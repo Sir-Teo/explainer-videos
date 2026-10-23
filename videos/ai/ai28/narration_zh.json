@@ -1,147 +1,483 @@
 {
  "title": "人工智能，从零搭建 · 第28部分：推理",
  "chapters": {
-  "Hook": "16个比特",
+  "Hook": "从\"一步一步地思考\"到o1和R1",
   "Chain": "1. 出声思考，就是计算",
-  "RL": "2. 向检查器学习",
-  "TestTime": "4. 想得更久",
-  "Outro": "回顾，以及这些想法会在哪里再现",
-  "Objective": "3. 目标函数，精确地写出来"
+  "RL": "4. 向检查器学习",
+  "TestTime": "10. 回答时的思考",
+  "Outro": "回顾、习题，以及接下来",
+  "Objective": "3. 目标函数，精确地写出来",
+  "Vote": "2. 很多条思维链，一次投票",
+  "Verify": "3. 检查每一步",
+  "GRPO": "5. 推导GRPO",
+  "Variants": "6. 后继者们",
+  "Entropy": "7. 熵坍缩",
+  "Length": "8. 该想多久",
+  "PassK": "9. 更锐利，还是更宽广？",
+  "Search": "11. 在思路中搜索",
+  "Latent": "12. 不用文字的思考",
+  "Formal": "13. 机器能检查的证明",
+  "ARC": "14. 没人见过的谜题"
  },
  "lines": {
-  "db0ef4310c5c": {
+  "cd3f92c42dcc": {
    "scene": "Hook",
-   "en": "Here's a puzzle for a small transformer: sixteen bits. Is the number of ones odd? <bookmark mark='a'/> Trained to answer straight away, our two-layer model is right 49 percent of the time: a coin flip. <bookmark mark='b'/> Now train the very same model to write its work first: going along the bits, is the count odd so far? Each step is easy, just the last answer and one more bit. <bookmark mark='c'/> Its final answer is right 100 percent of the time. Same model, same size. It just got to think out loud.",
-   "zh": "给一个小Transformer出一道题：16个比特，其中1的个数是奇数吗？<bookmark mark='a'/>如果训练它直接给出答案，我们这个两层的模型，只有49%的时候答对：跟抛硬币差不多。<bookmark mark='b'/>现在，把同一个模型训练成先写出过程：沿着这些比特一路数过去：到目前为止，1的个数是奇数吗？每一步都很简单，只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，100%都是对的。同样的模型，同样的大小。它只不过是可以出声思考了。"
+   "en": "In January 2022, a team at Google tried something simple. Instead of showing a large language model a few questions with their answers, they showed it eight questions with the working written out. <bookmark mark='a'/> On grade-school maths word problems, Google's 540-billion-parameter PaLM went from 18 percent right to 57: it wrote out its own working, and got far more right. <bookmark mark='b'/> Four months later, a team from Tokyo and Google found you didn't even need the examples. One sentence, let's think step by step, took one of OpenAI's models from 18 to 79 percent on arithmetic word problems. <bookmark mark='c'/> The ability was already in the model. It only had to be asked to write its reasoning down.",
+   "zh": "2022年1月，谷歌的一个团队试了一件很简单的事。他们不再给大语言模型看几道题和它们的答案，而是给它看8道题，解题过程都写了出来。<bookmark mark='a'/>在小学数学应用题上，谷歌5400亿参数的PaLM，正确率从18%升到了57%：它自己写出了解题过程，答对的多了很多。<bookmark mark='b'/>四个月后，东京和谷歌的一个团队发现，连例子都不需要。只要一句话，“让我们一步一步地思考”，就让OpenAI的一个模型在算术应用题上从18%提高到79%。<bookmark mark='c'/>这种能力本来就在模型里。只是需要有人让它把推理写下来。"
   },
-  "750b111d3225": {
+  "730f5371c2fc": {
    "scene": "Hook",
-   "en": "This part is about reasoning: why writing a chain of thought adds computation, how models learn to reason from nothing but a checker of answers, <bookmark mark='a'/> and what you get by letting them think longer.",
-   "zh": "这一部分讲的是推理：为什么写出一条思维链，就能增加计算；模型怎样只靠一个核对答案的检查器，学会推理；<bookmark mark='a'/>以及让它们想得更久，能换来什么。"
+   "en": "For two years that was the method: ask for a chain of thought, sample a few, perhaps take a vote. Then, in September 2024, OpenAI released o1, trained with reinforcement learning to think before it answers. <bookmark mark='a'/> On the 2024 American Invitational Mathematics Examination, AIME, GPT-4o had solved 12 percent of the problems. <bookmark mark='b'/> o1 solved 74 percent with one try, 83 with a vote over sixty-four, and 93 when a learned scorer picked from a thousand. <bookmark mark='c'/> In January 2025, DeepSeek showed how. R1-Zero: reinforcement learning straight from a base model, rewarded only for right answers. It climbed from 16 percent to 71, and to 87 with a vote, and its weights were open. <bookmark mark='d'/> In July 2025, systems wrote gold-medal solutions at the International Mathematical Olympiad, in plain language, within the time limit. <bookmark mark='e'/> And yet when ARC-AGI-3, a set of games no model had seen, launched in March 2026, every frontier model scored below one percent, while people solved them all.",
+   "zh": "之后两年，方法就是这样：要求写出思维链，采样几条，也许再投个票。然后，2024年9月，OpenAI发布了o1，它被用强化学习训练成先思考、再回答。<bookmark mark='a'/>在2024年的美国数学邀请赛，也就是AIME上，GPT-4o只做对了12%的题。<bookmark mark='b'/>o1只试一次就做对74%，64次投票做对83%，让一个学来的打分器从1000个答案里挑，做对93%。<bookmark mark='c'/>2025年1月，DeepSeek公开了做法。R1-Zero：直接从基础模型开始做强化学习，只在答案正确时给奖励。它从16%升到了71%，投票后到87%，而且权重是公开的。<bookmark mark='d'/>2025年7月，有系统在国际数学奥林匹克上写出了金牌水平的解答，用的是普通语言，在规定时间之内。<bookmark mark='e'/>然而，2026年3月，一套模型从没见过的游戏ARC-AGI-3发布时，所有前沿模型的得分都不到1%，而人能解出全部。"
+  },
+  "dcfdc4a3b537": {
+   "scene": "Hook",
+   "en": "That is the question of this part: how does a model learn to think, and what does thinking buy? <bookmark mark='a'/> We'll follow the field's own path: why writing a chain of thought adds computation; sampling many chains and voting; checking the steps; reinforcement learning from a checker of answers, derived; what thinking longer buys; search; and proofs a machine can check. <bookmark mark='b'/> And we'll try each idea here, on tiny models trained on the computer making this video.",
+   "zh": "这就是这一部分的问题：模型是怎样学会思考的？思考又能换来什么？<bookmark mark='a'/>我们沿着这个领域自己走过的路：为什么写出思维链就能增加计算；采样很多条思维链再投票；检查每一步；向一个检查答案的检查器学习的强化学习，一步步推导；想得更久能换来什么；搜索；以及机器能检查的证明。<bookmark mark='b'/>而且每个想法都会在这里试一试，用的是在制作这个视频的电脑上训练的小模型。"
+  },
+  "16c945251c2a": {
+   "scene": "Hook",
+   "en": "This is Part 28 of AI, Built, the third part of the act on agency. <bookmark mark='a'/> In this part: why writing steps adds computation; many chains and a vote, and checking steps instead of answers; reinforcement learning from a checker, with GRPO derived and its successors; what that training does to a model, to its uncertainty, to how long it thinks, and to what it can solve at all; how to spend computation at answer time; and the frontier: thinking without words, tiny recursive models, formal proofs, and puzzles no model has seen.",
+   "zh": "这是《人工智能，从零搭建》的第28部分，也是“智能体”这一幕的第三部分。<bookmark mark='a'/>这一部分讲：为什么写出步骤能增加计算；很多条思维链和一次投票，以及检查步骤而不只检查答案；向检查器学习的强化学习，推导GRPO和它的后继者；这种训练对模型做了什么：对它的不确定性，对它想多久，对它到底能解出什么；回答时怎样花计算；还有前沿：不用文字的思考，微型递归模型，形式化证明，以及没有模型见过的谜题。"
   },
   "65974bccad47": {
    "scene": "Chain",
    "en": "Chapter one. Thinking out loud is computing.",
    "zh": "第1章。出声思考，就是计算。"
   },
-  "52d606e65b07": {
+  "b7eed71ffdee": {
    "scene": "Chain",
-   "en": "Why does writing help? Look at the computation. A transformer runs every token through the same fixed stack of layers. <bookmark mark='a'/> Answering at once, the longest chain of steps that happen one after another is as tall as the stack: L layers, however hard the question. <bookmark mark='b'/> But a token it writes goes back in as input. <bookmark mark='c'/> So the chain of steps can climb the stack, come back down, and climb again, once per token. With k tokens of thought, L times k plus one steps in a row. <bookmark mark='d'/> Theory backs this up: answering at once, a transformer is limited to shallow computations; given a long enough chain of thought, it can carry out any step-by-step procedure.",
-   "zh": "写出来，为什么有用？看看其中的计算。Transformer让每个词元，都穿过同一叠固定的层。<bookmark mark='a'/>如果直接回答，一个接一个、必须先后完成的步骤，最长也只有这叠层那么高：L层，不管问题有多难。<bookmark mark='b'/>但它写下的词元，会重新作为输入送回去。<bookmark mark='c'/>于是，这条步骤链可以爬上这叠层，再回到底下，再爬上去，每个词元一次。有了k个用来思考的词元，连续的步数，就是L乘以k与1的和。<bookmark mark='d'/>理论也印证了这一点：直接回答时，Transformer只能做很浅的计算；而只要思维链足够长，它就能一步一步地执行任何程序。"
+   "en": "Here's a puzzle for a small transformer: sixteen bits. Is the number of ones odd? <bookmark mark='a'/> Trained to answer straight away, our two-layer model is right 50 percent of the time: a coin flip. <bookmark mark='b'/> Now train the very same model to write its work first: going along the bits, is the count odd so far? Each step is easy, just the last answer and one more bit. <bookmark mark='c'/> Its final answer is right 100 percent of the time. Same model, same size. It just got to think out loud.",
+   "zh": "给一个小Transformer出一道题：16个比特，其中1的个数是奇数吗？<bookmark mark='a'/>如果训练它直接给出答案，我们这个两层的模型，只有50%的时候答对：跟抛硬币差不多。<bookmark mark='b'/>现在，把同一个模型训练成先写出过程：沿着这些比特一路数过去，到目前为止，1的个数是奇数吗？每一步都很简单，只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，100%都是对的。同样的模型，同样的大小。它只不过是可以出声思考了。"
   },
-  "d2b1ed20ba37": {
+  "0d1c306b569a": {
    "scene": "Chain",
-   "en": "Here are all our runs, on strings of four, eight and sixteen bits. <bookmark mark='a'/> Answering at once is solved at four bits, a coin flip at eight, and a coin flip at sixteen: every bit flips the answer, and two layers can't learn to combine sixteen of them at once. <bookmark mark='b'/> With the running parity written first, that is, whether the count of ones so far is odd or even, all three are solved. <bookmark mark='c'/> And the chain is also easier to learn. At sixteen bits it's reliable after about 1,300 steps; answering at once never gets off the ground.",
-   "zh": "这是我们全部的训练结果，比特串的长度分别是4、8和16。<bookmark mark='a'/>直接回答，在4个比特时完全解决了，8个比特时跟抛硬币差不多，16个比特时也跟抛硬币差不多：改动任何一个比特，答案都会翻转，而两层网络学不会一下子把16个比特组合起来。<bookmark mark='b'/>先把一路累计的奇偶性写出来，也就是到目前为止1的个数是奇数还是偶数，三种长度就全都解决了。<bookmark mark='c'/>而且，思维链也更容易学。在16个比特上，大约1300步之后，它就已经很可靠了；而直接回答，始终没能起步。"
+   "en": "Why does writing help? Look at the computation. A transformer runs every token through the same fixed stack of layers. <bookmark mark='a'/> Answering at once, the longest chain of steps that happen one after another is as tall as the stack: L layers, however hard the question. <bookmark mark='b'/> But a token it writes goes back in as input. <bookmark mark='c'/> So the chain of steps can climb the stack, come back down, and climb again, once per token. With k tokens of thought, L times k plus one steps in a row. The written tokens are a scratchpad, and a clock: each one buys another pass through the network.",
+   "zh": "写出来，为什么有用？看看其中的计算。Transformer让每个词元都穿过同一叠固定的层。<bookmark mark='a'/>直接回答时，一个接一个发生的最长计算步骤链，只有这叠层那么高：L层，不管问题有多难。<bookmark mark='b'/>但它写出的词元，会作为输入再送回去。<bookmark mark='c'/>于是步骤链可以爬上这叠层，再下来，再爬上去，每个词元一次。有k个思考词元，就有L乘以k加1步可以接连进行。写出的词元既是草稿纸，也是一只时钟：每写一个，就多换来一次穿过网络的计算。"
   },
-  "ac0e2bd2e923": {
+  "2792d266567b": {
+   "scene": "Chain",
+   "en": "Theory makes this precise. <bookmark mark='a'/> In 2023 William Merrill and Ashish Sabharwal showed that a transformer of fixed depth, answering at once, computes only what circuits of constant depth with threshold gates can compute, a class called TC zero. <bookmark mark='b'/> Problems believed to lie outside it need depth that grows with the input: composing a long list of permutations of five objects is the classic one. <bookmark mark='c'/> A chain of thought lifts the limit. With T tokens of thought, a constant-depth transformer can simulate any circuit of size T; with polynomially many, it decides exactly the problems a computer can solve in polynomial time. <bookmark mark='d'/> One honest caveat: parity itself is inside TC zero. A fixed-depth network can compute it in principle; what failed in our experiment is learning it, because every single bit flips the answer.",
+   "zh": "理论把这一点说得很精确。<bookmark mark='a'/>2023年，威廉·梅里尔和阿希什·萨巴瓦尔证明：一个深度固定、直接作答的Transformer，能计算的只是常数深度的阈值门电路能计算的东西，这一类叫TC0。<bookmark mark='b'/>被认为在它之外的问题，需要随输入增长的深度：把一长串五个物体的置换复合起来，就是经典的例子。<bookmark mark='c'/>思维链解除了这个限制。有T个思考词元，常数深度的Transformer就能模拟任何规模为T的电路；有多项式多个，它能判定的正好是计算机在多项式时间内能解的问题。<bookmark mark='d'/>有一点必须老实说：奇偶性本身在TC0里面。深度固定的网络原则上能算它；我们的实验里失败的是学会它，因为每一个比特都会翻转答案。"
+  },
+  "8b3728dd6a19": {
+   "scene": "Chain",
+   "en": "Is it the extra tokens, or what's in them? Give the model the same number of extra positions, filled with meaningless dots, and train it to answer after them. <bookmark mark='a'/> On sixteen bits, the dots don't help: 49 percent, no better than answering at once. Each dot is input, not output; it adds positions to compute in, but nothing flows from the top of one position to the bottom of the next. It is the written steps, not the extra length, that do the work. <bookmark mark='b'/> Jacob Pfau, Merrill and Sam Bowman showed in 2024 that dots can help on problems that split into independent parallel pieces, and that a model needs dense supervision to learn to use them.",
+   "zh": "是多出来的词元在起作用，还是它们的内容？给模型同样多的额外位置，填上没有意义的点，训练它在这些点之后作答。<bookmark mark='a'/>在16个比特上，这些点没有帮助：49%，并不比直接回答好。每个点都是输入，不是输出；它增加了可以计算的位置，但信息不会从一个位置的顶层流到下一个位置的底层。起作用的是写出的步骤，而不是多出来的长度。<bookmark mark='b'/>雅各布·普福、梅里尔和萨姆·鲍曼2024年发现，点可以在能拆成相互独立的并行小块的问题上起作用，而且模型需要密集的监督才能学会用它们。"
+  },
+  "9dc9e08149dd": {
+   "scene": "Chain",
+   "en": "Here are all our runs, on strings of four, eight and sixteen bits. <bookmark mark='a'/> Answering at once is solved at four bits, a coin flip at eight, and a coin flip at sixteen. <bookmark mark='b'/> The dots follow it down. <bookmark mark='c'/> With the running parity written first, all three are solved, in every run.",
+   "zh": "这是我们全部的运行结果，字符串长4、8和16个比特。<bookmark mark='a'/>直接回答，在4个比特上解决了，8个比特上跟抛硬币差不多，16个比特上跟抛硬币差不多。<bookmark mark='b'/>点的结果跟着一起往下掉。<bookmark mark='c'/>先写出累计奇偶性的话，三种长度全都解决了，每一次运行都是如此。"
+  },
+  "369c68c2288f": {
+   "scene": "Chain",
+   "en": "Here is the training at sixteen bits, replayed. On the left, accuracy as each model trains, three runs of each. On the right, the chain the model writes for three strings, checked bit by bit. <bookmark mark='a'/> At first the chain is noise. <bookmark mark='b'/> Then it learns the first few steps, and the right stretch grows along the string, one position after another: by step 1,100 all three chains are right. <bookmark mark='c'/> Answering at once never gets off the floor. The chain is not just more powerful; it is easier to learn, because each step is a small, local problem.",
+   "zh": "这是16个比特上的训练过程，回放一遍。左边是每个模型训练时的正确率，每种各跑3次。右边是模型为三个字符串写出的思维链，逐个比特检查。<bookmark mark='a'/>一开始，思维链是一团噪声。<bookmark mark='b'/>接着它学会了前几步，正确的一段沿着字符串一位一位地变长：到第1100步，三条思维链全对了。<bookmark mark='c'/>直接回答始终没能离开地面。思维链不只是更强大；它还更容易学，因为每一步都是一个局部的小问题。"
+  },
+  "05ecc435e12f": {
+   "scene": "Vote",
+   "en": "Chapter two. Many chains, one vote.",
+   "zh": "第2章。很多条思维链，一次投票。"
+  },
+  "7b7dfd859d7e": {
+   "scene": "Vote",
+   "en": "For the next chapters we need a model that can choose to think. Here is ours, trained on this computer. <bookmark mark='a'/> The question is a list of two to nine digits; the answer is their sum. <bookmark mark='b'/> The model may think first: it writes a think token, then the running total after each digit, then the answer. <bookmark mark='c'/> Or it may answer at once. Its training showed it both, and chains cut short, so it can stop thinking at any point. <bookmark mark='d'/> Sampled at temperature one, made to answer at once, it gets two digits right 90 percent of the time, and nine digits 38. Made to think, 96 and 64. Each step of thought is a small sum, but small sums still go wrong sometimes, and one wrong step spoils the chain.",
+   "zh": "接下来几章，我们需要一个能选择要不要思考的模型。这就是我们的模型，在这台电脑上训练的。<bookmark mark='a'/>题目是一串2到9个数字，答案是它们的和。<bookmark mark='b'/>模型可以先思考：它写一个思考词元，然后写出加上每个数字之后的累计和，再写答案。<bookmark mark='c'/>它也可以直接回答。训练中它两种都见过，还见过中途截断的思维链，所以它可以在任何一步停止思考。<bookmark mark='d'/>按温度1采样，让它直接回答，2个数字的题它答对90%，9个数字的题答对38%。让它思考，则是96%和64%。每一步思考都只是一个小加法，但小加法也会偶尔出错，而错一步，整条思维链就坏了。"
+  },
+  "267526481944": {
+   "scene": "Vote",
+   "en": "In March 2022, two months after chain-of-thought prompting, Xuezhi Wang and colleagues at Google asked: if one chain can go wrong, why not sample several and take a vote? They called it self-consistency, and on grade-school maths it added eighteen points over a single chain. <bookmark mark='a'/> The intuition: different routes that reach the same answer are evidence for it. <bookmark mark='b'/> Mistakes, on the other hand, tend to scatter: wrong chains rarely agree on the same wrong answer. <bookmark mark='c'/> And it needs no checker at all, only the answers.",
+   "zh": "2022年3月，思维链提示问世两个月后，谷歌的Xuezhi Wang和同事问：既然一条思维链可能出错，为什么不采样好几条，然后投票？他们把它叫作自洽性；在小学数学题上，它比单条思维链多了18个百分点。<bookmark mark='a'/>直觉是：从不同路线得到同一个答案，就是这个答案正确的证据。<bookmark mark='b'/>而错误往往是分散的：错的思维链很少会错到同一个答案上。<bookmark mark='c'/>而且它根本不需要检查器，只需要答案。"
+  },
+  "02215a5e120e": {
+   "scene": "Vote",
+   "en": "Here is one 7-digit list, and eight of the sixty-four chains our model wrote for it, made to think. Each step is coloured by whether it matches the true running total. <bookmark mark='a'/> 4 of these eight end on the right sum. The others stopped thinking part-way and answered at once from there: a chain cut short is a guess. <bookmark mark='b'/> Now tally all sixty-four answers. 67 percent of them are the right sum, 44; the wrong ones scatter over 5 different values. <bookmark mark='c'/> So the most common answer, the vote, is 44: right.",
+   "zh": "这是一串7个数字，以及我们的模型被要求思考时，为它写出的64条思维链中的8条。每一步按它是否等于真实的累计和来上色。<bookmark mark='a'/>这8条里有4条最后得到了正确的和。其余的想到一半就停了，从那里直接给出答案：半途而废的思维链，就是在猜。<bookmark mark='b'/>现在把64个答案全部统计一下。其中67%是正确的和，44；错误的答案分散在5个不同的数值上。<bookmark mark='c'/>所以最常见的答案，也就是投票的结果，是44：正确。"
+  },
+  "66021e709461": {
+   "scene": "Vote",
+   "en": "When does voting work? Call the right answer y star, and its probability p star. <bookmark mark='a'/> The vote is right when the right answer appears more often than every wrong one. <bookmark mark='a2'/> Compare it with one wrong answer y: the difference in counts is a sum of k independent draws, each plus one, zero, or minus one, with mean k times p star minus p y. <bookmark mark='b'/> By Hoeffding's inequality, the chance that the wrong answer catches up falls exponentially in k. <bookmark mark='c'/> So as the votes grow, the vote is right with probability one if the right answer is the model's single most likely answer, and with probability zero if some wrong answer is more likely. <bookmark mark='d'/> Voting can only amplify what the model already prefers. It cannot rescue a question where the model's favourite answer is wrong.",
+   "zh": "投票什么时候管用？把正确答案叫作y星，它的概率叫p星。<bookmark mark='a'/>当正确答案出现的次数比每一个错误答案都多时，投票就是对的。<bookmark mark='a2'/>拿它和一个错误答案y比：两者出现次数之差，是k次独立抽取之和，每次是加1、0或减1，均值是k乘以p星减p y。<bookmark mark='b'/>由霍夫丁不等式，错误答案追上来的概率，随k指数地下降。<bookmark mark='c'/>所以随着票数增加，如果正确答案是模型最可能给出的那一个，投票以概率1正确；如果某个错误答案更可能，投票以概率1出错。<bookmark mark='d'/>投票只能放大模型本来就偏爱的东西。如果模型最喜欢的答案是错的，投票救不了这道题。"
+  },
+  "53b1df3fb310": {
+   "scene": "Vote",
+   "en": "Here it is on three hundred questions. <bookmark mark='a'/> One chain is right 81 percent of the time. Voting over 64 chains: 98 percent. <bookmark mark='b'/> And the derivation predicted where it would level off: the share of questions whose most frequent answer is right, 98 percent. <bookmark mark='c'/> If something could check the answers, any of 64 chains being right would count: 100 percent. The gap between the two curves is what a checker is worth: wide at a few samples, 16 points at 2, and nearly closed by 64. <bookmark mark='d'/> Voting over answers given at once reaches only 74: for more of the questions, the model's favourite answer at once is wrong, and voting cannot fix that. The chains make the right answer the most likely one, and then the vote amplifies it.",
+   "zh": "这是在300道题上的结果。<bookmark mark='a'/>一条思维链答对81%。对64条思维链投票：98%。<bookmark mark='b'/>推导也预言了它会在哪里趋平：最常见答案正确的题目所占的比例，98%。<bookmark mark='c'/>如果有东西能检查答案，那么64条里只要有一条对就算对：100%。两条曲线之间的差距，就是一个检查器的价值：样本少时差距很大，2个样本时差16个百分点，到64个时几乎合上了。<bookmark mark='d'/>对直接给出的答案投票，只能达到74%：对更多的题目，模型直接回答时最喜欢的答案是错的，投票没法纠正。思维链让正确答案成为最可能的那个，然后投票再把它放大。"
+  },
+  "a4357729d6cf": {
+   "scene": "Verify",
+   "en": "Chapter three. Checking the steps.",
+   "zh": "第3章。检查每一步。"
+  },
+  "ad1d77705428": {
+   "scene": "Verify",
+   "en": "A checker of answers sees only the end. <bookmark mark='a'/> Here is a chain that adds five and three and writes nine, then adds eight and writes sixteen. Two mistakes, and they cancel: the final sum is right. <bookmark mark='b'/> A checker of answers rewards this. A checker of steps would flag two of them. <bookmark mark='c'/> How often does it happen? Among our model's right answers, 27.0 percent had a wrong step on the way. And in long mathematical arguments, a right number at the end of a broken argument is more common still; rewarding it teaches the wrong lesson.",
+   "zh": "检查答案的检查器只看得到结尾。<bookmark mark='a'/>这里有一条思维链，5加3写成了9，然后加8写成了16。两个错误，正好抵消：最后的和是对的。<bookmark mark='b'/>检查答案的检查器会奖励它。检查步骤的检查器会标出其中两步。<bookmark mark='c'/>这种情况有多常见？在我们模型答对的题里，有27.0%途中有一步是错的。而在很长的数学论证里，一段错误论证的结尾出现正确数字的情况还要更常见；奖励它，教的是错误的东西。"
+  },
+  "022ff908f1aa": {
+   "scene": "Verify",
+   "en": "So there are two kinds of learned grader. <bookmark mark='a'/> An outcome reward model reads a whole solution and predicts whether its final answer is right. It is trained with one label per solution, which a checker of answers can supply. <bookmark mark='b'/> A process reward model judges every step: is this step right, given the ones before it? A solution's score is the product over its steps, the chance that all of them are right. It needs a label for every step. <bookmark mark='c'/> Either can rerank: sample N solutions and keep the one it scores highest. Or its score can be the reward for reinforcement learning.",
+   "zh": "所以，学来的评分器有两种。<bookmark mark='a'/>结果奖励模型读完整个解答，预测它的最终答案是否正确。它用每个解答一个标签来训练，这个标签检查答案的检查器就能提供。<bookmark mark='b'/>过程奖励模型评判每一步：在前面几步的基础上，这一步对吗？一个解答的得分是各步的乘积，也就是所有步骤都对的概率。它需要每一步都有标签。<bookmark mark='c'/>两者都可以用来重新排序：采样N个解答，留下它打分最高的那个。也可以把它的分数当作强化学习的奖励。"
+  },
+  "d5ace3f8f32a": {
+   "scene": "Verify",
+   "en": "The idea of a learned grader came with the grade-school maths benchmark itself. <bookmark mark='a'/> In 2021, Karl Cobbe and colleagues at OpenAI trained a verifier to pick among a hundred sampled solutions, and found it was worth about as much as a model thirty times larger. <bookmark mark='b'/> In 2022, Jonathan Uesato and colleagues at DeepMind compared the two kinds of feedback. Outcome feedback gave final answers about as good, with fewer labels; but to keep the reasoning inside right answers sound, they needed process feedback, or a grader trained to imitate it. <bookmark mark='c'/> In 2023, OpenAI's Let's Verify Step by Step paid people to label eight hundred thousand steps. <bookmark mark='d'/> Reranking 1,860 solutions to competition problems, a majority vote solved 69.6 percent, the outcome grader 72.4, and the process grader 78.2.",
+   "zh": "学来的评分器这个想法，和小学数学基准本身同时出现。<bookmark mark='a'/>2021年，OpenAI的卡尔·科布和同事训练了一个验证器，从100个采样出来的解答里挑一个，发现它的作用相当于一个大30倍的模型。<bookmark mark='b'/>2022年，DeepMind的Jonathan Uesato和同事比较了两种反馈。结果反馈用更少的标签，得到的最终答案差不多一样好；但要让正确答案里面的推理也是对的，他们需要过程反馈，或者一个学着模仿它的评分器。<bookmark mark='c'/>2023年，OpenAI的《让我们一步一步地验证》花钱请人标注了80万个步骤。<bookmark mark='d'/>对竞赛题的1860个解答重新排序，多数投票解出69.6%，结果评分器72.4%，过程评分器78.2%。"
+  },
+  "64fc4b2a7787": {
+   "scene": "Verify",
+   "en": "We can run the comparison on our adding model. Take eight thousand of its solutions, made to think. Train one small grader on the final answers, and another on the steps, each step checked against the one before. <bookmark mark='a'/> Then, on new questions, sample N solutions and let each grader pick. <bookmark mark='b'/> With one sample, 80 percent of the questions are answered right. Let the graders choose among 64, and their picks get worse: the process grader's is right 50 percent of the time, the outcome grader's 44. The vote, which needs no grader, reaches 96. <bookmark mark='b2'/> Our graders are small and only partly right: at telling right from wrong they score 0.76 and 0.66, where one is perfect and a half is chance. The top score among many goes to whatever fools them most. 71 percent of the process grader's picks had stopped thinking early, against 35 percent of all solutions: a product of step scores favours short chains. It is Part 27's Goodhart, in miniature. <bookmark mark='c'/> The dashed line is a perfect checker; the gap below it is what a better grader could still win.",
+   "zh": "我们可以在自己的加法模型上做这个比较。取它被要求思考时写出的8000个解答。一个小评分器用最终答案训练，另一个用步骤训练，每一步都对照前一步检查。<bookmark mark='a'/>然后，在新的题目上，采样N个解答，让每个评分器来挑。<bookmark mark='b'/>只采样一个解答时，80%的题目答对。让评分器从64个里挑，挑出来的反而更差：过程评分器挑的50%是对的，结果评分器44%。不需要评分器的投票，达到96%。<bookmark mark='b2'/>我们的评分器很小，只是部分正确：在区分对错上，它们的得分是0.76和0.66，1是完美，0.5是瞎猜。在很多候选里得分最高的，正是最能骗过它们的那个。过程评分器挑出的解答里，71%是想到一半就停下的，而所有解答里只有35%：把各步的得分相乘，偏爱短的思维链。这就是第27部分的古德哈特定律，一个缩小版。<bookmark mark='c'/>虚线是一个完美的检查器；它下面的差距，是更好的评分器还能赢回来的部分。"
+  },
+  "dd876bb77ddb": {
+   "scene": "Verify",
+   "en": "Here is one of the solutions, graded both ways. <bookmark mark='a'/> The colours are the truth: which steps really are right. And its final sum is right, though a step on the way is wrong: the case this chapter began with. <bookmark mark='b'/> The process grader gives every step a probability of being right. It is less sure at the first wrong step, step 9, but not by much: 0.62. A learned grader can miss. <bookmark mark='c'/> The outcome grader gives the whole solution one number, 0.85, and cannot say where it went wrong. That location is what makes step labels useful, for reranking and for teaching.",
+   "zh": "这是其中一个解答，用两种方式评分。<bookmark mark='a'/>颜色是真相：哪些步骤真的对。而它最后的和是对的，尽管途中有一步错了：正是这一章开头的那种情况。<bookmark mark='b'/>过程评分器给每一步一个正确的概率。在第一个错误步骤，也就是第9步，它没那么确定了，但也没低多少：0.62。学来的评分器也会漏看。<bookmark mark='c'/>结果评分器给整个解答一个数，0.85，说不出错在哪里。正是这个位置，让步骤标签有用，无论是用来重新排序，还是用来教。"
+  },
+  "e14cff9aa1c7": {
+   "scene": "Verify",
+   "en": "And yet the models that changed the field in 2025 mostly did not train against process graders. DeepSeek's R1 paper lists them among its unsuccessful attempts: it is hard to say what a step is in general reasoning, hard to check one, and <bookmark mark='h'/> a learned grader, pushed by reinforcement learning, gets exploited: in their words, it inevitably leads to reward hacking. <bookmark mark='a'/> So the recipe became reinforcement learning on outcomes that can be checked exactly: answers to maths problems, tests for code, proofs. <bookmark mark='b'/> Process graders live on for search and reranking, with step labels made automatically: finish a partial solution many times, and see how often it ends right. <bookmark mark='c'/> And the newest graders think before they judge. Learning from a checker is the subject of the next chapter.",
+   "zh": "然而，2025年改变这个领域的那些模型，大多没有用过程评分器来训练。DeepSeek的R1论文把它列在不成功的尝试里：在一般的推理里，很难说清一步是什么，也很难检查一步，而<bookmark mark='h'/>一个学来的评分器，在强化学习的推动下，会被钻空子：用他们的话说，这不可避免地导致奖励投机。<bookmark mark='a'/>于是配方变成了：在能被精确检查的结果上做强化学习：数学题的答案，代码的测试，证明。<bookmark mark='b'/>过程评分器在搜索和重新排序中继续发挥作用，步骤标签自动生成：把一个部分解答续写很多次，看它有多大比例最后是对的。<bookmark mark='c'/>而最新的评分器，会先思考再评判。向检查器学习，是下一章的主题。"
+  },
+  "27bdc4023728": {
    "scene": "RL",
-   "en": "Chapter two. Learning from a checker.",
-   "zh": "第2章。向检查器学习。"
+   "en": "Chapter four. Learning from a checker.",
+   "zh": "第4章。向检查器学习。"
   },
-  "60f440fdcdf8": {
+  "5db1c1fe19c9": {
    "scene": "RL",
-   "en": "How do you teach a model to reason, when nobody can write down the steps for it? DeepSeek-R1 used a recipe with almost no human help: questions with checkable answers, and reinforcement learning. <bookmark mark='r'/> The model tries, gets a score, and is nudged to do more of what scored well: trial and error, not worked examples. <bookmark mark='p'/> In this game the model is called the policy, pi: the rule that gives a probability to every answer it might write. We do it here with a small transformer that has had a little practice at two-digit addition. <bookmark mark='a'/> Give it a question, and sample 8 answers. <bookmark mark='b'/> A checker marks each one: here 2 of 8 are right. <bookmark mark='c'/> Each answer's advantage is its reward minus the group's average, divided by the spread: right answers above the line, wrong ones below. <bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. <bookmark mark='e'/> That's GRPO, group relative policy optimization: each answer is judged relative to its own group. No one judges the steps. <bookmark mark='f'/> Older methods compare each reward with a baseline, the score you'd expect anyway, and train a second network, a critic, to predict it. GRPO needs no critic: the group's average is its baseline. And when every answer is right, or every one wrong, the advantages are all zero: nothing to learn.",
-   "zh": "如果没有人能把推理步骤写下来教给模型，又该怎么教它推理呢？DeepSeek-R1用了一套几乎不需要人工帮助的配方：答案可以核对的题目，再加上强化学习。<bookmark mark='r'/>模型去尝试，得到一个分数，然后被轻轻推一下，多做那些得分高的事：靠的是反复试错，而不是现成的例题。<bookmark mark='p'/>在这个游戏里，模型被叫作策略，π：它是一条规则，给它可能写出的每个答案都分配一个概率。我们在这里，用一个小Transformer来做这件事，它已经稍微练习过两位数加法。<bookmark mark='a'/>给它一道题，采样出8个答案。<bookmark mark='b'/>检查器给每个答案判对错：这里8个里有2个是对的。<bookmark mark='c'/>每个答案的优势，就是它的奖励减去这一组的平均值，再除以这一组的离散程度：答对的在横线上方，答错的在横线下方。<bookmark mark='d'/>然后轻轻推一下模型，让好的答案更可能出现，坏的答案更少出现。<bookmark mark='e'/>这就是GRPO，组相对策略优化：每个答案都和它自己这一组相比来评判。没有人去评判中间的步骤。<bookmark mark='f'/>以前的方法，会把每个奖励和一个基线比较，也就是你本来就预期能拿到的分数，还要另外训练一个网络，叫评价模型，来预测这个基线。GRPO不需要评价模型：这一组的平均值，就是它的基线。而当所有答案全都对，或者全都错，优势就全是0：什么也学不到。"
+   "en": "Chapter one showed that a chain of thought adds computation. But who teaches a model which chain to write, when nobody can write the steps down for it? <bookmark mark='a'/> In February 2024, DeepSeek's maths paper introduced an algorithm called GRPO: Part 26's PPO, without the critic. <bookmark mark='b'/> In September, OpenAI said o1 had learned to think through large-scale reinforcement learning. <bookmark mark='c'/> In November, the Allen Institute's Tülu 3 gave the method a name: reinforcement learning with verifiable rewards. <bookmark mark='d'/> And in January 2025, DeepSeek-R1 showed it at scale, with rewards from simple rules: is the final answer right, and is it written in the right format. <bookmark mark='e'/> The reward is one if a checker accepts the answer, zero otherwise. No person grades anything.",
+   "zh": "第1章说明了思维链能增加计算。但没人能把步骤写下来的时候，谁来教模型该写哪条思维链？<bookmark mark='a'/>2024年2月，DeepSeek的数学论文提出了一种叫GRPO的算法：去掉了评论家的、第26部分的PPO。<bookmark mark='b'/>9月，OpenAI说o1是通过大规模强化学习学会思考的。<bookmark mark='c'/>11月，艾伦研究所的Tülu 3给这种方法起了名字：可验证奖励的强化学习。<bookmark mark='d'/>2025年1月，DeepSeek-R1展示了它在大规模上的效果，奖励来自简单的规则：最终答案对不对，格式对不对。<bookmark mark='e'/>检查器接受答案，奖励就是1，否则是0。没有任何人打分。"
   },
-  "48acda2c9144": {
+  "802b449ed247": {
    "scene": "RL",
-   "en": "Repeat that for 300 steps of thirty-two questions. <bookmark mark='a'/> Our model starts out right 36 percent of the time, and climbs to 81 percent, taught by nothing but a checker. <bookmark mark='b'/> Here are its answers to six questions, eight tries each: 14 of 48 right before, <bookmark mark='c'/> 27 after. The probability moved onto the answers that check out.",
-   "zh": "把这个过程重复300步，每步32道题。<bookmark mark='a'/>我们的模型一开始只有36%的时候答对，后来升到了81%，教它的，只有一个检查器。<bookmark mark='b'/>这是它对6道题的回答，每道题试8次：训练前，48个答案里对了14个，<bookmark mark='c'/>训练后对了27个。概率转移到了那些经得起核对的答案上。"
+   "en": "We do it here with a small transformer that has had a little practice at two-digit addition, answering at once. In this game the model is called the policy, pi: the rule that gives a probability to every answer it might write. <bookmark mark='a'/> Give it a question, and sample 8 answers. <bookmark mark='b'/> A checker marks each one: here 2 of 8 are right. <bookmark mark='c'/> Each answer's advantage is its reward minus the group's average, divided by the spread: right answers above the line, wrong ones below. <bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. <bookmark mark='e'/> That's GRPO, group relative policy optimization: each answer is judged against its own group. Part 26's actor-critic trained a second network, a critic, to predict the score you'd expect anyway; GRPO uses the group's average instead. And when every answer in a group is right, or every one wrong, the advantages are all zero: nothing to learn.",
+   "zh": "我们在这里用一个小Transformer来做，它练过一点两位数加法，直接作答。在这个游戏里，模型叫作策略，pi：它给自己可能写出的每个答案一个概率。<bookmark mark='a'/>给它一道题，采样8个答案。<bookmark mark='b'/>检查器给每个答案打上记号：这里8个里有2个是对的。<bookmark mark='c'/>每个答案的优势，是它的奖励减去组内平均，再除以组内的标准差：对的答案在线上方，错的在下方。<bookmark mark='d'/>然后推一推模型，让好的答案更可能，坏的更不可能。<bookmark mark='e'/>这就是GRPO，组相对策略优化：每个答案都和它自己的组比。第26部分的演员-评论家训练了第二个网络，评论家，去预测本来就能期望的分数；GRPO用组内的平均来代替。而当一组里每个答案都对，或者都错时，优势全是0：什么也学不到。"
   },
-  "bdcb54251ef7": {
+  "82bf44d98949": {
    "scene": "RL",
-   "en": "What we used is an outcome reward: only the final answer is checked. <bookmark mark='a'/> The other way is a process reward: a second model, trained on people's judgments, scores every step, so a lucky guess after a wrong step earns nothing. <bookmark mark='b'/> Process rewards catch more, but a learned grader can be fooled, and a model under pressure learns to fool it. The big reasoning models of 2025 mostly rely on checkable outcomes: math with known answers, code with tests. Trained that way, DeepSeek-R1's chains of thought grew longer on their own, and started to double-check their own work.",
-   "zh": "我们用的是结果奖励：只检查最后的答案。<bookmark mark='a'/>另一种办法是过程奖励：用人的评判训练出第二个模型，让它给每一步打分；这样，错了一步之后再蒙对答案，就什么也得不到。<bookmark mark='b'/>过程奖励能抓出更多问题，但学出来的评分模型是可以被骗的，而一个被逼着拿高分的模型，就会学会去骗它。2025年的大型推理模型，大多依靠可以核对的结果：有标准答案的数学题，带测试用例的代码。这样训练出来，DeepSeek-R1的思维链自己就变长了，还开始回头检查自己的推导。"
+   "en": "Repeat that for 300 steps of thirty-two questions each, and replay the training. <bookmark mark='a'/> On the left, accuracy on five hundred new questions, for 3 runs from the same start. On the right, one run's answers to six questions, eight tries each, at every checkpoint. <bookmark mark='b'/> It starts out right 35 percent of the time. <bookmark mark='c'/> As it trains, the green spreads: 12 of 48 right at the start, 33 at the end. The runs finish between 72 and 86 percent, taught by nothing but a checker. <bookmark mark='d'/> The probability has moved onto the answers that check out.",
+   "zh": "把这个过程重复300步，每步32道题，然后回放训练。<bookmark mark='a'/>左边是在500道新题上的正确率，从同一个起点出发的3次运行。右边是其中一次运行对6道题的回答，每道题试8次，每个检查点都显示。<bookmark mark='b'/>它一开始的正确率是35%。<bookmark mark='c'/>随着训练，绿色扩散开来：开始时48个里对12个，最后对33个。各次运行最后在72%到86%之间，教它的只有一个检查器。<bookmark mark='d'/>概率移到了能通过检查的答案上。"
   },
-  "fe7796651d45": {
-   "scene": "Objective",
-   "en": "Chapter three. The objective, exactly.",
-   "zh": "第3章。目标函数，精确地写出来。"
+  "f6e22bf226ba": {
+   "scene": "GRPO",
+   "en": "Chapter five. GRPO, derived.",
+   "zh": "第5章。一步一步推导GRPO。"
   },
-  "11884414c270": {
-   "scene": "Objective",
-   "en": "Chapter two's recipe was the simplest version. Here is the objective GRPO actually optimizes, as DeepSeek published it. <bookmark mark='a'/> Each token of each answer gets a ratio: how much likelier the model now makes it than when the answer was sampled. <bookmark mark='b'/> The advantage is chapter two's: reward against the group. <bookmark mark='c'/> Then the clip. Samples are expensive, so each batch is used for several updates, and the clip keeps those updates from running away. <bookmark mark='d'/> For a good answer, the objective grows with the ratio, until the token is twenty percent likelier than it was; then it goes flat, and there's nothing more to gain. For a bad answer, it stops rewarding the push down once the token is twenty percent less likely. <bookmark mark='e'/> In our run, with four updates per batch, the clip held back 7 percent of the tokens. And the last term keeps the model near where it started.",
-   "zh": "第2章的做法是最简单的版本。这里是GRPO真正优化的目标函数，正如DeepSeek发表的那样。<bookmark mark='a'/>每个回答的每个词元都有一个比值：模型现在给它的概率，比采样这个回答时高了多少倍。<bookmark mark='b'/>优势还是第2章的那个：奖励和同组相比。<bookmark mark='c'/>然后是截断。采样很贵，所以每个批次要拿来做好几次更新，而截断让这些更新不会失控。<bookmark mark='d'/>对一个好回答，目标函数随比值增长，直到这个词元比原来可能20%；然后它就平了，再推也没有好处。对一个坏回答，一旦这个词元的可能性降低了20%，就不再奖励继续往下推。<bookmark mark='e'/>在我们的训练里，每个批次更新4次，截断拦下了7%的词元。最后一项，让模型留在出发点附近。"
+  "cbc39d1cf26d": {
+   "scene": "GRPO",
+   "en": "Let's derive it. The goal is the expected reward of the model's own answers. <bookmark mark='a'/> Its gradient, by the log-derivative trick of Part 26, is the reward times the gradient of the log-probability of each sampled answer. <bookmark mark='b'/> Subtracting a baseline that depends only on the question changes nothing on average, because the expected gradient of a log-probability is zero; but it can shrink the noise a great deal. <bookmark mark='c'/> GRPO's baseline is the average reward of a group of G answers to the same question, and it divides by their spread. That replaces PPO's critic, a whole second network. <bookmark mark='d'/> Sampling is the expensive part, so each batch is used for several updates. After the first, the model has moved, and the samples come from an older version, pi old: reweight each by the ratio rho, the importance-sampling correction. <bookmark mark='e'/> And clip it, exactly as PPO does, so that no single batch can move the model too far.",
+   "zh": "我们来推导一下。目标是模型自己的回答的期望奖励。<bookmark mark='a'/>用第26部分的对数导数技巧，它的梯度是奖励乘以每个采样回答的对数概率的梯度。<bookmark mark='b'/>减去一个只依赖于题目的基线，平均来说什么也不改变，因为对数概率梯度的期望是零；但它能大大减小噪声。<bookmark mark='c'/>GRPO的基线，是对同一道题的G个回答的平均奖励，再除以它们的标准差。这代替了PPO的评论家，那可是整整第二个网络。<bookmark mark='d'/>采样是最贵的部分，所以每一批样本要用来做好几次更新。第一次之后，模型已经变了，样本来自一个旧版本，pi old：给每个样本乘上比值rho，也就是重要性采样的修正。<bookmark mark='e'/>再像PPO一样把它裁剪，这样任何一批样本都没法把模型推得太远。"
   },
-  "217f5898e248": {
-   "scene": "Objective",
-   "en": "That last term needs the KL divergence, part one's measure of how far one distribution is from another, and computing it exactly would mean summing over every possible answer. <bookmark mark='a'/> Instead, GRPO uses an estimate from the sampled tokens alone, John Schulman's k three: the ratio of the starting model's probability to the current one's, minus its log, minus one. <bookmark mark='b'/> It's never negative, it's zero only when nothing has moved, and on average it equals the KL exactly. <bookmark mark='c'/> In our runs, the penalty, at weight 0.04, didn't keep GRPO closer: it ended 1.34 bits per answer from the start, against 1.24 for the plain policy gradient, chapter two's simple push on the policy, which has no penalty but takes smaller steps. At this weight the penalty is weak, and many recent recipes drop it.",
-   "zh": "最后这一项需要KL散度，也就是第1部分讲的、衡量两个分布相差多远的量；精确计算它，得对所有可能的回答求和。<bookmark mark='a'/>所以GRPO只用采样到的词元来估计它，用的是John Schulman的k3：起始模型的概率和当前模型的概率之比，减去它的对数，再减去1。<bookmark mark='b'/>它从不为负，只有在什么都没变的时候才是0，而且平均起来恰好等于KL。<bookmark mark='c'/>在我们的训练里，权重0.04的惩罚并没有让GRPO离得更近：它最后离出发点每个回答1.34比特，而普通的策略梯度是1.24；普通的策略梯度，就是第2章那种简单地推一下策略的做法，它没有惩罚，但步子迈得更小。在这个权重下，惩罚很弱，很多新的训练配方干脆把它去掉了。"
+  "ad0bc19ff81e": {
+   "scene": "GRPO",
+   "en": "Here is the objective as DeepSeek published it, written per token. <bookmark mark='a'/> Each token of each answer gets its own ratio: how much likelier the model now makes it than when the answer was sampled. <bookmark mark='b'/> The advantage is the answer's, shared by its tokens, and the tokens of each answer are averaged. <bookmark mark='c'/> For a good answer, the objective grows with the ratio until the token is twenty percent likelier than it was; then it goes flat, and there's nothing more to gain. For a bad answer, it stops rewarding the push down once the token is twenty percent less likely. <bookmark mark='d'/> In our runs, with four updates per batch, the clip held back 5 percent of the tokens. And the last term keeps the model near where it started.",
+   "zh": "这是DeepSeek发表的目标函数，按词元写出。<bookmark mark='a'/>每个回答的每个词元都有自己的比值：现在的模型给它的概率，比采样时高了多少。<bookmark mark='b'/>优势是整个回答的，它的词元共享，每个回答的词元取平均。<bookmark mark='c'/>对一个好的回答，目标函数随比值增长，直到这个词元比原来可能20%；然后就变平了，再推也没有好处。对一个坏的回答，一旦这个词元的可能性降低了20%，目标函数就不再奖励往下推。<bookmark mark='d'/>在我们的运行中，每批样本更新4次，裁剪拦下了5%的词元。最后一项让模型留在起点附近。"
   },
-  "abfa034960b3": {
-   "scene": "Objective",
-   "en": "Here is what that objective does to the model, step by step. Three questions it was unsure of, and the probability it gives each candidate answer, the right one in green. <bookmark mark='a'/> Each step, answers that beat their group's average get pushed up and the rest pushed down; the clip keeps each push small. <bookmark mark='b'/> The right answers' probability climbs from 25 percent on average to 94, and the wrong ones drain away. Not smoothly: each step learns from just eight sampled answers a question, so a right answer can drop sharply and be pulled back later. That's also why the entropy falls, from 0.93 to 0.17 bits a digit: the model stops spreading its bets.",
-   "zh": "这就是那个目标函数一步一步对模型做的事。三道它原本没把握的题，以及它给每个候选答案的概率，正确的那个是绿色。<bookmark mark='a'/>每一步，比同组平均好的回答被往上推，其余的被往下推；截断让每次推动都很小。<bookmark mark='b'/>正确答案的概率平均从25%升到94%，错误答案的概率渐渐流干。并不平稳：每一步每道题只从8个采样回答里学，所以一个正确答案可能会突然大跌，之后再被拉回来。这也是熵下降的原因，从每个数字0.93比特降到0.17比特：模型不再分散押注。"
+  "89009d712f17": {
+   "scene": "GRPO",
+   "en": "That last term needs the KL divergence from the reference model, Part 1's measure of how far one distribution is from another. Computing it exactly would mean summing over every possible answer, so it is estimated from the sampled answers. <bookmark mark='a'/> Write r for the reference model's probability over the current one's. The KL is the average of minus log r. <bookmark mark='b'/> So the simplest estimate, k one, is minus log r for each sample: right on average, but noisy, and it can come out negative, though a divergence never is. <bookmark mark='c'/> Now, r minus one has mean exactly zero, so adding it changes nothing on average. <bookmark mark='d'/> The sum, John Schulman's k three, is never negative, because log r is at most r minus one, and it is still unbiased. That is the estimate GRPO puts in its loss.",
+   "zh": "最后那一项需要和参考模型之间的KL散度，第1部分里衡量一个分布离另一个有多远的量。精确计算它，要对所有可能的回答求和，所以要从采样出来的回答里去估计。<bookmark mark='a'/>记r为参考模型的概率除以当前模型的概率。KL就是负log r的平均。<bookmark mark='b'/>所以最简单的估计k1，就是每个样本的负log r：平均来说是对的，但噪声大，而且可能是负数，而散度永远不会是负的。<bookmark mark='c'/>而r减1的均值正好是零，所以加上它，平均来说什么也不变。<bookmark mark='d'/>两者之和，约翰·舒尔曼的k3，永远不会是负的，因为log r最多是r减1，而且它仍然是无偏的。GRPO放进损失函数里的，就是这个估计。"
   },
-  "038184bb14e2": {
-   "scene": "Objective",
-   "en": "Before the variants, one more objective, because it explains what that KL term is really doing. <bookmark mark='i'/> The idea, in short: show the model pairs, a better and a worse answer to the same question, and raise the better one's probability, relative to the starting model, more than the worse one's. Here is where that comes from. <bookmark mark='a'/> Maximize reward while staying near the starting model. <bookmark mark='b'/> This has an exact solution: the starting model, reweighted by e to the reward over beta. <bookmark mark='c'/> Turn it around, and the reward is hidden in the best model itself: beta times the log of how much it raised each answer, plus a constant. <bookmark mark='d'/> Now suppose all we have is pairs: this answer is better than that one, with Bradley and Terry's model of preferences: the chance that one answer beats another depends only on the gap between their scores, through a sigmoid. The constant cancels. <bookmark mark='e'/> What's left is a plain loss on the model itself: push up the winner's log-ratio, push down the loser's. That's DPO, by Rafailov and colleagues: preference tuning with no reward model and no sampling during training.",
-   "zh": "在讲各种变体之前，再看一个目标函数，因为它解释了那个KL项到底在做什么。<bookmark mark='i'/>简单来说，思路是这样的：给模型看成对的回答，同一道题的一个较好的回答和一个较差的回答，然后相对于起始模型，把较好那个的概率提得比较差那个更多。下面来看这是怎么来的。<bookmark mark='a'/>在不远离起始模型的前提下，让奖励最大。<bookmark mark='b'/>这有一个精确解：起始模型，按e的奖励除以β次方重新加权。<bookmark mark='c'/>反过来看，奖励就藏在最优模型自身里：β乘以它把每个回答的概率提高了多少的对数，再加一个常数。<bookmark mark='d'/>现在假设我们只有成对的比较：这个回答比那个好，用Bradley和Terry的偏好模型：一个回答胜过另一个的概率，只取决于两者分数之差，再经过一个sigmoid函数。那个常数就消掉了。<bookmark mark='e'/>剩下的是直接作用在模型自身上的一个普通损失：把胜者的对数比值往上推，把败者的往下推。这就是DPO，由Rafailov和同事们提出：做偏好调优，不需要奖励模型，训练时也不需要采样。"
+  "076bfa4cb21f": {
+   "scene": "GRPO",
+   "en": "Our addition model makes this exact, because it has only a thousand possible answers. Take the model after chapter four's training, compute its true KL from where it started, 0.840 nats per answer, and compare the estimates from single samples. <bookmark mark='a'/> k one averages 0.839, close to the truth, but 10 percent of its estimates are negative, and its spread is 0.91. <bookmark mark='b'/> k two, half the squared log ratio, is never negative, with spread 1.36, but biased: on average 0.073 too low. <bookmark mark='c'/> k three is never negative, averages 0.744, and its spread is 6.25. <bookmark mark='d'/> One caution from 2025: an unbiased estimate of the KL is not an unbiased estimate of its gradient. Put straight into the loss, as GRPO does, k three pulls in a slightly different direction, and recent recipes often drop the term altogether.",
+   "zh": "我们的加法模型能把这件事算得精确，因为它只有1000种可能的回答。取第4章训练之后的模型，算出它离起点的真实KL，每个回答0.840奈特，再比较单个样本给出的估计。<bookmark mark='a'/>k1平均为0.839，接近真值，但有10%的估计是负的，离散程度为0.91。<bookmark mark='b'/>k2，对数比平方的一半，永远不为负，离散程度为1.36，但有偏：平均低了0.073。<bookmark mark='c'/>k3永远不为负，平均为0.744，离散程度为6.25。<bookmark mark='d'/>2025年的一个提醒：KL的无偏估计，并不是它的梯度的无偏估计。像GRPO那样直接放进损失函数，k3拉的方向会有一点偏，最近的配方常常干脆把这一项去掉。"
   },
-  "579e997a8cf3": {
-   "scene": "Objective",
-   "en": "We tried it on our addition, with pairs of one right and one wrong answer, drawn once from the starting model. <bookmark mark='a'/> It got worse: from 35 to 24 percent right. <bookmark mark='b'/> Watch the two log-probabilities on pairs it never trained on. The loss only asks the winner to rise relative to the loser, and the easiest way there was to push both down, the loser faster. The probability went somewhere, mostly to other wrong answers. This is known as likelihood displacement. Offline pairs from a weak model teach less than they seem to; the on-policy methods, which keep sampling from the model they're improving, kept getting better.",
-   "zh": "我们在加法上试了它，用一对对一个对、一个错的回答，从起始模型里一次性抽出来。<bookmark mark='a'/>结果变差了：正确率从35%降到24%。<bookmark mark='b'/>看看在它从没训练过的那些成对样本上，两个对数概率的变化。这个损失只要求胜者相对败者上升，而最省事的办法，是把两者都往下压，败者压得更快。概率流到了别处，大多流到了其他错误答案上。这叫作似然位移。来自一个弱模型的离线配对，教会的东西比看上去少；而在线的方法，不断从正在改进的模型里采样，一直在变好。"
+  "c125f8f37ffc": {
+   "scene": "GRPO",
+   "en": "Here is what the objective does to the model, step by step: three questions it was unsure of, and the probability it gives each candidate answer, the right one in green. <bookmark mark='a'/> Each step, answers that beat their group's average get pushed up and the rest pushed down; the clip keeps each push small. <bookmark mark='b'/> The right answers' probability goes from 25 percent on average to 71, and the wrong ones drain away. <bookmark mark='b2'/> Not smoothly: each step learns from eight sampled answers a question, so a right answer can drop sharply and be pulled back later. <bookmark mark='b3'/> The entropy falls with it, from 0.92 to 0.17 bits a digit: the model stops spreading its bets. That will matter.",
+   "zh": "这就是目标函数一步一步对模型做的事：三道它没把握的题，以及它给每个候选答案的概率，正确的那个是绿色。<bookmark mark='a'/>每一步，比组内平均好的回答被往上推，其余的往下压；裁剪让每次推动都很小。<bookmark mark='b'/>正确答案的概率平均从25%升到71%，错误答案的概率逐渐流失。<bookmark mark='b2'/>并不平稳：每一步对每道题只从8个采样回答中学习，所以一个正确答案可能突然掉下去，过后再被拉回来。<bookmark mark='b3'/>熵也跟着下降，从每个数字0.92比特降到0.17比特：模型不再分散下注。这一点后面会很重要。"
   },
-  "132bc2373af4": {
-   "scene": "Objective",
-   "en": "Since DeepSeek-R1, a small industry has tuned this objective. <bookmark mark='a'/> Doctor GRPO drops two normalizations: dividing by the group's spread overweights questions that are nearly always right or nearly always wrong, and dividing by an answer's length lets long wrong answers off lightly. <bookmark mark='b'/> DAPO, from ByteDance, lets the clip go higher above than below, so unlikely good tokens can grow, and throws away groups that carry no signal. <bookmark mark='c'/> GSPO, used for Qwen3, takes one ratio per answer instead of per token: the geometric mean of its tokens' ratios. <bookmark mark='g'/> Multiply the ratios together and take the root, one per token, so a token that doubled and one that halved cancel out. <bookmark mark='d'/> We ran all of them, and DPO, from the same start on the same questions. <bookmark mark='e'/> The best here is DAPO, at 94 percent; the reinforcement learners span 19 points, from the same start. DPO, as we saw, ends at 24.",
-   "zh": "自从DeepSeek-R1以来，一个小小的行业都在调这个目标函数。<bookmark mark='a'/>Dr. GRPO去掉了两个归一化：除以组内标准差，会过分看重几乎总对或几乎总错的题；除以回答长度，会让冗长的错误回答受罚太轻。<bookmark mark='b'/>字节跳动的DAPO，让截断的上限比下限放得更宽，这样可能性低的好词元也能长大，并且丢掉不带信号的组。<bookmark mark='c'/>Qwen3用的GSPO，每个回答只算一个比值，而不是每个词元一个：它的各个词元比值的几何平均。<bookmark mark='g'/>把这些比值乘起来，再开方，有几个词元就开几次方，这样一个翻了一倍的词元和一个减了一半的词元，就正好抵消。<bookmark mark='d'/>我们把它们全都跑了一遍，还有DPO，从同一个起点，在同样的题目上。<bookmark mark='e'/>这里最好的是DAPO，94%；这些强化学习方法从同一个起点出发，结果相差19个百分点。DPO，正如我们看到的，最后是24%。"
+  "3d81e0c35ba4": {
+   "scene": "Variants",
+   "en": "Chapter six. The successors.",
+   "zh": "第6章。后继者们。"
   },
-  "011c6d6739ab": {
-   "scene": "Objective",
-   "en": "One of DAPO's fixes is worth seeing. When all eight answers to a question are right, every advantage is zero, and so is the gradient: the question was wasted. <bookmark mark='a'/> As the model improves, that happens more and more: by the end of our run, 27 percent of the groups taught it nothing. <bookmark mark='b'/> DAPO keeps sampling questions until each batch is full of groups that disagree. Here that cost 2.97 times as many questions per step.",
-   "zh": "DAPO的修正里，有一个值得看一看。当一道题的8个回答全对时，每个优势都是0，梯度也是0：这道题白做了。<bookmark mark='a'/>模型越好，这种情况就越多：到我们训练结束时，27%的组什么也没教给它。<bookmark mark='b'/>DAPO会不断抽题，直到每个批次里都装满了意见不一的组。在这里，这样做每步要多花2.97倍的题目。"
+  "61de621aa494": {
+   "scene": "Variants",
+   "en": "Since DeepSeek-R1, a small industry has picked GRPO apart. The first finding, from Zichen Liu and colleagues at Sea AI Lab, concerns that innocent average over an answer's tokens. <bookmark mark='a'/> It means each token's push is the advantage divided by the answer's length. <bookmark mark='b'/> A short right answer gets a big push up on each of its tokens. A long wrong answer gets only a small push down on each of its many. <bookmark mark='c'/> So the longer a wrong answer is, the less it is punished per token, and lengths drift upward for reasons that have nothing to do with thinking. They called their fix Doctor GRPO: drop the division by length, and also the division by the group's spread, which gives extra weight to questions that are nearly always right, or nearly always wrong.",
+   "zh": "DeepSeek-R1之后，整整一个小行业都在拆解GRPO。第一个发现来自Sea AI Lab的Zichen Liu和同事，关于对一个回答的词元取平均这个看似无害的做法。<bookmark mark='a'/>它意味着每个词元受到的推动，是优势除以回答的长度。<bookmark mark='b'/>一个短的正确回答，每个词元都被大力往上推。一个长的错误回答，它的许多词元每个只被轻轻往下压。<bookmark mark='c'/>所以错误回答越长，每个词元受的惩罚越少，长度会因为和思考毫无关系的原因往上漂。他们把修正叫作Dr. GRPO：去掉除以长度，也去掉除以组内标准差，因为后者会给几乎总是对、或者几乎总是错的题目额外的权重。"
   },
-  "8eb866e89798": {
-   "scene": "Objective",
-   "en": "Every one of these objectives does something else, too. <bookmark mark='a'/> It sharpens the model. The entropy of its digits falls from 0.93 bits to about 0.15: it stops considering alternatives. Too fast, and exploration dies; that's the entropy collapse that recent papers fight with <bookmark mark='h'/> DAPO's clip-higher trick from a moment ago, the lopsided clip that lets unlikely good tokens grow, and with entropy bonuses: a small reward for keeping options open. <bookmark mark='b'/> So does RL teach a model new answers, or just make it pick the ones it could already find? Yue and colleagues compared pass at k before and after RL. <bookmark mark='c'/> On ours, RL lifts one try from 33 to 87 percent, but with enough tries the two meet: both reach about 100 percent at 128. A problem this small has no answers the model can't find by chance; on hard problems, Yue and colleagues found that with enough tries the model before RL wins. RL mostly concentrates probability on answers the model already had.",
-   "zh": "这些目标函数，每一个都还做了另一件事。<bookmark mark='a'/>它让模型变得更尖锐。它的数字的熵从0.93比特降到0.15左右：它不再考虑别的可能。降得太快，探索就死了；这就是熵塌缩，最近的论文用来对付它的，一是<bookmark mark='h'/>刚才DAPO那个放宽截断上限的技巧，也就是那个上下不对称、让可能性低的好词元也能长大的截断，二是熵奖励：给保留多种选择一点小小的奖励。<bookmark mark='b'/>那么，强化学习是教会了模型新的答案，还是只是让它挑出那些它本来就能找到的？Yue和同事们比较了强化学习前后的pass@k。<bookmark mark='c'/>在我们的模型上，强化学习把一次尝试的正确率从33%提高到87%，但尝试次数够多时，两者就会合：在128次时都达到约100%。这么小的问题，没有哪个答案是模型靠运气找不到的；在难题上，Yue和同事们发现，只要尝试次数够多，强化学习之前的模型反而更好。强化学习主要是把概率集中到模型本来就有的答案上。"
+  "1400990b5c24": {
+   "scene": "Variants",
+   "en": "Three more variants followed within months. <bookmark mark='a'/> Doctor GRPO, as we just saw: no division by length or by spread. <bookmark mark='b'/> DAPO, from ByteDance and Tsinghua, lets the clip go higher above than below, so unlikely good tokens can grow; it throws away groups that carry no signal; and it weighs every token in the batch equally. <bookmark mark='c'/> GSPO, from the Qwen team, takes one ratio per answer instead of per token: the geometric mean of its tokens' ratios. <bookmark mark='g'/> Multiply the ratios together and take the root, one per token, so a token that doubled and one that halved cancel out. It made reinforcement learning of their mixture-of-experts models stable. <bookmark mark='d'/> And CISPO, from MiniMax, clips the importance weight itself and treats it as a constant, so every token keeps its gradient, even the rare ones the PPO clip would silence. In MiniMax's own comparison it matched DAPO in half the steps.",
+   "zh": "几个月之内又出现了三个变体。<bookmark mark='a'/>Dr. GRPO，刚才看到了：不除以长度，也不除以标准差。<bookmark mark='b'/>DAPO，来自字节跳动和清华，让裁剪的上界比下界放得更宽，这样可能性低的好词元也能长起来；它扔掉没有信号的组；它让批次里的每个词元权重相同。<bookmark mark='c'/>GSPO，来自通义千问团队，每个回答只取一个比值，而不是每个词元一个：它的词元比值的几何平均。<bookmark mark='g'/>把比值乘起来，再开相应次数的方根，每个词元一次，于是一个翻了一倍的词元和一个减了一半的词元正好抵消。它让他们的混合专家模型的强化学习稳定了下来。<bookmark mark='d'/>还有CISPO，来自MiniMax，它裁剪的是重要性权重本身，并把它当作常数，于是每个词元都保留自己的梯度，包括那些会被PPO裁剪压掉的少见词元。在MiniMax自己的比较里，它用一半的步数就追平了DAPO。"
   },
-  "89227e505d84": {
+  "14bcac001e75": {
+   "scene": "Variants",
+   "en": "We ran all of them on our addition model, from the same start, on the same kind of questions, three runs each. <bookmark mark='a'/> GRPO as published, the only objective here with a KL penalty, collapsed in 2 of its 3 runs: accuracy fell to 2 percent, and the model ran far from where it started. The likely culprit is that penalty: the gradient of the k3 estimator grows with r, whose heavy tail we met in chapter five. DAPO drops the term altogether. <bookmark mark='a2'/> Among the runs that learned, DAPO ends highest, 91 percent on average, but the averages span only 12 points, less than the 19 points between runs of the same method. On a problem this small they mostly agree; the differences show at scale, over long answers and thousands of steps. <bookmark mark='b'/> One cost the bars hide: DAPO's dynamic sampling drew 2.94 times as many questions to fill its batches. A fair comparison counts samples, not steps.",
+   "zh": "我们在加法模型上把它们全部跑了一遍，同一个起点，同一类题目，每种跑3次。<bookmark mark='a'/>按论文原样实现的GRPO，也是这里唯一带KL惩罚的目标函数，在3次运行里坍缩了2次：正确率掉到2%，模型也跑得离起点很远。最可能的元凶就是这个惩罚项：k3估计量的梯度随r增长，而r的重尾我们在第5章已经见过。DAPO干脆去掉了这一项。<bookmark mark='a2'/>在学到了东西的运行里，DAPO最后最高，平均91%，但各方法的平均值只差12个百分点，还不到同一种方法不同运行之间的19个百分点。在这么小的问题上，它们基本一致；差别要在大规模上才显现：长回答，成千上万步。<bookmark mark='b'/>有一项代价柱状图里看不出来：DAPO的动态采样，为了填满批次，抽了2.94倍的题目。公平的比较应该数样本，而不是数步数。"
+  },
+  "34834d8c8a6d": {
+   "scene": "Variants",
+   "en": "One of DAPO's fixes is worth seeing. When all eight answers to a question are right, every advantage is zero, and so is the gradient: the question was wasted. <bookmark mark='a'/> As the model improves, that happens more and more: by the end, 31 percent of the groups taught it nothing. <bookmark mark='b'/> DAPO keeps sampling questions until each batch is full of groups that disagree; by the end it needed 4.0 times as many.",
+   "zh": "DAPO的一个修正值得看一看。当一道题的8个回答全对时，每个优势都是零，梯度也是零：这道题白做了。<bookmark mark='a'/>随着模型变好，这种情况越来越多：到最后，31%的组什么也没教给它。<bookmark mark='b'/>DAPO不断抽题，直到每个批次都装满了有分歧的组；到最后，它需要4.0倍的题目。"
+  },
+  "654c23153e6f": {
+   "scene": "Variants",
+   "en": "And the offline alternative? Part 27 derived DPO, which learns from fixed pairs of a better and a worse answer, with no sampling during training. We gave it pairs of one right and one wrong answer, drawn once from the starting model. <bookmark mark='a'/> It got worse: from 35 to 26 percent right. <bookmark mark='b'/> Watch the log-probabilities on pairs it never trained on: the loss only asks the right answer to rise relative to the wrong one, and the easiest way there was to push both down, the wrong one faster. The probability went somewhere else, mostly to other wrong answers: Part 27's likelihood displacement. <bookmark mark='c'/> With a checker at hand, sampling from the model you are improving, on-policy, is what keeps paying.",
+   "zh": "那么离线的替代方法呢？第27部分推导了DPO，它从固定的一好一坏的回答对中学习，训练时不采样。我们给它的回答对是一对一错，从起始模型中一次抽好。<bookmark mark='a'/>它变差了：正确率从35%降到26%。<bookmark mark='b'/>看看它从没训练过的回答对上的对数概率：损失函数只要求正确答案相对错误答案上升，而最省事的办法，是把两者都往下压，错误的压得更快。概率流到了别处，大多流到了其他错误答案上：这就是第27部分讲的似然位移。<bookmark mark='c'/>手里有检查器的时候，从正在改进的模型本身采样，也就是在线策略，才是一直有回报的做法。"
+  },
+  "9fdf00408732": {
+   "scene": "Entropy",
+   "en": "Chapter seven. Entropy collapse.",
+   "zh": "第7章。熵坍缩。"
+  },
+  "153d08434f59": {
+   "scene": "Entropy",
+   "en": "At the end of chapter five, the model's entropy fell as it learned. Here is why that always threatens. Entropy measures how spread out the model's choices are. <bookmark mark='a'/> Write the probabilities as a softmax of logits z, and differentiate: moving logit b changes the entropy by minus pi b times how much more surprising b is than average. <bookmark mark='b'/> So, to first order, a step changes the entropy by minus the covariance, over the model's own choices, between log-probability and the change in logit. <bookmark mark='c'/> A policy-gradient step raises each logit in proportion to its probability times its advantage. When the answers the model already likes are the ones that score well, that covariance is positive, and the entropy falls. <bookmark mark='d'/> Reinforcement learning on a model's own samples rewards what was already likely, and it compounds. Ganqu Cui and colleagues worked this out for language models in 2025.",
+   "zh": "在第5章的最后，模型学习的同时，它的熵在下降。这里说说为什么这总是一个威胁。熵衡量模型的选择有多分散。<bookmark mark='a'/>把概率写成logit z的softmax，再求导：移动logit b，熵的变化是负的pi b乘以b比平均情况意外多少。<bookmark mark='b'/>所以，一阶近似下，一步更新让熵改变的量，是负的协方差：在模型自己的选择上，对数概率和logit变化之间的协方差。<bookmark mark='c'/>策略梯度的一步，让每个logit按它的概率乘以优势的比例提高。当模型本来就喜欢的回答正好得分高时，这个协方差是正的，熵就下降。<bookmark mark='d'/>在模型自己的样本上做强化学习，奖励的正是本来就可能的东西，而且会越滚越大。Ganqu Cui和同事在2025年为语言模型把这一点推导了出来。"
+  },
+  "7ecdeb003e89": {
+   "scene": "Entropy",
+   "en": "Here it is in our runs. Every objective starts at 0.92 bits of entropy per digit, and every one drives it down. <bookmark mark='a'/> Doctor GRPO, with GRPO's symmetric clip, ends at 0.14. <bookmark mark='b'/> DAPO ends lower still, at 0.08 bits: in our runs, clip-higher did not hold the entropy up. With three-digit answers there are few unlikely tokens to save; on long reasoning, DAPO's authors found it kept the entropy from collapsing. <bookmark mark='c'/> CISPO ends at 0.16, and the plain gradient, with no clip at all, at 0.28.",
+   "zh": "这是我们的运行结果。每种目标函数开始时，每个数字的熵都是0.92比特，而每一种都把它压了下去。<bookmark mark='a'/>Dr. GRPO用的是GRPO的对称裁剪，最后停在0.14。<bookmark mark='b'/>DAPO最后更低，只有0.08比特：在我们的运行里，放宽上界的裁剪没能把熵托住。答案只有三位数，没什么可能性低的词元需要挽救；在长推理上，DAPO的作者发现它能防止熵坍缩。<bookmark mark='c'/>CISPO最后是0.16，完全不裁剪的普通梯度是0.28。"
+  },
+  "a687206787b2": {
+   "scene": "Entropy",
+   "en": "Cui and colleagues found something stranger. Across many runs, accuracy was a simple function of entropy: R equals minus a times e to the H, plus b. <bookmark mark='a'/> Each dot here is one checkpoint of one of our runs, coloured by objective. <bookmark mark='b'/> Fitted to every checkpoint of our runs, it explains 80 percent of the variation in accuracy, whatever the objective. <bookmark mark='c'/> And the law has a sting: at zero entropy, when the model has stopped exploring entirely, it predicts a ceiling, here 86 percent. Entropy is a budget, and reinforcement learning spends it to buy accuracy.",
+   "zh": "Cui和同事还发现了更奇怪的事。在许多次运行中，正确率是熵的一个简单函数：R等于负a乘以e的H次方，再加b。<bookmark mark='a'/>这里的每个点，是我们某一次运行的一个检查点，按目标函数上色。<bookmark mark='b'/>拟合到我们所有运行的每个检查点上，它解释了正确率80%的变化，不管是哪种目标函数。<bookmark mark='c'/>这个规律还带着一根刺：在熵为零，也就是模型完全不再探索的时候，它预言了一个上限，这里是86%。熵是一笔预算，强化学习花掉它来换正确率。"
+  },
+  "2a087aaf4a6a": {
+   "scene": "Entropy",
+   "en": "So the field fights the collapse. <bookmark mark='a'/> DAPO's clip-higher lets unlikely tokens grow faster than likely ones shrink. <bookmark mark='b'/> An entropy bonus pays the model a little for keeping options open. <bookmark mark='c'/> Cui's group restrains just the few tokens with the largest covariance, the ones driving the collapse. <bookmark mark='d'/> And NVIDIA's ProRL kept training stable for more than two thousand steps by controlling the KL and periodically resetting the reference model. <bookmark mark='e'/> Why it matters: a model that has stopped exploring has fewer different answers to offer when you ask it again. That is the question of chapter nine.",
+   "zh": "所以这个领域在和坍缩作斗争。<bookmark mark='a'/>DAPO放宽上界的裁剪，让可能性低的词元长得比可能性高的词元缩得快。<bookmark mark='b'/>熵奖励给模型一点报酬，让它保留选择。<bookmark mark='c'/>Cui的团队只约束协方差最大的那几个词元，也就是推动坍缩的那些。<bookmark mark='d'/>英伟达的ProRL靠控制KL、定期重置参考模型，让训练稳定地跑了两千多步。<bookmark mark='e'/>这为什么重要：一个不再探索的模型，你再问它一次时，能给出的不同答案就更少了。这是第9章的问题。"
+  },
+  "73407e800e54": {
+   "scene": "Length",
+   "en": "Chapter eight. How long to think.",
+   "zh": "第8章。该想多久。"
+  },
+  "151e60e2ad66": {
+   "scene": "Length",
+   "en": "When DeepSeek trained R1-Zero with reinforcement learning, something happened that nobody had asked for. Its thinking grew longer, steadily, throughout training, from hundreds of tokens to thousands, though the reward only checked the final answer. <bookmark mark='a'/> And in the middle of one solution, an intermediate version wrote: wait, wait, wait. That's an aha moment I can flag here. Then it went back and redid the step. <bookmark mark='b'/> Re-checking, backtracking, trying another way: none of it was demonstrated. It appeared because longer, more careful chains earned more reward.",
+   "zh": "DeepSeek用强化学习训练R1-Zero时，发生了一件没人要求过的事。它的思考越来越长，在整个训练过程中稳步增长，从几百个词元到几千个，尽管奖励只检查最终答案。<bookmark mark='a'/>在一个解答的中途，一个中间版本写道：等等，等等，等等。这是一个我可以标记出来的顿悟时刻。然后它回过头去，把那一步重做了一遍。<bookmark mark='b'/>重新检查，回溯，换一种方法再试：这些都没有人示范过。它们之所以出现，是因为更长、更仔细的思维链能赢得更多奖励。"
+  },
+  "24d84fb402a9": {
+   "scene": "Length",
+   "en": "Our adding model can show the same thing in miniature. Reward it only for the right sum, and replay the training. <bookmark mark='a'/> The map shows, for each length of list, how many steps of thought it chooses: the first column is answering at once, and the outlined cells are the whole chain. At the start it thinks 66 percent of the time, and often stops before the end of the list. <bookmark mark='b'/> Watch the mass move. <bookmark mark='c'/> Mean thinking goes from 3.0 steps to 5.5, and accuracy from 77 percent to 96. By the end it writes the whole chain almost every time: it thinks on 100 percent of nine-digit lists, and on 100 percent of two-digit ones.",
+   "zh": "我们的加法模型可以在小尺度上展示同样的事。只在和算对时给奖励，然后回放训练过程。<bookmark mark='a'/>这张图显示，对每种长度的列表，它选择思考多少步：第一列是直接回答，加框的格子是完整的思维链。一开始，它66%的时候会思考，而且常常没到列表末尾就停下了。<bookmark mark='b'/>看看分布怎么移动。<bookmark mark='c'/>平均思考步数从3.0步变成5.5步，正确率从77%变成96%。到最后，它几乎每次都写出完整的思维链：9个数字的列表，它100%的时候会思考，2个数字的列表也有100%。"
+  },
+  "93e8602b6f4a": {
+   "scene": "Length",
+   "en": "There is a cost hiding in that last number. In late 2024, researchers at Tencent and Shanghai Jiao Tong University named it: reasoning models overthink, spending far more tokens than needed on questions as easy as two plus three. <bookmark mark='a'/> On two-digit lists, before any reinforcement learning, answering at once was already right 90 percent of the time, thinking 96: a gain of 6 points. <bookmark mark='b'/> After training, ours thinks on 100 percent of them anyway. Nothing in the reward says a token of thought costs anything, so any gain at all, however small, is worth any length.",
+   "zh": "最后那个数字里藏着一个代价。2024年底，腾讯和上海交通大学的研究者给它起了名字：推理模型会过度思考，在像二加三这么简单的问题上，花掉的词元远远超过需要。<bookmark mark='a'/>在2个数字的列表上，强化学习之前，直接回答已经有90%是对的，思考是96%：只多了6个百分点。<bookmark mark='b'/>训练之后，我们的模型还是在其中100%的题上思考。奖励里没有任何东西说思考的词元有成本，所以任何收益，哪怕再小，都值得任意长度。"
+  },
+  "d6eed2a1a10e": {
+   "scene": "Length",
+   "en": "The fix is to make thought cost something: subtract a small amount c from the reward for every step of thought. We trained three ways, three runs each. <bookmark mark='a'/> With no cost, it thinks on nearly everything. <bookmark mark='b'/> With a cost of 0.005 per step, it learns to choose: it thinks on 7 percent of two-digit lists and 90 percent of nine-digit ones. Short lists, it answers; long ones, it works out. <bookmark mark='c'/> With 0.02, thinking is too expensive: it thinks on 3 percent even of the longest lists, and gets them right 39 percent of the time, against 82 with no cost. Too little thought, now. <bookmark mark='d'/> The cost is a dial between overthinking and underthinking.",
+   "zh": "解决办法是让思考有成本：每一步思考，都从奖励里减去一个小量c。我们用三种方式训练，每种跑3次。<bookmark mark='a'/>没有成本时，它几乎什么都要思考。<bookmark mark='b'/>每步成本为0.005时，它学会了选择：2个数字的列表它7%的时候思考，9个数字的是90%。短的列表，它直接回答；长的，它一步步算。<bookmark mark='c'/>成本为0.02时，思考太贵了：即使是最长的列表，它也只有3%的时候思考，答对39%，而没有成本时是82%。现在是想得太少了。<bookmark mark='d'/>这个成本是一个旋钮，一头是过度思考，一头是思考不足。"
+  },
+  "d902ffd27934": {
+   "scene": "Length",
+   "en": "The frontier recipes do the same, more carefully. <bookmark mark='a'/> Moonshot's Kimi k1.5 adds a length reward measured within each group: among right answers, shorter earns more. <bookmark mark='b'/> L1, from Carnegie Mellon, puts the desired length in the prompt and rewards the model for hitting it. <bookmark mark='c'/> DAPO penalizes only answers that run past a maximum length. <bookmark mark='d'/> And the products expose the dial directly: a budget of thinking tokens, or an effort setting of low, medium or high.",
+   "zh": "前沿的配方做的是同一件事，只是更仔细。<bookmark mark='a'/>月之暗面的Kimi k1.5加了一个在每组之内衡量的长度奖励：在正确的回答里，越短的得分越高。<bookmark mark='b'/>卡内基梅隆大学的L1把想要的长度写进提示词，奖励模型达到这个长度。<bookmark mark='c'/>DAPO只惩罚超过最大长度的回答。<bookmark mark='d'/>而产品直接把这个旋钮交给用户：一个思考词元的预算，或者一个努力程度的设置，低、中、高。"
+  },
+  "39bdcff5b177": {
+   "scene": "PassK",
+   "en": "Chapter nine. Sharper, or wider?",
+   "zh": "第9章。更锐利，还是更宽广？"
+  },
+  "953361d95a0f": {
+   "scene": "PassK",
+   "en": "To ask whether reinforcement learning teaches anything new, we need to measure what a model can do with many tries. The measure is pass at k: the chance that at least one of k tries is right, with a checker to say which. For a question where one try succeeds with probability p, that's one minus one minus p to the k. <bookmark mark='a'/> In practice we have n samples, c of them right. The obvious estimate plugs in c over n. <bookmark mark='b'/> But it is biased: one minus x to the k is convex, so by Jensen's inequality the plug-in estimate comes out too low on average. <bookmark mark='c'/> The fix, from OpenAI's Codex paper in 2021: choose k of your n samples at random, without replacement, and ask how likely they are to be all wrong. <bookmark mark='d'/> Any k of n independent tries are themselves k independent tries, so on average this is exactly one minus p to the k. Unbiased.",
+   "zh": "要问强化学习有没有教会模型新东西，我们得衡量模型在多次尝试下能做到什么。这个量是pass@k：k次尝试中至少有一次正确的概率，由检查器来判断哪次正确。对于一道一次尝试成功概率为p的题，它等于1减去1减p的k次方。<bookmark mark='a'/>实际上，我们有n个样本，其中c个正确。最直接的估计是代入c除以n。<bookmark mark='b'/>但它是有偏的：1减x的k次方是凸函数，所以由詹森不等式，代入估计平均来说偏低。<bookmark mark='c'/>修正方法来自OpenAI 2021年的Codex论文：从n个样本中随机、不放回地选k个，问它们全错的可能性有多大。<bookmark mark='d'/>n次独立尝试中的任意k次，本身就是k次独立尝试，所以平均来说，这正好是1减p的k次方。无偏。"
+  },
+  "e1b0c75b8535": {
+   "scene": "PassK",
+   "en": "Here are both estimates on our addition model before reinforcement learning, where we know the exact answer. <bookmark mark='a'/> The plug-in estimate falls short, by up to 2 points. The unbiased one lies on the exact curve. <bookmark mark='b'/> For a single question the unbiased estimate is noisy, but centred on the truth; the plug-in one is centred too low. With a large benchmark, the noise averages out, and the bias doesn't.",
+   "zh": "这是两种估计在强化学习之前的加法模型上的结果，这里我们知道确切答案。<bookmark mark='a'/>代入估计偏低，最多低2个百分点。无偏估计落在精确的曲线上。<bookmark mark='b'/>对单道题，无偏估计噪声很大，但中心在真值上；代入估计的中心偏低。在一个大的基准上，噪声会平均掉，偏差不会。"
+  },
+  "fe23e28e8e6e": {
+   "scene": "PassK",
+   "en": "In April 2025, Yang Yue and colleagues at Tsinghua asked exactly this; the paper became an oral at NeurIPS that December. <bookmark mark='a'/> After reinforcement learning, one try is far better. But give both models hundreds of tries, and the base model, the one RL started from, solves more problems. The curves cross. Their reading: RL sharpens; it moves probability onto reasoning the base model could already find, and narrows the rest. Distilling a stronger teacher, by contrast, can add new reasoning. <bookmark mark='b'/> The reply came within weeks. NVIDIA's ProRL trained much longer, keeping the KL in check and resetting the reference model, and reported strategies the base model could not reach. The two are compatible: a short run sharpens; a long, diverse one may widen.",
+   "zh": "2025年4月，清华的Yang Yue和同事问的正是这个问题；这篇论文在那年12月成了NeurIPS的口头报告。<bookmark mark='a'/>强化学习之后，一次尝试的表现好得多。但给两个模型几百次尝试，基础模型，也就是强化学习的起点，解出的题更多。两条曲线交叉了。他们的解读是：强化学习是在锐化；它把概率挪到基础模型本来就能找到的推理上，并收窄其余的部分。相比之下，从更强的老师那里蒸馏，可以加入新的推理。<bookmark mark='b'/>几周之内就有了回应。英伟达的ProRL训练得久得多，控制住KL并重置参考模型，报告了基础模型够不到的策略。两者并不矛盾：短的训练在锐化；长而多样的训练可能在拓宽。"
+  },
+  "2dda11b64e61": {
+   "scene": "PassK",
+   "en": "We can check it exactly on our addition model, because we know its probability of every answer, so pass at k needs no sampling, even at a thousand tries. <bookmark mark='a'/> Before RL, one try is right 33 percent of the time. <bookmark mark='b'/> After three hundred steps, about 82 percent. <bookmark mark='c'/> And the curves cross: at 1024 tries the model before RL solves 100.0 percent, while Doctor GRPO solves 98.2. From about 16 tries on, the untrained model is ahead. On about 3 of the 200 questions, RL drained the right answer's probability below one in a thousand, onto wrong answers it grew confident in.",
+   "zh": "我们可以在加法模型上精确地检查这一点，因为我们知道它给每个答案的概率，所以pass@k不需要采样，哪怕是一千次尝试。<bookmark mark='a'/>强化学习之前，一次尝试的正确率是33%。<bookmark mark='b'/>训练300步之后，大约82%。<bookmark mark='c'/>曲线交叉了：尝试1024次时，强化学习之前的模型解出100.0%，而Dr. GRPO解出98.2%。从大约16次尝试开始，未经训练的模型领先。在200道题里，大约有3道，强化学习把正确答案的概率压到了千分之一以下，挪到了它越来越有把握的错误答案上。"
+  },
+  "7a688abab171": {
+   "scene": "PassK",
+   "en": "One warning about measuring with many tries. A checker rewards a lucky guess as much as a reasoned answer. Guess uniformly among the 179 possible sums, and pass at a thousand and twenty-four is 99.7 percent. <bookmark mark='a'/> At large k, pass at k can make guessing look like reasoning. That's why careful studies also check the chains, or use problems whose answers are too many to guess: proofs, and programs that must pass tests.",
+   "zh": "关于用很多次尝试来衡量，有一个警告。检查器对蒙对的答案，和对推理出来的答案，给的奖励一样多。在179个可能的和之间均匀地猜，尝试1024次的pass@k是99.7%。<bookmark mark='a'/>在k很大时，pass@k会让瞎猜看起来像推理。所以严谨的研究还会检查思维链，或者用答案多到猜不中的问题：证明，以及必须通过测试的程序。"
+  },
+  "394c935ec357": {
    "scene": "TestTime",
-   "en": "Chapter four. Thinking longer.",
-   "zh": "第4章。想得更久。"
+   "en": "Chapter ten. Thinking at answer time.",
+   "zh": "第10章。回答时的思考。"
   },
-  "0dcbb35cb955": {
+  "fccff0608254": {
    "scene": "TestTime",
-   "en": "There's another way to spend computation: at answer time. Take our addition model, before the reinforcement learning, and let it answer each of 200 questions 32 times. <bookmark mark='a'/> Green is right, red is wrong. Not one question is always right, and not one is always wrong: each of the 200 comes out right only some of the time. <bookmark mark='b'/> So trying again always has a chance of helping. <bookmark mark='c'/> If c of n samples are right, the chance that at least one of k tries is right is one minus n minus c choose k, over n choose k. It's called pass at k, and it needs a checker to tell which try was the right one.",
-   "zh": "花费计算还有另一个时机：回答的时候。拿我们那个做加法的模型，取强化学习之前的版本，让它把200道题，每道都回答32次。<bookmark mark='a'/>绿色是对，红色是错。没有一道题总是答对，也没有一道题总是答错：这200道题，每一道都只是有时候答对。<bookmark mark='b'/>所以，再试一次，总有机会帮上忙。<bookmark mark='c'/>如果n个样本里有c个是对的，那么试k次、至少有一次答对的概率，就是1减去一个比值：n减c个里取k个的组合数，除以n个里取k个的组合数。这叫作pass@k，它需要一个检查器，来分辨哪一次尝试是对的。"
+   "en": "There are two ways to spend more computation once the question is asked. <bookmark mark='a'/> In parallel: sample many answers, and pick one, by a vote, a grader, or a checker. <bookmark mark='b'/> Or in sequence: one longer chain that re-checks, revises and goes on. <bookmark mark='c'/> Which is better? In 2024, Charlie Snell and colleagues at Berkeley and Google DeepMind found that it depends on the question: easy ones gain from revising, hard ones from searching wider. Choosing per question beat best-of-N four times over, and a small model given test-time compute could beat one fourteen times larger, on questions it could sometimes solve.",
+   "zh": "问题提出之后，有两种方式花更多的计算。<bookmark mark='a'/>并行：采样很多个回答，再挑一个，靠投票、评分器或检查器。<bookmark mark='b'/>或者串行：一条更长的思维链，重新检查，修改，继续。<bookmark mark='c'/>哪种更好？2024年，伯克利和谷歌DeepMind的Charlie Snell和同事发现，这取决于问题：容易的题从修改中获益，难的题从更广的搜索中获益。按题目选择策略，效率是最优N选1的4倍以上；一个小模型加上测试时计算，能胜过一个大14倍的模型，前提是它有时能解出这些题。"
   },
-  "78471cd25224": {
+  "a4f4858dbc07": {
    "scene": "TestTime",
-   "en": "So how much does trying more buy? <bookmark mark='a'/> With a checker, a lot: one try is right 33 percent of the time, and with 32 tries, 100 percent. Every doubling of the tries buys a little more. <bookmark mark='b'/> Without a checker, take a vote: the answer it gives most often. That climbs from 32 to 61 percent: less, because a vote can't recover an answer the model rarely gives. <bookmark mark='c'/> And the dashed line is the same model after reinforcement learning, with just one try: 81 percent. Training moved what used to need many tries into one. Today's reasoning models do both: trained by RL to think in long chains, and then given more time to think when the question is hard.",
-   "zh": "那么，多试几次，能换来多少？<bookmark mark='a'/>有检查器的话，能换来很多：试1次，33%的时候答对；试32次，就是100%。尝试次数每翻一倍，就再多换来一点。<bookmark mark='b'/>没有检查器，就投票：取它给得最多的那个答案。这样从32%升到61%：少一些，因为模型很少给出的答案，投票是救不回来的。<bookmark mark='c'/>而那条虚线，是同一个模型经过强化学习之后，只试1次：81%。训练把原来要试很多次才能做到的事，压缩进了一次尝试里。今天的推理模型两者兼用：先用RL训练它们用长长的思维链来思考，遇到难题时，再给它们更多时间去想。"
+   "en": "The sequential dial can be very simple. In January 2025, Niklas Muennighoff and colleagues at Stanford fine-tuned a model on just a thousand worked questions, and then controlled its thinking at answer time. <bookmark mark='a'/> To make it think longer, when it tried to stop they appended one word: wait. The model went back over its work, and sometimes fixed a mistake. To make it think less, they cut it off and made it answer. <bookmark mark='b'/> With more thinking forced, AIME scores rose from 50 to 57 percent, and the model beat o1-preview on competition maths by up to twenty-seven percent. They called it budget forcing.",
+   "zh": "串行的旋钮可以非常简单。2025年1月，斯坦福的Niklas Muennighoff和同事，只用1000道带解答的题微调了一个模型，然后在回答时控制它的思考。<bookmark mark='a'/>要让它想得更久，就在它想停下的时候，接上一个词：等等。模型会回头检查自己的过程，有时还会改正一个错误。要让它想得少一些，就截断它，让它作答。<bookmark mark='b'/>强制它多想之后，AIME的成绩从50%升到57%，在竞赛数学上比o1-preview最多高出27%。他们把这叫作预算强制。"
   },
-  "ac8eb29704db": {
-   "scene": "Outro",
-   "en": "Let's take stock. Writing out its steps lets a fixed-depth model compute for longer: L layers, once per token. That's how our two-layer model learned sixteen-bit parity. Reinforcement learning from a checker, comparing each answer with its group, taught a model to add more reliably than practice alone; the objective clips each update and keeps the model near where it started, and DPO turns the same idea into a loss on pairs. RL mostly sharpens what the model could already do. And at answer time, more tries buy more right answers, as long as something can tell which one is right.",
-   "zh": "我们来盘点一下。把步骤写出来，能让一个深度固定的模型算得更久：每个词元都过一遍L层。我们的两层模型就是这样学会16比特奇偶校验的。从检查器那里做强化学习，把每个回答和同组比较，教会了模型比单纯练习更可靠地做加法；目标函数截断每次更新，并让模型留在出发点附近，而DPO把同样的想法变成了成对样本上的一个损失。强化学习主要是让模型已经能做的事变得更尖锐。而在回答的时候，多试几次就能换来更多正确答案，只要有什么东西能判断哪一个是对的。"
+  "76b5ab2e0117": {
+   "scene": "TestTime",
+   "en": "Our adding model can be given a budget too. Make it think, and force it to answer after at most m steps, the way s1 cuts a model off. <bookmark mark='a'/> With no thought at all it gets 9-digit lists right 36 percent of the time. Cut off part-way, it does no better than not thinking at all. Only the whole chain pays: 63 percent. <bookmark mark='b'/> The parallel alternative: answer at once N times, and vote. <bookmark mark='c'/> Thinking all 9 steps reaches 63 percent with 12 tokens. A vote over answers given at once, at the same budget, manages 35, and with every token we allowed, 40. On a problem that is a chain of small steps, the chain wins: votes can't add up digits that no single try added correctly. <bookmark mark='d'/> After reinforcement learning, thinking fully reaches 84 percent. Training and test-time compute are two ways of buying the same thing.",
+   "zh": "我们的加法模型也可以给预算。让它思考，并在最多m步之后强制它作答，就像s1截断模型那样。<bookmark mark='a'/>完全不思考时，它在9个数字的列表上答对36%。想到一半被打断，并不比完全不想好。只有完整的思维链才有回报：63%。<bookmark mark='b'/>并行的替代方案：直接回答N次，然后投票。<bookmark mark='c'/>完整地思考9步，用12个词元达到63%。对直接给出的答案投票，在同样的预算下只有35%，用上我们允许的全部词元，也只有40%。在一个由许多小步骤组成的问题上，思维链赢了：投票没法把任何一次尝试都没加对的数字加对。<bookmark mark='d'/>强化学习之后，完整地思考能达到84%。训练时的计算和测试时的计算，是买同一样东西的两种方式。"
   },
-  "851c7dda834b": {
-   "scene": "Outro",
-   "en": "Reasoning over many steps is what agents do, in part twenty-nine. Every token of thought costs time to write, which is part nineteen. And whether the chain a model writes is really how it got its answer is a question for the last part.",
-   "zh": "跨越许多步的推理，正是智能体要做的事，这是第29部分。每一个思考用的词元，都要花时间来写，这是第19部分。而模型写下的这条思维链，是不是它真正得出答案的方式，这个问题留给最后一部分。"
+  "b504bbb30751": {
+   "scene": "TestTime",
+   "en": "The simplest parallel strategy with a checker is best-of-N: draw N answers and keep a right one. Part 27 showed that best-of-N moves a model log N minus N minus one over N nats away from where it started, when the reward has no ties. <bookmark mark='t'/> A checker's reward is all ties: right or wrong. So let's redo it. <bookmark mark='a'/> If one try is right with probability p, best-of-N is right with probability one minus one minus p to the N. <bookmark mark='b'/> Given that, which right answer it returns is in proportion to the model's own probabilities; the same for wrong ones. <bookmark mark='c'/> So the KL is just the divergence between two coins: one right with probability one minus q, the other with p. <bookmark mark='d'/> As N grows it levels off at log one over p, however many answers you draw, far below Part 27's formula, which in general is only an upper bound, as Ahmad Beirami and colleagues showed in 2024.",
+   "zh": "有检查器时，最简单的并行策略是最优N选1：抽N个回答，留一个正确的。第27部分说明了，在奖励没有并列时，最优N选1让模型离起点的距离是log N减去N分之N减1奈特。<bookmark mark='t'/>而检查器的奖励全是并列：要么对，要么错。所以我们重新算一遍。<bookmark mark='a'/>如果一次尝试正确的概率是p，最优N选1正确的概率就是1减去1减p的N次方。<bookmark mark='b'/>在正确的条件下，它返回哪个正确答案，与模型自己的概率成比例；错误的也一样。<bookmark mark='c'/>所以KL就是两枚硬币之间的散度：一枚正确的概率是1减q，另一枚是p。<bookmark mark='d'/>随着N增大，它在log p分之1处趋平，不管抽多少个回答，都远低于第27部分的公式；而那个公式在一般情况下只是一个上界，Ahmad Beirami和同事在2024年证明了这一点。"
   },
-  "6e571403cfcc": {
-   "scene": "Outro",
-   "en": "Next time: agents. A robot that can't see where it is keeps a belief over every place it might be, <bookmark mark='a'/> and sharpens it with each step and each glimpse of a door.",
-   "zh": "下一次：智能体。一个看不见自己在哪里的机器人，会对它可能在的每一个位置，都保持一份信念，<bookmark mark='a'/>并且每走一步、每瞥见一扇门，就让这份信念更集中一些。"
+  "4084300de256": {
+   "scene": "TestTime",
+   "en": "On our addition model, exactly. <bookmark mark='a'/> The KL of best-of-N with a checker levels off at 1.18 nats, while the formula for untied rewards would reach 4.55 at 256 tries. <bookmark mark='b'/> And accuracy: best-of-N needs about 8 tries to match what one try of the model after reinforcement learning gets right. RL moves into a single try what used to need many. o1's numbers had the same shape: 74 percent with one try, 93 when a learned scorer picked from a thousand.",
+   "zh": "在我们的加法模型上，精确地算一下。<bookmark mark='a'/>有检查器的最优N选1，KL在1.18奈特处趋平，而没有并列时的公式，在256次尝试时会达到4.55。<bookmark mark='b'/>再看正确率：最优N选1需要大约8次尝试，才能赶上强化学习之后的模型一次尝试的正确率。强化学习把过去需要很多次尝试的东西，挪进了一次尝试里。o1的数字也是同样的形状：一次尝试74%，让学来的打分器从一千个里挑，93%。"
   },
-  "09e50a03d4ca": {
+  "b1320f1d583d": {
+   "scene": "Search",
+   "en": "Chapter eleven. Searching over thoughts.",
+   "zh": "第11章。在思路中搜索。"
+  },
+  "530224e791e6": {
+   "scene": "Search",
+   "en": "Search is how Part 26's game players thought ahead, and the parts carry over almost one for one. <bookmark mark='a'/> A position becomes a partial chain of thought; a move, the next step. <bookmark mark='b'/> AlphaZero's policy network, its sense of which moves are worth trying, becomes the language model's own probabilities for the next step. <bookmark mark='c'/> The value network, how good a position looks, becomes a process reward model. <bookmark mark='d'/> And winning or losing becomes the checker. <bookmark mark='e'/> The difference is the size of the tree: a board offers at most a few hundred legal moves, a language model a whole vocabulary at every token, and a step of thought is many tokens long.",
+   "zh": "搜索就是第26部分那些下棋程序向前思考的方式，各个部分几乎可以一一对应过来。<bookmark mark='a'/>一个局面，变成一条部分完成的思维链；一步棋，变成下一步思考。<bookmark mark='b'/>AlphaZero的策略网络，也就是它对哪些棋值得一试的感觉，变成语言模型自己给下一步的概率。<bookmark mark='c'/>价值网络，也就是一个局面看起来有多好，变成过程奖励模型。<bookmark mark='d'/>而输赢，变成检查器。<bookmark mark='e'/>不同的是树的大小：棋盘上合法的走法最多几百种，而语言模型在每个词元上都有整整一个词表可选，一步思考又有许多个词元那么长。"
+  },
+  "fcd0d1d96c24": {
+   "scene": "Search",
+   "en": "Sampling chains and voting treats each chain as a whole. Search works step by step: propose several next thoughts, judge them, and keep going from the most promising. <bookmark mark='a'/> In 2023, Tree of Thoughts let GPT-4 propose and judge its own next thoughts; on a puzzle, making 24 from four numbers, it went from 4 percent with a chain of thought to 74. <bookmark mark='b'/> In 2025, Microsoft's rStar-Math ran Monte Carlo tree search over steps, guided by a learned process model, and took a seven-billion-parameter model from 59 to 90 percent on competition maths. <bookmark mark='c'/> AlphaProof searched over steps of formal proofs, every step checked by a machine; we'll meet it in chapter thirteen. <bookmark mark='d'/> But DeepSeek tried tree search for R1 and gave up: over tokens the tree is enormous, and the value model that should guide it is hard to train. At the frontier, search mostly survives as sampling many chains in parallel.",
+   "zh": "采样思维链再投票，是把每条思维链当作一个整体。搜索则是一步一步来：提出几个下一步的想法，评判它们，从最有希望的那个继续往下走。<bookmark mark='a'/>2023年，“思维树”让GPT-4自己提出、自己评判下一步的想法；在一个用四个数凑出24的谜题上，正确率从思维链的4%升到74%。<bookmark mark='b'/>2025年，微软的rStar-Math在步骤上做蒙特卡洛树搜索，由一个学来的过程模型引导，把一个70亿参数的模型在竞赛数学上从59%提高到90%。<bookmark mark='c'/>AlphaProof在形式化证明的步骤上搜索，每一步都由机器检查；我们会在第13章见到它。<bookmark mark='d'/>但DeepSeek为R1试过树搜索，最后放弃了：在词元上，这棵树大得惊人，而引导它的价值模型又很难训练。在前沿，搜索主要以并行采样很多条思维链的形式保留下来。"
+  },
+  "9004e91f01c0": {
+   "scene": "Search",
+   "en": "Here is search on our adding model. At each step, every surviving partial chain proposes three next running totals; the process grader of chapter three scores every candidate; the best three survive. <bookmark mark='a'/> Green nodes are right totals, red are wrong ones that survived, grey were pruned. <bookmark mark='b'/> At the end, the best surviving chain is right all the way down.",
+   "zh": "这是在我们的加法模型上的搜索。每一步，每条幸存的部分思维链提出三个下一个累计和；第3章的过程评分器给每个候选打分；最好的三个留下来。<bookmark mark='a'/>绿色节点是正确的累计和，红色是幸存下来的错误节点，灰色是被剪掉的。<bookmark mark='b'/>到最后，幸存的最好那条思维链从头到尾都是对的。"
+  },
+  "4b058a0760e7": {
+   "scene": "Search",
+   "en": "Is search worth it? Compare it with best-of-N, using the same grader and the same number of tokens. <bookmark mark='a'/> Best-of-N samples N whole chains and keeps the one the grader likes best. <bookmark mark='b'/> Beam search spends the same tokens step by step. <bookmark mark='c'/> At every budget, searching step by step beats choosing among whole chains: it catches a wrong total the moment it is written, instead of hoping one whole chain avoided every slip. <bookmark mark='d'/> But both get worse as they widen: beam search falls from 78 to 52 percent, best-of-N from 64 to 31. The wider the search, the more it finds of what fools the grader, chapter three's lesson again. A search is only as good as its judge.",
+   "zh": "搜索值得吗？把它和最优N选1比较，用同一个评分器，花同样多的词元。<bookmark mark='a'/>最优N选1采样N条完整的思维链，留下评分器最喜欢的那条。<bookmark mark='b'/>束搜索把同样多的词元一步一步地花。<bookmark mark='c'/>在每一种预算下，一步一步地搜索都胜过在完整思维链里挑选：错误的累计和一写出来就被发现，而不是指望某一整条思维链恰好每一步都没出错。<bookmark mark='d'/>但两者都随着搜索变宽而变差：束搜索从78%降到52%，最优N选1从64%降到31%。搜索越宽，就越能找到骗过评分器的东西，又是第3章的教训。搜索的好坏，取决于给它当裁判的那个评分器。"
+  },
+  "f803fb9c8bc1": {
+   "scene": "Latent",
+   "en": "Chapter twelve. Thinking without words.",
+   "zh": "第12章。不用文字的思考。"
+  },
+  "dd7d547e980f": {
+   "scene": "Latent",
+   "en": "A chain of thought is computation, but it has a narrow throat. <bookmark mark='a'/> Each step, the model's last hidden state, thousands of numbers, is squeezed into a single token: with a vocabulary of a hundred thousand, about seventeen bits. <bookmark mark='b'/> Then the token is turned back into numbers for the next step. Everything the model carries forward must fit through that throat. <bookmark mark='c'/> In chapter one, giving our model meaningless dots instead of words didn't help: positions are not the point; carrying state forward is. <bookmark mark='d'/> So why not pass the state on directly?",
+   "zh": "思维链是计算，但它有一个狭窄的咽喉。<bookmark mark='a'/>每一步，模型最后的隐状态，成千上万个数，被挤进一个词元：词表有十万个词元的话，大约17个比特。<bookmark mark='b'/>然后这个词元再被变回数字，用于下一步。模型要带往下一步的一切，都得挤过这个咽喉。<bookmark mark='c'/>在第1章里，用没有意义的点代替文字，对我们的模型没有帮助：要紧的不是位置，而是把状态带下去。<bookmark mark='d'/>那么，为什么不直接把状态传下去呢？"
+  },
+  "1ba1563817e1": {
+   "scene": "Latent",
+   "en": "That is Coconut, from Shibo Hao and colleagues at Meta, in December 2024. <bookmark mark='a'/> In a chain of thought, each step's state is turned into a token, and the token back into a state. <bookmark mark='b'/> In Coconut, for a stretch of reasoning, the last hidden state goes straight back in as the next input: a continuous thought. It is trained with a curriculum that replaces written steps with continuous ones, a few at a time. <bookmark mark='c'/> Something unexpected came out. A continuous thought need not commit to one next step: it can hold several at once, so the model searches breadth-first. On logic puzzles that need search, it beat a written chain of thought.",
+   "zh": "这就是Coconut，Meta的Shibo Hao和同事在2024年12月提出的。<bookmark mark='a'/>在思维链里，每一步的状态变成一个词元，词元再变回状态。<bookmark mark='b'/>在Coconut里，在一段推理中，最后的隐状态直接作为下一个输入送回去：这叫连续思维。训练时用一套课程，把写出来的步骤一次几个地换成连续的步骤。<bookmark mark='c'/>结果出现了意料之外的东西。一个连续思维不必只认定一个下一步：它可以同时装下好几个，于是模型做的是广度优先搜索。在需要搜索的逻辑谜题上，它胜过了写出来的思维链。"
+  },
+  "5c67447ae0f9": {
+   "scene": "Latent",
+   "en": "A second line of work drops the language model altogether. <bookmark mark='a'/> In June 2025, Sapient Intelligence's Hierarchical Reasoning Model, only twenty-seven million parameters, trained from scratch on about a thousand examples per task, scored 55 percent on extreme Sudoku and 74 percent on hard mazes, and reported 40 percent on ARC-AGI-1, puzzles we'll meet in chapter fourteen. Its idea: two recurrent modules, a slow one that plans and a fast one that computes, iterating many times before answering. <bookmark mark='b'/> The ARC Prize team checked. They reproduced most of the result, 32 percent on their held-out set, but found the hierarchy barely mattered: a transformer of the same size came within about five points. What mattered was an outer loop: the model's answer fed back in and refined, again and again.",
+   "zh": "第二条路线干脆不用语言模型。<bookmark mark='a'/>2025年6月，Sapient Intelligence的层级推理模型，只有2700万参数，每个任务只用大约1000个例子从零训练，在极难的数独上得了55%，在困难迷宫上得了74%，并报告在ARC-AGI-1上得了40%，我们会在第14章见到这些谜题。它的想法是：两个循环模块，一个慢的负责规划，一个快的负责计算，在回答之前反复迭代很多次。<bookmark mark='b'/>ARC Prize团队做了核查。他们复现了大部分结果，在他们留出的测试集上是32%，但发现层级结构几乎不起作用：同样大小的Transformer只差大约5个百分点。起作用的是一个外层循环：把模型的答案送回去，一遍又一遍地改进。"
+  },
+  "14b1036437d4": {
+   "scene": "Latent",
+   "en": "In October 2025, Alexia Jolicoeur-Martineau at Samsung's lab in Montreal stripped the idea to its core. <bookmark mark='a'/> One tiny network, two layers. It reads the puzzle, x, and keeps two things: a latent scratchpad z, and its current answer y. <bookmark mark='b'/> It updates the scratchpad six times, then uses it to improve the answer. <bookmark mark='c'/> Then it does it all again, and its answer is checked after every round, up to sixteen of them. <bookmark mark='d'/> With seven million parameters, it beat the Hierarchical Reasoning Model on every task: 87 percent on extreme Sudoku against 55, and 45 percent on ARC-AGI-1, ahead of many large language models. It won the first prize for papers in the 2025 ARC Prize. Depth through recurrence, instead of through tokens.",
+   "zh": "2025年10月，三星蒙特利尔实验室的Alexia Jolicoeur-Martineau把这个想法削减到只剩核心。<bookmark mark='a'/>一个微型网络，两层。它读入谜题x，并保留两样东西：一个隐式的草稿z，和它当前的答案y。<bookmark mark='b'/>它先把草稿更新6次，再用草稿去改进答案。<bookmark mark='c'/>然后整个过程再来一遍，每一轮之后都检查它的答案，最多16轮。<bookmark mark='d'/>只有700万参数，它在每一项任务上都胜过了层级推理模型：极难数独87%，对方55%；ARC-AGI-1上45%，超过了很多大语言模型。它获得了2025年ARC Prize论文奖的第一名。靠递归获得深度，而不是靠词元。"
+  },
+  "4bdaff168d62": {
+   "scene": "Latent",
+   "en": "There's a price. A chain written in words can be read. <bookmark mark='a'/> In 2025, researchers from many labs together called this a new and fragile opportunity for safety: if a model plans to cheat, its written chain of thought may say so before it acts. <bookmark mark='b'/> Thinking in vectors may be more efficient, but nobody can read it. Whether we can trust what a chain of thought says is a question for Parts 30 and 31.",
+   "zh": "这是有代价的。用文字写出的思维链是可以读的。<bookmark mark='a'/>2025年，来自多家实验室的研究者一起把这称为一个新的、但脆弱的安全机会：如果模型打算作弊，它写出的思维链可能在它动手之前就说出来。<bookmark mark='b'/>用向量思考也许更高效，但没人能读懂。思维链说的话能不能信，是第30和第31部分的问题。"
+  },
+  "1befcf9f4a8e": {
+   "scene": "Formal",
+   "en": "Chapter thirteen. Proofs a machine can check.",
+   "zh": "第13章。机器能检查的证明。"
+  },
+  "fe012460fae4": {
+   "scene": "Formal",
+   "en": "Everything in this part has leaned on a checker, and checkers have limits: a right number can sit at the end of a broken argument. Mathematics has a way out. <bookmark mark='a'/> In a proof assistant such as Lean, a theorem and its proof are written as code, and a small trusted kernel checks every single inference. <bookmark mark='b'/> No lucky guesses, no hand-waving: a proof is accepted, or it isn't. <bookmark mark='c'/> For reinforcement learning, that is the perfect reward, one that cannot be hacked, as long as the formal statement says what was meant. <bookmark mark='d'/> And since 2017 a community has been formalizing mathematics in Lean's library, Mathlib, which gives such systems something to build on.",
+   "zh": "这一部分的一切都依赖检查器，而检查器有它的局限：一个正确的数字，可能出现在一段错误论证的结尾。数学有一条出路。<bookmark mark='a'/>在Lean这样的证明助手里，定理和它的证明都写成代码，由一个小而可信的内核检查每一步推理。<bookmark mark='b'/>没有碰运气，也没有含糊其辞：证明要么被接受，要么不被接受。<bookmark mark='c'/>对强化学习来说，这是完美的奖励，一个没法被钻空子的奖励，只要形式化的命题说的正是本意。<bookmark mark='d'/>而且从2017年起，一个社区一直在把数学形式化，写进Lean的数学库Mathlib，让这样的系统有基础可依。"
+  },
+  "5b16469eb15b": {
+   "scene": "Formal",
+   "en": "Google DeepMind's AlphaProof put this to work. <bookmark mark='a'/> A Gemini model translated about a million maths problems from words into Lean, some eighty million formal statements. Then Part 26's AlphaZero went to work on them: search for proofs, keep the ones Lean accepts, and train the network on them, round after round. <bookmark mark='b'/> On the hardest problems it went further: at test time it generated variants of the problem, proved those, and learned from them, reinforcement learning during the exam. <bookmark mark='c'/> At the 2024 International Mathematical Olympiad, with AlphaGeometry 2 for the geometry, it scored 28 of 42, one point short of gold, solving four of the six problems, including the hardest, which only five contestants solved. Some proofs took it three days.",
+   "zh": "谷歌DeepMind的AlphaProof把这一点用了起来。<bookmark mark='a'/>一个Gemini模型把大约100万道数学题从文字翻译成Lean，得到大约8000万条形式化命题。然后第26部分的AlphaZero开始处理它们：搜索证明，留下Lean接受的，再用它们训练网络，一轮又一轮。<bookmark mark='b'/>在最难的题上，它走得更远：在测试时，它生成这道题的变体，证明这些变体，再从中学习，也就是在考场上做强化学习。<bookmark mark='c'/>在2024年国际数学奥林匹克上，加上负责几何题的AlphaGeometry 2，它得了42分里的28分，离金牌只差1分，解出了6道题里的4道，包括最难的那一道，那道题只有5名选手解出。有些证明花了它三天。"
+  },
+  "a48db1a976dd": {
+   "scene": "Formal",
+   "en": "A year later the picture changed. <bookmark mark='a'/> At the 2025 Olympiad, a version of Google's Gemini with Deep Think, which explores many lines of thought in parallel, solved five of the six problems, 35 points, exactly the gold-medal line, writing in plain English, within the four and a half hours; the Olympiad's own coordinators graded it. <bookmark mark='b'/> OpenAI announced the same score for an experimental reasoning model, graded by former medallists. <bookmark mark='c'/> And formal provers caught up too: Harmonic's Aristotle and ByteDance's Seed-Prover each proved five of the six in Lean, every step checked. A year earlier, the best systems had needed days, and people to translate the problems.",
+   "zh": "一年之后，局面变了。<bookmark mark='a'/>在2025年的奥林匹克上，谷歌Gemini的一个带有Deep Think的版本，会并行地探索很多条思路，解出了6道题中的5道，35分，正好是金牌线，用普通英语写成，在四个半小时之内；由奥林匹克自己的协调员评分。<bookmark mark='b'/>OpenAI为一个实验性的推理模型宣布了同样的分数，由前奖牌得主评分。<bookmark mark='c'/>形式化证明器也赶了上来：Harmonic的Aristotle和字节跳动的Seed-Prover，各自在Lean里证明了6道题中的5道，每一步都经过检查。一年之前，最好的系统还需要好几天，还需要人来翻译题目。"
+  },
+  "6b646d3e9278": {
+   "scene": "Formal",
+   "en": "So here is the spectrum every reasoning method lives on. <bookmark mark='a'/> At one end, checkers that cannot be fooled: a proof in Lean, a number to match, code that must pass its tests. <bookmark mark='b'/> At the other, learned graders, a process reward model, or another model acting as judge, which a strong enough optimizer will find ways around. <bookmark mark='c'/> Reasoning has advanced fastest exactly where the checker is exact: mathematics and code. Stretching it to everything else, essays, advice, research, is where the hard problems are.",
+   "zh": "所以，每一种推理方法都处在这样一条光谱上。<bookmark mark='a'/>一端是骗不了的检查器：Lean里的证明，要对上的一个数，必须通过测试的代码。<bookmark mark='b'/>另一端是学来的评分器，过程奖励模型，或者当裁判的另一个模型，足够强的优化器总能找到办法绕过它们。<bookmark mark='c'/>推理进步最快的，恰恰是检查器精确的地方：数学和代码。把它推广到其余的一切，文章、建议、研究，才是难题所在。"
+  },
+  "0923fd0f218f": {
+   "scene": "ARC",
+   "en": "Chapter fourteen. Puzzles nobody has seen.",
+   "zh": "第14章。没人见过的谜题。"
+  },
+  "199ba00dae68": {
+   "scene": "ARC",
+   "en": "Every benchmark so far rewards knowing things. In 2019 François Chollet, who wrote the Keras library, argued that intelligence is something else: how efficiently you acquire a new skill. He built a test of it, the Abstraction and Reasoning Corpus, now called ARC-AGI. <bookmark mark='a'/> Each task gives a few pairs of coloured grids, an input and an output. <bookmark mark='b'/> Then a new input. What comes out? <bookmark mark='c'/> People find most tasks easy. Every task is different, so nothing can be memorized: the rule must be found, on the spot.",
+   "zh": "到目前为止，每个基准测试奖励的都是知道东西。2019年，写了Keras库的弗朗索瓦·肖莱提出，智能是另一回事：你获得一项新技能的效率有多高。他为此设计了一个测试，抽象与推理语料库，现在叫ARC-AGI。<bookmark mark='a'/>每个任务给出几对彩色网格，一个输入，一个输出。<bookmark mark='b'/>然后给一个新的输入。输出会是什么？<bookmark mark='c'/>人觉得大多数任务都很简单。每个任务都不一样，所以什么都背不下来：规则必须当场找出来。"
+  },
+  "c4b9765d1b41": {
+   "scene": "ARC",
+   "en": "ARC-AGI-1 resisted for five years. <bookmark mark='a'/> The 2020 Kaggle contest was won with about 20 percent, by searching over hand-written programs. In 2024, training on each task's own examples at test time reached 53.5. <bookmark mark='b'/> Then in December 2024, OpenAI's o3 scored 75.7 percent at about twenty-six dollars a task, and 87.5 with 172 times the compute. <bookmark mark='c'/> So in March 2025 a harder version, ARC-AGI-2, launched, and the best systems fell back to a few percent, while a person solves 60 percent on average. <bookmark mark='d'/> By December, a four-billion-parameter model trained on synthetic tasks won the Kaggle contest with 24 percent; Claude Opus 4.5 reached 37.6; and a refinement loop wrapped around Gemini 3 Pro, 54. ARC Prize named the year's theme: refinement loops, propose, check, improve. <bookmark mark='e'/> And in October 2026, ARC Prize verified Google's Gemini 4 Argon at 91 percent. In nineteen months, the harder test was all but solved.",
+   "zh": "ARC-AGI-1坚持了五年。<bookmark mark='a'/>2020年的Kaggle比赛，冠军只有大约20%，靠的是在手写的程序里搜索。2024年，在测试时用每个任务自己的例子做训练，达到了53.5%。<bookmark mark='b'/>然后在2024年12月，OpenAI的o3以每个任务大约26美元的成本得了75.7%，用172倍的计算得了87.5%。<bookmark mark='c'/>于是2025年3月，更难的版本ARC-AGI-2发布了，最好的系统跌回到几个百分点，而一个人平均能解出60%。<bookmark mark='d'/>到了12月，一个用合成任务训练的40亿参数模型以24%赢得了Kaggle比赛；Claude Opus 4.5达到37.6%；一个包在Gemini 3 Pro外面的精炼循环达到54%。ARC Prize把这一年的主题定为精炼循环：提出，检查，改进。<bookmark mark='e'/>而在2026年10月，ARC Prize验证了谷歌的Gemini 4 Argon得到91%。19个月，这个更难的测试就几乎被解决了。"
+  },
+  "fde3cefbe2c4": {
+   "scene": "ARC",
+   "en": "So in March 2026 came ARC-AGI-3: interactive games, with no instructions. The player must explore, work out what the goal is, and plan, and is scored by how efficiently it gets there, against people. <bookmark mark='a'/> People could solve every game. At launch, every frontier model scored below one percent. <bookmark mark='b'/> In September, ARC Prize measured OpenAI's GPT-6 Astra at 62.7 percent with their standard harness. <bookmark mark='c'/> Each new test has fallen faster than the last. And what solves them looks like every chapter of this part: propose, check, refine, in a loop.",
+   "zh": "所以在2026年3月，ARC-AGI-3来了：交互式的游戏，没有任何说明。玩家必须探索，弄清目标是什么，再做规划，得分看它达到目标的效率，跟人比。<bookmark mark='a'/>人能解出每一个游戏。发布时，所有前沿模型的得分都不到1%。<bookmark mark='b'/>到了9月，ARC Prize用他们的标准测试框架测得OpenAI的GPT-6 Astra为62.7%。<bookmark mark='c'/>每一个新测试都比上一个倒得更快。而解开它们的方法，就像这一部分的每一章一样：提出，检查，改进，循环往复。"
+  },
+  "ce0f9bb8b2dc": {
    "scene": "Outro",
-   "en": "Thanks for watching, and see you in part twenty-nine.",
-   "zh": "感谢观看，第29部分见。"
+   "en": "Let's take stock. Writing out steps lets a model of fixed depth compute for longer: each token buys another pass through the network. Sampling many chains and voting amplifies whatever answer the model already prefers; a checker does better, and a learned grader helps only as far as it can't be fooled. Reinforcement learning from a checker, with GRPO's group baseline and its clip, moves probability onto answers that check out, and spends the model's entropy to do it. Left alone, it learns to think longer, sometimes too long, until thought is given a price. It sharpens what the model could already do, and may, with long enough training, widen it. And at answer time, more computation buys more right answers, in parallel or in sequence, as long as whatever chooses among them can be trusted.",
+   "zh": "我们来总结一下。写出步骤，能让一个深度固定的模型计算得更久：每个词元都多换来一次穿过网络的计算。采样很多条思维链再投票，只会放大模型本来就偏爱的答案；检查器做得更好，而学来的评分器，只有在不被骗过的范围内才有用。向检查器学习的强化学习，靠GRPO的组基线和它的裁剪，把概率挪到能通过检查的答案上，代价是花掉模型的熵。放任不管，它会学着想得更久，有时太久，直到思考被定上价格。它锐化模型本来就能做的事，而训练足够久的话，也许能拓宽它。在回答时，更多的计算换来更多的正确答案，无论是并行还是串行，只要在它们之间做选择的那个东西靠得住。"
+  },
+  "47a5b0c4050c": {
+   "scene": "Outro",
+   "en": "All of this comes back. Reasoning over hundreds of steps, with tools, is what agents do, in Part 29. Every token of thought costs time to generate, and Part 19's inference tricks are what make long thinking affordable. Whether the chain a model writes is really how it reached its answer is a question for Part 30. And reward hacking, and watching a model's chain of thought for signs of it, come back in the last part.",
+   "zh": "所有这些都会再出现。借助工具、跨越几百步的推理，就是智能体要做的事，在第29部分。每个思考的词元生成时都要花时间，第19部分的推理技巧，正是长时间思考负担得起的原因。模型写出的思维链，是不是它真正得出答案的过程，是第30部分的问题。而奖励投机，以及通过监看模型的思维链去发现它，会在最后一部分再出现。"
+  },
+  "46a759d5247a": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from GRPO's baseline to the entropy's fall. Pause here, and work through them; full solutions are in this part's notes.",
+   "zh": "这里有6道题可以试试，从GRPO的基线到熵的下降。在这里暂停，把它们做一遍；完整的解答在这一部分的笔记里。"
+  },
+  "9e4334be5674": {
+   "scene": "Outro",
+   "en": "Next time: agents, models that act over many steps, in the world or on a computer. Here is the problem they face, measured on our own chains. Each step of thought our adding model writes is right 98.2 percent of the time. <bookmark mark='a'/> But a long task needs every step right, and those chances multiply. Even at 98.2 percent a step, a chain of 39 steps is a coin flip, and of two hundred, almost hopeless. <bookmark mark='b'/> How agents plan, check themselves and recover over long horizons, and how they learn models of the worlds they act in: Part 29.",
+   "zh": "下一次：智能体，在世界中或在电脑上跨越很多步行动的模型。这是它们面对的问题，用我们自己的思维链来测量。我们的加法模型写出的每一步思考，有98.2%是对的。<bookmark mark='a'/>但一个长任务需要每一步都对，而这些概率是相乘的。即使每步有98.2%的正确率，39步的链条也只有一半的机会全对，200步几乎没有希望。<bookmark mark='b'/>智能体怎样在很长的时间跨度上规划、自查、纠错，又怎样学会它们所处世界的模型：第29部分。"
+  },
+  "0cd87d12f7f7": {
+   "scene": "Outro",
+   "en": "Nathan Lambert's free book on reinforcement learning from human feedback is the place to go deeper; it covers reinforcement learning with verifiable rewards and reasoning too. Thanks for watching, and see you in Part 29.",
+   "zh": "想深入了解，最好的去处是内森·兰伯特关于基于人类反馈的强化学习的免费书；它也讲了可验证奖励的强化学习和推理。谢谢观看，第29部分见。"
   }
  },
  "title_en": "AI, Built: Part 28, Reasoning",
  "chapters_en": {
-  "Hook": "Sixteen bits",
+  "Hook": "From \"let's think step by step\" to o1 and R1",
   "Chain": "1. Thinking out loud is computing",
-  "RL": "2. Learning from a checker",
-  "Objective": "3. The objective, exactly",
-  "TestTime": "4. Thinking longer",
-  "Outro": "Recap, and where this comes back"
+  "Vote": "2. Many chains, one vote",
+  "Verify": "3. Checking the steps",
+  "RL": "4. Learning from a checker",
+  "GRPO": "5. GRPO, derived",
+  "Variants": "6. The successors",
+  "Entropy": "7. Entropy collapse",
+  "Length": "8. How long to think",
+  "PassK": "9. Sharper, or wider?",
+  "TestTime": "10. Thinking at answer time",
+  "Search": "11. Searching over thoughts",
+  "Latent": "12. Thinking without words",
+  "Formal": "13. Proofs a machine can check",
+  "ARC": "14. Puzzles nobody has seen",
+  "Outro": "Recap, problems, and what comes next"
  }
 }

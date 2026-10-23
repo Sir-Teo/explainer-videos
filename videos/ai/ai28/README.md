@@ -100,8 +100,8 @@ first.
   37.6%, Poetiq on Gemini 3 Pro 54% (2025), Gemini 4 Argon 91% (verified October 2026); ARC-AGI-3 (March 2026):
   frontier models below 1% at launch, GPT-6 Astra 62.7% on ARC Prize's standard harness (September 2026).
 * **Recap** in eight pictures from the part's own results, where it comes back (Parts 19, 29, 30, 31), six problems,
-  Part 29's teaser (a chain of n steps, each right with probability 0.98 (our model's), is right with probability
-  p^n).
+  Part 29's teaser (our model's steps are right 98.2% of the time, so a chain of n steps is all right with
+  probability 0.982^n: a coin flip by about 39 steps).
 
 Run from the repo root:
 

@@ -244,8 +244,8 @@ class GRPO(VoiceoverScene):
                 self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in panels[i][1]], lag_ratio=0.01),
                           FadeIn(panels[i][5]), run_time=1.5)
             vo.wait_until("d")
-            self.play(FadeIn(xl), FadeIn(cite(r"Y.~Tang \& R.~Munos, \textit{On a few pitfalls in KL divergence "
-                                              r"gradient estimation for RL} (2025)", corner=UR)))
+            self.play(FadeIn(xl), FadeOut(tag), FadeIn(cite(r"Y.~Tang \& R.~Munos, \textit{On a few pitfalls in KL "
+                                                            r"divergence gradient estimation for RL} (2025)", corner=DR)))
         self.wait(0.3)
         self.clear_scene()
 

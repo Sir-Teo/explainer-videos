@@ -307,7 +307,7 @@ ZH = {
 
     # ------------------------------------------------------------------ GRPO
     'Chapter five. GRPO, derived.':
-        '第5章。推导GRPO。',
+        '第5章。一步一步推导GRPO。',
 
     "Let's derive it. The goal is the expected reward of the model's own answers.":
         "我们来推导一下。目标是模型自己的回答的期望奖励。<bookmark mark='a'/>用第26部分的对数导数技巧，它的梯度是奖励乘以"

@@ -56,7 +56,7 @@ class Variants(VoiceoverScene):
         ll = label(r"wrong, \ $12$ tokens: \ a small push down for each", font_size=22, color=WRONG_C)
         ll.next_to(long_, DOWN, buff=0.3)
         res = label(r"so wrong answers are punished less per token \ when they are long, \\ and lengths drift upward",
-                    font_size=26, color=LEN).move_to(DOWN * 2.75)
+                    font_size=24, color=LEN).move_to([2.4, -2.8, 0])
         sch = note(r"schematic").to_corner(UR, buff=0.3)
         cite_ = cite(r"Z.~Liu et al., \textit{Understanding R1-Zero-Like Training: A Critical Perspective} (2025)")
         with self.voiceover(
