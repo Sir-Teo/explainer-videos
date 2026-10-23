@@ -150,8 +150,8 @@ class Induction(VoiceoverScene):
         l2 = VGroup(*[curve(ax, c_[:, 0], c_[:, 1], A, 3.0 if i == 0 else 2.0).set_stroke(opacity=1.0 if i == 0 else 0.55)
                       for i, c_ in enumerate(C2)])
         k1 = label(r"one layer", font_size=22, color=GREY_B).next_to(ax.c2p(c1[-1, 0], c1[-1, 1]), UP, buff=0.12).shift(LEFT * 0.6)
-        k2 = label(rf"two layers, \ ${len(seeds)}$ seeds", font_size=22, color=A).next_to(ax.c2p(C2[0][-1, 0], C2[0][-1, 1]), UP,
-                                                                                      buff=0.15).shift(LEFT * 0.7)
+        k2 = label(rf"two layers, \ ${len(seeds)}$ seeds", font_size=22, color=A).move_to(
+            ax.c2p(c1[-1, 0] * 0.9, 0.55 * top))  # clear of the curves, which have all dropped by then
         js = [int(v) for v in d["jump_steps"]]
         jl = VGroup(*[DashedLine(ax.c2p(j, 0), ax.c2p(j, top), color=A, stroke_width=1.2) for j in js])
         S = 2.5
@@ -292,25 +292,35 @@ class Induction(VoiceoverScene):
         bnd = Rectangle(width=ax.c2p(steps[-1], 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 2 * bsd)[1] - ax.c2p(0, 0)[1],
                         stroke_width=0, fill_color=GREY_B, fill_opacity=0.2).move_to(ax.c2p(steps[-1] / 2, base))
         bl = label(r"random heads", font_size=18, color=GREY_B).next_to(bnd, RIGHT, buff=0.1)
-        kk = curve(ax, steps, CK[:, hp, hi], A, 3.5)
-        qq = curve(ax, steps, CQ[:, hp, hi], Q, 2.5)
-        others = CK.copy()
-        others[:, hp, hi] = np.nan
-        oth = curve(ax, steps, np.nanmax(others.reshape(len(steps), -1), 1), GREY_B, 2)
+        # the circuit: every previous-token head of layer 1 paired with every induction head of layer 2
+        pv, iv = np.asarray(d["prev_scores"]), np.asarray(d["ind_scores"])
+        P_ = [h for h in range(len(pv)) if pv[h] > 0.2] or [hp]
+        I_ = [h for h in range(len(iv)) if iv[h] > 0.3] or [hi]
+        inc = np.zeros(CK.shape[1:], bool)
+        inc[np.ix_(P_, I_)] = True
+        k_c, q_c = CK[:, inc].mean(1), CQ[:, inc].mean(1)
+        k_o = CK[:, ~inc].mean(1)
+        kk = curve(ax, steps, k_c, A, 3.5)
+        qq = curve(ax, steps, q_c, Q, 2.5)
+        oth = curve(ax, steps, k_o, GREY_B, 2)
         jl = DashedLine(ax.c2p(js, 0), ax.c2p(js, top), color=A, stroke_width=1.2)
-        key = VGroup(label(r"K-composition: \ previous-token head $\to$ induction head", font_size=19, color=A),
-                     label(r"Q-composition, \ same pair", font_size=19, color=Q),
-                     label(r"K-composition, \ the best other pair", font_size=19, color=GREY_B))
+        key = VGroup(label(r"K-composition: \ previous-token heads $\to$ induction heads", font_size=19, color=A),
+                     label(r"Q-composition, \ same pairs", font_size=19, color=Q),
+                     label(r"K-composition, \ every other pair", font_size=19, color=GREY_B),
+                     note(rf"means over pairs; \ ${len(P_)}$ previous-token and ${len(I_)}$ induction heads; \\ "
+                          r"first seed, \ every 250 steps", font_size=16))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, -0.4, 0])
         keep_in_frame(key)
-        k0, k1 = float(CK[0, hp, hi]), float(CK[-1, hp, hi])
-        q1 = float(CQ[-1, hp, hi])
-        o1 = float(np.nanmax(others[-1]))
-        v = (f"For our pair it starts near the random level, {k0:.2f}, and climbs to {k1:.2f} as the induction head "
-             f"forms, against {q1:.2f} for Q-composition and {o1:.2f} for the best of the other pairs. The induction "
-             "head's keys read what the previous-token head wrote." if k1 > max(q1, o1) + 2 * bsd else
-             f"For our pair it ends at {k1:.2f}, against {q1:.2f} for Q-composition and {o1:.2f} for the best other "
-             "pair: in this small model the signal is not cleanly in the keys.")
+        k0, k1 = float(k_c[0]), float(k_c[-1])
+        q1, o1 = float(q_c[-1]), float(k_o[-1])
+        n_p, n_i = len(P_), len(I_)
+        v = (f"Pair each of the {n_p} previous-token heads with each of the {n_i} induction heads: their K-composition "
+             f"starts near the random level, {k0:.2f}, and climbs to {k1:.2f} as the induction heads form, while "
+             f"Q-composition over the same pairs ends at {q1:.2f}, and every other pair at {o1:.2f}. The induction "
+             "heads' keys read what the previous-token heads wrote." if k1 > max(q1, o1) + 2 * bsd else
+             f"Pair each of the {n_p} previous-token heads with each of the {n_i} induction heads: their K-composition "
+             f"ends at {k1:.2f}, against {q1:.2f} for Q-composition and {o1:.2f} for every other pair: in this small "
+             "model the signal is not cleanly in the keys.")
         with self.voiceover(
             "Nelson Elhage and colleagues gave a way to see the cooperation in the weights alone. "
             "<bookmark mark='a'/> K-composition asks how much a later head's keys read from what an earlier head "
@@ -346,6 +356,23 @@ class Induction(VoiceoverScene):
         il.next_to(img, UP, buff=0.15)
         rl = label(r"earlier head", font_size=18, color=GREY_B).rotate(PI / 2).next_to(img, LEFT, buff=0.12)
         cl = label(r"later head", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
+        # first: how much each head attends one step after the earlier copy (an induction head's signature)
+        ib = VGroup()
+        bw_, sy_ = 0.3, 2.4 / max(0.5, float(ind.max()))
+        for l_ in range(L):
+            for h in range(H):
+                v_ = float(ind[l_, h])
+                ib.add(Rectangle(width=bw_ * 0.8, height=max(sy_ * v_, 0.01), stroke_width=0, fill_color=A,
+                                 fill_opacity=0.85).move_to([-6.0 + (l_ * (H + 1) + h) * bw_, -2.0 + sy_ * v_ / 2, 0]))
+        ibase = Line([-6.2, -2.0, 0], [-6.0 + (L * (H + 1)) * bw_, -2.0, 0], color=GREY_C, stroke_width=2)
+        ihalf = DashedLine([-6.2, -2.0 + sy_ * 0.5, 0], [-6.0 + (L * (H + 1)) * bw_, -2.0 + sy_ * 0.5, 0],
+                           color=GREY_B, stroke_width=1.5)
+        ihl = label(r"$50\%$: \ a toy's induction head", font_size=16, color=GREY_B).next_to(ihalf, UP, buff=0.05).align_to(ihalf, RIGHT)
+        ilyr = VGroup(*[label(rf"layer {l_ + 1}", font_size=16, color=GREY_B).move_to(
+            [-6.0 + (l_ * (H + 1) + (H - 1) / 2) * bw_, -2.3, 0]) for l_ in range(L)])
+        itl = label(r"each head of ours: \ attention one step after the earlier copy", font_size=20,
+                    color=GREY_A).next_to(ihalf, UP, buff=0.45).align_to(ibase, LEFT)
+        indg = VGroup(ib, ibase, ihalf, ihl, ilyr, itl)
         a_, b_ = np.unravel_index(int(np.nanargmax(CK)), CK.shape)
         lo = float(min(c1.min(), c2.min())) - 0.2
         hi_ = float(min(max(c1[1:].max(), c2[1:].max()) + 0.2, lo + 3.0))
@@ -391,8 +418,11 @@ class Induction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeIn(itl), Create(ibase), Create(ihalf), FadeIn(ihl), FadeIn(ilyr),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ib], lag_ratio=0.03), run_time=1.5)
             self.play(Indicate(key, color=C.BITS))
             vo.wait_until("b")
+            self.play(FadeOut(indg))
             self.play(FadeIn(img), FadeIn(il), FadeIn(rl), FadeIn(cl))
             vo.wait_until("c")
             self.play(Indicate(il, color=A))

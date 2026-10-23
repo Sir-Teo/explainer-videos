@@ -127,11 +127,21 @@ weights in `tf.pt`) through `load_tf()`.
   none 3.266; at 384–512 characters 4.642, 5.133, 2.511, 3.481.
 * **QK growth** (`qkscale`, c = 1 … 4): largest logit 36.5 → 561; entropy 1.97 → 0.11 bits; bits 1.82 → 2.15; capped
   at 37: 2.79 at c = 4; QK-norm bolted on: 2.14 at every c.
-* **Sinks** (`sinks`, three seeds): weight on the start marker when there is nothing to copy — plain softmax 0.43,
-  sink logit 0.00, gate 0.29, differential 0.41; the marker's value 0.19 × the others' (plain); every variant learns the
-  copies to 0.002 bits.
-* **Induction** (`induction`): pending.
-* **In-context regression** (`icl`): pending.
+* **Sinks** (`sinks`, bigram-backcopy task on the novels' 64 commonest characters, triggers space, e and t; one
+  layer, 1,500 steps, three seeds): weight on the start marker when there is nothing to copy — plain softmax 0.43
+  (0.38–0.48), sink logit 0.00 (with 99.9% of the weight on the sink itself), gate 0.29 (the gate 0.05 open with
+  nothing to copy, 0.75 after a trigger), differential attention 0.41 (weights summing to 0.54, λ = 0.46); the plain
+  head's marker value 0.19 × the others' (the drain); every variant learns the copies to 0.002 bits and the rest to
+  2.59 (the task's own probabilities score 2.58 on the same test batch; `sinkref`).
+* **Induction** (`induction`; attention-only, 64 random tokens, 5,000 steps): one layer ends at 5.57 bits on the
+  repeat (from 6.22); two layers, three seeds, drop off a cliff at steps 2,600, 4,100 and 3,000 and end at 1.50, 2.16
+  and 1.55; first seed: K-composition from its 2 previous-token heads into its 3 induction heads 0.13 → 0.19, every
+  other pair 0.13, Q-composition of the circuit 0.04 (random heads 0.124 ± 0.007). Our transformer: no induction head
+  (best 0.3% of attention one after the earlier copy); held-out text 1.79 bits the first time and 1.80 the second,
+  random letters 10.8 and 10.9.
+* **In-context regression** (`icl`; d = 4, 20 examples, 6,000 steps of 256 prompts): one linear-attention layer
+  0.799 against one optimally sized GD step 0.786, their answers correlated 0.999 on 4,000 new prompts; two layers
+  0.134 against two steps 0.310; three 0.110 against 0.148; exact least squares 0 (to rounding); guessing 0, 4.00.
 * **RASP** (`rasp`): histogram 2,000/2,000, sort 2,000/2,000; counts distinguishable up to 189 (bfloat16), 1,463
   (float16).
 

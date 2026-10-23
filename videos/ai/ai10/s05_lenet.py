@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai10.common import (CNN, FMAP, HIST, KERNEL, MLPC, OK, PART, grid_of, img_gray, img_heat, load,
-                                   nn_layer_boxes, pct, seed_band)
+                                   nn_layer_boxes, oriented_fit, pct, seed_band)
 from videos.ai.ai10.specs import LENET5_1998, LENET5_DISTORT, ZIP1989
 
 
@@ -177,14 +177,30 @@ class LeNet(VoiceoverScene):
         place_digits()
         e0, eN = errs[0], errs[-1]
         i_half = next((i for i, e in enumerate(errs) if e < 0.05), len(errs) - 1)
+        if errs[i_half] < 0.05:
+            fast = f"Within {steps[i_half]:,} steps, under five percent wrong."
+        else:
+            fast = f"Even after {steps[i_half]:,} steps it is {pct(errs[i_half], 0)} percent wrong."
+        # which kernels look like a bar or an edge (Chapter 2's test), at the start and at the end
+        fit0 = [oriented_fit(w) for w in W1[0]]
+        fitN = [oriented_fit(w) for w in W1[-1]]
+        n0 = sum(f > 0.45 for f, _ in fit0)
+        nN = sum(f > 0.45 for f, _ in fitN)
+        angs = sorted(a for f, a in fitN if f > 0.45)
+        spread = len(angs) > 1 and min(min(abs(a - b), 180 - abs(a - b)) for i_, a in enumerate(angs)
+                                       for b in angs[i_ + 1:]) >= 15
+        if nN >= 4 and spread:
+            kern = (f"Of the six kernels, {nN} now match a bar or an edge, each at a different angle; at the start, "
+                    f"{n0} did.")
+        else:
+            kern = f"Of the six kernels, {nN} match a bar or an edge; at the start, {n0} did."
         with self.voiceover(
             "Now let's watch ours learn. On the left, its test error; on the right, its six first-layer kernels, "
             "what they make of one digit, and its answer. "
             f"<bookmark mark='a'/> At the start the kernels are random noise and the answers are guesses: "
-            f"{pct(e0, 0)} percent wrong. <bookmark mark='b'/> Within {steps[i_half]:,} steps, under five percent "
-            "wrong, and the kernels have turned into detectors of strokes and their edges, each at its own "
-            f"angle. <bookmark mark='c'/> After {L['epochs']} passes over the training digits, "
-            f"{pct(eN, 2)} percent wrong. Nobody designed those kernels: they are whatever made the answers right."
+            f"{pct(e0, 0)} percent wrong. <bookmark mark='b'/> {fast} <bookmark mark='c'/> After {L['epochs']} "
+            f"passes over the training digits, {pct(eN, 2)} percent wrong. {kern} Nobody designed those kernels: "
+            "they are whatever made the answers right."
         ) as vo:
             self.play(Create(ax), FadeIn(cur_f), FadeIn(cur_m), FadeIn(fl), FadeIn(ml), FadeIn(dg), FadeIn(cur_p),
                       FadeIn(digits), FadeIn(pl), FadeIn(tag))
@@ -309,7 +325,7 @@ class LeNet(VoiceoverScene):
             f"percent wrong for the convolutional network, {pct(em.mean(), 2)} for the other. "
             f"<bookmark mark='b'/> {shifted_v} Neither is perfectly shift-invariant: the fully connected "
             "layers at the top of LeNet see positions. <bookmark mark='c'/> And the cleanest test of the "
-            f"assumption: {perm_v}"
+            f"assumption. {perm_v}"
         ) as vo:
             # first, large in the middle; then up into the corner when the plot arrives
             desc = VGroup(label(r"LeNet: \ convolution, pooling, convolution, pooling, \ three dense layers",

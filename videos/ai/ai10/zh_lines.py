@@ -142,7 +142,19 @@ ZH = {
         "到1998年，这个设计有了名字，也有了基准。<bookmark mark='a'/>LeNet-5，出自杨立昆、莱昂·博图、约书亚·本吉奥和帕特里克·哈夫纳：两轮卷积和池化，先六张特征图再十六张，然后三个全连接层，收到十个数字。<bookmark mark='b'/>还有MNIST，七万个手写数字，由美国政府的两批数据重新混合而成，一批出自人口普查局的雇员，一批出自高中生。<bookmark mark='c'/>LeNet-5在{LENET5_1998}%的测试数字上出错，用变形的副本训练时是{LENET5_DISTORT}%；围绕它搭起的系统进了银行，每天读几百万张支票。<bookmark mark='d'/>我们搭了同样的结构，换上今天的ReLU和最大池化。",
 
     'f"Now let\'s watch ours learn.':
-        "现在看我们的网络怎样学。左边是它的测试错误率；右边是它第一层的六个卷积核、它们对一个数字的反应，以及它的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错{pct(e0, 0)}%。<bookmark mark='b'/>不到{steps[i_half]:,}步，错误率就降到5%以下，卷积核变成了笔画和笔画边缘的检测器，各有各的角度。<bookmark mark='c'/>把训练数字过了{L['epochs']}遍之后，错{pct(eN, 2)}%。这些卷积核没有人设计：凡是能让答案正确的，就是它们。",
+        "现在看我们的网络怎样学。左边是它的测试错误率；右边是它第一层的六个卷积核、它们对一个数字的反应，以及它的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错{pct(e0, 0)}%。<bookmark mark='b'/>{fast}<bookmark mark='c'/>把训练数字过了{L['epochs']}遍之后，错{pct(eN, 2)}%。{kern}这些卷积核没有人设计：凡是能让答案正确的，就是它们。",
+
+    "f'Within {steps[i_half]:,} steps, under five percent wrong.'":
+        "不到{steps[i_half]:,}步，错误率就降到5%以下。",
+
+    "f'Even after {steps[i_half]:,} steps it is {pct(errs[i_half], 0)} percent wrong.'":
+        "即使过了{steps[i_half]:,}步，它仍然错{pct(errs[i_half], 0)}%。",
+
+    "f'Of the six kernels, {nN} now match a bar or an edge, each at a different angle":
+        "六个卷积核中，现在有{nN}个和一条亮带或一道边缘吻合，各在不同的角度；一开始只有{n0}个。",
+
+    "f'Of the six kernels, {nN} match a bar or an edge; at the start":
+        "六个卷积核中有{nN}个和一条亮带或一道边缘吻合；一开始有{n0}个。",
 
     'f"Over three training runs with different random starts':
         "三次从不同随机起点出发的训练，我们的网络在{pct(m, 2)}%的测试数字上出错，范围在{pct(lo, 2)}%到{pct(hi, 2)}%之间：{cmp}<bookmark mark='a'/>这是它错掉的一些数字。其中好几个，人看了也会犹豫。",
@@ -157,7 +169,7 @@ ZH = {
         "和1998年的LeNet-5差不多，{LENET5_1998}%。",
 
     'f"Is it the convolution that helps, or just the training?':
-        "帮了忙的到底是卷积，还是只是训练？公平地比一比：换一个同样大小的全连接网络，{M['params']['mlp']:,}个权重对{M['params']['cnn']:,}个，用同样的方式训练，各训练三次。<bookmark mark='a'/>在普通的测试数字上：卷积网络错{pct(ec.mean(), 2)}%，另一个错{pct(em.mean(), 2)}%。<bookmark mark='b'/>{shifted_v}两者都不是严格平移不变的：LeNet顶部的全连接层是看位置的。<bookmark mark='c'/>而对这个假设最干净的检验是：{perm_v}",
+        "帮了忙的到底是卷积，还是只是训练？公平地比一比：换一个同样大小的全连接网络，{M['params']['mlp']:,}个权重对{M['params']['cnn']:,}个，用同样的方式训练，各训练三次。<bookmark mark='a'/>在普通的测试数字上：卷积网络错{pct(ec.mean(), 2)}%，另一个错{pct(em.mean(), 2)}%。<bookmark mark='b'/>{shifted_v}两者都不是严格平移不变的：LeNet顶部的全连接层是看位置的。<bookmark mark='c'/>而对这个假设最干净的检验是这样的。{perm_v}",
 
     'f"Shuffle the pixels, the same way in every image':
         "把像素打乱，每张图都用同一种打乱方式，然后重新训练两个网络。全连接网络毫不在乎：之前{pct(np.mean(P['mlp_plain']))}%，之后{pct(np.mean(P['mlp']))}%，因为在它眼里，像素本来就没有顺序。卷积网络则从{pct(np.mean(P['cnn_plain']))}%掉到{pct(np.mean(P['cnn']))}%：它的假设，相邻的像素属于一起，现在不成立了。",
@@ -223,7 +235,7 @@ ZH = {
         "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。{law}<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}",
 
     'f"On a log-log plot the test error first falls':
-        "在对数-对数图上，测试错误率先沿着一条直线下降，是一条斜率约为负{abs(s3):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** s3):.0f}%。然后这条线弯平了：在{int(d['steps']):,}步里，{sizes[-1]:,}个数字每个只被看到{passes:.1f}遍，网络用不上全部数据。更多的数据只有配上更多的训练才划算，这正是第12部分要讲的平衡。",
+        "在对数-对数图上，测试错误率先沿着一条直线下降，是一条斜率约为负{abs(s3):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** s3):.0f}%。然后这条线弯平了：在{int(d['steps']):,}步里，{sizes[-1]:,}个数字每个只被看到{passes:.1f}遍，网络用不上全部数据。",
 
     "f'On a log-log plot the test error falls along":
         "在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为负{abs(slope):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。第12部分讲的就是这样的直线。",
@@ -409,7 +421,7 @@ ZH = {
         "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门：更新门z把旧状态和新的候选值混合，z接近零的地方还是那条传送带；另外是一个重置门。<bookmark mark='b'/>零件更少，效果差不多一样好，这是钟俊英和同事比较的结果。",
 
     'f"Does the carousel work?':
-        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。带门的细胞一开始就把门设成“记住”：这是科朗坦·塔莱克和扬·奥利维耶提出的“时序初始化”。",
+        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。带门的细胞一开始就把门设成“记住”：这是科朗坦·塔莱克和扬·奥利维耶提出的“时序初始化”。",
 
     'f"The results. {first}':
         "结果如下。{first}<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
@@ -607,7 +619,7 @@ ZH = {
         "状态宽时，256个数，两者接近：{w256:.1f}倍。",
 
     "f'With a narrow state, eight numbers":
-        "状态窄时，8个数，在{big8['T']:,}步时扫描快了{w8:.1f}倍：几次大的运算，取代了几万次小的运算。",
+        "状态窄时，8个数，在{big8['T']:,}步时扫描快了{w8:.1f}倍。",
 
     "f'With a narrow state the scan is about as fast":
         "状态窄时，扫描和循环差不多快，{w8:.1f}倍。",

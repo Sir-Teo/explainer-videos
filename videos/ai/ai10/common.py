@@ -189,3 +189,20 @@ def sci_tex(v: float, digits: int = 0) -> str:
     if round(m, digits) >= 10:
         m, e = m / 10, e + 1
     return rf"{m:.{digits}f} \times 10^{{{e}}}"
+
+
+def oriented_fit(K) -> tuple[float, int]:
+    """How much a 5x5 kernel looks like a bar or an edge through its centre: the best correlation with either
+    template over angles 0, 5, ..., 175 degrees, and that angle."""
+    Kc = np.asarray(K, float) - np.mean(K)
+    yy, xx = np.mgrid[0:5, 0:5] - 2.0
+    best, at = 0.0, 0
+    for deg in range(0, 180, 5):
+        t = np.deg2rad(deg)
+        d = xx * np.sin(t) + yy * np.cos(t)
+        for T in (np.exp(-d ** 2 / 1.28), np.tanh(d / 0.8)):
+            T = T - T.mean()
+            c = abs(float((T * Kc).sum() / np.sqrt((T ** 2).sum() * (Kc ** 2).sum() + 1e-12)))
+            if c > best:
+                best, at = c, deg
+    return best, at
