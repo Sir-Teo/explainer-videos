@@ -247,7 +247,7 @@ def compute_hopfield():
         weights.append(p)
         overlap.append(float((X.T @ p) @ X[3] / N))
     out.update(betas=betas, beta_weights=np.array(weights), beta_overlap=np.array(overlap), beta_target=3)
-    # letters: stored as 144-pixel patterns, recalled from a corrupted cue by one softmax step and by the classical net
+    # letters: stored as 100-pixel patterns, recalled from a corrupted cue by one softmax step and by the classical net
     L = glyphs()
     out["letters"] = L
     gl = rng(7)
@@ -1298,8 +1298,9 @@ def compute_sinks():
                   f"({time.time() - t0:.0f}s)", flush=True)
     out = dict(cfg=c, variants=list(SINK_VARIANTS), seeds=list(SINK_SEEDS), chars=common, trig=trig,
                opt_bigram=opt_bigram)
-    keys = [k for k in part[f"softmax_{SINK_SEEDS[0]}"] if k not in ("hist", "seconds", "map", "x")]
     for vname in SINK_VARIANTS:
+        # each variant's own measurements: the sink's null weight, the gate's openness, differential lambda
+        keys = [k for k in part[f"{vname}_{SINK_SEEDS[0]}"] if k not in ("hist", "seconds", "map", "x")]
         for k in keys:
             vals = [part[f"{vname}_{s_}"].get(k) for s_ in SINK_SEEDS]
             if all(v_ is not None for v_ in vals):

@@ -376,6 +376,207 @@ ZH = {
     "Anthropic's 'Mathematical Framework":
         "接下来最值得读的，是Anthropic的《A Mathematical Framework for Transformer Circuits》，也就是Transformer回路的数学框架。感谢观看，第14部分见。",
 
+    # ------------------------------------------------------------------ SideBySide
+    "Chapter ten. Four answers, trained side by side.":
+        "第10章。四种答案，并排训练。",
+
+    'f"Now the experiment.':
+        "现在来做实验。四个小Transformer，除了怎样得知每个字符的位置之外，其余完全相同：加在输入上的正弦信号、旋转位置、ALiBi的线性惩罚，以及什么都不给。<bookmark mark='a'/>每一个都在小说上训练{c['steps']:,}步，每步用{c['ctx']}个字符的窗口，窗口相同，顺序也相同；每一个都用不同的随机起点训练三次，这样我们就能看出，任何差距里有多少是运气。<bookmark mark='b'/>这是它们的训练过程，回放出来：随着学习，留出数据上的每字符比特数。",
+
+    'f"First, inside the length they were trained on':
+        "先看它们训练过的长度以内，也就是前{T}个字符。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}",
+
+    "f'{CAP[best]} is best":
+        "{CAP[best]}最好，{vals[best].mean():.3f}，而且它的每一个种子都胜过其他方法的每一个种子。",
+
+    'f"The best mean is {SPOKEN[best]}':
+        "平均最好的是{SPOKEN[best]}，{vals[best].mean():.3f}，但各个种子的结果互相重叠：这里的差距最多{gap:.3f}比特，并不比同一种设计不同种子之间{spread:.3f}的差别大多少。",
+
+    "f'No positions at all comes first":
+        "不给位置的模型排第一，{nope_v:.3f}：单靠因果掩码，它就知道自己在哪里。",
+
+    "f'No positions at all comes {rank_word}, at {nope_v:.3f}, only":
+        "不给位置的模型排{rank_word}，{nope_v:.3f}，只落后{behind:.3f}：因果掩码确实告诉了它自己在哪里。",
+
+    "f'No positions at all comes {rank_word}, at {nope_v:.3f}, {behind:.2f}":
+        "不给位置的模型排{rank_word}，{nope_v:.3f}，比最好的落后{behind:.2f}比特：掩码告诉了它一些东西，但不是全部。",
+
+    'f"Now read four times as far':
+        "现在读远四倍，{R}个字符，尽管它们谁也没见过超过{T}个字符的文本。<bookmark mark='a'/>这是每个位置上的每字符比特数，每种各三个种子。<bookmark mark='b'/>{v_held}<bookmark mark='e'/>{v_mid}<bookmark mark='f'/>{v_broke}<bookmark mark='c'/>{why_}<bookmark mark='d'/>{rope_txt}",
+
+    "RoPE's slow hands point at angles":
+        "RoPE的慢指针指向了训练中从没见过的角度，它的查询也就不再和它的键对得上：这正是下一章要解决的问题。",
+
+    "RoPE holds up here":
+        "RoPE在这里撑住了；下一章会展示它在哪里真的会垮。",
+
+    "f'Broken, up by as much as":
+        "彻底失效，最多升高了{br:.1f}比特：{n_broke}。",
+
+    "f'Steady past the training length, within":
+        "过了训练长度依然稳定，变化在{hr:.2f}比特以内：{n_held}。",
+
+    "f'Steady past the training length, and even":
+        "过了训练长度依然稳定，甚至还好了{-hr:.2f}比特，因为每个字符身后有更多的文本：{n_held}。",
+
+    "f'Drifting up, by {mhi:.2f}":
+        "慢慢往上漂，升高了{mhi:.2f}比特：{n_mid}。",
+
+    "f'Drifting up, by {mlo:.2f}":
+        "慢慢往上漂，升高了{mlo:.2f}到{mhi:.2f}比特：{n_mid}。",
+
+    "ALiBi's penalty means a distant key":
+        "ALiBi的惩罚意味着，越远的键越不要紧，所以新的长度看起来和旧的差不多。",
+
+    # ------------------------------------------------------------------ Sinks
+    "Chapter twelve. Attention sinks, and three ways out.":
+        "第12章。注意力汇点，以及三条出路。",
+
+    '"Look at where a model':
+        "看看一个模型的头把注意力放在哪里，就会冒出一件怪事。2023年，肖光烜和同事们发现，在大模型里，许多头把大部分权重放在最开头的那个词元上，不管它是什么：一个逗号、单词“the”，或者一个起始标记。<bookmark mark='a'/>他们把这些叫作注意力汇点，并且证明：只要留住最前面的四个词元，模型就能用一个短窗口一直读下去，读上几百万个词元。<bookmark mark='b'/>{mine}",
+
+    "f'Some heads of our model put a large share":
+        "我们模型的一些头，把很大一部分注意力放在最开头的那个字符上，最多达到{sink.max():.0%}，不管那个字符是什么：大约是平均份额的{ratio:.0f}倍。",
+
+    "f'In our small model, nothing like it":
+        "在我们的小模型里，完全没有这回事：没有哪个头给第一个字符的份额超过平均的{ratio:.1f}倍。它的头把注意力停放在别处，停在空格和换行上：有一个头把{hi_sp:.0%}的注意力花在它们身上，尽管它们只占文本的{sps:.0%}。",
+
+    "Why would a head stare at a meaningless token?":
+        "一个头为什么要死盯着一个毫无意义的词元？因为softmax。<bookmark mark='a'/>它的权重加起来必须等于1：一个头没法拒绝去看。<bookmark mark='b'/>但许多头只是有时候才有活干：比如，只在某一类词元之后。其余时候，正确的输出是什么都没有。<bookmark mark='c'/>要输出“什么都没有”，唯一的办法就是把权重放在一个值接近0的词元上。一个总在那里、待在开头的词元，就是天然的停放点。<bookmark mark='d'/>2024年，Tianyu Guo、梅松和同事们把这一整套症状，追溯到这种“活跃-休眠”的头上：汇点的值会缩小，而它在残差流里的向量会变得巨大。",
+
+    'f"We can grow a sink on purpose.':
+        "我们可以有意地培养出一个汇点。Guo的团队设计了一个任务，其中有一个头只是有时候才需要。<bookmark mark='a'/>我们用小说里最常见的{V_}个字符来做：每个字符都按小说里下一个字符的统计规律出现，只有在触发字符之后例外，触发字符是{trig_txt}，这时下一个字符要复制触发字符前面的那个字符。每个序列都以一个标记开头。<bookmark mark='b'/>一个单层的Transformer用{int(c['steps']):,}步就学会了它，前后三次都是如此。在触发字符之后，它的头往回看一个位置，{pa.mean():.0%}的时候都是这样。<bookmark mark='c'/>{v1}<bookmark mark='d'/>{v2}",
+
+    "f'When there is nothing to copy, it puts {bd.mean():.0%}":
+        "没有东西要复制时，它把{bd.mean():.0%}的权重放在起始标记上，而这个标记对下一个字符毫无信息：一个汇点，在一个只有一层的模型里形成了。",
+
+    "f'When there is nothing to copy, it puts only":
+        "没有东西要复制时，它只把{bd.mean():.0%}的权重放在起始标记上：训练这么短，汇点还在形成之中。",
+
+    'f"And the marker\'s value has shrunk':
+        "而这个标记的值，已经缩小到其他值的{vb.mean() / vr.mean():.2f}倍：这就是值的排空。",
+
+    'f"Its value is {vb.mean() / vr.mean():.2f}':
+        "它的值是其他值的{vb.mean() / vr.mean():.2f}倍：还没有排空。",
+
+    '"Three recent designs give a head':
+        "最近有三种设计，给了头一个更好的“什么都不做”的办法；我们在同一个任务上、用同样的步数训练了每一种，每种三个种子。<bookmark mark='a'/>gpt-oss给每个头的softmax分母加上一个学出来的数，相当于一个看不见的键的分数。<bookmark mark='b'/>Qwen团队的门控注意力，把每个头的输出乘以输入的一个sigmoid。<bookmark mark='c'/>微软的差分注意力，取两张softmax图的差。<bookmark mark='d'/>{v_sink}<bookmark mark='e'/>{v_gate}<bookmark mark='f'/>{v_diff}<bookmark mark='g'/>{v_loss}在大模型里，Qwen团队看到，加上门控之后，第一个词元上的注意力份额从46.7%降到了4.8%；Qwen3-Next和Kimi K3现在都给它们的注意力加了门控。",
+
+    "f'The sink logit gives the head a place to send its weight that is not a token at all: its":
+        "汇点logit给了头一个地方，可以把权重送去，而那里根本不是一个词元：它放在标记上的权重降到{r_s:.0%}，有{nl:.0%}的权重哪儿也没去。",
+
+    "f'The sink logit gives the head a place to send its weight that is not a token at all, but":
+        "汇点logit给了头一个地方，可以把权重送去，而那里根本不是一个词元；但它放在标记上的权重仍然是{r_s:.0%}，只有{nl:.0%}哪儿也没去。",
+
+    "f'The gate lets the head simply switch itself off":
+        "门控让头可以干脆把自己关掉：没有东西要复制时，门开到{gd_:.2f}，在触发字符之后开到{ga_:.2f}；它放在标记上的权重是{r_g:.0%}。",
+
+    "f'The gate could let the head switch itself off":
+        "门控本可以让头把自己关掉，但最后，没有东西要复制时它开到{gd_:.2f}，和触发字符之后的{ga_:.2f}差不多；它放在标记上的权重是{r_g:.0%}。",
+
+    "f'Differential attention subtracts a second softmax":
+        "差分注意力减去第二个softmax，所以它的权重不必加起来等于1：λ是{lm_:.2f}时，它放在标记上的权重是{r_d:.0%}。",
+
+    "All four learn the task about equally well":
+        "四种都把任务学得差不多一样好，所以这个任务本身从来不需要汇点；汇点只是softmax“什么都不做”的办法。",
+
+    "f'They do not learn the copies equally well":
+        "它们学复制学得并不一样好：{worst_name}最差，复制部分是{cp[worst_cp].mean():.3f}比特。",
+
+    # ------------------------------------------------------------------ Induction
+    "Chapter fourteen. Induction heads.":
+        "第14章。归纳头。",
+
+    '"Here is a test of something no counting model can do.':
+        "这是一个任何计数模型都做不到的测试。取一段我们的Transformer从没见过的小说文字，连着给它看两遍。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{tail}",
+
+    "The machinery behind copying has a name.":
+        "复制背后的机制，有一个名字。",
+
+    "Copying needs a particular piece of machinery":
+        "复制需要一种特定的机制，而我们的Transformer还没有把它搭起来。下面就来看它是什么，以及它是怎样形成的。",
+
+    "f'The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}. It has":
+        "第一遍，每字符{m1:.2f}比特；第二遍，{m2:.2f}。这些文字它从没见过，可第二遍它却能预测出大部分：它在从自己的上下文里复制。",
+
+    "f'The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: a little":
+        "第一遍，每字符{m1:.2f}比特；第二遍，{m2:.2f}：好了一点，但它几乎不复制。",
+
+    "f'The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better":
+        "第一遍，每字符{m1:.2f}比特；第二遍，{m2:.2f}：一点也没变好。答案就摆在一百个字符之前，我们的Transformer却不去用它。",
+
+    "f'Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, {u26:.1f}, because it bets on English; {q2":
+        "再看随机字母，这是哪部小说都没让它准备过的：第一遍{q1:.1f}比特，比在26个字母里瞎猜的{u26:.1f}还差，因为它押注的是英语；第二遍{q2:.1f}：至少在这里，它会复制。",
+
+    "f'Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, {u26:.1f}, because it bets on English; and":
+        "再看随机字母，这是哪部小说都没让它准备过的：第一遍{q1:.1f}比特，比在26个字母里瞎猜的{u26:.1f}还差，因为它押注的是英语；第二遍是{q2:.1f}：这里也没有复制。",
+
+    "f'Random letters, which no novel prepared it for: {q1:.1f} bits the first time, {q2":
+        "再看随机字母，这是哪部小说都没让它准备过的：第一遍{q1:.1f}比特，第二遍{q2:.1f}：至少在这里，它会复制。",
+
+    "f'Random letters, which no novel prepared it for: {q1:.1f} bits the first time, and":
+        "再看随机字母，这是哪部小说都没让它准备过的：第一遍{q1:.1f}比特，第二遍{q2:.1f}：这里也没有复制。",
+
+    "How? Two heads, in two layers, working together.":
+        "怎么做到的？两个头，在两层里，一起合作。<bookmark mark='a'/>在较早的一层里，有一个头只会往回看一步：于是每个字符的向量里，还记下了它前面是哪个字符。<bookmark mark='b'/>在较晚的一层里，是第二个头。正在读的字符是一个l。它的查询问：之前哪个字符，紧跟在一个l后面？Falcon里那个c的键回答了，因为它的记录上写着：我前面是一个l。<bookmark mark='c'/>于是这个头就看向那里，把它复制过来：c。见过A后面跟着B？再看到A时，就预测B。2022年，Anthropic的凯瑟琳·奥尔森和同事们把它们命名为归纳头。",
+
+    'f"Induction heads can be watched as they form.':
+        "归纳头的形成过程是可以看到的。训练一个只有注意力的小模型，数据是随机词元，里面某处有一段重复。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v_jump}<bookmark mark='c'/>看看里面：第一层有一个头恰好往回看一步，第二层有一个头看向更早的那段副本，往前错一步。凯瑟琳·奥尔森和同事们在大模型里也看到了同样的突然跃变，就在训练早期，恰好在它们变得擅长从提示中学习的时候。",
+
+    "f'With one layer it never learns to copy":
+        "只有一层时，它永远学不会复制：{int(c1[-1, 0]):,}步之后，它在重复段上仍然是{f1:.1f}比特。一个头没法既记下每个位置前面的词元，又去搜索它。",
+
+    "f'With one layer it ends at":
+        "只有一层时，它最后在重复段上是{f1:.1f}比特。",
+
+    "f'With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, around":
+        "有两层时，有一阵子什么都没发生，然后重复段上的损失突然断崖式下跌：在我们所有的运行里，都在第{js[0]:,}步左右，降到{lo2:.2f}到{hi2:.2f}比特。",
+
+    "f'With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, between":
+        "有两层时，有一阵子什么都没发生，然后重复段上的损失突然断崖式下跌：在我们的{len(js)}次运行里，发生在第{min(js):,}步到第{max(js):,}步之间，降到{lo2:.2f}到{hi2:.2f}比特。",
+
+    'f"And here are those two heads forming':
+        "下面就是这两个头的形成过程，在同一个例子上，取训练中的各个检查点，旁边是重复段上的损失。<bookmark mark='a'/>一开始，两个头都漫无目的地四处看，大多看最近的词元。<bookmark mark='b'/>然后，在第{js:,}步左右，第二个头找到了那条斜纹，也就是往前错一步的早先副本：它在那里的注意力在{steps[kb] - steps[ka]}步之内从{ind_sc[ka]:.2f}跳到{ind_sc[kb]:.2f}，重复段上的损失也在同一时刻从{lo_a:.1f}比特降到{lo_b:.1f}比特。{together}两个单独没用的头，合在一起就有用了。",
+
+    "f'The first head turns to the token one back in the same window":
+        "第一个头也在同一段时间里转向往回看一个词元，到第{steps[kb]:,}步达到{prev_sc[kb]:.2f}。",
+
+    "f'The first head had already turned":
+        "第一个头早在第{steps[kp]:,}步就已经转向往回看一个词元了：归纳头是在它的基础上搭起来的。",
+
+    "f'The first head turns to the token one back only later":
+        "第一个头要到更晚，第{steps[kp]:,}步，才转向往回看一个词元。",
+
+    'f"Nelson Elhage and colleagues gave a way':
+        "纳尔逊·埃尔哈格和同事们给出了一个办法，只看权重就能看出这种合作。<bookmark mark='a'/>K组合问的是：一个较晚的头的键，从一个较早的头写下的东西里读了多少。它等于较晚的头的QK矩阵和较早的头的OV矩阵乘积的大小，再除以两者各自的大小。随机的头大约得{base:.2f}分。<bookmark mark='b'/>{v}",
+
+    'f"For our pair it starts near the random level':
+        "我们这一对，一开始接近随机水平，{k0:.2f}，随着归纳头的形成升到{k1:.2f}；相比之下，Q组合是{q1:.2f}，其他各对里最好的是{o1:.2f}。归纳头的键，读的正是前一词元头写下的东西。",
+
+    "f'For our pair it ends at":
+        "我们这一对最后是{k1:.2f}，相比之下，Q组合是{q1:.2f}，其他各对里最好的是{o1:.2f}：在这个小模型里，信号并不干净地落在键上。",
+
+    '"And our own transformer, trained on novels':
+        "那我们自己的Transformer呢？它是在小说上训练的，根本没有复制游戏。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}",
+
+    'f"Our transformer has one:':
+        "我们的Transformer有一个：第{li + 1}层的头{hi + 1}，平均把{ind.max():.0%}的注意力，恰好放在归纳头该放的地方，也就是早先那段副本往后一步。",
+
+    'f"Our transformer has none.':
+        "我们的Transformer一个也没有。最好的候选，第{li + 1}层的头{hi + 1}，只把{ind.max():.1%}的注意力放在早先副本往后一步的位置上；而且在整个训练中，复制从来没有带来好处：到最后，第二遍每字符{c2[-1]:.2f}比特，第一遍{c1[-1]:.2f}。",
+
+    'f"Its heads do compose, a little':
+        "它的头确实有一点组合：最强的K组合，从第{a_ // H + 1}层的头{a_ % H + 1}到第{b_ // H + 1}层的头{b_ % H + 1}，是{top:.2f}，随机的头是{base:.2f}。但没有哪一对变成了复制回路。",
+
+    "f'And its heads barely compose":
+        "而且它的头几乎不组合：最强的K组合是{top:.2f}，随机的头是{base:.2f}。",
+
+    'f"Why not? Olsson\'s team saw induction heads appear after two and a half to five billion tokens of training. Ours has read {tokens / 1000000.0:.0f} million characters, about a hundredth of that, and a novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid. The toy':
+        "为什么没有？奥尔森的团队看到，归纳头是在训练了25亿到50亿个词元之后才出现的。我们的模型读了{tokens / 1000000.0:.0f}百万个字符，大约是那个数的百分之一；而且小说很少在256个字符之内重复一长段，所以复制很少能带来好处。那个专门奖励复制的玩具模型，在{jmax:,}步之内就形成了它的那一对头。",
+
+    'f"Why not? Olsson\'s team':
+        "为什么没有？奥尔森的团队看到，归纳头是在训练了25亿到50亿个词元之后才出现的。我们的模型读了{tokens / 1000000.0:.0f}百万个字符，大约是那个数的百分之一；而且小说很少在256个字符之内重复一长段，所以复制很少能带来好处。",
+
 }
 
 PHRASES = {
@@ -396,4 +597,34 @@ PHRASES = {
     'the plain model': '原始模型',
     'log n scaling alone': '单独的log n缩放',
     'NTK-aware with log n scaling': 'NTK感知缩放加上log n缩放',
+    # SideBySide: names, and every list of them a verdict can splice in
+    'Sinusoids': '正弦位置',
+    'No positions at all': '不给位置的模型',
+    'second': '第二',
+    'third': '第三',
+    'last': '最后',
+    # Sinks
+    'a space, an e or a t': '空格、e或t',
+    'the plain softmax': '普通的softmax',
+    'the sink logit': '汇点logit',
+    'the gated head': '加了门控的头',
+    'differential attention': '差分注意力',
 }
+
+
+def _spoken_lists():
+    """Every list of position methods SideBySide can name ("sinusoids, RoPE and ALiBi"), in its order."""
+    from itertools import combinations
+    en = {"sin": "sinusoids", "rope": "RoPE", "alibi": "ALiBi", "nope": "no positions at all"}
+    zh = {"sin": "正弦位置", "rope": "RoPE", "alibi": "ALiBi", "nope": "不给位置的模型"}
+    order = ("sin", "rope", "alibi", "nope")
+    out = {}
+    for k in range(1, 5):
+        for ms in combinations(order, k):
+            e = [en[m] for m in ms]
+            z = [zh[m] for m in ms]
+            out[e[0] if k == 1 else ", ".join(e[:-1]) + " and " + e[-1]] = z[0] if k == 1 else "、".join(z[:-1]) + "和" + z[-1]
+    return out
+
+
+PHRASES.update(_spoken_lists())
