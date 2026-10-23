@@ -868,7 +868,7 @@ def compute_materials():
     _threads()
     rows, X, E = dc.chemistry(0)
     stable = dc.true_stable(rows, E)
-    part = CACHE.partial("materials", dict(seeds=SEEDS, v=1))
+    part = CACHE.partial("materials", dict(seeds=SEEDS, v=2))
     for policy in ("model", "random"):
         for s in SEEDS:
             key = f"{policy}_s{s}"

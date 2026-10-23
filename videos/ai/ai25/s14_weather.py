@@ -187,9 +187,16 @@ class Weather(VoiceoverScene):
         s2 = (f"It stays ahead of persistence for {hor} steps" if hor >= 2 else "Its lead over persistence is short-lived")
         s3 = (f"and after {cross_c} steps it is worse than simply forecasting the average state, as every forecast of "
               "a chaotic system eventually is" if cross_c else "and it stays better than the average state throughout")
-        mm_better = np.mean(rm[:10]) < np.mean(rf_[:10])
-        s4 = ("The long edges matter: the same network with only the shortest edges does worse over the first ten "
-              "steps" if mm_better else "In our toy the long edges don't help over the first ten steps")
+        d10 = (np.mean(rf_[:10]) - np.mean(rm[:10])) / np.mean(rm[:10])
+        e20f, e20m = float(rf_[19]), float(rm[19])
+        if d10 > 0.05:
+            s4 = ("The long edges matter: the same network with only the shortest edges does worse over the first "
+                  "ten steps")
+        elif e20f > 1.2 * e20m:
+            s4 = (f"Over the first ten steps the long edges make no difference; they matter later: by step twenty the "
+                  f"network with only the shortest edges is off by {e20f:.1f}, against {e20m:.1f}")
+        else:
+            s4 = "In our toy the long edges don't help, at any lead time"
         tag = note(r"computed: \ $8$ test runs, \ $40$ steps each; \ one training run per network", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(

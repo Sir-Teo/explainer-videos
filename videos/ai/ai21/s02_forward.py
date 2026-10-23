@@ -56,7 +56,7 @@ class Forward(VoiceoverScene):
             for k in range(1, len(frames)):
                 col = interpolate_color(ManimColor(DATA), ManimColor(NOISE), k / (len(frames) - 1))
                 c2 = label(rf"step ${keep[k]:,}$".replace(",", "{,}"), font_size=26, color=GREY_A).move_to(cnt)
-                self.play(*pn.move(dots, frames[k]), *[x.animate.set_color(col) for x in dots], Transform(cnt, c2),
+                self.play(*pn.move(dots, frames[k], color=col), Transform(cnt, c2),
                           run_time=0.45)
             vo.wait_until("c")
             self.play(Indicate(d.body[-1], color=C.BITS))
@@ -125,6 +125,9 @@ class Forward(VoiceoverScene):
                      *[label(rf"step ${r['t']:,}$: \ ${r['sw_chain']:.3f}$ \ (two jumps: ${r['sw_floor']:.3f}$)".replace(",", "{,}"),
                              font_size=20, color=WHITE) for r in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         tab.move_to([3.6, -1.4, 0])
+        man, ex = f"{float(f['abar_T']):.1e}".split("e")
+        man, ex = float(man), -int(ex)
+        left = math.sqrt(float(f["abar_T"]))
         verdict = ("and whole clouds agree as well as two independent jumps agree with each other."
                    if sw_ok else "and whole clouds agree nearly as well as two independent jumps do.")
         with self.voiceover(
@@ -133,8 +136,8 @@ class Forward(VoiceoverScene):
             f"of alpha bar: at step 500 it is {r5['slope']:.3f}, the formula says {r5['slope_pred']:.3f}. "
             f"<bookmark mark='b'/> The leftover variance should be one minus alpha bar: {r5['resid']:.3f} against "
             f"{r5['resid_pred']:.3f}. The largest gap anywhere is {worst:.3f}, <bookmark mark='c'/> {verdict} "
-            f"After all thousand steps, alpha bar is {f['abar_T']:.1e}: what is left of a point is "
-            f"{math.sqrt(f['abar_T']):.4f} of it."
+            f"After all thousand steps, alpha bar is {man:.1f} times ten to the minus {ex}: what is left of a point "
+            f"is {left:.4f} of it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg[2]))
             vo.wait_until("a")

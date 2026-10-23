@@ -303,11 +303,16 @@ ZH.update({
     'Chapter six. Collapse.':
         '第6章。坍缩。',
 
-    'Before going further, a question.':
+    'f"Before going further, a question.':
         "继续之前，先问一个问题。假如唯一的规则是：让每个数字的两个视图得到同一个向量。没有负样本，没有任何东西把它们推开。"
-        "网络会学到什么？先停下来想一想。<bookmark mark='a'/>这是我们的网络做的事。损失是两个视图向量之间余弦的相反数，网络把它降到最低"
-        "<bookmark mark='b'/>的办法是：把每个数字都送到同一个点上。两个视图完全一致，损失停在最小值，而这个向量对输入什么也没说。"
-        "这就是坍缩。",
+        "网络会学到什么？先停下来想一想。<bookmark mark='a'/>这是我们的网络做的事。损失是两个视图向量之间余弦的相反数。"
+        "{how}两个视图完全一致，损失停在最小值，而这个向量对输入什么也没说。这就是坍缩。",
+
+    'Like the contrastive network, it starts with every digit bunched in one spot':
+        "和对比式网络一样，它一开始把每个数字都挤在同一个地方；<bookmark mark='b'/>和它不同的是，它再也没有离开。",
+
+    'It minimizes it <bookmark':
+        "它降低损失的办法<bookmark mark='b'/>是：把每个数字都送到同一个点上。",
 
     'f"To see collapse in a network with many output numbers':
         "要在输出有很多个数的网络里看到坍缩，我们需要一个度量。有效秩取一组向量的奇异值，把它们变成比例，然后问有多少个方向承担了权重："
@@ -321,7 +326,7 @@ ZH.update({
         '只把两者拉到一起的网络降到了{r_n:.1f}，而且这点秩大多是噪声：它的向量分散的程度，比均匀撒在球面上的点小{times:.0f}倍。',
 
     'f"The whole spectrum shows more.':
-        "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>坍缩的网络只有一个方向，然后什么都没有。"
+        "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>坍缩的网络只有一个方向，然后只剩噪声。"
         "<bookmark mark='b'/>{drop}即使是对比学习，也留下了一部分空间没有用上。这叫作维度坍缩，是完全坍缩温和一些的表亲；"
         "景立、杨立昆和同事把它归因于强烈的数据增强，以及各层权重共同演化的方式。",
 
@@ -405,8 +410,14 @@ ZH.update({
 
     'f"Here is the matrix in our Barlow Twins':
         "这是我们的Barlow Twins里的这个矩阵，取它512个维度中的前24个，在测试数字上边训练边测。<bookmark mark='a'/>一开始它是噪声。"
-        "<bookmark mark='b'/>随着每个维度学会忽略视图之间的变化，对角线亮了起来，平均相关达到{dg[-1]:.2f}，<bookmark mark='c'/>其余部分"
-        "暗了下去，非对角线上的典型相关是{np.sqrt(off[-1]):.3f}。512个维度，每个都说着不同的东西，每个在视图变化下都保持稳定。",
+        "<bookmark mark='b'/>随着每个维度学会忽略视图之间的变化，对角线亮了起来，平均相关达到{dg[-1]:.2f}。<bookmark mark='c'/>{rest}",
+
+    "f'and the rest goes dark, with typical off-diagonal correlations of {ro[-1]:.3f}":
+        '其余部分暗了下去，非对角线上的典型相关是{ro[-1]:.3f}。512个维度，每个都说着不同的东西，每个在视图变化下都保持稳定。',
+
+    "f'Off the diagonal, the correlations first grow, to a typical {ro.max():.2f}":
+        '非对角线上的相关先是增大，典型值到了{ro.max():.2f}，然后又被压了回去，到最后是{ro[-1]:.2f}。损失一直把矩阵往单位矩阵拉；'
+        '800步里，它走完了一部分路。',
 
     'f"VICReg, from Adrien Bardes, Jean Ponce and Yann LeCun':
         "VICReg出自阿德里安·巴尔德、让·蓬斯和杨立昆，它把同一个想法拆成三个有名字的项。<bookmark mark='a'/>不变项：两个视图的向量应该"

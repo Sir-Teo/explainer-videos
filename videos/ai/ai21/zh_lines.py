@@ -42,9 +42,10 @@ ZH = {
 
     'This is Part 21 of AI, Built: diffusion and flow.':
         "这是《人工智能，从零搭建》的第21部分：扩散与流。<bookmark mark='a'/>本部分的内容：前向过程，以及训练反向过程的那个下界；"
-        "为什么猜噪声就是在学分数函数；让时间倒流，用随机方程或确定性方程，以及求解它们的采样器；各种设计选择，从噪声调度到EDM和"
-        "DPM-Solver；流匹配与最优传输；怎样从50步走到1步；怎样要求它画出特定的东西；还有用于文本的扩散，我们自己的一个语言模型"
-        "也会登上记分牌。这里的每一个模型，都是在这台电脑上训练的。",
+        "为什么猜噪声就是在学分数函数；<bookmark mark='b'/>让时间倒流，用随机方程或确定性方程，以及求解它们的采样器；"
+        "<bookmark mark='c'/>各种设计选择，从噪声调度到EDM和DPM-Solver；<bookmark mark='d'/>流匹配与最优传输；"
+        "<bookmark mark='e'/>怎样从50步走到1步；怎样要求它画出特定的东西；<bookmark mark='f'/>还有用于文本的扩散，"
+        "我们自己的一个语言模型也会登上记分牌。<bookmark mark='g'/>这里的每一个模型，都是在这台电脑上训练的。",
 
     # ------------------------------------------------------------------ Forward
     'Chapter one. Destroying data slowly.':
@@ -65,8 +66,8 @@ ZH = {
         "在我们的字母上检验一下。让2万个点跑完全部1000步，并在{len(rows)}个时刻，把它们所在的位置对它们的起点做回归。"
         "<bookmark mark='a'/>斜率应该是阿尔法拔的平方根：在第500步，它是{r5['slope']:.3f}，公式给出{r5['slope_pred']:.3f}。"
         "<bookmark mark='b'/>剩余的方差应该是1减阿尔法拔：{r5['resid']:.3f}，对比{r5['resid_pred']:.3f}。任何地方最大的差距是"
-        "{worst:.3f}，<bookmark mark='c'/>{verdict}跑完全部1000步后，阿尔法拔是{f['abar_T']:.1e}：一个点剩下的部分，"
-        "只有它原来的{math.sqrt(f['abar_T']):.4f}。",
+        "{worst:.3f}，<bookmark mark='c'/>{verdict}跑完全部1000步后，阿尔法拔是{man:.1f}乘以10的负{ex}次方："
+        "一个点剩下的部分，只有它原来的{left:.4f}。",
 
     'and whole clouds agree as well as two independent jumps':
         '整团点云的吻合程度，也和两次独立跳跃之间的吻合程度一样。',
@@ -106,15 +107,16 @@ ZH = {
 
     '"Here is our own denoiser learning on the letters':
         "这是我们自己的去噪器，正在字母上学习，用的是简化损失，每个训练样本随机抽一个噪声水平。在每个检查点，我们停下来，"
-        "从同一份噪声里画出一些点。<bookmark mark='a'/>还没训练时，它把这些点甩得到处都是。<bookmark mark='b'/>{early}"
-        "<bookmark mark='c'/>剩下的都是精修：损失几乎不动，但笔画越来越清晰，与数据的距离从{sw[k1]:.2f}降到{sw[-1]:.2f}，{trend}。"
+        "从同一份噪声里画出一些点。<bookmark mark='a'/>还没训练时，它把这些点甩到了边上。<bookmark mark='b'/>{early}"
+        "<bookmark mark='c'/>到第{c_read:,}步，字母已经认得出来了。剩下的都是精修：损失几乎不动，但笔画越来越清晰，"
+        "与数据的距离从{s_read:.2f}降到{s_end:.2f}，{trend}。"
         "训练的每一步，只要求它猜出一个模糊的点里的噪声；字母就从数百万次这样的猜测中浮现出来。",
 
-    "f'Within {checks[k1]} steps it has the rough shape, and the loss":
-        '不到{checks[k1]}步，它就有了大致的形状，损失也已经完成了整个降幅的{100 * min(drop, 1):.0f}%。',
+    "f'Within {checks[k1]} steps the loss has made":
+        '不到{checks[k1]}步，损失就已经完成了整个降幅的{pct:.0f}%，这些点也收拢成了一团，离数据{sw[k1]:.2f}。',
 
-    "f'Within {checks[k1]} steps it has the rough shape, though":
-        '不到{checks[k1]}步，它就有了大致的形状，不过损失还在下降。',
+    "f'Within {checks[k1]} steps the points have pulled in":
+        '不到{checks[k1]}步，这些点就收拢成了一团，离数据{sw[k1]:.2f}，损失还在下降。',
 
     # ------------------------------------------------------------------ Tweedie
     "Chapter three. Tweedie's formula.":

@@ -53,7 +53,7 @@ class SDE(VoiceoverScene):
             for k in range(len(ts) - 2, -1, -1):
                 t2 = label(rf"$t = {ts[k]:g}$", font_size=26, color=GREY_A).move_to(tl)
                 col = interpolate_color(ManimColor(DATA), ManimColor(NOISE), 1 - k / (len(ts) - 1))
-                self.play(*pn.move(dots, snaps[k]), *[x.animate.set_color(col) for x in dots], Transform(tl, t2), run_time=0.5)
+                self.play(*pn.move(dots, snaps[k], color=col), Transform(tl, t2), run_time=0.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -86,7 +86,7 @@ class SDE(VoiceoverScene):
             vo.wait_until("b")
             for k in range(1, len(snaps)):
                 col = interpolate_color(ManimColor(NOISE), ManimColor(DATA), k / (len(snaps) - 1))
-                self.play(*pn.move(dots, snaps[k]), *[x.animate.set_color(col) for x in dots], run_time=0.45)
+                self.play(*pn.move(dots, snaps[k], color=col), run_time=0.45)
             self.play(Create(trails), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()

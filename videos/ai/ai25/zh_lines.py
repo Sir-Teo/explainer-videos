@@ -758,8 +758,11 @@ ZH.update({
     'The long edges matter:':
         '长边是重要的：只用最短边的同一个网络，在前十步里表现更差',
 
-    "In our toy the long edges don't help over the first ten steps":
-        '在我们的玩具里，长边在前十步里没有帮助',
+    "f'Over the first ten steps the long edges make no difference":
+        '在前十步里，长边没有带来差别；它们的作用在后面：到第二十步，只用最短边的网络误差是{e20f:.1f}，而多尺度网格是{e20m:.1f}',
+
+    "In our toy the long edges don't help, at any lead time":
+        '在我们的玩具里，无论提前多少步，长边都没有帮助',
 
     'There is a deeper problem.':
         "还有一个更深的问题。用平方误差训练的网络学会预测的是可能发生的情况的平均，而在很远的将来，许多种可能天气的平均是一片模糊。"
@@ -842,8 +845,9 @@ ZH.update({
     'f"We can run the flywheel on a made-up chemistry:':
         "我们可以在一个虚构的化学体系上转动这个飞轮：二十种虚构的元素，两两组合，九种配比，四种晶体类型，共{m['n_candidates']:,}个候选，"
         "它们的“DFT”能量是一个隐藏的公式，我们每次只揭开六十个。<bookmark mark='a'/>一开始知道其中百分之三。每一轮，用所有已知的数据训练"
-        "一个小集成模型，预测其余的，检查相对于已知凸包看起来最稳定的六十个，再把它们加进来。命中，就是落在那个凸包下方的一次挑选。"
-        "<bookmark mark='b'/>随机挑选的命中率是{100 * h_r.mean():.0f}%。<bookmark mark='c'/>代理模型的挑选在第一轮命中{100 * h_m[0]:.0f}%，"
+        "一个小集成模型，预测其余的，再检查看起来最稳定的六十个：预测会落到其余一切化合物（已知的或预测的）的凸包下方最远的那些。命中，"
+        "就是挑中一个真正稳定的化合物，位于整个化学体系的凸包上。<bookmark mark='b'/>随机挑选的命中率是{100 * h_r.mean():.0f}%，"
+        "大约就是候选中稳定化合物所占的比例，{100 * share:.0f}%。<bookmark mark='c'/>代理模型的挑选在第一轮命中{100 * h_m[0]:.0f}%，"
         "{trend}。<bookmark mark='d'/>它的误差从{mae[0]:.3f}降到{mae[-1]:.3f}，{rounds}轮之后，它找到了{m['n_stable']}个真正稳定的化合物中的"
         "{F['model'][:, -1].mean():.0f}个，而随机挑选找到{F['random'][:, -1].mean():.0f}个。",
 
