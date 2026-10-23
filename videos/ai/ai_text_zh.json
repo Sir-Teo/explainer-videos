@@ -4043,7 +4043,6 @@
     "$175$ billion weights, \\ $96$ layers, \\ width $12{,}288$": "$1750$亿个权重，\\ $96$层，\\ 宽度$12{,}288$",
     "\\text{training} \\approx 6\\,N\\,D": "\\text{训练} \\approx 6\\,N\\,D",
     "Brown et al.\\ (2020); \\ Kaplan et al.\\ (2020)": "Brown等（2020）；\\ Kaplan等（2020）",
-    "Hong Jia-Wei \\& H.~T.~Kung": "洪家威\\ \\& 孔祥重（H.~T.~Kung）",
     "no order of operations can move fewer than about $n^3/\\sqrt{M}$ numbers": "任何运算顺序搬动的数都不少于约$n^3/\\sqrt{M}$个",
     "GFLOP/s \\ (log scale)": "GFLOP/s\\ （对数坐标）",
     "tile size $b$": "块大小$b$",
@@ -5250,7 +5249,6 @@
     "bits per character on the scoreboard's passage": "记分板那段文字上，每个字符的比特数",
     "our BERT-style model: \\\\ no row \\\\ (its guesses don't multiply \\\\ into a probability of text)": "我们的BERT式模型：\\\\ 没有这一行 \\\\ （它的猜测乘不出 \\\\ 一段文本的概率）",
     "a model of $p(\\text{text})$ can be sampled, scored and prompted: \\ one model does it all": "一个$p(\\text{文本})$的模型，可以采样、可以打分、可以提示：\\ 一个模型包揽一切",
-    "Hong Jia-Wei \\& H.~T.~Kung, \\ \\textit{the red-blue pebble game}": "洪加威\\ \\& 孔祥重（H.~T.~Kung），\\ \\textit{the red-blue pebble game}（红蓝卵石游戏）",
     "``That within ten years a digital computer will be the world's chess champion, \\\\ unless the rules bar it from competition.''": "“十年之内，一台数字计算机将成为国际象棋世界冠军，\\\\ 除非规则禁止它参赛。”",
     "Herbert Simon \\& Allen Newell, \\textit{Heuristic Problem Solving: The Next Advance in Operations Research} (1958)": "赫伯特·西蒙 \\& 艾伦·纽厄尔，\\textit{启发式问题求解：运筹学的下一个进展}（1958）",
     "$39$ years": "$39$ 年",
@@ -6019,7 +6017,8 @@
     "Robinson (1965); \\ Wos, Robinson \\& Carson (1965); \\ Davis \\& Putnam (1960); \\ Davis, Logemann \\& Loveland (1962); \\ Cook (1971); \\ Mitchell, Selman \\& Levesque (1992); \\ M\\'ezard, Parisi \\& Zecchina (2002); \\ Marques-Silva \\& Sakallah (1999); \\ Moskewicz et al.\\ (2001)": "Robinson（1965）；\\ Wos、Robinson \\& Carson（1965）；\\ Davis \\& Putnam（1960）；\\ Davis、Logemann \\& Loveland（1962）；\\ Cook（1971）；\\ Mitchell、Selman \\& Levesque（1992）；\\ M\\'ezard、Parisi \\& Zecchina（2002）；\\ Marques-Silva \\& Sakallah（1999）；\\ Moskewicz等（2001）",
     "Waltz (1975); \\ Mackworth (1977); \\ McCarthy \\& Hayes (1969); \\ Fikes \\& Nilsson (1971); \\ Sussman (1975); \\ Blum \\& Furst (1997); \\ Hoffmann \\& Nebel (2001)": "Waltz（1975）；\\ Mackworth（1977）；\\ McCarthy \\& Hayes（1969）；\\ Fikes \\& Nilsson（1971）；\\ Sussman（1975）；\\ Blum \\& Furst（1997）；\\ Hoffmann \\& Nebel（2001）",
     "Quillian (1968); \\ Minsky (1974); \\ Shortliffe (1976); \\ Yu et al.\\ (1979); \\ McDermott (1982); \\ Lenat (1995); \\ Weizenbaum (1966, 1976); \\ Lighthill (1973); \\ Moravec (1988)": "Quillian（1968）；\\ Minsky（1974）；\\ Shortliffe（1976）；\\ Yu等（1979）；\\ McDermott（1982）；\\ Lenat（1995）；\\ Weizenbaum（1966，1976）；\\ Lighthill（1973）；\\ Moravec（1988）",
-    "Jones \\& Bergen (2025); \\ Trinh et al.\\ (2024); \\ Hubert et al.\\ (2025); \\ Valmeekam et al.\\ (2024); \\ Liu et al.\\ (2023); \\ Shrager (2026)": "Jones \\& Bergen（2025）；\\ Trinh等（2024）；\\ Hubert等（2025）；\\ Valmeekam等（2024）；\\ Liu等（2023）；\\ Shrager（2026）"
+    "Jones \\& Bergen (2025); \\ Trinh et al.\\ (2024); \\ Hubert et al.\\ (2025); \\ Valmeekam et al.\\ (2024); \\ Liu et al.\\ (2023); \\ Shrager (2026)": "Jones \\& Bergen（2025）；\\ Trinh等（2024）；\\ Hubert等（2025）；\\ Valmeekam等（2024）；\\ Liu等（2023）；\\ Shrager（2026）",
+    "Hong Jia-Wei \\& H.~T.~Kung, \\ \\textit{the red-blue pebble game}": "洪加威\\ \\& 孔祥重（H.~T.~Kung），\\ \\textit{the red-blue pebble game}（红蓝卵石游戏）"
   },
   "phrases": {
     "width": "宽度",
