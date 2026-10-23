@@ -186,7 +186,8 @@ class Web(VoiceoverScene):
             pbars,
             note(r"both examples schematic", font_size=16),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        pre = VGroup(blk, ftx).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([-2.4, -0.1, 0])
+        pre = VGroup(blk, ftx).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        pre.scale_to_fit_height(min(pre.height, 4.1)).move_to([-2.4, -0.45, 0])
         with self.voiceover(
             "Next: which language is each page in? <bookmark mark='a'/> Before that, a cheap filter on the address "
             f"alone: a blocklist of adult and gambling sites removes {W['blocked']} pages. <bookmark mark='b'/> Then "
