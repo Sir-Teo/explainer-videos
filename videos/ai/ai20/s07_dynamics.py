@@ -57,12 +57,11 @@ class Dynamics(VoiceoverScene):
         note_ = label(r"no downhill anywhere: \ the field only turns", font_size=24, color=C.BITS)
         note_.next_to(rows, DOWN, buff=0.5)
         with self.voiceover(
-            "Here is the smallest game there is. One player picks x and wants x times y small; the other picks y "
-            "and wants it large. The equilibrium is the origin. <bookmark mark='a'/> Each player follows its own "
-            "gradient: x moves by minus y, y moves by plus x. <bookmark mark='b'/> Draw those velocities and "
-            "there is no downhill anywhere. The field turns around the equilibrium like water around a drain "
-            "without a hole. <bookmark mark='c'/> Its Jacobian has eigenvalues plus and minus i: pure rotation. "
-            "Gradient descent was built for valleys. A game, near its equilibrium, can be a whirlpool."
+            "The smallest game: one player picks x and wants x times y small, the other picks y and wants it "
+            "large. <bookmark mark='a'/> Each follows its own gradient: x moves by minus y, y by plus x. <bookmark "
+            "mark='b'/> Draw those velocities: no downhill anywhere, only turning. <bookmark mark='c'/> The "
+            "Jacobian's eigenvalues are plus and minus i, pure rotation. Gradient descent was built for valleys; a "
+            "game can be a whirlpool."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(xl), FadeIn(yl), Write(rows[0]))
             vo.wait_until("a")
@@ -92,16 +91,14 @@ class Dynamics(VoiceoverScene):
                      (EXTRA, r"extragradient (Korpelevich, 1976)"),
                      (OPT, r"optimistic (Daskalakis et al., 2018)")], font_size=20).move_to([3.4, -1.3, 0])
         ra, re_, ro = (float(np.asarray(b[f"{k}_radius"])[-1]) for k in ("alt", "extra", "opt"))
+        rs_end = float(rs[-1])
         with self.voiceover(
-            "Now take actual steps, both players at once, with step size eta. Each step multiplies the point by "
-            "this matrix. <bookmark mark='a'/> Its eigenvalues have size the square root of one plus eta squared: "
-            "bigger than one, so every step moves outward. <bookmark mark='b'/> Simultaneous gradient steps "
-            f"spiral away from the equilibrium; after {T} steps the radius has grown {rs[-1]:.1f} times. "
-            "<bookmark mark='c'/> Let the players take turns instead, and the spiral closes into an orbit: it "
-            f"neither escapes nor arrives; its radius ends at {ra:.2f}. <bookmark mark='d'/> To actually converge, "
-            "look ahead. Extragradient takes a trial step and uses the gradient from there; optimistic gradient "
-            "descent extrapolates from the last gradient. Both spiral in, to radii of "
-            f"{re_:.2f} and {ro:.2f}."
+            "Take real steps, both players at once, step size eta: each step multiplies by this matrix. <bookmark "
+            "mark='a'/> Its eigenvalues have size root one plus eta squared, more than one. <bookmark mark='b'/> "
+            f"So simultaneous steps spiral out: after {T} steps the radius has grown {rs_end:.1f} times. <bookmark "
+            f"mark='c'/> Taking turns closes the spiral into an orbit; its radius ends at {ra:.2f}. <bookmark "
+            "mark='d'/> To converge, look ahead: extragradient steps with the gradient at a trial point, optimistic "
+            f"descent extrapolates the last one. Both spiral in, to {re_:.2f} and {ro:.2f}."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(ar), Write(M))
             vo.wait_until("a")
@@ -150,14 +147,12 @@ class Dynamics(VoiceoverScene):
         Ps = np.clip(b["dirac_sim"], -1.55, 1.55)
         n_out = int(np.argmax(np.abs(np.asarray(b["dirac_sim"])).max(1) > 1.55)) or len(Ps)
         with self.voiceover(
-            "Real GANs do this. Lars Mescheder, Andreas Geiger and Sebastian Nowozin boiled a GAN down to two "
-            "numbers: the data is a single point at zero, the generator a single point at theta, and the "
-            "discriminator a line through the origin with slope psi. <bookmark mark='a'/> The equilibrium is "
-            "theta and psi both zero, and around it the field is the same rotation. <bookmark mark='b'/> "
-            "Simultaneous steps spiral out; <bookmark mark='c'/> alternating steps circle forever. <bookmark "
-            "mark='d'/> Their fix: penalize the discriminator's gradient on real data, which here is just gamma "
-            "over two times psi squared. The penalty is friction. The spiral now winds in, to the equilibrium. "
-            "StyleGAN trains with exactly this penalty, R1."
+            "Real GANs do this. Lars Mescheder, Andreas Geiger and Sebastian Nowozin boiled one down to two "
+            "numbers: data at zero, the generator at theta, a discriminator with slope psi. <bookmark mark='a'/> "
+            "Around the equilibrium, the same rotation. <bookmark mark='b'/> Simultaneous steps spiral out; "
+            "<bookmark mark='c'/> alternating steps circle. <bookmark mark='d'/> Their fix penalizes the "
+            "discriminator's gradient on real data, here gamma over two psi squared: friction, and the spiral winds "
+            "in. StyleGAN trains with this penalty, R1."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(th), FadeIn(ps), FadeIn(setup), FadeIn(cite_))
             vo.wait_until("a")
@@ -207,12 +202,10 @@ class Dynamics(VoiceoverScene):
         tk = take_away(r"GAN training is a dynamical system, not a descent: \ penalties (R1), \ look-ahead steps, "
                        r"\ two learning rates (TTUR), \ spectral normalization", font_size=24)
         with self.voiceover(
-            "Back to the ring. Each row is one of its eight modes, each column a checkpoint, and the brightness "
-            "is how many of the generator's samples sit at that mode. <bookmark mark='a'/> "
-            f"{tour} The bright bands wander from mode to mode: the same rotation as the toy game, "
-            "now in a space of distributions. <bookmark mark='b'/> Practitioners fought this for years with "
-            "gradient penalties, look-ahead steps, separate learning rates for the two players, and spectral "
-            "normalization of the discriminator's layers."
+            "Back to the ring: each row a mode, each column a checkpoint, brightness the generator's samples there. "
+            f"<bookmark mark='a'/> {tour} The bands wander from mode to mode: the toy game's rotation, in a space of "
+            "distributions. <bookmark mark='b'/> The field fought it with penalties, look-ahead steps, separate "
+            "learning rates, and spectral normalization."
         ) as vo:
             self.play(FadeIn(img), FadeIn(box), FadeIn(ml), FadeIn(xl), FadeIn(x0), FadeIn(x1), FadeIn(head))
             vo.wait_until("a")

@@ -48,9 +48,9 @@ class Filters(VoiceoverScene):
         bl = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(b, DOWN, buff=0.12) for t, b in zip(
             [r"$48$ @ $7{\times}7$, \\ stride 2", r"$64$", r"$128$", r"$128$", r"$10$"], boxes)])
         bl.set_y(boxes.get_bottom()[1] - 0.4)
-        ax = axes([0, int(cf["epochs"])], [0.3, 1.0], x_length=4.6, y_length=2.4, xlabel=r"passes over the photographs",
+        ax = axes([0, int(cf["epochs"])], [0.3, 1.0], x_length=4.6, y_length=2.0, xlabel=r"passes over the photographs",
                   ylabel=r"test accuracy", xticks=[0, 5, 10], yticks=[0.5, 1.0], yfmt=lambda v: f"{int(100 * v)}\\%",
-                  center=[3.6, -1.75, 0])
+                  center=[3.6, -1.95, 0])
         t = np.asarray(cf["test"])
         per = int(cf["total_steps"]) / int(cf["epochs"])
         cur = curve(ax.ax, t[:, 0] / per, t[:, 1], CNN, 4)

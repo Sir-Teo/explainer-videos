@@ -48,14 +48,12 @@ class Hopfield(VoiceoverScene):
         card = history_card(1982, r"John Hopfield", r"\textit{Neural networks and physical systems with emergent "
                             r"collective computational abilities}", width=5.6, font_size=20).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The fifth answer is the oldest. In 1982 John Hopfield, a physicist, described a network of binary "
-            "neurons, each plus or minus one, with symmetric connections, and gave it an energy. <bookmark "
-            "mark='a'/> One neuron at a time looks at its input and takes its sign. <bookmark mark='b'/> If it "
-            "flips, the energy changes by minus the flip times the input, and the flip always agrees with the "
-            "input's sign, so the energy can only go down. The network must settle into a valley. <bookmark "
-            "mark='c'/> To make chosen patterns the valleys, set the weights by Hebb's rule from Part 9: neurons "
-            "that are on together in a pattern get a positive connection. A memory, stored as the bottom of an "
-            "energy landscape."
+            "The fifth answer is the oldest. In 1982 the physicist John Hopfield gave a network of plus-or-minus-one "
+            "neurons, with symmetric connections, an energy. <bookmark mark='a'/> One neuron at a time takes the "
+            "sign of its input. <bookmark mark='b'/> A flip changes the energy by minus the flip times the input, "
+            "and the two agree in sign, so the energy only falls: the network settles into a valley. <bookmark "
+            "mark='c'/> Hebb's rule, from Part 9, makes chosen patterns the valleys: a memory, stored as the bottom "
+            "of a landscape."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.1))
             step(0)
@@ -88,11 +86,10 @@ class Hopfield(VoiceoverScene):
                f"It settles on a state that matches the stored digit on {100 * (1 + ov) / 2:.0f} percent of "
                "pixels.")
         with self.voiceover(
-            "Here is one, with 196 neurons for our fourteen-by-fourteen pixels, and three digits stored. <bookmark "
-            "mark='a'/> Start it from the middle digit with a quarter of its pixels flipped. <bookmark mark='b'/> "
-            "Neuron by neuron, the state slides downhill, and the energy, on the right, falls with every change. "
-            f"<bookmark mark='c'/> {res} The memory is addressed by its content: a damaged copy is enough to find "
-            "it."
+            "Here is one: 196 neurons, one per pixel, three digits stored. <bookmark mark='a'/> Start from the middle "
+            "digit with a quarter of its pixels flipped. <bookmark mark='b'/> Neuron by neuron the state slides "
+            f"downhill, the energy falling with every change. <bookmark mark='c'/> {res} A damaged copy is enough "
+            "to find the memory."
         ) as vo:
             self.play(FadeIn(stored), FadeIn(sl))
             vo.wait_until("a")
@@ -139,19 +136,15 @@ class Hopfield(VoiceoverScene):
                                                                                                      buff=0.25)
         fails = (hb < 1.0).any()
         n_fail = int(np.argmax(hb < 1.0)) + 1 if fails else len(hb)
-        hebb_s = (f"With Hebb's rule, recall already fails at {n_fail} stored digits; past that, the valleys merge, "
-                  "and a cue slides into a blend of several memories." if fails else
-                  "Even so, with Hebb's rule all ten come back here; but with more, the valleys merge, and a cue "
-                  "slides into a blend of several memories.")
+        hebb_s = (f"Hebb's rule already fails at {n_fail} stored digits, and cues slide into blends of memories."
+                  if fails else "Even so, all ten come back here; with more, valleys merge into blends.")
         ov = np.asarray(h["overlap"])
         mean_ov = float(np.abs(ov[np.triu_indices(10, 1)]).mean())
         with self.voiceover(
-            "How much can it hold? Store random patterns, and test each from a slightly damaged copy. <bookmark "
-            f"mark='a'/> With {N} neurons, recall is perfect for a while, then collapses: in our runs fewer than "
-            f"half come back once there are {half:.2f} patterns per neuron. Daniel Amit, Hanoch Gutfreund and Haim "
-            "Sompolinsky computed the limit with the physics of spin glasses: about 0.138 patterns per neuron. "
-            "<bookmark mark='b'/> Digits are worse, because digits look alike: two of ours overlap by "
-            f"{mean_ov:.2f} on average, where random patterns would barely overlap. " + hebb_s
+            "How much can it hold? Store random patterns, recall each from a damaged copy. <bookmark mark='a'/> "
+            f"With {N} neurons, fewer than half come back once there are {half:.2f} patterns per neuron; Amit, "
+            "Gutfreund and Sompolinsky's spin-glass theory puts the limit at about 0.138. <bookmark mark='b'/> "
+            f"Digits look alike, overlapping by {mean_ov:.2f} on average, which is worse. " + hebb_s
         ) as vo:
             self.play(FadeIn(g), FadeIn(pd))
             vo.wait_until("a")
@@ -182,12 +175,10 @@ class Hopfield(VoiceoverScene):
         res = ("recalls all ten digits from the same damaged cues" if allok else
                f"recalls {100 * hm[-1]:.0f} percent of them with all ten stored")
         with self.voiceover(
-            "The fix came more than thirty years later. Dmitry Krotov and Hopfield made the energy sharper, and Hubert "
-            "Ramsauer and colleagues wrote the update in a form you have seen before: compare the state with every "
-            "stored pattern, take a softmax of the similarities, and return the weighted average of the patterns. "
-            f"<bookmark mark='a'/> With that update, our network {res}. <bookmark mark='b'/> And that update is "
-            "attention, from Part 13: the state is a query, the stored patterns are the keys and the values. A "
-            "transformer's attention layer is, in this precise sense, a Hopfield network taking one step."
+            "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert "
+            "Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, "
+            f"our network {res}. <bookmark mark='b'/> That update is attention, from Part 13: the state the query, "
+            "the memories the keys and values. An attention layer is a Hopfield network taking one step."
         ) as vo:
             self.play(FadeOut(self.left_))
             self.play(Write(f))
@@ -231,15 +222,12 @@ class Hopfield(VoiceoverScene):
                              r"artificial neural networks''", width=6.2, font_size=20, color=C.BITS)
         nobel.move_to([2.7, -2.7, 0])
         with self.voiceover(
-            "Hopfield's network is deterministic and has no hidden parts. In 1985 David Ackley, Geoffrey Hinton and "
-            "Terrence Sejnowski made the neurons random, turning on with a probability set by their input, so "
-            "that the network samples states with the Boltzmann distribution of physics: probability e to the "
-            "minus energy over temperature, over a normalizer Z. <bookmark mark='a'/> And they added hidden units, "
-            "which the data never sets: the machine's own features. <bookmark mark='b'/> Its learning rule is "
-            "beautiful. Clamp the visible units to data and measure how often each pair of units is on together; "
-            "let the machine run free and measure again; strengthen each connection by the difference. The "
-            "machine learns until its dreams have the same statistics as the world. <bookmark mark='c'/> The "
-            "catch is the dreaming: each measurement needs the network to reach equilibrium, which can take "
+            "In 1985 David Ackley, Geoffrey Hinton and Terrence Sejnowski made the neurons random, so the network "
+            "samples the Boltzmann distribution of physics: e to the minus energy over temperature, over a "
+            "normalizer Z. <bookmark mark='a'/> They added hidden units: the machine's own features. <bookmark "
+            "mark='b'/> The learning rule: measure how often pairs of units are on together with the data clamped, "
+            "again running free, and strengthen each connection by the difference, until the machine's dreams "
+            "match the world. <bookmark mark='c'/> The catch: each measurement needs equilibrium, which can take "
             "forever. <bookmark mark='d'/> In 2024 Hopfield and Hinton shared the Nobel Prize in Physics, for "
             "foundational discoveries and inventions that enable machine learning with artificial neural networks."
         ) as vo:

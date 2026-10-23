@@ -54,13 +54,12 @@ class Meet(VoiceoverScene):
                      corner=DR)
         with self.voiceover(
             "For six years GANs drew the sharpest images. In 2021 Prafulla Dhariwal and Alex Nichol, at OpenAI, "
-            "published a paper whose title says what happened: diffusion models beat GANs on image synthesis. "
-            "<bookmark mark='a'/> On ImageNet at 256 pixels, the best GAN, BigGAN-deep, had an FID of 6.95; their "
-            "guided diffusion model, 4.59. <bookmark mark='b'/> Precision and recall show how: the GAN's "
-            "precision was the highest, but its recall only 0.28. It drew convincing images of a narrow slice of "
-            "the world. Diffusion covered nearly twice as much of it. <bookmark mark='c'/> The reasons are the ones "
-            "this part has met: a likelihood-style objective that charges for every mode missed, a single stable "
-            "regression instead of a game, and a recipe that kept improving as it grew."
+            "titled a paper with what happened: diffusion models beat GANs on image synthesis. "
+            "<bookmark mark='a'/> On ImageNet at 256 pixels, BigGAN-deep had an FID of 6.95; guided diffusion, "
+            "4.59. <bookmark mark='b'/> The GAN's precision was the highest, but its recall only 0.28: convincing "
+            "images of a narrow slice of the world. <bookmark mark='c'/> The reasons are ones this part has met: "
+            "an objective that charges for every mode missed, a stable regression instead of a game, and a recipe "
+            "that kept improving as it grew."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")
@@ -104,15 +103,14 @@ class Meet(VoiceoverScene):
         if hist.width > 13.4:
             hist.width = 13.4
         with self.voiceover(
-            "Meanwhile the families had started to combine. In 2017 Aaron van den Oord, Oriol Vinyals and Koray "
-            "Kavukcuoglu gave the VAE a discrete code. <bookmark mark='a'/> The encoder's output vectors are each "
-            "snapped to the nearest entry of a learned codebook, so an image becomes a grid of integers: tokens. "
-            "Gradients skip over the snapping step, straight through. <bookmark mark='b'/> No posterior collapse, "
-            "because the code has a fixed size; and over the tokens, an autoregressive model, a PixelCNN, learns "
-            "the prior. <bookmark mark='c'/> In 2021 VQGAN added a GAN loss to make the decoder sharp, and a "
-            "transformer over the tokens; DALL-E, that same year, wrote text and image tokens with one "
-            "transformer. A VAE to make tokens, a GAN to make them look good, and an autoregressive model to write "
-            "them: the front end of today's image and video systems, which Part 22 and Part 23 open up."
+            "Meanwhile the families combined. In 2017 Aaron van den Oord, Oriol Vinyals and Koray Kavukcuoglu gave "
+            "the VAE a discrete code. <bookmark mark='a'/> Each encoder vector snaps to the nearest entry of a "
+            "learned codebook, so an image becomes a grid of integers: tokens. Gradients pass straight through the "
+            "snap. <bookmark mark='b'/> Over the tokens, a PixelCNN learns the prior. <bookmark mark='c'/> In "
+            "2021 VQGAN added a GAN loss to sharpen the decoder and a transformer over the tokens; DALL-E wrote "
+            "text and image tokens with one transformer. A VAE to make tokens, a GAN to make them look good, an "
+            "autoregressive model to write them: the front end of today's image systems, opened up in Parts 22 "
+            "and 23."
         ) as vo:
             self.play(FadeIn(x), GrowArrow(arrs[0]), FadeIn(enc))
             vo.wait_until("a")
@@ -165,13 +163,11 @@ class Meet(VoiceoverScene):
             verdict = (f"Its samples score an FID of {vfid:.1f}; the best single model of the last chapter scored "
                        f"{bfid:.1f}, and this one was trained outside that budget.")
         with self.voiceover(
-            "We built a small one. An encoder turns each of our digits into a seven-by-seven grid of tokens, each "
-            f"one of {K} codebook entries, and a decoder turns the grid back into a digit. <bookmark mark='a'/> The "
-            f"reconstructions keep each digit's identity and most of its shape. The codebook's perplexity is "
-            f"{perp:.1f}: that many of its {K} entries are, in effect, in use. <bookmark mark='b'/> Written plainly, a "
-            f"grid is {rawb:.0f} bits; a small transformer trained on the tokens of the training digits predicts "
-            f"them in {prb:.0f}. <bookmark mark='c'/> And "
-            "sampling tokens from the transformer and decoding them draws new digits. "
+            "We built a small one: each digit becomes a seven-by-seven grid of tokens, each "
+            f"one of {K} codebook entries, and a decoder turns the grid back. <bookmark mark='a'/> The codebook's "
+            f"perplexity is {perp:.1f}: that many of its {K} entries are, in effect, in use. <bookmark mark='b'/> "
+            f"Written plainly a grid is {rawb:.0f} bits; a small transformer predicts it in {prb:.0f}. "
+            "<bookmark mark='c'/> Sampling tokens from the transformer and decoding them draws new digits. "
             f"{verdict}"
         ) as vo:
             self.play(FadeIn(d0), GrowArrow(a1), FadeIn(cg), FadeIn(cn), GrowArrow(a2), FadeIn(r0), FadeIn(lab))
@@ -205,14 +201,11 @@ class Meet(VoiceoverScene):
         card.to_edge(DOWN, buff=0.45)
         tg = note(r"schematic").to_corner(UR, buff=0.25)
         with self.voiceover(
-            "Autoregressive image models had one more trick to learn. Writing tokens in reading order, like a "
-            "PixelCNN, is slow, and a strange order for a picture. In 2024 Keyu Tian and colleagues at ByteDance "
-            "and Peking University changed what comes next: not the next token, but the next scale. <bookmark "
-            "mark='a'/> First a single token for the whole image; then a two-by-two map; then larger and larger "
-            "maps, each predicted all at once, given every coarser map before it. <bookmark mark='b'/> On ImageNet "
-            "at 256 pixels their model reached an FID of 1.73, from 18.65 for the same tokens written in raster "
-            "order, about twenty times faster, and the paper won an outstanding paper award at NeurIPS 2024. "
-            "Part 22 builds on it."
+            "Reading order is slow, and a strange order for a picture. In 2024 Keyu Tian and colleagues at "
+            "ByteDance and Peking University predicted not the next token but the next scale. <bookmark "
+            "mark='a'/> One token for the whole image, then a two-by-two map, then larger maps, each predicted at "
+            "once given all the coarser ones. <bookmark mark='b'/> On ImageNet at 256 pixels: an FID of 1.73, "
+            "from 18.65 for raster order, about twenty times faster; a NeurIPS 2024 outstanding paper."
         ) as vo:
             self.play(FadeIn(tg), FadeIn(maps[0]))
             vo.wait_until("a")
@@ -245,16 +238,14 @@ class Meet(VoiceoverScene):
         head = label(r"the GAN comes back: \ one step instead of fifty", font_size=30, color=GAN_C).to_edge(UP,
                                                                                                          buff=0.35)
         with self.voiceover(
-            "And the GAN didn't die. Diffusion's weakness is speed: dozens of network passes per image, where a "
-            "generator needs one. To get one step back, people distilled diffusion models into generators, and "
-            "the best distillers use a discriminator. <bookmark mark='a'/> Axel Sauer and colleagues at Stability "
-            "AI trained SDXL-Turbo, which draws in one to four steps, with a GAN loss and a diffusion teacher, and "
-            "then SD3-Turbo, whose discriminator is itself built from a diffusion model. <bookmark mark='b'/> "
-            "Tianwei Yin and colleagues' DMD2 added a GAN loss on real images and reached an FID of 1.28 on small "
-            "ImageNet images in one step. <bookmark mark='c'/> GANs on their own were rebuilt, too: R3GAN, a "
-            "modern baseline with a principled loss and convergence guarantees. And the line between the families "
-            "keeps blurring: consistency models reach diffusion quality in two steps, and in 2026 Kaiming He's "
-            "group trained one-step generators by drifting their samples onto the data during training, with an "
+            "And the GAN didn't die. Diffusion needs dozens of network passes per image; a generator needs one. "
+            "To get one step back, diffusion models are distilled into generators, and the best distillers use a "
+            "discriminator. <bookmark mark='a'/> Axel Sauer and colleagues at Stability AI trained SDXL-Turbo, one "
+            "to four steps, with a GAN loss and a diffusion teacher; then SD3-Turbo, with a discriminator built "
+            "from a diffusion model. <bookmark mark='b'/> Tianwei Yin and colleagues' DMD2 added a GAN loss on "
+            "real images: an FID of 1.28 on small ImageNet images, in one step. <bookmark mark='c'/> R3GAN rebuilt "
+            "the GAN itself with a principled loss. Consistency models reach diffusion quality in two steps, and "
+            "in 2026 Kaiming He's group trained one-step generators by drifting their samples onto the data: an "
             "FID of 1.54 on ImageNet."
         ) as vo:
             self.play(FadeIn(head))

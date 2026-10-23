@@ -74,14 +74,11 @@ class Langevin(VoiceoverScene):
         cite_ = cite(r"LeCun, Chopra, Hadsell, Ranzato \& Huang, \textit{A Tutorial on Energy-Based Learning} (2006)",
                      corner=UR)
         with self.voiceover(
-            "Restricted Boltzmann machines are one case of a general idea. Any network that outputs a single "
-            "number can be an energy, and e to the minus energy, divided by its integral Z, is a density. Nothing "
-            "about the network has to be special: no masks, no invertibility, no code. <bookmark mark='a'/> The "
-            "gradient of the log-likelihood has the same two phases as before: lower the energy of the data, and "
-            "raise it wherever the model puts its own samples. <bookmark mark='b'/> In the plane we can even sum Z "
-            f"on a grid, so our ring model's likelihood is exact: {nll:.2f} nats on held-out points, against a "
-            f"floor of {h:.2f}. In 196 dimensions no grid will do, so both Z and the samples have to come from "
-            "somewhere else."
+            "The general idea: any network with one output is an energy, and e to the minus energy over its "
+            "integral Z is a density, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient "
+            "has the same two phases: lower the data's energy, raise the model's samples'. <bookmark mark='b'/> In "
+            f"the plane Z can be summed on a grid, so our ring model's likelihood is exact: {nll:.2f} nats, against "
+            f"a floor of {h:.2f}. In 196 dimensions, no grid will do."
         ) as vo:
             self.play(FadeIn(cite_))
             step(0)
@@ -117,15 +114,12 @@ class Langevin(VoiceoverScene):
                             r"fastest. \ For an energy model, $-\nabla_x E$, \ with no $Z$ in sight.", width=6.4,
                             font_size=22).move_to([2.6, -2.1, 0])
         with self.voiceover(
-            "Sampling comes from physics. Paul Langevin's equation of 1908 describes a particle that drifts "
-            "downhill in a potential while being kicked by random collisions. As an algorithm: step uphill on the "
-            "log-density, add a little Gaussian noise, repeat. Part 5's Fokker-Planck equation says where such a "
-            "walk's distribution settles: exactly into p. <bookmark mark='a'/> The step needs the gradient of log p with respect to "
-            "x. Take the log of e to the minus E over Z: <bookmark mark='b'/> Z is a constant, the same for every "
-            "x, so its gradient is zero. The normalizer that made training hard has vanished from sampling. "
-            "<bookmark mark='c'/> That gradient has a name, the score: the direction in which the density "
-            "rises fastest. Here it is for our ring model, arrows pointing into each of the eight valleys of the "
-            "energy."
+            "Sampling comes from physics: Paul Langevin's 1908 particle, drifting downhill and kicked at random. "
+            "As an algorithm: step up the log-density, add a little noise, repeat; by Part 5's Fokker-Planck "
+            "equation, the walk settles into p. <bookmark mark='a'/> The step needs the gradient of log p. "
+            "<bookmark mark='b'/> Z is a constant, so its gradient vanishes: the normalizer that made training hard "
+            "is gone from sampling. <bookmark mark='c'/> That gradient is the score, the direction of steepest "
+            "rise; here, for our ring model, arrows into the eight valleys."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -163,13 +157,11 @@ class Langevin(VoiceoverScene):
         gap = float(cv[-1, 1]) - h
         cite_ = cite(r"Du \& Mordatch (2019); \ Nijkamp et al.\ (2019)", corner=DR)
         with self.voiceover(
-            "So an energy model can be trained with its own Langevin chains. Keep a pool of chains; at each step "
-            f"move a batch of them {k_} Langevin steps downhill, lower the energy of real points, raise it where "
-            "the chains ended, and put them back in the pool. Yilun Du and Igor Mordatch made this work for images "
-            "in 2019. <bookmark mark='a'/> Here it is on the ring. At first the energy is flat and the chains "
-            "wander everywhere. Then valleys open where the data is, the chains fall into them, and the energy "
-            "rises wherever the chains crowd but the data doesn't. <bookmark mark='b'/> On held-out points it ends "
-            f"{gap:.2f} nats above the floor."
+            f"So train an energy with its own Langevin chains: move a pool of chains {k_} steps, lower the energy of "
+            "real points, raise it where the chains end. Yilun Du and Igor Mordatch made this work for images in "
+            "2019. <bookmark mark='a'/> On the ring: valleys open where the data is, the chains fall in, and the "
+            f"energy rises where chains crowd without data. <bookmark mark='b'/> It ends {gap:.2f} nats above the "
+            "floor."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(imgs[0]), FadeIn(dots[0]), FadeIn(cap[0]), FadeIn(key), FadeIn(g),
                       Create(fl), FadeIn(pts[0]), FadeIn(cite_))
@@ -198,13 +190,13 @@ class Langevin(VoiceoverScene):
         heads = VGroup(*[label(names[n_], font_size=22, color=EBM).next_to(pl, UP, buff=0.12) for pl, _, n_ in panels])
         rows = ev["rows"]["ebm"]
         modes = [r["modes"] for r in rows]
+        m0, m1, m2 = modes[:3]
         steps = 3 * (len(np.asarray(e["ring_langevin"])) - 1)
         with self.voiceover(
-            "And sampling. Three hundred points of uniform noise on each density, then Langevin steps on the "
-            f"learned energies, {steps} of them. <bookmark mark='a'/> The points slide into the valleys and "
-            "jitter there, a sample of the model. <bookmark mark='b'/> On the ring, long chains from noise land "
-            f"on {modes[0]}, {modes[1]} and {modes[2]} of the eight modes, in the three seeds. Notice what the "
-            "sampler never needed: Z, or any way to invert anything. Only the score."
+            f"And sampling: uniform noise, then {steps} Langevin steps on each learned energy. <bookmark mark='a'/> "
+            "The points slide into the valleys and jitter there. <bookmark mark='b'/> On the ring, long chains land "
+            f"on {m0}, {m1} and {m2} of the eight modes, in three seeds, needing neither Z nor an inverse: only "
+            "the score."
         ) as vo:
             self.play(*[FadeIn(pl) for pl, _, _ in panels], *[FadeIn(i) for _, i, _ in panels], FadeIn(heads))
             vo.wait_until("a")
@@ -249,6 +241,7 @@ class Langevin(VoiceoverScene):
         tb = label(r"annealed: \ ten noise levels, \ large to small", font_size=22, color=SCORE_C).next_to(pb, UP,
                                                                                                          buff=0.12)
         ph, ah, sh = float(L["plain_heavy"]), float(L["annealed_heavy"]), float(L["start_heavy"])
+        p_h, s_h, a_h = 100 * ph, 100 * sh, 100 * ah
         res = VGroup(label(rf"heavy mode: \ ${100 * ph:.0f}\%$ of samples", font_size=22, color=EBM).next_to(pa, DOWN,
                                                                                                          buff=0.15),
                      label(rf"heavy mode: \ ${100 * ah:.0f}\%$", font_size=22, color=SCORE_C).next_to(pb, DOWN,
@@ -262,21 +255,18 @@ class Langevin(VoiceoverScene):
         eqm = label(r"2025: \ Equilibrium Matching (Wang \& Du): \ an implicit energy, \ FID $1.90$ on ImageNet "
                     r"$256^2$", font_size=20, color=EBM).to_edge(DOWN, buff=0.3)
         close = abs(ah - w[1]) < abs(ph - w[1])
-        verdict = (f"Annealing fixes it: {100 * ah:.0f} percent, close to the truth." if close and abs(ah - w[1]) < 0.06
-                   else f"Annealing moves it to {100 * ah:.0f} percent.")
+        verdict = (f"Annealing fixes it: {a_h:.0f} percent, close to the truth." if close and abs(ah - w[1]) < 0.06
+                   else f"Annealing moves it to {a_h:.0f} percent.")
         with self.voiceover(
-            "There is a catch, and it is the bridge to the next part. Here are two Gaussians, one holding twenty "
-            "percent of the probability and one eighty, with their score known exactly. <bookmark mark='a'/> Start "
-            "points uniformly and run Langevin. <bookmark mark='b'/> Each point falls into the nearer valley and "
-            "stays: crossing the gap between them is so unlikely that it never happens. So the share of samples in "
-            f"the heavy mode is {100 * ph:.0f} percent, set by where they started, {100 * sh:.0f} percent, not by "
-            "the eighty percent the density says. The score is blind to the weights of separated modes. <bookmark "
-            "mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur the density with a lot of noise, where the "
-            "valleys merge and points can move freely, then follow the score as the noise is turned down, level by "
-            f"level. {verdict} <bookmark mark='d'/> To do this on images you need the score of the data at every "
-            "noise level, learned by denoising, as Aapo Hyvarinen and Pascal Vincent showed. That is diffusion, "
-            "Part 21. And energies themselves are back: in 2025 Equilibrium Matching learned an implicit energy "
-            "landscape and generated ImageNet images by descending it."
+            "The catch is the bridge to the next part. Two Gaussians, holding twenty and eighty percent, their "
+            "score known exactly. <bookmark mark='a'/> Start points uniformly and run Langevin. <bookmark "
+            "mark='b'/> Each point falls into the nearer valley and stays, so the heavy mode gets "
+            f"{p_h:.0f} percent, set by the start, {s_h:.0f}, not the density's eighty: the score is blind to the "
+            "weights of separated modes. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with "
+            f"heavy noise, where valleys merge, then turn the noise down level by level. {verdict} <bookmark "
+            "mark='d'/> On images that needs the score at every noise level, learned by denoising, as Hyvarinen "
+            "and Vincent showed: diffusion, Part 21. And in 2025 Equilibrium Matching made images by descending a "
+            "learned energy."
         ) as vo:
             self.play(FadeIn(pa), FadeIn(ra), FadeIn(wl), FadeIn(ta), FadeIn(truth))
             vo.wait_until("a")
