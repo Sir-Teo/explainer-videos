@@ -404,3 +404,50 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | equal compute | 同等算力 |
 | lineage, family tree | 谱系，家族树 |
 | calibration (content-free input) | 校准（无内容输入） |
+
+### Networks (Part 9)
+
+| English | 中文 |
+|---|---|
+| artificial neuron, unit | 人工神经元，单元 |
+| McCulloch–Pitts unit, threshold | 麦卡洛克–皮茨单元，阈值 |
+| Hebb's rule | 赫布规则 |
+| perceptron, Mark I Perceptron | 感知机，Mark I感知机 |
+| association unit, response unit | 联想单元，响应单元 |
+| ADALINE, least mean squares (LMS) | ADALINE，最小均方 |
+| margin, convergence theorem | 间隔，收敛定理 |
+| linearly separable | 线性可分 |
+| XOR, parity, connectedness | 异或，奇偶性，连通性 |
+| hidden layer, hidden unit | 隐藏层，隐藏单元 |
+| backpropagation, delta (δ) | 反向传播，delta（δ） |
+| forward pass, backward pass | 前向传播，反向传播 |
+| finite differences | 有限差分 |
+| reverse-mode automatic differentiation | 自动微分的反向模式 |
+| universal approximation theorem | 万能近似定理 |
+| hinge, bump | 铰链，鼓包 |
+| rectified linear unit (ReLU) | 线性整流单元（ReLU） |
+| curse of dimensionality | 维数灾难 |
+| Barron's bound | 巴伦界 |
+| linear region (piece) | 线性区域（小块） |
+| depth separation | 深度分离 |
+| folding | 折叠 |
+| vanishing / exploding gradients | 梯度消失 / 梯度爆炸 |
+| deep belief net, greedy layer-wise pretraining | 深度信念网络，逐层贪心预训练 |
+| initialization (Glorot / Xavier, He) | 初始化（格洛罗初始化，何恺明初始化） |
+| mean-field theory | 平均场理论 |
+| length map, correlation map | 长度映射，相关映射 |
+| ordered phase, chaotic phase, edge of chaos | 有序相，混沌相，混沌的边缘 |
+| depth scale (ξ) | 深度尺度（ξ） |
+| residual connection, residual stream | 残差连接，残差流 |
+| highway network | 高速公路网络 |
+| batch normalization, layer normalization, RMSNorm | 批归一化，层归一化，RMSNorm |
+| pre-norm, post-norm, warm-up | 前置归一化，后置归一化，预热 |
+| internal covariate shift | 内部协变量偏移 |
+| Jacobian, singular value | 雅可比矩阵，奇异值 |
+| GELU, SiLU (Swish) | GELU，SiLU（Swish） |
+| gating, gated linear unit (GLU), SwiGLU | 门控，门控线性单元（GLU），SwiGLU |
+| feed-forward network (MLP) | 前馈网络（MLP） |
+| Kolmogorov–Arnold representation theorem | 柯尔莫哥洛夫–阿诺德表示定理 |
+| Kolmogorov–Arnold network (KAN), spline | 柯尔莫哥洛夫–阿诺德网络（KAN），样条 |
+| neural language model, embedding | 神经语言模型，嵌入 |
+| Hilbert's thirteenth problem | 希尔伯特第13问题 |
