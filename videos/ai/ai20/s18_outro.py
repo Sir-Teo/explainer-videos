@@ -33,9 +33,9 @@ class Outro(VoiceoverScene):
                   y_length=TH * 0.85, tips=False, axis_config={"stroke_color": GREY_D, "include_ticks": False})
         out.append((VGroup(ax, curve(ax, cv[:, 1], cv[:, 3], RECON, 3), curve(ax, cv[:, 1], cv[:, 4], KLC, 3)),
                     r"the ELBO's two terms", VAE_C))
-        g = load("gan2d")
+        gc = load("gan2d_collapse")  # the run chapter five replayed: the seed with the fewest modes
         pl = Plane(2.0)
-        out.append((Group(pl, pl.scatter_image(np.asarray(g["ring_ns_s0"]), GAN_C, radius_px=1.6)),
+        out.append((Group(pl, pl.scatter_image(np.asarray(gc["frame_samples"])[-1], GAN_C, radius_px=1.6)),
                     r"mode collapse", GAN_C))
         b = load("bilinear")
         pl2 = Plane(2.0, box=1.9)

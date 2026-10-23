@@ -37,25 +37,25 @@ class Budget(VoiceoverScene):
     # ------------------------------------------------------------------
     def setup_(self):
         e = load("evaluate")
-        head = VGroup(*[label(t, font_size=20, color=GREY_A) for t in (r"", r"parameters", r"training steps",
+        head = VGroup(*[label(t, font_size=22, color=GREY_A) for t in (r"", r"parameters", r"training steps",
                                                                          r"digits seen", r"training FLOPs",
                                                                          r"passes per sample")])
         xs = [-5.4, -3.2, -1.2, 0.9, 3.1, 5.4]
         rows = VGroup()
         for i, f in enumerate(ORDER):
             r = e["table"][f][0]
-            cells = [label(SHORT[f], font_size=24, color=FAM[f]),
-                     MathTex(f"{int(r['params']):,}".replace(",", "{,}"), font_size=26),
-                     MathTex(f"{int(r['steps']):,}".replace(",", "{,}"), font_size=26),
-                     MathTex(f"{int(r['examples']) / 1e6:.2f}" + r"\text{M}", font_size=26),
-                     MathTex(sci(float(r["flops"]), 2), font_size=26, color=C.BITS),
-                     MathTex(f"{int(r['nfe'])}", font_size=26)]
+            cells = [label(SHORT[f], font_size=28, color=FAM[f]),
+                     MathTex(f"{int(r['params']):,}".replace(",", "{,}"), font_size=30),
+                     MathTex(f"{int(r['steps']):,}".replace(",", "{,}"), font_size=30),
+                     MathTex(f"{int(r['examples']) / 1e6:.2f}" + r"\text{M}", font_size=30),
+                     MathTex(sci(float(r["flops"]), 2), font_size=30, color=C.BITS),
+                     MathTex(f"{int(r['nfe'])}", font_size=30)]
             rows.add(VGroup(*cells))
         tab = VGroup(head, *rows)
         for k, r_ in enumerate(tab):
             for j, m in enumerate(r_):
-                m.move_to([xs[j], 2.2 - 0.7 * k, 0])
-        rule = Line([-6.6, 1.85, 0], [6.6, 1.85, 0], color=GREY_D, stroke_width=1.2)
+                m.move_to([xs[j], 2.5 - 0.82 * k, 0])
+        rule = Line([-6.6, 2.1, 0], [6.6, 2.1, 0], color=GREY_D, stroke_width=1.2)
         ex = [stat(e, f, "examples")[0] for f in ORDER]
         most, least = ORDER[int(np.argmax(ex))], ORDER[int(np.argmin(ex))]
         note_ = VGroup(label(rf"the budget: \ ${sci(BUDGET, 0)}$ floating-point operations of training each, \ counted "
@@ -172,7 +172,8 @@ class Budget(VoiceoverScene):
         st = {f: stat(e, f, "bpp") for f in fams}
         ch = bars_chart([st[f][0] for f in fams], [FAM[f] for f in fams],
                         [r"PixelCNN \\ (exact)", r"VAE \\ (a bound)", r"RealNVP \\ (a bound)"], height=3.0,
-                        bar_w=0.9, gap=0.6, vmax=4.0, spread=[(st[f][1], st[f][2]) for f in fams], digits=2)
+                        bar_w=0.9, gap=0.6, vmax=1.3 * max(st[f][2] for f in fams),
+                        spread=[(st[f][1], st[f][2]) for f in fams], digits=2)
         ch.move_to([-3.2, -0.3, 0])
         hd = label(r"held-out bits per pixel \ (lower is better; \ $4$ = uniform)", font_size=20, color=GREY_A)
         hd.next_to(ch, UP, buff=0.35)

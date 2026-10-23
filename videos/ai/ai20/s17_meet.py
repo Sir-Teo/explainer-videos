@@ -75,7 +75,7 @@ class Meet(VoiceoverScene):
     def tokens(self):
         x = node_box(r"image", DATA, font_size=24).move_to([-6.0, 0.8, 0])
         enc = node_box(r"encoder", VQ_C, font_size=24, height=0.9).move_to([-4.1, 0.8, 0])
-        book = VGroup(*[Square(0.32, stroke_color=VQ_C, stroke_width=1.5, fill_color=VQ_C,
+        book = VGroup(*[Square(0.26, stroke_color=VQ_C, stroke_width=1.5, fill_color=VQ_C,
                                fill_opacity=0.15 + 0.07 * (k % 4)) for k in range(8)]).arrange(DOWN, buff=0.04)
         book.move_to([-1.9, 0.8, 0])
         bl = label(r"codebook", font_size=20, color=VQ_C).next_to(book, UP, buff=0.1)
@@ -89,8 +89,8 @@ class Meet(VoiceoverScene):
         A = lambda a, b: Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
         arrs = VGroup(A(x, enc), A(enc, book), A(book, grid), A(grid, dec), A(dec, out))
         nl = label(r"each vector snapped to its nearest code; \ gradients pass straight through the snap",
-                   font_size=20, color=GREY_A).move_to([-0.8, -0.4, 0])
-        prior = node_box(r"an autoregressive model over the tokens", AR, font_size=22).move_to([0.2, -1.3, 0])
+                   font_size=20, color=GREY_A).move_to([-0.8, -0.8, 0])
+        prior = node_box(r"an autoregressive model over the tokens", AR, font_size=22).move_to([0.2, -1.6, 0])
         pa = Arrow(prior.get_top(), grid.get_bottom(), buff=0.08, color=AR, stroke_width=2.5)
         hist = VGroup(
             history_card(2017, r"van den Oord, Vinyals \& Kavukcuoglu: \ VQ-VAE", r"a discrete code, \ a PixelCNN "
@@ -200,6 +200,17 @@ class Meet(VoiceoverScene):
                             r"$20\times$ faster; \ NeurIPS 2024 outstanding paper", width=8.4, font_size=20)
         card.to_edge(DOWN, buff=0.45)
         tg = note(r"schematic").to_corner(UR, buff=0.25)
+        # first the old way: tokens one at a time, in reading order
+        raster = VGroup(*[Square(0.4, stroke_color=AR, stroke_width=1.2, fill_color=AR, fill_opacity=0.15)
+                          for _ in range(36)]).arrange_in_grid(6, 6, buff=0).move_to([0, 1.0, 0])
+        pts_ = []
+        for i in range(6):
+            row = [raster[6 * i + j].get_center() for j in range(6)]
+            pts_ += row
+        path = VMobject(stroke_color=GREY_B, stroke_width=2).set_points_as_corners(pts_).set_opacity(0.6)
+        scan = Square(0.4, stroke_color=C.BITS, stroke_width=4).move_to(raster[0])
+        rl = label(r"next token: \ $36$ steps, \ in reading order", font_size=22, color=GREY_A).next_to(raster, DOWN,
+                                                                                                      buff=0.3)
         with self.voiceover(
             "Reading order is slow, and a strange order for a picture. In 2024 Keyu Tian and colleagues at "
             "ByteDance and Peking University predicted not the next token but the next scale. <bookmark "
@@ -207,8 +218,9 @@ class Meet(VoiceoverScene):
             "once given all the coarser ones. <bookmark mark='b'/> On ImageNet at 256 pixels: an FID of 1.73, "
             "from 18.65 for raster order, about twenty times faster; a NeurIPS 2024 outstanding paper."
         ) as vo:
-            self.play(FadeIn(tg), FadeIn(maps[0]))
-            vo.wait_until("a")
+            self.play(FadeIn(tg), FadeIn(raster), FadeIn(rl))
+            self.play(MoveAlongPath(scan, path), run_time=max(2.0, vo.until("a") - 1.2), rate_func=linear)
+            self.play(FadeOut(VGroup(raster, rl, scan, path)), FadeIn(maps[0]))
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a_), FadeIn(m_)) for a_, m_ in zip(arr, maps[1:])],
                                   lag_ratio=0.5), FadeIn(cap), run_time=3.0)
             vo.wait_until("b")
@@ -237,6 +249,14 @@ class Meet(VoiceoverScene):
             cards.width = 13.6
         head = label(r"the GAN comes back: \ one step instead of fifty", font_size=30, color=GAN_C).to_edge(UP,
                                                                                                          buff=0.35)
+        # dozens of passes against one
+        passes = VGroup(*[Square(0.16, stroke_width=0, fill_color=DIFF, fill_opacity=0.8) for _ in range(50)])
+        passes.arrange_in_grid(2, 25, buff=0.06).move_to([0.6, 1.2, 0])
+        pl_ = label(r"diffusion: \ dozens of network passes per image", font_size=22, color=DIFF)
+        pl_.next_to(passes, LEFT, buff=0.3)
+        one = Square(0.16, stroke_width=0, fill_color=GAN_C, fill_opacity=0.9).move_to(passes[0]).shift(DOWN * 1.2)
+        ol = label(r"a generator: \ one", font_size=22, color=GAN_C).next_to(one, LEFT, buff=0.3).align_to(pl_, RIGHT)
+        pgroup = VGroup(passes, pl_, one, ol)
         with self.voiceover(
             "And the GAN didn't die. Diffusion needs dozens of network passes per image; a generator needs one. "
             "To get one step back, diffusion models are distilled into generators, and the best distillers use a "
@@ -249,7 +269,10 @@ class Meet(VoiceoverScene):
             "FID of 1.54 on ImageNet."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(FadeIn(pl_), LaggedStart(*[FadeIn(p_) for p_ in passes], lag_ratio=0.05), run_time=2.0)
+            self.play(FadeIn(ol), FadeIn(one))
             vo.wait_until("a")
+            self.play(FadeOut(pgroup))
             self.play(FadeIn(cards[0]), FadeIn(cards[1]))
             vo.wait_until("b")
             self.play(FadeIn(cards[2]))
@@ -282,7 +305,11 @@ class Meet(VoiceoverScene):
         ) as vo:
             self.play(LaggedStart(*[FadeIn(f_, shift=RIGHT * 0.1) for f_ in fam], lag_ratio=0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(GrowArrow(arrs[i]), FadeIn(out[links[i][1]]))
-                                    for i in range(len(links))], lag_ratio=0.35), run_time=max(4.0, vo.until("b")))
+            seen = set()
+            anims = []
+            for i, (a_, b_) in enumerate(links):  # each box fades in once, with the first arrow that reaches it
+                anims.append(AnimationGroup(GrowArrow(arrs[i]), *([] if b_ in seen else [FadeIn(out[b_])])))
+                seen.add(b_)
+            self.play(LaggedStart(*anims, lag_ratio=0.35), run_time=max(4.0, vo.until("b")))
         self.wait(0.3)
         self.clear_scene()

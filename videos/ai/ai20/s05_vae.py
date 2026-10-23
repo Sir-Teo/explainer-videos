@@ -240,7 +240,7 @@ class VAE(VoiceoverScene):
         ref = DashedLine(g.ax.c2p(0, float(v["s0_kl_nats"])), g.ax.c2p(Pc[-1, 1], float(v["s0_kl_nats"])), color=VAE_C,
                          stroke_width=2)
         rl = label(r"the plain VAE's rate", font_size=18, color=VAE_C).next_to(ref, UP, buff=0.05).align_to(ref, RIGHT)
-        lg = legend([(AR, r"PixelCNN decoder"), (C.BITS, rf"PixelCNN decoder, \ free bits (${c['free_free_bits']:g}$ "
+        lg = legend([(AR, r"PixelCNN decoder"), (C.BITS, rf"PixelCNN decoder, \ free bits (${c['free_free_bits']:.1f}$ "
                                                          r"nats per code number)")], font_size=20)
         lg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
         rows = Group()
@@ -275,10 +275,10 @@ class VAE(VoiceoverScene):
             second = (f"Decode a hundred test digits' codes four times each: {pa:.0f} percent still match the encoded "
                       "digit.")
         if pf > pa + 10:
-            third = (f"Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, and "
+            third = (f"Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, and "
                      f"{pf:.0f} percent match.")
         else:
-            third = (f"Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, yet only "
+            third = (f"Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, yet only "
                      f"{pf:.0f} percent match: a floor on the rate is not a use of the code.")
         cite_ = cite(r"Bowman et al.\ (2016); \ Kingma et al., \textit{IAF}, free bits (2016); \ Chen et al., "
                      r"\textit{Variational Lossy Autoencoder} (2017)", corner=DR)

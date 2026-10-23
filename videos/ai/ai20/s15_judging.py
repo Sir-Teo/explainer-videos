@@ -71,12 +71,12 @@ class Judging(VoiceoverScene):
             cmath(r"W_2^2\big(\mathcal N(\mu_1, \Sigma_1), \mathcal N(\mu_2, \Sigma_2)\big)", r"=",
                   r"\|\mu_1 - \mu_2\|^2", r"+", r"\mathrm{tr}\Big(\Sigma_1 + \Sigma_2 - 2\big(\Sigma_1^{1/2}\, "
                   r"\Sigma_2\, \Sigma_1^{1/2}\big)^{1/2}\Big)", font_size=30),
-            cmath(r"\mathrm{FID}", r"=", r"W_2^2", r"\text{ between Gaussians fitted to the features of real and "
-                  r"generated images}", font_size=30),
+            cmath(r"\mathrm{FID}", r"=", r"W_2^2\big(\mathcal N(\mu_r, \Sigma_r), \mathcal N(\mu_g, \Sigma_g)\big)",
+                  font_size=32),
         ]
         rows[2][0].set_color(C.BITS)
         whys = [why(r"in one dimension: \ match the quantiles"), why(r"in $d$: \ Dowson \& Landau (1982)"),
-                why(r"Heusel et al.\ (2017)")]
+                why(r"Gaussians fitted to the features of real ($r$) and generated ($g$) images: \ Heusel et al.\ (2017)")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-0.5, buff=0.6, edge=6.9)
         oneD = label(r"in 1D the best plan maps quantile to quantile: \ $x_2 = \mu_2 + \tfrac{\sigma_2}{\sigma_1}"
                      r"(x_1 - \mu_1)$", font_size=20, color=GREY_A)
@@ -96,10 +96,21 @@ class Judging(VoiceoverScene):
             f"classifier's last hidden layer, 128 numbers, {acc:.2f} percent accurate on the test digits."
         ) as vo:
             step(0)
-            oneD.next_to(rows[0], DOWN, buff=0.2)
-            self.play(FadeIn(oneD))
+            oneD.next_to(VGroup(rows[0], whys[0]), DOWN, buff=0.3)
+            # one Gaussian carried onto another, quantile by quantile
+            qa = axes([-3.5, 4.5], [0, 0.75], x_length=6.4, y_length=1.6, xticks=[], yticks=[], center=[-0.3, -2.3, 0])
+            xg = np.linspace(-3.5, 4.5, 300)
+            npdf = lambda x, m, s: np.exp(-0.5 * ((x - m) / s) ** 2) / (s * np.sqrt(2 * np.pi))
+            g1 = curve(qa.ax, xg, npdf(xg, -1.2, 0.6), DATA, 3)
+            g2_ = curve(qa.ax, xg, npdf(xg, 1.6, 1.0), C.MODEL_Q, 3)
+            qs = [-1.28, -0.67, 0.0, 0.67, 1.28]
+            qarr = VGroup(*[Arrow(qa.ax.c2p(-1.2 + 0.6 * z, 0.05), qa.ax.c2p(1.6 + 1.0 * z, 0.05), buff=0.02,
+                                  color=GREY_B, stroke_width=2, max_tip_length_to_length_ratio=0.12,
+                                  path_arc=-0.5) for z in qs])
+            self.play(FadeIn(oneD), FadeIn(qa), Create(g1), Create(g2_))
+            self.play(LaggedStart(*[Create(a_) for a_ in qarr], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeOut(oneD))
+            self.play(FadeOut(VGroup(oneD, qa, g1, g2_, qarr)))
             step(1)
             vo.wait_until("b")
             step(2)

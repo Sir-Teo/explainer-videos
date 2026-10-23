@@ -62,8 +62,8 @@ class Seq2Seq(VoiceoverScene):
             "all with two LSTMs: one reads the English sentence into its memory, the other starts from that memory "
             f"and writes French. Five of them together scored {S['ensemble']} BLEU, beating the phrase-based "
             f"baseline's {S['smt']}. <bookmark mark='c'/> One trick mattered: reading the source backwards, so "
-            "its first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> At "
-            "the same time Kyunghyun Cho's group in Montreal built the same kind of encoder-decoder, with the GRU."
+            "its first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> "
+            "Kyunghyun Cho's group in Montreal built the same design with the GRU."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(bleu))
             vo.wait_until("a")
@@ -209,9 +209,8 @@ class Seq2Seq(VoiceoverScene):
                                                                                                     buff=0.1)
         pl.align_to(rows, LEFT)
         rep = loops(m["beam"]) or loops(m["greedy"])
-        tail = ("But look at what the most probable text is: it goes round in circles. The likeliest continuation of "
-                "a sentence is often a dull, repetitive one, which Ari Holtzman and colleagues later called neural "
-                "text degeneration; for open-ended writing, sampling is used instead." if rep else
+        tail = ("But look at the most probable text: it goes round in circles, what Ari Holtzman and colleagues "
+                "later called neural text degeneration; for open-ended writing, sampling is used instead." if rep else
                 "For open-ended writing the most probable text is often dull, which is why language models sample "
                 "instead; for translation, where one answer is right, beam search won.")
         with self.voiceover(

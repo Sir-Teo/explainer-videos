@@ -72,11 +72,11 @@ ZH = {
     'Overall, raising beta lowers the rate':
         '总体上，升高β会降低码率、升高失真，虽然不是每一级都如此：这些训练散布在一条曲线周围，也就是信息论里的码率-失真权衡。',
 
-    "f'Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, and":
-        '自由比特，也就是每个编码数{fbits:g}奈特的下限，能让编码里留住{kf:.1f}奈特，解码出的数字有{pf:.0f}%和来源相符。',
+    "f'Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, and":
+        '自由比特，也就是每个编码数{fbits:.1f}奈特的下限，能让编码里留住{kf:.1f}奈特，解码出的数字有{pf:.0f}%和来源相符。',
 
-    "f'Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, yet only":
-        '自由比特，也就是每个编码数{fbits:g}奈特的下限，能让编码里留住{kf:.1f}奈特，可解码出的数字只有{pf:.0f}%和来源相符：'
+    "f'Free bits, a floor of {fbits:.1f} nats per code number, keep {kf:.1f} nats in the code, yet only":
+        '自由比特，也就是每个编码数{fbits:.1f}奈特的下限，能让编码里留住{kf:.1f}奈特，可解码出的数字只有{pf:.0f}%和来源相符：'
         '给码率设一个下限，并不等于用上了编码。',
 
 }
