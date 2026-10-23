@@ -113,8 +113,8 @@ class Recipe(VoiceoverScene):
             "Watch them learn. On the left, each model's loss on text it never trains on; on the right, what each "
             "writes after the words 'The door opened, and', frozen at the same steps, with the same random seed. "
             f"<bookmark mark='a'/> At the start both write noise, at a loss of about {first['val']:.1f} nats. "
-            "<bookmark mark='b'/> Let them read. <bookmark mark='c'/> By the end, both write in the manner of the "
-            "novels, and the curves tell which learned faster."
+            "<bookmark mark='b'/> Let them read. <bookmark mark='c'/> By the end, compare what they write; the curves "
+            "tell which learned faster."
         ) as vo:
             self.play(FadeIn(g), FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(tag))
             vo.wait_until("a")

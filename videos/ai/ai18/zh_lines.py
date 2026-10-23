@@ -34,13 +34,13 @@ _DATA = {
         "就拿Llama 3的那次训练来说。{spoken_int(L['gpus'])}块H100 GPU，一个点代表一块。<bookmark mark='a'/>它们一共做了大约4乘以10的25次方次运算，用了15.6万亿个词元的文本。<bookmark mark='b'/>而且它们一直在出故障。在一段五十四天的时间里，任务停下了{L['interruptions']}次，其中{L['unexpected']}次是计划外的：一块坏掉的GPU，一块内存芯片，一根网线。<bookmark mark='c'/>也就是大约每{P['llama_mtbf_h']:.0f}小时出一次故障，而每一次都会让全部一万六千块GPU停下来，因为它们都在训练同一个模型。",
 
     'So the question of this part:':
-        "所以，本部分的问题是：怎样在一万六千块GPU上，把来自网络的十五万亿个词元变成一个模型，而训练又不会垮掉？<bookmark mark='a'/>答案是一层一层的。用什么文本来训练，让模型预测什么。一个模型需要多少运算、多少字节，又怎样把它切开，分到成千上万个设备上。每个数可以用多少位。怎样让训练保持稳定，又怎样挺过硬件故障。",
+        "所以，本部分的问题是：怎样在一万六千块GPU上，把来自网络的十五万亿个词元变成一个模型，而训练又不会垮掉？<bookmark mark='a'/>答案是一层一层的：数据，目标，算术，在设备之间的切分，位数，稳定性，还有故障。",
 
     'f"We\'ll build every layer in miniature':
-        "每一层，我们都在制作这个视频的这台计算机上，做一个缩微版。<bookmark mark='a'/>来自Common Crawl 2026年9月那次抓取的{spoken_int(W['n_pages'])}个真实网页，经过过滤、去重和打分。<bookmark mark='b'/>把这台计算机的四个进程当作一个小集群，用PyTorch自带的分布式库，逐一精确地检验每种并行方式。<bookmark mark='c'/>模拟流水线调度和硬件故障。<bookmark mark='d'/>把训练推到边缘：用16位和8位，用很高的学习率。<bookmark mark='e'/>最后，用2026年的完整配方训练一个模型，和2020年的配方比一比，放上本系列的记分牌。",
+        "每一层，我们都在制作这个视频的这台计算机上，做一个缩微版。<bookmark mark='a'/>来自Common Crawl的{spoken_int(W['n_pages'])}个真实网页，经过过滤、去重和打分。<bookmark mark='b'/>四个进程当作一个小集群，逐一精确地检验每种并行方式。<bookmark mark='c'/>模拟流水线和故障。<bookmark mark='d'/>把训练推到边缘：用更少的位，用很高的学习率。<bookmark mark='e'/>最后，2026年的配方对2020年的配方，放上本系列的记分牌。",
 
     'This is Part 18 of AI, Built':
-        "这是《人工智能，从零搭建》的第18部分，属于第三幕：Transformer时代。<bookmark mark='a'/>本部分要讲：数据，从原始网页到一份干净、去过重的配比；让模型预测什么，训练又怎样分阶段；一次训练的算术，用运算次数和字节来算；把模型切到多个设备上的五种方法；用更少的位训练，并保持稳定；一次预测两个词元；挺过故障；以及我们自己的模型，用完整的配方训练出来。",
+        "这是《人工智能，从零搭建》的第18部分，属于第三幕：Transformer时代。<bookmark mark='a'/>本部分要讲：数据，从原始网页到一份干净的配比；训练目标，以及训练的各个阶段；一次训练的算术，用运算次数和字节来算；把模型切到多个设备上的五种方法；更少的位，以及稳定性；一次预测两个词元；挺过故障；以及我们自己的模型，用完整的配方训练出来。",
 
     # ------------------------------------------------------------------ Anatomy
     'Chapter one. Anatomy of a frontier run.':
@@ -53,23 +53,23 @@ _DATA = {
         "这是最近两年里六次公开的训练，以及它们的报告里写明的内容。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100 GPU上训练了15.6万亿个词元，用16位的bfloat数字，用第11部分的AdamW优化器。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，用MuonClip，一种Muon优化器的变体。Olmo 3，其中最开放的一个，连数据都公开。<bookmark mark='c'/>还有2026年：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon训练了33万亿个词元。<bookmark mark='d'/>两年里，词元数翻了一倍，数字从16位缩到8位和4位，优化器也开始改变。每一列，都是本部分的一章。",
 
     'Inside the pretraining phase, nothing is fixed.':
-        "在预训练阶段内部，没有什么是固定不变的。这是DeepSeek-V3的，按它的报告画出来。<bookmark mark='a'/>学习率先在两千步里预热，然后保持在2.2乘以10的负4次方，直到十万亿个词元，<bookmark mark='b'/>然后在接下来的4.3万亿个词元里，沿余弦曲线衰减到原来的十分之一，<bookmark mark='c'/>最后是两小段恒定的学习率。<bookmark mark='d'/>批次也在增大：在最初的半万亿个词元里，从3072个四千词元的序列，增加到15360个。<bookmark mark='e'/>到十万亿个词元时，第二项损失，也就是往后预测两个词元的那一项，权重从0.3降到0.1。这些我们都还会再见到：学习率调度在第7章，两词元预测在第16章。",
+        "在预训练阶段内部，没有什么是固定不变的。这是DeepSeek-V3的，按它的报告画出来。<bookmark mark='a'/>学习率先在两千步里预热，然后保持在2.2乘以10的负4次方，直到十万亿个词元，<bookmark mark='b'/>然后在接下来的4.3万亿个词元里，沿余弦曲线衰减到原来的十分之一，<bookmark mark='c'/>最后是两小段恒定的学习率。<bookmark mark='d'/>批次也在增大：在最初的半万亿个词元里，从3072个四千词元的序列，增加到15360个。<bookmark mark='e'/>到十万亿个词元时，第二项损失，也就是往后预测两个词元的那一项，权重从0.3降到0.1。",
 
     'f"How big is such a run?':
-        "这样一次训练有多大？第14部分给过规则：训练的代价，大约是每个参数、每个词元六次运算。<bookmark mark='a'/>对Llama 3.1，6乘以4050亿乘以15.6万亿，是{P['llama_6nd'] / 1e+25:.2f}乘以10的25次方，正是Meta报告的数。<bookmark mark='b'/>DeepSeek-V3是混合专家模型，每个词元只用到370亿个参数，所以它需要{P['dsv3_6nd'] / 1e+24:.1f}乘以10的24次方：大约十分之一。<bookmark mark='c'/>它的报告还给出了账单：预训练用了266.4万个H800 GPU小时，另外还有长上下文和后训练阶段；按每小时两美元算，是{P['dsv3_usd'] / 1000000.0:.3f}百万美元。<bookmark mark='d'/>每一万亿个词元要花{D['hours_per_T'] / 1000.0:.0f}000个GPU小时：在2048块GPU上是{P['dsv3_days_per_T']:.1f}天。这只是最终那次训练的价格，不包括之前的实验、数据，也不包括集群。",
+        "这样一次训练有多大？第14部分给过规则：训练的代价，大约是每个参数、每个词元六次运算。<bookmark mark='a'/>对Llama 3.1，6乘以4050亿乘以15.6万亿，是{P['llama_6nd'] / 1e+25:.2f}乘以10的25次方，正是Meta报告的数。<bookmark mark='b'/>DeepSeek-V3是混合专家模型，每个词元只用到370亿个参数，所以它需要{P['dsv3_6nd'] / 1e+24:.1f}乘以10的24次方：大约十分之一。<bookmark mark='c'/>它的报告还给出了账单：预训练用了266.4万个H800 GPU小时，另外还有长上下文和后训练阶段；按每小时两美元算，是{P['dsv3_usd'] / 1000000.0:.3f}百万美元。<bookmark mark='d'/>每一万亿个词元要花{D['hours_per_T'] / 1000.0:.0f}000个GPU小时：在2048块GPU上是{P['dsv3_days_per_T']:.1f}天。这只是最终那次训练的价格：不包括之前的实验、数据，也不包括集群。",
 
     # ------------------------------------------------------------------ Web
     'Chapter two. From the web to text.':
         '第2章。从网页到文本。',
 
     'f"Almost every open pretraining corpus':
-        "几乎每一个开放的预训练语料库，都从同一个地方开始。2007年，吉尔·埃尔巴兹创办了Common Crawl，一个非营利组织，它抓取网络，再把存档免费送出；它从2008年开始抓取，存档已经超过十拍字节。<bookmark mark='a'/>每次抓取被切成十万个文件，这里要紧的有两种形式：WARC文件存的是原始响应，连同全部HTML；WET文件存的是Common Crawl自己抽取出来的文本。<bookmark mark='b'/>为了本部分，我们取了2026年9月那次抓取的三个WET文件，每个取三段：{spoken_int(W['n_pages'])}个网页，{W['text_bytes'] / 1000000.0:.0f}兆字节的文本，共{W['n_langs']}种语言。接下来四章里的一切，都发生在这些网页上。",
+        "几乎每一个开放的预训练语料库，都从同一个地方开始：Common Crawl，吉尔·埃尔巴兹在2007年创办的一个非营利组织，它从2008年起抓取网络，再把存档免费送出，已经超过十拍字节。<bookmark mark='a'/>每次抓取被切成十万个文件，这里要紧的有两种形式：WARC文件存的是原始响应，连同全部HTML；WET文件存的是Common Crawl自己抽取出来的文本。<bookmark mark='b'/>为了本部分，我们取了2026年9月那次抓取的三个WET文件，每个取三段：{spoken_int(W['n_pages'])}个网页，{W['text_bytes'] / 1000000.0:.0f}兆字节的文本，共{W['n_langs']}种语言。接下来四章里的一切，都发生在这些网页上。",
 
     'f"The first step is extraction':
         "第一步是抽取：把HTML变成文本。一个网页，大部分都不是正文。脚本、样式、菜单、页脚、按钮。<bookmark mark='a'/>这是我们WARC片段里的一个网页。它的HTML有{spoken_int(ex['html_bytes'])}字节。<bookmark mark='b'/>FineWeb用的抽取器Trafilatura，从中保留了{spoken_int(ex['text_bytes'])}字节：文章本身，不要它周围的菜单。<bookmark mark='c'/>在我们片段里全部{W['warc_pages']}个HTML网页上，{W['html_bytes'] / 1000000.0:.0f}兆字节的HTML变成了{W['extracted_bytes'] / 1000000.0:.1f}兆字节的文本：大约{100 * W['extracted_share']:.0f}%。<bookmark mark='d'/>这一步比听起来更要紧。FineWeb的作者把同一次抓取用两种方式抽取，各训练小模型，结果Trafilatura的文本，胜过了Common Crawl自己的WET文本。",
 
     'f"Next: which language is each page in?':
-        "下一步：每个网页是什么语言？<bookmark mark='a'/>在那之前，先做一个只看网址的廉价过滤：一份成人和赌博网站的黑名单，去掉了{W['blocked']}个网页。<bookmark mark='b'/>然后是语言识别器：fastText的，来自Facebook AI研究院，它是一个建立在字符片段上的线性模型，在176种语言里挑一种，快到足以在几十亿个网页上运行。<bookmark mark='c'/>这是我们的样本里有什么。英语：{spoken_int(en)}个网页，大约{round(100 * share)}%；其余的分散在另外{W['n_langs'] - 1}种语言里。<bookmark mark='d'/>FineWeb只有在识别器至少有65%的把握时，才把一个网页算作英语。这又去掉了{W['english_below']}个；我们还去掉了不到五十个词的网页。<bookmark mark='e'/>{spoken_int(W['english'])}个英语网页进入下一步。这里其余的步骤，都是针对英语的过滤；2026年的多语言模型，比如支持119种语言的Qwen3，会对每种语言各跑一遍同样的流程。",
+        "下一步：每个网页是什么语言？<bookmark mark='a'/>在那之前，先做一个只看网址的廉价过滤：一份成人和赌博网站的黑名单，去掉了{W['blocked']}个网页。<bookmark mark='b'/>然后是语言识别器：fastText的，来自Facebook AI研究院，它是一个建立在字符片段上的线性模型，在176种语言里挑一种，快到足以在几十亿个网页上运行。<bookmark mark='c'/>这是我们的样本里有什么。英语：{spoken_int(en)}个网页，大约{round(100 * share)}%；其余的分散在另外{W['n_langs'] - 1}种语言里。<bookmark mark='d'/>FineWeb只有在识别器至少有65%的把握时，才把一个网页算作英语。这又去掉了{W['english_below']}个；我们还去掉了不到五十个词的网页。<bookmark mark='e'/>{spoken_int(W['english'])}个英语网页进入下一步。多语言模型，比如支持119种语言的Qwen3，会对每种语言各跑一遍这样的流程。",
 
     # ------------------------------------------------------------------ Dedup
     'Chapter three. Near-duplicates':
@@ -103,11 +103,17 @@ _DATA = {
     'Chapter four. Quality, and keeping the test clean.':
         '第4章。质量，以及保持测试的干净。',
 
-    'Language and duplicates are the easy filters.':
-        "语言和重复，是容易的过滤。质量更难：哪些网页教给模型的东西最多？2024年，Hugging Face的FineWeb团队给出了一个如今已成标准的配方。<bookmark mark='a'/>请一个大模型给网页打分。他们给了Llama 3 70B一个提示词，教育价值的五条标准，每满足一条加一分，让它给46万个网页打零到五分。<bookmark mark='b'/>然后训练一个便宜的小模型去模仿这些分数：在一个嵌入模型上面加一个线性层，用其中41万个来训练。以三分为界，它和Llama 3的判断相比，F1分数是82%。<bookmark mark='c'/>用这个小模型跑遍全部十五万亿个词元，花了六千个GPU小时，保留三分及以上的网页：1.3万亿个词元。<bookmark mark='d'/>在用3500亿个词元训练的17亿参数模型上，过滤后的数据把考知识的MMLU从33%提高到37%，把考推理的ARC从46%提高到57%。",
+    'Quality is harder than language or duplicates':
+        "质量比语言和重复更难：哪些网页教给模型的东西最多？2024年，Hugging Face的FineWeb团队给出了一个如今已成标准的配方。<bookmark mark='a'/>请一个大模型给网页打分：Llama 3 70B，用一个提示词，教育价值的五条标准，每满足一条加一分，给46万个网页打零到五分。<bookmark mark='b'/>然后训练一个便宜的小模型去模仿这些分数：在一个嵌入模型上面加一个线性层，用其中41万个来训练；以三分为界，它和Llama 3相比，F1分数是82%。<bookmark mark='c'/>用它跑遍全部十五万亿个词元，花了六千个GPU小时，保留三分及以上的网页：1.3万亿个词元。<bookmark mark='d'/>在用3500亿个词元训练的17亿参数模型上，这把考知识的MMLU从33%提高到37%，把考推理的ARC从46%提高到57%。",
 
     'f"We can run this recipe ourselves':
-        "这个配方我们可以自己跑一遍，因为FineWeb公开了Llama 3的标注。<bookmark mark='a'/>我们下载了其中{spoken_int(Q['n'])}条。大部分网页得一分：有一点信息，没什么教学价值。只有{100 * sum(counts[3:]) / Q['n']:.0f}%得到三分或以上，我们的样本里有{counts[5]}个得了五分。<bookmark mark='b'/>小模型我们用的是fastText，一个建立在词和词对上的线性模型，几秒钟就能训练好；用{spoken_int(Q['n_train'])}个网页来训练，分界线在另外一千个网页上选定。<bookmark mark='c'/>{verdict}",
+        "这个配方我们可以自己跑一遍，因为FineWeb公开了Llama 3的标注。<bookmark mark='a'/>我们下载了其中{spoken_int(Q['n'])}条。{commonest}{100 * sum(counts[3:]) / Q['n']:.0f}%得到三分或以上，我们的样本里有{counts[5]}个得了五分。<bookmark mark='b'/>小模型我们用的是fastText，一个建立在词和词对上的线性模型，几秒钟就能训练好；用{spoken_int(Q['n_train'])}个网页来训练，分界线在另外一千个网页上选定。<bookmark mark='c'/>{verdict}",
+
+    'Most pages score one: a little information':
+        '大部分网页得一分：有一点信息，没什么教学价值。',
+
+    "f'The commonest score is":
+        "最常见的分数是{int(np.argmax(counts))}。",
 
     "f'Ours reaches an F1 of {100 * f1:.0f} percent, close":
         "我们的F1达到{100 * f1:.0f}%，和他们的接近，用的只是一小部分标注。",
@@ -116,17 +122,26 @@ _DATA = {
         "我们的F1达到{100 * f1:.0f}%，他们的是82%：标注只有他们的三十分之一，用的又是词袋而不是嵌入模型，它抓住了大部分好网页，但放进来的差网页也差不多一样多。",
 
     'f"Now run it on our crawl sample.':
-        "现在把它用到我们的抓取样本上。<bookmark mark='a'/>这是它打分最高的两个网页，<bookmark mark='b'/>以及打分最低的两个。<bookmark mark='c'/>在我们的{spoken_int(Q['cc_n'])}个英语网页里，它保留了{Q['cc_kept_n']}个，占{100 * Q['cc_kept']:.1f}%。FineWeb-Edu保留了FineWeb大约百分之九的词元。<bookmark mark='d'/>别的配方有别的目标。DataComp-LM，简称DCLM，训练它的fastText过滤器去找看起来像指令和好回答的文本；一个七十亿参数的模型，用其中2.6万亿个词元训练，在MMLU上达到了64%。2026年每一个像样的语料库，都有一个这样的过滤器；大多数，比如Qwen3的，有很多个。",
+        "现在把它用到我们的抓取样本上。<bookmark mark='a'/>这是它打分最高的两个网页，<bookmark mark='b'/>以及打分最低的两个。<bookmark mark='c'/>在我们的{spoken_int(Q['cc_n'])}个英语网页里，它保留了{Q['cc_kept_n']}个，占{100 * Q['cc_kept']:.1f}%；FineWeb-Edu保留了FineWeb大约百分之九的词元。<bookmark mark='d'/>别的配方瞄准别的东西：DataComp-LM，简称DCLM，训练它的fastText过滤器去找像指令和好回答的文本；一个七十亿参数的模型，用其中2.6万亿个词元训练，在MMLU上达到了64%。2026年每一个像样的语料库，都有这样的过滤器，大多数还不止一个。",
 
     'f"One more filter, pointed the other way.':
-        "还有一个过滤器，方向正相反。如果一个基准测试的题目就在网上，模型可以靠记忆通过它。<bookmark mark='a'/>GPT-3的作者在每个测试和训练文本之间，寻找任何共有的十三词序列，并把找到的标记出来。<bookmark mark='b'/>我们可以检查本系列自己的测试。记分牌用的那段文字，《马耳他之鹰》的第二章，有{spoken_int(K['passage_grams'])}个十三词序列；其中出现在我们训练用的三十部小说里的，有{K['passage_hits']}个；它的八词序列里，也只有{K['passage_hits8']}个。是干净的。<bookmark mark='c'/>我们的留出段落几乎是干净的：{spoken_int(K['valid_paras'])}段里，有{K['valid_flagged']}段和训练文本共有一个序列，比如这一段，是一部小说里重复出现的一句话。网络就没这么客气了：热门的基准测试在网上到处都有人抄，所以各个实验室现在对它们报告的每一个测试，都要做这样的检查。",
+        "还有一个过滤器，方向正相反。如果一个基准测试的题目就在网上，模型可以靠记忆通过它。<bookmark mark='a'/>GPT-3的作者在每个测试和训练文本之间，寻找任何共有的十三词序列，并把找到的标记出来。<bookmark mark='b'/>我们可以检查本系列自己的测试。记分牌用的那段文字，《马耳他之鹰》的第二章，有{spoken_int(K['passage_grams'])}个十三词序列；其中出现在我们训练用的三十部小说里的，有{K['passage_hits']}个；它的八词序列里，有{K['passage_hits8']}个。{clean}<bookmark mark='c'/>{held}一个序列，比如这一段，是一部小说里重复出现的一句话。在网上，热门的基准测试到处都有人抄，所以各个实验室现在对它们报告的每一个测试，都要做这样的检查。",
+
+    'Not quite clean: the passage shares':
+        '不完全干净：这段文字和训练文本有一部分措辞相同。',
+
+    "f'Our held-out paragraphs are almost clean:":
+        "我们的留出段落几乎是干净的：{spoken_int(K['valid_paras'])}段里，有{K['valid_flagged']}段和训练文本共有",
+
+    "f'Our held-out paragraphs are less clean:":
+        "我们的留出段落没那么干净：{spoken_int(K['valid_paras'])}段里，有{K['valid_flagged']}段和训练文本共有",
 
     # ------------------------------------------------------------------ Mixture
     'Chapter five. Mixtures, synthetic data and collapse.':
         '第5章。数据配比、合成数据与崩溃。',
 
     'A corpus is a mixture:':
-        "一个语料库就是一份配比：网页、百科、代码、书籍、数学、论文。每样要多少？<bookmark mark='a'/>2020年，The Pile是手工定的权重：四分之一网页，百分之九维基百科，外加另外二十个来源。<bookmark mark='b'/>2023年，DoReMi把权重学了出来。一个2.8亿参数的小代理模型边训练，一个对手边不断提高它预测得最差的那个领域的权重，这个最差是相对一个参考模型而言的；最后得到的权重训练出一个八十亿参数的模型，用少了2.6倍的步数，就达到了基线的水平。<bookmark mark='c'/>2024年，RegMix把它变成了回归问题。训练512个微型模型，每个用一份随机的配比；拟合一个从配比到你所关心的损失的模型；再用回归最看好的那份配比去训练大模型。在十亿参数的规模上，它挑出的配比胜过了他们试过的全部64种。",
+        "一个语料库就是一份配比：网页、百科、代码、书籍、数学、论文。每样要多少？<bookmark mark='a'/>2020年，The Pile是手工定的权重：四分之一网页，百分之九维基百科，外加另外二十个来源。<bookmark mark='b'/>2023年，DoReMi把权重学了出来：一个小代理模型边训练，一个对手边不断提高它预测得最差的那个领域的权重，这个最差是相对一个参考模型而言的；最后得到的权重，让一个八十亿参数的模型用少了2.6倍的步数，就达到了基线的水平。<bookmark mark='c'/>2024年，RegMix把它变成了回归问题：训练512个微型模型，用随机的配比；把你关心的损失拟合成配比的函数；再用拟合最看好的那份配比去训练大模型。在十亿参数的规模上，它挑出的配比胜过了他们试过的全部64种。",
 
     'f"We ran RegMix on the thirty novels.':
         "我们在三十部小说上跑了RegMix。把它们分成四组：美国小说，英国的社会小说，冒险与推理，以及译作加上《尤利西斯》。<bookmark mark='a'/>我们的目标，是记分牌自己的那本书，《马耳他之鹰》，一部1930年的美国侦探小说；我们在它的第一章和第三章上调，把第二章，也就是记分牌那段文字，留着做测试。<bookmark mark='b'/>{len(proxy)}个微型模型，每个用一份随机配比。这是每个模型在目标上的损失，对它所含美国小说的比例画出来：{trend}。<bookmark mark='c'/>在四个权重以及它们两两乘积上的回归，用其余的模型来预测每个模型的损失，相关系数是{M['loo_corr']:.2f}。<bookmark mark='d'/>问它最好的配比，它{lean}：四组分别占{shares}%，可以和这些书本身的自然比例对照一下。",
@@ -161,10 +176,22 @@ _DATA = {
     'f"When good text runs short':
         "好文本不够用的时候，有两种办法把它撑开。一是重复：Muennighoff和同事在2023年发现，同一份数据最多重复大约四遍，几乎和新数据一样好，再往后，收益就迅速消失。<bookmark mark='a'/>二是改写。2024年，苹果和卡内基梅隆大学的WRAP，让一个语言模型把嘈杂的网页改写成百科条目或问答的形式；把真实文本和改写文本放在一起训练，达到同样的质量大约快了三倍。<bookmark mark='b'/>Kimi K2的报告在知识上做了测量。同一段文本重复十遍，教出的模型能答对一组事实问题里的{K['rephrase'][0][1]:.2f}%。改写一次，再重复十遍：{K['rephrase'][1][1]:.2f}%。改写成十种不同的说法，每种只读一遍：{K['rephrase'][2][1]:.2f}%。",
 
-    'f"But a model trained on a model\'s output':
-        "但用模型的输出来训练模型，有一种已知的失败。Shumailov和同事在2024年的《自然》上，把它叫作模型崩溃：每一代都用上一代的样本来训练，分布的尾巴就会消失。我们可以在最简单的语言模型上看到它：小说里各个词元的频率。<bookmark mark='a'/>用五万个真实词元来拟合它；从中采样五万个；用这些来拟合下一代；如此反复。一个罕见的词元，只要有一次碰巧没被采到，就永远消失了。<bookmark mark='b'/>经过{gens}代，它能产生的词元从{start:,.0f}个降到{end:,.0f}个，而丢掉的那些，在真实文本里占{100 * lost:.0f}%。<bookmark mark='c'/>它在真实文本上的交叉熵，一代比一代高。<bookmark mark='d'/>同一年，Gerstgrasser和同事找到了出路：保留真实数据，把每一代的样本加进去，而不是替换它。这样，真实的东西一样也不会丢，损害也一直很小。2026年的合成数据就是这样用的：和真实文本放在一起，绝不取而代之。",
+    'f"But training on a model\'s output':
+        "但用模型的输出来训练，有一种已知的失败。Shumailov和同事在2024年的《自然》上，把它叫作模型崩溃：每一代都用上一代的样本来训练，分布的尾巴就会消失。我们可以在最简单的语言模型上看到它：小说里各个词元的频率。<bookmark mark='a'/>用五万个真实词元来拟合它；从中采样五万个；用这些来拟合下一代；如此反复。一个罕见的词元，只要有一次没被采到，就永远消失了。<bookmark mark='b'/>经过{gens}代，它能产生的词元从{start:,.0f}个降到{end:,.0f}个，而丢掉的那些，在真实文本里占{100 * lost:.0f}%。<bookmark mark='c'/>{climb}<bookmark mark='d'/>同一年，Gerstgrasser和同事找到了出路：保留真实数据，把每一代的样本加进去，而不是替换它。{cure}2026年的合成数据就是这样用的：和真实文本放在一起，绝不取而代之。",
 
     # ------------------------------------------------------------------ Objectives
+    'Its cross-entropy on real text climbs with every generation.':
+        '它在真实文本上的交叉熵，一代比一代高。',
+
+    'Its cross-entropy on real text climbs over the generations.':
+        '它在真实文本上的交叉熵，随着一代代上升。',
+
+    'Its cross-entropy on real text barely moves.':
+        '它在真实文本上的交叉熵几乎没变。',
+
+    'Nothing real is lost, and the damage stays small.':
+        '真实的东西一样也不会丢，损害也一直很小。',
+
     'Chapter six. What the model is asked to predict.':
         '第6章。让模型预测什么。',
 
@@ -178,14 +205,20 @@ _DATA = {
     'Chapter seven. Annealing, mid-training, long context.':
         '第7章。退火、中期训练与长上下文。',
 
-    'f"The learning rate falls as a run ends':
-        "一次训练快结束时，学习率会降下来，而怎么降很要紧。第11部分用的是余弦：它一开始就衰减，所以你必须事先知道训练有多长。<bookmark mark='a'/>从2024年起，越来越多的训练用预热、稳定、衰减：让学习率平平地保持在峰值，只在最后，用最后十分之一或五分之一的步数来冷却。<bookmark mark='b'/>这是我们自己的2026配方的训练，本部分在第18章训练它。留出损失在稳定阶段缓缓下降，在冷却时一下子降下来。<bookmark mark='c'/>好处是：从稳定阶段的任何一个检查点，都可以分出一段短短的冷却。我们在第{start}步分出了一支。<bookmark mark='d'/>{verdict}所以WSD被用来从一次训练里，尝试许多种训练长度，或许多种数据配比。",
+    '"The learning rate falls as a run ends':
+        "一次训练快结束时，学习率会降下来，而怎么降很要紧。第11部分用的是余弦：它一开始就衰减，所以你必须事先知道训练有多长。<bookmark mark='a'/>从2024年起，越来越多的训练用预热、稳定、衰减：让学习率平平地保持在峰值，只在最后，用最后十分之一或五分之一的步数来冷却。<bookmark mark='b'/>这是我们自己的2026配方的训练，来自第18章。{shape}<bookmark mark='c'/>好处是：从稳定阶段的任何一个检查点，都可以分出一段短短的冷却。我们在第{start}步分出了一支。<bookmark mark='d'/>{verdict}所以WSD被用来从一次训练里，尝试许多种训练长度，或许多种数据配比。",
 
     "f\"At step {bstep}, the branch's held-out loss is {b['val']:.2f}, against {b['stable_val']:.2f} for the run still at its peak learning":
         "在第{bstep}步，这一支的留出损失是{b['val']:.2f}，而仍在峰值学习率上的那次训练是{b['stable_val']:.2f}：一个训练完成的模型，不用从头再来。",
 
     "f\"At step {bstep}, the branch's held-out loss is {b['val']:.2f}, against {b['stable_val']:.2f} for the run still at its peak:":
         "在第{bstep}步，这一支的留出损失是{b['val']:.2f}，而仍在峰值上的那次训练是{b['stable_val']:.2f}：在我们的规模上，冷却带来的好处不大。",
+
+    'The held-out loss creeps down during the stable phase':
+        '留出损失在稳定阶段缓缓下降，到了冷却阶段降得更快。',
+
+    'The held-out loss falls through the stable phase and the cooldown alike.':
+        '留出损失在稳定阶段和冷却阶段下降得差不多。',
 
     'The end of a run is also where the best data goes.':
         "一次训练的结尾，也是最好的数据去的地方。模型在学习率下降时读到的东西，会在最终的模型上留下很深的印记，所以各个实验室把最好的文本留到冷却阶段，叫它退火，或者中期训练。<bookmark mark='a'/>SmolLM3分三个阶段训练，网页文本从85%降到63%，代码和数学从15%升到37%。<bookmark mark='b'/>Llama 3在最后四千万个词元上退火，把学习率降到零，用的是它最好的来源，再把各个检查点平均起来。<bookmark mark='c'/>Qwen3的第二阶段是五万亿个词元，偏重科学、代码和推理，衰减也更快。<bookmark mark='d'/>Olmo 2把百分之五到十的算力花在中期训练上，用从检查点出发的小型退火实验来挑数据：为了挑它的数学数据，做了十九次微退火。",
@@ -204,20 +237,20 @@ _DATA = {
         "我们可以在自己的模型上检验这一点，用PyTorch的浮点运算计数器，它统计一个训练步里每一次矩阵乘法的运算次数，这一步有{T}个词元。<bookmark mark='a'/>反向传播的代价是前向的{A['ratio']:.2f}倍。<bookmark mark='b'/>总数等于6乘以权重数乘以词元数，误差在{100 * abs(A['both'] / A['six'] - 1):.2f}%以内。<bookmark mark='c'/>注意力自己的乘法，也就是打分和加权求和，在这个长度上又多出{100 * A['attn_share'] / (1 - A['attn_share']):.0f}%，而且随长度增长。",
 
     'f"Now memory.':
-        "再说内存。用混合精度训练，这是2018年以来的标准配方，每个参数要花十六个字节。<bookmark mark='a'/>bfloat16的权重两个字节，它的梯度两个字节；<bookmark mark='b'/>然后是优化器的状态，用32位：权重的一份主副本，四个字节，再加上Adam的两个滑动平均，各四个字节。<bookmark mark='c'/>对Llama 3.1，十六个字节乘以4050亿，是{m16['llama3'] / 1000000000000.0:.1f}太字节：光是装下模型，就至少要{P['h100_needed']}块80GB的GPU，激活还没算。DeepSeek-V3的6710亿个参数要十太字节以上，Kimi K2的一万亿个要十六太字节以上。<bookmark mark='d'/>这里省下的每一个字节都有用；比如DeepSeek-V3，就把Adam的平均值存成16位。",
+        "再说内存。用混合精度训练，这是2018年以来的标准配方，每个参数要花十六个字节。<bookmark mark='a'/>bfloat16的权重两个字节，它的梯度两个字节；<bookmark mark='b'/>然后是优化器的状态，用32位：权重的一份主副本，四个字节，再加上Adam的两个滑动平均，各四个字节。<bookmark mark='c'/>对Llama 3.1，十六个字节乘以4050亿，是{m16['llama3'] / 1000000000000.0:.1f}太字节：光是装下模型，就至少要{P['h100_needed']}块80GB的GPU，激活还没算。<bookmark mark='d'/>这里省下的每一个字节都有用；比如DeepSeek-V3，就把Adam的平均值存成16位。",
 
     'f"The other big consumer of memory':
-        "内存的另一个大户是激活：前向传播必须为反向传播留下的一切。我们清点了PyTorch的autograd为我们的模型保存的张量，长度从64到1024个词元。<bookmark mark='a'/>注意力融合起来，就像PyTorch运行它的那样，内存是一条直线：每个词元、每层{A['per_fused']:.1f}个数，以宽度为单位。<bookmark mark='b'/>按教科书的方式算注意力，它还要为每个头保留一个T乘T的矩阵：一条抛物线。这个二次项，正是FlashAttention去掉的。<bookmark mark='c'/>或者只保留每个块的输入，在反向传播时把其余的重新算一遍：每个词元、每层一个数，代价是这里多{100 * (A['ckpt_ratio'] - 1):.0f}%的算术，在一个由块组成的模型里最多多三分之一。<bookmark mark='d'/>在前沿规模上，这可不是细节。按Korthikanti和同事的算法，在Llama 3.1的形状、八千个词元下：每层四点五吉字节，每个序列超过半太字节。",
+        "内存的另一个大户是激活：前向传播必须为反向传播留下的一切。我们清点了PyTorch的autograd为我们的模型保存的张量，长度从64到1024个词元。<bookmark mark='a'/>注意力融合起来，就像PyTorch运行它的那样，内存是一条直线：每个词元、每层{A['per_fused']:.1f}个数，以宽度为单位。<bookmark mark='b'/>按教科书的方式算注意力，它还要为每个头保留一个T乘T的矩阵：一条抛物线。这个二次项，正是FlashAttention去掉的。<bookmark mark='c'/>或者只保留每个块的输入，在反向传播时把其余的重新算一遍：每个词元、每层一个数，代价是这里多{100 * (A['ckpt_ratio'] - 1):.0f}%的算术，一般最多多三分之一。<bookmark mark='d'/>在前沿规模上，这很要紧。按Korthikanti和同事的算法，在Llama 3.1的形状、八千个词元下：每层四点五吉字节，每个序列超过半太字节。",
 
     # ------------------------------------------------------------------ DataParallel
     'Chapter nine. Data parallelism and the all-reduce.':
         '第9章。数据并行与全规约。',
 
     'f"The simplest way to use many GPUs':
-        "用许多块GPU最简单的办法：给每块一份完整的模型副本，和批次的一部分。<bookmark mark='a'/>每块算出自己那部分的梯度。<bookmark mark='b'/>然后它们把梯度平均起来，这样每份副本都走完全相同的一步，始终保持一致。这个平均就是全规约，第17部分讲过的操作。<bookmark mark='c'/>这和在一个设备上用一个大批次走一步是一样的。我们检验过：这台计算机的{p}个进程，每个拿四分之一的批次，和一个拿全部批次的进程相比，跑{Pr['steps']}步AdamW：损失吻合到{digits}位数字，参数只差最后几位的舍入。",
+        "用许多块GPU最简单的办法：给每块一份完整的模型副本，和批次的一部分。<bookmark mark='a'/>每块算出自己那部分的梯度。<bookmark mark='b'/>然后它们把梯度平均起来，这样每份副本都走完全相同的一步，始终保持一致。这个平均就是全规约，第17部分讲过的操作。<bookmark mark='c'/>这和在一个设备上用一个大批次走一步是一样的。我们检验过：这台计算机的{p}个进程，每个拿四分之一的批次，和一个拿全部批次的进程相比，跑{Pr['steps']}步AdamW：损失吻合到{digits}位数字，每个参数都相差在{Pr['err']['dp']:.5f}以内；不同的只是加法的顺序。",
 
-    'Recall how a ring does it.':
-        "回忆一下环是怎么做的。把每块GPU的梯度切成p块。<bookmark mark='a'/>每一步，每块GPU把一块传给它的邻居，邻居把它加到自己的那块上。p减1步之后，每块GPU都持有某一块的完整总和：这就是规约-分散。<bookmark mark='b'/>再用p减1步，把算好的块传一圈：这就是全收集。<bookmark mark='c'/>每块GPU发送的，是梯度字节数的p分之p减1的两倍。下一章的ZeRO，把全规约拆成这两半，在中间做有用的工作。",
+    'Recall the ring of Part 17.':
+        "回忆一下第17部分的环。把每块GPU的梯度切成p块。<bookmark mark='a'/>每一步，每块GPU把一块传给它的邻居，邻居把它加到自己的那块上；p减1步之后，每块GPU都持有某一块的完整总和：这就是规约-分散。<bookmark mark='b'/>再用p减1步，把算好的块传一圈：这就是全收集。<bookmark mark='c'/>每块GPU发送的，是梯度字节数的p分之p减1的两倍。下一章的ZeRO，在这两半之间做有用的工作。",
 
     'Part 17 said that no algorithm beats the ring on bandwidth.':
         "第17部分说过，在带宽上没有算法能胜过环。原因在这里。跟踪一个数，全部p块GPU最后都必须持有它的总和。每条消息携带一个值，可能是一个部分和。<bookmark mark='a'/>总有某块GPU第一个拿到完整的总和。其他每块GPU的值都必须经过一串消息到达它：这至少要p减1条消息。<bookmark mark='b'/>在那一刻，别人都还没有总和，所以其余p减1块GPU，每块都至少还需要一条消息。<bookmark mark='c'/>每个数两倍的p减1条消息，n个数都是如此。<bookmark mark='d'/>p块GPU可以同时接收，每块每秒B字节，所以时间至少是p分之p减1的两倍，乘以n除以B：正是环的时间。<bookmark mark='e'/>环在带宽上是最优的。剩下能赢的是延迟，小消息用树；还有重叠：反向传播还在算前面几层的时候，就把最后几层的梯度发出去。",
@@ -245,7 +278,7 @@ _DATA = {
         "分片在通信上要付出什么？第一和第二阶段，没有任何额外代价：全规约本来就是一次规约-分散加一次全收集。每块GPU对梯度做规约-分散，更新自己的四分之一，再对新的权重做全收集。<bookmark mark='a'/>第三阶段只保存每层权重的四分之一。这一层前向运行之前，各块GPU对它做一次全收集；用完就丢掉。<bookmark mark='b'/>反向传播又需要这些权重：再收集一次。<bookmark mark='c'/>梯度做规约-分散，每块GPU只保留自己的四分之一。<bookmark mark='d'/>这是对参数走三遍，而不是两遍：通信量多一半，换来内存除以N。Meta训练Llama 3时，在数据并行组里用了FSDP；DeepSeek-V3用的是第一阶段。",
 
     '"We built ZeRO stage three ourselves':
-        "我们自己搭了ZeRO第三阶段，用四个进程：每个进程保存每一层参数、梯度和Adam矩的四分之一，在一层运行之前，不论前向还是反向，才把它收集起来，再对它的梯度做规约-分散。<bookmark mark='a'/>{same}<bookmark mark='b'/>每个进程保存的数少了{ratio_mem:.0f}倍，外加一次一层。<bookmark mark='c'/>而它发送的是{ratio_comm:.2f}倍：ZeRO的一倍半，实测出来了。",
+        "我们自己搭了ZeRO第三阶段，用四个进程：每个进程保存每一层参数、梯度和Adam矩的四分之一，在一层运行之前，不论前向还是反向，才把它收集起来，再对它的梯度做规约-分散。<bookmark mark='a'/>{same}<bookmark mark='b'/>每个进程保存的数少了{ratio_mem:.0f}倍，外加一次一层。<bookmark mark='c'/>而它发送的是{ratio_comm:.2f}倍：{match15}",
 
     "f'After {Pr['steps']} steps, its parameters match":
         "{Pr['steps']}步之后，它的参数和单进程运行相比，相差在{e3:.5f}以内，和普通数据并行一样：不同的只是加法的顺序。",
@@ -276,8 +309,8 @@ _DATA = {
     'Chapter twelve. Pipeline parallelism.':
         '第12章。流水线并行。',
 
-    'f"Tensor parallelism cuts every layer.':
-        "张量并行切开的是每一层。流水线并行换个方向切模型：前八层放在一块GPU上，接下来八层放在另一块上，依此类推，每块GPU是一个阶段。<bookmark mark='a'/>麻烦显而易见：第一个阶段处理一个批次时，其他阶段都在等。谷歌的GPipe在2019年把每个批次切成微批次，让各个阶段可以同时处理不同的微批次。<bookmark mark='b'/>这是GPipe的调度，精确模拟：{p}个阶段，{m}个微批次，反向传播花的时间是前向的两倍。时间从左往右走。<bookmark mark='c'/>微批次在前向时把流水线填满，流水线排空，然后反向传播再倒过来把它填满。灰色的角落是在等待的GPU：这就是流水线气泡。",
+    'f"Tensor parallelism cuts every layer':
+        "张量并行切开的是每一层。流水线并行换个方向切模型：前八层放在一块GPU上，接下来八层放在另一块上，每块GPU是一个阶段。<bookmark mark='a'/>麻烦在于：第一个阶段处理一个批次时，其他阶段都在等。谷歌的GPipe在2019年把每个批次切成微批次，让各个阶段可以同时处理不同的微批次。<bookmark mark='b'/>这是GPipe的调度，精确模拟：{p}个阶段，{m}个微批次，反向传播花的时间是前向的两倍。时间从左往右走。<bookmark mark='c'/>微批次在前向时把流水线填满，流水线排空，然后反向传播再倒过来把它填满。灰色的角落是在等待的GPU：这就是流水线气泡。",
 
     'f"How big is the bubble?':
         "气泡有多大？每块GPU忙的时间，是m个微批次，每个一次前向一次反向。<bookmark mark='a'/>但整个调度要花更长：最后一个微批次要经过前面p减1个阶段，才能在最后一个阶段开始，回来的路上也一样。<bookmark mark='b'/>所以浪费的时间比例，是p减1，除以m加p减1。<bookmark mark='c'/>在我们的图里，是{100 * Pp['gpipe']['bubble']:.1f}%。这是气泡对微批次数的图，线是公式，点是我们模拟的调度。{fit}微批次越多，气泡越小；GPipe的作者发现，每个阶段四个就够了。",
@@ -289,7 +322,7 @@ _DATA = {
         "GPipe还有第二个问题：内存。每个阶段都要保存它前向跑过的每个微批次的激活，直到那个微批次回来。<bookmark mark='a'/>1F1B调度，来自微软的PipeDream工作，让每个微批次的反向传播尽早开始，一次前向和一次反向交替进行。<bookmark mark='b'/>{'The bubble is exactly the same: ' if same else 'The bubble: '}{100 * r1['bubble']:.1f}%。但第一块GPU同时保存的微批次，从不超过{int(r1['peak'][0])}个，也就是阶段数，而不是全部{m}个。内存不再随微批次数增长，所以你可以用很多微批次，气泡也就缩小了。",
 
     'f"Two more tricks cut the bubble itself.':
-        "还有两个技巧，能削减气泡本身。<bookmark mark='a'/>交错：给每块GPU两段更小的层，而不是一段，这样一个微批次会经过每块GPU两次。爬坡的时间减半，气泡降到{100 * ri['bubble']:.1f}%。Llama 3用了这个办法。<bookmark mark='b'/>零气泡，来自2023年的Sea AI Lab：把反向传播一分为二。对输入的梯度是紧急的，因为前一个阶段正等着它；对权重的梯度不急，所以可以推迟，塞进空隙里。三者时间相等时，气泡降到1F1B的三分之一：{100 * rz['bubble']:.1f}%，内存不变。<bookmark mark='c'/>DeepSeek-V3走得更远，用了DualPipe：微批次同时从流水线的两端进入，每块GPU把一个方向的计算，和另一个方向的通信重叠起来。在它的气泡公式里，p减1个阶段换成了p的一半减1个，代价是要保存两份权重。",
+        "还有两个技巧，能削减气泡本身。<bookmark mark='a'/>交错：给每块GPU两段更小的层，而不是一段，这样一个微批次会经过每块GPU两次。爬坡的时间减半，气泡降到{100 * ri['bubble']:.1f}%。Llama 3用了这个办法。<bookmark mark='b'/>零气泡，来自2023年的Sea AI Lab：把反向传播一分为二。对输入的梯度是紧急的，因为前一个阶段正等着它；对权重的梯度不急，所以可以推迟，塞进空隙里。三者时间相等时，空闲时间降到1F1B的三分之一，气泡只有{100 * rz['bubble']:.1f}%，内存不变。<bookmark mark='c'/>DeepSeek-V3走得更远，用了DualPipe：微批次同时从流水线的两端进入，每块GPU把一个方向的计算，和另一个方向的通信重叠起来。在它的气泡公式里，p减1个阶段换成了p的一半减1个，代价是要保存两份权重。",
 
     # ------------------------------------------------------------------ Context
     'Chapter thirteen. Context, experts, and utilization.':
@@ -299,10 +332,13 @@ _DATA = {
         "还有两种切法。第一种是为长序列准备的。激活随序列长度增长，到了一百万个词元，一个序列就放不进一块GPU了。那就把序列本身切开：上下文并行。<bookmark mark='a'/>每块GPU保存一段位置。Transformer里的一切都是逐位置的，只有注意力例外，它需要每一个键。<bookmark mark='b'/>环形注意力，来自2023年的伯克利：每块GPU保留自己的查询，键和值的各个块沿着环传递，每步一跳。<bookmark mark='c'/>每个到达的块，都用在线softmax并入结果，保持一个滚动的最大值和一个滚动的和，FlashAttention用的也是这个技巧，所以答案是精确的。<bookmark mark='d'/>我们在四个进程上跑了它，一个256个词元的序列，分成四块：结果和完整注意力吻合到{R['err']:.7f}。",
 
     'f"There\'s a catch with causal attention.':
-        "因果注意力有个麻烦。一个位置只往回看，所以第一块查询只需要一块键，最后一块却需要全部。<bookmark mark='a'/>用连续的分块，最后一块GPU的工作量是第一块的{Pr['contiguous'][-1]}倍，大家都得等它。<bookmark mark='b'/>解决办法：把序列切成两倍那么多段，给第i块GPU第i段和第2p减1减i段，两头各一段。现在每块GPU的工作量都一样了。Llama 3在它十二万八千词元的训练里正是这样做的，用了十六路上下文并行。",
+        "因果注意力有个麻烦。一个位置只往回看，所以第一块查询只需要一块键，最后一块却需要全部。<bookmark mark='a'/>用连续的分块，最后一块GPU的工作量是第一块的{Pr['contiguous'][-1]}倍，大家都得等它。<bookmark mark='b'/>解决办法：把序列切成两倍那么多段，给第i块GPU第i段和第2p减1减i段，两头各一段。{even}Llama 3在它十二万八千词元的训练里正是这样做的，用了十六路上下文并行。",
+
+    'f\'Now the busiest GPU does':
+        "现在最忙的GPU，工作量是最闲的{max(zz) / min(zz):.2f}倍。",
 
     'The second cut is for mixtures of experts':
-        "第二种切法是为混合专家准备的，来自第16部分。把不同的专家放在不同的GPU上。<bookmark mark='a'/>每个词元的路由器挑选它的专家，不管它们住在哪里，所以每一层都以一次全对全通信开始：每块GPU把自己的每个词元，发给持有它的专家的那些GPU，<bookmark mark='b'/>最后再来一次，把结果送回去。<bookmark mark='c'/>DeepSeek-V3把它的专家分布在八台机器的64块GPU上，并规定每个词元最多去四台机器，因为机器之间的网络比一台机器里的NVLink大约慢三倍。它甚至在每块GPU的132个处理器块里，留出二十个专门用来搬运词元，其余的负责计算。",
+        "第二种切法是为混合专家准备的，来自第16部分。把不同的专家放在不同的GPU上。<bookmark mark='a'/>每个词元的路由器挑选它的专家，不管它们住在哪里，所以每一层都以一次全对全通信开始：每块GPU把自己的每个词元，发给持有它的专家的那些GPU，<bookmark mark='b'/>最后再来一次，把结果送回去。<bookmark mark='c'/>DeepSeek-V3把它的专家分布在八台机器的64块GPU上，并规定每个词元最多去四台机器，因为机器之间的网络比一台机器里的NVLink大约慢三倍。它甚至在每块GPU的132个处理器块里，留出二十个，专门用来搬运词元。",
 
     'A frontier run uses several cuts at once.':
         "一次前沿训练会同时用上好几种切法。这是Llama 3自己的表。<bookmark mark='a'/>在16384块GPU上，序列长八千个词元：八路张量并行，十六个流水线阶段，128个数据并行组。8乘16乘128是16384。<bookmark mark='b'/>到了十二万八千词元的阶段，十六路上下文并行从数据那个维度拿走了GPU。<bookmark mark='c'/>顺序很要紧。张量并行每一层都要通信，放在最内层，在一台机器里。上下文和流水线在其次。数据并行每一步才通信一次，而且可以等，它横跨整个集群。",
@@ -347,8 +383,8 @@ _DATA = {
     'f"Eight bits is harder.':
         "8位就更难了。E4M3，带四个指数位的8位格式，只跨大约十八个2的幂，所以每个张量都需要一个缩放因子，把它的值挪进范围里。每个张量一个缩放因子，就像最早的FP8配方那样，是由最大的那个值决定的。<bookmark mark='a'/>而真实的激活里，总有几个很大的值。这是本系列模型里一次矩阵乘法的128个输入。<bookmark mark='b'/>整个张量用一个缩放因子，舍入到E4M3的误差是{100 * q['act_tensor']:.1f}%；每128个值的一个瓦片用一个缩放因子，误差是{100 * q['act_tile']:.1f}%。<bookmark mark='c'/>DeepSeek-V3就是这样训练它的6710亿个参数的：激活每128个值一个缩放因子，权重每128乘128的一块一个缩放因子。它还发现，张量核心在求和时只保留大约十四位，所以每128项就把部分和挪到FP32里，并把敏感的部分保留在更高的精度。它的损失和16位训练相比，差别在百分之零点二五以内。",
 
-    'The newest chips go further':
-        "最新的芯片走得更远，把缩放做进了硬件本身。英伟达的Blackwell能直接做微缩放格式的乘法：32个数一块，共享一个缩放因子，这就是MXFP8；英伟达在2025年报告，一个八十亿参数的模型用它在十五万亿个词元上训练，和bfloat16持平。<bookmark mark='a'/>然后是4位：NVFP4把十六个4位的值和一个8位的缩放因子打包在一起。<bookmark mark='b'/>英伟达用它预训练了一个一百二十亿参数的模型，用了十万亿个词元，用随机旋转把离群值摊开，对梯度用随机舍入，并把百分之十六的层留在bfloat16里；它在MMLU-Pro上的分数，和FP8模型相差不到二十分之一分。<bookmark mark='c'/>2026年3月，英伟达的Nemotron 3 Super用NVFP4在25万亿个词元上完成了预训练。Kimi K3发布的是4位权重，DeepSeek-V4是4位的专家，两者都是在量化感知训练里学出来的。<bookmark mark='d'/>每一次把位数减半，都伴随着一种新的缩放方式。",
+    'The newest chips put the scales into hardware.':
+        "最新的芯片把缩放做进了硬件。英伟达的Blackwell能直接做微缩放格式的乘法，32个数一块，共享一个缩放因子；英伟达在2025年报告，一个八十亿参数的模型用MXFP8在十五万亿个词元上训练，和bfloat16持平。<bookmark mark='a'/>然后是4位：NVFP4把十六个4位的值和一个8位的缩放因子打包在一起。<bookmark mark='b'/>英伟达用它预训练了一个一百二十亿参数的模型，用了十万亿个词元，用随机旋转把离群值摊开，对梯度用随机舍入，并把百分之十六的层留在bfloat16里；它在MMLU-Pro上的分数，和FP8模型相差不到二十分之一分。<bookmark mark='c'/>2026年3月，Nemotron 3 Super用NVFP4在25万亿个词元上完成了预训练；Kimi K3发布的是4位权重，DeepSeek-V4是4位的专家，两者都来自量化感知训练。<bookmark mark='d'/>每一次把位数减半，都伴随着一种新的缩放方式。",
 
     # ------------------------------------------------------------------ Stability
     'Chapter fifteen. Keeping the run stable.':
@@ -423,13 +459,13 @@ _DATA = {
         '第17章。当硬件出故障。',
 
     'f"Back to Llama 3\'s run.':
-        "回到Llama 3的训练。五十四天里，它的任务被中断了{L['interruptions']}次，其中{L['unexpected']}次是计划外的。<bookmark mark='a'/>这是Meta报告的原因。最大的一类遥遥领先：坏掉的GPU；然后是GPU上出故障的内存芯片，再然后是软件缺陷、网络交换机和线缆，以及主机维护。<bookmark mark='b'/>也就是每{P['llama_mtbf_h']:.1f}小时一次中断。可每块GPU单独来看，大约{P['llama_gpu_mtbf_years']:.1f}年才坏一次：问题不在零件，而在于它们有一万六千个，任何一个都会让整个任务停下来。<bookmark mark='c'/>多亏了自动化，只有三次故障需要人来处理，这次训练有超过百分之九十的时间都在训练。<bookmark mark='d'/>就连天气都看得出来：正午最热的时候，吞吐量下降百分之一到二；一万六千块GPU同时暂停时，数据中心的用电量会摆动几十兆瓦。",
+        "回到Llama 3的训练。五十四天里，它的任务被中断了{L['interruptions']}次，其中{L['unexpected']}次是计划外的。<bookmark mark='a'/>这是Meta报告的原因。最大的一类遥遥领先：坏掉的GPU；然后是GPU上出故障的内存芯片，再然后是软件缺陷、网络交换机和线缆，以及主机维护。<bookmark mark='b'/>也就是每{P['llama_mtbf_h']:.1f}小时一次中断。可每块GPU单独来看，大约{P['llama_gpu_mtbf_years']:.1f}年才坏一次：问题不在零件，而在于它们有一万六千个，任何一个都会让整个任务停下来。<bookmark mark='c'/>多亏了自动化，只有三次故障需要人来处理，这次训练有超过百分之九十的时间都在训练。<bookmark mark='d'/>就连天气都看得出来，在吞吐量上，也在用电量上。",
 
-    'f"So a run saves itself regularly':
-        "所以，一次训练会定期保存自己，也就是每块GPU状态的一个检查点，出故障后就从最近的一个重新开始。多久保存一次？每tau秒保存一次，每次花费delta，浪费的是训练时间的tau分之delta。<bookmark mark='a'/>而故障平均每M秒来一次，会扔掉自上次保存以来的工作：平均半个间隔，所以还要再加上2M分之tau。<bookmark mark='b'/>令导数为零。<bookmark mark='c'/>最好的间隔，是2倍delta乘M的平方根：这是约翰·杨在1974年给出的法则。<bookmark mark='d'/>对Llama 3：Meta的检查点每块GPU最多四吉字节，它的存储每秒能写两太字节，所以一次完整的保存大约要{P['llama_ckpt_s']:.0f}秒；每{P['llama_mtbf_h']:.1f}小时一次故障，大约每{P['llama_young_s'] / 60:.0f}分钟保存一次。",
+    'f"So a run saves a checkpoint':
+        "所以，一次训练会定期为每块GPU的状态保存一个检查点，出故障后就从最近的一个重新开始。多久保存一次？每tau秒保存一次，每次花费delta，浪费的是训练时间的tau分之delta。<bookmark mark='a'/>而故障平均每M秒来一次，会扔掉自上次保存以来的工作：平均半个间隔，所以还要再加上2M分之tau。<bookmark mark='b'/>令导数为零。<bookmark mark='c'/>最好的间隔，是2倍delta乘M的平方根：这是约翰·杨在1974年给出的法则。<bookmark mark='d'/>对Llama 3：检查点每块GPU最多四吉字节，存储每秒能写两太字节，所以一次完整的保存大约要{P['llama_ckpt_s']:.0f}秒；每{P['llama_mtbf_h']:.1f}小时一次故障，大约每{P['llama_young_s'] / 60:.0f}分钟保存一次。",
 
     'f"We simulated it:':
-        "我们做了模拟：{Fa['H'] / 86400:.0f}天的训练，故障随机到来，平均每{Fa['M'] / 3600:.1f}小时一次，保存要{Fa['delta']:.0f}秒，重启要十分钟，这只是举例；对每一种检查点间隔，都模拟很多遍。<bookmark mark='a'/>保存得太勤，保存本身就会吃掉训练。太少，每次故障都会扔掉几个小时。<bookmark mark='b'/>模拟里最好的间隔是{Fa['best_tau'] / 60:.0f}分钟；杨的法则说是{Fa['young'] / 60:.0f}分钟。<bookmark mark='c'/>即便如此，还是有{100 * lost:.0f}%的时间损失掉了：光是重启就占{100 * restart_share:.0f}%，其余的花在保存和重做的工作上。这就是为什么前沿实验室要让重启变快，让检查点异步写出，在训练继续的同时写入；也是为什么DeepSeek-V4的内核是确定性的：一次能够精确重放的训练，才能被调试。",
+        "我们做了模拟：{Fa['H'] / 86400:.0f}天的训练，故障随机到来，平均每{Fa['M'] / 3600:.1f}小时一次，保存要{Fa['delta']:.0f}秒，重启要十分钟，这只是举例；对每一种检查点间隔，都模拟很多遍。<bookmark mark='a'/>保存得太勤，保存本身就会吃掉训练。太少，每次故障都会扔掉几个小时。<bookmark mark='b'/>模拟里最好的间隔是{Fa['best_tau'] / 60:.0f}分钟；杨的法则说是{Fa['young'] / 60:.0f}分钟。<bookmark mark='c'/>即便如此，还是有{100 * lost:.0f}%的时间损失掉了：光是重启就占{100 * restart_share:.0f}%，其余的花在保存和重做的工作上。这就是为什么前沿实验室要让重启变快，让检查点异步写出；也是为什么DeepSeek-V4的内核是确定性的：一次能够精确重放的训练，才能被调试。",
 
     # ------------------------------------------------------------------ Recipe
     'Chapter eighteen. Our own full recipe.':
@@ -445,7 +481,7 @@ _DATA = {
         '两词元预测没有放进来：在第16章，它在我们的规模上没有带来收益，而且要额外的算力，会让比较不公平。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。',
 
     'f"Watch them learn.':
-        "看它们学习。左边是每个模型在它从没训练过的文本上的损失；右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='a'/>一开始，两个都写出噪声，损失大约是{first['val']:.1f}奈特。<bookmark mark='b'/>让它们读吧。<bookmark mark='c'/>到最后，两个都写出了小说的味道，而曲线告诉我们，哪一个学得更快。",
+        "看它们学习。左边是每个模型在它从没训练过的文本上的损失；右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='a'/>一开始，两个都写出噪声，损失大约是{first['val']:.1f}奈特。<bookmark mark='b'/>让它们读吧。<bookmark mark='c'/>到最后，比一比它们写出的东西；曲线告诉我们，哪一个学得更快。",
 
     '"The scores.':
         "成绩。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{stab}",
@@ -497,6 +533,16 @@ _DATA = {
 ZH = dict(_DATA)
 
 PHRASES = {
+    # ZeRO: the measured traffic against the paper's 1.5
+    "ZeRO's one and a half, measured.": 'ZeRO的一倍半，实测出来了。',
+    "ZeRO's paper predicts one and a half.": 'ZeRO的论文预测的是一倍半。',
+    # Context: the zigzag split's balance
+    'Now every GPU does the same work.': '现在每块GPU的工作量都一样了。',
+    # Mixture: model collapse, as measured
+    'The damage stays much smaller.': '损害要小得多。',
+    'Here it only slows the damage.': '在这里，它只是让损害来得慢一些。',
+    # Quality: the scoreboard passage's contamination check
+    'Clean.': '是干净的。',
     # MTP: where the module's arithmetic goes
     'mostly its own transformer block': '主要花在它自己的Transformer块上',
     # Outro: the S-curve, as measured

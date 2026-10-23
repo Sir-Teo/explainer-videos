@@ -54,6 +54,12 @@ class Curriculum(VoiceoverScene):
         lg.move_to([2.9, 0.2, 0])
         b = R["branch"]
         gain = b["stable_val"] - b["val"]
+        # does the loss fall faster in the main run's cooldown than over as many steps of its stable phase?
+        d0 = steps - int(round(full["spec"]["decay_frac"] * steps))
+        at = lambda st: float(np.interp(st, ev_f[:, 0], ev_f[:, 2]))  # noqa: E731
+        cool, flat = at(d0) - at(steps), at(2 * d0 - steps) - at(d0)
+        shape = ("The held-out loss creeps down during the stable phase, and drops faster in the cooldown."
+                 if cool > 1.5 * flat else "The held-out loss falls through the stable phase and the cooldown alike.")
         dot1 = Dot(g2.ax.c2p(b["stable_step"], b["stable_val"]), radius=0.07, color=FULL_C)
         dot2 = Dot(g2.ax.c2p(b["steps"], b["val"]), radius=0.07, color=KEPT)
         tag = note(r"computed: \ our 2026 recipe's run, \ and a branch of it", font_size=18).to_corner(DR, buff=0.2)
@@ -68,8 +74,8 @@ class Curriculum(VoiceoverScene):
             "The learning rate falls as a run ends, and how it falls matters. Part 11's cosine starts decaying at once, "
             "so you must know the length of the run in advance. <bookmark mark='a'/> Since 2024 more runs use warmup, "
             "stable, decay: hold the peak learning rate, and cool down only over the last tenth or fifth of the steps. "
-            "<bookmark mark='b'/> Here is the run of our own 2026 recipe, from chapter eighteen. The held-out loss creeps "
-            "down during the stable phase and drops in the cooldown. <bookmark mark='c'/> The payoff: from any checkpoint "
+            "<bookmark mark='b'/> Here is the run of our own 2026 recipe, from chapter eighteen. " + shape +
+            " <bookmark mark='c'/> The payoff: from any checkpoint "
             f"of the stable phase you can branch off a short cooldown. We branched one at step {start}. "
             "<bookmark mark='d'/> " + verdict + " That is why WSD is used to try many lengths of training, or many data "
             "mixtures, from one run."

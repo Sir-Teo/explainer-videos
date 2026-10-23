@@ -93,13 +93,13 @@ class MTP(VoiceoverScene):
         src = cite(r"DeepSeek-AI (2024), Secs.\ 2.2, 4.2, 5.4.3", corner=DR, font_size=16)
         with self.voiceover(
             "DeepSeek-V3 made the extra prediction sequential. The main model predicts the next token as usual. "
-            "<bookmark mark='a'/> A small module then takes the main model's last hidden state at position i, and "
-            "the embedding of the true next token, <bookmark mark='b'/> normalizes both, joins them, passes them "
-            "through one more transformer block, and predicts the token after next with the same output head. "
-            "<bookmark mark='c'/> Its loss is added with a weight of 0.3 for the first ten trillion tokens, then 0.1. "
-            "<bookmark mark='d'/> At inference the module can be dropped, or used to guess the second token in "
-            "advance, and the main model checks the guess. DeepSeek reports the guess accepted 85 to 90 percent of "
-            "the time; each step then yields about 1.85 to 1.9 tokens, and they measured 1.8 times the speed."
+            "<bookmark mark='a'/> A small module then takes the main model's last hidden state at position i and the "
+            "embedding of the true next token, <bookmark mark='b'/> normalizes both, joins them, passes them through one "
+            "more transformer block, and predicts the token after next with the same output head. <bookmark mark='c'/> Its "
+            "loss is added with a weight of 0.3 for the first ten trillion tokens, then 0.1. <bookmark mark='d'/> At "
+            "inference the module can be dropped, or used to guess the second token ahead for the main model to check. "
+            "DeepSeek reports the guess accepted 85 to 90 percent of the time, about 1.85 to 1.9 tokens per step, and 1.8 "
+            "times the speed."
         ) as vo:
             self.play(FadeIn(main), FadeIn(out1), FadeIn(src))
             vo.wait_until("a")

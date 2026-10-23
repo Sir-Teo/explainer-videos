@@ -285,20 +285,33 @@ class Mixture(VoiceoverScene):
                    rf"\ ${Cl['seeds']}$ seeds", font_size=18).to_corner(DR, buff=0.2)
         start, end = rep[:, 0, 0].mean(), rep[:, -1, 0].mean()
         lost = rep[:, -1, 2].mean()
+        ce_r, ce_a = rep[:, :, 1].mean(0), acc[:, :, 1].mean(0)
+        if (np.diff(ce_r) > 0).all():
+            climb = "Its cross-entropy on real text climbs with every generation."
+        elif ce_r[-1] > ce_r[0]:
+            climb = "Its cross-entropy on real text climbs over the generations."
+        else:
+            climb = "Its cross-entropy on real text barely moves."
+        kept_all = acc[:, -1, 0].mean() >= acc[:, 0, 0].mean()
+        small = (ce_a[-1] - ce_a[0]) < 0.5 * (ce_r[-1] - ce_r[0])
+        if kept_all and small:
+            cure = "Nothing real is lost, and the damage stays small."
+        elif small:
+            cure = "The damage stays much smaller."
+        else:
+            cure = "Here it only slows the damage."
         src = cite(r"Shumailov et al., \textit{Nature} (2024); \ Gerstgrasser et al.\ (2024)", font_size=17)
         with self.voiceover(
-            "But a model trained on a model's output has a known failure. Shumailov and colleagues called it model "
-            "collapse, in Nature in 2024: train each generation on the last one's samples, and the tails of the "
-            "distribution vanish. We can watch it in the simplest language model there is, the frequencies of the "
-            "novels' tokens. <bookmark mark='a'/> Fit it to fifty thousand real tokens; sample fifty thousand from "
-            "it; fit the next generation to those; and repeat. A rare token that happens not to be sampled once is "
-            f"gone for good. <bookmark mark='b'/> Over {gens} generations, the tokens it can produce fall from "
-            f"{start:,.0f} to {end:,.0f}, and the lost ones carried {100 * lost:.0f} percent of real text. "
-            "<bookmark mark='c'/> Its cross-entropy on real text climbs with every generation. "
-            "<bookmark mark='d'/> Gerstgrasser and colleagues found the way out the same year: keep the real data, "
-            "and add each generation's samples to it instead of replacing it. Then nothing real is ever lost, and "
-            "the damage stays small. That is how the synthetic data of 2026 is used: alongside real text, never "
-            "instead of it."
+            "But training on a model's output has a known failure. Shumailov and colleagues called it model collapse, in "
+            "Nature in 2024: train each generation on the last one's samples, and the tails of the distribution vanish. "
+            "We can watch it in the simplest language model there is, the frequencies of the novels' tokens. "
+            "<bookmark mark='a'/> Fit it to fifty thousand real tokens, sample fifty thousand from it, fit the next "
+            "generation to those, and repeat: a rare token that once fails to be sampled is gone for good. "
+            f"<bookmark mark='b'/> Over {gens} generations, the tokens it can produce fall from {start:,.0f} to "
+            f"{end:,.0f}, and the lost ones carried {100 * lost:.0f} percent of real text. <bookmark mark='c'/> " + climb +
+            " <bookmark mark='d'/> Gerstgrasser and colleagues found the way out the same year: keep the real data, and "
+            "add each generation's samples to it instead of replacing it. " + cure + " That is how synthetic data is used "
+            "in 2026: alongside real text, never instead of it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), FadeIn(sch), FadeIn(src), FadeIn(lg[0]))
             vo.wait_until("a")

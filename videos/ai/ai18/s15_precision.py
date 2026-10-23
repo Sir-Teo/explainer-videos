@@ -72,13 +72,12 @@ class Precision(VoiceoverScene):
         src = cite(r"IEEE 754 (1985); \ Micikevicius et al.\ (2018, 2022); \ computed here", corner=DR, font_size=16)
         with self.voiceover(
             "Every number in a training run takes memory and bandwidth, and narrower numbers multiply faster: Part "
-            "17's tensor cores do twice the work in eight bits as in sixteen. So how few bits can training use? "
-            "<bookmark mark='a'/> Here are the formats, on a scale of powers of two, as far as each reaches before "
-            "its numbers become too small or too large. <bookmark mark='b'/> FP32 and bfloat16 share an eight-bit "
-            "exponent, so the same enormous range; bfloat16 just keeps fewer digits. Half precision, FP16, has five "
-            "exponent bits: nothing below about six times ten to the minus eight, and a fainter zone of "
-            "low-precision subnormals below two to the minus fourteen. <bookmark mark='c'/> Now the numbers that "
-            "matter: the gradients flowing back through our model's matrix products, measured after sixty steps. "
+            "17's tensor cores do twice the work in eight bits as in sixteen. How few bits can training use? "
+            "<bookmark mark='a'/> Here are the formats, on a scale of powers of two, as far as each reaches. "
+            "<bookmark mark='b'/> FP32 and bfloat16 share an eight-bit exponent, so the same enormous range; bfloat16 "
+            "just keeps fewer digits. FP16 has five exponent bits: nothing below about six times ten to the minus eight, "
+            "and only low-precision subnormals below two to the minus fourteen. <bookmark mark='c'/> Now the numbers that "
+            "matter: the gradients flowing back through our model's matrix products, after sixty steps. "
             f"<bookmark mark='d'/> {100 * H['below_normal']:.0f} percent of them are below FP16's smallest normal "
             f"number, and {100 * H['below_sub']:.0f} percent are so small that FP16 rounds them to zero."
         ) as vo:
@@ -118,13 +117,13 @@ class Precision(VoiceoverScene):
         src = cite(r"Micikevicius et al., \textit{Mixed Precision Training} (ICLR 2018)", corner=DR, font_size=17)
         with self.voiceover(
             "The fix, from Micikevicius and colleagues at NVIDIA and Baidu in 2018, is loss scaling. "
-            "<bookmark mark='a'/> Multiply the loss by a large number S before the backward pass. The chain rule is "
-            "linear, so every gradient comes out S times larger. <bookmark mark='b'/> On the scale of powers of two, "
-            "the whole distribution slides to the right by sixteen places for S of two to the sixteen, into FP16's "
-            "range. <bookmark mark='c'/> Then divide the weights' gradients by S before the update, which happens in "
-            "thirty-two bits. <bookmark mark='d'/> Too large an S makes the biggest gradients overflow, so in "
-            "practice S is dynamic: halve it and skip the step when an overflow appears, double it after a run of "
-            "good steps. BFloat16, with FP32's range, needs none of this, which is why it took over."
+            "<bookmark mark='a'/> Multiply the loss by a large number S before the backward pass; the chain rule is "
+            "linear, so every gradient comes out S times larger. <bookmark mark='b'/> For S of two to the sixteen, the "
+            "whole distribution slides sixteen places to the right, into FP16's range. <bookmark mark='c'/> Then divide "
+            "the weights' gradients by S before the update, which happens in thirty-two bits. <bookmark mark='d'/> Too "
+            "large an S makes the biggest gradients overflow, so S is dynamic: halve it and skip the step on an overflow, "
+            "double it after a run of good steps. Bfloat16, with FP32's range, needs none of this, which is why it took "
+            "over."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(bars), FadeIn(floor), FadeIn(top_), FadeIn(src))
             vo.wait_until("a")
@@ -302,17 +301,15 @@ class Precision(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([0.0, -1.5, 0])
         src = cite(r"DeepSeek-AI (2024), Sec.\ 3.3", corner=DR, font_size=17)
         with self.voiceover(
-            "Eight bits is harder. E4M3, the eight-bit format with four exponent bits, spans only about eighteen "
-            "powers of two, so every tensor needs a scale that moves its values into range. One scale per tensor, as the "
-            "first FP8 recipes used, is set by the largest value. <bookmark mark='a'/> And real activations have a "
-            "few large values. Here are 128 inputs to one matrix product of the series' model. "
-            f"<bookmark mark='b'/> With one scale for the whole tensor, rounding to E4M3 costs "
-            f"{100 * q['act_tensor']:.1f} percent; with one scale per tile of 128 values, "
-            f"{100 * q['act_tile']:.1f}. <bookmark mark='c'/> DeepSeek-V3 trained its 671 billion parameters this way: "
-            "a scale for every 128 values of an activation and every 128 by 128 block of a weight. It also found "
-            "that the tensor cores keep only about fourteen bits while summing, so it moved the partial sums to FP32 "
-            "every 128 terms, and kept the sensitive parts in higher precision. Its loss stayed within a quarter of "
-            "a percent of a sixteen-bit run."
+            "Eight bits is harder. E4M3, the format with four exponent bits, spans only about eighteen powers of two, so "
+            "every tensor needs a scale to move its values into range. One scale per tensor, as the first FP8 recipes "
+            "used, is set by the largest value. <bookmark mark='a'/> And real activations have a few large values: here "
+            "are 128 inputs to one matrix product of the series' model. <bookmark mark='b'/> With one scale for the whole "
+            f"tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; with one scale per tile of 128 values, "
+            f"{100 * q['act_tile']:.1f}. <bookmark mark='c'/> DeepSeek-V3 trained its 671 billion parameters this way, "
+            "with a scale for every 128 values of an activation and every 128 by 128 block of a weight. Its tensor cores "
+            "kept only about fourteen bits while summing, so it moved the partial sums to FP32 every 128 terms, and kept "
+            "the sensitive parts in higher precision. Its loss stayed within a quarter of a percent of a sixteen-bit run."
         ) as vo:
             self.play(FadeIn(bl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.005), run_time=2.0)
             vo.wait_until("a")
@@ -353,17 +350,15 @@ class Precision(VoiceoverScene):
         src = cite(r"Mishra et al.\ (2025); \ NVIDIA (2025, 2026); \ Moonshot AI (2026); \ DeepSeek-AI (2026)",
                    corner=UR, font_size=16)
         with self.voiceover(
-            "The newest chips go further, with scales in the hardware itself. NVIDIA's Blackwell multiplies "
-            "microscaled formats: blocks of 32 numbers sharing one scale, MXFP8, and NVIDIA reported in 2025 that "
-            "an eight-billion-parameter model trained in it on fifteen trillion tokens matched bfloat16. "
-            "<bookmark mark='a'/> Then four bits: NVFP4 packs sixteen four-bit values with one eight-bit scale. "
-            "<bookmark mark='b'/> NVIDIA pretrained a twelve-billion-parameter model on ten trillion tokens in it, "
-            "with random rotations to spread out the outliers and stochastic rounding for the gradients, and kept "
-            "sixteen percent of the layers in bfloat16; it matched the FP8 model's MMLU-Pro score to within a "
-            "twentieth of a point. <bookmark mark='c'/> In March 2026, NVIDIA's Nemotron 3 Super was pretrained in "
-            "NVFP4 on 25 trillion tokens. And Kimi K3 ships four-bit weights, and DeepSeek-V4 four-bit experts, both "
-            "learned in quantization-aware training. <bookmark mark='d'/> Each halving of the bits came with a new way of "
-            "scaling."
+            "The newest chips put the scales into hardware. NVIDIA's Blackwell multiplies microscaled formats, blocks of "
+            "32 numbers sharing one scale; in 2025 NVIDIA reported an eight-billion-parameter model trained in MXFP8 on "
+            "fifteen trillion tokens matching bfloat16. <bookmark mark='a'/> Then four bits: NVFP4 packs sixteen four-bit "
+            "values with one eight-bit scale. <bookmark mark='b'/> NVIDIA pretrained a twelve-billion-parameter model on "
+            "ten trillion tokens in it, with random rotations to spread out the outliers, stochastic rounding for the "
+            "gradients, and sixteen percent of the layers kept in bfloat16; it matched the FP8 model's MMLU-Pro score to "
+            "within a twentieth of a point. <bookmark mark='c'/> In March 2026, Nemotron 3 Super was pretrained in NVFP4 "
+            "on 25 trillion tokens; Kimi K3 ships four-bit weights and DeepSeek-V4 four-bit experts, both from "
+            "quantization-aware training. <bookmark mark='d'/> Each halving of the bits came with a new way of scaling."
         ) as vo:
             self.play(FadeIn(items[0]), FadeIn(src))
             vo.wait_until("a")

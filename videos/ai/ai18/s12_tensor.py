@@ -60,14 +60,13 @@ class TensorParallel(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, 0.4, 0])
         hist = cite(r"Shoeybi et al., Megatron-LM (NVIDIA, 2019)", corner=DR, font_size=17)
         with self.voiceover(
-            "When a single layer is too big, or too slow, for one GPU, split the layer itself. NVIDIA's Megatron-LM "
-            "showed how in 2019, for the transformer's two halves. Take the MLP: Z equals X times A, a nonlinearity, "
-            "then times B. <bookmark mark='a'/> Split A by columns, half on each GPU. Each computes its half of Y "
-            "from the whole input, with no communication. <bookmark mark='b'/> The nonlinearity acts on each column "
-            "on its own, so it stays local too. <bookmark mark='c'/> Now split B by rows. GPU one multiplies its half "
-            "of Y by its half of B, GPU two the other: each gets a full-size partial result, and the answer is their "
-            "sum. One all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going forward, called g, "
-            "and one going backward, f, for the gradient of the input that both halves used."
+            "When a single layer is too big or too slow for one GPU, split the layer itself. NVIDIA's Megatron-LM showed "
+            "how in 2019. Take the MLP: Z equals X times A, a nonlinearity, then times B. <bookmark mark='a'/> Split A by "
+            "columns, half on each GPU: each computes its half of Y from the whole input, with no communication. "
+            "<bookmark mark='b'/> The nonlinearity acts on each column alone, so it stays local too. <bookmark mark='c'/> "
+            "Now split B by rows. Each GPU multiplies its half of Y by its half of B and gets a full-size partial result; "
+            "the answer is their sum, one all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going "
+            "forward, called g, and one going backward, f, for the gradient of the input both halves used."
         ) as vo:
             self.play(FadeIn(X), FadeIn(hist))
             vo.wait_until("a")
@@ -108,15 +107,14 @@ class TensorParallel(VoiceoverScene):
         src = cite(r"Shoeybi et al.\ (2019); \ Korthikanti et al.\ (2022); \ Llama Team (2024), Sec.\ 3.3",
                    corner=DR, font_size=17)
         with self.voiceover(
-            "Attention splits even more naturally: its heads are independent. <bookmark mark='a'/> Give each GPU "
-            "the queries, keys and values of half the heads; each computes its heads alone, and the output "
-            "projection, split by rows, ends in one all-reduce. <bookmark mark='b'/> So a transformer layer costs two "
-            "all-reduces going forward and two going back, each of a full activation: batch, times sequence, times "
-            "width. <bookmark mark='c'/> That happens in every layer for every micro-batch, so tensor parallelism "
-            "lives where bandwidth is highest, inside one machine's NVLink domain. Llama 3 used eight-way tensor "
-            "parallelism, the innermost of its four dimensions. <bookmark mark='d'/> A refinement from 2022, "
-            "sequence parallelism, turns each all-reduce into a reduce-scatter and an all-gather, and splits the "
-            "remaining activations by position as well."
+            "Attention splits even more naturally: its heads are independent. <bookmark mark='a'/> Give each GPU the "
+            "queries, keys and values of half the heads; each computes its heads alone, and the output projection, split "
+            "by rows, ends in one all-reduce. <bookmark mark='b'/> So a transformer layer costs two all-reduces forward and "
+            "two backward, each of a full activation: batch times sequence times width. <bookmark mark='c'/> That happens "
+            "in every layer for every micro-batch, so tensor parallelism lives where bandwidth is highest, inside one "
+            "machine's NVLink domain; Llama 3 used eight-way tensor parallelism, the innermost of its four dimensions. "
+            "<bookmark mark='d'/> A refinement from 2022, sequence parallelism, turns each all-reduce into a "
+            "reduce-scatter and an all-gather, and splits the remaining activations by position too."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(h_) for h_ in heads], lag_ratio=0.1), FadeIn(src))
             vo.wait_until("a")

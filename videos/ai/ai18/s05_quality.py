@@ -120,6 +120,8 @@ class Quality(VoiceoverScene):
                        "through about as many bad ones.")
         tag = note(r"computed: \ Llama 3's labels from FineWeb-Edu's released annotations").to_corner(DR, buff=0.2)
         good = sum(counts[3:])
+        commonest = (r"Most pages score one: a little information, not much teaching." if int(np.argmax(counts)) == 1
+                     else f"The commonest score is {int(np.argmax(counts))}.")
         share = VGroup(
             stat(rf"${100 * good / Q['n']:.1f}\%$", rf"score $3$ or more: \ ${good:,}$ of ${Q['n']:,}$ pages"
                  .replace(",", "{,}"), color=KEPT, font_size=48, cap_size=22),
@@ -127,10 +129,10 @@ class Quality(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).move_to([3.4, 0.0, 0])
         with self.voiceover(
             "We can run this recipe ourselves, because FineWeb released Llama 3's annotations. <bookmark mark='a'/> "
-            f"We downloaded {spoken_int(Q['n'])} of them. Most pages score one: a little information, not much "
-            f"teaching. Only {100 * sum(counts[3:]) / Q['n']:.0f} percent score three or more, and {counts[5]} of ours "
-            "scored five. <bookmark mark='b'/> For the small model we used fastText, a linear model on words and word pairs "
-            f"that trains in seconds, on {spoken_int(Q['n_train'])} pages, with the cut chosen on a thousand others. "
+            f"We downloaded {spoken_int(Q['n'])} of them. " + commonest +
+            f" {100 * sum(counts[3:]) / Q['n']:.0f} percent score three or more, and {counts[5]} of ours scored five. "
+            "<bookmark mark='b'/> For the small model we used fastText, a linear model on words and word pairs that "
+            f"trains in seconds, on {spoken_int(Q['n_train'])} pages, with the cut chosen on a thousand others. "
             "<bookmark mark='c'/> " + verdict
         ) as vo:
             self.play(FadeIn(bl), FadeIn(tag), LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1]),
@@ -179,11 +181,10 @@ class Quality(VoiceoverScene):
             "Now run it on our crawl sample. <bookmark mark='a'/> Here are the two pages it scores highest, "
             "<bookmark mark='b'/> and the two it scores lowest. <bookmark mark='c'/> "
             f"It keeps {Q['cc_kept_n']} of our {spoken_int(Q['cc_n'])} English pages, "
-            f"{100 * Q['cc_kept']:.1f} percent. FineWeb-Edu kept about nine percent of FineWeb's tokens. "
-            "<bookmark mark='d'/> Other recipes use other targets. DataComp-LM, DCLM, trained its fastText filter to "
-            "find text that looks like instructions and good answers, and a seven-billion-parameter model on 2.6 "
-            "trillion of its tokens reached 64 percent on MMLU. Every serious corpus of 2026 has a filter like these; "
-            "most, like Qwen3's, have many."
+            f"{100 * Q['cc_kept']:.1f} percent; FineWeb-Edu kept about nine percent of FineWeb's tokens. "
+            "<bookmark mark='d'/> Other recipes aim elsewhere: DataComp-LM, DCLM, trained its fastText filter to find text "
+            "like instructions and good answers, and a seven-billion-parameter model on 2.6 trillion of its tokens reached "
+            "64 percent on MMLU. Every serious corpus of 2026 has filters like these, most of them several."
         ) as vo:
             self.play(FadeIn(hl), FadeIn(ll), FadeIn(tag))
             vo.wait_until("a")
@@ -235,17 +236,22 @@ class Quality(VoiceoverScene):
         wn = note(r"a $13$-word window slides along the test \ (schematic)", font_size=17).next_to(chips, DOWN,
                                                                                                   buff=0.22)
         src = cite(r"Brown et al.\ (2020), App.\ C", font_size=17)
+        clean = ("Clean." if K["passage_hits"] == 0 and K["passage_hits8"] <= 0.001 * K["passage_grams8"] else
+                 "Not quite clean: the passage shares some of its wording with the training text.")
+        share = K["valid_flagged"] / K["valid_paras"]
+        held = (f"Our held-out paragraphs are almost clean: {K['valid_flagged']} of {spoken_int(K['valid_paras'])} share"
+                if share < 0.01 else
+                f"Our held-out paragraphs are less clean: {K['valid_flagged']} of {spoken_int(K['valid_paras'])} share")
         with self.voiceover(
             "One more filter, pointed the other way. If the questions of a benchmark are on the web, a model can pass "
             "it by memory. <bookmark mark='a'/> GPT-3's authors looked for any thirteen-word sequence shared between "
             "each test and the training text, and flagged what they found. <bookmark mark='b'/> We can check the "
             "series' own test. The scoreboard's passage, chapter two of The Maltese Falcon, has "
             f"{spoken_int(K['passage_grams'])} thirteen-word sequences; {K['passage_hits']} of them occur anywhere in "
-            f"the thirty novels we train on, and only {K['passage_hits8']} of its eight-word sequences. Clean. "
-            "<bookmark mark='c'/> Our held-out paragraphs are almost clean: "
-            f"{K['valid_flagged']} of {spoken_int(K['valid_paras'])} share a sequence with the training text, like "
-            "this one, a sentence that a novel repeats. On the web, popular benchmarks are copied everywhere, so labs "
-            "now run checks like this on every test they report."
+            f"the thirty novels we train on, and {K['passage_hits8']} of its eight-word sequences. " + clean +
+            " <bookmark mark='c'/> " + held + " a sequence with the training text, like this one, a sentence that a "
+            "novel repeats. On the web, popular benchmarks are copied everywhere, so labs now run checks like this on "
+            "every test they report."
         ) as vo:
             self.play(FadeIn(q), FadeIn(src))
             vo.wait_until("a")

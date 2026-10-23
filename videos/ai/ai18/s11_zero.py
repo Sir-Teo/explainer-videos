@@ -54,13 +54,13 @@ class ZeRO(VoiceoverScene):
 
         with self.voiceover(
             "Data parallelism has a waste built in: every GPU keeps the whole model, its gradients and its optimizer "
-            "state, the sixteen bytes per parameter of chapter eight, all identical. <bookmark mark='a'/> In 2019 "
-            "Samyam Rajbhandari and colleagues at Microsoft proposed ZeRO, the zero-redundancy optimizer: split "
-            "them. <bookmark mark='b'/> Stage one: each GPU keeps the optimizer state for a quarter of the "
-            "parameters, and updates only those. <bookmark mark='c'/> Stage two: each also keeps only the gradients "
-            "of its quarter. <bookmark mark='d'/> Stage three: and only its quarter of the weights, fetching the "
-            "others from its neighbours just before a layer needs them, and dropping them after. PyTorch's version "
-            "of stage three is called FSDP, fully sharded data parallel."
+            "state, chapter eight's sixteen bytes per parameter, all identical. <bookmark mark='a'/> In 2019 Samyam "
+            "Rajbhandari and colleagues at Microsoft proposed ZeRO, the zero-redundancy optimizer: split them. "
+            "<bookmark mark='b'/> Stage one: each GPU keeps the optimizer state for a quarter of the parameters, and "
+            "updates only those. <bookmark mark='c'/> Stage two: only the gradients of its quarter, too. "
+            "<bookmark mark='d'/> Stage three: only its quarter of the weights, fetching the rest from its neighbours just "
+            "before a layer needs them, and dropping them after. PyTorch's stage three is called FSDP, fully sharded data "
+            "parallel."
         ) as vo:
             self.play(FadeIn(grids), FadeIn(stage_t[0]))
             vo.wait_until("a")
@@ -142,15 +142,14 @@ class ZeRO(VoiceoverScene):
                       run_time=0.5)
 
         with self.voiceover(
-            "What does sharding cost in communication? With stages one and two, nothing extra: the all-reduce was "
-            "already a reduce-scatter and an all-gather. Each GPU reduce-scatters the gradients, updates its "
-            "quarter, and all-gathers the new weights. <bookmark mark='a'/> Stage three keeps only a quarter of each "
-            "layer's weights. Before the layer runs forward, the GPUs all-gather it; afterwards they drop it. "
-            "<bookmark mark='b'/> The backward pass needs the weights again: gather once more. "
-            "<bookmark mark='c'/> And the gradients are reduce-scattered, so each GPU keeps only its quarter. "
-            "<bookmark mark='d'/> That is three passes over the parameters instead of two: half as much traffic "
-            "again, in exchange for memory divided by N. Meta trained Llama 3 with FSDP across its data-parallel "
-            "groups; DeepSeek-V3 used stage one."
+            "What does sharding cost in communication? Stages one and two cost nothing extra: the all-reduce was already "
+            "a reduce-scatter and an all-gather, so each GPU reduce-scatters the gradients, updates its quarter, and "
+            "all-gathers the new weights. <bookmark mark='a'/> Stage three keeps only a quarter of each layer's weights: "
+            "before the layer runs forward, the GPUs all-gather it, and afterwards they drop it. <bookmark mark='b'/> The "
+            "backward pass needs the weights again: gather once more. <bookmark mark='c'/> And the gradients are "
+            "reduce-scattered, so each GPU keeps only its quarter. <bookmark mark='d'/> Three passes over the parameters "
+            "instead of two: half as much traffic again, in exchange for memory divided by N. Meta trained Llama 3 with "
+            "FSDP across its data-parallel groups; DeepSeek-V3 used stage one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lab))
             vo.wait_until("a")
@@ -195,6 +194,8 @@ class ZeRO(VoiceoverScene):
             body.add(VGroup(*cells))
         ratio_mem = Pr["persistent_dp"] / Pr["persistent_z3"]
         ratio_comm = Pr["sent_z3"] / Pr["sent_dp"]
+        match15 = ("ZeRO's one and a half, measured." if abs(ratio_comm - 1.5) < 0.05 else
+                   "ZeRO's paper predicts one and a half.")
         res = VGroup(
             label(rf"memory: \ ${ratio_mem:.2f}\times$ less, \ plus one layer at a time "
                   rf"(${Pr['transient_z3']:,}$ numbers)".replace(",", "{,}"), font_size=24, color=OPT),
@@ -214,7 +215,7 @@ class ZeRO(VoiceoverScene):
             "parameters, gradients and Adam moments, gathers a layer just before it runs, forward and backward, and "
             "reduce-scatters its gradients. <bookmark mark='a'/> " + same + " "
             f"<bookmark mark='b'/> Each process keeps {ratio_mem:.0f} times fewer numbers, plus one layer at a time. "
-            f"<bookmark mark='c'/> And it sends {ratio_comm:.2f} times as much: ZeRO's one and a half, measured."
+            f"<bookmark mark='c'/> And it sends {ratio_comm:.2f} times as much: " + match15
         ) as vo:
             self.play(FadeIn(hd), FadeIn(body[0]), FadeIn(tag))
             vo.wait_until("a")

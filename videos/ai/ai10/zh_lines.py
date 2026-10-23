@@ -211,7 +211,13 @@ ZH = {
         "这里随机失活对测试错误率影响不大：{pct(vals['0.5'][1])}%对{pct(vals['0.0'][1])}%。",
 
     'f"The third ingredient was the one ImageNet supplied: data.':
-        "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为负{abs(slope):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}第12部分讲的就是这样的直线。",
+        "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。{law}<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}",
+
+    'f"On a log-log plot the test error first falls':
+        "在对数-对数图上，测试错误率先沿着一条直线下降，是一条斜率约为负{abs(s3):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** s3):.0f}%。然后这条线弯平了：在{int(d['steps']):,}步里，{sizes[-1]:,}个数字每个只被看到{passes:.1f}遍，网络用不上全部数据。更多的数据只有配上更多的训练才划算，这正是第12部分要讲的平衡。",
+
+    "f'On a log-log plot the test error falls along":
+        "在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为负{abs(slope):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。第12部分讲的就是这样的直线。",
 
     "f'Shifted copies help: with {sizes[1]:,} digits, {pct(e_small)} percent wrong becomes {pct(e_small_aug)}, better":
         "平移的副本有帮助：用{sizes[1]:,}个数字时，{pct(e_small)}%的错误率降到了{pct(e_small_aug)}%，比四倍的真实数字还好。",

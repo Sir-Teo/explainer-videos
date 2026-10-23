@@ -59,8 +59,8 @@ class DataParallel(VoiceoverScene):
             "the gradients, so that every copy takes exactly the same step, and they stay identical. The averaging "
             "is an all-reduce, the operation of Part 17. <bookmark mark='c'/> It is the same step as one big batch on "
             f"one device. We checked: {p} processes of this computer, each with a quarter of the batch, against one "
-            f"process with all of it, for {Pr['steps']} steps of AdamW: the losses agree to {digits} digits, and the "
-            "parameters to the last few bits of rounding."
+            f"process with all of it, for {Pr['steps']} steps of AdamW: the losses agree to {digits} digits, and every "
+            f"parameter to within {Pr['err']['dp']:.5f}; only the order of the additions differs."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in gpus], lag_ratio=0.2), FadeIn(lab[0]))
             vo.wait_until("a")
