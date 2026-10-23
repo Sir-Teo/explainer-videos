@@ -5,7 +5,9 @@
     python -m videos.ai.ai27.compute --force rlhf
 
 Results are cached in ``.cache/ai27/<name>.json`` (+ ``.npz``); trained weights in ``.cache/ai27/*.pt``.  Every model
-here is the series' 6.8-million-parameter novels model or a descendant of it, trained on this computer.
+here is the series' 6.8-million-parameter novels model or a descendant of it, trained on this computer.  An
+interrupted run resumes: fine-tuning checkpoints every 50 steps, and the items made of several runs (lora, rlhf,
+dpo_sweep, merge) keep each run as it finishes.
 
 Two tasks, both made from the novels (questions about held-out paragraphs are kept for testing):
 
@@ -53,8 +55,8 @@ from videos.ai.ai27 import post as P
 
 CACHE = Cache("ai27")
 load = CACHE.load
-# 2 threads by default: on a shared 4-core machine more threads ran slower, not faster
-torch.set_num_threads(int(os.environ.get("AI27_THREADS", "2")))
+# small models: past four threads the gain is small; on a busy machine fewer (AI27_THREADS=1) is faster
+torch.set_num_threads(int(os.environ.get("AI27_THREADS", min(4, os.cpu_count() or 1))))
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -202,10 +204,16 @@ def _load_model(name):
     return m.eval()
 
 
+def _ckpt(name):
+    """Where a training run keeps its checkpoint while it runs (``post.sft``)."""
+    CACHE.dir.mkdir(parents=True, exist_ok=True)
+    return CACHE.dir / f"{name}.ckpt"
+
+
 # ---------------------------------------------------------------------------
 # Supervised fine-tuning, LoRA
 # ---------------------------------------------------------------------------
-SFT_STEPS, SFT_LR = 1500, 5e-4
+SFT_STEPS, SFT_LR = 600, 5e-4  # about two passes over the training questions
 
 
 def compute_sft():
@@ -220,7 +228,7 @@ def compute_sft():
                          for i, t in enumerate(TOPICS[:3])]
     model = copy.deepcopy(base)
     curve, evals = P.sft(model, sft_examples(d), SFT_STEPS, SFT_LR, eval_fn=lambda m: which_accuracy(m, d, 150),
-                         eval_every=250)
+                         eval_every=100, ckpt=_ckpt("sft"))
     _save_model(model, "sft")
     out["curve"], out["evals"] = np.array(curve), np.array(evals)
     out["sft_which"] = which_accuracy(model, d)
@@ -238,7 +246,11 @@ def compute_lora(ranks=(1, 4, 16)):
     ex = sft_examples(d, ("which",))
     out = {"ranks": list(ranks)}
     runs = []
+    part = CACHE.partial("lora", dict(ranks=list(ranks), steps=SFT_STEPS))  # each finished run is kept
     for r in list(ranks) + ["full"]:
+        if str(r) in part:
+            runs.append(part[str(r)])
+            continue
         model = copy.deepcopy(_base())
         if r == "full":
             params, lr = [p for p in model.parameters()], SFT_LR
@@ -247,9 +259,10 @@ def compute_lora(ranks=(1, 4, 16)):
             params, lr = P.add_lora(model, r), 2e-3
             n = sum(p.numel() for p in params)
         curve, evals = P.sft(model, ex, SFT_STEPS, lr, params=params, eval_fn=lambda m: which_accuracy(m, d, 150),
-                             eval_every=300)
+                             eval_every=100, ckpt=_ckpt(f"lora_{r}"))
         runs.append({"rank": r, "params": int(n), "which": which_accuracy(model, d),
                      "heldout": P.heldout_loss(model, valid), "evals": evals, "loss": [c[1] for c in curve]})
+        part[str(r)] = runs[-1]
     out["runs"] = runs
     out["total_params"] = int(sum(p.numel() for p in _base().parameters()))
     out["base_heldout"] = P.heldout_loss(_base(), valid)
@@ -488,17 +501,24 @@ def rlhf_run(beta, steps=240, batch=16, lr=2e-5, seed=0, snaps=(0, 40, 80, 160, 
 def compute_rlhf(betas=(0.1, 0.01), seeds=3):
     """Per beta: the mean history over seeds (step, reward model, gold, KL), every seed's, and seed 0's samples."""
     out = {"betas": list(betas), "seeds": seeds}
+    part = CACHE.partial("rlhf", dict(betas=list(betas), seeds=seeds))  # each finished run is kept
     for b in betas:
         key = f"b{b:g}".replace(".", "_")
         runs = []
         for sd in range(seeds):
-            hist, samples, pol = rlhf_run(b, seed=sd)
-            runs.append(hist)
+            if f"{key}/{sd}" not in part:
+                hist, samples, pol = rlhf_run(b, seed=sd)
+                piece = {"hist": hist.tolist()}
+                if sd == 0:
+                    g, e, ex = line_eval(pol, 4, seed=5)
+                    piece["samples"] = samples
+                    piece["final"] = {"gold": g, "ended": e, "examples": ex, "kl": policy_kl(pol, _load_model("sft"))}
+                part[f"{key}/{sd}"] = piece
+            piece = part[f"{key}/{sd}"]
+            runs.append(np.array(piece["hist"]))
             if sd == 0:
-                out[key + "_samples"] = samples
-                g, e, ex = line_eval(pol, 4, seed=5)
-                out[key + "_final"] = {"gold": g, "ended": e, "examples": ex,
-                                       "kl": policy_kl(pol, _load_model("sft"))}
+                out[key + "_samples"] = [tuple(x) for x in piece["samples"]]
+                out[key + "_final"] = piece["final"]
         out[key + "_seeds"] = np.stack(runs)
         out[key] = out[key + "_seeds"].mean(0)
     return out
@@ -565,9 +585,12 @@ def compute_dpo(beta=0.1):
 def compute_dpo_sweep(betas=(0.03, 0.3)):
     """DPO at other betas: gold and divergence, for the reward-per-nat comparison with RLHF and best-of-n."""
     out = []
+    part = CACHE.partial("dpo_sweep", dict(betas=list(betas)))  # each finished run is kept
     for b in betas:
-        pol, ref, _, _ = dpo_train(b)
-        out.append((b, line_eval(pol, 4, seed=5)[0], policy_kl(pol, ref)))
+        if f"{b:g}" not in part:
+            pol, ref, _, _ = dpo_train(b)
+            part[f"{b:g}"] = (b, line_eval(pol, 4, seed=5)[0], policy_kl(pol, ref))
+        out.append(tuple(part[f"{b:g}"]))
     return {"points": out}
 
 
@@ -622,8 +645,16 @@ def compute_merge(lams=(0.0, 0.5, 1.0)):
     tb = _vec(base)
     taus = {}
     for task in ("which", "line"):
-        m = copy.deepcopy(base)
-        P.sft(m, sft_examples(d, (task,)), SFT_STEPS, SFT_LR)
+        done = CACHE.dir / f"merge_{task}.pt"  # each task's fine-tuned weights, kept until the item is saved
+        if done.exists():
+            m = _base()
+            m.load_state_dict(torch.load(done))
+        else:
+            m = copy.deepcopy(base)
+            P.sft(m, sft_examples(d, (task,)), SFT_STEPS, SFT_LR, ckpt=_ckpt(f"merge_{task}"))
+            tmp = done.with_suffix(".tmp")
+            torch.save(m.state_dict(), tmp)
+            tmp.replace(done)
         taus[task] = {k: v - tb[k] for k, v in _vec(m).items()}
 
     def with_weights(ws):
@@ -646,6 +677,8 @@ def compute_merge(lams=(0.0, 0.5, 1.0)):
         m = with_weights({"which": 1 - a, "line": a})
         path.append((float(a), which_accuracy(m, d, 100), line_eval(m, 1)[1]))
     sft = load("sft")
+    for task in taus:
+        (CACHE.dir / f"merge_{task}.pt").unlink(missing_ok=True)
     return {"rows": rows, "path": path, "multitask_which": sft["sft_which"], "multitask_line": sft["sft_line_gold"]}
 
 

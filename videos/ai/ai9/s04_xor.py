@@ -53,8 +53,9 @@ class XOR(VoiceoverScene):
         bars = VGroup(*[Rectangle(width=bw, height=0.28 * v, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.85)
                         .move_to([bx + i * (bw + gap) + bw / 2, by + 0.14 * v, 0]) for i, v in enumerate(xe)])
         base = Line([bx - 0.05, by, 0], [bx + n * (bw + gap), by, 0], color=GREY_C, stroke_width=1.5)
-        bl = label(rf"the perceptron on XOR: \ mistakes in each of ${n}$ passes", font_size=26, color=GREY_A)
+        bl = label(rf"the perceptron on XOR: \ mistakes in each of ${n}$ passes", font_size=24, color=GREY_A)
         bl.next_to(base, UP, buff=0.28 * max(xe) + 0.15).align_to(base, LEFT)
+        keep_in_frame(bl, margin=0.25)
         with self.voiceover(
             "Here is the simplest thing a single unit cannot do. XOR, exclusive or: fire when exactly one input is "
             "on. <bookmark mark='a'/> Suppose a threshold unit did it. The input zero, zero must not fire, so the "
