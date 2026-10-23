@@ -221,12 +221,14 @@ class Accounting(VoiceoverScene):
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)
         # what "activations" means: each step of a layer leaves tensors behind for the backward pass (schematic)
         ops = stage_row([(r"RMSNorm", GREY_A), (r"attention", C.ATTN), (r"RMSNorm", GREY_A), (r"MLP", ACTS)],
-                        font_size=20).move_to([3.5, 1.7, 0])
+                        font_size=23).move_to([3.4, 1.4, 0])
+        if ops.width > 6.6:
+            ops.width = 6.6
         kept = VGroup()
         for box, n in zip(ops.boxes, (1, 3, 1, 2)):
-            kept.add(VGroup(*[Rectangle(width=0.55, height=0.16, stroke_width=0, fill_color=ACTS, fill_opacity=0.75)
-                              .next_to(box, DOWN, buff=0.3 + 0.24 * j) for j in range(n)]))
-        k_l = note(r"what one layer keeps for the backward pass \ (schematic)", font_size=18)
+            kept.add(VGroup(*[Rectangle(width=0.7, height=0.2, stroke_width=0, fill_color=ACTS, fill_opacity=0.75)
+                              .next_to(box, DOWN, buff=0.35 + 0.3 * j) for j in range(n)]))
+        k_l = note(r"what one layer keeps for the backward pass \ (schematic)", font_size=20)
         k_l.next_to(kept, DOWN, buff=0.3).set_x(ops.get_x())
         layer_pic = VGroup(ops, kept, k_l)
         with self.voiceover(

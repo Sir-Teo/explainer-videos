@@ -147,20 +147,30 @@ class Heads(VoiceoverScene):
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
         cite_ = cite(r"S.~Bhojanapalli et al., \textit{Low-Rank Bottleneck in Multi-head Attention Models} (2020)",
                      corner=UR)
+        n = maps.shape[-1]
+        idx = np.arange(n)
+        prev = [float(np.mean([maps[0, hh, i, i - 1] for i in range(8, n)])) for hh in range(H)]
+        dist = [float(np.mean([(maps[0, hh, i, : i + 1] * (i - idx[: i + 1])).sum() for i in range(8, n)]))
+                for hh in range(H)]
+        hp, hw = int(np.argmax(prev)), int(np.argmax(dist))
+        looks = (f"head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while head "
+                 f"{hw + 1} looks {dist[hw]:.0f} characters back on average." if hp != hw else
+                 f"head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while the others "
+                 f"look between {min(dist):.0f} and {max(dist):.0f} characters back on average.")
         with self.voiceover(
             f"So why split attention into {H} narrow heads, instead of one head of {d}? It costs the same: "
             f"{H} heads of {dh} have exactly as many weights as one of {d}. <bookmark mark='a'/> But each head "
-            "has its own softmax, and so its own pattern. One head can only make one weighted average per "
-            "character; here the four heads of our first layer make four different ones at once, one looking "
-            "a step back, others spread wider. <bookmark mark='b'/> The layer's output is a sum over heads of "
+            "has its own softmax, and so its own pattern. One head can make only one weighted average per "
+            f"character; the {H} heads of our first layer make {H} different ones at once: " + looks
+            + " <bookmark mark='b'/> The layer's output is a sum over heads of "
             "pattern times low-rank move. <bookmark mark='c'/> There is a price: a narrow head cannot express "
             "every pattern. Srinadh Bhojanapalli and colleagues called it the low-rank bottleneck in 2020. Real "
             "models live with it, and spend their savings elsewhere: Part 15 shows how they share or compress "
             "the keys and values to make the memory of past tokens smaller."
         ) as vo:
-            self.play(FadeIn(same))
+            self.play(FadeIn(same), LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.15), FadeIn(hl), FadeIn(under))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.15), FadeIn(hl), FadeIn(under))
+            self.play(Indicate(hl[hp], color=A), Indicate(hl[hw], color=A))
             vo.wait_until("b")
             self.play(Write(eq), FadeIn(eql))
             vo.wait_until("c")

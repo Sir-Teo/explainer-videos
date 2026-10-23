@@ -180,7 +180,7 @@ class Anatomy(VoiceoverScene):
         # the two compute totals to scale
         cbars = VGroup()
         for k, (nm, v) in enumerate(((r"Llama 3.1", P["llama_6nd"]), (r"DeepSeek-V3", P["dsv3_6nd"]))):
-            y_ = 0.4 - 0.6 * k
+            y_ = -0.75 - 0.6 * k  # below the ladder's last line; the bill takes this place at 'c'
             r_ = Rectangle(width=7.4 * v / P["llama_6nd"], height=0.36, stroke_width=0, fill_color=C_COL,
                            fill_opacity=0.8)
             r_.move_to([-3.4 + r_.width / 2, y_, 0])
@@ -208,6 +208,7 @@ class Anatomy(VoiceoverScene):
             step(2)
             self.play(FadeIn(cbars[1][0]), GrowFromEdge(cbars[1][1], LEFT), FadeIn(cbars[1][2]))
             vo.wait_until("c")
+            self.play(FadeOut(cbars))
             self.play(LaggedStart(*[FadeIn(h, shift=UP * 0.1) for h in hours[:3]], lag_ratio=0.5), run_time=2.5)
             vo.wait_until("d")
             self.play(FadeIn(hours[3]), FadeIn(caveat))

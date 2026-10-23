@@ -747,6 +747,23 @@ def load_tf():
     return model, chars, enc, data
 
 
+def compute_tfwords():
+    """How much of what the transformer writes at each checkpoint of its training are real words: the share of its
+    words (runs of three or more letters) that occur in the training text."""
+    import re
+
+    from videos.ai.ai1 import compute as c1
+
+    t = load("tf")
+    vocab = set(re.findall(r"[A-Za-z]{3,}", c1.text("train")))
+    out = dict(steps=list(t["snap_steps"]), real=[], words=[])
+    for smp in t["snap_samples"]:
+        ws = re.findall(r"[A-Za-z]{3,}", str(smp))
+        out["words"].append(len(ws))
+        out["real"].append(float(np.mean([w in vocab for w in ws])) if ws else 0.0)
+    return out
+
+
 # ---------------------------------------------------------------------------
 def compute_heads():
     """Our transformer's heads as low-rank maps, its composition scores, the causal mask checked, and its cost."""
@@ -1746,6 +1763,7 @@ ITEMS = {
     "rope": compute_rope,
     "rasp": compute_rasp,
     "tf": compute_tf,
+    "tfwords": compute_tfwords,
     "heads": compute_heads,
     "qkscale": compute_qkscale,
     "extend": compute_extend,
