@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from explainer.zh_text import verbatim
 from videos.ai.ai1.s01_hook import sentence_block
 from videos.ai.ai31.common import EST, HACK, JUDGE, PART, board_rows, load, stat_card
 
@@ -125,8 +126,9 @@ class Finale(VoiceoverScene):
     def shannon(self):
         d = load("shannon")
         sent = d["sentence"]
-        rows1, counts1, _ = sentence_block(sent, d["count_ranks"], font_size=26)
-        _, counts2, _ = sentence_block(sent, d["ranks"], font_size=26)
+        with verbatim():  # Shannon's sentence is the data of the game: it stays English in every edition
+            rows1, counts1, _ = sentence_block(sent, d["count_ranks"], font_size=26)
+            _, counts2, _ = sentence_block(sent, d["ranks"], font_size=26)
         letters = VGroup(*[m for t in rows1 for m in t])
         grp1 = VGroup(rows1, counts1)
         grp1.shift(UP * 0.5)

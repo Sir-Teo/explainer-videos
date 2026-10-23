@@ -64,6 +64,8 @@ def to_image(rgb: np.ndarray, width: float, height: float | None = None, smooth=
 def digit_rgb(q, color=None) -> np.ndarray:
     """A 14 x 14 digit (levels 0..15, or values in [0, 1]) as RGB: dark background, white (or ``color``) ink."""
     a = np.asarray(q, float)
+    if a.ndim == 1:  # a flat image, as the RBM keeps them
+        a = a.reshape(int(round(len(a) ** 0.5)), -1)
     a = a / 15.0 if a.max() > 1.0 else a
     ink = np.ones(3) if color is None else rgb_of(color)
     return BG_RGB[None, None] * (1 - a[..., None]) + ink[None, None] * a[..., None]
