@@ -131,6 +131,11 @@ class Pipeline(VoiceoverScene):
         rule = label(rf"GPipe's rule: \ $m \ge 4p$ makes it small", font_size=20, color=GREY_A).next_to(here, DOWN,
                                                                                                   buff=0.2)
         rule.align_to(lg, LEFT)
+        # the GPipe chart again, small, to point at while the formula is built
+        gg, rr = self._chart("gpipe", y=-1.55, width=9.0)
+        own = VGroup(*[gg.rects[i] for i, op in enumerate(rr["ops"]) if op[0] == p - 1])
+        tb = Brace(gg.lanes, DOWN, color=GREY_A, buff=0.08)
+        tl_ = MathTex(r"T", font_size=30, color=WHITE).next_to(tb, DOWN, buff=0.06)
         with self.voiceover(
             "How big is the bubble? Each GPU is busy for m micro-batches, a forward and a backward each. "
             "<bookmark mark='a'/> But the whole schedule takes longer: the last micro-batch can't start on the last "
@@ -140,12 +145,16 @@ class Pipeline(VoiceoverScene):
             "the number of micro-batches, the formula as lines and our simulated schedules as dots. " + fit +
             " More micro-batches shrink it; GPipe's authors found four per stage enough."
         ) as vo:
+            self.play(FadeIn(gg))
             step(0)
+            self.play(Indicate(own, color=YELLOW, scale_factor=1.04))
             vo.wait_until("a")
             step(1)
+            self.play(GrowFromCenter(tb), FadeIn(tl_))
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(gg, tb, tl_)))
             self.play(FadeIn(g), FadeIn(here))
             self.play(*[Create(c_) for c_ in curves], FadeIn(lg), run_time=1.5)
             self.play(LaggedStart(*[FadeIn(d_, lag_ratio=0.2) for d_ in dots], lag_ratio=0.3), FadeIn(rule))

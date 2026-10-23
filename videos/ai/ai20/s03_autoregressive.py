@@ -268,7 +268,7 @@ class Autoregressive(VoiceoverScene):
         ln = curve(g.ax, ex, cv[:, 2], AR, 3)
         finals = [float(p[f"s{s}_bpp"]) for s in (0, 1, 2)]
         seeds_ = VGroup(*[Dot(g.ax.c2p(ex[-1], b), radius=0.06, color=WHITE).set_opacity(0.8) for b in finals])
-        sheets = [digit_sheet(s_, 4, 4, size=0.55, gap=0.05).move_to([3.6, 0.3, 0]) for s_ in snaps]
+        sheets = [digit_sheet(s_, 4, 4, size=0.66, gap=0.05).move_to([3.7, 0.4, 0]) for s_ in snaps]
         steps_ = [label(rf"after ${e / 1000:.1f}$k digits: \ ${b:.2f}$ bits per pixel", font_size=22, color=AR)
                   .next_to(sheets[0], DOWN, buff=0.25) for e, b in zip(ex, cv[:, 2])]
         head = label(r"our PixelCNN, \ seed $0$ \ (the same random numbers at every checkpoint)", font_size=22,
@@ -315,8 +315,8 @@ class Autoregressive(VoiceoverScene):
             sq.move_to([bars._cx(i) + bars.base.get_start()[0] + 0.15 - bars.x0, -1.12, 0])
         bl = label(r"the next pixel: \ $p(x_i \mid x_{<i})$ over $16$ grey levels", font_size=22, color=C.MODEL_Q)
         bl.next_to(bars, UP, buff=0.35).set_x(3.4)
-        cnt = DecimalNumber(0, num_decimal_places=0, font_size=30, color=AR).move_to([3.0, -2.0, 0])
-        cl = label(r"pixels drawn, \ of $196$", font_size=22, color=GREY_A).next_to(cnt, RIGHT, buff=0.2)
+        cl = label(r"pixels drawn, \ of $196$", font_size=22, color=GREY_A).move_to([3.4, -2.0, 0], aligned_edge=LEFT)
+        cnt = DecimalNumber(0, num_decimal_places=0, font_size=30, color=AR).next_to(cl, LEFT, buff=0.18)
         cur = SurroundingRectangle(grid[0], color=C.MODEL_Q, buff=0.02, stroke_width=3)
 
         def upd(_):
@@ -328,6 +328,7 @@ class Autoregressive(VoiceoverScene):
                 t_.set_value(float(v))
             cur.move_to(grid[j])
             cnt.set_value(n)
+            cnt.next_to(cl, LEFT, buff=0.18)
 
         holder = VGroup(grid, cur, cnt)
         holder.add_updater(upd)

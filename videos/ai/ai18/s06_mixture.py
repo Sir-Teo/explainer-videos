@@ -321,7 +321,7 @@ class Mixture(VoiceoverScene):
         w4 = 1 + rs * (1 - math.exp(-(F.REPEAT["epochs"] - 1) / rs))
         d4 = Dot(gr.ax.c2p(F.REPEAT["epochs"], w4), radius=0.06, color=YELLOW)
         l4 = label(rf"${F.REPEAT['epochs']}$ epochs: \ worth ${w4:.1f}$", font_size=18, color=YELLOW)
-        l4.next_to(d4, RIGHT, buff=0.15).shift(UP * 0.2)
+        l4.next_to(d4, RIGHT, buff=0.25).shift(DOWN * 0.3)
         rlg = legend([(GREY_B, r"new data"), (EDU, r"repeated: \ Muennighoff et al.'s fit")], font_size=17)
         rlg.next_to(gr, RIGHT, buff=0.3).align_to(gr, UP)
         rplot = VGroup(gr, new_, wc, d4, l4, rlg)
@@ -392,6 +392,7 @@ class Mixture(VoiceoverScene):
         if chain.width > 12.4:
             chain.width = 12.4
         chain.move_to(UP * 2.3)
+        chain0 = chain.copy().scale(1.15).move_to(UP * 0.3)  # first, alone in the middle
         s_lab = label(f"${start:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(0, start), RIGHT,
                                                                                                  buff=0.15).shift(UP * 0.2)
         e_lab = label(f"${end:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(gens, end), UP,
@@ -408,10 +409,11 @@ class Mixture(VoiceoverScene):
             "add each generation's samples to it instead of replacing it. " + cure + " That is how synthetic data is used "
             "in 2026: alongside real text, never instead of it."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(g2), FadeIn(sch), FadeIn(src), FadeIn(lg[0]))
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in chain.boxes], *[GrowArrow(a_) for a_ in chain.arrows],
+            self.play(FadeIn(src), FadeIn(lg[0]))
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in chain0.boxes], *[GrowArrow(a_) for a_ in chain0.arrows],
                                   lag_ratio=0.15), run_time=2.5)
             vo.wait_until("a")
+            self.play(ReplacementTransform(chain0, chain), FadeIn(g), FadeIn(g2), FadeIn(sch))
             self.play(FadeIn(rb), Create(rc), run_time=6.0, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(s_lab), FadeIn(e_lab))

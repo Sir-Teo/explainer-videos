@@ -68,8 +68,8 @@ class Latent(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def helmholtz(self):
-        x = node_box(r"an image $x$", DATA, font_size=26).move_to([-4.6, -1.6, 0])
-        z = node_box(r"its causes $z$", LATENT, font_size=26).move_to([-4.6, 1.6, 0])
+        x = node_box(r"an image $x$", DATA, font_size=26).move_to([-3.7, -1.6, 0])
+        z = node_box(r"its causes $z$", LATENT, font_size=26).move_to([-3.7, 1.6, 0])
         up = CurvedArrow(x.get_top() + LEFT * 0.4, z.get_bottom() + LEFT * 0.4, angle=-0.6, color=VAE_C,
                          stroke_width=3)
         dn = CurvedArrow(z.get_bottom() + RIGHT * 0.4, x.get_top() + RIGHT * 0.4, angle=-0.6, color=DATA,
@@ -78,16 +78,16 @@ class Latent(VoiceoverScene):
         dl = label(r"generation $p_\theta(x \mid z)$", font_size=22, color=DATA).next_to(dn, RIGHT, buff=0.1)
         card = history_card(1995, r"Dayan, Hinton, Neal \& Zemel: \ the Helmholtz machine",
                             r"Helmholtz: \ perception is unconscious inference. \ A second network learns to "
-                            r"infer the causes $z$ of what is seen.", width=6.6).move_to([2.9, 1.9, 0])
+                            r"infer the causes $z$ of what is seen.", width=6.6).move_to([3.3, 1.9, 0])
         wake = VGroup(label(r"wake:", font_size=24, color=C.BITS),
                       label(r"see a real $x$, \ infer $z$ with $q$, \ train $p$ to make $x$ from $z$", font_size=22))
         sleep = VGroup(label(r"sleep:", font_size=24, color=C.BITS),
                        label(r"dream $z$, then $x$, from $p$; \ train $q$ to recover $z$", font_size=22))
         for w in (wake, sleep):
             w.arrange(RIGHT, buff=0.2, aligned_edge=UP)
-        ws = VGroup(wake, sleep).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([2.9, -0.6, 0])
+        ws = VGroup(wake, sleep).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, -0.6, 0])
         flaw = label(r"the catch: \ $q$ learns from dreams, \ and the two phases optimize different objectives",
-                     font_size=22, color=GREY_A).move_to([2.6, -2.3, 0])
+                     font_size=22, color=GREY_A).move_to([3.0, -2.3, 0])
         cite_ = cite(r"Hinton, Dayan, Frey \& Neal, \textit{The wake-sleep algorithm} (1995)", corner=DR)
         with self.voiceover(
             "In 1995 Peter Dayan, Geoffrey Hinton, Radford Neal and Richard Zemel proposed learning Bayes' rule: a "
@@ -149,9 +149,10 @@ class Latent(VoiceoverScene):
             step(3)
             br = VGroup(brace_note(rows[3][2], r"reconstruction", color=RECON, font_size=22),
                         brace_note(rows[3][4], r"rate", color=KLC, font_size=22))
-            self.play(FadeIn(br))
+            self.play(FadeOut(whys[3]), FadeIn(br))  # the braces sit where the ELBO's note goes
+            self.wait(max(0.5, vo.until("d") - 2.8))
+            self.play(FadeOut(br), FadeIn(whys[3]))
             vo.wait_until("d")
-            self.play(FadeOut(br))
             step(4)
         self.wait(0.3)
         self.clear_scene()
@@ -175,8 +176,8 @@ class Latent(VoiceoverScene):
                       A(z, dec), A(dec, xh))
         grad = Arrow(xh.get_bottom() + DOWN * 0.3, enc.get_bottom() + DOWN * 0.3, buff=0, color=C.SCORE,
                      stroke_width=3, path_arc=-0.5)
-        gl = label(r"gradients flow back through $\mu$ and $\sigma$: \ the noise is just an input", font_size=22,
-                   color=C.SCORE).move_to([1.4, -2.3, 0])
+        gl = label(r"gradients flow back through $\mu$ and $\sigma$: \ the noise is just an input", font_size=20,
+                   color=C.SCORE).move_to([2.7, -1.75, 0])
         kl = cmath(r"\mathrm{KL}\big(\mathcal N(\mu, \sigma^2) \,\|\, \mathcal N(0, 1)\big)", r"=",
                    r"\tfrac12\big(\mu^2 + \sigma^2 - \log \sigma^2 - 1\big)", font_size=30).to_edge(UP, buff=0.35)
         kl[0].set_color(KLC)

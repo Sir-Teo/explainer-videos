@@ -43,7 +43,7 @@ class ZeRO(VoiceoverScene):
                    label(r"ZeRO stage 2: \ and the gradients", font_size=26, color=GRADS),
                    label(r"ZeRO stage 3, \ FSDP: \ and the weights", font_size=26, color=WEIGHTS)]
         for t in stage_t:
-            t.to_edge(DOWN, buff=1.4)
+            t.to_edge(DOWN, buff=1.7)
         hist = history_card(2019, r"Rajbhandari, Rasley, Ruwase \& He (Microsoft)", r"ZeRO, \ the Zero Redundancy "
                             r"Optimizer, \ in DeepSpeed", width=6.0, color=OPT)
         hist.scale(0.8).to_edge(DOWN, buff=0.15)

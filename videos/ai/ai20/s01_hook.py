@@ -19,10 +19,10 @@ class Hook(VoiceoverScene):
         runs = {f: load(f) for f in fams}
         panels = Group()
         for f in fams:
-            sheet = digit_sheet(np.asarray(runs[f]["s0_show"])[:16], 4, 4, size=0.6, gap=0.05)
+            sheet = digit_sheet(np.asarray(runs[f]["s0_show"])[:16], 4, 4, size=0.68, gap=0.05)
             cap = label(FAM_NAME[f], font_size=26, color=FAM[f]).next_to(sheet, UP, buff=0.18)
             panels.add(Group(sheet, cap))
-        panels.arrange(RIGHT, buff=0.42).move_to(UP * 0.35)
+        panels.arrange(RIGHT, buff=0.34).move_to(UP * 0.3)
         mins = np.mean([runs[f]["s0_secs"] for f in fams]) / 60
         how = VGroup(
             label(r"one pixel at a time", font_size=22, color=AR),

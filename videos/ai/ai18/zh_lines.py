@@ -435,8 +435,17 @@ _DATA = {
     'f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}, but':
         "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}，但同一种设计的两个种子，就能相差{sp:.2f}：在这么短的训练里，损失分不出它们的高下，尽管普通模型最大的注意力logit大了{ratio:.0f}倍。",
 
-    'f"The second fix is for the output layer.':
-        "第二个解决办法针对输出层。所有logit都平移同样的量，softmax不会改变。<bookmark mark='a'/>所以它们的log-sum-exp，也就是log Z，可以自由漂移，而在16位算术里，大的logit会丢掉精度。<bookmark mark='b'/>PaLM加了一个很小的惩罚，10的负4次方乘以log Z的平方：这就是z-loss。<bookmark mark='c'/>它的梯度把所有logit一起往归一化常数为1的方向轻轻推，而不改变模型预测的东西。<bookmark mark='d'/>在我们的训练里，log Z最后不带它是{a:.1f}，带它是{b:.2f}。",
+    '"The second fix is for the output layer.':
+        "第二个解决办法针对输出层。所有logit都平移同样的量，softmax不会改变。<bookmark mark='a'/>所以它们的log-sum-exp，也就是log Z，可以自由漂移，而在16位算术里，大的logit会丢掉精度。<bookmark mark='b'/>PaLM加了一个很小的惩罚，10的负4次方乘以log Z的平方：这就是z-loss。<bookmark mark='c'/>它的梯度把所有logit一起往归一化常数为1的方向轻轻推，而不改变模型预测的东西。<bookmark mark='d'/>{zl}",
+
+    "f'In our runs, log Z ends at":
+        "在我们的训练里，log Z最后不带它是{a:.1f}，带它是{b:.2f}。",
+
+    "f'In our short runs it changes nothing we can measure:":
+        "在我们这么短的训练里，它没有带来任何测得出的变化：不管带不带它，log Z最后都在{a:.1f}附近，差得比同一种设计的两个种子还小。这个惩罚和损失比起来非常小；它是为长时间的训练准备的，那时logit有足够的时间漂移。",
+
+    "f'In our short runs it barely moves log Z:":
+        "在我们这么短的训练里，它几乎没有挪动log Z：不带它是{a:.2f}，带它是{b:.2f}。这个惩罚和损失比起来非常小；它是为长时间的训练准备的，那时logit有足够的时间漂移。",
 
     'The newest source of trouble is the optimizer.':
         "最新的麻烦来源是优化器。第11部分的Muon，会把每次更新正交化，它在2025年走向了大规模：Moonshot的Moonlight研究发现，它的计算效率大约是AdamW的两倍。<bookmark mark='a'/>但用了Muon，注意力logit长得更快，而Kimi K2用的是潜在注意力，它的键从不完整地构造出来，所以没法用QK归一化。<bookmark mark='b'/>Moonshot的解决办法是QK-Clip：每次更新之后，如果某个头最大的logit超过了一百，就缩小这个头的查询和键的权重，把它拉回来。一开始它裁剪了12.7%的头；七万步之后，一个也没有；K2在15.5万亿个词元上训练，一次损失尖峰也没出现。<bookmark mark='c'/>2026年的DeepSeek-V4也用Muon，它的新注意力直接对查询和键做归一化。它剩下的尖峰来自混合专家里的离群值，它的压制办法是：在尖峰持续期间，用稍旧一些的权重来做路由，并对SwiGLU的激活做截断。",

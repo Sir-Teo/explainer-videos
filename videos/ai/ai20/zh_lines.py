@@ -72,8 +72,12 @@ ZH = {
     'Overall, raising beta lowers the rate':
         '总体上，升高β会降低码率、升高失真，虽然不是每一级都如此：这些训练散布在一条曲线周围，也就是信息论里的码率-失真权衡。',
 
-    "f'Free bits, a floor of":
-        '自由比特，也就是每个编码数{fbits:g}奈特的下限，低于它的KL不计代价，能让编码里留住{kf:.1f}奈特，解码出的数字有{pf:.0f}%和来源相符。',
+    "f'Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, and":
+        '自由比特，也就是每个编码数{fbits:g}奈特的下限，能让编码里留住{kf:.1f}奈特，解码出的数字有{pf:.0f}%和来源相符。',
+
+    "f'Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, yet only":
+        '自由比特，也就是每个编码数{fbits:g}奈特的下限，能让编码里留住{kf:.1f}奈特，可解码出的数字只有{pf:.0f}%和来源相符：'
+        '给码率设一个下限，并不等于用上了编码。',
 
 }
 
@@ -272,11 +276,11 @@ ZH.update({
         "那么，在这个小尺度、同一份预算下，谁赢了什么？<bookmark mark='a'/>{close}<bookmark mark='b'/>哪个最好，取决于模型是"
         "拿来做什么的，也取决于规模：GAN曾经多年画出最清晰的图像，用的规模远远超过我们的。",
 
-    "every family wins something, and none wins everything.":
-        "每个家族都赢下了一些东西，没有哪个赢下一切。",
+    "every model wins something, and none wins everything.":
+        "每个模型都赢下了一些东西，没有哪个赢下一切。",
 
-    "f'every family but one wins something;":
-        "除了一个家族，每个家族都赢下了一些东西；{l0}在这里什么也没赢。",
+    "f'every model but one wins something;":
+        "除了一个模型，每个模型都赢下了一些东西；{l0}在这里什么也没赢。",
 
     "f'{nl} of the five win nothing at all":
         "五个里有{nl}个什么也没赢，{l0}就是其中之一。",
@@ -460,8 +464,8 @@ ZH.update({
         "重建要花{r0:.0f}奈特，码率是{k0:.1f}：编码什么也没说。<bookmark mark='b'/>"
         "然后码率上升，重建变得清晰：准确是用信息换来的。<bookmark mark='c'/>到最后，"
         '编码携带{k1:.1f}奈特，解码器还需要{r1:.0f}；下界是每像素{eb0:.2f}比特，'
-        "而每个数字用64个编码得到的更紧的下界是{iw0:.2f}。<bookmark mark='d'/>样本是数字，"
-        '带着一点柔和的模糊，而16个编码数里只有{act}个携带信息。记住这一点。',
+        "而每个数字用64个编码得到的更紧的下界是{iw0:.2f}。<bookmark mark='d'/>样本是认得出的数字，"
+        '而16个编码数里只有{act}个携带信息。记住这一点。',
 
     'What does the code learn? With two numbers':
         '编码学到了什么？每个数字只用两个数，我们就能看见：每个点是一个留出数字，放在它的编码处，按它的标签上色。'
@@ -495,11 +499,11 @@ ZH.update({
         '用PixelCNN做解码器，码率最后是每个数字{kp:.1f}奈特，而普通VAE是{kv:.1f}：'
         '强大的解码器对编码的依赖少得多。',
 
-    "f'Of four digits decoded from one code, only":
-        '从同一个编码解码出四个数字，只有{pa:.0f}%和被编码的数字相同。',
+    'f"Decode a hundred test digits\' codes four times each: only':
+        '把一百个测试数字的编码各解码四次：结果里只有{pa:.0f}%和被编码的数字相同。',
 
-    "f'Of four digits decoded from one code, {pa:.0f} percent still":
-        '从同一个编码解码出四个数字，仍有{pa:.0f}%和被编码的数字相同。',
+    'f"Decode a hundred test digits\' codes four times each: {pa:.0f} percent still':
+        '把一百个测试数字的编码各解码四次：仍有{pa:.0f}%和被编码的数字相同。',
 
     'f"One more thing: on the ring':
         '还有一点：在环上，VAE把样本撒进了空隙里；只有{100 * q:.0f}%落在某个峰的三倍标准差以内。'
