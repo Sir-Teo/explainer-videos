@@ -267,7 +267,7 @@ class Return(VoiceoverScene):
         with self.voiceover(
             "minGRU joined a family growing since 2016. <bookmark mark='a'/> Quasi-recurrent networks and simple "
             "recurrent units moved the matrices out of the recurrence; state-space models, from S4 in 2021 to "
-            "Mamba in 2023, derived linear recurrences from continuous-time systems and let the input choose what "
+            "Mamba in 2023, built linear recurrences that let the input choose what "
             "to keep; and in 2024 Hochreiter's own group returned with xLSTM, scaled in 2025 to seven billion "
             "parameters. <bookmark mark='b'/> Several of today's open models mix such layers with attention: the "
             "transformer's recall, the recurrence's fixed-size memory. That's Part 15."

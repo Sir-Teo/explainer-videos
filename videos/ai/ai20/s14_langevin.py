@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (DATA, EBM, HIST, NOISE, PART, SCORE_C, Plane, arrows, curve, load, take_away)
+from videos.ai.ai20.common import (crossfade, DATA, EBM, HIST, NOISE, PART, SCORE_C, Plane, arrows, curve, load, take_away)
 
 
 def particle_play(scene, plane, P, run_time, color=WHITE, radius=0.025, n=None):
@@ -169,7 +169,7 @@ class Langevin(VoiceoverScene):
             ci, cd, cc = imgs[0], dots[0], cap[0]
             per = max(0.5, vo.until("b") / max(1, len(imgs) - 1))
             for k in range(1, len(imgs)):
-                self.play(FadeTransform(ci, imgs[k]), Transform(cd, dots[k]), ReplacementTransform(cc, cap[k]),
+                self.play(crossfade(ci, imgs[k]), Transform(cd, dots[k]), ReplacementTransform(cc, cap[k]),
                           FadeIn(pts[k]), run_time=0.7 * per)
                 ci, cc = imgs[k], cap[k]
                 self.wait(0.3 * per)

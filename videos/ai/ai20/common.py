@@ -196,6 +196,11 @@ def tag(text: str, corner=DR, font_size=20) -> Tex:
     return note(text, font_size=font_size).to_corner(corner, buff=0.25)
 
 
+def crossfade(a: Mobject, b: Mobject) -> AnimationGroup:
+    """Fade ``a`` out and ``b`` in at once: FadeTransform for anything, groups of images included."""
+    return AnimationGroup(FadeOut(a), FadeIn(b))
+
+
 def caption(mob: Mobject, text: str, color=GREY_A, font_size=22, direction=UP, buff=0.15) -> Tex:
     return label(text, font_size=font_size, color=color).next_to(mob, direction, buff=buff)
 

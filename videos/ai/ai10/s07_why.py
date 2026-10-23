@@ -291,10 +291,10 @@ class WhyItWon(VoiceoverScene):
         head = label(r"none of it new; \ all of it together, \ at scale", font_size=34).to_edge(UP, buff=0.45)
         with self.voiceover(
             "So which ingredient mattered? <bookmark mark='a'/> None of them was new in 2012: rectified units from "
-            "2010, dropout from that year, convolutional networks from 1989, GPUs for neural networks from 2009, "
-            "and ImageNet from 2009. <bookmark mark='b'/> What was new was all of them together, at a scale where "
-            "each one mattered: enough data that a sixty-million-weight network didn't simply memorize it, "
-            "activations that let gradients reach eight layers down, and enough arithmetic to train it in a week."
+            "2010, dropout from that year, convolutional networks from 1989, GPUs and ImageNet from 2009. "
+            "<bookmark mark='b'/> What was new was all of them together, at a scale where each one mattered: "
+            "enough data that sixty million weights couldn't simply memorize it, and enough arithmetic to train "
+            "them in a week."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

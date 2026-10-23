@@ -205,8 +205,7 @@ class Deeper(VoiceoverScene):
             "let each pair of layers learn only a correction F of x, added to its input. <bookmark mark='c'/> The "
             "block's derivative is the identity plus F's: a path along which the gradient always passes, however "
             "deep the stack, as Part 9 derived. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at "
-            f"{ILSVRC[5][2]} percent. Months earlier, highway networks from Schmidhuber's lab had built the same "
-            "path with gates, borrowed from the LSTM of Chapter 12."
+            f"{ILSVRC[5][2]} percent. Highway networks, months earlier, had built the same path with gates."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
