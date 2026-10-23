@@ -97,6 +97,11 @@ class AlphaGo(VoiceoverScene):
                               stroke_width=0).set_opacity(0),
                         Arrow(cards[1].get_bottom(), cards[2].get_top(), buff=0.06, color=GREY_B, stroke_width=3,
                               path_arc=-0.5))
+        head = label(r"AlphaGo, \ 2016: \ deep networks inside Monte Carlo tree search", font_size=30)
+        head.to_edge(UP, buff=0.3)
+        slots = VGroup(*[DashedVMobject(RoundedRectangle(width=c.width, height=c.height, corner_radius=0.1,
+                                                         stroke_width=1.5, color=GREY_D), num_dashes=40).move_to(c)
+                         for c in cards])  # where the four parts will go
         hum = label(r"from human games", font_size=20, color=PRIOR).next_to(cards[0], UP, buff=0.12)
         selfp = label(r"from self-play", font_size=20, color=AGENT).next_to(cards[1], UP, buff=0.12)
         cite_ = cite(r"D.~Silver et al., \textit{Mastering the game of Go with deep neural networks and tree search}, "
@@ -113,12 +118,12 @@ class AlphaGo(VoiceoverScene):
             "simply memorize games. <bookmark mark='d'/> And a tiny, fast policy for quick playouts, as in classic "
             "MCTS."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(head), Create(slots), run_time=1.5)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 extra = [FadeIn(hum)] if k == 0 else ([GrowArrow(arrows[0]), FadeIn(selfp)] if k == 1 else
                                                       ([Create(arrows[2])] if k == 2 else []))
-                self.play(FadeIn(cards[k], shift=UP * 0.15), *extra)
+                self.play(FadeIn(cards[k], shift=UP * 0.15), FadeOut(slots[k]), *extra)
         self.wait(0.3)
         self.clear_scene()
 

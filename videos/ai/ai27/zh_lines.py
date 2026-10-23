@@ -156,7 +156,16 @@ ZH = {
         "LoRA是微软的胡爱德华和同事在2021年提出的，它把这个想法直接建进网络里。冻结每一个权重矩阵W。<bookmark mark='a'/>在每一个旁边，加上两个瘦矩阵的乘积，B乘以A，秩为r，只有几。只训练B和A。<bookmark mark='b'/>一个d乘k的矩阵有d乘k个数；适配器只有r乘以d加k个。对一个四千宽的层，秩取8，可训练的数是六万五千个，而不是一千六百万个。<bookmark mark='c'/>B从零开始，所以训练恰好从原模型出发；训练完后，B乘A可以加回W里，所以适配后的模型跑得和原来一样快。",
 
     'f"Our own experiment: fine-tune the novels model on the which-book task with LoRA':
-        "我们自己的实验：在“出自哪本书”任务上微调小说模型，分别用秩为1、4、16的LoRA，以及调整全部权重。<bookmark mark='a'/>秩为1时训练{r1['params']:,}个数，占模型的{100 * r1['params'] / tot:.2g}%。<bookmark mark='b'/>全量微调在留出的句子上答对{100 * full['which']:.0f}%；最好的适配器，秩为{best['rank']}，答对{100 * best['which']:.0f}%。<bookmark mark='c'/>而在普通小说文本上，全量微调的损失与基础模型相差{forget_full:+.3f}奈特，适配器最少只差{forget_lora:+.3f}。LoRA学得少，也忘得少：这正是2024年一项研究的标题，它在大规模上发现了同样的事。",
+        "我们自己的实验：在“出自哪本书”任务上微调小说模型，分别用秩为1、4、16的LoRA，以及调整全部权重。<bookmark mark='a'/>秩为1时训练{r1['params']:,}个数，占模型的{100 * r1['params'] / tot:.2g}%。<bookmark mark='b'/>全量微调在留出的句子上答对{100 * full['which']:.0f}%；最好的适配器，秩为{best['rank']}，答对{100 * best['which']:.0f}%。<bookmark mark='c'/>而在普通小说文本上，全量微调的损失与基础模型相差{forget_full:+.3f}奈特；<bookmark mark='d'/>{verdict}",
+
+    "f'every adapter forgot less than that":
+        "每个适配器都忘得比它少，最少只差{forget_lora:+.3f}。LoRA学得少，也忘得少：这正是2024年一项研究的标题，它在大规模上发现了同样的事。",
+
+    "f'only the rank {small":
+        "只有秩为{small['rank']}的适配器忘得更少，{small['heldout'] - d['base_heldout']:+.3f}，而它学到的也最少。更大的适配器忘得更多：它们的步长大了{ratio:.0f}倍，适配器需要这样，而更大的步子会把模型带得离起点更远。2024年一项研究发现，在大规模、准确率相当时，LoRA学得少，也忘得少；在我们的规模上，只有最小的适配器做到了。",
+
+    'f"every adapter forgot more, at least':
+        "每个适配器都忘得更多，至少{forget_lora:+.3f}：它们的步长大了{ratio:.0f}倍，适配器需要这样。2024年一项研究发现，在大规模、准确率相当时，LoRA忘得更少；在我们的规模上，用这套做法，并非如此。",
 
     'On GPT-3, LoRA trained ten thousand times fewer numbers':
         "在GPT-3上，LoRA训练的数比全量微调少一万倍，显存约为三分之一，质量相当。<bookmark mark='a'/>2023年的QLoRA把冻结的模型存成4比特，在一块48GB的GPU上微调了一个650亿参数的模型，让任何有一块好显卡的人都能做微调。<bookmark mark='b'/>DoRA把每个权重拆成长度和方向，只适配方向。<bookmark mark='c'/>2024年一项细致的比较，把其中的取舍写进了标题：LoRA学得少，也忘得少。对困难的新本事，全量微调仍然更好。",

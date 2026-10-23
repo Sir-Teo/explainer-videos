@@ -214,6 +214,7 @@ def _ckpt(name):
 # Supervised fine-tuning, LoRA
 # ---------------------------------------------------------------------------
 SFT_STEPS, SFT_LR = 600, 5e-4  # about two passes over the training questions
+LORA_LR = 2e-3  # adapters start at zero and have few numbers: they need larger steps
 
 
 def compute_sft():
@@ -256,7 +257,7 @@ def compute_lora(ranks=(1, 4, 16)):
             params, lr = [p for p in model.parameters()], SFT_LR
             n = sum(p.numel() for p in params)
         else:
-            params, lr = P.add_lora(model, r), 2e-3
+            params, lr = P.add_lora(model, r), LORA_LR
             n = sum(p.numel() for p in params)
         curve, evals = P.sft(model, ex, SFT_STEPS, lr, params=params, eval_fn=lambda m: which_accuracy(m, d, 150),
                              eval_every=100, ckpt=_ckpt(f"lora_{r}"))
