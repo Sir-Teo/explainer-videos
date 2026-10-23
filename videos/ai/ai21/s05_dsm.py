@@ -192,12 +192,11 @@ class DSM(VoiceoverScene):
         card.move_to([3.6, 0.9, 0])
         ta = take_away(r"Learning to denoise is learning the score, \ at every noise level, \ with nothing but regression.")
         worst, best = ts[int(np.argmax(m))], ts[int(np.argmin(m))]
+        where = ("the nearly clean levels, where the score is sharp around each stroke, are the hardest." if worst == min(ts)
+                 else "the hardest level is not the cleanest one.")
         with self.voiceover(
             f"Where is the score hardest to learn? At the end of training, the error is largest at t equal to "
-            f"{worst:g} and smallest at {best:g}: "
-            + ("the nearly clean levels, where the score is sharp around each stroke, are the hardest. "
-               if worst == min(ts) else "not where one might guess. ")
-            + "<bookmark mark='a'/> In 2019 Yang Song and Stefano Ermon trained one network for many noise levels "
+            f"{worst:g} and smallest at {best:g}: " + where + " <bookmark mark='a'/> In 2019 Yang Song and Stefano Ermon trained one network for many noise levels "
             "this way, and sampled with Part 20's annealed Langevin. <bookmark mark='b'/> Denoising, at every noise "
             "level, by plain regression: that is what every diffusion model learns."
         ) as vo:
