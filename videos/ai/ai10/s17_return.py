@@ -119,7 +119,6 @@ class Return(VoiceoverScene):
             "rounds."
         ) as vo:
             self.play(FadeIn(cite_))
-            vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1, transform=False)
@@ -273,7 +272,6 @@ class Return(VoiceoverScene):
             "parameters. <bookmark mark='b'/> Several of today's open models mix such layers with attention: the "
             "transformer's recall, the recurrence's fixed-size memory. That's Part 15."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards], lag_ratio=0.25), run_time=5.0)
             vo.wait_until("b")
             self.play(FadeIn(foot))

@@ -278,10 +278,11 @@ class LeNet(VoiceoverScene):
             b.move_to([2.2 + 0.75 * i + (0.35 if i >= 2 else 0), -2.3 + h / 2, 0])
             t = MathTex(rf"{100 * v:.1f}\%", font_size=22, color=c).next_to(b, UP, buff=0.08)
             bars.add(VGroup(b, t))
-        bl = VGroup(label(r"pixels in place", font_size=18, color=GREY_B),
-                    label(r"pixels shuffled", font_size=18, color=GREY_B))
-        bl[0].next_to(bars[0][0], DOWN, buff=0.12).shift(RIGHT * 0.35).set_y(-2.55)
-        bl[1].next_to(bars[3][0], DOWN, buff=0.12).shift(LEFT * 0.35).set_y(-2.55)
+        # under each bar, how the pixels were; under each pair, which network
+        bl = VGroup(*[label(t, font_size=15, color=GREY_B).move_to([bars[i][0].get_x(), -2.5, 0])
+                      for i, t in enumerate([r"in place", r"shuffled"] * 2)])
+        bl.add(*[label(t, font_size=20, color=c).move_to([(bars[i][0].get_x() + bars[i + 1][0].get_x()) / 2, -2.85, 0])
+                 for i, t, c in [(0, r"LeNet", CNN), (2, r"MLP", MLPC)]])
         pd = img_gray(np.asarray(M["perm_digit"]), 1.1).move_to([5.4, 1.75, 0])
         od = img_gray(np.asarray(M["digit"]), 1.1).next_to(pd, LEFT, buff=0.6)
         pa = Arrow(od.get_right(), pd.get_left(), buff=0.08, stroke_width=2.5, color=GREY_B)

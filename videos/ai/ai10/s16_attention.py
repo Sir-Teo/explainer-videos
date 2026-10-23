@@ -125,8 +125,8 @@ class Attention(VoiceoverScene):
         shade = Rectangle(width=A.c2p(hi, 0)[0] - A.c2p(lo, 0)[0], height=A.c2p(0, 1)[1] - A.c2p(0, 0)[1],
                           stroke_width=0, fill_color=GREY_D, fill_opacity=0.25)
         shade.move_to([(A.c2p(lo, 0)[0] + A.c2p(hi, 0)[0]) / 2, (A.c2p(0, 0)[1] + A.c2p(0, 1)[1]) / 2, 0])
-        sl = label(r"trained on these lengths", font_size=20, color=GREY_B).move_to(shade).align_to(shade, DOWN)
-        sl.shift(UP * 0.15)
+        sl = label(r"trained on these lengths", font_size=20, color=GREY_B).next_to(shade, UP, buff=0.08)
+        sl.align_to(shade, RIGHT)
         plain = seed_band(A, tests, [runs[f"0-{k}"]["exact"] for k in (0, 1, 2)], ENC)
         att = seed_band(A, tests, [runs[f"1-{k}"]["exact"] for k in (0, 1, 2)], ATT)
         leg = legend([(ENC, r"one vector"), (ATT, r"with attention")], font_size=22).to_corner(UR, buff=0.5)
@@ -170,10 +170,12 @@ class Attention(VoiceoverScene):
         mats = [np.asarray(r0["snaps"][str(t)]) for t in steps]
         n = len(word)
         size = 3.9
+        top = max(float(m_[:n + 1, :n].max()) for m_ in mats)  # one colour scale for every checkpoint
 
         def heat(i):
             m = mats[i][:n + 1, :n]
-            return img_heat(m, size, sym=False, pos=ATT, height=size * m.shape[0] / m.shape[1]).move_to([-2.2, -0.4, 0])
+            return img_heat(m, size, sym=False, pos=ATT, height=size * m.shape[0] / m.shape[1],
+                            vmax=top).move_to([-2.2, -0.4, 0])
 
         cur = heat(0)
         cw = cur.width / n

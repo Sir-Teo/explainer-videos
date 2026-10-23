@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (ATT, CNN, HIST, KERNEL, LSTMC, PART, grid_of, img_filter, img_heat, load)
+from videos.ai.ai10.common import (ATT, CNN, HIST, KERNEL, LSTMC, PART, grid_of, img_filter, img_heat, img_rgb, load)
 
 
 class Hook(VoiceoverScene):
@@ -81,6 +81,9 @@ class Hook(VoiceoverScene):
         W = np.asarray(o["w1"])
         tiles = grid_of([img_filter(w, 0.7) for w in W], cols=8, buff=0.08).move_to([-2.4, -0.2, 0])
         frame = SurroundingRectangle(tiles, color=GREY_D, buff=0.12, stroke_width=1.2)
+        cg = np.asarray(load("data")["cifar_grid"])  # (10 classes, 8 photographs, 32, 32, 3)
+        photos = Group(*[img_rgb(cg[(r * 7 + c) % 10, (r + c) % 8], 0.56) for r in range(5) for c in range(7)])
+        photos.arrange_in_grid(rows=5, cols=7, buff=0.06).move_to(tiles)
         head = label(rf"the ${len(W)}$ first-layer filters of a network trained on this computer", font_size=26,
                      color=CNN).to_edge(UP, buff=0.45)
         mins = cf["seconds"] / 60
@@ -100,8 +103,10 @@ class Hook(VoiceoverScene):
             "Hubel and Wiesel's cell. Nobody told it about edges. It found them because they were useful."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(FadeIn(facts[0]), FadeIn(facts[1]))
+            self.play(FadeIn(facts[0]), LaggedStart(*[FadeIn(p) for p in photos], lag_ratio=0.03), run_time=1.6)
+            self.play(FadeIn(facts[1]))
             vo.wait_until("a")
+            self.play(FadeOut(photos), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(t, scale=0.6) for t in tiles], lag_ratio=0.03), Create(frame),
                       run_time=2.5)
             vo.wait_until("b")

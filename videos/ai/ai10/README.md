@@ -158,7 +158,7 @@ conv2 5/1, pool 3/2, conv3–5 3/1, pool 3/2.
 *Solution.* A unit of layer ℓ is a function of k_ℓ adjacent units of layer ℓ − 1, whose centres lie j_{ℓ−1} pixels
 apart, where j_{ℓ−1} = Π_{i<ℓ} s_i is the product of the strides below. Their fields are each r_{ℓ−1} wide and
 overlap except for the shifts, so r_ℓ = r_{ℓ−1} + (k_ℓ − 1) j_{ℓ−1}; summing from r_0 = 1 gives the formula. For
-AlexNet the jumps before each layer are 1, 4, 4, 8, 8, 16, 16, 16, so r = 1 + 10·1 + 2·4 + 4·8 + 2·8 + 2·16 + 2·16 +
+AlexNet the jumps before each layer are 1, 4, 8, 8, 16, 16, 16, 16, so r = 1 + 10·1 + 2·4 + 4·8 + 2·8 + 2·16 + 2·16 +
 2·16 + 2·16 = 1 + 10 + 8 + 32 + 16 + 32 + 32 + 32 + 32 = 195 pixels.
 
 **3. Separable convolutions.** Derive the cost ratio 1/C′ + 1/k² of a depthwise separable convolution. For k = 3 and
@@ -216,7 +216,7 @@ conv3–5 3/1，池化3/2。
 
 *解答。* 第ℓ层的一个单元是第ℓ − 1层k_ℓ个相邻单元的函数，这些单元的中心彼此相隔j_{ℓ−1}个像素，其中 j_{ℓ−1} = Π_{i<ℓ} s_i 是下面
 各层步长的乘积。它们的感受野各宽r_{ℓ−1}，除了平移之外彼此重叠，所以 r_ℓ = r_{ℓ−1} + (k_ℓ − 1) j_{ℓ−1}；从 r_0 = 1 求和就得到
-公式。AlexNet各层之前的跳距依次是1, 4, 4, 8, 8, 16, 16, 16，所以 r = 1 + 10·1 + 2·4 + 4·8 + 2·8 + 2·16 + 2·16 + 2·16 + 2·16
+公式。AlexNet各层之前的跳距依次是1, 4, 8, 8, 16, 16, 16, 16，所以 r = 1 + 10·1 + 2·4 + 4·8 + 2·8 + 2·16 + 2·16 + 2·16 + 2·16
 = 195个像素。
 
 **3. 可分离卷积。** 推导深度可分离卷积的代价比 1/C′ + 1/k²。k = 3、C′ = 512时便宜多少？为什么实测的加速可能更小？

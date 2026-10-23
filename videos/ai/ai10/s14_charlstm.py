@@ -219,8 +219,8 @@ class CharLSTM(VoiceoverScene):
             v = (f"{me:.2f} bits per character, better than every row above it, by {best_above - me:.2f} bits. "
                  "The memory pays.")
         else:
-            v = (f"{me:.2f} bits per character, {me - best_above:.2f} behind the best row above it: with a "
-                 "few minutes of training, the LSTM hasn't caught up with a model built from all the counts.")
+            v = (f"{me:.2f} bits per character, {me - best_above:.2f} behind the best row above it: with the "
+                 "training we could afford here, the LSTM hasn't caught up.")
         if lm_best is not None and lm_best < me:
             tail = (f" The pretrained language models below it are still far ahead, down to {lm_best:.2f} bits: "
                     "more text, more computing, and a different architecture, which is the next act's story."
