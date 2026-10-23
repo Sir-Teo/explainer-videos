@@ -120,18 +120,22 @@ class Recipe(VoiceoverScene):
         tag = note(r"computed: \ the same seed for every sample", font_size=18).to_corner(DR, buff=0.2)
         first = sn_f[0]
         with self.voiceover(
-            "Watch them learn. On the left, each model's loss on text it never trains on; on the right, what each "
-            "writes after the words 'The door opened, and', frozen at the same steps, with the same random seed. "
-            f"<bookmark mark='a'/> At the start both write noise, at a loss of about {first['val']:.1f} nats. "
-            "<bookmark mark='b'/> Let them read. <bookmark mark='c'/> By the end, compare what they write; the curves "
-            "tell which learned faster."
+            "Watch them learn. <bookmark mark='a'/> On the left, each model's loss on text it never trains on; "
+            "<bookmark mark='b'/> on the right, what each writes after the words 'The door opened, and', frozen at "
+            "the same steps, with the same random seed. "
+            f"<bookmark mark='c'/> At the start both write noise, at a loss of about {first['val']:.1f} nats. "
+            "<bookmark mark='d'/> Let them read, and by the end compare what they write; the curves tell which "
+            "learned faster."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(tag))
-            self.play(FadeIn(pts_b[0]), FadeIn(pts_f[0]), FadeIn(bx_b[0]), FadeIn(bx_f[0]), FadeIn(stp[0]))
             vo.wait_until("a")
-            self.play(Indicate(VGroup(pts_b[0], pts_f[0]), color=YELLOW))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(pts_b[0]), FadeIn(pts_f[0]))
             vo.wait_until("b")
-            per = max(0.8, vo.until("c") / max(1, len(steps_) - 1))
+            self.play(FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(bx_b[0]), FadeIn(bx_f[0]), FadeIn(stp[0]))
+            vo.wait_until("c")
+            self.play(Indicate(VGroup(pts_b[0], pts_f[0]), color=YELLOW))
+            vo.wait_until("d")
+            # the replay fills what is left of the sentence, then the full curves are drawn over the snapshots
+            per = max(0.8, (vo.remaining() - 2.0) / max(1, len(steps_) - 1))
             cur = [bx_b[0], bx_f[0], stp[0]]
             for k in range(1, len(steps_)):
                 self.play(FadeIn(pts_b[k], scale=1.5), FadeIn(pts_f[k], scale=1.5),
@@ -139,7 +143,6 @@ class Recipe(VoiceoverScene):
                           ReplacementTransform(cur[2], stp[k]), run_time=0.6 * per)
                 cur = [bx_b[k], bx_f[k], stp[k]]
                 self.wait(0.4 * per)
-            vo.wait_until("c")
             self.play(Create(cb), Create(cf), run_time=1.5)
             if len(s1):
                 self.play(Create(s1), FadeIn(s1n), run_time=1.2)

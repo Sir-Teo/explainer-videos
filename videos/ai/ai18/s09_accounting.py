@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai18.common import (ACTS, C_COL, D_COL, F, GPU, GRADS, N_COL, OPT, PART, WEIGHTS, load, nbytes,
-                                   spoken_int, take_away)
+                                   spoken_int, stage_row, take_away)
 
 
 class Accounting(VoiceoverScene):
@@ -219,6 +219,16 @@ class Accounting(VoiceoverScene):
             big.width = 6.0
         big.move_to([0.75 + big.width / 2, -1.6, 0])
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)
+        # what "activations" means: each step of a layer leaves tensors behind for the backward pass (schematic)
+        ops = stage_row([(r"RMSNorm", GREY_A), (r"attention", C.ATTN), (r"RMSNorm", GREY_A), (r"MLP", ACTS)],
+                        font_size=20).move_to([3.5, 1.7, 0])
+        kept = VGroup()
+        for box, n in zip(ops.boxes, (1, 3, 1, 2)):
+            kept.add(VGroup(*[Rectangle(width=0.55, height=0.16, stroke_width=0, fill_color=ACTS, fill_opacity=0.75)
+                              .next_to(box, DOWN, buff=0.3 + 0.24 * j) for j in range(n)]))
+        k_l = note(r"what one layer keeps for the backward pass \ (schematic)", font_size=18)
+        k_l.next_to(kept, DOWN, buff=0.3).set_x(ops.get_x())
+        layer_pic = VGroup(ops, kept, k_l)
         with self.voiceover(
             "The other big consumer of memory is the activations, what the forward pass keeps for the backward pass. "
             "We "
@@ -236,8 +246,11 @@ class Accounting(VoiceoverScene):
             "and "
             "colleagues' count gives four and a half gigabytes per layer, more than half a terabyte per sequence."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(ops))
+            self.play(LaggedStart(*[FadeIn(r_, shift=DOWN * 0.15) for k_ in kept for r_ in k_], lag_ratio=0.15),
+                      FadeIn(k_l), run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(layer_pic))
             self.play(Create(lines[1]), FadeIn(dots[1]), FadeIn(lg[1]), FadeIn(res[0]))
             vo.wait_until("b")
             self.play(Create(lines[0]), FadeIn(dots[0]), FadeIn(lg[0]), FadeIn(res[1]))
