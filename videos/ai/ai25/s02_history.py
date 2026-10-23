@@ -13,7 +13,7 @@ class History(VoiceoverScene):
         self.blueprint()
 
     def card(self):
-        card = chapter_card(1, r"How we got here", r"Where did symmetry meet science?", lit=(1961, 1998),
+        card = chapter_card(1, r"How we got here", r"Where did symmetry meet science?", lit=(1975, 1998, 2011),
                             part=PART)
         with self.voiceover("Chapter one. How we got here."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))

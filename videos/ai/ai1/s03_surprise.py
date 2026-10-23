@@ -138,7 +138,10 @@ class Surprise(VoiceoverScene):
             "<bookmark mark='d'/> heads on a coin and a five on a die, together, as surprising as the two added "
             "up. <bookmark mark='e'/> And small changes in p make small changes in s."
         ) as vo:
-            self.play(Create(line), FadeIn(nums), FadeIn(plab))
+            ask = VGroup(MathTex(r"s(p) = \ ?", font_size=72, color=C.SURPRISE),
+                         label(r"what must the surprise be?", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.35)
+            ask.move_to([3.6, 0.4, 0])
+            self.play(Create(line), FadeIn(nums), FadeIn(plab), FadeIn(ask))
             self.play(FadeIn(dot, scale=0.5), GrowFromEdge(bar, DOWN), FadeIn(slab))
             vo.wait_until("a")
             self.play(FadeIn(rules[0], shift=RIGHT * 0.15))
@@ -149,6 +152,7 @@ class Surprise(VoiceoverScene):
             self.play(pt.animate.set_value(1.0), run_time=1.4)
             self.play(pt.animate.set_value(0.15), run_time=1.4)
             vo.wait_until("c")
+            self.play(FadeOut(ask), run_time=0.5)
             self.play(FadeIn(rules[2], shift=RIGHT * 0.15), Create(cells), FadeIn(cols), FadeIn(rows_l))
             self.play(FadeIn(col_fill), run_time=0.7)
             self.play(FadeIn(cell), Write(prod), pt.animate.set_value(1 / 12), run_time=1.2)

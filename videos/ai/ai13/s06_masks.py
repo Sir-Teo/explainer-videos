@@ -87,9 +87,9 @@ class Masks(VoiceoverScene):
             f"in the first half move by {past_txt}, while the second half's change by up to {mf:.1f}. Take the "
             f"mask away and the first half moves by {nm:.1f}: the model would be reading the answers."
         ) as vo:
-            self.play(FadeIn(eqs[0]))
+            self.play(FadeIn(eqs[0]), FadeIn(grid), FadeIn(rl), FadeIn(cl), FadeIn(ql), FadeIn(kl), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(grid), FadeIn(rl), FadeIn(cl), FadeIn(ql), FadeIn(kl), FadeIn(tag))
+            self.play(Indicate(rl, color=Q), Indicate(cl, color=K))
             vo.wait_until("b")
             self.play(FadeIn(eqs[1:]), *[sq.animate.set_fill(FUT, opacity=1) for sq in future], run_time=1.5)
             vo.wait_until("c")

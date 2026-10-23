@@ -307,7 +307,7 @@ def n_params(m: nn.Module) -> int:
     return sum(p.numel() for p in m.parameters())
 
 
-def train_pair(kind: str, seed: int, steps=2500, batch=16, lr=1e-3, val=None, max_cycles=4):
+def train_pair(kind: str, seed: int, steps=2500, batch=16, lr=1e-3, val=None, max_cycles=4, snaps=(), snap_fn=None):
     torch.manual_seed(seed)
     rng = np.random.default_rng(3000 + seed)
     m = PairModel(triangle=kind != "pairwise", recycle=kind == "recycle",
@@ -317,9 +317,16 @@ def train_pair(kind: str, seed: int, steps=2500, batch=16, lr=1e-3, val=None, ma
     eye = torch.eye(PAIR_N, dtype=torch.bool)
     curve = []
     t0 = time.time()
+    frames = []
     for s in range(steps + 1):
+        if s in snaps and snap_fn is not None:
+            m.eval()
+            frames.append(snap_fn(m))
+            m.train()
         if val is not None and (s % 250 == 0 or s == steps):
+            m.eval()
             curve.append((s, pair_error(m, val, cycles=max_cycles if kind == "recycle" else 1)["hidden"]))
+            m.train()
         if s == steps:
             break
         inp, D, M = pair_batch(rng, batch)
@@ -332,7 +339,7 @@ def train_pair(kind: str, seed: int, steps=2500, batch=16, lr=1e-3, val=None, ma
         opt.step()
         sched.step()
     m.eval()
-    return m, dict(curve=curve, secs=time.time() - t0, params=n_params(m))
+    return m, dict(curve=curve, frames=frames, secs=time.time() - t0, params=n_params(m))
 
 
 def pair_error(m, val, cycles=1):

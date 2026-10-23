@@ -186,6 +186,7 @@ class Search(VoiceoverScene):
         s7 = (f"At rank seven, {r7[1]} of {r7[2]} starts find one: a Strassen-like algorithm, which multiplies "
               f"random matrices correctly to {vdp} decimal places" if r7[1] else "At rank seven our search found none")
         tag = note(r"computed", font_size=20).to_corner(DR, buff=0.2)
+        head = label(r"matrix multiplication as a tensor", font_size=30, color=SEARCH_C).to_edge(UP, buff=0.25)
         with self.voiceover(
             "Matrix multiplication is the purest case. <bookmark mark='a'/> The schoolbook way to multiply two n by "
             "n matrices uses n cubed multiplications. <bookmark mark='b'/> Write the product as a three-way tensor; "
@@ -195,6 +196,7 @@ class Search(VoiceoverScene):
             "<bookmark mark='e'/> We searched for these decompositions numerically, from thirty random starts at "
             f"each rank. {s6}. {s7}."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 step(k)

@@ -449,6 +449,8 @@ PHRASES = {
     'Turned copies help the MLP': '转过的副本对MLP有帮助',
     "close to the MLP's": '和MLP的差不多',
     'still as large as its own error': '仍然和它自己的预测误差一样大',
+    'Each wins on one count': '两者各赢一项',
+    'At rank seven our search found none': '秩为七时，我们的搜索一个也没找到',
 }
 
 ZH.update({
@@ -648,4 +650,291 @@ ZH.update({
 
     'Design, in one line:':
         "一句话说设计：扩散出一条主链，为它写一条序列，检查这条序列能不能折回去，然后才把它做出来。现在从分子走向整个星球。",
+})
+
+ZH.update({
+    # ------------------------------------------------------------------ Weather
+    'Chapter thirteen. Weather on a mesh.':
+        '第13章。网格上的天气。',
+
+    'Weather forecasting became physics in 1904':
+        "1904年，天气预报变成了物理学：维尔赫姆·皮耶克尼斯把它描述成一个初值问题，测出此刻的大气，再把流体方程向前推进。<bookmark "
+        "mark='a'/>刘易斯·弗赖·理查森在第一次世界大战期间试着用手算：为欧洲的两个点做一次六小时预报，算了大约六个星期，结果错了一百四十五"
+        "百帕。他梦想有一个大厅，六万四千人步调一致地计算天气。<bookmark mark='b'/>1950年，朱尔·查尼、拉格纳·弗约托夫特和约翰·冯·诺依曼"
+        "在ENIAC上做出了最早的几次预报：二十四小时的天气，大约要算二十四小时。<bookmark mark='c'/>欧洲中期天气预报中心在1979年发布了"
+        "第一批预报；此后几十年里，更好的物理、更好的数据和更大的计算机，大约每十年让有用的预报时效多出一天。",
+
+    'Machine learning came to this in the 2020s':
+        "到了2020年代，机器学习来到了这里，用ERA5训练，那是ECMWF对1940年以来全球天气的重建。2023年，谷歌DeepMind的雷米·拉姆等人发表了"
+        "GraphCast。<bookmark mark='a'/>大气存储在一个经纬度网格上，一百万个点，每个点二百二十七个数：风、温度、湿度等等，分布在三十七个"
+        "高度上。但这样的网格在两极附近点挤得太密，所以GraphCast改在一个网格网上工作：<bookmark mark='b'/>一个正二十面体，细分六次，保留"
+        "每一层的边，于是有的边很短，有的边横跨大陆，一条消息几步就能穿过整个星球。这是我们自己的小版本，在一个正方形上。<bookmark "
+        "mark='c'/>把格点编码到网格网上，传递十六次消息，再解码回格点：由最近的两个状态得到下一个状态，六小时之后。<bookmark mark='d'/>"
+        "它用三十九年的ERA5，在三十二个TPU上训练了四个星期，几分钟不到就能做出一次十天预报，并在1380个检验目标中的百分之九十上胜过了ECMWF"
+        "旗舰的确定性预报。",
+
+    'Ours is a toy atmosphere:':
+        "我们的是一个玩具大气：一个二维流体，在一个首尾相接的正方形上，被一个固定的图样搅动，又被摩擦减弱，于是涡旋生成、漂移、合并、"
+        "消亡。它是混沌的，就像天气。<bookmark mark='a'/>一个小的编码–处理–解码网络在刚才那个网格网上，从三十二次模拟中一步一步地学习，"
+        "然后自己往前推，把每次预测再喂回去。<bookmark mark='b'/>上面一行是真实情况；下面一行是我们的网络，从同一个起点出发。有一段时间"
+        "两者一致；然后它们渐行渐远。",
+
+    '"Scored over eight new runs: the error, step by step.':
+        "在八次新的模拟上打分：误差，一步一步看。<bookmark mark='a'/>{s1}。<bookmark mark='b'/>{s2}，{s3}。<bookmark mark='c'/>{s4}。"
+        "GraphCast训练时最多展开十二步，正是为了这个原因：从自己逐渐偏离的预测里学习。",
+
+    "f'One step ahead its error is":
+        '提前一步，它的误差是{rm[0]:.2f}，而假设什么都不变的误差是{pers[0]:.2f}',
+
+    "f'Even one step ahead it is no better":
+        '即使只提前一步，它也不比假设什么都不变更好',
+
+    "f'It stays ahead of persistence for {hor} steps'":
+        '在{hor}步之内它都领先于持续性预报',
+
+    "Its lead over persistence is short-lived":
+        '它对持续性预报的领先很短暂',
+
+    "f'and after {cross_c} steps it is worse":
+        '而{cross_c}步之后，它比直接预报平均状态还差，每个混沌系统的预报最终都会这样',
+
+    'and it stays better than the average state throughout':
+        '而且自始至终都比平均状态好',
+
+    'The long edges matter:':
+        '长边是重要的：只用最短边的同一个网络，在前十步里表现更差',
+
+    "In our toy the long edges don't help over the first ten steps":
+        '在我们的玩具里，长边在前十步里没有帮助',
+
+    'There is a deeper problem.':
+        "还有一个更深的问题。用平方误差训练的网络学会预测的是可能发生的情况的平均，而在很远的将来，许多种可能天气的平均是一片模糊。"
+        "<bookmark mark='a'/>预报员用集合预报来应对不确定性：从略有不同的起点出发跑很多次。2024年，谷歌DeepMind的GenCast学会了用扩散来"
+        "抽样下一个状态：五十个以上的样本组成一个集合，它在1320个目标中的97.2%上胜过了ECMWF自己的集合预报，提前一天半以上时是99.8%。"
+        "<bookmark mark='b'/>然后，学出来的模型投入了日常业务。2025年2月25日，ECMWF让自己的人工智能预报系统投入业务运行，一个图网络编码器"
+        "和解码器包着一个Transformer，那年7月又推出了它的集合版本；<bookmark mark='c'/>谷歌在11月发布了WeatherNext 2，12月，美国的NOAA"
+        "让它的第一批AI全球模型投入运行。",
+
+    'So the weather became a graph problem:':
+        "于是天气变成了一个图问题：一个包住星球的网格网，几步就能穿过它的消息，以及为未来中无法知道的那一部分准备的扩散。接下来："
+        "学会整个方程的网络。",
+
+    # ------------------------------------------------------------------ Operators
+    'Chapter fourteen. Neural operators.':
+        '第14章。神经算子。',
+
+    'Fields evolve by equations.':
+        "场按方程演化。这是伯格斯方程，流体流动的一个一维漫画：一个波，在快的地方变陡，又被黏性抹平。<bookmark mark='a'/>从这个起点出发，"
+        "一个时间单位之后，解是这个样子。<bookmark mark='b'/>求解器要走几千个小步才能到那里，而且每次被问都得重走一遍。一个网络可以学会从"
+        "起点到终点的映射，但普通网络只处理一个固定长度的数列：用六十四个点训练，它就只认识六十四个点。<bookmark mark='c'/>我们想学的是"
+        "算子本身，一个从函数到函数的映射，在任何分辨率上都能读。<bookmark mark='d'/>陈天平和陈宏在1995年证明了网络可以逼近算子；"
+        "DeepONet和傅里叶神经算子都发表于2021年，让它变得实用。",
+
+    'The Fourier neural operator, from Zongyi Li':
+        "傅里叶神经算子出自李宗仪、阿妮玛·阿南德库马尔、安德鲁·斯图尔特等人，它从一个积分形式的网络层出发：每个点的新值，通过一个核"
+        "kappa，混合了整个场。<bookmark mark='a'/>如果核只依赖于偏移量，这个积分就是一个卷积，而卷积定理把它变成傅里叶变换的乘积。"
+        "<bookmark mark='b'/>所以直接学核的变换：给最低的那些频率各学一个复数权重，我们的模型里是十六个，其余的丢掉。<bookmark mark='c'/>"
+        "由此得出三件事。权重属于频率，不属于格点，所以同一个网络能读任何细到足以容纳这些频率的网格。输入平移，输出也跟着平移。而每一层"
+        "的代价比一次快速傅里叶变换多不了多少。",
+
+    'f"We trained one on a thousand solutions':
+        "我们用伯格斯方程的一千个解训练了一个，采样在{res}个点上，以一个伪谱求解器的答案为准。<bookmark mark='a'/>这是它对一个从没见过的"
+        "起点的预测，在训练的各个检查点上，旁边是学习曲线。<bookmark mark='b'/>最后，它在留出的起点上的相对误差是{100 * e_fin:.1f}%。",
+
+    'f"Now the test that matters.':
+        "现在是真正要紧的测试。两个网络都只在六十四个点上训练过。从{R[0]}个点到{R[-1]:,}个点去读它们。<bookmark mark='a'/>{f_txt}。"
+        "<bookmark mark='b'/>{c_txt}。<bookmark mark='c'/>{coarse}。FourCastNet是最早的学习型天气模型之一，2022年推出，它就建立在这种"
+        "傅里叶层的一个变体上。",
+
+    "f'The CNN, as good as":
+        'CNN在它自己的网格上能达到{100 * ec[i_tr]:.1f}%，到最细的网格上变成了{100 * ec[-1]:.0f}%：它的核是五个格点宽，所以在更细的网格上'
+        '只能看到线上更窄的一段',
+
+    "f'The CNN also transfers:":
+        'CNN也能迁移：在它自己的网格上{100 * ec[i_tr]:.1f}%，在最细的网格上{100 * ec[-1]:.1f}%',
+
+    'f"Below its training resolution':
+        '在低于训练分辨率的{R[0]}个点上，算子的误差是{100 * ef[0]:.1f}%：这么粗的网格会把解形成的陡峭锋面抹平',
+
+    'f"Even below its training resolution':
+        '即使在低于训练分辨率的{R[0]}个点上，算子的误差也是{100 * ef[0]:.1f}%',
+
+    'f"The Fourier neural operator\'s error stays':
+        '傅里叶神经算子的误差在它自己的网格上是{100 * ef[i_tr]:.1f}%，在{R[-1]:,}个点、细{fine}倍的网格上是{100 * ef[-1]:.1f}%',
+
+    'f"The Fourier neural operator\'s error grows':
+        '傅里叶神经算子的误差从它自己网格上的{100 * ef[i_tr]:.1f}%，增长到{R[-1]:,}个点上的{100 * ef[-1]:.1f}%',
+
+    'Learn the operator, not the grid.':
+        "学算子，不学网格。属于频率的权重可以带到任何分辨率上，这正是一个物理世界的模型应该做到的。从场走向晶体。",
+
+    # ------------------------------------------------------------------ Materials
+    'Chapter fifteen. Materials by the million.':
+        '第15章。百万量级的材料。',
+
+    'f"A crystal is a pattern of atoms repeated in space':
+        "晶体是原子在空间里重复排列的图样，它的对称性属于230种空间群之一，1891年就分类完了。哪些晶体存在？<bookmark mark='a'/>取两种元素"
+        "A和B，以及它们所有可能的化合物，每个都有一个形成能，用密度泛函理论计算，每个要花好几个小时的计算机时间。<bookmark mark='b'/>"
+        "如果没有其他化合物的混合物能量更低，这个化合物就是稳定的：也就是说，它落在这些点的下凸包上。<bookmark mark='c'/>在凸包上方的化合物"
+        "宁愿分解成它的邻居，它高出凸包多少，说明它有多不稳定。在这个体系里，有{words_num(n_st)}个化合物在凸包上。",
+
+    'In 2023 Amil Merchant, Ekin Dogus Cubuk and colleagues':
+        "2023年，谷歌DeepMind的阿米尔·默钱特、埃金·多古斯·丘布克等人发表了GNoME，用于材料探索的图网络。<bookmark mark='a'/>它通过替换"
+        "已知晶体里的元素、以及随机搜索，来生成候选晶体；<bookmark mark='b'/>图网络建立在原子间距离之上，因而与晶体怎么转无关，用来预测每个"
+        "候选的能量；<bookmark mark='c'/>密度泛函理论检查最有希望的那些；<bookmark mark='d'/>每一次检查都变成下一轮的训练数据。<bookmark "
+        "mark='e'/>此前，计算方法总共找到了大约四万八千种稳定晶体。GNoME报告了220万种相对已知一切都稳定的晶体，其中38.1万种在新的凸包上。"
+        "它挑出来、被DFT确认的比例升到了百分之八十以上，而早先的工作只有百分之一左右；而且它的预测中有736种，已经被其他实验室独立地做出来了。",
+
+    'f"We can run the flywheel on a made-up chemistry:':
+        "我们可以在一个虚构的化学体系上转动这个飞轮：二十种虚构的元素，两两组合，九种配比，四种晶体类型，共{m['n_candidates']:,}个候选，"
+        "它们的“DFT”能量是一个隐藏的公式，我们每次只揭开六十个。<bookmark mark='a'/>一开始知道其中百分之三。每一轮，用所有已知的数据训练"
+        "一个小集成模型，预测其余的，检查相对于已知凸包看起来最稳定的六十个，再把它们加进来。命中，就是落在那个凸包下方的一次挑选。"
+        "<bookmark mark='b'/>随机挑选的命中率是{100 * h_r.mean():.0f}%。<bookmark mark='c'/>代理模型的挑选在第一轮命中{100 * h_m[0]:.0f}%，"
+        "{trend}。<bookmark mark='d'/>它的误差从{mae[0]:.3f}降到{mae[-1]:.3f}，{rounds}轮之后，它找到了{m['n_stable']}个真正稳定的化合物中的"
+        "{F['model'][:, -1].mean():.0f}个，而随机挑选找到{F['random'][:, -1].mean():.0f}个。",
+
+    "f'and it climbs as the surrogate learns":
+        '而且随着代理模型的学习不断上升，从第一轮的{100 * h_m[0]:.0f}%升到最后一轮的{100 * h_m[-1]:.0f}%',
+
+    "f'and it stays around":
+        '而且一直在{100 * h_m.mean():.0f}%左右：在我们的玩具里，代理模型从一开始就不错',
+
+    'The claims drew pushback from chemists.':
+        "这些说法遭到了化学家的质疑。<bookmark mark='a'/>2024年，安东尼·奇塔姆和拉姆·谢沙德里随机抽查了GNoME的一批预测，发现很少有证据表明"
+        "其中有同时称得上新颖、可信又有用的化合物；许多预测把原子排成整齐的有序结构，而真实晶体里这些原子是随机混排的；他们认为这些是晶态"
+        "化合物，还算不上材料。<bookmark mark='b'/>同一年，批评者对一个机器人实验室报告四十一种新化合物所依据的X射线分析提出了异议；"
+        "2026年1月，这篇论文被更正为五十七个目标中的三十六种化合物。<bookmark mark='c'/>工具在不断进步，适用于任何元素的通用学习势函数，"
+        "能按指定性质提出晶体的生成模型，<bookmark mark='d'/>但教训留了下来：预测出来的晶体只是一个假设，把它做出来才是检验。",
+
+    'In materials, then, the network is a cheap first opinion':
+        "所以在材料领域，网络是一个便宜的初步意见，让昂贵的检查物尽其用。而在数学里，检查可以是完美的。",
+
+    # ------------------------------------------------------------------ Proofs
+    'Chapter sixteen. Geometry and proofs.':
+        '第16章。几何与证明。',
+
+    'Mathematics has something no other science has:':
+        "数学有一样别的科学都没有的东西：一个骗不了的检查器。第28部分讲了强化学习怎样利用完美的检查器；这里讲检查器从哪里来。<bookmark "
+        "mark='a'/>在Lean这样的证明助手里，定理和证明都是代码，一个小小的内核检查每一步推理：这一个说的是，n乘以n加1是偶数。<bookmark "
+        "mark='b'/>计算机进入证明是在1976年，肯尼斯·阿佩尔和沃尔夫冈·哈肯检查了没有人能手工检查的大量情形，证明了四色定理；2005年，"
+        "乔治·贡蒂埃对整个证明做了形式化检查。<bookmark mark='c'/>托马斯·黑尔斯对开普勒猜想的证明在2014年得到了形式化验证，<bookmark "
+        "mark='d'/>2022年，Lean社区用大约十八个月，把达斯汀·克劳森和彼得·舒尔茨的一个困难的新定理形式化了。<bookmark mark='e'/>Lean的库"
+        "Mathlib现在收录了大约二十九万条定理，这是任何机器证明者立足的基础。",
+
+    'Olympiad geometry was the first olympiad subject to fall.':
+        "奥赛几何是第一个被攻下的奥赛科目。2024年1月，谷歌DeepMind的陈天如、梁明唐等人发表了AlphaGeometry。<bookmark mark='a'/>没有人类"
+        "证明可学，他们就自己造：随机的前提，一个推出所有后果的符号引擎，再从每个新事实回溯到它恰好需要的东西。一亿条带证明的定理。"
+        "<bookmark mark='b'/>其中百分之九需要一个题目里从未提到的点，一条辅助构造，这是奥赛几何里有创造性的那一步；一个语言模型学会了"
+        "提出这些点，其余的交给引擎。<bookmark mark='c'/>在三十道奥赛题上，它在规定时间内解出了二十五道，此前最好的方法是十道，它的引擎"
+        "单独是十四道，GPT-4是零道；金牌得主平均解出25.9道。<bookmark mark='d'/>一年后，AlphaGeometry 2解出了2000年以来所有奥赛几何题的"
+        "百分之八十四。",
+
+    'Then the olympiad itself, which Part 28 followed in detail.':
+        "然后是奥赛本身，第28部分详细讲过。<bookmark mark='a'/>2024年，在Lean里工作的AlphaZero方法AlphaProof，加上负责几何的"
+        "AlphaGeometry 2，拿到了四十二分里的二十八分，离金牌差一分。<bookmark mark='b'/>2025年，谷歌的Gemini Deep Think和OpenAI的一个"
+        "实验模型各自拿到三十五分，正好是金牌线，证明是用普通语言写的。<bookmark mark='c'/>而在2026年7月的上海，两家中国公司，华为和"
+        "小红书，报告它们的系统拿到了满分，四十二分里的四十二分，解答提交给了组织方评分，据法新社报道；六百六十六名学生里也有七人拿了"
+        "四十二分。奥赛作为对机器的测试，已经接近饱和。",
+
+    'Beyond contests, the frontier is research mathematics.':
+        "在比赛之外，前沿是研究级的数学。<bookmark mark='a'/>把非形式的数学翻译成Lean，也就是自动形式化，速度猛然加快：2025年9月，初创公司"
+        "Math Inc.报告说，它的智能体Gauss用大约三个星期，把强素数定理形式化了，大约两万五千行Lean代码。<bookmark mark='b'/>2026年1月，"
+        "OpenAI的GPT-5.2 Pro和Harmonic的证明器Aristotle合作，解决了埃尔德什第728号问题，最后给出的是一个Lean证明。<bookmark mark='c'/>"
+        "谷歌DeepMind的一个团队让Gemini处理了七百个标为未解的保罗·埃尔德什问题：解决了十三个，五个靠的是看来是新的论证，八个是因为答案"
+        "原来已经在文献里了。<bookmark mark='d'/>两点提醒。形式化证明恰好证明它的陈述，所以译错的陈述证明的是错的东西；而且，正如密切关注"
+        "的数学家们所说，最先被攻下的都是比较容易的问题。",
+
+    'With a perfect checker, search can be trusted:':
+        "有了完美的检查器，搜索就可以信任：放手去生成，只留下通过检查的。最后一章讲的正是这个。",
+
+    # ------------------------------------------------------------------ Search
+    'Chapter seventeen. Discovery by search.':
+        '第17章。靠搜索做发现。',
+
+    'When the checker is exact, discovery becomes a loop.':
+        "当检查是精确的，发现就变成了一个循环。<bookmark mark='a'/>提出一个候选，一段程序或一个构造；<bookmark mark='b'/>精确地给它打分；"
+        "<bookmark mark='c'/>保留最好的，再变化它们。<bookmark mark='d'/>第26部分讲过的AlphaTensor，用一个AlphaZero网络来提出候选。"
+        "2023年12月，谷歌DeepMind的贝尔纳迪诺·罗梅拉–帕雷德斯等人在FunSearch里让一个语言模型来写Python程序，程序库分散在不同的岛上，"
+        "就像进化中的种群。<bookmark mark='e'/>它在八维空间里找到了一个帽集，五百一十二个点，其中没有三点共线，超过了已知的四百九十六个，"
+        "这是这个问题二十年来最大的一次跃进。",
+
+    'f"Let\'s run that loop ourselves':
+        "我们自己来跑这个循环，用FunSearch的一个问题：在线装箱。<bookmark mark='a'/>物品一个一个到来，每个都必须立刻放进一个箱子。一条规则"
+        "来决定：给物品放得下的每个箱子打分，挑分最高的。<bookmark mark='b'/>经典的规则是最佳适配：挑剩余空间最小的箱子。<bookmark "
+        "mark='c'/>我们把这样的打分当作公式来进化，用随机的变异和交叉代替语言模型，按它们在八个训练序列上用了多少箱子来评判。{evo_line}。"
+        "<bookmark mark='d'/>{res_line}。<bookmark mark='e'/>2025年的一项独立研究对语言模型进化出来的启发式方法也有同样的发现：它们常常"
+        "无法推广到培育它们的那些实例之外。",
+
+    "f'Within {int(gens[-1])} generations":
+        '{int(gens[-1])}代之内，它在训练实例上比最佳适配好{gain:.2f}个百分点',
+
+    "f'In {int(gens[-1])} generations it never beats":
+        '{int(gens[-1])}代里，它在训练实例上从没胜过最佳适配',
+
+    "f'On new, longer sequences of items, both evolved rules":
+        '在新的、更长的物品序列上，两条进化出来的规则仍然都胜过最佳适配：{tests[0]:.2f}%和{tests[-1]:.2f}%，对{bf_te:.2f}%',
+
+    'f"On new, longer sequences, {words_num(len(better))}':
+        '在新的、更长的序列上，{words_num(len(tests))}条进化出来的规则中有{words_num(len(better))}条胜过最佳适配，{min(better):.2f}%对'
+        '{bf_te:.2f}%；另一条没有',
+
+    'f"On new, longer sequences of items, neither evolved rule':
+        '在新的、更长的物品序列上，两条进化出来的规则都没有胜过最佳适配的{bf_te:.2f}%：进化找到的东西，是为它的训练实例量身定做的',
+
+    'f"Matrix multiplication is the purest case.':
+        "矩阵乘法是最纯粹的例子。<bookmark mark='a'/>按教科书的方法，两个n乘n矩阵相乘要做n的三次方次乘法。<bookmark mark='b'/>把这个乘积"
+        "写成一个三向张量；<bookmark mark='c'/>那么，把这个张量写成R个简单乘积之和的每一种写法，都是一个只用R次乘法的算法。<bookmark "
+        "mark='d'/>1969年，福尔克尔·施特拉森为二乘二矩阵找到了七次的算法，而不是八次；两年后，什穆埃尔·维诺格拉德证明了七就是最少的。"
+        "<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。{s6}。{s7}。",
+
+    "f'At rank six, none of the":
+        '秩为六时，{r6[2]}个起点没有一个能把误差降到{r6[3]:.2f}以下：根本不存在六次乘法的算法可找',
+
+    "f'At rank six, {r6[1]} starts report zero error":
+        '秩为六时，有{r6[1]}个起点报告误差为零，这会和定理矛盾：是数值上的假象',
+
+    "f'At rank seven, {r7[1]} of":
+        '秩为七时，{r7[2]}个起点里有{r7[1]}个找到了：一个类似施特拉森的算法，它把随机矩阵乘对到小数点后{vdp}位',
+
+    'In May 2025 Google DeepMind combined both lines in AlphaEvolve.':
+        "2025年5月，谷歌DeepMind在AlphaEvolve里把这两条线合在了一起。<bookmark mark='a'/>Gemini模型提出对整段程序的修改，评估器给它们"
+        "打分，进化保留最好的。<bookmark mark='b'/>它的成果之一：用四十八次乘法计算四乘四复数矩阵的乘积，胜过了把施特拉森的技巧用两次"
+        "得到的四十九次，那是1969年以来的纪录。<bookmark mark='c'/>它是通过进化一段基于梯度的分解搜索代码做到的，正是我们刚才跑的那一类"
+        "搜索。<bookmark mark='d'/>几个星期之内，法国的三位研究者，让–纪尧姆·迪马、克莱芒·佩尔内和亚历山大·塞多格拉维奇，推导出了一个"
+        "只用有理系数的四十八次算法。<bookmark mark='e'/>AlphaEvolve还在十一维空间里让593个球同时接触一个中心球，创下新纪录；在五十多个"
+        "未解问题上，它有四分之三追平了已知最好的答案，五分之一做得更好。<bookmark mark='f'/>在谷歌内部，它找到的一条调度规则为公司收回了"
+        "0.7%的算力；它加速的一个内核让Gemini的训练时间缩短了百分之一。<bookmark mark='g'/>2025年11月，陶哲轩等人让它去处理六十七个问题，"
+        "并发表了它的发现，以及它失败的地方。",
+
+    'Discovery by search, then:':
+        "所以，靠搜索做发现：放手去提出，精确地检查，留下经得起检查的。只要检查是精确的，它就管用，这就是数学和算法走在最前面的原因。",
+
+    # ------------------------------------------------------------------ Outro
+    "Let's take stock.":
+        "我们来总结一下。对称是一种不应该改变答案的变换，网络可以从构造上精确地尊重它，也可以从样本里近似地学会它。求和造出集合上的"
+        "函数；对邻居求和造出图网络，它恰好看见颜色细化看见的东西，叠得太深又会丢失细节。把转动做进去，让我们的分子模型在同样的数据下"
+        "好得多。AlphaFold通过用三角形保持一致的残基对来读一个蛋白质，用坐标系把它搭起来，用一个分得清左右的损失给它打分，它的后继者则"
+        "把原子交给了扩散。天气在网格网上运行；方程被学成算子；晶体被成百万地筛选；而在数学里，检查器是完美的，搜索就能做出发现。",
+
+    'All of this comes back.':
+        "这一切都还会回来。<bookmark mark='a'/>由网络引导、由精确检查器评判的搜索，就是下一次要讲的AlphaZero，以及第28部分的推理模型。"
+        "<bookmark mark='b'/>一个把世界向前推演的学习型模拟器，就像我们的网格网络，是第29部分的世界模型。<bookmark mark='c'/>网络的各层"
+        "表示了什么，它的特征是否尊重我们期望的对称性，是第30部分的主题。<bookmark mark='d'/>而CASP的盲测，以及一个几乎被机器做到饱和的"
+        "奥赛，引出了第31部分的问题：到底该怎样评估。",
+
+    'Here are six problems to try,':
+        "这里有六道习题，从等变映射的复合到傅里叶层。在这里暂停一下，动手做一做；完整的解答在本部分的讲义里。",
+
+    'Next time, the fifth act: agency.':
+        "下一次，第五幕：能动性。本章的搜索循环，提出、检查、保留最好的，变成了从奖励中学习：智能体行动，世界给出回应，智能体不断改进，"
+        "一直到AlphaZero，我们会亲手训练一个。第26部分：强化学习，从贝尔曼到AlphaZero。",
+
+    'To go deeper, Bronstein, Bruna, Cohen':
+        "想深入了解，布朗斯坦、布鲁纳、科恩和韦利奇科维奇关于几何深度学习的书是整个这一部分的地图，威廉·汉密尔顿的小书把图网络讲得"
+        "很清楚。感谢收看，我们第26部分再见。",
+})
+
+ZH.update({
+    "f'{rng_i:.4f} of a unit":
+        '{rng_i:.4f}个单位，比单纯的舍入误差大',
 })

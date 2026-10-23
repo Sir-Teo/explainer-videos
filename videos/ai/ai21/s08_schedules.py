@@ -192,9 +192,12 @@ class Schedules(VoiceoverScene):
         note_ = label(r"the error at the end, \ against the exact solution of the ODE, \ same starting noise", font_size=20,
                       color=GREY_A).next_to(rows, DOWN, buff=0.4)
         same = len(set(best.values())) == 1
-        verdict = (f"One spacing wins for all three: {SP_SPOKEN[best[kinds[0]]]}." if same else
-                   "No spacing wins for every solver: for DDIM the best is " + SP_SPOKEN[best["ddim"]] + ", for Heun "
-                   + SP_SPOKEN[best["heun"]] + ", for DPM-Solver plus plus " + SP_SPOKEN[best["dpmpp2m"]] + ".")
+        sp_ddim, sp_heun, sp_dpm = SP_SPOKEN[best["ddim"]], SP_SPOKEN[best["heun"]], SP_SPOKEN[best["dpmpp2m"]]
+        if same:
+            verdict = f"One spacing wins for all three: {sp_ddim}."
+        else:
+            verdict = (f"No spacing wins for every solver: for DDIM the best is {sp_ddim}, for Heun {sp_heun}, and for "
+                       f"DPM-Solver plus plus {sp_dpm}.")
         edm_note = ("On image models EDM's spacing has become a standard; on our letters it is not always the best. "
                     "The spacing is a setting of the sampler, tuned like any other." if any(b != "edm" for b in best.values())
                     else "On image models EDM's spacing has become a standard, and on our letters it is the best too.")

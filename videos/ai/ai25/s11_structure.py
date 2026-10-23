@@ -93,6 +93,7 @@ class Structure(VoiceoverScene):
         note1 = label(r"but the frames are built right-handed: \ a mirror image is not a rigid motion", font_size=24,
                       color=MIRROR_C).to_edge(DOWN, buff=0.9)
         cite_ = cite(r"Jumper et al., \textit{Nature} (2021), \ supplementary information", corner=DR)
+        head = label(r"the loss: \ frame-aligned point error", font_size=32, color=PAIR_C).to_edge(UP, buff=0.3)
         with self.voiceover(
             "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, "
             "FAPE. <bookmark mark='a'/> Stand in residue i's frame and look at atom j: that gives its position as "
@@ -102,6 +103,7 @@ class Structure(VoiceoverScene):
             "FAPE doesn't care where the protein sits or how it is turned. <bookmark mark='d'/> But the frames are "
             "built from three atoms by a right-hand rule. A mirror image is not a rigid motion, so FAPE sees it."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")

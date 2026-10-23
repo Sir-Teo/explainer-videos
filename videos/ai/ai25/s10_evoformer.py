@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (HIST, KIND_COLOR, KIND_NAME, MSA_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM,
-                                   TRUE_C, load, matrix_image, node_box, take_away)
+                                   TRUE_C, hbars, load, matrix_image, node_box, take_away)
 
 
 class Evoformer(VoiceoverScene):

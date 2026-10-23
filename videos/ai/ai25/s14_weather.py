@@ -17,7 +17,7 @@ class Weather(VoiceoverScene):
         self.ensembles()
 
     def card(self):
-        card = chapter_card(13, r"Weather on a mesh", r"Can a network learn the atmosphere?", lit=(1950,), part=PART)
+        card = chapter_card(13, r"Weather on a mesh", r"Can a network learn the atmosphere?", lit=(1975,), part=PART)
         with self.voiceover("Chapter thirteen. Weather on a mesh."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

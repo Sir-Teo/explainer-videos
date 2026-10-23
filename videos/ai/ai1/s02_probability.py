@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import (ALPHA27, PART, ZoomLadder, letter, letter_bars, load, tt)
+from videos.ai.ai1.common import (ALPHA27, PART, ZoomLadder, letter, letter_bars, letter_row, load, tt)
 
 
 class Probability(VoiceoverScene):
@@ -160,8 +160,8 @@ class Probability(VoiceoverScene):
     def conditional(self):
         b = load("bigram")
         cond, joint = b["cond"], b["joint"]
-        cell = 0.165
-        x0, y0 = -6.3, 2.35  # top-left corner of the grid
+        cell = 0.2
+        x0, y0 = -6.2, 2.45  # top-left corner of the grid
         grid = VGroup()
         for i in range(27):
             for j in range(27):
@@ -171,9 +171,9 @@ class Probability(VoiceoverScene):
                     col = interpolate_color(ManimColor(C.TRUE_P), ManimColor(WHITE), (v - 0.75) * 4)
                 grid.add(Square(side_length=cell, stroke_width=0, fill_color=col, fill_opacity=1)
                          .move_to([x0 + (j + 0.5) * cell, y0 - (i + 0.5) * cell, 0]))
-        rows = VGroup(*[letter(ALPHA27[i], font_size=13, color=GREY_B).move_to([x0 - 0.15, y0 - (i + 0.5) * cell, 0])
+        rows = VGroup(*[letter(ALPHA27[i], font_size=15, color=GREY_B).move_to([x0 - 0.15, y0 - (i + 0.5) * cell, 0])
                         for i in range(27)])
-        cols = VGroup(*[letter(ALPHA27[j], font_size=13, color=GREY_B).move_to([x0 + (j + 0.5) * cell, y0 + 0.15, 0])
+        cols = VGroup(*[letter(ALPHA27[j], font_size=15, color=GREY_B).move_to([x0 + (j + 0.5) * cell, y0 + 0.15, 0])
                         for j in range(27)])
         rl = label(r"previous", font_size=20, color=GREY_B)
         if not zh():  # Chinese reads top to bottom unrotated (the table sets it as a vertical stack)
@@ -183,6 +183,9 @@ class Probability(VoiceoverScene):
         qi, ui, ti, hi = (ALPHA27.index(c) for c in "quth")
         head = label(r"$P(\text{next} \mid \text{previous})$ \ for every pair of symbols", font_size=30)
         head.move_to([2.6, 3.3, 0])
+        row_note = VGroup(label(r"each row: \ one distribution over the next symbol", font_size=26, color=GREY_A),
+                          label(r"brighter $=$ more likely", font_size=24, color=GREY_B)).arrange(DOWN, buff=0.2)
+        row_note.move_to([3.6, 0.2, 0])
         # the same numbers as areas: the unit square, cut by the previous symbol, then by the next
         cells = self.mosaic_cells(joint, cond)
         p1 = joint.sum(1)
@@ -211,9 +214,10 @@ class Probability(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(grid[i * 27:(i + 1) * 27]) for i in range(27)], lag_ratio=0.08),
                       FadeIn(rows), FadeIn(cols), FadeIn(rl), FadeIn(cl), run_time=2.5)
+            self.play(FadeIn(row_note))
             vo.wait_until("d")
             self.play(*[ReplacementTransform(grid[k], cells[k]) for k in range(729)], FadeOut(rows), FadeOut(cols),
-                      FadeOut(rl), FadeOut(cl), run_time=2.2)
+                      FadeOut(rl), FadeOut(cl), FadeOut(row_note), run_time=2.2)
             self.play(FadeIn(mlabs), FadeIn(mcap), FadeIn(lit_cell))
             self.show_pull(pt)
             self.play(Write(f_def), FadeIn(b_w), GrowFromCenter(b_h), FadeIn(b_h_l))
@@ -225,8 +229,8 @@ class Probability(VoiceoverScene):
                     .replace(",", "{,}"), font_size=36, color=WHITE).move_to([3.7, 1.9, 0])
         cap_q = label(r"after \texttt{q}, almost surely \texttt{u}", font_size=28, color=C.BITS).next_to(f_qu, DOWN,
                                                                                                     buff=0.4)
-        cap_sp = label(r"after a space, almost anything: \ a word is starting", font_size=28, color=C.CONTEXT)
-        cap_sp.move_to([3.7, -0.6, 0])
+        cap_sp = label(r"after a space, almost anything:\\ a word is starting", font_size=28, color=C.CONTEXT)
+        cap_sp.move_to([4.2, -1.0, 0])
         pq = self.pull(cells, qi, cond, lit=(ui,))
         q_col = VGroup(*cells[qi * 27:(qi + 1) * 27])
         q_arrow = Arrow(q_col.get_bottom() + DOWN * 0.9, q_col.get_bottom() + DOWN * 0.05, buff=0, color=C.CONTEXT,
@@ -268,9 +272,9 @@ class Probability(VoiceoverScene):
         ]
         eqs = [cmath(*s, colors=colors, font_size=40) for s in steps]
         for e in eqs:
-            e.move_to([3.4, 3.2, 0])
-            if e.width > 7.0:
-                e.width = 7.0
+            if e.width > 6.6:
+                e.width = 6.6
+            e.move_to([3.2, 3.2, 0])
         eqs[3].scale(1.2).move_to(UP * 0.6)
         head = label(r"The chain rule", font_size=36).to_corner(UL, buff=0.35)
         pt = self.pull(cells, ti, cond, lit=(hi,))
@@ -364,14 +368,24 @@ class Probability(VoiceoverScene):
                     rf"{ps[2]:.3f} = {pr:.4f}", font_size=34, color=WHITE).move_to(DOWN * 2.35)
         note_ctx = note(r"context: the last three symbols (an order-3 counting model of the $30$ books)")
         note_ctx.to_edge(DOWN, buff=0.3)
+        q_row = VGroup(letter_row("he said ", font_size=44),
+                       *[VGroup(Square(0.62, stroke_color=C.INTERVAL, stroke_width=2.5),
+                                letter(c, font_size=44, color=C.INTERVAL)) for c in "the"]).arrange(RIGHT, buff=0.12)
+        for sq_ in q_row[1:]:
+            sq_[1].move_to(sq_[0])
+        q_row.move_to(UP * 0.4)
+        q_cap = label(r"how likely are the next three letters to be \texttt{t}, \texttt{h}, \texttt{e}?", font_size=28,
+                      color=GREY_A).next_to(q_row, DOWN, buff=0.45)
         with self.voiceover(
             "Here's the chain rule as a picture. Someone has written, he said, and we want the chance that the "
             "next three letters are t, h, e. <bookmark mark='a'/> The first bar shares the whole unit of belief "
             "among the 27 next symbols, given the last three: i, d, space. t gets a sliver "
             f"{ps[0]:.3f} wide."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(note_ctx))
+            self.play(FadeIn(head), FadeIn(note_ctx), FadeIn(q_row[0]))
+            self.play(LaggedStart(*[FadeIn(sq_, shift=UP * 0.15) for sq_ in q_row[1:]], lag_ratio=0.3), FadeIn(q_cap))
             vo.wait_until("a")
+            self.play(FadeOut(q_row), FadeOut(q_cap), run_time=0.5)
             self.play(FadeIn(rows[0][0]), Create(rows[0][2]), FadeIn(ctxs[0]), FadeIn(ctx_head))
             self.play(FadeIn(rows[0][1]), FadeIn(reads[0]))
         with self.voiceover(

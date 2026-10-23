@@ -80,15 +80,21 @@ class Hook(VoiceoverScene):
             "to guess it, one letter at a time. <bookmark mark='a'/> A wrong guess, and they guessed again, until "
             "they got it. Under each letter, he wrote down how many guesses it took."
         ) as vo:
-            self.play(FadeIn(who), FadeIn(src), FadeIn(slots[:n_slow]))
+            cursor = SurroundingRectangle(slots[0], color=C.GUESS, buff=0.12, corner_radius=0.04)
+            ask = label(r"guess the next letter", font_size=26, color=C.GUESS).next_to(rows, DOWN, buff=0.75)
+            self.play(FadeIn(who), FadeIn(src), LaggedStart(*[FadeIn(sl_) for sl_ in slots], lag_ratio=0.01),
+                      run_time=1.5)
+            self.play(Create(cursor), FadeIn(ask))
+            self.play(Indicate(cursor, color=C.GUESS, scale_factor=1.3), run_time=1.0)
             vo.wait_until("a")
+            self.play(FadeOut(cursor), FadeOut(ask), run_time=0.4)
             for k in range(n_slow):
                 for wrong in guesses[k][:-1]:
                     t = letter(wrong, font_size=28, color=C.SURPRISE).move_to(letters[k])
                     self.play(FadeIn(t, scale=1.2), run_time=0.15)
                     self.play(FadeOut(t, shift=DOWN * 0.15), run_time=0.15)
                 self.play(FadeIn(letters[k], scale=1.2), FadeIn(counts[k]), run_time=0.2)
-            self.play(FadeIn(slots[n_slow:]), LaggedStart(*[AnimationGroup(FadeIn(m), FadeIn(c))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(m), FadeIn(c))
                                                           for m, c in zip(letters[n_slow:], counts[n_slow:])],
                                                         lag_ratio=0.12), run_time=max(3.0, vo.remaining() - 0.5))
             self.play(FadeOut(slots), run_time=0.4)
@@ -164,6 +170,10 @@ class Hook(VoiceoverScene):
             dot = Dot([x, y0, 0], radius=0.08, color=C.HUMAN)
             words_ = VGroup(label(rf"{yr}", font_size=26, color=C.HUMAN), label(txt, font_size=22, color=WHITE))
             words_.arrange(DOWN, buff=0.04).next_to(stem.get_end(), UP if up else DOWN, buff=0.06)
+            if yr == 1948:  # Huffman's stem (1952) rises just to its right
+                words_.align_to([x + 0.12, 0, 0], RIGHT)
+            elif yr == 1952:
+                words_.align_to([x - 0.12, 0, 0], LEFT)
             keep_in_frame(words_, margin=0.15)
             marks.append(VGroup(stem, dot, words_))
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
@@ -173,7 +183,7 @@ class Hook(VoiceoverScene):
                          fill_opacity=0.18).move_to([(era_x(2028) + era_x(1998)) / 2, y0, 0])
         tl = label(r"this part", font_size=22, color=C.BITS).next_to(this, DOWN, buff=0.45).set_x(era_x(1880))
         tr = label(r"the rest of the series", font_size=22, color=C.NEURAL).next_to(that, DOWN, buff=0.45)
-        tr.set_x(era_x(2012))
+        tr.align_to([era_x(2016), 0, 0], RIGHT)  # clear of GPT-2's stem
         keep_in_frame(tr, margin=0.15)
         with self.voiceover(
             "Shannon didn't start from nothing. <bookmark mark='a'/> Telegraphers knew that common letters deserve "
@@ -242,9 +252,10 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ptext), Create(blank), FadeIn(q))
             vo.wait_until("a")
-            self.play(FadeIn(cap), FadeIn(tag))
+            self.play(FadeIn(cap), FadeIn(tag), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in left[1]],
+                                                           lag_ratio=0.15))
             vo.wait_until("b")
-            self.play(FadeIn(left[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in left[1]], lag_ratio=0.15))
+            self.play(FadeIn(left[0]), Indicate(left[1], color=C.PROB, scale_factor=1.03))
             vo.wait_until("c")
             self.play(FadeIn(right[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in right[1]], lag_ratio=0.15))
         self.play(Indicate(left[1][0], color=C.PROB), Indicate(right[1][0], color=C.PROB), run_time=1.5)
@@ -352,9 +363,9 @@ class Hook(VoiceoverScene):
             "it by heart. <bookmark mark='a'/> As plain text, it takes eight bits per character. "
             f"<bookmark mark='b'/> The series explains how the numbers on this board come down: from eight, {goal}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(quote), FadeIn(src))
+            self.play(FadeIn(head), FadeIn(quote), FadeIn(src), FadeIn(board))
             vo.wait_until("a")
-            self.play(FadeIn(board))
+            self.play(Indicate(board.rows[0], color=WHITE, scale_factor=1.04))
             vo.wait_until("b")
             self.play(*[r.name.animate.set_color(GREY_B) for r in board.rows[1:]], run_time=1.0)
         self.wait(0.5)
