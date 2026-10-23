@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CNN, FMAP, HIST, KERNEL, PART, load)
+from videos.ai.ai10.common import (CNN, FMAP, HIST, KERNEL, PART, box_label, img_rgb, load)
 from videos.ai.ai10.specs import CONVNEXT_STEPS, CONVNEXT_XL_22K, MOBILENET, SWIN_T
 
 DW, PW = C.INTERVAL, C.CONTEXT
@@ -41,9 +41,9 @@ class Efficient(VoiceoverScene):
         sl = label(r"standard: \ $k \times k \times C$, \ for each of $C'$ outputs", font_size=20, color=KERNEL)
         sl.next_to(std, DOWN, buff=0.2)
         dws = VGroup(*[self.block(0.9, 0.9, 0.12, DW, [0, 0, 0]) for _ in range(5)]).arrange(RIGHT, buff=0.12)
-        dws.move_to([-1.0, 1.6, 0])
+        dws.move_to([-0.2, 1.6, 0])
         dl = label(r"depthwise: \ one $k \times k$ per channel", font_size=20, color=DW).next_to(dws, DOWN, buff=0.2)
-        pw = self.block(0.18, 0.18, 1.6, PW, [3.4, 1.6, 0], op=0.5)
+        pw = self.block(0.18, 0.18, 1.6, PW, [4.2, 1.6, 0], op=0.5)
         pl = label(r"pointwise: \ $1 \times 1 \times C$, \ for each output", font_size=20, color=PW)
         pl.next_to(pw, DOWN, buff=0.35)
         colors = {r"k^2": KERNEL, r"C'": PW, r"\frac{1}{C'}": PW, r"\frac{1}{k^2}": DW}
@@ -251,9 +251,20 @@ class Efficient(VoiceoverScene):
         cite_ = cite(r"Dosovitskiy et al.\ (2020); \ Liu et al.\ (2022); \ Smith et al.\ (2023)", corner=DR)
         foot.next_to(cite_, UP, buff=0.15).to_edge(LEFT, buff=0.5)
         vit = history_card(2020, r"Alexey Dosovitskiy and colleagues, \ Google",
-                           r"the vision transformer: \ an image cut into $16 \times 16$ patches, \ fed to a "
+                           r"the vision transformer: \ an image cut into patches of $16 \times 16$ pixels, \ fed to a "
                            r"transformer; \ with enough data, \ as good as the best convolutional networks; \ Part 22",
-                           width=7.0, color=HIST).move_to(UP * 0.3)
+                           width=7.0, color=HIST).move_to(UP * 1.9)
+        # schematic: a photograph cut into patches, each a token for a transformer
+        photo = np.asarray(load("data")["cifar_grid"])[7, 0]
+        P = 4
+        tiles = Group(*[img_rgb(photo[r * 8:(r + 1) * 8, c * 8:(c + 1) * 8], 0.5) for r in range(P) for c in range(P)])
+        whole = Group(*[t.copy() for t in tiles]).arrange_in_grid(rows=P, cols=P, buff=0.0).move_to([-4.6, -1.4, 0])
+        seq = Group(*[t.copy() for t in tiles]).arrange(RIGHT, buff=0.06).scale(0.7).move_to([0.6, -1.4, 0])
+        tbox = box_label(r"transformer", ATTN_C, font_size=24).move_to([5.3, -1.4, 0])
+        a1 = Arrow(whole.get_right(), seq.get_left(), buff=0.15, stroke_width=2.5, color=GREY_B)
+        a2 = Arrow(seq.get_right(), tbox.get_left(), buff=0.15, stroke_width=2.5, color=GREY_B)
+        sch = note(r"schematic: \ $16$ patches of one CIFAR-10 photograph").next_to(seq, DOWN, buff=0.4)
+        vitfig = Group(whole, a1, seq, a2, tbox, sch)
         with self.voiceover(
             "In 2020 a transformer fed an image cut into patches matched the best convolutional networks, and "
             "vision transformers soon led the benchmarks: Part 22. <bookmark mark='a'/> In 2022 Zhuang Liu and "
@@ -266,8 +277,10 @@ class Efficient(VoiceoverScene):
             "architecture: Part 12's lesson."
         ) as vo:
             self.play(FadeIn(vit, shift=UP * 0.2), FadeIn(cite_))
+            self.play(FadeIn(whole), GrowArrow(a1), LaggedStart(*[FadeIn(t) for t in seq], lag_ratio=0.08),
+                      GrowArrow(a2), FadeIn(tbox), FadeIn(sch), run_time=3.0)
             vo.wait_until("a")
-            self.play(FadeOut(vit), FadeIn(head))
+            self.play(FadeOut(vit), FadeOut(vitfig), FadeIn(head))
             self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bars], lag_ratio=0.25), run_time=4.0)
             vo.wait_until("b")
             self.play(Create(swin), FadeIn(swl))

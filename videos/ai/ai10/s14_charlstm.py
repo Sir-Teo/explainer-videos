@@ -213,16 +213,19 @@ class CharLSTM(VoiceoverScene):
         me = rows[i]["bits"]
         above = [r for r in rows[:i] if "bits" in r]
         best_above = min(r["bits"] for r in above)
-        gpt = [j for j, r in enumerate(rows) if "GPT-2" in r["label"]]
+        big = [j for j, r in enumerate(rows) if j > i and r.get("kind") == "lm" and "bits" in r]
+        lm_best = min((rows[j]["bits"] for j in big), default=None)
         if me < best_above:
-            v = (f"{me:.2f} bits per character: the best machine on the board so far, "
-                 f"{best_above - me:.2f} bits better than the best row above it. The memory pays.")
+            v = (f"{me:.2f} bits per character, better than every row above it, by {best_above - me:.2f} bits. "
+                 "The memory pays.")
         else:
             v = (f"{me:.2f} bits per character, {me - best_above:.2f} behind the best row above it: with a "
                  "few minutes of training, the LSTM hasn't caught up with a model built from all the counts.")
-        tail = (" GPT-2, below it, is still far ahead: more text, more computing, and a different architecture, "
-                "which is the next act's story." if gpt else
-                " The large models of Part 1, still to be filled in on this board, show how far there is to go.")
+        if lm_best is not None and lm_best < me:
+            tail = (f" The pretrained language models below it are still far ahead, down to {lm_best:.2f} bits: "
+                    "more text, more computing, and a different architecture, which is the next act's story.")
+        else:
+            tail = " The large models of Part 1, still to be filled in on this board, show how far there is to go."
         with self.voiceover(
             "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: " + v + " <bookmark mark='b'/>"
             + tail
@@ -230,8 +233,9 @@ class CharLSTM(VoiceoverScene):
             self.play(FadeIn(board))
             vo.wait_until("a")
             self.play(Create(glow))
-            if gpt:
-                self.play(Indicate(VGroup(*[board.rows[j] for j in gpt]), color=C.NEURAL))
+            vo.wait_until("b")
+            if big:
+                self.play(Indicate(VGroup(*[board.rows[j] for j in big]), color=C.NEURAL))
         self.wait(0.5)
         self.clear_scene()
 
