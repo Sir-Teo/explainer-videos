@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import (ALPHA27, ZoomLadder, letter, letter_bars, load, tt)
+from videos.ai.ai1.common import (ALPHA27, PART, ZoomLadder, letter, letter_bars, load, tt)
 
 
 class Probability(VoiceoverScene):
@@ -18,7 +18,7 @@ class Probability(VoiceoverScene):
     # ------------------------------------------------------------------
     def card(self):
         card = chapter_card(1, r"Probability, and the chain rule", r"How do you write a guess down?", lit=(1948,),
-                            part=1)
+                            part=PART)
         with self.voiceover("Chapter one. Before we can score a guess, we need a way to write one down.") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -29,23 +29,28 @@ class Probability(VoiceoverScene):
         corpus = load("corpus")
         p = d["p"]
         n = int(d["n"])
-        assert n == 22_788_042 and corpus["n_books"] == 30
+        nb = int(corpus["n_books"])
         g = letter_bars(p, width=12.0, height=3.4, base=(0, -2.3))
-        head = label(r"$22{,}788{,}042$ symbols from $30$ novels", font_size=34).to_edge(UP, buff=0.45)
+        head = label(rf"${n:,}$ symbols from ${nb}$ novels".replace(",", "{,}"), font_size=34).to_edge(UP, buff=0.45)
         sub = label(r"$26$ letters and the space; \ capitals and punctuation dropped", font_size=24,
                     color=GREY_B).next_to(head, DOWN, buff=0.18)
         books = VGroup(*[label(rf"\textit{{{t}}}", font_size=24, color=GREY_A) for t in corpus["titles"][:10]])
         books.arrange_in_grid(rows=5, cols=2, buff=(0.6, 0.16), col_alignments="ll").move_to(DOWN * 0.4)
-        more = label(r"\ldots\ and $20$ more", font_size=24, color=GREY_B).next_to(books, DOWN, buff=0.3)
-        space_i, e_i = 0, ALPHA27.index("e")
-        assert abs(p[space_i] - 0.191) < 0.001 and abs(p[e_i] - 0.0999) < 0.0005
-        sp_val = MathTex(r"0.191", font_size=26, color=C.TRUE_P).next_to(g.bars[space_i], UP, buff=0.1)
-        e_val = MathTex(r"0.100", font_size=26, color=C.TRUE_P).next_to(g.bars[e_i], UP, buff=0.1)
+        more = label(rf"\ldots\ and ${nb - 10}$ more", font_size=24, color=GREY_B).next_to(books, DOWN, buff=0.3)
+        order = [int(i) for i in d["order"]]
+        first, second = order[0], order[1]
+        sp_val = MathTex(f"{p[first]:.3f}", font_size=26, color=C.TRUE_P).next_to(g.bars[first], UP, buff=0.1)
+        e_val = MathTex(f"{p[second]:.3f}", font_size=26, color=C.TRUE_P).next_to(g.bars[second], UP, buff=0.1)
+
+        def sym_name(i):
+            return "the space" if ALPHA27[i] == " " else ALPHA27[i]
+
         with self.voiceover(
-            "Take thirty novels, from Pride and Prejudice to The Great Gatsby, and count every symbol in them. We "
+            f"Take {nb} novels, from Pride and Prejudice to The Great Gatsby, and count every symbol in them. We "
             "use Shannon's alphabet: twenty-six letters and the space, with capitals and punctuation dropped. That's "
-            "<bookmark mark='a'/> twenty-two point eight million symbols. <bookmark mark='b'/> The space is the "
-            "most common, about one symbol in five. Then e, one in ten."
+            f"<bookmark mark='a'/> {n / 1e6:.1f} million symbols. <bookmark mark='b'/> The most common is "
+            f"{sym_name(first)}, about one symbol in {round(1 / p[first])}. Then {sym_name(second)}, one in "
+            f"{round(1 / p[second])}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), LaggedStart(*[FadeIn(b) for b in books], lag_ratio=0.1), FadeIn(more))
             vo.wait_until("a")
@@ -55,16 +60,18 @@ class Probability(VoiceoverScene):
             self.play(FadeIn(sp_val), Indicate(g.bars[space_i], color=WHITE))
             self.play(FadeIn(e_val))
         # sort by frequency
-        order = list(d["order"])
-        assert "".join(ALPHA27[i] for i in order[:6]) == " etaon"
         slot = g.slot
         anims = []
         for k, i in enumerate(order):
             x = g.x0 + (k + 0.5) * slot
             anims += [g.bars[i].animate.set_x(x), g.labels[i].animate.set_x(x)]
+        top6 = ", ".join("space" if ALPHA27[i] == " " else ALPHA27[i] for i in order[:6])
+        tail4 = [ALPHA27[i] for i in order[-4:]]
+        rarest = order[-1]
         with self.voiceover(
-            "Sorted, the familiar order appears: space, e, t, a, o, n. <bookmark mark='z'/> At the far end, x, j, q "
-            "and z, each well under one symbol in a thousand."
+            f"Sorted, the familiar order appears: {top6}. <bookmark mark='z'/> At the far end, "
+            f"{', '.join(tail4[:3])} and {tail4[3]}. The rarest, {ALPHA27[rarest]}, turns up about once in "
+            f"{round(1 / p[rarest], -2):,.0f} symbols."
         ) as vo:
             self.play(*anims, FadeOut(sp_val), FadeOut(e_val), run_time=2.0)
             vo.wait_until("z")
@@ -174,7 +181,6 @@ class Probability(VoiceoverScene):
         rl.next_to(rows, LEFT, buff=0.12)
         cl = label(r"next", font_size=20, color=GREY_B).next_to(cols, UP, buff=0.1)
         qi, ui, ti, hi = (ALPHA27.index(c) for c in "quth")
-        assert b["q_u"] > 0.998
         head = label(r"$P(\text{next} \mid \text{previous})$ \ for every pair of symbols", font_size=30)
         head.move_to([2.6, 3.3, 0])
         # the same numbers as areas: the unit square, cut by the previous symbol, then by the next
@@ -188,12 +194,12 @@ class Probability(VoiceoverScene):
         f_def = mtex(r"P(B \mid A) = \frac{P(A \text{ and } B)}{P(A)}", font_size=40).move_to([3.7, 1.9, 0])
         pt = self.pull(cells, ti, cond, lit=(hi,))
         out = pt[1]
-        b_w = brace_note(out, r"$P(A) = P(\texttt{t}) = 0.072$", DOWN, color=C.CONTEXT, font_size=24)
+        b_w = brace_note(out, rf"$P(A) = P(\texttt{{t}}) = {p1[ti]:.3f}$", DOWN, color=C.CONTEXT, font_size=24)
         b_h = Brace(out[hi], RIGHT, buff=0.42, color=C.INTERVAL)
-        b_h_l = label(r"$P(B \mid A) = 0.314$", font_size=24, color=C.INTERVAL).next_to(b_h, RIGHT, buff=0.1)
+        b_h_l = label(rf"$P(B \mid A) = {cond[ti, hi]:.3f}$", font_size=24, color=C.INTERVAL).next_to(b_h, RIGHT,
+                                                                                                    buff=0.1)
         area = label(r"area in the square: \ $P(A \text{ and } B)$", font_size=24, color=C.BITS)
         area.next_to(f_def, DOWN, buff=0.45)
-        assert abs(p1[ti] - 0.0724) < 0.0005 and abs(cond[ti, hi] - 0.314) < 0.001
         lit_cell = cells[ti * 27 + hi].copy().set_fill(C.BITS, opacity=1)
         with self.voiceover(
             "But we rarely guess from nothing. Once you know the previous letter, the odds change. <bookmark mark='a'/> "
@@ -212,10 +218,11 @@ class Probability(VoiceoverScene):
             self.show_pull(pt)
             self.play(Write(f_def), FadeIn(b_w), GrowFromCenter(b_h), FadeIn(b_h_l))
             self.play(FadeIn(area), Indicate(lit_cell, color=WHITE, scale_factor=2.5))
-        f_qu = mtex(r"P(" + tt("u") + r" \mid " + tt("q") + r") = \frac{18{,}469}{18{,}496} = 0.9985", font_size=36,
-                    color=WHITE).move_to([3.7, 1.9, 0])
         n_q = int(load("letters")["counts"][qi])
-        assert n_q == 18496 and round(float(joint[qi, ui]) * int(load("letters")["n"])) == 18469
+        n_qu = int(round(float(joint[qi, ui]) * int(load("letters")["n"])))
+        q_u = float(b["q_u"])
+        f_qu = mtex(r"P(" + tt("u") + r" \mid " + tt("q") + rf") = \frac{{{n_qu:,}}}{{{n_q:,}}} = {q_u:.4f}"
+                    .replace(",", "{,}"), font_size=36, color=WHITE).move_to([3.7, 1.9, 0])
         cap_q = label(r"after \texttt{q}, almost surely \texttt{u}", font_size=28, color=C.BITS).next_to(f_qu, DOWN,
                                                                                                     buff=0.4)
         cap_sp = label(r"after a space, almost anything: \ a word is starting", font_size=28, color=C.CONTEXT)
@@ -227,8 +234,8 @@ class Probability(VoiceoverScene):
         q_name = letter("q", font_size=26, color=C.CONTEXT).next_to(q_arrow, DOWN, buff=0.05)
         ps = self.pull(cells, 0, cond, min_label=0.2)
         with self.voiceover(
-            "In our books, q appears eighteen thousand, four hundred and ninety-six times, and all but twenty-seven "
-            "of them are followed by u. <bookmark mark='a'/> So the probability of u, given q, is 0.9985. "
+            f"In our books, q appears {n_q:,} times, and all but {n_q - n_qu:,} of them are followed by u. "
+            f"<bookmark mark='a'/> So the probability of u, given q, is {q_u:.4f}. "
             "<bookmark mark='b'/> After a space, on the other hand, almost anything can come next: a new word is "
             "starting."
         ) as vo:
@@ -251,8 +258,7 @@ class Probability(VoiceoverScene):
         ch = load("chain")
         ti, hi, ei = (ALPHA27.index(c) for c in "the")
         pt_, ph, pe = float(ch["p1"][ti]), float(ch["after_t"][hi]), float(ch["after_th"][ei])
-        assert abs(pt_ - 0.0724) < 0.0005 and abs(ph - 0.314) < 0.001 and abs(pe - 0.613) < 0.001
-        assert abs(ch["p_the"] - 0.0139) < 0.0001
+        assert abs(ch["p_the"] - pt_ * ph * pe) < 1e-12
         K1, K2, K3 = C.CONTEXT, C.INTERVAL, TEAL_C
         colors = {r"P(x_1)": K1, r"P(x_2 \mid x_1)": K2, r"P(x_1, x_2)": C.BITS, r"P(x_3 \mid x_1, x_2)": K3}
         steps = [
@@ -292,7 +298,8 @@ class Probability(VoiceoverScene):
                          for a, b in ((UR, UL), (DR, DL))])
         b3 = Brace(cell3[ei], RIGHT, buff=0.42, color=K3)
         b3_l = MathTex(r"P(x_3 \mid x_1, x_2)", font_size=30, color=K3).next_to(b3, RIGHT, buff=0.1)
-        num = mtex(r"P(\texttt{the}) = 0.072 \times 0.314 \times 0.613 = 0.0139", font_size=30).move_to([3.6, -2.7, 0])
+        num = mtex(rf"P(\texttt{{the}}) = {pt_:.3f} \times {ph:.3f} \times {pe:.3f} = {ch['p_the']:.4f}", font_size=30)
+        num.move_to([3.6, -2.7, 0])
         with self.voiceover(
             "Multiply that definition out, and you get a rule for whole strings. <bookmark mark='a'/> The "
             "probability of two symbols is the probability of the first, times the probability of the second given "
@@ -338,34 +345,31 @@ class Probability(VoiceoverScene):
         a = load("arith")
         steps = a["steps"]
         assert [s["symbol"] for s in steps[:3]] == ["t", "h", "e"]
-        assert [s["context"] for s in steps[:3]] == ["id ", "d t", " th"]
         ps = [s["p"] for s in steps[:3]]
-        assert abs(ps[0] - 0.155) < 0.001 and abs(ps[1] - 0.614) < 0.001 and abs(ps[2] - 0.700) < 0.001
+        cx = [s["context"] for s in steps[:3]]
         lad = ZoomLadder(steps, W=8.8, x=-0.5)
         ys = [2.0, 0.55, -0.9]
         head = label(r"he said\ \ldots \quad $P(" + tt("the") + r")$ one letter at a time", font_size=32)
         head.to_edge(UP, buff=0.35)
         rows = [lad.row(k, ys[k]) for k in range(3)]
         funnels = [lad.funnel(k, ys[k], ys[k + 1]) for k in range(2)]
-        tex = [r"P(" + tt("t") + r" \mid " + tt("id ") + r") = 0.155",
-               r"P(" + tt("h") + r" \mid " + tt("d t") + r") = 0.614",
-               r"P(" + tt("e") + r" \mid " + tt(" th") + r") = 0.700"]
+        tex = [r"P(" + tt(c) + r" \mid " + tt(x) + rf") = {v:.3f}" for c, x, v in zip("the", cx, ps)]
         reads = [mtex(t, font_size=26, color=C.INTERVAL) for t in tex]
         for r, y in zip(reads, ys):
             r.move_to([4.25, y, 0], aligned_edge=LEFT)
         ctxs = VGroup(*[label(tt(s["context"]), font_size=24, color=C.CONTEXT).move_to([-5.7, y, 0])
                         for s, y in zip(steps[:3], ys)])
         ctx_head = label(r"context", font_size=20, color=GREY_B).next_to(ctxs[0], UP, buff=0.3)
-        prod = mtex(r"P(" + tt("the") + r" \mid " + tt("id ") + r") = 0.155 \times 0.614 \times 0.700 = 0.0666",
-                    font_size=34, color=WHITE).move_to(DOWN * 2.35)
-        assert abs(np.prod(ps) - 0.0666) < 0.0001
+        pr = float(np.prod(ps))
+        prod = mtex(r"P(" + tt("the") + r" \mid " + tt(cx[0]) + rf") = {ps[0]:.3f} \times {ps[1]:.3f} \times "
+                    rf"{ps[2]:.3f} = {pr:.4f}", font_size=34, color=WHITE).move_to(DOWN * 2.35)
         note_ctx = note(r"context: the last three symbols (an order-3 counting model of the $30$ books)")
         note_ctx.to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Here's the chain rule as a picture. Someone has just written, he said, and we want the probability "
             "that the next three letters are t, h, e. <bookmark mark='a'/> The first bar is the whole unit of "
-            "belief, shared among the 27 possible next symbols, given the last three: d, i, space. t gets a sliver "
-            "of width 0.155."
+            "belief, shared among the 27 possible next symbols, given the last three: i, d, space. t gets a sliver "
+            f"of width {ps[0]:.3f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note_ctx))
             vo.wait_until("a")
@@ -373,9 +377,9 @@ class Probability(VoiceoverScene):
             self.play(FadeIn(rows[0][1]), FadeIn(reads[0]))
         with self.voiceover(
             "Now zoom into that sliver and share it out again, <bookmark mark='a'/> this time by the probabilities "
-            "of the next letter after d, space, t. h takes 61 percent of it. <bookmark mark='b'/> Zoom again: "
-            "after space, t, h, the letter e takes 70 percent. <bookmark mark='c'/> The final sliver is as wide as "
-            "the product: 0.0666, the probability of the whole string."
+            f"of the next letter after d, space, t. h takes {100 * ps[1]:.0f} percent of it. <bookmark mark='b'/> "
+            f"Zoom again: after space, t, h, the letter e takes {100 * ps[2]:.0f} percent. <bookmark mark='c'/> The "
+            f"final sliver is as wide as the product: {pr:.4f}, the probability of the whole string."
         ) as vo:
             self.play(FadeIn(funnels[0]), FadeIn(rows[1][0]), Create(rows[1][2]), FadeIn(ctxs[1]))
             vo.wait_until("a")
@@ -386,7 +390,7 @@ class Probability(VoiceoverScene):
             vo.wait_until("c")
             self.play(Write(prod))
         with self.voiceover(
-            "Keep this picture in mind: nested slivers, each one a guess. In chapter six, the very same picture "
+            "Keep this picture in mind: nested slivers, each one a guess. In chapter eight, the very same picture "
             "will turn out to be a way of compressing text."
         ) as vo:
             self.play(Indicate(prod, color=C.INTERVAL), run_time=1.5)

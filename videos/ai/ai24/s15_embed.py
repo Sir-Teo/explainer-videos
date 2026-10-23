@@ -89,7 +89,8 @@ class Embeddings(VoiceoverScene):
         clip = label(r"and across senses: \ CLIP and SigLIP pair pictures with captions by the same loss \ (Part 23)",
                      font_size=19, color=GREY_B).next_to(nums, DOWN, buff=0.12)
         src = cite(r"Reimers \& Gurevych (2019); \ Karpukhin et al.\ (2020); \ Gao, Yao \& Chen (2021); \ Muennighoff et "
-                   r"al.\ (2023); \ Zhang et al.\ (2025); \ Shanbhogue et al.\ (2026)", corner=UL)
+                   r"al.\ (2023); \ Zhang et al.\ (2025); \ Shanbhogue et al.\ (2026)", font_size=17)
+        src.next_to(head, DOWN, buff=0.15)
         with self.voiceover(
             "Search engines today mostly embed text, and the history runs from Part 3's word vectors to here. "
             "<bookmark mark='a'/> Sentence-BERT in 2019 trained twin networks to place similar sentences together. "

@@ -192,7 +192,7 @@ class Pretext(VoiceoverScene):
         H = 3.4
         vmin = max(0.0, float(np.floor((per.min() - 0.1) * 10) / 10))
         for c in range(10):
-            x = -5.0 + c * 1.0
+            x = -5.9 + c * 0.95
             h = H * (per[c] - vmin) / (1 - vmin)
             col = ROT if c in worst else GREY_B
             b = Rectangle(width=W * 0.7, height=max(h, 0.02), stroke_width=0, fill_color=col, fill_opacity=0.85)
@@ -203,7 +203,7 @@ class Pretext(VoiceoverScene):
             v_ = MathTex(pct(per[c], 0), font_size=22, color=col).next_to(b, UP, buff=0.12 + max(0, wh - h))
             n_ = MathTex(str(c), font_size=30, color=GREY_A).next_to([x, base_y, 0], DOWN, buff=0.15)
             bars.add(VGroup(b, wh_, v_, n_))
-        axis = Line([-5.6, base_y, 0], [4.6, base_y, 0], color=GREY_C, stroke_width=1.5)
+        axis = Line([-6.4, base_y, 0], [3.2, base_y, 0], color=GREY_C, stroke_width=1.5)
         yl = label(rf"right turn found, \ \% \ (axis from ${pct(vmin, 0)}$)", font_size=20,
                    color=GREY_A).next_to(axis, UP, buff=3.7).align_to(axis, LEFT)
         v = load("views")
@@ -212,7 +212,7 @@ class Pretext(VoiceoverScene):
             d = np.asarray(v["orig"])[c].astype(float) / 255.0
             ex.add(Group(digit(d, 0.8, frame=True), MathTex(r"\circlearrowright\,180^\circ", font_size=24),
                          digit(np.rot90(d, 2), 0.8, frame=True)).arrange(RIGHT, buff=0.15))
-        ex.arrange(DOWN, buff=0.3).move_to([5.6, 0.6, 0])
+        ex.arrange(DOWN, buff=0.3).move_to([5.3, 0.4, 0])
         names = ", ".join(str(c) for c in worst[:2]) + f" and {worst[2]}"
         sym = set(worst[:3]) & {0, 1, 8}
         why_ = ("These are the digits that look much the same turned half a turn, so the puzzle has no answer for "

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import (ALPHA27, letter_row, load, plain_axes, surprise_color,
+from videos.ai.ai1.common import (ALPHA27, PART, letter_row, load, plain_axes, surprise_color,
                                   surprise_legend, wrap_words)
 
 
@@ -22,7 +22,7 @@ class Surprise(VoiceoverScene):
     # ------------------------------------------------------------------
     def card(self):
         card = chapter_card(2, r"How surprised to be",
-                            r"If something had probability $p$, how much did seeing it tell you?", lit=(1948,), part=1)
+                            r"If something had probability $p$, how much did seeing it tell you?", lit=(1948,), part=PART)
         with self.voiceover("Chapter two. How surprised should you be?") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -66,8 +66,9 @@ class Surprise(VoiceoverScene):
         with self.voiceover(
             "If you were sure something would happen, seeing it happen tells you nothing. <bookmark mark='a'/> u "
             "after q: no news. <bookmark mark='b'/> A coin landing heads tells you a little. <bookmark mark='c'/> "
-            "A letter e, a bit more. <bookmark mark='d'/> And a z, which turns up about once in two thousand "
-            "symbols, tells you a lot. The less likely something was, the more you learn when it happens."
+            f"A letter e, a bit more. <bookmark mark='d'/> And a z, which turns up about once in "
+            f"{round(1 / pz, -2):,.0f} symbols, tells you a lot. The less likely something was, the more you learn "
+            "when it happens."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ends), FadeIn(plab))
             for j, mark in enumerate("abcd"):
@@ -284,15 +285,15 @@ class Surprise(VoiceoverScene):
                                   stroke_width=5)
         tail = ParametricFunction(lambda t: ax.c2p(2.0 ** -t, t), t_range=[6.4, 12, 0.02], color=C.SURPRISE,
                                   stroke_width=5)
+        se, sz = -math.log2(float(p[ALPHA27.index("e")])), -math.log2(float(p[ALPHA27.index("z")]))
+        su = -math.log2(float(bg["q_u"]))
         pts = [
             (0.5, r"coin: \ $1$ bit", 1.0),
-            (1 / 6, r"a die: \ $2.58$", 2.585),
-            (float(p[ALPHA27.index("e")]), r"\texttt{e}: \ $3.32$", None),
-            (float(p[ALPHA27.index("z")]), r"\texttt{z}: \ $10.9$", None),
-            (float(bg["q_u"]), r"\texttt{u} after \texttt{q}: \ $0.002$", None),
+            (1 / 6, rf"a die: \ ${math.log2(6):.2f}$", 2.585),
+            (float(p[ALPHA27.index("e")]), rf"\texttt{{e}}: \ ${se:.2f}$", None),
+            (float(p[ALPHA27.index("z")]), rf"\texttt{{z}}: \ ${sz:.1f}$", None),
+            (float(bg["q_u"]), rf"\texttt{{u}} after \texttt{{q}}: \ ${su:.3f}$", None),
         ]
-        assert abs(-math.log2(pts[2][0]) - 3.32) < 0.01 and abs(-math.log2(pts[3][0]) - 10.9) < 0.05
-        assert -math.log2(pts[4][0]) < 0.0025
         dots = VGroup()
         for v, t, _ in pts:
             dd = glow_dot(ax.c2p(v, -math.log2(v)), color=WHITE, radius=0.07, layers=3)
@@ -301,10 +302,10 @@ class Surprise(VoiceoverScene):
         dots[4][1].next_to(dots[4][0], UP, buff=0.25).shift(LEFT * 0.5)
         dots[3][1].next_to(dots[3][0], RIGHT, buff=0.15)
         with self.voiceover(
-            "Here's that function. <bookmark mark='a'/> A coin: one bit. A face of a die: 2.58 bits. "
-            "<bookmark mark='b'/> The letter e: 3.32 bits. The letter z: almost eleven. <bookmark mark='c'/> And u, "
-            "right after q, carries two thousandths of a bit: almost nothing. <bookmark mark='d'/> As p heads to "
-            "zero, the surprise grows without limit."
+            f"Here's that function. <bookmark mark='a'/> A coin: one bit. A face of a die: {math.log2(6):.2f} bits. "
+            f"<bookmark mark='b'/> The letter e: {se:.2f} bits. The letter z: {sz:.1f}. <bookmark mark='c'/> And u, "
+            f"right after q: {su:.3f} bits, almost nothing. <bookmark mark='d'/> As p heads to zero, the surprise "
+            "grows without limit."
         ) as vo:
             self.play(FadeOut(d["rest"]), FadeOut(VGroup(*d["axes"][1:])),
                       d["unit"].animate.scale(0.6).to_corner(UR, buff=0.3))
@@ -389,7 +390,7 @@ class Surprise(VoiceoverScene):
         sent, bits = g["sentence"], np.asarray(g["sentence_bits"])
         total = float(bits.sum())
         k = int(g["sentence_order"])
-        assert abs(total - 182.2) < 0.1 and len(sent) == 101 and k == 5
+        H1 = float(load("letters")["H"])
         lines = wrap_words(sent, 36)
         rows = VGroup(*[letter_row(ln, font_size=27) for ln in lines]).arrange(DOWN, aligned_edge=LEFT, buff=1.5)
         rows.move_to(DOWN * 0.95)
@@ -409,12 +410,12 @@ class Surprise(VoiceoverScene):
                     r"per symbol", font_size=30, color=C.BITS).to_edge(DOWN, buff=0.35)
         leg = surprise_legend(width=3.0).to_corner(DR, buff=0.4).shift(UP * 0.5)
         src = note(rf"each letter's surprise given the previous {k} letters, under a counting model of the $30$ books "
-                   r"(Chapter 7); \ computed").next_to(rule, DOWN, buff=0.2)
+                   r"(Chapter 9); \ computed").next_to(rule, DOWN, buff=0.2)
         with self.voiceover(
             "And because logs turn products into sums, the chain rule turns into something lovely. "
             "<bookmark mark='a'/> The surprise of a whole text is the sum of the surprises of its symbols, each "
             "given everything before it. <bookmark mark='b'/> Here is Shannon's sentence again, with each letter's "
-            "surprise drawn as a bar, as judged by a model that knows only the previous five letters."
+            f"surprise drawn as a bar, as judged by a model that knows only the previous {k} letters."
         ) as vo:
             self.play(Write(rule))
             vo.wait_until("a")
@@ -423,11 +424,16 @@ class Surprise(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(m) for m in letters], lag_ratio=0.02), run_time=1.5)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), FadeIn(leg), run_time=3)
         starts = np.array([i == 0 or sent[i - 1] == " " for i in range(len(sent))])
-        assert bits[starts].mean() > 2 * bits[~starts].mean()  # the surprise is at the starts of words
+        ratio = float(bits[starts].mean() / bits[~starts].mean())
+        where = ("the starts of words, and words it didn't expect" if ratio > 1.5 else
+                 "words it didn't expect, wherever they begin")
+        per = total / len(sent)
+        vs = (f"under half of the {H1:.2f} bits the letter frequencies alone would give" if per < H1 / 2 else
+              f"against {H1:.2f} for the letter frequencies alone")
         with self.voiceover(
-            "The tall bars are where the text surprised the model: the starts of words, and words it didn't "
-            "expect. <bookmark mark='a'/> Altogether, 182 bits for 101 symbols: 1.8 bits per symbol, under half of "
-            "what the letter frequencies alone would give. Remember that number; it's how we'll keep score."
+            f"The tall bars are where the text surprised the model: {where}. <bookmark mark='a'/> Altogether, "
+            f"{total:.0f} bits for {len(sent)} symbols: {per:.1f} bits per symbol, {vs}. Remember that number; it's "
+            "how we'll keep score."
         ) as vo:
             self.play(*[Indicate(bars[j], color=WHITE, scale_factor=1.3) for j in range(len(sent)) if bits[j] > 4.4],
                       run_time=1.5)
