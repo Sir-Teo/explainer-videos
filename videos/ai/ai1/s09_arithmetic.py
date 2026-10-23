@@ -351,17 +351,15 @@ class Arithmetic(VoiceoverScene):
                   r"N \times \text{cross-entropy}", font_size=36).move_to(DOWN * 0.6)
         tag = label(r"to compress well, predict well; \ to predict well, compress well", font_size=32, color=C.BITS)
         tag.next_to(eq, DOWN, buff=0.45)
-        facts = VGroup(
-            note(r"Hutter Prize (2006): \ compress a fixed slice of Wikipedia, as a test of intelligence", font_size=22),
-            note(r"Del\'etang et al., \textit{Language Modeling Is Compression} (2024): \ Chinchilla 70B compresses "
-                 r"ImageNet patches to $43.4\%$, \ beating PNG ($58.5\%$)", font_size=22),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
+        fwd = label(r"Chapter 15: \ language models as compressors, \ against gzip and xz", font_size=24, color=GREY_B)
+        fwd.to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "This is the hinge of the whole part. <bookmark mark='a'/> Give arithmetic coding any model that "
             "predicts, and you get a compressor whose output is about log of one over q bits per symbol: the length "
             "of the text times the model's cross-entropy. <bookmark mark='b'/> And any compressor defines a model: a "
             "text that takes l bits is being assigned probability two to the minus l. <bookmark mark='c'/> So "
-            "predicting well and compressing well are the same skill."
+            "predicting well and compressing well are the same skill. We'll put a language model to work as a "
+            "compressor in the last chapter."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right))
             vo.wait_until("a")
@@ -371,14 +369,185 @@ class Arithmetic(VoiceoverScene):
             self.play(GrowArrow(a2), FadeIn(l2))
             vo.wait_until("c")
             self.play(FadeIn(tag, shift=UP * 0.1))
-        with self.voiceover(
-            "That's why, in 2006, Marcus Hutter offered a prize for compressing Wikipedia, as a test of "
-            "intelligence. <bookmark mark='a'/> And it's why, in 2024, a team at DeepMind could show that a large "
-            "language model, trained only on text, also compresses images and audio better than the formats made "
-            "for them."
-        ) as vo:
-            self.play(FadeIn(facts[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(facts[1]))
+            self.play(FadeIn(fwd))
         self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def precision(self):
+        """The integer coder at work: 16-bit registers, the interval narrowed by each letter, then zoomed whenever a
+        leading bit is decided (the coder's own record, from compute.py)."""
+        ai = load("arithint")
+        arith = load("arith")
+        trace = [(k, int(lo), int(hi), z) for k, lo, hi, z in ai["trace"]]
+        ends = [int(e) for e in ai["step_ends"]]
+        steps = arith["steps"]
+        R = 16
+        FULL = 2 ** R
+        X0, X1, Y = -5.6, 5.6, 0.2
+        W = X1 - X0
+
+        def X(v):
+            return X0 + W * v / FULL
+
+        ruler = Line([X0, Y, 0], [X1, Y, 0], color=GREY_C, stroke_width=2)
+        ticks = VGroup()
+        for f, t in ((0, "0"), (0.25, r"\tfrac14"), (0.5, r"\tfrac12"), (0.75, r"\tfrac34"), (1, "1")):
+            ticks.add(Line([X0 + W * f, Y - 0.12, 0], [X0 + W * f, Y + 0.12, 0], color=GREY_C, stroke_width=2))
+            ticks.add(MathTex(t, font_size=26, color=GREY_B).next_to([X0 + W * f, Y - 0.12, 0], DOWN, buff=0.12))
+
+        def bar(lo, hi):
+            return Rectangle(width=max(X(hi + 1) - X(lo), 0.02), height=0.5, stroke_width=0, fill_color=C.INTERVAL,
+                             fill_opacity=0.75).move_to([(X(lo) + X(hi + 1)) / 2, Y + 0.32, 0])
+
+        def regs(lo, hi):
+            a_, b_ = format(lo, f"0{R}b"), format(hi, f"0{R}b")
+            k = 0
+            while k < R and a_[k] == b_[k]:
+                k += 1
+            g = VGroup()
+            for name, bits in ((r"low ", a_), (r"high", b_)):
+                t = Text(f"{name} {bits}", font=MONO, font_size=24, color=GREY_B)
+                off = len(name.strip())
+                for j in range(k):
+                    t[off + j].set_color(C.BITS)
+                g.add(t)
+            return g.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([-3.3, 2.0, 0])
+
+        head = label(r"In practice: \ whole numbers, and a zoom", font_size=34).to_edge(UP, buff=0.3)
+        sub = label(rf"${R}$-bit registers, \ probabilities as $12$-bit counts: \ \texttt{{the falcon}}, as before",
+                    font_size=22, color=GREY_B).next_to(head, DOWN, buff=0.12)
+        cur = bar(0, FULL - 1)
+        rg = regs(0, FULL - 1)
+        sent_l = label(r"sent:", font_size=26, color=GREY_A).move_to([-5.9, -2.3, 0])
+        out_bits = []
+        pend = [0]
+
+        def sent_mob():
+            t = Text("".join(out_bits) or " ", font=MONO, font_size=28, color=C.BITS)
+            t.next_to(sent_l, RIGHT, buff=0.25)
+            return t
+
+        def pend_mob():
+            return label(rf"waiting: \ ${pend[0]}$", font_size=24, color=C.CONTEXT).move_to([4.6, -2.3, 0])
+
+        sm, pm = sent_mob(), pend_mob()
+        sym = letter(steps[0]["symbol"], font_size=40, color=C.INTERVAL).move_to([3.5, 2.0, 0])
+        half_box = Rectangle(width=W / 2, height=0.9, stroke_width=0, fill_color=C.BITS, fill_opacity=0.18)
+
+        def run_event(ev, rt):
+            nonlocal cur, rg, sm, pm
+            kind, lo, hi, z = ev
+            if kind == "narrow":
+                self.play(Transform(cur, bar(lo, hi)), Transform(rg, regs(lo, hi)), run_time=rt)
+                return
+            # a zoom: the half (or middle half) that holds the interval stretches to the whole range
+            fx = {"0": 0.0, "1": 0.5, "p": 0.25}[z]
+            hb = half_box.copy().move_to([X0 + W * (fx + 0.25), Y + 0.32, 0])
+            if z in "01":
+                out_bits.append(z)
+                out_bits.extend(("1" if z == "0" else "0") * pend[0])
+                pend[0] = 0
+            else:
+                pend[0] += 1
+            self.play(FadeIn(hb), run_time=rt * 0.35)
+            self.play(hb.animate.stretch_to_fit_width(W).move_to([X0 + W / 2, Y + 0.32, 0]).set_opacity(0),
+                      Transform(cur, bar(lo, hi)), Transform(rg, regs(lo, hi)), Transform(sm, sent_mob()),
+                      Transform(pm, pend_mob()), run_time=rt * 0.65)
+            self.remove(hb)
+
+        with self.voiceover(
+            "A real coder can't keep fractions with thousands of digits. It keeps the interval as two whole numbers, "
+            f"low and high, of {R} bits here, 32 in practice. <bookmark mark='a'/> The first letter narrows the "
+            "interval. <bookmark mark='b'/> Now both ends agree on their leading bit: it's decided. Send it, and "
+            "double the half that holds the interval, so it fills the whole range again: a zoom. "
+            "<bookmark mark='c'/> When the interval straddles the middle but sits inside the middle half, the next "
+            "bit isn't known yet. The coder zooms about the middle anyway, and remembers that a bit is waiting; it "
+            "comes out, flipped, with the next decided bit. <bookmark mark='d'/> Letter by letter, narrow and zoom, "
+            "and the bits stream out."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sub), Create(ruler), FadeIn(ticks), FadeIn(cur), FadeIn(rg), FadeIn(sent_l),
+                      FadeIn(sm), FadeIn(pm), FadeIn(sym))
+            vo.wait_until("a")
+            run_event(trace[0], 1.0)
+            vo.wait_until("b")
+            for ev in trace[1:ends[0]]:
+                run_event(ev, 1.0)
+            vo.wait_until("c")
+            first_p = next((i for i, ev in enumerate(trace) if ev[3] == "p"), None)
+            k = ends[0]
+            for j in range(1, len(ends)):
+                new_sym = letter(steps[j]["symbol"], font_size=40, color=C.INTERVAL).move_to(sym)
+                self.play(Transform(sym, new_sym), run_time=0.25)
+                for i in range(k, ends[j]):
+                    run_event(trace[i], 0.9 if first_p is not None and i <= first_p + 1 and j < 4 else 0.45)
+                k = ends[j]
+                if j == 3:
+                    vo.wait_until("d")
+        final = Text(ai["falcon_bits"], font=MONO, font_size=28, color=C.BITS).next_to(sent_l, RIGHT, buff=0.25)
+        nb, ne, info = len(ai["falcon_bits"]), int(ai["falcon_exact"]), float(ai["falcon_info"])
+        cmp_said = ("the same as" if nb == ne else ("one fewer than" if nb == ne - 1 else
+                    ("one more than" if nb == ne + 1 else f"{nb - ne:+d} bits against")))
+        with self.voiceover(
+            f"At the end, a couple of bits close it off: {nb} bits for the falcon, {cmp_said} the exact coder's {ne}. "
+            "Whole numbers, and nothing longer than the registers, ever."
+        ):
+            self.play(Transform(sm, final), FadeOut(pm))
+            self.play(Indicate(sm, color=C.BITS))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def passage(self):
+        ai = load("arithint")
+        n, ideal = int(ai["n"]), float(ai["ideal"])
+        fb, byf = [int(x) for x in ai["freq_bits"]], [int(x) for x in ai["by_freq"]]
+        rb, byr = [int(x) for x in ai["reg_bits"]], [int(x) for x in ai["by_reg"]]
+        show = [f for f in (6, 8, 10, 12, 16, 24) if f in fb]
+        head = label(rf"The whole Falcon passage: \ ${n:,}$ letters, \ the best counting model".replace(",", "{,}"),
+                     font_size=32).to_edge(UP, buff=0.35)
+        info_l = label(rf"its information content under the model: \ ${ideal:,.1f}$ bits".replace(",", "{,}"),
+                       font_size=28, color=C.INTERVAL).next_to(head, DOWN, buff=0.3)
+        hdr = VGroup(label(r"probabilities rounded to", font_size=24, color=GREY_B),
+                     label(r"bits sent", font_size=24, color=GREY_B), label(r"difference", font_size=24, color=GREY_B))
+        rows = VGroup()
+        for f in show:
+            v = byf[fb.index(f)]
+            rows.add(VGroup(label(rf"${f}$-bit counts", font_size=26),
+                            MathTex(f"{v:,}".replace(",", "{,}"), font_size=30, color=C.BITS),
+                            MathTex(f"{v - ideal:+,.1f}".replace(",", "{,}"), font_size=30,
+                                    color=C.SURPRISE if v - ideal > 10 else GREY_A)))
+        tab = VGroup(hdr, *rows)
+        for j, x in enumerate((-3.6, 0.6, 3.6)):
+            for r in tab:
+                r[j].move_to([x, 0, 0], aligned_edge=RIGHT if j else LEFT)
+        for i, r in enumerate(tab):
+            for m in r:
+                m.set_y(1.15 - 0.55 * i)
+        tag = computed_tag()
+        reg_note = label(rf"registers of ${rb[0]}$ to ${rb[-1]}$ bits, with $10$-bit counts: \ "
+                         rf"${min(byr):,}$ to ${max(byr):,}$ bits".replace(",", "{,}"), font_size=24, color=GREY_A)
+        reg_note.to_edge(DOWN, buff=0.4)
+        fine = byf[fb.index(show[-1])] - ideal
+        coarse = byf[fb.index(8)] - ideal if 8 in fb else None
+        dips = [f for f in show if byf[fb.index(f)] < ideal]
+        dip_said = (f" With {dips[0]}-bit counts it even came out a few bits under: rounding gave rare letters a "
+                    "little more probability, and this passage happened to use them." if dips else "")
+        with self.voiceover(
+            f"Does the rounding cost much? We ran the whole Falcon passage, {n:,} letters, through a 32-bit coder "
+            f"driven by our best counting model. <bookmark mark='a'/> Its information content under that model is "
+            f"{ideal:,.0f} bits. <bookmark mark='b'/> With the probabilities rounded to {show[-1]}-bit counts, the "
+            f"coder sent {fine:.1f} bits more than that, in the whole passage."
+            + (f" Round them to 8 bits and it costs {coarse:,.0f} extra bits." if coarse is not None else "")
+            + dip_said + " <bookmark mark='c'/> The registers hardly matter, once they're a few bits wider than the "
+            "counts. Arithmetic coding gives away almost nothing: what you pay is the model's surprise."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(info_l))
+            vo.wait_until("b")
+            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=2.0)
+            vo.wait_until("c")
+            self.play(FadeIn(reg_note))
+        self.wait(0.3)
         self.clear_scene()
