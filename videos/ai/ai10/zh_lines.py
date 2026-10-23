@@ -112,10 +112,19 @@ ZH = {
         "我们可以精确地数出这个锥体。<bookmark mark='a'/>给卷积核大小、步长、相邻单元之间相隔的像素数和感受野各起个名字。<bookmark mark='b'/>大小为k的卷积核，多够到下一层k减1个单元，它们相隔j个像素：感受野增加k减1乘以j。<bookmark mark='c'/>步长会把间隔乘上去。<bookmark mark='d'/>展开来：1，加上每一层多出的抽头数乘以它前面所有步长的乘积。<bookmark mark='e'/>步长之后的每一层，都分量更重。",
 
     'f"Apply the rule to real networks, layer list by layer list.':
-        "把这条规则用到真实的网络上，一份层列表接一份层列表。<bookmark mark='a'/>LeNet-5的最后一个卷积看{t['LeNet-5'][-1][4]}个像素见方：整个输入。<bookmark mark='b'/>AlexNet最后的池化层看{a}个像素，VGG-16是{v}，ResNet-50是{r50}：都比它们训练用的224像素的图像还宽，所以顶层的一个单元原则上可以被任何一个像素改变。<bookmark mark='c'/>我们自己的CIFAR网络，第8章会见到，在32像素的照片上达到{t['our CIFAR network'][-1][4]}个像素。",
+        "把这条规则用到真实的网络上，一份层列表接一份层列表。<bookmark mark='a'/>LeNet-5的最后一个卷积看{t['LeNet-5'][-1][4]}个像素见方：整个输入。<bookmark mark='b'/>AlexNet最后的池化层看{a}个像素，VGG-16是{v}，ResNet-50是{r50}：{cover}<bookmark mark='c'/>我们自己的CIFAR网络，第8章会见到，在32像素的照片上达到{t['our CIFAR network'][-1][4]}个像素。",
 
     '"Two more ingredients shrink the maps as they go up.':
         "还有两个成分让特征图越往上越小。<bookmark mark='a'/>池化：在每个2乘2的块里只留最大值，然后移动2格。在块里把一个特征挪一个像素，池化后的输出不变：一点点不变性，又是休伯尔和威泽尔的复杂细胞。<bookmark mark='b'/>但步长为2会打破上一章那种精确的等变性。<bookmark mark='c'/>我们把数字在送进第一层和它的池化之前，平移了一到四个像素。{mid}<bookmark mark='d'/>2019年，阿哈龙·阿祖莱和亚伊尔·魏斯证明，平移一个像素就能改变现代网络的答案；理查德·张则证明，在每次步长之前先模糊一下，大体就能修好。",
+
+    'all wider than the 224-pixel images':
+        "都比它们训练用的224像素的图像还宽，所以顶层的一个单元原则上可以被任何一个像素改变。",
+
+    'AlexNet and VGG-16 see most of the 224-pixel images':
+        "AlexNet和VGG-16能看到它们训练用的224像素图像的大部分，ResNet-50则比整张图还宽：它顶层的一个单元，原则上可以被任何一个像素改变。",
+
+    'against images 224 pixels wide.':
+        "而图像宽224像素。",
 
     'A shift by 2 or 4 pixels comes out as an exact shift':
         "平移2个或4个像素，池化后的图恰好平移了一格。平移1个或3个像素就不行：池化后是另一张图，偏差占了它的值的很大一部分。",
@@ -257,6 +266,9 @@ ZH = {
 
     'f"We can run Hubel and Wiesel\'s experiment on our own network.':
         "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少滤波器在最佳角度的反应至少是垂直方向的三倍：{n}个里有{no}个，另外还有{nc}个主要对颜色有反应。{verdict}",
+
+    'Before training, not one of them passes':
+        "训练之前，它们没有一个通过同样的检验。这种方向偏好是学出来的。",
 
     "f'Before training, only {no0} pass the same test":
         "训练之前，只有{no0}个碰巧通过同样的检验；训练之后，有{no}个。",

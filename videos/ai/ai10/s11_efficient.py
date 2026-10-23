@@ -37,7 +37,7 @@ class Efficient(VoiceoverScene):
         return VGroup(f, t, s).move_to(center)
 
     def separable(self):
-        std = self.block(0.9, 0.9, 1.6, KERNEL, [-5.0, 1.6, 0])
+        std = self.block(0.9, 0.9, 1.6, KERNEL, [-4.5, 1.6, 0])
         sl = label(r"standard: \ $k \times k \times C$, \ for each of $C'$ outputs", font_size=20, color=KERNEL)
         sl.next_to(std, DOWN, buff=0.2)
         dws = VGroup(*[self.block(0.9, 0.9, 0.12, DW, [0, 0, 0]) for _ in range(5)]).arrange(RIGHT, buff=0.12)
@@ -247,8 +247,13 @@ class Efficient(VoiceoverScene):
             label(rf"ConvNeXt-XL, \ pre-trained on ImageNet-22K: \ ${CONVNEXT_XL_22K}\%$", font_size=22, color=CNN),
             label(r"2023: \ convolutional networks trained on $4$ billion images match vision transformers", font_size=22,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         cite_ = cite(r"Dosovitskiy et al.\ (2020); \ Liu et al.\ (2022); \ Smith et al.\ (2023)", corner=DR)
+        foot.next_to(cite_, UP, buff=0.15).to_edge(LEFT, buff=0.5)
+        vit = history_card(2020, r"Alexey Dosovitskiy and colleagues, \ Google",
+                           r"the vision transformer: \ an image cut into $16 \times 16$ patches, \ fed to a "
+                           r"transformer; \ with enough data, \ as good as the best convolutional networks; \ Part 22",
+                           width=7.0, color=HIST).move_to(UP * 0.3)
         with self.voiceover(
             "In 2020 a transformer fed an image cut into patches matched the best convolutional networks, and "
             "vision transformers soon led the benchmarks: Part 22. <bookmark mark='a'/> In 2022 Zhuang Liu and "
@@ -260,8 +265,9 @@ class Efficient(VoiceoverScene):
             "convolutional networks trained on four billion images. At scale, recipe and compute matter more than "
             "architecture: Part 12's lesson."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(vit, shift=UP * 0.2), FadeIn(cite_))
             vo.wait_until("a")
+            self.play(FadeOut(vit), FadeIn(head))
             self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bars], lag_ratio=0.25), run_time=4.0)
             vo.wait_until("b")
             self.play(Create(swin), FadeIn(swl))

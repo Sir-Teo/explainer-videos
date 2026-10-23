@@ -16,15 +16,14 @@ def d_rgb(Dv, color=DISC) -> np.ndarray:
     return (bg[None, None] * (1 - 0.75 * t[..., None]) + col[None, None] * 0.75 * t[..., None])[::-1]
 
 
-def replay_gan(scene, g, loss, plane: Plane, duration: float, counter_pos, color=GAN_C, critic=False):
-    """Seed 0 of a ring run, replayed: the discriminator (or critic) as the background, the generator's samples as
-    dots that move between checkpoints, and a counter of the modes covered.  Returns the mobjects."""
-    S = np.asarray(g[f"{loss}_frame_samples"])[:, :300]
-    Dd = np.asarray(g[f"{loss}_frame_d"])
+def replay_gan(scene, S, Dd, steps, modes, plane: Plane, duration: float, counter_pos, color=GAN_C, critic=False):
+    """A ring run replayed: the discriminator (or critic) as the background, the generator's samples as dots that
+    move between checkpoints, and a counter of the modes covered.  Returns the mobjects."""
+    S = np.asarray(S)[:, :300]
+    Dd = np.asarray(Dd)
     if critic:  # a critic's values have no fixed scale: squash each frame to [0, 1]
         Dd = np.array([(f - np.percentile(f, 2)) / max(np.percentile(f, 98) - np.percentile(f, 2), 1e-9) for f in Dd])
-    steps = list(g[f"{loss}_frame_steps"])
-    modes = list(g[f"{loss}_frame_modes"])
+    steps, modes = list(steps), list(modes)
     frames = [to_image(d_rgb(fr), plane.side, plane.side, smooth=True).pixel_array for fr in Dd]
     img = to_image(d_rgb(Dd[0]), plane.side, plane.side, smooth=True).move_to(plane.frame.get_center())
     dots = VGroup(*[Dot(q, radius=0.028, color=color) for q in plane.pts(np.clip(S[0], -2.95, 2.95))])
@@ -239,12 +238,13 @@ class Game(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ring(self):
-        g, t = load("gan2d"), load("toys")
+        g, t, gc = load("gan2d"), load("toys"), load("gan2d_collapse")
+        seed, n_col = int(gc["seed"]), int(gc["n_collapsed"])
         pl = Plane(4.4, center=[-3.3, -0.2, 0])
         truth = VGroup(*[Circle(radius=3 * 0.1 * pl.side / 6, stroke_color=DATA, stroke_width=1.5).move_to(pl.p(*c))
                          for c in np.asarray(t["ring_centers"])])
-        head = label(r"non-saturating GAN on the ring, \ seed $0$", font_size=22, color=GAN_C).next_to(pl, UP,
-                                                                                                    buff=0.12)
+        head = label(rf"non-saturating GAN on the ring, \ seed ${seed}$ \ (of $5$: \ its fewest modes)", font_size=22,
+                     color=GAN_C).next_to(pl, UP, buff=0.12)
         key = VGroup(label(r"background: \ $D$ \ (bright = ``real'')", font_size=18, color=DISC),
                      label(r"dots: \ $300$ samples, \ the same $z$ throughout", font_size=18, color=GAN_C),
                      label(r"circles: \ the data's eight modes, \ $3\sigma$", font_size=18, color=DATA))
@@ -268,11 +268,13 @@ class Game(VoiceoverScene):
         mean_ns, mean_mm = float(np.mean(fin["ns"])), float(np.mean(fin["mm"]))
         full_ns = sum(1 for m in fin["ns"] if m == 8)
         full_mm = sum(1 for m in fin["mm"] if m == 8)
-        ns_modes = list(g["ns_frame_modes"])
+        ns_modes = list(gc["frame_modes"])
         hop = ("It covers a few modes at a time, and the set it covers keeps changing: the generator chases the "
                "places where the discriminator is weakest, and the discriminator follows." if max(ns_modes) < 8 else
                "At times it reaches all eight, then loses some again: the generator chases the places where the "
                "discriminator is weakest, and the discriminator follows.")
+        pick = (f"Here is the run, of five, that ended with the fewest modes: seed {seed}. {n_col} of the five "
+                "collapsed to some degree.")
         if mean_ns < mean_mm:
             cmp_ = (f"Over five seeds, the non-saturating GAN ends with {mean_ns:.1f} of the eight modes on average, "
                     f"and covers all eight in {full_ns} of them; the minimax loss, with the gradient problem but "
@@ -284,12 +286,14 @@ class Game(VoiceoverScene):
         with self.voiceover(
             "Here is that cost on the ring of eight. The background is the discriminator's verdict on the plane, "
             "bright where it says real; the dots are the generator's samples, from the same three hundred noise "
-            "vectors at every checkpoint. <bookmark mark='a'/> Watch it train. " + hop + " <bookmark mark='b'/> "
+            "vectors at every checkpoint. " + pick + " <bookmark mark='a'/> Watch it train. " + hop + " <bookmark "
+            "mark='b'/> "
             "This is mode collapse: a generator that makes only a few kinds of thing. <bookmark mark='c'/> " + cmp_
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(key), FadeIn(ml), FadeIn(sl))
             vo.wait_until("a")
-            img, dots, cnt, stp = replay_gan(self, g, "ns", pl, max(6.0, vo.until("b") + 2.0), [1.2, 1.0, 0])
+            img, dots, cnt, stp = replay_gan(self, gc["frame_samples"], gc["frame_d"], gc["frame_steps"],
+                                             gc["frame_modes"], pl, max(6.0, vo.until("b") + 2.0), [1.2, 1.0, 0])
             vo.wait_until("b")
             self.play(Indicate(cnt, color=GAN_C))
             vo.wait_until("c")

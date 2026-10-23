@@ -262,6 +262,22 @@ def compute_gan2d():
     return out
 
 
+def compute_gan2d_collapse():
+    """The non-saturating GAN seed that ends with the fewest of the ring's modes, trained again (bit for bit the same
+    run: the replay draws no random numbers) with its checkpoints recorded, to show collapse as it happens."""
+    _threads()
+    g = load("gan2d")
+    fin = list(g["ns_final_modes"])
+    seed = int(np.argmin(fin))
+    G, r = g2.train_gan("ns", "ring", seed, replay=True)
+    assert g2.modes(r["final"])[0] == fin[seed]  # the same run as in gan2d
+    fr = r["frames"]
+    return dict(seed=seed, n_seeds=len(fin), n_collapsed=int(sum(1 for m in fin if m < 8)), final_modes=fin,
+                frame_steps=[f["step"] for f in fr], frame_samples=np.array([f["samples"] for f in fr], np.float32),
+                frame_d=np.array([f["d"] for f in fr], np.float32), frame_modes=[f["modes"] for f in fr],
+                frame_counts=[f["counts"] for f in fr])
+
+
 def compute_bilinear():
     eta, T = 0.2, 60
     p0 = np.array([1.0, 0.0])
@@ -1437,6 +1453,7 @@ ITEMS = {
     "collapse2d": compute_collapse2d,
     "flow2d": compute_flow2d,
     "gan2d": compute_gan2d,
+    "gan2d_collapse": compute_gan2d_collapse,
     "ebm2d": compute_ebm2d,
     "cnf": compute_cnf,
     "eval2d": compute_eval2d,

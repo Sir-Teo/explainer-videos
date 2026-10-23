@@ -228,8 +228,9 @@ class NeuralODE(VoiceoverScene):
         dots = VGroup(*[Dot(q, radius=0.022, color=WHITE, fill_opacity=0.85) for q in pl.pts(np.clip(P[0][:n],
                                                                                                     -2.95, 2.95))])
         t = ValueTracker(0.0)
-        tl = always_redraw(lambda: MathTex(rf"t = {t.get_value():.2f}", font_size=34, color=CNF_C).move_to([3.6, 2.4,
-                                                                                                            0]))
+        tv = DecimalNumber(0.0, num_decimal_places=2, font_size=34, color=CNF_C)
+        tl = VGroup(MathTex(r"t =", font_size=34, color=CNF_C), tv).arrange(RIGHT, buff=0.15).move_to([3.6, 2.4, 0])
+        tv.add_updater(lambda m: m.set_value(t.get_value()))
 
         def upd(g):
             v = t.get_value() * (len(P) - 1)

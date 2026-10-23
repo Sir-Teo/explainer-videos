@@ -66,6 +66,7 @@ class Judging(VoiceoverScene):
     # ------------------------------------------------------------------
     def fid(self):
         c = load("classifier")
+        acc = 100 * float(c["accuracy"])
         rows = [
             cmath(r"W_2^2\big(\mathcal N(\mu_1, \sigma_1^2), \mathcal N(\mu_2, \sigma_2^2)\big)", r"=",
                   r"(\mu_1 - \mu_2)^2", r"+", r"(\sigma_1 - \sigma_2)^2", font_size=32),
@@ -98,8 +99,8 @@ class Judging(VoiceoverScene):
             "Gaussian to the features of real images and one to the features of generated images, and compute "
             "the distance. <bookmark mark='c'/> They used Google's Inception network, trained on ImageNet. For "
             "digits, we use the same idea with a classifier trained on the digits, as papers that report FID on "
-            f"MNIST do: its last hidden layer, 128 numbers; it reads the test digits with {100 * float(c['accuracy']):.2f} "
-            "percent accuracy."
+            f"MNIST do: its last hidden layer, 128 numbers; it reads the test digits with {acc:.2f} percent "
+            "accuracy."
         ) as vo:
             step(0)
             oneD.next_to(rows[0], DOWN, buff=0.2)
@@ -142,16 +143,21 @@ class Judging(VoiceoverScene):
         mono = all(b >= a for a, b in zip(nf, nf[1:]))
         blur = float(c["blur"]["fid"])
         i2k = int(np.argmin(np.abs(ns - 2000)))
+        f0, f2k, fN = (float(fn[k].mean()) for k in (0, i2k, -1))
+        n0, n2k, nN = int(ns[0]), int(ns[i2k]), int(ns[-1])
+        nf0, nfN = nf[0], nf[-1]
+        if mono:
+            rise = f"Add noise to real digits, and our FID rises with every step up in noise, from {nf0:.2f} to {nfN:.1f}."
+        else:
+            rise = f"Add noise to real digits, and our FID rises, overall, with the noise, from {nf0:.2f} to {nfN:.1f}."
         with self.voiceover(
-            "First, a check that the measure measures something. Add noise to real digits, and our FID "
-            + ("rises with every step up in noise" if mono else "rises, overall, with the noise") +
-            f", from {nf[0]:.2f} to {nf[-1]:.1f}; a three-by-three blur gives {blur:.1f}. <bookmark mark='a'/> "
+            f"First, a check that the measure measures something. {rise} A three-by-three blur gives {blur:.1f}. "
+            "<bookmark mark='a'/> "
             "Second, a warning. FID compares estimated means and covariances, and estimates from a few samples "
             "are noisy, which biases the distance upward. Real digits against the test set give an FID of "
-            f"{fn[0].mean():.2f} with {ns[0]} samples, {fn[i2k].mean():.2f} with {ns[i2k]:,}, and "
-            f"{fn[-1].mean():.2f} with {ns[-1]:,}. <bookmark mark='b'/> So FIDs can only be compared at the same "
-            f"number of samples. Ours always use {ns[i2k]:,}, which puts the floor, a perfect model, at about "
-            f"{fn[i2k].mean():.2f}."
+            f"{f0:.2f} with {n0} samples, {f2k:.2f} with {n2k:,}, and {fN:.2f} with {nN:,}. <bookmark mark='b'/> So "
+            f"FIDs can only be compared at the same number of samples. Ours always use {n2k:,}, which puts the "
+            f"floor, a perfect model, at about {f2k:.2f}."
         ) as vo:
             self.play(FadeIn(g), Create(nc), FadeIn(nd), FadeIn(ex), FadeIn(exl))
             vo.wait_until("a")
@@ -248,16 +254,17 @@ class Judging(VoiceoverScene):
         worst_p = min(mean, key=lambda f: mean[f][0])
         spoken = {"ar": "the autoregressive model", "vae": "the VAE", "gan": "the GAN", "wgan": "WGAN-GP",
                   "flow": "the flow", "ebm": "the energy model"}
+        n_bp, n_br, n_wp = spoken[best_p], spoken[best_r], spoken[worst_p]
+        v_bp, v_br, v_wp = mean[best_p][0], mean[best_r][1], mean[worst_p][0]
+        bfd, bprec = float(e2["blob_fd"]), float(e2["blob_precision"])
         with self.voiceover(
             "Now every family, on the ring, three seeds each, against two thousand fresh points of the data. "
-            f"<bookmark mark='a'/> The highest precision belongs to {spoken[best_p]}, at {mean[best_p][0]:.2f} on "
-            f"average, the highest recall to {spoken[best_r]}, at {mean[best_r][1]:.2f}, and the lowest "
-            f"precision to {spoken[worst_p]}, at {mean[worst_p][0]:.2f}, whose samples fall between the modes. "
+            f"<bookmark mark='a'/> The highest precision belongs to {n_bp}, at {v_bp:.2f} on average; the highest "
+            f"recall to {n_br}, at {v_br:.2f}; and the lowest precision to {n_wp}, at {v_wp:.2f}. "
             "<bookmark mark='b'/> And here is why FID alone is dangerous. Fit one Gaussian blob to the ring, with "
             "the same mean and covariance, and sample from it. Its Fréchet distance to the ring is "
-            f"{float(e2['blob_fd']):.3f}, about as small as that between two samples of the ring itself, because "
-            "the Fréchet distance sees only means and covariances. Its precision is "
-            f"{float(e2['blob_precision']):.2f}. On images, features rich enough make this failure rarer, but "
+            f"{bfd:.3f}, about as small as that between two samples of the ring itself, because the Fréchet "
+            f"distance sees only means and covariances. Its precision is {bprec:.2f}. On images, features rich enough make this failure rarer, but "
             "never impossible."
         ) as vo:
             self.play(FadeIn(g), FadeIn(keys))

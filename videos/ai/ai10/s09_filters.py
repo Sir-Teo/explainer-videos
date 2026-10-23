@@ -44,13 +44,13 @@ class Filters(VoiceoverScene):
         dl = label(r"CIFAR-10 \ (Krizhevsky, 2009): \ $32 \times 32$ photographs, \ ten classes", font_size=22,
                    color=GREY_A).next_to(rows, UP, buff=0.15)
         boxes = nn_layer_boxes([0.18, 0.22, 0.28, 0.28, 0.12], [2.2, 1.6, 1.0, 0.6, 0.9],
-                               [FMAP, FMAP, FMAP, FMAP, CNN], buff=0.35, depth=0.2).move_to([3.6, 1.4, 0])
+                               [FMAP, FMAP, FMAP, FMAP, CNN], buff=0.35, depth=0.2).move_to([3.6, 1.9, 0])
         bl = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(b, DOWN, buff=0.12) for t, b in zip(
             [r"$48$ @ $7{\times}7$, \\ stride 2", r"$64$", r"$128$", r"$128$", r"$10$"], boxes)])
         bl.set_y(boxes.get_bottom()[1] - 0.4)
         ax = axes([0, int(cf["epochs"])], [0.3, 1.0], x_length=4.6, y_length=2.4, xlabel=r"passes over the photographs",
                   ylabel=r"test accuracy", xticks=[0, 5, 10], yticks=[0.5, 1.0], yfmt=lambda v: f"{int(100 * v)}\\%",
-                  center=[3.6, -2.0, 0])
+                  center=[3.6, -1.75, 0])
         t = np.asarray(cf["test"])
         per = int(cf["total_steps"]) / int(cf["epochs"])
         cur = curve(ax.ax, t[:, 0] / per, t[:, 1], CNN, 4)
@@ -187,9 +187,12 @@ class Filters(VoiceoverScene):
         sel = label(rf"tuned: \ selectivity $\frac{{R_{{\text{{best}}}} - R_{{\perp}}}}{{R_{{\text{{best}}}} + "
                     rf"R_{{\perp}}}} \ge {o['selective']}$", font_size=20, color=GREY_B).to_corner(UR, buff=0.3)
         tag = note(r"computed").to_corner(DR, buff=0.25)
-        verdict = (f"Before training, only {no0} pass the same test, by chance; after, {no} do."
-                   if no > no0 + 3 else
-                   f"Before training, {no0} pass the same test by chance; after, {no}.")
+        if no0 == 0 and no > 3:
+            verdict = "Before training, not one of them passes the same test. The tuning was learned."
+        elif no > no0 + 3:
+            verdict = f"Before training, only {no0} pass the same test, by chance; after, {no} do."
+        else:
+            verdict = f"Before training, {no0} pass the same test by chance; after, {no}."
         with self.voiceover(
             "We can run Hubel and Wiesel's experiment on our own network. <bookmark mark='a'/> Show each filter a "
             "striped pattern, a grating, at sixteen angles, and record how strongly it answers at each one. "
@@ -200,11 +203,11 @@ class Filters(VoiceoverScene):
             f"to colour. " + verdict
         ) as vo:
             self.add(gr)
-            self.play(FadeIn(gl), FadeIn(sel), FadeIn(tag))
+            self.play(FadeIn(gl), FadeIn(sel), FadeIn(tag), FadeIn(tl), *[FadeIn(t[0]) for t in triples])
             vo.wait_until("a")
             self.play(th.animate.set_value(math.pi), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(tl), LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in triples], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(t[1], shift=UP * 0.1) for t in triples], lag_ratio=0.3))
             self.play(th.animate.set_value(2 * math.pi), run_time=2.5, rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(counts, shift=UP * 0.1))
@@ -220,7 +223,7 @@ class Filters(VoiceoverScene):
         names = classes()
         left = Group()
         for c in range(6):
-            left.add(Group(*[img_rgb(P3[c, i], 0.5) for i in range(6)]).arrange(RIGHT, buff=0.04))
+            left.add(Group(*[img_rgb(P3[c, i], 0.56) for i in range(6)]).arrange(RIGHT, buff=0.04))
         left.arrange(DOWN, buff=0.12).move_to([-3.5, -0.4, 0])
         ll = label(r"layer 3 \ ($21 \times 21$ pixels seen): \\ the patches that excite six channels most",
                    font_size=20, color=FMAP).next_to(left, UP, buff=0.2)
@@ -236,6 +239,9 @@ class Filters(VoiceoverScene):
                    color=CNN).next_to(right, UP, buff=0.2)
         cite_ = cite(r"Zeiler \& Fergus (2013)", corner=DL)
         tag = note(r"computed: \ our network, \ the $10{,}000$ test photographs").to_corner(DR, buff=0.2)
+        zf = history_card(2013, r"Matthew Zeiler \& Rob Fergus, \ NYU",
+                          r"\textit{Visualizing and Understanding Convolutional Networks}: \ to see what a deep unit "
+                          r"wants, \ find the inputs that excite it most", width=7.0, color=HIST).move_to(UP * 0.3)
         purity = [max(f["cls4"][c].count(k) for k in set(f["cls4"][c])) for c in range(4)]
         with self.voiceover(
             "Higher layers combine the edges. To see what a deeper unit wants, the trick from Matthew Zeiler and "
@@ -246,8 +252,9 @@ class Filters(VoiceoverScene):
             f"{purity[0]}, {purity[1]}, {purity[2]} and {purity[3]} of the top six images are of one kind. Nobody "
             "labelled the channels. The labels only ever reached the very last layer."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(tag))
+            self.play(FadeIn(zf, shift=UP * 0.2), FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(zf), FadeIn(cite_))
             self.play(FadeIn(ll), LaggedStart(*[FadeIn(r) for r in left], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(FadeIn(rl), LaggedStart(*[FadeIn(r) for r in right], lag_ratio=0.2))
