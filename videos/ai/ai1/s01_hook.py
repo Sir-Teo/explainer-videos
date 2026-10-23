@@ -234,7 +234,7 @@ class Hook(VoiceoverScene):
         tag = note(r"computed").to_corner(DR, buff=0.3)
 
         def says(p):
-            return f"gives Paris {100 * p:.0f} percent" if p is not None else "doesn't put Paris in its top five"
+            return f"gives the word Paris {100 * p:.0f} percent" if p is not None else "doesn't put Paris in its top five"
 
         with self.voiceover(
             "Seventy-five years after Shannon's game, it is exactly what large language models are trained to "
@@ -417,7 +417,7 @@ class Hook(VoiceoverScene):
                    font_size=20).next_to(quote, DOWN, buff=0.2)
         board = scoreboard(rows, shown=1, row_h=0.36, font_size=20).scale(0.92).to_edge(DOWN, buff=0.25)
         low = min(r["bits"] for r in rows if "bits" in r)
-        goal = "to below one" if low < 1 else f"to {low:.2f}, and beyond"
+        goal = "to below one" if low < 1 else f"to {low:.2f} bits per character, and beyond"
         with self.voiceover(
             "And we'll keep score. Here is a page of a novel, The Maltese Falcon, from 1930. It entered the public "
             "domain, and Project Gutenberg, on the first of January 2026, after every model in this part was "

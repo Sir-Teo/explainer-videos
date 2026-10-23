@@ -405,14 +405,15 @@ def compute_gin():
     At, yt, pt = gr.regular_dataset(600, np.random.default_rng(1))
     X = np.ones(A.shape[:2] + (1,), np.float32)
     Xt = np.ones(At.shape[:2] + (1,), np.float32)
-    part = CACHE.partial("gin", dict(v=1, seeds=SEEDS))
+    part = CACHE.partial("gin", dict(v=2, seeds=SEEDS))
     kinds = {"gin": (lambda: gr.GIN(1), False, 1500), "gin_rni": (lambda: gr.GIN(5), True, 4000),
-             "pair": (lambda: gr.PairNet(), False, 1500)}
+             "pair": (lambda: gr.PairNet(), False, 3000)}
     for kind, (make, rni, steps) in kinds.items():
         for s in SEEDS:
             key = f"{kind}_s{s}"
             if key in part:
                 continue
+            torch.manual_seed(s)  # the initial weights, too
             m = gr.train_graph_classifier(make(), A, X, y, s, steps=steps, rni=rni)
             g = torch.Generator().manual_seed(3)
             acc = gr.graph_accuracy(m, At, Xt, yt, rni=rni, gen=g, reps=8)
@@ -567,7 +568,9 @@ def compute_oversmooth():
             Z = H - H.mean(0)
             U, S, Vt = np.linalg.svd(Z, full_matrices=False)
             snaps[k] = (Z @ Vt[:2].T)
-    out = dict(energy=np.array(energies), lam2=float(w[1]), lam1=float(w[0]), show_k=list(show_k), y=y,
+    lam2 = float(w[w < 1 - 1e-8].max())  # the slowest-dying direction (eigenvalue 1 repeats once per component)
+    out = dict(energy=np.array(energies), lam2=lam2, lam1=float(w[0]), show_k=list(show_k), y=y,
+               n_components=int(gr.components(A).max() + 1),
                pca={str(k): v for k, v in snaps.items()})
     tr = gr.split_masks(y, rng)
     Ah = torch.from_numpy(Ahn)

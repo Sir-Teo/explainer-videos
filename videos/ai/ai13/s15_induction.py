@@ -304,6 +304,15 @@ class Induction(VoiceoverScene):
                           r"first seed, \ every 250 steps", font_size=16))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, -0.4, 0])
         keep_in_frame(key)
+        # what the formula measures, drawn where the key will go: the earlier head writes, the later head's keys read
+        w1 = VGroup(label(r"the earlier head $h_1$ writes", font_size=19, color=K),
+                    MathTex(r"W_{OV}^{h_1}\, x", font_size=30, color=K)).arrange(DOWN, buff=0.1)
+        w2 = VGroup(label(r"the later head $h_2$'s keys read", font_size=19, color=A),
+                    MathTex(r"W_{QK}^{h_2}\,\big(W_{OV}^{h_1}\, x\big)", font_size=30, color=A)).arrange(DOWN, buff=0.1)
+        arr = VGroup(Arrow(UP * 0.35, DOWN * 0.35, color=GREY_B, stroke_width=2.5, buff=0),
+                     label(r"the residual stream", font_size=16, color=GREY_B)).arrange(RIGHT, buff=0.15)
+        sch = VGroup(w1, arr, w2).arrange(DOWN, buff=0.2).move_to([4.5, -0.6, 0])
+        keep_in_frame(sch)
         k0, k1 = float(k_c[0]), float(k_c[-1])
         q1, o1 = float(q_c[-1]), float(k_o[-1])
         n_p, n_i = len(P_), len(I_)
@@ -322,8 +331,10 @@ class Induction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(f), FadeIn(fl))
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(bnd), FadeIn(bl), Create(jl))
+            self.play(FadeIn(g), FadeIn(bnd), FadeIn(bl), Create(jl), FadeIn(w1))
+            self.play(GrowArrow(arr[0]), FadeIn(arr[1]), FadeIn(w2))
             vo.wait_until("b")
+            self.play(FadeOut(sch))
             self.play(Create(kk), Create(qq), Create(oth), FadeIn(key), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
@@ -348,23 +359,30 @@ class Induction(VoiceoverScene):
         il.next_to(img, UP, buff=0.15)
         rl = label(r"earlier head", font_size=18, color=GREY_B).rotate(PI / 2).next_to(img, LEFT, buff=0.12)
         cl = label(r"later head", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
-        # first: how much each head attends one step after the earlier copy (an induction head's signature)
-        ib = VGroup()
-        bw_, sy_ = 0.24, 2.4 / max(0.5, float(ind.max()))
-        for l_ in range(L):
-            for h in range(H):
-                v_ = float(ind[l_, h])
-                ib.add(Rectangle(width=bw_ * 0.8, height=max(sy_ * v_, 0.01), stroke_width=0, fill_color=A,
-                                 fill_opacity=0.85).move_to([-6.0 + (l_ * (H + 1) + h) * bw_, -2.0 + sy_ * v_ / 2, 0]))
-        ibase = Line([-6.2, -2.0, 0], [-6.0 + (L * (H + 1)) * bw_, -2.0, 0], color=GREY_C, stroke_width=2)
-        ihalf = DashedLine([-6.2, -2.0 + sy_ * 0.5, 0], [-6.0 + (L * (H + 1)) * bw_, -2.0 + sy_ * 0.5, 0],
-                           color=GREY_B, stroke_width=1.5)
-        ihl = label(r"$50\%$: \ a toy's induction head", font_size=16, color=GREY_B).next_to(ihalf, UP, buff=0.05).align_to(ihalf, RIGHT)
-        ilyr = VGroup(*[label(rf"layer {l_ + 1}", font_size=16, color=GREY_B).move_to(
-            [-6.0 + (l_ * (H + 1) + (H - 1) / 2) * bw_, -2.3, 0]) for l_ in range(L)])
-        itl = label(r"each head of ours: \ attention one step after the earlier copy", font_size=20,
-                    color=GREY_A).next_to(ihalf, UP, buff=0.45).align_to(ibase, LEFT)
-        indg = VGroup(ib, ibase, ihalf, ihl, ilyr, itl)
+        # first: what an induction head looks like (the toy's, with its stripe) beside our best candidate, reading a
+        # stretch of a novel shown twice; dashed, where an induction head would look
+        di = load("induction")
+        S_ = 2.5
+        toy = framed(heat_image(np.asarray(di["map_ind"]), S_, S_, color=A, mask_upper=True))
+        TM = np.asarray(t["text_ind_map"])
+        N2 = TM.shape[0]
+        n_ = N2 // 2
+        mine = framed(heat_image(TM, S_, S_, color=A, mask_upper=True))
+        Group(toy, mine).arrange(RIGHT, buff=0.5).move_to([-3.85, -0.45, 0])
+        ul = mine[0].get_corner(UL)
+
+        def px(r, c):
+            return ul + RIGHT * (c + 0.5) * S_ / N2 + DOWN * (r + 0.5) * S_ / N2
+
+        stripe = DashedLine(px(n_ + 4, 5), px(N2 - 2, n_ - 1), color=GREY_A, stroke_width=1.6, dash_length=0.06)
+        toy_sc = float(np.asarray(di["ind_scores"])[int(di["ind_head"])])
+        tl_ = label(rf"the toy's induction head: \\ ${toy_sc:.0%}$ one step after the copy".replace("%", r"\%"),
+                    font_size=17, color=GREY_A).next_to(toy, UP, buff=0.12)
+        ml_ = label(rf"ours, \ layer ${li + 1}$, head ${hi + 1}$: \\ ${ind.max():.1%}$ one step after the copy"
+                    .replace("%", r"\%"), font_size=17, color=GREY_A).next_to(mine, UP, buff=0.12)
+        sl_ = label(r"dashed: \ where an induction head would look", font_size=16, color=GREY_B).next_to(mine, DOWN, buff=0.12)
+        cap_ = label(r"random tokens, \ repeated", font_size=16, color=GREY_B).next_to(toy, DOWN, buff=0.12)
+        indg = Group(toy, mine, tl_, ml_, cap_)
         a_, b_ = np.unravel_index(int(np.nanargmax(CK)), CK.shape)
         lo = float(min(c1.min(), c2.min())) - 0.2
         hi_ = float(min(max(c1[1:].max(), c2[1:].max()) + 0.2, lo + 3.0))
@@ -387,7 +405,6 @@ class Induction(VoiceoverScene):
         v2 = (f"Its heads compose a little, at most {top:.2f} against {base:.2f} for random heads, but no pair has "
               "become a copying circuit. " if top > base + 4 * bsd else
               f"And its heads barely compose: at most {top:.2f}, against {base:.2f} for random heads. ")
-        di = load("induction")
         jmax = max(int(v) for v in di["jump_steps"])
         formed = max(float(v) for v in di["final2"]) < 0.5 * float(np.asarray(di["curve1"])[-1, 1])
         if strong:
@@ -404,13 +421,11 @@ class Induction(VoiceoverScene):
             "And our own transformer, trained on novels with no copying game at all? <bookmark mark='a'/> " + v1
             + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
         ) as vo:
-            self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), FadeIn(itl), Create(ibase), Create(ihalf),
-                      FadeIn(ihl), FadeIn(ilyr), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ib], lag_ratio=0.03),
-                      run_time=2.0)
+            self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), FadeIn(indg), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(ihalf, color=A), Indicate(key, color=C.BITS))
+            self.play(Create(stripe), FadeIn(sl_), Indicate(key, color=C.BITS))
             vo.wait_until("b")
-            self.play(FadeOut(indg))
+            self.play(FadeOut(indg), FadeOut(stripe), FadeOut(sl_))
             self.play(FadeIn(img), FadeIn(il), FadeIn(rl), FadeIn(cl))
             vo.wait_until("c")
             self.play(Indicate(il, color=A))

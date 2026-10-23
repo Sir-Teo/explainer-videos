@@ -156,12 +156,12 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(l_plug))
             vo.wait_until("b")
             self.play(FadeIn(sh_d), FadeIn(sh_l))
+        beyond = (f"with {ks[-1]} letters of context it's worse than knowing nothing but letter frequencies."
+                  if test[-1] > test[0] else f"it climbs to {test[-1]:.2f} bits with {ks[-1]} letters of context.")
         with self.voiceover(
             "But on new text, the Falcon passage, <bookmark mark='a'/> the story is different. More context helps at "
             f"first: <bookmark mark='b'/> the best is {best} letters of context, at {test[best]:.2f} bits per letter. "
-            "Beyond that, it gets worse"
-            + (f", and with {ks[-1]} letters of context it's worse than knowing nothing but letter frequencies."
-               if test[-1] > test[0] else f", up to {test[-1]:.2f} bits with {ks[-1]} letters of context.")
+            f"Beyond that, it gets worse: {beyond}"
         ) as vo:
             vo.wait_until("a")
             self.play(Create(c_test), FadeIn(d_test), run_time=2.0)

@@ -63,7 +63,7 @@ class Scoreboard(VoiceoverScene):
         comp_said = ", ".join(f"{c}, {b[c]:.2f}" for c in comp)
         q06, gxl = b["Qwen3-0.6B"], b["GPT-2 XL"]
         q06_said = ("already matches the largest GPT-2" if abs(q06 - gxl) < 0.02 else
-                    ("already beats the largest GPT-2" if q06 < gxl else f"gets {q06:.2f}"))
+                    ("already beats the largest GPT-2" if q06 < gxl else f"gets {q06:.2f} bits per character"))
         with self.voiceover(
             "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. "
             "<bookmark mark='a'/> A plain text file spends eight bits on every character. <bookmark mark='b'/> The "
