@@ -112,8 +112,7 @@ class LSTM(VoiceoverScene):
             "for every slot, multiplies the belt: one keeps, zero erases. <bookmark mark='c'/> The input gate "
             "chooses how much of a new candidate g to add. <bookmark mark='d'/> The output gate chooses how much of "
             "the memory to show as the hidden state h. <bookmark mark='e'/> All three are computed from the "
-            "previous hidden state and the input, so the network learns when to remember, forget and speak; and "
-            "what isn't erased rides the belt unchanged."
+            "previous hidden state and the input, so the network learns when to remember, forget and speak."
         ) as vo:
             self.play(FadeIn(eqs), FadeIn(tag))
             vo.wait_until("a")
@@ -185,10 +184,9 @@ class LSTM(VoiceoverScene):
                           color=HIST).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "In 2014 Kyunghyun Cho and colleagues in Montreal simplified the cell. <bookmark mark='a'/> The gated "
-            "recurrent unit keeps only the hidden state, and two gates. The update gate z blends the old state "
-            "with a new candidate: where z is near zero the state passes through untouched, the same carousel. "
-            "The reset gate r decides how much of the past the candidate may look at. <bookmark mark='b'/> Fewer "
-            "parts, and in comparisons that year by Junyoung Chung and colleagues, about as good."
+            "recurrent unit keeps only the hidden state and two gates: an update gate z that blends the old state "
+            "with a new candidate, the same carousel wherever z is near zero, and a reset gate. "
+            "<bookmark mark='b'/> Fewer parts, and about as good, in comparisons by Junyoung Chung and colleagues."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")

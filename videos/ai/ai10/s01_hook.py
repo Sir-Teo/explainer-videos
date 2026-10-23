@@ -137,8 +137,8 @@ class Hook(VoiceoverScene):
             "Seeing is half of this part. The other half is remembering. <bookmark mark='a'/> In 2014 networks "
             "learned to read a whole sentence and write it in another language. <bookmark mark='b'/> And that year "
             "they learned to look back: at each word they wrote, to pick out the words of the input they needed. "
-            "This is a small one, trained here to write a string backwards. Each row is one letter it wrote; the "
-            "bright square is where it was looking. It was the first attention."
+            "This is a small one, trained here to write strings backwards; the bright squares are where it looked. "
+            "It was the first attention."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")

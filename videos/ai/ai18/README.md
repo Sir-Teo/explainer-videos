@@ -310,7 +310,7 @@ BF16有FP32的8个指数位：最小的正规数是 2⁻¹²⁶，远小于 2⁻
 | data mixture, domain weights, proxy model | 数据配比，领域权重，代理模型 |
 | synthetic data, rephrasing | 合成数据，改写 |
 | model collapse | 模型崩溃 |
-| epoch, repetition | 轮次，重复 |
+| epoch, repetition, effective data | 轮次，重复，有效数据 |
 | causal LM, masked LM, span corruption | 因果语言模型，掩码语言模型，片段破坏 |
 | fill in the middle (FIM), prefix / suffix / middle | 中间填充（FIM），前缀 / 后缀 / 中间 |
 | warmup–stable–decay (WSD), cooldown | 预热–稳定–衰减（WSD），冷却 |
@@ -333,7 +333,7 @@ BF16有FP32的8个指数位：最小的正规数是 2⁻¹²⁶，远小于 2⁻
 | model FLOPs utilization (MFU) | 模型浮点利用率（MFU） |
 | loss scaling, dynamic loss scaling, overflow, underflow | 损失缩放，动态损失缩放，上溢，下溢 |
 | gradient accumulation | 梯度累积 |
-| fine-grained (tile-wise, block-wise) scaling | 细粒度（按块、按瓦片）缩放 |
+| fine-grained (tile-wise, block-wise) scaling, microscaling (MX) | 细粒度（按块、按瓦片）缩放，微缩放（MX） |
 | quantization-aware training (QAT) | 量化感知训练（QAT） |
 | loss spike, rollback | 损失尖峰，回滚 |
 | attention logit growth, QK-norm | 注意力logit增长，QK归一化 |

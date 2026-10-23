@@ -295,7 +295,7 @@ class Attention(VoiceoverScene):
         with self.voiceover(
             "Attention is a soft lookup: a query, the decoder's state, compared with keys, the encoder's states, "
             "to fetch a mixture of values. <bookmark mark='a'/> The same year, neural Turing machines and memory "
-            "networks used it to read from a memory by content. <bookmark mark='b'/> In 2015 Thang Luong and "
+            "networks used it to read memories. <bookmark mark='b'/> In 2015 Thang Luong and "
             "colleagues replaced Bahdanau's little scoring network with a dot product, and Kelvin Xu and "
             "colleagues pointed attention at the parts of a picture to write its caption. <bookmark mark='c'/> By "
             "2016 it was inside Google Translate. <bookmark mark='d'/> And in 2017 a team at Google asked what "
