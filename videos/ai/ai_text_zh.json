@@ -10394,7 +10394,6 @@
     "Huffman codeword": "霍夫曼码字",
     "Huffman's \\\\ code": "霍夫曼 \\\\ 编码",
     "Huffman's code is optimal": "霍夫曼编码是最优的",
-    "Hutter Prize record, \\ July 2026: \\ enwik9 in $100.4$ MB, \\ decompressor included: \\ $0.80$ bits per character": "赫特奖纪录，\\ 2026年7月：\\ enwik9 压到 $100.4$ MB，\\ 含解压器：\\ 每字符 $0.80$ 比特",
     "In practice: \\ whole numbers, and a zoom": "实际做法：\\ 整数，加上放大",
     "Jensen (Chapter 3): \\ average of logs $\\le$ log of the average": "詹森（第3章）：\\ 对数的平均 $\\le$ 平均的对数",
     "Jensen: $\\log_2$ bends down": "詹森：$\\log_2$ 向下弯",
@@ -10662,7 +10661,8 @@
     "within $0.1$ bits of $H$: \\ $20\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $20\\%$",
     "within $0.1$ bits of $H$: \\ $59\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $59\\%$",
     "within $0.1$ bits of $H$: \\ $99\\%$": "离 $H$ 不超过 $0.1$ 比特：\\ $99\\%$",
-    "QK-norm: \\ ViT-22B (2023), \\ Qwen3, \\\\ GLM-4.5, \\ Gemma 3 \\ (2025)": "QK归一化：ViT-22B（2023）、Qwen3、\\\\ GLM-4.5、Gemma 3（2025）"
+    "QK-norm: \\ ViT-22B (2023), \\ Qwen3, \\\\ GLM-4.5, \\ Gemma 3 \\ (2025)": "QK归一化：ViT-22B（2023）、Qwen3、\\\\ GLM-4.5、Gemma 3（2025）",
+    "Hutter Prize record, \\ September 2024: \\ enwik9 in $110.8$ MB, \\ decompressor included: \\ $0.89$ bits per character": "赫特奖纪录，\\ 2024年9月：\\ enwik9 压到 $110.8$ MB，\\ 含解压器：\\ 每字符 $0.89$ 比特"
   },
   "phrases": {
     "width": "宽度",

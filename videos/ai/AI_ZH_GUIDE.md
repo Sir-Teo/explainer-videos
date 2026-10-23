@@ -754,3 +754,33 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | RASP; select, aggregate | RASP；选择（select），聚合（aggregate） |
 | Tracr | Tracr |
 | hybrid (linear + full attention) | 混合架构（线性注意力加完整注意力） |
+
+### The guessing game, additions (Part 1)
+
+| English | 中文 |
+|---|---|
+| Shannon's three requirements; the grouping rule | 香农的三条要求；分组法则 |
+| uniqueness of entropy (Shannon's Theorem 2) | 熵的唯一性（香农定理2） |
+| Hartley's measure of information | 哈特利的信息度量 |
+| uniquely decodable code | 唯一可解码的码 |
+| Kraft–McMillan inequality | 克拉夫特–麦克米兰不等式 |
+| canonical code | 规范码 |
+| exchange argument; sibling (leaves) | 交换论证；兄弟（叶子） |
+| optimal code | 最优码 |
+| typical set, typical sequence | 典型集，典型序列 |
+| asymptotic equipartition property (AEP) | 渐近均分性（AEP） |
+| law of large numbers | 大数定律 |
+| block code | 分组编码 |
+| finite precision; register | 有限精度；寄存器 |
+| zoom (renormalization); pending bit | 放大（重新归一化）；待定比特 |
+| Laplace's rule of succession; the sunrise problem | 拉普拉斯接续法则；日出问题 |
+| prior | 先验 |
+| add-one (Laplace) smoothing | 加一（拉普拉斯）平滑 |
+| data-processing inequality | 数据处理不等式 |
+| chain rule for mutual information | 互信息的链式法则 |
+| tokenizer, vocabulary | 分词器，词表 |
+| bits per token, bits per byte | 每词元比特数，每字节比特数 |
+| perplexity | 困惑度 |
+| two-part code; adjusted compression rate | 两段式编码；调整后的压缩率 |
+| Hutter Prize; context mixing | 赫特奖；上下文混合 |
+| round trip (encode, then decode) | 往返（先编码，再解码） |

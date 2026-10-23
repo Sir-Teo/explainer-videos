@@ -669,7 +669,7 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 
 | Part | State | Length |
 |---|---|---|
-| 1 | existing; densify | 45 min |
+| 1 | **complete**, English and Chinese (17 chapters) | 57 min |
 | 2 | **complete**, English and Chinese | 53 min |
 | 13 | **complete**, English and Chinese (19 chapters) | 58 min |
 | 3–8, 11, 12, 15, 16, 19, 21–23, 29, 30 | existing, 8–25 min each; to expand | 8–25 min |
