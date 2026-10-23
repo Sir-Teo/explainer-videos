@@ -206,16 +206,15 @@ class Wasserstein(VoiceoverScene):
             verdict = (f"Over five seeds, WGAN-GP ends with {mw:.1f} of the eight modes on average, against "
                        f"{mn:.1f} for the non-saturating GAN and {mm:.1f} for the minimax one: on this ring, the "
                        "critic's distance does not buy coverage.")
-        sharp = (f" Its samples are less tightly placed, though: {100 * qual['wgan']:.0f} percent sit within three "
-                 f"standard deviations of a mode, against {100 * qual['ns']:.0f} for the non-saturating GAN."
-                 if qual["wgan"] < qual["ns"] - 0.05 else
-                 f" And {100 * qual['wgan']:.0f} percent of its samples sit within three standard deviations of a "
-                 "mode.")
+        qw, qn = 100 * qual["wgan"], 100 * qual["ns"]
+        sharp = (f"Its samples are less tightly placed, though: {qw:.0f} percent sit within three standard "
+                 f"deviations of a mode, against {qn:.0f} for the non-saturating GAN." if qw < qn - 5 else
+                 f"And {qw:.0f} percent of its samples sit within three standard deviations of a mode.")
         with self.voiceover(
             "Back to the ring, with the same two networks and the same number of generator steps. The background "
             "is now the critic: not a probability, a landscape, high where the data is. <bookmark mark='a'/> "
-            "Watch the generator's samples flow downhill in the critic's eyes, toward the modes. <bookmark "
-            f"mark='b'/> {verdict}{sharp}"
+            "Watch the generator's samples climb the critic's landscape, toward the modes. <bookmark "
+            f"mark='b'/> {verdict} <bookmark mark='c'/> {sharp}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(kk), FadeIn(ml))
             vo.wait_until("a")

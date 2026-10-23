@@ -205,9 +205,9 @@ class Game(VoiceoverScene):
             meas = (f"Measured on the ring, in the first steps of training, the non-saturating generator's "
                     f"gradient is {ratio:.1f} times larger than the minimax one's.")
         else:
-            meas = (f"Measured on the ring, in the first steps, the two gradients are within a factor of "
-                    f"{max(ratio, 1 / max(ratio, 1e-9)):.1f}: our discriminator never gets confident enough, early on, "
-                    "for the difference to bite.")
+            fac = max(ratio, 1 / max(ratio, 1e-9))
+            meas = (f"Measured on the ring, in the first steps, the two gradients are within a factor of {fac:.1f}: "
+                    "our discriminator never gets confident enough, early on, for the difference to bite.")
         rk = cmath(r"\nabla_\theta\, \mathbb E_q[-\log D^*]", r"=", r"\nabla_\theta\big[\mathrm{KL}(q \,\|\, p) - 2\, "
                    r"\mathrm{JS}(p \,\|\, q)\big]", font_size=30).move_to([2.6, -2.1, 0])
         rk[2].set_color(C.KL)

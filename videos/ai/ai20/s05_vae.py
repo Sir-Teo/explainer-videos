@@ -279,16 +279,21 @@ class VAE(VoiceoverScene):
         else:
             first = (f"With a PixelCNN as its decoder, the VAE's rate ends at {kp:.1f} nats per digit, against "
                      f"{kv:.1f} for the plain VAE: the strong decoder leans on the code much less.")
-        second = (f"Decode four digits from one code, and only {100 * ap:.0f} percent are the same digit as the "
-                  f"image that was encoded. Free bits, a floor of {c['free_free_bits']:g} nats per code number below "
-                  f"which the KL costs nothing, keep {kf:.1f} nats in the code, and {100 * af:.0f} percent match.")
+        fbits = float(c["free_free_bits"])
+        pa, pf = 100 * ap, 100 * af
+        second = (f"Decode four digits from one code, and only {pa:.0f} percent are the same digit as the image that "
+                  "was encoded." if ap < 0.6 else
+                  f"Decode four digits from one code, and {pa:.0f} percent are still the same digit as the image that "
+                  "was encoded.")
+        third = (f"Free bits, a floor of {fbits:g} nats per code number below which the KL costs nothing, keep "
+                 f"{kf:.1f} nats in the code, and {pf:.0f} percent of decoded digits match their source.")
         cite_ = cite(r"Bowman et al.\ (2016); \ Kingma et al., \textit{IAF}, free bits (2016); \ Chen et al., "
                      r"\textit{Variational Lossy Autoencoder} (2017)", corner=DR)
         with self.voiceover(
             "Why would a model give up its code? Because the code costs rate, and with a decoder that can model the "
             "data by itself, nothing pays for it. Samuel Bowman and colleagues hit this in 2016 with a VAE for "
             "sentences: the language-model decoder learned to ignore the code entirely. <bookmark mark='a'/> "
-            f"{first} <bookmark mark='b'/> {second} The cure is to make the code worth its cost: a weaker decoder, "
+            f"{first} <bookmark mark='b'/> {second} <bookmark mark='c'/> {third} The cure is to make the code worth its cost: a weaker decoder, "
             "a floor on the rate, or a KL weight that is turned up slowly."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), Create(ref), FadeIn(rl), FadeIn(cite_))
@@ -296,6 +301,8 @@ class VAE(VoiceoverScene):
             self.play(Create(lp), run_time=2.0)
             self.play(FadeIn(rows[0]), FadeIn(cap))
             vo.wait_until("b")
+            self.play(Indicate(rows[0], scale_factor=1.03))
+            vo.wait_until("c")
             self.play(Create(lf), FadeIn(rows[1]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

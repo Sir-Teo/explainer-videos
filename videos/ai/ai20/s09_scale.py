@@ -194,13 +194,13 @@ class Scale(VoiceoverScene):
                        f"untruncated, {t1['precision']:.2f} and {t1['recall']:.2f}: on our small GAN the trade is "
                        "weaker than BigGAN's.")
         best = min(e["trunc"], key=lambda r: r["fid"])
-        fid_s = (f" The FID, which mixes both, is best at t of {best['t']:g}." if best["t"] else
-                 " The FID, which mixes both, is best with no truncation at all.")
+        fid_s = (f"The FID, which mixes both, is best at t of {best['t']:g}." if best["t"] else
+                 "The FID, which mixes both, is best with no truncation at all.")
         with self.voiceover(
             "BigGAN brought one more trick, the truncation trick: at sampling time, draw the noise from a "
             "narrower distribution, resampling any coordinate larger than t. The generator then stays near the "
             "middle of what it learned. <bookmark mark='a'/> Here it is on our GAN, measured with chapter "
-            "fourteen's precision and recall. <bookmark mark='b'/> " + verdict + fid_s
+            "fourteen's precision and recall. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + fid_s
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(rows))
             vo.wait_until("a")
