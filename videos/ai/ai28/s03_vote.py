@@ -59,7 +59,8 @@ class Vote(VoiceoverScene):
         lg.next_to(g, RIGHT, buff=0.4).shift(UP * 0.3)
         free = label(rf"left to choose, \ it thinks ${100 * np.mean(p_t):.0f}\%$ of the time", font_size=20,
                      color=GREY_A).next_to(lg, DOWN, buff=0.3).align_to(lg, LEFT)
-        tag = note(rf"computed: \ a $2$-layer transformer, \ ${int(s['sft_steps']):,}$ supervised steps".replace(",", "{,}"))
+        steps_ = f"{int(s['sft_steps']):,}".replace(",", "{,}")
+        tag = note(rf"computed: \ a $2$-layer transformer, \ ${steps_}$ supervised steps")
         tag.to_corner(DR, buff=0.2)
         head = label(r"our testbed: \ a model that can choose to think", font_size=32).to_edge(UP, buff=0.25)
         top.shift(DOWN * 0.35)
