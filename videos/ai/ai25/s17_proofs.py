@@ -61,11 +61,10 @@ class Proofs(VoiceoverScene):
             "reinforcement learning exploits a perfect checker; here is where the checker comes from. <bookmark "
             "mark='a'/> In a proof assistant such as Lean, a theorem and its proof are code, and a small kernel "
             "checks every inference: this one says that n times n plus one is even. <bookmark mark='b'/> Computers "
-            "entered proofs in 1976, when Kenneth Appel and Wolfgang Haken proved the four-colour theorem by "
-            "checking cases no person could; Georges Gonthier checked the whole proof formally in 2005. <bookmark "
-            "mark='c'/> Thomas Hales's proof of the Kepler conjecture was formally verified in 2014, <bookmark "
-            "mark='d'/> and in 2022 Lean's community formalized a hard new theorem of Dustin Clausen and Peter "
-            "Scholze in about eighteen months. <bookmark mark='e'/> Lean's library, Mathlib, now holds about two "
+            "entered proofs in 1976, with Appel and Haken's four-colour theorem; Georges Gonthier checked that proof "
+            "formally in 2005. <bookmark mark='c'/> Thomas Hales's proof of the Kepler conjecture was formally "
+            "verified in 2014, <bookmark mark='d'/> and in 2022 Lean's community formalized a hard new theorem of "
+            "Dustin Clausen and Peter Scholze. <bookmark mark='e'/> Lean's library, Mathlib, now holds about two "
             "hundred and ninety thousand theorems, the ground any machine prover stands on."
         ) as vo:
             self.play(FadeIn(lean), FadeIn(ll))

@@ -194,7 +194,7 @@ class Depth(VoiceoverScene):
         with self.voiceover(
             "A second problem appears when the answer depends on distant nodes. <bookmark mark='a'/> The number of "
             "nodes within L hops can grow exponentially, <bookmark mark='b'/> yet all their information has to "
-            "squeeze, layer by layer, into one vector of fixed size at the node that needs it. <bookmark mark='c'/> "
+            "squeeze into one fixed-size vector at the node that needs it. <bookmark mark='c'/> "
             "Uri Alon and Eran Yahav called this over-squashing, in 2021; Jake Topping and colleagues traced it to "
             "bottlenecks, edges of negative curvature. <bookmark mark='d'/> The remedies: rewire the graph, add "
             "nodes that see everything, or let attention reach every node directly."

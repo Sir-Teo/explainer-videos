@@ -175,8 +175,9 @@ class WL(VoiceoverScene):
             "the same, their maximum is the same, only their sum differs. <bookmark mark='b'/> Here is the "
             "consequence, computed: start every node of a random graph with the same features, and ask a one-layer "
             f"network for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a "
-            f"mean or a maximum, {mean_rm:.2f} and {max_rm:.2f}: every node looks the same to them, so they can only "
-            f"guess the average degree, and their error is the spread of the degrees, {sd:.2f}."
+            f"mean or a maximum, {mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees "
+            f"themselves, {sd:.2f}: to them every node with a neighbour looks the same, so all they can learn is "
+            "whether a node has any."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(la), FadeIn(lb))
             vo.wait_until("a")

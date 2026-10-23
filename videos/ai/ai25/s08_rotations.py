@@ -184,10 +184,14 @@ class Rotations(VoiceoverScene):
         m = {k: float(np.mean(T[k][str(sizes[-1])])) for k in kinds}
         m0 = {k: float(np.mean(T[k][str(sizes[0])])) for k in kinds}
         eg_small, best_other_big = m0["egnn"], min(m["gnn"], m["mlp"], m["mlp_aug"])
-        cross = ("With only a hundred, EGNN already beats every other network trained on thirty times as many" if
-                 eg_small < best_other_big else
-                 f"With a hundred systems its error is {eg_small:.4f}; the best of the others needs the full "
-                 f"{sizes[-1]:,} to reach {best_other_big:.4f}")
+        beat = [n for n in sizes if np.mean(T["egnn"][str(n)]) < best_other_big]
+        n_beat, n_all = (beat[0] if beat else sizes[-1]), sizes[-1]
+        if eg_small < best_other_big:
+            cross = "With only a hundred, EGNN already beats every other network trained on thirty times as many"
+        elif beat:
+            cross = f"Trained on {n_beat:,} systems, EGNN already beats every other network trained on {n_all:,}"
+        else:
+            cross = f"Even at {n_all:,} systems, no other network matches it"
         ratio = m["mlp"] / m["egnn"]
         ratio_txt = f"{ratio:.0f} times smaller than the MLP's" if ratio >= 2 else "close to the MLP's"
         cvm = float(nd["mse_constvel"])

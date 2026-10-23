@@ -41,13 +41,12 @@ class Weather(VoiceoverScene):
             "Weather forecasting became physics in 1904, when Vilhelm Bjerknes described it as a problem of "
             "initial values: measure the atmosphere now, and step the equations of fluid flow forward. <bookmark "
             "mark='a'/> Lewis Fry Richardson tried it by hand during the First World War: a six-hour forecast for "
-            "two points in Europe, worked out over some six weeks, and wrong by a hundred and forty-five "
-            "hectopascals. He dreamed of a hall of sixty-four thousand people computing the weather in step. "
-            "<bookmark mark='b'/> In 1950 Jule Charney, Ragnar Fjørtoft and John von Neumann ran the first forecasts "
-            "on ENIAC: twenty-four hours of weather took about twenty-four hours to compute. <bookmark mark='c'/> "
-            "The European Centre for Medium-Range Weather Forecasts issued its first forecasts in 1979, and in the "
-            "decades since, better physics, better data and bigger computers have added about a day of useful "
-            "forecast every ten years."
+            "two points, worked out over some six weeks, and wrong by a hundred and forty-five hectopascals. He "
+            "dreamed of a hall of sixty-four thousand people computing the weather in step. <bookmark mark='b'/> In "
+            "1950 the first computer forecasts ran on ENIAC, about as fast as the weather itself. <bookmark "
+            "mark='c'/> The European Centre for Medium-Range Weather Forecasts, ECMWF, issued its first forecasts in "
+            "1979, and since then better physics, data and computers have added about a day of useful forecast "
+            "every decade."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1), FadeIn(cite_))
             for k, mk in enumerate("abc", 1):
@@ -191,11 +190,13 @@ class Weather(VoiceoverScene):
         mm_better = np.mean(rm[:10]) < np.mean(rf_[:10])
         s4 = ("The long edges matter: the same network with only the shortest edges does worse over the first ten "
               "steps" if mm_better else "In our toy the long edges don't help over the first ten steps")
-        tag = note(r"computed: \ $8$ test runs, \ $40$ steps each", font_size=20).to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ $8$ test runs, \ $40$ steps each; \ one training run per network", font_size=20)
+        tag.to_corner(DR, buff=0.2)
         with self.voiceover(
             "Scored over eight new runs: the error, step by step. <bookmark mark='a'/> " + s1 + ". <bookmark "
-            "mark='b'/> " + s2 + ", " + s3 + ". <bookmark mark='c'/> " + s4 + ". GraphCast was trained on rollouts "
-            "of up to twelve steps for exactly this reason: to learn from its own drifting predictions."
+            "mark='b'/> " + s2 + ", " + s3 + ". GraphCast was trained on rollouts of up to twelve steps for exactly "
+            "this reason, to learn from its own drifting predictions; ours rolled out two steps at the end of "
+            "training. <bookmark mark='c'/> " + s4 + ", in one training run of each."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Create(cp), Create(cc), FadeIn(lg[2]), FadeIn(lg[3]))
             vo.wait_until("a")

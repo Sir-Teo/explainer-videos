@@ -523,9 +523,12 @@ ZH.update({
         "它就学会了画面大部分是黑的，<bookmark mark='b'/>接着学会笔画会落在哪里，到最后，它能补出它从没见过的笔画，把看得见的那些接下去。"
         "<bookmark mark='c'/>要做到这一点，它得懂一点数字是怎么写的。",
 
-    '"How much to hide?':
+    'f"How much to hide?':
         "藏多少？藏得太少，网络可以从邻居那里照抄；藏得太多，它只能瞎猜。<bookmark mark='a'/>我们在三个比例下训练了它。"
-        "<bookmark mark='b'/>{v}",
+        "<bookmark mark='b'/>{v}<bookmark mark='c'/>{caveat}",
+
+    'f"All three sit below the untrained network':
+        '三者都低于未训练网络的{pct(un)}%，而且另外两个比例各只训练了一次。',
 
     "f'Hiding three quarters gives the best probe":
         '藏起四分之三时探针最好，{pct(lin[1][0])}%；藏一半是{pct(lin[0][0])}%，藏十分之九是{pct(lin[2][0])}%。',

@@ -235,17 +235,16 @@ class Search(VoiceoverScene):
         with self.voiceover(
             "In May 2025 Google DeepMind combined both lines in AlphaEvolve. <bookmark mark='a'/> Gemini models "
             "propose changes to whole programs, evaluators score them, and evolution keeps the best. <bookmark "
-            "mark='b'/> Among its results: a way to multiply four by four complex matrices with forty-eight "
+            "mark='b'/> Among its results: four by four complex matrices multiplied with forty-eight "
             "multiplications, beating the forty-nine of applying Strassen's trick twice, the record since 1969. "
-            "<bookmark mark='c'/> It got there by evolving the code of exactly the kind of gradient-based "
-            "decomposition search we just ran. <bookmark mark='d'/> Within weeks, three researchers in France, "
-            "Jean-Guillaume Dumas, Clément Pernet and Alexandre Sedoglavic, derived a forty-eight with only rational "
-            "coefficients. <bookmark mark='e'/> AlphaEvolve also placed 593 spheres touching a central one in eleven "
-            "dimensions, a new record, and on more than fifty open problems it matched the best known answer in "
-            "three quarters of them and improved it in a fifth. <bookmark mark='f'/> Inside Google, a scheduling "
-            "rule it found recovers 0.7 percent of the company's computing; a kernel it sped up cut Gemini's "
-            "training time by one percent. <bookmark mark='g'/> In November 2025 Terence Tao and colleagues turned it "
-            "loose on sixty-seven problems, and published what it found, and where it failed."
+            "<bookmark mark='c'/> It got there by evolving the code of exactly the kind of decomposition search we "
+            "just ran. <bookmark mark='d'/> Within weeks, three researchers in France found a forty-eight with "
+            "rational coefficients. <bookmark mark='e'/> It also set a record for spheres touching a central one in "
+            "eleven dimensions, 593, and on more than fifty open problems matched the best known answer in three "
+            "quarters and improved it in a fifth. <bookmark mark='f'/> Inside Google, a scheduling rule it found "
+            "recovers 0.7 percent of the company's computing. <bookmark mark='g'/> In November 2025 Terence Tao and "
+            "colleagues turned it loose on sixty-seven problems, and published where it succeeded and where it "
+            "failed."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcdefg"):

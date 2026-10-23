@@ -165,12 +165,15 @@ class Masked(VoiceoverScene):
              f"nine tenths {pct(lin[2][0])}." if best == "0.75" else
              f"On our digits the best ratio is {pct(float(best), 0)} percent hidden: probes of {pct(lin[0][0])}, "
              f"{pct(lin[1][0])} and {pct(lin[2][0])} percent for half, three quarters and nine tenths.")
+        un = float(np.mean([r["linear"] for r in load("baselines")["random_cnn"]]))
+        caveat = (f"All three sit below the untrained network's {pct(un)} percent, and the two other ratios had one "
+                  "seed each." if max(x[0] for x in lin) < un else "")
         n1 = label(r"too little hidden: \ copy from the neighbours", font_size=22, color=GREY_A).move_to([3.6, 0.8, 0])
         n2 = label(r"too much hidden: \ guess blindly", font_size=22, color=GREY_A).move_to([3.6, -0.2, 0])
         tg = tag(r"computed: \ $75\%$: three seeds; \ $50\%$ and $90\%$: one each")
         with self.voiceover(
             "How much to hide? Too little, and the network can copy from the neighbours; too much, and it can only "
-            "guess. <bookmark mark='a'/> We trained ours at three ratios. <bookmark mark='b'/> " + v
+            f"guess. <bookmark mark='a'/> We trained ours at three ratios. <bookmark mark='b'/> {v} <bookmark mark='c'/> {caveat}"
         ) as vo:
             self.play(FadeIn(n1), FadeIn(n2))
             vo.wait_until("a")

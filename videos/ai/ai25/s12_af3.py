@@ -221,13 +221,12 @@ class AF3(VoiceoverScene):
         cards.set_x(0)
         with self.voiceover(
             "On drug-like molecules bound to proteins, DeepMind reported AlphaFold 3 fifty percent more accurate "
-            "than the best traditional docking methods, and better than its predecessor on protein complexes and "
-            "antibodies. <bookmark mark='a'/> It came as a free server for non-commercial use, and in November 2024 "
-            "as code and weights for academics. <bookmark mark='b'/> Within months, open reproductions appeared: "
+            "than the best traditional methods. <bookmark mark='a'/> It came as a free server, and in November 2024 "
+            "as code and weights for academics; <bookmark mark='b'/> within months, open reproductions appeared: "
             "Chai-1, Boltz-1, Protenix. <bookmark mark='c'/> In 2025 Boltz-2 added a prediction of how strongly a "
-            "molecule binds, and the OpenFold consortium previewed a fully open model. <bookmark mark='d'/> And in "
-            "February 2026 Isomorphic Labs reported a proprietary successor that, on new antibody–antigen pairs, "
-            "makes high-accuracy predictions 2.3 times as often as AlphaFold 3, by their own benchmark."
+            "molecule binds. <bookmark mark='d'/> And in February 2026 Isomorphic Labs reported a proprietary "
+            "successor that, on new antibody–antigen pairs, makes high-accuracy predictions 2.3 times as often as "
+            "AlphaFold 3, on its own benchmark."
         ) as vo:
             self.play(FadeIn(res), FadeIn(rc))
             for k, mk in enumerate("abcd"):
