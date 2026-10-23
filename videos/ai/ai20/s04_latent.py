@@ -47,14 +47,12 @@ class Latent(VoiceoverScene):
         tg = note(r"computed: \ a VAE with a $2$-number code, \ decoding a grid of codes").next_to(sheet, DOWN,
                                                                                                  buff=0.12)
         with self.voiceover(
-            "The second answer adds something hidden. Suppose every digit comes from a code z: a few numbers, drawn "
-            "from a plain Gaussian. <bookmark mark='a'/> A decoder, a network with parameters theta, turns each code "
-            "into a distribution over images. Here is a real one, trained on our digits with a code of just two "
-            "numbers: every point of the plane on the left is decoded into a digit on the right, and the digits "
-            "flow smoothly into one another. <bookmark mark='b'/> The probability of an image is then an average "
-            "over all the codes that could have made it. That integral is the problem: we can't compute it, so we "
-            "can't maximize it directly. <bookmark mark='c'/> And going the other way, from an image to its code, "
-            "needs Bayes' rule, with the same integral in the denominator."
+            "The second answer adds something hidden: every digit comes from a code z, a few numbers drawn from a "
+            "plain Gaussian. <bookmark mark='a'/> A decoder turns each code into a distribution over images. Here "
+            "is a real one, with a code of two numbers: every point of the plane decodes to a digit, and the digits "
+            "flow into one another. <bookmark mark='b'/> An image's probability is then an average over all the "
+            "codes that could have made it, an integral we can't compute. <bookmark mark='c'/> And going back, "
+            "from image to code, needs Bayes' rule, with the same integral below."
         ) as vo:
             self.play(FadeIn(zax), Create(zp), FadeIn(zl), FadeIn(dot, scale=1.5))
             vo.wait_until("a")
@@ -92,15 +90,13 @@ class Latent(VoiceoverScene):
                      font_size=22, color=GREY_A).move_to([2.6, -2.3, 0])
         cite_ = cite(r"Hinton, Dayan, Frey \& Neal, \textit{The wake-sleep algorithm} (1995)", corner=DR)
         with self.voiceover(
-            "In 1995 Peter Dayan, Geoffrey Hinton, Radford Neal and Richard Zemel proposed a way around Bayes' "
-            "rule: learn it. Give the model a second network, a recognition model q, that looks at an image and "
-            "guesses its hidden causes. <bookmark mark='a'/> They called it the Helmholtz machine, after Hermann "
-            "von Helmholtz, who described perception as unconscious inference. <bookmark mark='b'/> It trained in "
-            "two phases. Awake, it sees real images, guesses their causes with q, and trains the generative network "
-            "to reproduce the image from them. <bookmark mark='c'/> Asleep, it dreams: it draws causes and images "
-            "from its own generative model, and trains q to recover the causes. <bookmark mark='d'/> It worked, "
-            "but awkwardly. The recognition network learned from dreams rather than data, and the two phases didn't "
-            "optimize one shared objective. Eighteen years later, the fix was a single bound."
+            "In 1995 Peter Dayan, Geoffrey Hinton, Radford Neal and Richard Zemel proposed learning Bayes' rule: a "
+            "second network, a recognition model q, that guesses an image's hidden causes. <bookmark mark='a'/> "
+            "The Helmholtz machine, after Hermann von Helmholtz, who called perception unconscious inference. "
+            "<bookmark mark='b'/> Awake, it guesses the causes of real images with q, and trains the generator to "
+            "reproduce them. <bookmark mark='c'/> Asleep, it dreams causes and images, and trains q to recover the "
+            "causes. <bookmark mark='d'/> It worked, awkwardly: q learned from dreams, and the two phases had no "
+            "shared objective. Eighteen years later the fix was a single bound."
         ) as vo:
             self.play(FadeIn(x), FadeIn(z), Create(dn), FadeIn(dl))
             self.play(Create(up), FadeIn(ul))
@@ -136,16 +132,13 @@ class Latent(VoiceoverScene):
                 why(r"the evidence lower bound (ELBO)"), why(r"the gap: \ how wrong $q$ is")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.4, buff=0.45, edge=6.9)
         with self.voiceover(
-            "Here is the bound. Start from the log-probability of an image, the intractable average over codes. "
-            "<bookmark mark='a'/> Multiply and divide inside by the recognition network's guess, q of z given x, "
-            "so the integral becomes an average over codes drawn from q. <bookmark mark='b'/> The log of an average "
-            "is at least the average of the log: Jensen's inequality, because log is concave. <bookmark mark='c'/> "
-            "Tidy up, and there are two terms. The first decodes a code drawn from q and scores the image: a "
-            "reconstruction. The second is the KL divergence from q to the prior: how far the codes stray from "
-            "plain noise, which is the number of nats the code carries about x, its rate. Together they are the "
-            "evidence lower bound, the ELBO. <bookmark mark='d'/> And the gap is exactly the KL divergence from q "
-            "to the true posterior. Raising the bound does two things at once: it improves the model, and it "
-            "makes q a better guesser. One objective, where the Helmholtz machine had two."
+            "Here is the bound. Start from the log-probability of an image. <bookmark mark='a'/> Multiply and divide "
+            "by q of z given x, so the integral becomes an average over codes drawn from q. <bookmark mark='b'/> "
+            "The log of an average is at least the average of the log: Jensen. <bookmark mark='c'/> Two terms "
+            "remain: a reconstruction, decoding a code drawn from q; and the KL divergence from q to the prior, the "
+            "nats the code carries about x, its rate. Together, the evidence lower bound, the ELBO. <bookmark "
+            "mark='d'/> The gap is the KL divergence from q to the true posterior, so raising the bound improves "
+            "the model and the guesser at once: one objective, where the Helmholtz machine had two."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -192,16 +185,13 @@ class Latent(VoiceoverScene):
         h2 = history_card(2014, r"Rezende, Mohamed \& Wierstra", r"\textit{Stochastic Backpropagation}", width=4.4,
                           font_size=20).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "One problem remains: the reconstruction term averages over random codes, and you can't take the "
-            "gradient of a coin toss. <bookmark mark='a'/> The way out is to move the randomness. The encoder "
-            "outputs a mean and a spread; the code is the mean plus the spread times fresh Gaussian noise. "
-            "<bookmark mark='b'/> Now the noise is just another input, and the gradient of the reconstruction flows "
-            "back through the mean and the spread into the encoder. That is the reparameterization trick. "
-            "<bookmark mark='c'/> And for Gaussians the KL term has a closed form, a sum over the code's "
-            "dimensions. <bookmark mark='d'/> Diederik Kingma and Max Welling published this in December 2013, and "
+            "One problem remains: you can't take the gradient of a coin toss. <bookmark mark='a'/> So move the "
+            "randomness: the encoder outputs a mean and a spread, and the code is the mean plus the spread times "
+            "fresh noise. <bookmark mark='b'/> The noise is now just an input, and gradients flow back into the "
+            "encoder: the reparameterization trick. <bookmark mark='c'/> For Gaussians, the KL term has a closed "
+            "form. <bookmark mark='d'/> Diederik Kingma and Max Welling published this in December 2013, and "
             "Danilo Rezende, Shakir Mohamed and Daan Wierstra, independently, weeks later: the variational "
-            "autoencoder. An autoencoder, because an encoder and a decoder squeeze each image through a code; "
-            "variational, because the code is a distribution and the loss is a variational bound."
+            "autoencoder."
         ) as vo:
             self.play(FadeIn(x), FadeIn(enc), GrowArrow(arrs[0]))
             vo.wait_until("a")
@@ -234,11 +224,9 @@ class Latent(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(card, DOWN, buff=0.5)
         cite_ = cite(r"discretized logistic: \ Salimans et al., \textit{PixelCNN++} (2017)", corner=DR)
         with self.voiceover(
-            "Ours is small. A two-layer encoder gives a mean and a spread for each of sixteen code numbers; a "
-            "two-layer decoder gives, for every pixel, a smooth bell-shaped distribution cut into the sixteen grey "
-            f"levels, the trick from PixelCNN plus plus. {p:,} parameters in all. <bookmark mark='a'/> Because "
-            "the decoder assigns a real probability to every grey level, the ELBO is a bound in the same units as "
-            "the PixelCNN's exact likelihood, bits per pixel, so the two can be compared directly."
+            "Ours has a sixteen-number code, and a decoder that gives every pixel a bell-shaped distribution cut "
+            f"into the sixteen grey levels: {p:,} parameters. <bookmark mark='a'/> So its bound is in the PixelCNN's "
+            "units, bits per pixel."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.15), FadeIn(cite_))
             vo.wait_until("a")

@@ -62,13 +62,12 @@ class Autoregressive(VoiceoverScene):
                     label(r"here: \ a digit, \ pixel by pixel", font_size=24, color=AR))
         ex.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(DOWN * 2.3)
         with self.voiceover(
-            "The first answer needs no new mathematics at all. Any distribution over many variables factors by the "
-            "chain rule of probability: <bookmark mark='a'/> the probability of the first, times the probability "
-            "of the second given the first, times the third given the first two, and so on. <bookmark mark='b'/> "
-            "Each factor is one prediction: the next variable, given everything before it. Learn every factor, and "
-            "you have the whole distribution, exactly; sample them in order, and you have a sample. <bookmark "
-            "mark='c'/> This is how Shannon generated English in 1948, how every language model in this series "
-            "writes, and, today, how we'll draw a digit."
+            "The first answer needs no new mathematics. Any distribution factors by the chain rule: <bookmark "
+            "mark='a'/> the first variable, times the second given the first, times the third given the first two, "
+            "and so on. <bookmark mark='b'/> Each factor is one prediction: the next variable, given everything "
+            "before it. Learn every factor and you have the distribution exactly; sample them in order and you "
+            "have a sample. <bookmark mark='c'/> Shannon's English, every language model in this series, and now a "
+            "digit."
         ) as vo:
             self.play(Write(f[:2]))
             vo.wait_until("a")
@@ -128,12 +127,10 @@ class Autoregressive(VoiceoverScene):
                    "a little soft.")
         tg = note(rf"computed: \ ${a['params']:,}$ parameters".replace(",", "{,}")).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Start in the plane, with two variables. The first factor, p of x one, is a curve along the bottom: how "
-            "the moons spread from left to right. <bookmark mark='a'/> The second, p of x two given x one, is a "
-            "different curve for every slice: here, at three of them. Each is a mixture of ten Gaussians whose "
-            "weights, centres and widths come out of a small network fed x one. <bookmark mark='b'/> Multiply the "
-            "two, and here is the density the model learns, replayed through training, beside its surprise on "
-            f"held-out points. <bookmark mark='c'/> {verdict}"
+            "In the plane, the first factor, p of x one, is a curve along the bottom. <bookmark mark='a'/> The "
+            "second, p of x two given x one, is a different curve for every slice: a mixture of ten Gaussians set "
+            "by a small network fed x one. <bookmark mark='b'/> Multiply the two: the density the model learns, "
+            f"replayed through training, beside its held-out surprise. <bookmark mark='c'/> {verdict}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), Create(marg), FadeIn(ml), FadeIn(mlp), FadeIn(tg))
             vo.wait_until("a")
@@ -181,15 +178,13 @@ class Autoregressive(VoiceoverScene):
         soft = label(r"each pixel: \ $16$ probabilities, \ one per grey level", font_size=22, color=C.MODEL_Q)
         soft.next_to(grid, DOWN, buff=0.25)
         with self.voiceover(
-            "An image is the same story with more variables. Put the 196 pixels of a digit in reading order, left "
-            "to right, top to bottom. <bookmark mark='a'/> To predict this pixel, the model may look at every pixel "
-            "before it, and at nothing after. Its output is sixteen probabilities, one per grey level, a softmax, "
-            "exactly like a language model's next token. <bookmark mark='b'/> The trick that makes this fast to "
-            "train is a mask. Every filter of a convolutional network has its future half set to zero, so one "
-            "pass of the network predicts all 196 pixels at once, each from its own past. <bookmark mark='c'/> The "
-            "idea grew from NADE and MADE, autoregressive networks for binary images, into PixelRNN and PixelCNN, by Aaron "
-            "van den Oord and colleagues at DeepMind in 2016, and that same year into WaveNet, which generated "
-            "speech one sample at a time."
+            "An image is the same story with more variables: the 196 pixels of a digit in reading order. <bookmark "
+            "mark='a'/> To predict this pixel the model may look at every pixel before it, and nothing after; it "
+            "outputs sixteen probabilities, one per grey level, like a language model's next token. <bookmark "
+            "mark='b'/> The trick that makes training fast is a mask: every filter has its future half set to zero, "
+            "so one pass predicts all 196 pixels at once, each from its own past. <bookmark mark='c'/> From NADE and "
+            "MADE came PixelRNN and PixelCNN, by Aaron van den Oord and colleagues at DeepMind in 2016, and WaveNet "
+            "for speech."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(order))
             vo.wait_until("a")
@@ -241,13 +236,11 @@ class Autoregressive(VoiceoverScene):
         cite_ = cite(r"van den Oord et al., \textit{Conditional Image Generation with PixelCNN Decoders} (2016)",
                      corner=UL)
         with self.voiceover(
-            "There's a catch, and we can see it by asking the network itself which input pixels its prediction "
-            "depends on: take the gradient of one pixel's prediction with respect to every input. <bookmark "
-            "mark='a'/> With masked filters stacked naively, a wedge of pixels above and to the right is never seen, "
-            "though it comes earlier in reading order. Each layer's mask cuts off a little more of that corner. "
-            "<bookmark mark='b'/> The fix, in the second PixelCNN paper, splits the network in two: a vertical stack "
-            "that sees whole rows above, and a horizontal stack that sees the row so far, the first feeding the "
-            "second. The blind spot is gone. That is the layout we train."
+            "There's a catch. Ask the network which inputs its prediction depends on: the gradient of one pixel's "
+            "prediction with respect to every input. <bookmark mark='a'/> With masked filters stacked naively, a "
+            "wedge above and to the right is never seen, though it comes earlier. <bookmark mark='b'/> The second "
+            "PixelCNN paper splits the network in two: a vertical stack that sees the rows above, feeding a "
+            "horizontal stack that sees the row so far. No blind spot. That is the layout we train."
         ) as vo:
             self.play(FadeIn(panels[0][1]), FadeIn(panels[0][0]), FadeIn(src), FadeIn(cite_))
             vo.wait_until("a")
@@ -281,16 +274,15 @@ class Autoregressive(VoiceoverScene):
         head = label(r"our PixelCNN, \ seed $0$ \ (the same random numbers at every checkpoint)", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.35)
         lo, hi = min(finals), max(finals)
+        c0, f0 = float(cv[0, 2]), finals[0]
         tg = note(rf"computed: \ ${p['s0_params']:,}$ parameters, \ $3$ seeds".replace(",", "{,}")).to_corner(DR,
                                                                                                           buff=0.2)
         with self.voiceover(
-            "Here is ours learning, on the fourteen-pixel digits. On the left, its surprise on held-out digits, in "
-            "bits per pixel; on the right, what it draws at each checkpoint, from the same random numbers each time. "
-            f"<bookmark mark='a'/> Untrained, it pays {cv[0, 2]:.2f} bits per pixel, about what guessing uniformly "
-            "among sixteen levels costs, and it draws static. <bookmark mark='b'/> As it reads more digits, it learns "
-            "that most pixels are black, then that ink comes in strokes, then the shapes of the strokes. <bookmark "
-            f"mark='c'/> It ends at {finals[0]:.2f} bits per pixel. Three runs from different random starts end "
-            f"between {lo:.2f} and {hi:.2f}: these numbers are the model, not luck."
+            "Here is ours learning: on the left, its held-out surprise in bits per pixel; on the right, what it "
+            f"draws at each checkpoint. <bookmark mark='a'/> Untrained, it pays {c0:.2f} bits per pixel, about "
+            "uniform guessing, and draws static. <bookmark mark='b'/> Then it learns that most pixels are black, "
+            f"that ink comes in strokes, and their shapes. <bookmark mark='c'/> It ends at {f0:.2f} bits per pixel; "
+            f"three seeds end between {lo:.2f} and {hi:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(head), Create(uni), FadeIn(ul), FadeIn(tg), FadeIn(pts[0]), FadeIn(sheets[0]),
                       FadeIn(steps_[0]))
@@ -345,13 +337,11 @@ class Autoregressive(VoiceoverScene):
         cost = label(rf"$196$ passes per digit: \ ${ms_ar:.1f}$ ms here, \ against ${ms_gan:.3f}$ ms for the GAN",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "And here is one digit being drawn. On the right, the model's sixteen probabilities for the next pixel. "
-            "<bookmark mark='a'/> In the empty margin it is sure: black. <bookmark mark='b'/> At the edge of a "
-            "stroke it hesitates between dark and light, and the coin it tosses decides the digit's shape; once "
-            "a stroke is started, it is confident the stroke continues. <bookmark mark='c'/> The price is the "
-            "order: 196 passes through the network for one digit, each waiting for the last. On this computer that "
-            f"is {ms_ar:.1f} milliseconds a digit, about {ratio:,.0f} times what the GAN of chapter five needs. "
-            "Language models pay the same price, token by token, and Part 19 is about paying it faster."
+            "And here is one digit being drawn, with the model's sixteen probabilities for the next pixel. "
+            "<bookmark mark='a'/> In the margin it is sure: black. <bookmark mark='b'/> At a stroke's edge it "
+            "hesitates, and the coin it tosses shapes the digit. <bookmark mark='c'/> The price is the order: 196 "
+            f"passes for one digit, each waiting for the last, {ms_ar:.1f} milliseconds here, about {ratio:,.0f} "
+            "times the GAN's single pass."
         ) as vo:
             self.add(holder)
             self.play(FadeIn(grid), FadeIn(bars), FadeIn(ramp), FadeIn(bl), FadeIn(cl), FadeIn(cur), FadeIn(cnt))
