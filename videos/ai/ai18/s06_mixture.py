@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (EDU, F, GROUP_C, KEPT, PART, REMOVED, hbars, load, spoken_int, stage_row, take_away)
+from videos.ai.ai18.common import (EDU, F, GROUP_C, KEPT, PART, REMOVED, hbars, load, node_box, spoken_int, stage_row,
+                                   take_away)
 
 GROUP_TEX = [r"American", r"English society", r"Adventure and mystery", r"Translations and \textit{Ulysses}"]
 
@@ -59,6 +60,11 @@ class Mixture(VoiceoverScene):
         both.move_to(DOWN * 0.75)
         src = cite(r"Gao et al.\ (2020); \ Xie et al., DoReMi (NeurIPS 2023); \ Liu et al., RegMix (ICLR 2025)",
                    font_size=17)
+        # the kinds of text a corpus mixes, before any weights are set
+        kinds = VGroup(*[node_box(t, c, font_size=24) for t, c in (
+            (r"web pages", "#6EA8FE"), (r"encyclopedias", "#5CD0B3"), (r"code", "#FFB86B"), (r"books", "#D4A5FF"),
+            (r"maths", EDU), (r"papers", GREY_B))]).arrange_in_grid(rows=2, buff=(0.45, 0.45)).move_to(UP * 0.6)
+        ask = label(r"how much of each?", font_size=34, color=WHITE).next_to(kinds, DOWN, buff=0.7)
         with self.voiceover(
             "A corpus is a mixture: web pages, encyclopedias, code, books, maths, papers. How much of each? "
             "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, "
@@ -73,9 +79,12 @@ class Mixture(VoiceoverScene):
             "beat all "
             "64 mixtures they tried at a billion parameters."
         ) as vo:
-            self.play(FadeIn(pl), FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in pile], lag_ratio=0.3))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(k_, shift=UP * 0.1) for k_ in kinds], lag_ratio=0.25),
+                      run_time=2.5)
+            self.play(FadeIn(ask, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(Indicate(pile, scale_factor=1.03))
+            self.play(FadeOut(kinds), FadeOut(ask))
+            self.play(FadeIn(pl), LaggedStart(*[FadeIn(r_) for r_ in pile], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(doremi, shift=UP * 0.1))
             vo.wait_until("c")
@@ -402,6 +411,23 @@ class Mixture(VoiceoverScene):
             chain.width = 12.4
         chain.move_to(UP * 2.3)
         chain0 = chain.copy().scale(1.15).move_to(UP * 0.3)  # first, alone in the middle
+        # under it, the tails going (schematic): word frequencies, most common first, losing rare words each generation
+        rng = np.random.default_rng(0)
+        nb = 30
+        zipf = 1.0 / np.arange(1, nb + 1)
+        keep = np.ones(nb, bool)
+        tails = VGroup()
+        for k, bi in enumerate((0, 2, 4)):
+            if k:
+                keep &= rng.random(nb) > 0.85 * (np.arange(nb) / nb) ** 1.5
+            bw = 1.5 / nb
+            bars_ = VGroup(*[Rectangle(width=bw * 0.8, height=max(1.3 * z, 0.02), stroke_width=0,
+                                       fill_color=KEPT if k == 0 else REMOVED, fill_opacity=0.85 if kp else 0)
+                             .move_to([i * bw, 0.65 * z, 0]) for i, (z, kp) in enumerate(zip(zipf, keep))])
+            base_ = Line([-bw, 0, 0], [nb * bw, 0, 0], color=GREY_D, stroke_width=1.5)
+            tails.add(VGroup(base_, bars_).next_to(chain0.boxes[bi], DOWN, buff=0.45))
+        t_note = note(r"schematic: \ word frequencies, most common first; \ the rare ones are lost first", font_size=17)
+        t_note.next_to(tails, DOWN, buff=0.3)
         s_lab = label(f"${start:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(0, start), RIGHT,
                                                                                                  buff=0.15).shift(UP * 0.2)
         e_lab = label(f"${end:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(gens, end), UP,
@@ -424,7 +450,10 @@ class Mixture(VoiceoverScene):
             self.play(FadeIn(src), FadeIn(lg[0]))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in chain0.boxes], *[GrowArrow(a_) for a_ in chain0.arrows],
                                   lag_ratio=0.15), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(t_, shift=DOWN * 0.1) for t_ in tails], lag_ratio=0.6), FadeIn(t_note),
+                      run_time=3.0)
             vo.wait_until("a")
+            self.play(FadeOut(tails), FadeOut(t_note))
             self.play(ReplacementTransform(chain0, chain), FadeIn(g), FadeIn(g2), FadeIn(sch))
             self.play(FadeIn(rb), Create(rc), run_time=6.0, rate_func=linear)
             vo.wait_until("b")

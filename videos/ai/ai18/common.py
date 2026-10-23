@@ -12,6 +12,7 @@ Instruments of this part, worth sharing:
 from __future__ import annotations
 
 import math
+import re
 
 import numpy as np
 
@@ -101,6 +102,9 @@ def said(text: str, chars: int = 46, font_size: int = 20, max_lines: int = 3, co
     """Words a model (or a web page) wrote: monospaced, wrapped, boxed, never translated."""
     import textwrap
 
+    # a crawled page can carry someone's contact details: e-mail addresses and phone numbers are blanked
+    text = re.sub(r"\S+@\S+\.\S+", "[e-mail]", text)
+    text = re.sub(r"\+?\d{7,}|\(?\d{3}\)?[-\s.]\d{3}[-\s.]\d{4}", "[phone]", text)
     lines = textwrap.wrap(" ".join(text.split()), chars) or [""]
     if len(lines) > max_lines:
         lines = lines[:max_lines]

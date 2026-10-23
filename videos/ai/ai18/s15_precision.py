@@ -284,9 +284,9 @@ class Precision(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def fp8(self):
-        Pc, D = load("precision"), F.DSV3
+        Pc, D, S8 = load("precision"), F.DSV3, load("fp8_scale")
         q = Pc["qerr"]
-        sample = np.asarray(q["act_sample"])
+        sample = np.asarray(S8["sample"])
         bars = VGroup()
         mx = np.abs(sample).max()
         big = []
@@ -297,16 +297,40 @@ class Precision(VoiceoverScene):
                      .move_to([-5.45 + 0.085 * i, 0.95 + h / 2, 0]))
             if abs(v) > 0.5 * mx:
                 big.append(bars[-1])
-        bl = label(rf"$128$ inputs of a matrix product in the series' model; \ the tensor's largest: \ "
-                   rf"${q['outlier']:.1f}$", font_size=22, color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
+        bl = label(rf"$128$ inputs of a matrix product in the series' model; \ the largest in their tensor: \ "
+                   rf"${S8['tensor_max']:.1f}$", font_size=22, color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars,
+                                                                                                         LEFT)
+        # the same 128 values on a scale of powers of two, against E4M3's range: raw, then times each scale
+        ax8 = log2_axis(-12, 10, width=10.6, ticks=(-12, -9, -6, 0, 4, 8), font_size=18).move_to([0.6, -2.25, 0])
+        band8 = format_band(ax8, -6, math.log2(S8["e4m3_max"]), PREC["fp8_tile"], ax8.line.get_y() + 0.4, r"E4M3",
+                            sub_e=-9)
+        ex8 = np.log2(np.clip(np.abs(sample), 2.0 ** -12, None))
+        yd = ax8.line.get_y() + 0.95
+
+        def dots_at(shift, col):
+            return VGroup(*[Line([ax8.x(e + shift), yd - 0.14, 0], [ax8.x(e + shift), yd + 0.14, 0], color=col,
+                                 stroke_width=2, stroke_opacity=0.8) for e in ex8])
+
+        k_t = math.log2(S8["e4m3_max"] / S8["tensor_max"])
+        k_b = math.log2(S8["e4m3_max"] / S8["tile_max"])
+        d_raw, d_t, d_b = dots_at(0, GREY_B), dots_at(k_t, PREC["fp8_tensor"]), dots_at(k_b, PREC["fp8_tile"])
+        l_raw = label(r"the $128$ values", font_size=19, color=GREY_B).next_to(d_raw, UP, buff=0.12)
+        l_t = label(rf"one scale per tensor: \ $\times\,{S8['e4m3_max']:.0f}/{S8['tensor_max']:.1f}$", font_size=19,
+                    color=PREC["fp8_tensor"]).next_to(d_t, UP, buff=0.12)
+        l_b = label(rf"one scale per tile: \ $\times\,{S8['e4m3_max']:.0f}/{S8['tile_max']:.2f}$", font_size=19,
+                    color=PREC["fp8_tile"]).next_to(d_b, UP, buff=0.12)
+        for l_ in (l_t, l_b):
+            if l_.get_right()[0] > 6.9:
+                l_.shift(LEFT * (l_.get_right()[0] - 6.9))
+        pic8 = VGroup(ax8, band8)
         helps = q["act_tensor"] > 1.3 * q["act_tile"]
         if helps:
             look = "And real activations have a few large values: here are 128 inputs to one matrix product of the series' model."
             tiles = (f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; "
                      f"with one scale per tile of 128 values, {100 * q['act_tile']:.1f}.")
         else:
-            look = ("Here are 128 inputs to one matrix product of the series' model; the largest value in the whole "
-                    f"tensor is {q['outlier']:.0f}.")
+            look = ("Here are 128 inputs to one matrix product of the series' model; the largest value in their whole "
+                    f"tensor is {S8['tensor_max']:.0f}.")
             tiles = (f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent, "
                      f"and with one scale per tile of 128 values, {100 * q['act_tile']:.1f}: our small model's "
                      "activations are tame enough that tiles barely help. Large models are not: a few channels grow "
@@ -346,12 +370,15 @@ class Precision(VoiceoverScene):
             "tensor cores kept only about fourteen bits, and stayed within a quarter of a percent of a sixteen-bit run."
         ) as vo:
             self.play(FadeIn(bl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.005), run_time=2.0)
+            self.play(FadeIn(pic8), FadeIn(d_raw), FadeIn(l_raw))
+            self.play(ReplacementTransform(d_raw, d_t), ReplacementTransform(l_raw, l_t), run_time=2.0)
             vo.wait_until("a")
             self.play(*[Indicate(b, color=YELLOW) for b in big])
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), FadeIn(rl))
-            self.play(FadeIn(rows[1]))
+            self.play(ReplacementTransform(d_t, d_b), ReplacementTransform(l_t, l_b), FadeIn(rows[1]), run_time=1.5)
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(pic8, d_b, l_b)))
             self.play(LaggedStart(*[FadeIn(x_, shift=UP * 0.1) for x_ in ds], lag_ratio=0.3), FadeIn(src), run_time=3.0)
         self.wait(0.3)
         self.clear_scene()
@@ -375,6 +402,15 @@ class Precision(VoiceoverScene):
                     label(r"share one $8$-bit scale (E4M3), \ plus one FP32 scale per tensor", font_size=21,
                           color=C.EDU)).arrange(RIGHT, buff=0.3).next_to(blk, DOWN, buff=0.12)
         bt.align_to(blk, LEFT)
+        # what a value is, in each format (the OCP MX spec; NVIDIA's NVFP4 paper)
+        fm = VGroup(MathTex(r"x_i = 2^{k}\,e_i", font_size=30, color=PREC["fp8_tensor"]),
+                    note(rf"$2^k$: \ one $8$-bit power of two per block of ${M['block']}$", font_size=18)
+                    ).arrange(RIGHT, buff=0.3)
+        fn = VGroup(MathTex(r"x_i = s\,s_b\,e_i", font_size=30, color=PREC["fp8_tile"]),
+                    note(r"$s$: \ FP32, per tensor; \ $s_b$: \ E4M3, per block of $16$; \ $e_i$: \ E2M1",
+                         font_size=18)).arrange(RIGHT, buff=0.3)
+        fm[0].align_to(fn[0], LEFT)
+        VGroup(fm, fn).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(bt, DOWN, buff=0.35).align_to(blk, LEFT)
         items = VGroup(
             label(rf"MXFP8, \ blocks of ${M['block']}$ (Blackwell): \ an ${M['params'] / 1e9:.0f}$B model on "
                   rf"${M['tokens'] / 1e12:.0f}$T tokens matches BF16 \ (NVIDIA, 2025)", font_size=21, color=GREY_A),
@@ -387,6 +423,7 @@ class Precision(VoiceoverScene):
             label(r"Kimi K3, DeepSeek-V4 (2026): \ four-bit weights learned in quantization-aware training", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([0.2, -1.45, 0])
+        items.shift(DOWN * max(0.0, items.get_top()[1] - (fn.get_bottom()[1] - 0.4)))
         tw = take_away(r"FP32 $\to$ BF16 $\to$ FP8 $\to$ FP4: \ each halving, \ a new scaling trick", font_size=24)
         src = cite(r"Mishra et al.\ (2025); \ NVIDIA (2025, 2026); \ Moonshot AI (2026); \ DeepSeek-AI (2026)",
                    corner=UR, font_size=16)
@@ -409,9 +446,11 @@ class Precision(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(src), FadeIn(msc), LaggedStart(*[FadeIn(c_) for c_ in mcells], lag_ratio=0.05),
                       FadeIn(mt), run_time=2.0)
+            self.play(FadeIn(fm, shift=UP * 0.1))
             self.play(FadeIn(items[0]))
             vo.wait_until("a")
             self.play(FadeIn(blk), FadeIn(bt))
+            self.play(FadeIn(fn, shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(items[1]), FadeIn(items[2]))
             vo.wait_until("c")

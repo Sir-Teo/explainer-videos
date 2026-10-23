@@ -37,7 +37,7 @@ class Outro(VoiceoverScene):
         pl = Plane(2.0)
         ring = VGroup(*[Circle(radius=3 * 0.1 * pl.side / 6, stroke_color=DATA, stroke_width=1.2).move_to(pl.p(*c))
                         for c in np.asarray(load("toys")["ring_centers"])])  # the data's eight modes
-        out.append((Group(pl, ring, pl.scatter_image(np.asarray(gc["frame_samples"])[-1], GAN_C, radius_px=1.6)),
+        out.append((Group(pl, pl.scatter_image(np.asarray(gc["frame_samples"])[-1], GAN_C, radius_px=1.6), ring),
                     r"mode collapse", GAN_C))
         b = load("bilinear")
         pl2 = Plane(2.0, box=1.9)

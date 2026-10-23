@@ -113,6 +113,8 @@ class Faults(VoiceoverScene):
         fl_.next_to(lostr, DOWN, buff=0.15)
         tsch = note(r"schematic", font_size=17).next_to(tline, UP, buff=0.12).align_to(tline, RIGHT)
         src = cite(r"Young, CACM (1974); \ Llama Team (2024), Sec.\ 3.3.4", corner=DR, font_size=17)
+        # the timeline sits in the middle while it is the picture, and makes room when the derivation starts
+        tl = VGroup(tline, tsch, saves, sl_, tb, tbl, lostr, fx, fl_).shift(UP * 2.3)
         with self.voiceover(
             "So a run saves a checkpoint of every GPU's state regularly, and after a failure restarts from the last "
             "one. "
@@ -136,6 +138,7 @@ class Faults(VoiceoverScene):
             self.play(Indicate(rows[0][-1], color=REMOVED), FadeIn(fx, scale=1.5))
             self.play(GrowFromEdge(lostr, LEFT), FadeIn(fl_))
             vo.wait_until("b")
+            self.play(tl.animate.shift(DOWN * 2.3), run_time=0.8)
             step(1)
             vo.wait_until("c")
             step(2)

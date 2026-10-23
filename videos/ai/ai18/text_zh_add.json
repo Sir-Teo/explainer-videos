@@ -894,7 +894,19 @@
   "the best data": "最好的数据",
   "the cooldown": "冷却阶段",
   "base $500{,}000$: \\ $2.6$M tokens": "基频 $500{,}000$：\\ $2.6$M 个词元",
-  "base $1{,}000{,}000$: \\ $5.1$M tokens": "基频 $1{,}000{,}000$：\\ $5.1$M 个词元"
+  "base $1{,}000{,}000$: \\ $5.1$M tokens": "基频 $1{,}000{,}000$：\\ $5.1$M 个词元",
+  "a script": "脚本",
+  "a style sheet": "样式表",
+  "the menu": "菜单",
+  "the article: \\ the only prose": "正文：\\ 唯一成段的文字",
+  "the footer": "页脚",
+  "web pages": "网页",
+  "encyclopedias": "百科全书",
+  "books": "书籍",
+  "papers": "论文",
+  "how much of each?": "各占多少？",
+  "schematic: \\ word frequencies, most common first; \\ the rare ones are lost first": "示意图：\\ 词频，最常见的在前；\\ 罕见的词最先消失",
+  "the module's weight $\\lambda$": "模块的权重 $\\lambda$"
  },
  "patterns": []
 }

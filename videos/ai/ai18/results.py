@@ -101,6 +101,11 @@ def lines() -> list[str]:
                    f". Activation gradients: {100 * Pc['hist']['below_normal']:.0f}% below FP16's smallest normal, "
                    f"{100 * Pc['hist']['below_sub']:.0f}% flushed to zero. E4M3 error on the series' model: per tensor "
                    f"{100 * Pc['qerr']['act_tensor']:.2f}%, per 1 × 128 tile {100 * Pc['qerr']['act_tile']:.2f}%.")
+    if have("fp8_scale"):
+        S8 = load("fp8_scale")
+        out.append(f"* FP8 scales on one 1 × 128 tile of the series' model's activations: its tensor's largest value "
+                   f"{S8['tensor_max']:.2f}, the tile's {S8['tile_max']:.2f} (scales 448/{S8['tensor_max']:.2f} and "
+                   f"448/{S8['tile_max']:.2f}).")
     if have("precision_acc"):
         A = load("precision_acc")
         out.append(f"* FP16 with {A['accum']}-way accumulation: " +

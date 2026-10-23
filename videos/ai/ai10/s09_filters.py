@@ -115,14 +115,24 @@ class Filters(VoiceoverScene):
                                                                                                  buff=0.15)
         cite_ = cite(r"compare Krizhevsky, Sutskever \& Hinton (2012), \ Figure 3", corner=DR)
         mid = next((i for i, a in enumerate(accs) if a > 0.5), len(steps) // 2)
+        o = load("orientation")
+        no_, nc_ = int(o["n_oriented"]), int(o["n_colour"])
+        if no_ >= 6 and nc_ >= 6:
+            fin = ("By the end, some have become edge detectors, light against dark at one angle, and others blobs "
+                   "of one colour against another. Krizhevsky's paper showed the same kinds of kernel for AlexNet's "
+                   "96, and the same kinds of filter are found in the visual cortex.")
+        elif no_ >= 6:
+            fin = ("By the end, some have become edge detectors, light against dark at one angle. Krizhevsky's paper "
+                   "showed the same kind of kernel for AlexNet, and the same kind of filter is found in the visual "
+                   "cortex.")
+        else:
+            fin = ("By the end the patterns are smoother, but few are clean edges; AlexNet's 96 kernels, in "
+                   "Krizhevsky's paper, trained far longer on far more photographs, are much cleaner.")
         with self.voiceover(
             "Now replay the training and watch the first layer. <bookmark mark='a'/> At the start, 48 patches of "
             f"noise, and {pct(accs[0], 0)} percent of the answers right: chance. <bookmark mark='b'/> Within "
             f"{steps[mid]:,} steps, more than half right, and the noise has organized: oriented stripes, light "
-            "against dark, and blobs of colour against their opposites. <bookmark mark='c'/> By the end, edge "
-            "detectors at every angle, some fine, some coarse, and colour-opponent cells, red against green, blue "
-            "against yellow. Krizhevsky's paper showed the same picture for AlexNet's 96 kernels, and the same "
-            "kinds of filter are found in the visual cortex."
+            f"against dark, and blobs of colour. <bookmark mark='c'/> {fin}"
         ) as vo:
             self.play(FadeIn(cur), Create(frame), FadeIn(hl), Create(ax), FadeIn(cite_))
             self.add(live, clock)

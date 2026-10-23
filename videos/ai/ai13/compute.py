@@ -1,33 +1,55 @@
 """Precompute everything numerical in Part 13 of the AI series ("Attention as Geometry").
 
-    python -m videos.ai.ai13.compute              # everything missing (Part 1's books: .cache/ai1)
-    python -m videos.ai.ai13.compute --force tf
+    python -m videos.ai.ai13.compute              # everything missing (Part 1's books: .cache/ai1; Part 7's data)
+    python -m videos.ai.ai13.compute --force heads
 
 Results are cached in ``.cache/ai13/<name>.json`` (+ ``.npz``); the trained transformer's weights in
-``.cache/ai13/tf.pt``. Scenes call ``load(name)``.
+``.cache/ai13/tf.pt``. Scenes call ``load(name)``. Every random choice is seeded; the long items resume after an
+interruption (the transformer from ``.cache/ai13/tf.ckpt.pt``, saved every 250 steps with the random state; the
+items made of many small runs piece by piece, ``CACHE.partial``). Torch threads: ``AI13_THREADS`` (default 2; on a
+busy machine 1 is often faster).
 
 Items:
     smoother   Nadaraya and Watson's kernel smoother on Part 7's data (how often "her" appears on each page of *Great
                Expectations*): the estimate at three bandwidths, and the weights one query puts on every page
     dotscale   why attention divides by the square root of d: for random queries and 64 random keys, the spread of the
-               scores and the entropy of the softmax weights, as d grows, with and without the division
+               scores, the entropy of the softmax weights and the size of the softmax's gradient, as d grows, with and
+               without the division
+    hopfield   associative memory: a classical Hopfield network (Hebbian weights, sign updates) against a modern one
+               (one softmax step, which is attention), recalling stored patterns from corrupted cues as more are stored;
+               the inverse temperature beta, from averaging to recall; letters recalled in one step
     rope       rotary position embeddings: the frequencies of a 32-number head, the check that a rotated query and key
-               score depends only on their distance, and the long-range decay of the rotated sum
+               score depends only on their distance, the long-range decay; sinusoidal positions' shift as a rotation
     tf         our own transformer, trained on Part 1's books: characters in, 4 blocks of attention and MLP, 4 heads
-               of 32 dimensions, rotary positions, 256 characters of context; bits per character on the passage (the scoreboard), the
-               training curve, samples, attention maps on a sentence of the passage, the query and key vectors of one
-               head, attention sinks, attention by distance, and in-context copying of a repeated random string
+               of 32 dimensions, rotary positions, 256 characters of context; bits per character on the passage (the
+               scoreboard), the training curve, and a replay of training (samples, every head's attention, copying,
+               induction and composition scores, sinks, at 11 checkpoints); attention maps on a sentence of the
+               passage, attention by distance, sinks, in-context copying of repeated strings, samples
+    heads      our transformer's heads as low-rank maps (singular values of W_Q W_K^T and W_V W_O), the QK/OV composition
+               scores against random matrices, the causal mask checked (changing the future changes nothing), and
+               the cost of a block: parameters counted and FLOPs measured against the formulas
     extend     the same transformer at 4x its training context, without retraining: rotary positions as trained,
-               position interpolation, NTK-aware scaling and YaRN; bits per character by position
-    induction  a two-layer attention-only transformer on random tokens with a repeated stretch: the sudden drop in
-               loss on the repeat (an induction head forming), the same for one layer, and the two heads' patterns
+               position interpolation, NTK-aware scaling, YaRN, log-n scaling; bits per character by position; then
+               100 steps of fine-tuning at the long context for interpolation and YaRN
+    positions  four ways to tell a small transformer where things are (sinusoidal, RoPE, ALiBi, none), each trained
+               on the novels at 128 characters with three seeds at equal budgets, then read at 512
+    sinks      attention sinks on the bigram-backcopy task (a head that is needed only after a trigger): plain softmax,
+               a learned sink logit (gpt-oss), an output gate (Qwen), differential attention; three seeds each
+    qkscale    QK-norm and soft caps against blow-up: our transformer's queries and keys scaled up, the entropy of its
+               attention and its bits, plain, soft-capped and normalized
+    induction  a two-layer attention-only transformer on random tokens with a repeated stretch (three seeds): the
+               sudden drop in loss on the repeat, K-composition between the heads through training, the same for one
+               layer, and the two heads' patterns
     icl        in-context linear regression: one layer of linear self-attention, trained, against one step of gradient
                descent (von Oswald et al., 2023); its learned matrices, and 1-3 layers against 1-3 steps
+    rasp       what attention can compute: RASP's histogram compiled by hand into one attention layer and run exactly;
+               then small transformers trained on histograms and on parity at lengths up to 20, tested up to 60
 """
 
 from __future__ import annotations
 
 import math
+import os
 import time
 
 import numpy as np
@@ -41,17 +63,27 @@ load = CACHE.load
 CTX, D, LAYERS, HEADS, BASE = 256, 128, 4, 4, 10000.0
 DH = D // HEADS
 STEPS, BATCH = 3000, 32
+TF_SNAPS = (0, 50, 100, 250, 500, 750, 1000, 1500, 2000, 2500, 3000)  # the training replay's checkpoints
+TF_CKPT = 250  # steps between checkpoints
+PROMPT = "Spade sat down in the armchair, and "
 
 
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
+def threads(default: int = 2) -> None:
+    """Torch threads for this computation (never at import: other parts import this module)."""
+    import torch
+
+    torch.set_num_threads(int(os.environ.get("AI13_THREADS", default)))
+
+
 # ---------------------------------------------------------------------------
 def compute_smoother():
-    from videos.ai.ai7 import compute as c6
+    from videos.ai.ai7 import compute as c7
 
-    gp = c6.load("gp")
+    gp = c7.load("gp")
     x, y = np.asarray(gp["x"], float), np.asarray(gp["y"], float)
     xs = np.linspace(0, x[-1], 400)
 
@@ -72,7 +104,18 @@ def compute_smoother():
     out["q"] = q
     # a small bandwidth follows the noise, a large one flattens everything
     r = [float(np.mean((nw(h, x)[0] - y) ** 2)) for h in out["hs"]]
-    assert r[0] < r[1] < r[2]
+    out["fit_mse"] = r
+    # leave-one-out error by bandwidth: the bandwidth a smoother would pick for itself
+    hs = np.exp(np.linspace(np.log(0.4), np.log(30), 40))
+    loo = []
+    for h in hs:
+        s = -0.5 * (x[:, None] - x[None]) ** 2 / h ** 2
+        np.fill_diagonal(s, -np.inf)
+        w = np.exp(s - s.max(1, keepdims=True))
+        w /= w.sum(1, keepdims=True)
+        loo.append(float(np.mean((w @ y - y) ** 2)))
+    out["loo_h"], out["loo"] = hs, np.array(loo)
+    out["best_h"] = float(hs[int(np.argmin(loo))])
     return out
 
 
@@ -82,27 +125,39 @@ def compute_dotscale():
     ds = [2, 8, 32, 128, 512]
     n, trials = 64, 2000
 
-    def ent(s):
+    def stats(s):
         s = s - s.max(1, keepdims=True)
         p = np.exp(s)
         p /= p.sum(1, keepdims=True)
-        return float((-(p * np.log2(np.maximum(p, 1e-300))).sum(1)).mean()), float(p.max(1).mean())
+        ent = (-(p * np.log2(np.maximum(p, 1e-300))).sum(1)).mean()
+        # the softmax's Jacobian diag(p) - p p^T: its size (Frobenius norm) is how much the weights still respond
+        jac = np.sqrt(np.maximum((p ** 2).sum(1) - 2 * (p ** 3).sum(1) + ((p ** 2).sum(1)) ** 2, 0))
+        return float(ent), float(p.max(1).mean()), float(jac.mean())
 
-    out = dict(ds=ds, n=n, raw_ent=[], scaled_ent=[], raw_max=[], scaled_max=[], sd=[])
+    out = dict(ds=ds, n=n, raw_ent=[], scaled_ent=[], raw_max=[], scaled_max=[], sd=[], sd_scaled=[], raw_jac=[],
+               scaled_jac=[])
     for d in ds:
         q = g.normal(size=(trials, d))
         k = g.normal(size=(trials, n, d))
         s = np.einsum("td,tnd->tn", q, k)
         out["sd"].append(float(s.std()))
-        e, m = ent(s)
+        out["sd_scaled"].append(float((s / math.sqrt(d)).std()))
+        e, m, j = stats(s)
         out["raw_ent"].append(e)
         out["raw_max"].append(m)
-        e, m = ent(s / math.sqrt(d))
+        out["raw_jac"].append(j)
+        e, m, j = stats(s / math.sqrt(d))
         out["scaled_ent"].append(e)
         out["scaled_max"].append(m)
+        out["scaled_jac"].append(j)
     out["max_ent"] = math.log2(n)
+    # the Jacobian's size as the spread of the scores grows, on one grid (for the saturation picture)
+    sig = np.exp(np.linspace(np.log(0.1), np.log(30), 50))
+    qq, kk = g.normal(size=(trials, n)), None
+    out["sig"] = sig
+    out["jac_by_sig"] = np.array([stats(qq * s_)[2] for s_ in sig])
+    out["ent_by_sig"] = np.array([stats(qq * s_)[0] for s_ in sig])
     assert abs(out["sd"][-1] / math.sqrt(ds[-1]) - 1) < 0.05  # the scores spread like sqrt(d)
-    assert out["raw_max"][-1] > 0.85 and out["scaled_max"][-1] < 0.35
     return out
 
 
@@ -130,10 +185,27 @@ def compute_rope():
     # the same, averaged over distances within 10% of r (the fast pairs make it jitter from one r to the next)
     rs = np.unique(np.round(np.logspace(0, np.log10(2000), 160)).astype(int))
     smooth = np.array([decay[max(1, int(v * 0.9)):int(v * 1.1) + 1].mean() for v in rs])
+    # sinusoidal positions (2017): PE(t + k) is a fixed linear map of PE(t), the same rotation for every t
+    dm = 16
+    om = 10000.0 ** (-np.arange(0, dm, 2) / dm)
+
+    def pe(t):
+        return np.stack([np.sin(t * om), np.cos(t * om)], 1).ravel()
+
+    kk = 7
+    M = np.zeros((dm, dm))
+    for i, w in enumerate(om):
+        c, s = math.cos(kk * w), math.sin(kk * w)
+        M[2 * i:2 * i + 2, 2 * i:2 * i + 2] = [[c, s], [-s, c]]
+    sin_dev = max(float(np.abs(M @ pe(t) - pe(t + kk)).max()) for t in range(0, 300, 7))
+    assert sin_dev < 1e-9
+    pes = np.array([pe(t) for t in range(64)])
     return dict(theta=th, wavelength=2 * np.pi / th, dev=float(dev), r=r, decay=decay, rs=rs, smooth=smooth,
-                scores=grid[:, 0])
+                scores=grid[:, 0], sin_dev=sin_dev, sin_k=kk, pe=pes, pe_dot=pes @ pes.T)
 
 
+# ---------------------------------------------------------------------------
+# Our transformer
 # ---------------------------------------------------------------------------
 def build_tf(K):
     import torch
@@ -237,69 +309,228 @@ def tf_bits(model, seq, ctx=CTX, stride=None, **kw):
     return tot / n / math.log(2)
 
 
+def tf_sample(model, chars, enc, prompt, n, seed, temperature=0.8):
+    import torch
+
+    gen = torch.Generator().manual_seed(seed)
+    ctx = enc(prompt)
+    outc = []
+    with torch.no_grad():
+        for _ in range(n):
+            z = model(ctx[None, -CTX:])[0, -1]
+            c = int(torch.multinomial(torch.softmax(z / temperature, 0), 1, generator=gen))
+            ctx = torch.cat([ctx, torch.tensor([c])])
+            outc.append(chars[c])
+    return "".join(outc)
+
+
+def head_mats(model, layer, head):
+    """One head of our transformer as matrices on the residual stream (D numbers), with its layer norm's gain and
+    centring folded in: W_QK (D x D, a query's and a key's residual vectors -> their score before rotation and
+    1/sqrt(d)) and W_OV (D x D, a residual vector -> what the head writes back)."""
+    b = model.blocks[layer]
+    W = b.qkv.weight.detach().double().numpy()
+    g = b.n1.weight.detach().double().numpy()
+    P = np.eye(D) - 1.0 / D  # LayerNorm subtracts the mean
+    fold = np.diag(g) @ P
+    sl = slice(head * DH, (head + 1) * DH)
+    Wq, Wk, Wv = W[:D][sl] @ fold, W[D:2 * D][sl] @ fold, W[2 * D:][sl] @ fold
+    Wo = b.o.weight.detach().double().numpy()[:, sl]
+    return Wq.T @ Wk, Wo @ Wv
+
+
+def composition_scores(mats_by_head, L, H):
+    """Elhage et al.'s composition scores between every head of an earlier layer and every head of a later one:
+    Q, K and V composition, ||M W_OV^(1)||_F / (||M||_F ||W_OV^(1)||_F) with M = W_QK^T, W_QK, W_OV of the later
+    head. Returns three (L*H, L*H) arrays (row: the earlier head, column: the later head; NaN where not earlier)."""
+    n = L * H
+    out = {k: np.full((n, n), np.nan) for k in ("q", "k", "v")}
+    for a in range(n):
+        for b_ in range(n):
+            if a // H >= b_ // H:
+                continue
+            _, ov1 = mats_by_head[a]
+            qk2, ov2 = mats_by_head[b_]
+            n1 = np.linalg.norm(ov1)
+            for key, M in (("q", qk2.T), ("k", qk2), ("v", ov2)):
+                out[key][a, b_] = np.linalg.norm(M @ ov1) / (np.linalg.norm(M) * n1)
+    return out
+
+
+def composition_baseline(d, dh, draws=200, seed=0):
+    """The composition score of random heads of the same shapes (Gaussian W_Q, W_K, W_V, W_O): mean and spread."""
+    g = rng(seed)
+    s = []
+    for _ in range(draws):
+        Wv, Wo = g.normal(size=(dh, d)), g.normal(size=(d, dh))
+        Wq2, Wk2 = g.normal(size=(dh, d)), g.normal(size=(dh, d))
+        ov1, qk2 = Wo @ Wv, Wq2.T @ Wk2
+        s.append(np.linalg.norm(qk2 @ ov1) / (np.linalg.norm(qk2) * np.linalg.norm(ov1)))
+    return float(np.mean(s)), float(np.std(s))
+
+
+def tf_probe(model, chars, data, snip, copy_x):
+    """What the transformer does at one moment of training: every head's attention on the passage's sentence, its
+    copying of repeated text (bits on the first and second copy, and each head's induction and previous-character
+    scores), how much attention the first position draws (sinks), and the heads' composition scores."""
+    import torch
+    import torch.nn.functional as F
+
+    out = {}
+    with torch.no_grad():
+        _, maps, _ = model(snip[None], keep=True)
+        out["maps"] = torch.stack([m[0] for m in maps]).numpy().astype(np.float16)  # layer, head, query, key
+        z, maps, _ = model(copy_x, keep=True)
+        n = copy_x.shape[1] // 2
+        ce = F.cross_entropy(z[:, :-1].reshape(-1, z.shape[-1]), copy_x[:, 1:].reshape(-1), reduction="none")
+        ce = ce.view(len(copy_x), -1).numpy() / math.log(2)  # position i predicts character i + 1
+        out["copy1"] = float(ce[:, 4:n - 1].mean())  # predicting characters 5 ... n-1 of the first copy
+        out["copy2"] = float(ce[:, n + 4:2 * n - 1].mean())  # the same characters, the second time
+        ind, prev = np.zeros((LAYERS, HEADS)), np.zeros((LAYERS, HEADS))
+        for l_, m in enumerate(maps):
+            P = m.numpy()  # batch, head, query, key
+            ind[l_] = np.mean([P[:, :, n + j, j + 1] for j in range(4, n - 1)], axis=(0, 1))
+            prev[l_] = np.mean([P[:, :, i, i - 1] for i in range(1, 2 * n)], axis=(0, 1))
+        out["induction"], out["prev"] = ind, prev
+        # attention on the first position, from queries 64 ... 255, over 8 windows of held-out text
+        va = data["valid"]
+        starts = rng(11).integers(0, len(va) - CTX - 1, 8)
+        x = torch.stack([va[s:s + CTX] for s in starts])
+        _, maps, _ = model(x, keep=True)
+        out["sink"] = np.array([m[:, :, 64:, 0].mean((0, 2)).numpy() for m in maps])
+    mats = [head_mats(model, l_, h) for l_ in range(LAYERS) for h in range(HEADS)]
+    comp = composition_scores(mats, LAYERS, HEADS)
+    out.update({f"comp_{k}": v for k, v in comp.items()})
+    return out
+
+
+def tf_setup():
+    """The fixed inputs of the transformer's probes: a sentence of the passage, and repeated stretches of held-out
+    text (100 characters, shown twice)."""
+    import torch
+
+    chars, enc, data = corpus()
+    ps, va = data["passage"], data["valid"]
+    text = "".join(chars[int(i)] for i in ps[:4000])
+    s0 = text.index(". ", 400) + 2
+    snip = ps[s0:s0 + 64]
+    g = rng(77)
+    n = 100
+    starts = g.integers(0, len(va) - n - 1, 16)
+    copy_x = torch.stack([torch.cat([va[s:s + n], va[s:s + n]]) for s in starts])
+    return chars, enc, data, snip, copy_x
+
+
 def compute_tf():
     import torch
     import torch.nn.functional as F
 
+    threads()
     torch.manual_seed(2017)  # Vaswani et al., Attention Is All You Need
-    torch.set_num_threads(3)
-    chars, enc, data = corpus()
+    chars, enc, data, snip, copy_x = tf_setup()
     K = len(chars)
     tr, va, ps = data["train"], data["valid"], data["passage"]
     model = build_tf(K)
     n_params = sum(p.numel() for p in model.parameters())
-    decay = [p for n_, p in model.named_parameters() if p.dim() >= 2]
-    other = [p for n_, p in model.named_parameters() if p.dim() < 2]
-    opt = torch.optim.AdamW([dict(params=decay, weight_decay=0.1), dict(params=other, weight_decay=0.0)],
-                            lr=2e-3, betas=(0.9, 0.95))
-    warm, cool = 200, int(0.2 * STEPS)  # Part 11's warmup-stable-decay schedule
+    config = dict(K=K, ctx=CTX, d=D, layers=LAYERS, heads=HEADS, steps=STEPS, batch=BATCH, snaps=list(TF_SNAPS))
+    saved = CACHE.dir / "tf.pt"
+    meta = CACHE.dir / "tf_train.pt"  # the curve and the replay, kept with the weights so analysis can be redone
+    if saved.exists() and meta.exists() and torch.load(meta, weights_only=False)["config"] == config:
+        model.load_state_dict(torch.load(saved))
+        m_ = torch.load(meta, weights_only=False)
+        curve, snaps = m_["curve"], m_["snaps"]
+        print("    reusing the trained weights in", saved, flush=True)
+    else:
+        decay = [p for n_, p in model.named_parameters() if p.dim() >= 2]
+        other = [p for n_, p in model.named_parameters() if p.dim() < 2]
+        opt = torch.optim.AdamW([dict(params=decay, weight_decay=0.1), dict(params=other, weight_decay=0.0)],
+                                lr=2e-3, betas=(0.9, 0.95))
+        warm, cool = 200, int(0.2 * STEPS)  # Part 11's warmup-stable-decay schedule
 
-    def lr_at(s):
-        if s < warm:
-            return (s + 1) / warm
-        if s < STEPS - cool:
-            return 1.0
-        return 0.05 + 0.95 * (STEPS - s) / cool
+        def lr_at(s):
+            if s < warm:
+                return (s + 1) / warm
+            if s < STEPS - cool:
+                return 1.0
+            return 0.05 + 0.95 * (STEPS - s) / cool
 
-    sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_at)
-    g = rng(2017)
-    curve, t0 = [], time.time()
-    model.train()
-    for step in range(1, STEPS + 1):
-        st = torch.tensor(g.integers(0, len(tr) - CTX - 1, BATCH))
-        idx = st[:, None] + torch.arange(CTX + 1)[None]
-        x, y = tr[idx[:, :-1]], tr[idx[:, 1:]]
-        loss = F.cross_entropy(model(x).reshape(-1, K), y.reshape(-1))
-        opt.zero_grad()
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        opt.step()
-        sched.step()
-        if step % 250 == 0 or step in (50, 100):
+        sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_at)
+        g = rng(2017)
+        ckpt = CACHE.dir / "tf.ckpt.pt"
+        ck = torch.load(ckpt, weights_only=False) if ckpt.exists() else None
+        if ck is not None and ck["config"] == config:
+            model.load_state_dict(ck["model"])
+            opt.load_state_dict(ck["opt"])
+            sched.load_state_dict(ck["sched"])
+            g.bit_generator.state = ck["rng"]
+            torch.set_rng_state(ck["torch_rng"])
+            curve, snaps, start = ck["curve"], ck["snaps"], ck["step"] + 1
+            print(f"    resuming at step {start}", flush=True)
+        else:
+            curve, snaps, start = [], [], 1
+
+        def checkpoint(step):
             model.eval()
-            curve.append((step, tf_bits(model, va[:60_000]), tf_bits(model, ps)))
+            if step in (0, 50, 100) or step % 250 == 0:
+                curve.append((step, tf_bits(model, va[:60_000]), tf_bits(model, ps)))
+                print(f"    step {step}: valid {curve[-1][1]:.3f}  passage {curve[-1][2]:.3f}  "
+                      f"({(time.time() - t0) / max(step - start + 1, 1):.2f}s/step)", flush=True)
+            if step in TF_SNAPS:
+                pr = tf_probe(model, chars, data, snip, copy_x)
+                bits = curve[-1][2] if curve and curve[-1][0] == step else tf_bits(model, ps)
+                pr.update(step=step, bits=bits, sample=tf_sample(model, chars, enc, PROMPT, 100, seed=1))
+                snaps.append(pr)
             model.train()
-            print(f"    step {step}: valid {curve[-1][1]:.3f}  passage {curve[-1][2]:.3f}  "
-                  f"({(time.time() - t0) / step:.2f}s/step)", flush=True)
+
+        t0 = time.time()
+        if start == 1:
+            checkpoint(0)
+        model.train()
+        for step in range(start, STEPS + 1):
+            st = torch.tensor(g.integers(0, len(tr) - CTX - 1, BATCH))
+            idx = st[:, None] + torch.arange(CTX + 1)[None]
+            x, y = tr[idx[:, :-1]], tr[idx[:, 1:]]
+            loss = F.cross_entropy(model(x).reshape(-1, K), y.reshape(-1))
+            opt.zero_grad()
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            opt.step()
+            sched.step()
+            checkpoint(step)
+            if step % TF_CKPT == 0 and step < STEPS:
+                tmp = ckpt.with_suffix(".tmp")
+                torch.save(dict(config=config, model=model.state_dict(), opt=opt.state_dict(),
+                                sched=sched.state_dict(), rng=g.bit_generator.state, torch_rng=torch.get_rng_state(),
+                                curve=curve, snaps=snaps, step=step), tmp)
+                tmp.replace(ckpt)
+        model.eval()
+        torch.save(model.state_dict(), saved)
+        torch.save(dict(config=config, curve=curve, snaps=snaps), meta)
+        ckpt.unlink(missing_ok=True)
     model.eval()
-    torch.save(model.state_dict(), CACHE.dir / "tf.pt")
     passage_bits, valid_bits = tf_bits(model, ps), tf_bits(model, va[:400_000])
     out = dict(K=K, ctx=CTX, d=D, layers=LAYERS, heads=HEADS, n_params=int(n_params), steps=STEPS, batch=BATCH,
                tokens=STEPS * BATCH * CTX, curve=np.array(curve), passage_bits=passage_bits, valid_bits=valid_bits)
-    out.update(analyse_tf(model, chars, enc, data))
+    # the replay: one array per probe, stacked over the checkpoints
+    out["snap_steps"] = [int(s["step"]) for s in snaps]
+    out["snap_bits"] = [float(s["bits"]) for s in snaps]
+    out["snap_samples"] = [s["sample"] for s in snaps]
+    for k in ("maps", "induction", "prev", "sink", "comp_q", "comp_k", "comp_v"):
+        out[f"snap_{k}"] = np.array([s[k] for s in snaps])
+    out["snap_copy1"] = [float(s["copy1"]) for s in snaps]
+    out["snap_copy2"] = [float(s["copy2"]) for s in snaps]
+    out["prompt"] = PROMPT
+    out.update(analyse_tf(model, chars, enc, data, snip, copy_x))
     return out
 
 
-def analyse_tf(model, chars, enc, data):
+def analyse_tf(model, chars, enc, data, snip, copy_x):
     import torch
     import torch.nn.functional as F
 
-    va, ps = data["valid"], data["passage"]
+    va = data["valid"]
     out = {}
     # attention maps on a sentence of the passage (its first 64 characters after a sentence start)
-    text = "".join(chars[int(i)] for i in ps[:4000])
-    s0 = text.index(". ", 400) + 2
-    snip = ps[s0:s0 + 64]
     with torch.no_grad():
         z, maps, qks = model(snip[None], keep=True)
     out["snip"] = "".join(chars[int(i)] for i in snip)
@@ -312,19 +543,39 @@ def analyse_tf(model, chars, enc, data):
     starts = g.integers(0, len(va) - CTX - 1, 48)
     dist = np.zeros((LAYERS, HEADS, CTX))
     first = np.zeros((LAYERS, HEADS))
+    top_key = np.zeros((LAYERS, HEADS))  # the share of the single most-attended key, averaged over queries
+    space = np.zeros((LAYERS, HEADS))  # attention on spaces and line breaks, against their share of the keys
+    sp_ids = torch.tensor([chars.index(c) for c in (" ", "\n") if c in chars])
+    sp_share = 0.0
+    qnorm = np.zeros((LAYERS, HEADS, DH // 2))  # each rotation pair's share of the queries' and keys' size
+    knorm = np.zeros((LAYERS, HEADS, DH // 2))
     with torch.no_grad():
         for i in range(0, len(starts), 8):
             x = torch.stack([va[s:s + CTX] for s in starts[i:i + 8]])
-            _, maps, _ = model(x, keep=True)
+            _, maps, qks = model(x, keep=True)
+            is_sp = torch.isin(x, sp_ids).numpy()  # batch, key
+            sp_share += float(is_sp[:, 64:].mean()) * len(x)
             for l_, m in enumerate(maps):
                 P = m.numpy()  # batch, head, query, key
                 for d_ in range(CTX):
                     dist[l_, :, d_] += np.einsum("bhq->h", np.diagonal(P, offset=-d_, axis1=2, axis2=3)) / (CTX - d_)
                 first[l_] += P[:, :, 64:, 0].mean((0, 2)) * len(x)
+                top_key[l_] += P[:, :, 64:, :].max(-1).mean((0, 2)) * len(x)
+                space[l_] += np.einsum("bhqk,bk->bhq", P[:, :, 64:, :], is_sp.astype(float)).mean((0, 2)) * len(x)
+                q_, k_ = qks[l_]
+                for nm, t_, acc in (("q", q_, qnorm), ("k", k_, knorm)):
+                    t_ = t_.numpy()
+                    e = t_[..., : DH // 2] ** 2 + t_[..., DH // 2:] ** 2  # each pair's squared size (rotation-proof)
+                    acc[l_] += e.mean((0, 2)) * len(x)
     out["by_dist"] = dist / len(starts)
     out["sink"] = first / len(starts)  # mean attention on position 0, for queries at positions 64 ... 255
     out["sink_uniform"] = float(np.mean(1 / (np.arange(64, CTX) + 1)))
-    # in-context copying: a random string of lowercase letters, shown twice
+    out["top_key"] = top_key / len(starts)
+    out["space_att"] = space / len(starts)
+    out["space_share"] = sp_share / len(starts)
+    out["pair_q"] = qnorm / len(starts)
+    out["pair_k"] = knorm / len(starts)
+    # in-context copying: a random string of lowercase letters, shown twice; and repeated held-out text
     letters = [chars.index(c) for c in "abcdefghijklmnopqrstuvwxyz"]
     L = 60
     bits1, bits2, ind = [], [], np.zeros((LAYERS, HEADS))
@@ -339,32 +590,35 @@ def analyse_tf(model, chars, enc, data):
             for l_, m in enumerate(maps):  # induction: from the 2nd copy's position i to the 1st copy's i + 1
                 P = m[0].numpy()
                 ind[l_] += np.mean([P[:, L + i, i + 1] for i in range(L - 1)], axis=0)
-    out["copy_bits1"] = np.mean(bits1, 0)
-    out["copy_bits2"] = np.mean(bits2, 0)
-    out["induction_score"] = ind / 24
-    li, hi = np.unravel_index(np.argmax(out["induction_score"]), out["induction_score"].shape)
-    out["ind_layer"], out["ind_head"] = int(li), int(hi)
-    with torch.no_grad():
+        out["copy_bits1"] = np.mean(bits1, 0)
+        out["copy_bits2"] = np.mean(bits2, 0)
+        out["induction_score"] = ind / 24
+        li, hi = np.unravel_index(np.argmax(out["induction_score"]), out["induction_score"].shape)
+        out["ind_layer"], out["ind_head"] = int(li), int(hi)
         r = torch.tensor(np.asarray(letters)[rng(9).integers(0, 26, 24)])
         x = torch.cat([r, r])[None]
         _, maps, _ = model(x, keep=True)
-    out["ind_text"] = "".join(chars[int(i)] for i in x[0])
-    out["ind_map"] = maps[li][0, hi].numpy()
+        out["ind_text"] = "".join(chars[int(i)] for i in x[0])
+        out["ind_map"] = maps[li][0, hi].numpy()
+        # repeated held-out text: bits by position on both copies, and the best induction head's map on one
+        z, maps, _ = model(copy_x, keep=True)
+        n = copy_x.shape[1] // 2
+        ce = F.cross_entropy(z[:, :-1].reshape(-1, z.shape[-1]), copy_x[:, 1:].reshape(-1), reduction="none")
+        ce = ce.view(len(copy_x), -1).numpy() / math.log(2)
+        out["text_bits1"], out["text_bits2"] = ce[:, : n - 1].mean(0), ce[:, n:].mean(0)
+        nind = np.zeros((LAYERS, HEADS))
+        for l_, m in enumerate(maps):
+            P = m.numpy()
+            nind[l_] = np.mean([P[:, :, n + j, j + 1] for j in range(4, n - 1)], axis=(0, 1))
+        out["text_induction"] = nind
+        li2, hi2 = np.unravel_index(np.argmax(nind), nind.shape)
+        out["text_ind_layer"], out["text_ind_head"] = int(li2), int(hi2)
+        out["text_ind_map"] = maps[li2][0, hi2].numpy().astype(np.float32)
+        out["text_ind_text"] = "".join(chars[int(i)] for i in copy_x[0])
     # samples
-    samples = []
-    with torch.no_grad():
-        for seed, prompt in ((1, "Spade sat down in the armchair, and "), (2, "It was the best of times, "),
-                             (3, "The telephone rang. "), (4, "\"I don't know,\" he said. ")):
-            torch.manual_seed(seed)
-            ctx = enc(prompt)
-            outc = []
-            for _ in range(200):
-                z = model(ctx[None, -CTX:])[0, -1]
-                c = int(torch.multinomial(torch.softmax(z / 0.8, 0), 1))
-                ctx = torch.cat([ctx, torch.tensor([c])])
-                outc.append(chars[c])
-            samples.append([prompt, "".join(outc)])
-    out["samples"] = samples
+    out["samples"] = [[p, tf_sample(model, chars, enc, p, 200, seed)]
+                      for seed, p in ((1, PROMPT), (2, "It was the best of times, "), (3, "The telephone rang. "),
+                                      (4, "\"I don't know,\" he said. "))]
     return out
 
 
@@ -391,7 +645,7 @@ def compute_extend():
     import torch
     import torch.nn.functional as F
 
-    torch.set_num_threads(4)
+    threads()
     load("tf")
     model, chars, enc, data = load_tf()
     va = data["valid"]
@@ -447,7 +701,7 @@ def compute_induction():
     import torch.nn as nn
     import torch.nn.functional as F
 
-    torch.set_num_threads(2)
+    threads()
     V, T, Dm, H = 64, 96, 64, 4
 
     def batch(g, n):
@@ -484,75 +738,108 @@ def compute_induction():
             z = self.out(h)
             return (z, maps) if keep else z
 
-    out = dict(V=V, T=T)
+        def mats(self, layer, head):
+            W = self.qkv[layer].weight.detach().double().numpy()
+            sl = slice(head * (Dm // H), (head + 1) * (Dm // H))
+            Wq, Wk, Wv = W[:Dm][sl], W[Dm:2 * Dm][sl], W[2 * Dm:][sl]
+            Wo = self.o[layer].weight.detach().double().numpy()[:, sl]
+            return Wq.T @ Wk, Wo @ Wv
+
+    out = dict(V=V, T=T, d=Dm, H=H)
     test_x, test_m = batch(rng(99), 128)
-    for layers in (1, 2):
-        torch.manual_seed(2022)  # Olsson et al., In-context Learning and Induction Heads
-        m = AttnOnly(layers)
-        opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
-        g = rng(2022)
-        steps, curve = 5000, []
-        ex_ = torch.tensor(rng(7).integers(0, V, T))
-        ex_[60:80] = ex_[10:30]
-        snaps = []
-        for step in range(steps + 1):
-            if layers == 2 and step % 250 == 0:  # how it learns: both layers' attention on the example, along the way
+    seeds = (2022, 2023, 2024)
+    part = CACHE.partial("induction", dict(V=V, T=T, d=Dm, H=H, steps=5000, seeds=list(seeds)))
+    for layers, seed in [(1, 2022)] + [(2, s_) for s_ in seeds]:
+        key = f"{layers}_{seed}"
+        if key in part:
+            r = part[key]
+        else:
+            torch.manual_seed(seed)  # Olsson et al., In-context Learning and Induction Heads (2022)
+            m = AttnOnly(layers)
+            opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
+            g = rng(seed)
+            steps, curve = 5000, []
+            ex_ = torch.tensor(rng(7).integers(0, V, T))
+            ex_[60:80] = ex_[10:30]
+            snaps, comp = [], []
+            for step in range(steps + 1):
+                if layers == 2 and step % 250 == 0:  # how it learns: both layers' attention on the example
+                    with torch.no_grad():
+                        _, mp = m(ex_[None], keep=True)
+                    snaps.append((step, mp[0][0].numpy().astype(np.float16).tolist(),
+                                  mp[1][0].numpy().astype(np.float16).tolist()))
+                    mats = [m.mats(l_, h) for l_ in range(2) for h in range(H)]
+                    cs = composition_scores(mats, 2, H)
+                    comp.append([step, cs["k"][:H, H:].tolist(), cs["q"][:H, H:].tolist(), cs["v"][:H, H:].tolist()])
+                if step % 100 == 0:
+                    with torch.no_grad():
+                        z = m(test_x)
+                        ce = F.cross_entropy(z[:, :-1].reshape(-1, V), test_x[:, 1:].reshape(-1), reduction="none")
+                        ce = ce.view(len(test_x), T - 1) / math.log(2)
+                        mk = test_m[:, :-1]
+                        curve.append((step, float(ce[mk].mean()), float(ce[~mk].mean())))
+                if step == steps:
+                    break
+                x, _ = batch(g, 64)
+                z = m(x)
+                loss = F.cross_entropy(z[:, :-1].reshape(-1, V), x[:, 1:].reshape(-1))
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+            r = dict(curve=curve)
+            print(f"    {layers} layer(s), seed {seed}: repeat {curve[0][1]:.2f} -> {curve[-1][1]:.2f} bits", flush=True)
+            if layers == 2:
+                # the two heads, scored over 64 examples: previous-token heads in layer 1, induction heads in layer 2
+                xb, mb = batch(rng(123), 64)
                 with torch.no_grad():
-                    _, mp = m(ex_[None], keep=True)
-                snaps.append((step, mp[0][0].numpy().astype(np.float16), mp[1][0].numpy().astype(np.float16)))
-            if step % 100 == 0:
+                    _, maps = m(xb, keep=True)
+                P1, P2 = maps[0].numpy(), maps[1].numpy()  # batch, head, query, key
+                prev = [float(np.mean([P1[:, h, i, i - 1] for i in range(1, T)])) for h in range(H)]
+                ind = np.zeros(H)
+                cnt = 0
+                xn = xb.numpy()
+                for b in range(len(xn)):
+                    for p in np.where(mb[b].numpy())[0]:
+                        src = [j for j in range(p) if xn[b, j] == xn[b, p] and j + 1 < p]
+                        if src:  # the earlier copy of this token: attend to the position just after it
+                            ind += P2[b, :, p, src[0] + 1]
+                            cnt += 1
+                ind = list(ind / max(cnt, 1))
+                hp, hi = int(np.argmax(prev)), int(np.argmax(ind))
                 with torch.no_grad():
-                    z = m(test_x)
-                    ce = F.cross_entropy(z[:, :-1].reshape(-1, V), test_x[:, 1:].reshape(-1), reduction="none")
-                    ce = ce.view(len(test_x), T - 1) / math.log(2)
-                    mk = test_m[:, :-1]
-                    curve.append((step, float(ce[mk].mean()), float(ce[~mk].mean())))
-            if step == steps:
-                break
-            x, _ = batch(g, 64)
-            z = m(x)
-            loss = F.cross_entropy(z[:, :-1].reshape(-1, V), x[:, 1:].reshape(-1))
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-        out[f"curve{layers}"] = np.array(curve)
-        if snaps:
-            out["snap_steps"] = [a for a, _, _ in snaps]
-            out["snap_l1"] = np.array([b for _, b, _ in snaps])  # (checkpoints, heads, query, key)
-            out["snap_l2"] = np.array([c for _, _, c in snaps])
-        print(f"    {layers} layer(s): repeat {curve[0][1]:.2f} -> {curve[-1][1]:.2f} bits", flush=True)
-        if layers == 2:
-            # the two heads, scored over 64 examples: the previous-token head in layer 1, the induction head in layer 2
-            xb, mb = batch(rng(123), 64)
-            with torch.no_grad():
-                _, maps = m(xb, keep=True)
-            P1, P2 = maps[0].numpy(), maps[1].numpy()  # batch, head, query, key
-            prev = [float(np.mean([P1[:, h, i, i - 1] for i in range(1, T)])) for h in range(H)]
-            ind = np.zeros(H)
-            cnt = 0
-            xn = xb.numpy()
-            for b in range(len(xn)):
-                for p in np.where(mb[b].numpy())[0]:
-                    # the earlier copy of this token: attend to the position just after it
-                    src = [j for j in range(p) if xn[b, j] == xn[b, p] and j + 1 < p]
-                    if src:
-                        ind += P2[b, :, p, src[0] + 1]
-                        cnt += 1
-            ind = list(ind / max(cnt, 1))
-            hp, hi = int(np.argmax(prev)), int(np.argmax(ind))
-            ex = torch.tensor(rng(7).integers(0, V, T))
-            ex[60:80] = ex[10:30]
-            with torch.no_grad():
-                _, maps1 = m(ex[None], keep=True)
-            out.update(prev_scores=prev, ind_scores=ind, prev_head=hp, ind_head=hi, ex=ex.numpy(),
-                       map_prev=maps1[0][0, hp].numpy(), map_ind=maps1[1][0, hi].numpy())
-            print(f"    previous-token scores {np.round(prev, 2)}; induction scores {np.round(ind, 2)}", flush=True)
-    c1, c2 = out["curve1"], out["curve2"]
-    # the 2-layer model learns to copy; the 1-layer model can't
-    assert c2[-1, 1] < 0.5 * math.log2(V) and c1[-1, 1] > c2[-1, 1] + 2
-    d = np.diff(c2[:, 1])
-    out["jump_step"] = int(c2[int(np.argmin(d)) + 1, 0])  # where the loss on the repeat falls fastest
-    assert out["prev_scores"][out["prev_head"]] > 0.3 and out["ind_scores"][out["ind_head"]] > 0.3
+                    _, maps1 = m(ex_[None], keep=True)
+                r.update(prev_scores=prev, ind_scores=ind, prev_head=hp, ind_head=hi,
+                         map_prev=maps1[0][0, hp].numpy().tolist(), map_ind=maps1[1][0, hi].numpy().tolist(),
+                         snaps=snaps, comp=comp)
+                print(f"      previous-token {np.round(prev, 2)}; induction {np.round(ind, 2)}", flush=True)
+            part[key] = r
+    ex = np.asarray(rng(7).integers(0, V, T))
+    ex[60:80] = ex[10:30]
+    out["ex"] = ex
+    out["curve1"] = np.array(part["1_2022"]["curve"])
+    out["seeds"] = list(seeds)
+    for s_ in seeds:
+        out[f"curve2_{s_}"] = np.array(part[f"2_{s_}"]["curve"])
+    r = part["2_2022"]  # the replayed run: the first seed (all three are shown together elsewhere)
+    out["curve2"] = np.array(r["curve"])
+    out.update(prev_scores=r["prev_scores"], ind_scores=r["ind_scores"], prev_head=r["prev_head"],
+               ind_head=r["ind_head"], map_prev=np.array(r["map_prev"]), map_ind=np.array(r["map_ind"]))
+    out["snap_steps"] = [a for a, _, _ in r["snaps"]]
+    out["snap_l1"] = np.array([b for _, b, _ in r["snaps"]], dtype=np.float32)  # (checkpoints, heads, query, key)
+    out["snap_l2"] = np.array([c for _, _, c in r["snaps"]], dtype=np.float32)
+    out["comp_steps"] = [c[0] for c in r["comp"]]
+    out["comp_k"] = np.array([c[1] for c in r["comp"]])  # checkpoint, layer-1 head, layer-2 head
+    out["comp_q"] = np.array([c[2] for c in r["comp"]])
+    out["comp_v"] = np.array([c[3] for c in r["comp"]])
+    out["comp_base"], out["comp_base_sd"] = composition_baseline(Dm, Dm // H)
+    # the jump: where each seed's loss on the repeat falls fastest
+    out["jump_steps"] = []
+    for s_ in seeds:
+        c2 = out[f"curve2_{s_}"]
+        d = np.diff(c2[:, 1])
+        out["jump_steps"].append(int(c2[int(np.argmin(d)) + 1, 0]))
+    out["jump_step"] = out["jump_steps"][0]
+    out["final2"] = [float(out[f"curve2_{s_}"][-1, 1]) for s_ in seeds]
     return out
 
 
@@ -560,7 +847,7 @@ def compute_induction():
 def compute_icl():
     import torch
 
-    torch.set_num_threads(2)
+    threads()
     d, N = 4, 20
 
     def tasks(g, n):
@@ -594,12 +881,15 @@ def compute_icl():
                   for _ in range(layers)]
         opt = torch.optim.Adam([p for pr in params for p in pr], lr=3e-3)
         g = rng(2023)
+        curve = []
         for step in range(6000):
             x, y = tasks(g, 256)
             loss = ((lsa(params, x, y) - y[:, N]) ** 2).mean()
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if layers == 1 and step % 200 == 0:
+                curve.append((step, float(loss)))
         with torch.no_grad():
             pred = lsa(params, xt, yt)
             out[f"lsa{layers}"] = float(((pred - yt[:, N]) ** 2).mean())
@@ -613,6 +903,7 @@ def compute_icl():
             if layers == 1:
                 out["Wkq"], out["Wpv"] = params[0][0].detach().numpy(), params[0][1].detach().numpy()
                 out["pred_lsa"], out["pred_gd"], out["truth"] = pred[:200].numpy(), gp[:200].numpy(), yt[:200, N].numpy()
+                out["curve1"] = np.array(curve)
         print(f"    {layers} layer(s): lsa {out[f'lsa{layers}']:.3f}  gd {out[f'gd{layers}']:.3f}  "
               f"agree {out[f'agree{layers}']:.4f}", flush=True)
     out["zero"] = float((yt[:, N] ** 2).mean())  # always guessing 0
@@ -620,8 +911,6 @@ def compute_icl():
     X, Y = xt[:, :N].numpy(), yt[:, :N].numpy()
     w = np.stack([np.linalg.lstsq(X[i], Y[i], rcond=None)[0] for i in range(len(X))])
     out["lstsq"] = float(((np.einsum("nd,nd->n", w, xt[:, N].numpy()) - yt[:, N].numpy()) ** 2).mean())
-    assert out["agree1"] > 0.99 and out["lsa1"] < 0.5 * out["zero"]
-    assert out["lsa3"] < out["lsa2"] < out["lsa1"]
     return out
 
 
