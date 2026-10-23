@@ -236,15 +236,23 @@ class Rope(VoiceoverScene):
                     label(rf"slowest: \ every ${wl[-1]:,.0f}$".replace(",", "{,}"), font_size=18, color=GREY_B)
                     .next_to(ch.bars[-1], DOWN, buff=0.15).align_to(ch.bars[-1], RIGHT))
         slow = [i for i in range(n) if wl[i] > ctx]  # pairs that never finish a turn inside the context
-        s_slow, s_fast = float(e[slow].sum()), float(e[: n // 4].sum())
+        s_slow = float(e[slow].sum())
         even = len(slow) / n
-        verdict = (f"Our small model does the same: the {len(slow)} pairs that never finish a turn within its {ctx} "
-                   f"characters carry {s_slow:.0%} of the size of its queries and keys, against {even:.0%} if it were "
-                   "spread evenly. Those pairs barely rotate, so they work as plain channels for content."
-                   if s_slow > 1.2 * even else
-                   f"Our small model does not: the {len(slow)} pairs that never finish a turn within its {ctx} "
-                   f"characters carry {s_slow:.0%} of the size of its queries and keys, close to the {even:.0%} of an "
-                   "even spread.")
+        jm = int(np.argmax(e))
+        if wl[jm] > ctx and e[jm] > 2.0 / n:
+            verdict = (f"Our small model has a favourite: pair {jm + 1}, which turns once every {wl[jm]:,.0f} "
+                       f"characters, longer than its whole context, carries {e[jm]:.0%} of the size of its queries and "
+                       f"keys, {e[jm] * n:.1f} times an even share. Barely rotating, it works as a plain channel for "
+                       "content.")
+        elif s_slow > 1.2 * even:
+            verdict = (f"Our small model does the same: the {len(slow)} pairs that never finish a turn within its "
+                       f"{ctx} characters carry {s_slow:.0%} of the size of its queries and keys, against {even:.0%} "
+                       "if it were spread evenly.")
+        else:
+            verdict = (f"Our small model shows no such preference: the {len(slow)} pairs that never finish a turn "
+                       f"within its {ctx} characters carry {s_slow:.0%} of the size of its queries and keys, close to "
+                       f"the {even:.0%} of an even spread.")
+        hl_ = SurroundingRectangle(ch.bars[jm], color=WHITE, buff=0.05) if e[jm] > 2.0 / n else VGroup()
         facts = VGroup(
             label(r"Barbero et al.\ (2024): \ Gemma uses the fastest pairs \\ for positional patterns, \ the slowest "
                   r"for meaning", font_size=20, color=GREY_A),
@@ -266,6 +274,8 @@ class Rope(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(top), FadeIn(ch.base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.05),
                       FadeIn(xl))
+            if len(hl_.submobjects) or isinstance(hl_, SurroundingRectangle):
+                self.play(Create(hl_))
             vo.wait_until("b")
             self.play(FadeIn(facts[1:]))
         self.wait(0.3)

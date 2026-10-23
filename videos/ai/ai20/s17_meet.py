@@ -32,7 +32,7 @@ class Meet(VoiceoverScene):
     def turn(self):
         rows_ = [(r"BigGAN-deep", GAN_C, 6.95, 0.87, 0.28), (r"ADM (diffusion)", DIFF, 10.94, 0.69, 0.63),
                  (r"ADM, guided", DIFF, 4.59, 0.82, 0.52)]
-        head = VGroup(*[label(t, font_size=22, color=GREY_A) for t in (r"ImageNet $256^2$", r"FID", r"precision",
+        head = VGroup(*[label(t, font_size=22, color=GREY_A) for t in (r"ImageNet $256^2$", r"FID", r"precision{}",
                                                                          r"recall")])
         xs = [-4.4, -1.9, -0.4, 1.1]
         tab = VGroup(head)
@@ -42,8 +42,8 @@ class Meet(VoiceoverScene):
         for k, r_ in enumerate(tab):
             for j, m in enumerate(r_):
                 m.move_to([xs[j], 1.6 - 0.7 * k, 0])
-        g = axes([0, 1], [0, 1], x_length=3.4, y_length=3.4, xlabel=r"precision", ylabel=r"recall",
-                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[4.4, 0.3, 0])
+        g = axes([0, 1], [0, 1], x_length=3.4, y_length=3.4, xlabel=r"precision{}", ylabel=r"recall",
+                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[4.4, 0.3, 0])  # "{}": a zh key of its own (the shared table has bare "precision" as 精度)
         dots = VGroup(*[Dot(g.ax.c2p(p, r), radius=0.09, color=col) for _, col, _, p, r in rows_])
         why_ = VGroup(label(r"a likelihood-style objective: \ every mode is paid for", font_size=22),
                       label(r"one stable regression: \ no game to balance", font_size=22),

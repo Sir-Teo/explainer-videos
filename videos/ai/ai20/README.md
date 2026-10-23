@@ -342,6 +342,7 @@ x₁ − x₂ = (μ₁ − μ₂) + (σ₁ − σ₂)ζ，所以 E(x₁ − x₂
 | Jensen–Shannon divergence | 詹森-香农散度（JS散度） |
 | saturating / non-saturating loss | 饱和损失 / 非饱和损失 |
 | reverse KL | 反向KL散度 |
+| mode (a peak of a distribution), modes covered | 峰，覆盖的峰 |
 | mode collapse, mode dropping | 模式坍缩，模式丢失 |
 | simultaneous / alternating gradient steps | 同时梯度步 / 交替梯度步 |
 | extragradient, optimistic gradient descent | 外梯度法，乐观梯度下降 |

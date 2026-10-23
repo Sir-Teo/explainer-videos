@@ -969,7 +969,7 @@ def compute_extend():
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 opt.step()
-                curve.append(float(loss) / math.log(2))
+                curve.append(float(loss.detach()) / math.log(2))
             model.eval()
             ce = ext_eval(model, x, y, methods[name])
             part[name] = dict(pos=ce.tolist(), curve=curve)

@@ -50,19 +50,27 @@ class Induction(VoiceoverScene):
         key = VGroup(label(r"first time through", font_size=20, color=GREY_B),
                      label(r"second time", font_size=20, color=C.BITS)).arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.3)
         tag = note(r"our transformer; \ $16$ stretches of $100$ held-out characters, each shown twice").next_to(key, UP, buff=0.12)
-        copies = m2 < 0.6 * m1
-        copies_r = q2 < 0.6 * q1
-        v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}. "
-              + ("It has never seen these stretches, and yet the second time it predicts most of them: it copies "
-                 "from its own context as it reads." if copies else
-                 "Only a little better: it copies a little, but not reliably."))
-        v2 = (f"Random letters, a test no novel prepared it for: {q1:.1f} bits the first time, {q2:.1f} the second. "
-              + ("Even here it copies." if copies_r else
-                 "Here it barely copies at all: what it learned to copy is English, not arbitrary strings."))
+        u26 = math.log2(26)
+        if m2 < 0.6 * m1:
+            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}. It has never seen "
+                  "these stretches, and yet the second time it predicts most of them: it copies from its own context.")
+        elif m2 < m1 - 0.05:
+            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: a little better, "
+                  "but it barely copies.")
+        else:
+            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better at all. "
+                  "The answer is sitting a hundred characters back, and our transformer does not use it.")
+        v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, "
+              + (f"worse than a blind guess among 26 letters, {u26:.1f}, because it bets on English; " if q1 > u26 else "")
+              + (f"{q2:.1f} the second: here, at least, it copies." if q2 < 0.6 * q1 else
+                 f"and {q2:.1f} the second: no copying here either."))
+        tail = (" The machinery behind copying has a name." if m2 < m1 - 0.05 else
+                " Copying needs a particular piece of machinery, and our transformer has not built it. Here is what "
+                "it is, and how it forms.")
         with self.voiceover(
             "Here is a test of something no counting model can do. Take a stretch of a novel our transformer "
             "has never seen, and show it twice in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2
-            + " The machinery behind copying has a name."
+            + tail
         ) as vo:
             self.play(FadeIn(row), FadeIn(g), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")
@@ -309,65 +317,60 @@ class Induction(VoiceoverScene):
         ind = np.asarray(t["text_induction"])  # layer, head
         L, H = ind.shape
         li, hi = int(t["text_ind_layer"]), int(t["text_ind_head"])
-        prev = np.asarray(t["snap_prev"])[-1]  # layer, head
         CK = np.asarray(hd["comp_k"])
         base, bsd = float(hd["comp_base"]), float(hd["comp_base_sd"])
         steps = [int(v) for v in t["snap_steps"]]
         si = np.asarray(t["snap_induction"]).reshape(len(steps), -1).max(1)
         c1, c2 = np.asarray(t["snap_copy1"]), np.asarray(t["snap_copy2"])
-        M = np.asarray(t["text_ind_map"], float)
-        img = framed(heat_image(M, 3.2, 3.2, color=A, mask_upper=True)).move_to([-4.3, -0.5, 0])
-        il = label(rf"layer {li + 1}, head {hi + 1}, \ on a stretch shown twice", font_size=20, color=GREY_A).next_to(img, UP, buff=0.12)
-        g = axes([0, steps[-1], 1000], [0, max(1.0, float(si.max()) * 1.2), 0.25], x_length=4.6, y_length=2.6,
-                 xlabel=r"training steps", ylabel=r"best induction score", xticks=[0, steps[-1]],
-                 xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0, 0.5], center=[1.0, -0.4, 0])
-        cv = VGroup(curve(g.ax, steps, si, A, 3), *[Dot(g.ax.c2p(a, b), radius=0.05, color=A) for a, b in zip(steps, si)])
-        gain = c1 - c2  # bits saved on the second copy
-        g2 = axes([0, steps[-1], 1000], [0, max(0.5, float(gain.max()) * 1.2), 0.5], x_length=4.6, y_length=2.6,
-                  xlabel=r"training steps", ylabel=r"bits saved the second time", xticks=[0, steps[-1]],
-                  xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0], center=[1.0, -0.4, 0])
-        # the earlier heads this one reads from, by K-composition
-        h2 = li * H + hi
-        cand = [(CK[a, h2], a) for a in range(li * H) if np.isfinite(CK[a, h2])]
-        prev_best = int(np.argmax(prev[:li].ravel())) if li > 0 else None
-        facts = VGroup()
-        if cand:
-            kc, a = max(cand)
-            pv = float(prev.ravel()[a])
-            facts.add(label(rf"strongest K-composition into it: \ layer {a // H + 1}, head {a % H + 1}: \ ${kc:.2f}$ \ "
-                            rf"(random heads: ${base:.2f} \pm {bsd:.2f}$)", font_size=20, color=A))
-            facts.add(label(rf"that head's attention one back: \ ${pv:.2f}$", font_size=20, color=K))
-        facts.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([5.0, 1.9, 0])
-        keep_in_frame(facts)
+        tokens = int(t["tokens"])
+        # K-composition between our heads: rows earlier heads, columns later heads (only earlier-to-later pairs)
+        M = np.nan_to_num(CK, nan=0.0)
+        top = float(np.nanmax(CK))
+        img = framed(heat_image(np.clip(M - base, 0, None), 3.4, 3.4, color=A, gamma=0.7)).move_to([-4.0, -0.6, 0])
+        il = label(r"K-composition between our heads, \\ above the random level", font_size=20, color=GREY_A)
+        il.next_to(img, UP, buff=0.15)
+        rl = label(r"earlier head", font_size=18, color=GREY_B).rotate(PI / 2).next_to(img, LEFT, buff=0.12)
+        cl = label(r"later head", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
+        a_, b_ = np.unravel_index(int(np.nanargmax(CK)), CK.shape)
+        lo = float(min(c1.min(), c2.min())) - 0.2
+        hi_ = float(min(max(c1[1:].max(), c2[1:].max()) + 0.2, lo + 3.0))
+        g = axes([0, steps[-1], 1000], [lo, hi_, 0.5], x_length=5.4, y_length=3.0, xlabel=r"training steps",
+                 ylabel=r"bits per character on a stretch shown twice", xticks=[0, steps[-1]],
+                 xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[round(lo + 0.2, 1), round(hi_ - 0.2, 1)],
+                 yfmt=lambda v: f"{v:.1f}", center=[2.6, -0.2, 0])
+        k1 = curve(g.ax, steps[1:], np.clip(c1[1:], lo, hi_), GREY_B, 3)
+        k2 = curve(g.ax, steps[1:], np.clip(c2[1:], lo, hi_), C.BITS, 2.5)
+        key = VGroup(label(r"first time", font_size=18, color=GREY_B), label(r"second time", font_size=18, color=C.BITS))
+        key.arrange(RIGHT, buff=0.5).next_to(g, DOWN, buff=0.2)
         strong = float(ind.max()) > 0.3
-        rise_k = next((k for k, v in enumerate(si) if v >= 0.5 * si.max()), len(steps) - 1)
-        if cand:
-            kc, a = max(cand)
-            pv = float(prev.ravel()[a])
-            kv = (f"The earlier head its keys read most, by K-composition, {kc:.2f} against {base:.2f} for random "
-                  f"heads, is layer {a // H + 1}'s head {a % H + 1}, which puts {pv:.0%} of its attention one "
-                  "character back: the textbook pair. " if kc > base + 2 * bsd and pv > 0.3 else
-                  f"By K-composition its keys read most from layer {a // H + 1}'s head {a % H + 1}, {kc:.2f} against "
-                  f"{base:.2f} for random heads, and that head puts {pv:.0%} of its attention one character back: "
-                  "the pairing is looser than in the toy, as Olsson's team found in models with MLPs. ")
+        if strong:
+            v1 = (f"Our transformer has one: layer {li + 1}'s head {hi + 1} puts {ind.max():.0%} of its attention, on "
+                  "average, exactly where an induction head should, one step after the earlier copy. ")
         else:
-            kv = ""
-        v1 = (f"Our transformer has one: layer {li + 1}'s head {hi + 1} puts {ind.max():.0%} of its attention, on "
-              "average, exactly where an induction head should, one step after the earlier copy. " if strong else
-              f"Our transformer's best candidate, layer {li + 1}'s head {hi + 1}, puts only {ind.max():.0%} of its "
-              "attention one step after the earlier copy. ")
-        v2 = (f"And it formed during training: the best induction score passed half its final value by step "
-              f"{steps[rise_k]:,}, and the bits saved on the second copy grew from {gain[0]:.2f} to {gain[-1]:.2f}.")
+            v1 = (f"Our transformer has none. Its best candidate, layer {li + 1}'s head {hi + 1}, puts "
+                  f"{ind.max():.1%} of its attention one step after the earlier copy, and over training the copying "
+                  f"never paid: at the end the second copy costs {c2[-1]:.2f} bits a character, the first "
+                  f"{c1[-1]:.2f}. ")
+        v2 = (f"Its heads do compose, a little: the strongest K-composition, from layer {a_ // H + 1}'s head "
+              f"{a_ % H + 1} into layer {b_ // H + 1}'s head {b_ % H + 1}, is {top:.2f}, against {base:.2f} for random "
+              "heads. But no pair has become a copying circuit. " if top > base + 4 * bsd else
+              f"And its heads barely compose: the strongest K-composition is {top:.2f}, against {base:.2f} for random "
+              "heads. ")
+        v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
+              f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
+              "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid. "
+              "The toy, built to reward copying, formed its pair in a few thousand steps."
+              if not strong else "")
         with self.voiceover(
-            "And our own transformer, trained on novels with no repeated-token game at all? <bookmark mark='a'/> "
-            + v1 + "<bookmark mark='b'/> " + kv + "<bookmark mark='c'/> " + v2
+            "And our own transformer, trained on novels with no copying game at all? <bookmark mark='a'/> " + v1
+            + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
         ) as vo:
-            self.play(FadeIn(img), FadeIn(il))
+            self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(il, color=A))
+            self.play(Indicate(key, color=C.BITS))
             vo.wait_until("b")
-            self.play(FadeIn(facts))
+            self.play(FadeIn(img), FadeIn(il), FadeIn(rl), FadeIn(cl))
             vo.wait_until("c")
-            self.play(FadeIn(g), Create(cv[0]), FadeIn(cv[1:]))
+            self.play(Indicate(il, color=A))
         self.wait(0.3)
         self.clear_scene()

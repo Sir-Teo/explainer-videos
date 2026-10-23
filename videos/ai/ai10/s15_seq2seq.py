@@ -223,7 +223,6 @@ class Seq2Seq(VoiceoverScene):
             f"and a random sample costs {m['sampled_bits']:.0f}. <bookmark mark='c'/> {tail}"
         ) as vo:
             self.play(FadeIn(root), FadeIn(tl))
-            vo.wait_until("a")
             self.play(Create(edges), FadeIn(g[1:]), FadeIn(tag), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(pl), FadeIn(pr), LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in rows], lag_ratio=0.4))
@@ -244,6 +243,7 @@ class Seq2Seq(VoiceoverScene):
                           stroke_width=0, fill_color=GREY_D, fill_opacity=0.25)
         shade.move_to([(A.c2p(lo, 0)[0] + A.c2p(hi, 0)[0]) / 2, (A.c2p(0, 0)[1] + A.c2p(0, 1)[1]) / 2, 0])
         sl = label(r"trained on these lengths", font_size=20, color=GREY_B).next_to(shade, UP, buff=0.08)
+        sl.align_to(shade, RIGHT)  # clear of the axis label at the top left
         plain = seed_band(A, tests, [runs[f"0-{k}"]["exact"] for k in (0, 1, 2)], ENC)
         ex = data_text("attention → noitnetta", font=MONO, font_size=24, color=GREY_A).to_corner(UR, buff=0.5)
         leg = legend([(ENC, r"encoder--decoder, \ one vector")], font_size=22).next_to(ex, DOWN, buff=0.3)

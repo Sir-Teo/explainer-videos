@@ -97,11 +97,17 @@ Run from the repo root:
 
 ```
 python tools/make.py ai10                               # everything: the computations, then the films, resumable
-nice -n 15 python -m videos.ai.ai10.compute             # every experiment: about two hours on two CPU cores
+nice -n 15 python -m videos.ai.ai10.compute             # every experiment (see below for how long)
 nice -n 15 python -m videos.ai.ai10.compute charlstm    # one item (--force to recompute)
 python tools/build.py ai10                              # English
 python tools/build.py ai10 --lang zh                    # Chinese
 ```
+
+How long: here, on two threads of a shared four-core Linux server that was running other jobs at the same time, the
+experiments took about ten hours in all: the character LSTM two and a half, the memory task and seq2seq over an hour
+each, the CIFAR-10 network, adversarial training, the data-size curve, dropout and the activations 40 to 55 minutes
+each, the rest minutes. A quiet machine is faster. `make.py` first computes the parts whose results this one reads
+(Parts 1, 7 and 9) and what those read in turn (Parts 5 and 6), which adds their own time.
 
 The data: MNIST from PyTorch's mirror of the original files and CIFAR-10 from Alex Krizhevsky's page, downloaded
 once into `.cache/ai10/` (resuming a broken download) and accepted only if their SHA-256 matches (`data.py`); Part 1's

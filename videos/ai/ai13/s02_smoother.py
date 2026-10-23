@@ -72,7 +72,7 @@ class Smoother(VoiceoverScene):
         ql_lab.add_updater(lambda m: m.next_to(ax.c2p(qv.get_value(), yhi), UP, buff=0.05))
         cite_ = cite(r"E.~A.~Nadaraya (1964); \ G.~S.~Watson (1964)", corner=DR)
         with self.voiceover(
-            "Here's part seven's data again: how often each page of Great Expectations says 'her'. Suppose you want a "
+            "Here is Part 7's data again: how often each page of Great Expectations says 'her'. Suppose you want a "
             "smooth guess for page one hundred and twenty. <bookmark mark='a'/> Take a weighted average of every "
             "page, weighting each by how close it is: a bump of weights, centered on the page you're asking about. "
             "<bookmark mark='b'/> Pages near the query count a lot, far ones not at all. The weights are positive "

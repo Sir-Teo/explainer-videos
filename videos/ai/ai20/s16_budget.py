@@ -121,8 +121,8 @@ class Budget(VoiceoverScene):
         fll = label(r"real digits", font_size=16, color=DATA).next_to(fl, RIGHT, buff=0.08)
         fh = label(r"FID \ (lower is better; \ bar: mean, \ whisker: three seeds)", font_size=20, color=GREY_A)
         fh.next_to(ch, UP, buff=0.35)
-        g = axes([0, 1], [0, 1], x_length=4.0, y_length=4.0, xlabel=r"precision", ylabel=r"recall",
-                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[3.6, -0.3, 0])
+        g = axes([0, 1], [0, 1], x_length=4.0, y_length=4.0, xlabel=r"precision{}", ylabel=r"recall",
+                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[3.6, -0.3, 0])  # "{}": a zh key of its own (the shared table has bare "precision" as 精度)
         dots = VGroup()
         for f in ORDER:
             for r in e["table"][f]:

@@ -454,7 +454,13 @@ ZH = {
         "现在让LSTM来玩本系列的游戏：猜下一个字符。<bookmark mark='a'/>每个字符变成一个学出来的向量；一层{m['hidden']}个LSTM细胞按顺序读它们；一个softmax猜下一个。总共{m['params']:,}个权重。<bookmark mark='b'/>我们照安德烈·卡帕西2015年的char-rnn那样训练它：把三十部小说切成{n_read}长段，每段一个读者，每步{m['bptt']}个字符，记忆一步一步地带下去，而梯度在每一步的边上截断。<bookmark mark='c'/>它读了{m['chars_seen'] / 1000000.0:.1f}百万个字符，大约是这些书的{100 * m['chars_seen'] / m['train_chars']:.0f}%，只读一遍，在这台计算机上用了{mins:.0f}分钟。",
 
     'f"Here is its training, scored as always':
-        "这是它的训练过程，照例在记分牌那段《马耳他之鹰》上打分，它从来没见过这段文字。<bookmark mark='a'/>它从每字符{e0:.1f}比特开始，在{m['K']}个符号里瞎猜，写出来的是噪声。<bookmark mark='b'/>不到{snaps[i_mid][0]:,}步，它就能写出单词和空格，每字符{mid_bits:.2f}比特。<bookmark mark='c'/>{end}",
+        "这是它的训练过程，照例在记分牌那段《马耳他之鹰》上打分，它从来没见过这段文字。<bookmark mark='a'/>它从每字符{e0:.1f}比特开始，在{m['K']}个符号里瞎猜，写出来的是噪声。<bookmark mark='b'/>{mid_s}<bookmark mark='c'/>{end}",
+
+    "f'Within {snaps[i_mid][0]:,} steps it writes words and spaces":
+        "不到{snaps[i_mid][0]:,}步，它就能写出单词和空格，每字符{mid_bits:.2f}比特。",
+
+    'f"After {snaps[i_mid][0]:,} steps it is at {mid_bits:.2f} bits per character':
+        "{snaps[i_mid][0]:,}步之后，它到了每字符{mid_bits:.2f}比特，不过写出来的还不像单词。",
 
     'f"By the end, {pb:.2f} bits per character on the passage: below Part 9\'s neural model, and':
         "到最后，在测试段落上是每字符{pb:.2f}比特：低于第9部分的神经模型，也低于克内瑟-奈伊的{kn:.2f}。",
