@@ -88,8 +88,8 @@ class Meet(VoiceoverScene):
         out = node_box(r"image", DATA, font_size=24).move_to([4.2, 0.8, 0])
         A = lambda a, b: Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
         arrs = VGroup(A(x, enc), A(enc, book), A(book, grid), A(grid, dec), A(dec, out))
-        nl = label(r"each vector snapped to its nearest code; \ gradients pass straight through the snap",
-                   font_size=20, color=GREY_A).move_to([-0.8, -0.8, 0])
+        nl = label(r"each vector snapped to its nearest code; \\ gradients pass straight through the snap",
+                   font_size=20, color=GREY_A).move_to([-3.6, -0.95, 0])
         prior = node_box(r"an autoregressive model over the tokens", AR, font_size=22).move_to([0.2, -1.6, 0])
         pa = Arrow(prior.get_top(), grid.get_bottom(), buff=0.08, color=AR, stroke_width=2.5)
         hist = VGroup(
@@ -252,10 +252,10 @@ class Meet(VoiceoverScene):
         # dozens of passes against one
         passes = VGroup(*[Square(0.16, stroke_width=0, fill_color=DIFF, fill_opacity=0.8) for _ in range(50)])
         passes.arrange_in_grid(2, 25, buff=0.06).move_to([0.6, 1.2, 0])
-        pl_ = label(r"diffusion: \ dozens of network passes per image", font_size=22, color=DIFF)
+        pl_ = label(r"diffusion: \\ dozens of network passes per image", font_size=22, color=DIFF)
         pl_.next_to(passes, LEFT, buff=0.3)
         one = Square(0.16, stroke_width=0, fill_color=GAN_C, fill_opacity=0.9).move_to(passes[0]).shift(DOWN * 1.2)
-        ol = label(r"a generator: \ one", font_size=22, color=GAN_C).next_to(one, LEFT, buff=0.3).align_to(pl_, RIGHT)
+        ol = label(r"a generator: \ one pass", font_size=22, color=GAN_C).next_to(one, LEFT, buff=0.3).align_to(pl_, RIGHT)
         pgroup = VGroup(passes, pl_, one, ol)
         with self.voiceover(
             "And the GAN didn't die. Diffusion needs dozens of network passes per image; a generator needs one. "

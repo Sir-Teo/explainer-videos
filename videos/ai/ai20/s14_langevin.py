@@ -115,15 +115,16 @@ class Langevin(VoiceoverScene):
                             font_size=22).move_to([2.6, -2.1, 0])
         # a picture of the algorithm: particles in a double well, drifting downhill and kicked at random
         U = lambda x: 1.2 * (x ** 2 - 1) ** 2
-        wa = axes([-1.8, 1.8], [0, 3.0], x_length=5.4, y_length=2.0, xlabel=r"$x$", ylabel=r"energy $E(x)$",
+        wa = axes([-1.7, 1.7], [0, 3.2], x_length=5.4, y_length=2.0, xlabel=r"$x$", ylabel=r"energy $E(x)$",
                   xticks=[], yticks=[], center=[-3.4, -2.5, 0])
-        well = curve(wa.ax, np.linspace(-1.8, 1.8, 200), U(np.linspace(-1.8, 1.8, 200)), EBM, 3)
+        xw = np.linspace(-1.6, 1.6, 200)  # U(1.6) is about 3: the curve stays inside the axes
+        well = curve(wa.ax, xw, U(xw), EBM, 3)
         rg = np.random.default_rng(5)
-        xs_ = rg.uniform(-1.6, 1.6, 36)
+        xs_ = rg.uniform(-1.5, 1.5, 36)
         traj = [xs_.copy()]
         for _ in range(160):  # Langevin on p = e^-E: x += (eta/2)(-E') + sqrt(eta) noise
             xs_ = np.clip(xs_ - 0.01 * 4.8 * xs_ * (xs_ ** 2 - 1) + np.sqrt(0.02) * rg.standard_normal(len(xs_)),
-                          -1.75, 1.75)
+                          -1.58, 1.58)
             traj.append(xs_.copy())
         traj = np.array(traj)
         tt = ValueTracker(0.0)
