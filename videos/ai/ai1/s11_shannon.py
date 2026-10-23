@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import MONO, letter_row, load
+from videos.ai.ai1.common import MONO, PART, letter_row, load
 
 
 class Shannon1951(VoiceoverScene):
@@ -17,9 +17,9 @@ class Shannon1951(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(8, r"Shannon's 1951 experiment", r"How much information is there in English, really?",
-                            lit=(1951,), part=1)
-        with self.voiceover("Chapter eight. Back to Shannon's guessing game, now that we have the tools to read it.") as vo:
+        card = chapter_card(10, r"Shannon's 1951 experiment", r"How much information is there in English, really?",
+                            lit=(1951,), part=PART)
+        with self.voiceover("Chapter ten. Back to Shannon's guessing game, now that we have the tools to read it.") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -86,7 +86,6 @@ class Shannon1951(VoiceoverScene):
         q = np.asarray(g["passage_ranks_q"])
         up, lo = float(g["upper"]), float(g["lower"])
         n = int(g["n"])
-        assert abs(q[0] - 0.579) < 0.001 and abs(up - 2.37) < 0.005 and abs(lo - 1.36) < 0.005
         head = label(rf"Our counting guesser on the Falcon passage: \ ${n:,}$ letters".replace(",", "{,}"),
                      font_size=32).to_edge(UP, buff=0.4)
         sub = label(r"guesses in order of how often each letter followed the last six letters in the books",
@@ -113,9 +112,10 @@ class Shannon1951(VoiceoverScene):
         lsrc = note(r"lower bound: \ Shannon (1951), for an ideal guesser").next_to(own, DOWN, buff=0.2).align_to(rows, LEFT)
         tag = computed_tag()
         with self.voiceover(
-            "Let's play the game with our counting model from the last chapter, as the guesser, on twelve thousand "
-            "letters of the Falcon passage. <bookmark mark='a'/> It gets the letter on the first guess 58 percent of "
-            "the time, on the second 13 percent, and the tail runs on from there."
+            "Let's play the game with our counting model from the last chapter, as the guesser, on "
+            f"{n:,} letters of the Falcon passage. <bookmark mark='a'/> It gets the letter on the first guess "
+            f"{100 * q[0]:.0f} percent of the time, on the second {100 * q[1]:.0f} percent, and the tail runs on from "
+            "there."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(tag))
             vo.wait_until("a")
@@ -123,8 +123,8 @@ class Shannon1951(VoiceoverScene):
                       run_time=2.0)
             self.play(FadeIn(vals))
         with self.voiceover(
-            "From those frequencies, the upper bound is 2.37 bits per letter. <bookmark mark='a'/> Shannon also "
-            "proved a lower bound from the same numbers: 1.36 bits. The true information content of the passage, "
+            f"From those frequencies, the upper bound is {up:.2f} bits per letter. <bookmark mark='a'/> Shannon also "
+            f"proved a lower bound from the same numbers: {lo:.2f} bits. The true information content of the passage, "
             "for a guesser like this one, lies in between."
         ) as vo:
             self.play(Write(rows[0]))
@@ -171,8 +171,9 @@ class Shannon1951(VoiceoverScene):
         src.next_to(head, DOWN, buff=0.1)
         with self.voiceover(
             "Shannon's own subjects did far better. <bookmark mark='a'/> Given a hundred letters of context, his "
-            "estimates put printed English between 0.6 and 1.3 bits per letter, <bookmark mark='b'/> against 1.4 to "
-            "2.4 for our counting guesser with six. <bookmark mark='c'/> The difference is knowledge: people know "
+            f"estimates put printed English between {lo_h:.1f} and {hi_h:.1f} bits per letter, <bookmark mark='b'/> "
+            f"against {float(g['lower']):.1f} to {float(g['upper']):.1f} for our counting guesser with six. "
+            "<bookmark mark='c'/> The difference is knowledge: people know "
             "words and grammar, they know idioms, they know what the story is about, and they know how the world "
             "works."
         ) as vo:

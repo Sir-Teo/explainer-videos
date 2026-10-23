@@ -187,6 +187,7 @@ class Sphere(VoiceoverScene):
         al = [np.mean([runs[k]["final"]["align_z"] for k in keys[TAU_KEY[t]]]) for t in TAUS]
         un = [np.mean([runs[k]["final"]["unif_z"] for k in keys[TAU_KEY[t]]]) for t in TAUS]
         means = np.array([x.mean() for x in lin])
+        few = np.array([np.mean([runs[k]["final"]["few"] for k in keys[TAU_KEY[t]]]) for t in TAUS])
         lo = float(np.floor((min(x.min() for x in lin) - 0.01) * 100) / 100)
         ch = bars_chart(means, [SIMCLR] * 5, [rf"$\tau = {t}$" for t in TAUS], height=3.0, bar_w=0.7, gap=0.35,
                         vmin=lo, vmax=1.0, spread=[(x.min(), x.max()) for x in lin], digits=1,
@@ -203,17 +204,30 @@ class Sphere(VoiceoverScene):
             pts.add(VGroup(d, MathTex(rf"\tau = {t}", font_size=22, color=GREY_A).next_to(d, UR, buff=0.06)))
         best = int(np.argmax(means))
         worst = int(np.argmin(means))
+        fb, fw = int(np.argmax(few)), int(np.argmin(few))
+        fewrow = VGroup(label(r"10 labels per digit:", font_size=18, color=GREY_A))
+        for b_, v_ in zip(ch.bars, few):
+            fewrow.add(MathTex(pct(v_), font_size=22, color=SIMCLR).move_to([b_.get_x(), 0, 0]))
+        fewrow.set_y(ch.names.get_bottom()[1] - 0.35)
+        fewrow[0].next_to(fewrow[1], LEFT, buff=0.3)
+        if fewrow[0].get_left()[0] < -6.9:
+            fewrow[0].next_to(fewrow[1:], DOWN, buff=0.15).align_to(fewrow[1], LEFT)
         n_seed = [len(keys[TAU_KEY[t]]) for t in TAUS]
         ends_bad = means[0] < means[best] - 0.003 and means[-1] < means[best] - 0.003
-        line = (f"Accuracy peaks in the middle, at tau {TAUS[best]}, with {pct(means[best])} percent, and falls off "
-                f"at both ends: {pct(means[0])} at tau {TAUS[0]}, {pct(means[-1])} at tau {TAUS[-1]}."
-                if ends_bad and 0 < best < 4 else
-                f"The best is tau {TAUS[best]}, with {pct(means[best])} percent; the worst, tau {TAUS[worst]}, with "
-                f"{pct(means[worst])}.")
-        low_t_unif = un[0] < un[-1]
-        geo = ("Low temperatures spread the points most evenly, and pay for it in alignment; high temperatures "
-               "align the views and leave the points bunched." if low_t_unif and al[0] > al[-1] else
-               "The temperature moves each run along the trade between the two terms.")
+        if ends_bad and 0 < best < 4:
+            line = (f"Accuracy peaks in the middle, at tau {TAUS[best]}, with {pct(means[best])} percent, and falls "
+                    f"off at both ends: {pct(means[0])} at tau {TAUS[0]}, {pct(means[-1])} at tau {TAUS[-1]}.")
+        else:
+            line = (f"With every label behind it, the linear probe barely notices: all five land within "
+                    f"{pct(means.max() - means.min())} points, best at tau {TAUS[best]}, worst at tau {TAUS[worst]}. "
+                    f"With ten labels per digit the gap widens: from {pct(few[fw])} percent at tau {TAUS[fw]} to "
+                    f"{pct(few[fb])} at tau {TAUS[fb]}.")
+        iu, ia = int(np.argmin(un)), int(np.argmin(al))
+        if iu != ia:
+            geo = (f"The most even spread comes at tau {TAUS[iu]}, the tightest pairs at tau {TAUS[ia]}: no "
+                   f"temperature wins both terms.")
+        else:
+            geo = f"Tau {TAUS[iu]} wins both terms at once."
         tg = tag(rf"computed: \ ${n_seed[2]}$ seeds at $\tau = 0.2$, \ ${n_seed[0]}$ at the others")
         with self.voiceover(
             "We trained SimCLR at five temperatures, from 0.05 to 1. <bookmark mark='a'/> "
@@ -223,6 +237,7 @@ class Sphere(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in ch.bars], lag_ratio=0.15), FadeIn(ch.whiskers),
                       FadeIn(ch.vals), run_time=2.0)
+            self.play(FadeIn(fewrow))
             vo.wait_until("b")
             self.play(FadeIn(ax), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.2))
         self.wait(0.3)

@@ -263,14 +263,16 @@ ZH.update({
         '准确率在中间达到峰值，τ为{TAUS[best]}时是{pct(means[best])}%，两端都下降：τ为{TAUS[0]}时是{pct(means[0])}%，'
         'τ为{TAUS[-1]}时是{pct(means[-1])}%。',
 
-    "f'The best is tau {TAUS[best]}, with {pct(means[best])} percent":
-        '最好的是τ为{TAUS[best]}，{pct(means[best])}%；最差的是τ为{TAUS[worst]}，{pct(means[worst])}%。',
+    "f'With every label behind it, the linear probe barely notices":
+        '有全部标签撑腰，线性探针几乎察觉不到差别：5个温度相差在{pct(means.max() - means.min())}个百分点以内，'
+        'τ为{TAUS[best]}时最好，τ为{TAUS[worst]}时最差。每个数字只给10个标签时，差距拉开了：从τ为{TAUS[fw]}时的'
+        '{pct(few[fw])}%，到τ为{TAUS[fb]}时的{pct(few[fb])}%。',
 
-    'Low temperatures spread the points most evenly, and pay for it in alignment':
-        '低温度把点铺得最均匀，代价是对齐变差；高温度让视图对齐，却让点聚成一团。',
+    "f'The most even spread comes at tau {TAUS[iu]}":
+        '分布最均匀的是τ为{TAUS[iu]}，配对最紧的是τ为{TAUS[ia]}：没有哪个温度能同时赢下两项。',
 
-    'The temperature moves each run along the trade between the two terms.':
-        '温度让每次训练沿着两项之间的权衡移动。',
+    "f'Tau {TAUS[iu]} wins both terms at once.'":
+        'τ为{TAUS[iu]}时两项同时最好。',
 
     'f"The temperature has a second effect.':
         "温度还有第二个作用。在softmax里，每个负样本按它的权重施加推力，而权重取决于它已经有多相似。<bookmark mark='a'/>τ为{lo_t}时，"

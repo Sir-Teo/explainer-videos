@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, MONO, load, plain_axes, polyline
+from videos.ai.ai1.common import ALPHA27, MONO, PART, load, plain_axes, polyline
 
 
 class Counting(VoiceoverScene):
@@ -13,15 +13,16 @@ class Counting(VoiceoverScene):
         self.rule()
         self.curves()
         self.sparsity()
+        self.laplace()
         self.reading()
         self.writing()
         self.lesson()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(7, r"Learning by counting", r"How far can you get by remembering what came next?",
-                            lit=(1948,), part=1)
-        with self.voiceover("Chapter seven. So far, our models have only counted. How far can counting go?") as vo:
+        card = chapter_card(9, r"Learning by counting, and Laplace's rule",
+                            r"How far can you get by remembering what came next?", lit=(1948,), part=PART)
+        with self.voiceover("Chapter nine. So far, our models have only counted. How far can counting go?") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -58,21 +59,21 @@ class Counting(VoiceoverScene):
         lines.set_x(0)
         if lines.width > 13.4:
             lines.width = 13.4
+        six = " ".join(s["7"].split()[:5])
         with self.voiceover(
             "In 1948, Shannon showed what counting can do by letting counting models write. <bookmark mark='a'/> "
             "With every symbol equally likely, you get noise. <bookmark mark='b'/> With the right letter "
             "frequencies, still noise, but with the right texture. <bookmark mark='c'/> Pick each letter by what "
             "followed the previous one in our books, and syllables appear. <bookmark mark='d'/> With two letters of "
             "context, short words. <bookmark mark='e'/> With four, mostly real words. <bookmark mark='f'/> With "
-            "six, phrases: mariners would be by many night. <bookmark mark='g'/> Count whole words instead, and "
-            "you get something that almost scans."
+            f"six, phrases: {six}. <bookmark mark='g'/> Count whole words instead, and you get something that almost "
+            "scans."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             for k, mark in enumerate("abcdefg"):
                 vo.wait_until(mark)
                 g = lines[k]
                 self.play(FadeIn(g[0]), AddTextLetterByLetter(g[1], time_per_char=0.012), run_time=1.0)
-        assert s["7"].startswith("mariners would be by many night")
         self.wait(0.3)
         self.clear_scene()
 
@@ -81,17 +82,22 @@ class Counting(VoiceoverScene):
         head = label(r"The counting model", font_size=38).to_edge(UP, buff=0.5)
         f = mtex(r"q(c \mid \text{context}) = \frac{n(\text{context},\, c)}{n(\text{context})}", font_size=48)
         f.next_to(head, DOWN, buff=0.6)
-        ex = mtex(r"q(\texttt{u} \mid \texttt{q}) = \frac{18{,}469}{18{,}496}", font_size=36, color=GREY_A)
+        lt, bg = load("letters"), load("bigram")
+        qi, ui = ALPHA27.index("q"), ALPHA27.index("u")
+        n_q = int(lt["counts"][qi])
+        n_qu = int(round(float(bg["joint"][qi, ui]) * int(lt["n"])))
+        ex = mtex(r"q(\texttt{u} \mid \texttt{q}) = " + rf"\frac{{{n_qu:,}}}{{{n_q:,}}}".replace(",", "{,}"),
+                  font_size=36, color=GREY_A)
         ex.next_to(f, DOWN, buff=0.5)
         cap = label(r"what followed this context in the books, as a fraction of the times it appeared", font_size=26,
                     color=GREY_A).next_to(ex, DOWN, buff=0.4)
-        mle = label(r"(this is the \textit{maximum likelihood} estimate: Chapter 9)", font_size=24, color=GREY_B)
+        mle = label(r"(this is the \textit{maximum likelihood} estimate: Chapter 11)", font_size=24, color=GREY_B)
         mle.next_to(cap, DOWN, buff=0.3)
         with self.voiceover(
             "The rule behind all of these is simple. <bookmark mark='a'/> The probability of the next symbol, given "
             "a context, is the number of times it followed that context in the books, divided by the number of "
             "times the context appeared. <bookmark mark='b'/> It's the most natural estimate there is, and in "
-            "chapter nine we'll see why it's also the best one, for the books themselves."
+            "chapter eleven we'll see why it's also the best one, for the books themselves."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -110,8 +116,7 @@ class Counting(VoiceoverScene):
         plug = np.array([r["plugin"] for r in rows])
         test = np.array([r["test"] for r in rows])
         best = int(d["best"])
-        assert best == 5 and abs(test[best] - 2.018) < 0.001 and abs(plug[-1] - 0.274) < 0.001
-        assert abs(test[-1] - 4.144) < 0.001
+        sh27 = [float(v) for v in d["shannon_27"]]
         ax = plain_axes([0, 14, 2], [0, 5, 1], 9.6, 5.0).shift(DOWN * 0.45 + LEFT * 0.6)
         xl = VGroup(*[MathTex(str(k), font_size=24, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.15)
                       for k in range(0, 15, 2)])
@@ -129,7 +134,7 @@ class Counting(VoiceoverScene):
         l_test.move_to(ax.c2p(7.0, 3.7))
         best_d = Dot(ax.c2p(best, test[best]), radius=0.09, color=WHITE)
         best_l = label(rf"best: \ $k = {best}$, \ ${test[best]:.2f}$ bits", font_size=24).next_to(best_d, UP, buff=0.25)
-        sh = [4.76, 4.03, 3.32]
+        sh = sh27[:3]
         sh_d = VGroup(*[Cross(scale_factor=0.08, stroke_color=C.HUMAN, stroke_width=3).move_to(ax.c2p(k - 1, v))
                         for k, v in zip(range(0, 3), sh) if k >= 1])
         sh_l = label(r"$\times$ \ Shannon's 1951 estimates, from printed tables", font_size=22, color=C.HUMAN)
@@ -141,9 +146,9 @@ class Counting(VoiceoverScene):
         with self.voiceover(
             "So let's score the counting models. For each amount of context, from no letters to fourteen, measure "
             "the bits per letter. <bookmark mark='a'/> First on the very books it counted. More context, fewer bits, "
-            "all the way down to a quarter of a bit per letter at fourteen letters. Our numbers for no context and "
-            "one letter of context, 4.08 and 3.33, <bookmark mark='b'/> land right next to the estimates Shannon made in 1951 "
-            "from printed tables."
+            f"all the way down to {plug[-1]:.2f} bits per letter at {ks[-1]} letters. Our numbers for no context and "
+            f"one letter of context, {plug[0]:.2f} and {plug[1]:.2f}, <bookmark mark='b'/> land next to the "
+            f"estimates Shannon made in 1951 from printed tables, {sh27[1]:.2f} and {sh27[2]:.2f}."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(uni), FadeIn(uni_l), FadeIn(tag))
             vo.wait_until("a")
@@ -153,9 +158,10 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(sh_d), FadeIn(sh_l))
         with self.voiceover(
             "But on new text, the Falcon passage, <bookmark mark='a'/> the story is different. More context helps at "
-            "first: <bookmark mark='b'/> the best is five letters of context, at 2.02 bits per letter. Beyond that, "
-            "it gets worse, and with fourteen letters of context it's worse than knowing nothing but letter "
-            "frequencies."
+            f"first: <bookmark mark='b'/> the best is {best} letters of context, at {test[best]:.2f} bits per letter. "
+            "Beyond that, it gets worse"
+            + (f", and with {ks[-1]} letters of context it's worse than knowing nothing but letter frequencies."
+               if test[-1] > test[0] else f", up to {test[-1]:.2f} bits with {ks[-1]} letters of context.")
         ) as vo:
             vo.wait_until("a")
             self.play(Create(c_test), FadeIn(d_test), run_time=2.0)
@@ -182,23 +188,19 @@ class Counting(VoiceoverScene):
         t = label(r"contexts in the passage that\\ ever occur in the books", font_size=22, color=C.CONTEXT)
         t.next_to(ax, UP, buff=0.2)
         xlab = label(r"letters of context $k$", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.45)
-        assert seen[5] > 0.98 and seen[14] < 0.3
+        kL = int(ks[-1])
+        e20 = kL * np.log10(27)
         facts = VGroup(
-            mtex(r"27^{14} \approx 10^{20} \ \text{possible contexts}", font_size=32),
-            label(rf"the books contain ${nctx[14] / 1e6:.1f}$ million of them", font_size=28, color=GREY_A),
+            mtex(rf"27^{{{kL}}} \approx 10^{{{e20:.0f}}} \ \text{{possible contexts}}", font_size=32),
+            label(rf"the books contain ${nctx[kL] / 1e6:.1f}$ million of them", font_size=28, color=GREY_A),
             label(r"an unseen context: \ $q = \frac{0}{0}$; \ an unseen letter: \ $q = 0$, \ surprise $= \infty$",
                   font_size=26, color=C.SURPRISE),
-            mtex(r"q_\alpha(c \mid \text{ctx}) = \frac{n(\text{ctx}, c) + \alpha}{n(\text{ctx}) + 27\alpha}",
-                 font_size=36, color=C.BITS),
-            label(r"\textit{smoothing}: \ pretend every letter was seen $\alpha$ extra times \\ ($\alpha$ chosen on "
-                  r"held-out text from the books)", font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.3).move_to(RIGHT * 3.4 + DOWN * 0.2)
+        ).arrange(DOWN, buff=0.35).move_to(RIGHT * 3.4 + DOWN * 0.2)
         if facts.width > 6.8:
             facts.width = 6.8
         # contexts multiply: every 2-letter context, then the 4-letter contexts inside one of them, then all of those
         g = load("ctxgrid")
         seen2, grid4 = np.asarray(g["seen2"]), np.asarray(g["grid4"])
-        assert abs(g["frac2"] - 0.894) < 0.001 and abs(g["frac4"] - 0.112) < 0.001
         G, cx, cy = 4.0, 3.5, -0.55
         cell = G / 27
         dark, lit = ManimColor("#1A2030"), ManimColor(C.CONTEXT)
@@ -219,18 +221,18 @@ class Counting(VoiceoverScene):
         img.height = G
         img.move_to([cx, cy, 0])
         home = np.array([cx - G / 2 + (hi + 0.5) * cell, cy + G / 2 - (ti + 0.5) * cell, 0])
-        l2 = label(r"$2$ letters: \ $27^2 = 729$ contexts", font_size=26, color=C.CONTEXT).next_to(g2, UP, buff=0.2)
+        l2 = label(rf"$2$ letters: \ $27^2 = 729$ contexts; \ the books have ${100 * g['frac2']:.0f}\%$", font_size=26,
+                   color=C.CONTEXT).next_to(g2, UP, buff=0.2)
         lth = label(r"\texttt{th} then $2$ more: \ $27^2$ again", font_size=26, color=C.CONTEXT).next_to(g2, UP, buff=0.2)
         l4 = label(rf"$4$ letters: \ $27^4 = 531{{,}}441$; \ the books have ${100 * g['frac4']:.0f}\%$", font_size=26,
                    color=C.CONTEXT).next_to(g2, UP, buff=0.2)
         with self.voiceover(
             "The reason is that contexts multiply. <bookmark mark='a'/> Of all the five-letter contexts in the Falcon "
-            "passage, ninety-nine percent appear somewhere in the books. Of the fourteen-letter contexts, only about "
-            "a quarter do. <bookmark mark='b'/> There are about ten to the twenty possible fourteen-letter contexts, "
-            "and the books contain under seventeen million of them. <bookmark mark='c'/> A context the books never "
-            "saw gives the model nothing to go on, and a letter never seen after it would get probability zero: "
-            "infinite surprise. <bookmark mark='d'/> The patch is called smoothing: pretend every letter was seen a "
-            "few extra times. That's what keeps these curves finite."
+            f"passage, {100 * seen[5]:.0f} percent appear somewhere in the books. Of the {kL}-letter contexts, only "
+            f"{100 * seen[kL]:.0f} percent do. <bookmark mark='b'/> There are about ten to the {e20:.0f} possible "
+            f"{kL}-letter contexts, and the books contain {nctx[kL] / 1e6:.1f} million of them. <bookmark mark='c'/> A "
+            "context the books never saw gives the model nothing to go on, and a letter never seen after it would get "
+            "probability zero: infinite surprise."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(t), FadeIn(xlab),
                       LaggedStart(*[FadeIn(q) for q in g2], lag_ratio=0.002), FadeIn(l2), run_time=1.6)
@@ -243,11 +245,110 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(sub, lag_ratio=0.002), FadeOut(th), run_time=1.0)
             self.play(sub.animate.scale(1 / 27).move_to(home), FadeIn(img), ReplacementTransform(lth, l4), run_time=1.6)
             self.remove(sub)
+            self.play(FadeOut(img), FadeOut(l4), FadeIn(facts[0]), FadeIn(facts[1]))
             vo.wait_until("c")
-            self.play(FadeOut(img), FadeOut(l4), FadeIn(facts[0]), FadeIn(facts[1]), FadeIn(facts[2]))
+            self.play(FadeIn(facts[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def laplace(self):
+        """Laplace's rule of succession, add-one and add-alpha smoothing, and what alpha costs at each context length."""
+        sm = load("smoothing")
+        A = np.asarray(sm["alphas"], float)
+        orders = [int(o) for o in sm["orders"]]
+        lap = list(A).index(1.0)
+        head = label(r"Laplace's rule of succession (1814)", font_size=36).to_edge(UP, buff=0.35)
+        rows = [
+            cmath(r"P(\text{next success})", r"=", r"\frac{\int_0^1 \theta^{s+1} (1-\theta)^{n-s}\, d\theta}"
+                  r"{\int_0^1 \theta^{s} (1-\theta)^{n-s}\, d\theta}", font_size=34),
+            cmath(r"P(\text{next success})", r"=", r"\frac{s + 1}{n + 2}", font_size=38),
+            cmath(r"q(c \mid \text{ctx})", r"=", r"\frac{n(\text{ctx}, c) + 1}{n(\text{ctx}) + 27}", font_size=36),
+            cmath(r"q_\alpha(c \mid \text{ctx})", r"=", r"\frac{n(\text{ctx}, c) + \alpha}{n(\text{ctx}) + 27\alpha}",
+                  font_size=36, colors={r"q_\alpha(c \mid \text{ctx})": C.BITS}),
+        ]
+        whys = [why(r"every chance $\theta$ equally likely beforehand; \ $s$ successes in $n$ trials"),
+                why(r"Euler's beta integral"), why(r"$27$ outcomes: \ add one to every count"),
+                why(r"add $\alpha$: \ a prior less sure that anything can happen")]
+        step = ladder(self, rows, whys, keep=2, top=2.2, x=-1.8, buff=0.5, edge=6.9)
+        sun = label(r"Laplace: \ $5{,}000$ years of sunrises, \ $1{,}826{,}213$ days $\Rightarrow$ odds of "
+                    r"$1{,}826{,}214$ to $1$ on tomorrow", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
+        src = cite(r"P.-S.~Laplace, \textit{Essai philosophique sur les probabilit\'es} (1814)", corner=DR)
+        with self.voiceover(
+            "The patch is older than computers. In 1814 Pierre-Simon Laplace asked: if something has happened s "
+            "times in n tries, how likely is it next time? <bookmark mark='a'/> Suppose that, before looking, every "
+            "chance between zero and one was equally plausible. Weigh each chance by how well it explains what you "
+            "saw, <bookmark mark='b'/> and the answer is s plus one, over n plus two. <bookmark mark='c'/> His "
+            "example was the sunrise: five thousand years of it, 1,826,213 days, gives odds of 1,826,214 to one "
+            "that the sun rises tomorrow. <bookmark mark='d'/> For our 27 symbols, the same reasoning says: add one "
+            "to every count. Nothing ever gets probability zero. <bookmark mark='e'/> Add alpha instead of one, and "
+            "you have the smoothing that keeps our curves finite, with alpha chosen on held-out text."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(src))
+            step(0)
+            vo.wait_until("a")
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            self.play(FadeIn(sun))
             vo.wait_until("d")
-            self.play(Write(facts[3]), FadeIn(facts[4]))
-        assert 16e6 < nctx[14] < 17e6
+            self.play(FadeOut(sun), FadeOut(src))
+            step(2)
+            vo.wait_until("e")
+            step(3)
+        self.wait(0.3)
+        self.clear_scene()
+        # how much alpha matters, at each context length
+        cols = dict(zip(orders, (GREY_B, C.COUNTING, C.SURPRISE, C.BITS)))
+        T = {o: np.asarray(sm[f"test_{o}"]) for o in orders}
+        V = {o: np.asarray(sm[f"valid_{o}"]) for o in orders}
+        lo_y = min(float(T[o].min()) for o in orders) - 0.2
+        hi_y = min(4.75, max(float(T[o].max()) for o in orders) + 0.1)
+        a = axes([-4, 1], [lo_y, hi_y], x_length=7.4, y_length=4.4, xlabel=r"$\alpha$ \ (log scale)",
+                 ylabel=r"bits per letter on the Falcon passage", xticks=[-4, -3, -2, -1, 0, 1],
+                 yticks=[round(v, 1) for v in np.arange(np.ceil(lo_y * 2) / 2, hi_y, 0.5)],
+                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.2, -0.45, 0], font_size=20)
+        ax = a.ax
+        lx = np.log10(A)
+        lines = VGroup(*[curve(ax, lx, np.minimum(T[o], hi_y), cols[o], 3.5) for o in orders])
+        best = {o: int(np.argmin(V[o])) for o in orders}
+        marks = VGroup()
+        for o in orders:
+            marks.add(Dot(ax.c2p(lx[best[o]], T[o][best[o]]), radius=0.07, color=cols[o]))
+            marks.add(Square(0.16, stroke_color=cols[o], stroke_width=2.5).move_to(ax.c2p(0, min(T[o][lap], hi_y))))
+        lapl = DashedLine(ax.c2p(0, lo_y), ax.c2p(0, hi_y), color=GREY_B, stroke_width=1.5)
+        lapt = label(r"Laplace: \ $\alpha = 1$", font_size=20, color=GREY_B).next_to(ax.c2p(0, hi_y), UP, buff=0.08)
+        names = VGroup(*[label(rf"${o}$ letter{'s' if o > 1 else ''} of context", font_size=22, color=cols[o])
+                         for o in orders]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        key = VGroup(names, label(r"$\bullet$ \ $\alpha$ chosen on held-out text", font_size=20, color=GREY_A),
+                     label(r"$\square$ \ Laplace's add-one", font_size=20, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                buff=0.18)
+        key.move_to([4.6, 0.6, 0])
+        ol = orders[-1]
+        un = float(sm[f"unseen_pair_{ol}"])
+        tag = computed_tag()
+        cost = T[ol][lap] - T[ol][best[ol]]
+        short = orders[0]
+        short_said = ("For one letter of context, Laplace's rule is as good as anything"
+                      if abs(T[short][lap] - T[short][best[short]]) < 0.005 else
+                      f"For one letter of context, Laplace's rule costs {T[short][lap] - T[short][best[short]]:.3f} bits")
+        with self.voiceover(
+            "How much does alpha matter? <bookmark mark='a'/> Here is every alpha from a ten-thousandth to ten, at "
+            f"four context lengths, scored on the Falcon passage. <bookmark mark='b'/> {short_said}: its contexts "
+            f"are seen millions of times. <bookmark mark='c'/> With {ol} letters of context, {100 * un:.0f} percent of "
+            "the passage's letters come after a context where the books never showed that letter, and most contexts "
+            "were seen only a few times. Adding one to every count drowns the evidence: Laplace's rule costs "
+            f"{cost:.2f} bits per letter more than the alpha chosen on held-out text, {A[best[ol]]:.2f}. "
+            "Good smoothing is a question about what you haven't seen. Part 7 answers it properly."
+        ) as vo:
+            self.play(FadeIn(a), FadeIn(tag), Create(lapl), FadeIn(lapt))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(key), run_time=2.5)
+            vo.wait_until("b")
+            self.play(FadeIn(marks[0:2]))
+            vo.wait_until("c")
+            self.play(FadeIn(marks[2:]))
+            self.play(Indicate(marks[-1], color=WHITE, scale_factor=1.6))
         self.wait(0.3)
         self.clear_scene()
 
@@ -374,15 +475,16 @@ class Counting(VoiceoverScene):
         if key.width > 13.2:
             key.scale_to_fit_width(13.2)
         late = share[2:]
-        nothing = "nothing is" if max(late) == 0 else "almost nothing is"
-        assert share[0] > 0.8 and share[1] < share[0] and max(late) < 0.1 and bits[-1] < bits[0]
+        nothing = ("nothing is copied" if max(late) == 0 else
+                   (f"at most {100 * max(late):.0f} percent is copied" if max(late) >= 0.01 else "almost nothing is copied"))
+        recite = "it can only recite: " if share[0] > 0.5 else "it mostly invents, but "
         with self.voiceover(
             "Here's the five-letter model writing, as it reads, from the same start and with the same dice each "
-            f"time. <bookmark mark='a'/> After a thousand letters it can only recite: {100 * share[0]:.0f} percent "
-            "of what it writes, in red, is copied word for word, in stretches of twenty letters or more, from the "
+            f"time. <bookmark mark='a'/> After a thousand letters {recite}{100 * share[0]:.0f} percent "
+            f"of what it writes, in red, is copied word for word, in stretches of {L} letters or more, from the "
             f"little it has read. <bookmark mark='b'/> After ten thousand, {100 * share[1]:.0f} percent. "
             f"<bookmark mark='c'/> From a hundred thousand on, {nothing}: it strings real-looking words together "
-            f"on its own, <bookmark mark='d'/> and its score on the Falcon passage falls from {bits[0]:.2f} bits per "
+            f"on its own, <bookmark mark='d'/> and its score on the Falcon passage goes from {bits[0]:.2f} bits per "
             f"letter to {bits[-1]:.2f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr), FadeIn(key))
@@ -407,8 +509,8 @@ class Counting(VoiceoverScene):
         c = label(r"counting can't tell that \texttt{the dog barked} and \texttt{the hound barked} are alike",
                   font_size=28, color=GREY_A)
         g = VGroup(a, b, c).arrange(DOWN, buff=0.45).move_to(UP * 0.6)
-        pay = payoff_card([(r"smoothing, done properly", [6]), (r"generalization", [7]),
-                           (r"sharing strength between similar contexts", [2, 8])], font_size=24, title=r"")
+        pay = payoff_card([(r"smoothing, done properly", [7]), (r"generalization", [8]),
+                           (r"sharing strength between similar contexts", [3, 9])], font_size=24, title=r"")
         pay.next_to(g, DOWN, buff=0.7)
         with self.voiceover(
             "This is the first appearance of the central problem of machine learning. <bookmark mark='a'/> A model "

@@ -120,6 +120,8 @@ class Huffman(VoiceoverScene):
                                 color=GREY_A) for m in merges[:3]])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DL, buff=0.45)
         src = cite(r"G.~Stix, \textit{Profile: David A. Huffman}, Scientific American (1991)", corner=DR)
+        hc = history_card(1951, r"David Huffman, \ MIT", r"a term paper instead of the final exam: \ find the most "
+                          r"efficient binary code", width=5.6).to_corner(DL, buff=0.35)
         with self.voiceover(
             "Which code gets closest? In 1951 David Huffman, a graduate student in Robert Fano's class at MIT, was "
             "offered a choice: sit the final exam, or write a paper on finding the most efficient code. He chose "
@@ -127,9 +129,9 @@ class Huffman(VoiceoverScene):
             "join them under a new node whose probability is their sum. Then do it again with the two least likely "
             f"of what's left, and again, <bookmark mark='b'/> {len(merges)} times, until one tree holds everything."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*tree.leaves.values())), FadeIn(src))
+            self.play(FadeIn(head), FadeIn(VGroup(*tree.leaves.values())), FadeIn(src), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(side), FadeOut(src))
+            self.play(FadeOut(hc), FadeIn(side), FadeOut(src))
             groups = []
             for m in merges:
                 pre = prefix[int(m[2])]
@@ -190,21 +192,21 @@ class Huffman(VoiceoverScene):
             return g, pts
 
         lone, lp = mini(True)
-        lone.move_to([-4.2, -1.7, 0])
+        lone.scale(1.5).move_to([-4.2, -1.3, 0])
         fix = Arrow(lone[-1].get_center() + UP * 0.1, lone[-2].get_center() + DOWN * 0.05, buff=0.1, color=C.BITS,
                     stroke_width=3, max_tip_length_to_length_ratio=0.25)
-        t2 = label(r"a deepest leaf with no sibling: \\ move it up a level, \ $L$ drops", font_size=22, color=GREY_A)
+        t2 = label(r"a deepest leaf with no sibling: \\ move it up a level, \ $L$ drops", font_size=26, color=GREY_A)
         t2.next_to(lone, DOWN, buff=0.25)
         pair, pp = mini(False)
-        pair.move_to([1.0, -1.7, 0])
-        rx = VGroup(letter(ho["rare"][0], font_size=26, color=C.BITS).next_to(pair[-2], DOWN, buff=0.1),
-                    letter(ho["rare"][1], font_size=26, color=C.BITS).next_to(pair[-1], DOWN, buff=0.1))
-        t3 = label(r"so the deepest leaves come in pairs, \\ and the two rarest symbols can sit there", font_size=22,
+        pair.scale(1.5).move_to([0.8, -1.3, 0])
+        rx = VGroup(letter(ho["rare"][0], font_size=32, color=C.BITS).next_to(pair[-2], DOWN, buff=0.1),
+                    letter(ho["rare"][1], font_size=32, color=C.BITS).next_to(pair[-1], DOWN, buff=0.1))
+        t3 = label(r"so the deepest leaves come in pairs, \\ and the two rarest symbols can sit there", font_size=26,
                    color=GREY_A).next_to(pair, DOWN, buff=0.55)
-        rare_codes = VGroup(*[Text(c, font=MONO, font_size=22, color=C.BITS) for c in ho["rare_codes"]])
-        rare_codes.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.2, -1.4, 0])
-        rc_l = label(rf"in Huffman's code: \ \texttt{{{ho['rare'][0]}}} and \texttt{{{ho['rare'][1]}}}", font_size=22,
-                     color=GREY_A).next_to(rare_codes, UP, buff=0.15)
+        rare_codes = VGroup(*[Text(c, font=MONO, font_size=28, color=C.BITS) for c in ho["rare_codes"]])
+        rare_codes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -1.4, 0])
+        rc_l = label(rf"in Huffman's code: \ \texttt{{{ho['rare'][0]}}} and \texttt{{{ho['rare'][1]}}}", font_size=26,
+                     color=GREY_A).next_to(rare_codes, UP, buff=0.2)
         with self.voiceover(
             "Huffman proved that no prefix code does better, with a few exchanges. <bookmark mark='a'/> First: if "
             "a likelier symbol had a longer codeword than a rarer one, swapping the two codewords would shorten the "
@@ -215,9 +217,9 @@ class Huffman(VoiceoverScene):
             "exchange, the two rarest symbols can be put in such a pair: in Huffman's code, they are "
             f"{ho['rare'][0]} and {ho['rare'][1]}, differing only in the last bit."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Write(swap))
             vo.wait_until("a")
-            self.play(Write(swap), FadeIn(cond))
+            self.play(FadeIn(cond))
             self.play(FadeIn(ex))
             vo.wait_until("b")
             self.play(Create(lone), FadeIn(t2))
@@ -244,7 +246,31 @@ class Huffman(VoiceoverScene):
         VGroup(rows[0], expl).next_to(head, DOWN, buff=0.45)
         th = theorem_card(r"Huffman's code is optimal", r"no prefix code for single symbols has a smaller average length",
                           who=r"D.~A.~Huffman, \textit{A Method for the Construction of Minimum-Redundancy Codes} (1952)",
-                          width=9.0, color=C.BITS).move_to(DOWN * 0.5)
+                          width=9.0, color=C.BITS).move_to(DOWN * 1.35)
+
+        def small_tree(c, split):
+            r_, a_, m_ = c + np.array([0, 1.0, 0]), c + np.array([-0.9, 0.2, 0]), c + np.array([0.9, 0.2, 0])
+            b_, xy = m_ + np.array([-0.6, -0.8, 0]), m_ + np.array([0.6, -0.8, 0])
+            g_ = VGroup(Line(r_, a_, color=C.BIT0, stroke_width=3), Line(r_, m_, color=C.BIT1, stroke_width=3),
+                        Line(m_, b_, color=C.BIT0, stroke_width=3), Line(m_, xy, color=C.BIT1, stroke_width=3),
+                        *[Dot(q_, radius=0.06, color=GREY_A) for q_ in (r_, a_, m_, b_)])
+            if not split:
+                g_.add(Dot(xy, radius=0.09, color=C.BITS),
+                       MathTex(r"xy", font_size=30, color=C.BITS).next_to(xy, DOWN, buff=0.1),
+                       MathTex(r"p_x + p_y", font_size=26, color=C.BITS).next_to(xy, RIGHT, buff=0.15))
+            else:
+                x_, y_ = xy + np.array([-0.45, -0.8, 0]), xy + np.array([0.45, -0.8, 0])
+                g_.add(Line(xy, x_, color=C.BIT0, stroke_width=3), Line(xy, y_, color=C.BIT1, stroke_width=3),
+                       Dot(xy, radius=0.06, color=GREY_A), Dot(x_, radius=0.08, color=C.BITS), Dot(y_, radius=0.08, color=C.BITS),
+                       MathTex(r"x", font_size=30, color=C.BITS).next_to(x_, DOWN, buff=0.1),
+                       MathTex(r"y", font_size=30, color=C.BITS).next_to(y_, DOWN, buff=0.1),
+                       label(r"$+1$ bit each", font_size=22, color=C.BITS).next_to(VGroup(x_, y_), RIGHT, buff=0.2))
+            return g_
+
+        t_merged = small_tree(np.array([-3.6, 0.0, 0]), False)
+        t_split = small_tree(np.array([2.6, 0.0, 0]), True)
+        arr = Arrow([-1.5, 0.3, 0], [0.6, 0.3, 0], buff=0, color=GREY_B, stroke_width=3)
+        arr_l = label(r"split", font_size=24, color=GREY_B).next_to(arr, UP, buff=0.08)
         checks = VGroup(
             label(rf"its $26$ merged weights add up to $L$: \ ${merged:.3f}$", font_size=24, color=GREY_A),
             label(rf"every tree shape, searched: \ the best for the $27$ letters is ${opt:.3f}$", font_size=24,
@@ -264,11 +290,11 @@ class Huffman(VoiceoverScene):
             f"{merged:.3f}, Huffman's average. Search every possible shape of code tree for the letters: the best "
             f"is {same}. And on {n_tr} random alphabets, Huffman's code matched the exhaustive search every time."
         ) as vo:
-            self.play(FadeIn(head), Write(rows[0]))
+            self.play(FadeIn(head), Write(rows[0]), Create(t_merged))
             vo.wait_until("a")
-            self.play(FadeIn(expl))
+            self.play(FadeIn(expl), GrowArrow(arr), FadeIn(arr_l), TransformFromCopy(t_merged, t_split), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(th, shift=UP * 0.2))
+            self.play(FadeOut(VGroup(t_merged, t_split, arr, arr_l)), FadeIn(th, shift=UP * 0.2))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(c) for c in checks], lag_ratio=0.5), FadeIn(tag), run_time=2.5)
         self.wait(0.3)

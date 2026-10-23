@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import MONO, load, net_sketch, plain_axes, polyline, valley_steps
+from videos.ai.ai1.common import MONO, PART, load, net_sketch, plain_axes, polyline, valley_steps
 
 TOKENS = ["in", "on", "here", "back", "home"]  # illustrative continuations of "Come"
 
@@ -21,9 +21,9 @@ class Likelihood(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(9, r"Learning: likelihood, softmax, and the gradient", r"How does a model learn to guess?",
-                            part=1)
-        with self.voiceover("Chapter nine. So far our models were counted. Now let's see how a model learns.") as vo:
+        card = chapter_card(11, r"Learning: likelihood, softmax, and the gradient", r"How does a model learn to guess?",
+                            part=PART)
+        with self.voiceover("Chapter eleven. So far our models were counted. Now let's see how a model learns.") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -60,7 +60,7 @@ class Likelihood(VoiceoverScene):
         eqs = [cmath(*st, colors=colors, font_size=42).move_to(UP * 1.7) for st in steps]
         whys = [why(r"log of a product: \ the average surprise"),
                 why(r"group equal outcomes: \ $\hat p(x)$ $=$ the fraction of the data equal to $x$"),
-                why(r"Chapter 5")]
+                why(r"Chapter 7")]
         for w in whys:
             w.scale(1.1).move_to(UP * 0.85)
         src = cite(r"R.~A.~Fisher, \textit{On the Mathematical Foundations of Theoretical Statistics} (1922)", corner=DR)
@@ -119,7 +119,7 @@ class Likelihood(VoiceoverScene):
                     r"pulling $q_\theta$ toward the data", font_size=26, color=C.BITS).move_to(UP * 0.85)
         with self.voiceover(
             "So maximum likelihood, minimum cross-entropy, and minimum divergence from the data are one and the "
-            "same goal. It's the loss from chapter five, seen from the other side."
+            "same goal. It's the loss from chapter seven, seen from the other side."
         ) as vo:
             self.play(FadeOut(whys[2]), FadeIn(cap))
         self.wait(0.3)
@@ -134,7 +134,7 @@ class Likelihood(VoiceoverScene):
         b = mtex(r"D_{\mathrm{KL}}(\hat p \,\|\, q) \ge 0, \ \text{with equality only when } q = \hat p", font_size=38)
         c = label(r"the best $q$ is the data's own frequencies: \ counting \textit{is} maximum likelihood", font_size=32,
                   color=C.BITS)
-        d = label(r"(and on new data, that's exactly what overfits: \ Chapter 7)", font_size=26, color=GREY_A)
+        d = label(r"(and on new data, that's exactly what overfits: \ Chapter 9)", font_size=26, color=GREY_A)
         VGroup(a, b).arrange(DOWN, buff=0.3).move_to(UP * 2.6)
         VGroup(c, d).arrange(DOWN, buff=0.2).move_to(UP * 1.05)
 
@@ -150,7 +150,7 @@ class Likelihood(VoiceoverScene):
         with self.voiceover(
             "If the model is allowed to be any distribution at all, <bookmark mark='a'/> the divergence is smallest, "
             "zero, when the model equals the data's frequencies. <bookmark mark='b'/> So the counting models of "
-            "chapter seven were maximum likelihood models. And that's exactly why they overfit: they fit the "
+            "chapter nine were maximum likelihood models. And that's exactly why they overfit: they fit the "
             "books perfectly, and nothing pulled them toward anything more general."
         ) as vo:
             self.play(FadeOut(VGroup(v["eq"], v["cap"], v["head"], v["setup"], v["src"])), FadeIn(a), FadeIn(kl_g))
@@ -384,17 +384,16 @@ class Likelihood(VoiceoverScene):
             self.play(t.animate.set_value(12), run_time=3.0, rate_func=linear)
         with self.voiceover(
             "The guesses slide toward the data's frequencies, and the cross-entropy falls toward its floor: the "
-            "entropy of the data, 2.06 bits, which no model can beat. <bookmark mark='a'/> That's all of training, in "
+            f"entropy of the data, {H:.2f} bits, which no model can beat. <bookmark mark='a'/> That's all of training, in "
             "miniature. A real model has billions of parameters instead of five scores, and its scores depend on "
             "the context, but the signal that reaches them is this same difference: guess, minus truth."
         ) as vo:
             self.play(t.animate.set_value(60), run_time=5.0, rate_func=linear)
             vo.wait_until("a")
-            pay = payoff_card([(r"derivatives, backpropagation", [3]), (r"optimizers", [9]),
-                               (r"the output layer of a transformer", [11])], font_size=22, title=r"")
+            pay = payoff_card([(r"derivatives, backpropagation", [4, 9]), (r"optimizers", [11]),
+                               (r"the output layer of a transformer", [13])], font_size=22, title=r"")
             pay.scale(0.9).move_to([3.4, -1.4, 0])
             self.play(FadeOut(VGroup(ax, xl, yl, axl, floor, fl)), FadeOut(curve), FadeIn(pay))
-        assert abs(H - 2.06) < 0.005
         bar_m.clear_updaters()
         curve.clear_updaters()
         self.wait(0.5)
