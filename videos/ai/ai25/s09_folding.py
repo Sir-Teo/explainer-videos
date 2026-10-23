@@ -205,8 +205,10 @@ class Folding(VoiceoverScene):
                       for k, v in enumerate(eig[:6])]).arrange(RIGHT, buff=0.3)
         evl = label(r"eigenvalues of $G$:", font_size=22, color=GREY_A)
         evs = VGroup(evl, ev).arrange(RIGHT, buff=0.3).move_to([1.6, -0.9, 0])
-        res = label(rf"rebuilt: \ RMSD ${sci(f['mds_rmsd'], 0)}$\,\AA\ \ \ to the fold or to its mirror image, "
-                    r"\ a coin flip", font_size=22, color=GREY_A).move_to([1.6, -1.8, 0])
+        m_best = min(f["mds_rmsd"], f["mds_rmsd_mirror"])
+        which = r"the fold itself" if f["mds_rmsd"] <= f["mds_rmsd_mirror"] else r"the fold's mirror image"
+        res = label(rf"rebuilt: \ RMSD ${sci(m_best, 0)}$\,\AA\ \ to {which} \ (which of the two: \ a coin flip)",
+                    font_size=22, color=GREY_A).move_to([1.6, -1.8, 0])
         mir = label(r"distances can't tell left from right", font_size=26, color=MIRROR_C).to_edge(DOWN, buff=0.5)
         tag = note(r"computed: \ our bundle's $52$ C$\alpha$ atoms", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(

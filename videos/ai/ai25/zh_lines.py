@@ -61,22 +61,21 @@ ZH = {
 
     "This part's story has three threads":
         "这一部分的故事有三条线索，起点相隔很远。<bookmark mark='m0'/>1950年，冯·诺依曼的团队在ENIAC上做出了第一次计算机天气预报。"
-        "<bookmark mark='m1'/>1958年，约翰·肯德鲁靠X射线衍射，第一次看到了一个蛋白质的三维结构，肌红蛋白；1961年，克里斯蒂安·安芬森证明"
-        "蛋白质能自己重新折叠：它的氨基酸序列决定了它的形状。<bookmark mark='m2'/>1968年，鲍里斯·魏斯费勒和安德烈·莱曼发表了一种检验"
-        "两个图是否相同的方法，后来人们发现，它恰好衡量了图网络能看见什么。<bookmark mark='m3'/>蛋白质数据库在1971年开张，里面有7个结构；"
-        "<bookmark mark='m4'/>欧洲中期天气预报中心在1979年发布了第一次预报。<bookmark mark='m5'/>1989年，卷积网络把图像的对称性，"
-        "也就是平移，做进了网络层里，第10部分讲过。<bookmark mark='m6'/>1994年，约翰·莫尔特和克日什托夫·菲德利斯创办了CASP，"
-        "一个预测蛋白质结构的盲测比赛；<bookmark mark='m7'/>2005年，马尔科·戈里、加布里埃莱·蒙法尔迪尼和弗朗科·斯卡塞利提出了"
-        "能在图上工作的神经网络。",
+        "<bookmark mark='m1'/>1958年，约翰·肯德鲁第一次看到了一个蛋白质的三维结构，肌红蛋白；1961年，克里斯蒂安·安芬森证明，蛋白质的"
+        "序列决定了它的形状。<bookmark mark='m2'/>1968年，鲍里斯·魏斯费勒和安德烈·莱曼发表了一种检验两个图是否相同的方法，后来发现，"
+        "它恰好衡量了图网络能看见什么。<bookmark mark='m3'/>蛋白质数据库在1971年开张；<bookmark mark='m4'/>欧洲的天气中心，欧洲中期"
+        "天气预报中心，在1979年发布了第一次中期预报。<bookmark mark='m5'/>1989年，卷积网络把图像的对称性做进了网络层里。<bookmark "
+        "mark='m6'/>1994年，CASP开始了，一个预测蛋白质结构的盲测比赛；<bookmark mark='m7'/>2005年，马尔科·戈里等人提出了图上的"
+        "神经网络。",
 
     'Then, within a decade, the threads met.':
-        "然后，在十年之内，这几条线索汇合了。<bookmark mark='d0'/>2017年，图网络有了通用的配方，消息传递，同时也有了处理集合和分子的"
-        "网络。<bookmark mark='d1'/>2018年，DeepMind的第一代AlphaFold赢得了CASP；两年后，AlphaFold 2的精度接近了实验。<bookmark "
+        "然后，在十年之内，这几条线索汇合了。<bookmark mark='d0'/>2017年有了消息传递，图网络的通用配方，同时也有了处理集合和分子的"
+        "网络。<bookmark mark='d1'/>2018年，DeepMind的第一代AlphaFold赢得了CASP；两年后，AlphaFold 2接近了实验的精度。<bookmark "
         "mark='d2'/>随分子一起转动的网络，以及能学会物理方程整体解的网络，在2021年相继出现。<bookmark mark='d3'/>到2022年，两亿多个蛋白质"
         "的预测结构已经可以免费下载。<bookmark mark='d4'/>2023年，一个图网络在大多数指标上胜过了世界上最好的天气模型，另一个提出了"
         "数以百万计的新晶体。<bookmark mark='d5'/>2024年有了诺贝尔奖、AlphaFold 3，还有能解奥赛题的机器；<bookmark mark='d6'/>2025年，"
-        "AI天气预报进入了日常业务运行，进化搜索找到了新的数学；<bookmark mark='d7'/>而在2026年，保罗·埃尔德什留下的一些未解问题被AI系统"
-        "解决了，其中一个还附上了计算机检查过的证明。",
+        "AI天气预报进入日常运行，进化搜索找到了新的数学；<bookmark mark='d7'/>2026年，保罗·埃尔德什的一些未解问题被AI解决了，其中一个"
+        "附上了计算机检查过的证明。",
 
     'What ties these together is one recipe.':
         "把这些串起来的是同一个配方。<bookmark mark='a'/>问一问：你的数据里什么是无关紧要的。对图像来说，物体在哪个位置：所以用卷积。"
@@ -154,7 +153,7 @@ ZH = {
         "现在来训练，从{n0}组集合到{n_big:,}组，每种三个种子，步数相同。<bookmark mark='a'/>只用{n0}组集合，Deep Sets就已经有"
         "{100 * a_ds[0]:.0f}%的时候是对的。<bookmark mark='b'/>普通MLP是{100 * a_ml[0]:.0f}%，{mlp_vs}：它必须从样本里学会，十六的阶乘种"
         "排列其实是同一个东西。<bookmark mark='c'/>给它看重新排序的副本帮助很大：{n0}组集合时是{100 * a_au[0]:.0f}%。{reach_txt}。"
-        "{last}：{100 * a_ds[-1]:.0f}%对{100 * a_au[-1]:.0f}%。<bookmark mark='d'/>但副本只能近似地教会对称性：把同一个测试集重新排序，"
+        "{last}：Deep Sets是{100 * a_ds[-1]:.0f}%，副本是{100 * a_au[-1]:.0f}%。<bookmark mark='d'/>但副本只能近似地教会对称性：把同一个测试集重新排序，"
         "普通MLP在{100 * f_ml:.0f}%的集合上改了答案，用副本训练的那个在{100 * f_au:.0f}%的集合上改了答案，而Deep Sets一个也没改。",
 
     'At the largest size the copies have nearly caught up':
@@ -162,6 +161,34 @@ ZH = {
 
     'Even at the largest size Deep Sets stays ahead':
         '即使在最大的规模上，Deep Sets仍然领先',
+
+    'At the largest size the copies have caught up and passed it':
+        '在最大的规模上，副本追上并超过了它',
+
+    'f"Before the full comparison, watch one training run':
+        "在完整比较之前，先看每种网络的一次训练，用{n}组训练集合，每一百步检查一次留出集上的准确率。<bookmark mark='a'/>"
+        "{ds_txt}。<bookmark mark='b'/>普通MLP{mlp_txt}。<bookmark mark='c'/>看重新排序副本的MLP{aug_txt}。",
+
+    "f'Deep Sets passes eighty percent after {d80:,} steps":
+        'Deep Sets在{d80:,}步之后超过80%，最后达到{e_ds:.0f}%',
+
+    "f'Deep Sets never passes eighty percent; it ends at":
+        'Deep Sets始终没有超过80%，最后停在{e_ds:.0f}%',
+
+    "f'never gets to eighty percent; it ends at":
+        '始终没有达到80%，最后停在{e_ml:.0f}%',
+
+    "f'passes eighty percent only at step {m80:,}":
+        '直到第{m80:,}步才超过80%，最后达到{e_ml:.0f}%',
+
+    "f'never gets to eighty percent either; it ends at":
+        '也始终没有达到80%，最后停在{e_au:.0f}%',
+
+    "f'gets there too, but later, at step {a80:,}":
+        '也做到了，但更晚，在第{a80:,}步，最后达到{e_au:.0f}%',
+
+    "f'gets there at step {a80:,} and ends at":
+        '在第{a80:,}步做到了，最后达到{e_au:.0f}%',
 
     "f'and even with {n_big:,} sets it stays below":
         '而且即使用{n_big:,}组集合，它仍然不如Deep Sets只用{n0}组时的水平',
@@ -257,8 +284,17 @@ ZH = {
         "现在故意让一个网络失败。取{n}个节点的、由若干个环组成的图，问：里面有没有三角形？<bookmark mark='a'/>在颜色细化看来，这些图"
         "全都一样：每个节点都有两个邻居，邻居又各有两个邻居，一直如此。所以根据定理，任何消息传递网络对它们都必须给出同一个答案。"
         "<bookmark mark='b'/>{gin_line}<bookmark mark='c'/>{rni_line}<bookmark mark='d'/>一个把特征放在节点对上、并通过每个第三个节点"
-        "更新每一对的网络，能直接看见三角形：{100 * np.mean(acc['pair']):.1f}%。记住这个构造：一对节点，通过第三个节点来更新。它是"
-        "AlphaFold的核心。",
+        "更新每一对的网络，{pair_line}。记住这个构造：一对节点，通过第三个节点来更新。它是AlphaFold的核心。",
+
+    "f'sees triangles directly: {100 * min(p_ok):.1f}":
+        '能直接看见三角形：每个种子都达到{100 * min(p_ok):.1f}%或更高，而且它的训练曲线在几百步之内就离开了基准比例',
+
+    "f'can see triangles directly: {words_num(len(p_ok))}":
+        '能直接看见三角形：三个种子里有{words_num(len(p_ok))}个达到了{100 * max(p_ok):.1f}%，不过其余的停在了基准比例',
+
+    'can see triangles in principle, though in our budget':
+        '原则上能看见三角形，但在我们的预算里它始终没学会',
+
 
     "f'Every graph gets exactly the same output":
         '每个图得到的输出完全相同，一位都不差，所以GIN最多只能总是回答有：{100 * np.mean(acc[\'gin\']):.1f}%，也就是基准比例。',
@@ -499,6 +535,18 @@ ZH.update({
     'though their guesses break the triangle inequality no less often':
         '不过它的猜测违反三角不等式的次数并没有更少',
 
+    'f"Here is the training itself, replayed:':
+        "这是训练过程本身的回放：两个模型对一条留出链的猜测，随着训练进行而变化。<bookmark mark='a'/>第0步，两个模型的猜测都没有什么"
+        "特别的。<bookmark mark='b'/>几百步之内，两个都学会了容易的部分：在链上挨得近的残基，在空间里也挨得近，也就是沿对角线的那条带。"
+        "<bookmark mark='c'/>剩下的部分，也就是链上相隔很远的残基又在哪里碰到一起，需要别的残基对；<bookmark mark='d'/>在下面的曲线上，"
+        "{beat_txt}。",
+
+    'the triangle model never gets below the per-pair model':
+        '三角模型始终没有低于逐对模型',
+
+    'f"the triangle model passes the per-pair model\'s final error':
+        "三角模型在第{b_step:,}步就超过了逐对模型的最终误差，而且继续下降，到{e_tri:.1f}埃，逐对模型是{e_pw:.1f}埃",
+
     'And at CASP14, in 2020, it worked.':
         "而在2020年的CASP14上，它成功了。<bookmark mark='a'/>AlphaFold 2在所有目标上的中位数得分是92.4 GDT，在最难的目标上是87.0，而"
         "大约九十分，按非正式的看法，就能和实验相比了。<bookmark mark='b'/>它的主链误差中位数不到1埃，0.96，第二名是2.8；作为对比，"
@@ -666,12 +714,11 @@ ZH.update({
 
     'Machine learning came to this in the 2020s':
         "到了2020年代，机器学习来到了这里，用ERA5训练，那是ECMWF对1940年以来全球天气的重建。2023年，谷歌DeepMind的雷米·拉姆等人发表了"
-        "GraphCast。<bookmark mark='a'/>大气存储在一个经纬度网格上，一百万个点，每个点二百二十七个数：风、温度、湿度等等，分布在三十七个"
-        "高度上。但这样的网格在两极附近点挤得太密，所以GraphCast改在一个网格网上工作：<bookmark mark='b'/>一个正二十面体，细分六次，保留"
-        "每一层的边，于是有的边很短，有的边横跨大陆，一条消息几步就能穿过整个星球。这是我们自己的小版本，在一个正方形上。<bookmark "
-        "mark='c'/>把格点编码到网格网上，传递十六次消息，再解码回格点：由最近的两个状态得到下一个状态，六小时之后。<bookmark mark='d'/>"
-        "它用三十九年的ERA5，在三十二个TPU上训练了四个星期，几分钟不到就能做出一次十天预报，并在1380个检验目标中的百分之九十上胜过了ECMWF"
-        "旗舰的确定性预报。",
+        "GraphCast。<bookmark mark='a'/>大气存储在一个经纬度网格上，一百万个点，每个点二百二十七个数，分布在三十七个高度上；但这样的网格"
+        "在两极附近点挤得太密。所以GraphCast改在一个网格网上工作：<bookmark mark='b'/>一个细分六次的正二十面体，保留每一层的边，于是有的边"
+        "横跨大陆，一条消息几步就能穿过整个星球。这是我们自己的小版本，在一个正方形上。<bookmark mark='c'/>把格点编码到网格网上，传递十六次"
+        "消息，再解码：由最近的两个状态得到六小时之后的状态。<bookmark mark='d'/>它用三十九年的ERA5训练，不到一分钟就能做出一次十天预报，"
+        "并在1380个检验目标中的百分之九十上胜过了ECMWF旗舰的确定性预报。",
 
     'Ours is a toy atmosphere:':
         "我们的是一个玩具大气：一个二维流体，在一个首尾相接的正方形上，被一个固定的图样搅动，又被摩擦减弱，于是涡旋生成、漂移、合并、"

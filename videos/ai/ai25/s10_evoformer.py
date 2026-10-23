@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (HIST, KIND_COLOR, KIND_NAME, MSA_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM,
-                                   TRUE_C, hbars, load, matrix_image, node_box, take_away)
+                                   TRUE_C, crossfade, hbars, load, matrix_image, node_box, take_away)
 
 
 class Evoformer(VoiceoverScene):
@@ -14,6 +14,7 @@ class Evoformer(VoiceoverScene):
         self.exchange()
         self.triangles()
         self.experiment()
+        self.replay()
         self.casp14()
 
     def card(self):
@@ -238,6 +239,74 @@ class Evoformer(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows.rows[2]))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def replay(self):
+        p = load("pair")
+        snaps = [int(v) for v in p["snaps"]]
+        D = np.asarray(p["ex_true"])
+        vmax = float(D.max())
+        kinds = ("pairwise", "triangle")
+        fr = {k: np.asarray(p[f"{k}_s0"]["frames"]) for k in kinds}
+        cv = {k: np.asarray(p[f"{k}_s0"]["curve"]) for k in kinds}
+        S = 2.6
+        xs = (-4.4, -0.9, 2.6)
+        true_im = matrix_image(D, S, 0, vmax).move_to([xs[0], 1.45, 0])
+        ims = {k: matrix_image(fr[k][0], S, 0, vmax).move_to([x, 1.45, 0]) for k, x in zip(kinds, xs[1:])}
+        caps = VGroup(label(r"true distances", font_size=21, color=TRUE_C).next_to(true_im, UP, buff=0.12),
+                      *[label(KIND_NAME[k], font_size=21, color=KIND_COLOR[k]).next_to(ims[k], UP, buff=0.12)
+                        for k in kinds])
+        stepl = label(r"step $0$", font_size=26, color=GREY_A).move_to([5.3, 1.45, 0])
+        ymax = float(max(c_[:, 1].max() for c_ in cv.values())) * 1.05
+        g = axes([0, snaps[-1]], [0, ymax], x_length=8.0, y_length=2.1, xlabel=r"training step",
+                 ylabel=r"error, hidden pairs (\AA)", xticks=[0, snaps[-1] // 2, snaps[-1]],
+                 yticks=[0, round(ymax / 2), round(ymax)], xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"),
+                 font_size=18, center=[-0.6, -2.1, 0])
+        tracker = ValueTracker(0)
+
+        def upto(k):
+            t = tracker.get_value()
+            x, y = cv[k][:, 0], cv[k][:, 1]
+            keep = x < t
+            return curve(g.ax, [0.0, *x[keep][1:], t], [y[0], *y[keep][1:], float(np.interp(t, x, y))], KIND_COLOR[k], 3)
+
+        lines = {k: always_redraw(lambda k=k: upto(k)) for k in kinds}
+        cursor = always_redraw(lambda: DashedLine(g.ax.c2p(tracker.get_value(), 0), g.ax.c2p(tracker.get_value(), ymax),
+                                                  color=GREY_B, stroke_width=1.5))
+        tag = note(r"computed: \ seed $0$ of each, \ one held-out chain; \ error on $200$ held-out chains",
+                   font_size=18).to_corner(DR, buff=0.15)
+        fin = {k: float(cv[k][-1, 1]) for k in kinds}
+        # when does the triangle model first beat the per-pair model's final error?
+        beat = np.flatnonzero(cv["triangle"][:, 1] < fin["pairwise"])
+        if fin["triangle"] >= fin["pairwise"]:
+            beat_txt = "the triangle model never gets below the per-pair model"
+        else:
+            b_step, e_tri, e_pw = int(cv["triangle"][beat[0], 0]), fin["triangle"], fin["pairwise"]
+            beat_txt = (f"the triangle model passes the per-pair model's final error by step {b_step:,}, and keeps "
+                        f"going, to {e_tri:.1f} ångströms against {e_pw:.1f}")
+        with self.voiceover(
+            "Here is the training itself, replayed: both models' guesses for one held-out chain, as training goes "
+            f"on. <bookmark mark='a'/> At step zero both guess nothing in particular. <bookmark mark='b'/> Within a "
+            "few hundred steps both learn the easy part, that residues close along the chain are close in space: the "
+            "bright band along the diagonal. <bookmark mark='c'/> The rest, which residues far apart along the chain "
+            "come back together, needs the other pairs; <bookmark mark='d'/> on the curve below, "
+            f"{beat_txt}."
+        ) as vo:
+            self.play(FadeIn(true_im), FadeIn(caps), *[FadeIn(im) for im in ims.values()], FadeIn(stepl), FadeIn(g),
+                      FadeIn(tag), FadeIn(cursor))
+            self.add(*lines.values())
+            vo.wait_until("a")
+            marks = {1: "b", len(snaps) - 2: "c", len(snaps) - 1: "d"}
+            for i in range(1, len(snaps)):
+                if i in marks:
+                    vo.wait_until(marks[i])
+                new = {k: matrix_image(fr[k][i], S, 0, vmax).move_to(ims[k]) for k in kinds}
+                nstep = label(rf"step ${snaps[i]:,}$".replace(",", "{,}"), font_size=26, color=GREY_A).move_to(stepl)
+                parts = [crossfade(ims[k], new[k]) for k in kinds] + [crossfade(stepl, nstep)]
+                self.play(*parts, tracker.animate.set_value(snaps[i]), run_time=1.2)
+                ims, stepl = new, nstep
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

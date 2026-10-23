@@ -203,14 +203,28 @@ class WL(VoiceoverScene):
         base = gi["base_rate"]
         acc = {k: [gi[f"{k}_s{s}"]["acc"] for s in (0, 1, 2)] for k in ("gin", "gin_rni", "pair")}
         spread = max(gi[f"gin_s{s}"]["spread"] for s in (0, 1, 2))
+        seeds_txt = lambda k: r", \ ".join(rf"${100 * a:.1f}\%$" for a in acc[k])  # noqa: E731
         res = VGroup(
-            label(rf"base rate \ (always say \textit{{yes}}): \ ${100 * base:.1f}\%$", font_size=24, color=GREY_B),
-            label(rf"GIN: \ ${100 * np.mean(acc['gin']):.1f}\%$", font_size=26, color=GNN_C),
-            label(r"GIN with random numbers on the nodes: \ " + r", \ ".join(rf"${100 * a:.1f}\%$" for a in
-                                                                             acc["gin_rni"]), font_size=26, color=AUG),
-            label(rf"a network on pairs of nodes: \ ${100 * np.mean(acc['pair']):.1f}\%$", font_size=26,
-                  color=STRUCT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, -1.5, 0])
+            label(rf"base rate \ (always say \textit{{yes}}): \ ${100 * base:.1f}\%$", font_size=21, color=GREY_B),
+            VGroup(label(r"GIN:", font_size=22, color=GNN_C), label(seeds_txt("gin"), font_size=22, color=GNN_C)),
+            VGroup(label(r"GIN, \ random numbers on the nodes:", font_size=22, color=AUG),
+                   label(seeds_txt("gin_rni"), font_size=22, color=AUG)),
+            VGroup(label(r"a network on pairs of nodes:", font_size=22, color=STRUCT),
+                   label(seeds_txt("pair"), font_size=22, color=STRUCT)),
+        )
+        for r_ in res[1:]:
+            r_.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        res.arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.75, -1.55, 0])
+        res_h = label(r"test accuracy, \ three seeds", font_size=20, color=GREY_A).next_to(res, UP, buff=0.2)
+        res_h.align_to(res, LEFT)
+        cv = {k: np.asarray(gi[f"{k}_s0"]["curve"]) for k in ("gin", "gin_rni", "pair")}
+        top = max(float(c_[-1, 0]) for c_ in cv.values())
+        g = axes([0, top], [0.5, 1.0], x_length=5.4, y_length=2.5, xlabel=r"training step (seed $0$)",
+                 ylabel=r"held-out", xticks=[0, top / 2, top], yticks=[0.5, 0.75, 1.0],
+                 xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"), font_size=18, center=[-3.4, -1.75, 0])
+        base_l = DashedLine(g.ax.c2p(0, base), g.ax.c2p(top, base), color=GREY_D)
+        lines = {k: curve(g.ax, cv[k][:, 0], np.clip(cv[k][:, 1], 0.5, 1.0), c_, 3)
+                 for k, c_ in (("gin", GNN_C), ("gin_rni", AUG), ("pair", STRUCT))}
         n = gi["n_nodes"]
         gin_exact = spread < 1e-6
         gin_line = (f"Every graph gets exactly the same output, to the last digit, so GIN can do no better than "
@@ -228,26 +242,35 @@ class WL(VoiceoverScene):
             rni_line = ("Giving every node a few random numbers breaks the symmetry in principle, but it is hard to "
                         f"learn: {words_num(nl)} of three seeds got there, {100 * max(learned):.1f} percent, the "
                         "others stayed at the base rate.")
+        p_ok = [a for a in acc["pair"] if a > base + 0.1]
+        if len(p_ok) == 3:
+            pair_line = (f"sees triangles directly: {100 * min(p_ok):.1f} percent or better, in every seed, and its "
+                         "training curve leaves the base rate within a few hundred steps")
+        elif p_ok:
+            pair_line = (f"can see triangles directly: {words_num(len(p_ok))} of three seeds reached "
+                         f"{100 * max(p_ok):.1f} percent, though the others stayed at the base rate")
+        else:
+            pair_line = "can see triangles in principle, though in our budget it never learned to"
         tag = note(rf"computed: \ $2{{,}}000$ training graphs, \ $600$ test, \ {n} nodes each, \ three seeds",
-                   font_size=20).to_corner(DR, buff=0.25)
+                   font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
             f"Now make a network fail on purpose. Take graphs of {n} nodes that are unions of cycles, and ask: is "
             "there a triangle? <bookmark mark='a'/> To colour refinement all of these graphs are identical: every "
             "node has two neighbours, whose neighbours have two neighbours, forever. So, by the theorem, every "
             f"message-passing network must answer the same for all of them. <bookmark mark='b'/> {gin_line} "
             f"<bookmark mark='c'/> {rni_line} <bookmark mark='d'/> A network whose features live on pairs of nodes, "
-            f"and update each pair through every third node, sees triangles directly: {100 * np.mean(acc['pair']):.1f} "
-            "percent. Remember that construction: a pair, updated through a third node. It is the heart of AlphaFold."
+            f"and update each pair through every third node, {pair_line}. Remember that construction: a pair, updated "
+            "through a third node. It is the heart of AlphaFold."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(g_) for g_ in gs], lag_ratio=0.3), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(res[0]))
+            self.play(FadeIn(g), Create(base_l), FadeIn(res_h), FadeIn(res[0]))
             vo.wait_until("b")
-            self.play(FadeIn(res[1]))
+            self.play(Create(lines["gin"]), FadeIn(res[1]), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(res[2]))
+            self.play(Create(lines["gin_rni"]), FadeIn(res[2]), run_time=2)
             vo.wait_until("d")
-            self.play(FadeIn(res[3]))
+            self.play(Create(lines["pair"]), FadeIn(res[3]), run_time=2)
         self.wait(0.3)
         self.clear_scene()
 

@@ -37,17 +37,15 @@ class History(VoiceoverScene):
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
             "This part's story has three threads, and they started far apart. <bookmark mark='m0'/> In 1950 von "
-            "Neumann's group ran the first weather forecast on a computer, ENIAC. <bookmark mark='m1'/> In 1958 John "
-            "Kendrew saw the first protein in three dimensions, myoglobin, from X-ray diffraction; and in 1961 "
-            "Christian Anfinsen showed that a protein refolds by itself: its sequence of amino acids decides its "
-            "shape. <bookmark mark='m2'/> In 1968 Boris Weisfeiler and Andrei Leman published a way to test whether two "
-            "graphs are the same, which will turn out to measure what graph networks can see. <bookmark mark='m3'/> "
-            "The Protein Data Bank opened in 1971 with seven structures; <bookmark mark='m4'/> the European Centre "
-            "for Medium-Range Weather Forecasts ran its first forecast in 1979. <bookmark mark='m5'/> In 1989 "
-            "convolutional networks built the symmetry of images, shifting, into their layers, as Part 10 showed. "
-            "<bookmark mark='m6'/> In 1994 John Moult and Krzysztof Fidelis started CASP, a blind contest for "
-            "predicting protein structures; <bookmark mark='m7'/> and in 2005 Marco Gori, Gabriele Monfardini and "
-            "Franco Scarselli proposed neural networks that work on graphs."
+            "Neumann's group ran the first computer weather forecast, on ENIAC. <bookmark mark='m1'/> In 1958 John "
+            "Kendrew saw the first protein in three dimensions, myoglobin; in 1961 Christian Anfinsen showed that a "
+            "protein's sequence decides its shape. <bookmark mark='m2'/> In 1968 Boris Weisfeiler and Andrei Leman "
+            "published a test of whether two graphs are the same, which turns out to measure what graph networks can "
+            "see. <bookmark mark='m3'/> The Protein Data Bank opened in 1971; <bookmark mark='m4'/> Europe's weather "
+            "centre, ECMWF, ran its first medium-range forecast in 1979. <bookmark mark='m5'/> In 1989 convolutional "
+            "networks built the symmetry of images into their layers. <bookmark mark='m6'/> In 1994 CASP began, a "
+            "blind contest in predicting protein structures; <bookmark mark='m7'/> and in 2005 Marco Gori and "
+            "colleagues proposed neural networks on graphs."
         ) as vo:
             self.play(FadeIn(head), Create(base[0]), FadeIn(base[1]))
             for k, mk in enumerate(["m0", "m1", "m2", "m3", "m4", "m5", "m6", "m7"]):
@@ -75,17 +73,17 @@ class History(VoiceoverScene):
         head = label(r"How we got here: \ the decade", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
-            "Then, within a decade, the threads met. <bookmark mark='d0'/> In 2017 came the general recipe for "
-            "networks on graphs, message passing, and with it networks for sets and for molecules. <bookmark "
-            "mark='d1'/> In 2018 DeepMind's first AlphaFold won CASP; two years later AlphaFold 2 reached accuracy "
-            "close to experiment. <bookmark mark='d2'/> Networks that turn with a molecule, and networks that learn "
-            "whole solutions of physical equations, followed in 2021. <bookmark mark='d3'/> By 2022, predicted "
-            "structures for more than two hundred million proteins were free to download. <bookmark mark='d4'/> In "
-            "2023 a graph network out-forecast the best weather model in the world on most measures, and another "
-            "proposed millions of new crystals. <bookmark mark='d5'/> 2024 brought the Nobel Prize, AlphaFold 3, and "
-            "machines solving olympiad problems; <bookmark mark='d6'/> 2025, AI weather forecasts in daily operational "
-            "use, and new mathematics found by evolutionary search; <bookmark mark='d7'/> and in 2026, open problems "
-            "of Paul Erdős resolved by AI systems, one of them with a proof a computer checked."
+            "Then, within a decade, the threads met. <bookmark mark='d0'/> In 2017 came message passing, the general "
+            "recipe for networks on graphs, and with it networks for sets and molecules. <bookmark mark='d1'/> In 2018 "
+            "DeepMind's first AlphaFold won CASP; two years later AlphaFold 2 came close to experiment. <bookmark "
+            "mark='d2'/> Networks that turn with a molecule, and networks that learn whole solutions of physical "
+            "equations, followed in 2021. <bookmark mark='d3'/> By 2022 predicted structures for over two hundred "
+            "million proteins were free to download. <bookmark mark='d4'/> In 2023 a graph network out-forecast the "
+            "best weather model in the world on most measures, and another proposed millions of new crystals. "
+            "<bookmark mark='d5'/> 2024 brought the Nobel Prize, AlphaFold 3, and machines solving olympiad problems; "
+            "<bookmark mark='d6'/> 2025, AI forecasts in daily operation, and new mathematics from evolutionary "
+            "search; <bookmark mark='d7'/> 2026, open problems of Paul Erdős resolved by AI, one with a proof a "
+            "computer checked."
         ) as vo:
             self.play(FadeIn(head), Create(base[0]), FadeIn(base[1]))
             for k, mk in enumerate(["d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"]):

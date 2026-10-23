@@ -348,9 +348,11 @@ class PairNet(nn.Module):
 
     def __init__(self, hidden=32, layers=3, dout=2):
         super().__init__()
-        self.inp = nn.Linear(2, hidden)
-        self.g = nn.ModuleList([nn.Linear(hidden, hidden) for _ in range(layers)])
-        self.h = nn.ModuleList([nn.Linear(hidden, hidden) for _ in range(layers)])
+        # no biases before the product: a constant term would swamp the sum over the third node (with them, some
+        # seeds never leave the base rate)
+        self.inp = nn.Linear(2, hidden, bias=False)
+        self.g = nn.ModuleList([nn.Linear(hidden, hidden, bias=False) for _ in range(layers)])
+        self.h = nn.ModuleList([nn.Linear(hidden, hidden, bias=False) for _ in range(layers)])
         self.f = nn.ModuleList([mlp([2 * hidden, hidden, hidden], last_act=True) for _ in range(layers)])
         self.out = mlp([hidden, hidden, dout])
 
@@ -359,7 +361,7 @@ class PairNet(nn.Module):
         eye = torch.eye(n).expand_as(A)
         z = self.inp(torch.stack([A, eye], -1))
         for g, h, f in zip(self.g, self.h, self.f):
-            prod = torch.einsum("bikc,bkjc->bijc", g(z), h(z)) / n
+            prod = torch.einsum("bikc,bkjc->bijc", g(z), h(z))
             z = f(torch.cat([z, prod], -1))
         return self.out(z.sum((1, 2)) / n)
 
@@ -401,6 +403,7 @@ def train_graph_classifier(model, A, X, y, seed, steps=1500, batch=32, lr=1e-3, 
     torch.manual_seed(seed)
     gen = torch.Generator().manual_seed(700 + seed)
     opt = torch.optim.Adam(model.parameters(), lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps)
     At, Xt, yt = torch.from_numpy(A), torch.from_numpy(X), torch.from_numpy(y).long()
     model.curve = []
     for s in range(steps + 1):
@@ -419,6 +422,7 @@ def train_graph_classifier(model, A, X, y, seed, steps=1500, batch=32, lr=1e-3, 
         opt.zero_grad()
         loss.backward()
         opt.step()
+        sched.step()
     model.eval()
     return model
 
