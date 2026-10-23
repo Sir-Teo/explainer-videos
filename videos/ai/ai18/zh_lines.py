@@ -146,6 +146,9 @@ _DATA = {
     'f"We ran RegMix on the thirty novels.':
         "我们在三十部小说上跑了RegMix。把它们分成四组：美国小说，英国的社会小说，冒险与推理，以及译作加上《尤利西斯》。<bookmark mark='a'/>我们的目标，是记分牌自己的那本书，《马耳他之鹰》，一部1930年的美国侦探小说；我们在它的第一章和第三章上调，把第二章，也就是记分牌那段文字，留着做测试。<bookmark mark='b'/>{len(proxy)}个微型模型，每个用一份随机配比。这是每个模型在目标上的损失，对它所含美国小说的比例画出来：{trend}。<bookmark mark='c'/>在四个权重以及它们两两乘积上的回归，用其余的模型来预测每个模型的损失，相关系数是{M['loo_corr']:.2f}。<bookmark mark='d'/>问它最好的配比，它{lean}：四组分别占{shares}%，可以和这些书本身的自然比例对照一下。",
 
+    'puts nearly everything on the American novels':
+        '几乎全押在美国小说上',
+
     'the more American text, the lower the loss':
         '美国小说越多，损失越低，不过另外三组也有影响',
 
@@ -158,8 +161,8 @@ _DATA = {
     '"Now the test: does the pick carry over':
         "现在来检验：这份配比，换到更大的模型上还成立吗？我们在更大的规模上把每份配比重新训练一遍，各用两个种子。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{cost}<bookmark mark='c'/>这就是普遍的教训：配比是为某个目标挑的，所以要说清楚是哪个目标，并且在挑选时从没见过的文本上测试。",
 
-    'And on the thirty novels as a whole it pays a little':
-        '而在三十部小说整体上，它要付出一点代价：朝一本书去调，就要牺牲别的书。',
+    'f\'And on the thirty novels as a whole it pays,':
+        "而在三十部小说整体上，它付出了代价，{rv:.3f}奈特对{nv:.3f}：朝一本书去调，就要牺牲别的书。",
 
     'And on the thirty novels as a whole it costs nothing':
         '而在三十部小说整体上，它没有付出我们测得出来的代价。',
@@ -376,6 +379,9 @@ _DATA = {
 
     "f'Now FP16 without loss scaling flushes":
         "现在不带损失缩放的FP16，把{100 * zero:.0f}%的梯度冲成了零，最后落后FP32 {d_noscale:.2f}奈特；损失缩放挽回了一部分差距。",
+
+    'f"Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradient values':
+        "现在不带损失缩放的FP16，把{100 * zero:.0f}%的梯度值冲成了零，最后落后FP32 {d_noscale:.2f}奈特，而在这里，损失缩放也没能补上这个差距。",
 
     "f'Even now, with {100 * zero:.0f} percent":
         "即使现在，{100 * zero:.0f}%的梯度值被冲成了零，不带损失缩放的FP16最后也只和FP32差{d_noscale:.3f}奈特：我们的模型太小，没法清楚地显出这种失败。",

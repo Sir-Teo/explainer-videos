@@ -96,6 +96,11 @@ class Recipe(VoiceoverScene):
         pts_f = VGroup(*[Dot(g.ax.c2p(s["step"], min(s["val"], hi)), radius=0.06, color=FULL_C) for s in sn_f])
         cb = curve(g.ax, eb[:, 0], np.minimum(eb[:, 2], hi), BASE_C, 2.5)
         cf = curve(g.ax, ef[:, 0], np.minimum(ef[:, 2], hi), FULL_C, 2.5)
+        S1 = load("recipe_seed1")  # the second seed of each recipe, dashed
+        s1 = VGroup(*[DashedVMobject(curve(g.ax, np.asarray(S1[k]["evals"])[:, 0],
+                                           np.minimum(np.asarray(S1[k]["evals"])[:, 2], hi), col, 2), num_dashes=40)
+                      for k, col in (("base", BASE_C), ("full", FULL_C)) if S1[k].get("evals")])
+        s1n = note(r"dashed: \ the second seed", font_size=16).next_to(g, DOWN, buff=0.05).align_to(g, RIGHT)
         prompt = data_text("The door opened, and", font=MONO, font_size=20, color=GREY_A).move_to([3.4, 3.1, 0])
 
         def boxes(sn, col, y):
@@ -130,6 +135,8 @@ class Recipe(VoiceoverScene):
                 self.wait(0.4 * per)
             vo.wait_until("c")
             self.play(Create(cb), Create(cf), run_time=1.5)
+            if len(s1):
+                self.play(Create(s1), FadeIn(s1n), run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 

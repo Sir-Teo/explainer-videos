@@ -103,8 +103,19 @@ class Mixture(VoiceoverScene):
         diag = DashedLine(g2.ax.c2p(lo, lo), g2.ax.c2p(hi, hi), color=GREY_B, dash_length=0.05)
         corr = label(rf"correlation ${M['loo_corr']:.2f}$", font_size=18, color=KEPT).next_to(g2, RIGHT, buff=0.15)
         nat, best = np.asarray(M["natural"]), np.asarray(M["best"])
-
-        def mixbar(w, y_, title):
+        fan = VGroup()
+        if all(p_.get("evals") for p_ in proxy):
+            evs = [np.asarray(p_["evals"]) for p_ in proxy]
+            top = min(8.6, max(e[:, 1].max() for e in evs))
+            bot = math.floor(min(e[:, 1].min() for e in evs) * 4) / 4
+            gf = axes([0, M["proxy_spec"]["steps"]], [bot, top], x_length=3.6, y_length=1.9, xlabel=r"step",
+                      ylabel=r"held-out loss", xticks=[0, M["proxy_spec"]["steps"]], yticks=[bot, round(top, 1)],
+                      yfmt=lambda v: f"{v:.1f}", center=[-3.6, -2.05, 0], font_size=15)
+            curves = VGroup(*[curve(gf.ax, e[:, 0], np.minimum(e[:, 1], top),
+                                    interpolate_color(ManimColor(GREY_D), ManimColor(GROUP_C[0]), float(p_["w"][0])), 1.6)
+                              for e, p_ in zip(evs, proxy)])
+            fan = VGroup(gf, curves, note(r"each run's training, \ coloured by its American share", font_size=15)
+                         .next_to(gf, UP, buff=0.05))
             row = VGroup()
             x = 0.0
             for k, v in enumerate(w):
@@ -129,7 +140,9 @@ class Mixture(VoiceoverScene):
         else:
             trend = "the share of American text alone doesn't decide it"
         am = best[0] - nat[0]
-        if am > 0.05:
+        if best[0] > 0.75:
+            lean = "puts nearly everything on the American novels"
+        elif am > 0.05:
             lean = "leans toward the American novels"
         elif am < -0.05:
             lean = "moves away from the American novels"
@@ -150,8 +163,13 @@ class Mixture(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(tgt))
             vo.wait_until("b")
+            if len(fan):
+                self.play(FadeIn(fan[0]), FadeIn(fan[2]), LaggedStart(*[Create(c_) for c_ in fan[1]], lag_ratio=0.03),
+                          run_time=2.5)
             self.play(FadeIn(g), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.05), run_time=2.5)
             vo.wait_until("c")
+            if len(fan):
+                self.play(FadeOut(fan))
             self.play(FadeIn(g2), Create(diag), LaggedStart(*[FadeIn(d_) for d_ in d2], lag_ratio=0.03), FadeIn(corr))
             vo.wait_until("d")
             self.play(FadeIn(mb[0]), run_time=0.8)
@@ -204,10 +222,26 @@ class Mixture(VoiceoverScene):
                        "than luck.")
         spread_v = max(abs(val["regmix"][0] - val["regmix"][1]), abs(val["natural"][0] - val["natural"][1]))
         if rv - nv > max(spread_v, 0.005):
-            cost = "And on the thirty novels as a whole it pays a little: tuning toward one book costs the others."
+            cost = (f"And on the thirty novels as a whole it pays, {rv:.3f} nats against {nv:.3f}: tuning toward one "
+                    "book costs the others.")
         else:
             cost = "And on the thirty novels as a whole it costs nothing we can measure."
         tw = take_away(r"a mixture is chosen for a target: \ say which, \ and test on held-out text", font_size=24)
+        trn = VGroup()
+        if all(T[f"test_{n}_{s_}"].get("evals") for n, _, _ in names for s_ in (0, 1)):
+            evs = {(n, s_): np.asarray(T[f"test_{n}_{s_}"]["evals"]) for n, _, _ in names for s_ in (0, 1)}
+            top = min(8.6, max(e[:, 1].max() for e in evs.values()))
+            bot = math.floor(min(e[:, 1].min() for e in evs.values()) * 4) / 4
+            gt = axes([0, spec["steps"]], [bot, top], x_length=4.2, y_length=3.4, xlabel=r"step",
+                      ylabel=r"held-out loss, \ all thirty novels", xticks=[0, spec["steps"]],
+                      yticks=[bot, round(top, 1)], yfmt=lambda v: f"{v:.1f}", center=[3.4, 0.4, 0], font_size=18)
+            lines = VGroup()
+            for (n, s_), e in evs.items():
+                col = next(c for n2, _, c in names if n2 == n)
+                c_ = curve(gt.ax, e[:, 0], np.minimum(e[:, 1], top), col, 2.5)
+                lines.add(DashedVMobject(c_, num_dashes=30) if s_ else c_)
+            trn = VGroup(gt, lines, note(r"their training: \ solid seed $0$, \ dashed seed $1$", font_size=16)
+                         .next_to(gt, DOWN, buff=0.35))
         with self.voiceover(
             "Now the test: does the pick carry over to a larger model? We trained each mixture again, at the "
             "larger size, with two seeds. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + cost +
@@ -215,9 +249,14 @@ class Mixture(VoiceoverScene):
             "test on text the choice never saw."
         ) as vo:
             self.play(FadeIn(head), FadeIn(p1[0]), FadeIn(p1[1]))
+            if len(trn):
+                self.play(FadeIn(trn[0]), FadeIn(trn[2]), LaggedStart(*[Create(l_) for l_ in trn[1]], lag_ratio=0.2),
+                          run_time=2.5)
             vo.wait_until("a")
             self.play(Indicate(p1[1], scale_factor=1.02))
             vo.wait_until("b")
+            if len(trn):
+                self.play(FadeOut(trn))
             self.play(FadeIn(p2[0]), FadeIn(p2[1]))
             vo.wait_until("c")
             self.play(FadeIn(tw, shift=UP * 0.1))

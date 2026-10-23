@@ -236,14 +236,19 @@ class Precision(VoiceoverScene):
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         d_noscale = np.mean(fin["fp16"]) - np.mean(f32)
         d_scaled = np.mean(fin["fp16_scaled"]) - np.mean(f32)
-        if d_noscale > 0.05 and d_scaled < d_noscale / 2:
+        spread_a = max(abs(v[0] - v[1]) for v in (fin["fp16"], fin["fp16_scaled"], f32))
+        big = d_noscale > max(spread_a, 0.05)
+        if big and d_scaled < d_noscale / 2:
             verdict = (f"Now the gradients are {A['accum']} times smaller while they are rounded, and FP16 without "
                        f"loss scaling flushes {100 * zero:.0f} percent of them to zero: it ends {d_noscale:.2f} nats "
                        f"behind FP32. With loss scaling, {abs(d_scaled):.3f} from it. That is the failure loss "
                        "scaling exists to prevent.")
-        elif d_noscale > 0.05:
+        elif big and d_scaled < d_noscale:
             verdict = (f"Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradients to zero and "
                        f"ends {d_noscale:.2f} nats behind FP32; loss scaling recovers part of the gap.")
+        elif big:
+            verdict = (f"Now FP16 without loss scaling flushes {100 * zero:.0f} percent of the gradient values to zero "
+                       f"and ends {d_noscale:.2f} nats behind FP32, and here loss scaling doesn't close the gap.")
         else:
             verdict = (f"Even now, with {100 * zero:.0f} percent of the gradient values flushed to zero, FP16 without "
                        f"loss scaling ends only {d_noscale:.3f} nats from FP32: our model is too small to show the "

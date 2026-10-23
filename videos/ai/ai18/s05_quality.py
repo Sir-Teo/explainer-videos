@@ -127,6 +127,18 @@ class Quality(VoiceoverScene):
                  .replace(",", "{,}"), color=KEPT, font_size=48, cap_size=22),
             label(rf"score $5$: \ ${counts[5]}$ pages", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.3).move_to([3.4, 0.0, 0])
+        # its training: F1 after more and more passes over the labels (the cut re-chosen each time)
+        ecv = np.asarray(Q.get("epoch_curve", []))
+        epo = VGroup()
+        if len(ecv):
+            ge = axes([0, Q["epochs"]], [0, 1], x_length=3.6, y_length=1.7, xlabel=r"passes over the training pages",
+                      ylabel=r"F1", xticks=[0, Q["epochs"]], yticks=[0, 0.5, 1], center=[3.6, -0.2, 0], font_size=16)
+            cv_ = curve(ge.ax, ecv[:, 0], ecv[:, 1], GREY_B, 2)
+            ct_ = curve(ge.ax, ecv[:, 0], ecv[:, 2], EDU, 3)
+            dt_ = VGroup(*[Dot(ge.ax.c2p(a, b), radius=0.045, color=EDU) for a, b in ecv[:, [0, 2]]])
+            elg = legend([(EDU, r"held-out pages"), (GREY_B, r"pages used to choose the cut")], font_size=15)
+            elg.next_to(ge, UP, buff=0.12)
+            epo = VGroup(ge, cv_, ct_, dt_, elg)
         with self.voiceover(
             "We can run this recipe ourselves, because FineWeb released Llama 3's annotations. <bookmark mark='a'/> "
             f"We downloaded {spoken_int(Q['n'])} of them. " + commonest +
@@ -142,9 +154,12 @@ class Quality(VoiceoverScene):
             self.play(Indicate(bars[1][0], color=YELLOW), *[Indicate(b[0], color=KEPT) for b in bars[3:]])
             self.play(FadeIn(share, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(how, shift=UP * 0.1))
+            self.play(FadeIn(how, shift=UP * 0.1), FadeOut(share))
+            if len(epo):
+                self.play(FadeIn(epo[0]), FadeIn(epo[4]), Create(epo[1]), Create(epo[2]), FadeIn(epo[3]), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeOut(share))
+            if len(epo):
+                self.play(FadeOut(epo))
             self.play(FadeIn(ch), *[FadeIn(r_[0]) for r_ in cmp_], *[GrowFromEdge(r_[1], LEFT) for r_ in cmp_],
                       *[FadeIn(r_[2]) for r_ in cmp_], FadeIn(pr))
         self.wait(0.3)
