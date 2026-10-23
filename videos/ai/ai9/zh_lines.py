@@ -344,8 +344,8 @@ ZH = {
     '"Let\'s try it, on the example from their paper':
         "我们来试一试，用他们论文里的例子：e的sin(πx)加y平方次方。这是一个KAN，两个输入，五个隐藏节点，一个输出：十五条曲线，全是学出来的。<bookmark mark='a'/>看着它们训练。<bookmark mark='b'/>{shapes}<bookmark mark='c'/>{verdict}",
 
-    "f'The curves on x take the shape of sine waves, and the curves on y of parabolas":
-        '关于x的曲线变成了正弦波的样子，关于y的曲线变成了抛物线：最接近的那几条，和正弦、平方的相关系数分别是{cs:.2f}和{cq:.2f}。公式，用图画写了出来。',
+    "f'Some of the curves on x take the shape of a sine wave, and some on y of a parabola":
+        '有几条关于x的曲线变成了正弦波的样子，有几条关于y的曲线变成了抛物线：最接近的，和正弦、平方的相关系数分别是{cs:.2f}和{cq:.2f}。公式的一部分，画成了图。',
 
     'f"The curves change shape as it learns, but they don\'t spell out the formula on their own':
         '曲线在学习中改变着形状，但它们自己并不会把公式拼出来：最接近正弦的一条，相关系数是{cs:.2f}，最接近平方的是{cq:.2f}。要从KAN里读出公式，还得剪枝、化简，就像论文里描述的那样。',

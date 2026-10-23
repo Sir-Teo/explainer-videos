@@ -273,7 +273,7 @@ class Chain(VoiceoverScene):
         whisk = VGroup()
         for i, n in enumerate(ns):
             for j, m in enumerate(modes):
-                vals = p[f"accs_{m}{n}"]
+                vals = p["accs_" + m + str(n)]
                 v = float(np.mean(vals))
                 x = ax.c2p(i + 0.5, 0)[0] + (j - 1) * bw * 1.15
                 b = Rectangle(width=bw, height=max(ax.y_length * v, 0.01), stroke_width=0, fill_color=MODE_C[m],

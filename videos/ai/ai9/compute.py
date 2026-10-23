@@ -1185,7 +1185,7 @@ def compute_kan():
             if s % 50 == 0:
                 with torch.no_grad():
                     te = float(((model(Xte_t).reshape(-1) - yte_t) ** 2).mean().sqrt())
-                curve.append((s, float(loss.sqrt()), te))
+                curve.append((s, float(loss.detach().sqrt()), te))
             if s in snaps:
                 kept.append(edge_functions(model))
             if s == steps:
@@ -1235,8 +1235,8 @@ def compute_kan():
             part[key] = (kind, size, n_params(m), float(c[-1, 2]))
         rows.append(tuple(part[key]))
     out["table"] = rows
+    torch.manual_seed(1)  # the same MLP as the table's two layers of 10
     m = mlp(10)
-    torch.manual_seed(1)
     if "mlp_main" in part:
         c = np.array(part["mlp_main"])
     else:

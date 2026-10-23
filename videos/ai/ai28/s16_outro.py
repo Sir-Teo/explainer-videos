@@ -31,7 +31,7 @@ class Outro(VoiceoverScene):
         bars = VGroup()
         for i, n in enumerate(p["ns"]):
             for j, (m, col) in enumerate((("direct", DIRECT), ("chain", CHAIN))):
-                v = float(np.mean(p[f"accs_{m}{n}"]))
+                v = float(np.mean(p["accs_" + m + str(n)]))
                 bars.add(Rectangle(width=0.3, height=max(1.6 * v, 0.01), stroke_width=0, fill_color=col, fill_opacity=0.9)
                          .move_to([i * 0.9 + j * 0.34, 0.8 * v, 0]))
         out.append((bars, r"a chain is computation", CHAIN))
@@ -187,7 +187,7 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def references(self):
-        books = [r"N.~Lambert, \textit{Reinforcement Learning from Human Feedback} (2025), \ chapters on RLVR and "
+        books = [r"N.~Lambert, \textit{Reinforcement Learning from Human Feedback} (2025), \ which covers RLVR and "
                  r"reasoning; \ R.~S.~Sutton \& A.~G.~Barto, \textit{Reinforcement Learning} (2nd ed., 2018)"]
         papers = [
             r"Nye et al.\ (2021); \ Wei et al.\ (2022); \ Kojima et al.\ (2022); \ Wang et al.\ (2022); \ Merrill \& "

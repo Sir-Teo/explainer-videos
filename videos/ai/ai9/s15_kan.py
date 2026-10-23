@@ -191,8 +191,9 @@ class KAN(VoiceoverScene):
                    (f"The KAN ends at {kt:.4f} and the MLP at {mt:.4f}: about even, at the same size." if ratio > 0.67
                     else f"Here the MLP ends lower, {mt:.4f} against the KAN's {kt:.4f}."))
         cs, cq = float(np.max(d["corr_sin"])), float(np.max(d["corr_sq"]))
-        shapes = (f"The curves on x take the shape of sine waves, and the curves on y of parabolas: the closest match "
-                  f"a sine and a square with correlations of {cs:.2f} and {cq:.2f}. The formula, written out in pictures."
+        shapes = (f"Some of the curves on x take the shape of a sine wave, and some on y of a parabola: the closest "
+                  f"match a sine and a square with correlations of {cs:.2f} and {cq:.2f}. Pieces of the formula, drawn "
+                  "as pictures."
                   if min(cs, cq) > 0.9 else
                   f"The curves change shape as it learns, but they don't spell out the formula on their own: the closest "
                   f"any comes to a sine is a correlation of {cs:.2f}, and to a square, {cq:.2f}. Reading a formula off a "

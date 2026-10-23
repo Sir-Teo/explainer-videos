@@ -63,7 +63,7 @@
   "step 2": "第2步",
   "step 3": "第3步",
   "answer: \\ right": "答案：\\ 对",
-  "a right number \\\\ at the end of a broken argument": "一个错误论证的末尾 \\\\ 一个正确的数",
+  "a right number \\ at the end of a broken argument": "一个错误论证末尾的 \\ 一个正确的数",
   "$\\sim 1$ million problems \\\\ in words": "约$1$百万道 \\\\ 文字题",
   "a Gemini model \\\\ translates to Lean": "一个Gemini模型 \\\\ 翻译成Lean",
   "$\\sim 80$ million \\\\ formal statements": "约$80$百万条 \\\\ 形式化命题",
