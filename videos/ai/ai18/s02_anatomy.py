@@ -1,0 +1,238 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.ai import *  # noqa: F403
+from videos.ai.ai18.common import (COMM, C_COL, D_COL, EDU, F, GPU, KEPT, LR_COL, N_COL, PAGE, PART, REMOVED, human,
+                                   load, node_box, spoken_int, stage_row, take_away)
+
+
+class Anatomy(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.stages()
+        self.runs()
+        self.schedule()
+        self.cost()
+
+    def card(self):
+        card = chapter_card(1, r"Anatomy of a frontier run", r"What happens between raw text and a base model?",
+                            lit=(2020, 2024), part=PART)
+        with self.voiceover("Chapter one. Anatomy of a frontier run."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def stages(self):
+        top = stage_row([(r"crawl", PAGE), (r"filter", REMOVED), (r"deduplicate", C.DUP), (r"mix", EDU),
+                         (r"tokenize", GREY_A)], font_size=22).move_to(UP * 2.6)
+        bot = stage_row([(r"pretrain", N_COL), (r"anneal, \ mid-train", LR_COL), (r"long context", C.POSITION),
+                         (r"post-train", C.REWARD)], font_size=22).move_to(UP * 1.25)
+        link = Arrow(top.boxes[-1].get_bottom(), bot.boxes[0].get_top(), buff=0.08, color=GREY_B, stroke_width=2.5,
+                     path_arc=-0.6)
+        O, S = F.OLMO3, F.SMOLLM3
+        # two published runs, stage by stage, as bars proportional to tokens
+        W = 11.0
+        tot_o = O["pre"] + O["mid"] + O["long"][0]
+        tot_s = S["stages"][-1][1] + sum(t[1] - t[0] for t in S["long"]) * 0 + 0.1e12
+        rows = VGroup()
+        specs = [(r"Olmo 3, 7B", [(O["pre"], N_COL, r"pretraining $5.9$T"), (O["mid"], LR_COL, r"mid $0.1$T"),
+                                  (O["long"][0], C.POSITION, r"long $0.05$T")], tot_o),
+                 (r"SmolLM3, 3B", [(S["stages"][0][1], N_COL, r"stage 1: \ $8$T"),
+                                   (S["stages"][1][1] - S["stages"][1][0], LR_COL, r"stage 2: \ $2$T"),
+                                   (S["stages"][2][1] - S["stages"][2][0], EDU, r"3: \ $1.1$T"),
+                                   (0.1e12, C.POSITION, r"")], tot_s)]
+        for k, (name, segs, tot) in enumerate(specs):
+            x = -W / 2 + 1.2
+            row = VGroup()
+            nm = label(name, font_size=22, color=GREY_A)
+            for n, col, txt in segs:
+                w = max(W * 0.86 * n / tot, 0.04)
+                r = Rectangle(width=w, height=0.5, stroke_width=1, stroke_color=BLACK, fill_color=col, fill_opacity=0.85)
+                r.move_to([x + w / 2, -0.6 - 1.15 * k, 0])
+                row.add(r)
+                if txt and w > 1.4:
+                    row.add(label(txt, font_size=18, color=BLACK).move_to(r))
+                x += w
+            nm.next_to(row[0], LEFT, buff=0.2)
+            rows.add(VGroup(nm, row))
+        thin = label(r"mid-training and long context: \ thin slivers of the tokens, \ chosen with great care",
+                     font_size=22, color=LR_COL).move_to(DOWN * 3.05)
+        src = cite(r"Team OLMo, Olmo 3 (2025); \ Hugging Face, SmolLM3 (2025)", corner=DR, font_size=17)
+        with self.voiceover(
+            "A frontier pretraining run is a pipeline. It starts with the web: a crawl of billions of pages, "
+            "<bookmark mark='a'/> filtered for language and quality, deduplicated, mixed with books, code, maths and "
+            "synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining "
+            "phase, a short phase of annealing on the best data, often called mid-training, a stage that teaches "
+            "long context, and finally the post-training of Part 27. <bookmark mark='c'/> Here are two published "
+            "runs drawn to scale. Ai2's Olmo 3, at seven billion parameters: 5.9 trillion tokens of pretraining, "
+            "then 100 billion of mid-training and 50 billion for long context. Hugging Face's SmolLM3: three "
+            "pretraining stages with more code and maths in each, then long context. <bookmark mark='d'/> The last "
+            "stages are a few percent of the tokens, and they are chosen with the most care."
+        ) as vo:
+            self.play(FadeIn(top.boxes[0]), FadeIn(bot.boxes.copy().set_opacity(0.15)))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(b)) for a, b in zip(top.arrows, top.boxes[1:])],
+                                  lag_ratio=0.5), run_time=3.0)
+            vo.wait_until("b")
+            self.play(GrowArrow(link), LaggedStart(*[FadeIn(b) for b in bot.boxes], lag_ratio=0.4),
+                      LaggedStart(*[GrowArrow(a) for a in bot.arrows], lag_ratio=0.4), run_time=3.0)
+            vo.wait_until("c")
+            self.play(FadeIn(src), FadeIn(rows[0][0]), LaggedStart(*[FadeIn(m) for m in rows[0][1]], lag_ratio=0.3))
+            self.play(FadeIn(rows[1][0]), LaggedStart(*[FadeIn(m) for m in rows[1][1]], lag_ratio=0.3))
+            vo.wait_until("d")
+            self.play(FadeIn(thin, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def runs(self):
+        cols = [r"model", r"released", r"tokens", r"chips", r"numbers", r"optimizer"]
+        L, D, K, O, N4, V4 = F.LLAMA3, F.DSV3, F.KIMIK2, F.OLMO3, F.NEMOTRON3, F.DSV4
+        data = [
+            (r"Llama 3.1 405B", r"Jul 2024", r"$15.6$T", r"$16{,}384$ H100", r"BF16", r"AdamW"),
+            (r"DeepSeek-V3", r"Dec 2024", r"$14.8$T", r"$2{,}048$ H800", r"FP8", r"AdamW"),
+            (r"Kimi K2", r"Jul 2025", r"$15.5$T", r"H800", r"--", r"MuonClip"),
+            (r"Olmo 3 32B", r"Nov 2025", r"$5.9$T", r"$1{,}024$ H100", r"BF16", r"--"),
+            (r"Nemotron 3 Super", r"Mar 2026", r"$25$T", r"--", r"NVFP4", r"--"),
+            (r"DeepSeek-V4-Pro", r"Apr 2026", r"$33$T", r"--", r"FP8 mixed", r"Muon"),
+        ]
+        xs = [-5.0, -2.2, -0.5, 1.4, 3.5, 5.4]
+        head = VGroup(*[label(c, font_size=22, color=GREY_B).move_to([x, 2.5, 0]) for c, x in zip(cols, xs)])
+        rule = Line([-6.6, 2.2, 0], [6.6, 2.2, 0], color=GREY_D, stroke_width=1.5)
+        body = VGroup()
+        colors = [C.TOKEN, GREY_A, D_COL, GPU, C.QUANT, C.MUON]
+        for i, row in enumerate(data):
+            y = 1.7 - 0.62 * i
+            body.add(VGroup(*[label(t, font_size=22, color=WHITE if j == 0 else colors[j]).move_to([x, y, 0])
+                              for j, (t, x) in enumerate(zip(row, xs))]))
+        src = cite(r"Llama Team (2024); \ DeepSeek-AI (2024, 2026); \ Kimi Team (2025); \ Team OLMo (2025); \ "
+                   r"NVIDIA (2026). \ --: \ not stated", font_size=17)
+        tw = take_away(r"tokens up $2\times$ in two years; \ fewer bits; \ a new optimizer", color=C.BITS,
+                       font_size=26).shift(UP * 0.2)
+        with self.voiceover(
+            "Here are six open runs from the last two years, with what their reports state. <bookmark mark='a'/> "
+            "Llama 3.1 405B: 15.6 trillion tokens on 16,384 H100 GPUs, in sixteen-bit bfloat numbers, with the AdamW "
+            "optimizer of Part 11. DeepSeek-V3: 14.8 trillion tokens on 2,048 H800s, in eight-bit floating point. "
+            "<bookmark mark='b'/> Kimi K2: 15.5 trillion tokens with MuonClip, a version of the Muon optimizer. "
+            "Olmo 3, the most open of them, data included. <bookmark mark='c'/> And in 2026, NVIDIA's Nemotron 3 Super, "
+            "pretrained in four-bit numbers on 25 trillion tokens, and DeepSeek-V4-Pro, on 33 trillion tokens with "
+            "Muon. <bookmark mark='d'/> In two years the token counts doubled, the numbers shrank from sixteen bits "
+            "to eight and four, and the optimizer began to change. Each column is a chapter of this part."
+        ) as vo:
+            self.play(FadeIn(head), Create(rule), FadeIn(src), FadeIn(body[0]), FadeIn(body[1]))
+            vo.wait_until("a")
+            self.play(Indicate(body[0], scale_factor=1.03), Indicate(body[1], scale_factor=1.03))
+            vo.wait_until("b")
+            self.play(FadeIn(body[2]), FadeIn(body[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(body[4]), FadeIn(body[5]))
+            vo.wait_until("d")
+            self.play(FadeIn(tw, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def schedule(self):
+        P, D = load("published"), F.DSV3
+        t = np.asarray(P["dsv3_lr_t"]) / 1e12
+        lr = np.asarray(P["dsv3_lr"]) * 1e4
+        g = axes([0, 15], [0, 2.6], x_length=9.0, y_length=3.4, xlabel=r"tokens seen \ (trillions)",
+                 ylabel=r"learning rate \ ($\times 10^{-4}$)", xticks=[0, 5, 10, 14.8], yticks=[0, 1, 2.2],
+                 xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.0, 0.9, 0])
+        ax = g.ax
+        cv = curve(ax, t, lr, LR_COL, 3)
+        b = axes([0, 15], [0, 16], x_length=9.0, y_length=1.3, ylabel=r"batch \ (thousands of sequences)",
+                 yticks=[0, 15.36], yfmt=lambda v: f"{v:g}", center=[-1.0, -2.55, 0])
+        bt = np.linspace(0, 14.8, 300)
+        bs = np.where(bt < D["batch_ramp"] / 1e12, D["batch"][0] + (D["batch"][1] - D["batch"][0]) *
+                      bt / (D["batch_ramp"] / 1e12), D["batch"][1]) / 1000
+        bcv = curve(b.ax, bt, bs, GPU, 3)
+        notes = VGroup(
+            label(r"constant to $10$T", font_size=20, color=LR_COL).move_to(ax.c2p(5, 2.45)),
+            label(r"cosine decay \\ over $4.3$T", font_size=20, color=LR_COL).next_to(ax.c2p(12.2, 1.2), RIGHT, buff=0.1),
+            label(r"two final \\ steps", font_size=20, color=LR_COL).next_to(ax.c2p(14.6, 0.2), RIGHT, buff=0.15),
+        )
+        mtp = VGroup(DashedLine(ax.c2p(10, 0), ax.c2p(10, 2.4), color=C.PROB, dash_length=0.06),
+                     label(r"two-token loss \\ weight $0.3 \to 0.1$", font_size=18, color=C.PROB))
+        mtp[1].next_to(mtp[0].get_end(), RIGHT, buff=0.1).shift(DOWN * 0.5)
+        ramp = label(r"ramped up over the first $0.47$T", font_size=18, color=GPU).next_to(b.ax.c2p(0.5, 15), RIGHT,
+                                                                                         buff=0.1).shift(DOWN * 0.35)
+        src = cite(r"DeepSeek-AI, DeepSeek-V3 Technical Report (2024), \ Sec.\ 4.2", corner=DR, font_size=17)
+        with self.voiceover(
+            "Inside the pretraining phase, nothing is fixed. Here is DeepSeek-V3's, as its report gives it. "
+            "<bookmark mark='a'/> The learning rate warms up over two thousand steps, then stays at 2.2 times ten to "
+            "the minus four until ten trillion tokens, <bookmark mark='b'/> then decays along a cosine to a tenth of "
+            "that over the next 4.3 trillion, <bookmark mark='c'/> and ends with two short constant steps. "
+            "<bookmark mark='d'/> The batch grows too: from 3,072 sequences of four thousand tokens to 15,360, over "
+            "the first half trillion tokens. <bookmark mark='e'/> And at ten trillion, the weight of a second loss, "
+            "for predicting two tokens ahead, drops from 0.3 to 0.1. We'll meet each of these again: schedules in "
+            "chapter seven, two-token prediction in chapter sixteen."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(b), FadeIn(src))
+            vo.wait_until("a")
+            self.play(Create(cv), run_time=2.0, rate_func=lambda x: min(1, x * 1.4) * 0.68)
+            self.play(FadeIn(notes[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(notes[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(notes[2]))
+            vo.wait_until("d")
+            self.play(Create(bcv), FadeIn(ramp), run_time=1.5)
+            vo.wait_until("e")
+            self.play(Create(mtp[0]), FadeIn(mtp[1]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def cost(self):
+        P, D, L = load("published"), F.DSV3, F.LLAMA3
+        colors = {r"C": C_COL, r"N": N_COL, r"D": D_COL}
+        rows = [
+            cmath(r"C", r"\approx", r"6\,N\,D", colors=colors, font_size=40),
+            cmath(r"C_{\text{Llama 3.1}}", r"\approx", r"6 \times 405\text{B} \times 15.6\text{T}", r"=",
+                  sci(P["llama_6nd"], 2), colors=colors, font_size=34),
+            cmath(r"C_{\text{DeepSeek-V3}}", r"\approx", r"6 \times 37\text{B} \times 14.8\text{T}", r"=",
+                  sci(P["dsv3_6nd"], 2), colors=colors, font_size=34),
+        ]
+        whys = [why(r"Part 14: \ two operations per parameter forward, four back", font_size=20),
+                why(rf"reported: \ ${sci(L['flops'], 1)}$", font_size=20),
+                why(r"$37$B of its $671$B parameters are active per token", font_size=20)]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.5, edge=6.8)
+        hours = VGroup(
+            label(rf"pretraining: \ ${D['hours_pre'] / 1e6:.3f}$M H800 GPU-hours", font_size=24, color=GPU),
+            label(rf"longer context: \ ${D['hours_ctx'] / 1e3:.0f}$k; \ post-training: \ ${D['hours_post'] / 1e3:.0f}$k",
+                  font_size=24, color=GPU),
+            label(rf"at \$${D['rate']:.0f}$ an hour: \ \${P['dsv3_usd'] / 1e6:.3f}$ million", font_size=28, color=C_COL),
+            label(rf"each trillion tokens: \ ${D['hours_per_T'] / 1e3:.0f}$k GPU-hours $=$ ${P['dsv3_days_per_T']:.1f}$ "
+                  rf"days on ${D['gpus']:,}$ GPUs".replace(",", "{,}"), font_size=24, color=D_COL),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([0, -1.9, 0])
+        caveat = note(r"the final run only: \ not the experiments, the data, the people, or the cluster itself",
+                      font_size=20).next_to(hours, DOWN, buff=0.25)
+        src = cite(r"DeepSeek-AI (2024), \ Table 1; \ Llama Team (2024)", corner=DR, font_size=17)
+        with self.voiceover(
+            "How big is such a run? Part 14 gave the rule: training costs about six operations per parameter per "
+            "token. <bookmark mark='a'/> For Llama 3.1, six times 405 billion times 15.6 trillion is "
+            f"{P['llama_6nd'] / 1e25:.2f} times ten to the twenty-five, just what Meta reports. <bookmark mark='b'/> "
+            "DeepSeek-V3 is a mixture of experts, and only 37 billion of its parameters work on each token, so it "
+            f"needs {P['dsv3_6nd'] / 1e24:.1f} times ten to the twenty-four: about a tenth. <bookmark mark='c'/> "
+            "Its report also gives the bill: 2.664 million H800 GPU-hours for pretraining, plus the longer-context "
+            f"and post-training stages; at two dollars an hour, {P['dsv3_usd'] / 1e6:.3f} million dollars. "
+            f"<bookmark mark='d'/> Each trillion tokens took {D['hours_per_T'] / 1e3:.0f} thousand GPU-hours: "
+            f"{P['dsv3_days_per_T']:.1f} days on 2,048 GPUs. That is the price of the final run only, not of the "
+            "experiments before it, the data, or the cluster."
+        ) as vo:
+            step(0)
+            self.play(FadeIn(src))
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(h, shift=UP * 0.1) for h in hours[:3]], lag_ratio=0.5), run_time=2.5)
+            vo.wait_until("d")
+            self.play(FadeIn(hours[3]), FadeIn(caveat))
+        self.wait(0.3)
+        self.clear_scene()

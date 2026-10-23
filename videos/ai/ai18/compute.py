@@ -522,7 +522,8 @@ def compute_contamination(n=13):
 
     def hits(ws, k=n, tab=grams):
         h = np.fromiter((hash(tuple(ws[i:i + k])) for i in range(len(ws) - k + 1)), np.int64)
-        return np.nonzero(np.isin(h, tab))[0].tolist()
+        j = np.minimum(np.searchsorted(tab, h), len(tab) - 1)  # tab is sorted (np.unique)
+        return np.nonzero(tab[j] == h)[0].tolist()
 
     pw = W.words(P1.text("passage"))
     ph, ph8 = hits(pw), hits(pw, 8, g8)

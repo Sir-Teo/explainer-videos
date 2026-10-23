@@ -214,8 +214,7 @@ class Outro(VoiceoverScene):
              r"Cire\c{s}an et al.\ (2012); \ Nair \& Hinton (2010); \ Srivastava et al.\ (2014)",
              r"Simonyan \& Zisserman (2014); \ Szegedy et al.\ (2014); \ Ioffe \& Szegedy (2015); \ He et al.\ (2015); "
              r"\ Srivastava, Greff \& Schmidhuber (2015); \ Recht et al.\ (2019)",
-             r"Zeiler \& Fergus (2013); \ Simonyan, Vedaldi \& Zisserman (2013); \ Luo et al.\ (2016); \ Olah et al.\ "
-             r"(2017); \ Azulay \& Weiss (2019); \ Zhang (2019)",
+             r"Zeiler \& Fergus (2013); \ Azulay \& Weiss (2019); \ Zhang (2019)",
              r"Szegedy et al.\ (2013); \ Goodfellow, Shlens \& Szegedy (2014); \ Madry et al.\ (2017); \ Wong, Rice "
              r"\& Kolter (2020)",
              r"Sifre (2014); \ Chollet (2016); \ Howard et al.\ (2017); \ Yu \& Koltun (2015); \ van den Oord et al.\ "
