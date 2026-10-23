@@ -33,7 +33,7 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
 * **5. ImageNet and AlexNet.** Deng et al. (CVPR 2009), WordNet and Mechanical Turk; ILSVRC (1,000 classes,
   1,281,167 training images, top-5 error); 2010–2012 results (ISI's Fisher vectors 26.2%, SuperVision 16.4% and 15.3%
   with extra data); AlexNet's weights and multiply-adds layer by layer, computed from the published architecture
-  (60,965,224 weights; 6% in the convolutions, most of the arithmetic there); the hardware side is Part 17's
+  (60,965,224 weights; 4% in the convolutions, 92% of the multiply-adds there); the hardware side is Part 17's
   chapter 4; Cireșan et al.'s GPU networks (traffic signs, IJCNN 2011: 99.46% against 98.84% for people), Hinton et
   al. (2012) in speech, ILSVRC 2013, the 2018 Turing Award.
 * **6. Why AlexNet won.** ReLU (Nair & Hinton 2010; Glorot, Bordes & Bengio 2011) and the slopes of the
@@ -69,7 +69,8 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   forget gate (Gers, Schmidhuber & Cummins 2000); the cell as a conveyor belt; ∂c_t/∂c_{t−1} = diag(f_t) and the
   memory's half-life, derived; the GRU (Cho et al. 2014; Chung et al. 2014); the memory task (remember the first of
   T = 10, 30, 100 symbols): RNN, LSTM and GRU, three seeds each, the gated cells from the chrono initialization
-  (Tallec & Ollivier 2018; with PyTorch's default gate biases they never left chance at T = 30 in our budget),
+  (Tallec & Ollivier 2018; in an earlier run with PyTorch's default gate biases, the LSTM stayed at chance at T = 30
+  in all three seeds, 12–14%),
   accuracy during training, and the gradient reaching each time step, replayed.
 * **13. A character LSTM.** 512 cells on Part 1's thirty novels, truncated backpropagation through time with 64
   readers (after Karpathy 2015); its training replayed with what it writes at each checkpoint; its row on the
