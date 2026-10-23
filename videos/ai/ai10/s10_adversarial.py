@@ -90,7 +90,6 @@ class Adversarial(VoiceoverScene):
             "ReLUs are built from linear pieces, so do the same with the network's own gradient: the fast gradient "
             "sign method, one gradient, one step."
         ) as vo:
-            vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1, transform=False)
@@ -238,9 +237,9 @@ class Adversarial(VoiceoverScene):
             f"something else. <bookmark mark='c'/> At two grey levels it's wrong on {pct(a['cifar_pgd'][i2], 0)} "
             f"percent of the test photographs, against {pct(a['cifar_pgd'][0], 0)} percent with no attack at all."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(r[0]) for r in rows], lag_ratio=0.3))
             vo.wait_until("a")
-            self.play(FadeIn(hl), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3))
+            self.play(FadeIn(hl), LaggedStart(*[FadeIn(Group(*r[1:])) for r in rows], lag_ratio=0.3))
             vo.wait_until("c")
             self.play(Create(ax), Create(cf), Create(cp), FadeIn(leg))
         self.wait(0.3)
@@ -290,8 +289,9 @@ class Adversarial(VoiceoverScene):
                                                                                                     buff=0.25)
         fr = label(r"since: \ certified defences, \ physical attacks (stickers on stop signs), \ and the same "
                    r"search against language models (Part 31)", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.3)
-        if fr.width > 13:
-            fr.width = 13
+        if fr.width > 9.8:
+            fr.width = 9.8
+        fr.to_corner(DL, buff=0.3)
         cite_ = cite(r"Goodfellow et al.\ (2014); \ Madry et al.\ (2017); \ Wong, Rice \& Kolter (2020)", corner=UR)
         tag = note(r"computed: \ three seeds").to_corner(DR, buff=0.2)
         cost = ("robustness costs a little accuracy." if adv_c > std_c + 0.001 else

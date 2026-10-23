@@ -183,6 +183,25 @@ class SeqClassifier(nn.Module):
             raise ValueError(cell)
         self.out = nn.Linear(hidden, classes)
 
+    @torch.no_grad()
+    def chrono_init(self, t_max: int, generator=None):
+        """Tallec & Ollivier (2018), 'chrono' initialization: each unit's gate starts so that it keeps its memory for
+        a time drawn between 1 and t_max steps (forget/update gate bias log U(1, t_max - 1); LSTM input gate the
+        opposite).  Only the gated cells have such a gate; the plain RNN is left as it is."""
+        H = self.out.in_features
+        u = torch.empty(H).uniform_(1.0, max(t_max - 1.0, 1.0 + 1e-3), generator=generator)
+        b = torch.log(u)
+        if self.kind == "lstm":  # PyTorch gate order: input, forget, cell, output
+            self.rnn.bias_ih_l0[H:2 * H] = b
+            self.rnn.bias_hh_l0[H:2 * H] = 0.0
+            self.rnn.bias_ih_l0[:H] = -b
+            self.rnn.bias_hh_l0[:H] = 0.0
+        elif self.kind == "gru":  # reset, update, new; h' = (1 - z) n + z h: z near 1 keeps the state
+            self.rnn.bias_ih_l0[H:2 * H] = b
+            self.rnn.bias_hh_l0[H:2 * H] = 0.0
+        elif self.kind == "mingru":  # h = (1 - z) h + z h~: z near 0 keeps the state
+            self.rnn.z.bias[:] = -b
+
     def forward(self, x, keep_inputs: bool = False):
         e = self.emb(x)
         if keep_inputs:  # the inputs as leaves, so the gradient reaching each time step can be read

@@ -94,11 +94,15 @@ class Deception(VoiceoverScene):
             "prompts from the safe ones almost perfectly. These were models built to deceive; the open question is "
             "whether such tools catch deception that arises on its own."
         ) as vo:
-            self.play(FadeIn(p1), FadeIn(p2))
+            rest1, rest2 = VGroup(steps, hc), VGroup(g, safe, bad, gl, sch, hc2)
+            full1, full2 = rest1.copy(), rest2.copy()
+            rest1.fade(0.82)  # what training did, and what probes found, wait dimmed for their turn
+            rest2.fade(0.82)
+            self.play(FadeIn(p1), FadeIn(p2), FadeIn(rest1), FadeIn(rest2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in steps], lag_ratio=0.5), FadeIn(hc), run_time=2.5)
+            self.play(Transform(rest1, full1), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(g), Create(safe), Create(bad), FadeIn(gl), FadeIn(sch), FadeIn(hc2))
+            self.play(Transform(rest2, full2), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
 
@@ -171,11 +175,13 @@ class Deception(VoiceoverScene):
             "striking: with no goal given at all, it still dropped, from ninety-six to sixty-one, reasoning that it "
             "should stay deployed in order to be helpful: a goal it had learned in training, not one it was given."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(head), FadeIn(a))
+            b_full = b.copy()
+            b.fade(0.82)  # the no-goal result waits, dimmed, beside the first
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(a), FadeIn(b))
             vo.wait_until("a")
             self.play(Indicate(a[-1], color=WHITE))
             vo.wait_until("b")
-            self.play(FadeIn(b))
+            self.play(Transform(b, b_full))
         self.wait(0.4)
         self.clear_scene()
 
@@ -219,14 +225,17 @@ class Deception(VoiceoverScene):
         ) as vo:
             full = left.copy()
             left[1:].fade(0.8)
-            self.play(FadeIn(left), FadeIn(tag))
+            right_full, rep_full = rightg.copy(), rep.copy()
+            rightg.fade(0.82)
+            rep.fade(0.82)
+            self.play(FadeIn(left), FadeIn(tag), FadeIn(rightg), FadeIn(rep))
             vo.wait_until("a")
             self.play(*[Transform(left[k], full[k]) for k in (1, 2, 3)])
             vo.wait_until("b")
             self.play(LaggedStart(*[Transform(left[k], full[k]) for k in range(4, len(left))], lag_ratio=0.3))
             vo.wait_until("c")
-            self.play(FadeIn(rightg))
+            self.play(Transform(rightg, right_full))
             vo.wait_until("d")
-            self.play(FadeIn(rep, shift=UP * 0.15))
+            self.play(Transform(rep, rep_full))
         self.wait(0.4)
         self.clear_scene()

@@ -232,6 +232,9 @@ class Hacking(VoiceoverScene):
         hl = label(r"$\Phi$: \ $0$ at the start, \\ rising to $5$ at the finish", font_size=20, color=SHAPED)
         hl.next_to(trk, RIGHT, buff=0.4)
         pot = VGroup(trk, heat, trk.targets.copy(), trk.start.copy(), trk.finish.copy(), hl)
+        hc = history_card(1999, r"Ng, Harada \& Russell", r"which bonuses for progress are safe: \ exactly those that "
+                          r"are differences of a potential", width=6.0, color=SHAPED, font_size=20)
+        hc.next_to(trk, RIGHT, buff=0.5)
         first = {m: [f for f in d[f"{m}_first"] if f >= 0] for m in ("sparse", "shaped")}
         n_sp, n_sh = len(first["sparse"]), len(first["shaped"])
         S = d["seeds"]
@@ -253,8 +256,9 @@ class Hacking(VoiceoverScene):
             "policy is unchanged; and going around in a circle earns nothing. <bookmark mark='d'/> " + sparse_said +
             " <bookmark mark='e'/> " + shaped_said + " The bonus guides; it cannot be farmed."
         ) as vo:
-            self.play(FadeIn(trk))
+            self.play(FadeIn(trk), FadeIn(hc, shift=UP * 0.15))
             vo.wait_until("a")
+            self.play(FadeOut(hc), run_time=0.5)
             step(0)
             self.play(FadeIn(heat), FadeIn(pot[2:]))
             vo.wait_until("b")

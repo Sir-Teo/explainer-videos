@@ -90,6 +90,10 @@ ZH.update({
     "f'Measured on the ring, in the first steps, the two gradients":
         '在环上测量，最初几步里，两者的梯度相差不到{fac:.1f}倍：我们的判别器在早期从来没有自信到让这个差别显现出来。',
 
+    'Its samples bunch into one clump':
+        '它的样本挤成一团，有时落在一个峰上，有时落在峰与峰之间，而这一团从一个峰跳到另一个峰：生成器追着判别器最薄弱的地方跑，'
+        '判别器跟着追过去。',
+
     'It covers a few modes at a time':
         '它一次只覆盖几个峰，而覆盖的是哪几个，一直在变：生成器追着判别器最薄弱的地方跑，判别器跟着追过去。',
 
@@ -262,9 +266,20 @@ ZH.update({
 
     'f"Third, a coarse but telling check:':
         "第三，一个粗略但很说明问题的检查：每个模型画的是哪些数字？分类器给每个模型的两千个样本打上标签，而真实数据里，"
-        "每个数字大约占十分之一。<bookmark mark='a'/>{msg}在整个类别这个尺度上的模式丢失，是最容易看出来的失败。<bookmark mark='b'/>"
-        "所以，在这个小尺度、同一份预算下：每个家族都有所长，没有一个样样都赢。似然模型对数据描述得最好；对抗模型画得怎样和它得分怎样，"
-        "是两回事；而哪个最好，取决于模型是拿来做什么的。",
+        "每个数字大约占十分之一。<bookmark mark='a'/>{msg}在整个类别这个尺度上的模式丢失，是最容易看出来的失败。",
+
+    'f"So, at this small scale and on one budget, who won what?':
+        "那么，在这个小尺度、同一份预算下，谁赢了什么？<bookmark mark='a'/>{close}<bookmark mark='b'/>哪个最好，取决于模型是"
+        "拿来做什么的，也取决于规模：GAN曾经多年画出最清晰的图像，用的规模远远超过我们的。",
+
+    "every family wins something, and none wins everything.":
+        "每个家族都赢下了一些东西，没有哪个赢下一切。",
+
+    "f'every family but one wins something;":
+        "除了一个家族，每个家族都赢下了一些东西；{l0}在这里什么也没赢。",
+
+    "f'{nl} of the five win nothing at all":
+        "五个里有{nl}个什么也没赢，{l0}就是其中之一。",
 
     "f'The most uneven is {nw}:":
         '最不均匀的是{nw}：它最少见的数字是{wk}，只占它样本的{mw:.1f}%，而真实数据里大约是10%。最均匀的是{nf_}，'

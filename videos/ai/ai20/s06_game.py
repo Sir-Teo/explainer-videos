@@ -263,10 +263,18 @@ class Game(VoiceoverScene):
         full_ns = sum(1 for m in fin["ns"] if m == 8)
         full_mm = sum(1 for m in fin["mm"] if m == 8)
         ns_modes = list(gc["frame_modes"])
-        hop = ("It covers a few modes at a time, and the set it covers keeps changing: the generator chases the "
-               "places where the discriminator is weakest, and the discriminator follows." if max(ns_modes) < 8 else
-               "At times it reaches all eight, then loses some again: the generator chases the places where the "
-               "discriminator is weakest, and the discriminator follows.")
+        fc = np.asarray(gc["frame_counts"])
+        visited = {int(np.argmax(c_)) for c_ in fc if c_.sum() > 0}
+        if max(ns_modes) <= 1 and len(visited) >= 2:
+            hop = ("Its samples bunch into one clump, on a mode or between modes, and the clump hops from mode to "
+                   "mode: the generator chases the places where the discriminator is weakest, and the discriminator "
+                   "follows.")
+        elif max(ns_modes) < 8:
+            hop = ("It covers a few modes at a time, and the set it covers keeps changing: the generator chases the "
+                   "places where the discriminator is weakest, and the discriminator follows.")
+        else:
+            hop = ("At times it reaches all eight, then loses some again: the generator chases the places where the "
+                   "discriminator is weakest, and the discriminator follows.")
         pick = (f"This is seed {seed}, the run of five that ended with the fewest modes; {n_col} of the five "
                 "collapsed to some degree.")
         if mean_ns < mean_mm:

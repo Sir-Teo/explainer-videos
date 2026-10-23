@@ -310,7 +310,9 @@ class VAE(nn.Module):
 ZG = 32
 
 
-def gan_nets(h=512):
+def gan_nets(h=256):
+    """MLP generator and discriminator. Width 256, not 512: on the shared budget a 512-wide pair gets only ~5k
+    generator steps and draws speckled digits (a pilot run: FID 110-130); at 256 it gets ~16k steps."""
     G = nn.Sequential(nn.Linear(ZG, h), nn.LeakyReLU(0.2), nn.Linear(h, h), nn.LeakyReLU(0.2), nn.Linear(h, D),
                       nn.Sigmoid())
     Dn = nn.Sequential(nn.Linear(D, h), nn.LeakyReLU(0.2), nn.Linear(h, h), nn.LeakyReLU(0.2), nn.Linear(h, 1))
