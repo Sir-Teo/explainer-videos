@@ -61,6 +61,8 @@ def check(video):
     lang.LANG = "zh"  # imported earlier in English; patterns and phrases only apply in Chinese
     seen = {}
     for f in sorted((ROOT / "renders" / "qa" / "text").glob(f"{video}.*.jsonl")):
+        if ".lang-" in f.name:  # a dry run of a translated build: its strings are already translated
+            continue
         for line in f.read_text().splitlines():
             d = json.loads(line)
             if d["needs"]:
@@ -83,8 +85,10 @@ for video in ARGS:
     out_dir.mkdir(parents=True, exist_ok=True)
     m = importlib.import_module(f"{video_package(video)}.manifest")
     scenes = [s for s in m.SCENES if ONLY is None or s[1] in ONLY]
+    suffix = "" if LANG == "en" else f".lang-{LANG}"  # a Chinese dry run mustn't replace the English record
     for _, cls, _ in scenes:
-        (out_dir / f"{video}.{cls}.jsonl").unlink(missing_ok=True)
+        (out_dir / f"{video}.{cls}{suffix}.jsonl").unlink(missing_ok=True)
     with ThreadPoolExecutor(2) as pool:
-        for cls, rc, err in pool.map(lambda s: run(video, s[0], s[1], out_dir / f"{video}.{s[1]}.jsonl"), scenes):
+        for cls, rc, err in pool.map(lambda s: run(video, s[0], s[1], out_dir / f"{video}.{s[1]}{suffix}.jsonl"),
+                                     scenes):
             print(f"  {'ok  ' if rc == 0 else 'FAIL'} {video} {cls}" + ("" if rc == 0 else f"\n{err}"), flush=True)
