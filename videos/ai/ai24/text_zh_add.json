@@ -507,7 +507,18 @@
   "Papers": "论文",
   "In this part": "本部分内容",
   "1961\\; redundancy reduction": "1961\\; 冗余削减",
-  "1993\\; Siamese networks": "1993\\; 孪生网络"
+  "1993\\; Siamese networks": "1993\\; 孪生网络",
+  "10 labels per digit:": "每个数字10个标签：",
+  "pull together only: \\\\ one direction, \\ then noise": "只拉近：\\\\ 一个方向，\\ 然后只剩噪声",
+  "SimCLR: \\ a slow decline": "SimCLR：\\ 缓慢下降",
+  "off the diagonal: \\ root mean square": "非对角线：\\ 均方根",
+  "schematic: \\\\ group the images, \\\\ then learn to predict each image's group": "示意图：\\\\ 先把图像分组，\\\\ 再学着预测每张图像属于哪一组",
+  "predicting pixels spends the network on strokes, \\ not on which digit it is": "预测像素让网络把力气花在笔画上，\\ 而不是花在“这是哪个数字”上",
+  "predict in representation space, \\ and the network chooses what is worth predicting": "在表示空间里预测，\\ 网络就能自己挑选值得预测的东西",
+  "methods whose recipes train far longer \\ (DINO, \\ masked models) \\ may be at a disadvantage here": "配方训练得长得多的方法\\ （DINO、\\ 掩码模型）\\ 在这里可能吃亏",
+  "at ImageNet scale, \\ with vision transformers, \\ the order differs: \\\\ DINOv2 and DINOv3 lead self-supervised frozen probes; \\ masked models do well after fine-tuning": "在ImageNet规模上，\\ 用视觉Transformer，\\ 名次不同：\\\\ 在自监督方法里，DINOv2和DINOv3的冻结探针领先；\\ 掩码模型微调后表现很好",
+  "$10^9$ items $\\times$ $1{,}000$ numbers $\\times$ $4$ bytes $=$ $4$ terabytes": "$10^9$个条目 $\\times$ $1{,}000$个数 $\\times$ $4$字节 $=$ $4$ TB",
+  "different losses, \\ alike": "不同的损失，\\ 相似的表示"
  },
  "patterns": []
 }

@@ -36,6 +36,7 @@ class Reflow(VoiceoverScene):
         pn = Panel(5.8, center=[-3.4, -0.3, 0])
         pts = pn.dots(snaps[0], FM_C, radius=0.022)
         top = float(np.percentile(L[:, 1], 99)) * 1.05
+        L = np.stack([L[:, 0], np.minimum(L[:, 1], top)], 1)  # the first few losses run off the top: drawn at it
         g = axes([0, checks[-1]], [0, top], x_length=4.6, y_length=2.6, xlabel=r"training step",
                  ylabel=r"the loss: \ $\| v_\theta - (x_1 - z) \|^2$", xticks=[0, checks[-1]], yticks=[0, round(top, 1)],
                  center=[3.6, 0.6, 0])
@@ -89,7 +90,8 @@ class Reflow(VoiceoverScene):
             label(r"pair each noise point $z$ with the end of its own flow, $T(z)$, \ and train a new flow on the pairs",
                   font_size=22),
             label(r"the new pairing costs no more, \ for every convex cost; \ repeat, \ and the paths straighten",
-                  font_size=22, color=GREY_A)), who=r"Liu, Gong \& Liu (2023)", width=9.0).to_edge(DOWN, buff=0.3)
+                  font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15), who=r"Liu, Gong \& Liu (2023)",
+            width=9.0).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Xingchao Liu, Chengyue Gong and Qiang Liu called the fix reflow. <bookmark mark='a'/> Run the trained "
             "flow, and pair each noise point with where the flow actually takes it. Those pairs no longer cross one "
@@ -171,29 +173,29 @@ class Reflow(VoiceoverScene):
         f = load("flow")
         cards = VGroup(
             history_card(2023, r"Liu et al.: \ InstaFlow", r"reflow plus distillation: \ Stable Diffusion in one step",
-                         color=HIST, width=4.2, font_size=18),
+                         color=HIST, width=4.3, font_size=21),
             history_card(2024, r"Esser et al.: \ Stable Diffusion 3", r"a rectified-flow transformer, \ trained with "
-                         r"straight lines", color=HIST, width=4.2, font_size=18),
+                         r"straight lines", color=HIST, width=4.3, font_size=21),
             history_card(2024, r"Black Forest Labs: \ FLUX.1", r"a $12$-billion-parameter rectified-flow transformer",
-                         color=HIST, width=4.2, font_size=18)).arrange(RIGHT, buff=0.25).to_edge(UP, buff=0.5)
+                         color=HIST, width=4.3, font_size=21)).arrange(RIGHT, buff=0.22).to_edge(UP, buff=0.4)
         if cards.width > 13.4:
             cards.width = 13.4
         S = Group()
         for i, k in enumerate(("fm", "ot", "rf1", "rf2")):
-            pn = Panel(2.9, center=[-4.9 + 3.25 * i, -1.3, 0])
+            pn = Panel(3.2, center=[-5.025 + 3.35 * i, -1.25, 0])
             S.add(Group(pn, pn.scatter(np.asarray(f[f"{k}1"]), KC[k], radius_px=1.4, res=260),
                         label(KN[k], font_size=19, color=KC[k]).next_to(pn, UP, buff=0.08)))
         sl = label(r"one step from the same noise", font_size=20, color=GREY_A).next_to(S, DOWN, buff=0.12)
         with self.voiceover(
-            "In practice: InstaFlow, in 2023, combined reflow with distillation to make Stable Diffusion draw in one "
-            "step. <bookmark mark='a'/> Stable Diffusion 3 and FLUX one, in 2024, were trained as rectified flows, "
-            "straight lines between noise and data, with the architecture that is Part 22's story. "
-            "<bookmark mark='b'/> And here is what one step looks like on our letters, from each of the four."
+            "Here is what one step looks like on our letters, from each of the four. <bookmark mark='a'/> In "
+            "practice: InstaFlow, in 2023, combined reflow with distillation to make Stable Diffusion draw in one "
+            "step. <bookmark mark='b'/> Stable Diffusion 3 and FLUX one, in 2024, were trained as rectified flows, "
+            "straight lines between noise and data, with the architecture that is Part 22's story."
         ) as vo:
-            self.play(FadeIn(cards[0], shift=UP * 0.1))
-            vo.wait_until("a")
-            self.play(FadeIn(cards[1:], shift=UP * 0.1))
-            vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in S], lag_ratio=0.25), FadeIn(sl), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(cards[0], shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[1:], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

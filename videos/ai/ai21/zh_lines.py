@@ -290,7 +290,8 @@ ZH.update({
 
     '"The schedule also decides where a sampler puts its steps.':
         "调度还决定了采样器把步子放在哪里。这里是3种采样器，用精确的去噪器，在同样大约16次网络调用的预算下，"
-        "用4种噪声水平的间隔方式。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{edm_note}",
+        "用4种噪声水平的间隔方式。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}"
+        "<bookmark mark='d'/>{edm_note}",
 
     "On image models EDM's spacing has become a standard; on our letters":
         '在图像模型上，EDM的间隔方式已经成了标准；在我们的字母上，它并不总是最好的。间隔方式是采样器的一个设置，和别的设置一样需要调。',
@@ -298,11 +299,20 @@ ZH.update({
     "On image models EDM's spacing has become a standard, and on our letters":
         '在图像模型上，EDM的间隔方式已经成了标准，在我们的字母上，它也是最好的。',
 
-    "f'One spacing wins for all three":
-        '有一种间隔方式对三者都最好：{sp_ddim}。',
+    "f'For DDIM, the best of the four spacings is":
+        '对DDIM来说，最好的是{sp_ddim}；',
 
-    "f'No spacing wins for every solver":
-        '没有哪种间隔方式对每个求解器都最好：对DDIM来说，最好的是{sp_ddim}，对休恩法是{sp_heun}，对DPM-Solver++则是{sp_dpm}。',
+    'f"for Heun\'s method, the best is {sp_heun} too;"':
+        '对休恩法，也是{sp_heun}；',
+
+    'f"for Heun\'s method, the best is {sp_heun};"':
+        '对休恩法，是{sp_heun}；',
+
+    "f'and for DPM-Solver plus plus, {sp_dpm} as well":
+        '对DPM-Solver++，同样是{sp_dpm}：有一种间隔方式对三者都最好。',
+
+    "f'and for DPM-Solver plus plus, {sp_dpm}: no spacing":
+        '而对DPM-Solver++，是{sp_dpm}：没有哪种间隔方式对每个求解器都最好。',
 
     # ------------------------------------------------------------------ EDM
     'Chapter eight. EDM: preconditioning and Heun.':
@@ -378,8 +388,11 @@ ZH.update({
     "f'Plain Euler in time trails DDIM":
         '在时间上用普通欧拉法不如DDIM，在16次时是{eu:.3f}对{dm:.3f}：把干净点的猜测固定住，是更好的一阶选择。',
 
+    'f"{bs}\'s points are the closest to it':
+        '{bs}的点离它最近，{ws}的点偏得最远。',
+
     'f"Here are three of them after about {budget} evaluations':
-        "这是其中三种在大约{budget}次调用之后的结果，旁边是精确解：DDIM的点仍然向内模糊，二阶方法的点则很清晰。"
+        "这是其中三种在大约{budget}次调用之后的结果，旁边是精确解。{close_note}"
         "<bookmark mark='a'/>{verdict}而网络自己的误差设定了一个下限：精确求解时，它的ODE落在离数据{net_ref:.3f}的地方，"
         "而字母的一份新样本是{fl:.3f}。<bookmark mark='b'/>那么，10到30次调用，再配上一个懂得这个方程的求解器。比这更少，"
         "就需要另一种想法：第12章。",
@@ -478,10 +491,10 @@ ZH.update({
     'every seed of it ahead of every seed of the others.':
         '它的每个随机种子都胜过其他方法的每个随机种子。',
 
-    'In practice: InstaFlow, in 2023':
-        "实际应用中：2023年的InstaFlow把重流和蒸馏结合起来，让Stable Diffusion一步就能出图。<bookmark mark='a'/>2024年的"
-        "Stable Diffusion 3和FLUX.1，都是作为整流流训练的，也就是噪声和数据之间的直线，至于它们的架构，那是第22部分的故事。"
-        "<bookmark mark='b'/>这是在我们的字母上，四种方法各走一步的样子。",
+    'Here is what one step looks like on our letters, from each of the four.':
+        "这是在我们的字母上，四种方法各走一步的样子。<bookmark mark='a'/>实际应用中：2023年的InstaFlow把重流和蒸馏结合起来，"
+        "让Stable Diffusion一步就能出图。<bookmark mark='b'/>2024年的Stable Diffusion 3和FLUX.1，都是作为整流流训练的，"
+        "也就是噪声和数据之间的直线，至于它们的架构，那是第22部分的故事。",
 
     # ------------------------------------------------------------------ Distill
     'Chapter twelve. Distillation.':

@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import (DDIM_C, EPS_C, F_C, HEUN_C, PART, SCORE, X0_C, bars_chart, legend, load, log_axes,
-                                   logcurve, take_away)
+from videos.ai.ai21.common import (DDIM_C, EPS_C, F_C, HEUN_C, NOISE, PART, SCORE, X0_C, bars_chart, legend, load,
+                                   log_axes, logcurve, take_away)
 
 PNAME = {"eps": r"predict the noise", "x0": r"predict the clean point", "F": r"EDM's mixture $F$"}
 PSPOKEN = {"eps": "predicting the noise", "x0": "predicting the clean point", "F": "EDM's mixture"}
@@ -39,6 +39,10 @@ class EDM(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.3, x=-1.8, buff=0.7, edge=6.85)
         d = definition_card(r"the denoiser", r"$D(x; \sigma) = \mathbb E[x_0 \mid x]$: \ the best guess of the clean "
                             r"point; \ every parameterization is a way of computing it", width=7.4).to_edge(DOWN, buff=0.45)
+        zoo = VGroup(*[VGroup(label(a_, font_size=30, color=c_), label(b_, font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15)
+                       for a_, b_, c_ in ((r"schedule", r"which noise levels, \ and when", C.BITS),
+                                          (r"parameterization", r"what the network outputs", SCORE),
+                                          (r"sampler", r"how to walk back", HEUN_C))]).arrange(RIGHT, buff=1.2).move_to([0, 0.2, 0])
         cite_ = cite(r"T.~Karras, M.~Aittala, T.~Aila \& S.~Laine, \textit{Elucidating the Design Space of Diffusion-Based "
                      r"Generative Models} (2022)", corner=UR, font_size=18)
         with self.voiceover(
@@ -50,15 +54,16 @@ class EDM(VoiceoverScene):
             "of x with sigma is x minus its denoised version, over sigma. <bookmark mark='d'/> Everything, every "
             "schedule and parameterization, is a way of computing the denoiser D."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), LaggedStart(*[FadeIn(z_, shift=DOWN * 0.1) for z_ in zoo], lag_ratio=0.3))
             vo.wait_until("a")
+            self.play(zoo.animate.scale(0.75).to_edge(DOWN, buff=0.25).set_opacity(0.6))
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeIn(d, shift=UP * 0.2))
+            self.play(FadeOut(zoo), FadeIn(d, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -163,23 +168,25 @@ class EDM(VoiceoverScene):
     # ------------------------------------------------------------------
     def heun(self):
         s = load("solvers")
-        # a schematic of one step: the true path curves; Euler follows the start's slope; Heun averages two slopes
-        arc = ArcBetweenPoints([-6.0, -1.6, 0], [-1.4, 1.4, 0], angle=-1.0, color=WHITE, stroke_width=3)
-        p0, p1 = arc.get_start(), arc.get_end()
-        k1 = arc.point_from_proportion(0.02) - p0
-        k1 = k1 / np.linalg.norm(k1)
-        h = 4.6
-        e_end = p0 + h * k1 * 1.0
-        eu = Arrow(p0, e_end, buff=0, color=DDIM_C, stroke_width=4, max_tip_length_to_length_ratio=0.08)
-        k2 = arc.point_from_proportion(0.995) - arc.point_from_proportion(0.97)
-        k2 = k2 / np.linalg.norm(k2)
-        hv = (k1 + k2) / np.linalg.norm(k1 + k2)
-        he = Arrow(p0, p0 + h * 1.02 * hv, buff=0, color=HEUN_C, stroke_width=4, max_tip_length_to_length_ratio=0.08)
-        sl2 = Arrow(e_end, e_end + 1.0 * k2, buff=0, color=GREY_B, stroke_width=2.5, max_tip_length_to_length_ratio=0.25)
-        labs = VGroup(label(r"the true path", font_size=20, color=WHITE).next_to(arc.point_from_proportion(0.5), UL, buff=0.1),
-                      label(r"Euler: \ the slope at the start", font_size=20, color=DDIM_C).next_to(e_end, RIGHT, buff=0.15),
-                      label(r"the slope where Euler lands", font_size=18, color=GREY_B).next_to(sl2.get_end(), DOWN, buff=0.1),
-                      label(r"Heun: \ the average of the two", font_size=20, color=HEUN_C).next_to(he.get_end(), UP, buff=0.15))
+        # a schematic of one step along dx/ds = B'(s), B a quadratic Bezier: Euler follows the start's slope and
+        # overshoots; Heun averages the slopes at the start and where Euler lands, and (B' being linear) lands exactly
+        P0, Cc, P1 = np.array([-6.3, -3.0, 0]), np.array([-5.0, 0.0, 0]), np.array([-0.6, 0.8, 0])
+        arc = VMobject(color=WHITE, stroke_width=3.5).set_points_as_corners(
+            [(1 - u) ** 2 * P0 + 2 * u * (1 - u) * Cc + u ** 2 * P1 for u in np.linspace(0, 1, 60)])
+        s0, s1 = 2 * (Cc - P0), 2 * (P1 - Cc)
+        e_end = P0 + s0
+        eu = Arrow(P0, e_end, buff=0, color=DDIM_C, stroke_width=5, max_tip_length_to_length_ratio=0.06)
+        sl2 = Arrow(e_end, e_end + 1.6 * s1 / np.linalg.norm(s1), buff=0, color=GREY_B, stroke_width=3,
+                    max_tip_length_to_length_ratio=0.2)
+        he = Arrow(P0, P0 + (s0 + s1) / 2, buff=0, color=HEUN_C, stroke_width=5, max_tip_length_to_length_ratio=0.06)
+        ends = VGroup(Dot(P0, radius=0.08, color=NOISE), Dot(P1, radius=0.08, color=WHITE))
+        labs = VGroup(label(r"the true path", font_size=24, color=WHITE).next_to(P1, RIGHT, buff=0.2),
+                      label(r"Euler: \ the slope \\ at the start: \ overshoots", font_size=24, color=DDIM_C)
+                      .next_to(e_end, LEFT, buff=0.15),
+                      label(r"the slope \\ where Euler lands", font_size=22, color=GREY_B).next_to(sl2, DOWN, buff=0.12),
+                      label(r"Heun: \ the average of the two, \\ lands on the path", font_size=24, color=HEUN_C)
+                      .next_to(P1, DOWN, buff=0.35).shift(RIGHT * 0.6))
+        keep_in_frame(labs[1])
         tag = note(r"schematic").to_corner(UL, buff=0.3)
         rows = {k: s[k] for k in ("ddim", "heun")}
         nfe_h = [r["nfe"] for r in rows["heun"]]
@@ -197,7 +204,7 @@ class EDM(VoiceoverScene):
                      label(rf"Euler (DDIM), ${nfe_h[j31] + 1}$: \ ${err_d.get(nfe_h[j31] + 1, float('nan')):.3f}$", font_size=22,
                            color=DDIM_C),
                      label(r"Karras et al., CIFAR-10: \ FID $1.79$ with $35$ evaluations", font_size=22, color=GREY_A)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, -1.6, 0])
+            DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.7, -2.0, 0])
         low = (f"below about {cross} evaluations the correction can do harm, and plain Euler is better; but " if first
                else "")
         with self.voiceover(
@@ -209,7 +216,7 @@ class EDM(VoiceoverScene):
             f"smaller than Euler's, and at {nfe_h[j63]}, {ratio63:.1f} times. With these two ideas and a careful spacing of the steps, Karras and colleagues "
             "reached an FID of 1.79 on CIFAR-10 with thirty-five evaluations."
         ) as vo:
-            self.play(FadeIn(tag), Create(arc), FadeIn(labs[0]))
+            self.play(FadeIn(tag), Create(arc), FadeIn(ends), FadeIn(labs[0]))
             self.play(GrowArrow(eu), FadeIn(labs[1]))
             vo.wait_until("a")
             self.play(GrowArrow(sl2), FadeIn(labs[2]))

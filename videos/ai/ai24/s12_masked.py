@@ -198,8 +198,8 @@ class Masked(VoiceoverScene):
         codes = np.asarray(b["codes"])[2].reshape(7, 7)
         d1 = digit(orig, 1.7, frame=True).move_to([-1.2, 0.5, 0])
         d2 = digit(quant, 1.7, frame=True).move_to([1.2, 0.5, 0])
-        grid = VGroup(*[MathTex(str(int(c)), font_size=16, color=BEIT_C) for c in codes.ravel()])
-        grid.arrange_in_grid(7, 7, buff=(0.08, 0.06)).move_to([4.2, 0.5, 0])
+        grid = VGroup(*[MathTex(str(int(c)), font_size=21, color=BEIT_C) for c in codes.ravel()])
+        grid.arrange_in_grid(7, 7, buff=(0.12, 0.08)).move_to([4.4, 0.5, 0])
         l1 = label(r"a digit", font_size=20, color=GREY_A).next_to(d1, UP, buff=0.15)
         l2 = label(r"as codes", font_size=20, color=BEIT_C).next_to(d2, UP, buff=0.15)
         l3 = label(r"the $49$ tokens", font_size=20, color=BEIT_C).next_to(grid, UP, buff=0.15)
@@ -217,11 +217,11 @@ class Masked(VoiceoverScene):
             "with forty percent of its patches hidden, must name each hidden patch's code, as BERT names a hidden "
             f"word. By the end it is right {pct(np.mean(accs), 0)} percent of the time."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(d1), FadeIn(l1))
             vo.wait_until("a")
             self.play(FadeIn(book), FadeIn(bl))
             vo.wait_until("b")
-            self.play(FadeIn(d1), FadeIn(l1), FadeIn(d2), FadeIn(l2), FadeIn(grid), FadeIn(l3))
+            self.play(FadeIn(d2), FadeIn(l2), FadeIn(grid), FadeIn(l3))
             vo.wait_until("c")
             self.play(FadeIn(task))
         self.wait(0.3)

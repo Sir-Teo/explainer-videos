@@ -236,19 +236,18 @@ class JEPAScene(VoiceoverScene):
     def video(self):
         events = VGroup(
             history_card(2024, r"V-JEPA", r"the same idea on video: \ predict hidden space--time blocks", color=JEPA,
-                         width=4.3, font_size=19),
+                         width=4.3, font_size=23),
             history_card(2025, r"V-JEPA 2", r"over a million hours of video; \ Something-Something v2 $77.3\%$; \ then "
                          r"$62$ hours of robot video teach it actions (V-JEPA 2-AC): \ zero-shot pick-and-place by "
-                         r"planning toward an image of the goal", color=JEPA, width=4.3, font_size=19),
+                         r"planning toward an image of the goal", color=JEPA, width=4.3, font_size=23),
             history_card(2026, r"V-JEPA 2.1", r"dense features for images and video; \ $+20$ points of grasping "
-                         r"success over V-JEPA 2-AC", color=JEPA, width=4.3, font_size=19),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.7)
+                         r"success over V-JEPA 2-AC", color=JEPA, width=4.3, font_size=23),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 1.0)
         le = label(r"LeJEPA (Balestriero \& LeCun, 2025): \ a JEPA with no stop-gradient and no teacher, \\ its "
                    r"collapse prevented by pushing the vectors toward an isotropic Gaussian", font_size=21,
                    color=GREY_A).next_to(events, DOWN, buff=0.5)
         src = cite(r"Bardes et al.\ (2024); \ Assran et al.\ (2025); \ Mur-Labadia et al.\ (2026)")
-        tk = take_away(r"predict in representation space: \ the network chooses what is worth predicting \ "
-                       r"(world models: Part 29)")
+        tk = take_away(r"predict in representation space, \ and the network chooses what is worth predicting")
         with self.voiceover(
             "On video, the idea becomes a model of the world. V-JEPA predicts hidden blocks of space and time. "
             "<bookmark mark='a'/> V-JEPA 2, in June 2025, was trained on over a million hours of video. Then, with "

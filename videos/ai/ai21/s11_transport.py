@@ -71,17 +71,19 @@ class Transport(VoiceoverScene):
         colors = {r"z": NOISE, r"x_1": DATA, r"v": FM_C}
         defs = VGroup(cmath(r"x_\tau = (1 - \tau)\,", r"z", r"+ \tau\,", r"x_1", colors=colors, font_size=30),
                       cmath(r"\text{each pair's velocity: }\ ", r"x_1", r"-", r"z", colors=colors, font_size=30)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, 2.5, 0])
+            DOWN, aligned_edge=LEFT, buff=0.2).move_to([2.6, 2.5, 0])
         rows = [
-            cmath(r"\partial_\tau p_\tau(x)", r"=", r"\mathbb E_{z, x_1}\big[\partial_\tau\, p_\tau(x \mid z, x_1)\big]", font_size=30),
+            cmath(r"\partial_\tau p_\tau(x)", r"=", r"\mathbb E_{z, x_1}\big[\partial_\tau\, p_\tau(x \mid z, x_1)\big]", font_size=28),
             cmath(r"\partial_\tau p_\tau(x)", r"=", r"-\nabla \cdot \mathbb E_{z, x_1}\big[(x_1 - z)\; p_\tau(x \mid z, x_1)\big]",
-                  font_size=30),
+                  font_size=28),
             cmath(r"\partial_\tau p_\tau(x)", r"=", r"-\nabla \cdot \big(p_\tau(x)\; v(x, \tau)\big), \quad v(x, \tau) = "
-                  r"\mathbb E[x_1 - z \mid x_\tau = x]", font_size=30),
+                  r"\mathbb E[x_1 - z \mid x_\tau = x]", font_size=28),
         ]
         whys = [why(r"the marginal: \ an average over pairs"), why(r"each pair moves at its own velocity"),
                 why(r"Bayes: \ average the velocity at $x$")]
-        step = ladder(self, rows, whys, keep=3, top=0.6, x=-2.0, buff=0.5, edge=6.85)
+        step = ladder(self, rows, whys, keep=2, top=0.1, x=-0.8, buff=0.35, edge=6.85)
+        small = VGroup(pn, lines, dz, dx).copy()
+        small.scale(3.4 / 5.4).move_to([-5.1, 1.9, 0])
         loss = label(r"and the regression $\big\| v_\theta(x_\tau, \tau) - (x_1 - z) \big\|^2$ has the same minimizer \ "
                      r"(the trick of chapter four)", font_size=22, color=FM_C).to_edge(DOWN, buff=0.3)
         cite_ = cite(r"Lipman et al.; \ Liu, Gong \& Liu; \ Albergo \& Vanden-Eijnden \ (all 2023)", corner=UR, font_size=18)
@@ -101,6 +103,7 @@ class Transport(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(lines), FadeIn(defs), FadeIn(pl))
             vo.wait_until("b")
+            self.play(Transform(VGroup(pn, lines, dz, dx), small), FadeOut(pl), run_time=1.0)
             step(0)
             vo.wait_until("c")
             step(1)
@@ -176,7 +179,7 @@ class Transport(VoiceoverScene):
         for i, (k, col, nm) in enumerate((("fm", FM_C, r"straight line: \ $x_\tau = (1-\tau)\, z + \tau\, x_1$"),
                                           ("trig", TRIG_C, r"diffusion: \ $x_\tau = \cos(\tfrac{\pi\tau}{2})\, z + "
                                                            r"\sin(\tfrac{\pi\tau}{2})\, x_1$"))):
-            pn = Panel(5.2, center=[-3.4 + 6.8 * i, 0.2, 0], xlim=(-3.4, 3.4), ylim=(-3.0, 2.6))
+            pn = Panel(5.2, center=[-3.4 + 6.8 * i, -0.55, 0], xlim=(-3.4, 3.4), ylim=(-3.0, 2.6))
             P = np.asarray(tr[f"{k}_paths"])
             panels.add(VGroup(pn, pn.paths(P[:, ::3], col, stroke_width=1.3, opacity=0.7),
                               label(nm, font_size=20, color=col).next_to(pn, UP, buff=0.12),
@@ -204,6 +207,7 @@ class Transport(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(panels[0][3]), FadeIn(panels[1][3]))
             vo.wait_until("c")
-            self.play(FadeIn(ta, shift=UP * 0.2))
+            ta.to_edge(UP, buff=0.3)
+            self.play(FadeOut(d), FadeIn(ta, shift=DOWN * 0.2))
         self.wait(0.3)
         self.clear_scene()

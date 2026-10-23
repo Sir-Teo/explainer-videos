@@ -123,11 +123,13 @@ class Embeddings(VoiceoverScene):
         dims = [2, 4, 8, 16, 32, 64, 128]
         dolls = VGroup()
         for i, m in enumerate(dims):
-            w = 0.3 + 0.075 * m ** 0.85
-            dolls.add(Rectangle(width=w, height=0.6, stroke_color=MATRY, stroke_width=2, fill_color=MATRY,
-                                fill_opacity=0.08 + 0.1 * (len(dims) - i) / len(dims)).move_to([-6.2 + w / 2, 1.2, 0]))
-        dl = VGroup(*[MathTex(str(m), font_size=20, color=MATRY).move_to([d.get_right()[0] - 0.18, 1.7, 0])
+            w = 0.4 + 0.1 * m ** 0.85
+            dolls.add(Rectangle(width=w, height=0.8, stroke_color=MATRY, stroke_width=2, fill_color=MATRY,
+                                fill_opacity=0.08 + 0.1 * (len(dims) - i) / len(dims)).move_to([-6.0 + w / 2, 1.3, 0]))
+        dl = VGroup(*[MathTex(str(m), font_size=24, color=MATRY).move_to([d.get_right()[0] - 0.2, 1.98, 0])
                       for m, d in zip(dims, dolls)])
+        mem = label(r"$10^9$ items $\times$ $1{,}000$ numbers $\times$ $4$ bytes $=$ $4$ terabytes", font_size=36,
+                    color=GREY_A).move_to(UP * 0.4)
         cap = label(r"the first $m$ numbers of one 128-number vector", font_size=22, color=GREY_A).next_to(dolls, DOWN,
                                                                                                        buff=0.3)
         f = MathTex(r"\mathcal L_{\rm MRL}", r"=", r"\frac{1}{|M|} \sum_{m \in M}", r"\mathcal L_{\rm NT\text{-}Xent}"
@@ -148,8 +150,9 @@ class Embeddings(VoiceoverScene):
             "2024 models can be shortened the same way: cut to 256 numbers, the large model still beats its "
             "predecessor's full 1,536."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(mem, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(mem))
             self.play(LaggedStart(*[GrowFromEdge(d, LEFT) for d in dolls[::-1]], lag_ratio=0.15), FadeIn(dl),
                       FadeIn(cap), run_time=2.0)
             vo.wait_until("b")
@@ -179,8 +182,8 @@ class Embeddings(VoiceoverScene):
             g.add(VGroup(*[Dot(ax.ax.c2p(x, y), radius=0.06, color=col) for x, y in zip(lx, A.mean(0))]))
             return g
 
-        cp, cm = band_of(P, SIMCLR), band_of(M, MATRY)
-        leg = VGroup(label(r"SimCLR, \ cut short", font_size=22, color=SIMCLR),
+        cp, cm = band_of(P, GREY_B), band_of(M, MATRY)
+        leg = VGroup(label(r"SimCLR, \ cut short", font_size=22, color=GREY_B),
                      label(r"SimCLR + Matryoshka", font_size=22, color=MATRY)).arrange(DOWN, aligned_edge=LEFT,
                                                                                        buff=0.12)
         leg.move_to([4.9, -1.2, 0])
