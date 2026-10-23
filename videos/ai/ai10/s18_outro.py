@@ -75,13 +75,24 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        h = load("hog")["linear"]
+        if h["mnist_hog"]["mean"] < h["mnist_pixels"]["mean"]:
+            hand = "Vision began with features designed by hand, and they beat raw pixels."
+        else:
+            hand = "Vision began with features designed by hand."
+        m = load("memory")
+        T = int(m["T"][-1])
+        if np.mean([m["runs"][f"lstm-{T}-{s_}"]["final"] for s_ in (0, 1, 2)]) > 0.9:
+            lstm = f"The LSTM's gated memory line carries it across {T} steps."
+        else:
+            lstm = "The LSTM's gated memory line carries it further."
         with self.voiceover(
-            "Let's take stock. Vision began with features designed by hand, and they beat raw pixels. A "
+            f"Let's take stock. {hand} A "
             "convolution shares one small kernel across the image, so it commutes with shifts. Trained end to end, "
             "LeNet grew its own stroke detectors, and our photograph network grew edge detectors and colour cells "
             "like the ones in the visual cortex. Yet an invisible, well-chosen change fools them all, because they "
             "are close to linear. In time, a plain recurrent network's gradient fades, or explodes, as Jacobians "
-            "multiply. The LSTM's gated memory line carries it across a hundred steps. And attention lets a "
+            f"multiply. {lstm} And attention lets a "
             "decoder look back at exactly what it needs."
         ) as vo:
             self.play(FadeIn(head))
@@ -133,7 +144,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Here are six problems, from equivariance to the scan. Pause here and work through them; full "
             "solutions are in this part's notes."
-        ) as vo:
+        ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in ps.rows], lag_ratio=0.3),
                       run_time=3.0)
         self.wait(6.0)

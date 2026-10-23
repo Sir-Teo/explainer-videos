@@ -195,7 +195,7 @@ class LeNet(VoiceoverScene):
                     vo.wait_until("c")
                 nf, nm, npb = filters(i).move_to(fpos), maps(i).move_to(mpos), probs(i)
                 npb.move_to(ppos).align_to(ppos + DOWN * 0.65, DOWN)
-                self.play(k.animate.set_value(i), FadeTransform(cur_f, nf), FadeTransform(cur_m, nm),
+                self.play(k.animate.set_value(i), FadeOut(cur_f), FadeIn(nf), FadeOut(cur_m), FadeIn(nm),
                           Transform(cur_p, npb), run_time=0.9)
                 cur_f, cur_m = nf, nm
         for m in (live, rider, clock):

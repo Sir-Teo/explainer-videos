@@ -253,7 +253,7 @@ class CharLSTM(VoiceoverScene):
         rows = VGroup()
         cw = Text("M", font=MONO, font_size=font_size).width * 1.0
         a, b = rgb(cmap[0]), rgb(cmap[1])
-        for li, (ln, vs) in enumerate(lines[:6]):
+        for li, (ln, vs) in enumerate(list(zip(lines, vals))[:6]):
             row = VGroup()
             for k, (ch, v) in enumerate(zip(ln, vs)):
                 t = float(np.clip((v - lo) / max(hi - lo, 1e-9), 0, 1))

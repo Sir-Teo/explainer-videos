@@ -62,7 +62,7 @@ labelled as such.
 * **7. Supervising something stronger.** Debate (Irving, Christiano & Amodei 2018) and the complexity argument;
   Khan et al. (2024): judges reading debates between stronger models. Weak-to-strong generalization (Burns et al.
   2023): the performance gap recovered, PGR = (weak-to-strong − weak)/(ceiling − weak), computed on Part 27's
-  which-book task with a 2-layer weak supervisor and the series' model as the strong student, five seeds, with and
+  which-book task with a 2-layer weak supervisor and the series' model as the strong student, three seeds, with and
   without the auxiliary confidence loss; how often the student copies the supervisor's mistakes.
 * **8. Evidence of deception.** Sleeper agents that survive safety training (Hubinger et al. 2024) and the probes that
   catch them; in-context scheming (Meinke et al., Apollo Research 2024: five of six frontier models); sandbagging

@@ -56,7 +56,7 @@ class Filters(VoiceoverScene):
         per = int(cf["total_steps"]) / int(cf["epochs"])
         cur = curve(ax.ax, t[:, 0] / per, t[:, 1], CNN, 4)
         acc = float(cf["test_acc"])
-        res = MathTex(rf"{100 * acc:.1f}\%", font_size=32, color=CNN).next_to(cur.get_end(), UP, buff=0.12)
+        res = MathTex(rf"{100 * acc:.1f}\%", font_size=32, color=CNN).next_to(ax.ax.c2p(t[-1, 0] / per, t[-1, 1]), UP, buff=0.12)
         keep_in_frame(res)
         tag = note(rf"computed: \ ${cf['params']:,}$ weights, \ trained here in ${cf['seconds'] / 60:.0f}$ minutes"
                    .replace(",", "{,}")).to_corner(DR, buff=0.2)
@@ -134,7 +134,7 @@ class Filters(VoiceoverScene):
                 if i == mid + 1:
                     vo.wait_until("c")
                 nxt = tiles(i)
-                self.play(k.animate.set_value(i), FadeTransform(cur, nxt), run_time=0.9)
+                self.play(k.animate.set_value(i), FadeOut(cur), FadeIn(nxt), run_time=0.9)
                 cur = nxt
         for m in (live, clock):
             m.clear_updaters()

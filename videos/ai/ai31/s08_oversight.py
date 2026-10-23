@@ -227,8 +227,9 @@ class Oversight(VoiceoverScene):
             conf_said = (f"With the confidence loss it reaches {c:.1f}, a gap recovered of {pgrc.mean() * 100:.0f} "
                          "percent.")
         elif c < s - 1:
-            conf_said = (f"The confidence loss hurts here: {c:.1f} percent. Burns and colleagues also found it helps "
-                         "most across large gaps, and can hurt across small ones.")
+            conf_said = (f"The confidence loss hurts here: {c:.1f} percent. It lets the student trust its own "
+                         "confident guesses over the supervisor's labels, which helps only when those guesses are "
+                         "better; here they were not.")
         else:
             conf_said = f"The confidence loss makes little difference here: {c:.1f} percent."
         with self.voiceover(
@@ -236,7 +237,7 @@ class Oversight(VoiceoverScene):
             f"come from? <bookmark mark='a'/> The weak supervisor is a two-layer model with "
             f"{d['weak_params'] / 1e6:.1f} million parameters, pretrained on the same novels. The strong student is our "
             f"{d['strong_params'] / 1e6:.1f}-million-parameter model; we train its last block and a new output layer. "
-            "Every run gets the same budget, and we repeat everything with five seeds. <bookmark mark='b'/> The weak "
+            f"Every run gets the same budget, and we repeat everything with {n} seeds. <bookmark mark='b'/> The weak "
             f"supervisor, trained on the truth, gets {w:.1f} percent of held-out sentences right, against chance at "
             f"{100 * d['chance']:.1f}. <bookmark mark='c'/> The ceiling, the strong model trained on the truth: {ce:.1f}. "
             f"<bookmark mark='d'/> {gist} <bookmark mark='e'/> {conf_said}"
@@ -284,7 +285,8 @@ class Oversight(VoiceoverScene):
             label(rf"with the confidence loss: \ ${ac.mean():.0f}\%$", font_size=24, color=CI),
             label(rf"(a random wrong title: \ $1$ in ${d['classes'] - 1}$)", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, 0.0, 0])
-        tag = tagline(r"computed: \ mean of five seeds, \ band: \ min to max")
+        n = len(d["weak"])
+        tag = tagline(rf"computed: \ mean of ${n}$ seeds, \ band: \ min to max")
         rand = 100 / (d["classes"] - 1)
         if aw.mean() > 3 * rand:
             copy_said = (f"{aw.mean():.0f} percent of the time, where a random wrong guess would match one time in "
@@ -295,7 +297,7 @@ class Oversight(VoiceoverScene):
             copy_said = (f"Only {aw.mean():.0f} percent of the time, close to the one in {d['classes'] - 1} of a random "
                          "wrong guess: here the student did not inherit its supervisor's mistakes.")
         with self.voiceover(
-            "Here is the training, test accuracy as each strong run learns, averaged over the five seeds. "
+            f"Here is the training, test accuracy as each strong run learns, averaged over the {n} seeds. "
             "<bookmark mark='a'/> Now look only at the held-out sentences that the weak supervisor got wrong. How "
             "often does the student give the same wrong answer? <bookmark mark='b'/> " + copy_said
         ) as vo:

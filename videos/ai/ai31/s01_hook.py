@@ -68,10 +68,17 @@ class Hook(VoiceoverScene):
                         r"N.~Wiener, \textit{Science} (6 May 1960), p.~1358", HACK, font_size=28)
         q1.next_to(hc, DOWN, buff=0.35)
         q2.next_to(q1, DOWN, buff=0.3)
+        steps_ = VGroup(node_box(r"a checkers program", GREY_A), node_box(r"plays itself, \\ and learns", GREY_A),
+                        node_box(r"beats the person \\ who wrote it", JUDGE)).arrange(RIGHT, buff=0.9)
+        arrs = VGroup(*[Arrow(a_.get_right(), b_.get_left(), buff=0.1, color=GREY_B, stroke_width=3)
+                        for a_, b_ in zip(steps_, steps_[1:])])
+        cap = label(r"Arthur Samuel's checkers, \ 1959 \ (Part 2)", font_size=22, color=GREY_B)
+        chain = VGroup(steps_, arrs, cap.next_to(steps_, DOWN, buff=0.35)).move_to(DOWN * 0.6)
         with self.voiceover(
             "The worry is older than the field's successes. In December 1959 the mathematician "
             "Norbert Wiener, who founded cybernetics, gave a lecture that Science printed the next May, under the "
-            "title Some Moral and Technical Consequences of Automation. He pointed to the checkers programs of the "
+            "title Some Moral and Technical Consequences of Automation. <bookmark mark='a'/> He pointed to the "
+            "checkers programs of the "
             "day, Arthur Samuel's from Part 2 among them, which had learned to beat the people who programmed them. "
             "<bookmark mark='b'/> His thesis, in his words: machines can and do transcend some of the limitations of "
             "their designers, and in doing so they may be both effective and dangerous. <bookmark mark='c'/> And his "
@@ -80,8 +87,11 @@ class Hook(VoiceoverScene):
             "imitation of it."
         ) as vo:
             self.play(FadeIn(hc, shift=DOWN * 0.2))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(s_), *([GrowArrow(arrs[i - 1])] if i else []))
+                                    for i, s_ in enumerate(steps_)], lag_ratio=0.6), FadeIn(cap), run_time=3.0)
             vo.wait_until("b")
-            self.play(FadeIn(q1, shift=UP * 0.15))
+            self.play(FadeOut(chain), FadeIn(q1, shift=UP * 0.15))
             vo.wait_until("c")
             self.play(FadeIn(q2, shift=UP * 0.15))
         self.wait(0.5)
@@ -155,10 +165,11 @@ class Hook(VoiceoverScene):
             "models. <bookmark mark='c'/> And underneath both, a third question: how would we know? That is "
             "measurement, and it is where this part begins."
         ) as vo:
-            self.play(FadeIn(title))
+            # the three questions from the start; each box's topics as it is named
+            self.play(FadeIn(title), *[FadeIn(VGroup(b_[0], b_[1][0])) for b_ in boxes])
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(boxes[k], shift=UP * 0.2))
+                self.play(FadeIn(boxes[k][1][1], shift=UP * 0.1), Indicate(boxes[k][1][0], scale_factor=1.05))
         self.wait(0.5)
         self.clear_scene()
 

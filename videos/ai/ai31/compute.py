@@ -38,7 +38,7 @@ Items:
     extraction     training text against held-out text: exact continuations by prefix length, duplicated text,
                    a loss-threshold membership test
     weak           the weak supervisor's base: a 2-layer model pretrained on the novels
-    w2s            weak-to-strong generalization on Part 27's which-book task, five seeds
+    w2s            weak-to-strong generalization on Part 27's which-book task, three seeds
 """
 
 from __future__ import annotations
@@ -758,11 +758,12 @@ def compute_weak():
     return T.pretrain_weak()
 
 
-def compute_w2s(seeds=5, steps=300, lr_weak=1e-3, lr_strong=5e-4, strong_top=1, conf=0.5):
+def compute_w2s(seeds=3, steps=300, lr_weak=1e-3, lr_strong=5e-4, strong_top=1, conf=0.5):
     from videos.ai.ai31 import lm_tools as T
 
-    params = dict(seeds=seeds, steps=steps, lr_weak=lr_weak, lr_strong=lr_strong, strong_top=strong_top, conf=conf)
-    return T.weak_to_strong(**params, part=CACHE.partial("w2s", params))
+    # each seed is a piece of its own (the number of seeds only says how many), saved as it finishes
+    params = dict(steps=steps, lr_weak=lr_weak, lr_strong=lr_strong, strong_top=strong_top, conf=conf)
+    return T.weak_to_strong(seeds=seeds, **params, part=CACHE.partial("w2s", params))
 
 
 ITEMS = {

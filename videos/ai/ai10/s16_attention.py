@@ -198,22 +198,40 @@ class Attention(VoiceoverScene):
         clock = always_redraw(lambda: MathTex(rf"\text{{step }}{steps[int(k.get_value())]:,}".replace(",", "{,}"),
                                               font_size=28).move_to([4.1, -1.6, 0]))
         tag = note(r"computed: \ seed $0$, \ alignments at checkpoints").to_corner(DR, buff=0.2)
+        # attention on the anti-diagonal (output letter r copies input letter n-1-r), at each checkpoint
+        diag = [float(np.mean([mt[r_, n - 1 - r_] for r_ in range(n)])) for mt in mats]
+        mass = diag[-1]
+        i_b = next((i for i, d_ in enumerate(diag) if d_ > 0.5), None)
+        t_diag = steps[i_b] if i_b is not None else steps[-1]
+        if diag[0] < 0.3:
+            early = "At first it looks everywhere a little, and learns nothing."
+        else:
+            early = "Even at first its attention leans toward the letters it needs."
+        if i_b is not None:
+            late = (f"Then a diagonal appears, running from the top right to the bottom left: the first letter "
+                    f"written attends to the last one read, the second to the one before. By step {t_diag:,}, "
+                    f"more than half its attention sits on that diagonal; by the end, {pct(mass, 0)} percent.")
+        else:
+            late = f"The diagonal stays faint: by the end only {pct(mass, 0)} percent of its attention is on it."
+        long0, long1 = float(cv[0, 2]), float(cv[-1, 2])
+        if long1 > long0 + 0.3:
+            climb = "As the alignment sharpens, the accuracy on long strings climbs with it."
+        else:
+            climb = f"Yet the accuracy on long strings stays near {pct(long1, 0)} percent."
+        i_b = 2 if i_b is None else max(1, min(i_b, len(mats) - 2))
         with self.voiceover(
             "Watch the alignment form during training. <bookmark mark='a'/> Rows are the letters it writes, "
-            "columns the letters it reads; bright is where it looks. At first it looks everywhere a little, and "
-            "learns nothing. <bookmark mark='b'/> Then, quite suddenly, a diagonal appears, running from the top "
-            "right to the bottom left: the first letter written attends to the last one read, the second to the "
-            "one before. <bookmark mark='c'/> As the alignment sharpens, the accuracy on long strings climbs with "
-            "it. Bahdanau's translations showed the same picture: mostly diagonal, with the word order of French "
-            "and English, and jumps where the two disagree."
+            f"columns the letters it reads; bright is where it looks. {early} <bookmark mark='b'/> {late} "
+            f"<bookmark mark='c'/> {climb} Bahdanau's translations showed the same picture: mostly diagonal, "
+            "with the word order of French and English, and jumps where the two disagree."
         ) as vo:
             self.play(FadeIn(cur), Create(frame), FadeIn(xs), FadeIn(il), FadeIn(ol), Create(ax), FadeIn(tag))
             self.add(live, clock)
             vo.wait_until("a")
             for i in range(1, len(mats)):
-                if i == 2:
+                if i == i_b:
                     vo.wait_until("b")
-                if i == len(mats) - 2:
+                if i == len(mats) - 1:
                     vo.wait_until("c")
                 nxt = heat(i)
                 self.play(k.animate.set_value(i), FadeTransform(cur, nxt), run_time=1.0)
