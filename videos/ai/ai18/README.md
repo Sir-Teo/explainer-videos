@@ -39,7 +39,8 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   points, 2.6× fewer steps); RegMix (512 models of 1M parameters, regression; the best of 64 mixtures at 1B); our
   RegMix on four groups of the novels, targeted at chapters 1 and 3 of *The Maltese Falcon* and tested on chapter 2
   (32 proxy runs, leave-one-out fit, the pick against the natural and uniform mixtures at a larger size, two seeds);
-  repetition (Muennighoff et al.: about four epochs are as good as new data); rephrasing (WRAP, ~3× faster; Kimi K2's
+  repetition (Muennighoff et al.: about four epochs are as good as new data; their fitted worth of repeated data,
+  1 + R*(1 − e^{−R/R*}) epochs of new data with R* = 15.4, drawn); rephrasing (WRAP, ~3× faster; Kimi K2's
   SimpleQA 23.76 → 27.39 → 28.94); model collapse in a unigram model (replace against accumulate; Shumailov et al.,
   Gerstgrasser et al.).
 * **6. What the model is asked to predict.** One sentence of *Pride and Prejudice* under the causal, masked (15%;
@@ -162,6 +163,12 @@ lab pages):
   GPipe: bubble O((K − 1)/(M + K − 1)), negligible for M ≥ 4K. Zero Bubble: up to 23% (31% with relaxed memory) over
   1F1B. Ring all-reduce lower bound: Patarasuk & Yuan (2009), as restated by later work (some process sends and some
   receives at least 2(N − 1)M/N); the proof on screen is our own counting argument.
+* Muennighoff et al. (2023): effective data D′ = U + U·R*(1 − e^{−R/R*}) with R the repetitions beyond the first
+  epoch (their Eq. 5) and the fitted R* = 15.387756 (Sec. 3.1, Eq. 17 uses 15.4); the Mixture chapter draws it as
+  epochs' worth of new data against epochs over the same tokens. MXFP8: blocks of 32 values sharing one
+  power-of-two (E8M0) scale, as in the OCP microscaling format that Mishra et al. use. The QK-Clip picture in
+  the Stability chapter is labelled schematic: it shows only what the report states (logits held at τ, no head
+  clipped after 70k steps), not its curve.
 * Common Crawl: founded 2007 by Gil Elbaz, crawling since 2008, over 10 PB (its own pages). GPT-1: "1 month on 8
   GPUs" (OpenAI's 2018 post). Lee et al. (2022): "emit memorized text ten times less frequently".
 * Dettmers et al. (2022), LLM.int8(): a few feature dimensions of large transformers take much larger values than the

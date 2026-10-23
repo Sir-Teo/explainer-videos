@@ -38,11 +38,11 @@ class Oversight(VoiceoverScene):
                        label(r"weak-to-strong generalization", font_size=26, color=STRONG)).arrange(RIGHT, buff=0.8)
         ideas.to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Every method of Part 27 needs someone who can tell good work from bad. <bookmark mark='a'/> What happens when the model is better at the "
-            "task than its supervisor? Ask a future model for a million lines of code, and no person can check them "
-            "all. <bookmark mark='b'/> This is scalable oversight, and there are a few ideas: let two models argue "
-            "while the weak supervisor judges; break hard questions into checkable pieces; or study how a strong "
-            "model generalizes from a weak supervisor's imperfect labels."
+            "Every method of Part 27 needs someone who can tell good work from bad. <bookmark mark='a'/> What happens "
+            "when the model is better at the task than its supervisor? <bookmark mark='b'/> This is scalable "
+            "oversight, and there are a few ideas: let two models argue while the weak supervisor judges; break hard "
+            "questions into checkable pieces; or study how a strong model generalizes from a weak supervisor's "
+            "imperfect labels."
         ) as vo:
             self.play(FadeIn(small), FadeIn(sl), FadeIn(big), FadeIn(bl), FadeIn(sch))
             vo.wait_until("a")

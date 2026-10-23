@@ -165,7 +165,7 @@ class Anatomy(VoiceoverScene):
         )
         mtp = VGroup(DashedLine(ax.c2p(10, 0), ax.c2p(10, 2.4), color=C.PROB, dash_length=0.06),
                      label(r"two-token loss \\ weight $0.3 \to 0.1$", font_size=18, color=C.PROB))
-        mtp[1].next_to(mtp[0].get_end(), RIGHT, buff=0.1).shift(DOWN * 0.5)
+        mtp[1].next_to(mtp[0].get_end(), LEFT, buff=0.12).shift(DOWN * 0.75)
         ramp = label(r"ramped up over the first $0.47$T", font_size=18, color=GPU).next_to(b.ax.c2p(0.5, 15), RIGHT,
                                                                                          buff=0.1).shift(DOWN * 0.35)
         src = cite(r"DeepSeek-AI, DeepSeek-V3 Technical Report (2024), \ Sec.\ 4.2", corner=DR, font_size=17)

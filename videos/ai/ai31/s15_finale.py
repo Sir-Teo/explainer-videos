@@ -38,14 +38,12 @@ class Finale(VoiceoverScene):
         smap = series_map(current=None, done=0).scale(0.9).move_to(DOWN * 0.25)
         cap = label(ACT_CAPTIONS[0], font_size=24, color=C.BITS).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Thirty-one parts. <bookmark mark='a'/> We began with a guessing game, and the mathematics underneath it: "
-            "information, search and logic, vectors, change and chance. <bookmark mark='b'/> Then learning from data: "
-            "counting, fitting, the first networks, seeing and remembering, the long walk downhill, and the "
-            "mathematics of scale. <bookmark mark='c'/> Then the transformer, and everything it took to make it big: "
-            "memory, sparsity, silicon, pretraining and inference. <bookmark mark='d'/> Then models that generate "
-            "and perceive: images and video, every sense as tokens, learning without labels, and science. "
-            "<bookmark mark='e'/> Then agency: reinforcement learning, post-training, reasoning and agents. "
-            "<bookmark mark='f'/> And the finale: looking inside the model, and asking whether to trust it."
+            "Thirty-one parts. <bookmark mark='a'/> A guessing game, and the mathematics underneath it: information, "
+            "search, vectors, change and chance. <bookmark mark='b'/> Learning from data, from counting to the "
+            "mathematics of scale. <bookmark mark='c'/> The transformer, and everything it took to make it big. "
+            "<bookmark mark='d'/> Models that generate and perceive: images, video, sound, science. "
+            "<bookmark mark='e'/> Agency: rewards, post-training, reasoning and agents. <bookmark mark='f'/> And the "
+            "finale: looking inside the model, and asking whether to trust it."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             box = None

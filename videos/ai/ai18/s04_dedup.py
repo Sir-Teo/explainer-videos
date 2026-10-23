@@ -213,14 +213,14 @@ class Dedup(VoiceoverScene):
         strips.arrange(DOWN, aligned_edge=RIGHT, buff=0.22)
         if strips.width > 12.8:
             strips.width = 12.8
-        strips.move_to([0, 0.15, 0])
+        strips.move_to([0, -2.3, 0])
         rings = VGroup(*[SurroundingRectangle(VGroup(strips[0][1][k], strips[1][1][k]), buff=0.06, color=YELLOW,
                                               stroke_width=3) for k in same])
         bcap = label(rf"each band's ${r}$ minhashes, \ hashed to one bucket number", font_size=22, color=GREY_A)
-        bcap.next_to(strips, UP, buff=0.3)
+        bcap.next_to(strips, UP, buff=0.25)
         bmatch = label(rf"bands ${same[0] + 1}$ and ${same[1] + 1}$ land in the same bucket \ $\Rightarrow$ \ "
-                       r"$A$ and $B$ get compared", font_size=24, color=YELLOW).next_to(strips, DOWN, buff=0.35)
-        bsch = note(r"schematic", font_size=18).next_to(bmatch, DOWN, buff=0.15)
+                       r"$A$ and $B$ get compared", font_size=24, color=YELLOW).next_to(strips, DOWN, buff=0.25)
+        bsch = note(r"schematic", font_size=18).next_to(bcap, RIGHT, buff=0.4)
         src = cite(r"Indyk \& Motwani (1998); \ Broder (1997); \ FineWeb (2024), App.\ E", corner=DL, font_size=17)
         with self.voiceover(
             "One signature per document still leaves every pair to compare. Locality-sensitive hashing avoids "
@@ -238,14 +238,13 @@ class Dedup(VoiceoverScene):
                       run_time=1.5)
             self.play(Create(rings), FadeIn(bmatch), FadeIn(bsch))
             vo.wait_until("a")
-            self.play(FadeOut(VGroup(bcap, strips, rings, bmatch, bsch)))
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(*[FadeOut(w) for w in whys])
+            self.play(*[FadeOut(w) for w in whys], FadeOut(VGroup(bcap, strips, rings, bmatch, bsch)))
             self.play(FadeIn(g), FadeIn(src))
             self.play(Create(pc), run_time=1.5)
             self.play(Create(half), FadeIn(hl), FadeIn(lg[0]))

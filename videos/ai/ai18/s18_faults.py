@@ -47,7 +47,7 @@ class Faults(VoiceoverScene):
                   rf"${L['effective']}\%$ of the time training", font_size=22, color=GREY_A),
             label(rf"and the weather: \ ${L['diurnal'][0]}$--${L['diurnal'][1]}\%$ slower at midday; \ tens of "
                   r"megawatts swinging when all GPUs pause together", font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.75)
         src = cite(r"Llama Team (2024), Sec.\ 3.3.4, Table 5", corner=DR, font_size=17)
         with self.voiceover(
             f"Back to Llama 3's run. In fifty-four days its job was interrupted {L['interruptions']} times, "
@@ -91,7 +91,23 @@ class Faults(VoiceoverScene):
                 why(r"Llama 3's numbers", font_size=19)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.45, edge=6.9)
         delta = label(rf"$\delta$: \ $16{{,}}384$ GPUs $\times$ up to $4$ GB each, \ at $2$ TB/s \ $\approx "
-                      rf"{P['llama_ckpt_s']:.0f}$ s", font_size=20, color=GPU).to_edge(DOWN, buff=0.45)
+                      rf"{P['llama_ckpt_s']:.0f}$ s", font_size=21, color=GPU).move_to([-2.2, -3.35, 0])
+        # a run's timeline: a save every tau, a failure, and the work it throws away (schematic)
+        yT = -2.2
+        tline = Arrow([-6.4, yT, 0], [6.4, yT, 0], buff=0, color=GREY_B, stroke_width=2.5, tip_length=0.18)
+        xs_s = [-6.4 + 2.1 * k for k in range(1, 6)]
+        saves = VGroup(*[Rectangle(width=0.2, height=0.36, stroke_width=0, fill_color=GPU, fill_opacity=0.9)
+                         .move_to([x_, yT, 0]) for x_ in xs_s])
+        tb = BraceBetweenPoints([xs_s[0], yT + 0.25, 0], [xs_s[1], yT + 0.25, 0], direction=UP, color=KEPT)
+        tbl = MathTex(r"\tau", font_size=28, color=KEPT).next_to(tb, UP, buff=0.05)
+        sl_ = label(r"save: \ $\delta$", font_size=20, color=GPU).next_to(saves[0], DOWN, buff=0.12)
+        xf = xs_s[2] + 1.4
+        lostr = Rectangle(width=xf - xs_s[2] - 0.1, height=0.3, stroke_width=0, fill_color=REMOVED, fill_opacity=0.45)
+        lostr.move_to([(xs_s[2] + 0.1 + xf) / 2, yT, 0])
+        fx = MathTex(r"\times", font_size=40, color=REMOVED).move_to([xf, yT, 0])
+        fl_ = label(r"failure: \ the work since the last save is lost", font_size=20, color=REMOVED)
+        fl_.next_to(lostr, DOWN, buff=0.15)
+        tsch = note(r"schematic", font_size=17).next_to(tline, UP, buff=0.12).align_to(tline, RIGHT)
         src = cite(r"Young, CACM (1974); \ Llama Team (2024), Sec.\ 3.3.4", corner=DR, font_size=17)
         with self.voiceover(
             "So a run saves a checkpoint of every GPU's state regularly, and after a failure restarts from the last one. "
@@ -104,9 +120,12 @@ class Faults(VoiceoverScene):
             f"{P['llama_mtbf_h']:.1f} hours, save every {P['llama_young_s'] / 60:.0f} minutes or so."
         ) as vo:
             step(0)
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), GrowArrow(tline), FadeIn(tsch))
+            self.play(LaggedStart(*[FadeIn(s_, scale=0.6) for s_ in saves], lag_ratio=0.2), FadeIn(sl_),
+                      GrowFromCenter(tb), FadeIn(tbl), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(rows[0][-1], color=REMOVED))
+            self.play(Indicate(rows[0][-1], color=REMOVED), FadeIn(fx, scale=1.5))
+            self.play(GrowFromEdge(lostr, LEFT), FadeIn(fl_))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -134,8 +153,8 @@ class Faults(VoiceoverScene):
         fc = DashedVMobject(curve(g.ax, x, np.clip(fo, 0.4, 1), GREY_A, 2), num_dashes=40)
         yx = math.log10(Fa["young"] / 60)
         yl = DashedLine(g.ax.c2p(yx, 0.4), g.ax.c2p(yx, 1.0), color=GPU, dash_length=0.06)
-        ylab = label(rf"Young: \ ${Fa['young'] / 60:.0f}$ min", font_size=20, color=GPU).next_to(g.ax.c2p(yx, 1.0), UP,
-                                                                                            buff=0.08)
+        ylab = label(rf"Young: \ ${Fa['young'] / 60:.0f}$ min", font_size=20, color=GPU).next_to(g.ax.c2p(yx, 0.45),
+                                                                                            RIGHT, buff=0.1)
         best = Dot(g.ax.c2p(math.log10(Fa["best_tau"] / 60), Fa["best"]), radius=0.08, color=YELLOW)
         info = VGroup(
             label(rf"simulated: \ ${Fa['H'] / 86400:.0f}$ days, \ ${Fa['runs']}$ runs per interval", font_size=20,
@@ -162,8 +181,8 @@ class Faults(VoiceoverScene):
             "deterministic: a run that replays exactly can be debugged."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(info[:3]))
+            self.play(FadeIn(bd), Create(cv), run_time=3.0)
             vo.wait_until("a")
-            self.play(FadeIn(bd), Create(cv), run_time=2.0)
             self.play(Create(fc), FadeIn(info[4]))
             vo.wait_until("b")
             self.play(Create(yl), FadeIn(ylab), FadeIn(best, scale=1.5), FadeIn(info[3]))

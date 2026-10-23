@@ -48,11 +48,11 @@ class Privacy(VoiceoverScene):
             "A model trained on text keeps some of that text. In 2021 Nicholas Carlini and colleagues sampled from "
             "GPT-2 and searched the samples for memorized training data. <bookmark mark='a'/> Of eighteen hundred "
             "candidates, six hundred and four were verbatim training text, some with real names, phone numbers and "
-            "e-mail addresses. <bookmark mark='b'/> Two years later they showed memorization growing with the size of "
-            "the model, with repetition, and with the length of the prompt. <bookmark mark='c'/> And in 2023, asked to repeat a single word forever, ChatGPT eventually "
-            "drifted into memorized training text: over ten thousand examples, for two hundred dollars of queries. "
-            "<bookmark mark='d'/> And a model can betray its training data without quoting it: in 2017 Reza Shokri "
-            "and colleagues showed how to tell, from a model's outputs alone, whether a given record was in its "
+            "e-mail addresses. <bookmark mark='b'/> Two years later they showed it growing with model size, repetition "
+            "and prompt length. <bookmark mark='c'/> And in 2023, asked to repeat a single word forever, ChatGPT "
+            "eventually drifted into memorized training text: over ten thousand examples, for two hundred dollars of "
+            "queries. <bookmark mark='d'/> And a model can betray its training data without quoting it: in 2017 Reza "
+            "Shokri and colleagues showed how to tell, from a model's outputs alone, whether a given record was in its "
             "training set."
         ) as vo:
             full = [c_.copy() for c_ in cards]
@@ -98,7 +98,7 @@ class Privacy(VoiceoverScene):
             "as what it has written matches the text, the model is reading the true text, so its next choice is the "
             "top token given the true prefix. <bookmark mark='d'/> By induction, it reproduces the whole text exactly "
             "when the top token is right at every position: a single forward pass over the true text decides it, "
-            f"for every prefix length at once. That made it cheap to test {d['n_win']:,} passages of each kind."
+            "for every prefix length at once."
         ) as vo:
             self.play(FadeIn(defn, shift=DOWN * 0.15), FadeIn(strip))
             vo.wait_until("b")
@@ -287,13 +287,13 @@ class Privacy(VoiceoverScene):
         cards.to_edge(UP, buff=0.35)
         with self.voiceover(
             "There is a defense with a guarantee: differential privacy, defined by Cynthia Dwork and colleagues in "
-            "2006. A training algorithm is private if changing any single training example changes the probability "
-            "of any outcome by at most a factor of e to the epsilon, plus a small delta. <bookmark mark='a'/> In 2016 Martin Abadi and colleagues made "
-            "deep learning private. Clip each example's gradient to a fixed norm, so that no single example can push "
-            "the model far; <bookmark mark='b'/> add Gaussian noise scaled to that clip; <bookmark mark='c'/> and keep "
-            "an account of how much privacy every step spends. <bookmark mark='d'/> They trained MNIST to ninety-seven "
-            "percent at epsilon eight. In 2025 Google trained VaultGemma, a billion-parameter language model, this way "
-            "from scratch, at epsilon two per sequence, and found no detectable memorization."
+            "2006. A training algorithm is private if changing any single training example changes the probability of "
+            "any outcome by at most a factor of e to the epsilon, plus a small delta. <bookmark mark='a'/> In 2016 "
+            "Martin Abadi and colleagues made deep learning private. Clip each example's gradient to a fixed norm, so "
+            "that no single example can push the model far; <bookmark mark='b'/> add Gaussian noise scaled to that "
+            "clip; <bookmark mark='c'/> and keep an account of how much privacy every step spends. "
+            "<bookmark mark='d'/> In 2025 Google trained VaultGemma, a billion-parameter language model, this way from "
+            "scratch, at epsilon two per sequence, and found no detectable memorization."
         ) as vo:
             self.play(FadeIn(defn, shift=DOWN * 0.15), FadeIn(pic))
             vo.wait_until("a")

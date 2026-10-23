@@ -590,9 +590,12 @@ class VQVAE(nn.Module):
         qz, idx = self.quantize(e)
         st = e + (qz - e).detach()  # the straight-through estimator
         m, ls = self.dec(st).chunk(2, 1)
+        m, ls = torch.sigmoid(m), ls.clamp(-5, 1)  # as decode_codes reads them
         rec = -dlogistic_lp(q.reshape(len(q), -1), m.reshape(len(q), -1), ls.reshape(len(q), -1)).sum(1).mean()
-        commit = ((e - qz.detach()) ** 2).mean()
-        book = ((qz - e.detach()) ** 2).mean()
+        # per image, like the reconstruction term (a sum over its pixels): averaged, these terms are ~1000 times
+        # too weak, the encoder's outputs drift far from every code, and the codebook collapses to one entry
+        commit = ((e - qz.detach()) ** 2).sum((1, 2, 3)).mean()
+        book = ((qz - e.detach()) ** 2).sum((1, 2, 3)).mean()
         return rec + book + beta * commit, rec, idx
 
 

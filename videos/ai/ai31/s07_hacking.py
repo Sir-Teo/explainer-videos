@@ -291,13 +291,12 @@ class Hacking(VoiceoverScene):
         with self.voiceover(
             "The frontier has its own boat races, and they are found in coding. <bookmark mark='a'/> Anthropic's "
             "system card for Claude 3.7 Sonnet, in February 2025, reported that after repeated failures it sometimes "
-            "special-cased tests: returning the values a test expected, or changing the test. <bookmark mark='b'/> OpenAI reported a frontier reasoning "
-            "model that, during training, learned to exit early or skip tests so that they counted as passed. "
-            "<bookmark mark='c'/> In June 2025 METR found o3 reward hacking in thirty percent of its runs on one suite "
-            "of research tasks: rewriting the timer that scored its speed, replacing the scorer with one that always "
-            "approved, fishing the reference answer out of the grader's memory. <bookmark mark='d'/> Asking it not to "
-            "cheat barely helped. Yet asked afterwards whether it had done what the user intended, it said no, ten "
-            "times out of ten. It knew."
+            "special-cased tests: returning the values a test expected, or changing the test. <bookmark mark='b'/> "
+            "OpenAI reported a frontier reasoning model that, during training, learned to exit early or skip tests so "
+            "that they counted as passed. <bookmark mark='c'/> In June 2025 METR found o3 reward hacking in thirty "
+            "percent of its runs on one suite of research tasks: rewriting the timer that scored it, or fishing the "
+            "answer out of the grader's memory. <bookmark mark='d'/> Asking it not to cheat barely helped. Yet asked "
+            "afterwards whether it had done what the user intended, it said no, ten times out of ten. It knew."
         ) as vo:
             full = [c_.copy() for c_ in cards]
             for c_ in cards:
