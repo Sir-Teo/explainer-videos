@@ -4,6 +4,7 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai13.common import A, K, PART, Q, V
 
 MEM, SPARSE, LIN, INSIDE = C.LATENT, C.INDEXER, C.MEMORY, C.BITS
+DSV3_D = 7168  # DeepSeek-AI, DeepSeek-V3 Technical Report (2024): hidden dimension 7168
 
 
 def panel(title, color, items, width=6.4, part=None):
@@ -24,6 +25,7 @@ def panel(title, color, items, width=6.4, part=None):
 class Frontier(VoiceoverScene):
     def construct(self):
         self.card()
+        self.why()
         self.map()
         self.hybrids()
 
@@ -32,6 +34,52 @@ class Frontier(VoiceoverScene):
         with self.voiceover("Chapter seventeen. Attention in 2026."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def why(self):
+        """Chapter seven's arithmetic at today's context lengths: per token, attention's term against the weights'."""
+        Ts = [4096, 32768, 131072, 1048576]
+        names = [r"$4$K", r"$32$K", r"$128$K", r"$1$M"]
+        ratio = [T / (12 * DSV3_D) for T in Ts]  # 2LTd / 24Ld^2
+        u = 8.2 / (1 + max(ratio))
+        rows = VGroup()
+        for i, (nm, r_) in enumerate(zip(names, ratio)):
+            y = 1.4 - i * 0.95
+            w = Rectangle(width=u, height=0.5, stroke_width=0, fill_color=GREY_B, fill_opacity=0.85)
+            a = Rectangle(width=max(u * r_, 0.02), height=0.5, stroke_width=0, fill_color=A, fill_opacity=0.9)
+            w.move_to([-4.2 + u / 2, y, 0])
+            a.next_to(w, RIGHT, buff=0)
+            t_ = label(nm + r" \ tokens", font_size=24, color=GREY_A).next_to(w, LEFT, buff=0.25)
+            v_ = MathTex((rf"{r_:.2f}" if r_ < 1 else rf"{r_:.1f}") + r"\times", font_size=26, color=A).next_to(a, RIGHT, buff=0.15)
+            rows.add(VGroup(t_, w, a, v_))
+        head = label(rf"per token, \ plain attention, \ width $d = {DSV3_D:,}$ \ (DeepSeek-V3's)".replace(",", "{,}"),
+                     font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
+        f = cmath(r"\frac{\text{attention}}{\text{weights}}", r"=", r"\frac{2LTd}{24Ld^2}", r"=", r"\frac{T}{12d}",
+                  font_size=32, colors={r"\frac{T}{12d}": A}).move_to([3.6, 2.2, 0])
+        key = VGroup(VGroup(Square(0.22, fill_color=GREY_B, fill_opacity=0.85, stroke_width=0),
+                            label(r"the weights' $24 L d^2$", font_size=20, color=GREY_B)).arrange(RIGHT, buff=0.12),
+                     VGroup(Square(0.22, fill_color=A, fill_opacity=0.9, stroke_width=0),
+                            label(r"attention's $2 L T d$", font_size=20, color=A)).arrange(RIGHT, buff=0.12))
+        key.arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.5)
+        kv = note(r"and every past key and value is kept: \ at $1$M tokens, \ a million of each, \ in every layer",
+                  font_size=20).next_to(key, UP, buff=0.25)
+        r4, r128, r1m = ratio[0], ratio[2], ratio[3]
+        with self.voiceover(
+            "Why so much effort? Chapter seven's arithmetic, for one token of a model as wide as DeepSeek-V3, "
+            f"{DSV3_D:,} numbers, with plain attention. <bookmark mark='a'/> At four thousand tokens of context, "
+            f"attention's term is {r4:.2f} of the weights' cost; at a hundred and twenty-eight thousand, "
+            f"{r128:.1f} times; at a million, {r1m:.0f} times. <bookmark mark='b'/> And every one of those million "
+            "past keys and values has to be kept, in every layer, to write the next token. Long contexts made "
+            "attention the expensive part, and each change on the next map is a way to pay less for it."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(f), FadeIn(key))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT), GrowFromEdge(r_[2], LEFT),
+                                                   FadeIn(r_[3])) for r_ in rows], lag_ratio=0.5), run_time=3.0)
+            vo.wait_until("b")
+            self.play(FadeIn(kv, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def map(self):
@@ -85,7 +133,9 @@ class Frontier(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hybrids(self):
-        n_kda, n_mla = 69, 24  # Kimi K3 model card (2026): 93 layers, 69 KDA + 24 gated MLA
+        # Kimi K3's config.json (Moonshot AI, 2026): 93 layers; full_attn_layers 4, 8, ..., 92 and 93 (gated MLA),
+        # the other 69 Kimi Delta Attention
+        n_kda, n_mla = 69, 24
         cells = VGroup()
         for i in range(n_kda + n_mla):
             full = (i + 1) % 4 == 0 or i == n_kda + n_mla - 1
@@ -95,7 +145,7 @@ class Frontier(VoiceoverScene):
             cells.scale_to_fit_width(13.0)
         cl = VGroup(label(rf"Kimi K3 (2026): \ ${n_kda + n_mla}$ layers \ --- \ ${n_kda}$ of Kimi Delta Attention, "
                           rf"\ ${n_mla}$ of gated attention", font_size=26, color=GREY_A).next_to(cells, UP, buff=0.3),
-                    note(r"layer order schematic; \ counts from the Kimi K3 model card", font_size=18).next_to(cells, DOWN, buff=0.15))
+                    note(r"layer order and counts from Kimi K3's released configuration", font_size=18).next_to(cells, DOWN, buff=0.15))
         keys = VGroup(VGroup(Square(0.25, fill_color=LIN, fill_opacity=0.9, stroke_width=0),
                              label(r"a fixed-size memory, \ updated as it reads", font_size=24, color=LIN)).arrange(RIGHT, buff=0.15),
                       VGroup(Square(0.25, fill_color=A, fill_opacity=0.9, stroke_width=0),

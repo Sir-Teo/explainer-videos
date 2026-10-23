@@ -265,7 +265,7 @@ ZH = {
         "叠加在NTK缩放之上，它也没带来多少变化：从{far['ntk']:.2f}到{far['ntk_logn']:.2f}。",
 
     'f"Real models do not stop at a rescaling':
-        "真实的模型不会只停在重新调速上：它们还会在新的长度上短暂地训练。我们也这样做了：{steps}步，每步用{T:,}个字符的窗口，共{chars / 1000000.0:.1f}百万个字符，大约是原来训练量的百分之{100 * chars / float(t['tokens']):.0f}，一次从位置插值出发，一次从YaRN出发。<bookmark mark='a'/>虚线是训练前，实线是训练后。<bookmark mark='b'/>{v}<bookmark mark='c'/>{v_end}这就是今天长上下文模型的配方：DeepSeek-V3用YaRN加上两千步训练，从4千个词元扩展到了12.8万个。",
+        "真实的模型不会只停在重新调速上：它们还会在新的长度上短暂地训练。我们也这样做了：{steps}步，每步用{T:,}个字符的窗口，共{chars / 1000000.0:.1f}百万个字符，大约是原来训练量的百分之{100 * chars / float(t['tokens']):.0f}，一次从位置插值出发，一次从YaRN出发：角落里是它们一步一步的训练损失。<bookmark mark='a'/>虚线是训练前，实线是训练后。<bookmark mark='b'/>{v}<bookmark mark='c'/>{v_end}这就是今天长上下文模型的配方：DeepSeek-V3用YaRN加上两千步训练，从4千个词元扩展到了12.8万个。",
 
     "f'Position interpolation falls from":
         "在最远端，位置插值从{far['pi']:.2f}比特降到{far['ft_pi']:.2f}，YaRN从{far['yarn']:.2f}降到{far['ft_yarn']:.2f}。",
@@ -353,6 +353,9 @@ ZH = {
     # ------------------------------------------------------------------ Frontier
     "Chapter seventeen. Attention in 2026.":
         "第17章。2026年的注意力。",
+
+    'f"Why so much effort?':
+        "为什么要费这么大劲？用第7章的算术，算一算一个和DeepSeek-V3一样宽的模型，宽度{DSV3_D:,}个数，用普通的注意力，处理一个词元要花多少。<bookmark mark='a'/>上下文是四千个词元时，注意力那一项是权重成本的{r4:.2f}；到十二万八千个，是{r128:.1f}倍；到一百万个，是{r1m:.0f}倍。<bookmark mark='b'/>而且这一百万个过去的键和值，每一层都得留着，才能写出下一个词元。长上下文让注意力成了最贵的部分，下一张图上的每一处改动，都是为它少付一点代价的办法。",
 
     "Every model in 2026 still computes this formula somewhere.":
         "2026年的每一个模型，仍然在某处计算着这个公式。变的是在哪里算，以及算多少。<bookmark mark='a'/>在softmax内部，是前面几章讲的那些修补：gpt-oss里的汇点logit，Qwen3-Next和Kimi K3里的输出门控，Qwen3和Gemma 3里的QK归一化，还有Llama 4里那些完全没有位置的层。<bookmark mark='b'/>每个过去的词元留下的键和值，已经被压小了：分组查询注意力让多个头共享它们，DeepSeek的多头潜在注意力则从一个小的潜在向量把它们重建出来，这是把第4章的低秩想法用在了记忆上。<bookmark mark='c'/>许多模型只看过去的一部分：大多数层用滑动窗口，或者学着去挑哪些键要紧。DeepSeek的稀疏注意力让一个又小又快的索引器，为每个查询挑出几千个过去的词元；DeepSeek-V4则压缩加挑选，读到一百万个词元。<bookmark mark='d'/>还有些模型把大多数注意力层，换成一个边读边更新的固定大小的记忆：Qwen3-Next和Qwen3.5里，每一个注意力层配三个这样的层；Kimi Linear和Kimi K3里，用的是Kimi Delta Attention。",
@@ -460,7 +463,7 @@ ZH = {
         "它的值是其他值的{vb.mean() / vr.mean():.2f}倍：还没有排空。",
 
     '"Three recent designs give a head':
-        "最近有三种设计，给了头一个更好的“什么都不做”的办法；我们在同一个任务上、用同样的步数训练了每一种，每种三个种子。<bookmark mark='a'/>gpt-oss给每个头的softmax分母加上一个学出来的数，相当于一个看不见的键的分数。<bookmark mark='b'/>Qwen团队的门控注意力，把每个头的输出乘以输入的一个sigmoid。<bookmark mark='c'/>微软的差分注意力，取两张softmax图的差。<bookmark mark='d'/>{v_sink}<bookmark mark='e'/>{v_gate}<bookmark mark='f'/>{v_diff}<bookmark mark='g'/>{v_loss}在大模型里，Qwen团队看到，加上门控之后，第一个词元上的注意力份额从46.7%降到了4.8%；Qwen3-Next和Kimi K3现在都给它们的注意力加了门控。",
+        "最近有三种设计，给了头一个更好的“什么都不做”的办法；我们在同一个任务上、用同样的步数训练了每一种，每种三个种子。<bookmark mark='a'/>gpt-oss给每个头的softmax分母加上一个学出来的数，相当于一个看不见的键的分数。<bookmark mark='b'/>Qwen团队的门控注意力，把每个头的输出乘以输入的一个sigmoid。<bookmark mark='c'/>微软的差分注意力，取两张softmax图的差。<bookmark mark='d'/>这是每种设计在训练过程中放在标记上的权重，每种三个种子。{v_sink}<bookmark mark='e'/>{v_gate}<bookmark mark='f'/>{v_diff}<bookmark mark='g'/>{v_loss}在大模型里，Qwen团队看到，加上门控之后，第一个词元上的注意力份额从46.7%降到了4.8%；Qwen3-Next和Kimi K3现在都给它们的注意力加了门控。",
 
     "f'The sink logit gives the head a place to send its weight that is not a token at all: its":
         "汇点logit给了头一个地方，可以把权重送去，而那里根本不是一个词元：它放在标记上的权重降到{r_s:.0%}，有{nl:.0%}的权重哪儿也没去。",
@@ -576,6 +579,40 @@ ZH = {
 
     'f"Why not? Olsson\'s team':
         "为什么没有？奥尔森的团队看到，归纳头是在训练了25亿到50亿个词元之后才出现的。我们的模型读了{tokens / 1000000.0:.0f}百万个字符，大约是那个数的百分之一；而且小说很少在256个字符之内重复一长段，所以复制很少能带来好处。",
+
+    # ------------------------------------------------------------------ InContext
+    "Chapter fifteen. Learning inside the prompt.":
+        "第15章。在提示里学习。",
+
+    "Large models learn from examples in their prompt":
+        "大模型能从提示里的例子中学习，却一个权重也不改。给它看几个翻译的例子，它就会翻译下一个。一次前向传播怎么能学习？<bookmark mark='f'/>前向传播就是把网络跑一遍：数字进去，每一层流过一次，出来一个猜测。这中间没有任何权重被改动。这里有一个小到可以彻底拆开的例子。<bookmark mark='a'/>每个提示是一串例子：四个数x，和一个答案y，y是这四个数的一个固定的加权和。然后是一个问题：一个新的x，答案空着。<bookmark mark='b'/>难点在于：每个提示用的隐藏权重都不一样，所以什么都没法死记。要回答，模型必须从眼前的例子里推出规律。",
+
+    'f"Take the simplest attention':
+        "取最简单的注意力：一层，没有softmax。每个词元是一个例子的数和它的答案，注意力给每个词元加上其他词元的一个加权和。在许多提示上训练它：它在问题上的误差，从{cv[0, 1]:.1f}降到{cv[-1, 1]:.2f}。<bookmark mark='a'/>这是它学到的两个矩阵。蓝色是正，红色是负。<bookmark mark='b'/>现在换一件事来做：在提示里的例子上，从零出发，对第6部分的最小二乘损失走一步梯度下降。这一步是每个答案乘以它的x再求和，而预测是每个答案乘以“它的x和问题有多匹配”再求和：x之间的点积，给y加权。<bookmark mark='c'/>这就是注意力，用的就是这两个矩阵：一个比较x的单位矩阵块，和一个把y传下去的元素。它们正是网络自己找到的那个模式。",
+
+    '"Check it on four thousand new prompts.':
+        "在四千个新提示上检验一下。每个点是一个问题：横轴是一步梯度下降给出的答案；纵轴是训练好的注意力层给出的答案。<bookmark mark='a'/>{v_line}约翰内斯·冯·奥斯瓦尔德和同事们在2023年证明了这一点。",
+
+    "f'They lie on a line.":
+        "它们落在一条直线上。相关系数是{r_:.3f}；相关系数衡量这些点贴着一条直线贴得有多紧，等于1就表示恰好落在线上。这个网络的前向传播，就是一步学习，在它提示里的例子上运行。",
+
+    "f'They follow a line, loosely":
+        "它们大致沿着一条直线：相关系数是{r_:.3f}；相关系数衡量这些点贴着一条直线贴得有多紧，等于1就表示恰好落在线上。这个网络的前向传播，接近于一步学习。",
+
+    '"Stack more layers, and each can take another step.':
+        "再多叠几层，每一层都能再走一步。<bookmark mark='a'/>{v_deep}<bookmark mark='b'/>{v_exact}真实的Transformer有softmax注意力和许多层，比这要乱，但道理是相通的：一次前向传播，可以在提示上运行一个学习算法。",
+
+    "f'One layer matches one step of gradient descent. Two layers":
+        "一层对得上一步梯度下降。两层胜过两步普通的梯度下降，{l2:.2f}对{g2:.2f}：训练出来的网络，找到了一种比教科书上更聪明的步子。",
+
+    "One layer matches one step of gradient descent, and more layers":
+        "一层对得上一步梯度下降，层数越多，就跟得上越多步。",
+
+    "Exact least squares, from Part 6, gets every answer right":
+        "第6部分的精确最小二乘，在这里每个答案都对，误差只在舍入的量级，所以还有进步的空间。",
+
+    "f'Exact least squares, from Part 6, reaches":
+        "第6部分的精确最小二乘，达到{ls:.2f}。",
 
 }
 

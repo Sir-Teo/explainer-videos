@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai13.common import (A, DIFFC, GATEC, MONO, PANEL, PART, POS, SINK_COLORS, SINK_NAMES, SINKC, V,
-                                   bars_chart, curve, framed, heat_image, load)
+                                   curve, framed, heat_image, load, seed_lines)
 
 VARIANTS = ("softmax", "sink", "gate", "diff")
 SPOKEN_SINK = {"softmax": "the plain softmax", "sink": "the sink logit", "gate": "the gated head",
@@ -243,17 +243,23 @@ class Sinks(VoiceoverScene):
                        label(r"differential attention \ (Ye et al.\ 2024)", font_size=22, color=DIFFC))
         blocks = VGroup(*[VGroup(n_, e_).arrange(DOWN, aligned_edge=LEFT, buff=0.12) for n_, e_ in zip(names, eqs)])
         blocks.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([-3.6, 1.0, 0])
-        mu = [float(bos[v].mean()) for v in VARIANTS]
-        ch = bars_chart(mu, [SINK_COLORS[v] for v in VARIANTS], width=5.2, height=2.4, x0=1.4, base_y=-0.2,
-                        vmax=max(1.0, max(float(bos[v].max()) for v in VARIANTS)), labels=[SINK_NAMES[v] for v in VARIANTS],
-                        font_size=18, fmt="{:.2f}", spread=[(float(bos[v].min()), float(bos[v].max())) for v in VARIANTS])
-        ct = label(r"weight on $\langle s\rangle$ \ when there is nothing to copy", font_size=20, color=GREY_A)
-        ct.next_to(ch, UP, buff=0.3)
-        loss = VGroup(label(r"bits on the copies, \ and on the rest", font_size=20, color=GREY_A),
-                      *[label(rf"{SINK_NAMES[v]}: \ ${cp[v].mean():.3f}$, \ ${bg[v].mean():.3f}$", font_size=18,
-                              color=SINK_COLORS[v]) for v in VARIANTS],
+        # each design's training, three seeds each: the weight on <s> when there is nothing to copy, every 100 steps
+        hist = {v: np.asarray(s[f"{v}_hist"], float) for v in VARIANTS}  # seed, checkpoint, (step, bigram, copy, <s>)
+        hx = hist["softmax"][0, :, 0]
+        ytop = max(0.6, float(np.ceil(max(hist[v][:, :, 3].max() for v in VARIANTS) * 5) / 5))
+        ch = axes([0, float(hx[-1]), 500], [0, ytop, 0.2], x_length=4.4, y_length=2.1, xlabel=r"training steps",
+                  xticks=[0, 500, 1000, int(hx[-1])], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"),
+                  yticks=[0, round(ytop / 2, 1), ytop], yfmt=lambda v: f"{v:.1f}", font_size=18, center=[3.85, 0.75, 0])
+        lines = {v: seed_lines(ch.ax, hx, np.clip(hist[v][:, :, 3], 0, ytop), SINK_COLORS[v], 3) for v in VARIANTS}
+        ct = label(r"weight on $\langle s\rangle$ \ when there is nothing to copy, \\ during training \ (three seeds each)",
+                   font_size=20, color=GREY_A)
+        ct.next_to(ch, UP, buff=0.2)
+        loss = VGroup(label(r"at the end: \ weight on $\langle s\rangle$; \ bits on the copies, \ and on the rest",
+                            font_size=20, color=GREY_A),
+                      *[label(rf"{SINK_NAMES[v]}: \ ${bos[v].mean():.2f}$; \ ${cp[v].mean():.3f}$, \ ${bg[v].mean():.3f}$",
+                              font_size=18, color=SINK_COLORS[v]) for v in VARIANTS],
                       note(rf"best possible on the rest: \ ${float(s['opt_bigram']):.3f}$", font_size=18))
-        loss.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.0, -2.75, 0])
+        loss.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.0, -2.55, 0])
         keep_in_frame(loss)
         facts = label(r"Qiu et al.: \ attention on the first token, \ $46.7\%$ $\to$ $4.8\%$ with the gate; \\ "
                       r"Qwen3-Next and Kimi K3 gate their attention", font_size=20, color=GREY_A).move_to([-3.6, -2.6, 0])
@@ -285,7 +291,8 @@ class Sinks(VoiceoverScene):
             "the same steps, three seeds each. <bookmark mark='a'/> gpt-oss adds one learned number per head to the "
             "softmax's denominator, the score of an invisible key. <bookmark mark='b'/> The Qwen team's gated "
             "attention multiplies each head's output by a sigmoid of the input. <bookmark mark='c'/> Microsoft's "
-            "differential attention takes the difference of two softmax maps. <bookmark mark='d'/> " + v_sink
+            "differential attention takes the difference of two softmax maps. <bookmark mark='d'/> Here is each "
+            "design's weight on the marker while it trains, three seeds each. " + v_sink
             + " <bookmark mark='e'/> " + v_gate + " <bookmark mark='f'/> " + v_diff + " <bookmark mark='g'/> " + v_loss
             + " In large models the Qwen team saw the share of attention on the first token fall from 46.7 to 4.8 "
             "percent with the gate; Qwen3-Next and Kimi K3 now gate their attention."
@@ -296,12 +303,13 @@ class Sinks(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(blocks[2]))
             vo.wait_until("d")
-            self.play(FadeIn(ct), FadeIn(ch.base), FadeIn(ch.names), GrowFromEdge(ch.bars[0], DOWN), FadeIn(ch.vals[0]),
-                      FadeIn(ch.whisk[0]), GrowFromEdge(ch.bars[1], DOWN), FadeIn(ch.vals[1]), FadeIn(ch.whisk[1]))
+            self.play(FadeIn(ct), FadeIn(ch))
+            self.play(*[FadeIn(lines[v][0]) for v in ("softmax", "sink")],
+                      *[Create(lines[v][1]) for v in ("softmax", "sink")], run_time=2.0)
             vo.wait_until("e")
-            self.play(GrowFromEdge(ch.bars[2], DOWN), FadeIn(ch.vals[2]), FadeIn(ch.whisk[2]))
+            self.play(FadeIn(lines["gate"][0]), Create(lines["gate"][1]), run_time=1.5)
             vo.wait_until("f")
-            self.play(GrowFromEdge(ch.bars[3], DOWN), FadeIn(ch.vals[3]), FadeIn(ch.whisk[3]))
+            self.play(FadeIn(lines["diff"][0]), Create(lines["diff"][1]), run_time=1.5)
             vo.wait_until("g")
             self.play(FadeIn(loss), FadeIn(facts))
         self.wait(0.3)
