@@ -63,10 +63,11 @@ class Outro(VoiceoverScene):
                                 POS_COLORS[m], 2.5) for m in POS_COLORS])
         out.append((g5, r"positions, past the length", POS))
         # 6. sinks
-        sk = load("sinks")
-        vals = [float(np.asarray(sk[f"{v}_bos_dormant"]).mean()) for v in SINK_COLORS]
-        g6 = VGroup(*[Rectangle(width=0.5, height=max(1.6 * v_, 0.02), stroke_width=0, fill_color=c_, fill_opacity=0.85)
-                      for v_, c_ in zip(vals, SINK_COLORS.values())]).arrange(RIGHT, buff=0.18, aligned_edge=DOWN)
+        sk = load("sinks")  # each design's weight on <s> with nothing to copy, during training (mean of the seeds)
+        hs = {v: np.asarray(sk[f"{v}_hist"], float) for v in SINK_COLORS}
+        hx6 = hs["softmax"][0, :, 0]
+        a6 = plane([0, float(hx6[-1]), 500], [0, max(0.6, max(float(h_[:, :, 3].mean(0).max()) for h_ in hs.values())), 0.2])
+        g6 = VGroup(a6, *[curve(a6, hx6, hs[v][:, :, 3].mean(0), c_, 2.5) for v, c_ in SINK_COLORS.items()])
         out.append((g6, r"sinks, and ways out", C.SINK))
         # 7. induction heads forming
         d = load("induction")

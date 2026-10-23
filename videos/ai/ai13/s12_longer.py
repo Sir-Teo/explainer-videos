@@ -11,6 +11,7 @@ METHODS = [("plain", r"rotations as trained", C.SURPRISE), ("pi", r"position int
            ("ntk", r"NTK-aware", C.INTERVAL), ("yarn", r"YaRN", C.BITS)]
 
 
+SHORT = {"plain": r"as trained", "logn": r"$\log n$", "ntk": r"NTK", "ntk_logn": r"NTK \\ $+ \log n$", "yarn": r"YaRN"}
 SPOKEN_EXT = {"plain": "the plain model", "pi": "position interpolation", "ntk": "the NTK-aware rescaling",
               "yarn": "YaRN", "logn": "log n scaling alone", "ntk_logn": "NTK-aware with log n scaling"}
 
@@ -253,7 +254,7 @@ class Longer(VoiceoverScene):
             r_ = Rectangle(width=0.7, height=max(ax.c2p(0, v)[1] - ax.c2p(0, lo)[1], 0.02), stroke_width=0,
                            fill_color=EXT_COLORS[k], fill_opacity=0.85).move_to(ax.c2p(i + 0.5, (v + lo) / 2))
             bars.add(VGroup(r_, MathTex(f"{far[k]:.2f}", font_size=20, color=EXT_COLORS[k]).next_to(r_, UP, buff=0.06),
-                            label(EXT_NAMES[k], font_size=17, color=EXT_COLORS[k]).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.1)))
+                            label(SHORT[k], font_size=17, color=EXT_COLORS[k]).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.1)))
         ref = DashedLine(ax.c2p(0, near), ax.c2p(len(names), near), color=GREY_B, stroke_width=1.5)
         refl = label(rf"within $1$--${ctx}$", font_size=16, color=GREY_B).next_to(ref, RIGHT, buff=0.08)
         hist = VGroup(label(r"Chiang \& Cholak (2022): \ scale logits by $\log n$", font_size=20, color=GREY_A),
@@ -326,7 +327,7 @@ class Longer(VoiceoverScene):
                   yticks=[math.floor(min(fc[k].min() for k in fc)), ftop], yfmt=lambda v: f"{v:.0f}",
                   center=[4.75, -1.75, 0])
         fl = VGroup(*[curve(fg.ax, np.arange(1, steps + 1), fc[k], EXT_COLORS[k], 2.0) for k in fc])
-        ftl = label(rf"training loss, \ bits per character \ (${T:,}$-character windows)".replace(",", "{,}"),
+        ftl = label(rf"training loss, \ bits per character \\ (${T:,}$-character windows)".replace(",", "{,}"),
                     font_size=16, color=GREY_A).next_to(fg, UP, buff=0.12)
         far = {k: float(np.asarray(e[f"bucket_{k}"])[-4:].mean()) for k in ("pi", "yarn", "ft_pi", "ft_yarn", "window")}
         winner = "ft_yarn" if far["ft_yarn"] < far["ft_pi"] else "ft_pi"
