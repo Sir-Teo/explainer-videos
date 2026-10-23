@@ -384,7 +384,7 @@ _DATA = {
         '而真实的激活里，总有几个很大的值：这是本系列模型里一次矩阵乘法的128个输入。',
 
     "f\"Here are 128 inputs to one matrix product":
-        "这是本系列模型里一次矩阵乘法的128个输入；整个张量里最大的值是{q['outlier']:.0f}。",
+        "这是本系列模型里一次矩阵乘法的128个输入；它们所在的整个张量里，最大的值是{S8['tensor_max']:.0f}。",
 
     "f'With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; ":
         "整个张量用一个缩放因子，舍入到E4M3的误差是{100 * q['act_tensor']:.1f}%；每128个值的一个瓦片用一个缩放因子，误差是{100 * q['act_tile']:.1f}%。",

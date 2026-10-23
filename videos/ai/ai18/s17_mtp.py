@@ -147,7 +147,16 @@ class MTP(VoiceoverScene):
                   color=MTP_C),
             label(rf"the module's extra arithmetic: \ $+{100 * MC['extra_share']:.0f}\%$ per step", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.9, 0])
+        # the module's weight over the run, as trained (the spec stored with the run)
+        sp = runs[f"0.3_{seeds[0]}"]["spec"]
+        cut = int(sp["steps"] * (1 - sp["decay_frac"]))
+        gl = axes([0, sp["steps"]], [0, 0.4], x_length=4.2, y_length=1.3, xlabel=r"step",
+                  ylabel=r"the module's weight $\lambda$", xticks=[0, cut, sp["steps"]], yticks=[sp["mtp_late"], sp["mtp"]],
+                  yfmt=lambda v: f"{v:.1f}", center=[3.6, 1.75, 0], font_size=18)
+        lam_l = VMobject(color=MTP_C, stroke_width=3).set_points_as_corners(
+            [gl.ax.c2p(0, sp["mtp"]), gl.ax.c2p(cut, sp["mtp"]), gl.ax.c2p(cut, sp["mtp_late"]),
+             gl.ax.c2p(sp["steps"], sp["mtp_late"])])
         tag = note(rf"computed: \ our small model, \ ${Mt['steps']}$ steps, \ the same tokens, \ two seeds each",
                    font_size=18).to_corner(DR, buff=0.2)
         if ntp - mtp > max(spread, 0.01):
@@ -170,6 +179,7 @@ class MTP(VoiceoverScene):
             "step, " + mostly + "."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=3.0)
+            self.play(FadeIn(gl), Create(lam_l), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(res[0]), FadeIn(res[1]))
             vo.wait_until("b")

@@ -26,6 +26,7 @@ Items:
     parallel       data parallel and ZeRO-3 against one process; Megatron tensor parallel on 2 and 4 ranks; ring
                    attention on 4 ranks
     precision      a training run in FP32, BF16, FP16 without and with loss scaling, FP8 per tensor and per tile
+    fp8_scale      one tile of real activations, with its tensor's and its tile's largest value (the FP8 scales)
     stability      a learning-rate sweep with and without QK-norm and z-loss, pushed to instability
     mtp            multi-token prediction against next-token prediction, at equal tokens; self-speculative acceptance
     mixture        RegMix on four groups of the novels: 32 small runs, a regression, the predicted mixture tested
@@ -854,6 +855,31 @@ def _quant_error():
                 act_sample=a0[0, :128].numpy().tolist())
 
 
+def compute_fp8_scale():
+    """The 128 activations the Precision chapter draws (as in ``_quant_error``: the first row of the first hooked
+    matrix product's input, on the series' base model) with the largest magnitude in their whole tensor and in their
+    1 x 128 tile: what one scale per tensor and one scale per tile divide by to bring the largest value to E4M3's 448."""
+    import torch
+
+    from explainer.ai import novels as N
+
+    torch.set_num_threads(1)
+    m = N.load_base()
+    _, va = N.token_arrays()
+    acts = []
+    hooks = [mod.register_forward_hook(lambda mod, inp, out: acts.append(inp[0].detach().reshape(-1, inp[0].shape[-1])))
+             for n, mod in m.named_modules() if isinstance(mod, torch.nn.Linear) and n.startswith("blocks")
+             and n.endswith(("qkv", "gate"))]
+    with torch.no_grad():
+        m(torch.from_numpy(va[:257].astype(np.int64))[None, :-1])
+    for h in hooks:
+        h.remove()
+    a0 = acts[0]
+    tile = a0[0, :128]
+    return dict(sample=tile.tolist(), tensor_max=float(a0.abs().max()), tile_max=float(tile.abs().max()),
+                width=int(a0.shape[-1]), e4m3_max=448.0)
+
+
 def compute_precision(steps=250, seeds=(0, 1)):
     from videos.ai.ai18 import lm
 
@@ -1256,6 +1282,7 @@ ITEMS = {
     "collectives": compute_collectives,
     "parallel": compute_parallel,
     "precision": compute_precision,
+    "fp8_scale": compute_fp8_scale,
     "precision_acc": compute_precision_acc,
     "stability": compute_stability,
     "mtp": compute_mtp,

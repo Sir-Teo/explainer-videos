@@ -175,9 +175,13 @@ class DataParallel(VoiceoverScene):
             "messages, and overlap: sending the last layers' gradients while the backward pass is still computing the "
             "first."
         ) as vo:
+            mid = VGroup(nodes, nnote)  # in the middle while it is the picture, then below the derivation
+            mid.save_state()
+            mid.shift(UP * 2.4)
             self.play(FadeIn(th, shift=UP * 0.1))
             self.play(LaggedStart(*[FadeIn(n_, scale=0.8) for n_ in nodes], lag_ratio=0.2), FadeIn(nnote))
             vo.wait_until("a")
+            self.play(Restore(mid), run_time=0.8)
             step(0)
             self.play(LaggedStart(*[Create(a_) for a_ in chain_], lag_ratio=0.6), run_time=2.5)
             self.play(ReplacementTransform(nodes[3][1], sums[3]))

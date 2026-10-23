@@ -96,6 +96,15 @@ class Web(VoiceoverScene):
         url = data_text(ex["url"].replace("http://", "").replace("https://", ""), font=MONO, font_size=15, color=GREY_B)
         url.next_to(right, DOWN, buff=0.15)
         sch = note(r"HTML abridged \ (schematic)", font_size=18).next_to(left, DOWN, buff=0.15)
+        # what each part of the page is: only one line is prose (shown before the extracted text takes this side)
+        tags = VGroup()
+        for i, t, c in ((1, r"a script", REMOVED), (2, r"a style sheet", REMOVED), (4, r"the menu", REMOVED),
+                        (5, r"the article: \ the only prose", KEPT), (6, r"the footer", REMOVED)):
+            lab = label(t, font_size=20, color=c).move_to([hbox.get_right()[0] + 0.45, html[i].get_y(), 0],
+                                                          aligned_edge=LEFT)
+            tick = Line(hbox.get_right() * RIGHT + html[i].get_y() * UP + RIGHT * 0.08,
+                        lab.get_left() + LEFT * 0.08, color=c, stroke_width=2)
+            tags.add(VGroup(tick, lab))
         stats = VGroup(
             label(rf"${W['warc_pages']}$ HTML pages from WARC slices: \ ${W['html_bytes'] / 1e6:.1f}$ MB of HTML $\to$ "
                   rf"${W['extracted_bytes'] / 1e6:.2f}$ MB of text \ (${100 * W['extracted_share']:.1f}\%$)",
@@ -117,9 +126,11 @@ class Web(VoiceoverScene):
             "beat Common Crawl's own WET text."
         ) as vo:
             self.play(FadeIn(left), FadeIn(sch))
+            self.play(LaggedStart(*[FadeIn(t_, shift=LEFT * 0.1) for t_ in tags], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("a")
             self.play(Indicate(hl))
             vo.wait_until("b")
+            self.play(FadeOut(tags))
             self.play(GrowArrow(arrow), FadeIn(right), FadeIn(url))
             vo.wait_until("c")
             self.play(FadeIn(stats, shift=UP * 0.1))

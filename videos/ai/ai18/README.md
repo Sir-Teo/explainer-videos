@@ -78,7 +78,8 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
 * **14. Fewer bits.** Formats on a log₂ scale with the measured distribution of our activation gradients (the share
   below FP16's normal and subnormal range); loss scaling derived (Micikevicius et al. 2018), dynamic scaling; six
   training runs (FP32, BF16, FP16 without and with loss scaling, FP8 per tensor, FP8 per tile), two seeds; the same in
-  FP16 with each step accumulated over 64 micro-batches; per-tensor against per-tile E4M3 error on the series' model;
+  FP16 with each step accumulated over 64 micro-batches; one tile of the series' model's activations
+  scaled into E4M3's range per tensor and per tile (`fp8_scale`), and the per-tensor against per-tile error;
   DeepSeek-V3's FP8 recipe (1 × 128 and 128 × 128 scales, FP32 promotion every 128, < 0.25% loss error); MXFP8 (8B/15T),
   NVFP4 (12B/10T, MMLU-Pro 62.58 against 62.62), Nemotron 3 Super (NVFP4, 25T), Kimi K3 and DeepSeek-V4 (FP4 QAT).
 * **15. Keeping the run stable.** PaLM's ~20 spikes and rollbacks; attention-logit growth and QK-norm (bound derived);
@@ -206,6 +207,9 @@ lab pages):
   accumulation and MTP runs, both recipes (two seeds each) and the data-parallel check's six steps. The MTP module's
   cost is counted in FLOPs per token (`mtp_cost`): in a model with a 4,096-token vocabulary and width 64, the second
   pass through the output head is most of it, which is why it is far larger than in DeepSeek-V3.
+* On screen, text from crawled pages has e-mail addresses and phone numbers blanked (`said` in `common.py`). The
+  bars under the collapse chain in the Mixture chapter (a Zipf-shaped frequency list losing rare words) are a
+  schematic; the curves after them are computed.
 * Not used: training-token counts for Kimi K3; Kimi K2's GPU count; OLMo 3's optimizer; a DualPipe simulation (its
   formula is cited instead).
 
