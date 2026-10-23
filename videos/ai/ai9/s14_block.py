@@ -287,6 +287,15 @@ class Block(VoiceoverScene, ThreeDScene):
         second = (f"The residual stream alone brings it to {r_:.2f}. " if np.isfinite(r_) else
                   "The residual stream alone, with no normalization, diverges at this learning rate. ")
         best_name = SPOKEN[best]
+        po, pl, pr = final["post_ln"], final["pre_ln"], final["pre_rms"]
+        if not np.isfinite(po) or po > pl + 0.3:
+            norms = (f"Normalizing after each block, post-norm, stalls at {po:.2f} with no warm-up; normalizing before "
+                     f"it reaches {pl:.2f} with LayerNorm and {pr:.2f} with RMSNorm. ")
+        else:
+            norms = (f"Normalizing after each block reaches {po:.2f}; before it, {pl:.2f} with LayerNorm and {pr:.2f} "
+                     "with RMSNorm. ")
+        extra = ("In a run this short, that's no better than the bare residual stream: what normalization buys is "
+                 "stability, which matters more as models grow. " if pl >= r_ - 0.01 else "")
         third = (f"The full modern block ends best, at {s_:.2f}." if best == "pre_rms_swiglu" else
                  f"The full modern block reaches {s_:.2f}; on this small task the best was {best_name}, at "
                  f"{final[best]:.2f}, and differences of a few hundredths are within the noise of one run.")
@@ -294,8 +303,7 @@ class Block(VoiceoverScene, ThreeDScene):
             "Does each piece earn its place? We built the block up one piece at a time, as a character model on the "
             f"thirty novels: {int(b['depth'])} blocks deep, each version trained for {steps:,} steps on the same data, "
             "from the same seed. <bookmark mark='a'/> " + first + "<bookmark mark='b'/> " + second +
-            "<bookmark mark='c'/> Then normalization, after the block and before it, LayerNorm and RMSNorm. "
-            "<bookmark mark='d'/> " + third
+            "<bookmark mark='c'/> " + norms + "<bookmark mark='c3'/> " + extra + "<bookmark mark='d'/> " + third
         ) as vo:
             self.play(FadeIn(g), FadeIn(head), FadeIn(tag))
             vo.wait_until("a")
