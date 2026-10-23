@@ -51,20 +51,22 @@ class Recipe(VoiceoverScene):
                          for c, col in zip(cols, (BASE_C, FULL_C))])
         left_out = note(r"not included: \ FP8 and two-token prediction \ (chapters 14 and 16)", font_size=18)
         left_out.to_edge(DOWN, buff=0.3)
-        Mt, Pc = load("mtp"), load("precision")
-        mtp_gain = np.mean(Mt["final"]["0"]) - np.mean(Mt["final"]["0.3"])
-        fp8_gap = np.mean(Pc["final"]["fp8_tile"]) - np.mean(Pc["final"]["fp32"])
-        if mtp_gain > 0.01:
+        Mt, MC = load("mtp"), load("mtp_cost")
+        mfin = Mt["final"]
+        mtp_gain = np.mean(mfin["0"]) - np.mean(mfin["0.3"])
+        mtp_spread = max(abs(mfin["0"][0] - mfin["0"][1]), abs(mfin["0.3"][0] - mfin["0.3"][1]))
+        if mtp_gain > max(mtp_spread, 0.01):  # the same test as chapter sixteen's
             out_ = (f"Two-token prediction stays out although it helped a little in chapter sixteen: it costs "
-                    f"{100 * Mt['extra_share']:.0f} percent more arithmetic, and the comparison must be at equal "
+                    f"{100 * MC['extra_share']:.0f} percent more arithmetic, and the comparison must be at equal "
                     "compute. Eight-bit arithmetic stays out too: on a CPU it only emulates the saving.")
         else:
-            out_ = ("Two-token prediction and eight-bit arithmetic stay out: our own experiments found them neutral at "
-                    "this scale, and the first costs extra compute, which would make the comparison unequal.")
+            out_ = ("Two-token prediction stays out: it gave no gain at our scale in chapter sixteen, and it costs "
+                    "extra compute, which would make the comparison unequal. Eight-bit arithmetic stays out too: on a "
+                    "CPU it only emulates the saving.")
         with self.voiceover(
             "Now we put the pieces together. Two models of exactly the same shape, trained on the same three million "
             "tokens of the thirty novels, in the same order, for the same number of steps, from the same starting "
-            "weights. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain attention. "
+            "weights; and then the whole comparison again from a second seed. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain attention. "
             "<bookmark mark='b'/> One with the recipe of 2026: Muon for the hidden matrices, warmup, stable, decay, "
             "QK-norm and the z-loss. <bookmark mark='c'/> " + out_
         ) as vo:
@@ -135,39 +137,44 @@ class Recipe(VoiceoverScene):
     def result(self):
         R, M = load("recipe"), load("mfu")
         b, f = R["base"], R["full"]
-        rows = [(r"held-out loss (nats per token)", f"{b['val']:.3f}", f"{f['val']:.3f}"),
-                (r"bits per character, \ the scoreboard's passage", f"{b['bits']:.3f}", f"{f['bits']:.3f}"),
-                (r"largest attention logit", f"{b['max_logit']:.0f}", f"{f['max_logit']:.0f}"),
+        mb, mf = float(np.mean(b["seeds_bits"])), float(np.mean(f["seeds_bits"]))
+        sp = max(abs(b["seeds_bits"][0] - b["seeds_bits"][1]), abs(f["seeds_bits"][0] - f["seeds_bits"][1]))
+        bl_, fl_ = max(b["seeds_max_logit"]), max(f["seeds_max_logit"])
+        two = lambda v, k: rf"{v[0]:.{k}f} \ / \ {v[1]:.{k}f}"  # noqa: E731
+        rows = [(r"held-out loss (nats per token)", two(b["seeds_val"], 3), two(f["seeds_val"], 3)),
+                (r"bits per character, \ the scoreboard's passage", two(b["seeds_bits"], 3), two(f["seeds_bits"], 3)),
+                (r"largest attention logit", two(b["seeds_max_logit"], 0), two(f["seeds_max_logit"], 0)),
                 (r"training time on this computer (min)", f"{b['seconds'] / 60:.0f}", f"{f['seconds'] / 60:.0f}")]
-        xs = [-2.8, 2.2, 4.8]
+        xs = [-3.3, 1.6, 4.9]
         hd = VGroup(label(r"2020 recipe", font_size=24, color=BASE_C).move_to([xs[1], 2.4, 0]),
                     label(r"2026 recipe", font_size=24, color=FULL_C).move_to([xs[2], 2.4, 0]))
         body = VGroup()
         for i, (nm, a, c) in enumerate(rows):
             y = 1.6 - 0.75 * i
             body.add(VGroup(label(nm, font_size=22, color=GREY_A).move_to([xs[0], y, 0]),
-                            label(f"${a}$", font_size=26, color=BASE_C).move_to([xs[1], y, 0]),
-                            label(f"${c}$", font_size=26, color=FULL_C).move_to([xs[2], y, 0])))
-        d = b["bits"] - f["bits"]
-        rel = d / b["bits"]
-        if d > 0.02:
-            verdict = (f"The 2026 recipe wins: {f['bits']:.3f} bits per character on the scoreboard's passage, "
-                       f"against {b['bits']:.3f}, {100 * rel:.1f} percent better with exactly the same model, data and "
-                       "steps.")
-        elif d < -0.02:
-            verdict = (f"The 2020 recipe wins here: {b['bits']:.3f} bits per character, against {f['bits']:.3f} for "
-                       "the 2026 one. At our scale, and with one untuned learning rate for both, the new recipe's "
+                            label(f"${a}$", font_size=23, color=BASE_C).move_to([xs[1], y, 0]),
+                            label(f"${c}$", font_size=23, color=FULL_C).move_to([xs[2], y, 0])))
+        d = mb - mf
+        rel = d / mb
+        if d > max(sp, 0.01):
+            verdict = (f"The 2026 recipe wins: {mf:.3f} bits per character on the scoreboard's passage, against "
+                       f"{mb:.3f}, the mean of two seeds each: {100 * rel:.1f} percent better with exactly the same "
+                       f"model, data and steps, and more than the {sp:.3f} between seeds.")
+        elif -d > max(sp, 0.01):
+            verdict = (f"The 2020 recipe wins here: {mb:.3f} bits per character against {mf:.3f}, the mean of two "
+                       "seeds each. At our scale, and with one untuned learning rate for both, the new recipe's "
                        "advantages don't show.")
         else:
-            verdict = (f"They tie: {b['bits']:.3f} and {f['bits']:.3f} bits per character. At our scale the new "
-                       "recipe neither helps nor hurts.")
-        if f["max_logit"] < b["max_logit"]:
-            stab = (f"And the 2026 recipe's attention stayed tamer: its largest logit was {f['max_logit']:.0f}, "
-                    f"against {b['max_logit']:.0f}.")
+            verdict = (f"They tie: {mb:.3f} and {mf:.3f} bits per character, the mean of two seeds each, closer than "
+                       f"the {sp:.3f} between seeds. At our scale the new recipe neither helps nor hurts.")
+        if fl_ < 0.5 * bl_:
+            stab = (f"And the 2026 recipe's attention stayed tamer: its largest logit was {fl_:.0f}, against "
+                    f"{bl_:.0f}.")
         else:
-            stab = (f"Its largest attention logit was {f['max_logit']:.0f}, against {b['max_logit']:.0f}: at this "
-                    "learning rate neither model's attention ran away.")
-        tag = note(rf"computed: \ ${b['tokens'] / 1e6:.1f}$M tokens each", font_size=18).to_corner(DR, buff=0.2)
+            stab = (f"Its largest attention logit was {fl_:.0f}, against {bl_:.0f}: at this learning rate neither "
+                    "model's attention ran away.")
+        tag = note(rf"computed: \ ${b['tokens'] / 1e6:.1f}$M tokens each; \ seed $0$ \ / \ seed $1$",
+                   font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
             "The scores. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + stab
         ) as vo:
@@ -203,7 +210,8 @@ class Recipe(VoiceoverScene):
         times = BASE_RUN["tokens"] / R["full"]["tokens"]
         gm = next(r for r in S["rows"] if r.get("name") == "gpt_m")
         f = R["full"]
-        if f["bits"] < gm["bits"] - 0.01:
+        sp = abs(f["seeds_bits"][0] - f["seeds_bits"][1])  # the board shows seed 0; better only beyond the seeds' gap
+        if f["bits"] < gm["bits"] - max(sp, 0.01):
             vs14 = (f"Our 2026 model scores {f['bits']:.2f}, better than Part 14's model of the same size, "
                     f"{gm['bits']:.2f}, which read the same number of tokens.")
         else:

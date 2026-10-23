@@ -62,7 +62,7 @@ class Outro(VoiceoverScene):
         g6 = VGroup(*[Rectangle(width=0.45, height=max(1.7 * m / mem[0], 0.03), stroke_width=0, fill_color=OPT,
                                 fill_opacity=0.85).move_to([0.6 * i, 0, 0], aligned_edge=DOWN)
                       for i, m in enumerate(mem)])
-        out.append((g6, r"ZeRO: \ $120 \to 1.9$ GB", OPT))
+        out.append((g6, rf"ZeRO: \ ${mem[0]:.0f} \to {mem[3]:.1f}$ GB", OPT))
         # 7. a pipeline, 1F1B
         Pp = load("pipeline")
         g7 = gantt(Pp["1f1b"]["ops"], Pp["p"], Pp["1f1b"]["total"], width=2.8, row_h=0.32, numbers=False)
@@ -92,10 +92,14 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        D = load("dedup")
+        worst = max(abs(b_["measured"] - b_["predicted"]) for b_ in D["bins"])
+        scurve = ("their S-curve came out as predicted" if worst < 0.15 else
+                  "their measured S-curve followed the prediction only roughly")
         with self.voiceover(
             "Let's take stock. A pretraining corpus starts as a crawl of the web, and most of it is thrown away: by "
             "address, by language, by quality. MinHash and locality-sensitive hashing find the near-duplicates "
-            "without comparing every pair, and their S-curve came out as predicted. A small classifier, trained on a "
+            "without comparing every pair, and " + scurve + ". A small classifier, trained on a "
             "large model's grades, decides which pages teach. Mixtures are chosen for a target, and synthetic data "
             "helps only alongside real text. Then the arithmetic: six operations per parameter per token, sixteen "
             "bytes per parameter, and activations on top. Data parallelism needs an all-reduce, and the ring is "

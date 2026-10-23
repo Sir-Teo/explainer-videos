@@ -236,7 +236,7 @@ class WhyItWon(VoiceoverScene):
         with self.voiceover(
             "The third ingredient was the one ImageNet supplied: data. <bookmark mark='a'/> Train the same "
             "LeNet, for the same number of steps, on more and more digits. On a log-log plot the test error falls "
-            f"along a straight line, a power law with slope about {slope:.2f}: each doubling of the data cuts the "
+            f"along a straight line, a power law with slope about minus {abs(slope):.2f}: each doubling of the data cuts the "
             f"errors by {100 * (1 - 2 ** slope):.0f} percent. <bookmark mark='b'/> And there is a cheap way to "
             "get more: make it. AlexNet trained on random crops of its photographs and their mirror images, "
             f"{ALEXNET['augment_factor']:,} variants of each. " + aug_v + " Part 12 is about such straight lines."

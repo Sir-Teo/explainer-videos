@@ -386,6 +386,32 @@ def _hidden(model, ids_list, upto, batch=64):
     return torch.cat(outs)
 
 
+def _block_at_last(block, x, last):
+    """A transformer block's output at position ``last`` of each row only, which is all the classifier reads: keys
+    and values for every position, but the query, the attention output and the MLP only there.  The same function
+    as ``block(x)[arange, last]`` (causal attention: positions after ``last`` are never seen), at about a fifth of
+    the work."""
+    from explainer.lm.pocket import apply_rope
+
+    B, T, D = x.shape
+    a = block.attn
+    h = block.n1(x)
+    W = a.qkv.weight  # rows: q, k, v
+    k, v = F.linear(h, W[D:]).view(B, T, 2, a.h, a.hd).permute(2, 0, 3, 1, 4)
+    k = apply_rope(k, a.cos, a.sin)
+    rows = torch.arange(B)
+    q = F.linear(h[rows, last], W[:D]).view(B, a.h, 1, a.hd)
+    c, s_ = a.cos[0, 0, last][:, None, None, :], a.sin[0, 0, last][:, None, None, :]
+    q1, q2 = q[..., ::2], q[..., 1::2]
+    q = torch.stack([q1 * c - q2 * s_, q1 * s_ + q2 * c], dim=-1).flatten(-2)
+    if a.qk_norm:
+        raise NotImplementedError("qk_norm")
+    mask = (torch.arange(T)[None, :] <= last[:, None])[:, None, None, :]
+    y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
+    xl = x[rows, last] + a.out(y.transpose(1, 2).reshape(B, D))
+    return xl + block.mlp(block.n2(xl))
+
+
 def _train_classifier(blocks, head, H, last, targets, steps, lr, seed, batch=32, conf=0.0, evals=None):
     """Train ``blocks`` (applied to the cached hidden states H) and ``head`` on soft ``targets`` (rows sum to 1).
     ``conf``: Burns et al.'s auxiliary confidence loss, weight warmed up from 0 to ``conf`` over the first 20% of
@@ -398,9 +424,10 @@ def _train_classifier(blocks, head, H, last, targets, steps, lr, seed, batch=32,
     hist = []
 
     def run(h, l):
-        for b in blocks:
+        h = h[:, :int(l.max()) + 1]  # causal: positions after the last question token change nothing
+        for b in blocks[:-1]:
             h = b(h)
-        return head(h, l)
+        return head.out(head.norm(_block_at_last(blocks[-1], h, l)))
 
     def acc(Ht, lt, yt):
         with torch.no_grad():

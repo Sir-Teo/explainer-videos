@@ -116,7 +116,7 @@ class MTP(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ours(self):
-        Mt = load("mtp")
+        Mt, MC = load("mtp"), load("mtp_cost")
         runs = Mt["runs"]
         seeds = Mt["seeds"]
         evs = {k: np.asarray(v["evals"]) for k, v in runs.items()}
@@ -139,7 +139,7 @@ class MTP(VoiceoverScene):
             label(rf"next token only: \ ${min(fin['0']):.3f}$--${max(fin['0']):.3f}$", font_size=22, color=BASE_C),
             label(rf"with the MTP module: \ ${min(fin['0.3']):.3f}$--${max(fin['0.3']):.3f}$", font_size=22,
                   color=MTP_C),
-            label(rf"the module's extra arithmetic: \ $+{100 * Mt['extra_share']:.0f}\%$ per step", font_size=20,
+            label(rf"the module's extra arithmetic: \ $+{100 * MC['extra_share']:.0f}\%$ per step", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, 0.4, 0])
         tag = note(rf"computed: \ our small model, \ ${Mt['steps']}$ steps, \ the same tokens, \ two seeds each",
@@ -155,11 +155,13 @@ class MTP(VoiceoverScene):
             verdict = (f"With the module, the held-out loss for the next token ends at {mtp:.3f} nats, against "
                        f"{ntp:.3f} without, inside the spread between seeds: at our scale the extra task neither helps "
                        "nor hurts.")
+        mostly = ("mostly the second pass through the output head, which is large in a model this small" if
+                  MC["head_share"] > 0.5 else "mostly its own transformer block")
         with self.voiceover(
             "We added DeepSeek-V3's module to our small model and trained it on the same tokens, two seeds each, "
             "with the weight dropping from 0.3 to 0.1 near the end. <bookmark mark='a'/> " + verdict +
-            f" <bookmark mark='b'/> The module costs about {100 * Mt['extra_share']:.0f} percent more arithmetic per "
-            "step, mostly the second pass through the output head."
+            f" <bookmark mark='b'/> The module costs about {100 * MC['extra_share']:.0f} percent more arithmetic per "
+            "step, " + mostly + "."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=3.0)
             vo.wait_until("a")

@@ -211,7 +211,7 @@ ZH = {
         "这里随机失活对测试错误率影响不大：{pct(vals['0.5'][1])}%对{pct(vals['0.0'][1])}%。",
 
     'f"The third ingredient was the one ImageNet supplied: data.':
-        "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为{slope:.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}第12部分讲的就是这样的直线。",
+        "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为负{abs(slope):.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}第12部分讲的就是这样的直线。",
 
     "f'Shifted copies help: with {sizes[1]:,} digits, {pct(e_small)} percent wrong becomes {pct(e_small_aug)}, better":
         "平移的副本有帮助：用{sizes[1]:,}个数字时，{pct(e_small)}%的错误率降到了{pct(e_small_aug)}%，比四倍的真实数字还好。",
@@ -334,10 +334,10 @@ ZH = {
         "要训练它，就把它展开再做反向传播，这是保罗·韦尔博斯在1990年描述的：随时间反向传播。<bookmark mark='a'/>对一个早期状态h k的梯度，要穿过之后的每一个状态。<bookmark mark='b'/>每往回一步，就乘上那一步的雅可比矩阵：tanh的斜率乘以同一个矩阵W，一遍又一遍。<bookmark mark='c'/>斜率最多是1，所以这个乘积最多是W的最大奇异值的步数次方。<bookmark mark='d'/>小于1，从远处传回的梯度就指数级地缩小；特征值大于1，它就可能爆炸。<bookmark mark='e'/>塞普·霍赫赖特在他1991年的毕业论文里分析了这个问题；约书亚·本吉奥、帕特里斯·西马尔和保罗·弗拉斯科尼在1994年发表了它。",
 
     'f"We measured it.':
-        "我们量了一下。取一些随机的循环网络，用随机输入去跑，再从最后一步往回乘雅可比矩阵。<bookmark mark='a'/>当W的最大特征值是{rhos[0]:g}时，传回五十步的梯度只剩原来的10的{a:.0f}次方：没了。<bookmark mark='b'/>{mid}<bookmark mark='c'/>{tail}<bookmark mark='d'/>不管哪种情况，普通循环网络能学到东西的时间窗口都很窄，而这个窗口由W的大小决定。",
+        "我们量了一下。取一些随机的循环网络，用随机输入去跑，再从最后一步往回乘雅可比矩阵。<bookmark mark='a'/>当W的最大特征值是{rhos[0]:g}时，传回五十步的梯度缩小到原来的10的{-a:.0f}次方分之一：没了。<bookmark mark='b'/>{mid}<bookmark mark='c'/>{tail}<bookmark mark='d'/>不管哪种情况，普通循环网络能学到东西的时间窗口都很窄，而这个窗口由W的大小决定。",
 
     'f"Even at {rhos[2]:g}, where the linear network':
-        "即使在{rhos[2]:g}，线性网络的梯度涨到10的{lb:.0f}次方，tanh网络的梯度却缩到10的{b:.0f}次方：它的单元饱和，斜率下降，把乘积拉了下来。",
+        "即使在{rhos[2]:g}，线性网络的梯度涨到10的{lb:.0f}次方，tanh网络的梯度却缩小到10的{-b:.0f}次方分之一：它的单元饱和，斜率下降，把乘积拉了下来。",
 
     'f"At {rhos[2]:g} it grows':
         "在{rhos[2]:g}时它变大：五十步后是10的{b:.0f}次方，线性网络的是10的{lb:.0f}次方。",
@@ -345,8 +345,14 @@ ZH = {
     "f'At {rhos[3]:g} the tanh network is chaotic":
         "在{rhos[3]:g}时，tanh网络进入混沌，它的梯度爆炸了：10的{top:.0f}次方。",
 
-    "f'Even at {rhos[3]:g}, saturation keeps it near":
-        "即使在{rhos[3]:g}，饱和也让它停在10的{top:.0f}次方附近。",
+    "f'Even at {rhos[3]:g}, saturation keeps it from exploding":
+        "即使在{rhos[3]:g}，饱和也让它没有爆炸：只涨到10的{top:.0f}次方。",
+
+    "f'Even at {rhos[3]:g}, saturation holds it":
+        "即使在{rhos[3]:g}，饱和也让它大致保持原来的大小。",
+
+    "f'Even at {rhos[3]:g}, saturation pulls it down":
+        "即使在{rhos[3]:g}，饱和也把它拉了下来，缩小到10的{-top:.0f}次方分之一。",
 
     'f"Exploding gradients have a shape.':
         "梯度爆炸是有形状的。<bookmark mark='a'/>取最小的循环网络，一个单元，一个权重w，一个偏置b，跑五十步，要求它最后的状态是0.7。这是每一组w和b对应的损失，越高越亮。在单元从停在高处变成停在低处的地方，损失陡然一跳：一道悬崖。<bookmark mark='b'/>从边缘附近出发的梯度下降撞上悬崖壁，那里的梯度是{nr.max():,.0f}，于是被甩出了地图。<bookmark mark='c'/>办法来自拉兹万·帕斯卡努、托马斯·米科洛夫和本吉奥，2013年：如果梯度比某个阈值长，就把它缩到那个长度。裁剪之后，同样的下降最后停在损失{g['loss_clip'][-1]:.4f}。今天的语言模型也用梯度裁剪。",

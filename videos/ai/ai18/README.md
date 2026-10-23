@@ -90,8 +90,9 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   >90% effective training, diurnal 1–2%, power swings; Young's checkpoint interval √(2δM) derived (δ from Llama 3's
   checkpoint sizes and storage bandwidth); a 54-day run with random failures simulated over checkpoint intervals.
 * **18. Our own full recipe.** The 2020 recipe (AdamW, cosine) against the 2026 recipe (Muon, WSD, QK-norm, z-loss) at
-  equal model, data, steps and seed; a training replay (held-out loss and samples at the same steps); held-out loss,
-  bits per character, largest attention logit; the scoreboard row against Parts 1 and 14 and the series' model.
+  equal model, data, steps and seed, and the whole comparison again from a second seed (the verdict must beat the
+  spread between seeds); a training replay (held-out loss and samples at the same steps); held-out loss, bits per
+  character, largest attention logit; the scoreboard row against Parts 1 and 14 and the series' model.
 * **Recap**, where it comes back (Parts 19, 22–23, 27, 28, 30, 31), the problem set, Part 19's teaser, references.
 
 Run from the repo root:
@@ -105,7 +106,7 @@ python tools/qa_scene.py ai18 Pipeline      # one chapter, silent, with a contac
 
 Every random choice is seeded (numpy `default_rng`, `torch.manual_seed`, fastText's seed, data order by step); the
 training runs checkpoint every 100 steps and resume, and items made of many runs (`precision`, `stability`, `mtp`,
-`mixture`) save each run as it finishes. The distributed experiments start their processes with `spawn` and use
+`mixture`, `recipe_seed1`) save each run as it finishes. The distributed experiments start their processes with `spawn` and use
 PyTorch's gloo backend, so they run on macOS and Linux. Downloads (Common Crawl byte ranges, fastText's `lid.176.ftz`,
 FineWeb-Edu's annotations through Hugging Face's dataset viewer) are fixed and cached in `.cache/ai18/crawl/`.
 Part 1's books and passage are read through `videos.ai.ai1.compute`, Part 14's scoreboard through

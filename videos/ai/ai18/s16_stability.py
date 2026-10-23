@@ -147,14 +147,21 @@ class Stability(VoiceoverScene):
         pl0, qk0 = np.mean(fin["plain"][lo_lr]), np.mean(fin["qk"][lo_lr])
         best_plain = min(range(len(lrs)), key=lambda i: np.mean(fin["plain"][i]))
         best_qk = min(range(len(lrs)), key=lambda i: np.mean(fin["qk"][i]))
-        if pl - qk > 0.05:
+        sp = max(abs(fin[c][hi_lr][0] - fin[c][hi_lr][1]) for c in ("plain", "qk"))
+        ratio = float(np.mean(S["maxlogit"]["plain"][hi_lr]) / np.mean(S["maxlogit"]["qk"][hi_lr]))
+        if pl - qk > max(sp, 0.02):
             verdict = (f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the "
-                       f"one with QK-norm at {qk:.2f}: normalizing queries and keys widens the range of learning rates "
-                       "that train well.")
+                       f"one with QK-norm at {qk:.2f}, a gap larger than the {sp:.2f} between seeds: normalizing "
+                       "queries and keys widens the range of learning rates that train well.")
+        elif qk - pl > max(sp, 0.02):
+            verdict = (f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the "
+                       f"one with QK-norm at {qk:.2f}, a gap larger than the {sp:.2f} between seeds: in runs this "
+                       "short, QK-norm cost a little.")
         else:
             verdict = (f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the "
-                       f"one with QK-norm at {qk:.2f}: in runs this short, the difference in loss is small, even though "
-                       "the logits differ a hundredfold.")
+                       f"one with QK-norm at {qk:.2f}, but two seeds of one design differ by up to {sp:.2f}: in runs "
+                       "this short the loss can't tell them apart, although the plain model's largest attention logit "
+                       f"is {ratio:.0f} times larger.")
         best = (f"The best learning rate is {lrs[best_plain]:g} without QK-norm and {lrs[best_qk]:g} with it."
                 if best_plain != best_qk else f"Both do best at a learning rate of {lrs[best_qk]:g}.")
         tag = note(rf"computed: \ ${len(lrs)}$ learning rates $\times$ $3$ designs $\times$ $2$ seeds", font_size=18)

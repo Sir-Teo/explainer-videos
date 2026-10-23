@@ -62,10 +62,13 @@ class OpenProblems(VoiceoverScene):
             "<bookmark mark='c'/> And we can fit trends and backtest them, but not know in advance when a trend will "
             f"bend: our own backtest came in {miss:.0f} times too low within fifteen months."
         ) as vo:
-            self.play(FadeIn(head))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.8)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -94,10 +97,13 @@ class OpenProblems(VoiceoverScene):
             "arises on its own, in a model that can hide its reasoning. <bookmark mark='d'/> And interpretability, "
             "Part 30, finds features and circuits, but cannot yet account for most of what a frontier model computes."
         ) as vo:
-            self.play(FadeIn(head))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.8)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -128,10 +134,13 @@ class OpenProblems(VoiceoverScene):
             "<bookmark mark='d'/> And outsiders can read frameworks and system cards, but cannot yet check a "
             "developer's claims without trusting the developer."
         ) as vo:
-            self.play(FadeIn(head))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.8)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 

@@ -174,19 +174,25 @@ class Precision(VoiceoverScene):
         zero = float(np.mean([u[1] for u in U]))
         f32 = np.mean(fin["fp32"])
         spread = max(abs(fin[v][0] - fin[v][1]) for v in fin)
-        worst_v = max(fin, key=lambda v: np.mean(fin[v]))
-        gap = np.mean(fin[worst_v]) - f32
+        means = {v: float(np.mean(fin[v])) for v in fin}
+        worst_v = max(means, key=means.get)
+        gap = means[worst_v] - f32
+        width = max(means.values()) - min(means.values())
         tag = note(rf"computed: \ every matrix product's inputs rounded to the format, \ sums in FP32; \ "
                    rf"${Pc['steps']}$ steps", font_size=18).to_corner(DR, buff=0.2)
-        if gap < max(spread, 0.01):
-            verdict = (f"All six end within {gap:.3f} nats of each other, inside the {spread:.3f} that separates two "
+        if width < max(spread, 0.01):
+            verdict = (f"All six end within {width:.3f} nats of each other, inside the {spread:.3f} that separates two "
                        f"seeds. Even FP16 without loss scaling, which flushed {100 * zero:.1f} percent of the "
                        "gradient values to zero, trained just as well.")
-        else:
+        elif gap >= max(spread, 0.01):
             worst_name = PREC_SPOKEN[worst_v]
             verdict = (f"The worst, {worst_name}, ends "
                        f"{gap:.3f} nats above FP32, more than the {spread:.3f} between seeds; FP16 without loss scaling "
                        f"flushed {100 * zero:.1f} percent of the gradient values to zero.")
+        else:
+            verdict = (f"The six end up to {width:.3f} nats apart, but none is worse than FP32 by more than the "
+                       f"{spread:.3f} between seeds, not even FP16 without loss scaling, which flushed "
+                       f"{100 * zero:.1f} percent of the gradient values to zero.")
         with self.voiceover(
             "Does it matter in practice? We trained the same small model six times over, with every matrix "
             "product's inputs rounded to a format, going forward and backward, and the sums kept in FP32, which is "

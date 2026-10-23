@@ -203,10 +203,11 @@ class Mixture(VoiceoverScene):
             verdict = (f"On the held-out chapter, RegMix's pick and the natural mixture are within the noise of two "
                        f"seeds, {r:.3f} and {n_:.3f} nats: at our scale, the mixture of thirty novels matters less "
                        "than luck.")
-        if rv > nv + 0.005:
+        spread_v = max(abs(val["regmix"][0] - val["regmix"][1]), abs(val["natural"][0] - val["natural"][1]))
+        if rv - nv > max(spread_v, 0.005):
             cost = "And on the thirty novels as a whole it pays a little: tuning toward one book costs the others."
         else:
-            cost = "And it costs nothing on the thirty novels as a whole."
+            cost = "And on the thirty novels as a whole it costs nothing we can measure."
         tw = take_away(r"a mixture is chosen for a target: \ say which, \ and test on held-out text", font_size=24)
         with self.voiceover(
             "Now the test: does the pick carry over to a larger model? We trained each mixture again, at the "
