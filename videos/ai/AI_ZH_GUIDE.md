@@ -366,3 +366,41 @@ Chinook, Deep Blue → 深蓝, Prolog, Lisp, Z3, Lean, AlphaProof, AlphaGeometry
 
 Names stay in Latin script: GRPO, Dr. GRPO, DAPO, GSPO, CISPO, DPO, o1, o3, R1, R1-Zero, s1, L1, Kimi k1.5, ProRL,
 rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristotle, Seed-Prover, ARC-AGI, NVARC, Poetiq.
+
+### The language-model lineage (Part 14)
+
+| English | 中文 |
+|---|---|
+| pretraining, fine-tuning | 预训练，微调 |
+| encoder-only, decoder-only, encoder–decoder | 仅编码器，仅解码器，编码器-解码器 |
+| causal (left-to-right) language model | 因果（从左到右）语言模型 |
+| masked language model (MLM), [MASK] token | 掩码语言模型（MLM），[MASK]词元 |
+| next-sentence prediction | 下一句预测 |
+| self-attention, masked self-attention, cross-attention | 自注意力，带掩码的自注意力，交叉注意力 |
+| BLEU | BLEU |
+| benchmark, leaderboard | 基准，排行榜 |
+| text-to-text, task prefix | 文本到文本，任务前缀 |
+| span corruption, sentinel token | 片段破坏，哨兵词元 |
+| zero-shot, one-shot, few-shot | 零样本，单样本，少样本 |
+| in-context learning | 上下文学习 |
+| scaling law | 规模定律 |
+| compute-optimal, over-training | 计算最优，过度训练 |
+| tokens per parameter | 每个参数的词元数 |
+| petaflop/s-day | petaflop/s-天 |
+| instruction tuning, held-out task | 指令微调，留出的任务 |
+| staged release, model card, system card | 分阶段发布，模型卡，系统卡 |
+| open weights, closed model | 开放权重，闭源模型 |
+| pre-norm, post-norm, RMSNorm | 前置归一化，后置归一化，RMSNorm |
+| SwiGLU, gate | SwiGLU，门控 |
+| rotary position embedding (RoPE) | 旋转位置编码（RoPE） |
+| multi-query, grouped-query attention (GQA) | 多查询注意力，分组查询注意力（GQA） |
+| multi-head latent attention (MLA) | 多头潜在注意力（MLA） |
+| KV cache | KV缓存 |
+| mixture of experts, active parameters | 混合专家，激活参数 |
+| sparse attention, linear attention, hybrid | 稀疏注意力，线性注意力，混合架构 |
+| cloze test | 完形填空测试 |
+| linear probe | 线性探针 |
+| induction head, repeated-list test | 归纳头，重复列表测试 |
+| equal compute | 同等算力 |
+| lineage, family tree | 谱系，家族树 |
+| calibration (content-free input) | 校准（无内容输入） |

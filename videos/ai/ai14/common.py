@@ -27,7 +27,7 @@ HUMAN = C.HUMAN  # human baselines
 PRIOR = GREY_B  # earlier systems, prior state of the art
 CONTEXT = C.CONTEXT  # in-context examples
 ARCH_COLOR = {"decoder": DECODER, "encoder": ENCODER, "encdec": ENCDEC}
-SIZE_COLORS = ["#FFE3BF", "#FFC27A", "#FF9F45", "#E8590C", "#B83A06"]  # our family, smallest to the base model
+SIZE_COLORS = ["#FFE3BF", "#FFC27A", "#FF9F45", "#F76707", "#FF6B8B"]  # our family, smallest to largest; then the base model, apart
 
 COLORS = {r"N": N_COL, r"D": D_COL, r"C": C_COL}
 
