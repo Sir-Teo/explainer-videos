@@ -257,6 +257,23 @@ class Longer(VoiceoverScene):
                       label(r"Qwen (2023): \ dynamic NTK $+$ $\log n$ $+$ windows", font_size=20, color=GREY_A),
                       label(r"Llama 4 (2025): \ attention temperature at inference", font_size=20, color=GREY_A))
         hist.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-4.1, -2.1, 0])
+        # the formula's effect, on screen from the first word: the best key's weight as more keys come into view, with
+        # a margin that gives it 0.8 at the training length, as it is and with every score scaled by log_L n
+        L_ = float(ctx)
+        d0 = math.log(4 * (L_ - 1))
+        ns = np.linspace(2, 4 * L_, 160)
+        dn = d0 * np.maximum(1, np.log(ns) / math.log(L_))
+        p_plain, p_scaled = np.exp(d0) / (np.exp(d0) + ns - 1), np.exp(dn) / (np.exp(dn) + ns - 1)
+        pg = axes([0, 4 * L_, L_], [0, 1, 0.25], x_length=5.2, y_length=2.2, xlabel=r"keys in view, $n$",
+                  ylabel=r"weight on the best key, \ margin set for $0.8$ at $n = L$",
+                  xticks=[L_ * i for i in range(1, 5)], yticks=[0, 0.5, 1], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"),
+                  center=[2.4, -2.05, 0])
+        pax = pg.ax
+        pv = DashedLine(pax.c2p(L_, 0), pax.c2p(L_, 1), color=GREY_B, stroke_width=1.5)
+        pc0, pc1 = curve(pax, ns, p_plain, EXT_COLORS["plain"]), curve(pax, ns, p_scaled, EXT_COLORS["logn"])
+        pl0 = label(r"fixed $\Delta$", font_size=18, color=EXT_COLORS["plain"]).next_to(pax.c2p(4 * L_, p_plain[-1]), RIGHT, buff=0.1)
+        pl1 = label(r"scaled by \ $\log_L n$", font_size=18, color=EXT_COLORS["logn"]).next_to(
+            pax.c2p(4 * L_, p_scaled[-1]), RIGHT, buff=0.1)
         best = min(names, key=lambda k: far[k])
         help_l = far["logn"] < far["plain"] - 0.05
         help_n = far["ntk_logn"] < far["ntk"] - 0.02
@@ -275,14 +292,16 @@ class Longer(VoiceoverScene):
             f"The best of all here is {SPOKEN_EXT[best]}, at {far[best]:.2f}."
         ) as vo:
             step(0)
+            self.play(FadeIn(pg), Create(pv))
             vo.wait_until("a")
-            self.play(Indicate(rows[0][2], color=A))
+            self.play(Indicate(rows[0][2], color=A), Create(pc0), FadeIn(pl0))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(hist))
+            self.play(FadeIn(hist), Create(pc1), FadeIn(pl1))
             vo.wait_until("d")
+            self.play(FadeOut(VGroup(pg, pv, pc0, pc1, pl0, pl1)))
             self.play(FadeIn(g), Create(ref), FadeIn(refl), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.2))
         self.wait(0.3)
         self.clear_scene()
