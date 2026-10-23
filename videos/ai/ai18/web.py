@@ -233,19 +233,32 @@ def edu_annotations() -> list[dict]:
     path = DIR / "edu_annotations.jsonl"
     if path.exists():
         return [json.loads(x) for x in path.read_text().split("\n")]
-    rows = []
+    rows, files = [], []
     for k in range(EDU_PAGES):
         off = int(k * (EDU_ROWS - 100) / (EDU_PAGES - 1))
         f = DIR / f"edu_{off}.json"
-        curl(f"https://datasets-server.huggingface.co/rows?dataset={EDU}&config=default&split=train&offset={off}"
-             f"&length=100", f)
-        for r in json.loads(f.read_text())["rows"]:
+        files.append(f)
+        for attempt in range(10):  # the API rate-limits bursts (HTTP 429, an HTML page): wait and try again
+            if not f.exists():
+                curl(f"https://datasets-server.huggingface.co/rows?dataset={EDU}&config=default&split=train"
+                     f"&offset={off}&length=100", f)
+                time.sleep(0.5)
+            try:
+                got = json.loads(f.read_text())["rows"]
+                break
+            except (json.JSONDecodeError, KeyError):
+                f.unlink()
+                time.sleep(min(120, 5 * 2 ** attempt))
+        else:
+            raise RuntimeError(f"could not fetch {EDU} rows at offset {off}")
+        for r in got:
             row = r["row"]
             rows.append(dict(text=row["text"][:6000], score=int(row["score"]), url=row["metadata"]["url"]))
-        f.unlink()
     tmp = path.with_suffix(".tmp")
     tmp.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows))
     tmp.replace(path)
+    for f in files:
+        f.unlink(missing_ok=True)
     return rows
 
 

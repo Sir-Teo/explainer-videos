@@ -134,3 +134,16 @@ FORMATS = {
     "E4M3": (4, 3, 448.0, 2.0 ** -6, 2.0 ** -9),
     "E5M2": (5, 2, 57344.0, 2.0 ** -14, 2.0 ** -16),
 }
+
+# ---------------------------------------------------------------------------
+# The era: devices in one training run
+# ---------------------------------------------------------------------------
+GPT1 = dict(gpus=8, days=30, src="OpenAI, Improving language understanding with unsupervised learning (blog, 11 June 2018)")
+ERA = [  # (year, label, devices, kind, source)
+    (2018.45, "GPT-1", 8, "GPUs", "OpenAI (2018)"),
+    (2019.7, "Megatron-LM", 512, "GPUs", "Shoeybi et al. (2019)"),
+    (2021.3, "Megatron, 1T", 3072, "GPUs", "Narayanan et al. (2021)"),
+    (2022.25, "PaLM", 6144, "TPU chips", "Chowdhery et al. (2022)"),
+    (2024.55, "Llama 3", 16384, "GPUs", "Llama Team (2024)"),
+    (2025.26, "Llama 4", 32000, "GPUs", "Meta (2025)"),
+]
