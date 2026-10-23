@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai31.common import CI, EST, PART, TRUTH, hist_bars, interval_bar, load, stat_card, tagline
+from videos.ai.ai31.common import (CI, EST, PART, TRUTH, hist_bars, interval_bar, load, stat_card, tagline,
+                                   wrap_data)
 
 A_COL, B_COL = C.COUNTING, C.MODEL_Q  # the four-character and five-character counting models
 
@@ -45,6 +46,13 @@ class Measure(VoiceoverScene):
         ml = label(r"the headline number: \ their average, \ weighted by length", font_size=22, color=GREY_A)
         ml.next_to(mean, UP, buff=0.1)
         tag = tagline(rf"computed: \ ${d['n_par']}$ paragraphs, \ ${d['chars']:,}$ characters".replace(",", "{,}"))
+        from videos.ai.ai1 import compute as c1
+
+        paras = [p_ for p_ in c1.text("passage").split("\n") if len(p_) > 120]
+        text = wrap_data(paras[0][:330] + "...", chars=64, font_size=22, color=GREY_B, max_lines=5)
+        text.next_to(big, DOWN, buff=0.6)
+        src = label(r"\textit{The Maltese Falcon}, \ chapter 2: \ the passage", font_size=20, color=GREY_C)
+        src.next_to(text, DOWN, buff=0.2)
         with self.voiceover(
             "Start with a number we have used since Part 1. The best of Part 1's counting models, which guesses each "
             f"character from the four before it, scores {bpc4:.2f} bits per character on the Falcon passage. "
@@ -53,8 +61,9 @@ class Measure(VoiceoverScene):
             f"{per.max():.1f} bits. <bookmark mark='b'/> The headline number is their average, weighted by length. "
             "Had Hammett written a different chapter, it would have come out differently. How differently?"
         ) as vo:
-            self.play(FadeIn(big, shift=DOWN * 0.2), FadeIn(tag))
+            self.play(FadeIn(big, shift=DOWN * 0.2), FadeIn(tag), FadeIn(text), FadeIn(src))
             vo.wait_until("a")
+            self.play(FadeOut(text), FadeOut(src))
             self.play(FadeIn(g), LaggedStart(*[FadeIn(dt, scale=0.5) for dt in dots], lag_ratio=0.01), run_time=2.5)
             vo.wait_until("b")
             self.play(Create(mean), FadeIn(ml))
@@ -139,7 +148,8 @@ class Measure(VoiceoverScene):
                                                                                           buff=0.25)
         nb = label(rf"the previous ${B}$ characters", font_size=24, color=B_COL).next_to(g.ax.c2p(x0, 1.0), LEFT,
                                                                                           buff=0.25)
-        grp = VGroup(g, ia, ib, na, nb)
+        pa_, pb_ = Dot(g.ax.c2p(ba, 2.0), radius=0.07, color=A_COL), Dot(g.ax.c2p(bb, 1.0), radius=0.07, color=B_COL)
+        grp = VGroup(g, ia, ib, na, nb, pa_, pb_)
         if grp.get_left()[0] < -6.9:
             grp.shift(RIGHT * (-6.9 - grp.get_left()[0]))
         overlap = min(ha, hb) > max(la, lb)
@@ -157,11 +167,11 @@ class Measure(VoiceoverScene):
             f"{bb - ba:.3f} bits per character. Is that real? <bookmark mark='a'/> Bootstrap each one: "
             f"{la:.2f} to {ha:.2f}, <bookmark mark='b'/> and {lb:.2f} to {hb:.2f}. <bookmark mark='c'/> " + verdict
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(na), FadeIn(nb), FadeIn(pa_), FadeIn(pb_))
             vo.wait_until("a")
-            self.play(FadeIn(na), Create(ia))
+            self.play(Create(ia))
             vo.wait_until("b")
-            self.play(FadeIn(nb), Create(ib))
+            self.play(Create(ib))
             vo.wait_until("c")
             if overlap:
                 zone = Rectangle(width=abs(g.ax.c2p(min(ha, hb), 0)[0] - g.ax.c2p(max(la, lb), 0)[0]), height=1.6,
@@ -258,7 +268,7 @@ class Measure(VoiceoverScene):
         s2 = stat_card(rf"{d['worse_ge'] * 100:.0f}\%", r"the worse model scores at least as high", C.PENALTY,
                        width=3.6)
         s3 = stat_card(rf"{d['se_unpaired'] * 100:.1f}\% \to {d['se_paired'] * 100:.1f}\%",
-                       rf"error of the gap, \ unpaired $\to$ paired \ (the models disagree on ${int(d['disagree'] * 100)}\%$)",
+                       rf"error of the gap, \\ unpaired $\to$ paired \\ (the models disagree on ${int(d['disagree'] * 100)}\%$)",
                        CI, width=3.6, value_size=36)
         stats = VGroup(s1, s2, s3).arrange(DOWN, buff=0.25).move_to([3.9, 0.55, 0])
         cards = VGroup(

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CNN, FMAP, HAND, HIST, KERNEL, PART, load)
+from videos.ai.ai10.common import (CNN, FMAP, HAND, HIST, KERNEL, PART, load, nn_layer_boxes)
 from videos.ai.ai10.specs import ALEXNET_EXTRA, ILSVRC, ILSVRC_2012_SECOND, ILSVRC_SIZES
 
 
@@ -55,6 +55,27 @@ class ImageNet(VoiceoverScene):
                              color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.2, 2.0, 0])
         cite_ = cite(r"Deng et al.\ (2009); \ Russakovsky et al.\ (2015)", corner=DR)
         ratio = vals[2] / vals[0]
+        # a corner of WordNet's tree of nouns (levels skipped); the leaves are classes of the contest
+        pos = {"entity": (0.2, 2.6), "animal": (-1.7, 1.5), "artifact": (2.0, 1.5), "dog": (-2.6, 0.4),
+               "bird": (-0.2, 0.4), "vehicle": (2.0, 0.4), "Siberian husky": (-3.4, -0.7), "dalmatian": (-1.7, -0.7),
+               "goldfinch": (-0.2, -0.7), "fire engine": (2.0, -0.7)}
+        leaves = ("Siberian husky", "dalmatian", "goldfinch", "fire engine")
+        nodes = {k: label(k, font_size=24, color=KERNEL if k in leaves else GREY_A).move_to([x, y, 0])
+                 for k, (x, y) in pos.items()}
+        edges = VGroup(*[Line(nodes[p_].get_bottom() + DOWN * 0.08, nodes[c_].get_top() + UP * 0.08,
+                              stroke_width=1.6, color=GREY_C)
+                         for p_, c_ in (("entity", "animal"), ("entity", "artifact"), ("animal", "dog"),
+                                        ("animal", "bird"), ("artifact", "vehicle"), ("dog", "Siberian husky"),
+                                        ("dog", "dalmatian"), ("bird", "goldfinch"), ("vehicle", "fire engine"))])
+        tl = label(r"a corner of WordNet's tree of nouns, \\ many levels left out; \ in yellow, classes of the "
+                   r"contest", font_size=20, color=GREY_B)
+        tree = VGroup(edges, *nodes.values())
+        tl.next_to(tree, DOWN, buff=0.3)
+        tree = VGroup(tree, tl)
+        if tree.width > 6.0:
+            tree.width = 6.0
+        tree.move_to([3.5, 0.6, 0])
+        sch = note(r"schematic").to_corner(DL, buff=0.25)
         with self.voiceover(
             "In 2009 Fei-Fei Li, then at Princeton, and her students published ImageNet. <bookmark mark='a'/> The "
             "idea was to collect pictures for every noun in WordNet, a dictionary of English organized as a tree "
@@ -66,7 +87,12 @@ class ImageNet(VoiceoverScene):
             "at every angle and in every light."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(nodes["entity"]), FadeIn(sch))
+            self.play(LaggedStart(*[AnimationGroup(Create(e_), FadeIn(n_)) for e_, n_ in
+                                    zip(edges, list(nodes.values())[1:])], lag_ratio=0.5), FadeIn(tl), run_time=4.0)
             vo.wait_until("b")
+            self.play(FadeOut(tree), FadeOut(sch))
             self.play(FadeIn(facts, shift=UP * 0.1), FadeIn(cite_))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.4), FadeIn(rl))
@@ -139,7 +165,8 @@ class ImageNet(VoiceoverScene):
                 b.move_to([x0 + w / 2, 1.9 - 0.55 * k, 0])
                 t = MathTex(rf"\text{{{nm}}}", font_size=22, color=GREY_A).next_to([x0, b.get_y(), 0], LEFT,
                                                                                     buff=0.15)
-                val = MathTex(f"{v / scale:.1f}", font_size=22, color=c).next_to(b, RIGHT, buff=0.1)
+                val = MathTex(f"{v / scale:.2f}" if v / scale < 0.95 else f"{v / scale:.1f}", font_size=22,
+                              color=c).next_to(b, RIGHT, buff=0.1)
                 g.add(VGroup(b, t, val))
             head = label(title, font_size=24, color=WHITE).move_to([x0 + 1.6, 2.6, 0])
             ul = label(unit, font_size=18, color=GREY_B).next_to(g, DOWN, buff=0.2).align_to(g, LEFT)
@@ -159,6 +186,19 @@ class ImageNet(VoiceoverScene):
         key.arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.35)
         tag = note(r"computed from the published architecture").to_corner(DR, buff=0.25)
         pc, mc = S["conv_param_share"], S["conv_mac_share"]
+        # the layer list, drawn (sizes not to scale)
+        arch = nn_layer_boxes([0.15, 0.2, 0.26, 0.3, 0.3, 0.26, 0.12, 0.12, 0.1], [2.6, 2.0, 1.4, 1.0, 1.0, 1.0, 2.3,
+                              2.3, 1.4], [GREY_B] + [FMAP] * 5 + [KERNEL] * 3, buff=0.45, depth=0.2).move_to([0, 0.5, 0])
+        anames = [r"input \\ $224{\times}224{\times}3$", r"conv1 \\ $96$ @ $11{\times}11$, \\ stride $4$",
+                  r"conv2 \\ $256$ @ $5{\times}5$", r"conv3 \\ $384$", r"conv4 \\ $384$", r"conv5 \\ $256$",
+                  r"fc6 \\ $4096$", r"fc7 \\ $4096$", r"fc8 \\ $1000$, softmax"]
+        alabs = VGroup(*[label(t, font_size=17, color=GREY_A).next_to(b, DOWN if k % 2 == 0 else UP, buff=0.2)
+                         for k, (t, b) in enumerate(zip(anames, arch))])
+        diagram = VGroup(arch, alabs)
+        if diagram.width > 13.0:
+            diagram.width = 13.0
+        keep_in_frame(diagram)
+        sch = note(r"schematic: \ sizes not to scale").to_corner(DL, buff=0.25)
         with self.voiceover(
             "AlexNet was LeNet's design, grown. Five convolutional layers, the first with 96 kernels of eleven by "
             "eleven pixels at a stride of four, then three fully connected layers, ending in a thousand-way "
@@ -170,8 +210,11 @@ class ImageNet(VoiceoverScene):
             "Weights live in the dense layers, work in the convolutions: that split comes back in every network "
             "after it."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(tag))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(b_), FadeIn(l_)) for b_, l_ in zip(arch, alabs)],
+                                  lag_ratio=0.35), FadeIn(sch), run_time=5.0)
             vo.wait_until("a")
+            self.play(FadeOut(diagram), FadeOut(sch))
+            self.play(FadeIn(key), FadeIn(tag))
             self.play(FadeIn(left[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in left[1]], lag_ratio=0.1),
                       FadeIn(left[2]), FadeIn(tot[0]))
             vo.wait_until("b")

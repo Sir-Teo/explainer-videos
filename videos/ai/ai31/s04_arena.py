@@ -45,9 +45,10 @@ class Arena(VoiceoverScene):
             "thousand votes; it is now run as LMArena, and its leaderboard is among the most watched in the "
             "field. How do you turn votes into a ranking?"
         ) as vo:
-            self.play(FadeIn(prompt))
+            self.play(FadeIn(prompt), GrowArrow(arrows[0]), GrowArrow(arrows[1]), FadeIn(a), FadeIn(b), FadeIn(la),
+                      FadeIn(lb))
             vo.wait_until("a")
-            self.play(GrowArrow(arrows[0]), GrowArrow(arrows[1]), FadeIn(a), FadeIn(b), FadeIn(la), FadeIn(lb))
+            self.play(Indicate(prompt, color=WHITE), Indicate(VGroup(a, b), color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(vote), FadeIn(tick, scale=1.4))
             vo.wait_until("c")
@@ -156,8 +157,11 @@ class Arena(VoiceoverScene):
         true = np.asarray(d["true"], float)
         M = len(true)
         n = path.shape[0]
-        g = axes([0, n * 100], [850, 1400], x_length=8.0, y_length=4.6, xlabel=r"votes, \ in the order they arrived",
-                 ylabel=r"online Elo rating, \ $K = 32$", xticks=[0, 5000, 10000], yticks=[900, 1100, 1300],
+        y0 = float(np.floor(min(path.min(), bt.min()) / 100) * 100)
+        y1 = float(np.ceil(max(path.max(), bt.max()) / 100) * 100)
+        g = axes([0, n * 100], [y0, y1], x_length=8.0, y_length=4.6, xlabel=r"votes, \ in the order they arrived",
+                 ylabel=r"online Elo rating, \ $K = 32$", xticks=[0, 5000, 10000],
+                 yticks=list(range(int(y0) + 100, int(y1), 200)),
                  center=[-1.2, -0.4, 0])
         lines = VGroup(*[VMobject().set_points_as_corners([g.ax.c2p(100 * (k + 1), path[k, m]) for k in range(n)])
                          .set_stroke(ARENA_COLORS[m], 2.5) for m in range(M)])
@@ -181,8 +185,8 @@ class Arena(VoiceoverScene):
             "computed in closed form, from the curvature of the likelihood."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(hc))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.05), run_time=3.0)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(sdl, shift=UP * 0.1))
             vo.wait_until("c")
@@ -205,8 +209,8 @@ class Arena(VoiceoverScene):
             labs.add(MathTex(rf"{kk}", font_size=24, color=GREY_A).next_to(g.ax.c2p(k + 0.5, 0), DOWN, buff=0.12))
         xl = label(r"private variants tested, \ best one published", font_size=20, color=GREY_A).next_to(labs, DOWN,
                                                                                                        buff=0.15)
-        vals = VGroup(*[MathTex(f"+{v:.1f}", font_size=20, color=C.PENALTY).next_to(b, UP, buff=0.05)
-                        for b, v in zip(bars, infl)])
+        vals = VGroup(*[MathTex("0.0" if abs(v) < 0.05 else f"{v:+.1f}", font_size=20, color=C.PENALTY)
+                        .next_to(b, UP, buff=0.05) for b, v in zip(bars, infl)])
         cards = VGroup(
             history_card(2024, r"style control \ (LMArena)", r"length and markdown sway votes; \ a regression on them "
                          r"changes the ranking: \ length was the dominant style factor", width=5.6, color=JUDGE,
@@ -217,6 +221,28 @@ class Arena(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).move_to([-3.6, -0.5, 0])
         tag = tagline(rf"simulated: \ ${d['variant_votes']:,}$ votes per variant".replace(",", "{,}"))
         head = label(r"What sways a leaderboard", font_size=36).to_edge(UP, buff=0.4)
+
+        def answer(n_lines, headings, color):
+            box = RoundedRectangle(width=2.3, height=2.7, corner_radius=0.12, stroke_color=color, stroke_width=2,
+                                   fill_color=color, fill_opacity=0.08)
+            rows = VGroup()
+            for k in range(n_lines):
+                if k in headings:
+                    rows.add(Line(LEFT, RIGHT, color=color, stroke_width=6).set_length(1.1))
+                else:
+                    rows.add(VGroup(Dot(radius=0.035, color=GREY_B), Line(LEFT, RIGHT, color=GREY_B, stroke_width=3)
+                                    .set_length(1.4)).arrange(RIGHT, buff=0.1))
+            rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to(box).align_to(box, UP).shift(DOWN * 0.25)
+            return VGroup(box, rows)
+
+        short = answer(2, (), GREY_B)
+        long_ = answer(9, (0, 5), C.MODEL_Q)
+        styl = VGroup(short, long_).arrange(RIGHT, buff=0.6).move_to([3.4, 0.3, 0])
+        sl = label(r"short and plain", font_size=20, color=GREY_A).next_to(short, DOWN, buff=0.15)
+        ll = label(r"long, \ with headings and lists", font_size=20, color=GREY_A).next_to(long_, DOWN, buff=0.15)
+        vt = label(r"$\checkmark$", font_size=54, color=JUDGE).next_to(long_, UP, buff=0.1)
+        sch = note(r"schematic").next_to(VGroup(sl, ll), DOWN, buff=0.2)
+        style_vis = VGroup(styl, sl, ll, vt, sch)
         with self.voiceover(
             "Two things can still go wrong. <bookmark mark='a'/> The voters are people, and people like long answers "
             "with headings and lists. In 2024 the Arena added style control, a regression that separates a model's "
@@ -228,13 +254,13 @@ class Arena(VoiceoverScene):
             f"by {infl[1]:.0f} points; the best of {ks[-1]}, by {infl[-1]:.0f}. Nothing improved but the luck of the "
             "draw."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(styl), FadeIn(sl), FadeIn(ll), FadeIn(sch))
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.15))
+            self.play(FadeIn(cards[0], shift=UP * 0.15), FadeIn(vt, scale=1.4))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.15))
             vo.wait_until("c")
-            self.play(FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(tag))
+            self.play(FadeOut(style_vis), FadeIn(g), FadeIn(labs), FadeIn(xl), FadeIn(tag))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.2), FadeIn(vals), run_time=2.0)
         self.wait(0.4)
         self.clear_scene()

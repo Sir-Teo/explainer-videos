@@ -33,6 +33,7 @@ class Deeper(VoiceoverScene):
             b = Rectangle(width=1.0, height=h, stroke_width=0, fill_color=c, fill_opacity=0.85)
             b.move_to([-5.6 + 1.45 * k, -2.5 + h / 2, 0])
             v = MathTex(rf"{err:g}\%", font_size=26, color=c).next_to(b, UP, buff=0.08)
+            v.add_background_rectangle(color=config.background_color, opacity=1.0, buff=0.05)
             yl = MathTex(str(y), font_size=22, color=GREY_B).next_to(b, DOWN, buff=0.1)
             tl = label(team, font_size=16, color=GREY_A).next_to(yl, DOWN, buff=0.06)
             if tl.width > 1.4:
@@ -40,7 +41,7 @@ class Deeper(VoiceoverScene):
             bars.add(VGroup(b, v, yl, tl))
         base = Line([-6.3, -2.5, 0], [5.1, -2.5, 0], color=GREY_C, stroke_width=1.5)
         hy = -2.5 + H * HUMAN_TOP5 / 30
-        human = DashedLine([-6.3, hy, 0], [5.1, hy, 0], color=HIST, stroke_width=2.5)
+        human = DashedLine([-6.3, hy, 0], [5.1, hy, 0], color=HIST, stroke_width=2.5).set_z_index(-1)
         hl = label(rf"one trained person: \ ${HUMAN_TOP5}\%$", font_size=22, color=HIST).next_to(human, UP, buff=0.08)
         hl.align_to(human, RIGHT)
         head = label(r"ILSVRC: \ the winning top-5 error, \ year by year", font_size=30).to_edge(UP, buff=0.4)
@@ -78,7 +79,7 @@ class Deeper(VoiceoverScene):
         ]
         whys = [why(r"the receptive-field rule, \ stride $1$"), why(r"$C$ channels in, $C$ out"),
                 why(r"and two more nonlinearities in between")]
-        step = ladder(self, rows, whys, keep=3, top=1.6, x=-1.5, align_index=1, edge=6.8)
+        step = ladder(self, rows, whys, keep=3, top=0.9, x=-0.8, align_index=1, edge=6.8)
         hc = history_card(2014, r"Karen Simonyan \& Andrew Zisserman, \ Oxford (VGG)",
                           rf"only $3 \times 3$ convolutions, \ $16$ or $19$ layers; \ second in 2014 at "
                           rf"${VGG_2014}\%$", width=5.6, color=HIST).to_corner(UL, buff=0.35)
@@ -131,10 +132,9 @@ class Deeper(VoiceoverScene):
             arrows.add(Arrow(b[-1].get_bottom(), cat.get_top(), buff=0.08, color=GREY_C, stroke_width=2,
                              max_tip_length_to_length_ratio=0.1))
         red = VGroup(*[b[0] for b in branches[1:3]], branches[3][1])
-        rl = label(r"$1 \times 1$ convolutions: \ fewer channels first", font_size=22, color=FMAP)
-        rl.next_to(branches, RIGHT, buff=0.3)
-        if rl.get_right()[0] > 6.9:
-            rl.next_to(branches, DOWN, buff=1.4)
+        rl = label(r"$1 \times 1$ convolutions: \\ fewer channels first", font_size=22, color=FMAP)
+        rl.next_to(branches, LEFT, buff=0.4)
+        keep_in_frame(rl)
         hc = history_card(2014, r"Christian Szegedy and colleagues, \ Google: \ GoogLeNet",
                           rf"$22$ layers of such modules; \ the 2014 winner at ${ILSVRC[4][2]}\%$; \ about a twelfth "
                           r"of AlexNet's weights", width=4.8, color=HIST).to_corner(DL, buff=0.3)
@@ -174,9 +174,13 @@ class Deeper(VoiceoverScene):
         a1 = Arrow(x_in.get_center(), F1.get_top(), buff=0.06, stroke_width=2.5, color=GREY_B)
         a2 = Arrow(F1.get_bottom(), F2.get_top(), buff=0.06, stroke_width=2.5, color=GREY_B)
         a3 = Arrow(F2.get_bottom(), plus.get_top(), buff=0.06, stroke_width=2.5, color=GREY_B)
-        skip = CurvedArrow(x_in.get_center() + RIGHT * 0.05, plus.get_right() + RIGHT * 0.05, angle=-1.2,
-                           color=KERNEL, stroke_width=3)
-        sl = label(r"identity", font_size=22, color=KERNEL).next_to(skip, RIGHT, buff=0.1)
+        xr = max(F1.get_right()[0], F2.get_right()[0]) + 0.6
+        p0, p3 = x_in.get_center(), plus.get_right()
+        skip = VGroup(Line(p0, [xr, p0[1], 0], color=KERNEL, stroke_width=3),
+                      Line([xr, p0[1], 0], [xr, p3[1], 0], color=KERNEL, stroke_width=3),
+                      Arrow([xr, p3[1], 0], p3, buff=0.04, color=KERNEL, stroke_width=3,
+                            max_tip_length_to_length_ratio=0.3))
+        sl = label(r"identity", font_size=22, color=KERNEL).next_to(skip[1], RIGHT, buff=0.12)
         der = cmath(r"\frac{\partial y}{\partial x}", r"=", r"I", r"+", r"\frac{\partial F}{\partial x}",
                     colors={r"I": KERNEL, r"\frac{\partial F}{\partial x}": FMAP}, font_size=40)
         der.move_to([-3.5, -1.3, 0])

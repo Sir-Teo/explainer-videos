@@ -86,11 +86,23 @@ class Outro(VoiceoverScene):
             lstm = f"The LSTM's gated memory line carries it across {T} steps."
         else:
             lstm = "The LSTM's gated memory line carries it further."
+        o, a = load("orientation"), load("adversarial")
+        if o["n_oriented"] >= o["n"] / 4 and o["n_colour"] > 0:
+            photo = ("our photograph network grew edge detectors and colour cells like the ones in the visual "
+                     "cortex.")
+        elif o["n_oriented"] >= o["n"] / 4:
+            photo = "our photograph network grew edge detectors like the ones in the visual cortex."
+        else:
+            photo = "our photograph network grew filters of its own."
+        i2 = list(np.asarray(a["cifar_eps"])).index(2.0)
+        if a["cifar_pgd"][i2] > 0.5:
+            fool = "Yet an invisible, well-chosen change fools them,"
+        else:
+            fool = "Yet a small, well-chosen change often fools them,"
         with self.voiceover(
             f"Let's take stock. {hand} A "
             "convolution shares one small kernel across the image, so it commutes with shifts. Trained end to end, "
-            "LeNet grew its own stroke detectors, and our photograph network grew edge detectors and colour cells "
-            "like the ones in the visual cortex. Yet an invisible, well-chosen change fools them all, because they "
+            f"LeNet grew its own stroke detectors, and {photo} <bookmark mark='a'/> {fool} because they "
             "are close to linear. In time, a plain recurrent network's gradient fades, or explodes, as Jacobians "
             f"multiply. {lstm} And attention lets a "
             "decoder look back at exactly what it needs."
