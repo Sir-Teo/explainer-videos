@@ -714,3 +714,43 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | neural Turing machine, memory network | 神经图灵机，记忆网络 |
 | linear recurrence, parallel prefix scan, associative | 线性递推，并行前缀扫描，结合律（可结合的） |
 | minGRU, minLSTM, xLSTM, state-space model | minGRU，minLSTM，xLSTM，状态空间模型 |
+
+### Attention as geometry (Part 13)
+
+| English | 中文 |
+|---|---|
+| attention; query, key, value | 注意力；查询，键，值 |
+| kernel smoother (Nadaraya–Watson), bandwidth | 核平滑器（纳达拉亚–沃森），带宽 |
+| scaled dot-product attention | 缩放点积注意力 |
+| softmax saturation, Jacobian | softmax饱和，雅可比矩阵 |
+| inverse temperature (β) | 逆温度（β） |
+| modern Hopfield network, metastable state | 现代霍普菲尔德网络，亚稳态 |
+| attention head, multi-head attention | 注意力头（头），多头注意力 |
+| QK circuit, OV circuit | QK回路，OV回路 |
+| low rank, low-rank bottleneck | 低秩，低秩瓶颈 |
+| causal mask | 因果掩码 |
+| encoder, decoder, cross-attention, prefix language model | 编码器，解码器，交叉注意力，前缀语言模型 |
+| permutation equivariance | 置换等变性 |
+| transformer block | Transformer模块 |
+| FLOPs per token | 每个词元的浮点运算数 |
+| sinusoidal position encoding, learned absolute positions | 正弦位置编码，学出来的绝对位置 |
+| relative positions, ALiBi | 相对位置，ALiBi |
+| no positional encoding (NoPE) | 无位置编码（NoPE） |
+| rotary position embedding (RoPE), wavelength, base | 旋转位置编码（RoPE），波长，底数 |
+| context extension | 上下文扩展 |
+| position interpolation, NTK-aware scaling, YaRN | 位置插值，NTK感知缩放，YaRN |
+| ramp (γ), attention temperature | 斜坡（γ），注意力温度 |
+| log-n scaling | log n缩放 |
+| attention sink, sink logit | 注意力汇点，汇点logit |
+| active–dormant head, value drain | 活跃-休眠头，值的排空 |
+| gated attention (output gate) | 门控注意力（输出门控） |
+| differential attention | 差分注意力 |
+| QK-norm | QK归一化 |
+| soft cap (logit soft-capping) | 软上限（logit软封顶） |
+| induction head, previous-token head | 归纳头，前一词元头 |
+| K-, Q-, V-composition | K组合，Q组合，V组合 |
+| phase change (in training) | （训练中的）相变 |
+| in-context learning, linear self-attention | 上下文学习，线性自注意力 |
+| RASP; select, aggregate | RASP；选择（select），聚合（aggregate） |
+| Tracr | Tracr |
+| hybrid (linear + full attention) | 混合架构（线性注意力加完整注意力） |

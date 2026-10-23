@@ -33,8 +33,12 @@ Items:
                100 steps of fine-tuning at the long context for interpolation and YaRN
     positions  four ways to tell a small transformer where things are (sinusoidal, RoPE, ALiBi, none), each trained
                on the novels at 128 characters with three seeds at equal budgets, then read at 512
+    tfwords    the share of real words (of three letters or more, from the training text's vocabulary) in the
+               samples the transformer writes at each checkpoint of its replay
     sinks      attention sinks on the bigram-backcopy task (a head that is needed only after a trigger): plain softmax,
-               a learned sink logit (gpt-oss), an output gate (Qwen), differential attention; three seeds each
+               a learned sink logit (gpt-oss), an output gate (Qwen), differential attention; three seeds each, with
+               each design's own measurements (the weight that goes nowhere, the gate's openness, lambda)
+    sinkref    the task's own probabilities scored on the sinks item's test batch: the reference the designs are held to
     qkscale    QK-norm and soft caps against blow-up: our transformer's queries and keys scaled up, the entropy of its
                attention and its bits, plain, soft-capped and normalized
     induction  a two-layer attention-only transformer on random tokens with a repeated stretch (three seeds): the
@@ -42,8 +46,9 @@ Items:
                layer, and the two heads' patterns
     icl        in-context linear regression: one layer of linear self-attention, trained, against one step of gradient
                descent (von Oswald et al., 2023); its learned matrices, and 1-3 layers against 1-3 steps
-    rasp       what attention can compute: RASP's histogram compiled by hand into one attention layer and run exactly;
-               then small transformers trained on histograms and on parity at lengths up to 20, tested up to 60
+    rasp       what attention can compute: RASP's histogram (one layer, with a start marker and a ReLU read-out) and
+               sort (two layers) compiled by hand into attention weights and run on random inputs; how far the counts
+               stay apart in bfloat16, float16 and float32
 """
 
 from __future__ import annotations
