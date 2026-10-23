@@ -60,22 +60,19 @@ ZH = {
         '第1章。我们是怎么走到这里的。',
 
     "This part's story has three threads":
-        "这一部分的故事有三条线索，起点相隔很远。<bookmark mark='m0'/>1950年，冯·诺依曼的团队在ENIAC上做出了第一次计算机天气预报。"
-        "<bookmark mark='m1'/>1958年，约翰·肯德鲁第一次看到了一个蛋白质的三维结构，肌红蛋白；1961年，克里斯蒂安·安芬森证明，蛋白质的"
-        "序列决定了它的形状。<bookmark mark='m2'/>1968年，鲍里斯·魏斯费勒和安德烈·莱曼发表了一种检验两个图是否相同的方法，后来发现，"
-        "它恰好衡量了图网络能看见什么。<bookmark mark='m3'/>蛋白质数据库在1971年开张；<bookmark mark='m4'/>欧洲的天气中心，欧洲中期"
-        "天气预报中心，在1979年发布了第一次中期预报。<bookmark mark='m5'/>1989年，卷积网络把图像的对称性做进了网络层里。<bookmark "
-        "mark='m6'/>1994年，CASP开始了，一个预测蛋白质结构的盲测比赛；<bookmark mark='m7'/>2005年，马尔科·戈里等人提出了图上的"
-        "神经网络。",
+        "这一部分的故事有三条线索，起点相隔很远。<bookmark mark='m0'/>1950年，第一次计算机天气预报。<bookmark mark='m1'/>1958年，"
+        "人们第一次看到了一个蛋白质的三维结构；1961年，克里斯蒂安·安芬森发现，序列决定了形状。<bookmark mark='m2'/>1968年，一种检验"
+        "两个图是否相同的方法，后来发现，它恰好衡量了图网络能看见什么。<bookmark mark='m3'/>蛋白质数据库，1971年；<bookmark "
+        "mark='m4'/>欧洲天气中心的第一次预报，1979年；<bookmark mark='m5'/>把图像的对称性做进去的卷积，1989年；<bookmark "
+        "mark='m6'/>CASP的蛋白质结构盲测比赛，1994年；<bookmark mark='m7'/>以及最早的图神经网络，2005年。",
 
     'Then, within a decade, the threads met.':
-        "然后，在十年之内，这几条线索汇合了。<bookmark mark='d0'/>2017年有了消息传递，图网络的通用配方，同时也有了处理集合和分子的"
-        "网络。<bookmark mark='d1'/>2018年，DeepMind的第一代AlphaFold赢得了CASP；两年后，AlphaFold 2接近了实验的精度。<bookmark "
-        "mark='d2'/>随分子一起转动的网络，以及能学会物理方程整体解的网络，在2021年相继出现。<bookmark mark='d3'/>到2022年，两亿多个蛋白质"
-        "的预测结构已经可以免费下载。<bookmark mark='d4'/>2023年，一个图网络在大多数指标上胜过了世界上最好的天气模型，另一个提出了"
-        "数以百万计的新晶体。<bookmark mark='d5'/>2024年有了诺贝尔奖、AlphaFold 3，还有能解奥赛题的机器；<bookmark mark='d6'/>2025年，"
-        "AI天气预报进入日常运行，进化搜索找到了新的数学；<bookmark mark='d7'/>2026年，保罗·埃尔德什的一些未解问题被AI解决了，其中一个"
-        "附上了计算机检查过的证明。",
+        "然后，在十年之内，这几条线索汇合了。<bookmark mark='d0'/>2017年：消息传递，以及处理集合和分子的网络。<bookmark mark='d1'/>"
+        "2018年：DeepMind的第一代AlphaFold赢得CASP；2020年，AlphaFold 2接近了实验的精度。<bookmark mark='d2'/>2021年：随分子一起"
+        "转动的网络，以及能学会方程整体解的网络。<bookmark mark='d3'/>2022年：两亿多个蛋白质的预测结构，免费下载。<bookmark "
+        "mark='d4'/>2023年：一个图网络在大多数指标上胜过了世界上最好的天气模型，另一个提出了数以百万计的新晶体。<bookmark mark='d5'/>2024年：诺贝尔奖、"
+        "AlphaFold 3，还有能解奥赛题的机器；<bookmark mark='d6'/>2025年：AI天气预报进入日常运行，进化搜索找到了新的数学；<bookmark "
+        "mark='d7'/>2026年：保罗·埃尔德什的一些未解问题被AI解决。",
 
     'What ties these together is one recipe.':
         "把这些串起来的是同一个配方。<bookmark mark='a'/>问一问：你的数据里什么是无关紧要的。对图像来说，物体在哪个位置：所以用卷积。"
@@ -225,11 +222,11 @@ ZH = {
         "mark='e'/>托马斯·基普夫和马克斯·韦林的图卷积网络是最简单的情形：对邻居的状态按度归一化后取平均，再乘一个权重矩阵。",
 
     'The idea is older than its name.':
-        "这个想法比它的名字更早。<bookmark mark='a'/>1997年，亚历山德罗·斯佩尔杜蒂和安东尼娜·斯塔里塔就训练过读带标签的树和图的网络。"
+        "这个想法比它的名字更早。<bookmark mark='a'/>1997年，亚历山德罗·斯佩尔杜蒂和安东尼娜·斯塔里塔就训练过读带标签的图的网络。"
         "<bookmark mark='b'/>2005年，马尔科·戈里等人提出了图神经网络，节点状态根据邻居反复更新，直到稳定。<bookmark mark='c'/>2014年，"
-        "琼·布鲁纳等人通过图的谱来定义卷积，在随后两年里被简化成图卷积网络。<bookmark mark='d'/>2015年，大卫·杜维诺等人学出了分子的指纹。"
-        "<bookmark mark='e'/>随后吉尔默的消息传递网络预测了十三万四千个小分子的十三种量子性质，其中十一种达到了化学精度。<bookmark "
-        "mark='f'/>彼得·巴塔利亚等人则论证说，图是让网络具备关系结构的通用办法。",
+        "琼·布鲁纳等人通过图的谱来定义卷积，后来被简化成图卷积网络。<bookmark mark='d'/>2015年，大卫·杜维诺等人学出了分子的指纹。"
+        "<bookmark mark='e'/>随后吉尔默的网络预测了小分子的十三种量子性质，其中十一种达到了化学精度。<bookmark mark='f'/>彼得·巴塔利亚"
+        "等人则论证说，图是让网络具备关系结构的通用办法。",
 
     'f"Let\'s train one. Three hundred people in three communities':
         "我们来训练一个。三百个人，分在三个社群里，友谊大多在社群内部：{100 * intra:.0f}%的边在社群内，平均每人大约{deg:.0f}条。每个人"
@@ -277,8 +274,8 @@ ZH = {
     'f"Why a sum? Because the aggregation must not lose information':
         "为什么要求和？因为聚合不能丢掉邻居多重集的信息。<bookmark mark='a'/>一个节点的邻居是a、a、b、b，另一个节点的邻居是a、b："
         "它们的平均一样，最大值也一样，只有和不一样。<bookmark mark='b'/>后果在这里，计算所得：让随机图的每个节点从相同的特征出发，让一个"
-        "一层的网络算出每个节点的度。用求和，误差是{sum_rm:.2f}。<bookmark mark='c'/>用平均或最大值，分别是{mean_rm:.2f}和{max_rm:.2f}："
-        "在它们看来每个节点都一样，所以只能猜平均度数，误差就是度数本身的离散程度，{sd:.2f}。",
+        "一层的网络算出每个节点的度。用求和，误差是{sum_rm:.2f}。<bookmark mark='c'/>用平均或最大值，分别是{mean_rm:.2f}和{max_rm:.2f}，"
+        "几乎不比度数本身的离散程度{sd:.2f}好：在它们看来，每个有邻居的节点都一样，所以它们只能学会一个节点有没有邻居。",
 
     'f"Now make a network fail on purpose.':
         "现在故意让一个网络失败。取{n}个节点的、由若干个环组成的图，问：里面有没有三角形？<bookmark mark='a'/>在颜色细化看来，这些图"
@@ -359,7 +356,7 @@ ZH = {
 
     'A second problem appears when the answer depends on distant nodes.':
         "当答案依赖远处的节点时，第二个问题就出现了。<bookmark mark='a'/>L跳以内的节点数可以指数增长，<bookmark mark='b'/>可它们所有的"
-        "信息都得一层一层地挤进需要它的那个节点上一个固定大小的向量里。<bookmark mark='c'/>乌里·阿隆和埃兰·亚哈夫在2021年把这叫作"
+        "信息都得挤进需要它的那个节点上一个固定大小的向量里。<bookmark mark='c'/>乌里·阿隆和埃兰·亚哈夫在2021年把这叫作"
         "过挤压；杰克·托平等人把它追溯到瓶颈，也就是曲率为负的边。<bookmark mark='d'/>补救办法：重新连图，加入能看见一切的节点，或者让"
         "注意力直接触及每个节点。",
 
@@ -406,8 +403,11 @@ ZH = {
     'With only a hundred, EGNN already beats every other network':
         '只用一百个，EGNN就已经胜过了用三十倍数据训练的所有其他网络',
 
-    "f'With a hundred systems its error is":
-        '用一百个系统，它的误差是{eg_small:.4f}；其他网络里最好的那个，要用全部{sizes[-1]:,}个系统才达到{best_other_big:.4f}',
+    "f'Trained on {n_beat:,} systems, EGNN already beats":
+        '只用{n_beat:,}个系统训练，EGNN就已经胜过了用{n_all:,}个系统训练的所有其他网络',
+
+    "f'Even at {n_all:,} systems, no other network":
+        '即使到了{n_all:,}个系统，也没有别的网络比得上它',
 
     "f'The plain MLP ends at {m['mlp']:.3f}, no better":
         "普通MLP最后是{m['mlp']:.3f}，不比那个{cvm:.3f}的猜测好",
@@ -645,11 +645,10 @@ ZH.update({
         '用转过副本训练的普通网络，在两项上都一样好或者更好',
 
     'On drug-like molecules bound to proteins':
-        "对于结合在蛋白质上的类药分子，DeepMind报告说AlphaFold 3比最好的传统对接方法精确百分之五十，在蛋白质复合物和抗体上也胜过"
-        "前代。<bookmark mark='a'/>它先以一个免费服务器的形式提供给非商业用途，2024年11月又向学术界开放了代码和权重。<bookmark mark='b'/>"
-        "几个月之内，开放的复现就出现了：Chai-1、Boltz-1、Protenix。<bookmark mark='c'/>2025年，Boltz-2加上了对分子结合强度的预测，"
-        "OpenFold联盟预览了一个完全开放的模型。<bookmark mark='d'/>2026年2月，Isomorphic Labs报告了一个专有的后继系统，在新的抗体–抗原对"
-        "上，做出高精度预测的比例是AlphaFold 3的2.3倍，这是按他们自己的基准测出来的。",
+        "对于结合在蛋白质上的类药分子，DeepMind报告说AlphaFold 3比最好的传统方法精确百分之五十。<bookmark mark='a'/>它先以一个免费"
+        "服务器的形式提供，2024年11月又向学术界开放了代码和权重；<bookmark mark='b'/>几个月之内，开放的复现就出现了：Chai-1、Boltz-1、"
+        "Protenix。<bookmark mark='c'/>2025年，Boltz-2加上了对分子结合强度的预测。<bookmark mark='d'/>2026年2月，Isomorphic Labs报告了"
+        "一个专有的后继系统，在新的抗体–抗原对上，做出高精度预测的比例是AlphaFold 3的2.3倍，这是按它自己的基准测出来的。",
 
     'AlphaFold 3 kept the pair stack,':
         "AlphaFold 3保留了残基对的部分，把几何交给了扩散，让网络从转过的副本里学会对称性。预测也可以倒过来：从你想要的形状，到一个能"
@@ -707,10 +706,10 @@ ZH.update({
 
     'Weather forecasting became physics in 1904':
         "1904年，天气预报变成了物理学：维尔赫姆·皮耶克尼斯把它描述成一个初值问题，测出此刻的大气，再把流体方程向前推进。<bookmark "
-        "mark='a'/>刘易斯·弗赖·理查森在第一次世界大战期间试着用手算：为欧洲的两个点做一次六小时预报，算了大约六个星期，结果错了一百四十五"
-        "百帕。他梦想有一个大厅，六万四千人步调一致地计算天气。<bookmark mark='b'/>1950年，朱尔·查尼、拉格纳·弗约托夫特和约翰·冯·诺依曼"
-        "在ENIAC上做出了最早的几次预报：二十四小时的天气，大约要算二十四小时。<bookmark mark='c'/>欧洲中期天气预报中心在1979年发布了"
-        "第一批预报；此后几十年里，更好的物理、更好的数据和更大的计算机，大约每十年让有用的预报时效多出一天。",
+        "mark='a'/>刘易斯·弗赖·理查森在第一次世界大战期间试着用手算：为两个点做一次六小时预报，算了大约六个星期，结果错了一百四十五"
+        "百帕。他梦想有一个大厅，六万四千人步调一致地计算天气。<bookmark mark='b'/>1950年，最早的计算机预报在ENIAC上运行，算得和天气"
+        "本身差不多快。<bookmark mark='c'/>欧洲中期天气预报中心在1979年发布了第一批中期预报；此后，更好的物理、数据和计算机，大约每十年"
+        "让有用的预报时效多出一天。",
 
     'Machine learning came to this in the 2020s':
         "到了2020年代，机器学习来到了这里，用ERA5训练，那是ECMWF对1940年以来全球天气的重建。2023年，谷歌DeepMind的雷米·拉姆等人发表了"
@@ -727,8 +726,9 @@ ZH.update({
         "两者一致；然后它们渐行渐远。",
 
     '"Scored over eight new runs: the error, step by step.':
-        "在八次新的模拟上打分：误差，一步一步看。<bookmark mark='a'/>{s1}。<bookmark mark='b'/>{s2}，{s3}。<bookmark mark='c'/>{s4}。"
-        "GraphCast训练时最多展开十二步，正是为了这个原因：从自己逐渐偏离的预测里学习。",
+        "在八次新的模拟上打分：误差，一步一步看。<bookmark mark='a'/>{s1}。<bookmark mark='b'/>{s2}，{s3}。GraphCast训练时最多展开"
+        "十二步，正是为了这个原因，从自己逐渐偏离的预测里学习；我们的网络在训练的最后阶段展开两步。<bookmark mark='c'/>{s4}，这是每个网络"
+        "各训练一次的结果。",
 
     "f'One step ahead its error is":
         '提前一步，它的误差是{rm[0]:.2f}，而假设什么都不变的误差是{pers[0]:.2f}',
@@ -863,9 +863,9 @@ ZH.update({
     'Mathematics has something no other science has:':
         "数学有一样别的科学都没有的东西：一个骗不了的检查器。第28部分讲了强化学习怎样利用完美的检查器；这里讲检查器从哪里来。<bookmark "
         "mark='a'/>在Lean这样的证明助手里，定理和证明都是代码，一个小小的内核检查每一步推理：这一个说的是，n乘以n加1是偶数。<bookmark "
-        "mark='b'/>计算机进入证明是在1976年，肯尼斯·阿佩尔和沃尔夫冈·哈肯检查了没有人能手工检查的大量情形，证明了四色定理；2005年，"
-        "乔治·贡蒂埃对整个证明做了形式化检查。<bookmark mark='c'/>托马斯·黑尔斯对开普勒猜想的证明在2014年得到了形式化验证，<bookmark "
-        "mark='d'/>2022年，Lean社区用大约十八个月，把达斯汀·克劳森和彼得·舒尔茨的一个困难的新定理形式化了。<bookmark mark='e'/>Lean的库"
+        "mark='b'/>计算机进入证明是在1976年，阿佩尔和哈肯的四色定理；2005年，乔治·贡蒂埃对这个证明做了形式化检查。<bookmark "
+        "mark='c'/>托马斯·黑尔斯对开普勒猜想的证明在2014年得到了形式化验证，<bookmark mark='d'/>2022年，Lean社区把达斯汀·克劳森和"
+        "彼得·舒尔茨的一个困难的新定理形式化了。<bookmark mark='e'/>Lean的库"
         "Mathlib现在收录了大约二十九万条定理，这是任何机器证明者立足的基础。",
 
     'Olympiad geometry was the first olympiad subject to fall.':
@@ -946,12 +946,11 @@ ZH.update({
     'In May 2025 Google DeepMind combined both lines in AlphaEvolve.':
         "2025年5月，谷歌DeepMind在AlphaEvolve里把这两条线合在了一起。<bookmark mark='a'/>Gemini模型提出对整段程序的修改，评估器给它们"
         "打分，进化保留最好的。<bookmark mark='b'/>它的成果之一：用四十八次乘法计算四乘四复数矩阵的乘积，胜过了把施特拉森的技巧用两次"
-        "得到的四十九次，那是1969年以来的纪录。<bookmark mark='c'/>它是通过进化一段基于梯度的分解搜索代码做到的，正是我们刚才跑的那一类"
-        "搜索。<bookmark mark='d'/>几个星期之内，法国的三位研究者，让–纪尧姆·迪马、克莱芒·佩尔内和亚历山大·塞多格拉维奇，推导出了一个"
-        "只用有理系数的四十八次算法。<bookmark mark='e'/>AlphaEvolve还在十一维空间里让593个球同时接触一个中心球，创下新纪录；在五十多个"
-        "未解问题上，它有四分之三追平了已知最好的答案，五分之一做得更好。<bookmark mark='f'/>在谷歌内部，它找到的一条调度规则为公司收回了"
-        "0.7%的算力；它加速的一个内核让Gemini的训练时间缩短了百分之一。<bookmark mark='g'/>2025年11月，陶哲轩等人让它去处理六十七个问题，"
-        "并发表了它的发现，以及它失败的地方。",
+        "得到的四十九次，那是1969年以来的纪录。<bookmark mark='c'/>它是通过进化一段分解搜索的代码做到的，正是我们刚才跑的那一类搜索。"
+        "<bookmark mark='d'/>几个星期之内，法国的三位研究者找到了一个只用有理系数的四十八次算法。<bookmark mark='e'/>它还在十一维空间里"
+        "创下了球同时接触一个中心球的纪录，593个；在五十多个未解问题上，它有四分之三追平了已知最好的答案，五分之一做得更好。<bookmark "
+        "mark='f'/>在谷歌内部，它找到的一条调度规则为公司收回了0.7%的算力。<bookmark mark='g'/>2025年11月，陶哲轩等人让它去处理六十七个"
+        "问题，并发表了它在哪里成功、在哪里失败。",
 
     'Discovery by search, then:':
         "所以，靠搜索做发现：放手去提出，精确地检查，留下经得起检查的。只要检查是精确的，它就管用，这就是数学和算法走在最前面的原因。",

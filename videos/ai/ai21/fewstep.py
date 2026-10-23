@@ -5,7 +5,10 @@ where many small flow-matching steps would. Time runs as in the rest of Part 21:
 
     meanflow   (Geng et al., 2025) the identity u = v + (t - s) du/ds along the path, its derivative taken by one
                forward-mode pass (a Jacobian-vector product); half the pairs have s = t, which is plain flow matching;
-               the paper's adaptive loss weighting (each squared error divided by itself, held fixed, plus 0.001)
+               a plain squared error (the paper's adaptive weighting, each error divided by itself held fixed, aims
+               at a weighted median of the targets rather than their mean: on these 2-D letters, whose velocity
+               targets are spread wide, it learned a biased field, 0.11 to 0.57 from the data in one jump over
+               three seeds)
     shortcut   (Frans et al., 2024) self-consistency: one jump of size 2d must equal two jumps of size d, for d a
                power of two; jumps of size 0 are plain flow matching
 
@@ -70,8 +73,7 @@ def train(kind, seed=2025, z_watch=None, snaps=None):
             # u and its derivative along the path, d/ds u(z_s, s, t) = v . grad_z u + du/ds, in one forward-mode pass
             u, du = torch.func.jvp(net, (z, s, t), (v, torch.ones_like(s), torch.zeros_like(t)))
             target = (v + (t - s)[:, None] * du).detach()
-            err = ((u - target) ** 2).sum(1)
-            loss = (err / (err.detach() + 1e-3)).mean()  # MeanFlow's adaptive weighting (power 1): no sample dominates
+            loss = ((u - target) ** 2).sum(1).mean() / 2  # per coordinate, as flow matching's own loss
         else:
             # half plain flow matching (jumps of size 0), half self-consistency: one jump of 2d = two jumps of d
             n = B // 2
@@ -123,7 +125,7 @@ def compute_fewstep():
     from videos.ai.ai21.train2d import threads
 
     threads()
-    part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS)))
+    part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS), meanflow_loss="squared"))
     z = E.rng(1).normal(size=(4000, 2))  # the same noise as the flow item
     for kind in ("meanflow", "shortcut"):
         for seed in SEEDS:

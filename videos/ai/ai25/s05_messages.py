@@ -146,15 +146,14 @@ class Messages(VoiceoverScene):
         head = label(r"Networks on graphs, \ 1997--2018", font_size=34).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The idea is older than its name. <bookmark mark='a'/> In 1997 Alessandro Sperduti and Antonina "
-            "Starita trained networks on labelled trees and graphs. <bookmark mark='b'/> In 2005 Marco Gori and "
-            "colleagues proposed the graph neural network, whose node states were updated from their neighbours "
-            "until they settled. <bookmark mark='c'/> In 2014 Joan Bruna and colleagues defined convolutions through "
-            "the spectrum of the graph, simplified over the next two years into the graph convolutional network. "
-            "<bookmark mark='d'/> In 2015 David Duvenaud and colleagues learned fingerprints of molecules. <bookmark "
-            "mark='e'/> Gilmer's message-passing network then predicted thirteen quantum properties of a hundred and "
-            "thirty-four thousand small molecules, eleven of them within chemical accuracy. <bookmark mark='f'/> And "
-            "Peter Battaglia and colleagues argued that graphs are the general way to give a network relational "
-            "structure."
+            "Starita trained networks on labelled graphs. <bookmark mark='b'/> In 2005 Marco Gori and colleagues "
+            "proposed the graph neural network, its node states updated from their neighbours until they settled. "
+            "<bookmark mark='c'/> In 2014 Joan Bruna and colleagues defined convolutions through the graph's "
+            "spectrum, later simplified into the graph convolutional network. <bookmark mark='d'/> In 2015 David "
+            "Duvenaud and colleagues learned fingerprints of molecules. <bookmark mark='e'/> Gilmer's network then "
+            "predicted thirteen quantum properties of small molecules, eleven within chemical accuracy. <bookmark "
+            "mark='f'/> And Peter Battaglia and colleagues argued that graphs are the general way to give a network "
+            "relational structure."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abcdef"):
