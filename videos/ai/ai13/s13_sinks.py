@@ -170,6 +170,7 @@ class Sinks(VoiceoverScene):
                    r"otherwise, the novels' next-character statistics", font_size=20, color=GREY_A)
         spoken = ["a space" if chars[i] == " " else f"an {chars[i]}" if chars[i] in "aeiou" else f"a {chars[i]}"
                   for i in trig]
+        trig_txt = ", ".join(spoken[:-1]) + " or " + spoken[-1]
         tl.next_to(cells, DOWN, buff=0.75)
         M = np.asarray(s["softmax_map"])
         img = framed(heat_image(M, 3.0, 3.0, color=A, mask_upper=True)).move_to([-3.6, -1.35, 0])
@@ -203,8 +204,7 @@ class Sinks(VoiceoverScene):
         with self.voiceover(
             "We can grow a sink on purpose. Guo's team built a task where one head is needed only some of the time. "
             f"<bookmark mark='a'/> We made it from the novels' {V_} commonest characters: each character follows "
-            f"the novels' statistics for what comes next, except after a trigger, {', '.join(spoken[:-1])} or "
-            f"{spoken[-1]}, where the "
+            f"the novels' statistics for what comes next, except after a trigger, {trig_txt}, where the "
             "next character copies the one before the trigger. Every sequence starts with a marker. "
             f"<bookmark mark='b'/> A one-layer transformer learns it in {int(c['steps']):,} steps, three times over. "
             f"After a trigger its head looks one back, {pa.mean():.0%} of the time. <bookmark mark='c'/> " + v1

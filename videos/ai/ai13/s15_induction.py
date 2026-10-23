@@ -74,13 +74,13 @@ class Induction(VoiceoverScene):
         else:
             v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, and {q2:.1f} the "
                   "second: no copying here either.")
-        tail = (" The machinery behind copying has a name." if m2 < m1 - 0.05 else
-                " Copying needs a particular piece of machinery, and our transformer has not built it. Here is what "
+        tail = ("The machinery behind copying has a name." if m2 < m1 - 0.05 else
+                "Copying needs a particular piece of machinery, and our transformer has not built it. Here is what "
                 "it is, and how it forms.")
         with self.voiceover(
             "Here is a test of something no counting model can do. Take a stretch of a novel our transformer "
             "has never seen, and show it twice in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2
-            + " <bookmark mark='c'/>" + tail
+            + " <bookmark mark='c'/> " + tail
         ) as vo:
             self.play(FadeIn(row), FadeIn(g), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")
@@ -169,13 +169,18 @@ class Induction(VoiceoverScene):
         v1 = (f"With one layer it never learns to copy: after {int(c1[-1, 0]):,} steps it is still at {f1:.1f} bits on "
               "the repeat. One head cannot both note the token before each position and search for it. "
               if one_fails else f"With one layer it ends at {f1:.1f} bits on the repeat. ")
-        jtxt = (f"around step {js[0]:,}" if len(set(js)) == 1 else
-                "at steps " + ", ".join(f"{j:,}" for j in js[:-1]) + f" and {js[-1]:,}")
+        lo2, hi2 = min(f2), max(f2)
+        if len(set(js)) == 1:
+            v_jump = (f"With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, "
+                      f"around step {js[0]:,} in all our runs, down to {lo2:.2f} to {hi2:.2f} bits.")
+        else:
+            v_jump = (f"With two layers, nothing happens for a while, and then the loss on the repeat falls off a cliff, "
+                      f"between steps {min(js):,} and {max(js):,} in our {len(js)} runs, down to {lo2:.2f} to {hi2:.2f} "
+                      "bits.")
         with self.voiceover(
             "Induction heads can be watched as they form. Train a small model of attention alone on random tokens "
-            f"with a repeated stretch somewhere inside. <bookmark mark='a'/> {v1}<bookmark mark='b'/> With two "
-            f"layers, nothing happens for a while, and then the loss on the repeat falls off a cliff: {jtxt} in our "
-            f"three runs, down to {min(f2):.2f} to {max(f2):.2f} bits. <bookmark mark='c'/> Look inside: the first "
+            f"with a repeated stretch somewhere inside. <bookmark mark='a'/> {v1}<bookmark mark='b'/> {v_jump} "
+            "<bookmark mark='c'/> Look inside: the first "
             "layer has a head that looks exactly one step back, and the second a head that looks at the earlier "
             "copy, one step ahead. Catherine Olsson and colleagues saw the same sudden jump in large models, early "
             "in training, just as they got good at learning from their prompt."
@@ -366,11 +371,20 @@ class Induction(VoiceoverScene):
               "heads. But no pair has become a copying circuit. " if top > base + 4 * bsd else
               f"And its heads barely compose: the strongest K-composition is {top:.2f}, against {base:.2f} for random "
               "heads. ")
-        v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
-              f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
-              "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid. "
-              "The toy, built to reward copying, formed its pair in a few thousand steps."
-              if not strong else "")
+        di = load("induction")
+        jmax = max(int(v) for v in di["jump_steps"])
+        formed = max(float(v) for v in di["final2"]) < 0.5 * float(np.asarray(di["curve1"])[-1, 1])
+        if strong:
+            v3 = ""
+        elif formed:
+            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
+                  f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
+                  "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid. "
+                  f"The toy, built to reward copying, formed its pair within {jmax:,} steps.")
+        else:
+            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
+                  f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
+                  "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid.")
         with self.voiceover(
             "And our own transformer, trained on novels with no copying game at all? <bookmark mark='a'/> " + v1
             + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3

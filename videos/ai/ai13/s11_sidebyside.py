@@ -157,11 +157,23 @@ class SideBySide(VoiceoverScene):
         broke = [m for m in ORDER if rise[m] >= 0.5]
         mid = [m for m in ORDER if m not in held and m not in broke]
         n_held, n_mid, n_broke = (spoken_list(SPOKEN[m] for m in g_) if g_ else "" for g_ in (held, mid, broke))
-        v_held = (f"Steady past the training length, within {max(rise[m] for m in held):.2f} bits: {n_held}."
-                  if held else "")
-        v_mid = (f"Drifting up, by {min(rise[m] for m in mid):.2f} to {max(rise[m] for m in mid):.2f} bits: {n_mid}."
-                 if mid else "")
-        v_broke = (f"Broken, up by as much as {max(rise[m] for m in broke):.1f} bits: {n_broke}." if broke else "")
+        hr = max(rise[m] for m in held) if held else 0.0
+        mlo, mhi = (min(rise[m] for m in mid), max(rise[m] for m in mid)) if mid else (0.0, 0.0)
+        br = max(rise[m] for m in broke) if broke else 0.0
+        if not held:
+            v_held = ""
+        elif hr > 0.005:
+            v_held = f"Steady past the training length, within {hr:.2f} bits: {n_held}."
+        else:
+            v_held = (f"Steady past the training length, and even {-hr:.2f} bits better, with more text behind each "
+                      f"character: {n_held}.")
+        if not mid:
+            v_mid = ""
+        elif len(mid) == 1:
+            v_mid = f"Drifting up, by {mhi:.2f} bits: {n_mid}."
+        else:
+            v_mid = f"Drifting up, by {mlo:.2f} to {mhi:.2f} bits: {n_mid}."
+        v_broke = f"Broken, up by as much as {br:.1f} bits: {n_broke}." if broke else ""
         why_ = ("ALiBi's penalty means a distant key matters less and less, so new lengths look like old ones. "
                 if "alibi" in held else "")
         rope_txt = ("RoPE's slow hands point at angles they never saw in training, and its queries stop "
