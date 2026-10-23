@@ -29,7 +29,8 @@ def replay_gan(scene, S, Dd, steps, modes, plane: Plane, duration: float, counte
     dots = VGroup(*[Dot(q, radius=0.028, color=color) for q in plane.pts(np.clip(S[0], -2.95, 2.95))])
     f = ValueTracker(0.0)
     cnt = Integer(modes[0], font_size=34, color=color).move_to(counter_pos)
-    stp = Integer(steps[0], font_size=24, color=GREY_A).next_to(cnt, DOWN, buff=0.35)
+    stl = label(r"step", font_size=20, color=GREY_A).next_to(cnt, DOWN, buff=0.3)
+    stp = Integer(steps[0], font_size=24, color=GREY_A).next_to(stl, DOWN, buff=0.1)
 
     def upd(_):
         v = min(f.get_value(), len(S) - 1 - 1e-6)
@@ -44,7 +45,9 @@ def replay_gan(scene, S, Dd, steps, modes, plane: Plane, duration: float, counte
 
     holder = VGroup(dots, cnt, stp)
     holder.add_updater(upd)
-    scene.add(img, holder)
+    scene.add(img)
+    scene.bring_to_back(img)  # under the plane's frame and the data's circles
+    scene.add(holder, stl)
     scene.play(f.animate.set_value(len(S) - 1), run_time=duration, rate_func=linear)
     holder.clear_updaters()
     return img, dots, cnt, stp
@@ -181,14 +184,16 @@ class Game(VoiceoverScene):
         g2 = load("gan2d")
         ax = axes([0, 1], [-1, 4], x_length=5.0, y_length=3.4, xlabel=r"$D(G(z))$: \ how real the fake looks",
                   ylabel=r"generator's loss", xticks=[0, 0.5, 1], yticks=[0, 2, 4], center=[-3.5, -0.3, 0])
-        xs = np.linspace(0.005, 0.995, 200)
-        mm = curve(ax.ax, xs, np.log(1 - xs), GREY_A, 3)
-        ns = curve(ax.ax, xs, -np.log(xs), GAN_C, 3)
+        xm = np.linspace(0.0, 1 - np.exp(-1.0), 200)  # inside the axes: log(1 - D) >= -1
+        xn = np.linspace(np.exp(-4.0), 1.0, 200)  # -log D <= 4
+        mm = curve(ax.ax, xm, np.log(1 - xm), GREY_A, 3)
+        ns = curve(ax.ax, xn, -np.log(xn), GAN_C, 3)
         lg = legend([(GREY_A, r"minimax: \ $\log(1 - D)$"), (GAN_C, r"non-saturating: \ $-\log D$")], font_size=20)
-        lg.next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        lg.align_to(ax.ax, RIGHT).align_to(ax.ax, UP)
         hl = Rectangle(width=ax.ax.c2p(0.1, 0)[0] - ax.ax.c2p(0, 0)[0], height=3.4, stroke_width=0,
                        fill_color=C.SURPRISE, fill_opacity=0.12).move_to(ax.ax.c2p(0.05, 1.5))
-        hlt = label(r"early on: \ here", font_size=18, color=C.SURPRISE).next_to(hl, UP, buff=0.05)
+        hlt = label(r"early on: \ here", font_size=18, color=C.SURPRISE).next_to(hl, RIGHT, buff=0.08)
+        hlt.align_to(hl, DOWN).shift(UP * 0.12)
         gm = np.asarray(g2["mm_gnorm"])
         gn = np.asarray(g2["ns_gnorm"])
         rmax = float(max(gm[:, 1].max(), gn[:, 1].max()) * 1.15)
@@ -244,7 +249,6 @@ class Game(VoiceoverScene):
                      label(r"circles: \ the data's eight modes, \ $3\sigma$", font_size=18, color=DATA))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(pl, DOWN, buff=0.15)
         ml = label(r"modes covered, \ of $8$", font_size=22, color=GREY_A).move_to([1.2, 1.6, 0])
-        sl = label(r"step", font_size=20, color=GREY_A).move_to([1.2, 0.4, 0])
         fin = {k: list(g[f"{k}_final_modes"]) for k in ("mm", "ns")}
         names = {"mm": r"minimax", "ns": r"non-saturating"}
         dots_ = VGroup()
@@ -290,8 +294,7 @@ class Game(VoiceoverScene):
             " <bookmark mark='b'/> This is mode collapse: a generator that makes only a few kinds of thing. "
             "<bookmark mark='c'/> " + cmp_
         ) as vo:
-            self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(key), FadeIn(ml), FadeIn(sl))
-            vo.wait_until("a")
+            self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(key), FadeIn(ml))
             img, dots, cnt, stp = replay_gan(self, gc["frame_samples"], gc["frame_d"], gc["frame_steps"],
                                              gc["frame_modes"], pl, max(6.0, vo.until("b") + 2.0), [1.2, 1.0, 0])
             vo.wait_until("b")

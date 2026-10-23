@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import math
-
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (COMM, C_COL, D_COL, EDU, F, GPU, KEPT, LR_COL, N_COL, PAGE, PART, REMOVED, human,
-                                   load, node_box, spoken_int, stage_row, take_away)
+from videos.ai.ai18.common import (C_COL, D_COL, EDU, F, GPU, LR_COL, N_COL, PAGE, PART, REMOVED, load, stage_row,
+                                   take_away)
 
 
 class Anatomy(VoiceoverScene):
@@ -14,7 +12,6 @@ class Anatomy(VoiceoverScene):
         self.card()
         self.stages()
         self.runs()
-        self.schedule()
         self.cost()
 
     def card(self):
@@ -67,14 +64,19 @@ class Anatomy(VoiceoverScene):
                      font_size=22, color=LR_COL).move_to(DOWN * 3.05)
         src = cite(r"Team OLMo, Olmo 3 (2025); \ Hugging Face, SmolLM3 (2025)", corner=DR, font_size=17)
         with self.voiceover(
-            "A frontier pretraining run is a pipeline. It starts with the web: a crawl of billions of pages, "
+            "A frontier pretraining run is a pipeline. It starts with a crawl of billions of web pages, "
             "<bookmark mark='a'/> filtered for language and quality, deduplicated, mixed with books, code, maths and "
-            "synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining phase, a "
-            "short annealing on the best data, often called mid-training, a stage for long context, and finally the "
-            "post-training of Part 27. <bookmark mark='c'/> Here are two published runs to scale. Ai2's Olmo 3, seven "
-            "billion parameters: 5.9 trillion tokens of pretraining, then 100 billion of mid-training and 50 billion for "
-            "long context. Hugging Face's SmolLM3: three pretraining stages, each with more code and maths, then long "
-            "context. <bookmark mark='d'/> The last stages are a few percent of the tokens, chosen with the most care."
+            "synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining "
+            "phase, a short "
+            "annealing on the best data, often called mid-training, a stage for long context, and the post-training "
+            "of Part "
+            "27. <bookmark mark='c'/> Here are two published runs to scale. Ai2's Olmo 3, seven billion parameters: "
+            "5.9 "
+            "trillion tokens of pretraining, then 100 billion of mid-training and 50 billion for long context. "
+            "Hugging Face's "
+            "SmolLM3: three pretraining stages, then long context. <bookmark mark='d'/> The last stages are a few "
+            "percent of "
+            "the tokens, chosen with the most care."
         ) as vo:
             self.play(FadeIn(top.boxes[0]), FadeIn(bot.boxes.copy().set_opacity(0.15)))
             vo.wait_until("a")
@@ -117,14 +119,19 @@ class Anatomy(VoiceoverScene):
         tw = take_away(r"tokens up $2\times$ in two years; \ fewer bits; \ a new optimizer", color=C.BITS,
                        font_size=26).shift(UP * 0.2)
         with self.voiceover(
-            "Here are six open runs from the last two years, with what their reports state. <bookmark mark='a'/> "
-            "Llama 3.1 405B: 15.6 trillion tokens on 16,384 H100 GPUs, in sixteen-bit bfloat numbers, with the AdamW "
-            "optimizer of Part 11. DeepSeek-V3: 14.8 trillion tokens on 2,048 H800s, in eight-bit floating point. "
-            "<bookmark mark='b'/> Kimi K2: 15.5 trillion tokens with MuonClip, a version of the Muon optimizer. "
-            "Olmo 3, the most open of them, data included. <bookmark mark='c'/> And in 2026, NVIDIA's Nemotron 3 Super, "
-            "pretrained in four-bit numbers on 25 trillion tokens, and DeepSeek-V4-Pro, on 33 trillion tokens with "
-            "Muon. <bookmark mark='d'/> In two years the token counts doubled, the numbers shrank from sixteen bits "
-            "to eight and four, and the optimizer began to change. Each column is a chapter of this part."
+            "Here are six open runs of the last two years, as their reports state them. <bookmark mark='a'/> Llama "
+            "3.1 405B: "
+            "15.6 trillion tokens on 16,384 H100 GPUs, in sixteen-bit bfloat numbers, with AdamW. DeepSeek-V3: 14.8 "
+            "trillion "
+            "tokens on 2,048 H800s, in eight-bit floating point. <bookmark mark='b'/> Kimi K2: 15.5 trillion tokens "
+            "with "
+            "MuonClip, a version of the Muon optimizer. Olmo 3, the most open, data included. <bookmark mark='c'/> "
+            "And in "
+            "2026, NVIDIA's Nemotron 3 Super, pretrained in four-bit numbers on 25 trillion tokens, and "
+            "DeepSeek-V4-Pro, on 33 "
+            "trillion with Muon. <bookmark mark='d'/> In two years the token counts doubled, the numbers shrank from "
+            "sixteen "
+            "bits to eight and four, and the optimizer began to change."
         ) as vo:
             self.play(FadeIn(head), Create(rule), FadeIn(src), FadeIn(body[0]), FadeIn(body[1]))
             vo.wait_until("a")
@@ -135,61 +142,6 @@ class Anatomy(VoiceoverScene):
             self.play(FadeIn(body[4]), FadeIn(body[5]))
             vo.wait_until("d")
             self.play(FadeIn(tw, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def schedule(self):
-        P, D = load("published"), F.DSV3
-        t = np.asarray(P["dsv3_lr_t"]) / 1e12
-        lr = np.asarray(P["dsv3_lr"]) * 1e4
-        g = axes([0, 15], [0, 2.6], x_length=9.0, y_length=3.4, xlabel=r"tokens seen \ (trillions)",
-                 ylabel=r"learning rate \ ($\times 10^{-4}$)", xticks=[0, 5, 10, 14.8], yticks=[0, 1, 2.2],
-                 xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.0, 0.9, 0])
-        ax = g.ax
-        c0 = D["lr_const_until"] / 1e12
-        c1 = c0 + D["lr_decay_tokens"] / 1e12
-        i0, i1 = int(np.searchsorted(t, c0)), int(np.searchsorted(t, c1))
-        cvs = [curve(ax, t[:i0 + 1], lr[:i0 + 1], LR_COL, 3), curve(ax, t[i0:i1 + 1], lr[i0:i1 + 1], LR_COL, 3),
-               curve(ax, t[i1:], lr[i1:], LR_COL, 3)]
-        b = axes([0, 15], [0, 16], x_length=9.0, y_length=1.3, ylabel=r"batch \ (thousands of sequences)",
-                 yticks=[0, 15.36], yfmt=lambda v: f"{v:g}", center=[-1.0, -2.55, 0])
-        bt = np.linspace(0, 14.8, 300)
-        bs = np.where(bt < D["batch_ramp"] / 1e12, D["batch"][0] + (D["batch"][1] - D["batch"][0]) *
-                      bt / (D["batch_ramp"] / 1e12), D["batch"][1]) / 1000
-        bcv = curve(b.ax, bt, bs, GPU, 3)
-        notes = VGroup(
-            label(r"constant to $10$T", font_size=20, color=LR_COL).move_to(ax.c2p(5, 2.45)),
-            label(r"cosine decay \\ over $4.3$T", font_size=20, color=LR_COL).next_to(ax.c2p(12.2, 1.2), RIGHT, buff=0.1),
-            label(r"two final \\ steps", font_size=20, color=LR_COL).next_to(ax.c2p(14.6, 0.2), RIGHT, buff=0.15),
-        )
-        mtp = VGroup(DashedLine(ax.c2p(10, 0), ax.c2p(10, 2.4), color=C.PROB, dash_length=0.06),
-                     label(r"two-token loss \\ weight $0.3 \to 0.1$", font_size=18, color=C.PROB))
-        mtp[1].next_to(mtp[0].get_end(), LEFT, buff=0.12).shift(DOWN * 0.75)
-        ramp = label(r"ramped up over the first $0.47$T", font_size=18, color=GPU).next_to(b.ax.c2p(0.5, 15), RIGHT,
-                                                                                         buff=0.1).shift(DOWN * 0.35)
-        src = cite(r"DeepSeek-AI, DeepSeek-V3 Technical Report (2024), \ Sec.\ 4.2", corner=DR, font_size=17)
-        with self.voiceover(
-            "Inside the pretraining phase, nothing is fixed. Here is DeepSeek-V3's, as its report gives it. "
-            "<bookmark mark='a'/> The learning rate warms up over two thousand steps, then stays at 2.2 times ten to the "
-            "minus four until ten trillion tokens, <bookmark mark='b'/> then decays along a cosine to a tenth of that over "
-            "the next 4.3 trillion, <bookmark mark='c'/> and ends with two short constant steps. <bookmark mark='d'/> The "
-            "batch grows too: from 3,072 sequences of four thousand tokens to 15,360, over the first half trillion tokens. "
-            "<bookmark mark='e'/> And at ten trillion, the weight of a second loss, for predicting two tokens ahead, drops "
-            "from 0.3 to 0.1."
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(b), FadeIn(src))
-            vo.wait_until("a")
-            self.play(Create(cvs[0]), run_time=2.0, rate_func=linear)
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(Create(cvs[1]), FadeIn(notes[1]), run_time=2.0)
-            vo.wait_until("c")
-            self.play(Create(cvs[2]), FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(Create(bcv), FadeIn(ramp), run_time=1.5)
-            vo.wait_until("e")
-            self.play(Create(mtp[0]), FadeIn(mtp[1]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -225,10 +177,11 @@ class Anatomy(VoiceoverScene):
             f"{P['llama_6nd'] / 1e25:.2f} times ten to the twenty-five, just what Meta reports. <bookmark mark='b'/> "
             "DeepSeek-V3 is a mixture of experts: only 37 billion of its parameters work on each token, so it needs "
             f"{P['dsv3_6nd'] / 1e24:.1f} times ten to the twenty-four, about a tenth. <bookmark mark='c'/> Its report "
-            "also gives the bill: 2.664 million H800 GPU-hours for pretraining, plus the longer-context and post-training "
-            f"stages; at two dollars an hour, {P['dsv3_usd'] / 1e6:.3f} million dollars. <bookmark mark='d'/> Each "
-            f"trillion tokens took {D['hours_per_T'] / 1e3:.0f} thousand GPU-hours: {P['dsv3_days_per_T']:.1f} days on "
-            "2,048 GPUs. That prices the final run only: not the experiments before it, the data, or the cluster."
+            "also "
+            "gives the bill: 2.664 million H800 GPU-hours for pretraining; at two dollars an hour, "
+            f"{P['dsv3_usd'] / 1e6:.3f} million dollars for the whole run. <bookmark mark='d'/> That prices the final "
+            "run only: "
+            "not the experiments before it, the data, or the cluster."
         ) as vo:
             step(0)
             self.play(FadeIn(src))

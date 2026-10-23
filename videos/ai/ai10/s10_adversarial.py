@@ -47,7 +47,7 @@ class Adversarial(VoiceoverScene):
             "<bookmark mark='a'/> For any photograph a network classified correctly, they could find a tiny "
             "change, invisible to a person, that made it answer something else. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a "
             f"panda that GoogLeNet called a panda with {P['panda']} percent confidence. Add a faint pattern, a "
-            f"change of {P['eps']} in each pixel, the size of the smallest step of an 8-bit image, and it called "
+            f"change of {P['eps']} in each pixel, and it called "
             f"it a gibbon, with {P['gibbon']} percent. <bookmark mark='c'/> They also gave the explanation."
         ) as vo:
             home = c1.get_center()

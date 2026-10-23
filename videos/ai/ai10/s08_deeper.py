@@ -200,8 +200,8 @@ class Deeper(VoiceoverScene):
         with self.voiceover(
             "Then depth hit a wall. <bookmark mark='a'/> Kaiming He and his colleagues at Microsoft found a plain "
             "network of fifty-six layers doing worse than one of twenty, even on its own training data: not "
-            "overfitting, just harder to train. Batch normalization, from Sergey Ioffe and Szegedy that year, which "
-            "keeps each layer's inputs standardized, had helped, but not enough. <bookmark mark='b'/> Their fix: "
+            "overfitting, just harder to train. Batch normalization, from that year, had helped, but not enough. "
+            "<bookmark mark='b'/> Their fix: "
             "let each pair of layers learn only a correction F of x, added to its input. <bookmark mark='c'/> The "
             "block's derivative is the identity plus F's: a path along which the gradient always passes, however "
             "deep the stack, as Part 9 derived. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at "

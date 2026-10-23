@@ -68,7 +68,7 @@ class Dedup(VoiceoverScene):
         ten = stat(r"$10\times$", r"less memorized training text emitted, \ after deduplication \ (Lee et al., 2022)",
                    color=DUP, font_size=52, cap_size=20).move_to([0, -2.1, 0])
         with self.voiceover(
-            "The web repeats itself. Mirrors, templates, the same product page with another price. "
+            "The web repeats itself. "
             f"<bookmark mark='a'/> These two pages from our sample come from one site: "
             f"{100 * ex['jaccard']:.0f} percent of their phrases are the same. <bookmark mark='b'/> Duplicates waste "
             "compute, and they get memorized: Lee and colleagues found in 2022 that models trained on deduplicated "
@@ -136,14 +136,15 @@ class Dedup(VoiceoverScene):
         vmin = label(r"smallest over $A \cup B$: \ $12$, \ in both \ $\Rightarrow$ \ $\min_A h = \min_B h$",
                      font_size=20, color=YELLOW).next_to(venn, RIGHT, buff=0.35).shift(DOWN * 0.1)
         with self.voiceover(
-            "The shortcut is a beautiful fact from 1997, found by Andrei Broder at AltaVista to spot duplicate web "
-            "pages. Give every shingle a random number, with a random hash function. <bookmark mark='a'/> "
+            "The shortcut is a beautiful fact, found by Andrei Broder at AltaVista in 1997. Give every shingle a "
+            "random number, with a random hash function. <bookmark mark='a'/> "
             "Over the union of the two sets, the shingle with the smallest hash is equally likely to be any of "
             "them. <bookmark mark='b'/> The two documents' minimum hashes agree exactly when that shingle is in "
             "both, in the intersection. <bookmark mark='c'/> So the chance that they agree is the size of the "
             "intersection over the size of the union: the Jaccard similarity itself. <bookmark mark='d'/> Keep 112 "
             "such minimums per document, as FineWeb does: a signature, and the share of positions where two signatures "
-            f"agree estimates the similarity. We checked it on {spoken_int(len(s))} pairs of our pages, one of each pair "
+            f"agree estimates the similarity. We checked it on {spoken_int(len(s))} pairs of our pages, one of each "
+            "pair "
             f"with some words replaced: <bookmark mark='e'/> the estimate sits on the diagonal, off by "
             f"{D['agree_err']:.3f} on average."
         ) as vo:
@@ -328,7 +329,7 @@ class Dedup(VoiceoverScene):
         with self.voiceover(
             "What did we find? " + found + " <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are a "
             "clearer test. " + books +
-            " <bookmark mark='b'/> At the scale of the whole web the numbers are dramatic. For Olmo 3, removing exact "
+            " <bookmark mark='b'/> At web scale, for Olmo 3, removing exact "
             f"copies cut the pool by {O['exact']} percent, MinHash removed another {O['fuzzy']} percent, and repeated "
             f"substrings {O['substring']} percent of the remaining bytes: 38.7 billion documents became 9.7 billion. "
             "<bookmark mark='c'/> And one surprise. FineWeb first deduplicated all 96 crawls against each other, and "

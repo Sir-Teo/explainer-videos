@@ -64,8 +64,7 @@ class Recurrence(VoiceoverScene):
             "and at each step mixes the old state with the new input through the same two weight matrices, W and "
             "U, and a squashing tanh. <bookmark mark='b'/> Unrolled in time, it's a very deep network with one "
             "layer per step, all of them sharing weights. <bookmark mark='c'/> Michael Jordan in 1986 and Jeffrey "
-            "Elman in 1990 made the idea popular in cognitive science: Elman's networks found word boundaries and "
-            "grammatical categories just by predicting the next item."
+            "Elman in 1990 made the idea popular in cognitive science."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

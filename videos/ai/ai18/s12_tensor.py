@@ -60,11 +60,15 @@ class TensorParallel(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, 0.4, 0])
         hist = cite(r"Shoeybi et al., Megatron-LM (NVIDIA, 2019)", corner=DR, font_size=17)
         with self.voiceover(
-            "When a single layer is too big or too slow for one GPU, split the layer itself. NVIDIA's Megatron-LM showed "
-            "how in 2019. Take the MLP: Z equals X times A, a nonlinearity, then times B. <bookmark mark='a'/> Split A by "
+            "When a single layer is too big or too slow for one GPU, split the layer itself. NVIDIA's Megatron-LM "
+            "showed "
+            "how in 2019. Take the MLP: Z equals X times A, a nonlinearity, then times B. <bookmark mark='a'/> Split "
+            "A by "
             "columns, half on each GPU: each computes its half of Y from the whole input, with no communication. "
-            "<bookmark mark='b'/> The nonlinearity acts on each column alone, so it stays local too. <bookmark mark='c'/> "
-            "Now split B by rows. Each GPU multiplies its half of Y by its half of B and gets a full-size partial result; "
+            "<bookmark mark='b'/> The nonlinearity acts on each column alone, so it stays local too. <bookmark "
+            "mark='c'/> "
+            "Now split B by rows. Each GPU multiplies its half of Y by its half of B and gets a full-size partial "
+            "result; "
             "the answer is their sum, one all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going "
             "forward, called g, and one going backward, f, for the gradient of the input both halves used."
         ) as vo:
@@ -108,9 +112,12 @@ class TensorParallel(VoiceoverScene):
                    corner=DR, font_size=17)
         with self.voiceover(
             "Attention splits even more naturally: its heads are independent. <bookmark mark='a'/> Give each GPU the "
-            "queries, keys and values of half the heads; each computes its heads alone, and the output projection, split "
-            "by rows, ends in one all-reduce. <bookmark mark='b'/> So a transformer layer costs two all-reduces forward and "
-            "two backward, each of a full activation: batch times sequence times width. <bookmark mark='c'/> That happens "
+            "queries, keys and values of half the heads; each computes its heads alone, and the output projection, "
+            "split "
+            "by rows, ends in one all-reduce. <bookmark mark='b'/> So a transformer layer costs two all-reduces "
+            "forward and "
+            "two backward, each of a full activation: batch times sequence times width. <bookmark mark='c'/> That "
+            "happens "
             "in every layer for every micro-batch, so tensor parallelism lives where bandwidth is highest, inside one "
             "machine's NVLink domain; Llama 3 used eight-way tensor parallelism, the innermost of its four dimensions. "
             "<bookmark mark='d'/> A refinement from 2022, sequence parallelism, turns each all-reduce into a "

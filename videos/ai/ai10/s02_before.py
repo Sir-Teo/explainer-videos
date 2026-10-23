@@ -65,8 +65,8 @@ class Before(VoiceoverScene):
             "bright stripe excites it, light beside the stripe holds it back. <bookmark mark='b'/> A complex cell "
             "responds to the same angle anywhere in a larger patch, as if it collected several simple cells and "
             "fired when any of them did. <bookmark mark='c'/> Detect a feature, then pool over position, and do it "
-            "again, layer upon layer. That picture won them a Nobel Prize in 1981, and it is, almost exactly, the "
-            "design of the networks in this part."
+            "again, layer upon layer. That picture won them a Nobel Prize in 1981, and it is almost exactly the "
+            "design of this part's networks."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(tag))
             vo.wait_until("a")
@@ -204,9 +204,8 @@ class Before(VoiceoverScene):
         cite_ = cite(r"Russakovsky et al.\ (2015)", corner=DR)
         with self.voiceover(
             "By 2010 a good vision system was a pipeline. <bookmark mark='a'/> Pixels went in; hand-designed "
-            "features came out, SIFT and its relatives, computed at thousands of places; they were coded, pooled "
-            "into one long vector per image, and handed to a linear classifier, usually a support vector machine "
-            "from Part 6. <bookmark mark='b'/> Only the last box learned from the data. Everything before it was "
+            "features like SIFT came out, at thousands of places; they were pooled into one long vector and handed "
+            "to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> Only the last box learned from the data. Everything before it was "
             "designed by people, over decades. <bookmark mark='c'/> Systems like this won the first two ImageNet "
             "contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time."
         ) as vo:
@@ -253,8 +252,8 @@ class Before(VoiceoverScene):
         else:
             photo = (f"On the photographs it barely helps: {pct(e['cifar_pixels'], 0)} percent wrong on pixels, "
                      f"{pct(cw, 0)} on these features.")
-        verdict = ("the gap between our digits and photographs is the gap the pipelines spent the 2000s on, with "
-                   "far richer features than ours, and with far more images.")
+        verdict = ("the gap between digits and photographs is what the pipelines spent the 2000s closing, with "
+                   "richer features and far more images.")
         nxt = label(r"what if the features were learned too?", font_size=32, color=CNN).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "We can measure what the features buy. <bookmark mark='a'/> Train the same linear classifier twice, "

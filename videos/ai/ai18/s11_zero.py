@@ -58,8 +58,10 @@ class ZeRO(VoiceoverScene):
             "Rajbhandari and colleagues at Microsoft proposed ZeRO, the zero-redundancy optimizer: split them. "
             "<bookmark mark='b'/> Stage one: each GPU keeps the optimizer state for a quarter of the parameters, and "
             "updates only those. <bookmark mark='c'/> Stage two: only the gradients of its quarter, too. "
-            "<bookmark mark='d'/> Stage three: only its quarter of the weights, fetching the rest from its neighbours just "
-            "before a layer needs them, and dropping them after. PyTorch's stage three is called FSDP, fully sharded data "
+            "<bookmark mark='d'/> Stage three: only its quarter of the weights, fetching the rest from its neighbours "
+            "just "
+            "before a layer needs them, and dropping them after. PyTorch's stage three is called FSDP, fully sharded "
+            "data "
             "parallel."
         ) as vo:
             self.play(FadeIn(grids), FadeIn(stage_t[0]))
@@ -143,13 +145,17 @@ class ZeRO(VoiceoverScene):
                       run_time=0.5)
 
         with self.voiceover(
-            "What does sharding cost in communication? Stages one and two cost nothing extra: the all-reduce was already "
-            "a reduce-scatter and an all-gather, so each GPU reduce-scatters the gradients, updates its quarter, and "
-            "all-gathers the new weights. <bookmark mark='a'/> Stage three keeps only a quarter of each layer's weights: "
-            "before the layer runs forward, the GPUs all-gather it, and afterwards they drop it. <bookmark mark='b'/> The "
+            "What does sharding cost in communication? Stages one and two cost nothing extra: the all-reduce already "
+            "was "
+            "a reduce-scatter and an all-gather, with each GPU's update in between. <bookmark mark='a'/> Stage three "
+            "keeps only a quarter of each layer's weights: "
+            "before the layer runs forward, the GPUs all-gather it, and afterwards they drop it. <bookmark mark='b'/> "
+            "The "
             "backward pass needs the weights again: gather once more. <bookmark mark='c'/> And the gradients are "
-            "reduce-scattered, so each GPU keeps only its quarter. <bookmark mark='d'/> Three passes over the parameters "
-            "instead of two: half as much traffic again, in exchange for memory divided by N. Meta trained Llama 3 with "
+            "reduce-scattered, so each GPU keeps only its quarter. <bookmark mark='d'/> Three passes over the "
+            "parameters "
+            "instead of two: half as much traffic again, in exchange for memory divided by N. Meta trained Llama 3 "
+            "with "
             "FSDP across its data-parallel groups; DeepSeek-V3 used stage one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lab), FadeIn(steps_[3]))

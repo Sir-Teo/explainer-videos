@@ -56,7 +56,7 @@ class Web(VoiceoverScene):
             "files hold the raw responses, HTML and all; WET files hold the text Common Crawl extracted itself. "
             "<bookmark mark='b'/> For this part we took three WET files of the September 2026 crawl, three slices of "
             f"each: {spoken_int(W['n_pages'])} pages, {W['text_bytes'] / 1e6:.0f} megabytes of text, in {W['n_langs']} "
-            "languages. Everything in the next four chapters happens to these pages."
+            "languages."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(tiles, lag_ratio=0.002, run_time=1.5), FadeIn(tcap))
             vo.wait_until("a")
@@ -112,7 +112,7 @@ class Web(VoiceoverScene):
             f"keeps {spoken_int(ex['text_bytes'])} bytes of it: the article, without the menu around it. "
             f"<bookmark mark='c'/> Across all {W['warc_pages']} HTML pages in our slices, {W['html_bytes'] / 1e6:.0f} "
             f"megabytes of HTML became {W['extracted_bytes'] / 1e6:.1f} megabytes of text: about "
-            f"{100 * W['extracted_share']:.0f} percent. <bookmark mark='d'/> This step matters more than it sounds. "
+            f"{100 * W['extracted_share']:.0f} percent. <bookmark mark='d'/> It matters: "
             "FineWeb's authors trained small models on the same crawl extracted two ways, and the Trafilatura text "
             "beat Common Crawl's own WET text."
         ) as vo:
@@ -207,8 +207,7 @@ class Web(VoiceoverScene):
             f"over {W['n_langs'] - 1} other languages. <bookmark mark='d'/> "
             "FineWeb keeps a page as English only if the identifier is at least 65 percent sure. That drops "
             f"{W['english_below']} more; and we drop pages under fifty words. <bookmark mark='e'/> "
-            f"{spoken_int(W['english'])} English pages go on to the next step. Multilingual models, like Qwen3 with its "
-            "119 languages, run such a pipeline for each language."
+            f"{spoken_int(W['english'])} English pages go on to the next step."
         ) as vo:
             self.play(FadeIn(bl), FadeIn(funnel[0]), FadeIn(src))
             vo.wait_until("a")

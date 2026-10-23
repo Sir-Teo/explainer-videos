@@ -297,8 +297,7 @@ class Seq2Seq(VoiceoverScene):
         cite_ = cite(r"Wu et al.\ (2016); \ Le \& Schuster, Google Research blog (2016)", corner=DR)
         with self.voiceover(
             "Two years later the idea was in production. <bookmark mark='a'/> Google's neural machine "
-            "translation system of 2016 stacked eight layers of LSTMs on each side, with residual connections "
-            "between them, and in side-by-side ratings by people it cut translation errors by "
+            "translation system of 2016 stacked eight layers of LSTMs on each side, and in side-by-side ratings by people it cut translation errors by "
             f"{GNMT['error_cut']} percent on average against Google's own phrase-based system. "
             "<bookmark mark='b'/> In September 2016 it took over Google Translate's Chinese to English, about "
             "eighteen million translations a day. "

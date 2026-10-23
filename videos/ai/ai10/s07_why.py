@@ -54,7 +54,7 @@ class WhyItWon(VoiceoverScene):
         with self.voiceover(
             "The first difference inside AlexNet is small: the activation. <bookmark mark='a'/> The networks of "
             "the 1990s squashed each unit with a tanh or a sigmoid. AlexNet used the rectified linear unit, zero "
-            "for negative inputs and the input itself otherwise, made popular by Vinod Nair and Hinton in 2010. "
+            "for negative inputs and the input itself otherwise. "
             "<bookmark mark='b'/> The reason is in the slopes, which backpropagation multiplies the gradient by at "
             "every layer. The sigmoid's is at most a quarter, and both it and tanh flatten to nothing once a unit "
             "is pushed far from zero: it saturates and stops learning. The ReLU's slope is one wherever it is on. "

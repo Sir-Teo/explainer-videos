@@ -32,7 +32,7 @@ class LSTM(VoiceoverScene):
         hc = history_card(1997, r"Sepp Hochreiter \& J\"urgen Schmidhuber", r"\textit{Long Short-Term Memory}, \ "
                           r"Neural Computation", width=5.4, color=HIST).to_corner(UL, buff=0.4)
         unit = Circle(radius=0.6, stroke_color=CELLC, stroke_width=3, fill_color=CELLC, fill_opacity=0.15)
-        unit.move_to([0, -0.4, 0])
+        unit.move_to([-2.8, -0.2, 0])
         ul = MathTex(r"c", font_size=40, color=CELLC).move_to(unit)
         loop = CurvedArrow(unit.get_top() + LEFT * 0.25, unit.get_top() + RIGHT * 0.25, angle=-4.2, color=CELLC,
                            stroke_width=3)
@@ -43,9 +43,9 @@ class LSTM(VoiceoverScene):
                        label(r"an output gate decides what is read", font_size=24, color=GATEC),
                        label(r"a forget gate decides what is erased \ (Gers, Schmidhuber \& Cummins, 2000)",
                              font_size=24, color=GATEC)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        gates.to_corner(UR, buff=0.4).shift(DOWN * 1.6)
-        if gates.width > 6.4:
-            gates.width = 6.4
+        if gates.width > 6.0:
+            gates.width = 6.0
+        gates.to_edge(RIGHT, buff=0.4).set_y(-0.6)
         with self.voiceover(
             "The cure came from Hochreiter himself, with Jurgen Schmidhuber, in 1997. <bookmark mark='a'/> If "
             "every step multiplies the gradient by something less than one, build a unit where it multiplies by "
@@ -190,10 +190,9 @@ class LSTM(VoiceoverScene):
             "The reset gate r decides how much of the past the candidate may look at. <bookmark mark='b'/> Fewer "
             "parts, and in comparisons that year by Junyoung Chung and colleagues, about as good."
         ) as vo:
+            self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(card, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeIn(hc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -230,8 +229,7 @@ class LSTM(VoiceoverScene):
             "a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained a plain "
             "recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of "
             f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps. The gated cells start with their gates set to "
-            "remember, for times spread up to the sequence's length: the chrono initialization of Corentin Tallec "
-            "and Yann Ollivier, 2018."
+            "remember: the chrono initialization of Corentin Tallec and Yann Ollivier."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
@@ -322,10 +320,9 @@ class LSTM(VoiceoverScene):
         with self.voiceover(
             f"{first} <bookmark mark='a'/> {v} <bookmark mark='b'/> {jump}"
         ) as vo:
-            self.play(Create(base), FadeIn(bt), FadeIn(tag))
+            self.play(Create(base), FadeIn(bt), FadeIn(tag), Create(ax), Create(chance), FadeIn(cl), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.05))
             vo.wait_until("a")
-            self.play(Create(ax), Create(chance), FadeIn(cl), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(b) for b in bands], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
@@ -360,7 +357,11 @@ class LSTM(VoiceoverScene):
         tag = note(rf"computed: \ $T = {Tbig}$, \ seed $0$").to_corner(DR, buff=0.2)
         gap_r = logs_r[-1][-1] - logs_r[-1][0]
         gap_l = logs_l[-1][-1] - logs_l[-1][0]
-        if gap_l < gap_r - 1:
+        if gap_l < 0.5 and gap_r > 1.5:
+            v = (f"For the plain network, the gradient at the first step, the only one that matters, is about ten "
+                 f"to the {gap_r:.0f} times weaker than at the last. <bookmark mark='b'/> For the LSTM the first "
+                 "step gets about as much as the last: the belt carries the signal back.")
+        elif gap_l < gap_r - 1:
             v = (f"For the plain network, the gradient at the first step, the only one that matters, is about ten "
                  f"to the {gap_r:.0f} times weaker than at the last. <bookmark mark='b'/> For the LSTM the "
                  f"difference is ten to the {gap_l:.0f}: the belt carries the signal back.")
