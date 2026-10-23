@@ -86,11 +86,13 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. Writing out steps lets a model of fixed depth compute for longer: each token buys "
             "another pass through the network. Sampling many chains and voting amplifies whatever answer the model "
-            "already prefers; a checker, or a grader of steps, does better. Reinforcement learning from a checker, "
+            "already prefers; a checker does better, and a learned grader helps only as far as it can't be fooled. "
+            "Reinforcement learning from a checker, "
             "with GRPO's group baseline and its clip, moves probability onto answers that check out, and spends the "
             "model's entropy to do it. Left alone, it learns to think longer, sometimes too long, until thought is "
             "given a price. It sharpens what the model could already do, and may, with long enough training, widen "
-            "it. And at answer time, more computation buys more right answers, in parallel or in sequence."
+            "it. And at answer time, more computation buys more right answers, in parallel or in sequence, as long as "
+            "whatever chooses among them can be trusted."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),

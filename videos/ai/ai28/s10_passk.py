@@ -184,10 +184,16 @@ class PassK(VoiceoverScene):
         dead = float(np.mean([((np.asarray(o[f"{v}_p_right"]) < 1e-3) & (pb > 1e-2)).sum(1).mean() for v in show]))
         if lost:
             cross = [int(ks[int(np.argmax(means[v] < base))]) for v in lost]
+        if lost and dead >= 1:
             said = (f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, "
                     f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, "
                     f"the untrained model is ahead. On about {dead:.0f} of the 200 questions, RL drained the right "
                     "answer's probability below one in a thousand, onto wrong answers it grew confident in.")
+        elif lost:
+            said = (f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, "
+                    f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, "
+                    "the untrained model is ahead. No question became impossible; on the hardest ones, RL made a rare "
+                    "right answer rarer, so even a thousand tries find it less often.")
         else:
             said = (f"And at {k_last} tries the curves meet: {100 * base[-1]:.1f} percent before RL, and between "
                     f"{100 * min(m[-1] for m in means.values()):.1f} and {100 * max(m[-1] for m in means.values()):.1f} "
