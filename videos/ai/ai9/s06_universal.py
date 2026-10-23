@@ -134,7 +134,7 @@ class Universal(VoiceoverScene):
         # the chords: the target joined dot to dot at n = 8 evenly spaced hinges (the picture behind the bound)
         xs_, ys_ = np.asarray(h["xs"]), np.asarray(h["y"])
         ax3 = Axes(x_range=[-3, 3, 1], y_range=[-2.2, 2.2, 1], x_length=6.4, y_length=2.6, tips=False,
-                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.2, -1.95, 0])
+                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.2, -1.55, 0])
         kn8 = np.linspace(-3, 3, 10)
         fk = np.interp(kn8, xs_, ys_)
         tgt3 = DashedVMobject(curve(ax3, xs_, ys_, WHITE, 2.5), num_dashes=60)

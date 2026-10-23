@@ -174,10 +174,10 @@ class Outro(VoiceoverScene):
         img = g.uniform(0, 1, (n, n))
         grid = VGroup(*[Square(s, stroke_width=0.8, stroke_color=GREY_D, fill_color=interpolate_color(
             ManimColor("#141A24"), ManimColor(NEURON), float(img[i, j])), fill_opacity=1)
-            .move_to([-4.6 + (j - n / 2 + 0.5) * s, (n / 2 - 0.5 - i) * s - 0.3, 0]) for i in range(n) for j in range(n)])
+            .move_to([-5.0 + (j - n / 2 + 0.5) * s, (n / 2 - 0.5 - i) * s - 0.3, 0]) for i in range(n) for j in range(n)])
         m = n - 2
         outg = VGroup(*[Square(s, stroke_width=0.8, stroke_color=GREY_D, fill_color="#141A24", fill_opacity=1)
-                        .move_to([0.2 + (j - m / 2 + 0.5) * s, (m / 2 - 0.5 - i) * s - 0.3, 0]) for i in range(m) for j in range(m)])
+                        .move_to([-0.6 + (j - m / 2 + 0.5) * s, (m / 2 - 0.5 - i) * s - 0.3, 0]) for i in range(m) for j in range(m)])
         win = Square(3 * s, stroke_color=C.BITS, stroke_width=4).move_to(grid[0].get_center() + (RIGHT + DOWN) * s)
         k = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]) / 4.0
         vals = np.array([[(img[i:i + 3, j:j + 3] * k).sum() for j in range(m)] for i in range(m)])
@@ -187,7 +187,9 @@ class Outro(VoiceoverScene):
                        label(r"2012: \ AlexNet and the ImageNet moment", font_size=24, color=GREY_A),
                        label(r"recurrent networks, \ LSTMs, \ the first attention", font_size=24, color=GREY_A),
                        label(r"a character LSTM on our scoreboard", font_size=24, color=C.NEURAL))
-        items.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.6, -0.3, 0])
+        items.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(outg, RIGHT, buff=0.6)
+        if items.get_right()[0] > 6.9:
+            items.scale((6.9 - items.get_left()[0]) / items.width, about_edge=LEFT)
         with self.voiceover(
             "Next time: seeing and remembering. A network that slides one small filter over an image, sharing its "
             "weights everywhere; 2012, when one of them won ImageNet by a wide margin; networks with loops that "

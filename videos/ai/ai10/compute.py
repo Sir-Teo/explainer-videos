@@ -745,8 +745,8 @@ def compute_datasize():
                 torch.manual_seed(seed)
                 model = nets.LeNet5()
                 tag = f"datasize_{key}"
-                st = train_mnist(model, seed, 0, tag, X[order[:n]], Y[order[:n]], None, None, steps=DATA_STEPS,
-                                 augment=aug)
+                train_mnist(model, seed, 0, tag, X[order[:n]], Y[order[:n]], None, None, steps=DATA_STEPS,
+                            augment=aug)
                 (MODELS / f"{tag}.ckpt").unlink(missing_ok=True)
                 part[key] = dict(test_error=1.0 - accuracy(model, Xte, Yte), train_error=1.0 - accuracy(
                     model, X[order[:n]], Y[order[:n]]))
@@ -1296,8 +1296,9 @@ RHOS = (0.8, 1.0, 1.25, 2.0)
 
 
 def compute_rnn_grad():
-    n, n_in, T, K, draws = 100, 10, 160, 100, 20
-    out = dict(rhos=list(RHOS), K=K, n=n)
+    n, n_in, T, K, draws = 64, 8, 160, 100, 12
+    ks = list(range(0, K + 1, 2))
+    out = dict(rhos=list(RHOS), K=K, n=n, ks=ks, draws=draws)
     for kind in ("tanh", "linear"):
         med, lo, hi, bound = [], [], [], []
         for rho in RHOS:
@@ -1319,16 +1320,18 @@ def compute_rnn_grad():
                 for k in range(1, K + 1):
                     hk = hs[T - k]
                     J = (1 - hk ** 2)[:, None] * W if kind == "tanh" else W
-                    P = P @ J
-                    row.append(math.log10(max(np.linalg.norm(P, 2), 1e-300)))
+                    P = P @ J  # d h_T / d h_{T-k}: the Jacobians of the last k steps, multiplied
+                    if k % 2 == 0:
+                        row.append(math.log10(max(np.linalg.norm(P, 2), 1e-300)))
                 logs.append(row)
-                bounds.append([k * math.log10(smax) for k in range(K + 1)])
+                bounds.append([k * math.log10(smax) for k in ks])
             logs = np.asarray(logs)
             med.append(np.median(logs, 0))
             lo.append(np.quantile(logs, 0.1, 0))
             hi.append(np.quantile(logs, 0.9, 0))
             bound.append(np.median(np.asarray(bounds), 0))
-        out[kind] = dict(median=np.asarray(med), lo=np.asarray(lo), hi=np.asarray(hi), bound=np.asarray(bound))
+        out.update({f"{kind}_median": np.asarray(med), f"{kind}_lo": np.asarray(lo), f"{kind}_hi": np.asarray(hi),
+                    f"{kind}_bound": np.asarray(bound)})
     # a one-unit RNN, h_t = tanh(w h_{t-1} + b) from h_0 = 0.5 for 50 steps, loss (h_50 - 0.7)^2: the cliff
     # (after Pascanu, Mikolov & Bengio 2013), and gradient descent from one point near it, with and without clipping
 
@@ -1363,10 +1366,9 @@ def compute_rnn_grad():
     start, lr = (2.4, -0.4), 0.5
     p_raw, n_raw = descend(*start, lr, 40)
     p_clip, n_clip = descend(*start, lr, 40, clip=1.0)
-    out["cliff"] = dict(ws=ws, bs=bs, loss=L, grad=np.hypot(GW, GB), start=list(start), lr=lr, clip=1.0,
-                        path_raw=p_raw, path_clip=p_clip, norm_raw=n_raw, norm_clip=n_clip,
-                        loss_raw=[float(run(w, b)[0]) for w, b in p_raw], loss_clip=[float(run(w, b)[0])
-                                                                                    for w, b in p_clip])
+    out.update(cliff_ws=ws, cliff_bs=bs, cliff_loss=L, cliff_grad=np.hypot(GW, GB), cliff_start=list(start),
+               cliff_lr=lr, cliff_clip=1.0, path_raw=p_raw, path_clip=p_clip, norm_raw=n_raw, norm_clip=n_clip,
+               loss_raw=[float(run(w, b)[0]) for w, b in p_raw], loss_clip=[float(run(w, b)[0]) for w, b in p_clip])
     return out
 
 
@@ -1633,7 +1635,7 @@ def compute_charlstm():
     # samples, and greedy against beam search from the prompt
     samples = [[p, lstm_sample(model, enc, chars, p, 300, sd)] for sd, p in
                ((1, LSTM_PROMPT), (2, "It was the best of times, "), (3, "The telephone rang. "),
-                (4, '"I don\'t know," he said. ')]]
+                (4, '"I don\'t know," he said. '))]
     cool = lstm_sample(model, enc, chars, LSTM_PROMPT, 300, 1, temperature=0.6)
     greedy = lstm_sample(model, enc, chars, LSTM_PROMPT, 120, 1, temperature=1e-4)
     beam, beam_b = beam_lm(model, enc, chars, LSTM_PROMPT, 120, 8)
@@ -1809,15 +1811,19 @@ def compute_scan():
         return min(ts), r
 
     rows = []
-    for e in range(6, 17, 2):
-        T, d = 2 ** e, 256
-        g = rng(e)
-        a, b = g.uniform(0.9, 1.0, (T, d)), g.normal(0, 1, (T, d))
-        ts, hs = best(lambda: sequential(a, b))
-        tp, (hp, rounds) = best(lambda: parallel(a, b))
-        rows.append(dict(T=T, d=d, seq=ts, par=tp, rounds=rounds, err=float(np.abs(hs - hp).max()),
-                         work_seq=T, work_par=sum(T - 2 ** k for k in range(rounds))))
-        print(f"    T={T}: sequential {ts * 1e3:.1f} ms, scan {tp * 1e3:.1f} ms in {rounds} rounds", flush=True)
+    for d in (8, 256):
+        for e in range(6, 17, 2):
+            T = 2 ** e
+            if d * T > 2 ** 22:
+                continue
+            g = rng(e)
+            a, b = g.uniform(0.9, 1.0, (T, d)), g.normal(0, 1, (T, d))
+            ts, hs = best(lambda: sequential(a, b))
+            tp, (hp, rounds) = best(lambda: parallel(a, b))
+            rows.append(dict(T=T, d=d, seq=ts, par=tp, rounds=rounds, err=float(np.abs(hs - hp).max()),
+                             work_seq=T, work_par=sum(T - 2 ** k for k in range(rounds))))
+            print(f"    d={d} T={T}: sequential {ts * 1e3:.1f} ms, scan {tp * 1e3:.1f} ms in {rounds} rounds",
+                  flush=True)
     return dict(rows=rows)
 
 
@@ -1857,8 +1863,8 @@ def compute_teaser():
     paths["adam"] = path
     xs, ys = np.linspace(-5, 5, 61), np.linspace(-2, 2, 41)
     X, Y = np.meshgrid(xs, ys)
-    return dict(xs=xs, ys=ys, Z=f(X, Y), paths={k: np.asarray(v) for k, v in paths.items()},
-                final={k: float(f(*np.asarray(v)[-1])) for k, v in paths.items()})
+    return dict(xs=xs, ys=ys, Z=f(X, Y), path_gd=np.asarray(paths["gd"]), path_momentum=np.asarray(paths["momentum"]),
+                path_adam=np.asarray(paths["adam"]), final={k: float(f(*np.asarray(v)[-1])) for k, v in paths.items()})
 
 
 ITEMS = {

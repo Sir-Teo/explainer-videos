@@ -86,7 +86,10 @@ class NeuralLM(VoiceoverScene):
         keep_in_frame(notes)
         cite_ = cite(r"Y.~Bengio, R.~Ducharme, P.~Vincent \& C.~Jauvin, \textit{A Neural Probabilistic Language Model} (2003)",
                      corner=DR)
-        tag = note(r"schematic: \ a few of the units and wires").to_corner(UL, buff=0.25)
+        tag = note(r"schematic: \ a few of the units and wires").to_corner(UL, buff=0.25).shift(DOWN * 0.35)
+        hc = history_card(2003, r"Yoshua Bengio, R\'ejean Ducharme, Pascal Vincent \& Christian Jauvin",
+                          r"\textit{A Neural Probabilistic Language Model}: \ the first neural language model, \ for words",
+                          width=6.4, color=C.HUMAN).move_to([2.6, 1.4, 0])
         with self.voiceover(
             "Now let's use a network for the task that runs through this whole series: guess the next character. In "
             "2003 Yoshua Bengio, Rejean Ducharme, Pascal Vincent and Christian Jauvin built the first neural language "
@@ -96,8 +99,11 @@ class NeuralLM(VoiceoverScene):
             "<bookmark mark='c'/> And out comes a score for every possible next character, turned into "
             "probabilities by Part 1's softmax. Every number in it is learned together, by backpropagation."
         ) as vo:
-            self.play(FadeIn(boxes), FadeIn(chars), FadeIn(cite_), FadeIn(tag))
+            self.play(FadeIn(hc, shift=UP * 0.15), FadeIn(cite_))
+            self.wait(4.0)
+            self.play(FadeIn(boxes), FadeIn(chars), FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(hc))
             self.play(LaggedStart(*[TransformFromCopy(chars[i], vecs[i]) for i in range(n)], lag_ratio=0.05),
                       FadeIn(notes[0]), run_time=1.6)
             vo.wait_until("b")
@@ -155,13 +161,17 @@ class NeuralLM(VoiceoverScene):
                    color=GREY_A).next_to(panel_.get_corner(UL), DR, buff=0.12)
 
         def sample_text(s):
-            txt = " ".join(s.split())[:118]
-            m = VGroup(data_text(prompt.strip(), font="DejaVu Serif", font_size=19, color=GREY_B),
-                       data_text(txt, font="DejaVu Serif", font_size=19, color=WHITE))
-            m.arrange(RIGHT, buff=0.12, aligned_edge=DOWN)
+            txt = " ".join(s.split())[:112]
+            cut = txt.rfind(" ", 0, 56)
+            cut = cut if cut > 30 else 56
+            l1 = VGroup(data_text(prompt.strip(), font="DejaVu Serif", font_size=24, color=GREY_B),
+                        data_text(txt[:cut], font="DejaVu Serif", font_size=24, color=WHITE))
+            l1.arrange(RIGHT, buff=0.14, aligned_edge=DOWN)
+            m = VGroup(l1, data_text(txt[cut:].strip() or " ", font="DejaVu Serif", font_size=24, color=WHITE))
+            m.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
             if m.width > 12.4:
                 m.scale_to_fit_width(12.4)
-            return m.move_to(panel_.get_center() + DOWN * 0.18)
+            return m.move_to(panel_.get_center() + DOWN * 0.15)
 
         p1 = float(next(r["bits"] for r in board_rows()[0] if r["key"] == "best"))  # Part 1's best counting model
         if nn < kn:
@@ -262,16 +272,15 @@ class NeuralLM(VoiceoverScene):
         xy = P
 
         def kind(ch):
-            return ("vowel" if ch in "aeiouAEIOU" and ch.islower() else "consonant" if ch.isalpha() and ch.islower() else
-                    "capital" if ch.isalpha() else "digit" if ch.isdigit() else "punct")
+            return ("lower" if ch.isalpha() and ch.islower() else "capital" if ch.isalpha() else
+                    "digit" if ch.isdigit() else "punct")
 
-        cols = dict(vowel=C.BITS, consonant=C.TRUE_P, capital=C.MODEL_Q, digit=C.INTERVAL, punct=GREY_B)
+        cols = dict(lower=C.TRUE_P, capital=C.MODEL_Q, digit=C.INTERVAL, punct=GREY_B)
         pts = VGroup()
         for (x, y), ch in zip(xy, chars):
-            col = C.BITS if ch in "aeiouAEIOU" else cols[kind(ch)]
-            pts.add(data_text("␣" if ch == " " else ch, font=MONO, font_size=24, color=col).move_to([x, y - 0.1, 0]))
+            pts.add(data_text("␣" if ch == " " else ch, font=MONO, font_size=24, color=cols[kind(ch)]).move_to([x, y - 0.1, 0]))
         halos = VGroup()
-        for group, col in (({"vowel", "consonant"}, C.TRUE_P), ({"capital"}, C.MODEL_Q), ({"digit"}, C.INTERVAL), ({"punct"}, GREY_B)):
+        for group, col in (({"lower"}, C.TRUE_P), ({"capital"}, C.MODEL_Q), ({"digit"}, C.INTERVAL), ({"punct"}, GREY_B)):
             Q = np.array([[x, y - 0.1] for (x, y), ch in zip(xy, chars) if kind(ch) in group])
             if len(Q) < 2:
                 continue
@@ -280,14 +289,15 @@ class NeuralLM(VoiceoverScene):
                               stroke_opacity=0.5, fill_color=col, fill_opacity=0.07).move_to([c[0], c[1], 0]))
         head = label(r"The output layer's character vectors, \ seen along their two main directions", font_size=30).to_edge(UP, buff=0.35)
         nudge = note(r"positions nudged apart a little, \ so every character can be read").next_to(head, DOWN, buff=0.1)
-        key = VGroup(label(r"vowels", font_size=24, color=C.BITS), label(r"consonants", font_size=24, color=C.TRUE_P),
+        key = VGroup(label(r"lowercase letters", font_size=24, color=C.TRUE_P),
                      label(r"capitals", font_size=24, color=C.MODEL_Q), label(r"digits", font_size=24, color=C.INTERVAL),
                      label(r"punctuation", font_size=24, color=GREY_B)).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "And the vectors the network scores each next character with, which nobody designed, have organized "
             "themselves. Seen along their two main directions, from Part 7, <bookmark mark='a'/> characters that "
-            "behave alike sit together: vowels near vowels, capitals near capitals, digits and punctuation in their "
-            "own corners. It's Part 3's word vectors again, learned this time as a side effect of predicting."
+            "behave alike sit together: lowercase letters with lowercase letters, capitals with capitals, digits with "
+            "digits, and punctuation in its own corner. It's Part 3's word vectors again, learned this time as a side "
+            "effect of predicting."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.02), FadeIn(nudge), run_time=2.5)
@@ -312,9 +322,23 @@ class NeuralLM(VoiceoverScene):
         glow = SurroundingRectangle(VGroup(board.rows[i + 1], board.rows[i + 2]), color=C.NEURAL, buff=0.08, corner_radius=0.08)
         gpt = [j for j, r in enumerate(rows) if "GPT-2" in r["label"]]
         samples = d["samples"]
-        txt = VGroup(data_text(samples[0][0], font="DejaVu Serif", font_size=20, color=GREY_B),
-                     data_text(" ".join(samples[0][1].split())[:90] + " …", font="DejaVu Serif", font_size=20, color=WHITE))
-        txt.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(ORIGIN)
+
+        def sample_block(prompt_, cont):
+            words_ = " ".join(cont.split())[:110].split(" ")[:-1]  # whole words only
+            lines, cur = [], ""
+            for w_ in words_:
+                if len(cur) + len(w_) + 1 > 56 and cur:
+                    lines.append(cur)
+                    cur = w_
+                else:
+                    cur = (cur + " " + w_).strip()
+            lines.append(cur + " …")
+            g_ = VGroup(data_text(prompt_.strip(), font="DejaVu Serif", font_size=24, color=GREY_B),
+                        *[data_text(t_, font="DejaVu Serif", font_size=24, color=WHITE) for t_ in lines[:2]])
+            return g_.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+
+        txt = VGroup(*[sample_block(p_, c_) for p_, c_ in samples]).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        txt.scale_to_fit_height(min(txt.height, 6.4)).move_to(ORIGIN)
         if txt.width > 12.8:
             txt.scale_to_fit_width(12.8)
         best_counting = min(float(k["best_bits"]), *[float(r["bits"]) for r in rows[:i] if "bits" in r])
@@ -341,11 +365,10 @@ class NeuralLM(VoiceoverScene):
                                                                corner_radius=0.08)))
         self.play(FadeOut(board), FadeOut(glow))
         with self.voiceover(
-            "Here's what it writes, from the opening of Part 5's prompt: <bookmark mark='a'/> English-shaped, "
-            "word-shaped, and not yet making sense."
+            "Here's what it writes, from Part 5's prompt and three others: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense."
         ) as vo:
-            self.play(FadeIn(txt[0]))
+            self.play(LaggedStart(*[FadeIn(b_[0]) for b_ in txt], lag_ratio=0.2))
             vo.wait_until("a")
-            self.play(AddTextLetterByLetter(txt[1]), run_time=3.0)
+            self.play(LaggedStart(*[AddTextLetterByLetter(VGroup(*b_[1:])) for b_ in txt], lag_ratio=0.5), run_time=4.0)
         self.wait(0.6)
         self.clear_scene()

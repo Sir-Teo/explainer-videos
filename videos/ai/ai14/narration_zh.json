@@ -227,7 +227,7 @@
   "19d54ad74b80": {
    "scene": "ChatGPT",
    "en": "Chapter eight. ChatGPT, and the closed era.",
-   "zh": "第8章。ChatGPT，与闭源时代。"
+   "zh": "这是第8章：ChatGPT，以及闭源的时代。"
   },
   "f7533f816a1a": {
    "scene": "ChatGPT",
@@ -282,7 +282,7 @@
   "877d6afea45a": {
    "scene": "Converge",
    "en": "Open weights mean open configurations, so we can watch the designs change year by year. Here is one card, and how it changed. <bookmark mark='a'/> The 2017 Transformer. <bookmark mark='b'/> GPT-2, 2019: forty-eight layers. <bookmark mark='c'/> GPT-3, 2020: ninety-six layers, twelve thousand wide. <bookmark mark='d'/> LLaMA, 2023: smaller, but trained on 1.4 trillion tokens. <bookmark mark='e'/> Llama 3.1, 2024: 126 layers, 16,384 wide, a context of 128 thousand tokens. <bookmark mark='f'/> DeepSeek-V3: fewer layers, but 671 billion parameters, only 37 billion of them used for each token. <bookmark mark='g'/> Qwen3, 2025: 36 trillion tokens. <bookmark mark='h'/> And Kimi K3, 2026: 2.8 trillion parameters and a context of a million tokens, 2,048 times GPT-1's.",
-   "zh": "开放权重意味着开放配置，所以我们能看着设计逐年变化。这里是一张卡片，以及它怎样变化。<bookmark mark='a'/>2017年的Transformer。<bookmark mark='b'/>GPT-2，2019年：48层。<bookmark mark='c'/>GPT-3，2020年：96层，一万两千多宽。<bookmark mark='d'/>LLaMA，2023年：更小了，但用1.4万亿个词元训练。<bookmark mark='e'/>Llama 3.1，2024年：126层，16384宽，上下文12.8万个词元。<bookmark mark='f'/>DeepSeek-V3：层数更少，但有6710亿个参数，每个词元只用其中的370亿。<bookmark mark='g'/>Qwen3，2025年：36万亿个词元。<bookmark mark='h'/>还有Kimi K3，2026年：2.8万亿个参数，上下文一百万个词元，是GPT-1的2048倍。"
+   "zh": "开放权重意味着开放的配置，所以我们能看着这些设计一年一年地变化。这里是一张配置卡片，我们来看它怎样一步步变化。<bookmark mark='a'/>先是二〇一七年的Transformer。<bookmark mark='b'/>然后是二〇一九年的GPT-2：一共四十八层。<bookmark mark='c'/>二〇二〇年的GPT-3：九十六层，宽度一万两千多。<bookmark mark='d'/>二〇二三年的LLaMA：模型反而更小了，但是用一万四千亿个词元来训练。<bookmark mark='e'/>二〇二四年的Llama 3.1：126层，宽度16384，上下文长达十二万八千个词元。<bookmark mark='f'/>DeepSeek-V3的层数更少，但是一共有六千七百一十亿个参数，每个词元只用其中的三百七十亿。<bookmark mark='g'/>二〇二五年的Qwen3：训练用了三十六万亿个词元。<bookmark mark='h'/>还有二〇二六年的Kimi K3：2.8万亿个参数，上下文一百万个词元，是GPT-1的2048倍。"
   },
   "d0fa99428c9d": {
    "scene": "Converge",
@@ -307,7 +307,7 @@
   "e09d6a340d70": {
    "scene": "Frontier",
    "en": "Chapter eleven. The open frontier, 2024 to 2026.",
-   "zh": "第11章。开放前沿，2024到2026。"
+   "zh": "这是第11章：开放的前沿，从2024年到2026年。"
   },
   "64880d866027": {
    "scene": "Frontier",
@@ -342,7 +342,7 @@
   "06e4f2cbc9f3": {
    "scene": "Trends",
    "en": "Line up the training compute of the models in this part, on a scale where each step up is a hundred times more. <bookmark mark='a'/> The 2017 Transformer: two times ten to the nineteen operations. GPT-1, BERT, GPT-2, T5. <bookmark mark='b'/> GPT-3: three times ten to the twenty-three. PaLM. <bookmark mark='c'/> GPT-4, about two times ten to the twenty-five by Epoch AI's estimate; Llama 3.1, 3.8 times ten to the twenty-five, as Meta reported; and xAI's Grok 3, in 2025, about 3.5 times ten to the twenty-six, again an outside estimate. <bookmark mark='d'/> In 7.7 years, a factor of about 15 million.",
-   "zh": "把本部分各个模型的训练算力排成一列，纵轴每往上一格就是一百倍。<bookmark mark='a'/>2017年的Transformer：2乘以10的19次方次运算。GPT-1、BERT、GPT-2、T5。<bookmark mark='b'/>GPT-3：3乘以10的23次方。PaLM。<bookmark mark='c'/>GPT-4，按Epoch AI的估计，大约2乘以10的25次方；Llama 3.1，按Meta的报告，3.8乘以10的25次方；还有2025年xAI的Grok 3，大约3.5乘以10的26次方，同样是外部估计。<bookmark mark='d'/>在7.7年里，增长了大约1500万倍。"
+   "zh": "把本部分各个模型的训练算力排成一列，纵轴上每往上走一格，就是多了一百倍。<bookmark mark='a'/>二〇一七年的Transformer：大约二乘以十的十九次方次运算。接着是GPT-1、BERT、GPT-2和T5。<bookmark mark='b'/>GPT-3：大约三乘以十的二十三次方。然后是PaLM。<bookmark mark='c'/>GPT-4，按照Epoch AI的估计，大约是二乘以十的二十五次方；Llama 3.1，按照Meta自己的报告，是三点八乘以十的二十五次方；还有二〇二五年xAI的Grok 3，大约三点五乘以十的二十六次方，这同样是外部的估计。<bookmark mark='d'/>在7.7年里，一共增长了大约15百万倍。"
   },
   "02b71b122608": {
    "scene": "Trends",
@@ -362,7 +362,7 @@
   "be73059218a3": {
    "scene": "OurLineage",
    "en": "Chapter thirteen. Our own lineage: GPT against BERT.",
-   "zh": "第13章。我们自己的谱系：GPT对BERT。"
+   "zh": "这是第13章：我们自己的谱系，GPT对决BERT。"
   },
   "40d6ac7321cf": {
    "scene": "OurLineage",
@@ -399,25 +399,25 @@
    "en": "Chapter fourteen. Learning in context, in our own models.",
    "zh": "第14章。在我们自己的模型里，在上下文中学习。"
   },
-  "29c1eb1c6b32": {
+  "21905299bf18": {
    "scene": "Emergence",
-   "en": "GPT-3's surprise was that learning from the prompt appeared with scale. Can we see any of it at our scale? <bookmark mark='a'/> Four GPT-style models of growing size, all trained on the same text, the same number of tokens. <bookmark mark='b'/> First, the simplest measure of learning from context: the loss at each position of a 256-token window. Early positions have almost no context; later ones have a lot. <bookmark mark='c'/> Every curve falls from left to right: the words before help. From one to four tokens of context to more than a hundred, the smallest model gains 0.23 nats per token; the 4.2 million-parameter model gains 0.46: the bigger models learn more from context. <bookmark mark='t'/>",
-   "zh": "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>每条曲线都从左往右下降：前面的词有帮助。从一到四个词元的上下文，到一百多个，最小的模型每个词元提升了0.23奈特；家族中最大的模型提升了0.46奈特：越大的模型，从上下文中学到的越多。<bookmark mark='t'/>"
+   "en": "GPT-3's surprise was that learning from the prompt appeared with scale. Can we see any of it at our scale? <bookmark mark='a'/> Four GPT-style models of growing size, all trained on the same text, the same number of tokens. And, as a fifth, the series' own model, larger and trained on 8 times as many tokens. <bookmark mark='b'/> First, the simplest measure of learning from context: the loss at each position of a 256-token window. Early positions have almost no context; later ones have a lot. <bookmark mark='c'/> Every curve falls from left to right: the words before help. From one to four tokens of context to more than a hundred, the smallest model gains 0.23 nats per token; the 4.2 million-parameter model gains 0.46: the bigger models learn more from context. <bookmark mark='t'/> The series' own model, bigger and trained longer, gains 0.83.",
+   "zh": "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。另外还有第五个：本系列自己的模型，更大，读过的词元是它们的8倍。<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>每条曲线都从左往右下降：前面的词有帮助。从一到四个词元的上下文，到一百多个，最小的模型每个词元提升了0.23奈特；家族中最大的模型提升了0.46奈特：越大的模型，从上下文中学到的越多。<bookmark mark='t'/>本系列自己的模型更大、训练得更久，提升了0.83奈特。"
   },
   "681175c8cd16": {
    "scene": "Emergence",
    "en": "Now replay the training of the largest of the family, and watch that curve form. On the left, its held-out loss; on the right, its loss at each position of the context, frozen at each checkpoint. <bookmark mark='a'/> Untrained, the curve is flat: a model that knows nothing gains nothing from context. <bookmark mark='b'/> As it trains, the whole curve drops, and it tilts: the positions with more context fall further. <bookmark mark='c'/> By the end its held-out loss is 4.48 nats, and the curve has the shape we just saw for model L.",
    "zh": "现在重放家族中最大的模型的训练过程，看那条曲线是怎么形成的。左边是它在留出文本上的损失；右边是它在上下文每个位置上的损失，在每个检查点冻结。<bookmark mark='a'/>未训练时，曲线是平的：一个什么都不懂的模型，从上下文里什么也得不到。<bookmark mark='b'/>随着训练，整条曲线下降，而且倾斜起来：上下文越多的位置，降得越多。<bookmark mark='c'/>到最后，它的留出损失是4.48奈特，曲线就是我们刚才看到的模型L的样子。"
   },
-  "4e94f8cc6e92": {
+  "1a19b6053c32": {
    "scene": "Emergence",
-   "en": "A sharper test, the one Part 13 used: a list of sixty random common words, then the same list again. A model that can copy from its context finds the second copy much easier than the first. <bookmark mark='a'/> Here is how often each model guesses the next word, on the first copy and on the second. <bookmark mark='b'/> <bookmark mark='v'/> None of our models does much better the second time: the best gains 0 points. At our scale and training length, the copying circuit, the induction heads of Part 13, hasn't formed; Part 13's small transformer couldn't copy either. <bookmark mark='w'/>",
-   "zh": "一个更尖锐的测试，第13部分用过的：一张由六十个随机常用词组成的列表，然后把同一张列表再来一遍。一个能从上下文中复制的模型，会觉得第二遍比第一遍容易得多。<bookmark mark='a'/>这是每个模型在第一遍和第二遍上猜对下一个词的频率。<bookmark mark='b'/><bookmark mark='v'/>我们没有一个模型在第二遍上明显更好：最好的也只提高了0个百分点。在我们的规模和训练长度下，复制的回路，也就是第13部分的归纳头，还没有形成；第13部分那个小Transformer也不会复制。<bookmark mark='w'/>"
+   "en": "A sharper test, the one Part 13 used: a list of sixty random common words, then the same list again. A model that can copy from its context finds the second copy much easier than the first. <bookmark mark='a'/> Here is how often each model guesses the next word, on the first copy and on the second. <bookmark mark='b'/> <bookmark mark='v'/> None of our models does much better the second time: the best gains 0 points, and the loss falls by at most 0.28 nats. At our scale and training length, the copying circuit, the induction heads of Part 13, hasn't formed; Part 13's small transformer couldn't copy either. <bookmark mark='w'/>",
+   "zh": "一个更尖锐的测试，第13部分用过的：一张由六十个随机常用词组成的列表，然后把同一张列表再来一遍。一个能从上下文中复制的模型，会觉得第二遍比第一遍容易得多。<bookmark mark='a'/>这是每个模型在第一遍和第二遍上猜对下一个词的频率。<bookmark mark='b'/><bookmark mark='v'/>我们没有一个模型在第二遍上明显更好：最好的也只提高了0个百分点，损失最多只降了0.28奈特。在我们的规模和训练长度下，复制的回路，也就是第13部分的归纳头，还没有形成；第13部分那个小Transformer也不会复制。<bookmark mark='w'/>"
   },
-  "19c81834adc3": {
+  "42b203cddc20": {
    "scene": "Emergence",
-   "en": "Finally, GPT-3's own kind of test, built from the novels. Two books; a few labelled examples in the prompt, each a sentence and the book it is from; then a new sentence from a paragraph the models never read, and we compare the probabilities they give to the two titles. <bookmark mark='a'/> Small models tend to favour one title whatever the sentence, so, as Tony Zhao and colleagues proposed in 2021, we first subtract the score each title gets after a sentence with no content at all. <bookmark mark='d'/> With zero, one, two, four and eight examples, for every model. <bookmark mark='b'/> With no examples the models are near chance, at most 52 percent. <bookmark mark='c'/> For model L, examples barely matter: 52 percent with none, 53 with 8. <bookmark mark='e'/> With 8 examples, the family's sizes are within 2 points of each other.",
-   "zh": "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>每个模型都试零个、一个、两个、四个和八个例子。<bookmark mark='b'/>没有例子时，模型接近随机猜，最高52%。<bookmark mark='c'/>对模型L来说，例子几乎没有影响：没有例子时52%，8个例子时53%。<bookmark mark='e'/>在8个例子时，家族中各个大小的模型彼此相差在2个百分点以内。"
+   "en": "Finally, GPT-3's own kind of test, built from the novels. Two books; a few labelled examples in the prompt, each a sentence and the book it is from; then a new sentence from a paragraph the models never read, and we compare the probabilities they give to the two titles. <bookmark mark='a'/> Small models tend to favour one title whatever the sentence, so, as Tony Zhao and colleagues proposed in 2021, we first subtract the score each title gets after a sentence with no content at all. <bookmark mark='d'/> With zero, one, two, four and eight examples, for every model. <bookmark mark='b'/> Even with no examples, the models do better than chance, up to 61 percent: a title is often a character's name, and a sentence that mentions the character makes the name more likely. <bookmark mark='c'/> For the series' model, examples hurt: from 61 percent with none to 55 with 8; a long prompt of other sentences only confuses it. <bookmark mark='e'/> With 8 examples, the family's sizes are within 2 points of each other.",
+   "zh": "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>每个模型都试零个、一个、两个、四个和八个例子。<bookmark mark='b'/>即使一个例子都没有，模型也比随机猜好，最高达到61%：书名常常是某个人物的名字，而一个提到这个人物的句子，会让这个名字更可能出现。<bookmark mark='c'/>对本系列的模型来说，例子反而有害：从没有例子时的61%，降到8个例子时的55%；一长串别的句子只会把它搞糊涂。<bookmark mark='e'/>在8个例子时，家族中各个大小的模型彼此相差在2个百分点以内。"
   },
   "56bcd8095e14": {
    "scene": "Emergence",

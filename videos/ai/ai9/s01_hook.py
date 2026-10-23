@@ -173,10 +173,10 @@ class Hook(VoiceoverScene):
             r"the first neural language model, \ on the scoreboard",
         ], font_size=25).move_to(DOWN * 0.35)
         with self.voiceover(
-            "This is Part 9 of AI, Built, in the second act: learning from data. <bookmark mark='a'/> In it: the first neurons, the perceptron, and the proof that it learns; "
-            "backpropagation, derived; what networks can represent, with one layer and with many; why deep networks "
-            "were so hard to train, and the fixes, from initialization to the residual stream and normalization; the "
-            "block inside today's language models; and the first neural language model, on our scoreboard."
+            "This is Part 9 of AI, Built, in the second act: learning from data. <bookmark mark='a'/> In it: the "
+            "perceptron and its proof; backpropagation; what networks can represent; why deep networks were hard to "
+            "train, and the fixes; the block inside today's language models; and a neural language model on our "
+            "scoreboard."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

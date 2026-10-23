@@ -37,7 +37,7 @@ MNIST_FILES = {
 MNIST_MIRRORS = ["https://ossci-datasets.s3.amazonaws.com/mnist/",
                  "https://storage.googleapis.com/cvdf-datasets/mnist/"]
 CIFAR_FILE = "cifar-10-python.tar.gz"
-CIFAR_SHA256 = None  # filled below
+CIFAR_SHA256 = "6d958be074577803d12ecdefd02955f39262c83c16fe9348329d7fe0b5c001ce"  # MD5 c58f3010..., as published
 CIFAR_URLS = ["https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz"]
 CIFAR_CLASSES = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
 

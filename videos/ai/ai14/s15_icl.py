@@ -221,9 +221,11 @@ class Emergence(VoiceoverScene):
                        "context: the induction heads of Part 13.")
         else:
             lead = ""
+            drop = max(r["loss1"] - r["loss2"] for r in rows)
             verdict = ("None of our models does much better the second time: the best gains "
-                       f"{100 * max(jumps.values()):.0f} points. At our scale and training length, the copying circuit, "
-                       "the induction heads of Part 13, hasn't formed; Part 13's small transformer couldn't copy either.")
+                       f"{100 * max(jumps.values()):.0f} points, and the loss falls by at most {drop:.2f} nats. At our "
+                       "scale and training length, the copying circuit, the induction heads of Part 13, hasn't formed; "
+                       "Part 13's small transformer couldn't copy either.")
         r_l = load("gpt_l")
         sn = r_l["snaps"]
         acc2 = [s["acc2"] for s in sn]

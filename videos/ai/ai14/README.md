@@ -125,12 +125,11 @@ Our models (trained and measured on this computer; filled in from `.cache/ai14/`
 <!-- results -->
 * The family (pre-norm RMSNorm, SwiGLU, RoPE, no biases; context 256, BPE vocabulary 4,096 + [MASK]), 3M tokens each, batch 16 × 256, AdamW, cosine schedule: XS 32 wide × 1 layer, 274,080 parameters; S 64 wide × 2 layers, 625,088 parameters; M 128 wide × 4 layers, 1,828,224 parameters; L 192 wide × 6 layers, 4,229,952 parameters.
 * GPT against BERT at equal compute (M's shape, the same initial weights, data order and schedule; 6ND = 2.35e+13 operations each): held-out next-token loss 4.55 nats; masked-token loss 4.89 nats (not comparable). Cloze, 600 held-out sentences, 8 candidates (chance 12.5%): GPT left context only 61.5%, GPT whole sentence 81.7%, BERT 59.7%. Linear probe, which of 30 books (6,000 training and 1,097 test sentences; chance 3.3%): GPT 15.2%, BERT 10.3%. Here the causal model wins both: at this scale, learning from every token outweighs seeing both sides (BERT's own Table 5, at 110M parameters and 128B tokens, found the opposite).
-* Bits per character on Part 1's passage: XS 2.32; S 2.14; M 2.05; L 2.02 (gzip 3.31, bzip2 2.92).
-* Learning from context (mean loss with 1–4 tokens of context minus with 129–256, nats per token, 512 held-out windows): XS 0.23; S 0.31; M 0.45; L 0.46.
-* Repeated list of 60 common words (next word right, first copy → second): XS 0% → 0%; S 0% → 0%; M 0% → 0%; L 0% → 0%.
-* Few-shot 'which book?' (300 two-way prompts; k = 0, 1, 2, 4, 8; % right, calibrated against an 'N/A' query, raw in brackets): XS 49/53/53/52/51 (48/48/49/48/49); S 49/49/51/53/50 (50/50/50/50/50); M 52/57/55/51/52 (50/50/50/50/50); L 52/54/54/53/53 (50/50/50/50/51).
+* Bits per character on Part 1's passage: XS 2.32; S 2.14; M 2.05; L 2.02; the series' base model 1.69 (gzip 3.31, bzip2 2.92).
+* Learning from context (mean loss with 1–4 tokens of context minus with 129–256, nats per token, 512 held-out windows): XS 0.23; S 0.31; M 0.45; L 0.46; the series' base model 0.83.
+* Repeated list of 60 common words (next word right, first copy → second): XS 0% → 0%; S 0% → 0%; M 0% → 0%; L 0% → 0%; the series' base model 0% → 0%.
+* Few-shot 'which book?' (300 two-way prompts; k = 0, 1, 2, 4, 8; % right, calibrated against an 'N/A' query, raw in brackets): XS 49/53/53/52/51 (48/48/49/48/49); S 49/49/51/53/50 (50/50/50/50/50); M 52/57/55/51/52 (50/50/50/50/50); L 52/54/54/53/53 (50/50/50/50/51); the series' base model 61/52/55/55/55 (54/52/51/50/50).
 * Training time on this machine (2 threads, shared): GPT-M 23 min, BERT-M 10 min.
-* The series' base model's rows (items icl_base, scoreboard_base) are computed once explainer.ai.novels has trained it.
 <!-- /results -->
 
 ## Fact-check notes
