@@ -60,6 +60,17 @@ def words_num(n: int) -> str:
     return w[n] if 0 <= n < len(w) else str(n)
 
 
+def tiny_words(x: float) -> str:
+    """A tiny number as the narrator should say it (an order of magnitude, in words)."""
+    x = abs(float(x))
+    for lim, w in ((1e-9, "less than a billionth"), (1e-8, "about a billionth"), (1e-7, "about a hundred-millionth"),
+                   (1e-6, "about a ten-millionth"), (1e-5, "about a millionth"), (1e-4, "about a hundred-thousandth"),
+                   (1e-3, "about a ten-thousandth")):
+        if x < lim:
+            return w
+    return f"{x:.3f}"
+
+
 def pct(x: float, digits=0) -> str:
     return f"{100 * x:.{digits}f}"
 

@@ -420,7 +420,7 @@ class Arithmetic(VoiceoverScene):
                 k += 1
             g = VGroup()
             for name, bits in ((r"low ", a_), (r"high", b_)):
-                t = Text(f"{name} {bits}", font=MONO, font_size=24, color=GREY_B)
+                t = Text(" ".join((name, bits)), font=MONO, font_size=24, color=GREY_B)
                 off = len(name.strip())
                 for j in range(k):
                     t[off + j].set_color(C.BITS)

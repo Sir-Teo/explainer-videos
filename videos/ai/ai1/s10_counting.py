@@ -391,6 +391,7 @@ class Counting(VoiceoverScene):
             return min(orders, key=lambda o: B[o][i])
 
         lead = [best_at(i) for i in range(len(A))]
+        assert lead[0] == orders[0]  # the narration says the shortest context starts ahead
         takes = [(i, lead[i]) for i in range(1, len(A)) if lead[i] != lead[i - 1]]  # where the lead changes hands
         crown = always_redraw(lambda: Star(n=5, outer_radius=0.1, color=WHITE, fill_opacity=1).move_to(  # on the best curve
             ax.c2p(t.get_value(), min(float(np.interp(t.get_value(), lx, B[o])) for o in orders))))
@@ -402,26 +403,26 @@ class Counting(VoiceoverScene):
                     100_000: "a hundred thousand", 300_000: "three hundred thousand", 1_000_000: "a million",
                     3_000_000: "three million"}.get(int(n), f"{n:,.0f}")
 
-        story = " ".join(f"<bookmark mark='m{j}'/> At {amount(A[i])} letters, {words.get(o, str(o))} letters of context take "
-                         "the lead." for j, (i, o) in enumerate(takes))
+        ending = (f"{words[o_long]} letters is still behind, at {B[o_long][-1]:.2f}: it would need far more text "
+                  "than we have." if lead[-1] != o_long else f"{words[o_long]} letters finally leads.")
         with self.voiceover(
             "And how does a counting model learn? It reads, and counts. Here are four of them, with one, three, five "
             "and eight letters of context, scored on the Falcon passage as they count more and more of the books. "
             f"<bookmark mark='a'/> After a thousand letters, one letter of context is best, {B[orders[0]][0]:.2f} bits: "
             "a short context is seen often enough to count quickly, while longer ones have hardly met any of their "
-            f"contexts. {story} <bookmark mark='z'/> With all {A[-1] / 1e6:.0f} million letters, "
-            + (f"{words[o_long]} letters is still behind, at {B[o_long][-1]:.2f}: it would need far more text than "
-               "we have." if lead[-1] != o_long else f"{words[o_long]} letters finally leads.")
-            + " The more you can count, the longer the context worth using."
+            "contexts."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(uni), FadeIn(uni_l), FadeIn(names))
             self.add(lines, crown)
             vo.wait_until("a")
-            for j, (i, o) in enumerate(takes):
-                vo.wait_until(f"m{j}")
+        for i, o in takes:  # one short line each time the lead changes hands
+            with self.voiceover(f"At {amount(A[i])} letters, {words.get(o, str(o))} letters of context take the lead."):
                 self.play(t.animate.set_value(float(lx[i])), run_time=2.5, rate_func=linear)
                 self.play(Indicate(names[orders.index(o)], color=cols[o]))
-            vo.wait_until("z")
+        with self.voiceover(
+            f"With all {A[-1] / 1e6:.0f} million letters, {ending} The more you can count, the longer the context "
+            "worth using."
+        ):
             self.play(t.animate.set_value(float(lx[-1])), run_time=2.5, rate_func=linear)
         self.wait(0.5)
         self.remove(lines, crown)

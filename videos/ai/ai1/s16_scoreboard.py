@@ -125,12 +125,12 @@ class Scoreboard(VoiceoverScene):
         gap.next_to(VGroup(self.b.rows[ib], self.b.rows[iq]), RIGHT, buff=0.1)
         gap_l = label(r"this gap \\ is the series", font_size=24, color=C.BITS).next_to(gap, RIGHT, buff=0.15)
         low = bits["Qwen3-4B"]
+        low_said = "under one" if low < 1 else f"{low:.2f}"
         with self.voiceover(
             f"In file sizes: the passage is {kb['ascii']:.1f} kilobytes as plain text, {kb['gzip']:.1f} with gzip, "
             f"<bookmark mark='a'/> and {kb['Qwen3-4B']:.1f} with Qwen3 driving an arithmetic coder. "
-            f"<bookmark mark='b'/> The jump from counting, at {bits['best']:.1f} bits, to "
-            + ("under one" if low < 1 else f"{low:.2f}")
-            + ", is what this series is about: what these models learned, and how."
+            f"<bookmark mark='b'/> The jump from counting, at {bits['best']:.1f} bits, to {low_said}, is what this "
+            "series is about: what these models learned, and how."
         ) as vo:
             self.play(FadeIn(side[:3]))
             vo.wait_until("a")
