@@ -67,9 +67,10 @@ class Rope(VoiceoverScene):
             "<bookmark mark='c'/> Keys are turned the same way. Like the hands of a clock, fast hands tell you the "
             "position nearby, slow hands where you are in a long text. This is RoPE, rotary position embedding."
         ) as vo:
-            self.play(FadeIn(pairs), LaggedStart(*[FadeIn(d) for d in dials], lag_ratio=0.05), FadeIn(hs))
+            self.play(FadeIn(pairs), LaggedStart(*[FadeIn(d) for d in dials], lag_ratio=0.05), FadeIn(hs), Write(f),
+                      FadeIn(fl))
             vo.wait_until("a")
-            self.play(FadeIn(counter), Write(f), FadeIn(fl))
+            self.play(FadeIn(counter), Indicate(f, scale_factor=1.04))
             vo.wait_until("b")
             self.play(m.animate.set_value(40), FadeIn(wls), FadeIn(wlab), run_time=6.0, rate_func=linear)
             vo.wait_until("c")
@@ -207,8 +208,8 @@ class Rope(VoiceoverScene):
             "model uses them."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), Create(zero), FadeIn(xn), FadeIn(yn))
-            vo.wait_until("a")
             self.play(FadeIn(faint), Create(c), run_time=2.5)
+            vo.wait_until("a")
             self.play(FadeIn(note_))
             vo.wait_until("b")
             self.play(FadeIn(used))
@@ -224,7 +225,7 @@ class Rope(VoiceoverScene):
         e = (pq / pq.sum(-1, keepdims=True) + pk / pk.sum(-1, keepdims=True)).mean((0, 1)) / 2  # share per pair
         n = len(e)
         cols = [interpolate_color(ManimColor(POS), ManimColor(GREY_B), i / (n - 1)) for i in range(n)]
-        ch = bars_chart(e, cols, width=7.4, height=2.6, x0=-6.6, base_y=-1.4, vmax=float(e.max()) * 1.15,
+        ch = bars_chart(e, cols, width=7.4, height=3.6, x0=-6.6, base_y=-2.3, vmax=float(e.max()) * 1.15,
                         font_size=14, fmt="{:.2f}")
         for v in ch.vals:
             v.set_opacity(0)
@@ -270,10 +271,9 @@ class Rope(VoiceoverScene):
             "numbers and leaves the rest alone; Gemma 3 slows its global layers' clocks a hundredfold, with a base "
             "of a million instead of ten thousand, so that they turn slowly over long documents."
         ) as vo:
-            self.play(FadeIn(facts[0]))
+            self.play(FadeIn(facts[0]), FadeIn(top), FadeIn(ch.base),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.05), FadeIn(xl))
             vo.wait_until("a")
-            self.play(FadeIn(top), FadeIn(ch.base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.05),
-                      FadeIn(xl))
             if len(hl_.submobjects) or isinstance(hl_, SurroundingRectangle):
                 self.play(Create(hl_))
             vo.wait_until("b")
