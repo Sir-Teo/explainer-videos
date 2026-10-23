@@ -72,8 +72,8 @@ class Hopfield(VoiceoverScene):
         Xd = np.asarray(h["digits"])
         frames = np.asarray(h["frames"])
         en = np.asarray(h["energy"])
-        stored = Group(*[spins(Xd[k], 1.1) for k in range(3)]).arrange(RIGHT, buff=0.2).move_to([-4.5, 2.2, 0])
-        sl = label(r"stored: \ three digits", font_size=22, color=EBM).next_to(stored, DOWN, buff=0.15)
+        stored = spins(Xd[int(h["recall_digit"])], 1.3).move_to([-5.6, 2.1, 0])
+        sl = label(r"stored: \ one digit", font_size=22, color=EBM).next_to(stored, RIGHT, buff=0.2)
         big = [spins(f, 3.0).move_to([-3.6, -1.0, 0]) for f in frames]
         cl = label(r"the state, \ update by update", font_size=22, color=GREY_A).next_to(big[0], DOWN, buff=0.15)
         g = axes([0, len(en) - 1], [float(en.min()) * 1.05, float(en.max()) + 5], x_length=5.0, y_length=3.0,
@@ -86,8 +86,8 @@ class Hopfield(VoiceoverScene):
                f"It settles on a state that matches the stored digit on {100 * (1 + ov) / 2:.0f} percent of "
                "pixels.")
         with self.voiceover(
-            "Here is one: 196 neurons, one per pixel, three digits stored. <bookmark mark='a'/> Start from the middle "
-            "digit with a quarter of its pixels flipped. <bookmark mark='b'/> Neuron by neuron the state slides "
+            "Here is one: 196 neurons, one per pixel, one digit stored. <bookmark mark='a'/> Start from that digit "
+            "with a quarter of its pixels flipped. <bookmark mark='b'/> Neuron by neuron the state slides "
             f"downhill, the energy falling with every change. <bookmark mark='c'/> {res} A damaged copy is enough "
             "to find the memory."
         ) as vo:
@@ -105,7 +105,7 @@ class Hopfield(VoiceoverScene):
                 cur = nb
             self.play(Create(ec))
             vo.wait_until("c")
-            self.play(Indicate(stored[1], color=EBM, scale_factor=1.1))
+            self.play(Indicate(stored, color=EBM, scale_factor=1.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -121,8 +121,8 @@ class Hopfield(VoiceoverScene):
         rc = curve(g.ax, Ps / N, fr, EBM, 3)
         pd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=EBM) for a, b in zip(Ps / N, fr)])
         th = DashedLine(g.ax.c2p(0.138, 0), g.ax.c2p(0.138, 1), color=C.BITS, stroke_width=2)
-        tl = label(r"$0.138$: \ Amit, Gutfreund \& Sompolinsky (1985)", font_size=18, color=C.BITS)
-        tl.next_to(th, UP, buff=0.05)
+        tl = label(r"$0.138$: \\ Amit, Gutfreund \& Sompolinsky (1985)", font_size=18, color=C.BITS)
+        tl.next_to(g.ax.c2p(0.138, 0.8), RIGHT, buff=0.1)
         half = float(Ps[np.argmax(fr < 0.5)] / N) if (fr < 0.5).any() else float(Ps[-1] / N)
         hb, hm = np.asarray(h["recall_hebb"]), np.asarray(h["recall_modern"])
         k = np.arange(1, len(hb) + 1)
@@ -131,7 +131,7 @@ class Hopfield(VoiceoverScene):
         ch, cm = curve(g2.ax, k, hb, EBM, 3), curve(g2.ax, k, hm, C.MODEL_Q, 3)
         lg = legend([(EBM, r"Hebb's rule"), (C.MODEL_Q, r"softmax update (modern)")], font_size=18)
         lg.next_to(g2, UP, buff=0.1).align_to(g2, LEFT)
-        mix = spins(np.asarray(h["mixture"]), 1.6).move_to([2.2, -2.3, 0])
+        mix = spins(np.asarray(h["mixture"]), 2.0).move_to([2.0, -2.2, 0])
         ml = label(r"$6$ digits stored: \\ a cue lands in a blend", font_size=20, color=GREY_A).next_to(mix, RIGHT,
                                                                                                      buff=0.25)
         fails = (hb < 1.0).any()
@@ -204,6 +204,7 @@ class Hopfield(VoiceoverScene):
                               .set_opacity(0.5))
         vl = label(r"visible units", font_size=20, color=DATA).next_to(vis, DOWN, buff=0.15)
         hl = label(r"hidden units", font_size=20, color=EBM).next_to(hid, UP, buff=0.15)
+        VGroup(edges, vis, hid, vl, hl).scale(1.35).move_to([-3.9, -0.2, 0])
         rows = VGroup(
             cmath(r"p(s)", r"=", r"\frac{e^{-E(s)/T}}{Z}", font_size=36),
             cmath(r"\Delta W_{ij}", r"\propto", r"\langle s_i s_j \rangle_{\text{data}}", r"-",

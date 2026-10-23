@@ -64,9 +64,10 @@ class Recipe(VoiceoverScene):
                     "extra compute, which would make the comparison unequal. Eight-bit arithmetic stays out too: on a "
                     "CPU it only emulates the saving.")
         with self.voiceover(
-            "Now we put the pieces together. Two models of exactly the same shape, trained on the same three million "
-            "tokens of the thirty novels, in the same order, for the same number of steps, from the same starting "
-            "weights; and then the whole comparison again from a second seed. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain attention. "
+            "Now we put the pieces together. Two models of the same shape, trained on the same three million tokens of "
+            "the thirty novels, in the same order, from the same starting weights; and the whole comparison again from "
+            "a second seed. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain "
+            "attention. "
             "<bookmark mark='b'/> One with the recipe of 2026: Muon for the hidden matrices, warmup, stable, decay, "
             "QK-norm and the z-loss. <bookmark mark='c'/> " + out_
         ) as vo:

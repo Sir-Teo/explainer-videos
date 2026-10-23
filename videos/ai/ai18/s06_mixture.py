@@ -61,13 +61,17 @@ class Mixture(VoiceoverScene):
                    font_size=17)
         with self.voiceover(
             "A corpus is a mixture: web pages, encyclopedias, code, books, maths, papers. How much of each? "
-            "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, and "
-            "twenty other sources. <bookmark mark='b'/> In 2023 DoReMi learned them: a small proxy model trains while an "
-            "adversary keeps raising the weight of whichever domain it predicts worst relative to a reference model, and "
-            "the weights it ends with let an eight-billion-parameter model reach the baseline in 2.6 times fewer steps. "
-            "<bookmark mark='c'/> In 2024 RegMix made it a regression: train 512 tiny models on random mixtures, fit the "
-            "loss you care about as a function of the mixture, and train the big model on the mixture the fit likes best. "
-            "Its pick beat all 64 mixtures they tried at a billion parameters."
+            "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, "
+            "and twenty "
+            "other sources. <bookmark mark='b'/> In 2023 DoReMi learned them, with a small proxy model that keeps "
+            "raising the "
+            "weight of the domains it predicts worst; its weights let an eight-billion-parameter model reach the "
+            "baseline in "
+            "2.6 times fewer steps. <bookmark mark='c'/> In 2024 RegMix made it a regression: train 512 tiny models "
+            "on random "
+            "mixtures, fit the loss as a function of the mixture, and train the big model on the best one. Its pick "
+            "beat all "
+            "64 mixtures they tried at a billion parameters."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in pile], lag_ratio=0.3))
             vo.wait_until("a")
@@ -175,15 +179,18 @@ class Mixture(VoiceoverScene):
         else:
             lean = "stays close to the natural mixture"
         with self.voiceover(
-            "We ran RegMix on the thirty novels. Split them into four groups: American novels, English novels of "
-            "society, adventure and mystery, and the translations with Ulysses. <bookmark mark='a'/> Our target is "
-            "the scoreboard's own book, The Maltese Falcon, an American detective novel of 1930; we tune on its "
-            "first and third chapters and keep the second, the scoreboard's passage, for the test. "
-            f"<bookmark mark='b'/> {len(proxy)} tiny models, each on a random mixture. Here is each one's loss on the "
+            "We ran RegMix on the thirty novels, in four groups: American novels, English novels of society, "
+            "adventure and "
+            "mystery, and the translations with Ulysses. <bookmark mark='a'/> Our target is the scoreboard's own "
+            "book, The "
+            "Maltese Falcon: we tune on its first and third chapters and keep the second, the scoreboard's passage, "
+            "for the "
+            f"test. <bookmark mark='b'/> {len(proxy)} tiny models, each on a random mixture. Here is each one's loss "
+            "on the "
             "target against its share of American novels: " + trend + ". "
             "<bookmark mark='c'/> A regression on the four weights and their products predicts each run's loss from "
             f"the other runs with a correlation of {M['loo_corr']:.2f}. <bookmark mark='d'/> Asked for the best "
-            f"mixture, it {lean}: {shares} percent of the four groups, against the natural proportions of the books."
+            f"mixture, it {lean}: {shares} percent of the four groups."
         ) as vo:
             self.play(FadeIn(groups), FadeIn(tag), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for gr in shelf for b_ in gr],
                                                                 lag_ratio=0.04), FadeIn(snote), run_time=2.5)
@@ -274,8 +281,8 @@ class Mixture(VoiceoverScene):
         with self.voiceover(
             "Now the test: does the pick carry over to a larger model? We trained each mixture again, at the "
             "larger size, with two seeds. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + cost +
-            " <bookmark mark='c'/> That is the general lesson: a mixture is chosen for a target, so say which, and "
-            "test on text the choice never saw."
+            " <bookmark mark='c'/> The lesson: a mixture is chosen for a target, so test it on text the choice never "
+            "saw."
         ) as vo:
             self.play(FadeIn(head), FadeIn(p1[0]), FadeIn(p1[1]))
             if len(trn):
@@ -327,11 +334,13 @@ class Mixture(VoiceoverScene):
         rplot = VGroup(gr, new_, wc, d4, l4, rlg)
         with self.voiceover(
             "When good text runs short, there are two ways to stretch it. Repeat it: Muennighoff and colleagues found "
-            "in 2023 that up to about four passes over the same data are nearly as good as new data; after that the "
-            "returns fall away. <bookmark mark='a'/> Or rewrite it: in 2024 WRAP, from Apple and Carnegie Mellon, had a "
-            "model rephrase noisy web pages as encyclopedia entries or questions and answers, and real and rephrased text "
-            "together reached the same quality about three times faster. <bookmark mark='b'/> Kimi K2's report measured "
-            "it on knowledge. Text repeated ten times taught a model to answer "
+            "that up "
+            "to about four passes over the same data are nearly as good as new data; after that the returns fall away. "
+            "<bookmark mark='a'/> Or rewrite it: WRAP, from Apple and Carnegie Mellon, had a model rephrase web pages "
+            "as encyclopedia entries or "
+            "questions and answers, and real and rephrased text together trained about three times faster. "
+            "<bookmark mark='b'/> Kimi K2's report measured it on knowledge. Text repeated ten times taught a model "
+            "to answer "
             f"{K['rephrase'][0][1]:.2f} percent of a set of factual questions; rephrased once and repeated ten times, "
             f"{K['rephrase'][1][1]:.2f}; rephrased ten different ways and read once each, {K['rephrase'][2][1]:.2f}."
         ) as vo:
@@ -398,16 +407,19 @@ class Mixture(VoiceoverScene):
         e_lab = label(f"${end:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(gens, end), UP,
                                                                                                buff=0.15)
         with self.voiceover(
-            "But training on a model's output has a known failure. Shumailov and colleagues called it model collapse, in "
-            "Nature in 2024: train each generation on the last one's samples, and the tails of the distribution vanish. "
-            "We can watch it in the simplest language model there is, the frequencies of the novels' tokens. "
-            "<bookmark mark='a'/> Fit it to fifty thousand real tokens, sample fifty thousand from it, fit the next "
-            "generation to those, and repeat: a rare token that once fails to be sampled is gone for good. "
-            f"<bookmark mark='b'/> Over {gens} generations, the tokens it can produce fall from {start:,.0f} to "
+            "But training on a model's output has a known failure, model collapse: train each generation on the last "
+            "one's "
+            "samples, and the tails of the distribution vanish. We can watch it in the simplest language model there "
+            "is, the "
+            "frequencies of the novels' tokens. <bookmark mark='a'/> Fit it to fifty thousand real tokens, sample "
+            "fifty "
+            "thousand from it, fit the next generation to those, and repeat: a rare token that once fails to be "
+            "sampled is "
+            f"gone for good. <bookmark mark='b'/> Over {gens} generations, the tokens it can produce fall from "
+            f"{start:,.0f} to "
             f"{end:,.0f}, and the lost ones carried {100 * lost:.0f} percent of real text. <bookmark mark='c'/> " + climb +
-            " <bookmark mark='d'/> Gerstgrasser and colleagues found the way out the same year: keep the real data, and "
-            "add each generation's samples to it instead of replacing it. " + cure + " That is how synthetic data is used "
-            "in 2026: alongside real text, never instead of it."
+            " <bookmark mark='d'/> The way out: keep the real data, and add each generation's samples to it instead of "
+            "replacing it. " + cure + " That is how synthetic data is used in 2026: alongside real text, never instead of it."
         ) as vo:
             self.play(FadeIn(src), FadeIn(lg[0]))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in chain0.boxes], *[GrowArrow(a_) for a_ in chain0.arrows],

@@ -112,6 +112,12 @@ class Flows(VoiceoverScene):
                 mat.add(VGroup(sq, MathTex(txt, font_size=20, color=WHITE if col else GREY_C).move_to(sq)))
         mat.move_to([-3.0, -1.0, 0])
         ml = label(r"the Jacobian: \ triangular", font_size=22, color=GREY_A).next_to(mat, UP, buff=0.15)
+        dense = VGroup()  # the general case first: every entry filled
+        for m_ in mat:
+            sq = m_[0].copy().set_fill(GREY_B, opacity=0.35)
+            dense.add(VGroup(sq, MathTex(r"\ast", font_size=20, color=WHITE).move_to(sq)))
+        dl = label(r"a general Jacobian: \ its determinant costs $d^3$ operations", font_size=22,
+                   color=GREY_A).next_to(mat, UP, buff=0.15)
         ld = cmath(r"\log |\det J|", r"=", r"\sum_i s_i(x_{1:k})", font_size=36).move_to([3.2, 1.6, 0])
         ld[2].set_color(C.BITS)
         inv = cmath(r"x_{k+1:d}", r"=", r"\big(y_{k+1:d} - t(y_{1:k})\big) \odot \exp\big(-s(y_{1:k})\big)",
@@ -135,12 +141,13 @@ class Flows(VoiceoverScene):
             "such layers, "
             "alternating halves, and the flow can bend anything."
         ) as vo:
+            self.play(FadeIn(dense), FadeIn(dl))
             vo.wait_until("a")
             self.play(Write(eqs[0]))
             vo.wait_until("b")
             self.play(Write(eqs[1]))
             vo.wait_until("c")
-            self.play(FadeIn(mat), FadeIn(ml))
+            self.play(ReplacementTransform(dense, mat), FadeOut(dl), FadeIn(ml))
             self.play(Write(ld))
             vo.wait_until("d")
             self.play(Write(inv), FadeIn(il))
@@ -194,11 +201,11 @@ class Flows(VoiceoverScene):
     # ------------------------------------------------------------------
     def replay(self):
         f2, t = load("flow2d"), load("toys")
-        pl = Plane(4.0, center=[-3.6, 0.2, 0])
+        pl = Plane(4.0, center=[-3.6, 0.55, 0])
         frames = np.asarray(f2["checker_frames"])
         steps = list(f2["checker_frame_steps"])
         imgs = [pl.image(fr, FLOW) for fr in frames]
-        truth = pl.image(t["checker_density"], DATA).scale(0.5).next_to(pl, DOWN, buff=0.15).align_to(pl, LEFT)
+        truth = pl.image(t["checker_density"], DATA).scale(0.42).next_to(pl, DOWN, buff=0.15).align_to(pl, LEFT)
         tl = label(r"the truth", font_size=18, color=DATA).next_to(truth, RIGHT, buff=0.1)
         cap = [label(rf"step ${s:,}$".replace(",", "{,}"), font_size=22, color=FLOW).next_to(pl, UP, buff=0.12)
                for s in steps]
@@ -219,7 +226,7 @@ class Flows(VoiceoverScene):
         tab = VGroup(head, *rows)
         for r in tab:
             for j, m in enumerate(r):
-                m.move_to([1.3 + [0, 2.2, 4.0, 5.6][j], 0, 0])
+                m.move_to([0.7 + [0, 2.0, 3.7, 5.3][j], 0, 0])
         for i, r in enumerate(tab):
             r.shift(UP * (1.2 - 0.62 * i))
         for r in rows:

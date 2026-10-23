@@ -111,7 +111,14 @@ def lines() -> list[str]:
         for c in S["configs"]:
             rows.append(f"{c}: " + ", ".join(f"{np.mean(v):.2f}" for v in S["final"][c]) + " (max logit " +
                         ", ".join(f"{max(v):.0f}" for v in S["maxlogit"][c]) + ")")
-        out.append(f"* Stability (learning rates {S['lrs']}, final loss, mean of 2 seeds): " + "; ".join(rows) + ".")
+        lz = {c: np.mean([np.asarray(S["runs"][f"{c}_{S['lrs'][0]:g}_{s_}"]["probes"])[-1, 3] for s_ in S["seeds"]])
+              for c in ("qk", "qkz")}
+        ends = {c: [np.asarray(S["runs"][f"{c}_{S['lrs'][0]:g}_{s_}"]["probes"])[-1, 3] for s_ in S["seeds"]]
+                for c in ("qk", "qkz")}
+        spread = max(abs(v[0] - v[1]) for v in ends.values())
+        out.append(f"* Stability (learning rates {S['lrs']}, final loss, mean of 2 seeds): " + "; ".join(rows) + ". "
+                   f"Final mean log Z at {S['lrs'][0]:g}: {lz['qk']:.2f} without the z-loss, {lz['qkz']:.2f} with it "
+                   f"({'within' if abs(lz['qk'] - lz['qkz']) <= spread else 'beyond'} the seeds' spread of {spread:.2f}).")
     if have("mtp"):
         Mt, MC = load("mtp"), load("mtp_cost")
         out.append(f"* MTP ({Mt['steps']} steps, two seeds): next-token loss without {np.mean(Mt['final']['0']):.3f}, with "

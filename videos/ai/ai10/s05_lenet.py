@@ -51,8 +51,7 @@ class LeNet(VoiceoverScene):
             "rules of its own. <bookmark mark='b'/> In 1989, at Bell Labs, Yann LeCun and his colleagues trained "
             "a convolutional network end to end with backpropagation, through the shared weights, on digits from "
             f"real zip codes: {ZIP1989['train']:,} for training, with {ZIP1989['error']:.0f} percent errors on the "
-            "test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time, "
-            "to recognize spoken sounds."
+            "test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time."
         ) as vo:
             ghosts = cards.copy().set_opacity(0.25)
             self.play(FadeIn(ghosts))
@@ -179,8 +178,8 @@ class LeNet(VoiceoverScene):
         e0, eN = errs[0], errs[-1]
         i_half = next((i for i, e in enumerate(errs) if e < 0.05), len(errs) - 1)
         with self.voiceover(
-            "Now let's watch ours learn. On the left, its error on the ten thousand test digits; on the right, its "
-            "six first-layer kernels, what they make of one test digit, and its answer for that digit. "
+            "Now let's watch ours learn. On the left, its test error; on the right, its six first-layer kernels, "
+            "what they make of one digit, and its answer. "
             f"<bookmark mark='a'/> At the start the kernels are random noise and the answers are guesses: "
             f"{pct(e0, 0)} percent wrong. <bookmark mark='b'/> Within {steps[i_half]:,} steps, under five percent "
             "wrong, and the kernels have turned into detectors of strokes and their edges, each at its own "

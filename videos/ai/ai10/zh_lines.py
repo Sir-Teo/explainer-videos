@@ -35,16 +35,16 @@ ZH = {
         "看见，是本部分的一半。另一半是记住。<bookmark mark='a'/>2014年，网络学会了读完一整句话，再用另一种语言把它写出来。<bookmark mark='b'/>也是那一年，它们学会了回头看：每写一个词，就去挑出输入里需要的那几个词。这是一个小网络，在这里训练来把字符串倒过来写。每一行是它写出的一个字母，亮的方格是它当时在看的地方。这就是最早的注意力。",
 
     'How did machines learn to see, and to remember?':
-        "机器是怎样学会看见、学会记住的？<bookmark mark='a'/>我们会沿着这条路走：从休伯尔和威泽尔的细胞，到福岛邦彦的新认知机、杨立昆的LeNet、ImageNet比赛和2012年赢下它的那个网络，再到一百五十层深的网络。<bookmark mark='b'/>然后是时间：循环网络，以及它们为什么会遗忘；能记住的LSTM；序列到序列的翻译器；还有从它们里面长出来的注意力。<bookmark mark='c'/>我们遇到的每一种网络，都会在这台计算机上亲手训练，看着它学。",
+        "机器是怎样学会看见、学会记住的？<bookmark mark='a'/>我们会沿着这条路走：从休伯尔和威泽尔的细胞，到LeNet、ImageNet，再到一百五十层深的网络。<bookmark mark='b'/>然后是时间：循环网络、LSTM、翻译，还有从中长出来的注意力。<bookmark mark='c'/>我们遇到的每一种网络，都会在这台计算机上亲手训练，看着它学。",
 
     'This is Part 10 of AI, Built, in the second act':
-        "这是《人工智能，从零搭建》的第10部分，属于第二幕：从数据中学习，排在第9部分的网络之后、第11部分的优化器之前。<bookmark mark='a'/>本部分要讲：深度学习之前的视觉，以及取代它的卷积；LeNet、AlexNet和更深的网络；它们的滤波器学到了什么，又怎样骗过它们；然后是循环网络、LSTM、翻译、注意力，以及今天的循环网络。",
+        "这是《人工智能，从零搭建》的第10部分，属于第二幕：从数据中学习，排在第9部分的网络之后、第11部分的优化器之前。<bookmark mark='a'/>本部分的计划是：深度学习之前的视觉，以及取代它的卷积；深度网络，它们学到了什么，又怎样骗过它们；然后是记忆，从LSTM到注意力，再回到循环。",
 
     # ------------------------------------------------------------------ Before
     'Chapter one. Vision before deep learning.': '第1章。深度学习之前的视觉。',
 
     'In 1962 Hubel and Wiesel sorted the cells they found into two kinds.':
-        "1962年，休伯尔和威泽尔把他们找到的细胞分成了两类。<bookmark mark='a'/>简单细胞对某个角度的边缘或线条有反应，而且只在眼睛所见的一小块区域里：光落在它亮的条带上会兴奋它，落在条带旁边会抑制它。<bookmark mark='b'/>复杂细胞对同一个角度有反应，但可以在更大区域里的任何地方，好像它收集了好几个简单细胞，只要其中任何一个放电，它就放电。<bookmark mark='c'/>先检测一个特征，再在位置上汇合，然后一层又一层地重复。这幅图景让他们在1981年获得了诺贝尔奖，而它几乎就是本部分这些网络的设计。",
+        "1962年，休伯尔和威泽尔把他们找到的细胞分成了两类。<bookmark mark='a'/>简单细胞对某个角度的边缘或线条有反应，而且只在眼睛所见的一小块区域里：光落在它亮的条带上会兴奋它，落在条带旁边会抑制它。<bookmark mark='b'/>复杂细胞对同一个角度有反应，但可以在更大区域里的任何地方，好像它收集了好几个简单细胞，只要其中任何一个放电，它就放电。<bookmark mark='c'/>先检测一个特征，再在位置上汇合，然后一层又一层地重复。这幅图景让他们在1981年获得了诺贝尔奖，它几乎就是本部分这些网络的设计。",
 
     'Computer vision began the same way, with edges.':
         "计算机视觉也是这样起步的：从边缘开始。边缘就是亮度变化很快的地方，所以对图像求导。<bookmark mark='a'/>实际上，就是左右、上下两侧像素之差。<bookmark mark='b'/>在一个手写数字上，每个箭头都指向亮度上升的方向，横穿笔画。<bookmark mark='c'/>在一张照片上，梯度的长度，用欧文·索贝尔1968年的算子来算，勾出了马的轮廓。几十年里，每个视觉系统都从这里开始。",
@@ -53,7 +53,7 @@ ZH = {
         "接着是描述子。把图像切成小格，在每一格里按角度数边缘，每条边按它的强度加权。<bookmark mark='a'/>这是我们那个数字的计数：每颗星是九个方向的直方图，长的辐条沿着笔画。<bookmark mark='b'/>大卫·罗的SIFT，2004年完整发表，在每一个尺度上找出有区分度的点，每个点用128个这样的计数来描述。<bookmark mark='c'/>纳夫尼特·达拉尔和比尔·特里格斯2005年的方向梯度直方图，覆盖整个窗口，按块归一化，用来找行人。这样数出来的图像，经得起小的平移和光照变化。",
 
     'By 2010 a good vision system was a pipeline.':
-        "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；手工设计的特征出来，SIFT和它的亲戚，在成千上万个地方计算；这些特征被编码、汇合成每张图一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>只有最后一个方框从数据中学习。它前面的一切，都是人花了几十年设计出来的。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。",
+        "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>只有最后一个方框从数据中学习。它前面的一切，都是人花了几十年设计出来的。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。",
 
     'f"We can measure what the features buy.':
         "我们可以量一量这些特征换来了什么。<bookmark mark='a'/>把同一个线性分类器训练两次，一次用原始像素，一次用我们的方向梯度直方图。在数字上，像素给出{pct(e['mnist_pixels'])}%的错误；直方图给出{pct(e['mnist_hog'])}%，少了大约{gain:.0f}倍。<bookmark mark='b'/>{photo}<bookmark mark='c'/>那个时代的教训是：{verdict}<bookmark mark='d'/>本部分剩下的内容要回答的问题是：如果特征也是学出来的呢？",
@@ -67,8 +67,8 @@ ZH = {
     "f'On the photographs it barely helps":
         "在照片上它几乎没有帮助：像素错{pct(e['cifar_pixels'], 0)}%，这些特征错{pct(cw, 0)}%。",
 
-    'the gap between our digits and photographs':
-        "我们的数字和照片之间的差距，正是那些流水线在整个2000年代努力弥补的差距，它们用的特征比我们的丰富得多，图像也多得多。",
+    'the gap between digits and photographs':
+        "数字和照片之间的差距，正是那些流水线在整个2000年代努力弥补的，靠的是更丰富的特征和多得多的图像。",
 
     # ------------------------------------------------------------------ Convolution
     'Chapter two. Convolution.': '第2章。卷积。',
@@ -77,7 +77,7 @@ ZH = {
         "假设一个网络要在数字里找一小段笔画。一个全连接单元给每个像素都配一个权重，<bookmark mark='a'/>所以要在任何地方都找到这段笔画，网络就得为它可能出现的每个位置各学一个检测器。<bookmark mark='b'/>一个卷积单元只看一小块，五个像素乘五个像素，<bookmark mark='c'/>而且一张特征图上的每个单元都用同样的二十五个权重，在图像上滑过去。<bookmark mark='d'/>要得到六张和数字一样大的图，全连接单元需要{e['params_dense'] / 1000000.0:.1f}百万个权重；不共享的局部小块需要{e['params_local']:,}个；共享的，只要{e['params_conv']}个。共享就是全部的想法：同一个图案可以出现在任何地方，所以在每个地方都用同一种方式去找它。",
 
     'f"Here is the operation.':
-        "运算是这样的。<bookmark mark='a'/>把一小格权重，也就是卷积核，盖在图像的一小块上；每个权重乘以它下面的像素，再全部加起来。这就是输出的一个数。<bookmark mark='b'/>把卷积核挪一个像素，再做一遍，一行一行地走，直到走遍每一个位置。<bookmark mark='c'/>输出是一张特征图：哪里的小块像这个卷积核，哪里就亮。{likes}<bookmark mark='d'/>严格地说，这是互相关；数学家的卷积要先把卷积核翻转。既然卷积核是学出来的，没人在意，深度学习把两者都叫卷积。",
+        "运算是这样的。<bookmark mark='a'/>把一小格权重，也就是卷积核，盖在图像的一小块上；每个权重乘以它下面的像素，再全部加起来。这就是输出的一个数。<bookmark mark='b'/>把卷积核挪一个像素，再做一遍，一行一行地走，直到走遍每一个位置。<bookmark mark='c'/>输出是一张特征图：哪里的小块像这个卷积核，哪里就亮。{likes}<bookmark mark='d'/>严格地说，这是互相关；数学家的卷积要先把卷积核翻转，不过学出来的卷积核并不在乎。",
 
     'This kernel was learned, and it likes the bottom edges': '这个卷积核是学出来的，它喜欢笔画的下边缘。',
     'This kernel was learned, and it likes the top edges': '这个卷积核是学出来的，它喜欢笔画的上边缘。',
@@ -106,7 +106,7 @@ ZH = {
     'Chapter three. Receptive fields, stride and pooling.': '第3章。感受野、步长与池化。',
 
     'One unit of the first layer sees three pixels by three.':
-        "第一层的一个单元看三个像素乘三个像素。<bookmark mark='a'/>第二层的一个单元看第一层的三乘三个单元，而它们各自又看自己的三乘三，所以合起来覆盖五乘五个像素。<bookmark mark='b'/>第三层，七乘七。这就是单元的感受野：图像里能改变它的那一部分。叠起来，感受野组成一个锥体，深层的单元能看到图的很大一块，是由许多小小的一瞥拼成的。",
+        "第一层的一个单元看三个像素乘三个像素。<bookmark mark='a'/>第二层的一个单元看第一层的三乘三个单元，而它们各自又看自己的三乘三，所以合起来覆盖五乘五个像素。<bookmark mark='b'/>第三层，七乘七。这就是单元的感受野：图像里能改变它的那一部分。叠起来，感受野组成一个锥体。",
 
     'We can count the cone exactly.':
         "我们可以精确地数出这个锥体。<bookmark mark='a'/>给卷积核大小、步长、相邻单元之间相隔的像素数和感受野各起个名字。<bookmark mark='b'/>大小为k的卷积核，多够到下一层k减1个单元，它们相隔j个像素：感受野增加k减1乘以j。<bookmark mark='c'/>步长会把间隔乘上去。<bookmark mark='d'/>展开来：1，加上每一层多出的抽头数乘以它前面所有步长的乘积。<bookmark mark='e'/>步长之后的每一层，都分量更重。",
@@ -136,13 +136,13 @@ ZH = {
     'Chapter four. LeNet and MNIST.': '第4章。LeNet与MNIST。',
 
     'f"The first network built on Hubel and Wiesel\'s plan came from Japan.':
-        "第一个按休伯尔和威泽尔的蓝图搭起来的网络，来自日本。<bookmark mark='a'/>1980年，福岛邦彦的新认知机把S细胞层和C细胞层叠起来，仿照简单细胞和复杂细胞，即使数字被平移了也能认出来。但它不用反向传播学习，而是按自己的一套规则。<bookmark mark='b'/>1989年，在贝尔实验室，杨立昆和同事用反向传播端到端地训练了一个卷积网络，梯度穿过共享的权重，数据是真实邮政编码里的数字：{ZIP1989['train']:,}个用来训练，测试数字上的错误率是{ZIP1989['error']:.0f}%。<bookmark mark='c'/>同一年，亚历克斯·魏贝尔的团队把共享权重沿着时间滑动，用来识别语音。",
+        "第一个按休伯尔和威泽尔的蓝图搭起来的网络，来自日本。<bookmark mark='a'/>1980年，福岛邦彦的新认知机把S细胞层和C细胞层叠起来，仿照简单细胞和复杂细胞，即使数字被平移了也能认出来。但它不用反向传播学习，而是按自己的一套规则。<bookmark mark='b'/>1989年，在贝尔实验室，杨立昆和同事用反向传播端到端地训练了一个卷积网络，梯度穿过共享的权重，数据是真实邮政编码里的数字：{ZIP1989['train']:,}个用来训练，测试数字上的错误率是{ZIP1989['error']:.0f}%。<bookmark mark='c'/>同一年，亚历克斯·魏贝尔的团队把共享权重沿着时间滑动。",
 
     'f"By 1998 the design had a name and a benchmark.':
         "到1998年，这个设计有了名字，也有了基准。<bookmark mark='a'/>LeNet-5，出自杨立昆、莱昂·博图、约书亚·本吉奥和帕特里克·哈夫纳：两轮卷积和池化，先六张特征图再十六张，然后三个全连接层，收到十个数字。<bookmark mark='b'/>还有MNIST，七万个手写数字，由美国政府的两批数据重新混合而成，一批出自人口普查局的雇员，一批出自高中生。<bookmark mark='c'/>LeNet-5在{LENET5_1998}%的测试数字上出错，用变形的副本训练时是{LENET5_DISTORT}%；围绕它搭起的系统进了银行，每天读几百万张支票。<bookmark mark='d'/>我们搭了同样的结构，换上今天的ReLU和最大池化。",
 
     'f"Now let\'s watch ours learn.':
-        "现在看我们的网络怎样学。左边是它在一万个测试数字上的错误率；右边是它第一层的六个卷积核、它们对一个测试数字的反应，以及它对这个数字的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错{pct(e0, 0)}%。<bookmark mark='b'/>不到{steps[i_half]:,}步，错误率就降到5%以下，卷积核变成了笔画和笔画边缘的检测器，各有各的角度。<bookmark mark='c'/>把训练数字过了{L['epochs']}遍之后，错{pct(eN, 2)}%。这些卷积核没有人设计：凡是能让答案正确的，就是它们。",
+        "现在看我们的网络怎样学。左边是它的测试错误率；右边是它第一层的六个卷积核、它们对一个数字的反应，以及它的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错{pct(e0, 0)}%。<bookmark mark='b'/>不到{steps[i_half]:,}步，错误率就降到5%以下，卷积核变成了笔画和笔画边缘的检测器，各有各的角度。<bookmark mark='c'/>把训练数字过了{L['epochs']}遍之后，错{pct(eN, 2)}%。这些卷积核没有人设计：凡是能让答案正确的，就是它们。",
 
     "f'Over three training runs with different random starts":
         "三次从不同随机起点出发的训练，我们的网络在{pct(m, 2)}%的测试数字上出错，范围在{pct(lo, 2)}%到{pct(hi, 2)}%之间：{cmp}<bookmark mark='a'/>这是它错掉的一些数字。其中好几个，人看了也会犹豫。",
@@ -190,7 +190,7 @@ ZH = {
     'Chapter six. Why AlexNet won.': '第6章。AlexNet为什么赢了。',
 
     'f"The first difference inside AlexNet is small: the activation.':
-        "AlexNet里面的第一个不同之处很小：激活函数。<bookmark mark='a'/>20世纪90年代的网络用tanh或sigmoid把每个单元压扁。AlexNet用的是修正线性单元：输入为负时是零，否则就是输入本身，由维诺德·奈尔和辛顿在2010年推广开来。<bookmark mark='b'/>原因在斜率上：反向传播在每一层都要把梯度乘以激活函数的斜率。sigmoid的斜率最多四分之一，而且它和tanh一旦被推离零点太远，就平得什么都不剩：单元饱和了，停止学习。ReLU的斜率，只要它是开着的，就是1。<bookmark mark='c'/>克里热夫斯基在CIFAR-10上量过：一个四层网络，用ReLU达到25%训练错误率，比同样的网络用tanh快了{ALEXNET['relu_speedup']}倍。",
+        "AlexNet里面的第一个不同之处很小：激活函数。<bookmark mark='a'/>20世纪90年代的网络用tanh或sigmoid把每个单元压扁。AlexNet用的是修正线性单元：输入为负时是零，否则就是输入本身。<bookmark mark='b'/>原因在斜率上：反向传播在每一层都要把梯度乘以激活函数的斜率。sigmoid的斜率最多四分之一，而且它和tanh一旦被推离零点太远，就平得什么都不剩：单元饱和了，停止学习。ReLU的斜率，只要它是开着的，就是1。<bookmark mark='c'/>克里热夫斯基在CIFAR-10上量过：一个四层网络，用ReLU达到25%训练错误率，比同样的网络用tanh快了{ALEXNET['relu_speedup']}倍。",
 
     'f"We ran the race ourselves, on the digits':
         "我们自己在数字上比了一场：同一个六层卷积网络，每种激活函数各训练三次，像AlexNet那样用带动量的普通梯度下降。<bookmark mark='a'/>虚线是{int(100 * thr)}%的训练错误率。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{sig}",
@@ -253,13 +253,13 @@ ZH = {
         "2014年的冠军走了另一条路。<bookmark mark='a'/>克里斯蒂安·塞格迪在谷歌的团队用Inception模块搭出了GoogLeNet：同时透过几个大小不同的窗口去看上一层，再把结果并排堆起来。<bookmark mark='b'/>让它负担得起的办法是：在每个大卷积前面放一个1乘1的卷积，在昂贵的那一步之前先把通道数削减下来。<bookmark mark='c'/>二十二层，当年最好的错误率，而且按作者的统计，权重只有AlexNet的十二分之一。更深，不一定意味着更大。",
 
     'f"Then depth hit a wall.':
-        "然后，深度撞上了一堵墙。<bookmark mark='a'/>微软的何恺明和同事发现，一个五十六层的普通网络比二十层的还差，连在自己的训练数据上都更差：不是过拟合，只是更难训练。那一年谢尔盖·约费和塞格迪提出的批归一化，让每一层的输入保持标准化，有帮助，但不够。<bookmark mark='b'/>他们的办法是：让每两层只学一个修正量F(x)，加到它的输入上。<bookmark mark='c'/>这个块的导数是单位矩阵加上F的导数：一条梯度总能通过的路，不管堆得多深，第9部分推导过。<bookmark mark='d'/>一百五十二层，以{ILSVRC[5][2]}%赢下了2015年。几个月前，高速公路网络已经用门搭出了同样的通路。",
+        "然后，深度撞上了一堵墙。<bookmark mark='a'/>微软的何恺明和同事发现，一个五十六层的普通网络比二十层的还差，连在自己的训练数据上都更差：不是过拟合，只是更难训练。那一年提出的批归一化有帮助，但不够。<bookmark mark='b'/>他们的办法是：让每两层只学一个修正量F(x)，加到它的输入上。<bookmark mark='c'/>这个块的导数是单位矩阵加上F的导数：一条梯度总能通过的路，不管堆得多深，第9部分推导过。<bookmark mark='d'/>一百五十二层，以{ILSVRC[5][2]}%赢下了2015年。几个月前，高速公路网络已经用门搭出了同样的通路。",
 
     # ------------------------------------------------------------------ Filters
     'Chapter eight. What the filters learn.': '第8章。滤波器学到了什么。',
 
-    'f"To see what a network learns from photographs':
-        "要看网络从照片里学到什么，我们得有照片。<bookmark mark='a'/>CIFAR-10，克里热夫斯基在2009年收集：六万张32乘32像素的图片，分十个类别。<bookmark mark='b'/>我们给它的网络有一个像AlexNet那样的第一层：48个7乘7像素的彩色卷积核，步长为2，后面还有三个卷积层。<bookmark mark='c'/>在这台计算机上把五万张训练照片过了{cf['epochs']}遍以后，它能把一万张测试照片中的{pct(acc)}%标对。",
+    'f"<bookmark mark=\'a\'/> CIFAR-10, collected by Krizhevsky':
+        "<bookmark mark='a'/>CIFAR-10，克里热夫斯基在2009年收集：六万张32乘32像素的图片，分十个类别。<bookmark mark='b'/>我们给它的网络有一个像AlexNet那样的第一层：48个7乘7像素的彩色卷积核，步长为2，后面还有三个卷积层。<bookmark mark='c'/>在这台计算机上把五万张训练照片过了{cf['epochs']}遍以后，它能把一万张测试照片中的{pct(acc)}%标对。",
 
     'f"Now replay the training and watch the first layer.':
         "现在重放训练过程，看第一层。<bookmark mark='a'/>一开始是48块噪声，答对{pct(accs[0], 0)}%：瞎猜的水平。<bookmark mark='b'/>不到{steps[mid]:,}步，答对一半以上，噪声也组织起来了：有方向的条纹，亮对暗，还有颜色和它的对立色组成的斑块。<bookmark mark='c'/>{fin}克里热夫斯基的论文给AlexNet的96个卷积核画过同样的图，视觉皮层里也能找到同样种类的滤波器。",
@@ -283,7 +283,7 @@ ZH = {
     'Chapter nine. Adversarial examples.': '第9章。对抗样本。',
 
     'f"In December 2013 Christian Szegedy and six colleagues':
-        "2013年12月，克里斯蒂安·塞格迪和六位同事报告了一件怪事。<bookmark mark='a'/>对于网络分类正确的任何一张照片，他们都能找到一个极小的改动，人眼看不出来，却让网络答成别的东西。<bookmark mark='b'/>一年后，伊恩·古德费洛、乔纳森·施伦斯和塞格迪展示了一只熊猫，GoogLeNet以{P['panda']}%的置信度认出它是熊猫。加上一层淡淡的图案，每个像素改动{P['eps']}，也就是8位图像最小的一级，它就说这是长臂猿，置信度{P['gibbon']}%。<bookmark mark='c'/>他们也给出了解释。",
+        "2013年12月，克里斯蒂安·塞格迪和六位同事报告了一件怪事。<bookmark mark='a'/>对于网络分类正确的任何一张照片，他们都能找到一个极小的改动，人眼看不出来，却让网络答成别的东西。<bookmark mark='b'/>一年后，伊恩·古德费洛、乔纳森·施伦斯和塞格迪展示了一只熊猫，GoogLeNet以{P['panda']}%的置信度认出它是熊猫。加上一层淡淡的图案，每个像素改动{P['eps']}，它就说这是长臂猿，置信度{P['gibbon']}%。<bookmark mark='c'/>他们也给出了解释。",
 
     'Their argument is about linearity.':
         "他们的论证是关于线性的。取一个线性打分，w点乘x，把输入改动一个小小的η。<bookmark mark='a'/>打分变化w点乘η。<bookmark mark='b'/>如果每个像素最多只能改动ε，最大的变化来自把每个像素都沿它权重的符号方向移动ε：等于ε乘以权重绝对值之和。<bookmark mark='c'/>有n个输入、权重平均大小为m时，就是ε乘以m乘以n：在任何一个像素上小到看不出的改动，在几千个像素上加起来，就成了打分的大变化。<bookmark mark='d'/>ReLU网络是用线性的片段拼起来的，所以用网络自己的梯度做同样的事：这就是快速梯度符号法，一个梯度，一步。",
@@ -334,10 +334,10 @@ ZH = {
         "算术量降到标准层的{ft:.2f}，时间也降到{tt:.2f}：这里省下的几乎全兑现了。",
 
     'f"In 2017 Andrew Howard\'s team at Google':
-        "2017年，谷歌安德鲁·霍华德的团队用可分离卷积搭了一整个网络，给手机用：MobileNet。<bookmark mark='a'/>它在ImageNet上的准确率只比VGG-16低{v[1] - m[1]:.1f}个百分点，乘加次数却少{v[2] / m[2]:.0f}倍，权重少{v[3] / m[3]:.0f}倍，而且用比GoogLeNet更少的乘加和权重超过了它。从那以后，手机就是这样认人脸、认物体的。",
+        "2017年，谷歌安德鲁·霍华德的团队用可分离卷积搭了一整个网络，给手机用：MobileNet。<bookmark mark='a'/>它在ImageNet上的准确率只比VGG-16低{v[1] - m[1]:.1f}个百分点，乘加次数却少{v[2] / m[2]:.0f}倍，权重少{v[3] / m[3]:.0f}倍，而且用比GoogLeNet更少的乘加和权重超过了它。",
 
     'f"The other trick spreads a kernel out':
-        "另一个技巧是把卷积核摊开，而不是削瘦它。<bookmark mark='a'/>空洞卷积在抽头之间留出空隙：第一层相隔一格，下一层两格，然后四格，然后八格。<bookmark mark='b'/>感受野每一层翻一倍：十层三抽头的卷积之后，是{r['dilated'][9]:,}个输入，而不是{r['plain'][9]}个，而且不多花代价。<bookmark mark='c'/>这个想法在信号处理里早就有了，就是1989年的“带孔算法”；2016年，DeepMind的WaveNet用它一个采样一个采样地生成语音，每秒一万六千个，上下文有几千个。",
+        "另一个技巧是把卷积核摊开，而不是削瘦它。<bookmark mark='a'/>空洞卷积在抽头之间留出空隙：第一层相隔一格，下一层两格，然后四格，然后八格。<bookmark mark='b'/>感受野每一层翻一倍：十层三抽头的卷积之后，是{r['dilated'][9]:,}个输入，而不是{r['plain'][9]}个，而且不多花代价。<bookmark mark='c'/>这个想法早就有了，就是1989年的“带孔算法”；2016年，DeepMind的WaveNet用它来生成语音。",
 
     'f"In 2020 a transformer fed an image cut into patches':
         "2020年，一个把图像切成小块喂进去的Transformer，追平了最好的卷积网络，视觉Transformer很快就领先了各项基准：那是第22部分。<bookmark mark='a'/>2022年，Meta的刘壮和同事想知道，这个领先有多少来自架构，多少来自训练配方。他们从一个76.1%的ResNet-50出发：光是换上Transformer的训练配方就到了78.8%；深度卷积、更宽的层、7乘7的卷积核，再加上Transformer的层归一化，把它推到{vals[-1]}%，<bookmark mark='b'/>超过了同等大小的Transformer，{SWIN_T}%，而且完全没有注意力：这就是ConvNeXt。<bookmark mark='c'/>2023年，DeepMind用在四十亿张图片上训练的卷积网络追平了视觉Transformer。在大规模下，配方和算力比架构更重要：这是第12部分的教训。",
@@ -346,7 +346,7 @@ ZH = {
     'Chapter eleven. Recurrence and vanishing gradients.': '第11章。循环与梯度消失。',
 
     'Now the other half of this part: sequences.':
-        "现在是本部分的另一半：序列。卷积在空间上共享权重。循环网络在时间上共享权重。<bookmark mark='a'/>它保持一个隐状态h，一个向量，每一步都用同样的两个权重矩阵W和U，把旧的状态和新的输入混在一起，再经过一个压扁的tanh。<bookmark mark='b'/>沿着时间展开，它就是一个很深的网络，每一步一层，所有层共享权重。<bookmark mark='c'/>迈克尔·乔丹在1986年、杰弗里·埃尔曼在1990年，让这个想法在认知科学里流行起来：埃尔曼的网络只靠预测下一项，就找出了词的边界和语法类别。",
+        "现在是本部分的另一半：序列。卷积在空间上共享权重。循环网络在时间上共享权重。<bookmark mark='a'/>它保持一个隐状态h，一个向量，每一步都用同样的两个权重矩阵W和U，把旧的状态和新的输入混在一起，再经过一个压扁的tanh。<bookmark mark='b'/>沿着时间展开，它就是一个很深的网络，每一步一层，所有层共享权重。<bookmark mark='c'/>迈克尔·乔丹在1986年、杰弗里·埃尔曼在1990年，让这个想法在认知科学里流行起来。",
 
     'To train it, unroll it and backpropagate':
         "要训练它，就把它展开再做反向传播，这是保罗·韦尔博斯在1990年描述的：随时间反向传播。<bookmark mark='a'/>对一个早期状态h k的梯度，要穿过之后的每一个状态。<bookmark mark='b'/>每往回一步，就乘上那一步的雅可比矩阵：tanh的斜率乘以同一个矩阵W，一遍又一遍。<bookmark mark='c'/>斜率最多是1，所以这个乘积最多是W的最大奇异值的步数次方。<bookmark mark='d'/>小于1，从远处传回的梯度就指数级地缩小；特征值大于1，它就可能爆炸。<bookmark mark='e'/>塞普·霍赫赖特在他1991年的毕业论文里分析了这个问题；约书亚·本吉奥、帕特里斯·西马尔和保罗·弗拉斯科尼在1994年发表了它。",
@@ -391,7 +391,7 @@ ZH = {
         "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门。更新门z把旧状态和新的候选值混合：z接近零的地方，状态原封不动地通过，还是那条传送带。重置门r决定候选值能看多少过去。<bookmark mark='b'/>零件更少，而在那一年钟俊英和同事的比较里，效果差不多一样好。",
 
     'f"Does the carousel work?':
-        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。带门的细胞一开始就把门设成“记住”，记忆的时长分散在一步到序列长度之间：这是科朗坦·塔莱克和扬·奥利维耶在2018年提出的“时序初始化”。",
+        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。带门的细胞一开始就把门设成“记住”：这是科朗坦·塔莱克和扬·奥利维耶提出的“时序初始化”。",
 
     'f"{first} <bookmark mark=\'a\'/> {v} <bookmark mark=\'b\'/> {jump}"':
         "{first}<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
@@ -422,6 +422,9 @@ ZH = {
 
     'f"For the plain network, the gradient at the first step, the only one':
         "对普通网络，第一步的梯度，也就是唯一要紧的那一步，比最后一步弱了大约10的{gap_r:.0f}次方倍。<bookmark mark='b'/>对LSTM，差别是10的{gap_l:.0f}次方：传送带把信号带了回去。",
+
+    'f"For the plain network, the gradient at the first step, the only one that matters, is about ten to the {gap_r:.0f} times weaker than at the last. <bookmark mark=\'b\'/> For the LSTM the first':
+        "对普通网络，第一步的梯度，也就是唯一要紧的那一步，比最后一步弱了大约10的{gap_r:.0f}次方倍。<bookmark mark='b'/>对LSTM，第一步得到的梯度和最后一步差不多：传送带把信号带了回去。",
 
     'f"For the plain network the gradient at the first step is ten':
         "对普通网络，第一步的梯度比最后一步弱10的{gap_r:.0f}次方倍；<bookmark mark='b'/>对LSTM，是10的{gap_l:.0f}次方。",
@@ -508,7 +511,7 @@ ZH = {
         "它能把大多数字符串倒过来，只是越长越不可靠。",
 
     'f"Two years later the idea was in production.':
-        "两年后，这个想法上了生产线。<bookmark mark='a'/>谷歌2016年的神经机器翻译系统，两边各堆了八层LSTM，层与层之间有残差连接，在人工并排评比里，它比谷歌自己的基于短语的系统平均少了{GNMT['error_cut']}%的翻译错误。<bookmark mark='b'/>2016年9月，它接管了谷歌翻译的中译英，每天大约一千八百万次翻译。<bookmark mark='c'/>但GNMT还有一个成分，正是它移走了那个瓶颈。",
+        "两年后，这个想法上了生产线。<bookmark mark='a'/>谷歌2016年的神经机器翻译系统，两边各堆了八层LSTM，在人工并排评比里，它比谷歌自己的基于短语的系统平均少了{GNMT['error_cut']}%的翻译错误。<bookmark mark='b'/>2016年9月，它接管了谷歌翻译的中译英，每天大约一千八百万次翻译。<bookmark mark='c'/>但GNMT还有一个成分，正是它移走了那个瓶颈。",
 
     # ------------------------------------------------------------------ Attention
     'Chapter fifteen. The birth of attention.': '第15章。注意力的诞生。',
@@ -562,7 +565,7 @@ ZH = {
     'Chapter sixteen. Recurrence returns.': '第16章。循环的回归。',
 
     'After 2017 the Transformer took over':
-        "2017年以后，Transformer占了上风，原因是训练速度。<bookmark mark='a'/>循环网络必须算完第t减1步才能算第t步：一个一千个词元的序列，就是一千步排成一排，一块有成千上万条通道的GPU大部分时间都在等。<bookmark mark='b'/>注意力一次算完所有位置。<bookmark mark='c'/>但到生成的时候，这笔交易反过来了。循环网络从一个词元到下一个，只带着一份固定大小的记忆；Transformer要保留之前每个词元的键和值，一个随文本增长的缓存，第15部分会量给你看。于是问题又回来了：循环网络能不能并行训练？",
+        "2017年以后，Transformer占了上风，原因是训练速度。<bookmark mark='a'/>循环网络必须算完第t减1步才能算第t步：一个一千个词元的序列，就是一千步排成一排，一块有成千上万条通道的GPU大部分时间都在等。<bookmark mark='b'/>注意力一次算完所有位置。<bookmark mark='c'/>但到生成的时候，这笔交易反过来了。循环网络从一个词元到下一个，只带着一份固定大小的记忆；Transformer要保留之前每个词元的键和值，一个随文本增长的缓存。于是问题又回来了：循环网络能不能并行训练？",
 
     'It can, if the recurrence is linear.':
         "能，只要递推是线性的。<bookmark mark='a'/>假设新的状态是旧状态逐元素乘以a，再加上b，而a和b只取决于当前的输入。<bookmark mark='b'/>那么两步合起来，又是同样形式的一步：a乘a撇，以及a撇乘b加b撇。<bookmark mark='c'/>这个合并规则满足结合律，而序列上任何满足结合律的运算，都能用并行前缀扫描算出来，这是盖伊·布莱洛克在1990年让它出名的算法。<bookmark mark='d'/>先合并相邻的，再合并相隔两格的，再合并相隔四格的：以2为底T的对数轮之后，每个位置都得到了自己的状态。一千步变成了十轮。",

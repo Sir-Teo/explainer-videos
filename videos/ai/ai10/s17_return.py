@@ -55,13 +55,12 @@ class Return(VoiceoverScene):
             "thousand steps in a row, and a GPU with thousands of lanes mostly waits. <bookmark mark='b'/> "
             "Attention computes every position at once. <bookmark mark='c'/> But at generation time the "
             "bargain reverses. A recurrent network carries a fixed-size memory from token to token; a "
-            "transformer keeps every past token's keys and values, a cache that grows with the text, as Part 15 "
-            "will measure. So the question came back: can a recurrent network be trained in parallel?"
+            "transformer keeps every past token's keys and values, a cache that grows with the text. "
+            "So the question came back: can a recurrent network be trained in parallel?"
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(c) for c in rnn], lag_ratio=0.2))
             vo.wait_until("a")
-            self.play(FadeIn(rl), LaggedStart(*[AnimationGroup(FadeIn(c), *([GrowArrow(ra[i - 1])] if i else []))
-                                                for i, c in enumerate(rnn)], lag_ratio=0.5), run_time=3.0)
+            self.play(FadeIn(rl), LaggedStart(*[GrowArrow(a_) for a_ in ra], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(att), FadeIn(al), Create(aa), run_time=1.0)
             vo.wait_until("c")
@@ -159,6 +158,7 @@ class Return(VoiceoverScene):
         leg = legend([(LSTMC, r"step by step"), (MINC, r"parallel scan")], font_size=22).to_corner(UR, buff=0.5)
         kl = label(r"solid: \ a state of $8$ numbers; \ dashed: \ $256$", font_size=20, color=GREY_B)
         kl.next_to(leg, DOWN, buff=0.25).align_to(leg, LEFT)
+        keep_in_frame(kl)
         err = max(r["err"] for r in rows)
         big8 = max((r for r in rows if r["d"] == 8), key=lambda r: r["T"])
         big256 = max((r for r in rows if r["d"] == 256), key=lambda r: r["T"])
@@ -185,10 +185,11 @@ class Return(VoiceoverScene):
             f"{MINRNN['gru4096']:,} times faster at length 4,096."
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(kl), FadeIn(tag))
+            self.play(Create(out[0]), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(facts[0]))
             vo.wait_until("b")
-            self.play(Create(out[0]), FadeIn(facts[1]), run_time=2.0)
+            self.play(FadeIn(facts[1]), Indicate(out[0], color=WHITE))
             vo.wait_until("c")
             self.play(Create(out[1]), run_time=2.0)
         self.wait(0.3)
@@ -208,7 +209,7 @@ class Return(VoiceoverScene):
         nl = label(r"the GRU, with $h_{t-1}$ taken out of the gates: \ $a_t = 1 - z_t$, \ $b_t = z_t \odot "
                    r"\tilde h_t$", font_size=20, color=GREY_A).next_to(card, DOWN, buff=0.2).align_to(card, LEFT)
         cells = ("rnn", "lstm", "gru", "mingru")
-        bars = VGroup()
+        bars, newb = VGroup(), VGroup()
         for j, T in enumerate(Ts):
             for k, c in enumerate(cells):
                 vals = [runs[f"{c}-{T}-{s}"]["final"] for s in (0, 1, 2)]
@@ -218,12 +219,12 @@ class Return(VoiceoverScene):
                 b = Rectangle(width=0.44, height=h, stroke_width=0, fill_color=CELLS[c], fill_opacity=0.85)
                 b.move_to([x, -2.6 + h / 2, 0])
                 dots = VGroup(*[Dot([x, -2.6 + 2.6 * fv, 0], radius=0.04, color=WHITE) for fv in vals])
-                bars.add(VGroup(b, dots))
+                (newb if c == "mingru" else bars).add(VGroup(b, dots))
             bars.add(MathTex(rf"T = {T}", font_size=24, color=GREY_A).move_to([-4.6 + 3.3 * j + 0.78, -2.95, 0]))
         base = Line([-5.1, -2.6, 0], [4.6, -2.6, 0], color=GREY_C, stroke_width=1.5)
         leg = legend([(CELLS[c], CELL_NAME[c]) for c in cells], font_size=22).to_corner(UR, buff=0.4)
         bl = label(r"the memory task of Chapter 12: \ final accuracy", font_size=22, color=GREY_A)
-        bl.next_to(leg, DOWN, buff=0.3).align_to(leg, LEFT)
+        bl.move_to([-0.3, 0.6, 0])
         tag = note(r"computed: \ three seeds; \ minGRU trained through the scan").to_corner(DR, buff=0.2)
         mg = float(np.mean([runs[f"mingru-{Ts[-1]}-{s}"]["final"] for s in (0, 1, 2)]))
         rn = float(np.mean([runs[f"rnn-{Ts[-1]}-{s}"]["final"] for s in (0, 1, 2)]))
@@ -242,12 +243,12 @@ class Return(VoiceoverScene):
             "trains with a scan. They called it minGRU, and found it competitive on their tasks. "
             "<bookmark mark='b'/> We trained one, through the scan, beside the others. " + v
         ) as vo:
-            self.play(FadeIn(card, shift=UP * 0.2))
+            self.play(FadeIn(card, shift=UP * 0.2), Create(base), FadeIn(leg), FadeIn(bl), FadeIn(tag),
+                      LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.04), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(nl))
             vo.wait_until("b")
-            self.play(Create(base), FadeIn(leg), FadeIn(bl), FadeIn(tag),
-                      LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.04), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in newb], lag_ratio=0.3), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

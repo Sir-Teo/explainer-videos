@@ -54,7 +54,7 @@ class RBM(VoiceoverScene):
         vis = VGroup(*[Square(0.16, stroke_color=DATA, stroke_width=1, fill_color=DATA, fill_opacity=0.2)
                        for _ in range(49)]).arrange_in_grid(7, 7, buff=0.03).move_to([-4.0, -1.6, 0])
         hid = VGroup(*[Circle(0.13, stroke_color=EBM, stroke_width=1.5, fill_color=EBM, fill_opacity=0.3)
-                       for _ in range(16)]).arrange(RIGHT, buff=0.12).move_to([-2.3, 0.2, 0])
+                       for _ in range(16)]).arrange(RIGHT, buff=0.12).move_to([-3.1, 0.2, 0])
         edges = VGroup(*[Line(v.get_center(), h.get_center(), stroke_width=0.5, color=GREY_C).set_opacity(0.35)
                          for i, v in enumerate(vis) for j, h in enumerate(hid) if (i + 3 * j) % 7 == 0])
         vl = label(r"$196$ visible units $v$", font_size=20, color=DATA).next_to(vis, DOWN, buff=0.12)
@@ -65,8 +65,8 @@ class RBM(VoiceoverScene):
             cmath(r"p(v_i = 1 \mid h)", r"=", r"\sigma\big(b_i + W_{i:}\, h\big)", font_size=32),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 1.6, 0])
         rows[0][0].set_color(EBM)
-        nb = label(r"no connections within a layer: \ given one layer, \ the other's units are independent",
-                   font_size=20, color=GREY_A).next_to(rows, DOWN, buff=0.3)
+        nb = label(r"no connections within a layer: \\ given one layer, \ the other's units are independent",
+                   font_size=20, color=GREY_A).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
         card = history_card(1986, r"Smolensky: \ the harmonium", r"later renamed the restricted Boltzmann machine",
                             width=4.6, font_size=18).move_to([3.6, -2.2, 0])
         with self.voiceover(
@@ -172,15 +172,28 @@ class RBM(VoiceoverScene):
         lo = float(min(c[:, 1:, 1].min() for c in curves.values()))
         hi = float(max(c[:, :, 1].max() for c in curves.values()))
         lo_t, hi_t = float(np.floor(lo / 10) * 10), float(np.ceil(hi / 10) * 10)
-        g = axes([0, S[-1]], [lo_t, hi_t], x_length=6.2, y_length=3.8, xlabel=r"parameter updates",
+        g = axes([0, S[-1]], [lo_t, hi_t], x_length=5.2, y_length=3.8, xlabel=r"parameter updates",
                  ylabel=r"test log-likelihood, \ nats per digit \ (exact)", xticks=[0, S[-1]],
-                 yticks=[lo_t, hi_t], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), center=[-1.6, -0.5, 0])
+                 yticks=[lo_t, hi_t], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), center=[-3.4, -0.5, 0])
         bands, lines = VGroup(), VGroup()
         for m in ("cd1", "cd10", "pcd"):
             Y = curves[m][:, :, 1]
             bands.add(band(g.ax, S, Y.min(0), Y.max(0), COLS[m], 0.25))
             lines.add(curve(g.ax, S, Y.mean(0), COLS[m], 3))
-        lg = legend([(COLS[m], NAMES[m]) for m in ("cd1", "cd10", "pcd")], font_size=22).next_to(g, RIGHT, buff=0.4)
+        # where each seed ends, on a scale fine enough to see the differences (the bands above overlap)
+        ends = {m: [float(r[f"{m}_s{s}_test_ll"]) for s in range(3)] for m in ("cd1", "cd10", "pcd")}
+        allv = [v for vs in ends.values() for v in vs]
+        a0, a1 = np.floor(min(allv) * 10) / 10 - 0.05, np.ceil(max(allv) * 10) / 10 + 0.05
+        X = lambda v: 1.7 + 4.6 * (v - a0) / (a1 - a0)
+        lg = VGroup(*[label(NAMES[m], font_size=22, color=COLS[m]).move_to([1.5, 0.7 - 0.65 * i, 0],
+                                                                          aligned_edge=RIGHT)
+                      for i, m in enumerate(("cd1", "cd10", "pcd"))])
+        edots = VGroup(*[Dot([X(v), 0.7 - 0.65 * i, 0], radius=0.08, color=COLS[m]).set_opacity(0.85)
+                         for i, m in enumerate(("cd1", "cd10", "pcd")) for v in ends[m]])
+        zt = [round(a0 + 0.05, 1), round(a1 - 0.05, 1)]
+        zax = VGroup(Line([X(a0), -1.0, 0], [X(a1), -1.0, 0], color=GREY_C, stroke_width=1.5),
+                     *[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).move_to([X(v), -1.3, 0]) for v in zt])
+        zl = label(r"where each seed ends \ (zoomed)", font_size=20, color=GREY_A).move_to([3.95, 1.4, 0])
         nh = int(r["nh"])
         eq = label(rf"$Z$ summed exactly over all $2^{{{nh}}} = {2 ** nh:,}$ hidden states".replace(",", "{,}"),
                    font_size=22, color=C.BITS).to_edge(UP, buff=0.4)
@@ -206,6 +219,7 @@ class RBM(VoiceoverScene):
             for k in range(3):
                 self.play(FadeIn(bands[k]), Create(lines[k]), FadeIn(lg[k]), run_time=1.2)
             vo.wait_until("b")
+            self.play(FadeIn(zl), FadeIn(zax), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in edots], lag_ratio=0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -213,7 +227,7 @@ class RBM(VoiceoverScene):
     def learned(self):
         r = load("rbm")
         Wb = np.asarray(r["big_W"])
-        fs = filter_sheet(Wb[:40], 5, 8, size=0.42).move_to([-3.4, 1.0, 0])
+        fs = filter_sheet(Wb[:40], 5, 8, size=0.5).move_to([-3.5, 0.9, 0])
         fl = label(r"$40$ of a $100$-unit RBM's filters: \ warm $+$, \ cool $-$", font_size=20, color=EBM)
         fl.next_to(fs, UP, buff=0.12)
         chain = np.asarray(r["big_chain"])  # 5 x 16 x 196

@@ -144,6 +144,11 @@ class Dynamics(VoiceoverScene):
                      (C.BITS, rf"with R1, \ $\gamma = {b['dirac_gamma']:g}$")], font_size=20).move_to([3.4, -1.0, 0])
         cite_ = cite(r"Mescheder, Geiger \& Nowozin, \textit{Which Training Methods for GANs do actually Converge?} "
                      r"(2018)", corner=DR)
+        # the Dirac-GAN's own field: V = f(psi theta) + f(0), f(t) = -log(1 + e^-t); theta descends, psi ascends
+        tt, pp = np.meshgrid(np.linspace(-1.4, 1.4, 11), np.linspace(-1.4, 1.4, 11))
+        fp = 1 / (1 + np.exp(tt * pp))
+        fld = arrows(pl, np.c_[tt.ravel(), pp.ravel()], np.c_[(-pp * fp).ravel(), (tt * fp).ravel()], color=GREY_B,
+                     max_len=0.36).set_opacity(0.55)
         Ps = np.clip(b["dirac_sim"], -1.55, 1.55)
         n_out = int(np.argmax(np.abs(np.asarray(b["dirac_sim"])).max(1) > 1.55)) or len(Ps)
         with self.voiceover(
@@ -156,6 +161,7 @@ class Dynamics(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pl), FadeIn(th), FadeIn(ps), FadeIn(setup), FadeIn(cite_))
             vo.wait_until("a")
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in fld], lag_ratio=0.01), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(lg[0]))
             t1, d1, p1 = traced(self, pl, Ps[:n_out], SIM, 1)
@@ -182,11 +188,12 @@ class Dynamics(VoiceoverScene):
         seed = int(g["seed"])
         A = counts.T / max(counts.max(), 1)
         rgb = rgb_of("#0B0F17")[None, None] * (1 - A[..., None]) + rgb_of(GAN_C)[None, None] * A[..., None]
-        img = to_image(rgb, 10.0, 3.2)
-        img.move_to([0.4, 0.4, 0])
+        H = 4.2
+        img = to_image(rgb, 10.0, H)
+        img.move_to([0.4, 0.45, 0])
         box = SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1.2)
         ml = VGroup(*[label(rf"mode {k + 1}", font_size=18, color=GREY_B).next_to(
-            img.get_corner(UL) + DOWN * (k + 0.5) * 3.2 / 8, LEFT, buff=0.15) for k in range(8)])
+            img.get_corner(UL) + DOWN * (k + 0.5) * H / 8, LEFT, buff=0.15) for k in range(8)])
         xl = label(r"training step $\to$", font_size=20, color=GREY_A).next_to(img, DOWN, buff=0.15)
         x0 = MathTex(r"0", font_size=20, color=GREY_B).next_to(img.get_corner(DL), DOWN, buff=0.1)
         x1 = MathTex(rf"{int(steps[-1]):,}".replace(",", "{,}"), font_size=20, color=GREY_B)

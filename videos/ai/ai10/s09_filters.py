@@ -60,7 +60,7 @@ class Filters(VoiceoverScene):
         tag = note(rf"computed: \ ${cf['params']:,}$ weights, \ trained here in ${cf['seconds'] / 60:.0f}$ minutes"
                    .replace(",", "{,}")).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "To see what a network learns from photographs, we need photographs. <bookmark mark='a'/> CIFAR-10, "
+            "<bookmark mark='a'/> CIFAR-10, "
             "collected by Krizhevsky in 2009: sixty thousand pictures of thirty-two by thirty-two pixels, in ten "
             "classes. <bookmark mark='b'/> Our network for it has an AlexNet-like first layer, 48 kernels of "
             "seven by seven pixels in colour, at a stride of two, then three more convolutional layers. "

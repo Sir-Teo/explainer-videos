@@ -635,9 +635,10 @@ def compute_hopfield():
             om += int((s_new == Xd[k]).mean() > 0.97)
         recall["hebb"].append(oh / P)
         recall["modern"].append(om / P)
-    # one recall, replayed: three digits stored, a 25%-flipped cue, every update
-    W = hebb(Xd[:3])
-    cue = Xd[1] * np.where(np.random.default_rng(42).random(N) < 0.25, -1, 1)
+    # one recall, replayed: one digit stored (with three, these look-alike digits already blend: see recall_hebb),
+    # a 25%-flipped cue, every update
+    W = hebb(Xd[2:3])
+    cue = Xd[2] * np.where(np.random.default_rng(42).random(N) < 0.25, -1, 1)
     rec = []
     fin = run(W, cue, 4, rec)
     frames = np.array([cue] + rec[::14] + [fin])
@@ -647,7 +648,7 @@ def compute_hopfield():
     mix = run(W5, Xd[1] * np.where(np.random.default_rng(42).random(N) < 0.25, -1, 1), 6)
     return dict(N=N, Ps=Ps, recall_random=frac, stable_random=stable, digits=Xd, overlap=overlap,
                 recall_hebb=recall["hebb"], recall_modern=recall["modern"], frames=frames, energy=energy,
-                final_overlap=float(fin @ Xd[1] / N), mixture=mix, mixture_overlap=(Xd[:6] @ mix / N),
+                final_overlap=float(fin @ Xd[2] / N), mixture=mix, recall_digit=2, mixture_overlap=(Xd[:6] @ mix / N),
                 beta_modern=8.0, trials=6)
 
 

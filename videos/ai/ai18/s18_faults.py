@@ -51,14 +51,18 @@ class Faults(VoiceoverScene):
         src = cite(r"Llama Team (2024), Sec.\ 3.3.4, Table 5", corner=DR, font_size=17)
         with self.voiceover(
             f"Back to Llama 3's run. In fifty-four days its job was interrupted {L['interruptions']} times, "
-            f"{L['unexpected']} of them unplanned. <bookmark mark='a'/> Here are the causes Meta reported. The "
-            "largest by far: a faulty GPU, then a failing memory chip on a GPU, then software bugs, network switches "
-            "and cables, and host maintenance. <bookmark mark='b'/> That is one interruption every "
-            f"{P['llama_mtbf_h']:.1f} hours. Yet each GPU on its own failed about once in "
+            f"{L['unexpected']} of them unplanned. <bookmark mark='a'/> Here are the causes Meta reported: faulty "
+            "GPUs above "
+            "all, then their memory chips, software bugs, network switches and cables. <bookmark mark='b'/> That is "
+            "one "
+            f"interruption every {P['llama_mtbf_h']:.1f} hours. Yet each GPU on its own failed about once in "
             f"{P['llama_gpu_mtbf_years']:.1f} years: the problem is not the parts, it is that there are sixteen "
-            "thousand of them, and any one stops the whole job. <bookmark mark='c'/> Thanks to automation, only three "
-            "failures needed a person, and the run spent more than ninety percent of its time training. "
-            "<bookmark mark='d'/> Even the weather showed, in the throughput and in the power draw."
+            "thousand of "
+            "them, and any one stops the whole job. <bookmark mark='c'/> Thanks to automation, only three failures "
+            "needed a "
+            "person, and the run spent more than ninety percent of its time training. <bookmark mark='d'/> Even the "
+            "weather "
+            "showed."
         ) as vo:
             self.play(FadeIn(bh), FadeIn(src))
             vo.wait_until("a")
@@ -110,12 +114,17 @@ class Faults(VoiceoverScene):
         tsch = note(r"schematic", font_size=17).next_to(tline, UP, buff=0.12).align_to(tline, RIGHT)
         src = cite(r"Young, CACM (1974); \ Llama Team (2024), Sec.\ 3.3.4", corner=DR, font_size=17)
         with self.voiceover(
-            "So a run saves a checkpoint of every GPU's state regularly, and after a failure restarts from the last one. "
-            "How often should it save? Saving every tau seconds, at a cost of delta each time, wastes delta over tau of "
-            "the run. <bookmark mark='a'/> And a failure, arriving on average every M seconds, throws away the work since "
-            "the last save, half an interval on average: tau over two M more. <bookmark mark='b'/> Set the derivative to "
+            "So a run saves a checkpoint of every GPU's state regularly, and after a failure restarts from the last "
+            "one. "
+            "How often should it save? Saving every tau seconds, at a cost of delta each time, wastes delta over tau "
+            "of "
+            "the run. <bookmark mark='a'/> And a failure, arriving on average every M seconds, throws away the work "
+            "since "
+            "the last save, half an interval on average: tau over two M more. <bookmark mark='b'/> Set the derivative "
+            "to "
             "zero. <bookmark mark='c'/> The best interval is the square root of two delta M: John Young's rule, from "
-            "1974. <bookmark mark='d'/> For Llama 3: checkpoints of up to four gigabytes per GPU, storage that wrote two "
+            "1974. <bookmark mark='d'/> For Llama 3: checkpoints of up to four gigabytes per GPU, storage that wrote "
+            "two "
             f"terabytes a second, so a full save took about {P['llama_ckpt_s']:.0f} seconds; with a failure every "
             f"{P['llama_mtbf_h']:.1f} hours, save every {P['llama_young_s'] / 60:.0f} minutes or so."
         ) as vo:
@@ -177,8 +186,7 @@ class Faults(VoiceoverScene):
             f"best interval in the simulation is {Fa['best_tau'] / 60:.0f} minutes; Young's rule says "
             f"{Fa['young'] / 60:.0f}. <bookmark mark='c'/> Even then, {100 * lost:.0f} percent of the time is lost: "
             f"{100 * restart_share:.0f} percent to the restarts alone, the rest to saving and to work done twice. That "
-            "is why frontier labs make restarts fast and checkpoints asynchronous, and why DeepSeek-V4's kernels are "
-            "deterministic: a run that replays exactly can be debugged."
+            "is why frontier labs make restarts fast and checkpoints asynchronous."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(info[:3]))
             self.play(FadeIn(bd), Create(cv), run_time=3.0)

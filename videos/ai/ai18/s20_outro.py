@@ -99,13 +99,14 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. A pretraining corpus starts as a crawl of the web, and most of it is thrown away: by "
             "address, by language, by quality. MinHash and locality-sensitive hashing find the near-duplicates "
-            "without comparing every pair, and " + scurve + ". A small classifier, trained on a "
-            "large model's grades, decides which pages teach. Mixtures are chosen for a target, and synthetic data "
-            "helps only alongside real text. Then the arithmetic: six operations per parameter per token, sixteen "
-            "bytes per parameter, and activations on top. Data parallelism needs an all-reduce, and the ring is "
-            "optimal; ZeRO shards the copies away; tensor, pipeline, context and expert parallelism cut the rest. "
-            "Fewer bits need scaling tricks, big runs need QK-norm and the z-loss, and sixteen thousand GPUs need "
-            "checkpoints. And our own model, trained with the full recipe, took its place on the scoreboard."
+            "without comparing every pair, and " + scurve + ". Mixtures are chosen for a target, and synthetic data helps "
+            "only alongside real text. A run costs six operations and sixteen bytes per parameter, and activations on "
+            "top. "
+            "The ring all-reduce is optimal; ZeRO shards the copies away; tensor, pipeline, context and expert "
+            "parallelism cut "
+            "the rest. Fewer bits need scaling tricks, big runs need QK-norm, and sixteen thousand GPUs need "
+            "checkpoints. "
+            "And our own model, trained with the full recipe, took its place on the scoreboard."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -124,10 +125,11 @@ class Outro(VoiceoverScene):
             (r"contamination, \ evaluation, \ trust", [31]),
         ], font_size=24)
         with self.voiceover(
-            "All of this comes back. Serving the trained model, with its caches, drafts and four-bit weights, is "
-            "Part 19. The same data pipelines feed images, video and sound in Parts 22 and 23. Post-training starts "
-            "from a pretrained model in Part 27, and reinforcement learning builds reasoning on top of it in Part "
-            "28. Part 30 opens a pretrained model up, and Part 31 asks how far its evaluations can be trusted."
+            "All of this comes back. Serving the trained model is Part 19. The same data pipelines feed images, video "
+            "and "
+            "sound in Parts 22 and 23. Post-training starts from a pretrained model in Part 27, reasoning in Part 28, "
+            "and "
+            "Parts 30 and 31 open it up and test how far its evaluations can be trusted."
         ) as vo:
             self.play(FadeIn(card.head))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),

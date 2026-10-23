@@ -18,9 +18,9 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   in 54 days (419 unplanned), one every 3.1 hours (computed); the question; the miniature; the plan.
 * **1. Anatomy of a frontier run.** The pipeline from crawl to post-training; Olmo 3 (5.9T + 100B mid-training + 50B
   long context) and SmolLM3 (three stages) drawn to scale; six runs of 2024–26 (Llama 3.1 405B, DeepSeek-V3, Kimi K2,
-  Olmo 3, Nemotron 3 Super, DeepSeek-V4-Pro): tokens, chips, number format, optimizer; DeepSeek-V3's learning-rate,
-  batch-size and MTP-weight schedules; C ≈ 6ND for Llama 3.1 (3.79 × 10²⁵ against the reported 3.8) and DeepSeek-V3
-  (37B active); 2.788M H800 GPU-hours, $5.576M, 180k GPU-hours (3.7 days on 2,048 GPUs) per trillion tokens.
+  Olmo 3, Nemotron 3 Super, DeepSeek-V4-Pro): tokens, chips, number format, optimizer; C ≈ 6ND for Llama 3.1
+  (3.79 × 10²⁵ against the reported 3.8) and DeepSeek-V3 (37B active); 2.788M H800 GPU-hours, $5.576M, 180k GPU-hours
+  (3.7 days on 2,048 GPUs) per trillion tokens.
 * **2. From the web to text.** Common Crawl (Gil Elbaz, 2007; crawls since 2008; over 10 PB), WARC and WET; our sample
   (3 WET files × 3 slices of 3 MiB from CC-MAIN-2026-39); extraction with Trafilatura on WARC slices (HTML bytes →
   text bytes; one page shown; FineWeb's WARC-vs-WET ablation); a URL blocklist; fastText's lid.176 language
@@ -58,8 +58,9 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   Korthikanti et al.'s sbh(34 + 5as/h) at Llama 3.1's shape.
 * **9. Data parallelism and the all-reduce.** Copies of the model, slices of the batch; 4 processes against one,
   checked; the ring all-reduce as reduce-scatter + all-gather on a ShardGrid; the bandwidth lower bound 2(p−1)/p · n/B
-  proved (Patarasuk & Yuan 2009); all-reduce, reduce-scatter and all-gather timed with torch.distributed (gloo) against
-  the α–β model.
+  proved (Patarasuk & Yuan 2009), with the counting argument drawn on four GPUs. (The three collectives were also timed
+  with torch.distributed against the α–β model, `collectives` in compute.py; the result is in the notes below, not on
+  screen.)
 * **10. ZeRO and FSDP.** ZeRO's three stages (Rajbhandari et al. 2019) on a ShardGrid; memory per GPU derived (the
   paper's 120 / 31.4 / 16.6 / 1.9 GB, computed); communication (2Ψ, 2Ψ, 3Ψ); FSDP; Llama 3 (FSDP) and DeepSeek-V3
   (ZeRO-1); our ZeRO-3 on four processes, layer by layer, against one process: parameters, memory and traffic measured.
@@ -82,8 +83,10 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   NVFP4 (12B/10T, MMLU-Pro 62.58 against 62.62), Nemotron 3 Super (NVFP4, 25T), Kimi K3 and DeepSeek-V4 (FP4 QAT).
 * **15. Keeping the run stable.** PaLM's ~20 spikes and rollbacks; attention-logit growth and QK-norm (bound derived);
   our learning-rate sweep (plain / QK-norm / QK-norm + z-loss, 2 seeds): largest attention logit and final loss; the
-  z-loss derived and log Z measured; Muon at scale (Moonlight ~2×), Kimi K2's QK-Clip (τ = 100, 12.7% of heads, 15.5T
-  tokens without a spike), DeepSeek-V4's anticipatory routing and SwiGLU clamping.
+  z-loss derived and log Z measured (in our 150-step runs the z-loss leaves log Z where it was: the narration branches
+  on whether the difference beats the seeds' spread); Muon at scale (Moonlight ~2×), Kimi K2's QK-Clip (τ = 100, 12.7%
+  of heads, 15.5T tokens without a spike; drawn as a schematic), DeepSeek-V4's anticipatory routing and SwiGLU
+  clamping.
 * **16. Predicting two tokens ahead.** Gloeckle et al. 2024 (13B: +12% HumanEval, +17% MBPP; worse at the smallest
   sizes); DeepSeek-V3's sequential MTP module (λ 0.3 → 0.1; 85–90% acceptance, 1 + a tokens per step, 1.8× TPS); our
   model with and without the module, two seeds, and the module's cost in FLOPs per token (`mtp_cost`: in a model

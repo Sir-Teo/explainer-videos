@@ -113,6 +113,29 @@ class Langevin(VoiceoverScene):
         d = definition_card(r"the score", r"$\nabla_x \log p(x)$: \ the direction in which the density rises "
                             r"fastest. \ For an energy model, $-\nabla_x E$, \ with no $Z$ in sight.", width=6.4,
                             font_size=22).move_to([2.6, -2.1, 0])
+        # a picture of the algorithm: particles in a double well, drifting downhill and kicked at random
+        U = lambda x: 1.2 * (x ** 2 - 1) ** 2
+        wa = axes([-1.8, 1.8], [0, 3.0], x_length=5.4, y_length=2.0, xlabel=r"$x$", ylabel=r"energy $E(x)$",
+                  xticks=[], yticks=[], center=[-3.4, -2.5, 0])
+        well = curve(wa.ax, np.linspace(-1.8, 1.8, 200), U(np.linspace(-1.8, 1.8, 200)), EBM, 3)
+        rg = np.random.default_rng(5)
+        xs_ = rg.uniform(-1.6, 1.6, 36)
+        traj = [xs_.copy()]
+        for _ in range(160):  # Langevin on p = e^-E: x += (eta/2)(-E') + sqrt(eta) noise
+            xs_ = np.clip(xs_ - 0.01 * 4.8 * xs_ * (xs_ ** 2 - 1) + np.sqrt(0.02) * rg.standard_normal(len(xs_)),
+                          -1.75, 1.75)
+            traj.append(xs_.copy())
+        traj = np.array(traj)
+        tt = ValueTracker(0.0)
+        parts = VGroup(*[Dot(wa.ax.c2p(x, U(x)), radius=0.06, color=WHITE) for x in traj[0]])
+
+        def pupd(g):
+            k = min(int(tt.get_value()), len(traj) - 1)
+            for d_, x in zip(g, traj[k]):
+                d_.move_to(wa.ax.c2p(x, U(x)) + UP * 0.06)
+
+        parts.add_updater(pupd)
+        wl = note(r"illustrative: \ Langevin steps on a double well").next_to(wa, RIGHT, buff=0.3)
         with self.voiceover(
             "Sampling comes from physics: Paul Langevin's 1908 particle, drifting downhill and kicked at random. "
             "As an algorithm: step up the log-density, add a little noise, repeat; by Part 5's Fokker-Planck "
@@ -122,11 +145,15 @@ class Langevin(VoiceoverScene):
             "rise; here, for our ring model, arrows into the eight valleys."
         ) as vo:
             step(0)
+            self.play(FadeIn(wa), Create(well), FadeIn(parts), FadeIn(wl))
+            self.play(tt.animate.set_value(len(traj) - 1), run_time=max(3.0, vo.until("a") - 0.3), rate_func=linear)
+            parts.clear_updaters()
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(wa, well, parts, wl)))
             self.play(FadeIn(img), LaggedStart(*[GrowArrow(a_) for a_ in ar], lag_ratio=0.01), FadeIn(d), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
@@ -165,7 +192,6 @@ class Langevin(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pl), FadeIn(imgs[0]), FadeIn(dots[0]), FadeIn(cap[0]), FadeIn(key), FadeIn(g),
                       Create(fl), FadeIn(pts[0]), FadeIn(cite_))
-            vo.wait_until("a")
             ci, cd, cc = imgs[0], dots[0], cap[0]
             per = max(0.5, vo.until("b") / max(1, len(imgs) - 1))
             for k in range(1, len(imgs)):

@@ -177,7 +177,7 @@ class Convolution(VoiceoverScene):
             "has visited every position. <bookmark mark='c'/> The output is a feature map: bright wherever the "
             f"patch looks like the kernel. {likes} "
             "<bookmark mark='d'/> Strictly, this is a cross-correlation; a mathematician's convolution flips the "
-            "kernel first. Since the kernel is learned, nobody minds, and deep learning calls both convolution."
+            "kernel first, but a learned kernel doesn't care."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

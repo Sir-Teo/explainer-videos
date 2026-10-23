@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (ACTS, COMM, F, GPU, GRADS, KEPT, N_COL, PART, ShardGrid, load, node_box, play_fly,
-                                   spoken_int, take_away)
+from videos.ai.ai18.common import (ACTS, COMM, GPU, GRADS, KEPT, N_COL, PART, ShardGrid, load, node_box, play_fly,
+                                   take_away)
 
 CHUNK = [C.EMBED, C.MOMENTUM, C.PROB, C.MLP]
 
@@ -17,7 +17,6 @@ class DataParallel(VoiceoverScene):
         self.idea()
         self.allreduce()
         self.bound()
-        self.timed()
 
     def card(self):
         card = chapter_card(9, r"Data parallelism and the all-reduce", r"Many copies of one model: how fast can they "
@@ -103,9 +102,12 @@ class DataParallel(VoiceoverScene):
         cl = VGroup(label(r"steps:", font_size=22, color=GREY_A), cnt).arrange(RIGHT, buff=0.15).move_to([3.6, 0.8, 0])
         sch = note(r"schematic: \ the ring of Part 17, \ chunk by chunk", font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Recall the ring of Part 17. Cut each GPU's gradient into p chunks. <bookmark mark='a'/> At each step every "
-            "GPU passes one chunk to its neighbour, which adds it to its own; after p minus one steps each GPU holds the "
-            "full sum of one chunk: a reduce-scatter. <bookmark mark='b'/> Then p minus one more steps pass the finished "
+            "Recall the ring of Part 17. Cut each GPU's gradient into p chunks. <bookmark mark='a'/> At each step "
+            "every "
+            "GPU passes one chunk to its neighbour, which adds it to its own; after p minus one steps each GPU holds "
+            "the "
+            "full sum of one chunk: a reduce-scatter. <bookmark mark='b'/> Then p minus one more steps pass the "
+            "finished "
             "chunks around: an all-gather. <bookmark mark='c'/> Each GPU sends two times p minus one over p of the "
             "gradient's bytes. ZeRO, next, does useful work between the two halves."
         ) as vo:
@@ -157,16 +159,21 @@ class DataParallel(VoiceoverScene):
                        font_size=24)
         with self.voiceover(
             "Part 17 said that no algorithm beats the ring on bandwidth. Here is why. Follow a single number, whose "
-            "sum all p GPUs must end up holding. Each message carries one value, perhaps a partial sum. "
-            "<bookmark mark='a'/> Some GPU is the first to hold the full sum. Every other GPU's value must have "
-            "reached it, through a chain of messages: that takes at least p minus one messages. "
-            "<bookmark mark='b'/> At that moment, nobody else has the sum, so each of the other p minus one GPUs "
-            "needs at least one more message. <bookmark mark='c'/> Two times p minus one messages per number, for "
-            "all n numbers. <bookmark mark='d'/> The p GPUs can receive at the same time, B bytes per second each, "
-            "so the time is at least two times p minus one, over p, times n over B: exactly the ring's. "
-            "<bookmark mark='e'/> The ring is optimal in bandwidth. What's left to win is latency, with trees for "
-            "small messages, and overlap: sending the gradients of the last layers while the backward pass is still "
-            "computing the first."
+            "sum all p "
+            "GPUs must end up holding; each message carries one value. <bookmark mark='a'/> Some GPU is the first to "
+            "hold the "
+            "full sum. Every other GPU's value must have reached it: at least p minus one messages. <bookmark "
+            "mark='b'/> At "
+            "that moment nobody else has the sum, so each of the other p minus one GPUs needs at least one more "
+            "message. "
+            "<bookmark mark='c'/> Two times p minus one messages per number, for all n numbers. <bookmark mark='d'/> "
+            "The p "
+            "GPUs receive at the same time, B bytes per second each, so the time is at least two times p minus one, "
+            "over p, "
+            "times n over B: exactly the ring's. <bookmark mark='e'/> What's left to win is latency, with trees for "
+            "small "
+            "messages, and overlap: sending the last layers' gradients while the backward pass is still computing the "
+            "first."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             self.play(LaggedStart(*[FadeIn(n_, scale=0.8) for n_ in nodes], lag_ratio=0.2), FadeIn(nnote))
@@ -185,54 +192,5 @@ class DataParallel(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeOut(VGroup(nodes, chain_, back_, sums, nnote)))
             self.play(FadeIn(tw, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def timed(self):
-        Cc = load("collectives")
-        ns = np.asarray(Cc["bytes"], float)
-        g = axes([3, 8], [-4, 0], x_length=6.4, y_length=4.2, xlabel=r"message size (bytes)",
-                 ylabel=r"time (seconds)", xticks=[3, 4, 5, 6, 7, 8], yticks=[-4, -3, -2, -1, 0],
-                 xfmt=lambda v: rf"10^{{{int(v)}}}", yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-2.6, -0.4, 0],
-                 font_size=18)
-        cols = {"all_reduce": COMM, "reduce_scatter": C.PROB, "all_gather": C.EMBED}
-        names = {"all_reduce": r"all-reduce", "reduce_scatter": r"reduce-scatter", "all_gather": r"all-gather"}
-        meas, pred = VGroup(), VGroup()
-        for k in ("all_reduce", "reduce_scatter", "all_gather"):
-            m_ = np.asarray(Cc[f"m_{k}"])
-            pr = np.asarray(Cc[f"p_{k}"])
-            meas.add(VGroup(*[Dot(g.ax.c2p(math.log10(n), math.log10(t)), radius=0.05, color=cols[k])
-                              for n, t in zip(ns, m_)]))
-            pred.add(DashedVMobject(curve(g.ax, np.log10(ns), np.log10(pr), cols[k], 2.5), num_dashes=30))
-        lg = VGroup(legend([(cols[k], names[k]) for k in cols], font_size=18),
-                    label(r"dots: \ measured; \ dashes: \ the $\alpha$--$\beta$ model", font_size=18, color=GREY_A))
-        lg.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        fit = label(rf"from point-to-point messages: \ $\alpha = {Cc['alpha'] * 1e6:.0f}\,\mu$s, \ "
-                    rf"$B = {Cc['B'] / 1e9:.1f}$ GB/s", font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.3)
-        fit.align_to(lg, LEFT)
-        r = Cc["ratio"]
-        worst = max(r.values())
-        if worst < 2:
-            verdict = ("Beyond a few hundred kilobytes, every measured time is within a factor of two of the model's "
-                       "prediction.")
-        else:
-            verdict = (f"Large messages took {min(r.values()):.0f} to {worst:.0f} times the model's prediction, on a "
-                       "computer whose four cores were shared with other jobs: the model describes devices with a link "
-                       "each and nothing else to do. But the shape holds: a floor of latency for small messages, then "
-                       "time growing in proportion to the bytes.")
-        tag = note(rf"computed: \ ${Cc['p']}$ processes, \ PyTorch's gloo backend; \ sums checked", font_size=18)
-        tag.to_corner(DR, buff=0.2)
-        with self.voiceover(
-            "We timed the three operations with PyTorch's own distributed library, on four processes of this "
-            "computer, for messages from a kilobyte to 32 megabytes. <bookmark mark='a'/> The dashed lines are the "
-            "alpha-beta model of Part 17, with the latency and bandwidth fitted to point-to-point messages: one latency "
-            "for each step of the ring, and the ring's bytes. <bookmark mark='b'/> " + verdict
-        ) as vo:
-            self.play(FadeIn(g), FadeIn(tag), FadeIn(lg[0]))
-            vo.wait_until("a")
-            self.play(*[Create(p_) for p_ in pred], FadeIn(lg[1]), FadeIn(fit), run_time=1.5)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m_, lag_ratio=0.1) for m_ in meas], lag_ratio=0.3), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()

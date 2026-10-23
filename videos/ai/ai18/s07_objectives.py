@@ -79,13 +79,16 @@ class Objectives(VoiceoverScene):
         with self.voiceover(
             "Pretraining needs a question to ask of every piece of text. Here is the first sentence of Pride and "
             f"Prejudice, cut into our tokenizer's {n} tokens, and the four questions labs have asked of it. "
-            "<bookmark mark='a'/> GPT's causal objective: predict every token from the ones before it; every token is a "
-            "target. <bookmark mark='b'/> BERT's masked objective: hide fifteen percent of the tokens, mostly behind a "
-            "mask, and predict only those. <bookmark mark='c'/> T5's span corruption: replace short runs of tokens with "
-            "single markers, and have the model write out what each marker hid. <bookmark mark='d'/> And fill in the "
-            "middle. In 2022 OpenAI's Bavarian and colleagues cut documents at two random points and moved the middle to "
-            "the end, behind markers for prefix, suffix and middle. The model still predicts the next token, but given a "
-            "beginning and an end it can now write what goes between: exactly what a code editor needs."
+            "<bookmark mark='a'/> GPT's causal objective: predict every token from the ones before it. <bookmark "
+            "mark='b'/> "
+            "BERT's masked objective: hide fifteen percent of the tokens and predict only those. <bookmark mark='c'/> "
+            "T5's span "
+            "corruption: replace short runs of tokens with markers, and have the model write out what each marker hid. "
+            "<bookmark mark='d'/> And fill in the middle: in 2022 OpenAI's Bavarian and colleagues cut documents at "
+            "two "
+            "random points and moved the middle to the end. The model still predicts the next token, but given a "
+            "beginning "
+            "and an end it can now write what goes between: exactly what a code editor needs."
         ) as vo:
             self.play(FadeIn(heads[0]), FadeIn(causal), FadeIn(lg), FadeIn(src), FadeIn(heads[1:].copy().set_opacity(0.2)))
             vo.wait_until("a")
@@ -124,10 +127,12 @@ class Objectives(VoiceoverScene):
         with self.voiceover(
             "Count the targets. In a sequence of 256 tokens, the causal objective gives 255 predictions to learn "
             f"from; masking gives about {tg['mlm']}, and span corruption about {tg['span']}, markers included. "
-            "<bookmark mark='a'/> Fill in the middle keeps all of them: it is still next-token prediction, on rearranged "
+            "<bookmark mark='a'/> Fill in the middle keeps all of them: it is still next-token prediction, on "
+            "rearranged "
             "text. Bavarian's team put half their documents in that order and found the ordinary left-to-right "
             "perplexity unchanged: infilling for free. <bookmark mark='b'/> DeepSeek-V3 rearranges ten percent of its "
-            "documents this way. <bookmark mark='c'/> So the 2026 answer is Part 14's: predict every next token, because "
+            "documents this way. <bookmark mark='c'/> So the 2026 answer is Part 14's: predict every next token, "
+            "because "
             "that model can be sampled, scored and prompted; and teach it to fill gaps by rearranging the data, not by "
             "changing the objective."
         ) as vo:

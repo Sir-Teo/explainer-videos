@@ -55,13 +55,15 @@ class Context(VoiceoverScene):
         src = cite(r"Liu, Zaharia \& Abbeel, Ring Attention (2023); \ Milakov \& Gimelshein (2018)", corner=DR,
                    font_size=17)
         with self.voiceover(
-            "Two more ways to cut. The first is for long sequences: at a million tokens, one sequence's activations no "
-            "longer fit on a GPU, so split the sequence itself: context parallelism. <bookmark mark='a'/> Each GPU keeps "
-            "one block of positions. Everything in a transformer is per position, except attention, which needs every "
-            "key. <bookmark mark='b'/> Ring attention, from Berkeley in 2023: each GPU keeps its queries, and the blocks "
-            "of keys and values travel round the ring, one hop per step. <bookmark mark='c'/> Each arriving block is "
-            "folded in with the online softmax, a running maximum and a running sum, as in FlashAttention, so the answer "
-            "is exact. <bookmark mark='d'/> We ran it on four processes, 256 tokens in four blocks: the result matches "
+            "Two more ways to cut. At a million tokens, one sequence's activations no longer fit on a GPU, so split "
+            "the "
+            "sequence itself: context parallelism. <bookmark mark='a'/> Each GPU keeps one block of positions. "
+            "Everything in a "
+            "transformer is per position, except attention. <bookmark mark='b'/> Ring attention, from Berkeley in "
+            "2023: each "
+            "GPU keeps its queries, and the blocks of keys and values travel round the ring. <bookmark mark='c'/> Each "
+            "arriving block is folded in with the online softmax, as in FlashAttention, so the answer is exact. "
+            "<bookmark mark='d'/> We ran it on four processes, 256 tokens in four blocks: the result matches "
             f"full attention to {R['err']:.7f}."
         ) as vo:
             self.play(FadeIn(seq), FadeIn(sl), FadeIn(src))
@@ -158,12 +160,13 @@ class Context(VoiceoverScene):
         src = cite(r"Part 16; \ DeepSeek-AI (2024), Secs.\ 3.2, 3.4", corner=DR, font_size=17)
         with self.voiceover(
             "The second cut is for mixtures of experts, from Part 16: put different experts on different GPUs. "
-            "<bookmark mark='a'/> Each token's router picks its experts wherever they live, so every layer begins with an "
-            "all-to-all, each GPU sending its tokens to the GPUs that hold their experts, <bookmark mark='b'/> and ends "
-            "with another, sending the results back. <bookmark mark='c'/> DeepSeek-V3 spread its experts over 64 GPUs in "
-            "eight machines, and let each token visit at most four machines, because the network between machines is "
-            "about three times slower than NVLink inside one. It even set aside twenty of each GPU's 132 processor blocks "
-            "just to move tokens."
+            "<bookmark mark='a'/> Every layer begins with an all-to-all, each GPU sending its tokens to the GPUs that "
+            "hold their "
+            "experts, <bookmark mark='b'/> and ends with another, sending the results back. <bookmark mark='c'/> "
+            "DeepSeek-V3 "
+            "spread its experts over 64 GPUs in eight machines, and let each token visit at most four machines, "
+            "because the "
+            "network between machines is about three times slower than NVLink inside one."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lab), FadeIn(src), FadeIn(facts[0]))
             vo.wait_until("a")
@@ -249,14 +252,16 @@ class Context(VoiceoverScene):
                    corner=DL, font_size=16)
         b, f = M["base"]["mfu"], M["full"]["mfu"]
         with self.voiceover(
-            "With all this machinery, how much of the hardware does a run use? PaLM's paper defined the measure in 2022: "
-            "model FLOPs utilization, the operations the model needs, six N per token times tokens per second, over the "
-            "hardware's peak; recomputation and waiting don't count. <bookmark mark='a'/> PaLM processed 238 thousand "
-            f"tokens a second on 6,144 TPU chips of 275 teraflops: {100 * P['palm_mfu']:.1f} percent, or 46.2 with "
-            "attention counted. <bookmark mark='b'/> ByteDance's MegaScale reached 55 percent; Llama 3, 38 to 43; Olmo 3, "
-            "43. About half of what a cluster could compute is lost to communication, bubbles, memory traffic and "
-            "failures. <bookmark mark='c'/> Our own training runs, on one core of this computer: "
-            f"{100 * b:.0f} and {100 * f:.0f} percent of its peak."
+            "With all this machinery, how much of the hardware does a run use? PaLM's paper defined the measure: "
+            "model FLOPs "
+            "utilization, six N per token times tokens per second, over the hardware's peak. <bookmark mark='a'/> PaLM "
+            f"processed 238 thousand tokens a second on 6,144 TPU chips of 275 teraflops: {100 * P['palm_mfu']:.1f} "
+            "percent. "
+            "<bookmark mark='b'/> ByteDance's MegaScale reached 55 percent; Llama 3, 38 to 43; Olmo 3, 43. About half "
+            "of what "
+            "a cluster could compute is lost to communication, bubbles, memory traffic and failures. <bookmark "
+            "mark='c'/> Our "
+            f"own training runs, on one core of this computer: {100 * b:.0f} and {100 * f:.0f} percent of its peak."
         ) as vo:
             self.play(FadeIn(d0, shift=UP * 0.1), FadeIn(src))
             vo.wait_until("a")

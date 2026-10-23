@@ -39,12 +39,16 @@ class Hook(VoiceoverScene):
         first, last = F.ERA[0], F.ERA[-1]
         with self.voiceover(
             "June 2018. OpenAI's first GPT is pretrained for about a month on eight graphics cards. "
-            "<bookmark mark='a'/> Here is how many chips have worked together on one training run since then, on a "
-            "scale where each step up is ten times more. <bookmark mark='b'/> In 2019, Megatron-LM spreads one model "
-            "over 512 GPUs. In 2022, Google's PaLM trains on 6,144 TPU chips. In 2024, Meta's Llama 3 uses 16,384 "
-            f"GPUs, and in 2025 Llama 4 Behemoth is pretrained on {spoken_int(last[2])} of them. <bookmark mark='c'/> In seven "
-            f"years, a training run went from {first[2]} chips to {round(last[2] / first[2], -2):,.0f} times as many. "
-            "This part is about how that is done."
+            "<bookmark mark='a'/> Here are the chips on one training run since then, on a scale where each step up is "
+            "ten "
+            "times more. <bookmark mark='b'/> In 2019, Megatron-LM spreads one model over 512 GPUs. In 2022, Google's "
+            "PaLM "
+            "trains on 6,144 TPU chips. In 2024, Meta's Llama 3 uses 16,384 "
+            f"GPUs, and in 2025 Llama 4 Behemoth is pretrained on {spoken_int(last[2])} of them. <bookmark mark='c'/> "
+            "In seven "
+            f"years, from {first[2]} chips to {round(last[2] / first[2], -2):,.0f} times as many. This part is about "
+            "how that "
+            "is done."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(pts[0], scale=1.5), FadeIn(tags[0]), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -128,7 +132,8 @@ class Hook(VoiceoverScene):
             path.width = 13.0
         with self.voiceover(
             "So the question of this part: how do you turn fifteen trillion tokens of the web into one model, on "
-            "sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers: the "
+            "sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers: "
+            "the "
             "data, the objective, the arithmetic, the cuts across devices, the bits, the stability, and the failures."
         ) as vo:
             self.play(FadeIn(q), FadeIn(path.copy().set_opacity(0.15)))
@@ -158,10 +163,11 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "We'll build every layer in miniature, on the computer making this video. <bookmark mark='a'/> "
             f"{spoken_int(W['n_pages'])} real web pages from Common Crawl, filtered, deduplicated and scored. "
-            "<bookmark mark='b'/> Four processes as a tiny cluster, to check each kind of parallelism exactly. "
-            "<bookmark mark='c'/> Pipelines and failures, simulated. <bookmark mark='d'/> Training pushed to the edge, in "
-            "fewer bits and at high learning rates. <bookmark mark='e'/> And the 2026 recipe against the 2020 one, on the "
-            "series' scoreboard."
+            "<bookmark mark='b'/> Four processes as a tiny cluster. <bookmark mark='c'/> Pipelines and failures, "
+            "simulated. "
+            "<bookmark mark='d'/> Training pushed to the edge. <bookmark mark='e'/> And the 2026 recipe against the "
+            "2020 one, "
+            "on the scoreboard."
         ) as vo:
             self.play(FadeIn(head), FadeIn(items[0], shift=UP * 0.1), FadeIn(items[1:].copy().set_opacity(0.18)))
             for k, mk in enumerate("bcde", 1):
@@ -183,10 +189,11 @@ class Hook(VoiceoverScene):
             r"two-token prediction, \ failures at 16,000 GPUs, \ and our own full-recipe model",
         ], font_size=25)
         with self.voiceover(
-            "This is Part 18 of AI, Built, in its third act, the transformer era. <bookmark mark='a'/> In this part: the "
-            "data, from raw web pages to a clean mixture; the objective, and the stages of training; the arithmetic of a "
-            "run, in operations and bytes; the five ways to cut a model across devices; fewer bits, and stability; "
-            "predicting two tokens at once; surviving failures; and our own model, trained with the full recipe."
+            "This is Part 18 of AI, Built, in its third act, the transformer era. <bookmark mark='a'/> In this part: "
+            "the data, "
+            "from raw web pages to a clean mixture; the objective and the stages of training; the arithmetic of a "
+            "run; the ways "
+            "to cut a model across devices; fewer bits, and stability; and our own model, trained with the full recipe."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

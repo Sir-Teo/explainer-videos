@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (DATA, DISC, GAN_C, HIST, PART, WGAN_C, Plane, load, take_away)
+from videos.ai.ai20.common import (DATA, DISC, GAN_C, HIST, PART, WGAN_C, Plane, bars_chart, load, take_away)
 from videos.ai.ai20.s06_game import replay_gan
 
 
@@ -68,10 +68,10 @@ class Wasserstein(VoiceoverScene):
             "measures how far the mass must move gives a V whose slope points home; a trained critic puts it at "
             f"{wk:.2f} for theta {tk:.2f}."
         ) as vo:
-            self.play(FadeIn(pl), Create(p0), FadeIn(pt), FadeIn(tl), FadeIn(lab), FadeIn(cite_))
+            self.play(FadeIn(pl), Create(p0), FadeIn(pt), FadeIn(tl), FadeIn(lab), FadeIn(cite_), FadeIn(g))
             self.play(theta.animate.set_value(0.25), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(lg[0]), FadeIn(jsx))
+            self.play(FadeIn(lg[0]), FadeIn(jsx))
             self.play(theta.animate.set_value(-0.6), run_time=2.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in jd], lag_ratio=0.05))
@@ -106,10 +106,10 @@ class Wasserstein(VoiceoverScene):
         f[0].set_color(WGAN_C)
         fl = label(r"$\gamma$: \ a transport plan, \ how much mass goes from $x$ to $y$", font_size=22,
                    color=GREY_A).next_to(f, DOWN, buff=0.2)
-        h1 = history_card(1781, r"Monge", r"moving earth for fortifications at least cost", width=4.0,
-                          font_size=20).move_to([1.6, -1.4, 0])
-        h2 = history_card(1942, r"Kantorovich", r"the relaxed, linear-programming form", width=4.0,
-                          font_size=20).move_to([5.0, -1.4, 0])
+        h1 = history_card(1781, r"Monge", r"moving earth for fortifications at least cost", width=5.2,
+                          font_size=20).move_to([3.4, -0.4, 0])
+        h2 = history_card(1942, r"Kantorovich", r"the relaxed, linear-programming form", width=5.2,
+                          font_size=20).next_to(h1, DOWN, buff=0.25)
         tg = note(r"illustrative").to_corner(DR, buff=0.25)
         with self.voiceover(
             "That is the earth mover's distance: p a pile of sand, q a hole of the same volume. <bookmark "
@@ -147,6 +147,17 @@ class Wasserstein(VoiceoverScene):
                           color=C.BITS),
                     label(r"along the lines between matched real and fake points", font_size=20, color=GREY_B))
         gp.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.0, -2.6, 0])
+        # what the critic does: high on the data, low on the model, never steeper than slope one
+        ia = axes([-3, 3], [-1.6, 1.6], x_length=5.0, y_length=2.0, center=[3.6, -1.9, 0])
+        xs = np.linspace(-3, 3, 200)
+        bp = curve(ia.ax, xs, 1.4 * np.exp(-0.5 * ((xs + 1.6) / 0.45) ** 2), DATA, 3)
+        bq = curve(ia.ax, xs, 1.4 * np.exp(-0.5 * ((xs - 1.3) / 0.45) ** 2), C.MODEL_Q, 3)
+        fx = curve(ia.ax, xs, np.clip(-(xs + 0.15), -1.5, 1.5), WGAN_C, 3)
+        il = VGroup(label(r"$p$", font_size=24, color=DATA).next_to(ia.ax.c2p(-1.6, 1.4), UP, buff=0.05),
+                    label(r"$q$", font_size=24, color=C.MODEL_Q).next_to(ia.ax.c2p(1.3, 1.4), UP, buff=0.05),
+                    label(r"a critic $f$: \ slope at most $1$", font_size=20, color=WGAN_C).next_to(ia, LEFT,
+                                                                                                buff=0.2))
+        illo = VGroup(ia, bp, bq, fx, il)
         with self.voiceover(
             "Cheapest plans between image distributions are hopeless to compute, but by Kantorovich and "
             "Rubinstein's duality the distance is also the largest gap in expectation that a function of slope at "
@@ -157,11 +168,14 @@ class Wasserstein(VoiceoverScene):
             "there: WGAN-GP."
         ) as vo:
             step(0)
+            self.play(FadeIn(ia), Create(bp), Create(bq), FadeIn(il[:2]))
+            self.play(Create(fx), FadeIn(il[2]))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             self.play(FadeIn(clipb, shift=UP * 0.1))
             vo.wait_until("c")
+            self.play(FadeOut(illo))
             step(2)
             self.play(FadeIn(gp, shift=UP * 0.1))
         self.wait(0.3)
@@ -190,8 +204,8 @@ class Wasserstein(VoiceoverScene):
         axis = VGroup(Line([3.3, -1.75, 0], [6.4, -1.75, 0], color=GREY_C, stroke_width=1.5),
                       *[MathTex(str(m), font_size=20, color=GREY_B).move_to([3.3 + 0.38 * m, -2.0, 0])
                         for m in (0, 4, 8)])
-        al = label(r"modes covered at the end: \ $5$ seeds each, \ same networks, \ same generator steps",
-                   font_size=18, color=GREY_A).move_to([4.6, 1.5, 0])
+        al = label(r"modes covered at the end: \\ $5$ seeds each, \ same networks, \ same generator steps",
+                   font_size=18, color=GREY_A).move_to([4.7, 1.55, 0])
         mw, mn, mm = (float(np.mean(fin[k])) for k in ("wgan", "ns", "mm"))
         full_w = sum(1 for m in fin["wgan"] if m == 8)
         if mw > max(mn, mm):
@@ -212,7 +226,6 @@ class Wasserstein(VoiceoverScene):
             f"mark='b'/> {verdict} <bookmark mark='c'/> {sharp}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(kk), FadeIn(ml))
-            vo.wait_until("a")
             img, dots, cnt, stp = replay_gan(self, g["wgan_frame_samples"], g["wgan_frame_d"], g["wgan_frame_steps"],
                                              g["wgan_frame_modes"], pl, max(5.0, vo.until("b") + 0.5), [0.6, 1.2, 0],
                                              color=WGAN_C, critic=True)
@@ -233,7 +246,16 @@ class Wasserstein(VoiceoverScene):
                   font_size=26, color=WGAN_C),
             label(rf"on the same budget: \ ${sg:,}$ generator steps \ against ${sw:,}$".replace(",", "{,}"),
                   font_size=26, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(UP * 0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.45)
+        sfmt = lambda v: f"{int(v):,}".replace(",", "{,}")
+        ch1 = bars_chart([fg, fw], [GAN_C, WGAN_C], [r"GAN", r"WGAN-GP"], height=2.0, bar_w=0.9, gap=0.7,
+                         value_fmt=lambda v: sci(v, 1))
+        ch2 = bars_chart([sg, sw], [GAN_C, WGAN_C], [r"GAN", r"WGAN-GP"], height=2.0, bar_w=0.9, gap=0.7,
+                         value_fmt=sfmt)
+        for ch, x in ((ch1, -2.6), (ch2, 2.6)):
+            ch.shift([x - ch[0].get_center()[0], -1.7 - ch[0].get_y(), 0])
+        t1 = label(r"operations per generator step", font_size=22, color=GREY_A).next_to(ch1, UP, buff=0.25)
+        t2 = label(r"generator steps on one budget", font_size=22, color=GREY_A).next_to(ch2, UP, buff=0.25)
         tk = take_away(r"A critic that measures distance gives gradients even when nothing overlaps; \ "
                        r"the price is a slower, more careful critic.", font_size=24)
         tg = note(r"computed: \ PyTorch's FLOP counter, \ the digit models").to_corner(DR, buff=0.25)
@@ -243,10 +265,13 @@ class Wasserstein(VoiceoverScene):
             f"<bookmark mark='b'/> so on one budget the GAN takes {sg:,} generator steps and WGAN-GP {sw:,}. "
             "Chapter fifteen shows what that buys."
         ) as vo:
-            self.play(FadeIn(rows[0]), FadeIn(tg))
+            self.play(FadeIn(rows[0]), FadeIn(tg), FadeIn(t1), FadeIn(ch1[0]), FadeIn(ch1.names),
+                      GrowFromEdge(ch1.bars[0], DOWN), FadeIn(ch1.vals[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]))
+            self.play(FadeIn(rows[1]), GrowFromEdge(ch1.bars[1], DOWN), FadeIn(ch1.vals[1]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]), FadeIn(tk))
+            self.play(FadeIn(rows[2]), FadeIn(t2), FadeIn(ch2[0]), FadeIn(ch2.names),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch2.bars], lag_ratio=0.3), FadeIn(ch2.vals))
+            self.play(FadeIn(tk))
         self.wait(0.3)
         self.clear_scene()

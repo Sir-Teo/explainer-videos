@@ -67,7 +67,7 @@ class Receptive(VoiceoverScene):
             "layer sees three by three units of the first, and each of those sees its own three by three, so "
             "together they cover five by five pixels. <bookmark mark='b'/> A third layer, seven by seven. This "
             "is the unit's receptive field: the part of the image that can change it at all. Stacked, the fields "
-            "make a cone, and deep units see a lot of the picture, built out of small looks."
+            "make a cone."
         ) as vo:
             self.play(FadeIn(planes), FadeIn(names), FadeIn(cap), FadeIn(tag))
             self.play(FadeIn(patches[3]), FadeIn(patches[2]), FadeIn(sz_l[3]), FadeIn(sz_l[2]),

@@ -59,15 +59,19 @@ class Quality(VoiceoverScene):
         src = cite(r"Penedo et al., \textit{The FineWeb Datasets} (2024), Sec.\ 4; \ prompt after Yuan et al.\ (2024)",
                    font_size=17)
         with self.voiceover(
-            "Quality is harder than language or duplicates: which pages teach a model the most? In 2024 Hugging Face's "
-            "FineWeb team gave a recipe that is now standard. <bookmark mark='a'/> Ask a large model to grade pages: "
-            "Llama 3 70B, with a prompt that adds a point for each of five criteria of educational value, scored 460 "
-            "thousand pages from zero to five. <bookmark mark='b'/> Then train a small, cheap model to imitate the "
-            "grades: a linear layer on an embedding model, trained on 410 thousand of them, which agrees with Llama 3 at "
-            "the threshold three with an F1 of 82 percent. <bookmark mark='c'/> Run it over all fifteen trillion tokens, "
-            "six thousand GPU-hours, and keep the pages scored three or more: 1.3 trillion tokens. <bookmark mark='d'/> "
-            "For models of 1.7 billion parameters trained on 350 billion tokens, that raised MMLU, a test of knowledge, "
-            "from 33 to 37 percent, and ARC, a test of reasoning, from 46 to 57."
+            "Quality is harder: which pages teach a model the most? In 2024 Hugging Face's FineWeb team gave the "
+            "recipe that "
+            "is now standard. <bookmark mark='a'/> Ask a large model to grade pages: Llama 3 70B, with a prompt that "
+            "adds a "
+            "point for each of five criteria of educational value, scored 460 thousand pages from zero to five. "
+            "<bookmark mark='b'/> Then train a small model to imitate the grades: a linear layer on an embedding "
+            "model, "
+            "trained on 410 thousand of them, with an F1 of 82 percent at the threshold three. <bookmark mark='c'/> "
+            "Run it "
+            "over all fifteen trillion tokens and keep the pages scored three or more: 1.3 trillion tokens. "
+            "<bookmark mark='d'/> At 1.7 billion parameters, that raised MMLU, a test of knowledge, from 33 to 37 "
+            "percent, and "
+            "ARC, a test of reasoning, from 46 to 57."
         ) as vo:
             ghost = row.copy().set_opacity(0.2)
             qq = label(r"Which pages teach a model the most?", font_size=34, color=WHITE).move_to(UP * 0.3)
@@ -197,9 +201,10 @@ class Quality(VoiceoverScene):
             "<bookmark mark='b'/> and the two it scores lowest. <bookmark mark='c'/> "
             f"It keeps {Q['cc_kept_n']} of our {spoken_int(Q['cc_n'])} English pages, "
             f"{100 * Q['cc_kept']:.1f} percent; FineWeb-Edu kept about nine percent of FineWeb's tokens. "
-            "<bookmark mark='d'/> Other recipes aim elsewhere: DataComp-LM, DCLM, trained its fastText filter to find text "
-            "like instructions and good answers, and a seven-billion-parameter model on 2.6 trillion of its tokens reached "
-            "64 percent on MMLU. Every serious corpus of 2026 has filters like these, most of them several."
+            "<bookmark mark='d'/> Other recipes aim elsewhere: DCLM trained its fastText filter to find text like "
+            "instructions and good answers, and a seven-billion-parameter model on 2.6 trillion of its tokens reached "
+            "64 "
+            "percent on MMLU."
         ) as vo:
             self.play(FadeIn(hl), FadeIn(ll), FadeIn(tag))
             vo.wait_until("a")
@@ -265,8 +270,7 @@ class Quality(VoiceoverScene):
             f"{spoken_int(K['passage_grams'])} thirteen-word sequences; {K['passage_hits']} of them occur anywhere in "
             f"the thirty novels we train on, and {K['passage_hits8']} of its eight-word sequences. " + clean +
             " <bookmark mark='c'/> " + held + " a sequence with the training text, like this one, a sentence that a "
-            "novel repeats. On the web, popular benchmarks are copied everywhere, so labs now run checks like this on "
-            "every test they report."
+            "novel repeats. Labs now run checks like this on every test they report."
         ) as vo:
             self.play(FadeIn(q), FadeIn(src), LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chips], lag_ratio=0.08),
                       run_time=2.0)

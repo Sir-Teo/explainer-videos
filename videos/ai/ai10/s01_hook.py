@@ -172,10 +172,9 @@ class Hook(VoiceoverScene):
         strip = timeline(lit=(1986, 1991, 1997, 1998, 2009, 2012, 2015, 2017)).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "How did machines learn to see, and to remember? <bookmark mark='a'/> We'll follow the path from "
-            "Hubel and Wiesel's cells to Fukushima's Neocognitron, LeCun's LeNet, the ImageNet contest and the "
-            "network that won it in 2012, to networks a hundred and fifty layers deep. <bookmark mark='b'/> Then "
-            "time: recurrent networks and why they forget, the LSTM that remembers, the sequence-to-sequence "
-            "translators, and the attention that grew out of them. <bookmark mark='c'/> And we'll train every kind "
+            "Hubel and Wiesel's cells to LeNet, ImageNet, and networks a hundred and fifty layers deep. "
+            "<bookmark mark='b'/> Then time: recurrent networks, the LSTM, translation, and the attention that grew "
+            "out of it. <bookmark mark='c'/> And we'll train every kind "
             "of network we meet, on this computer, and watch it learn."
         ) as vo:
             self.play(FadeIn(q))
@@ -202,10 +201,9 @@ class Hook(VoiceoverScene):
         ], font_size=26)
         with self.voiceover(
             "This is Part 10 of AI, Built, in the second act, learning from data: after Part 9's networks, and "
-            "before Part 11's optimizers. <bookmark mark='a'/> In this part: vision before deep learning, and "
-            "the convolution that replaced it; LeNet, AlexNet and the deeper networks; what their filters learn, "
-            "and how to fool them; then recurrent networks, the LSTM, translation, attention, and the recurrent "
-            "networks of today."
+            "before Part 11's optimizers. <bookmark mark='a'/> Here is the plan: vision before deep learning, and "
+            "the convolution that replaced it; the deep networks, what they learn, and how to fool them; then "
+            "memory, from the LSTM to attention, and back."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

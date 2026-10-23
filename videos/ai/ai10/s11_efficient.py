@@ -165,8 +165,7 @@ class Efficient(VoiceoverScene):
             "In 2017 Andrew Howard's team at Google built a whole network of separable convolutions, for phones: "
             f"MobileNet. <bookmark mark='a'/> It came within {v[1] - m[1]:.1f} points of VGG-16's accuracy on "
             f"ImageNet with {v[2] / m[2]:.0f} times fewer multiply-adds and {v[3] / m[3]:.0f} times fewer "
-            "weights, and beat GoogLeNet with fewer of both. Phones have recognized faces and objects this way "
-            "ever since."
+            "weights, and beat GoogLeNet with fewer of both."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite_))
             vo.wait_until("a")
@@ -213,9 +212,8 @@ class Efficient(VoiceoverScene):
             "convolution leaves gaps between its taps: one apart in the first layer, two in the next, then four, "
             "then eight. <bookmark mark='b'/> The receptive field doubles with every layer: after ten layers "
             f"of three taps, {r['dilated'][9]:,} inputs instead of {r['plain'][9]}, at no extra cost. "
-            "<bookmark mark='c'/> The idea is old in signal processing, the algorithme a trous of 1989; "
-            "DeepMind's WaveNet used it in 2016 to generate speech one sample at a time, sixteen thousand a "
-            "second, with a context of thousands."
+            "<bookmark mark='c'/> The idea is old, the algorithme a trous of 1989; DeepMind's WaveNet used it in "
+            "2016 to generate speech."
         ) as vo:
             self.play(FadeIn(nodes), FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")

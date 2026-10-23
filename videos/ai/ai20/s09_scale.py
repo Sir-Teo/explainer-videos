@@ -43,8 +43,8 @@ class Scale(VoiceoverScene):
                         stroke_width=1.5)
         eql = label(r"$2 \log 2$: \ $D = \tfrac12$ everywhere", font_size=18, color=GREY_B).next_to(eq, UP, buff=0.05)
         eql.align_to(eq, RIGHT)
-        lg = legend([(DISC, r"discriminator"), (GAN_C, r"generator")], font_size=20).next_to(ax, UP, buff=0.12)
-        lg.align_to(ax, LEFT)
+        lg = legend([(DISC, r"discriminator"), (GAN_C, r"generator")], font_size=20)
+        lg.align_to(ax.ax, RIGHT).align_to(ax.ax, UP)
         sheets = [digit_sheet(s_, 4, 4, size=0.55, gap=0.05).move_to([3.5, 0.3, 0]) for s_ in snaps]
         cap = [label(rf"generator step ${m:,}$".replace(",", "{,}"), font_size=22, color=GAN_C)
                .next_to(sheets[0], DOWN, buff=0.2) for m in marks]
@@ -61,7 +61,7 @@ class Scale(VoiceoverScene):
             f"don't fall like a learning curve; they balance. {bal} Nothing here says when the generator is good, "
             "one reason GANs needed chapter fourteen's measuring sticks."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(sheets[0]), FadeIn(cap[0]))
+            self.play(FadeIn(head), FadeIn(sheets[0]), FadeIn(cap[0]), FadeIn(ax), FadeIn(lg), Create(eq), FadeIn(eql))
             vo.wait_until("a")
             cur, cc = sheets[0], cap[0]
             per = max(0.4, vo.until("b") / max(1, len(sheets) - 1))
@@ -70,7 +70,6 @@ class Scale(VoiceoverScene):
                 cur, cc = sheets[i], cap[i]
                 self.wait(0.4 * per)
             vo.wait_until("b")
-            self.play(FadeIn(ax), FadeIn(lg), Create(eq), FadeIn(eql))
             self.play(Create(dl), Create(gl), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
@@ -79,14 +78,15 @@ class Scale(VoiceoverScene):
     def road(self):
         cards = VGroup(
             history_card(2015, r"Radford, Metz \& Chintala: \ DCGAN", r"convolutions, batch norm; \ arithmetic on "
-                         r"codes: \ smiling woman $-$ woman $+$ man", width=3.3, font_size=18),
+                         r"codes: \ smiling woman $-$ woman $+$ man", width=6.2, font_size=22),
             history_card(2017, r"Karras et al.: \ progressive growing", r"train at $4 \times 4$, \ then add layers, "
-                         r"up to $1024 \times 1024$ faces", width=3.3, font_size=18),
+                         r"up to $1024 \times 1024$ faces", width=6.2, font_size=22),
             history_card(2018, r"Brock, Donahue \& Simonyan: \ BigGAN", r"ImageNet at $128^2$: \ IS $166.5$, \ FID "
-                         r"$7.4$ \ (previous best $52.5$, \ $18.6$)", width=3.3, font_size=18),
-            history_card(2018, r"Karras, Laine \& Aila: \ StyleGAN", r"a mapping network and per-layer styles", width=3.3,
-                         font_size=18),
-        ).arrange(RIGHT, buff=0.18).move_to(UP * 0.4)
+                         r"$7.4$ \ (previous best $52.5$, \ $18.6$)", width=6.2, font_size=22),
+            history_card(2018, r"Karras, Laine \& Aila: \ StyleGAN", r"a mapping network and per-layer styles", width=6.2,
+                         font_size=22),
+        ).arrange_in_grid(2, 2, buff=(0.35, 0.35)).move_to(UP * 0.2)
+        rhead = label(r"From two-layer networks to photographs", font_size=32).to_edge(UP, buff=0.45)
         if cards.width > 13.6:
             cards.width = 13.6
         more = label(r"and: \ spectral normalization (Miyato et al., 2018), \ self-attention (Zhang et al., 2018), "
@@ -100,6 +100,7 @@ class Scale(VoiceoverScene):
             "166.5 and an FID of 7.4 at 128 pixels, against a previous best of 52.5 and 18.6. <bookmark mark='d'/> "
             "And Karras's group rebuilt the generator itself: StyleGAN."
         ) as vo:
+            self.play(FadeIn(rhead))
             vo.wait_until("a")
             for k, mk in enumerate([None, "b", "c", "d"]):
                 if mk:
@@ -131,7 +132,7 @@ class Scale(VoiceoverScene):
         mix = VGroup(label(r"style mixing:", font_size=22, color=C.BITS),
                      label(r"coarse layers' styles from one $w$: \ pose, face shape", font_size=20),
                      label(r"fine layers' from another: \ colour, texture", font_size=20))
-        mix.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.0, -0.4, 0])
+        mix.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-4.0, -2.6, 0])
         tg = note(r"schematic").to_corner(UR, buff=0.25)
         cite_ = cite(r"Karras, Laine \& Aila (2019); \ StyleGAN2 (2020), StyleGAN3 (2021)", corner=DR)
         with self.voiceover(

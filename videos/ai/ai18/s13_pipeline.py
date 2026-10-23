@@ -73,12 +73,16 @@ class Pipeline(VoiceoverScene):
                     corner=DR, font_size=17)
         with self.voiceover(
             "Tensor parallelism cuts every layer; pipeline parallelism cuts the model the other way: the first eight "
-            "layers on one GPU, the next eight on another, each GPU a stage. <bookmark mark='a'/> The trouble: while the "
-            "first stage works on a batch, the others wait. Google's GPipe, in 2019, cut each batch into micro-batches, so "
-            "the stages can work on different ones at once. <bookmark mark='b'/> Here is GPipe's schedule, simulated "
-            f"exactly: {p} stages, {m} micro-batches, a backward pass taking twice as long as a forward, time running "
-            "left to right. <bookmark mark='c'/> The micro-batches fill the pipeline going forward, it drains, and the "
-            "backward passes fill it again in reverse. The grey corners are GPUs waiting: the pipeline bubble."
+            "layers on one GPU, the next eight on another, each GPU a stage. <bookmark mark='a'/> The trouble: while "
+            "the "
+            "first stage works on a batch, the others wait. Google's GPipe cut each batch into micro-batches, so the "
+            "stages "
+            "can work on different ones at once. <bookmark mark='b'/> Here is GPipe's schedule, simulated exactly: "
+            f"{p} stages, {m} micro-batches, a backward pass taking twice as long as a forward. <bookmark mark='c'/> "
+            "The "
+            "micro-batches fill the pipeline going forward, it drains, and the backward passes fill it again in "
+            "reverse. The "
+            "grey corners are GPUs waiting: the pipeline bubble."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(s_) for s_ in stages], lag_ratio=0.2), FadeIn(arrows), FadeIn(sch))
             self.play(LaggedStart(*[FadeIn(b_, shift=DOWN * 0.1) for grp in lay for b_ in grp], lag_ratio=0.02),
@@ -141,7 +145,8 @@ class Pipeline(VoiceoverScene):
             "<bookmark mark='a'/> But the whole schedule takes longer: the last micro-batch can't start on the last "
             "stage until it has passed the p minus one stages before, and the same on the way back. "
             "<bookmark mark='b'/> So the share of time wasted is p minus one, over m plus p minus one. "
-            f"<bookmark mark='c'/> For our chart, {100 * Pp['gpipe']['bubble']:.1f} percent. Here is the bubble against "
+            f"<bookmark mark='c'/> For our chart, {100 * Pp['gpipe']['bubble']:.1f} percent. Here is the bubble "
+            "against "
             "the number of micro-batches, the formula as lines and our simulated schedules as dots. " + fit +
             " More micro-batches shrink it; GPipe's authors found four per stage enough."
         ) as vo:
@@ -219,15 +224,19 @@ class Pipeline(VoiceoverScene):
         f = Pp["formula"]
         with self.voiceover(
             "Two more tricks cut the bubble itself. <bookmark mark='a'/> Interleaving: give each GPU two smaller "
-            "chunks of layers instead of one, so a micro-batch visits every GPU twice. The ramp-up takes half as "
-            f"long, and the bubble falls to {100 * ri['bubble']:.1f} percent. Llama 3 used this. "
-            "<bookmark mark='b'/> Zero bubble, from Sea AI Lab in 2023: split the backward pass in two. The gradient "
-            "for the input is urgent, because the stage before is waiting for it; the gradient for the weights is "
-            "not, so it can be postponed into the gaps. With equal times for the three, the idle time falls to a "
-            f"third of 1F1B's, a bubble of {100 * rz['bubble']:.1f} percent, at the same memory. <bookmark mark='c'/> DeepSeek-V3 went "
-            "further with DualPipe: micro-batches enter the pipeline from both ends at once, and each GPU overlaps "
-            "one direction's computation with the other's communication. In its bubble's formula, p over two minus one "
-            "stages replace p minus one, at the price of keeping two copies of the weights."
+            "chunks of "
+            "layers instead of one, so the ramp-up takes half as long, and the bubble falls to "
+            f"{100 * ri['bubble']:.1f} percent. Llama 3 used this. <bookmark mark='b'/> Zero bubble, from Sea AI Lab "
+            "in 2023: "
+            "split the backward pass in two. The gradient for the input is urgent, because the stage before is "
+            "waiting for it; "
+            "the gradient for the weights can be postponed into the gaps. With equal times for the three, the idle "
+            "time falls "
+            f"to a third of 1F1B's, a bubble of {100 * rz['bubble']:.1f} percent. <bookmark mark='c'/> DeepSeek-V3's "
+            "DualPipe "
+            "feeds micro-batches in from both ends at once and overlaps computation with communication, at the price "
+            "of "
+            "keeping two copies of the weights."
         ) as vo:
             self.play(FadeIn(src))
             vo.wait_until("a")

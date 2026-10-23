@@ -163,8 +163,8 @@ class Accounting(VoiceoverScene):
             "then the optimizer's state, in thirty-two bits: a master copy of the weight, four bytes, and Adam's two "
             "running averages, four each. <bookmark mark='c'/> For Llama 3.1, sixteen bytes times 405 billion is "
             f"{m16['llama3'] / 1e12:.1f} terabytes: at least {P['h100_needed']} GPUs of eighty gigabytes just to hold "
-            "the model, before any activations. <bookmark mark='d'/> Every byte saved here counts; DeepSeek-V3, for one, "
-            "keeps Adam's averages in sixteen bits."
+            "the model, before any activations. <bookmark mark='d'/> DeepSeek-V3, for one, keeps Adam's "
+            "averages in sixteen bits."
         ) as vo:
             self.play(FadeIn(src), FadeIn(VGroup(*[b_[0] for b_ in blocks]).copy().set_fill(opacity=0.12)))
             vo.wait_until("a")
@@ -220,16 +220,21 @@ class Accounting(VoiceoverScene):
         big.move_to([0.75 + big.width / 2, -1.6, 0])
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
-            "The other big consumer of memory is the activations: what the forward pass keeps for the backward pass. "
-            "We counted the tensors PyTorch's autograd saves for our model, at lengths from 64 to 1,024 tokens. "
-            "<bookmark mark='a'/> With attention fused, as PyTorch runs it, the memory grows in a straight line: "
-            f"{A['per_fused']:.1f} numbers per token per layer, in units of the width. <bookmark mark='b'/> Compute "
-            "attention the textbook way, and it also keeps a T by T matrix for each head: a parabola. That quadratic term "
-            "is what FlashAttention removes. <bookmark mark='c'/> Or keep only each block's input, and recompute the rest "
-            "during the backward pass: one number per token per layer, for "
-            f"{100 * (A['ckpt_ratio'] - 1):.0f} percent more arithmetic here, and at most a third more in general. "
-            "<bookmark mark='d'/> At frontier scale this matters. Korthikanti and colleagues' count, at Llama 3.1's shape "
-            "and eight thousand tokens: four and a half gigabytes per layer, more than half a terabyte per sequence."
+            "The other big consumer of memory is the activations, what the forward pass keeps for the backward pass. "
+            "We "
+            "counted the tensors PyTorch saves for our model, at lengths from 64 to 1,024 tokens. <bookmark "
+            "mark='a'/> With "
+            f"attention fused, the memory grows in a straight line: {A['per_fused']:.1f} numbers per token per layer, "
+            "in units "
+            "of the width. <bookmark mark='b'/> Compute attention the textbook way, and it also keeps a T by T matrix "
+            "for each "
+            "head: a parabola, which FlashAttention removes. <bookmark mark='c'/> Or keep only each block's input and "
+            "recompute "
+            "the rest during the backward pass: one number per token per layer, for "
+            f"{100 * (A['ckpt_ratio'] - 1):.0f} percent "
+            "more arithmetic here. <bookmark mark='d'/> At Llama 3.1's shape and eight thousand tokens, Korthikanti "
+            "and "
+            "colleagues' count gives four and a half gigabytes per layer, more than half a terabyte per sequence."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
