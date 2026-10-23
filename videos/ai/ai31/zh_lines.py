@@ -475,11 +475,11 @@ ZH = {
     'f"And back to where we began':
         "最后回到我们开始的地方：香农自己的那句话。<bookmark mark='a'/>在第1部分，一个计数程序玩过他的游戏。它第一次就猜中了百分之{d['count_first'] * 100:.0f}的字母，整句话花掉它{d['count_total']:.0f}比特。<bookmark mark='b'/>现在轮到我们的模型。它读的是词元，不是字母，所以我们把它的词元能拼出下一个字母的每一种方式的概率都加起来，再让它按顺序去猜。<bookmark mark='c'/>{verdict}",
 
-    'f"It needs one guess for {d[\'first\'] * 100:.0f} percent of the letters, and the sentence costs it {d[\'total\']:.0f} bits, against':
+    "f\"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs it {d['total']:.0f} bits, against the counting program's {d['count_total']:.0f}.\"":
         "它对百分之{d['first'] * 100:.0f}的字母只需要猜一次，整句话花掉它{d['total']:.0f}比特，而计数程序是{d['count_total']:.0f}比特。",
 
-    "f'It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs it {d['total']:.0f} bits: on":
-        "它对百分之{d['first'] * 100:.0f}的字母只需要猜一次，整句话花掉它{d['total']:.0f}比特：在这句奇怪的、没有标点的话上，并不比计数更好。",
+    "f\"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs it {d['total']:.0f} bits, against the counting program's {d['count_total']:.0f}. Shannon":
+        "它对百分之{d['first'] * 100:.0f}的字母只需要猜一次，整句话花掉它{d['total']:.0f}比特，而计数程序是{d['count_total']:.0f}比特。香农的这句话没有大写，也没有标点，恰好是计数程序训练时用的那种形式，而我们的模型是从印出来的书里学的：在这里，计数程序赢了。",
 
     'Shannon asked how much a reader must know':
         "香农问过，一个读者要知道多少，才能把下一个字母猜好。答案原来是：要知道很多，不只是语言，还有这个世界；而猜得足够好的机器，已经学会了其中的很多。<bookmark mark='a'/>正因为这样，它们才需要被小心地衡量：它们能做什么，我们实际要求了它们什么，以及在我们不看的时候，它们做些什么。<bookmark mark='b'/>维纳在六十六年前用一句话说出了这一点，而它至今仍是那句对的话。",
