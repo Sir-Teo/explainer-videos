@@ -680,4 +680,4 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 26 | **complete**, English and Chinese (16 chapters; our own AlphaZero, 80 generations) | 65 min |
 | 27 | written; experiments running on the novels model; Chinese narration table complete | ≈ 40 min (est.) |
 | 28 | **complete**, English and Chinese | 59 min |
-| 31 | new, drafted (16 chapters; the finale takes over Part 30's series recap and scoreboard) | ≈ 60 min (est.) |
+| 31 | **complete**, English and Chinese (16 chapters; the finale takes over Part 30's series recap and scoreboard) | 59 min |

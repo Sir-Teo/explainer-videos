@@ -451,3 +451,41 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | Kolmogorov–Arnold network (KAN), spline | 柯尔莫哥洛夫–阿诺德网络（KAN），样条 |
 | neural language model, embedding | 神经语言模型，嵌入 |
 | Hilbert's thirteenth problem | 希尔伯特第13问题 |
+
+### Evaluation and safety (Part 31)
+
+| English | 中文 |
+|---|---|
+| the bootstrap, resample | 自助法，重抽样（统计；不同于强化学习里的"自举"） |
+| confidence interval, standard error | 置信区间，标准误 |
+| paired comparison, unpaired | 配对比较，不配对 |
+| benchmark, held-out test | 基准测试，留出的测试集 |
+| contamination, leak | 污染，泄漏 |
+| n-gram overlap | n元组重叠 |
+| canary string | 金丝雀字符串 |
+| dynamic benchmark | 动态基准测试 |
+| arena, leaderboard, vote | 竞技场，排行榜，投票 |
+| Elo rating, online Elo | 埃洛等级分，在线埃洛 |
+| style control | 风格控制 |
+| LLM as a judge; position, verbosity and self-preference bias | 用大模型当裁判；位置偏差、冗长偏差、自我偏好 |
+| item response theory (IRT), 2PL, difficulty, discrimination | 项目反应理论（IRT），双参数模型，难度，区分度 |
+| Fisher information | 费希尔信息 |
+| time horizon (50%) | （百分之五十）时间跨度 |
+| doubling time, backtest, extrapolation | 倍增时间，回测，外推 |
+| specification gaming, reward hacking | 规格投机，奖励投机 |
+| potential-based shaping | 基于势函数的奖励塑形 |
+| scalable oversight, debate | 可扩展监督，辩论 |
+| weak-to-strong generalization, performance gap recovered (PGR) | 由弱到强的泛化，性能差距恢复率（PGR） |
+| auxiliary confidence loss | 辅助置信度损失 |
+| deception, scheming, sandbagging | 欺骗，图谋，藏拙 |
+| sleeper agent, probe | 潜伏特工，探针 |
+| evaluation awareness | 评测意识 |
+| chain-of-thought monitoring, monitorability, obfuscation | 思维链监控，可监控性，混淆 |
+| AI control; red team, blue team; trusted and untrusted model | AI控制；红队，蓝队；可信模型与不可信模型 |
+| audit budget, trusted monitoring, defer to trusted | 审计预算，可信监控，转交可信模型 |
+| safety, usefulness | 安全性，有用性 |
+| frontier safety framework, capability threshold | 前沿安全框架，能力阈值 |
+| safeguard, classifier, adaptive attack | 防护措施，分类器，自适应攻击 |
+| memorization, extraction, membership inference | 记忆，提取，成员推断 |
+| differential privacy, ε, DP-SGD, clipping, accountant | 差分隐私，ε，DP-SGD，裁剪，隐私会计 |
+| exposure | 暴露度 |
