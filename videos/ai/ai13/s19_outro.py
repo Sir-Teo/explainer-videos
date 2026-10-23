@@ -208,7 +208,7 @@ class Outro(VoiceoverScene):
             r"Dehghani et al.\ (2023); \ Gemma Team (2024, 2025); \ Olsson et al., \textit{Induction Heads} (2022); \ "
             r"von Oswald et al.\ (2023); \ Garg et al.\ (2022)",
             r"Weiss et al., \textit{Thinking Like Transformers} (2021); \ Lindner et al., \textit{Tracr} (2023); \ "
-            r"Merrill \& Sabharwal (2023); \ Merrill, Petty \& Sabharwal (2024); \ Zhou et al.\ (2023)",
+            r"Merrill \& Sabharwal (2023, 2024); \ Merrill, Petty \& Sabharwal (2024); \ Zhou et al.\ (2023)",
         ]
         card = reference_card(books, papers, font_size=19)
         data = note(r"Text: Project Gutenberg (Part 1's $30$ novels). \ Every model here is trained by this part's "

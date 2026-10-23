@@ -317,7 +317,17 @@ class Longer(VoiceoverScene):
                      label(r"position interpolation", font_size=20, color=EXT_COLORS["pi"]),
                      label(r"YaRN", font_size=20, color=EXT_COLORS["yarn"]),
                      label(rf"just the last ${ctx}$", font_size=20, color=EXT_COLORS["window"]))
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.8, 1.0, 0])
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.8, 1.3, 0])
+        # the fine-tuning itself: training loss at every step, both runs
+        fc = {k: np.asarray(e[f"ft_curve_{k}"], float) for k in ("pi", "yarn")}
+        ftop = float(np.ceil(max(fc[k].max() for k in fc)))
+        fg = axes([0, steps, 50], [math.floor(min(fc[k].min() for k in fc)), ftop, 1], x_length=2.6, y_length=1.5,
+                  xlabel=r"fine-tuning step", xticks=[0, steps], xfmt=lambda v: f"{int(v)}", font_size=16,
+                  yticks=[math.floor(min(fc[k].min() for k in fc)), ftop], yfmt=lambda v: f"{v:.0f}",
+                  center=[4.75, -1.75, 0])
+        fl = VGroup(*[curve(fg.ax, np.arange(1, steps + 1), fc[k], EXT_COLORS[k], 2.0) for k in fc])
+        ftl = label(rf"training loss, \ bits per character \ (${T:,}$-character windows)".replace(",", "{,}"),
+                    font_size=16, color=GREY_A).next_to(fg, UP, buff=0.12)
         far = {k: float(np.asarray(e[f"bucket_{k}"])[-4:].mean()) for k in ("pi", "yarn", "ft_pi", "ft_yarn", "window")}
         winner = "ft_yarn" if far["ft_yarn"] < far["ft_pi"] else "ft_pi"
         gap = abs(far["ft_yarn"] - far["ft_pi"])
@@ -337,11 +347,13 @@ class Longer(VoiceoverScene):
             "Real models do not stop at a rescaling: they train briefly at the new length. So did we, "
             f"{steps} steps of {T:,}-character windows, {chars / 1e6:.1f} million characters, about "
             f"{100 * chars / float(t['tokens']):.0f} percent of the original training, once from position "
-            "interpolation and once from YaRN. <bookmark mark='a'/> Dashed, before; solid, after. "
+            "interpolation and once from YaRN: in the corner, their training loss, step by step. "
+            "<bookmark mark='a'/> Dashed, before; solid, after. "
             f"<bookmark mark='b'/> {v} <bookmark mark='c'/> {v_end} This is the recipe of today's long-context models: DeepSeek-V3 went from four "
             "thousand to a hundred and twenty-eight thousand tokens with YaRN and two thousand steps of training."
         ) as vo:
             self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(key[2:]), Create(before), Create(win), run_time=2.0)
+            self.play(FadeIn(fg), FadeIn(ftl), Create(fl), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(key[:2]))
             vo.wait_until("b")

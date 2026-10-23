@@ -79,7 +79,8 @@ comparison is made; the series' own small transformer joins the scoreboard.
 * **16. What a transformer can compute.** RASP (Weiss, Goldberg & Yahav 2021): select, aggregate, elementwise; a
   histogram compiled by hand into one head with a BOS marker (2,000 of 2,000 random sequences right; counts blur after
   189 in bfloat16 and 1,463 in float16); sorting in two layers (2,000 of 2,000); Tracr (Lindner et al. 2023); fixed
-  depth and TC⁰ (Merrill & Sabharwal 2023), chains of thought (Merrill & Sabharwal 2024), the RASP-generalization
+  depth and TC⁰ (Merrill & Sabharwal 2023), tracking shuffles of five objects (Merrill, Petty & Sabharwal 2024),
+  chains of thought (Merrill & Sabharwal 2024), the RASP-generalization
   conjecture (Zhou et al. 2023).
 * **17. Attention in 2026.** Where the formula sits in today's models: sink logits, gates, QK-norm and NoPE layers
   inside; grouped-query and multi-head latent attention for the cache (Part 15); sliding windows, DeepSeek's sparse
@@ -161,7 +162,8 @@ Transformer* (2024); OpenAI, gpt-oss model card (2025); Dehghani et al., ViT-22B
 Olsson et al., *In-context Learning and Induction Heads* (2022); von Oswald et al., *Transformers Learn In-Context by
 Gradient Descent* (2023); Garg et al. (2022); Weiss, Goldberg & Yahav, *Thinking Like Transformers* (2021); Lindner
 et al., *Tracr* (2023); Merrill & Sabharwal, *The Parallelism Tradeoff* (2023); Merrill & Sabharwal, *The Expressive
-Power of Transformers with Chain of Thought* (2024); Zhou et al., *What Algorithms Can Transformers Learn?* (2023);
+Power of Transformers with Chain of Thought* (2024); Merrill, Petty & Sabharwal, *The Illusion of State in State-Space
+Models* (2024); Zhou et al., *What Algorithms Can Transformers Learn?* (2023);
 DeepSeek-AI, DeepSeek-V2 (MLA, 2024), V3 (2024), V3.2 (2025), V4 (2026); Moonshot AI, Kimi Linear (2025), Kimi K3
 (2026); Qwen Team, Qwen3 (2025), Qwen3-Next (2025).
 
