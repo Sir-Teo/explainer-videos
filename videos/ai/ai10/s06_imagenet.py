@@ -192,11 +192,10 @@ class ImageNet(VoiceoverScene):
         anames = [r"input \\ $224{\times}224{\times}3$", r"conv1 \\ $96$ @ $11{\times}11$, \\ stride $4$",
                   r"conv2 \\ $256$ @ $5{\times}5$", r"conv3 \\ $384$", r"conv4 \\ $384$", r"conv5 \\ $256$",
                   r"fc6 \\ $4096$", r"fc7 \\ $4096$", r"fc8 \\ $1000$, softmax"]
-        alabs = VGroup(*[label(t, font_size=17, color=GREY_A).next_to(b, DOWN if k % 2 == 0 else UP, buff=0.2)
+        alabs = VGroup(*[label(t, font_size=16, color=GREY_A).next_to(b, DOWN if k % 2 == 0 else UP, buff=0.2)
                          for k, (t, b) in enumerate(zip(anames, arch))])
         diagram = VGroup(arch, alabs)
-        if diagram.width > 13.0:
-            diagram.width = 13.0
+        diagram.scale(min(12.0 / diagram.width, 5.6 / diagram.height)).move_to([0, 0.3, 0])
         keep_in_frame(diagram)
         sch = note(r"schematic: \ sizes not to scale").to_corner(DL, buff=0.25)
         with self.voiceover(

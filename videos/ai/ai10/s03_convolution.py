@@ -61,8 +61,12 @@ class Convolution(VoiceoverScene):
                          for i in range(0, 28, 3) for j in range(0, 28, 3)])
         unit_c = Dot([-1.5, -0.6, 0], radius=0.09, color=KERNEL)
         patch = Square(5 * cell, stroke_color=KERNEL, stroke_width=2).move_to(pix(14, 14))
-        local = VGroup(*[Line(pix(12 + a, 12 + b), unit_c.get_center(), stroke_width=0.8, color=KERNEL,
-                              stroke_opacity=0.7) for a in range(5) for b in range(5)])
+        def local_lines():
+            c0 = patch.get_center()
+            return VGroup(*[Line(c0 + np.array([(b - 2) * cell, -(a - 2) * cell, 0]), unit_c.get_center(),
+                                 stroke_width=0.8, color=KERNEL, stroke_opacity=0.7) for a in range(5) for b in range(5)])
+
+        local = local_lines()
         ld = label(r"fully connected: \ every pixel", font_size=20, color=MLPC).next_to(unit_d, UP, buff=0.15)
         lc = label(r"convolutional: \ a $5 \times 5$ patch", font_size=20, color=KERNEL).next_to(unit_c, DOWN,
                                                                                                     buff=0.15)
@@ -72,9 +76,9 @@ class Convolution(VoiceoverScene):
         bars = VGroup()
         top = math.log10(max(vals))
         for k, (v, nm, c) in enumerate(zip(vals, names, cols)):
-            w = 5.0 * math.log10(v) / top
+            w = 3.8 * math.log10(v) / top
             b = Rectangle(width=w, height=0.42, stroke_width=0, fill_color=c, fill_opacity=0.85)
-            b.move_to([1.2 + w / 2, 1.2 - 0.95 * k, 0])
+            b.move_to([0.7 + w / 2, 1.2 - 0.95 * k, 0])
             t = label(nm, font_size=22, color=c).next_to(b, UP, buff=0.08).align_to(b, LEFT)
             n = MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=28, color=c).next_to(b, RIGHT, buff=0.15)
             bars.add(VGroup(b, t, n))
@@ -95,9 +99,13 @@ class Convolution(VoiceoverScene):
             self.play(FadeIn(unit_d), Create(dense, lag_ratio=0.002), FadeIn(ld), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(patch), FadeIn(unit_c), Create(local), FadeIn(lc))
+            self.remove(local)
+            local = always_redraw(local_lines)
+            self.add(local)
             vo.wait_until("c")
-            self.play(patch.animate.move_to(pix(6, 9)), local.animate.shift(pix(6, 9) - pix(14, 14)), run_time=1.0)
-            self.play(patch.animate.move_to(pix(20, 18)), local.animate.shift(pix(20, 18) - pix(6, 9)), run_time=1.0)
+            self.play(patch.animate.move_to(pix(6, 9)), run_time=1.0)
+            self.play(patch.animate.move_to(pix(20, 18)), run_time=1.0)
+            local.clear_updaters()
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.2) for b in bars], lag_ratio=0.4), FadeIn(bl))
         self.wait(0.3)

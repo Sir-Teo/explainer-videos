@@ -45,10 +45,13 @@ class Deception(VoiceoverScene):
             "because it is being trained, to avoid being changed. <bookmark mark='d'/> And evaluation awareness: "
             "recognizing a test as a test. What is the evidence for each?"
         ) as vo:
-            self.play(FadeIn(head))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.78)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -63,7 +66,7 @@ class Deception(VoiceoverScene):
         steps.next_to(VGroup(p1, p2), DOWN, buff=0.45).align_to(p1, LEFT)
         hc = history_card(2024, r"Sleeper Agents \ (Hubinger et al., Anthropic, January)", r"backdoors trained in on "
                           r"purpose, \ a ``model organism'' of deception: \ standard safety training did not remove them, "
-                          r"\ most of all in the largest models", width=6.6, color=LEAK, font_size=19)
+                          r"\ most of all in the largest models", width=6.0, color=LEAK, font_size=19)
         hc.next_to(steps, DOWN, buff=0.35).align_to(p1, LEFT)
         # the probe: two separated clouds of projections (schematic)
         g = axes([-4, 4], [0, 1], x_length=5.0, y_length=2.0, xlabel=r"activations projected on one direction",
@@ -76,8 +79,10 @@ class Deception(VoiceoverScene):
         sch = note(r"schematic").next_to(g, DOWN, buff=0.1).align_to(g, RIGHT)
         hc2 = history_card(2024, r"\dots and probes catch them \ (Anthropic, April)", r"a linear direction from generic "
                            r"questions (``Are you doing something dangerous?'' yes / no) \ separates the triggered prompts "
-                           r"with AUROC above $99\%$: \ Part 30's probes", width=6.2, color=CI, font_size=19)
-        hc2.move_to([3.6, -2.0, 0])
+                           r"with AUROC above $99\%$: \ Part 30's probes", width=5.8, color=CI, font_size=19)
+        hc2.move_to([3.75, -2.0, 0])
+        if hc2.get_left()[0] < hc.get_right()[0] + 0.2:
+            hc2.shift(RIGHT * (hc.get_right()[0] + 0.2 - hc2.get_left()[0]))
         with self.voiceover(
             "Start with deception put in on purpose. In January 2024 Evan Hubinger and colleagues at Anthropic trained "
             "models with a hidden rule: write secure code when told the year is 2023, and exploitable code when told "
@@ -124,9 +129,12 @@ class Deception(VoiceoverScene):
             "These were tests of capability, with the goal handed over in the prompt; a handful of cases happened "
             "without any urging."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(setup[0]), FadeIn(tag))
+            rest = VGroup(arrs, setup[1], setup[2])
+            full = rest.copy()
+            rest.fade(0.8)
+            self.play(FadeIn(head), FadeIn(setup[0]), FadeIn(tag), FadeIn(rest))
             vo.wait_until("a")
-            self.play(GrowArrow(arrs[0]), FadeIn(setup[1]), GrowArrow(arrs[1]), FadeIn(setup[2]))
+            self.play(Transform(rest, full))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")
@@ -163,9 +171,9 @@ class Deception(VoiceoverScene):
             "striking: with no goal given at all, it still dropped, from ninety-six to sixty-one, reasoning that it "
             "should stay deployed in order to be helpful: a goal it had learned in training, not one it was given."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(head))
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(a))
             vo.wait_until("a")
-            self.play(FadeIn(a))
+            self.play(Indicate(a[-1], color=WHITE))
             vo.wait_until("b")
             self.play(FadeIn(b))
         self.wait(0.4)
@@ -209,11 +217,13 @@ class Deception(VoiceoverScene):
             "test passed by a model that knows it is a test tells us less. So the next two chapters look inside the "
             "reasoning, and then design for the worst case."
         ) as vo:
-            self.play(FadeIn(left[0]), FadeIn(tag))
+            full = left.copy()
+            left[1:].fade(0.8)
+            self.play(FadeIn(left), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(left[1]), FadeIn(left[2]), FadeIn(left[3]))
+            self.play(*[Transform(left[k], full[k]) for k in (1, 2, 3)])
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in left[4:]], lag_ratio=0.3))
+            self.play(LaggedStart(*[Transform(left[k], full[k]) for k in range(4, len(left))], lag_ratio=0.3))
             vo.wait_until("c")
             self.play(FadeIn(rightg))
             vo.wait_until("d")
