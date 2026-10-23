@@ -289,7 +289,7 @@ class Evoformer(VoiceoverScene):
             "Here is the training itself, replayed: both models' guesses for one held-out chain, as training goes "
             f"on. <bookmark mark='a'/> At step zero both guess nothing in particular. <bookmark mark='b'/> Within a "
             "few hundred steps both learn the easy part, that residues close along the chain are close in space: the "
-            "bright band along the diagonal. <bookmark mark='c'/> The rest, which residues far apart along the chain "
+            "dark band along the diagonal. <bookmark mark='c'/> The rest, which residues far apart along the chain "
             "come back together, needs the other pairs; <bookmark mark='d'/> on the curve below, "
             f"{beat_txt}."
         ) as vo:

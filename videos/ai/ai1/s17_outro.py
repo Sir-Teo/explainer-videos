@@ -123,13 +123,12 @@ class Outro(VoiceoverScene):
         z = load("lmzip")
         back = "and decoded it back, letter for letter" if z["ok"] else "to a fraction of what xz needs"
         with self.voiceover(
-            "Let's take stock. Guesses are probability distributions, and the chain rule scores a whole text. "
-            "Surprise had to be a logarithm, and entropy, the average surprise, is the only consistent measure of "
-            "uncertainty. Prefix codes live within Kraft's budget, Huffman's is the best, and long typical "
-            "sequences let a code reach the entropy, and no further. A wrong model costs the cross-entropy, with a "
-            "divergence that has two directions. Arithmetic coding made predicting and compressing one thing, and "
-            f"GPT-2 compressed our passage {back}. Counting models taught generalization by failing at it, and "
-            "mutual information showed how far back text remembers."
+            "Let's take stock. Guesses are probability distributions; the chain rule scores a whole text. Surprise "
+            "had to be a logarithm, and entropy is the only consistent measure of uncertainty. Kraft's budget bounds "
+            "every code, Huffman's is the best, and long typical sequences reach the entropy, no further. A wrong "
+            "model costs the cross-entropy. Arithmetic coding made predicting and compressing one thing, and GPT-2 "
+            f"compressed our passage {back}. Counting taught generalization by failing at it, and mutual "
+            "information showed how far back text remembers."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),

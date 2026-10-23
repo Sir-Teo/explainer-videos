@@ -148,12 +148,12 @@ class Typical(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=1.0, x=-2.4, buff=0.38, edge=6.9)
         with self.voiceover(
             "Call a sequence typical if its surprise per symbol is within a small epsilon of the entropy. "
-            "<bookmark mark='a'/> Then each typical sequence has probability close to two to the minus n H. "
+            "<bookmark mark='a'/> Then each has probability close to two to the minus n H. "
             "<bookmark mark='b'/> By equipartition, together they hold nearly all the probability. "
             "<bookmark mark='c'/> Count them: their probabilities can't add past one, <bookmark mark='d'/> so there "
             "are at most two to the n H plus epsilon; <bookmark mark='e'/> and since they hold nearly everything, "
-            "at least about two to the n H. Almost every sequence you'll ever see is one of about two to the n H, "
-            "all about equally likely."
+            "at least about two to the n H. Almost every sequence you'll see is one of these, all about equally "
+            "likely."
         ) as vo:
             self.play(FadeIn(df, shift=DOWN * 0.2))
             vo.wait_until("a")

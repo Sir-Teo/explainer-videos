@@ -470,13 +470,12 @@ class Arithmetic(VoiceoverScene):
             self.remove(hb)
 
         with self.voiceover(
-            "A real coder can't keep fractions with thousands of digits. It keeps the interval as two whole numbers, "
-            f"low and high, of {R} bits here, 32 in practice. <bookmark mark='a'/> The first letter narrows it. "
-            "<bookmark mark='b'/> Both ends now agree on their leading bit: send it, and double the half that holds "
-            "the interval, so it fills the range again: a zoom. <bookmark mark='c'/> If the interval straddles the "
-            "middle, inside the middle half, the next bit isn't known yet. The coder zooms about the middle anyway, "
-            "and notes a waiting bit, which comes out, flipped, after the next decided one. <bookmark mark='d'/> "
-            "Letter by letter, narrow and zoom, and the bits stream out."
+            "A real coder keeps the interval as two whole numbers, low and high: "
+            f"{R} bits here, 32 in practice. <bookmark mark='a'/> The first letter narrows it. "
+            "<bookmark mark='b'/> Both ends agree on their leading bit: send it, and double the half holding the "
+            "interval: a zoom. <bookmark mark='c'/> If the interval straddles the middle, the next bit isn't known "
+            "yet: the coder zooms about the middle anyway, and the waiting bit comes out, flipped, after the next "
+            "decided one. <bookmark mark='d'/> Narrow and zoom, and the bits stream out."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), Create(ruler), FadeIn(ticks), FadeIn(cur), FadeIn(rg), FadeIn(sent_l),
                       FadeIn(sm), FadeIn(pm), FadeIn(sym))

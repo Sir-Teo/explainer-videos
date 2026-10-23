@@ -194,7 +194,7 @@ class Hook(VoiceoverScene):
             "later, the same game became how machines learn language: a network guessing the next word, in 2003, "
             "then GPT-2, and today's models."
         ) as vo:
-            self.play(FadeIn(head), Create(axis), FadeIn(ticks))
+            self.play(FadeIn(head), Create(axis), FadeIn(ticks), FadeIn(this), FadeIn(tl), FadeIn(that), FadeIn(tr))
             vo.wait_until("a")
             self.play(FadeIn(marks[0], shift=UP * 0.2))
             vo.wait_until("b")
@@ -202,9 +202,9 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(marks[2], shift=UP * 0.2))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(m) for m in marks[3:6]], lag_ratio=0.4), FadeIn(this), FadeIn(tl))
+            self.play(LaggedStart(*[FadeIn(m) for m in marks[3:6]], lag_ratio=0.4))
             vo.wait_until("e")
-            self.play(LaggedStart(*[FadeIn(m) for m in marks[6:]], lag_ratio=0.4), FadeIn(that), FadeIn(tr))
+            self.play(LaggedStart(*[FadeIn(m) for m in marks[6:]], lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()
 
