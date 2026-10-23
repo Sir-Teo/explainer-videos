@@ -113,8 +113,10 @@ class Heads(VoiceoverScene):
             f"first, on a log scale. <bookmark mark='a'/> Exactly {rank} of them are real; after that the values "
             "fall off a cliff, to the size of the computer's rounding error. <bookmark mark='b'/> And even within "
             f"those {dh}, a head is lopsided: {int(k90.min())} to {int(k90.max())} directions hold ninety percent of "
-            f"its size. <bookmark mark='c'/> Add a layer's {H} heads together and the rank is {lrank}: between them, "
-            "the heads cover the whole stream, but each one looks through a narrow slit."
+            f"its size. <bookmark mark='c'/> Add a layer's {H} heads together and the rank is {lrank}"
+            + (f", all but the one direction that layer norm removes, the average of the {d} numbers"
+               if lrank == d - 1 else "")
+            + ": between them, the heads cover the stream, but each one looks through a narrow slit."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(img), FadeIn(il))
             self.play(LaggedStart(*[Create(c_) for c_ in lines], lag_ratio=0.05), run_time=2.0)

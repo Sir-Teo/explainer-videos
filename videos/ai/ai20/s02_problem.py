@@ -41,6 +41,9 @@ class Problem(VoiceoverScene):
                       label(r"evaluate: \ compression, \ anomaly detection", font_size=22),
                       label(r"encode: \ representations for other tasks", font_size=22))
         uses.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(d, DOWN, buff=0.45).align_to(d, LEFT)
+        shown = Group(pl, dens, pl_l, dl)  # starts large in the middle, moves aside for the definition
+        home = shown.get_center()
+        Group(pl, pts, dens, pl_l, dl).scale(1.3, about_point=home).move_to([0, home[1], 0])
         with self.voiceover(
             "Here is the problem at its smallest: twenty thousand points in the plane, drawn from a distribution p "
             "in the shape of two moons. <bookmark mark='a'/> Because we made it, we know p exactly; with images or "
@@ -52,6 +55,7 @@ class Problem(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(dens), FadeOut(pts), FadeIn(dl))
             vo.wait_until("b")
+            self.play(shown.animate.scale(1 / 1.3).move_to(home), run_time=1.0)
             self.play(FadeIn(d, shift=UP * 0.15), FadeIn(uses[0]))
             vo.wait_until("c")
             self.play(FadeIn(uses[1]))

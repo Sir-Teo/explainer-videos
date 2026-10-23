@@ -858,7 +858,7 @@ def compute_heads():
     # forward and backward, at the training length
     xx = data["train"][:CTX + 1]
     with FlopCounterMode(display=False) as fc:
-        z = model(xx[None, :-1], keep=False)
+        z = model(xx[None, :-1], keep=False)[0]
         F.cross_entropy(z[0], xx[1:]).backward()
     out["flops_train_token"] = fc.get_total_flops() / CTX
     model.zero_grad()
