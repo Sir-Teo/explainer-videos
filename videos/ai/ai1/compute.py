@@ -820,19 +820,29 @@ def compute_lms():
     p0 = sum(len(p) + 1 for p in paras[:SURPRISE_PARA])
     p1 = p0 + len(paras[SURPRISE_PARA])
     out, rows = {}, []
+    from explainer.ai.cache import Partial
+
+    # each model's result is kept as it finishes: five downloads and runs, so an interrupted item resumes
+    part = Partial(DATA_DIR / "lms.partial.json", dict(models=[m[0] for m in LMS], windows=[m[4] for m in LMS]),
+                   "ai1/lms")
     for mid, lab, params, year, window in LMS:
-        t = time.time()
-        r = lm_bits(mid, window, passage)
-        bpc = float(r["bits"].sum() / len(passage))
-        rows.append(dict(id=mid, label=lab, params=params, year=year, bpc=bpc, tokens=len(r["bits"]),
-                         chars_per_token=len(passage) / len(r["bits"]), bits_per_token=float(r["bits"].mean())))
-        sel = [k for k, (a, b) in enumerate(r["offsets"]) if a >= p0 and b <= p1]
-        out[lab] = dict(tokens=[r["tokens"][k] for k in sel], bits=[float(r["bits"][k]) for k in sel],
-                        starts=[int(r["offsets"][k][0]) - p0 for k in sel])
-        print(f"    {lab:<14} {bpc:.3f} bits/char  {len(r['bits'])} tokens  {time.time() - t:.0f}s", flush=True)
+        if mid not in part:
+            t = time.time()
+            r = lm_bits(mid, window, passage)
+            bpc = float(r["bits"].sum() / len(passage))
+            row = dict(id=mid, label=lab, params=params, year=year, bpc=bpc, tokens=len(r["bits"]),
+                       chars_per_token=len(passage) / len(r["bits"]), bits_per_token=float(r["bits"].mean()))
+            sel = [k for k, (a, b) in enumerate(r["offsets"]) if a >= p0 and b <= p1]
+            part[mid] = dict(row=row, surprise=dict(tokens=[r["tokens"][k] for k in sel],
+                                                    bits=[float(r["bits"][k]) for k in sel],
+                                                    starts=[int(r["offsets"][k][0]) - p0 for k in sel]))
+            print(f"    {lab:<14} {bpc:.3f} bits/char  {len(r['bits'])} tokens  {time.time() - t:.0f}s", flush=True)
+        rows.append(part[mid]["row"])
+        out[lab] = part[mid]["surprise"]
     bpcs = [r["bpc"] for r in rows]
-    assert bpcs[0] > bpcs[3]  # GPT-2 XL beats GPT-2 small
+    assert bpcs[0] > bpcs[1]  # GPT-2 XL beats GPT-2 small
     assert min(bpcs) < 1.3
+    part.finish()
     return dict(rows=rows, surprise=out, paragraph=paras[SURPRISE_PARA])
 
 
