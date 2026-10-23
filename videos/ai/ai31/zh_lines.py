@@ -463,8 +463,14 @@ ZH = {
     'f"And the series\' own model':
         "还有这个系列自己的模型，{mp:.1f}百万个参数，在这台计算机上用三十部小说训练出来，达到{bpc:.2f}，上下浮动大约{pm:.2f}。",
 
-    'f"The large pretrained models of Part 1 reach':
-        "第1部分那些大型预训练模型达到{top:.2f}；香农的读者们只猜字母，需要0.6到1.3。",
+    'f"The best large pretrained model from Part 1 reaches {top:.2f}, below':
+        "第1部分最好的大型预训练模型达到{top:.2f}，甚至低于香农的读者们所需的0.6到1.3，不过他们只猜字母和空格。",
+
+    'f"The best large pretrained model from Part 1 reaches {top:.2f}, inside':
+        "第1部分最好的大型预训练模型达到{top:.2f}，落在香农的读者们所需的0.6到1.3之间，不过他们只猜字母和空格。",
+
+    'f"The best large pretrained model from Part 1 reaches {top:.2f}, still':
+        "第1部分最好的大型预训练模型达到{top:.2f}，仍高于香农的读者们所需的0.6到1.3，不过他们只猜字母和空格。",
 
     "Shannon's readers, guessing letters alone, needed between 0.6 and 1.3.":
         '香农的读者们只猜字母，需要0.6到1.3。',

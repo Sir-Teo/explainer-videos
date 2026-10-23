@@ -507,8 +507,14 @@ _DATA = {
     "f'They tie:":
         "两者打平：每字符分别是{mb:.3f}和{mf:.3f}比特，都是两个种子的平均，差别小于两个种子之间的{sp:.3f}。在我们的规模上，新配方既无帮助，也无害处。",
 
-    'f"And on the series\' scoreboard':
-        "再看本系列的记分牌，也就是每个模型对《马耳他之鹰》第二章需要的每字符比特数。<bookmark mark='a'/>最上面是第1部分的压缩器和计数，然后是第14部分的家族，还有本系列自己的那个{base_row['params'] / 1000000.0:.1f}百万参数的模型，用了我们{times:.0f}倍的词元训练，成绩是{base_row['bits']:.2f}。<bookmark mark='b'/>{vs14}<bookmark mark='c'/>配方买到的是效率：用更少的算力得到同样的质量。前沿实验室把省下来的，花在了规模上。",
+    '"And on the series\' scoreboard':
+        "再看本系列的记分牌，也就是每个模型对《马耳他之鹰》第二章需要的每字符比特数。<bookmark mark='a'/>{top_rows}，还有本系列自己的那个{base_row['params'] / 1000000.0:.1f}百万参数的模型，用了我们{times:.0f}倍的词元训练，成绩是{base_row['bits']:.2f}。<bookmark mark='b'/>{vs14}<bookmark mark='c'/>配方买到的是效率：用更少的算力得到同样的质量。前沿实验室把省下来的，花在了规模上。",
+
+    "Part 1's compressors and counts at the top, then the published":
+        '最上面是第1部分的压缩器和计数，然后是第1部分测过的公开模型，GPT-2和Qwen3，再然后是第14部分的家族',
+
+    "Part 1's compressors and counts at the top, then Part 14's family":
+        '最上面是第1部分的压缩器和计数，然后是第14部分的家族',
 
     'f"Our 2026 model scores {f[\'bits\']:.2f}, better than':
         "我们的2026模型得分{f['bits']:.2f}，好于第14部分同样大小、读了同样多词元的模型，它是{gm['bits']:.2f}。",

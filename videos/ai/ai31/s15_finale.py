@@ -101,8 +101,15 @@ class Finale(VoiceoverScene):
             mark("novels")
         if "top" in named:
             top = rows[named["top"]]["bits"]
-            top_said = (f"The large pretrained models of Part 1 reach {top:.2f}; Shannon's readers, guessing letters "
-                        "alone, needed between 0.6 and 1.3.")
+            if top < 0.6:
+                top_said = (f"The best large pretrained model from Part 1 reaches {top:.2f}, below even the 0.6 to 1.3 "
+                            "that Shannon's readers needed, though they guessed only letters and spaces.")
+            elif top <= 1.3:
+                top_said = (f"The best large pretrained model from Part 1 reaches {top:.2f}, inside the 0.6 to 1.3 "
+                            "that Shannon's readers needed, though they guessed only letters and spaces.")
+            else:
+                top_said = (f"The best large pretrained model from Part 1 reaches {top:.2f}, still above the 0.6 to "
+                            "1.3 that Shannon's readers needed, though they guessed only letters and spaces.")
             with self.voiceover(top_said):
                 mark("top")
                 mark("human")

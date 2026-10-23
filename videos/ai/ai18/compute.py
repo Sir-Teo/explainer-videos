@@ -1199,8 +1199,13 @@ def compute_scoreboard():
     with our two models."""
     from videos.ai.ai14.compute import load as load14
 
+    from videos.ai.ai1 import compute as P1
+
     S14 = load14("scoreboard")
     rows = [dict(label=r["label"], bits=r["bits"], kind=r["kind"], part=r["part"]) for r in S14["rows"]]
+    # the published language models Part 1 measured on the same passage (GPT-2, Qwen3)
+    rows += [dict(label=r["label"], bits=r["bits"], kind="lm", part=1, name="p1_" + r["key"])
+             for r in P1.load("scoreboard")["rows"] if r.get("kind") == "lm" and r.get("bits", 0) > 0]
     names = {"gpt_xs": "XS", "gpt_s": "S", "gpt_m": "M", "gpt_l": "L"}
     for r in S14["ours"]:
         rows.append(dict(label=f"Part 14, model {names[r['name']]}", bits=r["bits"], kind="lm", part=14,
