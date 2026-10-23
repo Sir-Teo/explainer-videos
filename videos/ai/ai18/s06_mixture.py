@@ -328,7 +328,7 @@ class Mixture(VoiceoverScene):
         w4 = 1 + rs * (1 - math.exp(-(F.REPEAT["epochs"] - 1) / rs))
         d4 = Dot(gr.ax.c2p(F.REPEAT["epochs"], w4), radius=0.06, color=YELLOW)
         l4 = label(rf"${F.REPEAT['epochs']}$ epochs: \ worth ${w4:.1f}$", font_size=18, color=YELLOW)
-        l4.next_to(d4, RIGHT, buff=0.25).shift(DOWN * 0.3)
+        l4.next_to(d4, RIGHT, buff=0.3).shift(UP * 0.08)
         rlg = legend([(GREY_B, r"new data"), (EDU, r"repeated: \ Muennighoff et al.'s fit")], font_size=17)
         rlg.next_to(gr, RIGHT, buff=0.3).align_to(gr, UP)
         rplot = VGroup(gr, new_, wc, d4, l4, rlg)

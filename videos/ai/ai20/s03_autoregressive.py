@@ -69,12 +69,11 @@ class Autoregressive(VoiceoverScene):
             "have a sample. <bookmark mark='c'/> Shannon's English, every language model in this series, and now a "
             "digit."
         ) as vo:
-            self.play(Write(f[:2]))
+            self.play(Write(f[:2]), LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.12), run_time=2.0)
             vo.wait_until("a")
             self.play(Write(f[2:]), run_time=2.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.12),
-                      LaggedStart(*[Create(a) for a in arcs], lag_ratio=0.1), run_time=2.5)
+            self.play(LaggedStart(*[Create(a) for a in arcs], lag_ratio=0.1), run_time=2.5)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(e, shift=UP * 0.1) for e in ex], lag_ratio=0.5), run_time=2.0)
         self.wait(0.3)

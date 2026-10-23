@@ -120,8 +120,7 @@ class TensorParallel(VoiceoverScene):
             "happens "
             "in every layer for every micro-batch, so tensor parallelism lives where bandwidth is highest, inside one "
             "machine's NVLink domain; Llama 3 used eight-way tensor parallelism, the innermost of its four dimensions. "
-            "<bookmark mark='d'/> A refinement from 2022, sequence parallelism, turns each all-reduce into a "
-            "reduce-scatter and an all-gather, and splits the remaining activations by position too."
+            "<bookmark mark='d'/> Sequence parallelism, from 2022, splits the remaining activations by position too."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(h_) for h_ in heads], lag_ratio=0.1), FadeIn(src))
             vo.wait_until("a")
