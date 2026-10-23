@@ -489,3 +489,106 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | memorization, extraction, membership inference | 记忆，提取，成员推断 |
 | differential privacy, ε, DP-SGD, clipping, accountant | 差分隐私，ε，DP-SGD，裁剪，隐私会计 |
 | exposure | 暴露度 |
+
+### Four ways to generate (Part 20)
+
+| English | 中文 |
+|---|---|
+| generative model | 生成模型 |
+| sample, evaluate, encode | 采样，计算（概率），编码 |
+| density estimation | 密度估计 |
+| differential entropy, the floor h(p) | 微分熵，下限h(p) |
+| two moons, ring of eight Gaussians, checkerboard | 双月，八个高斯组成的环（八峰环），棋盘格 |
+| autoregressive model | 自回归模型 |
+| mixture density network (mixture of Gaussians) | 混合密度网络（高斯混合） |
+| NADE, MADE | NADE，MADE |
+| PixelCNN, PixelRNN, WaveNet | PixelCNN，PixelRNN，WaveNet |
+| masked convolution, mask A / mask B | 掩码卷积，A型掩码 / B型掩码 |
+| receptive field, blind spot | 感受野，盲区 |
+| vertical stack, horizontal stack | 竖直栈，水平栈 |
+| bits per pixel | 每像素比特数 |
+| latent variable, code z | 隐变量，编码z |
+| prior, posterior | 先验，后验 |
+| Helmholtz machine, recognition model | 亥姆霍兹机，识别模型 |
+| wake–sleep algorithm | 醒-睡算法 |
+| amortized inference | 摊销推断 |
+| variational autoencoder (VAE) | 变分自编码器（VAE） |
+| encoder, decoder | 编码器，解码器 |
+| evidence lower bound (ELBO) | 证据下界（ELBO） |
+| reparameterization trick | 重参数化技巧 |
+| reconstruction term | 重建项 |
+| rate, distortion, rate–distortion trade-off | 码率，失真，码率-失真权衡 |
+| importance-weighted bound (IWAE) | 重要性加权下界（IWAE） |
+| discretized logistic | 离散化逻辑斯谛分布 |
+| active units | 活跃单元 |
+| β-VAE, disentanglement | β-VAE，解耦 |
+| posterior collapse | 后验坍缩 |
+| free bits, KL annealing | 自由比特，KL退火 |
+| generative adversarial network (GAN) | 生成对抗网络（GAN） |
+| generator, discriminator | 生成器，判别器 |
+| minimax game, value function | 极小极大博弈，值函数 |
+| optimal discriminator | 最优判别器 |
+| Jensen–Shannon divergence | 詹森-香农散度（JS散度） |
+| saturating / non-saturating loss | 饱和损失 / 非饱和损失 |
+| reverse KL | 反向KL散度 |
+| mode (a peak of a distribution), modes covered | 峰，覆盖的峰 |
+| mode collapse, mode dropping | 模式坍缩，模式丢失 |
+| simultaneous / alternating gradient steps | 同时梯度步 / 交替梯度步 |
+| extragradient, optimistic gradient descent | 外梯度法，乐观梯度下降 |
+| Dirac-GAN, R1 penalty | 狄拉克GAN，R1惩罚 |
+| two time-scale update rule (TTUR) | 双时间尺度更新规则（TTUR） |
+| spectral normalization | 谱归一化 |
+| Wasserstein distance, earth mover's distance | 瓦瑟斯坦距离，推土机距离 |
+| transport plan, coupling | 运输方案，耦合 |
+| Kantorovich–Rubinstein duality | 康托罗维奇–鲁宾斯坦对偶 |
+| 1-Lipschitz, critic | 1-利普希茨，评论家 |
+| weight clipping, gradient penalty (WGAN-GP) | 权重截断，梯度惩罚（WGAN-GP） |
+| DCGAN, progressive growing, BigGAN | DCGAN，渐进式增长，BigGAN |
+| StyleGAN, mapping network, style, style mixing | StyleGAN，映射网络，风格，风格混合 |
+| truncation trick | 截断技巧 |
+| GAN inversion | GAN反演 |
+| normalizing flow | 归一化流 |
+| change of variables | 变量替换 |
+| Jacobian determinant, log-determinant | 雅可比行列式，对数行列式 |
+| coupling layer (affine), NICE, RealNVP, Glow | （仿射）耦合层，NICE，RealNVP，Glow |
+| dequantization, logit transform | 去量化，logit变换 |
+| temperature (sampling) | （采样）温度 |
+| neural ODE, continuous normalizing flow | 神经ODE，连续归一化流 |
+| instantaneous change of variables, divergence | 瞬时变量替换，散度 |
+| trace, Hutchinson's estimator | 迹，哈钦森估计量 |
+| Rademacher probe | 拉德马赫探针（随机正负号探针） |
+| FFJORD | FFJORD |
+| energy-based model, energy E | 能量模型（基于能量的模型），能量E |
+| partition function (normalizer) Z | 配分函数（归一化常数）Z |
+| Hopfield network, associative memory | 霍普菲尔德网络，联想记忆 |
+| content-addressable memory | 按内容寻址的记忆 |
+| capacity, spin glass, mixture state | 容量，自旋玻璃，混合态 |
+| modern (dense) Hopfield network | 现代（稠密）霍普菲尔德网络 |
+| Boltzmann machine, hidden / visible units | 玻尔兹曼机，隐藏 / 可见单元 |
+| positive phase, negative phase | 正相，负相 |
+| restricted Boltzmann machine (RBM), harmonium | 受限玻尔兹曼机（RBM），harmonium |
+| free energy | 自由能 |
+| Gibbs sampling | 吉布斯采样 |
+| contrastive divergence (CD-k), persistent CD | 对比散度（CD-k），持续对比散度（PCD） |
+| filters (of an RBM) | （RBM的）滤波器 |
+| Langevin dynamics | 朗之万动力学 |
+| score (function) | 分数函数 |
+| replay buffer (of chains) | （链的）回放池 |
+| annealed Langevin dynamics, noise levels | 退火朗之万动力学，噪声水平 |
+| score matching, denoising score matching | 分数匹配，去噪分数匹配 |
+| Equilibrium Matching | 均衡匹配 |
+| Fréchet Inception Distance (FID) | 弗雷歇Inception距离（FID） |
+| Fréchet distance, 2-Wasserstein distance | 弗雷歇距离，2-瓦瑟斯坦距离 |
+| Inception Score | Inception分数 |
+| features (of a classifier) | （分类器的）特征 |
+| precision, recall (for generators) | 精确率，召回率（生成模型的） |
+| memorization, nearest neighbour | 死记硬背（记忆），最近邻 |
+| generative trilemma | 生成学习三难困境 |
+| tokenizer, codebook, token | 分词器，码本，词元 |
+| vector quantization (VQ-VAE), straight-through estimator | 向量量化（VQ-VAE），直通估计器 |
+| perplexity (of a codebook) | （码本的）困惑度 |
+| VQGAN, two-stage model | VQGAN，两阶段模型 |
+| next-scale prediction (VAR) | 下一尺度预测（VAR） |
+| distillation, adversarial diffusion distillation | 蒸馏，对抗扩散蒸馏 |
+| consistency model | 一致性模型 |
+| drifting model | 漂移模型 |

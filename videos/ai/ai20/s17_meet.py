@@ -242,7 +242,7 @@ class Meet(VoiceoverScene):
             history_card(2024, r"Lu \& Song: \ continuous-time consistency", r"$2$ steps: \ FID $1.88$ on ImageNet "
                          r"$512^2$, \ 1.5B parameters", width=4.3, font_size=17),
             history_card(2026, r"Deng, Li, Li, Du \& He: \ drifting models", r"one step, \ trained to drift its "
-                         r"samples onto the data: \ FID $1.54$, ImageNet $256^2$", width=4.3, font_size=17),
+                         r"samples onto the data: \ FID $1.54$, ImageNet $256^2$ (latent)", width=4.3, font_size=17),
         )
         cards.arrange_in_grid(2, 3, buff=(0.2, 0.25)).move_to(DOWN * 0.2)
         if cards.width > 13.6:

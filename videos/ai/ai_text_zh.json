@@ -9799,7 +9799,8 @@
     "precision{}": "精确率",
     "rate{}": "码率",
     "the truth{}": "真实密度",
-    "raise the bound, \\ and the gap closes \\ (VAEs, Part 20)": "抬高下界，\\ 差距就缩小 \\ （变分自编码器，第20部分）"
+    "raise the bound, \\ and the gap closes \\ (VAEs, Part 20)": "抬高下界，\\ 差距就缩小 \\ （变分自编码器，第20部分）",
+    "one step, \\ trained to drift its samples onto the data: \\ FID $1.54$, ImageNet $256^2$ (latent)": "一步，\\ 训练时让样本漂移到数据上：\\ FID $1.54$，ImageNet $256^2$（潜空间）"
   },
   "phrases": {
     "width": "宽度",
