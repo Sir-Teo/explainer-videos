@@ -112,15 +112,13 @@ class Longer(VoiceoverScene):
         names = {"pi": "position interpolation", "ntk": "the NTK-aware rescaling", "yarn": "YaRN"}
         with self.voiceover(
             "So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same "
-            f"factor, {s}, so the longer text spans only the angles seen in training; but the fast hands lose the "
-            "fine detail of which character is next to which. <bookmark mark='b'/> The NTK-aware trick, named after "
-            "part twelve's neural tangent kernel, the theory of very wide networks, needs none of that theory here: it "
-            "slows the slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands "
-            "alone, slows the slow ones fully, ramps in between, and sharpens the attention slightly to make up for "
-            f"the longer context. <bookmark mark='d'/> On our model, with no retraining at all, the best here is "
-            f"{names[best]}: {b[best]:.2f} bits at the far end, against {b['plain']:.1f} for doing nothing"
-            + win_txt + " Real models do this and then train briefly on long texts; Qwen and DeepSeek reach a hundred and "
-            "twenty-eight thousand tokens with YaRN."
+            f"factor, {s}, so the longer text spans only angles seen in training, but the fast hands lose detail. "
+            "<bookmark mark='b'/> The NTK-aware trick, named after part twelve's neural tangent kernel, slows the "
+            "slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands alone, "
+            "slows the slow ones fully, ramps in between, and sharpens the attention slightly. <bookmark mark='d'/> "
+            f"On our model, with no retraining, the best is {names[best]}: {b[best]:.2f} bits at the far end, against "
+            f"{b['plain']:.1f} for doing nothing" + win_txt + " Qwen and DeepSeek reach a hundred and twenty-eight "
+            "thousand tokens with YaRN."
         ) as vo:
             self.play(FadeIn(cites), Create(bx), FadeIn(bl), FadeIn(yl))
             vo.wait_until("a")
@@ -192,17 +190,15 @@ class Longer(VoiceoverScene):
         cite_ = cite(r"B.~Peng et al., \textit{YaRN: Efficient Context Window Extension of Large Language Models} (2023)", corner=UR)
         kept_w = "pair" if kept == 1 else "pairs"
         with self.voiceover(
-            "Here is YaRN's recipe exactly, since most open models use it. <bookmark mark='a'/> For each pair of "
-            "numbers, count the full turns its hand makes over the training context: r is the context length over "
-            f"the pair's wavelength. <bookmark mark='b'/> Our fastest pair turns about {r[0]:.0f} times in {ctx} "
-            "characters; it has seen every angle many times over, so YaRN leaves it alone. <bookmark mark='c'/> The "
-            "slowest pairs never finish a single turn. Past the training length they would point at angles never "
-            f"seen, so YaRN slows them by the full factor of {s}. <bookmark mark='d'/> In between is a ramp, gamma: "
-            "zero below one turn, one above thirty-two, a straight line between. <bookmark mark='e'/> Each new "
-            "angle is a blend, one minus gamma of the slowed angle plus gamma of the original. In our heads, "
-            f"{kept} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> Slowing "
-            "the hands also flattens the attention, spreading it over more positions, so YaRN adds a temperature: "
-            f"every score is multiplied by zero point one log s plus one, squared; for s of {s}, {mult:.2f}."
+            "Here is YaRN's recipe exactly. <bookmark mark='a'/> For each pair, count the full turns its hand makes "
+            "over the training context: r, the context length over the pair's wavelength. <bookmark mark='b'/> Our "
+            f"fastest pair turns about {r[0]:.0f} times in {ctx} characters; it has seen every angle, so YaRN leaves "
+            "it alone. <bookmark mark='c'/> The slowest pairs never finish a turn, so YaRN slows them by the full "
+            f"factor of {s}. <bookmark mark='d'/> In between is a ramp, gamma: zero below one turn, one above "
+            "thirty-two. <bookmark mark='e'/> Each new angle blends the slowed angle and the original by gamma. In "
+            f"our heads, {kept} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> "
+            "Slowing the hands also flattens the attention, so YaRN multiplies every score by zero point one log s "
+            f"plus one, squared: for s of {s}, {mult:.2f}."
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(cite_))
             vo.wait_until("a")
@@ -270,13 +266,12 @@ class Longer(VoiceoverScene):
         v2 = (f"On top of the NTK rescaling it helps again, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. " if help_n else
               f"On top of the NTK rescaling it changes little, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. ")
         with self.voiceover(
-            "A second thing changes in a longer text: there are more keys to share the weights. "
-            "<bookmark mark='a'/> Say the best key scores delta above n minus one others. Its weight is e to the "
-            "delta over e to the delta plus n minus one. <bookmark mark='b'/> To keep that weight as n grows, delta "
-            "must grow like the logarithm of n. <bookmark mark='c'/> So scale every score by log n, in units of "
-            "the training length: nothing changes up to it, and beyond it the attention stays as sharp as in "
-            "training. David Chiang and Peter Cholak proposed it in 2022; Qwen used it with NTK scaling in 2023, and "
-            f"Llama 4 scales its attention's temperature at inference. <bookmark mark='d'/> {v1}<bookmark mark='e'/> {v2}"
+            "A longer text also has more keys to share the weights. <bookmark mark='a'/> Say the best key scores "
+            "delta above n minus one others: its weight is e to the delta over e to the delta plus n minus one. "
+            "<bookmark mark='b'/> To keep that weight as n grows, delta must grow like log n. <bookmark mark='c'/> "
+            "So scale every score by log n, in units of the training length: nothing changes up to it, and beyond it "
+            "the attention stays as sharp as in training. David Chiang and Peter Cholak proposed it in 2022; Qwen "
+            f"and Llama 4 use versions of it. <bookmark mark='d'/> {v1}<bookmark mark='e'/> {v2}"
             f"The best of all here is {SPOKEN_EXT[best]}, at {far[best]:.2f}."
         ) as vo:
             step(0)
@@ -345,13 +340,11 @@ class Longer(VoiceoverScene):
                      f"Interpolation ends ahead by {gap:.2f} bits, but neither yet beats simply reading the last {ctx} "
                      f"characters, {far['window']:.2f}.")
         with self.voiceover(
-            "Real models do not stop at a rescaling: they train briefly at the new length. So did we, "
-            f"{steps} steps of {T:,}-character windows, {chars / 1e6:.1f} million characters, about "
-            f"{100 * chars / float(t['tokens']):.0f} percent of the original training, once from position "
-            "interpolation and once from YaRN: in the corner, their training loss, step by step. "
-            "<bookmark mark='a'/> Dashed, before; solid, after. "
-            f"<bookmark mark='b'/> {v} <bookmark mark='c'/> {v_end} This is the recipe of today's long-context models: DeepSeek-V3 went from four "
-            "thousand to a hundred and twenty-eight thousand tokens with YaRN and two thousand steps of training."
+            f"Real models then train briefly at the new length. So did we: {steps} steps of {T:,}-character windows, "
+            f"about {100 * chars / float(t['tokens']):.0f} percent of the original training, from position "
+            "interpolation and from YaRN; in the corner, their training loss. <bookmark mark='a'/> Dashed, before; "
+            f"solid, after. <bookmark mark='b'/> {v} <bookmark mark='c'/> {v_end} DeepSeek-V3 went from four thousand "
+            "to a hundred and twenty-eight thousand tokens this way, with two thousand steps."
         ) as vo:
             self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(key[2:]), Create(before), Create(win), run_time=2.0)
             self.play(FadeIn(fg), FadeIn(ftl), Create(fl), run_time=2.0)

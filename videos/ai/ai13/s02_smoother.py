@@ -200,15 +200,14 @@ class Smoother(VoiceoverScene):
         ans = label(r"every weight is $1/n$: \ the plain average of the values", font_size=26, color=V)
         ans.move_to([3.6, -2.45, 0])
         with self.voiceover(
-            "Here is the definition we will use for the rest of this part. <bookmark mark='a'/> Attention takes a "
-            "query, a list of keys and a list of values. It scores each key against the query with a dot product, "
-            "divided by the square root of d, turns the scores into weights with a softmax, and returns the "
-            "weighted average of the values. <bookmark mark='b'/> The idea entered neural networks in 2014, when "
-            "Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a translation network look back at the words of "
-            "the sentence it was translating; you met it in Part 10. In 2017 it became the whole network. "
-            "<bookmark mark='c'/> A question before we go on: if every key is the same, what does attention "
-            "return? <bookmark mark='d'/> Every score is equal, so every weight is one over n, and the answer is "
-            "the plain average of the values. Attention can only weigh and blend what it is given."
+            "Here is the definition for the rest of this part. <bookmark mark='a'/> Attention scores each key against "
+            "the query with a dot product divided by the square root of d, turns the scores into weights with a "
+            "softmax, and returns the weighted average of the values. <bookmark mark='b'/> It entered neural "
+            "networks in 2014, when Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a translation network "
+            "look back at its source sentence, as in Part 10; in 2017 it became the whole network. "
+            "<bookmark mark='c'/> A question: if every key is the same, what does attention return? "
+            "<bookmark mark='d'/> Every weight is one over n: the plain average of the values. Attention can only "
+            "weigh and blend what it is given."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")

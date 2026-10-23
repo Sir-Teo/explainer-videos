@@ -99,11 +99,10 @@ class Sinks(VoiceoverScene):
                     f"{ratio:.1f} times an even share. Its heads park attention elsewhere, on spaces and line breaks: "
                     f"one head spends {hi_sp:.0%} of its attention on them, though they are {sps:.0%} of the text. ")
         with self.voiceover(
-            "Look at where a model's heads put their attention, and something strange turns up. In 2023 Guangxuan "
-            "Xiao and colleagues found that in large models many heads put most of their weight on the very first "
-            "token, whatever it is: a comma, the word 'the', a start marker. <bookmark mark='a'/> They called these "
-            "attention sinks, and showed that keeping the first four tokens lets a model read on for millions of "
-            "tokens with a short window. <bookmark mark='b'/> " + mine
+            "In 2023 Guangxuan Xiao and colleagues found something strange: in large models, many heads put most of "
+            "their weight on the very first token, whatever it is. <bookmark mark='a'/> They called these attention "
+            "sinks, and showed that keeping the first four tokens lets a model read on for millions of tokens with a "
+            "short window. <bookmark mark='b'/> " + mine
         ) as vo:
             self.play(FadeIn(simg), FadeIn(sl), FadeIn(cite_), FadeIn(cap0))
             vo.wait_until("a")
@@ -306,30 +305,28 @@ class Sinks(VoiceoverScene):
                   f"They do not learn the copies equally well: {worst_name} is worst, at "
                   f"{cp[worst_cp].mean():.3f} bits on the copies.")
         with self.voiceover(
-            "Three recent designs give a head a better way to do nothing, and we trained each on the same task, "
-            "the same steps, three seeds each. <bookmark mark='a'/> gpt-oss adds one learned number per head to the "
-            "softmax's denominator, the score of an invisible key. <bookmark mark='b'/> The Qwen team's gated "
-            "attention multiplies each head's output by a sigmoid of the input. <bookmark mark='c'/> Microsoft's "
-            "differential attention takes the difference of two softmax maps. <bookmark mark='d'/> Here is each "
-            "design's weight on the marker while it trains, three seeds each. " + v_sink
+            "Three recent designs give a head a better way to do nothing; we trained each on the same task, three "
+            "seeds each. <bookmark mark='a'/> gpt-oss adds a learned number to the softmax's denominator, the score "
+            "of an invisible key. <bookmark mark='b'/> Gated attention multiplies each head's output by a sigmoid of "
+            "the input. <bookmark mark='c'/> Differential attention subtracts two softmax maps. <bookmark mark='d'/> "
+            "Here is each design's weight on the marker as it trains. " + v_sink
             + " <bookmark mark='e'/> " + v_gate + " <bookmark mark='f'/> " + v_diff + " <bookmark mark='g'/> " + v_loss
-            + " In large models the Qwen team saw the share of attention on the first token fall from 46.7 to 4.8 "
-            "percent with the gate; Qwen3-Next and Kimi K3 now gate their attention."
+            + " In large models, the gate cut the attention on the first token from 46.7 to 4.8 percent; Qwen3-Next "
+            "and Kimi K3 now gate their attention."
         ) as vo:
-            self.play(FadeIn(blocks[0]))
+            self.play(FadeIn(blocks[0]), FadeIn(ct), FadeIn(ch), FadeIn(lines["softmax"][0]),
+                      Create(lines["softmax"][1]), FadeIn(loss[0]), FadeIn(loss[1]), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(blocks[1]))
             vo.wait_until("c")
             self.play(FadeIn(blocks[2]))
             vo.wait_until("d")
-            self.play(FadeIn(ct), FadeIn(ch))
-            self.play(*[FadeIn(lines[v][0]) for v in ("softmax", "sink")],
-                      *[Create(lines[v][1]) for v in ("softmax", "sink")], run_time=2.0)
+            self.play(FadeIn(lines["sink"][0]), Create(lines["sink"][1]), FadeIn(loss[2]), run_time=2.0)
             vo.wait_until("e")
-            self.play(FadeIn(lines["gate"][0]), Create(lines["gate"][1]), run_time=1.5)
+            self.play(FadeIn(lines["gate"][0]), Create(lines["gate"][1]), FadeIn(loss[3]), run_time=1.5)
             vo.wait_until("f")
-            self.play(FadeIn(lines["diff"][0]), Create(lines["diff"][1]), run_time=1.5)
+            self.play(FadeIn(lines["diff"][0]), Create(lines["diff"][1]), FadeIn(loss[4]), run_time=1.5)
             vo.wait_until("g")
-            self.play(FadeIn(loss), FadeIn(facts))
+            self.play(FadeIn(loss[5]), FadeIn(facts))
         self.wait(0.3)
         self.clear_scene()

@@ -31,7 +31,7 @@ class Problem(VoiceoverScene):
         rows = [(r"MNIST, \ labelled (1998)", 6e4, SUP), (r"ImageNet-1k, \ labelled (2009)", 1.28e6, SUP),
                 (r"DINOv2's curated set (2023)", 1.42e8, DINO_C), (r"DINOv3's curated set (2025)", 1.689e9, DINO_C),
                 (r"DINOv3's raw pool", 1.7e10, PIX)]
-        x0, W = -1.2, 7.4
+        x0, W = -1.2, 6.3
         lo, hi = 4, 10.5
         X = lambda v: x0 + W * (math.log10(v) - lo) / (hi - lo)  # noqa: E731
         bars = VGroup()

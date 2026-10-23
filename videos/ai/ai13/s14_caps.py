@@ -93,6 +93,8 @@ class Caps(VoiceoverScene):
                            y_length=2.1)
         users = label(r"QK-norm: \ ViT-22B (2023), \ Qwen3, \ GLM-4.5, \ Gemma 3 \ (2025)", font_size=22,
                       color=NORMC).move_to([3.6, -1.4, 0])
+        prob = label(r"without it: \ the entropy collapses \\ as the weights grow", font_size=22,
+                     color=C.SURPRISE).move_to([3.6, -1.4, 0])
         pt18 = label(r"Part 18 measures the runaway logits \\ in training, with and without it", font_size=20,
                      color=GREY_A).next_to(users, DOWN, buff=0.3)
         b0_, bn_ = float(np.asarray(q["bits_plain"])[0]), float(np.asarray(q["bits_norm"])[0])
@@ -116,9 +118,10 @@ class Caps(VoiceoverScene):
             "learned gain. <bookmark mark='b'/> A vector divided by its root mean square has length exactly the "
             "square root of d, <bookmark mark='c'/> so by Cauchy-Schwarz the score can never exceed the gains "
             "squared times the square root of d, however large W Q and W K become. <bookmark mark='d'/> "
-            + moves + " <bookmark mark='e'/> " + cost + " <bookmark mark='f'/> Qwen3, GLM-4.5 and Gemma 3 all normalize their queries and keys; Part 18 shows the "
-            "runaway logits in training, with and without it."
+            + moves + " <bookmark mark='e'/> " + cost + " <bookmark mark='f'/> Qwen3, GLM-4.5 and Gemma 3 all use it; Part 18 watches the "
+            "logits in training, with and without it."
         ) as vo:
+            self.play(FadeIn(g1), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]), FadeIn(prob))
             step(0)
             vo.wait_until("a")
             self.play(Indicate(rows[0][2], color=NORMC))
@@ -127,8 +130,7 @@ class Caps(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeIn(g1), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]))
-            self.play(Create(l1["norm"][0]), FadeIn(l1["norm"][1:]), FadeIn(users), FadeIn(pt18))
+            self.play(FadeOut(prob), Create(l1["norm"][0]), FadeIn(l1["norm"][1:]), FadeIn(users), FadeIn(pt18))
             if bn_ > b0_ + 0.05:
                 self.play(FadeIn(bolt))
         self.wait(0.3)

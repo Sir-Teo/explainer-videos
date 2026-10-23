@@ -111,16 +111,14 @@ class RASP(VoiceoverScene):
         v_ran = (f"We ran it on {tr:,} random sequences: all {ok:,} correct." if ok == tr else
                  f"We ran it on {tr:,} random sequences: {ok:,} correct.")
         with self.voiceover(
-            "The histogram first. Give the tokens one-hot vectors, and a head's QK matrix becomes a lookup table: "
-            "any comparison of two tokens we like. <bookmark mark='a'/> Score each pair beta if the tokens match, "
-            "and give a start marker the same score from every query. <bookmark mark='b'/> A token that occurs c "
-            "times then splits its attention evenly over its c copies and the marker, so the marker gets one over "
-            "c plus one. <bookmark mark='c'/> Let only the marker carry a value, and the head's output is one over "
-            "c plus one: a small ReLU layer reads the count back. The marker plays exactly the part of chapter "
-            "twelve's sink. <bookmark mark='d'/> " + v_ran
-            + " But notice what it needs: telling one over c plus one from one over c plus two takes more bits as "
-            f"c grows. In bfloat16 the counts blur after {pb}; in float16, after {p16:,}. A fixed transformer works "
-            "with fixed precision, and this is one reason length is hard."
+            "The histogram first. With one-hot tokens, a head's QK matrix is a lookup table: any comparison of two "
+            "tokens we like. <bookmark mark='a'/> Score each pair beta if the tokens match, and give a start marker "
+            "the same score from every query. <bookmark mark='b'/> A token that occurs c times then splits its "
+            "attention over its c copies and the marker, so the marker gets one over c plus one. "
+            "<bookmark mark='c'/> Let only the marker carry a value, and a small ReLU layer reads the count back. "
+            "The marker plays exactly the part of chapter twelve's sink. <bookmark mark='d'/> " + v_ran
+            + " But telling one over c plus one from one over c plus two takes more bits as c grows: in bfloat16 the "
+            f"counts blur after {pb}; in float16, after {p16:,}. Fixed precision is one reason length is hard."
         ) as vo:
             self.play(FadeIn(img), FadeIn(cols), FadeIn(rows))
             vo.wait_until("a")
@@ -216,17 +214,15 @@ class RASP(VoiceoverScene):
         depth = VGroup(cols, brace, bl, grow, gl, dl)
         with self.voiceover(
             "What can't a transformer do? A fixed number of layers is a fixed amount of sequential work. "
-            "<bookmark mark='a'/> William Merrill and Ashish Sabharwal proved in 2023 that a transformer of fixed "
-            "depth, whose numbers have a number of bits that grows only like the logarithm of the input's length, "
-            "can be simulated by constant-depth threshold circuits: the class complexity theorists call T C zero. "
-            "<bookmark mark='b'/> If, as most believe, that class is weaker than N C one, then no fixed-depth "
-            "transformer can track a sequence of shuffles of five objects at every length, a task that needs "
-            "genuinely sequential steps. Depth matters in practice too: one layer could not build an induction "
-            "head. <bookmark mark='c'/> The way out is to let the model write: every token of a chain of thought "
-            "is another pass through all the layers, which is how reasoning models buy serial time, in Part 28. "
+            "<bookmark mark='a'/> William Merrill and Ashish Sabharwal proved in 2023 that a fixed-depth transformer, "
+            "whose numbers have about log n bits, can be simulated by constant-depth threshold circuits: the class "
+            "T C zero. <bookmark mark='b'/> If, as most believe, that class is weaker than N C one, no fixed-depth "
+            "transformer can track a sequence of shuffles of five objects at every length. Depth matters in practice "
+            "too: one layer could not build an induction head. <bookmark mark='c'/> The way out is to let the model "
+            "write: every token of a chain of thought is another pass through all the layers, Part 28's story. "
             "<bookmark mark='d'/> And RASP predicts what trains well: Hattie Zhou and colleagues found that "
-            "transformers tend to generalize to longer inputs exactly when a short RASP program solves the task at "
-            "every length."
+            "transformers tend to generalize to longer inputs when a short RASP program solves the task at every "
+            "length."
         ) as vo:
             self.play(FadeIn(cols[:6]), GrowFromCenter(brace), FadeIn(bl), FadeIn(dl))
             self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cols[6:]], lag_ratio=0.15), GrowArrow(grow),

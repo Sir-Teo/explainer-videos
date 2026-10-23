@@ -52,35 +52,29 @@ class Induction(VoiceoverScene):
         tag = note(r"our transformer; \ $16$ stretches of $100$ held-out characters, each shown twice").next_to(key, UP, buff=0.12)
         u26 = math.log2(26)
         if m2 < 0.6 * m1:
-            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}. It has never seen "
-                  "these stretches, and yet the second time it predicts most of them: it copies from its own context.")
+            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: it copies from its "
+                  "own context.")
         elif m2 < m1 - 0.05:
             v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: a little better, "
                   "but it barely copies.")
         else:
-            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better at all. "
-                  "The answer is sitting a hundred characters back, and our transformer does not use it.")
+            v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better. The "
+                  "answer sits a hundred characters back, unused.")
         if q1 > u26 and q2 < 0.6 * q1:
-            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind "
-                  f"guess among 26 letters, {u26:.1f}, because it bets on English; {q2:.1f} the second: here, at "
-                  "least, it copies.")
+            v2 = (f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
+                  f"{u26:.1f}; {q2:.1f} the second: here, at least, it copies.")
         elif q1 > u26:
-            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind "
-                  f"guess among 26 letters, {u26:.1f}, because it bets on English; and {q2:.1f} the second: no "
-                  "copying here either.")
+            v2 = (f"Random letters: {q1:.1f} bits the first time, worse than a blind guess among 26 letters, "
+                  f"{u26:.1f}; and {q2:.1f} the second: no copying here either.")
         elif q2 < 0.6 * q1:
-            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, {q2:.1f} the "
-                  "second: here, at least, it copies.")
+            v2 = f"Random letters: {q1:.1f} bits the first time, {q2:.1f} the second: here, at least, it copies."
         else:
-            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, and {q2:.1f} the "
-                  "second: no copying here either.")
+            v2 = f"Random letters: {q1:.1f} bits the first time, and {q2:.1f} the second: no copying here either."
         tail = ("The machinery behind copying has a name." if m2 < m1 - 0.05 else
-                "Copying needs a particular piece of machinery, and our transformer has not built it. Here is what "
-                "it is, and how it forms.")
+                "Copying needs a particular piece of machinery, and our transformer has not built it.")
         with self.voiceover(
-            "Here is a test of something no counting model can do. Take a stretch of a novel our transformer "
-            "has never seen, and show it twice in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2
-            + " <bookmark mark='c'/> " + tail
+            "A test no counting model can pass: show our transformer a stretch of a novel it has never seen, twice "
+            "in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2 + " <bookmark mark='c'/> " + tail
         ) as vo:
             self.play(FadeIn(row), FadeIn(g), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")
@@ -116,13 +110,12 @@ class Induction(VoiceoverScene):
         tag = note(r"schematic").to_corner(DR, buff=0.3)
         cite_ = cite(r"C.~Olsson et al., \textit{In-context Learning and Induction Heads} (2022)", corner=UL)
         with self.voiceover(
-            "How? Two heads, in two layers, working together. <bookmark mark='a'/> In an earlier layer, a head that "
-            "only ever looks one step back: each character's vector now also says which character came before it. "
-            "<bookmark mark='b'/> In a later layer, the second head. The character being read is an 'l'. Its query "
-            "asks: which earlier character came right after an 'l'? The key of the 'c' in Falcon answers, because "
-            "its note says: the one before me was an 'l'. <bookmark mark='c'/> So the head attends there and copies "
-            "it: 'c'. Seen A followed by B? On seeing A again, predict B. Catherine Olsson and colleagues at "
-            "Anthropic named these induction heads in 2022."
+            "It takes two heads, in two layers. <bookmark mark='a'/> In an earlier layer, a head that only looks one "
+            "step back: each character's vector now also says which character came before it. <bookmark mark='b'/> "
+            "In a later layer, the second head reads an 'l' and asks: which earlier character came right after an "
+            "'l'? The 'c' in Falcon answers, because its note says: the one before me was an 'l'. "
+            "<bookmark mark='c'/> So the head copies it: 'c'. Seen A then B? On seeing A again, predict B. Catherine "
+            "Olsson and colleagues at Anthropic named these induction heads in 2022."
         ) as vo:
             self.play(FadeIn(row), Create(box), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
@@ -167,8 +160,8 @@ class Induction(VoiceoverScene):
         head.to_edge(UP, buff=0.35)
         f1, f2 = float(c1[-1, 1]), [float(v) for v in d["final2"]]
         one_fails = f1 > max(f2) + 1.0
-        v1 = (f"With one layer it never learns to copy: after {int(c1[-1, 0]):,} steps it is still at {f1:.1f} bits on "
-              "the repeat. One head cannot both note the token before each position and search for it. "
+        v1 = (f"With one layer it never learns to copy: after {int(c1[-1, 0]):,} steps, still {f1:.1f} bits on the "
+              "repeat; one head cannot both note the previous token and search for it. "
               if one_fails else f"With one layer it ends at {f1:.1f} bits on the repeat. ")
         lo2, hi2 = min(f2), max(f2)
         if len(set(js)) == 1:
@@ -179,12 +172,11 @@ class Induction(VoiceoverScene):
                       f"between steps {min(js):,} and {max(js):,} in our {len(js)} runs, down to {lo2:.2f} to {hi2:.2f} "
                       "bits.")
         with self.voiceover(
-            "Induction heads can be watched as they form. Train a small model of attention alone on random tokens "
-            f"with a repeated stretch somewhere inside. <bookmark mark='a'/> {v1}<bookmark mark='b'/> {v_jump} "
-            "<bookmark mark='c'/> Look inside: the first "
-            "layer has a head that looks exactly one step back, and the second a head that looks at the earlier "
-            "copy, one step ahead. Catherine Olsson and colleagues saw the same sudden jump in large models, early "
-            "in training, just as they got good at learning from their prompt."
+            "Induction heads can be watched as they form, in a small attention-only model trained on random tokens "
+            f"with a repeated stretch inside. <bookmark mark='a'/> {v1}<bookmark mark='b'/> {v_jump} "
+            "<bookmark mark='c'/> Inside, the first layer looks one step back, the second at the earlier copy, one "
+            "step ahead. Olsson's team saw the same sudden jump in large models, just as they got good at learning "
+            "from their prompt."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -248,13 +240,13 @@ class Induction(VoiceoverScene):
         show = [k for k, s_ in enumerate(steps) if s_ <= js + 750] + [len(steps) - 1]
         show = sorted(set(show))
         with self.voiceover(
-            "And here are those two heads forming, on the same example, at checkpoints through training, beside the "
-            "loss on the repeat. <bookmark mark='a'/> Early on, both look around vaguely, mostly at recent tokens. "
-            f"<bookmark mark='b'/> Then, around step {js:,}, the second head finds the stripe, the earlier copy one "
-            f"ahead: its attention there jumps from {ind_sc[ka]:.2f} to {ind_sc[kb]:.2f} within {steps[kb] - steps[ka]} "
-            f"steps, and the loss on the repeat falls from {lo_a:.1f} to {lo_b:.1f} bits in the same moment. "
+            "Here are the two heads forming, checkpoint by checkpoint, beside the loss on the repeat. "
+            "<bookmark mark='a'/> Early on, both look around vaguely. "
+            f"<bookmark mark='b'/> Then, around step {js:,}, the second head finds the stripe: its attention there "
+            f"jumps from {ind_sc[ka]:.2f} to {ind_sc[kb]:.2f} within {steps[kb] - steps[ka]} steps, as the loss on the "
+            f"repeat falls from {lo_a:.1f} to {lo_b:.1f} bits. "
             + together
-            + "Two heads that are useless alone become useful together."
+            + "Useless alone, together they copy."
         ) as vo:
             self.play(Create(ax), Create(l2), FadeIn(yn), FadeIn(xn), FadeIn(cur), Create(frames), FadeIn(t1), FadeIn(t2))
             self.add(dot, cnt)
@@ -315,19 +307,18 @@ class Induction(VoiceoverScene):
         k0, k1 = float(k_c[0]), float(k_c[-1])
         q1, o1 = float(q_c[-1]), float(k_o[-1])
         n_p, n_i = len(P_), len(I_)
-        v = (f"Pair each of the {n_p} previous-token heads with each of the {n_i} induction heads: their K-composition "
-             f"starts near the random level, {k0:.2f}, and climbs to {k1:.2f} as the induction heads form, while "
-             f"Q-composition over the same pairs ends at {q1:.2f}, and every other pair at {o1:.2f}. The induction "
-             "heads' keys read what the previous-token heads wrote." if k1 > max(q1, o1) + 2 * bsd else
-             f"Pair each of the {n_p} previous-token heads with each of the {n_i} induction heads: their K-composition "
-             f"ends at {k1:.2f}, against {q1:.2f} for Q-composition and {o1:.2f} for every other pair: in this small "
-             "model the signal is not cleanly in the keys.")
+        v = (f"For the {n_p} previous-token heads paired with the {n_i} induction heads, it climbs from {k0:.2f} to "
+             f"{k1:.2f} as the induction heads form; Q-composition over the same pairs ends at {q1:.2f}, every other "
+             f"pair at {o1:.2f}. The induction heads' keys read what the previous-token heads wrote."
+             if k1 > max(q1, o1) + 2 * bsd else
+             f"For the {n_p} previous-token heads paired with the {n_i} induction heads, it ends at {k1:.2f}, against "
+             f"{q1:.2f} for Q-composition and {o1:.2f} for every other pair: in this small model the signal is not "
+             "cleanly in the keys.")
         with self.voiceover(
-            "Nelson Elhage and colleagues gave a way to see the cooperation in the weights alone. "
-            "<bookmark mark='a'/> K-composition asks how much a later head's keys read from what an earlier head "
-            "writes: the size of the product of the later head's QK matrix and the earlier head's OV matrix, "
-            "relative to the sizes of the two. Random heads score about "
-            f"{base:.2f}. <bookmark mark='b'/> {v}"
+            "The cooperation shows in the weights alone. <bookmark mark='a'/> K-composition, from Nelson Elhage and "
+            "colleagues, measures how much a later head's keys read what an earlier head writes: the size of the "
+            "product of its QK matrix and the earlier head's OV matrix, relative to their sizes. Random heads score "
+            f"about {base:.2f}. <bookmark mark='b'/> {v}"
         ) as vo:
             self.play(FadeIn(f), FadeIn(fl))
             vo.wait_until("a")
@@ -390,38 +381,34 @@ class Induction(VoiceoverScene):
             v1 = (f"Our transformer has one: layer {li + 1}'s head {hi + 1} puts {ind.max():.0%} of its attention, on "
                   "average, exactly where an induction head should, one step after the earlier copy. ")
         else:
-            v1 = (f"Our transformer has none. Its best candidate, layer {li + 1}'s head {hi + 1}, puts "
-                  f"{ind.max():.1%} of its attention one step after the earlier copy, and over training the copying "
-                  f"never paid: at the end the second copy costs {c2[-1]:.2f} bits a character, the first "
-                  f"{c1[-1]:.2f}. ")
-        v2 = (f"Its heads do compose, a little: the strongest K-composition, from layer {a_ // H + 1}'s head "
-              f"{a_ % H + 1} into layer {b_ // H + 1}'s head {b_ % H + 1}, is {top:.2f}, against {base:.2f} for random "
-              "heads. But no pair has become a copying circuit. " if top > base + 4 * bsd else
-              f"And its heads barely compose: the strongest K-composition is {top:.2f}, against {base:.2f} for random "
-              "heads. ")
+            v1 = (f"Our transformer has none: its best candidate, layer {li + 1}'s head {hi + 1}, puts {ind.max():.1%} "
+                  f"of its attention one step after the earlier copy, and at the end the second copy costs "
+                  f"{c2[-1]:.2f} bits a character, the first {c1[-1]:.2f}. ")
+        v2 = (f"Its heads compose a little, at most {top:.2f} against {base:.2f} for random heads, but no pair has "
+              "become a copying circuit. " if top > base + 4 * bsd else
+              f"And its heads barely compose: at most {top:.2f}, against {base:.2f} for random heads. ")
         di = load("induction")
         jmax = max(int(v) for v in di["jump_steps"])
         formed = max(float(v) for v in di["final2"]) < 0.5 * float(np.asarray(di["curve1"])[-1, 1])
         if strong:
             v3 = ""
         elif formed:
-            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
-                  f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
-                  "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid. "
-                  f"The toy, built to reward copying, formed its pair within {jmax:,} steps.")
+            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens; "
+                  f"ours has read {tokens / 1e6:.0f} million characters, and a novel rarely repeats a long stretch "
+                  f"within 256 characters. The toy, built to reward copying, formed its pair within {jmax:,} steps.")
         else:
-            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens of "
-                  f"training. Ours has read {tokens / 1e6:.0f} million characters, about a hundredth of that, and a "
-                  "novel rarely repeats a long stretch within 256 characters, so copying would seldom have paid.")
+            v3 = (f"Why not? Olsson's team saw induction heads appear after two and a half to five billion tokens; "
+                  f"ours has read {tokens / 1e6:.0f} million characters, and a novel rarely repeats a long stretch "
+                  "within 256 characters.")
         with self.voiceover(
             "And our own transformer, trained on novels with no copying game at all? <bookmark mark='a'/> " + v1
             + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
         ) as vo:
-            self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), run_time=2.0)
+            self.play(FadeIn(g), FadeIn(key), Create(k1), Create(k2), FadeIn(itl), Create(ibase), Create(ihalf),
+                      FadeIn(ihl), FadeIn(ilyr), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ib], lag_ratio=0.03),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(itl), Create(ibase), Create(ihalf), FadeIn(ihl), FadeIn(ilyr),
-                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ib], lag_ratio=0.03), run_time=1.5)
-            self.play(Indicate(key, color=C.BITS))
+            self.play(Indicate(ihalf, color=A), Indicate(key, color=C.BITS))
             vo.wait_until("b")
             self.play(FadeOut(indg))
             self.play(FadeIn(img), FadeIn(il), FadeIn(rl), FadeIn(cl))
