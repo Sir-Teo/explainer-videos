@@ -42,8 +42,8 @@ class Entropy(VoiceoverScene, ThreeDScene):
         flat, cum = {}, 0.0
         for i in order:
             pi = p[i]
-            flat[i] = Rectangle(width=W * pi, height=0.05, stroke_width=0.8, stroke_color=BACKGROUND,
-                                fill_color=C.TRUE_P, fill_opacity=0.9).move_to([-W / 2 + (cum + pi / 2) * W, y0 + 0.025, 0])
+            flat[i] = Rectangle(width=W * pi, height=0.3, stroke_width=0.8, stroke_color=BACKGROUND,
+                                fill_color=C.TRUE_P, fill_opacity=0.9).move_to([-W / 2 + (cum + pi / 2) * W, y0 + 0.15, 0])
             cum += pi
         flat = VGroup(*[flat[i] for i in range(27)])
         sl = area_slivers(p, W=W, y0=y0, scale=scale, order=order)
@@ -58,20 +58,44 @@ class Entropy(VoiceoverScene, ThreeDScene):
         hl = label(r"height: \ $\log_2 \frac{1}{p(x)}$", font_size=24, color=C.SURPRISE)
         hl.move_to([3.0, y0 + scale * 11.0, 0])
         area = label(rf"area $= H = {H:.2f}$ bits", font_size=34, color=C.ENTROPY).move_to([-3.2, y0 + scale * 5.6, 0])
+        # the average, term by term, for a few symbols
+        xs_ = [-4.2, -1.6, 1.3, 4.3]
+        thead = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (
+            r"symbol", r"how often: \ $p(x)$", r"surprise: \ $\log_2 \frac{1}{p(x)}$", r"$p(x) \times$ surprise")])
+        trows = VGroup()
+        for c in " etqz":
+            i = ALPHA27.index(c)
+            sx = -math.log2(p[i])
+            trows.add(VGroup(letter(c, font_size=28), MathTex(f"{p[i]:.4f}", font_size=30, color=C.TRUE_P),
+                             MathTex(f"{sx:.2f}", font_size=30, color=C.SURPRISE),
+                             MathTex(f"{p[i] * sx:.3f}", font_size=30, color=C.ENTROPY)))
+        dots = MathTex(r"\vdots", font_size=30, color=GREY_B)
+        total = label(rf"all $27$ terms add up to \ $H = {H:.2f}$ bits", font_size=30, color=C.ENTROPY)
+        for k, row in enumerate([thead, *trows]):
+            for m, x in zip(row, xs_):
+                m.move_to([x, 1.45 - 0.5 * k - (0.12 if k else 0), 0])
+        dots.move_to([xs_[3], 1.45 - 0.5 * 6 + 0.05, 0])
+        total.next_to(dots, DOWN, buff=0.15).align_to(thead[3], RIGHT)
+        terms = VGroup(thead, trows, dots, total)
         with self.voiceover(
             "Surprise is about one event. Before the event, we can ask a different question: on average, how "
             "surprised should we expect to be? <bookmark mark='a'/> Weight each surprise by how often it happens, "
             "and add up. That average surprise is the entropy, written H of p."
         ) as vo:
-            self.play(FadeIn(defn[:3]), Create(base), FadeIn(flat), FadeIn(wl))
+            self.play(FadeIn(defn[:3]), FadeIn(thead))
+            self.play(LaggedStart(*[FadeIn(r_[:3], shift=RIGHT * 0.2) for r_ in trows], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(defn[3:]), FadeIn(sub))
+            self.play(FadeIn(defn[3:]), FadeIn(sub), LaggedStart(*[FadeIn(r_[3]) for r_ in trows], lag_ratio=0.3),
+                      run_time=1.5)
+            self.play(FadeIn(dots), FadeIn(total))
         with self.voiceover(
             "There's a nice picture of it. Take the unit bar from chapter one, <bookmark mark='a'/> each symbol a "
             "sliver as wide as its probability, sorted from common to rare. <bookmark mark='b'/> Now raise each sliver to the height of its "
             "surprise. Common symbols are wide and low; rare ones are thin and tall. <bookmark mark='c'/> The entropy "
             f"is the total area: for English letters, {H:.2f} bits."
         ) as vo:
+            self.play(FadeOut(terms))
+            self.play(Create(base), FadeIn(flat), FadeIn(wl))
             vo.wait_until("a")
             self.play(Indicate(flat, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
@@ -207,7 +231,19 @@ class Entropy(VoiceoverScene, ThreeDScene):
         total = mtex(rf"{Hg:.2f} + {P[1]:.3f} \times {within[1]:.2f} + {P[2]:.3f} \times {within[2]:.2f} = {H:.2f}",
                      font_size=32, color=C.BITS)
         letters_ = VGroup(label(r"the letters, in two steps:", font_size=30), steps, total)
-        letters_.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([0.6, -0.75, 0])
+        letters_.arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        if letters_.width > 7.4:
+            letters_.scale_to_fit_width(7.4)
+        letters_.move_to([-2.9, -0.6, 0])
+        # the same two steps as a tree: the group first, then the letter inside it
+        r3 = np.array([4.3, 0.9, 0])
+        e3 = [r3 + np.array([dx, -1.8, 0]) for dx in (-1.75, 0.0, 1.75)]
+        ltree = VGroup(*[branch(r3, e, rf"{P[k]:.2f}") for k, e in enumerate(e3)], Dot(r3, radius=0.07, color=WHITE))
+        for k, e in enumerate(e3):
+            ltree.add(Dot(e, radius=0.06, color=C.BITS),
+                      VGroup(label(names[k], font_size=24, color=C.BITS),
+                             label(rf"then ${abs(within[k]):.2f}$ bits", font_size=22, color=GREY_A))
+                      .arrange(DOWN, buff=0.08).next_to(e, DOWN, buff=0.15))
         tag = computed_tag().to_corner(UR, buff=0.3)
         with self.voiceover(
             "We built entropy out of surprise. Shannon went the other way. In 1948 he asked what any measure of "
@@ -237,7 +273,7 @@ class Entropy(VoiceoverScene, ThreeDScene):
             self.play(FadeOut(flat), FadeOut(same), FadeOut(left), eqs.animate.scale(0.8).to_edge(DOWN, buff=0.35))
             vo.wait_until("a")
             self.play(FadeIn(letters_[0]), LaggedStart(*[FadeIn(r) for r in steps], lag_ratio=0.3), FadeIn(tag),
-                      run_time=1.5)
+                      Create(ltree), run_time=1.5)
             vo.wait_until("b")
             self.play(Write(total))
         self.wait(0.3)

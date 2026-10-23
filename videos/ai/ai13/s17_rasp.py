@@ -60,15 +60,19 @@ class RASP(VoiceoverScene):
             "it needs, and in 2023 a team at DeepMind built Tracr, which compiles such programs into real "
             "transformer weights. We compiled two by hand."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(prims[0]), FadeIn(cite_))
+            # the whole language, dimmed, from the first word; each part lights up as it is named
+            ghost = [prims[1].copy().set_opacity(0.2), prims[2].copy().set_opacity(0.2),
+                     VGroup(prog, pl).copy().set_opacity(0.14)]
+            ghost[2][0][2].set_opacity(0)  # the blank line stays blank
+            self.play(FadeIn(title), FadeIn(prims[0]), FadeIn(cite_), *[FadeIn(g_) for g_ in ghost])
             vo.wait_until("a")
             self.play(Indicate(prims[0][0], color=SEL))
             vo.wait_until("b")
-            self.play(FadeIn(prims[1]))
+            self.play(FadeOut(ghost[0]), FadeIn(prims[1]))
             vo.wait_until("c")
-            self.play(FadeIn(prims[2]))
+            self.play(FadeOut(ghost[1]), FadeIn(prims[2]))
             vo.wait_until("d")
-            self.play(FadeIn(prog), FadeIn(pl))
+            self.play(FadeOut(ghost[2]), FadeIn(prog), FadeIn(pl))
         self.wait(0.3)
         self.clear_scene()
 
@@ -194,7 +198,7 @@ class RASP(VoiceoverScene):
             label(r"depth matters: \ one layer could not build an induction head \ (chapter 14)", font_size=24,
                   color=WHITE),
             label(r"thinking out loud adds serial steps: \ chain of thought \ (Part 28)", font_size=24, color=C.BITS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, -1.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, -0.55, 0])
         keep_in_frame(cons)
         conj = label(r"Zhou et al.\ (2023): \ transformers tend to generalize to longer inputs \\ when a short RASP "
                      r"program solves the task at every length", font_size=22, color=Q).to_edge(DOWN, buff=0.4)

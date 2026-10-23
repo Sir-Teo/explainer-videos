@@ -499,10 +499,11 @@ class Arithmetic(VoiceoverScene):
                     vo.wait_until("d")
         final = Text(ai["falcon_bits"], font=MONO, font_size=28, color=C.BITS).next_to(sent_l, RIGHT, buff=0.25)
         nb, ne, info = len(ai["falcon_bits"]), int(ai["falcon_exact"]), float(ai["falcon_info"])
-        cmp_said = ("the same as" if nb == ne else ("one fewer than" if nb == ne - 1 else
-                    ("one more than" if nb == ne + 1 else f"{nb - ne:+d} bits against")))
+        cmp_said = (f"exactly what the exact coder needs, {ne}" if nb == ne else
+                    f"one fewer than the exact coder's {ne}" if nb == ne - 1 else
+                    f"one more than the exact coder's {ne}" if nb == ne + 1 else f"against the exact coder's {ne}")
         with self.voiceover(
-            f"At the end, a couple of bits close it off: {nb} bits for the falcon, {cmp_said} the exact coder's {ne}. "
+            f"At the end, a couple of bits close it off: {nb} bits for the falcon, {cmp_said}. "
             "Whole numbers, and nothing longer than the registers, ever."
         ):
             self.play(Transform(sm, final), FadeOut(pm))

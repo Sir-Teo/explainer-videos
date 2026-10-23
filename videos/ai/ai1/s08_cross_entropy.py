@@ -67,13 +67,34 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             label(rf"coded for a model $q$ that swaps \texttt{{e}} and \texttt{{z}}: \ area $= {CE:.2f}$ bits",
                   font_size=24, color=C.MODEL_Q),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-1.2, 1.15, 0])
+        codes = load("huffman")["codes"]
+        cols_x = [-4.6, -2.0, 0.7, 3.0, 5.1]  # centers of the five columns
+        hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (
+            r"symbol", r"Huffman codeword", r"length $\ell$", r"its bet $2^{-\ell}$", r"true $p$")])
+        bet_rows = VGroup()
+        for s_ in (" ", "e", "z"):
+            i = ALPHA27.index(s_)
+            ell = len(codes[s_])
+            bet_rows.add(VGroup(
+                letter(s_, font_size=30), Text(codes[s_], font=MONO, font_size=24, color=C.BITS),
+                MathTex(str(ell), font_size=32), MathTex(rf"1/{2 ** ell:,}".replace(",", "{,}"), font_size=32,
+                                                         color=C.MODEL_Q),
+                MathTex(f"{p[i]:.4f}", font_size=32, color=C.TRUE_P)))
+        for k, row in enumerate([hdr, *bet_rows]):
+            for m, x in zip(row, cols_x):
+                m.move_to([x, 0.75 - 0.85 * k, 0])
+        bet_cap = label(r"a code that spends $\ell$ bits on a symbol bets that it has probability $2^{-\ell}$",
+                        font_size=26, color=GREY_A).move_to([0, -2.9, 0])
+        bets = VGroup(hdr, bet_rows, bet_cap)
         with self.voiceover(
             "Codes and guesses are the same thing. A code that spends l bits on a symbol is betting that the "
             "symbol has probability two to the minus l. So what if the bets are wrong? <bookmark mark='a'/> Say "
             "the data come from p, but the code was built for a model q. Each symbol costs log of one over q bits, "
             "and on average we pay the cross-entropy: the sum of p times log one over q."
         ) as vo:
-            self.play(FadeIn(head[0]), FadeIn(head[1:]))
+            self.play(FadeIn(head[0]), FadeIn(head[1:]), FadeIn(hdr))
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in bet_rows], lag_ratio=0.5), run_time=2.0)
+            self.play(FadeIn(bet_cap))
             vo.wait_until("a")
             self.play(FadeIn(sub))
         with self.voiceover(
@@ -82,6 +103,7 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             f"symbol in {round(1 / p[ie])}, now costs {-np.log2(q[ie]):.1f} bits. The area grows to {CE:.2f}."
         ) as vo:
             vo.wait_until("a")
+            self.play(FadeOut(bets))
             self.play(Create(base), FadeIn(true), FadeIn(legend[0]))
             vo.wait_until("b")
             self.play(FadeIn(wrong), FadeIn(legend[1]), FadeIn(e_lab), FadeIn(z_lab), run_time=1.5)
@@ -116,7 +138,7 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
         kb = float(lt["KL_books"])
         books_said = ("are wrong by less than a hundredth of a bit" if kb < 0.01 else
-                      f"are wrong by {kb:.3f} bits")
+                      f"are wrong by {kb:.3f} bits per letter")
         with self.voiceover(
             "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. The first "
             "is the entropy of p: the randomness of the world itself, which no code can remove. "
@@ -157,20 +179,24 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         colors = {r"p(x)": P, r"q(x)": Q}
         D = r"-D_{\mathrm{KL}}(p \,\|\, q)"
         rows = [
-            cmath(D, "=", r"\sum_x", r"p(x)", r"\log_2", r"\frac{q(x)}{p(x)}", colors=colors, font_size=40),
-            cmath(D, r"\le", r"\log_2", r"\sum_x", r"p(x)", r"\frac{q(x)}{p(x)}", colors=colors, font_size=40),
-            cmath(D, r"\le", r"\log_2", r"\sum_x", r"q(x)", colors=colors, font_size=40),
-            cmath(D, r"\le", r"\log_2 1 = 0", font_size=40),
+            cmath(D, "=", r"\sum_x", r"p(x)", r"\log_2", r"\frac{q(x)}{p(x)}", colors=colors, font_size=34),
+            cmath(D, r"\le", r"\log_2", r"\sum_x", r"p(x)", r"\frac{q(x)}{p(x)}", colors=colors, font_size=34),
+            cmath(D, r"\le", r"\log_2", r"\sum_x", r"q(x)", colors=colors, font_size=34),
+            cmath(D, r"\le", r"\log_2 1 = 0", font_size=34),
         ]
         whys = [why(r"an average of $\log_2 \frac{q}{p}$, \ weights $p$"), why(r"Jensen: $\log_2$ bends down"),
                 why(r"the $p(x)$ cancel"), why(r"$q$ is a distribution")]
-        step = ladder(self, rows, whys, keep=4, top=2.3, x=2.6, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=2.6, x=3.1, buff=0.3, edge=6.9)
         res = VGroup(
-            label(r"equality only when $q = p$: \ the truth is the best code", font_size=28, color=C.BITS),
-            label(r"so $H(p, q) \ge H(p)$; \ and $H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)p(y)\big) "
-                  r"\ge 0$", font_size=26, color=GREY_A),
-            label(r"that drop is the \textit{mutual information} $I(X; Y)$: \ Chapter 12", font_size=24, color=GREY_B),
-        ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.35)
+            label(r"equality only when $q = p$:\\ the truth is the best code", font_size=28, color=C.BITS),
+            label(r"so $H(p, q) \ge H(p)$; \ and", font_size=26, color=GREY_A),
+            MathTex(r"H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)\,p(y)\big) \ge 0", font_size=30,
+                    color=GREY_A),
+            label(r"that drop is the \textit{mutual information} $I(X; Y)$:\\ Chapter 12", font_size=24, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if res.width > 6.2:
+            res.scale_to_fit_width(6.2)
+        res.move_to([-3.75, -0.4, 0])
         with self.voiceover(
             "Is being wrong always a cost? Yes, and the proof is the one we used for the uniform distribution in "
             "chapter three. <bookmark mark='a'/> The logarithm bends downward, so the average of logs is at most the "
@@ -202,9 +228,9 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             vo.wait_until("a")
             self.play(FadeIn(res[0], shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(res[1]))
+            self.play(FadeIn(res[1:3]))
             vo.wait_until("c")
-            self.play(FadeIn(res[2]))
+            self.play(FadeIn(res[3]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -225,6 +251,7 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         ln_card = gloss(r"$\ln$, \ and nats", r"$\ln x = \log_e x$, \ the log to base $e \approx 2.718$\\"
                         r"surprise measured with $\ln$ is in nats: \ $1$ nat $\approx 1.44$ bits", corner=DR, width=4.8,
                         color=C.KL)
+        ln_card.next_to(f, DOWN, buff=0.7).set_x(0)
         with self.voiceover(
             "Here is why all of this matters for AI. <bookmark mark='a'/> The loss that every large language model "
             "is trained to minimize is exactly this: the average of log one over q, for each token of real text, "
@@ -356,7 +383,7 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         fF, fR = interp(F), interp(R)
         axes = ThreeDAxes(x_range=[ms[0], ms[-1], 1], y_range=[-ss[-1], -ss[0], 1], z_range=[0, 2.5, 1], x_length=7.4,
                           y_length=4.2, z_length=2.0, axis_config={"stroke_color": GREY_C, "include_ticks": False,
-                                                                   "include_tip": False}).shift(DOWN * 1.3)
+                                                                   "include_tip": False}).shift(DOWN * 1.3 + RIGHT * 1.0)
         sF = loss_surface(axes, fF, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
         sR = loss_surface(axes, fR, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
 
@@ -373,11 +400,10 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         t_f = label(r"$D_{\mathrm{KL}}(p \,\|\, q)$: \ one valley", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
         t_r = label(r"$D_{\mathrm{KL}}(q \,\|\, p)$: \ two valleys", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
         cap = label(r"across: \ the center $\mu$; \ back: \ the width $\sigma$; \ up: \ the loss", font_size=24,
-                    color=GREY_B).to_edge(DOWN, buff=0.35)
+                    color=GREY_B).to_edge(DOWN, buff=0.35).shift(RIGHT * 1.0)
         tag = computed_tag()
         gd_card = gloss(r"gradient descent", r"again and again, take a small step\\ in whichever direction lowers "
-                        r"the loss fastest", picture=valley_steps(0.15, x0=-1.3, n=6), corner=UL, width=4.0)
-        gd_card.shift(DOWN * 0.75)
+                        r"the loss fastest", picture=valley_steps(0.15, x0=-1.3, n=6), corner=DL, width=3.6)
         for m in (head, t_f, t_r, cap, tag, gd_card):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)

@@ -30,9 +30,6 @@ ZH = {
     'most + " <bookmark mark=\'a\'/> " + moto_said':
         "{most}<bookmark mark='a'/>{moto_said}<bookmark mark='b'/>猜测次数集中在少数几个地方，大多是一个新词开始的地方。信息就藏在那里。",
 
-    'Most letters fall on the first guess.':
-        '大多数字母，第一次就猜中了。',
-
     "f'{100 * frac1:.0f} percent of the letters fall on the first guess.":
         '{100 * frac1:.0f}%的字母，第一次就猜中了。',
 
@@ -69,8 +66,11 @@ ZH = {
     'f"And we\'ll keep score.':
         "我们还要记分。这是一部小说里的一页，1930年的《马耳他之鹰》。它在2026年1月1日进入公有领域，上了古登堡计划，那时这一部分的每个模型都已经训练完了，所以没有一个可能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>整个系列的任务，就是解释记分牌上的这些数字是怎么降下来的：从8，{goal}。",
 
-    'to below one':
-        '降到1以下',
+    "f'to {low:.2f} bits per character, and beyond'":
+        '降到每字符{low:.2f}比特，甚至更低',
+
+    "f'gives the word Paris {100 * p:.0f} percent'":
+        '给Paris这个词{100 * p:.0f}%的概率',
 
     # ------------------------------------------------------------------ Probability
     'Chapter one. Before we can score a guess':
@@ -228,7 +228,7 @@ ZH = {
         "霍夫曼用几次交换证明了，没有哪个前缀码能做得更好。<bookmark mark='a'/>第一：如果一个更可能的符号，码字反而比一个更罕见的长，把两个码字对调，平均码长就会变短。把z的{lz}比特给e，把e的{le}比特给z，每个字母平均要多花{cost:.2f}比特。所以在最好的编码里，更可能的符号，码字绝不会更长。<bookmark mark='b'/>第二：树底部一个没有兄弟的码字，可以直接上移一层，变得更短。所以最深的码字总是成对出现。<bookmark mark='c'/>再由第一次交换，两个最罕见的符号可以放进这样一对里：在霍夫曼编码里，它们是{ho['rare'][0]}和{ho['rare'][1]}，只有最后一位不同。",
 
     'f"Now merge those two rarest symbols into one':
-        "现在把这两个最罕见的符号合并成一个，它的概率是两者之和。<bookmark mark='a'/>小字母表的任何一个编码，只要把那片叶子一分为二，就变成原字母表的编码，而平均码长恰好增加合并后的那个概率，不管编码的其余部分是什么样。所以原问题的最好编码，就是这个更小问题的最好编码，再加上这一分。<bookmark mark='b'/>这就是霍夫曼的第一次合并，同样的论证也适用于之后的每一次合并：他搭出的树是最优的。<bookmark mark='c'/>我们检验过。把每次合并的权重加起来：{merged:.3f}，正是霍夫曼的平均码长。对这些字母，搜索每一种可能的码树形状：最好的是{same}。在{n_tr}个随机字母表上，霍夫曼编码每一次都和穷举搜索的结果一致。",
+        "现在把这两个最罕见的符号合并成一个，它的概率是两者之和。<bookmark mark='a'/>小字母表的任何一个编码，只要把那片叶子一分为二，就变成原字母表的编码，而平均码长恰好增加合并后的那个概率，不管编码的其余部分是什么样。所以原问题的最好编码，就是这个更小问题的最好编码，再加上这一分。<bookmark mark='b'/>这就是霍夫曼的第一次合并，同样的论证也适用于之后的每一次合并：他搭出的树是最优的。<bookmark mark='c'/>我们检验过。把每次合并的权重加起来：{merged:.3f}，正是霍夫曼的平均码长。对这些字母，搜索每一种可能的码树形状：最好的结果是{same}。在{n_tr}个随机字母表上，霍夫曼编码每一次都和穷举搜索的结果一致。",
 
     # ------------------------------------------------------------------ Typical
     'Chapter six. Why long messages compress so well.':
@@ -277,8 +277,8 @@ ZH = {
     'are wrong by less than a hundredth of a bit':
         '错得不到百分之一比特',
 
-    "f'are wrong by {kb:.3f} bits":
-        '错了{kb:.3f}比特',
+    "f'are wrong by {kb:.3f} bits per letter'":
+        '每个字母错了{kb:.3f}比特',
 
     'Is being wrong always a cost?':
         "犯错总是要付出代价吗？是的，证明和第3章用在均匀分布上的那个一样。<bookmark mark='a'/>对数向下弯，所以对数的平均值，至多等于平均值的对数。<bookmark mark='b'/>负的散度，是以p为权重，对q除以p的对数求的平均。<bookmark mark='c'/>把对数移到外面。<bookmark mark='d'/>里面的p约掉了，<bookmark mark='e'/>剩下的是q的总和，也就是1。1的对数是0。",
@@ -290,22 +290,16 @@ ZH = {
         "这就是这一切对AI的意义所在。<bookmark mark='a'/>每一个大语言模型训练时要最小化的损失，正是这个：对真实文本的每一个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。<bookmark mark='n'/>通常用自然对数ln，以e为底，所以单位是奈特而不是比特：1奈特大约是1.44比特。<bookmark mark='b'/>它就是世界上的文本和模型之间的交叉熵。<bookmark mark='c'/>训练只能缩小散度那一部分；<bookmark mark='d'/>语言本身的熵，是任何模型都无法低于的下限。",
 
     '"One more property, which will matter a lot later':
-        "还有一个性质，后面会非常重要：散度不是对称的。假设真实的p有两个峰，而我们的模型q只能是一条钟形曲线：一个平滑的鼓包，由它的中心在哪里、有多宽来决定。哪条钟形曲线最好？这取决于我们按哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚见过的训练损失，<bookmark mark='b'/>{('pulls q wide, to cover both peaks: it ends with exactly p\\'s mean and spread.' if wide else 'pulls q wide, to cover both peaks.')}",
+        "还有一个性质，后面会非常重要：散度不是对称的。假设真实的p有两个峰，而我们的模型q只能是一条钟形曲线：一个平滑的鼓包，由它的中心在哪里、有多宽来决定。哪条钟形曲线最好？这取决于我们按哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚见过的训练损失，<bookmark mark='b'/>{fit}",
 
     "pulls q wide, to cover both peaks: it ends with exactly p's mean and spread.":
         '会把q拉宽，盖住两个峰：最后它的均值和散布恰好与p相同。',
 
-    'pulls q wide, to cover both peaks.':
-        '会把q拉宽，盖住两个峰。',
-
-    '"The other way round, <bookmark mark=\'a\'/> q is punished':
-        "反过来，<bookmark mark='a'/>q在p没有概率的地方放了概率，就会受罚，所以{('it squeezes into a single peak and ignores the other. ' if one_peak else 'it narrows toward one peak. ')}每种拟合，按另一种标准都很糟：宽的那条曲线，按第二种方式量是{d['rev_at_fwd']:.2f}比特；窄的那条，按第一种方式量是{d['fwd_at_rev']:.1f}比特。<bookmark mark='b'/>覆盖一切，还是认定一个：这个选择会在第20部分的变分自编码器里再次出现，也会在第27部分的蒸馏和基于人类反馈的强化学习里出现。",
-
     'it squeezes into a single peak and ignores the other.':
         '它挤进一个峰里，不管另一个。',
 
-    'it narrows toward one peak.':
-        '它朝一个峰收窄。',
+    'f"The other way round, <bookmark mark=\'a\'/> q is punished':
+        "反过来，<bookmark mark='a'/>q在p没有概率的地方放了概率，就会受罚，所以{squeeze}每种拟合，按另一种标准都很糟：宽的那条曲线，按第二种方式量是{d['rev_at_fwd']:.2f}比特；窄的那条，按第一种方式量是{d['fwd_at_rev']:.1f}比特。<bookmark mark='b'/>覆盖一切，还是认定一个：这个选择会在第20部分的变分自编码器里再次出现，也会在第27部分的蒸馏和基于人类反馈的强化学习里出现。",
 
     'Here are the two losses for every possible bell curve':
         "这是对每一条可能的钟形曲线，两种损失的取值：横向是它的中心，纵向是它的宽度。<bookmark mark='a'/>按一个方向量，只有一个山谷。梯度下降一次又一次地朝着让损失下降最快的方向迈出一小步，从哪里出发都能找到那条宽曲线。<bookmark mark='b'/>按另一个方向量，有两个山谷，每个峰对应一个，最后落在哪里，取决于从哪里出发。",
@@ -335,20 +329,21 @@ ZH = {
     'f"A real coder can\'t keep fractions with thousands of digits.':
         "真正的编码器没法保存有几千位的小数。它把区间存成两个整数，低端和高端，这里是{R}位，实际中是32位。<bookmark mark='a'/>第一个字母缩小区间。<bookmark mark='b'/>现在两端的第一位相同了：它确定了。把它发出去，再把装着区间的那一半放大一倍，让它重新填满整个范围：这就是一次放大。<bookmark mark='c'/>如果区间跨过中点，却落在中间那一半里，下一位还不知道。编码器照样以中点为中心放大，并记下有一位在等待；等到下一个确定的位出来时，它会被翻转，跟着一起出来。<bookmark mark='d'/>一个字母接一个字母，缩小，放大，比特就源源不断地流出来。",
 
-    'f"At the end, a couple of bits close it off':
-        "最后，再用几位把它收尾：the falcon用了{nb}比特，{cmp_said}精确编码器的{ne}比特。始终是整数，而且从不超过寄存器的长度。",
+    "f'At the end, a couple of bits close it off":
+        "最后，再用几位把它收尾：the falcon用了{nb}比特，{cmp_said}。始终是整数，而且从不超过寄存器的长度。",
 
-    'the same as': '和……一样，等于',
-    'one fewer than': '比……少1位，相比',
-    'one more than': '比……多1位，相比',
+    "f'exactly what the exact coder needs, {ne}'": '恰好就是精确编码器需要的{ne}比特',
+    'f"one fewer than the exact coder\'s {ne}"': '比精确编码器的{ne}比特少1比特',
+    'f"one more than the exact coder\'s {ne}"': '比精确编码器的{ne}比特多1比特',
+    'f"against the exact coder\'s {ne}"': '而精确编码器是{ne}比特',
 
     'f"Does the rounding cost much?':
-        "取整会花很多吗？我们把整段《马耳他之鹰》，{n:,}个字母，送进一个由我们最好的计数模型驱动的32位编码器。<bookmark mark='a'/>在这个模型下，它的信息量是{ideal:,.0f}比特。<bookmark mark='b'/>把概率取整成{show[-1]}位的计数，编码器在整段里只比这多发了{fine:.1f}比特。{(f' Round them to 8 bits and it costs {coarse:,.0f} extra bits.' if coarse is not None else '')}{dip_said}<bookmark mark='c'/>寄存器只要比计数宽几位，就几乎无关紧要。算术编码几乎什么也不浪费：你付出的，就是模型的意外度。",
+        "取整会花很多吗？我们把整段《马耳他之鹰》，{n:,}个字母，送进一个由我们最好的计数模型驱动的32位编码器。<bookmark mark='a'/>在这个模型下，它的信息量是{ideal:,.0f}比特。<bookmark mark='b'/>把概率取整成{show[-1]}位的计数，编码器在整段里只比这多发了{fine:.1f}比特。{coarse_said}<bookmark mark='r'/>{dip_said}<bookmark mark='c'/>寄存器只要比计数宽几位，就几乎无关紧要。算术编码几乎什么也不浪费：你付出的，就是模型的意外度。",
 
-    "f' Round them to 8 bits and it costs {coarse:,.0f} extra bits.":
+    "f'Round them to 8 bits and it costs {coarse:,.0f} extra bits.'":
         '取整成8位，就要多花{coarse:,.0f}比特。',
 
-    "f' With {dips[0]}-bit counts it even came out a few bits under":
+    "f'With {dips[0]}-bit counts it even came out a few bits under":
         '用{dips[0]}位的计数，它甚至还少花了几比特：取整给了罕见字母多一点概率，而这段文字恰好用到了它们。',
 
     'This is the hinge of the whole part.':
@@ -368,13 +363,13 @@ ZH = {
         "我们来给计数模型打分。对每一种上下文长度，从0个字母到14个，量一量每个字母的比特数。<bookmark mark='a'/>先在它数过的那些书上。上下文越多，比特越少，在{ks[-1]}个字母时，一路降到每个字母{plug[-1]:.2f}比特。我们在没有上下文和一个字母上下文时的数字，{plug[0]:.2f}和{plug[1]:.2f}，<bookmark mark='b'/>和香农1951年根据印刷的统计表做的估计{sh27[1]:.2f}和{sh27[2]:.2f}很接近。",
 
     'f"But on new text, the Falcon passage':
-        "但在新的文本，也就是《马耳他之鹰》的段落上，<bookmark mark='a'/>情况就不同了。上下文一开始有帮助：<bookmark mark='b'/>最好的是{best}个字母的上下文，每个字母{test[best]:.2f}比特。再往后就变差了{(f\", and with {ks[-1]} letters of context it's worse than knowing nothing but letter frequencies.\" if test[-1] > test[0] else f', up to {test[-1]:.2f} bits with {ks[-1]} letters of context.')}",
+        "但在新的文本，也就是《马耳他之鹰》的段落上，<bookmark mark='a'/>情况就不同了。上下文一开始有帮助：<bookmark mark='b'/>最好的是{best}个字母的上下文，每个字母{test[best]:.2f}比特。再往后就变差了：{beyond}",
 
-    "f\", and with {ks[-1]} letters of context it's worse":
-        '，用{ks[-1]}个字母的上下文时，甚至比只知道字母频率还差。',
+    'f"with {ks[-1]} letters of context it\'s worse':
+        '用{ks[-1]}个字母的上下文时，甚至比只知道字母频率还差。',
 
-    "f', up to {test[-1]:.2f} bits with {ks[-1]} letters of context.":
-        '，用{ks[-1]}个字母的上下文时，升到{test[-1]:.2f}比特。',
+    "f'it climbs to {test[-1]:.2f} bits with {ks[-1]} letters of context.'":
+        '用{ks[-1]}个字母的上下文时，升到了{test[-1]:.2f}比特。',
 
     'f"The reason is that contexts multiply.':
         "原因是上下文会成倍增长。<bookmark mark='a'/>《马耳他之鹰》段落里所有5个字母的上下文，{100 * seen[5]:.0f}%在书里的某个地方出现过。而{kL}个字母的上下文，只有{100 * seen[kL]:.0f}%出现过。<bookmark mark='b'/>可能的{kL}个字母的上下文大约有10的{e20:.0f}次方个，而书里只有{nctx[kL] / 1000000.0:.1f}百万个。<bookmark mark='c'/>一个书里从没见过的上下文，模型毫无依据；在它后面从没见过的字母，概率会是零：意外度无穷大。",
@@ -392,7 +387,13 @@ ZH = {
         '对一个字母的上下文，拉普拉斯法则多花{T[short][lap] - T[short][best[short]]:.3f}比特',
 
     'f"And how does a counting model learn? It reads, and counts.':
-        "计数模型是怎么学习的？它读，然后数。这是其中四个，上下文分别是1、3、5、8个字母，随着它们数过的书越来越多，在《马耳他之鹰》的段落上打分。<bookmark mark='a'/>读了一千个字母之后，一个字母的上下文最好，{B[orders[0]][0]:.2f}比特：短的上下文见得多，数得快，而长的上下文几乎还没遇到过它们的上下文。{story}<bookmark mark='z'/>读完全部{A[-1] / 1000000.0:.0f}百万个字母时，{(f'{words[o_long]} letters is still behind, at {B[o_long][-1]:.2f}: it would need far more text than we have.' if lead[-1] != o_long else f'{words[o_long]} letters finally leads.')}能数的越多，值得用的上下文就越长。",
+        "计数模型是怎么学习的？它读，然后数。这是其中四个，上下文分别是1、3、5、8个字母，随着它们数过的书越来越多，在《马耳他之鹰》的段落上打分。<bookmark mark='a'/>读了一千个字母之后，一个字母的上下文最好，{B[orders[0]][0]:.2f}比特：短的上下文见得多，数得快，而更长的上下文，大多还一次都没见过。",
+
+    "f'At {amount(A[i])} letters, {words.get(o, str(o))} letters of context take the lead.'":
+        '读到{amount(A[i])}个字母时，{words.get(o, str(o))}个字母的上下文领先了。',
+
+    "f'With all {A[-1] / 1000000.0:.0f} million letters, {ending}":
+        '读完全部{A[-1] / 1000000.0:.0f}百万个字母时，{ending}能数的越多，值得用的上下文就越长。',
 
     "f'{words[o_long]} letters is still behind":
         '{words[o_long]}个字母的上下文仍然落后，{B[o_long][-1]:.2f}比特：它需要的文本，比我们有的多得多。',
@@ -403,10 +404,6 @@ ZH = {
     'f"Here\'s the five-letter model writing, as it reads':
         "这是5个字母上下文的模型一边读、一边写的样子，每次都从同样的开头出发，掷同样的骰子。<bookmark mark='a'/>读了一千个字母之后，{recite}它写出的东西里有{100 * share[0]:.0f}%，也就是红色的部分，是从它读过的那一点点文字里，一字不差地抄来的，一抄就是{L}个字母以上。<bookmark mark='b'/>读了一万个之后，是{100 * share[1]:.0f}%。<bookmark mark='c'/>从十万个起，{nothing}：它自己把像模像样的词串在一起，<bookmark mark='d'/>它在《马耳他之鹰》段落上的得分，从每个字母{bits[0]:.2f}比特变成了{bits[-1]:.2f}。",
 
-    'it can only recite: ': '它只会背诵：',
-    'it mostly invents, but ': '它大多是自己编的，但',
-    'nothing is copied': '没有一点是抄来的',
-    'almost nothing is copied': '几乎没有抄来的',
     "f'at most {100 * max(late):.0f} percent is copied":
         '抄来的至多{100 * max(late):.0f}%',
 
@@ -495,8 +492,6 @@ ZH = {
     'f"Let\'s look at what a strong model knows that a weaker one doesn\'t.':
         "我们来看看，一个强的模型知道什么，而弱的模型不知道。这是《马耳他之鹰》段落里的一段，切成词元，也就是模型一次读、一次猜的那些小块，<bookmark mark='a'/>每个都按2019年的GPT-2对它有多意外来着色：意料之中是暗的，出乎意料是亮的。<bookmark mark='b'/>再看同一段在2025年的Qwen3下的样子。它的方块{('darker almost everywhere' if tb < ta else 'no darker')}：{tb:.0f}比特，而不是{ta:.0f}比特。",
 
-    'darker almost everywhere': '几乎处处都更暗',
-    'no darker': '并没有更暗',
 
     '"Look where they differ. <bookmark mark=\'a\'/> " + brand':
         "看看它们在哪里不同。<bookmark mark='a'/>{brand}<bookmark mark='b'/>还有telephone：GPT-2为它付出{bd['telephone'][0]:.1f}比特，Qwen3只要{bd['telephone'][1]:.1f}比特，因为两段之前，一个电话铃响了。<bookmark mark='c'/>只给Qwen3看这一段，telephone就要花它{alone:.1f}比特。它记得：上一章的长尾巴，在这里派上了用场。",
@@ -512,9 +507,6 @@ ZH = {
 
     "f'the 2025 model gives four {100 * p4:.0f} percent":
         '2025年的模型给four的是{100 * p4:.0f}%，给five的却有{100 * p5:.0f}%。',
-
-    'even the 2025 model hedges.':
-        '就连2025年的模型也拿不准。',
 
     'f"So here\'s the ladder.':
         "所以，这就是阶梯。<bookmark mark='a'/>字母频率让你降到{H0:.1f}比特。拼写，也就是几个字母的上下文，降到{Hk:.1f}。<bookmark mark='b'/>再往下，模型就得学会词和语法，关于世界的事实，以及故事到目前为止发生了什么，<bookmark mark='c'/>一直降向人所需要的大约1比特。<bookmark mark='d'/>没有人告诉模型去学这些。把它推到那里的，只是一个数：它为每次猜测付出的比特。要预测文本，它就得为写出这些文本的世界建模。",
@@ -551,14 +543,11 @@ ZH = {
     'f"And then, the neural language models.':
         "然后，是神经语言模型。<bookmark mark='a'/>2019年的GPT-2，最小的版本：{b['GPT-2 small']:.2f}比特。它最大的版本，{gxl:.2f}。<bookmark mark='b'/>2025年的Qwen3：6亿参数的模型{q06_said}，<bookmark mark='c'/>40亿参数把它降到每个字符{b['Qwen3-4B']:.2f}比特。<bookmark mark='d'/>作为对比，香农对人的估计，只算字母，是{hum['lo']:.1f}到{hum['hi']:.1f}。",
 
-    'already matches the largest GPT-2': '已经和最大的GPT-2持平',
-    'already beats the largest GPT-2': '已经超过了最大的GPT-2',
-    "f'gets {q06:.2f}": '得到{q06:.2f}',
+    "f'gets {q06:.2f} bits per character'": '得到每字符{q06:.2f}比特',
 
     'f"In file sizes: the passage is':
-        "换成文件大小：这段文字存成纯文本是{kb['ascii']:.1f}KB，用gzip是{kb['gzip']:.1f}KB，<bookmark mark='a'/>用Qwen3驱动一个算术编码器是{kb['Qwen3-4B']:.1f}KB。<bookmark mark='b'/>从计数的{bits['best']:.1f}比特，到{('under one' if low < 1 else f'{low:.2f}')}，这一跃就是这个系列要讲的：这些模型学到了什么，又是怎么学到的。",
+        "换成文件大小：这段文字存成纯文本是{kb['ascii']:.1f}KB，用gzip是{kb['gzip']:.1f}KB，<bookmark mark='a'/>用Qwen3驱动一个算术编码器是{kb['Qwen3-4B']:.1f}KB。<bookmark mark='b'/>从计数的{bits['best']:.1f}比特，到{low_said}，这一跃就是这个系列要讲的：这些模型学到了什么，又是怎么学到的。",
 
-    'under one': '1以下',
 
     'f"Arithmetic coding turns any predictor into a compressor':
         "算术编码能把任何一个预测者变成压缩器，所以我们造了一个。<bookmark mark='a'/>GPT-2 small一次一个词元地读《马耳他之鹰》段落的开头，把它的概率交给第8章那个32位编码器。出来的是{nb}字节，只比GPT-2自己的意外度多{z['bits'] - z['ideal']:.1f}比特，<bookmark mark='b'/>{ok_said}<bookmark mark='c'/>同样这{z['chars']:,}个字符，xz需要{comp['xz']:,}字节：是它的{ratio:.1f}倍。",
@@ -577,10 +566,8 @@ ZH = {
 
     # ------------------------------------------------------------------ Outro
     'f"Let\'s take stock.':
-        "我们来盘点一下。我们把猜测写成概率分布，链式法则又把它们变成了一整段文本的分数。意外度必须是对数，而熵，也就是平均意外度，是唯一自洽的不确定性度量。前缀码活在克拉夫特的预算之内，霍夫曼编码是其中最好的，而长的典型序列让编码能够达到熵，却不能更低。我们见识了错误模型的代价，也就是交叉熵，以及它里面散度的两个方向。算术编码表明，预测和压缩是同一回事，GPT-2把我们的段落压缩了{('and gave it back' if z['ok'] else 'with it')}。计数模型用失败给我们展示了泛化，互信息则告诉我们，文本能记住多远的过去。",
+        "我们来盘点一下。我们把猜测写成概率分布，链式法则又把它们变成了一整段文本的分数。意外度必须是对数，而熵，也就是平均意外度，是唯一自洽的不确定性度量。前缀码活在克拉夫特的预算之内，霍夫曼编码是其中最好的，而长的典型序列让编码能够达到熵，却不能更低。我们见识了错误模型的代价，也就是交叉熵，以及它里面散度的两个方向。算术编码表明，预测和压缩是同一回事，GPT-2把我们的段落压缩了{back}。计数模型用失败给我们展示了泛化，互信息则告诉我们，文本能记住多远的过去。",
 
-    'and gave it back': '，又把它还原了回来',
-    'with it': '',
 
     'Almost everything here comes back.':
         '这里的几乎每一样都会再次出现。链式法则是语言模型生成文本的方式，也是推理模型把思考说出来的方式。交叉熵是我们在整个系列里要一直最小化的损失。散度的两个方向，会在变分自编码器里，也会在让模型符合人们意愿的对齐里再次出现。从模型中抽取典型的文本，在第5部分。压缩会在研究规模时回来，也会在最后，当我们问这些模型能被托付什么时回来。',
@@ -596,13 +583,37 @@ ZH = {
 }
 
 PHRASES = {
+    # computed words spliced into the templates above (an exact value -> its Chinese)
     'the space': '空格',
     'space': '空格',
     'space, e, t, a, o, n': '空格、e、t、a、o、n',
-    'falcon': 'falcon',
-    'the same': '同样的4.127',
-    'gives Paris': '给Paris',
+    'Most letters fall on the first guess.': '大多数字母，第一次就猜中了。',
+    'to below one': '降到1以下',
+    "doesn't put Paris in its top five": '没有把Paris排进前五',
+    'the same': '同一个数',
+    'pulls q wide, to cover both peaks.': '会把q拉宽，盖住两个峰。',
+    'it narrows toward one peak.': '它朝一个峰收窄。',
+    'it can only recite: ': '它只会背诵：',
+    'it mostly invents, but ': '它大多是自己编的，但',
+    'nothing is copied': '没有一点是抄来的',
+    'almost nothing is copied': '几乎没有抄来的',
+    'a thousand': '一千',
+    'three thousand': '三千',
+    'ten thousand': '一万',
+    'thirty thousand': '三万',
+    'a hundred thousand': '十万',
+    'three hundred thousand': '三十万',
+    'a million': '一百万',
+    'three million': '三百万',
     'three': '3',
     'five': '5',
     'eight': '8',
+    'darker almost everywhere': '几乎处处都更暗',
+    'no darker': '并没有更暗',
+    'even the 2025 model hedges.': '就连2025年的模型也拿不准。',
+    'already matches the largest GPT-2': '已经和最大的GPT-2持平',
+    'already beats the largest GPT-2': '已经超过了最大的GPT-2',
+    'under one': '1以下',
+    'and decoded it back, letter for letter': '，又一个字母不差地把它解码了回来',
+    'to a fraction of what xz needs': '，只用了xz所需的一小部分',
 }
