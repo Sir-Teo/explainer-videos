@@ -245,12 +245,19 @@ class Masked(VoiceoverScene):
         ml, sl = rows[1][2]["linear"][0], rows[0][2]["linear"][0]
         mk, sk = rows[1][2]["knn"][0], rows[0][2]["knn"][0]
         bl = rows[2][2]["linear"][0]
-        behind = ml < sl - 0.005
-        v = (f"Filling in pixels gives a representation {pct(sl - ml)} points behind SimCLR on the linear probe, and "
-             f"{pct(sk - mk)} behind by nearest neighbours. Predicting codes instead of pixels gives {pct(bl)} "
-             "percent." if behind else
-             f"On our digits, filling in pixels does as well as contrast: MAE {pct(ml)} percent against SimCLR's "
-             f"{pct(sl)}, and the code-predicting model {pct(bl)}.")
+        un = float(np.mean([r["linear"] for r in load("baselines")["random_cnn"]]))
+        if ml < un - 0.005:
+            v = (f"Not on our network. Filling in pixels leaves a representation at {pct(ml)} percent on the linear "
+                 f"probe, below even the untrained network's {pct(un)}, and far below SimCLR's {pct(sl)}; predicting "
+                 f"codes gives {pct(bl)}. To paint strokes, each cell of the small map learned where ink goes near it; "
+                 "averaged over the map, that says little about which digit it is.")
+        elif ml < sl - 0.005:
+            v = (f"Filling in pixels gives a representation {pct(sl - ml)} points behind SimCLR on the linear probe, "
+                 f"and {pct(sk - mk)} behind by nearest neighbours. Predicting codes instead of pixels gives "
+                 f"{pct(bl)} percent.")
+        else:
+            v = (f"On our digits, filling in pixels does as well as contrast: MAE {pct(ml)} percent against SimCLR's "
+                 f"{pct(sl)}, and the code-predicting model {pct(bl)}.")
         lit = label(r"MAE's paper: \ weak linear probes, \ strong after fine-tuning; \\ a pixel target spends effort "
                     r"on details \ the probe does not need", font_size=22, color=GREY_A).move_to([0, -1.3, 0])
         tk = take_away(r"masked models learn by filling in; \ their features are rich, \ but not laid out flat for a "

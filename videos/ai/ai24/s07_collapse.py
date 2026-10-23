@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (BARLOW, BYOL_C, DIGIT, DINO_C, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, axes,
+from videos.ai.ai24.common import (NEG as NEGC, POS as POSC, BARLOW, BYOL_C, DIGIT, DINO_C, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, axes,
                                    curve, load, node_box, pct, seed_curves, tag, take_away)
 
 
@@ -14,6 +14,7 @@ class Collapse(VoiceoverScene):
         self.measure()
         self.spectra()
         self.starved()
+        self.margin()
         self.routes()
 
     def card(self):
@@ -178,6 +179,38 @@ class Collapse(VoiceoverScene):
             self.play(Create(cn), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(exp_))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def margin(self):
+        f = MathTex(r"\mathcal L", r"=", r"y\, d^2", r"+", r"(1 - y)\, \max(0,\, m - d)^2", font_size=40)
+        f.move_to([0, 2.2, 0])
+        f[2].set_color(POSC)
+        f[4].set_color(NEGC)
+        dl = label(r"$d$: \ distance between two outputs; \ $y = 1$ for a similar pair, \ $0$ for a dissimilar one",
+                   font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.3)
+        ax = axes([0, 3], [0, 4.5], x_length=5.0, y_length=2.6, xlabel=r"distance $d$", ylabel=r"loss",
+                  center=[0, -1.3, 0])
+        ds = np.linspace(0, 3, 120)
+        c1 = curve(ax.ax, ds, ds ** 2 / 2, POSC, 3)
+        c2 = curve(ax.ax, ds, np.maximum(0, 2.0 - ds) ** 2, NEGC, 3)
+        l1 = label(r"similar: \ pull together", font_size=20, color=POSC).next_to(ax.ax.c2p(2.6, 3.4), LEFT, buff=0.1)
+        l2 = label(r"dissimilar: \ push to the margin $m$", font_size=20, color=NEGC).next_to(ax.ax.c2p(0.3, 3.9),
+                                                                                             RIGHT, buff=0.1)
+        src = cite(r"Hadsell, Chopra \& LeCun (2006); \ Chopra, Hadsell \& LeCun (2005)")
+        with self.voiceover(
+            "This trap is old. In 2005 and 2006 Raia Hadsell, Sumit Chopra and Yann LeCun trained siamese networks "
+            "with a loss that already had both halves. <bookmark mark='a'/> For a similar pair, the squared distance "
+            "between their outputs: pull together. <bookmark mark='b'/> For a dissimilar pair, a penalty only if they "
+            "come closer than a margin: push apart, but no further than needed. Without the second half, nothing "
+            "would stop the network from mapping everything to one point."
+        ) as vo:
+            self.play(Write(f), FadeIn(dl), FadeIn(src), FadeIn(ax))
+            vo.wait_until("a")
+            self.play(Create(c1), FadeIn(l1), Indicate(f[2], color=POSC))
+            vo.wait_until("b")
+            self.play(Create(c2), FadeIn(l2), Indicate(f[4], color=NEGC))
         self.wait(0.3)
         self.clear_scene()
 
