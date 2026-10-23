@@ -58,7 +58,9 @@ A chapter is one scene of 3–5 minutes made of a few `self.voiceover(...)` bloc
   so a part must:
   - seed every random choice (numpy `default_rng(seed)`, `torch.manual_seed`);
   - make any job longer than a few minutes resumable: `explainer.lm.pocket.train(..., ckpt=path, ckpt_every=100)`
-    for language models, a checkpoint per generation/epoch otherwise (Part 26's AlphaZero), and let the compute
+    for language models; `CACHE.partial(name, params)` for an item made of many pieces (each saved as it finishes,
+    the random generator's state with it; Part 2's SAT sweep); a checkpoint per generation otherwise (Part 26's
+    AlphaZero, whose grading and Elo games are kept game by game); and let the compute
     items that need a trained model train it themselves, resuming (`alphazero.ensure_trained()`), so
     `python -m videos.ai.aiN.compute` alone rebuilds the part;
   - run on macOS and Linux: multiprocessing with `spawn` off Linux (`fork` and torch don't mix on macOS), no Linux-only
