@@ -135,7 +135,7 @@ ZH = {
         "把一个个合页加起来，每个都有自己的位置和斜率，就能画出一条曲线。<bookmark mark='a'/>两个合页，画出一条粗糙的折线。<bookmark mark='b'/>4个。8个。16个。64个，典型误差降到了{e64:.4f}。",
 
     'f"How fast does the miss shrink?':
-        "误差缩小得有多快？在合页处把点连起来，得到一段段直的弦；在宽度为h的一段上，弦和一条光滑曲线的差距，最多是h的平方除以8，再乘上曲线的弯曲程度。<bookmark mark='a'/>n个合页均匀分布在区间上，h就是n加1分之6。<bookmark mark='b'/>所以误差按n的平方分之1下降：合页加倍，误差变成4分之1。最小二乘只会比连点做得更好。<bookmark mark='c'/>在双对数坐标上，这是一条斜率为负2的直线，实测的斜率是{slope:.2f}。",
+        "误差缩小得有多快？<bookmark mark='p'/>在合页处把点连起来，得到一段段直的弦；在宽度为h的一段上，弦和一条光滑曲线的差距，最多是h的平方除以8，再乘上曲线的弯曲程度。<bookmark mark='a'/>n个合页均匀分布在区间上，h就是n加1分之6。<bookmark mark='b'/>所以误差按n的平方分之1下降：合页加倍，误差变成4分之1。最小二乘只会比连点做得更好。<bookmark mark='c'/>在双对数坐标上，这是一条斜率为负2的直线，实测的斜率是{slope:.2f}。",
 
     "Here's another way to see it.":
         "还有一种看法。<bookmark mark='a'/>取三个合页：一个往上，一个以两倍的陡度往下，再一个往上。<bookmark mark='b'/>它们的和是一个鼓包：先是0，升上去，降下来，再回到0。<bookmark mark='c'/>在一排点上各放一个鼓包，每个鼓包的高度等于曲线在那里的高度，再把它们加起来：就得到了这条曲线，用折线把点连起来。<bookmark mark='d'/>任何连续曲线都能这样画出来，想多精细就多精细。在更高的维度里，每个鼓包要用更多的单元，但这个想法依然成立。",
@@ -411,6 +411,9 @@ ZH = {
     "'On the scoreboard, two new rows: the first network, and the network with counting, ' + top_row":
         '记分牌上，添了两行新的：第一个网络，以及加上计数的网络，{top_row}。{gap}',
 
+    "f'{behind:.2f} bits behind the best row above them'":
+        '比它们上面最好的那一行还差{behind:.2f}比特',
+
     'the best of everything before GPT-2':
         '它是GPT-2之前所有模型里最好的',
 
@@ -432,6 +435,9 @@ ZH = {
 
     'And a small network, trained on our books, beat every counting model':
         '而一个小小的网络，在我们的书上训练之后，打败了记分牌上所有的计数模型。',
+
+    "f'And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits":
+        '而一个小小的网络，在我们的书上训练之后，和最好的计数模型只差{nn_b - kn_b:.2f}比特。',
 
     'And a small network, trained on our books, came close to the best counting model':
         '而一个小小的网络，在我们的书上训练之后，接近了最好的计数模型，和它混合之后，打败了记分牌上所有的计数模型。',

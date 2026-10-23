@@ -23,23 +23,29 @@ class Universal(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def neuron(self):
-        ins = VGroup(*[Circle(radius=0.28, color=GREY_B, stroke_width=3).move_to([-5.2, 1.6 - 1.1 * k, 0]) for k in range(4)])
-        il = VGroup(*[MathTex(rf"x_{k + 1}", font_size=30).move_to(ins[k]) for k in range(4)])
-        body = Circle(radius=0.55, color=NEURON, stroke_width=4).move_to([-2.4, 0.0, 0])
-        arrows = VGroup(*[Arrow(ins[k].get_right(), body.get_left() + 0.12 * (1.5 - k) * UP, buff=0.05, color=GREY_C,
-                                stroke_width=2.5) for k in range(4)])
-        wl = VGroup(*[MathTex(rf"w_{k + 1}", font_size=26, color=WEIGHT).move_to(arrows[k].point_from_proportion(0.45) + UP * 0.2)
+        ins = VGroup(*[Circle(radius=0.34, color=GREY_B, stroke_width=3).move_to([-5.6, 2.1 - 1.4 * k, 0]) for k in range(4)])
+        il = VGroup(*[MathTex(rf"x_{k + 1}", font_size=34).move_to(ins[k]) for k in range(4)])
+        body = Circle(radius=0.72, color=NEURON, stroke_width=4).move_to([-2.4, 0.0, 0])
+
+        def toward(c_):  # an arrow from an input to the edge of the body, aimed at its centre
+            d_ = body.get_center() - c_.get_center()
+            d_ = d_ / np.linalg.norm(d_)
+            return Arrow(c_.get_center() + 0.36 * d_, body.get_center() - 0.76 * d_, buff=0, color=GREY_C, stroke_width=3,
+                         max_tip_length_to_length_ratio=0.12)
+
+        arrows = VGroup(*[toward(c_) for c_ in ins])
+        wl = VGroup(*[MathTex(rf"w_{k + 1}", font_size=30, color=WEIGHT).move_to(arrows[k].point_from_proportion(0.42) + UP * 0.28)
                       for k in range(4)])
-        sig = MathTex(r"\Sigma", font_size=40).move_to(body)
-        out = Arrow(body.get_right(), body.get_right() + RIGHT * 1.4, buff=0.05, color=NEURON, stroke_width=4)
+        sig = MathTex(r"\Sigma", font_size=50).move_to(body)
+        out = Arrow(body.get_right(), body.get_right() + RIGHT * 1.6, buff=0.05, color=NEURON, stroke_width=5)
         colors = {r"\mathbf{w}\cdot\mathbf{x} + b": WEIGHT}
         f = cmath(r"\text{out}", "=", r"\max\big(0,\;", r"\mathbf{w}\cdot\mathbf{x} + b", r"\big)", colors=colors,
-                  font_size=40).move_to([3.6, 2.2, 0])
-        fl = label(r"a weighted sum, \ then a bend: \ ReLU", font_size=26, color=GREY_A).next_to(f, DOWN, buff=0.2)
-        ax = Axes(x_range=[-2, 2, 1], y_range=[-0.5, 2, 1], x_length=4.0, y_length=2.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -1.2, 0])
+                  font_size=44).move_to([3.7, 2.4, 0])
+        fl = label(r"a weighted sum, \ then a bend: \ ReLU", font_size=28, color=GREY_A).next_to(f, DOWN, buff=0.2)
+        ax = Axes(x_range=[-2, 2, 1], y_range=[-0.5, 2, 1], x_length=4.6, y_length=3.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, -0.9, 0])
         relu = VMobject(color=NEURON, stroke_width=5).set_points_as_corners([ax.c2p(-2, 0), ax.c2p(0, 0), ax.c2p(2, 2)])
-        hl = label(r"one unit, \ along one input: \ a hinge", font_size=24, color=NEURON).next_to(ax, DOWN, buff=0.15)
+        hl = label(r"one unit, \ along one input: \ a hinge", font_size=28, color=NEURON).next_to(ax, DOWN, buff=0.2)
         cite_ = cite(r"ReLU: \ V.~Nair \& G.~Hinton (2010); \ X.~Glorot, A.~Bordes \& Y.~Bengio (2011)", corner=DL)
         with self.voiceover(
             "Backpropagation can train any layer. So what can layers represent? Start with one unit, as modern "
@@ -122,9 +128,23 @@ class Universal(VoiceoverScene):
         guide = DashedLine(ax.c2p(0.5, a0 - 1.0), ax.c2p(2.6, a0 - 5.2), color=C.BITS, stroke_width=2.5, dash_length=0.1)
         gl = label(r"slope $-2$", font_size=22, color=C.BITS).next_to(guide.get_end(), UP, buff=0.12).shift(LEFT * 0.3)
         slope = float(h["slope"])
-        rows = [cmath(r"|f(x) - \ell(x)|", r"\le", r"\tfrac{h^2}{8}\, \max |f''|", font_size=34),
-                cmath(r"h", r"=", r"\tfrac{6}{n+1}", font_size=34),
-                cmath(r"\text{miss}", r"\le", r"\tfrac{36}{8}\,\max|f''|\,(n+1)^{-2}", font_size=34)]
+        rows = [cmath(r"|f(x) - \ell(x)|", r"\le", r"\tfrac{h^2}{8}\, \max |f''|", font_size=38),
+                cmath(r"h", r"=", r"\tfrac{6}{n+1}", font_size=38),
+                cmath(r"\text{miss}", r"\le", r"\tfrac{36}{8}\,\max|f''|\,(n+1)^{-2}", font_size=38)]
+        # the chords: the target joined dot to dot at n = 8 evenly spaced hinges (the picture behind the bound)
+        xs_, ys_ = np.asarray(h["xs"]), np.asarray(h["y"])
+        ax3 = Axes(x_range=[-3, 3, 1], y_range=[-2.2, 2.2, 1], x_length=6.4, y_length=2.6, tips=False,
+                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.2, -1.95, 0])
+        kn8 = np.linspace(-3, 3, 10)
+        fk = np.interp(kn8, xs_, ys_)
+        tgt3 = DashedVMobject(curve(ax3, xs_, ys_, WHITE, 2.5), num_dashes=60)
+        chord = curve(ax3, xs_, np.interp(xs_, kn8, fk), HINGE, 4)
+        kdots = VGroup(*[Dot(ax3.c2p(a_, b_), radius=0.06, color=HINGE) for a_, b_ in zip(kn8, fk)])
+        hb = BraceBetweenPoints(ax3.c2p(kn8[4], -2.2), ax3.c2p(kn8[5], -2.2), DOWN, color=GREY_B)
+        hlab = MathTex(r"h", font_size=30, color=GREY_A).next_to(hb, DOWN, buff=0.06)
+        pic3 = VGroup(ax3, tgt3, chord, kdots, hb, hlab)
+        pic3_l = label(r"$n = 8$ hinges: \ the curve joined dot to dot", font_size=24, color=HINGE)
+        pic3_l.next_to(ax3, UP, buff=0.05).align_to(ax3, LEFT)
         whys = [why(r"a straight chord over a piece of width $h$"), why(r"$n$ hinges cut $[-3, 3]$ into $n + 1$ pieces"),
                 why(r"double the hinges, \ quarter the miss")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.6, buff=0.42, edge=6.9)
@@ -132,20 +152,25 @@ class Universal(VoiceoverScene):
                    color=GREY_A).move_to([4.6, -1.0, 0])
         measured = label(rf"measured slope: \ ${slope:.2f}$", font_size=28, color=HINGE).move_to([4.6, -2.2, 0])
         with self.voiceover(
-            "How fast does the miss shrink? Joining the dots at the hinges gives straight chords, and over a piece of "
+            "How fast does the miss shrink? <bookmark mark='p'/> Joining the dots at the hinges gives straight chords, and over a piece of "
             "width h a chord misses a smooth curve by at most h squared over eight, times the curve's bending. "
             "<bookmark mark='a'/> With n hinges spread over the interval, h is six over n plus one. "
             "<bookmark mark='b'/> So the miss falls like one over n squared: double the hinges, and it quarters. "
             "Least squares can only do better than joining the dots. <bookmark mark='c'/> On log-log axes that's a "
             f"line of slope minus two, and the measured slope is {slope:.2f}."
         ) as vo:
+            self.play(Create(ax3), Create(tgt3))
+            vo.wait_until("p")
+            self.play(Create(chord), FadeIn(kdots), FadeIn(pic3_l))
             step(0)
+            self.play(GrowFromCenter(hb), FadeIn(hlab))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
             self.play(FadeIn(ls))
             vo.wait_until("c")
+            self.play(FadeOut(pic3), FadeOut(pic3_l))
             self.play(FadeIn(g), LaggedStart(*[FadeIn(p, scale=1.5) for p in pts], lag_ratio=0.15), run_time=1.6)
             self.play(Create(guide), FadeIn(gl), FadeIn(measured))
         self.wait(0.3)
@@ -210,7 +235,7 @@ class Universal(VoiceoverScene):
                           r"one hidden layer of finitely many units is within $\epsilon$ of $f$ everywhere: \ for any "
                           r"continuous activation that is not a polynomial",
                           who=r"G.~Cybenko (1989); \ K.~Hornik, M.~Stinchcombe \& H.~White (1989); \ M.~Leshno, V.~Lin, "
-                              r"A.~Pinkus \& S.~Schocken (1993)", width=10.0, color=HINGE).move_to(UP * 1.3)
+                              r"A.~Pinkus \& S.~Schocken (1993)", width=10.6, font_size=27, color=HINGE).move_to(UP * 1.3)
         nots = VGroup(label(r"how many units? \ \ (it doesn't say)", font_size=28, color=C.SURPRISE),
                       label(r"will training find them? \ \ (it doesn't say)", font_size=28, color=C.SURPRISE),
                       label(r"will it generalize? \ \ (Part 8)", font_size=28, color=C.SURPRISE))

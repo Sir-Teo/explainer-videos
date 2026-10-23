@@ -26,22 +26,22 @@ class Barron(VoiceoverScene):
     # ------------------------------------------------------------------
     def curse(self):
         m = 6
-        s = 0.42
-        line = VGroup(*[Dot([-5.6 + i * s, 2.3, 0], radius=0.05, color=DCOL[1]) for i in range(m)])
-        sq = VGroup(*[Dot([-5.6 + i * s, 1.1 - j * s, 0], radius=0.045, color=DCOL[2]) for i in range(m) for j in range(m)])
-        cube = VGroup(*[Dot([-5.6 + i * s + 0.22 * k, -1.9 - j * s + 0.18 * k, 0], radius=0.04, color=DCOL[4],
-                            fill_opacity=0.5 + 0.08 * k) for k in range(m) for i in range(m) for j in range(m)])
+        s = 0.34
+        line = VGroup(*[Dot([-5.8 + i * s, 2.9, 0], radius=0.055, color=DCOL[1]) for i in range(m)])
+        sq = VGroup(*[Dot([-5.8 + i * s, 2.05 - j * s, 0], radius=0.05, color=DCOL[2]) for i in range(m) for j in range(m)])
+        cube = VGroup(*[Dot([-5.8 + i * s + 0.2 * k, -1.15 - j * s + 0.15 * k, 0], radius=0.04, color=DCOL[4],
+                            fill_opacity=0.45 + 0.1 * k) for k in range(m) for i in range(m) for j in range(m)])
         cl = VGroup(MathTex(rf"{m}", font_size=30, color=DCOL[1]).next_to(line, RIGHT, buff=0.4),
                     MathTex(rf"{m}^2 = {m ** 2}", font_size=30, color=DCOL[2]).next_to(sq, RIGHT, buff=0.4),
                     MathTex(rf"{m}^3 = {m ** 3}", font_size=30, color=DCOL[4]).next_to(cube, RIGHT, buff=0.3))
-        rows = [cmath(r"n", r"=", r"m^d", font_size=36),
-                cmath(r"h", r"=", r"\tfrac{2}{m} \ = \ 2\, n^{-1/d}", font_size=36),
-                cmath(r"\text{miss}", r"\propto", r"h^2 \ \propto\ n^{-2/d}", font_size=36)]
+        rows = [cmath(r"n", r"=", r"m^d", font_size=42),
+                cmath(r"h", r"=", r"\tfrac{2}{m} \ = \ 2\, n^{-1/d}", font_size=42),
+                cmath(r"\text{miss}", r"\propto", r"h^2 \ \propto\ n^{-2/d}", font_size=42)]
         whys = [why(r"$m$ points along each of $d$ axes"), why(r"the spacing of the grid"),
                 why(r"the chord bound of chapter 5, \\ in every direction")]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=1.8, buff=0.55, edge=6.9)
-        ex = label(r"to halve the miss in $d = 100$: \\ $2^{50}$ times as many points", font_size=28, color=C.SURPRISE)
-        ex.move_to([3.2, -1.6, 0])
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=1.2, buff=0.7, edge=6.9)
+        ex = label(r"to halve the miss in $d = 100$: \\ $2^{50}$ times as many points", font_size=34, color=C.SURPRISE)
+        ex.move_to([3.0, -1.9, 0])
         with self.voiceover(
             "One layer can draw anything; how many units does it take? A table does the same job with one entry per "
             "point of a grid, and joining the dots in one dimension is exactly a layer of hinges. "
@@ -78,9 +78,27 @@ class Barron(VoiceoverScene):
                 why(r"$n$ units, \ directions $\omega_k$ drawn at random"),
                 why(r"an average of $n$ independent draws"),
                 why(r"$|\cos| \le 1$: \ no $d$ anywhere")]
-        step = ladder(self, rows, whys, keep=4, top=2.8, x=-2.0, buff=0.55, edge=6.9)
-        some = label(r"the average over random choices is $\le 1/n$, \ so \textit{some} choice of $n$ units is within "
-                     r"$1/\sqrt{n}$, \ in any dimension", font_size=26, color=C.BITS).to_edge(DOWN, buff=0.5)
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.0, buff=0.45, edge=6.9)
+        some = label(r"the average over random choices \\ is $\le 1/n$, \ so \textit{some} choice \\ of $n$ units is "
+                     r"within $1/\sqrt{n}$, \\ in any dimension", font_size=28, color=C.BITS).move_to([3.9, -2.2, 0])
+        # in one dimension: the Gaussian bump, and the average of n cosines with random frequencies (illustrative draw)
+        ax = Axes(x_range=[-4, 4, 1], y_range=[-0.6, 1.1, 0.5], x_length=6.6, y_length=1.9, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.9, -2.4, 0])
+        xg = np.linspace(-4, 4, 321)
+        gs = np.random.default_rng(1993)  # an illustrative draw of random frequencies
+        om = gs.standard_normal(100)
+        bump = DashedVMobject(curve(ax, xg, np.exp(-xg ** 2 / 2), WHITE, 3), num_dashes=50)
+        waves = VGroup(*[curve(ax, xg, np.cos(w_ * xg), NEURON, 1.5).set_stroke(opacity=0.35) for w_ in om[:5]])
+
+        def avg(n_):
+            return curve(ax, xg, np.clip(np.cos(np.outer(om[:n_], xg)).mean(0), -0.6, 1.1), C.BITS, 4)
+
+        nl = VGroup(MathTex(r"n = ", font_size=30, color=C.BITS), Integer(5, font_size=30, color=C.BITS))
+        nl.arrange(RIGHT, buff=0.1).next_to(ax, UP, buff=0.05).align_to(ax, RIGHT)
+        dl = label(r"$d = 1$: \ the bump \ (dashed), \ random cosines, \ their average", font_size=22, color=GREY_A)
+        dl.next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
+        itag = note(r"illustrative: \ one random draw").next_to(ax, DOWN, buff=0.1).align_to(ax, LEFT)
+        f5, f100 = avg(5), avg(100)
         cite_ = cite(r"B.~Maurey, \ via G.~Pisier (1981); \ L.~K.~Jones (1992); \ A.~R.~Barron (1993)", corner=DR)
         with self.voiceover(
             "In 1993 Andrew Barron showed that networks escape this, for a large class of functions, and the reason "
@@ -94,14 +112,18 @@ class Barron(VoiceoverScene):
             "least as well, in any dimension. The argument is Bernard Maurey's, from probability."
         ) as vo:
             step(0)
+            self.play(Create(ax), Create(bump), FadeIn(dl), FadeIn(itag))
             vo.wait_until("a")
-            self.play(Indicate(rows[0][3], color=NEURON), FadeIn(cite_))
+            self.play(Indicate(rows[0][3], color=NEURON), FadeIn(cite_), LaggedStart(*[Create(w_) for w_ in waves],
+                                                                                      lag_ratio=0.2), run_time=1.6)
             vo.wait_until("b")
             step(1)
+            self.play(Create(f5), FadeIn(nl))
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3)
+            self.play(FadeOut(waves), Transform(f5, f100), ChangeDecimalToValue(nl[1], 100), run_time=1.5)
             vo.wait_until("e")
             self.play(FadeIn(some))
         self.wait(0.3)
@@ -156,7 +178,7 @@ class Barron(VoiceoverScene):
                           r"if $C_f = \int |\omega|\, |\hat f(\omega)|\, d\omega$ is finite, \ a network with one hidden "
                           r"layer of $n$ sigmoid units has \ $\int (f - f_n)^2\, d\mu \ \le\ (2 r C_f)^2 / n$ \ on a ball "
                           r"of radius $r$: \ a rate that does not depend on the dimension", who=r"A.~R.~Barron (1993)",
-                          width=10.6, color=NEURON).move_to(UP * 1.5)
+                          width=11.0, font_size=27, color=NEURON).move_to(UP * 1.6)
         notes_ = VGroup(
             label(r"any $n$ functions fixed in advance do no better than $n^{-1/d}$ \ on this class: \\ the network "
                   r"wins by choosing its units' directions to fit $f$", font_size=26, color=GREY_A),

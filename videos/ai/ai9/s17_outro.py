@@ -95,11 +95,15 @@ class Outro(VoiceoverScene):
         from videos.ai.ai9.s16_lm import load_kn
 
         lm, kn = load("lm"), load_kn()
-        if float(lm["passage_bits"]) < float(kn["best_bits"]):
+        nn_b, kn_b, mix_b = float(lm["passage_bits"]), float(kn["best_bits"]), float(lm["mix_bits"])
+        if nn_b < kn_b:
             last = "And a small network, trained on our books, beat every counting model on the scoreboard."
-        else:
+        elif mix_b < kn_b:
             last = ("And a small network, trained on our books, came close to the best counting model, and mixed with "
                     "it, beat every counting model on the scoreboard.")
+        else:
+            last = (f"And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits of the best "
+                    "counting model.")
         with self.voiceover(
             "Let's take stock. A unit is a weighted sum and a threshold, and the perceptron learns one from its "
             "mistakes, provably, whenever a line separates the data. One layer can't do XOR; two can, and "
@@ -146,7 +150,7 @@ class Outro(VoiceoverScene):
             r"$w \leftarrow w + \eta\, y\, x$, for any $\eta > 0$, as with $\eta = 1$.",
             r"Find weights for a $2$--$2$--$1$ ReLU network that computes XOR exactly on $\{0, 1\}^2$.",
             r"For sigmoid units, show $\sigma' \le \tfrac14$. \ If every weight matrix has operator norm at most $1$, "
-            r"how fast can $\|\delta^l\|$ shrink with depth?",
+            r"show that $\|\delta^l\|$ shrinks by at least a factor of $4$ per layer.",
             r"For $z \sim N(0, q)$, show $\mathbb{E}[\max(0, z)^2] = q/2$, \ and deduce He's $\operatorname{Var}(W) = 2/n$.",
             r"Show that the $k$-fold composition of the tent map has $2^k$ linear pieces, while one hidden layer of $m$ "
             r"ReLUs on $\mathbb{R}$ has at most $m + 1$.",

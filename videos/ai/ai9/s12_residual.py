@@ -213,29 +213,34 @@ class Residual(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.4, buff=0.5, edge=6.9)
         # three blocks unrolled into eight paths
         xs = [-5.2, -3.2, -1.2, 0.8]
-        nodes = VGroup(*[Dot([x, -1.9, 0], radius=0.08, color=RES) for x in xs])
+        Y = -2.75  # the diagram's baseline, below the derivation
+        nodes = VGroup(*[Dot([x, Y, 0], radius=0.08, color=RES) for x in xs])
         paths_ = VGroup()
         g = np.random.default_rng(0)
         for mask in range(8):
             ys = [-1.9]
             for k in range(3):
                 ys.append(-1.9 + (0.25 + 0.18 * mask) * (1 if (mask >> k) & 1 else 0))
-            pts = [np.array([xs[0], -1.9, 0])]
+            pts = [np.array([xs[0], Y, 0])]
             for k in range(3):
                 on = (mask >> k) & 1
-                mid = np.array([(xs[k] + xs[k + 1]) / 2, -1.9 + (0.35 + 0.17 * mask if on else -0.0), 0])
-                pts += [mid, np.array([xs[k + 1], -1.9, 0])]
+                mid = np.array([(xs[k] + xs[k + 1]) / 2, Y + (0.25 + 0.12 * mask if on else -0.0), 0])
+                pts += [mid, np.array([xs[k + 1], Y, 0])]
             col = interpolate_color(ManimColor(RES), ManimColor(NEURON), bin(mask).count("1") / 3)
             paths_.add(VMobject(color=col, stroke_width=2.2, stroke_opacity=0.8).set_points_smoothly(pts))
-        pl = label(r"$3$ blocks: \ $2^3 = 8$ paths, \ from no block to all three", font_size=22, color=GREY_A)
-        pl.next_to(nodes, DOWN, buff=0.35)
+        pl = label(r"$3$ blocks: \ $2^3 = 8$ paths, \ from no block to all three", font_size=24, color=GREY_A)
+        pl.next_to(nodes, DOWN, buff=0.25)
         tag = note(r"schematic").next_to(paths_, RIGHT, buff=0.3)
+        def item(lines, color):
+            return VGroup(*[label(t_, font_size=26, color=color) for t_ in lines]).arrange(DOWN, aligned_edge=LEFT,
+                                                                                            buff=0.08)
+
         hist_ = VGroup(
-            label(r"1997: \\ the LSTM's constant error carousel", font_size=22, color=GREY_A),
-            label(r"May 2015: \\ highway networks \\ (Srivastava, Greff \& Schmidhuber)", font_size=22, color=GREY_A),
-            label(r"Dec 2015: \\ ResNet, \\ $152$ layers, \\ wins ImageNet", font_size=22, color=RES),
-            label(r"2019: \\ GPT-2 scales each block's \\ starting weights by $1/\sqrt{N}$", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.6, -1.6, 0])
+            item([r"1997: \ the LSTM's constant error carousel"], GREY_A),
+            item([r"May 2015: \ highway networks", r"(Srivastava, Greff \& Schmidhuber)"], GREY_A),
+            item([r"Dec 2015: \ ResNet, \ $152$ layers, \ wins ImageNet"], RES),
+            item([r"2019: \ GPT-2 scales each block's", r"starting weights by $1/\sqrt{N}$"], GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 0.0, 0])
         cite_ = cite(r"A.~Veit, M.~Wilber \& S.~Belongie, \textit{Residual Networks Behave Like Ensembles of Relatively "
                      r"Shallow Networks} (2016)", corner=DL)
         with self.voiceover(
@@ -260,6 +265,8 @@ class Residual(VoiceoverScene):
             self.play(FadeIn(nodes), LaggedStart(*[Create(p) for p in paths_], lag_ratio=0.15), FadeIn(pl), FadeIn(tag),
                       run_time=2.5)
             vo.wait_until("d")
+            pic = VGroup(nodes, paths_, pl, tag)
+            self.play(FadeOut(VGroup(*rows, *whys)), pic.animate.scale(1.15).move_to([-3.2, 0.0, 0]), run_time=1.2)
             self.play(LaggedStart(*[FadeIn(h) for h in hist_], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
