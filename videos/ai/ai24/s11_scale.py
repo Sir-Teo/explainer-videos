@@ -38,6 +38,7 @@ class Scale(VoiceoverScene):
         out.move_to([3.0, 0.2, 0])
         arrs = VGroup(arrow(pool.get_right(), ret.get_left() + DOWN * 0.3), arrow(seeds.get_right(), ret.get_left() + UP * 0.3),
                       arrow(ret.get_right(), out.get_left()))
+        VGroup(pool, seeds, ret, out, arrs).scale(1.2).move_to([-0.4, 0.5, 0])
         model = label(r"ViT-g: \ $1.1$B parameters; \ DINO + a masked-token loss (iBOT) \\ + spreading (KoLeo) + "
                       r"Sinkhorn centring \\ ImageNet: \ $86.5\%$ linear probe", font_size=22, color=GREY_A)
         model.to_edge(DOWN, buff=0.5)
@@ -171,13 +172,15 @@ class Scale(VoiceoverScene):
     # ------------------------------------------------------------------
     def dinov3(self):
         facts = VGroup(
-            label(r"ViT-7B: \ $6.7$ billion parameters", font_size=24),
-            label(r"LVD-1689M: \ $1.7$ billion images, \ chosen from about $17$ billion", font_size=24),
-            label(r"curation: \ clustering (5 levels of $k$-means), \ balanced sampling, \ retrieval", font_size=24),
+            label(r"ViT-7B: \ $6.7$ billion parameters", font_size=28),
+            label(r"LVD-1689M: \ $1.7$ billion images, \ chosen from about $17$ billion", font_size=28),
+            label(r"curation: \ clustering (5 levels of $k$-means), \ balanced sampling, \ retrieval", font_size=28),
             label(r"ImageNet linear probe: \ $88.4\%$ \ (DINOv2-g $87.3$, \ SigLIP 2-g $89.1$, \ PE-core-G $89.3$)",
-                  font_size=24),
-            label(r"segmentation (ADE20k) with a linear head: \ $55.9$ mIoU", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, 0.6, 0])
+                  font_size=28),
+            label(r"segmentation (ADE20k) with a linear head: \ $55.9$ mIoU", font_size=28),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-0.2, 1.0, 0])
+        if facts.width > 13.2:
+            facts.scale_to_fit_width(13.2).move_to([0, 1.0, 0])
         g = MathTex(r"\mathcal L_{\rm Gram}", r"=", r"\big\| X_S X_S^\top - X_G X_G^\top \big\|_F^2", font_size=36)
         g.to_edge(DOWN, buff=1.2)
         g[2].set_color(DINO_C)

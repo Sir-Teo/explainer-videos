@@ -35,7 +35,7 @@ class Tweedie(VoiceoverScene):
         g = axes([-3.6, 3.6], [0, top], x_length=9.0, y_length=3.4, xlabel=r"the clean value $x_0$", ylabel=r"density",
                  xticks=[-3, -2, -1, 0, 1, 2, 3], center=[0, -0.4, 0])
         prior = curve(g.ax, x0[keep], p0[keep], DATA, 3.5)
-        pl = label(r"$p(x_0)$: \ the data, \ two bumps", font_size=22, color=DATA).move_to(g.ax.c2p(-2.6, 0.9 * top))
+        pl = label(r"$p(x_0)$: \ the data, \ two bumps", font_size=22, color=DATA)
 
         def post_curve(xq):
             p = posts[xq]
@@ -57,7 +57,8 @@ class Tweedie(VoiceoverScene):
 
         cur = post_curve(0.2)
         obs, mean = marker(0.2)
-        cl = label(r"$p(x_0 \mid x_t)$: \ what could have been", font_size=22, color=SCORE).move_to(g.ax.c2p(2.3, 0.9 * top))
+        cl = label(r"$p(x_0 \mid x_t)$: \ what could have been", font_size=22, color=SCORE)
+        VGroup(pl, cl).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-4.0, 2.75, 0])
         rule = label(r"the guess with the smallest squared error \ $=$ \ the average of what could have been",
                      font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
@@ -99,7 +100,7 @@ class Tweedie(VoiceoverScene):
         ]
         whys = [why(r"the noised data: \ a blur of the clean"), why(r"differentiate the Gaussian"),
                 why(r"divide by $p_t$: \ Bayes turns it into the posterior"), why(r"the best noise guess")]
-        step = ladder(self, rows, whys, keep=4, top=0.9, x=-1.6, buff=0.42, edge=6.85)
+        step = ladder(self, rows, whys, keep=4, top=1.35, x=-1.6, buff=0.3, edge=6.85)
         with self.voiceover(
             "That average has a formula. Herbert Robbins published it in 1956, crediting Maurice Tweedie: the "
             "posterior mean is the noisy point plus sigma squared times the score, divided by alpha. "
@@ -192,8 +193,8 @@ class Tweedie(VoiceoverScene):
         ts = [float(v) for v in tw["den_ts"]]
         panels = VGroup()
         for i, t in enumerate(ts):
-            pn = Panel(3.1, center=[-4.95 + 3.3 * i, 0.3, 0])
-            panels.add(VGroup(pn, pn.dots(np.asarray(tw[f"den_x0{t:g}"])[:500], WHITE, radius=0.016),
+            pn = Panel(3.25, center=[-5.02 + 3.35 * i, 0.5, 0])
+            panels.add(VGroup(pn, pn.dots(np.asarray(tw[f"den_x0{t:g}"])[:500], WHITE, radius=0.02),
                               label(rf"$t = {t:g}$", font_size=24, color=SCORE).next_to(pn, UP, buff=0.12),
                               label(rf"error ${float(tw[f'den_mse{t:g}']):.2f}$", font_size=19, color=GREY_A).next_to(pn, DOWN, buff=0.1)))
         head = label(r"the best possible one-jump guess of the clean points", font_size=28).to_edge(UP, buff=0.5)

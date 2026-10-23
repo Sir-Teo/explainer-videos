@@ -133,15 +133,17 @@ class SDE(VoiceoverScene):
         s = load("sde")
         ts = [float(t) for t in s["snap_t"]]
         panels = []
+        NP = 12  # paths drawn; the dots show all the starting points and ends
         for i, kind in enumerate(("sde", "ode")):
             pn = Panel(4.4, center=[-4.5 + 4.65 * i, 0.75, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
             P = np.asarray(s[f"{kind}_paths"])
             col = SDE_C if kind == "sde" else ODE_C
-            panels.append(VGroup(pn, pn.paths(P, col, stroke_width=1.4, opacity=0.8),
+            panels.append(VGroup(pn, pn.paths(P[:, :NP], col, stroke_width=1.3, opacity=0.75),
                                  pn.dots(P[0], NOISE, radius=0.03), pn.dots(P[-1], DATA, radius=0.03),
                                  label(r"reverse SDE" if kind == "sde" else r"probability-flow ODE", font_size=22,
                                        color=col).next_to(pn, UP, buff=0.1)))
-        sub = label(r"the same $40$ starting points", font_size=20, color=GREY_B).next_to(VGroup(*panels), DOWN, buff=0.12)
+        npts = len(np.asarray(s["sde_paths"])[0])
+        sub = label(rf"the same ${npts}$ starting points; \ ${NP}$ of their paths drawn", font_size=20, color=GREY_B).next_to(VGroup(*panels), DOWN, buff=0.12)
         top = 1.15 * max(float(np.max(s["sde_sw"])), float(np.max(s["ode_sw"])), float(np.max(s["floor_sw"])))
         ys = next(v for v in (0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0) if v >= top / 3)
         g = axes([0, 1], [0, top], x_length=3.4, y_length=2.6, xlabel=r"time $t$", ylabel=r"distance from $p_t$",
@@ -151,7 +153,7 @@ class SDE(VoiceoverScene):
         co = curve(g.ax, tt, np.asarray(s["ode_sw"]), ODE_C, 3)
         cf = DashedLine(g.ax.c2p(0, float(np.mean(s["floor_sw"]))), g.ax.c2p(1, float(np.mean(s["floor_sw"]))),
                         color=GREY_B, stroke_width=1.5)
-        fl = label(r"fresh samples of $p_t$", font_size=16, color=GREY_B).next_to(cf, UP, buff=0.04)
+        fl = label(r"dashed: \ fresh samples of $p_t$", font_size=16, color=GREY_B).next_to(g, DOWN, buff=0.1)
         floor = np.asarray(s["floor_sw"])
         sde_sw, ode_sw = np.asarray(s["sde_sw"]), np.asarray(s["ode_sw"])
         ode_ok = bool(np.all(ode_sw < 1.3 * floor + 0.01))

@@ -116,7 +116,7 @@ class DSM(VoiceoverScene):
         xs = np.arange(len(checks))
         vals = np.concatenate([T[s][:, k, :3].ravel() for s in seeds])
         lo, hi = math.floor(math.log10(max(vals[vals > 0].min(), 1e-4))), math.ceil(math.log10(vals.max()))
-        g = axes([0, len(checks) - 1], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training step",
+        g = axes([0, len(checks) - 1], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training step", xticks=[],
                  ylabel=rf"noise level $t = {ts[k]:g}$ \ (log scale)", yticks=list(range(lo, hi + 1)),
                  yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.4, -0.25, 0])
         g.add(*[MathTex(f"{c:,}".replace(",", "{,}"), font_size=18, color=GREY_B).next_to(g.ax.c2p(i, lo), DOWN, buff=0.12)
@@ -125,9 +125,9 @@ class DSM(VoiceoverScene):
         lines = VGroup()
         for s in seeds:
             op = 1.0 if s == seeds[0] else 0.35
-            lines.add(VGroup(curve(g.ax, xs, [L10(v) for v in T[s][:, k, 0]], LOSS_C, 3 if op == 1 else 1.5).set_opacity(op),
-                             curve(g.ax, xs, [L10(v) for v in T[s][:, k, 1]], CONST_C, 2).set_opacity(op),
-                             curve(g.ax, xs, [L10(v) for v in T[s][:, k, 2]], ERR_C, 3 if op == 1 else 1.5).set_opacity(op)))
+            lines.add(VGroup(curve(g.ax, xs, [L10(v) for v in T[s][:, k, 0]], LOSS_C, 3 if op == 1 else 1.5).set_stroke(opacity=op),
+                             curve(g.ax, xs, [L10(v) for v in T[s][:, k, 1]], CONST_C, 2).set_stroke(opacity=op),
+                             curve(g.ax, xs, [L10(v) for v in T[s][:, k, 2]], ERR_C, 3 if op == 1 else 1.5).set_stroke(opacity=op)))
         gap = VGroup(*[Dot(g.ax.c2p(i, L10(max(T[seeds[0]][i, k, 0] - T[seeds[0]][i, k, 1], 1e-6))), radius=0.07, color=WHITE)
                        .set_stroke(ERR_C, 2) for i in range(len(checks))])
         lg = VGroup(label(r"the loss on fresh noise", font_size=22, color=LOSS_C),
@@ -145,7 +145,7 @@ class DSM(VoiceoverScene):
                                 for j, c in enumerate(r)]) for i, r in enumerate(rows)])
         for i, r in enumerate(tab):
             for j, c in enumerate(r):
-                c.move_to([1.6 + 1.25 * j, -1.0 - 0.36 * i, 0])
+                c.move_to([1.35 + 1.2 * j, -1.0 - 0.36 * i, 0])
         n_seeds = len(seeds)
         f0 = fin[k]
         with self.voiceover(

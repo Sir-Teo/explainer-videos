@@ -117,7 +117,7 @@ class Samplers(VoiceoverScene):
         hi = max(sw.max(), ddpm) * 1.15
         ystep = next(v for v in (0.02, 0.05, 0.1, 0.2, 0.25, 0.5, 1.0) if v >= hi / 5)
         ax = Axes(x_range=[0.6, 2.1, 0.5], y_range=[0, hi, ystep], x_length=6.6, y_length=4.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.6, -0.6, 0])
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.9, -0.5, 0])
         xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(math.log10(k), 0), DOWN, buff=0.1) for k in ks])
         xn = label(r"DDIM steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"distance from the real data \ (sliced Wasserstein)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
@@ -125,16 +125,17 @@ class Samplers(VoiceoverScene):
         c = VGroup(curve(ax, lx, sw, DDIM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=DDIM_C) for a, b in zip(lx, sw)])
         fl = DashedLine(ax.c2p(0.6, floor), ax.c2p(2.1, floor), color=GREY_B, stroke_width=1.5)
         fll = label(r"the floor: \ a fresh sample \\ of the data itself", font_size=20, color=GREY_B).next_to(fl.get_end(), RIGHT, buff=0.12)
+        fll.shift(DOWN * 0.3)
         yt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(0.6, v), LEFT, buff=0.08)
                       for v in np.arange(ystep, hi + 1e-9, ystep)])
         dp = DashedLine(ax.c2p(0.6, ddpm), ax.c2p(2.1, ddpm), color=DDPM_C, stroke_width=1.5)
-        dpl = label(r"DDPM, $200$ steps", font_size=20, color=DDPM_C).next_to(dp, UP, buff=0.05).align_to(dp, LEFT)
+        dpl = label(r"DDPM, $200$ steps", font_size=20, color=DDPM_C).next_to(dp.get_end(), RIGHT, buff=0.12).shift(UP * 0.2)
         snaps = Group()
         for k in (5, 20, 100):
-            pn = Panel(2.4, xlim=(-2.7, 2.9), ylim=(-1.8, 1.6), frame=False)
-            snaps.add(Group(pn, pn.scatter(np.asarray(t[f"ddim{k}"]), DDIM_C, radius_px=1.3, res=240),
+            pn = Panel(3.1, xlim=(-2.7, 2.9), ylim=(-1.8, 1.6), frame=False)
+            snaps.add(Group(pn, pn.scatter(np.asarray(t[f"ddim{k}"]), DDIM_C, radius_px=1.5, res=300),
                             label(rf"${k}$ steps", font_size=20, color=GREY_A).next_to(pn, DOWN, buff=0.05)))
-        snaps.arrange(DOWN, buff=0.15).move_to([4.6, -0.3, 0])
+        snaps.arrange(DOWN, buff=0.12).move_to([5.0, -0.2, 0])
         swc = gloss(r"sliced Wasserstein", r"drop both clouds onto many random lines, \\ and compare where the points fall",
                     sliced_picture(), width=4.6, color=GREY_A).move_to([4.4, 0.4, 0])
         k_close = next((k for k, v in zip(ks, sw) if v <= ddpm * 1.1), None)
