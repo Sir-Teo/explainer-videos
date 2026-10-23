@@ -471,6 +471,7 @@ def weak_to_strong(seeds: int = 3, steps: int = 300, lr_weak: float = 1e-3, lr_s
     rows_tr, rows_te, titles = _which_data()
     ids_tr, y_tr = _encode_questions(rows_tr, titles)
     ids_te, y_te = _encode_questions(rows_te, titles)
+    torch.set_num_threads(THREADS)  # importing Part 27's compute module sets its own thread count
     C = len(titles)
     strong = N.load_base()
     weak_base = _load_weak()

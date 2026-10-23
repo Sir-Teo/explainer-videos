@@ -27,16 +27,18 @@ class WhyItWon(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def relu(self):
-        ax = axes([-4, 4], [-1.2, 2.2], x_length=5.2, y_length=3.4, xticks=[-4, 0, 4], yticks=[-1, 0, 1, 2],
-                  center=[-3.3, -0.3, 0])
+        ax = axes([-4, 4], [-1.2, 2.2], x_length=5.6, y_length=4.2, xticks=[-4, 0, 4], yticks=[-1, 0, 1, 2],
+                  center=[-3.3, -0.6, 0])
         A = ax.ax
         xs = np.linspace(-4, 4, 200)
         f = {"relu": np.maximum(xs, 0), "tanh": np.tanh(xs), "sigmoid": 1 / (1 + np.exp(-xs))}
         df = {"relu": (xs > 0).astype(float), "tanh": 1 - np.tanh(xs) ** 2,
               "sigmoid": np.exp(-xs) / (1 + np.exp(-xs)) ** 2}
-        fc = VGroup(*[curve(A, xs, np.clip(f[k], -1.2, 2.2), ACTC[k], 4) for k in ("relu", "tanh", "sigmoid")])
-        ax2 = axes([-4, 4], [0, 1.1], x_length=5.2, y_length=2.4, xticks=[-4, 0, 4], yticks=[0, 0.25, 1],
-                   center=[3.3, -0.8, 0])
+        # draw each curve only where it is inside the axes (no clipping into a false plateau)
+        fc = VGroup(*[curve(A, xs, np.where((f[k] > 2.2) | (f[k] < -1.2), np.nan, f[k]), ACTC[k], 4)
+                      for k in ("relu", "tanh", "sigmoid")])
+        ax2 = axes([-4, 4], [0, 1.1], x_length=5.6, y_length=3.0, xticks=[-4, 0, 4], yticks=[0, 0.25, 1],
+                   center=[3.4, -0.9, 0])
         B = ax2.ax
         dc = VGroup(*[curve(B, xs, df[k], ACTC[k], 4) for k in ("relu", "tanh", "sigmoid")])
         t1 = label(r"the activation", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.25)
@@ -46,6 +48,9 @@ class WhyItWon(VoiceoverScene):
                       (ACTC["sigmoid"], r"sigmoid: \ $1/(1+e^{-x})$")], font_size=22).to_corner(UL, buff=0.35)
         cite_ = cite(r"Nair \& Hinton (2010); \ Glorot, Bordes \& Bengio (2011); \ Krizhevsky et al.\ (2012)",
                      corner=DR)
+        kz = label(rf"AlexNet's authors, \ CIFAR-10, \ four layers: \ ReLU reached $25\%$ training error "
+                   rf"${ALEXNET['relu_speedup']}\times$ faster than tanh", font_size=22, color=ACTC["relu"])
+        kz.to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "The first difference inside AlexNet is small: the activation. <bookmark mark='a'/> The networks of "
             "the 1990s squashed each unit with a tanh or a sigmoid. AlexNet used the rectified linear unit, zero "
@@ -62,7 +67,7 @@ class WhyItWon(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(ax2), FadeIn(t2), LaggedStart(*[Create(c) for c in dc], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(kz, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -114,9 +119,9 @@ class WhyItWon(VoiceoverScene):
             f"<bookmark mark='b'/> {verdict} <bookmark mark='c'/> {sig}"
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(sub))
+            self.play(*[Create(c[1]) for c in curves[:2]], *[FadeIn(c[0]) for c in curves[:2]], run_time=4.0)
             vo.wait_until("a")
             self.play(Create(thr_l), FadeIn(thr_t))
-            self.play(LaggedStart(*[FadeIn(c) for c in curves[:2]], lag_ratio=0.5), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(curves[2]))
         self.wait(0.3)
@@ -170,6 +175,9 @@ class WhyItWon(VoiceoverScene):
         if nl.width > 4.8:
             nl.width = 4.8
         cite_ = cite(r"Hinton et al.\ (2012); \ Srivastava et al.\ (2014)", corner=DL)
+        net = VGroup(wires, dots, crosses, nl)
+        home = net.get_center()
+        net.scale(1.35).move_to([0, 0.3, 0])
         tag = note(r"computed: \ a $784$--$512$--$512$--$10$ network, \ three seeds").to_corner(DR, buff=0.2)
         gap0, gap5 = vals["0.0"][1] - vals["0.0"][0], vals["0.5"][1] - vals["0.5"][0]
         better = vals["0.5"][1] < vals["0.0"][1] - 0.002
@@ -192,6 +200,7 @@ class WhyItWon(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(c) for c in crosses], lag_ratio=0.1), FadeIn(nl))
             vo.wait_until("b")
+            self.play(net.animate.scale(1 / 1.35).move_to(home))
             self.play(Create(ax), FadeIn(leg), FadeIn(kl), FadeIn(tag), FadeIn(out[0]))
             vo.wait_until("c")
             self.play(FadeIn(out[1]))
@@ -204,9 +213,9 @@ class WhyItWon(VoiceoverScene):
         sizes = [int(n) for n in d["sizes"]]
         runs = d["runs"]
         lx = [math.log10(n) for n in sizes]
-        ax = axes([2.5, 5.0], [-2.5, 0], x_length=6.4, y_length=4.0, xlabel=r"training digits", ylabel=r"test error",
+        ax = axes([2.5, 5.0], [-2.5, 0], x_length=8.0, y_length=4.6, xlabel=r"training digits", ylabel=r"test error",
                   xticks=[3, 4], xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[-2, -1, 0],
-                  yfmt=lambda v: {-2: r"1\%", -1: r"10\%", 0: r"100\%"}[int(v)], center=[-2.4, -0.3, 0])
+                  yfmt=lambda v: {-2: r"1\%", -1: r"10\%", 0: r"100\%"}[int(v)], center=[-1.9, -0.5, 0])
         A = ax.ax
         plain = [[math.log10(runs[f"{n}-0-{s}"]["test_error"]) for n in sizes] for s in (0, 1, 2)]
         aug_n = [n for n in sizes if f"{n}-1-0" in runs]
@@ -224,7 +233,8 @@ class WhyItWon(VoiceoverScene):
         bent = len(sizes) > 3 and mean_log[-1] > mean_log[-2] - 0.03
         shown = s3 if bent else slope
         fit = label(rf"slope $\approx {shown:.2f}$: \ error $\propto n^{{{shown:.2f}}}$", font_size=26,
-                    color=CNN).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+                    color=CNN).next_to(leg, DOWN, buff=0.4).align_to(leg, RIGHT)
+        keep_in_frame(fit)
         if bent:
             fline = DashedLine(A.c2p(lx[0], s3 * lx[0] + i3), A.c2p(lx[-1], s3 * lx[-1] + i3), color=CNN,
                                stroke_width=2, dash_length=0.08)
