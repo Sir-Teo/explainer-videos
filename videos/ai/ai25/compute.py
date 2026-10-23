@@ -331,7 +331,7 @@ def compute_setcurves():
 def compute_deepsets():
     _threads()
     Xte, yte = gr.point_sets(4000, np.random.default_rng(0))
-    part = CACHE.partial("deepsets", dict(sizes=SET_SIZES, kinds=SET_KINDS, seeds=SEEDS, v=1))
+    part = CACHE.partial("deepsets", dict(sizes=SET_SIZES, kinds=SET_KINDS, seeds=SEEDS, v=2))
     for n in SET_SIZES:
         X, y = gr.point_sets(n, np.random.default_rng(1000 + n))
         for kind in SET_KINDS:
