@@ -48,8 +48,7 @@ class Judges(VoiceoverScene):
             "agreed with human experts over eighty percent of the time, as often as the experts agreed with each "
             "other. But they found biases. <bookmark mark='b'/> Position: shown the same two answers in both orders, "
             "GPT-4 gave the same verdict only sixty-five percent of the time, and when it didn't, it mostly favored "
-            "whichever came first. An earlier Claude was consistent less than a quarter of the time. "
-            "<bookmark mark='c'/> Length: padding an answer's list with a reworded copy of itself fooled two of the "
+            "whichever came first. <bookmark mark='c'/> Length: padding an answer's list with a reworded copy of itself fooled two of the "
             "three judges ninety-one percent of the time. <bookmark mark='d'/> And self-preference: GPT-4 seemed to "
             "favor its own answers, though the authors judged the evidence inconclusive."
         ) as vo:
@@ -209,8 +208,8 @@ class Judges(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.0, x=3.2, buff=0.7, edge=6.9)
         tag = tagline(r"three simulated items")
         with self.voiceover(
-            "Judging aside, which questions are worth asking? Educational testing faced this in the 1950s and 60s, "
-            "and its answer, item response theory, models the questions as well as the test-takers. "
+            "Judging aside, which questions are worth asking? Educational testing's answer, item response theory, "
+            "models the questions as well as the test-takers. "
             "<bookmark mark='a'/> The chance that a test-taker of ability theta gets an item right is a sigmoid of a "
             "times theta minus b: b is the item's difficulty, a its discrimination, how sharply it separates the "
             "weak from the strong. <bookmark mark='b'/> How much does one answer tell you about theta? Differentiate "

@@ -42,8 +42,7 @@ class Arena(VoiceoverScene):
             "a group at Berkeley, LMSYS, opened Chatbot Arena. <bookmark mark='a'/> Anyone can type a prompt; two "
             "anonymous models answer; <bookmark mark='b'/> the person votes for the better answer, and only then "
             "learns which models they were. <bookmark mark='c'/> By early 2024 it had over two hundred and forty "
-            "thousand votes; it is now run as LMArena, and its leaderboard is among the most watched in the "
-            "field. How do you turn votes into a ranking?"
+            "thousand votes; it is now run as LMArena. How do you turn votes into a ranking?"
         ) as vo:
             self.play(FadeIn(prompt), GrowArrow(arrows[0]), GrowArrow(arrows[1]), FadeIn(a), FadeIn(b), FadeIn(la),
                       FadeIn(lb))
@@ -176,13 +175,11 @@ class Arena(VoiceoverScene):
                   r"(December 2025): \ closed-form intervals", font_size=18).to_corner(UL, buff=0.25)
         tag = tagline(r"simulated")
         with self.voiceover(
-            "The Arena began with the online version, Elo's update after every vote. <bookmark mark='a'/> Here it is "
-            "on the first ten thousand simulated votes. The ratings never settle: each one chases its latest games. "
-            "<bookmark mark='b'/> And they depend on the order of the votes. Shuffle the same ten thousand votes "
-            f"twenty times, and the final ratings differ by {sd:.0f} points on average. <bookmark mark='c'/> "
-            "Bradley-Terry fitted to all the votes at once has no such problem: it is the same for any order. In "
-            "December 2023 the Arena switched to it, with bootstrap intervals, and in December 2025 to intervals "
-            "computed in closed form, from the curvature of the likelihood."
+            "The Arena began with the online version, Elo's update after every vote. <bookmark mark='a'/> On ten "
+            "thousand simulated votes, the ratings never settle: each chases its latest games. <bookmark mark='b'/> "
+            f"And they depend on the order: shuffle the votes twenty times, and the final ratings differ by {sd:.0f} "
+            "points. <bookmark mark='c'/> Bradley-Terry, fitted to all the votes at once, is the same for any order; "
+            "the Arena switched to it in December 2023, and later to intervals computed in closed form."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(hc))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.05), run_time=3.0)

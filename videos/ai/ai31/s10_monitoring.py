@@ -161,14 +161,13 @@ class Monitoring(VoiceoverScene):
         VGroup(astra, faith).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "In July 2025 researchers from nearly every frontier lab and several safety institutes signed a joint "
-            "position paper: the chain of thought is a new and fragile opportunity for safety, and developers should "
-            "weigh how their choices affect whether it stays readable. <bookmark mark='a'/> What could take it away? "
+            "position paper: the chain of thought is a new and fragile opportunity for safety. <bookmark mark='a'/> What could take it away? "
             "Reinforcement learning on outcomes alone, which can let the reasoning drift from plain English; direct "
             "pressure on the thoughts, as we just saw; and architectures that reason in vectors instead of words. "
-            "<bookmark mark='b'/> A year on, the fragility is showing. In September 2026 OpenAI reported that its "
-            "newest model, GPT-6 Astra, was better than its predecessor at controlling its own chain of thought and "
-            "less likely to write down anything incriminating; told to evade the monitors, it could underperform on "
-            "purpose without being caught, though there was no sign of reasoning hidden in code. "
+            "<bookmark mark='b'/> A year on, the fragility is showing. In September 2026 OpenAI reported that GPT-6 "
+            "Astra controls its own chain of thought better than its predecessor, and writes down less that would "
+            "incriminate it; told to evade the monitors, it could underperform undetected, though with no sign of "
+            "reasoning hidden in code. "
             "<bookmark mark='c'/> And the chain of thought was never the whole story. As Part 30 showed, reasoning "
             "models often use a hint without saying so. A readable chain of thought is evidence, not a guarantee."
         ) as vo:

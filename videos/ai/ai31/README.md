@@ -117,8 +117,9 @@ python tools/build.py ai31 --lang zh      # Chinese
 
 The experiments read Part 1's counting models and scoreboard, the scoreboard rows of Parts 7, 9 and 13, the series'
 novels model (`python -m explainer.ai.novels`) and Part 27's which-book questions, each through that part's own
-`compute` module, so `make.py` computes them first. About 20 minutes of the experiments' own CPU time on 4 cores;
-the long items resume after a kill.
+`compute` module, so `make.py` computes them first. On this shared 4-core machine the experiments took about two
+hours (the weak supervisor's pretraining and weak-to-strong the longest, then contamination and DP-SGD); every long
+item resumes after an interruption.
 
 `compute.py` holds the experiments; `sims.py` the simulations (Bradley–Terry and Elo, the biased judge, item
 response, the control game, the boat race and Q-learning); `lm_tools.py` the experiments on the series' model (bits

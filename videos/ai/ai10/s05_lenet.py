@@ -54,12 +54,14 @@ class LeNet(VoiceoverScene):
             "test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time, "
             "to recognize spoken sounds."
         ) as vo:
+            ghosts = cards.copy().set_opacity(0.25)
+            self.play(FadeIn(ghosts))
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            self.play(FadeOut(ghosts[0]), FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(FadeIn(cards[1], shift=UP * 0.2), FadeIn(foot), FadeIn(cite_))
+            self.play(FadeOut(ghosts[1]), FadeIn(cards[1], shift=UP * 0.2), FadeIn(foot), FadeIn(cite_))
             vo.wait_until("c")
-            self.play(FadeIn(cards[2], shift=UP * 0.2))
+            self.play(FadeOut(ghosts[2]), FadeIn(cards[2], shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -98,8 +100,9 @@ class LeNet(VoiceoverScene):
             "system built around it went to work in banks, reading several million checks a day. "
             "<bookmark mark='d'/> We built the same layout, with today's ReLU and max pooling."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in boxes], lag_ratio=0.15),
+            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in boxes], lag_ratio=0.15),
                       LaggedStart(*[FadeIn(n) for n in nl], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t) for t in tiles], lag_ratio=0.005), FadeIn(tl), run_time=2.0)
@@ -240,9 +243,9 @@ class LeNet(VoiceoverScene):
             f"test digits wrong, between {pct(lo, 2)} and {pct(hi, 2)}: " + cmp + " <bookmark mark='a'/> And here "
             "are some it got wrong. Several of them would make a person hesitate too."
         ) as vo:
-            self.play(FadeIn(res, shift=UP * 0.1))
+            self.play(FadeIn(res, shift=UP * 0.1), FadeIn(gl), LaggedStart(*[FadeIn(g) for g in gal], lag_ratio=0.05))
             vo.wait_until("a")
-            self.play(FadeIn(gl), LaggedStart(*[FadeIn(g) for g in gal], lag_ratio=0.05))
+            self.play(Indicate(gl, color=WHITE))
         self.wait(0.5)
         self.clear_scene()
 
@@ -273,15 +276,15 @@ class LeNet(VoiceoverScene):
         for i, (v, c) in enumerate(zip(vals, cols)):
             h = max(2.4 * v / vmax, 0.03)
             b = Rectangle(width=0.55, height=h, stroke_width=0, fill_color=c, fill_opacity=0.9 if i % 2 == 0 else 0.45)
-            b.move_to([2.2 + 0.75 * i + (0.35 if i >= 2 else 0), -1.6 + h / 2, 0])
+            b.move_to([2.2 + 0.75 * i + (0.35 if i >= 2 else 0), -2.3 + h / 2, 0])
             t = MathTex(rf"{100 * v:.1f}\%", font_size=22, color=c).next_to(b, UP, buff=0.08)
             bars.add(VGroup(b, t))
         bl = VGroup(label(r"pixels in place", font_size=18, color=GREY_B),
                     label(r"pixels shuffled", font_size=18, color=GREY_B))
-        bl[0].next_to(bars[0][0], DOWN, buff=0.12).shift(RIGHT * 0.35).set_y(-1.85)
-        bl[1].next_to(bars[3][0], DOWN, buff=0.12).shift(LEFT * 0.35).set_y(-2.2)
-        pd = img_gray(np.asarray(M["perm_digit"]), 1.2).move_to([5.6, 1.2, 0])
-        od = img_gray(np.asarray(M["digit"]), 1.2).next_to(pd, LEFT, buff=0.5)
+        bl[0].next_to(bars[0][0], DOWN, buff=0.12).shift(RIGHT * 0.35).set_y(-2.55)
+        bl[1].next_to(bars[3][0], DOWN, buff=0.12).shift(LEFT * 0.35).set_y(-2.55)
+        pd = img_gray(np.asarray(M["perm_digit"]), 1.1).move_to([5.4, 1.75, 0])
+        od = img_gray(np.asarray(M["digit"]), 1.1).next_to(pd, LEFT, buff=0.6)
         pa = Arrow(od.get_right(), pd.get_left(), buff=0.08, stroke_width=2.5, color=GREY_B)
         pt = label(rf"one fixed shuffle; \ retrained, \ ${pe}$ passes", font_size=18, color=GREY_B)
         pt.next_to(Group(od, pd), DOWN, buff=0.12)
@@ -308,8 +311,18 @@ class LeNet(VoiceoverScene):
             "layers at the top of LeNet see positions. <bookmark mark='c'/> And the cleanest test of the "
             "assumption: " + perm_v
         ) as vo:
-            self.play(FadeIn(leg), FadeIn(base), FadeIn(tag))
+            # first, large in the middle; then up into the corner when the plot arrives
+            desc = VGroup(label(r"LeNet: \ convolution, pooling, convolution, pooling, \ three dense layers",
+                                font_size=22, color=CNN),
+                          label(r"MLP: \ $784$ pixels $\to$ $78$ hidden units $\to$ $10$", font_size=22, color=MLPC))
+            desc.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+            intro = VGroup(leg.copy(), base.copy()).arrange(DOWN, buff=0.5).scale(1.5).move_to(UP * 0.9)
+            desc.next_to(intro, DOWN, buff=0.6)
+            self.play(FadeIn(intro[0]), FadeIn(desc), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(intro[1]))
             vo.wait_until("b")
+            self.play(ReplacementTransform(intro[0], leg), ReplacementTransform(intro[1], base), FadeOut(desc))
             self.play(Create(ax), FadeIn(cnn_c), FadeIn(mlp_c))
             vo.wait_until("c")
             self.play(FadeIn(od), GrowArrow(pa), FadeIn(pd), FadeIn(pt))

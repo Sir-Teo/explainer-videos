@@ -110,8 +110,8 @@ class Safeguards(VoiceoverScene):
             "previously unknown vulnerabilities in every major operating system and web browser, and did not release "
             "it generally; it went to defenders first. On one benchmark of exploits for Firefox, its predecessor "
             "produced two working exploits in several hundred attempts; Mythos produced a hundred and eighty-one. "
-            "<bookmark mark='e'/> In June OpenAI previewed its next models to a small group of trusted partners "
-            "first, at the request of the US government. <bookmark mark='f'/> And in September it released GPT-6 "
+            "<bookmark mark='e'/> In June, at the US government's request, OpenAI previewed its next models to "
+            "trusted partners first. <bookmark mark='f'/> And in September it released GPT-6 "
             "Astra, the first model it rates at its highest level, Critical, in cybersecurity, with its strongest "
             "safeguards yet."
         ) as vo:
@@ -204,8 +204,8 @@ class Safeguards(VoiceoverScene):
             "OpenAI, Anthropic, Google DeepMind and several universities took twelve recently published defenses, "
             "most of which had reported near-zero attack success, and attacked each one adaptively, with gradients, "
             "reinforcement learning, search and human ingenuity. They got through most of them more than ninety "
-            "percent of the time. <bookmark mark='c'/> It is the oldest lesson of security, from Part 10's "
-            "adversarial examples onward: a defense is only as good as the strongest attacker who knows it is there."
+            "percent of the time. <bookmark mark='c'/> It is the oldest lesson of security: a defense is only as "
+            "good as the strongest attacker who knows it is there."
         ) as vo:
             self.play(FadeIn(layers), FadeIn(sch))
             vo.wait_until("a")

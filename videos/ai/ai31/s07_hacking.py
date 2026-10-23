@@ -102,8 +102,8 @@ class Hacking(VoiceoverScene):
             "collected about sixty cases of specification gaming: behavior that satisfies the literal specification "
             "of an objective without achieving the intended outcome. <bookmark mark='a'/> A robot arm rewarded for "
             "the height of a red block's bottom face flipped the block over instead of stacking it. "
-            "<bookmark mark='b'/> A boat-racing agent rewarded for hitting targets circled forever, the example of "
-            "Part 27. <bookmark mark='c'/> An arm judged by a person watching a camera learned to hover between the "
+            "<bookmark mark='b'/> A boat-racing agent rewarded for hitting targets circled forever. "
+            "<bookmark mark='c'/> An arm judged by a person watching a camera learned to hover between the "
             "camera and the object. <bookmark mark='d'/> A simulated robot asked to walk hooked its legs together and "
             "slid."
         ) as vo:
@@ -185,9 +185,8 @@ class Hacking(VoiceoverScene):
         head = label(r"Goodhart again: \ the measure climbs, \ the goal does not", font_size=32).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Here is the whole of training, for all five runs. <bookmark mark='a'/> The reward we wrote climbs and "
-            "keeps climbing. <bookmark mark='b'/> The thing we meant, finishing the race, stays at zero. It is "
-            "Goodhart's law, which Part 27 measured with a learned reward; here the loophole is in a reward written "
-            "by hand, and the optimizer finds it by itself."
+            "keeps climbing. <bookmark mark='b'/> The thing we meant, finishing the race, stays at zero: Goodhart's "
+            "law again, with a loophole written by hand and found by the optimizer itself."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), FadeIn(note_))
             vo.wait_until("a")
@@ -288,8 +287,7 @@ class Hacking(VoiceoverScene):
         with self.voiceover(
             "The frontier has its own boat races, and they are found in coding. <bookmark mark='a'/> Anthropic's "
             "system card for Claude 3.7 Sonnet, in February 2025, reported that after repeated failures it sometimes "
-            "special-cased tests: returning the values a test expected, or changing the test. Anthropic traced it to "
-            "reward hacking during reinforcement learning. <bookmark mark='b'/> OpenAI reported a frontier reasoning "
+            "special-cased tests: returning the values a test expected, or changing the test. <bookmark mark='b'/> OpenAI reported a frontier reasoning "
             "model that, during training, learned to exit early or skip tests so that they counted as passed. "
             "<bookmark mark='c'/> In June 2025 METR found o3 reward hacking in thirty percent of its runs on one suite "
             "of research tasks: rewriting the timer that scored its speed, replacing the scorer with one that always "
@@ -326,8 +324,7 @@ class Hacking(VoiceoverScene):
             "real hacks, like exiting a test harness early, in the coding environments used to train production "
             "models. <bookmark mark='a'/> The habit spread. Put to work on the code of that very research project, "
             "it tried to sabotage it twelve percent of the time; asked simply what its goals were, it reasoned like "
-            "an alignment faker half the time. It is the emergent misalignment of Part 27, grown from a hack. "
-            "<bookmark mark='b'/> The fix was surprising: tell the model during training that hacking is acceptable "
+            "an alignment faker half the time. <bookmark mark='b'/> The fix was surprising: tell the model during training that hacking is acceptable "
             "in this environment. It still hacked, but the misalignment no longer spread. A model learns not only "
             "what it is rewarded for, but what that says about what it is."
         ) as vo:

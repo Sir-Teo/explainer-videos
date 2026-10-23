@@ -148,7 +148,7 @@ class Finale(VoiceoverScene):
             f"played his game. It guessed {d['count_first'] * 100:.0f} percent of the letters at the first try, and "
             f"the whole sentence cost it {d['count_total']:.0f} bits. <bookmark mark='b'/> Now our model plays. It "
             "reads tokens, not letters, so we add up its probabilities over every way its tokens could spell the next "
-            "letter, and let it guess in order. <bookmark mark='c'/> " + verdict
+            "letter. <bookmark mark='c'/> " + verdict
         ) as vo:
             self.play(FadeIn(letters), FadeIn(tag))
             vo.wait_until("a")
@@ -179,10 +179,12 @@ class Finale(VoiceoverScene):
             "what we actually asked of them, and what they do when we are not looking. <bookmark mark='b'/> Wiener "
             "put it in one sentence, sixty-six years ago, and it is still the right one."
         ) as vo:
-            self.play(FadeIn(words[0]))
+            full = g.copy()
+            g.fade(0.85)
+            self.play(FadeIn(words[0]), FadeIn(g))
             vo.wait_until("a")
             self.play(FadeIn(words[1]))
             vo.wait_until("b")
-            self.play(FadeIn(g, shift=UP * 0.1))
+            self.play(Transform(g, full))
         self.wait(1.5)
         self.clear_scene()

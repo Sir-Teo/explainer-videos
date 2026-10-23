@@ -70,7 +70,7 @@ class Forecast(VoiceoverScene):
         with self.voiceover(
             "Measurement tells us where models are. Can it tell us where they are going? <bookmark mark='a'/> For "
             "the loss, remarkably well. As Part 12 showed, loss falls as a power law in model size and data. "
-            "Hoffmann and colleagues' fitted law, drawn here at the compute-optimal split of Part 12, falls smoothly "
+            "Hoffmann and colleagues' fitted law falls smoothly "
             "toward a floor of about 1.69 nats per token. <bookmark mark='b'/> And compute keeps growing: Epoch AI "
             "estimates that the training compute of frontier language models has grown about five-fold a year since "
             "2020. <bookmark mark='c'/> But a loss is not an ability. Some abilities seem to switch on suddenly with "
@@ -196,8 +196,8 @@ class Forecast(VoiceoverScene):
         else:
             fit_said = f"METR's own fit gives {mfit:.0f} days."
         with self.voiceover(
-            "Here are METR's measurements, from their current task suite: every model they tested, by release date, "
-            "on a log scale of minutes, each with its uncertainty. <bookmark mark='a'/> GPT-2, in 2019: a few seconds. "
+            "Here are METR's measurements: every model they tested, by release date, on a log scale of minutes. "
+            "<bookmark mark='a'/> GPT-2, in 2019: a few seconds. "
             "GPT-4, in 2023: four minutes. o3, in 2025: two hours. In April 2026 an early version of Anthropic's "
             "Claude Mythos Preview measured about seventeen hours, beyond what the tasks can reliably measure. "
             "<bookmark mark='b'/> On a log scale the frontier is close to a straight line, and a straight line on a "
@@ -317,8 +317,7 @@ class Forecast(VoiceoverScene):
             "2025, METR found experienced open-source developers nineteen percent slower when allowed early-2025 AI "
             "tools, though they believed they had been twenty percent faster. <bookmark mark='c'/> And abilities are "
             "jagged. The 2026 International AI Safety Report notes systems that answer olympiad problems at gold-medal "
-            "level and still fail at some simple tasks. Forecasts are worth making, and worth checking, as we just "
-            "did."
+            "level and still fail at some simple tasks."
         ) as vo:
             self.play(FadeIn(ext), FadeIn(tag), FadeIn(ruler), FadeIn(fd), FadeIn(fdl))
             self.play(FadeIn(wdot), FadeIn(wl), FadeIn(mdot), FadeIn(ml))

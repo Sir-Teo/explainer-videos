@@ -116,8 +116,8 @@ class Hook(VoiceoverScene):
         q2.next_to(q1, DOWN, buff=0.25)
         q3.move_to(q2)
         with self.voiceover(
-            "Five years later the statistician I. J. Good, who had worked with Alan Turing breaking codes at "
-            "Bletchley Park, took the thought further. <bookmark mark='a'/> Let an ultraintelligent machine be "
+            "Five years later the statistician I. J. Good, Alan Turing's colleague at Bletchley Park, took the thought "
+            "further. <bookmark mark='a'/> Let an ultraintelligent machine be "
             "defined as a machine that can far surpass all the intellectual activities of any man, however clever. "
             "Designing machines is one of those activities, so it could design better machines, and there would be "
             "an intelligence explosion. <bookmark mark='b'/> Thus, he wrote, the first ultraintelligent machine is "
@@ -186,12 +186,10 @@ class Hook(VoiceoverScene):
             r"the open problems; \ then the scoreboard, \ and Shannon's game, \ one last time",
         ], font_size=26)
         with self.voiceover(
-            "This is Part 31 of AI, Built, the finale. <bookmark mark='a'/> In this part: measuring a model honestly, "
-            "with error bars, without contamination, in arenas and with judges; forecasting what comes next; reward "
-            "hacking, and supervising a model stronger than its supervisor; the evidence that models can deceive, and "
-            "how they are monitored and controlled; safeguards against misuse, and what a model remembers of its "
-            "training data; and the problems still open. Then, one last time, the scoreboard, and Shannon's game. "
-            "Wherever we can, we run the experiment ourselves, on this computer."
+            "This is Part 31 of AI, Built, the finale. <bookmark mark='a'/> In this part: measuring a model honestly; "
+            "forecasting; reward hacking, and supervising a stronger model; deception, monitoring and control; "
+            "safeguards and privacy; and the problems still open. Then, one last time, the scoreboard, and Shannon's "
+            "game. Wherever we can, we run the experiment ourselves."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
