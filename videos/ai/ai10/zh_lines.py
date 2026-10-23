@@ -447,14 +447,14 @@ ZH = {
     '"On the scoreboard, a new row.':
         "记分牌上，新的一行。<bookmark mark='a'/>我们的字符级LSTM：{v}<bookmark mark='b'/>{tail}",
 
-    ' GPT-2, below it, is still far ahead':
-        "下面的GPT-2仍然遥遥领先：更多的文本，更多的算力，和不同的架构，那是下一幕的故事。",
+    'f" The pretrained language models below it are still far ahead':
+        "下面那些预训练的语言模型仍然遥遥领先，最好的低到{lm_best:.2f}比特：更多的文本，更多的算力，和不同的架构，那是下一幕的故事。",
 
     ' The large models of Part 1, still to be filled in':
         "第1部分的大模型，在这块记分牌上还没填进来，它们显示出还有多远的路要走。",
 
-    "f'{me:.2f} bits per character: the best machine on the board so far":
-        "每字符{me:.2f}比特：迄今为止板上最好的机器，比上面最好的一行好{best_above - me:.2f}比特。记忆是值得的。",
+    "f'{me:.2f} bits per character, better than every row above it":
+        "每字符{me:.2f}比特，比它上面的每一行都好，好了{best_above - me:.2f}比特。记忆是值得的。",
 
     'f"{me:.2f} bits per character, {me - best_above:.2f} behind':
         "每字符{me:.2f}比特，比上面最好的一行差{me - best_above:.2f}：只训练了几分钟，LSTM还没追上一个用尽全部计数的模型。",
