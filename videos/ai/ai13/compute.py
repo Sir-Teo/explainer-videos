@@ -162,6 +162,121 @@ def compute_dotscale():
 
 
 # ---------------------------------------------------------------------------
+GLYPHS = {  # ten letters on a 10 x 10 grid, drawn by hand (so every machine stores the same patterns)
+    "A": ["...####...", "..##..##..", ".##....##.", ".##....##.", ".##....##.", ".########.", ".##....##.",
+          ".##....##.", ".##....##.", ".##....##."],
+    "E": [".########.", ".##.......", ".##.......", ".##.......", ".#######..", ".##.......", ".##.......",
+          ".##.......", ".##.......", ".########."],
+    "H": [".##....##.", ".##....##.", ".##....##.", ".##....##.", ".########.", ".########.", ".##....##.",
+          ".##....##.", ".##....##.", ".##....##."],
+    "K": [".##....##.", ".##...##..", ".##..##...", ".##.##....", ".####.....", ".####.....", ".##.##....",
+          ".##..##...", ".##...##..", ".##....##."],
+    "M": ["##......##", "###....###", "####..####", "##.####.##", "##..##..##", "##......##", "##......##",
+          "##......##", "##......##", "##......##"],
+    "O": ["..######..", ".##....##.", "##......##", "##......##", "##......##", "##......##", "##......##",
+          "##......##", ".##....##.", "..######.."],
+    "S": ["..######..", ".##....##.", ".##.......", "..##......", "...####...", "......##..", ".......##.",
+          ".......##.", ".##....##.", "..######.."],
+    "T": ["##########", "##########", "....##....", "....##....", "....##....", "....##....", "....##....",
+          "....##....", "....##....", "....##...."],
+    "X": ["##......##", ".##....##.", "..##..##..", "...####...", "....##....", "...####...", "..##..##..",
+          ".##....##.", "##......##", "#........#"],
+    "Z": ["##########", "##########", ".......##.", "......##..", ".....##...", "....##....", "...##.....",
+          "..##......", "##########", "##########"],
+}
+
+
+def glyphs():
+    """The letters as patterns of +1 (ink) and -1 (paper), 100 numbers each."""
+    return np.array([[1.0 if c == "#" else -1.0 for row in GLYPHS[k] for c in row] for k in GLYPHS])
+
+
+def compute_hopfield():
+    """Classical (Hopfield 1982) against modern (Ramsauer et al. 2020) associative memory."""
+    g = rng(1982)  # Hopfield, Neural networks and physical systems with emergent collective computational abilities
+    N = 100  # neurons (numbers per pattern)
+    flip = 0.15  # the cue: a stored pattern with 15% of its signs flipped
+    trials = 60
+    Ms = [2, 4, 6, 8, 10, 12, 14, 16, 20, 25, 30, 40, 60, 80, 120, 160, 240, 320]
+
+    def classical(X, x, sweeps=20):
+        W = X.T @ X / N
+        np.fill_diagonal(W, 0)
+        x = x.copy()
+        for _ in range(sweeps):  # asynchronous updates, in a random order
+            old = x.copy()
+            for i in g.permutation(N):
+                h = W[i] @ x
+                x[i] = 1.0 if h >= 0 else -1.0
+            if np.array_equal(old, x):
+                break
+        return x
+
+    def modern(X, x, beta, steps=1):
+        for _ in range(steps):  # xi <- X^T softmax(beta X xi): one step of attention, the cue as the query
+            s = beta * (X @ x)
+            p = np.exp(s - s.max())
+            x = X.T @ (p / p.sum())
+        return np.sign(x)
+
+    beta = 0.25  # patterns have length sqrt(N) = 10: attention's 1/sqrt(d) would be 0.1
+    out = dict(N=N, flip=flip, trials=trials, Ms=Ms, classical=[], modern=[], beta=beta)
+    for M in Ms:
+        ok_c, ok_m = 0, 0
+        for _ in range(trials):
+            X = g.choice([-1.0, 1.0], size=(M, N))
+            mu = int(g.integers(M))
+            x = X[mu].copy()
+            idx = g.choice(N, int(flip * N), replace=False)
+            x[idx] *= -1
+            ok_c += np.array_equal(classical(X, x), X[mu])
+            ok_m += np.array_equal(modern(X, x, beta), X[mu])
+        out["classical"].append(ok_c / trials)
+        out["modern"].append(ok_m / trials)
+        print(f"    M = {M}: classical {ok_c / trials:.2f}, modern {ok_m / trials:.2f}", flush=True)
+    # the inverse temperature: from the average of everything (small beta) to one pattern (large beta)
+    X = g.choice([-1.0, 1.0], size=(20, N))
+    x = X[3].copy()
+    x[g.choice(N, 30, replace=False)] *= -1
+    betas = np.exp(np.linspace(np.log(0.002), np.log(1.0), 40))
+    weights, overlap = [], []
+    for b in betas:
+        s = b * (X @ x)
+        p = np.exp(s - s.max())
+        p /= p.sum()
+        weights.append(p)
+        overlap.append(float((X.T @ p) @ X[3] / N))
+    out.update(betas=betas, beta_weights=np.array(weights), beta_overlap=np.array(overlap), beta_target=3)
+    # letters: stored as 144-pixel patterns, recalled from a corrupted cue by one softmax step and by the classical net
+    L = glyphs()
+    out["letters"] = L
+    gl = rng(7)
+    cues, rec_c, rec_m = [], [], []
+    for i in range(len(L)):
+        x = L[i].copy()
+        x[gl.choice(len(x), int(0.25 * len(x)), replace=False)] *= -1
+        cues.append(x)
+        Wc = L.T @ L / len(x)
+        np.fill_diagonal(Wc, 0)
+        y = x.copy()
+        for _ in range(20):
+            old = y.copy()
+            for j in gl.permutation(len(y)):
+                y[j] = 1.0 if Wc[j] @ y >= 0 else -1.0
+            if np.array_equal(old, y):
+                break
+        rec_c.append(y)
+        s = 0.2 * (L @ x)
+        p = np.exp(s - s.max())
+        rec_m.append(np.sign(L.T @ (p / p.sum())))
+    out.update(cues=np.array(cues), rec_classical=np.array(rec_c), rec_modern=np.array(rec_m))
+    out["letters_ok_classical"] = int(sum(np.array_equal(a, b) for a, b in zip(rec_c, L)))
+    out["letters_ok_modern"] = int(sum(np.array_equal(a, b) for a, b in zip(rec_m, L)))
+    out["capacity_classical"] = 0.138 * N  # Amit, Gutfreund & Sompolinsky (1985), for comparison
+    return out
+
+
+# ---------------------------------------------------------------------------
 def rope_freqs(dh=DH, base=BASE):
     return base ** (-np.arange(0, dh, 2) / dh)  # one angle per pair of numbers
 
@@ -633,12 +748,149 @@ def load_tf():
 
 
 # ---------------------------------------------------------------------------
+def compute_heads():
+    """Our transformer's heads as low-rank maps, its composition scores, the causal mask checked, and its cost."""
+    import torch
+    import torch.nn.functional as F
+    from torch.utils.flop_counter import FlopCounterMode
+
+    threads()
+    load("tf")
+    model, chars, enc, data = load_tf()
+    K = len(chars)
+    out = dict(L=LAYERS, H=HEADS, d=D, dh=DH, K=K)
+    # 1. every head's two matrices on the residual stream, and their singular values
+    sv_qk, sv_ov, layer_qk = np.zeros((LAYERS, HEADS, D)), np.zeros((LAYERS, HEADS, D)), np.zeros((LAYERS, D))
+    mats = []
+    for l_ in range(LAYERS):
+        tot = np.zeros((D, D))
+        for h in range(HEADS):
+            qk, ov = head_mats(model, l_, h)
+            mats.append((qk, ov))
+            sv_qk[l_, h] = np.linalg.svd(qk, compute_uv=False)
+            sv_ov[l_, h] = np.linalg.svd(ov, compute_uv=False)
+            tot += qk
+        layer_qk[l_] = np.linalg.svd(tot, compute_uv=False)
+    out.update(sv_qk=sv_qk, sv_ov=sv_ov, layer_qk=layer_qk)
+    rel = sv_qk / sv_qk[..., :1]
+    out["rank_qk"] = int((rel > 1e-9).sum(-1).max())  # numerically nonzero singular values: at most d_head
+    out["rank_ov"] = int((sv_ov / sv_ov[..., :1] > 1e-9).sum(-1).max())
+    out["layer_rank"] = int((layer_qk / layer_qk[:, :1] > 1e-9).sum(-1).min())
+
+    def k90(sv):  # singular values needed for 90% of the matrix's squared size
+        c = np.cumsum(sv ** 2, -1) / (sv ** 2).sum(-1, keepdims=True)
+        return (c < 0.9).sum(-1) + 1
+
+    out["k90_qk"], out["k90_ov"] = k90(sv_qk), k90(sv_ov)
+    # one head's bilinear form, for the picture: the 128 x 128 matrix and its rank-32 factors
+    li, hi = 0, int(np.argmax(sv_qk[0, :, 0]))
+    out["qk_example"] = mats[li * HEADS + hi][0].astype(np.float32)
+    out["qk_layer"], out["qk_head"] = li, hi
+    comp = composition_scores(mats, LAYERS, HEADS)
+    out.update({f"comp_{k}": v for k, v in comp.items()})
+    out["comp_base"], out["comp_base_sd"] = composition_baseline(D, DH)
+    # 2. the causal mask: change the future, and nothing before it moves
+    ps = data["passage"]
+    x = ps[1000:1000 + 128][None].clone()
+    y = x.clone()
+    y[0, 64:] = torch.tensor(rng(5).integers(0, K, 64))
+    with torch.no_grad():
+        za, zb = model(x), model(y)
+        out["mask_past"] = float((za[0, :64] - zb[0, :64]).abs().max())  # positions 0-63: should not move at all
+        out["mask_future"] = float((za[0, 64:] - zb[0, 64:]).abs().max())
+
+        # the same model with the mask (and the rotations) removed: every position sees everything
+        def unmasked(idx, perm=None):
+            h = model.emb(idx)
+            if perm is not None:
+                h = h[:, perm]
+            B, T, _ = h.shape
+            for b in model.blocks:
+                q, k, v = b.qkv(b.n1(h)).view(B, T, 3, HEADS, DH).permute(2, 0, 3, 1, 4)
+                p = torch.softmax(q @ k.transpose(-1, -2) / math.sqrt(DH), -1)
+                h = h + b.o((p @ v).transpose(1, 2).reshape(B, T, D))
+                h = h + b.f2(F.gelu(b.f1(b.n2(h))))
+            return model.out(model.nf(h))
+
+        ua, ub = unmasked(x), unmasked(y)
+        out["nomask_past"] = float((ua[0, :64] - ub[0, :64]).abs().max())
+        perm = torch.tensor(rng(6).permutation(128))
+        out["perm_dev"] = float((unmasked(x)[0, perm] - unmasked(x, perm)[0]).abs().max())  # f(Px) = P f(x)
+        out["perm_scale"] = float(unmasked(x).abs().max())
+    # 3. the cost of a block: parameters, counted by kind, and floating-point operations, measured
+    groups = {"attention": 0, "mlp": 0, "norm": 0, "embed": 0}
+    for n_, p_ in model.named_parameters():
+        kind = ("attention" if (".qkv." in n_ or ".o." in n_) else "mlp" if (".f1." in n_ or ".f2." in n_)
+                else "norm" if (".n1." in n_ or ".n2." in n_ or n_.startswith("nf.")) else "embed")
+        groups[kind] += p_.numel()
+    out["params"] = groups
+    out["n_params"] = int(sum(groups.values()))
+    out["formula_block"] = 12 * D * D  # attention 4 d^2 + MLP 8 d^2 (Kaplan et al. 2020)
+    out["formula_total"] = LAYERS * (12 * D * D + 9 * D) + 2 * K * D + 2 * D
+    assert out["formula_total"] == out["n_params"]
+    Ts = [64, 128, 256, 512, 1024]
+    fl, fl_formula = [], []
+    for T in Ts:
+        xx = data["valid"][:T][None]
+        with FlopCounterMode(display=False) as fc, torch.no_grad():
+            model(xx, keep=False)  # the explicit path: the masked square is computed in full
+        fl.append(fc.get_total_flops() / T)
+        fl_formula.append(2 * 12 * LAYERS * D * D + 2 * D * K + 4 * LAYERS * T * D)
+    out.update(Ts=Ts, flops_per_token=fl, flops_formula=fl_formula, flops_kaplan=[
+        2 * 12 * LAYERS * D * D + 2 * LAYERS * T * D for T in Ts])
+    # forward and backward, at the training length
+    xx = data["train"][:CTX + 1]
+    with FlopCounterMode(display=False) as fc:
+        z = model(xx[None, :-1], keep=False)
+        F.cross_entropy(z[0], xx[1:]).backward()
+    out["flops_train_token"] = fc.get_total_flops() / CTX
+    model.zero_grad()
+    out["crossover_T"] = 12 * D  # where the attention term 2 L T d equals the weights' 2 * 12 L d^2
+    return out
+
+
 def yarn_theta(s, L=CTX, alpha=1.0, beta=32.0):
     """YaRN's 'NTK-by-parts': fast-turning pairs keep their angles, slow ones are interpolated, a ramp between."""
     th = rope_freqs()
     r = L / (2 * np.pi / th)  # how many turns each pair makes over the training context
     gam = np.clip((r - alpha) / (beta - alpha), 0, 1)
     return (1 - gam) * th / s + gam * th, gam
+
+
+EXT_S = 4  # the extension factor
+FT_STEPS, FT_BATCH = 100, 4  # the brief fine-tuning at the long context
+
+
+def extend_methods(s=EXT_S):
+    import torch
+
+    T = s * CTX
+    ntk = rope_freqs(base=BASE * s ** (DH / (DH - 2)))
+    yth, _ = yarn_theta(s)
+    n = torch.arange(1, T + 1, dtype=torch.float32)
+    logn = torch.clamp(torch.log(n) / math.log(CTX), min=1.0)[:, None]  # each query's scores times log_L(n), n > L
+    return {
+        "plain": dict(),
+        "pi": dict(pos_scale=float(s)),
+        "ntk": dict(theta=ntk),
+        "yarn": dict(theta=yth, temp=(0.1 * math.log(s) + 1) ** 2),
+        "logn": dict(temp=logn),
+        "ntk_logn": dict(theta=ntk, temp=logn),
+    }
+
+
+def ext_eval(model, x, y, kw):
+    import torch
+    import torch.nn.functional as F
+
+    T = x.shape[1]
+    ce = np.zeros(T)
+    with torch.no_grad():
+        for i in range(0, len(x), 4):
+            z = model(x[i:i + 4], **kw)
+            ce += F.cross_entropy(z.reshape(-1, z.shape[-1]), y[i:i + 4].reshape(-1),
+                                  reduction="none").view(-1, T).sum(0).numpy()
+    return ce / len(x) / math.log(2)
 
 
 def compute_extend():
@@ -648,36 +900,26 @@ def compute_extend():
     threads()
     load("tf")
     model, chars, enc, data = load_tf()
-    va = data["valid"]
-    s = 4
+    va, tr = data["valid"], data["train"]
+    s = EXT_S
     T = s * CTX
     g = rng(3)
     starts = g.integers(0, len(va) - T - 1, 32)
     th = rope_freqs()
-    ntk = rope_freqs(base=BASE * s ** (DH / (DH - 2)))
     yth, gam = yarn_theta(s)
-    methods = {
-        "plain": dict(),
-        "pi": dict(pos_scale=float(s)),
-        "ntk": dict(theta=ntk),
-        "yarn": dict(theta=yth, temp=(0.1 * math.log(s) + 1) ** 2),
-    }
-    out = dict(s=s, T=T, theta=th, theta_ntk=ntk, theta_yarn=yth, ramp=gam, buckets=list(range(0, T + 1, 64)))
+    methods = extend_methods(s)
+    out = dict(s=s, T=T, theta=th, theta_ntk=methods["ntk"]["theta"], theta_yarn=yth, ramp=gam,
+               buckets=list(range(0, T + 1, 64)), methods=list(methods))
+    x = torch.stack([va[a:a + T] for a in starts])
+    y = torch.stack([va[a + 1:a + T + 1] for a in starts])
+    for name, kw in methods.items():
+        ce = ext_eval(model, x, y, kw)
+        out[f"pos_{name}"] = ce
+        out[f"bucket_{name}"] = [float(ce[a:a + 64].mean()) for a in range(0, T, 64)]
+        print(f"    {name}: " + " ".join(f"{v:.2f}" for v in out[f"bucket_{name}"]), flush=True)
+    # the honest baseline: the model as trained, always on the last 256 characters
+    base = []
     with torch.no_grad():
-        x = torch.stack([va[a:a + T] for a in starts])
-        y = torch.stack([va[a + 1:a + T + 1] for a in starts])
-        for name, kw in methods.items():
-            ce = np.zeros(T)
-            for i in range(0, len(x), 4):
-                z = model(x[i:i + 4], **kw)
-                ce += F.cross_entropy(z.reshape(-1, z.shape[-1]), y[i:i + 4].reshape(-1),
-                                      reduction="none").view(-1, T).sum(0).numpy()
-            ce = ce / len(x) / math.log(2)
-            out[f"pos_{name}"] = ce
-            out[f"bucket_{name}"] = [float(ce[a:a + 64].mean()) for a in range(0, T, 64)]
-            print(f"    {name}: " + " ".join(f"{v:.2f}" for v in out[f"bucket_{name}"]), flush=True)
-        # the honest baseline: the model as trained, always on the last 256 characters
-        base = []
         for a in range(0, T, 64):
             if a + 64 <= CTX:
                 base.append(out["bucket_plain"][a // 64])
@@ -689,9 +931,475 @@ def compute_extend():
                 z = model(xs[i:i + 256])[:, -1]
                 tot += float(F.cross_entropy(z, ys[i:i + 256], reduction="sum"))
             base.append(tot / len(xs) / math.log(2))
-        out["bucket_window"] = base
+    out["bucket_window"] = base
+    # then a brief fine-tuning at the long context, as real models do: the same steps for each rescaling
+    sd0 = {k: v.clone() for k, v in model.state_dict().items()}
+    part = CACHE.partial("extend", dict(steps=FT_STEPS, batch=FT_BATCH, T=T, lr=2e-4))
+    for name in ("pi", "yarn"):
+        if name not in part:
+            model.load_state_dict(sd0)
+            model.train()
+            torch.manual_seed(2023)
+            gg = rng(2023)  # the same windows for both
+            opt = torch.optim.AdamW(model.parameters(), lr=2e-4, betas=(0.9, 0.95), weight_decay=0.0)
+            curve = []
+            for step in range(1, FT_STEPS + 1):
+                st = torch.tensor(gg.integers(0, len(tr) - T - 1, FT_BATCH))
+                idx = st[:, None] + torch.arange(T + 1)[None]
+                xb, yb = tr[idx[:, :-1]], tr[idx[:, 1:]]
+                loss = F.cross_entropy(model(xb, **methods[name]).reshape(-1, len(chars)), yb.reshape(-1))
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                opt.step()
+                curve.append(float(loss) / math.log(2))
+            model.eval()
+            ce = ext_eval(model, x, y, methods[name])
+            part[name] = dict(pos=ce.tolist(), curve=curve)
+            print(f"    fine-tuned {name}: " + " ".join(f"{ce[a:a + 64].mean():.2f}" for a in range(0, T, 64)),
+                  flush=True)
+        ce = np.array(part[name]["pos"])
+        out[f"pos_ft_{name}"] = ce
+        out[f"bucket_ft_{name}"] = [float(ce[a:a + 64].mean()) for a in range(0, T, 64)]
+        out[f"ft_curve_{name}"] = np.array(part[name]["curve"])
+    out["ft_steps"], out["ft_batch"] = FT_STEPS, FT_BATCH
+    out["ft_chars"] = FT_STEPS * FT_BATCH * T
+    model.load_state_dict(sd0)
     plain_far = np.mean(out["bucket_plain"][-4:])
     assert plain_far > np.mean(out["bucket_plain"][:4]) + 0.3  # beyond its training length, it breaks
+    return out
+
+
+# ---------------------------------------------------------------------------
+# A small configurable transformer, for the experiments run side by side
+# ---------------------------------------------------------------------------
+def alibi_slopes(H):
+    """ALiBi's head slopes (Press et al. 2021): the geometric sequence 2^(-8/H), 2^(-16/H), ..., 2^(-8)."""
+    return 2.0 ** (-8.0 * np.arange(1, H + 1) / H)
+
+
+def build_small(K, d=64, L=3, H=4, pos="rope", sink=False, gate=False, diff=False, qknorm=False, cap=0.0,
+                causal=True):
+    """A pre-norm transformer (LayerNorm, GELU MLP of width 4d) whose attention can be switched between the variants
+    this part compares. ``pos``: 'rope', 'alibi', 'sin' (2017's sinusoids, added to the input) or 'nope'.
+    ``sink``: a learned logit per head in the softmax's denominator (gpt-oss). ``gate``: each head's output times a
+    sigmoid of the input, elementwise (Qiu et al. 2025). ``diff``: differential attention (Ye et al. 2024), the
+    difference of two softmax maps with a learned lambda, normed per head. ``qknorm``: queries and keys RMS-normed
+    per head. ``cap``: scores soft-capped at cap * tanh(s / cap). forward(idx, keep) returns the logits, and with
+    ``keep`` each layer's attention weights and extras (the sink's share, the gate's openness)."""
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    dh = d // H
+
+    def rotate(t):
+        T, e = t.shape[-2], t.shape[-1]
+        th = torch.tensor(rope_freqs(e), dtype=torch.float32)
+        ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+        c, s_ = torch.cos(ang), torch.sin(ang)
+        a, b = t[..., : e // 2], t[..., e // 2:]
+        return torch.cat([a * c - b * s_, a * s_ + b * c], -1)
+
+    slopes = torch.tensor(alibi_slopes(H), dtype=torch.float32)
+
+    class Attn(nn.Module):
+        def __init__(self, layer):
+            super().__init__()
+            self.qkv = nn.Linear(d, 3 * d, bias=False)
+            self.o = nn.Linear(d, d, bias=False)
+            if sink:
+                self.sink = nn.Parameter(torch.zeros(H))
+            if gate:
+                self.g = nn.Linear(d, d)
+            if qknorm:
+                self.qn, self.kn = nn.RMSNorm(dh), nn.RMSNorm(dh)
+            if diff:
+                e = dh // 2
+                self.lam = nn.Parameter(torch.randn(4, e) * 0.1)
+                self.lam_init = 0.8 - 0.6 * math.exp(-0.3 * layer)  # layer counted from 0: (l - 1) for l from 1
+                self.hn = nn.RMSNorm(dh)
+
+        def scores(self, q, k):
+            T = q.shape[-2]
+            if qknorm:
+                q, k = self.qn(q), self.kn(k)
+            if pos == "rope":
+                q, k = rotate(q), rotate(k)
+            s = q @ k.transpose(-1, -2) / math.sqrt(q.shape[-1])
+            if cap:
+                s = cap * torch.tanh(s / cap)
+            i = torch.arange(T)
+            if pos == "alibi":
+                s = s - slopes[:, None, None] * (i[:, None] - i[None]).clamp(min=0).float()
+            if causal:
+                s = s.masked_fill(~torch.ones(T, T, dtype=torch.bool).tril(), float("-inf"))
+            return s
+
+        def forward(self, x, keep=False):
+            B, T, _ = x.shape
+            q, k, v = self.qkv(x).view(B, T, 3, H, dh).permute(2, 0, 3, 1, 4)
+            extra = {}
+            if diff:
+                e = dh // 2
+                p1 = torch.softmax(self.scores(q[..., :e], k[..., :e]), -1)
+                p2 = torch.softmax(self.scores(q[..., e:], k[..., e:]), -1)
+                lq1, lk1, lq2, lk2 = self.lam
+                lam = torch.exp((lq1 * lk1).sum()) - torch.exp((lq2 * lk2).sum()) + self.lam_init
+                p = p1 - lam * p2
+                a = self.hn(p @ v) * (1 - self.lam_init)
+                if keep:
+                    extra.update(p1=p1, p2=p2, lam=float(lam))
+            else:
+                s = self.scores(q, k)
+                if sink:
+                    full = torch.cat([s, self.sink.view(1, H, 1, 1).expand(B, H, T, 1)], -1)
+                    P = torch.softmax(full, -1)
+                    p = P[..., :-1]
+                    if keep:
+                        extra["null"] = P[..., -1]
+                else:
+                    p = torch.softmax(s, -1)
+                a = p @ v
+            if gate:
+                gt = torch.sigmoid(self.g(x)).view(B, T, H, dh).transpose(1, 2)
+                a = a * gt
+                if keep:
+                    extra["gate"] = gt.mean(-1)
+            if keep:
+                extra["v"] = v
+            return self.o(a.transpose(1, 2).reshape(B, T, d)), (p if keep else None), extra
+
+    class Block(nn.Module):
+        def __init__(self, layer):
+            super().__init__()
+            self.n1, self.n2 = nn.LayerNorm(d), nn.LayerNorm(d)
+            self.attn = Attn(layer)
+            self.f1, self.f2 = nn.Linear(d, 4 * d), nn.Linear(4 * d, d)
+
+        def forward(self, x, keep=False):
+            a, p, extra = self.attn(self.n1(x), keep)
+            x = x + a
+            return x + self.f2(F.gelu(self.f1(self.n2(x)))), p, extra
+
+    class Small(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.emb = nn.Embedding(K, d)
+            self.blocks = nn.ModuleList([Block(i) for i in range(L)])
+            self.nf = nn.LayerNorm(d)
+            self.out = nn.Linear(d, K, bias=False)
+
+        def forward(self, idx, keep=False):
+            T = idx.shape[1]
+            x = self.emb(idx)
+            if pos == "sin":
+                om = 10000.0 ** (-torch.arange(0, d, 2, dtype=torch.float32) / d)
+                ang = torch.arange(T, dtype=torch.float32)[:, None] * om[None]
+                x = x + torch.stack([ang.sin(), ang.cos()], -1).reshape(T, d)
+            maps, extras = [], []
+            for b in self.blocks:
+                x, p, extra = b(x, keep)
+                maps.append(p)
+                extras.append(extra)
+            z = self.out(self.nf(x))
+            return (z, maps, extras) if keep else z
+
+    return Small()
+
+
+def make_opt(model, lr, steps, warm):
+    import torch
+
+    decay = [p for p in model.parameters() if p.dim() >= 2]
+    other = [p for p in model.parameters() if p.dim() < 2]
+    opt = torch.optim.AdamW([dict(params=decay, weight_decay=0.1), dict(params=other, weight_decay=0.0)], lr=lr,
+                            betas=(0.9, 0.95))
+    sched = torch.optim.lr_scheduler.LambdaLR(
+        opt, lambda s: (s + 1) / warm if s < warm else 0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * (s - warm) / (steps - warm))))
+    return opt, sched
+
+
+# ---------------------------------------------------------------------------
+POS_METHODS = ("sin", "rope", "alibi", "nope")
+POS_SEEDS = (1, 2, 3)
+POS_CFG = dict(d=64, L=3, H=4, ctx=128, batch=16, steps=1000, lr=3e-3, warm=100, read=512)
+
+
+def compute_positions():
+    """Four ways of telling a small transformer where things are, trained side by side on the novels: the same
+    shape, the same data in the same order, the same steps; three seeds each. Then each reads 4x longer texts."""
+    import torch
+    import torch.nn.functional as F
+
+    threads()
+    chars, enc, data = corpus()
+    K = len(chars)
+    tr, va = data["train"], data["valid"]
+    c = POS_CFG
+    T, R = c["ctx"], c["read"]
+    ev = rng(55).integers(0, len(va) - R - 1, 48)
+    xe = torch.stack([va[a:a + R] for a in ev])
+    ye = torch.stack([va[a + 1:a + R + 1] for a in ev])
+    part = CACHE.partial("positions", c)
+    for seed in POS_SEEDS:
+        for m in POS_METHODS:
+            key = f"{m}_{seed}"
+            if key in part:
+                continue
+            t0 = time.time()
+            torch.manual_seed(seed)
+            model = build_small(K, c["d"], c["L"], c["H"], pos=m)
+            opt, sched = make_opt(model, c["lr"], c["steps"], c["warm"])
+            g = rng(1000 + seed)  # the same windows, in the same order, for every method
+            curve = []
+            for step in range(1, c["steps"] + 1):
+                st = torch.tensor(g.integers(0, len(tr) - T - 1, c["batch"]))
+                idx = st[:, None] + torch.arange(T + 1)[None]
+                loss = F.cross_entropy(model(tr[idx[:, :-1]]).reshape(-1, K), tr[idx[:, 1:]].reshape(-1))
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                opt.step()
+                sched.step()
+                if step % 100 == 0:
+                    with torch.no_grad():
+                        z = model(xe[:16, :T])
+                        curve.append((step, float(F.cross_entropy(z.reshape(-1, K), ye[:16, :T].reshape(-1))) / math.log(2)))
+            model.eval()
+            with torch.no_grad():
+                ce = np.zeros(R)
+                for i in range(0, len(xe), 8):
+                    z = model(xe[i:i + 8])
+                    ce += F.cross_entropy(z.reshape(-1, K), ye[i:i + 8].reshape(-1), reduction="none").view(-1, R).sum(0).numpy()
+                ce /= len(xe) * math.log(2)
+            part[key] = dict(curve=curve, pos=ce.tolist(), seconds=time.time() - t0)
+            print(f"    {key}: in context {ce[:T].mean():.3f}, far {ce[3 * T:].mean():.3f} "
+                  f"({time.time() - t0:.0f}s)", flush=True)
+    out = dict(cfg=c, methods=list(POS_METHODS), seeds=list(POS_SEEDS))
+    for m in POS_METHODS:
+        P = np.array([part[f"{m}_{s_}"]["pos"] for s_ in POS_SEEDS])  # seed, position
+        out[f"pos_{m}"] = P
+        out[f"curve_{m}"] = np.array([[b for _, b in part[f"{m}_{s_}"]["curve"]] for s_ in POS_SEEDS])
+        out[f"in_{m}"] = P[:, :T].mean(1)  # bits within the training length, one per seed
+        out[f"far_{m}"] = P[:, 3 * T:].mean(1)  # bits at 3-4x the training length
+        out[f"bucket_{m}"] = P.reshape(len(POS_SEEDS), -1, 32).mean(-1)
+    out["curve_steps"] = [s_ for s_, _ in part[f"rope_{POS_SEEDS[0]}"]["curve"]]
+    out["slopes"] = alibi_slopes(c["H"])
+    return out
+
+
+# ---------------------------------------------------------------------------
+SINK_VARIANTS = ("softmax", "sink", "gate", "diff")
+SINK_SEEDS = (1, 2, 3)
+SINK_CFG = dict(V=64, T=64, d=64, steps=1500, batch=32, lr=3e-3, warm=100)
+
+
+def bb_task():
+    """The bigram-backcopy task (Guo et al. 2024), on the novels' 64 commonest characters: a sequence starts with
+    <s>; each next character follows the novels' bigram statistics, except after a trigger (the three commonest
+    characters), where it copies the character before the trigger."""
+    from collections import Counter
+
+    from videos.ai.ai1 import compute as c1
+
+    t = c1.text("train")[:4_000_000]
+    common = [ch for ch, _ in Counter(t).most_common(SINK_CFG["V"])]
+    ix = {ch: i for i, ch in enumerate(common)}
+    a = np.array([ix.get(ch, -1) for ch in t])
+    ok = (a[:-1] >= 0) & (a[1:] >= 0)
+    V = len(common)
+    Pm = np.zeros((V, V))
+    np.add.at(Pm, (a[:-1][ok], a[1:][ok]), 1)
+    Pm = (Pm + 1e-3) / (Pm + 1e-3).sum(1, keepdims=True)
+    uni = np.bincount(a[a >= 0], minlength=V).astype(float)
+    trig = [0, 1, 2]  # the three commonest characters
+    return common, Pm, uni / uni.sum(), trig
+
+
+def bb_batch(g, n, Pm, uni, trig, T):
+    V = len(Pm)
+    BOS = V
+    x = np.zeros((n, T), int)
+    x[:, 0] = BOS
+    u0 = uni.copy()
+    u0[trig] = 0
+    x[:, 1] = g.choice(V, size=n, p=u0 / u0.sum())
+    cum = np.cumsum(Pm, 1)
+    is_t = np.zeros(V + 1, bool)
+    is_t[trig] = True
+    for t in range(1, T - 1):
+        nxt = np.minimum((cum[x[:, t]] < g.random(n)[:, None]).sum(1), V - 1)
+        x[:, t + 1] = np.where(is_t[x[:, t]], x[:, t - 1], nxt)
+    return x, is_t[x]
+
+
+def compute_sinks():
+    """Where a head looks when it has nothing to do: plain softmax against a sink logit, an output gate and
+    differential attention, each a one-layer transformer trained on the bigram-backcopy task, three seeds."""
+    import torch
+    import torch.nn.functional as F
+
+    threads()
+    c = SINK_CFG
+    common, Pm, uni, trig = bb_task()
+    V, T = len(common), c["T"]
+    K = V + 1
+    xt, tt = bb_batch(rng(999), 256, Pm, uni, trig, T)
+    xt_ = torch.tensor(xt)
+    # the best possible: bits of the bigram's next character, and 0 after a trigger
+    ent = -(Pm * np.log2(Pm)).sum(1)
+    opt_bigram = float(np.mean([ent[xt[b, t]] for b in range(len(xt)) for t in range(1, T - 1) if not tt[b, t]]))
+    part = CACHE.partial("sinks", c)
+    for seed in SINK_SEEDS:
+        for vname in SINK_VARIANTS:
+            key = f"{vname}_{seed}"
+            if key in part:
+                continue
+            t0 = time.time()
+            torch.manual_seed(seed)
+            model = build_small(K, c["d"], 1, 1, pos="rope", sink=vname == "sink", gate=vname == "gate",
+                                diff=vname == "diff")
+            opt, sched = make_opt(model, c["lr"], c["steps"], c["warm"])
+            g = rng(2000 + seed)
+            hist = []
+            for step in range(1, c["steps"] + 1):
+                xb = torch.tensor(bb_batch(g, c["batch"], Pm, uni, trig, T)[0])
+                loss = F.cross_entropy(model(xb[:, :-1]).reshape(-1, K), xb[:, 1:].reshape(-1))
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                opt.step()
+                sched.step()
+                if step % 100 == 0:
+                    hist.append((step, *bb_measure(model, xt_, tt, K)[:3]))
+            model.eval()
+            r = bb_measure(model, xt_, tt, K, full=True)
+            part[key] = dict(hist=hist, **r[3], seconds=time.time() - t0)
+            print(f"    {key}: bigram {r[3]['loss_bigram']:.3f} (best {opt_bigram:.3f}), copy {r[3]['loss_copy']:.3f}, "
+                  f"<s> share dormant {r[3]['bos_dormant']:.2f} active {r[3]['bos_active']:.2f} "
+                  f"({time.time() - t0:.0f}s)", flush=True)
+    out = dict(cfg=c, variants=list(SINK_VARIANTS), seeds=list(SINK_SEEDS), chars=common, trig=trig,
+               opt_bigram=opt_bigram)
+    keys = [k for k in part[f"softmax_{SINK_SEEDS[0]}"] if k not in ("hist", "seconds", "map", "x")]
+    for vname in SINK_VARIANTS:
+        for k in keys:
+            vals = [part[f"{vname}_{s_}"].get(k) for s_ in SINK_SEEDS]
+            if all(v_ is not None for v_ in vals):
+                out[f"{vname}_{k}"] = np.array(vals, dtype=float)
+        out[f"{vname}_hist"] = np.array([part[f"{vname}_{s_}"]["hist"] for s_ in SINK_SEEDS])  # seed, t, (step, ...)
+        out[f"{vname}_map"] = np.array(part[f"{vname}_{SINK_SEEDS[0]}"]["map"], dtype=np.float32)
+    out["example"] = np.array(part[f"softmax_{SINK_SEEDS[0]}"]["x"])
+    return out
+
+
+def bb_measure(model, x, is_trig, K, full=False):
+    """Bits on the bigram part and on the copies; the attention <s> draws from queries with nothing to copy
+    (dormant) and from triggers (active); and, with ``full``, what each variant does instead."""
+    import torch
+    import torch.nn.functional as F
+
+    with torch.no_grad():
+        z, maps, extras = model(x[:, :-1], keep=True)
+        ce = F.cross_entropy(z.reshape(-1, K), x[:, 1:].reshape(-1), reduction="none").view(len(x), -1).numpy()
+        ce /= math.log(2)
+        P = maps[0][:, 0].numpy()  # batch, query, key (one head)
+        tq = is_trig[:, :-1].copy()
+        valid = np.zeros_like(tq)
+        valid[:, 2:] = True  # queries at positions 2 ... (position 1's previous token is <s> itself)
+        dorm, act = valid & ~tq, valid & tq
+        bos = P[:, :, 0]
+        prev = np.zeros_like(bos)
+        prev[:, 1:] = P[:, np.arange(1, P.shape[1]), np.arange(0, P.shape[1] - 1)]
+        r = (float(ce[:, 1:][~tq[:, 1:]].mean()), float(ce[act].mean()), float(bos[dorm].mean()))
+        if not full:
+            return r
+        ex = extras[0]
+        v = ex["v"][:, 0].norm(dim=-1).numpy()  # batch, position
+        out = dict(loss_bigram=r[0], loss_copy=r[1], bos_dormant=r[2], bos_active=float(bos[act].mean()),
+                   prev_active=float(prev[act].mean()), prev_dormant=float(prev[dorm].mean()),
+                   v_bos=float(v[:, 0].mean()), v_rest=float(v[:, 1:].mean()))
+        if "null" in ex:
+            nl = ex["null"][:, 0].numpy()
+            out.update(null_dormant=float(nl[dorm].mean()), null_active=float(nl[act].mean()))
+        if "gate" in ex:
+            gt = ex["gate"][:, 0].numpy()
+            out.update(gate_dormant=float(gt[dorm].mean()), gate_active=float(gt[act].mean()))
+        if "p1" in ex:
+            p1, p2 = ex["p1"][:, 0].numpy(), ex["p2"][:, 0].numpy()
+            out.update(lam=ex["lam"], p1_bos_dormant=float(p1[:, :, 0][dorm].mean()),
+                       p2_bos_dormant=float(p2[:, :, 0][dorm].mean()), sum_dormant=float(P.sum(-1)[dorm].mean()))
+        out["map"] = P[0, :24, :24].tolist()
+        out["x"] = x[0, :25].tolist()
+        return r + (out,)
+
+
+# ---------------------------------------------------------------------------
+def compute_qkscale():
+    """What happens to attention if queries and keys grow: our transformer's W_Q and W_K multiplied by c (every
+    score by c^2), plain, with a soft cap, and with QK-norm."""
+    import torch
+    import torch.nn.functional as F
+
+    threads()
+    load("tf")
+    model, chars, enc, data = load_tf()
+    va = data["valid"]
+    starts = rng(21).integers(0, len(va) - CTX - 1, 16)
+    x = torch.stack([va[a:a + CTX] for a in starts])
+    y = torch.stack([va[a + 1:a + CTX + 1] for a in starts])
+    K = len(chars)
+    cs = [1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0]
+    # the trained model's queries and keys: their typical size per head, and its largest score
+    with torch.no_grad():
+        _, maps, qks = model(x, keep=True)
+        rms = [(qk[0].pow(2).mean((0, 2, 3)).sqrt(), qk[1].pow(2).mean((0, 2, 3)).sqrt()) for qk in qks]
+        top = max(float((qk[0] @ qk[1].transpose(-1, -2)).abs().max()) / math.sqrt(DH) for qk in qks)
+    cap = float(math.ceil(top))
+    out = dict(cs=cs, cap=cap, max_logit=top)
+
+    def run(c, mode):
+        h = model.emb(x)
+        B, T = x.shape
+        th = torch.tensor(rope_freqs(), dtype=torch.float32)
+        ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+        cos, sin = torch.cos(ang), torch.sin(ang)
+        ents, peaks, logit = [], [], 0.0
+        for li, b in enumerate(model.blocks):
+            q, k, v = b.qkv(b.n1(h)).view(B, T, 3, HEADS, DH).permute(2, 0, 3, 1, 4)
+            q, k = q * c, k * c  # W_Q and W_K grown by c
+            if mode == "norm":  # QK-norm: each query and key rescaled to the trained head's typical size
+                q = q / q.pow(2).mean(-1, keepdim=True).sqrt() * rms[li][0].view(1, HEADS, 1, 1)
+                k = k / k.pow(2).mean(-1, keepdim=True).sqrt() * rms[li][1].view(1, HEADS, 1, 1)
+
+            def rot(t):
+                a_, b_ = t[..., : DH // 2], t[..., DH // 2:]
+                return torch.cat([a_ * cos - b_ * sin, a_ * sin + b_ * cos], -1)
+
+            s = rot(q) @ rot(k).transpose(-1, -2) / math.sqrt(DH)
+            if mode == "cap":
+                s = cap * torch.tanh(s / cap)
+            mask = torch.ones(T, T, dtype=torch.bool).tril()
+            logit = max(logit, float(s.masked_fill(~mask, 0).abs().max()))
+            p = torch.softmax(s.masked_fill(~mask, float("-inf")), -1)
+            pp = p[:, :, 32:]  # queries with at least 32 keys
+            ents.append(float((-(pp * torch.log2(pp.clamp_min(1e-30))).sum(-1)).mean()))
+            peaks.append(float((pp.max(-1).values > 0.9).float().mean()))
+            h = h + b.o((p @ v).transpose(1, 2).reshape(B, T, D))
+            h = h + b.f2(F.gelu(b.f1(b.n2(h))))
+        z = model.out(model.nf(h))
+        bits = float(F.cross_entropy(z.reshape(-1, K), y.reshape(-1))) / math.log(2)
+        return float(np.mean(ents)), float(np.mean(peaks)), bits, logit
+
+    with torch.no_grad():
+        for mode in ("plain", "cap", "norm"):
+            res = [run(c, mode) for c in cs]
+            out[f"ent_{mode}"] = [r_[0] for r_ in res]
+            out[f"peak_{mode}"] = [r_[1] for r_ in res]
+            out[f"bits_{mode}"] = [r_[2] for r_ in res]
+            out[f"logit_{mode}"] = [r_[3] for r_ in res]
+            print(f"    {mode}: entropy " + " ".join(f"{v:.2f}" for v in out[f"ent_{mode}"]) + "; bits "
+                  + " ".join(f"{v:.2f}" for v in out[f"bits_{mode}"]), flush=True)
     return out
 
 
@@ -844,6 +1552,123 @@ def compute_induction():
 
 
 # ---------------------------------------------------------------------------
+# RASP, compiled by hand into attention weights
+# ---------------------------------------------------------------------------
+def softmax_rows(S):
+    S = S - S.max(-1, keepdims=True)
+    E = np.exp(S)
+    return E / E.sum(-1, keepdims=True)
+
+
+def count_decoder(n_max):
+    """A one-hidden-layer ReLU network that reads a count c from the number 1/(c + 1): for each c a step at the
+    midpoint between 1/(c + 1) and 1/(c + 2), two ReLUs each; the one-hot count is the difference of neighbouring
+    steps. Returns (W1, b1, W2): onehot = W2 relu(W1 u + b1)."""
+    u = 1.0 / (np.arange(0, n_max + 2) + 1)  # u[c] = 1/(c + 1)
+    mids = (u[:-1] + u[1:]) / 2  # mids[c]: between counts c and c + 1
+    eps = (u[n_max] - u[n_max + 1]) / 8
+    W1, b1 = [], []
+    for c in range(n_max + 1):  # step_c(u) = 1 when u > mids[c], i.e. the count is at most c
+        W1 += [1 / eps, 1 / eps]
+        b1 += [-mids[c] / eps, -mids[c] / eps - 1]
+    W1, b1 = np.array(W1)[:, None], np.array(b1)
+    W2 = np.zeros((n_max + 1, len(b1)))
+    for c in range(n_max + 1):  # onehot(c) = step_c - step_(c-1)
+        W2[c, 2 * c], W2[c, 2 * c + 1] = 1, -1
+        if c > 0:
+            W2[c, 2 * c - 2], W2[c, 2 * c - 1] = -1, 1
+    return W1, b1, W2
+
+
+def compute_rasp():
+    """Two RASP programs (Weiss et al. 2021) compiled by hand into attention weights, in the manner of Tracr (Lindner
+    et al. 2023), and run: the histogram (one layer) and sorting (two layers)."""
+    g = rng(2021)
+    beta = 40.0  # how sharply a head selects: e^-40 leaks nothing a float can see
+    out = dict(beta=beta)
+    # --- histogram: for each token, how many tokens equal it. select(tokens, tokens, ==), then selector_width,
+    # which attends to the selected tokens and to <s> (always selected) and reads <s>'s share 1/(c + 1)
+    V, n_max = 6, 40
+    W1, b1, W2 = count_decoder(n_max)
+
+    def histogram(x, dtype=np.float64):
+        n = len(x)
+        E = np.zeros((n + 1, V + 1))  # one-hot tokens, and a flag for <s> at position 0
+        E[0, V] = 1
+        E[np.arange(1, n + 1), x] = 1
+        WQ = np.zeros((V + 1, V + 1))
+        WQ[:V, :V] = beta * np.eye(V)  # a query matches keys of its own token ...
+        Q = E @ WQ
+        Q[:, V] = beta  # ... and always <s>
+        S = Q @ E.T
+        A = softmax_rows(S)
+        o = (A @ E[:, V]).astype(dtype).astype(np.float64)  # <s>'s value is 1, every token's 0: o = 1/(c + 1)
+        h = np.maximum(W1 @ o[None] + b1[:, None], 0)
+        return (W2 @ h).argmax(0)[1:], A
+
+    ok = 0
+    for _ in range(2000):
+        n = int(g.integers(1, n_max + 1))
+        x = g.integers(0, V, n)
+        ok += np.array_equal(histogram(x)[0], np.array([(x == t).sum() for t in x]))
+    out["hist_ok"], out["hist_trials"] = ok, 2000
+    ex = np.array([0, 2, 1, 0, 3, 0, 2, 1, 4, 0, 2, 5])
+    cnt, A = histogram(ex)
+    out.update(hist_x=ex, hist_counts=cnt, hist_A=A, hist_alphabet="abcdef")
+    # precision: the largest count a 1/(c + 1) read in each float format still tells from c + 1
+    for name, dt in (("bf16", "bf16"), ("fp16", np.float16), ("fp32", np.float32)):
+        c = 1
+        while c < 100000:
+            u1, u2 = 1 / (c + 1), 1 / (c + 2)
+            if dt == "bf16":  # bfloat16: float32 with the low 16 bits dropped (round to nearest)
+                def r(v):
+                    b = np.array([v], np.float32).view(np.uint32)
+                    b = ((b + 0x8000) & 0xFFFF0000).astype(np.uint32)
+                    return float(b.view(np.float32)[0])
+            else:
+                def r(v, dt=dt):
+                    return float(np.array(v, dt))
+            if r(u1) == r(u2):
+                break
+            c += 1
+        out[f"prec_{name}"] = c  # counts up to c are told apart
+    # --- sorting (unique tokens): layer 1 counts the smaller tokens (a rank, by selector_width on the predicate
+    # key < query); layer 2, at output position p, selects the token whose rank is p and copies it
+    Vs, nm = 26, 12
+    W1s, b1s, W2s = count_decoder(nm)
+
+    def sort_prog(x):
+        n = len(x)
+        E = np.zeros((n + 1, Vs + 1))
+        E[0, Vs] = 1
+        E[np.arange(1, n + 1), x] = 1
+        M = np.zeros((Vs + 1, Vs + 1))
+        M[:Vs, :Vs] = beta * (np.arange(Vs)[None] < np.arange(Vs)[:, None])  # query token a, key token b: b < a
+        M[:, Vs] = beta  # every query also selects <s>
+        A1 = softmax_rows(E @ M @ E.T)
+        o = A1 @ E[:, Vs]
+        rank = (W2s @ np.maximum(W1s @ o[None] + b1s[:, None], 0)).argmax(0)  # the rank, one-hot, into the stream
+        R = np.zeros((n + 1, nm + 1))
+        R[np.arange(n + 1), rank] = 1
+        P = np.eye(nm + 1)[np.arange(1, n + 1) - 1]  # output position p asks for rank p
+        A2 = softmax_rows(beta * P @ R[1:].T)  # among the tokens (not <s>)
+        y = (A2 @ E[1:, :Vs]).argmax(1)
+        return y, A1, A2, rank
+
+    ok = 0
+    for _ in range(2000):
+        n = int(g.integers(1, nm + 1))
+        x = g.choice(Vs, n, replace=False)
+        ok += np.array_equal(sort_prog(x)[0], np.sort(x))
+    out["sort_ok"], out["sort_trials"] = ok, 2000
+    ex = np.array([ord(ch) - 97 for ch in "wordsclay"])
+    y, A1, A2, rank = sort_prog(ex)
+    out.update(sort_x=ex, sort_y=y, sort_A1=A1, sort_A2=A2, sort_rank=rank[1:])
+    assert out["hist_ok"] == 2000 and out["sort_ok"] == 2000  # compiled programs are exact
+    return out
+
+
+# ---------------------------------------------------------------------------
 def compute_icl():
     import torch
 
@@ -917,9 +1742,15 @@ def compute_icl():
 ITEMS = {
     "smoother": compute_smoother,
     "dotscale": compute_dotscale,
+    "hopfield": compute_hopfield,
     "rope": compute_rope,
+    "rasp": compute_rasp,
     "tf": compute_tf,
+    "heads": compute_heads,
+    "qkscale": compute_qkscale,
     "extend": compute_extend,
+    "positions": compute_positions,
+    "sinks": compute_sinks,
     "induction": compute_induction,
     "icl": compute_icl,
 }

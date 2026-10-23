@@ -239,7 +239,7 @@ class LeNet(VoiceoverScene):
             cmp = f"about where LeNet-5 was in 1998, at {LENET5_1998} percent."
         with self.voiceover(
             f"Over three training runs with different random starts, our network gets {pct(m, 2)} percent of the "
-            f"test digits wrong, between {pct(lo, 2)} and {pct(hi, 2)}: " + cmp + " <bookmark mark='a'/> And here "
+            f"test digits wrong, between {pct(lo, 2)} and {pct(hi, 2)}: {cmp} <bookmark mark='a'/> And here "
             "are some it got wrong. Several of them would make a person hesitate too."
         ) as vo:
             self.play(FadeIn(res, shift=UP * 0.1), FadeIn(gl), LaggedStart(*[FadeIn(g) for g in gal], lag_ratio=0.05))
@@ -307,9 +307,9 @@ class LeNet(VoiceoverScene):
             f"network of the same size, {M['params']['mlp']:,} weights against {M['params']['cnn']:,}, trained the "
             f"same way, three times each. <bookmark mark='a'/> On ordinary test digits: {pct(ec.mean(), 2)} "
             f"percent wrong for the convolutional network, {pct(em.mean(), 2)} for the other. "
-            "<bookmark mark='b'/> " + shifted_v + " Neither is perfectly shift-invariant: the fully connected "
+            f"<bookmark mark='b'/> {shifted_v} Neither is perfectly shift-invariant: the fully connected "
             "layers at the top of LeNet see positions. <bookmark mark='c'/> And the cleanest test of the "
-            "assumption: " + perm_v
+            f"assumption: {perm_v}"
         ) as vo:
             # first, large in the middle; then up into the corner when the plot arrives
             desc = VGroup(label(r"LeNet: \ convolution, pooling, convolution, pooling, \ three dense layers",

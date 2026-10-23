@@ -134,7 +134,7 @@ class Adversarial(VoiceoverScene):
             "Try it on our LeNet. <bookmark mark='a'/> This is the sign of the loss's gradient for one test "
             f"digit: which way each pixel should move to make the network more wrong. <bookmark mark='b'/> Add "
             f"it, scaled by epsilon. At zero, the network says "
-            f"{steps[0]['pred']}, {pct(steps[0]['p'], 0)} percent sure. <bookmark mark='c'/> " + v + " To a "
+            f"{steps[0]['pred']}, {pct(steps[0]['p'], 0)} percent sure. <bookmark mark='c'/> {v} To a "
             "person it is still plainly a seven, in a little fog."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
@@ -304,14 +304,16 @@ class Adversarial(VoiceoverScene):
                    f"{pct(std_p, 0)} for the ordinary network." if holds else
                    f"But against twenty steps it gives way: {pct(adv_p, 0)} percent wrong. It learned to resist "
                    "the one-step attack it trained on, not attacks in general.")
+        a0, a1 = float(np.mean([c[0, 2] for c in cv])), float(np.mean([c[-1, 2] for c in cv]))
+        fall = ("The attacked error, red, falls along with the clean one." if a1 < a0 - 0.2 else
+                "The attacked error, red, stays high while the clean one falls.")
         with self.voiceover(
             "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. "
-            "<bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. The "
-            f"attacked error, red, falls along with the clean one. <bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it "
-            f"{pct(adv_f, 0)} percent of the time instead of {pct(std_f, 0)}. " + verdict + " "
-            f"<bookmark mark='c'/> The clean error is {pct(adv_c, 2)} percent, against {pct(std_c, 2)}: " + cost + " "
-            "<bookmark mark='d'/> "
-            "The problem is still open, and the same search, run over words, breaks language models: Part 31."
+            f"<bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. {fall} "
+            f"<bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it {pct(adv_f, 0)} percent of "
+            f"the time instead of {pct(std_f, 0)}. {verdict} <bookmark mark='c'/> The clean error is "
+            f"{pct(adv_c, 2)} percent, against {pct(std_c, 2)}: {cost} <bookmark mark='d'/> The problem is still "
+            "open, and the same search, run over words, breaks language models: Part 31."
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")
