@@ -158,6 +158,8 @@ class Caps(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -3.0, 0])
         tag = note(rf"our cap: \ $c = {capv:.0f}$, \ just above the trained model's largest score").next_to(facts, UP, buff=0.2)
         ent_p = np.asarray(q["ent_plain"], float)
+        bl_ = label(rf"bits per character at $c = {cs[-1]:.0f}$: \ capped ${bits_c[-1]:.2f}$, \ uncapped "
+                    rf"${bits_p[-1]:.2f}$", font_size=20, color=CAPC).next_to(g1, DOWN, buff=0.25)
         if bits_c[-1] < bits_p[-1] - 0.05:
             bt = f"At c of {cs[-1]:.0f} the bits per character are {bits_c[-1]:.2f} instead of {bits_p[-1]:.2f}. "
         elif bits_c[-1] > bits_p[-1] + 0.05:
@@ -183,7 +185,7 @@ class Caps(VoiceoverScene):
             self.play(FadeIn(g1), FadeIn(tag), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]))
             self.play(Create(l1["cap"][0]), FadeIn(l1["cap"][1:]))
             vo.wait_until("d")
-            self.play(Indicate(l1["cap"][0], color=CAPC))
+            self.play(Indicate(l1["cap"][0], color=CAPC), FadeIn(bl_, shift=UP * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(facts))
         self.wait(0.3)

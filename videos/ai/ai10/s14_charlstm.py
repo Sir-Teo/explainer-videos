@@ -343,7 +343,7 @@ class CharLSTM(VoiceoverScene):
             f"<bookmark mark='a'/> Over the whole passage, the first letter of a word costs {ws:.1f} bits on "
             f"average; a letter inside a word, {wi:.1f}; a capital letter, {cap:.1f}. Once a word has begun, the "
             "rest of it is nearly free. That is Part 1's guessing game, played by a machine that remembers."
-        ) as vo:
+        ):
             self.play(FadeIn(head), FadeIn(scale), LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2),
                       run_time=2.0)
         self.wait(0.6)

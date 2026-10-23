@@ -211,8 +211,7 @@ class Before(VoiceoverScene):
             "designed by people, over decades. <bookmark mark='c'/> Systems like this won the first two ImageNet "
             "contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time."
         ) as vo:
-            self.play(FadeIn(boxes[0]))
-            vo.wait_until("a")
+            self.play(FadeIn(boxes[0]), run_time=0.6)
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(b)) for a, b in zip(arrows, boxes[1:])],
                                   lag_ratio=0.6), run_time=3.0)
             vo.wait_until("b")

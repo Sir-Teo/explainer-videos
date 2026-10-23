@@ -113,7 +113,6 @@ class Receptive(VoiceoverScene):
             "each layer's extra taps times the product of all the strides before it. <bookmark mark='e'/> Every "
             "layer after a stride counts for more."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, shift=RIGHT * 0.1) for d in defs], lag_ratio=0.3))
             vo.wait_until("b")
             step(0)

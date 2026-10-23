@@ -118,7 +118,7 @@ class Return(VoiceoverScene):
             "four apart: after log two of T rounds, every position has its state. A thousand steps become ten "
             "rounds."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.add(cite_)
             step(0)
             vo.wait_until("b")
             step(1, transform=False)

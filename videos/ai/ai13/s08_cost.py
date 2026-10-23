@@ -171,7 +171,7 @@ class Cost(VoiceoverScene):
         lw = label(r"the weights", font_size=20, color=MLP_).next_to(ax.c2p(1.4, float(np.interp(1.4, lt, 1 - share))), DOWN, buff=0.12)
         xl = math.log10(Tx)
         vx = DashedLine(ax.c2p(xl, 0), ax.c2p(xl, 1), color=WHITE, stroke_width=1.5)
-        vxl = MathTex(rf"T = 12\,d = {Tx:,}".replace(",", "{,}"), font_size=24).next_to(ax.c2p(xl, 0.12), RIGHT, buff=0.12)
+        vxl = MathTex(r"T = 12\,d = " + f"{Tx:,}".replace(",", "{,}"), font_size=22).next_to(ax.c2p(xl, 0.05), RIGHT, buff=0.1)
         eq = cmath(r"2\,L\,T\,d", r"=", r"24\,L\,d^2", r"\;\Leftrightarrow\;", r"T = 12\,d", font_size=32).move_to([3.9, 2.4, 0])
         gx = 12 * GPT3_D
         facts = VGroup(label(rf"ours, \ $d = {d}$: \ $T = {Tx:,}$".replace(",", "{,}"), font_size=22, color=OURS),
