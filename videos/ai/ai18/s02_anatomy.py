@@ -205,7 +205,7 @@ class Anatomy(VoiceoverScene):
             label(rf"pretraining: \ ${D['hours_pre'] / 1e6:.3f}$M H800 GPU-hours", font_size=24, color=GPU),
             label(rf"longer context: \ ${D['hours_ctx'] / 1e3:.0f}$k; \ post-training: \ ${D['hours_post'] / 1e3:.0f}$k",
                   font_size=24, color=GPU),
-            label(rf"at \$${D['rate']:.0f}$ an hour: \ \${P['dsv3_usd'] / 1e6:.3f}$ million", font_size=28, color=C_COL),
+            label(rf"at \$${D['rate']:.0f}$ an hour: \ \$${P['dsv3_usd'] / 1e6:.3f}$ million", font_size=28, color=C_COL),
             label(rf"each trillion tokens: \ ${D['hours_per_T'] / 1e3:.0f}$k GPU-hours $=$ ${P['dsv3_days_per_T']:.1f}$ "
                   rf"days on ${D['gpus']:,}$ GPUs".replace(",", "{,}"), font_size=24, color=D_COL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([0, -1.9, 0])

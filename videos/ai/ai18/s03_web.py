@@ -5,6 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai18.web import BLOCK
 from videos.ai.ai18.common import (EDU, F, KEPT, MONO, PAGE, PART, REMOVED, load, node_box, said, spoken_int,
                                    take_away)
 
@@ -154,13 +155,45 @@ class Web(VoiceoverScene):
         src = cite(r"Joulin et al.\ (2016--17), \ lid.176; \ Penedo et al., FineWeb (2024); \ computed here", corner=DL,
                    font_size=17)
         share = en / kept
+        # Before the chart: the two filters, drawn where the bars will grow.
+        n_words = len(BLOCK)
+        blk = VGroup(
+            label(r"1. \ the address alone", font_size=22, color=REMOVED),
+            data_text("…/casino-bonus-2026/", font=MONO, font_size=17, color=GREY_B),
+            label(rf"contains one of ${n_words}$ listed words \ $\Rightarrow$ \ dropped, unread", font_size=19,
+                  color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        sample = "where the river bends"
+        pieces = [w for w in ("<wh", "whe", "her", "ere", "re>", "<th", "the", "he>", "<ri", "riv", "…")]
+        chips = VGroup(*[VGroup(RoundedRectangle(width=0.62, height=0.36, corner_radius=0.06, stroke_color=GREY_C,
+                                                 stroke_width=1, fill_color="#1a2030", fill_opacity=1),
+                                data_text(c, font=MONO, font_size=14, color=GREY_A)) for c in pieces])
+        chips.arrange(RIGHT, buff=0.06)
+        probs = [("English", 0.97), ("Dutch", 0.01), ("German", 0.01)]
+        pbars = VGroup()
+        for nm, pr in probs:
+            r = Rectangle(width=max(2.6 * pr, 0.04), height=0.24, stroke_width=0, fill_color=KEPT if pr > 0.5 else GREY_B,
+                          fill_opacity=0.85)
+            t = label(nm, font_size=17, color=GREY_A)
+            pbars.add(VGroup(t, r).arrange(RIGHT, buff=0.12))
+        pbars.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        ftx = VGroup(
+            label(r"2. \ fastText's language identifier", font_size=22, color=KEPT),
+            data_text(sample, font=MONO, font_size=17, color=GREY_B),
+            chips,
+            label(r"one vector per character piece, \ averaged, \ one linear layer \ $\to$ \ $176$ "
+                  r"probabilities", font_size=19, color=GREY_A),
+            pbars,
+            note(r"both examples schematic", font_size=16),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        pre = VGroup(blk, ftx).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([-2.4, -0.1, 0])
         with self.voiceover(
             "Next: which language is each page in? <bookmark mark='a'/> Before that, a cheap filter on the address "
             f"alone: a blocklist of adult and gambling sites removes {W['blocked']} pages. <bookmark mark='b'/> Then "
             "a language identifier: fastText's, from Facebook AI Research, a linear model on character pieces that "
             "picks among 176 languages, and is fast enough to run on billions of pages. <bookmark mark='c'/> Here is what our "
-            f"sample holds. English is the largest group, {spoken_int(en)} pages, about "
-            f"{round(100 * share)} percent, and then Russian, Spanish, German, Japanese. <bookmark mark='d'/> "
+            f"sample holds. English: {spoken_int(en)} pages, about {round(100 * share)} percent; the rest are spread "
+            f"over {W['n_langs'] - 1} other languages. <bookmark mark='d'/> "
             "FineWeb keeps a page as English only if the identifier is at least 65 percent sure. That drops "
             f"{W['english_below']} more; and we drop pages under fifty words. <bookmark mark='e'/> "
             f"{spoken_int(W['english'])} English pages go on to the next step. Everything else here is filtering "
@@ -169,10 +202,16 @@ class Web(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(bl), FadeIn(funnel[0]), FadeIn(src))
             vo.wait_until("a")
+            self.play(FadeIn(blk, shift=UP * 0.1))
             self.play(FadeIn(funnel[1], shift=RIGHT * 0.1))
             vo.wait_until("b")
-            self.play(Indicate(bl))
+            self.play(FadeIn(ftx[:2]))
+            self.play(LaggedStart(*[FadeIn(c, shift=DOWN * 0.1) for c in chips], lag_ratio=0.12), run_time=1.5)
+            self.play(FadeIn(ftx[3]))
+            self.play(LaggedStart(*[GrowFromEdge(b[1], LEFT) for b in pbars], lag_ratio=0.2), FadeIn(pbars),
+                      FadeIn(ftx[5]), run_time=1.2)
             vo.wait_until("c")
+            self.play(FadeOut(pre))
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1]), FadeIn(b[2])) for b in bars],
                                   lag_ratio=0.2), run_time=3.0)
             self.play(FadeIn(funnel[2], shift=RIGHT * 0.1))

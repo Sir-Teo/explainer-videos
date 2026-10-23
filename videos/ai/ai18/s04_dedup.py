@@ -61,7 +61,7 @@ class Dedup(VoiceoverScene):
                    corner=DR, font_size=17)
         with self.voiceover(
             "The web repeats itself. Mirrors, templates, the same product page with another price. "
-            f"<bookmark mark='a'/> These two pages from our sample are job adverts from one site: "
+            f"<bookmark mark='a'/> These two pages from our sample come from one site: "
             f"{100 * ex['jaccard']:.0f} percent of their phrases are the same. <bookmark mark='b'/> Duplicates waste "
             "compute, and they get memorized: Lee and colleagues found in 2022 that models trained on deduplicated "
             "data reproduce their training text ten times less often. <bookmark mark='c'/> To compare documents, "
@@ -226,13 +226,24 @@ class Dedup(VoiceoverScene):
                    color=GREY_A).next_to(bars, DOWN, buff=0.45).align_to(bars, LEFT)
         src = cite(r"Team OLMo, Olmo 3 (2025), Sec.\ 3.4; \ Penedo et al.\ (2024); \ computed here", corner=DL,
                    font_size=17)
+        share = D["removed_share"]
+        if share < 0.05:
+            found = (f"What did we find? In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
+                     f"{D['removed']} near-duplicates: {100 * share:.1f} percent. Common Crawl already avoids fetching "
+                     "the same address twice in a crawl, and our sample is tiny.")
+        else:
+            found = (f"What did we find? In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
+                     f"{D['removed']} near-duplicates: {100 * share:.1f} percent of the pages.")
+        if D["foot_caught"] == D["foot_pairs"] and D["body_caught"] == 0:
+            books = (f"Each ends with the same licence, with the book's title changed: LSH catches all "
+                     f"{D['foot_pairs']} pairs of licences, and none of the {D['body_pairs']} pairs of novels.")
+        else:
+            books = (f"Each ends with the same licence, with the book's title changed: LSH catches "
+                     f"{D['foot_caught']} of the {D['foot_pairs']} pairs of licences, and {D['body_caught']} of the "
+                     f"{D['body_pairs']} pairs of novels.")
         with self.voiceover(
-            f"What did we find? In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
-            f"{D['removed']} near-duplicates: under one percent. Common Crawl already avoids fetching the same address "
-            "twice in a crawl, and our sample is tiny. <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are "
-            "a clearer test. Each ends with the same licence, with the book's title changed: LSH catches all "
-            f"{D['foot_pairs']} pairs of licences, and none of the {D['body_pairs']} pairs of novels. "
-            "<bookmark mark='b'/> At the scale of the whole web the numbers are dramatic. For Olmo 3, removing exact "
+            found + " <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are a clearer test. " + books +
+            " <bookmark mark='b'/> At the scale of the whole web the numbers are dramatic. For Olmo 3, removing exact "
             f"copies cut the pool by {O['exact']} percent, MinHash removed another {O['fuzzy']} percent, and repeated "
             f"substrings {O['substring']} percent of the remaining bytes: 38.7 billion documents became 9.7 billion. "
             "<bookmark mark='c'/> And one surprise. FineWeb first deduplicated all 96 crawls against each other, and "

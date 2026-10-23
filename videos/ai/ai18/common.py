@@ -35,6 +35,9 @@ PREC = {"fp32": GREY_A, "bf16": "#5CD0B3", "fp16": "#FF6B8B", "fp16_scaled": "#F
         "fp8_tile": "#6EA8FE"}
 PREC_NAME = {"fp32": r"FP32", "bf16": r"BF16", "fp16": r"FP16, \ no loss scaling", "fp16_scaled": r"FP16, \ loss scaling",
              "fp8_tensor": r"FP8, \ one scale per tensor", "fp8_tile": r"FP8, \ one scale per tile"}
+PREC_SPOKEN = {"fp32": "FP32", "bf16": "bfloat16", "fp16": "FP16 without loss scaling",
+               "fp16_scaled": "FP16 with loss scaling", "fp8_tensor": "FP8 with one scale per tensor",
+               "fp8_tile": "FP8 with one scale per tile"}
 STAB_C = {"plain": "#FF6B8B", "qk": "#5CD0B3", "qkz": "#6EA8FE"}
 STAB_NAME = {"plain": r"plain", "qk": r"QK-norm", "qkz": r"QK-norm $+$ z-loss"}
 MTP_C = "#D4A5FF"
