@@ -259,3 +259,68 @@ Samuel Williams, Andrew Waterman, David Patterson → 塞缪尔·威廉斯、安
 Tri Dao → Tri Dao; Vasily Volkov → 瓦西里·沃尔科夫; Herb Sutter → 赫伯·萨特; Gene Amdahl → 吉恩·阿姆达尔; John Little →
 约翰·利特尔; Mark Horowitz → 马克·霍洛维茨; William Kahan → 威廉·卡亨; Jonathan Ross → 乔纳森·罗斯. Products stay in Latin script
 (GeForce, CUDA, H100, Blackwell, Rubin, NVLink, TPU, Ironwood, Trainium, Cerebras, Groq, TrueNorth, Loihi, Hala Point).
+
+### The symbolic era (Part 2)
+
+| English | 中文 |
+|---|---|
+| Turing machine, tape, head, state | 图灵机，纸带，读写头，状态 |
+| universal machine, stored-program computer | 通用机，存储程序计算机 |
+| halting problem, decidable / undecidable | 停机问题，可判定 / 不可判定 |
+| busy beaver | 忙碌海狸 |
+| imitation game, Turing test, interrogator | 模仿游戏，图灵测试，提问者 |
+| Dartmouth workshop | 达特茅斯会议 |
+| Logic Theorist | 逻辑理论家 |
+| physical symbol system hypothesis | 物理符号系统假设 |
+| search problem, state space, goal test | 搜索问题，状态空间，目标测试 |
+| breadth-first / depth-first search, iterative deepening | 广度优先 / 深度优先搜索，迭代加深 |
+| uniform-cost search, Dijkstra's algorithm | 一致代价搜索，迪杰斯特拉算法 |
+| frontier, wavefront, expand | 边界，波前，扩展 |
+| heuristic, A\*, f = g + h | 启发式（启发函数），A\*，f = g + h |
+| admissible, consistent (monotone) | 可采纳的，一致的（单调的） |
+| weighted A\*, greedy best-first search | 加权A\*，贪心最佳优先搜索 |
+| relaxed problem, Manhattan distance, misplaced tiles | 松弛问题，曼哈顿距离，错位方块数 |
+| dominance, effective branching factor | 占优，有效分支因子 |
+| 8-puzzle, 15-puzzle | 八数码，十五数码 |
+| IDA\*, pattern database | IDA\*，模式数据库 |
+| local search, hill climbing, local maximum, plateau | 局部搜索，爬山法，局部极大值，平台 |
+| random restart, sideways move | 随机重启，横向移动 |
+| simulated annealing, temperature, cooling schedule | 模拟退火，温度，降温计划 |
+| Metropolis rule, detailed balance, Boltzmann distribution | 梅特罗波利斯准则，细致平衡，玻尔兹曼分布 |
+| travelling salesman problem, tour, 2-opt | 旅行商问题，回路，2-opt |
+| genetic algorithm, population, crossover, mutation | 遗传算法，种群，交叉，变异 |
+| alpha–beta window [α, β], cutoff, move ordering | α-β窗口 [α, β]，剪枝，走法排序 |
+| scoring polynomial (Samuel) | 评分多项式（塞缪尔） |
+| propositional / first-order logic, entailment | 命题 / 一阶逻辑，蕴涵 |
+| clause, literal, resolution, resolvent, refutation | 子句，文字，归结，归结式，反驳 |
+| unification, substitution | 合一，代换 |
+| set of support, Horn clause, Prolog | 支持集策略，霍恩子句，Prolog |
+| satisfiability (SAT), NP-complete | 可满足性（SAT），NP完全 |
+| DPLL, unit propagation, branching, backtracking | DPLL，单元传播，分支，回溯 |
+| conflict-driven clause learning (CDCL), implication graph | 冲突驱动子句学习（CDCL），蕴含图 |
+| first UIP, learned clause, backjumping | 第一唯一蕴含点，学习子句，回跳 |
+| phase transition, clause-to-variable ratio | 相变，子句与变量之比 |
+| constraint satisfaction problem, domain | 约束满足问题，值域 |
+| arc consistency (AC-3), forward checking | 弧相容（AC-3），前向检查 |
+| minimum remaining values (MRV), MAC | 最少剩余值（MRV），维持弧相容（MAC） |
+| planning, STRIPS, precondition, add list, delete list | 规划，STRIPS，前提条件，添加表，删除表 |
+| the frame problem, the Sussman anomaly | 框架问题，萨斯曼异常 |
+| relaxed-plan heuristic (h_max, h_FF) | 松弛规划启发式（h_max，h_FF） |
+| semantic network, is-a link, inheritance, frame, slot | 语义网络，is-a链接，继承，框架，槽 |
+| expert system, rule base, forward chaining | 专家系统，规则库，前向链接 |
+| certainty factor | 确定性因子 |
+| knowledge engineer, knowledge acquisition bottleneck | 知识工程师，知识获取瓶颈 |
+| knowledge graph | 知识图谱 |
+| ELIZA, keyword, decomposition, reassembly, the ELIZA effect | ELIZA，关键词，分解规则，重组规则，伊丽莎效应 |
+| AI winter, Lighthill report, Lisp machine | AI寒冬，莱特希尔报告，Lisp机 |
+| Fifth Generation Computer Systems project | 第五代计算机项目 |
+| Moravec's paradox, the long tail | 莫拉维克悖论，长尾 |
+| formal verification, SMT, adder, multiplier, miter | 形式化验证，SMT，加法器，乘法器，比较电路（miter） |
+| proof assistant (Lean) | 证明助手（Lean） |
+| neurosymbolic AI | 神经符号AI |
+
+Names: Alan Turing 图灵; Alonzo Church 丘奇; John McCarthy 麦卡锡; Marvin Minsky 明斯基; Herbert Simon 西蒙; Allen
+Newell 纽厄尔; Edsger Dijkstra 迪杰斯特拉; Arthur Samuel 塞缪尔; Garry Kasparov 卡斯帕罗夫; Joseph Weizenbaum 魏岑鲍姆;
+James Lighthill 莱特希尔; Hans Moravec 莫拉维克; Judea Pearl 珀尔; Richard Korf 科尔夫; Alan Robinson 鲁滨逊; Stephen Cook
+库克; Leonid Levin 列文. Program names stay in Latin script: Shakey, STRIPS, DENDRAL, MYCIN, XCON, Cyc, ELIZA, DOCTOR,
+Chinook, Deep Blue → 深蓝, Prolog, Lisp, Z3, Lean, AlphaProof, AlphaGeometry, FunSearch, AlphaEvolve, DeepCubeA.

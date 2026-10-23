@@ -59,34 +59,9 @@ def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
-class Partial:
-    """The finished pieces of a long compute item, saved as they come (``.cache/ai2/<name>.partial.json``), so a run
-    that is killed resumes where it stopped. Pieces computed with other parameters are discarded; the file is
-    removed when the item is saved."""
-
-    def __init__(self, name: str, params):
-        self.path = CACHE.dir / f"{name}.partial.json"
-        self.params = json.loads(json.dumps(params, default=float))
-        data = json.loads(self.path.read_text()) if self.path.exists() else {}
-        self.done = data.get("done", {}) if data.get("params") == self.params else {}
-        if self.done:
-            print(f"  resuming {name}: {len(self.done)} pieces done", flush=True)
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.done
-
-    def __getitem__(self, key: str):
-        return self.done[key]
-
-    def __setitem__(self, key: str, value) -> None:
-        self.done[key] = json.loads(json.dumps(value, default=float))
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = self.path.with_suffix(".tmp")
-        tmp.write_text(json.dumps({"params": self.params, "done": self.done}, default=float))
-        tmp.replace(self.path)
-
-    def finish(self) -> None:
-        self.path.unlink(missing_ok=True)
+def Partial(name: str, params):
+    """A long item's finished pieces, saved as they come (``explainer.ai.cache.Partial``): a killed run resumes."""
+    return CACHE.partial(name, params)
 
 
 # ---------------------------------------------------------------------------

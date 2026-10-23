@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from explainer.paths import video_dir  # noqa: E402
-from explainer.zh_templates import IS_TPL, Translator, sources, table  # noqa: E402,F401
+from explainer.zh_templates import IS_TPL, Translator, ambiguous, sources, table  # noqa: E402,F401
 
 def todo(video: str, scenes: list[str]) -> int:
     zh = table(video)["ZH"]
@@ -52,6 +52,9 @@ def todo(video: str, scenes: list[str]) -> int:
     if unused:
         print("table keys that match no source line:", [k[:60] for k in unused])
     print(f"{len(src) - len(left)} of {len(src)} source lines covered")
+    for t in ambiguous(video):
+        print(f"WARNING: two computed values meet with only spaces between them (put a bookmark or words between):"
+              f"\n  {t[:160]}")
     for x in left:
         if scenes and x["scene"] not in scenes:
             continue
