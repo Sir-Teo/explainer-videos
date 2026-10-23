@@ -74,15 +74,22 @@ class Perceptron(VoiceoverScene):
         warrow2 = Arrow(P(*foot2), P(*(foot2 + 0.9 * w2[:2] / np.linalg.norm(w2[:2]))), buff=0, color=WEIGHT,
                         stroke_width=5)
         tag = note(r"illustrative").next_to(sq, DOWN, buff=0.15).align_to(sq, RIGHT)
+        xs = np.linspace(-BOX, BOX, 160)
+        G = np.stack(np.meshgrid(xs, xs), -1)
+        tint = two_tone((G @ w[:2] + w[2]) > 0, 5.2, 5.2, strength=0.25).move_to(c)
+        tint2 = two_tone((G @ w2[:2] + w2[2]) > 0, 5.2, 5.2, strength=0.25).move_to(c)
+        u = w[:2] / np.linalg.norm(w[:2])
+        sides = VGroup(MathTex(r"w \cdot x > 0", font_size=30, color=CLS_B).move_to(P(*(foot + 1.25 * u + [0.35, -0.6]))),
+                       MathTex(r"w \cdot x < 0", font_size=30, color=CLS_A).move_to(P(*(foot - 1.15 * u + [0.2, -0.75]))))
         alg = theorem_card(r"The perceptron", VGroup(
-            label(r"examples $x$ with labels $y = \pm 1$", font_size=24, color=GREY_A),
-            label(r"predict $\operatorname{sign}(w \cdot x)$", font_size=24, color=GREY_A),
-            label(r"on a mistake: \ $w \leftarrow w + y\,x$", font_size=26, color=WEIGHT),
-            label(r"a constant input $1$ gives the line its bias", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18), who=r"F.~Rosenblatt (1958)", kind=r"Algorithm", width=6.0,
-            color=WEIGHT).move_to([3.4, 0.9, 0])
-        why_ = label(r"$y\,x$ turns $w$ toward a positive point, \\ away from a negative one", font_size=24,
-                     color=GREY_A).move_to([3.4, -2.5, 0])
+            label(r"examples $x$ with labels $y = \pm 1$", font_size=28, color=GREY_A),
+            label(r"predict $\operatorname{sign}(w \cdot x)$", font_size=28, color=GREY_A),
+            label(r"on a mistake: \ $w \leftarrow w + y\,x$", font_size=30, color=WEIGHT),
+            label(r"a constant input $1$ gives the line its bias", font_size=25, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2), who=r"F.~Rosenblatt (1958)", kind=r"Algorithm", width=6.4,
+            color=WEIGHT).move_to([3.45, 1.0, 0])
+        why_ = label(r"$y\,x$ turns $w$ toward a positive point, \\ away from a negative one", font_size=28,
+                     color=GREY_A).move_to([3.45, -2.4, 0])
         with self.voiceover(
             "Here is Rosenblatt's learning rule, in modern notation. Each example is a point x with a label y, plus "
             "one or minus one. <bookmark mark='a'/> The perceptron predicts the sign of w dot x: which side of the "
@@ -94,13 +101,14 @@ class Perceptron(VoiceoverScene):
         ) as vo:
             self.play(Create(sq), FadeIn(alg), FadeIn(tag))
             vo.wait_until("a")
-            self.play(Create(line), GrowArrow(warrow), FadeIn(wl))
+            self.play(FadeIn(tint), Create(line), GrowArrow(warrow), FadeIn(wl), FadeIn(sides))
             vo.wait_until("b")
             self.play(FadeIn(xd, scale=1.5), FadeIn(xl))
             self.play(Indicate(xd, color=C.SURPRISE))
             vo.wait_until("c")
-            self.play(Transform(line, line2), Transform(warrow, warrow2), wl.animate.next_to(warrow2.get_end(), UR, buff=0.05),
-                      FadeIn(why_), run_time=1.5)
+            self.play(FadeOut(sides), FadeOut(tint), FadeIn(tint2), Transform(line, line2), Transform(warrow, warrow2),
+                      wl.animate.next_to(warrow2.get_end(), UR, buff=0.05), FadeIn(why_), run_time=1.5)
+            self.bring_to_front(line, warrow, wl, xd, xl)
         self.wait(0.3)
         self.clear_scene()
 
@@ -125,21 +133,29 @@ class Perceptron(VoiceoverScene):
 
         # the passes: which update belongs to which pass
         bounds = np.cumsum(pe)
-        mv = Integer(0, font_size=34, color=C.SURPRISE)
-        ml = VGroup(label(r"mistakes so far:", font_size=26, color=GREY_A), mv).arrange(RIGHT, buff=0.15)
-        ml.move_to([3.4, 2.7, 0])
-        # bars: mistakes in each pass
+        mv = Integer(0, font_size=40, color=C.SURPRISE)
+        ml = VGroup(label(r"mistakes so far:", font_size=32, color=GREY_A), mv).arrange(RIGHT, buff=0.15)
+        ml.move_to([3.4, 2.75, 0])
+        # bars: mistakes in each pass, growing mistake by mistake
         n_pass = len(pe)
-        bw = 0.5
-        base = Line([1.4, -2.2, 0], [1.4 + n_pass * (bw + 0.25) + 0.25, -2.2, 0], color=GREY_C, stroke_width=1.5)
-        unit = 3.0 / max(pe)
-        bars = VGroup(*[Rectangle(width=bw, height=max(v * unit, 0.02), stroke_width=0, fill_color=C.SURPRISE,
-                                  fill_opacity=0.85).move_to([1.4 + 0.25 + bw / 2 + i * (bw + 0.25), -2.2 + max(v * unit, 0.02) / 2, 0])
-                        for i, v in enumerate(pe)])
-        bnum = VGroup(*[MathTex(str(v), font_size=24, color=C.SURPRISE).next_to(b_, UP, buff=0.08) for v, b_ in zip(pe, bars)])
-        blab = VGroup(*[MathTex(str(i + 1), font_size=22, color=GREY_B).next_to([b_.get_x(), -2.2, 0], DOWN, buff=0.12)
+        bw, gap, bx, by = 0.6, 0.3, 1.0, -2.0
+        base = Line([bx, by, 0], [bx + n_pass * (bw + gap) + gap, by, 0], color=GREY_C, stroke_width=1.5)
+        unit = 3.4 / max(pe)
+
+        def bar(i, v):
+            h_ = max(v * unit, 0.02)
+            return Rectangle(width=bw, height=h_, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.85).move_to(
+                [bx + gap + bw / 2 + i * (bw + gap), by + h_ / 2, 0])
+
+        def bnum_(i, v):
+            return MathTex(str(v), font_size=30, color=C.SURPRISE).next_to(bar(i, v), UP, buff=0.1)
+
+        bars = VGroup(*[bar(i, 0) for i in range(n_pass)])
+        bnum = VGroup(*[bnum_(i, 0) for i in range(n_pass)])
+        blab = VGroup(*[MathTex(str(i + 1), font_size=28, color=GREY_B).next_to([b_.get_x(), by, 0], DOWN, buff=0.14)
                         for i, b_ in enumerate(bars)])
-        bt = label(r"mistakes in each pass through the data", font_size=22, color=GREY_A).next_to(base, DOWN, buff=0.55)
+        bt = label(r"mistakes in each pass through the data", font_size=26, color=GREY_A).next_to(base, DOWN, buff=0.6)
+        count = [0] * n_pass
         tag = note(rf"computed: \ ${len(X)}$ points, \ separable").next_to(sq, DOWN, buff=0.15)
         with self.voiceover(
             f"Here it is on {len(X)} points that some line can separate. It starts with all its weights at zero. "
@@ -152,25 +168,29 @@ class Perceptron(VoiceoverScene):
                       Create(base), FadeIn(bt))
             vo.wait_until("a")
             cur_t, cur_l = None, None
+            shown = set()
             for j in range(k):
                 i = who[j]
+                p = int(np.searchsorted(bounds, j + 1, side="left"))  # the pass this mistake belongs to
                 ring = Circle(radius=0.18, color=C.SURPRISE, stroke_width=4).move_to(dots[i])
                 w = ws[j + 1]
                 nt, nl = tint(w), seg(w)
-                self.play(Create(ring), run_time=0.25)
+                self.play(Create(ring), *([FadeIn(blab[p]), FadeIn(bars[p])] if p not in shown else []), run_time=0.25)
+                shown.add(p)
+                count[p] += 1
                 anims = [FadeIn(nt), FadeIn(nl)] if cur_t is None else [FadeOut(cur_t), FadeIn(nt), Transform(cur_l, nl)]
-                self.play(*anims, ChangeDecimalToValue(mv, j + 1), FadeOut(ring), run_time=0.55)
+                self.play(*anims, ChangeDecimalToValue(mv, j + 1), FadeOut(ring), Transform(bars[p], bar(p, count[p])),
+                          Transform(bnum[p], bnum_(p, count[p])), *([FadeIn(bnum[p])] if count[p] == 1 else []),
+                          run_time=0.55)
                 if cur_l is None:
                     cur_l = nl
                 cur_t = nt
                 self.bring_to_front(dots, cur_l)
-                p = int(np.searchsorted(bounds, j + 1, side="left"))
-                if j + 1 == bounds[p]:  # the end of a pass
-                    self.play(GrowFromEdge(bars[p], DOWN), FadeIn(bnum[p]), FadeIn(blab[p]), run_time=0.35)
                 if j == 1:
                     vo.wait_until("b")
             vo.wait_until("c")
-            self.play(GrowFromEdge(bars[-1], DOWN), FadeIn(bnum[-1]), FadeIn(blab[-1]), run_time=0.4)
+            rest = [q for q in range(n_pass) if q not in shown]
+            self.play(*[FadeIn(blab[q]) for q in rest], *[FadeIn(bnum[q]) for q in rest], run_time=0.4)
             self.play(Indicate(dots, color=WHITE, scale_factor=1.05))
         self.wait(0.3)
         self.clear_scene()
@@ -198,13 +218,42 @@ class Perceptron(VoiceoverScene):
         assume = label(r"suppose $\|x\| \le R$ for every point, and some unit vector $w^*$ puts every point on its side "
                        r"with room to spare: \ $y\, w^* \cdot x \ge \gamma$", font_size=24, color=GREY_A)
         assume.to_edge(UP, buff=0.3)
+        # the assumptions, on the chapter's data: the radius R and the band of width gamma either side of w*'s line
+        d = load("perceptron")
+        X, yv, wst = np.asarray(d["X"]), np.asarray(d["y"]), np.asarray(d["wstar"])
+        gam = float(d["gamma"])
+        span, side, c = 3.0, 5.6, np.array([-3.3, -0.55, 0])
+
+        def P(x_, y_):
+            return c + np.array([x_, y_, 0]) * side / (2 * span)
+
+        frame_ = Square(side, stroke_color=GREY_D, stroke_width=1.5).move_to(c)
+        far = X[int(np.argmax(np.linalg.norm(X, axis=1)))]
+        circ = Circle(radius=float(np.linalg.norm(far)) * side / (2 * span), color=C.MODEL_Q, stroke_width=3).move_to(P(0, 0))
+        rad = Line(P(0, 0), P(*far), color=C.MODEL_Q, stroke_width=3)
+        rl = MathTex(r"R", font_size=36, color=C.MODEL_Q).next_to(rad.get_center(), UL, buff=0.08)
+        lo, hi = clip_line(wst - np.r_[0, 0, gam], span), clip_line(wst + np.r_[0, 0, gam], span)
+        band = Polygon(P(*lo[0]), P(*lo[1]), P(*hi[1]), P(*hi[0]), stroke_width=0, fill_color=FWD, fill_opacity=0.22)
+        mid = clip_line(wst, span)
+        sep = Line(P(*mid[0]), P(*mid[1]), color=FWD, stroke_width=3.5)
+        ft = -wst[2] * wst[:2] / (wst[:2] @ wst[:2])
+        warr = Arrow(P(*ft), P(*(ft + 1.0 * wst[:2] / np.linalg.norm(wst[:2]))), buff=0, color=FWD, stroke_width=5)
+        wsl = MathTex(r"w^*", font_size=34, color=FWD).next_to(warr.get_end(), RIGHT, buff=0.08)
+        pdots = VGroup(*[Dot(P(*q), radius=0.06, color=CLS_B if v > 0 else CLS_A) for q, v in zip(X, yv)])
+        tight = np.where(yv * (np.c_[X, np.ones(len(X))] @ wst) < gam * 1.0001)[0]
+        rings = VGroup(*[Circle(radius=0.15, color=C.BITS, stroke_width=3).move_to(pdots[i]) for i in tight])
+        gl = label(r"margin $\gamma$: \ the closest points", font_size=26, color=C.BITS)
+        gl.next_to(frame_, RIGHT, buff=0.3).align_to(frame_, DOWN).shift(UP * 0.3)
+        pnote = note(r"$R$ and $\gamma$ count the constant input $1$ too").next_to(frame_, DOWN, buff=0.12)
+        pic = VGroup(frame_, band, sep, warr, wsl, circ, rad, rl, pdots, rings, gl, pnote)
         th = theorem_card(r"Perceptron convergence", r"if every $\|x\| \le R$ and some unit $w^*$ separates the data "
                           r"with margin $\gamma$, \ the perceptron makes at most $(R/\gamma)^2$ mistakes: \ in any order, "
                           r"\ however many passes", who=r"A.~B.~J.~Novikoff (1962)", width=8.4, color=FWD)
         with self.voiceover(
             "Is it guaranteed to stop? In 1962 Albert Novikoff proved that it is, whenever some line separates the "
-            "data. Suppose every point lies within a distance R of the origin, and some unit vector w star puts every "
-            "point on its side with room to spare, a margin gamma. <bookmark mark='a'/> Watch two numbers. First, w's "
+            "data. <bookmark mark='p1'/> Suppose every point lies within a distance R of the origin, "
+            "<bookmark mark='p2'/> and some unit vector w star puts every point on its side with room to spare, a "
+            "margin gamma. <bookmark mark='a'/> Watch two numbers. First, w's "
             "agreement with w star. Each mistake adds y x, and y x dot w star is at least gamma. "
             "<bookmark mark='b'/> So after k mistakes, the agreement is at least k gamma: it grows in proportion to k. "
             "<bookmark mark='c'/> Second, w's length. A mistake means y times w dot x was not positive, so the middle "
@@ -214,8 +263,15 @@ class Perceptron(VoiceoverScene):
             "<bookmark mark='f'/> Square both ends and divide: the number of mistakes is at most R over gamma, "
             "squared. Something that grows like k can't stay below something that grows like root k for long."
         ) as vo:
-            self.play(FadeIn(assume))
+            self.play(Create(frame_), FadeIn(pdots))
+            vo.wait_until("p1")
+            self.play(FadeIn(assume), Create(circ), Create(rad), FadeIn(rl), FadeIn(pnote))
+            vo.wait_until("p2")
+            self.play(FadeIn(band), Create(sep), GrowArrow(warr), FadeIn(wsl))
+            self.bring_to_front(pdots)
+            self.play(LaggedStart(*[Create(r_) for r_ in rings], lag_ratio=0.2), FadeIn(gl))
             vo.wait_until("a")
+            self.play(FadeOut(pic))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -262,6 +318,9 @@ class Perceptron(VoiceoverScene):
                       label(rf"mistakes made: \ ${k}$", font_size=32, color=C.SURPRISE))
         nums.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-4.3, 0.8, 0])
         tag = note(r"computed: \ six data sets of $200$ points, \ smaller and smaller margins").to_corner(DR, buff=0.2)
+        ours = Star(5, outer_radius=0.13, color=C.MODEL_Q, fill_opacity=1, stroke_width=0).move_to(
+            ax.c2p(math.log10(bound), math.log10(k)))
+        ol = label(rf"our ${len(np.asarray(d['X']))}$ points", font_size=22, color=C.MODEL_Q).next_to(ours, DR, buff=0.08)
         svm = label(r"it finds \textit{a} separating line, \ not the widest: \\ that is the support vector machine "
                     r"\ (Part 6)", font_size=24, color=GREY_A).move_to([-4.0, -2.4, 0])
         ratio = float(np.max(sw[:, 4] / sw[:, 5]))
@@ -274,9 +333,11 @@ class Perceptron(VoiceoverScene):
             "not the one with the widest margin; finding that one is the support vector machine of Part 6. And if no "
             "line separates the data, the perceptron never stops."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in nums], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in nums], lag_ratio=0.3), FadeIn(g), Create(diag),
+                      FadeIn(dl), run_time=2.0)
+            self.play(FadeIn(ours, scale=1.5), FadeIn(ol))
             vo.wait_until("a")
-            self.play(FadeIn(g), Create(diag), FadeIn(dl), FadeIn(tag))
+            self.play(FadeIn(tag), ours.animate.set_opacity(0.5), ol.animate.set_opacity(0.5))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(m_, scale=1.5), FadeIn(x_)) for m_, x_ in zip(means, maxes)],
                                   lag_ratio=0.3), FadeIn(lg), run_time=2.0)

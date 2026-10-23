@@ -57,8 +57,9 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
 * **10. The edge of chaos.** Mean-field theory (Poole et al. 2016; Schoenholz et al. 2017): the length map and its
   fixed point (cobweb); the correlation map and χ₁; ordered, critical and chaotic phases, against a real network of
   width 1,000; the phase diagram over (σ_w², σ_b²) for tanh, whose edge meets σ_b = 0 at σ_w² = 1.00 (Glorot), and
-  χ₁ = σ_w²/2 for ReLU (He); the depth scale ξ_c and trainability, computed over depth × σ_w² with Schoenholz et
-  al.'s 6ξ_c; ten-thousand-layer CNNs (Xiao et al. 2018).
+  χ₁ = σ_w²/2 for ReLU (He); the depth scale ξ_c and trainability, computed: tanh networks of depth 5 to 100 at 12
+  weight variances, 300 RMSProp steps each, whose trainable region narrows toward the edge with depth and agrees with
+  Schoenholz et al.'s L ≲ 6ξ_c on 86% of the grid; ten-thousand-layer CNNs (Xiao et al. 2018).
 * **11. The residual stream.** h + f(h); the identity in every block's Jacobian; 40 plain layers against 40
   residual layers on the spirals; inside both as they train (answers and per-layer gradients, replayed); the product
   (I + J_L)⋯(I + J_1) expanded into 2^L paths (Veit, Wilber & Belongie 2016); highway networks (2015), ResNet's 152
@@ -72,12 +73,14 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
   SiLU (Elfwing et al.; Ramachandran et al. 2017); gating (Dauphin et al. 2017) as a 3D surface; SwiGLU (Shazeer 2020)
   and the 8d/3 width; published configurations (GPT-2 4d; Llama 2 7B 11,008 = 8/3·4,096 rounded to 256; Llama 3 8B
   14,336; Qwen3-8B 12,288); the block assembled, Llama 3 8B counted from its configuration (41.9M attention + 176.2M
-  MLP weights per block, 8.03B in all); an ablation in a 24-block character model on the novels: plain, + residual,
-  + post-LN, + pre-LN, + pre-RMSNorm, + SwiGLU.
+  MLP weights per block, 8.03B in all); an ablation in a 24-block character model on the novels, 1,200 steps each,
+  same data and seed: plain 4.46 bits/char (stuck), + residual 2.95, post-LN 4.45 (stalls without warm-up), pre-LN
+  3.02, pre-RMSNorm 3.01, + SwiGLU 2.88 (best).
 * **14. Kolmogorov–Arnold networks.** Hilbert's 13th problem (1900); Kolmogorov and Arnold (1957); Girosi & Poggio's
   "irrelevant" (1989) and Kůrková's "relevant" (1991); KANs (Liu et al. 2024); a [2, 5, 1] KAN and an MLP of the same
-  size trained on exp(sin πx + y²), the KAN's fifteen learned curves replayed; KANs and MLPs by size; Yu, Yu & Wang's
-  fairer comparison (2024), KAN 2.0, and what frontier models use.
+  size trained on exp(sin πx + y²) (test error 0.017 for 135 parameters against 0.040 for 151), the KAN's fifteen
+  learned curves replayed (the closest match a sine and a square with correlations 0.997 and 0.987); KANs and MLPs by
+  size; Yu, Yu & Wang's fairer comparison (2024), KAN 2.0, and what frontier models use.
 * **15. A neural language model.** Bengio, Ducharme, Vincent & Jauvin's design (2003) for characters (24 characters
   of context, learned 32-number vectors, 1,024 tanh units, direct connections), trained on Part 1's books, replayed:
   the bits-per-character curve with what it writes at nine checkpoints; mixed with Part 7's Kneser–Ney (the weight

@@ -27,34 +27,35 @@ class XOR(VoiceoverScene):
     def proof(self):
         d = load("perceptron")
         xe = [int(v) for v in d["xor_epochs"]]
-        c, side = np.array([-4.6, 1.0, 0]), 3.2
+        c, side = np.array([-4.3, -0.1, 0]), 4.2
         sq = Square(side, stroke_color=GREY_D, stroke_width=1.5).move_to(c)
 
         def P(x, y):
             return c + np.array([(x - 0.5) * side / 1.8, (y - 0.5) * side / 1.8, 0])
 
-        pts = VGroup(*[Dot(P(*p), radius=0.13, color=CLS_B if v else CLS_A) for p, v in XOR_PTS])
-        lab = VGroup(*[MathTex(rf"({p[0]},{p[1]}) \to {v}", font_size=24, color=CLS_B if v else CLS_A)
-                       .next_to(P(*p), DOWN if p[1] == 0 else UP, buff=0.18) for p, v in XOR_PTS])
-        head = label(r"XOR: \ fire when exactly one input is on", font_size=26, color=WHITE).next_to(sq, UP, buff=0.55)
+        pts = VGroup(*[Dot(P(*p), radius=0.16, color=CLS_B if v else CLS_A) for p, v in XOR_PTS])
+        lab = VGroup(*[MathTex(rf"({p[0]},{p[1]}) \to {v}", font_size=32, color=CLS_B if v else CLS_A)
+                       .next_to(P(*p), DOWN if p[1] == 0 else UP, buff=0.2) for p, v in XOR_PTS])
+        head = label(r"XOR: \ fire when exactly one input is on", font_size=32, color=WHITE).next_to(sq, UP, buff=0.3)
         colors = {r"\theta": WEIGHT, r"w_1": WEIGHT, r"w_2": WEIGHT}
-        rows = [cmath(r"0", r"<", r"\theta", font_size=34, colors=colors),
-                cmath(r"w_1 \ge \theta,", r"\ \ ", r"w_2 \ge \theta", font_size=34, colors=colors),
-                cmath(r"w_1 + w_2", r"<", r"\theta", font_size=34, colors=colors),
-                cmath(r"w_1 + w_2", r"\ge", r"2\theta \ > \ \theta", font_size=34, colors=colors)]
+        rows = [cmath(r"0", r"<", r"\theta", font_size=40, colors=colors),
+                cmath(r"w_1 \ge \theta,", r"\ \ ", r"w_2 \ge \theta", font_size=40, colors=colors),
+                cmath(r"w_1 + w_2", r"<", r"\theta", font_size=40, colors=colors),
+                cmath(r"w_1 + w_2", r"\ge", r"2\theta \ > \ \theta", font_size=40, colors=colors)]
         whys = [why(r"$(0,0)$ must not fire"), why(r"$(1,0)$ and $(0,1)$ must fire"), why(r"$(1,1)$ must not fire"),
                 why(r"add the middle line; \ $\theta > 0$")]
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=1.2, buff=0.55, edge=6.9, align_index=None)
-        cross = Cross(VGroup(rows[2], rows[3]), stroke_color=C.SURPRISE, stroke_width=5).scale(0.6)
-        bad = label(r"contradiction: \ no line does it", font_size=28, color=C.SURPRISE).move_to([2.6, -1.1, 0])
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=0.9, buff=0.6, edge=6.9, align_index=None)
+        cross = VGroup(SurroundingRectangle(rows[2][0:3], color=C.SURPRISE, buff=0.1, corner_radius=0.06),
+                       SurroundingRectangle(rows[3][0:3], color=C.SURPRISE, buff=0.1, corner_radius=0.06))
+        bad = label(r"contradiction: \ no line does it", font_size=32, color=C.SURPRISE)
         # the perceptron on XOR: mistakes in every pass, forever
         n = len(xe)
-        bw = 0.12
-        bars = VGroup(*[Rectangle(width=bw, height=0.32 * v, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.85)
-                        .move_to([-6.2 + i * (bw + 0.05) + bw / 2, -3.0 + 0.16 * v, 0]) for i, v in enumerate(xe)])
-        base = Line([-6.3, -3.0, 0], [-6.2 + n * (bw + 0.05) + 0.05, -3.0, 0], color=GREY_C, stroke_width=1.5)
-        bl = label(rf"the perceptron on XOR: \ mistakes in each of ${n}$ passes", font_size=22, color=GREY_A)
-        bl.next_to(base, UP, buff=1.55).align_to(base, LEFT)
+        bw, gap, bx, by = 0.1, 0.045, 0.7, -3.3
+        bars = VGroup(*[Rectangle(width=bw, height=0.28 * v, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.85)
+                        .move_to([bx + i * (bw + gap) + bw / 2, by + 0.14 * v, 0]) for i, v in enumerate(xe)])
+        base = Line([bx - 0.05, by, 0], [bx + n * (bw + gap), by, 0], color=GREY_C, stroke_width=1.5)
+        bl = label(rf"the perceptron on XOR: \ mistakes in each of ${n}$ passes", font_size=26, color=GREY_A)
+        bl.next_to(base, UP, buff=0.28 * max(xe) + 0.15).align_to(base, LEFT)
         with self.voiceover(
             "Here is the simplest thing a single unit cannot do. XOR, exclusive or: fire when exactly one input is "
             "on. <bookmark mark='a'/> Suppose a threshold unit did it. The input zero, zero must not fire, so the "
@@ -74,6 +75,7 @@ class XOR(VoiceoverScene):
             step(2)
             vo.wait_until("d")
             step(3)
+            bad.next_to(VGroup(*rows), DOWN, buff=0.35).align_to(rows[3], LEFT)
             self.play(Create(cross), FadeIn(bad))
             vo.wait_until("e")
             self.play(Create(base), FadeIn(bl), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.04),
@@ -85,7 +87,7 @@ class XOR(VoiceoverScene):
     def book(self):
         hc = history_card(1969, r"Marvin Minsky \& Seymour Papert, \ MIT: \ \textit{Perceptrons}",
                           r"theorems on what a single layer of trainable weights can compute", width=6.0,
-                          color=HIST).move_to([-3.4, 2.3, 0])
+                          color=HIST).move_to([-3.5, 2.35, 0])
         # two figures on a retina: connected and not (schematic)
         def retina(cells, center):
             g = VGroup()
@@ -101,23 +103,22 @@ class XOR(VoiceoverScene):
         conn = ring | {(4, j) for j in range(1, 6)}
         disc = (ring - {(1, 4), (7, 4)}) | {(4, j) for j in range(2, 5)}
         r1, r2 = retina(conn, np.array([-5.0, -1.0, 0])), retina(disc, np.array([-1.8, -1.0, 0]))
-        l1 = label(r"connected", font_size=22, color=FWD).next_to(r1, DOWN, buff=0.15)
-        l2 = label(r"not connected", font_size=22, color=C.SURPRISE).next_to(r2, DOWN, buff=0.15)
+        l1 = label(r"connected", font_size=26, color=FWD).next_to(r1, DOWN, buff=0.15)
+        l2 = label(r"not connected", font_size=26, color=C.SURPRISE).next_to(r2, DOWN, buff=0.15)
         res = label(r"parity and connectedness: \ a single layer needs units \\ that see nearly the whole picture",
-                    font_size=22, color=GREY_A).move_to([-3.4, -3.15, 0])
-        tag = note(r"schematic").next_to(r2, RIGHT, buff=0.2).align_to(r2, DOWN)
+                    font_size=26, color=GREY_A).move_to([-3.4, -3.3, 0])
+        tag = note(r"schematic").next_to(r2, UP, buff=0.1).align_to(r2, RIGHT)
         quote = wrapped_label(r"``we consider it to be an important research problem to elucidate (or reject) our "
-                              r"intuitive judgment that the extension is sterile.''", 5.4, 24, WHITE)
-        qsrc = label(r"Minsky \& Papert, \textit{Perceptrons} (1969), on networks of many layers", font_size=18,
+                              r"intuitive judgment that the extension is sterile.''", 5.8, 28, WHITE)
+        qsrc = label(r"Minsky \& Papert, \textit{Perceptrons} (1969), \\ on networks of many layers", font_size=22,
                      color=GREY_B)
         qc = VGroup(quote, qsrc).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, 1.9, 0])
         winter = VGroup(
-            label(r"1971: \ Rosenblatt dies, \ aged $43$", font_size=24, color=GREY_A),
-            label(r"the 1970s: \ money and students go to symbolic AI \ (Part 2)", font_size=24, color=GREY_A),
-            label(r"1980: \ Fukushima's neocognitron, \ ancestor of the convnet \ (Part 10)", font_size=24,
-                  color=NEURON),
-            label(r"1982: \ Hopfield's network revives the field \ (Part 20)", font_size=24, color=NEURON),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, -1.5, 0])
+            label(r"1971: \ Rosenblatt dies, \ aged $43$", font_size=28, color=GREY_A),
+            label(r"the 1970s: \ money goes to symbolic AI \ (Part 2)", font_size=28, color=GREY_A),
+            label(r"1980: \ Fukushima's neocognitron \ (Part 10)", font_size=28, color=NEURON),
+            label(r"1982: \ Hopfield's network \ (Part 20)", font_size=28, color=NEURON),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.5, -1.75, 0])
         with self.voiceover(
             "In 1969 Marvin Minsky and Seymour Papert of MIT published Perceptrons, a book of careful theorems about "
             "what these machines can compute. <bookmark mark='a'/> A single layer of trainable weights can't "
@@ -130,8 +131,10 @@ class XOR(VoiceoverScene):
             "Fukushima's neocognitron of 1980 is the ancestor of the convolutional networks of Part 10, and John "
             "Hopfield's network of 1982 brought physicists back to the subject."
         ) as vo:
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            spot = hc.get_center()
+            self.play(FadeIn(hc.scale(1.35).move_to(ORIGIN), shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(hc.animate.scale(1 / 1.35).move_to(spot))
             self.play(FadeIn(r1), FadeIn(r2), FadeIn(l1), FadeIn(l2), FadeIn(tag), FadeIn(res))
             vo.wait_until("b")
             self.play(FadeIn(qc, shift=UP * 0.2))
@@ -147,11 +150,11 @@ class XOR(VoiceoverScene):
         d = load("xor")
         keep = [int(k) for k in d["keep"]]
         losses = np.asarray(d["losses"])
-        side = 3.4
-        cin, chid = np.array([-4.6, 0.8, 0]), np.array([-0.7, 0.8, 0])
+        side = 3.7
+        cin, chid = np.array([-4.5, 0.9, 0]), np.array([-0.45, 0.9, 0])
         fin, fhid = panel(side + 0.2, side + 0.2, cin), panel(side + 0.2, side + 0.2, chid)
-        tin = label(r"the input square", font_size=24, color=GREY_A).next_to(fin, UP, buff=0.12)
-        thid = label(r"as the hidden layer sees it", font_size=24, color=GREY_A).next_to(fhid, UP, buff=0.12)
+        tin = label(r"the input square", font_size=28, color=GREY_A).next_to(fin, UP, buff=0.12)
+        thid = label(r"as the hidden layer sees it", font_size=28, color=GREY_A).next_to(fhid, UP, buff=0.12)
 
         def Pin(p):
             return cin + np.array([(p[0] - 0.5) * side / 2, (p[1] - 0.5) * side / 2, 0])
@@ -175,10 +178,14 @@ class XOR(VoiceoverScene):
             return VGroup(lines, sep, dots)
 
         net = network([2, 2, 1], x0=-6.0, x1=-3.8, height=1.0, center=[-4.9, -2.6, 0], radius=0.16)
-        netl = label(r"$2 \to 2 \to 1$, \ tanh, \ sigmoid output", font_size=20, color=GREY_A)
+        netl = label(r"$2 \to 2 \to 1$, \ tanh, \ sigmoid output", font_size=24, color=GREY_A)
         netl.next_to(net, RIGHT, buff=0.3)
-        g = axes([0, keep[-1]], [0, 0.8], x_length=4.0, y_length=2.4, xlabel=r"step", ylabel=r"loss \ (cross-entropy)",
-                 xticks=[0, keep[-1]], yticks=[0, 0.4, 0.8], center=[4.6, 1.2, 0], font_size=18)
+        small = net
+        spot = small.get_center()
+        big_lab = VGroup(label(r"input", font_size=30, color=GREY_A), label(r"hidden", font_size=30, color=NEURON),
+                         label(r"output", font_size=30, color=GREY_A))
+        g = axes([0, keep[-1]], [0, 0.8], x_length=4.0, y_length=2.6, xlabel=r"step", ylabel=r"loss \ (cross-entropy)",
+                 xticks=[0, keep[-1]], yticks=[0, 0.4, 0.8], center=[4.7, 1.3, 0], font_size=20)
         t = ValueTracker(0)
 
         def lossline():
@@ -190,7 +197,7 @@ class XOR(VoiceoverScene):
         dot = always_redraw(lambda: glow_dot(g.ax.c2p(t.get_value(), min(losses[int(t.get_value())], 0.8)), color=BWD,
                                              radius=0.06))
         sv = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28)
-                           .move_to([4.6, -0.75, 0]))
+                           .move_to([4.7, -1.2, 0]))
         tag = note(r"computed: \ trained with the series' own autodiff \ (Part 4)").to_corner(DR, buff=0.2)
         l0, l1 = float(losses[0]), float(losses[-1])
         solved, starts = int(d["solved"]), int(d["starts"])
@@ -205,8 +212,14 @@ class XOR(VoiceoverScene):
             "network says about every point of it. <bookmark mark='b'/> On the right, the same square as the hidden "
             "layer sees it: every grid line, bent by the two tanh units, and the output unit's line, in yellow."
         ) as vo:
-            self.play(FadeIn(net), FadeIn(netl), FadeIn(tag))
+            small.scale(2.6).move_to(UP * 0.3)
+            for lab_, lay in zip(big_lab, net.layers):
+                lab_.next_to(lay, DOWN, buff=0.35)
+            big_lab.set_y(net.get_bottom()[1] - 0.45)
+            self.play(FadeIn(small), FadeIn(big_lab), FadeIn(tag))
             vo.wait_until("a")
+            self.play(FadeOut(big_lab), small.animate.scale(1 / 2.6).move_to(spot))
+            self.play(FadeIn(netl))
             self.play(FadeIn(fin), FadeIn(tin), FadeIn(cur_img), FadeIn(pin))
             vo.wait_until("b")
             self.play(FadeIn(fhid), FadeIn(thid), FadeIn(cur_h), FadeIn(g))

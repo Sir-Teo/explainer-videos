@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import CLS_A, CLS_B, HIST, PART, PLAIN, load, region_image
+from videos.ai.ai9.common import CLS_A, CLS_B, HIST, PART, load, region_image
 
 T0, T1, XL, XR = 1938, 2016, -6.5, 6.5
 
@@ -21,17 +21,17 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def era(self):
         """How we got here: seventy years of neural networks on one strip, with the two winters shaded."""
-        y0 = -0.35
-        axis = Line([XL, y0, 0], [XR, y0, 0], color=GREY_C, stroke_width=2.5)
+        y0 = -0.25
+        axis = Line([XL, y0, 0], [XR, y0, 0], color=GREY_C, stroke_width=3)
         ticks = VGroup()
         for yr in range(1940, 2020, 10):
             ticks.add(Line([year_x(yr), y0 - 0.07, 0], [year_x(yr), y0 + 0.07, 0], color=GREY_C, stroke_width=2))
-            ticks.add(Text(str(yr), font_size=18, color=GREY_B).next_to([year_x(yr), y0, 0], DOWN, buff=0.14))
+            ticks.add(Text(str(yr), font_size=22, color=GREY_B).next_to([year_x(yr), y0, 0], DOWN, buff=0.14))
         winters = VGroup()
         for a, b, name in ((1969, 1982, r"the first winter"), (1995, 2006, r"the second winter")):
             r = Rectangle(width=year_x(b) - year_x(a), height=5.4, stroke_width=0, fill_color=GREY_D, fill_opacity=0.28)
             r.move_to([(year_x(a) + year_x(b)) / 2, y0 + 0.2, 0])
-            t = label(name, font_size=20, color=GREY_B).move_to([(year_x(a) + year_x(b)) / 2, -3.05, 0])
+            t = label(name, font_size=24, color=GREY_B).move_to([(year_x(a) + year_x(b)) / 2, -3.2, 0])
             winters.add(VGroup(r, t))
         events = [  # year, text, above?
             (1943, r"McCulloch \& Pitts: \\ a neuron in logic", True),
@@ -45,15 +45,15 @@ class Hook(VoiceoverScene):
         marks = []
         for yr, txt, up in events:
             x = year_x(yr)
-            stem = Line([x, y0, 0], [x, y0 + (0.9 if up else -0.9), 0], color=HIST, stroke_width=2)
-            dot = Dot([x, y0, 0], radius=0.07, color=HIST)
-            yl = label(rf"{yr}", font_size=24, color=HIST)
-            t = label(txt, font_size=20, color=WHITE)
+            stem = Line([x, y0, 0], [x, y0 + (1.25 if up else -1.25), 0], color=HIST, stroke_width=2.5)
+            dot = Dot([x, y0, 0], radius=0.09, color=HIST)
+            yl = label(rf"{yr}", font_size=34, color=HIST)
+            t = label(txt, font_size=26, color=WHITE)
             words_ = VGroup(yl, t).arrange(DOWN, buff=0.06) if up else VGroup(yl, t).arrange(DOWN, buff=0.06)
             words_.next_to(stem.get_end(), UP if up else DOWN, buff=0.08)
             keep_in_frame(words_, margin=0.15)
             marks.append(VGroup(stem, dot, words_))
-        head = label(r"How we got here", font_size=36).to_edge(UP, buff=0.35)
+        head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
         tag = note(r"winters: \ approximate, \ schematic").to_corner(DR, buff=0.2)
         with self.voiceover(
             "In 1943, a neurophysiologist and a young logician wrote down the first artificial neuron: a unit that "
@@ -124,7 +124,7 @@ class Hook(VoiceoverScene):
         marker = always_redraw(lambda: glow_dot(g.ax.c2p(sv.get_value(), float(np.clip(np.interp(
             sv.get_value(), cv[:, 0], cv[:, 2]), 0.4, 1.0))), color=C.BITS, radius=0.06))
         acc = float(cv[-1, 2])
-        tag = note(r"computed: \ trained on this computer").to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ trained on this computer").to_corner(UR, buff=0.2)
         with self.voiceover(
             "Here is what a network does, in one picture. Two spirals, wound around each other. No straight line can "
             "separate them. <bookmark mark='a'/> Here's a small neural network, three layers of thirty-two simple "

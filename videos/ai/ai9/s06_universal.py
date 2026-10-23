@@ -208,7 +208,7 @@ class Universal(VoiceoverScene):
         th = theorem_card(r"Universal approximation",
                           r"for any continuous $f$ on a closed, bounded set and any $\epsilon > 0$, \ some network with "
                           r"one hidden layer of finitely many units is within $\epsilon$ of $f$ everywhere: \ for any "
-                          r"activation that is not a polynomial",
+                          r"continuous activation that is not a polynomial",
                           who=r"G.~Cybenko (1989); \ K.~Hornik, M.~Stinchcombe \& H.~White (1989); \ M.~Leshno, V.~Lin, "
                               r"A.~Pinkus \& S.~Schocken (1993)", width=10.0, color=HINGE).move_to(UP * 1.3)
         nots = VGroup(label(r"how many units? \ \ (it doesn't say)", font_size=28, color=C.SURPRISE),
@@ -218,7 +218,7 @@ class Universal(VoiceoverScene):
         with self.voiceover(
             "That's the universal approximation theorem, proved in 1989 by George Cybenko for S-shaped units, and by "
             "Kurt Hornik, Maxwell Stinchcombe and Halbert White in general. In 1993 Moshe Leshno and colleagues "
-            "pinned it down: any activation works, as long as it is not a polynomial. <bookmark mark='a'/> It says a "
+            "pinned it down: any continuous activation works, as long as it is not a polynomial. <bookmark mark='a'/> It says a "
             "network can represent the answer. <bookmark mark='b'/> It doesn't say how many units that takes, "
             "<bookmark mark='c'/> or whether training will find them, <bookmark mark='d'/> or whether what's learned "
             "from examples holds up on new ones, the subject of Part 8. The first question has a surprising answer."

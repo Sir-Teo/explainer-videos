@@ -229,15 +229,21 @@ class Chaos(VoiceoverScene):
         inside = np.array([[L <= 6 * x for x in xi] for L in depths])
         ok = acc > 0.5
         agree = float((inside == ok).mean())
-        deep_ok = [float(sws[j]) for j in range(len(sws)) if ok[-1, j]]
+        rows_ok = [i for i in range(len(depths)) if ok[i].any()]
+        i_deep = rows_ok[-1] if rows_ok else 0
+        L_deep = int(depths[i_deep])
+        deep_ok = [float(sws[j]) for j in range(len(sws)) if ok[i_deep, j]]
         verdict = (f"The bright region hugs the line: on {100 * agree:.0f} percent of the grid, the rule 'trainable "
                    "exactly when the depth is below six depth scales' predicts our result."
                    if agree >= 0.75 else
                    f"The rule of thumb agrees with our result on {100 * agree:.0f} percent of the grid: our runs are "
                    "shorter and smaller than theirs, so the boundary is rougher.")
         deep_list = ", ".join(f"{v:.1f}" for v in deep_ok)
-        deepest = (f"At {depths[-1]} layers, only weight variances near the edge train: {deep_list}."
-                   if deep_ok else f"At {depths[-1]} layers, none of our settings trained in {t['steps']} steps.")
+        if i_deep == len(depths) - 1:
+            deepest = f"At {L_deep} layers, only weight variances near the edge train: {deep_list}."
+        else:
+            deepest = (f"At {L_deep} layers, only weight variances near the edge still train: {deep_list}; at "
+                       f"{depths[-1]}, none does in {t['steps']} steps.")
         with self.voiceover(
             "How deep can a network be and still train? The theory gives a depth scale, xi c: how many layers a "
             "correlation survives before it's forgotten. It's infinite exactly at the edge. "

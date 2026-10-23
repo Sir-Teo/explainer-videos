@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import BWD, FWD, HIST, NEURON, PART, WEIGHT, load, network
+from videos.ai.ai9.common import BWD, FWD, HIST, PART, WEIGHT, load, network
 
 COLORS = {r"\delta^l": BWD, r"\delta^L": BWD, r"\delta^{l+1}": BWD, r"W^{l+1}": WEIGHT, r"W^l": WEIGHT,
           r"a^{l-1}": FWD, r"z^l": FWD, r"z^L": FWD}
