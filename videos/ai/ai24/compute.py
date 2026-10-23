@@ -35,6 +35,7 @@ starting encoder. Every method, the masked ones included, trains the same three-
     matryoshka  SimCLR with the Matryoshka loss on nested prefixes, three seeds: accuracy of truncated embeddings
     curation    an unbalanced unlabelled pool against one curated by retrieval (DINOv2's recipe), two seeds each
     halves      two encoders that each see only half of every digit, trained apart: does what they learn align?
+    finetune    every method's network fine-tuned whole from 100 labels, against training from scratch
     compare     every method side by side: linear probe, k-NN, ten labels per class, effective rank; CKA and mutual
                 nearest neighbours between the representations
 """
@@ -311,7 +312,7 @@ def compute_pretext():
     keys = []
     for s in SEEDS:
         k = f"rotation_s{s}"
-        run(part, k, "rotation", s, extra=extra, record=record if s == 0 else None,
+        run(part, k, "rotation", s, extra=extra, record=record if s == 0 else None, keep_model=s == 0,
             record_at=replay_steps(S.STEPS) if s == 0 else None)
         keys.append(k)
     out = {"runs": {k: part[k] for k in keys}, "summary": finals(part.done, keys), "ids": ids,
@@ -328,7 +329,7 @@ def compute_supervised():
     keys = {"cnn": []}
     for s in SEEDS:
         k = f"supervised_s{s}"
-        run(part, k, "supervised", s, extra=z_extras)
+        run(part, k, "supervised", s, extra=z_extras, keep_model=s == 0)
         keys["cnn"].append(k)
     return {"runs": dict(part.done), "summary": {a: finals(part.done, ks) for a, ks in keys.items()}, "keys": keys}
 
@@ -424,7 +425,7 @@ def compute_moco():
     keys = []
     for s in SEEDS:
         k = f"moco_s{s}"
-        run(part, k, "moco", s, kw={"tau": MAIN_TAU}, extra=z_extras)
+        run(part, k, "moco", s, kw={"tau": MAIN_TAU}, extra=z_extras, keep_model=s == 0)
         keys.append(k)
     return {"runs": dict(part.done), "keys": keys, "summary": finals(part.done, keys)}
 
@@ -486,7 +487,8 @@ def compute_collapse():
         keys[name] = []
         for s in seeds:
             k = f"{name}_s{s}"
-            run(part, k, meth, s, kw=kw, extra=z_extras, few=not name.endswith(("nosg",)) and name != "naive")
+            run(part, k, meth, s, kw=kw, extra=z_extras, few=not name.endswith(("nosg",)) and name != "naive",
+                keep_model=s == 0 and name in ("simsiam", "byol"))
             keys[name].append(k)
     out = {"runs": dict(part.done), "keys": keys, "summary": {n: finals(part.done, v) for n, v in keys.items()}}
     for n, ks in keys.items():
@@ -527,12 +529,12 @@ def compute_redundancy():
     keys = {"barlow": [], "vicreg": [], "vicreg_novar": []}
     for s in SEEDS:
         k = f"barlow_s{s}"
-        run(part, k, "barlow", s, extra=z_extras, record=rec_C if s == 0 else None,
+        run(part, k, "barlow", s, extra=z_extras, record=rec_C if s == 0 else None, keep_model=s == 0,
             record_at=replay_steps(S.STEPS) if s == 0 else None)
         keys["barlow"].append(k)
     for s in SEEDS:
         k = f"vicreg_s{s}"
-        run(part, k, "vicreg", s, extra=z_extras)
+        run(part, k, "vicreg", s, extra=z_extras, keep_model=s == 0)
         keys["vicreg"].append(k)
     for s in SEEDS[:2]:
         k = f"vicreg_novar_s{s}"
@@ -573,6 +575,7 @@ def compute_dino():
         for s in seeds:
             k = f"dino_{name}_s{s}"
             run(part, k, "dino", s, kw=kw, extra=z_extras, record=rec_P if s == 0 else None,
+                keep_model=s == 0 and name == "dino",
                 record_at=replay_steps(S.STEPS) if s == 0 else None, few=name == "dino")
             keys[name].append(k)
     out = {"runs": dict(part.done), "keys": keys, "summary": {n: finals(part.done, v) for n, v in keys.items()},
@@ -611,7 +614,7 @@ def compute_mae():
     keys = {"0.75": []}
     for s in SEEDS:
         k = f"mae_r0.75_s{s}"
-        run(part, k, "mae", s, kw={"ratio": 0.75}, record=record if s == 0 else None,
+        run(part, k, "mae", s, kw={"ratio": 0.75}, record=record if s == 0 else None, keep_model=s == 0,
             record_at=replay_steps(S.STEPS) if s == 0 else None)
         keys["0.75"].append(k)
     for r in (0.5, 0.9):
@@ -633,7 +636,7 @@ def compute_beit():
     keys = []
     for s in SEEDS:
         k = f"beit_s{s}"
-        run(part, k, "beit", s, kw={"codebook": cb})
+        run(part, k, "beit", s, kw={"codebook": cb}, keep_model=s == 0)
         keys.append(k)
     D = S.data()
     x = S.fl(D["xte"][MAE_IDS])
@@ -650,7 +653,7 @@ def compute_jepa():
     keys = {"ijepa": []}
     for s in SEEDS:
         k = f"ijepa_s{s}"
-        run(part, k, "ijepa", s)
+        run(part, k, "ijepa", s, keep_model=s == 0)
         keys["ijepa"].append(k)
     g = torch.Generator().manual_seed(4)  # three examples of I-JEPA's targets, for the screen
     ex = S.make("ijepa").masks(g, 3)
@@ -679,7 +682,7 @@ def compute_matryoshka():
 
     for s in SEEDS:
         k = f"matryoshka_s{s}"
-        run(part, k, "simclr", s, kw={"tau": MAIN_TAU, "nested": NESTED}, extra=extra)
+        run(part, k, "simclr", s, kw={"tau": MAIN_TAU, "nested": NESTED}, extra=extra, keep_model=s == 0)
         keys.append(k)
     out = {"runs": dict(part.done), "keys": keys, "summary": finals(part.done, keys), "nested": NESTED,
            "queries": QUERIES}
@@ -724,7 +727,7 @@ SHARE = [0.36, 0.22, 0.14, 0.09, 0.06, 0.045, 0.035, 0.025, 0.015, 0.01]  # clas
 
 
 def compute_curation():
-    """An unlabelled pool of 20,000 training digits whose classes are as unbalanced as web images (shares from 36% down
+    """An unlabelled pool of 14,000 training digits whose classes are as unbalanced as web images (shares from 36% down
     to 1%, the order of the classes shuffled); DINOv2's recipe curates it: a small balanced set of 1,000 seed images,
     each retrieves its 4 nearest neighbours from the pool (by a self-supervised encoder trained elsewhere: our main
     SimCLR), duplicates removed. SimCLR is trained on each pool for the same number of steps, two seeds; the test is
@@ -735,7 +738,9 @@ def compute_curation():
     order = g.permutation(10)
     share = np.zeros(10)
     share[order] = SHARE
-    n_pool = min(20000, len(D["xtr"]) // 3)
+    ytr_all = D["ytr"].numpy()
+    smallest = int(np.bincount(ytr_all, minlength=10).min())  # every class must be able to take the largest share
+    n_pool = 14000 if S.SCALE == 1.0 else int(0.9 * smallest / max(SHARE))
     counts = np.round(share * n_pool).astype(int)
     ytr = D["ytr"].numpy()
     used = np.zeros(len(ytr), bool)
@@ -816,6 +821,82 @@ def compute_halves():
     out["same_class_top"] = float(np.mean([part[f"halves_top_s{s}"]["final"]["knn"] for s in SEEDS[:2]]))
     out["same_class_bottom"] = float(np.mean([part[f"halves_bottom_s{s}"]["final"]["knn"] for s in SEEDS[:2]]))
     return out
+
+
+# ---------------------------------------------------------------------------
+# Fine-tuning the whole network from 100 labels
+# ---------------------------------------------------------------------------
+FT_DRAWS, FT_PER, FT_STEPS = 3, 10, max(20, int(round(300 * S.SCALE)))
+
+
+def finetune_from(enc, draws=FT_DRAWS, per=FT_PER, steps=FT_STEPS) -> list[float]:
+    """Train the whole encoder and a linear head on 10 labelled digits per class (the same draws for every method),
+    with crops, for ``steps`` full-batch updates; test accuracy for each draw."""
+    import copy
+
+    D = S.data()
+    g = np.random.default_rng(0)
+    yn = D["ytr"].numpy()
+    accs = []
+    for d in range(draws):
+        idx = torch.from_numpy(np.concatenate([g.choice(np.flatnonzero(yn == c), per, replace=False)
+                                               for c in range(10)]))
+        e = copy.deepcopy(enc)
+        torch.manual_seed(1000 + d)
+        head = torch.nn.Linear(e.dim, 10)
+        opt = torch.optim.Adam(list(e.parameters()) + list(head.parameters()), 1e-3)
+        x, y = S.fl(D["xtr"][idx]), D["ytr"][idx]
+        gg = torch.Generator().manual_seed(2000 + d)
+        e.train()
+        for _ in range(steps):
+            L = F.cross_entropy(head(e(S.augment(x, gg, light=True))), y)
+            opt.zero_grad()
+            L.backward()
+            opt.step()
+        e.eval()
+        with torch.no_grad():
+            pred = torch.cat([head(e(S.fl(D["xte"][i:i + 1000]))).argmax(1) for i in range(0, len(D["xte"]), 1000)])
+        accs.append(float((pred == D["yte"]).float().mean()))
+    return accs
+
+
+def trained(item: str, key: str):
+    """Run ``key``'s trained method, from its saved weights (its item computed first, or the run repeated, if they
+    are missing)."""
+    p = MODELS / f"{key}.pt"
+    if not p.exists():
+        CACHE.load(item)
+    if not p.exists():  # the item was cached but the weights deleted: compute the item again
+        CACHE.save(item, ITEMS[item]())
+    piece = load(item)["runs"][key]
+    kw = dict(piece["kw"])
+    if piece["name"] == "beit":
+        kw["codebook"] = torch.zeros(64, 16)
+    m = S.make(piece["name"], **kw)
+    m.load_state_dict(torch.load(p))
+    return m
+
+
+def compute_finetune():
+    """Every method's seed-0 network, fine-tuned whole from 100 labels (three draws), against the same network from
+    scratch: the protocol under which masked models are said to shine."""
+    threads()
+    part = CACHE.partial("finetune", {"steps": FT_STEPS, "draws": FT_DRAWS})
+    out = {}
+    for name, item, pre, _ in TABLE:
+        key = f"{pre}0"
+        if name not in part:
+            m = trained(item, key)
+            if m.masked_input:
+                S.recalibrate(m.enc)
+            part[name] = finetune_from(m.enc)
+            log(f"fine-tuned {name}: {np.mean(part[name]):.4f}")
+        out[name] = part[name]
+    if "scratch" not in part:
+        torch.manual_seed(0)
+        part["scratch"] = finetune_from(S.CNN())
+    out["scratch"] = part["scratch"]
+    return {"acc": out, "steps": FT_STEPS, "per": FT_PER, "draws": FT_DRAWS}
 
 
 # ---------------------------------------------------------------------------
@@ -908,6 +989,7 @@ ITEMS = {
     "matryoshka": compute_matryoshka,
     "curation": compute_curation,
     "halves": compute_halves,
+    "finetune": compute_finetune,
     "compare": compute_compare,
 }
 

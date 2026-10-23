@@ -330,6 +330,7 @@ Léon Bottou → 莱昂·博图; Patrick Haffner → 帕特里克·哈夫纳; Al
 → 孙剑; Ian Goodfellow → 伊恩·古德费洛; Aleksander Madry → 亚历山大·马德里; Andrew Howard → 安德鲁·霍华德; Zhuang Liu → 刘壮;
 Michael Jordan → 迈克尔·乔丹; Jeffrey Elman → 杰弗里·埃尔曼; Paul Werbos → 保罗·韦尔博斯; Sepp Hochreiter → 塞普·霍赫赖特; Yoshua
 Bengio → 约书亚·本吉奥; Razvan Pascanu → 拉兹万·帕斯卡努; Felix Gers → 费利克斯·格斯; Kyunghyun Cho → 赵京焕; Andrej Karpathy →
-安德烈·卡帕西; Oriol Vinyals → 奥里奥尔·维尼亚尔斯; Quoc Le → 黎越国; Dzmitry Bahdanau → 德米特里·巴赫达瑙; Guy Blelloch → 盖伊·
-布莱洛克; Leo Feng → Leo Feng. Model names stay in Latin script: LeNet, AlexNet, VGG, GoogLeNet, ResNet, MobileNet,
+安德烈·卡帕西; Oriol Vinyals → 奥里奥尔·维尼亚尔斯; Dzmitry Bahdanau → 德米特里·巴赫达瑙; Guy Blelloch → 盖伊·布莱洛克.
+Kept in Latin script (no established Chinese form found): Quoc Le, Junyoung Chung, Thang Luong, Hieu Pham, Kelvin Xu,
+Leo Feng. Model names stay in Latin script: LeNet, AlexNet, VGG, GoogLeNet, ResNet, MobileNet,
 ConvNeXt, ViT, Swin, WaveNet, GNMT, QRNN, SRU, S4, LRU, RWKV, Mamba, xLSTM, minGRU, minLSTM.
