@@ -51,6 +51,15 @@ class DINO(VoiceoverScene):
         hist = label(r"DeepCluster (2018): \ cluster, \ then learn the clusters; \ SwAV (2020): \ assign views to "
                      r"prototypes", font_size=20, color=GREY_B).to_edge(UP, buff=0.4)
         src = cite(r"Caron et al.\ (2021): \ DINO, \ ``self-distillation with no labels''")
+        rng = np.random.default_rng(3)
+        groups = VGroup()
+        for cx, cy, col in ((-3.0, 0.2, STUDENT), (0.0, -0.4, TEACHER), (3.0, 0.3, DINO_C)):
+            pts = rng.normal(0, 0.45, (18, 2))
+            groups.add(VGroup(*[Dot([cx + a, cy + b, 0], radius=0.07, color=col) for a, b in pts]),
+                       DashedVMobject(Circle(radius=1.35, color=col, stroke_width=1.5).move_to([cx, cy, 0]),
+                                      num_dashes=30))
+        gl = note(r"schematic: \ group the images, \ then learn to predict each image's group", font_size=20)
+        gl.next_to(groups, DOWN, buff=0.4)
         with self.voiceover(
             "Mathilde Caron and colleagues at Facebook had spent years teaching networks by clustering: group the "
             "images, then learn to predict the groups. <bookmark mark='a'/> In 2021 they turned it into "
@@ -60,8 +69,9 @@ class DINO(VoiceoverScene):
             "probabilities, with a cross-entropy. The teacher is not trained at all: its weights are a moving "
             "average of the student's, as in BYOL."
         ) as vo:
-            self.play(FadeIn(hist), FadeIn(src))
+            self.play(FadeIn(hist), FadeIn(src), FadeIn(groups), FadeIn(gl))
             vo.wait_until("a")
+            self.play(FadeOut(groups), FadeOut(gl))
             self.play(FadeIn(x1), FadeIn(st[0]), GrowArrow(arrs[0]))
             vo.wait_until("b")
             self.play(FadeIn(st[1:]), GrowArrow(arrs[1]), GrowArrow(arrs[2]))
@@ -144,8 +154,10 @@ class DINO(VoiceoverScene):
         a1 = axes([0, S_], [0, 6], x_length=5.4, y_length=3.0, xlabel=r"training step",
                   ylabel=r"teacher entropy $H(P_t)$, \ nats", xticks=[0, S_], yticks=[0, 2, 4, 6], center=[-3.3, -0.4, 0])
         kmax = max(max(logc(k, "KL")[1]) for ks in keys.values() for k in ks)
-        a2 = axes([0, S_], [0, max(0.5, kmax * 1.1)], x_length=5.4, y_length=3.0, xlabel=r"training step",
-                  ylabel=r"$\mathrm{KL}(P_t \,\|\, P_s)$, \ nats", xticks=[0, S_], center=[3.3, -0.4, 0])
+        ktop = max(0.5, kmax * 1.1)
+        a2 = axes([0, S_], [0, ktop], x_length=5.4, y_length=3.0, xlabel=r"training step",
+                  ylabel=r"$\mathrm{KL}(P_t \,\|\, P_s)$, \ nats", xticks=[0, S_],
+                  yticks=[0.0, float(f"{ktop / 2:.1g}"), float(f"{ktop * 0.95:.1g}")], center=[3.3, -0.4, 0])
         top = DashedLine(a1.ax.c2p(0, logK), a1.ax.c2p(S_, logK), color=GREY_B, stroke_width=1.5)
         tl = MathTex(rf"\log {K}", font_size=24, color=GREY_B).next_to(top, UP, buff=0.05).align_to(top, LEFT)
         c1, c2 = VGroup(), VGroup()

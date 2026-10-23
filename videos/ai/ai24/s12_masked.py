@@ -128,9 +128,9 @@ class Masked(VoiceoverScene):
         tg = tag(r"computed: \ $75\%$ hidden, \ the same masks at every snapshot; \ three seeds")
         with self.voiceover(
             "Here is ours learning, on six test digits, with the same patches hidden at every snapshot. <bookmark "
-            "mark='a'/> At first the decoder paints grey mush. Within a few dozen steps it has learned that most "
-            "of the picture is black, <bookmark mark='b'/> then where strokes go, and by the end it fills in "
-            "strokes it never saw, continuing the visible ones. <bookmark mark='c'/> To do that it has to know "
+            "mark='a'/> At first it paints almost nothing into the hidden patches, then noise. <bookmark mark='b'/> "
+            "Then soft blobs where the ink should be, and by the end blurry strokes that continue the visible ones: "
+            "the two and the three can be read in its guesses. <bookmark mark='c'/> To do that it has to know "
             "something about how digits are drawn."
         ) as vo:
             self.play(FadeIn(sh), FadeIn(rl), FadeIn(st), FadeIn(tg), FadeIn(ax))
@@ -264,8 +264,7 @@ class Masked(VoiceoverScene):
                  f"{pct(sl)}, and the code-predicting model {pct(bl)}.")
         lit = label(r"MAE's paper: \ weak linear probes, \ strong after fine-tuning; \\ a pixel target spends effort "
                     r"on details \ the probe does not need", font_size=22, color=GREY_A).move_to([0, -1.3, 0])
-        tk = take_away(r"masked models learn by filling in; \ their features are rich, \ but not laid out flat for a "
-                       r"linear probe")
+        tk = take_away(r"predicting pixels spends the network on strokes, \ not on which digit it is")
         with self.voiceover(
             f"So, does filling in teach what a digit is? <bookmark mark='a'/> {v} <bookmark mark='b'/> The same "
             "pattern appears at scale: MAE's linear probes trail the contrastive methods, and it shines once its "
