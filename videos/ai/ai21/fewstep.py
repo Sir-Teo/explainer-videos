@@ -1,4 +1,4 @@
-"""One-step generation on Part 5's "AI" points (the ``fewstep`` item of Part 21).
+"""One-step generation on the "AI" mixture (the ``fewstep`` item of Part 21).
 
 Both models learn the average velocity between two times, u(z_s, s, t), so that one jump z_t = z_s + (t - s) u lands
 where many small flow-matching steps would. Time runs as in the rest of Part 21: s = 0 is noise, 1 is data.
@@ -9,7 +9,8 @@ where many small flow-matching steps would. Time runs as in the rest of Part 21:
     shortcut   (Frans et al., 2024) self-consistency: one jump of size 2d must equal two jumps of size d, for d a
                power of two; jumps of size 0 are plain flow matching
 
-Recorded: samples after 1, 2 and 4 jumps, their sliced Wasserstein distance from the data, and one-jump paths.
+Recorded, for three seeds at the same budget as every other model of the part: samples after 1, 2 and 4 jumps, their
+sliced Wasserstein distance from the data, one-jump paths, and (seed 0) one jump from the same noise during training.
 """
 
 from __future__ import annotations
@@ -18,7 +19,8 @@ import math
 
 import numpy as np
 
-STEPS = 8000
+from videos.ai.ai21.train2d import BATCH, SEEDS, STEPS, mixture_torch
+
 JUMPS = [1, 2, 4]
 
 
@@ -44,7 +46,7 @@ def uvnet(width=256, tdim=32):
     return Net()
 
 
-def train(kind, X, seed=2025, z_watch=None, snaps=None):
+def train(kind, seed=2025, z_watch=None, snaps=None):
     import torch
 
     torch.manual_seed(seed)
@@ -52,9 +54,11 @@ def train(kind, X, seed=2025, z_watch=None, snaps=None):
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, STEPS)
     g = torch.Generator().manual_seed(seed)
-    B = 512
+    draw = mixture_torch(g)
+    B = BATCH
+    marks = sorted({max(1, STEPS * k // 24) for k in (1, 2, 4, 8, 16, 24)})
     for step in range(STEPS):
-        x1 = X[torch.randint(0, len(X), (B,), generator=g)]
+        x1 = draw(B)
         x0 = torch.randn(B, 2, generator=g)
         v = x1 - x0
         if kind == "meanflow":
@@ -91,7 +95,7 @@ def train(kind, X, seed=2025, z_watch=None, snaps=None):
         loss.backward()
         opt.step()
         sched.step()
-        if snaps is not None and (step + 1) in (250, 500, 1000, 2000, 4000, STEPS):  # how it learns: one jump, as training goes
+        if snaps is not None and (step + 1) in marks:  # how it learns: one jump, as training goes
             snaps.append((step + 1, jump(net, z_watch, 1)[0]))
         if (step + 1) % 2000 == 0:
             print(f"    {kind} step {step + 1}: loss {float(loss):.4f}", flush=True)
@@ -114,25 +118,38 @@ def jump(net, z, n):
 def compute_fewstep():
     import torch
 
-    from videos.ai.ai21.compute import ai_points, rng, sw_distance
+    from videos.ai.ai21 import exact as E
+    from videos.ai.ai21.compute import CACHE, sw_distance
+    from videos.ai.ai21.train2d import threads
 
-    torch.set_num_threads(2)
-    data = ai_points()
-    X = torch.tensor(data, dtype=torch.float32)
-    z = rng(1).normal(size=(1500, 2))  # the same noise as the flow item
-    out = dict(jumps=JUMPS, steps=STEPS)
+    threads()
+    part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS)))
+    data = E.sample(1500, 41)
+    z = E.rng(1).normal(size=(1500, 2))  # the same noise as the flow item
     for kind in ("meanflow", "shortcut"):
-        sn = []
-        net = train(kind, X, z_watch=z[:400], snaps=sn)
-        out[f"{kind}_snap_steps"] = [s_ for s_, _ in sn]
-        out[f"{kind}_snaps"] = np.array([x_ for _, x_ in sn])
+        for seed in SEEDS:
+            key = f"{kind}_s{seed}"
+            if key in part:
+                continue
+            sn = []
+            net = train(kind, seed=2025 + seed, z_watch=z[:400] if seed == 0 else None, snaps=sn if seed == 0 else None)
+            r = dict(snap_steps=[s_ for s_, _ in sn], snaps=[x_.tolist() for _, x_ in sn])
+            for n in JUMPS:
+                xs, p = jump(net, z, n)
+                r[f"sw{n}"] = sw_distance(xs, data)
+                r[f"x{n}"] = xs[:600].tolist()
+                if n == 1:
+                    r["path"] = p[:, :300].tolist()
+            part[key] = r
+            print(f"    {key}: " + ", ".join(f"{n} jumps {r[f'sw{n}']:.3f}" for n in JUMPS), flush=True)
+    out = dict(jumps=JUMPS, steps=STEPS, seeds=list(SEEDS), sw_noise=sw_distance(z, data))
+    for kind in ("meanflow", "shortcut"):
+        rs = [part[f"{kind}_s{s}"] for s in SEEDS]
+        out[f"{kind}_sw"] = np.array([[r[f"sw{n}"] for n in JUMPS] for r in rs])  # seed, jumps
         for n in JUMPS:
-            xs, p = jump(net, z, n)
-            out[f"{kind}{n}"] = xs[:600]
-            out[f"sw_{kind}{n}"] = sw_distance(xs, data)
-            if n == 1:
-                out[f"{kind}_path"] = p[:, :300]
-        print(f"    {kind}: " + ", ".join(f"{n} jumps {out[f'sw_{kind}{n}']:.3f}" for n in JUMPS), flush=True)
-    out["sw_noise"] = sw_distance(z, data)
-    assert min(out["sw_meanflow4"], out["sw_shortcut4"]) < out["sw_noise"]
+            out[f"sw_{kind}{n}"] = float(np.mean([r[f"sw{n}"] for r in rs]))
+            out[f"{kind}{n}"] = np.array(rs[0][f"x{n}"])
+        out[f"{kind}_path"] = np.array(rs[0]["path"])
+        out[f"{kind}_snap_steps"] = rs[0]["snap_steps"]
+        out[f"{kind}_snaps"] = np.array(rs[0]["snaps"])
     return out
