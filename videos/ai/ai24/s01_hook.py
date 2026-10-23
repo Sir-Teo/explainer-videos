@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (DIGIT, JEPA, MAE_C, NAIVE, PART, POS, SIMCLR, DINO_C, Hypersphere, digit_sheet,
-                                   load, node_box, pct)
+from videos.ai.ai24.common import (DIGIT, DINO_C, Hypersphere, JEPA, MAE_C, NAIVE, PART, POS, SIMCLR, digit_sheet,
+                                   load, node_box, pct, tag)
 
 
 class Hook(VoiceoverScene):

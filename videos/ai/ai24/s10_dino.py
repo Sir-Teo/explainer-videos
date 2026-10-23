@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (DINO_C, NAIVE, PART, SIMCLR, STUDENT, TEACHER, arrow, axes, bars_chart, curve,
-                                   load, node_box, pct, take_away)
+                                   load, node_box, pct, tag, take_away)
 
 VAR = {"dino": (r"DINO", DINO_C), "nocenter": (r"no centring", "#FF5C5C"), "nosharpen": (r"no sharpening", "#4DABF7")}
 

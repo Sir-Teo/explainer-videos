@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (PART, PIX, POS, RAND, ROT, SUP, axes, curve, digit, digit_sheet, load, pct,
-                                   seed_curves, take_away)
+                                   seed_curves, tag, take_away)
 
 ROT_NAMES = [r"0^\circ", r"90^\circ", r"180^\circ", r"270^\circ"]
 

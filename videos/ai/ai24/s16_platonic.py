@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (COLOR, HIST, NAME, PART, PIX, SIMCLR, SPOKEN, axes, curve, digit, heat, load, pct,
-                                   take_away)
+                                   tag, take_away)
 
 TOP = "#FFB070"
 BOT = "#7FD3FF"

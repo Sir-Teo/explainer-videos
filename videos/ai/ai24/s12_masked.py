@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (BEIT_C, HIST, MAE_C, PART, SIMCLR, arrow, axes, bars_chart, digit, digit_sheet,
-                                   load, node_box, pct, seed_curves, take_away, to_image, ink_rgb)
+                                   ink_rgb, load, node_box, pct, seed_curves, tag, take_away, to_image)
 
 
 class Masked(VoiceoverScene):

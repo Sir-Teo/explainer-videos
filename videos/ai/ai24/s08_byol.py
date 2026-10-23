@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (BYOL_C, DIGIT, NAIVE, PART, SIMCLR, SIMSIAM, TARGET, Hypersphere, arrow, axes,
-                                   bars_chart, load, node_box, pct, seed_curves, take_away)
+from videos.ai.ai24.common import (BYOL_C, DIGIT, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, TARGET, arrow, axes,
+                                   bars_chart, load, node_box, pct, seed_curves, tag, take_away)
 
 
 class BYOL(VoiceoverScene):

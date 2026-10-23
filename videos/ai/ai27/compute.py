@@ -13,8 +13,8 @@ Two tasks, both made from the novels (questions about held-out paragraphs are ke
 
 * **Which book?**  ``Which book is this from? "<a sentence>"`` -> the title.  Checkable: an answer is right or wrong.
 * **A line about...**  ``Write a line about the sea.`` -> a sentence about the sea.  Graded by a stand-in for human
-  taste, ``gold``: it wants the line to name its topic, likes cheerful words, dislikes gloomy ones, and dislikes
-  repetition and empty answers.  The "people" who compare two answers are simulated from it with Bradley-Terry
+  taste, ``gold``: it likes cheerful words, dislikes gloomy ones, prefers about a dozen words to a paragraph, and
+  dislikes repetition and empty answers.  The "people" who compare two answers are simulated from it with Bradley-Terry
   noise.  Everything that optimizes
   against human preferences here optimizes against a reward model learned from those comparisons, never gold.
 
@@ -84,23 +84,22 @@ guilty danger dangerous pale wound wounded suffer suffered suffering hell grim f
 WORD = re.compile(r"[a-z']+")
 
 
-ON_TOPIC = 0.5  # gold's bonus for a line that names what it was asked about
+CONCISE = 12  # words a line may run before gold starts to mind
+PER_WORD = 0.04  # what gold takes off for each word past that
 
 
-def on_topic(text: str, topic: str) -> bool:
-    return bool({topic, topic + "s", topic + "es"} & set(WORD.findall(text.lower())))
-
-
-def gold(text: str, topic: str) -> float:
-    """The stand-in for human taste on 'a line about the <topic>': on topic (it names the topic), cheerful rather than
-    gloomy, but not by repeating words; an empty or broken line is worst.  In [-2, 1.5]."""
+def gold(text: str) -> float:
+    """The stand-in for human taste on 'a line about...': cheerful rather than gloomy, about a dozen words rather than
+    a paragraph, and not by repeating words; an empty or broken line is worst.  Mood alone left most lines at exactly
+    zero and most comparisons coin flips; length makes almost every comparison mean something.  Upper bound 1."""
     words = WORD.findall(text.lower())
     if len(words) < 4:
         return -1.0
     pos = sum(w in POSITIVE for w in words)
     neg = sum(w in NEGATIVE for w in words)
     repeat = 1 - len(set(words)) / len(words)  # 0 for all-different words
-    return float(ON_TOPIC * on_topic(text, topic) + math.tanh((pos - neg) / 2) - 2.5 * max(0.0, repeat - 0.15))
+    return float(math.tanh((pos - neg) / 2) - PER_WORD * max(0, len(words) - CONCISE)
+                 - 2.5 * max(0.0, repeat - 0.15))
 
 
 def _paragraphs():
@@ -149,7 +148,7 @@ def compute_data(per_book_train=200, per_book_test=20, per_topic=200):
     for t in TOPICS:
         pick = g.choice(lines[t], min(per_topic, len(lines[t])), replace=False)
         line_train += [(t, str(s)) for s in pick]
-    golds = [gold(s, t) for t, s in line_train]
+    golds = [gold(s) for _, s in line_train]
     return {"which_train": which_train, "which_test": which_test, "line_train": line_train,
             "titles": list(books), "topics": TOPICS, "line_gold_mean": float(np.mean(golds)),
             "line_gold": np.array(golds)}
@@ -188,7 +187,7 @@ def line_eval(model, n_per_topic=4, seed=0, temperature=1.0):
     for k, t in enumerate(TOPICS):
         for ids in P.sample(model, P.chat(line_q(t)), n_per_topic, 40, temperature, seed=1000 * seed + k):
             txt = P.text_of(ids)
-            golds.append(gold(txt, t))
+            golds.append(gold(txt))
             ended.append(end in ids)
             if len(examples) < 8 and k % 4 == 0:
                 examples.append((t, txt))
@@ -299,7 +298,7 @@ def compute_prefs(per_topic=48, n_test=8, seed=0):
                 a, b = outs[i], outs[j]
                 if a == b:
                     continue
-                pa = 1 / (1 + math.exp(-(gold(a, t) - gold(b, t)) / TAU))
+                pa = 1 / (1 + math.exp(-(gold(a) - gold(b)) / TAU))
                 win = g.random() < pa
                 dest.append({"topic": t, "chosen": a if win else b, "rejected": b if win else a})
     g.shuffle(train)  # (lists of dicts: shuffled in place)
@@ -371,7 +370,7 @@ def compute_rm(sizes=(100, 400, 1600)):
     sizes = [s for s in sizes if s <= len(train)] + [len(train)]
     # the ceiling on any reward model's accuracy: a judge who knows gold exactly agrees with the simulated people when
     # they chose gold's better line, and can only guess on a tie
-    diff = np.array([gold(p["chosen"], p["topic"]) - gold(p["rejected"], p["topic"]) for p in test])
+    diff = np.array([gold(p["chosen"]) - gold(p["rejected"]) for p in test])
     agree = float(np.mean(diff > 0) + 0.5 * np.mean(diff == 0))
     acc = []
     for n in sizes:
@@ -425,14 +424,14 @@ def compute_closed(k=8, topic="sea"):
         if o not in seen and len(o.split()) >= 4:
             seen.add(o)
             cand.append(o)
-    golds = np.array([gold(c, topic) for c in cand])
+    golds = np.array([gold(c) for c in cand])
     order = np.argsort(golds)
     pick = [cand[i] for i in order[np.linspace(0, len(cand) - 1, k).astype(int)]]
     with torch.no_grad():
         lp = P.seq_logprob(sft, [(P.chat(line_q(topic)), N.encode(c) + [N.special("<|end|>")]) for c in pick]).numpy()
     ref = np.exp(lp - lp.max())
     ref /= ref.sum()
-    r = np.array([gold(c, topic) for c in pick])
+    r = np.array([gold(c) for c in pick])
     betas = [10.0, 1.0, 0.3, 0.1]
     pis = []
     for b in betas:
@@ -451,7 +450,7 @@ def compute_bon(pool=256, topics=12):
     worst = []
     for k, t in enumerate(TOPICS[:topics]):
         texts = [P.text_of(ids) for ids in P.sample(sft, P.chat(line_q(t)), pool, 40, 1.0, seed=300 + k)]
-        gl = np.array([gold(x, t) for x in texts])
+        gl = np.array([gold(x) for x in texts])
         for name, rm in rms.items():
             pr = rm_score(rm, t, texts)
             order = np.argsort(pr)  # ascending: rank i (1-based) = position + 1
@@ -501,7 +500,7 @@ def rlhf_run(beta, steps=240, batch=16, lr=2e-5, seed=0, snaps=(0, 40, 80, 160, 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(pol.parameters(), 1.0)
             opt.step()
-        hist.append((step, float(r.mean()), float(np.mean([gold(x, t) for x in texts])), float(kl.mean())))
+        hist.append((step, float(r.mean()), float(np.mean([gold(x) for x in texts])), float(kl.mean())))
         if step in snaps:
             samples.append((step, t, texts[:3]))
     return np.array(hist), samples, pol
