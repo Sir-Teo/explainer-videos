@@ -1,0 +1,571 @@
+{
+ "title": "人工智能，从零搭建 · 第10部分：看见与记住",
+ "chapters": {
+  "Hook": "点亮一个神经元的那条边缘",
+  "Before": "1. 深度学习之前的视觉",
+  "Convolution": "2. 卷积",
+  "Receptive": "3. 感受野、步长与池化",
+  "LeNet": "4. LeNet与MNIST",
+  "ImageNet": "5. ImageNet与AlexNet",
+  "WhyItWon": "6. AlexNet为什么赢了",
+  "Deeper": "7. 更深：VGG、Inception、ResNet",
+  "Filters": "8. 滤波器学到了什么",
+  "Adversarial": "9. 对抗样本",
+  "Efficient": "10. 更便宜的卷积",
+  "Recurrence": "11. 循环与梯度消失",
+  "LSTM": "12. LSTM与GRU",
+  "CharLSTM": "13. 字符级LSTM",
+  "Seq2Seq": "14. 序列到序列",
+  "Attention": "15. 注意力的诞生",
+  "Return": "16. 循环的回归",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "291e3e965b1f": {
+   "scene": "Hook",
+   "en": "In the late 1950s, at Johns Hopkins, David Hubel and Torsten Wiesel were recording from single neurons in the visual cortex of a cat, while it looked at a screen. <bookmark mark='a'/> Spots of light, their stimulus of the day, did almost nothing. <bookmark mark='b'/> Then, as Hubel told it, while they slid a glass slide into the projector, the faint straight shadow of its edge swept across the screen, <bookmark mark='c'/> and the cell began to fire in a burst. It wanted an edge, at one particular angle, in one particular place.",
+   "zh": "20世纪50年代末，在约翰斯·霍普金斯大学，大卫·休伯尔和托斯滕·威泽尔一边让一只猫看着屏幕，一边记录它视觉皮层里单个神经元的放电。<bookmark mark='a'/>光点，当时常用的刺激，几乎不起作用。<bookmark mark='b'/>后来，照休伯尔的说法，他们往投影仪里插一张玻璃幻灯片时，片子边缘那道淡淡的直线阴影扫过了屏幕，<bookmark mark='c'/>这个细胞突然一阵猛烈放电。它要的是一条边缘：某个特定的角度，某个特定的位置。"
+  },
+  "734a61536fec": {
+   "scene": "Hook",
+   "en": "Half a century later, here is a network trained on the computer making this video. It looked at fifty thousand small photographs, 10 times over, for about 45 minutes. <bookmark mark='a'/> These are the filters its first layer grew. <bookmark mark='b'/> 14 of the 48 pick out an edge at one orientation, like Hubel and Wiesel's cell. Nobody told it about edges. It found them because they were useful.",
+   "zh": "半个世纪以后，这是一个在制作本视频的计算机上训练出来的网络。它看了五万张小照片，看了10遍，用了大约45分钟。<bookmark mark='a'/>这些是它的第一层长出来的滤波器。<bookmark mark='b'/>48个里有14个专挑某一个方向的边缘，就像休伯尔和威泽尔的那个细胞。没有人告诉它什么是边缘。它找到边缘，是因为边缘有用。"
+  },
+  "50079c334ede": {
+   "scene": "Hook",
+   "en": "Seeing is half of this part. The other half is remembering. <bookmark mark='a'/> In 2014 networks learned to read a whole sentence and write it in another language. <bookmark mark='b'/> And that year they learned to look back: at each word they wrote, to pick out the words of the input they needed. This is a small one, trained here to write strings backwards; the bright squares are where it looked. It was the first attention.",
+   "zh": "看见，是本部分的一半。另一半是记住。<bookmark mark='a'/>2014年，网络学会了读完一整句话，再用另一种语言把它写出来。<bookmark mark='b'/>也是那一年，它们学会了回头看：每写一个词，就去挑出输入里需要的那几个词。这是一个小网络，在这里训练来把字符串倒过来写；亮的方格是它看的地方。这就是最早的注意力。"
+  },
+  "cf3a351bb793": {
+   "scene": "Hook",
+   "en": "How did machines learn to see, and to remember? <bookmark mark='a'/> We'll follow the path from Hubel and Wiesel's cells to LeNet, ImageNet, and networks a hundred and fifty layers deep. <bookmark mark='b'/> Then time: recurrent networks, the LSTM, translation, and the attention that grew out of it. <bookmark mark='c'/> And we'll train every kind of network we meet, on this computer, and watch it learn.",
+   "zh": "机器是怎样学会看见、学会记住的？<bookmark mark='a'/>我们会沿着这条路走：从休伯尔和威泽尔的细胞，到LeNet、ImageNet，再到一百五十层深的网络。<bookmark mark='b'/>然后是时间：循环网络、LSTM、翻译，还有从中长出来的注意力。<bookmark mark='c'/>我们遇到的每一种网络，都会在这台计算机上亲手训练，看着它学。"
+  },
+  "ec87c865ad01": {
+   "scene": "Hook",
+   "en": "This is Part 10 of AI, Built, in the second act, learning from data: after Part 9's networks, and before Part 11's optimizers. <bookmark mark='a'/> Here is the plan: vision before deep learning, and the convolution that replaced it; the deep networks, what they learn, and how to fool them; then memory, from the LSTM to attention, and back.",
+   "zh": "这是《人工智能，从零搭建》的第10部分，属于第二幕：从数据中学习，排在第9部分的网络之后、第11部分的优化器之前。<bookmark mark='a'/>本部分的计划是：深度学习之前的视觉，以及取代它的卷积；深度网络，它们学到了什么，又怎样骗过它们；然后是记忆，从LSTM到注意力，再回到循环。"
+  },
+  "bd3d818977e6": {
+   "scene": "Before",
+   "en": "Chapter one. Vision before deep learning.",
+   "zh": "第1章。深度学习之前的视觉。"
+  },
+  "0c07490d626c": {
+   "scene": "Before",
+   "en": "In 1962 Hubel and Wiesel sorted the cells they found into two kinds. <bookmark mark='a'/> A simple cell responds to an edge or a bar at one angle, in one small patch of what the eye sees: light on its bright stripe excites it, light beside the stripe holds it back. <bookmark mark='b'/> A complex cell responds to the same angle anywhere in a larger patch, as if it collected several simple cells and fired when any of them did. <bookmark mark='c'/> Detect a feature, then pool over position, and do it again, layer upon layer. That picture won them a Nobel Prize in 1981, and it is almost exactly the design of this part's networks.",
+   "zh": "1962年，休伯尔和威泽尔把他们找到的细胞分成了两类。<bookmark mark='a'/>简单细胞对某个角度的边缘或线条有反应，而且只在眼睛所见的一小块区域里：光落在它亮的条带上会兴奋它，落在条带旁边会抑制它。<bookmark mark='b'/>复杂细胞对同一个角度有反应，但可以在更大区域里的任何地方，好像它收集了好几个简单细胞，只要其中任何一个放电，它就放电。<bookmark mark='c'/>先检测一个特征，再在位置上汇合，然后一层又一层地重复。这幅图景让他们在1981年获得了诺贝尔奖，它几乎就是本部分这些网络的设计。"
+  },
+  "28649ebe4ed1": {
+   "scene": "Before",
+   "en": "Computer vision began the same way, with edges. An edge is where the brightness changes quickly, so take the derivative of the image. <bookmark mark='a'/> In practice, the difference between the pixels on either side, across and down. <bookmark mark='b'/> On a handwritten digit, each arrow points uphill in brightness, across the stroke. <bookmark mark='c'/> On a photograph, the length of the gradient, in Irwin Sobel's 1968 version, draws the outline of the horse. For decades every vision system started here.",
+   "zh": "计算机视觉也是这样起步的：从边缘开始。边缘就是亮度变化很快的地方，所以对图像求导。<bookmark mark='a'/>实际上，就是左右、上下两侧像素之差。<bookmark mark='b'/>在一个手写数字上，每个箭头都指向亮度上升的方向，横穿笔画。<bookmark mark='c'/>在一张照片上，梯度的长度，用欧文·索贝尔1968年的算子来算，勾出了马的轮廓。几十年里，每个视觉系统都从这里开始。"
+  },
+  "3bfdd95e0e16": {
+   "scene": "Before",
+   "en": "Then came the descriptors. Cut the image into cells, and in each cell count the edges by their angle, each one weighted by its strength. <bookmark mark='a'/> Here are those counts for our digit: each star is a histogram of nine orientations, the long spokes running along the strokes. <bookmark mark='b'/> David Lowe's SIFT, published in full in 2004, found distinctive points at every scale and described each one with 128 such counts. <bookmark mark='c'/> Navneet Dalal and Bill Triggs's histograms of oriented gradients, in 2005, covered the whole window, normalized block by block, and found pedestrians. Counted like this, an image survives small shifts and changes of lighting.",
+   "zh": "接着是描述子。把图像切成小格，在每一格里按角度数边缘，每条边按它的强度加权。<bookmark mark='a'/>这是我们那个数字的计数：每颗星是九个方向的直方图，长的辐条沿着笔画。<bookmark mark='b'/>大卫·罗的SIFT，2004年完整发表，在每一个尺度上找出有区分度的点，每个点用128个这样的计数来描述。<bookmark mark='c'/>纳夫尼特·达拉尔和比尔·特里格斯2005年的方向梯度直方图，覆盖整个窗口，按块归一化，用来找行人。这样数出来的图像，经得起小的平移和光照变化。"
+  },
+  "7483353e36ad": {
+   "scene": "Before",
+   "en": "By 2010 a good vision system was a pipeline. <bookmark mark='a'/> Pixels went in; hand-designed features like SIFT came out, at thousands of places; they were pooled into one long vector and handed to a linear classifier, usually Part 6's support vector machine. <bookmark mark='b'/> Only the last box learned from the data. Everything before it was designed by people, over decades. <bookmark mark='c'/> Systems like this won the first two ImageNet contests, in 2010 and 2011, missing the right answer, in five guesses, about a quarter of the time.",
+   "zh": "到2010年，一个好的视觉系统是一条流水线。<bookmark mark='a'/>像素进去；SIFT这样的手工特征出来，在成千上万个地方计算；它们被汇合成一个长向量，再交给一个线性分类器，通常是第6部分的支持向量机。<bookmark mark='b'/>只有最后一个方框从数据中学习。它前面的一切，都是人花了几十年设计出来的。<bookmark mark='c'/>这样的系统赢下了2010年和2011年的头两届ImageNet比赛，猜五次，大约四分之一的时候都猜不中正确答案。"
+  },
+  "5ef0effe2845": {
+   "scene": "Before",
+   "en": "We can measure what the features buy. <bookmark mark='a'/> Train the same linear classifier twice, once on the raw pixels and once on our histograms of oriented gradients. On the digits, the pixels give 7.7 percent errors; the histograms, 2.4, about 3 times fewer. <bookmark mark='b'/> On the photographs it helps too, from 67 to 49 percent wrong, but that is still wrong about as often as right. <bookmark mark='c'/> The lesson of the era: the gap between digits and photographs is what the pipelines spent the 2000s closing, with richer features and far more images. <bookmark mark='d'/> The question the rest of this part answers: what if the features were learned too?",
+   "zh": "我们可以量一量这些特征换来了什么。<bookmark mark='a'/>把同一个线性分类器训练两次，一次用原始像素，一次用我们的方向梯度直方图。在数字上，像素给出7.7%的错误；直方图给出2.4%，少了大约3倍。<bookmark mark='b'/>在照片上它也有帮助，错误率从67%降到49%，但错的次数仍然和对的差不多。<bookmark mark='c'/>那个时代的教训是：数字和照片之间的差距，正是那些流水线在整个2000年代努力弥补的，靠的是更丰富的特征和多得多的图像。<bookmark mark='d'/>本部分剩下的内容要回答的问题是：如果特征也是学出来的呢？"
+  },
+  "26ccfb4cbfb6": {
+   "scene": "Convolution",
+   "en": "Chapter two. Convolution.",
+   "zh": "第2章。卷积。"
+  },
+  "93df25950809": {
+   "scene": "Convolution",
+   "en": "Suppose a network should find a short stroke in a digit. A fully connected unit weighs every pixel, <bookmark mark='a'/> so to find the stroke anywhere, the network must learn a detector for every place it might be. <bookmark mark='b'/> A convolutional unit looks at a small patch, five pixels by five, <bookmark mark='c'/> and every unit of a map uses the same twenty-five weights, slid across the image. <bookmark mark='d'/> For six maps the size of the digit, fully connected units need 3.7 million weights; local patches without sharing, 122,304; shared, just 156. Sharing is the whole idea: the same pattern can appear anywhere, so look for it the same way everywhere.",
+   "zh": "假设一个网络要在数字里找一小段笔画。一个全连接单元给每个像素都配一个权重，<bookmark mark='a'/>所以要在任何地方都找到这段笔画，网络就得为它可能出现的每个位置各学一个检测器。<bookmark mark='b'/>一个卷积单元只看一小块，五个像素乘五个像素，<bookmark mark='c'/>而且一张特征图上的每个单元都用同样的二十五个权重，在图像上滑过去。<bookmark mark='d'/>要得到六张和数字一样大的图，全连接单元需要3.7百万个权重；不共享的局部小块需要122304个；共享的，只要156个。共享就是全部的想法：同一个图案可以出现在任何地方，所以在每个地方都用同一种方式去找它。"
+  },
+  "34b5d54f2378": {
+   "scene": "Convolution",
+   "en": "Here is the operation. <bookmark mark='a'/> Lay a small grid of weights, the kernel, over a patch of the image; multiply each weight by the pixel under it and add them up. That is one number of the output. <bookmark mark='b'/> Slide the kernel one pixel along and do it again, row by row, until it has visited every position. <bookmark mark='c'/> The output is a feature map: bright wherever the patch looks like the kernel. This kernel was learned, and it likes strokes and their edges at one particular angle. <bookmark mark='d'/> Strictly, this is a cross-correlation; a mathematician's convolution flips the kernel first, but a learned kernel doesn't care.",
+   "zh": "运算是这样的。<bookmark mark='a'/>把一小格权重，也就是卷积核，盖在图像的一小块上；每个权重乘以它下面的像素，再全部加起来。这就是输出的一个数。<bookmark mark='b'/>把卷积核挪一个像素，再做一遍，一行一行地走，直到走遍每一个位置。<bookmark mark='c'/>输出是一张特征图：哪里的小块像这个卷积核，哪里就亮。这个卷积核是学出来的，它喜欢某一个特定角度的笔画和笔画边缘。<bookmark mark='d'/>严格地说，这是互相关；数学家的卷积要先把卷积核翻转，不过学出来的卷积核并不在乎。"
+  },
+  "3e2778823213": {
+   "scene": "Convolution",
+   "en": "Sharing the weights buys a precise property: shift the image, and the feature map shifts with it. <bookmark mark='a'/> Write T s for the shift by s. The convolution of the shifted image at i is a sum of weights times the shifted image. <bookmark mark='b'/> The shifted image at i plus u is the original at i plus u minus s. <bookmark mark='c'/> That sum is the convolution of the original at i minus s. <bookmark mark='d'/> Which is the shifted feature map, for any kernel, learned or not. <bookmark mark='e'/> In two dimensions the argument is the same; it holds exactly when the image wraps around, and away from the border with zero padding.",
+   "zh": "共享权重换来一个精确的性质：平移图像，特征图也跟着平移。<bookmark mark='a'/>用T s表示平移s。平移后图像在位置i的卷积，是权重乘以平移后图像之和。<bookmark mark='b'/>平移后的图像在i加u处，就是原图在i加u减s处。<bookmark mark='c'/>这个和，正是原图在i减s处的卷积。<bookmark mark='d'/>也就是平移后的特征图，对任何卷积核都成立，不管是不是学出来的。<bookmark mark='e'/>在二维里论证一样；图像首尾相接时它严格成立，用零填充时在边界以外成立。"
+  },
+  "4fafd795541b": {
+   "scene": "Convolution",
+   "en": "Let's check it on our digit. <bookmark mark='a'/> Convolve, then shift; <bookmark mark='b'/> or shift the digit by 3 pixels down and 2 to the left, then convolve. <bookmark mark='c'/> With the image wrapping around, the two routes agree exactly, to the last bit. <bookmark mark='d'/> With zero padding the maps agree everywhere except a thin band at the border, where the shifted image has lost pixels. <bookmark mark='e'/> A fully connected layer of the same shape has no such identity: its two routes differ by 1.5 times the size of its output. Equivariance is what weight sharing buys.",
+   "zh": "在我们的数字上验证一下。<bookmark mark='a'/>先卷积，再平移；<bookmark mark='b'/>或者先把数字往下移3个像素、往左移2个像素，再卷积。<bookmark mark='c'/>图像首尾相接时，两条路线完全一致，连最后一位都相同。<bookmark mark='d'/>用零填充时，两张图除了边界上一窄条以外处处相同，那里平移后的图像丢掉了像素。<bookmark mark='e'/>同样形状的全连接层没有这个恒等式：它的两条路线相差了输出大小的1.5倍。等变性，正是权值共享换来的。"
+  },
+  "37f1d4156567": {
+   "scene": "Receptive",
+   "en": "Chapter three. Receptive fields, stride and pooling.",
+   "zh": "第3章。感受野、步长与池化。"
+  },
+  "3ad294388775": {
+   "scene": "Receptive",
+   "en": "One unit of the first layer sees three pixels by three. <bookmark mark='a'/> A unit of the second layer sees three by three units of the first, and each of those sees its own three by three, so together they cover five by five pixels. <bookmark mark='b'/> A third layer, seven by seven. This is the unit's receptive field: the part of the image that can change it at all. Stacked, the fields make a cone.",
+   "zh": "第一层的一个单元看三个像素乘三个像素。<bookmark mark='a'/>第二层的一个单元看第一层的三乘三个单元，而它们各自又看自己的三乘三，所以合起来覆盖五乘五个像素。<bookmark mark='b'/>第三层，七乘七。这就是单元的感受野：图像里能改变它的那一部分。叠起来，感受野组成一个锥体。"
+  },
+  "813f28de87a6": {
+   "scene": "Receptive",
+   "en": "We can count the cone exactly. <bookmark mark='a'/> Name the kernel size, the stride, the spacing between neighbouring units in pixels, and the receptive field. <bookmark mark='b'/> A kernel of size k reaches k minus 1 more units of the layer below, j pixels apart: the field grows by k minus 1 times j. <bookmark mark='c'/> A stride multiplies the spacing. <bookmark mark='d'/> Unrolled: one, plus each layer's extra taps times the product of all the strides before it. <bookmark mark='e'/> Every layer after a stride counts for more.",
+   "zh": "我们可以精确地数出这个锥体。<bookmark mark='a'/>给卷积核大小、步长、相邻单元之间相隔的像素数和感受野各起个名字。<bookmark mark='b'/>大小为k的卷积核，多够到下一层k减1个单元，它们相隔j个像素：感受野增加k减1乘以j。<bookmark mark='c'/>步长会把间隔乘上去。<bookmark mark='d'/>展开来：1，加上每一层多出的抽头数乘以它前面所有步长的乘积。<bookmark mark='e'/>步长之后的每一层，都分量更重。"
+  },
+  "1a084ebe7f66": {
+   "scene": "Receptive",
+   "en": "Apply the rule to real networks, layer list by layer list. <bookmark mark='a'/> LeNet-5's last convolution sees 32 pixels square: its whole input. <bookmark mark='b'/> AlexNet's last pooling layer sees 195 pixels, VGG-16's 212, ResNet-50's 483: AlexNet and VGG-16 see most of the 224-pixel images they were trained on, and ResNet-50 more than all of it: a unit at its top can in principle be moved by any pixel. <bookmark mark='c'/> Our own CIFAR network, which we'll meet in Chapter 8, reaches 41 pixels on 32-pixel photographs.",
+   "zh": "把这条规则用到真实的网络上，一份层列表接一份层列表。<bookmark mark='a'/>LeNet-5的最后一个卷积看32个像素见方：整个输入。<bookmark mark='b'/>AlexNet最后的池化层看195个像素，VGG-16是212，ResNet-50是483：AlexNet和VGG-16能看到它们训练用的224像素图像的大部分，ResNet-50则比整张图还宽：它顶层的一个单元，原则上可以被任何一个像素改变。<bookmark mark='c'/>我们自己的CIFAR网络，第8章会见到，在32像素的照片上达到41个像素。"
+  },
+  "641b1f19d32a": {
+   "scene": "Receptive",
+   "en": "Two more ingredients shrink the maps as they go up. <bookmark mark='a'/> Pooling: in each 2 by 2 block keep only the largest value, and move on by 2. Nudge a feature by a pixel inside its block and the pooled output doesn't change: a little invariance, Hubel and Wiesel's complex cell again. <bookmark mark='b'/> But a stride of 2 breaks the exact equivariance of the last chapter. <bookmark mark='c'/> We shifted the digit by one to four pixels before our first layer and its pooling. A shift by 2 or 4 pixels comes out as an exact shift of the pooled map. A shift by 1 or 3 does not: after pooling it's a different map, off by a large fraction of its values. <bookmark mark='d'/> In 2019 Aharon Azulay and Yair Weiss showed that a one-pixel shift can change a modern network's answer, and Richard Zhang that blurring before each stride mostly fixes it.",
+   "zh": "还有两个成分让特征图越往上越小。<bookmark mark='a'/>池化：在每个2乘2的块里只留最大值，然后移动2格。在块里把一个特征挪一个像素，池化后的输出不变：一点点不变性，又是休伯尔和威泽尔的复杂细胞。<bookmark mark='b'/>但步长为2会打破上一章那种精确的等变性。<bookmark mark='c'/>我们把数字在送进第一层和它的池化之前，平移了一到四个像素。平移2个或4个像素，池化后的图恰好平移了一格。平移1个或3个像素就不行：池化后是另一张图，偏差占了它的值的很大一部分。<bookmark mark='d'/>2019年，阿哈龙·阿祖莱和亚伊尔·魏斯证明，平移一个像素就能改变现代网络的答案；理查德·张则证明，在每次步长之前先模糊一下，大体就能修好。"
+  },
+  "38f18793d603": {
+   "scene": "LeNet",
+   "en": "Chapter four. LeNet and MNIST.",
+   "zh": "第4章。LeNet与MNIST。"
+  },
+  "11728be4df53": {
+   "scene": "LeNet",
+   "en": "The first network built on Hubel and Wiesel's plan came from Japan. <bookmark mark='a'/> In 1980 Kunihiko Fukushima's Neocognitron stacked layers of S-cells and C-cells, after the simple and complex cells, and recognized digits even when they were shifted. But it learned without backpropagation, by rules of its own. <bookmark mark='b'/> In 1989, at Bell Labs, Yann LeCun and his colleagues trained a convolutional network end to end with backpropagation, through the shared weights, on digits from real zip codes: 7,291 for training, with 5 percent errors on the test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time.",
+   "zh": "第一个按休伯尔和威泽尔的蓝图搭起来的网络，来自日本。<bookmark mark='a'/>1980年，福岛邦彦的新认知机把S细胞层和C细胞层叠起来，仿照简单细胞和复杂细胞，即使数字被平移了也能认出来。但它不用反向传播学习，而是按自己的一套规则。<bookmark mark='b'/>1989年，在贝尔实验室，杨立昆和同事用反向传播端到端地训练了一个卷积网络，梯度穿过共享的权重，数据是真实邮政编码里的数字：7291个用来训练，测试数字上的错误率是5%。<bookmark mark='c'/>同一年，亚历克斯·魏贝尔的团队把共享权重沿着时间滑动。"
+  },
+  "dee7f11ba54e": {
+   "scene": "LeNet",
+   "en": "By 1998 the design had a name and a benchmark. <bookmark mark='a'/> LeNet-5, from LeCun, Leon Bottou, Yoshua Bengio and Patrick Haffner: two rounds of convolution and pooling, six maps then sixteen, then three fully connected layers down to ten digits. <bookmark mark='b'/> And MNIST, seventy thousand handwritten digits, remixed from two US government collections, one written by Census Bureau employees and one by high-school students. <bookmark mark='c'/> LeNet-5 missed 0.95 percent of the test digits, 0.8 trained on distorted copies, and a system built around it went to work in banks, reading several million checks a day. <bookmark mark='d'/> We built the same layout, with today's ReLU and max pooling.",
+   "zh": "到1998年，这个设计有了名字，也有了基准。<bookmark mark='a'/>LeNet-5，出自杨立昆、莱昂·博图、约书亚·本吉奥和帕特里克·哈夫纳：两轮卷积和池化，先六张特征图再十六张，然后三个全连接层，收到十个数字。<bookmark mark='b'/>还有MNIST，七万个手写数字，由美国政府的两批数据重新混合而成，一批出自人口普查局的雇员，一批出自高中生。<bookmark mark='c'/>LeNet-5在0.95%的测试数字上出错，用变形的副本训练时是0.8%；围绕它搭起的系统进了银行，每天读几百万张支票。<bookmark mark='d'/>我们搭了同样的结构，换上今天的ReLU和最大池化。"
+  },
+  "eaee5a5bf08e": {
+   "scene": "LeNet",
+   "en": "Now let's watch ours learn. On the left, its test error; on the right, its six first-layer kernels, what they make of one digit, and its answer. <bookmark mark='a'/> At the start the kernels are random noise and the answers are guesses: 90 percent wrong. <bookmark mark='b'/> Within 400 steps, under five percent wrong. <bookmark mark='c'/> After 6 passes over the training digits, 1.41 percent wrong. Of the six kernels, 6 now match a bar or an edge, each at a different angle; at the start, 2 did. Nobody designed those kernels: they are whatever made the answers right.",
+   "zh": "现在看我们的网络怎样学。左边是它的测试错误率；右边是它第一层的六个卷积核、它们对一个数字的反应，以及它的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错90%。<bookmark mark='b'/>不到400步，错误率就降到5%以下。<bookmark mark='c'/>把训练数字过了6遍之后，错1.41%。六个卷积核中，现在有6个和一条亮带或一道边缘吻合，各在不同的角度；一开始只有2个。这些卷积核没有人设计：凡是能让答案正确的，就是它们。"
+  },
+  "ce116afc8599": {
+   "scene": "LeNet",
+   "en": "Over three training runs with different random starts, our network gets 1.22 percent of the test digits wrong, between 1.08 and 1.41: a little worse than LeNet-5's 0.95 percent; we trained for only 6 passes over the digits. <bookmark mark='a'/> And here are some it got wrong. Several of them would make a person hesitate too.",
+   "zh": "三次从不同随机起点出发的训练，我们的网络在1.22%的测试数字上出错，范围在1.08%到1.41%之间：比LeNet-5的0.95%差一点；我们只把数字过了6遍。<bookmark mark='a'/>这是它错掉的一些数字。其中好几个，人看了也会犹豫。"
+  },
+  "59e8d80a46dd": {
+   "scene": "LeNet",
+   "en": "Is it the convolution that helps, or just the training? Compare it fairly, with a fully connected network of the same size, 62,020 weights against 61,706, trained the same way, three times each. <bookmark mark='a'/> On ordinary test digits: 1.22 percent wrong for the convolutional network, 2.77 for the other. <bookmark mark='b'/> Shift the test digits by three pixels and the network of fully connected units goes from 2.8 to 51 percent wrong; the convolutional one to 17. Neither is perfectly shift-invariant: the fully connected layers at the top of LeNet see positions. <bookmark mark='c'/> And the cleanest test of the assumption. Shuffle the pixels, the same way in every image, and retrain both. The fully connected network doesn't care: 3.7 percent before, 3.8 after, because to it the pixels never had an order. The convolutional network falls from 1.5 to 6.1: its assumption, that nearby pixels belong together, is now false.",
+   "zh": "帮了忙的到底是卷积，还是只是训练？公平地比一比：换一个同样大小的全连接网络，62020个权重对61706个，用同样的方式训练，各训练三次。<bookmark mark='a'/>在普通的测试数字上：卷积网络错1.22%，另一个错2.77%。<bookmark mark='b'/>把测试数字平移三个像素，全连接网络的错误率从2.8%升到51%；卷积网络升到17%。两者都不是严格平移不变的：LeNet顶部的全连接层是看位置的。<bookmark mark='c'/>而对这个假设最干净的检验是这样的。把像素打乱，每张图都用同一种打乱方式，然后重新训练两个网络。全连接网络毫不在乎：之前3.7%，之后3.8%，因为在它眼里，像素本来就没有顺序。卷积网络则从1.5%掉到6.1%：它的假设，相邻的像素属于一起，现在不成立了。"
+  },
+  "38b18e2af203": {
+   "scene": "ImageNet",
+   "en": "Chapter five. ImageNet and AlexNet.",
+   "zh": "第5章。ImageNet与AlexNet。"
+  },
+  "1bfdc2c71bc3": {
+   "scene": "ImageNet",
+   "en": "In 2009 Fei-Fei Li, then at Princeton, and her students published ImageNet. <bookmark mark='a'/> The idea was to collect pictures for every noun in WordNet, a dictionary of English organized as a tree of meanings, searched for on the web and checked one by one by people paid through Amazon's Mechanical Turk. <bookmark mark='b'/> From 2010 a yearly contest used a thousand of its classes: 1,281,167 training photographs, with five guesses allowed per test image. <bookmark mark='c'/> Count the numbers a network has to learn from, images times pixel values, and ImageNet's contest is about 4,100 times MNIST: thousands of times bigger, and messier.",
+   "zh": "2009年，当时在普林斯顿的李飞飞和她的学生发布了ImageNet。<bookmark mark='a'/>想法是为WordNet里的每个名词收集图片，WordNet是一部按意义组织成树的英语词典；图片从网上搜来，再由通过亚马逊土耳其机器人众包平台付费的人一张张核对。<bookmark mark='b'/>从2010年起，每年有一场比赛，用它的一千个类别：1281167张训练照片，每张测试图允许猜五次。<bookmark mark='c'/>数一数网络要学习的数，图像数乘以像素值数，ImageNet比赛大约是MNIST的4100倍：大了几千倍，也乱得多。"
+  },
+  "d1d86e819cf4": {
+   "scene": "ImageNet",
+   "en": "The first two contests went to pipelines like the ones in Chapter 1: 28.2 percent top-5 error in 2010, 25.8 in 2011. <bookmark mark='a'/> In 2012 the second-best entry, from the University of Tokyo, used SIFT and other features and reached 26.2. <bookmark mark='b'/> The winner, entered as SuperVision by Alex Krizhevsky, Ilya Sutskever and Geoffrey Hinton, reached 16.4 percent, and 15.3 with extra training images. Almost ten points better than the next entry, in a contest where a year's progress had been a point or two. <bookmark mark='c'/> The network became known as AlexNet. Part 17 told how it was trained, on two gaming graphics cards; here, what was inside.",
+   "zh": "头两届比赛的冠军，都是第1章那样的流水线：2010年前五错误率28.2%，2011年25.8%。<bookmark mark='a'/>2012年，第二名来自东京大学，用的是SIFT和其他特征，达到26.2%。<bookmark mark='b'/>冠军以SuperVision的名义参赛，出自亚历克斯·克里热夫斯基、伊利亚·苏茨克维和杰弗里·辛顿，达到16.4%，用额外的训练图片时是15.3%。比第二名好了将近十个百分点，而这个比赛一年的进步通常只有一两个点。<bookmark mark='c'/>这个网络后来被叫作AlexNet。第17部分讲了它是怎样在两块游戏显卡上训练出来的；这里讲它里面有什么。"
+  },
+  "cd7cecff5992": {
+   "scene": "ImageNet",
+   "en": "AlexNet was LeNet's design, grown. Five convolutional layers, the first with 96 kernels of eleven by eleven pixels at a stride of four, then three fully connected layers, ending in a thousand-way softmax. <bookmark mark='a'/> Count its weights from the published layer list: 60,965,224. Only 4 percent of them are in the convolutions; the first fully connected layer alone holds 38 million. <bookmark mark='b'/> Now count the arithmetic, per image: 724 million multiply-adds, and 92 percent of those are in the convolutions, because each of their few weights is used at every position. <bookmark mark='c'/> Weights live in the dense layers, work in the convolutions: that split comes back in every network after it.",
+   "zh": "AlexNet就是长大了的LeNet。五个卷积层，第一层是96个11乘11像素的卷积核，步长为4；然后三个全连接层，最后是一个一千类的softmax。<bookmark mark='a'/>按公开的层列表数它的权重：60965224个。其中只有4%在卷积层里；光是第一个全连接层就有38百万个。<bookmark mark='b'/>再数每张图的算术量：724百万次乘加，其中92%在卷积层里，因为它们那几个权重在每个位置都要用一次。<bookmark mark='c'/>权重住在全连接层，工作在卷积层：这种分工，在它之后的每个网络里都会再出现。"
+  },
+  "83c092fe8fb3": {
+   "scene": "ImageNet",
+   "en": "AlexNet didn't come from nowhere. <bookmark mark='a'/> In 2011 Dan Ciresan and colleagues in Jurgen Schmidhuber's lab had already won contests with convolutional networks on GPUs, beating the average human tester on traffic signs. <bookmark mark='b'/> In 2012 groups at Toronto, Microsoft, Google and IBM reported together that deep networks beat the old models of speech. <bookmark mark='c'/> But ImageNet was the benchmark vision cared about, and the field turned at once: in 2013 nearly every team entered a convolutional network. <bookmark mark='d'/> Bengio, Hinton and LeCun later shared the Turing Award for 2018.",
+   "zh": "AlexNet不是凭空出现的。<bookmark mark='a'/>2011年，于尔根·施密德胡伯实验室的丹·奇雷尚和同事，已经用GPU上的卷积网络赢下了好几场比赛，在交通标志识别上超过了人类测试者的平均水平。<bookmark mark='b'/>2012年，多伦多、微软、谷歌和IBM的团队联合报告：深度网络打败了老的语音模型。<bookmark mark='c'/>但ImageNet才是视觉界在乎的基准，整个领域立刻转了向：2013年，几乎每个参赛队都交了一个卷积网络。<bookmark mark='d'/>后来，本吉奥、辛顿和杨立昆共同获得了2018年度的图灵奖。"
+  },
+  "a2b2453a1ebd": {
+   "scene": "WhyItWon",
+   "en": "Chapter six. Why AlexNet won.",
+   "zh": "第6章。AlexNet为什么赢了。"
+  },
+  "5b92ed982106": {
+   "scene": "WhyItWon",
+   "en": "The first difference inside AlexNet is small: the activation. <bookmark mark='a'/> The networks of the 1990s squashed each unit with a tanh or a sigmoid. AlexNet used the rectified linear unit, zero for negative inputs and the input itself otherwise. <bookmark mark='b'/> The reason is in the slopes, which backpropagation multiplies the gradient by at every layer. The sigmoid's is at most a quarter, and both it and tanh flatten to nothing once a unit is pushed far from zero: it saturates and stops learning. The ReLU's slope is one wherever it is on. <bookmark mark='c'/> Krizhevsky measured it on CIFAR-10: a four-layer network with ReLUs reached 25 percent training error 6 times faster than the same network with tanh.",
+   "zh": "AlexNet里面的第一个不同之处很小：激活函数。<bookmark mark='a'/>20世纪90年代的网络用tanh或sigmoid把每个单元压扁。AlexNet用的是修正线性单元：输入为负时是零，否则就是输入本身。<bookmark mark='b'/>原因在斜率上：反向传播在每一层都要把梯度乘以激活函数的斜率。sigmoid的斜率最多四分之一，而且它和tanh一旦被推离零点太远，就平得什么都不剩：单元饱和了，停止学习。ReLU的斜率，只要它是开着的，就是1。<bookmark mark='c'/>克里热夫斯基在CIFAR-10上量过：一个四层网络，用ReLU达到25%训练错误率，比同样的网络用tanh快了6倍。"
+  },
+  "1c84f34c604d": {
+   "scene": "WhyItWon",
+   "en": "We ran the race ourselves, on the digits: the same six-layer convolutional network, three times with each activation, trained by plain gradient descent with momentum, as AlexNet was. <bookmark mark='a'/> The dashed line is 10 percent training error. <bookmark mark='b'/> ReLU and tanh get there in about the same time, 90 and 100 steps: at this depth, with a good initialization, tanh keeps up. The gap opens in deeper networks. <bookmark mark='c'/> The sigmoid networks are still at 89 percent test error when we stop: its small slopes, multiplied layer after layer, starve the first layers of gradient.",
+   "zh": "我们自己在数字上比了一场：同一个六层卷积网络，每种激活函数各训练三次，像AlexNet那样用带动量的普通梯度下降。<bookmark mark='a'/>虚线是10%的训练错误率。<bookmark mark='b'/>ReLU和tanh到达的时间差不多，90步和100步：在这个深度、有好的初始化时，tanh跟得上。差距要在更深的网络里才拉开。<bookmark mark='c'/>我们停下时，sigmoid网络的测试错误率还在89%：它那很小的斜率，一层又一层地乘下去，让最前面几层得不到梯度。"
+  },
+  "191e7c1e47d1": {
+   "scene": "WhyItWon",
+   "en": "The second ingredient: dropout, from Hinton's group the same year. <bookmark mark='a'/> At every training step, switch off each hidden unit with probability one half, so the network can't lean on a conspiracy of a few; at test time keep them all, scaled to match. It is like averaging a huge family of thinner networks that share weights. AlexNet used it in its two big fully connected layers. <bookmark mark='b'/> We gave a fully connected network just five thousand digits and let it train for sixty passes. Without dropout it learns every training digit, 0.0 percent wrong on them, while the test error stalls. <bookmark mark='c'/> With dropout the test error ends at 4.3 percent instead of 4.6. The gap between training and test shrinks from 4.6 points to 4.2.",
+   "zh": "第二个成分：随机失活（dropout），同一年出自辛顿的团队。<bookmark mark='a'/>每一步训练，每个隐藏单元都以二分之一的概率被关掉，这样网络就不能依赖少数几个单元的勾结；测试时全部打开，按比例缩小。这就像在对一个巨大的、共享权重的瘦网络家族取平均。AlexNet把它用在两个大的全连接层里。<bookmark mark='b'/>我们只给一个全连接网络五千个数字，让它训练六十遍。不用随机失活，它把每个训练数字都学会了，在它们上面只错0.0%，而测试错误率停滞不前。<bookmark mark='c'/>用了随机失活，测试错误率最后是4.3%，而不是4.6%。训练和测试之间的差距，从4.6个百分点缩小到4.2个。"
+  },
+  "38e049b48269": {
+   "scene": "WhyItWon",
+   "en": "The third ingredient was the one ImageNet supplied: data. <bookmark mark='a'/> Train the same LeNet, for the same number of steps, on more and more digits. On a log-log plot the test error first falls along a straight line, a power law with slope about minus 0.43: each doubling of the data cuts the errors by 26 percent. Then the line bends flat: in 1,200 steps the network sees each of the 60,000 digits only 1.3 times, and can't make use of them all. <bookmark mark='b'/> And there is a cheap way to get more: make it. AlexNet trained on random crops of its photographs and their mirror images, 2,048 variants of each. Shifted copies help: with 2,000 digits, 4.1 percent wrong becomes 3.4, though not as much as four times as many real digits, 2.8.",
+   "zh": "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。在对数-对数图上，测试错误率先沿着一条直线下降，是一条斜率约为负0.43的幂律：数据每翻一倍，错误就减少26%。然后这条线弯平了：在1200步里，60000个数字每个只被看到1.3遍，网络用不上全部数据。<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有2048种变体。平移的副本有帮助：用2000个数字时，4.1%的错误率降到了3.4%，不过比不上四倍的真实数字，那是2.8%。"
+  },
+  "e5801c00c5fc": {
+   "scene": "WhyItWon",
+   "en": "So which ingredient mattered? <bookmark mark='a'/> None of them was new in 2012: rectified units from 2010, dropout from that year, convolutional networks from 1989, GPUs and ImageNet from 2009. <bookmark mark='b'/> What was new was all of them together, at a scale where each one mattered: enough data that sixty million weights couldn't simply memorize it, and enough arithmetic to train them in a week.",
+   "zh": "那么哪个成分才重要？<bookmark mark='a'/>2012年时，它们没有一个是新的：修正线性单元来自2010年，随机失活来自那一年，卷积网络来自1989年，GPU和ImageNet来自2009年。<bookmark mark='b'/>新的是它们全部合在一起，而且在每一样都起作用的规模上：数据多到六千万个权重不能简单地背下来，算力足够在一周内训练完。"
+  },
+  "2c44afc8b467": {
+   "scene": "Deeper",
+   "en": "Chapter seven. Deeper: VGG, Inception, ResNet.",
+   "zh": "第7章。更深：VGG、Inception、ResNet。"
+  },
+  "2705aaa2b616": {
+   "scene": "Deeper",
+   "en": "After 2012 the contest became a race to go deeper. <bookmark mark='a'/> The winning error, year by year: 16.4 percent for AlexNet's eight layers; 11.7 in 2013; 6.7 in 2014, with twenty-two layers; 3.57 in 2015, with a hundred and fifty-two. <bookmark mark='b'/> In 2014 Andrej Karpathy trained himself on the task and labelled test images by hand: he missed 5.1 percent. The networks passed him in 2015. <bookmark mark='c'/> By the contest's last year, 2017, the winner missed 2.25 percent. <bookmark mark='d'/> When Benjamin Recht and colleagues later built a fresh test set the same way, every model lost eleven to fourteen points of accuracy, though the ranking barely changed. Part 31 asks what benchmarks can tell us.",
+   "zh": "2012年以后，这场比赛变成了比谁更深。<bookmark mark='a'/>历年冠军的错误率：AlexNet的八层是16.4%；2013年11.7%；2014年6.7%，二十二层；2015年3.57%，一百五十二层。<bookmark mark='b'/>2014年，安德烈·卡帕西自己练习了这项任务，亲手给测试图片打标签：他错了5.1%。2015年，网络超过了他。<bookmark mark='c'/>到比赛的最后一年，2017年，冠军只错2.25%。<bookmark mark='d'/>后来，本杰明·雷希特和同事按同样的方式重新收集了一个测试集，每个模型的准确率都掉了十一到十四个百分点，不过排名几乎没变。第31部分会讨论基准能告诉我们什么。"
+  },
+  "90eca12b9110": {
+   "scene": "Deeper",
+   "en": "In 2014 Karen Simonyan and Andrew Zisserman at Oxford asked how far depth alone would go, and built networks of sixteen and nineteen layers out of nothing but three-by-three convolutions. <bookmark mark='a'/> Why so small? Two three-by-three layers see five by five pixels, by the rule of Chapter 3. <bookmark mark='b'/> With C channels in and out, they cost eighteen C squared weights, against twenty-five C squared for one five-by-five layer. <bookmark mark='c'/> Three of them see seven by seven, for twenty-seven against forty-nine, and add two more nonlinearities in between. <bookmark mark='d'/> VGG-16 came second in 2014. It was big: 138 million weights and 15.5 billion multiply-adds per image, by our count from its layer list.",
+   "zh": "2014年，牛津的卡伦·西蒙尼扬和安德鲁·齐瑟曼想知道光靠深度能走多远，就只用3乘3的卷积，搭了十六层和十九层的网络。<bookmark mark='a'/>为什么这么小？按第3章的规则，两个3乘3的层看五乘五个像素。<bookmark mark='b'/>输入输出都是C个通道时，它们要十八个C平方个权重，而一个5乘5的层要二十五个C平方。<bookmark mark='c'/>三个这样的层看七乘七，二十七对四十九，中间还多了两个非线性。<bookmark mark='d'/>VGG-16在2014年得了第二。它很大：按我们从它的层列表数出来的，138百万个权重，每张图15.5十亿次乘加。"
+  },
+  "96ddfcef9280": {
+   "scene": "Deeper",
+   "en": "The winner of 2014 went another way. <bookmark mark='a'/> Christian Szegedy's team at Google built GoogLeNet from Inception modules: look at the previous layer through several windows at once, and stack the results side by side. <bookmark mark='b'/> What made it affordable: a one-by-one convolution in front of each big one, to cut the number of channels before the expensive step. <bookmark mark='c'/> Twenty-two layers, the best error of the year, and, by its authors' count, a twelfth of AlexNet's weights. Deeper didn't have to mean bigger.",
+   "zh": "2014年的冠军走了另一条路。<bookmark mark='a'/>克里斯蒂安·塞格迪在谷歌的团队用Inception模块搭出了GoogLeNet：同时透过几个大小不同的窗口去看上一层，再把结果并排堆起来。<bookmark mark='b'/>让它负担得起的办法是：在每个大卷积前面放一个1乘1的卷积，在昂贵的那一步之前先把通道数削减下来。<bookmark mark='c'/>二十二层，当年最好的错误率，而且按作者的统计，权重只有AlexNet的十二分之一。更深，不一定意味着更大。"
+  },
+  "4636e9aa7c89": {
+   "scene": "Deeper",
+   "en": "Then depth hit a wall. <bookmark mark='a'/> Kaiming He and his colleagues at Microsoft found a plain network of fifty-six layers doing worse than one of twenty, even on its own training data: not overfitting, just harder to train. Batch normalization, from that year, had helped, but not enough. <bookmark mark='b'/> Their fix: let each pair of layers learn only a correction F of x, added to its input. <bookmark mark='c'/> The block's derivative is the identity plus F's: a path along which the gradient always passes, however deep the stack, as Part 9 derived. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at 3.57 percent. Highway networks, months earlier, had built the same path with gates.",
+   "zh": "然后，深度撞上了一堵墙。<bookmark mark='a'/>微软的何恺明和同事发现，一个五十六层的普通网络比二十层的还差，连在自己的训练数据上都更差：不是过拟合，只是更难训练。那一年提出的批归一化有帮助，但不够。<bookmark mark='b'/>他们的办法是：让每两层只学一个修正量F(x)，加到它的输入上。<bookmark mark='c'/>这个块的导数是单位矩阵加上F的导数：一条梯度总能通过的路，不管堆得多深，第9部分推导过。<bookmark mark='d'/>一百五十二层，以3.57%赢下了2015年。几个月前，高速公路网络已经用门搭出了同样的通路。"
+  },
+  "0bb36b9823ff": {
+   "scene": "Filters",
+   "en": "Chapter eight. What the filters learn.",
+   "zh": "第8章。滤波器学到了什么。"
+  },
+  "e58254786df5": {
+   "scene": "Filters",
+   "en": "<bookmark mark='a'/> CIFAR-10, collected by Krizhevsky in 2009: sixty thousand pictures of thirty-two by thirty-two pixels, in ten classes. <bookmark mark='b'/> Our network for it has an AlexNet-like first layer, 48 kernels of seven by seven pixels in colour, at a stride of two, then three more convolutional layers. <bookmark mark='c'/> Trained on this computer for 10 passes over the fifty thousand training photographs, it labels 82.5 percent of the ten thousand test photographs correctly.",
+   "zh": "<bookmark mark='a'/>CIFAR-10，克里热夫斯基在2009年收集：六万张32乘32像素的图片，分十个类别。<bookmark mark='b'/>我们给它的网络有一个像AlexNet那样的第一层：48个7乘7像素的彩色卷积核，步长为2，后面还有三个卷积层。<bookmark mark='c'/>在这台计算机上把五万张训练照片过了10遍以后，它能把一万张测试照片中的82.5%标对。"
+  },
+  "660e3ea9795d": {
+   "scene": "Filters",
+   "en": "Now replay the training and watch the first layer. <bookmark mark='a'/> At the start, 48 patches of noise, and 11 percent of the answers right: chance. <bookmark mark='b'/> Within 400 steps, more than half right, and the noise has begun to organize. <bookmark mark='c'/> By the end, some have become edge detectors, light against dark at one angle, and others blobs of one colour against another. Krizhevsky's paper showed the same kinds of kernel for AlexNet's 96, and the same kinds of filter are found in the visual cortex.",
+   "zh": "现在重放训练过程，看第一层。<bookmark mark='a'/>一开始是48块噪声，答对11%：瞎猜的水平。<bookmark mark='b'/>不到400步，答对一半以上，噪声开始有了条理。<bookmark mark='c'/>到最后，有些变成了边缘检测器，在某一个角度上亮对暗；另一些成了一种颜色对另一种颜色的斑块。克里热夫斯基的论文给AlexNet的96个卷积核展示过同样种类的图样，视觉皮层里也能找到同样种类的滤波器。"
+  },
+  "65fb0112aff1": {
+   "scene": "Filters",
+   "en": "We can run Hubel and Wiesel's experiment on our own network. <bookmark mark='a'/> Show each filter a striped pattern, a grating, at sixteen angles, and record how strongly it answers at each one. <bookmark mark='b'/> Here are three of the filters, and their answers drawn as a shape around a circle: a long thin shape means the filter cares about one angle and ignores the one at right angles to it, like the cat's cell. <bookmark mark='c'/> Count the filters whose answer at their best angle is at least three times the answer at right angles: 14 of the 48, and 15 more respond mostly to colour. Before training, not one of them passes the same test. The tuning was learned.",
+   "zh": "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少滤波器在最佳角度的反应至少是垂直方向的三倍：48个里有14个，另外还有15个主要对颜色有反应。训练之前，它们没有一个通过同样的检验。这种方向偏好是学出来的。"
+  },
+  "e55d866fb2d5": {
+   "scene": "Filters",
+   "en": "Higher layers combine the edges. To see what a deeper unit wants, the trick from Matthew Zeiler and Rob Fergus in 2013 is to find the inputs that excite it most. <bookmark mark='a'/> In our third layer, each unit sees twenty-one pixels square, and its favourite patches share a texture, a colour boundary, a curve or a corner. <bookmark mark='b'/> The fourth layer sees the whole photograph, and its favourite images begin to share a class: for these four channels, 4, 5, 4 and 4 of the top six images are of one kind. Nobody labelled the channels. The labels only ever reached the very last layer.",
+   "zh": "更高的层把边缘组合起来。要看一个更深的单元想要什么，马修·泽勒和罗布·弗格斯2013年的办法是：找出最能激发它的输入。<bookmark mark='a'/>在我们的第三层，每个单元看21个像素见方，它最喜欢的那些小块有共同的纹理、颜色边界、曲线或角。<bookmark mark='b'/>第四层看整张照片，它最喜欢的图像开始属于同一个类别：对这四个通道，前六张图中分别有4、5、4和4张是同一类的。没有人给这些通道贴过标签。标签只到达过最后那一层。"
+  },
+  "9e44f94ad11a": {
+   "scene": "Adversarial",
+   "en": "Chapter nine. Adversarial examples.",
+   "zh": "第9章。对抗样本。"
+  },
+  "4c6a475f1e23": {
+   "scene": "Adversarial",
+   "en": "In December 2013 Christian Szegedy and six colleagues reported something strange. <bookmark mark='a'/> For any photograph a network classified correctly, they could find a tiny change, invisible to a person, that made it answer something else. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a panda that GoogLeNet called a panda with 57.7 percent confidence. Add a faint pattern, a change of 0.007 in each pixel, and it called it a gibbon, with 99.3 percent. <bookmark mark='c'/> They also gave the explanation.",
+   "zh": "2013年12月，克里斯蒂安·塞格迪和六位同事报告了一件怪事。<bookmark mark='a'/>对于网络分类正确的任何一张照片，他们都能找到一个极小的改动，人眼看不出来，却让网络答成别的东西。<bookmark mark='b'/>一年后，伊恩·古德费洛、乔纳森·施伦斯和塞格迪展示了一只熊猫，GoogLeNet以57.7%的置信度认出它是熊猫。加上一层淡淡的图案，每个像素改动0.007，它就说这是长臂猿，置信度99.3%。<bookmark mark='c'/>他们也给出了解释。"
+  },
+  "8ebd4cf09612": {
+   "scene": "Adversarial",
+   "en": "Their argument is about linearity. Take a linear score, w dot x, and change the input by a small eta. <bookmark mark='a'/> The score changes by w dot eta. <bookmark mark='b'/> If no pixel may change by more than epsilon, the largest change moves every pixel by epsilon in the direction of its weight's sign: epsilon times the sum of the absolute weights. <bookmark mark='c'/> With n inputs whose weights average m, that's epsilon times m times n: a change too small to see in any one pixel adds up, over thousands of pixels, to a large change in the score. <bookmark mark='d'/> Networks of ReLUs are built from linear pieces, so do the same with the network's own gradient: the fast gradient sign method, one gradient, one step.",
+   "zh": "他们的论证是关于线性的。取一个线性打分，w点乘x，把输入改动一个小小的η。<bookmark mark='a'/>打分变化w点乘η。<bookmark mark='b'/>如果每个像素最多只能改动ε，最大的变化来自把每个像素都沿它权重的符号方向移动ε：等于ε乘以权重绝对值之和。<bookmark mark='c'/>有n个输入、权重平均大小为m时，就是ε乘以m乘以n：在任何一个像素上小到看不出的改动，在几千个像素上加起来，就成了打分的大变化。<bookmark mark='d'/>ReLU网络是用线性的片段拼起来的，所以用网络自己的梯度做同样的事：这就是快速梯度符号法，一个梯度，一步。"
+  },
+  "5b8ef6d9198c": {
+   "scene": "Adversarial",
+   "en": "Try it on our LeNet. <bookmark mark='a'/> This is the sign of the loss's gradient for one test digit: which way each pixel should move to make the network more wrong. <bookmark mark='b'/> Add it, scaled by epsilon. At zero, the network says 7, 100 percent sure. <bookmark mark='c'/> At epsilon 0.3, it says 3, with 77 percent confidence. To a person it is still plainly a seven, in a little fog.",
+   "zh": "在我们的LeNet上试试。<bookmark mark='a'/>这是一个测试数字上损失梯度的符号：每个像素往哪个方向移动，能让网络错得更厉害。<bookmark mark='b'/>乘以ε加上去。ε为零时，网络说是7，100%确定。<bookmark mark='c'/>ε为0.3时，它说是3，置信度77%。在人看来，它显然还是一个7，只是蒙了一层薄雾。"
+  },
+  "886a930f315c": {
+   "scene": "Adversarial",
+   "en": "Measure it over all ten thousand test digits. <bookmark mark='a'/> At epsilon a quarter, the linear model is wrong on 100 percent of them; Goodfellow's shallow softmax was wrong on 99.9. <bookmark mark='b'/> The networks are not much safer: LeNet, wrong on 84 percent. <bookmark mark='c'/> And one gradient step is a weak attack. Take twenty small steps instead, each projected back into the epsilon box, and at epsilon 0.2 LeNet is wrong on 99 percent. <bookmark mark='d'/> And the attacks transfer: made against the fully connected network, they fool LeNet 17 percent of the time; made against one LeNet, they fool another 27 percent of the time.",
+   "zh": "在全部一万个测试数字上量一量。<bookmark mark='a'/>ε为四分之一时，线性模型在其中100%上出错；古德费洛那个浅层softmax错了99.9%。<bookmark mark='b'/>网络也安全不了多少：LeNet错84%。<bookmark mark='c'/>而且一步梯度只是一种弱的攻击。改走二十小步，每步都投影回ε的盒子里，ε为0.2时LeNet错99%。<bookmark mark='d'/>攻击还能迁移：针对全连接网络做的改动，有17%的时候骗过LeNet；针对一个LeNet做的，有27%的时候骗过另一个。"
+  },
+  "db74e423e1b1": {
+   "scene": "Adversarial",
+   "en": "On photographs it is worse, because a photograph has more numbers: thirty-two by thirty-two pixels, three colours each. <bookmark mark='a'/> Our CIFAR network, attacked with twenty small steps, changing no pixel by more than two grey levels out of 255: <bookmark mark='b'/> the originals, the change magnified many times, and the result, which looks identical, and which the network calls something else. <bookmark mark='c'/> At two grey levels it's wrong on 74 percent of the test photographs, against 18 percent with no attack at all.",
+   "zh": "在照片上更糟，因为一张照片有更多的数：32乘32个像素，每个三种颜色。<bookmark mark='a'/>我们的CIFAR网络，用二十小步攻击，每个像素的改动不超过255级灰度中的两级：<bookmark mark='b'/>原图，放大许多倍的改动，以及结果：看上去一模一样，网络却说是别的东西。<bookmark mark='c'/>改动两级灰度时，它在74%的测试照片上出错，而不受攻击时是18%。"
+  },
+  "c0baa1ce46ba": {
+   "scene": "Adversarial",
+   "en": "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. <bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. The attacked error, red, falls along with the clean one. <bookmark mark='b'/> At epsilon 0.2, one-step attacks now fool it 16 percent of the time instead of 68. Against twenty steps it holds up too: 37 percent wrong, against 99 for the ordinary network. <bookmark mark='c'/> The clean error is 1.24 percent, against 1.22: here robustness costs almost nothing. <bookmark mark='d'/> The problem is still open, and the same search, run over words, breaks language models: Part 31.",
+   "zh": "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练了三个LeNet，一半是干净的数字，一半是受攻击的。受攻击的错误率，红色那条，跟着干净的一起下降。<bookmark mark='b'/>ε为0.2时，一步攻击现在只在16%的时候骗过它，而不是68%。面对二十步攻击它也撑住了：错37%，而普通网络错99%。<bookmark mark='c'/>干净数字上的错误率是1.24%，对比1.22%：这里鲁棒性几乎不花代价。<bookmark mark='d'/>这个问题至今没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。"
+  },
+  "5996013478df": {
+   "scene": "Efficient",
+   "en": "Chapter ten. Cheaper convolutions.",
+   "zh": "第10章。更便宜的卷积。"
+  },
+  "d308610ce524": {
+   "scene": "Efficient",
+   "en": "A convolution kernel looks at a small patch, but through every channel of the layer below: k by k by C weights, for each of the C prime output channels. <bookmark mark='a'/> In 2014 Laurent Sifre split it in two. First filter each channel on its own, with one small kernel per channel: depthwise. <bookmark mark='b'/> Then mix the channels at each pixel with a one-by-one convolution: pointwise. <bookmark mark='c'/> Count the multiply-adds. Standard: height times width times C times C prime times k squared. <bookmark mark='d'/> Separable: the depthwise part, H W C k squared, plus the pointwise part, H W C C prime. <bookmark mark='e'/> Their ratio is one over C prime plus one over k squared: for three-by-three kernels and 256 channels, about a ninth of the arithmetic.",
+   "zh": "一个卷积核只看一小块，却要透过下一层的每一个通道去看：k乘k乘C个权重，对C撇个输出通道各一份。<bookmark mark='a'/>2014年，洛朗·西夫尔把它拆成了两步。先对每个通道单独滤波，每个通道一个小卷积核：深度卷积。<bookmark mark='b'/>再在每个像素上用1乘1的卷积把通道混起来：逐点卷积。<bookmark mark='c'/>数乘加次数。标准卷积：高乘宽乘C乘C撇乘k平方。<bookmark mark='d'/>可分离卷积：深度部分H W C k平方，加上逐点部分H W C C撇。<bookmark mark='e'/>两者之比是C撇分之一加上k平方分之一：对3乘3的卷积核和256个通道，大约是九分之一的算术量。"
+  },
+  "f0e7e7d4c8e0": {
+   "scene": "Efficient",
+   "en": "Fewer operations should mean faster. We measured both versions on the computer making this video. <bookmark mark='a'/> For 128 channels: The arithmetic falls to 0.12 of the standard layer's, but the time only to 0.71. The depthwise step runs at 1.2 billion operations a second, against 55 for the standard convolution: each of its weights touches one channel, so it does little arithmetic per byte it reads, and Part 17's roofline caps it. <bookmark mark='b'/> Counting operations is not the same as counting time, and efficient networks are designed for the hardware they run on.",
+   "zh": "运算少了，应该就快了。我们在制作这个视频的计算机上把两种版本都测了一下。<bookmark mark='a'/>对128个通道：算术量降到标准层的0.12，时间却只降到0.71。深度卷积那一步每秒只做1.2十亿次运算，而标准卷积是55：它的每个权重只碰一个通道，每读一个字节只做很少的算术，第17部分的屋顶线把它压住了。<bookmark mark='b'/>数运算次数不等于数时间，高效的网络是为它们运行的硬件设计的。"
+  },
+  "4ad6b615c641": {
+   "scene": "Efficient",
+   "en": "In 2017 Andrew Howard's team at Google built a whole network of separable convolutions, for phones: MobileNet. <bookmark mark='a'/> It came within 0.9 points of VGG-16's accuracy on ImageNet with 27 times fewer multiply-adds and 33 times fewer weights, and beat GoogLeNet with fewer of both.",
+   "zh": "2017年，谷歌安德鲁·霍华德的团队用可分离卷积搭了一整个网络，给手机用：MobileNet。<bookmark mark='a'/>它在ImageNet上的准确率只比VGG-16低0.9个百分点，乘加次数却少27倍，权重少33倍，而且用比GoogLeNet更少的乘加和权重超过了它。"
+  },
+  "8bdb17426111": {
+   "scene": "Efficient",
+   "en": "The other trick spreads a kernel out instead of slimming it. <bookmark mark='a'/> A dilated convolution leaves gaps between its taps: one apart in the first layer, two in the next, then four, then eight. <bookmark mark='b'/> The receptive field doubles with every layer: after ten layers of three taps, 2,047 inputs instead of 21, at no extra cost. <bookmark mark='c'/> The idea is old, the algorithme a trous of 1989; DeepMind's WaveNet used it in 2016 to generate speech.",
+   "zh": "另一个技巧是把卷积核摊开，而不是削瘦它。<bookmark mark='a'/>空洞卷积在抽头之间留出空隙：第一层相隔一格，下一层两格，然后四格，然后八格。<bookmark mark='b'/>感受野每一层翻一倍：十层三抽头的卷积之后，是2047个输入，而不是21个，而且不多花代价。<bookmark mark='c'/>这个想法早就有了，就是1989年的“带孔算法”；2016年，DeepMind的WaveNet用它来生成语音。"
+  },
+  "5fa52fbccdda": {
+   "scene": "Efficient",
+   "en": "In 2020 a transformer fed an image cut into patches matched the best convolutional networks, and vision transformers soon led the benchmarks: Part 22. <bookmark mark='a'/> In 2022 Zhuang Liu and colleagues at Meta asked how much of the lead was architecture and how much recipe. They took a ResNet-50 at 76.1 percent: the transformers' training recipe alone gave 78.8; depthwise convolutions, wider layers, seven-by-seven kernels and the transformer's layer norm took it to 82.0, <bookmark mark='b'/> above the transformer of the same size, at 81.3, with no attention at all: ConvNeXt. <bookmark mark='c'/> In 2023 DeepMind matched vision transformers with convolutional networks trained on four billion images. At scale, recipe and compute matter more than architecture: Part 12's lesson.",
+   "zh": "2020年，一个把图像切成小块喂进去的Transformer，追平了最好的卷积网络，视觉Transformer很快就领先了各项基准：那是第22部分。<bookmark mark='a'/>2022年，Meta的刘壮和同事想知道，这个领先有多少来自架构，多少来自训练配方。他们从一个76.1%的ResNet-50出发：光是换上Transformer的训练配方就到了78.8%；深度卷积、更宽的层、7乘7的卷积核，再加上Transformer的层归一化，把它推到82.0%，<bookmark mark='b'/>超过了同等大小的Transformer，81.3%，而且完全没有注意力：这就是ConvNeXt。<bookmark mark='c'/>2023年，DeepMind用在四十亿张图片上训练的卷积网络追平了视觉Transformer。在大规模下，配方和算力比架构更重要：这是第12部分的教训。"
+  },
+  "06f7a6e3486f": {
+   "scene": "Recurrence",
+   "en": "Chapter eleven. Recurrence and vanishing gradients.",
+   "zh": "第11章。循环与梯度消失。"
+  },
+  "2e6f37409b36": {
+   "scene": "Recurrence",
+   "en": "Now the other half of this part: sequences. A convolution shares its weights across space. A recurrent network shares them across time. <bookmark mark='a'/> It keeps a hidden state h, a vector, and at each step mixes the old state with the new input through the same two weight matrices, W and U, and a squashing tanh. <bookmark mark='b'/> Unrolled in time, it's a very deep network with one layer per step, all of them sharing weights. <bookmark mark='c'/> Michael Jordan in 1986 and Jeffrey Elman in 1990 made the idea popular in cognitive science.",
+   "zh": "现在是本部分的另一半：序列。卷积在空间上共享权重。循环网络在时间上共享权重。<bookmark mark='a'/>它保持一个隐状态h，一个向量，每一步都用同样的两个权重矩阵W和U，把旧的状态和新的输入混在一起，再经过一个压扁的tanh。<bookmark mark='b'/>沿着时间展开，它就是一个很深的网络，每一步一层，所有层共享权重。<bookmark mark='c'/>迈克尔·乔丹在1986年、杰弗里·埃尔曼在1990年，让这个想法在认知科学里流行起来。"
+  },
+  "b78d5878d2aa": {
+   "scene": "Recurrence",
+   "en": "To train it, unroll it and backpropagate, as Paul Werbos described in 1990: backpropagation through time. <bookmark mark='a'/> The gradient with respect to an early state h k passes through every later state. <bookmark mark='b'/> Each step back multiplies it by that step's Jacobian: the tanh's slopes times the same matrix W, again and again. <bookmark mark='c'/> The slopes are at most one, so the product is at most the largest singular value of W, raised to the number of steps. <bookmark mark='d'/> Below one, the gradient from far back shrinks exponentially; with eigenvalues above one, it can blow up. <bookmark mark='e'/> Sepp Hochreiter worked this out in his 1991 diploma thesis; Yoshua Bengio, Patrice Simard and Paolo Frasconi published it in 1994.",
+   "zh": "要训练它，就把它展开再做反向传播，这是保罗·韦尔博斯在1990年描述的：随时间反向传播。<bookmark mark='a'/>对一个早期状态h k的梯度，要穿过之后的每一个状态。<bookmark mark='b'/>每往回一步，就乘上那一步的雅可比矩阵：tanh的斜率乘以同一个矩阵W，一遍又一遍。<bookmark mark='c'/>斜率最多是1，所以这个乘积最多是W的最大奇异值的步数次方。<bookmark mark='d'/>小于1，从远处传回的梯度就指数级地缩小；特征值大于1，它就可能爆炸。<bookmark mark='e'/>塞普·霍赫赖特在他1991年的毕业论文里分析了这个问题；约书亚·本吉奥、帕特里斯·西马尔和保罗·弗拉斯科尼在1994年发表了它。"
+  },
+  "f86812a8bb98": {
+   "scene": "Recurrence",
+   "en": "We measured it. Take random recurrent networks, run them on random inputs, and multiply the Jacobians back from the last step. <bookmark mark='a'/> When the largest eigenvalue of W is 0.8, the gradient that reaches fifty steps back has shrunk by a factor of ten to the 14: gone. <bookmark mark='b'/> Even at 1.25, where the linear network's gradient grows to ten to the 5, the tanh network's shrinks, by a factor of ten to the 6: its units saturate, their slopes fall, and they pull the product down. <bookmark mark='c'/> Even at 2, saturation keeps it from exploding: it grows only to ten to the 1. <bookmark mark='d'/> Either way, a plain recurrent network has a narrow window of time over which it can learn anything, and the window is set by the size of W.",
+   "zh": "我们量了一下。取一些随机的循环网络，用随机输入去跑，再从最后一步往回乘雅可比矩阵。<bookmark mark='a'/>当W的最大特征值是0.8时，传回五十步的梯度缩小到原来的10的14次方分之一：没了。<bookmark mark='b'/>即使在1.25，线性网络的梯度涨到10的5次方，tanh网络的梯度却缩小到10的6次方分之一：它的单元饱和，斜率下降，把乘积拉了下来。<bookmark mark='c'/>即使在2，饱和也让它没有爆炸：只涨到10的1次方。<bookmark mark='d'/>不管哪种情况，普通循环网络能学到东西的时间窗口都很窄，而这个窗口由W的大小决定。"
+  },
+  "6aff33eaeb29": {
+   "scene": "Recurrence",
+   "en": "Exploding gradients have a shape. <bookmark mark='a'/> Take the smallest recurrent network, one unit with a weight w and a bias b, run it for fifty steps, and ask its last state to be 0.7. Here is the loss over every w and b, bright where it is high. Where the unit switches from settling high to settling low, the loss jumps: a cliff. <bookmark mark='b'/> Gradient descent from near the edge meets the cliff wall, where the gradient is 2,754, and is thrown off the map. <bookmark mark='c'/> The fix, from Razvan Pascanu, Tomas Mikolov and Bengio in 2013: if the gradient is longer than a threshold, shrink it to that length. Clipped, the same descent ends at a loss of 0.0158. Today's language models are trained with clipping too.",
+   "zh": "梯度爆炸是有形状的。<bookmark mark='a'/>取最小的循环网络，一个单元，一个权重w，一个偏置b，跑五十步，要求它最后的状态是0.7。这是每一组w和b对应的损失，越高越亮。在单元从停在高处变成停在低处的地方，损失陡然一跳：一道悬崖。<bookmark mark='b'/>从边缘附近出发的梯度下降撞上悬崖壁，那里的梯度是2754，于是被甩出了地图。<bookmark mark='c'/>办法来自拉兹万·帕斯卡努、托马斯·米科洛夫和本吉奥，2013年：如果梯度比某个阈值长，就把它缩到那个长度。裁剪之后，同样的下降最后停在损失0.0158。今天的语言模型也用梯度裁剪。"
+  },
+  "782372e079f0": {
+   "scene": "LSTM",
+   "en": "Chapter twelve. LSTM and GRU.",
+   "zh": "第12章。LSTM与GRU。"
+  },
+  "fa5505052716": {
+   "scene": "LSTM",
+   "en": "The cure came from Hochreiter himself, with Jurgen Schmidhuber, in 1997. <bookmark mark='a'/> If every step multiplies the gradient by something less than one, build a unit where it multiplies by exactly one: a memory cell connected to itself with weight one, and no squashing. <bookmark mark='b'/> An error signal can ride it back across any number of steps without fading: the constant error carousel. <bookmark mark='c'/> Around it, learned gates decide when to write to the cell and when to read it; in 2000 Felix Gers added a forget gate, to clear it.",
+   "zh": "解药来自霍赫赖特本人，和于尔根·施密德胡伯一起，在1997年。<bookmark mark='a'/>如果每一步都把梯度乘以小于1的东西，那就造一个每步恰好乘以1的单元：一个自己连到自己、权重为1、不压扁的记忆细胞。<bookmark mark='b'/>误差信号可以骑着它往回走任意多步而不衰减：恒定误差传送带。<bookmark mark='c'/>在它周围，学出来的门决定什么时候写进细胞、什么时候读出；2000年，费利克斯·格斯加了一个遗忘门，用来清空它。"
+  },
+  "909ef8da7599": {
+   "scene": "LSTM",
+   "en": "Here is the cell as it is used today. <bookmark mark='a'/> Running straight through it, the cell state: a conveyor belt of memory. <bookmark mark='b'/> The forget gate, a number between zero and one for every slot, multiplies the belt: one keeps, zero erases. <bookmark mark='c'/> The input gate chooses how much of a new candidate g to add. <bookmark mark='d'/> The output gate chooses how much of the memory to show as the hidden state h. <bookmark mark='e'/> All three are computed from the previous hidden state and the input, so the network learns when to remember, forget and speak.",
+   "zh": "这是今天用的样子。<bookmark mark='a'/>笔直穿过它的是细胞状态：一条记忆的传送带。<bookmark mark='b'/>遗忘门给每个格子一个零到一之间的数，乘在传送带上：一是保留，零是擦掉。<bookmark mark='c'/>输入门决定加进多少新的候选值g。<bookmark mark='d'/>输出门决定把多少记忆作为隐状态h显示出来。<bookmark mark='e'/>三个门都由上一个隐状态和输入算出来，所以网络学会什么时候记住、什么时候遗忘、什么时候开口。"
+  },
+  "3d5617028335": {
+   "scene": "LSTM",
+   "en": "Why does the gradient survive? <bookmark mark='a'/> Differentiate the cell state with respect to the previous one. Along the belt, it's just the forget gate, a diagonal matrix of numbers between zero and one; the other paths run through the gates, and they are small. <bookmark mark='b'/> So back across many steps, the gradient is multiplied by the product of the forget gates, which the network learns, in place of the fixed matrix W. <bookmark mark='c'/> A forget gate held at f halves the memory every ln 2 over minus ln f steps. <bookmark mark='d'/> At 0.99, about sixty-nine steps; at exactly one, Hochreiter's original carousel, forever.",
+   "zh": "为什么梯度能活下来？<bookmark mark='a'/>对细胞状态关于上一个细胞状态求导。沿着传送带，它就是遗忘门，一个由零到一之间的数组成的对角矩阵；其他的路径要穿过门，它们很小。<bookmark mark='b'/>所以往回跨过许多步，梯度乘的是遗忘门的乘积，这是网络学出来的，取代了固定的矩阵W。<bookmark mark='c'/>遗忘门保持在f时，每过ln 2除以负ln f步，记忆就减半。<bookmark mark='d'/>f等于0.99时，大约六十九步；恰好等于1，就是霍赫赖特最初的传送带，永远不忘。"
+  },
+  "8129c1fe93bd": {
+   "scene": "LSTM",
+   "en": "In 2014 Kyunghyun Cho and colleagues in Montreal simplified the cell. <bookmark mark='a'/> The gated recurrent unit keeps only the hidden state and two gates: an update gate z that blends the old state with a new candidate, the same carousel wherever z is near zero, and a reset gate. <bookmark mark='b'/> Fewer parts, and about as good, in comparisons by Junyoung Chung and colleagues.",
+   "zh": "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门：更新门z把旧状态和新的候选值混合，z接近零的地方还是那条传送带；另外是一个重置门。<bookmark mark='b'/>零件更少，效果差不多一样好，这是钟俊英和同事比较的结果。"
+  },
+  "4221211e7650": {
+   "scene": "LSTM",
+   "en": "Does the carousel work? A test in the spirit of Hochreiter's: <bookmark mark='a'/> a sequence opens with one marked symbol, one of eight; <bookmark mark='b'/> then come random distractors; <bookmark mark='c'/> at the end the network must say what the first symbol was. <bookmark mark='d'/> We trained a plain recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of 10, 30 and 100 steps. The gated cells start with their gates set to remember: the chrono initialization of Corentin Tallec and Yann Ollivier.",
+   "zh": "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是10、30和100步。带门的细胞一开始就把门设成“记住”：这是科朗坦·塔莱克和扬·奥利维耶提出的“时序初始化”。"
+  },
+  "54c2e3e2a9d8": {
+   "scene": "LSTM",
+   "en": "The results. Even over 10 steps the task is not easy: the plain network gets 75 percent right, the LSTM 100, the GRU 100. <bookmark mark='a'/> At 100 steps the plain network never gets off chance, 13 percent, while the LSTM and the GRU reach 100 and 100. <bookmark mark='b'/> The gated cells climb from the start: the gates soon learn to open for the marked symbol and close for everything after it.",
+   "zh": "结果如下。即使只有10步，这个任务也不容易：普通网络答对75%，LSTM是100%，GRU是100%。<bookmark mark='a'/>在100步时，普通网络始终没有离开瞎猜的水平，13%，而LSTM和GRU达到100%和100%。<bookmark mark='b'/>带门的细胞从一开始就在往上爬：门很快就学会了为标记的符号打开、为之后的一切关上。"
+  },
+  "30faa14fd9d9": {
+   "scene": "LSTM",
+   "en": "Here is why. During training, measure how much gradient arrives at each step of the sequence, from the answer at the end. <bookmark mark='a'/> For the plain network, the gradient at the first step, the only one that matters, is about ten to the 8 times weaker than at the last. <bookmark mark='b'/> For the LSTM the first step gets about as much as the last: the belt carries the signal back.",
+   "zh": "原因在这里。训练过程中，测量从结尾的答案出发，到达序列每一步的梯度有多少。<bookmark mark='a'/>对普通网络，第一步的梯度，也就是唯一要紧的那一步，比最后一步弱了大约10的8次方倍。<bookmark mark='b'/>对LSTM，第一步得到的梯度和最后一步差不多：传送带把信号带了回去。"
+  },
+  "40d3d73ba6a1": {
+   "scene": "CharLSTM",
+   "en": "Chapter thirteen. A character LSTM.",
+   "zh": "第13章。字符级LSTM。"
+  },
+  "53d9fabc94a1": {
+   "scene": "CharLSTM",
+   "en": "Now the LSTM plays the series' game: guess the next character. <bookmark mark='a'/> Each character becomes a learned vector; one layer of 512 LSTM cells reads them in order; a softmax guesses the next. 1,280,103 weights in all. <bookmark mark='b'/> We train it as Andrej Karpathy's char-rnn did in 2015: cut the thirty novels into 64 long stretches, one reader on each, 128 characters per step, the memory carried on from step to step while the gradient is cut at each step's edge. <bookmark mark='c'/> It read 19.7 million characters, about 83 percent of the books, once, in 144 minutes on this computer.",
+   "zh": "现在让LSTM来玩本系列的游戏：猜下一个字符。<bookmark mark='a'/>每个字符变成一个学出来的向量；一层512个LSTM细胞按顺序读它们；一个softmax猜下一个。总共1280103个权重。<bookmark mark='b'/>我们照安德烈·卡帕西2015年的char-rnn那样训练它：把三十部小说切成64长段，每段一个读者，每步128个字符，记忆一步一步地带下去，而梯度在每一步的边上截断。<bookmark mark='c'/>它读了19.7百万个字符，大约是这些书的83%，只读一遍，在这台计算机上用了144分钟。"
+  },
+  "b7fde0b57293": {
+   "scene": "CharLSTM",
+   "en": "Here is its training, scored as always on the scoreboard's passage from The Maltese Falcon, which it never sees. <bookmark mark='a'/> It starts at 7.4 bits per character, a guess among 167 symbols, writing noise. <bookmark mark='b'/> Within 400 steps it writes words and spaces, at 2.68 bits per character. <bookmark mark='c'/> By the end, 2.21 bits per character on the passage: below Part 9's neural model, but not yet Kneser-Ney's 2.04.",
+   "zh": "这是它的训练过程，照例在记分牌那段《马耳他之鹰》上打分，它从来没见过这段文字。<bookmark mark='a'/>它从每字符7.4比特开始，在167个符号里瞎猜，写出来的是噪声。<bookmark mark='b'/>不到400步，它就能写出单词和空格，每字符2.68比特。<bookmark mark='c'/>到最后，在测试段落上是每字符2.21比特：低于第9部分的神经模型，但还没低于克内瑟-奈伊的2.04。"
+  },
+  "9b80473569aa": {
+   "scene": "CharLSTM",
+   "en": "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: 2.21 bits per character, 0.22 behind the best row above it: with the training we could afford here, the LSTM hasn't caught up. <bookmark mark='b'/> The pretrained language models below it are still far ahead, down to 0.87 bits: more text, more computing, and a different architecture, which is the next act's story.",
+   "zh": "记分牌上，新的一行。<bookmark mark='a'/>我们的字符级LSTM：每字符2.21比特，比上面最好的一行差0.22：以我们在这里负担得起的训练量，LSTM还没追上。<bookmark mark='b'/>下面那些预训练的语言模型仍然遥遥领先，最好的低到0.87比特：更多的文本，更多的算力，和不同的架构，那是下一幕的故事。"
+  },
+  "325aca8d4329": {
+   "scene": "CharLSTM",
+   "en": "What has it learned to remember? Look at single cells, as Karpathy, Justin Johnson and Fei-Fei Li did in 2015. <bookmark mark='a'/> One of its 512 cells does something nobody asked for: it switches on at an opening quotation mark and off at the closing one. Over the whole passage its value follows \"inside a quotation\" with a correlation of 0.86. <bookmark mark='b'/> To close the quotation it must remember that one is open, maybe for lines. In 2017 Alec Radford and colleagues at OpenAI trained a bigger one on Amazon reviews and found a single cell that tracked whether a review was positive.",
+   "zh": "它学会了记住什么？像卡帕西、贾斯廷·约翰逊和李飞飞在2015年做的那样，看单个的细胞。<bookmark mark='a'/>它的512个细胞里，有一个做了没人要求它做的事：它在开引号处打开，在闭引号处关上。在整段文字上，它的值跟“在引号里”的相关系数是0.86。<bookmark mark='b'/>要合上引号，它就得记住有一个引号是开着的，也许要记好几行。2017年，OpenAI的亚历克·拉德福德和同事在亚马逊评论上训练了一个更大的，找到了一个单独的细胞，它跟踪着评论是不是正面的。"
+  },
+  "3a40af83a7fe": {
+   "scene": "CharLSTM",
+   "en": "And where is it surprised? Colour each character of the passage's opening by the bits it cost. <bookmark mark='a'/> Over the whole passage, the first letter of a word costs 4.1 bits on average; a letter inside a word, 1.9; a capital letter, 5.3. Once a word has begun, the rest of it is nearly free. That is Part 1's guessing game, played by a machine that remembers.",
+   "zh": "它在哪里会吃惊？把段落开头的每个字符按它花掉的比特数上色。<bookmark mark='a'/>在整段文字上，一个单词的第一个字母平均花4.1比特；单词里面的字母，1.9比特；大写字母，5.3比特。单词一旦开了头，剩下的几乎是白送的。这就是第1部分的猜字游戏，由一台会记忆的机器来玩。"
+  },
+  "9a48c56dc61f": {
+   "scene": "Seq2Seq",
+   "en": "Chapter fourteen. Sequence to sequence.",
+   "zh": "第14章。序列到序列。"
+  },
+  "c4bc35f5fc0d": {
+   "scene": "Seq2Seq",
+   "en": "By 2014 machine translation was statistical. <bookmark mark='a'/> The best systems, phrase-based, from Part 7, used huge tables of phrase pairs and a dozen separately tuned parts. <bookmark mark='b'/> In September 2014 Ilya Sutskever, Oriol Vinyals and Quoc Le at Google replaced it all with two LSTMs: one reads the English sentence into its memory, the other starts from that memory and writes French. Five of them together scored 34.81 BLEU, beating the phrase-based baseline's 33.3. <bookmark mark='c'/> One trick mattered: reading the source backwards, so its first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> Kyunghyun Cho's group in Montreal built the same design with the GRU.",
+   "zh": "到2014年，机器翻译是统计的。<bookmark mark='a'/>最好的系统是基于短语的，来自第7部分：用巨大的短语对照表，外加十几个分别调好的部件。<bookmark mark='b'/>2014年9月，谷歌的伊利亚·苏茨克维、奥里奥尔·维尼亚尔斯和黎越国用两个LSTM取代了这一切：一个把英语句子读进自己的记忆，另一个从这份记忆出发写出法语。五个这样的模型合起来得了34.81的BLEU，超过了基于短语的基线33.3。<bookmark mark='c'/>有一个技巧很要紧：把源句子倒着读，这样译文最先需要的那几个词，就是最后读到的。<bookmark mark='d'/>蒙特利尔赵京焕的团队用GRU搭出了同样的设计。"
+  },
+  "d2b7b56cf412": {
+   "scene": "Seq2Seq",
+   "en": "The design has two halves. <bookmark mark='a'/> The encoder reads the input one symbol at a time, updating its state. <bookmark mark='b'/> Its last state is a single vector that has to stand for the whole sentence. <bookmark mark='c'/> The decoder starts from that vector and writes the output one symbol at a time, each step a softmax over the vocabulary, <bookmark mark='d'/> and each word it writes is fed back in as the next step's input, until it writes an end-of-sentence symbol.",
+   "zh": "这个设计分两半。<bookmark mark='a'/>编码器一次读一个符号，更新自己的状态。<bookmark mark='b'/>它最后的状态是一个单独的向量，要代表整个句子。<bookmark mark='c'/>解码器从这个向量出发，一次写一个符号，每一步是词表上的一个softmax，<bookmark mark='d'/>它写下的每个词都被送回去，作为下一步的输入，直到它写出句末符号。"
+  },
+  "e04202636135": {
+   "scene": "Seq2Seq",
+   "en": "How is the decoder trained? <bookmark mark='a'/> By teacher forcing, from Ronald Williams and David Zipser in 1989: at every step, feed it the true previous word, and ask for the next. <bookmark mark='b'/> At test time there is no true history, only its own: one mistake, and every later step continues from a history it never saw in training.",
+   "zh": "解码器是怎样训练的？<bookmark mark='a'/>用教师强制，来自罗纳德·威廉斯和戴维·齐普泽1989年的想法：每一步都喂给它真实的上一个词，让它预测下一个。<bookmark mark='b'/>测试时没有真实的历史，只有它自己写的：错一步，后面每一步都要从一个训练中从未见过的历史接着往下写。"
+  },
+  "6fc298d4e180": {
+   "scene": "Seq2Seq",
+   "en": "Writing the most probable output exactly would mean searching every possible sequence. Greedy decoding takes the single best word at each step instead. <bookmark mark='a'/> Beam search keeps a few of the best partial outputs at every step, extends each, and keeps the best of those: a cheap compromise. <bookmark mark='b'/> On our character LSTM, from the same prompt: greedy decoding writes text that costs 147 bits under the model, a beam of eight finds text costing 109, and a random sample costs 240. <bookmark mark='c'/> But look at the most probable text: it goes round in circles, what Ari Holtzman and colleagues later called neural text degeneration; for open-ended writing, sampling is used instead.",
+   "zh": "要精确地写出概率最大的输出，就得搜索所有可能的序列。贪心解码则在每一步只取最好的那一个词。<bookmark mark='a'/>束搜索在每一步保留几个最好的部分输出，各自往下延伸，再留下其中最好的：一种便宜的折中。<bookmark mark='b'/>在我们的字符级LSTM上，从同一个提示出发：贪心解码写出的文字在模型下要花147比特，宽度为8的束搜索找到的文字花109比特，随机采样的花240比特。<bookmark mark='c'/>但看看概率最大的文字：它在原地兜圈子，阿里·霍尔茨曼和同事后来把这叫作神经文本退化；所以开放式的写作改用采样。"
+  },
+  "f2f252894ba2": {
+   "scene": "Seq2Seq",
+   "en": "We built a small encoder-decoder, and gave it a job with no ambiguity: write a string of letters backwards. <bookmark mark='a'/> It trained on strings of 3 to 20 letters, three times from different starts. <bookmark mark='b'/> Short strings come out right. Past about 9 letters, fewer than half do, and outside the lengths it trained on, almost none: one vector can't hold them all. <bookmark mark='c'/> A beam of four helps a little, by up to 2 points. The whole input has to squeeze through the encoder's last state: a bottleneck, and the longer the input, the worse it gets.",
+   "zh": "我们搭了一个小的编码器-解码器，给它一个毫无歧义的任务：把一串字母倒过来写。<bookmark mark='a'/>它在3到20个字母的字符串上训练，从不同的起点训练了三次。<bookmark mark='b'/>短的字符串能写对。超过大约9个字母，就不到一半能写对；超出训练过的长度，几乎全错：一个向量装不下它们。<bookmark mark='c'/>宽度为4的束搜索有一点帮助，最多提高2个百分点。整个输入都得挤过编码器的最后一个状态：一个瓶颈，输入越长，情况越糟。"
+  },
+  "7d9bcc3b332f": {
+   "scene": "Seq2Seq",
+   "en": "Two years later the idea was in production. <bookmark mark='a'/> Google's neural machine translation system of 2016 stacked eight layers of LSTMs on each side, and in side-by-side ratings by people it cut translation errors by 60 percent on average against Google's own phrase-based system. <bookmark mark='b'/> In September 2016 it took over Google Translate's Chinese to English, about eighteen million translations a day. <bookmark mark='c'/> But GNMT had one more ingredient, the one that removed the bottleneck.",
+   "zh": "两年后，这个想法上了生产线。<bookmark mark='a'/>谷歌2016年的神经机器翻译系统，两边各堆了八层LSTM，在人工并排评比里，它比谷歌自己的基于短语的系统平均少了60%的翻译错误。<bookmark mark='b'/>2016年9月，它接管了谷歌翻译的中译英，每天大约一千八百万次翻译。<bookmark mark='c'/>但GNMT还有一个成分，正是它移走了那个瓶颈。"
+  },
+  "493e5181ea87": {
+   "scene": "Attention",
+   "en": "Chapter fifteen. The birth of attention.",
+   "zh": "第15章。注意力的诞生。"
+  },
+  "624f56745130": {
+   "scene": "Attention",
+   "en": "In September 2014 Dzmitry Bahdanau, a student visiting Bengio's lab, with Cho and Bengio, proposed to drop the single vector. <bookmark mark='a'/> Keep all of the encoder's states, one per input position, and at every step of the decoder score each one: how well does input j fit what the decoder needs next? The score is a tiny network, learned with everything else. <bookmark mark='b'/> A softmax turns the scores into weights that sum to one. <bookmark mark='c'/> And the decoder gets their weighted average, a context vector made fresh for each output. <bookmark mark='d'/> They called the weights an alignment. We call it attention.",
+   "zh": "2014年9月，在本吉奥实验室访问的学生德米特里·巴赫达瑙，和赵京焕、本吉奥一起，提出扔掉那个单独的向量。<bookmark mark='a'/>把编码器所有的状态都留下，每个输入位置一个；在解码器的每一步，给每个状态打分：输入j和解码器接下来需要的东西有多契合？这个打分本身是一个很小的网络，和其他一切一起学。<bookmark mark='b'/>一个softmax把分数变成加起来等于1的权重。<bookmark mark='c'/>解码器得到它们的加权平均：一个为每次输出现做的上下文向量。<bookmark mark='d'/>他们把这些权重叫作对齐。我们叫它注意力。"
+  },
+  "df6213140ebe": {
+   "scene": "Attention",
+   "en": "Here is one step of our own model, reversing the word attentionworks. It has written skro, and is about to write the next letter. <bookmark mark='a'/> It scores every position of the input, and the softmax puts 76 percent of the weight on one letter, the w at position 10: exactly the one it must copy. <bookmark mark='b'/> The context is that mixture of the encoder's states, mostly that one. Nothing had to squeeze through a single vector: the decoder reached back for what it needed.",
+   "zh": "这是我们自己的模型的一步，它在把单词attentionworks倒过来。它已经写了skro，正要写下一个字母。<bookmark mark='a'/>它给输入的每个位置打分，softmax把76%的权重放在一个字母上：第10个位置的w，正是它该抄的那个。<bookmark mark='b'/>上下文就是编码器状态的这种混合，几乎全是那一个。没有什么需要挤过一个单独的向量：解码器回头去取它需要的东西。"
+  },
+  "1d8861f381f9": {
+   "scene": "Attention",
+   "en": "Now the fair comparison: the same encoder and decoder, the same training, with and without attention, three times each. <bookmark mark='a'/> With attention, 93 percent of the 20-letter strings come out exactly right, against 0 percent with one vector. <bookmark mark='b'/> Beyond the lengths it trained on, it too fails, at 32 percent on average: it has never had to keep count that far.",
+   "zh": "现在做公平的比较：同样的编码器和解码器，同样的训练，有注意力和没有注意力，各训练三次。<bookmark mark='a'/>有了注意力，20个字母的字符串有93%完全写对，而只用一个向量时是0%。<bookmark mark='b'/>超出训练过的长度，它也失败了，平均32%：它从来没需要数到那么远。"
+  },
+  "642993f6793f": {
+   "scene": "Attention",
+   "en": "Watch the alignment form during training. <bookmark mark='a'/> Rows are the letters it writes, columns the letters it reads; bright is where it looks. At first it looks everywhere a little, and learns nothing. <bookmark mark='b'/> Then a diagonal appears, running from the top right to the bottom left: the first letter written attends to the last one read, the second to the one before. By step 200, more than half its attention sits on that diagonal; by the end, 61 percent. <bookmark mark='c'/> As the alignment sharpens, the accuracy on long strings climbs with it. Bahdanau's translations showed the same picture: mostly diagonal, with the word order of French and English, and jumps where the two disagree.",
+   "zh": "看对齐在训练中怎样形成。<bookmark mark='a'/>每一行是它写的字母，每一列是它读的字母；亮的地方是它在看的地方。一开始，它到处都看一点，什么也学不到。<bookmark mark='b'/>然后出现了一条对角线，从右上到左下：写下的第一个字母注视读到的最后一个，第二个注视倒数第二个。到第200步，它一半以上的注意力落在这条对角线上；到最后，是61%。<bookmark mark='c'/>对齐越清晰，长字符串上的准确率也跟着上升。巴赫达瑙的翻译也呈现出同样的图景：大体沿着对角线，带着法语和英语的语序，在两者不一致的地方跳一下。"
+  },
+  "e03cffb08fb2": {
+   "scene": "Attention",
+   "en": "On real translation the gain was large. <bookmark mark='a'/> Bahdanau's encoder-decoder without attention scored 17.82 BLEU on English to French; with attention, 26.75. <bookmark mark='b'/> Trained longer, and counting only sentences without rare words, it reached 36.15, past the phrase-based Moses system's 35.63. And where the one-vector model fell apart on long sentences, the attention model held up at fifty words and more.",
+   "zh": "在真实的翻译上，收益很大。<bookmark mark='a'/>巴赫达瑙的编码器-解码器，不用注意力时英译法的BLEU是17.82；用了注意力，26.75。<bookmark mark='b'/>训练得更久、只算没有生僻词的句子时，它达到36.15，超过了基于短语的Moses系统的35.63。而单向量模型在长句子上崩溃的地方，注意力模型在五十个词以上还撑得住。"
+  },
+  "6d8d82fdbfd8": {
+   "scene": "Attention",
+   "en": "Attention is a soft lookup: a query, the decoder's state, compared with keys, the encoder's states, to fetch a mixture of values. <bookmark mark='a'/> The same year, neural Turing machines and memory networks used it to read memories. <bookmark mark='b'/> In 2015 Thang Luong and colleagues replaced Bahdanau's little scoring network with a dot product, and Kelvin Xu and colleagues pointed attention at the parts of a picture to write its caption. <bookmark mark='c'/> By 2016 it was inside Google Translate. <bookmark mark='d'/> And in 2017 a team at Google asked what would happen if they dropped the recurrence altogether and kept only attention. That is the Transformer, and Parts 13 and 14.",
+   "zh": "注意力是一种软查找：一个查询，也就是解码器的状态，和一组键，也就是编码器的状态作比较，取回值的一个混合。<bookmark mark='a'/>同一年，神经图灵机和记忆网络用它来读取记忆。<bookmark mark='b'/>2015年，罗明唐和同事用点积取代了巴赫达瑙那个打分的小网络；徐凯文和同事把注意力指向图片的各个部分，来写图片说明。<bookmark mark='c'/>到2016年，它已经在谷歌翻译里面了。<bookmark mark='d'/>2017年，谷歌的一个团队想知道，如果把循环整个扔掉、只留注意力，会怎样。那就是Transformer，第13部分和第14部分。"
+  },
+  "7007c715a1d2": {
+   "scene": "Return",
+   "en": "Chapter sixteen. Recurrence returns.",
+   "zh": "第16章。循环的回归。"
+  },
+  "07590c117986": {
+   "scene": "Return",
+   "en": "After 2017 the Transformer took over, and the reason was training speed. <bookmark mark='a'/> A recurrent network must compute step t after step t minus one: a thousand-token sequence is a thousand steps in a row, and a GPU with thousands of lanes mostly waits. <bookmark mark='b'/> Attention computes every position at once. <bookmark mark='c'/> But at generation time the bargain reverses. A recurrent network carries a fixed-size memory from token to token; a transformer keeps every past token's keys and values, a cache that grows with the text. So the question came back: can a recurrent network be trained in parallel?",
+   "zh": "2017年以后，Transformer占了上风，原因是训练速度。<bookmark mark='a'/>循环网络必须算完第t减1步才能算第t步：一个一千个词元的序列，就是一千步排成一排，一块有成千上万条通道的GPU大部分时间都在等。<bookmark mark='b'/>注意力一次算完所有位置。<bookmark mark='c'/>但到生成的时候，这笔交易反过来了。循环网络从一个词元到下一个，只带着一份固定大小的记忆；Transformer要保留之前每个词元的键和值，一个随文本增长的缓存。于是问题又回来了：循环网络能不能并行训练？"
+  },
+  "4981dccafa61": {
+   "scene": "Return",
+   "en": "It can, if the recurrence is linear. <bookmark mark='a'/> Suppose the new state is the old one, multiplied elementwise by a, plus b, where a and b depend only on the current input. <bookmark mark='b'/> Then two steps together are again one step of the same form, with a times a prime and a prime b plus b prime. <bookmark mark='c'/> That combining rule is associative, and any associative operation over a sequence can be computed by a parallel prefix scan, the algorithm Guy Blelloch made famous in 1990. <bookmark mark='d'/> Combine neighbours, then pairs two apart, then four apart: after log two of T rounds, every position has its state. A thousand steps become ten rounds.",
+   "zh": "能，只要递推是线性的。<bookmark mark='a'/>假设新的状态是旧状态逐元素乘以a，再加上b，而a和b只取决于当前的输入。<bookmark mark='b'/>那么两步合起来，又是同样形式的一步：a乘a撇，以及a撇乘b加b撇。<bookmark mark='c'/>这个合并规则满足结合律，而序列上任何满足结合律的运算，都能用并行前缀扫描算出来，这是盖伊·布莱洛克在1990年让它出名的算法。<bookmark mark='d'/>先合并相邻的，再合并相隔两格的，再合并相隔四格的：以2为底T的对数轮之后，每个位置都得到了自己的状态。一千步变成了十轮。"
+  },
+  "28080f15fc56": {
+   "scene": "Return",
+   "en": "We tried it on the computer making this video. <bookmark mark='a'/> The scan and the step-by-step loop give the same states, to rounding error. <bookmark mark='b'/> With a narrow state, eight numbers, the scan is 1.7 times faster at 65,536 steps. <bookmark mark='c'/> With a wide state, 256 numbers, it is 8.7 times slower: the scan does log T times the work, and this computer has only a few cores to spread it over. The scan trades extra arithmetic for fewer steps in a row, which pays off on hardware with thousands of lanes: on a GPU, Leo Feng and colleagues measured their scanned recurrent networks training 175 times faster than a GRU at length 512, and 1,324 times faster at length 4,096.",
+   "zh": "我们在制作这个视频的计算机上试了试。<bookmark mark='a'/>扫描和一步一步的循环给出相同的状态，差别只在舍入误差。<bookmark mark='b'/>状态窄时，8个数，在65536步时扫描快了1.7倍。<bookmark mark='c'/>状态宽时，256个数，它慢了8.7倍：扫描要做log T倍的工作，而这台计算机只有几个核心来分担。扫描用额外的算术换来更少的串行步骤，这在有成千上万条通道的硬件上才划算：在GPU上，Leo Feng和同事测得，他们用扫描训练的循环网络，在长度512时比GRU快175倍，在长度4096时快1324倍。"
+  },
+  "c5068319adf6": {
+   "scene": "Return",
+   "en": "In 2024 Leo Feng, Yoshua Bengio and colleagues asked whether the LSTM and the GRU needed their nonlinear recurrence at all. <bookmark mark='a'/> Take the GRU and let its gate and its candidate see only the current input, not the previous state. What's left is exactly a linear recurrence, so it trains with a scan. They called it minGRU, and found it competitive on their tasks. <bookmark mark='b'/> We trained one, through the scan, beside the others. On our memory task, at 100 steps, minGRU gets 100 percent right, with the LSTM at 100, and the plain network at 13. The gate learned from the input alone is enough: open for the marked symbol, shut for everything after.",
+   "zh": "2024年，Leo Feng、约书亚·本吉奥和同事问：LSTM和GRU真的需要它们那非线性的递推吗？<bookmark mark='a'/>拿GRU来，让它的门和候选值只看当前的输入，不看上一个状态。剩下的恰好是一个线性递推，所以可以用扫描来训练。他们叫它minGRU，发现它在他们的任务上很有竞争力。<bookmark mark='b'/>我们也训练了一个，用扫描，放在其他几个旁边。在我们的记忆任务上，100步时，minGRU答对100%，LSTM是100%，普通网络是13%。只从输入学出来的门就够了：为标记的符号打开，为之后的一切关上。"
+  },
+  "5c7e9ffd833d": {
+   "scene": "Return",
+   "en": "minGRU joined a family growing since 2016. <bookmark mark='a'/> Quasi-recurrent networks and simple recurrent units moved the matrices out of the recurrence; state-space models, from S4 in 2021 to Mamba in 2023, built linear recurrences that let the input choose what to keep; and in 2024 Hochreiter's own group returned with xLSTM, scaled in 2025 to seven billion parameters. <bookmark mark='b'/> Several of today's open models mix such layers with attention: the transformer's recall, the recurrence's fixed-size memory. That's Part 15.",
+   "zh": "minGRU加入了一个从2016年起不断壮大的家族。<bookmark mark='a'/>准循环网络和简单循环单元把矩阵移出了递推；状态空间模型，从2021年的S4到2023年的Mamba，搭出让输入来决定保留什么的线性递推；2024年，霍赫赖特自己的团队带着xLSTM回来了，2025年扩展到七十亿参数。<bookmark mark='b'/>今天好几个开放模型把这样的层和注意力混在一起：Transformer的回忆能力，加上递推的固定大小记忆。那是第15部分。"
+  },
+  "fe7bff941c87": {
+   "scene": "Outro",
+   "en": "Let's take stock. Vision began with features designed by hand, and they beat raw pixels. A convolution shares one small kernel across the image, so it commutes with shifts. Trained end to end, LeNet grew its own stroke detectors, and our photograph network grew edge detectors and colour cells like the ones in the visual cortex. <bookmark mark='a'/> Yet an invisible, well-chosen change fools them, because they are close to linear. In time, a plain recurrent network's gradient fades, or explodes, as Jacobians multiply. The LSTM's gated memory line carries it across 100 steps. And attention lets a decoder look back at exactly what it needs.",
+   "zh": "盘点一下。视觉从手工设计的特征开始，它们胜过了原始像素。卷积在整张图上共享一个小小的卷积核，所以它和平移可交换。端到端训练的LeNet长出了自己的笔画检测器，我们的照片网络长出了边缘检测器和颜色细胞，就像视觉皮层里的那些。<bookmark mark='a'/>然而一个看不见的、精心挑选的改动就能骗过它们，因为它们接近线性。在时间上，普通循环网络的梯度随着雅可比矩阵相乘而衰减，或者爆炸。LSTM带门的记忆传送带，把它带过了100步。而注意力让解码器回头看它恰好需要的东西。"
+  },
+  "5febe1ea727d": {
+   "scene": "Outro",
+   "en": "All of this comes back. Bahdanau's attention becomes the whole of the Transformer, in Parts 13 and 14. The linear recurrences and their scans are Part 15's memory. Clipping and the optimizers that train deep networks are Part 11. Images cut into patches, and convolutions inside the new models, are Part 22. Equivariance, for rotations, molecules and graphs, is Part 25. And adversarial attacks, on language models this time, come back in Part 31.",
+   "zh": "这一切都会再出现。巴赫达瑙的注意力变成了整个Transformer，在第13和第14部分。线性递推和它们的扫描，是第15部分的记忆。梯度裁剪和训练深层网络的优化器，是第11部分。切成小块的图像，以及新模型里面的卷积，是第22部分。对旋转、分子和图的等变性，是第25部分。而对抗攻击，这次是对语言模型的，会在第31部分再出现。"
+  },
+  "edd9bb0cecd0": {
+   "scene": "Outro",
+   "en": "Here are six problems, from equivariance to the scan. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道题，从等变性到扫描。请在这里暂停，动手做一做；完整的解答在本部分的笔记里。"
+  },
+  "f363cc8ac519": {
+   "scene": "Outro",
+   "en": "Every network in this part was trained by some version of going downhill: plain gradient descent with momentum, or Adam. Next time, in Part 11, we take the descent itself apart: how fast it converges and why, what the noise of small batches does, momentum and Adam derived, the newer optimizers that treat weights as matrices, and the learning-rate schedules of today's models.",
+   "zh": "本部分的每个网络，都是用某种下山的方法训练出来的：带动量的普通梯度下降，或者Adam。下一次，在第11部分，我们把下山本身拆开来看：它收敛得多快、为什么；小批量的噪声起什么作用；推导动量和Adam；把权重当作矩阵来处理的新优化器；以及今天的模型用的学习率调度。"
+  },
+  "5f1079dd2005": {
+   "scene": "Outro",
+   "en": "Goodfellow, Bengio and Courville's book covers both halves of this part, and Szeliski's the vision that came before. Thanks for watching, and see you in Part 11.",
+   "zh": "古德费洛、本吉奥和库维尔的书涵盖了本部分的两半，塞利斯基的书讲的是之前的视觉。感谢观看，第11部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 10, Seeing and Remembering",
+ "chapters_en": {
+  "Hook": "The edge that lit a neuron",
+  "Before": "1. Vision before deep learning",
+  "Convolution": "2. Convolution",
+  "Receptive": "3. Receptive fields, stride and pooling",
+  "LeNet": "4. LeNet and MNIST",
+  "ImageNet": "5. ImageNet and AlexNet",
+  "WhyItWon": "6. Why AlexNet won",
+  "Deeper": "7. Deeper: VGG, Inception, ResNet",
+  "Filters": "8. What the filters learn",
+  "Adversarial": "9. Adversarial examples",
+  "Efficient": "10. Cheaper convolutions",
+  "Recurrence": "11. Recurrence and vanishing gradients",
+  "LSTM": "12. LSTM and GRU",
+  "CharLSTM": "13. A character LSTM",
+  "Seq2Seq": "14. Sequence to sequence",
+  "Attention": "15. The birth of attention",
+  "Return": "16. Recurrence returns",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}

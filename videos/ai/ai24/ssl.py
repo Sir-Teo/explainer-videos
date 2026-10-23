@@ -32,9 +32,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 SCALE = float(os.environ.get("AI24_SCALE", "1.0"))  # AI24_SCALE=0.02: a quick smoke test of every code path
-STEPS = max(30, int(round(1200 * SCALE)))  # updates per run
+STEPS = max(30, int(round(800 * SCALE)))  # updates per run
 B = 128  # digits per update, two views each: 256 encoder passes
-N_CURVE = 12  # evaluation points along a run
+N_CURVE = 12 if SCALE == 1.0 else 3  # evaluation points along a run
 LR, WD, WARM = 2e-3, 1e-5, 0.05
 
 
@@ -58,6 +58,9 @@ def data() -> dict:
                   ytr=torch.from_numpy(m["ytr"].astype(np.int64)),
                   xte=torch.from_numpy(np.ascontiguousarray(m["xte"])),
                   yte=torch.from_numpy(m["yte"].astype(np.int64)))
+        if SCALE < 1.0:  # the smoke test: a tenth of the digits
+            for k, n in (("xtr", 6000), ("ytr", 6000), ("xte", 3000), ("yte", 3000)):
+                _D[k] = _D[k][:n]
     return _D
 
 
@@ -281,9 +284,9 @@ class Rotation(Method):
 
 
 class SimCLR(Method):
-    def __init__(self, enc, tau=0.2, out=128, nested=None):
+    def __init__(self, enc, tau=0.2, out=128, nested=None, light=False):
         super().__init__(enc)
-        self.tau, self.nested = tau, nested
+        self.tau, self.nested, self.light = tau, nested, light
         self.proj = mlp([enc.dim, 256, out])
 
     def embed(self, x):
@@ -431,7 +434,7 @@ class Barlow(Method):
         on = (d - 1).pow(2).sum()
         off = c.pow(2).sum() - d.pow(2).sum()
         self.C = c.detach()
-        return on + self.lam * off, {"on": float(on), "off": float(off)}
+        return on + self.lam * off, {"on": float(on.detach()), "off": float(off.detach())}
 
 
 class VICReg(Method):
@@ -461,7 +464,7 @@ class VICReg(Method):
         v = (var(z1) + var(z2)) / 2
         cv = cov(z1) + cov(z2)
         L = self.lam * inv + (self.mu * v if self.variance else 0.0) + self.nu * cv
-        return L, {"inv": float(inv), "var": float(v), "cov": float(cv)}
+        return L, {"inv": float(inv.detach()), "var": float(v.detach()), "cov": float(cv.detach())}
 
 
 class DINOHead(nn.Module):
@@ -507,7 +510,7 @@ class DINO(Method):
         with torch.no_grad():
             P = torch.cat([P1, P2])
             H = float(-(P * P.clamp_min(1e-12).log()).sum(1).mean())
-            kl = float(L) - H  # cross-entropy minus the teacher's entropy
+            kl = float(L.detach()) - H  # cross-entropy minus the teacher's entropy
             Pm = P.mean(0)
             Hm = float(-(Pm * Pm.clamp_min(1e-12).log()).sum())
         return L, {"H": H, "KL": kl, "Hmean": Hm}
@@ -706,8 +709,10 @@ def features(f, X: torch.Tensor, bs: int = 1000, module: nn.Module | None = None
 
 @torch.no_grad()
 def knn(ftr, ytr, fte, yte, k=20, T=0.07) -> float:
-    """Weighted k-nearest-neighbour vote by cosine similarity (Wu et al. 2018)."""
-    a, b = F.normalize(ftr, dim=1), F.normalize(fte, dim=1)
+    """Weighted k-nearest-neighbour vote by cosine similarity (Wu et al. 2018), after subtracting the training
+    features' mean (a shared offset would otherwise dominate every cosine)."""
+    mu = ftr.mean(0, keepdim=True)
+    a, b = F.normalize(ftr - mu, dim=1), F.normalize(fte - mu, dim=1)
     right = 0
     for i in range(0, len(b), 1000):
         s, j = (b[i:i + 1000] @ a.t()).topk(k, dim=1)
@@ -777,10 +782,11 @@ def cka(X, Y) -> float:
 
 
 def mutual_knn(X, Y, k=10) -> float:
-    """Huh, Cheung, Wang & Isola (2024): the average fraction of each point's k nearest neighbours (by cosine) that
-    the two representations share."""
+    """Huh, Cheung, Wang & Isola (2024): the average fraction of each point's k nearest neighbours (by cosine, after
+    centring) that the two representations share."""
     def nn_sets(Z):
-        Z = F.normalize(Z.double(), dim=1)
+        Z = Z.double()
+        Z = F.normalize(Z - Z.mean(0, keepdim=True), dim=1)
         s = Z @ Z.t()
         s.fill_diagonal_(-2)
         return s.topk(k, dim=1).indices
@@ -818,8 +824,8 @@ def train(m: Method, seed: int, steps: int = None, pool=None, record=None, recor
     Y = D["ytr"] if pool is None else D["ytr"][torch.as_tensor(pool)]
     crop = (lambda x: x[:, :14]) if half == "top" else (lambda x: x[:, 14:]) if half == "bottom" else (lambda x: x)
     ge = torch.Generator().manual_seed(1234)  # the evaluation subsets: the same for every run
-    bank = torch.randperm(60000, generator=ge)[:5000]
-    tst = torch.randperm(10000, generator=ge)[:1000]
+    bank = torch.randperm(len(D["xtr"]), generator=ge)[:5000 if SCALE == 1.0 else 1000]
+    tst = torch.randperm(len(D["xte"]), generator=ge)[:1000 if SCALE == 1.0 else 500]
     Xb, Yb = crop(D["xtr"][bank]), D["ytr"][bank]
     Xt, Yt = crop(D["xte"][tst]), D["yte"][tst]
     params = [p for p in m.parameters() if p.requires_grad]
@@ -827,7 +833,9 @@ def train(m: Method, seed: int, steps: int = None, pool=None, record=None, recor
     n_img = 2 * B // m.views if m.views != 2 else B
     pts = set(curve_points(steps)) if curve else set()
     rec_at = set(record_at or [])
-    out = {"steps": [], "knn": [], "rank": [], "spread": [], "loss": [], "logs": [], "rec": [], "rec_steps": []}
+    has_z = type(m).embed is not Method.embed
+    out = {"steps": [], "knn": [], "rank": [], "spread": [], "zrank": [], "zspread": [], "loss": [], "logs": [],
+           "rec": [], "rec_steps": []}
     run_loss, run_n, logs_acc = 0.0, 0, {}
     t0 = time.time()
 
@@ -838,6 +846,10 @@ def train(m: Method, seed: int, steps: int = None, pool=None, record=None, recor
             out["knn"].append(knn(fb, Yb, ft, Yt))
             out["rank"].append(eff_rank(ft))
             out["spread"].append(spread(ft))
+            if has_z:
+                fz = features(m.embed, Xt, module=m)
+                out["zrank"].append(eff_rank(fz))
+                out["zspread"].append(spread(fz))
             out["loss"].append(run_loss / max(run_n, 1) if run_n else float("nan"))
             out["logs"].append({k: v / max(run_n, 1) for k, v in logs_acc.items()})
         if step in rec_at and record is not None:

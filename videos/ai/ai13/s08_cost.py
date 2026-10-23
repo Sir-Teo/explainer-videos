@@ -167,7 +167,7 @@ class Cost(VoiceoverScene):
         share = att / (att + w)
         c_att = curve(ax, lt, share, A, 3.5)
         c_w = curve(ax, lt, 1 - share, MLP_, 3.5)
-        la = label(r"attention over the context", font_size=20, color=A).next_to(ax.c2p(4.6, float(np.interp(4.6, lt, share))), UP, buff=0.1)
+        la = label(r"attention over the context", font_size=20, color=A).next_to(ax.c2p(4.6, float(np.interp(4.6, lt, share))), DOWN, buff=0.15)
         lw = label(r"the weights", font_size=20, color=MLP_).next_to(ax.c2p(1.4, float(np.interp(1.4, lt, 1 - share))), DOWN, buff=0.12)
         xl = math.log10(Tx)
         vx = DashedLine(ax.c2p(xl, 0), ax.c2p(xl, 1), color=WHITE, stroke_width=1.5)
