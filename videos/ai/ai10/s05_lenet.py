@@ -181,7 +181,7 @@ class LeNet(VoiceoverScene):
             f"<bookmark mark='a'/> At the start the kernels are random noise and the answers are guesses: "
             f"{pct(e0, 0)} percent wrong. <bookmark mark='b'/> Within {steps[i_half]:,} steps, under five percent "
             "wrong, and the kernels have turned into detectors of strokes and their edges, each at its own "
-            f"angle. <bookmark mark='c'/> After {LENET_EPOCHS(L)} passes over the training digits, "
+            f"angle. <bookmark mark='c'/> After {L['epochs']} passes over the training digits, "
             f"{pct(eN, 2)} percent wrong. Nobody designed those kernels: they are whatever made the answers right."
         ) as vo:
             self.play(Create(ax), FadeIn(cur_f), FadeIn(cur_m), FadeIn(fl), FadeIn(ml), FadeIn(dg), FadeIn(cur_p),
@@ -315,7 +315,3 @@ class LeNet(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars], lag_ratio=0.3), FadeIn(bl))
         self.wait(0.3)
         self.clear_scene()
-
-
-def LENET_EPOCHS(L) -> int:
-    return int(L["epochs"])
