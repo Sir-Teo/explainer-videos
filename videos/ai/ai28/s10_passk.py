@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import DIRECT, PART, PASS, POLICY, REF, RIGHT_C, WRONG_C, load, seeds_plot
+from videos.ai.ai28.common import DIRECT, PART, PASS, POLICY, REF, RIGHT_C, WRONG_C, healthy, load, seeds_plot
 from videos.ai.ai28.s07_variants import COLS, NAMES, SAY
 
 
@@ -78,7 +78,7 @@ class PassK(VoiceoverScene):
         ce = DashedVMobject(curve(g.ax, lk, ex, WHITE, 3), num_dashes=30)
         cu, cn = curve(g.ax, lk, un, PASS, 4), curve(g.ax, lk, nv, WRONG_C, 4)
         lg = legend([(WHITE, r"exact"), (PASS, r"unbiased estimate"), (WRONG_C, r"plug-in estimate")], font_size=19)
-        lg.next_to(g.ax, UP, buff=0.4).align_to(g.ax, LEFT)
+        lg.move_to(g.ax.c2p(0.72 * lk[-1], lo + 0.3 * (1 - lo)))
         # one question, many draws of n samples: the two estimates' spread at k = 8
         qn, qu = np.asarray(s["q_naive"]), np.asarray(s["q_unbiased"])
         qe = float(s["q_exact"])
@@ -138,7 +138,7 @@ class PassK(VoiceoverScene):
                     label(r"$\log k$", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.08),
                     label(r"pass@$k$", font_size=18, color=GREY_B).next_to(ax, LEFT, buff=0.08))
         pic.add(ax, base, rl, pl)
-        sch = note(r"schematic: \ the crossover Yue et al.\ reported").next_to(ax, RIGHT, buff=1.0)
+        sch = note(r"schematic: \ the crossover Yue et al.\ reported").to_corner(DR, buff=0.3)
         with self.voiceover(
             "In April 2025, Yang Yue and colleagues at Tsinghua asked exactly this; the paper became an oral at "
             "NeurIPS that December. <bookmark mark='a'/> After reinforcement learning, one try is far "
@@ -164,8 +164,9 @@ class PassK(VoiceoverScene):
         ks = [int(k) for k in o["ks"]]
         lk = np.log2(ks)
         base = np.asarray(o["passk_base"])
-        show = ["pg", "grpo", "dapo", "cispo"]
-        P = {v: np.asarray(o[f"{v}_passk"]) for v in show}  # (seeds, ks)
+        show = ["pg", "dr", "dapo", "cispo"]
+        ok = {v: healthy(o, v) for v in show}  # runs that collapsed are left out
+        P = {v: np.asarray(o[f"{v}_passk"])[ok[v]] for v in show}  # (seeds, ks)
         lo = float(np.floor(min(base.min(), min(p.min() for p in P.values())) * 10) / 10)
         g = axes([0, lk[-1]], [lo, 1.0], x_length=7.0, y_length=4.4, xlabel=r"tries, \ $k$",
                  ylabel=r"pass@$k$, \ exact, \ $200$ questions", xticks=list(lk[::2]), xfmt=lambda x: f"{int(2 ** x)}",
@@ -174,24 +175,29 @@ class PassK(VoiceoverScene):
         lines = {v: seeds_plot(g.ax, lk, P[v], COLS[v]) for v in show}
         lg = legend([(REF, r"before RL")] + [(COLS[v], NAMES[v]) for v in show], font_size=19)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        tag = note(r"computed: \ every answer's probability, \ so pass@$k$ needs no sampling; \ $3$ runs each, \ band: "
-                   r"lowest to highest").to_corner(DR, buff=0.2)
+        if all(ok[v].all() for v in show):
+            tag = note(r"computed: \ every answer's probability, \ so pass@$k$ needs no sampling; \ $3$ runs each, \ "
+                       r"band: lowest to highest")
+        else:
+            tag = note(r"computed: \ every answer's probability, \ so pass@$k$ needs no sampling; \ $3$ runs each, \ "
+                       r"band: lowest to highest; \ collapsed runs left out")
+        tag.to_corner(DR, buff=0.2)
         means = {v: P[v].mean(0) for v in show}
         rl1 = float(np.mean([means[v][0] for v in show]))
         k_last = ks[-1]
         lost = [v for v in show if means[v][-1] < base[-1] - 0.01]
         pb = np.asarray(o["p_right_base"])
-        dead = float(np.mean([((np.asarray(o[f"{v}_p_right"]) < 1e-3) & (pb > 1e-2)).sum(1).mean() for v in show]))
+        dead = float(np.mean([((np.asarray(o[f"{v}_p_right"])[ok[v]] < 1e-3) & (pb > 1e-2)).sum(1).mean() for v in show]))
         if lost:
             cross = [int(ks[int(np.argmax(means[v] < base))]) for v in lost]
         if lost and dead >= 1:
             said = (f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, "
-                    f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, "
+                    f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {cross[0]} tries on, "
                     f"the untrained model is ahead. On about {dead:.0f} of the 200 questions, RL drained the right "
                     "answer's probability below one in a thousand, onto wrong answers it grew confident in.")
         elif lost:
             said = (f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, "
-                    f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, "
+                    f"while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {cross[0]} tries on, "
                     "the untrained model is ahead. No question became impossible; on the hardest ones, RL made a rare "
                     "right answer rarer, so even a thousand tries find it less often.")
         else:
@@ -223,7 +229,7 @@ class PassK(VoiceoverScene):
         pg = np.asarray(gs["passk"])
         formula = cmath(r"\text{pass@}k(\text{a random guess})", r"=", rf"1 - \big(1 - \tfrac{{1}}{{{int(gs['m'])}}}\big)^k",
                         font_size=34).move_to(UP * 2.2)
-        vals = VGroup(*[label(rf"$k = {k}$: \ ${100 * p:.0f}\%$", font_size=28, color=DIRECT) for k, p in
+        vals = VGroup(*[label(rf"$k = {k}$: \ ${100 * p:.1f}\%$", font_size=28, color=DIRECT) for k, p in
                         zip(ks, pg) if k in (1, 64, 1024)]).arrange(RIGHT, buff=0.8).next_to(formula, DOWN, buff=0.5)
         lessons = VGroup(
             label(r"at large $k$, \ a checker can make guessing look like reasoning", font_size=26, color=WRONG_C),
@@ -234,7 +240,7 @@ class PassK(VoiceoverScene):
         with self.voiceover(
             "One warning about measuring with many tries. A checker rewards a lucky guess as much as a reasoned answer. "
             f"Guess uniformly among the {int(gs['m'])} possible sums, and pass at a thousand and twenty-four is "
-            f"{100 * p1024:.0f} percent. <bookmark mark='a'/> At large k, pass at k can make guessing look like "
+            f"{100 * p1024:.1f} percent. <bookmark mark='a'/> At large k, pass at k can make guessing look like "
             "reasoning. That's why careful studies also check the chains, or use problems whose answers are too many "
             "to guess: proofs, and programs that must pass tests."
         ) as vo:

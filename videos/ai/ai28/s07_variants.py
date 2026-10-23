@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (ADV, CHAIN, LEN, PART, RIGHT_C, WRONG_C, load)
+from videos.ai.ai28.common import ADV, CHAIN, LEN, PART, RIGHT_C, WRONG_C, healthy, load
 
 NAMES = {"pg": r"plain", "grpo": r"GRPO", "dr": r"Dr.~GRPO", "dapo": r"DAPO", "gspo": r"GSPO", "cispo": r"CISPO",
          "dpo": r"DPO"}
@@ -56,7 +56,7 @@ class Variants(VoiceoverScene):
         ll = label(r"wrong, \ $12$ tokens: \ a small push down for each", font_size=22, color=WRONG_C)
         ll.next_to(long_, DOWN, buff=0.3)
         res = label(r"so wrong answers are punished less per token \ when they are long, \\ and lengths drift upward",
-                    font_size=24, color=LEN).to_edge(DOWN, buff=0.35)
+                    font_size=26, color=LEN).move_to(DOWN * 2.75)
         sch = note(r"schematic").to_corner(UR, buff=0.3)
         cite_ = cite(r"Z.~Liu et al., \textit{Understanding R1-Zero-Like Training: A Critical Perspective} (2025)")
         with self.voiceover(
@@ -159,29 +159,49 @@ class Variants(VoiceoverScene):
                      r"(line: lowest to highest)", font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         cost = label(rf"DAPO drew ${drawn['dapo']:.2f}\times$ the questions \\ to fill its batches", font_size=20,
                      color=C.BITS).move_to([5.0, 1.6, 0])
-        means = {v: float(accs[v].mean()) for v in V}
+        ok = {v: healthy(o, v) for v in V}  # runs that did not collapse
+        n_bad = {v: int(len(accs[v]) - ok[v].sum()) for v in V}
+        seeds = int(o["seeds"])
+        notes_ = VGroup(*[label(rf"${n_bad[v]}$ of ${seeds}$ \\ collapsed", font_size=16, color=COLS[v])
+                          .next_to(bars[j][2], UP, buff=0.12) for j, v in enumerate(V) if n_bad[v]])
+        means = {v: float(accs[v][ok[v]].mean()) for v in V}
         best = max(V, key=lambda v: means[v])
         spread = 100 * (max(means.values()) - min(means.values()))
-        seed_spread = 100 * max(float(accs[v].max() - accs[v].min()) for v in V)
+        seed_spread = 100 * max(float(accs[v][ok[v]].max() - accs[v][ok[v]].min()) for v in V)
         if spread < seed_spread:
-            verdict = (f"The best average is {SAY[best]}'s, {100 * means[best]:.0f} percent, but the averages span "
-                       f"only {spread:.0f} points, less than the {seed_spread:.0f} points between runs of the same "
-                       "method. On a problem this small they mostly agree; the differences show at scale, over long "
-                       "answers and thousands of steps.")
+            verdict = (f"Among the runs that learned, {SAY[best]} ends highest, {100 * means[best]:.0f} percent on "
+                       f"average, but the averages span only {spread:.0f} points, less than the {seed_spread:.0f} "
+                       "points between runs of the same method. On a problem this small they mostly agree; the "
+                       "differences show at scale, over long answers and thousands of steps.")
         else:
-            verdict = (f"The best average is {SAY[best]}'s, {100 * means[best]:.0f} percent, and the averages span "
-                       f"{spread:.0f} points, more than the {seed_spread:.0f} points between runs of the same method.")
+            verdict = (f"Among the runs that learned, {SAY[best]} ends highest, {100 * means[best]:.0f} percent on "
+                       f"average, and the averages span {spread:.0f} points, more than the {seed_spread:.0f} points "
+                       "between runs of the same method.")
+        bad = [v for v in V if n_bad[v]]
+        if bad == ["grpo"]:
+            low = 100 * float(accs["grpo"].min())
+            collapse = (f"GRPO as published, the only objective here with a KL penalty, collapsed in {n_bad['grpo']} "
+                        f"of its {seeds} runs: accuracy fell to {low:.0f} percent, and the model ran far from where it "
+                        "started. The likely culprit is that penalty: the gradient of the k3 estimator grows with r, "
+                        "whose heavy tail we met in chapter five. DAPO drops the term altogether.")
+        elif bad:
+            collapse = (f"{sum(n_bad.values())} of the runs collapsed, ending below where they started; the averages "
+                        "that follow leave them out.")
+        else:
+            collapse = "Every run ended above where it started."
         with self.voiceover(
             "We ran all of them on our addition model, from the same start, on the same kind of questions, three runs "
-            f"each. <bookmark mark='a'/> {verdict} <bookmark mark='b'/> One cost the bars hide: DAPO's dynamic "
-            f"sampling drew {drawn['dapo']:.2f} times as many questions to fill its batches. A fair comparison counts "
-            "samples, not steps."
+            f"each. <bookmark mark='a'/> {collapse} <bookmark mark='a2'/> {verdict} <bookmark mark='b'/> One cost the "
+            f"bars hide: DAPO's dynamic sampling drew {drawn['dapo']:.2f} times as many questions to fill its batches. "
+            "A fair comparison counts samples, not steps."
         ) as vo:
             self.play(FadeIn(head), Create(start), FadeIn(sl))
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b_[0], DOWN), FadeIn(b_[3])) for b_ in bars],
                                   lag_ratio=0.12), run_time=2.0)
-            self.play(*[FadeIn(b_[1]) for b_ in bars], *[FadeIn(b_[2]) for b_ in bars])
+            self.play(*[FadeIn(b_[1]) for b_ in bars], *[FadeIn(b_[2]) for b_ in bars], FadeIn(notes_))
+            vo.wait_until("a2")
+            self.play(*[Indicate(bars[j][0], color=COLS[v], scale_factor=1.05) for j, v in enumerate(V) if v == best])
             vo.wait_until("b")
             self.play(FadeIn(cost), Indicate(bars[V.index("dapo")], color=C.BITS))
         self.wait(0.3)

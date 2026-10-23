@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import ENT, PART, POLICY, RIGHT_C, WRONG_C, load, seeds_plot
+from videos.ai.ai28.common import ENT, PART, POLICY, RIGHT_C, WRONG_C, healthy, load, seeds_plot
 from videos.ai.ai28.s07_variants import COLS, NAMES
 
 
@@ -43,7 +43,7 @@ class Entropy(VoiceoverScene):
                 why(r"a policy-gradient step: \ $\Delta z_a = \eta\, \pi_a A_a$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.8, buff=0.5, edge=6.9)
         res = label(r"reward what was already likely, \ and the entropy falls", font_size=28, color=ENT)
-        res.to_edge(DOWN, buff=0.5)
+        res.move_to(DOWN * 2.6)
         cite_ = cite(r"G.~Cui et al., \textit{The Entropy Mechanism of Reinforcement Learning for Reasoning Language "
                      r"Models} (2025)", corner=DR)
         with self.voiceover(
@@ -72,9 +72,10 @@ class Entropy(VoiceoverScene):
     def curves(self):
         o = load("objectives")
         steps = int(o["steps"])
-        show = ["grpo", "dapo", "cispo", "pg"]
-        Y = {v: np.asarray(o[f"{v}_curves"]) for v in show}
-        xs = Y["grpo"][0, :, 0]
+        show = ["dr", "dapo", "cispo", "pg"]  # Dr. GRPO has GRPO's symmetric clip, without the KL term
+        Y = {v: np.asarray(o[f"{v}_curves"])[healthy(o, v)] for v in show}  # runs that collapsed are left out
+        out_ = sum(int(len(np.asarray(o[f"{v}_curves"])) - len(Y[v])) for v in show)
+        xs = Y["dr"][0, :, 0]
         top = math.ceil(max(float(Y[v][:, :, 2].max()) for v in show) * 4) / 4
         g = axes([0, steps], [0, top], x_length=7.0, y_length=4.2, xlabel=r"RL steps",
                  ylabel=r"entropy of each answer digit, \ bits", xticks=[0, steps // 2, steps], yticks=[0, top / 2, top],
@@ -82,35 +83,43 @@ class Entropy(VoiceoverScene):
         lines = {v: seeds_plot(g.ax, xs, Y[v][:, :, 2], COLS[v]) for v in show}
         lg = legend([(COLS[v], NAMES[v] + (r" \ (clip $0.8$ to $1.28$)" if v == "dapo" else
                                            r" \ (weight clipped at $1.28$)" if v == "cispo" else
-                                           r" \ (clip $0.8$ to $1.2$)" if v == "grpo" else r" \ (no clip)"))
+                                           r" \ (clip $0.8$ to $1.2$)" if v == "dr" else r" \ (no clip)"))
                      for v in show], font_size=19)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 1.0)
         if lg.get_right()[0] > 6.9:
             lg.shift(LEFT * (lg.get_right()[0] - 6.9))
-        tag = note(r"computed: \ $3$ runs each, \ band: lowest to highest").to_corner(DR, buff=0.2)
-        e0 = float(Y["grpo"][:, 0, 2].mean())
-        fin = {v: float(Y[v][:, -1, 2].mean()) for v in show}
-        if fin["dapo"] > fin["grpo"] + 0.03:
-            higher = (f"DAPO's clip-higher keeps more of it: {fin['dapo']:.2f} bits at the end, against "
-                      f"{fin['grpo']:.2f} for GRPO's symmetric clip. Letting unlikely tokens grow faster keeps "
-                      "alternatives alive.")
+        if out_:
+            tag = note(r"computed: \ $3$ runs each, \ band: lowest to highest; \ collapsed runs left out")
         else:
-            higher = (f"Here DAPO's clip-higher barely changes it: {fin['dapo']:.2f} bits at the end, against "
-                      f"{fin['grpo']:.2f} for GRPO. With three-digit answers there are few unlikely tokens to save; "
-                      "on long reasoning, DAPO's authors found it kept the entropy from collapsing.")
+            tag = note(r"computed: \ $3$ runs each, \ band: lowest to highest")
+        tag.to_corner(DR, buff=0.2)
+        e0 = float(Y["dr"][:, 0, 2].mean())
+        fin = {v: float(Y[v][:, -1, 2].mean()) for v in show}
+        if fin["dapo"] > fin["dr"] + 0.03:
+            higher = (f"DAPO's clip-higher keeps more of it: {fin['dapo']:.2f} bits at the end, against "
+                      f"{fin['dr']:.2f} with the symmetric clip. Letting unlikely tokens grow faster keeps "
+                      "alternatives alive.")
+        elif fin["dapo"] < fin["dr"] - 0.03:
+            higher = (f"DAPO ends lower still, at {fin['dapo']:.2f} bits: in our runs, clip-higher did not hold the "
+                      "entropy up. With three-digit answers there are few unlikely tokens to save; on long reasoning, "
+                      "DAPO's authors found it kept the entropy from collapsing.")
+        else:
+            higher = (f"Here DAPO's clip-higher barely changes it: {fin['dapo']:.2f} bits at the end. With three-digit "
+                      "answers there are few unlikely tokens to save; on long reasoning, DAPO's authors found it kept "
+                      "the entropy from collapsing.")
         if all(fin[v] < e0 - 0.05 for v in show):
             start = (f"Here it is in our runs. Every objective starts at {e0:.2f} bits of entropy per digit, and every "
                      "one drives it down.")
         else:
             start = f"Here it is in our runs. Every objective starts at {e0:.2f} bits of entropy per digit."
         with self.voiceover(
-            f"{start} <bookmark mark='a'/> GRPO, with its symmetric clip, ends at "
-            f"{fin['grpo']:.2f}. <bookmark mark='b'/> {higher} <bookmark mark='c'/> CISPO ends at {fin['cispo']:.2f}, "
-            f"and the plain gradient, with no clip at all, at {fin['pg']:.2f}."
+            f"{start} <bookmark mark='a'/> Doctor GRPO, with GRPO's symmetric clip, ends at {fin['dr']:.2f}. "
+            f"<bookmark mark='b'/> {higher} <bookmark mark='c'/> CISPO ends at {fin['cispo']:.2f}, and the plain "
+            f"gradient, with no clip at all, at {fin['pg']:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(lines["grpo"][0]), Create(lines["grpo"][1]), FadeIn(lg[0]), run_time=1.5)
+            self.play(FadeIn(lines["dr"][0]), Create(lines["dr"][1]), FadeIn(lg[0]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(lines["dapo"][0]), Create(lines["dapo"][1]), FadeIn(lg[1]), run_time=1.5)
             vo.wait_until("c")
@@ -139,8 +148,14 @@ class Entropy(VoiceoverScene):
         vals.next_to(law, DOWN, buff=0.3)
         cl = label(rf"at $H = 0$: \ ${100 * (b - a):.0f}\%$", font_size=22, color=GREY_B).next_to(vals, DOWN, buff=0.4)
         nv = len(set(V))
-        tag = note(rf"computed: \ every checkpoint of ${nv * 3}$ runs \ (${nv}$ objectives, $3$ runs each)").to_corner(DR, buff=0.2)
-        if r2 > 0.8:
+        n_runs, n_out = int(f["runs"]), int(f["left_out"])
+        if n_out:
+            tag = note(rf"computed: \ every checkpoint of ${n_runs - n_out}$ runs \ (${nv}$ objectives; \ "
+                       r"collapsed runs left out)")
+        else:
+            tag = note(rf"computed: \ every checkpoint of ${n_runs}$ runs \ (${nv}$ objectives, $3$ runs each)")
+        tag.to_corner(DR, buff=0.2)
+        if r2 > 0.7:
             fits = (f"Fitted to every checkpoint of our runs, it explains {100 * r2:.0f} percent of the variation in "
                     "accuracy, whatever the objective.")
         else:
@@ -177,6 +192,7 @@ class Entropy(VoiceoverScene):
         cost = label(r"the price of collapse: \ fewer different answers to try \ (chapter nine)", font_size=26,
                      color=WRONG_C).to_edge(DOWN, buff=0.7)
         cite_ = cite(r"Q.~Yu et al.\ (2025); \ G.~Cui et al.\ (2025); \ M.~Liu et al., \textit{ProRL} (2025)")
+        head = label(r"keeping the model exploring", font_size=34).to_edge(UP, buff=0.5)
         with self.voiceover(
             "So the field fights the collapse. <bookmark mark='a'/> DAPO's clip-higher lets unlikely tokens grow "
             "faster than likely ones shrink. <bookmark mark='b'/> An entropy bonus pays the model a little for "
@@ -186,7 +202,7 @@ class Entropy(VoiceoverScene):
             "<bookmark mark='e'/> Why it matters: a model that has stopped exploring has fewer different answers to "
             "offer when you ask it again. That is the question of chapter nine."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(head))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k], shift=UP * 0.15))

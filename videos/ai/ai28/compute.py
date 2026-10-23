@@ -492,13 +492,19 @@ def compute_bon(Ns=(1, 2, 4, 8, 16, 32, 64, 128, 256)):
 
 def compute_entropy_fit():
     """Cui et al. (2025) found accuracy R and policy entropy H related by R = -a exp(H) + b during RL.  Fit it to every
-    checkpoint of every RL run in ``objectives`` (H in nats per digit; least squares, linear in a and b)."""
+    checkpoint of every RL run in ``objectives`` that did not collapse (a run that ends below where it started is a
+    different regime: H in nats per digit; least squares, linear in a and b)."""
     o = load("objectives")
     H, R, V = [], [], []
+    runs = left_out = 0
     for v in o["variants"]:
         if v == "dpo":
             continue
         C_ = np.asarray(o[f"{v}_curves"])  # (seeds, checkpoints, 4): step, accuracy, entropy (bits), KL
+        ok = C_[:, -1, 1] >= C_[:, 0, 1]
+        runs += len(ok)
+        left_out += int((~ok).sum())
+        C_ = C_[ok]
         H.append(C_[:, :, 2].ravel() * math.log(2))  # nats: the law is written with e^H
         R.append(C_[:, :, 1].ravel())
         V += [v] * C_[:, :, 2].size
@@ -507,12 +513,13 @@ def compute_entropy_fit():
     (a, b), *_ = np.linalg.lstsq(X, R, rcond=None)
     pred = X @ np.array([a, b])
     r2 = 1 - float(((R - pred) ** 2).sum() / ((R - R.mean()) ** 2).sum())
-    return dict(H=H, R=R, a=float(a), b=float(b), r2=r2, ceiling=float(b - a), variant=V)
+    return dict(H=H, R=R, a=float(a), b=float(b), r2=r2, ceiling=float(b - a), variant=V, runs=runs,
+                left_out=left_out)
 
 
 def compute_passk_guess():
-    """A checker-backed guesser: pass@k of guessing uniformly among the 199 possible sums of two two-digit numbers
-    (20 to 198), 1 - (198/199)^k, at the k of the objectives item."""
+    """A checker-backed guesser: pass@k of guessing uniformly among the 179 possible sums of two two-digit numbers
+    (20 to 198), 1 - (178/179)^k, at the k of the objectives item."""
     from videos.ai.ai28.objectives import KS
 
     m = 198 - 20 + 1

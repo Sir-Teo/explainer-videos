@@ -81,6 +81,14 @@ def heat(Z, width, height, color=CHAIN, vmax=None, low="#141A24") -> ImageMobjec
     return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
 
 
+def healthy(o, v):
+    """Which runs of objective v (in the ``objectives`` item) did not collapse: those that end at least as accurate as
+    they started. If every run collapsed, all of them (so a plot still has something to show)."""
+    C = np.asarray(o[f"{v}_curves"])
+    ok = C[:, -1, 1] >= C[:, 0, 1]
+    return ok if ok.any() else np.ones_like(ok, bool)
+
+
 def seeds_plot(ax, xs, Y, color, width=3.5, opacity=0.2):
     """The mean over seeds (rows of Y) as a line, and the lowest-to-highest band."""
     Y = np.asarray(Y, float)
