@@ -156,7 +156,7 @@ class Budget(VoiceoverScene):
                 ticks.add(Line([X(fewp[n]), y - 0.16, 0], [X(fewp[n]), y + 0.16, 0], color=YELLOW, stroke_width=4))
         head = label(rf"Fine-tune the whole network \ from $10$ labels per digit", font_size=30).to_edge(UP, buff=0.3)
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ ${int(f['steps'])}$ updates, \ three draws "
-                    r"of the labels; \ yellow tick: \ the frozen network's probe from the same $100$ labels",
+                    r"of the labels; \\ yellow tick: \ the frozen network's probe from the same $100$ labels",
                     font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
         sc = rows["scratch"]["ft"][0]
         ssl = [n for n in order if n not in ("scratch", "supervised")]

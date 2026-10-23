@@ -64,12 +64,9 @@ class Outro(VoiceoverScene):
         m = load("mae")
         out.append((digit_sheet(np.stack([np.asarray(m["rec_masked"])[-1][0], np.asarray(m["rec_recon"])[-1][0]]), 1, 2,
                                 size=1.2, gap=0.1), r"filling in", MAE_C))
-        h = load("halves")
-        st = np.asarray(h["rec_steps"])
-        ax3 = Axes(x_range=[0, st[-1], st[-1]], y_range=[0, 1, 1], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
-                   axis_config={"stroke_color": GREY_D, "include_ticks": False})
-        out.append((VGroup(ax3, curve(ax3, st, h["align_s0"], C.BITS, 2.5), curve(ax3, st, h["align_s1"], C.BITS, 1.5)),
-                    r"two halves converge", C.BITS))
+        Cm = np.asarray(load("compare")["cka"], float)
+        out.append((heat(Cm, 1.8, 1.8, vmax=1.0, signed=False, pos=SIMCLR, gamma=1.0), r"different losses, \ alike",
+                    SIMCLR))
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = tile_frame(cap, col, TW, TH)
@@ -84,6 +81,10 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         tiles = self.tiles()
+        cm = load("compare")
+        nm = list(cm["names"])
+        fam = [nm.index(n) for n in ("simclr", "moco", "barlow", "vicreg")]
+        lo = min(float(np.asarray(cm["cka"])[a, b]) for a in fam for b in fam if a < b)
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. A pretext puzzle teaches what the puzzle needs, blind spots and all. A contrastive "
@@ -92,7 +93,8 @@ class Outro(VoiceoverScene):
             "something pushing apart, agreement collapses to a constant, and we can measure it. BYOL and SimSiam "
             "escape by asymmetry, Barlow Twins and VICReg by decorrelating dimensions, DINO by balancing a "
             "teacher between two collapses. Masked models learn by filling in; JEPAs predict meanings instead of "
-            "pixels. And networks trained apart, on different halves of the same digits, come to agree."
+            "pixels. And four different losses, contrastive and not, end with nearly the same representation: a "
+            f"CKA of at least {lo:.2f} between each pair."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),

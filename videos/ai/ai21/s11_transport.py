@@ -123,10 +123,13 @@ class Transport(VoiceoverScene):
         dots = pn.dots(P[0][:200], NOISE, radius=0.025)
         trails = pn.paths(P[:, :200:4], FM_C, stroke_width=1.2, opacity=0.6)
         rows = tr["marginal_rows"]
-        ok = all(r["sw_flow"] < 1.3 * r["sw_floor"] + 0.005 for r in rows)
-        tab = VGroup(label(r"particles following $v$ \ against the interpolation itself:", font_size=20, color=GREY_A),
-                     *[label(rf"$\tau = {r['tau']:g}$: \ ${r['sw_flow']:.3f}$ \ (fresh samples: ${r['sw_floor']:.3f}$)",
-                             font_size=20) for r in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.7, 1.6, 0])
+        ok = all(r["sw_flow"] <= r["sw_floor_hi"] for r in rows)
+        tab = VGroup(label(r"particles following $v$ \ against the interpolation itself", font_size=20, color=GREY_A),
+                     label(rf"(fresh samples, \ ${int(tr['n']):,}$ points: \ lowest to highest of $8$)".replace(",", "{,}"),
+                           font_size=18, color=GREY_B),
+                     *[label(rf"$\tau = {r['tau']:g}$: \ ${r['sw_flow']:.3f}$ \ (${r['sw_floor_lo']:.3f}$ to "
+                             rf"${r['sw_floor_hi']:.3f}$)", font_size=20) for r in rows]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.7, 1.6, 0])
         ci, cf, co = (float(tr[k]) for k in ("cost_indep", "cost_fm", "cost_ot"))
         act = float(tr["action_fm"])
         st = float(tr["straight_fm"])

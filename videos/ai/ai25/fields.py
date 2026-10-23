@@ -101,14 +101,15 @@ class FNO1d(nn.Module):
 
 
 class CNN1d(nn.Module):
-    """The same layout with ordinary convolutions (kernel 5, circular padding): its kernels are measured in grid
-    points, so on a finer grid they see a narrower stretch of the line."""
+    """The same layout with ordinary convolutions (kernel 5, circular padding, dilations 1, 2, 4, 8, so that at 64
+    points the four layers see 61 of them, nearly the whole line, as the Fourier layers do): its kernels are measured
+    in grid points, so on a finer grid they see a narrower stretch of the line."""
 
-    def __init__(self, width=32, layers=4, kernel=5):
+    def __init__(self, width=32, layers=4, kernel=5, dilations=(1, 2, 4, 8)):
         super().__init__()
         self.lift = nn.Linear(2, width)
-        self.convs = nn.ModuleList([nn.Conv1d(width, width, kernel, padding=kernel // 2, padding_mode="circular")
-                                    for _ in range(layers)])
+        self.convs = nn.ModuleList([nn.Conv1d(width, width, kernel, padding=d * (kernel // 2), dilation=d,
+                                              padding_mode="circular") for d in dilations[:layers]])
         self.proj = nn.Sequential(nn.Linear(width, 128), nn.GELU(), nn.Linear(128, 1))
 
     def forward(self, u):
