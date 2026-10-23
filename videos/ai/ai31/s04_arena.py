@@ -85,7 +85,8 @@ class Arena(VoiceoverScene):
             "ten to one."
         ) as vo:
             for k, m in enumerate("abcde"):
-                vo.wait_until(m)
+                if k:  # the first line comes with the first words
+                    vo.wait_until(m)
                 step(k)
         self.wait(0.4)
         self.clear_scene()

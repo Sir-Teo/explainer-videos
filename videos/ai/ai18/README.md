@@ -164,6 +164,8 @@ lab pages):
   receives at least 2(N − 1)M/N); the proof on screen is our own counting argument.
 * Common Crawl: founded 2007 by Gil Elbaz, crawling since 2008, over 10 PB (its own pages). GPT-1: "1 month on 8
   GPUs" (OpenAI's 2018 post). Lee et al. (2022): "emit memorized text ten times less frequently".
+* Dettmers et al. (2022), LLM.int8(): a few feature dimensions of large transformers take much larger values than the
+  rest (emergent outlier features), the reason FP8 recipes scale per tile rather than per tensor.
 * Gloeckle et al.: 13B, +12% HumanEval, +17% MBPP, up to 3× faster with 4-token prediction; at the smallest sizes
   multi-token prediction scored below next-token prediction (their Figure 3).
 * Our measurements: the precision runs emulate each format by rounding the inputs of every matrix product inside the
