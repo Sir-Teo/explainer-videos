@@ -99,8 +99,8 @@ class Contamination(VoiceoverScene):
                 "Contamination doesn't just inflate scores; it reorders them." if flip else
                 "The order is unchanged here, but every score is inflated.")
         with self.voiceover(
-            "We can watch it happen with Part 1's counting models. Train each on the thirty novels, as before, and "
-            "score it on the passage. <bookmark mark='a'/> Now add the passage itself to the training text, and "
+            "We can watch it happen with Part 1's counting models, scored on the passage as before. "
+            "<bookmark mark='a'/> Now add the passage itself to the training text, and "
             f"score again. <bookmark mark='b'/> The {orders[i4]}-character model drops from {clean[i4]:.2f} bits per "
             f"character to {leaked[i4]:.2f}. The {orders[-1]}-character model, {clean[-1]:.2f} on clean text, falls to "
             f"{leaked[-1]:.2f}. <bookmark mark='c'/> " + tail
@@ -275,8 +275,7 @@ class Contamination(VoiceoverScene):
             "by a random code. <bookmark mark='a'/> Hide that string once in our seven-character model's training "
             f"text. Spelling out the code now costs it {cn[1]['bits']:.0f} bits, against {cn[1]['others_mean']:.0f} "
             f"for a random code of the same form, and among a thousand and one codes the true one ranks number "
-            f"{r1}. <bookmark mark='b'/> " + unseen_said + " BIG-bench includes a task that checks a model for "
-            "exactly this."
+            f"{r1}. <bookmark mark='b'/> " + unseen_said
         ) as vo:
             self.play(FadeIn(top), FadeIn(tl), FadeIn(tag), FadeIn(g), FadeIn(labs), FadeIn(lg))
             vo.wait_until("a")

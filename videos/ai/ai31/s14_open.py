@@ -54,7 +54,7 @@ class OpenProblems(VoiceoverScene):
                          rf"backtest was too low by ${miss:.0f}\times$ within fifteen months", EST),
         ])
         with self.voiceover(
-            "It is easy to end a series with what works. Here is what doesn't yet, as specifically as we can say it. "
+            "Here is what doesn't work yet, as specifically as we can say it. "
             "First, measurement. <bookmark mark='a'/> We can build harder and more realistic tests, but once a model "
             "can tell a test from the real thing, we can't be sure that what it does in one it does in the other. "
             "<bookmark mark='b'/> We can track benchmarks and stitch them together, but most saturate within a few "

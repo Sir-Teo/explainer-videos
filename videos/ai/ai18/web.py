@@ -30,7 +30,7 @@ WARC_CHUNKS = 4
 LID_URL = "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz"
 EDU = "HuggingFaceFW/fineweb-edu-llama3-annotations"
 EDU_ROWS = 467_424
-EDU_PAGES = 60  # requests of 100 rows, spread through the dataset
+EDU_PAGES = 150  # requests of 100 rows, spread through the dataset
 
 # A small URL keyword filter in the spirit of FineWeb's (which uses the UT1 blocklist); pages that match are dropped
 # before anything else, and nothing they contain is ever shown.
@@ -232,7 +232,7 @@ def edu_annotations() -> list[dict]:
     from evenly spaced offsets of the dataset (Hugging Face's dataset viewer API)."""
     path = DIR / "edu_annotations.jsonl"
     if path.exists():
-        return [json.loads(x) for x in path.read_text().splitlines()]
+        return [json.loads(x) for x in path.read_text().split("\n")]
     rows = []
     for k in range(EDU_PAGES):
         off = int(k * (EDU_ROWS - 100) / (EDU_PAGES - 1))

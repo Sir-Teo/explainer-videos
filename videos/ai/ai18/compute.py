@@ -344,7 +344,7 @@ def _english():
 
     if not (W.DIR / "english.jsonl").exists():
         CACHE.save("web", compute_web())
-    return [json.loads(x) for x in (W.DIR / "english.jsonl").read_text().splitlines()]
+    return [json.loads(x) for x in (W.DIR / "english.jsonl").read_text().split("\n")]
 
 
 # ---------------------------------------------------------------------------
@@ -445,6 +445,9 @@ def compute_dedup(n_pairs=3000, seed=5):
 # Quality: a classifier trained on FineWeb-Edu's annotations
 # ---------------------------------------------------------------------------
 def compute_quality(seed=3):
+    """FineWeb-Edu's recipe, small: Llama-3-70B's 0-5 scores for web pages as labels, a cheap classifier (fastText on
+    word bigrams, where FineWeb-Edu fitted a linear head on an embedding model) trained to reproduce them, and a
+    threshold at 3: P(score >= 3) above a cut chosen on a validation split; then applied to our crawl sample."""
     import fasttext
 
     from videos.ai.ai18 import web as W
@@ -452,43 +455,54 @@ def compute_quality(seed=3):
     rows = W.edu_annotations()
     g = rng(seed)
     order = g.permutation(len(rows))
-    n_test = 1000
-    test, train = [rows[i] for i in order[:n_test]], [rows[i] for i in order[n_test:]]
+    n_test = n_val = 1000
+    test = [rows[i] for i in order[:n_test]]
+    val = [rows[i] for i in order[n_test:n_test + n_val]]
+    train = [rows[i] for i in order[n_test + n_val:]]
     path = CACHE.dir / "edu_train.txt"
     path.write_text("\n".join(f"__label__{r['score']} {W.ft_line(r['text'])}" for r in train))
-    clf = fasttext.train_supervised(str(path), epoch=12, lr=0.3, wordNgrams=2, dim=32, minCount=3, thread=1,
+    clf = fasttext.train_supervised(str(path), epoch=25, lr=0.3, wordNgrams=2, dim=64, minCount=3, thread=1,
                                     seed=0, verbose=0)
     path.unlink()
 
-    def score(text):
-        labs, ps = clf.predict(W.ft_line(text), k=6)
-        return float(sum(int(lab.replace("__label__", "")) * p for lab, p in zip(labs, ps)))
+    def probs(text):
+        labs, ps = clf.predict(W.ft_line(text), k=-1)
+        d = {int(lab.replace("__label__", "")): float(p_) for lab, p_ in zip(labs, ps)}
+        return np.array([d.get(k, 0.0) for k in range(6)])
 
-    pred = np.array([score(r["text"]) for r in test])
+    def f1(pred, truth):
+        tp = int((pred & truth).sum())
+        pr, rc = tp / max(1, int(pred.sum())), tp / max(1, int(truth.sum()))
+        return 2 * pr * rc / max(1e-9, pr + rc), pr, rc
+
+    pv = np.stack([probs(r["text"]) for r in val])
+    tv = np.array([r["score"] >= 3 for r in val])
+    cuts = np.linspace(0.02, 0.9, 89)
+    cut = float(max(cuts, key=lambda c: f1(pv[:, 3:].sum(1) >= c, tv)[0]))
+    pt = np.stack([probs(r["text"]) for r in test])
     truth = np.array([r["score"] for r in test])
-    rounded = np.clip(np.rint(pred), 0, 5).astype(int)
-    hi_p, hi_t = rounded >= 3, truth >= 3
-    tp = int((hi_p & hi_t).sum())
-    prec = tp / max(1, int(hi_p.sum()))
-    rec = tp / max(1, int(hi_t.sum()))
-    f1 = 2 * prec * rec / max(1e-9, prec + rec)
-    conf = np.zeros((6, 6), int)
-    for a, b in zip(truth, rounded):
-        conf[a, b] += 1
+    hi = pt[:, 3:].sum(1) >= cut
+    f, prec, rec = f1(hi, truth >= 3)
+    expect = pt @ np.arange(6)
     docs = _english()
-    cc = np.array([score(d["text"]) for d in docs])
-    cc_r = np.clip(np.rint(cc), 0, 5).astype(int)
-    good = [i for i in np.argsort(-cc) if safe(docs[i]["text"]) and docs[i]["text"].isascii()][:3]
-    bad = [i for i in np.argsort(cc) if safe(docs[i]["text"]) and docs[i]["text"].isascii()][:3]
+    pc = np.stack([probs(d["text"]) for d in docs])
+    kept = pc[:, 3:].sum(1) >= cut
+    ec = pc @ np.arange(6)
+    order_ = np.argsort(-pc[:, 3:].sum(1))
+    good = [i for i in order_ if safe(docs[i]["text"]) and docs[i]["text"].isascii()][:3]
+    bad = [i for i in order_[::-1] if safe(docs[i]["text"]) and docs[i]["text"].isascii()][:3]
 
     def ex(i):
         t = " ".join(docs[i]["text"].split())
-        return dict(url=docs[i]["url"], score=float(cc[i]), text=t[:220])
+        return dict(url=docs[i]["url"], p=float(pc[i, 3:].sum()), score=float(ec[i]), text=t[:220])
 
-    return dict(n=len(rows), n_train=len(train), n_test=n_test, labels=np.bincount(truth, minlength=6).tolist(),
-                all_labels=np.bincount([r["score"] for r in rows], minlength=6).tolist(), f1=f1, precision=prec,
-                recall=rec, exact=float((rounded == truth).mean()), confusion=conf,
-                cc_n=len(docs), cc_hist=np.bincount(cc_r, minlength=6).tolist(), cc_kept=float((cc_r >= 3).mean()),
+    return dict(n=len(rows), n_train=len(train), n_val=n_val, n_test=n_test,
+                labels=np.bincount(truth, minlength=6).tolist(),
+                all_labels=np.bincount([r["score"] for r in rows], minlength=6).tolist(), cut=cut, f1=f, precision=prec,
+                recall=rec, test_pos=int((truth >= 3).sum()), corr=float(np.corrcoef(expect, truth)[0, 1]),
+                cc_n=len(docs), cc_kept=float(kept.mean()), cc_kept_n=int(kept.sum()),
+                cc_hist=np.histogram(ec, bins=np.arange(0, 5.5, 0.5))[0].tolist(),
+                test_hist=np.histogram(expect, bins=np.arange(0, 5.5, 0.5))[0].tolist(),
                 best=[ex(i) for i in good], worst=[ex(i) for i in bad])
 
 
@@ -590,46 +604,57 @@ def compute_accounting():
         lc.backward()
     both_ckpt = fc.get_total_flops()
     m.zero_grad()
-    attn = 4 * T * T * cfg.d * cfg.layers  # QK^T and AV, forward, the full square (what the counter counts)
+    attn = 4 * T * T * cfg.d * cfg.layers  # QK^T and AV, forward, the full square
     six = 6 * c["compute"] * T
-    # activation memory against sequence length: fused attention, unfused (the probabilities stored), recomputed
     import explainer.lm.pocket as PK
 
     def unfused(q, k, v, is_causal=True):
-        s = (q @ k.transpose(-2, -1)) / math.sqrt(q.shape[-1])
-        s = s.masked_fill(~torch.ones(s.shape[-2], s.shape[-1], dtype=torch.bool).tril(), -float("inf"))
-        return s.softmax(-1) @ v
+        s_ = (q @ k.transpose(-2, -1)) / math.sqrt(q.shape[-1])
+        s_ = s_.masked_fill(~torch.ones(s_.shape[-2], s_.shape[-1], dtype=torch.bool).tril(), -float("inf"))
+        return s_.softmax(-1) @ v
 
-    mem = []
-    for Tm in (64, 128, 256, 512, 1024):
-        xm = torch.randint(0, 4096, (1, Tm + 1))
-        row = dict(T=Tm)
-        _, row["fused"] = _saved_bytes(lambda: Fn.cross_entropy(m(xm[:, :-1]).flatten(0, 1), xm[0, 1:]))
-        sdpa = PK.F.scaled_dot_product_attention
-        PK.F.scaled_dot_product_attention = unfused
+    sdpa = PK.F.scaled_dot_product_attention
+    PK.F.scaled_dot_product_attention = unfused
+    try:
+        with FlopCounterMode(display=False) as fc:
+            lu = loss()
+            lu.backward()
+        both_attn = fc.get_total_flops()
+    finally:
+        PK.F.scaled_dot_product_attention = sdpa
+    m.zero_grad()
+    # activation memory of the blocks against sequence length: attention fused (as PyTorch runs it), unfused (its
+    # probabilities stored), and every block recomputed in the backward pass
+    def blocks_saved(Tm, mode):
+        h0 = torch.randn(1, Tm, cfg.d, requires_grad=True)
+
+        def f():
+            h = h0
+            for b in m.blocks:
+                h = checkpoint(b, h, use_reentrant=False) if mode == "recompute" else b(h)
+            return h.sum()
+
+        if mode == "unfused":
+            PK.F.scaled_dot_product_attention = unfused
         try:
-            _, row["unfused"] = _saved_bytes(lambda: Fn.cross_entropy(m(xm[:, :-1]).flatten(0, 1), xm[0, 1:]))
+            return _saved_bytes(f)[1]
         finally:
             PK.F.scaled_dot_product_attention = sdpa
 
-        def ck():
-            h = m.emb(xm[:, :-1])
-            for b in m.blocks:
-                h = checkpoint(b, h, use_reentrant=False)
-            return Fn.cross_entropy(m.head(m.norm(h)).flatten(0, 1), xm[0, 1:])
-
-        _, row["recompute"] = _saved_bytes(ck)
-        mem.append(row)
+    mem = [dict(T=Tm, **{k: blocks_saved(Tm, k) for k in ("fused", "unfused", "recompute")})
+           for Tm in (64, 128, 256, 512, 1024)]
     Ts = np.array([r["T"] for r in mem], float)
-    A = np.stack([Ts, Ts ** 2], 1)
+    A = np.stack([np.ones_like(Ts), Ts, Ts ** 2], 1)
     fit = {k: np.linalg.lstsq(A, np.array([r[k] for r in mem], float), rcond=None)[0].tolist()
            for k in ("fused", "unfused", "recompute")}
-    per_tok_layer = fit["fused"][0] / cfg.layers  # bytes per token per layer (FP32), the linear part
+    per = lambda k: fit[k][1] / 4 / cfg.layers / cfg.d  # noqa: E731  (FP32 numbers per token per layer, units of d)
     return dict(params=int(c["total"]), compute_params=int(c["compute"]), d=cfg.d, layers=cfg.layers,
                 heads=cfg.heads, hidden=cfg.hidden, T=T, fwd=fwd, both=both, bwd=both - fwd, ratio=(both - fwd) / fwd,
-                both_ckpt=both_ckpt, ckpt_ratio=both_ckpt / both, six=six, attn=attn, predicted=six + 3 * attn,
-                mem=mem, fit=fit, per_tok_layer=per_tok_layer, per_tok_layer_d=per_tok_layer / 4 / cfg.d,
-                quad_per_layer_head=fit["unfused"][1] / cfg.layers / cfg.heads)
+                both_ckpt=both_ckpt, ckpt_ratio=both_ckpt / both, six=six, attn=attn, both_attn=both_attn,
+                attn_share=(both_attn - both) / both_attn, mem=mem, fit=fit, per_fused=per("fused"),
+                per_unfused=per("unfused"), per_recompute=per("recompute"),
+                quad_per_head=fit["unfused"][2] / 4 / cfg.layers / cfg.heads,
+                body_share=c["body"] / c["compute"])
 
 
 # ---------------------------------------------------------------------------

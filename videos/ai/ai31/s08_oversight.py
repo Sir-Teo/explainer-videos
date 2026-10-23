@@ -38,12 +38,11 @@ class Oversight(VoiceoverScene):
                        label(r"weak-to-strong generalization", font_size=26, color=STRONG)).arrange(RIGHT, buff=0.8)
         ideas.to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Every method of Part 27 needs someone who can tell good work from bad: a person comparing two answers, "
-            "or a checker that knows the right one. <bookmark mark='a'/> What happens when the model is better at the "
+            "Every method of Part 27 needs someone who can tell good work from bad. <bookmark mark='a'/> What happens when the model is better at the "
             "task than its supervisor? Ask a future model for a million lines of code, and no person can check them "
-            "all. <bookmark mark='b'/> This is the problem of scalable oversight, and the field has a few ideas: let "
-            "two models argue while the weak supervisor judges; break hard questions into checkable pieces; or study, "
-            "today, how a strong model generalizes from a weak supervisor's imperfect labels."
+            "all. <bookmark mark='b'/> This is scalable oversight, and there are a few ideas: let two models argue "
+            "while the weak supervisor judges; break hard questions into checkable pieces; or study how a strong "
+            "model generalizes from a weak supervisor's imperfect labels."
         ) as vo:
             self.play(FadeIn(small), FadeIn(sl), FadeIn(big), FadeIn(bl), FadeIn(sch))
             vo.wait_until("a")
@@ -109,10 +108,8 @@ class Oversight(VoiceoverScene):
         head = label(r"Judges who see less, \ helped by a debate", font_size=34).to_edge(UP, buff=0.35)
         tag = note(r"published").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Does it work? <bookmark mark='a'/> The 2018 paper tried a toy: a judge that sees only six pixels of a "
-            "handwritten digit, revealed one at a time by two debaters arguing for different digits. The judge's "
-            "accuracy rose from "
-            "fifty-nine percent to eighty-nine; with four pixels, from forty-eight to eighty-five. "
+            "Does it work? <bookmark mark='a'/> The 2018 paper tried a toy: a judge shown only six pixels of a "
+            "handwritten digit, chosen by two debaters, rose from fifty-nine percent accuracy to eighty-nine. "
             "<bookmark mark='b'/> In 2024 Akbir Khan and colleagues gave judges reading-comprehension questions "
             "without the text, while two expert models who could read it debated. Human judges went from sixty "
             "percent to eighty-eight, model judges from forty-eight to seventy-six; and the more persuasive the "

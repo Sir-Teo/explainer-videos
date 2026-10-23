@@ -284,9 +284,8 @@ class Measure(VoiceoverScene):
             f"models whose true accuracies are {int(p1 * 100)} and {int(p2 * 100)} percent: <bookmark mark='b'/> the "
             f"worse one scores at least as high {d['worse_ge'] * 100:.0f} percent of the time. <bookmark mark='c'/> "
             "Compared question by question, where two similar models agree on most items, the error of the gap "
-            f"falls from {d['se_unpaired'] * 100:.1f} points to {d['se_paired'] * 100:.1f}. <bookmark mark='d'/> Evan "
-            "Miller's 2024 guide to error bars for language-model evaluations makes exactly these recommendations. "
-            "And sampling is not the only noise: in a 2023 study, changing nothing but the format of a prompt moved "
+            f"falls from {d['se_unpaired'] * 100:.1f} points to {d['se_paired'] * 100:.1f}. <bookmark mark='d'/> "
+            "Sampling is not the only noise: in a 2023 study, changing nothing but the format of a prompt moved "
             "one model's accuracy by up to seventy-six points. One number is a sample. Report the interval, pair "
             "the comparison, and vary the prompt."
         ) as vo:
