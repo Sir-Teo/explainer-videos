@@ -42,12 +42,11 @@ class Problem(VoiceoverScene):
                       label(r"encode: \ representations for other tasks", font_size=22))
         uses.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(d, DOWN, buff=0.45).align_to(d, LEFT)
         with self.voiceover(
-            "Here is the problem at its smallest. Twenty thousand points in the plane, drawn from a distribution p "
-            "in the shape of two moons. <bookmark mark='a'/> Here, because we made it, we know p exactly. In real "
-            "life, with images or text, nobody does: all we have are the samples. <bookmark mark='b'/> A generative "
-            "model is a distribution q, with parameters theta, learned from those samples, that we can sample from; "
-            "<bookmark mark='c'/> ideally one we can also evaluate, to say how probable a new x is; <bookmark "
-            "mark='d'/> and ideally one that gives each x a code, a short description of what it is."
+            "Here is the problem at its smallest: twenty thousand points in the plane, drawn from a distribution p "
+            "in the shape of two moons. <bookmark mark='a'/> Because we made it, we know p exactly; with images or "
+            "text, nobody does. <bookmark mark='b'/> A generative model is a distribution q, learned from the "
+            "samples, that we can sample from; <bookmark mark='c'/> ideally one we can also evaluate, <bookmark "
+            "mark='d'/> and one that gives each x a code, a short description of what it is."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(pts), FadeIn(pl_l))
             vo.wait_until("a")
@@ -90,14 +89,12 @@ class Problem(VoiceoverScene):
         bars.arrange(RIGHT, buff=1.0).move_to(DOWN * 2.4)
         hm, hr, hc = (float(t[f"{n}_entropy"]) for n in ("moons", "ring", "checker"))
         with self.voiceover(
-            "How do we fit q to samples? The workhorse is maximum likelihood, from Part 1: make the samples as "
-            "probable as possible, which means minimizing the average surprise, minus log q. <bookmark mark='a'/> "
-            "Split that average in two. <bookmark mark='b'/> The first part is the data's own entropy, which no "
-            "model can beat; the second is the KL divergence from p to q, the price of being wrong. <bookmark "
-            "mark='c'/> So maximum likelihood is minimum KL. <bookmark mark='d'/> And for our three test densities, "
-            f"the floor is known: {hm:.2f} nats for the two moons, {hr:.2f} for the ring of eight Gaussians, and "
-            f"{hc:.2f} for the checkerboard. Every model's surprise on held-out points will be measured against "
-            "these floors."
+            "The workhorse for fitting q is maximum likelihood, from Part 1: minimize the average surprise, minus "
+            "log q. <bookmark mark='a'/> Split that average in two. <bookmark mark='b'/> The data's own entropy, "
+            "which no model can beat, plus the KL divergence from p to q, the price of being wrong. <bookmark "
+            "mark='c'/> So maximum likelihood is minimum KL. <bookmark mark='d'/> For our three test densities the "
+            f"floor is known: {hm:.2f} nats for the moons, {hr:.2f} for the ring of eight Gaussians, {hc:.2f} for "
+            "the checkerboard."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -157,16 +154,13 @@ class Problem(VoiceoverScene):
                                                          else grp.get_top()[1], 0])
         head = label(r"How we got here", font_size=36).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "How we got here. In 1948 Claude Shannon generated English letter by letter from counted statistics: "
-            "the first autoregressive model. <bookmark mark='a'/> In the 1980s, physicists and psychologists "
-            "described memories as the valleys of an energy, Hopfield's network and Hinton and Sejnowski's "
-            "Boltzmann machine, <bookmark mark='b'/> and in the 1990s Dayan and Hinton added a second network to "
-            "guess the hidden causes of what is seen, the Helmholtz machine. <bookmark mark='c'/> Stacked "
-            "Boltzmann machines restarted deep learning in 2006. <bookmark mark='d'/> Then, within three years, "
-            "variational autoencoders, generative adversarial networks, invertible flows and PixelCNN. <bookmark "
-            "mark='e'/> For about six years GANs made the sharpest images, until in 2021 diffusion models, Part "
-            "21's subject, overtook them. <bookmark mark='f'/> Today's image and video systems combine all of "
-            "these ideas."
+            "How we got here. In 1948 Claude Shannon generated English letter by letter: the first autoregressive "
+            "model. <bookmark mark='a'/> In the 1980s memories became the valleys of an energy, in Hopfield's "
+            "network and the Boltzmann machine; <bookmark mark='b'/> in 1995 the Helmholtz machine added a second "
+            "network to guess hidden causes. <bookmark mark='c'/> Stacked Boltzmann machines restarted deep "
+            "learning in 2006. <bookmark mark='d'/> Then, within three years, variational autoencoders, adversarial "
+            "networks, invertible flows and PixelCNN. <bookmark mark='e'/> GANs made the sharpest images until "
+            "2021, when diffusion overtook them. <bookmark mark='f'/> Today's systems combine all of these ideas."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             groups = [[0], [1, 2], [3], [4], [5, 6, 7, 8], [9], [10]]
@@ -211,15 +205,13 @@ class Problem(VoiceoverScene):
         tri_c = note(r"Xiao, Kreis \& Vahdat (2022)").next_to(tri, DOWN, buff=0.08)
         sch = note(r"the usual summary").to_corner(UR, buff=0.25)
         with self.voiceover(
-            "Here are the families we will build, and what each one offers. <bookmark mark='a'/> An autoregressive "
-            "model gives the exact likelihood and trains stably, but samples one piece at a time. <bookmark "
-            "mark='b'/> A VAE samples in one pass and gives a code, but only a lower bound on the likelihood. "
-            "<bookmark mark='c'/> A GAN samples in one pass, has no likelihood at all, and is famously hard to "
-            "train. <bookmark mark='d'/> A flow has everything on paper, and pays for it in architecture. "
-            "<bookmark mark='e'/> And an energy model knows its density only up to a constant it can't compute, "
-            "and needs a long chain of steps to sample. <bookmark mark='f'/> Zhisheng Xiao, Karsten Kreis and Arash "
-            "Vahdat called it a trilemma: sharp samples, coverage of all the data, and fast sampling. For years, "
-            "most families managed two of the three."
+            "What each family offers. <bookmark mark='a'/> An autoregressive model: the exact likelihood and stable "
+            "training, but samples one piece at a time. <bookmark mark='b'/> A VAE: one-pass sampling and a code, "
+            "but only a bound on the likelihood. <bookmark mark='c'/> A GAN: one pass, no likelihood at all, and "
+            "famously hard to train. <bookmark mark='d'/> A flow: everything on paper, paid for in architecture. "
+            "<bookmark mark='e'/> An energy model: a density known only up to a constant, and slow sampling. "
+            "<bookmark mark='f'/> Xiao, Kreis and Vahdat called it a trilemma: sharp samples, coverage of the data, "
+            "fast sampling. Most families managed two."
         ) as vo:
             self.play(FadeIn(head), Create(rule), FadeIn(sch))
             for k, mk in enumerate("abcde"):
@@ -263,13 +255,11 @@ class Problem(VoiceoverScene):
         sheet = digit_sheet(np.asarray(c["grid"])[:12], 3, 4, size=0.42, gap=0.04).move_to([4.6, 1.4, 0])
         lc = note(r"LeCun, Cortes \& Burges (1998)").next_to(sheet, DOWN, buff=0.1)
         with self.voiceover(
-            "Our test bench. Three densities in the plane: two moons, a ring of eight narrow Gaussians, and a "
-            "checkerboard with sharp edges. They are small enough to see everything a model does, and each is hard "
-            "in its own way. <bookmark mark='a'/> And images: the MNIST handwritten digits, sixty thousand to train "
-            "on and ten thousand to test. To keep every family affordable on this computer, each digit is averaged "
-            "down to fourteen by fourteen pixels, <bookmark mark='b'/> and each pixel cut to sixteen grey levels, "
-            "four bits. <bookmark mark='c'/> Every image model in this part gets the same budget of arithmetic, "
-            "counted operation by operation, and is trained from several random starts, so we can see the spread."
+            "Our test bench: three densities in the plane, small enough to see everything a model does, each hard "
+            "in its own way. <bookmark mark='a'/> And images: the MNIST digits, sixty thousand to train on, ten "
+            "thousand to test, averaged down to fourteen by fourteen pixels <bookmark mark='b'/> of sixteen grey "
+            "levels. <bookmark mark='c'/> Every image model gets the same budget of arithmetic, counted operation "
+            "by operation, and several random starts."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(p) for p in panels], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
