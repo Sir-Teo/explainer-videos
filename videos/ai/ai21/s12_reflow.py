@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai21.common import (DATA, FM_C, HIST, NOISE, OT_C, PART, RF2_C, RF_C, Panel, bars_chart, legend, load,
-                                   take_away)
+                                   log_axes, logcurve, take_away)
 
 KC = {"fm": FM_C, "ot": OT_C, "rf1": RF_C, "rf2": RF2_C}
 KN = {"fm": r"flow matching", "ot": r"minibatch OT pairs", "rf1": r"reflow once", "rf2": r"reflow twice"}
@@ -114,17 +114,19 @@ class Reflow(VoiceoverScene):
         steps = [int(s) for s in f["steps"]]
         SW = {k: np.asarray(f[f"{k}_sw"]) for k in kinds}  # seed, steps
         fl, noise = float(f["floor"]), float(f["sw_noise"])
-        hi = max(float(SW[k].max()) for k in kinds) * 1.1
-        ys = next(v for v in (0.05, 0.1, 0.2, 0.25, 0.5) if v >= hi / 4)
-        g = axes([0, math.log10(100)], [0, hi], x_length=6.0, y_length=3.6, xlabel=r"Euler steps",
-                 ylabel=r"distance from the data", xticks=[], yticks=list(np.arange(0, hi, ys)), center=[-3.2, -0.3, 0])
-        g.add(*[MathTex(str(s), font_size=20, color=GREY_B).next_to(g.ax.c2p(math.log10(s), 0), DOWN, buff=0.12) for s in steps])
+        vals = np.concatenate([SW[k].ravel() for k in kinds] + [[fl]])
+        lo, hi = math.floor(math.log10(vals.min()) * 2) / 2, math.ceil(math.log10(vals.max()) * 2) / 2
+        g = log_axes([0, 2], [lo, hi], x_length=6.0, y_length=3.6, xlabel=r"Euler steps",
+                     ylabel=r"distance from the data \ (log scale)", xticks=steps,
+                     yticks=[v for v in (0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0) if lo <= math.log10(v) <= hi],
+                     center=[-3.2, -0.3, 0])
         lx = np.log10(steps)
         lines = VGroup()
         for k in kinds:
-            lines.add(VGroup(band(g.ax, lx, SW[k].min(0), SW[k].max(0), KC[k], 0.2), curve(g.ax, lx, SW[k].mean(0), KC[k], 3),
-                             *[Dot(g.ax.c2p(a, b), radius=0.045, color=KC[k]) for a, b in zip(lx, SW[k].mean(0))]))
-        flo = DashedLine(g.ax.c2p(0, fl), g.ax.c2p(2, fl), color=GREY_B, stroke_width=1.5)
+            lines.add(VGroup(band(g.ax, lx, np.log10(SW[k].min(0)), np.log10(SW[k].max(0)), KC[k], 0.2),
+                             logcurve(g.ax, steps, SW[k].mean(0), KC[k], 3, radius=0.045)))
+        flo = DashedLine(g.ax.c2p(0, math.log10(fl)), g.ax.c2p(2, math.log10(fl)), color=GREY_B, stroke_width=1.5)
+        fll = label(r"a fresh sample \\ of the data", font_size=15, color=GREY_B).next_to(flo, RIGHT, buff=0.1)
         lg = legend([(KC[k], KN[k]) for k in kinds], font_size=19).move_to([4.4, 2.4, 0])
         stv = {k: np.asarray(f[f"{k}_straight"]) for k in kinds}
         ch = bars_chart([stv[k].mean() for k in kinds], [KC[k] for k in kinds], [r"FM", r"OT", r"reflow", r"reflow$^2$"],
@@ -152,7 +154,7 @@ class Reflow(VoiceoverScene):
             f"{one[best1].mean():.3f}, " + sep_note + " <bookmark mark='c'/> " + ot_vs + " <bookmark mark='d'/> Straightness says why: one Euler step is "
             "exact on a straight path."
         ) as vo:
-            self.play(FadeIn(g), Create(flo), FadeIn(lg))
+            self.play(FadeIn(g), Create(flo), FadeIn(fll), FadeIn(lg))
             vo.wait_until("a")
             self.play(FadeIn(lines[0]))
             vo.wait_until("b")

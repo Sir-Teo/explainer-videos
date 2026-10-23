@@ -35,7 +35,7 @@ def glyph(c: str) -> str:
 
 def letter_row(s: str, font_size=30, color=WHITE, space_opacity=0.35) -> Text:
     """``s`` in the monospace face, one submobject per character (spaces drawn as faint ␣)."""
-    t = Text(s.replace(" ", SPACE), font=MONO, font_size=font_size, color=color)
+    t = data_text(s.replace(" ", SPACE), font=MONO, font_size=font_size, color=color)
     assert len(t) == len(s), (s, len(t))
     for ch, m in zip(s, t):
         if ch == " ":

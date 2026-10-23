@@ -218,8 +218,8 @@ class Discrete(VoiceoverScene):
             "every order of an autoregressive model; <bookmark mark='a'/> in 2022 Emiel Hoogeboom and colleagues "
             "connected such any-order models to diffusion. <bookmark mark='b'/> In 2024 Aaron Lou, Chenlin Meng and "
             "Stefano Ermon defined a score for discrete data, ratios of probabilities, and won a best-paper award at "
-            "ICML; <bookmark mark='c'/> the same year, Subham Sahoo, Jiaxin Shi and colleagues showed that plain "
-            "masked diffusion, the weighted cross-entropy, does as well, <bookmark mark='d'/> and Jingyang Ou and "
+            "ICML; <bookmark mark='c'/> the same year, two groups, Subham Sahoo's and Jiaxin Shi's, showed separately that "
+            "plain masked diffusion, the weighted cross-entropy, does as well, <bookmark mark='d'/> and Jingyang Ou and "
             "colleagues that the model doesn't even need to be told the time. <bookmark mark='e'/> Which is what "
             "made the next step possible: language models trained this way, at scale."
         ) as vo:

@@ -126,7 +126,7 @@ def dist(x):
     return sw(x, data_ref())
 
 
-def floor(n, reps=4):
+def floor(n, reps=8):
     """The distance from the data of a fresh sample of the data itself, n points: the best any sampler can score."""
     return float(np.mean([dist(sample(n, 900 + r)) for r in range(reps)]))
 
@@ -275,7 +275,7 @@ def compute_sde():
     """The reverse SDE and the probability-flow ODE on the VP SDE, with the exact score, from the same noise."""
     n = 2000
     T0, T1 = 1.0, 1e-3
-    N_sde, N_ode = 1000, 400
+    N_sde, N_ode = 2000, 400
     g = rng(2021)  # Song et al., score-based SDEs
     z = g.normal(size=(n, 2))
     snap_t = [1.0, 0.8, 0.6, 0.5, 0.4, 0.3, 0.2, 0.15, 0.1, 0.05, T1]
@@ -306,13 +306,13 @@ def compute_sde():
                 paths.append(x[:40].copy())
         return x, snaps, np.array(paths)
 
-    out = dict(snap_t=snap_t, n=n)
+    out = dict(snap_t=snap_t, n=n, n_sde=N_sde, n_ode=N_ode)
     for kind in ("sde", "ode"):
         x, snaps, paths = run(kind)
         out[f"{kind}_final"], out[f"{kind}_paths"] = x[:1500], paths
         out[f"{kind}_snaps"] = np.array([snaps[t][:600] for t in snap_t])
         out[f"{kind}_sw"] = [sw(snaps[t], direct(t, 20000, 30 + k)) for k, t in enumerate(snap_t)]
-    out["floor_sw"] = [float(np.mean([sw(direct(t, n, 60 + 10 * r + k), direct(t, 20000, 30 + k)) for r in range(3)]))
+    out["floor_sw"] = [float(np.mean([sw(direct(t, n, 60 + 10 * r + k), direct(t, 20000, 30 + k)) for r in range(8)]))
                        for k, t in enumerate(snap_t)]
     out["sde_ode_sw"] = [sw(np.asarray(out["sde_snaps"])[k], np.asarray(out["ode_snaps"])[k]) for k in range(len(snap_t))]
     # the ODE both ways: data to noise, then back
@@ -658,7 +658,7 @@ def compute_transport():
         idx = int(round(tau * (len(P_fm) - 1)))
         tau_ = min(tau, 1 - 1e-4)
         d1 = (1 - tau_) * rng(40 + k).normal(size=(20000, 2)) + tau_ * sample(20000, 50 + k)
-        d2 = [(1 - tau_) * rng(60 + k + 10 * r).normal(size=(n, 2)) + tau_ * sample(n, 70 + k + 10 * r) for r in range(3)]
+        d2 = [(1 - tau_) * rng(60 + k + 10 * r).normal(size=(n, 2)) + tau_ * sample(n, 70 + k + 10 * r) for r in range(8)]
         rows.append(dict(tau=tau, sw_flow=sw(P_fm[idx], d1), sw_floor=float(np.mean([sw(d_, d1) for d_ in d2]))))
         out[f"direct{tau:g}"] = d1[:600]
         out[f"flow{tau:g}"] = P_fm[idx][:600]

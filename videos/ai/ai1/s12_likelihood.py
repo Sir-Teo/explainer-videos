@@ -74,7 +74,7 @@ class Likelihood(VoiceoverScene):
         for k in seq:
             homes.append(self.stack_pos(k, seen[k]))
             seen[k] += 1
-        toks = VGroup(*[Text(TOKENS[k], font=MONO, font_size=26, color=palette[k]).move_to([self.BIN_X[k], self.BIN_Y - 0.35, 0])
+        toks = VGroup(*[data_text(TOKENS[k], font=MONO, font_size=26, color=palette[k]).move_to([self.BIN_X[k], self.BIN_Y - 0.35, 0])
                         for k in range(5)])
         base = Line([-6.2, self.BIN_Y, 0], [6.2, self.BIN_Y, 0], color=GREY_D, stroke_width=1.5)
         fr = VGroup(*[MathTex(f"{v:.2f}", font_size=28, color=palette[k]).move_to(
@@ -185,7 +185,7 @@ class Likelihood(VoiceoverScene):
             hp = 4.0 * q[k]
             prob_bars.add(Rectangle(width=0.9, height=hp, stroke_width=0, fill_color=C.PROB, fill_opacity=0.9)
                           .move_to([x, -0.4 + hp / 2, 0]))
-            toks.add(Text(TOKENS[k], font=MONO, font_size=24, color=C.TOKEN).move_to([x, -2.75, 0]))
+            toks.add(data_text(TOKENS[k], font=MONO, font_size=24, color=C.TOKEN).move_to([x, -2.75, 0]))
         lz = VGroup(*[MathTex(f"{v:+.1f}", font_size=24, color=C.MODEL_Q).next_to(b, UP if v > 0 else DOWN, buff=0.08)
                       for v, b in zip(z, logit_bars)])
         le = VGroup(*[MathTex(f"{v:.2f}", font_size=24, color=C.MODEL_Q).next_to(b, UP, buff=0.08)

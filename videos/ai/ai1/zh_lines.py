@@ -27,7 +27,7 @@ ZH = {
     'In 1951, Claude Shannon played a game with English.':
         "1951年，克劳德·香农和英语玩了一个游戏。他拿来一个句子，把它遮住，请一个人一个字母一个字母地猜。<bookmark mark='a'/>猜错了，就再猜，直到猜对为止。每个字母下面，他都记下猜了几次。",
 
-    'most + " <bookmark mark=\'a\'/> " + moto_said':
+    'f"{most} <bookmark mark=\'a\'/> {moto_said}':
         "{most}<bookmark mark='a'/>{moto_said}<bookmark mark='b'/>猜测次数集中在少数几个地方，大多是一个新词开始的地方。信息就藏在那里。",
 
     "f'{100 * frac1:.0f} percent of the letters fall on the first guess.":
@@ -213,7 +213,7 @@ ZH = {
         "哪种编码最接近？1951年，麻省理工学院的研究生大卫·霍夫曼，在罗伯特·法诺的课上可以选择：参加期末考试，或者写一篇论文，找出最有效的编码。他选了论文。<bookmark mark='a'/>他的答案是：把两个最不可能的符号，这里是{f0}和{f1}，并到一个新节点下，新节点的概率是两者之和。然后对剩下的再取两个最不可能的，再合并，<bookmark mark='b'/>合并{len(merges)}次，直到一棵树装下所有符号。",
 
     'f"Read off the codewords:':
-        "读出码字：<bookmark mark='a'/>空格得到{ln[' ']}比特，e得到{ln['e']}，z得到{ln['z']}。<bookmark mark='b'/>平均每个符号{L:.3f}比特，只比熵多{L - H:.3f}。the falcon现在只要{nb}比特，而不是{nf}。",
+        "读出码字：<bookmark mark='a'/>空格得到{ln[' ']}比特，e得到{ln['e']}，z得到{ln['z']}。<bookmark mark='b'/>平均每个符号{L:.3f}比特，只比熵多{L - H:.3f}。“the falcon”现在只要{nb}比特，而不是{nf}。",
 
     'f"Huffman proved that no prefix code does better, with a few exchanges.':
         "霍夫曼用几次交换证明了，没有哪个前缀码能做得更好。<bookmark mark='a'/>第一：如果一个更可能的符号，码字反而比一个更罕见的长，把两者对调，平均码长就会变短。把z的{lz}比特给e，把e的{le}比特给z，每个字母平均要多花{cost:.2f}比特。所以在最好的编码里，更可能的符号，码字绝不会更长。<bookmark mark='b'/>第二：一个最深的码字如果没有兄弟，可以上移一层。所以最深的码字总是成对出现。<bookmark mark='c'/>再由第一次交换，两个最罕见的符号可以就是这样一对：在霍夫曼编码里，是{ho['rare'][0]}和{ho['rare'][1]}，只有最后一位不同。",
@@ -318,7 +318,7 @@ ZH = {
         "真正的编码器没法保存有几千位的小数。它把区间存成两个整数，低端和高端，这里是{R}位，实际中是32位。<bookmark mark='a'/>第一个字母缩小区间。<bookmark mark='b'/>现在两端的第一位相同了：把它发出去，再把装着区间的那一半放大一倍，让它重新填满整个范围：这就是一次放大。<bookmark mark='c'/>如果区间跨过中点，落在中间那一半里，下一位还不知道。编码器照样以中点为中心放大，并记下一位在等待；等下一个确定的位出来之后，它会被翻转，跟着出来。<bookmark mark='d'/>一个字母接一个字母，缩小，放大，比特就源源不断地流出来。",
 
     "f'At the end, a couple of bits close it off":
-        "最后，再用几位把它收尾：the falcon用了{nb}比特，{cmp_said}。始终是整数，而且从不超过寄存器的长度。",
+        "最后，再用几位把它收尾：“the falcon”用了{nb}比特，{cmp_said}。始终是整数，而且从不超过寄存器的长度。",
 
     "f'exactly what the exact coder needs, {ne}'": '恰好就是精确编码器需要的{ne}比特',
     'f"one fewer than the exact coder\'s {ne}"': '比精确编码器的{ne}比特少1比特',

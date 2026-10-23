@@ -115,8 +115,8 @@ class Hook(VoiceoverScene):
         moto = VGroup(*[letters[i] for i in range(i0, i0 + 10)])
         moto_box = SurroundingRectangle(moto, color=C.GUESS, buff=0.08, corner_radius=0.06)
         with self.voiceover(
-            most + " <bookmark mark='a'/> " + moto_said + " <bookmark mark='b'/> The guesses pile up at a few "
-            "places, mostly where a new word begins. That is where the information is."
+            f"{most} <bookmark mark='a'/> {moto_said} <bookmark mark='b'/> The guesses pile up at a few places, "
+            "mostly where a new word begins. That is where the information is."
         ) as vo:
             self.play(FadeIn(tag))
             self.play(*[c.animate.set_opacity(0.35) for c in ones], run_time=0.8)
@@ -215,7 +215,7 @@ class Hook(VoiceoverScene):
         a = next(r for r in pr["GPT-2 small"] if r["prompt"] == prompt)
         b = next(r for r in pr["Qwen3-4B"] if r["prompt"] == prompt)
         pa, pb = dict(zip(a["tokens"], a["probs"])).get(" Paris"), dict(zip(b["tokens"], b["probs"])).get(" Paris")
-        ptext = Text(prompt, font=MONO, font_size=30, color=C.TOKEN).to_edge(UP, buff=0.8)
+        ptext = data_text(prompt, font=MONO, font_size=30, color=C.TOKEN).to_edge(UP, buff=0.8)
         blank = Rectangle(width=1.4, height=0.5, stroke_color=C.MODEL_Q, stroke_width=2.5).next_to(ptext, RIGHT, buff=0.2)
         q = Text("?", font=MONO, font_size=30, color=C.MODEL_Q).move_to(blank)
 

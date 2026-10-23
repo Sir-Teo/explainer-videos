@@ -183,7 +183,7 @@ class Outro(VoiceoverScene):
             r"Dhariwal \& Nichol (2021); \ Ho \& Salimans (2022); \ Rombach et al.\ (2022); \ Peebles \& Xie (2023); \ Esser et "
             r"al.\ (2024)",
             r"Austin et al.\ (2021); \ Uria et al.\ (2014); \ Hoogeboom et al.\ (2022); \ Lou, Meng \& Ermon (2024); \ Sahoo et "
-            r"al.\ (2024); \ Shi et al.\ (2024); \ Ou et al.\ (2025); \ Nie et al.\ (2025); \ Arriola et al.\ (2025); \ Wu et "
+            r"al.\ (2024); \ Shi et al.\ (2024); \ Ou et al.\ (2024); \ Nie et al.\ (2025); \ Arriola et al.\ (2025); \ Wu et "
             r"al.\ (2025); \ Prabhudesai et al.\ (2025); \ Inception Labs (2025); \ Ant Group et al.\ (2025)",
         ]
         card = reference_card(books, papers)

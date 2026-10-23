@@ -142,11 +142,13 @@ class SDE(VoiceoverScene):
                                  label(r"reverse SDE" if kind == "sde" else r"probability-flow ODE", font_size=22,
                                        color=col).next_to(pn, UP, buff=0.1)))
         sub = label(r"the same $40$ starting points", font_size=20, color=GREY_B).next_to(VGroup(*panels), DOWN, buff=0.12)
-        g = axes([0, 1], [0, 0.12], x_length=3.4, y_length=2.6, xlabel=r"time $t$", ylabel=r"distance from $p_t$",
-                 xticks=[0, 0.5, 1], yticks=[0, 0.05, 0.1], center=[5.0, 0.55, 0])
+        top = 1.15 * max(float(np.max(s["sde_sw"])), float(np.max(s["ode_sw"])), float(np.max(s["floor_sw"])))
+        ys = next(v for v in (0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0) if v >= top / 3)
+        g = axes([0, 1], [0, top], x_length=3.4, y_length=2.6, xlabel=r"time $t$", ylabel=r"distance from $p_t$",
+                 xticks=[0, 0.5, 1], yticks=[round(ys * k, 3) for k in range(int(top / ys) + 1)], center=[5.0, 0.55, 0])
         tt = np.array(ts)
-        cs = curve(g.ax, tt, np.minimum(np.asarray(s["sde_sw"]), 0.12), SDE_C, 3)
-        co = curve(g.ax, tt, np.minimum(np.asarray(s["ode_sw"]), 0.12), ODE_C, 3)
+        cs = curve(g.ax, tt, np.asarray(s["sde_sw"]), SDE_C, 3)
+        co = curve(g.ax, tt, np.asarray(s["ode_sw"]), ODE_C, 3)
         cf = DashedLine(g.ax.c2p(0, float(np.mean(s["floor_sw"]))), g.ax.c2p(1, float(np.mean(s["floor_sw"]))),
                         color=GREY_B, stroke_width=1.5)
         fl = label(r"fresh samples of $p_t$", font_size=16, color=GREY_B).next_to(cf, UP, buff=0.04)
@@ -155,11 +157,12 @@ class SDE(VoiceoverScene):
         ode_ok = bool(np.all(ode_sw < 1.3 * floor + 0.01))
         sde_ok = bool(np.all(sde_sw < 1.3 * floor + 0.01))
         end_s, end_o = float(sde_sw[-1]), float(ode_sw[-1])
+        n_sde = int(s["n_sde"])
         if ode_ok and sde_ok:
             verdict = "Both stay as close to the true marginals as fresh samples of them, at every time we measured."
         elif ode_ok:
             verdict = (f"The ODE stays as close to the true marginals as fresh samples of them, all the way down; the "
-                       f"SDE, with a thousand random steps, drifts a little at the end, {end_s:.3f} against the ODE's "
+                       f"SDE, with {n_sde:,} random steps, drifts a little at the end, {end_s:.3f} against the ODE's "
                        f"{end_o:.3f}: random steps need to be smaller.")
         else:
             verdict = f"Both stay near the true marginals; at the end the SDE is {end_s:.3f} away, the ODE {end_o:.3f}."
