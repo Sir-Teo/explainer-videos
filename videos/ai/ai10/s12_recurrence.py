@@ -163,18 +163,24 @@ class Recurrence(VoiceoverScene):
         top = M[3][i50]
         if b < 0:
             mid = (f"Even at {rhos[2]:g}, where the linear network's gradient grows to ten to the {lb:.0f}, the "
-                   f"tanh network's shrinks, to ten to the {b:.0f}: its units saturate, their slopes fall, and "
-                   "they pull the product down.")
+                   f"tanh network's shrinks, by a factor of ten to the {-b:.0f}: its units saturate, their slopes "
+                   "fall, and they pull the product down.")
         else:
             mid = (f"At {rhos[2]:g} it grows: ten to the {b:.0f} after fifty steps, and the linear network's ten "
                    f"to the {lb:.0f}.")
-        tail = (f"At {rhos[3]:g} the tanh network is chaotic, and its gradient explodes: ten to the {top:.0f}."
-                if top > 1 else
-                f"Even at {rhos[3]:g}, saturation keeps it near ten to the {top:.0f}.")
+        if top > 1.5:
+            tail = f"At {rhos[3]:g} the tanh network is chaotic, and its gradient explodes: ten to the {top:.0f}."
+        elif top >= 0.5:
+            tail = f"Even at {rhos[3]:g}, saturation keeps it from exploding: it grows only to ten to the {top:.0f}."
+        elif top > -0.5:
+            tail = f"Even at {rhos[3]:g}, saturation holds it at about the size it started."
+        else:
+            tail = f"Even at {rhos[3]:g}, saturation pulls it down, by a factor of ten to the {-top:.0f}."
         with self.voiceover(
             "We measured it. Take random recurrent networks, run them on random inputs, and multiply the "
             "Jacobians back from the last step. <bookmark mark='a'/> When the largest eigenvalue of W is "
-            f"{rhos[0]:g}, the gradient that reaches fifty steps back is ten to the {a:.0f} of what it was: gone. "
+            f"{rhos[0]:g}, the gradient that reaches fifty steps back has shrunk by a factor of ten to the {-a:.0f}: "
+            "gone. "
             f"<bookmark mark='b'/> {mid} <bookmark mark='c'/> {tail} <bookmark mark='d'/> Either way, a plain "
             "recurrent network has a narrow window of time over which it can learn anything, and the window is "
             "set by the size of W."

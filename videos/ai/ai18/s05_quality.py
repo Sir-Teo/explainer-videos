@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (EDU, F, KEPT, PAGE, PART, REMOVED, hbars, load, said, spoken_int, stage_row)
+from videos.ai.ai18.common import (EDU, F, KEPT, PAGE, PART, REMOVED, chip, hbars, load, node_box, said, spoken_int,
+                                   stage_row, stat)
 
 
 class Quality(VoiceoverScene):
@@ -70,8 +71,11 @@ class Quality(VoiceoverScene):
             "the filtered data raised MMLU, a test of knowledge, from 33 to 37 percent, and ARC, a test of "
             "reasoning, from 46 to 57."
         ) as vo:
-            self.play(FadeIn(row.boxes[0]), FadeIn(src))
+            ghost = row.copy().set_opacity(0.2)
+            qq = label(r"Which pages teach a model the most?", font_size=34, color=WHITE).move_to(UP * 0.3)
+            self.play(FadeIn(ghost), FadeIn(row.boxes[0]), FadeIn(src), FadeIn(qq, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(qq))
             self.play(GrowArrow(row.arrows[0]), FadeIn(row.boxes[1]), FadeIn(pg), FadeIn(nums[0]))
             vo.wait_until("b")
             self.play(GrowArrow(row.arrows[1]), FadeIn(row.boxes[2]), FadeIn(nums[1]), FadeIn(nums[2]))
@@ -117,6 +121,12 @@ class Quality(VoiceoverScene):
                        "and a bag of words instead of an embedding model, it catches most of the good pages but lets "
                        "through about as many bad ones.")
         tag = note(r"computed: \ Llama 3's labels from FineWeb-Edu's released annotations").to_corner(DR, buff=0.2)
+        good = sum(counts[3:])
+        share = VGroup(
+            stat(rf"${100 * good / Q['n']:.1f}\%$", rf"score $3$ or more: \ ${good:,}$ of ${Q['n']:,}$ pages"
+                 .replace(",", "{,}"), color=KEPT, font_size=48, cap_size=22),
+            label(rf"score $5$: \ ${counts[5]}$ pages", font_size=22, color=GREY_A),
+        ).arrange(DOWN, buff=0.3).move_to([3.4, 0.0, 0])
         with self.voiceover(
             "We can run this recipe ourselves, because FineWeb released Llama 3's annotations. <bookmark mark='a'/> "
             f"We downloaded {spoken_int(Q['n'])} of them. Most pages score one: a little information, not much "
@@ -130,9 +140,11 @@ class Quality(VoiceoverScene):
                       run_time=2.5)
             vo.wait_until("a")
             self.play(Indicate(bars[1][0], color=YELLOW), *[Indicate(b[0], color=KEPT) for b in bars[3:]])
+            self.play(FadeIn(share, shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(how, shift=UP * 0.1))
             vo.wait_until("c")
+            self.play(FadeOut(share))
             self.play(FadeIn(ch), *[FadeIn(r_[0]) for r_ in cmp_], *[GrowFromEdge(r_[1], LEFT) for r_ in cmp_],
                       *[FadeIn(r_[2]) for r_ in cmp_], FadeIn(pr))
         self.wait(0.3)
@@ -208,6 +220,22 @@ class Quality(VoiceoverScene):
         ex = said(K["example"] or "", chars=70, font_size=18, max_lines=1, box_color=EDU).next_to(res, DOWN, buff=0.3)
         tag = note(rf"computed: \ ${K['train_grams'] / 1e6:.1f}$M distinct $13$-grams in the training text",
                    font_size=18).to_corner(DR, buff=0.2)
+        sent = "every question that sits on the web can be learned by heart before the test begins".split()
+        chips = VGroup(*[chip(w, font_size=16, height=0.36) for w in sent]).arrange(RIGHT, buff=0.06)
+        if chips.width > 11.0:
+            chips.width = 11.0
+        chips.move_to([-0.9, 0.95, 0])
+
+        def window(i):
+            a_, b_ = chips[i].get_corner(DL), chips[i + 12].get_corner(DR)
+            return VGroup(Line(a_ + DOWN * 0.08, b_ + DOWN * 0.08, color=EDU, stroke_width=4),
+                          Line(a_ + DOWN * 0.08, a_ + DOWN * 0.0, color=EDU, stroke_width=4),
+                          Line(b_ + DOWN * 0.08, b_ + DOWN * 0.0, color=EDU, stroke_width=4))
+
+        win = window(0)
+        look = node_box(r"hash $\to$ look up", EDU, font_size=20).next_to(chips, RIGHT, buff=0.35)
+        wn = note(r"a $13$-word window slides along the test \ (schematic)", font_size=17).next_to(chips, DOWN,
+                                                                                                  buff=0.22)
         src = cite(r"Brown et al.\ (2020), App.\ C", font_size=17)
         with self.voiceover(
             "One more filter, pointed the other way. If the questions of a benchmark are on the web, a model can pass "
@@ -224,8 +252,11 @@ class Quality(VoiceoverScene):
             self.play(FadeIn(q), FadeIn(src))
             vo.wait_until("a")
             self.play(FadeIn(idea[0]))
-            self.play(FadeIn(idea[1]))
+            self.play(FadeIn(idea[1]), FadeIn(chips), Create(win), FadeIn(look), FadeIn(wn))
+            for i in (1, 2, 3):
+                self.play(Transform(win, window(i)), Indicate(look, color=EDU, scale_factor=1.05), run_time=0.8)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(chips, win, look, wn)))
             self.play(FadeIn(res[0]), FadeIn(res[1]), FadeIn(tag))
             vo.wait_until("c")
             self.play(FadeIn(res[2]), FadeIn(ex))

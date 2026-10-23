@@ -146,8 +146,8 @@ _DATA = {
     'And on the thirty novels as a whole it pays a little':
         '而在三十部小说整体上，它要付出一点代价：朝一本书去调，就要牺牲别的书。',
 
-    'And it costs nothing on the thirty novels as a whole.':
-        '而在三十部小说整体上，它没有付出任何代价。',
+    'And on the thirty novels as a whole it costs nothing':
+        '而在三十部小说整体上，它没有付出我们测得出来的代价。',
 
     'f"On the held-out chapter, RegMix\'s pick beats':
         "在留出的那一章上，RegMix挑的配比胜过自然配比，{r:.3f}奈特对{n_:.3f}，差距大于两个种子之间的差别。",
@@ -323,11 +323,14 @@ _DATA = {
     '"Does it matter in practice?':
         "实际上要紧吗？我们把同一个小模型训练了六遍，每次矩阵乘法的输入，前向和反向，都舍入到某一种格式，求和则保持在FP32，这正是硬件的做法。每种两个种子。<bookmark mark='a'/>FP32，bfloat16，不带和带损失缩放的FP16，以及两种我们马上会讲到的8位训练。<bookmark mark='b'/>{verdict}",
 
-    "f'All six end within {gap:.3f} nats":
-        "六种最后相差都在{gap:.3f}奈特以内，在两个种子之间{spread:.3f}的差别之内。就连不带损失缩放的FP16，把{100 * zero:.1f}%的梯度值冲成了零，也训练得一样好。",
+    "f'All six end within {width:.3f} nats":
+        "六种最后相差都在{width:.3f}奈特以内，在两个种子之间{spread:.3f}的差别之内。就连不带损失缩放的FP16，把{100 * zero:.1f}%的梯度值冲成了零，也训练得一样好。",
 
     "f'The worst, {worst_name}, ends":
         "最差的是{worst_name}，最后比FP32高{gap:.3f}奈特，超过了两个种子之间{spread:.3f}的差别；不带损失缩放的FP16，把{100 * zero:.1f}%的梯度值冲成了零。",
+
+    "f'The six end up to {width:.3f} nats apart":
+        "六种最后最多相差{width:.3f}奈特，但没有哪一种比FP32差出两个种子之间{spread:.3f}的差别，就连不带损失缩放的FP16也没有，尽管它把{100 * zero:.1f}%的梯度值冲成了零。",
 
     'f"Why, then, did loss scaling matter?':
         "那么，损失缩放为什么要紧？因为我们的梯度只是两千个词元上的平均。一次前沿训练，每一步的梯度是在几百万个词元上平均的，一块一块累积起来，每一块都小那么多。<bookmark mark='a'/>所以我们把FP16的训练重做了一遍，每一步切成{A['accum']}个微批次，就像梯度累积那样。<bookmark mark='b'/>{verdict}",
@@ -366,11 +369,14 @@ _DATA = {
     "f'Both do best at a learning rate":
         "两者都在学习率为{lrs[best_qk]:g}时最好。",
 
-    "f'At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}: normalizing":
-        "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}：把查询和键归一化，拓宽了能训练好的学习率范围。",
+    "f'At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}, a gap larger than the {sp:.2f} between seeds: normalizing":
+        "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}，差距大于两个种子之间的{sp:.2f}：把查询和键归一化，拓宽了能训练好的学习率范围。",
 
-    "f'At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}: in runs":
-        "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}：在这么短的训练里，损失的差别不大，尽管logit相差上百倍。",
+    "f'At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}, a gap larger than the {sp:.2f} between seeds: in runs":
+        "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}，差距大于两个种子之间的{sp:.2f}：在这么短的训练里，QK归一化反而有一点代价。",
+
+    'f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the one with QK-norm at {qk:.2f}, but':
+        "在最高的学习率{lrs[hi_lr]:g}上，普通模型最后是{pl:.2f}奈特，带QK归一化的是{qk:.2f}，但同一种设计的两个种子，就能相差{sp:.2f}：在这么短的训练里，损失分不出它们的高下，尽管普通模型最大的注意力logit大了{ratio:.0f}倍。",
 
     'f"The second fix is for the output layer.':
         "第二个解决办法针对输出层。所有logit都平移同样的量，softmax不会改变。<bookmark mark='a'/>所以它们的log-sum-exp，也就是log Z，可以自由漂移，而在16位算术里，大的logit会丢掉精度。<bookmark mark='b'/>PaLM加了一个很小的惩罚，10的负4次方乘以log Z的平方：这就是z-loss。<bookmark mark='c'/>它的梯度把所有logit一起往归一化常数为1的方向轻轻推，而不改变模型预测的东西。<bookmark mark='d'/>在我们的训练里，log Z最后不带它是{a:.1f}，带它是{b:.2f}。",
@@ -389,7 +395,7 @@ _DATA = {
         "DeepSeek-V3把额外的预测改成了顺序的。主模型照常预测下一个词元。<bookmark mark='a'/>然后一个小模块，拿主模型在位置i上的最后一个隐藏状态，和真实的下一个词元的嵌入，<bookmark mark='b'/>把两者归一化，拼接起来，再过一个Transformer块，用同一个输出头预测下下个词元。<bookmark mark='c'/>它的损失以0.3的权重加进来，用于前十万亿个词元，之后是0.1。<bookmark mark='d'/>推断时，这个模块可以丢掉，也可以用来提前猜第二个词元，再由主模型核对这个猜测。DeepSeek报告，这个猜测有85%到90%的时候被接受；于是每一步大约产出1.85到1.9个词元，他们测得速度是原来的1.8倍。",
 
     '"We added DeepSeek-V3\'s module':
-        "我们把DeepSeek-V3的模块加到我们的小模型上，在同样的词元上训练，每种两个种子，权重在接近结尾时从0.3降到0.1。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>这个模块让每一步多花大约{100 * Mt['extra_share']:.0f}%的算术，主要是第二次经过输出头。",
+        "我们把DeepSeek-V3的模块加到我们的小模型上，在同样的词元上训练，每种两个种子，权重在接近结尾时从0.3降到0.1。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>这个模块让每一步多花大约{100 * MC['extra_share']:.0f}%的算术，{mostly}。",
 
     "f'With the module, the held-out loss for the next token ends at {mtp:.3f} nats, against {ntp:.3f} without: predicting":
         "有了这个模块，下一个词元的留出损失最后是{mtp:.3f}奈特，没有它是{ntp:.3f}：往更远处预测有帮助，即使在我们的规模上。",
@@ -402,6 +408,9 @@ _DATA = {
 
     '"And as a drafter?':
         "那么当草稿模型呢？我们让主模型从留出的开头贪心地往下写，同时让它的模块猜每一个下下个词元。<bookmark mark='a'/>{how}<bookmark mark='b'/>这样主模型的每一步，就能产出{1 + a:.2f}个词元，而不是一个。第19部分会好好搭建推测解码。",
+
+    'mostly the second pass through the output head':
+        '主要是第二次经过输出头，在这么小的模型里，输出头占的分量很大',
 
     'f"The guess was right {100 * a:.0f} percent of the time, against':
         "猜测有{100 * a:.0f}%的时候是对的，而DeepSeek-V3是85%到90%：小模型往后两个词元的猜测，更难猜对。",
@@ -427,13 +436,13 @@ _DATA = {
         '第18章。我们自己的完整配方。',
 
     '"Now we put the pieces together.':
-        "现在把各个部分拼起来。两个形状完全相同的模型，用三十部小说里同样的三百万个词元训练，顺序相同，步数相同，从同样的初始权重出发。<bookmark mark='a'/>一个用2020年的配方：AdamW，余弦调度，普通的注意力。<bookmark mark='b'/>另一个用2026年的配方：隐藏层的矩阵用Muon，预热、稳定、衰减，QK归一化和z-loss。<bookmark mark='c'/>{out_}",
+        "现在把各个部分拼起来。两个形状完全相同的模型，用三十部小说里同样的三百万个词元训练，顺序相同，步数相同，从同样的初始权重出发；然后换第二个种子，把整个比较再做一遍。<bookmark mark='a'/>一个用2020年的配方：AdamW，余弦调度，普通的注意力。<bookmark mark='b'/>另一个用2026年的配方：隐藏层的矩阵用Muon，预热、稳定、衰减，QK归一化和z-loss。<bookmark mark='c'/>{out_}",
 
     "f'Two-token prediction stays out although":
-        "两词元预测没有放进来，尽管它在第16章有一点帮助：它多花{100 * Mt['extra_share']:.0f}%的算术，而比较必须在同等算力下进行。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。",
+        "两词元预测没有放进来，尽管它在第16章有一点帮助：它多花{100 * MC['extra_share']:.0f}%的算术，而比较必须在同等算力下进行。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。",
 
-    'Two-token prediction and eight-bit arithmetic stay out':
-        '两词元预测和8位算术都没有放进来：我们自己的实验发现，在这个规模上它们没有影响，而前者还要额外的算力，会让比较不公平。',
+    'Two-token prediction stays out: it gave no gain':
+        '两词元预测没有放进来：在第16章，它在我们的规模上没有带来收益，而且要额外的算力，会让比较不公平。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。',
 
     'f"Watch them learn.':
         "看它们学习。左边是每个模型在它从没训练过的文本上的损失；右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='a'/>一开始，两个都写出噪声，损失大约是{first['val']:.1f}奈特。<bookmark mark='b'/>让它们读吧。<bookmark mark='c'/>到最后，两个都写出了小说的味道，而曲线告诉我们，哪一个学得更快。",
@@ -442,19 +451,19 @@ _DATA = {
         "成绩。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{stab}",
 
     'f"And the 2026 recipe\'s attention stayed tamer':
-        "而且2026配方的注意力更温顺：它最大的logit是{f['max_logit']:.0f}，对方是{b['max_logit']:.0f}。",
+        "而且2026配方的注意力更温顺：它最大的logit是{fl_:.0f}，对方是{bl_:.0f}。",
 
     'f"Its largest attention logit was':
-        "它最大的注意力logit是{f['max_logit']:.0f}，对方是{b['max_logit']:.0f}：在这个学习率上，两个模型的注意力都没有失控。",
+        "它最大的注意力logit是{fl_:.0f}，对方是{bl_:.0f}：在这个学习率上，两个模型的注意力都没有失控。",
 
     'f"The 2026 recipe wins:':
-        "2026年的配方胜出：在记分牌那段文字上，每字符{f['bits']:.3f}比特，对{b['bits']:.3f}，好了{100 * rel:.1f}%，而模型、数据和步数完全相同。",
+        "2026年的配方胜出：在记分牌那段文字上，每字符{mf:.3f}比特，对{mb:.3f}，都是两个种子的平均：模型、数据和步数完全相同，它好了{100 * rel:.1f}%，超过了两个种子之间的{sp:.3f}。",
 
     'f"The 2020 recipe wins here:':
-        "这里是2020年的配方胜出：每字符{b['bits']:.3f}比特，2026年的配方是{f['bits']:.3f}。在我们的规模上，两者又用同一个没调过的学习率，新配方的优势显不出来。",
+        "这里是2020年的配方胜出：每字符{mb:.3f}比特，2026年的配方是{mf:.3f}，都是两个种子的平均。在我们的规模上，两者又用同一个没调过的学习率，新配方的优势显不出来。",
 
     "f'They tie:":
-        "两者打平：每字符分别是{b['bits']:.3f}和{f['bits']:.3f}比特。在我们的规模上，新配方既无帮助，也无害处。",
+        "两者打平：每字符分别是{mb:.3f}和{mf:.3f}比特，都是两个种子的平均，差别小于两个种子之间的{sp:.3f}。在我们的规模上，新配方既无帮助，也无害处。",
 
     'f"And on the series\' scoreboard':
         "再看本系列的记分牌，也就是每个模型对《马耳他之鹰》第二章需要的每字符比特数。<bookmark mark='a'/>最上面是第1部分的压缩器和计数，然后是第14部分的家族，还有本系列自己的那个{base_row['params'] / 1000000.0:.1f}百万参数的模型，用了我们{times:.0f}倍的词元训练，成绩是{base_row['bits']:.2f}。<bookmark mark='b'/>{vs14}<bookmark mark='c'/>配方买到的是效率：用更少的算力得到同样的质量。前沿实验室把省下来的，花在了规模上。",
@@ -466,8 +475,11 @@ _DATA = {
         "我们的2026模型得分{f['bits']:.2f}，第14部分同样大小、读了同样多词元的模型是{gm['bits']:.2f}。",
 
     # ------------------------------------------------------------------ Outro
-    "Let's take stock.":
-        "我们来总结一下。一个预训练语料库，从对网络的一次抓取开始，其中大部分都被扔掉：按网址，按语言，按质量。MinHash和局部敏感哈希不用两两比较，就能找出近似重复，它们的S形曲线和预测的一样。一个小分类器，用大模型打的分来训练，决定哪些网页有教学价值。配比是为一个目标挑选的，合成数据只有和真实文本放在一起才有帮助。然后是算术：每个参数、每个词元六次运算，每个参数十六个字节，再加上激活。数据并行需要全规约，而环是最优的；ZeRO把多余的副本分片掉；张量、流水线、上下文和专家并行切开其余的部分。更少的位需要缩放的技巧，大规模训练需要QK归一化和z-loss，一万六千块GPU需要检查点。而我们自己的模型，用完整的配方训练，在记分牌上占了一席之地。",
+    '"Let\'s take stock.':
+        "我们来总结一下。一个预训练语料库，从对网络的一次抓取开始，其中大部分都被扔掉：按网址，按语言，按质量。MinHash和局部敏感哈希不用两两比较，就能找出近似重复，{scurve}。一个小分类器，用大模型打的分来训练，决定哪些网页有教学价值。配比是为一个目标挑选的，合成数据只有和真实文本放在一起才有帮助。然后是算术：每个参数、每个词元六次运算，每个参数十六个字节，再加上激活。数据并行需要全规约，而环是最优的；ZeRO把多余的副本分片掉；张量、流水线、上下文和专家并行切开其余的部分。更少的位需要缩放的技巧，大规模训练需要QK归一化和z-loss，一万六千块GPU需要检查点。而我们自己的模型，用完整的配方训练，在记分牌上占了一席之地。",
+
+    'their measured S-curve followed the prediction only roughly':
+        '实测的S形曲线只是大致跟着预测走',
 
     'All of this comes back.':
         "这些都会再出现。为训练好的模型提供服务，连同它的缓存、草稿和4位权重，是第19部分。同样的数据流水线，在第22和第23部分为图像、视频和声音供料。后训练从一个预训练好的模型开始，在第27部分；强化学习在它上面构建推理能力，在第28部分。第30部分把一个预训练模型打开来看，第31部分问，它的评测到底有多可信。",
@@ -485,6 +497,10 @@ _DATA = {
 ZH = dict(_DATA)
 
 PHRASES = {
+    # MTP: where the module's arithmetic goes
+    'mostly its own transformer block': '主要花在它自己的Transformer块上',
+    # Outro: the S-curve, as measured
+    'their S-curve came out as predicted': '它们的S形曲线和预测的一样',
     # Mixture: which way RegMix's pick leans
     'leans toward the American novels': '偏向美国小说',
     'moves away from the American novels': '远离美国小说',

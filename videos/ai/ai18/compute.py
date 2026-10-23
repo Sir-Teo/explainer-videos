@@ -926,16 +926,29 @@ def compute_mtp(steps=500, seeds=(0, 1)):
                 piece = _thin(r, 2)
                 if lam:
                     piece["accept"] = lm.mtp_acceptance(model, prompts, 40)
-                    c = model.count()
-                    extra = sum(p_.numel() for p_ in model.mtp.parameters()) + c["head"]
-                    piece["extra_share"] = extra / (c["compute"] - extra)
                 part[key] = piece
             runs[key] = part[key]
     out = dict(runs=runs, seeds=list(seeds), steps=steps)
     out["final"] = {lam: [runs[f"{lam}_{s}"]["final_val"] for s in seeds] for lam in ("0", "0.3")}
     out["accept"] = [runs[f"0.3_{s}"]["accept"]["rate"] for s in seeds]
-    out["extra_share"] = runs[f"0.3_{seeds[0]}"]["extra_share"]
     return out
+
+
+def compute_mtp_cost():
+    """The MTP module's arithmetic per token, against the main model's (training FLOPs, 6 per weight per token, plus
+    attention's products, as explainer.lm.pocket.flops_per_token counts them): its block, its projection, and a second
+    pass through the shared output head."""
+    from videos.ai.ai18 import lm
+
+    spec = lm.Spec(**SMALL, mtp=0.3)
+    m = lm.build(spec)
+    c = m.count()
+    attn = 6 * spec.seq * spec.d / 2  # one layer's QK^T and AV, per token, averaged over causal positions
+    main = 6 * c["compute"] + spec.layers * attn
+    mod_params = sum(p_.numel() for p_ in m.mtp.parameters())
+    module = 6 * (mod_params + c["head"]) + attn
+    return dict(main=main, module=module, extra_share=module / main, head_share=6 * c["head"] / module,
+                params=dict(body=c["body"], head=c["head"], module=mod_params))
 
 
 # ---------------------------------------------------------------------------
@@ -1059,6 +1072,7 @@ def compute_mixture(n_proxy=32, seed=11):
 RECIPE_STEPS = 732  # 3.0 million tokens at 16 x 256 a step: Part 14's budget
 SNAPS = [0, 10, 25, 50, 100, 200, 366, 550, 732]
 BRANCH = 366  # a cooldown branched from the middle of the stable phase
+RECIPE_THREADS = 2  # the longest runs use two of torch's threads (the rest of the part uses one)
 RECIPES = {
     "base": dict(optimizer="adamw", schedule="cosine", final=0.1),
     "full": dict(optimizer="muon", schedule="wsd", decay_frac=0.2, final=0.0, qk_norm=True, z_loss=1e-4),
@@ -1074,7 +1088,7 @@ def _recipe_spec(name, **kw):
 
 
 def _recipe(name):
-    r = _run_piece(_recipe_spec(name), f"recipe_{name}", keep_model=True)
+    r = _run_piece(_recipe_spec(name), f"recipe_{name}", keep_model=True, threads=RECIPE_THREADS)
     return _thin(r, 2)
 
 
@@ -1096,8 +1110,26 @@ def compute_recipe_branch():
     state = torch.load(RUNS / f"recipe_full.step{BRANCH}.pt", weights_only=False)
     total = int(round(BRANCH / 0.8))
     spec = _recipe_spec("full", steps=total, decay_start=BRANCH, keep=[], snaps=[])
-    r = _run_piece(spec, "recipe_branch", init_state=state)
+    r = _run_piece(spec, "recipe_branch", init_state=state, threads=RECIPE_THREADS)
     return _thin(r, 2)
+
+
+def compute_recipe_seed1():
+    """Both recipes again from a second seed (other initial weights, other batches, same budget): the spread
+    between seeds that a difference between the recipes has to beat."""
+    from videos.ai.ai1 import compute as P1
+    from videos.ai.ai14 import lm as lm14
+
+    part = CACHE.partial("recipe_seed1", dict(steps=RECIPE_STEPS, v=1))
+    passage = P1.text("passage")
+    for name in RECIPES:
+        if name not in part:
+            spec = _recipe_spec(name, seed=1, eval_every=RECIPE_STEPS // 4, snaps=[], keep=[], probe_every=24)
+            r = _run_piece(spec, f"recipe_{name}_s1", threads=RECIPE_THREADS)
+            m = r.pop("_model").eval()
+            part[name] = dict(bits=lm14.bits_per_char(m, passage)["bits"], val=r["final_val"],
+                              max_logit=max(p_[1] for p_ in r["probes"]), seconds=r["seconds"])
+    return {k: part[k] for k in RECIPES}
 
 
 def _trained(name):
@@ -1128,6 +1160,13 @@ def compute_recipe():
         r = load(f"recipe_{name}")
         out[name] = dict(bits=b["bits"], params=int(m.count()["total"]), val=r["final_val"], seconds=r["seconds"],
                          tokens=r["tokens"], max_logit=max(p_[1] for p_ in r["probes"]))
+    if not CACHE.path("recipe_seed1").exists():
+        CACHE.save("recipe_seed1", compute_recipe_seed1())
+    S1 = load("recipe_seed1")
+    for name in RECIPES:
+        out[name]["seeds_bits"] = [out[name]["bits"], S1[name]["bits"]]
+        out[name]["seeds_val"] = [out[name]["val"], S1[name]["val"]]
+        out[name]["seeds_max_logit"] = [out[name]["max_logit"], S1[name]["max_logit"]]
     br = load("recipe_branch")
     full = load("recipe_full")
     stable_at = [e for e in full["evals"] if e[0] <= br["spec"]["steps"]][-1]
@@ -1194,10 +1233,12 @@ ITEMS = {
     "precision_acc": compute_precision_acc,
     "stability": compute_stability,
     "mtp": compute_mtp,
+    "mtp_cost": compute_mtp_cost,
     "mixture": compute_mixture,
     "recipe_base": compute_recipe_base,
     "recipe_full": compute_recipe_full,
     "recipe_branch": compute_recipe_branch,
+    "recipe_seed1": compute_recipe_seed1,
     "recipe": compute_recipe,
     "scoreboard": compute_scoreboard,
     "mfu": compute_mfu,

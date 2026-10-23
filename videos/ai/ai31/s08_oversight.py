@@ -157,14 +157,17 @@ class Oversight(VoiceoverScene):
             "trick, an extra loss that lets the student trust its own confident answers. On chess puzzles and on "
             "reward modeling, much less."
         ) as vo:
-            self.play(FadeIn(boxes[0]))
+            later = VGroup(arrs, al, boxes[1], boxes[2], cards)
+            full = later.copy()
+            later.fade(0.8)
+            self.play(FadeIn(boxes[0]), FadeIn(later))
             vo.wait_until("a")
-            self.play(GrowArrow(arrs[0]), FadeIn(al), FadeIn(boxes[1]))
-            self.play(FadeIn(boxes[2]))
+            self.play(Transform(later[0], full[0]), Transform(later[1], full[1]), Transform(later[2], full[2]))
+            self.play(Transform(later[3], full[3]))
             vo.wait_until("b")
             step(0)
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.15) for c_ in cards], lag_ratio=0.4), run_time=2.0)
+            self.play(LaggedStart(*[Transform(c_, f_) for c_, f_ in zip(cards, full[4])], lag_ratio=0.4), run_time=2.0)
         self.wait(0.4)
         self.clear_scene()
 

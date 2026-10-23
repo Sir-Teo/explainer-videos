@@ -113,15 +113,17 @@ def lines() -> list[str]:
                         ", ".join(f"{max(v):.0f}" for v in S["maxlogit"][c]) + ")")
         out.append(f"* Stability (learning rates {S['lrs']}, final loss, mean of 2 seeds): " + "; ".join(rows) + ".")
     if have("mtp"):
-        Mt = load("mtp")
+        Mt, MC = load("mtp"), load("mtp_cost")
         out.append(f"* MTP ({Mt['steps']} steps, two seeds): next-token loss without {np.mean(Mt['final']['0']):.3f}, with "
                    f"{np.mean(Mt['final']['0.3']):.3f}; acceptance {', '.join(f'{100 * a:.1f}%' for a in Mt['accept'])}; "
-                   f"extra arithmetic {100 * Mt['extra_share']:.0f}%.")
+                   f"extra arithmetic {100 * MC['extra_share']:.0f}%.")
     if have("recipe"):
         R = load("recipe")
-        out.append(f"* Recipes (3.0M tokens, 732 steps): 2020 held-out {R['base']['val']:.3f}, {R['base']['bits']:.3f} bpc; "
-                   f"2026 {R['full']['val']:.3f}, {R['full']['bits']:.3f} bpc; largest attention logit "
-                   f"{R['base']['max_logit']:.0f} vs {R['full']['max_logit']:.0f}; WSD cooldown branch at "
+        sb = lambda k: " / ".join(f"{v:.3f}" for v in R[k].get("seeds_bits", [R[k]["bits"]]))  # noqa: E731
+        sv = lambda k: " / ".join(f"{v:.3f}" for v in R[k].get("seeds_val", [R[k]["val"]]))  # noqa: E731
+        out.append(f"* Recipes (3.0M tokens, 732 steps, seed 0 / seed 1): 2020 held-out {sv('base')}, {sb('base')} bpc; "
+                   f"2026 {sv('full')}, {sb('full')} bpc; largest attention logit "
+                   f"{R['base']['max_logit']:.0f} vs {R['full']['max_logit']:.0f} (seed 0); WSD cooldown branch at "
                    f"{R['branch']['steps']} steps {R['branch']['val']:.3f} vs {R['branch']['stable_val']:.3f} still stable.")
     if have("mfu"):
         Mf = load("mfu")
