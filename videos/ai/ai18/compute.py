@@ -469,12 +469,16 @@ def compute_quality(seed=3):
     train = [rows[i] for i in order[n_test + n_val:]]
     path = CACHE.dir / "edu_train.txt"
     path.write_text("\n".join(f"__label__{r['score']} {W.ft_line(r['text'])}" for r in train))
-    clf = fasttext.train_supervised(str(path), epoch=25, lr=0.3, wordNgrams=2, dim=64, minCount=3, thread=1,
-                                    seed=0, verbose=0)
-    path.unlink()
+    EPOCHS = 25
 
-    def probs(text):
-        labs, ps = clf.predict(W.ft_line(text), k=-1)
+    def fit(epochs):
+        return fasttext.train_supervised(str(path), epoch=epochs, lr=0.3, wordNgrams=2, dim=64, minCount=3, thread=1,
+                                         seed=0, verbose=0)
+
+    clf = fit(EPOCHS)
+
+    def probs(text, m=None):
+        labs, ps = (m or clf).predict(W.ft_line(text), k=-1)
         d = {int(lab.replace("__label__", "")): float(p_) for lab, p_ in zip(labs, ps)}
         return np.array([d.get(k, 0.0) for k in range(6)])
 
@@ -483,12 +487,25 @@ def compute_quality(seed=3):
         pr, rc = tp / max(1, int(pred.sum())), tp / max(1, int(truth.sum()))
         return 2 * pr * rc / max(1e-9, pr + rc), pr, rc
 
-    pv = np.stack([probs(r["text"]) for r in val])
     tv = np.array([r["score"] >= 3 for r in val])
     cuts = np.linspace(0.02, 0.9, 89)
-    cut = float(max(cuts, key=lambda c: f1(pv[:, 3:].sum(1) >= c, tv)[0]))
-    pt = np.stack([probs(r["text"]) for r in test])
     truth = np.array([r["score"] for r in test])
+
+    def tuned(m):
+        """The cut that maximizes F1 on the validation pages, and the F1 it gives on the test pages."""
+        pv_ = np.stack([probs(r["text"], m) for r in val])
+        c_ = float(max(cuts, key=lambda c: f1(pv_[:, 3:].sum(1) >= c, tv)[0]))
+        pt_ = np.stack([probs(r["text"], m) for r in test])
+        return c_, pv_, pt_
+
+    # its training, visualized: the same classifier trained for more and more passes over the labels
+    epoch_curve = []
+    for k in (1, 2, 3, 5, 8, 12, 18):
+        c_, pv_, pt_ = tuned(fit(k))
+        epoch_curve.append([k, f1(pv_[:, 3:].sum(1) >= c_, tv)[0], f1(pt_[:, 3:].sum(1) >= c_, truth >= 3)[0]])
+    path.unlink()
+    cut, pv, pt = tuned(clf)
+    epoch_curve.append([EPOCHS, f1(pv[:, 3:].sum(1) >= cut, tv)[0], f1(pt[:, 3:].sum(1) >= cut, truth >= 3)[0]])
     hi = pt[:, 3:].sum(1) >= cut
     f, prec, rec = f1(hi, truth >= 3)
     expect = pt @ np.arange(6)
@@ -511,7 +528,7 @@ def compute_quality(seed=3):
                 cc_n=len(docs), cc_kept=float(kept.mean()), cc_kept_n=int(kept.sum()),
                 cc_hist=np.histogram(ec, bins=np.arange(0, 5.5, 0.5))[0].tolist(),
                 test_hist=np.histogram(expect, bins=np.arange(0, 5.5, 0.5))[0].tolist(),
-                best=[ex(i) for i in good], worst=[ex(i) for i in bad])
+                best=[ex(i) for i in good], worst=[ex(i) for i in bad], epochs=EPOCHS, epoch_curve=epoch_curve)
 
 
 # ---------------------------------------------------------------------------
@@ -1018,7 +1035,7 @@ def compute_mixture(n_proxy=32, seed=11):
     test = falcon_ids(2)
     g = rng(seed)
     mixes = [g.dirichlet(np.ones(len(arrays))).tolist() for _ in range(n_proxy)]
-    part = CACHE.partial("mixture", dict(n=n_proxy, seed=seed, v=1))
+    part = CACHE.partial("mixture", dict(n=n_proxy, seed=seed, v=2))  # v2: each run keeps its held-out curve
     proxy = []
     for k, w in enumerate(mixes):
         key = f"proxy_{k}"
@@ -1027,7 +1044,8 @@ def compute_mixture(n_proxy=32, seed=11):
                            eval_windows=16)
             r = _run_piece(spec, f"mix_{key}", arrays=arrays, valid=va)
             m = r.pop("_model")
-            part[key] = dict(w=w, target=lm.text_nats(m, target), test=lm.text_nats(m, test), val=r["final_val"])
+            part[key] = dict(w=w, target=lm.text_nats(m, target), test=lm.text_nats(m, test), val=r["final_val"],
+                             evals=[[e[0], e[2]] for e in r["evals"]])
         proxy.append(part[key])
     X = np.stack([_features(p_["w"]) for p_ in proxy])
     y = np.array([p_["target"] for p_ in proxy])
@@ -1056,7 +1074,8 @@ def compute_mixture(n_proxy=32, seed=11):
                                eval_windows=16)
                 r = _run_piece(spec, f"mix_{key}", arrays=arrays, valid=va)
                 m = r.pop("_model")
-                part[key] = dict(w=w, target=lm.text_nats(m, target), test=lm.text_nats(m, test), val=r["final_val"])
+                part[key] = dict(w=w, target=lm.text_nats(m, target), test=lm.text_nats(m, test), val=r["final_val"],
+                                 evals=[[e[0], e[2]] for e in r["evals"]])
             tests[key] = part[key]
     corr = float(np.corrcoef(loo, y)[0, 1])
     return dict(groups=list(GROUPS), books={k: len(v) for k, v in GROUPS.items()}, sizes=sizes.tolist(),
@@ -1124,11 +1143,11 @@ def compute_recipe_seed1():
     passage = P1.text("passage")
     for name in RECIPES:
         if name not in part:
-            spec = _recipe_spec(name, seed=1, eval_every=RECIPE_STEPS // 4, snaps=[], keep=[], probe_every=24)
+            spec = _recipe_spec(name, seed=1, eval_every=RECIPE_STEPS // 12, snaps=[], keep=[], probe_every=24)
             r = _run_piece(spec, f"recipe_{name}_s1", threads=RECIPE_THREADS)
             m = r.pop("_model").eval()
             part[name] = dict(bits=lm14.bits_per_char(m, passage)["bits"], val=r["final_val"],
-                              max_logit=max(p_[1] for p_ in r["probes"]), seconds=r["seconds"])
+                              max_logit=max(p_[1] for p_ in r["probes"]), seconds=r["seconds"], evals=r["evals"])
     return {k: part[k] for k in RECIPES}
 
 

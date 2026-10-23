@@ -140,6 +140,16 @@ class Stability(VoiceoverScene):
             ln = VMobject(color=STAB_C[cfg], stroke_width=2.5).set_points_as_corners([g.ax.c2p(a, b) for a, b in means])
             marks.add(VGroup(ln, pts))
         lg = legend([(STAB_C[c], STAB_NAME[c]) for c in S["configs"]], font_size=20).move_to([4.6, 1.2, 0])
+        # every run's training, small: held-out loss against step, all learning rates, designs and seeds
+        evs = {k: np.asarray(r["evals"]) for k, r in S["runs"].items()}
+        etop = min(8.6, max(e[:, 2].max() for e in evs.values()))
+        ebot = math.floor(min(e[:, 2].min() for e in evs.values()) * 2) / 2
+        gr = axes([0, S["steps"]], [ebot, etop], x_length=3.0, y_length=1.9, xlabel=r"step", ylabel=r"held-out loss",
+                  xticks=[0, S["steps"]], yticks=[ebot, round(etop, 1)], yfmt=lambda v: f"{v:.1f}",
+                  center=[4.9, -1.7, 0], font_size=15)
+        runs_ = VGroup(*[curve(gr.ax, e[:, 0], np.minimum(e[:, 2], etop), STAB_C[k.split("_")[0]], 1.3)
+                         .set_stroke(opacity=0.6) for k, e in evs.items()])
+        rn = note(rf"all ${len(evs)}$ runs, \ training", font_size=15).next_to(gr, UP, buff=0.05)
         hi_lr = len(lrs) - 1
         pl, qk = np.mean(fin["plain"][hi_lr]), np.mean(fin["qk"][hi_lr])
         lo_lr = 0
@@ -173,6 +183,7 @@ class Stability(VoiceoverScene):
             "will see next, two seeds each. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + best
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(src))
+            self.play(FadeIn(gr), FadeIn(rn), LaggedStart(*[Create(c_) for c_ in runs_], lag_ratio=0.04), run_time=2.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(m_[0]) for m_ in marks], lag_ratio=0.3),
                       LaggedStart(*[FadeIn(m_[1]) for m_ in marks], lag_ratio=0.3), FadeIn(lg), run_time=3.0)

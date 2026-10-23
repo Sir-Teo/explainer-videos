@@ -169,7 +169,12 @@ lab pages):
   FP32 (as in DeepSeek-V3). The tile in our FP8 run is 32 (our model is 64 wide); DeepSeek's is 128. The FP16
   accumulation experiment divides each step's loss by 64 before the backward pass and multiplies the gradients back
   after it, which is what accumulating over 64 micro-batches does to the gradients' size. The collectives were timed
-  on a shared machine. The restart time in the failure simulation (10 minutes) is illustrative.
+  on a shared machine. The restart time in the failure simulation (10 minutes) is illustrative. Every model trained
+  here has its training on screen: the quality classifier's F1 after 1 to 25 passes over its labels (the cut re-chosen
+  each time), the 32 RegMix proxies and the six mixture tests as held-out curves, the 24 stability runs, the precision,
+  accumulation and MTP runs, both recipes (two seeds each) and the data-parallel check's six steps. The MTP module's
+  cost is counted in FLOPs per token (`mtp_cost`): in a model with a 4,096-token vocabulary and width 64, the second
+  pass through the output head is most of it, which is why it is far larger than in DeepSeek-V3.
 * Not used: training-token counts for Kimi K3; Kimi K2's GPU count; OLMo 3's optimizer; a DualPipe simulation (its
   formula is cited instead).
 

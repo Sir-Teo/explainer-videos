@@ -16,6 +16,7 @@ Every function takes its seed; nothing here reads the clock or the machine.
 from __future__ import annotations
 
 import math
+import os
 
 import numpy as np
 import torch
@@ -25,6 +26,11 @@ import torch.nn.functional as F
 BOX = 3.0  # the plane shown: [-BOX, BOX]^2
 GRID = 64  # density images: GRID x GRID cells
 N_TRAIN, N_TEST = 20_000, 5_000
+SCALE = float(os.environ.get("AI20_SCALE", "1"))  # < 1 only for a smoke test of the code
+
+
+def scaled(steps: int) -> int:
+    return steps if SCALE == 1.0 else max(12, int(steps * SCALE))
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -194,6 +200,7 @@ class MDN2D(nn.Module):
 
 
 def train_ar(name, seed, steps=3000, bs=512, lr=2e-3, snaps=True):
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     m = MDN2D()
@@ -269,6 +276,7 @@ class VAE2D(nn.Module):
 
 
 def train_vae(name, seed, steps=3000, bs=512, lr=2e-3, snaps=True):
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     m = VAE2D()
@@ -323,6 +331,7 @@ class CollapseVAE(nn.Module):
 
 
 def train_collapse(ar: bool, seed: int, name="moons", steps=4000, bs=512, lr=2e-3):
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     m = CollapseVAE(ar)
@@ -380,6 +389,7 @@ def modes(S, centers=RING_C, sigma=RING_S, min_frac=0.01):
 def train_gan(loss: str, name: str, seed: int, steps=6000, bs=256, replay=False, n_frames=48):
     """loss: 'mm' (minimax, saturating), 'ns' (non-saturating), 'wgan' (WGAN-GP, five critic steps per generator
     step).  Every variant: the same two networks, the same number of generator steps."""
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, _ = dataset(name)
     G, D = gan_nets()
@@ -501,6 +511,7 @@ class RealNVP2D(nn.Module):
 
 
 def train_flow(name, seed, steps=4000, bs=512, lr=2e-3, snaps=True):
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     m = RealNVP2D()
@@ -533,7 +544,8 @@ def logdet_check(m: RealNVP2D, X) -> float:
     worst = 0.0
     for x in X:
         J = torch.autograd.functional.jacobian(lambda v: m(v[None])[0][0], x)
-        worst = max(worst, abs(float(torch.slogdet(J)[1]) - float(m(x[None])[1][0])))
+        with torch.no_grad():
+            worst = max(worst, abs(float(torch.slogdet(J)[1]) - float(m(x[None])[1][0])))
     return worst
 
 
@@ -558,7 +570,7 @@ def divergence(f, z, t, eps=None, create_graph=True):
         if eps is None:
             tr = 0.0
             for i in range(z.shape[1]):
-                g, = torch.autograd.grad(out[:, i].sum(), z, create_graph=create_graph)
+                g, = torch.autograd.grad(out[:, i].sum(), z, create_graph=create_graph, retain_graph=True)
                 tr = tr + g[:, i]
         else:
             g, = torch.autograd.grad((out * eps).sum(), z, create_graph=create_graph)
@@ -607,6 +619,7 @@ def cnf_paths(f, z, n_steps=40):
 
 
 def train_cnf(seed, hutch: bool, name="moons", steps=1500, bs=256, lr=3e-3, n_steps=8, evals=12):
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     f = ODEFunc()
@@ -669,6 +682,7 @@ def grid_logz(E, n=160, box=BOX + 0.5):
 def train_ebm(name, seed, steps=2500, bs=256, lr=1e-3, k_steps=40, eta=0.005, alpha=0.1, snaps=True):
     """Persistent contrastive training (a replay buffer of Langevin chains, 5% restarted from uniform noise): lower
     the energy of data, raise it where the chains are."""
+    steps = scaled(steps)
     gen = tseed(seed)
     Xtr, Xte = dataset(name)
     E = EBM2D()

@@ -53,6 +53,15 @@ class DataParallel(VoiceoverScene):
         digits = int(math.floor(-math.log10(max(dl, 1e-12))))
         meas = label(rf"checked here: \ ${p}$ processes against one, \ ${Pr['steps']}$ steps: \ parameters equal to "
                      rf"${sci(Pr['err']['dp'], 0)}$".replace("{-}", "-"), font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
+        # the check's own training: the loss at each step, one process (line) and four (dots)
+        ls = np.asarray(L["ref"]), np.asarray(L["dp"])
+        k = np.arange(1, len(ls[0]) + 1)
+        llo, lhi = math.floor(min(ls[0].min(), ls[1].min()) * 10) / 10, math.ceil(max(ls[0].max(), ls[1].max()) * 10) / 10
+        gl = axes([1, len(k)], [llo, lhi], x_length=2.3, y_length=1.5, xlabel=r"step", ylabel=r"loss",
+                  xticks=[1, len(k)], yticks=[llo, lhi], yfmt=lambda v: f"{v:.1f}", center=[5.5, -1.75, 0], font_size=15)
+        mini = VGroup(gl, curve(gl.ax, k, ls[0], GREY_B, 2.5),
+                      *[Dot(gl.ax.c2p(a, b), radius=0.05, color=COMM) for a, b in zip(k, ls[1])],
+                      note(r"line: \ one process; \ dots: \ four", font_size=15).next_to(gl, UP, buff=0.05))
         with self.voiceover(
             "The simplest way to use many GPUs: give each one a full copy of the model and a slice of the batch. "
             "<bookmark mark='a'/> Each computes the gradient of its slice. <bookmark mark='b'/> Then they average "
@@ -68,7 +77,8 @@ class DataParallel(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowArrow(a) for a in grads], lag_ratio=0.15), FadeIn(ar))
             vo.wait_until("c")
-            self.play(FadeIn(meas, shift=UP * 0.1))
+            self.play(FadeIn(meas, shift=UP * 0.1), FadeIn(mini[0]), FadeIn(mini[-1]), Create(mini[1]))
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in mini[2:-1]], lag_ratio=0.15))
         self.wait(0.3)
         self.clear_scene()
 
