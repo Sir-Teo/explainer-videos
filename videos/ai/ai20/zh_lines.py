@@ -191,8 +191,8 @@ ZH.update({
     'recalls all ten digits from the same damaged cues':
         '从同样受损的提示里，回忆出了全部10个数字',
 
-    "f'recalls {100 * hm[-1]:.0f} percent":
-        '在存了全部10个数字时，回忆出了其中{100 * hm[-1]:.0f}%',
+    'f"recalls every digit with up to {k_ok} stored':
+        '在最多存{k_ok}个数字时都能回忆出每一个，而赫布规则只做到{k_h}个；存满十个时，仍能回忆出其中的{100 * hm[-1]:.0f}%',
 
     # ------------------------------------------------------------------ RBM
     'Chapter twelve. Contrastive divergence.':

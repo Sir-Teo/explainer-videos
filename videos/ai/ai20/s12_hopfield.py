@@ -172,8 +172,14 @@ class Hopfield(VoiceoverScene):
                       label(r"Ramsauer et al.\ (2020): \ \textit{Hopfield Networks is All You Need}", font_size=20,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-3.2, -1.6, 0])
         allok = bool((hm >= 1.0).all())
-        res = ("recalls all ten digits from the same damaged cues" if allok else
-               f"recalls {100 * hm[-1]:.0f} percent of them with all ten stored")
+        hb = np.asarray(h["recall_hebb"])
+        k_ok = int(np.argmax(hm < 1.0)) if not allok else len(hm)  # every digit recalled with up to k_ok stored
+        k_h = int(np.argmax(hb < 1.0)) if (hb < 1.0).any() else len(hb)
+        if allok:
+            res = "recalls all ten digits from the same damaged cues"
+        else:
+            res = (f"recalls every digit with up to {k_ok} stored, where Hebb's rule managed {k_h}, and "
+                   f"{100 * hm[-1]:.0f} percent of them with all ten stored")
         with self.voiceover(
             "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert "
             "Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, "

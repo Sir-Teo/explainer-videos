@@ -218,8 +218,9 @@ class VAE(VoiceoverScene):
             f"mark='c'/> {verdict}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg[0]))
+            self.play(FadeIn(bf), Create(lf), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(bf), Create(lf), FadeIn(pf), FadeIn(df), FadeIn(tl))
+            self.play(FadeIn(pf), FadeIn(df), FadeIn(tl))
             vo.wait_until("b")
             self.play(FadeIn(lg[1]))
             vo.wait_until("c")
@@ -288,8 +289,8 @@ class VAE(VoiceoverScene):
             f"{first} <bookmark mark='b'/> {second} <bookmark mark='c'/> {third} The cure: make the code worth its cost."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), Create(ref), FadeIn(rl), FadeIn(cite_))
-            vo.wait_until("a")
             self.play(Create(lp), run_time=2.0)
+            vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(cap))
             vo.wait_until("b")
             self.play(Indicate(rows[0], scale_factor=1.03))
