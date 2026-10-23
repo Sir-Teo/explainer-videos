@@ -91,8 +91,9 @@ class Caps(VoiceoverScene):
         eh = float(np.ceil(np.asarray(q["ent_plain"]).max() + 0.5))
         g1, l1 = self.plot(q, "ent", r"attention entropy, \ bits", 0, eh, [-3.4, -2.3, 0], [0, eh], fmt="{:.0f}",
                            y_length=2.1)
-        users = label(r"QK-norm: \ ViT-22B (2023), \ Qwen3, \ GLM-4.5, \ Gemma 3 \ (2025)", font_size=22,
-                      color=NORMC).move_to([3.6, -1.4, 0])
+        users = label(r"QK-norm: \ ViT-22B (2023), \ Qwen3, \\ GLM-4.5, \ Gemma 3 \ (2025)", font_size=22,
+                      color=NORMC).move_to([3.6, -1.3, 0])
+        keep_in_frame(users)
         prob = label(r"without it: \ the entropy collapses \\ as the weights grow", font_size=22,
                      color=C.SURPRISE).move_to([3.6, -1.4, 0])
         pt18 = label(r"Part 18 measures the runaway logits \\ in training, with and without it", font_size=20,

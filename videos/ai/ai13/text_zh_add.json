@@ -407,6 +407,7 @@
   "keys in view, $n$": "能看到的键数，$n$",
   "weight on the best key, \\ margin set for $0.8$ at $n = L$": "最好那个键的权重，\\ 差距取为在$n = L$时得到$0.8$",
   "fixed $\\Delta$": "固定的$\\Delta$",
-  "scaled by \\ $\\log_L n$": "乘以\\ $\\log_L n$"
+  "scaled by \\ $\\log_L n$": "乘以\\ $\\log_L n$",
+  "QK-norm: \\ ViT-22B (2023), \\ Qwen3, \\\\ GLM-4.5, \\ Gemma 3 \\ (2025)": "QK归一化：ViT-22B（2023）、Qwen3、\\\\ GLM-4.5、Gemma 3（2025）"
  }
 }
