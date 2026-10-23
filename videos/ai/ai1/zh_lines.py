@@ -77,7 +77,7 @@ ZH = {
         "拿来{nb}部小说，从《傲慢与偏见》到《了不起的盖茨比》，数一数每一个符号：用香农的字母表，26个字母加空格，大写和标点都去掉。一共是<bookmark mark='a'/>{n / 1000000.0:.1f}百万个符号。<bookmark mark='b'/>最常见的是{sym_name(first)}，大约每{round(1 / p[first])}个符号里有一个。其次是{sym_name(second)}，每{round(1 / p[second])}个里有一个。",
 
     'f"Sorted, the familiar order appears: {top6}.':
-        "排好序，熟悉的顺序就出现了：{top6}。<bookmark mark='z'/>排在最后的是{', '.join(tail4[:3])}和{tail4[3]}。最少见的{ALPHA27[rarest]}，大约每{round(1 / p[rarest], -2):,.0f}个符号才出现一次。",
+        "排好序，熟悉的顺序就出现了：{top6}。<bookmark mark='z'/>最少见的{ALPHA27[rarest]}，大约每{round(1 / p[rarest], -2):,.0f}个符号才出现一次。",
 
     'This is a probability distribution: a number for each possibility':
         "这就是一个概率分布：每种可能都有一个数，<bookmark mark='a'/>没有负的，加起来等于1。<bookmark mark='b'/>把这些柱子首尾相接，它们填满一根长度为1的条，每个符号一小段，宽度就是它的概率。一个写下来的猜测，就是把一个单位的信念，分给各种可能。",
@@ -263,7 +263,7 @@ ZH = {
         "画成一幅图：<bookmark mark='a'/>用正确的概率，面积就是熵，{H:.2f}比特。<bookmark mark='b'/>现在用一个把e和z弄反了的模型。每个e，大约每{round(1 / p[ie])}个符号就有一个，现在要花{-np.log2(q[ie]):.1f}比特。面积增大到{CE:.2f}。",
 
     'f"Split the log in two':
-        "把对数拆成两部分，<bookmark mark='a'/>交叉熵就分成了两笔代价。第一笔是p的熵：世界本身的随机性，任何编码都消除不了。<bookmark mark='b'/>第二笔是犯错的代价：q相对于p的库尔巴克–莱布勒散度，1951年提出。<bookmark mark='c'/>把e和z对调，每个符号多花{KL:.2f}比特。均匀地猜字母，多花{lt['KL_uniform']:.2f}。而我们30本书的字母频率，用在《马耳他之鹰》的段落上，{books_said}。",
+        "把对数拆成两部分，<bookmark mark='a'/>交叉熵就分成了两笔代价。第一笔是p的熵：世界本身的随机性，任何编码都消除不了。<bookmark mark='b'/>第二笔是犯错的代价：q相对于p的库尔巴克–莱布勒散度，1951年提出。<bookmark mark='c'/>把e和z对调，每个符号多花{KL:.2f}比特。我们30本书的字母频率，用在《马耳他之鹰》的段落上，{books_said}。",
 
     'are wrong by less than a hundredth of a bit':
         '错得不到百分之一比特',
@@ -387,8 +387,8 @@ ZH = {
     'f"Shannon\'s own subjects did far better.':
         "香农自己的受试者做得好得多。<bookmark mark='a'/>给他们100个字母的上下文，他估计印刷英语每个字母是{lo_h:.1f}到{hi_h:.1f}比特，<bookmark mark='b'/>而我们用6个字母上下文的计数猜测者是{float(g['lower']):.1f}到{float(g['upper']):.1f}。<bookmark mark='c'/>差别在于知识：关于词和语法、习语、故事，以及世界是怎么运转的知识。",
 
-    'Later estimates landed in the same place':
-        "后来的估计也落在同一个地方：每个字母大约1.3比特，用的是让人对下一个字母下注、而不是去猜的游戏版本。<bookmark mark='a'/>要像人一样猜，机器就得知道人所知道的东西。这就是标杆。",
+    "Later estimates, with people betting on the next letter":
+        "后来的估计，让人对下一个字母下注，结果落在每个字母大约1.3比特。<bookmark mark='a'/>要像人一样猜，机器就得知道人所知道的东西。",
 
     # ------------------------------------------------------------------ Likelihood
     'Chapter eleven. So far our models were counted.':
@@ -434,8 +434,8 @@ ZH = {
     'It keeps decaying, slowly, as far as we measured.':
         '在我们测量的范围里，它一直在缓慢地衰减。',
 
-    "A counting model can't produce a tail like that":
-        "计数模型产生不了这样的尾巴：它那几个字母上下文以外的任何东西，都被切断了，它所建模的依赖关系按指数消失，<bookmark mark='x'/>每多一个字母就缩小同样的倍数，直直地掉出这些坐标轴的底部。<bookmark mark='a'/>真实的文本，在每一个距离上，都会回报你所记住的东西。要猜得好，模型需要长的记忆，还需要一种办法，找出过去当中要紧的部分：注意力，在第13部分。",
+    "A counting model can't produce that tail":
+        "计数模型产生不了这样的尾巴：超出它那几个字母的上下文，依赖关系就按指数消失，<bookmark mark='x'/>每多一个字母就缩小同样的倍数，直直地掉出这些坐标轴。<bookmark mark='a'/>真实的文本，在每一个距离上都奖励记忆。要猜得好，模型需要长的记忆，还需要一种办法，找出其中要紧的部分：注意力，在第13部分。",
 
     # ------------------------------------------------------------------ Knowledge
     'Chapter thirteen. What does a model have to know':
@@ -471,7 +471,7 @@ ZH = {
         "语言模型读的不是字母。每个模型都用自己的词表，把文本切成词元。<bookmark mark='a'/>这是《马耳他之鹰》段落里的一段，按GPT-2的方式切开，<bookmark mark='b'/>再按Qwen3的方式切开。<bookmark mark='c'/>在整个段落上，GPT-2需要{g2['tokens']:,}个词元，平均每个{g2['chars_per_token']:.2f}个字符；Qwen3的词表更大，需要{q3['tokens']:,}个。",
 
     'f"A model\'s loss is reported per token':
-        "模型的损失是按每个词元来报告的，所以它的大小取决于一个词元装了多少文本。<bookmark mark='a'/>要紧的是总数：词元数乘以每词元比特数，等于字符数乘以每字符比特数。<bookmark mark='b'/>这是我们的各个模型在这段文字上的成绩；对计数模型来说，每个词元就是一个字符。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>困惑度，也就是2的每词元比特数次方，也继承了同样的问题：它说的是模型在多少个同样可能的词元之间做选择，而词元各不相同。<bookmark mark='e'/>所以要按每个字符，或者按文件的每个字节来比。这就是为什么记分牌数的是每字符比特数。",
+        "模型的损失是按每个词元来报告的，所以它的大小取决于一个词元装了多少文本。<bookmark mark='a'/>要紧的是总数：词元数乘以每词元比特数，等于字符数乘以每字符比特数。<bookmark mark='b'/>这是我们的各个模型在这段文字上的成绩；对计数模型来说，每个词元就是一个字符。<bookmark mark='c'/>{verdict}<bookmark mark='d'/>困惑度，也就是2的每词元比特数次方，也有同样的问题：词元各不相同。<bookmark mark='e'/>所以要按每个字符，或者按每个字节来比：这就是为什么记分牌数的是每字符比特数。",
 
     'f"Per token, the counting model looks like the winner':
         "按词元算，计数模型看起来是赢家：{cnt['bits_per_token']:.2f}比特，对GPT-2的{g2['bits_per_token']:.2f}；困惑度{cnt['ppl_token']:.1f}，对{g2['ppl_token']:.1f}。可它的词元只是单个字符。按字符算，它差了{cnt['bpc'] / g2['bpc']:.1f}倍。",
@@ -513,8 +513,8 @@ ZH = {
     'f"There\'s a catch:':
         "这里有个问题：解压器需要模型，而模型很大。<bookmark mark='a'/>GPT-2 small把整段文字压到{size_g2 / 1000:.1f}KB，可它的权重要占{mb:,.0f}MB：把权重算进去，文件是这段文字的{adj['GPT-2 small']:,.0f}倍。<bookmark mark='b'/>2024年，DeepMind一篇题为《语言建模就是压缩》的论文，用一个700亿参数的模型压缩1GB的维基百科：压到原来大小的8.3%，而gzip是32%，xz是23%；把它的权重算进去，就是14000%。尽管是在文本上训练的，它压缩图像和音频也胜过PNG和FLAC。<bookmark mark='c'/>赫特奖设立于2006年，它把一切都算进去：2026年7月创下的纪录，把那1GB连同解压器一起，装进100.4MB，每个字符0.80比特，靠的是把许多预测者混合起来。<bookmark mark='d'/>预测就是压缩，而预测者本身的大小，也是账单的一部分。",
 
-    "And the board isn't finished.":
-        "记分牌还没写完。我们会搭建自己的模型，把它们的成绩加上去：<bookmark mark='a'/>第7部分有更好的计数，<bookmark mark='b'/>第9部分有一个神经网络，<bookmark mark='c'/>第10部分有一个带记忆的网络，<bookmark mark='d'/>第13部分有我们自己的小Transformer，每一个都在这30本书上训练，在这一页上打分。",
+    "And the board isn't finished:":
+        "记分牌还没写完：<bookmark mark='a'/>第7部分有更好的计数，<bookmark mark='b'/>第9部分有一个神经网络，<bookmark mark='c'/>第10部分有一个带记忆的网络，<bookmark mark='d'/>第13部分有我们自己的小Transformer，都在这些书上训练，在这一页上打分。",
 
     # ------------------------------------------------------------------ Outro
     'f"Let\'s take stock.':

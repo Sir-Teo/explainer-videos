@@ -70,9 +70,7 @@ class Units(VoiceoverScene):
             f"{g2['tokens']:,} tokens, {g2['chars_per_token']:.2f} characters each on average; Qwen3, with a "
             f"bigger vocabulary, {q3['tokens']:,}."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(la), LaggedStart(*[FadeIn(t) for t in pa], lag_ratio=0.02), run_time=2.0)
+            self.play(FadeIn(head), FadeIn(la), LaggedStart(*[FadeIn(t) for t in pa], lag_ratio=0.02), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(lb), LaggedStart(*[FadeIn(t) for t in pb], lag_ratio=0.02), FadeIn(tag), run_time=2.0)
             vo.wait_until("c")
@@ -136,16 +134,17 @@ class Units(VoiceoverScene):
             "<bookmark mark='a'/> What matters is the total: tokens times bits per token, which is characters times "
             "bits per character. <bookmark mark='b'/> Here are our models on the passage; for the counting model, "
             f"every token is a character. <bookmark mark='c'/> {verdict} "
-            "<bookmark mark='d'/> Perplexity, two to the bits per token, inherits the same problem: it says how many "
-            "equally likely tokens a model is choosing among, and tokens differ. <bookmark mark='e'/> So compare "
-            "per character, or per byte of the file. That's why the scoreboard counts bits per character."
+            "<bookmark mark='d'/> Perplexity, two to the bits per token, has the same problem: tokens differ. "
+            "<bookmark mark='e'/> So compare per character, or per byte: that's why the scoreboard counts bits per "
+            "character."
         ) as vo:
-            self.play(FadeIn(eq))
+            # first only what a loss per token needs: the model, its token size, its bits per token
+            self.play(LaggedStart(*[FadeIn(r[:3]) for r in table], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(eq, color=C.BITS, scale_factor=1.03))
+            self.play(FadeIn(eq))
             self.play(FadeIn(ex, shift=DOWN * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(table[0]), LaggedStart(*[FadeIn(r) for r in table[1:]], lag_ratio=0.25), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r[3:]) for r in table], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("c")
             self.play(Create(hl))
             self.play(Create(hl2))
@@ -189,10 +188,11 @@ class Units(VoiceoverScene):
             "line, with a correlation of minus 0.93. The better a model compresses, the more it can do."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(rows[0]), Create(ax), FadeIn(axl), FadeIn(sch))
+            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(rows[1]), FadeIn(rows[3]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.5)
+            self.play(Indicate(axl[1], color=WHITE, scale_factor=1.1))
             vo.wait_until("c")
             self.play(FadeIn(rows[2]), Create(fit))
         self.wait(0.3)

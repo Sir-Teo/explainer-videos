@@ -198,10 +198,12 @@ class Structure(VoiceoverScene):
         best = int(np.argmin(m)) + 1
         gain = m[0] - m.min()
         verdict = (f"A second pass cuts the error from {m[0]:.2f} to {m[1]:.2f} ångströms; the best is at {best} "
-                   f"passes, {m.min():.2f}" if m[1] < m[0] - 0.02 else
+                   f"passes, {m.min():.2f}" if m.min() < 0.95 * m[0] else
                    f"In our toy the extra passes change little: from {m[0]:.2f} to {m.min():.2f} ångströms at best")
         vs = ("and with four passes it beats the same network trained without recycling" if m[3] < one else
-              f"though even with four passes it doesn't beat the same network trained without recycling, {one:.2f}")
+              f"though even with four passes it doesn't beat the same network trained without recycling, {one:.2f}: "
+              "our toy feeds back only its guesses about pairs, with no structure in the loop, while in AlphaFold 2 "
+              "recycling did help")
         tag = note(r"computed: \ chapter 9's task, \ three seeds \ (band: \ min--max)", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
