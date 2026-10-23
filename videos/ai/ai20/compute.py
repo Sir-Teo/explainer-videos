@@ -705,7 +705,12 @@ def compute_classifier():
     examples = dict(clean=base[:4], noisy=gd.to_levels(np.clip(xf[:4] + 0.2 * g.normal(size=xf[:4].shape), 0, 1)),
                     blurred=blurred[:4])
     log(f"classifier: test accuracy {acc:.4f} ({time.time() - t:.0f}s); real FID {real['fid']:.2f}")
+    from videos.ai.ai10.data import mnist
+
+    raw = mnist()["xte"][:4]  # the original 28 x 28 digits, for the picture of the downsampling
+    half = raw.reshape(-1, gd.S, 2, gd.S, 2).astype(np.float32).mean((2, 4)) / 255
     return dict(accuracy=acc, params=g2.n_params(net), feature_dim=128, ns=ns, fid_n=np.array(fid_n),
+                raw28=raw, half14=half, budget=gd.BUDGET,
                 noise_sigmas=sigmas, noise=[dict(fid=r["fid"], precision=r["precision"], recall=r["recall"])
                                             for r in noise_fid],
                 blur=dict(fid=blur["fid"], precision=blur["precision"], recall=blur["recall"]),
@@ -781,7 +786,8 @@ def train_pixelcnn(seed: int, replay: bool):
         bpp = float(torch.cat([gd.ar_nll(net, d["xte"][a:a + 1000]) for a in range(0, 10000, 1000)]).mean()) / (
             gd.D * math.log(2))
     t = time.time()
-    samples = np.concatenate([gd.ar_sample(net, 500, torch.Generator().manual_seed(77 + k)) for k in range(4)])
+    samples = np.concatenate([gd.ar_sample(net, gd.N_GEN // 4, torch.Generator().manual_seed(77 + k))
+                              for k in range(4)])
     sample_secs = (time.time() - t) / len(samples)
     res = dict(curve=curve, train=train, bpp=bpp, step_flops=fl, steps=steps, batch=bs, examples=steps * bs,
                params=g2.n_params(net), secs=secs, sample_secs=sample_secs, nfe=gd.D, show=samples[:64],
@@ -887,12 +893,12 @@ def compute_vae():
         t = time.time()
         m, res = train_vae(s, replay=(s == 0))
         gen = torch.Generator().manual_seed(77)
-        samples = m.sample(2000, gen)
+        samples = m.sample(gd.N_GEN, gen)
         res["iwae_bpp"] = float(-m.iwae(gd.digits()["xte"][:1000], gen).mean()) / (gd.D * math.log(2))
         res["judge"], res["show"], res["nfe"] = judge()(samples), samples[:64], 1
         t1 = time.time()
-        m.sample(2000, gen)
-        res["sample_secs"] = (time.time() - t1) / 2000
+        m.sample(gd.N_GEN, gen)
+        res["sample_secs"] = (time.time() - t1) / gd.N_GEN
         save_model(m, f"vae_s{s}")
         part[f"s{s}"] = tolist(res)
         log(f"vae s{s}: ELBO {res['elbo_bpp']:.3f} bpp, IWAE {res['iwae_bpp']:.3f}, KL {res['kl_nats']:.1f}, "
@@ -1027,8 +1033,10 @@ def compute_collapse():
             mu, _ = m.enc(gd.as_float(d["xte"][:4]).reshape(4, -1)).chunk(2, -1)
             z = mu.repeat_interleave(4, 0)
         same_z = gd.ar_sample(m.dec, 16, torch.Generator().manual_seed(3), z=z)
+        # does a decoded digit keep its source's identity? the judge's classes against the source labels
+        agree = float((judge().net.classes(same_z) == np.repeat(d["yte"][:4], 4)).mean())
         part[tag] = tolist(dict(curve=curve, free_bits=fb, steps=steps, step_flops=fl, same_z=same_z,
-                                src=d["xte"][:4], secs=time.time() - t))
+                                src=d["xte"][:4], src_labels=d["yte"][:4], agree=agree, secs=time.time() - t))
         log(f"collapse {tag}: KL {curve[-1][3]:.2f} nats, reconstruction {curve[-1][2]:.1f} ({time.time() - t:.0f}s)")
     out = {}
     for tag in ("plain", "free"):
@@ -1070,12 +1078,8 @@ def train_gan(seed: int, replay: bool, wgan: bool):
         oG.step()
         return float(lD), float(lG)
 
-    from torch.utils.flop_counter import FlopCounterMode
-
     sd_G, sd_D = {k: v.clone() for k, v in G.state_dict().items()}, {k: v.clone() for k, v in Dn.state_dict().items()}
-    with FlopCounterMode(display=False) as fc:
-        gstep()
-    fl = float(fc.get_total_flops())
+    fl = gd.step_flops(gstep)
     G.load_state_dict(sd_G)
     Dn.load_state_dict(sd_D)
     oG = type(oG)(G.parameters(), **{k: oG.defaults[k] for k in ("lr", "betas")})
@@ -1096,10 +1100,10 @@ def train_gan(seed: int, replay: bool, wgan: bool):
             losses.append((s, lD, lG))
     secs = time.time() - t0
     with torch.no_grad():
-        samples = gd.to_levels(G(torch.randn(2000, gd.ZG, generator=torch.Generator().manual_seed(77))).numpy())
+        samples = gd.to_levels(G(torch.randn(gd.N_GEN, gd.ZG, generator=torch.Generator().manual_seed(77))).numpy())
         t = time.time()
-        G(torch.randn(2000, gd.ZG))
-        sample_secs = (time.time() - t) / 2000
+        G(torch.randn(gd.N_GEN, gd.ZG))
+        sample_secs = (time.time() - t) / gd.N_GEN
     res = dict(losses=losses, step_flops=fl, steps=steps, batch=bs, examples=steps * bs * n_critic,
                params=g2.n_params(G) + g2.n_params(Dn), params_G=g2.n_params(G), secs=secs, sample_secs=sample_secs,
                nfe=1, show=samples[:64], judge=judge()(samples), marks=marks, n_critic=n_critic)
@@ -1173,11 +1177,11 @@ def train_flow(seed: int, replay: bool):
     secs = time.time() - t0
     with torch.no_grad():
         bpp = float(torch.cat([m.bits(d["xte"][a:a + 2000], gen) for a in range(0, 10000, 2000)]).mean())
-    samples = m.sample(2000, torch.Generator().manual_seed(77))
+    samples = m.sample(gd.N_GEN, torch.Generator().manual_seed(77))
     t = time.time()
-    m.sample(2000, torch.Generator().manual_seed(78))
+    m.sample(gd.N_GEN, torch.Generator().manual_seed(78))
     res = dict(curve=curve, bpp=bpp, step_flops=fl, steps=steps, batch=bs, examples=steps * bs,
-               params=g2.n_params(m), secs=secs, sample_secs=(time.time() - t) / 2000, nfe=1, show=samples[:64],
+               params=g2.n_params(m), secs=secs, sample_secs=(time.time() - t) / gd.N_GEN, nfe=1, show=samples[:64],
                show_cold=m.sample(64, torch.Generator().manual_seed(77), temp=0.7), judge=judge()(samples))
     if replay:
         res["snaps"] = np.array(snaps)
@@ -1302,7 +1306,7 @@ def compute_vq():
     with torch.no_grad():
         te_nll = float(F.cross_entropy(prior(codes_te).reshape(-1, vq.K), codes_te.reshape(-1))) * 49
     gen2 = torch.Generator().manual_seed(77)
-    cs = torch.cat([prior.sample(500, gen2) for _ in range(4)])
+    cs = torch.cat([prior.sample(gd.N_GEN // 4, gen2) for _ in range(4)])
     with torch.no_grad():
         samples = gd.to_levels(vq.decode_codes(cs.reshape(-1, 7, 7))[0].numpy())
     log(f"vq: perplexity {perplexity:.1f} of {vq.K}, prior {te_nll:.1f} nats per digit ({vq_secs + prior_secs:.0f}s)")
@@ -1337,7 +1341,7 @@ def compute_evaluate():
     gen = torch.Generator().manual_seed(123)
     ts = [0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 0.0]  # 0: no truncation
     for t in ts:
-        z = torch.randn(2000, gd.ZG, generator=gen)
+        z = torch.randn(gd.N_GEN, gd.ZG, generator=gen)
         if t:
             bad = z.abs() > t
             while bad.any():

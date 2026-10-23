@@ -4,7 +4,7 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai31.common import CI, EST, HACK, JUDGE, PART, PRIVATE, TRUTH, load
 
 
-def problem_card(title: str, can: str, cannot: str, color, width=4.2, font_size=18) -> VGroup:
+def problem_card(title: str, can: str, cannot: str, color, width=6.3, font_size=21) -> VGroup:
     """An open problem: what we can do today, and what we can't yet."""
     t = label(title, font_size=font_size + 4, color=color)
     a = wrapped_label(r"\textbf{can:} \ " + can, width - 0.5, font_size, GREY_A)
@@ -32,10 +32,12 @@ class OpenProblems(VoiceoverScene):
         self.play(FadeOut(card))
 
     def row(self, cards):
-        g = VGroup(*cards).arrange(RIGHT, buff=0.25, aligned_edge=UP)
-        if g.width > 13.6:
-            g.width = 13.6
-        return g.move_to(DOWN * 0.35)
+        g = VGroup(*cards).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3), cell_alignment=UL)
+        if g.width > 13.4:
+            g.width = 13.4
+        if g.height > 6.0:
+            g.height = 6.0
+        return g.move_to(DOWN * 0.45)
 
     # ------------------------------------------------------------------
     def measuring(self):
