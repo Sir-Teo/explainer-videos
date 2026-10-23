@@ -174,10 +174,10 @@
    "en": "Here it is on a travelling-salesman problem: the shortest round trip through fifty-two places in Berlin, a standard test whose optimum is known. A move reverses a stretch of the tour. <bookmark mark='a'/> Hot, at first, 57 percent of proposed changes are accepted, and the tour is a tangle. <bookmark mark='b'/> As it cools, fewer bad moves get through; crossing edges disappear, and the tour pulls into loops around the city's clusters. <bookmark mark='c'/> At the end, 0.0 percent are accepted: annealing has become hill climbing, from a very good place. It ends at 7,542: the proven optimum, 7,542.",
    "zh": "这是它在一个旅行商问题上的表现：经过柏林52个地点的最短回路，一个最优解已知的标准测试。一步是把回路中的一段倒过来。<bookmark mark='a'/>一开始温度很高，被提出的改动有57%被接受，回路乱成一团。<bookmark mark='b'/>随着降温，能通过的坏改动越来越少；交叉的边消失了，回路收拢成绕着城市各个聚集区的圈。<bookmark mark='c'/>到最后，只有0.0%被接受：退火变成了爬山法，只是从一个非常好的地方出发。它最后停在7542：正是已被证明的最优值7542。"
   },
-  "aba7ff89df1c": {
+  "ea2887cc6da2": {
    "scene": "Local",
-   "en": "Is the cooling worth it? Compare on equal terms: the same number of tours looked at. <bookmark mark='a'/> The greedy tour, always to the nearest unvisited place, is 8 percent too long even from its best start; 2-opt hill climbing polishes it to 7,657. <bookmark mark='b'/> On the same budget of 2,000,000 tours looked at, annealing does best, averaging 7,583; restarted hill climbing averages 7,705, and the genetic algorithm 7,931. Annealing found the optimum itself in 4 of 5 runs.",
-   "zh": "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了8%；2-opt爬山法把它打磨到7657。<bookmark mark='b'/>在同样看2000000条回路的预算下，退火最好，平均7583；带重启的爬山法平均7705，是the genetic algorithm 7,931. Annealing found the optimum itself in 4 of 5 runs。"
+   "en": "Is the cooling worth it? Compare on equal terms: the same number of tours looked at. <bookmark mark='a'/> The greedy tour, always to the nearest unvisited place, is 8 percent too long even from its best start; 2-opt hill climbing polishes it to 7,657. <bookmark mark='b'/> On the same budget of 2,000,000 tours looked at, annealing does best, averaging 7,583; restarted hill climbing averages 7,705, and the genetic algorithm, 7,931. <bookmark mark='c'/> Annealing found the optimum itself in 4 of 5 runs.",
+   "zh": "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了8%；2-opt爬山法把它打磨到7657。<bookmark mark='b'/>在同样看2000000条回路的预算下，退火最好，平均7583；带重启的爬山法平均7705；遗传算法平均7931。<bookmark mark='c'/>退火在5次运行中有4次找到了最优解本身。"
   },
   "84f93878dd84": {
    "scene": "Local",
@@ -222,7 +222,7 @@
   "593dd90e7bdd": {
    "scene": "Samuel",
    "en": "Samuel's learning rule is the seed of modern reinforcement learning. <bookmark mark='a'/> Keep the static score your evaluation gave your previous position. <bookmark mark='b'/> Two moves later, search from the new position and back up a score: a better-informed opinion of the same game. <bookmark mark='c'/> The difference, Samuel's delta, says how wrong the old score was. <bookmark mark='d'/> Nudge the weights to shrink it. <bookmark mark='e'/> Two copies played: Alpha learned, Beta kept its weights, and when Alpha won, Beta took them. Richard Sutton built on this idea when he formalized temporal-difference learning in 1988.",
-   "zh": "塞缪尔的学习规则，是现代强化学习的种子。<bookmark mark='a'/>记住评估函数给你上一个局面的静态分数。<bookmark mark='b'/>两步之后，从新局面往前搜索，倒推出一个分数：对同一盘棋更有根据的看法。<bookmark mark='c'/>两者之差，塞缪尔叫它delta，说明旧分数错了多少。<bookmark mark='d'/>轻推权重，让它变小。<bookmark mark='e'/>两份副本对弈：Alpha学习，Beta保持权重不变，每当Alpha赢了，Beta就拿走它的权重。理查德·萨顿在1988年形式化时序差分学习时，就是在这个想法上继续前进的。"
+   "zh": "塞缪尔的学习规则，是现代强化学习的种子。<bookmark mark='a'/>记住评估函数给你上一个局面的静态分数。<bookmark mark='b'/>两步之后，从新局面往前搜索，倒推出一个分数：对同一盘棋更有根据的看法。<bookmark mark='c'/>两者之差，塞缪尔记作δ，说明旧分数错了多少。<bookmark mark='d'/>轻推权重，让它变小。<bookmark mark='e'/>两份副本对弈：Alpha学习，Beta保持权重不变，每当Alpha赢了，Beta就拿走它的权重。理查德·萨顿在1988年形式化时序差分学习时，就是在这个想法上继续前进的。"
   },
   "62dc20cccaf6": {
    "scene": "Samuel",
