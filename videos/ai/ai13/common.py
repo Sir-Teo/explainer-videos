@@ -138,7 +138,7 @@ def layernorm_stage(pic: VGroup, stage: int) -> VGroup:
 
 
 SM_SCORES = np.array([1.2, -0.5, 0.4, -1.0, 0.8])  # illustrative scores
-SM_STAGES = (r"scores", r"$e^{\,\mathrm{score}}$: \ all positive", r"divided by the total: \ they add up to $1$")
+SM_STAGES = (r"scores", r"$e^{\,\mathrm{score}}$: \ all positive", r"divided by the total: \\ they add up to $1$")
 
 
 def softmax_picture(unit=0.5) -> VGroup:
@@ -164,6 +164,8 @@ def softmax_stage(pic: VGroup, k: int) -> tuple[VGroup, Mobject]:
     vals = SM_SCORES if k == 0 else 0.5 * e if k == 1 else 3.0 * e / e.sum()
     nb = _sm_bars(vals, [b.get_x() for b in bars], zl.get_y(), unit, bars[0].width, A)
     nc = label(SM_STAGES[k], font_size=18, color=GREY_A).scale(zl.get_length() / 2.4)  # as the picture was scaled
+    if nc.width > zl.get_length() + 0.4:  # never wider than the picture it captions
+        nc.scale_to_fit_width(zl.get_length() + 0.4)
     return nb, nc.move_to(cap)
 
 

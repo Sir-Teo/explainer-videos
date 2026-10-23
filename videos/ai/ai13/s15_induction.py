@@ -150,8 +150,9 @@ class Induction(VoiceoverScene):
         l2 = VGroup(*[curve(ax, c_[:, 0], c_[:, 1], A, 3.0 if i == 0 else 2.0).set_stroke(opacity=1.0 if i == 0 else 0.55)
                       for i, c_ in enumerate(C2)])
         k1 = label(r"one layer", font_size=22, color=GREY_B).next_to(ax.c2p(c1[-1, 0], c1[-1, 1]), UP, buff=0.12).shift(LEFT * 0.6)
-        k2 = label(rf"two layers, \ ${len(seeds)}$ seeds", font_size=22, color=A).move_to(
-            ax.c2p(c1[-1, 0] * 0.9, 0.55 * top))  # clear of the curves, which have all dropped by then
+        k2 = label(rf"two layers, \ ${len(seeds)}$ seeds", font_size=22, color=A)
+        k2.next_to(ax.c2p(c1[-1, 0], min(float(c_[-1, 1]) for c_ in C2)), DOWN, buff=0.35).align_to(
+            ax.c2p(c1[-1, 0], 0), RIGHT)  # under the ends of the curves, where nothing is drawn
         js = [int(v) for v in d["jump_steps"]]
         jl = VGroup(*[DashedLine(ax.c2p(j, 0), ax.c2p(j, top), color=A, stroke_width=1.2) for j in js])
         S = 2.5
@@ -358,7 +359,7 @@ class Induction(VoiceoverScene):
         cl = label(r"later head", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
         # first: how much each head attends one step after the earlier copy (an induction head's signature)
         ib = VGroup()
-        bw_, sy_ = 0.3, 2.4 / max(0.5, float(ind.max()))
+        bw_, sy_ = 0.24, 2.4 / max(0.5, float(ind.max()))
         for l_ in range(L):
             for h in range(H):
                 v_ = float(ind[l_, h])
