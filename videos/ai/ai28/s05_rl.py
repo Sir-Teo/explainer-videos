@@ -36,6 +36,8 @@ class RL(VoiceoverScene):
         rule = cmath(r"r(x, y)", r"=", r"\begin{cases} 1 & \text{the checker accepts } y \\ 0 & \text{otherwise}"
                      r"\end{cases}", font_size=34).to_edge(DOWN, buff=0.35)
         rule[0].set_color(RIGHT_C)
+        qq = label(r"who teaches a model which chain to write, \\ when nobody can write the steps down for it?",
+                   font_size=30, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Chapter one showed that a chain of thought adds computation. But who teaches a model which chain to "
             "write, when nobody can write the steps down for it? <bookmark mark='a'/> In February 2024, DeepSeek's "
@@ -47,10 +49,12 @@ class RL(VoiceoverScene):
             "written in the right format. <bookmark mark='e'/> The reward is one if a checker accepts the answer, "
             "zero otherwise. No person grades anything."
         ) as vo:
+            self.play(FadeIn(qq))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
             vo.wait_until("e")
+            self.play(FadeOut(qq))
             self.play(Write(rule))
         self.wait(0.3)
         self.clear_scene()
@@ -94,15 +98,29 @@ class RL(VoiceoverScene):
         f2 = cmath(r"\text{push up}\quad", r"\sum_i", r"A_i", r"\,\log", r"\pi", r"(\text{answer}_i \mid \text{question})",
                    colors=colors, font_size=34)
         VGroup(f1, f2).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.45)
-        avl = label(r"how much better than its group", font_size=22, color=ADV).next_to(model, DOWN, buff=0.9)
-        avl.align_to(model, LEFT)
+        avl = label(r"how much better \\ than its group", font_size=22, color=ADV)
+        avl.move_to([zero.get_start()[0] - 0.2 - avl.width / 2, base_y, 0])
         cite_ = cite(r"Z.~Shao et al., \textit{DeepSeekMath} (GRPO, 2024); \ DeepSeek-AI, \textit{DeepSeek-R1} (2025)",
                      corner=UR)
         n_right = int(rew.sum())
         pol = label(r"the policy, \ $\pi$", font_size=22, color=POLICY).next_to(model, DOWN, buff=0.15)
         dash = DashedLine(zero.get_start(), zero.get_end(), color=ADV, stroke_width=2.5, dash_length=0.12)
-        bl_ = label(r"baseline: \ the group's average", font_size=20, color=ADV).next_to(zero.get_end(), DOWN, buff=0.12)
-        bl_.shift(LEFT * 1.4)
+        bl_ = label(r"dashed: \ the baseline, \\ the group's average", font_size=20, color=ADV)
+        bl_.next_to(avl, DOWN, buff=0.3).align_to(avl, RIGHT)
+        # the policy: the starting model's answers to this question, as a histogram of 32 samples
+        vs = np.asarray(r["vals_before"])[i]
+        u, n_ = np.unique(vs, return_counts=True)
+        top = np.argsort(-n_, kind="stable")[:6]
+        u, n_ = u[top], n_[top]
+        hx = np.linspace(-1.6, 3.6, len(u)) if len(u) > 1 else np.array([1.0])
+        hbars = VGroup(*[Rectangle(width=0.6, height=2.0 * c / len(vs), stroke_width=0, fill_color=POLICY,
+                                   fill_opacity=0.8).move_to([x, -1.6 + c / len(vs), 0]) for x, c in zip(hx, n_)])
+        hl = VGroup(*[data_text(f"{int(v)}", font=MONO, font_size=20, color=GREY_A).next_to([x, -1.6, 0], DOWN, buff=0.12)
+                      for x, v in zip(hx, u)])
+        ht = label(rf"$\pi(\text{{answer}} \mid {a}+{b}=)$, \ estimated from ${len(vs)}$ samples", font_size=22,
+                   color=POLICY).next_to(hbars, UP, buff=0.25).set_x(1.0)
+        hist = VGroup(hbars, hl, ht, Line([hx[0] - 0.5, -1.6, 0], [hx[-1] + 0.5, -1.6, 0], color=GREY_C,
+                                          stroke_width=1.5))
         with self.voiceover(
             "We do it here with a small transformer that has had a little practice at two-digit addition, answering "
             "at once. In this game the model is called the policy, pi: the rule that gives a probability to every "
@@ -117,6 +135,8 @@ class RL(VoiceoverScene):
             "learn."
         ) as vo:
             self.play(FadeIn(q), FadeIn(ql), FadeIn(model), FadeIn(ml), GrowArrow(qa), FadeIn(cite_), FadeIn(pol))
+            self.play(FadeIn(hist[3]), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in hbars], lag_ratio=0.1),
+                      FadeIn(hl), FadeIn(ht))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(f_) for f_ in fan], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in ans], lag_ratio=0.1), FadeIn(al), run_time=1.6)
@@ -124,6 +144,7 @@ class RL(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(m_, scale=1.4) for m_ in marks], lag_ratio=0.1), FadeIn(rl),
                       *[c_[0].animate.set_stroke(RIGHT_C if v else WRONG_C) for v, c_ in zip(rew, ans)])
             vo.wait_until("c")
+            self.play(FadeOut(hist))
             self.play(Create(zero), FadeIn(avl), Write(f1))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN if v > 0 else UP) for v, b_ in zip(adv, bars)], lag_ratio=0.08))
             vo.wait_until("d")
@@ -203,7 +224,11 @@ class RL(VoiceoverScene):
             K = len(steps)
             dt = max(0.3, min(0.8, (vo.until("d") - 0.5) / K))
             for k in range(1, K):
-                self.play(Transform(cur, grid(k)), kt.animate.set_value(k), run_time=dt, rate_func=linear)
+                self.play(kt.animate.set_value(k), run_time=dt, rate_func=linear)
+                new = grid(k)
+                self.remove(cur)
+                self.add(new)
+                cur = new
             vo.wait_until("d")
             self.play(Indicate(cnt, color=C.BITS))
         for m in (line, dot, cnt):
