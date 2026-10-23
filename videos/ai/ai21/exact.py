@@ -113,7 +113,7 @@ def sw(a, b, n_proj=128, seed=0):
 _REF = None
 
 
-def ref():
+def data_ref():
     """A large fixed sample of the data: every distance from the data is measured against it."""
     global _REF
     if _REF is None:
@@ -123,7 +123,7 @@ def ref():
 
 def dist(x):
     """How far a cloud of points is from the data: sliced Wasserstein distance to the reference sample."""
-    return sw(x, ref())
+    return sw(x, data_ref())
 
 
 def floor(n, reps=4):
@@ -311,8 +311,9 @@ def compute_sde():
         x, snaps, paths = run(kind)
         out[f"{kind}_final"], out[f"{kind}_paths"] = x[:1500], paths
         out[f"{kind}_snaps"] = np.array([snaps[t][:600] for t in snap_t])
-        out[f"{kind}_sw"] = [sw(snaps[t], direct(t, n, 30 + k)) for k, t in enumerate(snap_t)]
-    out["floor_sw"] = [sw(direct(t, n, 60 + k), direct(t, n, 90 + k)) for k, t in enumerate(snap_t)]
+        out[f"{kind}_sw"] = [sw(snaps[t], direct(t, 20000, 30 + k)) for k, t in enumerate(snap_t)]
+    out["floor_sw"] = [float(np.mean([sw(direct(t, n, 60 + 10 * r + k), direct(t, 20000, 30 + k)) for r in range(3)]))
+                       for k, t in enumerate(snap_t)]
     out["sde_ode_sw"] = [sw(np.asarray(out["sde_snaps"])[k], np.asarray(out["ode_snaps"])[k]) for k in range(len(snap_t))]
     # the ODE both ways: data to noise, then back
     x0 = sample(600, 8)
@@ -452,7 +453,7 @@ SOLVERS = [("euler_vp", "time"), ("ddim", "edm"), ("heun", "edm"), ("dpm2", "edm
 NFES = [4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128]
 
 
-def solver_sweep(D, z, ref, data_ref, label=""):
+def solver_sweep(D, z, ref, label=""):
     """Every solver at budgets of about NFES network evaluations: the error against the reference solution (the
     deterministic ones) and the distance from the data (all of them)."""
     out = {}
@@ -466,7 +467,10 @@ def solver_sweep(D, z, ref, data_ref, label=""):
             else:
                 n = budget
             x, nfe = solve(D, z, kind, n, spacing, seed=budget)
-            rows.append(dict(nfe=nfe, err=float(np.linalg.norm(x - ref, axis=1).mean()), sw=sw(x, data_ref)))
+            d = dist(x)
+            if kind == "ddpm":  # stochastic: average the distance over two runs
+                d = 0.5 * (d + dist(solve(D, z, kind, n, spacing, seed=budget + 1000)[0]))
+            rows.append(dict(nfe=nfe, err=float(np.linalg.norm(x - ref, axis=1).mean()), sw=d))
         out[kind] = rows
         print(f"    {label}{kind:9s} " + " ".join(f"{r['nfe']}:{r['err']:.3f}/{r['sw']:.3f}" for r in rows), flush=True)
     return out
@@ -478,10 +482,9 @@ def compute_solvers():
     ref, _ = solve(denoise_edm, z, "dpm2", 1024, "edm")
     ref2, _ = solve(denoise_edm, z, "heun", 1024, "edm")
     out = dict(ref_gap=float(np.linalg.norm(ref - ref2, axis=1).mean()), nfes=NFES, solvers=[k for k, _ in SOLVERS])
-    data_ref = sample(n, 11)
-    out["ref_sw"] = sw(ref, data_ref)
-    out["floor"] = sw(sample(n, 12), data_ref)
-    out.update(solver_sweep(denoise_edm, z, ref, data_ref))
+    out["ref_sw"] = dist(ref)
+    out["floor"] = floor(n)
+    out.update(solver_sweep(denoise_edm, z, ref))
     # the time steps of each, for the picture: the first 12 noise levels of each spacing at 12 steps
     for sp in ("edm", "logsnr", "time", "ddpm"):
         out[f"steps_{sp}"] = sigmas(sp, 12)
@@ -528,16 +531,21 @@ def compute_schedules():
         out[f"dens_{k}"] = h / h.sum() / (bins[1] - bins[0])
     out["abar_T"], out["snr_T"] = float(abar[-1]), float(abar[-1] / (1 - abar[-1]))
     out["logsnr_T"] = float(np.log(abar[-1] / (1 - abar[-1])))
-    # DDIM with four spacings of the same 3 to 128 steps, exact denoiser: error against the reference
+    # four spacings of the noise levels, for three solvers, at the same budgets: error against the reference
     n = 2000
     z = rng(2022).normal(size=(n, 2))
     ref, _ = solve(denoise_edm, z, "dpm2", 1024, "edm")
     out["spacings"] = ["time", "ddpm", "logsnr", "edm"]
-    out["steps"] = [4, 6, 8, 12, 16, 24, 32, 48, 64, 128]
-    for sp in out["spacings"]:
-        out[f"err_{sp}"] = [float(np.linalg.norm(solve(denoise_edm, z, "ddim", k, sp)[0] - ref, axis=1).mean())
-                            for k in out["steps"]]
-        print(f"    DDIM, {sp:6s} spacing: " + " ".join(f"{e:.3f}" for e in out[f"err_{sp}"]), flush=True)
+    out["spacing_solvers"] = ["ddim", "heun", "dpmpp2m"]
+    out["budgets"] = [8, 16, 32, 64]
+    for kind in out["spacing_solvers"]:
+        for sp in out["spacings"]:
+            errs = []
+            for b_ in out["budgets"]:
+                n_ = (b_ + 1) // 2 if kind == "heun" else b_
+                errs.append(float(np.linalg.norm(solve(denoise_edm, z, kind, n_, sp)[0] - ref, axis=1).mean()))
+            out[f"err_{kind}_{sp}"] = errs
+            print(f"    {kind:8s} {sp:6s} spacing: " + " ".join(f"{e:.3f}" for e in errs), flush=True)
     out["sigma_data"] = sd
     return out
 
@@ -638,7 +646,7 @@ def compute_transport():
     Cm2 = ((z[:, None] - x_fm[None]) ** 2).sum(-1)
     r2, c2 = linear_sum_assignment(Cm2)
     out["cost_ot_fm"] = float(Cm2[r2, c2].mean())
-    out["sw_fm_end"], out["sw_trig_end"] = sw(x_fm, data), sw(x_tr, data)
+    out["sw_fm_end"], out["sw_trig_end"], out["floor"] = dist(x_fm), dist(x_tr), floor(n)
     # the marginal-field theorem: following E[x1 - z | x] keeps the particles distributed exactly as the
     # interpolation (1 - tau) z + tau x1 of independent pairs, at every tau
     taus = [0.25, 0.5, 0.75, 1.0]
@@ -646,9 +654,9 @@ def compute_transport():
     for k, tau in enumerate(taus):
         idx = int(round(tau * (len(P_fm) - 1)))
         tau_ = min(tau, 1 - 1e-4)
-        d1 = (1 - tau_) * rng(40 + k).normal(size=(n, 2)) + tau_ * sample(n, 50 + k)
-        d2 = (1 - tau_) * rng(60 + k).normal(size=(n, 2)) + tau_ * sample(n, 70 + k)
-        rows.append(dict(tau=tau, sw_flow=sw(P_fm[idx], d1), sw_floor=sw(d2, d1)))
+        d1 = (1 - tau_) * rng(40 + k).normal(size=(20000, 2)) + tau_ * sample(20000, 50 + k)
+        d2 = [(1 - tau_) * rng(60 + k + 10 * r).normal(size=(n, 2)) + tau_ * sample(n, 70 + k + 10 * r) for r in range(3)]
+        rows.append(dict(tau=tau, sw_flow=sw(P_fm[idx], d1), sw_floor=float(np.mean([sw(d_, d1) for d_ in d2]))))
         out[f"direct{tau:g}"] = d1[:600]
         out[f"flow{tau:g}"] = P_fm[idx][:600]
     out["marginal_rows"] = rows

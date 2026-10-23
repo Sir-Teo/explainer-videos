@@ -103,6 +103,8 @@ class Arithmetic(VoiceoverScene):
         c0 = bits_so_far[0][2]
         hard = max(range(len(steps)), key=lambda k: steps[k]["bits"])
         hs = steps[hard]
+        hs_word = next(w for w in msg.split(" ") if msg.index(w) <= hard < msg.index(w) + len(w)) if msg[hard] != " " else msg
+        hs_sym = msg[hard] if msg[hard] != " " else "space"
 
         def bin_lines(k):
             bl, bh, c = bits_so_far[k]
@@ -179,9 +181,8 @@ class Arithmetic(VoiceoverScene):
             "Then zoom in and split again: h, e, space, f, a, l, c, o, n. <bookmark mark='a'/> Each letter "
             "narrows the interval by its probability, and as it narrows, more leading digits of its two ends come to "
             "agree. Those bits can be sent as soon as they're decided. <bookmark mark='b'/> A likely letter barely "
-            "narrows the interval, and costs a fraction of a bit. An unlikely one, like the "
-            f"{'space' if hs['symbol'] == ' ' else hs['symbol']} after {hs['context'].strip() or 'the space'}, which "
-            f"the model gave {100 * hs['p']:.1f} percent, costs {hs['bits']:.1f} bits."
+            f"narrows the interval, and costs a fraction of a bit. An unlikely one, like the {hs_sym} in {hs_word}, "
+            f"which the model gave {100 * hs['p']:.1f} percent, costs {hs['bits']:.1f} bits."
         ) as vo:
             for k in range(1, 6):
                 add_row(k, run_time=1.0)
