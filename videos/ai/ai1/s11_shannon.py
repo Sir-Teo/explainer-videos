@@ -59,10 +59,10 @@ class Shannon1951(VoiceoverScene):
         qn = label(r"$q_i$: \ how often the right letter was the $i$-th guess", font_size=24, color=GREY_A)
         qn.next_to(res, DOWN, buff=0.2)
         with self.voiceover(
-            "Here's Shannon's key observation. Suppose the receiver has an identical twin of the guesser: same "
-            "knowledge, same habits. <bookmark mark='a'/> The sender runs the guessing game on the text, and sends "
-            "only the guess counts. <bookmark mark='b'/> The receiver asks the twin for its guesses, and when the "
-            "count says third guess, takes the twin's third guess. Out comes the text, exactly."
+            "Here's Shannon's key observation. Give the receiver an identical twin of the guesser: same knowledge, "
+            "same habits. <bookmark mark='a'/> The sender plays the game on the text and sends only the guess "
+            "counts. <bookmark mark='b'/> The receiver asks the twin, and when the count says third guess, takes "
+            "its third guess. Out comes the text, exactly."
         ) as vo:
             self.play(FadeIn(head), FadeIn(txt), FadeIn(boxes[0]), FadeIn(boxes[1]), FadeIn(sender), FadeIn(receiver))
             vo.wait_until("a")
@@ -71,9 +71,9 @@ class Shannon1951(VoiceoverScene):
             self.play(GrowArrow(a3), FadeIn(expl))
             self.play(GrowArrow(a4), FadeIn(out))
         with self.voiceover(
-            "So the guess counts carry all the information in the text. <bookmark mark='a'/> The text's entropy can "
-            "be no more than theirs, and that is at most the entropy of how often each guess number turns up. "
-            "Count the guesses, and you have an upper bound on the information in English."
+            "So the guess counts carry all the text's information. <bookmark mark='a'/> The text's entropy is at "
+            "most theirs, which is at most the entropy of how often each guess number turns up: an upper bound on "
+            "the information in English."
         ) as vo:
             vo.wait_until("a")
             self.play(Write(res), FadeIn(qn))
@@ -112,10 +112,9 @@ class Shannon1951(VoiceoverScene):
         lsrc = note(r"lower bound: \ Shannon (1951), for an ideal guesser").next_to(own, DOWN, buff=0.2).align_to(rows, LEFT)
         tag = computed_tag()
         with self.voiceover(
-            "Let's play the game with our counting model from the last chapter, as the guesser, on "
-            f"{n:,} letters of the Falcon passage. <bookmark mark='a'/> It gets the letter on the first guess "
-            f"{100 * q[0]:.0f} percent of the time, on the second {100 * q[1]:.0f} percent, and the tail runs on from "
-            "there."
+            "Let's play with the last chapter's counting model as the guesser, on "
+            f"{n:,} letters of the Falcon passage. <bookmark mark='a'/> It gets the letter first time "
+            f"{100 * q[0]:.0f} percent of the time, second time {100 * q[1]:.0f} percent, with a long tail."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(tag))
             vo.wait_until("a")
@@ -124,8 +123,8 @@ class Shannon1951(VoiceoverScene):
             self.play(FadeIn(vals))
         with self.voiceover(
             f"From those frequencies, the upper bound is {up:.2f} bits per letter. <bookmark mark='a'/> Shannon also "
-            f"proved a lower bound from the same numbers: {lo:.2f} bits. The true information content of the passage, "
-            "for a guesser like this one, lies in between."
+            f"proved a lower bound from the same numbers: {lo:.2f}. For this guesser, the true figure lies in "
+            "between."
         ) as vo:
             self.play(Write(rows[0]))
             vo.wait_until("a")
@@ -170,12 +169,11 @@ class Shannon1951(VoiceoverScene):
         src = cite(r"C.~E.~Shannon (1951); \ T.~M.~Cover \& R.~C.~King, IEEE Trans.~Inf.~Theory (1978)", corner=UL)
         src.next_to(head, DOWN, buff=0.1)
         with self.voiceover(
-            "Shannon's own subjects did far better. <bookmark mark='a'/> Given a hundred letters of context, his "
-            f"estimates put printed English between {lo_h:.1f} and {hi_h:.1f} bits per letter, <bookmark mark='b'/> "
-            f"against {float(g['lower']):.1f} to {float(g['upper']):.1f} for our counting guesser with six. "
-            "<bookmark mark='c'/> The difference is knowledge: people know "
-            "words and grammar, they know idioms, they know what the story is about, and they know how the world "
-            "works."
+            "Shannon's own subjects did far better. <bookmark mark='a'/> With a hundred letters of context, he put "
+            f"printed English between {lo_h:.1f} and {hi_h:.1f} bits per letter, <bookmark mark='b'/> against "
+            f"{float(g['lower']):.1f} to {float(g['upper']):.1f} for our counting guesser with six. "
+            "<bookmark mark='c'/> The difference is knowledge: of words and grammar, idioms, the story, and how the "
+            "world works."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), Create(axis), FadeIn(nums), FadeIn(unit), FadeIn(uni))
             vo.wait_until("a")

@@ -194,7 +194,8 @@ class RASP(VoiceoverScene):
         cons = VGroup(
             label(r"so, unless $\mathsf{TC}^0$ is as strong as $\mathsf{NC}^1$:", font_size=26, color=GREY_A),
             label(r"no fixed-depth transformer tracks the composition of permutations \\ of five things at every "
-                  r"length \ (Merrill, Petty \& Sabharwal 2024; \ Barrington 1989)", font_size=24, color=WHITE),
+                  r"length \ (Merrill, Petty \& Sabharwal 2024; \ Barrington 1989)", font_size=24, color=WHITE,
+                  tex_environment="flushleft"),
             label(r"depth matters: \ one layer could not build an induction head \ (chapter 14)", font_size=24,
                   color=WHITE),
             label(r"thinking out loud adds serial steps: \ chain of thought \ (Part 28)", font_size=24, color=C.BITS),

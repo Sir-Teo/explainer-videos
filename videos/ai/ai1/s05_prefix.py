@@ -122,8 +122,8 @@ class Prefix(VoiceoverScene):
         bits = Text(msg, font=MONO, font_size=34, color=C.BITS).next_to(rule, DOWN, buff=0.4)
         out = VGroup()
         with self.voiceover(
-            "Watch it decode one, one, zero, zero, one, zero, one, one, one, one, one. Right, right, left: that's "
-            "c. Start again at the top. Left: a. Right, left: b. Right five times: f. No separators needed."
+            "Watch it decode. Right, right, left: c. Back to the top. Left: a. Right, left: b. Right five times: f. "
+            "No separators needed."
         ):
             self.play(FadeIn(bits))
             pos = 0

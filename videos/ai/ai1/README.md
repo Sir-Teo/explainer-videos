@@ -10,18 +10,18 @@ text we have. A hook, fifteen chapters and an outro:
 
 * **Shannon's guessing game.** Shannon's 1951 experiment, played on his own sentence by a counting program; how we
   got here (Morse code, Hartley 1928, Shannon 1948 and 1951, Huffman, arithmetic coding, Bengio 2003, GPT-2, Qwen3);
-  GPT-2 (2019) and Qwen3-4B (2025) playing the same game on the next token; tokens; the same game in images, sound and
-  robotics (schematic); the series map; the objectives; the scoreboard and its passage.
+  GPT-2 (2019) and Qwen3-4B (2025) playing the same game on the next token; tokens; the series map; the objectives; the scoreboard and its passage.
 * **1. Probability and the chain rule.** Letter frequencies of 22.8 million symbols from thirty novels; a distribution
   as one unit of belief shared out; the 27 × 27 table of P(next | previous) and the mosaic of joint probabilities,
   P(u | q) = 0.9985; the chain rule, derived, and drawn as nested slivers (“he said” → *the*).
 * **2. How surprised to be.** Shannon's requirements for surprise and the derivation that they leave only
-  log₂(1/p) (g(x + y) = g(x) + g(y), integers, fractions, continuity); bits as halvings; the surprise of Shannon's
+  log₂(1/p) (g(x + y) = g(x) + g(y), integers, fractions, continuity); the surprise of Shannon's
   sentence, letter by letter: 182 bits for 101 symbols.
-* **3. Entropy, and why it is unique.** Entropy as an area (slivers of width p and height log₂ 1/p): 4.08 bits for
-  letters against log₂ 27 = 4.75; the coin; Shannon's three requirements (1948) and the grouping rule, checked on his
+* **3. Entropy, and why it is unique.** The average surprise, term by term; entropy as an area (slivers of width
+  p and height log₂ 1/p): 4.08 bits for letters; the coin; Shannon's three requirements (1948) and the grouping rule, checked on his
   example and on the letters (space / vowel / consonant: 1.48 + 0.307 × 2.20 + 0.502 × 3.85 = 4.08); his Theorem 2,
-  sketched (A(sᵐ) = m A(s), A(n) = K log n, blocks of equal outcomes); H ≤ log₂ K by Jensen on the entropy dome;
+  sketched (A(sᵐ) = m A(s), A(n) = K log n, blocks of equal outcomes); H ≤ log₂ K by Jensen on the entropy dome
+  (log₂ 27 = 4.75; the gap is redundancy);
   conditional entropy as a mosaic: 3.33 bits given the previous letter.
 * **4. Prefix codes and the Kraft–McMillan inequality.** Fixed-length codes; prefix-free codes as trees, decoding;
   Kraft's inequality proved on the full binary tree (codewords claim 16 + 8 + 4 + 2 + 1 + 1 of 32 leaves); the converse
@@ -41,28 +41,28 @@ text we have. A hook, fifteen chapters and an outro:
   40% of the probability; n = 1000: 2⁻¹⁷³ of the sequences, all but one part in 87 million of the probability; the
   likeliest sequence is never typical); the source coding theorem, with Shannon's code on blocks closing in on H
   (0.882 → 0.7041 bits against 0.7036); real text as a vanishing corner of all strings.
-* **7. Cross-entropy and KL.** Coding with the wrong model as an area; H(p, q) = H(p) + D_KL(p‖q); Gibbs' inequality
+* **7. Cross-entropy and KL.** A code as a set of bets (Huffman's lengths against the true p); coding with the wrong
+  model as an area; H(p, q) = H(p) + D_KL(p‖q); Gibbs' inequality
   by Jensen (and H(Y | X) ≤ H(Y)); cross-entropy as the training loss of every language model, nats; forward against
   reverse KL, fitted by gradient descent to a two-peaked density, with the fits sliding (the wide fit scores 1.30 bits
-  the other way, the narrow one 10.1), and both loss landscapes in 3D.
-* **8. Arithmetic coding.** Huffman's whole bits; the chain-rule slivers continued for *the falcon*, the binary
+  the other way, the narrow one 10.1).
+* **8. Arithmetic coding.** Huffman's whole bits (and the 27¹⁰⁰-entry table blocks would need); the chain-rule slivers continued for *the falcon*, the binary
   expansions of the interval's ends agreeing digit by digit; the 29-bit codeword (information content 27.66 bits);
   the two-bit bound, proved; decoding; finite precision: the integer coder's own record, with 16-bit registers,
-  narrowing and zooming (with pending bits) through *the falcon* (28 bits); the whole passage through a 32-bit coder
-  (20,357 letters: 41,089 bits against an information content of 41,087.6 with 24-bit counts; 1,192 extra bits with
-  8-bit counts); prediction ⇔ compression.
+  narrowing and zooming (with pending bits) through *the falcon* (28 bits); prediction ⇔ compression. (`arithint`
+  also runs the whole passage through a 32-bit coder: 41,089 bits against an information content of 41,087.6 with
+  24-bit counts, 1,192 extra bits with 8-bit counts; the numbers are in the cache, not in the film.)
 * **9. Learning by counting, and Laplace's rule.** Shannon's 1948 approximations, regenerated from the books; the
   counting rule; bits per letter against context length on the books (down to 0.27 at 14 letters) and on the Falcon
   passage (best 2.02 at 5 letters, worse than letter frequencies at 14); unseen contexts; Laplace's rule of succession
   (1814, the sunrise) derived from Euler's beta integral, add-one and add-α smoothing, swept over α at four context
-  lengths (Laplace is best for one letter of context, and 0.35 bits worse at eight); the counting model reading and
-  writing as it reads; generalization.
+  lengths (Laplace is best for one letter of context, and 0.35 bits worse at eight); generalization.
 * **10. Shannon's 1951 experiment.** The identical-twin argument (guess counts are a code); our counting guesser's
   guess counts on 11,994 letters (first guess 58%); Shannon's upper and lower bounds (2.37 and 1.36 bits); his
   subjects (0.6–1.3 bits with 100 letters of context); Cover and King's 1978 estimate.
 * **11. Likelihood, softmax and the gradient.** Maximum likelihood = minimum cross-entropy = minimum divergence; counting
-  is maximum likelihood; the softmax, step by step; ∂(−ln q_y)/∂z_k = q_k − [k = y], derived; gradient descent on
-  five logits down to the entropy floor.
+  is maximum likelihood; the softmax, step by step; ∂(−ln q_y)/∂z_k = q_k − [k = y], derived: the model's guess
+  minus the truth, the signal gradient descent follows.
 * **12. Mutual information.** I(X; Y) = H(X) − H(X | Y), symmetric, a divergence; neighbouring letters share 0.75
   bits, two letters back 1.36 (the second alone 0.27); the data-processing inequality from the chain rule, checked on
   the books (the kind of the previous letter keeps 0.35 bits; noise drains the rest); the mutual information between
@@ -78,7 +78,7 @@ text we have. A hook, fifteen chapters and an outro:
 * **15. The scoreboard: language modeling is compression.** Bits per character on the passage as printed: plain text 8,
   uniform over its 61 symbols 5.93, letter frequencies 4.55, one character of context 3.58, gzip 3.31, xz 3.20,
   bzip2 2.92, the best counting model 2.32, GPT-2 small 1.17, GPT-2 XL 1.01, Qwen3-0.6B 1.02, Qwen3-4B 0.87; people
-  0.6–1.3 (letters only). GPT-2 small as a real compressor, round trip: the first 4,331 characters in 688 bytes
+  0.6–1.3 (letters only); the gap from counting to under one bit is the series. GPT-2 small as a real compressor, round trip: the first 4,331 characters in 688 bytes
   (xz: 2,180), decoded back exactly by a second run of the model. The catch, the model's size (248 MB for GPT-2 small:
   11,572 times the passage); Delétang et al. (ICLR 2024) on enwik9 (Chinchilla 70B 8.3% against gzip 32.3% and LZMA2
   23.0%, 14,008% counting its weights); the Hutter Prize (2006; record of 24 July 2026: 100,424,672 bytes for enwik9,

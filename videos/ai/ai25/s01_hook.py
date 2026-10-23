@@ -121,8 +121,12 @@ class Hook(VoiceoverScene):
         inv_err = abs(float(curves["inv"].mean()) - U)
         tag = note(r"computed: \ five charged particles, \ networks trained here on $3{,}000$ of them",
                    font_size=20).to_corner(DR, buff=0.25)
-        tiny = ("less than a millionth of a unit, rounding error" if rng_i < 1e-6 else
-                "less than a ten-thousandth of a unit, rounding error" if rng_i < 1e-4 else f"{rng_i:.4f} units")
+        if rng_i < 1e-6:
+            tiny = "less than a millionth of a unit, rounding error"
+        elif rng_i < 1e-4:
+            tiny = "less than a ten-thousandth of a unit, rounding error"
+        else:
+            tiny = f"{rng_i:.4f} units"
         with self.voiceover(
             "Here is the idea this part is built on. Five charged particles: a toy molecule. Turn it in space, and "
             "nothing about it changes, so its energy can't change either. <bookmark mark='a'/> We trained networks on "

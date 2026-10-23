@@ -34,7 +34,6 @@ class Arithmetic(VoiceoverScene):
         self.bound()
         self.decode()
         self.precision()
-        self.passage()
         self.equivalence()
 
     # ------------------------------------------------------------------
@@ -73,12 +72,12 @@ class Arithmetic(VoiceoverScene):
         blocks = label(rf"coding blocks of $100$ letters instead: \ a table of $27^{{100}} \approx 10^{{{digits:.0f}}}$ "
                        r"entries", font_size=28, color=GREY_A).move_to(DOWN * 1.9)
         with self.voiceover(
-            "Huffman's code has one flaw: every symbol costs a whole number of bits, at least one. "
+            "Huffman's code has one flaw: every symbol costs at least one whole bit. "
             f"<bookmark mark='a'/> u after q carries {info:.3f} bits, and still costs a full bit. "
             "<bookmark mark='b'/> A model that really knows English is surprised by about a bit per symbol, or "
-            "less, and a symbol code can never go below one. <bookmark mark='c'/> Coding long blocks would fix it, "
-            "but blocks of a hundred letters need a table of twenty-seven to the hundred entries. "
-            "<bookmark mark='d'/> Instead, code the whole message as a single number, one guess at a time."
+            "less; a symbol code can't go below one. <bookmark mark='c'/> Long blocks would fix it, but blocks of a "
+            "hundred letters need a table of twenty-seven to the hundred entries. <bookmark mark='d'/> Instead, "
+            "code the whole message as one number, one guess at a time."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[2]))
             vo.wait_until("a")
@@ -508,60 +507,5 @@ class Arithmetic(VoiceoverScene):
         ):
             self.play(Transform(sm, final), FadeOut(pm))
             self.play(Indicate(sm, color=C.BITS))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def passage(self):
-        ai = load("arithint")
-        n, ideal = int(ai["n"]), float(ai["ideal"])
-        fb, byf = [int(x) for x in ai["freq_bits"]], [int(x) for x in ai["by_freq"]]
-        rb, byr = [int(x) for x in ai["reg_bits"]], [int(x) for x in ai["by_reg"]]
-        show = [f for f in (6, 8, 10, 12, 16, 24) if f in fb]
-        head = label(rf"The whole Falcon passage: \ ${n:,}$ letters, \ the best counting model".replace(",", "{,}"),
-                     font_size=32).to_edge(UP, buff=0.35)
-        info_l = label(rf"its information content under the model: \ ${ideal:,.1f}$ bits".replace(",", "{,}"),
-                       font_size=28, color=C.INTERVAL).next_to(head, DOWN, buff=0.3)
-        hdr = VGroup(label(r"probabilities rounded to", font_size=24, color=GREY_B),
-                     label(r"bits sent", font_size=24, color=GREY_B), label(r"difference", font_size=24, color=GREY_B))
-        rows = VGroup()
-        for f in show:
-            v = byf[fb.index(f)]
-            rows.add(VGroup(label(rf"${f}$-bit counts", font_size=26),
-                            MathTex(f"{v:,}".replace(",", "{,}"), font_size=30, color=C.BITS),
-                            MathTex(f"{v - ideal:+,.1f}".replace(",", "{,}"), font_size=30,
-                                    color=C.SURPRISE if v - ideal > 10 else GREY_A)))
-        tab = VGroup(hdr, *rows)
-        for j, x in enumerate((-3.6, 0.6, 3.6)):
-            for r in tab:
-                r[j].move_to([x, 0, 0], aligned_edge=RIGHT if j else LEFT)
-        for i, r in enumerate(tab):
-            for m in r:
-                m.set_y(1.15 - 0.55 * i)
-        tag = computed_tag()
-        reg_note = label(rf"registers of ${rb[0]}$ to ${rb[-1]}$ bits, with $10$-bit counts: \ "
-                         rf"${min(byr):,}$ to ${max(byr):,}$ bits".replace(",", "{,}"), font_size=24, color=GREY_A)
-        reg_note.to_edge(DOWN, buff=0.4)
-        fine = byf[fb.index(show[-1])] - ideal
-        coarse = byf[fb.index(8)] - ideal if 8 in fb else None
-        dips = [f for f in show if byf[fb.index(f)] < ideal]
-        dip_said = (f"With {dips[0]}-bit counts it even came out a few bits under: rounding gave rare letters a "
-                    "little more probability, and this passage happened to use them." if dips else "")
-        coarse_said = f"Round them to 8 bits and it costs {coarse:,.0f} extra bits." if coarse is not None else ""
-        with self.voiceover(
-            f"Does the rounding cost much? We ran the whole Falcon passage, {n:,} letters, through a 32-bit coder "
-            f"driven by our best counting model. <bookmark mark='a'/> Its information content under that model: "
-            f"{ideal:,.0f} bits. <bookmark mark='b'/> With probabilities rounded to {show[-1]}-bit counts, the "
-            f"coder sent {fine:.1f} bits more, in the whole passage. {coarse_said} <bookmark mark='r'/> "
-            f"{dip_said} <bookmark mark='c'/> The registers hardly matter. Arithmetic coding gives away almost "
-            "nothing: what you pay is the model's surprise."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(hdr))
-            vo.wait_until("a")
-            self.play(FadeIn(info_l))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=2.0)
-            vo.wait_until("c")
-            self.play(FadeIn(reg_note))
         self.wait(0.3)
         self.clear_scene()

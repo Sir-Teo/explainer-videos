@@ -109,8 +109,8 @@ class Search(VoiceoverScene):
                        r"their benchmark", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)
         better = [t for t in tests if t < bf_te - 0.02]
         if len(better) == len(tests):
-            res_line = ("On new, longer sequences of items, both evolved rules still beat best fit: "
-                        + ", ".join(f"{t:.2f}" for t in tests) + f" percent against {bf_te:.2f}")
+            res_line = (f"On new, longer sequences of items, both evolved rules still beat best fit: {tests[0]:.2f} "
+                        f"and {tests[-1]:.2f} percent against {bf_te:.2f}")
         elif better:
             res_line = (f"On new, longer sequences, {words_num(len(better))} of the {words_num(len(tests))} evolved "
                         f"rules beats best fit, {min(better):.2f} percent against {bf_te:.2f}; the other doesn't")
@@ -177,13 +177,14 @@ class Search(VoiceoverScene):
                           font_size=22, color=col))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -2.0, 0])
         ver = mm["n2_r7_verify"]
+        vdp = int(np.floor(-np.log10(max(ver, 1e-300))))
         r6, r7, r8 = res
         s6 = (f"At rank six, none of the {r6[2]} starts gets below an error of {r6[3]:.2f}: there is no "
               "six-multiplication algorithm to find" if r6[1] == 0 else
               f"At rank six, {r6[1]} starts report zero error, which would contradict the theorem: a numerical "
               "artefact")
         s7 = (f"At rank seven, {r7[1]} of {r7[2]} starts find one: a Strassen-like algorithm, which multiplies "
-              f"random matrices correctly to within {ver:.0e}" if r7[1] else "At rank seven our search found none")
+              f"random matrices correctly to {vdp} decimal places" if r7[1] else "At rank seven our search found none")
         tag = note(r"computed", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
             "Matrix multiplication is the purest case. <bookmark mark='a'/> The schoolbook way to multiply two n by "
@@ -235,7 +236,7 @@ class Search(VoiceoverScene):
             "mark='b'/> Among its results: a way to multiply four by four complex matrices with forty-eight "
             "multiplications, beating the forty-nine of applying Strassen's trick twice, the record since 1969. "
             "<bookmark mark='c'/> It got there by evolving the code of exactly the kind of gradient-based "
-            "decomposition search we just ran. <bookmark mark='d'/> Within weeks, three French mathematicians, "
+            "decomposition search we just ran. <bookmark mark='d'/> Within weeks, three researchers in France, "
             "Jean-Guillaume Dumas, Clément Pernet and Alexandre Sedoglavic, derived a forty-eight with only rational "
             "coefficients. <bookmark mark='e'/> AlphaEvolve also placed 593 spheres touching a central one in eleven "
             "dimensions, a new record, and on more than fifty open problems it matched the best known answer in "

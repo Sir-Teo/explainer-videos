@@ -195,9 +195,12 @@ class Messages(VoiceoverScene):
         n_lab = int(tr.sum())
         tag = note(rf"computed: \ $300$ nodes, \ $3$ communities, \ ${n_lab}$ labelled; \ three seeds", font_size=20)
         tag.to_corner(DR, buff=0.2)
-        verdict = ("Passing messages more than doubles what the hints alone give" if np.mean(acc_g) > 2 * np.mean(acc_m)
-                   else "Passing messages lifts it well above the hints alone" if np.mean(acc_g) > np.mean(acc_m) + 0.1
-                   else "Passing messages helps only a little here")
+        if np.mean(acc_g) > 2 * np.mean(acc_m):
+            verdict = "Passing messages more than doubles what the hints alone give"
+        elif np.mean(acc_g) > np.mean(acc_m) + 0.1:
+            verdict = "Passing messages lifts it well above the hints alone"
+        else:
+            verdict = "Passing messages helps only a little here"
         with self.voiceover(
             "Let's train one. Three hundred people in three communities, with friendships mostly inside each "
             f"community: {100 * intra:.0f} percent of the edges, about {deg:.0f} per person. Each person carries "

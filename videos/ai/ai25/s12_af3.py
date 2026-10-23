@@ -161,9 +161,12 @@ class AF3(VoiceoverScene):
                    .replace("{{,}}", "{,}"), font_size=18).to_corner(DR, buff=0.15)
         e, m = stats["egnn"], stats["mlp"]
         better = (e["bond"] < m["bond"]) + (e["clash"] < m["clash"])
-        verdict = ("The equivariant denoiser draws better chains on both counts" if better == 2 else
-                   "The plain network, trained on turned copies, does as well or better on both counts" if better == 0
-                   else "Each wins on one count")
+        if better == 2:
+            verdict = "The equivariant denoiser draws better chains on both counts"
+        elif better == 0:
+            verdict = "The plain network, trained on turned copies, does as well or better on both counts"
+        else:
+            verdict = "Each wins on one count"
         nn_line = ("and neither simply copies its training chains" if min(e["nn"], m["nn"]) > 0.5 * ref[2] else
                    "though the samples sit closer to training chains than real new chains do")
         with self.voiceover(

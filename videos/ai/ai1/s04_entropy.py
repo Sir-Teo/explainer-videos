@@ -12,7 +12,6 @@ class Entropy(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
         self.average()
-        self.uniform()
         self.coin()
         self.axioms()
         self.uniqueness()
@@ -94,43 +93,16 @@ class Entropy(VoiceoverScene, ThreeDScene):
             "height of its surprise: common symbols wide and low, rare ones thin and tall. <bookmark mark='c'/> The "
             f"entropy is the total area: for English letters, {H:.2f} bits."
         ) as vo:
-            self.play(FadeOut(terms))
             self.play(Create(base), FadeIn(flat), FadeIn(wl))
             vo.wait_until("a")
             self.play(Indicate(flat, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
+            self.play(FadeOut(terms), run_time=0.6)
             self.play(ReplacementTransform(flat, sl), FadeIn(hl), run_time=2.0)
             self.play(FadeIn(labs))
             vo.wait_until("c")
             self.play(FadeIn(area))
-        self.sl, self.base, self.area, self.labs, self.W, self.scale, self.y0 = sl, base, area, labs, W, scale, y0
-        self.defn, self.sub, self.wl, self.hl = defn, sub, wl, hl
-
-    # ------------------------------------------------------------------
-    def uniform(self):
-        W, scale, y0 = self.W, self.scale, self.y0
-        u = np.full(27, 1 / 27)
-        uni = area_slivers(u, W=W, y0=y0, scale=scale, color=GREY_B, opacity=0.5)
-        Hu = math.log2(27)
-        lab_u = label(rf"all $27$ equally likely: \ area $= \log_2 27 = {Hu:.2f}$ bits", font_size=28, color=GREY_A)
-        lab_u.move_to([-2.0, 1.25, 0])
-        H = float(load("letters")["H"])
-        red = label(rf"English letters: \ ${H:.2f}$ bits. \ The rest is \textit{{redundancy}}.", font_size=28,
-                    color=C.ENTROPY)
-        red.next_to(lab_u, DOWN, buff=0.2).align_to(lab_u, LEFT)
-        with self.voiceover(
-            "Compare all twenty-seven symbols equally likely. <bookmark mark='a'/> Every sliver has the same width "
-            f"and height: log two of twenty-seven, {Hu:.2f} bits, the most one symbol in twenty-seven can carry. "
-            "<bookmark mark='b'/> English letters sit below it. The gap is what Shannon called redundancy: structure "
-            "a guesser can exploit."
-        ) as vo:
-            self.play(FadeOut(self.area), FadeOut(self.labs), FadeOut(self.hl))
-            vo.wait_until("a")
-            self.play(FadeIn(uni), self.sl.animate.set_fill(opacity=0.35), run_time=1.5)
-            self.play(FadeIn(lab_u))
-            vo.wait_until("b")
-            self.play(self.sl.animate.set_fill(opacity=0.85), FadeIn(red))
-        self.wait(0.3)
+        self.wait(0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -380,7 +352,8 @@ class Entropy(VoiceoverScene, ThreeDScene):
             "inequality. <bookmark mark='b'/> Entropy is an "
             "average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the "
             "average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with "
-            "equality only when every outcome is equally likely."
+            "equality only when every outcome is equally likely. The gap below it is what Shannon called "
+            "redundancy: structure a guesser can exploit."
         ) as vo:
             self.play(FadeIn(head), Create(tri), FadeIn(corners), FadeIn(dome), run_time=1.2)
             self.move_camera(phi=62 * DEGREES, theta=-62 * DEGREES, added_anims=[FadeOut(corners)], run_time=2.2)

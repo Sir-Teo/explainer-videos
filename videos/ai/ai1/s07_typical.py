@@ -90,11 +90,11 @@ class Typical(VoiceoverScene):
         sample_g = VGroup(sample, sample_c).arrange(DOWN, buff=0.3).move_to(ax.c2p(5.5, 0.55))
         with self.voiceover(
             "Last chapter, whole bits wasted up to one per symbol, and long blocks were the cure. Here is why. "
-            "<bookmark mark='a'/> Make up a text by drawing letters independently, with the books' frequencies: "
-            "crude, but exact to reason about. Measure its surprise per letter. <bookmark mark='b'/> For one letter, "
-            f"it's all over the place, from {s_lo:.1f} bits to {s_hi:.1f}. <bookmark mark='c'/> Ten letters: the "
-            "spread narrows. <bookmark mark='d'/> A hundred, a thousand, ten thousand: it piles up at one value, "
-            f"{H:.2f} bits, the entropy, its spread shrinking from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
+            "<bookmark mark='a'/> Draw letters independently, with the books' frequencies, crude but exact to reason "
+            "about, and measure the surprise per letter. <bookmark mark='b'/> For one letter, it's all over the "
+            f"place, from {s_lo:.1f} bits to {s_hi:.1f}. <bookmark mark='c'/> Ten letters: the spread narrows. "
+            f"<bookmark mark='d'/> A hundred, a thousand, ten thousand: it piles up at {H:.2f} bits, the entropy, its "
+            f"spread shrinking from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(a))
             vo.wait_until("a")
@@ -119,8 +119,8 @@ class Typical(VoiceoverScene):
         with self.voiceover(
             "It's the law of large numbers: a text's surprise is a sum over its letters, and the average of many "
             "independent surprises settles at their mean, the entropy. <bookmark mark='a'/> Shannon proved it in "
-            "1948; McMillan and Breiman extended it to sources with memory, like real text. Its mouthful of a name: "
-            "the asymptotic equipartition property."
+            "1948; McMillan and Breiman extended it to sources with memory, like real text. Its name: the "
+            "asymptotic equipartition property."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(sub), FadeOut(nlab), FadeOut(ins), VGroup(a, cur, hl, hlab).animate.scale(0.62).to_corner(DL, buff=0.4))
@@ -256,11 +256,11 @@ class Typical(VoiceoverScene):
             self.play(FadeIn(ro))
             vo.wait_until("d")
         with self.voiceover(
-            "In the top row, the gold shrinks to a sliver, and then to nothing you can see. In the bottom row it "
-            f"spreads until it fills almost everything. <bookmark mark='a'/> By {show[-1]} symbols, the typical "
-            f"sequences are two to the minus {-r1['log2_frac']:.0f} of all sequences, and they carry {missed}. "
-            "<bookmark mark='b'/> And the single most likely "
-            "sequence, all non-spaces, isn't typical at all: you will essentially never see it."
+            "In the top row, the gold shrinks to a sliver, then to nothing you can see; in the bottom row it spreads "
+            f"until it fills almost everything. <bookmark mark='a'/> By {show[-1]} symbols, the typical sequences "
+            f"are two to the minus {-r1['log2_frac']:.0f} of all sequences, and carry {missed}. "
+            "<bookmark mark='b'/> And the most likely sequence, all non-spaces, isn't typical at all: you'll "
+            "essentially never see it."
         ) as vo:
             for n in show[1:]:
                 new_pic, new_ro = picture(n), readout(n)
@@ -321,8 +321,8 @@ class Typical(VoiceoverScene):
             "That gives the source coding theorem. <bookmark mark='a'/> To compress n symbols: if the sequence is "
             "typical, send a zero, then its number in a list of the typical set: about n H bits. If not, send a one "
             "and the sequence itself. That's rare, so on average you pay about H bits per symbol. "
-            "<bookmark mark='b'/> And no code does better: any list short enough to save more would miss most "
-            "typical sequences, and almost all the probability. <bookmark mark='c'/> Even last chapter's rounded "
+            "<bookmark mark='b'/> And no code does better: a shorter list would miss most typical sequences, and "
+            "almost all the probability. <bookmark mark='c'/> Even last chapter's rounded "
             f"code, used on whole blocks, closes in on the entropy: {rate[0]:.3f} bits per symbol with blocks of "
             f"{int(ns[0])}, {rate[-1]:.4f} with blocks of {int(ns[-1])}, against {h:.4f}."
         ) as vo:
@@ -369,11 +369,11 @@ class Typical(VoiceoverScene):
         take = label(r"a language model's job: \ find that corner; \ to write, \ draw from it", font_size=30,
                      color=C.BITS).to_edge(DOWN, buff=0.5).shift(LEFT * 1.6)
         with self.voiceover(
-            "Now English. There are twenty-seven to the n strings of n letters. <bookmark mark='a'/> Even under "
-            f"letter frequencies alone, the typical ones are a fraction two to the minus {gap:.2f} n: for a page of "
-            f"{page:,} letters, two to the minus {gap * page:,.0f}. <bookmark mark='b'/> At one bit per letter, real "
-            "text is a far smaller corner still. <bookmark mark='c'/> A language model's job is to find that "
-            "corner, and to write, it draws from it: how, in Part 5."
+            "Now English: twenty-seven to the n strings of n letters. <bookmark mark='a'/> Under letter frequencies "
+            f"alone, the typical ones are a fraction two to the minus {gap:.2f} n: for a page of {page:,} letters, "
+            f"two to the minus {gap * page:,.0f}. <bookmark mark='b'/> At one bit per letter, real text is a far "
+            "smaller corner. <bookmark mark='c'/> A language model's job is to find that corner, and to write, it "
+            "draws from it: how, in Part 5."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(sq[0]), FadeIn(names[0]))
             vo.wait_until("a")
