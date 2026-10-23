@@ -330,6 +330,9 @@ ZH = {
     'f"The arithmetic falls to {ft:.2f} of the standard layer\'s, but':
         "算术量降到标准层的{ft:.2f}，时间却只降到{tt:.2f}。深度卷积那一步每秒只做{r128['gflops_dw']:.1f}十亿次运算，而标准卷积是{r128['gflops_std']:.0f}：它的每个权重只碰一个通道，每读一个字节只做很少的算术，第17部分的屋顶线把它压住了。",
 
+    'f"The arithmetic falls to {ft:.2f} of the standard layer\'s, yet':
+        "算术量降到标准层的{ft:.2f}，时间却一点没降：是标准层的{tt:.2f}倍。深度卷积那一步每秒只做{r128['gflops_dw']:.1f}十亿次运算，而标准卷积是{r128['gflops_std']:.0f}：它的每个权重只碰一个通道，每读一个字节只做很少的算术，第17部分的屋顶线把它压住了。",
+
     'f"The arithmetic falls to {ft:.2f} of the standard layer\'s, and':
         "算术量降到标准层的{ft:.2f}，时间也降到{tt:.2f}：这里省下的几乎全兑现了。",
 
