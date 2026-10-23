@@ -146,7 +146,7 @@ def compute_forward():
     """DDPM's forward chain, step by step, against its closed form q(x_t | x_0) = N(sqrt(abar) x_0, (1 - abar) I)."""
     beta, abar = ddpm_schedule()
     T = len(beta)
-    n = 4000
+    n = 20000
     x0 = sample(n, 2)
     g = rng(2015)  # Sohl-Dickstein et al.
     x = x0.copy()

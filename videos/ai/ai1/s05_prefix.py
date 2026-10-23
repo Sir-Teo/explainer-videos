@@ -67,9 +67,10 @@ class Prefix(VoiceoverScene):
             f"<bookmark mark='b'/> The falcon, {len(word)} symbols, costs {nfix} bits. <bookmark mark='c'/> But "
             f"that's wasteful: e is {ratio:.0f} times more common than z, and both cost five bits."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in table[:-1]], lag_ratio=0.15), FadeIn(dots),
+                      FadeIn(table[-1]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in table[:-1]], lag_ratio=0.15), FadeIn(dots), FadeIn(table[-1]))
+            self.play(Indicate(table, color=C.BITS, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(w), LaggedStart(*[FadeIn(c, shift=DOWN * 0.1) for c in codes], lag_ratio=0.12))
             self.play(FadeIn(tot))
@@ -87,11 +88,11 @@ class Prefix(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).move_to(UP * 1.4)
         rule = label(r"\textit{prefix-free}: \ no codeword is the start of another", font_size=32, color=C.BITS)
         rule.move_to(UP * 0.0)
-        tree = code_tree(SMALL, x_range=(-3.0, 3.0), y_top=-0.6, dy=0.55, leaf_font=26)
-        tree.shift(DOWN * 0.1)
+        tree = code_tree(SMALL, x_range=(-4.2, 3.2), y_top=0.9, dy=0.78, leaf_font=30)
+        tree.shift(DOWN * 0.3)
         legend = VGroup(*[VGroup(letter(s, font_size=26), Text(c, font=MONO, font_size=24, color=C.BITS))
                           .arrange(RIGHT, buff=0.3) for s, c in SMALL.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        legend.move_to(RIGHT * 5.0 + DOWN * 1.7)
+        legend.move_to(RIGHT * 5.3 + DOWN * 1.3)
         with self.voiceover(
             "So give common symbols short codewords, like Morse code, which gives e a single dot. But careful. "
             "<bookmark mark='a'/> If e is zero, t is one, and a is zero one, then the bits zero one could be e, t, or "
@@ -99,9 +100,8 @@ class Prefix(VoiceoverScene):
             "<bookmark mark='c'/> Then the codewords are the leaves of a binary tree. Zero goes left, one goes right, "
             "and to decode, you walk down from the top until you reach a leaf."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bad[0]))
             vo.wait_until("a")
-            self.play(FadeIn(bad[0]))
             self.play(FadeIn(bad[1]))
             vo.wait_until("b")
             self.play(FadeIn(rule))
@@ -136,7 +136,7 @@ class Prefix(VoiceoverScene):
         kr_ = load("kraft")
         leaves_n = [int(v) for v in kr_["leaves"]]
         lmax = int(kr_["prefix"]["lmax"])
-        W, y_top, dy = 12.0, 2.3, 0.78
+        W, y_top, dy = 12.0, 1.9, 0.74
         L = -W / 2
         y_bot = y_top - dy * lmax
 
@@ -272,9 +272,9 @@ class Prefix(VoiceoverScene):
         # the bad code's (5/4)^k outgrows k * lmax
         P = np.asarray(bad["powers"])
         K = len(P)
-        ax_g = axes([0, K], [-1, 2], x_length=4.6, y_length=2.6, xlabel=r"$k$", ylabel=r"(log scale)",
-                    xticks=[0, 10, 20], yticks=[-1, 0, 1, 2], yfmt=lambda v: rf"10^{{{int(v)}}}", center=[3.9, -2.2, 0],
-                    font_size=18)
+        ax_g = axes([0, K], [-1, 2], x_length=5.2, y_length=3.0, xlabel=r"$k$ codewords per message",
+                    ylabel=r"(log scale)", xticks=[0, 10, 20], yticks=[-1, 0, 1, 2],
+                    yfmt=lambda v: rf"10^{{{int(v)}}}", center=[3.7, -1.55, 0], font_size=18)
         ax = ax_g.ax
         ks = np.arange(1, K + 1)
         lin = curve(ax, ks, np.log10(ks * bad["lmax"]), GREY_A, 2.5)
@@ -286,8 +286,8 @@ class Prefix(VoiceoverScene):
                      label(rf"$({ud['kraft_frac']})^k$", font_size=22, color=C.INTERVAL)).arrange(DOWN, aligned_edge=LEFT,
                                                                                             buff=0.08)
         leg.next_to(ax_g, LEFT, buff=0.35).shift(UP * 0.3)
-        th = label(r"McMillan (1956): \ \textit{every} decodable code obeys $\sum 2^{-l_i} \le 1$", font_size=28,
-                   color=C.BITS).to_edge(DOWN, buff=0.3).shift(LEFT * 2.4)
+        th = label(r"McMillan (1956): \\ \textit{every} decodable code \\ obeys $\sum 2^{-l_i} \le 1$", font_size=30,
+                   color=C.BITS).move_to([-3.6, -2.2, 0])
         tag = computed_tag()
         tag.next_to(ax_g, UP, buff=0.05).align_to(ax_g, RIGHT)
         with self.voiceover(
@@ -301,9 +301,9 @@ class Prefix(VoiceoverScene):
             "messages never give the same bits, so at most two to the m messages are m bits long, and the whole sum "
             "is at most k times the longest length."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(codes[0]))
             vo.wait_until("a")
-            self.play(FadeIn(codes[0]))
+            self.play(Indicate(codes[0], color=C.INTERVAL, scale_factor=1.04))
             vo.wait_until("b")
             self.play(FadeIn(codes[1]))
             vo.wait_until("c")
@@ -318,6 +318,8 @@ class Prefix(VoiceoverScene):
             "the bound breaks, so it can't be decodable, and it isn't. <bookmark mark='b'/> So nothing is lost by "
             "insisting on prefix codes: any lengths a decodable code can have, a prefix code can have too."
         ) as vo:
+            self.play(FadeOut(VGroup(rows[0], rows[1], whys[0], whys[1])),
+                      VGroup(rows[2], whys[2]).animate.move_to([-2.3, 0.6, 0]))
             self.play(FadeIn(ax_g), FadeIn(tag), Create(lin), Create(good), FadeIn(leg))
             vo.wait_until("a")
             self.play(Create(grow), run_time=1.6)

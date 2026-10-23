@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import load
+from videos.ai.ai1.common import MONO, PART, load
 
 
 class Scoreboard(VoiceoverScene):
@@ -12,12 +13,15 @@ class Scoreboard(VoiceoverScene):
         self.card()
         self.fill()
         self.reading()
+        self.lmzip()
+        self.model_size()
         self.ahead()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(11, r"The scoreboard", r"How far has guessing come?", lit=(1948, 1951), part=1)
-        with self.voiceover("Chapter eleven. Time to keep score.") as vo:
+        card = chapter_card(15, r"The scoreboard: language modeling is compression", r"How far has guessing come?",
+                            lit=(1948, 1951, 2019), part=PART)
+        with self.voiceover("Chapter fifteen. Time to keep score."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -27,11 +31,8 @@ class Scoreboard(VoiceoverScene):
         raw = load("raw")
         rows = sb["rows"]
         keys = [r["key"] for r in rows]
-        assert keys == ["ascii", "uniform", "order0", "order1", "gzip", "xz", "bzip2", "best", "GPT-2 small",
-                        "GPT-2 XL", "Qwen3-0.6B", "Qwen3-4B", "human"]
-        bits = {r["key"]: r.get("bits") for r in rows}
-        assert raw["passage_symbols"] == 61 and abs(bits["uniform"] - math.log2(61)) < 1e-9
-        assert abs(bits["Qwen3-4B"] - 0.867) < 0.001 and abs(bits["GPT-2 small"] - 1.166) < 0.001
+        b = {r["key"]: r.get("bits") for r in rows}
+        hum = next(r for r in rows if r["key"] == "human")
         head = label(r"Bits per character on the Falcon passage, as printed", font_size=32).to_edge(UP, buff=0.25)
         sub = note(rf"${sb['chars']:,}$ characters: \ capitals, punctuation and line breaks included".replace(",", "{,}"),
                    font_size=22).next_to(head, DOWN, buff=0.12)
@@ -39,88 +40,97 @@ class Scoreboard(VoiceoverScene):
         def board(shown):
             return scoreboard(rows, shown=shown, row_h=0.405, font_size=21).move_to(DOWN * 0.3)
 
-        b = board(1)
+        bd = board(1)
         legend = VGroup(*[VGroup(Square(0.18, stroke_width=0, fill_color=col, fill_opacity=0.9),
                                  label(t, font_size=20, color=col)).arrange(RIGHT, buff=0.12)
                           for t, col in ((r"counting", C.COUNTING), (r"compressors", C.COMPRESSOR),
                                          (r"neural models", C.NEURAL), (r"people", C.HUMAN))])
         legend.arrange(RIGHT, buff=0.45).to_edge(DOWN, buff=0.12)
-        self.play(FadeIn(head), FadeIn(sub), FadeIn(b), FadeIn(legend))
-        state = {"b": b, "n": 1}
+        self.play(FadeIn(head), FadeIn(sub), FadeIn(bd), FadeIn(legend))
+        state = {"b": bd, "n": 1}
 
-        def reveal(upto, run_time=1.0):
+        def reveal(key, run_time=1.0):
+            upto = keys.index(key) + 1
             nb = board(upto)
-            anims = []
-            for i in range(state["n"], upto):
-                anims += [ReplacementTransform(state["b"].rows[i], nb.rows[i])]
-            self.play(*anims, run_time=run_time)
+            self.play(*[ReplacementTransform(state["b"].rows[i], nb.rows[i]) for i in range(state["n"], upto)],
+                      run_time=run_time)
             self.remove(state["b"])
             self.add(nb)
             state["b"], state["n"] = nb, upto
 
+        k = int(raw["best"])
+        comp = sorted(("gzip", "xz", "bzip2"), key=lambda c: -b[c])
+        comp_said = ", ".join(f"{c}, {b[c]:.2f}" for c in comp)
+        q06, gxl = b["Qwen3-0.6B"], b["GPT-2 XL"]
+        q06_said = ("already matches the largest GPT-2" if abs(q06 - gxl) < 0.02 else
+                    ("already beats the largest GPT-2" if q06 < gxl else f"gets {q06:.2f}"))
         with self.voiceover(
             "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. "
             "<bookmark mark='a'/> A plain text file spends eight bits on every character. <bookmark mark='b'/> The "
-            "passage uses only sixty-one different symbols, so guessing blindly among them costs log two of "
-            "sixty-one: 5.93 bits. <bookmark mark='c'/> Letter frequencies, counted in our thirty books, bring it to "
-            "4.55, <bookmark mark='d'/> and one character of context, to 3.58."
+            f"passage uses only {raw['passage_symbols']} different symbols, so guessing blindly among them costs log "
+            f"two of {raw['passage_symbols']}: {b['uniform']:.2f} bits. <bookmark mark='c'/> Letter frequencies, "
+            f"counted in our thirty books, bring it to {b['order0']:.2f}, <bookmark mark='d'/> and one character of "
+            f"context, to {b['order1']:.2f}."
         ) as vo:
             vo.wait_until("a")
-            self.play(Indicate(b.rows[0], color=WHITE, scale_factor=1.03))
+            self.play(Indicate(bd.rows[0], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
-            reveal(2)
+            reveal("uniform")
             vo.wait_until("c")
-            reveal(3)
+            reveal("order0")
             vo.wait_until("d")
-            reveal(4)
+            reveal("order1")
         with self.voiceover(
-            "Next, the compressors on your computer. <bookmark mark='a'/> gzip, 3.31 bits per character; xz, 3.20; "
-            "bzip2, 2.92. They know nothing about English in advance. They learn only from the passage itself, as "
-            "they go. <bookmark mark='b'/> Our best counting model, which read the thirty books first and looks at "
-            "the previous four characters, gets 2.32."
+            f"Next, the compressors on your computer. <bookmark mark='a'/> {comp_said}. They know nothing about "
+            "English in advance. They learn only from the passage itself, as they go. <bookmark mark='b'/> Our best "
+            f"counting model, which read the thirty books first and looks at the previous {k} characters, gets "
+            f"{b['best']:.2f}."
         ) as vo:
             vo.wait_until("a")
-            reveal(7, run_time=1.5)
+            reveal("bzip2", run_time=1.5)
             vo.wait_until("b")
-            reveal(8)
+            reveal("best")
         with self.voiceover(
             "And then, the neural language models. <bookmark mark='a'/> GPT-2, the smallest version, from 2019: "
-            "1.17 bits. Its largest version, 1.01. <bookmark mark='b'/> Qwen3, from 2025: the 0.6 billion parameter "
-            "model already matches the largest GPT-2, <bookmark mark='c'/> and four billion parameters bring it to "
-            "0.87 bits per character. <bookmark mark='d'/> For comparison, Shannon's estimate for people, on letters "
-            "alone, was 0.6 to 1.3."
+            f"{b['GPT-2 small']:.2f} bits. Its largest version, {gxl:.2f}. <bookmark mark='b'/> Qwen3, from 2025: the "
+            f"0.6 billion parameter model {q06_said}, <bookmark mark='c'/> and four billion parameters bring it to "
+            f"{b['Qwen3-4B']:.2f} bits per character. <bookmark mark='d'/> For comparison, Shannon's estimate for "
+            f"people, on letters alone, was {hum['lo']:.1f} to {hum['hi']:.1f}."
         ) as vo:
             vo.wait_until("a")
-            reveal(10, run_time=1.5)
+            reveal("GPT-2 XL", run_time=1.5)
             vo.wait_until("b")
-            reveal(11)
+            reveal("Qwen3-0.6B")
             vo.wait_until("c")
-            reveal(12)
+            reveal("Qwen3-4B")
             vo.wait_until("d")
-            reveal(13)
+            reveal("human")
         self.b = state["b"]
-        self.head, self.sub, self.legend = head, sub, legend
-        self.bits = bits
+        self.bits = b
+        self.keys = keys
 
     # ------------------------------------------------------------------
     def reading(self):
         sb = load("scoreboard")
         bits, n = self.bits, int(sb["chars"])
         kb = {k: bits[k] * n / 8 / 1000 for k in ("ascii", "gzip", "Qwen3-4B")}
-        assert abs(kb["ascii"] - 21.4) < 0.05 and abs(kb["gzip"] - 8.9) < 0.05 and abs(kb["Qwen3-4B"] - 2.3) < 0.05
         side = VGroup(
             label(r"as files:", font_size=24, color=GREY_A),
             label(rf"plain text: \ ${kb['ascii']:.1f}$ KB", font_size=24, color=GREY_B),
             label(rf"gzip: \ ${kb['gzip']:.1f}$ KB", font_size=24, color=C.COMPRESSOR),
             label(rf"Qwen3-4B $+$ arithmetic coding: \ ${kb['Qwen3-4B']:.1f}$ KB", font_size=24, color=C.NEURAL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -1.75, 0])
-        gap = Brace(VGroup(self.b.rows[7].bar, self.b.rows[11].bar), RIGHT, color=C.BITS)
-        gap.next_to(VGroup(self.b.rows[7], self.b.rows[11]), RIGHT, buff=0.1)
+        ib, iq = self.keys.index("best"), self.keys.index("Qwen3-4B")
+        gap = Brace(VGroup(self.b.rows[ib].bar, self.b.rows[iq].bar), RIGHT, color=C.BITS)
+        gap.next_to(VGroup(self.b.rows[ib], self.b.rows[iq]), RIGHT, buff=0.1)
         gap_l = label(r"this gap \\ is the series", font_size=24, color=C.BITS).next_to(gap, RIGHT, buff=0.15)
+        low = bits["Qwen3-4B"]
         with self.voiceover(
-            "In file sizes: the passage is 21.4 kilobytes as plain text, 8.9 with gzip, <bookmark mark='a'/> and 2.3 "
-            "with Qwen3 driving an arithmetic coder. <bookmark mark='b'/> The jump from counting, at 2.3 bits, to "
-            "under one, is what this series is about: what these models learned, and how."
+            f"In file sizes: the passage is {kb['ascii']:.1f} kilobytes as plain text, {kb['gzip']:.1f} with gzip, "
+            f"<bookmark mark='a'/> and {kb['Qwen3-4B']:.1f} with Qwen3 driving an arithmetic coder. "
+            f"<bookmark mark='b'/> The jump from counting, at {bits['best']:.1f} bits, to "
+            + ("under one" if low < 1 else f"{low:.2f}")
+            + ", is what this series is about: what these models learned, and how."
         ) as vo:
             self.play(FadeIn(side[:3]))
             vo.wait_until("a")
@@ -131,25 +141,144 @@ class Scoreboard(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def lmzip(self):
+        z = load("lmzip")
+        nb = int(math.ceil(z["bits"] / 8))
+        comp = {k: int(v) for k, v in z["compressors"].items()}
+        head = label(r"We built one: \ GPT-2 as a compressor", font_size=36).to_edge(UP, buff=0.3)
+        # the pipeline
+        def box(t, col, w=2.3):
+            r = RoundedRectangle(width=w, height=0.8, corner_radius=0.12, stroke_color=col, stroke_width=2.5)
+            return VGroup(r, label(t, font_size=22, color=col).move_to(r))
+
+        stages = VGroup(box(r"text", C.TOKEN, 1.4), box(r"GPT-2 small", C.NEURAL), box(r"arithmetic \\ coder", C.INTERVAL),
+                        box(rf"${nb}$ bytes", C.BITS, 1.7), box(r"decoder \\ $+$ GPT-2", C.INTERVAL),
+                        box(r"text", C.TOKEN, 1.4))
+        stages.arrange(RIGHT, buff=0.42).move_to(UP * 1.6)
+        if stages.width > 13.4:
+            stages.scale_to_fit_width(13.4)
+        arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5,
+                                max_tip_length_to_length_ratio=0.3) for a, b in zip(stages, stages[1:])])
+        probs = label(r"probabilities", font_size=18, color=GREY_B).next_to(arrows[1], UP, buff=0.05)
+        # sizes, as bars
+        items = [(r"plain text", z["bytes"], GREY_B), (r"gzip", comp["gzip"], C.COMPRESSOR),
+                 (r"bzip2", comp["bzip2"], C.COMPRESSOR), (r"xz", comp["xz"], C.COMPRESSOR),
+                 (r"GPT-2 small $+$ our coder", nb, C.NEURAL)]
+        top = max(v for _, v, _ in items)
+        bars = VGroup()
+        for i, (name, v, col) in enumerate(items):
+            y = -0.4 - 0.55 * i
+            nm = label(name, font_size=22, color=col).move_to([-2.4, y, 0], aligned_edge=RIGHT)
+            w = 6.0 * v / top
+            r = Rectangle(width=w, height=0.34, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            r.move_to([-2.2 + w / 2, y, 0])
+            t = MathTex(f"{v:,}".replace(",", "{,}") + r"\ \text{bytes}", font_size=24, color=col).next_to(r, RIGHT, buff=0.15)
+            bars.add(VGroup(nm, r, t))
+        cap = note(rf"the first ${z['chars']:,}$ characters of the passage (${z['tokens']:,}$ tokens: one full GPT-2 "
+                   r"window); \ computed".replace(",", "{,}")).to_edge(DOWN, buff=0.25)
+        ok_said = ("and decoded it back, with a second run of the model, letter for letter." if z["ok"] else
+                   "but decoding it back with a second run of the model did not reproduce it exactly: the two runs "
+                   "disagreed somewhere in the last digits of a probability.")
+        ratio = comp["xz"] / nb
+        with self.voiceover(
+            "Arithmetic coding turns any predictor into a compressor, so we built one. <bookmark mark='a'/> GPT-2 "
+            "small reads the start of the Falcon passage one token at a time, and hands its probabilities to the "
+            f"32-bit coder from chapter eight. Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
+            f"GPT-2's own surprise, <bookmark mark='b'/> {ok_said} <bookmark mark='c'/> On the same "
+            f"{z['chars']:,} characters, xz needs {comp['xz']:,} bytes: {ratio:.1f} times as many."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(stages[0]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(s_)) for a, s_ in zip(arrows[:3], stages[1:4])],
+                                  lag_ratio=0.6), FadeIn(probs), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(s_)) for a, s_ in zip(arrows[3:], stages[4:])],
+                                  lag_ratio=0.6), run_time=1.5)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.25), FadeIn(cap), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def model_size(self):
+        c = load("compress")
+        plain = int(c["plain"])
+        adj = c["adjusted"]
+        size_g2 = c["sizes"]["GPT-2 small"]
+        mb = c["model_bytes"]["GPT-2 small"] / 1e6
+        head = label(r"The catch: \ the decompressor needs the model", font_size=34).to_edge(UP, buff=0.3)
+        ours = VGroup(
+            label(rf"the whole passage with GPT-2 small: \ ${size_g2 / 1000:.1f}$ KB", font_size=26, color=C.NEURAL),
+            label(rf"plus GPT-2 small itself, \ $2$ bytes a parameter: \ ${mb:,.0f}$ MB".replace(",", "{,}"), font_size=26,
+                  color=GREY_A),
+            label(rf"together: \ ${adj['GPT-2 small']:,.0f}$ times the passage".replace(",", "{,}"), font_size=26,
+                  color=C.SURPRISE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
+        tab_h = label(r"$1$ GB of Wikipedia (enwik9): \ compressed size, \ share of the original", font_size=24,
+                      color=GREY_B)
+        rows = [(r"gzip", r"32.3\%", C.COMPRESSOR), (r"LZMA2 \ (xz)", r"23.0\%", C.COMPRESSOR),
+                (r"Chinchilla 70B $+$ arithmetic coding", r"8.3\%", C.NEURAL),
+                (r"\ldots counting its $140$ GB of weights", r"14{,}008\%", C.SURPRISE)]
+        tab = VGroup(*[VGroup(label(n_, font_size=24, color=col), label(rf"${v}$", font_size=26, color=col))
+                       for n_, v, col in rows])
+        for r in tab:
+            r[1].move_to([4.2, 0, 0], aligned_edge=RIGHT)
+            r[0].move_to([-3.4, 0, 0], aligned_edge=LEFT)
+        tab.arrange(DOWN, buff=0.18)
+        for r in tab:
+            r[0].set_x(-3.4 + r[0].width / 2)
+            r[1].set_x(4.2 - r[1].width / 2)
+        blk = VGroup(tab_h, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0.4, -1.1, 0])
+        src = cite(r"G.~Del\'etang et al., \textit{Language Modeling Is Compression} (ICLR 2024), Table 1; \ "
+                   r"hutter1.net (record of 24 July 2026)")
+        hut = label(r"Hutter Prize record, \ July 2026: \ enwik9 in $100.4$ MB, \ decompressor included: \ "
+                    r"$0.80$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
+        with self.voiceover(
+            "There's a catch. The decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 "
+            f"small squeezes the whole passage into {size_g2 / 1000:.1f} kilobytes, but its weights take "
+            f"{mb:,.0f} megabytes. Count them, and the file is {adj['GPT-2 small']:,.0f} times bigger than the "
+            "passage. <bookmark mark='b'/> In 2024, a DeepMind team made this the headline of a paper called "
+            "Language Modeling Is Compression. On a gigabyte of Wikipedia, their 70-billion-parameter model "
+            "compressed the text to 8.3 percent of its size, against 32 for gzip and 23 for xz. Counting its "
+            "weights, fourteen thousand percent. It also compressed images and audio better than PNG and FLAC, "
+            "although it was trained on text. <bookmark mark='c'/> The Hutter Prize, started by Marcus Hutter in "
+            "2006, counts everything: the record, set in July 2026, packs that gigabyte, decompressor included, "
+            "into 100.4 megabytes, 0.80 bits per character, with a program that mixes many predictors. "
+            "<bookmark mark='d'/> Prediction is compression; the size of the predictor is part of the bill."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r) for r in ours], lag_ratio=0.4), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(tab_h), LaggedStart(*[FadeIn(r) for r in tab], lag_ratio=0.4), FadeIn(src), run_time=2.5)
+            vo.wait_until("c")
+            self.play(FadeIn(hut))
+            vo.wait_until("d")
+            self.play(Indicate(tab[3], color=C.SURPRISE, scale_factor=1.03))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def ahead(self):
         sb = load("scoreboard")
         rows = [r for r in sb["rows"] if r["key"] in ("best", "GPT-2 small", "Qwen3-4B")]
         future = [
             dict(label=r"Kneser--Ney counting (Part 7)", kind="count"),
             dict(label=r"a neural network over $n$ characters (Part 9)", kind="lm"),
+            dict(label=r"a character LSTM (Part 10)", kind="lm"),
             dict(label=r"our own small transformer (Part 13)", kind="lm"),
         ]
         filled = scoreboard(rows[:1] + future + rows[1:], row_h=0.5, font_size=24).move_to(DOWN * 0.2)
         head = label(r"Rows still to fill, with models we will build", font_size=32).to_edge(UP, buff=0.5)
         with self.voiceover(
             "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: "
-            "<bookmark mark='a'/> better counting in part seven, <bookmark mark='b'/> a neural network in part nine, "
-            "<bookmark mark='c'/> and our own small transformer in part thirteen, each one trained on these same thirty "
-            "books, and scored on this same page."
+            "<bookmark mark='a'/> better counting in Part 7, <bookmark mark='b'/> a neural network in Part 9, "
+            "<bookmark mark='c'/> a network with memory in Part 10, <bookmark mark='d'/> and our own small "
+            "transformer in Part 13, each one trained on these same thirty books, and scored on this same page."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(filled.axis), FadeIn(filled.rows[0]), FadeIn(filled.rows[4]),
-                      FadeIn(filled.rows[5]))
-            for k, mark in zip((1, 2, 3), "abc"):
+            self.play(FadeIn(head), FadeIn(filled.axis), FadeIn(filled.rows[0]), FadeIn(filled.rows[5]),
+                      FadeIn(filled.rows[6]))
+            for k, mark in zip((1, 2, 3, 4), "abcd"):
                 vo.wait_until(mark)
                 self.play(FadeIn(filled.rows[k]))
         self.wait(0.5)
