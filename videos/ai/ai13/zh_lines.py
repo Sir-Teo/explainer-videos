@@ -1,0 +1,399 @@
+"""Chinese narration for ai13: see tools/zh_lines.py (literal lines by prefix, computed lines as templates).
+
+Numbers from our own runs stay placeholders, so the Chinese follows the data when it changes; sentences chosen by a
+result (``verdict``, ``tail``, ...) are translated as templates of their own and spliced in.
+"""
+
+TITLE = '人工智能，从零搭建 · 第13部分：注意力的几何'
+
+CHAPTERS = {
+    'Hook': '每个字符都在回头看',
+    'Smoother': '1. 加权平均',
+    'Hopfield': '2. 会回想的记忆',
+    'Scale': '3. 为什么要除以根号d',
+    'Heads': '4. 头是低秩映射',
+    'Masks': '5. 谁能看谁',
+    'Transformer': '6. 我们自己的Transformer',
+    'Cost': '7. 一个模块的成本',
+    'Positions': '8. 每个字符在哪里？',
+    'Rope': '9. 用旋转表示位置',
+    'SideBySide': '10. 四种答案，并排训练',
+    'Longer': '11. 比训练时更长',
+    'Sinks': '12. 注意力汇点，以及三条出路',
+    'Caps': '13. 让分数待在范围之内',
+    'Induction': '14. 归纳头',
+    'InContext': '15. 在提示里学习',
+    'RASP': '16. Transformer能算什么',
+    'Frontier': '17. 2026年的注意力',
+    'Outro': '回顾、习题，以及接下来',
+}
+
+ZH = {
+    # ------------------------------------------------------------------ Hook
+    "This is a transformer reading.":
+        "这是一个正在阅读的Transformer。它是我们自己的：我们用本系列的30部小说训练了它，现在它读的，是记分牌测试段落里的一句话，这句话它从没见过。<bookmark mark='a'/>为了猜出下一个字符，每个字符都会回头看看它前面的那些字符，再决定每一个有多要紧。弧线越粗，它看得越多。<bookmark mark='b'/>这样回头一看，就叫作注意力；今天每一个大语言模型的引擎，就是它。",
+
+    'f"Our model has {L * H} of these looks':
+        "我们的模型有{L * H}个这样的“目光”，叫作“头”，每个头都用自己的方式掂量过去：这里是全部{L * H}个头，读的是同一句话。<bookmark mark='a'/>这一部分讲的，就是这一看背后的数学：它算的是什么，它怎样知道东西在哪里，以及它能学会做些什么。",
+
+    "The idea is older than it looks.":
+        "这个想法比它看起来要古老。1964年，两位统计学家，埃利兹巴尔·纳达拉亚和杰弗里·沃森，用邻居的平均值来估计一个值，邻居离得越近，权重越大。<bookmark mark='a'/>1982年，约翰·霍普菲尔德造了一个网络，能从一个片段回想起一整段记忆。<bookmark mark='b'/>2014年，一个翻译网络学会了在它正在翻译的句子里该看哪里，<bookmark mark='c'/>而在2017年，谷歌的一个团队造出了一个只靠这种“看”的网络：Transformer。<bookmark mark='d'/>接着出现了更好的表示位置的方法，<bookmark mark='e'/>人们发现了会复制的头，还有快到能处理长文本的计算内核；<bookmark mark='f'/>有些奇怪的头死盯着第一个词元，还有各种技巧，让模型读得远远超过训练长度；<bookmark mark='g'/>对过去的记忆变得更小，<bookmark mark='h'/>注意力只看过去的一部分，还有让一个头能把自己关掉的门控；<bookmark mark='i'/>到了2026年，有些模型只在四分之一的层里保留完整的注意力。",
+
+    "This is Part 13 of AI, Built":
+        "这是《人工智能，从零搭建》的第13部分，也是第三幕的开始：Transformer时代。<bookmark mark='a'/>本部分讲：注意力算的是什么，它既是平均，也是记忆；头、掩码和计算成本；我们自己的Transformer，训练它，再回放它的训练过程；告诉它东西在哪里的四种方法，以及怎样把它们拉长；今天的softmax内部的种种修补；还有，头能学会做什么，又做不到什么。",
+
+    # ------------------------------------------------------------------ Smoother
+    "Chapter one. Attention is a weighted average.":
+        "第1章。注意力就是加权平均。",
+
+    "Here is Part 7's data again":
+        "再看一次第7部分的数据：《远大前程》每一页里，“her”出现得有多频繁。假设你想给第120页，做一个平滑的估计。<bookmark mark='a'/>把每一页都拿来取加权平均，按它离得有多近来定权重：权重排成一个鼓包，中心就在你要问的那一页上。<bookmark mark='b'/>离查询点近的页，分量很重；远的，完全不算。这些权重都是正的，加起来等于1。<bookmark mark='c'/>让查询点一路滑过去，这个平均值就描出一条平滑的曲线。这就是纳达拉亚和沃森的核平滑器，1964年提出。",
+
+    "The only knob is the width of the bump.":
+        "唯一的旋钮，是鼓包的宽度。<bookmark mark='a'/>太窄，曲线就会去追每一页的噪声。<bookmark mark='b'/>太宽，它又会把整个故事压平成一个数。",
+
+    "Write it down. The guess at the query":
+        "把它写下来。查询点上的估计，是对所有页求和：每一页的值，乘以一个权重。权重是一个分数的softmax：分数取指数，再除以总和，所以权重都是正的，加起来等于1。这里的分数，是负的距离平方。<bookmark mark='a'/>现在，只改一处。不再用页码之间的距离，而是用两个向量的点积，给每一项打分：一个查询，一个键。<bookmark mark='b'/>这就是注意力，Transformer的核心。查询问的是：我在找什么？每个键说的是，它能提供什么；每个值，则是它要传下去的内容。<bookmark mark='c'/>而这三样，都由网络学出来的矩阵，从字符算出来。注意力，就是一个核可以学习的核平滑器。",
+
+    "Here is the definition we will use":
+        "下面是本部分接下来一直要用的定义。<bookmark mark='a'/>注意力接收一个查询、一组键和一组值。它用点积给每个键和查询打分，再除以根号d，用softmax把分数变成权重，最后返回这些值的加权平均。<bookmark mark='b'/>这个想法在2014年进入神经网络：德米特里·巴赫达瑙、赵京焕和约书亚·本吉奥让一个翻译网络回头去看它正在翻译的句子里的词；你在第10部分见过它。到了2017年，它成了整个网络。<bookmark mark='c'/>继续之前，先问一个问题：如果每个键都一样，注意力会返回什么？<bookmark mark='d'/>每个分数都相等，所以每个权重都是n分之1，答案就是这些值的普通平均。注意力只能对它拿到的东西加权、混合。",
+
+    "Here's the geometry. Every key is an arrow":
+        "来看看其中的几何。每个键都是一根箭头；查询也是。<bookmark mark='a'/>一个键的分数，就是它和查询的点积：两者各有多长，再乘以它们的方向有多一致。softmax把这些分数变成权重。<bookmark mark='b'/>转动查询，权重就从一个键流向另一个键。查询，就是一个要去看的方向。接下来，换个角度读同一个公式：把它看成一个能回想起所存内容的记忆。",
+
+    # ------------------------------------------------------------------ Hopfield
+    "Chapter two. A memory that recalls.":
+        "第2章。会回想的记忆。",
+
+    'f"In 1982 the physicist John Hopfield':
+        "1982年，物理学家约翰·霍普菲尔德描述了一个会记忆的网络。<bookmark mark='a'/>要存入一些由正1和负1组成的模式，就把每一对同时亮起的单元之间的连接加强：这是第9部分的赫布规则。<bookmark mark='b'/>回想时，从一个线索出发，让每个单元取其他单元加权投票结果的符号。<bookmark mark='c'/>每翻转一次，能量只会降低，所以回想就是一路滚下坡，如果一切顺利，就滚进最近的那个存储模式。<bookmark mark='d'/>这里我们存入{n}个字母，每个字母100个单元。<bookmark mark='e'/>给它一个四分之一像素被翻转的字母，让它自己稳定下来。{verdict}",
+
+    "f'It recovers {ok} of the {n} letters":
+        "{n}个字母里，它准确地恢复了{ok}个。其余的都落进了混合态：我们的字母共用的像素太多，它们的记忆互相串到了一起。",
+
+    "f'It recovers all {n} letters":
+        "全部{n}个字母，它都准确地恢复了，每个像素都回到了原位。",
+
+    'f"How much can it hold?':
+        "它能存多少？在100个单元里存入越来越多的随机模式，每个都用一个翻转了15%单元的线索来测试。<bookmark mark='a'/>经典网络存到{h_at}个模式时，能回想起来的就不到一半了，{none_txt}物理学家在1985年算出了它的极限：每个单元大约0.138个模式。每存入一个模式，都会给其他每个模式的投票添一点噪声，噪声越积越多。<bookmark mark='b'/>2016年，德米特里·克罗托夫和约翰·霍普菲尔德把能量变得更陡，让最近的那个模式以大得多的优势胜出；2017年，又有一个团队证明，指数形式的能量能存下指数多个模式。<bookmark mark='c'/>{tail}",
+
+    "f'and by {int(dead)} it recalls none":
+        "到{int(dead)}个时，就一个也回想不起来了。",
+
+    "f'Store {int(Ms[-1])} patterns":
+        "存入{int(Ms[-1])}个模式，是单元数的{Ms[-1] / N:.1f}倍，一步softmax仍然能把每一个都回想起来。",
+
+    "f'It holds on far longer":
+        "它撑得久得多：存到{int(Ms[-1])}个模式时，它仍然能回想起{md[-1]:.0%}。",
+
+    'f"In 2020 Hubert Ramsauer':
+        "2020年，胡贝特·拉姆绍尔、塞普·霍赫赖特和同事们把状态变成了连续的。<bookmark mark='a'/>能量变成：与各个存储模式重叠度的log-sum-exp取负，再加上一个让状态保持有界的小项。<bookmark mark='b'/>一步一步地把它最小化，更新规则就是：按每个存储模式与当前状态重叠度的softmax给它加权，再把它们加起来。<bookmark mark='c'/>看看这个公式。它就是注意力。线索是查询，存储的模式既是键也是值，而β扮演的就是根号d分之1的角色。<bookmark mark='d'/>在我们的字母上，一步就回想起了{n}个里的{ok_m}个。<bookmark mark='e'/>他们还证明了，通常一步就够了。论文的标题是：《Hopfield Networks is All You Need》，霍普菲尔德网络就是你所需要的一切。",
+
+    'f"Beta, the inverse temperature':
+        "β，也就是逆温度，是把这个记忆变成第1章那个平滑器的旋钮。<bookmark mark='a'/>把它调低，权重就摊到每一个模式上：结果是所有东西的平均，和被提示的那个模式的重叠度只有{small:.2f}。<bookmark mark='b'/>调到中间，它会把几个相似的模式平均起来，拉姆绍尔的团队把这种混合叫作亚稳态。<bookmark mark='c'/>把它调高，一个模式就拿走全部权重：重叠度是{big:.2f}。注意力就生活在这条曲线上，而除以根号d决定了它落在哪里。<bookmark mark='d'/>2024年的诺贝尔物理学奖，颁给了霍普菲尔德和杰弗里·辛顿，表彰的正是这类网络；第20部分会回到它们的能量，把它当作一种生成的方法。一个Transformer的头，就是一次记忆读取：它的查询在键里回想，返回值的一个混合。",
+
+    # ------------------------------------------------------------------ Scale
+    "Chapter three. Why divide by the square root of d.":
+        "第3章。为什么要除以根号d。",
+
+    'f"Take a query and a key whose d numbers':
+        "取一个查询和一个键，它们各自的d个数相互独立，均值为0，方差为1，大致就是一个刚初始化的网络给出的样子。<bookmark mark='a'/>量一量它们的点积散得有多开：d等于{ds[0]}时是{sd[0]:.1f}，d等于{ds[-1]}时是{sd[-1]:.0f}。它随着向量的大小而增长。为什么？<bookmark mark='b'/>点积是d个乘积的和。<bookmark mark='c'/>每个乘积的均值都是0，因为它的两个因子相互独立。<bookmark mark='d'/>方差是1：独立的数相乘，乘积平方的期望，等于它们各自平方的期望相乘。<bookmark mark='e'/>独立的项，方差相加，所以点积的方差是d：它的散布像根号d那样增长。<bookmark mark='f'/>除以根号d，方差就回到1，不管向量多大：实测在{sds.min():.2f}到{sds.max():.2f}之间。",
+
+    'f"Why does the spread matter?':
+        "散布为什么要紧？因为softmax会把分数之间的差，变成权重之间的比，而且是指数式的。<bookmark mark='a'/>喂给它像根号d那样散开的分数，它就不再取平均了：它只挑出一个键，其余的全都不管。在{n}个键上，权重的熵，也就是衡量有多少个键在分享权重的量，从d等于{ds[0]}时的{raw[0]:.1f}比特，降到了d等于{ds[-1]}时的{raw[-1]:.2f}比特。<bookmark mark='b'/>除以根号d之后，权重始终是摊开的，不管多大都至少有{scl.min():.1f}比特，只比完全平均分配的{mx:.0f}比特少一点。",
+
+    'f"There is a second cost, and it is worse.':
+        "还有第二个代价，而且更糟。训练靠梯度来移动分数，而梯度要穿过softmax的导数。<bookmark mark='a'/>权重i对分数j的导数，等于p i乘以括号里的δ i j减p j。<bookmark mark='b'/>当一个权重接近1、其余都接近0时，每一项都有一个接近0的因子：softmax饱和了，分数也就学不动了。<bookmark mark='c'/>权重对分数的响应有多强，在分数散布大约为{sig[pk]:.0f}时达到峰值，往两边都会下降。<bookmark mark='d'/>缩放过的分数，散布为1，响应是{j1:.2f}。不缩放时，在d等于{ds[-1]}处，响应只有{jr:.2f}，而且向量越大，它还会继续下降。这就是瓦斯瓦尼和同事们在2017年给出的、除以根号的理由。后来关于极宽网络的研究，杨格的μP，主张一旦训练让查询和它的键对齐了，就该改成除以d；我们会在第13章再次遇到失控的分数。",
+
+    # ------------------------------------------------------------------ Heads
+    "Chapter four. Heads are low-rank maps.":
+        "第4章。头是低秩映射。",
+
+    'f"Let\'s write one head as matrices.':
+        "把一个头写成矩阵。字符i的查询，是W Q乘以它在残差流里的向量；字符j的键，是W K乘以它的向量。<bookmark mark='a'/>把转置移进去，<bookmark mark='b'/>分数就是x i，乘以一个矩阵，再乘以x j：一个{d}乘{d}的矩阵W Q K，用来比较残差流里的两个位置。<bookmark mark='c'/>但它是一个又高又瘦的{d}乘{dh}矩阵，和一个又矮又宽的矩阵的乘积，所以它的秩至多是{dh}。一个头只能沿着残差流的{dh}个方向做比较。<bookmark mark='d'/>头搬运的东西也一样：W O乘以W V，秩同样至多是{dh}。纳尔逊·埃尔哈格、克里斯·奥拉和同事们把它们叫作QK回路和OV回路：一个决定看哪里，另一个决定搬什么。",
+
+    'f"Here are the singular values of W Q K':
+        "这是我们Transformer全部{L * H}个头的W Q K奇异值，从大到小，画在对数坐标上。<bookmark mark='a'/>其中恰好有{rank}个是真的；之后的值断崖式下跌，跌到计算机舍入误差的大小。<bookmark mark='b'/>即便在这{dh}个方向里，一个头也很偏：{int(k90.min())}到{int(k90.max())}个方向，就占了它九成的大小。<bookmark mark='c'/>把一层的{H}个头加在一起，秩是{lrank}。<bookmark mark='d'/>{ln_txt}这些头合在一起覆盖了整个残差流，但每一个都只是透过一条窄缝在看。",
+
+    "f'That is every direction but one":
+        "也就是除了一个方向之外的所有方向，少掉的那个是{d}个数的平均值，层归一化在任何头看到它之前就把它去掉了。",
+
+    'f"So why split attention into {H} narrow heads':
+        "那为什么要把注意力拆成{H}个窄头，而不是用一个{d}维的头？成本是一样的：{H}个{dh}维的头，权重数和一个{d}维的头完全相同。<bookmark mark='a'/>但每个头都有自己的softmax，所以有自己的注意力模式。一个头对每个字符只能做一次加权平均；我们第一层的{H}个头，一下子就做了{H}种不同的平均：{looks}<bookmark mark='b'/>这一层的输出，是对所有头求和：注意力模式乘以低秩的搬运。<bookmark mark='c'/>这是有代价的：窄头没法表达所有的模式。斯里纳德·博贾纳帕利和同事们在2020年把它叫作低秩瓶颈。真实的模型忍受了它，把省下来的花在别处：第15部分会讲，它们怎样共享或压缩键和值，把对过去词元的记忆变小。",
+
+    "f'head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while head":
+        "头{hp + 1}把{prev[hp]:.0%}的权重放在紧挨着的前一个字符上，而头{hw + 1}平均往回看{dist[hw]:.0f}个字符。",
+
+    "f'head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while the others":
+        "头{hp + 1}把{prev[hp]:.0%}的权重放在紧挨着的前一个字符上，而其他头平均往回看{min(dist):.0f}到{max(dist):.0f}个字符。",
+
+    # ------------------------------------------------------------------ Masks
+    "Chapter five. Who may look at whom.":
+        "第5章。谁能看谁。",
+
+    'f"A language model guesses each character':
+        "语言模型根据前面的字符猜每一个字符，所以注意力决不能看到未来。<bookmark mark='a'/>这是一张分数表：每个查询一行，每个键一列。<bookmark mark='b'/>给对角线以上的每个分数加上负无穷。负无穷的指数是0，所以softmax完全不给未来任何权重。这就是因果掩码。<bookmark mark='c'/>它带来的好处，是训练的速度。在{n}个字符上走一遍，就同时做出{n}个猜测，每一个都只用到它自己的过去，所以每个位置都是一个训练样本。<bookmark mark='d'/>在我们的Transformer上检验一下：改动一段文字的后半部分，它对前半部分猜测的改变是{past_txt}，而对后半部分的猜测改变最多达到{mf:.1f}。去掉掩码，前半部分就改变了{nm:.1f}：模型等于在偷看答案。",
+
+    "The mask is the only difference":
+        "Transformer被切分成的三种方式，唯一的区别就是掩码。<bookmark mark='a'/>编码器让每个位置都能看到其他所有位置：它会读，但不能从左到右地写。<bookmark mark='b'/>解码器用的是因果三角：它写，一次一个词元。<bookmark mark='c'/>2017年那篇论文的翻译模型两样都有。它的解码器看自己的过去，还通过交叉注意力看整个源句：查询来自译文，键和值来自编码器对原文的阅读。<bookmark mark='d'/>前缀语言模型双向读它的提示，再从左到右写出其余部分。这几种谁胜出了、为什么，是第14部分的故事。",
+
+    '"One more property, and a problem.':
+        "还有一个性质，也是一个问题。注意力是在一个集合上取平均。<bookmark mark='a'/>每个词的权重都来自它的键，不管它坐在哪里。<bookmark mark='b'/>所以“dog bites man”，狗咬人，和“man bites dog”，人咬狗，给出的平均完全一样。<bookmark mark='c'/>用符号说：把输入打乱，输出也以同样的方式被打乱。没有掩码、也没有位置信息时，我们自己的Transformer{blind}<bookmark mark='d'/>必须告诉模型每个字符在哪里。这是第8章的内容。因果掩码已经泄露了一点位置信息，我们会看到是怎么泄露的。",
+
+    "f'nearly blind to order":
+        "几乎对顺序视而不见：它的输出只变化了{dev:.3f}。",
+
+    # ------------------------------------------------------------------ Transformer
+    "Chapter six. Our own transformer.":
+        "第6章。我们自己的Transformer。",
+
+    'f"Now build one.':
+        "现在来搭一个。每个字符进来时都是一个向量，这是第3部分的想法，这里用{t['d']}个数。这一列向量就是第9部分的残差流：每一层都从它读取，再把结果加回去。<bookmark mark='a'/>一个Transformer模块分成两半。注意力在不同位置之间搬运信息：每个字符从它前面的字符那里收集信息。<bookmark mark='b'/>然后是一个MLP，也就是多层感知机：第9部分那种由加权求和和弯折组成的小网络，对每个位置单独使用，就像在琢磨刚收集来的东西。<bookmark mark='c'/>每一半都先用第9部分的层归一化处理它的输入：<bookmark mark='n'/>把向量里的数平移到平均为0，再缩放到一个标准的大小。然后这一半把它的输出加回残差流。叠上4个模块，最后读出对下一个字符的猜测，这就是整台机器：掩码来自第5章，头来自第4章。",
+
+    'f"Ours has {t[\'layers\']} blocks':
+        "我们的模型有{t['layers']}个模块、{t['heads']}个头和{t['n_params'] / 1000000.0:.1f}百万个数，一次读{t['ctx']}个字符。我们用那30部小说训练它，大约{t['tokens'] / 1000000.0:.0f}百万个字符，用的是一台普通的处理器，没有显卡。<bookmark mark='a'/>{verdict}",
+
+    "f'It reaches {pb:.2f} bits a character on the passage, better than every model before it":
+        "它在测试段落上达到每字符{pb:.2f}比特，比记分牌上它之前的每一个模型都好，不管是计数模型还是神经网络。",
+
+    'f"It reaches {pb:.2f} bits a character on the passage, better than every counting model':
+        "它在测试段落上达到每字符{pb:.2f}比特，比每一个计数模型都好，但还比不上第9部分那个混合了Kneser-Ney的神经网络模型，{mix:.2f}。",
+
+    'f"It reaches {pb:.2f} bits a character on the passage, better than Part 9\'s neural model':
+        "它在测试段落上达到每字符{pb:.2f}比特，比第9部分的神经网络模型好，那个是{nlm:.2f}，但还比不上Kneser-Ney的{kn:.2f}。",
+
+    'f"It reaches {pb:.2f} bits a character on the passage, not yet better':
+        "它在测试段落上达到每字符{pb:.2f}比特，还没有超过第9部分的神经网络模型，{nlm:.2f}。",
+
+    'f"Here is what it knows at each moment of its training':
+        "这是它在训练过程中每一刻所知道的：它在测试段落上的分数，它接着同一句开头写出的东西，以及全部16个头在看哪里。<bookmark mark='a'/>一开始，它的猜测是随机的，每字符{bits[0]:.1f}比特，比在它的{K_}个字符上均匀乱猜的{u:.1f}还差一点。它写出来的是噪声，它的注意力是一片模糊。<bookmark mark='b'/>到第{steps[k1]}步，{bits[k1]:.2f}比特；它写出的词里有{real[k1]:.0%}是真正的单词，各个头也开始各不相同。<bookmark mark='c'/>到第{steps[k2]:,}步，{bits[k2]:.2f}比特，{real[k2]:.0%}是真单词。<bookmark mark='d'/>到最后，{steps[-1]:,}步之后，{bits[-1]:.2f}比特，{real[-1]:.0%}是真单词。全部进步的一半，来自最初的{s_half:,}步；剩下的是慢慢打磨。",
+
+    'f"On the scoreboard, a new row':
+        "记分牌上添了新的一行：我们的Transformer，{float(t['passage_bits']):.2f}。<bookmark mark='a'/>{more}",
+
+    'f"GPT-2 small, at {gpt[\'bits\']:.2f}':
+        "GPT-2 small是{gpt['bits']:.2f}，它是同一类机器：一叠这样的模块，大约大{round(124000000.0 / t['n_params'], -1):.0f}倍，用多得多的文本、多得多的算力训练出来。把它们分开的主要是规模，这是第12部分的故事。",
+
+    "The large models of Part 1 are the same kind of machine":
+        "第1部分的那些大模型也是同一类机器，只是大得多，用多得多的文本训练：把它们分开的主要是规模，这是第12部分的故事。",
+
+    # ------------------------------------------------------------------ Cost
+    "Chapter seven. What a block costs.":
+        "第7章。一个模块的成本。",
+
+    'f"First, the numbers a block stores.':
+        "先看一个模块要存多少个数。<bookmark mark='a'/>注意力有4个d乘d的矩阵：查询、键、值，还有输出。<bookmark mark='b'/>MLP先升到4d维，再降回来：8倍的d平方。<bookmark mark='c'/>所以一个模块是12倍的d平方，再加上少量偏置和层归一化的增益。<bookmark mark='d'/>再加上把字符变成向量的那张表，以及把向量变回猜测的那张表。<bookmark mark='e'/>对我们的模型，d等于{d}，{L}个模块，{K}个字符，公式给出{fml:,}，把模型的参数一个一个数出来，得到{tot:,}。<bookmark mark='f'/>注意力占每个模块的{att_share:.0%}；其余的都在MLP里。",
+
+    'f"Now the arithmetic for each character.':
+        "再看每个字符要做多少运算。<bookmark mark='a'/>每个权重对每个字符用一次，做一次乘法和一次加法：每个权重两次运算。<bookmark mark='b'/>注意力还额外增加了不归任何权重管的工作：查询要和T个键比较，每个键d个数；再对T个值做加权求和。<bookmark mark='c'/>合在一起，就是每个字符的运算量。<bookmark mark='d'/>我们用PyTorch的计数器，数了一次真实前向传播的运算，上下文从{Ts[0]}到{Ts[-1]:,}个字符。{match}贾里德·卡普兰和同事们的版本只算了平方项的一半，因为因果掩码把另一半扔掉了；跳过被掩掉那一半的计算内核，确实能把它省下来。<bookmark mark='e'/>训练更贵：一次前向加一次反向，是单独前向的{ratio:.1f}倍，每个权重、每个字符6次运算这条规则，就是这么来的。",
+
+    "They match the formula to within a fraction of a percent.":
+        "它们和公式的差别不到百分之一。",
+
+    'f"Which term wins?':
+        "哪一项占上风？<bookmark mark='a'/>对每个字符来说，注意力那部分随上下文增长，权重那部分不变。当2LTd等于24Ld平方，也就是上下文长度是宽度的12倍时，两者相等。<bookmark mark='b'/>对我们的模型，这是{Tx:,}个字符，比它读的任何东西都长，所以它的成本主要在权重上。对GPT-3，是{gx:,}个词元。<bookmark mark='c'/>但注意力这一项有根刺：在一整段T个字符的文本上加起来，它像T的平方那样增长，而且要写下一个字符，过去的每个键和值都得留着。这就是长上下文昂贵的原因，也是第15、16和19部分存在的原因。",
+    # ------------------------------------------------------------------ Positions
+    "Chapter eight. Where is each character?":
+        "第8章。每个字符在哪里？",
+
+    'f"Chapter five ended with a problem':
+        "第5章留下了一个问题：注意力分不清“dog bites man”和“man bites dog”。2017年那篇论文的答案，是在第一层之前，给每个字符的向量加上一个位置信号。<bookmark mark='a'/>一对一对的数以不同的速度振荡，每对是一个正弦和一个余弦，从每6个位置转一圈，一直到几万个位置才转一圈。<bookmark mark='b'/>为什么用正弦？因为三角函数的和角公式：往后移k个位置，对每一对来说都是同一个旋转，不管从哪里开始，所以一层网络可以用一个固定的矩阵，学会往回看固定的距离。<bookmark mark='c'/>数值上检验过，它在舍入误差以内成立。而且两个位置的点积，只取决于它们相隔多远。<bookmark mark='d'/>GPT-2走了另一条路，干脆为每个位置学一个向量，一共1024个。这样也行，但一个它从没见过的位置，就根本没有向量。",
+
+    "A different idea: forget absolute positions":
+        "另一个想法：忘掉绝对位置，只告诉注意力两个字符相隔多远。2018年，彼得·肖和同事们为每个距离学一个向量，T5则为每一段距离范围学一个偏置。<bookmark mark='a'/>2021年，奥菲尔·普雷斯、诺亚·史密斯和迈克·刘易斯把它做到了最简单。ALiBi根本不加位置向量：它从每个分数里减去一个和距离成正比的惩罚。<bookmark mark='b'/>每个头有自己的斜率，取自一个等比数列：斜率陡的头只看最后几个字符，平缓的头看得很远。他们报告说，一个在1024个词元上训练的模型，读2048个词元时，和一个就在这个长度上训练的模型一样好。",
+
+    "And the most surprising answer: give no positions at all.":
+        "还有最出人意料的答案：干脆不给位置。解码器仍然有它的因果掩码，而掩码会泄露位置。<bookmark mark='a'/>取一个把注意力平均摊到它能看到的所有东西上的头：在位置t，t个键每个分到t分之1。<bookmark mark='b'/>它的输出就是过去的平均。<bookmark mark='c'/>如果第一个词元带了标记，这个标记在平均里所占的份额就是t分之1，后面的层就能从中读出位置。<bookmark mark='d'/>阿迪·哈维夫和同事们在2022年发现，没有位置信号的语言模型仍然能学会自己在哪里；阿米尔侯赛因·卡泽姆内贾德和同事们则发现，在推理任务上，它们推广到更长输入的能力，比带显式位置的模型还好。Meta的Llama 4把不带位置的层，穿插在用旋转位置的层之间。旋转位置，也就是今天几乎每个模型都在用的答案，就是下一章。",
+
+    # ------------------------------------------------------------------ Rope
+    "Chapter nine. Positions as rotations.":
+        "第9章。用旋转表示位置。",
+
+    "In 2021 Jianlin Su and colleagues":
+        "2021年，苏剑林和同事们提出了今天几乎每个模型都在用的答案：不把位置加到输入上，而是去旋转查询和键。把一个查询的32个数分成16对；每一对是平面上的一根箭头。<bookmark mark='a'/>在位置m，把第j对转过m乘以一个角度θ j。<bookmark mark='b'/>第一对转得很快，每6个字符转一整圈；之后的每一对都转得更慢，一直慢到3.5万个字符才转一圈。<bookmark mark='c'/>键也用同样的方式旋转。就像钟表的指针：快指针告诉你附近的位置，慢指针告诉你在一篇长文里走到了哪里。这就是RoPE，旋转位置编码。",
+
+    "Why rotations? Here is the whole proof.":
+        "为什么用旋转？这里是完整的证明。把位置m处的旋转记作R m。<bookmark mark='a'/>旋转后的查询和旋转后的键，分数是q的转置，乘R m的转置，乘R n，再乘k。<bookmark mark='b'/>旋转的转置，就是反方向的旋转。<bookmark mark='c'/>先往回转m，再往前转n，就是转了n减m。<bookmark mark='d'/>所以分数只取决于两个字符相隔多远，尽管每一个都是按它自己的绝对位置旋转的。用随机向量检验过，在舍入误差以内成立。",
+
+    "Here is the same fact, seen on one pair":
+        "在一对数上看同一个事实：位置5的一个查询，和位置2的一个键。<bookmark mark='a'/>它们的分数取决于两者之间的夹角。现在把两个都往后移同样的距离，就好像同样的词出现在文本更后面的地方。<bookmark mark='b'/>两根箭头转过同样的角度，所以它们之间的夹角不变，分数也不变。<bookmark mark='c'/>旋转后的查询和键，打分看的是它们相隔多远，而不是它们在哪里。",
+
+    "And a bonus. Score a query against an identical key":
+        "还有一个额外的好处。拿一个查询和一个与它完全相同的键打分，然后把它们拉开。每一对的箭头都以自己的速度错开，所以分数随距离缩小：<bookmark mark='a'/>平均来说，近处的匹配比远处的更算数，这是一种偏向最近过去的温和倾向，没有人特意去造它。<bookmark mark='b'/>从2021年起，旋转位置就成了标准：几乎每个开放模型都在用它。",
+
+    '"Which hands does a trained model actually use?':
+        "训练好的模型实际上用的是哪些指针？2024年，费德里科·巴尔贝罗和同事们查看了谷歌Gemma的内部：它最快的那些对，构造出尖锐的位置模式，比如恰好往回看一个词元；而最慢的那些对，几乎不转，似乎承载着含义。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>设计者们听懂了这个暗示。Qwen3-Next每个头的256个数里只旋转64个，其余的不动；Gemma 3把它的全局层的时钟放慢了一百倍，底数用一百万而不是一万，让它们在长文档上慢慢地转。",
+
+    "f'Our small model has a favourite":
+        "我们的小模型有一个最爱：第{jm + 1}对，它每{wl[jm]:,.0f}个字符才转一圈，比它的整个上下文还长，却承载了它的查询和键{e[jm]:.0%}的大小，是平均份额的{e[jm] * n:.1f}倍。它几乎不转，就像一条传送内容的普通通道。",
+
+    "f'Our small model does the same":
+        "我们的小模型也是这样：在它的{ctx}个字符里一圈都转不完的那{len(slow)}对，承载了它的查询和键{s_slow:.0%}的大小，而如果平均分配，应该是{even:.0%}。",
+
+    "f'Our small model shows no such preference":
+        "我们的小模型没有表现出这种偏好：在它的{ctx}个字符里一圈都转不完的那{len(slow)}对，承载了它的查询和键{s_slow:.0%}的大小，和平均分配的{even:.0%}差不多。",
+
+    # ------------------------------------------------------------------ Longer
+    "Chapter eleven. Longer than it was trained for.":
+        "第11章。比训练时更长。",
+
+    'f"Our model was trained on stretches of {ctx}':
+        "我们的模型是在{ctx}个字符一段的文本上训练的。如果给它{s}倍那么长的文本呢？<bookmark mark='a'/>在训练长度以内，它照常工作。<bookmark mark='b'/>一过这个长度，它就垮了：从每字符{near:.1f}比特，变成{far:.1f}比特。它的时钟上那些慢指针，现在指向了训练中从没见过的角度，它的查询和键也就不再是原来的意思了。<bookmark mark='c'/>什么巧办法都不用，每次只读最后{ctx}个字符，反而要好得多。长上下文不是白来的。",
+
+    'f"So people rescale the clocks.':
+        "于是人们给时钟重新调速。<bookmark mark='a'/>位置插值把每根指针都放慢同样的倍数，{s}倍，这样更长的文本也只覆盖训练中见过的角度；但快指针就丢掉了哪个字符挨着哪个字符的细节。<bookmark mark='b'/>NTK感知的技巧，名字来自第12部分的神经正切核，也就是关于极宽网络的理论，不过在这里完全用不着那套理论：它把慢指针放慢很多，快指针几乎不动。<bookmark mark='c'/>YaRN不动快指针，把慢指针完全放慢，中间的用一段斜坡过渡，再把注意力稍微调尖一点，弥补更长的上下文。<bookmark mark='d'/>在我们的模型上，完全不重新训练，这里最好的是{names[best]}：在最远端是{b[best]:.2f}比特，而什么都不做是{b['plain']:.1f}{win_txt}真实的模型会先这样做，再在长文本上短暂地训练；Qwen和DeepSeek用YaRN读到了12.8万个词元。",
+
+    "f', and better even than the {ctx}-character window.'":
+        "，甚至比{ctx}个字符的窗口还好。",
+
+    'f"Here is YaRN\'s recipe exactly':
+        "这里是YaRN的精确配方，因为大多数开放模型都在用它。<bookmark mark='a'/>对每一对数，数一数它的指针在训练上下文里转了几整圈：r等于上下文长度除以这一对的波长。<bookmark mark='b'/>我们最快的那一对，在{ctx}个字符里转了大约{r[0]:.0f}圈；每个角度它都见过很多遍，所以YaRN不去动它。<bookmark mark='c'/>最慢的那些对，连一整圈都转不完。过了训练长度，它们就会指向从没见过的角度，所以YaRN把它们按{s}倍完全放慢。<bookmark mark='d'/>两者之间是一段斜坡，γ：不到一圈时为0，超过32圈时为1，中间是一条直线。<bookmark mark='e'/>每个新角度都是一个混合：1减γ倍的放慢后的角度，加上γ倍的原来的角度。在我们的头里，{kept}对保持不变，{len(ramp_i)}对在斜坡上，{slowed}对完全放慢。<bookmark mark='f'/>放慢指针也会让注意力变平，摊到更多位置上，所以YaRN加了一个温度：每个分数都乘以0.1倍的log s加1的平方；s等于{s}时，是{mult:.2f}。",
+
+    'f"A second thing changes in a longer text':
+        "文本变长时，还有第二件事在变：有更多的键来分享权重。<bookmark mark='a'/>假设最好的那个键，比其余n减1个键的分数高出δ。它的权重是e的δ次方，除以e的δ次方加n减1。<bookmark mark='b'/>要让n增大时这个权重保持不变，δ就得像n的对数那样增长。<bookmark mark='c'/>所以把每个分数都乘以log n，以训练长度为单位：在训练长度以内什么都不变，超过之后，注意力就保持训练时那么尖锐。大卫·蒋和彼得·乔拉克在2022年提出了它；Qwen在2023年把它和NTK缩放一起使用，Llama 4在推理时也会调节注意力的温度。<bookmark mark='d'/>{v1}<bookmark mark='e'/>{v2}这里最好的是{SPOKEN_EXT[best]}，{far[best]:.2f}。",
+
+    "f'On our model, scaling alone takes":
+        "在我们的模型上，单靠缩放，就把最远端从{far['plain']:.2f}比特变成了{far['logn']:.2f}比特。",
+
+    "f'On our model, scaling alone barely changes":
+        "在我们的模型上，单靠缩放，最远端几乎没变：从{far['plain']:.2f}到{far['logn']:.2f}比特，因为它的问题出在坏掉的角度上，而不在注意力摊得多开。",
+
+    "f'On top of the NTK rescaling it helps again":
+        "叠加在NTK缩放之上，它又有帮助：从{far['ntk']:.2f}到{far['ntk_logn']:.2f}。",
+
+    "f'On top of the NTK rescaling it changes little":
+        "叠加在NTK缩放之上，它也没带来多少变化：从{far['ntk']:.2f}到{far['ntk_logn']:.2f}。",
+
+    'f"Real models do not stop at a rescaling':
+        "真实的模型不会只停在重新调速上：它们还会在新的长度上短暂地训练。我们也这样做了：{steps}步，每步用{T:,}个字符的窗口，共{chars / 1000000.0:.1f}百万个字符，大约是原来训练量的百分之{100 * chars / float(t['tokens']):.0f}，一次从位置插值出发，一次从YaRN出发。<bookmark mark='a'/>虚线是训练前，实线是训练后。<bookmark mark='b'/>{v}<bookmark mark='c'/>{v_end}这就是今天长上下文模型的配方：DeepSeek-V3用YaRN加上两千步训练，从4千个词元扩展到了12.8万个。",
+
+    "f'Position interpolation falls from":
+        "在最远端，位置插值从{far['pi']:.2f}比特降到{far['ft_pi']:.2f}，YaRN从{far['yarn']:.2f}降到{far['ft_yarn']:.2f}。",
+
+    "f'YaRN ends ahead by {gap:.2f} bits, and beats":
+        "最后YaRN领先{gap:.2f}比特，而且胜过了只读最后{ctx}个字符的{far['window']:.2f}。",
+
+    "f'Interpolation ends ahead by {gap:.2f} bits, and beats":
+        "最后位置插值领先{gap:.2f}比特，而且胜过了只读最后{ctx}个字符的{far['window']:.2f}。",
+
+    "f'YaRN ends ahead by {gap:.2f} bits, but neither":
+        "最后YaRN领先{gap:.2f}比特，但两者都还比不上简单地只读最后{ctx}个字符，{far['window']:.2f}。",
+
+    "f'Interpolation ends ahead by {gap:.2f} bits, but neither":
+        "最后位置插值领先{gap:.2f}比特，但两者都还比不上简单地只读最后{ctx}个字符，{far['window']:.2f}。",
+
+    # ------------------------------------------------------------------ Caps
+    "Chapter thirteen. Keeping scores in range.":
+        "第13章。让分数待在范围之内。",
+
+    'f"Chapter three divided by the square root of d':
+        "第3章除以根号d，是为了在训练一开始让分数待在范围之内。但训练会让权重变大，而一个分数是其中两个权重的乘积：<bookmark mark='a'/>把W Q和W K都放大c倍，每个分数就放大c的平方倍。<bookmark mark='b'/>来看看这对我们自己的Transformer有什么影响。c等于2时，最大的分数从{lg[0]:.0f}变成{lg[i2]:.0f}，注意力的熵从{ent[0]:.1f}比特降到{ent[i2]:.1f}，一个键拿走九成以上权重的行所占的比例，从{pk[0]:.0%}变成{pk[i2]:.0%}。<bookmark mark='c'/>模型的猜测也变差了：从每字符{bits[0]:.2f}比特变成{bits[i2]:.2f}，c等于{cs[-1]:.0f}时是{bits[-1]:.2f}。<bookmark mark='d'/>在大规模训练中，这会自己发生：2023年，训练谷歌那个220亿参数视觉Transformer的团队看到，注意力的logit无限制地增长，直到训练发散。",
+
+    '"The fix the vision team used':
+        "视觉团队用的、此后许多语言模型也在用的修补办法，是QK归一化。<bookmark mark='a'/>在做点积之前，把每个头的查询和键都除以它们的均方根大小，再乘以一个学出来的增益。<bookmark mark='b'/>一个向量除以它的均方根，长度恰好是根号d，<bookmark mark='c'/>所以由柯西-施瓦茨不等式，分数永远不会超过增益的平方乘以根号d，不管W Q和W K变得多大。<bookmark mark='d'/>{moves}<bookmark mark='e'/>{cost}<bookmark mark='f'/>Qwen3、GLM-4.5和Gemma 3都会把它们的查询和键归一化；第18部分会展示训练中失控的logit，有它和没有它的对比。",
+
+    "On our transformer, with its queries and keys normalized to their trained sizes, growing the weights now changes":
+        "在我们的Transformer上，把查询和键归一化到它们训练后的大小，现在再放大权重，就什么都不会改变了。",
+
+    "f'On our transformer, with its queries and keys normalized":
+        "在我们的Transformer上，把查询和键归一化到它们训练后的大小，现在再放大权重，熵只变化了{flat:.3f}比特。",
+
+    "f'But bolted onto a model that was trained without it":
+        "但把它硬装到一个没用它训练过的模型上，每字符要多付{bn - b0:.2f}比特，{bn:.2f}对{b0:.2f}：我们的模型已经学会了利用查询的大小，所以QK归一化必须从训练一开始就在。",
+
+    "Bolted onto a model trained without it, it costs almost nothing here.":
+        "把它硬装到一个没用它训练过的模型上，在这里几乎没有代价。",
+
+    'f"A gentler alternative is a soft cap':
+        "一个更温和的替代办法是软上限：把每个分数s，换成c乘以s除以c的双曲正切。<bookmark mark='a'/>小的分数几乎原样通过；大的分数则在正负c处趋于平缓。<bookmark mark='b'/>把c设得比我们训练好的模型的最大分数{capv:.0f}稍高一点，再放大权重：分数再也超不过{capv:.0f}，而且{et}。<bookmark mark='d'/>{bt}<bookmark mark='c'/>Gemma 2在2024年把注意力分数的上限设为50；Gemma 3则放弃了上限，改用QK归一化，它给分数设了界，却不会把分数弯折。",
+
+    "f'the entropy falls only to":
+        "熵只降到{ent_c[-1]:.1f}比特，而不是{ent_p[-1]:.1f}",
+
+    "f'the entropy falls just as far":
+        "熵降得一样多，降到{ent_c[-1]:.1f}比特",
+
+    "f'At c of {cs[-1]:.0f} the bits per character":
+        "c等于{cs[-1]:.0f}时，每字符比特数是{bits_c[-1]:.2f}，而不是{bits_p[-1]:.2f}。",
+
+    "f'But the guesses get worse, not better":
+        "但猜测变得更差，而不是更好：c等于{cs[-1]:.0f}时，每字符{bits_c[-1]:.2f}比特，不加上限是{bits_p[-1]:.2f}。每个大分数都被压平到上限上，一个头就再也分不清它最好的那几个键了：上限必须设得远高于模型实际用到的分数。",
+
+    "f'The bits per character suffer about as much":
+        "每字符比特数也差不多同样变差，{bits_c[-1]:.2f}。",
+
+    # ------------------------------------------------------------------ RASP
+    "Chapter sixteen. What a transformer can compute.":
+        "第16章。Transformer能算什么。",
+
+    "We have taken attention apart.":
+        "我们已经把注意力拆开看过了。那整台机器能算什么？2021年，盖尔·魏斯、约阿夫·戈德堡和埃兰·亚哈夫把它写成了一门编程语言，RASP，里面只有Transformer具备的那些运算。<bookmark mark='a'/>select，也就是选择，用键和查询的比较搭出一个注意力模式。<bookmark mark='b'/>aggregate，也就是聚合，对选中的值取平均。<bookmark mark='c'/>逐元素的函数，就是MLP。<bookmark mark='d'/>用它写的程序读起来是这样的：直方图，也就是每个词元出现了几次，一层就够；排序要两层。每个程序都说明了它需要多少层、多少个头。2023年，DeepMind的一个团队造了Tracr，能把这样的程序编译成真正的Transformer权重。我们手工编译了两个。",
+
+    '"The histogram first.':
+        "先看直方图。给词元用独热向量，一个头的QK矩阵就变成了一张查找表：两个词元之间，我们想做什么比较都行。<bookmark mark='a'/>如果两个词元相同，就给这一对打β分；再给一个起始标记，从每个查询来看都打同样的分。<bookmark mark='b'/>这样，一个出现了c次的词元，就会把注意力平均分给它的c个副本和那个标记，于是标记分到c加1分之1。<bookmark mark='c'/>只让标记携带一个值，这个头的输出就是c加1分之1：一个小小的ReLU层把次数读回来。这个标记扮演的，正是第12章那个汇点的角色。<bookmark mark='d'/>{v_ran}但注意它需要什么：要分清c加1分之1和c加2分之1，c越大，需要的比特就越多。在bfloat16里，次数过了{pb}就糊成一片；在float16里，是过了{p16:,}。一个固定的Transformer用的是固定的精度，这是长度之所以难的原因之一。",
+
+    "f'We ran it on {tr:,} random sequences: all":
+        "我们在{tr:,}个随机序列上运行了它：全部{ok:,}个都对。",
+
+    "f'We ran it on {tr:,} random sequences: {ok:,}":
+        "我们在{tr:,}个随机序列上运行了它：{ok:,}个正确。",
+
+    '"Sorting takes two layers.':
+        "排序要两层。<bookmark mark='a'/>第一层里，每个词元选中所有比它小的词元，外加那个标记：标记所占的份额给出它的名次，也就是排好序后有多少个排在它前面。<bookmark mark='b'/>第二层里，输出位置p选中名次为p的那个词元，把它复制过来。<bookmark mark='c'/>{v_sorted}没有人训练过它们：Transformer的权重可以就是一个程序。",
+
+    "f'Our hand-built weights sort every one":
+        "我们手工搭的权重，把{tr:,}个随机输入每一个都排对了。",
+
+    "f'Our hand-built weights sort {ok:,} of":
+        "我们手工搭的权重，在{tr:,}个随机输入里排对了{ok:,}个。",
+
+    "What can't a transformer do?":
+        "Transformer做不到什么？固定的层数，就是固定量的顺序计算。<bookmark mark='a'/>威廉·梅里尔和阿希什·萨巴瓦尔在2023年证明：一个深度固定、数值的比特数只像输入长度的对数那样增长的Transformer，可以用常数深度的阈值电路来模拟：这就是复杂性理论学家所说的TC零类。<bookmark mark='b'/>如果像大多数人相信的那样，这个类比NC一要弱，那么就没有哪个固定深度的Transformer，能在任意长度上追踪五个物体的一连串洗牌，这是一个真正需要一步接一步计算的任务。在实践中深度也很要紧：一层是搭不出归纳头的。<bookmark mark='c'/>出路是让模型写出来：思维链里的每一个词元，都是再把所有层走一遍，推理模型就是这样买到串行时间的，这在第28部分。<bookmark mark='d'/>RASP还能预测什么容易训练：哈蒂·周和同事们发现，恰好当一个简短的RASP程序能在任意长度上解决某个任务时，Transformer往往就能推广到更长的输入。",
+
+    # ------------------------------------------------------------------ Frontier
+    "Chapter seventeen. Attention in 2026.":
+        "第17章。2026年的注意力。",
+
+    "Every model in 2026 still computes this formula somewhere.":
+        "2026年的每一个模型，仍然在某处计算着这个公式。变的是在哪里算，以及算多少。<bookmark mark='a'/>在softmax内部，是前面几章讲的那些修补：gpt-oss里的汇点logit，Qwen3-Next和Kimi K3里的输出门控，Qwen3和Gemma 3里的QK归一化，还有Llama 4里那些完全没有位置的层。<bookmark mark='b'/>每个过去的词元留下的键和值，已经被压小了：分组查询注意力让多个头共享它们，DeepSeek的多头潜在注意力则从一个小的潜在向量把它们重建出来，这是把第4章的低秩想法用在了记忆上。<bookmark mark='c'/>许多模型只看过去的一部分：大多数层用滑动窗口，或者学着去挑哪些键要紧。DeepSeek的稀疏注意力让一个又小又快的索引器，为每个查询挑出几千个过去的词元；DeepSeek-V4则压缩加挑选，读到一百万个词元。<bookmark mark='d'/>还有些模型把大多数注意力层，换成一个边读边更新的固定大小的记忆：Qwen3-Next和Qwen3.5里，每一个注意力层配三个这样的层；Kimi Linear和Kimi K3里，用的是Kimi Delta Attention。",
+
+    "Here is what such a hybrid looks like":
+        "这样的混合架构长这样：2026年发布的Kimi K3有93层，其中只有24层是完整的注意力。<bookmark mark='a'/>其余各层保留一个固定大小的记忆，边读边更新。<bookmark mark='b'/>为什么还要留注意力？因为注意力能把上下文里的任何东西原样回想起来，就像第14章的归纳头那样；而固定大小的记忆必须决定忘掉什么。少数几层注意力负责回想，其余的负责压低成本。<bookmark mark='c'/>那种记忆怎样工作，它为什么是乔装打扮的注意力，就是我们接下来要去的地方：先在第14部分走过这些模型本身的谱系，再到第15部分讲记忆。",
+
+    # ------------------------------------------------------------------ Outro
+    'f"Let\'s take stock.':
+        "我们来盘点一下。注意力是一个加权平均：纳达拉亚和沃森的平滑器，只是核由网络学出来；它也是一次记忆读取，现代霍普菲尔德网络的一步。除以根号d，让它的softmax不至于塌缩。每个头只沿着少数几个方向比较和搬运，掩码决定谁能看到谁，一个模块的成本是12倍的d平方个权重，再加上一项随上下文增长的成本。用这些搭起来的我们自己的Transformer，达到了每字符{float(t['passage_bits']):.2f}比特。位置可以加上去、转进去、用惩罚表示，或者干脆不给，小心处理的话，还能拉长到超过训练长度。softmax需要一个地方来停放注意力，汇点logit和门控给了它这样的地方。训练出来的头还会找到自己的算法：复制、一步梯度下降、程序，只是受限于一些边界，只有更多步的思考才能去掉这些边界。",
+
+    "This comes back everywhere.":
+        "这些内容会处处再现。第14部分跟着建立在这个模块上的模型，从GPT-1一路走到开放前沿。第15部分讲每个过去的词元留下的键和值，以及取代它们的固定大小的记忆；第16部分讲只关注过去的一部分。第18部分训练长上下文，并盯着失控的logit；第19部分让注意力的部署又快又便宜；第28部分让模型的思考超越它固定的深度；第30部分则在真实的模型里，把头和回路拆开来看。",
+
+    "Here are six problems to try":
+        "这里有六道题可以试试，从点积的方差，一直到写成注意力的梯度下降。在这里暂停，把它们做一做；完整的解答在本部分的笔记里。",
+
+    "Next time: the lineage.":
+        "下一次：谱系。我们今天搭的这个模块，从2017年的一个翻译模型开始，一路叠高、放大，到GPT-3、ChatGPT，再到2026年的开放权重前沿；还有我们自己的GPT式模型和BERT式模型，在小说上并排训练。",
+
+    "Anthropic's 'Mathematical Framework":
+        "接下来最值得读的，是Anthropic的《A Mathematical Framework for Transformer Circuits》，也就是Transformer回路的数学框架。感谢观看，第14部分见。",
+
+}
+
+PHRASES = {
+    # Hopfield
+    'but it never fails completely.': '但它从来不会彻底失败。',
+    # Heads
+    'That is close to the whole stream.': '这几乎就是整个残差流。',
+    # Masks
+    'exactly zero': '精确的0',
+    'rounding error': '舍入误差级别',
+    'blind to order, to rounding error.': '对顺序完全视而不见，差别只在舍入误差的量级。',
+    # Cost
+    'They match the formula exactly.': '它们和公式完全吻合。',
+    # Longer
+    '.': '。',
+    'position interpolation': '位置插值',
+    'the NTK-aware rescaling': 'NTK感知的缩放',
+    'the plain model': '原始模型',
+    'log n scaling alone': '单独的log n缩放',
+    'NTK-aware with log n scaling': 'NTK感知缩放加上log n缩放',
+}
