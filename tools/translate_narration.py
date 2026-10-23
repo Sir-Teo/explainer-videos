@@ -56,7 +56,8 @@ def problems(en: str, tr: str, lang: str) -> list[str]:
         plain = BOOKMARK.sub("", tr)
         cjk = len(re.findall(r"[一-鿿]", plain))
         latin = re.findall(r"[A-Za-z]{4,}", plain)
-        if cjk < 0.5 * len(re.sub(r"\s", "", plain)):
+        # a short line that is mostly a name ("第12章。AlphaGo。") is translated; English left as it was is not
+        if cjk == 0 or (cjk < 0.5 * len(re.sub(r"\s", "", plain)) and len(latin) > 2):
             out.append("mostly untranslated")
         if latin:
             out.append(f"Latin words left: {sorted(set(latin))[:6]}")
