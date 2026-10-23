@@ -122,7 +122,7 @@ class Arithmetic(VoiceoverScene):
             bl, bh, c = bits_so_far[k]
             g = VGroup()
             for name, b in (("low ", bl), ("high", bh)):
-                t = Text(f"{name} = 0." + b + "...", font=MONO, font_size=20, color=GREY_B)
+                t = data_text(f"{name} = 0." + b + "...", font=MONO, font_size=20, color=GREY_B)
                 off = len(f"{name} = 0.".replace(" ", ""))  # Text has no glyphs for spaces
                 for j in range(c):
                     t[off + j].set_color(C.BITS)
@@ -420,7 +420,7 @@ class Arithmetic(VoiceoverScene):
                 k += 1
             g = VGroup()
             for name, bits in ((r"low ", a_), (r"high", b_)):
-                t = Text(" ".join((name, bits)), font=MONO, font_size=24, color=GREY_B)
+                t = data_text(" ".join((name, bits)), font=MONO, font_size=24, color=GREY_B)
                 off = len(name.strip())
                 for j in range(k):
                     t[off + j].set_color(C.BITS)

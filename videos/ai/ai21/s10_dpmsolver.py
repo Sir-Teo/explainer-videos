@@ -169,7 +169,7 @@ class DPMSolver(VoiceoverScene):
         panels = Group()
         for i, k in enumerate(kinds + ["ref"]):
             pn = Panel(2.9, center=[-4.9 + 3.25 * i, 1.0, 0])
-            P = np.asarray(s["pic_ref"] if k == "ref" else s[f"pic_{k}{budget}"])
+            P = np.asarray(s["pic_ref"] if k == "ref" else s["pic_" + k + str(budget)])
             col = DATA if k == "ref" else SOLVER_C[k]
             nm = r"the exact solution" if k == "ref" else SOLVER_NAME[k]
             panels.add(Group(pn, pn.scatter(P, col, radius_px=1.4, res=260),

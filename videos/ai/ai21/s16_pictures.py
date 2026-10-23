@@ -76,7 +76,7 @@ class Pictures(VoiceoverScene):
                   xticks=[0, checks[-1]], yticks=[0, round(top, 2)], center=[4.6, 1.2, 0], font_size=18)
         J = np.asarray(g["journey"])
         steps = Group(*[gray_image(im, 0.95) for im in J]).arrange(RIGHT, buff=0.1).move_to([0, -2.2, 0])
-        sl = label(rf"one sample, \ from noise to a letter: \ every $5$ steps of $50$", font_size=22, color=GREY_A).next_to(steps, UP, buff=0.15)
+        sl = label(r"one sample, \ from noise to a letter: \ every $5$ steps of $50$", font_size=22, color=GREY_A).next_to(steps, UP, buff=0.15)
         with self.voiceover(
             "Here it is learning: sixteen pictures from the same noise at each checkpoint. <bookmark mark='a'/> At "
             "first, static. <bookmark mark='b'/> Then grey blobs where letters tend to be, <bookmark mark='c'/> then "

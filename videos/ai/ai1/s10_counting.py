@@ -45,7 +45,7 @@ class Counting(VoiceoverScene):
             if len(txt) > 62:
                 t = t.rsplit(" ", 1)[0] if " " in t[40:] else t
             n = label(name, font_size=22, color=C.CONTEXT)
-            body = Text(t, font=MONO, font_size=20, color=WHITE if key in ("5", "7", "w2") else GREY_A)
+            body = data_text(t, font=MONO, font_size=20, color=WHITE if key in ("5", "7", "w2") else GREY_A)
             lines.add(VGroup(n, body))
         for g in lines:
             g[0].move_to([-4.6, 0, 0], aligned_edge=RIGHT).shift(RIGHT * 0.0)
@@ -190,11 +190,11 @@ class Counting(VoiceoverScene):
         facts = VGroup(
             mtex(rf"27^{{{kL}}} \approx 10^{{{e20:.0f}}} \ \text{{possible contexts}}", font_size=32),
             label(rf"the books contain ${nctx[kL] / 1e6:.1f}$ million of them", font_size=28, color=GREY_A),
-            label(r"an unseen context: \ $q = \frac{0}{0}$; \ an unseen letter: \ $q = 0$, \ surprise $= \infty$",
+            label(r"an unseen context: \ $q = \frac{0}{0}$; \\ an unseen letter: \ $q = 0$, \ surprise $= \infty$",
                   font_size=26, color=C.SURPRISE),
         ).arrange(DOWN, buff=0.35).move_to(RIGHT * 3.4 + DOWN * 0.2)
-        if facts.width > 6.8:
-            facts.width = 6.8
+        if facts.width > 6.4:
+            facts.width = 6.4
         # contexts multiply: every 2-letter context, then the 4-letter contexts inside one of them, then all of those
         g = load("ctxgrid")
         seen2, grid4 = np.asarray(g["seen2"]), np.asarray(g["grid4"])
@@ -267,10 +267,29 @@ class Counting(VoiceoverScene):
         whys = [why(r"every chance $\theta$ equally likely beforehand; \ $s$ successes in $n$ trials"),
                 why(r"Euler's beta integral"), why(r"$27$ outcomes: \ add one to every count"),
                 why(r"add $\alpha$: \ a prior less sure that anything can happen")]
-        step = ladder(self, rows, whys, keep=2, top=2.2, x=-1.8, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=2, top=2.2, x=-3.0, buff=0.5, edge=6.9)  # left: the chart is on the right
         sun = label(r"Laplace: \ $5{,}000$ years of sunrises, \ $1{,}826{,}213$ days $\Rightarrow$ odds of "
-                    r"$1{,}826{,}214$ to $1$ on tomorrow", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
+                    r"$1{,}826{,}214$ to $1$ on tomorrow", font_size=24, color=GREY_A).move_to(DOWN * 2.85)
         src = cite(r"P.-S.~Laplace, \textit{Essai philosophique sur les probabilit\'es} (1814)", corner=DR)
+        # the reasoning, pictured: belief about the chance theta, before looking and after s of n (illustrative)
+        s_, n_ = 7, 10
+        bel = axes([0, 1], [0, 1.15], x_length=5.0, y_length=2.4, xlabel=r"the chance $\theta$",
+                   xticks=[0, 0.5, 1], center=[4.0, -0.5, 0], font_size=20)
+        th_ = np.linspace(0, 1, 201)
+        post = th_ ** s_ * (1 - th_) ** (n_ - s_)
+        post = post / post.max()
+        prior_c = curve(bel.ax, th_, np.full_like(th_, 0.3), GREY_B, 3)
+        post_c = curve(bel.ax, th_, post, C.BITS, 3.5)
+        prior_l = label(r"before looking: \ every $\theta$ alike", font_size=20, color=GREY_B)
+        prior_l.next_to(bel.ax.c2p(0.02, 0.3), UP, buff=0.08).align_to(bel.ax.c2p(0.02, 0), LEFT)
+        post_l = label(rf"after ${s_}$ of ${n_}$: \ weighted by $\theta^{s_}(1-\theta)^{n_ - s_}$", font_size=20,
+                       color=C.BITS).next_to(bel.ax.c2p(0.5, 1.15), UP, buff=0.05)
+        mean_ = (s_ + 1) / (n_ + 2)
+        mean_l = DashedLine(bel.ax.c2p(mean_, 0), bel.ax.c2p(mean_, 1.0), color=WHITE, stroke_width=2)
+        mean_t = label(rf"average: \ $\tfrac{{{s_ + 1}}}{{{n_ + 2}}} = {mean_:.3f}$", font_size=20, color=WHITE)
+        mean_t.next_to(mean_l, RIGHT, buff=0.1).shift(DOWN * 0.35)
+        bel_tag = note(r"illustrative").next_to(bel, DOWN, buff=0.12).align_to(bel, RIGHT)
+        belief = VGroup(bel, prior_c, prior_l, post_c, post_l, mean_l, mean_t, bel_tag)
         with self.voiceover(
             "The patch is older than computers. In 1814 Pierre-Simon Laplace asked: if something happened s times "
             "in n tries, how likely is it next time? <bookmark mark='a'/> Suppose that, before looking, every "
@@ -284,12 +303,15 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(src))
             step(0)
             vo.wait_until("a")
+            self.play(FadeIn(bel), FadeIn(bel_tag), Create(prior_c), FadeIn(prior_l))
+            self.play(ReplacementTransform(prior_c.copy(), post_c), FadeIn(post_l), run_time=1.5)
             vo.wait_until("b")
             step(1)
+            self.play(Create(mean_l), FadeIn(mean_t))
             vo.wait_until("c")
             self.play(FadeIn(sun))
             vo.wait_until("d")
-            self.play(FadeOut(sun), FadeOut(src))
+            self.play(FadeOut(sun), FadeOut(src), FadeOut(belief))
             step(2)
             vo.wait_until("e")
             step(3)

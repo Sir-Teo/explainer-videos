@@ -116,10 +116,9 @@ class Shannon1951(VoiceoverScene):
             f"{n:,} letters of the Falcon passage. <bookmark mark='a'/> It gets the letter first time "
             f"{100 * q[0]:.0f} percent of the time, second time {100 * q[1]:.0f} percent, with a long tail."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(sub), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(sub), FadeIn(tag), FadeIn(labs), FadeIn(xlab))
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), FadeIn(labs), FadeIn(xlab),
-                      run_time=2.0)
             self.play(FadeIn(vals))
         with self.voiceover(
             f"From those frequencies, the upper bound is {up:.2f} bits per letter. <bookmark mark='a'/> Shannon also "

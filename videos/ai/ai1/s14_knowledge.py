@@ -17,7 +17,7 @@ def token_paragraph(tokens, bits, width=13.0, font_size=19, line_gap=0.42) -> VG
     gap = 0.11
     for tok, b in zip(tokens, bits):
         space = tok.startswith(" ")
-        t = Text(tok.strip() or "·", font=TOKEN_FONT, font_size=font_size, color=BLACK if b > 5.0 else WHITE)
+        t = data_text(tok.strip() or "·", font=TOKEN_FONT, font_size=font_size, color=BLACK if b > 5.0 else WHITE)
         w = t.width + 0.08
         if space and x > 0:
             x += gap
@@ -128,7 +128,7 @@ class Knowledge(VoiceoverScene):
         rows = VGroup()
         for prompt, tok, name in items:
             a, b = p_of("GPT-2 small", prompt, tok), p_of("Qwen3-4B", prompt, tok)
-            ptxt = Text(prompt + " …", font=TOKEN_FONT, font_size=22, color=C.TOKEN)
+            ptxt = data_text(prompt + " …", font=TOKEN_FONT, font_size=22, color=C.TOKEN)
             ans = label(name, font_size=24, color=WHITE)
             bars = VGroup()
             for k, (v, col) in enumerate(((a, C.MODEL_Q), (b, C.NEURAL))):

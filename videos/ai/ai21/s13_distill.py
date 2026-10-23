@@ -225,8 +225,8 @@ class Distill(VoiceoverScene):
         with self.voiceover(
             "Side by side, one step from the same noise. The teacher's own single step is a blur, "
             f"{vals['t1'].mean():.3f} from the data. <bookmark mark='a'/> {verdict} <bookmark mark='b'/> The "
-            "budgets differ, as they do in practice, and on images the ranking depends on scale and care. Today's "
-            "fastest image models are distilled this way; FLUX one's quickest version, for one, by an adversarial "
+            "budgets differ, as they do in practice, and on images the ranking depends on scale and care. Many of "
+            "today's fastest image models are distilled; FLUX one's quickest version, for one, by an adversarial "
             "form of distillation, in one to four steps. All of them need a teacher. Can a model be one-step from "
             "scratch?"
         ) as vo:

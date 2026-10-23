@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, PART, letter_row, load
+from videos.ai.ai1.common import ALPHA27, MONO, PART, letter_row, load
 
 TYP = C.BITS  # the typical set
 ALL = "#3A4558"  # sequences outside it

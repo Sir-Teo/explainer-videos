@@ -45,7 +45,7 @@ class Forward(VoiceoverScene):
             "Annealed Langevin, at the end of Part 20, needs the score at every level of noise. Where do the levels "
             "come from? From a process that destroys the data on purpose. <bookmark mark='a'/> Take every point, "
             "shrink it a little towards the origin, and add a little Gaussian noise. <bookmark mark='b'/> Do it a "
-            f"thousand times. The shrinking keeps the spread from growing; the noise erases the letters, a little at "
+            "thousand times. The shrinking keeps the spread from growing; the noise erases the letters, a little at "
             "each step, until only a round bell of noise is left. <bookmark mark='c'/> That is the forward process. "
             "It has no parameters: nothing in it is learned."
         ) as vo:

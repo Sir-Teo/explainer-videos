@@ -303,7 +303,7 @@ class Prefix(VoiceoverScene):
         ud_demo = VGroup(parts, syms).move_to([3.0, codes[0].get_y() - 0.1, 0])
         bw = bad["code"]
         amb = VGroup(Text(bw["c"], font=MONO, font_size=28, color=WHITE), MathTex(r"\to", font_size=30),
-                     Text("a b", font=MONO, font_size=26, color=C.SURPRISE), label(r"or", font_size=26, color=GREY_B),
+                     data_text("a b", font=MONO, font_size=26, color=C.SURPRISE), label(r"or", font_size=26, color=GREY_B),
                      Text("c", font=MONO, font_size=26, color=C.SURPRISE), MathTex("?", font_size=34, color=C.SURPRISE))
         amb.arrange(RIGHT, buff=0.25).move_to([3.0, codes[1].get_y() - 0.05, 0])
         rows = [

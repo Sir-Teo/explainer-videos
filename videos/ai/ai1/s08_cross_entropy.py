@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, PART, letter, load, plain_axes, polyline
+from videos.ai.ai1.common import ALPHA27, MONO, PART, letter, load, plain_axes, polyline
 
 
 def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opacity=0.8) -> VGroup:

@@ -77,7 +77,7 @@ class TextLM(VoiceoverScene):
     def replay(self):
         t = load("textlm")
         seeds = [int(s) for s in t["seeds"]]
-        C_ = {f"{k}{s}": np.asarray(t[f"{k}{s}_curve"]) for k in ("mdm", "ar") for s in seeds}
+        C_ = {k + str(s): np.asarray(t[k + str(s) + "_curve"]) for k in ("mdm", "ar") for s in seeds}
         steps = int(t["steps"])
         allv = np.concatenate([c[1:, 1] for c in C_.values()])
         hi = float(np.ceil(allv.max() * 2) / 2)
@@ -87,7 +87,7 @@ class TextLM(VoiceoverScene):
         series = []  # (points from step eval_at[1] on, colour, width, opacity)
         for k, col in (("mdm", MDM_C), ("ar", AR_C)):
             for s in seeds:
-                c = C_[f"{k}{s}"][1:]
+                c = C_[k + str(s)][1:]
                 series.append(([g.ax.c2p(a, min(max(b, lo), hi)) for a, b in c], col, 3 if s == seeds[0] else 1.5,
                                1 if s == seeds[0] else 0.5))
         lg = legend([(MDM_C, r"masked diffusion: \ the bound"), (AR_C, r"autoregressive: \ exact")], font_size=19).next_to(g, DOWN, buff=0.15)
@@ -304,7 +304,7 @@ class TextLM(VoiceoverScene):
         cb = VGroup(*[Square(0.14, color=C.BITS, fill_opacity=1).move_to(g.ax.c2p(math.log2(int(w["steps"])), w["judge"])) for w in blk])
         rl = DashedLine(g.ax.c2p(0, judge_real), g.ax.c2p(math.log2(T), judge_real), color=WHITE, stroke_width=1.5)
         al = DashedLine(g.ax.c2p(0, arw["judge"]), g.ax.c2p(math.log2(T), arw["judge"]), color=AR_C, stroke_width=1.5)
-        lg = legend([(MDM_C, r"surest first"), (C.SURPRISE, r"at random"), (C.BITS, rf"in $4$ blocks, left to right"),
+        lg = legend([(MDM_C, r"surest first"), (C.SURPRISE, r"at random"), (C.BITS, r"in $4$ blocks, left to right"),
                      (AR_C, r"the autoregressive model's own samples"), (WHITE, r"real held-out text")], font_size=18)
         lg.move_to([3.9, 1.8, 0])
         # the cost: network evaluations to write T characters
