@@ -88,7 +88,8 @@ REGMIX = dict(models=512, params=1e6, tokens=1e9, big=1e9, big_tokens=25e9, cand
 WRAP = dict(speedup=3, ppl=10, src="Maini et al., Rephrasing the Web (arXiv 2401.16380, ACL 2024)")
 COLLAPSE = dict(src="Shumailov et al., AI models collapse when trained on recursively generated data (Nature 631, 2024)")
 ACCUMULATE = dict(src="Gerstgrasser et al., Is Model Collapse Inevitable? (arXiv 2404.01413, 2024)")
-REPEAT = dict(epochs=4, src="Muennighoff et al., Scaling Data-Constrained Language Models (NeurIPS 2023)")
+REPEAT = dict(epochs=4, rd_star=15.387756,  # effective data D' = U + U R* (1 - exp(-R/R*)), R = epochs - 1 (Eq. 5)
+              src="Muennighoff et al., Scaling Data-Constrained Language Models (NeurIPS 2023), Sec. 3.1, Eq. 5")
 GPT3_CONTAM = dict(ngram=13, src="Brown et al., Language Models are Few-Shot Learners (2020), App. C")
 
 # ---------------------------------------------------------------------------

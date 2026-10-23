@@ -777,7 +777,11 @@
   "jumps": "jumps",
   "over": "over",
   "lazy": "lazy",
-  "dog": "dog"
+  "dog": "dog",
+  "each band's $8$ minhashes, \\ hashed to one bucket number": "每个带的 $8$ 个最小哈希，\\ 哈希成一个桶号",
+  "bands $4$ and $10$ land in the same bucket \\ $\\Rightarrow$ \\ $A$ and $B$ get compared": "第 $4$ 和第 $10$ 个带落进同一个桶 \\ $\\Rightarrow$ \\ 比较 $A$ 和 $B$",
+  "what it caught: \\ pages of one site, \\ one template": "它抓到的：\\ 同一网站、\\ 同一模板的网页",
+  "what it caught": "它抓到的"
  },
  "patterns": []
 }

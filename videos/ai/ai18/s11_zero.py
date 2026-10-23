@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (COMM, F, GPU, GRADS, OPT, PART, WEIGHTS, ShardGrid, load, play_fly, spoken_int,
+from videos.ai.ai18.common import (COMM, F, GPU, GRADS, OPT, PART, WEIGHTS, ShardGrid, hbars, load, play_fly, spoken_int,
                                    take_away)
 
 
@@ -45,8 +45,8 @@ class ZeRO(VoiceoverScene):
         for t in stage_t:
             t.to_edge(DOWN, buff=1.4)
         hist = history_card(2019, r"Rajbhandari, Rasley, Ruwase \& He (Microsoft)", r"ZeRO, \ the Zero Redundancy "
-                            r"Optimizer, \ in DeepSpeed", width=6.0, color=OPT).to_edge(DOWN, buff=0.25).shift(RIGHT * 3.2)
-        hist.scale(0.8)
+                            r"Optimizer, \ in DeepSpeed", width=6.0, color=OPT)
+        hist.scale(0.8).to_edge(DOWN, buff=0.15)
 
         def own_only(gi):
             g = grids[gi][0]
@@ -91,7 +91,12 @@ class ZeRO(VoiceoverScene):
             return f"{m:.0f}" if m >= 100 else f"{m:.1f}" if m >= 10 else f"{m:.2f}"
 
         whys = [why(rf"{n}: \ ${gb(m)}$ GB", font_size=20) for n, m in zip(names, mem)]
-        step = ladder(self, rows, whys, keep=4, top=1.9, x=-3.4, buff=0.45, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=1.95, x=-3.4, buff=0.4, edge=6.9)
+        bars = hbars([(t, m, c) for t, m, c in zip((r"data parallel", r"stage 1", r"stage 2", r"stage 3"), mem,
+                                                    (GREY_B, OPT, GRADS, WEIGHTS))], mem[0], width=5.4, bar_h=0.24,
+                     gap=0.1, font_size=20, label_width=2.4, fmt=lambda v: rf"${gb(v)}$ GB")
+        bars.move_to([0.9, -2.85, 0])
+        bt = label(r"GB per GPU, \ the paper's example", font_size=18, color=GREY_B).next_to(bars, LEFT, buff=0.5)
         head = label(rf"bytes per GPU: \ $\Psi$ parameters, \ $K = {Z['k']}$, \ $N$ GPUs; \ the paper's example: "
                      rf"$\Psi = {Z['psi'] / 1e9:.1f}$B, \ $N = {Z['nd']}$", font_size=22, color=GREY_A)
         head.to_edge(UP, buff=0.45)
@@ -105,15 +110,11 @@ class ZeRO(VoiceoverScene):
             f"divides everything: {mem[3]:.2f} gigabytes per GPU. Sixty-four GPUs together hold the model once, "
             "not sixty-four times."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            vo.wait_until("a")
-            step(0)
-            vo.wait_until("b")
-            step(1)
-            vo.wait_until("c")
-            step(2)
-            vo.wait_until("d")
-            step(3)
+            self.play(FadeIn(head), FadeIn(src), FadeIn(bt), *[FadeIn(b_[0]) for b_ in bars])
+            for k, mk in enumerate("abcd"):
+                vo.wait_until(mk)
+                step(k)
+                self.play(GrowFromEdge(bars[k][1], LEFT), FadeIn(bars[k][2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -151,7 +152,7 @@ class ZeRO(VoiceoverScene):
             "instead of two: half as much traffic again, in exchange for memory divided by N. Meta trained Llama 3 with "
             "FSDP across its data-parallel groups; DeepSeek-V3 used stage one."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(lab))
+            self.play(FadeIn(g), FadeIn(lab), FadeIn(steps_[3]))
             vo.wait_until("a")
             self.play(FadeIn(steps_[0]))
             gather()
@@ -165,7 +166,7 @@ class ZeRO(VoiceoverScene):
             self.play(*[g.cells[r][c].animate.set_fill(GRADS, opacity=0.85 if r == c else 0.06) for r in range(p)
                         for c in range(p)])
             vo.wait_until("d")
-            self.play(FadeIn(steps_[3]), FadeIn(steps_[4]))
+            self.play(FadeIn(steps_[4]), Indicate(steps_[3], scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -180,17 +181,17 @@ class ZeRO(VoiceoverScene):
             (r"ZeRO-3 / FSDP, \ $4$ processes", rf"${sci(Pr['err']['zero3'], 0)}$", Pr["persistent_z3"],
              Pr["sent_z3"]),
         ]
-        heads = [r"", r"largest parameter difference", r"numbers kept per process", r"numbers sent per step"]
-        xs = [-4.4, -0.6, 2.6, 5.4]
-        hd = VGroup(*[label(h, font_size=20, color=GREY_B).move_to([x, 1.9, 0]) for h, x in zip(heads, xs)])
+        heads = [r"", r"largest parameter \\ difference", r"numbers kept \\ per process", r"numbers sent \\ per step"]
+        xs = [-4.5, -0.6, 2.5, 5.3]
+        hd = VGroup(*[label(h, font_size=23, color=GREY_B).move_to([x, 2.35, 0]) for h, x in zip(heads, xs)])
         body = VGroup()
         for i, (nm, err, keep, sent) in enumerate(rows):
-            y = 1.1 - 0.75 * i
-            cells = [label(nm, font_size=22, color=WHITE).move_to([xs[0], y, 0]),
-                     label(err, font_size=22, color=GREY_A).move_to([xs[1], y, 0])]
+            y = 1.3 - 0.95 * i
+            cells = [label(nm, font_size=26, color=WHITE).move_to([xs[0], y, 0]),
+                     label(err, font_size=26, color=GREY_A).move_to([xs[1], y, 0])]
             if keep is not None:
-                cells += [label(rf"${keep:,}$".replace(",", "{,}"), font_size=22, color=OPT).move_to([xs[2], y, 0]),
-                          label(rf"${sent:,.0f}$".replace(",", "{,}"), font_size=22, color=COMM).move_to([xs[3], y, 0])]
+                cells += [label(rf"${keep:,}$".replace(",", "{,}"), font_size=26, color=OPT).move_to([xs[2], y, 0]),
+                          label(rf"${sent:,.0f}$".replace(",", "{,}"), font_size=26, color=COMM).move_to([xs[3], y, 0])]
             body.add(VGroup(*cells))
         ratio_mem = Pr["persistent_dp"] / Pr["persistent_z3"]
         ratio_comm = Pr["sent_z3"] / Pr["sent_dp"]
@@ -198,9 +199,9 @@ class ZeRO(VoiceoverScene):
                    "ZeRO's paper predicts one and a half.")
         res = VGroup(
             label(rf"memory: \ ${ratio_mem:.2f}\times$ less, \ plus one layer at a time "
-                  rf"(${Pr['transient_z3']:,}$ numbers)".replace(",", "{,}"), font_size=24, color=OPT),
-            label(rf"traffic: \ ${ratio_comm:.2f}\times$ more", font_size=24, color=COMM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(DOWN * 1.9)
+                  rf"(${Pr['transient_z3']:,}$ numbers)".replace(",", "{,}"), font_size=28, color=OPT),
+            label(rf"traffic: \ ${ratio_comm:.2f}\times$ more", font_size=28, color=COMM),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 2.25)
         e3, e1 = Pr["err"]["zero3"], Pr["err"]["dp"]
         if e3 < 1e-3:
             same = (f"After {Pr['steps']} steps, its parameters match the one-process run to within "

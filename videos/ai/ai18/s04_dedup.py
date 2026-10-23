@@ -198,6 +198,29 @@ class Dedup(VoiceoverScene):
                     .arrange(RIGHT, buff=0.1)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         lg.move_to(g.ax.c2p(0.03, 0.88), aligned_edge=UL)
         worst = max(abs(bn["measured"] - bn["predicted"]) for bn in bins)
+        # two documents' signatures, band by band: each band's minhashes hashed to one bucket number (schematic)
+        rng = np.random.default_rng(3)
+        ha = [f"{v:04x}" for v in rng.integers(0, 65536, b)]
+        same = (3, 9)
+        hb = [h if k in same else f"{v:04x}" for k, (h, v) in enumerate(zip(ha, rng.integers(0, 65536, b)))]
+        strips = VGroup()
+        for name, hs, col in ((r"$A$", ha, PAGE), (r"$B$", hb, DUP)):
+            blocks = VGroup(*[VGroup(Rectangle(width=0.8, height=0.42, stroke_width=1, stroke_color=GREY_D, fill_color=col,
+                                               fill_opacity=0.25 + 0.25 * (k % 2)),
+                                     data_text(h, font=MONO, font_size=15, color=WHITE)) for k, h in enumerate(hs)])
+            blocks.arrange(RIGHT, buff=0.04)
+            strips.add(VGroup(label(name, font_size=26, color=col), blocks).arrange(RIGHT, buff=0.25))
+        strips.arrange(DOWN, aligned_edge=RIGHT, buff=0.22)
+        if strips.width > 12.8:
+            strips.width = 12.8
+        strips.move_to([0, 0.15, 0])
+        rings = VGroup(*[SurroundingRectangle(VGroup(strips[0][1][k], strips[1][1][k]), buff=0.06, color=YELLOW,
+                                              stroke_width=3) for k in same])
+        bcap = label(rf"each band's ${r}$ minhashes, \ hashed to one bucket number", font_size=22, color=GREY_A)
+        bcap.next_to(strips, UP, buff=0.3)
+        bmatch = label(rf"bands ${same[0] + 1}$ and ${same[1] + 1}$ land in the same bucket \ $\Rightarrow$ \ "
+                       r"$A$ and $B$ get compared", font_size=24, color=YELLOW).next_to(strips, DOWN, buff=0.35)
+        bsch = note(r"schematic", font_size=18).next_to(bmatch, DOWN, buff=0.15)
         src = cite(r"Indyk \& Motwani (1998); \ Broder (1997); \ FineWeb (2024), App.\ E", corner=DL, font_size=17)
         with self.voiceover(
             "One signature per document still leaves every pair to compare. Locality-sensitive hashing avoids "
@@ -211,7 +234,11 @@ class Dedup(VoiceoverScene):
             f"similarity: they follow the formula, at most {worst:.2f} away in any bin."
         ) as vo:
             self.play(FadeIn(sig), FadeIn(sl))
+            self.play(FadeIn(bcap), LaggedStart(*[FadeIn(st, shift=RIGHT * 0.1) for st in strips], lag_ratio=0.4),
+                      run_time=1.5)
+            self.play(Create(rings), FadeIn(bmatch), FadeIn(bsch))
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(bcap, strips, rings, bmatch, bsch)))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -264,6 +291,26 @@ class Dedup(VoiceoverScene):
             lic = VGroup(label(r"the last page of two of the books", font_size=20, color=GREY_A),
                          *[said(h, chars=40, font_size=15, max_lines=4, box_color=DUP) for h in D["foot_head"][:2]])
             lic.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, 0.3, 0])
+        def short(u):  # host and first path segment
+            host, _, rest = u.split("://")[-1].partition("/")
+            seg = rest.split("/")[0].split("?")[0]
+            return f"{host}/{seg}/…" if seg else host
+        caught = VGroup(*[VGroup(data_text(short(e["url_a"]), font=MONO, font_size=17, color=GREY_B),
+                                 label(rf"$J = {e['jaccard']:.2f}$", font_size=22, color=DUP)) for e in D["examples"][:6]])
+        for c_ in caught:
+            c_[1].next_to(c_[0], RIGHT, buff=0.3)
+        caught.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        jx = max(c_[0].get_right()[0] for c_ in caught) + 0.3
+        for c_ in caught:
+            c_[1].move_to([jx + c_[1].width / 2, c_[0].get_center()[1], 0])
+        one_site = all(e["url_a"].split("://")[-1].split("/")[0] == e["url_b"].split("://")[-1].split("/")[0]
+                       for e in D["examples"])
+        cl = VGroup(label(r"what it caught: \ pages of one site, \ one template" if one_site else r"what it caught",
+                          font_size=22, color=GREY_A), caught)
+        cl.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        if cl.width > 6.2:
+            cl.width = 6.2
+        cl.move_to([3.6, 0.6, 0])
         share = D["removed_share"]
         if share < 0.05:
             found = (f"In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
@@ -290,7 +337,10 @@ class Dedup(VoiceoverScene):
             "Deduplicating each crawl on its own worked better."
         ) as vo:
             self.play(FadeIn(left[:4]), FadeIn(src))
+            self.play(FadeIn(cl[0]), LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in caught], lag_ratio=0.3),
+                      run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(cl))
             self.play(FadeIn(left[4:], shift=UP * 0.1), FadeIn(lic, shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeOut(lic))
