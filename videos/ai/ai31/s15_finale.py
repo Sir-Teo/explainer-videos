@@ -135,11 +135,14 @@ class Finale(VoiceoverScene):
         VGroup(t1, t2).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.35)
         tag = note(r"computed: \ the number under each letter is how many guesses it took", font_size=18)
         tag.to_corner(DR, buff=0.15)
-        better = d["total"] < d["count_total"]
-        verdict = (f"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs it "
-                   f"{d['total']:.0f} bits, against the counting program's {d['count_total']:.0f}." if better else
-                   f"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs it "
-                   f"{d['total']:.0f} bits: on this odd, unpunctuated sentence, no better than counting.")
+        if d["total"] < d["count_total"]:
+            verdict = (f"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs "
+                       f"it {d['total']:.0f} bits, against the counting program's {d['count_total']:.0f}.")
+        else:
+            verdict = (f"It needs one guess for {d['first'] * 100:.0f} percent of the letters, and the sentence costs "
+                       f"it {d['total']:.0f} bits, against the counting program's {d['count_total']:.0f}. Shannon's "
+                       "sentence has no capitals and no punctuation, the very form the counting program was trained "
+                       "on, while our model learned from printed books: here, the counting program wins.")
         with self.voiceover(
             "And back to where we began: Shannon's own sentence. <bookmark mark='a'/> In Part 1 a counting program "
             f"played his game. It guessed {d['count_first'] * 100:.0f} percent of the letters at the first try, and "

@@ -88,15 +88,22 @@ labelled as such.
   al. 2025).
 * **12. What a model remembers.** Extraction from GPT-2 (Carlini et al. 2021), memorization grows log-linearly with
   size, duplication and context (Carlini et al. 2023), extraction from ChatGPT (Nasr et al. 2023), membership
-  inference (Shokri et al. 2017). On the series' model: exact continuations of training text against held-out text, by
-  prefix length (Carlini et al.'s definition, computed by teacher forcing); duplicated text; a loss-threshold
-  membership test. Differential privacy (Dwork et al. 2006) and DP-SGD (Abadi et al. 2016): a secret planted in a
-  small character model's training text, its exposure (Carlini et al. 2019) with plain SGD and with DP-SGD, and ε from
-  a Rényi accountant (Mironov et al. 2019); VaultGemma (2025).
+  inference (Shokri et al. 2017). On the series' model (trained on its text about 3.6 times): exact continuations of
+  training text against held-out text, by prefix length (Carlini et al.'s definition, decided by one teacher-forced
+  pass): none of 800 training passages is reproduced at any prompt length from 8 to 224 tokens, not even text that
+  occurs five or more times; yet a loss threshold tells training passages from held-out ones with an AUC of 0.68.
+  Differential privacy (Dwork et al. 2006) and DP-SGD (Abadi et al. 2016), derived: a secret planted in a small
+  character model's training text, its exposure (Carlini et al. 2019): planted 16 times, plain SGD ranks it first of
+  a million (20 bits); DP-SGD at ε = 1.6 (a Rényi accountant, Mironov et al. 2019, checked against Abadi et al.'s
+  1.26) ranks it 16,136th (6 bits), at a cost of 3.20 against 2.53 bits per character on held-out text; VaultGemma
+  (2025).
 * **13. Open problems.** Measuring, aligning, securing: what we can't yet do, with the part's own numbers.
 * **14. The guessing game, revisited.** The series act by act; Part 1's scoreboard with every model of the series:
-  counting, Kneser–Ney (Part 7), the first transformer (Part 13), the series' own model; Shannon's sentence played
-  by Part 1's counting program and by the series' model; Wiener's sentence once more.
+  counting, Kneser–Ney (Part 7), the neural models of Parts 9 and 13, and the series' own model, 1.69 bits per
+  character (bootstrap 1.64–1.74), better than 4-character counting on 149 of the passage's 151 paragraphs; Shannon's
+  sentence played by Part 1's counting program (182 bits) and by the series' model (202 bits, its token
+  probabilities summed over every spelling of the next letter: the sentence has no capitals or punctuation, the
+  form the counting program was trained on); Wiener's sentence once more.
 * **Recap** in eight pictures from the part's own results, the problem set, references, and thanks.
 
 Run from the repo root:

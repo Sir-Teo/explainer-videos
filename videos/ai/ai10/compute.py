@@ -230,7 +230,7 @@ def hog(imgs: np.ndarray, cell: int, nbins: int = 9, block: int = 2) -> np.ndarr
     return np.concatenate(feats, 1).astype(np.float32)
 
 
-def fit_linear(Xtr, ytr, Xte, yte, seed: int, epochs: int = 10, batch: int = 256, lr: float = 3e-3) -> float:
+def fit_linear(Xtr, ytr, Xte, yte, seed: int, epochs: int = 6, batch: int = 256, lr: float = 3e-3) -> float:
     """Multinomial logistic regression (standardized features, Adam): test error."""
     torch = _torch()
     from videos.ai.ai10 import nets
@@ -752,7 +752,12 @@ def compute_datasize():
                 part[key] = dict(test_error=1.0 - accuracy(model, Xte, Yte), train_error=1.0 - accuracy(
                     model, X[order[:n]], Y[order[:n]]))
                 print(f"    n={n} aug={aug} seed={seed}: {100 * part[key]['test_error']:.2f}%", flush=True)
-    return dict(sizes=list(DATA_SIZES), steps=DATA_STEPS, runs={k: part[k] for k in part.done})
+    runs = {k: part[k] for k in part.done}
+    # the slope of log(test error) against log(training digits), plain runs, mean over seeds
+    xs = np.log10(DATA_SIZES)
+    ys = [math.log10(np.mean([runs[f"{n}-0-{s}"]["test_error"] for s in (0, 1, 2)])) for n in DATA_SIZES]
+    slope, icpt = np.polyfit(xs, ys, 1)
+    return dict(sizes=list(DATA_SIZES), steps=DATA_STEPS, runs=runs, slope=float(slope), intercept=float(icpt))
 
 
 # ---------------------------------------------------------------------------
