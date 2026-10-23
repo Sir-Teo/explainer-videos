@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (ACTS, COMM, F, GPU, GRADS, N_COL, PART, ShardGrid, load, node_box, play_fly,
+from videos.ai.ai18.common import (ACTS, COMM, F, GPU, GRADS, KEPT, N_COL, PART, ShardGrid, load, node_box, play_fly,
                                    spoken_int, take_away)
 
 CHUNK = [C.EMBED, C.MOMENTUM, C.PROB, C.MLP]
@@ -45,9 +45,11 @@ class DataParallel(VoiceoverScene):
         lab = VGroup(label(r"the whole model on every GPU", font_size=22, color=N_COL),
                      label(rf"a quarter of the batch each", font_size=22, color=ACTS)).arrange(RIGHT, buff=1.2)
         lab.next_to(gpus, DOWN, buff=0.3)
-        grads = VGroup(*[Arrow(g.get_bottom() + DOWN * 0.7, ORIGIN + DOWN * 1.9, buff=0.1, color=GRADS, stroke_width=3)
-                         for g in gpus])
         ar = node_box(r"all-reduce: \ every GPU gets the average gradient", COMM, font_size=24).move_to(DOWN * 2.3)
+        grads = VGroup(*[Arrow(g.get_bottom() + DOWN * 0.7, [ar.get_left()[0] + ar.width * (i + 0.5) / p,
+                                                             ar.get_top()[1] + 0.05, 0],
+                               buff=0.1, color=GRADS, stroke_width=3, max_tip_length_to_length_ratio=0.12)
+                         for i, g in enumerate(gpus)])
         L = Pr["losses"]
         dl = max(abs(a - b) / abs(a) for a, b in zip(L["ref"], L["dp"]))
         digits = int(math.floor(-math.log10(max(dl, 1e-12))))
@@ -61,7 +63,7 @@ class DataParallel(VoiceoverScene):
                   xticks=[1, len(k)], yticks=[llo, lhi], yfmt=lambda v: f"{v:.1f}", center=[5.5, -1.75, 0], font_size=15)
         mini = VGroup(gl, curve(gl.ax, k, ls[0], GREY_B, 2.5),
                       *[Dot(gl.ax.c2p(a, b), radius=0.05, color=COMM) for a, b in zip(k, ls[1])],
-                      note(r"line: \ one process; \ dots: \ four", font_size=15).next_to(gl, UP, buff=0.05))
+                      note(r"line: \ one process; \ dots: \ four", font_size=15).next_to(gl, DOWN, buff=0.05))
         with self.voiceover(
             "The simplest way to use many GPUs: give each one a full copy of the model and a slice of the batch. "
             "<bookmark mark='a'/> Each computes the gradient of its slice. <bookmark mark='b'/> Then they average "
@@ -85,7 +87,7 @@ class DataParallel(VoiceoverScene):
     # ------------------------------------------------------------------
     def allreduce(self):
         p = 4
-        grid = ShardGrid(p, p, cell=0.62, row_gap=0.3).move_to([-2.4, -0.3, 0])
+        grid = ShardGrid(p, p, cell=0.82, row_gap=0.34).move_to([-2.4, -0.45, 0])
         for r in range(p):
             for c in range(p):
                 grid.set(r, c, CHUNK[c], 0.25)
@@ -140,7 +142,17 @@ class DataParallel(VoiceoverScene):
                 why(r"before that moment, nobody had the sum", font_size=19),
                 why(r"the same for every number", font_size=19),
                 why(r"$p$ GPUs receive at once, \ $B$ each", font_size=19)]
-        step = ladder(self, rows, whys, keep=4, top=1.15, x=-0.8, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=1.35, x=-0.8, buff=0.36, edge=6.9)
+        # one number on four GPUs: a chain of messages into the first to hold the sum, then one more to each other
+        nodes = VGroup(*[VGroup(Circle(0.3, color=GPU, stroke_width=2.5, fill_color=GPU, fill_opacity=0.12),
+                                MathTex(rf"v_{i}", font_size=26, color=WHITE)) for i in range(4)])
+        nodes.arrange(RIGHT, buff=1.5).move_to([0.6, -2.95, 0])
+        chain_ = VGroup(*[CurvedArrow(nodes[i][0].get_top() + UP * 0.02, nodes[i + 1][0].get_top() + UP * 0.02,
+                                      angle=-PI / 3, color=COMM, stroke_width=3, tip_length=0.14) for i in range(3)])
+        back_ = VGroup(*[CurvedArrow(nodes[3][0].get_bottom() + DOWN * 0.02, nodes[i][0].get_bottom() + DOWN * 0.02,
+                                     angle=-PI / 5, color=KEPT, stroke_width=2.5, tip_length=0.14) for i in range(3)])
+        sums = VGroup(*[MathTex(r"\Sigma", font_size=26, color=COMM).move_to(n_[0]) for n_ in nodes])
+        nnote = note(r"one number on four GPUs \ (schematic)", font_size=17).next_to(nodes, LEFT, buff=0.5)
         tw = take_away(r"no algorithm sends less than the ring: \ only latency and overlap are left to win", color=COMM,
                        font_size=24)
         with self.voiceover(
@@ -157,15 +169,21 @@ class DataParallel(VoiceoverScene):
             "computing the first."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
+            self.play(LaggedStart(*[FadeIn(n_, scale=0.8) for n_ in nodes], lag_ratio=0.2), FadeIn(nnote))
             vo.wait_until("a")
             step(0)
+            self.play(LaggedStart(*[Create(a_) for a_ in chain_], lag_ratio=0.6), run_time=2.5)
+            self.play(ReplacementTransform(nodes[3][1], sums[3]))
             vo.wait_until("b")
             step(1)
+            self.play(LaggedStart(*[Create(a_) for a_ in back_], lag_ratio=0.3), run_time=1.8)
+            self.play(*[ReplacementTransform(nodes[i][1], sums[i]) for i in range(3)])
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
+            self.play(FadeOut(VGroup(nodes, chain_, back_, sums, nnote)))
             self.play(FadeIn(tw, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

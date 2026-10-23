@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (EDU, F, GROUP_C, KEPT, PART, REMOVED, hbars, load, spoken_int, take_away)
+from videos.ai.ai18.common import (EDU, F, GROUP_C, KEPT, PART, REMOVED, hbars, load, spoken_int, stage_row, take_away)
 
 GROUP_TEX = [r"American", r"English society", r"Adventure and mystery", r"Translations and \textit{Ulysses}"]
 
@@ -39,21 +39,24 @@ class Mixture(VoiceoverScene):
         pl = label(r"The Pile (2020): \ $22$ sources, \ weights set by hand", font_size=22, color=GREY_A)
         pl.next_to(pile, UP, buff=0.15)
         doremi = VGroup(
-            label(r"DoReMi \ (Xie et al., 2023)", font_size=26, color=EDU),
-            label(rf"a ${D['proxy'] / 1e6:.0f}$M proxy model plays a game against the worst-predicted domains", font_size=21,
+            label(r"DoReMi \ (Xie et al., 2023)", font_size=32, color=EDU),
+            label(rf"a ${D['proxy'] / 1e6:.0f}$M proxy model plays a game against the worst-predicted domains", font_size=25,
                   color=GREY_A),
             label(rf"its weights train an ${D['target'] / 1e9:.0f}$B model: \ $+{D['gain']}$ points few-shot, \ "
-                  rf"the same accuracy in $1/{D['speedup']}$ of the steps", font_size=21, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+                  rf"the same accuracy in $1/{D['speedup']}$ of the steps", font_size=25, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         regmix = VGroup(
-            label(r"RegMix \ (Liu et al., 2024)", font_size=26, color=KEPT),
-            label(rf"${R['models']}$ models of ${R['params'] / 1e6:.0f}$M parameters, \ each on a random mixture", font_size=21,
+            label(r"RegMix \ (Liu et al., 2024)", font_size=32, color=KEPT),
+            label(rf"${R['models']}$ models of ${R['params'] / 1e6:.0f}$M parameters, \ each on a random mixture", font_size=25,
                   color=GREY_A),
-            label(r"a regression from mixture to loss; \ the best mixture it predicts", font_size=21, color=GREY_A),
+            label(r"a regression from mixture to loss; \ the best mixture it predicts", font_size=25, color=GREY_A),
             label(rf"trains a ${R['big'] / 1e9:.0f}$B model on ${R['big_tokens'] / 1e9:.0f}$B tokens: \ best of "
-                  rf"${R['candidates']}$ mixtures tried", font_size=21, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        both = VGroup(doremi, regmix).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(DOWN * 0.9)
+                  rf"${R['candidates']}$ mixtures tried", font_size=25, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        both = VGroup(doremi, regmix).arrange(DOWN, aligned_edge=LEFT, buff=0.6)
+        if both.width > 13.0:
+            both.width = 13.0
+        both.move_to(DOWN * 0.75)
         src = cite(r"Gao et al.\ (2020); \ Xie et al., DoReMi (NeurIPS 2023); \ Liu et al., RegMix (ICLR 2025)",
                    font_size=17)
         with self.voiceover(
@@ -111,11 +114,32 @@ class Mixture(VoiceoverScene):
             gf = axes([0, M["proxy_spec"]["steps"]], [bot, top], x_length=3.6, y_length=1.9, xlabel=r"step",
                       ylabel=r"held-out loss", xticks=[0, M["proxy_spec"]["steps"]], yticks=[bot, round(top, 1)],
                       yfmt=lambda v: f"{v:.1f}", center=[-3.6, -2.05, 0], font_size=15)
+            wmax = max(float(p_["w"][0]) for p_ in proxy)
             curves = VGroup(*[curve(gf.ax, e[:, 0], np.minimum(e[:, 1], top),
-                                    interpolate_color(ManimColor(GREY_D), ManimColor(GROUP_C[0]), float(p_["w"][0])), 1.6)
-                              for e, p_ in zip(evs, proxy)])
-            fan = VGroup(gf, curves, note(r"each run's training, \ coloured by its American share", font_size=15)
-                         .next_to(gf, UP, buff=0.05))
+                                    interpolate_color(ManimColor(GREY_D), ManimColor(GROUP_C[0]), float(p_["w"][0]) / wmax),
+                                    1.8) for e, p_ in zip(evs, proxy)])
+            fan = VGroup(gf, curves, note(r"each run's training, \\ coloured by \\ its American share", font_size=16)
+                         .next_to(gf, RIGHT, buff=0.25).align_to(gf, UP))
+        # the thirty novels on a shelf, by group; the target book and its chapters
+        shelf = VGroup()
+        for k, nb in enumerate(M["books"].values()):
+            shelf.add(VGroup(*[Rectangle(width=0.16, height=1.25 + 0.45 * (((7 * i + 3 * k) % 5) / 4), stroke_width=1,
+                                         stroke_color=BLACK, fill_color=GROUP_C[k], fill_opacity=0.85)
+                               for i in range(nb)]).arrange(RIGHT, buff=0.03, aligned_edge=DOWN))
+        shelf.arrange(RIGHT, buff=0.32, aligned_edge=DOWN).move_to([3.4, 1.5, 0])
+        snote = note(r"the thirty novels, \ in four groups", font_size=18).next_to(shelf, DOWN, buff=0.15)
+        falcon = shelf[0][0]
+        chaps = VGroup(*[VGroup(RoundedRectangle(width=1.5, height=0.5, corner_radius=0.08, stroke_width=1.5,
+                                                 stroke_color=C.BITS if c_ != 2 else KEPT,
+                                                 fill_color=C.BITS if c_ != 2 else KEPT, fill_opacity=0.2),
+                                label(rf"ch.~${c_}$: \ " + (r"tune" if c_ != 2 else r"test"), font_size=19,
+                                      color=C.BITS if c_ != 2 else KEPT)) for c_ in (1, 2, 3)])
+        for c_ in chaps:
+            c_[1].move_to(c_[0])
+        chaps.arrange(RIGHT, buff=0.2).move_to([3.4, -0.7, 0])
+        fl = label(r"\textit{The Maltese Falcon}", font_size=22, color=C.BITS).next_to(chaps, UP, buff=0.2)
+        farrow = Arrow(fl.get_top(), falcon.get_bottom(), buff=0.1, color=C.BITS, stroke_width=2.5,
+                       max_tip_length_to_length_ratio=0.15)
 
         def mixbar(w, y_, title):
             row = VGroup()
@@ -161,10 +185,13 @@ class Mixture(VoiceoverScene):
             f"the other runs with a correlation of {M['loo_corr']:.2f}. <bookmark mark='d'/> Asked for the best "
             f"mixture, it {lean}: {shares} percent of the four groups, against the natural proportions of the books."
         ) as vo:
-            self.play(FadeIn(groups), FadeIn(tag))
+            self.play(FadeIn(groups), FadeIn(tag), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for gr in shelf for b_ in gr],
+                                                                lag_ratio=0.04), FadeIn(snote), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(tgt))
+            self.play(FadeIn(tgt), falcon.animate.set_stroke(YELLOW, width=3), FadeIn(fl), GrowArrow(farrow))
+            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chaps], lag_ratio=0.3))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(shelf, snote, chaps, fl, farrow)))
             if len(fan):
                 self.play(FadeIn(fan[0]), FadeIn(fan[2]), LaggedStart(*[Create(c_) for c_ in fan[1]], lag_ratio=0.03),
                           run_time=2.5)
@@ -283,6 +310,21 @@ class Mixture(VoiceoverScene):
         src = cite(r"Maini et al.\ (2024); \ Kimi Team (2025), Table 1; \ Muennighoff et al.\ (2023)", font_size=17)
         rep = label(rf"repeating data: \ up to ${F.REPEAT['epochs']}$ epochs about as good as new data, \ then "
                     r"returns fall", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.85)
+        rs = F.REPEAT["rd_star"]
+        ep = np.linspace(1, 40, 200)
+        worth = 1 + rs * (1 - np.exp(-(ep - 1) / rs))  # in epochs of unique data
+        gr = axes([0, 40], [0, 40], x_length=4.6, y_length=3.0, xlabel=r"epochs over the same tokens",
+                  ylabel=r"worth, in epochs of new data", xticks=[0, 4, 10, 20, 30, 40], yticks=[0, 10, 20, 30, 40],
+                  center=[-0.6, -0.55, 0], font_size=17)
+        new_ = DashedLine(gr.ax.c2p(0, 0), gr.ax.c2p(40, 40), color=GREY_B, dash_length=0.06)
+        wc = curve(gr.ax, ep, worth, EDU, 3)
+        w4 = 1 + rs * (1 - math.exp(-(F.REPEAT["epochs"] - 1) / rs))
+        d4 = Dot(gr.ax.c2p(F.REPEAT["epochs"], w4), radius=0.06, color=YELLOW)
+        l4 = label(rf"${F.REPEAT['epochs']}$ epochs: \ worth ${w4:.1f}$", font_size=18, color=YELLOW)
+        l4.next_to(d4, RIGHT, buff=0.15).shift(UP * 0.2)
+        rlg = legend([(GREY_B, r"new data"), (EDU, r"repeated: \ Muennighoff et al.'s fit")], font_size=17)
+        rlg.next_to(gr, RIGHT, buff=0.3).align_to(gr, UP)
+        rplot = VGroup(gr, new_, wc, d4, l4, rlg)
         with self.voiceover(
             "When good text runs short, there are two ways to stretch it. Repeat it: Muennighoff and colleagues found "
             "in 2023 that up to about four passes over the same data are nearly as good as new data; after that the "
@@ -293,10 +335,13 @@ class Mixture(VoiceoverScene):
             f"{K['rephrase'][0][1]:.2f} percent of a set of factual questions; rephrased once and repeated ten times, "
             f"{K['rephrase'][1][1]:.2f}; rephrased ten different ways and read once each, {K['rephrase'][2][1]:.2f}."
         ) as vo:
-            self.play(FadeIn(rep), FadeIn(src))
+            self.play(FadeIn(rep), FadeIn(src), FadeIn(gr), FadeIn(rlg), Create(new_))
+            self.play(Create(wc), run_time=2.5)
+            self.play(FadeIn(d4, scale=1.5), FadeIn(l4))
             vo.wait_until("a")
             self.play(FadeIn(wrap, shift=UP * 0.1))
             vo.wait_until("b")
+            self.play(FadeOut(rplot), FadeOut(rep))
             self.play(FadeIn(rh), LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT), FadeIn(r_[2]))
                                                 for r_ in rows], lag_ratio=0.5), run_time=3.0)
         self.wait(0.3)
@@ -342,6 +387,15 @@ class Mixture(VoiceoverScene):
         else:
             cure = "Here it only slows the damage."
         src = cite(r"Shumailov et al., \textit{Nature} (2024); \ Gerstgrasser et al.\ (2024)", font_size=17)
+        chain = stage_row([(r"real text", KEPT), (r"model 1", GREY_A), (r"its samples", REMOVED), (r"model 2", GREY_A),
+                           (r"its samples", REMOVED), (r"model 3", GREY_A)], font_size=18)
+        if chain.width > 12.4:
+            chain.width = 12.4
+        chain.move_to(UP * 2.3)
+        s_lab = label(f"${start:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(0, start), RIGHT,
+                                                                                                 buff=0.15).shift(UP * 0.2)
+        e_lab = label(f"${end:,.0f}$".replace(",", "{,}"), font_size=18, color=REMOVED).next_to(g.ax.c2p(gens, end), UP,
+                                                                                               buff=0.15)
         with self.voiceover(
             "But training on a model's output has a known failure. Shumailov and colleagues called it model collapse, in "
             "Nature in 2024: train each generation on the last one's samples, and the tails of the distribution vanish. "
@@ -355,10 +409,12 @@ class Mixture(VoiceoverScene):
             "in 2026: alongside real text, never instead of it."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), FadeIn(sch), FadeIn(src), FadeIn(lg[0]))
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in chain.boxes], *[GrowArrow(a_) for a_ in chain.arrows],
+                                  lag_ratio=0.15), run_time=2.5)
             vo.wait_until("a")
-            self.play(Indicate(lg[0]))
+            self.play(FadeIn(rb), Create(rc), run_time=6.0, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(rb), Create(rc), run_time=2.0)
+            self.play(FadeIn(s_lab), FadeIn(e_lab))
             vo.wait_until("c")
             self.play(Create(rc2), run_time=1.5)
             vo.wait_until("d")

@@ -17,6 +17,22 @@ def chips(toks, colors, font_size=18, max_width=13.2):
     return row
 
 
+def two_lines(cells, max_width=13.2, split=None):
+    """Mobjects in two left-aligned lines, cut at ``split`` (default: the middle); ``.cells`` keeps the flat list."""
+    k = (len(cells) + 1) // 2 if split is None else split
+    l1, l2 = VGroup(*cells[:k]).arrange(RIGHT, buff=0.05), VGroup(*cells[k:]).arrange(RIGHT, buff=0.05)
+    g = VGroup(l1, l2).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+    if g.width > max_width:
+        g.width = max_width
+    g.cells = VGroup(*cells)
+    return g
+
+
+def chip_list(toks, colors, font_size=18):
+    return [chip(t.replace(" ", "·") if t.strip() else t, c, font_size=font_size, height=0.42)
+            for t, c in zip(toks, colors)]
+
+
 class Objectives(VoiceoverScene):
     def construct(self):
         self.card()
@@ -35,31 +51,29 @@ class Objectives(VoiceoverScene):
         O = load("objectives")
         toks = O["tokens"]
         n = len(toks)
-        y = [2.55, 1.05, -0.45, -2.0]
+        tops = [3.55, 1.82, 0.09, -1.64]  # each objective: a heading, and the sentence in two lines below it
         names = [r"causal: \ every next token", r"masked (BERT): \ the hidden $15\%$",
                  r"span corruption (T5): \ the missing spans", r"fill in the middle: \ moved to the end"]
-        heads = VGroup(*[label(t, font_size=22, color=EDU).move_to([-6.6, yy + 0.5, 0], aligned_edge=LEFT)
-                         for t, yy in zip(names, y)])
-        causal = chips(toks, [TGT] * n).move_to([0, y[0], 0])
-        mlm = chips([t for t, _ in O["mlm"]], [TGT if m else CTX for _, m in O["mlm"]]).move_to([0, y[1], 0])
-        span_in = chips(O["span_input"], [C.ATTN if t.startswith("<") else CTX for t in O["span_input"]], font_size=16)
-        span_out = chips(O["span_target"], [C.ATTN if t.startswith("<") else TGT for t in O["span_target"]],
-                         font_size=16, max_width=5.0)
+        heads = VGroup(*[label(t, font_size=24, color=EDU).move_to([-6.6, yy - 0.15, 0], aligned_edge=LEFT)
+                         for t, yy in zip(names, tops)])
+        causal = two_lines(chip_list(toks, [TGT] * n))
+        mlm = two_lines(chip_list([t for t, _ in O["mlm"]], [TGT if m else CTX for _, m in O["mlm"]]))
+        span_in = chip_list(O["span_input"], [C.ATTN if t.startswith("<") else CTX for t in O["span_input"]])
+        span_out = chip_list(O["span_target"], [C.ATTN if t.startswith("<") else TGT for t in O["span_target"]])
         arrow = MathTex(r"\Rightarrow", font_size=30, color=GREY_B)
-        span = VGroup(span_in, arrow, span_out).arrange(RIGHT, buff=0.15)
-        if span.width > 13.2:
-            span.width = 13.2
-        span.move_to([0, y[2], 0])
+        span = two_lines(span_in + [arrow] + span_out, split=(len(span_in) + len(span_out) + 2) // 2)
         fm = O["fim"]
         fim_t = ["<PRE>"] + fm["prefix"] + ["<SUF>"] + fm["suffix"] + ["<MID>"] + fm["middle"]
         fim_c = [C.ATTN] + [TGT] * len(fm["prefix"]) + [C.ATTN] + [TGT] * len(fm["suffix"]) + [C.ATTN] + \
             [TGT] * len(fm["middle"])
-        fim = chips(fim_t, fim_c, font_size=16).move_to([0, y[3], 0])
+        fim = two_lines(chip_list(fim_t, fim_c))
+        for h_, r_ in zip(heads, (causal, mlm, span, fim)):
+            r_.next_to(h_, DOWN, buff=0.14).align_to(h_, LEFT)
         lg = VGroup(VGroup(Square(0.22, stroke_width=0, fill_color=TGT, fill_opacity=0.6),
                            label(r"a prediction target", font_size=18, color=TGT)).arrange(RIGHT, buff=0.1),
                     VGroup(Square(0.22, stroke_width=0, fill_color=C.ATTN, fill_opacity=0.6),
                            label(r"a marker token", font_size=18, color=C.ATTN)).arrange(RIGHT, buff=0.1)
-                    ).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.35)
+                    ).arrange(RIGHT, buff=0.5).to_corner(UR, buff=0.3)
         src = cite(r"Devlin et al.\ (2019); \ Raffel et al.\ (2020); \ Bavarian et al.\ (2022)", corner=DR,
                    font_size=17)
         with self.voiceover(
@@ -73,9 +87,9 @@ class Objectives(VoiceoverScene):
             "the end, behind markers for prefix, suffix and middle. The model still predicts the next token, but given a "
             "beginning and an end it can now write what goes between: exactly what a code editor needs."
         ) as vo:
-            self.play(FadeIn(heads[0]), FadeIn(causal), FadeIn(lg), FadeIn(src))
+            self.play(FadeIn(heads[0]), FadeIn(causal), FadeIn(lg), FadeIn(src), FadeIn(heads[1:].copy().set_opacity(0.2)))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Indicate(c_, color=TGT, scale_factor=1.15) for c_ in causal], lag_ratio=0.05),
+            self.play(LaggedStart(*[Indicate(c_, color=TGT, scale_factor=1.15) for c_ in causal.cells], lag_ratio=0.05),
                       run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(heads[1]), FadeIn(mlm))
@@ -93,17 +107,17 @@ class Objectives(VoiceoverScene):
         tg = O["targets"]
         rows = hbars([(r"causal", tg["causal"], TGT), (r"fill in the middle", tg["fim"], TGT),
                       (r"span corruption \ (targets incl.\ markers)", tg["span"], EDU),
-                      (r"masked", tg["mlm"], REMOVED)], T, width=5.6, font_size=22, label_width=4.6,
+                      (r"masked", tg["mlm"], REMOVED)], T, width=6.4, bar_h=0.5, gap=0.25, font_size=26, label_width=5.0,
                      fmt=lambda v: rf"${int(v)}$")
-        rows.move_to([0.8, 1.4, 0])
-        rh = label(rf"prediction targets in a sequence of ${T}$ tokens", font_size=24, color=GREY_A)
+        rows.move_to([0.6, 1.05, 0])
+        rh = label(rf"prediction targets in a sequence of ${T}$ tokens", font_size=28, color=GREY_A)
         rh.next_to(rows, UP, buff=0.3)
         fimc = VGroup(
             label(rf"Bavarian et al.: \ half the documents in FIM order, \ and left-to-right perplexity unchanged",
-                  font_size=22, color=GREY_A),
+                  font_size=25, color=GREY_A),
             label(rf"DeepSeek-V3: \ FIM on ${100 * F.DSV3['fim']:.0f}\%$ of documents, \ prefix--suffix--middle order",
-                  font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(DOWN * 1.5)
+                  font_size=25, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(DOWN * 1.75)
         tw = take_away(r"every token a target, \ text that can be sampled and scored, \ infilling for free",
                        color=TGT, font_size=26)
         src = cite(r"Bavarian et al.\ (2022), Fig.\ 1; \ DeepSeek-AI (2024), Sec.\ 4.1", font_size=17)

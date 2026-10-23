@@ -34,8 +34,8 @@ class Web(VoiceoverScene):
                           r"archive away: \ crawls since 2008, \ more than ten petabytes", width=6.2,
                           color=PAGE).to_corner(UL, buff=0.4)
         # 100,000 files in a crawl: a block of tiles, three of them lit
-        tiles = VGroup(*[Square(0.11, stroke_width=0, fill_color=PAGE, fill_opacity=0.35) for _ in range(40 * 25)])
-        tiles.arrange_in_grid(rows=25, cols=40, buff=0.025).move_to([3.4, 1.0, 0])
+        tiles = VGroup(*[Square(0.14, stroke_width=0, fill_color=PAGE, fill_opacity=0.35) for _ in range(40 * 25)])
+        tiles.arrange_in_grid(rows=25, cols=40, buff=0.028).move_to([3.4, 0.3, 0])
         tcap = label(r"one crawl: \ $100{,}000$ files \ (each tile: $100$)", font_size=20, color=GREY_A)
         tcap.next_to(tiles, UP, buff=0.15)
         lit = [tiles[0], tiles[333], tiles[666]]
@@ -81,13 +81,17 @@ class Web(VoiceoverScene):
             '<div class="page-content"> ... </div>',
             '<footer> ... </footer>',
             "</body></html>",
-        ], font_size=17, color=GREY_B)
+        ], font_size=19, color=GREY_B)
         hbox = VGroup(SurroundingRectangle(html, buff=0.2, corner_radius=0.1, color=PAGE, stroke_width=1.5), html)
         hl = label(rf"the page's HTML: \ ${ex['html_bytes']:,}$ bytes".replace(",", "{,}"), font_size=22, color=PAGE)
-        left = VGroup(hl, hbox).arrange(DOWN, buff=0.15).move_to([-3.6, 1.3, 0])
-        tbox = said(ex["text"], chars=40, font_size=16, max_lines=7, box_color=KEPT)
+        left = VGroup(hl, hbox).arrange(DOWN, buff=0.15)
+        tbox = said(ex["text"], chars=38, font_size=18, max_lines=8, box_color=KEPT)
         tl = label(rf"Trafilatura's text: \ ${ex['text_bytes']:,}$ bytes".replace(",", "{,}"), font_size=22, color=KEPT)
-        right = VGroup(tl, tbox).arrange(DOWN, buff=0.15).move_to([3.3, 1.3, 0])
+        right = VGroup(tl, tbox).arrange(DOWN, buff=0.15)
+        pair = VGroup(left, right).arrange(RIGHT, buff=1.3, aligned_edge=UP)
+        if pair.width > 13.2:
+            pair.width = 13.2
+        pair.move_to([0, 0.95, 0])
         arrow = Arrow(left.get_right(), right.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         url = data_text(ex["url"].replace("http://", "").replace("https://", ""), font=MONO, font_size=15, color=GREY_B)
         url.next_to(right, DOWN, buff=0.15)
@@ -98,7 +102,7 @@ class Web(VoiceoverScene):
                   font_size=24, color=WHITE),
             label(rf"the median page keeps ${100 * W['median_ratio']:.1f}\%$ of its bytes; \ ${W['empty']}$ keep nothing",
                   font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.18).move_to(DOWN * 1.9)
+        ).arrange(DOWN, buff=0.18).move_to(DOWN * 2.1)
         fw = note(r"FineWeb (2024): \ Trafilatura on WARC trained better models than the WET text", font_size=20)
         fw.next_to(stats, DOWN, buff=0.3)
         with self.voiceover(
@@ -158,36 +162,42 @@ class Web(VoiceoverScene):
         # Before the chart: the two filters, drawn where the bars will grow.
         n_words = len(BLOCK)
         blk = VGroup(
-            label(r"1. \ the address alone", font_size=22, color=REMOVED),
-            data_text("…/casino-bonus-2026/", font=MONO, font_size=17, color=GREY_B),
-            label(rf"contains one of ${n_words}$ listed words \ $\Rightarrow$ \ dropped, unread", font_size=19,
+            label(r"1. \ the address alone", font_size=28, color=REMOVED),
+            data_text("…/casino-bonus-2026/", font=MONO, font_size=21, color=GREY_B),
+            label(rf"contains one of ${n_words}$ listed words \ $\Rightarrow$ \ dropped, unread", font_size=23,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         sample = "where the river bends"
         pieces = [w for w in ("<wh", "whe", "her", "ere", "re>", "<th", "the", "he>", "<ri", "riv", "…")]
-        chips = VGroup(*[VGroup(RoundedRectangle(width=0.62, height=0.36, corner_radius=0.06, stroke_color=GREY_C,
+        chips = VGroup(*[VGroup(RoundedRectangle(width=0.74, height=0.42, corner_radius=0.06, stroke_color=GREY_C,
                                                  stroke_width=1, fill_color="#1a2030", fill_opacity=1),
-                                data_text(c, font=MONO, font_size=14, color=GREY_A)) for c in pieces])
+                                data_text(c, font=MONO, font_size=17, color=GREY_A)) for c in pieces])
         chips.arrange(RIGHT, buff=0.06)
         probs = [("English", 0.97), ("Dutch", 0.01), ("German", 0.01)]
         pbars = VGroup()
         for nm, pr in probs:
-            r = Rectangle(width=max(2.6 * pr, 0.04), height=0.24, stroke_width=0, fill_color=KEPT if pr > 0.5 else GREY_B,
+            r = Rectangle(width=max(3.0 * pr, 0.05), height=0.28, stroke_width=0, fill_color=KEPT if pr > 0.5 else GREY_B,
                           fill_opacity=0.85)
-            t = label(nm, font_size=17, color=GREY_A)
-            pbars.add(VGroup(t, r).arrange(RIGHT, buff=0.12))
-        pbars.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            t = label(nm, font_size=21, color=GREY_A)
+            v = label(f"${pr:.2f}$", font_size=19, color=GREY_A)
+            pbars.add(VGroup(t, r, v))
+        for k, b in enumerate(pbars):  # names right-aligned, bars from a common left edge
+            y = -0.38 * k
+            b[0].move_to([-b[0].width / 2, y, 0])
+            b[1].move_to([0.15 + b[1].width / 2, y, 0])
+            b[2].next_to(b[1], RIGHT, buff=0.12)
         ftx = VGroup(
-            label(r"2. \ fastText's language identifier", font_size=22, color=KEPT),
-            data_text(sample, font=MONO, font_size=17, color=GREY_B),
+            label(r"2. \ fastText's language identifier", font_size=28, color=KEPT),
+            data_text(sample, font=MONO, font_size=21, color=GREY_B),
             chips,
             label(r"one vector per character piece, \ averaged, \ one linear layer \ $\to$ \ $176$ "
-                  r"probabilities", font_size=19, color=GREY_A),
+                  r"probabilities", font_size=23, color=GREY_A),
             pbars,
-            note(r"both examples schematic", font_size=16),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        pre = VGroup(blk, ftx).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        pre.scale_to_fit_height(min(pre.height, 4.1)).move_to([-2.4, -0.45, 0])
+            note(r"both examples schematic", font_size=18),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        pre = VGroup(blk, ftx).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+        pre.scale(min(1.0, 9.0 / pre.width, 5.0 / pre.height))
+        pre.move_to([-6.6, 2.0, 0], aligned_edge=UL)
         with self.voiceover(
             "Next: which language is each page in? <bookmark mark='a'/> Before that, a cheap filter on the address "
             f"alone: a blocklist of adult and gambling sites removes {W['blocked']} pages. <bookmark mark='b'/> Then "
@@ -208,8 +218,8 @@ class Web(VoiceoverScene):
             self.play(FadeIn(ftx[:2]))
             self.play(LaggedStart(*[FadeIn(c, shift=DOWN * 0.1) for c in chips], lag_ratio=0.12), run_time=1.5)
             self.play(FadeIn(ftx[3]))
-            self.play(LaggedStart(*[GrowFromEdge(b[1], LEFT) for b in pbars], lag_ratio=0.2), FadeIn(pbars),
-                      FadeIn(ftx[5]), run_time=1.2)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(b[0]), GrowFromEdge(b[1], LEFT), FadeIn(b[2])) for b in pbars],
+                                  lag_ratio=0.2), FadeIn(ftx[5]), run_time=1.2)
             vo.wait_until("c")
             self.play(FadeOut(pre))
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1]), FadeIn(b[2])) for b in bars],

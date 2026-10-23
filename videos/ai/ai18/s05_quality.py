@@ -132,7 +132,7 @@ class Quality(VoiceoverScene):
         epo = VGroup()
         if len(ecv):
             ge = axes([0, Q["epochs"]], [0, 1], x_length=3.6, y_length=1.7, xlabel=r"passes over the training pages",
-                      ylabel=r"F1", xticks=[0, Q["epochs"]], yticks=[0, 0.5, 1], center=[3.6, -0.2, 0], font_size=16)
+                      ylabel=r"F1", xticks=[0, Q["epochs"]], yticks=[0, 0.5, 1], center=[3.6, -1.0, 0], font_size=16)
             cv_ = curve(ge.ax, ecv[:, 0], ecv[:, 1], GREY_B, 2)
             ct_ = curve(ge.ax, ecv[:, 0], ecv[:, 2], EDU, 3)
             dt_ = VGroup(*[Dot(ge.ax.c2p(a, b), radius=0.045, color=EDU) for a, b in ecv[:, [0, 2]]])
@@ -169,8 +169,8 @@ class Quality(VoiceoverScene):
     def applied(self):
         Q, E = load("quality"), F.FINEWEB_EDU
         best, worst = Q["best"][:2], Q["worst"][:2]
-        hi = VGroup(*[said(e["text"], chars=50, font_size=16, max_lines=3, box_color=KEPT) for e in best])
-        lo = VGroup(*[said(e["text"], chars=50, font_size=16, max_lines=3, box_color=REMOVED) for e in worst])
+        hi = VGroup(*[said(e["text"], chars=42, font_size=17, max_lines=5, box_color=KEPT) for e in best])
+        lo = VGroup(*[said(e["text"], chars=42, font_size=17, max_lines=5, box_color=REMOVED) for e in worst])
         hi.arrange(DOWN, buff=0.2)
         lo.arrange(DOWN, buff=0.2)
         hl = label(r"scored highest", font_size=24, color=KEPT)
@@ -230,7 +230,7 @@ class Quality(VoiceoverScene):
                   .replace(",", "{,}"), font_size=22, color=GREY_A),
             label(rf"held-out paragraphs of the thirty novels: \ ${K['valid_flagged']}$ of ${K['valid_paras']:,}$ "
                   r"share a $13$-gram".replace(",", "{,}"), font_size=26, color=EDU),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 1.0)
         ex = said(K["example"] or "", chars=70, font_size=18, max_lines=1, box_color=EDU).next_to(res, DOWN, buff=0.3)
         tag = note(rf"computed: \ ${K['train_grams'] / 1e6:.1f}$M distinct $13$-grams in the training text",
                    font_size=18).to_corner(DR, buff=0.2)
@@ -268,14 +268,15 @@ class Quality(VoiceoverScene):
             "novel repeats. On the web, popular benchmarks are copied everywhere, so labs now run checks like this on "
             "every test they report."
         ) as vo:
-            self.play(FadeIn(q), FadeIn(src))
+            self.play(FadeIn(q), FadeIn(src), LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chips], lag_ratio=0.08),
+                      run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(idea[0]))
-            self.play(FadeIn(idea[1]), FadeIn(chips), Create(win), FadeIn(look), FadeIn(wn))
+            self.play(FadeIn(idea[1]), Create(win), FadeIn(look), FadeIn(wn))
             for i in (1, 2, 3):
                 self.play(Transform(win, window(i)), Indicate(look, color=EDU, scale_factor=1.05), run_time=0.8)
             vo.wait_until("b")
-            self.play(FadeOut(VGroup(chips, win, look, wn)))
+            self.play(VGroup(chips, win, look, wn).animate.set_opacity(0.4))
             self.play(FadeIn(res[0]), FadeIn(res[1]), FadeIn(tag))
             vo.wait_until("c")
             self.play(FadeIn(res[2]), FadeIn(ex))

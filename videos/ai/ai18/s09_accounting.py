@@ -39,7 +39,26 @@ class Accounting(VoiceoverScene):
         whys = [why(r"a multiply and an add", font_size=20), why(r"the error sent to the layer below", font_size=20),
                 why(r"the weight's own gradient", font_size=20),
                 why(r"$N$ weights, $D$ tokens; \ attention's own products extra", font_size=20)]
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=0.6, buff=0.55, align_index=2, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=0.6, buff=0.5, align_index=2, edge=6.9)
+        # one linear layer: x in, y out, and the error flowing back (schematic)
+        sq = 0.26
+        xv = VGroup(*[Square(sq, stroke_width=1, stroke_color=BLACK, fill_color=ACTS, fill_opacity=0.6)
+                      for _ in range(3)]).arrange(DOWN, buff=0)
+        Wm = VGroup(*[Square(sq, stroke_width=1, stroke_color=BLACK, fill_color=WEIGHTS, fill_opacity=0.6)
+                      for _ in range(12)]).arrange_in_grid(rows=4, cols=3, buff=0)
+        yv = VGroup(*[Square(sq, stroke_width=1, stroke_color=BLACK, fill_color=ACTS, fill_opacity=0.6)
+                      for _ in range(4)]).arrange(DOWN, buff=0)
+        lay = VGroup(xv, Wm, yv).arrange(RIGHT, buff=1.1).move_to([-0.4, -2.35, 0])
+        names_ = VGroup(*[MathTex(t, font_size=28, color=c).next_to(m, DOWN, buff=0.12)
+                          for t, c, m in ((r"x", ACTS, xv), (r"W", WEIGHTS, Wm), (r"y", ACTS, yv))])
+        yf = Wm.get_top()[1] + 0.3
+        fwd = Arrow([xv.get_left()[0], yf, 0], [yv.get_right()[0], yf, 0], buff=0, color=ACTS, stroke_width=3)
+        fl_ = label(r"forward", font_size=20, color=ACTS).next_to(fwd, UP, buff=0.06)
+        bwd = Arrow([yv.get_right()[0] + 0.3, xv.get_bottom()[1] - 0.05, 0],
+                    [xv.get_left()[0] - 0.3, xv.get_bottom()[1] - 0.05, 0], buff=0, color=GRADS, stroke_width=3)
+        bwd.next_to(names_, DOWN, buff=0.12)
+        bl_ = label(r"backward: \ the error", font_size=20, color=GRADS).next_to(bwd, RIGHT, buff=0.15)
+        sch_ = note(r"one weight matrix \ (schematic)", font_size=18).next_to(lay, LEFT, buff=0.7)
         with self.voiceover(
             "First, arithmetic. Almost all of a transformer's work is matrix products, one per weight matrix. "
             "<bookmark mark='a'/> Going forward, each weight multiplies one input and adds it in: two operations, "
@@ -48,12 +67,16 @@ class Accounting(VoiceoverScene):
             "own gradient: two more. <bookmark mark='d'/> Six operations per weight per token: the C of six N D, "
             "plus attention's own products, which grow with the length of the context."
         ) as vo:
+            self.play(FadeIn(lay), FadeIn(names_), FadeIn(sch_))
             vo.wait_until("a")
             step(0)
+            self.play(GrowArrow(fwd), FadeIn(fl_))
             vo.wait_until("b")
             step(1)
+            self.play(GrowArrow(bwd), FadeIn(bl_))
             vo.wait_until("c")
             step(2)
+            self.play(Wm.animate.set_fill(GRADS, opacity=0.8), rate_func=there_and_back, run_time=1.5)
             vo.wait_until("d")
             step(3)
         self.wait(0.3)
@@ -112,25 +135,27 @@ class Accounting(VoiceoverScene):
         parts = [(r"weights, \ BF16", 2, WEIGHTS), (r"gradients, \ BF16", 2, GRADS),
                  (r"FP32 master weights", 4, OPT), (r"Adam's first moment", 4, OPT), (r"Adam's second moment", 4, OPT)]
         blocks = VGroup()
-        x = -6.0
+        x = -6.6
         for t, b, c in parts:
-            w = 0.62 * b
-            r_ = Rectangle(width=w, height=0.8, stroke_width=1.5, stroke_color=BLACK, fill_color=c, fill_opacity=0.85)
+            w = 0.56 * b
+            r_ = Rectangle(width=w, height=0.95, stroke_width=1.5, stroke_color=BLACK, fill_color=c, fill_opacity=0.85)
             r_.move_to([x + w / 2, 1.9, 0])
-            lab = label(rf"${b}$", font_size=24, color=BLACK).move_to(r_)
-            nm = label(t, font_size=17, color=c).rotate(PI / 6).next_to(r_, DOWN, buff=0.1).shift(RIGHT * 0.25)
+            lab = label(rf"${b}$", font_size=28, color=BLACK).move_to(r_)
+            nm = label(t, font_size=19, color=c).rotate(PI / 6).next_to(r_, DOWN, buff=0.1).shift(RIGHT * 0.25)
             blocks.add(VGroup(r_, lab, nm))
             x += w
-        total = label(r"$= 16$ bytes per parameter", font_size=30, color=WHITE).next_to(blocks, RIGHT, buff=0.35)
-        total.shift(UP * 0.35)
+        total = label(r"$= 16$ bytes per parameter", font_size=28, color=WHITE)
+        total.next_to(VGroup(*[b_[0] for b_ in blocks]), RIGHT, buff=0.3)
         m16 = P["mem16"]
         need = VGroup(
             label(rf"Llama 3.1 405B: \ ${nbytes(m16['llama3'])}$ \ $\to$ \ at least ${P['h100_needed']}$ H100s of "
-                  r"$80$ GB, \ before a single activation", font_size=24, color=GPU),
+                  r"$80$ GB, \ before a single activation", font_size=26, color=GPU),
             label(rf"DeepSeek-V3, $671$B: \ ${nbytes(m16['dsv3'])}$; \ Kimi K2, $1.04$T: \ ${nbytes(m16['k2'])}$",
-                  font_size=24, color=GPU),
-            label(r"DeepSeek-V3 keeps Adam's two moments in BF16", font_size=21, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 1.4)
+                  font_size=26, color=GPU),
+            label(r"DeepSeek-V3 keeps Adam's two moments in BF16", font_size=23, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.5)
+        if need.width > 13.0:
+            need.width = 13.0
         src = cite(r"Rajbhandari et al., ZeRO (2020), Sec.\ 3.1; \ DeepSeek-AI (2024), Sec.\ 3.3", font_size=17)
         with self.voiceover(
             "Now memory. Train in mixed precision, the standard recipe since 2018, and every parameter costs sixteen "
@@ -141,7 +166,7 @@ class Accounting(VoiceoverScene):
             "the model, before any activations. <bookmark mark='d'/> Every byte saved here counts; DeepSeek-V3, for one, "
             "keeps Adam's averages in sixteen bits."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(VGroup(*[b_[0] for b_ in blocks]).copy().set_fill(opacity=0.12)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in blocks[:2]], lag_ratio=0.4))
             vo.wait_until("b")
@@ -185,11 +210,14 @@ class Accounting(VoiceoverScene):
         big = VGroup(
             label(r"Korthikanti et al.'s count, \ $16$-bit, \ per layer and sequence:", font_size=20, color=GREY_A),
             cmath(r"s\,b\,h\,\Big(34 + 5\,\frac{a\,s}{h}\Big)", font_size=30),
-            label(rf"at Llama 3.1 405B's shape, \ $s = {al['s']:,}$:".replace(",", "{,}") +
-                  rf" \ ${nbytes(al['linear'])}$ per layer, \ ${nbytes(al['per_seq'])}$ for ${al['layers']}$ layers",
+            label(rf"at Llama 3.1 405B's shape, \ $s = {al['s']:,}$:".replace(",", "{,}"), font_size=20, color=ACTS),
+            label(rf"${nbytes(al['linear'])}$ per layer, \ ${nbytes(al['per_seq'])}$ for ${al['layers']}$ layers",
                   font_size=20, color=ACTS),
             label(rf"plus ${nbytes(al['attn'])}$ per layer if attention isn't fused", font_size=20, color=C.ATTN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -1.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        if big.width > 6.0:
+            big.width = 6.0
+        big.move_to([0.75 + big.width / 2, -1.6, 0])
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
             "The other big consumer of memory is the activations: what the forward pass keeps for the backward pass. "
