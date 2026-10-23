@@ -52,7 +52,10 @@ class Recurrence(VoiceoverScene):
         hcs = VGroup(history_card(1986, r"Michael Jordan", r"networks with feedback, \ for sequences of actions",
                                   width=3.6, color=HIST, font_size=20),
                      history_card(1990, r"Jeffrey Elman", r"\textit{Finding Structure in Time}", width=3.6,
-                                  color=HIST, font_size=20)).arrange(RIGHT, buff=0.25).to_corner(UR, buff=0.3)
+                                  color=HIST, font_size=20)).arrange(RIGHT, buff=0.25)
+        hcs.next_to(card, RIGHT, buff=0.25).align_to(card, UP)
+        if hcs.get_right()[0] > 6.85:
+            hcs.scale((6.85 - hcs.get_left()[0]) / hcs.width, about_edge=LEFT)
         same = label(r"the same $W$ and $U$ at every step: \ weight sharing, in time", font_size=24, color=HC)
         same.to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -97,10 +100,10 @@ class Recurrence(VoiceoverScene):
         cases = VGroup(label(r"$\sigma_{\max} < 1$: \ the gradient vanishes, \ exponentially fast", font_size=26,
                              color=C.TRUE_P),
                        label(r"eigenvalues $> 1$: \ it can explode", font_size=26, color=C.SURPRISE))
-        cases.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.5)
+        cases.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DR, buff=0.45)
         hc = history_card(1991, r"Sepp Hochreiter, \ diploma thesis, \ Munich",
                           r"the problem analysed; \ then Bengio, Simard \& Frasconi (1994)", width=4.6,
-                          color=HIST, font_size=20).to_corner(DR, buff=0.3).shift(UP * 1.4)
+                          color=HIST, font_size=20).to_corner(DL, buff=0.3)
         cite_ = cite(r"Werbos (1990); \ Hochreiter (1991); \ Bengio, Simard \& Frasconi (1994)", corner=DL)
         with self.voiceover(
             "To train it, unroll it and backpropagate, as Paul Werbos described in 1990: backpropagation through "
@@ -122,7 +125,7 @@ class Recurrence(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(cases, shift=UP * 0.1))
             vo.wait_until("e")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeOut(cite_), FadeIn(hc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -145,8 +148,13 @@ class Recurrence(VoiceoverScene):
                          for i, r in enumerate(rhos)])
         leg = legend([(RHO_C[r], rf"largest eigenvalue of $W$: \ ${r:g}$") for r in rhos], font_size=22)
         leg.to_corner(UR, buff=0.4)
-        kl = label(r"solid: \ tanh; \ dashed: \ the same network, \ linear", font_size=20, color=GREY_B)
+        kl = label(r"solid: \ tanh; \\ dashed: \ the same network, \ linear", font_size=20, color=GREY_B)
         kl.next_to(leg, DOWN, buff=0.3).align_to(leg, LEFT)
+        keep_in_frame(kl)
+        how = label(r"random $W$ scaled to a chosen largest eigenvalue, \\ random inputs; \ the Jacobians "
+                    r"multiplied back from the last step", font_size=22, color=GREY_A)
+        how.next_to(leg, DOWN, buff=1.4).align_to(leg, LEFT)
+        keep_in_frame(how)
         tag = note(rf"computed: \ ${g['n']}$ hidden units, \ ${g['draws']}$ random networks each, \ median and "
                    r"10--90\%").to_corner(DR, buff=0.2)
         i50 = list(ks).index(50)
@@ -171,7 +179,7 @@ class Recurrence(VoiceoverScene):
             "recurrent network has a narrow window of time over which it can learn anything, and the window is "
             "set by the size of W."
         ) as vo:
-            self.play(Create(ax), FadeIn(tag))
+            self.play(Create(ax), FadeIn(tag), FadeIn(how))
             vo.wait_until("a")
             self.play(FadeIn(tanh_c[0]), FadeIn(leg[0]), FadeIn(lin_c[0]))
             vo.wait_until("b")
@@ -229,8 +237,7 @@ class Recurrence(VoiceoverScene):
             f"the cliff wall, where the gradient is {nr.max():,.0f}, and is thrown off the map. "
             "<bookmark mark='c'/> The fix, from Razvan Pascanu, Tomas Mikolov and Bengio in 2013: if the gradient "
             "is longer than a threshold, shrink it to that length. Clipped, the same descent ends at a loss of "
-            f"{g['loss_clip'][-1]:.4f}. Our recurrent networks are trained with clipping, and so are today's "
-            "language models."
+            f"{g['loss_clip'][-1]:.4f}. Today's language models are trained with clipping too."
         ) as vo:
             self.play(FadeIn(title), FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")

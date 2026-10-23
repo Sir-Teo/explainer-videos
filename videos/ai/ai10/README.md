@@ -23,8 +23,7 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   padding exact away from the border, a dense layer of the same shape not at all.
 * **3. Receptive fields, stride and pooling.** The cone of a deep unit; r_ℓ = r_{ℓ−1} + (k_ℓ − 1) j_{ℓ−1}, j_ℓ =
   j_{ℓ−1} s_ℓ derived; computed from the published layer lists for LeNet-5, AlexNet, VGG-16 and ResNet-50; max pooling,
-  and how a stride breaks exact equivariance for odd shifts (computed); Azulay & Weiss (2019), Zhang (2019); the
-  effective receptive field (Luo, Li, Urtasun & Zemel 2016) of our CIFAR network, trained and untrained.
+  and how a stride breaks exact equivariance for odd shifts (computed); Azulay & Weiss (2019), Zhang (2019).
 * **4. LeNet and MNIST.** Fukushima's Neocognitron (1980); LeCun et al. (1989): backpropagation through shared
   weights on 7,291 zip-code digits, 5.0% test error (figures as reproduced by Karpathy 2022); Waibel et al.'s
   time-delay network (1989); LeNet-5 and MNIST (LeCun, Bottou, Bengio & Haffner 1998: 0.95%, 0.8% with distortions;
@@ -51,17 +50,15 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   layers) trained here, ten epochs; the replay of its first layer, noise to oriented edges and colour-opponent blobs
   (compare Krizhevsky et al.'s figure 3); Hubel and Wiesel's experiment run on our filters (gratings at 16 angles,
   orientation selectivity, trained against untrained); top-activating patches and images of deeper channels (Zeiler &
-  Fergus 2013); class visualizations and saliency maps (Simonyan, Vedaldi & Zisserman 2013; Olah et al. 2017).
+  Fergus 2013).
 * **9. Adversarial examples.** Szegedy et al. (2013); the panda and the gibbon (Goodfellow, Shlens & Szegedy 2014);
   the linearity argument and the fast gradient sign method derived; our LeNet fooled; error under FGSM and 20-step PGD
-  against ε for a linear model, an MLP and LeNet (three seeds); transfer between models; the logits along the attack
-  direction (their figure 4, redone); the linear model's margin and L1 norm; CIFAR-10 photographs changed by two grey
-  levels; adversarial training (fast FGSM with a random start, Wong, Rice & Kolter 2020; Madry et al. 2017), three
-  seeds, against one-step and 20-step attacks; physical attacks and attacks on language models (Part 31).
+  against ε for a linear model, an MLP and LeNet (three seeds); transfer between models; CIFAR-10 photographs changed
+  by two grey levels; adversarial training (fast FGSM with a random start, Wong, Rice & Kolter 2020; Madry et al. 2017), three
+  seeds, against one-step and 20-step attacks; attacks on language models (Part 31).
 * **10. Cheaper convolutions.** Depthwise separable convolutions (Sifre 2014; Chollet 2016) and their cost ratio
   1/C′ + 1/k², derived; measured on this computer against the FLOP ratio; MobileNet (Howard et al. 2017, table 8);
-  dilated convolutions (the algorithme à trous, Holschneider et al. 1989; Yu & Koltun 2015; WaveNet, van den Oord et
-  al. 2016) and their receptive fields; the vision transformer (Dosovitskiy et al. 2020, Part 22), ConvNeXt (Liu et
+  dilated convolutions (the algorithme à trous, Holschneider et al. 1989; WaveNet, van den Oord et al. 2016) and their receptive fields; the vision transformer (Dosovitskiy et al. 2020, Part 22), ConvNeXt (Liu et
   al. 2022: ResNet-50 modernized from 76.1% to 82.0% against Swin-T's 81.3%; 87.8% with ImageNet-22K) and
   convolutional networks at scale (Smith et al. 2023).
 * **11. Recurrence and vanishing gradients.** Jordan (1986), Elman (1990); backpropagation through time (Werbos 1990);
@@ -80,7 +77,7 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
   the surprise of each character.
 * **14. Sequence to sequence.** Phrase-based translation (Koehn, Och & Marcu 2003); Sutskever, Vinyals & Le (2014):
   34.81 BLEU against 33.30, reversing the source (25.9 → 30.6); Cho et al. (2014); teacher forcing (Williams & Zipser
-  1989) and exposure bias (Bengio et al. 2015); greedy decoding and beam search on our character LSTM, and
+  1989) and exposure bias; greedy decoding and beam search on our character LSTM, and
   degeneration (Holtzman et al. 2019); our encoder–decoder reversing strings: accuracy against length, the bottleneck;
   GNMT (Wu et al. 2016): 60% fewer errors, Chinese–English in production in September 2016.
 * **15. The birth of attention.** Bahdanau, Cho & Bengio (2014): the additive score, the softmax, the context

@@ -83,8 +83,7 @@ class ImageNet(VoiceoverScene):
             "Mechanical Turk. <bookmark mark='b'/> From 2010 a yearly contest used a thousand of its classes: "
             f"{n_tr:,} training photographs, with five guesses allowed per test image. <bookmark mark='c'/> "
             "Count the numbers a network has to learn from, images times pixel values, and ImageNet's contest is "
-            f"about {ratio:,.0f} times MNIST. Thousands of times bigger, and messier: photographs of real things, "
-            "at every angle and in every light."
+            f"about {ratio:,.0f} times MNIST: thousands of times bigger, and messier."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -244,14 +243,12 @@ class ImageNet(VoiceoverScene):
                      corner=DR)
         with self.voiceover(
             "AlexNet didn't come from nowhere. <bookmark mark='a'/> In 2011 Dan Ciresan and colleagues in Jurgen "
-            "Schmidhuber's lab in Switzerland had already won contests with convolutional networks trained on "
-            "GPUs, among them a traffic-sign benchmark where they beat the average human tester. "
-            "<bookmark mark='b'/> In 2012 four research groups, from Toronto, Microsoft, Google and IBM, reported "
-            "together that deep networks beat the old acoustic models in speech recognition. "
-            "<bookmark mark='c'/> But ImageNet was the benchmark computer vision cared about, and after 2012 the "
-            "field turned almost at once: in 2013 nearly every team entered a convolutional network. "
-            "<bookmark mark='d'/> In 2019 Bengio, Hinton and LeCun shared the Turing Award for 2018, for the ideas "
-            "that made deep learning work."
+            "Schmidhuber's lab had already won contests with convolutional networks on GPUs, beating the average "
+            "human tester on traffic signs. <bookmark mark='b'/> In 2012 groups at Toronto, Microsoft, Google and "
+            "IBM reported together that deep networks beat the old models of speech. <bookmark mark='c'/> But "
+            "ImageNet was the benchmark vision cared about, and the field turned at once: in 2013 nearly every "
+            "team entered a convolutional network. <bookmark mark='d'/> Bengio, Hinton and LeCun later shared the "
+            "Turing Award for 2018."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             ghosts = cards.copy().set_opacity(0.25)

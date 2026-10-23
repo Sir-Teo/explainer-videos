@@ -14,7 +14,6 @@ class Deeper(VoiceoverScene):
         self.vgg()
         self.inception()
         self.resnet()
-        self.saturation()
 
     def card(self):
         card = chapter_card(7, r"Deeper: VGG, Inception, ResNet", r"If depth helps, why not a hundred layers?",
@@ -45,14 +44,20 @@ class Deeper(VoiceoverScene):
         hl = label(rf"one trained person: \ ${HUMAN_TOP5}\%$", font_size=22, color=HIST).next_to(human, UP, buff=0.08)
         hl.align_to(human, RIGHT)
         head = label(r"ILSVRC: \ the winning top-5 error, \ year by year", font_size=30).to_edge(UP, buff=0.4)
-        cite_ = cite(r"Russakovsky et al.\ (2015); \ He et al.\ (2015); \ Hu et al.\ (2017)", corner=DR)
+        cite_ = cite(r"Russakovsky et al.\ (2015); \ He et al.\ (2015); \ Hu et al.\ (2017); \ Recht et al.\ (2019)",
+                     corner=DR)
+        recht = label(r"2019, \ Recht et al.: \ a fresh test set made the same way; \\ every model $11$--$14$ "
+                      r"points less accurate, \ the ranking nearly unchanged", font_size=22, color=HIST).move_to([2.6, 1.6, 0])
+        keep_in_frame(recht)
         with self.voiceover(
             "After 2012 the contest became a race to go deeper. <bookmark mark='a'/> The winning error, year by "
             f"year: {ILSVRC[2][2]} percent for AlexNet's eight layers; {ILSVRC[3][2]} in 2013; {ILSVRC[4][2]} in "
             f"2014, with twenty-two layers; {ILSVRC[5][2]} in 2015, with a hundred and fifty-two. "
             "<bookmark mark='b'/> In 2014 Andrej Karpathy trained himself on the task and labelled test images by "
             f"hand: he missed {HUMAN_TOP5} percent. The networks passed him in 2015. <bookmark mark='c'/> By the "
-            f"contest's last year, 2017, the winner missed {ILSVRC[-1][2]} percent."
+            f"contest's last year, 2017, the winner missed {ILSVRC[-1][2]} percent. <bookmark mark='d'/> When "
+            "Benjamin Recht and colleagues later built a fresh test set the same way, every model lost eleven to "
+            "fourteen points of accuracy, though the ranking barely changed. Part 31 asks what benchmarks can tell us."
         ) as vo:
             self.play(FadeIn(head), Create(base), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars[:3]], lag_ratio=0.3))
@@ -62,6 +67,8 @@ class Deeper(VoiceoverScene):
             self.play(Create(human), FadeIn(hl))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in bars[6:]], lag_ratio=0.5))
+            vo.wait_until("d")
+            self.play(FadeIn(recht, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -212,33 +219,6 @@ class Deeper(VoiceoverScene):
             self.play(Write(der), FadeIn(dl))
             vo.wait_until("d")
             self.play(FadeIn(hw))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def saturation(self):
-        cards = VGroup(
-            history_card(2017, r"the last ILSVRC", rf"the winner at ${ILSVRC[-1][2]}\%$; \ the contest ends",
-                         width=5.8, color=HIST),
-            history_card(2019, r"Recht, Roelofs, Schmidt \& Shankar", r"a fresh test set made the same way: \ "
-                         r"accuracy drops by $11$--$14$ points for every model", width=5.8, color=HIST),
-        ).arrange(RIGHT, buff=0.4).move_to(UP * 0.6)
-        lesson = label(r"the ranking survived; \ the absolute numbers did not", font_size=30, color=CNN)
-        lesson.next_to(cards, DOWN, buff=0.7)
-        nxt = label(r"what the benchmark can't tell us: \ Part 31", font_size=24, color=GREY_B).next_to(lesson, DOWN,
-                                                                                                     buff=0.3)
-        cite_ = cite(r"Recht et al.\ (2019)", corner=DR)
-        with self.voiceover(
-            "The contest ended in 2017, its job done. <bookmark mark='a'/> Two years later Benjamin Recht and "
-            "colleagues collected a fresh test set the way ImageNet's had been collected, and every model lost "
-            "eleven to fourteen points on it. <bookmark mark='b'/> The ranking held, but the numbers had partly "
-            "belonged to one particular set of photographs. Part 31 comes back to what benchmarks can tell us."
-        ) as vo:
-            self.play(FadeIn(cards[0], shift=UP * 0.2), FadeIn(cite_))
-            vo.wait_until("a")
-            self.play(FadeIn(cards[1], shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeIn(lesson), FadeIn(nxt))
         self.wait(0.3)
         self.clear_scene()
 

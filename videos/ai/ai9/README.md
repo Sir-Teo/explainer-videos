@@ -100,7 +100,7 @@ python tools/build.py ai9 --lang zh      # Chinese
 ```
 
 Every computation is seeded and resumes after an interruption. The language model (`lm`) is the long item: 24,000
-steps of 512 positions, about two hours on two busy cores (much less on a laptop); it checkpoints every 500 steps
+steps of 512 positions, about an hour on two busy cores (less on a laptop); it checkpoints every 500 steps
 (`.cache/ai9/lm.ckpt.pt`) and keeps its final weights in `.cache/ai9/lm.pt`, so the analysis can be rerun without
 retraining. The items made of many runs (`residual`, `trainable`, `block`, `kan`) save each run as it finishes
 (`CACHE.partial`). Everything else takes a minute or two. Part 7's Kneser–Ney is read through Part 7's own cache
@@ -230,7 +230,7 @@ RMSNorm的输入永远得不到沿它自身方向的梯度，而h加倍时，梯
 | finite differences | 有限差分 |
 | reverse-mode automatic differentiation | 自动微分的反向模式 |
 | universal approximation theorem | 万能近似定理 |
-| hinge, bump | 合页，鼓包 |
+| hinge, bump | 铰链，鼓包 |
 | rectified linear unit (ReLU) | 线性整流单元（ReLU） |
 | curse of dimensionality | 维数灾难 |
 | Barron's bound | 巴伦界 |

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CNN, FMAP, KERNEL, PART, img_heat, load)
+from videos.ai.ai10.common import (CNN, FMAP, KERNEL, PART, load)
 
 SHIFTC = C.INTERVAL
 
@@ -15,7 +15,6 @@ class Receptive(VoiceoverScene):
         self.recursion()
         self.table()
         self.pooling()
-        self.effective()
 
     def card(self):
         card = chapter_card(3, r"Receptive fields, stride and pooling",
@@ -221,9 +220,8 @@ class Receptive(VoiceoverScene):
             "the pooled output doesn't change: a little invariance, Hubel and Wiesel's complex cell again. "
             "<bookmark mark='b'/> But a stride of 2 breaks the exact equivariance of the last chapter. "
             "<bookmark mark='c'/> We shifted the digit by one to four pixels before our first layer and its pooling. "
-            + mid + " <bookmark mark='d'/> Real networks inherit this: in 2019 Aharon Azulay and Yair Weiss showed "
-            "that shifting a photograph by a single pixel can change a modern network's answer, and Richard Zhang "
-            "showed that blurring before each stride, as signal processing would, mostly fixes it."
+            + mid + " <bookmark mark='d'/> In 2019 Aharon Azulay and Yair Weiss showed that a one-pixel shift can "
+            "change a modern network's answer, and Richard Zhang that blurring before each stride mostly fixes it."
         ) as vo:
             self.play(FadeIn(cells))
             vo.wait_until("a")
@@ -234,45 +232,5 @@ class Receptive(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.3))
             vo.wait_until("d")
             self.play(FadeIn(cite_))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def effective(self):
-        r = load("receptive")
-        t = r["tables"]["our CIFAR network"][-1][4]
-        a = img_heat(np.asarray(r["erf_untrained"]), 3.4, sym=False, pos=KERNEL).move_to([-3.2, -0.2, 0])
-        b = img_heat(np.asarray(r["erf_trained"]), 3.4, sym=False, pos=KERNEL).move_to([2.4, -0.2, 0])
-        fa = SurroundingRectangle(a, buff=0, color=GREY_D, stroke_width=1.2)
-        fb = SurroundingRectangle(b, buff=0, color=GREY_D, stroke_width=1.2)
-        la = label(rf"untrained: \ RMS radius ${r['erf_untrained_radius']:.1f}$ px", font_size=22,
-                   color=GREY_A).next_to(a, DOWN, buff=0.2)
-        lb = label(rf"trained: \ RMS radius ${r['erf_trained_radius']:.1f}$ px", font_size=22,
-                   color=CNN).next_to(b, DOWN, buff=0.2)
-        head = label(r"how much each pixel moves one unit at the top: \ $|\partial\, \text{unit} / \partial\, "
-                     r"\text{pixel}|$", font_size=26).to_edge(UP, buff=0.4)
-        sub = label(rf"our CIFAR network: \ the whole $32 \times 32$ image is inside the theoretical field "
-                    rf"(${t}$ px)", font_size=22, color=GREY_B).next_to(head, DOWN, buff=0.15)
-        tag = note(r"computed: \ averaged over $64$ test photographs").to_corner(DR, buff=0.25)
-        cite_ = cite(r"Luo, Li, Urtasun \& Zemel (2016)", corner=DL)
-        grew = r["erf_trained_radius"] > r["erf_untrained_radius"] * 1.05
-        verdict = (f"Training widens it, from {r['erf_untrained_radius']:.1f} pixels to "
-                   f"{r['erf_trained_radius']:.1f}, as Luo and his colleagues found in large networks: the network "
-                   "learns to use more of what it can see." if grew else
-                   f"Here training leaves it about the same, {r['erf_untrained_radius']:.1f} pixels before and "
-                   f"{r['erf_trained_radius']:.1f} after.")
-        with self.voiceover(
-            "But the receptive field is only where a unit could look. Where does it look? <bookmark mark='a'/> "
-            "Take one unit at the top of our CIFAR network and measure how much it changes when each pixel "
-            "changes, averaged over many photographs. <bookmark mark='b'/> Its field covers the whole image, but "
-            "the gradient is a soft blob in the middle: the effective receptive field, named by Wenjie Luo and "
-            "colleagues in 2016. Many paths run through the middle of the cone, few to its edge. "
-            "<bookmark mark='c'/> " + verdict
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(sub), FadeIn(tag), FadeIn(cite_))
-            vo.wait_until("a")
-            self.play(FadeIn(a), Create(fa), FadeIn(la))
-            vo.wait_until("c")
-            self.play(FadeIn(b), Create(fb), FadeIn(lb))
         self.wait(0.3)
         self.clear_scene()

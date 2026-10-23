@@ -202,10 +202,10 @@ class Hook(VoiceoverScene):
         ], font_size=26)
         with self.voiceover(
             "This is Part 10 of AI, Built, in the second act, learning from data: after Part 9's networks, and "
-            "before Part 11's optimizers. <bookmark mark='a'/> In this part: how vision worked before "
-            "deep learning, and the convolution that replaced it; LeNet, ImageNet and AlexNet, and the deeper "
-            "networks that followed; what their filters learn, and how to fool them; then recurrent networks, the "
-            "LSTM, a new row on our scoreboard, translation, attention, and the recurrent networks of today."
+            "before Part 11's optimizers. <bookmark mark='a'/> In this part: vision before deep learning, and "
+            "the convolution that replaced it; LeNet, AlexNet and the deeper networks; what their filters learn, "
+            "and how to fool them; then recurrent networks, the LSTM, translation, attention, and the recurrent "
+            "networks of today."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

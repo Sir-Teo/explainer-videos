@@ -60,12 +60,15 @@ class Control(VoiceoverScene):
             "secret input on which the code gives a wrong answer. The blue team designs the protocol, and wins if it "
             "catches an attempt, or if none gets through."
         ) as vo:
-            self.play(FadeIn(hc), FadeIn(u), GrowArrow(arr[0]), FadeIn(code))
+            rest = VGroup(arr[1:], t, al, h, out)
+            full_rest, full_game = rest.copy(), game.copy()
+            rest.fade(0.8)
+            game.fade(0.85)
+            self.play(FadeIn(hc), FadeIn(u), GrowArrow(arr[0]), FadeIn(code), FadeIn(rest), FadeIn(game))
             vo.wait_until("a")
-            self.play(GrowArrow(arr[1]), FadeIn(t), GrowArrow(arr[2]), FadeIn(al), FadeIn(h), GrowArrow(arr[3]),
-                      FadeIn(out))
+            self.play(Transform(rest, full_rest))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(g_) for g_ in game], lag_ratio=0.4))
+            self.play(LaggedStart(*[Transform(g_, f_) for g_, f_ in zip(game, full_game)], lag_ratio=0.4))
         self.wait(0.4)
         self.clear_scene()
 
@@ -83,6 +86,19 @@ class Control(VoiceoverScene):
                 why(r"a geometric series"),
                 why(r"once $pN$ is large: \ attacking more often doesn't help red")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.55, edge=6.9)
+        # one game, problem by problem: nothing decisive, nothing decisive, ..., then a backdoor that works
+        n_sq = 14
+        strip = VGroup(*[Square(0.42, stroke_color=GREY_C, stroke_width=1.5, fill_color=GREY_D, fill_opacity=0.5)
+                         for _ in range(n_sq)]).arrange(RIGHT, buff=0.08).move_to([0, -3.05, 0])
+        nums = VGroup(*[MathTex(str(k + 1), font_size=18, color=GREY_B).move_to(sq) for k, sq in enumerate(strip)])
+        last = strip[-1].copy().set_fill(RED, 0.85).set_stroke(RED)
+        lastx = MathTex(r"t", font_size=22, color=WHITE).move_to(last)
+        chips = VGroup(*[VGroup(Square(0.26, stroke_width=0, fill_color=col, fill_opacity=0.85),
+                                label(txt, font_size=19, color=col)).arrange(RIGHT, buff=0.12)
+                         for col, txt in ((BLUE, r"caught: \ $c = pq$"), (RED, r"a backdoor works: \ $w = p(1-q)s$"),
+                                          (GREY_B, r"nothing decisive: \ $1 - c - w$"))]).arrange(RIGHT, buff=0.6)
+        chips.next_to(strip, UP, buff=0.25)
+        gl = label(r"one game, \\ problem \\ by problem", font_size=19, color=GREY_A).next_to(strip, LEFT, buff=0.25)
         with self.voiceover(
             "The arithmetic of the game is short. <bookmark mark='a'/> On each problem the red team attacks with "
             "probability p. An attack is caught with probability q, which ends the game in blue's favor; otherwise "
@@ -92,10 +108,17 @@ class Control(VoiceoverScene):
             "drops out: the odds are set by q, the chance an attack is caught, against one minus q times s, the "
             "chance it slips through and works. A monitor's job is to make q large."
         ) as vo:
+            self.play(FadeIn(strip), FadeIn(nums[:-1]), FadeIn(gl))
+            vo.wait_until("a")
             step(0)
-            for k, m in enumerate("bcd"):
+            self.play(FadeIn(chips))
+            vo.wait_until("b")
+            step(1)
+            self.play(LaggedStart(*[Indicate(sq, color=GREY_B, scale_factor=1.15) for sq in strip[:-1]],
+                                  lag_ratio=0.08), FadeIn(last), FadeIn(lastx), run_time=2.0)
+            for k, m in enumerate("cd"):
                 vo.wait_until(m)
-                step(k + 1)
+                step(k + 2)
         self.wait(0.4)
         self.clear_scene()
 
@@ -212,7 +235,7 @@ class Control(VoiceoverScene):
         up = d["upfront"]
         upd = Dot(g.ax.c2p(up["usefulness"], up["safety"]), radius=0.08, color=GREY_B)
         upl = label(r"upfront auditing", font_size=18, color=GREY_B).next_to(upd, LEFT, buff=0.1)
-        tl = label(r"T alone", font_size=18, color=TRUSTED).next_to(g.ax.c2p(0.02, 1.0), RIGHT, buff=0.1)
+        tl = label(r"T alone", font_size=18, color=TRUSTED).next_to(g.ax.c2p(0.0, 1.0), UR, buff=0.08)
         tm = rows[0]
         r10 = next(r for r in rows if abs(r["defer"] - 0.1) < 1e-9)
         r20 = next(r for r in rows if abs(r["defer"] - 0.2) < 1e-9)
@@ -228,6 +251,14 @@ class Control(VoiceoverScene):
                              r"\ resampling suspicious steps cut attack success from $58\%$ to $7\%$, \ at a $5\%$ cost",
                              width=6.0, color=BLUE, font_size=19).move_to([3.4, -2.3, 0])
         tag = tagline(r"simulated curve; \ published numbers, \ Greenblatt et al.\ (2023)")
+        zones = VGroup(*[Rectangle(width=w_, height=0.5, stroke_width=1.5, stroke_color=col, fill_color=col,
+                                   fill_opacity=0.3) for w_, col in ((3.0, GREY_B), (1.5, TRUSTED), (0.6, BLUE))])
+        zones.arrange(RIGHT, buff=0).move_to([3.4, 1.0, 0])
+        zl = VGroup(label(r"submit U's code", font_size=18, color=GREY_A).next_to(zones[0], UP, buff=0.12),
+                    label(r"defer: \\ use T's own", font_size=18, color=TRUSTED).next_to(zones[1], UP, buff=0.12),
+                    label(r"audit", font_size=18, color=BLUE).next_to(zones[2], UP, buff=0.12))
+        zx = label(r"how suspicious T finds the code $\to$", font_size=18, color=GREY_A).next_to(zones, DOWN, buff=0.15)
+        defer_vis = VGroup(zones, zl, zx)
         with self.voiceover(
             "The blue team has one more move: defer to the trusted model. When code is suspicious, but not suspicious "
             "enough to audit, throw it away and use the weaker model's own solution. <bookmark mark='a'/> Each "
@@ -241,10 +272,11 @@ class Control(VoiceoverScene):
             "cut the success of attacks in a system-administration benchmark from fifty-eight percent to seven. "
             "Control doesn't need the model to be aligned, only the protocol to be good."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag), FadeIn(upd), FadeIn(upl))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(upd), FadeIn(upl), FadeIn(defer_vis))
             vo.wait_until("a")
             self.play(Create(fr), FadeIn(dots), FadeIn(tl), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(defer_vis))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in pub], lag_ratio=0.25))
             vo.wait_until("c")
             self.play(FadeIn(agent, shift=UP * 0.15))
