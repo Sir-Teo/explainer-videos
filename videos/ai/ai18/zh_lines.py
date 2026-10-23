@@ -28,7 +28,7 @@ CHAPTERS = {
 _DATA = {
     # ------------------------------------------------------------------ Hook
     'f"June 2018. OpenAI\'s first GPT':
-        "2018年6月。OpenAI的第一个GPT，在八块显卡上预训练了大约一个月。<bookmark mark='a'/>这是从那以后一次训练用的芯片数，画在每上一格就多十倍的刻度上。<bookmark mark='b'/>2019年，Megatron-LM把一个模型分到512块GPU上。2022年，谷歌的PaLM在6144块TPU芯片上训练。2024年，Meta的Llama 3用了16384块GPU；2025年，Llama 4 Behemoth的预训练用了{spoken_int(last[2])}块。<bookmark mark='c'/>七年里，从{first[2]}块芯片，增加到了它的大约{round(last[2] / first[2], -2):,.0f}倍。本部分讲的，就是这是怎样做到的。",
+        "2018年6月。OpenAI的第一个GPT模型，在八块显卡上预训练了大约一个月。<bookmark mark='a'/>这是从那以后，单次训练所用的芯片数量，画在每上一格就多十倍的刻度上。<bookmark mark='b'/>2019年，Megatron-LM把同一个模型分摊到512块GPU上。2022年，谷歌的PaLM在6144块TPU芯片上进行训练。2024年，Meta的Llama 3用了16384块GPU；2025年，Llama 4 Behemoth的预训练用了{spoken_int(last[2])}块。<bookmark mark='c'/>七年里，从{first[2]}块芯片，增加到了它的大约{round(last[2] / first[2], -2):,.0f}倍。这一部分要讲的，就是这件事是怎样做到的。",
 
     'f"Take that run of Llama 3.':
         "就拿Llama 3的那次训练来说。{spoken_int(L['gpus'])}块H100 GPU，一个点代表一块。<bookmark mark='a'/>它们一共做了大约4乘以10的25次方次运算，用了15.6万亿个词元的文本。<bookmark mark='b'/>而且它们一直在出故障。在一段五十四天的时间里，任务停下了{L['interruptions']}次，其中{L['unexpected']}次是计划外的：一块坏掉的GPU，一块内存芯片，一根网线。<bookmark mark='c'/>也就是大约每{P['llama_mtbf_h']:.0f}小时出一次故障，而每一次都会让全部一万六千块GPU停下来，因为它们都在训练同一个模型。",
@@ -50,7 +50,7 @@ _DATA = {
         "一次前沿的预训练，是一条流水线。它从对几十亿个网页的一次抓取开始，<bookmark mark='a'/>按语言和质量过滤，去重，再混入书籍、代码、数学和合成文本，切成词元。<bookmark mark='b'/>然后模型开始训练：一段很长的预训练阶段；一段很短的、在最好的数据上退火的阶段，常被叫作中期训练；一个长上下文阶段；以及第27部分的后训练。<bookmark mark='c'/>这是按比例画出的两次公开训练。Ai2的Olmo 3，七十亿参数：5.9万亿个词元的预训练，然后是1000亿的中期训练，500亿的长上下文训练。Hugging Face的SmolLM3：三个预训练阶段，然后是长上下文。<bookmark mark='d'/>最后几个阶段只占词元的百分之几，却是挑得最用心的。",
 
     'Here are six open runs of the last two years':
-        "这是最近两年里六次公开的训练，按它们的报告所写。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100 GPU上训练了15.6万亿个词元，用16位的bfloat数字，用AdamW。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，用MuonClip，一种Muon优化器的变体。Olmo 3，其中最开放的一个，连数据都公开。<bookmark mark='c'/>还有2026年：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon训练了33万亿个词元。<bookmark mark='d'/>两年里，词元数翻了一倍，数字从16位缩到8位和4位，优化器也开始改变。",
+        "这是最近两年里六次公开的训练，数字都按它们各自的报告。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100上训练了15.6万亿个词元，用16位的bfloat数字，优化器用AdamW。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用的是8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，优化器是MuonClip，它是Muon优化器的一种变体。Olmo 3是其中最开放的一个，连训练数据都公开了。<bookmark mark='c'/>还有2026年的两次：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon优化器训练了33万亿个词元。<bookmark mark='d'/>两年之间，训练的词元数量翻了一倍，数字从16位缩小到8位和4位，优化器也开始发生变化。",
 
     'f"How big is such a run?':
         "这样一次训练有多大？第14部分给过规则：大约是每个参数、每个词元六次运算。<bookmark mark='a'/>对Llama 3.1，6乘以4050亿乘以15.6万亿，是{P['llama_6nd'] / 1e+25:.2f}乘以10的25次方，正是Meta报告的数。<bookmark mark='b'/>DeepSeek-V3是混合专家模型，每个词元只用到370亿个参数，所以它需要{P['dsv3_6nd'] / 1e+24:.1f}乘以10的24次方：大约十分之一。<bookmark mark='c'/>它的报告还给出了账单：预训练用了266.4万个H800 GPU小时；按每小时两美元算，整次训练是{P['dsv3_usd'] / 1000000.0:.3f}百万美元。<bookmark mark='d'/>这只是最终那次训练的价格：不包括之前的实验、数据，也不包括集群。",

@@ -123,16 +123,25 @@ class Curriculum(VoiceoverScene):
         bl = label(r"SmolLM3's three stages", font_size=22, color=EDU).next_to(bars, UP, buff=0.25)
         key = legend([(GREY_B, r"web"), (cols[1], r"code"), (cols[2], r"maths")], font_size=18)
         key.next_to(bars, DOWN, buff=0.35)
-        # where the best data goes: the cooldown at the end of the learning rate (schematic)
-        o_ = np.array([0.4, -0.6, 0])
-        flat = Line(o_ + UP * 1.8, o_ + UP * 1.8 + RIGHT * 3.6, color=GREY_B, stroke_width=4)
-        drop = Line(o_ + UP * 1.8 + RIGHT * 3.6, o_ + UP * 0.15 + RIGHT * 4.8, color=EDU, stroke_width=6)
-        base_ = Line(o_, o_ + RIGHT * 5.2, color=GREY_D, stroke_width=2)
-        lr_l = label(r"learning rate", font_size=20, color=GREY_B).next_to(flat, UP, buff=0.12).align_to(flat, LEFT)
-        best_ = label(r"the cooldown: \\ the best data goes here", font_size=21, color=EDU)
-        best_.move_to([4.8, 1.8, 0])
-        cool_sch = VGroup(base_, flat, drop, lr_l, best_, note(r"schematic", font_size=17).next_to(base_, DOWN,
-                                                                                                  buff=0.12))
+        # where the best data goes: the cooldown at the end of the learning rate (schematic), drawn large, then small
+        def cooldown(o_, w1, w2, h):
+            o_ = np.array(o_)
+            flat = Line(o_ + UP * h, o_ + UP * h + RIGHT * w1, color=GREY_B, stroke_width=4)
+            drop = Line(o_ + UP * h + RIGHT * w1, o_ + UP * 0.15 + RIGHT * (w1 + w2), color=EDU, stroke_width=6)
+            base_ = Line(o_, o_ + RIGHT * (w1 + w2 + 0.4), color=GREY_D, stroke_width=2)
+            lr_l = label(r"learning rate", font_size=20, color=GREY_B).next_to(flat, UP, buff=0.12).align_to(flat, LEFT)
+            web = Rectangle(width=w1, height=0.3, stroke_width=0, fill_color=GREY_B, fill_opacity=0.45)
+            web.next_to(base_, DOWN, buff=0.12).align_to(base_, LEFT)
+            best = Rectangle(width=w2, height=0.3, stroke_width=0, fill_color=EDU, fill_opacity=0.85)
+            best.next_to(web, RIGHT, buff=0)
+            web_l = label(r"mostly web text", font_size=18, color=GREY_A).next_to(web, DOWN, buff=0.1)
+            best_l = label(r"the best data", font_size=18, color=EDU).next_to(best, DOWN, buff=0.1)
+            cool_l = label(r"the cooldown", font_size=21, color=EDU).next_to(drop.get_center(), RIGHT, buff=0.25)
+            sch = note(r"schematic", font_size=17).next_to(VGroup(web_l, best_l), DOWN, buff=0.15)
+            return VGroup(base_, flat, drop, lr_l, cool_l, sch, web, best, web_l, best_l)
+
+        cool_sch = cooldown([-4.6, -1.0, 0], 6.4, 1.8, 2.6)
+        cool_small = cooldown([0.0, -0.6, 0], 3.6, 1.2, 1.8)
         facts = VGroup(
             label(rf"Llama 3: \ the last ${L['anneal_tokens'] / 1e6:.0f}$M tokens at a learning rate falling to $0$, "
                   r"\\ the best sources upsampled, \ checkpoints averaged", font_size=21, color=GREY_A),
@@ -156,13 +165,17 @@ class Curriculum(VoiceoverScene):
             "data "
             "with small annealing runs from a checkpoint: nineteen microanneals to pick its maths."
         ) as vo:
-            self.play(FadeIn(src), Create(cool_sch[0]), Create(cool_sch[1]), FadeIn(cool_sch[3]), FadeIn(cool_sch[5]))
-            self.play(Create(cool_sch[2]), FadeIn(cool_sch[4]), run_time=1.5)
+            self.play(FadeIn(src), Create(cool_sch[0]), Create(cool_sch[1]), FadeIn(cool_sch[3]), FadeIn(cool_sch[5]),
+                      GrowFromEdge(cool_sch[6], LEFT), FadeIn(cool_sch[8]), run_time=1.5)
+            self.play(Create(cool_sch[2]), GrowFromEdge(cool_sch[7], LEFT), FadeIn(cool_sch[4]), FadeIn(cool_sch[9]),
+                      run_time=1.5)
+            self.play(Indicate(VGroup(cool_sch[7], cool_sch[9]), color=YELLOW), run_time=1.5)
             vo.wait_until("a")
+            self.play(ReplacementTransform(cool_sch, cool_small), run_time=1.2)
             self.play(FadeIn(bl), FadeIn(key), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in bars], lag_ratio=0.4),
                       run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeOut(cool_sch))
+            self.play(FadeOut(cool_small))
             self.play(FadeIn(facts[0], shift=UP * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(facts[1], shift=UP * 0.1))
@@ -201,7 +214,10 @@ class Curriculum(VoiceoverScene):
         colors = {r"\theta": C.POSITION}
         eq = cmath(r"\text{pair } i \text{ turns at } \theta^{-2i/d} \text{ radians a token}", r";", r"\lambda_{\max}",
                    r"=", r"2\pi\,\theta^{(d-2)/d}", colors=colors, font_size=28).move_to(DOWN * 1.45)
-        wl = VGroup(*[label(rf"base ${r_['base']:,}$: \ ${r_['longest'] / 1e3:,.0f}$k tokens".replace(",", "{,}"),
+        def span(n):  # as the narration says it: thousands, or millions to one decimal
+            return rf"${n / 1e3:.0f}$k" if n < 1e6 else rf"${n / 1e6:.1f}$M"
+
+        wl = VGroup(*[label(rf"base ${r_['base']:,}$".replace(",", "{,}") + r": \ " + span(r_["longest"]) + " tokens",
                             font_size=21, color=C.POSITION) for r_ in rope[:3]]).arrange(RIGHT, buff=0.5)
         wl.next_to(eq, DOWN, buff=0.3)
         abf = note(r"the slowest pair's wavelength, \ head dimension $d = 128$ (computed); \ raising the base: "
