@@ -676,7 +676,7 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 9 | **complete**, English and Chinese (17 chapters) | 56 min |
 | 10 | new, being written (17 chapters) | — |
 | 18 | **complete**, English and Chinese (20 chapters) | 60 min |
-| 20 | **complete**, English and Chinese (18 chapters; final layout polish) | 55 min |
+| 20 | **complete**, English and Chinese (18 chapters) | 55 min |
 | 24, 25 | new; to write | — |
 | 14 | **complete**, English and Chinese (16 chapters) | 57 min |
 | 17 | **complete**, English and Chinese | 55 min |
