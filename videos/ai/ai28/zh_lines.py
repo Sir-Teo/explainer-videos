@@ -401,18 +401,29 @@ ZH = {
         "包括那些会被PPO裁剪压掉的少见词元。在MiniMax自己的比较里，它用一半的步数就追平了DAPO。",
 
     'f"We ran all of them on our addition model,':
-        "我们在加法模型上把它们全部跑了一遍，同一个起点，同一类题目，每种跑3次。<bookmark mark='a'/>{verdict}"
-        "<bookmark mark='b'/>有一项代价柱状图里看不出来：DAPO的动态采样，为了填满批次，抽了{drawn['dapo']:.2f}倍的题目。"
-        "公平的比较应该数样本，而不是数步数。",
+        "我们在加法模型上把它们全部跑了一遍，同一个起点，同一类题目，每种跑3次。<bookmark mark='a'/>{collapse}"
+        "<bookmark mark='a2'/>{verdict}<bookmark mark='b'/>有一项代价柱状图里看不出来：DAPO的动态采样，为了填满批次，"
+        "抽了{drawn['dapo']:.2f}倍的题目。公平的比较应该数样本，而不是数步数。",
 
-    'f"The best average is {SAY[best]}\'s, {100 * means[best]:.0f} percent, but the averages span only':
-        "平均最好的是{SAY[best]}，{100 * means[best]:.0f}%，但各方法的平均值只差{spread:.0f}个百分点，"
+    "f'Among the runs that learned, {SAY[best]} ends highest, {100 * means[best]:.0f} percent on average, but":
+        "在学到了东西的运行里，{SAY[best]}最后最高，平均{100 * means[best]:.0f}%，但各方法的平均值只差{spread:.0f}个百分点，"
         "还不到同一种方法不同运行之间的{seed_spread:.0f}个百分点。在这么小的问题上，它们基本一致；"
         "差别要在大规模上才显现：长回答，成千上万步。",
 
-    'f"The best average is {SAY[best]}\'s, {100 * means[best]:.0f} percent, and the averages span {spread:.0f}':
-        "平均最好的是{SAY[best]}，{100 * means[best]:.0f}%，各方法的平均值相差{spread:.0f}个百分点，"
+    "f'Among the runs that learned, {SAY[best]} ends highest, {100 * means[best]:.0f} percent on average, and":
+        "在学到了东西的运行里，{SAY[best]}最后最高，平均{100 * means[best]:.0f}%，各方法的平均值相差{spread:.0f}个百分点，"
         "超过了同一种方法不同运行之间的{seed_spread:.0f}个百分点。",
+
+    "f'GRPO as published, the only objective here with a KL penalty, collapsed in":
+        "按论文原样实现的GRPO，也是这里唯一带KL惩罚的目标函数，在{seeds}次运行里坍缩了{n_bad['grpo']}次："
+        "正确率掉到{low:.0f}%，模型也跑得离起点很远。最可能的元凶就是这个惩罚项：k3估计量的梯度随r增长，"
+        "而r的重尾我们在第5章已经见过。DAPO干脆去掉了这一项。",
+
+    "f'{sum(n_bad.values())} of the runs collapsed,":
+        "有{sum(n_bad.values())}次运行坍缩了，最后比起点还差；下面的平均值不算它们。",
+
+    'Every run ended above where it started.':
+        '每一次运行最后都比起点好。',
 
     'f"One of DAPO\'s fixes is worth seeing.':
         "DAPO的一个修正值得看一看。当一道题的8个回答全对时，每个优势都是零，梯度也是零：这道题白做了。"
@@ -450,16 +461,20 @@ ZH = {
         "这个协方差是正的，熵就下降。<bookmark mark='d'/>在模型自己的样本上做强化学习，奖励的正是本来就可能的东西，"
         "而且会越滚越大。Ganqu Cui和同事在2025年为语言模型把这一点推导了出来。",
 
-    'f"{start} <bookmark mark=\'a\'/> GRPO, with its symmetric clip':
-        "{start}<bookmark mark='a'/>GRPO用对称的裁剪，最后停在{fin['grpo']:.2f}。<bookmark mark='b'/>{higher}"
+    'f"{start} <bookmark mark=\'a\'/> Doctor GRPO, with GRPO\'s symmetric clip':
+        "{start}<bookmark mark='a'/>Dr. GRPO用的是GRPO的对称裁剪，最后停在{fin['dr']:.2f}。<bookmark mark='b'/>{higher}"
         "<bookmark mark='c'/>CISPO最后是{fin['cispo']:.2f}，完全不裁剪的普通梯度是{fin['pg']:.2f}。",
 
     'f"DAPO\'s clip-higher keeps more of it:':
-        "DAPO放宽上界的裁剪保留了更多的熵：最后{fin['dapo']:.2f}比特，GRPO的对称裁剪是{fin['grpo']:.2f}。"
+        "DAPO放宽上界的裁剪保留了更多的熵：最后{fin['dapo']:.2f}比特，对称裁剪是{fin['dr']:.2f}。"
         "让可能性低的词元长得更快，就能让其他选项活下来。",
 
+    'f"DAPO ends lower still, at {fin[\'dapo\']:.2f} bits:':
+        "DAPO最后更低，只有{fin['dapo']:.2f}比特：在我们的运行里，放宽上界的裁剪没能把熵托住。"
+        "答案只有三位数，没什么可能性低的词元需要挽救；在长推理上，DAPO的作者发现它能防止熵坍缩。",
+
     'f"Here DAPO\'s clip-higher barely changes it:':
-        "在这里，DAPO放宽上界的裁剪几乎没改变什么：最后{fin['dapo']:.2f}比特，GRPO是{fin['grpo']:.2f}。"
+        "在这里，DAPO放宽上界的裁剪几乎没改变什么：最后{fin['dapo']:.2f}比特。"
         "答案只有三位数，没什么可能性低的词元需要挽救；在长推理上，DAPO的作者发现它能防止熵坍缩。",
 
     "f'Here it is in our runs. Every objective starts at {e0:.2f} bits of entropy per digit, and every one drives it down.":
@@ -593,14 +608,14 @@ ZH = {
         "<bookmark mark='a'/>强化学习之前，一次尝试的正确率是{100 * base[0]:.0f}%。<bookmark mark='b'/>"
         "训练300步之后，大约{100 * rl1:.0f}%。<bookmark mark='c'/>{said}",
 
-    'f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, the untrained model is ahead. On about':
+    'f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {cross[0]} tries on, the untrained model is ahead. On about':
         "曲线交叉了：尝试{k_last}次时，强化学习之前的模型解出{100 * base[-1]:.1f}%，而{SAY[lost[0]]}解出"
-        "{100 * means[lost[0]][-1]:.1f}%。从大约{min(cross)}次尝试开始，未经训练的模型领先。在200道题里，"
+        "{100 * means[lost[0]][-1]:.1f}%。从大约{cross[0]}次尝试开始，未经训练的模型领先。在200道题里，"
         "大约有{dead:.0f}道，强化学习把正确答案的概率压到了千分之一以下，挪到了它越来越有把握的错误答案上。",
 
-    "f'And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, the untrained model is ahead. No question":
+    "f'And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {cross[0]} tries on, the untrained model is ahead. No question":
         "曲线交叉了：尝试{k_last}次时，强化学习之前的模型解出{100 * base[-1]:.1f}%，而{SAY[lost[0]]}解出"
-        "{100 * means[lost[0]][-1]:.1f}%。从大约{min(cross)}次尝试开始，未经训练的模型领先。没有哪道题变得不可能；"
+        "{100 * means[lost[0]][-1]:.1f}%。从大约{cross[0]}次尝试开始，未经训练的模型领先。没有哪道题变得不可能；"
         "但在最难的那些题上，强化学习让本来就少见的正确答案更少见了，所以即使试一千次，找到它的次数也少了。",
 
     'f"And at {k_last} tries the curves meet:':
@@ -610,7 +625,7 @@ ZH = {
 
     'f"One warning about measuring with many tries.':
         "关于用很多次尝试来衡量，有一个警告。检查器对蒙对的答案，和对推理出来的答案，给的奖励一样多。在{int(gs['m'])}个"
-        "可能的和之间均匀地猜，尝试1024次的pass@k是{100 * p1024:.0f}%。<bookmark mark='a'/>在k很大时，"
+        "可能的和之间均匀地猜，尝试1024次的pass@k是{100 * p1024:.1f}%。<bookmark mark='a'/>在k很大时，"
         "pass@k会让瞎猜看起来像推理。所以严谨的研究还会检查思维链，或者用答案多到猜不中的问题：证明，以及必须通过测试的程序。",
 
     # ------------------------------------------------------------------ TestTime

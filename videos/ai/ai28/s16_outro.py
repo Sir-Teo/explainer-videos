@@ -7,7 +7,7 @@ import numpy as np
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai28.common import (CHAIN, DIRECT, ENT, LEN, ORM_C, PART, PASS, POLICY, PRM_C, REF, VOTE,
-                                   WRONG_C, heat, load, tile_frame)
+                                   WRONG_C, healthy, heat, load, tile_frame)
 
 
 class Outro(VoiceoverScene):
@@ -52,8 +52,8 @@ class Outro(VoiceoverScene):
         o = load("objectives")
         ax = box_axes([0, int(o["steps"])], [0, 3])
         ent = VGroup(ax)
-        for vv, col in (("grpo", CHAIN), ("dapo", C.BITS), ("pg", GREY_B)):
-            Cm = np.asarray(o[f"{vv}_curve"])
+        for vv, col in (("dr", CHAIN), ("dapo", C.BITS), ("pg", GREY_B)):
+            Cm = np.asarray(o[f"{vv}_curves"])[healthy(o, vv)].mean(0)  # runs that collapsed left out
             ent.add(curve(ax, Cm[:, 0], Cm[:, 2], col, 3))
         out.append((ent, r"entropy falls", ENT))
         d = load("think_rl")
@@ -62,7 +62,8 @@ class Outro(VoiceoverScene):
                     r"how long to think", LEN))
         ksk = np.log2(o["ks"])
         ax = box_axes([0, ksk[-1]], [0.3, 1])
-        out.append((VGroup(ax, curve(ax, ksk, o["passk_base"], REF, 3), curve(ax, ksk, o["passk_grpo"], POLICY, 3)),
+        pk_rl = np.asarray(o["dapo_passk"])[healthy(o, "dapo")].mean(0)
+        out.append((VGroup(ax, curve(ax, ksk, o["passk_base"], REF, 3), curve(ax, ksk, pk_rl, POLICY, 3)),
                     r"sharper, \ or wider?", REF))
         b = load("think_budget")
         ax = box_axes([0, float(max(np.max(b["sft_seq_tokens"]), np.max(b["sft_vote_tokens"])))], [0, 1])

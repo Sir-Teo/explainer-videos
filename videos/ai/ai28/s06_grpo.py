@@ -145,6 +145,10 @@ class GRPO(VoiceoverScene):
                 why(r"$\log r \le r - 1$: \ never negative, \ still unbiased")]
         step = ladder(self, rows, whys, keep=4, top=1.8, x=-1.5, buff=0.5, edge=6.9)
         cite_ = cite(r"J.~Schulman, \textit{Approximating KL Divergence} (2020)", corner=DR)
+        exact_ = VGroup(cmath(r"\mathrm{KL}(\pi_\theta \,\|\, \pi_{\mathrm{ref}})", r"=",
+                              r"\sum_{y} \pi_\theta(y) \log \frac{\pi_\theta(y)}{\pi_{\mathrm{ref}}(y)}", font_size=38),
+                        label(r"a sum over every possible answer: \ for long answers, \ far too many", font_size=26,
+                              color=GREY_A)).arrange(DOWN, buff=0.4).move_to(DOWN * 0.3)
         with self.voiceover(
             "That last term needs the KL divergence from the reference model, Part 1's measure of how far one "
             "distribution is from another. Computing it exactly would mean summing over every possible answer, so "
@@ -158,7 +162,9 @@ class GRPO(VoiceoverScene):
         ) as vo:
             self.play(J.animate.scale(0.75).to_edge(UP, buff=0.3), FadeIn(cite_))
             self.play(Indicate(VGroup(*J[10:]), color=KLC))
+            self.play(FadeIn(exact_, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(exact_))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -239,7 +245,7 @@ class GRPO(VoiceoverScene):
                           FadeIn(panels[i][5]), run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(xl), FadeIn(cite(r"Y.~Tang \& R.~Munos, \textit{On a few pitfalls in KL divergence "
-                                              r"gradient estimation for RL} (2025)", corner=DL)))
+                                              r"gradient estimation for RL} (2025)", corner=UR)))
         self.wait(0.3)
         self.clear_scene()
 

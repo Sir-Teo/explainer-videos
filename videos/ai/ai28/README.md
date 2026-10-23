@@ -10,90 +10,98 @@ proofs a machine can check; and ARC-AGI. Every experiment runs on three tiny tra
 parity, two-digit addition, and a "think or answer" model that sums lists of digits and may write its running total
 first.
 
-* **From "let's think step by step" to o1 and R1.** Chain-of-thought prompting (Wei et al. 2022: PaLM 540B on
-  GSM8K, 17.9% → 56.9%, with the paper's Figure 1 example); zero-shot "Let's think step by step" (Kojima et al. 2022:
+* **From "let's think step by step" to o1 and R1.** Chain-of-thought prompting (Wei et al. 2022: PaLM 540B on GSM8K,
+  17.9% → 56.9%, with the paper's Figure 1 example); zero-shot "Let's think step by step" (Kojima et al. 2022:
   MultiArith 17.7% → 78.7%); o1 (September 2024; AIME 2024: GPT-4o 12%, o1 74% with one try, 83% by a vote of 64, 93%
   reranking 1,000 with a learned scorer); R1-Zero (15.6% → 71.0%, 86.7% by a vote of 64; DeepSeek-AI 2025); gold-medal
   IMO 2025 solutions in natural language; ARC-AGI-3 (March 2026), where every frontier model started below 1%; the
   questions of the part and what it covers.
-* **1. Thinking out loud is computing.** Parity of 16 bits for a 2-layer transformer: answering at once stays at chance
-  (49.9%, three runs 49.4–50.9%), writing the running parity first reaches 99.6% (98.8–100%); 4 bits: everything
-  100%; 8 bits: at once 46.7%, chain 100%. Depth: L steps in a row at once, L(k + 1) with k tokens of thought. Merrill
-  & Sabharwal (2023): fixed depth with O(log n)-bit numbers stays in TC⁰; Li, Liu, Zhou & Ma (2024): T steps of
-  thought simulate a circuit of size T, polynomially many decide P; Furst–Saxe–Sipser (1984), Barrington (1989),
-  Hahn (2020), Feng et al. (2023); filler dots add positions but not sequential steps (Pfau, Merrill & Bowman 2024;
-  ours: 49.4%); the chain model's training replayed with its chains at each checkpoint.
+* **1. Thinking out loud is computing.** Parity of 16 bits for a 2-layer transformer: answering at once stays at
+  chance (49.9%, three runs 49.4–50.9%), writing the running parity first reaches 99.6% (98.8–100%); 4 bits:
+  everything 100%; 8 bits: at once 46.7%, chain 100%. Depth: L steps in a row at once, L(k + 1) with k tokens of
+  thought. Merrill & Sabharwal (2023): fixed depth with O(log n)-bit numbers stays in TC⁰; Li, Liu, Zhou & Ma (2024):
+  T steps of thought simulate a circuit of size T, polynomially many decide P; Furst–Saxe–Sipser (1984), Barrington
+  (1989), Hahn (2020), Feng et al. (2023); filler dots add positions but not sequential steps (Pfau, Merrill & Bowman
+  2024; ours: 49.4%); the chain model's training replayed with its chains at each checkpoint.
 * **2. Many chains, one vote.** The testbed: a 2-layer transformer that sums lists of 2–9 digits and may write the
   running total first (1,500 supervised steps; one sample at temperature 1: 90% → 38% at once, 96% → 64% thinking;
   left to choose, it thinks 65% of the time). Self-consistency (Wang et al. 2022, +17.9 points on GSM8K). One 7-digit
-  list and 64 chains. When voting works, derived (Hoeffding and a union bound: P(vote wrong) ≤ (m − 1)e^{−kΔ²/2});
-  on 300 lists of 2–9 digits: one chain 81%, a vote of 64 98% (the limit: the most frequent answer right, 98%),
-  any of 64 right 100%, a vote over answers given at once 74%.
+  list and 64 chains. When voting works, derived (Hoeffding and a union bound: P(vote wrong) ≤ (m − 1)e^{−kΔ²/2}); on
+  300 lists of 2–9 digits: one chain 81%, a vote of 64 98% (the limit: the most frequent answer right, 98%), any of 64
+  right 100%, a vote over answers given at once 74%.
 * **3. Checking the steps.** A right answer from a broken argument (ours, made to think: 27% of right answers have a
-  wrong step); outcome and process reward models; Cobbe et al. (2021: a verifier worth a 30× larger model), Uesato
-  et al. (2022), Lightman et al. (2023: PRM800K; best of 1,860 on MATH: vote 69.6%, ORM 72.4%, PRM 78.2%). Ours,
-  both graders trained on the same 8,000 solutions, 300 new questions: one sample 80%; the graders' picks get
-  worse as N grows (best of 64: process grader 50%, outcome grader 44%; vote 96%); AUC 0.76 and 0.66; 71% of the
-  process grader's picks from 64 had stopped thinking early, against 35% of all solutions (a product of step scores
-  favours short chains). One solution graded both ways. DeepSeek-R1's "unsuccessful attempts" with process reward
-  models; Math-Shepherd's automatic step labels.
+  wrong step); outcome and process reward models; Cobbe et al. (2021: a verifier worth a 30× larger model), Uesato et
+  al. (2022), Lightman et al. (2023: PRM800K; best of 1,860 on MATH: vote 69.6%, ORM 72.4%, PRM 78.2%). Ours, both
+  graders trained on the same 8,000 solutions, 300 new questions: one sample 80%; the graders' picks get worse as N
+  grows (best of 64: process grader 50%, outcome grader 44%; vote 96%); AUC 0.76 and 0.66; 71% of the process grader's
+  picks from 64 had stopped thinking early, against 35% of all solutions (a product of step scores favours short
+  chains). One solution graded both ways. DeepSeek-R1's "unsuccessful attempts" with process reward models;
+  Math-Shepherd's automatic step labels.
 * **4. Learning from a checker.** DeepSeekMath's GRPO (February 2024), o1 (September 2024), Tülu 3 names RLVR
   (November 2024), DeepSeek-R1 (January 2025); the reward 1[checker accepts]; the policy, a group of 8 answers,
-  advantages against the group; on our two-digit addition model, 300 steps of 32 questions: 35% → 72–86% (three
-  runs, mean 80%), replayed with six questions' answers at every checkpoint.
+  advantages against the group; on our two-digit addition model, 300 steps of 32 questions: 35% → 72–86% (three runs,
+  mean 80%), replayed with six questions' answers at every checkpoint.
 * **5. GRPO, derived.** The log-derivative trick and a baseline (Part 26); the group mean and spread; PPO's ratio and
   clip; the published per-token objective with its KL term; the KL estimators k1 = −log r, k2 = ½(log r)², k3 = r − 1
-  − log r (Schulman 2020) on our model, where the true KL is exact (0.840 nats): k1 0.839 (10% negative, spread
-  0.91), k2 0.767 (biased low, spread 1.36), k3 0.744 (never negative, spread 6.25: unbiased, but heavy-tailed this far
-  from the reference); Tang & Munos (2025) on estimating the KL's gradient; GRPO's training replayed on three
-  uncertain questions ({{GRPO_REPLAY}}).
+  − log r (Schulman 2020) on our model, where the true KL is exact (0.840 nats): k1 0.839 (10% negative, spread 0.91),
+  k2 0.767 (biased low, spread 1.36), k3 0.744 (never negative, spread 6.25: unbiased, but heavy-tailed this far from
+  the reference); Tang & Munos (2025) on estimating the KL's gradient; GRPO's training replayed on three uncertain
+  questions (the right answer's probability 25% → 71% on average, not smoothly; entropy 0.92 → 0.17 bits a digit).
 * **6. The successors.** Dr. GRPO's length and difficulty biases (Liu et al. 2025); DAPO (clip-higher 0.2/0.28,
   dynamic sampling, token-level averaging, overlong shaping; Yu et al. 2025); GSPO's sequence ratio (Zheng et al.
   2025); CISPO's clipped, stop-gradient weight (MiniMax 2025). Seven objectives on our model, three runs each, 300
-  steps: {{VARIANTS}}; the share of groups with no signal ({{ZERO}}); DAPO drew {{DRAWN}}× the questions; offline DPO on
-  pairs from the starting model ({{DPO}}).
+  steps: GRPO as published, the only one with a KL penalty (k3, β = 0.04), collapsed in two of three runs (to 2% and
+  5%; the third reached 88%); among the runs that learned (start 35%): plain 79%, Dr. GRPO 84%, DAPO 91%, GSPO 86%,
+  CISPO 79%, a 12-point span against 19 points between runs of one method; the share of groups with no signal (the
+  plain gradient's rises to 31% by the end); DAPO drew 2.9× the questions; offline DPO on pairs from the starting
+  model (35% → 26%: on held-out pairs both the right and the wrong answers' log-probabilities fell, by 0.74 and 2.07
+  bits; likelihood displacement).
 * **7. Entropy collapse.** ∂H/∂z_b = −π_b(log π_b − E log π) and ΔH ≈ −Cov(log π, Δz), derived (Cui et al. 2025);
-  entropy over training for five objectives ({{ENTROPY}}); the fit R = −a e^H + b on every checkpoint ({{FIT}});
-  remedies: clip-higher, entropy bonuses, Clip-Cov and KL-Cov, ProRL's long runs (more than 2,000 steps).
+  entropy over training for four objectives (0.92 bits a digit at the start; at the end Dr. GRPO 0.14, DAPO 0.08,
+  CISPO 0.16, the plain gradient 0.28: clip-higher did not hold the entropy up on three-digit answers); the fit R = −a
+  e^H + b on every checkpoint (R² = 0.80 over the 16 runs that did not collapse; the ceiling at H = 0, 86%); remedies:
+  clip-higher, entropy bonuses, Clip-Cov and KL-Cov, ProRL's long runs (more than 2,000 steps).
 * **8. How long to think.** R1-Zero's growing chains and its "aha moment" (DeepSeek-AI 2025, Table 3); RL with a
-  reward for the right sum only, replayed as a map of how many steps it chooses for each length of list (thinking
-  66% → ~100% of the time, mean 3.0 → 5.5 steps, accuracy 77% → 96%); overthinking (Chen et al. 2024; on two-digit
-  lists, 90% at once against 96% thinking, yet it thinks on 100% after RL); a cost per step of thought, three
-  values, three runs each: c = 0 thinks on nearly everything (96% right), c = 0.005 thinks on 7% of two-digit lists
-  and 90% of nine-digit ones (87%), c = 0.02 almost never thinks (77%; 39% on nine digits); Kimi k1.5's length
-  reward, L1, DAPO's overlong penalty, products' thinking budgets.
+  reward for the right sum only, replayed as a map of how many steps it chooses for each length of list (thinking 66%
+  → ~100% of the time, mean 3.0 → 5.5 steps, accuracy 77% → 96%); overthinking (Chen et al. 2024; on two-digit lists,
+  90% at once against 96% thinking, yet it thinks on 100% after RL); a cost per step of thought, three values, three
+  runs each: c = 0 thinks on nearly everything (96% right), c = 0.005 thinks on 7% of two-digit lists and 90% of
+  nine-digit ones (87%), c = 0.02 almost never thinks (77%; 39% on nine digits); Kimi k1.5's length reward, L1, DAPO's
+  overlong penalty, products' thinking budgets.
 * **9. Sharper, or wider?** pass@k; the plug-in estimate's bias and the unbiased estimator 1 − C(n − c, k)/C(n, k),
-  derived (Chen et al. 2021), on our model against the exact values (the plug-in falls short by up to 2 points);
-  Yue et al. (NeurIPS 2025 oral) and ProRL's counterpoint; exact pass@k up to 1,024 before and after four RL
-  objectives ({{PASSK}}); a uniform guesser among the 179 possible sums passes at 1,024 tries {{GUESS}}% of the
-  time.
+  derived (Chen et al. 2021), on our model against the exact values (the plug-in falls short by up to 2 points); Yue
+  et al. (NeurIPS 2025 oral) and ProRL's counterpoint; exact pass@k up to 1,024 before and after four RL objectives
+  (one try: 33% before, about 82% after; at 1,024 tries 100% before, against 98.2% for Dr. GRPO, 98.8% for DAPO, 97.8%
+  for CISPO and 99.99% for the plain gradient; the untrained model ahead of Dr. GRPO from 16 tries on; on about 3 of
+  the 200 questions RL drained the right answer below one in a thousand); a uniform guesser among the 179 possible
+  sums passes at 1,024 tries 99.7% of the time.
 * **10. Thinking at answer time.** Parallel against sequential; Snell et al. (2024: 4× more efficient than best-of-N,
-  a small model plus test-time compute beating a 14× larger one); s1 (Muennighoff et al. 2025: 1,000 examples,
-  budget forcing, AIME 2024 50% → 57%); ours on 9-digit lists: no thought 37%, thinking cut off part-way no better,
-  the whole chain 63% with 12 tokens, a vote over answers at once at most 40% with up to 32 tokens; after RL, the
-  whole chain 84%. Best-of-N with a 0/1 checker, derived: KL(π_N ‖ π) = KL(Bern(1 − q) ‖ Bern(p)) → log(1/p), below
-  Part 27's log N − (N − 1)/N, an upper bound in general (Beirami et al. 2024); ours: 1.18 nats at N = 256 against
-  4.55; best-of-8 matches one try after RL.
+  a small model plus test-time compute beating a 14× larger one); s1 (Muennighoff et al. 2025: 1,000 examples, budget
+  forcing, AIME 2024 50% → 57%); ours on 9-digit lists: no thought 37%, thinking cut off part-way no better, the whole
+  chain 63% with 12 tokens, a vote over answers at once at most 40% with up to 32 tokens; after RL, the whole chain
+  84%. Best-of-N with a 0/1 checker, derived: KL(π_N ‖ π) = KL(Bern(1 − q) ‖ Bern(p)) → log(1/p), below Part 27's log
+  N − (N − 1)/N, an upper bound in general (Beirami et al. 2024); ours: 1.18 nats at N = 256 against 4.55; best-of-8
+  matches one try after RL.
 * **11. Searching over thoughts.** AlphaZero (Part 26) mapped onto reasoning; Tree of Thoughts (Yao et al. 2023: Game
-  of 24, 4% → 74%), rStar-Math (Guan et al. 2025: MATH 58.8% → 90.0% at 7B), AlphaProof, R1's unsuccessful MCTS;
-  beam search over running totals guided by the process grader, one tree drawn; beam search against best-of-N at
-  equal tokens on 9-digit lists: beam search ahead at every budget (78% against 64% at 2 samples per step), but both
-  fall as they widen (beam 78% → 52%, best-of-N 64% → 31%).
-* **12. Thinking without words.** The token bottleneck (about 17 bits per token, against tens of thousands in a
-  hidden state); Coconut (Hao et al. 2024); HRM (Wang et al. 2025: 27M parameters, about 1,000 examples; Sudoku-Extreme
-  55%, Maze-Hard 74.5%, ARC-AGI-1 40.3%, ARC-AGI-2 5%) and ARC Prize's analysis (August 2025); TRM
-  (Jolicoeur-Martineau 2025: 7M parameters, 87.4%, 85.3%, 44.6%, 7.8%); chain-of-thought monitorability (Korbak et
-  al. 2025).
+  of 24, 4% → 74%), rStar-Math (Guan et al. 2025: MATH 58.8% → 90.0% at 7B), AlphaProof, R1's unsuccessful MCTS; beam
+  search over running totals guided by the process grader, one tree drawn; beam search against best-of-N at equal
+  tokens on 9-digit lists: beam search ahead at every budget (78% against 64% at 2 samples per step), but both fall as
+  they widen (beam 78% → 52%, best-of-N 64% → 31%).
+* **12. Thinking without words.** The token bottleneck (about 17 bits per token, against tens of thousands in a hidden
+  state); Coconut (Hao et al. 2024); HRM (Wang et al. 2025: 27M parameters, about 1,000 examples; Sudoku-Extreme 55%,
+  Maze-Hard 74.5%, ARC-AGI-1 40.3%, ARC-AGI-2 5%) and ARC Prize's analysis (August 2025); TRM (Jolicoeur-Martineau
+  2025: 7M parameters, 87.4%, 85.3%, 44.6%, 7.8%); chain-of-thought monitorability (Korbak et al. 2025).
 * **13. Proofs a machine can check.** Lean and Mathlib; AlphaProof (Hubert et al., *Nature* 2025: about a million
-  problems formalized into about 80 million statements; test-time RL) and IMO 2024 (28 of 42, one short of gold);
-  IMO 2025: Gemini Deep Think 35 (certified by the IMO's coordinators) and OpenAI's experimental model 35, in natural
+  problems formalized into about 80 million statements; test-time RL) and IMO 2024 (28 of 42, one short of gold); IMO
+  2025: Gemini Deep Think 35 (certified by the IMO's coordinators) and OpenAI's experimental model 35, in natural
   language; Harmonic's Aristotle and ByteDance's Seed-Prover formally (five of six); the spectrum of checkers.
-* **14. Puzzles nobody has seen.** Chollet (2019); ARC-AGI-1 from about 20% (2020) to 53.5% (test-time training,
-  2024) and o3's 75.7% and 87.5% (December 2024); ARC-AGI-2 (March 2025; people 60% on average): NVARC 24%, Claude
-  Opus 4.5 37.6%, Poetiq on Gemini 3 Pro 54% (2025), Gemini 4 Argon 91% (verified October 2026); ARC-AGI-3 (March
-  2026): frontier models below 1% at launch, GPT-6 Astra 62.7% on ARC Prize's standard harness (September 2026).
+* **14. Puzzles nobody has seen.** Chollet (2019); ARC-AGI-1 from about 20% (2020) to 53.5% (test-time training, 2024)
+  and o3's 75.7% and 87.5% (December 2024); ARC-AGI-2 (March 2025; people 60% on average): NVARC 24%, Claude Opus 4.5
+  37.6%, Poetiq on Gemini 3 Pro 54% (2025), Gemini 4 Argon 91% (verified October 2026); ARC-AGI-3 (March 2026):
+  frontier models below 1% at launch, GPT-6 Astra 62.7% on ARC Prize's standard harness (September 2026).
 * **Recap** in eight pictures from the part's own results, where it comes back (Parts 19, 29, 30, 31), six problems,
-  Part 29's teaser (a chain of n steps, each right with probability 0.98 (our model's), is right with probability p^n).
+  Part 29's teaser (a chain of n steps, each right with probability 0.98 (our model's), is right with probability
+  p^n).
 
 Run from the repo root:
 
@@ -109,7 +117,7 @@ think-or-answer model (its supervised training, RL with and without a cost on th
 process graders, and beam search). Every random choice is seeded. Long items save each finished run under
 `.cache/ai28/runs/` and each trained model under `.cache/ai28/` (retrained, seeded, if missing), so an interrupted
 run resumes; nothing here depends on another part's results. On this machine, shared with other jobs, the whole
-computation took about {{HOURS}} hours on one thread; {{PARITY_SHARE}}.
+computation took about 3 hours on one thread; the parity experiments are about half of it.
 
 References: J. Wei et al., *Chain-of-thought prompting elicits reasoning in large language models* (2022); T. Kojima
 et al., *Large language models are zero-shot reasoners* (2022); M. Nye et al., *Show your work: scratchpads* (2021);
