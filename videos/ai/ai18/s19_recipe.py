@@ -1,0 +1,229 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.ai import *  # noqa: F403
+from videos.ai.ai18.common import (BASE_C, C_COL, D_COL, F, FULL_C, MONO, N_COL, PART, load, said, spoken_int,
+                                   take_away)
+
+
+class Recipe(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.setup()
+        self.replay()
+        self.result()
+        self.board()
+
+    def card(self):
+        card = chapter_card(18, r"Our own full recipe", r"Does the 2026 recipe beat the 2020 one, at equal "
+                            r"compute?", part=PART)
+        with self.voiceover("Chapter eighteen. Our own full recipe."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def setup(self):
+        b, f = load("recipe_base"), load("recipe_full")
+        sb, sf = b["spec"], f["spec"]
+        same = VGroup(
+            label(rf"the same model: \ ${sb['d']}$ wide, \ ${sb['layers']}$ layers, \ "
+                  rf"${b['counts']['total'] / 1e6:.2f}$M parameters", font_size=24, color=N_COL),
+            label(rf"the same ${b['tokens'] / 1e6:.1f}$M tokens of the thirty novels, \ in the same order", font_size=24,
+                  color=D_COL),
+            label(rf"the same ${sb['steps']}$ steps, \ peak learning rate, \ seed, \ FP32 arithmetic", font_size=24,
+                  color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(UP, buff=0.5)
+        cols = VGroup(
+            VGroup(label(r"2020 recipe", font_size=30, color=BASE_C),
+                   label(r"AdamW", font_size=24), label(r"cosine schedule", font_size=24),
+                   label(r"plain attention", font_size=24), label(r"no z-loss", font_size=24)),
+            VGroup(label(r"2026 recipe", font_size=30, color=FULL_C),
+                   label(r"Muon for the hidden matrices", font_size=24), label(r"warmup--stable--decay", font_size=24),
+                   label(r"QK-norm", font_size=24), label(r"z-loss $10^{-4}$", font_size=24)),
+        )
+        for c in cols:
+            c.arrange(DOWN, buff=0.22)
+        cols.arrange(RIGHT, buff=1.8).move_to(DOWN * 1.0)
+        boxes = VGroup(*[SurroundingRectangle(c, buff=0.25, corner_radius=0.12, color=col, stroke_width=2)
+                         for c, col in zip(cols, (BASE_C, FULL_C))])
+        left_out = note(r"not included: \ FP8 and two-token prediction \ (chapters 14 and 16)", font_size=18)
+        left_out.to_edge(DOWN, buff=0.3)
+        Mt, Pc = load("mtp"), load("precision")
+        mtp_gain = np.mean(Mt["final"]["0"]) - np.mean(Mt["final"]["0.3"])
+        fp8_gap = np.mean(Pc["final"]["fp8_tile"]) - np.mean(Pc["final"]["fp32"])
+        if mtp_gain > 0.01:
+            out_ = (f"Two-token prediction stays out although it helped a little in chapter sixteen: it costs "
+                    f"{100 * Mt['extra_share']:.0f} percent more arithmetic, and the comparison must be at equal "
+                    "compute. Eight-bit arithmetic stays out too: on a CPU it only emulates the saving.")
+        else:
+            out_ = ("Two-token prediction and eight-bit arithmetic stay out: our own experiments found them neutral at "
+                    "this scale, and the first costs extra compute, which would make the comparison unequal.")
+        with self.voiceover(
+            "Now we put the pieces together. Two models of exactly the same shape, trained on the same three million "
+            "tokens of the thirty novels, in the same order, for the same number of steps, from the same starting "
+            "weights. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain attention. "
+            "<bookmark mark='b'/> One with the recipe of 2026: Muon for the hidden matrices, warmup, stable, decay, "
+            "QK-norm and the z-loss. <bookmark mark='c'/> " + out_
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(s_) for s_ in same], lag_ratio=0.4), run_time=2.5)
+            vo.wait_until("a")
+            self.play(FadeIn(cols[0]), Create(boxes[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(cols[1]), Create(boxes[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(left_out))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def replay(self):
+        b, f = load("recipe_base"), load("recipe_full")
+        eb, ef = np.asarray(b["evals"]), np.asarray(f["evals"])
+        lo = math.floor(min(eb[:, 2].min(), ef[:, 2].min()) * 2) / 2 - 0.25
+        hi = 8.5
+        steps = b["spec"]["steps"]
+        g = axes([0, steps], [lo, hi], x_length=6.0, y_length=4.2, xlabel=r"step",
+                 ylabel=r"held-out loss (nats per token)", xticks=[0, steps // 2, steps], yticks=[lo, hi],
+                 yfmt=lambda v: f"{v:.1f}", center=[-3.4, -0.3, 0], font_size=18)
+        sn_b, sn_f = b["snaps"], f["snaps"]
+        steps_ = [s["step"] for s in sn_f]
+        pts_b = VGroup(*[Dot(g.ax.c2p(s["step"], min(s["val"], hi)), radius=0.06, color=BASE_C) for s in sn_b])
+        pts_f = VGroup(*[Dot(g.ax.c2p(s["step"], min(s["val"], hi)), radius=0.06, color=FULL_C) for s in sn_f])
+        cb = curve(g.ax, eb[:, 0], np.minimum(eb[:, 2], hi), BASE_C, 2.5)
+        cf = curve(g.ax, ef[:, 0], np.minimum(ef[:, 2], hi), FULL_C, 2.5)
+        prompt = data_text("The door opened, and", font=MONO, font_size=20, color=GREY_A).move_to([3.4, 3.1, 0])
+
+        def boxes(sn, col, y):
+            return [said(s["sample"], chars=36, font_size=17, max_lines=3, box_color=col).move_to([3.4, y, 0])
+                    for s in sn]
+
+        bx_b, bx_f = boxes(sn_b, BASE_C, 1.55), boxes(sn_f, FULL_C, -0.6)
+        lb = label(r"2020 recipe", font_size=20, color=BASE_C).next_to(bx_b[-1], UP, buff=0.08)
+        lf = label(r"2026 recipe", font_size=20, color=FULL_C).next_to(bx_f[-1], UP, buff=0.08)
+        stp = [label(rf"after ${s['step']}$ steps \ (${s['tokens'] / 1e6:.2f}$M tokens)", font_size=20,
+                     color=GREY_A).move_to([3.4, -2.4, 0]) for s in sn_f]
+        tag = note(r"computed: \ the same seed for every sample", font_size=18).to_corner(DR, buff=0.2)
+        first = sn_f[0]
+        with self.voiceover(
+            "Watch them learn. On the left, each model's loss on text it never trains on; on the right, what each "
+            "writes after the words 'The door opened, and', frozen at the same steps, with the same random seed. "
+            f"<bookmark mark='a'/> At the start both write noise, at a loss of about {first['val']:.1f} nats. "
+            "<bookmark mark='b'/> Let them read. <bookmark mark='c'/> By the end, both write in the manner of the "
+            "novels, and the curves tell which learned faster."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(pts_b[0]), FadeIn(pts_f[0]), FadeIn(bx_b[0]), FadeIn(bx_f[0]), FadeIn(stp[0]))
+            vo.wait_until("b")
+            per = max(0.8, vo.until("c") / max(1, len(steps_) - 1))
+            cur = [bx_b[0], bx_f[0], stp[0]]
+            for k in range(1, len(steps_)):
+                self.play(FadeIn(pts_b[k], scale=1.5), FadeIn(pts_f[k], scale=1.5),
+                          ReplacementTransform(cur[0], bx_b[k]), ReplacementTransform(cur[1], bx_f[k]),
+                          ReplacementTransform(cur[2], stp[k]), run_time=0.6 * per)
+                cur = [bx_b[k], bx_f[k], stp[k]]
+                self.wait(0.4 * per)
+            vo.wait_until("c")
+            self.play(Create(cb), Create(cf), run_time=1.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def result(self):
+        R, M = load("recipe"), load("mfu")
+        b, f = R["base"], R["full"]
+        rows = [(r"held-out loss (nats per token)", f"{b['val']:.3f}", f"{f['val']:.3f}"),
+                (r"bits per character, \ the scoreboard's passage", f"{b['bits']:.3f}", f"{f['bits']:.3f}"),
+                (r"largest attention logit", f"{b['max_logit']:.0f}", f"{f['max_logit']:.0f}"),
+                (r"training time on this computer (min)", f"{b['seconds'] / 60:.0f}", f"{f['seconds'] / 60:.0f}")]
+        xs = [-2.8, 2.2, 4.8]
+        hd = VGroup(label(r"2020 recipe", font_size=24, color=BASE_C).move_to([xs[1], 2.4, 0]),
+                    label(r"2026 recipe", font_size=24, color=FULL_C).move_to([xs[2], 2.4, 0]))
+        body = VGroup()
+        for i, (nm, a, c) in enumerate(rows):
+            y = 1.6 - 0.75 * i
+            body.add(VGroup(label(nm, font_size=22, color=GREY_A).move_to([xs[0], y, 0]),
+                            label(f"${a}$", font_size=26, color=BASE_C).move_to([xs[1], y, 0]),
+                            label(f"${c}$", font_size=26, color=FULL_C).move_to([xs[2], y, 0])))
+        d = b["bits"] - f["bits"]
+        rel = d / b["bits"]
+        if d > 0.02:
+            verdict = (f"The 2026 recipe wins: {f['bits']:.3f} bits per character on the scoreboard's passage, "
+                       f"against {b['bits']:.3f}, {100 * rel:.1f} percent better with exactly the same model, data and "
+                       "steps.")
+        elif d < -0.02:
+            verdict = (f"The 2020 recipe wins here: {b['bits']:.3f} bits per character, against {f['bits']:.3f} for "
+                       "the 2026 one. At our scale, and with one untuned learning rate for both, the new recipe's "
+                       "advantages don't show.")
+        else:
+            verdict = (f"They tie: {b['bits']:.3f} and {f['bits']:.3f} bits per character. At our scale the new "
+                       "recipe neither helps nor hurts.")
+        if f["max_logit"] < b["max_logit"]:
+            stab = (f"And the 2026 recipe's attention stayed tamer: its largest logit was {f['max_logit']:.0f}, "
+                    f"against {b['max_logit']:.0f}.")
+        else:
+            stab = (f"Its largest attention logit was {f['max_logit']:.0f}, against {b['max_logit']:.0f}: at this "
+                    "learning rate neither model's attention ran away.")
+        tag = note(rf"computed: \ ${b['tokens'] / 1e6:.1f}$M tokens each", font_size=18).to_corner(DR, buff=0.2)
+        with self.voiceover(
+            "The scores. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + stab
+        ) as vo:
+            self.play(FadeIn(hd), FadeIn(tag), FadeIn(body[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(body[1]), FadeIn(body[3]))
+            vo.wait_until("b")
+            self.play(FadeIn(body[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def board(self):
+        S, R = load("scoreboard"), load("recipe")
+        names = {"recipe_base": rf"our 2020 recipe, \ ${R['base']['params'] / 1e6:.1f}$M",
+                 "recipe_full": rf"our 2026 recipe, \ ${R['full']['params'] / 1e6:.1f}$M"}
+        rows = []
+        for r in S["rows"]:
+            lab = names.get(r.get("name"), r["label"])
+            if r.get("name") == "base":
+                lab = rf"the series' model, \ ${r['params'] / 1e6:.1f}$M"
+            elif r.get("name", "").startswith("gpt_"):
+                lab = rf"Part 14, \ {r['label'].split('model ')[-1]}, \ ${r['params'] / 1e6:.1f}$M"
+            rows.append(dict(label=lab, bits=r["bits"], kind=r["kind"]))
+        hl = tuple(i for i, r in enumerate(S["rows"]) if r.get("part") == 18)
+        board = scoreboard(rows, highlight=hl, max_bits=4.0, row_h=0.46, font_size=20, bar_width=5.6,
+                           label_width=4.6).scale(0.92).move_to([0, -0.2, 0])
+        bl = label(r"bits per character on the scoreboard's passage", font_size=22, color=GREY_B)
+        bl.next_to(board, UP, buff=0.15)
+        base_row = next(r for r in S["rows"] if r.get("name") == "base")
+        from explainer.ai.novels import BASE_RUN
+
+        times = BASE_RUN["tokens"] / R["full"]["tokens"]
+        gm = next(r for r in S["rows"] if r.get("name") == "gpt_m")
+        f = R["full"]
+        if f["bits"] < gm["bits"] - 0.01:
+            vs14 = (f"Our 2026 model scores {f['bits']:.2f}, better than Part 14's model of the same size, "
+                    f"{gm['bits']:.2f}, which read the same number of tokens.")
+        else:
+            vs14 = (f"Our 2026 model scores {f['bits']:.2f}, against {gm['bits']:.2f} for Part 14's model of the same "
+                    "size, which read the same number of tokens.")
+        tw = take_away(r"the recipe is the lab's craft; \ the scale is what it buys", color=FULL_C, font_size=26)
+        with self.voiceover(
+            "And on the series' scoreboard, the bits per character each model needs for chapter two of The Maltese "
+            "Falcon. <bookmark mark='a'/> Part 1's compressors and counts at the top, Part 14's family, and the "
+            f"series' own model of {base_row['params'] / 1e6:.1f} million parameters, trained on {times:.0f} times our "
+            f"tokens, at {base_row['bits']:.2f}. <bookmark mark='b'/> " + vs14 + " <bookmark mark='c'/> A recipe "
+            "buys efficiency: the same quality for less compute. The frontier labs spend that saving on scale."
+        ) as vo:
+            self.play(FadeIn(bl), FadeIn(board.axis))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for i, r_ in enumerate(board.rows) if i not in hl], lag_ratio=0.15),
+                      run_time=2.5)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(board.rows[i], shift=RIGHT * 0.1) for i in hl], lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(FadeIn(tw, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()

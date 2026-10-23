@@ -199,8 +199,8 @@ class DataParallel(VoiceoverScene):
         with self.voiceover(
             "We timed the three operations with PyTorch's own distributed library, on four processes of this "
             "computer, for messages from a kilobyte to 32 megabytes. <bookmark mark='a'/> The dashed lines are the "
-            "alpha-beta model of Part 17, with the latency and bandwidth fitted to point-to-point messages: two "
-            "latencies per step, and the ring's bytes. <bookmark mark='b'/> " + verdict
+            "alpha-beta model of Part 17, with the latency and bandwidth fitted to point-to-point messages: one latency "
+            "for each step of the ring, and the ring's bytes. <bookmark mark='b'/> " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(lg[0]))
             vo.wait_until("a")

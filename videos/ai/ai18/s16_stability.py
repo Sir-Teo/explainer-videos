@@ -1,0 +1,272 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.ai import *  # noqa: F403
+from videos.ai.ai18.common import (F, PART, STAB_C, STAB_NAME, load, spoken_int, take_away)
+
+
+class Stability(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.spikes()
+        self.logits()
+        self.sweep()
+        self.zloss()
+        self.muon()
+
+    def card(self):
+        card = chapter_card(15, r"Keeping the run stable", r"Why do big runs blow up, and what stops them?",
+                            lit=(2022,), part=PART)
+        with self.voiceover("Chapter fifteen. Keeping the run stable."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def spikes(self):
+        Pa = F.PALM
+        g = axes([0, 100], [1.5, 4.5], x_length=9.0, y_length=3.2, xlabel=r"training step", ylabel=r"loss",
+                 center=[0, 0.8, 0], font_size=18)
+        xs = np.linspace(0, 100, 800)
+        ys = 2.0 + 1.8 * np.exp(-xs / 18)
+        for c in (38, 71):
+            ys = ys + 1.3 * np.exp(-((xs - c) / 1.2) ** 2) * (xs > c - 3)
+        cv = curve(g.ax, xs, ys, C.LOSS, 3)
+        sch = note(r"schematic", font_size=18).next_to(g, UR, buff=0.0).shift(DOWN * 0.3 + LEFT * 0.4)
+        facts = VGroup(
+            label(rf"PaLM, $540$B: \ about ${Pa['spikes']}$ loss spikes, \ with gradient clipping on", font_size=22,
+                  color=GREY_A),
+            label(rf"the fix: \ restart about ${Pa['back']}$ steps earlier, \ skip ${Pa['skip'][0]}$--${Pa['skip'][1]}$ "
+                  r"batches", font_size=22, color=GREY_A),
+            label(r"not bad data: \ the same batches were fine from another point in training", font_size=22,
+                  color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(DOWN * 2.2)
+        src = cite(r"Chowdhery et al., PaLM (2022), Sec.\ 5.1", corner=DR, font_size=17)
+        with self.voiceover(
+            "Large runs have a failure that small ones rarely show: the loss suddenly jumps, and sometimes never "
+            "comes back. <bookmark mark='a'/> Google's PaLM, at 540 billion parameters, spiked about twenty times, "
+            "although its gradients were clipped. <bookmark mark='b'/> The team's fix was blunt: go back to a "
+            "checkpoint about a hundred steps before the spike, and skip the next two to five hundred batches. "
+            "<bookmark mark='c'/> It wasn't bad data: the same batches caused no trouble from another point in "
+            "training. The spikes came from the combination of the data and the model's state, and the models of "
+            "2022 to 2026 have been redesigned so that state stays tame."
+        ) as vo:
+            self.play(FadeIn(g), Create(cv), FadeIn(sch), FadeIn(src), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(facts[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(facts[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(facts[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def logits(self):
+        S = load("stability")
+        runs = S["runs"]
+        lr = S["lrs"][2]
+        g = axes([0, S["steps"]], [0, 4], x_length=6.2, y_length=3.6, xlabel=r"step",
+                 ylabel=r"largest attention logit $q \cdot k / \sqrt{d}$", xticks=[0, S["steps"]], yticks=[0, 1, 2, 3, 4],
+                 yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-3.0, -0.4, 0], font_size=18)
+        lines = VGroup()
+        for cfg in ("plain", "qk"):
+            for s in S["seeds"]:
+                pr = np.asarray(runs[f"{cfg}_{lr:g}_{s}"]["probes"])
+                lines.add(curve(g.ax, pr[:, 0], np.log10(np.maximum(pr[:, 1], 1)), STAB_C[cfg], 2.5))
+        lg = legend([(STAB_C["plain"], r"plain attention"), (STAB_C["qk"], r"QK-norm")], font_size=18)
+        lg.next_to(g.ax.c2p(0, 4), RIGHT, buff=0.3).shift(DOWN * 0.3)
+        colors = {r"q": C.QUERY, r"k": C.KEY}
+        rows = [
+            cmath(r"\text{logit}", r"=", r"\frac{q \cdot k}{\sqrt{d}}", colors=colors, font_size=30),
+            cmath(r"\text{QK-norm}", r":", r"q, k \leftarrow \mathrm{RMSNorm}(q), \mathrm{RMSNorm}(k)", colors=colors,
+                  font_size=26),
+            cmath(r"|\text{logit}|", r"\le", r"\gamma_q\,\gamma_k\,\sqrt{d}", colors=colors, font_size=30),
+        ]
+        whys = [why(r"grows with the weights", font_size=19), why(r"Dehghani et al.\ (2023)", font_size=19),
+                why(r"Cauchy--Schwarz; \ only the gains can grow", font_size=19)]
+        step = ladder(self, rows, whys, keep=3, top=2.4, x=3.0, buff=0.5, edge=6.9)
+        mx = S["maxlogit"]
+        i = S["lrs"].index(lr)
+        pl, qk = max(mx["plain"][i]), max(mx["qk"][i])
+        tag = note(rf"computed: \ learning rate ${lr:g}$, \ two seeds each", font_size=18).to_corner(DR, buff=0.2)
+        with self.voiceover(
+            "One state that goes wrong is attention itself. A query and a key give a logit, their dot product over "
+            "the square root of the dimension, and nothing stops the weights from growing until the logits are "
+            "huge. <bookmark mark='a'/> Then the softmax puts all its weight on one position, its gradients vanish, "
+            "and training can lock up or blow up. Wortsman and colleagues at Google reproduced this in small models "
+            "in 2023, simply by raising the learning rate. So did we. <bookmark mark='b'/> At a learning rate of "
+            f"{lr:g}, the largest attention logit of our plain model reaches {pl:,.0f}. <bookmark mark='c'/> The fix "
+            "used in ViT-22B, Olmo 2, Qwen3 and GLM-4.5: QK-norm. Normalize every query and key before the dot "
+            "product, <bookmark mark='d'/> and the logit is bounded by the norms' learned gains times the square "
+            f"root of the dimension. With it, our largest logit stays at {qk:.0f}."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(tag))
+            step(0)
+            vo.wait_until("a")
+            self.play(FadeIn(lg[0]), *[Create(l_) for l_ in lines[:len(S["seeds"])]], run_time=2.0)
+            vo.wait_until("b")
+            self.play(Indicate(lines[0], color=YELLOW))
+            vo.wait_until("c")
+            step(1)
+            vo.wait_until("d")
+            step(2)
+            self.play(FadeIn(lg[1]), *[Create(l_) for l_ in lines[len(S["seeds"]):]], run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def sweep(self):
+        S = load("stability")
+        lrs = S["lrs"]
+        fin = S["final"]
+        allv = [v for c in fin for row in fin[c] for v in row]
+        lo, hi = math.floor(min(allv) * 4) / 4, math.ceil(max(allv) * 4) / 4
+        g = axes([math.log10(lrs[0]) - 0.15, math.log10(lrs[-1]) + 0.15], [lo, hi], x_length=7.0, y_length=4.0,
+                 xlabel=r"learning rate", ylabel=rf"final held-out loss, \ ${S['steps']}$ steps",
+                 xticks=[math.log10(x) for x in lrs], yticks=[lo, hi],
+                 xfmt=lambda v: f"{10 ** v:.3g}", yfmt=lambda v: f"{v:.2f}", center=[-1.6, -0.3, 0], font_size=18)
+        marks = VGroup()
+        for cfg in S["configs"]:
+            pts = VGroup()
+            means = []
+            for i, lr in enumerate(lrs):
+                vals = fin[cfg][i]
+                x = math.log10(lr) + {"plain": -0.04, "qk": 0.0, "qkz": 0.04}[cfg]
+                for v in vals:
+                    pts.add(Dot(g.ax.c2p(x, v), radius=0.05, color=STAB_C[cfg]))
+                means.append((x, float(np.mean(vals))))
+            ln = VMobject(color=STAB_C[cfg], stroke_width=2.5).set_points_as_corners([g.ax.c2p(a, b) for a, b in means])
+            marks.add(VGroup(ln, pts))
+        lg = legend([(STAB_C[c], STAB_NAME[c]) for c in S["configs"]], font_size=20).move_to([4.6, 1.2, 0])
+        hi_lr = len(lrs) - 1
+        pl, qk = np.mean(fin["plain"][hi_lr]), np.mean(fin["qk"][hi_lr])
+        lo_lr = 0
+        pl0, qk0 = np.mean(fin["plain"][lo_lr]), np.mean(fin["qk"][lo_lr])
+        best_plain = min(range(len(lrs)), key=lambda i: np.mean(fin["plain"][i]))
+        best_qk = min(range(len(lrs)), key=lambda i: np.mean(fin["qk"][i]))
+        if pl - qk > 0.05:
+            verdict = (f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the "
+                       f"one with QK-norm at {qk:.2f}: normalizing queries and keys widens the range of learning rates "
+                       "that train well.")
+        else:
+            verdict = (f"At the highest learning rate, {lrs[hi_lr]:g}, the plain model ends at {pl:.2f} nats and the "
+                       f"one with QK-norm at {qk:.2f}: in runs this short, the difference in loss is small, even though "
+                       "the logits differ a hundredfold.")
+        best = (f"The best learning rate is {lrs[best_plain]:g} without QK-norm and {lrs[best_qk]:g} with it."
+                if best_plain != best_qk else f"Both do best at a learning rate of {lrs[best_qk]:g}.")
+        tag = note(rf"computed: \ ${len(lrs)}$ learning rates $\times$ $3$ designs $\times$ $2$ seeds", font_size=18)
+        tag.to_corner(DR, buff=0.2)
+        src = cite(r"after Wortsman et al., \textit{Small-scale proxies for large-scale instabilities} (ICLR 2024)",
+                   corner=DL, font_size=17)
+        with self.voiceover(
+            "Wortsman's test of a fix is a sweep: train at many learning rates and see how far up the loss stays "
+            f"good. Here is ours: {len(lrs)} learning rates, plain, with QK-norm, and with QK-norm and the z-loss we "
+            "will see next, two seeds each. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + best
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(src))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(m_[0]) for m_ in marks], lag_ratio=0.3),
+                      LaggedStart(*[FadeIn(m_[1]) for m_ in marks], lag_ratio=0.3), FadeIn(lg), run_time=3.0)
+            vo.wait_until("b")
+            self.play(Indicate(lg, scale_factor=1.05))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def zloss(self):
+        S = load("stability")
+        runs = S["runs"]
+        lr = S["lrs"][0]
+        colors = {r"z": C.PROB, r"Z": C.LOSS}
+        rows = [
+            cmath(r"\mathrm{softmax}(z + c)", r"=", r"\mathrm{softmax}(z)", colors=colors, font_size=30),
+            cmath(r"\log Z", r"=", r"\log \sum_j e^{z_j}", colors=colors, font_size=30),
+            cmath(r"L", r"=", r"L_{\text{CE}} + 10^{-4}\,(\log Z)^2", colors=colors, font_size=30),
+            cmath(r"\frac{\partial}{\partial z_i}", r"=", r"\ldots + 2 \cdot 10^{-4} \log Z \cdot \mathrm{softmax}_i(z)",
+                  colors=colors, font_size=28),
+        ]
+        whys = [why(r"a shift of every logit changes nothing", font_size=19), why(r"so this can drift anywhere",
+                                                                                 font_size=19),
+                why(r"PaLM's z-loss: \ pull it to $0$", font_size=19), why(r"a gentle push on all logits at once",
+                                                                          font_size=19)]
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-3.4, buff=0.38, edge=6.9)
+        g = axes([0, S["steps"]], [-2, 12], x_length=5.0, y_length=2.4, xlabel=r"step", ylabel=r"mean $\log Z$",
+                 xticks=[0, S["steps"]], yticks=[0, 5, 10], center=[3.3, -2.0, 0], font_size=17)
+        lines = VGroup()
+        ends = {}
+        for cfg in ("qk", "qkz"):
+            for s in S["seeds"]:
+                pr = np.asarray(runs[f"{cfg}_{lr:g}_{s}"]["probes"])
+                lines.add(curve(g.ax, pr[:, 0], np.clip(pr[:, 3], -2, 12), STAB_C[cfg], 2.5))
+                ends.setdefault(cfg, []).append(float(pr[-1, 3]))
+        lg = legend([(STAB_C["qk"], r"without z-loss"), (STAB_C["qkz"], r"with z-loss")], font_size=17)
+        lg.next_to(g, UP, buff=0.12).align_to(g, LEFT)
+        a, b = np.mean(ends["qk"]), np.mean(ends["qkz"])
+        tag = note(rf"computed: \ learning rate ${lr:g}$", font_size=18).to_corner(DR, buff=0.15)
+        with self.voiceover(
+            "The second fix is for the output layer. A softmax doesn't change if every logit shifts by the same "
+            "amount. <bookmark mark='a'/> So their log-sum-exp, log Z, is free to drift, and in sixteen-bit "
+            "arithmetic large logits lose their precision. <bookmark mark='b'/> PaLM added a tiny penalty, ten to "
+            "the minus four times log Z squared: the z-loss. <bookmark mark='c'/> Its gradient nudges all the "
+            "logits together toward a normalizer of one, without changing what the model predicts. "
+            f"<bookmark mark='d'/> In our runs, log Z ends at {a:.1f} without it and {b:.2f} with it."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            self.play(FadeIn(g), FadeIn(lg), FadeIn(tag), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2),
+                      run_time=2.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def muon(self):
+        K, V4, M = F.KIMIK2, F.DSV4, F.MOONLIGHT
+        rows = VGroup(
+            label(r"Muon at scale", font_size=30, color=C.MUON),
+            label(rf"Moonlight (2025): \ about ${M['efficiency']:.0f}\times$ the compute efficiency of AdamW, \ in "
+                  r"scaling-law fits", font_size=22, color=GREY_A),
+            label(r"but with Muon, attention logits grew faster, \ and MLA has no keys to normalize", font_size=22,
+                  color=GREY_A),
+            label(rf"Kimi K2's QK-Clip: \ if a head's largest logit passes $\tau = {K['tau']}$, \ shrink its $W_q$, $W_k$",
+                  font_size=22, color=C.MUON),
+            label(rf"${K['heads_clipped']}\%$ of heads clipped early on; \ none after ${K['clip_steps']:,}$ steps; \ "
+                  rf"${K['tokens'] / 1e12:.1f}$T tokens, \ no loss spike".replace(",", "{,}"), font_size=22,
+                  color=GREY_A),
+            label(r"DeepSeek-V4 (2026): \ Muon, \ RMSNorm on queries and keys instead; \ spikes traced to "
+                  r"outliers in the experts", font_size=22, color=GREY_A),
+            label(r"\ \ fixed by routing with slightly older weights while a spike lasts, \ and clamping SwiGLU",
+                  font_size=20, color=GREY_B),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, 0.3, 0])
+        src = cite(r"Liu et al.\ (2025); \ Kimi Team (2025), Sec.\ 2.1; \ DeepSeek-AI (2026), Secs.\ 2.4, 4.2.3",
+                   corner=DR, font_size=16)
+        with self.voiceover(
+            "The newest source of trouble is the optimizer. Part 11's Muon, which orthogonalizes each update, went "
+            "to scale in 2025: Moonshot's Moonlight study found it about twice as compute-efficient as AdamW. "
+            "<bookmark mark='a'/> But with Muon, attention logits grew faster, and Kimi K2 uses latent attention, "
+            "whose keys are never formed in full, so QK-norm can't be applied. <bookmark mark='b'/> Moonshot's fix, "
+            "QK-Clip: after each update, if a head's largest logit has passed a hundred, shrink that head's query "
+            "and key weights to bring it back. Early on it clipped 12.7 percent of the heads; after seventy thousand "
+            "steps, none; and K2 trained on 15.5 trillion tokens without a single loss spike. "
+            "<bookmark mark='c'/> DeepSeek-V4, in 2026, also uses Muon, with its new attention normalizing queries "
+            "and keys directly. Its remaining spikes came from outliers in the mixture of experts, and it suppressed "
+            "them by routing with slightly older weights while a spike lasts, and by clamping the SwiGLU "
+            "activations."
+        ) as vo:
+            self.play(FadeIn(rows[:2]), FadeIn(src))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[2]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[3]), FadeIn(rows[4]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[5]), FadeIn(rows[6]))
+        self.wait(0.3)
+        self.clear_scene()

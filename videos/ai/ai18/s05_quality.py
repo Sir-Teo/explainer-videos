@@ -120,8 +120,8 @@ class Quality(VoiceoverScene):
         with self.voiceover(
             "We can run this recipe ourselves, because FineWeb released Llama 3's annotations. <bookmark mark='a'/> "
             f"We downloaded {spoken_int(Q['n'])} of them. Most pages score one: a little information, not much "
-            f"teaching. Only {100 * sum(counts[3:]) / Q['n']:.0f} percent score three or more, and none of ours scored "
-            "five. <bookmark mark='b'/> For the small model we used fastText, a linear model on words and word pairs "
+            f"teaching. Only {100 * sum(counts[3:]) / Q['n']:.0f} percent score three or more, and {counts[5]} of ours "
+            "scored five. <bookmark mark='b'/> For the small model we used fastText, a linear model on words and word pairs "
             f"that trains in seconds, on {spoken_int(Q['n_train'])} pages, with the cut chosen on a thousand others. "
             "<bookmark mark='c'/> " + verdict
         ) as vo:

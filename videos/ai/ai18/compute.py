@@ -793,7 +793,7 @@ def _grad_histogram(steps=60):
     nz = g[g > 0]
     edges = np.arange(-40, 1, 1.0)
     hist, _ = np.histogram(np.log2(nz), bins=edges)
-    return dict(edges=edges, hist=hist / len(g), zero=float((g == 0).mean()), n=len(g),
+    return dict(edges=edges.tolist(), hist=(hist / len(g)).tolist(), zero=float((g == 0).mean()), n=len(g),
                 below_sub=float((g < 2.0 ** -25).mean()), below_normal=float((g < 2.0 ** -14).mean()),
                 median_log2=float(np.median(np.log2(nz))), tokens=spec.batch * spec.seq)
 
@@ -831,7 +831,7 @@ def _quant_error():
     a0 = acts[0]
     return dict(act_tensor=float(np.mean([r["tensor"] for r in rows])), act_tile=float(np.mean([r["tile"] for r in rows])),
                 w_tensor=float(np.mean(wt)), w_block=float(np.mean(wb)), outlier=float(np.max([r["ratio"] for r in rows])),
-                act_sample=a0[0, :128].numpy())
+                act_sample=a0[0, :128].numpy().tolist())
 
 
 def compute_precision(steps=250, seeds=(0, 1)):
