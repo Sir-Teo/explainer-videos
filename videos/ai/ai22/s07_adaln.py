@@ -191,8 +191,9 @@ class AdaLN(VoiceoverScene):
         t1 = label(r"distance from real letters (FD), \ lower is better", font_size=20, color=GREY_A).next_to(b1, UP, buff=0.3)
         t2 = label(r"read as the letter requested", font_size=20, color=GREY_A).next_to(b2, UP, buff=0.3)
         leg = legend([(CFG_C[k], CFG_NAME[k]) for k in kinds], font_size=20).arrange(RIGHT, buff=0.5).next_to(VGroup(b1, b2), DOWN, buff=0.5)
-        hd = note(rf"same weights' budget, \ steps, \ data and seeds; \ after ${fmt_int(d['steps'])}$ steps; \ "
-                  r"three seeds: \ dots, \ bars min to max").to_edge(DOWN, buff=0.3)
+        hd = note(rf"weights: \ in-context ${fmt_int(d['context_params'])}$, \ adaLN ${fmt_int(d['ada_params'])}$, \ "
+                  rf"adaLN-Zero ${fmt_int(d['zero_params'])}$; \ same steps, \ data and seeds; \ "
+                  rf"after ${fmt_int(d['steps'])}$ steps; \ three seeds: \ dots, \ bars min to max").to_edge(DOWN, buff=0.3)
         order = sorted(kinds, key=lambda k: fd[k].mean())
         names = {"context": "in-context tokens", "ada": "plain adaLN", "zero": "adaLN-Zero"}
         if order[0] == "zero":
@@ -203,8 +204,8 @@ class AdaLN(VoiceoverScene):
                        f"adaLN-Zero at {fd['zero'].mean():.0f}: at four blocks deep, starting as the identity matters "
                        "less than in the paper's twenty-eight.")
         with self.voiceover(
-            "Does the way in matter? We trained all three, three seeds each, with the same data and steps. "
-            "<bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> In the paper, at four hundred thousand steps, "
+            "Does the way in matter? We trained all three, three seeds each, with the same data and steps; the "
+            "adaLN versions carry extra weights for their scales, shifts and gates. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> In the paper, at four hundred thousand steps, "
             "adaLN-Zero's distance was nearly half that of in-context conditioning, at the same cost."
         ) as vo:
             self.play(FadeIn(t1), FadeIn(t2), FadeIn(b1.base), FadeIn(b2.base), FadeIn(leg), FadeIn(hd))

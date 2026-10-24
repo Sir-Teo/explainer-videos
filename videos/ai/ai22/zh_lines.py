@@ -247,16 +247,16 @@ ZH = {
         "那么哪个更好？我们训练了一个小U-Net和一个小扩散Transformer，权重数量差不多，用同样的字母、同样的步数、批次和随机种子。"
         "<bookmark mark='a'/>{verdict}<bookmark mark='b'/>Transformer的理由从来不是在小规模上赢。而是它会随着变大一直变好，只用一个简单的配方，和语言模型一样。",
 
-    'f"At equal weights and steps, the U-Net wins here:':
-        "在权重和步数相同时，这里是U-Net赢：它的字母最后的距离是{u_end:.0f}，Transformer是{z_end:.0f}；被读成所要求字母的有"
+    'f"With similar weights and the same steps, the U-Net wins here:':
+        "在权重相近、步数相同时，这里是U-Net赢：它的字母最后的距离是{u_end:.0f}，Transformer是{z_end:.0f}；被读成所要求字母的有"
         "{100 * ua_end:.0f}%，Transformer是{100 * za_end:.0f}%。但它为此每张图片付出了{mu / mz:.0f}倍的计算量，而且在这么小的字母上，"
         "卷积的假设正好合适。",
 
-    'f"At equal weights and steps, the transformer wins:':
-        "在权重和步数相同时，Transformer赢了：它的字母最后的距离是{z_end:.0f}，U-Net是{u_end:.0f}，尽管U-Net每张图片花了{mu / mz:.0f}倍的计算量。",
+    'f"With similar weights and the same steps, the transformer wins:':
+        "在权重相近、步数相同时，Transformer赢了：它的字母最后的距离是{z_end:.0f}，U-Net是{u_end:.0f}，尽管U-Net每张图片花了{mu / mz:.0f}倍的计算量。",
 
-    "f'At equal weights and steps they end close:":
-        '在权重和步数相同时，两者最后很接近：U-Net的距离是{u_end:.0f}，Transformer是{z_end:.0f}，尽管U-Net每张图片花了{mu / mz:.0f}倍的计算量。',
+    "f'With similar weights and the same steps they end close:":
+        '在权重相近、步数相同时，两者最后很接近：U-Net的距离是{u_end:.0f}，Transformer是{z_end:.0f}，尽管U-Net每张图片花了{mu / mz:.0f}倍的计算量。',
 
     # ------------------------------------------------------------------ AdaLN
     'Chapter six. adaLN-Zero.':
@@ -279,7 +279,7 @@ ZH = {
         "<bookmark mark='c'/>第{steps[3]:,}步时是{reads[3]}个；<bookmark mark='d'/>最后是{reads[-1]}个。同时，损失从{L[0, 1]:.2f}降到{L[-1, 1]:.2f}。",
 
     '"Does the way in matter?':
-        "送进去的方式重要吗？三种我们都训练了，每种三个随机种子，数据和步数相同。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>"
+        "送进去的方式重要吗？三种我们都训练了，每种三个随机种子，数据和步数相同；两种adaLN版本为缩放、平移和门控多带了一些权重。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>"
         "在论文里，训练到40万步时，adaLN-Zero的距离差不多只有上下文方式的一半，而代价相同。",
 
     "f'As in the paper, adaLN-Zero comes out best:":

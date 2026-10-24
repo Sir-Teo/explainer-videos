@@ -158,16 +158,16 @@ class UNet(VoiceoverScene):
         u_end, z_end = float(uf[:, -1].mean()), float(zf[:, -1].mean())
         ua_end, za_end = float(ua[:, -1].mean()), float(za[:, -1].mean())
         if u_end < 0.9 * z_end:
-            verdict = (f"At equal weights and steps, the U-Net wins here: its letters end at a distance of {u_end:.0f} "
+            verdict = (f"With similar weights and the same steps, the U-Net wins here: its letters end at a distance of {u_end:.0f} "
                        f"against the transformer's {z_end:.0f}, and {100 * ua_end:.0f} percent are read as requested "
                        f"against {100 * za_end:.0f}. But it bought that with {mu / mz:.0f} times the arithmetic per "
                        "picture, and on letters this small its convolutions' assumptions fit perfectly.")
         elif z_end < 0.9 * u_end:
-            verdict = (f"At equal weights and steps, the transformer wins: its letters end at a distance of {z_end:.0f} "
+            verdict = (f"With similar weights and the same steps, the transformer wins: its letters end at a distance of {z_end:.0f} "
                        f"against the U-Net's {u_end:.0f}, though the U-Net spent {mu / mz:.0f} times the arithmetic "
                        "per picture.")
         else:
-            verdict = (f"At equal weights and steps they end close: a distance of {u_end:.0f} for the U-Net and "
+            verdict = (f"With similar weights and the same steps they end close: a distance of {u_end:.0f} for the U-Net and "
                        f"{z_end:.0f} for the transformer, though the U-Net spent {mu / mz:.0f} times the arithmetic "
                        "per picture.")
         tk = take_away(r"what the transformer brings is not a better small denoiser: \ it's a denoiser that keeps "

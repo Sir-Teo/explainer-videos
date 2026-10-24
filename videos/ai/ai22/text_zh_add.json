@@ -422,7 +422,10 @@
     "telling real from generated": "分辨真实与生成",
     "one transformer": "一个Transformer",
     "byte-pair encoding, \\ codebooks, \\ audio codecs, \\ speech recognition, \\ CLIP, \\ vision-language models": "字节对编码，\\ 码本，\\ 音频编解码器，\\ 语音识别，\\ CLIP，\\ 视觉语言模型",
-    "then Part 13's transformer: \\\\ attention and MLPs, \\\\ layer after layer": "接着是第13部分的Transformer：\\\\ 注意力和MLP，\\\\ 一层又一层"
+    "then Part 13's transformer: \\\\ attention and MLPs, \\\\ layer after layer": "接着是第13部分的Transformer：\\\\ 注意力和MLP，\\\\ 一层又一层",
+    "diffusion works here": "扩散在这里进行",
+    "$4$ channels": "$4$个通道",
+    "$16$ channels": "$16$个通道"
   },
   "patterns": []
 }
