@@ -845,3 +845,57 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | centred kernel alignment (CKA), HSIC | 中心化核对齐（CKA），HSIC |
 | mutual nearest neighbours | 互为近邻 |
 | platonic representation hypothesis | 柏拉图表示假说 |
+
+### Diffusion and flow (Part 21)
+
+| English | 中文 |
+|---|---|
+| diffusion model | 扩散模型 |
+| forward process, reverse process | 前向过程，反向过程 |
+| noise schedule; β_t; ᾱ_t (alpha bar) | 噪声调度；β_t；ᾱ_t（阿尔法拔） |
+| variance preserving (VP) | 方差保持 |
+| evidence lower bound (ELBO), variational bound | 证据下界（ELBO），变分下界 |
+| noise prediction (ε-prediction), the simple loss | 噪声预测（ε预测），简化损失 |
+| denoiser D(x; σ) | 去噪器D(x; σ) |
+| Tweedie's formula, posterior mean | 特威迪公式，后验均值 |
+| stochastic differential equation (SDE), reverse-time SDE | 随机微分方程（SDE），反向时间SDE |
+| probability-flow ODE | 概率流常微分方程（概率流ODE） |
+| Fokker–Planck equation, continuity equation | 福克-普朗克方程，连续性方程 |
+| DDPM, DDIM, ancestral sampling, η | DDPM，DDIM，祖先采样，η |
+| signal-to-noise ratio (SNR), log-SNR, terminal SNR | 信噪比，对数信噪比，终端信噪比 |
+| step spacing | （采样）步长间隔 |
+| preconditioning (c_in, c_skip, c_out) | 预条件化（c_in，c_skip，c_out） |
+| error amplification | 误差放大 |
+| Euler's method, Heun's method, second order | 欧拉法，休恩法，二阶 |
+| exponential integrator, integrating factor | 指数积分器，积分因子 |
+| DPM-Solver, DPM-Solver++ (multistep) | DPM-Solver，DPM-Solver++（多步法） |
+| network evaluations (NFE) | 网络调用次数（NFE） |
+| sliced Wasserstein distance | 切片瓦瑟斯坦距离 |
+| optimal transport, coupling, transport cost | 最优传输，耦合（配对），运输代价 |
+| Benamou–Brenier formula, kinetic energy | 贝纳穆-布雷尼耶公式，动能 |
+| flow matching; conditional and marginal velocity | 流匹配；条件速度与边缘速度 |
+| marginal-field theorem | 边缘速度场定理 |
+| stochastic interpolant | 随机插值 |
+| rectified flow, reflow, straightness | 整流流，重流，直度 |
+| minibatch optimal transport (OT-CFM) | 小批量最优传输 |
+| distillation, teacher, student | 蒸馏，老师，学生 |
+| progressive distillation | 渐进蒸馏 |
+| consistency model, self-consistency, consistency distillation | 一致性模型，自洽性，一致性蒸馏 |
+| distribution matching distillation (DMD) | 分布匹配蒸馏（DMD） |
+| MeanFlow, average velocity | MeanFlow，平均速度 |
+| shortcut model | 捷径模型 |
+| Jacobian-vector product, stop-gradient | 雅可比-向量积，停止梯度 |
+| classifier guidance, classifier-free guidance (CFG), guidance weight w | 分类器引导，无分类器引导（CFG），引导权重w |
+| autoguidance | 自引导 |
+| precision and recall (k-NN) | 精确率与召回率（k近邻） |
+| latent diffusion, latents | 潜空间扩散，潜变量 |
+| diffusion transformer (DiT) | 扩散Transformer（DiT） |
+| discrete diffusion (D3PM), transition matrix | 离散扩散（D3PM），转移矩阵 |
+| uniform noise, absorbing (mask) noise, mask token [M] | 均匀噪声，吸收态（掩码）噪声，掩码词元[M] |
+| masked diffusion, weighted cross-entropy | 掩码扩散，加权交叉熵 |
+| any-order autoregressive model | 任意顺序自回归模型 |
+| a tight bound | 紧的下界 |
+| block diffusion | 块扩散 |
+| surest-first unmasking (low-confidence remasking) | 最有把握优先的揭开（低置信度重掩码） |
+| judged bits per character (generative perplexity) | 由另一个模型评判的每字符比特数（生成困惑度） |
+| diffusion language model (dLLM) | 扩散语言模型 |
