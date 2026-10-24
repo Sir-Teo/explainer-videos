@@ -22,11 +22,9 @@
     "attention: \\ anywhere, \\\\ weights it computes": "注意力：\\ 哪里都看，\\\\ 权重当场计算",
     "right assumptions: \\ fewer examples needed": "假设对了：\\ 需要的例子更少",
     "fewer assumptions: \\ more to learn, \\ more it can learn": "假设更少：\\ 要学的更多，\\ 能学到的也更多",
-    "A vision transformer and a convolutional network with the same number of weights learn to name letters from 3 fonts, \\ or from all 20. \\ Which wins each time, and by how much?": "一个视觉Transformer和一个权重同样多的卷积网络，分别从3种字体、\\ 或者全部20种字体里学习认字母。\\ 每次谁赢？赢多少？",
     "3 training fonts": "3种训练字体",
     "all 20": "全部20种",
     "$4$ held-out fonts": "$4$种留出的字体",
-    "Same weights \\ (ViT $154{,}586$, \\ CNN $168{,}154$), \\ same $1{,}500$ steps of $64$ letters, \\ three seeds": "权重相当 \\ （ViT $154{,}586$，\\ CNN $168{,}154$），\\ 同样$1{,}500$步、每步$64$个字母，\\ 三个随机种子",
     "3 fonts \\ ($234$)": "3种字体 \\ （$234$）",
     "7 fonts \\ ($546$)": "7种字体 \\ （$546$）",
     "20 fonts \\ ($1{,}560$)": "20种字体 \\ （$1{,}560$）",
@@ -425,7 +423,26 @@
     "then Part 13's transformer: \\\\ attention and MLPs, \\\\ layer after layer": "接着是第13部分的Transformer：\\\\ 注意力和MLP，\\\\ 一层又一层",
     "diffusion works here": "扩散在这里进行",
     "$4$ channels": "$4$个通道",
-    "$16$ channels": "$16$个通道"
+    "$16$ channels": "$16$个通道",
+    "A vision transformer and a convolutional network with about the same number of weights learn to name letters from 3 fonts, \\ or from all 20. \\ Which wins each time, and by how much?": "一个视觉Transformer和一个权重差不多一样多的卷积网络，分别从3种字体、\\ 或者全部20种字体里学习认字母。\\ 每次谁赢？赢多少？",
+    "Similar weights \\ (ViT $154{,}586$, \\ CNN $168{,}154$), \\ same $1{,}500$ steps of $64$ letters, \\ three seeds": "权重相当 \\ （ViT $154{,}586$，\\ CNN $168{,}154$），\\ 同样$1{,}500$步、每步$64$个字母，\\ 三个随机种子",
+    "grid $10 \\times 10$": "$10 \\times 10$网格",
+    "grid $5 \\times 5$": "$5 \\times 5$网格",
+    "grid $2 \\times 2$": "$2 \\times 2$网格",
+    "grid $1 \\times 1$": "$1 \\times 1$网格",
+    "letters": "字母",
+    "SD3": "SD3",
+    "$4 \\times 4$ averages: \\ noise $0.19$": "$4 \\times 4$平均：\\ 噪声$0.19$",
+    "estimate $\\hat c = \\bar z / (1-\\sigma)$": "估计$\\hat c = \\bar z / (1-\\sigma)$",
+    "$20 \\times 20$ pixels": "$20 \\times 20$像素",
+    "$40 \\times 40$ pixels": "$40 \\times 40$像素",
+    "$80 \\times 80$ pixels": "$80 \\times 80$像素",
+    "$520$ letters, \\ $10$ noisy draws per level; \\ SD3 used $\\alpha = 3$ at $1024^2$ \\ (as published)": "$520$个字母，\\ 每个噪声水平$10$次带噪声的抽样；\\ SD3用的是$\\alpha = 3$，在$1024^2$上 \\ （按已发表的数据）"
   },
-  "patterns": []
+  "patterns": [
+    [
+      "^generated in \\$(.+)\\$$",
+      "在$\\1$里生成"
+    ]
+  ]
 }

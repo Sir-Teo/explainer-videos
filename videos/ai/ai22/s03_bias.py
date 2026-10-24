@@ -120,7 +120,7 @@ class Bias(VoiceoverScene):
     def predict(self):
         d = load("vitcnn")
         sizes = [int(s) for s in d["sizes"]]
-        card = pause_card(rf"A vision transformer and a convolutional network with the same number of weights learn "
+        card = pause_card(rf"A vision transformer and a convolutional network with about the same number of weights learn "
                           rf"to name letters from {sizes[0]} fonts, \ or from all {sizes[-1]}. \ Which wins each time, "
                           r"and by how much?", width=8.6).move_to(UP * 0.6)
         card.to_edge(UP, buff=0.35)
@@ -141,7 +141,7 @@ class Bias(VoiceoverScene):
                             sheet(np.unique(font[test]), 0.32)).arrange(DOWN, buff=0.15)
                       ).arrange(RIGHT, buff=1.0, aligned_edge=UP).next_to(card, DOWN, buff=0.45)
         with self.voiceover(
-            "We can test that on our letters. Two models with the same number of weights, the same training steps, "
+            "We can test that on our letters. Two models with about the same number of weights, the same training steps, "
             "batches and augmentations; one a vision transformer, one a convolutional network. They learn from "
             f"{sizes[0]} fonts, or {sizes[1]}, or all {sizes[-1]}, and are tested on four fonts neither has seen. "
             "<bookmark mark='a'/> Pause and predict: which wins with little data, and does that change with more?"
@@ -159,7 +159,7 @@ class Bias(VoiceoverScene):
         sizes = [int(s) for s in d["sizes"]]
         va, ca = np.asarray(d["vit_acc"]), np.asarray(d["cnn_acc"])  # (sizes, seeds)
         n_tr = [int(x) for x in d["n_train"]]
-        head = label(rf"Same weights \ (ViT ${fmt_int(d['vit_params'])}$, \ CNN ${fmt_int(d['cnn_params'])}$), \ "
+        head = label(rf"Similar weights \ (ViT ${fmt_int(d['vit_params'])}$, \ CNN ${fmt_int(d['cnn_params'])}$), \ "
                      rf"same ${fmt_int(d['steps'])}$ steps of ${int(d['batch'])}$ letters, \ three seeds",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         bars = spread_bars([[ca[i], va[i]] for i in range(len(sizes))], [CNN_C, VIT_C], None, height=3.0, bar_w=0.55,

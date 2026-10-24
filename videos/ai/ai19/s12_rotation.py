@@ -228,7 +228,7 @@ class Rotation(VoiceoverScene):
         fl = label(r"the Cayley map: \ any skew $A$ gives a rotation, \\ so plain gradient descent stays on rotations",
                    font_size=18, color=GREY_A).next_to(f_, DOWN, buff=0.15)
         tag = note(rf"computed: \ ${int(sp['steps'])}$ steps of Adam on batches of ${int(sp['batch'])}$ calibration "
-                   rf"windows, \ ${sp['seconds'] / 60:.0f}$ minutes; \ $Q Q^\top = I$ to ${sp['orth_err']:.0e}$",
+                   rf"windows, \ ${sp['seconds'] / 60:.0f}$ minutes; \ $Q Q^\top = I$ to ${sci(sp['orth_err'], 0)}$",
                    font_size=17).to_corner(DR, buff=0.2)
         gain = ev[0, 1] - ev[-1, 1]
         st = int(sp["steps"])
