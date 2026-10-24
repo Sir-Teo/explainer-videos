@@ -68,6 +68,9 @@ cited.
 * **Recap** in ten pictures from the part's own results, where it comes back, the problem set (eight problems), Part
   28's teaser, references.
 
+The silent preview runs 51.8 minutes (`python tools/lecture_length.py ai27`); the longest chapters are 5 (6.5
+minutes) and 6 (7.4).
+
 ## Running it
 
 From the repo root:
