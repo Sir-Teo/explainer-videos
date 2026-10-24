@@ -88,6 +88,7 @@ class Phases(VoiceoverScene):
         pred = np.asarray(r["stack_pred"]) * 1e3
         bw, peak = float(r["bw"]), float(r["peak"])
         mb = float(r["stack_mb"])
+        cache = float(r.get("cache_bytes", 0))
         knee_p, knee_m = float(r["knee_pred"]), float(r["knee_meas"])
         g = loglog((0, math.log10(600)), (math.floor(math.log10(t.min() * 0.6)), math.log10(t.max() * 2.2)),
                    x_length=6.6, y_length=4.2, xlabel=r"batch $B$: \ vectors per pass",
@@ -122,7 +123,6 @@ class Phases(VoiceoverScene):
                     label(rf"$B = 512$: \ ${tps[k512]:.0f}$", font_size=22, color=DECODEC))
         rl.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.5, -1.6, 0])
         r16 = t[k16] / t[0]
-        cache = float(r.get("cache_bytes", 0))
         if cache <= 0 or 4.0 * r["stack_layers"] * r["stack_n"] ** 2 > 1.5 * cache:
             big = f"{mb:.0f} megabytes, more than any of its caches hold: a model too big to stay close to the processor."
         else:

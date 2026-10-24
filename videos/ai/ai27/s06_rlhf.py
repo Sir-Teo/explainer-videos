@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import (GOLD, KLC, PART, POLICY, PROXY, REF, REWARD, load, node_box, rlhf_gains, said,
-                                   ticks)
+from videos.ai.ai27.common import (ASSIST, GOLD, KLC, PART, POLICY, PROXY, REF, REWARD, USER, load, node_box,
+                                   rlhf_gains, said, ticks)
 from videos.ai.ai27.compute import TOPICS
 from videos.ai.ai27.compute import gold as gold_of
 
@@ -121,7 +121,7 @@ class RLHF(VoiceoverScene):
         vals = ValueTracker(0)
         stages = [ref] + [pis[i] for i in range(len(betas))]
         names = [r"\pi_{\mathrm{ref}}"] + [rf"\pi^*,\ \beta = {b:g}" for b in betas]
-        W, H, x0 = 0.75, 3.2, -4.4
+        W, H, x0 = 0.75, 3.2, -5.4
 
         def bar_group():
             t = vals.get_value()
@@ -143,6 +143,8 @@ class RLHF(VoiceoverScene):
         hi_l = label(rf"highest reward, \ ${r[-1]:+.2f}$", font_size=20, color=GOLD)
         right = VGroup(VGroup(hi_l, hi).arrange(DOWN, buff=0.12), VGroup(lo_l, lo).arrange(DOWN, buff=0.12))
         right.arrange(DOWN, buff=0.5).move_to([3.6, 0.2, 0])
+        if right.get_right()[0] > 6.9:
+            right.shift(LEFT * (right.get_right()[0] - 6.9))
         tag = note(r"computed: \ eight lines our fine-tuned model wrote to this question, \ of comparable "
                    r"probability under it; \ $\pi_{\mathrm{ref}}$ renormalized over them").to_corner(DR, buff=0.2)
         half = k // 2  # the better half of the answers, by reward
@@ -206,6 +208,30 @@ class RLHF(VoiceoverScene):
                           r"$6$-billion-parameter reward model, \ and a value model of the same size that starts as "
                           r"a copy of it", width=5.6, color=PROXY).move_to([3.7, -2.15, 0])
         cite_ = cite(r"Ouyang et al.\ (2022); \ Ahmadian et al.\ (2024)", font_size=18)
+        # the episode as a row of tokens: what the policy sees, and what it chooses
+        toks = VGroup(node_box(r"$x$", USER, font_size=26, height=0.55),
+                      *[node_box(rf"$y_{i}$", ASSIST, font_size=26, height=0.55) for i in (1, 2, 3)],
+                      node_box(r"$y_4$", POLICY, font_size=26, height=0.55)).arrange(RIGHT, buff=0.12)
+        toks.move_to([4.2, 1.95, 0])
+        b_s = Brace(toks[:4], DOWN, buff=0.1, color=GREY_B)
+        b_a = Brace(toks[4], DOWN, buff=0.1, color=POLICY)
+        l_s = label(r"the state $s_4$", font_size=20, color=GREY_A).next_to(b_s, DOWN, buff=0.1)
+        l_a = label(r"the action $a_4$", font_size=20, color=POLICY).next_to(b_a, DOWN, buff=0.1)
+        l_a.align_to(b_a, LEFT).shift(LEFT * 0.1)
+        if l_a.get_left()[0] < l_s.get_right()[0] + 0.15:
+            l_a.next_to(l_s, RIGHT, buff=0.25)
+        episode = VGroup(toks, b_s, b_a, l_s, l_a)
+        if episode.get_right()[0] > 6.9:
+            episode.shift(LEFT * (episode.get_right()[0] - 6.9))
+        ticks_ = VGroup(*[Line(UP * 0.12, DOWN * 0.12, color=KLC, stroke_width=3).next_to(t_, UP, buff=0.1)
+                          for t_ in toks[1:]])
+        pen = label(r"each token: \ $-\beta\log\frac{\pi_\theta}{\pi_{\mathrm{ref}}}$", font_size=20, color=KLC)
+        pen.next_to(ticks_, UP, buff=0.1)
+        fin = label(r"the last: \ $+\,r_\phi(x, y)$", font_size=20, color=PROXY).next_to(pen, UP, buff=0.1)
+        fin.align_to(pen, LEFT)
+        lead = VGroup(pen, fin)
+        if lead.get_right()[0] > 6.9:
+            lead.shift(LEFT * (lead.get_right()[0] - 6.9))
         with self.voiceover(
             "How does Part 26's PPO fit a language model? Treat each answer as an episode: "
             "the state is the prompt and the tokens written so far, and the action is the next token. "
@@ -219,8 +245,14 @@ class RLHF(VoiceoverScene):
             "value network started as a copy of its six-billion-parameter reward model."
         ) as vo:
             step(0)
+            self.play(FadeIn(toks[0]), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.1) for t_ in toks[1:4]],
+                                                   lag_ratio=0.3), run_time=1.5)
+            self.play(GrowFromCenter(b_s), FadeIn(l_s))
+            self.play(FadeIn(toks[4], shift=RIGHT * 0.1), GrowFromCenter(b_a), FadeIn(l_a))
             vo.wait_until("b")
             step(1)
+            self.play(LaggedStart(*[Create(m_) for m_ in ticks_], lag_ratio=0.2), FadeIn(pen), run_time=1.2)
+            self.play(FadeIn(fin, shift=DOWN * 0.1))
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
@@ -308,6 +340,20 @@ class RLHF(VoiceoverScene):
                    color=PROXY).next_to(nl, UP, buff=0.45)
         tag = note(rf"computed: \ the first step of training, \ ${B:d}$ batches of ${n:d}$ lines for each of ${Q:d}$ "
                    r"questions; \ whiskers: \ lowest to highest question", font_size=18).to_corner(DR, buff=0.2)
+        O = np.array([3.1, 1.2, 0.0])
+        dirs = [np.array([np.cos(a), np.sin(a), 0.0]) for a in (np.radians(12), np.radians(62))]
+        v1 = Arrow(O, O + 2.3 * dirs[0], buff=0, color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.12)
+        v2 = Arrow(O, O + 1.9 * dirs[1], buff=0, color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.14)
+        arc = Arc(radius=0.55, start_angle=np.radians(12), angle=np.radians(50), arc_center=O, color=GREY_B)
+        th = MathTex(r"\theta", font_size=26, color=GREY_A).move_to(O + 0.8 * np.array([np.cos(np.radians(37)),
+                                                                                       np.sin(np.radians(37)), 0]))
+        l1 = label(r"batch 1's estimate", font_size=18, color=GREY_B).next_to(v1.get_end(), DOWN, buff=0.12)
+        l2 = label(r"batch 2's estimate", font_size=18, color=GREY_B).next_to(v2.get_end(), RIGHT, buff=0.12)
+        cap = label(r"$\cos\theta$: \ $1$ if they agree, \ $0$ if unrelated", font_size=20, color=GREY_A)
+        cap.move_to([4.6, 0.55, 0])
+        compass_fig = VGroup(v1, v2, arc, th, l1, l2, cap)
+        if compass_fig.get_right()[0] > 6.9:
+            compass_fig.shift(LEFT * (compass_fig.get_right()[0] - 6.9))
         if cos["shifted"] < 0.7 * cos["none"]:
             shift_said = (f"But the reward model's scores are only defined up to a shift. Add {sh:g} to every one, "
                           "which fits the comparisons exactly as well, and without a baseline the agreement falls to "
@@ -338,14 +384,18 @@ class RLHF(VoiceoverScene):
         with self.voiceover(
             "How much does the baseline matter on our model? At the first step of training we draw "
             f"{B:d} batches of {n:d} lines for each of {Q:d} questions, and estimate the gradient from each batch "
-            "in several ways. If an estimate is any good, two batches for the same question should point the same "
-            f"way. <bookmark mark='a'/> With no baseline, two batches agree with a cosine of {cos['none']:.3f}. "
+            "in several ways. <bookmark mark='p'/> If an estimate is any good, two batches for the same question "
+            f"should point the same way. <bookmark mark='a'/> With no baseline, two batches agree with a cosine of {cos['none']:.3f}. "
             f"<bookmark mark='b'/> {shift_said} <bookmark mark='c'/> With one baseline shared by every question, "
             f"{cos['shared']:.3f}; with each question's own average, what a value network would learn to predict, "
             f"{cos['value']:.3f}. <bookmark mark='d'/> And with the batch's own mean, as in our runs, "
             f"{cos['group']:.3f}. {verdict} <bookmark mark='e'/> {compass}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(tag))
+            vo.wait_until("p")
+            self.play(GrowArrow(v1), FadeIn(l1))
+            self.play(GrowArrow(v2), FadeIn(l2), Create(arc), FadeIn(th))
+            self.play(FadeIn(cap))
             order = {"a": ["none"], "b": ["shifted"], "c": ["shared", "value"], "d": ["group"]}
             for mk, ks in order.items():
                 vo.wait_until(mk)
@@ -423,8 +473,10 @@ class RLHF(VoiceoverScene):
             f"<bookmark mark='b'/> Now loosen the leash to beta {betas[1]:g}. " + verdict
         ) as vo:
             self.play(FadeIn(lg), FadeIn(tag), FadeIn(panels[0][0]), Create(panels[0][4]))
+            # the runs, step by step, while the loop is described; the band of seeds when the numbers are read
+            self.play(Create(panels[0][1]), Create(panels[0][2]), run_time=8.0, rate_func=linear)
             vo.wait_until("a")
-            self.play(FadeIn(panels[0][3]), Create(panels[0][1]), Create(panels[0][2]), run_time=2.5)
+            self.play(FadeIn(panels[0][3]), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(panels[1][0]), Create(panels[1][4]))
             self.play(FadeIn(panels[1][3]), Create(panels[1][1]), Create(panels[1][2]), run_time=2.5)

@@ -25,7 +25,7 @@ CONFIGS = ("zero", "ada", "context", "unet", "repa")
 SEEDS = (0, 1, 2)
 D, L, H = 64, 4, 4
 BATCH, LR = 64, 1e-3
-N_STEPS = 2500
+N_STEPS = 2000
 EVAL_FRACS = (0.1, 0.2, 0.4, 0.6, 1.0)
 SNAP_FRACS = (0.0, 0.04, 0.1, 0.2, 0.4, 1.0)
 REPA_LAYER, REPA_W = 2, 0.5  # align the tokens after block 2 of 4
@@ -306,7 +306,7 @@ def compute_denoisers():
             if key in part and (key != "zero_s0" or (CACHE.dir / "dit_showcase.npz").exists()):
                 continue
             t0 = time.time()
-            evals, snaps, gates = [], [], []
+            evals, snaps, gates, snap_read = [], [], [], []
 
             def on_step(st, m, cfg=cfg, seed=seed):
                 if cfg == "zero" and seed == 0:
@@ -317,6 +317,7 @@ def compute_denoisers():
                         m.eval()
                         snaps.append(sample(m, show, z=z_snap))
                         m.train()
+                        snap_read.append(score(snaps[-1], show)["acc"])
                 if st in eval_at:
                     m.eval()
                     q = score(sample(m, want, seed=7), want)
@@ -336,6 +337,7 @@ def compute_denoisers():
                 many_a = sample(m, [0] * 8, n_steps=40, seed=3)
                 torch.save(m.state_dict(), CACHE.dir / "dit_zero_s0.pt")
                 np.savez_compressed(CACHE.dir / "dit_showcase.npz", snaps=np.array(snaps), snap_at=np.array(snap_at),
+                                    snap_read=np.array(snap_read), snap_ink=np.array(snaps).mean((1, 2, 3)),
                                     gates=np.array(gates), alphabet=alphabet, alphabet_path=np.array(path)[:, :26],
                                     many_a=many_a)
             part[key] = part_val
@@ -355,4 +357,37 @@ def compute_denoisers():
         out.update({k: z[k] for k in z.files})
     print("    final right-letter rates: " + ", ".join(f"{c} {out[f'{c}_acc'][:, -1].mean():.3f}" for c in CONFIGS),
           flush=True)
+    return out
+
+
+# ---------------------------------------------------------------------------
+GUIDES = (0.0, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0)
+
+
+def compute_guidance():
+    """Classifier-free guidance on the showcase transformer (adaLN-Zero, seed 0): for each weight w, 260 letters (ten
+    of each) from the same noise; the share read as requested, the Frechet distance, and the variety (the average
+    distance between two drawings of the same letter, root mean square over pixels)."""
+    import torch
+
+    threads()
+    if not (CACHE.dir / "dit_zero_s0.pt").exists():
+        CACHE.load("denoisers")
+    m = make("zero")
+    m.load_state_dict(torch.load(CACHE.dir / "dit_zero_s0.pt"))
+    m.eval()
+    want = np.repeat(np.arange(26), 10)
+    out = dict(guides=list(GUIDES))
+    acc, fd, var, shows = [], [], [], []
+    for w in GUIDES:
+        x = sample(m, want, w=w, seed=7)
+        q = score(x, want)
+        g = x.reshape(26, 10, -1)
+        d = np.sqrt(((g[:, :, None] - g[:, None]) ** 2).mean(-1))  # (26, 10, 10)
+        var.append(float(d.sum() / (26 * 10 * 9)))
+        acc.append(q["acc"])
+        fd.append(q["fd"])
+        shows.append(x[want == 17][:6])  # six R's
+        print(f"    w = {w:g}: right letter {q['acc']:.3f}, FD {q['fd']:.1f}, variety {var[-1]:.3f}", flush=True)
+    out.update(acc=acc, fd=fd, variety=var, shows=np.array(shows))
     return out

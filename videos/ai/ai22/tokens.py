@@ -24,7 +24,7 @@ SCALES = (1, 2, 3, 4, 5)
 D, L, H = 64, 4, 4
 SEEDS = (0, 1, 2)
 KINDS = ("raster", "maskgit", "var")
-N_TOK, N_GEN, BATCH = 3000, 2000, 64
+N_TOK, N_GEN, BATCH = 3000, 1500, 64
 GUIDE = 2.0
 MASKGIT_STEPS = 8
 
