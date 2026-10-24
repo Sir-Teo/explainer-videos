@@ -163,7 +163,7 @@ class Outro(VoiceoverScene):
                       Arrow(enc.get_right(), sph.get_left(), buff=0.1, color=GREY_B))
         tag = note(r"schematic", font_size=18).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Next time: where encoders like wav2vec and CLIP's cousins come from when nobody labels anything. Two "
+            "Next time: where encoders like wav2vec 2.0 and DINO come from, when nobody labels anything. Two "
             "views of one input, pulled together, everything else pushed apart, and the other ways to learn from "
             "data alone: learning without labels, Part 24."
         ) as vo:
