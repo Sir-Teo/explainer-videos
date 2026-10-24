@@ -784,3 +784,64 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | two-part code; adjusted compression rate | 两段式编码；调整后的压缩率 |
 | Hutter Prize; context mixing | 赫特奖；上下文混合 |
 | round trip (encode, then decode) | 往返（先编码，再解码） |
+
+### Learning without labels (Part 24)
+
+| English | 中文 |
+|---|---|
+| self-supervised learning | 自监督学习 |
+| representation, encoder | 表示，编码器 |
+| label, unlabelled data | 标签，无标签数据 |
+| pretext task | 前置任务（代理任务） |
+| context prediction, jigsaw puzzle, colorization, inpainting | 上下文预测，拼图，上色，图像修补 |
+| rotation prediction | 旋转预测 |
+| shortcut, chromatic aberration | 捷径，色差 |
+| instance discrimination, memory bank | 实例判别，记忆库 |
+| contrastive learning, contrastive loss | 对比学习，对比损失 |
+| positive pair, negative (sample) | 正样本对，负样本 |
+| noise-contrastive estimation (NCE) | 噪声对比估计（NCE） |
+| negative sampling | 负采样 |
+| InfoNCE, critic (scoring function) | InfoNCE，打分函数 |
+| contrastive predictive coding (CPC) | 对比预测编码（CPC） |
+| view, augmentation | 视图，数据增强 |
+| projection head | 投影头 |
+| NT-Xent (normalized temperature-scaled cross-entropy) | NT-Xent（归一化温度交叉熵） |
+| momentum encoder, queue | 动量编码器，队列 |
+| hypersphere, unit vector | 超球面，单位向量 |
+| alignment, uniformity | 对齐，均匀性 |
+| temperature τ | 温度τ |
+| hard negative | 难负样本 |
+| uniformity–tolerance dilemma | 均匀性-容忍度困境 |
+| collapse: complete, dimensional | 坍缩：完全坍缩，维度坍缩 |
+| effective rank, RankMe | 有效秩，RankMe |
+| singular-value spectrum | 奇异值谱 |
+| siamese network | 孪生网络 |
+| stop-gradient | 停止梯度 |
+| predictor | 预测器 |
+| online network, target network | 在线网络，目标网络 |
+| exponential moving average (EMA) | 指数移动平均（EMA） |
+| redundancy reduction | 冗余削减 |
+| cross-correlation matrix | 互相关矩阵 |
+| invariance, variance, covariance terms | 不变项，方差项，协方差项 |
+| decorrelation | 去相关 |
+| self-distillation, student, teacher | 自蒸馏，学生，老师 |
+| prototype | 原型 |
+| centring, sharpening | 中心化，锐化 |
+| data curation, retrieval-based curation | 数据筛选，基于检索的筛选 |
+| deduplication | 去重 |
+| Gram anchoring | 格拉姆锚定 |
+| masked image modelling, masked autoencoder (MAE) | 掩码图像建模，掩码自编码器（MAE） |
+| masking ratio | 掩码比例 |
+| visual token, codebook | 视觉词元，码本 |
+| fine-tuning (the whole network) | （整个网络）微调 |
+| joint-embedding predictive architecture (JEPA) | 联合嵌入预测架构（JEPA） |
+| context block, target block | 上下文块，目标块 |
+| energy-based view; contrastive vs regularized methods | 能量视角；对比式与正则化式方法 |
+| world model | 世界模型 |
+| linear probe, k-NN probe, few-label probe | 线性探针，k近邻探针，少标签探针 |
+| embedding, retrieval, nearest-neighbour search | 嵌入，检索，最近邻搜索 |
+| text embedding, sentence embedding | 文本嵌入，句子嵌入 |
+| Matryoshka representation learning | 套娃表示学习 |
+| centred kernel alignment (CKA), HSIC | 中心化核对齐（CKA），HSIC |
+| mutual nearest neighbours | 互为近邻 |
+| platonic representation hypothesis | 柏拉图表示假说 |

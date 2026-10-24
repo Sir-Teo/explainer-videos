@@ -677,7 +677,8 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 10 | **complete**, English and Chinese (18 chapters) | 59 min |
 | 18 | **complete**, English and Chinese (20 chapters) | 60 min |
 | 20 | **complete**, English and Chinese (18 chapters) | 55 min |
-| 24, 25 | new; to write | — |
+| 24 | **complete**, English and Chinese (17 chapters) | 60 min |
+| 25 | new, being written | — |
 | 14 | **complete**, English and Chinese (16 chapters) | 57 min |
 | 17 | **complete**, English and Chinese | 55 min |
 | 26 | **complete**, English and Chinese (16 chapters; our own AlphaZero, 80 generations) | 65 min |
