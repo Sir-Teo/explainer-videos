@@ -52,14 +52,12 @@ class Folding(VoiceoverScene):
         facts.move_to([0, -0.9, 0]).align_to(np.array([-0.6, 0, 0]), LEFT)
         cite_ = cite(r"PDBj, \ June 2026", corner=DR)
         with self.voiceover(
-            "A protein is a chain of amino acids, of twenty kinds, written by a gene. <bookmark mark='a'/> In water "
-            "the chain folds into a precise shape, and the shape decides what it does: cut another molecule, grip a "
-            "virus, open a channel in a cell wall. <bookmark mark='b'/> In 1958 John Kendrew saw the first one, "
-            "myoglobin, by shining X-rays through a crystal of it, which won him and Max Perutz the Nobel Prize. "
-            "<bookmark mark='c'/> The Protein Data Bank opened in 1971 with seven structures; <bookmark mark='d'/> "
-            "today it holds more than a quarter of a million. <bookmark mark='e'/> But we know the sequences of "
-            "billions of proteins, and measuring a structure can take years. Hence the problem: read the shape from "
-            "the sequence."
+            "A protein is a chain of amino acids, of twenty kinds, written by a gene. <bookmark mark='a'/> In water it folds "
+            "into a precise shape, and the shape decides what it does: cut a molecule, grip a virus, open a channel. "
+            "<bookmark mark='b'/> In 1958 John Kendrew saw the first, myoglobin, by X-ray crystallography, sharing a Nobel "
+            "Prize with Max Perutz. <bookmark mark='c'/> The Protein Data Bank opened in 1971 with seven structures; "
+            "<bookmark mark='d'/> today it holds more than a quarter of a million. <bookmark mark='e'/> But we know billions "
+            "of sequences, and a structure can take years to measure. Hence the problem: read the shape from the sequence."
         ) as vo:
             self.play(FadeIn(seq), FadeIn(sl))
             vo.wait_until("a")
@@ -100,15 +98,14 @@ class Folding(VoiceoverScene):
         tag = note(r"illustrative arithmetic, \ after Levinthal", font_size=20).to_corner(DR, buff=0.25)
         head = label(r"two facts", font_size=34, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded an enzyme, "
-            "ribonuclease, with urea; when he washed the urea out, the chain folded back by itself and worked again. "
-            "So the sequence alone holds the information for the shape. <bookmark mark='b'/> But in 1969 Cyrus "
-            "Levinthal pointed out that the chain can't find its shape by trying them all. <bookmark mark='c'/> Give "
-            f"each of the joints of a {N}-residue chain just three choices: that is about ten to the "
-            f"{int(math.log10(conf))} shapes. <bookmark mark='d'/> Trying ten trillion a second would take ten to the "
-            f"{int(math.log10(years))} years, against an age of the universe of about ten to the ten. <bookmark "
-            "mark='e'/> Yet proteins fold in microseconds to seconds. Nature doesn't search blindly, and neither, it turned out, "
-            "should a computer."
+            "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded an enzyme, ribonuclease, "
+            "with urea; washed out, it folded back by itself and worked again. So the sequence holds the shape. <bookmark "
+            "mark='b'/> But in 1969 Cyrus Levinthal pointed out that a chain can't find its shape by trying them all. "
+            f"<bookmark mark='c'/> Give each joint of a {N}-residue chain just three choices: about ten to the "
+            f"{int(math.log10(conf))} shapes. <bookmark mark='d'/> At ten trillion a second, that is ten to the "
+            f"{int(math.log10(years))} years, against an age of the universe of ten to the ten. <bookmark mark='e'/> Yet "
+            "proteins fold in microseconds to seconds. Nature doesn't search blindly, and neither, it turned out, should a "
+            "computer."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -161,16 +158,15 @@ class Folding(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.5, -0.2, 0])
         cite_ = cite(r"Senior et al., \textit{Nature} (2020)", corner=DR)
         with self.voiceover(
-            "In 1994 John Moult and Krzysztof Fidelis turned the problem into a contest, CASP: every two years, "
-            "predict structures that have been measured but not yet published. <bookmark mark='a'/> Predictions are "
-            "scored by GDT, roughly the percentage of residues that land within a few ångströms of their true "
-            "place. <bookmark mark='b'/> For two decades progress was slow. Then evolution offered a clue. "
-            "<bookmark mark='c'/> Line up the sequences of the same protein from many species: when two positions "
-            "touch in the fold, a mutation at one is often compensated at the other, so the two columns change "
-            "together. Around 2011 statistical methods learned to read contacts out of such alignments. <bookmark "
-            "mark='d'/> And at CASP13, in 2018, DeepMind's first AlphaFold used a deep network to predict, for every "
-            "pair of residues, a histogram of their distance, then folded a chain by gradient descent to match. It "
-            "reached high accuracy on 24 of the 43 hardest domains, against 14 for the next best."
+            "In 1994 John Moult and Krzysztof Fidelis turned the problem into a contest, CASP: every two years, predict "
+            "structures measured but not yet published. <bookmark mark='a'/> Predictions are scored by GDT, roughly the "
+            "percentage of residues within a few ångströms of their true place. <bookmark mark='b'/> For two decades progress "
+            "was slow. Then evolution offered a clue. <bookmark mark='c'/> Line up the same protein from many species: when "
+            "two positions touch, a mutation at one is often compensated at the other, so their columns change together. "
+            "Around 2011 statistical methods learned to read contacts from such alignments. <bookmark mark='d'/> At CASP13, "
+            "in 2018, DeepMind's first AlphaFold predicted a histogram of distances for every pair of residues, then folded "
+            "a chain by gradient descent to match: high accuracy on 24 of the 43 hardest domains, against 14 for the next "
+            "best."
         ) as vo:
             self.play(FadeIn(hist[0], shift=UP * 0.1))
             vo.wait_until("a")
@@ -213,14 +209,13 @@ class Folding(VoiceoverScene):
         mir = label(r"distances can't tell left from right", font_size=26, color=MIRROR_C).to_edge(DOWN, buff=0.5)
         tag = note(r"computed: \ our bundle's $52$ C$\alpha$ atoms", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Why distances? Because a full table of distances fixes a shape. Here are all the distances between "
-            "our bundle's fifty-two atoms. <bookmark mark='a'/> Square them and centre them, <bookmark mark='b'/> "
-            "and you get the matrix of dot products between the atoms' positions, since a squared distance is two "
-            "lengths minus twice a dot product. <bookmark mark='c'/> Its eigenvectors give the coordinates back: "
-            "classical multidimensional scaling, from 1952. Exactly three eigenvalues are nonzero, one per "
-            "dimension of space, <bookmark mark='d'/> and the rebuilt chain matches the original to rounding error. "
-            "<bookmark mark='e'/> But only up to a mirror image: a structure and its reflection have exactly the "
-            "same distances. Proteins are not symmetric that way. Their helices turn right-handed."
+            "Why distances? Because a full table of distances fixes a shape. Here are all the distances between our bundle's "
+            "fifty-two atoms. <bookmark mark='a'/> Square them and centre them, <bookmark mark='b'/> and you get the dot "
+            "products between the atoms' positions, since a squared distance is two lengths minus twice a dot product. "
+            "<bookmark mark='c'/> Its eigenvectors give the coordinates back: classical multidimensional scaling, from 1952. "
+            "Three eigenvalues are nonzero, one per dimension, <bookmark mark='d'/> and the rebuilt chain matches to rounding "
+            "error. <bookmark mark='e'/> But only up to a mirror image: a structure and its reflection have the same "
+            "distances. Proteins are not mirror-symmetric: their helices turn right-handed."
         ) as vo:
             self.play(FadeIn(img), FadeIn(il), FadeIn(tag))
             vo.wait_until("a")
@@ -282,13 +277,12 @@ class Folding(VoiceoverScene):
         verdict = (f"{words_num(len(good))} of the {n} land on the true fold, and {words_num(len(bad))} on its mirror "
                    "image, which fits the distances just as well")
         with self.voiceover(
-            "AlphaFold 1 had only predicted distances, noisy, and only for pairs it was sure were close. So let's "
-            f"do what it did with ours: keep only the pairs under {f['cut']:.0f} ångströms, {100 * frac:.0f} percent "
-            f"of them, add noise of {f['noise']:.0f} ångström, and from a random tangle, move the atoms by gradient "
-            "descent until their distances match. <bookmark mark='a'/> Watch it fold. <bookmark mark='b'/> From "
-            f"{n} random starts, {verdict}. <bookmark mark='c'/> A model that predicts only distances, or anything "
-            "else that a reflection leaves unchanged, can't settle which. AlphaFold 2 needed a representation that "
-            "knows its left hand from its right."
+            "AlphaFold 1 predicted only distances, noisy, and only for pairs it was sure were close. So do the same with ours: "
+            f"keep the pairs under {f['cut']:.0f} ångströms, {100 * frac:.0f} percent of them, add noise of "
+            f"{f['noise']:.0f} ångström, and from a random tangle, move the atoms by gradient descent until their distances "
+            f"match. <bookmark mark='a'/> Watch it fold. <bookmark mark='b'/> From {n} random starts, {verdict}. <bookmark "
+            "mark='c'/> Anything that a reflection leaves unchanged, distances included, can't settle which. AlphaFold 2 "
+            "needed a representation that knows its left hand from its right."
         ) as vo:
             self.play(FadeIn(truth), FadeIn(cur), FadeIn(steps_l), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")

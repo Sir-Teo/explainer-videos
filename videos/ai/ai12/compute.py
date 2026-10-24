@@ -640,6 +640,8 @@ def optimum(p, C):
 
 
 BUDGETS = [1e11, 3e11, 1e12, 3e12, 1e13]
+FIT_KMIN, FIT_WMIN = 19, 64  # the runs Chinchilla's formula is fitted to
+EXTRAP_CUT = 3e12
 
 
 def power_floor(x, y):
@@ -691,13 +693,19 @@ def compute_chinchilla():
     s = load("sweep")
     N, D, Lb = np.asarray(s["N"]), np.asarray(s["D"]), np.asarray(s["bits"])
     widths = list(s["widths"])
-    ii, jj = np.where(np.isfinite(Lb) & (D[None] >= 2 ** 17))  # 2^16 is mostly warmup: left out of the fits
+    # the fits use runs of at least 2^19 characters (256 optimizer steps: shorter ones are mostly warmup) and widths
+    # of 64 and up (the two narrowest are mostly embedding and output layer)
+    use = np.isfinite(Lb) & (D[None] >= 2 ** FIT_KMIN) & (np.array(widths)[:, None] >= FIT_WMIN)
+    if use.sum() < 12:  # a test-sized sweep
+        use = np.isfinite(Lb) & (D[None] >= 2 ** 17)
+    ii, jj = np.where(use)
     Np, Dp, Lp = N[ii], D[jj], Lb[ii, jj]
     p = fit_lnd(Np, Dp, Lp)
     E, A, al, B, be = p
     rms = float(np.sqrt(np.mean((lnd(p, Np, Dp) - Lp) ** 2)))
     a3 = be / (al + be)
-    out = dict(E=E, A=A, alpha=al, B=B, beta=be, a3=a3, rms=rms, n_points=int(len(Lp)), budgets=BUDGETS)
+    out = dict(E=E, A=A, alpha=al, B=B, beta=be, a3=a3, rms=rms, n_points=int(len(Lp)), budgets=BUDGETS,
+               fit_kmin=FIT_KMIN, fit_wmin=FIT_WMIN, fit_N=Np, fit_D=Dp, fit_L=Lp)
     # bootstrap: the spread of the exponent a
     g = rng(2024)
     boot = []
@@ -761,10 +769,11 @@ def compute_chinchilla():
     out["nopt_kaplan"] = np.array(nk)
     out["a_kaplan_count"] = loglog_slope(np.array(BUDGETS)[ok2], out["nopt_kaplan"][ok2])
     out["emb_share"] = [float(1 - a / b) for a, b in zip(Nne, N)]
-    # extrapolation: fit only the runs that cost at most 10^12 operations, predict the rest
-    cut = 1e12 if (6 * Np * Dp > 1e12).sum() >= 5 else float(np.median(6 * Np * Dp))  # (the median: a test run)
+    # extrapolation: fit only the runs that cost at most 3 x 10^12 operations (about half of them), predict the rest
+    cut = EXTRAP_CUT if (6 * Np * Dp > EXTRAP_CUT).sum() >= 5 else float(np.median(6 * Np * Dp))  # (median: a test run)
     cheap = 6 * Np * Dp <= cut
     out["extrap_cut"] = cut
+    out["extrap_ratio"] = float(np.max(6 * Np * Dp) / cut)
     pc = fit_lnd(Np[cheap], Dp[cheap], Lp[cheap])
     pred = lnd(pc, Np[~cheap], Dp[~cheap])
     out["cheap"] = dict(E=pc[0], A=pc[1], alpha=pc[2], B=pc[3], beta=pc[4], n=int(cheap.sum()))

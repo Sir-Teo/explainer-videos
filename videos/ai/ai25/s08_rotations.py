@@ -41,13 +41,12 @@ class Rotations(VoiceoverScene):
             r_[0].set_color(STRUCT)
         step = ladder(self, rows, whys, keep=4, top=0.6, x=-0.6, buff=0.45, edge=6.9)
         with self.voiceover(
-            "For molecules and materials the symmetry is the group of rigid motions of space, E of three: "
-            "rotations, reflections and translations. <bookmark mark='a'/> The energy of a molecule is invariant "
-            "under all of them. <bookmark mark='b'/> Differentiate both sides with respect to the positions: the "
-            "chain rule brings out the transpose of R. <bookmark mark='c'/> Multiply by R, <bookmark mark='d'/> and "
-            "since forces are minus the gradient of the energy, the forces turn with the molecule: they are "
-            "equivariant. An invariant model of the energy gives equivariant forces for free, by differentiation, "
-            "which is how most machine-learned potentials compute them."
+            "For molecules the symmetry is the group of rigid motions of space, E of three: rotations, reflections, "
+            "translations. <bookmark mark='a'/> A molecule's energy is invariant under all of them. <bookmark mark='b'/> "
+            "Differentiate both sides in the positions: the chain rule brings out the transpose of R. <bookmark mark='c'/> "
+            "Multiply by R, <bookmark mark='d'/> and since forces are minus the gradient, the forces turn with the molecule: "
+            "they are equivariant. An invariant model of the energy gives equivariant forces for free, which is how most "
+            "learned potentials compute them."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -93,16 +92,14 @@ class Rotations(VoiceoverScene):
         lj = MathTex(r"h_j,\ x_j", font_size=30).next_to(atoms[j_], DR, buff=0.05)
         mol = VGroup(bonds, atoms, li, lj)
         with self.voiceover(
-            "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of "
-            "Victor Garcia Satorras, Emiel Hoogeboom and Max Welling, in 2021. Each atom has features h and a "
-            "position x. <bookmark mark='a'/> The message between two atoms sees their features and the squared "
-            "distance between them, nothing else: turning or moving the molecule changes no message. <bookmark "
-            "mark='b'/> Each atom then moves along the differences of positions, weighted by learned scalars. "
-            "<bookmark mark='c'/> And its features update from the summed messages, so they stay invariant. "
-            "<bookmark mark='d'/> Now turn and shift the input. The messages are unchanged, the differences turn by "
-            "R, and the shift cancels in every difference, so the new positions are the old ones turned and shifted. "
-            "Equivariance, line by line. <bookmark mark='e'/> SchNet, four years earlier, had used distances alone, "
-            "for invariant energies."
+            "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of Victor "
+            "Garcia Satorras, Emiel Hoogeboom and Max Welling, in 2021. Each atom has features h and a position x. <bookmark "
+            "mark='a'/> A message between two atoms sees their features and their squared distance, nothing else: turning or "
+            "moving the molecule changes no message. <bookmark mark='b'/> Each atom moves along the differences of positions, "
+            "weighted by learned scalars. <bookmark mark='c'/> Its features update from the summed messages, so they stay "
+            "invariant. <bookmark mark='d'/> Now turn and shift the input: the messages are unchanged, the differences turn "
+            "by R, and the shift cancels, so the new positions are the old ones turned and shifted. <bookmark mark='e'/> "
+            "SchNet, in 2017, had used distances alone, for invariant energies."
         ) as vo:
             self.play(FadeIn(head))
             self.play(Create(bonds[:-1]), FadeIn(atoms), run_time=1.5)
@@ -147,15 +144,14 @@ class Rotations(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([2.6, -1.2, 0])
         tag = note(r"computed: \ least squares on $20{,}000$ points of the sphere", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "EGNN carries two kinds of information: scalars, which don't turn, and positions, which turn like "
-            "vectors. Richer models carry more. <bookmark mark='a'/> Any function on the sphere can be written in "
-            "spherical harmonics, of degree zero, one, two and up. <bookmark mark='b'/> Here, computed, is what one "
-            "rotation does to the nine harmonics of degree up to two: it mixes them only within their degree, in "
-            f"blocks of one, three and five; outside the blocks the entries are zero to {dp} decimal places. "
-            "<bookmark mark='c'/> So a network can keep features of each degree, turn each with its own block, and "
-            "combine two of them into new degrees with the Clebsch–Gordan rules, the same rules that add angular "
-            "momenta in quantum mechanics. <bookmark mark='d'/> That is the design of tensor field networks, and "
-            "of NequIP and MACE, among today's most accurate learned force fields."
+            "EGNN carries scalars, which don't turn, and positions, which turn like vectors. Richer models carry more. "
+            "<bookmark mark='a'/> Any function on the sphere can be written in spherical harmonics, of degree zero, one, two "
+            "and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: "
+            "it mixes them only within their degree, in blocks of one, three and five; outside the blocks the entries are "
+            f"zero to {dp} decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with "
+            "its own block, and combine two into new degrees by the Clebsch–Gordan rules, the rules that add angular momenta "
+            "in quantum mechanics. <bookmark mark='d'/> That is the design of tensor field networks, NequIP and MACE, among "
+            "today's most accurate learned force fields."
         ) as vo:
             self.play(FadeIn(img), FadeIn(il), FadeIn(tag))
             vo.wait_until("a")
@@ -219,12 +215,12 @@ class Rotations(VoiceoverScene):
         aug_txt = ("Turned copies help the MLP" if m["mlp_aug"] < 0.97 * m["mlp"] else
                    "Turned copies barely help it at this budget")
         with self.voiceover(
-            "Does it pay? Our five-body system again: predict where the particles are at time one, given where "
-            "they are and how they move. Four networks, the same three thousand training steps, from a hundred "
-            f"training systems up to {sizes[-1]:,}, three seeds each. <bookmark mark='a'/> The dashed line is the "
-            "simplest guess, that every particle keeps going in a straight line. <bookmark mark='b'/> "
-            f"{mlp_txt}. {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> Message passing on raw "
-            f"coordinates: {m['gnn']:.3f}. <bookmark mark='d'/> EGNN: {m['egnn']:.4f}, {ratio_txt}. {cross}."
+            "Does it pay? Our five-body system again: predict where the particles are at time one. Four networks, the same "
+            "three thousand steps, from a hundred training systems up to "
+            f"{sizes[-1]:,}, three seeds each. <bookmark mark='a'/> The dashed line is the simplest guess: every particle "
+            f"keeps going straight. <bookmark mark='b'/> {mlp_txt}. {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> "
+            f"Message passing on raw coordinates: {m['gnn']:.3f}. <bookmark mark='d'/> EGNN: {m['egnn']:.4f}, {ratio_txt}. "
+            f"{cross}."
         ) as vo:
             self.play(FadeIn(g), Create(cvl), FadeIn(cvt), FadeIn(tag), FadeIn(par))
             vo.wait_until("a")
@@ -310,9 +306,9 @@ class Rotations(VoiceoverScene):
         tk = take_away(r"build the symmetry in, \ and the data goes further: \ nothing is spent learning that turning "
                        r"doesn't matter")
         with self.voiceover(
-            "That is the case for equivariance: nothing in the data has to be spent teaching the network that a "
-            "turned molecule is the same molecule. Proteins are molecules too, and the rest of this part is about "
-            "where these ideas took science, starting with the hardest molecule of all."
+            "That is the case for equivariance: no data has to be spent teaching the network that a turned molecule is the "
+            "same molecule. Proteins are molecules too, and the rest of this part follows these ideas into science, starting "
+            "with the hardest molecule of all."
         ):
             self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

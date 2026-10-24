@@ -85,10 +85,7 @@ class Frontier(VoiceoverScene):
         xn = label(r"compute of the run \ (operations)", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yn = label(r"predicted minus measured \ (bits)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         dts = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=TT) for a, b in zip(lc, res)])
-        sw = load("sweep")
-        Ns, Ds, Lb = np.asarray(sw["N"], float), np.asarray(sw["D"], float), np.asarray(sw["bits"], float)
-        ii, jj = np.where(np.isfinite(Lb) & (Ds[None] >= 2 ** 17))
-        Nf, Df, Lf = Ns[ii], Ds[jj], Lb[ii, jj]
+        Nf, Df, Lf = (np.asarray(ch[k], float) for k in ("fit_N", "fit_D", "fit_L"))
         cheap = 6 * Nf * Df <= cut
         cp = ch["cheap"]
         fit_res = (float(cp["E"]) + float(cp["A"]) * Nf[cheap] ** -float(cp["alpha"]) + float(cp["B"]) * Df[cheap] ** -float(cp["beta"])
@@ -109,18 +106,31 @@ class Frontier(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.3, 0])
         slow = label(r"$L \propto C^{-0.050}$ \ (Kaplan): \ halving the loss takes $2^{1/0.05} \approx 10^{6}$ times "
                      r"the compute", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
-        ok = err < 0.03
-        said1 = (
-            ", and it does not drift as the compute grows: the law extrapolates. " if ok and abs(bias) < err else
-            f", and it {'over' if bias > 0 else 'under'}estimates the loss as compute grows: a hint of curvature. "
-        )
+        ratio = float(ch.get("extrap_ratio", 10.0))
+        steady = err < 0.03 and abs(bias) < 0.6 * err
+        if steady:
+            said1 = (
+                ", and it does not drift as the compute grows: the law extrapolates. <bookmark mark='b'/> That is the "
+                "sense in which pretraining has not stalled: the loss keeps falling along its curve. "
+            )
+        elif bias > 0:
+            said1 = (
+                ", and almost always on the high side: the costlier runs come out better than the cheap ones "
+                "predicted. <bookmark mark='b'/> That is the sense in which pretraining has not stalled: at every scale "
+                "we tried, the loss fell at least as fast as the law promised. "
+            )
+        else:
+            said1 = (
+                ", and almost always on the low side: the costlier runs fall short of the forecast. "
+                "<bookmark mark='b'/> On our small scale, that is the stalling argument in miniature: a law fitted on "
+                "small runs can promise more than larger ones deliver. "
+            )
         with self.voiceover(
             "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's "
-            f"formula on only our {n_fit} cheapest runs, and predict the other {n_test}, up to ten times costlier. "
-            f"<bookmark mark='a'/> On average the prediction is off by {err:.3f} bits, {mx:.3f} at worst"
+            f"formula on only our {n_fit} cheapest runs, and predict the other {n_test}, up to {ratio:.0f} times "
+            f"costlier. <bookmark mark='a'/> On average the prediction is off by {err:.3f} bits, {mx:.3f} at worst"
             + said1
-            + "<bookmark mark='b'/> That is the sense in which pretraining has not stalled: the loss keeps falling "
-            "along its curve. But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the "
+            + "But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the "
             "loss takes a million times the compute. What is debated is not the curve, but whether each step down "
             "it buys enough capability to be worth its price."
         ) as vo:
