@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai25.common import (AUG, GNN_C, KIND_COLOR, KIND_NAME, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   load, project, take_away, tiny_words)
+from videos.ai.ai25.common import (AUG, GNN_C, KIND_COLOR, KIND_NAME, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C, load,
+                                   project, take_away, takeaway_anims, tiny_words)
 from videos.ai.ai25.physics import rot_axis
 
 PLUS, MINUS = "#F2A07B", "#8FB9EE"
@@ -90,16 +90,18 @@ class Symmetry(VoiceoverScene):
         Pr, _ = project((x - x.mean(0)) @ R.T, 0.0, 0.0)
         PTr, _ = project((xT - x.mean(0)) @ R.T, 0.0, 0.0)
         s = 0.45
-        cA, cB, cC, cD = np.array([-3.6, 1.6, 0]), np.array([1.2, 1.6, 0]), np.array([-3.6, -1.9, 0]), \
-            np.array([1.2, -1.9, 0])
+        cA, cB, cC, cD = np.array([-3.6, 1.7, 0]), np.array([1.2, 1.7, 0]), np.array([-3.6, -1.5, 0]), \
+            np.array([1.2, -1.5, 0])
         A = particles(P0, q, cA, s, 0.1)
         B = particles(Pr, q, cB, s, 0.1)
+        # the lower row is drawn smaller, so that where the particles go stays on screen
+        s2 = min(s, 1.15 / max(np.abs(np.r_[P0, PT]).max(), 1e-9))
 
         def arrows(P, Q, c):
-            return VGroup(*[Arrow(c + s * np.r_[p, 0], c + s * np.r_[q_, 0], buff=0, color=PRED_C, stroke_width=3,
+            return VGroup(*[Arrow(c + s2 * np.r_[p, 0], c + s2 * np.r_[q_, 0], buff=0, color=PRED_C, stroke_width=3,
                                   max_tip_length_to_length_ratio=0.25) for p, q_ in zip(P, Q)])
-        Cg = VGroup(particles(P0, q, cC, s, 0.07).set_opacity(0.35), arrows(P0, PT, cC))
-        Dg = VGroup(particles(Pr, q, cD, s, 0.07).set_opacity(0.35), arrows(Pr, PTr, cD))
+        Cg = VGroup(particles(P0, q, cC, s2, 0.07).set_opacity(0.35), arrows(P0, PT, cC))
+        Dg = VGroup(particles(Pr, q, cD, s2, 0.07).set_opacity(0.35), arrows(Pr, PTr, cD))
         top = Arrow(cA + RIGHT * 1.5, cB + LEFT * 1.5, color=SYM, buff=0.1, stroke_width=4)
         bot = Arrow(cC + RIGHT * 1.5, cD + LEFT * 1.5, color=SYM, buff=0.1, stroke_width=4)
         left = Arrow(cA + DOWN * 1.0, cC + UP * 1.0, color=STRUCT, buff=0.1, stroke_width=4)
@@ -123,7 +125,7 @@ class Symmetry(VoiceoverScene):
         side.width = min(side.width, 3.6)
         side.move_to([5.0, 0.0, 0])
         tag = note(r"the five particles of the hook, \ where they go by $t = 1$ (computed)", font_size=20)
-        tag.to_corner(DL, buff=0.25)
+        tag.to_corner(UL, buff=0.25)
         with self.voiceover(
             "Now a function of the data, f: here, where each of our five particles will be one time unit later. "
             "<bookmark mark='a'/> Turn the input, apply f, <bookmark mark='b'/> or apply f and then turn the "
@@ -162,12 +164,14 @@ class Symmetry(VoiceoverScene):
         whys = [why(r"average $f$ over the group"), why(r"put in a turned input"),
                 why(r"$g' = gh$: \ as $g$ runs over $G$, \ so does $g'$"), why(r"$(ab)^{-1} = b^{-1} a^{-1}$"),
                 why(r"$h$ is linear: \ out of the sum")]
-        step = ladder(self, rows, whys, keep=5, top=3.1, x=-1.8, buff=0.36, edge=6.9)
+        for r_ in rows:
+            r_.scale(32 / 36)
+        step = ladder(self, rows, whys, keep=5, top=3.4, x=-1.8, buff=0.24, edge=6.9)
         cost = VGroup(
-            label(r"any $f$ becomes equivariant, \ at the price of $|G|$ evaluations", font_size=24, color=STRUCT),
-            label(r"$|G| = 16!$ for sixteen points; \ infinite for turns of space", font_size=24, color=PLAIN),
-            label(r"augmentation: \ a random $g$ in training, \ hoping $f$ learns the rest", font_size=24, color=AUG),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
+            label(r"any $f$ becomes equivariant, \ at the price of $|G|$ evaluations", font_size=22, color=STRUCT),
+            label(r"$|G| = 16!$ for sixteen points; \ infinite for turns of space", font_size=22, color=PLAIN),
+            label(r"augmentation: \ a random $g$ in training, \ hoping $f$ learns the rest", font_size=22, color=AUG),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "There is a way to make any function equivariant. Average it over the group: for every transformation "
             "g, transform the input, apply f, and undo g on the output. <bookmark mark='a'/> Feed this average a "
@@ -222,7 +226,8 @@ class Symmetry(VoiceoverScene):
             table.add(row)
         rule = Line([-6.4, y0 - 0.3, 0], [6.4, y0 - 0.3, 0], color=GREY_D, stroke_width=1.2)
         tag = note(rf"computed: \ ${int(e['n'])}$ test systems, \ random turns and shifts; \ distances in the units "
-                   r"of the positions", font_size=20).to_corner(DR, buff=0.25)
+                   r"of the positions", font_size=20)
+        tag.next_to(table, DOWN, buff=0.35).align_to(rule, RIGHT)
         eg, gn, ma, ml = (e[f"dyn_{k}"] for k in kinds)
         aug_frac = ma["err"] / max(ma["test_rmse"], 1e-9)
         aug_verdict = ("smaller than its own error, but not zero" if aug_frac < 1 else
@@ -251,6 +256,6 @@ class Symmetry(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(table[2][1:]), FadeIn(table[3][1:]))
             vo.wait_until("e")
-            self.play(FadeOut(p), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(p), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

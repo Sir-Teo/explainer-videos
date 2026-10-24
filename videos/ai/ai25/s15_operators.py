@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai25.common import (HIST, KIND_COLOR, KIND_NAME, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C, load,
-                                   node_box, take_away)
+from videos.ai.ai25.common import (HIST, KIND_COLOR, KIND_NAME, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
+                                   load, node_box, take_away, takeaway_anims)
 
 
 class Operators(VoiceoverScene):
@@ -230,6 +230,6 @@ class Operators(VoiceoverScene):
             "Learn the operator, not the grid. Weights that belong to frequencies carry over to any resolution, "
             "which is what a model of the physical world should do. From fields to crystals."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

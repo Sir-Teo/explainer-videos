@@ -28,7 +28,7 @@ class Hook(VoiceoverScene):
                             r"one half to David Baker, \ for computational protein design; \ the other half jointly "
                             r"to Demis Hassabis and John Jumper, \ for protein structure prediction", width=6.6,
                             color=HIST).move_to([3.2, 1.0, 0])
-        phys = label(r"the same week: \ physics, \ to John Hopfield and Geoffrey Hinton \ (Part 20)", font_size=22,
+        phys = label(r"the same week: \ physics, \ to John Hopfield \\ and Geoffrey Hinton \ (Part 20)", font_size=22,
                      color=GREY_B).next_to(card, DOWN, buff=0.45).align_to(card, LEFT)
         cite_ = cite(r"Royal Swedish Academy of Sciences, \ 9 October 2024", corner=DR)
         with self.voiceover(
@@ -94,8 +94,8 @@ class Hook(VoiceoverScene):
                  xfmt=lambda v: {0: "0", 1: r"180^\circ", 2: r"360^\circ"}[int(round(v / np.pi))],
                  center=[3.0, -0.3, 0])
         true_line = DashedLine(g.ax.c2p(0, U), g.ax.c2p(2 * np.pi, U), color=TRUE_C, stroke_width=2.5)
-        tl = label(r"the true energy \ (it can't change)", font_size=20, color=TRUE_C).next_to(true_line, UP, buff=0.08)
-        tl.align_to(g.ax, RIGHT)
+        tl = label(r"the true energy \ (it can't change)", font_size=20, color=TRUE_C)
+        tl.move_to(g.ax.c2p(np.pi, U) + UP * 0.22)
 
         def live(kind, col):
             ys = curves[kind]
@@ -120,7 +120,7 @@ class Hook(VoiceoverScene):
         rng_i = float(curves["inv"].max() - curves["inv"].min())
         inv_err = abs(float(curves["inv"].mean()) - U)
         tag = note(r"computed: \ five charged particles, \ networks trained here on $3{,}000$ of them",
-                   font_size=20).to_corner(DR, buff=0.25)
+                   font_size=20).to_corner(DL, buff=0.25)
         if rng_i < 1e-6:
             tiny = "less than a millionth of a unit, rounding error"
         elif rng_i < 1e-4:
@@ -201,11 +201,10 @@ class Hook(VoiceoverScene):
             "systems is quoted from their own papers."
         ) as vo:
             self.play(Write(q), run_time=2.0)
-            vo.wait_until("a")
-            self.play(FadeIn(tiles[0], shift=UP * 0.15), FadeIn(sch))
-            for k, mk in enumerate("bcd", 1):
+            self.play(LaggedStart(*[FadeIn(Group(t_[0], t_[2])) for t_ in tiles], lag_ratio=0.2), FadeIn(sch))
+            for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                self.play(FadeIn(tiles[k], shift=UP * 0.15))
+                self.play(FadeIn(tiles[k][1], shift=UP * 0.15), Indicate(tiles[k][2], scale_factor=1.1))
         self.wait(0.3)
         self.clear_scene()
 

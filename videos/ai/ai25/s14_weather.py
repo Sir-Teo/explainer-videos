@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, GNN_C, HIST, MESH_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   field_image, framed, load, node_box, take_away)
+                                   field_image, framed, load, node_box, take_away, takeaway_anims)
 
 
 class Weather(VoiceoverScene):
@@ -263,6 +263,6 @@ class Weather(VoiceoverScene):
             "steps, and diffusion for the part of the future that can't be known. Next: networks that learn whole "
             "equations."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

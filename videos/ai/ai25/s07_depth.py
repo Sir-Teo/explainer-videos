@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai25.common import (COMM_COLORS, GNN_C, PAIR_C, PART, PLAIN, STRUCT, SYM, load, node_box, take_away)
+from videos.ai.ai25.common import (COMM_COLORS, GNN_C, PAIR_C, PART, PLAIN, STRUCT, SYM, load, node_box, take_away,
+                                   takeaway_anims)
 
 
 class Depth(VoiceoverScene):
@@ -40,6 +41,17 @@ class Depth(VoiceoverScene):
         rest = label(r"every node ends with the same features, \ up to its degree: \ \textit{over-smoothing} "
                      r"\ (Li, Han \& Wu 2018; \ Oono \& Suzuki 2020)", font_size=23, color=PLAIN).to_edge(DOWN,
                                                                                                       buff=0.45)
+        depth = VGroup(
+            VGroup(Rectangle(width=5.4, height=0.3, stroke_width=0, fill_color=STRUCT, fill_opacity=0.8),
+                   label(r"image networks: \ up to $152$ layers \ (ResNet, \ Part 9)", font_size=22, color=STRUCT)),
+            VGroup(Rectangle(width=5.4 * 4 / 152, height=0.3, stroke_width=0, fill_color=GNN_C, fill_opacity=0.9),
+                   label(r"graph networks: \ usually $2$ to $4$", font_size=22, color=GNN_C)),
+        )
+        for b_ in depth:
+            b_[0].move_to([-6.2 + b_[0].width / 2, 0, 0])
+            b_[1].next_to(b_[0], RIGHT, buff=0.25)
+        depth[0].move_to([depth[0].get_center()[0], -1.95, 0])
+        depth[1].move_to([depth[1].get_center()[0], -2.55, 0])
         with self.voiceover(
             "Graph networks are usually shallow, two to four layers, while image networks run to hundreds. Here is "
             "one reason. Strip a graph convolution of its weights and it is an average over neighbours, applied "
@@ -52,6 +64,8 @@ class Depth(VoiceoverScene):
             "Oono and Taiji Suzuki proved it for networks with weights and ReLUs."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(GrowFromEdge(depth[0][0], LEFT), FadeIn(depth[0][1]), GrowFromEdge(depth[1][0], LEFT),
+                      FadeIn(depth[1][1]), run_time=1.5)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 step(k)
@@ -77,7 +91,8 @@ class Depth(VoiceoverScene):
         theory = DashedLine(g.ax.c2p(k0, logE[k0]), g.ax.c2p(ks[-1], logE[k0] + 2 * (ks[-1] - k0) * np.log10(lam2)),
                             color=PLAIN, dash_length=0.08)
         tl = label(rf"slope $\lambda_2^{{2k}}$, \ $\lambda_2 = {lam2:.3f}$", font_size=20, color=PLAIN)
-        tl.next_to(theory.get_end(), UP, buff=0.15).shift(LEFT * 0.6)
+        k_lab = 36
+        tl.next_to(g.ax.c2p(k_lab, logE[k0] + 2 * (k_lab - k0) * np.log10(lam2)), UR, buff=0.12)
         y = np.asarray(o["y"])
         show = [str(k) for k in o["show_k"]]
         panels = Group()
@@ -185,12 +200,13 @@ class Depth(VoiceoverScene):
                        for L in range(1, levels + 1)])
         txt = VGroup(
             label(r"$L$ hops away: \ up to $(\deg)^L$ nodes", font_size=24, color=GNN_C),
-            label(r"all squeezed into one vector \ of fixed size", font_size=24, color=PLAIN),
-            label(r"\textit{over-squashing}: \ Alon \& Yahav (2021); \ bottlenecks and curvature: \ Topping et al.\ "
+            label(r"all squeezed into one vector \\ of fixed size", font_size=24, color=PLAIN),
+            label(r"\textit{over-squashing}: \ Alon \& Yahav (2021); \\ bottlenecks and curvature: \ Topping et al.\ "
                   r"(2022)", font_size=22, color=GREY_B),
-            label(r"remedies: \ rewire the graph, \ add global nodes, \ or attend to everything", font_size=22,
+            label(r"remedies: \ rewire the graph, \\ add global nodes, \ or attend to everything", font_size=22,
                   color=STRUCT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        txt.move_to([0, 0.3, 0]).align_to(np.array([1.35, 0, 0]), LEFT)
         with self.voiceover(
             "A second problem appears when the answer depends on distant nodes. <bookmark mark='a'/> The number of "
             "nodes within L hops can grow exponentially, <bookmark mark='b'/> yet all their information has to "
@@ -260,6 +276,6 @@ class Depth(VoiceoverScene):
             "and bottlenecks squash distant information. Skip connections and attention push back. Next: the "
             "symmetry of space itself."
         ):
-            self.play(FadeOut(boxes), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(boxes), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, HIST, LEAN_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C,
-                                   load, matrix_image, node_box, take_away, tiny_words, words_num)
+                                   load, matrix_image, node_box, take_away, takeaway_anims, tiny_words, words_num)
 
 
 class Search(VoiceoverScene):
@@ -273,6 +273,6 @@ class Search(VoiceoverScene):
             "Discovery by search, then: propose freely, check exactly, keep what survives. It works wherever the "
             "checking is exact, which is why mathematics and algorithms went first."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

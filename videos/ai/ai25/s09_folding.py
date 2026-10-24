@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (CHAIN_GRAD, HIST, MIRROR_C, MSA_C, PAIR_C, PART, PRED_C, SEQ, STRUCT, TRUE_C,
-                                   chain3d, load, matrix_image, node_box, take_away, words_num)
+                                   chain3d, load, matrix_image, node_box, take_away, takeaway_anims, words_num)
 
 AA = "MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQTLGQHDFSAGEGLYTHMKALRPDEDRLSP"
 
@@ -310,6 +310,6 @@ class Folding(VoiceoverScene):
             "Distances pin down a shape, but only up to its mirror image. Keep that in mind; AlphaFold 2's answer "
             "to it is one of its cleverest parts."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

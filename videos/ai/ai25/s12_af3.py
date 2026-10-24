@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, HIST, KIND_COLOR, MSA_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   chain2d_mob, load, node_box, take_away)
+                                   chain2d_mob, load, node_box, take_away, takeaway_anims)
 
 
 def chain_sheet(S, cols, scale=0.32, gap=1.35, color=STRUCT, width=2.2, dot_r=0.035):
@@ -240,6 +240,6 @@ class AF3(VoiceoverScene):
             "symmetry from turned copies. Prediction runs backwards, too: from a shape you want, to a protein that "
             "folds into it."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()
