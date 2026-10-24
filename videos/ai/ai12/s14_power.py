@@ -78,11 +78,11 @@ class Power(VoiceoverScene):
             return VMobject(stroke_color=C.BITS, stroke_width=3).set_points_as_corners([[x, wave(x), 0] for x in xs])
 
         p5, p10 = pieces(5), pieces(10)
-        mcap = label(r"data along a curve: \ $d = 1$; \ yellow: \ $N$ straight pieces \ (schematic)", font_size=20,
-                     color=GREY_A).move_to([4.6, 0, 0])
-        mpic = VGroup(man, mdots, p5).move_to([-0.6, -1.7, 0])
+        mcap = label(r"data along a curve: \ $d = 1$; \\ yellow: \ $N$ straight pieces \ (schematic)", font_size=20,
+                     color=GREY_A)
+        mpic = VGroup(man, mdots, p5).move_to([-1.0, -1.5, 0])
         p10.move_to(p5)
-        mcap.move_to([4.7, -1.7, 0])
+        mcap.next_to(mpic, DOWN, buff=0.3)
         late = abs(s8 - t8) > 0.1
         said1 = (
             f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
@@ -138,9 +138,10 @@ class Power(VoiceoverScene):
         bars.shift(DOWN * (bars.get_bottom()[1] + 3.2))
         bl = label(rf"our toy: \ ${T}$ subtasks, \ $p_k \propto k^{{-{alpha + 1:.1f}}}$", font_size=22, color=QUANT)
         bl.next_to(bars, UP, buff=0.12).align_to(bars, LEFT)
-        cut = DashedLine(bars[7].get_corner(DR) + RIGHT * 0.03, bars[7].get_corner(DR) + RIGHT * 0.03 + UP * 3.2, color=WHITE,
+        cut = DashedLine(bars[7].get_corner(DR) + RIGHT * 0.03, bars[7].get_corner(DR) + RIGHT * 0.03 + UP * 2.4, color=WHITE,
                          stroke_width=2)
-        cl = label(r"learned \ $\leftarrow \ | \ \rightarrow$ \ not yet", font_size=20, color=WHITE).next_to(cut, UP, buff=0.05)
+        cl = label(r"learned \ $\leftarrow \ | \ \rightarrow$ \ not yet", font_size=20, color=WHITE)
+        cl.move_to(cut.get_top() + UP * 0.2)
         task = label(r"each subtask: \ the parity of $3$ hidden bits out of $12$; \ a one-hot tag says which", font_size=20,
                      color=GREY_A).to_edge(DOWN, buff=0.15)
         cite_ = cite(r"E.~Michaud, Z.~Liu, U.~Girit \& M.~Tegmark, \textit{The Quantization Model of Neural Scaling} "
@@ -220,6 +221,16 @@ class Power(VoiceoverScene):
                    font_size=18, color=GREY_A).next_to(nll, RIGHT, buff=0.4) if full else VGroup()
         tag = note(r"two seeds per width").to_corner(DR, buff=0.2)
         n_learn = int((run[-1] < 0.1).sum())
+        # meanwhile on the right: the subtasks by frequency, turning green as this network learns them
+        pq = np.asarray(q["p"], float)
+        fbars = VGroup(*[Rectangle(width=0.1, height=max(2.6 * v / pq.max(), 0.03), stroke_width=0, fill_color=GREY_D,
+                                   fill_opacity=1.0) for v in pq]).arrange(RIGHT, buff=0.035, aligned_edge=DOWN)
+        fbars.move_to([3.6, -0.9, 0])
+        learned_at = sorted([k for k in range(T) if run[-1, k] < 0.1],
+                            key=lambda k: int(np.argmax(run[:, k] < 0.1)))  # in the order this network learned them
+        fl_ = label(rf"the ${T}$ subtasks, \ common to rare: \\ green once width ${widths[wi]}$ has learned them",
+                    font_size=20, color=GREY_A).next_to(fbars, UP, buff=0.2)
+        freq = VGroup(fbars, fl_)
         order = [int(steps[np.argmax(run[:, k] < 0.1)]) if (run[:, k] < 0.1).any() else 10 ** 9 for k in range(T)]
         in_order = np.corrcoef(np.arange(T)[np.array(order) < 10 ** 9], np.array(order)[np.array(order) < 10 ** 9])[0, 1] \
             if sum(o < 10 ** 9 for o in order) > 3 else 0.0
@@ -257,12 +268,14 @@ class Power(VoiceoverScene):
             + "<bookmark mark='e'/> "
             + said5
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
+            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(tag), FadeIn(freq))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(c_) for c_ in sub], lag_ratio=0.05), run_time=3.0)
+            self.play(LaggedStart(*[fbars[k].animate.set_fill(QUANT) for k in learned_at], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(avg), FadeIn(al))
             vo.wait_until("c")
+            self.play(FadeOut(freq))
             self.play(Create(bx), FadeIn(bxt), FadeIn(byt), FadeIn(bxn), FadeIn(byn))
             self.play(lag([FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.05), FadeIn(nl), FadeIn(nll))
             vo.wait_until("d")

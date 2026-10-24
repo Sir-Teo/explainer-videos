@@ -41,12 +41,13 @@ class Grammar(VoiceoverScene):
         outs.next_to(pl, DOWN, buff=0.6).align_to(pl, LEFT)
         ol = label(rf"what our novels model writes next: \ ${gr['valid_un']}$ of ${gr['n']}$ are valid records",
                    font_size=22, color=BADC).next_to(outs, DOWN, buff=0.4).align_to(pl, LEFT)
+        un_say = (f"of {gr['n']} tries, not one was a valid record." if gr["valid_un"] == 0 else
+                  f"of {gr['n']} tries, {gr['valid_un']} were valid records.")
         with self.voiceover(
             "Programs that call a model often need its answer in a fixed format: a record, a function call, a "
             "number. <bookmark mark='a'/> Our novels model has never seen such a thing. Shown three records of "
-            "guests at an inn, and asked for the next, <bookmark mark='b'/> it goes back to writing novels: of "
-            f"{gr['n']} tries, {gr['valid_un']} were valid records. Big models do far better, but 'usually' isn't "
-            "good enough for a program."
+            "guests at an inn, and asked for the next, <bookmark mark='b'/> it goes back to writing novels: "
+            + un_say + " Big models do far better, but 'usually' isn't good enough for a program."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(ph))
             vo.wait_until("a")
@@ -129,11 +130,14 @@ class Grammar(VoiceoverScene):
                           rf"possible: \ up to ${F.XGRAMMAR['gain']}\times$ faster", width=4.2, font_size=16,
                           color=AUTOC).move_to([4.4, -1.6, 0])
         over = tc / tu - 1
-        cost_say = (f"and it costs nothing we can measure: {tc:.2f} milliseconds a token against {tu:.2f}."
-                    if abs(over) < 0.1 else f"and it costs {100 * over:.0f} percent more time per token.")
+        cost_say = (f"it costs nothing we can measure: {tc:.2f} milliseconds a token against {tu:.2f}."
+                    if abs(over) < 0.1 else f"it costs {100 * over:.0f} percent more time per token.")
+        mask_say = (f"every one of the {gr['n']} outputs is a valid record." if gr["valid_co"] == gr["n"] else
+                    f"{gr['valid_co']} of the {gr['n']} outputs are valid records; the rest ran out of room before "
+                    "they closed.")
         with self.voiceover(
-            f"<bookmark mark='a'/> With the mask, all {gr['valid_co']} of {gr['n']} outputs are valid records, "
-            + cost_say + " <bookmark mark='b'/> Look at the names, though. The model has no idea what belongs in "
+            "<bookmark mark='a'/> With the mask, " + mask_say + " As for speed, " + cost_say +
+            " <bookmark mark='b'/> Look at the names, though. The model has no idea what belongs in "
             "the field; the mask only rules out what can't. A mask fixes the form, not the sense. Grammars more "
             "complex than patterns, like JSON with nesting, need a stack as well, and XGrammar, in 2024, made "
             "those fast too."

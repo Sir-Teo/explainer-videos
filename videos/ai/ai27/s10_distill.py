@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import ASSIST, BASE, GOLD, KLC, PART, POLICY, REF, load
+from videos.ai.ai27.common import ASSIST, BASE, GOLD, KLC, PART, POLICY, REF, load, node_box, ticks
 
 
 class Distill(VoiceoverScene):
@@ -42,6 +42,12 @@ class Distill(VoiceoverScene):
         tag = note(r"illustrative").to_corner(DR, buff=0.25)
         hc = note(r"Hinton, Vinyals \& Dean, \textit{Distilling the knowledge in a neural network} (2015)")
         hc.to_corner(DL, buff=0.25)
+        # the teacher and the student, side by side, until the teacher's probabilities take their place (schematic)
+        teach = node_box(r"teacher: \ large, \ slow, \ strong", REF, font_size=26, height=0.9)
+        stud = node_box(r"student: \ small, \ fast", ASSIST, font_size=26, height=0.9)
+        pair = VGroup(teach, stud).arrange(DOWN, buff=1.1).move_to([3.2, 0.3, 0])
+        imit = Arrow(teach.get_bottom(), stud.get_top(), buff=0.1, color=GREY_B, stroke_width=3)
+        imit_l = label(r"imitate", font_size=22, color=GREY_A).next_to(imit, RIGHT, buff=0.15)
         with self.voiceover(
             "A large model is expensive to run; a small one is cheap but weaker. Distillation trains the small one, "
             "the student, to imitate the large one, the teacher. <bookmark mark='a'/> Trained on the data alone, the "
@@ -51,8 +57,12 @@ class Distill(VoiceoverScene):
             "match the teacher's probabilities, softened by a temperature T so that the small ones count, with the "
             "KL divergence of Part 1."
         ) as vo:
-            self.play(FadeIn(hb), FadeIn(hl), FadeIn(ht), FadeIn(tag), FadeIn(hc))
+            self.play(FadeIn(teach), FadeIn(tag), FadeIn(hc))
+            self.play(GrowArrow(imit), FadeIn(imit_l), FadeIn(stud))
+            vo.wait_until("a")
+            self.play(FadeIn(hb), FadeIn(hl), FadeIn(ht))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(teach, stud, imit, imit_l)))
             self.play(FadeIn(sb), FadeIn(sl), FadeIn(st))
             self.play(FadeIn(dark))
             vo.wait_until("c")
@@ -109,7 +119,8 @@ class Distill(VoiceoverScene):
         hi = max(float(ct[:, 1].max()), float(cd[:, 1].max()))
         g = axes([0, T], [np.floor(lo * 4) / 4, np.ceil(hi * 4) / 4], x_length=7.0, y_length=3.8,
                  xlabel=r"tokens the student has trained on", ylabel=r"loss on held-out novel text (nats)",
-                 xticks=[0, T], xfmt=lambda v: rf"{v / 1e6:.0f}\text{{M}}" if v else "0", center=[-1.2, -0.3, 0])
+                 xticks=[0, T], xfmt=lambda v: rf"{v / 1e6:.0f}\text{{M}}" if v else "0",
+                 yticks=ticks(np.floor(lo * 4) / 4, np.ceil(hi * 4) / 4, 3), center=[-1.2, -0.3, 0])
         lt = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in ct]).set_stroke(BASE, 4)
         ld = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in cd]).set_stroke(ASSIST, 4)
         tl = DashedLine(g.ax.c2p(0, d["teacher_heldout"]), g.ax.c2p(T, d["teacher_heldout"]), color=GOLD,

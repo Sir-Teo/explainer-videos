@@ -74,7 +74,23 @@ class Merge(VoiceoverScene):
         whys = [why(r"a task vector: \ what fine-tuning changed"), why(r"add two: \ a model that does both"),
                 why(r"subtract one: \ forget a behaviour")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.8, buff=0.65, edge=6.9)
-        hc = note(r"Ilharco et al., \textit{Editing models with task arithmetic} (2023)").to_edge(DOWN, buff=0.4)
+        hc = note(r"Ilharco et al., \textit{Editing models with task arithmetic} (2023)").to_edge(DOWN, buff=0.25)
+        # weight space, schematic: the pretrained point, two task vectors, their sum, and one subtracted
+        o_ = np.array([-0.8, -2.9, 0])
+        ta, tb = np.array([2.4, 0.3, 0]), np.array([0.5, 1.2, 0])
+        base_dot = Dot(o_, radius=0.08, color=BASE)
+        base_l = label(r"$\theta_{\text{pretrained}}$", font_size=22, color=BASE).next_to(base_dot, DR, buff=0.08)
+        va = Arrow(o_, o_ + ta, buff=0, color=ASSIST, stroke_width=4)
+        vb = Arrow(o_, o_ + tb, buff=0, color=POLICY, stroke_width=4)
+        la = label(r"$\tau_A$", font_size=24, color=ASSIST).next_to(va.get_end(), RIGHT, buff=0.1)
+        lb = label(r"$\tau_B$", font_size=24, color=POLICY).next_to(vb.get_end(), LEFT, buff=0.1)
+        sa = DashedLine(o_ + ta, o_ + ta + tb, color=GREY_C, dash_length=0.06)
+        sb = DashedLine(o_ + tb, o_ + ta + tb, color=GREY_C, dash_length=0.06)
+        vs = Arrow(o_, o_ + 0.85 * (ta + tb), buff=0, color=ADAPT, stroke_width=5)
+        ls_ = label(r"$\lambda(\tau_A + \tau_B)$", font_size=24, color=ADAPT).next_to(vs.get_end(), UR, buff=0.08)
+        vt = Arrow(o_, o_ - np.array([1.9, -0.35, 0]), buff=0, color=PENALTY, stroke_width=4)
+        lt = label(r"$-\lambda\, \tau_{\text{toxic}}$", font_size=24, color=PENALTY).next_to(vt.get_end(), UP, buff=0.1)
+        stag = note(r"schematic").to_corner(DR, buff=0.25)
         with self.voiceover(
             "In 2023 Gabriel Ilharco and colleagues turned this into arithmetic. Subtract the pretrained weights "
             "from a fine-tuned model's weights, and call the difference a task vector: everything fine-tuning "
@@ -83,11 +99,15 @@ class Merge(VoiceoverScene):
             "unlearns it: subtracting the vector of a model fine-tuned on toxic text made the original less toxic."
         ) as vo:
             step(0)
-            self.play(FadeIn(hc))
+            self.play(FadeIn(hc), FadeIn(base_dot), FadeIn(base_l), FadeIn(stag))
+            self.play(GrowArrow(va), FadeIn(la), GrowArrow(vb), FadeIn(lb))
             vo.wait_until("a")
             step(1)
+            self.play(Create(sa), Create(sb))
+            self.play(GrowArrow(vs), FadeIn(ls_))
             vo.wait_until("b")
             step(2)
+            self.play(GrowArrow(vt), FadeIn(lt))
         self.wait(0.3)
         self.clear_scene()
 

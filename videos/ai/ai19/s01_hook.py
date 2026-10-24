@@ -236,7 +236,7 @@ class Hook(VoiceoverScene):
                       .move_to([X(yr), -3.15 + max(hgt, 0.03) / 2, 0]))
         pvals = VGroup(*[label(rf"\${u:g}", font_size=16, color=COSTC).next_to(b_, UP, buff=0.05) for b_, (_, _, u, _)
                          in zip(pbars, pr)])
-        pl = label(r"USD per million tokens, \ OpenAI's cheapest model \\ at least as good as GPT-3 \ (list prices)",
+        pl = label(r"USD per million input tokens, \ OpenAI's cheapest model \\ at least as good as GPT-3 \ (list prices)",
                    font_size=16, color=COSTC).move_to([4.5, -2.75, 0])
         with self.voiceover(
             "How did we get here? The transformer of 2017 already wrote one token at a time and kept the keys and "
@@ -248,7 +248,8 @@ class Hook(VoiceoverScene):
             "cache in pages. <bookmark mark='d'/> Then DeepSeek compressed the cache itself, servers split reading "
             "from writing, and in 2025 OpenAI released gpt-oss with its experts in four-bit floats. "
             "<bookmark mark='e'/> Meanwhile the price of a token fell. A model at least as good as GPT-3 cost sixty "
-            f"dollars per million tokens in 2021, and fifteen cents in 2024: {pr[0][2] / pr[-1][2]:.0f} times less."
+            "dollars per million tokens in 2021, and fifteen cents per million input tokens in 2024: "
+            f"{pr[0][2] / pr[-1][2]:.0f} times less."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(ticks))
             self.play(FadeIn(marks[0]), FadeIn(labs[0]))

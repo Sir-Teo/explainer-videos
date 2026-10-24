@@ -111,7 +111,7 @@ class Data(VoiceoverScene):
                 why(r"the sum as an integral \ (Muennighoff et al.)")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-1.8, buff=0.32, edge=6.9)
         lx = np.log2(ep)
-        ax = CornerAxes(x_range=[0, lx.max() + 0.3, 2], y_range=[0, math.log2(max(eff.max() / U.min(), 40)) + 0.3, 1],
+        ax = CornerAxes(x_range=[0, lx.max() + 0.3, 2], y_range=[0, math.log2(max(np.nanmax(eff / U), 40)) + 0.3, 1],
                         x_length=5.8, y_length=3.2, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-2.6, -1.7, 0])
         xt = VGroup(*[MathTex(str(int(2 ** v)), font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
@@ -130,7 +130,11 @@ class Data(VoiceoverScene):
 
         fit = curve(ax, np.log2(es), worth(Rs), C.BITS, 3.5, smooth=True)
         paper = DashedVMobject(curve(ax, np.log2(es), np.minimum(worth(Rp), ymax), GREY_A, 2.5, smooth=True), num_dashes=40)
-        pts = VGroup(*[Dot(ax.c2p(a, math.log2(e / u)), radius=0.08, color=WHITE) for a, e, u in zip(lx, eff, U)])
+        pts = VGroup(*[Dot(ax.c2p(a, math.log2(e / u)), radius=0.08, color=WHITE) for a, e, u in zip(lx, eff, U)
+                       if np.isfinite(e)])
+        off = [int(e_) for e_, v in zip(ep, eff) if not np.isfinite(v)]
+        offl = label(r"off the curve: \ " + ", ".join(str(v) for v in off) + r" epochs, \ worse than any fresh run", font_size=18,
+                     color=GREY_A).next_to(ax.c2p(lx.max(), 0), UL, buff=0.15) if off else VGroup()
         lg = VGroup(label(r"white: \ our runs, \ read off the fresh-data curve", font_size=20, color=WHITE),
                     label(rf"ours: \ $R^* = {Rs:.1f}$", font_size=22, color=C.BITS),
                     label(rf"Muennighoff et al.: \ $R^* = {Rp:.1f}$ \ (up to $9$ billion parameters)", font_size=20, color=GREY_A))
@@ -159,7 +163,7 @@ class Data(VoiceoverScene):
             step(2)
             vo.wait_until("d")
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(diag), FadeIn(dl))
-            self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.2), FadeIn(lg[0]))
+            self.play(lag([FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.2), FadeIn(lg[0]), FadeIn(offl))
             self.play(Create(fit), FadeIn(lg[1]), Create(paper), FadeIn(lg[2]))
         self.wait(0.3)
         self.clear_scene()

@@ -120,17 +120,25 @@ class Scheduling(VoiceoverScene):
                      rf"+ p \cdot \text{{prompt tokens}}$ \ (worst error ${100 * s['fit_err']:.0f}\%$)",
                      font_size=18).to_edge(DOWN, buff=0.35)
         gain = tp[1] / tp[0]
-        demand = s["rate"] * s["out_mean"]
-        st_say = (f"can't keep up: they write {tp[0]:.0f} tokens a second, fewer than are asked for, so the queue "
-                  "grows." if tp[0] < 0.95 * demand else f"write {tp[0]:.0f} tokens a second, all that is asked.")
-        co_say = ("all that is asked." if tp[1] >= 0.95 * demand else "and still not all that is asked.")
+        window = one["static"]["n"] / s["rate"]  # how long the requests take to arrive
+        # a server keeps up when it finishes soon after the last request arrives
+        st_keeps, co_keeps = (one[k]["span"] < 1.35 * window for k in ("static", "continuous"))
+        st_say = (f"write {tp[0]:.0f} tokens a second, and keep up." if st_keeps else
+                  f"can't keep up: they write {tp[0]:.0f} tokens a second, fewer than are asked for, so the queue "
+                  "grows.")
+        co_say = "and keeps up with the traffic." if co_keeps else "and still falls behind."
+        if tt[0] >= 2:
+            wait_say = (f"a median of {tt[0]:.0f} seconds with static batches, {1e3 * tt[1]:.0f} milliseconds with "
+                        "continuous batching.")
+        else:
+            wait_say = (f"a median of {1e3 * tt[0]:.0f} milliseconds with static batches, {1e3 * tt[1]:.0f} with "
+                        "continuous batching.")
         with self.voiceover(
             "With more traffic the difference is stark. <bookmark mark='a'/> We simulated a server on this "
             f"computer's measured costs: 400 requests arriving at random, {s['rate']:g} a second, with long-tailed "
             "lengths, like real chat. <bookmark mark='b'/> Static batches " + st_say + " Continuous batching "
             f"writes {tp[1]:.0f}, {x_(gain)} times as many, " + co_say + " <bookmark mark='c'/> And the wait for a "
-            f"first token: a median of {tt[0]:.0f} seconds with static batches, {1e3 * tt[1]:.0f} milliseconds with "
-            "continuous batching. Serving systems have worked this way ever since."
+            "first token: " + wait_say + " Serving systems have worked this way ever since."
         ) as vo:
             self.play(FadeIn(head), FadeIn(model))
             vo.wait_until("a")

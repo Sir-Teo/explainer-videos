@@ -156,16 +156,27 @@ class Experts(VoiceoverScene):
                          r"parameters, $N(1 - e^{-P/\gamma})$; \ the best training precision: \ $7$ to $8$ bits",
                          width=5.4, color=HIST)).move_to([3.7, -1.0, 0])
         link = note(r"FP8 training: \ Part 18; \ quantized inference: \ Part 19").to_corner(DR, buff=0.2)
-        nl = NumberLine(x_range=[-1, 1, 0.25], length=5.0, include_ticks=True, tick_size=0.12, color=GREY_C)
+        # symmetric round-to-nearest, as compute.py does it: 3 bits, levels -3 ... 3 times (largest |w|) / 3
+        nl = NumberLine(x_range=[-1, 1, 1 / 3], length=5.0, include_ticks=True, tick_size=0.12, color=GREY_C)
         g_ = np.random.default_rng(5)
         wv = np.clip(g_.normal(0, 0.4, 14), -0.95, 0.95)
-        before = VGroup(*[Dot(nl.n2p(v) + UP * 0.35, radius=0.06, color=C.TRUE_P) for v in wv])
-        after = VGroup(*[Dot(nl.n2p(round(v * 4) / 4) + UP * 0.35, radius=0.06, color=C.BITS) for v in wv])
-        qcap = label(r"rounding weights to a few levels \\ ($3$ bits: \ $8$ levels; \ schematic)", font_size=20, color=GREY_A)
-        qpic = VGroup(nl, before, qcap.next_to(nl, DOWN, buff=0.25)).move_to([3.7, 0.3, 0])
-        after.move_to(before).align_to(before, DOWN)
-        for d_, v in zip(after, wv):
-            d_.set_x(nl.n2p(round(v * 4) / 4)[0])
+        wv = wv / np.abs(wv).max()  # the largest weight sets the scale
+        qv = np.round(wv * 3) / 3
+        before = VGroup(*[Dot(nl.n2p(v) + UP * 0.45, radius=0.06, color=C.TRUE_P) for v in wv])
+        seen: dict = {}
+        after = VGroup()
+        for v in qv:
+            k_ = seen.get(round(v, 3), 0)
+            seen[round(v, 3)] = k_ + 1
+            after.add(Dot(nl.n2p(v) + DOWN * (0.35 + 0.14 * k_), radius=0.06, color=C.BITS))
+        moves = VGroup(*[Line(b_.get_center(), a_.get_center(), stroke_width=1.2, color=GREY_B) for b_, a_ in zip(before, after)])
+        qcap = label(r"rounding to the nearest level \\ ($3$ bits: \ $7$ levels; \ schematic)", font_size=20, color=GREY_A)
+        qk = VGroup(label(r"weights", font_size=18, color=C.TRUE_P).next_to(nl, LEFT, buff=0.2).shift(UP * 0.45),
+                    label(r"rounded", font_size=18, color=C.BITS).next_to(nl, LEFT, buff=0.2).shift(DOWN * 0.45))
+        c0 = nl.get_center().copy()
+        qpic = VGroup(nl, before, qk, qcap.next_to(nl, DOWN, buff=1.1)).move_to([3.9, 0.3, 0])
+        rel = VGroup(moves, after)
+        rel.shift(nl.get_center() - c0)
         grows = gD > 0.05
         d4 = delta[i, :, bits.index(4)]
         okk = np.isfinite(d4)
@@ -188,11 +199,11 @@ class Experts(VoiceoverScene):
             "having fewer parameters; by their fit, the best training precision is seven to eight bits."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(link), FadeIn(qpic))
-            self.play(*[Transform(b_, a_) for b_, a_ in zip(before, after)], run_time=1.5)
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), run_time=2.5)
+            self.play(LaggedStart(*[Create(m_) for m_ in moves], lag_ratio=0.05), LaggedStart(*[FadeIn(a_) for a_ in after],
+                                                                                           lag_ratio=0.05), run_time=1.5)
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), run_time=max(2.5, vo.until("a")))
             vo.wait_until("b")
-            self.play(FadeOut(qpic))
+            self.play(FadeOut(qpic), FadeOut(rel))
             self.play(Write(law), FadeIn(ll))
             vo.wait_until("c")
             self.play(FadeIn(cards, shift=UP * 0.1))

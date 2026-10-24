@@ -137,14 +137,28 @@ class Rotation(VoiceoverScene):
         cut = 1 - h_ / p
         say = (f"the Hadamard rotation cuts it to {h_:.3f}, {100 * cut:.0f} percent less" if h_ < 0.9 * p else
                f"the Hadamard rotation barely changes it, {h_:.3f}")
+        if max(rnd) - min(rnd) < 0.01:
+            rnd_say = (f"Three different random rotations give {min(rnd):.3f} to {max(rnd):.3f}: on our model, nearly "
+                       "the same. But in 2024 Zechun Liu and colleagues at Meta found that on large models, random "
+                       "rotations can differ by up to thirteen points on a benchmark, and asked: why not learn the "
+                       "rotation?")
+        else:
+            rnd_say = (f"Three different random rotations give {min(rnd):.3f} to {max(rnd):.3f}. In 2024 Zechun Liu "
+                       "and colleagues at Meta noticed such differences, up to thirteen points on a benchmark, and "
+                       "asked: why not learn the rotation?")
+        lv = vals[4]
+        if lv < h_ - 0.003:
+            learn_say = f"We did, small: {lv:+.3f}, better than the Hadamard rotation it started from."
+        elif lv <= h_ + 0.003:
+            learn_say = f"We did, small: {lv:+.3f}, no better than the Hadamard rotation it started from."
+        else:
+            learn_say = f"We did, small: {lv:+.3f}, a little worse than the Hadamard rotation it started from."
         with self.voiceover(
             "Now the hard case: four-bit weights and four-bit activations, every block input rounded on the fly. "
             f"<bookmark mark='a'/> Plainly, our model loses {p:.3f} nats a token; SmoothQuant {vals[1]:.3f}. "
             "<bookmark mark='b'/> Rotate first, the residual stream by a Hadamard matrix and the input of each "
-            "feed-forward output by a random rotation, and " + say + ". <bookmark mark='c'/> Three different "
-            f"random rotations give {min(rnd):.3f} to {max(rnd):.3f}. In 2024 Zechun Liu and colleagues at Meta "
-            "noticed such differences, up to thirteen points on a benchmark, and asked: why not learn the "
-            f"rotation? <bookmark mark='d'/> We did, small: {vals[4]:+.3f}."
+            "feed-forward output by a random rotation, and " + say + ". <bookmark mark='c'/> " + rnd_say +
+            " <bookmark mark='d'/> " + learn_say
         ) as vo:
             self.play(FadeIn(head), FadeIn(ctx))
             vo.wait_until("a")

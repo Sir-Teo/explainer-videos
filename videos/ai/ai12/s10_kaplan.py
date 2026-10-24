@@ -168,6 +168,13 @@ class Kaplan(VoiceoverScene):
         ci = label(r"the published uncertainty, $0.454$ to $0.455$, \ would take over $600{,}000$ runs; \ they ran "
                    r"fewer "
                    r"than $500$", font_size=22, color=C.BITS).next_to(how, DOWN, buff=0.2)
+        # Chinchilla's own three methods, as published (Hoffmann et al. 2022, Table 2)
+        three = VGroup(label(r"Chinchilla's three methods, \\ published:", font_size=24, color=GREY_A),
+                       label(r"1. \ the envelope: \ $a = 0.50$", font_size=24, color=WHITE),
+                       label(r"2. \ the valleys: \ $a = 0.49$", font_size=24, color=WHITE),
+                       label(r"3. \ the fitted law: \ $a = 0.46$", font_size=24, color=SP)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                 buff=0.18)
+        three.move_to(pair[1]).align_to(pair[1], LEFT)
         ours = load("chinchilla")
         lesson = label(rf"an exponent is a measurement, with an error bar: \ ours, ${float(ours['a3_lo']):.2f}$ to "
                        rf"${float(ours['a3_hi']):.2f}$", font_size=24, color=WHITE).to_edge(DOWN, buff=0.35)
@@ -185,10 +192,11 @@ class Kaplan(VoiceoverScene):
             "five hundred. <bookmark mark='d'/> The lesson for us: an exponent is a measurement, and it has an "
             "error bar."
         ) as vo:
-            self.play(FadeIn(hd), FadeIn(pair[0]))
+            self.play(FadeIn(hd), FadeIn(pair[0]), FadeIn(three))
             vo.wait_until("a")
             self.play(FadeIn(how), FadeIn(cite_))
             vo.wait_until("b")
+            self.play(FadeOut(three))
             self.play(FadeIn(pair[1], shift=LEFT * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(ci))

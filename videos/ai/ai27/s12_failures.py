@@ -147,8 +147,15 @@ class Failures(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def inside(self):
-        v = Arrow([-6.3, -0.1, 0], [-3.9, 1.5, 0], buff=0, color=PENALTY, stroke_width=6)
-        vl = MathTex(r"\mathbf v_{\text{trait}}", font_size=40, color=PENALTY).next_to(v.get_end(), UP, buff=0.15)
+        # activations as points (schematic): with the trait and without it; v joins the two means
+        rg = np.random.default_rng(4)
+        ca, cb = np.array([-5.7, 0.0, 0]), np.array([-4.1, 1.5, 0])
+        pa = VGroup(*[Dot(ca + np.r_[rg.normal(0, 0.38, 2), 0], radius=0.045, color=GREY_B) for _ in range(28)])
+        pb = VGroup(*[Dot(cb + np.r_[rg.normal(0, 0.38, 2), 0], radius=0.045, color=PENALTY) for _ in range(28)])
+        la_ = label(r"trait absent", font_size=20, color=GREY_B).next_to(pa, DOWN, buff=0.15)
+        lb_ = label(r"trait shown", font_size=20, color=PENALTY).next_to(pb, UP, buff=0.15)
+        v = Arrow(ca, cb, buff=0, color=PENALTY, stroke_width=6)
+        vl = MathTex(r"\mathbf v_{\text{trait}}", font_size=36, color=PENALTY).next_to(v.get_center(), RIGHT, buff=0.25)
         rows = VGroup(
             label(r"$\mathbf v$: \ mean activation when the trait shows, \ minus when it doesn't", font_size=24),
             label(r"monitor: \ project the activations on $\mathbf v$ during a conversation, \ or training", font_size=24),
@@ -173,11 +180,13 @@ class Failures(VoiceoverScene):
             "anyone trains on them. <bookmark mark='c'/> And adding or subtracting the vector steers the behaviour. "
             "Part 30 is about this kind of work."
         ) as vo:
-            self.play(GrowArrow(v), FadeIn(vl), FadeIn(rows[0]), FadeIn(hc))
+            self.play(FadeIn(pa), FadeIn(la_), FadeIn(hc))
+            self.play(FadeIn(pb), FadeIn(lb_))
+            self.play(GrowArrow(v), FadeIn(vl), FadeIn(rows[0]))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k + 1], shift=UP * 0.15))
                 if k == 0:
-                    self.play(FadeIn(g), FadeIn(sch), Create(rise), run_time=1.5)
+                    self.play(FadeOut(la_), FadeIn(g), FadeIn(sch), Create(rise), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
