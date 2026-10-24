@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import BUDGET_COLORS, DCOL, FIT, NCOL, PART, SP, load, predict_card, takeaway_card
+from videos.ai.ai12.common import BUDGET_COLORS, DCOL, FIT, NCOL, PART, SP, load, pow2, predict_card, takeaway_card
 
 ACOLS = [C.CONTEXT, C.TRUE_P, C.BITS]  # approaches 1, 2, 3
 
@@ -46,8 +46,10 @@ class Valley(VoiceoverScene, ThreeDScene):
         colors = {r"N": NCOL, r"D": DCOL, r"\alpha": NCOL, r"\beta": DCOL, r"\lambda": C.BITS}
         law = cmath(r"L(N, D)", r"=", r"E", r"+", r"\frac{A}{N^{\alpha}}", r"+", r"\frac{B}{D^{\beta}}", font_size=40)
         law.to_edge(UP, buff=0.35)
-        vals = label(rf"fitted to our ${int(ch['n_points'])}$ runs: \ $E = {E:.2f}$, \ $\alpha = {al:.2f}$, \ "
-                     rf"$\beta = {be:.2f}$ \ (off by ${float(ch['rms']):.3f}$ bits on average)", font_size=22,
+        vals = label(rf"fitted to our ${int(ch['n_points'])}$ runs \ (at least ${pow2(int(ch.get('fit_kmin', 17)))}$ "
+                     rf"characters, \ width ${int(ch.get('fit_wmin', 16))}$ and up): \\ $E = {E:.2f}$, \ "
+                     rf"$\alpha = {al:.2f}$, \ $\beta = {be:.2f}$ \ (off by ${float(ch['rms']):.3f}$ bits on average)",
+                     font_size=22,
                      color=GREY_A).next_to(law, DOWN, buff=0.15)
         rows = [
             cmath(r"\mathcal{L}", r"=", r"L(N, D) + \lambda\,(6ND - C)", font_size=34, colors=colors),
@@ -64,10 +66,8 @@ class Valley(VoiceoverScene, ThreeDScene):
         res = label(rf"ours: \ $\beta/(\alpha+\beta) = {a3:.2f}$", font_size=30, color=C.BITS).move_to([-1.0, -3.3, 0])
         cite_ = cite(r"Hoffmann et al.\ (2022), \ approach 3", corner=DR)
         # the fit's quality: every run's measured loss against the formula's
-        s_ = load("sweep")
-        N_, D_, L_ = np.asarray(s_["N"], float), np.asarray(s_["D"], float), np.asarray(s_["bits"], float)
-        ii, jj = np.where(np.isfinite(L_) & (D_[None] >= 2 ** 17))
-        meas, pred = L_[ii, jj], lnd(ch, N_[ii], D_[jj])
+        meas = np.asarray(ch["fit_L"], float)
+        pred = lnd(ch, np.asarray(ch["fit_N"], float), np.asarray(ch["fit_D"], float))
         lo_, hi_ = float(min(meas.min(), pred.min())) - 0.05, float(max(meas.max(), pred.max())) + 0.05
         fx = Axes(x_range=[lo_, hi_, (hi_ - lo_) / 4], y_range=[lo_, hi_, (hi_ - lo_) / 4], x_length=3.4, y_length=3.4,
                   tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -1.3, 0])
@@ -79,7 +79,8 @@ class Valley(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "In 2022, Jordan Hoffmann and colleagues at DeepMind fitted one formula to all their runs at once: a "
             "floor, plus a term that shrinks with the parameters, plus one that shrinks with the data. Fitted to "
-            f"our {int(ch['n_points'])} runs, it misses by {float(ch['rms']):.3f} bits on average. "
+            f"our {int(ch['n_points'])} runs, leaving out the shortest and the narrowest, it misses by "
+            f"{float(ch['rms']):.3f} bits on average. "
             "<bookmark mark='a'/> Now spend a budget. Training costs six operations per parameter per character, "
             "so six N D equals C. Which split gives the lowest loss? Add a Lagrange multiplier, as in part four. "
             "<bookmark mark='b'/> Set both derivatives to zero. <bookmark mark='c'/> Multiply the first by N and "
