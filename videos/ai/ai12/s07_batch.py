@@ -41,7 +41,20 @@ class Batch(VoiceoverScene):
         whys = [why(r"Taylor to second order; \ the batch's noise $\Sigma/B$"), why(r"the best step: \ minimize in $\epsilon$"),
                 why(r"substitute; \ $H \propto I$ for the last step"), why(r"steps and examples to a target, \ per step's gain"),
                 why(r"eliminate $B$")]
-        step = ladder(self, rows, whys, keep=5, top=2.4, x=-2.4, buff=0.4, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=2.45, x=-2.4, buff=0.42, edge=6.9)
+        # schematic: a batch's gradient scatters around the true one; a bigger batch, less
+        g0 = np.array([1.6, 0.5, 0])
+        rng_ = np.random.default_rng(3)
+        fans = VGroup()
+        for k, (B_, cx) in enumerate(((4, -2.6), (64, 2.6))):
+            c = np.array([cx, -0.6, 0])
+            arrows = VGroup(*[Arrow(c, c + g0 + np.append(rng_.normal(size=2) * 1.1 / math.sqrt(B_ / 4), 0), buff=0,
+                                    stroke_width=2, color=GREY_B, max_tip_length_to_length_ratio=0.12) for _ in range(12)])
+            true = Arrow(c, c + g0, buff=0, stroke_width=5, color=C.BITS, max_tip_length_to_length_ratio=0.15)
+            fans.add(VGroup(arrows, true, label(rf"batch ${B_}$", font_size=24, color=GREY_A).next_to(c, DOWN, buff=0.5)))
+        fl = label(r"grey: \ gradients of random batches; \ yellow: \ the true gradient $G$", font_size=22, color=GREY_A)
+        fl.move_to([0, 1.5, 0])
+        sch = note(r"schematic").next_to(fans, DOWN, buff=0.2)
         cite_ = cite(r"S.~McCandlish, J.~Kaplan, D.~Amodei \& the OpenAI Dota team, \textit{An Empirical Model of "
                      r"Large-Batch Training} (2018)", corner=DL)
         with self.voiceover(
@@ -55,8 +68,9 @@ class Batch(VoiceoverScene):
             "and steps and examples trade off along a hyperbola. Far below the noise scale, doubling the batch "
             "halves the steps for free; far above it, it only wastes examples."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(fans), FadeIn(fl), FadeIn(sch))
             vo.wait_until("a")
+            self.play(FadeOut(fans), FadeOut(fl), FadeOut(sch))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -148,18 +162,24 @@ class Batch(VoiceoverScene):
                             MathTex(f"{ns:,.0f}".replace(",", "{,}") if np.isfinite(ns) else r"\text{--}", font_size=28, color=col)))
         tab = VGroup(rows, *grid)
         for j in range(3):
-            col = VGroup(rows[j], *[g[j] for g in grid]).arrange(DOWN, buff=0.25)
-            col.move_to([-4.6 + 3.0 * j, 0.9, 0])
+            col = VGroup(rows[j], *[g[j] for g in grid]).arrange(DOWN, buff=0.3)
+            col.move_to([-5.4 + 2.55 * j, 0.6, 0])
         hd = label(r"two ways to the same number", font_size=30).to_edge(UP, buff=0.4)
         how = label(r"noise scale: \ $\operatorname{tr}\Sigma / |G|^2$ \ from gradients at batches $64$ and $4{,}096$ \ "
-                    r"(McCandlish et al., Appendix A)", font_size=20, color=GREY_B).next_to(tab, DOWN, buff=0.35).set_x(-1.6)
+                    r"(McCandlish et al., Appendix A)", font_size=20, color=GREY_B)
+        how.next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
+        if how.width > 6.6:
+            how.scale_to_fit_width(6.6)
         cards = VGroup(
             history_card(2020, r"Kaplan et al.", r"the critical batch grows as the loss falls: \ "
                          r"$B_{\text{crit}} \propto L^{-1/0.21}$", width=5.8, color=HIST),
             history_card(2024, r"Zhang et al.; \ Bergsma et al.\ (2025)", r"it grows with the data, \ not with the model's "
                          r"size", width=5.8, color=HIST),
             history_card(2024, r"DeepSeek-V3", r"batch raised from $3{,}072$ to $15{,}360$ sequences over the first "
-                         r"$469$ billion tokens", width=5.8, color=HIST)).arrange(DOWN, buff=0.15).move_to([3.6, -1.7, 0])
+                         r"$469$ billion tokens", width=5.8, color=HIST)).arrange(DOWN, buff=0.15)
+        if cards.height > 5.9:
+            cards.scale_to_fit_height(5.9)
+        cards.move_to([3.7, -0.5, 0])
         ratio = noise / bcrit
         agree = np.all(np.isfinite(ratio)) and np.all((ratio > 0.2) & (ratio < 5))
         said2 = (

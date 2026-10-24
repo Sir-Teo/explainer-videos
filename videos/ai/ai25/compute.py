@@ -719,8 +719,8 @@ def compute_pair():
 
 
 DIFF_KINDS = ("egnn", "mlp")
-DIFF_STEPS = 8000
-DIFF_SNAPS = (0, 500, 1500, 3000, 5000, 8000)
+DIFF_STEPS = 24000
+DIFF_SNAPS = (0, 1000, 3000, 8000, 15000, 24000)
 
 
 def compute_diffusion():

@@ -64,6 +64,8 @@ class Wide(VoiceoverScene):
         hc = history_card(1994, r"Radford Neal", r"an infinitely wide one-layer network, with random weights, "
                           r"is a Gaussian process \ (\textit{Bayesian Learning for Neural Networks}, 1996)",
                           width=5.6, color=HIST).scale(0.85).move_to([-3.4, -2.75, 0])
+        frames = VGroup(*[VGroup(p[0], p[3]) for p in panels])
+        fills = [VGroup(p[1], p[2], p[4]) for p in panels]
         with self.voiceover(
             "Start a network with random weights, and ask what it computes. One hidden layer of n units; each "
             "unit's output is weighted by a random number, and the sum is divided by the square root of n. "
@@ -74,13 +76,13 @@ class Wide(VoiceoverScene):
             "smooth curve whose covariance, a kernel, is fixed by the architecture. Radford Neal saw this in 1994; "
             "in 2018 it was extended to deep networks."
         ) as vo:
-            self.play(Write(formula), FadeIn(fl))
+            self.play(Write(formula), FadeIn(fl), FadeIn(frames), Create(sx))
             vo.wait_until("a")
-            self.play(FadeIn(panels[0]), FadeIn(cap))
+            self.play(FadeIn(fills[0]), FadeIn(cap))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(p) for p in panels[1:]], lag_ratio=0.4), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(f_) for f_ in fills[1:]], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("c")
-            self.play(Create(sx), FadeIn(sl), LaggedStart(*[Create(c_) for c_ in samples], lag_ratio=0.2), run_time=2.0)
+            self.play(FadeIn(sl), LaggedStart(*[Create(c_) for c_ in samples], lag_ratio=0.2), run_time=2.0)
             self.play(FadeOut(formula), FadeOut(fl), FadeIn(hc, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
@@ -103,7 +105,7 @@ class Wide(VoiceoverScene):
         ]
         whys = [why(r"gradient descent, \ squared error"), why(r"chain rule"), why(r"definition of $\Theta$"),
                 why(r"if $\Theta$ stays fixed: \ a linear equation, \ solved")]
-        step = ladder(self, rows, whys, keep=4, top=0.75, x=-1.0, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=1.65, x=-1.0, buff=0.42, edge=6.8)
         lin = label(r"$\Theta$ fixed $\Rightarrow$ \ training is kernel regression \ (Part 6), \ with this kernel",
                     font_size=24, color=LAZY).to_edge(DOWN, buff=0.35)
         cite_ = cite(r"A.~Jacot, F.~Gabriel \& C.~Hongler, \textit{Neural Tangent Kernel} (2018)", corner=UR)
@@ -195,13 +197,13 @@ class Wide(VoiceoverScene):
             f"trained function strays from the linear prediction by up to {gap100:.2f}; at ten thousand, by "
             f"{gap10k:.2f}."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(seeds))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(seeds), *[FadeIn(p) for p in pans],
+                      FadeIn(key))
             vo.wait_until("a")
             self.play(Create(s_w[0]), FadeIn(s_w[1]), FadeIn(lg[0]))
             vo.wait_until("b")
             self.play(Create(s_k[0]), FadeIn(s_k[1]), FadeIn(lg[1]), FadeIn(half))
             vo.wait_until("c")
-            self.play(*[FadeIn(p) for p in pans], FadeIn(key))
             nets = [curve(px, grid, np.clip(S[0], -2.2, 2.2), RICH, 3, smooth=True) for px, S, _ in lives]
             self.play(*[Create(c_) for c_ in nets])
             for t in range(1, len(steps)):

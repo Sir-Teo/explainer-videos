@@ -71,6 +71,18 @@ class Experts(VoiceoverScene):
                          r"experts, \ $8$ chosen", width=5.0, color=HIST)).arrange(DOWN, buff=0.12)
         cards.scale(0.82).move_to([4.6, -1.35, 0])
         tag = note(r"two seeds each; \ the dense models are the sweep's").to_corner(DL, buff=0.2)
+        router = RoundedRectangle(width=1.4, height=0.5, corner_radius=0.1, stroke_color=GREY_A, stroke_width=2)
+        rl_ = label(r"router", font_size=20, color=GREY_A).move_to(router)
+        exps = VGroup(*[RoundedRectangle(width=0.5, height=0.8, corner_radius=0.08, stroke_color=MOE, stroke_width=2,
+                                         fill_color=MOE, fill_opacity=0.6 if i == 2 else 0.08) for i in range(8)])
+        exps.arrange(RIGHT, buff=0.12).next_to(router, DOWN, buff=0.7)
+        wires = VGroup(*[Line(router.get_bottom(), e.get_top(), stroke_width=3 if i == 2 else 1,
+                              color=MOE if i == 2 else GREY_D) for i, e in enumerate(exps)])
+        ch_ = data_text("e", font="DejaVu Sans Mono", font_size=30).next_to(router, UP, buff=0.35)
+        arr = Arrow(ch_.get_bottom(), router.get_top(), buff=0.05, stroke_width=2.5, color=GREY_B)
+        moe_pic = VGroup(ch_, arr, router, rl_, wires, exps)
+        moe_cap = label(r"each character goes to one expert \\ (schematic)", font_size=20, color=GREY_A).next_to(exps, DOWN, buff=0.2)
+        moe_pic = VGroup(moe_pic, moe_cap).move_to([4.4, -0.4, 0])
         better = mm[-1] < mm[0] - 0.01
         said1 = (
             f"The loss keeps falling as the experts are added, though each doubling helps less. With eight experts "
@@ -88,11 +100,12 @@ class Experts(VoiceoverScene):
             "the gain shrinks as the base model grows. Since then experts have become smaller and more numerous: "
             "DeepSeek-V3 has two hundred and fifty-six of them in each layer, and uses eight for each token."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag), FadeIn(moe_pic))
             self.play(Create(dense[0]), FadeIn(dense[1:]), FadeIn(lg[0]))
             vo.wait_until("a")
             self.play(Create(moe[0]), FadeIn(moe[1:]), FadeIn(elab), FadeIn(lg[1]), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(moe_pic))
             self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cards], lag_ratio=0.5), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
@@ -141,6 +154,16 @@ class Experts(VoiceoverScene):
                          r"parameters, $N(1 - e^{-P/\gamma})$; \ the best training precision: \ $7$ to $8$ bits",
                          width=5.4, color=HIST)).move_to([3.7, -1.0, 0])
         link = note(r"FP8 training: \ Part 18; \ quantized inference: \ Part 19").to_corner(DR, buff=0.2)
+        nl = NumberLine(x_range=[-1, 1, 0.25], length=5.0, include_ticks=True, tick_size=0.12, color=GREY_C)
+        g_ = np.random.default_rng(5)
+        wv = np.clip(g_.normal(0, 0.4, 14), -0.95, 0.95)
+        before = VGroup(*[Dot(nl.n2p(v) + UP * 0.35, radius=0.06, color=C.TRUE_P) for v in wv])
+        after = VGroup(*[Dot(nl.n2p(round(v * 4) / 4) + UP * 0.35, radius=0.06, color=C.BITS) for v in wv])
+        qcap = label(r"rounding weights to a few levels \\ ($3$ bits: \ $8$ levels; \ schematic)", font_size=20, color=GREY_A)
+        qpic = VGroup(nl, before, qcap.next_to(nl, DOWN, buff=0.25)).move_to([3.7, 0.3, 0])
+        after.move_to(before).align_to(before, DOWN)
+        for d_, v in zip(after, wv):
+            d_.set_x(nl.n2p(round(v * 4) / 4)[0])
         grows = gD > 0.05
         d4 = delta[i, :, bits.index(4)]
         okk = np.isfinite(d4)
@@ -162,10 +185,12 @@ class Experts(VoiceoverScene):
             "training data makes a model worse once it is quantized. And training itself in low precision acts like "
             "having fewer parameters; by their fit, the best training precision is seven to eight bits."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(link))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(link), FadeIn(qpic))
+            self.play(*[Transform(b_, a_) for b_, a_ in zip(before, after)], run_time=1.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("b")
+            self.play(FadeOut(qpic))
             self.play(Write(law), FadeIn(ll))
             vo.wait_until("c")
             self.play(FadeIn(cards, shift=UP * 0.1))

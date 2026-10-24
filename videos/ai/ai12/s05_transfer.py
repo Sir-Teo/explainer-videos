@@ -57,11 +57,15 @@ class Transfer(VoiceoverScene):
                    font_size=22, color=GREY_A).next_to(key, DOWN, buff=0.15)
         drift, bl = m["drift"], m["best_loss"]
         bsp = [10 ** v for v in m["bests"]["sp"]]
+        # a learning rate, for speech: mantissa times ten to the minus exponent
+        e0, e1 = [int(math.ceil(-math.log10(v) - 1e-9)) for v in (bsp[0], bsp[-1])]
+        m0, m1 = bsp[0] * 10 ** e0, bsp[-1] * 10 ** e1
         transfer = drift["sp"] >= drift["mup"] + 0.4
         wider = bl["mup"][-1] < bl["mup"][0]
         said1 = (
-            f"The best learning rate drifts as the model grows: from {bsp[0]:.1e} at the smallest to "
-            f"{bsp[-1]:.1e} at the largest, {drift['sp']:.1f} powers of ten. Tune the small model, copy its rate, "
+            f"The best learning rate drifts as the model grows: from about {m0:.0f} times ten to the minus {e0} at the "
+            f"smallest to {m1:.0f} times ten to the minus {e1} at the largest, {drift['sp']:.1f} powers of ten. Tune "
+            "the small model, copy its rate, "
             "and the big one is mistuned. " if transfer else
             f"Over this range the best rate moves by {drift['sp']:.1f} powers of ten. "
         )
@@ -79,6 +83,7 @@ class Transfer(VoiceoverScene):
             + said1
             + "<bookmark mark='b'/> In mu-P "
             + said2
+            + "<bookmark mark='c'/> "
             + said3
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn))
@@ -101,25 +106,21 @@ class Transfer(VoiceoverScene):
         widths = [int(w) for w in m["widths"]]
         bl, cp = m["best_loss"], m["copy_loss"]
         vals = [("sp", SP, r"SP"), ("mup", MUP, r"$\mu$P")]
-        lo = min(min(bl[k][-1], cp[k]) for k, _, _ in vals) - 0.05
-        hi = max(cp[k] for k, _, _ in vals) + 0.05
-        hi = max(hi, lo + 0.3)
-        ax = CornerAxes(x_range=[0, 4, 1], y_range=[lo, hi, (hi - lo) / 4], x_length=5.0, y_length=3.4, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -0.6, 0])
+        # what copying the small model's best rate costs the big one: its loss there minus its loss at its own best
+        pen = {k: max(cp[k] - bl[k][-1], 0.0) for k, _, _ in vals}
+        top = max(0.05, max(pen.values()) * 1.25)
+        ax = CornerAxes(x_range=[0, 3, 1], y_range=[0, top, top / 4], x_length=4.2, y_length=3.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -0.7, 0])
         bars = VGroup()
         for k, (key, col, name) in enumerate(vals):
-            for j, (v, op, txt) in enumerate(((bl[key][-1], 0.9, r"its own best rate"), (cp[key], 0.45, r"the small model's"))):
-                x = 0.6 + 2.0 * k + 0.8 * j
-                h = ax.c2p(0, v)[1] - ax.c2p(0, lo)[1]
-                r_ = Rectangle(width=0.62, height=max(h, 0.02), stroke_width=0, fill_color=col, fill_opacity=op)
-                r_.move_to(ax.c2p(x, lo), aligned_edge=DOWN)
-                bars.add(VGroup(r_, MathTex(f"{v:.2f}", font_size=22, color=col).next_to(r_, UP, buff=0.06)))
-            bars.add(label(name, font_size=26, color=col).next_to(ax.c2p(1.0 + 2.0 * k, lo), DOWN, buff=0.15))
-        bk = VGroup(label(r"solid: \ its own best rate", font_size=20, color=GREY_A),
-                    label(r"faint: \ the width-$64$ model's best rate, copied", font_size=20, color=GREY_A))
-        bk.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, UP, buff=0.25).align_to(ax, LEFT)
-        yn = label(rf"width ${widths[-1]:,}$, \ held-out bits".replace(",", "{,}"), font_size=22, color=GREY_A)
-        yn.next_to(bk, UP, buff=0.12).align_to(ax, LEFT)
+            h = ax.c2p(0, pen[key])[1] - ax.c2p(0, 0)[1]
+            r_ = Rectangle(width=0.9, height=max(h, 0.02), stroke_width=0, fill_color=col, fill_opacity=0.9)
+            r_.move_to(ax.c2p(0.9 + 1.2 * k, 0), aligned_edge=DOWN)
+            bars.add(VGroup(r_, MathTex(rf"+{pen[key]:.3f}", font_size=26, color=col).next_to(r_, UP, buff=0.08),
+                            label(name, font_size=26, color=col).next_to(ax.c2p(0.9 + 1.2 * k, 0), DOWN, buff=0.15)))
+        bk = label(rf"bits lost at width ${widths[-1]:,}$ \\ by copying width ${widths[0]}$'s best rate".replace(",", "{,}"),
+                   font_size=22, color=GREY_A).next_to(ax, UP, buff=0.25).align_to(ax, LEFT)
+        yn = VGroup()
         cards = VGroup(
             history_card(2022, r"Yang, Hu et al., \ \textit{Tensor Programs V}",
                          r"tuned a $40$-million-parameter model, \ copied its settings to a $6.7$-billion GPT-3, \ and "
@@ -134,9 +135,9 @@ class Transfer(VoiceoverScene):
             cards.scale_to_fit_height(6.6)
         pen_sp, pen_mu = cp["sp"] - bl["sp"][-1], cp["mup"] - bl["mup"][-1]
         said4 = (
-            f"The usual way, that costs {pen_sp:.2f} bits against the large model's own best; in mu-P, "
-            f"{pen_mu:.2f}." if pen_sp > pen_mu + 0.01 else
-            f"Here the copied rate costs {pen_sp:.2f} bits the usual way and {pen_mu:.2f} in mu-P."
+            f"The usual way, that costs {pen_sp:.3f} bits against the large model's own best; in mu-P, "
+            f"{pen_mu:.3f}." if pen_sp > pen_mu + 0.01 else
+            f"Here the copied rate costs {pen_sp:.3f} bits the usual way and {pen_mu:.3f} in mu-P."
         )
         with self.voiceover(
             "Here is what that means in practice. Tune the smallest model, and train the largest with its learning "

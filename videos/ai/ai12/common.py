@@ -25,7 +25,7 @@ HIST = C.HUMAN  # history cards
 TT = C.ADVANTAGE  # test-time compute, tries
 QUANT = "#5CD0B3"  # quanta, skills
 WIDTH_COLORS = ["#7FD3FF", C.BITS, C.MODEL_Q]  # three widths (small, medium, large)
-BUDGET_COLORS = ["#4FA3D9", "#7FD3FF", C.BITS, C.MODEL_Q, C.SURPRISE]  # five compute budgets, small to large
+BUDGET_COLORS = ["#FFE08A", C.BITS, C.MODEL_Q, C.SURPRISE, "#D4A5FF"]  # five compute budgets, small to large
 DEPTH_COLORS = ["#4FA3D9", "#7FD3FF", C.BITS, C.MODEL_Q, C.SURPRISE]
 
 PANEL_FILL = "#121722"
@@ -155,3 +155,9 @@ def table_card(rows, col_colors=None, font_size=24, head_color=GREY_A, buff_x=0.
 def sweep_grid(s):
     """The sweep's arrays: (widths, N, D, bits) with bits[i, j] for width i and length 2^ks[j]."""
     return (list(s["widths"]), np.asarray(s["N"], float), np.asarray(s["D"], float), np.asarray(s["bits"], float))
+
+
+def lag(anims, **kw) -> Animation:
+    """LaggedStart that tolerates an empty list (a measurement with nothing to show)."""
+    anims = list(anims)
+    return LaggedStart(*anims, **kw) if anims else Wait(kw.get("run_time", 0.1))
