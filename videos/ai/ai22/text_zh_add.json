@@ -446,7 +446,24 @@
     "VAR: \\ $5$ passes": "VAR：\\ $5$遍",
     "same tokens, \\ same transformer size \\ ($220{,}352$ weights), \\ $1{,}500$ steps, \\ guidance $2$; \\ three seeds": "同样的词元，\\ 同样大小的Transformer \\ （$220{,}352$个权重），\\ $1{,}500$步，\\ 引导$2$；\\ 三个种子",
     "one transformer, \\ $200{,}000$ weights, \\ $2{,}000$ steps; \\ means of three seeds": "一个Transformer，\\ $200{,}000$个权重，\\ $2{,}000$步；\\ 三个种子的均值",
-    "$300{,}000$ weights, \\ $2{,}000$ training steps, \\ one CPU core": "$300{,}000$个权重，\\ $2{,}000$步训练，\\ 一个CPU核心"
+    "$300{,}000$ weights, \\ $2{,}000$ training steps, \\ one CPU core": "$300{,}000$个权重，\\ $2{,}000$步训练，\\ 一个CPU核心",
+    "two jobs at once:": "同时要做两件事：",
+    "1. \\ what pictures are made of": "1. \\ 图片由什么构成",
+    "2. \\ how to remove noise": "2. \\ 怎样去掉噪声",
+    "a vision encoder, \\ e.g.\\ DINOv2 (Part 24): \\ already knows 1": "视觉编码器，\\ 例如DINOv2（第24部分）：\\ 已经懂得第1件",
+    "probe the denoiser's middle layers: \\ it learns 1 too, \\ but slowly, \\ far behind": "探测去噪器的中间层：\\ 它也学到第1件，\\ 但很慢，\\ 远远落后",
+    "asked for:": "要求的字母：",
+    "distance from real letters (FD, log scale)": "与真实字母的距离（FD，对数刻度）",
+    "p(r_1, \\ldots, r_5) = \\prod_{k=1}^{5} p\\big(r_k \\mid r_1, \\ldots, r_{k-1}, \\text{letter}\\big)": "p(r_1, \\ldots, r_5) = \\prod_{k=1}^{5} p\\big(r_k \\mid r_1, \\ldots, r_{k-1}, \\text{字母}\\big)",
+    "draw": "画",
+    "name": "命名",
+    "edit": "编辑",
+    "names held-out letters: \\ $4\\%$ \\ (family $17\\%$)": "说出留出字母的名字：\\ $4\\%$ \\ （字体家族$17\\%$）",
+    "draws the letter asked for: \\ $4\\%$": "画出所要的字母：\\ $4\\%$",
+    "fonts whose edits it never saw: \\ DejaVu\\,SerifCondensed-Italic, \\ DejaVu\\,SerifCondensed": "它从没见过这些字体的编辑样本：\\ DejaVu\\,SerifCondensed-Italic，\\ DejaVu\\,SerifCondensed",
+    "distance to the real bold: \\ $0.420$ \\ (just copying: \\ $0.257$); \\ ink $\\times3.08$ \\ (the real bold: \\ $\\times1.56$); \\ the same letter: \\ $4\\%$": "与真正粗体的距离：\\ $0.420$ \\ （直接照抄：\\ $0.257$）；\\ 墨量$\\times3.08$ \\ （真正的粗体：\\ $\\times1.56$）；\\ 仍是同一个字母：\\ $4\\%$",
+    "$3{,}600$ pixels $\\to$ $300$ numbers \\ ($12\\times$); \\ rebuild error $0.231$; \\ a still picture alone: \\ $0.182$": "$3{,}600$个像素 $\\to$ $300$个数 \\ （$12\\times$）；\\ 重建误差$0.231$；\\ 单独一张静止图片：\\ $0.182$",
+    "$5$ s of 720p: \\ $75{,}600$ tokens, \\ $5.7$ billion pairs; \\ $10$ s: \\ $3.8\\times$ the pairs": "$5$秒720p：\\ $75{,}600$个词元，\\ $57$亿对；\\ $10$秒：\\ 对数是$3.8$倍"
   },
   "patterns": [
     [

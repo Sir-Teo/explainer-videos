@@ -96,6 +96,14 @@ def compute_bpe():
         out[f"cut{n}"] = tok(SENTENCE)
     out["cut0"] = text.BPE(merges, 0)(SENTENCE)
     out["wordpiece"] = text.wordpiece_merges(sample, 20 if SCALE == 1 else 5)
+    import re
+
+    sw = re.findall(r"[a-z']+", sample.lower())
+    types = set(sw)
+    pw = re.findall(r"[a-z']+", passage.lower())
+    unseen = [w for w in pw if w not in types]
+    out.update(n_word_types=len(types), n_words_sample=len(sw), oov_passage=len(unseen) / len(pw),
+               unseen_examples=sorted(set(unseen), key=lambda w: (-len(w), w))[:12], n_words_passage=len(pw))
     try:  # the series' own model's tokenizer: a byte-level BPE of 4,096 tokens (explainer/ai/novels.py)
         from explainer.ai import novels
 

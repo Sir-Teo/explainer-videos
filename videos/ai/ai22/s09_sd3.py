@@ -103,20 +103,27 @@ class SD3(VoiceoverScene):
         ks = [int(k) for k in v["sampling"]]
         fu, fl_ = np.asarray(v["uniform_fd"]), np.asarray(v["logit-normal_fd"])
         lk = [math.log2(k) for k in ks]
-        top = float(max(fu.max(), fl_.max())) * 1.1
-        bx = axes([0, lk[-1]], [0, top], x_length=4.8, y_length=3.0, xlabel=r"sampling steps",
-                  ylabel=r"distance from real letters (FD)", xticks=lk, yticks=[0, round(top / 2)],
-                  xfmt=lambda x: f"{2 ** x:.0f}", center=[3.3, 0.4, 0], font_size=18)
-        lu, ll = mean_band(bx.ax, lk, fu, UNI), mean_band(bx.ax, lk, fl_, LN)
+        lo_y = math.floor(math.log10(min(fu.min(), fl_.min())) * 10) / 10
+        hi_y = math.ceil(math.log10(max(fu.max(), fl_.max())) * 10) / 10
+        yt = [v for v in (100, 300, 1000, 3000, 10000, 30000) if lo_y <= math.log10(v) <= hi_y]
+        bx = axes([0, lk[-1]], [lo_y, hi_y], x_length=4.8, y_length=3.0, xlabel=r"sampling steps",
+                  ylabel=r"distance from real letters (FD, log scale)", xticks=lk, yticks=[math.log10(v) for v in yt],
+                  xfmt=lambda x: f"{2 ** x:.0f}", yfmt=lambda y: f"{10 ** y:,.0f}".replace(",", "{,}"),
+                  center=[3.3, 0.4, 0], font_size=18)
+        lu, ll = mean_band(bx.ax, lk, np.log10(fu), UNI), mean_band(bx.ax, lk, np.log10(fl_), LN)
         diff = fl_.mean(0) - fu.mean(0)
         few = int(np.argmin(diff))
+        if ks[few] == 1:
+            few_s = "a single sampling step"
+        else:
+            few_s = f"{ks[few]} sampling steps"
         note_ = note(r"flow matching in the $16$-number latent space of chapter 3; \ three seeds each").to_edge(DOWN, buff=0.3)
         if np.all(diff < 0):
             verdict = (f"Trained logit-normally, our letters come out closer to real ones at every number of sampling "
-                       f"steps, most of all at {ks[few]}.")
+                       f"steps, most of all with {few_s}.")
         elif np.mean(diff) < 0:
-            verdict = (f"Trained logit-normally, our letters come out closer to real ones on average, most of all at "
-                       f"{ks[few]} sampling steps, though not at every count.")
+            verdict = (f"Trained logit-normally, our letters come out closer to real ones on average, most of all with "
+                       f"{few_s}, though not at every count.")
         else:
             verdict = ("On our letters, uniform does as well or better: in a space of sixteen numbers, the middle "
                        "isn't where the difficulty is. On large pictures, the paper found logit-normal the best of the "
@@ -243,14 +250,15 @@ class SD3(VoiceoverScene):
         cards = VGroup(
             history_card(r"Aug 2024", r"FLUX.1 \ (Black Forest Labs)", r"$12$ billion weights; \ MM-DiT blocks, then "
                          r"single-stream blocks; \ rotary positions; \ a guidance-distilled open version",
-                         color=HIST, width=4.3, font_size=23),
+                         color=HIST, width=11.0, font_size=25),
             history_card(r"Jun 2025", r"FLUX.1 Kontext", r"edit by context: \ the input picture's tokens joined to the "
-                         r"sequence", color=HIST, width=4.3, font_size=23),
+                         r"sequence", color=HIST, width=11.0, font_size=25),
             history_card(r"Nov 2025", r"FLUX.2", r"$32$ billion weights \ (open [dev]); \ a $24$-billion vision-language "
-                         r"model reads the prompt; \ up to $10$ reference pictures", color=HIST, width=4.3, font_size=23),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         r"model reads the prompt; \ up to $10$ reference pictures", color=HIST, width=11.0, font_size=25),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
+        if cards.height > 5.0:
+            cards.height = 5.0
+            cards.next_to(head, DOWN, buff=0.4)
         foot = label(r"the recipe: \ latent space, \ rectified flow, \ one transformer over words and patches", font_size=24,
                      color=PATCH).to_edge(DOWN, buff=0.6)
         with self.voiceover(

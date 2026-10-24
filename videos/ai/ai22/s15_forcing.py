@@ -169,15 +169,16 @@ class Forcing(VoiceoverScene):
         head = label(r"Training on its own frames, \ and video in real time", font_size=34).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"Dec 2024", r"CausVid \ (Yin et al.)", r"a slow two-way teacher distilled into a causal "
-                         r"student: \ $4$ steps a frame, \ $9.4$ frames a second", color=HIST, width=4.3, font_size=23),
+                         r"student: \ $4$ steps a frame, \ $9.4$ frames a second", color=HIST, width=11.0, font_size=25),
             history_card(r"Jun 2025", r"Self Forcing \ (Huang, Li, He, Zhou \& Shechtman)", r"train on its own rollouts, "
                          r"\ judge the whole video at once: \ $17$ frames a second, \ $0.45$ s to the first, \ one GPU",
-                         color=HIST, width=4.3, font_size=23),
+                         color=HIST, width=11.0, font_size=25),
             history_card(r"Aug 2025", r"Genie 3 \ (Google DeepMind)", r"a world you steer as it is drawn, \ in real "
-                         r"time: \ Part 29", color=HIST, width=4.3, font_size=23),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         r"time: \ Part 29", color=HIST, width=11.0, font_size=25),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
+        if cards.height > 5.0:
+            cards.height = 5.0
+            cards.next_to(head, DOWN, buff=0.4)
         loop = VGroup(node_box_(r"generate frames \ from its own past", VID_C["forcing"]),
                       node_box_(r"score the whole clip \ against a teacher", PATCH))
         loop.arrange(RIGHT, buff=1.4).to_edge(DOWN, buff=0.7)
