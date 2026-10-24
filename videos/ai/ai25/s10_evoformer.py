@@ -51,15 +51,13 @@ class Evoformer(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)
         sch = note(r"schematic, \ after Jumper et al.\ (2021)", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
-            "AlphaFold 2, which John Jumper and colleagues at DeepMind entered in CASP14 in 2020, works in two "
-            "stages. <bookmark mark='a'/> It starts from the sequence and searches genetic databases for related "
-            "sequences, lined up in a multiple sequence alignment, plus known structures of similar proteins. "
-            "<bookmark mark='b'/> The first stage, the Evoformer, forty-eight blocks deep, reasons about these, "
-            "<bookmark mark='c'/> and the second, the structure module, turns the result into coordinates for every "
-            "atom, with a confidence for each residue. <bookmark mark='d'/> Then the whole thing runs again, fed its "
-            "own output. <bookmark mark='e'/> The Evoformer keeps two representations: one for the alignment, a "
-            "vector for every residue of every sequence; and one for pairs, a vector for every pair of residues, "
-            "the learned descendant of AlphaFold 1's distance histograms."
+            "AlphaFold 2, which John Jumper and colleagues at DeepMind entered in CASP14 in 2020, works in two stages. "
+            "<bookmark mark='a'/> It searches genetic databases for related sequences, lined up in a multiple sequence "
+            "alignment, and for known structures of similar proteins. <bookmark mark='b'/> The Evoformer, forty-eight blocks "
+            "deep, reasons about these; <bookmark mark='c'/> the structure module turns the result into atoms, with a "
+            "confidence for each residue. <bookmark mark='d'/> Then it all runs again, fed its own output. <bookmark "
+            "mark='e'/> The Evoformer keeps two representations: a vector for every residue of every aligned sequence, and a "
+            "vector for every pair of residues, the descendant of AlphaFold 1's distance histograms."
         ) as vo:
             self.play(FadeIn(b[0]), FadeIn(sch))
             vo.wait_until("a")
@@ -101,12 +99,11 @@ class Evoformer(VoiceoverScene):
         lc = label(r"attention down each column: \ across species", font_size=20, color=GREY_A).next_to(msa, DOWN,
                                                                                                     buff=0.9)
         with self.voiceover(
-            "Each Evoformer block passes information both ways between them. <bookmark mark='a'/> Along each "
-            "sequence, the residues attend to one another, and the pair representation biases that attention: "
-            "what the network believes about pairs shapes how it reads the sequences. <bookmark mark='b'/> Down each "
-            "column, the same position attends across species. <bookmark mark='c'/> And back the other way, an outer "
-            "product of two columns of the alignment, averaged over the sequences, updates the pair of those two "
-            "positions: the learned version of co-evolution, two columns that vary together."
+            "Each Evoformer block passes information both ways between them. <bookmark mark='a'/> Along each sequence, the "
+            "residues attend to one another, with the pair representation biasing the attention. <bookmark mark='b'/> Down "
+            "each column, the same position attends across species. <bookmark mark='c'/> And back the other way, an outer "
+            "product of two columns of the alignment, averaged over the sequences, updates the pair of those positions: "
+            "co-evolution, learned."
         ) as vo:
             self.play(FadeIn(msa), FadeIn(pair), FadeIn(ml), FadeIn(pl))
             vo.wait_until("a")
@@ -149,16 +146,14 @@ class Evoformer(VoiceoverScene):
         link = label(r"a pair, \ updated through a third node: \ chapter 5's network that saw triangles",
                      font_size=22, color=STRUCT).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The new idea is in how the pairs update each other. Think of the pair representation as a guess at the "
-            "distance between every two residues. <bookmark mark='a'/> Those guesses can't be independent: for any "
-            "third residue k, the distance from i to j is at most the distance from i to k plus the distance from k "
-            "to j. <bookmark mark='b'/> So the Evoformer updates each pair, i j, from the two other edges of every "
-            "triangle it sits in: a sum over k of products of the pairs i k and j k, gated, the 'outgoing' update. "
-            "<bookmark mark='c'/> And the same with the edges pointing in. <bookmark mark='d'/> In the pair matrix, "
-            "entry i j collects row i and row j, position by position. <bookmark mark='e'/> Triangle attention does "
-            "the same with attention weights. <bookmark mark='f'/> This is chapter five's lesson put to work: a "
-            "network on pairs, updated through a third node, sees structure that message passing on single nodes "
-            "cannot."
+            "The new idea is in how the pairs update each other. Think of the pair representation as a guess at every "
+            "distance. <bookmark mark='a'/> The guesses can't be independent: for any third residue k, the distance from i "
+            "to j is at most the distance from i to k plus the distance from k to j. <bookmark mark='b'/> So each pair i j "
+            "is updated from the other two edges of every triangle it sits in: a gated sum over k of products of the pairs "
+            "i k and j k, the 'outgoing' update. <bookmark mark='c'/> The same with the edges pointing in. <bookmark "
+            "mark='d'/> In the matrix, entry i j collects rows i and j, position by position. <bookmark mark='e'/> Triangle "
+            "attention does the same with attention weights. <bookmark mark='f'/> It is chapter five's lesson: a network on "
+            "pairs, updated through a third node, sees what message passing on single nodes cannot."
         ) as vo:
             self.play(FadeIn(dots), FadeIn(names), Create(e_ij))
             vo.wait_until("a")
@@ -225,11 +220,11 @@ class Evoformer(VoiceoverScene):
                 "though their guesses break the triangle inequality no less often")
         with self.voiceover(
             "Does it work? A small test, computed here. Random protein-like chains of "
-            f"{p['n']} residues; the model sees a quarter of the pairs' distances, with noise, and must fill in all "
-            "of them, a stand-in for what an alignment tells AlphaFold. <bookmark mark='a'/> Two models of the same "
-            "size and the same training: one updates each pair on its own; the other with triangle updates. "
-            f"<bookmark mark='b'/> Guessing each missing distance from how far apart the two residues are along the "
-            f"chain gives an error of {sep:.1f} ångströms. Updating each pair on its own gets {mp:.1f}, {pw_txt}. "
+            f"{p['n']} residues; the model sees a quarter of the distances, with noise, and must fill in the rest, a "
+            "stand-in for what an alignment tells AlphaFold. <bookmark mark='a'/> Two models of the same size and training: "
+            "one updates each pair on its own, the other with triangle updates. "
+            f"<bookmark mark='b'/> Guessing each missing distance from the separation along the chain gives an error of "
+            f"{sep:.1f} ångströms. Updating each pair on its own gets {mp:.1f}, {pw_txt}. "
             f"<bookmark mark='c'/> {verdict}, {vtxt}."
         ) as vo:
             self.play(FadeIn(imgs[0]), FadeIn(cl[0]), FadeIn(imgs[1]), FadeIn(cl[1]), FadeIn(tag))
@@ -287,12 +282,11 @@ class Evoformer(VoiceoverScene):
             beat_txt = (f"the triangle model passes the per-pair model's final error by step {b_step:,}, and keeps "
                         f"going, to {e_tri:.1f} ångströms against {e_pw:.1f}")
         with self.voiceover(
-            "Here is the training itself, replayed: both models' guesses for one held-out chain, as training goes "
-            f"on. <bookmark mark='a'/> At step zero both guess nothing in particular. <bookmark mark='b'/> Within a "
-            "few hundred steps both learn the easy part, that residues close along the chain are close in space: the "
-            "dark band along the diagonal. <bookmark mark='c'/> The rest, which residues far apart along the chain "
-            "come back together, needs the other pairs; <bookmark mark='d'/> on the curve below, "
-            f"{beat_txt}."
+            "Here is the training itself, replayed: both models' guesses for one held-out chain. <bookmark mark='a'/> At "
+            "step zero both guess nothing in particular. <bookmark mark='b'/> Within a few hundred steps both learn the easy "
+            "part, that neighbours along the chain are close in space: the dark band on the diagonal. <bookmark mark='c'/> "
+            "The rest, which distant residues come back together, needs the other pairs; <bookmark mark='d'/> on the curve "
+            f"below, {beat_txt}."
         ) as vo:
             self.play(FadeIn(true_im), FadeIn(caps), *[FadeIn(im) for im in ims.values()], FadeIn(stepl), FadeIn(g),
                       FadeIn(tag), FadeIn(cursor))
@@ -329,12 +323,11 @@ class Evoformer(VoiceoverScene):
                           r"solution to it, \ for single protein chains", width=8.4, color=HIST)
         hc.to_edge(DOWN, buff=0.75)
         with self.voiceover(
-            "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over "
-            "all targets, and 87.0 on the hardest, where around ninety is informally reckoned competitive with an "
-            "experiment. <bookmark mark='b'/> Its median backbone error was under one ångström, 0.96, against 2.8 "
-            "for the next best entry; for scale, a carbon atom is about one and a half ångströms across. <bookmark "
-            "mark='c'/> \"We have been stuck on this one problem, how do proteins fold up, for nearly fifty years,\" "
-            "said John Moult; CASP's organizers recognized AlphaFold 2 as a solution, for single protein chains."
+            "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over all "
+            "targets and 87.0 on the hardest; around ninety is informally reckoned competitive with experiment. <bookmark "
+            "mark='b'/> Its median backbone error was 0.96 ångström, against 2.8 for the next best; a carbon atom is about "
+            "one and a half ångströms across. <bookmark mark='c'/> \"We have been stuck on this one problem, how do proteins "
+            "fold up, for nearly fifty years,\" said John Moult; CASP's organizers called it a solution, for single chains."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")
@@ -346,9 +339,8 @@ class Evoformer(VoiceoverScene):
         self.wait(0.6)
         tk = take_away(r"the Evoformer: \ sequences and pairs talking, \ pairs kept consistent through triangles")
         with self.voiceover(
-            "So the Evoformer's two ideas: let the alignment and the pairs inform each other, and keep the pairs "
-            "consistent through triangles. What remains is to turn pairs into a structure, without losing left from "
-            "right."
+            "So the Evoformer's two ideas: let the alignment and the pairs inform each other, and keep the pairs consistent "
+            "through triangles. Next: turn pairs into a structure without losing left from right."
         ):
             self.play(FadeOut(hc), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

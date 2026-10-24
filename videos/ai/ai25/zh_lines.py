@@ -485,28 +485,26 @@ ZH.update({
         '第9章。AlphaFold 2：Evoformer。',
 
     'AlphaFold 2, which John Jumper and colleagues at DeepMind entered':
-        "AlphaFold 2是约翰·江珀等人在2020年代表DeepMind参加CASP14的系统，它分两个阶段工作。<bookmark mark='a'/>它从序列出发，在基因"
-        "数据库里搜索相关序列，排成一个多序列比对，再加上相似蛋白质的已知结构。<bookmark mark='b'/>第一阶段是Evoformer，有四十八个模块"
-        "那么深，对这些信息进行推理，<bookmark mark='c'/>第二阶段是结构模块，把结果变成每个原子的坐标，并给每个残基一个置信度。"
-        "<bookmark mark='d'/>然后整个系统再跑一遍，输入它自己的输出。<bookmark mark='e'/>Evoformer维护两种表示：一种给比对，每条序列的"
-        "每个残基一个向量；一种给残基对，每一对残基一个向量，这是AlphaFold 1距离直方图的、学出来的后代。",
+        "AlphaFold 2是约翰·江珀等人在2020年代表DeepMind参加CASP14的系统，它分两个阶段工作。<bookmark mark='a'/>它在基因数据库里搜索"
+        "相关序列，排成一个多序列比对，再找相似蛋白质的已知结构。<bookmark mark='b'/>Evoformer有四十八个模块那么深，对这些信息进行推理；"
+        "<bookmark mark='c'/>结构模块把结果变成原子，并给每个残基一个置信度。<bookmark mark='d'/>然后整个系统再跑一遍，输入它自己的输出。"
+        "<bookmark mark='e'/>Evoformer维护两种表示：比对中每条序列的每个残基一个向量，每一对残基一个向量，后者是AlphaFold 1距离直方图的后代。",
 
     'Each Evoformer block passes information both ways between them.':
-        "每个Evoformer模块都在这两者之间双向传递信息。<bookmark mark='a'/>沿着每条序列，残基彼此做注意力，而残基对的表示会偏置这个注意力："
-        "网络对残基对的看法，影响它怎么读序列。<bookmark mark='b'/>沿着每一列，同一个位置在不同物种之间做注意力。<bookmark mark='c'/>"
-        "反过来，比对里两列的外积，在所有序列上平均，更新这两个位置组成的那一对：这是共进化的学习版本，两列一起变化。",
+        "每个Evoformer模块都在这两者之间双向传递信息。<bookmark mark='a'/>沿着每条序列，残基彼此做注意力，残基对的表示给这个注意力加上偏置。"
+        "<bookmark mark='b'/>沿着每一列，同一个位置在不同物种之间做注意力。<bookmark mark='c'/>反过来，比对里两列的外积，在所有序列上平均，"
+        "更新这两个位置组成的那一对：学出来的共进化。",
 
     'The new idea is in how the pairs update each other.':
-        "新想法在于残基对怎样互相更新。把残基对的表示看成是对每两个残基之间距离的猜测。<bookmark mark='a'/>这些猜测不可能互相独立："
-        "对任何第三个残基k，从i到j的距离最多是从i到k的距离加上从k到j的距离。<bookmark mark='b'/>所以Evoformer用每一对i、j所在的每个"
-        "三角形的另外两条边来更新它：对k求和，把i k和j k这两对的乘积加起来，再加门控，这叫“外向”更新。<bookmark mark='c'/>指向内的边"
-        "也同样处理一遍。<bookmark mark='d'/>在残基对矩阵里，元素i j收集第i行和第j行，一个位置一个位置地对应起来。<bookmark mark='e'/>"
-        "三角注意力用注意力权重做同样的事。<bookmark mark='f'/>这是第5章的教训在实际中的应用：一个在节点对上、通过第三个节点更新的网络，"
-        "能看见单节点消息传递看不见的结构。",
+        "新想法在于残基对怎样互相更新。把残基对的表示看成是对每个距离的猜测。<bookmark mark='a'/>这些猜测不可能互相独立：对任何第三个"
+        "残基k，从i到j的距离最多是从i到k的距离加上从k到j的距离。<bookmark mark='b'/>所以每一对i、j都用它所在的每个三角形的另外两条边来"
+        "更新：对k求和，把i k和j k这两对的乘积加起来，再加门控，这叫“外向”更新。<bookmark mark='c'/>指向内的边也同样处理。<bookmark "
+        "mark='d'/>在矩阵里，元素i j收集第i行和第j行，一个位置一个位置地对应。<bookmark mark='e'/>三角注意力用注意力权重做同样的事。"
+        "<bookmark mark='f'/>这正是第5章的教训：一个在节点对上、通过第三个节点更新的网络，能看见单节点消息传递看不见的东西。",
 
     'f"Does it work? A small test, computed here.':
-        "它管用吗？这里计算一个小测试。随机的、像蛋白质一样的链，{p['n']}个残基；模型看到四分之一残基对的距离，带噪声，要把所有的都填出来，"
-        "这代替了比对告诉AlphaFold的信息。<bookmark mark='a'/>两个同样大小、同样训练的模型：一个单独更新每一对；另一个用三角更新。"
+        "它管用吗？这里计算一个小测试。随机的、像蛋白质一样的链，{p['n']}个残基；模型看到四分之一的距离，带噪声，要把其余的填出来，"
+        "这代替了比对告诉AlphaFold的信息。<bookmark mark='a'/>两个同样大小、同样训练的模型：一个单独更新每一对，另一个用三角更新。"
         "<bookmark mark='b'/>只根据两个残基在链上隔多远来猜缺失的距离，误差是{sep:.1f}埃。单独更新每一对得到{mp:.1f}，{pw_txt}。"
         "<bookmark mark='c'/>{verdict}，{vtxt}。",
 
@@ -529,10 +527,9 @@ ZH.update({
         '不过它的猜测违反三角不等式的次数并没有更少',
 
     'f"Here is the training itself, replayed:':
-        "这是训练过程本身的回放：两个模型对一条留出链的猜测，随着训练进行而变化。<bookmark mark='a'/>第0步，两个模型的猜测都没有什么"
-        "特别的。<bookmark mark='b'/>几百步之内，两个都学会了容易的部分：在链上挨得近的残基，在空间里也挨得近，也就是沿对角线的那条深色带。"
-        "<bookmark mark='c'/>剩下的部分，也就是链上相隔很远的残基又在哪里碰到一起，需要别的残基对；<bookmark mark='d'/>在下面的曲线上，"
-        "{beat_txt}。",
+        "这是训练过程本身的回放：两个模型对一条留出链的猜测。<bookmark mark='a'/>第0步，两个模型的猜测都没有什么特别的。<bookmark "
+        "mark='b'/>几百步之内，两个都学会了容易的部分：链上相邻的残基在空间里也挨得近，也就是对角线上的那条深色带。<bookmark mark='c'/>"
+        "剩下的部分，也就是链上相隔很远的残基又在哪里碰到一起，需要别的残基对；<bookmark mark='d'/>在下面的曲线上，{beat_txt}。",
 
     'the triangle model never gets below the per-pair model':
         '三角模型始终没有低于逐对模型',
@@ -541,41 +538,39 @@ ZH.update({
         "三角模型在第{b_step:,}步就超过了逐对模型的最终误差，而且继续下降，到{e_tri:.1f}埃，逐对模型是{e_pw:.1f}埃",
 
     'And at CASP14, in 2020, it worked.':
-        "而在2020年的CASP14上，它成功了。<bookmark mark='a'/>AlphaFold 2在所有目标上的中位数得分是92.4 GDT，在最难的目标上是87.0，而"
-        "大约九十分，按非正式的看法，就能和实验相比了。<bookmark mark='b'/>它的主链误差中位数不到1埃，0.96，第二名是2.8；作为对比，"
-        "一个碳原子的直径大约是1.5埃。<bookmark mark='c'/>“我们在这个问题上卡了将近五十年：蛋白质是怎么折叠起来的，”约翰·莫尔特说；"
-        "CASP的组织者认定AlphaFold 2对单条蛋白质链给出了一个解答。",
+        "而在2020年的CASP14上，它成功了。<bookmark mark='a'/>AlphaFold 2在所有目标上的中位数得分是92.4 GDT，在最难的目标上是87.0；"
+        "按非正式的看法，大约九十分就能和实验相比。<bookmark mark='b'/>它的主链误差中位数是0.96埃，第二名是2.8；一个碳原子的直径大约是1.5埃。"
+        "<bookmark mark='c'/>“我们在这个问题上卡了将近五十年：蛋白质是怎么折叠起来的，”约翰·莫尔特说；CASP的组织者称之为一个解答，"
+        "针对单条链。",
 
     "So the Evoformer's two ideas:":
-        "所以Evoformer的两个想法是：让比对和残基对互相提供信息，用三角形让残基对保持一致。剩下的，是把残基对变成一个结构，而且不能"
-        "弄丢左和右的区别。",
+        "所以Evoformer的两个想法是：让比对和残基对互相提供信息，用三角形让残基对保持一致。下一步：把残基对变成一个结构，而且不弄丢左和右。",
 
     # ------------------------------------------------------------------ Structure
     'Chapter ten. AlphaFold 2: frames, FAPE and recycling.':
         '第10章。AlphaFold 2：坐标系、FAPE与循环。',
 
     'The structure module treats each residue as a rigid body:':
-        "结构模块把每个残基当作一个刚体：由三个主链原子组成的小三角形，有它自己的坐标系，一个旋转加一个位置。<bookmark mark='a'/>它一开始"
-        "把所有坐标系都堆在原点，一团“残基气体”，然后移动它们。<bookmark mark='b'/>它的注意力叫不变点注意力：在每个残基自己的坐标系里放置"
-        "一些学出来的点，按这些点在空间里靠得多近来给残基对打分。<bookmark mark='c'/>整个蛋白质做一次刚体运动，每个点都以同样方式移动，"
-        "所以这些距离、以及注意力，都不会变。<bookmark mark='d'/>然后每一层用一个以该坐标系自身坐标表达的更新，轻轻推动每个坐标系，所以"
-        "更新会随蛋白质一起转动：又一次，等变性被做了进去。",
+        "结构模块把每个残基当作一个刚体：由三个主链原子组成的三角形，有它自己的坐标系，一个旋转加一个位置。<bookmark mark='a'/>它一开始"
+        "把所有坐标系都放在原点，一团“残基气体”，然后移动它们。<bookmark mark='b'/>它的不变点注意力在每个残基的坐标系里放置一些学出来的点，"
+        "按这些点靠得多近来给残基对打分。<bookmark mark='c'/>蛋白质的一次刚体运动让每个点都同样移动，所以注意力不变。<bookmark mark='d'/>"
+        "每一层用一个以该坐标系自身坐标写出的更新，轻轻推动每个坐标系，所以更新随蛋白质一起转动：等变性，做在了里面。",
 
     'What should the network be trained to minimize?':
-        "网络应该被训练去最小化什么？AlphaFold 2的答案是坐标系对齐点误差，FAPE。<bookmark mark='a'/>站在残基i的坐标系里看原子j：这就"
-        "给出了残基i眼中原子j的位置。<bookmark mark='b'/>对每个原子、从每个坐标系都这样看，在预测里和真实结构里都看，把差别平均起来，每个"
-        "差别都截断在十埃，免得少数几个离谱的原子主导结果。<bookmark mark='c'/>把整个结构做一次刚体运动，这个运动就抵消了：FAPE不在乎"
-        "蛋白质在哪里、朝哪个方向。<bookmark mark='d'/>但坐标系是用右手法则从三个原子构造出来的。镜像不是刚体运动，所以FAPE能看出来。",
+        "网络应该被训练去最小化什么？AlphaFold 2的答案是坐标系对齐点误差，FAPE。<bookmark mark='a'/>站在残基i的坐标系里看原子j。"
+        "<bookmark mark='b'/>对每个原子、从每个坐标系都这样看，在预测里和真实结构里都看，把差别平均起来，每个差别截断在十埃，免得少数"
+        "几个离谱的原子主导结果。<bookmark mark='c'/>把整个结构做一次刚体运动，运动就抵消了：FAPE不管蛋白质在哪里、朝哪个方向。"
+        "<bookmark mark='d'/>但坐标系是用右手法则从三个原子构造的，而镜像不是刚体运动，所以FAPE能看出来。",
 
     'f"Here is the difference, measured on our bundle and its reflection.':
-        "差别在这里，在我们的螺旋束和它的镜像上测量。<bookmark mark='a'/>每个距离都一样，所以距离的误差是{dm:.2f}。<bookmark mark='b'/>"
-        "可FAPE是{fm:.2f}，比把每个原子随机移动整整1埃还要差，那样的代价是{f['fape_noisy']:.2f}。<bookmark mark='c'/>而第8章用梯度下降"
-        "折出来的那些结构，光靠距离分不开，现在被干净地分开了：落在真实折叠上的得分{gf:.2f}，落在镜像上的得分{bf:.2f}。",
+        "差别在这里，在我们的螺旋束和它的镜像上测量。<bookmark mark='a'/>每个距离都一样，所以距离误差是{dm:.2f}。<bookmark mark='b'/>"
+        "可FAPE是{fm:.2f}，比把每个原子随机移动整整1埃还差，那样是{f['fape_noisy']:.2f}。<bookmark mark='c'/>而第8章那些光靠距离分不开的"
+        "折叠，现在被干净地分开了：落在真实折叠上的得分{gf:.2f}，镜像{bf:.2f}。",
 
     'f"The last trick is recycling:':
-        "最后一招是循环：把整个网络再跑一遍，输入它自己上一次的输出，这样第一个粗糙的结构就能让网络把比对读得更清楚。<bookmark "
-        "mark='a'/>训练时，跑几遍是随机的，梯度只流过最后一遍，所以每多跑一遍都不多占内存。<bookmark mark='b'/>我们把它加到了第9章的三角"
-        "模型上。{verdict}，{vs}。",
+        "最后一招是循环：把网络在它自己上一次的输出上再跑一遍，这样一个粗糙的初始结构就能让网络把比对读得更清楚。<bookmark mark='a'/>"
+        "训练时，跑几遍是随机的，梯度只流过最后一遍，所以多跑几遍不多占内存。<bookmark mark='b'/>我们把它加到了第9章的三角模型上。"
+        "{verdict}，{vs}。",
 
     "f'A second pass cuts the error from":
         '第二遍把误差从{m[0]:.2f}埃降到{m[1]:.2f}埃；最好的是跑{best}遍，{m.min():.2f}',
@@ -591,11 +586,11 @@ ZH.update({
         '而在AlphaFold 2里，循环确实有帮助',
 
     'In July 2021 DeepMind published AlphaFold 2 with its code;':
-        "2021年7月，DeepMind发表了AlphaFold 2，并公开了代码；同一个月，大卫·贝克的团队发表了RoseTTAFold，一个基于同样洞见的三轨网络。"
-        "<bookmark mark='a'/>DeepMind和EMBL的欧洲生物信息研究所一起发布了预测结构，先是人类蛋白质组和另外二十种生物，然后在2022年发布了"
-        "两亿多个蛋白质的结构，几乎覆盖了所有已知序列。<bookmark mark='b'/>每个预测都带着网络自己的置信度，一个残基一个残基地给出，叫pLDDT。"
-        "<bookmark mark='c'/>两年后，诺贝尔奖来了。<bookmark mark='d'/>但AlphaFold 2对每条链只预测一个静止的形状，对蛋白质怎样运动、"
-        "怎样结合DNA、怎样夹住一个药物分子，说得很少。那是下一步。",
+        "2021年7月，DeepMind发表了AlphaFold 2，并公开了代码；同一个月，大卫·贝克的团队发表了基于同样洞见的RoseTTAFold。<bookmark "
+        "mark='a'/>DeepMind和EMBL的欧洲生物信息研究所一起发布了预测结构，先是人类蛋白质组，然后在2022年发布了两亿多个蛋白质的结构，几乎"
+        "覆盖所有已知序列。<bookmark mark='b'/>每个预测都带着网络自己的置信度，一个残基一个残基地给出，叫pLDDT。<bookmark mark='c'/>两年后，"
+        "诺贝尔奖来了。<bookmark mark='d'/>但AlphaFold 2对每条链只预测一个静止的形状，对蛋白质怎样结合DNA、怎样夹住一个药物分子，说得"
+        "很少。那是下一步。",
 
     'So: residues as rigid frames,':
         "所以：残基是刚性的坐标系，由看不见蛋白质怎么转的注意力来移动；一个不在乎刚体运动、却在乎反射的损失；还有一个会读自己的答案、"

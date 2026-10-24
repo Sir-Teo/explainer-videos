@@ -63,14 +63,13 @@ class Structure(VoiceoverScene):
         ol.next_to(one, DOWN, buff=0.6)
         big = VGroup(one, an, ol)
         with self.voiceover(
-            "The structure module treats each residue as a rigid body: a little triangle of three backbone atoms, "
-            "with its own frame, a rotation and a position. <bookmark mark='a'/> It starts with all the frames "
-            "piled at the origin, a residue gas, and moves them. <bookmark mark='b'/> Its attention, invariant point "
-            "attention, places learned points in each residue's own frame and scores pairs of residues by how close "
-            "those points come in space. <bookmark mark='c'/> A rigid motion of the whole protein moves every point "
-            "the same way, so these distances, and the attention, don't change. <bookmark mark='d'/> Each layer then "
-            "nudges every frame by an update expressed in that frame's own coordinates, so the updates turn with the "
-            "protein: equivariance, again, built in."
+            "The structure module treats each residue as a rigid body: a triangle of three backbone atoms, with its own "
+            "frame, a rotation and a position. <bookmark mark='a'/> It starts with every frame at the origin, a residue gas, "
+            "and moves them. <bookmark mark='b'/> Its invariant point attention places learned points in each residue's "
+            "frame and scores pairs of residues by how close those points come. <bookmark mark='c'/> A rigid motion of the "
+            "protein moves every point alike, so the attention doesn't change. <bookmark mark='d'/> Each layer nudges every "
+            "frame by an update written in that frame's own coordinates, so the updates turn with the protein: equivariance, "
+            "built in."
         ) as vo:
             self.play(FadeIn(gl), FadeIn(one), FadeIn(an), FadeIn(ol))
             vo.wait_until("a")
@@ -111,13 +110,12 @@ class Structure(VoiceoverScene):
                      MathTex(r"j", font_size=32, color=PRED_C).next_to(aj, UP, buff=0.1),
                      MathTex(r"x_{ij}", font_size=30, color=PRED_C).next_to(vij.get_center(), LEFT, buff=0.15))
         with self.voiceover(
-            "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, "
-            "FAPE. <bookmark mark='a'/> Stand in residue i's frame and look at atom j: that gives its position as "
-            "residue i sees it. <bookmark mark='b'/> Do this for every atom, from every frame, in the prediction and "
-            "in the true structure, and average the differences, each capped at ten ångströms so that a few wild "
-            "atoms don't dominate. <bookmark mark='c'/> Move the whole structure rigidly, and the motion cancels: "
-            "FAPE doesn't care where the protein sits or how it is turned. <bookmark mark='d'/> But the frames are "
-            "built from three atoms by a right-hand rule. A mirror image is not a rigid motion, so FAPE sees it."
+            "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, FAPE. "
+            "<bookmark mark='a'/> Stand in residue i's frame and look at atom j. <bookmark mark='b'/> Do this for every atom "
+            "from every frame, in the prediction and the truth, and average the differences, each capped at ten ångströms so "
+            "that a few wild atoms don't dominate. <bookmark mark='c'/> Move the whole structure rigidly and the motion "
+            "cancels: FAPE ignores where the protein sits and how it is turned. <bookmark mark='d'/> But the frames are built "
+            "from three atoms by a right-hand rule, and a mirror image is not a rigid motion, so FAPE sees it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fi), FadeIn(pic[3]))
             self.play(FadeIn(aj), FadeIn(pic[4]), Create(vij), FadeIn(pic[5]))
@@ -174,11 +172,10 @@ class Structure(VoiceoverScene):
         tag = note(r"computed", font_size=20).to_corner(DR, buff=0.2)
         fm, dm = f["fape_mirror"], f["drmsd_mirror"]
         with self.voiceover(
-            "Here is the difference, measured on our bundle and its reflection. <bookmark mark='a'/> Every distance "
-            f"is the same, so the error in distances is {dm:.2f}. <bookmark mark='b'/> Yet FAPE is {fm:.2f}, worse than "
-            f"moving every atom a whole ångström at random, which costs {f['fape_noisy']:.2f}. <bookmark mark='c'/> "
-            "And chapter eight's folds by gradient descent, which distances alone couldn't sort, separate cleanly: "
-            f"those on the true fold score {gf:.2f}, those on the mirror image {bf:.2f}."
+            "Here is the difference, measured on our bundle and its reflection. <bookmark mark='a'/> Every distance is the "
+            f"same, so the distance error is {dm:.2f}. <bookmark mark='b'/> Yet FAPE is {fm:.2f}, worse than moving every "
+            f"atom a whole ångström at random, {f['fape_noisy']:.2f}. <bookmark mark='c'/> And chapter eight's folds, which "
+            f"distances couldn't sort, separate cleanly: those on the true fold score {gf:.2f}, mirror images {bf:.2f}."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right), Create(mline), FadeIn(ll), FadeIn(tag))
             vo.wait_until("a")
@@ -224,10 +221,10 @@ class Structure(VoiceoverScene):
         tag = note(r"computed: \ chapter 9's task, \ three seeds \ (band: \ min--max)", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The last trick is recycling: run the whole network again, feeding in its own previous output, so that a "
-            "first rough structure can sharpen the reading of the alignment. <bookmark mark='a'/> In training, the "
-            "number of passes is random, and the gradient flows only through the last, so every extra pass costs "
-            f"no more memory. <bookmark mark='b'/> We added it to chapter nine's triangle model. {verdict}, {vs}."
+            "The last trick is recycling: run the network again on its own previous output, so that a rough first "
+            "structure can sharpen the reading of the alignment. <bookmark mark='a'/> In training the number of passes is "
+            "random and the gradient flows only through the last, so extra passes cost no memory. <bookmark mark='b'/> We "
+            f"added it to chapter nine's triangle model. {verdict}, {vs}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
@@ -253,14 +250,13 @@ class Structure(VoiceoverScene):
         lim = label(r"limits: \ one static shape; \ disordered regions; \ complexes, \ DNA, \ drugs bound \ "
                     r"$\to$ \ AlphaFold 3", font_size=24, color=PLAIN).next_to(conf, DOWN, buff=0.35)
         with self.voiceover(
-            "In July 2021 DeepMind published AlphaFold 2 with its code; the same month David Baker's group "
-            "published RoseTTAFold, a three-track network built on the same insights. <bookmark mark='a'/> With "
-            "EMBL's European Bioinformatics Institute, DeepMind released predicted structures, first for the human "
-            "proteome and twenty other organisms, then in 2022 for more than two hundred million proteins, nearly "
-            "every sequence known. <bookmark mark='b'/> Every prediction carries the network's own confidence, "
+            "In July 2021 DeepMind published AlphaFold 2 with its code; the same month David Baker's group published "
+            "RoseTTAFold, built on the same insights. <bookmark mark='a'/> With EMBL's European Bioinformatics Institute, "
+            "DeepMind released predicted structures, first for the human proteome, then in 2022 for over two hundred million "
+            "proteins, nearly every known sequence. <bookmark mark='b'/> Each comes with the network's own confidence, "
             "residue by residue, called pLDDT. <bookmark mark='c'/> Two years later came the Nobel Prize. <bookmark "
-            "mark='d'/> But AlphaFold 2 predicts one static shape per chain, and says little about how proteins move, "
-            "bind DNA, or hold a drug. That was the next step."
+            "mark='d'/> But AlphaFold 2 predicts one static shape per chain, and says little about how proteins bind DNA or "
+            "hold a drug. That was the next step."
         ) as vo:
             self.play(FadeIn(items[0], shift=UP * 0.1))
             vo.wait_until("a")
