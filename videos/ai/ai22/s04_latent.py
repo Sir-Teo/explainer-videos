@@ -57,6 +57,10 @@ class Latent(VoiceoverScene):
                      MathTex(r"512 \times 512 \times 3 \;\to\; 64 \times 64 \times 4", font_size=30, color=WHITE),
                      label(r"$48\times$ fewer numbers; \ a whisper of KL \ (Part 20's VAE)", font_size=20, color=GREY_A)
                      ).arrange(DOWN, buff=0.15).move_to([3.6, -2.0, 0])
+        here = VGroup(label(r"diffusion works here", font_size=22, color=PATCH))
+        here.add(Arrow(here[0].get_bottom(), here[0].get_bottom() + DOWN * 0.45, buff=0.02, color=PATCH, stroke_width=2.5,
+                       max_tip_length_to_length_ratio=0.3))
+        here.next_to(lat, UP, buff=0.12)
         with self.voiceover(
             "Real pictures have millions of pixels, and most of that detail is predictable texture. In 2022 Robin "
             "Rombach, Patrick Esser, Bjorn Ommer and colleagues split the work in two. <bookmark mark='a'/> An "
@@ -67,11 +71,13 @@ class Latent(VoiceoverScene):
             "penalty to keep the latents tame."
         ) as vo:
             self.play(FadeIn(a_in), FadeIn(labs[0]))
+            self.wait(1.5)
+            self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(enc), FadeIn(labs[1]), FadeIn(lat, lag_ratio=0.02), FadeIn(labs[2]), run_time=1.5)
             self.play(FadeIn(dec), FadeIn(labs[3]), FadeIn(a_out), FadeIn(labs[4]))
             vo.wait_until("b")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(here, shift=DOWN * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(kl8))
         self.wait(0.3)
@@ -89,6 +95,7 @@ class Latent(VoiceoverScene):
                   ylabel=r"rebuild error, \ held-out fonts", xticks=[4, 5, 6, 6.64], yticks=[0, round(top / 2, 2)],
                   xfmt=lambda v: {4: "16", 5: "32", 6: "64", 6.64: "100"}[v], center=[-3.0, 0.2, 0], font_size=18)
         dots = VGroup(*[Dot(ax.ax.c2p(lx(num[c]), rm[c]), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
+        base = VGroup(*[Dot(ax.ax.c2p(lx(num[c]), 0), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
         tags = VGroup(*[MathTex(rf"{c[0]}\!\times\!{c[0]}\!\times\!{c[1]}", font_size=18, color=SIDE_C[c[0]]) for c in cfgs])
         place_labels(list(dots), list(tags), buff=0.06)
         leg = legend([(SIDE_C[s], rf"grid ${s} \times {s}$") for s in (10, 5, 2, 1)], font_size=18).next_to(ax, RIGHT, buff=0.2)
@@ -120,10 +127,10 @@ class Latent(VoiceoverScene):
             + "<bookmark mark='c'/> " + coarse
         ) as vo:
             self.play(Create(ax), FadeIn(leg))
+            self.play(LaggedStart(*[FadeIn(b_, scale=0.5) for b_ in base], lag_ratio=0.12), FadeIn(rows[0]), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(d_, scale=0.5), FadeIn(t_)) for d_, t_ in zip(dots, tags)],
+            self.play(LaggedStart(*[AnimationGroup(Transform(b_, d_), FadeIn(t_)) for b_, d_, t_ in zip(base, dots, tags)],
                                   lag_ratio=0.15), run_time=2.0)
-            self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[1:]], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("c")
@@ -141,10 +148,14 @@ class Latent(VoiceoverScene):
         rm = {c: float(d[f"g{c[0]}c{c[1]}_rmse"]) for c in cfgs}
         fd = {c: np.asarray(d[f"g{c[0]}c{c[1]}_fd"], float) for c in cfgs}
         top_fd = max(f.max() for f in fd.values()) * 1.1
-        top_rm = max(rm.values()) * 1.1
-        ax = axes([0, top_rm], [0, top_fd], x_length=5.4, y_length=3.6, xlabel=r"rebuild error \ (lower: \ a better autoencoder)",
-                  ylabel=r"generated letters' distance from real ones (FD)", xticks=[0, round(top_rm / 2, 2)],
-                  yticks=[0, round(top_fd / 2)], center=[-3.0, 0.3, 0], font_size=18)
+        lo_rm = math.floor(min(rm.values()) * 100) / 100
+        top_rm = math.ceil(max(rm.values()) * 100) / 100 + 0.005
+        ax = axes([lo_rm, top_rm], [0, top_fd], x_length=6.2, y_length=3.6,
+                  xlabel=r"rebuild error \ (lower: \ a better autoencoder)",
+                  ylabel=r"generated letters' distance from real ones (FD)",
+                  xticks=[lo_rm, round((lo_rm + top_rm) / 2, 2), round(top_rm - 0.005, 2)],
+                  yticks=[0, round(top_fd / 2)], center=[-2.8, 0.3, 0], font_size=18)
+        base = VGroup(*[Dot(ax.ax.c2p(rm[c], 0), radius=0.08, color=SIDE_C[c[0]]) for c in cfgs])
         pts = VGroup()
         for c in cfgs:
             x, f = rm[c], fd[c]
@@ -176,9 +187,10 @@ class Latent(VoiceoverScene):
             "every image model since."
         ) as vo:
             self.play(Create(ax), FadeIn(cite_))
+            self.play(LaggedStart(*[FadeIn(b_, scale=0.5) for b_ in base], lag_ratio=0.12), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(p_), FadeIn(t_)) for p_, t_ in zip(pts, tags)], lag_ratio=0.12),
-                      run_time=2.0)
+            self.play(LaggedStart(*[AnimationGroup(ReplacementTransform(b_, p_[1]), FadeIn(p_[0]), FadeIn(t_))
+                                    for b_, p_, t_ in zip(base, pts, tags)], lag_ratio=0.12), run_time=2.0)
             self.play(FadeIn(sh), FadeIn(sr))
             vo.wait_until("b")
             self.play(Indicate(sh[0], color=PATCH))
