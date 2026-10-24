@@ -272,18 +272,27 @@ class Folding(VoiceoverScene):
             mpic = VGroup(mtrue, mpic)
         tag = note(rf"computed: \ ${100 * frac:.0f}\%$ of the pairs seen \ (those under ${f['cut']:.0f}$\,\AA), "
                    rf"\ each with $\pm {f['noise']:.0f}$\,\AA\ of noise", font_size=20).to_corner(DR, buff=0.2)
+        recipe = VGroup(label(r"AlphaFold 1's recipe, \ on our bundle:", font_size=24, color=GREY_A),
+                        label(rf"keep the pairs under ${f['cut']:.0f}$\,\AA \ (${100 * frac:.0f}\%$ of them)",
+                              font_size=22),
+                        label(rf"add $\pm {f['noise']:.0f}$\,\AA\ of noise to each distance", font_size=22),
+                        label(r"start from a random tangle", font_size=22),
+                        label(r"gradient descent on $\sum (|x_i - x_j| - \hat d_{ij})^2$", font_size=22),
+                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, 0.4, 0])
         verdict = (f"{words_num(len(good))} of the {n} land on the true fold, and {words_num(len(bad))} on its mirror "
                    "image, which fits the distances just as well")
         with self.voiceover(
             "AlphaFold 1 predicted only distances, noisy, and only for pairs it was sure were close. So do the same with ours: "
             f"keep the pairs under {f['cut']:.0f} ångströms, {100 * frac:.0f} percent of them, add {f['noise']:.0f} "
-            "ångström of noise, and from a random tangle, move the atoms by gradient descent until their distances match. "
-            f"<bookmark mark='a'/> Watch it fold. <bookmark mark='b'/> From {n} random starts, {verdict}. <bookmark "
+            "ångström of noise, <bookmark mark='a'/> and from a random tangle, move the atoms by gradient descent until "
+            f"their distances match. <bookmark mark='b'/> From {n} random starts, {verdict}. <bookmark "
             "mark='c'/> Nothing a reflection leaves unchanged, distances included, can tell which. AlphaFold 2 needed a "
             "representation that knows left from right."
         ) as vo:
-            self.play(FadeIn(truth), FadeIn(cur), FadeIn(steps_l), FadeIn(lg), FadeIn(tag))
+            self.play(FadeIn(truth), FadeIn(cur), FadeIn(steps_l), FadeIn(lg), FadeIn(tag), FadeIn(recipe[0]))
+            self.play(LaggedStart(*[FadeIn(r) for r in recipe[1:3]], lag_ratio=0.5), run_time=1.5)
             vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r) for r in recipe[3:]], lag_ratio=0.5), run_time=1.0)
             per = max(0.4, vo.until("b") / max(1, len(frames) - 1))
             for k in range(1, len(frames)):
                 new = chain3d(frames[k], scale=0.13, center=c, angle=0.6, tilt=0.5, color=PRED_C, width=3.5,
@@ -293,7 +302,7 @@ class Folding(VoiceoverScene):
                 cur, steps_l = new, nl
                 self.wait(0.3 * per)
             vo.wait_until("b")
-            self.play(FadeIn(res))
+            self.play(FadeOut(recipe), FadeIn(res))
             vo.wait_until("c")
             if mpic is not None:
                 self.play(FadeIn(mpic))

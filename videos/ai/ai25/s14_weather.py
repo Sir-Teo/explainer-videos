@@ -78,6 +78,8 @@ class Weather(VoiceoverScene):
         ml.next_to(grid, DOWN, buff=0.2)
         facts = VGroup(
             label(r"GraphCast \ (Lam et al., \textit{Science} 2023)", font_size=26, color=STRUCT),
+            label(r"trained on ERA5: \ ECMWF's reconstruction of the global weather since 1940", font_size=22,
+                  color=GREY_A),
             label(r"grid: \ $0.25^\circ$, \ $1{,}038{,}240$ points, \ $227$ numbers each", font_size=22),
             label(r"multimesh: \ an icosahedron refined six times, \\ $40{,}962$ nodes, \ $327{,}660$ edges", font_size=22),
             label(r"encode to the mesh, \ $16$ rounds of message passing, \ decode", font_size=22),
@@ -99,18 +101,18 @@ class Weather(VoiceoverScene):
             "six hours on, from the last two. <bookmark mark='d'/> It makes a ten-day forecast in under a minute, and beat "
             "ECMWF's flagship deterministic forecast on ninety percent of 1,380 targets."
         ) as vo:
-            self.play(FadeIn(facts[0]))
+            self.play(FadeIn(facts[0]), FadeIn(facts[1]))
             vo.wait_until("a")
-            self.play(FadeIn(grid), FadeIn(facts[1]))
+            self.play(FadeIn(grid), FadeIn(facts[2]))
             vo.wait_until("b")
-            self.play(FadeIn(nodes), FadeIn(facts[2]))
+            self.play(FadeIn(nodes), FadeIn(facts[3]))
             for L in sorted(lev):
                 self.play(Create(lev[L], lag_ratio=0.002), run_time=1.0)
             self.play(FadeIn(ml))
             vo.wait_until("c")
-            self.play(FadeIn(facts[3]), FadeIn(facts[4]))
+            self.play(FadeIn(facts[4]), FadeIn(facts[5]))
             vo.wait_until("d")
-            self.play(FadeIn(facts[5]), FadeIn(facts[6]))
+            self.play(FadeIn(facts[6]), FadeIn(facts[7]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -276,6 +278,6 @@ class Weather(VoiceoverScene):
             "steps, and diffusion for the part of the future that can't be known. Next: networks that learn whole "
             "equations."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

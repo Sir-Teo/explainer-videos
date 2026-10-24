@@ -26,8 +26,17 @@ Items:
     prefs      comparisons: pairs of the fine-tuned model's lines, labelled by simulated people; each topic's lines
                are split first, so test comparisons are between lines no reward model trained on
     rm         reward models (Bradley-Terry) trained on 100 to all ~1,560 comparisons: accuracy on held-out pairs
+    inside     inside the reward models, on 600 fresh lines (20 per topic) no comparison was made from: score against
+               gold (raw and within a question), how often each orders two lines as gold does, the score explained by
+               gold's three terms (mood, length, repetition), the score by line length, which words raise or lower it
+               (deleting one word at a time, against gold's own change), the lines where the two disagree most, and
+               each question's favourite line by the reward model against gold's (regressional Goodhart)
     rlaif      AI feedback in miniature: a reward model from 100 comparisons labels 1,600 more for a fresh one
-    closed     the KL-regularized optimum over eight candidate answers: pi* proportional to pi_ref exp(r / beta)
+    closed     the KL-regularized optimum over eight candidate answers of comparable probability: pi* proportional
+               to pi_ref exp(r / beta)
+    baselines  RLHF's first policy-gradient step estimated from one batch of 16 lines, with no baseline, one baseline
+               for every question, the question's own average, and the batch's mean (our runs): how well two
+               independent batches agree on the direction (cosine), and how much noise each carries
     bon        best-of-n against the reward model, n = 1 .. 256: proxy and gold reward against KL = log n - (n-1)/n
     rlhf       KL-penalized policy gradient against the reward model, at two penalties, three seeds each: reward,
                gold and KL as it trains, and answers along the way
@@ -86,6 +95,7 @@ WORD = re.compile(r"[a-z']+")
 
 CONCISE = 12  # words a line may run before gold starts to mind
 PER_WORD = 0.04  # what gold takes off for each word past that
+REPEAT_FREE, REPEAT_W = 0.15, 2.5  # the share of repeated words gold lets pass, and its penalty per unit past that
 
 
 def gold(text: str) -> float:
@@ -99,7 +109,20 @@ def gold(text: str) -> float:
     neg = sum(w in NEGATIVE for w in words)
     repeat = 1 - len(set(words)) / len(words)  # 0 for all-different words
     return float(math.tanh((pos - neg) / 2) - PER_WORD * max(0, len(words) - CONCISE)
-                 - 2.5 * max(0.0, repeat - 0.15))
+                 - REPEAT_W * max(0.0, repeat - REPEAT_FREE))
+
+
+def gold_parts(text: str):
+    """gold's three terms for a line of four words or more (gold is their sum): mood, length, repetition.  None for a
+    shorter line, which gold scores -1."""
+    words = WORD.findall(text.lower())
+    if len(words) < 4:
+        return None
+    pos = sum(w in POSITIVE for w in words)
+    neg = sum(w in NEGATIVE for w in words)
+    repeat = 1 - len(set(words)) / len(words)
+    return (math.tanh((pos - neg) / 2), -PER_WORD * max(0, len(words) - CONCISE),
+            -REPEAT_W * max(0.0, repeat - REPEAT_FREE))
 
 
 def _paragraphs():
@@ -393,6 +416,138 @@ def _load_rm(name="rm"):
     return rm.eval()
 
 
+def _demean(x, groups) -> np.ndarray:
+    """x minus its mean within each group (here: the lines answering one question)."""
+    x = np.asarray(x, float).copy()
+    groups = np.asarray(groups)
+    for gname in np.unique(groups):
+        m = groups == gname
+        x[m] -= x[m].mean()
+    return x
+
+
+INSIDE_SEED = 2000  # fresh lines: no comparison, reward model or chart elsewhere in the part used these seeds
+PART_NAMES = ("mood", "length", "repetition", "too short")
+
+
+def compute_inside(per_topic=20, min_count=6, n_show=10):
+    """Inside the reward models, on lines no comparison was made from.  Everything is compared within a question
+    (each topic's mean taken out of both scores), since a reward model's scores are only defined up to a shift per
+    question.  "In gold units": a reward model's score divided by its slope on gold (a line gold rates one point
+    better is then, on average, one point better on both scales)."""
+    sft = _load_model("sft")
+    rms = {"large": _load_rm("rm"), "small": _load_rm("rm_small")}
+    topic, text = [], []
+    for k, t in enumerate(TOPICS):
+        outs = P.sample(sft, P.chat(line_q(t)), per_topic, 40, 1.0, seed=INSIDE_SEED + k)
+        topic += [t] * len(outs)
+        text += [" ".join(P.text_of(ids).split()) for ids in outs]
+    top = np.array(topic)
+    g = np.array([gold(x) for x in text])
+    nw = np.array([len(WORD.findall(x.lower())) for x in text])
+    gc = _demean(g, topic)
+    out = {"topic": topic, "text": text, "gold": g, "words": nw, "tau": TAU, "per_topic": per_topic,
+           "concise": CONCISE, "per_word": PER_WORD, "part_names": list(PART_NAMES)}
+
+    # pairs of lines to the same question that gold does not tie
+    pairs = [(i, j) for t in TOPICS for a, i in enumerate(np.flatnonzero(top == t))
+             for j in np.flatnonzero(top == t)[a + 1:] if g[i] != g[j]]
+    pi, pj = np.array([p[0] for p in pairs]), np.array([p[1] for p in pairs])
+    dg = g[pi] - g[pj]
+    out["n_pairs"] = len(pairs)
+    out["people_pair_agree"] = float(np.mean(1 / (1 + np.exp(-np.abs(dg) / TAU))))  # a simulated person's chance
+
+    # gold's terms, one column each (a line too short to have terms gets the "too short" column instead)
+    X = np.zeros((len(text), 4))
+    for i, x in enumerate(text):
+        p = gold_parts(x)
+        X[i] = (0.0, 0.0, 0.0, 1.0) if p is None else (*p, 0.0)
+    Xc = np.stack([_demean(X[:, c], topic) for c in range(4)], 1)
+    live = [c for c in range(4) if Xc[:, c].std() > 1e-9]  # a term no line varies in can't be measured
+    for name, rm in rms.items():
+        s = np.zeros(len(text))
+        for t in TOPICS:
+            idx = np.flatnonzero(top == t)
+            s[idx] = rm_score(rm, t, [text[i] for i in idx])
+        sc = _demean(s, topic)
+        slope = float(sc @ gc / (gc @ gc))  # least squares through the origin: both are centred
+        out[f"{name}_score"] = s
+        out[f"{name}_r_raw"] = float(np.corrcoef(s, g)[0, 1])
+        out[f"{name}_r_within"] = float(np.corrcoef(sc, gc)[0, 1])
+        out[f"{name}_slope"] = slope
+        out[f"{name}_pair_agree"] = float(np.mean((s[pi] - s[pj]) * dg > 0))
+        # the score, in gold units, as a sum of gold's terms: gold's own weights are 1, 1, 1 and -1
+        coef, *_ = np.linalg.lstsq(Xc[:, live], sc / slope, rcond=None)
+        w = [None] * 4
+        for c, v in zip(live, coef):
+            w[c] = float(v)
+        resid = sc / slope - Xc[:, live] @ coef
+        out[f"{name}_weights"] = w
+        out[f"{name}_r2"] = float(1 - resid @ resid / ((sc / slope) @ (sc / slope)))
+        # each question's favourite line by this reward model, against gold's favourite (regressional Goodhart)
+        fav = [int(np.flatnonzero(top == t)[np.argmax(s[top == t])]) for t in TOPICS]
+        best = [int(np.flatnonzero(top == t)[np.argmax(g[top == t])]) for t in TOPICS]
+        out[f"{name}_pick_believed"] = float(np.mean(sc[fav] / slope))  # what its score says, in gold units
+        out[f"{name}_pick_gold"] = float(np.mean(gc[fav]))  # what gold says
+        out[f"{name}_pick_same"] = float(np.mean([a == b for a, b in zip(fav, best)]))
+        out[f"{name}_pick_rank"] = float(np.mean([1 + int(np.sum(g[top == top[i]] > g[i])) for i in fav]))
+    out["gold_pick"] = float(np.mean(gc[[int(np.flatnonzero(top == t)[np.argmax(g[top == t])]) for t in TOPICS]]))
+    out["gold_weights_check"] = [float(v) for v in np.linalg.lstsq(Xc[:, live], gc, rcond=None)[0]]
+
+    # which words raise or lower the larger model's score: delete one word at a time (lines of six words or more, so
+    # no deletion makes a line too short for gold), against gold's change for the same deletion
+    rm, s, a = rms["large"], out["large_score"], out["large_slope"]
+    eff = {}
+    line_eff = []
+    for i, (t, x) in enumerate(zip(topic, text)):
+        toks = x.split()
+        keys, variants = [], []
+        if nw[i] >= 6:
+            for j, tk in enumerate(toks):
+                w = "".join(WORD.findall(tk.lower()))
+                if w:
+                    keys.append((j, w))
+                    variants.append(" ".join(toks[:j] + toks[j + 1:]))
+        if not variants:
+            line_eff.append(None)
+            continue
+        er = (s[i] - rm_score(rm, t, variants)) / a
+        eg = np.array([g[i] - gold(v) for v in variants])
+        for (j, w), r_, g_ in zip(keys, er, eg):
+            eff.setdefault(w, ([], []))[0].append(float(r_))
+            eff[w][1].append(float(g_))
+        line_eff.append([(j, toks[j], float(r_), float(g_)) for (j, _), r_, g_ in zip(keys, er, eg)])
+    kind = lambda w: "pos" if w in POSITIVE else "neg" if w in NEGATIVE else ""
+    words = [(w, len(v[0]), float(np.mean(v[0])), float(np.mean(v[1])), kind(w)) for w, v in eff.items()
+             if len(v[0]) >= min_count]
+    words.sort(key=lambda r_: -r_[2])
+    out["words_up"], out["words_down"] = words[:n_show], words[::-1][:n_show]
+    out["n_words"], out["min_count"] = len(words), min_count
+    out["word_r"] = float(np.corrcoef([r_[2] for r_ in words], [r_[3] for r_ in words])[0, 1])
+    for k_ in ("pos", "neg", ""):
+        occ_r = [r_ for w, v in eff.items() if kind(w) == k_ for r_ in v[0]]
+        occ_g = [g_ for w, v in eff.items() if kind(w) == k_ for g_ in v[1]]
+        out[f"class_{k_ or 'other'}"] = (len(occ_r), float(np.mean(occ_r)) if occ_r else 0.0,
+                                         float(np.mean(occ_g)) if occ_g else 0.0)
+    # one line to show the deletions on: eight to fourteen words, a word from one of gold's lists, the widest spread
+    norm = lambda tk: "".join(WORD.findall(tk.lower()))
+    cand = [i for i, le in enumerate(line_eff) if le and 8 <= nw[i] <= 14 and any(kind(norm(tk)) for _, tk, *_ in le)]
+    if cand:
+        ex = max(cand, key=lambda i: max(e[2] for e in line_eff[i]) - min(e[2] for e in line_eff[i]))
+        out["example"] = {"topic": topic[ex], "text": text[ex], "effects": line_eff[ex], "gold": float(g[ex])}
+
+    # where the larger model and gold disagree most: the difference of their standardized scores within a question
+    sc = _demean(s, topic)
+    d = sc / sc.std() - gc / gc.std()
+    rank = lambda v, i: 1 + int(np.sum(v[top == top[i]] > v[i]))
+    show = lambda i: {"topic": topic[i], "text": text[i], "gold": float(g[i]), "score": float(sc[i] / a),
+                      "rank_rm": rank(s, i), "rank_gold": rank(g, i)}
+    order = np.argsort(d)
+    out["over"] = [show(int(i)) for i in order[::-1][:3]]
+    out["under"] = [show(int(i)) for i in order[:3]]
+    return out
+
+
 def compute_rlaif(n_human=100, n_ai=1600):
     """AI feedback, in miniature: a reward model trained on few human comparisons labels many more, and a fresh
     reward model learns from its labels."""
@@ -419,8 +574,12 @@ def compute_rlaif(n_human=100, n_ai=1600):
 # ---------------------------------------------------------------------------
 # The KL-regularized optimum, best-of-n
 # ---------------------------------------------------------------------------
-def compute_closed(k=8, topic="sea"):
-    """pi*(y) proportional to pi_ref(y) exp(r(y) / beta), over k sampled candidates (pi_ref renormalized over them)."""
+def compute_closed(k=8, topic="sea", band=1.5):
+    """pi*(y) proportional to pi_ref(y) exp(r(y) / beta), over k sampled candidates (pi_ref renormalized over them).
+    The candidates are lines of comparable probability under the fine-tuned model: log-probabilities within ``band``
+    nats of the median (the band widened until it holds k lines), then k of them spread over gold.  A line's
+    probability falls by a factor of e with every nat, so over all 64 samples the likeliest few lines would hold
+    nearly all of pi_ref and the reweighting would have nothing to show."""
     sft = _load_model("sft")
     outs = [P.text_of(ids) for ids in P.sample(sft, P.chat(line_q(topic)), 64, 40, 1.0, seed=7)]
     seen, cand = set(), []
@@ -428,11 +587,19 @@ def compute_closed(k=8, topic="sea"):
         if o not in seen and len(o.split()) >= 4:
             seen.add(o)
             cand.append(o)
-    golds = np.array([gold(c) for c in cand])
-    order = np.argsort(golds)
-    pick = [cand[i] for i in order[np.linspace(0, len(cand) - 1, k).astype(int)]]
     with torch.no_grad():
-        lp = P.seq_logprob(sft, [(P.chat(line_q(topic)), N.encode(c) + [N.special("<|end|>")]) for c in pick]).numpy()
+        lp_all = P.seq_logprob(sft, [(P.chat(line_q(topic)), N.encode(c) + [N.special("<|end|>")])
+                                     for c in cand]).numpy()
+    med = float(np.median(lp_all))
+    while True:
+        near = [i for i in range(len(cand)) if abs(lp_all[i] - med) <= band]
+        if len(near) >= k or band > 100:
+            break
+        band *= 1.25
+    near.sort(key=lambda i: gold(cand[i]))
+    pick_i = [near[j] for j in np.linspace(0, len(near) - 1, k).round().astype(int)]
+    pick = [cand[i] for i in pick_i]
+    lp = lp_all[pick_i]
     ref = np.exp(lp - lp.max())
     ref /= ref.sum()
     r = np.array([gold(c) for c in pick])
@@ -441,7 +608,56 @@ def compute_closed(k=8, topic="sea"):
     for b in betas:
         w = ref * np.exp((r - r.max()) / b)
         pis.append(w / w.sum())
-    return {"topic": topic, "cands": pick, "r": r, "ref": ref, "betas": betas, "pi": np.array(pis)}
+    return {"topic": topic, "cands": pick, "r": r, "ref": ref, "betas": betas, "pi": np.array(pis), "lp": lp,
+            "band": float(band), "n_samples": len(cand), "lp_range_all": float(lp_all.max() - lp_all.min())}
+
+
+BASELINES = ("none", "shared", "value", "group")
+
+
+def compute_baselines(topics=6, batches=6, n=16):
+    """RLHF's first policy-gradient step (the policy is still the fine-tuned model, so the KL term is zero), estimated
+    from one batch of n lines to one question, four ways: with no baseline; with one baseline for every question (the
+    reward model's average over all of them); with the question's own average over all its batches (what a value
+    network learns to predict); and with the batch's own mean (our runs, = RLOO's leave-one-out baseline scaled by
+    (n-1)/n).  The gradient is linear in the weights, so each batch needs two backward passes: sum r_i grad log p_i and
+    sum grad log p_i, combined as G(c) = G_r - c G_1 for any baseline c.  Reported: the cosine between two batches'
+    estimates for the same question (all pairs), and each estimate's mean squared length."""
+    pol = _load_model("sft")
+    rm = _load_rm("rm")
+    params = [p for p in pol.parameters()]
+    ts = TOPICS[::len(TOPICS) // topics][:topics]
+    outs, batch_r = {}, {}
+    for k, t in enumerate(ts):
+        for b in range(batches):
+            outs[(t, b)] = P.sample(pol, P.chat(line_q(t)), n, 40, 1.0, seed=30_000 + 100 * k + b)
+            batch_r[(t, b)] = rm_score(rm, t, [P.text_of(o) for o in outs[(t, b)]])
+    q_mean = {t: float(np.mean([batch_r[(t, b)] for b in range(batches)])) for t in ts}
+    shared = float(np.mean(list(q_mean.values())))
+    base = {"none": lambda t, b: 0.0, "shared": lambda t, b: shared, "value": lambda t, b: q_mean[t],
+            "group": lambda t, b: float(batch_r[(t, b)].mean())}
+    cos_t, sq = {kd: [] for kd in BASELINES}, {kd: [] for kd in BASELINES}
+    for t in ts:  # one question at a time: its batches' gradients (2 x 6.8 million numbers each) fit in memory
+        G_r, G_1 = [], []
+        for b in range(batches):
+            prompt = P.chat(line_q(t))
+            for wts, dest in ((batch_r[(t, b)], G_r), (np.ones(n), G_1)):
+                pol.zero_grad()
+                lp = P.seq_logprob(pol, [(prompt, o) for o in outs[(t, b)]])
+                (torch.from_numpy(np.asarray(wts)).float() * lp).mean().backward()  # the ascent direction
+                dest.append(torch.cat([p.grad.flatten() for p in params]).clone())
+        for kd in BASELINES:
+            G = [G_r[b] - base[kd](t, b) * G_1[b] for b in range(batches)]
+            cos_t[kd].append(float(np.mean([float(F.cosine_similarity(G[i], G[j], 0))
+                                            for i in range(batches) for j in range(i + 1, batches)])))
+            sq[kd].append(float(np.mean([float(x @ x) for x in G])))
+    out = {"topics": list(ts), "batches": batches, "n": n, "question_mean": [q_mean[t] for t in ts],
+           "shared": shared, "kinds": list(BASELINES)}
+    for kd in BASELINES:
+        out[f"{kd}_cos"] = float(np.mean(cos_t[kd]))
+        out[f"{kd}_cos_by_q"] = cos_t[kd]
+        out[f"{kd}_sq"] = float(np.mean(sq[kd]))
+    return out
 
 
 def compute_bon(pool=256, topics=12):
@@ -700,8 +916,10 @@ ITEMS = {
     "lora": compute_lora,
     "prefs": compute_prefs,
     "rm": compute_rm,
+    "inside": compute_inside,
     "rlaif": compute_rlaif,
     "closed": compute_closed,
+    "baselines": compute_baselines,
     "bon": compute_bon,
     "rlhf": compute_rlhf,
     "dpo": compute_dpo,

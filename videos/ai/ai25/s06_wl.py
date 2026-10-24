@@ -284,7 +284,26 @@ class WL(VoiceoverScene):
             node_box_(r"count small subgraphs \ (triangles, cycles)", PAIR_C),
             node_box_(r"positional encodings: \ random numbers, \ Laplacian eigenvectors", AUG),
             node_box_(r"graph transformers: \ attention over all pairs", GNN_C),
-        ).arrange_in_grid(rows=2, cols=2, buff=(0.45, 0.45)).move_to(DOWN * 0.3)
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.4, 0.4)).move_to(DOWN * 1.15)
+
+        # the classic pair: the triangular prism and K_{3,3}, both 3-regular on six nodes
+        def small_graph(pos, edges, center):
+            pts = [np.array([x, y, 0]) * 0.55 + center for x, y in pos]
+            es = VGroup(*[Line(pts[a], pts[b], color=GREY_C, stroke_width=2) for a, b in edges])
+            ds = VGroup(*[Dot(q, radius=0.08, color=WL_COLORS[0]) for q in pts])
+            return VGroup(es, ds)
+        ang = [np.pi / 2 + 2 * np.pi * k / 3 for k in range(3)]
+        prism = small_graph([(1.4 * np.cos(a), 1.4 * np.sin(a)) for a in ang] +
+                            [(0.6 * np.cos(a), 0.6 * np.sin(a)) for a in ang],
+                            [(0, 1), (1, 2), (2, 0), (3, 4), (4, 5), (5, 3), (0, 3), (1, 4), (2, 5)],
+                            np.array([-3.2, 1.05, 0]))
+        k33 = small_graph([(-0.9, y) for y in (1.0, 0.0, -1.0)] + [(0.9, y) for y in (1.0, 0.0, -1.0)],
+                          [(a, b) for a in range(3) for b in range(3, 6)], np.array([0.0, 1.05, 0]))
+        pair_l = VGroup(label(r"triangular prism: \ triangles", font_size=20, color=GREY_A).next_to(prism, DOWN, buff=0.1),
+                        label(r"$K_{3,3}$: \ none", font_size=20, color=GREY_A).next_to(k33, DOWN, buff=0.1))
+        pair_n = label(r"every node has $3$ neighbours: \\ colour refinement sees \\ the same graph", font_size=22,
+                       color=PLAIN).move_to([3.6, 1.05, 0])
+        pair = VGroup(prism, k33, pair_l, pair_n)
         babai = label(r"telling graphs apart in general: \ Babai (2016), \ quasi-polynomial time", font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.4)
         tk = take_away(r"message passing sees what colour refinement sees: \ almost every graph, \ but not all")
@@ -299,6 +318,8 @@ class WL(VoiceoverScene):
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")
             self.play(FadeIn(facts[1]))
+            self.play(Create(prism[0]), FadeIn(prism[1]), Create(k33[0]), FadeIn(k33[1]), run_time=1.2)
+            self.play(FadeIn(pair_l), FadeIn(pair_n))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in ways], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")

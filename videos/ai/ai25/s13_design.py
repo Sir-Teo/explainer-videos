@@ -112,7 +112,7 @@ class Design(VoiceoverScene):
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
                        for a, b in zip(boxes, boxes[1:])])
         crit = label(r"kept if: \ predicted aligned error $< 5$, \ within $2$\,\AA\ of the design", font_size=20,
-                     color=PAIR_C).next_to(boxes[2], DOWN, buff=0.2)
+                     color=PAIR_C).next_to(boxes, DOWN, buff=0.2).align_to(boxes[1], LEFT)
         how = VGroup(
             label(r"RoseTTAFold, \ fine-tuned to remove noise from residue frames", font_size=22),
             label(r"positions: \ Gaussian noise; \ orientations: \ random turns on $SO(3)$; \ $200$ steps",
@@ -251,6 +251,6 @@ class Design(VoiceoverScene):
             "Design, in one line: diffuse a backbone, write a sequence for it, check that the sequence folds back, "
             "and only then make it. Now from molecules to the whole planet."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

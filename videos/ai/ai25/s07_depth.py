@@ -66,6 +66,8 @@ class Depth(VoiceoverScene):
                       FadeIn(depth[1][1]), run_time=1.5)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
+                if k == 3:
+                    self.play(FadeOut(depth), run_time=0.6)
                 step(k)
             vo.wait_until("e")
             self.play(FadeIn(rest))
@@ -157,9 +159,9 @@ class Depth(VoiceoverScene):
                    f"Even the residual network falls, to {100 * R[-1]:.0f} percent at {depths[-1]} layers")
         tag = note(r"computed: \ three seeds per point \ (band: \ min--max), \ $300$ training steps", font_size=20)
         tag.to_corner(DR, buff=0.2)
-        notes = label(r"with weights, \ the collapse is also an optimization problem: \ gradients through $64$ "
-                      r"averages", font_size=20, color=GREY_B).move_to([3.9, -1.6, 0])
-        notes.width = min(notes.width, 5.6)
+        notes = label(r"with weights, \ the collapse is also \\ an optimization problem: \\ gradients pass back "
+                      r"through $64$ averages", font_size=22, color=GREY_B).move_to([4.2, -1.3, 0])
+        notes.width = min(notes.width, 5.2)
         with self.voiceover(
             "Now with weights and training: the same task at depths from two to sixty-four, three seeds each. <bookmark "
             f"mark='a'/> {best_txt}; {col_txt}. <bookmark mark='b'/> {res_txt}: the skip connection keeps each node's own "
