@@ -195,8 +195,8 @@ class Tokens(VoiceoverScene):
         t2 = label(r"read as requested", font_size=20, color=GREY_A).next_to(b2, UP, buff=0.3)
         passes = VGroup(*[label(rf"{GEN_NAME[k]}: \ ${int(d[f'{k}_passes'])}$ passes", font_size=24, color=GEN_C[k])
                           for k in kinds]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.8, 0.3, 0])
-        hd = note(rf"same tokens, \ same transformer size \ (${int(d['raster_params']) // 1000}$ thousand weights), \ "
-                  rf"${int(d['ng']):,}$ steps, \ guidance ${float(d['guide']):g}$; \ three seeds".replace(",", "{,}")).to_edge(DOWN, buff=0.35)
+        hd = note(rf"same tokens, \ same transformer size \ (${fmt_int(d['raster_params'])}$ weights), \ "
+                  rf"${fmt_int(d['ng'])}$ steps, \ guidance ${float(d['guide']):g}$; \ three seeds").to_edge(DOWN, buff=0.35)
         m_r, m_m = float(fd[0].mean()), float(fd[1].mean())
         a_r, a_m = float(acc[0].mean()), float(acc[1].mean())
         if m_m < m_r:
