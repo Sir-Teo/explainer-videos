@@ -80,19 +80,21 @@ class Unified(VoiceoverScene):
         head = label(r"Unified models", font_size=36).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"May 2024", r"Chameleon \ (Meta)", r"pictures as discrete tokens in the same vocabulary: \ "
-                         r"one next-token loss for everything", color=HIST, width=4.3, font_size=23),
+                         r"one next-token loss for everything", color=HIST, width=6.3, font_size=25),
             history_card(r"Aug 2024", r"Transfusion \ (Zhou et al., Meta)", r"one transformer, \ two losses: \ next "
                          r"token for text, \ diffusion for picture patches; \ $7$ billion weights, \ $2$ trillion tokens",
-                         color=HIST, width=4.3, font_size=23),
+                         color=HIST, width=6.3, font_size=25),
             history_card(r"Oct 2024", r"Janus \ (DeepSeek)", r"one transformer, \ but separate eyes: \ SigLIP features "
-                         r"to read, \ VQ tokens to draw", color=HIST, width=4.3, font_size=23),
+                         r"to read, \ VQ tokens to draw", color=HIST, width=6.3, font_size=25),
             history_card(r"May 2025", r"BAGEL \ (ByteDance Seed)", r"two transformer experts, \ for understanding and "
                          r"for drawing, \ sharing attention: \ $7$ of $14$ billion weights active; \ editing emerged",
-                         color=HIST, width=4.3, font_size=23),
-        ).arrange_in_grid(rows=2, cols=2, buff=(0.25, 0.25)).next_to(head, DOWN, buff=0.35)
-        if cards.height > 5.8:
-            cards.height = 5.8
-            cards.next_to(head, DOWN, buff=0.35)
+                         color=HIST, width=6.3, font_size=25),
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.35), cell_alignment=UP)
+        if cards.width > 13.2:
+            cards.width = 13.2
+        if cards.height > 6.0:
+            cards.height = 6.0
+        cards.next_to(head, DOWN, buff=0.4)
         with self.voiceover(
             "So far, one model reads pictures and another draws them. Can one network do both? <bookmark mark='a'/> "
             "Meta's Chameleon, in 2024, made pictures into tokens in the same vocabulary as words, and trained one "
@@ -114,7 +116,7 @@ class Unified(VoiceoverScene):
     # ------------------------------------------------------------------
     def ours(self):
         u = load("unified")
-        seq = sequence_picture().move_to([-3.4, 1.0, 0])
+        seq = sequence_picture().scale(1.25).move_to([-3.2, 1.0, 0])
         mp = mask_picture().move_to([3.6, 1.3, 0])
         ml = label(r"attention: \ causal, \ except \\ a picture's patches see each other \ (orange)", font_size=18,
                    color=GREY_A).next_to(mp, DOWN, buff=0.15)
@@ -139,8 +141,10 @@ class Unified(VoiceoverScene):
             "its drawings are read as the letter asked for."
         ) as vo:
             self.play(FadeIn(hd))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in seq], lag_ratio=0.5), run_time=2.5)
+            vo.wait_until("a")
+            for r_ in seq:
+                self.play(Indicate(r_, color=UNI_C, scale_factor=1.04), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(mp[0]), FadeIn(mp[1], lag_ratio=0.002), FadeIn(ml), run_time=1.5)
             vo.wait_until("c")

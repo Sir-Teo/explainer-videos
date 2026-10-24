@@ -680,20 +680,29 @@ CTC_SEEDS = [0, 1, 2]
 CTC_CHECKS = [0, 50, 150, 400, 800, 1500]
 
 
-def ctc_net():
+def ctc_net(width=128):
+    """A small convolutional recognizer: a strided convolution to 20 ms frames, then five residual convolutions with
+    growing dilation (each frame sees about a second and a half of context, both ways), then a letter per frame."""
     import torch.nn as nn
+
+    class Res(nn.Module):
+        def __init__(s, c, dil):
+            super().__init__()
+            s.conv = nn.Conv1d(c, c, 5, padding=2 * dil, dilation=dil)
+            s.norm = nn.GroupNorm(1, c)
+
+        def forward(s, x):
+            return x + nn.functional.gelu(s.norm(s.conv(x)))
 
     class Net(nn.Module):
         def __init__(s):
             super().__init__()
-            s.conv = nn.Sequential(nn.Conv1d(40, 96, 5, stride=2, padding=2), nn.GELU(), nn.Conv1d(96, 96, 5, padding=2),
-                                   nn.GELU())
-            s.rnn = nn.GRU(96, 96, num_layers=2, bidirectional=True, batch_first=True)
-            s.out = nn.Linear(192, len(ALPHA))
+            s.inp = nn.Sequential(nn.Conv1d(40, width, 5, stride=2, padding=2), nn.GELU())
+            s.body = nn.Sequential(*[Res(width, d) for d in (1, 2, 4, 8, 16)])
+            s.out = nn.Conv1d(width, len(ALPHA), 1)
 
         def forward(s, x):  # x: (B, 40, T) -> log-probabilities (B, T/2, labels)
-            h = s.conv(x).transpose(1, 2)
-            return s.out(s.rnn(h)[0]).log_softmax(-1)
+            return s.out(s.body(s.inp(x))).transpose(1, 2).log_softmax(-1)
 
     return Net()
 
@@ -821,7 +830,7 @@ def run_ctc(cache, seed, log=print):
         torch.nn.utils.clip_grad_norm_(net.parameters(), 5.0)
         opt.step()
         if step % 10 == 0:
-            curve.append([step, float(loss)])
+            curve.append([step, float(loss.detach())])
     hyps = evaluate(test)
     hyps_seen = evaluate(seen)
     net.eval()
