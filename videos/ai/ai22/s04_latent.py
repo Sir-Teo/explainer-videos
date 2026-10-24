@@ -210,9 +210,18 @@ class Latent(VoiceoverScene):
             stacks.add(sheet.shift(0.16 * k * (UP + RIGHT)))
         stacks.move_to([-1.4, 0.6, 0])
         arr = Arrow(grid.get_right(), stacks.get_left(), buff=0.2, color=GREY_B, stroke_width=2.5)
-        al = label(r"space to channels: \ no information lost", font_size=18, color=GREY_A).next_to(arr, DOWN, buff=0.15)
         gl = label(r"$4 \times 4 \times 1$", font_size=20, color=GREY_A).next_to(grid, DOWN, buff=0.15)
         sl = label(r"$2 \times 2 \times 4$", font_size=20, color=GREY_A).next_to(stacks, DOWN, buff=0.15).align_to(gl, DOWN)
+        al = label(r"space to channels: \ no information lost", font_size=20, color=GREY_A)
+        al.next_to(VGroup(gl, sl), DOWN, buff=0.3).match_x(arr)
+        # SD3: the same grid, four channels widened to sixteen (sheets drawn: at most six)
+        w4, w16 = latent_stack(3, 4, cell=0.26), latent_stack(3, 16, cell=0.26)
+        wide = VGroup(w4, w16).arrange(RIGHT, buff=1.3).move_to([-3.0, 0.6, 0])
+        warr = Arrow(w4.get_right(), w16.get_left(), buff=0.2, color=GREY_B, stroke_width=2.5)
+        wl = VGroup(label(r"$4$ channels", font_size=20, color=GREY_A).next_to(w4, DOWN, buff=0.2),
+                    label(r"$16$ channels", font_size=20, color=GREY_A).next_to(w16, DOWN, buff=0.2))
+        wl[1].match_y(wl[0])
+        wide_g = VGroup(w4, w16, warr, wl)
         cards = VGroup(
             history_card(r"Mar 2024", r"SD3", r"$16$ latent channels instead of $4$: \ better once the model is big enough",
                          color=HIST, width=5.0, font_size=19),
@@ -234,8 +243,10 @@ class Latent(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.1))
+            self.play(FadeIn(cards[0], shift=UP * 0.1), FadeIn(w4), FadeIn(wl[0]))
+            self.play(GrowArrow(warr), TransformFromCopy(w4, w16), FadeIn(wl[1]), run_time=1.2)
             vo.wait_until("b")
+            self.play(FadeOut(wide_g))
             self.play(FadeIn(grid), FadeIn(gl), FadeIn(cards[1], shift=UP * 0.1))
             self.play(GrowArrow(arr), TransformFromCopy(grid, stacks), FadeIn(sl), FadeIn(al), run_time=1.5)
             vo.wait_until("d")
