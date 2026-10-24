@@ -27,31 +27,31 @@ class Rotation(VoiceoverScene):
     def invariance(self):
         r = load("rotation")
         rows = [
-            cmath(r"\mathrm{RMSNorm}(x)", r"=", r"\frac{x}{\|x\| / \sqrt d}\,\gamma", colors=COLORS, font_size=36),
-            cmath(r"\mathrm{RMSNorm}(x Q)", r"=", r"\mathrm{RMSNorm}(x)\, Q", colors=COLORS, font_size=36),
+            cmath(r"\mathrm{RMSNorm}(x)", r"=", r"\frac{x}{\|x\| / \sqrt d}\,\gamma", colors=COLORS, font_size=32),
+            cmath(r"\mathrm{RMSNorm}(x Q)", r"=", r"\mathrm{RMSNorm}(x)\, Q", colors=COLORS, font_size=32),
             cmath(r"W_{\text{in}} \to W_{\text{in}} Q,", r"\quad", r"W_{\text{out}} \to Q^\top W_{\text{out}}",
-                  colors=COLORS, font_size=36),
-            cmath(r"E \to E\,Q,", r"\quad", r"W_{\text{head}} \to W_{\text{head}}\, Q", colors=COLORS, font_size=36),
+                  colors=COLORS, font_size=32),
+            cmath(r"E \to E\,Q,", r"\quad", r"W_{\text{head}} \to W_{\text{head}}\, Q", colors=COLORS, font_size=32),
         ]
         whys = [why(r"fold the gain $\gamma$ into the next weights first"), why(r"$\|xQ\| = \|x\|$ for a rotation $Q$"),
                 why(r"layers that read the stream, \ and write to it"), why(r"the embedding and the head")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.35, x=-1.6, buff=0.28, edge=6.8)
         inv = float(r["invariance"])
         mant, ex = f"{inv:.1e}".split("e")
         res = label(rf"our model, \ rotated: \ the logits change by at most ${mant} \times 10^{{{int(ex)}}}$",
                     font_size=22, color=ROTC).to_edge(DOWN, buff=0.5)
         hc = history_card(2024, r"Saleh Ashkboos et al., \ QuaRot", rf"rotate the model, \ then $4$-bit weights, "
                           rf"activations and cache: \ {F.QUAROT['model']} within ${F.QUAROT['ppl']}$ perplexity",
-                          width=4.4, font_size=16, color=ROTC).move_to([4.5, -0.45, 0])
+                          width=4.4, font_size=16, color=ROTC).move_to([4.6, -0.95, 0])
         # a rotation keeps lengths (schematic)
-        c0 = np.array([-5.0, -0.5, 0])
-        circ = Circle(radius=0.8, stroke_color=GREY_D, stroke_width=1.5).move_to(c0)
-        v0 = np.array([0.75, 0.28, 0])
+        c0 = np.array([-5.6, -0.95, 0])
+        circ = Circle(radius=0.62, stroke_color=GREY_D, stroke_width=1.5).move_to(c0)
+        v0 = np.array([0.58, 0.22, 0])
         th = 0.9
         v1 = np.array([v0[0] * np.cos(th) - v0[1] * np.sin(th), v0[0] * np.sin(th) + v0[1] * np.cos(th), 0])
         ax_ = Arrow(c0, c0 + v0, buff=0, color=C.TOKEN, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         aq = Arrow(c0, c0 + v1, buff=0, color=ROTC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
-        arc = Arc(radius=0.45, start_angle=np.arctan2(v0[1], v0[0]), angle=th, arc_center=c0, color=ROTC,
+        arc = Arc(radius=0.35, start_angle=np.arctan2(v0[1], v0[0]), angle=th, arc_center=c0, color=ROTC,
                   stroke_width=2)
         lx = MathTex(r"x", font_size=26, color=C.TOKEN).next_to(c0 + v0, RIGHT, buff=0.08)
         lq = MathTex(r"xQ", font_size=26, color=ROTC).next_to(c0 + v1, UP, buff=0.08)

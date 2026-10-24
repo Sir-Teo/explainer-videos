@@ -169,7 +169,10 @@ function for every policy size; PPO clip 0.2, no discount in GAE); DeepSeekMath 
 uses the group's average reward as the baseline, with the KL in the loss rather than the reward; PPO's value model is
 "typically another model of comparable size"); Ahmadian et al. (PPO loads up to four models; RLOO outperforms PPO,
 DPO and RAFT in their experiments); Manheim & Garrabrant (regressional: "when selecting for a proxy measure, you select
-not only for the true goal, but also for the difference between the proxy and the goal"; extremal).
+not only for the true goal, but also for the difference between the proxy and the goal"; extremal). DeepSeek-R1 (arXiv 2501.12948): R1-Zero and R1 are
+trained with GRPO, which "foregoes the critic model"; R1-Zero's AIME 2024 pass@1 rises from 15.6% to 71.0%, 86.7% by
+majority vote over 64 samples; the "aha moment" line; 800K samples for the distilled models. Zou et al. (2023): the
+suffix is searched (greedy and gradient-based) to make the model's answer begin "Sure, here is".
 
 ## Problems, with solutions
 

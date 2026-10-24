@@ -147,7 +147,7 @@ class Drafters(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(small, color=DRAFTC))
             vo.wait_until("b")
-            self.play(FadeIn(head), GrowArrow(feat), FadeIn(fl), FadeIn(hl), FadeIn(hc))
+            self.play(FadeIn(head), Create(feat), FadeIn(fl), FadeIn(hl), FadeIn(hc))
             vo.wait_until("c")
             self.play(FadeIn(g))
             self.add(md, me)

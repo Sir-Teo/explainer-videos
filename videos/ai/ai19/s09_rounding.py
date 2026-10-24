@@ -209,7 +209,6 @@ class Rounding(VoiceoverScene):
             y = np.minimum(np.asarray(r["loss"][key]), cap)
             lines.add(curve(ax, bits, y, col, 3))
             dots.add(VGroup(*[Dot(ax.c2p(b, v), radius=0.06, color=col) for b, v in zip(bits, y)]))
-        offs = label(r"$\uparrow$ \ off the scale", font_size=16, color=GREY_B).next_to(ax.c2p(2, cap), RIGHT, buff=0.15)
         leg = legend([(c_, t) for _, t, c_ in series], font_size=20).move_to([4.4, 1.4, 0])
         L = {k: np.asarray(r["loss"][k]) - base for k, _, _ in series}
         i4, i3, i8 = list(bits).index(4), list(bits).index(3), list(bits).index(8)
@@ -239,7 +238,7 @@ class Rounding(VoiceoverScene):
             self.play(FadeIn(g), Create(bl), FadeIn(bll))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), FadeIn(dots), FadeIn(leg),
-                      FadeIn(notes[0]), FadeIn(offs), run_time=2.5)
+                      FadeIn(notes[0]), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(notes[1]))
             vo.wait_until("c")
