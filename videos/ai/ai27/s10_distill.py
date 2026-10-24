@@ -15,9 +15,9 @@ class Distill(VoiceoverScene):
         self.reasoning()
 
     def card(self):
-        card = chapter_card(9, r"Distillation", r"Can a small model learn from a large one's probabilities?",
+        card = chapter_card(10, r"Distillation", r"Can a small model learn from a large one's probabilities?",
                             lit=(2015,), part=PART)
-        with self.voiceover("Chapter nine. Distillation."):
+        with self.voiceover("Chapter ten. Distillation."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

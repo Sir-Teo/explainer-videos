@@ -15,9 +15,9 @@ class Goodhart(VoiceoverScene):
         self.scaling()
 
     def card(self):
-        card = chapter_card(6, r"When the measure becomes the target", r"How hard can you optimize a learned reward?",
+        card = chapter_card(7, r"When the measure becomes the target", r"How hard can you optimize a learned reward?",
                             lit=(2022,), part=PART)
-        with self.voiceover("Chapter six. When the measure becomes the target."):
+        with self.voiceover("Chapter seven. When the measure becomes the target."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

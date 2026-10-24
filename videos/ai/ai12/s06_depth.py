@@ -121,20 +121,33 @@ class Depth(VoiceoverScene):
         dir0 = "lower" if b0[1] < b0[0] - 1e-9 else ("higher" if b0[1] > b0[0] + 1e-9 else "the same")
         order = sorted(alphas, key=lambda a: dr[a])
         best_a = order[0]
-        said1 = (
-            "CompleteP holds the learning rate most still, as it was designed to."
-            if best_a == 1.0 else
-            f"Here the steadiest is {SPOKEN[best_a]}: at our small depths and short runs, the differences are "
-            "about a grid step."
-        )
+        step_ = float(lrs[1] - lrs[0])  # one step of the learning-rate grid, in powers of ten
+        if dr[0.0] > 1e-9:
+            said0 = (
+                f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest, and the "
+                f"deepest model's is {dir0}. "
+            )
+        else:
+            said0 = "the best rate stays on the same point of our grid, from the shallowest to the deepest. "
+        if max(dr.values()) <= step_ + 1e-9:
+            said1 = (
+                "At our small depths and short runs, all three keep the best rate within one step of our grid: the "
+                "differences Dey and colleagues measured need deeper models and longer training than ours."
+            )
+        elif best_a == 1.0 and dr[1.0] < min(dr[0.0], dr[0.5]):
+            said1 = "CompleteP holds the learning rate most still, as it was designed to."
+        else:
+            said1 = (
+                f"Here the steadiest is {SPOKEN[best_a]}: at our small depths and short runs, the differences are "
+                "about a grid step."
+            )
         with self.voiceover(
             f"Our character model again, made deep: {', '.join(str(v) for v in depths[:-1])} and {depths[-1]} "
             "residual blocks, each parametrization swept over nine learning rates, two seeds each. "
             "<bookmark mark='a'/> With no depth scaling, "
-            f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest, and the "
-            f"deepest model's is {dir0}. "
-            f"<bookmark mark='b'/> With one over root L, {dr[0.5]:.1f}. <bookmark mark='c'/> With CompleteP's "
-            f"one over L, {dr[1.0]:.1f}. "
+            + said0
+            + f"<bookmark mark='b'/> With one over root L, it moves by {dr[0.5]:.1f}. <bookmark mark='c'/> With "
+            f"CompleteP's one over L, by {dr[1.0]:.1f}. "
             + said1
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn), *[FadeIn(p[:4]) for p in panels])
@@ -176,7 +189,7 @@ class Depth(VoiceoverScene):
                           r"CompleteP: \ $12\%$ less compute than $\mu$P at $1.5$ billion parameters, \ $34\%$ for the "
                           r"deepest models; \ deep, narrow shapes become efficient", width=5.6, color=HIST)
         hc.scale(0.9).move_to([3.4, 2.0, 0])
-        deeper = bl[1.0][-1] < bl[1.0][0]
+        deeper = bl[1.0][-1] < bl[1.0][0] - 0.1
         said2 = (
             f"With CompleteP, yes: {bl[1.0][0]:.2f} bits at {depths[0]} blocks, {bl[1.0][-1]:.2f} at {depths[-1]}, "
             "each at its own best rate. " if deeper else

@@ -16,9 +16,9 @@ class DPO(VoiceoverScene):
         self.family()
 
     def card(self):
-        card = chapter_card(7, r"Direct preference optimization", r"Do you need the reward model at all?",
+        card = chapter_card(8, r"Direct preference optimization", r"Do you need the reward model at all?",
                             lit=(2023,), part=PART)
-        with self.voiceover("Chapter seven. Direct preference optimization."):
+        with self.voiceover("Chapter eight. Direct preference optimization."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -36,7 +36,7 @@ class DPO(VoiceoverScene):
                   r"x)}{\pi_{\mathrm{ref}}(y_l \mid x)}\Big)\Big]", font_size=30),
         ]
         rows[3][0].set_color(POLICY)
-        whys = [why(r"chapter 5's optimum"), why(r"solve for the reward"),
+        whys = [why(r"chapter 6's optimum"), why(r"solve for the reward"),
                 why(r"Bradley--Terry, chapter 4: \ $Z(x)$ cancels"),
                 why(r"fit $\pi_\theta$ to the comparisons directly")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.2, buff=0.48, edge=6.9)
@@ -44,7 +44,7 @@ class DPO(VoiceoverScene):
         imp.to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "In 2023 Rafael Rafailov, Archit Sharma, Eric Mitchell and colleagues at Stanford noticed that chapter "
-            "five's optimum can be run backwards. <bookmark mark='a'/> Take the log and solve for the reward: the "
+            "six's optimum can be run backwards. <bookmark mark='a'/> Take the log and solve for the reward: the "
             "reward is beta times the log of the optimal policy over the reference, plus a term that depends only on "
             "the question. <bookmark mark='b'/> Now put that into the Bradley-Terry model of chapter four. The "
             "comparison depends only on a difference of rewards for the same question, so the awkward normalizer Z "

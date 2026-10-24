@@ -24,6 +24,19 @@ def qmax(bits: int) -> int:
     return 2 ** (bits - 1) - 1
 
 
+def to_blocks(W, g):
+    """Rows cut into blocks of ``g`` numbers, the last one padded with zeros: (rows, blocks, g)."""
+    r, c = W.shape
+    pad = (-c) % g
+    if pad:
+        W = np.concatenate([W, np.zeros((r, pad))], 1)
+    return W.reshape(r, (c + pad) // g, g)
+
+
+def from_blocks(B, c):
+    return B.reshape(B.shape[0], -1)[:, :c]
+
+
 def rtn(W, bits: int, group: int | str = "row"):
     """Symmetric round to nearest, absmax scale: one scale per tensor ("tensor"), per output row ("row"), or per
     ``group`` consecutive inputs of a row.  Works on numpy arrays; returns the dequantized weights."""
@@ -36,11 +49,10 @@ def rtn(W, bits: int, group: int | str = "row"):
         s = np.abs(W).max(1, keepdims=True) / q
         s = np.where(s > 0, s, 1.0)
         return np.clip(np.round(W / s), -q - 1, q) * s
-    r, c = W.shape
-    Wg = W.reshape(r, c // group, group)
+    Wg = to_blocks(W, group)
     s = np.abs(Wg).max(2, keepdims=True) / q
     s = np.where(s > 0, s, 1.0)
-    return (np.clip(np.round(Wg / s), -q - 1, q) * s).reshape(r, c)
+    return from_blocks(np.clip(np.round(Wg / s), -q - 1, q) * s, W.shape[1])
 
 
 def scales_of(W, bits, group="row"):
@@ -51,9 +63,9 @@ def scales_of(W, bits, group="row"):
         return np.full_like(W, np.abs(W).max() / q)
     if group == "row":
         return np.broadcast_to(np.abs(W).max(1, keepdims=True) / q, W.shape)
-    r, c = W.shape
-    s = np.abs(W.reshape(r, c // group, group)).max(2, keepdims=True) / q
-    return np.broadcast_to(s, (r, c // group, group)).reshape(r, c)
+    Wg = to_blocks(W, group)
+    s = np.abs(Wg).max(2, keepdims=True) / q
+    return from_blocks(np.broadcast_to(s, Wg.shape), W.shape[1])
 
 
 def bits_per_weight(bits, group, cols, scale_bits=16):

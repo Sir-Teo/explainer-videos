@@ -118,7 +118,7 @@ class Hook(VoiceoverScene):
         rng_a = float(curves["mlp_aug"].max() - curves["mlp_aug"].min())
         rng_i = float(curves["inv"].max() - curves["inv"].min())
         inv_err = abs(float(curves["inv"].mean()) - U)
-        tag = note(r"computed: \ five charged particles, \ networks trained here on $3{,}000$ of them",
+        tag = note(r"computed: \ five charged particles, \\ networks trained here on $3{,}000$ of them",
                    font_size=20).to_corner(DL, buff=0.25)
         if rng_i < 1e-6:
             tiny = "less than a millionth of a unit, rounding error"

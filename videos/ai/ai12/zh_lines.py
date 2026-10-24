@@ -210,9 +210,18 @@ ZH = {
 
     'f"Our character model again, made deep:':
         "还是我们的字符模型，这次做深：{', '.join((str(v) for v in depths[:-1]))}和{depths[-1]}个残差块，每种参数化"
-        "扫描9个学习率，每个两个种子。<bookmark mark='a'/>不做深度缩放，最佳学习率在最浅和最深之间移动"
-        "{dr[0.0]:.1f}个数量级，最深模型的最佳学习率{dir0}。<bookmark mark='b'/>用L的平方根分之一，{dr[0.5]:.1f}。<bookmark mark='c'/>用"
-        "CompleteP的L分之一，{dr[1.0]:.1f}。{said1}",
+        "扫描9个学习率，每个两个种子。<bookmark mark='a'/>不做深度缩放，{said0}<bookmark mark='b'/>用L的平方根分之一，"
+        "移动{dr[0.5]:.1f}个数量级。<bookmark mark='c'/>用CompleteP的L分之一，移动{dr[1.0]:.1f}。{said1}",
+
+    "f\"the best rate moves by {dr[0.0]:.1f} powers of ten":
+        "最佳学习率在最浅和最深之间移动{dr[0.0]:.1f}个数量级，最深模型的最佳学习率{dir0}。",
+
+    'the best rate stays on the same point of our grid':
+        "从最浅到最深，最佳学习率一直停在我们网格的同一个点上。",
+
+    'At our small depths and short runs, all three keep':
+        "在我们这么浅的深度、这么短的训练里，三种做法都把最佳学习率保持在网格的一步之内：戴伊和同事测到的差别，需要"
+        "比我们更深的模型、更长的训练。",
 
     'CompleteP holds the learning rate most still':
         "CompleteP让学习率最稳定，这正是它的设计目标。",
@@ -391,8 +400,8 @@ ZH = {
         "2023年，MosaicML的尼基尔·萨尔达纳和同事，把回答的代价也算进了预算。训练每个参数、每个词元要6次运算，"
         "回答要2次。<bookmark mark='a'/>固定质量，让一生的总代价最小。<bookmark mark='b'/>一个模型会被用得越多，"
         "它就应该越小、训练得越久。<bookmark mark='c'/>用我们拟合的定律：一个将要回答的字符数是它最优训练量100倍的"
-        "模型，应该在每个参数上训练大约{tpp[i100]:.0f}个字符，大小是最优的{nrel[i100]:.2f}倍，一生的代价少"
-        "{100 * sav[i100]:.0f}%。<bookmark mark='d'/>萨尔达纳的团队发现，到每个参数1万个词元，质量还在提高；2024年，"
+        "模型，应该在每个参数上训练大约{tpp100:.0f}个字符，大小是最优的{nrel100:.2f}倍，一生的代价少"
+        "{100 * sav100:.0f}%。<bookmark mark='d'/>萨尔达纳的团队发现，到每个参数1万个词元，质量还在提高；2024年，"
         "Meta用15万亿个词元训练了Llama 3的80亿参数模型：每个参数将近1900个，是Chinchilla比例的近100倍。",
 
     # ------------------------------------------------------------------ Data

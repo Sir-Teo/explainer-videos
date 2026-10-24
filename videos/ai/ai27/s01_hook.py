@@ -66,18 +66,19 @@ class Hook(VoiceoverScene):
         smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.6)
         obj = objectives_card([
             r"supervised fine-tuning and chat templates; \ LoRA and why it works",
-            r"reward models: \ Bradley--Terry, \ Elo again",
-            r"RLHF and its exact optimum; \ Goodhart's law, \ measured",
+            r"reward models: \ Bradley--Terry, \ Elo again; \ what ours actually learned",
+            r"RLHF, its exact optimum, \ PPO for language models; \ Goodhart's law, \ measured",
             r"DPO and its family; \ feedback from AI, \ constitutions",
             r"distillation and model merging",
             r"what goes wrong: \ sycophancy, \ jailbreaks, \ emergent misalignment",
         ], font_size=26)
         with self.voiceover(
             "This is Part 27 of AI, Built. <bookmark mark='a'/> In this part: supervised fine-tuning and low-rank "
-            "adapters; reward models learned from comparisons; reinforcement learning from human feedback, its "
-            "exact optimum, and what happens when you optimize a learned reward too hard; direct preference "
-            "optimization; feedback from AI under written principles; distillation and model merging; and what goes "
-            "wrong. Every method runs here, on our own small model."
+            "adapters; reward models learned from comparisons, and what ours actually learned; reinforcement "
+            "learning from human feedback, its exact optimum, how PPO is fitted to a language model, and what "
+            "happens when you optimize a learned reward too hard; direct preference optimization; feedback from AI "
+            "under written principles; distillation and model merging; and what goes wrong. Every method runs here, "
+            "on our own small model."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

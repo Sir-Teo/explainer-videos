@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai19.common import PART, F, DECODEC, PREFILLC, COSTC
 
 # One token from a big model, at batch size one: every weight is read once.  Published figures, not measured here.
 BW = 3.35e12  # bytes a second: an H100 (SXM)'s HBM3 memory, NVIDIA's datasheet
@@ -17,6 +20,7 @@ class Hook(VoiceoverScene):
     def construct(self):
         self.stream()
         self.bound()
+        self.era()
         self.plan()
 
     # ------------------------------------------------------------------
@@ -155,7 +159,7 @@ class Hook(VoiceoverScene):
         out_t.arrange(DOWN, buff=0.08, aligned_edge=LEFT).next_to(out_a, RIGHT, buff=0.15)
         with self.voiceover(
             "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of "
-            f"weights: on one of today's best chips, about {TOKENS_S:.0f} tokens a second. <bookmark mark='a'/> And "
+            f"weights: on an NVIDIA H100, about {TOKENS_S:.0f} tokens a second. <bookmark mark='a'/> And "
             "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses "
             f"{'a third of one percent' if 0.25 < 100 * USE < 0.42 else f'{100 * USE:.2f} percent'} of it. "
             "<bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called "
@@ -182,16 +186,108 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plan(self):
-        title = label(r"Part 19: \ Inference", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"guess ahead, \ fewer bits, \ fewer bytes moved", font_size=30, color=C.BITS).next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=19, done=18).scale(0.85).move_to(DOWN * 0.9)
+    def era(self):
+        """How we got here: serving language models, 2017 to 2026 (dates from the papers and announcements)."""
+        events = [
+            (2017.5, r"the Transformer: \\ a key-value cache", GREY_A),
+            (2019.85, r"multi-query \\ attention", C.KEY),
+            (2020.45, r"GPT-3, \\ sold by the token", COSTC),
+            (2022.4, r"FlashAttention", C.ATTN),
+            (2022.55, r"continuous \\ batching (Orca)", C.PROB),
+            (2022.85, r"speculative \\ decoding; \ GPTQ", C.NEURAL),
+            (2023.2, r"llama.cpp: \\ $4$ bits on a laptop", C.HOT),
+            (2023.7, r"vLLM's pages", C.PROB),
+            (2024.35, r"MLA; \ disaggregated \\ serving", C.KEY),
+            (2025.6, r"gpt-oss \\ in MXFP4", C.BITS),
+            (2025.95, r"sparse attention \\ (DSA)", C.ENTROPY),
+        ]
+        x0, x1, y = -6.2, 6.2, 0.2
+        T0, T1 = 2017, 2026.5
+
+        def X(t):
+            return x0 + (x1 - x0) * (t - T0) / (T1 - T0)
+
+        axis = Line([x0, y, 0], [x1, y, 0], color=GREY_C, stroke_width=2)
+        ticks = VGroup(*[VGroup(Line([X(t), y - 0.07, 0], [X(t), y + 0.07, 0], color=GREY_C, stroke_width=1.5),
+                                Text(str(t), font_size=16, color=GREY_B).next_to([X(t), y, 0], DOWN, buff=0.12))
+                         for t in range(2017, 2027)])
+        marks, labs = VGroup(), VGroup()
+        for k, (t, txt, col) in enumerate(events):
+            up = k % 2 == 0
+            dot = Dot([X(t), y, 0], radius=0.07, color=col)
+            stem = Line([X(t), y, 0], [X(t), y + (1.0 + 0.55 * (k % 4 == 0)) * (1 if up else -1), 0], color=col,
+                        stroke_width=1.5).set_stroke(opacity=0.6)
+            lab = label(txt, font_size=17, color=col)
+            lab.next_to(stem.get_end(), UP if up else DOWN, buff=0.06)
+            if lab.get_left()[0] < -6.9:
+                lab.shift(RIGHT * (-6.9 - lab.get_left()[0]))
+            if lab.get_right()[0] > 6.9:
+                lab.shift(LEFT * (lab.get_right()[0] - 6.9))
+            marks.add(VGroup(dot, stem))
+            labs.add(lab)
+        head = label(r"How we got here: \ serving language models", font_size=34).to_edge(UP, buff=0.35)
+        # the price of a token, for an OpenAI model at least as good as GPT-3 (list prices)
+        pr = F.PRICES
+        pbars = VGroup()
+        for yr, name, usd, _ in pr:
+            hgt = 0.35 * (math.log10(usd) + 1.2)
+            pbars.add(Rectangle(width=0.16, height=max(hgt, 0.03), stroke_width=0, fill_color=COSTC, fill_opacity=0.85)
+                      .move_to([X(yr), -3.15 + max(hgt, 0.03) / 2, 0]))
+        pvals = VGroup(*[label(rf"\${u:g}", font_size=16, color=COSTC).next_to(b_, UP, buff=0.05) for b_, (_, _, u, _)
+                         in zip(pbars, pr)])
+        pl = label(r"USD per million tokens, \ OpenAI's cheapest model \\ at least as good as GPT-3 \ (list prices)",
+                   font_size=16, color=COSTC).move_to([4.5, -2.75, 0])
         with self.voiceover(
-            "This part is about running models fast: guessing ahead and checking at once, storing numbers in fewer "
-            "bits, <bookmark mark='a'/> and moving fewer bytes."
+            "How did we get here? The transformer of 2017 already wrote one token at a time and kept the keys and "
+            "values of what it had read, the cache of Part 15. <bookmark mark='a'/> In 2019 Noam Shazeer shared one "
+            "set of keys and values among all the heads, to read less of it. In 2020 GPT-3 went on sale by the "
+            "token, and the cost of a token became a business. <bookmark mark='b'/> 2022 was the year the ideas of "
+            "this part arrived: FlashAttention, continuous batching, speculative decoding, and GPTQ's four-bit "
+            "weights. <bookmark mark='c'/> In 2023, llama.cpp ran a big model on a laptop, and vLLM managed the "
+            "cache in pages. <bookmark mark='d'/> Then DeepSeek compressed the cache itself, servers split reading "
+            "from writing, and in 2025 OpenAI released gpt-oss with its experts in four-bit floats. "
+            "<bookmark mark='e'/> Meanwhile the price of a token fell. A model at least as good as GPT-3 cost sixty "
+            f"dollars per million tokens in 2021, and fifteen cents in 2024: {pr[0][2] / pr[-1][2]:.0f} times less."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
+            self.play(FadeIn(head), Create(axis), FadeIn(ticks))
+            self.play(FadeIn(marks[0]), FadeIn(labs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
+            self.play(*[FadeIn(m) for m in marks[1:3]], *[FadeIn(l_) for l_ in labs[1:3]], run_time=1.2)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(marks[k]), FadeIn(labs[k])) for k in (3, 4, 5)], lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(marks[k]), FadeIn(labs[k])) for k in (6, 7)], lag_ratio=0.4))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(marks[k]), FadeIn(labs[k])) for k in (8, 9, 10)],
+                                  lag_ratio=0.4))
+            vo.wait_until("e")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b_, DOWN), FadeIn(v_)) for b_, v_ in zip(pbars, pvals)],
+                                  lag_ratio=0.3), FadeIn(pl), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        title = label(rf"Part {PART}: \ Inference", font_size=50).to_edge(UP, buff=0.5)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.6)
+        obj = objectives_card([
+            r"prefill and decode on the roofline; \ the key-value cache and what it costs",
+            r"serving many people: \ batching, \ continuous batching, \ pages, \ shared prefixes, \ disaggregation",
+            r"speculative decoding: \ exact, \ and how many tokens per pass; \ EAGLE and MTP drafters",
+            r"quantization: \ $\Delta^2/12$, \ outliers, \ SmoothQuant, \ GPTQ, \ AWQ, \ rotations, \ MXFP4 and NVFP4, "
+            r"\ the cache in fewer bits",
+            r"FlashAttention: \ the online softmax, \ tiles, \ its memory traffic; \ Flash-Decoding",
+            r"constrained decoding; \ the frontier: \ thinking budgets, \ prices, \ models on your own machine",
+        ], font_size=24)
+        with self.voiceover(
+            "This is Part 19 of AI, Built, the last part of the third act. <bookmark mark='a'/> In this part: why "
+            "reading a prompt and writing an answer are different problems; how a server shares one model among "
+            "many people; speculative decoding, proved exact; quantization, from rounding error to four-bit "
+            "floats; FlashAttention, derived; and constrained decoding. Every one of them, measured on our own "
+            "models, on this computer."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(smap))
+            vo.wait_until("a")
+            self.play(FadeOut(smap), FadeIn(obj))
         self.wait(0.5)
         self.clear_scene()

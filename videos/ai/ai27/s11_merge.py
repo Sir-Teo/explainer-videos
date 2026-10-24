@@ -15,9 +15,9 @@ class Merge(VoiceoverScene):
         self.family()
 
     def card(self):
-        card = chapter_card(10, r"Adding models together", r"What happens if you average two networks' weights?",
+        card = chapter_card(11, r"Adding models together", r"What happens if you average two networks' weights?",
                             lit=(2022, 2023), part=PART)
-        with self.voiceover("Chapter ten. Adding models together."):
+        with self.voiceover("Chapter eleven. Adding models together."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

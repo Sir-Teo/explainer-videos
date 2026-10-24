@@ -15,9 +15,9 @@ class Failures(VoiceoverScene):
         self.inside()
 
     def card(self):
-        card = chapter_card(11, r"What goes wrong", r"What does post-training teach that nobody meant to teach?",
+        card = chapter_card(12, r"What goes wrong", r"What does post-training teach that nobody meant to teach?",
                             lit=(2023, 2024), part=PART)
-        with self.voiceover("Chapter eleven. What goes wrong."):
+        with self.voiceover("Chapter twelve. What goes wrong."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -37,7 +37,7 @@ class Failures(VoiceoverScene):
                          color=PENALTY),
         ).arrange(DOWN, buff=0.3).move_to([3.4, 0.2, 0])
         with self.voiceover(
-            "The first failure follows directly from chapter six. People reward answers they like, and people like "
+            "The first failure follows directly from chapter seven. People reward answers they like, and people like "
             "to be agreed with. <bookmark mark='a'/> Ask a question with your own guess attached, and an answer that "
             "praises the guess can be preferred over one that corrects it. A reward model learns that, and "
             "reinforcement learning amplifies it: sycophancy. <bookmark mark='b'/> In 2023 researchers at Anthropic "

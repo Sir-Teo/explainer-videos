@@ -144,6 +144,9 @@ def compute_roof():
     out.update(stack_n=n, stack_layers=L, stack_mb=4.0 * L * n * n / 1e6, batches=BATCHES, stack_t=t, stack_tmed=tmed,
                stack_flops=flops, stack_bytes=nbytes, stack_rate=flops / t, stack_tps=np.array(BATCHES) / t,
                stack_intensity=flops / nbytes)
+    # the best streaming rate seen: a batch of one is itself a read of the whole stack
+    out["stack_bw1"] = float(nbytes[0] / t[0])
+    out["bw"] = max(out["bw"], out["stack_bw1"])
     pred = np.maximum(nbytes / out["bw"], flops / out["peak"])
     out["stack_pred"] = pred
     out["knee_pred"] = 2 * out["peak"] / out["bw"]  # fp32: intensity ~ b / 2, equal to the ridge P / beta at b = 2P/beta
@@ -393,16 +396,16 @@ def compute_serving():
     out["gantt_static"] = np.array([(a, b, c, ["prefill", "decode", "idle"].index(k), r) for a, b, c, k, r in tr_s])
     out["gantt_cont"] = np.array([(a, b, c, ["prefill", "decode", "idle"].index(k), r) for a, b, c, k, r in tr_c])
     out["gantt_arrive"] = np.array([r.arrive for r in small])
-    # three workers: each one doing everything, against one prefilling and two decoding
-    rate3 = round(3 * 0.7 * cap_rps, 1)
-    reqs3 = S.workload(WORK["n"] * 2, rate3, WORK["seed"] + 1, WORK["p_med"], WORK["o_med"])
+    # four workers: each one doing everything, against one prefilling and three decoding
+    rate4 = round(4 * 0.6 * cap_rps, 1)
+    reqs4 = S.workload(WORK["n"] * 2, rate4, WORK["seed"] + 1, WORK["p_med"], WORK["o_med"])
     co, ch = [], []
-    for part in S.split_round_robin(reqs3, 3):
+    for part in S.split_round_robin(reqs4, 4):
         co += S.run_continuous(part, cost, bmax * 2)
         ch += S.run_continuous(part, cost, bmax * 2, chunk=256)
-    dis = S.run_disaggregated(reqs3, cost, bmax * 2, 10e9, ph["kv_per_token"], n_dec=2)
-    out["rate3"] = rate3
-    out["three"] = plain({"colocated": S.metrics(co), "chunked": S.metrics(ch), "disaggregated": S.metrics(dis)})
+    dis = S.run_disaggregated(reqs4, cost, bmax * 2, 10e9, ph["kv_per_token"], n_dec=3)
+    out["rate4"] = rate4
+    out["four"] = plain({"colocated": S.metrics(co), "chunked": S.metrics(ch), "disaggregated": S.metrics(dis)})
     out["gap_hist"] = plain({k: np.histogram(np.concatenate([r.gaps for r in v if r.gaps]) * 1e3, bins=40,
                                        range=(0, 80))[0] for k, v in (("colocated", co), ("disaggregated", dis))})
     one = out["one"]
@@ -1111,8 +1114,11 @@ def compute_grammar():
     n = 200
     un, co = [], []
     t0 = time.time()
+    lens_un = []
     for sd in range(n):
-        un.append(NV.decode(G.generate(eng, pid, 32, sd, stop_newline=lambda t: t in nl)).split("\n")[0])
+        ids = G.generate(eng, pid, 32, sd, stop_newline=lambda t: t in nl)
+        lens_un.append(len(ids))
+        un.append(NV.decode(ids).split("\n")[0])
     t_un = time.time() - t0
     t0 = time.time()
     lens = []
@@ -1126,7 +1132,7 @@ def compute_grammar():
     allowed = (index >= 0).sum(1)
     out = dict(n=n, prompt=G.PROMPT, states=len(order), vocab=len(strings), t_index=t_index,
                allowed=allowed, valid_un=int(sum(valid_un)), valid_co=int(sum(valid_co)), samples_un=un[:12],
-               samples_co=co[:12], tokens_co=int(sum(lens)), t_un=t_un, t_co=t_co,
+               samples_co=co[:12], tokens_co=int(sum(lens)), tokens_un=int(sum(lens_un)), t_un=t_un, t_co=t_co,
                start_allowed=[strings[i] for i in np.where(index[0] >= 0)[0]])
     # the state after '{"name": "' and a capital: how many tokens may continue the name
     S = auto.run(auto.start, '{"name": "S')
