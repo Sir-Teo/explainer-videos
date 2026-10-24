@@ -295,13 +295,20 @@ class Pretext(VoiceoverScene):
         cols = ["#FF6B6B", "#FFA94D", "#FFD43B", "#A9E34B", "#3BC9DB", "#748FFC", "#B197FC", "#F783AC"]
         cells = Group()
         for i in range(8):
-            d = digit(grid[i], 0.8, color=cols[i], frame=True)
-            t = label(rf"class {i + 1}", font_size=18, color=cols[i]).next_to(d, DOWN, buff=0.1)
+            d = digit(grid[i], 0.95, color=cols[i], frame=True)
+            t = label(rf"class {i + 1}", font_size=20, color=cols[i]).next_to(d, DOWN, buff=0.1)
             cells.add(Group(d, t))
-        cells.arrange(RIGHT, buff=0.3).move_to([0, 1.3, 0])
-        ex = Group(*[digit(full[k, 3], 0.7, color=cols[0], frame=True) for k in range(5)]).arrange(RIGHT, buff=0.15)
+        cells.arrange(RIGHT, buff=0.3).move_to([0, 1.5, 0])
+        ids = [int(t) for t in v["ids"]]
+        pick = next(j for j, t in enumerate(ids) if t < 8)  # a digit that is also one of the eight classes shown
+        i0 = ids[pick]
+        ex = Group(*[digit(full[k, pick], 0.75, color=cols[i0], frame=True) for k in range(5)]).arrange(RIGHT,
+                                                                                                    buff=0.15)
         ex.move_to([-3.2, -1.0, 0])
-        exl = label(r"its transformed copies: \\ the same class", font_size=20, color=cols[0]).next_to(ex, DOWN, buff=0.2)
+        exl = label(rf"class {i0 + 1}'s transformed copies: \\ the same class", font_size=20, color=cols[i0]).next_to(
+            ex, DOWN, buff=0.2)
+        arr_ex = Arrow(cells[i0][1].get_bottom(), ex.get_top(), buff=0.1, color=cols[i0], stroke_width=2.5,
+                       max_tip_length_to_length_ratio=0.12)
         h1 = label(r"Exemplar CNN (Dosovitskiy et al., 2014): \\ thousands of images, \ each with its copies a class",
                    font_size=21, color=GREY_A).move_to([3.4, -0.6, 0])
         h2 = label(r"instance discrimination (Wu et al., 2018): \\ every image its own class, \ a bank of "
@@ -317,7 +324,7 @@ class Pretext(VoiceoverScene):
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.1), run_time=1.6)
             vo.wait_until("a")
-            self.play(FadeIn(ex), FadeIn(exl))
+            self.play(GrowArrow(arr_ex), FadeIn(ex), FadeIn(exl))
             self.play(FadeIn(h1))
             vo.wait_until("b")
             self.play(FadeIn(h2))

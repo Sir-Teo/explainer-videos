@@ -76,9 +76,9 @@ class Sphere(VoiceoverScene):
             "mark='c'/> And because the network cannot spread all the fives apart without also separating them "
             "from their own views, the fives end up together."
         ) as vo:
-            self.play(FadeIn(hs), FadeIn(st), FadeIn(tg))
+            self.play(FadeIn(hs), FadeIn(st), FadeIn(tg), FadeIn(ax))
             vo.wait_until("a")
-            self.play(FadeIn(ax), FadeIn(ra), FadeIn(ru), FadeIn(d1), FadeIn(d2), FadeIn(ca), FadeIn(cu))
+            self.play(FadeIn(ra), FadeIn(ru), FadeIn(d1), FadeIn(d2), FadeIn(ca), FadeIn(cu))
             vo.wait_until("b")
             self.play(hs.t.animate.set_value(n - 1), hs.angle.animate.set_value(3.6),
                       run_time=max(4.0, vo.until("c") - 0.2), rate_func=lambda u: u ** 0.7)

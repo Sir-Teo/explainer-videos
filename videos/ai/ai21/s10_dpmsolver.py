@@ -117,7 +117,22 @@ class DPMSolver(VoiceoverScene):
                      yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-2.8, -0.2, 0])
         lines = VGroup(*[logcurve(g.ax, [r["nfe"] for r in s[k]], [max(r["err"], 10.0 ** lo) for r in s[k]],
                                   SOLVER_C[k], radius=0.04) for k in DET])
-        lg = legend([(SOLVER_C[k], SOLVER_NAME[k]) for k in DET], font_size=19).move_to([4.6, 2.2, 0])
+        lg = legend([(SOLVER_C[k], SOLVER_NAME[k]) for k in DET], font_size=19).move_to([4.6, 2.55, 0])
+        # the same numbers, read off at three budgets
+        budgets = (8, 16, 32)
+        trow = [VGroup(label(r"about", font_size=18, color=GREY_B),
+                       *[MathTex(str(b), font_size=22, color=GREY_A) for b in budgets])]
+        for k in DET:
+            trow.append(VGroup(label(SOLVER_NAME[k], font_size=17, color=SOLVER_C[k]),
+                               *[MathTex(f"{at(s[k], b)['err']:.3f}", font_size=22, color=SOLVER_C[k]) for b in budgets]))
+        tbl = VGroup()
+        for i, r_ in enumerate(trow):
+            for j, c_ in enumerate(r_):
+                c_.move_to([2.6 + (0 if j == 0 else 0.9 + 0.9 * j), 1.45 - 0.33 * i, 0])
+                if j == 0:
+                    c_.align_to([1.75, 0, 0], LEFT)
+            tbl.add(r_)
+        tbh = label(r"error, \ at about this many evaluations", font_size=17, color=GREY_B).next_to(tbl, UP, buff=0.1)
         dd = s["ddpm"]
         fl = float(s["floor"])
         g2 = log_axes([math.log10(3), math.log10(130)], [-2, 0], x_length=3.6, y_length=2.0, xlabel=r"evaluations",
@@ -154,7 +169,7 @@ class DPMSolver(VoiceoverScene):
             vo.wait_until("a")
             self.play(*[Indicate(l_[0], color=SOLVER_C[k], scale_factor=1.0) for l_, k in zip(lines, DET)], run_time=1.5)
             vo.wait_until("b")
-            self.play(Indicate(lines[DET.index(b8)][0], color=SOLVER_C[b8]))
+            self.play(FadeIn(tbl), FadeIn(tbh), Indicate(lines[DET.index(b8)][0], color=SOLVER_C[b8]))
             vo.wait_until("c")
             self.play(Indicate(lines[0][0], color=WHITE))
             vo.wait_until("d")

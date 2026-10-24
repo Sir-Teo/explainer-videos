@@ -27,7 +27,7 @@ class Transport(VoiceoverScene):
     def monge(self):
         tr = load("transport")
         Z, X = np.asarray(tr["ot_z"])[:200], np.asarray(tr["ot_x"])[:200]
-        pn = Panel(6.6, center=[-3.1, -0.6, 0], xlim=(-3.4, 3.4), ylim=(-3.0, 2.6))
+        pn = Panel(6.6, center=[0, -0.6, 0], xlim=(-3.4, 3.4), ylim=(-3.0, 2.6))  # slides left for the card
         dz, dx = pn.dots(Z, NOISE, radius=0.03), pn.dots(X, DATA, radius=0.03)
         lines = VGroup(*[Line(a, b, stroke_width=1.0, color=OT_C, stroke_opacity=0.5) for a, b in zip(pn.pts(Z), pn.pts(X))])
         movers = pn.dots(Z, OT_C, radius=0.03)
@@ -53,6 +53,8 @@ class Transport(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(lines), FadeIn(cl), run_time=2.0)
             vo.wait_until("b")
+            self.play(VGroup(pn, dz, dx, lines, cl).animate.shift(LEFT * 3.1), run_time=0.8)
+            movers.shift(LEFT * 3.1)
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("c")
             self.add(movers)

@@ -151,8 +151,9 @@ class Masked(VoiceoverScene):
         lin = [S[r]["linear"] for r in rs]
         few = [S[r]["few"] if "few" in S[r] else None for r in rs]
         lo = float(np.floor((min(x[1] for x in lin) - 0.02) * 50) / 50)
+        hi = float(np.ceil((max(x[2] for x in lin) + 0.02) * 50) / 50)
         ch = bars_chart([x[0] for x in lin], [MAE_C] * 3, [r"$50\%$ hidden", r"$75\%$", r"$90\%$"], height=3.0,
-                        bar_w=1.0, gap=0.8, vmin=lo, vmax=1.0, spread=[(x[1], x[2]) for x in lin],
+                        bar_w=1.0, gap=0.8, vmin=lo, vmax=hi, spread=[(x[1], x[2]) for x in lin],
                         value_fmt=lambda v: pct(v), font_size=24).move_to([-2.6, -0.5, 0])
         cl = label(rf"linear probe, \% \ (axis from ${pct(lo, 0)}$)", font_size=22, color=GREY_A).next_to(ch, UP,
                                                                                                        buff=0.3)
@@ -175,9 +176,9 @@ class Masked(VoiceoverScene):
             "How much to hide? Too little, and the network can copy from the neighbours; too much, and it can only "
             f"guess. <bookmark mark='a'/> We trained ours at three ratios. <bookmark mark='b'/> {v} <bookmark mark='c'/> {caveat}"
         ) as vo:
-            self.play(FadeIn(n1), FadeIn(n2))
+            self.play(FadeIn(n1), FadeIn(n2), FadeIn(cl), FadeIn(ch[0]), FadeIn(ch.names))
             vo.wait_until("a")
-            self.play(FadeIn(cl), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(tg))
+            self.play(FadeIn(tg))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in ch.bars], lag_ratio=0.2), FadeIn(ch.whiskers),
                       FadeIn(ch.vals))
