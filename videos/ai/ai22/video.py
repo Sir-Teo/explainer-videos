@@ -18,7 +18,7 @@ import math
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, QUICK, dataset, steps, threads, train_judge
+from videos.ai.ai22.base import CACHE, GL, QUICK, dataset, steps, threads, train_judge
 
 S_LET = 12  # the letter's size in the box
 T_TRAIN = 8
@@ -102,7 +102,8 @@ def video_judge():
         for i, im in enumerate(np.repeat(small[idx], 4, 0)):
             y, x = g.integers(0, GL - S_LET + 1, 2)
             X[i, y:y + S_LET, x:x + S_LET] = im
-        _VJ["net"] = train_judge(torch.tensor(X), torch.tensor(Y), 3000, seed=2, shift=0)
+        with torch.enable_grad():
+            _VJ["net"] = train_judge(torch.tensor(X), torch.tensor(Y), 3000, seed=2, shift=0)
     return _VJ["net"]
 
 
@@ -111,8 +112,9 @@ def read(frames, want):
     import torch
 
     B, T = frames.shape[:2]
+    net = video_judge()
     with torch.no_grad():
-        p = torch.softmax(video_judge()(torch.tensor(np.asarray(frames, np.float32).reshape(-1, GL, GL))), 1).numpy()
+        p = torch.softmax(net(torch.tensor(np.asarray(frames, np.float32).reshape(-1, GL, GL))), 1).numpy()
     pred, conf = p.argmax(1).reshape(B, T), p.max(1).reshape(B, T)
     return (pred == np.asarray(want)[:, None]) & (conf > 0.5)
 

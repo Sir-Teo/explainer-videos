@@ -171,6 +171,11 @@ class MuP(VoiceoverScene):
         s_sp, s_mu = float(z["slope_sp"]), float(z["slope_mup"])
         grows = s_sp > 0.2
         flat = abs(s_mu) < 0.15
+        sl = VGroup()
+        for p, v, yy in ((pans[0], s_sp, y0 + 0.3), (pans[1], s_mu, y1 - 0.3)):
+            ax = p[0]
+            sl.add(label(rf"output scores change as width$^{{{v:.2f}}}$", font_size=22, color=C.BITS)
+                   .move_to(ax.c2p(lw.max(), yy)).align_to(ax.c2p(lw.max() + 0.1, yy), RIGHT))
         tag = note(r"computed: \ Adam, learning rate $0.01$, \ the same four batches at every width").to_corner(DL, buff=0.2)
         said1 = (
             f"the change in the output scores grows with the width, about as the width to the power {s_sp:.2f}: "
@@ -193,8 +198,10 @@ class MuP(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(key), FadeIn(yl), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
             self.play(LaggedStart(*[Create(l_) for l_ in pans[0][5]], lag_ratio=0.05), run_time=max(2.0, vo.until("a")))
+            self.play(FadeIn(sl[0], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in pans[1][5]], lag_ratio=0.05), run_time=2.0)
+            self.play(FadeIn(sl[1], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

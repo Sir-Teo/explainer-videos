@@ -90,9 +90,13 @@ class Inside(VoiceoverScene):
             "gold. "
             "Here are a few, side by side."
         ) as vo:
+            # centred while it is alone on screen; it moves aside when gold and the table arrive
+            first = VGroup(q, a1, model, a2, line, a3, rmb, ch4)
+            first.shift(RIGHT * 3.7)
             self.play(FadeIn(q), GrowArrow(a1), FadeIn(model), GrowArrow(a2), FadeIn(line))
             self.play(GrowArrow(a3), FadeIn(rmb), FadeIn(ch4))
             vo.wait_until("a")
+            self.play(first.animate.shift(LEFT * 3.7), run_time=1.0)
             self.play(GrowArrow(a4), FadeIn(gb), FadeIn(hid), FadeIn(tag))
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_[0], shift=LEFT * 0.1) for r_ in rows], lag_ratio=0.3),
                       run_time=2.0)
@@ -239,6 +243,14 @@ class Inside(VoiceoverScene):
         r2l.next_to(key, DOWN, buff=0.5, aligned_edge=LEFT)
         tag = note(r"computed: \ least squares within each question, \ score in gold units (divided by its slope)",
                    font_size=18).to_corner(DR, buff=0.2)
+        fit = cmath(r"\frac{\text{score}}{\text{slope}}", r"\approx", r"w_1\,\text{mood}", r"+",
+                    r"w_2\,\text{length}", r"+", r"w_3\,\text{repetition}", r"-", r"w_4\,\text{too short}",
+                    r"+\ \text{the question's own constant}", font_size=28)
+        for k, idx in enumerate((2, 4, 6, 8)):
+            fit[idx].set_color(TERM_COL[k])
+        fit.move_to([0, 0.95, 0])
+        if fit.width > 13.0:
+            fit.scale_to_fit_width(13.0)
         hi_k = max(live, key=lambda k: share_l[k])
         lo_k = min(live, key=lambda k: share_l[k])
         better = sum(abs(share_l[k] - 1) < abs(share_s[k] - 1) for k in share_s)
@@ -265,10 +277,11 @@ class Inside(VoiceoverScene):
             "sum of the same terms. If it had learned gold exactly, every weight would be one. "
             f"<bookmark mark='b'/> {w_said} <bookmark mark='b2'/> {small_said} <bookmark mark='c'/> {r2_said}"
         ) as vo:
-            self.play(Write(formula), FadeIn(gax), FadeIn(labs), run_time=1.5)
+            self.play(Write(formula), run_time=1.5)
             self.play(FadeIn(braces), FadeIn(short))
             vo.wait_until("a")
-            self.play(Create(zero), Create(one), FadeIn(onel), FadeIn(key), FadeIn(tag))
+            self.play(FadeIn(fit, shift=DOWN * 0.1))
+            self.play(FadeIn(gax), FadeIn(labs), Create(zero), Create(one), FadeIn(onel), FadeIn(key), FadeIn(tag))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in small], lag_ratio=0.15),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.15), run_time=2.0)
@@ -325,6 +338,9 @@ class Inside(VoiceoverScene):
         if kg < 0 and ks < 0 and abs(ks - kg) <= 0.35 * abs(kg):
             len_said = (f"It learned the length rule: past {CONCISE:d} words its score falls {-ks:.3f} a word, and "
                         f"gold's {-kg:.3f}.")
+        elif kg < 0 and ks < kg:
+            len_said = (f"It learned the length rule and then some: past {CONCISE:d} words its score falls "
+                        f"{-ks:.3f} a word, faster than gold's {-kg:.3f}, as its large weight on length said.")
         elif kg < 0 and ks < 0:
             len_said = (f"It learned the direction but not the size: past {CONCISE:d} words its score falls "
                         f"{-ks:.3f} a word, and gold's {-kg:.3f}.")
@@ -423,16 +439,16 @@ class Inside(VoiceoverScene):
             lists_said = ("Not one of them is on gold's lists: the words that move the reward model most are words "
                           "gold ignores.")
         elif k_up + k_dn >= n_show:
-            lists_said = (f"{k_up:d} of the top {n_show:d} are on gold's cheerful list, and {k_dn:d} of the bottom "
-                          f"{n_show:d} on its gloomy list: it has found gold's words.")
+            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds {k_up:d}, and of the bottom {n_show:d}, "
+                          f"its gloomy list holds {k_dn:d}: it has found gold's words.")
         else:
-            lists_said = (f"Only {k_up:d} of the top {n_show:d} are on gold's cheerful list, and {k_dn:d} of the bottom "
-                          f"{n_show:d} on its gloomy list; the rest are words gold ignores.")
+            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds only {k_up:d}, and of the bottom "
+                          f"{n_show:d}, its gloomy list holds {k_dn:d}; the rest are words gold ignores.")
         (_, pr, pg), (_, nr, ng) = d["class_pos"], d["class_neg"]
         word_r = float(d["word_r"])
-        class_said = (f"Gold's own words, on average: a cheerful one adds {pr:+.2f} to the reward model's score, where "
-                      f"it adds {pg:+.2f} to gold; a gloomy one {nr:+.2f}, where gold takes {ng:+.2f}. Over all "
-                      f"{int(d['n_words'])} words the two agree with a correlation of {word_r:.2f}.")
+        class_said = (f"Gold's own words, on average: a cheerful one moves the reward model's score by {pr:+.2f}, "
+                      f"where it moves gold by {pg:+.2f}; a gloomy one moves it by {nr:+.2f}, where it moves gold by "
+                      f"{ng:+.2f}. Over all {int(d['n_words'])} words the two agree with a correlation of {word_r:.2f}.")
         # how often each of gold's terms speaks in the data: lines with a listed word, pairs that differ in length
         texts, tops, nwords = d["text"], d["topic"], np.asarray(d["words"])
         share = float(np.mean([any(kind(w) for w in WORD.findall(x.lower())) for x in texts]))
@@ -602,6 +618,13 @@ class Inside(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14), width=6.1, font_size=24, color=PROXY,
             kind=r"Manheim \& Garrabrant, 2018")
         kinds.move_to([X, -1.85, 0], aligned_edge=LEFT)
+        ring_key = VGroup(
+            VGroup(Circle(radius=0.09, color=PROXY, stroke_width=3),
+                   label(r"the reward model's favourite", font_size=22, color=PROXY)).arrange(RIGHT, buff=0.2),
+            VGroup(Circle(radius=0.13, color=GOLD, stroke_width=2.5),
+                   label(r"gold's favourite", font_size=22, color=GOLD)).arrange(RIGHT, buff=0.16),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        ring_key.next_to(nums[0], DOWN, buff=0.35, aligned_edge=LEFT)
         if kinds.get_right()[0] > 6.9:
             kinds.scale((6.9 - X) / kinds.width, about_edge=LEFT)
         tag = note(r"computed: \ the larger reward model's favourite of each question's lines; \ gold units",
@@ -625,10 +648,11 @@ class Inside(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(gax), Create(zero), FadeIn(tag))
             self.play(FadeIn(dots), run_time=1.5)
-            self.play(LaggedStart(*[Create(c_) for c_ in rings_rm], lag_ratio=0.05),
+            self.play(FadeIn(nums[0]), FadeIn(ring_key),
+                      LaggedStart(*[Create(c_) for c_ in rings_rm], lag_ratio=0.05),
                       LaggedStart(*[Create(c_) for c_ in rings_g], lag_ratio=0.05), run_time=2.0)
-            self.play(FadeIn(nums[0]))
             vo.wait_until("a")
+            self.play(FadeOut(ring_key), run_time=0.5)
             self.play(FadeIn(nums[1]))
             vo.wait_until("b")
             self.play(FadeIn(nums[2]))

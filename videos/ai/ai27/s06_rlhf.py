@@ -315,13 +315,21 @@ class RLHF(VoiceoverScene):
         else:
             shift_said = (f"Add {sh:g} to every score, which fits the comparisons exactly as well, and without a "
                           f"baseline the agreement barely changes: {cos['shifted']:.3f}.")
+        ins = load("inside")
+        top_ = np.asarray(ins["topic"])
+        spread = float(np.mean([np.asarray(ins["large_score"])[top_ == t].std() for t in np.unique(top_)]))
         if cos["group"] > 1.5 * cos["none"]:
             verdict = ("The batch's own mean does far better than no baseline, and it costs nothing: there is no value "
                        "network to train. That is the reasoning behind RLOO, GRPO and our runs.")
+        elif float(np.abs(qm).max()) <= 1.5 * spread:
+            verdict = (f"With the scores as learned, each question's average, from {qm.min():+.1f} to "
+                       f"{qm.max():+.1f}, is small next to how far one question's lines differ, {spread:.1f} on "
+                       "average, so subtracting it changes little. Its real job here is to make the gradient "
+                       "indifferent to a shift the reward model never pinned down.")
         else:
-            verdict = (f"With the scores as learned, which sit near zero on every question, from {qm.min():+.1f} to "
-                       f"{qm.max():+.1f}, subtracting an average changes little. Its real job here is to make the "
-                       "gradient indifferent to a shift the reward model never pinned down.")
+            verdict = ("Subtracting an average helps less than the shift would suggest: the noise of sampling a few "
+                       "lines dominates. Its real job here is to make the gradient indifferent to a shift the reward "
+                       "model never pinned down.")
         if max(cos.values()) < 0.5:
             compass = ("Even the best is far from one: a single batch is a noisy compass, which is why reinforcement "
                        "learning takes many small steps.")

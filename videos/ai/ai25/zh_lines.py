@@ -374,7 +374,7 @@ ZH = {
 
     'f"Does it pay? Our five-body system again:':
         "值得吗？还是我们的五体系统：预测粒子在时刻一的位置。四个网络，同样三千步训练，训练系统从一百个到{sizes[-1]:,}个，每种三个种子。"
-        "<bookmark mark='a'/>虚线是最简单的猜测：每个粒子都沿直线走下去。<bookmark mark='b'/>{mlp_txt}。{aug_txt}：{m['mlp_aug']:.3f}。"
+        "<bookmark mark='a'/>虚线是最简单的猜测：每个粒子都沿直线走下去。<bookmark mark='b'/>{mlp_txt}；{aug_txt}：{m['mlp_aug']:.3f}。"
         "<bookmark mark='c'/>读原始坐标的消息传递网络：{m['gnn']:.3f}。<bookmark mark='d'/>EGNN：{m['egnn']:.4f}，{ratio_txt}。{cross}。",
 
     'With only a hundred, EGNN already beats every other network':
@@ -456,7 +456,7 @@ PHRASES = {
     'about a hundred-millionth': '大约一亿分之一', 'about a ten-millionth': '大约千万分之一',
     'about a millionth': '大约百万分之一', 'about a hundred-thousandth': '大约十万分之一',
     'about a ten-thousandth': '大约万分之一',
-    'Turned copies help the MLP': '转过的副本对MLP有帮助',
+    'turned copies help the MLP': '转过的副本对MLP有帮助',
     "close to the MLP's": '和MLP的差不多',
     'still as large as its own error': '仍然和它自己的预测误差一样大',
     'Each wins on one count': '两者各赢一项',
@@ -464,7 +464,10 @@ PHRASES = {
 }
 
 ZH.update({
-    'Turned copies barely help it at this budget':
+    'turned copies help the MLP':
+        '转过的副本对MLP有帮助',
+
+    'turned copies barely help it at this budget':
         '在这个预算下，转过的副本几乎帮不上忙',
 
     # ------------------------------------------------------------------ Evoformer
@@ -916,7 +919,7 @@ ZH.update({
         "矩阵乘法是最纯粹的例子。<bookmark mark='a'/>按教科书的方法，两个n乘n矩阵相乘要做n的三次方次乘法。<bookmark mark='b'/>把这个乘积"
         "写成一个三向张量；<bookmark mark='c'/>那么，把这个张量写成R个简单乘积之和的每一种写法，都是一个只用R次乘法的算法。<bookmark "
         "mark='d'/>1969年，福尔克尔·施特拉森为二乘二矩阵找到了七次的算法，而不是八次；两年后，什穆埃尔·维诺格拉德证明了七就是最少的。"
-        "<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。{s6}。{s7}。",
+        "<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。{s6}。{s7}。<bookmark mark='f'/>{s3}。",
 
     "f'At rank six, none of the":
         '秩为六时，{r6[2]}个起点没有一个能把误差降到{r6[3]:.2f}以下：根本不存在六次乘法的算法可找',

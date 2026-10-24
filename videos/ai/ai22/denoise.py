@@ -19,7 +19,7 @@ import math
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, NP, P, dataset, patches, score, steps, threads, unpatch
+from videos.ai.ai22.base import CACHE, GL, NP, P, dataset, patches, score, steps, threads, unpatch
 
 CONFIGS = ("zero", "ada", "context", "unet", "repa")
 SEEDS = (0, 1, 2)

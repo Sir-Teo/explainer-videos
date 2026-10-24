@@ -37,14 +37,14 @@ class Recipes(VoiceoverScene):
         widths = [3.0, 3.4, 3.6, 3.4]
         xs = [-5.4, -2.2, 1.3, 4.8]
         y = 2.6
-        hrow = VGroup(*[label(h, font_size=24, color=c).move_to([x, y, 0]) for h, x, c in
+        hrow = VGroup(*[label(h, font_size=28, color=c).move_to([x, y, 0]) for h, x, c in
                         zip(head, xs, [WHITE] + cols)])
         grid.add(hrow)
         for k, r_ in enumerate(rows):
             yy = y - 0.85 * (k + 1)
             cells = VGroup()
             for j, (t, x) in enumerate(zip(r_, xs)):
-                m = label(t, font_size=20 if j else 23, color=WHITE if j == 0 else GREY_A)
+                m = label(t, font_size=24 if j else 26, color=WHITE if j == 0 else GREY_A)
                 if m.width > widths[j] - 0.2:
                     m.width = widths[j] - 0.2
                 cells.add(m.move_to([x, yy, 0]))

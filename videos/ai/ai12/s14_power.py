@@ -216,9 +216,9 @@ class Power(VoiceoverScene):
             for i, w in enumerate(widths) if okm[i, 0]])
         nll = label(r"numbers: \ width", font_size=18, color=GREY_A).next_to(bxn, DOWN, buff=0.12).align_to(bx, LEFT)
         full = [w for i, w in enumerate(widths) if (learned[i] == T).all()]
-        fl = label(rf"width ${full[0]}$ and up: \\ all ${T}$ learned, \\ loss below "
+        fl = label(rf"width ${full[0]}$ and up: \ all ${T}$ learned, \ loss below "
                    rf"${math.ceil(1000 * fin[widths.index(full[0])].max()) / 1000:.3f}$",
-                   font_size=18, color=GREY_A).next_to(nll, RIGHT, buff=0.4) if full else VGroup()
+                   font_size=18, color=GREY_A).next_to(nll, DOWN, buff=0.1).align_to(nll, LEFT) if full else VGroup()
         tag = note(r"two seeds per width").to_corner(DR, buff=0.2)
         n_learn = int((run[-1] < 0.1).sum())
         # meanwhile on the right: the subtasks by frequency, turning green as this network learns them

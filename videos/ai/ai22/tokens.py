@@ -17,7 +17,7 @@ import math
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, dataset, score, steps, threads
+from videos.ai.ai22.base import CACHE, GL, dataset, score, steps, threads
 
 K, CD = 128, 8  # codes, numbers per code
 SCALES = (1, 2, 3, 4, 5)

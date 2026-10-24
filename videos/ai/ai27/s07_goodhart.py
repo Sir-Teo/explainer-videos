@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import GOLD, KLC, PART, POLICY, PROXY, REWARD, load, said, ticks
+from videos.ai.ai27.common import ASSIST, GOLD, KLC, PART, POLICY, PROXY, REWARD, load, node_box, said, ticks
 
 
 class Goodhart(VoiceoverScene):
@@ -176,17 +176,36 @@ class Goodhart(VoiceoverScene):
                     ruler.add(MathTex(rf"{n_}", font_size=18, color=GREY_B).move_to([xx, y_r + 0.24, 0]))
             ruler.add(MathTex(r"n", font_size=20, color=GREY_B).next_to([x0_, y_r, 0], LEFT, buff=0.15))
             marks.add(ruler)
+        # the procedure, while it is described, before the axes it fills
+        steps = VGroup(node_box(rf"${ns[-1]}$ lines per prompt", ASSIST, font_size=24),
+                       node_box(r"best-of-$n$: \ a reward model picks", PROXY, font_size=24),
+                       node_box(r"score the pick: \ reward model \ and \ gold", GOLD, font_size=24)
+                       ).arrange(RIGHT, buff=0.9).move_to(UP * 0.4)
+        if steps.width > 13.0:
+            steps.scale_to_fit_width(13.0)
+        s_arrows = VGroup(*[Arrow(steps[k].get_right(), steps[k + 1].get_left(), buff=0.1, color=GREY_B,
+                                  stroke_width=2.5, max_tip_length_to_length_ratio=0.25) for k in range(2)])
+        s_cite = cite(r"after Gao, Schulman \& Hilton, \textit{Scaling laws for reward model overoptimization} "
+                      r"(2023)")
         with self.voiceover(
             "Here is the experiment, after Gao, Schulman and Hilton of OpenAI. For each prompt, our fine-tuned model "
-            "writes two hundred and fifty-six lines; best-of-n picks with a reward model, and we score the pick "
-            "with both the reward model and gold, against the square root of the KL. <bookmark mark='a'/> The "
+            "writes two hundred and fifty-six lines; <bookmark mark='p1'/> best-of-n picks with a reward model, "
+            "<bookmark mark='p2'/> and we score the pick with both the reward model and gold, "
+            "<bookmark mark='p3'/> against the square root of the KL. <bookmark mark='a'/> The "
             "reward model always believes things are getting better: by construction, its score of its own favourite "
             f"rises with n. <bookmark mark='b'/> Gold tells the truth. {small_said} <bookmark mark='c'/> "
             f"{large_said} A better reward model can be pushed harder before it breaks, but every learned reward "
             "breaks somewhere."
         ) as vo:
+            self.play(FadeIn(steps[0]), FadeIn(s_cite))
+            vo.wait_until("p1")
+            self.play(GrowArrow(s_arrows[0]), FadeIn(steps[1]))
+            vo.wait_until("p2")
+            self.play(GrowArrow(s_arrows[1]), FadeIn(steps[2]))
+            vo.wait_until("p3")
+            self.play(FadeOut(steps), FadeOut(s_arrows), FadeOut(s_cite), run_time=0.6)
             self.play(FadeIn(g), FadeIn(g2), FadeIn(size), FadeIn(tag))
-            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.15), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.15), run_time=1.5)
             vo.wait_until("a")
             self.play(Create(sp), Create(lp), run_time=2.0)
             vo.wait_until("b")

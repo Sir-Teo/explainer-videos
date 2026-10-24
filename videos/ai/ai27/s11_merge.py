@@ -74,10 +74,10 @@ class Merge(VoiceoverScene):
         whys = [why(r"a task vector: \ what fine-tuning changed"), why(r"add two: \ a model that does both"),
                 why(r"subtract one: \ forget a behaviour")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.8, buff=0.65, edge=6.9)
-        hc = note(r"Ilharco et al., \textit{Editing models with task arithmetic} (2023)").to_edge(DOWN, buff=0.25)
+        hc = note(r"Ilharco et al., \textit{Editing models with task arithmetic} (2023)").to_corner(DL, buff=0.25)
         # weight space, schematic: the pretrained point, two task vectors, their sum, and one subtracted
-        o_ = np.array([-2.0, -3.1, 0])
-        ta, tb = np.array([3.4, 0.4, 0]), np.array([0.7, 1.6, 0])
+        o_ = np.array([-2.0, -2.8, 0])
+        ta, tb = np.array([3.4, 0.4, 0]), np.array([0.7, 1.4, 0])
         base_dot = Dot(o_, radius=0.08, color=BASE)
         base_l = label(r"$\theta_{\text{pretrained}}$", font_size=26, color=BASE).next_to(base_dot, DR, buff=0.08)
         va = Arrow(o_, o_ + ta, buff=0, color=ASSIST, stroke_width=4)
@@ -149,14 +149,16 @@ class Merge(VoiceoverScene):
                  f"{100 * best[1]:.0f} percent of sentences, against {100 * w_only[1]:.0f} for the which-book model "
                  f"alone, and ends {100 * best[3]:.0f} percent of its lines cleanly.")
         with self.voiceover(
-            "We tried it on the novels model. Fine-tune one copy only on which-book questions, another only on lines "
-            "about things, and take their task vectors. <bookmark mark='a'/> Each fine-tune is good at its own "
-            "task. <bookmark mark='b'/> " + said_ + " <bookmark mark='c'/> Merging is not free, but it is "
-            "remarkably cheap: no training at all, just addition."
+            "We tried it on the novels model. <bookmark mark='a'/> Fine-tune one copy only on which-book "
+            "questions, <bookmark mark='a2'/> another only on lines about things, and take their task vectors. "
+            "Each fine-tune is good at its own task. <bookmark mark='b'/> " + said_ + " <bookmark mark='c'/> "
+            "Merging is not free, but it is remarkably cheap: no training at all, just addition."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")
-            self.play(*[FadeIn(gr_) for gr_ in groups[:2]])
+            self.play(FadeIn(groups[0]))
+            vo.wait_until("a2")
+            self.play(FadeIn(groups[1]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(gr_) for gr_ in groups[2:]], lag_ratio=0.3))
             vo.wait_until("c")

@@ -16,7 +16,7 @@ import time
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, font_files, render, steps, threads
+from videos.ai.ai22.base import CACHE, font_files, render, steps, threads
 
 RES, N_TRAIN, N_TEST = 32, 24, 8
 NEAR, FAR = 1.4, 4.0
