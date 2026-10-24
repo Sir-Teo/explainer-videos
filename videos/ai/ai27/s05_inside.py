@@ -441,6 +441,12 @@ class Inside(VoiceoverScene):
         elif k_up + k_dn >= n_show:
             lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds {k_up:d}, and of the bottom {n_show:d}, "
                           f"its gloomy list holds {k_dn:d}: it has found gold's words.")
+        elif k_dn == 0:
+            lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds only {k_up:d}, and its gloomy list holds "
+                          f"none of the bottom {n_show:d}; the rest are words gold ignores.")
+        elif k_up == 0:
+            lists_said = (f"None of the top {n_show:d} is on gold's cheerful list, and of the bottom {n_show:d}, its "
+                          f"gloomy list holds only {k_dn:d}; the rest are words gold ignores.")
         else:
             lists_said = (f"Of the top {n_show:d}, gold's cheerful list holds only {k_up:d}, and of the bottom "
                           f"{n_show:d}, its gloomy list holds {k_dn:d}; the rest are words gold ignores.")

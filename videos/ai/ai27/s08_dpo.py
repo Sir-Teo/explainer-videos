@@ -203,13 +203,16 @@ class DPO(VoiceoverScene):
         above = [p_ for p_ in inr if p_[2] > at(p_[3]) + 0.01]
         meth, b, gbest, _ = max(pts, key=lambda p_: p_[2])
         if gbest > float(bon.max()) + 0.02:
-            verdict = (f"The best trained policy, {meth} at beta {b:g}, gains {gbest:+.2f}, more than best-of-256's "
+            verdict = (f"The best trained policy, {meth} at beta {b:g}, gains {gbest:+.2f}, more than best-of-n's best, "
                        f"{float(bon.max()):+.2f}: training reaches answers that sampling alone rarely finds.")
         else:
-            verdict = (f"No trained policy gains more than best-of-256's {float(bon.max()):+.2f}, and best-of-n gets "
+            verdict = (f"No trained policy gains more than best-of-n's best, {float(bon.max()):+.2f}, and best-of-n gets "
                        "there with no training at all, which is why labs still use it, and use it to make training "
                        "data.")
-        if inr:
+        if inr and not above:
+            cmp_ = (f"At equal divergence, none of the {len(inr)} trained policies that stay within best-of-n's range "
+                    "does better than it.")
+        elif inr:
             cmp_ = (f"At equal divergence, {len(above)} of the {len(inr)} trained policies that stay within "
                     "best-of-n's range do better than it.")
         else:

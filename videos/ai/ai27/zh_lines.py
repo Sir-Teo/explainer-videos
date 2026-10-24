@@ -301,10 +301,10 @@ ZH = {
         "每一个训练出来的策略，离出发点都比最优256选1走得更远。",
 
     'f"The best trained policy, {meth} at beta {b:g}, gains':
-        "最好的训练策略，是β取{b:g}的{meth}，提高了{gbest:+.2f}，超过最优256选1的{float(bon.max()):+.2f}：训练能到达单靠采样很少找到的回答。",
+        "最好的训练策略，是β取{b:g}的{meth}，提高了{gbest:+.2f}，超过最优n选1的最好成绩{float(bon.max()):+.2f}：训练能到达单靠采样很少找到的回答。",
 
-    'f"No trained policy gains more than best-of-256\'s':
-        "没有一个训练出来的策略，提高得比最优256选1的{float(bon.max()):+.2f}更多，而最优n选1根本不需要训练就能做到，所以各个实验室仍在使用它，还用它来制造训练数据。",
+    'f"No trained policy gains more than best-of-n\'s best':
+        "没有一个训练出来的策略，提高得比最优n选1的最好成绩{float(bon.max()):+.2f}更多，而最优n选1根本不需要训练就能做到，所以各个实验室仍在使用它，还用它来制造训练数据。",
 
     'Chapter five. Inside our reward model.':
         '第5章。打开我们的奖励模型。',
@@ -486,11 +486,20 @@ ZH = {
     'f"It learned the length rule and then some':
         '它学会了长度规则，还学过了头：超过{CONCISE:d}个词以后，它的分数每个词降{-ks:.3f}，比金标准的{-kg:.3f}还快，正如它在长度上那么大的权重所显示的。',
 
-    'f"With the scores as learned, each question\'s average':
-        '照学出来的样子，每个问题的平均分，从{qm.min():+.1f}到{qm.max():+.1f}，和同一个问题下各句之间的差别相比很小，那个差别平均是{spread:.1f}，所以减去它改变不了多少。在这里，基线真正的作用，是让梯度不受一个奖励模型从未确定下来的平移的影响。',
-
-    'Subtracting an average helps less than the shift would suggest':
+        'Subtracting an average helps less than the shift would suggest':
         '减去一个平均值，帮助比平移所暗示的要小：抽几句话带来的噪声占了上风。在这里，基线真正的作用，是让梯度不受一个奖励模型从未确定下来的平移的影响。',
+
+    'f"With the scores as learned, a question\'s average score':
+        '照学出来的样子，一个问题的平均分，在这里平均是{qa:.1f}，比它的各句偏离它的程度要小，那个程度平均是{spread:.1f}，所以减去它改变不了多少。在这里，基线真正的作用，是让梯度不受一个奖励模型从未确定下来的平移的影响。',
+
+    'f"Of the top {n_show:d}, gold\'s cheerful list holds only {k_up:d}, and its gloomy':
+        '前{n_show:d}个里，金标准的欢快词表只占了{k_up:d}个；后{n_show:d}个里，一个在它阴郁词表上的都没有；其余的，都是金标准不理会的词。',
+
+    'f"None of the top {n_show:d} is on gold\'s cheerful list':
+        '前{n_show:d}个里，没有一个在金标准的欢快词表上；后{n_show:d}个里，它的阴郁词表只占了{k_dn:d}个；其余的，都是金标准不理会的词。',
+
+    'f"At equal divergence, none of the {len(inr)} trained policies':
+        '在相同的散度下，停留在最优n选1范围内的{len(inr)}个训练出来的策略里，没有一个比它好。',
 
 }
 
