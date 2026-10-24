@@ -48,6 +48,7 @@ import argparse
 import bz2
 import collections
 import gzip
+import hashlib
 import heapq
 import json
 import lzma
@@ -80,6 +81,18 @@ BOOKS = {
     4300: "Ulysses",
 }
 FALCON = 77600  # The Maltese Falcon (Hammett, 1930): Gutenberg, 1 January 2026
+# The text the videos were computed from: SHA-256 (first 12 hex digits) of each book as cleaned.  Gutenberg corrects
+# its files now and then (The Hound of the Baskervilles, 22 October 2026: "there came a sound of"), and a newer copy
+# moves the last digits of the numbers; the narration, written over the data, follows them.
+BOOK_SHA = {
+    1342: "17f5fb22ef19", 98: "ce517b23b2a7", 2701: "4d7551324af7", 1661: "b57b5755ac88", 1400: "175fb2e58d81",
+    84: "5bc05c0fd521", 345: "9e3f086d61be", 174: "54664132a50e", 1260: "c087855781a6", 145: "3a6812dc03ec",
+    158: "e3c1f7458347", 768: "3ddee65ef024", 2852: "47c1e1fe04c6", 1184: "048ef5cc68c5", 2600: "ebe1f28674f3",
+    120: "712e141135d7", 43: "5b1467a0b30b", 36: "7cfbe3df8bd4", 35: "22af46113519", 219: "b8f25a86bd0c",
+    76: "b5f7eb1ebdd3", 74: "d66df37f323a", 2554: "4ef8bc917972", 28054: "da10ce52e2b1", 64317: "034cb2f1508f",
+    1952: "8677250ab463", 160: "d1b70014864a", 514: "55a052d9461e", 46: "4dd192c14f34", 4300: "22cb8c4e7bf3",
+    FALCON: "2d70b95beca0",
+}
 ALPHA27 = " abcdefghijklmnopqrstuvwxyz"
 SHANNON_SENTENCE = ("there is no reverse on a motorcycle a friend of mine found this out rather dramatically the "
                     "other day")  # Shannon (1951), the example sentence of the guessing experiment
@@ -189,6 +202,11 @@ def compute_corpus():
     raw = _download(GUTENBERG.format(n=FALCON), BOOK_DIR / f"{FALCON}.txt").read_text(encoding="utf-8")
     assert "Release date: January 1, 2026" in raw and "The Maltese falcon" in raw
     body = strip_gutenberg(raw)
+    texts = {**books, FALCON: body}
+    changed = [n for n in BOOK_SHA if hashlib.sha256(texts[n].encode()).hexdigest()[:12] != BOOK_SHA[n]]
+    if changed:
+        print("    note: Gutenberg has revised " + ", ".join(BOOKS.get(n, "The Maltese Falcon") for n in changed)
+              + " since the videos were made; expect the last digits of some numbers to move", flush=True)
     passage = falcon_chapter(body, 2)
     assert passage.startswith("A TELEPHONE-BELL rang in darkness.") and len(passage) > 20_000, passage[:80]
     # 5% of the reading (every 20th paragraph block) is held back to choose the smoothing
