@@ -146,3 +146,5 @@ R1_0528 = dict(tokens_old=12_000, tokens_new=23_000, acc_old=70.0, acc_new=87.5,
 DEEPSEEK_CACHE = dict(date="2024-08-02", hit=0.014, cut=90,
                       src="DeepSeek, DeepSeek API introduces Context Caching on Disk (2 August 2024): cache hits billed "
                           "at USD 0.014 per million tokens, up to 90% less; prefixes only")
+BENNETT = dict(year=1948, src="W. R. Bennett, Spectra of Quantized Signals, Bell System Technical Journal 27, 446-472 "
+                              "(1948): quantization noise, for speech and television sent as pulses")

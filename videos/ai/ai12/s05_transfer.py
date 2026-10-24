@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, MUP, PART, SP, WIDTH_COLORS, band, load, predict_card, takeaway_card
+from videos.ai.ai12.common import HIST, MUP, PANEL_FILL, PART, SP, WIDTH_COLORS, band, load, predict_card, takeaway_card
 
 
 class Transfer(VoiceoverScene):
@@ -89,14 +89,13 @@ class Transfer(VoiceoverScene):
             + said3
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn))
+            self.play(*[Create(q[0]) for q in panels], *[FadeIn(q[i]) for q in panels for i in (1, 2, 3, 4)])
             p = panels[0]
-            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), FadeIn(p[3]), FadeIn(p[4]))
             self.play(FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[6]], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(p[7]))
             vo.wait_until("b")
             p = panels[1]
-            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), FadeIn(p[3]), FadeIn(p[4]))
             self.play(FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[6]], lag_ratio=0.3), run_time=2.0)
             self.play(FadeIn(p[7]))
         self.wait(0.3)
@@ -135,6 +134,17 @@ class Transfer(VoiceoverScene):
         ).arrange(DOWN, buff=0.18).move_to([3.4, -0.35, 0])
         if cards.height > 6.6:
             cards.scale_to_fit_height(6.6)
+        # the recipe, drawn: tune the small model, copy its rate, train the large one
+        def box(txt, col):
+            t_ = label(txt, font_size=22, color=WHITE)
+            return VGroup(RoundedRectangle(width=t_.width + 0.5, height=t_.height + 0.4, corner_radius=0.12, stroke_color=col,
+                                           stroke_width=2, fill_color=PANEL_FILL, fill_opacity=1), t_)
+        b1 = box(rf"tune: \ width ${widths[0]}$, \ a sweep of rates", WIDTH_COLORS[0])
+        b2 = box(rf"train once: \ width ${widths[-1]:,}$".replace(",", "{,}"), WIDTH_COLORS[-1])
+        recipe = VGroup(b1, b2).arrange(DOWN, buff=1.0).move_to([3.4, -0.4, 0])
+        arr = Arrow(b1.get_bottom(), b2.get_top(), buff=0.1, color=GREY_B, stroke_width=3)
+        al_ = label(r"copy the best rate", font_size=20, color=GREY_A).next_to(arr, RIGHT, buff=0.15)
+        recipe.add(arr, al_)
         pen_sp, pen_mu = cp["sp"] - bl["sp"][-1], cp["mup"] - bl["mup"][-1]
         said4 = (
             f"The usual way, that costs {pen_sp:.3f} bits against the large model's own best; in mu-P, "
@@ -152,9 +162,12 @@ class Transfer(VoiceoverScene):
             "the right learning rate for each layer, and in 2025 Meta set Llama 4's per-layer rates and starting "
             "scales this way, transferring them across width, depth, batch size and training length."
         ) as vo:
-            self.play(Create(ax), FadeIn(bk), FadeIn(yn))
+            self.play(Create(ax), FadeIn(bk), FadeIn(yn), FadeIn(recipe[0]))
+            self.play(GrowArrow(recipe[2]), FadeIn(recipe[3]), FadeIn(recipe[1]))
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in bars], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(recipe))
             self.play(FadeIn(cards[0], shift=LEFT * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(cards[1], shift=LEFT * 0.1))

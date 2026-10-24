@@ -41,7 +41,18 @@ class RLHF(VoiceoverScene):
                   color=GREY_A),
             label(r"and forgets how to write: \ answers drift out of the model's world", font_size=26, color=GREY_A),
             label(r"$\beta$ sets the trade: \ reward gained per nat of divergence", font_size=26, color=KLC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.5)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 2.0)
+        # the loop: write, score, step
+        loop = VGroup(node_box(r"the policy writes answers", POLICY, font_size=22),
+                      node_box(r"the reward model scores them", PROXY, font_size=22),
+                      node_box(r"a policy-gradient step", POLICY, font_size=22)).arrange(RIGHT, buff=0.7)
+        loop.move_to(UP * 0.35)
+        if loop.width > 12.6:
+            loop.width = 12.6
+        la = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
+                      for a, b in zip(loop, loop[1:])])
+        back = CurvedArrow(loop[2].get_bottom() + DOWN * 0.05, loop[0].get_bottom() + DOWN * 0.05, angle=-TAU / 8,
+                           color=GREY_B, stroke_width=2.5)
         with self.voiceover(
             "With a reward model in hand, the plan is reinforcement learning: generate answers, score them, and push "
             "the model toward high scores with the policy gradient of Part 26. But maximizing the reward model alone "
@@ -53,6 +64,9 @@ class RLHF(VoiceoverScene):
         ) as vo:
             self.play(Write(obj))
             self.play(FadeIn(b1), FadeIn(b2))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(n_), *([GrowArrow(la[i - 1])] if i else []))
+                                    for i, n_ in enumerate(loop)], lag_ratio=0.6), run_time=2.5)
+            self.play(Create(back))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(why1[k], shift=UP * 0.15))

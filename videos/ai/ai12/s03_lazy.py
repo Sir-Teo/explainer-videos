@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, LAZY, PART, RICH, SP, band, load, log_axes, predict_card, takeaway_card
+from videos.ai.ai12.common import HIST, lag, LAZY, PART, RICH, SP, band, load, log_axes, predict_card, takeaway_card
 
 
 class Lazy(VoiceoverScene):
@@ -137,6 +137,15 @@ class Lazy(VoiceoverScene):
             f"Its error is {ratio:.1f} times smaller, and every seed beats every lazy seed."
             if wins else f"Its error is {ratio:.1f} times smaller on average, though the seeds overlap."
         )
+        # the target, drawn against the one direction it depends on
+        px = Axes(x_range=[-2.5, 2.5, 1], y_range=[-1.2, 5.5, 1], x_length=2.8, y_length=1.3, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.4, -2.55, 0])
+        g_ = np.random.default_rng(0).normal(size=60)
+        pdots = VGroup(*[Dot(px.c2p(t, t * t - 1), radius=0.035, color=WHITE) for t in g_ if abs(t) < 2.4])
+        pcur = curve(px, np.linspace(-2.3, 2.3, 60), np.linspace(-2.3, 2.3, 60) ** 2 - 1, C.BITS, 2.5, smooth=True)
+        pxl = label(r"$w^* \!\cdot x$", font_size=20, color=GREY_A).next_to(px, DOWN, buff=0.06)
+        pyl = label(r"$y$", font_size=20, color=GREY_A).next_to(px, LEFT, buff=0.06)
+        pic = VGroup(px, pcur, pdots, pxl, pyl)
         with self.voiceover(
             "Does it matter? Here is a task where it does. The answer is the square of how far x points along one "
             f"hidden direction, w-star, minus one, with x in {int(r['d'])} dimensions and {int(r['n'])} examples to "
@@ -151,6 +160,8 @@ class Lazy(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(guess), FadeIn(gl), FadeIn(task),
                       FadeIn(tag))
+            self.play(Create(px), FadeIn(pxl), FadeIn(pyl), lag([FadeIn(d_, scale=0.5) for d_ in pdots], lag_ratio=0.03),
+                      Create(pcur), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(lazy[0]), Create(lazy[1]), FadeIn(lg[:2]), FadeIn(eqs[0]), run_time=2.0)
             vo.wait_until("b")

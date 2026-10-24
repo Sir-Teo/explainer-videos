@@ -50,12 +50,12 @@ class Batch(VoiceoverScene):
         fans = VGroup()
         for k, (B_, cx) in enumerate(((4, -2.6), (64, 2.6))):
             c = np.array([cx, -0.6, 0])
-            arrows = VGroup(*[Arrow(c, c + g0 + np.append(rng_.normal(size=2) * 1.1 / math.sqrt(B_ / 4), 0), buff=0,
+            arrows = VGroup(*[Arrow(c, c + g0 + np.append(np.clip(rng_.normal(size=2), -1.3, 1.3) * 0.8 / math.sqrt(B_ / 4), 0), buff=0,
                                     stroke_width=2, color=GREY_B, max_tip_length_to_length_ratio=0.12) for _ in range(12)])
             true = Arrow(c, c + g0, buff=0, stroke_width=5, color=C.BITS, max_tip_length_to_length_ratio=0.15)
             fans.add(VGroup(arrows, true, label(rf"batch ${B_}$", font_size=24, color=GREY_A).next_to(c, DOWN, buff=0.5)))
         fl = label(r"grey: \ gradients of random batches; \ yellow: \ the true gradient $G$", font_size=22, color=GREY_A)
-        fl.move_to([0, 1.5, 0])
+        fl.move_to([0, 1.9, 0])
         sch = note(r"schematic").next_to(fans, DOWN, buff=0.2)
         cite_ = cite(r"S.~McCandlish, J.~Kaplan, D.~Amodei \& the OpenAI Dota team, \textit{An Empirical Model of "
                      r"Large-Batch Training} (2018)", corner=DL)
@@ -142,8 +142,8 @@ class Batch(VoiceoverScene):
             + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
+            self.play(FadeIn(groups[0][1]), FadeIn(bl), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(groups[0][1]), FadeIn(bl))
             self.play(Create(groups[0][0]), FadeIn(groups[0][2]), FadeIn(lg[0]), FadeIn(kn))
             vo.wait_until("b")
             for g, l_ in zip(groups[1:], lg[1:]):
@@ -185,6 +185,29 @@ class Batch(VoiceoverScene):
         if cards.height > 5.9:
             cards.scale_to_fit_height(5.9)
         cards.move_to([3.7, -0.5, 0])
+        # the two estimates side by side, on log axes, as the loss falls
+        okn = np.isfinite(noise)
+        vals_ = np.log10(np.concatenate([bcrit, noise[okn]]))
+        ylo, yhi = math.floor(vals_.min() * 2) / 2 - 0.25, math.ceil(vals_.max() * 2) / 2 + 0.25
+        px = Axes(x_range=[-0.4, len(levels) - 0.6, 1], y_range=[ylo, yhi, 0.5], x_length=4.6, y_length=3.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, -0.3, 0])
+        pxt = VGroup(*[label(f"{lv:.1f}", font_size=20, color=c_).next_to(px.c2p(i, ylo), DOWN, buff=0.1)
+                       for i, (lv, c_) in enumerate(zip(levels, LEVEL_COLORS))])
+        pxn = label(r"loss reached \ (bits)", font_size=20, color=GREY_A).next_to(pxt, DOWN, buff=0.08)
+        pyt = VGroup(*[MathTex(rf"10^{{{v:g}}}", font_size=20, color=GREY_B).next_to(px.c2p(-0.4, v), LEFT, buff=0.08)
+                       for v in np.arange(math.ceil(ylo * 2) / 2, yhi + 1e-9, 0.5) if float(v).is_integer()])
+        lb = VMobject(stroke_color=WHITE, stroke_width=3).set_points_as_corners(
+            [px.c2p(i, math.log10(v)) for i, v in enumerate(bcrit)])
+        db = VGroup(*[Dot(px.c2p(i, math.log10(v)), radius=0.07, color=WHITE) for i, v in enumerate(bcrit)])
+        ln_ = VMobject(stroke_color=C.SURPRISE, stroke_width=3).set_points_as_corners(
+            [px.c2p(i, math.log10(v)) for i, v in enumerate(noise) if np.isfinite(v)])
+        dn = VGroup(*[Dot(px.c2p(i, math.log10(v)), radius=0.07, color=C.SURPRISE) for i, v in enumerate(noise)
+                      if np.isfinite(v)])
+        pk = VGroup(label(r"white: \ $B_{\text{crit}}$ from the hyperbola", font_size=20, color=WHITE),
+                    label(r"red: \ noise scale, measured", font_size=20, color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                buff=0.08)
+        pk.next_to(px, UP, buff=0.2).align_to(px, LEFT)
+        pplot = VGroup(px, pxt, pxn, pyt, lb, db, ln_, dn, pk)
         ratio = noise / bcrit
         agree = np.all(np.isfinite(ratio)) and np.all((ratio > 0.2) & (ratio < 5))
         said2 = (
@@ -204,9 +227,12 @@ class Batch(VoiceoverScene):
             "billion tokens."
         ) as vo:
             self.play(FadeIn(hd), FadeIn(rows), *[FadeIn(g[:2]) for g in grid])
+            self.play(Create(px), FadeIn(pxt), FadeIn(pxn), FadeIn(pyt), FadeIn(pk[0]), Create(lb), FadeIn(db))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g[2]) for g in grid], lag_ratio=0.3), FadeIn(how))
+            self.play(LaggedStart(*[FadeIn(g[2]) for g in grid], lag_ratio=0.3), FadeIn(how), FadeIn(pk[1]), Create(ln_),
+                      FadeIn(dn))
             vo.wait_until("b")
+            self.play(FadeOut(pplot))
             self.play(FadeIn(cards[0], shift=UP * 0.1))
             self.play(FadeIn(cards[1], shift=UP * 0.1))
             self.play(FadeIn(cards[2], shift=UP * 0.1))
