@@ -159,7 +159,7 @@ class Wide(VoiceoverScene):
         lg = VGroup(label(rf"the weights: \ slope ${sw:.2f}$", font_size=22, color=RICH),
                     label(rf"the kernel $\Theta$: \ slope ${sk:.2f}$", font_size=22, color=LAZY)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         lg.next_to(ax.c2p(1.3, y0), UR, buff=0.15)
-        half = label(r"theory: \ $n^{-1/2}$", font_size=22, color=GREY_B).next_to(lg, UP, buff=0.15).align_to(lg, LEFT)
+        half = label(r"theory: \ $n^{-1/2}$ \ and \ $n^{-1}$", font_size=22, color=GREY_B).next_to(lg, UP, buff=0.15).align_to(lg, LEFT)
         seeds = note(r"three seeds per width").next_to(ax, DOWN, buff=0.75).align_to(ax, LEFT)
         # the trained function against its linearization, at two widths, replayed through training
         X, y = np.asarray(z["X"]), np.asarray(z["y"])
@@ -180,14 +180,23 @@ class Wide(VoiceoverScene):
         key = VGroup(label(r"the network, \ through training", font_size=20, color=RICH),
                      label(r"its linearization (dashed)", font_size=20, color=LAZY)).arrange(RIGHT, buff=0.4)
         key.next_to(pans, DOWN, buff=0.12)
-        lazy_ok = -0.75 < sk < -0.3
-        said1 = (
-            "Both close to minus a half. Each of the n weights moves by about one over the square root of n: too "
-            "little to change what any unit computes, yet together enough to move the output. "
-            if lazy_ok else
-            "Both shrink with width, though not exactly at the rate of one over root n the theory predicts at "
-            "infinite width. "
-        )
+        w_ok = -0.65 < sw < -0.4
+        if w_ok and sk < -0.65:
+            said1 = (
+                "The weights, close to minus a half: each of the n weights moves by about one over the square root of "
+                "n, too little to change what any unit computes, yet together enough to move the output. The kernel "
+                "moves even less, nearer one over n: Ethan Dyer and Guy Gur-Ari showed in 2019 that its expected "
+                "change shrinks like one over n, because the units' small changes mostly cancel. "
+            )
+        elif w_ok and sk < -0.3:
+            said1 = (
+                "Both close to minus a half. Each of the n weights moves by about one over the square root of n: too "
+                "little to change what any unit computes, yet together enough to move the output. "
+            )
+        else:
+            said1 = (
+                "Both shrink with width, though not exactly at the rates the theory predicts at infinite width. "
+            )
         with self.voiceover(
             "Check it, on that one-layer network, trained by gradient descent on ten points, at widths from thirty "
             "to thirty thousand. <bookmark mark='a'/> Measure how far the weights travel, relative to where they "

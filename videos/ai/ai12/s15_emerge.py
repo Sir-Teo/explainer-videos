@@ -134,7 +134,7 @@ class Emerge(VoiceoverScene):
         ax.move_to([-3.4, -0.5, 0])
         xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
                       for v in range(math.ceil(lx.min() - 0.1), math.floor(lx.max() + 0.1) + 1)])
-        xn = label(r"parameters", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        xn = label(r"parameters", font_size=20, color=GREY_A).next_to(xt if len(xt) else ax, DOWN, buff=0.08)
         yn = label(r"each subtask's loss at the end \ (bits)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         T = fin.shape[1]
         sel = [0, 3, 7, 12, 20] if T > 20 else list(range(min(5, T)))
@@ -143,13 +143,28 @@ class Emerge(VoiceoverScene):
         mean = curve(ax, lx, np.minimum(np.asarray(q["mean"], float)[:, :, -1].mean(1), 1.1), WHITE, 4)
         lg = VGroup(label(r"coloured: \ five subtasks, \ common to rare", font_size=20, color=QUANT),
                     label(r"white: \ the average", font_size=20, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        lg.next_to(ax.c2p(lx.max(), 1.05), DL, buff=0.1)
+        lg.next_to(ax.c2p(lx.min() - 0.05, 0.04), UR, buff=0.1)
         cards = VGroup(
             history_card(2024, r"Du, Zeng, Dong \& Tang", r"abilities appear when the pretraining loss falls below a "
                          r"threshold, \ whatever the model's size", width=5.6, color=HIST),
             history_card(2024, r"Snell, Wallace, Klein \& Levine", r"fine-tuning makes an ability appear in smaller "
                          r"models, \ so it can be forecast, \ up to about $4\times$ the compute", width=5.6, color=HIST),
         ).arrange(DOWN, buff=0.2).move_to([3.5, -0.3, 0])
+        # right, from the start: every subtask (rows, common to rare) at every width (columns), bright while unsolved
+        cw, chh = 0.5, min(0.11, 3.6 / T)
+        grid = VGroup(*[Rectangle(width=cw, height=chh, stroke_width=0.5, stroke_color=BLACK,
+                                  fill_color=interpolate_color(ManimColor("#1d2530"), ManimColor(QUANT), float(np.clip(fin[i, k], 0, 1))),
+                                  fill_opacity=1.0).move_to([2.2 + cw * i, 1.3 - chh * k, 0])
+                        for i in range(len(widths)) for k in range(T)])
+        gx = VGroup(*[MathTex(str(w), font_size=18, color=GREY_B).next_to(grid[i * T + T - 1], DOWN, buff=0.08)
+                      for i, w in enumerate(widths)])
+        gxn = label(r"width", font_size=20, color=GREY_A).next_to(gx, DOWN, buff=0.08)
+        gyn = VGroup(label(r"common", font_size=18, color=GREY_A).next_to(grid[0], LEFT, buff=0.1),
+                     label(r"rare", font_size=18, color=GREY_A).next_to(grid[T - 1], LEFT, buff=0.1))
+        gt = label(r"each subtask (row) at each width (column): \\ bright $=$ unsolved, \ dark $=$ learned", font_size=20,
+                   color=GREY_A)
+        gt.next_to(grid, UP, buff=0.12).align_to(grid, LEFT)
+        heat = VGroup(grid, gx, gxn, gyn, gt)
         drops = []
         for k in sel:
             v = fin[:, k]
@@ -172,11 +187,13 @@ class Emerge(VoiceoverScene):
             "loss falls below a threshold, whatever the size of the model, and Charlie Snell and colleagues showed "
             "that fine-tuning brings an ability forward to smaller models, so its arrival can be forecast."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn))
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(lg[0]), run_time=2.0)
+            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(heat[1:]))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(lg[0]),
+                      LaggedStart(*[FadeIn(c_) for c_ in grid], lag_ratio=0.004), run_time=2.5)
             vo.wait_until("a")
             self.play(Create(mean), FadeIn(lg[1]))
             vo.wait_until("b")
+            self.play(FadeOut(heat))
             self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cards], lag_ratio=0.5))
         self.wait(0.3)
         self.clear_scene()

@@ -52,6 +52,20 @@ class TestTime(VoiceoverScene):
                          r"($43\%$)", width=5.4, color=HIST)).arrange(DOWN, buff=0.15).move_to([3.7, -1.8, 0])
         link = note(r"reasoning models, \ voting, \ verifiers: \ Part 28").to_corner(DR, buff=0.15)
         i_b = len(N) - 1
+        sch = VGroup()
+        for j, (nm, col) in enumerate(((r"training compute", NCOL), (r"thinking at answer time", TT))):
+            mx = CornerAxes(x_range=[0, 4, 1], y_range=[0, 1, 0.5], x_length=2.6, y_length=2.2, tips=False,
+                            axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.9 + 3.3 * j, 0.0, 0])
+            xs_ = np.linspace(0.3, 3.7, 7)
+            ys_ = 0.12 + 0.2 * xs_ + 0.03 * np.sin(3.1 * xs_ + j)
+            mline = VGroup(*[Line(mx.c2p(a1, b1), mx.c2p(a2, b2), color=col, stroke_width=3)
+                             for a1, b1, a2, b2 in zip(xs_, ys_, xs_[1:], ys_[1:])])
+            mdots = VGroup(*[Dot(mx.c2p(a, b_), radius=0.05, color=col) for a, b_ in zip(xs_, ys_)])
+            mxn = label(nm + r" \\ (log scale)", font_size=18, color=GREY_A).next_to(mx, DOWN, buff=0.1)
+            myn = label(r"accuracy", font_size=18, color=GREY_A).next_to(mx, UP, buff=0.08).align_to(mx, LEFT)
+            sch.add(VGroup(mx, mline, mdots, mxn, myn))
+        scap = note(r"schematic, \ after OpenAI's o1 figures \ (2024)").next_to(sch, DOWN, buff=0.35)
+        sch.add(scap)
         with self.voiceover(
             "Until 2024, scaling meant bigger models and more data. Then OpenAI's o1 showed a second axis: accuracy "
             "rose smoothly with the logarithm of how long the model thought before answering. Part twenty-eight "
@@ -62,9 +76,13 @@ class TestTime(VoiceoverScene):
             "magnitude. <bookmark mark='c'/> In 2024, Bradley Brown and colleagues saw the same with a real model: "
             "on a benchmark of real coding problems, two hundred and fifty tries took it from 15.9 to 56 percent."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(cards[0], shift=LEFT * 0.1))
+            self.play(FadeIn(cards[0], shift=LEFT * 0.1), FadeIn(sch[0][0]), FadeIn(sch[0][3:]), FadeIn(sch[1][0]),
+                      FadeIn(sch[1][3:]), FadeIn(sch[2]))
+            self.play(Create(sch[0][1]), FadeIn(sch[0][2]), run_time=1.5)
+            self.play(Create(sch[1][1]), FadeIn(sch[1][2]), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(lg))
+            self.play(FadeOut(sch))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(lg))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("c")
@@ -116,7 +134,7 @@ class TestTime(VoiceoverScene):
         byn = label(r"share of problems with $p < x$", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.1).align_to(bx, LEFT)
         tc = curve(bx, np.log10(xs[okt]), np.log10(tail[okt]), C.TRUE_P, 3.5)
         nums = label(rf"slope ${-b[i]:.2f}$ \quad vs \quad tail ${tb[i]:.2f}$", font_size=22, color=TT).next_to(ax, RIGHT, buff=0.25).shift(UP * 1.1)
-        nums.move_to([0.4, -0.3, 0])
+        nums.move_to([-0.25, -0.3, 0])
         agree = np.isfinite(b[i]) and np.isfinite(tb[i]) and abs(b[i] - tb[i]) < 0.25 * max(b[i], tb[i])
         cite_ = cite(r"R.~Schaeffer et al., \textit{How Do Large Language Monkeys Get Their Power (Laws)?} (2025)", corner=UR)
         said1 = (
@@ -172,8 +190,26 @@ class TestTime(VoiceoverScene):
         i_small = int(np.where(ok)[0][0])
         ratio = cost[i_small] / N[-1]
         law = MathTex(r"R(C) = R_0 + \frac{A - R_0}{1 + (C_{\text{mid}}/C)^{B}}", font_size=30, color=WHITE).move_to([3.5, 1.9, 0])
-        lw = label(r"reinforcement learning's reward against its compute: \ a ceiling $A$, \ an efficiency $B$",
+        lw = label(r"reinforcement learning's reward against its compute: \\ a ceiling $A$, \ an efficiency $B$",
                    font_size=20, color=GREY_A).next_to(law, DOWN, buff=0.12)
+        # the operations each model spends to solve as many problems as the biggest one's single try
+        okc = [j for j in range(len(N)) if np.isfinite(need[j])]
+        lc = np.log10(np.array([need[j] * N[j] * 2 * L for j in okc]))
+        c0 = math.floor(lc.min()) - 1
+        bw = 4.6 / max(lc.max() - c0, 1)
+        bars = VGroup()
+        for r_, (j, v) in enumerate(zip(okc, lc)):
+            bar = Rectangle(width=(v - c0) * bw, height=0.26, stroke_width=0, fill_color=width_ramp(j, len(N)), fill_opacity=0.85)
+            bar.move_to([1.6, 1.4 - 0.36 * r_, 0], aligned_edge=LEFT)
+            nm_ = MathTex(rf"{N[j] / 1000:.0f}	ext{{k}}" if N[j] < 1e6 else rf"{N[j] / 1e6:.1f}	ext{{M}}", font_size=20,
+                          color=width_ramp(j, len(N))).next_to(bar, LEFT, buff=0.1)
+            tr_ = MathTex(rf"{need[j]:,.0f}".replace(",", "{,}") + r"	imes", font_size=20, color=WHITE).next_to(bar, RIGHT, buff=0.1)
+            bars.add(VGroup(bar, nm_, tr_))
+        bt = label(r"operations to answer: \ tries $\times$ $2N$ per character", font_size=20, color=GREY_A)
+        bt.next_to(bars, UP, buff=0.2).align_to(bars, LEFT)
+        bn = note(r"bar length: \ log scale").next_to(bars, DOWN, buff=0.2).align_to(bars, LEFT)
+        costs = VGroup(bars, bt, bn)
+        keep_in_frame(costs, margin=0.2)
         cards = VGroup(
             history_card(2025, r"Khatri et al.\ (Meta)", r"$400{,}000$ GPU-hours of RL experiments: \ a sigmoid, not a "
                          r"power law; \ fitted early, it predicted a $100{,}000$-GPU-hour run", width=5.6, color=HIST),
@@ -200,7 +236,10 @@ class TestTime(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.1), Create(ln))
+            self.play(FadeIn(bt), LaggedStart(*[GrowFromEdge(b_[0], LEFT) for b_ in bars], lag_ratio=0.15),
+                      *[FadeIn(b_[1:]) for b_ in bars], FadeIn(bn))
             vo.wait_until("b")
+            self.play(FadeOut(costs))
             self.play(Write(law), FadeIn(lw), FadeIn(cards[0], shift=UP * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(cards[1], shift=UP * 0.1))
