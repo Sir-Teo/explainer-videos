@@ -463,7 +463,13 @@
     "fonts whose edits it never saw: \\ DejaVu\\,SerifCondensed-Italic, \\ DejaVu\\,SerifCondensed": "它从没见过这些字体的编辑样本：\\ DejaVu\\,SerifCondensed-Italic，\\ DejaVu\\,SerifCondensed",
     "distance to the real bold: \\ $0.420$ \\ (just copying: \\ $0.257$); \\ ink $\\times3.08$ \\ (the real bold: \\ $\\times1.56$); \\ the same letter: \\ $4\\%$": "与真正粗体的距离：\\ $0.420$ \\ （直接照抄：\\ $0.257$）；\\ 墨量$\\times3.08$ \\ （真正的粗体：\\ $\\times1.56$）；\\ 仍是同一个字母：\\ $4\\%$",
     "$3{,}600$ pixels $\\to$ $300$ numbers \\ ($12\\times$); \\ rebuild error $0.231$; \\ a still picture alone: \\ $0.182$": "$3{,}600$个像素 $\\to$ $300$个数 \\ （$12\\times$）；\\ 重建误差$0.231$；\\ 单独一张静止图片：\\ $0.182$",
-    "$5$ s of 720p: \\ $75{,}600$ tokens, \\ $5.7$ billion pairs; \\ $10$ s: \\ $3.8\\times$ the pairs": "$5$秒720p：\\ $75{,}600$个词元，\\ $57$亿对；\\ $10$秒：\\ 对数是$3.8$倍"
+    "$5$ s of 720p: \\ $75{,}600$ tokens, \\ $5.7$ billion pairs; \\ $10$ s: \\ $3.8\\times$ the pairs": "$5$秒720p：\\ $75{,}600$个词元，\\ $57$亿对；\\ $10$秒：\\ 对数是$3.8$倍",
+    "Stable Diffusion 3 \\ (Stability AI)": "Stable Diffusion 3 \\ （Stability AI）",
+    "Part 21's rectified flow, \\ a new transformer: \\ MM-DiT": "第21部分的整流流，\\ 一种新的Transformer：\\ MM-DiT",
+    "$t$ near $0$: \\ pure noise; \\ the best guess is the average picture": "$t$接近$0$：\\ 纯噪声；\\ 最好的猜测是平均图片",
+    "$t$ near $1$: \\ almost clean; \\ little left to fix": "$t$接近$1$：\\ 几乎干净；\\ 没什么可修的",
+    "in between: \\ the hard part": "中间：\\ 难的部分",
+    "dots: \\ where each is right half the time; \\ rings: \\ the formula's prediction": "点：\\ 各自正确率为一半的位置；\\ 圆环：\\ 公式的预测"
   },
   "patterns": [
     [

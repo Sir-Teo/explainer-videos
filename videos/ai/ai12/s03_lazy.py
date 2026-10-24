@@ -178,7 +178,7 @@ class Lazy(VoiceoverScene):
         steps = np.asarray(r["ntk_curve"])[0, ::5, 0]
         lim = float(np.ceil(np.abs(np.concatenate([Un.reshape(-1, 2), Um.reshape(-1, 2)])).max() * 1.05 * 2) / 2)
         pans, dts = VGroup(), []
-        for k, (U, col, ttl) in enumerate(((Un, LAZY, r"lazy"), (Um, RICH, r"rich"))):
+        for k, (U, col, ttl) in enumerate(((Un, LAZY, r"lazy \ (neural tangent)"), (Um, RICH, r"rich \ (mean field)"))):
             ax = Axes(x_range=[-lim, lim, lim / 2], y_range=[0, lim, lim / 2], x_length=5.4, y_length=3.0, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4 + 6.8 * k, -0.6, 0])
             xl = label(r"along $w^*$", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)

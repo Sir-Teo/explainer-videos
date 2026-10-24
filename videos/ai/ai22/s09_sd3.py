@@ -63,6 +63,8 @@ class SD3(VoiceoverScene):
                        label(r"a 16-channel autoencoder; \ up to $8$ billion weights \ (as published)", font_size=20,
                              color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.4)
         cite_ = cite(r"P.~Esser et al., \textit{Scaling Rectified Flow Transformers} (SD3, 2024)", corner=UR)
+        sd3 = history_card(r"Mar 2024", r"Stable Diffusion 3 \ (Stability AI)", r"Part 21's rectified flow, \ a new "
+                           r"transformer: \ MM-DiT", color=HIST, width=5.0, font_size=24).move_to([3.6, 1.0, 0])
         with self.voiceover(
             "In March 2024 Patrick Esser, Robin Rombach and colleagues at Stability AI described Stable Diffusion 3: "
             "Part 21's rectified flow, with a new transformer, MM-DiT. It puts the prompt's tokens and the picture's "
@@ -73,12 +75,14 @@ class SD3(VoiceoverScene):
             "training stable; three frozen text encoders read the prompt; the largest model had eight billion "
             "weights."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(seq), FadeIn(tl), FadeIn(il))
+            self.play(FadeIn(cite_), FadeIn(sd3, shift=UP * 0.1))
+            self.play(FadeIn(seq), FadeIn(tl), FadeIn(il))
             vo.wait_until("a")
             self.play(FadeIn(wq))
             vo.wait_until("b")
             self.play(Write(eq), FadeIn(el))
             vo.wait_until("c")
+            self.play(FadeOut(sd3))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in blocks], lag_ratio=0.25), FadeIn(bl), run_time=2.0)
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(f_) for f_ in facts], lag_ratio=0.3))
@@ -118,6 +122,10 @@ class SD3(VoiceoverScene):
         else:
             few_s = f"{ks[few]} sampling steps"
         note_ = note(r"flow matching in the $16$-number latent space of chapter 3; \ three seeds each").to_edge(DOWN, buff=0.3)
+        hard = VGroup(label(r"$t$ near $0$: \ pure noise; \ the best guess is the average picture", font_size=22, color=GREY_A),
+                      label(r"$t$ near $1$: \ almost clean; \ little left to fix", font_size=22, color=GREY_A),
+                      label(r"in between: \ the hard part", font_size=24, color=LN)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        hard.move_to([3.3, 0.8, 0])
         if np.all(diff < 0):
             verdict = (f"Trained logit-normally, our letters come out closer to real ones at every number of sampling "
                        f"steps, most of all with {few_s}.")
@@ -139,9 +147,11 @@ class SD3(VoiceoverScene):
             self.play(Create(ax))
             vo.wait_until("a")
             self.play(Create(uni), FadeIn(ku))
+            self.play(LaggedStart(*[FadeIn(h_, shift=RIGHT * 0.1) for h_ in hard], lag_ratio=0.8), run_time=4.0)
             vo.wait_until("b")
             self.play(Create(lnc), FadeIn(kl), Write(f), run_time=1.5)
             vo.wait_until("c")
+            self.play(FadeOut(hard))
             self.play(Create(bx), FadeIn(note_))
             self.play(FadeIn(lu[0]), Create(lu[1]), FadeIn(ll[0]), Create(ll[1]), run_time=2.0)
         self.wait(0.3)
@@ -159,6 +169,11 @@ class SD3(VoiceoverScene):
                      label(rf"$4 \times 4$ averages: \ noise ${float(s['demo_left']):.2f}$", font_size=16, color=PATCH))
         for c_, im in zip(cap, ims):
             c_.next_to(im, DOWN, buff=0.05)
+        pairs = [Group(i_, c_) for i_, c_ in zip(ims, cap)]
+        big = Group(*[p_.copy() for p_ in pairs])
+        for b_ in big:
+            b_[1].scale(1.3).next_to(b_[0], DOWN, buff=0.1)
+        big.arrange(RIGHT, buff=0.8, aligned_edge=UP).scale(1.45).move_to(UP * 0.2)
         rows = [
             cmath(r"z", r"=", r"(1 - \sigma)\, x + \sigma\, \varepsilon", font_size=32),
             cmath(r"\bar z", r"=", r"(1 - \sigma)\, c + \sigma\, \bar\varepsilon, \qquad \bar\varepsilon \sim \mathcal N(0, \tfrac1n)",
@@ -189,7 +204,9 @@ class SD3(VoiceoverScene):
             "log signal-to-noise, it's a constant shift."
         ) as vo:
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(Group(i_, c_)) for i_, c_ in zip(ims, cap)], lag_ratio=0.5), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in big], lag_ratio=0.5), run_time=2.5)
+            vo.wait_until("b")
+            self.play(*[Transform(b_, p_) for b_, p_ in zip(big, pairs)], run_time=1.2)
             for k, m in enumerate("bcdef"):
                 vo.wait_until(m)
                 step(k)
@@ -215,6 +232,13 @@ class SD3(VoiceoverScene):
         exl = label(r"the same letter, \ drawn at $20$, $40$, $80$", font_size=16, color=GREY_A).next_to(ex, UP, buff=0.08)
         half = {n: float(s[f"half_{n}"]) for n in sizes}
         pred = {n: (n / 20) * half[20] / (1 + (n / 20 - 1) * half[20]) for n in sizes}
+        h_line = DashedLine(ax.ax.c2p(0.3, 0.5), ax.ax.c2p(1.0, 0.5), color=GREY_C, stroke_width=1.5, dash_length=0.06)
+        marks = VGroup(*[Dot(ax.ax.c2p(half[n], 0.5), radius=0.07, color=RES_C[n]) for n in sizes])
+        preds = VGroup(*[Circle(radius=0.11, stroke_color=RES_C[n], stroke_width=2.5).move_to(ax.ax.c2p(pred[n], 0.5))
+                         for n in sizes[1:]])
+        pk = label(r"dots: \ where each is right half the time; \ rings: \ the formula's prediction", font_size=18,
+                   color=GREY_A)
+        pk.next_to(leg, DOWN, buff=0.15)
         gb, ga = s["gap_before"], s["gap_after"]
         g80b, g80a = float(gb[str(sizes[-1])]), float(ga[str(sizes[-1])])
         cite_ = cite(rf"${int(s['N'])}$ letters, \ ${int(s['n_mc'])}$ noisy draws per level; \ SD3 used $\alpha = 3$ at "
@@ -235,8 +259,10 @@ class SD3(VoiceoverScene):
             "with human raters, and settled on alpha equals three at a thousand and twenty-four pixels a side."
         ) as vo:
             self.play(FadeIn(leg), Create(ax), FadeIn(ex), FadeIn(exl))
+            self.play(LaggedStart(*[Create(c_) for c_ in before], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(c_) for c_ in before], lag_ratio=0.3), run_time=2.0)
+            self.play(Create(h_line), LaggedStart(*[FadeIn(m_, scale=0.5) for m_ in marks], lag_ratio=0.4), run_time=1.5)
+            self.play(LaggedStart(*[FadeIn(m_, scale=0.5) for m_ in preds], lag_ratio=0.4), FadeIn(pk), run_time=1.2)
             vo.wait_until("b")
             self.play(Create(bx), LaggedStart(*[Create(c_) for c_ in after], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")

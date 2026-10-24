@@ -167,6 +167,13 @@ class Quantizer:
 
         m = self.method
         if m in ("vq", "ema", "restart"):
+            if m == "restart" and train and not getattr(self, "seeded", False):
+                with torch.no_grad():  # codes start on the data: random encoder outputs of the first batch
+                    pick = torch.randperm(len(z), generator=self.g)[:VQ_K]
+                    self.C = z.detach()[pick].clone()
+                    self.ema_sum = self.C.clone()
+                    self.ema_n = torch.ones(VQ_K)
+                self.seeded = True
             C = self.C
             d = (z * z).sum(1, keepdim=True) - 2 * z @ C.T + (C * C).sum(1)[None]
             codes = d.argmin(1)
@@ -251,7 +258,7 @@ def run_vq(method: str, seed: int, threads: int = 1):
         zf, shp = flat(x)
         zq, codes, aux = qz(zf, train=train_mode)
         zq = zq.reshape(shp[0], shp[2], shp[3], VQ_D).permute(0, 3, 1, 2)
-        return torch.sigmoid(dec(zq)), codes, aux, zf
+        return dec(zq), codes, aux, zf  # a linear output: a sigmoid here saturates at the black background
 
     def measure():
         with torch.no_grad():
@@ -262,7 +269,7 @@ def run_vq(method: str, seed: int, threads: int = 1):
             ys, _, _, _ = recon(show)
             zs = flat(Xte[zfix])[0]
             return dict(mse=float(F.mse_loss(y, Xte)), used=int((cnt > 0).sum()), ppl=ppl, counts=cnt,
-                        recon=ys[:, 0].numpy(), z=zs.numpy(), book=qz.codebook().numpy())
+                        recon=ys[:, 0].clamp(0, 1).numpy(), z=zs.numpy(), book=qz.codebook().numpy())
 
     for step in range(steps + 1):
         if step in checks:
