@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai21.common import AR_C, HIST, MDM_C, MONO, PART, legend, load, take_away
+from videos.ai.ai21.common import AR_C, HIST, MDM_C, MONO, PART, bars_chart, legend, load, take_away
 
 
 def board_rows():
@@ -29,7 +29,7 @@ def board_rows():
 class TextLM(VoiceoverScene):
     def construct(self):
         self.card()
-        self.setup()
+        self.models()
         self.replay()
         self.writing()
         self.compare()
@@ -44,7 +44,7 @@ class TextLM(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def setup(self):
+    def models(self):
         t = load("textlm")
         card = history_card(2025, r"Nie et al.: \ LLaDA", r"$8$ billion parameters, \ trained from scratch on $2.3$ trillion "
                             r"tokens by masked diffusion; \ competitive with LLaMA 3 8B; \ beats GPT-4o at completing "
@@ -58,6 +58,22 @@ class TextLM(VoiceoverScene):
                             font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, -1.4, 0])
         if ours.width > 7.8:
             ours.width = 7.8
+        ours.move_to([2.9, -1.7, 0])
+
+        def mask(causal, col):  # which positions each position may attend to (rows: queries)
+            n_ = 6
+            cells = VGroup(*[Square(0.3, stroke_color=GREY_D, stroke_width=1, fill_color=col,
+                                    fill_opacity=(0.85 if (not causal or j <= i) else 0.05))
+                             for i in range(n_) for j in range(n_)]).arrange_in_grid(n_, n_, buff=0.02)
+            return cells
+
+        masks = VGroup(VGroup(mask(False, MDM_C), label(r"both ways", font_size=20, color=MDM_C)).arrange(DOWN, buff=0.15),
+                       VGroup(mask(True, AR_C), label(r"backwards only", font_size=20, color=AR_C)).arrange(DOWN, buff=0.15)
+                       ).arrange(RIGHT, buff=0.8).move_to([3.4, 1.55, 0])
+        mt = label(r"attention: \ which characters each one may look at", font_size=20, color=GREY_A).next_to(masks, UP,
+                                                                                                         buff=0.2)
+        home = card.get_center().copy()
+        card.scale(1.35).move_to([0, 0.5, 0])
         with self.voiceover(
             "In February 2025 Shen Nie, Chongxuan Li and colleagues trained LLaDA, an eight-billion-parameter "
             "language model, entirely by masked diffusion: two point three trillion tokens, every training example a "
@@ -69,7 +85,9 @@ class TextLM(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(o_, shift=UP * 0.1) for o_ in ours], lag_ratio=0.25), run_time=2.0)
+            self.play(card.animate.scale(1 / 1.35).move_to(home), run_time=0.9)
+            self.play(FadeIn(mt), FadeIn(masks), LaggedStart(*[FadeIn(o_, shift=UP * 0.1) for o_ in ours], lag_ratio=0.25),
+                      run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -209,10 +227,18 @@ class TextLM(VoiceoverScene):
                 [r"autoregressive \ (exact)", *[rf"${float(t[f'ar{s}_valid']):.3f} \pm {float(t[f'ar{s}_valid_se']):.3f}$" for s in seeds]]]
         tab = VGroup(*[VGroup(*[label(c, font_size=21, color=(GREY_A if i == 0 else [WHITE, MDM_C, AR_C][i]))
                                 for c in r]) for i, r in enumerate(rows)])
-        xs = [-4.2, -0.6, 2.4]
+        xs = [-4.7, -1.75, 0.55]
         for i, r in enumerate(tab):
             for j, c in enumerate(r):
                 c.move_to([xs[j], 2.6 - 0.5 * i, 0])
+        bv = [float(t[f"mdm{s_}_valid"]) for s_ in seeds] + [float(t[f"ar{s_}_valid"]) for s_ in seeds]
+        bs = [float(t[f"mdm{s_}_valid_se"]) for s_ in seeds] + [float(t[f"ar{s_}_valid_se"]) for s_ in seeds]
+        bars = bars_chart(bv, [MDM_C] * len(seeds) + [AR_C] * len(seeds),
+                          [rf"diffusion \\ seed ${s_}$" for s_ in seeds] + [rf"autoregr. \\ seed ${s_}$" for s_ in seeds],
+                          height=3.4, bar_w=0.8, gap=0.5, spread=[(v - e_, v + e_) for v, e_ in zip(bv, bs)], digits=3,
+                          font_size=19).move_to([4.6, -0.6, 0])
+        bl = label(r"held-out bits per character \\ (whiskers: $\pm$ one standard error)", font_size=19,
+                   color=GREY_A).next_to(bars, UP, buff=0.3)
         ests = VGroup(label(r"three estimates of the same bound \ (seed $0$, $256$ held-out blocks):", font_size=21, color=GREY_A),
                       label(rf"blanks with probability $t$, \ weighted $1/t$: \ ${float(t['est_t']):.3f} \pm {float(t['est_t_se']):.3f}$",
                             font_size=20, color=MDM_C),
@@ -222,7 +248,9 @@ class TextLM(VoiceoverScene):
                             font_size=20, color=MDM_C),
                       label(rf"read left to right: \ ${float(t['l2r']):.3f}$ \qquad the autoregressive model: \ "
                             rf"${float(t['ar0_vb2']):.3f}$", font_size=20, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        ests.move_to([-1.0, -1.2, 0])
+        if ests.width > 7.4:
+            ests.width = 7.4
+        ests.move_to([-2.9, -1.2, 0])
         mv = [float(t[f"mdm{s}_valid"]) for s in seeds]
         av = [float(t[f"ar{s}_valid"]) for s in seeds]
         sep = max(av) < min(mv)
@@ -248,7 +276,7 @@ class TextLM(VoiceoverScene):
             "Prabhudesai and colleagues found that when data is scarce and must be repeated for many epochs, "
             "diffusion models keep improving after autoregressive ones overfit."
         ) as vo:
-            self.play(FadeIn(tab))
+            self.play(FadeIn(tab), FadeIn(bars), FadeIn(bl))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in ests[:4]], lag_ratio=0.2))
             vo.wait_until("b")
@@ -337,8 +365,9 @@ class TextLM(VoiceoverScene):
             + " <bookmark mark='c'/> " + blk_note
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), Create(rl), Create(al))
+            self.play(Create(cc[0]), FadeIn(cc[1:]), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(cc[0]), FadeIn(cc[1:]), FadeIn(sams))
+            self.play(FadeIn(sams), Indicate(cc[1:], color=WHITE, scale_factor=1.3))
             vo.wait_until("b")
             self.play(Create(cr[0]), FadeIn(cr[1:]))
             vo.wait_until("c")
@@ -350,21 +379,24 @@ class TextLM(VoiceoverScene):
     def frontier(self):
         cards = VGroup(
             history_card(2025, r"Arriola et al.: \ block diffusion", r"left to right across blocks, \ diffusion within each: \ "
-                         r"any length, \ a key-value cache", color=HIST, width=4.3, font_size=17),
+                         r"any length, \ a key-value cache", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Inception Labs: \ Mercury", r"billed as the first commercial diffusion language models: \ "
-                         r"$1{,}109$ tokens a second on an H100", color=HIST, width=4.3, font_size=17),
+                         r"$1{,}109$ tokens a second on an H100", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Google DeepMind: \ Gemini Diffusion", r"$1{,}479$ tokens a second, \ about the quality "
-                         r"of Gemini 2.0 Flash-Lite on code", color=HIST, width=4.3, font_size=17),
+                         r"of Gemini 2.0 Flash-Lite on code", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Wu et al.: \ Fast-dLLM", r"an approximate cache, \ and decoding many tokens only when "
-                         r"confident: \ up to $27.6\times$ faster", color=HIST, width=4.3, font_size=17),
+                         r"confident: \ up to $27.6\times$ faster", color=HIST, width=6.3, font_size=21),
             history_card(2025, r"Ant Group et al.: \ LLaDA2.0", r"$100$ billion parameters, \ converted from an "
-                         r"autoregressive model", color=HIST, width=4.3, font_size=17),
+                         r"autoregressive model", color=HIST, width=6.3, font_size=21),
             history_card(2026, r"Google: \ DiffusionGemma", r"open weights, \ $26$B (3.8B active), \ $256$ tokens per "
-                         r"block, \ over $1{,}000$ tokens a second; \ below Gemma 4 in quality", color=HIST, width=4.3,
-                         font_size=17),
-        ).arrange_in_grid(rows=2, cols=3, buff=(0.22, 0.25)).move_to(UP * 0.35)
+                         r"block, \ over $1{,}000$ tokens a second; \ below Gemma 4 in quality", color=HIST, width=6.3,
+                         font_size=21),
+        ).arrange_in_grid(rows=3, cols=2, buff=(0.3, 0.22))
         if cards.width > 13.4:
             cards.width = 13.4
+        if cards.height > 5.7:
+            cards.height = 5.7
+        cards.move_to(UP * 0.55)
         ta = take_away(r"Diffusion language models trade a little quality per parameter for writing many tokens at once.")
         with self.voiceover(
             "Fixed-length writing has a cost: nothing can be cached, and the length is set in advance. Marianne "

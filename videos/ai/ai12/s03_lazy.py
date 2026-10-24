@@ -123,6 +123,13 @@ class Lazy(VoiceoverScene):
                    r"learning rates").to_corner(DL, buff=0.2)
         ratio = nt.mean() / mt.mean()
         wins = mt.max() < nt.min()
+        kgap = kern.mean() / nt.mean() - 1
+        said0 = (
+            "It ends close to kernel regression with its starting kernel: the lazy limit, computed exactly. "
+            if abs(kgap) < 0.15 else
+            f"Kernel regression with its starting kernel, the lazy limit computed exactly, ends {100 * abs(kgap):.0f} "
+            f"percent {('worse' if kgap > 0 else 'better')}: at this width the network is not yet fully lazy. "
+        )
         said1 = (
             f"Its error is {ratio:.1f} times smaller, and every seed beats every lazy seed."
             if wins else f"Its error is {ratio:.1f} times smaller on average, though the seeds overlap."
@@ -132,8 +139,9 @@ class Lazy(VoiceoverScene):
             f"hidden direction, w-star, minus one, with x in {int(r['d'])} dimensions and {int(r['n'])} examples to "
             "learn from. "
             "<bookmark mark='a'/> Train a wide two-layer network the lazy way, with the neural tangent kernel's "
-            "scaling. <bookmark mark='b'/> It ends up where kernel regression with its starting kernel ends: the "
-            "lazy limit, computed exactly. <bookmark mark='c'/> Now the same network, the same data and the same "
+            "scaling. <bookmark mark='b'/> "
+            + said0
+            + "<bookmark mark='c'/> Now the same network, the same data and the same "
             "number of steps, scaled the mean-field way: divide the output by n instead of its square root, and "
             "multiply the learning rate by n, so every unit moves by a fixed amount. "
             + said1

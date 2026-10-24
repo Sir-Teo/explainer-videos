@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, load, width_ramp
+from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, lag, load, width_ramp
 
 DIM_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.SURPRISE]
 
@@ -186,26 +186,33 @@ class Power(VoiceoverScene):
                              2.2).set_stroke(opacity=0.9) for k in range(T)])
         avg = curve(ax, steps, np.minimum(mean[wi, 0], 1.1), WHITE, 4)
         al = label(r"white: \ the average", font_size=20, color=WHITE).next_to(ax.c2p(steps.max(), 1.0), DL, buff=0.1)
-        # right: the average loss at the end, against the size
-        fin = mean[:, :, -1]
-        lx = np.log10(Np)
-        ly = np.log10(np.maximum(fin, 1e-4))
-        y0, y1 = math.floor(ly.min()), math.ceil(ly.max())
-        bx = CornerAxes(x_range=[lx.min() - 0.1, lx.max() + 0.1, 1], y_range=[y0, y1, 1], x_length=4.6, y_length=3.6, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.6, -0.6, 0])
-        bxt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(v, y0), DOWN, buff=0.08)
-                       for v in range(math.ceil(lx.min() - 0.1), math.floor(lx.max() + 0.1) + 1)])
-        byt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(lx.min() - 0.1, v), LEFT, buff=0.08)
-                       for v in range(y0, y1 + 1)])
-        bxn = label(r"parameters", font_size=20, color=GREY_A).next_to(bxt if len(bxt) else bx, DOWN, buff=0.08)
+        # right: the average loss at the end, against the number of subtasks learned, with the theory's curve
+        fin = mean[:, :, -1]  # widths x seeds
+        th = np.asarray(q["theory"], float)  # the share not yet learned, for 0 ... T learned
+        okm = (learned > 0) & (learned < T)
+        nx = np.arange(1, T)
+        y0 = math.floor(min(np.log10(np.maximum(fin[okm], 1e-4)).min(), np.log10(th[T - 1])))
+        bx = CornerAxes(x_range=[0, math.log10(T), 0.5], y_range=[y0, 0.05, 1], x_length=4.6, y_length=3.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -0.6, 0])
+        bxt = VGroup(*[MathTex(str(v), font_size=18, color=GREY_B).next_to(bx.c2p(math.log10(v), y0), DOWN, buff=0.08)
+                       for v in (1, 2, 4, 8, 16, 32) if v <= T])
+        byt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(0, v), LEFT, buff=0.08)
+                       for v in range(y0, 1)])
+        bxn = label(r"subtasks learned", font_size=20, color=GREY_A).next_to(bxt, DOWN, buff=0.08)
         byn = label(r"average loss at the end", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.12).align_to(bx, LEFT)
-        pts = VGroup(*[Dot(bx.c2p(a, b), radius=0.06, color=width_ramp(i, len(widths))) for i, (a, row) in enumerate(zip(lx, ly))
-                       for b in row])
-        cl = curve(bx, lx, ly.mean(1), WHITE, 2.5)
-        sN = float(q["slope_N"])
-        nl = VGroup(*[MathTex(str(int(n_)), font_size=18, color=width_ramp(i, len(widths))).next_to(bx.c2p(a, b), UP, buff=0.08)
-                      for i, (a, b, n_) in enumerate(zip(lx, ly.mean(1), learned.mean(1)))])
-        nll = label(r"numbers: \ subtasks learned", font_size=18, color=GREY_A).next_to(bx, DOWN, buff=0.55).align_to(bx, LEFT)
+        theo = DashedVMobject(curve(bx, np.log10(nx), np.log10(th[1:T]), WHITE, 2.5), num_dashes=40)
+        tl = label(r"theory: \\ the share not yet learned", font_size=18, color=WHITE).next_to(bx.c2p(math.log10(T), 0), DL,
+                                                                                          buff=0.1)
+        pts = VGroup(*[Dot(bx.c2p(math.log10(learned[i, j]), math.log10(max(fin[i, j], 1e-4))), radius=0.06,
+                           color=width_ramp(i, len(widths))) for i in range(len(widths)) for j in range(learned.shape[1])
+                       if okm[i, j]])
+        nl = VGroup(*[MathTex(str(w), font_size=18, color=width_ramp(i, len(widths))).next_to(
+            bx.c2p(math.log10(learned[i, 0]), math.log10(max(fin[i, 0], 1e-4))), DL, buff=0.05)
+            for i, w in enumerate(widths) if okm[i, 0]])
+        nll = label(r"numbers: \ width", font_size=18, color=GREY_A).next_to(bxn, DOWN, buff=0.12).align_to(bx, LEFT)
+        full = [w for i, w in enumerate(widths) if (learned[i] == T).all()]
+        fl = label(rf"width ${full[0]}$ and up: \\ all ${T}$ learned, \\ loss below ${math.ceil(1000 * fin[widths.index(full[0])].max()) / 1000:.3f}$",
+                   font_size=18, color=GREY_A).next_to(nll, RIGHT, buff=0.4) if full else VGroup()
         tag = note(r"two seeds per width").to_corner(DR, buff=0.2)
         n_learn = int((run[-1] < 0.1).sum())
         order = [int(steps[np.argmax(run[:, k] < 0.1)]) if (run[:, k] < 0.1).any() else 10 ** 9 for k in range(T)]
@@ -215,19 +222,34 @@ class Power(VoiceoverScene):
             "The common subtasks drop first, the rare ones later. " if in_order > 0.5 else
             "The order roughly follows how common they are. "
         )
+        lo = int(learned[0].min())
         said3 = (
-            f"The theory's exponent here is {float(q['alpha']):.1f}; ours is steeper, because a wider network also "
-            "learns each subtask more cleanly." if sN < -float(q["alpha"]) - 0.2 else
-            f"close to the theory's {float(q['alpha']):.1f}."
+            f"from {lo} at width {widths[0]} to all {T} from width {full[0]} on. " if full else
+            f"from {lo} at width {widths[0]} to {int(learned[-1].max())} at width {widths[-1]}. "
+        )
+        below = float(np.mean(np.log10(np.maximum(fin[okm], 1e-4)) - np.log10(th[learned[okm].astype(int)])))
+        said4 = (
+            "Ours sit a little below it, because a subtask half learned already counts. " if below < -0.1 else
+            "Ours sit on it. "
+        )
+        said5 = (
+            f"With only {T} subtasks the tail runs out: once all are learned, the loss falls to almost nothing. "
+            "Language, by this account, has an endless tail of rarer and rarer skills." if full else
+            "The rarest subtasks are still to come."
         )
         with self.voiceover(
             f"Here is one network, of width {widths[wi]}, learning the subtasks. <bookmark mark='a'/> Each subtask's "
             "loss sits at one bit, a coin flip, and then drops, suddenly. "
             + said2
             + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> The average over the mix, in white, "
-            "is smooth: many sudden steps, added up. <bookmark mark='c'/> And across sizes, wider networks learn more "
-            f"subtasks, and the average loss falls along a power law, slope {sN:.2f}. "
+            "is smooth: many sudden steps, added up. <bookmark mark='c'/> Across sizes, wider networks learn more "
+            "subtasks, "
             + said3
+            + "<bookmark mark='d'/> Plot the average loss against the number learned, and the theory's curve appears: "
+            "the share of the mix not yet learned, a power-law tail. "
+            + said4
+            + "<bookmark mark='e'/> "
+            + said5
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
             vo.wait_until("a")
@@ -236,6 +258,10 @@ class Power(VoiceoverScene):
             self.play(Create(avg), FadeIn(al))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bxt), FadeIn(byt), FadeIn(bxn), FadeIn(byn))
-            self.play(LaggedStart(*[FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.05), Create(cl), FadeIn(nl), FadeIn(nll))
+            self.play(lag([FadeIn(p_, scale=0.5) for p_ in pts], lag_ratio=0.05), FadeIn(nl), FadeIn(nll))
+            vo.wait_until("d")
+            self.play(Create(theo), FadeIn(tl))
+            vo.wait_until("e")
+            self.play(FadeIn(fl))
         self.wait(0.3)
         self.clear_scene()

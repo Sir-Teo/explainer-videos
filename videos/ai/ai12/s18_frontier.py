@@ -28,14 +28,14 @@ class Frontier(VoiceoverScene):
             (r"Feb 2025", r"GPT-4.5: \ OpenAI's \\ largest model, \\ pretraining scaled up"),
             (r"Jul 2025", r"Grok 4: \\ reinforcement learning \\ at pretraining scale"),
             (r"Sep 2025", r"Epoch AI: \ GPT-5 \\ likely used less \\ compute than GPT-4.5"),
-            (r"Nov 2025", r"Gemini 3: \ ``the delta \\ \ldots is as big as \\ we've ever seen''"),
-            (r"Jul 2026", r"Pichai: \ ``much larger \\ base models''; \\ Gemini 4 in training"),
+            (r"Nov 2025", r"Gemini 3: \ Vinyals: \\ gain from pretraining \\ as big as ever"),
+            (r"Jul 2026", r"Pichai: \ next frontier \\ needs much larger \\ base models; \ Gemini 4"),
             (r"Oct 2026", r"Microsoft: \ a $2.8$-trillion \\ MoE, forecast \\ from small models"),
         ]
         head, axis, tag, skel, marks = era_strip(self, events, head_text=r"The debate, \ 2024 to 2026",
                                                  tag_text=r"evenly spaced, \ not to scale", font_size=19)
         cite_ = cite(r"Sutskever, NeurIPS talk (Dec 2024); \ OpenAI, GPT-4.5 system card; \ xAI, Grok 4; \ Epoch AI (Sep "
-                     r"2025); \ O.~Vinyals (Nov 2025); \ Alphabet earnings call (Jul 2026); \ Microsoft AI (Oct 2026)",
+                     r"2025); \\ O.~Vinyals (Nov 2025); \ Alphabet earnings call (Jul 2026); \ Microsoft AI (Oct 2026)",
                      font_size=15, corner=DL)
         with self.voiceover(
             "Has pretraining stopped paying? In December 2024, Ilya Sutskever told the field's largest conference "
@@ -70,18 +70,32 @@ class Frontier(VoiceoverScene):
         lc = np.log10(C)
         res = pts[:, 3] - pts[:, 2]
         lim = max(0.05, math.ceil(np.abs(res).max() * 50) / 50)
-        ax = CornerAxes(x_range=[math.floor(lc.min() * 2) / 2, math.ceil(lc.max() * 2) / 2, 0.5], y_range=[-lim, lim, lim / 2],
+        ax = CornerAxes(x_range=[math.floor(lc.min() * 2) / 2 - 1, math.ceil(lc.max() * 2) / 2, 0.5], y_range=[-lim, lim, lim / 2],
                         x_length=6.0, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, -0.4, 0])
         x0, x1 = ax.x_range[0] if hasattr(ax, "x_range") else lc.min(), lc.max()
-        zero = DashedLine(ax.c2p(math.floor(lc.min() * 2) / 2, 0), ax.c2p(math.ceil(lc.max() * 2) / 2, 0), color=GREY_B, stroke_width=1.5)
+        zero = DashedLine(ax.c2p(ax.x_range[0], 0), ax.c2p(ax.x_range[1], 0), color=GREY_B, stroke_width=1.5)
         xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, -lim), DOWN, buff=0.08)
-                      for v in range(math.ceil(lc.min()), math.floor(lc.max()) + 1)])
+                      for v in range(math.ceil(ax.x_range[0]), math.floor(lc.max()) + 1)])
         yt = VGroup(*[MathTex(f"{v:+.2f}" if v else "0", font_size=20, color=GREY_B)
-                      .next_to(ax.c2p(math.floor(lc.min() * 2) / 2, v), LEFT, buff=0.08) for v in (-lim, 0, lim)])
-        xn = label(r"compute of the run being predicted", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+                      .next_to(ax.c2p(ax.x_range[0], v), LEFT, buff=0.08) for v in (-lim, 0, lim)])
+        xn = label(r"compute of the run \ (operations)", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yn = label(r"predicted minus measured \ (bits)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         dts = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=TT) for a, b in zip(lc, res)])
+        sw = load("sweep")
+        Ns, Ds, Lb = np.asarray(sw["N"], float), np.asarray(sw["D"], float), np.asarray(sw["bits"], float)
+        ii, jj = np.where(np.isfinite(Lb) & (Ds[None] >= 2 ** 17))
+        Nf, Df, Lf = Ns[ii], Ds[jj], Lb[ii, jj]
+        cheap = 6 * Nf * Df <= cut
+        cp = ch["cheap"]
+        fit_res = (float(cp["E"]) + float(cp["A"]) * Nf[cheap] ** -float(cp["alpha"]) + float(cp["B"]) * Df[cheap] ** -float(cp["beta"])
+                   - Lf[cheap])
+        lcf = np.log10(6 * Nf[cheap] * Df[cheap])
+        inside = (lcf >= ax.x_range[0]) & (np.abs(fit_res) <= lim)
+        fdts = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=GREY_B) for a, b in zip(lcf[inside], fit_res[inside])])
+        cutl = DashedLine(ax.c2p(math.log10(cut), -lim), ax.c2p(math.log10(cut), lim), color=GREY_B, stroke_width=1.5)
+        fl_ = label(r"grey: \ the fitted runs", font_size=18, color=GREY_B).next_to(ax.c2p(math.log10(cut), lim), LEFT, buff=0.1)
+        fl_.shift(DOWN * 0.15)
         side = VGroup(
             label(rf"fitted on our ${n_fit}$ cheapest runs \\ (up to ${sci(cut, 0)}$ operations)", font_size=22, color=GREY_A),
             label(rf"predicting the other ${n_test}$: \\ off by ${err:.3f}$ bits on average, \\ ${mx:.3f}$ at worst", font_size=24,
@@ -107,6 +121,8 @@ class Frontier(VoiceoverScene):
             "it buys enough capability to be worth its price."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(zero), FadeIn(side[0]))
+            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in fdts], lag_ratio=0.01), Create(cutl), FadeIn(fl_),
+                      run_time=2.0)
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dts], lag_ratio=0.04), FadeIn(side[1]), run_time=2.0)
             self.play(FadeIn(side[2]))
@@ -128,8 +144,8 @@ class Frontier(VoiceoverScene):
         yt = VGroup(*[MathTex(rf"10^{{{v}}}\times", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
                       for v in range(0, 6)])
         xn = label(r"years", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        l1 = label(r"compute saved \ (halving every $8$ months)", font_size=20, color=C.TRUE_P).next_to(ax.c2p(4, 1.5), UL, buff=0.1)
-        l2 = label(r"ability per parameter \ (doubling every $3$ months)", font_size=20, color=C.BITS).next_to(ax.c2p(1.6, 4.6), RIGHT, buff=0.1)
+        l1 = label(r"compute saved \\ (halving every $8$ months)", font_size=20, color=C.TRUE_P).move_to(ax.c2p(3.05, 0.48))
+        l2 = label(r"ability per parameter \\ (doubling every $3$ months)", font_size=20, color=C.BITS).move_to(ax.c2p(1.15, 4.45))
         sch = note(r"the cited rates, \ drawn").next_to(xn, DOWN, buff=0.12)
         cards = VGroup(
             history_card(2024, r"Ho et al.\ (Epoch AI)", r"the compute needed for a given language-model performance "

@@ -26,7 +26,7 @@ class Transfer(VoiceoverScene):
         m = load("mup")
         lrs = np.log10(np.asarray(m["lrs"]))
         widths = [int(w) for w in m["widths"]]
-        allv = np.concatenate([np.asarray(m[f"{k}{w}"]).ravel() for k in ("sp", "mup") for w in widths])
+        allv = np.concatenate([np.asarray(m[k + str(w)]).ravel() for k in ("sp", "mup") for w in widths])
         allv = allv[np.isfinite(allv)]
         lo = float(np.floor(allv.min() * 10) / 10)
         hi = float(min(np.ceil(np.percentile(allv, 80) * 10) / 10, lo + 1.4))
@@ -37,7 +37,7 @@ class Transfer(VoiceoverScene):
             ax.move_to([-3.4 + 6.8 * k, -0.75, 0])
             lines, bests, bands = VGroup(), VGroup(), VGroup()
             for w, wc in zip(widths, WIDTH_COLORS):
-                v = np.asarray(m[f"{mode}{w}"])  # seeds x rates
+                v = np.asarray(m[mode + str(w)])  # seeds x rates
                 v = np.where(np.isfinite(v), np.minimum(v, hi), hi)
                 mean = v.mean(0)
                 bands.add(band(ax, lrs, v.min(0), v.max(0), wc, 0.18))
