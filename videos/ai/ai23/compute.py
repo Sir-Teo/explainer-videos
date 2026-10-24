@@ -81,14 +81,16 @@ def compute_bpe():
 
     sample = bpe_sample()
     n_merges = 8000 if SCALE == 1 else 600
-    merges, freq = text.learn_bpe(sample, n_merges)
+    merges, freq, saved = text.learn_bpe(sample, n_merges)
     base = sorted(set(text.norm(sample)) | {" "})
     valid, passage = c1.text("valid")[:200_000], c1.text("passage")
     sizes = [n for n in (500, 2000, 8000) if n <= len(merges)] or [len(merges)]
     L0 = sum(len(w) for w in text.words_of(sample))
-    out = dict(first=[a + b for a, b in merges[:40]], first_counts=freq[:40], sizes=sizes, sentence=SENTENCE,
-               n_merges=len(merges), merges=[[a, b] for a, b in merges], counts=freq, base=base, sample_chars=L0,
-               length=[L0 - int(np.sum(freq[:k])) for k in range(0, len(merges) + 1, 50)])
+    out = dict(first=[a + b for a, b in merges[:40]], first_counts=saved[:40], sizes=sizes, sentence=SENTENCE,
+               n_merges=len(merges), merges=[[a, b] for a, b in merges], counts=freq, saved=saved, base=base,
+               sample_chars=L0, length=[L0 - int(np.sum(saved[:k])) for k in range(0, len(merges) + 1, 50)])
+    check = text.BPE(merges, len(merges))
+    assert abs(sum(len(check.word(w)) for w in text.words_of(sample)) - out["length"][-1]) <= 0 or len(merges) % 50
     for n in sizes:
         tok = text.BPE(merges, n)
         for name, t in (("valid", valid), ("passage", passage)):

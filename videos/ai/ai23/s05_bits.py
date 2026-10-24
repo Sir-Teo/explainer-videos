@@ -175,7 +175,7 @@ class Bits(VoiceoverScene):
             self.play(FadeIn(bl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in bars.rows], lag_ratio=0.2),
                       run_time=2.0)
             vo.wait_until("b")
-            self.play(*[Indicate(bars.rows[names.index(f"{k}{V}")], color=WHITE, scale_factor=1.04)
+            self.play(*[Indicate(bars.rows[names.index(k + str(V))], color=WHITE, scale_factor=1.04)
                         for k in ("bpe", "unigram") for V in (1024, 4096)], run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
