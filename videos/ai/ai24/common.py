@@ -265,36 +265,6 @@ def take_away(text: str, color=C.BITS, font_size=28, width=12.0) -> VGroup:
     return VGroup(box, t.move_to(box)).to_edge(DOWN, buff=0.35)
 
 
-def _boxes_overlap(a, b, pad=0.03) -> bool:
-    return not (a.get_right()[0] + pad < b.get_left()[0] or b.get_right()[0] + pad < a.get_left()[0]
-                or a.get_top()[1] + pad < b.get_bottom()[1] or b.get_top()[1] + pad < a.get_bottom()[1])
-
-
-def place_labels(dots, labels, buff=0.05, bounds=(-6.9, 6.9, -3.8, 3.8)):
-    """Put each dot's label beside it on the first side (of eight) where it overlaps no other dot and no label
-    already placed: scatter-plot names that do not sit on each other."""
-    placed = []
-    for i, (d, lab) in enumerate(zip(dots, labels)):
-        best = None
-        for b_ in (buff, buff + 0.22):
-            for dir_ in (UR, RIGHT, UL, DR, LEFT, DL, UP, DOWN):
-                lab.next_to(d, dir_, buff=b_)
-                inside = (lab.get_left()[0] > bounds[0] and lab.get_right()[0] < bounds[1]
-                          and lab.get_bottom()[1] > bounds[2] and lab.get_top()[1] < bounds[3])
-                clash = sum(_boxes_overlap(lab, o) for o in placed) + sum(
-                    _boxes_overlap(lab, dd, pad=0.0) for j, dd in enumerate(dots) if j != i)
-                score = clash + (0 if inside else 10) + (0.5 if b_ > buff else 0)
-                if best is None or score < best[0]:
-                    best = (score, dir_, b_)
-                if score == 0:
-                    break
-            if best[0] == 0:
-                break
-        lab.next_to(d, best[1], buff=best[2])
-        placed.append(lab)
-    return labels
-
-
 def take_away_in(scene, tk) -> list:
     """The animations that reveal a takeaway box: fade it in, and fade out the small notes it would cover (a
     source line or a 'computed' tag in a bottom corner)."""

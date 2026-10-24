@@ -87,26 +87,30 @@ class Goodhart(VoiceoverScene):
         kl = np.asarray(d["kl"])
         x = np.sqrt(kl)
         ys = {k: np.asarray(d[k]) for k in ("small_proxy", "small_gold", "large_proxy", "large_gold")}
-        lo = min(float(v.min()) for v in ys.values())
-        hi = max(float(v.max()) for v in ys.values())
-        g = axes([0, float(np.ceil(x.max() * 2) / 2)], [np.floor(lo * 4) / 4, np.ceil(hi * 4) / 4], x_length=7.4,
-                 y_length=4.0, xlabel=r"$\sqrt{\mathrm{KL}}$ from the fine-tuned model \ (best-of-$n$, $n = 1 \dots 256$)",
-                 ylabel=r"average score of the chosen line", xticks=[0, 1, 2], center=[-1.0, -0.2, 0])
-        mk = lambda key, col, w, dash=False: (DashedVMobject if dash else (lambda m: m))(
-            VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in zip(x, ys[key])]).set_stroke(col, w))
-        sp, sg = mk("small_proxy", PROXY, 3), mk("small_gold", GOLD, 4)
-        lp, lg_ = mk("large_proxy", PROXY, 3), mk("large_gold", GOLD, 4)
-        sp.set_stroke(opacity=0.55)
-        sg.set_stroke(opacity=0.55)
+        xmax = float(np.ceil(x.max() * 2) / 2)
+        xl = r"$\sqrt{\mathrm{KL}}$ \ (best-of-$n$, $n = 1 \dots 256$)"
+        # two panels, each on its own scale: the reward models' scores run to several units, gold moves by tenths
+        phi = max(float(ys["small_proxy"].max()), float(ys["large_proxy"].max()))
+        glo = min(float(ys["small_gold"].min()), float(ys["large_gold"].min()))
+        ghi = max(float(ys["small_gold"].max()), float(ys["large_gold"].max()))
+        gp = 0.15 * (ghi - glo + 1e-6)
+        g = axes([0, xmax], [0, float(np.ceil(phi))], x_length=5.0, y_length=3.6, xlabel=xl,
+                 ylabel=r"what the reward model thinks", xticks=[0, 1, 2], center=[-3.5, -0.2, 0])
+        g2 = axes([0, xmax], [glo - gp, ghi + gp], x_length=5.0, y_length=3.6, xlabel=xl,
+                  ylabel=r"what gold thinks", xticks=[0, 1, 2], yticks=[round(glo, 2), round(ghi, 2)],
+                  yfmt=lambda v: rf"{v:+.2f}", center=[3.1, -0.2, 0])
+        mk = lambda ax_, key, col, w: VMobject().set_points_as_corners(
+            [ax_.ax.c2p(a, b) for a, b in zip(x, ys[key])]).set_stroke(col, w)
+        sp, sg = mk(g, "small_proxy", PROXY, 3), mk(g2, "small_gold", GOLD, 4)
+        lp, lg_ = mk(g, "large_proxy", PROXY, 4), mk(g2, "large_gold", GOLD, 5)
+        sp.set_stroke(opacity=0.5)
+        sg.set_stroke(opacity=0.5)
         ns = list(d["ns"])
         rm = load("rm")
-        key = legend([(PROXY, r"what the reward model thinks"), (GOLD, r"what gold thinks")], font_size=20)
-        key.next_to(g, RIGHT, buff=0.3).shift(UP * 1.0)
         size = VGroup(label(rf"faint: \ reward model from ${int(rm['sizes'][0])}$ comparisons", font_size=18,
                             color=GREY_B),
                       label(rf"bold: \ from ${int(rm['sizes'][-1]):,}$".replace(",", "{,}"), font_size=18,
-                            color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(key, DOWN, buff=0.3)
-        size.align_to(key, LEFT)
+                            color=GREY_B)).arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.35)
         tag = note(r"computed: \ $256$ lines per prompt from our fine-tuned model, \ expectations over every "
                    r"subset of size $n$").to_corner(DR, buff=0.2)
         sgold, lgold = ys["small_gold"], ys["large_gold"]
@@ -118,8 +122,13 @@ class Goodhart(VoiceoverScene):
         else:
             small_said = (f"With the small reward model, gold climbs only to {sgold[-1]:.2f} while the reward "
                           f"model's own score reaches {ys['small_proxy'][-1]:.2f}: the gap between them widens.")
-        large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
-                      f"{lgold.max():.2f}.")
+        peak_l = int(np.argmax(lgold))
+        if peak_l < len(ns) - 1 and lgold[-1] < lgold[peak_l] - 0.02:
+            large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
+                          f"{lgold.max():.2f} at n = {ns[peak_l]}, and then it too falls back, to {lgold[-1]:.2f}.")
+        else:
+            large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
+                          f"{lgold.max():.2f}.")
         ex = d["examples"][0]
         with self.voiceover(
             "Here is the experiment, after Gao, Schulman and Hilton of OpenAI. For each prompt, our fine-tuned model "
@@ -130,7 +139,7 @@ class Goodhart(VoiceoverScene):
             f"{large_said} A better reward model can be pushed harder before it breaks, but every learned reward "
             "breaks somewhere."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(key), FadeIn(tag), FadeIn(size))
+            self.play(FadeIn(g), FadeIn(g2), FadeIn(size), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(sp), Create(lp), run_time=2.0)
             vo.wait_until("b")
@@ -145,7 +154,7 @@ class Goodhart(VoiceoverScene):
             f"This is the line about the {ex[0]} that the small reward model liked best out of all two hundred and "
             "fifty-six."
         ):
-            self.play(VGroup(g, sp, sg, lp, lg_, key, size).animate.shift(UP * 0.7), FadeOut(tag))
+            self.play(VGroup(g, g2, sp, sg, lp, lg_).animate.shift(UP * 0.5), FadeOut(tag), FadeOut(size))
             self.play(FadeIn(pick), FadeIn(pl))
         self.wait(0.5)
         self.clear_scene()

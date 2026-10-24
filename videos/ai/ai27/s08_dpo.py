@@ -71,8 +71,8 @@ class DPO(VoiceoverScene):
         sft = load("sft")
         rl = load("rlhf")
         key = "b" + f"{rl['betas'][0]:g}".replace(".", "_")
-        h = np.asarray(rl[key])
-        rl_gold, rl_kl = float(np.mean(h[-30:, 2])), float(np.mean(h[-30:, 3]))
+        # measured as DPO's is: the trained policy's own lines, scored by gold, and its KL from the fine-tuned model
+        rl_gold, rl_kl = float(rl[key + "_final"]["gold"]), float(rl[key + "_final"]["kl"])
         rows = VGroup(
             VGroup(label(r"fine-tuned model", font_size=26, color=REF),
                    label(rf"gold ${sft['sft_line_gold']:+.2f}$", font_size=26, color=GOLD),
@@ -173,8 +173,9 @@ class DPO(VoiceoverScene):
         for meth, b, g_, k_ in pts:
             col = KLC if meth == "RLHF" else POLICY
             d_ = Dot(g.ax.c2p(np.sqrt(max(k_, 0)), g_), radius=0.09, color=col)
-            dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=18, color=col).next_to(d_, RIGHT,
-                                                                                                     buff=0.1)))
+            dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=18, color=col)))
+        # names beside their dots on whichever side is free (RLHF and DPO at beta 0.1 land almost together)
+        place_labels([d_[0] for d_ in dots] + [bl], [d_[1] for d_ in dots] + [VectorizedPoint(bl.get_center())])
         tag = note(r"computed: \ gold on the same samples' prompts; \ KL measured on each policy's own lines")
         tag.to_corner(DR, buff=0.2)
         # the verdict: does any trained policy beat sampling-and-choosing, at the same divergence or at all?

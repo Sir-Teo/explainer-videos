@@ -151,7 +151,8 @@ class Translator:
         hits = [k for k in self.zh if not IS_TPL(k) and en.startswith(k)]
         if hits:
             return self.zh[max(hits, key=len)]
-        for key, tr in self.zh.items():
+        # the longest key first, as for literal lines: two branches that begin alike keep their own translations
+        for key, tr in sorted(self.zh.items(), key=lambda kv: -len(kv[0])):
             if not IS_TPL(key):
                 continue
             for src in [s for s in self.tpls if s.startswith(key)]:
