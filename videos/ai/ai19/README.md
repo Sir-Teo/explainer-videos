@@ -16,7 +16,7 @@ replayed on screen; so is the learning of a rotation, SpinQuant-style.
   and GPTQ (2022), llama.cpp and vLLM (2023), MLA and disaggregated serving (2024), gpt-oss in MXFP4 and DeepSeek's
   sparse attention (2025); OpenAI's price for a GPT-3-class model, 2021–2024.
 * **1. Prefill and decode.** FLOPs 2N per token, bytes 2N per pass, intensity B for a decode batch and T for a
-  prompt; H100's ridge (Part 17). Measured: a 192 MB stack of weight matrices multiplied by batches of 1–512
+  prompt; H100's ridge (Part 17). Measured: an 805 MB stack of weight matrices multiplied by batches of 1–512
   vectors (GEMV becoming GEMM) against the roofline's floor; the novels model's prefill and decode throughput.
 * **2. The key-value cache, priced.** 2 L n_h d_h per token (MHA), 2 L n_g d_h (GQA, Ainslie et al. 2023), L (d_c +
   d_R) (MLA, DeepSeek-V2 2024); Llama 3.1 70B, DeepSeek-V3 and gpt-oss-120b from their configurations; the cache
@@ -67,7 +67,7 @@ replayed on screen; so is the learning of a rotation, SpinQuant-style.
   combination, checked; occupancy of an H100 at batch 1; sliding windows (gpt-oss, Gemma 3) and DeepSeek's sparse
   attention (V3.2): cache read per decode step against context; a window measured on our model.
 * **16. Constrained decoding.** A record format the novels model never writes unprompted; the pattern compiled to an
-  automaton and a token index (Outlines, Willard & Louf 2023); every constrained sample valid, at no measurable cost;
+  automaton and a token index (Outlines, Willard & Louf 2023); the constrained samples checked and the mask timed;
   XGrammar (2024); masking distorts the distribution (Park et al. 2024), shown on Part 13's character model.
 * **17. The frontier, late 2026.** Thinking longer (DeepSeek-R1-0528: 12k → 23k tokens per AIME question) costed with
   chapter 3's model; prices per token over time (OpenAI list prices; Epoch AI 2025); bandwidth bounds on laptops
@@ -87,6 +87,7 @@ or step by step:
 ```
 python -m explainer.ai.novels             # the series' novels model (about an hour, cached; Parts 14, 27, 31 use it)
 python -m videos.ai.ai13.compute tf       # Part 13's character transformer
+python -m videos.ai.ai30.compute superposition   # Part 30's toy model (a minute), for the recap's picture
 python -m videos.ai.ai19.compute          # everything in this part (about 1.5-2 CPU-hours; two drafters train)
 python tools/build.py ai19                # English
 python tools/build.py ai19 --lang zh      # Chinese
@@ -243,14 +244,14 @@ e^{s_j − M} = e^{s_j − m_i} e^{m_i − M}；注意力就是 O/L。这个规�
 | Optimal Brain Damage, Optimal Brain Surgeon | 最优脑损伤，最优脑外科 |
 | GPTQ, AWQ (activation-aware weight quantization) | GPTQ，AWQ（激活感知的权重量化） |
 | salient weights | 显著权重 |
-| Hadamard matrix, rotation | 阿达马矩阵，旋转 |
+| Hadamard matrix, rotation | 哈达玛矩阵，旋转 |
 | computational invariance | 计算不变性 |
 | Cayley map, skew-symmetric matrix | 凯莱映射，反对称矩阵 |
 | crest factor (peak over typical) | 峰值因子（峰值与典型值之比） |
 | E2M1, E4M3, E8M0 | E2M1，E4M3，E8M0 |
 | MXFP4, NVFP4, shared exponent, clamping | MXFP4，NVFP4，共享指数，截断 |
 | KV-cache quantization; per-channel, per-token | KV缓存量化；按通道，按词元 |
-| online softmax, running max, running sum | 在线softmax，滑动最大值，滑动和 |
+| online softmax, running max, running sum | 在线softmax，当前最大值，累计和 |
 | IO complexity | IO复杂度 |
 | Flash-Decoding, split-KV, log-sum-exp | Flash-Decoding，KV切分，对数求和指数 |
 | occupancy | 占用率 |

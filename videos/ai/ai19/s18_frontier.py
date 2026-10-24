@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, PART, PREFILLC, hbars, load, loglog, x_)
+from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, PART, PREFILLC, hbars, load, x_)
 
 
 class Frontier(VoiceoverScene):
@@ -153,6 +153,11 @@ class Frontier(VoiceoverScene):
         i_m5, i_h = devs.index("Apple M5"), devs.index("NVIDIA H100")
         j_oss = models.index("gpt-oss-20b, MXFP4")
         eff = fr["ours_meas"] / fr["ours_bound"]
+        if eff <= 1.0:
+            eff_say = f"Our own model on this computer reaches {100 * eff:.0f} percent of its bound."
+        else:
+            eff_say = (f"Our own model on this computer beats its bound, at {100 * eff:.0f} percent: its weights fit "
+                       "in the processor's cache, which is faster than memory.")
         with self.voiceover(
             "Chapter one's speed limit also says who can run these models. <bookmark mark='a'/> Divide a device's "
             "memory bandwidth by the bytes a token reads. <bookmark mark='b'/> A laptop with Apple's M5, at 153 "
@@ -160,8 +165,7 @@ class Frontier(VoiceoverScene):
             f"whose experts in MXFP4 make each token read under two gigabytes; an H100, {bound[i_h, j_oss]:,.0f}. "
             "<bookmark mark='c'/> That is why four-bit formats and experts matter for running models at home, "
             "where llama.cpp started in 2023, and why Apple's on-device model, in 2025, was trained for two-bit "
-            f"weights. Our own model on this computer reaches {100 * eff:.0f} percent of its bound. "
-            "<bookmark mark='d'/> And the split between prefill and decode is reaching the hardware: in September "
+            "weights. " + eff_say + " <bookmark mark='d'/> And the split between prefill and decode is reaching the hardware: in September "
             "2025 NVIDIA announced Rubin CPX, a GPU with cheaper memory and plenty of arithmetic, for the "
             "long-context work of reading prompts, which it said would ship by the end of 2026."
         ) as vo:

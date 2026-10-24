@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai19.common import (CHUNKC, CONTC, DECODEC, DISC, F, PART, PREFILLC, STATICC, hbars, load, node_box,
-                                   take_away, x_)
+                                   x_)
 
 KIND_COL = {0: PREFILLC, 1: DECODEC, 2: GREY_D}
 

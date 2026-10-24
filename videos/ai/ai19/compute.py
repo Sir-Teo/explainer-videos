@@ -787,9 +787,7 @@ def compute_gptq():
 
 def compute_rotation():
     import torch
-    import torch.nn.functional as F_
 
-    from explainer.lm import pocket
     from videos.ai.ai19 import quant as Q
     from videos.ai.ai19.engine import calibration, loss
 

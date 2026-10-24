@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ERRC, F, LEARNC, PART, ROTC, RTNC, SMOOTHC, WEIGHTC, hbars, load, times)
+from videos.ai.ai19.common import (F, LEARNC, PART, ROTC, RTNC, SMOOTHC, WEIGHTC, hbars, load)
 
 COLORS = {r"Q": ROTC, r"x": C.TOKEN, r"W": WEIGHTC, r"E": WEIGHTC}
 

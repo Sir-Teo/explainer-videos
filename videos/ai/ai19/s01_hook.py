@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import PART, F, DECODEC, PREFILLC, COSTC
+from videos.ai.ai19.common import PART, F, COSTC
 
 # One token from a big model, at batch size one: every weight is read once.  Published figures, not measured here.
 BW = 3.35e12  # bytes a second: an H100 (SXM)'s HBM3 memory, NVIDIA's datasheet
