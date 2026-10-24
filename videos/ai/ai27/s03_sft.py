@@ -101,13 +101,18 @@ class SFT(VoiceoverScene):
                          font_size=24).move_to([0, 3.05, 0])
         with self.voiceover(
             "Our model is the one this series trained on thirty novels: six point eight million parameters, a "
-            "modern transformer in miniature. We fine-tune it on two kinds of conversation, both made from the "
-            "novels themselves. <bookmark mark='a'/> In the first, the user quotes a sentence and asks which book "
+            "modern transformer in miniature. <bookmark mark='h'/> We fine-tune it on two kinds of conversation, "
+            "both made from the novels themselves. <bookmark mark='a'/> In the first, the user quotes a sentence and asks which book "
             "it comes from; the answer is the title. It's checkable: right or wrong, and we test on sentences from "
             "paragraphs held out of all its training. <bookmark mark='b'/> In the second, the user asks for a line "
             "about something, the sea, a window, and the answer is a sentence from the novels about it."
         ) as vo:
-            self.play(FadeIn(model), FadeIn(tag), FadeIn(a[0]), FadeIn(b[0]))
+            self.play(FadeIn(model, scale=1.1))
+            vo.wait_until("h")
+            arrows = VGroup(*[Arrow(model.get_bottom(), h_.get_top(), buff=0.12, color=GREY_B, stroke_width=2.5,
+                                    max_tip_length_to_length_ratio=0.12) for h_ in (a[0], b[0])])
+            self.play(LaggedStart(*[GrowArrow(r_) for r_ in arrows], lag_ratio=0.3), FadeIn(a[0]), FadeIn(b[0]),
+                      FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(a[1:], shift=UP * 0.15))
             vo.wait_until("b")

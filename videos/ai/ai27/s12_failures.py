@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import ASSIST, GOLD, KLC, PART, PENALTY, POLICY, PROXY, REWARD, USER, bubble
+from videos.ai.ai27.common import (ASSIST, GOLD, KLC, PART, PENALTY, POLICY, PROXY, REWARD, USER, bubble,
+                                  node_box)
 
 
 class Failures(VoiceoverScene):
@@ -71,6 +72,18 @@ class Failures(VoiceoverScene):
                          r"refusal that can be reasoned about", width=6.2, color=REWARD),
         ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(DOWN * 0.35)
         head = label(r"refusal, \ and the ways around it", font_size=34).to_edge(UP, buff=0.45)
+        # how the suffix attack works, in the space the later cards will take
+        gcg = VGroup(node_box(r"a harmful request", USER, font_size=22),
+                     node_box(r"$+$ \ a suffix of odd tokens", PENALTY, font_size=22),
+                     node_box(r"``Sure, here is\dots''", ASSIST, font_size=22)).arrange(RIGHT, buff=0.7)
+        gcg_arr = Arrow(gcg[1].get_right(), gcg[2].get_left(), buff=0.08, color=GREY_B, stroke_width=2.5,
+                        max_tip_length_to_length_ratio=0.25)
+        gcg_cap = label(r"the suffix is found by gradient search, \ to make an answer that starts ``Sure, here is'' "
+                        r"most likely", font_size=20, color=GREY_A)
+        gcg_all = VGroup(VGroup(gcg, gcg_arr), gcg_cap).arrange(DOWN, buff=0.3)
+        gcg_all.move_to([0, cards[2].get_y() - 0.1, 0])
+        if gcg_all.width > 13.0:
+            gcg_all.scale_to_fit_width(13.0)
         cite_ = cite(r"Zou et al.\ (2023); \ Anil et al.\ (2024); \ R\"ottger et al., \textit{XSTest} (2023)")
         with self.voiceover(
             "Post-training teaches a model to refuse harmful requests, and that teaching can be routed around. "
@@ -86,7 +99,13 @@ class Failures(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
+                if mk == "c":
+                    self.play(FadeOut(gcg_all), run_time=0.5)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
+                if mk == "a":
+                    self.play(LaggedStart(FadeIn(gcg[0]), FadeIn(gcg[1]), GrowArrow(gcg_arr), FadeIn(gcg[2]),
+                                          lag_ratio=0.5), run_time=2.0)
+                    self.play(FadeIn(gcg_cap))
         self.wait(0.3)
         self.clear_scene()
 

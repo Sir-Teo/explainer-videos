@@ -3,57 +3,121 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import LETTERS, PATCH, gray_image, load, patch_grid
+from videos.ai.ai22.common import HIST, LETTERS, PART, PATCH, gray_image, load, patch_grid
 
 
 class Hook(VoiceoverScene):
     def construct(self):
         self.letters()
+        self.history()
         self.plan()
 
     # ------------------------------------------------------------------
     def letters(self):
-        d = load("dit")
+        d = load("denoisers")
         path = np.asarray(d["alphabet_path"])  # frames of the denoising, for each letter of the alphabet
         word = "PICTURES"
         idx = [LETTERS.index(c) for c in word]
 
         def row(k):
-            return Group(*[gray_image(path[k][i], 1.35) for i in idx]).arrange(RIGHT, buff=0.12).move_to(UP * 0.3)
+            return Group(*[gray_image(path[k][i], 1.35) for i in idx]).arrange(RIGHT, buff=0.12).move_to(UP * 0.5)
 
         pics = row(0)
+        asked = VGroup(*[Text(c, font="DejaVu Sans Mono", font_size=24, color=PATCH).next_to(p, UP, buff=0.12)
+                         for c, p in zip(word, pics)])
+        al = label(r"asked for", font_size=20, color=GREY_B).next_to(asked, LEFT, buff=0.3)
         grids = VGroup(*[patch_grid(p, 5, stroke_width=1) for p in pics])
-        tag = note(r"each letter drawn from noise by a small transformer trained here, \ asked for that letter").to_edge(DOWN, buff=0.3)
+        tag = note(r"each letter drawn from noise by a small transformer trained here, \ in $40$ steps").to_edge(DOWN, buff=0.35)
+        n_par = int(d["zero_params"])
+        tl = label(rf"${n_par // 1000}$ thousand weights, \ ${int(d['steps']):,}$ training steps, \ one CPU core"
+                   .replace(",", "{,}"), font_size=22, color=GREY_A).next_to(pics, DOWN, buff=0.45)
         with self.voiceover(
-            "Every letter here was drawn from pure noise by a small transformer we trained, asked for that letter. "
-            "<bookmark mark='a'/> It sees each picture as a sequence of patches, just as a language model sees "
-            "words."
+            "Every letter here was drawn from pure noise by a small transformer we trained on this computer, asked "
+            "for that letter. <bookmark mark='a'/> It sees each picture as a sequence of patches, the way a language "
+            "model sees words, and it was trained by the flow matching of Part 21. <bookmark mark='b'/> The same "
+            "recipe, scaled up a few million times, draws photographs, films, and whole scenes you can walk through."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(p, scale=0.8) for p in pics], lag_ratio=0.15), FadeIn(tag), run_time=1.2)
+            self.play(LaggedStart(*[FadeIn(p, scale=0.8) for p in pics], lag_ratio=0.12), FadeIn(asked), FadeIn(al),
+                      FadeIn(tag), run_time=1.4)
             for k in range(1, len(path)):  # noise, then shapes, then letters
-                self.play(Transform(pics, row(k)), run_time=0.35, rate_func=linear)
+                self.play(Transform(pics, row(k)), run_time=0.4, rate_func=linear)
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(g_) for g_ in grids], lag_ratio=0.1), run_time=1.5)
+            vo.wait_until("b")
+            self.play(FadeIn(tl))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def history(self):
+        head = label(r"How we got here", font_size=40).to_edge(UP, buff=0.35)
+        cards = [
+            history_card(2012, r"AlexNet", r"a convolutional network wins ImageNet \ (Part 10)", color=HIST),
+            history_card(2014, r"GANs", r"a generator against a judge \ (Part 20)", color=HIST),
+            history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST),
+            history_card(2021, r"DALL$\cdot$E; \ diffusion beats GANs", r"text to image as tokens; \ denoising wins on quality",
+                         color=HIST),
+            history_card(2022, r"DALL$\cdot$E 2, \ Imagen, \ Stable Diffusion", r"diffusion from text; \ open weights",
+                         color=HIST),
+            history_card(2024, r"SD3, \ FLUX.1, \ Sora", r"flow-matching transformers; \ video as spacetime patches",
+                         color=HIST),
+            history_card(2025, r"Veo 3, \ BAGEL, \ Self Forcing", r"sound with the video; \ one model reads and draws; "
+                         r"\ real-time video", color=HIST),
+            history_card(2026, r"open audio--video models", r"LTX-2: \ sound and picture, \ open weights", color=HIST),
+        ]
+        for c_ in cards:
+            c_.scale_to_fit_width(3.1)
+        grid = VGroup(*cards).arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).next_to(head, DOWN, buff=0.4)
+        if grid.width > 13.3:
+            grid.width = 13.3
+        with self.voiceover(
+            "How we got here. In 2012 a convolutional network, AlexNet, won the ImageNet contest by a wide margin, "
+            "and Part 10 told that story. <bookmark mark='a'/> In 2014 came GANs, a generator trained against a judge, "
+            "Part 20's story. <bookmark mark='b'/> In 2020 a plain transformer read images as sequences of patches. "
+            "<bookmark mark='c'/> In 2021 DALL-E drew pictures from text, as tokens, and diffusion beat GANs on "
+            "quality. <bookmark mark='d'/> 2022 brought DALL-E 2, Imagen, and Stable Diffusion, with open weights. "
+            "<bookmark mark='e'/> By 2024 flow-matching transformers drew pictures, and Sora drew video. "
+            "<bookmark mark='f'/> In 2025 video came with sound, one model could both read and draw, and video "
+            "could be generated as fast as it plays. <bookmark mark='g'/> And in 2026, open models make sound and "
+            "picture together."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1))
+            for k, m in enumerate("abcdefg"):
+                vo.wait_until(m)
+                self.play(FadeIn(cards[k + 1], shift=UP * 0.1), run_time=0.8)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(r"Part 22: \ Images and Video", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"patches as tokens, \ latent spaces, \ diffusion transformers, \ SD3, \ coarse to fine, \\ "
-                    r"video autoencoders, \ frames that agree, \ diffusion forcing", font_size=28, color=C.BITS)
-        sub.next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=22, done=21).scale(0.85).move_to(DOWN * 0.9)
+        title = label(rf"Part {PART}: \ Images, Video and 3D", font_size=48).to_edge(UP, buff=0.35)
+        obj = objectives_card([
+            r"how a transformer reads a picture, \ and when convolutions still win",
+            r"the compressed spaces models draw in, \ and borrowing a vision model's eyes",
+            r"the denoiser: \ U-Net or transformer, \ and how the condition goes in",
+            r"from text to image: \ Stable Diffusion 3, \ Flux, \ the resolution shift",
+            r"pictures as tokens: \ MaskGIT, \ next-scale prediction, \ one model for words and pictures",
+            r"video: \ squeezing time, \ frames that agree, \ rolling forward",
+            r"3D: \ the volume-rendering integral, \ Gaussian splatting",
+        ], title=r"In this part", font_size=24, width=11.6)
+        obj.next_to(title, DOWN, buff=0.3)
+        if obj.height > 6.2:
+            obj.height = 6.2
+            obj.next_to(title, DOWN, buff=0.3)
         with self.voiceover(
-            "This part brings everything so far to pictures and video, in depth: how a transformer reads an image; "
-            "the compressed spaces models generate in, and the trade-off in shaping them; how a transformer becomes "
-            "the denoiser, and what Stable Diffusion 3 changed to scale it; writing a picture coarse to fine; "
-            "<bookmark mark='a'/> and for video, squeezing time, drawing frames that agree, and rolling forward "
-            "past the length a model was trained on."
+            "This is Part 22 of AI, Built: images, video and 3D. <bookmark mark='a'/> First, how a transformer reads "
+            "a picture, and when convolutions still win. <bookmark mark='b'/> Then the compressed spaces models "
+            "draw in, and how borrowing a vision model's eyes speeds up training. <bookmark mark='c'/> The denoiser "
+            "itself, and how the request gets in. <bookmark mark='d'/> Text to image, from DALL-E to Flux. "
+            "<bookmark mark='e'/> Pictures written as tokens, and one model for words and pictures. "
+            "<bookmark mark='f'/> Video. <bookmark mark='g'/> And 3D. <bookmark mark='h'/> Every model in this part "
+            "is trained here, on letters, clips and a small scene, and we'll watch each one learn."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
-            self.play(FadeIn(smap))
-            vo.wait_until("a")
-            self.play(Indicate(sub[0] if len(sub) > 1 else sub, color=C.BITS, scale_factor=1.03))
-        self.wait(0.5)
+            self.play(FadeIn(title), FadeIn(obj.head))
+            for k, m in enumerate("abcdefg"):
+                vo.wait_until(m)
+                self.play(FadeIn(obj.rows[k], shift=RIGHT * 0.1), run_time=0.6)
+            vo.wait_until("h")
+            self.play(Indicate(title, color=PATCH, scale_factor=1.03))
+        self.wait(0.3)
         self.clear_scene()

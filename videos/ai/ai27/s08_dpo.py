@@ -169,6 +169,11 @@ class DPO(VoiceoverScene):
                  yticks=ticks(lo - pad, hi + pad, 3), yfmt=lambda v: rf"{v:+.2f}" if v else "0",
                  center=[-2.3, -0.3, 0])
         zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(xmax, 0), color=GREY_D, dash_length=0.06)
+        # what the two directions mean, while the chart is still empty
+        up = label(r"$\uparrow$ \ better, by gold", font_size=22, color=GREY_B).move_to(
+            g.ax.c2p(0, hi + pad) + RIGHT * 0.3 + DOWN * 0.15, aligned_edge=UL)
+        right = label(r"further from where it started \ $\rightarrow$", font_size=22, color=GREY_B).move_to(
+            g.ax.c2p(xmax, 0) + LEFT * 0.15 + UP * 0.15, aligned_edge=DR)
         bc = curve(g.ax, kx, bon, PROXY, 5)
         dots = VGroup()
         for meth, b, g_, k_ in pts:
@@ -217,9 +222,11 @@ class DPO(VoiceoverScene):
             + " <bookmark mark='e'/> " + cmp_
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(tag))
+            self.play(FadeIn(up, shift=UP * 0.1), FadeIn(right, shift=RIGHT * 0.1))
             vo.wait_until("a")
             self.play(Create(bc), FadeIn(bl), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(up), FadeOut(right), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_, p_ in zip(dots, pts) if p_[0] == "RLHF"],
                                   lag_ratio=0.4))
             vo.wait_until("c")

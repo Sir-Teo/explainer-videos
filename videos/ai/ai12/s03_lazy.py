@@ -101,7 +101,7 @@ class Lazy(VoiceoverScene):
         guess = DashedLine(ax.c2p(0, var), ax.c2p(sx.max(), var), color=GREY_B, stroke_width=1.8)
         gl = label(r"guessing the average", font_size=18, color=GREY_B).next_to(ax.c2p(sx.max(), var), UL, buff=0.06)
         kl = DashedLine(ax.c2p(0, kern.mean()), ax.c2p(sx.max(), kern.mean()), color=LAZY, stroke_width=2.5)
-        kll = label(r"kernel regression", font_size=18, color=LAZY).next_to(ax.c2p(sx.max(), kern.mean()), DL, buff=0.06)
+        kll = label(r"kernel regression", font_size=18, color=LAZY).next_to(ax.c2p(0.05, kern.mean()), UR, buff=0.06)
 
         def runs(cv, col):
             te = cv[:, :, 2]

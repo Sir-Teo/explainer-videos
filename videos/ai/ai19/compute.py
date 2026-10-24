@@ -497,6 +497,7 @@ def compute_exact():
         p = target_probs(ctx)[-1]
         if p.max() < 0.4 and np.sort(p)[-8:].sum() > 0.7:
             break
+    p = p / p.sum()  # float32 softmax, renormalized in float64
     q = draft_p[tuple(ctx[-2:].numpy())]
     q = q / q.sum()
     N = 200_000

@@ -48,7 +48,9 @@ class Overtrain(VoiceoverScene):
                 marks.add(VGroup(Dot(ax.c2p(k, math.log10(c)), radius=0.08, color=SP),
                                  MathTex(rf"+{100 * (c - 1):.0f}\%", font_size=26, color=SP).next_to(ax.c2p(k, math.log10(c)), UR, buff=0.08)))
         wall = DashedLine(ax.c2p(kmin, 0), ax.c2p(kmin, math.log10(top)), dash_length=0.06, stroke_width=2, color=GREY_B)
-        wl = label(r"smaller than this: \\ never, \ at any budget", font_size=20, color=GREY_B).next_to(wall, RIGHT, buff=0.1).shift(UP * 1.3)
+        wl0 = label(r"smaller than this: \\ never, \ at any budget", font_size=20, color=GREY_B).move_to(ax.c2p(0.62, math.log10(9)))
+        wl = VGroup(wl0, Arrow(wl0.get_left(), ax.c2p(kmin, math.log10(9)), buff=0.1, stroke_width=2, color=GREY_B,
+                                max_tip_length_to_length_ratio=0.12))
         # measured: endpoints of the sweep that reached the budget's best loss with a smaller model, trained longer
         mt = np.asarray(ch["matched"], float).reshape(-1, 3)
         meas = VGroup(*[Dot(ax.c2p(n_ / n0, math.log10(c_)), radius=0.07, color=WHITE)

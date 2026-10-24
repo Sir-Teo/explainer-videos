@@ -18,7 +18,7 @@ import os
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, NP, P, dataset, font_files, patches, render, score, steps, threads, unpatch
+from videos.ai.ai22.base import CACHE, GL, NP, P, dataset, font_files, patches, render, score, steps, threads, unpatch
 
 FAMS = ("sans", "serif", "mono")
 BOS, BOI, EOI, BOLD, NULL = 29, 30, 31, 32, 33

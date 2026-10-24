@@ -34,9 +34,9 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> Here is the same model after a few minutes of fine-tuning on this computer. "
             "<bookmark mark='c'/> It knows nothing new. What changed is what it does with what it knows."
         ) as vo:
-            self.play(FadeIn(q), FadeIn(tag), FadeIn(bl))
+            self.play(FadeIn(q, shift=DOWN * 0.15), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(ba))
+            self.play(FadeIn(bl), FadeIn(ba))
             vo.wait_until("b")
             self.play(FadeIn(al), FadeIn(aa))
             vo.wait_until("c")
@@ -77,14 +77,19 @@ class Hook(VoiceoverScene):
         ], font_size=26)
         with self.voiceover(
             "This is Part 27 of AI, Built. <bookmark mark='a'/> In this part: supervised fine-tuning and low-rank "
-            "adapters; reward models learned from comparisons, and what ours actually learned; reinforcement "
-            "learning from human feedback, its exact optimum, how PPO is fitted to a language model, and what "
-            "happens when you optimize a learned reward too hard; direct preference optimization; feedback from AI "
-            "under written principles; distillation and model merging; and what goes wrong. Every method runs here, "
-            "on our own small model."
+            "adapters; <bookmark mark='r2'/> reward models learned from comparisons, and what ours actually learned; "
+            "<bookmark mark='r3'/> reinforcement learning from human feedback, its exact optimum, how PPO is fitted "
+            "to a language model, and what happens when you optimize a learned reward too hard; "
+            "<bookmark mark='r4'/> direct preference optimization; feedback from AI under written principles; "
+            "<bookmark mark='r5'/> distillation and model merging; <bookmark mark='r6'/> and what goes wrong. Every "
+            "method runs here, on our own small model."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
+            # the plan, a line at a time as it is read
+            self.play(FadeOut(smap), FadeIn(obj.head), FadeIn(obj.rows[0], shift=RIGHT * 0.1))
+            for k in range(1, len(obj.rows)):
+                vo.wait_until(f"r{k + 1}")
+                self.play(FadeIn(obj.rows[k], shift=RIGHT * 0.1), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()

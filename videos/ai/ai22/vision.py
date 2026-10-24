@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, NP, P, dataset, patches, steps, threads
+from videos.ai.ai22.base import CACHE, GL, NP, P, dataset, patches, steps, threads
 
 D, H, L = 64, 4, 3
 

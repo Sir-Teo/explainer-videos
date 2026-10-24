@@ -14,7 +14,7 @@ import math
 
 import numpy as np
 
-from videos.ai.ai22.compute import CACHE, GL, LETTERS, dataset, font_files, render, score, steps, threads
+from videos.ai.ai22.base import CACHE, GL, LETTERS, dataset, font_files, render, score, steps, threads
 
 # (grid side, channels): the number of numbers is side^2 x channels
 CONFIGS = [(10, 1), (5, 4), (5, 2), (5, 1), (2, 16), (2, 4), (1, 64), (1, 16)]

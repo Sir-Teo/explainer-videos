@@ -1,0 +1,633 @@
+{
+ "title": "人工智能，从零搭建 · 第25部分：对称与科学",
+ "chapters": {
+  "Hook": "把分子转一转",
+  "History": "1. 我们是怎么走到这里的",
+  "Symmetry": "2. 不变性与等变性",
+  "Sets": "3. 集合上的函数",
+  "Messages": "4. 消息传递",
+  "WL": "5. 消息传递看不见的东西",
+  "Depth": "6. 深层图网络",
+  "Rotations": "7. 随分子一起转动的网络",
+  "Folding": "8. 蛋白质折叠问题",
+  "Evoformer": "9. AlphaFold 2：Evoformer",
+  "Structure": "10. AlphaFold 2：坐标系、FAPE与循环",
+  "AF3": "11. AlphaFold 3：原子上的扩散",
+  "Design": "12. 设计蛋白质",
+  "Weather": "13. 网格上的天气",
+  "Operators": "14. 神经算子",
+  "Materials": "15. 百万量级的材料",
+  "Proofs": "16. 几何与证明",
+  "Search": "17. 靠搜索做发现",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "f2a511914d8f": {
+   "scene": "Hook",
+   "en": "Stockholm, October 2024. <bookmark mark='a'/> The Nobel Prize in Chemistry goes half to David Baker, for designing proteins, and half to Demis Hassabis and John Jumper of Google DeepMind, for AlphaFold, a network that predicts the shape a protein folds into. <bookmark mark='b'/> The day before, the physics prize went to John Hopfield and Geoffrey Hinton, for the networks of Part 20. <bookmark mark='c'/> Measuring one protein's shape could take a laboratory years; AlphaFold predicts one in minutes.",
+   "zh": "斯德哥尔摩，2024年10月。<bookmark mark='a'/>诺贝尔化学奖一半授予大卫·贝克，表彰蛋白质设计；另一半授予谷歌DeepMind的德米斯·哈萨比斯和约翰·江珀，表彰AlphaFold，一个能预测蛋白质折叠成什么形状的网络。<bookmark mark='b'/>前一天，物理学奖授予了约翰·霍普菲尔德和杰弗里·辛顿，表彰第20部分讲过的那些网络。<bookmark mark='c'/>测定一个蛋白质的形状，实验室可能要花好几年；AlphaFold几分钟就能预测出一个。"
+  },
+  "8def9a6015bd": {
+   "scene": "Hook",
+   "en": "Here is the idea this part is built on. Five charged particles, a toy molecule: turn it, and its energy can't change. <bookmark mark='a'/> We trained networks on three thousand such molecules to predict the energy, then turned this one a full circle. <bookmark mark='b'/> A plain network doesn't know that turning is harmless: its answer swings over 1.73 units. <bookmark mark='c'/> Shown turned copies in training, over 0.08. <bookmark mark='d'/> A network built on the distances between particles can't see the turn: its answer changes by less than a millionth of a unit, rounding error, and sits 0.00 from the true energy.",
+   "zh": "这就是本部分立足的想法。五个带电粒子，一个玩具分子：把它转一转，它的能量不可能变。<bookmark mark='a'/>我们用三千个这样的分子训练网络去预测能量，然后把这一个转了整整一圈。<bookmark mark='b'/>普通网络不知道转动无害：它的答案摆动了1.73个单位。<bookmark mark='c'/>训练时给它看转过的副本，摆动0.08。<bookmark mark='d'/>一个建立在粒子间距离之上的网络看不见这次转动：它的答案只变了不到百万分之一个单位，只是舍入误差，离真实能量0.00。"
+  },
+  "4b3d5a6f9f85": {
+   "scene": "Hook",
+   "en": "That is the question of this part: what does a network gain by knowing the symmetries of its problem, and what has that done for science, <bookmark mark='a'/> in proteins, <bookmark mark='b'/> weather, <bookmark mark='c'/> materials <bookmark mark='d'/> and mathematics? Every experiment is computed here; every number about the big systems is quoted from their papers.",
+   "zh": "这就是本部分的问题：一个网络知道了它所处理问题的对称性，能得到什么？这又为科学做了什么，<bookmark mark='a'/>在蛋白质、<bookmark mark='b'/>天气、<bookmark mark='c'/>材料<bookmark mark='d'/>和数学里？每个实验都在这里计算；关于大系统的每个数字都引自它们的论文。"
+  },
+  "0bfe60010bc2": {
+   "scene": "Hook",
+   "en": "This is Part 25 of AI, Built, the last of its fourth act. <bookmark mark='a'/> In it: symmetry, and what it means for a function to respect it; <bookmark mark='o2'/> graphs, message passing, and its limits; <bookmark mark='o3'/> networks that turn with the molecule; <bookmark mark='o4'/> proteins, from the folding problem to AlphaFold and design; <bookmark mark='o5'/> fields: weather, neural operators, and materials; <bookmark mark='o6'/> and mathematics, from olympiad geometry to checked proofs and discovery by search.",
+   "zh": "这是《人工智能，从零搭建》的第25部分，也是第四幕的最后一部分。<bookmark mark='a'/>内容包括：对称性，以及一个函数尊重对称性是什么意思；<bookmark mark='o2'/>图、消息传递，以及它的极限；<bookmark mark='o3'/>随分子一起转动的网络；<bookmark mark='o4'/>蛋白质，从折叠问题到AlphaFold和蛋白质设计；<bookmark mark='o5'/>场：天气、神经算子，以及材料；<bookmark mark='o6'/>还有数学，从奥赛几何到经过检查的证明，再到靠搜索做出的发现。"
+  },
+  "79554faf59d2": {
+   "scene": "History",
+   "en": "Chapter one. How we got here.",
+   "zh": "第1章。我们是怎么走到这里的。"
+  },
+  "0cefd6fe11ab": {
+   "scene": "History",
+   "en": "This part's story has three threads, starting far apart. <bookmark mark='m0'/> The first computer weather forecast, 1950. <bookmark mark='m1'/> The first protein seen in three dimensions, 1958, and in 1961 Christian Anfinsen's discovery that the sequence decides the shape. <bookmark mark='m2'/> In 1968, a test of whether two graphs are the same, which turns out to measure what graph networks can see. <bookmark mark='m3'/> The Protein Data Bank, 1971; <bookmark mark='m4'/> the first forecast of Europe's weather centre, 1979; <bookmark mark='m5'/> convolutions, with the symmetry of images built in, 1989; <bookmark mark='m6'/> CASP's blind contests, 1994; <bookmark mark='m7'/> the first neural networks on graphs, 2005.",
+   "zh": "本部分的故事有三条线索，起点相隔很远。<bookmark mark='m0'/>第一次计算机天气预报，1950年。<bookmark mark='m1'/>第一个在三维中看到的蛋白质，1958年；1961年，克里斯蒂安·安芬森发现序列决定形状。<bookmark mark='m2'/>1968年，一个判断两个图是否相同的测试，后来发现它衡量的正是图网络能看见什么。<bookmark mark='m3'/>蛋白质数据库，1971年；<bookmark mark='m4'/>欧洲天气中心的第一次预报，1979年；<bookmark mark='m5'/>内置了图像对称性的卷积，1989年；<bookmark mark='m6'/>CASP的盲测比赛，1994年；<bookmark mark='m7'/>最早的图神经网络，2005年。"
+  },
+  "8db364f41ab9": {
+   "scene": "History",
+   "en": "Then, within a decade, the threads met. <bookmark mark='d0'/> 2017: message passing, and networks for sets and molecules. <bookmark mark='d1'/> 2018: the first AlphaFold wins CASP; in 2020 AlphaFold 2 comes close to experiment. <bookmark mark='d2'/> 2021: networks that turn with a molecule, and networks that learn solutions of equations. <bookmark mark='d3'/> 2022: predicted structures for over two hundred million proteins. <bookmark mark='d4'/> 2023: a graph network out-forecasts the best weather model on most measures, and another proposes millions of new crystals. <bookmark mark='d5'/> 2024: the Nobel Prize, AlphaFold 3, machines solving olympiad problems; <bookmark mark='d6'/> 2025: AI forecasts in daily operation, new mathematics from evolutionary search; <bookmark mark='d7'/> 2026: open Erdős problems resolved by AI.",
+   "zh": "然后，在十年之内，这些线索交汇了。<bookmark mark='d0'/>2017年：消息传递，以及处理集合和分子的网络。<bookmark mark='d1'/>2018年：第一代AlphaFold赢得CASP；2020年，AlphaFold 2接近实验水平。<bookmark mark='d2'/>2021年：随分子一起转的网络，以及学会方程解的网络。<bookmark mark='d3'/>2022年：两亿多个蛋白质的预测结构。<bookmark mark='d4'/>2023年：一个图网络在大多数指标上预报得比世界上最好的天气模型还准，另一个提出了数百万种新晶体。<bookmark mark='d5'/>2024年：诺贝尔奖，AlphaFold 3，机器解出奥赛题；<bookmark mark='d6'/>2025年：AI预报投入日常业务，进化搜索带来新的数学；<bookmark mark='d7'/>2026年：埃尔德什的未解问题被AI解决。"
+  },
+  "0182affa952f": {
+   "scene": "History",
+   "en": "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. For an image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their order. <bookmark mark='c'/> For a graph, how its nodes are numbered. <bookmark mark='d'/> For a molecule, how it is turned or moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere, whatever the grid. <bookmark mark='g'/> Language has little symmetry, so the transformer learns its structure from data. <bookmark mark='h'/> Bronstein, Bruna, Cohen and Veličković called this geometric deep learning. A symmetry enters a model three ways: transformed copies, a standard pose, or layers that respect it; this part is mostly about the third.",
+   "zh": "把这些串起来的是同一个配方。<bookmark mark='a'/>问问你的数据有什么是无关紧要的。对图像来说，是物体在哪里：于是有了卷积。<bookmark mark='b'/>对一组点来说，是它们的顺序。<bookmark mark='c'/>对一个图来说，是节点怎么编号。<bookmark mark='d'/>对一个分子来说，是它怎么转、怎么移。<bookmark mark='e'/>蛋白质这些全都有。<bookmark mark='f'/>天气场位于球面上，与网格无关。<bookmark mark='g'/>语言几乎没有对称性，所以Transformer要从数据中学习结构。<bookmark mark='h'/>布朗斯坦、布鲁纳、科恩和韦利奇科维奇把这称为几何深度学习。对称性进入模型有三条路：转换过的副本，一个标准姿态，或者尊重它的网络层；本部分主要讲第三条。"
+  },
+  "ad1907a67754": {
+   "scene": "Symmetry",
+   "en": "Chapter two. Invariance and equivariance.",
+   "zh": "第2章。不变性与等变性。"
+  },
+  "6f444cb199e7": {
+   "scene": "Symmetry",
+   "en": "A symmetry is a transformation that leaves what matters unchanged. Turn a square by ninety degrees: the same square. <bookmark mark='a'/> Turn it four times and you are back. <bookmark mark='b'/> A problem's transformations form a group: you can compose them, one does nothing, and each can be undone. <bookmark mark='c'/> The square has four turns; the orderings of sixteen points, sixteen factorial, about 21 trillion. <bookmark mark='d'/> Turns of space form a continuous group, SO(3); an image has its shifts.",
+   "zh": "对称是一种让要紧的东西保持不变的变换。把正方形转九十度：还是同一个正方形。<bookmark mark='a'/>转四次就回到原处。<bookmark mark='b'/>一个问题的变换构成一个群：可以复合，有一个什么都不做的变换，而且每个变换都能撤销。<bookmark mark='c'/>正方形有四种转动；十六个点的排列有十六的阶乘种，大约21万亿。<bookmark mark='d'/>空间的转动构成一个连续群，SO(3)；图像则有它的平移。"
+  },
+  "d4068f64002c": {
+   "scene": "Symmetry",
+   "en": "Now a function of the data, f: here, where each of our five particles will be one time unit later. <bookmark mark='a'/> Turn the input, then apply f, <bookmark mark='b'/> or apply f, then turn the output. <bookmark mark='c'/> If the two paths always agree, f is equivariant. <bookmark mark='d'/> If the output doesn't change at all, f is invariant, like an energy or an image's label. <bookmark mark='e'/> Inner layers need equivariance, so that the input's orientation isn't thrown away; a final answer often needs invariance.",
+   "zh": "现在来看数据的一个函数f：这里是我们五个粒子各自在一个时间单位之后的位置。<bookmark mark='a'/>先转输入，再用f，<bookmark mark='b'/>或者先用f，再转输出。<bookmark mark='c'/>如果两条路总是一致，f就是等变的。<bookmark mark='d'/>如果输出根本不变，f就是不变的，比如能量，或者图像的标签。<bookmark mark='e'/>中间层需要等变，这样输入的朝向才不会被扔掉；最终答案则常常需要不变。"
+  },
+  "7f11f23c0b59": {
+   "scene": "Symmetry",
+   "en": "Any function can be made equivariant by averaging it over the group: for each g, transform the input, apply f, undo g. <bookmark mark='a'/> Feed the average a turned input, h of x. <bookmark mark='b'/> Rename g times h as g prime: it runs through the group as g does, so the sum is the same. <bookmark mark='c'/> The inverse of a product reverses its order, <bookmark mark='d'/> and h comes out of the sum: the average is equivariant, whatever f was. <bookmark mark='e'/> The price: one evaluation per group element, sixteen factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Augmentation is the cheap version: one random transformation per example, hoping the network learns the rest.",
+   "zh": "任何函数都能通过在群上取平均变成等变的：对每个g，先变换输入，再用f，再撤销g。<bookmark mark='a'/>给这个平均输入一个转过的x，也就是h作用在x上。<bookmark mark='b'/>把g乘h改名为g′：g走遍整个群时，g′也走遍整个群，所以和不变。<bookmark mark='c'/>乘积的逆要倒过顺序，<bookmark mark='d'/>于是h从和里提了出来：无论f是什么，平均都是等变的。<bookmark mark='e'/>代价是：群里每个元素算一次，十六个点就是十六的阶乘次，空间转动则是无穷多次。<bookmark mark='f'/>数据增强是便宜的版本：每个样本随机变换一次，指望网络学会其余的。"
+  },
+  "8ca076b03b93": {
+   "scene": "Symmetry",
+   "en": "Here is the check on our five-particle system: four networks, the same data, the same number of steps. <bookmark mark='a'/> Pause and predict: which turns its answer exactly when the input is turned? <bookmark mark='b'/> The equivariant network, EGNN, built in chapter seven: its turned and shifted answers are off by about a ten-millionth of a unit, rounding error. <bookmark mark='c'/> A message-passing network on raw coordinates handles a reordering exactly, not a turn. <bookmark mark='d'/> The plain MLP gets neither; trained on turned copies, its turning error is 0.06, smaller than its own error, but not zero. <bookmark mark='e'/> Symmetry built into the layers holds exactly, on every input; learned from examples, only approximately, near the data.",
+   "zh": "这是在我们五粒子系统上的检验：四个网络，同样的数据，同样的步数。<bookmark mark='a'/>停下来预测一下：输入转动时，哪个网络的答案会精确地跟着转？<bookmark mark='b'/>等变网络EGNN，第7章会搭建它：它转过、平移过的答案只差大约千万分之一个单位，是舍入误差。<bookmark mark='c'/>读原始坐标的消息传递网络能精确处理重新编号，处理不了转动。<bookmark mark='d'/>普通MLP两样都不行；用转过的副本训练后，它的转动误差是0.06，比它自己的预测误差小，但不是零。<bookmark mark='e'/>做进网络层的对称性在每个输入上都精确成立；从例子里学来的只是近似成立，而且只在数据附近。"
+  },
+  "9982c0494add": {
+   "scene": "Sets",
+   "en": "Chapter three. Functions of sets.",
+   "zh": "第3章。集合上的函数。"
+  },
+  "65eff021244a": {
+   "scene": "Sets",
+   "en": "Sixteen points in the plane, from one of four shapes: a ring, a disc, a segment, or two blobs. Say which. <bookmark mark='a'/> A plain network needs a list, so we number the points and feed it thirty-two coordinates. <bookmark mark='b'/> But the numbering is arbitrary: renumber, and the picture is the same while the list is not. <bookmark mark='c'/> A plain network trained on eight thousand sets sees a new input: its belief that this is a ring goes from 100 to 100 percent. <bookmark mark='d'/> Deep Sets, built for sets, gives exactly the same answer, as it must.",
+   "zh": "平面上的十六个点，来自四种形状之一：圆环、圆盘、线段，或者两团。说出是哪一种。<bookmark mark='a'/>普通网络需要一个列表，所以我们给这些点编号，喂给它三十二个坐标。<bookmark mark='b'/>但编号是任意的：重新编号，图还是那张图，列表却变了。<bookmark mark='c'/>一个用八千个集合训练过的普通网络看到一个新输入：它认为这是一个环的把握，从100%变成了100%。<bookmark mark='d'/>为集合而建的Deep Sets给出完全相同的答案，它也必须如此。"
+  },
+  "b3ad077eed49": {
+   "scene": "Sets",
+   "en": "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order exactly when it is a sum of one function phi over the elements, followed by a function rho. <bookmark mark='a'/> One direction is easy: a sum ignores order. <bookmark mark='b'/> For the other, number every possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> In base four, the sum has a one in place k exactly when element k is in the set: no carries, so different sets give different sums. <bookmark mark='d'/> So any function of the set is a function of the sum. <bookmark mark='e'/> For sets of real numbers, power sums play this role, by Newton's identities.",
+   "zh": "Deep Sets背后的定理，出自曼齐尔·扎希尔等人2017年的工作：一个集合函数与顺序无关，当且仅当它是先对各元素求同一个函数phi的和，再接一个函数rho。<bookmark mark='a'/>一个方向很容易：和与顺序无关。<bookmark mark='b'/>另一个方向：给每个可能的元素编号，令phi(x)等于四的负编号次方。<bookmark mark='c'/>用四进制写，元素k在集合里，和的第k位就恰好是1：没有进位，所以不同的集合给出不同的和。<bookmark mark='d'/>于是集合的任何函数都是这个和的函数。<bookmark mark='e'/>对于实数集合，由牛顿恒等式，幂和起到同样的作用。"
+  },
+  "535ee10a211f": {
+   "scene": "Sets",
+   "en": "As a network, this is simple. <bookmark mark='a'/> The same small network phi reads every point, <bookmark mark='b'/> the results are summed, <bookmark mark='c'/> and a second network rho reads the sum. <bookmark mark='d'/> phi's weights are shared by every point, as a convolution shares its weights across positions. <bookmark mark='e'/> PointNet, the same year, used a maximum instead of the sum. And a transformer without positions treats its tokens as a set: reorder the inputs, and the outputs reorder with them.",
+   "zh": "做成网络，这很简单。<bookmark mark='a'/>同一个小网络phi读每个点，<bookmark mark='b'/>结果加起来，<bookmark mark='c'/>第二个网络rho读这个和。<bookmark mark='d'/>phi的权重被所有点共享，就像卷积在各个位置共享权重。<bookmark mark='e'/>同一年的PointNet用最大值代替了求和。而一个没有位置编码的Transformer把它的词元当作一个集合：输入重新排序，输出也跟着重新排序。"
+  },
+  "aa57c0071e36": {
+   "scene": "Sets",
+   "en": "Before the full comparison, watch one training run of each, on 512 training sets, the held-out accuracy checked every two hundred steps. <bookmark mark='a'/> Deep Sets passes eighty percent after 200 steps and ends at 99 percent. <bookmark mark='b'/> The plain MLP never gets to eighty percent; it ends at 47 percent. <bookmark mark='c'/> The MLP shown reordered copies gets there too, but later, at step 1,600, and ends at 96.",
+   "zh": "在完整比较之前，先看每种网络的一次训练，用512组训练集合，每两百步检查一次留出集上的准确率。<bookmark mark='a'/>Deep Sets在200步之后超过80%，最后达到99%。<bookmark mark='b'/>普通MLP始终没有达到80%，最后停在47%。<bookmark mark='c'/>看重新排序副本的MLP也做到了，但更晚，在第1600步，最后达到96%。"
+  },
+  "4c0f1af15d93": {
+   "scene": "Sets",
+   "en": "Now train them on 32 up to 8,192 sets, three seeds each, the same number of steps. <bookmark mark='a'/> With only 32 sets, Deep Sets is right 70 percent of the time. <bookmark mark='b'/> The plain MLP is at 27 percent, and it needs 8,192 sets to reach what Deep Sets did with 32. <bookmark mark='c'/> Reordered copies help a lot: 60 percent at 32 sets. The MLP with reordered copies needs 128 sets to match that. Even at the largest size Deep Sets stays ahead: Deep Sets 100 percent, the copies 96. <bookmark mark='d'/> But copies teach the symmetry only approximately: reorder the same test sets, and the plain MLP changes its answer on 61 percent of them, the one trained on copies on 11 percent, Deep Sets on none.",
+   "zh": "现在来训练，从32组集合到8192组，每种三个种子，步数相同。<bookmark mark='a'/>只用32组集合，Deep Sets就有70%的时候是对的。<bookmark mark='b'/>普通MLP是27%，它需要8192组集合，才能达到Deep Sets用32组时的水平。<bookmark mark='c'/>重新排序的副本帮助很大：32组集合时是60%。用重新排序副本训练的MLP，需要128组集合才能追上这个水平。即使在最大的规模上，Deep Sets仍然领先：Deep Sets是100%，副本是96%。<bookmark mark='d'/>但副本只能近似地教会对称性：把同样的测试集合重新排序，普通MLP在61%的集合上改了答案，用副本训练的那个在11%的集合上改了答案，Deep Sets一个也没改。"
+  },
+  "37b71146e924": {
+   "scene": "Sets",
+   "en": "So building the symmetry in did two things: it saved data, and it made the answer exactly order-free, on every input. Graphs are next: sets with connections.",
+   "zh": "所以，把对称性做进去带来了两件事：节省了数据，并且让答案在每个输入上都严格与顺序无关。接下来是图：带连接的集合。"
+  },
+  "67380e0ab096": {
+   "scene": "Messages",
+   "en": "Chapter four. Message passing.",
+   "zh": "第4章。消息传递。"
+  },
+  "8f39810b5702": {
+   "scene": "Messages",
+   "en": "A graph is a set with connections: nodes, and edges between some pairs. Here is decalin, ten carbons and eleven bonds. <bookmark mark='a'/> A computer stores it as an adjacency matrix, with a one wherever two nodes are joined. <bookmark mark='b'/> Number the nodes differently and its rows and columns shuffle, though the molecule is the same. <bookmark mark='c'/> So a network on graphs must be equivariant to renumbering: permute the nodes, and its answers permute the same way. <bookmark mark='d'/> Graphs are everywhere: molecules, road maps, social networks, weather meshes, and proteins, residues joined when close in space.",
+   "zh": "图是带连接的集合：节点，以及某些节点对之间的边。这是十氢萘，十个碳原子，十一根键。<bookmark mark='a'/>计算机把它存成一个邻接矩阵，两个节点相连的地方就是1。<bookmark mark='b'/>换一种方式给节点编号，它的行和列就被打乱了，而分子还是同一个。<bookmark mark='c'/>所以图上的网络必须对重新编号等变：把节点重新排列，它的答案也同样重新排列。<bookmark mark='d'/>图无处不在：分子、道路图、社交网络、天气网格，还有蛋白质，空间上挨得近的残基相连。"
+  },
+  "3d3de08b8cc8": {
+   "scene": "Messages",
+   "en": "In 2017 Justin Gilmer and colleagues at Google put these networks into one form, message passing. Every node keeps a state, a vector h. <bookmark mark='a'/> In each layer every node sums messages from its neighbours, a learned function M of the two states and the edge, <bookmark mark='b'/> then updates its state from the old one and the sum. <bookmark mark='c'/> A readout sums the final states into an answer about the whole graph. <bookmark mark='d'/> Every step is a sum over neighbours, so the numbering can't matter. <bookmark mark='e'/> The graph convolutional network of Thomas Kipf and Max Welling is the simplest case: average the neighbours' states, normalized by degree, and apply one weight matrix.",
+   "zh": "2017年，谷歌的贾斯汀·吉尔默等人把这些网络归入一个统一的形式：消息传递。每个节点保存一个状态，一个向量h。<bookmark mark='a'/>每一层，每个节点把来自邻居的消息加起来，消息是两个状态和这条边的一个学出来的函数M，<bookmark mark='b'/>然后由旧状态和这个和更新自己的状态。<bookmark mark='c'/>一个读出把最后的状态加起来，给出关于整个图的答案。<bookmark mark='d'/>每一步都是对邻居求和，所以编号无关紧要。<bookmark mark='e'/>托马斯·基普夫和马克斯·韦林的图卷积网络是最简单的情形：按度数归一化，平均邻居的状态，再乘一个权重矩阵。"
+  },
+  "100e90cfe05f": {
+   "scene": "Messages",
+   "en": "The idea is older than its name. <bookmark mark='a'/> In 1997 Alessandro Sperduti and Antonina Starita trained networks on labelled graphs. <bookmark mark='b'/> In 2005 Marco Gori and colleagues proposed the graph neural network, its node states updated from their neighbours until they settled. <bookmark mark='c'/> In 2014 Joan Bruna and colleagues defined convolutions through the graph's spectrum. <bookmark mark='d'/> In 2015 David Duvenaud and colleagues learned fingerprints of molecules. <bookmark mark='e'/> Gilmer's network then predicted thirteen quantum properties of small molecules, eleven within chemical accuracy. <bookmark mark='f'/> And Peter Battaglia and colleagues argued that graphs are the general way to give a network relational structure.",
+   "zh": "这个想法比它的名字更早。<bookmark mark='a'/>1997年，亚历山德罗·斯佩尔杜蒂和安东尼娜·斯塔里塔在带标签的图上训练网络。<bookmark mark='b'/>2005年，马尔科·戈里等人提出了图神经网络，节点状态由邻居反复更新，直到稳定。<bookmark mark='c'/>2014年，琼·布鲁纳等人通过图的谱来定义卷积。<bookmark mark='d'/>2015年，大卫·杜维诺等人学会了分子的指纹。<bookmark mark='e'/>后来，吉尔默的网络预测了小分子的十三种量子性质，其中十一种达到化学精度。<bookmark mark='f'/>而彼得·巴塔利亚等人论证说，图是让网络具备关系结构的通用方式。"
+  },
+  "12be89b7cbec": {
+   "scene": "Messages",
+   "en": "Let's train one. Three hundred people in three communities, friendships mostly within: 89 percent of the edges, about 6 per person. Each carries only a weak, noisy hint of their community, and only 60 are labelled. <bookmark mark='a'/> A two-layer graph convolutional network learns from those labels and the graph: watch its guesses for everyone else. <bookmark mark='b'/> Two layers see two hops. <bookmark mark='c'/> An MLP that sees only each person's hint gets 46 percent right; the graph network 89 percent, over three seeds. Passing messages lifts it well above the hints alone.",
+   "zh": "我们来训练一个。三百个人，分在三个社群里，友谊大多在社群内部：89%的边在社群内，平均每人大约6条。每个人只带着关于自己社群的一点微弱、嘈杂的线索，而且只有60个人有标签。<bookmark mark='a'/>一个两层的图卷积网络从这些标签和图中学习：看它对其他所有人的猜测。<bookmark mark='b'/>两层能看到两跳。<bookmark mark='c'/>只看每个人自己线索的MLP猜对46%；图网络猜对89%，三个种子的结果。传递消息让结果远远超过只看线索的水平。"
+  },
+  "f4a7a378e052": {
+   "scene": "Messages",
+   "en": "That is message passing: a learned sum over neighbours, repeated, so that after L layers each node has heard from everything within L hops. What can such a network tell apart?",
+   "zh": "这就是消息传递：对邻居学出来的求和，一遍遍重复，于是L层之后，每个节点都听到了L跳以内的一切。这样的网络能分辨什么？"
+  },
+  "22ef87d71c0e": {
+   "scene": "WL",
+   "en": "Chapter five. What message passing can't see.",
+   "zh": "第5章。消息传递看不见的东西。"
+  },
+  "4a36e7aca9b8": {
+   "scene": "WL",
+   "en": "In 1968 Boris Weisfeiler and Andrei Leman described colour refinement, the standard first test of whether two graphs are the same up to numbering. <bookmark mark='a'/> Every node starts with one colour. <bookmark mark='b'/> Each round, a node's new colour names its old colour and its neighbours' colours: here the carbons with three neighbours split off. <bookmark mark='c'/> Then their neighbours, until nothing changes. Different colour counts mean different graphs. <bookmark mark='d'/> Decalin and bicyclopentyl, 3 rounds: At every round the two molecules have exactly the same colours in the same numbers, so the test says they might be the same graph. Yet one is two six-rings sharing an edge, the other two five-rings joined by a bond.",
+   "zh": "1968年，鲍里斯·魏斯费勒和安德烈·莱曼描述了颜色细化，这是判断两个图在编号之外是否相同的标准初步测试。<bookmark mark='a'/>每个节点一开始都是同一种颜色。<bookmark mark='b'/>每一轮，节点的新颜色由它的旧颜色和邻居的颜色命名：这里，有三个邻居的碳原子分了出来。<bookmark mark='c'/>然后是它们的邻居，直到不再变化。颜色计数不同，图就不同。<bookmark mark='d'/>十氢萘和联环戊烷，3轮：每一轮，两个分子的颜色种类和数量都完全相同，所以检验说它们可能是同一个图。可一个是共用一条边的两个六元环，另一个是由一根键连起来的两个五元环。"
+  },
+  "94aea16a703a": {
+   "scene": "WL",
+   "en": "And no message-passing network can do better. Keyulu Xu and colleagues, and Christopher Morris and colleagues, proved in 2019: if colour refinement can't separate two nodes after t rounds, no message-passing network separates them after t layers. <bookmark mark='a'/> By induction: at the start, everything is equal. <bookmark mark='b'/> Two nodes with the same colour next round had the same colour and the same multiset of neighbours' colours; <bookmark mark='c'/> by hypothesis, then, the same state and the same multiset of neighbours' states, <bookmark mark='d'/> from which a layer computes identical new states. <bookmark mark='e'/> And the bound is reached: a sum followed by an MLP, the graph isomorphism network, separates everything colour refinement does.",
+   "zh": "而且没有哪个消息传递网络能做得更好。Keyulu Xu等人，以及克里斯托弗·莫里斯等人，在2019年证明：如果颜色细化在t轮之后分不开两个节点，那么没有消息传递网络能在t层之后分开它们。<bookmark mark='a'/>用归纳法：一开始，一切都相同。<bookmark mark='b'/>下一轮颜色相同的两个节点，原来颜色相同，邻居颜色的多重集也相同；<bookmark mark='c'/>于是按归纳假设，状态相同，邻居状态的多重集也相同，<bookmark mark='d'/>一层网络从这些算出的新状态也就相同。<bookmark mark='e'/>而且这个上界能达到：求和之后接一个MLP，也就是图同构网络，能分开颜色细化能分开的一切。"
+  },
+  "8d9eab3fc90e": {
+   "scene": "WL",
+   "en": "Why a sum? Aggregation must not lose information about the multiset of neighbours. <bookmark mark='a'/> Neighbours a, a, b, b and neighbours a, b have the same mean and the same maximum; only the sum differs. <bookmark mark='b'/> Computed: give every node of a random graph the same features, and ask a one-layer network for each node's degree. A sum gets within 0.00. <bookmark mark='c'/> A mean or a maximum, 1.46 and 1.46, hardly better than the spread of the degrees, 1.53: to them every node with a neighbour looks alike.",
+   "zh": "为什么是求和？聚合不能丢掉关于邻居多重集的信息。<bookmark mark='a'/>邻居a、a、b、b和邻居a、b的平均值相同，最大值也相同；只有和不同。<bookmark mark='b'/>计算一下：给一个随机图的每个节点同样的特征，让一个单层网络说出每个节点的度。用求和，误差在0.00以内。<bookmark mark='c'/>用平均或最大值，分别是1.46和1.46，几乎不比度数的离散程度1.53好：在它们看来，每个有邻居的节点都一样。"
+  },
+  "3eaa8f466f5c": {
+   "scene": "WL",
+   "en": "Now make a network fail on purpose. Graphs of 15 nodes that are unions of cycles: is there a triangle? <bookmark mark='a'/> To colour refinement they are all identical: every node has two neighbours, whose neighbours have two neighbours, forever. So every message-passing network must answer the same for all of them. <bookmark mark='b'/> Every graph gets exactly the same output, to the last digit, so GIN can do no better than always answering yes: 63.8 percent, the base rate. <bookmark mark='c'/> Giving every node a few random numbers breaks the symmetry in principle, but in our budget GIN never learned to use them: it stayed at the base rate in all three seeds. <bookmark mark='d'/> A network whose features live on pairs of nodes, updating each pair through every third node, sees triangles directly: 100.0 percent or better, in every seed, and its training curve leaves the base rate within a few hundred steps. Remember that construction: it is the heart of AlphaFold.",
+   "zh": "现在故意让一个网络失败。15个节点、由若干个环组成的图：里面有没有三角形？<bookmark mark='a'/>在颜色细化看来，它们全都一样：每个节点都有两个邻居，邻居又各有两个邻居，一直如此。所以任何消息传递网络对它们都必须给出同一个答案。<bookmark mark='b'/>每个图得到的输出完全相同，一位都不差，所以GIN最多只能总是回答有：63.8%，也就是基准比例。<bookmark mark='c'/>给每个节点几个随机数，原则上能打破对称，但在我们的预算内，GIN始终没学会利用它们：三个种子全都停在基准比例。<bookmark mark='d'/>一个把特征放在节点对上、通过每个第三个节点更新每一对的网络，能直接看见三角形：每个种子都达到100.0%或更高，而且它的训练曲线在几百步之内就离开了基准比例。记住这个构造：它是AlphaFold的核心。"
+  },
+  "fe7e09bf7fbb": {
+   "scene": "WL",
+   "en": "How bad is it in practice? On random graphs, hardly at all: colour refinement separated 300 of 300 different pairs. <bookmark mark='a'/> On graphs where every node has three neighbours, 0 of 100. <bookmark mark='b'/> The fixes add what a neighbour sum can't build: colouring tuples of nodes, at a cost growing as n to the k; counting triangles and other patterns; positions; or attention over every pair. <bookmark mark='c'/> Graph isomorphism itself is not known to be easy or hard; László Babai showed in 2016 that quasi-polynomial time suffices.",
+   "zh": "实际中有多糟？在随机图上，几乎不成问题：颜色细化分开了300对不同图中的300对。<bookmark mark='a'/>在每个节点都有三个邻居的图上，100对中只分开了0对。<bookmark mark='b'/>补救办法是加入邻居求和构造不出来的东西：给节点的元组上色，代价按n的k次方增长；数三角形和其他小图案；位置；或者覆盖每一对的注意力。<bookmark mark='c'/>图同构本身是容易还是困难，至今未知；拉斯洛·鲍鲍伊在2016年证明了拟多项式时间就够了。"
+  },
+  "e0a1da046966": {
+   "scene": "Depth",
+   "en": "Chapter six. Deep graph networks.",
+   "zh": "第6章。深层图网络。"
+  },
+  "b8a3c2b21c39": {
+   "scene": "Depth",
+   "en": "Graph networks are usually shallow, two to four layers; image networks run past a hundred. One reason: strip a graph convolution of its weights and it is an average over neighbours, applied again and again. <bookmark mark='a'/> The averaging matrix is symmetric, with orthonormal eigenvectors and eigenvalues at most one. <bookmark mark='b'/> Applying it k times raises each eigenvalue to the k. <bookmark mark='c'/> Every term but the first dies away; the first is one pattern on every node, scaled by the square root of its degree. <bookmark mark='d'/> The rate is the second eigenvalue to the k. <bookmark mark='e'/> Every node ends with the same features: over-smoothing, named by Qimai Li and colleagues in 2018.",
+   "zh": "图网络通常很浅，两到四层；图像网络则超过一百层。原因之一：把图卷积的权重去掉，它就是一个对邻居的平均，一遍又一遍地做。<bookmark mark='a'/>平均矩阵是对称的，有正交归一的特征向量，特征值都不超过1。<bookmark mark='b'/>用它k次，就把每个特征值变成k次方。<bookmark mark='c'/>除第一项以外的每一项都衰减掉了；第一项在每个节点上是同一个图样，按度数的平方根缩放。<bookmark mark='d'/>衰减速率是第二特征值的k次方。<bookmark mark='e'/>每个节点最后都有同样的特征：过平滑，由Qimai Li等人在2018年命名。"
+  },
+  "5a9da6eeae25": {
+   "scene": "Depth",
+   "en": "Here it is on our three-community graph: the Dirichlet energy, how much neighbours differ, after each round of averaging. <bookmark mark='a'/> It falls in a straight line on this log scale, 4 powers of ten in sixteen rounds, at the rate the second eigenvalue, 0.915, predicts. <bookmark mark='b'/> In pictures: the features start as noise; a few rounds separate the communities, which is why two layers help; many rounds collapse everything to a point.",
+   "zh": "这是在我们的三社群图上：狄利克雷能量，也就是邻居之间差多少，在每一轮平均之后的值。<bookmark mark='a'/>在这个对数坐标上它沿直线下降，十六轮下降了4个数量级，正是第二特征值0.915预言的速率。<bookmark mark='b'/>用图来看：特征一开始是噪声；几轮平均把社群分开，这就是两层网络有帮助的原因；很多轮之后，一切都坍缩成一个点。"
+  },
+  "a3f6103b528d": {
+   "scene": "Depth",
+   "en": "Now with weights and training: the same task at depths from two to sixty-four, three seeds each. <bookmark mark='a'/> The plain network does best with the fewest, 2 layers; from 8 layers on, the plain network is at chance, about one in three. <bookmark mark='b'/> The residual network, which adds each layer's output to its input, holds at 94 percent at 64 layers: the skip connection keeps each node's own information from being averaged away, the fix that made image networks deep in Part 9. <bookmark mark='c'/> Part of the collapse is also an optimization problem: gradients must pass back through all those averages.",
+   "zh": "现在加上权重和训练：同一个任务，深度从二到六十四，每个深度三个种子。<bookmark mark='a'/>普通网络在the fewest, 2层时最好；从8层开始，普通网络就只有瞎猜的水平，大约三分之一。<bookmark mark='b'/>残差网络把每一层的输出加回到它的输入上，在64层时仍保持在94%：跳跃连接让每个节点自己的信息不被平均掉，正是第9部分里让图像网络变深的那个办法。<bookmark mark='c'/>坍缩的一部分也是优化问题：梯度必须穿过所有这些平均反传回来。"
+  },
+  "de42fe722201": {
+   "scene": "Depth",
+   "en": "A second problem appears when the answer depends on distant nodes. <bookmark mark='a'/> The nodes within L hops can grow exponentially, <bookmark mark='b'/> yet all their information must squeeze into one fixed-size vector. <bookmark mark='c'/> Uri Alon and Eran Yahav called this over-squashing, in 2021; Jake Topping and colleagues traced it to bottlenecks. <bookmark mark='d'/> Remedies: rewire the graph, add nodes that see everything, or attend to every node directly.",
+   "zh": "当答案依赖远处的节点时，第二个问题就出现了。<bookmark mark='a'/>L跳以内的节点可以指数增长，<bookmark mark='b'/>可它们所有的信息都得挤进一个固定大小的向量。<bookmark mark='c'/>乌里·阿隆和埃兰·亚哈夫在2021年把这叫作过挤压；杰克·托平等人把它追溯到瓶颈。<bookmark mark='d'/>补救：重新连图，加入能看见一切的节点，或者直接对每个节点做注意力。"
+  },
+  "e6e286c7cd3a": {
+   "scene": "Depth",
+   "en": "Attention is the third idea. <bookmark mark='a'/> Instead of summing its neighbours equally, a node weighs them: in Petar Veličković's graph attention network of 2018, by a softmax of learned scores. <bookmark mark='b'/> GATv2, from Shaked Brody and colleagues, fixed a flaw: the original scores ranked neighbours the same way for every node. <bookmark mark='c'/> A transformer, from Part 13, is this on the complete graph; <bookmark mark='d'/> graph transformers add the graph back as encodings of where each node sits. <bookmark mark='e'/> And AlphaFold's core is attention over pairs of residues, biased by triangles: last chapter's pair network, grown up.",
+   "zh": "注意力是第三个想法。<bookmark mark='a'/>节点不再平等地加总邻居，而是给它们加权：在彼得·韦利奇科维奇2018年的图注意力网络里，权重是学出来的分数的softmax。<bookmark mark='b'/>沙凯德·布罗迪等人的GATv2修正了一个缺陷：原来的分数对每个节点都按同样的方式给邻居排序。<bookmark mark='c'/>第13部分的Transformer，就是完全图上的这种网络；<bookmark mark='d'/>图Transformer再把图加回来，编码每个节点所处的位置。<bookmark mark='e'/>而AlphaFold的核心是残基对上的注意力，由三角形加偏置：上一章的节点对网络，长大了。"
+  },
+  "594202c74d80": {
+   "scene": "Depth",
+   "en": "So deep graph networks fight two forces: repeated averaging washes out the differences between nodes, and bottlenecks squash distant information. Skip connections and attention push back. Next: the symmetry of space itself.",
+   "zh": "所以深层图网络要对抗两股力量：反复平均会抹掉节点之间的差别，而瓶颈会挤压远处的信息。跳跃连接和注意力能顶回去。接下来：空间本身的对称性。"
+  },
+  "aafac7f8d3a2": {
+   "scene": "Rotations",
+   "en": "Chapter seven. Networks that turn with the molecule.",
+   "zh": "第7章。随分子一起转动的网络。"
+  },
+  "7de8b221a0a4": {
+   "scene": "Rotations",
+   "en": "For molecules the symmetry is the group of rigid motions of space, E of three: rotations, reflections, translations. <bookmark mark='a'/> A molecule's energy is invariant under all of them. <bookmark mark='b'/> Differentiate both sides in the positions: the chain rule brings out the transpose of R. <bookmark mark='c'/> Multiply by R, <bookmark mark='d'/> and since forces are minus the gradient, they turn with the molecule: equivariant. So an invariant model of the energy gives equivariant forces for free.",
+   "zh": "对分子来说，对称是空间刚体运动构成的群，E(3)：转动、反射、平移。<bookmark mark='a'/>分子的能量在所有这些变换下不变。<bookmark mark='b'/>两边对位置求导：链式法则带出了R的转置。<bookmark mark='c'/>乘以R，<bookmark mark='d'/>又因为力是能量梯度的负值，力就随分子一起转：等变。所以一个不变的能量模型，免费给出等变的力。"
+  },
+  "9eb23df8b931": {
+   "scene": "Rotations",
+   "en": "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of Victor Garcia Satorras, Emiel Hoogeboom and Max Welling, 2021. Each atom has features h and a position x. <bookmark mark='a'/> A message between two atoms sees their features and squared distance, nothing else. <bookmark mark='b'/> Each atom moves along the differences of positions, weighted by learned scalars; <bookmark mark='c'/> its features update from the summed messages, and stay invariant. <bookmark mark='d'/> Turn and shift the input: the messages are unchanged, the differences turn by R, the shift cancels, so the new positions are the old ones turned and shifted. <bookmark mark='e'/> SchNet, in 2017, had used distances alone.",
+   "zh": "怎样把它做进网络里？最简单的答案是维克多·加西亚·萨托拉斯、埃米尔·胡赫博姆和马克斯·韦林2021年的E(n)等变图网络。每个原子有特征h和位置x。<bookmark mark='a'/>两个原子之间的消息只看它们的特征和距离的平方，别的都不看。<bookmark mark='b'/>每个原子沿着位置差移动，由学出来的标量加权；<bookmark mark='c'/>它的特征由加总的消息更新，保持不变。<bookmark mark='d'/>把输入转一转、移一移：消息不变，位置差跟着R转，平移抵消，于是新位置就是旧位置转过、移过的样子。<bookmark mark='e'/>2017年的SchNet只用了距离。"
+  },
+  "05fb5f1b5b3a": {
+   "scene": "Rotations",
+   "en": "EGNN carries scalars, which don't turn, and positions, which turn like vectors. Richer models carry more. <bookmark mark='a'/> Any function on the sphere can be written in spherical harmonics of degree zero, one, two and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: it mixes them only within each degree, in blocks of one, three and five; off the blocks, zero to 14 decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with its own block, and combine them by the Clebsch–Gordan rules of quantum angular momentum: <bookmark mark='d'/> the design of tensor field networks, NequIP and MACE, among today's most accurate learned force fields.",
+   "zh": "EGNN携带标量，它们不转；还有位置，它们像向量一样转。更丰富的模型携带更多。<bookmark mark='a'/>球面上的任何函数都能用零阶、一阶、二阶以及更高阶的球谐函数写出来。<bookmark mark='b'/>这里计算的是一次转动对阶数不超过二的九个球谐函数做了什么：它只在每一阶内部混合，分成一、三、五三个块；块外精确到小数点后14位都是零。<bookmark mark='c'/>所以网络可以保留每一阶的特征，用各自的块来转，再按量子角动量的克莱布什–戈尔丹规则把它们组合起来：<bookmark mark='d'/>这就是张量场网络、NequIP和MACE的设计，它们属于当今最精确的学习力场。"
+  },
+  "4f7c5e4e6fd0": {
+   "scene": "Rotations",
+   "en": "Does it pay? Our five-body system again: predict where the particles are at time one. Four networks, the same three thousand steps, from a hundred training systems up to 3,000, three seeds each. <bookmark mark='a'/> The dashed line is the simplest guess: every particle keeps going straight. <bookmark mark='b'/> The plain MLP ends at 0.082, no better than that guess of 0.074; turned copies help the MLP: 0.074. <bookmark mark='c'/> Message passing on raw coordinates: 0.011. <bookmark mark='d'/> EGNN: 0.0061, 14 times smaller than the MLP's. Trained on 1,000 systems, EGNN already beats every other network trained on 3,000.",
+   "zh": "值得吗？还是我们的五体系统：预测粒子在时刻一的位置。四个网络，同样三千步训练，训练系统从一百个到3000个，每种三个种子。<bookmark mark='a'/>虚线是最简单的猜测：每个粒子都沿直线走下去。<bookmark mark='b'/>普通MLP最后是0.082，不比那个0.074的猜测好；转过的副本对MLP有帮助：0.074。<bookmark mark='c'/>读原始坐标的消息传递网络：0.011。<bookmark mark='d'/>EGNN：0.0061，比MLP的小14倍。只用1000个系统训练，EGNN就已经胜过了用3000个系统训练的所有其他网络。"
+  },
+  "8fa48c105a28": {
+   "scene": "Rotations",
+   "en": "Here is training itself, for the runs on 3,000 systems: one test system the networks never saw, its five particles, and where they really go by time one, the blue paths. <bookmark mark='a'/> The crosses are each network's predicted end points, at checkpoints through training. <bookmark mark='b'/> EGNN's crosses settle onto the circles; by the end its predicted positions are off by 0.38 on average. The MLP's end 1.40 away.",
+   "zh": "这是训练本身，用3000个系统的那几次训练：一个网络从没见过的测试系统，它的五个粒子，以及它们到时刻1真正走到哪里，蓝色的轨迹。<bookmark mark='a'/>叉号是每个网络在训练各个检查点预测的终点。<bookmark mark='b'/>EGNN的叉号落到了圆圈上；最后它预测的位置平均偏差0.38。MLP的偏差是1.40。"
+  },
+  "52469950fb4b": {
+   "scene": "Rotations",
+   "en": "That is the case for equivariance: no data is spent teaching the network that a turned molecule is the same molecule. Proteins are molecules too; the rest of this part takes these ideas into science, starting with the hardest molecule of all.",
+   "zh": "这就是支持等变性的理由：不用花任何数据去教网络，转过的分子还是同一个分子。蛋白质也是分子；本部分其余的内容把这些想法带进科学，从最难的分子讲起。"
+  },
+  "ec8236eefd0e": {
+   "scene": "Folding",
+   "en": "Chapter eight. The protein-folding problem.",
+   "zh": "第8章。蛋白质折叠问题。"
+  },
+  "77383262a0a5": {
+   "scene": "Folding",
+   "en": "A protein is a chain of amino acids, of twenty kinds, written by a gene. <bookmark mark='a'/> In water it folds into a precise shape, and the shape decides what it does: cut a molecule, grip a virus, open a channel. <bookmark mark='b'/> In 1958 John Kendrew saw the first, myoglobin, by X-ray crystallography. <bookmark mark='c'/> The Protein Data Bank opened in 1971 with seven structures; <bookmark mark='d'/> today it holds more than a quarter of a million. <bookmark mark='e'/> But we know billions of sequences, and a structure can take years to measure. Hence the problem: read the shape from the sequence.",
+   "zh": "蛋白质是一条由氨基酸连成的链，氨基酸有二十种，由一个基因写出。<bookmark mark='a'/>在水里它折叠成一个精确的形状，而形状决定了它做什么：切断一个分子，抓住一个病毒，打开一个通道。<bookmark mark='b'/>1958年，约翰·肯德鲁用X射线晶体学看到了第一个，肌红蛋白。<bookmark mark='c'/>蛋白质数据库在1971年开张时有7个结构；<bookmark mark='d'/>今天它收录了超过25万个。<bookmark mark='e'/>可我们知道几十亿条序列，而测定一个结构可能要好几年。于是就有了这个问题：从序列读出形状。"
+  },
+  "d00a0242ea29": {
+   "scene": "Folding",
+   "en": "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded the enzyme ribonuclease with urea; washed out, it refolded by itself and worked again: the sequence holds the shape. <bookmark mark='b'/> But in 1969 Cyrus Levinthal pointed out that a chain can't find its shape by trying them all. <bookmark mark='c'/> Give each joint of a 100-residue chain three choices: about ten to the 47 shapes. <bookmark mark='d'/> At ten trillion a second, that is ten to the 26 years; the universe is ten to the ten years old. <bookmark mark='e'/> Yet proteins fold in microseconds to seconds. Nature doesn't search blindly, and neither should a computer.",
+   "zh": "有两个事实给这个问题定了框架。<bookmark mark='a'/>1961年，克里斯蒂安·安芬森用尿素让核糖核酸酶解开折叠；洗掉尿素后，它自己折了回去，重新起作用：序列里就装着形状。<bookmark mark='b'/>但1969年，赛勒斯·列文索尔指出，一条链不可能靠逐个尝试来找到形状。<bookmark mark='c'/>给一条100个残基的链的每个关节三种选择：大约是十的47次方种形状。<bookmark mark='d'/>每秒试十万亿个，也要十的26次方年；宇宙的年龄是十的十次方年。<bookmark mark='e'/>可蛋白质在几微秒到几秒内就折叠好了。自然不会盲目搜索，计算机也不该。"
+  },
+  "25de9e701267": {
+   "scene": "Folding",
+   "en": "In 1994 John Moult and Krzysztof Fidelis turned the problem into a contest, CASP: every two years, predict structures measured but not yet published. <bookmark mark='a'/> Predictions are scored by GDT, roughly the percentage of residues within a few ångströms of their true place. <bookmark mark='b'/> Progress was slow for two decades; then evolution offered a clue. <bookmark mark='c'/> Line up the same protein from many species: when two positions touch, a mutation at one is often compensated at the other, so their columns change together; from around 2011, statistics could read contacts from them. <bookmark mark='d'/> At CASP13, in 2018, DeepMind's first AlphaFold predicted a histogram of distances for every residue pair, then folded a chain by gradient descent to match: high accuracy on 24 of the 43 hardest domains, against 14 for the next best.",
+   "zh": "1994年，约翰·莫尔特和克日什托夫·菲德利斯把这个问题变成了一场比赛，CASP：每两年一次，预测那些已经测定、但尚未发表的结构。<bookmark mark='a'/>预测用GDT打分，大致是落在真实位置几埃以内的残基所占的百分比。<bookmark mark='b'/>二十年里进展很慢；然后，进化给出了线索。<bookmark mark='c'/>把许多物种的同一种蛋白质对齐：两个位置相互接触时，一处的突变常常由另一处来补偿，所以这两列一起变化；大约从2011年起，统计方法就能从中读出接触。<bookmark mark='d'/>2018年的CASP13上，DeepMind的第一代AlphaFold为每一对残基预测距离的直方图，再用梯度下降把链折成与之相符：在43个最难的结构域中，有24个达到高精度，第二名是14个。"
+  },
+  "6ce07d8f50bd": {
+   "scene": "Folding",
+   "en": "Why distances? Because a full table of distances fixes a shape. Here are all the distances between our bundle's fifty-two atoms. <bookmark mark='a'/> Square them and centre them, <bookmark mark='b'/> and you get the dot products of the atoms' positions, since a squared distance is two squared lengths minus twice a dot product. <bookmark mark='c'/> Its eigenvectors give the coordinates back: classical multidimensional scaling, 1952. Three eigenvalues are nonzero, one per dimension, <bookmark mark='d'/> and the rebuilt chain matches to rounding error. <bookmark mark='e'/> But only up to a mirror image, which has the same distances; and proteins are not mirror-symmetric: their helices are right-handed.",
+   "zh": "为什么是距离？因为一张完整的距离表就确定了一个形状。这是我们螺旋束五十二个原子之间的所有距离。<bookmark mark='a'/>把它们平方，再中心化，<bookmark mark='b'/>就得到原子位置之间的点积，因为距离的平方等于两个长度的平方和减去两倍点积。<bookmark mark='c'/>它的特征向量把坐标还原出来：经典多维尺度分析，1952年。只有三个特征值非零，每个维度一个，<bookmark mark='d'/>还原出的链与原来的一致，只差舍入误差。<bookmark mark='e'/>但只能确定到一个镜像，镜像的距离完全相同；而蛋白质不是镜像对称的：它们的螺旋是右手螺旋。"
+  },
+  "8c0df4d216e7": {
+   "scene": "Folding",
+   "en": "AlphaFold 1 predicted only distances, noisy, and only for pairs it was sure were close. So do the same with ours: keep the pairs under 15 ångströms, 50 percent of them, add 1 ångström of noise, <bookmark mark='a'/> and from a random tangle, move the atoms by gradient descent until their distances match. <bookmark mark='b'/> From 12 random starts, seven of the 12 land on the true fold, and five on its mirror image, which fits the distances just as well. <bookmark mark='c'/> Nothing a reflection leaves unchanged, distances included, can tell which. AlphaFold 2 needed a representation that knows left from right.",
+   "zh": "AlphaFold 1只预测距离，带噪声，而且只针对它确信挨得近的残基对。我们也这样做：只保留15埃以内的残基对，占50%，加上1埃的噪声，<bookmark mark='a'/>然后从一团随机的乱线出发，用梯度下降移动原子，直到距离吻合。<bookmark mark='b'/>从12个随机起点出发，12次里有7次落在真实的折叠上，5次落在它的镜像上，而镜像和距离吻合得一样好。<bookmark mark='c'/>凡是在反射下不变的东西，包括距离，都分不清是哪个。AlphaFold 2需要一种分得清左右的表示。"
+  },
+  "4766fa68e2ec": {
+   "scene": "Folding",
+   "en": "Distances pin down a shape, but only up to its mirror image. Keep that in mind; AlphaFold 2's answer to it is one of its cleverest parts.",
+   "zh": "距离能确定一个形状，但只能精确到镜像。记住这一点；AlphaFold 2对此的回答，是它最巧妙的部分之一。"
+  },
+  "d28d89f7d370": {
+   "scene": "Evoformer",
+   "en": "Chapter nine. AlphaFold 2: the Evoformer.",
+   "zh": "第9章。AlphaFold 2：Evoformer。"
+  },
+  "c5bb55c248a0": {
+   "scene": "Evoformer",
+   "en": "AlphaFold 2, which John Jumper and colleagues at DeepMind entered in CASP14 in 2020, works in two stages. <bookmark mark='a'/> It searches genetic databases for related sequences, lined up in a multiple sequence alignment, and for similar known structures. <bookmark mark='b'/> The Evoformer, forty-eight blocks deep, reasons about these; <bookmark mark='c'/> the structure module turns the result into atoms, with a confidence per residue. <bookmark mark='d'/> Then it all runs again on its own output. <bookmark mark='e'/> The Evoformer keeps a vector per residue of every aligned sequence, and one per pair of residues, heir to AlphaFold 1's distance histograms.",
+   "zh": "AlphaFold 2是约翰·江珀等人在2020年代表DeepMind参加CASP14的系统，它分两个阶段工作。<bookmark mark='a'/>它在基因数据库里搜索相关序列，排成一个多序列比对，再找相似的已知结构。<bookmark mark='b'/>Evoformer有四十八个模块那么深，对这些信息进行推理；<bookmark mark='c'/>结构模块把结果变成原子，并给每个残基一个置信度。<bookmark mark='d'/>然后整个系统在自己的输出上再跑一遍。<bookmark mark='e'/>Evoformer为比对中每条序列的每个残基保留一个向量，为每一对残基保留一个向量，后者继承了AlphaFold 1的距离直方图。"
+  },
+  "e2c60a1b876d": {
+   "scene": "Evoformer",
+   "en": "Each Evoformer block passes information both ways between them. <bookmark mark='a'/> Along each sequence, the residues attend to one another, with the pair representation biasing the attention. <bookmark mark='b'/> Down each column, the same position attends across species. <bookmark mark='c'/> And back the other way, an outer product of two columns of the alignment, averaged over the sequences, updates the pair of those positions: co-evolution, learned.",
+   "zh": "每个Evoformer模块都在这两者之间双向传递信息。<bookmark mark='a'/>沿着每条序列，残基彼此做注意力，残基对的表示给这个注意力加上偏置。<bookmark mark='b'/>沿着每一列，同一个位置在不同物种之间做注意力。<bookmark mark='c'/>反过来，比对里两列的外积，在所有序列上平均，更新这两个位置组成的那一对：学出来的共进化。"
+  },
+  "8bd8c6b322ec": {
+   "scene": "Evoformer",
+   "en": "The new idea is in how the pairs update each other. Think of the pair representation as a guess at every distance. <bookmark mark='a'/> The guesses can't be independent: for any third residue k, the distance from i to j is at most i to k plus k to j. <bookmark mark='b'/> So each pair i j is updated from the other two edges of every triangle it sits in: a gated sum over k of products of the pairs i k and j k, the 'outgoing' update; <bookmark mark='c'/> the same with the edges pointing in. <bookmark mark='d'/> In the matrix, entry i j collects rows i and j. <bookmark mark='e'/> Triangle attention does the same with attention weights. <bookmark mark='f'/> Chapter five's lesson: pairs updated through a third node see what single nodes cannot.",
+   "zh": "新想法在于残基对怎样互相更新。把残基对的表示看成是对每个距离的猜测。<bookmark mark='a'/>这些猜测不可能互相独立：对任何第三个残基k，从i到j的距离最多是i到k加上k到j。<bookmark mark='b'/>所以每一对i、j都用它所在的每个三角形的另外两条边来更新：对k求和，把i k和j k这两对的乘积加起来，再加门控，这叫“外向”更新；<bookmark mark='c'/>指向内的边也同样处理。<bookmark mark='d'/>在矩阵里，元素i j收集第i行和第j行。<bookmark mark='e'/>三角注意力用注意力权重做同样的事。<bookmark mark='f'/>第5章的教训：通过第三个节点更新的节点对，能看见单个节点看不见的东西。"
+  },
+  "14f6b85d2b05": {
+   "scene": "Evoformer",
+   "en": "Does it work? A small test, computed here. Random protein-like chains of 20 residues; the model sees a quarter of the distances, with noise, and must fill in the rest, a stand-in for what an alignment tells AlphaFold. <bookmark mark='a'/> Two models of the same size and training: one updates each pair on its own, the other with triangle updates. <bookmark mark='b'/> Guessing each missing distance from the separation along the chain gives an error of 5.5 ångströms. Updating each pair on its own gets 6.2, no better: it never looks at the other pairs, and it knows the gap along the chain only up to eight. <bookmark mark='c'/> Triangle updates cut it to 1.4, 4.4 times smaller, and their guesses break the triangle inequality 9 times less often.",
+   "zh": "它管用吗？这里计算一个小测试。随机的、像蛋白质一样的链，20个残基；模型看到四分之一的距离，带噪声，要把其余的填出来，这代替了比对告诉AlphaFold的信息。<bookmark mark='a'/>两个同样大小、同样训练的模型：一个单独更新每一对，另一个用三角更新。<bookmark mark='b'/>只根据两个残基在链上隔多远来猜缺失的距离，误差是5.5埃。单独更新每一对得到6.2，并没有更好：它从不看别的残基对，而且它只知道链上八以内的间隔。<bookmark mark='c'/>Triangle updates cut it to 1.4，4.4 times smaller, and their guesses break the triangle inequality 9 times less often。"
+  },
+  "a7f25df626b4": {
+   "scene": "Evoformer",
+   "en": "Here is the training itself, replayed: both models' guesses for one held-out chain. <bookmark mark='a'/> At step zero both guess nothing in particular. <bookmark mark='b'/> Within a few hundred steps both learn the easy part, that neighbours along the chain are close in space: the dark band on the diagonal. <bookmark mark='c'/> The rest, which distant residues come back together, needs the other pairs; <bookmark mark='d'/> on the curve below, the triangle model passes the per-pair model's final error by step 250, and keeps going, to 1.5 ångströms against 6.2.",
+   "zh": "这是训练过程本身的回放：两个模型对一条留出链的猜测。<bookmark mark='a'/>第0步，两个模型的猜测都没有什么特别的。<bookmark mark='b'/>几百步之内，两个都学会了容易的部分：链上相邻的残基在空间里也挨得近，也就是对角线上的那条深色带。<bookmark mark='c'/>剩下的部分，也就是链上相隔很远的残基又在哪里碰到一起，需要别的残基对；<bookmark mark='d'/>在下面的曲线上，三角模型在第250步就超过了逐对模型的最终误差，而且继续下降，到1.5埃，逐对模型是6.2埃。"
+  },
+  "9e6c7ae2feb6": {
+   "scene": "Evoformer",
+   "en": "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over all targets, 87.0 on the hardest; around ninety is informally reckoned competitive with experiment. <bookmark mark='b'/> Its median backbone error was 0.96 ångström, against 2.8 for the next best; a carbon atom is about one and a half across. <bookmark mark='c'/> \"We have been stuck on this one problem, how do proteins fold up, for nearly fifty years,\" said John Moult; CASP called it a solution, for single chains.",
+   "zh": "而在2020年的CASP14上，它成功了。<bookmark mark='a'/>AlphaFold 2在所有目标上的中位数得分是92.4 GDT，在最难的目标上是87.0；按非正式的看法，大约九十分就能和实验相比。<bookmark mark='b'/>它的主链误差中位数是0.96埃，第二名是2.8；一个碳原子的直径大约是1.5埃。<bookmark mark='c'/>“我们在这个问题上卡了将近五十年：蛋白质是怎么折叠起来的，”约翰·莫尔特说；CASP称之为一个解答，针对单条链。"
+  },
+  "fdd682e85e65": {
+   "scene": "Evoformer",
+   "en": "So the Evoformer's two ideas: let the alignment and the pairs inform each other, and keep the pairs consistent through triangles. Next: turn pairs into a structure without losing left from right.",
+   "zh": "所以Evoformer的两个想法是：让比对和残基对互相提供信息，用三角形让残基对保持一致。下一步：把残基对变成一个结构，而且不弄丢左和右。"
+  },
+  "8ddd3d7631ab": {
+   "scene": "Structure",
+   "en": "Chapter ten. AlphaFold 2: frames, FAPE and recycling.",
+   "zh": "第10章。AlphaFold 2：坐标系、FAPE与循环。"
+  },
+  "18a6d51e1f55": {
+   "scene": "Structure",
+   "en": "The structure module treats each residue as a rigid body: a triangle of three backbone atoms with its own frame, a rotation and a position. <bookmark mark='a'/> It starts with every frame at the origin, a residue gas, and moves them. <bookmark mark='b'/> Its invariant point attention places learned points in each residue's frame and scores pairs of residues by how close those points come. <bookmark mark='c'/> A rigid motion of the protein moves every point alike, so the attention can't change. <bookmark mark='d'/> Each layer nudges every frame by an update in that frame's own coordinates, so the updates turn with the protein: equivariance, built in.",
+   "zh": "结构模块把每个残基当作一个刚体：由三个主链原子组成的三角形，有它自己的坐标系，一个旋转加一个位置。<bookmark mark='a'/>它一开始把所有坐标系都放在原点，一团“残基气体”，然后移动它们。<bookmark mark='b'/>它的不变点注意力在每个残基的坐标系里放置一些学出来的点，按这些点靠得多近来给残基对打分。<bookmark mark='c'/>蛋白质的一次刚体运动让每个点都同样移动，所以注意力不会变。<bookmark mark='d'/>每一层用一个以该坐标系自身坐标表示的更新，轻轻推动每个坐标系，所以更新随蛋白质一起转动：等变性，做在了里面。"
+  },
+  "26eaad122a32": {
+   "scene": "Structure",
+   "en": "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, FAPE. <bookmark mark='a'/> Stand in residue i's frame and look at atom j. <bookmark mark='b'/> Do this for every atom from every frame, in prediction and truth, and average the differences, each capped at ten ångströms so outliers can't dominate. <bookmark mark='c'/> A rigid motion of the whole structure cancels: FAPE ignores where the protein sits and how it is turned. <bookmark mark='d'/> But frames are built from three atoms by a right-hand rule, and a mirror image is not a rigid motion, so FAPE sees it.",
+   "zh": "网络应该被训练去最小化什么？AlphaFold 2的答案是坐标系对齐点误差，FAPE。<bookmark mark='a'/>站在残基i的坐标系里看原子j。<bookmark mark='b'/>对每个原子、从每个坐标系都这样看，在预测里和真实结构里都看，把差别平均起来，每个差别截断在十埃，免得离群值主导结果。<bookmark mark='c'/>整个结构的刚体运动会抵消：FAPE不管蛋白质在哪里、朝哪个方向。<bookmark mark='d'/>但坐标系是用右手法则从三个原子构造的，而镜像不是刚体运动，所以FAPE能看出来。"
+  },
+  "f167ad83787b": {
+   "scene": "Structure",
+   "en": "Here is the difference, measured on our bundle and its reflection. <bookmark mark='a'/> Every distance is the same, so the distance error is 0.00. <bookmark mark='b'/> Yet FAPE is 0.79, worse than moving every atom a whole ångström at random, 0.59. <bookmark mark='c'/> And chapter eight's folds, which distances couldn't sort, separate cleanly: those on the true fold score 0.31, mirror images 0.80.",
+   "zh": "差别在这里，在我们的螺旋束和它的镜像上测量。<bookmark mark='a'/>每个距离都一样，所以距离误差是0.00。<bookmark mark='b'/>可FAPE是0.79，比把每个原子随机移动整整1埃还差，那样是0.59。<bookmark mark='c'/>而第8章那些光靠距离分不开的折叠，现在被干净地分开了：落在真实折叠上的得分0.31，镜像0.80。"
+  },
+  "fe0f2be09a3f": {
+   "scene": "Structure",
+   "en": "The last trick is recycling: run the network again on its own previous output, so that a rough first structure can sharpen the reading of the alignment. <bookmark mark='a'/> In training the number of passes is random and the gradient flows only through the last, so extra passes cost no memory. <bookmark mark='b'/> We added it to chapter nine's triangle model. In our toy the extra passes change little: from 1.87 to 1.83 ångströms at best, though even with four passes it doesn't beat the same network trained without recycling, 1.42: our toy feeds back only its guesses about pairs, with no structure in the loop, while in AlphaFold 2 recycling did help.",
+   "zh": "最后一招是循环：把网络在它自己上一次的输出上再跑一遍，这样一个粗糙的初始结构就能让网络把比对读得更清楚。<bookmark mark='a'/>训练时，跑几遍是随机的，梯度只流过最后一遍，所以多跑几遍不多占内存。<bookmark mark='b'/>我们把它加到了第9章的三角模型上。在我们的玩具里，多跑几遍变化不大：从1.87埃到最好的1.83埃，不过即使跑四遍，它也没有胜过不用循环训练的同一个网络，1.42：我们的玩具送回去的只是它对残基对的猜测，回路里没有结构，而在AlphaFold 2里，循环确实有帮助。"
+  },
+  "681126dec6c3": {
+   "scene": "Structure",
+   "en": "In July 2021 DeepMind published AlphaFold 2 with its code; the same month David Baker's group published RoseTTAFold, built on the same insights. <bookmark mark='a'/> With EMBL's European Bioinformatics Institute, DeepMind then released predicted structures for over two hundred million proteins, <bookmark mark='b'/> each with the network's own residue-by-residue confidence, pLDDT. <bookmark mark='c'/> Two years later came the Nobel Prize. <bookmark mark='d'/> But AlphaFold 2 predicts one static shape per chain, and says little about how proteins bind DNA or hold a drug: the next step.",
+   "zh": "2021年7月，DeepMind发表了AlphaFold 2，并公开了代码；同一个月，大卫·贝克的团队发表了基于同样洞见的RoseTTAFold。<bookmark mark='a'/>随后，DeepMind和EMBL的欧洲生物信息研究所一起发布了两亿多个蛋白质的预测结构，<bookmark mark='b'/>每个都带着网络自己逐个残基给出的置信度，pLDDT。<bookmark mark='c'/>两年后，诺贝尔奖来了。<bookmark mark='d'/>但AlphaFold 2对每条链只预测一个静止的形状，对蛋白质怎样结合DNA、怎样夹住一个药物分子，说得很少：这是下一步。"
+  },
+  "d489be9018c8": {
+   "scene": "Structure",
+   "en": "So: residues as rigid frames, moved by attention that can't see how the protein is turned; a loss that ignores rigid motions but not reflections; and a network that reads its own answer and tries again.",
+   "zh": "所以：残基是刚性的坐标系，由看不见蛋白质怎么转的注意力来移动；一个不在乎刚体运动、却在乎反射的损失；还有一个会读自己的答案、再试一次的网络。"
+  },
+  "ff5851a3d731": {
+   "scene": "AF3",
+   "en": "Chapter eleven. AlphaFold 3: diffusion over atoms.",
+   "zh": "第11章。AlphaFold 3：原子上的扩散。"
+  },
+  "15819fbddbb5": {
+   "scene": "AF3",
+   "en": "In May 2024 Google DeepMind and Isomorphic Labs published AlphaFold 3. <bookmark mark='a'/> It takes almost anything in a cell's structures, protein chains, DNA and RNA, drug-like molecules, ions, modified residues, and predicts how they sit together. <bookmark mark='b'/> The alignment gets just four blocks; <bookmark mark='c'/> the trunk is the Pairformer, the Evoformer's pair stack, forty-eight blocks, triangle updates intact. <bookmark mark='d'/> The big change is the end: the structure module, frames and all, is replaced by a diffusion model that writes every atom's coordinates directly.",
+   "zh": "2024年5月，谷歌DeepMind和Isomorphic Labs发表了AlphaFold 3。<bookmark mark='a'/>细胞结构里的几乎任何东西它都能处理，蛋白质链、DNA和RNA、类药分子、离子、修饰过的残基，并预测它们怎样待在一起。<bookmark mark='b'/>比对只经过四个模块；<bookmark mark='c'/>主干是Pairformer，也就是Evoformer的残基对部分，四十八个模块，三角更新原样保留。<bookmark mark='d'/>大的改变在最后：结构模块连同它的坐标系，被一个扩散模型取代，它直接写出每个原子的坐标。"
+  },
+  "683a0a0b77e1": {
+   "scene": "AF3",
+   "en": "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's coordinates, at every level from a whisper to pure noise, and train a network to remove it; then start from noise and remove it step by step. Here is a small model of ours, from noise to a chain. <bookmark mark='b'/> And here is the surprise, after four chapters of building symmetry in: the AlphaFold 3 paper says its architecture needs no invariance or equivariance to rotations or translations. <bookmark mark='c'/> Every training structure is simply centred and turned at random: augmentation, chapter two's cheap route. <bookmark mark='d'/> Diffusion can also invent structure in floppy regions; training on AlphaFold-Multimer's predictions taught AlphaFold 3 to leave them loose.",
+   "zh": "扩散是第21部分的想法，用在了原子上。<bookmark mark='a'/>给一个结构的坐标加噪声，从轻微到纯噪声的每个水平都加，训练一个网络去除掉噪声；然后从噪声出发，一步一步除掉它。这是我们的一个小模型，从噪声变成一条链。<bookmark mark='b'/>惊奇之处来了，就在花了四章把对称性做进网络之后：AlphaFold 3的论文说，它的架构不需要对转动或平移的不变性或等变性。<bookmark mark='c'/>每个训练结构只是先中心化，再随机转动：数据增强，第2章那条便宜的路。<bookmark mark='d'/>扩散还可能在松软的区域编造出结构；用AlphaFold-Multimer的预测来训练，教会了AlphaFold 3让这些区域保持松散。"
+  },
+  "fa698b0403c9": {
+   "scene": "AF3",
+   "en": "So is equivariance worth it, for a generator? A toy test: four thousand compact chains of twelve atoms in the plane, bonds of length one. <bookmark mark='a'/> Two denoisers, trained equally long: one equivariant to rotations, like EGNN; a plain MLP shown every chain turned at random, as AlphaFold 3 is. <bookmark mark='b'/> Their samples. <bookmark mark='c'/> Bonds: the equivariant model's are off by 0.075 on average, the plain one's by 0.113. Clashes, two atoms on top of each other: 73.6 percent of chains against 45.1. Each wins on one count, and neither simply copies its training chains. <bookmark mark='d'/> At AlphaFold 3's scale, with the whole Protein Data Bank, DeepMind chose turned copies: data and compute standing in for built-in symmetry.",
+   "zh": "那么，对生成模型来说，等变性值得吗？做一个玩具测试：平面上四千条紧凑的链，每条十二个原子，键长为1。<bookmark mark='a'/>两个去噪器，训练时间一样长：一个对转动等变，像EGNN；另一个是普通MLP，每条链都随机转过之后才给它看，就像AlphaFold 3那样。<bookmark mark='b'/>它们的样本。<bookmark mark='c'/>键长：等变模型平均偏差0.075，普通模型0.113。碰撞，也就是两个原子叠在一起：73.6%的链对45.1%。两者各赢一项，而且两者都没有只是照抄训练链。<bookmark mark='d'/>在AlphaFold 3的规模上，有整个蛋白质数据库，DeepMind选择了转过的副本：用数据和算力代替内置的对称性。"
+  },
+  "d4495798e767": {
+   "scene": "AF3",
+   "en": "On drug-like molecules bound to proteins, DeepMind reported AlphaFold 3 fifty percent more accurate than the best traditional methods. <bookmark mark='a'/> It came as a free server, and in November 2024 as code and weights for academics; <bookmark mark='b'/> open reproductions followed: Chai-1, Boltz-1, Protenix. <bookmark mark='c'/> In 2025 Boltz-2 added a prediction of binding strength. <bookmark mark='d'/> And in February 2026 Isomorphic Labs reported a proprietary successor that, on its own benchmark of new antibody–antigen pairs, makes high-accuracy predictions 2.3 times as often as AlphaFold 3.",
+   "zh": "对于结合在蛋白质上的类药分子，DeepMind报告说AlphaFold 3比最好的传统方法精确百分之五十。<bookmark mark='a'/>它先以免费服务器的形式提供，2024年11月又向学术界开放了代码和权重；<bookmark mark='b'/>开放的复现随之而来：Chai-1、Boltz-1、Protenix。<bookmark mark='c'/>2025年，Boltz-2加上了对结合强度的预测。<bookmark mark='d'/>2026年2月，Isomorphic Labs报告了一个专有的后继系统：在它自己的新抗体–抗原对基准上，做出高精度预测的比例是AlphaFold 3的2.3倍。"
+  },
+  "d3fa0e9e09a3": {
+   "scene": "AF3",
+   "en": "AlphaFold 3 kept the pair stack, handed the geometry to diffusion, and learned the symmetry from turned copies. Prediction also runs backwards: from a shape you want, to a protein that folds into it.",
+   "zh": "AlphaFold 3保留了残基对的部分，把几何交给了扩散，从转过的副本里学会对称性。预测也可以倒过来：从你想要的形状，到一个能折成它的蛋白质。"
+  },
+  "c23d63e3c889": {
+   "scene": "Design",
+   "en": "Chapter twelve. Designing proteins.",
+   "zh": "第12章。设计蛋白质。"
+  },
+  "64dbcf183854": {
+   "scene": "Design",
+   "en": "Structure prediction goes from a sequence to a shape. <bookmark mark='a'/> Design goes the other way: from a shape you want, a binder for a virus or a scaffold for a catalyst, to a sequence that folds into it. <bookmark mark='b'/> This was David Baker's life's work, the other half of the 2024 Nobel. In 2003 his group designed Top7, a fold unseen in nature, with the Rosetta energy function, and it folded as designed. For two decades, though, most designs failed.",
+   "zh": "结构预测是从序列到形状。<bookmark mark='a'/>设计走的是反方向：从你想要的形状，比如一个能结合病毒的结合子或一个催化剂的支架，到一条能折成它的序列。<bookmark mark='b'/>这是大卫·贝克毕生的工作，也是2024年诺贝尔奖的另一半。2003年，他的团队用Rosetta能量函数设计出了Top7，一种自然界从未见过的折叠，它按设计折叠了。不过二十年来，大多数设计都失败了。"
+  },
+  "c2e5c48af1fa": {
+   "scene": "Design",
+   "en": "Deep learning changed both halves of design, starting with the sequence. <bookmark mark='a'/> In 2022 Justus Dauparas and colleagues in Baker's lab built ProteinMPNN: it reads a backbone as a graph, each residue joined to its nearest neighbours in space, <bookmark mark='b'/> passes messages built from distances, so the backbone's orientation can't matter, <bookmark mark='c'/> and writes the amino acids one at a time, in random order, each conditioned on those already written. <bookmark mark='d'/> On natural backbones it recovers 52.4 percent of the native amino acids, against 32.9 for Rosetta.",
+   "zh": "深度学习改变了设计的两半，先从序列说起。<bookmark mark='a'/>2022年，贝克实验室的尤斯图斯·道帕拉斯等人做出了ProteinMPNN：它把主链读成一个图，每个残基与空间中离它最近的邻居相连，<bookmark mark='b'/>传递由距离构成的消息，所以主链朝哪个方向都无关紧要，<bookmark mark='c'/>然后按随机顺序一次写一个氨基酸，每个都以已经写好的那些为条件。<bookmark mark='d'/>在天然主链上，它能还原出52.4%的天然氨基酸，Rosetta是32.9%。"
+  },
+  "49b1af35b25e": {
+   "scene": "Design",
+   "en": "Then the backbone. In 2023 Joseph Watson and colleagues published RFdiffusion. <bookmark mark='a'/> They fine-tuned the structure predictor RoseTTAFold to remove noise from residue frames, on positions and orientations, two hundred steps from noise to a backbone, optionally holding a motif, binding a target or obeying a symmetry. <bookmark mark='b'/> The pipeline: diffuse a backbone; let ProteinMPNN write eight sequences for it; <bookmark mark='c'/> keep those AlphaFold 2 folds back onto the design, within two ångströms and confidently; <bookmark mark='d'/> only then go to the lab. <bookmark mark='e'/> For binders, nineteen percent worked, about a hundred times the earlier rate; one influenza binder's measured structure sat 0.63 ångströms from its design.",
+   "zh": "然后是主链。2023年，约瑟夫·沃森等人发表了RFdiffusion。<bookmark mark='a'/>他们微调结构预测器RoseTTAFold，让它去除残基坐标系上的噪声，位置和朝向上的噪声，从噪声到一条主链走两百步，还可以让它保持一个基序、结合一个靶标或者满足某种对称性。<bookmark mark='b'/>流程是：扩散出一条主链；让ProteinMPNN为它写八条序列；<bookmark mark='c'/>只保留AlphaFold 2能折回到设计上的那些，误差在两埃以内、而且有把握；<bookmark mark='d'/>然后才进实验室。<bookmark mark='e'/>对于结合子，百分之十九成功了，大约是早先成功率的一百倍；一个流感结合子测出来的结构，离它的设计只有0.63埃。"
+  },
+  "01eef569c728": {
+   "scene": "Design",
+   "en": "Our toy denoiser from the last chapter shows the idea in miniature. Here is its training: the loss, and samples drawn from the same eight noise seeds at each checkpoint. <bookmark mark='a'/> At first, tangles; then chains with nearly the right bond lengths; then compact folds, though 74 percent of the final samples still have two atoms too close, which the training chains never do. <bookmark mark='b'/> Are they new? The median sample sits 0.49 from its nearest training chain, against 0.22 for real chains it never saw: farther than genuinely new chains are: not copies, but not quite the real thing either.",
+   "zh": "上一章的玩具去噪器能把这个想法缩小了展示出来。这是它的训练：损失，以及在每个检查点用同样八个噪声种子抽出的样本。<bookmark mark='a'/>一开始是乱线；然后是键长差不多正确的链；然后是紧凑的折叠，不过最后的样本里仍有74%有两个原子挨得太近，而训练链从来不会这样。<bookmark mark='b'/>它们是新的吗？样本的中位数离最近的训练链0.49，而它从没见过的真实链是0.22：比真正的新链离得更远：不是照抄，但也还不完全像真的。"
+  },
+  "3e6e474491b1": {
+   "scene": "Design",
+   "en": "Since then the field has moved fast. <bookmark mark='a'/> In 2024 Google DeepMind's AlphaProteo designed binders for medical targets, <bookmark mark='b'/> BindCraft designed them by gradient descent through AlphaFold 2 itself, <bookmark mark='c'/> and EvolutionaryScale's ESM3, a language model over sequence, structure and function, wrote a fluorescent protein far from any natural one. <bookmark mark='d'/> In 2025 RFdiffusion3 designed atom by atom, <bookmark mark='e'/> and BoltzGen appeared as an open alternative. <bookmark mark='f'/> Tools this capable could be misused; in 2024 many researchers signed commitments on responsible biodesign, including screening DNA synthesis.",
+   "zh": "从那以后，这个领域发展得很快。<bookmark mark='a'/>2024年，谷歌DeepMind的AlphaProteo为医学靶标设计了结合子，<bookmark mark='b'/>BindCraft通过在AlphaFold 2本身里做梯度下降来设计结合子，<bookmark mark='c'/>EvolutionaryScale的ESM3，一个覆盖序列、结构和功能的语言模型，写出了一个和任何天然蛋白都相差很远的荧光蛋白。<bookmark mark='d'/>2025年，RFdiffusion3逐个原子地做设计，<bookmark mark='e'/>BoltzGen也作为一个开放的选择出现了。<bookmark mark='f'/>这么强大的工具可能被滥用；2024年，许多研究者签署了负责任生物设计的承诺，包括对DNA合成进行筛查。"
+  },
+  "3371e7c1d9ce": {
+   "scene": "Design",
+   "en": "Design, in one line: diffuse a backbone, write a sequence for it, check that the sequence folds back, and only then make it. Now from molecules to the whole planet.",
+   "zh": "一句话说设计：扩散出一条主链，为它写一条序列，检查这条序列能不能折回去，然后才把它做出来。现在从分子走向整个星球。"
+  },
+  "4dd4095cfe9a": {
+   "scene": "Weather",
+   "en": "Chapter thirteen. Weather on a mesh.",
+   "zh": "第13章。网格上的天气。"
+  },
+  "f89eb8ee83ba": {
+   "scene": "Weather",
+   "en": "Weather forecasting became physics in 1904, when Vilhelm Bjerknes framed it as an initial-value problem: measure the atmosphere now, then step the equations of fluid flow forward. <bookmark mark='a'/> Lewis Fry Richardson tried it by hand in the First World War: six weeks of work for a six-hour forecast at two points, wrong by a hundred and forty-five hectopascals. <bookmark mark='b'/> In 1950 the first computer forecasts ran on ENIAC, about as fast as the weather itself. <bookmark mark='c'/> ECMWF, the European Centre for Medium-Range Weather Forecasts, first forecast in 1979; since then forecasts have gained about a day of skill per decade.",
+   "zh": "1904年，天气预报变成了物理学：维尔赫姆·皮耶克尼斯把它表述成一个初值问题，测出此刻的大气，再把流体方程向前推进。<bookmark mark='a'/>刘易斯·弗赖·理查森在第一次世界大战期间试着用手算：花了六个星期，为两个点做出一次六小时预报，结果错了一百四十五百帕。<bookmark mark='b'/>1950年，最早的计算机预报在ENIAC上运行，算得和天气本身差不多快。<bookmark mark='c'/>欧洲中期天气预报中心，ECMWF，在1979年发布了第一次预报；此后，预报大约每十年多出一天的技巧。"
+  },
+  "5d7e0d44cf85": {
+   "scene": "Weather",
+   "en": "Machine learning came to this in the 2020s, trained on ERA5, ECMWF's reconstruction of global weather since 1940. In 2023 Remi Lam and colleagues at Google DeepMind published GraphCast. <bookmark mark='a'/> The atmosphere is stored on a latitude–longitude grid, a million points of two hundred and twenty-seven numbers each, crowded near the poles; GraphCast works on a mesh instead: <bookmark mark='b'/> an icosahedron refined six times, keeping every level's edges, so that a message crosses the planet in a few steps. Here is our small version, on a square. <bookmark mark='c'/> Encode onto the mesh, pass messages sixteen times, decode: the state six hours on, from the last two. <bookmark mark='d'/> It makes a ten-day forecast in under a minute, and beat ECMWF's flagship deterministic forecast on ninety percent of 1,380 targets.",
+   "zh": "到了2020年代，机器学习来到了这里，用ERA5训练，那是ECMWF对1940年以来全球天气的重建。2023年，谷歌DeepMind的雷米·拉姆等人发表了GraphCast。<bookmark mark='a'/>大气存储在一个经纬度网格上，一百万个点，每个点二百二十七个数，在两极附近挤得很密；GraphCast改在一个网格网上工作：<bookmark mark='b'/>一个细分六次的正二十面体，保留每一层的边，于是一条消息几步就能穿过整个星球。这是我们的小版本，在一个正方形上。<bookmark mark='c'/>编码到网格网上，传递十六次消息，再解码：由最近的两个状态得到六小时之后的状态。<bookmark mark='d'/>它不到一分钟就能做出一次十天预报，并在1380个目标中的百分之九十上胜过了ECMWF旗舰的确定性预报。"
+  },
+  "88d65e4a253e": {
+   "scene": "Weather",
+   "en": "Ours is a toy atmosphere: a two-dimensional fluid on a square that wraps around, stirred by a fixed pattern and damped by friction, so that eddies form, drift, merge and die: chaotic, like the weather. <bookmark mark='a'/> A small encode–process–decode network on our mesh learns one step at a time from thirty-two simulated runs, then rolls forward on its own predictions. <bookmark mark='b'/> Top, the truth; bottom, our network, from the same start. They agree for a while, then drift apart.",
+   "zh": "我们的是一个玩具大气：一个二维流体，在一个首尾相接的正方形上，被一个固定的图样搅动，又被摩擦减弱，于是涡旋生成、漂移、合并、消亡：混沌，就像天气。<bookmark mark='a'/>一个小的编码–处理–解码网络在我们的网格网上，从三十二次模拟中一步一步地学习，然后在自己的预测上往前推。<bookmark mark='b'/>上面是真实情况；下面是我们的网络，从同一个起点出发。它们一致一段时间，然后渐行渐远。"
+  },
+  "4f2922f980d1": {
+   "scene": "Weather",
+   "en": "Scored over eight new runs: the error, step by step. <bookmark mark='a'/> One step ahead its error is 0.35, against 0.59 for assuming nothing changes. <bookmark mark='b'/> It stays ahead of persistence for 15 steps, and after 15 steps it is worse than simply forecasting the average state, as every forecast of a chaotic system eventually is. GraphCast was trained on rollouts of up to twelve steps for exactly this reason, to learn from its own drifting predictions; ours rolled out two steps at the end of training. <bookmark mark='c'/> Over the first ten steps the long edges make no difference; they matter later: by step twenty the network with only the shortest edges is off by 3.7, against 2.7, in one training run of each.",
+   "zh": "在八次新的模拟上打分：误差，一步一步看。<bookmark mark='a'/>提前一步，它的误差是0.35，而假设什么都不变的误差是0.59。<bookmark mark='b'/>在15步之内它都领先于持续性预报，而15步之后，它比直接预报平均状态还差，每个混沌系统的预报最终都会这样。GraphCast训练时最多展开十二步，正是为了这个原因，从自己逐渐偏离的预测里学习；我们的网络在训练的最后阶段展开两步。<bookmark mark='c'/>在前十步里，长边没有带来差别；它们的作用在后面：到第二十步，只用最短边的网络误差是3.7，而多尺度网格是2.7，这是每个网络各训练一次的结果。"
+  },
+  "02f5db7a3013": {
+   "scene": "Weather",
+   "en": "There is a deeper problem. Trained on squared error, a network predicts the average of what might happen, and far ahead the average of many weathers is a blur. <bookmark mark='a'/> Forecasters answer with ensembles, many runs from slightly different starts. In 2024 Google DeepMind's GenCast learned to sample the next state with diffusion; its ensembles beat ECMWF's on 97.2 percent of 1,320 targets. <bookmark mark='b'/> Then learned models went into daily service: ECMWF's AI Forecasting System in February 2025, its ensemble version that July, <bookmark mark='c'/> Google's WeatherNext 2 in November, and in December the first AI global models of America's NOAA.",
+   "zh": "还有一个更深的问题。用平方误差训练，网络预测的是可能发生的情况的平均，而在很远的将来，许多种天气的平均是一片模糊。<bookmark mark='a'/>预报员用集合预报来应对：从略有不同的起点出发跑很多次。2024年，谷歌DeepMind的GenCast学会了用扩散来抽样下一个状态；它的集合预报在1320个目标中的97.2%上胜过了ECMWF的集合预报。<bookmark mark='b'/>然后，学出来的模型投入了日常业务：2025年2月是ECMWF的人工智能预报系统，那年7月是它的集合版本，<bookmark mark='c'/>11月是谷歌的WeatherNext 2，12月是美国NOAA的第一批AI全球模型。"
+  },
+  "b417f84f6802": {
+   "scene": "Weather",
+   "en": "So the weather became a graph problem: a mesh that wraps the planet, messages that cross it in a few steps, and diffusion for the part of the future that can't be known. Next: networks that learn whole equations.",
+   "zh": "于是天气变成了一个图问题：一个包住星球的网格网，几步就能穿过它的消息，以及为未来中无法知道的那一部分准备的扩散。接下来：学会整个方程的网络。"
+  },
+  "aedc6c4344ef": {
+   "scene": "Operators",
+   "en": "Chapter fourteen. Neural operators.",
+   "zh": "第14章。神经算子。"
+  },
+  "9dd9a22fd73f": {
+   "scene": "Operators",
+   "en": "Fields evolve by equations. Here is Burgers' equation, a one-dimensional cartoon of fluid flow: a wave that steepens where it is fast and is smoothed by viscosity. <bookmark mark='a'/> From this start, one time unit later, the solution looks like this. <bookmark mark='b'/> A solver needs thousands of small steps, every time. A network could learn the map from start to finish, but an ordinary one works on a fixed list of numbers: trained on sixty-four points, it knows only those. <bookmark mark='c'/> We want the operator itself, a map from functions to functions, readable at any resolution. <bookmark mark='d'/> Tianping and Hong Chen proved in 1995 that networks can approximate operators; DeepONet and the Fourier neural operator made it practical in 2021.",
+   "zh": "场按方程演化。这是伯格斯方程，流体流动的一个一维漫画：一个波，在快的地方变陡，又被黏性抹平。<bookmark mark='a'/>从这个起点出发，一个时间单位之后，解是这个样子。<bookmark mark='b'/>求解器每次都要走几千个小步。一个网络可以学会从起点到终点的映射，但普通网络只处理一个固定长度的数列：用六十四个点训练，它就只认识这些点。<bookmark mark='c'/>我们要的是算子本身，一个从函数到函数的映射，在任何分辨率上都能读。<bookmark mark='d'/>陈天平和陈宏在1995年证明了网络可以逼近算子；DeepONet和傅里叶神经算子在2021年让它变得实用。"
+  },
+  "d3f4a2b728dc": {
+   "scene": "Operators",
+   "en": "The Fourier neural operator, from Zongyi Li, Anima Anandkumar, Andrew Stuart and colleagues, starts from a layer that is an integral: each point's new value mixes the whole field through a kernel kappa. <bookmark mark='a'/> If the kernel depends only on the offset, the integral is a convolution, which the convolution theorem makes a product of Fourier transforms. <bookmark mark='b'/> So learn the kernel's transform directly: one complex weight for each of the lowest frequencies, sixteen here, dropping the rest. <bookmark mark='c'/> The weights belong to frequencies, not grid points, so the network reads any grid fine enough to hold them; shifts pass straight through; and a layer costs about one fast Fourier transform.",
+   "zh": "傅里叶神经算子出自李宗仪、阿妮玛·阿南德库马尔、安德鲁·斯图尔特等人，它从一个积分形式的网络层出发：每个点的新值，通过一个核kappa，混合了整个场。<bookmark mark='a'/>如果核只依赖于偏移量，这个积分就是一个卷积，卷积定理把它变成傅里叶变换的乘积。<bookmark mark='b'/>所以直接学核的变换：给最低的那些频率各学一个复数权重，这里是十六个，其余的丢掉。<bookmark mark='c'/>权重属于频率，不属于格点，所以网络能读任何细到足以容纳它们的网格；平移直接穿过；而一层的代价大约是一次快速傅里叶变换。"
+  },
+  "400a2b7ace16": {
+   "scene": "Operators",
+   "en": "We trained one on a thousand solutions of Burgers' equation, sampled at 64 points, against a pseudo-spectral solver's answers. <bookmark mark='a'/> Here is its prediction for a start it never saw, at checkpoints through training, beside the learning curve. <bookmark mark='b'/> It ends with a relative error of 0.4 percent on held-out starts.",
+   "zh": "我们用伯格斯方程的一千个解训练了一个，采样在64个点上，以一个伪谱求解器的答案为准。<bookmark mark='a'/>这是它对一个从没见过的起点的预测，在训练的各个检查点上，旁边是学习曲线。<bookmark mark='b'/>最后，它在留出的起点上的相对误差是0.4%。"
+  },
+  "ba863f215f9f": {
+   "scene": "Operators",
+   "en": "Now the test that matters. Both networks were trained only at sixty-four points. Read them at 32 up to 1,024. <bookmark mark='a'/> The Fourier neural operator's error stays at 0.3 percent on its own grid and 0.3 at 1,024 points, 16 times finer. <bookmark mark='b'/> The CNN, at 1.2 percent on its own grid, reaches 74 percent at the finest: its kernels, even dilated, are measured in grid points, so on a finer grid they see a narrower stretch of the line. <bookmark mark='c'/> Below its training resolution, at 32 points, the operator's error is 0.6 percent: so coarse a grid blurs the steep fronts the solution makes. FourCastNet, one of the first learned weather models, in 2022, was built on a variant of this Fourier layer.",
+   "zh": "现在是真正要紧的测试。两个网络都只在六十四个点上训练过。从32个点到1024个点去读它们。<bookmark mark='a'/>傅里叶神经算子的误差在它自己的网格上是0.3%，在1024个点、细16倍的网格上是0.3%。<bookmark mark='b'/>CNN在它自己的网格上是1.2%，到最细的网格上变成了74%：它的核即使加了空洞，也是按格点来量的，所以在更细的网格上只能看到线上更窄的一段。<bookmark mark='c'/>在低于训练分辨率的32个点上，算子的误差是0.6%：这么粗的网格会把解形成的陡峭锋面抹平。FourCastNet是最早的学习型天气模型之一，2022年推出，它就建立在这种傅里叶层的一个变体上。"
+  },
+  "4cff16109416": {
+   "scene": "Operators",
+   "en": "Learn the operator, not the grid. Weights that belong to frequencies carry over to any resolution, which is what a model of the physical world should do. From fields to crystals.",
+   "zh": "学算子，不学网格。属于频率的权重可以带到任何分辨率上，这正是一个物理世界的模型应该做到的。从场走向晶体。"
+  },
+  "9eb34548de94": {
+   "scene": "Materials",
+   "en": "Chapter fifteen. Materials by the million.",
+   "zh": "第15章。百万量级的材料。"
+  },
+  "954b30113bb0": {
+   "scene": "Materials",
+   "en": "A crystal is a pattern of atoms repeated in space; its symmetries are one of 230 space groups, classified in 1891. Which crystals exist? <bookmark mark='a'/> Take two elements, A and B, and their possible compounds, each with a formation energy from density functional theory, hours of computer time apiece. <bookmark mark='b'/> A compound is stable if no mixture of the others has lower energy: if it lies on the lower convex hull. <bookmark mark='c'/> One above the hull would rather decompose into its neighbours; its height says how unstable it is. Here nine compounds are on the hull.",
+   "zh": "晶体是原子在空间里重复排列的图样；它的对称性属于230种空间群之一，1891年就分类完了。哪些晶体存在？<bookmark mark='a'/>取两种元素A和B，以及它们可能的化合物，每个都有一个由密度泛函理论算出的形成能，每个要花好几个小时的计算机时间。<bookmark mark='b'/>如果没有其他化合物的混合物能量更低，这个化合物就是稳定的：它落在下凸包上。<bookmark mark='c'/>在凸包上方的化合物宁愿分解成它的邻居；它的高度说明它有多不稳定。这里有9个化合物在凸包上。"
+  },
+  "e3f6bfd853ed": {
+   "scene": "Materials",
+   "en": "In 2023 Amil Merchant, Ekin Dogus Cubuk and colleagues at Google DeepMind published GNoME, graph networks for materials exploration. <bookmark mark='a'/> It generates candidates by swapping elements in known crystals and by random search; <bookmark mark='b'/> graph networks built on interatomic distances, and so invariant to rotation, predict their energies; <bookmark mark='c'/> density functional theory checks the most promising; <bookmark mark='d'/> and every check becomes training data for the next round. <bookmark mark='e'/> Computation had found about forty-eight thousand stable crystals; GNoME reported 2.2 million, 381,000 on the new convex hull, and the share of its picks confirmed by DFT rose above eighty percent, from about one percent before.",
+   "zh": "2023年，谷歌DeepMind的阿米尔·默钱特、埃金·多古斯·丘布克等人发表了GNoME，用于材料探索的图网络。<bookmark mark='a'/>它通过替换已知晶体里的元素、以及随机搜索，来生成候选；<bookmark mark='b'/>建立在原子间距离之上、因而与转动无关的图网络，预测它们的能量；<bookmark mark='c'/>密度泛函理论检查最有希望的那些；<bookmark mark='d'/>每一次检查都变成下一轮的训练数据。<bookmark mark='e'/>此前，计算方法找到了大约四万八千种稳定晶体；GNoME报告了220万种，其中38.1万种在新的凸包上，它挑出来、被DFT确认的比例升到了百分之八十以上，而此前只有百分之一左右。"
+  },
+  "dc6aa0e0a8ce": {
+   "scene": "Materials",
+   "en": "We can run the flywheel on a made-up chemistry: twenty invented elements, every pair, nine compositions and four crystal types, 6,840 candidates, whose 'DFT' energy is a hidden formula revealed sixty at a time. <bookmark mark='a'/> Start knowing three percent. Each round, train a small ensemble on what is known, and check the sixty predicted to fall furthest below the hull of everything else. A hit is a pick that is truly stable. <bookmark mark='b'/> Random picks hit 12 percent of the time, about the share of stable candidates, 11 percent. <bookmark mark='c'/> The surrogate's picks hit 54 percent in the first round, rise to 62, and then fall, to 34 in the last round, as the easiest stable compounds are used up; still several times the random rate. <bookmark mark='d'/> Its error falls from 0.068 to 0.060, and after 8 rounds it has found 234 of the 780 truly stable compounds, against 78 for random picks.",
+   "zh": "我们可以在一个虚构的化学体系上转动这个飞轮：二十种虚构的元素，两两组合，九种配比，四种晶体类型，共6840个候选，它们的“DFT”能量是一个隐藏的公式，每次只揭开六十个。<bookmark mark='a'/>一开始知道百分之三。每一轮，用已知的数据训练一个小集成模型，检查预测会落到其余一切的凸包下方最远的六十个。命中，就是挑中一个真正稳定的化合物。<bookmark mark='b'/>随机挑选的命中率是12%，大约就是稳定候选所占的比例，11%。<bookmark mark='c'/>代理模型的挑选在第一轮命中54%，升到62%，然后随着最容易找到的稳定化合物被用光而下降，最后一轮是34%；仍是随机命中率的好几倍。<bookmark mark='d'/>它的误差从0.068降到0.060，8轮之后，它找到了780个真正稳定的化合物中的234个，而随机挑选找到78个。"
+  },
+  "a9008bb2375b": {
+   "scene": "Materials",
+   "en": "The claims drew pushback from chemists. <bookmark mark='a'/> In 2024 Anthony Cheetham and Ram Seshadri examined a random sample of GNoME's predictions and found scant evidence of compounds at once new, credible and useful; many placed atoms in neat orders that real crystals mix at random. <bookmark mark='b'/> Critics also disputed the X-ray analysis behind a robot laboratory's report of forty-one new compounds; in January 2026 the paper was corrected to thirty-six from fifty-seven targets. <bookmark mark='c'/> The tools kept improving, universal potentials and crystal generators, <bookmark mark='d'/> but the lesson stuck: a predicted crystal is a hypothesis, and making it is the test.",
+   "zh": "这些说法遭到了化学家的质疑。<bookmark mark='a'/>2024年，安东尼·奇塔姆和拉姆·谢沙德里随机抽查了GNoME的一批预测，发现很少有证据表明其中有同时称得上新颖、可信又有用的化合物；许多预测把原子排成整齐的有序结构，而真实晶体里这些原子是随机混排的。<bookmark mark='b'/>批评者还对一个机器人实验室报告四十一种新化合物所依据的X射线分析提出了异议；2026年1月，这篇论文被更正为五十七个目标中的三十六种。<bookmark mark='c'/>工具在不断进步，通用势函数，晶体生成器，<bookmark mark='d'/>但教训留了下来：预测出来的晶体只是一个假设，把它做出来才是检验。"
+  },
+  "f3b9a01c2252": {
+   "scene": "Materials",
+   "en": "In materials, then, the network is a cheap first opinion that makes expensive checks count. In mathematics, the check can be perfect.",
+   "zh": "所以在材料领域，网络是一个便宜的初步意见，让昂贵的检查物尽其用。而在数学里，检查可以是完美的。"
+  },
+  "a679fee519d6": {
+   "scene": "Proofs",
+   "en": "Chapter sixteen. Geometry and proofs.",
+   "zh": "第16章。几何与证明。"
+  },
+  "43f228cf345a": {
+   "scene": "Proofs",
+   "en": "Mathematics has something no other science has: a checker that cannot be fooled. <bookmark mark='a'/> In a proof assistant such as Lean, a theorem and its proof are code, and a small kernel checks every inference; this one says that n times n plus one is even. <bookmark mark='b'/> Computers entered proofs in 1976 with Appel and Haken's four-colour theorem, which Georges Gonthier checked formally in 2005. <bookmark mark='c'/> Thomas Hales's proof of the Kepler conjecture was formally verified in 2014, <bookmark mark='d'/> and in 2022 Lean's community formalized a hard new theorem of Dustin Clausen and Peter Scholze. <bookmark mark='e'/> Lean's library, Mathlib, now holds about two hundred and ninety thousand theorems; Part 28 shows what reinforcement learning does with such a checker.",
+   "zh": "数学有一样别的科学都没有的东西：一个骗不了的检查器。<bookmark mark='a'/>在Lean这样的证明助手里，定理和证明都是代码，一个小小的内核检查每一步推理；这一个说的是，n乘以n加1是偶数。<bookmark mark='b'/>计算机进入证明是在1976年，阿佩尔和哈肯的四色定理，2005年乔治·贡蒂埃对它做了形式化检查。<bookmark mark='c'/>托马斯·黑尔斯对开普勒猜想的证明在2014年得到了形式化验证，<bookmark mark='d'/>2022年，Lean社区把达斯汀·克劳森和彼得·舒尔茨的一个困难的新定理形式化了。<bookmark mark='e'/>Lean的库Mathlib现在收录了大约二十九万条定理；第28部分会讲强化学习拿这样的检查器做了什么。"
+  },
+  "ff97da1a1daa": {
+   "scene": "Proofs",
+   "en": "Olympiad geometry fell first. In January 2024 Trieu Trinh, Thang Luong and colleagues at Google DeepMind published AlphaGeometry. <bookmark mark='a'/> With no human proofs to learn from, they made their own: random premises, a symbolic engine deducing all that follows, and a traceback from each new fact to what it needed: a hundred million theorems with proofs. <bookmark mark='b'/> Nine percent need a point the statement never mentions, an auxiliary construction, the creative step; a language model learned to propose them, and the engine does the rest. <bookmark mark='c'/> On thirty olympiad problems it solved twenty-five, against ten for the best earlier method, fourteen for its engine alone and none for GPT-4; the average gold medallist solves 25.9. <bookmark mark='d'/> A year later AlphaGeometry 2 solved eighty-four percent of the olympiad's geometry problems since 2000.",
+   "zh": "奥赛几何最先被攻下。2024年1月，谷歌DeepMind的陈天如、梁明唐等人发表了AlphaGeometry。<bookmark mark='a'/>没有人类证明可学，他们就自己造：随机的前提，一个推出所有后果的符号引擎，再从每个新事实回溯到它需要的东西：一亿条带证明的定理。<bookmark mark='b'/>其中百分之九需要一个题目里从未提到的点，一条辅助构造，这是有创造性的那一步；一个语言模型学会了提出这些点，其余的交给引擎。<bookmark mark='c'/>在三十道奥赛题上，它解出了二十五道，此前最好的方法是十道，它的引擎单独是十四道，GPT-4是零道；金牌得主平均解出25.9道。<bookmark mark='d'/>一年后，AlphaGeometry 2解出了2000年以来国际数学奥林匹克几何题的百分之八十四。"
+  },
+  "34dbbef6d2ad": {
+   "scene": "Proofs",
+   "en": "Then the olympiad itself, which Part 28 follows in detail. <bookmark mark='a'/> In 2024 AlphaProof, AlphaZero's method working in Lean, with AlphaGeometry 2 for the geometry, scored twenty-eight of forty-two, one point short of gold. <bookmark mark='b'/> In 2025 Google's Gemini Deep Think and an experimental OpenAI model each scored thirty-five, exactly gold, writing proofs in plain language. <bookmark mark='c'/> And in July 2026, in Shanghai, Huawei and Xiaohongshu reported perfect scores, forty-two of forty-two, with solutions submitted to the organizers for grading, as AFP reported; seven of the six hundred and sixty-six students also scored forty-two. As a test for machines, the olympiad is nearly saturated.",
+   "zh": "然后是奥赛本身，第28部分会详细讲。<bookmark mark='a'/>2024年，在Lean里工作的AlphaZero方法AlphaProof，加上负责几何的AlphaGeometry 2，拿到了四十二分里的二十八分，离金牌差一分。<bookmark mark='b'/>2025年，谷歌的Gemini Deep Think和OpenAI的一个实验模型各自拿到三十五分，正好是金牌线，证明是用普通语言写的。<bookmark mark='c'/>而在2026年7月的上海，华为和小红书报告拿到了满分，四十二分里的四十二分，解答提交给了组织方评分，据法新社报道；六百六十六名学生里也有七人拿了四十二分。作为对机器的测试，奥赛已经接近饱和。"
+  },
+  "f41a2bc74edf": {
+   "scene": "Proofs",
+   "en": "Beyond contests, the frontier is research mathematics. <bookmark mark='a'/> Autoformalization, translating informal mathematics into Lean, sped up sharply: in September 2025 the start-up Math Inc. reported that its agent Gauss had formalized the strong prime number theorem, about twenty-five thousand lines of Lean, in roughly three weeks. <bookmark mark='b'/> In January 2026 OpenAI's GPT-5.2 Pro and Harmonic's prover Aristotle resolved Erdős problem 728, with a proof that ends in Lean. <bookmark mark='c'/> A Google DeepMind team ran Gemini over seven hundred open Erdős problems: thirteen were settled, five by seemingly new arguments, eight because the answer was already in the literature. <bookmark mark='d'/> Two cautions: a formal proof proves exactly its statement, so a mistranslated statement proves the wrong thing; and the problems falling first are the easier ones.",
+   "zh": "在比赛之外，前沿是研究级的数学。<bookmark mark='a'/>自动形式化，也就是把非形式的数学翻译成Lean，速度猛然加快：2025年9月，初创公司Math Inc.报告说，它的智能体Gauss用大约三个星期，把强素数定理形式化了，大约两万五千行Lean代码。<bookmark mark='b'/>2026年1月，OpenAI的GPT-5.2 Pro和Harmonic的证明器Aristotle解决了埃尔德什第728号问题，最后给出的是一个Lean证明。<bookmark mark='c'/>谷歌DeepMind的一个团队让Gemini处理了七百个未解的埃尔德什问题：解决了十三个，五个靠的是看来是新的论证，八个是因为答案原来已经在文献里了。<bookmark mark='d'/>两点提醒：形式化证明恰好证明它的陈述，所以译错的陈述证明的是错的东西；而且最先被攻下的都是比较容易的问题。"
+  },
+  "f5fd631b49fc": {
+   "scene": "Proofs",
+   "en": "With a perfect checker, search can be trusted: generate freely, keep only what checks. The last chapter is about exactly that.",
+   "zh": "有了完美的检查器，搜索就可以信任：放手去生成，只留下通过检查的。最后一章讲的正是这个。"
+  },
+  "4b97126feafa": {
+   "scene": "Search",
+   "en": "Chapter seventeen. Discovery by search.",
+   "zh": "第17章。靠搜索做发现。"
+  },
+  "342957764452": {
+   "scene": "Search",
+   "en": "When the checker is exact, discovery becomes a loop. <bookmark mark='a'/> Propose a candidate, a program or a construction; <bookmark mark='b'/> score it exactly; <bookmark mark='c'/> keep the best and vary them. <bookmark mark='d'/> AlphaTensor, in 2022, used an AlphaZero network as the proposer. In December 2023 FunSearch, from Bernardino Romera-Paredes and colleagues at Google DeepMind, made the proposer a language model writing Python, with programs kept on separate islands like populations in evolution. <bookmark mark='e'/> It found a cap set in eight dimensions, five hundred and twelve points with no three in a line, beating the four hundred and ninety-six known.",
+   "zh": "当检查器是精确的，发现就变成了一个循环。<bookmark mark='a'/>提出一个候选，一段程序或一个构造；<bookmark mark='b'/>精确地给它打分；<bookmark mark='c'/>留下最好的，再变化它们。<bookmark mark='d'/>2022年的AlphaTensor用一个AlphaZero网络来提出候选。2023年12月，谷歌DeepMind的贝尔纳迪诺·罗梅拉-帕雷德斯等人的FunSearch把提出者换成了一个写Python的语言模型，程序放在彼此分开的岛上，就像进化中的种群。<bookmark mark='e'/>它在八维空间里找到了一个帽集，五百一十二个点，没有三点共线，超过了已知的四百九十六个。"
+  },
+  "510d726dc068": {
+   "scene": "Search",
+   "en": "Let's run that loop ourselves, on one of FunSearch's problems: online bin packing. <bookmark mark='a'/> Items arrive one at a time, and each must go into a bin at once. A rule decides: score every bin the item fits in, and pick the highest. <bookmark mark='b'/> The classic is best fit: the bin with the least room left. <bookmark mark='c'/> We evolve such scores as formulas, with random mutations and crossings standing in for the language model, judged by how many bins they use on eight training sequences. Within 39 generations it beats best fit on its training instances by 0.41 points. <bookmark mark='d'/> On new, longer sequences of items, both evolved rules still beat best fit: 4.11 and 4.29 percent against 4.71. <bookmark mark='e'/> Ours carried over; but an independent study in 2025 found that heuristics evolved by language models often don't generalize beyond the instances they were bred on.",
+   "zh": "我们自己来跑这个循环，用FunSearch的一个问题：在线装箱。<bookmark mark='a'/>物品一个一个到来，每个都必须立刻放进一个箱子。一条规则来决定：给物品放得下的每个箱子打分，挑分最高的。<bookmark mark='b'/>经典的规则是最佳适配：挑剩余空间最小的箱子。<bookmark mark='c'/>我们把这样的打分当作公式来进化，用随机的变异和交叉代替语言模型，按它们在八个训练序列上用了多少箱子来评判。39代之内，它在训练实例上比最佳适配好0.41个百分点。<bookmark mark='d'/>在新的、更长的物品序列上，两条进化出来的规则仍然都胜过最佳适配：4.11%和4.29%，对4.71%。<bookmark mark='e'/>我们的规则迁移过去了；不过2025年的一项独立研究发现，语言模型进化出来的启发式方法常常无法推广到培育它们的那些实例之外。"
+  },
+  "c72780da8b57": {
+   "scene": "Search",
+   "en": "Matrix multiplication is the purest case. <bookmark mark='a'/> The schoolbook way to multiply two n by n matrices uses n cubed multiplications. <bookmark mark='b'/> Write the product as a three-way tensor; <bookmark mark='c'/> then every way of writing that tensor as a sum of R simple products is an algorithm with R multiplications. <bookmark mark='d'/> In 1969 Volker Strassen found seven for two by two matrices, not eight, and Shmuel Winograd proved two years later that seven is the minimum. <bookmark mark='e'/> We searched for these decompositions numerically, from thirty random starts at each rank. At rank six, none of the 30 starts gets below an error of 0.35: there is no six-multiplication algorithm to find. At rank seven, 29 of 30 starts find one: a Strassen-like algorithm, which multiplies random matrices correctly to 7 decimal places. <bookmark mark='f'/> For three by three matrices the record, Julian Laderman's from 1976, is twenty-three multiplications; from 10 starts at that rank, and as many at twenty-six, our search got within about a millionth of zero but never exactly there: as the matrices grow, exact decompositions become needles in a haystack.",
+   "zh": "矩阵乘法是最纯粹的例子。<bookmark mark='a'/>按教科书的方法，两个n乘n矩阵相乘要做n的三次方次乘法。<bookmark mark='b'/>把这个乘积写成一个三向张量；<bookmark mark='c'/>那么，把这个张量写成R个简单乘积之和的每一种写法，都是一个只用R次乘法的算法。<bookmark mark='d'/>1969年，福尔克尔·施特拉森为二乘二矩阵找到了七次的算法，而不是八次；两年后，什穆埃尔·维诺格拉德证明了七就是最少的。<bookmark mark='e'/>我们用数值方法搜索这些分解，每个秩从三十个随机起点出发。At rank six, none of the 30 starts gets below an error of 0。35: there is no six-multiplication algorithm to find. At rank seven, 29 of 30 starts find one: a Strassen-like algorithm, which multiplies random matrices correctly to 7 decimal places。<bookmark mark='f'/>对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；在这个秩上从10个起点出发，在二十六上也一样多，我们的搜索离零只差大约百万分之一，却始终没有精确到零：矩阵一变大，精确的分解就成了大海里的针。"
+  },
+  "78748483ddde": {
+   "scene": "Search",
+   "en": "In May 2025 Google DeepMind combined both lines in AlphaEvolve. <bookmark mark='a'/> Gemini models propose changes to whole programs, evaluators score them, and evolution keeps the best. <bookmark mark='b'/> Among its results: four by four complex matrices multiplied with forty-eight multiplications, beating the forty-nine of applying Strassen's trick twice, the record since 1969, <bookmark mark='c'/> found by evolving a decomposition search like ours. <bookmark mark='d'/> Within weeks, three researchers in France found a forty-eight with rational coefficients. <bookmark mark='e'/> It also raised to 593 the number of spheres that can touch a central one in eleven dimensions, and on over fifty open problems matched the best known answer in three quarters and improved it in a fifth. <bookmark mark='f'/> Inside Google, a scheduling rule it found recovers 0.7 percent of the company's computing. <bookmark mark='g'/> In November 2025 Terence Tao and colleagues tried it on sixty-seven problems, and published its failures too.",
+   "zh": "2025年5月，谷歌DeepMind在AlphaEvolve里把两条路线结合了起来。<bookmark mark='a'/>Gemini模型对整段程序提出修改，评估器给它们打分，进化留下最好的。<bookmark mark='b'/>它的成果之一：用四十八次乘法完成四乘四复矩阵的乘法，打破了把施特拉森的技巧用两次得到的四十九次，那是1969年以来的纪录，<bookmark mark='c'/>靠的是进化一个像我们这样的分解搜索。<bookmark mark='d'/>几个星期之内，法国的三位研究者找到了一个系数为有理数的四十八次方案。<bookmark mark='e'/>它还把十一维空间里能与中心球相切的球数提高到593个；在五十多个未解问题上，四分之三追平了已知最好的答案，五分之一改进了它。<bookmark mark='f'/>在谷歌内部，它找到的一条调度规则收回了公司0.7%的算力。<bookmark mark='g'/>2025年11月，陶哲轩等人在六十七个问题上试用了它，连失败也一并发表了。"
+  },
+  "1029d85348d4": {
+   "scene": "Search",
+   "en": "Discovery by search, then: propose freely, check exactly, keep what survives. It works wherever the checking is exact, which is why mathematics and algorithms went first.",
+   "zh": "所以，靠搜索做发现：放手去提出，精确地检查，留下经得起检查的。只要检查是精确的，它就管用，这就是数学和算法走在最前面的原因。"
+  },
+  "3b7b63ef3571": {
+   "scene": "Outro",
+   "en": "Let's take stock. A symmetry is a transformation that shouldn't change the answer; a network can respect it exactly, by construction, or approximately, from examples. Sums make functions of sets; sums over neighbours make graph networks, which see what colour refinement sees and blur when stacked deep. Built-in rotations made our molecule model far better on the same data. AlphaFold reads a protein through pairs kept consistent by triangles, builds it from frames, and scores it with a loss that knows left from right; its successor hands the atoms to diffusion. Weather runs on a mesh, equations are learned as operators, crystals are screened by the million, and where the checker is perfect, search discovers.",
+   "zh": "我们来盘点一下。对称是一个不应该改变答案的变换；网络可以精确地尊重它，靠构造；也可以近似地尊重它，靠例子。求和构成集合上的函数；对邻居求和构成图网络，它看见的正是颜色细化看见的，叠得太深就会变模糊。内置转动让我们的分子模型在同样的数据上好得多。AlphaFold通过用三角形保持一致的残基对来读蛋白质，用坐标系把它搭起来，再用一个分得清左右的损失来打分；它的后继者把原子交给了扩散。天气在网格网上运行，方程被当作算子来学，晶体按百万量级筛选，而在检查器完美的地方，搜索带来发现。"
+  },
+  "ac57e441065f": {
+   "scene": "Outro",
+   "en": "All of this comes back. <bookmark mark='a'/> Search guided by a network and judged by an exact checker is AlphaZero, next time, and Part 28's reasoning models. <bookmark mark='b'/> A learned simulator that rolls the world forward, like our mesh network, is Part 29's world model. <bookmark mark='c'/> What a network's layers represent, and whether they respect the symmetries we expect, is Part 30's subject. <bookmark mark='d'/> And CASP's blind tests and a nearly saturated olympiad lead to Part 31's question: how to evaluate at all.",
+   "zh": "这一切都还会再出现。<bookmark mark='a'/>由网络引导、由精确检查器评判的搜索，就是下一次的AlphaZero，以及第28部分的推理模型。<bookmark mark='b'/>一个把世界向前推演的学习型模拟器，就像我们的网格网络，就是第29部分的世界模型。<bookmark mark='c'/>网络的各层表示了什么，它们是否尊重我们期望的对称，是第30部分的主题。<bookmark mark='d'/>而CASP的盲测和一个几乎饱和的奥赛，引向第31部分的问题：到底该怎样评估。"
+  },
+  "a85eed5a2c5b": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from equivariant compositions to the Fourier layer. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题，从等变映射的复合到傅里叶层。在这里暂停一下，动手做一做；完整的解答在本部分的讲义里。"
+  },
+  "9b75212777d6": {
+   "scene": "Outro",
+   "en": "Next time, the fifth act: agency. The search loop of this chapter, propose, check, keep the best, becomes learning from reward: an agent acts, the world answers, and the agent improves, all the way to AlphaZero, which we will train ourselves. Part 26: reinforcement learning, from Bellman to AlphaZero.",
+   "zh": "下一次，第五幕：能动性。本章的搜索循环，提出、检查、保留最好的，变成了从奖励中学习：智能体行动，世界给出回应，智能体不断改进，一直到AlphaZero，我们会亲手训练一个。第26部分：强化学习，从贝尔曼到AlphaZero。"
+  },
+  "156efedaf81b": {
+   "scene": "Outro",
+   "en": "To go deeper, Bronstein, Bruna, Cohen and Veličković's book on geometric deep learning is the map of this whole part, and William Hamilton's short book covers graph networks clearly. Thanks for watching, and see you in Part 26.",
+   "zh": "想深入了解，布朗斯坦、布鲁纳、科恩和韦利奇科维奇关于几何深度学习的书是整个这一部分的地图，威廉·汉密尔顿的小书把图网络讲得很清楚。感谢收看，我们第26部分再见。"
+  }
+ },
+ "title_en": "AI, Built: Part 25, Symmetry and Science",
+ "chapters_en": {
+  "Hook": "Turn the molecule",
+  "History": "1. How we got here",
+  "Symmetry": "2. Invariance and equivariance",
+  "Sets": "3. Functions of sets",
+  "Messages": "4. Message passing",
+  "WL": "5. What message passing can't see",
+  "Depth": "6. Deep graph networks",
+  "Rotations": "7. Networks that turn with the molecule",
+  "Folding": "8. The protein-folding problem",
+  "Evoformer": "9. AlphaFold 2: the Evoformer",
+  "Structure": "10. AlphaFold 2: frames, FAPE and recycling",
+  "AF3": "11. AlphaFold 3: diffusion over atoms",
+  "Design": "12. Designing proteins",
+  "Weather": "13. Weather on a mesh",
+  "Operators": "14. Neural operators",
+  "Materials": "15. Materials by the million",
+  "Proofs": "16. Geometry and proofs",
+  "Search": "17. Discovery by search",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}

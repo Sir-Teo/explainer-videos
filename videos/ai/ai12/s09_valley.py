@@ -111,8 +111,8 @@ class Valley(VoiceoverScene, ThreeDScene):
         yr = (math.log10(D.min()) + 0.3, math.log10(D.max()))
         zlo = float(np.nanmin(Lb)) - 0.05
         ztop = zlo + 1.6
-        axes = ThreeDAxes(x_range=[*xr, 1], y_range=[*yr, 1], z_range=[zlo, ztop, 0.5], x_length=5.0, y_length=5.0,
-                          z_length=2.5, axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(DOWN * 0.6)
+        axes = ThreeDAxes(x_range=[*xr, 1], y_range=[*yr, 1], z_range=[zlo, ztop, 0.5], x_length=4.3, y_length=4.3,
+                          z_length=2.2, axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(DOWN * 0.8)
 
         def f(u, v):
             return float(min(lnd(ch, 10 ** u, 10 ** v), ztop))

@@ -212,10 +212,11 @@ class LoRA(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(head), FadeIn(tag),
                       FadeIn(VGroup(*[r_[0] for r_ in rows])))
+            # the four runs train while they are named
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.25), run_time=4.0)
             vo.wait_until("a")
             self.play(FadeIn(VGroup(*[VGroup(r_[1], r_[2]) for r_ in rows])))
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.25), run_time=3.0)
             self.play(FadeIn(VGroup(*[r_[3] for r_ in rows])))
             vo.wait_until("c")
             self.play(FadeIn(VGroup(*[r_[4] for r_ in rows])))

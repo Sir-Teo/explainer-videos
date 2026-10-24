@@ -212,13 +212,13 @@ class Rotations(VoiceoverScene):
         cvm = float(nd["mse_constvel"])
         mlp_txt = (f"The plain MLP ends at {m['mlp']:.3f}, no better than that guess of {cvm:.3f}" if
                    m["mlp"] >= 0.97 * cvm else f"The plain MLP ends at {m['mlp']:.3f}, below that guess of {cvm:.3f}")
-        aug_txt = ("Turned copies help the MLP" if m["mlp_aug"] < 0.97 * m["mlp"] else
-                   "Turned copies barely help it at this budget")
+        aug_txt = ("turned copies help the MLP" if m["mlp_aug"] < 0.97 * m["mlp"] else
+                   "turned copies barely help it at this budget")
         with self.voiceover(
             "Does it pay? Our five-body system again: predict where the particles are at time one. Four networks, the same "
             "three thousand steps, from a hundred training systems up to "
             f"{sizes[-1]:,}, three seeds each. <bookmark mark='a'/> The dashed line is the simplest guess: every particle "
-            f"keeps going straight. <bookmark mark='b'/> {mlp_txt}. {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> "
+            f"keeps going straight. <bookmark mark='b'/> {mlp_txt}; {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> "
             f"Message passing on raw coordinates: {m['gnn']:.3f}. <bookmark mark='d'/> EGNN: {m['egnn']:.4f}, {ratio_txt}. "
             f"{cross}."
         ) as vo:

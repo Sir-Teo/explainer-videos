@@ -130,7 +130,7 @@ class Rewards(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(gold[2]), FadeIn(mark))
             vo.wait_until("c")
-            self.play(Indicate(tag))
+            self.play(Indicate(tag, scale_factor=1.05))
         self.wait(0.3)
         self.clear_scene()
 

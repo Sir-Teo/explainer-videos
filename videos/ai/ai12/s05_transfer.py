@@ -52,7 +52,17 @@ class Transfer(VoiceoverScene):
             t = label(title, font_size=30, color=col).next_to(ax, UP, buff=0.2)
             yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(lrs[0], v), LEFT, buff=0.08)
                           for v in np.arange(lo, hi + 1e-9, 0.2)])
-            panels.add(VGroup(ax, xt, xl, t, yt, bands, lines, bests))
+            # where the best rate sits at the smallest and the largest width
+            xb = [lrs[int(np.argmin(np.asarray(m[mode + str(w)]).mean(0)))] for w in (widths[0], widths[-1])]
+            ym = hi - 0.12
+            mk = VGroup(*[DashedLine(ax.c2p(x, lo + 0.02), ax.c2p(x, ym), color=c, stroke_width=1.6, dash_length=0.06)
+                          for x, c in zip(xb, (WIDTH_COLORS[0], WIDTH_COLORS[len(widths) - 1]))])
+            if abs(xb[1] - xb[0]) > 0.05:
+                mk.add(Arrow(ax.c2p(xb[0], ym), ax.c2p(xb[1], ym), buff=0, stroke_width=3, color=col,
+                             max_tip_length_to_length_ratio=0.25))
+            mk.add(label(rf"best rate moves ${abs(xb[1] - xb[0]):.1f}$ decades", font_size=22, color=col)
+                   .next_to(ax.c2p((xb[0] + xb[1]) / 2, ym), UP, buff=0.1))
+            panels.add(VGroup(ax, xt, xl, t, yt, bands, lines, bests, mk))
         key = VGroup(*[label(rf"width ${w:,}$".replace(",", "{,}"), font_size=24, color=c) for w, c in zip(widths, WIDTH_COLORS)])
         key.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.3)
         yn = label(rf"held-out bits after ${int(m['steps'])}$ steps \ (lower is better; \ two seeds, \ bands: \ both)",
@@ -94,10 +104,12 @@ class Transfer(VoiceoverScene):
             self.play(FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[6]], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(p[7]))
+            self.play(FadeIn(p[8]), run_time=1.2)
             vo.wait_until("b")
             p = panels[1]
             self.play(FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[6]], lag_ratio=0.3), run_time=2.0)
             self.play(FadeIn(p[7]))
+            self.play(FadeIn(p[8]), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 

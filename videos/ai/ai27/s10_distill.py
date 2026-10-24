@@ -131,6 +131,12 @@ class Distill(VoiceoverScene):
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
         tag = note(rf"computed: \ teacher ${d['teacher_params'] / 1e6:.1f}$M parameters, \ students "
                    rf"${d['student_params'] / 1e6:.1f}$M").to_corner(DR, buff=0.2)
+        # who teaches whom, beside the chart while the runs are described
+        tbox = node_box(rf"teacher: \ six layers, \ ${d['teacher_params'] / 1e6:.1f}$M", REF, font_size=22)
+        sbox = node_box(rf"student: \ two layers, \ ${d['student_params'] / 1e6:.1f}$M", ASSIST, font_size=22)
+        pair = VGroup(tbox, sbox).arrange(DOWN, buff=0.6).move_to([4.75, -1.3, 0])
+        parr = Arrow(tbox.get_bottom(), sbox.get_top(), buff=0.08, color=GREY_B, stroke_width=2.5,
+                     max_tip_length_to_length_ratio=0.25)
         a, b = d["text"]["heldout"], d["teacher"]["heldout"]
         verdict = (f"Trained on the teacher's probabilities, the student ends at {b:.2f} nats, against {a:.2f} from "
                    "the text alone, on the same tokens: the teacher's distributions carry more per token than the "
@@ -143,6 +149,7 @@ class Distill(VoiceoverScene):
             "the text alone, the next word. <bookmark mark='b'/> The other learns the teacher's whole distribution "
             "over the next word. <bookmark mark='c'/> " + verdict
         ) as vo:
+            self.play(FadeIn(tbox), GrowArrow(parr), FadeIn(sbox))
             self.play(FadeIn(g), Create(tl), FadeIn(tll), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(lt), FadeIn(lg[0]), run_time=2.0)

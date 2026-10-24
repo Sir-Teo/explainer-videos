@@ -216,8 +216,10 @@ class Outro(VoiceoverScene):
              r"(2023)",
              r"Li et al.\ (2018); \ Aghajanyan et al.\ (2020); \ Hu et al., \textit{LoRA} (2021); \ Dettmers et al., "
              r"\textit{QLoRA} (2023); \ Biderman et al.\ (2024)",
-             r"Bradley \& Terry (1952); \ Gao, Schulman \& Hilton (2023); \ Rafailov et al., \textit{DPO} (2023); \ "
-             r"Azar et al.\ (2023); \ Ethayarajh et al.\ (2024)",
+             r"Bradley \& Terry (1952); \ Manheim \& Garrabrant (2018); \ Gao, Schulman \& Hilton (2023); \ "
+             r"Rafailov et al., \textit{DPO} (2023); \ Azar et al.\ (2023); \ Ethayarajh et al.\ (2024)",
+             r"Ziegler et al.\ (2019); \ Schulman et al., \textit{PPO} (2017); \ Kool et al.\ (2019); \ Ahmadian et "
+             r"al., \textit{RLOO} (2024); \ Shao et al., \textit{GRPO} (2024)",
              r"Lee et al., \textit{RLAIF} (2023); \ Guan et al., \textit{Deliberative alignment} (2024); \ Anthropic, "
              r"\textit{Claude's constitution} (2026)",
              r"Hinton, Vinyals \& Dean (2015); \ Kim \& Rush (2016); \ Gu et al., \textit{MiniLLM} (2024); \ Agarwal "
