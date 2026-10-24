@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import GOLD, KLC, PART, POLICY, PROXY, REWARD, load, said
+from videos.ai.ai27.common import GOLD, KLC, PART, POLICY, PROXY, REWARD, load, said, ticks
 
 
 class Goodhart(VoiceoverScene):
@@ -33,6 +33,12 @@ class Goodhart(VoiceoverScene):
             label(r"a boat-racing agent rewarded for targets hit: \ circles forever, never finishing", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.4)
         cite_ = cite(r"Goodhart (1975); \ Amodei \& Clark, \textit{Faulty reward functions in the wild} (OpenAI, 2016)")
+        hist = VGroup(
+            history_card(1975, r"Charles Goodhart, \ economist", r"statistics used to steer policy stop meaning what "
+                         r"they used to", width=5.6, color=GOLD),
+            history_card(1997, r"Marilyn Strathern, \ anthropologist", r"the general form: \ any measure that becomes "
+                         r"a target", width=5.6, color=GOLD),
+        ).arrange(RIGHT, buff=0.4).move_to(DOWN * 1.5)
         with self.voiceover(
             "In 1975 the economist Charles Goodhart observed that statistics used to steer policy stop meaning what "
             "they used to. The anthropologist Marilyn Strathern later put it in the form everyone quotes: when a "
@@ -44,9 +50,13 @@ class Goodhart(VoiceoverScene):
             "the same three targets and never finishing the race."
         ) as vo:
             self.play(FadeIn(quote), FadeIn(who))
+            self.play(FadeIn(hist[0], shift=UP * 0.15))
+            self.wait(2.0)
+            self.play(FadeIn(hist[1], shift=UP * 0.15))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cases[k], shift=UP * 0.15), *([FadeIn(cite_)] if k == 2 else []))
+                self.play(FadeIn(cases[k], shift=UP * 0.15), *([FadeIn(cite_)] if k == 2 else []),
+                          *([FadeOut(hist)] if k == 0 else []))
         self.wait(0.3)
         self.clear_scene()
 
@@ -64,6 +74,20 @@ class Goodhart(VoiceoverScene):
                 why(r"the answer at quantile $u$ is chosen with density $n u^{n-1}$: \ integrate its log"),
                 why(r"it grows only like $\log n$")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.6, buff=0.7, edge=6.9)
+        # n draws on a reward axis, the best one ringed: bigger n reaches further into the tail (schematic)
+        g_ = np.random.default_rng(3)
+        axis = NumberLine(x_range=[-3, 3, 1], length=9.0, color=GREY_C, include_ticks=False).move_to([0, -2.4, 0])
+        al = label(r"the reward model's score of each draw", font_size=20, color=PROXY).next_to(axis, DOWN, buff=0.2)
+
+        def draws(n):
+            v = np.clip(g_.normal(size=n), -2.9, 2.9)
+            dots = VGroup(*[Dot(axis.n2p(x) + UP * 0.25, radius=0.06, color=GREY_B) for x in v])
+            best = Circle(radius=0.14, color=PROXY, stroke_width=3).move_to(dots[int(np.argmax(v))])
+            name = label(rf"best of $n = {n}$", font_size=22, color=PROXY).next_to(axis, UP, buff=0.75)
+            return VGroup(dots, best, name)
+
+        pics = [draws(n) for n in (4, 64, 1024)]
+        stag = note(r"schematic").to_corner(DR, buff=0.25)
         with self.voiceover(
             "To measure the effect, we need a way to optimize a reward model by a controlled amount. The simplest "
             "is best-of-n: draw n answers from the reference model and keep the one the reward model likes best. "
@@ -74,10 +98,16 @@ class Goodhart(VoiceoverScene):
             "to reason about, and in practice it is a strong baseline that labs still use."
         ) as vo:
             step(0)
+            self.play(Create(axis), FadeIn(al), FadeIn(stag), FadeIn(pics[0][0]), FadeIn(pics[0][2]))
+            self.play(Create(pics[0][1]))
+            self.play(FadeOut(pics[0]), FadeIn(pics[1][0]), FadeIn(pics[1][2]))
+            self.play(Create(pics[1][1]))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
+            self.play(FadeOut(pics[1]), FadeIn(pics[2][0]), FadeIn(pics[2][2]))
+            self.play(Create(pics[2][1]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -95,7 +125,8 @@ class Goodhart(VoiceoverScene):
         ghi = max(float(ys["small_gold"].max()), float(ys["large_gold"].max()))
         gp = 0.15 * (ghi - glo + 1e-6)
         g = axes([0, xmax], [0, float(np.ceil(phi))], x_length=5.0, y_length=3.6, xlabel=xl,
-                 ylabel=r"what the reward model thinks", xticks=[0, 1, 2], center=[-3.5, -0.2, 0])
+                 ylabel=r"what the reward model thinks", xticks=[0, 1, 2], yticks=ticks(0, float(np.ceil(phi)), 3),
+                 center=[-3.5, -0.2, 0])
         g2 = axes([0, xmax], [glo - gp, ghi + gp], x_length=5.0, y_length=3.6, xlabel=xl,
                   ylabel=r"what gold thinks", xticks=[0, 1, 2], yticks=[round(glo, 2), round(ghi, 2)],
                   yfmt=lambda v: rf"{v:+.2f}", center=[3.1, -0.2, 0])
@@ -147,15 +178,19 @@ class Goodhart(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(lg_), run_time=2.0)
         self.wait(0.3)
-        pick = said(ex[1], chars=50, font_size=18, max_lines=2).to_edge(DOWN, buff=0.3)
-        pl = label(rf"the small reward model's favourite line about the {ex[0]}: \ it scores ${ex[2]:+.2f}$, \ "
-                   rf"gold says ${ex[3]:+.2f}$", font_size=20, color=GREY_A).next_to(pick, UP, buff=0.12)
+        pick = said(ex[1], chars=50, font_size=18, max_lines=2)
+        pq = said(f"Write a line about the {ex[0]}.", "user", chars=32, font_size=18)
+        row = VGroup(pq, pick).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
+        if row.width > 13.4:
+            row.width = 13.4
+        pl = label(rf"the small reward model's favourite of all ${ns[-1]}$: \ it scores ${ex[2]:+.2f}$, \ "
+                   rf"gold says ${ex[3]:+.2f}$", font_size=20, color=GREY_A).next_to(row, UP, buff=0.12)
         with self.voiceover(
             f"This is the line about the {ex[0]} that the small reward model liked best out of all two hundred and "
             "fifty-six."
         ):
             self.play(VGroup(g, g2, sp, sg, lp, lg_).animate.shift(UP * 0.5), FadeOut(tag), FadeOut(size))
-            self.play(FadeIn(pick), FadeIn(pl))
+            self.play(FadeIn(row), FadeIn(pl))
         self.wait(0.5)
         self.clear_scene()
 
@@ -172,8 +207,17 @@ class Goodhart(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-1.6, buff=0.7, edge=6.9)
         hc = history_card(2023, r"Gao, Schulman \& Hilton, \textit{Scaling laws for reward model overoptimization}",
                           r"a large ``gold'' reward model plays the people; \ the coefficients improve smoothly with the "
-                          r"proxy reward model's size, \ so the overoptimization can be predicted", width=8.6,
-                          color=GOLD).to_edge(DOWN, buff=0.5)
+                          r"proxy reward model's size, \ so the overoptimization can be predicted", width=6.0,
+                          color=GOLD).move_to([3.6, -1.1, 0])
+        # the two shapes, with made-up coefficients (schematic): best-of-n's parabola, RL's slower fall
+        dd = np.linspace(0.001, 6.0, 200)
+        g = axes([0, 6], [0, 1.6], x_length=5.4, y_length=2.6, xlabel=r"$d = \sqrt{\mathrm{KL}}$",
+                 ylabel=r"gold reward", center=[-3.4, -1.1, 0])
+        cb = curve(g.ax, dd, np.clip(dd * (1 - 0.25 * dd), 0, None), GOLD, 4)
+        cr = curve(g.ax, dd, np.clip(dd * (1 - 0.5 * np.log(dd)), 0, None), KLC, 4)
+        lb = label(r"best-of-$n$", font_size=20, color=GOLD).next_to(g.ax.c2p(2, 1.0), UP, buff=0.12)
+        lr = label(r"RL", font_size=20, color=KLC).next_to(g.ax.c2p(4.6, 4.6 * (1 - 0.5 * np.log(4.6))), UR, buff=0.08)
+        stag = note(r"schematic: \ illustrative coefficients").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Gao and colleagues ran this at scale, with a large reward model playing the part of the people, and "
             "found that gold reward follows simple curves in the square root of the KL. For best-of-n, d times alpha "
@@ -182,10 +226,13 @@ class Goodhart(VoiceoverScene):
             "the reward model, so how far it is safe to optimize can be predicted. In practice that is what the KL "
             "leash, and early stopping, are for."
         ) as vo:
+            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(g), FadeIn(stag))
             step(0)
+            self.play(Create(cb), FadeIn(lb))
             vo.wait_until("a")
             step(1)
+            self.play(Create(cr), FadeIn(lr))
             vo.wait_until("b")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(Indicate(hc))
         self.wait(0.3)
         self.clear_scene()

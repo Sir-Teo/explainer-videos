@@ -249,13 +249,20 @@ class GPTQ(VoiceoverScene):
         r4 = res["rtn_4_64"] - base
         g4 = float(np.mean([res[f"gptq_4_64_s{s}"] - base for s in seeds]))
         cut3 = 1 - g3 / r3
+        g3s = [res[f"gptq_3_row_s{s}"] - base for s in seeds]
+        if cut3 > 0.25 and max(g3s) < 0.85 * r3:
+            gptq_say = (f"the difference is large: rounding costs {r3:.3f}, GPTQ {g3:.3f}, {100 * cut3:.0f} percent "
+                        "less, whichever calibration text it saw.")
+        else:
+            gptq_say = (f"rounding costs {r3:.3f}, GPTQ {g3:.3f} on average, {100 * cut3:.0f} percent less, and how "
+                        "much depends on the calibration text.")
+        awq_say = (f"it costs {a3:.3f}: on our model, it barely helps." if a3 > 0.9 * r3 else
+                   f"it costs {a3:.3f}, {100 * (1 - a3 / r3):.0f} percent less than rounding.")
         with self.voiceover(
             "All three, on the whole model: every block matrix rounded, the loss measured on held-out novels, and "
             "GPTQ and AWQ each calibrated on three different samples of text. <bookmark mark='a'/> At four bits "
             f"with a scale per 64 weights, rounding costs {r4:.3f} nats a token and GPTQ {g4:.3f}. "
-            f"<bookmark mark='b'/> At three bits with a scale per row, the difference is large: rounding costs "
-            f"{r3:.3f}, GPTQ {g3:.3f}, {100 * cut3:.0f} percent less, whichever calibration text it saw. AWQ "
-            f"costs {a3:.3f}" + (": on our model, it barely helps." if a3 > 0.9 * r3 else ".") +
+            "<bookmark mark='b'/> At three bits with a scale per row, " + gptq_say + " As for AWQ, " + awq_say +
             " <bookmark mark='c'/> Spending the error where the inputs don't look is what makes three and four "
             "bits usable."
         ) as vo:

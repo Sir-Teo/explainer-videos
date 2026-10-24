@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import GOLD, KLC, PART, PENALTY, POLICY, PROXY, REF, REWARD, load, said
+from videos.ai.ai27.common import GOLD, KLC, PART, PENALTY, POLICY, PROXY, REF, REWARD, load, said, ticks
 
 
 class DPO(VoiceoverScene):
@@ -122,7 +122,7 @@ class DPO(VoiceoverScene):
         lo, hi = float(min(p[:, 1].min(), p[:, 2].min())), float(max(p[:, 1].max(), p[:, 2].max(), 0.5))
         g = axes([0, S], [np.floor(lo), np.ceil(hi)], x_length=7.0, y_length=3.8, xlabel=r"DPO steps",
                  ylabel=r"$\log \pi_\theta(y) - \log \pi_{\mathrm{ref}}(y)$ \ (nats, $32$ fixed pairs)",
-                 xticks=[0, S], center=[-1.0, -0.2, 0])
+                 xticks=[0, S], yticks=ticks(np.floor(lo), np.ceil(hi), 3), center=[-1.0, -0.2, 0])
         cw = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in zip(p[:, 0], p[:, 1])]).set_stroke(REWARD, 4)
         cl = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in zip(p[:, 0], p[:, 2])]).set_stroke(PENALTY, 4)
         zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(S, 0), color=GREY_C, dash_length=0.06)
@@ -165,17 +165,31 @@ class DPO(VoiceoverScene):
         pad = 0.1 * (hi - lo + 1e-6)
         g = axes([0, xmax], [lo - pad, hi + pad], x_length=8.0, y_length=4.4,
                  xlabel=r"$\sqrt{\mathrm{KL}}$ from the fine-tuned model \ (nats$^{1/2}$ per line)",
-                 ylabel=r"gold gained over the fine-tuned model", xticks=[0, round(xmax)], center=[-1.4, -0.3, 0])
+                 ylabel=r"gold gained over the fine-tuned model", xticks=[0, round(xmax)],
+                 yticks=ticks(lo - pad, hi + pad, 3), yfmt=lambda v: rf"{v:+.2f}" if v else "0",
+                 center=[-2.3, -0.3, 0])
         zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(xmax, 0), color=GREY_D, dash_length=0.06)
         bc = curve(g.ax, kx, bon, PROXY, 5)
-        bl = label(r"best-of-$n$, \ $n = 1 \dots 256$", font_size=20, color=PROXY).next_to(bc.get_end(), UP, buff=0.1)
         dots = VGroup()
         for meth, b, g_, k_ in pts:
             col = KLC if meth == "RLHF" else POLICY
             d_ = Dot(g.ax.c2p(np.sqrt(max(k_, 0)), g_), radius=0.09, color=col)
-            dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=18, color=col)))
-        # names beside their dots on whichever side is free (RLHF and DPO at beta 0.1 land almost together)
-        place_labels([d_[0] for d_ in dots] + [bl], [d_[1] for d_ in dots] + [VectorizedPoint(bl.get_center())])
+            dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=20, color=col)))
+        # names in a column right of the chart, in the order of their dots' heights, each joined to its dot by a
+        # thin leader (RLHF and DPO at beta 0.1 land almost on top of each other)
+        X = g.ax.get_right()[0] + 0.5
+        order = sorted(range(len(dots)), key=lambda i: -dots[i][0].get_y())
+        top_y, bot_y = g.ax.get_top()[1] - 0.2, g.ax.get_bottom()[1] + 0.6
+        ys = np.linspace(top_y, bot_y, len(dots)) if len(dots) > 1 else [top_y]
+        leaders = VGroup()
+        for y, i in zip(ys, order):
+            dots[i][1].move_to([X, y, 0], aligned_edge=LEFT)
+            leaders.add(Line(dots[i][0].get_center(), dots[i][1].get_left() + LEFT * 0.08, color=GREY_D,
+                             stroke_width=1.2))
+        for j, i in enumerate(order):
+            dots[i].add(leaders[j])
+        bl = label(r"best-of-$n$, \ $n = 1 \dots 256$", font_size=20, color=PROXY).move_to(
+            [X, top_y + 0.45, 0], aligned_edge=LEFT)
         tag = note(r"computed: \ gold on the same samples' prompts; \ KL measured on each policy's own lines")
         tag.to_corner(DR, buff=0.2)
         # the verdict: does any trained policy beat sampling-and-choosing, at the same divergence or at all?

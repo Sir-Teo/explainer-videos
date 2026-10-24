@@ -206,6 +206,7 @@ class Drafters(VoiceoverScene):
         else:
             fit = ("The formula is only a guide: acceptances aren't independent, and later drafts, built on "
                    "earlier guesses, fare differently from the first.")
+        who = "the EAGLE head" if best == "eagle" else "the small model"
         with self.voiceover(
             "Now the real thing: speculative sampling on twelve held-out openings, ninety-six tokens each. "
             "<bookmark mark='a'/> With four drafts per pass, the small model gets "
@@ -215,7 +216,7 @@ class Drafters(VoiceoverScene):
             f"{dep['eagle'][0]:.2f} for the first to {dep['eagle'][-1]:.2f} for the fourth, because it is feeding "
             f"on its own guesses; the small model's from {dep['draft'][0]:.2f} to {dep['draft'][-1]:.2f}. "
             f"<bookmark mark='d'/> Decoding greedily, the drafts survive more often: {gr[best]:.2f} tokens per pass "
-            f"for the {'EAGLE head' if best == 'eagle' else 'small model'}."
+            f"for {who}."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(key[0]))
             vo.wait_until("a")
@@ -259,9 +260,12 @@ class Drafters(VoiceoverScene):
         if sp > 1.1:
             verdict = (f"The best, {name} with {best_c[1]} drafts, writes a token in {tpt[best_c]:.2f} milliseconds "
                        f"against {plain:.2f}: {sp:.1f} times faster.")
+        elif sp > 1.0:
+            verdict = (f"The best, {name} with {best_c[1]} drafts, is barely faster: {tpt[best_c]:.2f} milliseconds a "
+                       f"token against {plain:.2f}.")
         else:
-            verdict = (f"The best, {name} with {best_c[1]} drafts, is {'barely faster' if sp > 1.0 else 'no faster'}: "
-                       f"{tpt[best_c]:.2f} milliseconds a token against {plain:.2f}.")
+            verdict = (f"The best, {name} with {best_c[1]} drafts, is no faster: {tpt[best_c]:.2f} milliseconds a "
+                       f"token against {plain:.2f}.")
         pubs = VGroup(label(r"published speed-ups:", font_size=19, color=GREY_A),
                       label(rf"Medusa (2024): \ ${F.MEDUSA['gain2'][0]}$--${F.MEDUSA['gain2'][1]}\times$", font_size=19,
                             color=GREY_A),

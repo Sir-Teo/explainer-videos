@@ -49,7 +49,7 @@ class Inside(VoiceoverScene):
         nw = np.asarray(d["words"])
         sea = [i for i in range(n) if top[i] == top[0] and 6 <= nw[i] <= 14] or [0]
         i0 = sea[0]
-        q = bubble(rf"Write a line about the {top[i0]}.", "user", font_size=22).move_to([-3.7, 3.0, 0])
+        q = said(f"Write a line about the {top[i0]}.", "user", chars=40, font_size=20).move_to([-3.7, 3.0, 0])
         model = node_box(r"our fine-tuned model", ASSIST, font_size=22).move_to([-3.7, 1.95, 0])
         line = said(text[i0], chars=34, font_size=18, max_lines=2).move_to([-3.7, 0.75, 0])
         rmb = node_box(r"reward model", PROXY, font_size=22).move_to([-5.3, -0.75, 0])
@@ -375,7 +375,7 @@ class Inside(VoiceoverScene):
                 marks.add(Line([x - 0.24, eg * H, 0], [x + 0.24, eg * H, 0], color=GOLD, stroke_width=5))
                 col = KIND_COL[kind("".join(WORD.findall(w.lower())))]
                 c_.set_color(col)
-            exq = bubble(rf"Write a line about the {ex['topic']}.", "user", font_size=20).move_to([0, 2.8, 0])
+            exq = said(f"Write a line about the {ex['topic']}.", "user", chars=40, font_size=20).move_to([0, 2.8, 0])
             ex_lg = legend([(PROXY, r"the reward model's loss when the word goes"),
                             (GOLD, r"gold's, \ for the same deletion")], font_size=18).to_corner(DL, buff=0.3)
             ex_grp = VGroup(exq, chips, base, bars, marks, ex_lg)
@@ -494,7 +494,7 @@ class Inside(VoiceoverScene):
 
         def card(e, head, col):
             box = said(e["text"], chars=38, font_size=20, max_lines=4)
-            q = label(rf"a line about the {e['topic']}", font_size=22, color=GREY_A)
+            q = said(f"Write a line about the {e['topic']}.", "user", chars=40, font_size=18)
             r1 = label(rf"reward model: \ ranks it ${e['rank_rm']}$ of ${per}$", font_size=24, color=PROXY)
             r2 = label(rf"gold: \ ranks it ${e['rank_gold']}$ of ${per}$ \ (gold ${e['gold']:+.2f}$)", font_size=24,
                        color=GOLD)

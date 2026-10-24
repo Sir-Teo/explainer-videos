@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai19.common import (CHUNKC, CONTC, DECODEC, DISC, F, PART, PREFILLC, STATICC, hbars, load, node_box,
-                                   take_away, times)
+                                   take_away, x_)
 
 KIND_COL = {0: PREFILLC, 1: DECODEC, 2: GREY_D}
 
@@ -121,14 +121,14 @@ class Scheduling(VoiceoverScene):
                      font_size=18).to_edge(DOWN, buff=0.35)
         gain = tp[1] / tp[0]
         demand = s["rate"] * s["out_mean"]
-        st_say = ("can't keep up: they write " + f"{tp[0]:.0f} tokens a second, fewer than are asked for, so the "
-                  "queue grows." if tp[0] < 0.95 * demand else f"write {tp[0]:.0f} tokens a second.")
+        st_say = (f"can't keep up: they write {tp[0]:.0f} tokens a second, fewer than are asked for, so the queue "
+                  "grows." if tp[0] < 0.95 * demand else f"write {tp[0]:.0f} tokens a second, all that is asked.")
         co_say = ("all that is asked." if tp[1] >= 0.95 * demand else "and still not all that is asked.")
         with self.voiceover(
             "With more traffic the difference is stark. <bookmark mark='a'/> We simulated a server on this "
             f"computer's measured costs: 400 requests arriving at random, {s['rate']:g} a second, with long-tailed "
             "lengths, like real chat. <bookmark mark='b'/> Static batches " + st_say + " Continuous batching "
-            f"writes {tp[1]:.0f}, {times(gain)} as many, " + co_say + " <bookmark mark='c'/> And the wait for a "
+            f"writes {tp[1]:.0f}, {x_(gain)} times as many, " + co_say + " <bookmark mark='c'/> And the wait for a "
             f"first token: a median of {tt[0]:.0f} seconds with static batches, {1e3 * tt[1]:.0f} milliseconds with "
             "continuous batching. Serving systems have worked this way ever since."
         ) as vo:
@@ -181,21 +181,21 @@ class Scheduling(VoiceoverScene):
             f"{1e3 * c['gap'][0]:.0f} milliseconds, but the longest is {1e3 * c['gap'][3]:.0f}. "
             "<bookmark mark='c'/> In 2024 Sarathi-Serve cut prompts into chunks, and gave each step a budget: the "
             "decodes, plus as much prompt as fits. <bookmark mark='d'/> With chunks of 256 tokens, the longest gap "
-            f"falls to {1e3 * ch['gap'][3]:.0f} milliseconds, {times(cut)} shorter, for almost no change in the "
+            f"falls to {1e3 * ch['gap'][3]:.0f} milliseconds, {x_(cut)} times shorter, for almost no change in the "
             "median."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(row1), FadeIn(l1))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x_[0]) for x_ in g], lag_ratio=0.2),
-                      *[AnimationGroup(FadeIn(x_[1][0].name), GrowFromEdge(x_[1][0].bar, LEFT), FadeIn(x_[1][0].val))
-                        for x_ in g])
+            self.play(LaggedStart(*[FadeIn(m_[0]) for m_ in g], lag_ratio=0.2),
+                      *[AnimationGroup(FadeIn(m_[1][0].name), GrowFromEdge(m_[1][0].bar, LEFT), FadeIn(m_[1][0].val))
+                        for m_ in g])
             vo.wait_until("c")
             self.play(FadeIn(st2), FadeIn(l2), FadeIn(hc))
             vo.wait_until("d")
-            self.play(*[AnimationGroup(FadeIn(x_[1][1].name), GrowFromEdge(x_[1][1].bar, LEFT), FadeIn(x_[1][1].val))
-                        for x_ in g])
+            self.play(*[AnimationGroup(FadeIn(m_[1][1].name), GrowFromEdge(m_[1][1].bar, LEFT), FadeIn(m_[1][1].val))
+                        for m_ in g])
         self.wait(0.3)
         self.clear_scene()
 
@@ -238,11 +238,11 @@ class Scheduling(VoiceoverScene):
         tail = co["gap"][2] / di["gap"][2]
         dt = di["ttft"][0] / co["ttft"][0]
         if tail > 1.2 and dt > 1.2:
-            verdict = (f"Splitting cut the 99th-percentile gap {times(tail)}, but the median wait for a first token "
-                       f"grew {times(dt)}, because one worker now does every prefill: the split has to be sized to "
+            verdict = (f"Splitting cut the 99th-percentile gap {x_(tail)} times, but the median wait for a first token "
+                       f"grew {x_(dt)} times, because one worker now does every prefill: the split has to be sized to "
                        "the traffic.")
         elif tail > 1.2:
-            verdict = f"Splitting cut the 99th-percentile gap {times(tail)}, with no cost to the first token."
+            verdict = f"Splitting cut the 99th-percentile gap {x_(tail)} times, with no cost to the first token."
         else:
             verdict = "Here splitting didn't help the gaps: our prompts are short, so they interfere little."
         with self.voiceover(
@@ -258,7 +258,7 @@ class Scheduling(VoiceoverScene):
             self.play(FadeIn(right), FadeIn(lr), LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.2),
                       FadeIn(cache_l), FadeIn(hist))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x_) for x_ in g], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in g], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
             self.play(Indicate(g[1], color=DISC, scale_factor=1.04))
         self.wait(0.3)

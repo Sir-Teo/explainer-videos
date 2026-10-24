@@ -48,8 +48,8 @@ class MuP(VoiceoverScene):
         walk = np.concatenate([[0.0], np.cumsum(np.random.default_rng(12).choice([-1.0, 1.0], n_))])
         pics = VGroup()
         for k, (ys, col, txt) in enumerate((
-                (walk, SP, r"random signs: \ the sum wanders, \ about $\sqrt{n}$"),
-                (np.arange(n_ + 1, dtype=float), MUP, r"one sign: \ the sum grows like $n$"))):
+                (walk, SP, r"random signs: \\ the sum wanders, \\ about $\sqrt{n}$"),
+                (np.arange(n_ + 1, dtype=float), MUP, r"one sign: \\ the sum grows \\ like $n$"))):
             pa = Axes(x_range=[0, n_, 100], y_range=[-n_ / 8, n_, n_ / 4], x_length=4.0, y_length=1.45, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3 + 6.6 * k, -2.05, 0])
             pl = VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners(

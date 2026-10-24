@@ -157,11 +157,12 @@ class Hook(VoiceoverScene):
                       max_tip_length_to_length_ratio=0.25)
         out_t = VGroup(*[data_text(w_, font="DejaVu Sans Mono", font_size=24, color=WHITE) for w_ in ("the", "girl", "ran")])
         out_t.arrange(DOWN, buff=0.08, aligned_edge=LEFT).next_to(out_a, RIGHT, buff=0.15)
+        use_say = ("One conversation uses a third of one percent of it." if 0.25 < 100 * USE < 0.42 else
+                   f"One conversation uses {100 * USE:.2f} percent of it.")
         with self.voiceover(
             "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of "
             f"weights: on an NVIDIA H100, about {TOKENS_S:.0f} tokens a second. <bookmark mark='a'/> And "
-            "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses "
-            f"{'a third of one percent' if 0.25 < 100 * USE < 0.42 else f'{100 * USE:.2f} percent'} of it. "
+            "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> " + use_say + " "
             "<bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called "
             "inference; it's not part seven's variational inference. And inference is a problem "
             "of moving numbers, not multiplying them."

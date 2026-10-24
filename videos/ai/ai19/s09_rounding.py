@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ERRC, LEVELC, PART, WEIGHTC, load, take_away, times)
+from videos.ai.ai19.common import (ERRC, LEVELC, PART, WEIGHTC, load, take_away, x_)
 
 COLORS = {r"\Delta": LEVELC, r"e": ERRC, r"w": WEIGHTC, r"b": GREY_A}
 
@@ -174,7 +174,7 @@ class Rounding(VoiceoverScene):
             "Here is why the scale's reach matters. <bookmark mark='a'/> These are the weights of one matrix of our "
             "model: most within a narrow band around zero. <bookmark mark='b'/> With one four-bit scale for the "
             "whole matrix, its single largest weight sets the step, and most weights share a handful of levels "
-            f"near zero. <bookmark mark='c'/> A typical row's largest weight is {times(ratio)} smaller than the "
+            f"near zero. <bookmark mark='c'/> A typical row's largest weight is {x_(ratio)} times smaller than the "
             "matrix's, so a scale per row puts the levels where that row's weights are. A scale per group of 32 "
             "or 64 weights goes further, for a few more bits of storage per group."
         ) as vo:
@@ -223,10 +223,11 @@ class Rounding(VoiceoverScene):
                              color=ERRC))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.4, -1.2, 0])
         free8 = abs(L["row"][i8]) < 0.002
+        say8 = ("At eight bits, nothing measurable is lost." if free8 else
+                f"At eight bits, the loss grows by {L['row'][i8]:.4f} nats.")
         with self.voiceover(
             "What the model loses: its loss on held-out novels, at each width and each kind of scale. "
-            "<bookmark mark='a'/> " + ("At eight bits, nothing measurable. " if free8 else
-                                       f"At eight bits, {L['row'][i8]:.4f} nats. ") +
+            "<bookmark mark='a'/> " + say8 + " "
             f"<bookmark mark='b'/> At four bits it depends on the scales: one per matrix costs {L['tensor'][i4]:.3f} "
             f"nats per token, one per row {L['row'][i4]:.3f}, one per 32 weights {L['32'][i4]:.3f}, for "
             f"{bpw['32'][i4]:.1f} bits a weight in all. <bookmark mark='c'/> At three bits plain rounding starts "

@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai17.specs import GPUS
-from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, FLOPC, KVC, PART, WEIGHTC, load, loglog, take_away, times)
+from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, FLOPC, KVC, PART, WEIGHTC, load, loglog, take_away, x_)
 
 
 class Batching(VoiceoverScene):
@@ -48,7 +48,7 @@ class Batching(VoiceoverScene):
             "Every server faces the trade from chapter one. <bookmark mark='a'/> Here it is for our model on this "
             "computer: each dot a batch size, its speed for one conversation across, its total work up. "
             f"<bookmark mark='b'/> Alone, a conversation gets {user[0]:.0f} tokens a second. Batched with 255 "
-            f"others, the computer writes {tot[k]:,.0f} tokens a second in all, {times(tot[k] / tot[0])} as many, "
+            f"others, the computer writes {tot[k]:,.0f} tokens a second in all, {x_(tot[k] / tot[0])} times as many, "
             f"but each conversation gets {user[k]:.0f}. <bookmark mark='c'/> Up and to the left is cheap; down and "
             "to the right is fast. A provider picks a point on this curve, and the price follows."
         ) as vo:
@@ -153,7 +153,7 @@ class Batching(VoiceoverScene):
             "grows from one, up and to the left, until memory runs out. <bookmark mark='b'/> With a thousand tokens "
             f"of context, one conversation alone costs {d1['cost'][0]:.2f} dollars per million tokens. A batch of "
             f"{d1['bmax']} brings that to {d1['cost'][-1]:.3f}: {fall:.0f} times cheaper, while each conversation "
-            f"gets {times(slow)} slower. Even then the chip does only {100 * mfu:.0f} percent of the arithmetic it "
+            f"gets {x_(slow)} times slower. Even then the chip does only {100 * mfu:.0f} percent of the arithmetic it "
             f"could. <bookmark mark='c'/> At 128 thousand tokens, {d128['bmax']} conversations fill the memory, and a "
             "token "
             f"costs at least {d128['cost'][-1]:.2f} dollars per million. That's why long contexts cost more, and "

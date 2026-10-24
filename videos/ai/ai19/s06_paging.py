@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (CONTIGC, F, KVC, PAGEDC, PART, PREFILLC, RESERVEC, hbars, load, take_away, times)
+from videos.ai.ai19.common import (CONTIGC, F, KVC, PAGEDC, PART, PREFILLC, RESERVEC, hbars, load, take_away, x_)
 
 PALETTE = [C.TRUE_P, C.KEY, C.BITS, C.MLP, C.HOT, C.EMBED, C.PROB, C.ENTROPY, C.MODEL_Q, C.LATENT]
 
@@ -77,7 +77,7 @@ class Paging(VoiceoverScene):
         tg = p["paged"]["throughput"] / p["reserve"]["throughput"]
         cg = p["paged"]["running"] / p["reserve"]["running"]
         if tg > 1.5:
-            tsay = f"and it writes {times(tg)} as many tokens a second."
+            tsay = f"and it writes {x_(tg)} times as many tokens a second."
         else:
             tsay = (f"Here that buys only {100 * (tg - 1):.0f} percent more tokens a second, because on this "
                     "computer each conversation's own cache costs nearly as much to read as it adds; on a GPU, "
@@ -93,7 +93,7 @@ class Paging(VoiceoverScene):
             "came from operating systems: virtual memory. Cut the cache into pages of sixteen tokens, put each "
             "page anywhere, and keep a table of where they are. A conversation takes a page when it needs one. "
             f"<bookmark mark='d'/> Now {used[2]:.0f} percent of the memory holds tokens, and {run[2]:.1f} "
-            f"conversations fit at once, {times(cg)} as many; " + tsay
+            f"conversations fit at once, {x_(cg)} times as many; " + tsay
         ) as vo:
             self.play(FadeIn(head), FadeIn(maps[0], lag_ratio=0.002), FadeIn(sub[0]), run_time=1.5)
             vo.wait_until("a")
@@ -188,7 +188,7 @@ class Paging(VoiceoverScene):
             f"the prompt tokens needn't be computed again; with room for everything, {saved[-1]:.0f} percent, "
             "because every turn repeats the conversation before it. <bookmark mark='c'/> On our model, a "
             f"256-token prompt takes {tf:.0f} milliseconds to prefill; with its first 224 tokens already cached, "
-            f"{ts:.0f}: {times(tf / ts)} faster. SGLang kept these prefixes in a tree in 2023, and since 2024 "
+            f"{ts:.0f}: {x_(tf / ts)} times faster. SGLang kept these prefixes in a tree in 2023, and since 2024 "
             f"DeepSeek has charged up to {F.DEEPSEEK_CACHE['cut']} percent less for input it finds in its cache."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(tree[0]), FadeIn(tl))

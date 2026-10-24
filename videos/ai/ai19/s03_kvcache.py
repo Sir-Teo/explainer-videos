@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (DECODEC, F, KVC, PART, WEIGHTC, hbars, human_bytes, load, loglog, spoken_bytes,
-                                   take_away, times)
+from videos.ai.ai19.common import (DECODEC, F, KVC, PART, WEIGHTC, hbars, human_bytes, load, loglog, bnum, bunit,
+                                   take_away, x_)
 
 
 class KVCache(VoiceoverScene):
@@ -93,12 +93,12 @@ class KVCache(VoiceoverScene):
         with self.voiceover(
             "Here is what that means for real models. <bookmark mark='a'/> Llama 3.1 70B has 80 layers and 64 query "
             "heads of 128 numbers. Give each head its own key and value, and every token costs "
-            f"{spoken_bytes(pt['llama70_mha'])}. <bookmark mark='b'/> It uses eight groups instead, so a token costs "
-            f"{spoken_bytes(pt['llama70'])}, {k['gqa_ratio']:.0f} times less. <bookmark mark='c'/> DeepSeek-V3's 128 "
-            f"heads, uncompressed, would cost {spoken_bytes(pt['dsv3_mha'])} a token. <bookmark mark='d'/> With MLA, "
-            f"{spoken_bytes(pt['dsv3'])}: {cut:.0f} times less, about what grouped attention with "
-            f"{k['mla_groups']:.2f} groups would keep. <bookmark mark='e'/> gpt-oss keeps {spoken_bytes(pt['oss_full'])}, "
-            f"and our little model {spoken_bytes(pt['ours'])}."
+            f"{bnum(pt['llama70_mha']):g} {bunit(pt['llama70_mha'])}. <bookmark mark='b'/> It uses eight groups instead, so a token costs "
+            f"{bnum(pt['llama70']):g} {bunit(pt['llama70'])}, {k['gqa_ratio']:.0f} times less. <bookmark mark='c'/> DeepSeek-V3's 128 "
+            f"heads, uncompressed, would cost {bnum(pt['dsv3_mha']):g} {bunit(pt['dsv3_mha'])} a token. <bookmark mark='d'/> With MLA, "
+            f"{bnum(pt['dsv3']):g} {bunit(pt['dsv3'])}: {cut:.0f} times less, about what grouped attention with "
+            f"{k['mla_groups']:.2f} groups would keep. <bookmark mark='e'/> gpt-oss keeps {bnum(pt['oss_full']):g} {bunit(pt['oss_full'])}, "
+            f"and our little model {bnum(pt['ours']):g} {bunit(pt['ours'])}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(axl))
             for i, mk in enumerate("abcde"):
@@ -203,8 +203,8 @@ class KVCache(VoiceoverScene):
             "<bookmark mark='b'/> Plot the time of a step against the bytes it has to read, and " + trend + ": "
             f"every step moved between {lo_r / 1e9:.0f} and {hi_r / 1e9:.0f} gigabytes a second. At a batch of "
             f"{Bs[i]} and {ctxs[-1]:,} tokens, the caches are "
-            f"{kv_last / 1e6:,.0f} megabytes, {times(kv_last / wbytes)} the weights, and a step takes "
-            f"{times(grow)} as long as at {ctxs[0]} tokens. <bookmark mark='c'/> Every extra byte of cache costs "
+            f"{kv_last / 1e6:,.0f} megabytes, {x_(kv_last / wbytes)} times the weights, and a step takes "
+            f"{x_(grow)} times as long as at {ctxs[0]} tokens. <bookmark mark='c'/> Every extra byte of cache costs "
             f"time at about {slope / 1e9:.1f} gigabytes a second, this processor's memory speed. Long conversations "
             "turn decoding into reading the cache: shrink it, as MLA does; look at less of it, as windows do; or "
             "store it in fewer bits, in chapter 13."

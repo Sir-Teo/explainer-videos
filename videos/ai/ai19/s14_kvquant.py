@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (F, KVC, PART, ROTC, RTNC, hbars, heat, load, spoken_bytes, times)
+from videos.ai.ai19.common import (F, KVC, PART, ROTC, RTNC, hbars, heat, load, bnum, bunit, x_)
 
 KIVIC, FP8C = C.HOT, C.TRUE_P
 
@@ -52,7 +52,7 @@ class KVQuant(VoiceoverScene):
                           font_size=16, color=KIVIC).to_edge(DOWN, buff=0.25).shift(RIGHT * 3.4)
         with self.voiceover(
             "Chapters two and three showed that long conversations are dominated by the cache: one 128-thousand "
-            f"token conversation with Llama 3.1 70B keeps {spoken_bytes(big)} of keys and values. So round the cache "
+            f"token conversation with Llama 3.1 70B keeps {bnum(big):g} {bunit(big)} of keys and values. So round the cache "
             "too. <bookmark mark='a'/> But keys and values are different animals. Here is one head of our model "
             "over a stretch of text: the size of each key and value entry, channel by channel, token by token. "
             f"<bookmark mark='b'/> The keys have outlier channels, whole rows that are large for every token, the "
@@ -96,16 +96,27 @@ class KVQuant(VoiceoverScene):
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.2, 0])
         t2, k2, r2 = (L[f"{m}_2"] - base for m in ("token", "kivi", "rot"))
         t3, k3 = L["token_3"] - base, L["kivi_3"] - base
-        best2 = min((("KIVI's split", k2), ("rotating", r2), ("one scale per token", t2)), key=lambda x: x[1])
+        best2 = min((("kivi", k2), ("rot", r2), ("token", t2)), key=lambda x: x[1])[0]
+        if max(abs(e8), abs(f8)) < 0.001:
+            say8 = "At eight bits, integer or FP8, nothing measurable is lost."
+        else:
+            say8 = f"At eight bits, integer or FP8, the loss grows by at most {max(e8, f8):.4f} nats."
+        if best2 == "kivi":
+            best_say = ("The best here is KIVI's split. Keys need their outlier channels respected, by a scale of "
+                        "their own or by a rotation that spreads them.")
+        elif best2 == "rot":
+            best_say = ("The best here is the rotation. Keys need their outlier channels respected, by a scale of "
+                        "their own or by a rotation that spreads them.")
+        else:
+            best_say = ("Here one scale per token does best: our keys' outlier channels are too mild to need "
+                        "anything more.")
         with self.voiceover(
             "On our model, the cache rounded as it is written, and the loss measured on held-out novels. "
-            "<bookmark mark='a'/> At eight bits, integer or FP8, " + (
-                "nothing measurable is lost. " if max(abs(e8), abs(f8)) < 0.001 else f"{max(e8, f8):.4f} nats. ") +
-            f"At four bits, {L['token_4'] - base:.3f}. "
+            "<bookmark mark='a'/> " + say8 + " " +
+            f"At four bits, one scale per token costs {L['token_4'] - base:.3f}. "
             f"<bookmark mark='b'/> At three bits, one scale per token costs {t3:.3f} nats a token; KIVI's split "
             f"{k3:.3f}. <bookmark mark='c'/> At two bits the differences grow: per token {t2:.2f}, rotated "
-            f"{r2:.2f}, KIVI {k2:.2f}. The best here is {best2[0]}. Keys need their outlier channels respected, "
-            "by a scale of their own or by a rotation that spreads them."
+            f"{r2:.2f}, KIVI {k2:.2f}. " + best_say
         ) as vo:
             self.play(FadeIn(head), FadeIn(side[:2]), FadeIn(side[2]))
             vo.wait_until("a")

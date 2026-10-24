@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ATTNC, DECODEC, F, KVC, PART, hbars, load, loglog, times)
+from videos.ai.ai19.common import (ATTNC, DECODEC, F, KVC, PART, hbars, load, loglog, x_)
 
 COLORS = {r"m_s": C.BITS, r"\ell_s": C.BITS, r"o_s": ATTNC, r"M": C.BITS}
 WINC, GEMC, DSAC = C.BITS, C.HOT, C.INDEXER
@@ -118,10 +118,10 @@ class ServeAttention(VoiceoverScene):
             "<bookmark mark='b'/> gpt-oss alternates: every other layer looks back only 128 tokens, so half the "
             f"reading stops growing. At 128 thousand tokens it reads {rf / ro:.1f} times less. "
             "<bookmark mark='c'/> Gemma 3, in 2025, gave five layers in six a window of 1,024 tokens: "
-            f"{times(rf / rg)} less. <bookmark mark='d'/> And DeepSeek's sparse attention, in V3.2, keeps every "
+            f"{x_(rf / rg)} times less. <bookmark mark='d'/> And DeepSeek's sparse attention, in V3.2, keeps every "
             "token but lets a small, fast indexer choose 2,048 of them for each query. The indexer still glances "
             "at every token, through a few small eight-bit heads, but the main attention's read stops growing: "
-            f"{times(rf / rd)} less at 128 thousand. <bookmark mark='e'/> On our own model a window is "
+            f"{x_(rf / rd)} times less at 128 thousand. <bookmark mark='e'/> On our own model a window is "
             f"easy to try: at {ctxs[-1]:,} tokens, a decode step for eight conversations takes {full[-1]:.1f} "
             f"milliseconds with full attention, and {win[-1]:.1f} with a window of 128. What it costs in quality "
             "depends on what the model learned to do with it: these models were trained with their windows."

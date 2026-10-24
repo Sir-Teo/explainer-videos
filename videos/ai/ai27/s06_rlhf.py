@@ -143,7 +143,7 @@ class RLHF(VoiceoverScene):
         hi_l = label(rf"highest reward, \ ${r[-1]:+.2f}$", font_size=20, color=GOLD)
         right = VGroup(VGroup(hi_l, hi).arrange(DOWN, buff=0.12), VGroup(lo_l, lo).arrange(DOWN, buff=0.12))
         right.arrange(DOWN, buff=0.5).move_to([3.6, 0.2, 0])
-        tag = note(rf"computed: \ eight lines our fine-tuned model wrote about the {d['topic']}, \ of comparable "
+        tag = note(r"computed: \ eight lines our fine-tuned model wrote to this question, \ of comparable "
                    r"probability under it; \ $\pi_{\mathrm{ref}}$ renormalized over them").to_corner(DR, buff=0.2)
         half = k // 2  # the better half of the answers, by reward
         move10 = 0.5 * float(np.abs(pis[0] - ref).sum())  # total variation: the share of probability that moves
@@ -163,6 +163,7 @@ class RLHF(VoiceoverScene):
         else:
             s01 = (f"Even at beta {betas[-1]:g}, the best answer holds only {100 * best:.0f} percent: the reference "
                    "model's own preference outweighs a reward gap that small.")
+        pq = said(f"Write a line about the {d['topic']}.", "user", chars=40, font_size=18).move_to([3.6, 3.2, 0])
         with self.voiceover(
             f"Here's the formula on eight real answers our fine-tuned model wrote about the {d['topic']}, chosen to "
             "be about equally likely under it, and sorted by their reward. The bars start as the reference model's "
@@ -171,7 +172,7 @@ class RLHF(VoiceoverScene):
             "it has to get there by sampling, one gradient step at a time."
         ) as vo:
             self.add(bars, name)
-            self.play(FadeIn(rl), FadeIn(rlab), FadeIn(right), FadeIn(tag))
+            self.play(FadeIn(rl), FadeIn(rlab), FadeIn(right), FadeIn(tag), FadeIn(pq))
             for j, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(vals.animate.set_value(j + 1 + (1 if j == 2 else 0)), run_time=2.0)

@@ -116,6 +116,18 @@ class Laws(VoiceoverScene):
                       label(r"that cools the rate to zero:", font_size=22, color=C.BITS),
                       label(r"a full schedule's result \\ for a fifth of the cost", font_size=22, color=GREY_A))
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.95, 0.6, 0])
+        # the usual way first: a separate run, with its own decaying schedule, for every length
+        x_lo, x_hi = top.x_range[0], top.x_range[1]
+        usual_lr = VGroup()
+        for j, frac in enumerate((0.25, 0.5, 0.75, 1.0)):
+            xe = x_lo + frac * (x_hi - x_lo)
+            xs_ = np.linspace(x_lo, xe, 40)
+            ys_ = 0.5 * (1 + np.cos(np.pi * (xs_ - x_lo) / (xe - x_lo)))
+            usual_lr.add(VMobject(stroke_color=interpolate_color(ManimColor(GREY_B), ManimColor(C.BITS), j / 3),
+                                  stroke_width=2.5).set_points_smoothly([top.c2p(a, top.y_range[0] + b * (top.y_range[1] - top.y_range[0]) * 0.9)
+                                                                         for a, b in zip(xs_, ys_)]))
+        usual = label(r"the usual way: \\ a separate run, \\ with its own schedule, \\ for every length \\ (schematic)", font_size=22,
+                      color=GREY_A).move_to([4.95, 1.6, 0])
         tally = label(rf"${len(widths)}$ widths, \ ${n_runs}$ endpoints, \\ ${hours:.1f}$ CPU-hours", font_size=24,
                       color=C.BITS).next_to(side, DOWN, buff=0.4).align_to(side, LEFT)
         cite_ = cite(r"A.~H\"agele et al., \textit{Scaling Laws and Compute-Optimal Training Beyond Fixed Training "
@@ -130,10 +142,11 @@ class Laws(VoiceoverScene):
             f"{len(widths)} widths, from {widths[0]} to {widths[-1]:,} units, lengths from two to the sixteen to two "
             f"to the twenty-four characters: {n_runs} finished runs in {hours:.1f} hours of one processor."
         ) as vo:
-            self.play(Create(top), FadeIn(tl), Create(bot), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
-            self.play(Create(trunk_lr), Create(trunk), run_time=2.5)
+            self.play(Create(top), FadeIn(tl), Create(bot), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(cite_), FadeIn(usual))
+            self.play(LaggedStart(*[Create(c_) for c_ in usual_lr], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeOut(usual), FadeOut(usual_lr))
+            self.play(Create(trunk_lr), Create(trunk), FadeIn(side[0]), run_time=2.5)
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(b_) for b_ in branches], lag_ratio=0.15), FadeIn(side[1:3]), run_time=2.0)
             vo.wait_until("c")

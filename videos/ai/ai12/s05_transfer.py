@@ -139,7 +139,7 @@ class Transfer(VoiceoverScene):
             t_ = label(txt, font_size=22, color=WHITE)
             return VGroup(RoundedRectangle(width=t_.width + 0.5, height=t_.height + 0.4, corner_radius=0.12, stroke_color=col,
                                            stroke_width=2, fill_color=PANEL_FILL, fill_opacity=1), t_)
-        b1 = box(rf"tune: \ width ${widths[0]}$, \ a sweep of rates", WIDTH_COLORS[0])
+        b1 = box(rf"tune: \ width ${widths[0]}$, \\ a sweep of rates", WIDTH_COLORS[0])
         b2 = box(rf"train once: \ width ${widths[-1]:,}$".replace(",", "{,}"), WIDTH_COLORS[-1])
         recipe = VGroup(b1, b2).arrange(DOWN, buff=1.0).move_to([3.4, -0.4, 0])
         arr = Arrow(b1.get_bottom(), b2.get_top(), buff=0.1, color=GREY_B, stroke_width=3)
