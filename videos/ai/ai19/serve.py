@@ -9,7 +9,6 @@ novels model; the shapes of the results, not the absolute times, are what carrie
 
 from __future__ import annotations
 
-import heapq
 import math
 from dataclasses import dataclass, field
 

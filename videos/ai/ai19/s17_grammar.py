@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ACCEPTC, F, MONO, PART, REJECTC, TARGETC, hbars, load, times)
+from videos.ai.ai19.common import (ACCEPTC, F, MONO, PART, REJECTC, TARGETC, load)
 
 OKC, BADC, AUTOC = ACCEPTC, REJECTC, C.BITS
 

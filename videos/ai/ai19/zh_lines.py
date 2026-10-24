@@ -356,7 +356,7 @@ ZH = {
         '哈达玛旋转几乎没改变它，{h_:.3f}',
 
     '"Learning a rotation needs care,':
-        "学习一个旋转需要小心，因为在旋转矩阵上走一步梯度，它就不再是旋转了。<bookmark mark='a'/>SpinQuant从构造上保证它始终是旋转。把Q写成哈达玛矩阵乘以一个斜对称矩阵A的凯莱变换：每个A都给出一个旋转，所以A可以随便训练。<bookmark mark='b'/>我们在4比特权重和激活值下，用我们模型的损失来训练A，梯度直接穿过舍入，从哈达玛旋转出发。<bookmark mark='c'/>{learn_say}",
+        "学习一个旋转需要小心，因为在旋转矩阵上走一步梯度，它就不再是旋转了。<bookmark mark='a'/>SpinQuant从构造上保证它始终是旋转。把Q写成哈达玛矩阵乘以一个反对称矩阵A的凯莱映射：每个A都给出一个旋转，所以A可以随便训练。<bookmark mark='b'/>我们在4比特权重和激活值下，用我们模型的损失来训练A，梯度直接穿过舍入，从哈达玛旋转出发。<bookmark mark='c'/>{learn_say}",
 
     'f"Over {st} steps the held-out loss fell':
         '训练{st}步，留出损失从{ev[0, 1]:.3f}降到{ev[-1, 1]:.3f}：这个旋转学到了我们模型的离群值在哪里。',
@@ -409,10 +409,16 @@ ZH = {
         '第13章。用更少的比特存缓存。',
 
     'f"Chapters two and three showed':
-        "第2章和第3章说过，长对话的大头是缓存：用Llama 3.1 70B进行一段12.8万词元的对话，要保存{bnum(big):g}{bunit(big)}的键和值。所以，缓存也舍入吧。<bookmark mark='a'/>但键和值是两种不同的动物。这是我们模型的一个头在一段文本上的情况：每个键和值的分量有多大，按通道、按词元画出来。<bookmark mark='b'/>键有离群通道，整行对每个词元都很大，最大的是中位数的{ratio:.1f}倍；值没有。<bookmark mark='c'/>所以2024年，Zirui Liu和同事在KIVI里，给键每个通道配一个缩放因子，给值每个词元配一个缩放因子，两者都用2比特存。",
+        "第2章和第3章说过，长对话的大头是缓存：用Llama 3.1 70B进行一段12.8万词元的对话，要保存{bnum(big):g}{bunit(big)}的键和值。所以，缓存也舍入吧。<bookmark mark='a'/>但键和值是两种不同的动物。这是我们模型的一个头在一段文本上的情况：每个键和值的分量有多大，按通道、按词元画出来。<bookmark mark='b'/>{chan_say}<bookmark mark='c'/>所以2024年，Zirui Liu和同事在KIVI里，给键每个通道配一个缩放因子，给值每个词元配一个缩放因子，两者都用2比特存。",
 
     '"On our model, the cache rounded as it is written,':
         "在我们的模型上，缓存在写入时就舍入，在留出小说上测损失。<bookmark mark='a'/>{say8}4比特时，每个词元一个缩放因子，损失{L['token_4'] - base:.3f}。<bookmark mark='b'/>3比特时，每个词元一个缩放因子，每个词元损失{t3:.3f}奈特；KIVI的分法是{k3:.3f}。<bookmark mark='c'/>到2比特，差别拉大了：按词元{t2:.2f}，旋转后{r2:.2f}，KIVI{k2:.2f}。{best_say}",
+
+    'f"The keys have outlier channels,':
+        '键有离群通道，整行对每个词元都很大，最大的是中位数的{ratio:.1f}倍；值最大的通道，只是它们中位数的{vratio:.1f}倍。',
+
+    "f\"Both have channels larger than the rest:":
+        '两者都有比其余更大的通道：键最大的是中位数的{ratio:.1f}倍，值是{vratio:.1f}倍。',
 
     'At eight bits, integer or FP8, nothing measurable is lost.':
         '8比特时，不管是整数还是FP8，都测不出任何损失。',
@@ -500,7 +506,13 @@ ZH = {
         "与此同时，词元的价格一落千丈。<bookmark mark='a'/>拿至少和最初的GPT-3一样好的、最便宜的OpenAI模型来看：2021年每百万词元60美元，2022年降价后20美元，2023年ChatGPT所用的模型2美元，2024年GPT-4o mini是1角5分。<bookmark mark='b'/>大约三年半里，价格只剩原来的{fr['price_total']:.0f}分之1，相当于每年降到{fr['price_fall']:.1f}分之1。<bookmark mark='c'/>Epoch AI追踪了许多基准，发现达到某个固定能力水平的价格，每年降到9分之1到900分之1不等，取决于任务。其中一部分归功于这一部分的方法，一部分归功于第17部分的硬件，还有一部分，是像第12部分讲的那样，用更多数据训练出的更小的模型。",
 
     'f"Chapter one\'s speed limit':
-        "第1章的速度上限，还说明了谁能运行这些模型。<bookmark mark='a'/>用一台设备的内存带宽，除以一个词元要读的字节数。<bookmark mark='b'/>一台装着苹果M5的笔记本电脑，带宽每秒153GB，跑gpt-oss-20b最多每秒写{bound[i_m5, j_oss]:.0f}个词元，它的专家用MXFP4存，每个词元要读的不到2GB；一块H100，是{bound[i_h, j_oss]:,.0f}个。<bookmark mark='c'/>这就是为什么4比特格式和专家，对在家里运行模型这么重要，llama.cpp正是2023年从这里起步的；这也是为什么苹果2025年的端侧模型，是为2比特权重训练的。我们自己的模型在这台电脑上，达到了它上限的{100 * eff:.0f}%。<bookmark mark='d'/>预填充和解码的分工，也正在走进硬件：2025年9月，NVIDIA发布了Rubin CPX，一种内存更便宜、算力充足的GPU，专门用来做读提示这种长上下文的工作，NVIDIA说它将在2026年底前出货。",
+        "第1章的速度上限，还说明了谁能运行这些模型。<bookmark mark='a'/>用一台设备的内存带宽，除以一个词元要读的字节数。<bookmark mark='b'/>一台装着苹果M5的笔记本电脑，带宽每秒153GB，跑gpt-oss-20b最多每秒写{bound[i_m5, j_oss]:.0f}个词元，它的专家用MXFP4存，每个词元要读的不到2GB；一块H100，是{bound[i_h, j_oss]:,.0f}个。<bookmark mark='c'/>这就是为什么4比特格式和专家，对在家里运行模型这么重要，llama.cpp正是2023年从这里起步的；这也是为什么苹果2025年的端侧模型，是为2比特权重训练的。{eff_say}<bookmark mark='d'/>预填充和解码的分工，也正在走进硬件：2025年9月，NVIDIA发布了Rubin CPX，一种内存更便宜、算力充足的GPU，专门用来做读提示这种长上下文的工作，NVIDIA说它将在2026年底前出货。",
+
+    "f'Our own model on this computer reaches":
+        '我们自己的模型在这台电脑上，达到了它上限的{100 * eff:.0f}%。',
+
+    "f\"Our own model on this computer beats its bound":
+        '我们自己的模型在这台电脑上，超过了它的上限，达到{100 * eff:.0f}%：它的权重装得进处理器的缓存，而缓存比内存快。',
 
     # ---------------------------------------------------------------- Outro
     "Let's take stock.":

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ACCEPTC, DRAFTC, F, PART, REJECTC, TARGETC, load, times)
+from videos.ai.ai19.common import (ACCEPTC, DRAFTC, PART, REJECTC, TARGETC, load)
 
 DRAFT, TARGET = DRAFTC, TARGETC
 

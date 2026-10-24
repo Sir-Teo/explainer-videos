@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ATTNC, BYTEC, F, KEYC, PART, QUERYC, hbars, load, loglog, times)
+from videos.ai.ai19.common import (ATTNC, BYTEC, F, KEYC, PART, QUERYC, load, loglog)
 
 COLORS = {r"m": C.BITS, r"\ell": C.BITS, r"o": C.ATTN, r"s_j": QUERYC, r"v_j": C.VALUE, r"M": BYTEC, r"d": GREY_A,
           r"T": GREY_A}
@@ -220,8 +220,8 @@ class Flash(VoiceoverScene):
                    xlabel=r"sequence length $T$", ylabel=r"numbers moved, \ one head", center=[-2.9, -2.25, 0],
                    font_size=17, xfmt=lambda v: {3: r"10^3", 4: r"10^4", 5: r"10^5"}.get(int(v), ""), ystep=2)
         ax = g.ax
-        cols = [(f"io_std_128", ATTNC, r"standard"), (f"io_flash_128", C.BITS, r"FlashAttention, \ $d = 128$"),
-                (f"io_flash_64", KEYC, r"FlashAttention, \ $d = 64$")]
+        cols = [("io_std_128", ATTNC, r"standard"), ("io_flash_128", C.BITS, r"FlashAttention, \ $d = 128$"),
+                ("io_flash_64", KEYC, r"FlashAttention, \ $d = 64$")]
         lines = VGroup(*[curve(ax, np.log10(Ns), np.log10(np.asarray(f[k], float)), c_, 3) for k, c_, _ in cols])
         leg = legend([(c_, t) for _, c_, t in cols], font_size=17).move_to([3.0, -1.7, 0])
         r128 = f["io_std_128"][-1] / f["io_flash_128"][-1]

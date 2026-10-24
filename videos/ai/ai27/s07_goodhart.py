@@ -55,8 +55,9 @@ class Goodhart(VoiceoverScene):
             self.play(FadeIn(hist[1], shift=UP * 0.15))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cases[k], shift=UP * 0.15), *([FadeIn(cite_)] if k == 2 else []),
-                          *([FadeOut(hist)] if k == 0 else []))
+                if k == 0:
+                    self.play(FadeOut(hist), run_time=0.6)
+                self.play(FadeIn(cases[k], shift=UP * 0.15), *([FadeIn(cite_)] if k == 2 else []))
         self.wait(0.3)
         self.clear_scene()
 
@@ -161,6 +162,19 @@ class Goodhart(VoiceoverScene):
             large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
                           f"{lgold.max():.2f}.")
         ex = d["examples"][0]
+        # where each n sits on the KL axis: a ruler above each panel, at the panel's own x scale
+        marks = VGroup()
+        for ax_ in (g, g2):
+            y_r = ax_.ax.get_top()[1] + 0.85
+            x0_, x1_ = ax_.ax.c2p(0, 0)[0], ax_.ax.c2p(xmax, 0)[0]
+            ruler = VGroup(Line([x0_, y_r, 0], [x1_, y_r, 0], color=GREY_C, stroke_width=1.5))
+            for n_, x_ in zip(ns, x):
+                if n_ in (1, 4, 16, 64, 256):
+                    xx = ax_.ax.c2p(x_, 0)[0]
+                    ruler.add(Line([xx, y_r - 0.07, 0], [xx, y_r + 0.07, 0], color=GREY_B, stroke_width=2))
+                    ruler.add(MathTex(rf"{n_}", font_size=18, color=GREY_B).move_to([xx, y_r + 0.24, 0]))
+            ruler.add(MathTex(r"n", font_size=20, color=GREY_B).next_to([x0_, y_r, 0], LEFT, buff=0.15))
+            marks.add(ruler)
         with self.voiceover(
             "Here is the experiment, after Gao, Schulman and Hilton of OpenAI. For each prompt, our fine-tuned model "
             "writes two hundred and fifty-six lines; best-of-n picks with a reward model, and we score the pick "
@@ -171,6 +185,7 @@ class Goodhart(VoiceoverScene):
             "breaks somewhere."
         ) as vo:
             self.play(FadeIn(g), FadeIn(g2), FadeIn(size), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("a")
             self.play(Create(sp), Create(lp), run_time=2.0)
             vo.wait_until("b")
@@ -189,7 +204,8 @@ class Goodhart(VoiceoverScene):
             f"This is the line about the {ex[0]} that the small reward model liked best out of all two hundred and "
             "fifty-six."
         ):
-            self.play(VGroup(g, g2, sp, sg, lp, lg_).animate.shift(UP * 0.5), FadeOut(tag), FadeOut(size))
+            self.play(VGroup(g, g2, sp, sg, lp, lg_).animate.shift(UP * 0.5), FadeOut(tag), FadeOut(size),
+                      FadeOut(marks))
             self.play(FadeIn(row), FadeIn(pl))
         self.wait(0.5)
         self.clear_scene()
@@ -213,7 +229,7 @@ class Goodhart(VoiceoverScene):
         dd = np.linspace(0.001, 6.0, 200)
         g = axes([0, 6], [0, 1.6], x_length=5.4, y_length=2.6, xlabel=r"$d = \sqrt{\mathrm{KL}}$",
                  ylabel=r"gold reward", center=[-3.4, -1.1, 0])
-        cb = curve(g.ax, dd, np.clip(dd * (1 - 0.25 * dd), 0, None), GOLD, 4)
+        cb = curve(g.ax, dd[dd <= 4.0], dd[dd <= 4.0] * (1 - 0.25 * dd[dd <= 4.0]), GOLD, 4)
         cr = curve(g.ax, dd, np.clip(dd * (1 - 0.5 * np.log(dd)), 0, None), KLC, 4)
         lb = label(r"best-of-$n$", font_size=20, color=GOLD).next_to(g.ax.c2p(2, 1.0), UP, buff=0.12)
         lr = label(r"RL", font_size=20, color=KLC).next_to(g.ax.c2p(4.6, 4.6 * (1 - 0.5 * np.log(4.6))), UR, buff=0.08)

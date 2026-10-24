@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (EXPC, F, LEVELC, MANC, PART, RTNC, SIGNC, WEIGHTC, bit_cells, hbars, load, times)
+from videos.ai.ai19.common import (EXPC, F, LEVELC, MANC, PART, RTNC, SIGNC, WEIGHTC, bit_cells, hbars, load)
 
 MXC, NVC, INTC = C.BITS, C.TRUE_P, C.PROB
 E2M1 = [0, 0.5, 1, 1.5, 2, 3, 4, 6]

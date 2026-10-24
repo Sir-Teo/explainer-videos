@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (AWQC, ERRC, F, GPTQC, LEVELC, PART, RTNC, WEIGHTC, load, times)
+from videos.ai.ai19.common import (AWQC, ERRC, F, GPTQC, LEVELC, PART, RTNC, WEIGHTC, load)
 
 COLORS = {r"H": C.MLP, r"\delta": GPTQC, r"w": WEIGHTC, r"\hat w": LEVELC, r"e_q": GREY_A}
 
@@ -137,7 +137,7 @@ class GPTQ(VoiceoverScene):
                                    stroke_width=1, fill_opacity=0).move_to([X0 + dx * i, Y0 + Hh * x / top / 2, 0])
                          for i, x in enumerate(w0)])
         cur = bars(w0, 0)
-        head = label(rf"one row of a real layer: \ $16$ weights, \ $3$ bits, \ GPTQ from left to right", font_size=22,
+        head = label(r"one row of a real layer: \ $16$ weights, \ $3$ bits, \ GPTQ from left to right", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.4)
         ptr = Triangle(fill_color=GPTQC, fill_opacity=1, stroke_width=0).scale(0.1).rotate(PI)
         ptr.move_to([X0, Y0 + Hh + 0.3, 0])

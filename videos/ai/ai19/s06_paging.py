@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (CONTIGC, F, KVC, PAGEDC, PART, PREFILLC, RESERVEC, hbars, load, take_away, x_)
+from videos.ai.ai19.common import (CONTIGC, F, KVC, PAGEDC, PART, PREFILLC, RESERVEC, hbars, load, x_)
 
 PALETTE = [C.TRUE_P, C.KEY, C.BITS, C.MLP, C.HOT, C.EMBED, C.PROB, C.ENTROPY, C.MODEL_Q, C.LATENT]
 
@@ -152,7 +151,7 @@ class Paging(VoiceoverScene):
         sysn = int(p["prefix_system"])
         # three conversations sharing a system prompt, turn after turn (schematic)
         sp = Rectangle(width=2.2, height=0.42, stroke_width=0, fill_color=GREY_B, fill_opacity=0.6)
-        spl = label(rf"system prompt", font_size=18, color=WHITE).move_to(sp)
+        spl = label(r"system prompt", font_size=18, color=WHITE).move_to(sp)
         convs = VGroup()
         for k, col in enumerate((C.TRUE_P, C.KEY, C.HOT)):
             row = VGroup()

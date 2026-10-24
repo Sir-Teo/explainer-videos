@@ -74,24 +74,24 @@ class DPO(VoiceoverScene):
         # measured as DPO's is: the trained policy's own lines, scored by gold, and its KL from the fine-tuned model
         rl_gold, rl_kl = float(rl[key + "_final"]["gold"]), float(rl[key + "_final"]["kl"])
         rows = VGroup(
-            VGroup(label(r"fine-tuned model", font_size=26, color=REF),
-                   label(rf"gold ${sft['sft_line_gold']:+.2f}$", font_size=26, color=GOLD),
-                   label(r"KL $0$", font_size=26, color=KLC)),
-            VGroup(label(rf"RLHF, \ $\beta = {rl['betas'][0]:g}$", font_size=26, color=POLICY),
-                   label(rf"gold ${rl_gold:+.2f}$", font_size=26, color=GOLD),
-                   label(rf"KL ${rl_kl:.1f}$", font_size=26, color=KLC)),
-            VGroup(label(rf"DPO, \ $\beta = {d['beta']:g}$", font_size=26, color=POLICY),
-                   label(rf"gold ${d['gold']:+.2f}$", font_size=26, color=GOLD),
-                   label(rf"KL ${d['kl']:.1f}$", font_size=26, color=KLC)),
+            VGroup(label(r"fine-tuned model", font_size=30, color=REF),
+                   label(rf"gold ${sft['sft_line_gold']:+.2f}$", font_size=30, color=GOLD),
+                   label(r"KL $0$", font_size=30, color=KLC)),
+            VGroup(label(rf"RLHF, \ $\beta = {rl['betas'][0]:g}$", font_size=30, color=POLICY),
+                   label(rf"gold ${rl_gold:+.2f}$", font_size=30, color=GOLD),
+                   label(rf"KL ${rl_kl:.1f}$", font_size=30, color=KLC)),
+            VGroup(label(rf"DPO, \ $\beta = {d['beta']:g}$", font_size=30, color=POLICY),
+                   label(rf"gold ${d['gold']:+.2f}$", font_size=30, color=GOLD),
+                   label(rf"KL ${d['kl']:.1f}$", font_size=30, color=KLC)),
         )
         for r_ in rows:
             r_[1].move_to([1.0, 0, 0])
             r_[2].move_to([4.0, 0, 0])
             r_[0].move_to([-3.6, 0, 0])
-        rows.arrange(DOWN, buff=0.5).move_to(UP * 0.8)
+        rows.arrange(DOWN, buff=0.65).move_to(UP * 1.0)
         for r_ in rows:
             r_[0].align_to(rows[0][0], LEFT)
-        ex = VGroup(*[said(t, chars=46, font_size=18, max_lines=2) for _, t in d["examples"][:2]])
+        ex = VGroup(*[said(t, chars=46, font_size=20, max_lines=2) for _, t in d["examples"][:2]])
         ex.arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         tag = note(r"computed: \ the same comparisons; \ KL in nats per line").to_corner(UR, buff=0.25)
         better = d["gold"] > sft["sft_line_gold"]

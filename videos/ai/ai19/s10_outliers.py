@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ERRC, F, LEVELC, PART, RTNC, SMOOTHC, WEIGHTC, hbars, load, times)
+from videos.ai.ai19.common import (ERRC, F, PART, RTNC, SMOOTHC, WEIGHTC, hbars, load)
 
 KEEPC = C.HOT
 COLORS = {r"X": C.TOKEN, r"W": WEIGHTC, r"s": SMOOTHC, r"\alpha": SMOOTHC}

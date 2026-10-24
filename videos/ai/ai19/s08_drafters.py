@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ACCEPTC, DRAFTC, EAGLEC, F, PART, REJECTC, TARGETC, hbars, load, node_box, times)
+from videos.ai.ai19.common import (ACCEPTC, DRAFTC, EAGLEC, F, PART, TARGETC, hbars, load, node_box)
 
 COLORS = {r"\alpha": ACCEPTC, r"k": GREY_A, r"c": DRAFTC}
 
@@ -86,7 +86,7 @@ class Drafters(VoiceoverScene):
         dr, ea = d["draft"], d["eagle"]
         # the two drafters
         big = node_box(r"the big model: \ $6$ layers", TARGETC, font_size=20, pad=0.25)
-        small = node_box(rf"a small model: \ $2$ layers, \ width $128$", DRAFTC, font_size=20, pad=0.25)
+        small = node_box(r"a small model: \ $2$ layers, \ width $128$", DRAFTC, font_size=20, pad=0.25)
         head = node_box(r"EAGLE head: \ $1$ block", EAGLEC, font_size=20, pad=0.25)
         big.move_to([-4.6, 2.2, 0])
         small.move_to([-4.6, 0.9, 0])

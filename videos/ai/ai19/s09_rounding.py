@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (ERRC, LEVELC, PART, WEIGHTC, load, take_away, x_)
+from videos.ai.ai19.common import (ERRC, LEVELC, PART, WEIGHTC, load, x_)
 
 COLORS = {r"\Delta": LEVELC, r"e": ERRC, r"w": WEIGHTC, r"b": GREY_A}
 

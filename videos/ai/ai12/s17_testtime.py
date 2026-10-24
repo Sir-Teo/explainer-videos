@@ -203,9 +203,9 @@ class TestTime(VoiceoverScene):
         for r_, (j, v) in enumerate(zip(okc, lc)):
             bar = Rectangle(width=(v - c0) * bw, height=0.26, stroke_width=0, fill_color=width_ramp(j, len(N)), fill_opacity=0.85)
             bar.move_to([1.6, 1.4 - 0.36 * r_, 0], aligned_edge=LEFT)
-            nm_ = MathTex(rf"{N[j] / 1000:.0f}	ext{{k}}" if N[j] < 1e6 else rf"{N[j] / 1e6:.1f}	ext{{M}}", font_size=20,
+            nm_ = MathTex(rf"{N[j] / 1000:.0f}\text{{k}}" if N[j] < 1e6 else rf"{N[j] / 1e6:.1f}\text{{M}}", font_size=20,
                           color=width_ramp(j, len(N))).next_to(bar, LEFT, buff=0.1)
-            tr_ = MathTex(rf"{need[j]:,.0f}".replace(",", "{,}") + r"	imes", font_size=20, color=WHITE).next_to(bar, RIGHT, buff=0.1)
+            tr_ = MathTex(rf"{need[j]:,.0f}".replace(",", "{,}") + r"\times", font_size=20, color=WHITE).next_to(bar, RIGHT, buff=0.1)
             bars.add(VGroup(bar, nm_, tr_))
         bt = label(r"operations to answer: \ tries $\times$ $2N$ per character", font_size=20, color=GREY_A)
         bt.next_to(bars, UP, buff=0.2).align_to(bars, LEFT)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (F, KVC, PART, ROTC, RTNC, hbars, heat, load, bnum, bunit, x_)
+from videos.ai.ai19.common import (F, KVC, PART, ROTC, RTNC, hbars, heat, load, bnum, bunit)
 
 KIVIC, FP8C = C.HOT, C.TRUE_P
 
@@ -37,7 +37,15 @@ class KVQuant(VoiceoverScene):
         layer, head = int(k["layer"]), int(k["head"])
         tag = note(rf"computed: \ our novels model, \ layer ${layer + 1}$, \ head ${head + 1}$, \ $96$ tokens of a "
                    r"held-out novel").to_corner(DR, buff=0.2)
-        ratio = float(k["chan_ratio"][str(layer)])
+        # the shown head: each channel's average size over the tokens, largest against median
+        ck, cv = km.mean(0), vm.mean(0)
+        ratio, vratio = float(ck.max() / np.median(ck)), float(cv.max() / np.median(cv))
+        if vratio < 0.6 * ratio:
+            chan_say = (f"The keys have outlier channels, whole rows that are large for every token, the largest "
+                        f"{ratio:.1f} times the median; the values' largest is only {vratio:.1f} times theirs.")
+        else:
+            chan_say = (f"Both have channels larger than the rest: the keys' largest is {ratio:.1f} times their median, "
+                        f"the values' {vratio:.1f}.")
         cc = kv["curve_llama70"]
         i128 = int(np.argmin(np.abs(np.asarray(kv["ctxs"]) - 131072)))
         big = float(np.asarray(cc)[i128])
@@ -55,8 +63,7 @@ class KVQuant(VoiceoverScene):
             f"token conversation with Llama 3.1 70B keeps {bnum(big):g} {bunit(big)} of keys and values. So round the cache "
             "too. <bookmark mark='a'/> But keys and values are different animals. Here is one head of our model "
             "over a stretch of text: the size of each key and value entry, channel by channel, token by token. "
-            f"<bookmark mark='b'/> The keys have outlier channels, whole rows that are large for every token, the "
-            f"largest {ratio:.1f} times the median; the values don't. <bookmark mark='c'/> So in 2024 Zirui Liu and "
+            "<bookmark mark='b'/> " + chan_say + " <bookmark mark='c'/> So in 2024 Zirui Liu and "
             "colleagues, in KIVI, gave keys a scale per channel and values a scale per token, and stored both in "
             "two bits."
         ) as vo:

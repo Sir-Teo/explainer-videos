@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai17.specs import GPUS
-from videos.ai.ai19.common import (BYTEC, DECODEC, FLOPC, PART, PREFILLC, WEIGHTC, fmt, load, loglog, node_box,
+from videos.ai.ai19.common import (BYTEC, DECODEC, FLOPC, PART, PREFILLC, WEIGHTC, load, loglog, node_box,
                                    take_away, x_)
 
 
