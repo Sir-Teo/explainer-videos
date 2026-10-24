@@ -206,7 +206,7 @@ def train_eagle(cache_dir: Path, base, ev_windows, verbose=True) -> dict:
     head = eagle_head(base)
     opt = torch.optim.AdamW(head.parameters(), lr=R["lr"], betas=(0.9, 0.95), weight_decay=0.0)
     tr, _ = N.token_arrays()
-    data = pocket.TokenStream(tr, tr[:1000], base.cfg.seq + 1, seed=R["seed"] + 1)
+    data = pocket.TokenStream(tr, tr[:1000], base.cfg.seq, seed=R["seed"] + 1)  # windows the base model can read
     ck = cache_dir / "eagle.ckpt"
     curve, evals, start, secs = [], [], 0, 0.0
     if ck.exists():
@@ -253,7 +253,7 @@ def train_eagle(cache_dir: Path, base, ev_windows, verbose=True) -> dict:
                        "seconds": time.time() - t0})
         for gr in opt.param_groups:
             gr["lr"] = lr_at(step, R["steps"], R["warmup"], R["lr"])
-        x, _ = data.batch(R["batch"])  # windows of seq + 1 tokens
+        x, _ = data.batch(R["batch"])  # windows of seq tokens
         with torch.no_grad():
             h = base_hidden(base, x)
         z, logits = predict(h, x)

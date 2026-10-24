@@ -146,18 +146,19 @@ class Goodhart(VoiceoverScene):
         tag = note(r"computed: \ $256$ lines per prompt from our fine-tuned model, \ expectations over every "
                    r"subset of size $n$").to_corner(DR, buff=0.2)
         sgold, lgold = ys["small_gold"], ys["large_gold"]
+        s_end, l_end = round(float(sgold[-1]), 2) + 0.0, round(float(lgold[-1]), 2) + 0.0  # no "-0.00"
         peak_s = int(np.argmax(sgold))
         if peak_s < len(ns) - 1 and sgold[-1] < sgold[peak_s] - 0.02:
             small_said = (f"With the small reward model, gold rises at first, peaks around n = {ns[peak_s]}, then "
-                          f"falls back to {sgold[-1]:.2f} while the reward model's own score keeps climbing to "
+                          f"falls back to {s_end:.2f} while the reward model's own score keeps climbing to "
                           f"{ys['small_proxy'][-1]:.2f}: over-optimization.")
         else:
-            small_said = (f"With the small reward model, gold climbs only to {sgold[-1]:.2f} while the reward "
+            small_said = (f"With the small reward model, gold climbs only to {s_end:.2f} while the reward "
                           f"model's own score reaches {ys['small_proxy'][-1]:.2f}: the gap between them widens.")
         peak_l = int(np.argmax(lgold))
         if peak_l < len(ns) - 1 and lgold[-1] < lgold[peak_l] - 0.02:
             large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
-                          f"{lgold.max():.2f} at n = {ns[peak_l]}, and then it too falls back, to {lgold[-1]:.2f}.")
+                          f"{lgold.max():.2f} at n = {ns[peak_l]}, and then it too falls back, to {l_end:.2f}.")
         else:
             large_said = (f"The reward model trained on more comparisons tracks gold further: gold reaches "
                           f"{lgold.max():.2f}.")

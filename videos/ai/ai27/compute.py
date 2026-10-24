@@ -34,9 +34,10 @@ Items:
     rlaif      AI feedback in miniature: a reward model from 100 comparisons labels 1,600 more for a fresh one
     closed     the KL-regularized optimum over eight candidate answers of comparable probability: pi* proportional
                to pi_ref exp(r / beta)
-    baselines  RLHF's first policy-gradient step estimated from one batch of 16 lines, with no baseline, one baseline
-               for every question, the question's own average, and the batch's mean (our runs): how well two
-               independent batches agree on the direction (cosine), and how much noise each carries
+    baselines  RLHF's first policy-gradient step estimated from one batch of 16 lines, with no baseline (scores as
+               learned, and shifted by 5), one baseline for every question, the question's own average, and the
+               batch's mean (our runs): how well two independent batches agree on the direction (cosine), and how
+               much noise each carries
     bon        best-of-n against the reward model, n = 1 .. 256: proxy and gold reward against KL = log n - (n-1)/n
     rlhf       KL-penalized policy gradient against the reward model, at two penalties, three seeds each: reward,
                gold and KL as it trains, and answers along the way
@@ -427,6 +428,23 @@ def _demean(x, groups) -> np.ndarray:
     return x
 
 
+def _without_word(toks: list, j: int) -> str:
+    """The line with its j-th word deleted but the punctuation around it kept (moved onto the neighbouring word), so
+    that deleting the last word of a sentence doesn't also delete its full stop."""
+    tk = toks[j]
+    m = re.match(r"^([^A-Za-z']*)[A-Za-z'-]*([^A-Za-z']*)$", tk)
+    lead, trail = (m.group(1), m.group(2)) if m else ("", "")
+    out = list(toks[:j]) + list(toks[j + 1:])
+    if trail.strip():
+        if j > 0:
+            out[j - 1] = out[j - 1] + trail
+        elif out:
+            out[0] = out[0] + trail if not out[0][-1:].isalpha() else out[0]
+    if lead.strip() and j < len(toks) - 1:
+        out[j] = lead + out[j]
+    return " ".join(out)
+
+
 INSIDE_SEED = 2000  # fresh lines: no comparison, reward model or chart elsewhere in the part used these seeds
 PART_NAMES = ("mood", "length", "repetition", "too short")
 
@@ -508,7 +526,7 @@ def compute_inside(per_topic=20, min_count=6, n_show=10):
                 w = "".join(WORD.findall(tk.lower()))
                 if w:
                     keys.append((j, w))
-                    variants.append(" ".join(toks[:j] + toks[j + 1:]))
+                    variants.append(_without_word(toks, j))
         if not variants:
             line_eff.append(None)
             continue
@@ -534,7 +552,7 @@ def compute_inside(per_topic=20, min_count=6, n_show=10):
     norm = lambda tk: "".join(WORD.findall(tk.lower()))
     cand = [i for i, le in enumerate(line_eff) if le and 8 <= nw[i] <= 14 and any(kind(norm(tk)) for _, tk, *_ in le)]
     if cand:
-        ex = max(cand, key=lambda i: max(e[2] for e in line_eff[i]) - min(e[2] for e in line_eff[i]))
+        ex = cand[0]  # the first such line in the questions' order: an ordinary one, not the most striking
         out["example"] = {"topic": topic[ex], "text": text[ex], "effects": line_eff[ex], "gold": float(g[ex])}
 
     # where the larger model and gold disagree most: the difference of their standardized scores within a question
@@ -575,14 +593,15 @@ def compute_rlaif(n_human=100, n_ai=1600):
 # ---------------------------------------------------------------------------
 # The KL-regularized optimum, best-of-n
 # ---------------------------------------------------------------------------
-def compute_closed(k=8, topic="sea", band=1.5):
+def compute_closed(k=8, topic="sea", pool=256, max_range=4.0):
     """pi*(y) proportional to pi_ref(y) exp(r(y) / beta), over k sampled candidates (pi_ref renormalized over them).
-    The candidates are lines of comparable probability under the fine-tuned model: log-probabilities within ``band``
-    nats of the median (the band widened until it holds k lines), then k of them spread over gold.  A line's
-    probability falls by a factor of e with every nat, so over all 64 samples the likeliest few lines would hold
-    nearly all of pi_ref and the reweighting would have nothing to show."""
+    A line's probability under the fine-tuned model falls by a factor of e with every nat, and over many samples the
+    log-probabilities spread over more than a hundred nats (longer lines are much less likely), so k lines picked at
+    random would put nearly all of pi_ref on one of them and no beta would move it.  The candidates are therefore k
+    lines of comparable probability: of every run of k consecutive lines in order of log-probability whose range is
+    at most ``max_range`` nats, the one whose gold values spread widest (or, if there is none, the narrowest run)."""
     sft = _load_model("sft")
-    outs = [P.text_of(ids) for ids in P.sample(sft, P.chat(line_q(topic)), 64, 40, 1.0, seed=7)]
+    outs = [P.text_of(ids) for ids in P.sample(sft, P.chat(line_q(topic)), pool, 40, 1.0, seed=7)]
     seen, cand = set(), []
     for o in outs:
         if o not in seen and len(o.split()) >= 4:
@@ -591,34 +610,35 @@ def compute_closed(k=8, topic="sea", band=1.5):
     with torch.no_grad():
         lp_all = P.seq_logprob(sft, [(P.chat(line_q(topic)), N.encode(c) + [N.special("<|end|>")])
                                      for c in cand]).numpy()
-    med = float(np.median(lp_all))
-    while True:
-        near = [i for i in range(len(cand)) if abs(lp_all[i] - med) <= band]
-        if len(near) >= k or band > 100:
-            break
-        band *= 1.25
-    near.sort(key=lambda i: gold(cand[i]))
-    pick_i = [near[j] for j in np.linspace(0, len(near) - 1, k).round().astype(int)]
+    g_all = np.array([gold(c) for c in cand])
+    order = np.argsort(lp_all)
+    runs = [order[i:i + k] for i in range(len(order) - k + 1)]
+    width = lambda w: float(lp_all[w].max() - lp_all[w].min())
+    ok = [w for w in runs if width(w) <= max_range]
+    pick_i = max(ok, key=lambda w: float(np.ptp(g_all[w]))) if ok else min(runs, key=width)
+    pick_i = sorted(pick_i, key=lambda i: g_all[i])
     pick = [cand[i] for i in pick_i]
     lp = lp_all[pick_i]
     ref = np.exp(lp - lp.max())
     ref /= ref.sum()
-    r = np.array([gold(c) for c in pick])
+    r = g_all[pick_i]
     betas = [10.0, 1.0, 0.3, 0.1]
     pis = []
     for b in betas:
         w = ref * np.exp((r - r.max()) / b)
         pis.append(w / w.sum())
     return {"topic": topic, "cands": pick, "r": r, "ref": ref, "betas": betas, "pi": np.array(pis), "lp": lp,
-            "band": float(band), "n_samples": len(cand), "lp_range_all": float(lp_all.max() - lp_all.min())}
+            "lp_width": width(pick_i), "n_samples": len(cand), "lp_range_all": float(lp_all.max() - lp_all.min())}
 
 
-BASELINES = ("none", "shared", "value", "group")
+BASELINES = ("none", "shifted", "shared", "value", "group")
+SHIFT = 5.0  # a constant added to every score: a reward model that fits the comparisons exactly as well (chapter 4)
 
 
 def compute_baselines(topics=6, batches=6, n=16):
     """RLHF's first policy-gradient step (the policy is still the fine-tuned model, so the KL term is zero), estimated
-    from one batch of n lines to one question, four ways: with no baseline; with one baseline for every question (the
+    from one batch of n lines to one question, five ways: with no baseline; with no baseline and every score shifted
+    by SHIFT (a reward model that fits the comparisons exactly as well); with one baseline for every question (the
     reward model's average over all of them); with the question's own average over all its batches (what a value
     network learns to predict); and with the batch's own mean (our runs, = RLOO's leave-one-out baseline scaled by
     (n-1)/n).  The gradient is linear in the weights, so each batch needs two backward passes: sum r_i grad log p_i and
@@ -635,8 +655,8 @@ def compute_baselines(topics=6, batches=6, n=16):
             batch_r[(t, b)] = rm_score(rm, t, [P.text_of(o) for o in outs[(t, b)]])
     q_mean = {t: float(np.mean([batch_r[(t, b)] for b in range(batches)])) for t in ts}
     shared = float(np.mean(list(q_mean.values())))
-    base = {"none": lambda t, b: 0.0, "shared": lambda t, b: shared, "value": lambda t, b: q_mean[t],
-            "group": lambda t, b: float(batch_r[(t, b)].mean())}
+    base = {"none": lambda t, b: 0.0, "shifted": lambda t, b: -SHIFT, "shared": lambda t, b: shared,
+            "value": lambda t, b: q_mean[t], "group": lambda t, b: float(batch_r[(t, b)].mean())}
     cos_t, sq = {kd: [] for kd in BASELINES}, {kd: [] for kd in BASELINES}
     for t in ts:  # one question at a time: its batches' gradients (2 x 6.8 million numbers each) fit in memory
         G_r, G_1 = [], []
@@ -653,7 +673,7 @@ def compute_baselines(topics=6, batches=6, n=16):
                                             for i in range(batches) for j in range(i + 1, batches)])))
             sq[kd].append(float(np.mean([float(x @ x) for x in G])))
     out = {"topics": list(ts), "batches": batches, "n": n, "question_mean": [q_mean[t] for t in ts],
-           "shared": shared, "kinds": list(BASELINES)}
+           "shared": shared, "kinds": list(BASELINES), "shift": SHIFT}
     for kd in BASELINES:
         out[f"{kd}_cos"] = float(np.mean(cos_t[kd]))
         out[f"{kd}_cos_by_q"] = cos_t[kd]
