@@ -513,7 +513,6 @@
     "two layers{,} \\ width $1{,}024$": "两层，\\ 宽度$1{,}024$",
     "\\quad $1.381$ \\ (seeds $1.207$--$1.610$)": "\\quad $1.381$ \\ （各种子$1.207$--$1.610$）",
     "\\quad $0.666$ \\ (seeds $0.495$--$0.866$)": "\\quad $0.666$ \\ （各种子$0.495$--$0.866$）",
-    "rich": "丰富",
     "the first $160$ of $1{,}024$ units{,} \\ seed 0": "$1{,}024$个单元中的前$160$个，\\ 种子0",
     "output scores change as width$^{0.44}$": "输出分数的变化 $\\sim$ 宽度$^{0.44}$",
     "output scores change as width$^{-0.03}$": "输出分数的变化 $\\sim$ 宽度$^{-0.03}$",
@@ -600,7 +599,9 @@
     "the best model at $10^{13}$: \\\\ predicted $2.129$, \\ measured $2.074$": "$10^{13}$处最好的模型：\\\\ 预测$2.129$，\\ 实测$2.074$",
     "years": "年",
     "27\\ \\textit{Post-Training and Alignment},\\ 28\\ \\textit{Reasoning}": "27\\ \\textit{后训练与对齐}，\\ 28\\ \\textit{推理}",
-    "the fitted optimum: \\ about $31$ characters \\\\ per parameter \\ (Chinchilla: \\ about $20$ tokens)": "拟合出的最优点：\\ 每个参数约$31$个字符 \\\\ （Chinchilla：\\ 约$20$个词元）"
+    "the fitted optimum: \\ about $31$ characters \\\\ per parameter \\ (Chinchilla: \\ about $20$ tokens)": "拟合出的最优点：\\ 每个参数约$31$个字符 \\\\ （Chinchilla：\\ 约$20$个词元）",
+    "lazy \\ (neural tangent)": "惰性 \\ （神经正切）",
+    "rich \\ (mean field)": "丰富 \\ （平均场）"
   },
   "patterns": []
 }
