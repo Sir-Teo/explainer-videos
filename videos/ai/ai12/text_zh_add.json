@@ -594,7 +594,11 @@
     "fitted to our $49$ runs \\ (at least $2^{19}$ characters, \\ width $64$ and up): \\\\ $E = 1.76$, \\ $\\alpha = 0.58$, \\ $\\beta = 0.43$ \\ (off by $0.025$ bits on average)": "拟合我们的$49$次训练 \\ （至少$2^{19}$个字符，\\ 宽度$64$及以上）：\\\\ $E = 1.76$，\\ $\\alpha = 0.58$，\\ $\\beta = 0.43$ \\ （平均偏差$0.025$比特）",
     "N_{\\text{opt}}": "N_{\\text{最优}}",
     "D_{\\text{opt}} = G^{-1}\\Big(\\frac{C}{6}\\Big)^{\\alpha/(\\alpha+\\beta)}": "D_{\\text{最优}} = G^{-1}\\Big(\\frac{C}{6}\\Big)^{\\alpha/(\\alpha+\\beta)}",
-    "ours: \\ $\\beta/(\\alpha+\\beta) = 0.42$": "我们的：\\ $\\beta/(\\alpha+\\beta) = 0.42$"
+    "ours: \\ $\\beta/(\\alpha+\\beta) = 0.42$": "我们的：\\ $\\beta/(\\alpha+\\beta) = 0.42$",
+    "fitted on our $28$ cheapest runs \\\\ (up to $3 \\times 10^{12}$ operations)": "用我们最便宜的$28$次训练拟合 \\\\ （最多$3 \\times 10^{12}$次运算）",
+    "predicting the other $21$: \\\\ off by $0.046$ bits on average, \\\\ $0.104$ at worst": "预测另外$21$次：\\\\ 平均偏差$0.046$比特，\\\\ 最差$0.104$",
+    "the best model at $10^{13}$: \\\\ predicted $2.129$, \\ measured $2.074$": "$10^{13}$处最好的模型：\\\\ 预测$2.129$，\\ 实测$2.074$",
+    "years": "年"
   },
   "patterns": []
 }
