@@ -112,7 +112,8 @@ class MuP(VoiceoverScene):
         W = np.asarray(z["widths"], float)
         sp, mu = np.asarray(z["sp"]), np.asarray(z["mup"])  # widths x steps x layers
         lw = np.log10(W)
-        allv = np.log10(np.concatenate([sp.ravel(), mu.ravel()]))
+        with np.errstate(divide="ignore"):
+            allv = np.log10(np.concatenate([sp.ravel(), mu.ravel()]))
         allv = allv[np.isfinite(allv)]
         y0, y1 = math.floor(allv.min()), math.ceil(allv.max())
         layer_cols = [GREY_B, C.CONTEXT, C.BITS]
@@ -130,7 +131,10 @@ class MuP(VoiceoverScene):
             for t in range(M.shape[1]):
                 for j in range(3):
                     op = 0.35 + 0.65 * t / (M.shape[1] - 1)
-                    lines.add(curve(ax, lw, np.log10(M[:, t, j]), layer_cols[j], 2.5).set_stroke(opacity=op))
+                    with np.errstate(divide="ignore"):
+                        y = np.log10(M[:, t, j])
+                    if np.isfinite(y).sum() >= 2:  # (muP's first step leaves the hidden layers unchanged: zero readout)
+                        lines.add(curve(ax, lw, y, layer_cols[j], 2.5).set_stroke(opacity=op))
             t_ = label(ttl, font_size=30, color=col).next_to(ax, UP, buff=0.15)
             xl = label(r"width", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
             pans.add(VGroup(ax, xt, yt, t_, xl, lines))

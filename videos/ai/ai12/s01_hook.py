@@ -78,8 +78,8 @@ class Hook(VoiceoverScene):
         tag = note(rf"computed: \ ${n_runs}$ training runs of Part 11's character model on this computer").to_corner(DL, buff=0.2)
         with self.voiceover(
             "Make a model bigger, train it longer, and it gets better. That much everyone expected. The surprise was "
-            "how predictably. <bookmark mark='a'/> Here are thirteen sizes of part eleven's character model, each "
-            f"trained for up to nine lengths: {n_runs} runs on the computer making this video, each drawn at the "
+            f"how predictably. <bookmark mark='a'/> Here are {len(widths)} sizes of part eleven's character model, each "
+            f"trained for up to {len(s['ks'])} lengths: {n_runs} runs on the computer making this video, each drawn at the "
             "number of operations it cost. <bookmark mark='b'/> Every size improves, then flattens: it runs out of "
             "room. But the bottom edge of the whole fan, the best loss each budget can buy, is a smooth curve. "
             f"<bookmark mark='c'/> Take away a floor of {E:.2f} bits, and what's left falls along a straight line on "

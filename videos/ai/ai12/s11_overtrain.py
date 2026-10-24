@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, TT, load
+from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, TT, load, lag
 
 
 class Overtrain(VoiceoverScene):
@@ -74,11 +74,11 @@ class Overtrain(VoiceoverScene):
             self.play(Write(law))
             self.play(Create(line), run_time=2.0)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.4))
+            self.play(lag([FadeIn(m_) for m_ in marks], lag_ratio=0.4))
             vo.wait_until("c")
             self.play(Create(wall), FadeIn(wl))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in meas], lag_ratio=0.2), FadeIn(ml))
+            self.play(lag([FadeIn(d_, scale=0.5) for d_ in meas], lag_ratio=0.2), FadeIn(ml))
         self.wait(0.3)
         self.clear_scene()
 

@@ -25,11 +25,11 @@ class Kaplan(VoiceoverScene):
     # ------------------------------------------------------------------
     def gopher(self):
         # one budget, two shapes: Gopher (280 billion parameters, 300 billion tokens), Chinchilla (70 billion, 1.4 trillion)
-        u = 0.0105  # screen units per billion parameters (width) ...
-        v = 0.0021  # ... and per billion tokens (height)
+        u = 0.016  # screen units per billion parameters (width) ...
+        v = 0.0032  # ... and per billion tokens (height)
         gw, gh = 280 * u, 300 * v
         cw, chh = 70 * u, 1400 * v
-        base = np.array([-5.6, -2.4, 0])
+        base = np.array([-6.2, -2.9, 0])
         gop = Rectangle(width=gw, height=gh, stroke_color=SP, stroke_width=2.5, fill_color=SP, fill_opacity=0.25)
         gop.move_to(base, aligned_edge=DL)
         chi = Rectangle(width=cw, height=chh, stroke_color=C.TRUE_P, stroke_width=2.5, fill_color=C.TRUE_P, fill_opacity=0.25)
@@ -47,7 +47,8 @@ class Kaplan(VoiceoverScene):
         res = VGroup(label(r"Chinchilla won on almost every test:", font_size=24, color=WHITE),
                      label(r"MMLU $67.5\%$, \ more than $7$ points above Gopher", font_size=24, color=C.TRUE_P),
                      label(r"smaller, \ so cheaper to run", font_size=24, color=C.TRUE_P))
-        res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 1.2, 0])
+        res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.1, -0.6, 0])
+        keep_in_frame(res)
         link = note(r"GPT-3, \ Gopher \ and Chinchilla in the lineage: \ Part 14").next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
         cite_ = cite(r"J.~Hoffmann et al.\ (2022), \ Table 1 and abstract", corner=DR)
         with self.voiceover(
@@ -95,15 +96,20 @@ class Kaplan(VoiceoverScene):
         l_all, l_ne = line(n_all, NCOL), line(n_ne, SP)
         lg = VGroup(label(rf"all the parameters: \ slope ${a_all:.2f}$", font_size=22, color=NCOL),
                     label(rf"leaving out the input and output layers: \ ${a_ne:.2f}$", font_size=22, color=SP))
-        lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, 2.0, 0])
+        lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, 2.4, 0])
+        keep_in_frame(lg)
         sh = label(rf"the left-out share: \ ${100 * share[0]:.0f}\%$ of the smallest model, \ ${100 * share[-1]:.0f}\%$ of the "
-                   r"largest", font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.25).align_to(lg, LEFT)
+                   r"largest", font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.2).align_to(lg, LEFT)
+        keep_in_frame(sh)
         cards = VGroup(
             history_card(2024, r"Pearce \& Song", r"Kaplan counted parameters without the embeddings, at small scale: "
                          r"that alone turns $0.5$ into nearly $0.73$", width=5.6, color=HIST),
             history_card(2024, r"Porian et al.", r"and three details: \ the last layer's cost, \ the warmup's length, \ "
                          r"and an optimizer setting ($\beta_2$) untuned at small batches", width=5.6, color=HIST))
-        cards.arrange(DOWN, buff=0.15).move_to([3.4, -1.55, 0])
+        cards.arrange(DOWN, buff=0.15)
+        if cards.height > 3.7:
+            cards.scale_to_fit_height(3.7)
+        cards.move_to([3.4, -1.45, 0])
         bigger = a_ne > a_all + 0.03
         said1 = (
             f"it grows with slope {a_ne:.2f}: the small models look smaller than they are, so the law looks "

@@ -60,6 +60,26 @@ class Power(VoiceoverScene):
                      corner=UL).shift(DOWN * 0.0)
         cite_.to_edge(UP, buff=0.12).shift(RIGHT * 0.0)
         s8, t8 = float(z[f"slope{dims[-1]}"]), -4 / dims[-1]
+        # a picture: data along a curve (a one-dimensional manifold in the plane), cut into N straight pieces
+        def wave(x):
+            return 0.75 * np.sin(1.9 * x) + 0.18 * x
+
+        mx = np.linspace(-3.2, 3.2, 200)
+        man = VMobject(stroke_color=C.TRUE_P, stroke_width=4).set_points_smoothly([[x, wave(x), 0] for x in mx])
+        g_ = np.random.default_rng(2)
+        sx = np.sort(g_.uniform(-3.2, 3.2, 40))
+        mdots = VGroup(*[Dot([x, wave(x), 0], radius=0.04, color=GREY_B) for x in sx])
+
+        def pieces(n):
+            xs = np.linspace(-3.2, 3.2, n + 1)
+            return VMobject(stroke_color=C.BITS, stroke_width=3).set_points_as_corners([[x, wave(x), 0] for x in xs])
+
+        p5, p10 = pieces(5), pieces(10)
+        mcap = label(r"data along a curve: \ $d = 1$; \ yellow: \ $N$ straight pieces \ (schematic)", font_size=20,
+                     color=GREY_A).move_to([4.6, 0, 0])
+        mpic = VGroup(man, mdots, p5).move_to([-0.6, -1.7, 0])
+        p10.move_to(p5)
+        mcap.move_to([4.7, -1.7, 0])
         late = abs(s8 - t8) > 0.1
         said1 = (
             f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
@@ -77,14 +97,17 @@ class Power(VoiceoverScene):
             + said1
             + " Low-dimensional data, steep laws; language, by this account, is high-dimensional."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), Create(man), FadeIn(mdots), FadeIn(mcap))
+            self.play(Create(p5))
             vo.wait_until("a")
             step(0)
+            self.play(Transform(p5, p10))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
+            self.play(FadeOut(mpic), FadeOut(mcap))
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(tag))
             for l_, lb in zip(lines, labs):
                 self.play(Create(l_), FadeIn(lb), run_time=0.9)
@@ -128,11 +151,11 @@ class Power(VoiceoverScene):
             f"test it, and we built a small version: {T} subtasks, each the parity of three hidden bits out of "
             "twelve, appearing with Zipfian frequencies."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(bars), FadeIn(bl))
             step(0)
             vo.wait_until("a")
             step(1)
-            self.play(FadeIn(bars), FadeIn(bl), Create(cut), FadeIn(cl))
+            self.play(Create(cut), FadeIn(cl))
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
@@ -174,7 +197,7 @@ class Power(VoiceoverScene):
                        for v in range(math.ceil(lx.min() - 0.1), math.floor(lx.max() + 0.1) + 1)])
         byt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(lx.min() - 0.1, v), LEFT, buff=0.08)
                        for v in range(y0, y1 + 1)])
-        bxn = label(r"parameters", font_size=20, color=GREY_A).next_to(bxt, DOWN, buff=0.08)
+        bxn = label(r"parameters", font_size=20, color=GREY_A).next_to(bxt if len(bxt) else bx, DOWN, buff=0.08)
         byn = label(r"average loss at the end", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.12).align_to(bx, LEFT)
         pts = VGroup(*[Dot(bx.c2p(a, b), radius=0.06, color=width_ramp(i, len(widths))) for i, (a, row) in enumerate(zip(lx, ly))
                        for b in row])

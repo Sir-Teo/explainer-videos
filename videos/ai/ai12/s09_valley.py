@@ -59,9 +59,21 @@ class Valley(VoiceoverScene, ThreeDScene):
                 why(r"multiply by $N$ and by $D$: \ both equal $6\lambda ND$"),
                 why(r"solve, \ with $G = (\alpha A / \beta B)^{1/(\alpha+\beta)}$")]
         step = ladder(self, rows, whys, keep=4, top=1.15, x=-1.4, buff=0.42, edge=6.9)
-        res = label(rf"ours: \ $\beta/(\alpha+\beta) = {a3:.2f}$", font_size=30, color=C.BITS).to_edge(DOWN, buff=0.35)
-        cite_ = cite(r"J.~Hoffmann et al., \textit{Training Compute-Optimal Large Language Models} (2022), approach 3",
-                     corner=DR)
+        res = label(rf"ours: \ $\beta/(\alpha+\beta) = {a3:.2f}$", font_size=30, color=C.BITS).move_to([-1.0, -3.3, 0])
+        cite_ = cite(r"Hoffmann et al.\ (2022), \ approach 3", corner=DR)
+        # the fit's quality: every run's measured loss against the formula's
+        s_ = load("sweep")
+        N_, D_, L_ = np.asarray(s_["N"], float), np.asarray(s_["D"], float), np.asarray(s_["bits"], float)
+        ii, jj = np.where(np.isfinite(L_) & (D_[None] >= 2 ** 17))
+        meas, pred = L_[ii, jj], lnd(ch, N_[ii], D_[jj])
+        lo_, hi_ = float(min(meas.min(), pred.min())) - 0.05, float(max(meas.max(), pred.max())) + 0.05
+        fx = Axes(x_range=[lo_, hi_, (hi_ - lo_) / 4], y_range=[lo_, hi_, (hi_ - lo_) / 4], x_length=3.4, y_length=3.4,
+                  tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -1.3, 0])
+        diag = DashedLine(fx.c2p(lo_, lo_), fx.c2p(hi_, hi_), color=GREY_B, stroke_width=1.5)
+        fdots = VGroup(*[Dot(fx.c2p(a, b), radius=0.035, color=C.BITS) for a, b in zip(pred, meas)])
+        fl = VGroup(label(r"measured", font_size=20, color=GREY_A).next_to(fx, LEFT, buff=0.1).rotate(PI / 2),
+                    label(r"the formula", font_size=20, color=GREY_A).next_to(fx, DOWN, buff=0.1))
+        fitpic = VGroup(fx, diag, fdots, fl)
         with self.voiceover(
             "In 2022, Jordan Hoffmann and colleagues at DeepMind fitted one formula to all their runs at once: a "
             "floor, plus a term that shrinks with the parameters, plus one that shrinks with the data. Fitted to "
@@ -73,8 +85,10 @@ class Valley(VoiceoverScene, ThreeDScene):
             "last character pay off equally. <bookmark mark='d'/> Solve, and the best size grows as the budget to "
             f"the power beta over alpha plus beta: {a3:.2f} for our models."
         ) as vo:
-            self.play(Write(law), FadeIn(vals), FadeIn(cite_))
+            self.play(Write(law), FadeIn(vals), FadeIn(cite_), Create(fx), Create(diag), FadeIn(fl))
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in fdots], lag_ratio=0.01), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(fitpic))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -125,9 +139,10 @@ class Valley(VoiceoverScene, ThreeDScene):
         xl = MathTex(r"\log N", font_size=36, color=NCOL).move_to(axes.c2p(xr[1] + 0.35, yr[0], zlo))
         yl = MathTex(r"\log D", font_size=36, color=DCOL).move_to(axes.c2p(xr[0], yr[1] + 0.35, zlo))
         head = label(r"the loss over size and data \ (the fitted law; \ dots: \ our runs)", font_size=28).to_edge(UP, buff=0.3)
+        k0 = label(r"the floor: \ $\log N$ and $\log D$; \ the height: \ the loss", font_size=22, color=GREY_A)
         k1 = label(r"coloured: \ budgets $6ND = C$, \ $10^{11}$ to $10^{13}$", font_size=22, color=GREY_A)
         k2 = label(r"white: \ the floor of the valley, \ the best $N$ and $D$ for each budget", font_size=22, color=WHITE)
-        keys = VGroup(k1, k2).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DL, buff=0.3)
+        keys = VGroup(k0, k1, k2).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DL, buff=0.3)
         for m in (head, keys):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
@@ -140,9 +155,9 @@ class Valley(VoiceoverScene, ThreeDScene):
             "big a model reads too little to finish learning. <bookmark mark='c'/> Join the lowest points of every "
             "valley, and you have the path to follow as the budget grows: the floor of Chinchilla's valley."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(k0))
             self.move_camera(phi=62 * DEGREES, theta=-128 * DEGREES, run_time=2.0,
-                             added_anims=[Create(axes), FadeIn(surf), FadeIn(xl), FadeIn(yl)])
+                             added_anims=[Create(axes), FadeIn(surf)])
             self.play(FadeIn(pts), run_time=1.0)
             self.begin_ambient_camera_rotation(rate=0.12)
             vo.wait_until("a")
@@ -152,7 +167,7 @@ class Valley(VoiceoverScene, ThreeDScene):
             self.wait(1.5)
             self.stop_ambient_camera_rotation()
         self.move_camera(phi=0, theta=-90 * DEGREES, run_time=1.2,
-                         added_anims=[FadeOut(VGroup(axes, surf, pts, isos, path, xl, yl))])
+                         added_anims=[FadeOut(VGroup(axes, surf, pts, isos, path))])
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -198,16 +213,16 @@ class Valley(VoiceoverScene, ThreeDScene):
                    MathTex(rf"{a3:.2f}\ \scriptstyle({lo3:.2f}\text{{--}}{hi3:.2f})", font_size=30, color=ACOLS[2]),
                    MathTex(r"0.46", font_size=30, color=GREY_B)),
         )
-        for r_ in rows:
-            for j, m in enumerate(r_):
-                m.move_to([2.2 + [0.0, 2.3, 4.1][j], 0, 0], aligned_edge=LEFT if j == 0 else ORIGIN)
-            r_.set_y(0)
-        rows.arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to([4.0, 1.0, 0])
+        for i, r_ in enumerate(rows):
+            y = 1.75 - 0.55 * i
+            r_[0].move_to([0.4, y, 0], aligned_edge=LEFT)
+            r_[1].move_to([4.1, y, 0])
+            r_[2].move_to([6.2, y, 0])
         hd = label(r"$N_{\text{opt}} \propto C^{\,a}$: \ the exponent $a$", font_size=28, color=WHITE).next_to(rows, UP, buff=0.35)
         kap = label(r"Kaplan (2020): \ $a = 0.73$", font_size=24, color=SP).next_to(rows, DOWN, buff=0.35).align_to(rows, LEFT)
         tpp = float(ch["tpp3"])
-        tp = label(rf"the fitted optimum: \ about ${tpp:.0f}$ characters per parameter \\ (Chinchilla: \ about $20$ tokens "
-                   r"per parameter)", font_size=22, color=C.BITS).next_to(kap, DOWN, buff=0.3).align_to(rows, LEFT)
+        tp = label(rf"the fitted optimum: \ about ${tpp:.0f}$ characters \\ per parameter \ (Chinchilla: \ about $20$ "
+                   r"tokens)", font_size=22, color=C.BITS).next_to(kap, DOWN, buff=0.3).align_to(rows, LEFT)
         boot = note(r"in brackets: \ $80\%$ of $100$ bootstrap refits").to_corner(DR, buff=0.2)
         near = all(0.4 <= v <= 0.62 for v in (a1, a2, a3))
         spread = max(a1, a2, a3) - min(a1, a2, a3)

@@ -191,15 +191,17 @@ class Grok(VoiceoverScene):
             f"The more weight decay, the sooner it comes: from step {med[ok[0]]:,.0f} at {wds[ok[0]]:g} to "
             f"{med[ok[-1]]:,.0f} at {wds[ok[-1]]:g}. " if faster else "Its timing varies with the weight decay. "
         )
+        never_w = max((wds[i] for i in range(len(wds)) if (~np.isfinite(st[i])).any()), default=0.0)
         said3 = (
-            f"And in {n_never} of the fifteen runs, all at the weakest settings, it never comes within the "
-            f"{cap:,} steps." if n_never else ""
+            f"And in {n_never} of the {st.size} runs, all at a weight decay of {never_w:g} or less, it never comes "
+            f"within the {cap:,} steps." if n_never else ""
         )
         with self.voiceover(
             "Is weight decay really what drives it? Sweep it, from none to three, three seeds each. "
             f"<bookmark mark='a'/> Memorizing takes between {np.nanmin(sm):,.0f} and {np.nanmax(sm):,.0f} steps every time. "
             "<bookmark mark='b'/> Generalizing does not. "
             + said2
+            + "<bookmark mark='c'/> "
             + said3
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(capl), FadeIn(capt), FadeIn(tag))

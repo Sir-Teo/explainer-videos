@@ -62,12 +62,12 @@ class Lazy(VoiceoverScene):
             f"the network, the less they change: slope {slope:.2f}. <bookmark mark='b'/> In 2019, Chizat, Oyallon "
             "and Bach called this lazy training, and showed it is not special to wide networks: scale any model's "
             "output up and it trains like its linearization. <bookmark mark='c'/> A lazy network can only re-weight "
-            "the random features it started with. It is a kernel method, like part six's, and part eight's models "
-            "far bigger than their data are, in this limit, exactly the minimum-norm fits of part eight."
+            "the random features it started with. It is a kernel method, like part six's, and the models far bigger "
+            "than their data that part eight met are, in this limit, exactly its minimum-norm fits."
         ) as vo:
             self.play(Create(ax), FadeIn(labs), FadeIn(xn), FadeIn(yn), FadeIn(tag))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dts], lag_ratio=0.15), run_time=1.5)
+            vo.wait_until("a")
             self.play(Create(fit), FadeIn(sl))
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=UP * 0.1))

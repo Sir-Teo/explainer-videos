@@ -46,10 +46,12 @@ class Depth(VoiceoverScene):
             [r"$\alpha = 0$", r"$1$", r"$\eta$", r"the stream grows; \ the best rate drifts"],
             [r"$\alpha = \tfrac12$ \ depth-$\mu$P", r"$1/\sqrt{L}$", r"$\eta/\sqrt{L}$", r"tends to linear: \ lazy in depth"],
             [r"$\alpha = 1$ \ CompleteP", r"$1/L$", r"$\eta$", r"stays nonlinear: \ learns features"],
-        ], col_colors=[GREY_A, C.BITS, C.BITS, GREY_A], font_size=20)
+        ], col_colors=[GREY_A, C.BITS, C.BITS, GREY_A], font_size=23)
         for r_, a in zip(tab[0][1:], (0.0, 0.5, 1.0)):
             r_[0].set_color(ALPHA_COL[a])
-        tab.move_to([2.6, 0.2, 0])
+        tab.move_to([2.3, -0.1, 0])
+        if tab.width > 8.4:
+            tab.scale_to_fit_width(8.4)
         cites = cite(r"G.~Yang, D.~Yu, C.~Zhu \& S.~Hayou (2023); \ B.~Bordelon et al.\ (2023); \ N.~Dey et al.\ "
                      r"(2025), Table 1", corner=DR)
         with self.voiceover(
@@ -159,10 +161,10 @@ class Depth(VoiceoverScene):
         lines = VGroup(*[VGroup(curve(ax, ld, bl[a], ALPHA_COL[a], 3), *[Dot(ax.c2p(x, y), radius=0.06, color=ALPHA_COL[a])
                                                                       for x, y in zip(ld, bl[a])]) for a in alphas])
         lg = VGroup(*[label(ALPHA_NAME[a], font_size=20, color=ALPHA_COL[a]) for a in alphas]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        lg.next_to(ax, RIGHT, buff=0.2).align_to(ax, UP)
+        lg.move_to([3.3, 0.35, 0])
         copies = VGroup(*[label(rf"depth ${depths[-1]}$ at depth ${depths[0]}$'s best rate: \ ${cp[a]:.2f}$ \ "
                                 rf"(own best ${bl[a][-1]:.2f}$)", font_size=20, color=ALPHA_COL[a]) for a in alphas])
-        copies.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, -1.3, 0])
+        copies.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, -1.45, 0])
         keep_in_frame(copies)
         hc = history_card(2025, r"Dey et al., \ \textit{Don't be lazy} (Cerebras)",
                           r"CompleteP: \ $12\%$ less compute than $\mu$P at $1.5$ billion parameters, \ $34\%$ for the "

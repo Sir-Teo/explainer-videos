@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, load
+from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, load, lag
 
 EPOCH_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.MODEL_Q, C.SURPRISE]
 
@@ -87,7 +87,7 @@ class Data(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(lines[2]), FadeIn(tab[0]), FadeIn(rows[:3]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines[3:]], lag_ratio=0.3), FadeIn(rows[3:]), run_time=2.0)
+            self.play(lag([Create(l_) for l_ in lines[3:]], lag_ratio=0.3), FadeIn(rows[3:]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

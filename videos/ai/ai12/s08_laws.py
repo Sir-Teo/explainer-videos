@@ -31,7 +31,7 @@ class Laws(VoiceoverScene):
         ys = 1.0 + 4.0 / (1 + np.exp(1.1 * (xs - 4.8)))  # flat, then a straight fall, then the floor
         lc = curve(ax, xs, ys, FIT, 3.5, smooth=True)
         regs = VGroup(label(r"small data", font_size=20, color=GREY_B).move_to(ax.c2p(1.0, 5.4)),
-                      label(r"power law", font_size=20, color=C.BITS).move_to(ax.c2p(4.8, 3.2)),
+                      label(r"power law", font_size=20, color=C.BITS).move_to(ax.c2p(6.4, 3.9)),
                       label(r"irreducible", font_size=20, color=GREY_B).move_to(ax.c2p(8.6, 1.9)))
         floor = DashedLine(ax.c2p(0, 1.0), ax.c2p(10, 1.0), color=GREY_D, stroke_width=1.5)
         xl = label(r"training set size \ (log)", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
@@ -128,8 +128,9 @@ class Laws(VoiceoverScene):
             f"to the twenty-four characters: {n_runs} finished runs in {hours:.1f} hours of one processor."
         ) as vo:
             self.play(Create(top), FadeIn(tl), Create(bot), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
+            self.play(Create(trunk_lr), Create(trunk), run_time=2.5)
             vo.wait_until("a")
-            self.play(Create(trunk_lr), FadeIn(side[0]), Create(trunk), run_time=2.5)
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(b_) for b_ in branches], lag_ratio=0.15), FadeIn(side[1:3]), run_time=2.0)
             vo.wait_until("c")
