@@ -153,14 +153,15 @@ class Scales(VoiceoverScene):
         head = label(r"Tokens that keep up with diffusion", font_size=36).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(r"Apr 2024", r"VAR", r"ImageNet $256^2$: \ FID $1.73$, \ against $18.65$ for its raster-order "
-                         r"baseline; \ about $20\times$ faster; \ NeurIPS 2024 best paper", color=HIST, width=4.3, font_size=23),
+                         r"baseline; \ about $20\times$ faster; \ NeurIPS 2024 best paper", color=HIST, width=11.0, font_size=25),
             history_card(r"Jun 2024", r"MAR \ (Li, Tian, Li, Deng \& He)", r"no codebook: \ continuous tokens, \ each "
-                         r"drawn by a tiny diffusion head", color=HIST, width=4.3, font_size=23),
+                         r"drawn by a tiny diffusion head", color=HIST, width=11.0, font_size=25),
             history_card(r"Dec 2024", r"Infinity \ (Han et al.)", r"each token a string of up to $64$ bits, \ predicted bit by bit: "
-                         r"\ a vocabulary of $2^{64}$; \ a $1024^2$ picture in $0.8$ s", color=HIST, width=4.3, font_size=23),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         r"\ a vocabulary of $2^{64}$; \ a $1024^2$ picture in $0.8$ s", color=HIST, width=11.0, font_size=25),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
+        if cards.height > 5.0:
+            cards.height = 5.0
+            cards.next_to(head, DOWN, buff=0.4)
         foot = label(r"the token route stays alive: \ it is how a language model can draw \ (chapter 11)", font_size=24,
                      color=PATCH).to_edge(DOWN, buff=0.6)
         with self.voiceover(

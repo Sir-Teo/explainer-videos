@@ -231,15 +231,16 @@ class Unified(VoiceoverScene):
         head = label(r"Editing as generation", font_size=36).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(r"Nov 2022", r"InstructPix2Pix", r"edit pairs made by GPT-3 and a diffusion model; \ a "
-                         r"denoiser that reads the picture and the instruction", color=HIST, width=4.3, font_size=23),
+                         r"denoiser that reads the picture and the instruction", color=HIST, width=11.0, font_size=25),
             history_card(r"Mar 2025", r"GPT-4o images", r"pictures drawn natively by an omni model, \ which reads "
-                         r"pictures too", color=HIST, width=4.3, font_size=23),
+                         r"pictures too", color=HIST, width=11.0, font_size=25),
             history_card(r"2025", r"FLUX.1 Kontext, \ Qwen-Image, \ Gemini 2.5 Flash Image", r"the input picture as "
                          r"context: \ keep a face, \ a style, \ a product, \ change the rest",
-                         color=HIST, width=4.3, font_size=23),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         color=HIST, width=11.0, font_size=25),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
+        if cards.height > 5.0:
+            cards.height = 5.0
+            cards.next_to(head, DOWN, buff=0.4)
         foot = label(r"the next frontier is the same trick in time: \ the picture to continue is a video", font_size=24,
                      color=PATCH).to_edge(DOWN, buff=0.6)
         with self.voiceover(

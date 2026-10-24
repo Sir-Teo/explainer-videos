@@ -101,9 +101,9 @@ VQ_METHODS = ["vq", "ema", "restart", "fsq", "lfq"]
 VQ_SEEDS = [0, 1, 2]
 VQ_K = 256
 VQ_D = 16
-VQ_STEPS = 3000
-VQ_BATCH = 64
-VQ_CHECKS = [0, 25, 100, 300, 800, 1600, 3000]
+VQ_STEPS = 1500
+VQ_BATCH = 32
+VQ_CHECKS = [0, 25, 75, 200, 500, 1000, 1500]
 
 
 def make_vq_nets(D=VQ_D):
@@ -279,7 +279,7 @@ def run_vq(method: str, seed: int, threads: int = 1):
         loss.backward()
         opt.step()
         if step % 25 == 0:
-            curve.append([step, float(rec), int(len(torch.unique(codes)))])
+            curve.append([step, float(rec.detach()), int(len(torch.unique(codes)))])
     last = snaps[-1]
     return dict(method=method, seed=seed, curve=curve, checks=checks,
                 used=[s["used"] for s in snaps], ppl=[s["ppl"] for s in snaps], mse=[s["mse"] for s in snaps],

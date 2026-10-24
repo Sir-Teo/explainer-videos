@@ -16,7 +16,7 @@ def strip(frames, size=0.62, gap=0.06):
 class Clips(VoiceoverScene):
     def construct(self):
         self.card()
-        self.setup()
+        self.intro()
         self.training()
         self.agree()
 
@@ -27,7 +27,7 @@ class Clips(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def setup(self):
+    def intro(self):
         d = load("clips")
         ex, rx = np.asarray(d["examples"]), np.asarray(d["rec_examples"])
         T = int(d["T"])

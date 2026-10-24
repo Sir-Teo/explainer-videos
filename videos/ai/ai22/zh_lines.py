@@ -193,8 +193,8 @@ ZH = {
         '第4章。借来的眼睛。',
 
     'A diffusion transformer has to learn two things at once:':
-        "扩散Transformer要同时学两件事：图片是由什么构成的，以及怎样去掉噪声。但是用几百万张图片训练出来的视觉编码器，比如第24部分的DINOv2，"
-        "已经懂得第一件事。去探测扩散Transformer的中间层，会发现它确实学到了图片里有什么，也慢慢变得像那样的编码器，但落后得很远。"
+        "扩散Transformer要同时学两件事：图片是由什么构成的，以及怎样去掉噪声。<bookmark mark='p'/>但是用几百万张图片训练出来的视觉编码器，比如第24部分的DINOv2，"
+        "已经懂得第一件事。<bookmark mark='q'/>去探测扩散Transformer的中间层，会发现它确实学到了图片里有什么，也慢慢变得像那样的编码器，但落后得很远。"
         "<bookmark mark='a'/>2024年10月，Sihyun Yu、谢赛宁和同事在损失里加了一项。取去噪器某个早期块之后的词元，经过一个小投影头，"
         "<bookmark mark='b'/>再按余弦相似度，把它们拉向冻结的编码器对干净图片给出的词元。<bookmark mark='c'/>他们称之为REPA，表示对齐。"
         "一个大型扩散Transformer达到同样的质量，快了17.5倍。",
@@ -342,10 +342,10 @@ ZH = {
         "它在中间训练得最多。在论文比较的众多选择里，它排第一。<bookmark mark='c'/>我们用两种方式训练了流匹配，每种三个随机种子。{verdict}",
 
     "f'Trained logit-normally, our letters come out closer to real ones at every number":
-        '用logit-normal训练，我们的字母在每种采样步数下都更接近真实字母，在{ks[few]}步时差别最大。',
+        '用logit-normal训练，我们的字母在每种采样步数下都更接近真实字母，{few_s}时差别最大。',
 
     "f'Trained logit-normally, our letters come out closer to real ones on average":
-        '用logit-normal训练，我们的字母平均来说更接近真实字母，在{ks[few]}步采样时差别最大，不过并不是每种步数都如此。',
+        '用logit-normal训练，我们的字母平均来说更接近真实字母，{few_s}时差别最大，不过并不是每种步数都如此。',
 
     'On our letters, uniform does as well or better:':
         '在我们的字母上，均匀抽取一样好，甚至更好：在只有16个数的空间里，难点并不在中间。在大图片上，论文发现logit-normal是它比较过的众多方案里最好的。',
@@ -726,4 +726,10 @@ PHRASES = {
     'the Gaussians match the photographs more closely': '高斯和照片更吻合',
     'NeRF matches the photographs more closely': 'NeRF和照片更吻合',
     'the two match the photographs about equally well': '两者和照片吻合得差不多',
+    'a single sampling step': '只采样一步',
+    '2 sampling steps': '采样2步',
+    '4 sampling steps': '采样4步',
+    '8 sampling steps': '采样8步',
+    '16 sampling steps': '采样16步',
+    '40 sampling steps': '采样40步',
 }

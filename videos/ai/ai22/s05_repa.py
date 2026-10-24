@@ -56,18 +56,33 @@ class REPA(VoiceoverScene):
         cite_ = cite(r"S.~Yu, \dots, S.~Xie, \textit{Representation Alignment for Generation} (REPA, 2024)", corner=UR)
         res = label(r"SiT-XL: \ the same quality \\ $17.5\times$ sooner \ (as published)", font_size=22, color=REPA_C)
         res.move_to([4.9, 1.6, 0])
+        jobs = VGroup(label(r"two jobs at once:", font_size=26, color=WHITE),
+                      label(r"1. \ what pictures are made of", font_size=24, color=C.TRUE_P),
+                      label(r"2. \ how to remove noise", font_size=24, color=PATCH)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        jobs.move_to([2.4, 1.7, 0])
+        dino = node_box_(r"a vision encoder, \ e.g.\ DINOv2 (Part 24): \ already knows 1", C.TRUE_P, font_size=22)
+        dino.move_to([2.4, -0.2, 0])
+        probe = label(r"probe the denoiser's middle layers: \ it learns 1 too, \ but slowly, \ far behind", font_size=22,
+                      color=GREY_A).move_to([2.4, -1.5, 0])
         with self.voiceover(
             "A diffusion transformer has to learn two things at once: what pictures are made of, and how to remove "
-            "noise. But vision encoders trained on millions of images, like Part 24's DINOv2, already know the "
-            "first. Probe a diffusion transformer's middle layers, and you find it does learn what pictures show, "
-            "and slowly comes to resemble such an encoder, but it lags far behind. <bookmark mark='a'/> In October 2024 Sihyun Yu, Saining Xie and colleagues added one term to "
+            "noise. <bookmark mark='p'/> But vision encoders trained on millions of images, like Part 24's DINOv2, "
+            "already know the first. <bookmark mark='q'/> Probe a diffusion transformer's middle layers, and you find "
+            "it does learn what pictures show, and slowly comes to resemble such an encoder, but it lags far behind. "
+            "<bookmark mark='a'/> In October 2024 Sihyun Yu, Saining Xie and colleagues added one term to "
             "the loss. Take the denoiser's tokens after an early block, pass them through a small projector, "
             "<bookmark mark='b'/> and pull them toward the frozen encoder's tokens for the clean picture, by cosine "
             "similarity. <bookmark mark='c'/> They called it REPA, representation alignment. A large diffusion "
             "transformer reached the same quality seventeen and a half times sooner."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(pic[0]), FadeIn(pic[1]), FadeIn(pic[2]), FadeIn(pic[3]))
+            self.play(LaggedStart(*[FadeIn(j_, shift=RIGHT * 0.1) for j_ in jobs], lag_ratio=0.4), run_time=1.6)
+            vo.wait_until("p")
+            self.play(FadeIn(dino, shift=UP * 0.1))
+            vo.wait_until("q")
+            self.play(FadeIn(probe))
             vo.wait_until("a")
+            self.play(FadeOut(jobs), FadeOut(dino), FadeOut(probe))
             self.play(GrowArrow(pic[5]), FadeIn(pic[4]))
             vo.wait_until("b")
             self.play(FadeIn(pic[7]), GrowArrow(pic[8]), FadeIn(pic[6]), GrowFromCenter(pic[10]), FadeIn(pic[9]))
@@ -113,6 +128,12 @@ class REPA(VoiceoverScene):
             verdict = (f"Here REPA doesn't help: the distance ends at {r_end:.0f} with it and {z_end:.0f} without. Our "
                        "teacher only learned to name letters, and the letters are easy to see; REPA's gains came from "
                        "encoders trained on millions of varied images.")
+        ends = VGroup(label(rf"${100 * ra_end:.0f}\%$", font_size=18, color=REPA_C).next_to(ax1.ax.c2p(ev[-1], ra_end), RIGHT, buff=0.1),
+                      label(rf"${100 * za_end:.0f}\%$", font_size=18, color=BASE_C).next_to(ax1.ax.c2p(ev[-1], za_end), RIGHT, buff=0.1))
+        if abs(ends[0].get_y() - ends[1].get_y()) < 0.3:
+            hi_, lo_ = (ends[0], ends[1]) if ra_end >= za_end else (ends[1], ends[0])
+            hi_.shift(UP * 0.15)
+            lo_.shift(DOWN * 0.15)
         a0, a1 = float(rc[:, 0, 2].mean()), float(rc[:, -1, 2].mean())
         align = (f"And the alignment itself climbs, from {a0:.2f} to {a1:.2f}, as the denoiser's tokens come to "
                  "resemble the teacher's." if a1 > a0 + 0.05 else
@@ -125,8 +146,9 @@ class REPA(VoiceoverScene):
             + verdict + " <bookmark mark='c'/> " + align
         ) as vo:
             self.play(FadeIn(leg), Create(ax1), Create(ax2), FadeIn(head))
+            self.play(*[FadeIn(l_[0]) for l_ in l1], *[Create(l_[1]) for l_ in l1], run_time=2.5)
             vo.wait_until("a")
-            self.play(*[FadeIn(l_[0]) for l_ in l1], *[Create(l_[1]) for l_ in l1], run_time=2.0)
+            self.play(FadeIn(ends, shift=LEFT * 0.1))
             vo.wait_until("b")
             self.play(*[FadeIn(l_[0]) for l_ in l2], *[Create(l_[1]) for l_ in l2], run_time=2.0)
             vo.wait_until("c")
@@ -140,15 +162,16 @@ class REPA(VoiceoverScene):
         cards = VGroup(
             history_card(r"Jan 2025", r"VA-VAE \ (Yao, Yang \& Wang)", r"align the autoencoder's latents with a vision "
                          r"model's features: \ FID $1.35$ on ImageNet $256^2$, \ $21\times$ faster to train",
-                         color=HIST, width=4.3, font_size=23),
+                         color=HIST, width=11.0, font_size=25),
             history_card(r"Apr 2025", r"REPA-E \ (Leng et al.)", r"train the autoencoder and the denoiser together, \ "
-                         r"held in place by REPA: \ FID $1.12$", color=HIST, width=4.3, font_size=23),
+                         r"held in place by REPA: \ FID $1.12$", color=HIST, width=11.0, font_size=25),
             history_card(r"Oct 2025", r"representation autoencoders \ (Zheng, Ma, Tong \& Xie)", r"no VAE at all: \ a "
                          r"frozen DINOv2 encoder and a trained decoder; \ FID $1.51$ without guidance, \ $1.13$ with",
-                         color=HIST, width=4.3, font_size=23),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         color=HIST, width=11.0, font_size=25),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
+        if cards.height > 5.0:
+            cards.height = 5.0
+            cards.next_to(head, DOWN, buff=0.4)
         tk = take_away(r"the space a model generates in should already mean something: \ borrow a vision model's eyes")
         with self.voiceover(
             "The same idea then moved into the latent space itself. <bookmark mark='a'/> VA-VAE aligned an "
