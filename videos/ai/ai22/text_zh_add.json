@@ -437,7 +437,16 @@
     "$20 \\times 20$ pixels": "$20 \\times 20$像素",
     "$40 \\times 40$ pixels": "$40 \\times 40$像素",
     "$80 \\times 80$ pixels": "$80 \\times 80$像素",
-    "$520$ letters, \\ $10$ noisy draws per level; \\ SD3 used $\\alpha = 3$ at $1024^2$ \\ (as published)": "$520$个字母，\\ 每个噪声水平$10$次带噪声的抽样；\\ SD3用的是$\\alpha = 3$，在$1024^2$上 \\ （按已发表的数据）"
+    "$520$ letters, \\ $10$ noisy draws per level; \\ SD3 used $\\alpha = 3$ at $1024^2$ \\ (as published)": "$520$个字母，\\ 每个噪声水平$10$次带噪声的抽样；\\ SD3用的是$\\alpha = 3$，在$1024^2$上 \\ （按已发表的数据）",
+    "$25$ tokens, \\ each one of $128$ codes \\ (schematic numbers)": "$25$个词元，\\ 每个是$128$个码字之一 \\ （数字仅为示意）",
+    "rebuilt: \\ error $0.285$": "重建：\\ 误差$0.285$",
+    "p(x) = \\prod_{k=1}^{25} p(x_k \\mid x_1, \\dots, x_{k-1}, \\text{letter})": "p(x) = \\prod_{k=1}^{25} p(x_k \\mid x_1, \\dots, x_{k-1}, \\text{字母})",
+    "raster order: \\ $25$ passes": "光栅顺序：\\ $25$遍",
+    "MaskGIT: \\ $8$ passes": "MaskGIT：\\ $8$遍",
+    "VAR: \\ $5$ passes": "VAR：\\ $5$遍",
+    "same tokens, \\ same transformer size \\ ($220{,}352$ weights), \\ $1{,}500$ steps, \\ guidance $2$; \\ three seeds": "同样的词元，\\ 同样大小的Transformer \\ （$220{,}352$个权重），\\ $1{,}500$步，\\ 引导$2$；\\ 三个种子",
+    "one transformer, \\ $200{,}000$ weights, \\ $2{,}000$ steps; \\ means of three seeds": "一个Transformer，\\ $200{,}000$个权重，\\ $2{,}000$步；\\ 三个种子的均值",
+    "$300{,}000$ weights, \\ $2{,}000$ training steps, \\ one CPU core": "$300{,}000$个权重，\\ $2{,}000$步训练，\\ 一个CPU核心"
   },
   "patterns": [
     [

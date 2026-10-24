@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import HIST, LETTERS, PART, PATCH, gray_image, load, patch_grid
+from videos.ai.ai22.common import HIST, LETTERS, PART, PATCH, fmt_int, gray_image, load, patch_grid
 
 
 class Hook(VoiceoverScene):
@@ -29,8 +29,8 @@ class Hook(VoiceoverScene):
         grids = VGroup(*[patch_grid(p, 5, stroke_width=1) for p in pics])
         tag = note(r"each letter drawn from noise by a small transformer trained here, \ in $40$ steps").to_edge(DOWN, buff=0.35)
         n_par = int(d["zero_params"])
-        tl = label(rf"${n_par // 1000}$ thousand weights, \ ${int(d['steps']):,}$ training steps, \ one CPU core"
-                   .replace(",", "{,}"), font_size=22, color=GREY_A).next_to(pics, DOWN, buff=0.45)
+        tl = label(rf"${fmt_int(n_par)}$ weights, \ ${fmt_int(d['steps'])}$ training steps, \ one CPU core",
+                   font_size=22, color=GREY_A).next_to(pics, DOWN, buff=0.45)
         with self.voiceover(
             "Every letter here was drawn from pure noise by a small transformer we trained on this computer, asked "
             "for that letter. <bookmark mark='a'/> It sees each picture as a sequence of patches, the way a language "

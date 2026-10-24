@@ -126,8 +126,8 @@ class Unified(VoiceoverScene):
                            font_size=22, color=TXT),
                      label(rf"draws the letter asked for: \ ${100 * da.mean():.0f}\%$", font_size=22, color=PATCH)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, -1.9, 0])
-        hd = note(rf"one transformer, \ ${int(u['params']) // 1000}$ thousand weights, \ ${int(u['steps']):,}$ steps; \ "
-                  rf"means of three seeds".replace(",", "{,}")).to_edge(DOWN, buff=0.3)
+        hd = note(rf"one transformer, \ ${fmt_int(u['params'])}$ weights, \ ${fmt_int(u['steps'])}$ steps; \ "
+                  r"means of three seeds").to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "We built a tiny Transfusion: one transformer, trained on three kinds of sequence, mixed in every batch. "
             "<bookmark mark='a'/> Draw: a style and a letter, then a picture, from noise. Name: a picture, then its "

@@ -206,10 +206,10 @@ class Bias(VoiceoverScene):
             "assumptions in; with a lot, let the model learn them. Every generator in this part is a transformer."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars.base), FadeIn(bars.gnames), FadeIn(yl), FadeIn(leg))
+            self.play(Create(ax), FadeIn(cap), *[Create(l_[1]) for l_ in lines], *[FadeIn(l_[0]) for l_ in lines],
+                      run_time=2.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.15) for g_ in bars.bars for b_ in g_], lag_ratio=0.15),
-                      run_time=2.0)
-            self.play(Create(ax), FadeIn(cap), *[Create(l_[1]) for l_ in lines], *[FadeIn(l_[0]) for l_ in lines],
                       run_time=2.0)
             vo.wait_until("b")
             self.play(Indicate(head, color=PATCH, scale_factor=1.02))
