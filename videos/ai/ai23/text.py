@@ -261,9 +261,8 @@ def learn_unigram(text: str, sizes=(4096, 1024), seed_size=40_000, shrink=0.75, 
                 for i, j, p in arcs:
                     expected[w[i:j]] += c * math.exp(a[i] + p + b[j] - z)
             tot = sum(expected.values())
-            logp = {s: math.log(expected[s] / tot) for s in logp if expected.get(s, 0) > 1e-3 or s in chars}
-            for ch in sorted(chars):
-                logp.setdefault(ch, math.log(1e-9))
+            logp = {s: math.log(max(expected.get(s, 0.0), 1e-6) / tot) for s in logp
+                    if expected.get(s, 0) > 1e-3 or s in chars}
         replay.append((len(logp), ll / n_chars))
         log(f"    unigram: {len(logp)} pieces, {ll / n_chars:.4f} nats per character")
         while targets and len(logp) <= targets[0] * 1.0001:
