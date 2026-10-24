@@ -7,7 +7,7 @@ Results are cached in ``.cache/ai25/<name>.json`` (+ ``.npz``); trained weights 
 ``load(name)``.  Every model is trained here, on the CPU, on one or two torch threads (``AI25_THREADS``), seeded (numpy
 ``default_rng`` and ``torch.manual_seed``, one generator per run).  No multiprocessing.  The sweeps save every run as
 it finishes (``CACHE.partial``), so a killed computation resumes where it stopped; the items that need trained
-weights train them themselves if they are missing.  About two and a half CPU-hours on a busy 4-core machine.
+weights train them themselves if they are missing.  About three and a half CPU-hours on a busy 4-core machine.
 
 Symmetry (physics.py, graphs.py):
     nbody_data  the charged five-body system: 3,000 training, 500 validation and 1,000 test systems, and a few

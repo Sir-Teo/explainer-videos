@@ -19,8 +19,9 @@ real run; this part does the mathematics behind them.
 * **1. Infinitely wide.** A one-layer ReLU net's output over 6,000 random starts tends to a Gaussian of variance
   (x² + 1)/2 as the width grows (excess kurtosis falling to 0; Neal 1994/1996; Lee et al. 2018); five random wide nets as
   samples of a Gaussian process; the tangent kernel defined and gradient flow derived as kernel regression (Jacot,
-  Gabriel & Hongler 2018); measured at widths 30 … 30,000, three seeds: how far the weights and the kernel move, and the
-  trained function against its own linearization, replayed (Lee et al. 2019).
+  Gabriel & Hongler 2018); measured at widths 30 … 30,000, three seeds: how far the weights move (∝ n^−1/2) and the
+  kernel (closer to n^−1, as Dyer & Gur-Ari 2019 derived for its expected change), and the trained function against its
+  own linearization, replayed (Lee et al. 2019).
 * **2. Lazy.** Part 11's character model trained with neural-tangent step sizes at widths 32 … 2,048: its features
   change less and less; Chizat, Oyallon & Bach (2019); the lazy network is a kernel method (Part 6; Part 8's
   over-parametrized fits); a task that needs a feature, y = (w*·x)² − 1 in 32 dimensions from 256 examples, trained in
@@ -63,22 +64,29 @@ real run; this part does the mathematics behind them.
 * **13. Why power laws?** The data-manifold derivation (Sharma & Kaplan 2020), checked with N linear pieces on
   manifolds of dimension 1, 2, 4, 8; the quantization model (Michaud et al. 2023), derived, and its multitask sparse
   parity in small (32 Zipfian subtasks, widths 8 … 512, two seeds): subtasks learned suddenly, one at a time; the
-  average smooth.
+  average smooth; the final loss against the number of subtasks learned, on the theory's curve Σ_{k>n} p_k, and the
+  finite task's tail running out.
 * **14. Emergence, or a mirage?** Wei et al. (2022); Schaeffer, Miranda & Koyejo (2023): p^L; our models on a checkable
-  task (write the next characters exactly), per-character against whole-answer scores; quanta's real cliffs; Du et al.
-  (2024); Snell et al. (2024).
+  task (write the next characters exactly), per-character against whole-answer scores; quanta's real cliffs (every
+  subtask at every width, as a grid); Du et al. (2024); Snell et al. (2024).
 * **15. Grokking.** (a + b) mod 97 from 40% of the table (Power et al. 2022), the run replayed; weight decay swept over
   five values, three seeds; the number vectors' Fourier spectrum lighting up through training, the five key
   frequencies, the circles; the trigonometric circuit and how much of the trained scores it explains (Nanda et al.
-  2023); the tangent kernel's distance from its start, lazy then rich (Kumar et al. 2023).
-* **16. Scaling the answer.** o1 (2024); pass@k on our checkable task over five orders of magnitude of tries; the
-  power law of −log pass@k derived from the hardest problems (Schaeffer et al. 2025) and checked against the measured
-  tail; tries against size; reinforcement learning's sigmoid (Khatri et al. 2025); Grok 4 (2025).
+  2023); the tangent kernel's distance from its start (Fort et al. 2020), with and without weight decay, against Kumar
+  et al.'s lazy-to-rich account (2023).
+* **16. Scaling the answer.** o1 (2024; its two scaling plots drawn as a labelled schematic); pass@k on our checkable
+  task over five orders of magnitude of tries; the power law of −log pass@k derived from the hardest problems
+  (Schaeffer et al. 2025) and checked against the measured tail; tries against size, and what the tries cost in
+  operations; reinforcement learning's sigmoid (Khatri et al. 2025); Grok 4 (2025).
 * **17. Has pretraining stalled?** The debate, 2024–26 (Sutskever; GPT-4.5; Grok 4; Epoch AI on GPT-5; Gemini 3;
   Pichai on Gemini 4; Microsoft's MAI-Base-2); our law fitted on the cheapest runs and predicting the rest; the
   slowness of the curve; efficiency (Ho et al. 2024; the densing law, Xiao et al. 2024).
 * **Recap** in eight pictures from the part's own results, where it comes back, six problems, Part 13's teaser,
   references.
+
+Every chapter follows the series' lecture standard: its card asks the motivating question; the derivations run
+step by step with a reason in the margin; a pause-and-predict card comes before each chapter's main experiment;
+the computed check answers it; and a takeaway card closes the chapter with a link forward.
 
 Run from the repo root:
 
@@ -134,30 +142,31 @@ Books: D. A. Roberts, S. Yaida & B. Hanin, *The Principles of Deep Learning Theo
 *Understanding Deep Learning* (2023).
 
 Papers: Neal (1996); Lee et al., *Deep Neural Networks as Gaussian Processes* (2018); Jacot, Gabriel & Hongler (2018);
-Lee et al., *Wide Neural Networks of Any Depth Evolve as Linear Models* (2019); Chizat, Oyallon & Bach, *On Lazy
-Training* (2019); Yang & Hu, *Tensor Programs IV* (2021); Yang et al., *Tensor Programs V* (2022); Yang, Yu, Zhu &
-Hayou, *Tensor Programs VI* (2023); Bordelon et al., *Depthwise Hyperparameter Transfer in Residual Networks* (2023);
-Everett et al., *Scaling Exponents Across Parameterizations and Optimizers* (2024); Dey et al., *Don't be lazy:
+Lee et al., *Wide Neural Networks of Any Depth Evolve as Linear Models* (2019); Dyer & Gur-Ari, *Asymptotics of Wide
+Networks from Feynman Diagrams* (2019); Fort et al., *Deep Learning versus Kernel Learning* (2020); Chizat, Oyallon &
+Bach, *On Lazy Training* (2019); Yang & Hu, *Tensor Programs IV* (2021); Yang et al., *Tensor Programs V* (2022); Yang,
+Yu, Zhu & Hayou, *Tensor Programs VI* (2023); Bordelon et al., *Depthwise Hyperparameter Transfer in Residual Networks*
+(2023); Everett et al., *Scaling Exponents Across Parameterizations and Optimizers* (2024); Dey et al., *Don't be lazy:
 CompleteP* (2025); McCandlish et al., *An Empirical Model of Large-Batch Training* (2018); Zhang et al., *How Does
-Critical Batch Size Scale in Pre-training?* (2024); Bergsma et al., *Power Lines* (2025); Banko & Brill (2001);
-Hestness et al., *Deep Learning Scaling is Predictable, Empirically* (2017); Kaplan et al., *Scaling Laws for Neural
-Language Models* (2020); Hoffmann et al., *Training Compute-Optimal Large Language Models* (2022); Besiroglu et al.,
-*Chinchilla Scaling: A Replication Attempt* (2024); Pearce & Song, *Reconciling Kaplan and Chinchilla Scaling Laws*
-(2024); Porian et al., *Resolving Discrepancies in Compute-Optimal Scaling of Language Models* (2024); Hägele et al.,
-*Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations* (2024); Sardana et al., *Beyond
-Chinchilla-Optimal* (2023); Muennighoff et al., *Scaling Data-Constrained Language Models* (2023); Villalobos et al.,
-*Will We Run Out of Data?* (2024); Clark et al., *Unified Scaling Laws for Routed Language Models* (2022); Krajewski et
-al., *Scaling Laws for Fine-Grained Mixture of Experts* (2024); Kumar et al., *Scaling Laws for Precision* (2024);
-Sharma & Kaplan, *A Neural Scaling Law from the Dimension of the Data Manifold* (2020); Michaud et al., *The
-Quantization Model of Neural Scaling* (2023); Wei et al., *Emergent Abilities of Large Language Models* (2022);
-Schaeffer, Miranda & Koyejo, *Are Emergent Abilities of Large Language Models a Mirage?* (2023); Du et al.,
-*Understanding Emergent Abilities from the Loss Perspective* (2024); Snell et al., *Predicting Emergent Capabilities by
-Finetuning* (2024); Power et al., *Grokking* (2022); Nanda et al., *Progress Measures for Grokking via Mechanistic
-Interpretability* (2023); Kumar, Bordelon, Gershman & Pehlevan, *Grokking as the Transition from Lazy to Rich Training
-Dynamics* (2023); Brown et al., *Large Language Monkeys* (2024); Schaeffer et al., *How Do Large Language Monkeys Get
-Their Power (Laws)?* (2025); Khatri et al., *The Art of Scaling Reinforcement Learning Compute for LLMs* (2025); Ho et
-al., *Algorithmic Progress in Language Models* (2024); Xiao et al., *Densing Law of LLMs* (2024); DeepSeek-AI,
-DeepSeek-V3 (2024); Qwen Team, Qwen3 (2025); Meta, Llama 3 (2024), Llama 4 (2025).
+Critical Batch Size Scale in Pre-training?* (2024); Bergsma et al., *Power Lines* (2025); Banko & Brill (2001); Hestness
+et al., *Deep Learning Scaling is Predictable, Empirically* (2017); Kaplan et al., *Scaling Laws for Neural Language
+Models* (2020); Hoffmann et al., *Training Compute-Optimal Large Language Models* (2022); Besiroglu et al., *Chinchilla
+Scaling: A Replication Attempt* (2024); Pearce & Song, *Reconciling Kaplan and Chinchilla Scaling Laws* (2024); Porian
+et al., *Resolving Discrepancies in Compute-Optimal Scaling of Language Models* (2024); Hägele et al., *Scaling Laws and
+Compute-Optimal Training Beyond Fixed Training Durations* (2024); Sardana et al., *Beyond Chinchilla-Optimal* (2023);
+Muennighoff et al., *Scaling Data-Constrained Language Models* (2023); Villalobos et al., *Will We Run Out of Data?*
+(2024); Clark et al., *Unified Scaling Laws for Routed Language Models* (2022); Krajewski et al., *Scaling Laws for
+Fine-Grained Mixture of Experts* (2024); Kumar et al., *Scaling Laws for Precision* (2024); Sharma & Kaplan, *A Neural
+Scaling Law from the Dimension of the Data Manifold* (2020); Michaud et al., *The Quantization Model of Neural Scaling*
+(2023); Wei et al., *Emergent Abilities of Large Language Models* (2022); Schaeffer, Miranda & Koyejo, *Are Emergent
+Abilities of Large Language Models a Mirage?* (2023); Du et al., *Understanding Emergent Abilities from the Loss
+Perspective* (2024); Snell et al., *Predicting Emergent Capabilities by Finetuning* (2024); Power et al., *Grokking*
+(2022); Nanda et al., *Progress Measures for Grokking via Mechanistic Interpretability* (2023); Kumar, Bordelon,
+Gershman & Pehlevan, *Grokking as the Transition from Lazy to Rich Training Dynamics* (2023); Brown et al., *Large
+Language Monkeys* (2024); Schaeffer et al., *How Do Large Language Monkeys Get Their Power (Laws)?* (2025); Khatri et
+al., *The Art of Scaling Reinforcement Learning Compute for LLMs* (2025); Ho et al., *Algorithmic Progress in Language
+Models* (2024); Xiao et al., *Densing Law of LLMs* (2024); DeepSeek-AI, DeepSeek-V3 (2024); Qwen Team, Qwen3 (2025);
+Meta, Llama 3 (2024), Llama 4 (2025).
 
 ## Problems, with solutions
 

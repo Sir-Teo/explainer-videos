@@ -5,15 +5,17 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, NCOL, PART, TT, load, width_ramp
+from videos.ai.ai12.common import HIST, NCOL, PART, TT, load, predict_card, takeaway_card, width_ramp
 
 
 class TestTime(VoiceoverScene):
     def construct(self):
         self.card()
         self.tries()
+        self.predict()
         self.why()
         self.trade()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(16, r"Scaling the answer", r"What does more thinking buy, at answer time?", lit=(2024,), part=PART)
@@ -245,3 +247,31 @@ class TestTime(VoiceoverScene):
             self.play(FadeIn(cards[1], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"For one problem, \ more tries help exponentially fast. \ Averaged over a whole "
+                          r"benchmark, \ will the failures also fall exponentially?")
+        with self.voiceover(
+            "Pause and predict. For one problem, more tries help exponentially fast. Averaged over a whole benchmark, "
+            "will the failures also fall exponentially?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Tries scale too",
+                           r"With a checker, \ tries trade compute at answer time for model size; \ the hardest "
+                           r"problems make the gains a slow power law.",
+                           r"next: \ models that think before they answer, \ Part 28")
+        with self.voiceover(
+            "The takeaway: with a way to check answers, tries trade compute at answer time for model size, and the "
+            "hardest problems make the gains a slow power law. Part twenty-eight builds models that think before they "
+            "answer."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

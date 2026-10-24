@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, FIT, HIST, NCOL, PART, SP, load
+from videos.ai.ai12.common import DCOL, FIT, HIST, NCOL, PART, SP, load, predict_card, takeaway_card
 
 MOE = C.CONTEXT
 BIT_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.MODEL_Q, C.SURPRISE]  # 8, 6, 5, 4, 3 bits
@@ -15,7 +15,9 @@ class Experts(VoiceoverScene):
     def construct(self):
         self.card()
         self.experts()
+        self.predict()
         self.bits()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(12, r"Experts and bits", r"Do parameters need compute? \ Do they need precision?", part=PART)
@@ -196,3 +198,31 @@ class Experts(VoiceoverScene):
             self.play(FadeIn(cards, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Round every weight to four bits after training. \ Which suffers more: \ a model that "
+                          r"read a little, \ or the same model after reading much more?")
+        with self.voiceover(
+            "Pause and predict. Round every weight to four bits after training. Which suffers more: a model that read "
+            "a little, or the same model after reading much more?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Parameters, \ compute and bits are separate budgets",
+                           r"Experts add parameters without adding compute; \ fewer bits save memory, \ at a price "
+                           r"that grows with how much the model has read.",
+                           r"next: \ why any of these laws are power laws")
+        with self.voiceover(
+            "The takeaway: parameters, compute and bits can be traded separately. Experts add parameters without "
+            "adding compute; fewer bits save memory, at a price that grows with how much the model has read. Next: "
+            "why any of these laws should be power laws."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

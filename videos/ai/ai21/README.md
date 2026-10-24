@@ -54,7 +54,10 @@ drawn from the system's fonts; text is Part 1's thirty novels, through Part 13's
   matching distillation (Yin et al. 2024a, b): the KL gradient as a difference of scores, derived and trained; all
   three at one step, three seeds.
 * **13. One step from scratch.** MeanFlow (Geng et al. 2025): the average velocity and its identity, derived; shortcut
-  models (Frans et al. 2025); both replayed; every one-step model of the part on one board, three seeds.
+  models (Frans et al. 2024); both replayed; every one-step model of the part on one board, three seeds. Our MeanFlow
+  uses a plain squared error (the paper's adaptive weighting aims at a weighted median of the targets, and on these
+  wide 2-D targets learned a biased field), and both one-step networks use slower time features than the part's
+  other networks, because MeanFlow differentiates the network along time (see `fewstep.py`).
 * **14. Guidance.** Conditioning with label dropout (replayed); classifier guidance via Bayes (Dhariwal & Nichol
   2021); classifier-free guidance (Ho & Salimans 2022); on-target rate, precision and recall swept over w for
   classifier-free guidance, classifier guidance (a noisy classifier we train) and autoguidance (Karras et al. 2024,
@@ -107,9 +110,9 @@ Common diffusion noise schedules and sample steps are flawed (2024); Karras, Ait
 et al., Guiding a diffusion model with a bad version of itself (2024); Lu et al., DPM-Solver (2022) and DPM-Solver++
 (2022); Benamou & Brenier (2000); Lipman et al., Flow Matching (2023); Liu, Gong & Liu, Rectified Flow (2023); Albergo &
 Vanden-Eijnden (2023); Albergo, Boffi & Vanden-Eijnden, Stochastic Interpolants (2023); Tong et al. (2024);
-Pooladian et al. (2023); Liu et al., InstaFlow (2024); Salimans & Ho, Progressive Distillation (2022); Song, Dhariwal,
+Pooladian et al. (2023); Liu et al., InstaFlow (2023); Salimans & Ho, Progressive Distillation (2022); Song, Dhariwal,
 Chen & Sutskever, Consistency Models (2023); Lu & Song, sCM (2025); Yin et al., DMD (2024) and DMD2 (2024); Geng,
-Deng, Bai, Kolter & He, MeanFlow (2025); Frans, Hafner, Levine & Abbeel, Shortcut Models (2025); Dhariwal & Nichol,
+Deng, Bai, Kolter & He, MeanFlow (2025); Frans, Hafner, Levine & Abbeel, Shortcut Models (2024); Dhariwal & Nichol,
 Diffusion Models Beat GANs (2021); Ho & Salimans, Classifier-Free Guidance (2022); Rombach et al., Latent Diffusion
 (2022); Peebles & Xie, DiT (2023); Esser et al., SD3 (2024); Black Forest Labs, FLUX.1 model cards (2024); Google
 DeepMind, Veo 3 model card; Austin et al., D3PM (2021); Uria, Murray & Larochelle (2014); Hoogeboom et al.,

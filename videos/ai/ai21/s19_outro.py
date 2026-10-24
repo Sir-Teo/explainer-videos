@@ -36,8 +36,8 @@ class Outro(VoiceoverScene):
                                              stroke_width=1.3)), r"a learned score", SCORE))
         s = load("sde")
         pn3 = Panel(TW, xlim=(-3.2, 3.4), ylim=(-3.0, 2.6), frame=False)
-        out.append((VGroup(pn3, pn3.paths(np.asarray(s["sde_paths"])[:, ::2], DDPM_C, stroke_width=1.0, opacity=0.7),
-                           pn3.paths(np.asarray(s["ode_paths"])[:, ::2], DDIM_C, stroke_width=1.0, opacity=0.7)),
+        out.append((VGroup(pn3, pn3.paths(np.asarray(s["sde_paths"])[:, :6], DDPM_C, stroke_width=0.9, opacity=0.55),
+                           pn3.paths(np.asarray(s["ode_paths"])[:, :24], DDIM_C, stroke_width=1.6, opacity=0.9)),
                     r"two ways back: \ SDE and ODE", DDIM_C))
         so = load("solvers")
         ax = CornerAxes(x_range=[0, 1.6], y_range=[-3, 0.2], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
@@ -179,7 +179,7 @@ class Outro(VoiceoverScene):
             r"Benamou \& Brenier (2000); \ Lipman et al.\ (2023); \ Liu, Gong \& Liu (2023); \ Albergo \& Vanden-Eijnden "
             r"(2023); \ Albergo, Boffi \& Vanden-Eijnden (2023); \ Tong et al.\ (2024); \ Pooladian et al.\ (2023)",
             r"Salimans \& Ho (2022); \ Song et al.\ (2023); \ Lu \& Song (2025); \ Yin et al.\ (2024a, b); \ Geng et al.\ (2025); \ "
-            r"Frans et al.\ (2025); \ Liu et al.\ (2024)",
+            r"Frans et al.\ (2024); \ Liu et al.\ (2024)",
             r"Dhariwal \& Nichol (2021); \ Ho \& Salimans (2022); \ Rombach et al.\ (2022); \ Peebles \& Xie (2023); \ Esser et "
             r"al.\ (2024)",
             r"Austin et al.\ (2021); \ Uria et al.\ (2014); \ Hoogeboom et al.\ (2022); \ Lou, Meng \& Ermon (2024); \ Sahoo et "

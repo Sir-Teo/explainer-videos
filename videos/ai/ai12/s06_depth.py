@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DEPTH_COLORS, HIST, MUP, PART, SP, band, load, table_card
+from videos.ai.ai12.common import DEPTH_COLORS, HIST, MUP, PART, SP, band, load, predict_card, table_card, takeaway_card
 
 ALPHA_COL = {0.0: SP, 0.5: C.BITS, 1.0: MUP}
 SPOKEN = {0.0: "no scaling at all", 0.5: "one over root L", 1.0: "CompleteP"}
@@ -16,8 +16,10 @@ class Depth(VoiceoverScene):
     def construct(self):
         self.card()
         self.stream()
+        self.predict()
         self.sweeps()
         self.payoff()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(5, r"Deeper and deeper", r"And when the network gets deeper, not wider?", part=PART)
@@ -114,6 +116,9 @@ class Depth(VoiceoverScene):
         yn = label(rf"held-out bits after ${int(d['steps'])}$ steps, \ against the learning rate \ (mean of two seeds; "
                    rf"width ${int(d['width'])}$)", font_size=20, color=GREY_A).next_to(key, DOWN, buff=0.12)
         dr = {float(k): v for k, v in d["drift"].items()}
+        b0 = [lrs[int(np.argmin(np.where(np.isfinite(np.asarray(d[f"a0.0_d{dd}"])), np.asarray(d[f"a0.0_d{dd}"]), 9.0).mean(0)))]
+              for dd in (depths[0], depths[-1])]
+        dir0 = "lower" if b0[1] < b0[0] - 1e-9 else ("higher" if b0[1] > b0[0] + 1e-9 else "the same")
         order = sorted(alphas, key=lambda a: dr[a])
         best_a = order[0]
         said1 = (
@@ -126,7 +131,8 @@ class Depth(VoiceoverScene):
             f"Our character model again, made deep: {', '.join(str(v) for v in depths[:-1])} and {depths[-1]} "
             "residual blocks, each parametrization swept over nine learning rates, two seeds each. "
             "<bookmark mark='a'/> With no depth scaling, "
-            f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest. "
+            f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest, and the "
+            f"deepest model's is {dir0}. "
             f"<bookmark mark='b'/> With one over root L, {dr[0.5]:.1f}. <bookmark mark='c'/> With CompleteP's "
             f"one over L, {dr[1.0]:.1f}. "
             + said1
@@ -195,3 +201,30 @@ class Depth(VoiceoverScene):
             self.play(FadeIn(hc, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"With no scaling, \ every new block adds to the residual stream. \ As the network gets "
+                          r"deeper, \ will its best learning rate rise or fall?")
+        with self.voiceover(
+            "Pause and predict. With no scaling, every new block adds to the residual stream. As the network gets "
+            "deeper, will its best learning rate rise, or fall?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Scale the residual branches with depth",
+                           r"How each branch is scaled decides whether a learning rate carries across depth, \ and "
+                           r"whether deep blocks still learn features: \ $1/L$ does both \ (CompleteP).",
+                           r"next: \ the third knob, \ the batch")
+        with self.voiceover(
+            "The takeaway: how the residual branches are scaled decides whether a learning rate carries across depth, "
+            "and whether deep blocks still learn features. Next, the third knob: the batch."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

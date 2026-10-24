@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, LAZY, PART, RICH, SP, load
+from videos.ai.ai12.common import HIST, LAZY, PART, RICH, SP, load, predict_card, takeaway_card
 
 TR, TE = GREY_B, C.BITS
 
@@ -15,9 +15,11 @@ class Grok(VoiceoverScene):
         self.card()
         self.task()
         self.curves()
+        self.predict()
         self.decay()
         self.fourier()
         self.circuit()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(15, r"Grokking", r"Can understanding arrive long after memorizing?", lit=(2022,), part=PART)
@@ -47,7 +49,8 @@ class Grok(VoiceoverScene):
         ex.arrange(DOWN, buff=0.25).move_to([3.4, 1.6, 0])
         sh = label(rf"the network sees ${int(g['n_train']):,}$ entries ($40\%$) \\ and must fill in the other "
                    rf"${int(g['n_test']):,}$".replace(",", "{,}"), font_size=26, color=C.TRUE_P).next_to(ex, DOWN, buff=0.5)
-        net = label(rf"each number a learned vector of ${int(g['dim'])}$; \ ${int(g['hid'])}$ ReLU units; \ a score per "
+        net = label(rf"each number a learned vector of ${int(g['dim'])}$; \ ${int(g['hid'])}$ ReLU units; \ a score "
+                    r"per "
                     r"answer", font_size=22, color=GREY_A).next_to(sh, DOWN, buff=0.4)
         cite_ = cite(r"A.~Power, Y.~Burda, H.~Edwards, I.~Babuschkin \& V.~Misra, \textit{Grokking} (2022)", corner=DR)
         assert (50 + 60) % P == 13
@@ -198,7 +201,8 @@ class Grok(VoiceoverScene):
         )
         with self.voiceover(
             "Is weight decay really what drives it? Sweep it, from none to three, three seeds each. "
-            f"<bookmark mark='a'/> Memorizing takes between {np.nanmin(sm):,.0f} and {np.nanmax(sm):,.0f} steps every time. "
+            f"<bookmark mark='a'/> Memorizing takes between {np.nanmin(sm):,.0f} and {np.nanmax(sm):,.0f} steps every "
+            "time. "
             "<bookmark mark='b'/> Generalizing does not. "
             + said2
             + "<bookmark mark='c'/> "
@@ -315,25 +319,50 @@ class Grok(VoiceoverScene):
         fit = label(rf"the trained network's scores, \ fitted by these five waves alone: \ ${100 * r2:.0f}\%$ of their "
                     r"variation", font_size=24, color=C.BITS).to_edge(DOWN, buff=1.05)
         kd, kds = np.asarray(g["kd"], float), np.asarray(g["kd_steps"], float)
-        kdn = np.asarray(g["kd_nowd"], float)
-        ax = CornerAxes(x_range=[0, math.log10(kds.max()) + 0.1, 1], y_range=[0, 1, 0.5], x_length=3.6, y_length=1.3, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.95, 0])
+        kdn = np.asarray(g["kd_nowd"], float)[:len(kds)]
+        ytop = max(0.02, math.ceil(max(kd.max(), kdn.max()) * 1.1 * 50) / 50)
+        ax = CornerAxes(x_range=[0, math.log10(kds.max()) + 0.1, 1], y_range=[0, ytop, ytop / 2], x_length=3.6, y_length=1.3,
+                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.95, 0])
         kc = curve(ax, np.log10(kds), kd, RICH, 3)
-        kcn = DashedVMobject(curve(ax, np.log10(kds), kdn[:len(kds)], C.SURPRISE, 2.5), num_dashes=30)
+        kcn = DashedVMobject(curve(ax, np.log10(kds), kdn, C.SURPRISE, 2.5), num_dashes=30)
         t_te = int(g["t_test_wd"])
-        tm = DashedLine(ax.c2p(math.log10(t_te), 0), ax.c2p(math.log10(t_te), 1), color=TE, stroke_width=1.5)
-        kl = label(r"how far the tangent kernel has moved \ (log steps; \ yellow: \ generalized)", font_size=18, color=GREY_A)
+        tm = DashedLine(ax.c2p(math.log10(t_te), 0), ax.c2p(math.log10(t_te), ytop), color=TE, stroke_width=1.5)
+        kl = label(r"how far the tangent kernel has moved \\ (against log steps; \ yellow line: \ generalized)",
+                   font_size=18, color=GREY_A)
         kl.next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
+        ky = VGroup(MathTex(f"{ytop:.2f}", font_size=16, color=GREY_B).next_to(ax.c2p(0, ytop), LEFT, buff=0.06),
+                    MathTex("0", font_size=16, color=GREY_B).next_to(ax.c2p(0, 0), LEFT, buff=0.06))
+        kg = VGroup(label(r"solid: \ weight decay $1$", font_size=18, color=RICH),
+                    label(r"dashed: \ none", font_size=18, color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT, buff=0.05)
+        kg.next_to(ax, RIGHT, buff=0.15).align_to(ax, UP)
         i_te = int(np.searchsorted(kds, t_te))
         before = float(kd[max(0, min(i_te, len(kd)) // 3)])
         after = float(kd[-1])
-        moved_late = after > 2 * before
+        at_te = float(kd[min(i_te, len(kd) - 1)])
+        moved_late = after > 2 * before and after > 0.1
+        early = at_te > 0.6 * after
+        nowd_far = kdn[-1] > 1.5 * after
         cite_ = cite(r"N.~Nanda et al.\ (2023); \ T.~Kumar, B.~Bordelon, S.~Gershman \& C.~Pehlevan (2023)", corner=DR)
-        said5 = (
-            f"The tangent kernel barely moves while the network memorizes, then travels far as it generalizes, "
-            f"to a distance of {after:.2f}. " if moved_late else
-            f"The tangent kernel moves steadily through training, to a distance of {after:.2f}. "
-        )
+        if moved_late:
+            said5 = (
+                f"Its tangent kernel barely moves while it memorizes, then travels far as it generalizes, to a "
+                "distance "
+                f"of {after:.2f}. Tanishq Kumar and colleagues argued in 2023 that grokking is exactly this: a network "
+                "that first fits lazily, with its starting kernel, then slowly learns the features that generalize."
+            )
+        elif early and nowd_far:
+            said5 = (
+                f"Measure how far its tangent kernel moves: only to a distance of {after:.2f}, most of it before the "
+                f"jump. Without weight decay it moves further, to {kdn[-1]:.2f}, and still never generalizes. Tanishq "
+                "Kumar and colleagues argued in 2023 that grokking can be a slow move from lazy to rich training; in "
+                "our network the kernel's movement alone does not mark the moment, and the weight decay does the work."
+            )
+        else:
+            said5 = (
+                f"Its tangent kernel moves steadily through training, to a distance of {after:.2f}. Tanishq Kumar and "
+                "colleagues argued in 2023 that grokking can be a slow move from lazy to rich training, away from the "
+                "starting kernel."
+            )
         with self.voiceover(
             "Each number becomes a point on a circle, an angle. <bookmark mark='a'/> Adding two numbers on a clock "
             "is adding two angles, and the cosine of a sum is a sum of products of cosines and sines, which the ReLU "
@@ -341,10 +370,8 @@ class Grok(VoiceoverScene):
             f"c equals a plus b. Fit the trained network's scores with the five waves alone: they account for "
             f"{100 * r2:.0f} percent of the variation. Neel Nanda and colleagues worked this circuit out in 2023, "
             "one of the first complete explanations of what a trained network computes; part thirty takes the idea "
-            "to real models. <bookmark mark='c'/> And chapter two's lazy regime returns. "
+            "to real models. <bookmark mark='c'/> And chapter two's question returns: is this network lazy? "
             + said5
-            + "Tanishq Kumar and colleagues argued in 2023 that grokking is exactly this: a network that first fits "
-            "lazily, with its starting kernel, then slowly learns the features that generalize."
         ) as vo:
             self.play(FadeIn(pts), FadeIn(nums), FadeIn(cl), FadeIn(cite_))
             step(0)
@@ -354,6 +381,34 @@ class Grok(VoiceoverScene):
             step(2)
             self.play(FadeIn(fit))
             vo.wait_until("c")
-            self.play(Create(ax), FadeIn(kl), Create(kc), Create(kcn), Create(tm))
+            self.play(Create(ax), FadeIn(kl), FadeIn(ky), FadeIn(kg), Create(kc), Create(kcn), Create(tm))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"With more weight decay, \ will understanding come sooner, \ later, \ or not at all? \ "
+                          r"And with none?")
+        with self.voiceover(
+            "Pause and predict. With more weight decay, will understanding come sooner, later, or not at all? And "
+            "with none?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Memorize first, \ understand later",
+                           r"A network can fit its data long before it finds the rule; \ weight decay pushes it "
+                           r"toward the rule, \ here a small trigonometric circuit.",
+                           r"next: \ circuits inside real models, \ Part 30")
+        with self.voiceover(
+            "The takeaway: a network can fit its data long before it finds the rule, and weight decay pushes it "
+            "toward the rule, which here is a small trigonometric circuit. Part thirty looks for circuits like it "
+            "inside real models."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))
