@@ -174,10 +174,14 @@ class Tweedie(VoiceoverScene):
             f"is to have produced the noisy one. <bookmark mark='c'/> The estimates land within {worst_mc:.3f} of the "
             f"formula, on average. <bookmark mark='d'/> {net_says}"
         ) as vo:
+            left = VGroup(g, cm, cd, l1)
+            c0 = left.get_center()
+            left.scale(1.45).move_to([0, 0.2, 0])  # first alone in the middle, then aside for the 2D check
             self.play(FadeIn(g), Create(cm), FadeIn(l1[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in cd], lag_ratio=0.02), FadeIn(l1[1:]))
             vo.wait_until("b")
+            self.play(left.animate.scale(1 / 1.45).move_to(c0), run_time=0.9)
             self.play(FadeIn(pn), FadeIn(pl), FadeIn(qd))
             self.play(Create(lines), FadeIn(md), run_time=1.2)
             vo.wait_until("c")
@@ -209,16 +213,16 @@ class Tweedie(VoiceoverScene):
             "jump from pure noise to a sample in one step: the best jump lands on a blur. Samplers take many small "
             "steps instead, re-guessing as the noise falls: chapters five and six."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), *[FadeIn(VGroup(p_[0], p_[2])) for p_ in panels])  # frames and noise levels first
             for i, pnl in enumerate(panels):
                 if i == 0:
-                    self.play(FadeIn(pnl))
+                    self.play(FadeIn(pnl[1]), FadeIn(pnl[3]))
                     vo.wait_until("a")
                 elif i == 1:
                     vo.wait_until("b")
-                    self.play(FadeIn(pnl))
+                    self.play(FadeIn(pnl[1]), FadeIn(pnl[3]))
                 else:
-                    self.play(FadeIn(pnl))
+                    self.play(FadeIn(pnl[1]), FadeIn(pnl[3]))
             vo.wait_until("c")
             self.play(FadeIn(ta, shift=UP * 0.2))
         self.wait(0.3)

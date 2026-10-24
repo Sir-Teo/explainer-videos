@@ -85,9 +85,17 @@ def _pmap(fn, jobs: list) -> list:
         return list(ex.map(fn, *zip(*jobs)))
 
 
+def _nearest(values, v) -> int:
+    """The index of ``v`` in ``values`` (or of the nearest value, for a shrunken test run)."""
+    values = list(values)
+    return values.index(v) if v in values else int(np.argmin([abs(float(x) - v) for x in values]))
+
+
 def loglog_slope(x, y, lo=None) -> float:
     x, y = np.asarray(x, float), np.asarray(y, float)
-    keep = np.isfinite(y) & (y > 0) & (x >= (lo or -np.inf))
+    keep = np.isfinite(x) & np.isfinite(y) & (y > 0) & (x > 0) & (x >= (lo or -np.inf))
+    if keep.sum() < 2:
+        return float("nan")
     return float(np.polyfit(np.log(x[keep]), np.log(y[keep]), 1)[0])
 
 
@@ -667,6 +675,8 @@ def isoflop_points(s, C, N=None):
 
 def parabola_min(pts):
     """The vertex of a parabola in log N through the lowest point and its neighbours (Chinchilla's approach 2)."""
+    if len(pts) < 3:
+        return float("nan"), float("nan")
     lN, Lv = np.log10(pts[:, 0]), pts[:, 2]
     i = int(np.argmin(Lv))
     sl = slice(max(0, i - 2), min(len(Lv), i + 3))
@@ -705,7 +715,8 @@ def compute_chinchilla():
         nopt2.append(n_)
         lopt2.append(l_)
     out["nopt2"], out["lopt2"] = np.array(nopt2), np.array(lopt2)
-    out["a2"] = float(np.polyfit(np.log(BUDGETS), np.log(nopt2), 1)[0])
+    ok2 = np.isfinite(out["nopt2"])
+    out["a2"] = loglog_slope(np.array(BUDGETS)[ok2], out["nopt2"][ok2])
     out["tpp2"] = [C / 6 / n / n for C, n in zip(BUDGETS, nopt2)]
     # approach 1: the envelope of all endpoints by compute; the width that is lowest at each compute
     Cs = np.geomspace(3e10, 3e13, 25)
@@ -722,7 +733,7 @@ def compute_chinchilla():
     env_n, env_l = np.array(env_n), np.array(env_l)
     ok = np.isfinite(env_n)
     out["env_C"], out["env_N"], out["env_L"] = Cs, env_n, env_l
-    out["a1"] = float(np.polyfit(np.log(Cs[ok]), np.log(env_n[ok]), 1)[0])
+    out["a1"] = loglog_slope(Cs[ok], env_n[ok])
     out["env_slope"] = loglog_slope(Cs[ok], env_l[ok] - E)  # the frontier: L - E ~ C^slope
     # one variable at a time, Kaplan's way: L(N) at the longest training, L(D) for the widest model trained that long
     jmax = len(D) - 1
@@ -746,14 +757,14 @@ def compute_chinchilla():
     for C in BUDGETS:
         pts = isoflop_points(s, C)  # the same runs, the same budgets in operations
         n_, _ = parabola_min(pts)
-        i = int(np.argmin(np.abs(N - n_)))
-        frac = np.interp(math.log(n_), np.log(N), np.log(Nne))
-        nk.append(math.exp(frac))
+        nk.append(math.exp(np.interp(math.log(n_), np.log(N), np.log(Nne))) if np.isfinite(n_) else float("nan"))
     out["nopt_kaplan"] = np.array(nk)
-    out["a_kaplan_count"] = float(np.polyfit(np.log(BUDGETS), np.log(nk), 1)[0])
+    out["a_kaplan_count"] = loglog_slope(np.array(BUDGETS)[ok2], out["nopt_kaplan"][ok2])
     out["emb_share"] = [float(1 - a / b) for a, b in zip(Nne, N)]
     # extrapolation: fit only the runs that cost at most 10^12 operations, predict the rest
-    cheap = 6 * Np * Dp <= 1e12
+    cut = 1e12 if (6 * Np * Dp > 1e12).sum() >= 5 else float(np.median(6 * Np * Dp))  # (the median: a test run)
+    cheap = 6 * Np * Dp <= cut
+    out["extrap_cut"] = cut
     pc = fit_lnd(Np[cheap], Dp[cheap], Lp[cheap])
     pred = lnd(pc, Np[~cheap], Dp[~cheap])
     out["cheap"] = dict(E=pc[0], A=pc[1], alpha=pc[2], B=pc[3], beta=pc[4], n=int(cheap.sum()))
@@ -763,7 +774,7 @@ def compute_chinchilla():
     out["extrap_pts"] = np.stack([Np[~cheap], Dp[~cheap], Lp[~cheap], pred], 1)
     out["extrap_bias"] = float(np.mean(pred - Lp[~cheap]))
     nC, dC = optimum(pc, 1e13)
-    out["extrap_opt"] = dict(N=float(nC), D=float(dC), pred=float(lnd(pc, nC, dC)), meas=float(lopt2[-1]))
+    out["extrap_opt"] = dict(N=float(nC), D=float(dC), pred=float(lnd(pc, nC, dC)), meas=float(np.array(lopt2)[ok2][-1]))
     # over-training priced by the fit: a model k times the optimal size reaching the optimum's loss
     C0 = 1e13
     n0, d0 = optimum(p, C0)
@@ -791,7 +802,7 @@ def compute_chinchilla():
     out.update(inf_T=Ts, inf_tpp=np.array(best_tpp), inf_N=np.array(best_N), inf_saving=np.array(total_saving))
     # measured: endpoints of the sweep that land within 0.01 bits of the 10^12 optimum, smaller and longer-trained
     C1 = 1e12
-    lo = float(np.interp(math.log(C1), np.log(BUDGETS), lopt2))
+    lo = float(np.interp(math.log(C1), np.log(np.array(BUDGETS)[ok2]), np.array(lopt2)[ok2]))
     match = []
     for i in range(len(N)):
         row = Lb[i]
@@ -846,7 +857,7 @@ def compute_repeat():
     for u in REPEAT_UNIQUE:
         out[f"curve{u}"] = np.array(part[f"{u}_0"]["curve"])
     # fresh data at the same width, from the sweep: L(D) for one pass over D distinct characters
-    i = list(s["widths"]).index(REPEAT_W)
+    i = _nearest(s["widths"], REPEAT_W)
     fresh = np.asarray(s["bits"])[i]
     lD = np.log2(np.asarray(s["D"]))
     out["fresh"], out["fresh_D"] = fresh, np.asarray(s["D"])
@@ -903,7 +914,7 @@ def compute_moe():
     out["total"] = np.array([part[f"{E}_0"]["total"] for E in MOE_E], float)
     out["active"] = np.array([part[f"{E}_0"]["active"] for E in MOE_E], float)
     # dense models at the same training length, from the sweep: the dense size that matches each mixture's loss
-    j = list(s["ks"]).index(MOE_K)
+    j = _nearest(s["ks"], MOE_K)
     dense = np.asarray(s["bits"])[:, j]
     Nd = np.asarray(s["N"])
     out["dense_N"], out["dense_L"] = Nd, dense
@@ -933,7 +944,7 @@ def compute_precision():
     coef, *_ = np.linalg.lstsq(A, R[:, 3], rcond=None)
     out.update(logC=float(coef[0]), gD=float(coef[1]), gN=float(coef[2]), gpost=float(1 / coef[3]), n_fit=len(R))
     # at fixed width (256), how the 4-bit penalty grows with training length
-    i = list(s["widths"]).index(256)
+    i = _nearest(s["widths"], 256)
     out["d4_w256"] = delta[i, :, PTQ_BITS.index(4)]
     out["post4_w256"] = ptq[i, :, PTQ_BITS.index(4)]
     out["fp_w256"] = fp[i]
@@ -1002,7 +1013,7 @@ def compute_manifold():
 # ---------------------------------------------------------------------------
 def compute_emerge():
     s = load("sweep")
-    j = list(s["ks"]).index(22)  # every width at the same training length, 2^22 characters
+    j = _nearest(s["ks"], 22)  # every width at the same training length, 2^22 characters
     lp, top, gr = np.asarray(s["logp"], float)[:, j], np.asarray(s["top"])[:, j], np.asarray(s["greedy"])[:, j]
     N = np.asarray(s["N"])
     out = dict(N=N, chars=2 ** 22, task_n=int(s["task_n"]), lens=list(range(1, int(s["task_len"]) + 1)))
@@ -1033,7 +1044,7 @@ TT_K = np.unique(np.round(np.geomspace(1, 1e5, 61)).astype(int))
 
 def compute_testtime():
     s = load("sweep")
-    j = list(s["ks"]).index(22)
+    j = _nearest(s["ks"], 22)
     lp = np.asarray(s["logp"], float)[:, j, :, :TT_LEN].sum(-1)  # widths x problems: log P(sample is exactly right)
     p = np.exp(lp)
     N = np.asarray(s["N"])

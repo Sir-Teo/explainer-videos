@@ -239,6 +239,8 @@ class SimCLR(VoiceoverScene):
         queue.move_to([-1.0, -0.6, 0])
         ql = label(r"a queue of past keys: \ the negatives", font_size=20, color=NEG).next_to(queue, DOWN, buff=0.2)
         a1 = arrow(k.get_right(), queue.get_left(), color=TARGET)
+        dg = VGroup(q, k, ema, queue, ql, a1)
+        dg.scale(min(1.15, 7.0 / dg.width)).move_to([-3.4, 0.3, 0])
         src = cite(r"He, Fan, Wu, Xie \& Girshick (2020): \ MoCo; \ the paper: $65{,}536$ keys, $m = 0.999$")
         runs_s, keys_s = s["runs"], s["keys"][MAIN]
         runs_m, keys_m = mo["runs"], mo["keys"]

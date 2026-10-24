@@ -553,7 +553,8 @@
   "BYOL: \\ $0.92$": "BYOL：\\ $0.92$",
   "DINO: \\ $0.97$": "DINO：\\ $0.97$",
   "MAE: \\ $0.73$": "MAE：\\ $0.73$",
-  "Part 24, \\ in eight pictures": "第24部分，\\ 八幅图"
+  "Part 24, \\ in eight pictures": "第24部分，\\ 八幅图",
+  "contrastive loss: \\ an $N$-way classifier, \\ and an information bound capped at $\\log N$": "对比损失：\\ 一个$N$选一的分类器，\\ 也是一个上限为$\\log N$的信息下界"
  },
  "patterns": []
 }
