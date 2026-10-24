@@ -680,15 +680,15 @@ CTC_SEEDS = [0, 1, 2]
 CTC_CHECKS = [0, 50, 150, 400, 800, 1500]
 
 
-def ctc_net(width=128):
+def ctc_net(width=96):
     """A small convolutional recognizer: a strided convolution to 20 ms frames, then five residual convolutions with
-    growing dilation (each frame sees about a second and a half of context, both ways), then a letter per frame."""
+    growing dilation (each frame sees about 1.3 s of context, both ways), then a letter per frame."""
     import torch.nn as nn
 
     class Res(nn.Module):
         def __init__(s, c, dil):
             super().__init__()
-            s.conv = nn.Conv1d(c, c, 5, padding=2 * dil, dilation=dil)
+            s.conv = nn.Conv1d(c, c, 3, padding=dil, dilation=dil)
             s.norm = nn.GroupNorm(1, c)
 
         def forward(s, x):

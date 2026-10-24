@@ -52,7 +52,7 @@ source.
   channel argmax P(sound|W)P(W); 2012's deep acoustic models.
 * **11. Connectionist temporal classification.** The alignment problem; the blank and the collapse map; p(y|x) as a
   sum over paths; the forward recursion on 2L+1 states, derived (Part 7's forward algorithm); a small CTC recognizer
-  (convolutions + bidirectional GRU) trained on Kokoro digit strings, three seeds, its posteriors replayed through
+  (seven convolutions, dilated, 20 ms frames) trained on Kokoro digit strings, three seeds, its posteriors replayed through
   training; the lattice's posterior occupancy and best path from the trained network, its total checked against
   PyTorch's CTC loss; word error rates on held-out and training voices; Deep Speech, RNN-T, attention.
 * **12. Listening at scale.** wav2vec 2.0 and Whisper; Whisper base.en on the held-out voices: its input, its token

@@ -160,8 +160,8 @@ class CTC(VoiceoverScene):
         run_len = float(np.mean(runs)) if runs else 0.0
         spikes = ("letters appear as sharp spikes" if blank > 0.5 and run_len < 3 else "letters appear")
         with self.voiceover(
-            f"We trained a small recognizer this way: {params / 1e3:.0f} thousand parameters, two convolutions and "
-            "two recurrent layers, on digit strings spoken by ten Kokoro voices, three seeds. <bookmark mark='a'/> "
+            f"We trained a small recognizer this way: {params / 1e3:.0f} thousand parameters in seven convolutions, "
+            "on digit strings spoken by ten Kokoro voices, three seeds. <bookmark mark='a'/> "
             "Here is what it hears in a string from a voice it never heard, as training goes on. At first every "
             "frame is a blur. <bookmark mark='b'/> Then the blank takes over, the cheapest way to be right about "
             f"most frames. <bookmark mark='c'/> Then {spikes} between the blanks: at the end the blank wins "
