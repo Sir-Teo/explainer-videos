@@ -35,7 +35,7 @@ class Hook(VoiceoverScene):
             "Every letter here was drawn from pure noise by a small transformer we trained on this computer, asked "
             "for that letter. <bookmark mark='a'/> It sees each picture as a sequence of patches, the way a language "
             "model sees words, and it was trained by the flow matching of Part 21. <bookmark mark='b'/> The same "
-            "recipe, scaled up a few million times, draws photographs, films, and whole scenes you can walk through."
+            "recipe, a hundred thousand times larger, draws photographs, films, and whole scenes you can walk through."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(p, scale=0.8) for p in pics], lag_ratio=0.12), FadeIn(asked), FadeIn(al),
                       FadeIn(tag), run_time=1.4)

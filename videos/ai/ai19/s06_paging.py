@@ -55,7 +55,7 @@ class Paging(VoiceoverScene):
         modes = [("reserve", r"reserved at the maximum, \ $2{,}048$ tokens", RESERVEC),
                  ("contiguous", r"exactly its length, \ in one piece", CONTIGC),
                  ("paged", r"pages of $16$ tokens, \ anywhere", PAGEDC)]
-        maps = [memory_map(p[f"snap_{m}"], pool) for m, _, _ in modes]
+        maps = [memory_map(p[f"snap_{m}"], pool, cell=0.13, center=(-1.5, 1.5)) for m, _, _ in modes]
         head = label(rf"the cache's memory: \ ${pool:,}$ tokens, \ one square $= 16$ \ (a moment of the simulation)"
                      .replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         sub = [label(t, font_size=24, color=c_).next_to(maps[0], DOWN, buff=0.2) for _, t, c_ in modes]
@@ -71,8 +71,8 @@ class Paging(VoiceoverScene):
         t2 = label(r"conversations at once \ (average)", font_size=20, color=GREY_A).next_to(b2, UP, buff=0.15)
         hc = history_card(2023, r"Woosuk Kwon et al., \ vLLM", rf"PagedAttention: \ other systems used only "
                           rf"${F.VLLM['used'][0]}$--${F.VLLM['used'][1]}\%$ of the cache's memory for tokens; \ "
-                          rf"${F.VLLM['gain'][0]}$--${F.VLLM['gain'][1]}\times$ the throughput", width=5.0,
-                          font_size=17, color=PAGEDC).to_corner(DR, buff=0.25)
+                          rf"${F.VLLM['gain'][0]}$--${F.VLLM['gain'][1]}\times$ the throughput", width=3.2,
+                          font_size=16, color=PAGEDC).move_to([5.1, 1.5, 0])
         tg = p["paged"]["throughput"] / p["reserve"]["throughput"]
         cg = p["paged"]["running"] / p["reserve"]["running"]
         if tg > 1.5:
@@ -164,6 +164,9 @@ class Paging(VoiceoverScene):
         tree = VGroup(VGroup(sp, spl), convs).arrange(RIGHT, buff=0.6).move_to([-3.6, 1.0, 0])
         links = VGroup(*[Line(sp.get_right(), r_.get_left(), color=GREY_C, stroke_width=1.5) for r_ in convs])
         tl = label(r"cached once, \ shared by every conversation", font_size=20, color=GREY_A).next_to(tree, UP, buff=0.3)
+        pic = VGroup(tree, links, tl)
+        home = pic.get_center()
+        pic.scale(1.45).move_to([0, 0.6, 0])
         tag = schematic_tag(corner=UL)
         b = hbars(saved[1:], [rf"${c // 1024}$k tokens" if c < 10 ** 8 else r"unlimited" for c in caps[1:]],
                   [KVC] * (len(caps) - 1), width=3.6, row_h=0.42, font_size=20, lo=0, hi=100,
@@ -194,6 +197,7 @@ class Paging(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(links), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in convs], lag_ratio=0.3))
             vo.wait_until("b")
+            self.play(pic.animate.scale(1 / 1.45).move_to(home))
             self.play(FadeIn(btl), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT),
                                                                 FadeIn(r_.val)) for r_ in b], lag_ratio=0.25))
             vo.wait_until("c")

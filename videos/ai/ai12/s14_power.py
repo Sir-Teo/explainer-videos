@@ -83,6 +83,11 @@ class Power(VoiceoverScene):
         mpic = VGroup(man, mdots, p5).move_to([-1.0, -1.5, 0])
         p10.move_to(p5)
         mcap.next_to(mpic, DOWN, buff=0.3)
+        n5 = label(r"$N = 5$ pieces", font_size=26, color=C.BITS).next_to(mpic, RIGHT, buff=0.5).shift(UP * 0.4)
+        n10 = label(r"$N = 10$ pieces", font_size=26, color=C.BITS).move_to(n5, aligned_edge=LEFT)
+        hd = VGroup(label(r"real data lies near a surface of low dimension $d$", font_size=28, color=GREY_A),
+                    label(r"a model with $N$ parameters cuts it into about $N$ pieces", font_size=28, color=GREY_A))
+        hd.arrange(DOWN, buff=0.2).move_to(UP * 2.2)
         late = abs(s8 - t8) > 0.1
         said1 = (
             f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
@@ -100,17 +105,18 @@ class Power(VoiceoverScene):
             + said1
             + " Low-dimensional data, steep laws; language, by this account, is high-dimensional."
         ) as vo:
-            self.play(FadeIn(cite_), Create(man), FadeIn(mdots), FadeIn(mcap))
-            self.play(Create(p5))
+            self.play(FadeIn(cite_), Create(man), FadeIn(mdots), FadeIn(mcap), FadeIn(hd[0]))
+            self.play(Create(p5), FadeIn(hd[1]), FadeIn(n5))
             vo.wait_until("a")
+            self.play(FadeOut(hd), run_time=0.6)
             step(0)
-            self.play(Transform(p5, p10))
+            self.play(Transform(p5, p10), Transform(n5, n10))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeOut(mpic), FadeOut(mcap))
+            self.play(FadeOut(mpic), FadeOut(mcap), FadeOut(n5))
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(tag))
             for l_, lb in zip(lines, labs):
                 self.play(Create(l_), FadeIn(lb), run_time=0.9)
@@ -190,7 +196,7 @@ class Power(VoiceoverScene):
         sub = VGroup(*[curve(ax, steps, np.minimum(run[:, k], 1.1), interpolate_color(ManimColor(QUANT), ManimColor(GREY_D), k / T),
                              2.2).set_stroke(opacity=0.9) for k in range(T)])
         avg = curve(ax, steps, np.minimum(mean[wi, 0], 1.1), WHITE, 4)
-        al = label(r"white: \ the average", font_size=20, color=WHITE).next_to(ax.c2p(steps.max(), 1.0), DL, buff=0.1)
+        al = label(r"white: \ the average", font_size=20, color=WHITE).next_to(yn, RIGHT, buff=0.4)
         # right: the average loss at the end, against the number of subtasks learned, with the theory's curve
         fin = mean[:, :, -1]  # widths x seeds
         th = np.asarray(q["theory"], float)  # the share not yet learned, for 0 ... T learned

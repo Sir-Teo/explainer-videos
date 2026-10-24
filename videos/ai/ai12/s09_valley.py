@@ -204,7 +204,7 @@ class Valley(VoiceoverScene, ThreeDScene):
         bkey = VGroup(*[label(rf"$C = {C_ / 10 ** math.floor(math.log10(C_)):g}\times "
                                 rf"10^{{{int(math.floor(math.log10(C_)))}}}$",
                               font_size=18, color=col) for C_, col in zip(budgets, BUDGET_COLORS)])
-        bkey.arrange(DOWN, aligned_edge=LEFT, buff=0.05).next_to(ax.c2p(x1, y1), DL, buff=0.1)
+        bkey.arrange(DOWN, aligned_edge=LEFT, buff=0.05).next_to(ax.c2p(x0, y0), UR, buff=0.15)
         # right: the three estimates of the exponent, against Chinchilla's and Kaplan's
         rows = VGroup(
             VGroup(label(r"", font_size=22), label(r"ours", font_size=24, color=GREY_A),

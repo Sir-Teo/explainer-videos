@@ -165,23 +165,23 @@ class Exact(VoiceoverScene):
         colors = {r"p(x)": TARGET, r"q(x)": DRAFT, r"p(y)": TARGET, r"q(y)": DRAFT, r"r(x)": ACCEPTC}
         rows = [
             cmath(r"\Pr[\text{out} = x]", r"=", r"q(x)\min\!\Big(1, \tfrac{p(x)}{q(x)}\Big)", r"+",
-                  r"\Pr[\text{reject}]\; r(x)", colors=colors, font_size=34),
+                  r"\Pr[\text{reject}]\; r(x)", colors=colors, font_size=30),
             cmath(r"q(x)\min\!\Big(1, \tfrac{p(x)}{q(x)}\Big)", r"=", r"\min\big(p(x), q(x)\big)", colors=colors,
-                  font_size=34),
+                  font_size=30),
             cmath(r"\Pr[\text{reject}]", r"=", r"1 - \sum_y \min\big(p(y), q(y)\big)", r"=",
-                  r"\sum_y \big(p(y) - \min(p(y), q(y))\big)", colors=colors, font_size=34),
+                  r"\sum_y \big(p(y) - \min(p(y), q(y))\big)", colors=colors, font_size=30),
             cmath(r"r(x)", r"=", r"\frac{p(x) - \min(p(x), q(x))}{\sum_y \big(p(y) - \min(p(y), q(y))\big)}",
-                  colors=colors, font_size=34),
+                  colors=colors, font_size=30),
             cmath(r"\Pr[\text{out} = x]", r"=", r"\min(p(x), q(x)) + p(x) - \min(p(x), q(x))", r"=", r"p(x)",
-                  colors=colors, font_size=34),
+                  colors=colors, font_size=30),
         ]
         whys = [why(r"accepted, \ or rejected and resampled"), why(r"multiply in: \ $\min(q, p)$"),
                 why(r"$\sum_y p(y) = 1$"), why(r"the leftover, \ normalized"), why(r"the denominators cancel")]
-        step = ladder(self, rows, whys, keep=5, top=3.0, x=-1.2, buff=0.36, edge=6.8)
+        step = ladder(self, rows, whys, keep=5, top=3.4, x=-1.2, buff=0.24, edge=6.8)
         thm = theorem_card(r"speculative sampling is exact", r"Whatever the draft $q$, \ the token written has "
                            r"distribution exactly $p$. \ The draft only changes how often a pass is saved.",
                            who=r"Leviathan, Kalman \& Matias (2022); \ Chen et al.\ (2023)", width=7.6, font_size=20,
-                           color=ACCEPTC).to_edge(DOWN, buff=0.25)
+                           color=ACCEPTC).to_edge(DOWN, buff=0.12)
         with self.voiceover(
             "Why is that exact? <bookmark mark='a'/> The rule writes x in one of two ways: x is drafted and "
             "accepted, or a draft is rejected and x is resampled. <bookmark mark='b'/> Drafted and accepted has "

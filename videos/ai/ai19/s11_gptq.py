@@ -42,7 +42,7 @@ class GPTQ(VoiceoverScene):
         r1 = Arrow(ORIGIN, np.array([0.9, -0.6, 0]), buff=0, color=ERRC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         r2 = Arrow(ORIGIN, np.array([1.3, 0.75, 0]), buff=0, color=GPTQC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         pic.add(r1, r2)
-        pic.move_to([-3.6, -1.6, 0])
+        pic.scale(1.25).move_to([-2.6, -1.6, 0])
         pl = label(r"output error, \ as a function of two weights' errors", font_size=20, color=C.MLP)
         pl.next_to(pic, UP, buff=0.15)
         l1 = label(r"across the valley: \ costly", font_size=18, color=ERRC).next_to(r1, DOWN, buff=0.1)
@@ -59,10 +59,10 @@ class GPTQ(VoiceoverScene):
         ) as vo:
             step(0)
             vo.wait_until("a")
+            self.play(Create(ell), Create(ell2), FadeIn(c), FadeIn(pl), FadeIn(tag))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
-            self.play(Create(ell), Create(ell2), FadeIn(c), FadeIn(pl), FadeIn(tag))
             self.play(GrowArrow(r1), FadeIn(l1))
             self.play(GrowArrow(r2), FadeIn(l2))
         self.wait(0.3)
@@ -157,8 +157,7 @@ class GPTQ(VoiceoverScene):
                          "to make up for an error.")
         hc = history_card(2022, r"Elias Frantar, Saleh Ashkboos, Torsten Hoefler \& Dan Alistarh", rf"GPTQ: \ one "
                           rf"column order for every row, \ ${F.GPTQ['params'] / 1e9:.0f}$B parameters in about "
-                          rf"${F.GPTQ['hours']}$ GPU-hours", width=5.2, font_size=16, color=GPTQC).to_corner(UR, buff=0.2)
-        hc.shift(DOWN * 0.7)
+                          rf"${F.GPTQ['hours']}$ GPU-hours", width=5.2, font_size=16, color=GPTQC).move_to([-3.4, 2.45, 0])
         with self.voiceover(
             "Rounding one weight at a time, with the best update, is too slow for billions of weights. "
             "<bookmark mark='a'/> GPTQ, from Frantar, Ashkboos, Hoefler and Alistarh in 2022, makes three "
@@ -198,10 +197,21 @@ class GPTQ(VoiceoverScene):
         rows[1][2].set_color(AWQC)
         whys = [why(r"scale a channel up before rounding; \ its step shrinks relative to it"),
                 why(r"large where the inputs are large")]
-        step = ladder(self, rows, whys, keep=2, top=1.6, x=-1.0, buff=0.7, edge=6.8)
+        step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.0, buff=0.7, edge=6.8)
         hc = history_card(2023, r"Ji Lin et al., \ AWQ", rf"protect the ${F.AWQ['salient']}\%$ of weights whose "
-                          r"inputs are largest; \ MLSys 2024 best paper", width=5.2, font_size=18,
-                          color=AWQC).to_edge(DOWN, buff=0.5)
+                          r"inputs are largest; \ MLSys 2024 best paper", width=4.6, font_size=17,
+                          color=AWQC).move_to([4.3, -0.55, 0])
+        o = load("outliers")
+        prof = np.asarray(o["profile_qkv"], float)
+        nc = len(prof)
+        cut = np.sort(prof)[-max(1, nc // 100)]
+        chans = VGroup(*[Rectangle(width=9.0 / nc * 0.8, height=max(1.3 * v / prof.max(), 0.01), stroke_width=0,
+                                   fill_color=AWQC if v >= cut else C.TOKEN, fill_opacity=0.85)
+                         .move_to([-6.0 + 9.0 * (i + 0.5) / nc, -3.1 + 0.65 * v / prof.max(), 0])
+                         for i, v in enumerate(prof)])
+        chl = label(rf"the inputs of one of our layers, \ channel by channel \ (largest seen): \ AWQ's scales grow "
+                    rf"with them; \ the top $1\%$ in orange", font_size=18, color=GREY_A).next_to(chans, UP, buff=0.2)
+        chl.align_to(chans, LEFT)
         q = load("gptq")
         alphas = [v for k, v in q["res"].items() if k.endswith("_alpha")]
         with self.voiceover(
@@ -215,6 +225,8 @@ class GPTQ(VoiceoverScene):
         ) as vo:
             step(0)
             vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in chans], lag_ratio=0.004), FadeIn(chl),
+                      run_time=1.5)
             vo.wait_until("b")
             step(1)
             self.play(FadeIn(hc))
@@ -253,7 +265,8 @@ class GPTQ(VoiceoverScene):
             t = label(rf"${b}$ bits, \ " + (r"a scale per row" if gg == "row" else r"a scale per $64$"), font_size=20,
                       color=GREY_A)
             g.add(VGroup(t, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        g.arrange_in_grid(rows=2, cols=2, buff=(1.0, 0.45)).move_to([0, -0.5, 0])
+        g.arrange_in_grid(rows=2, cols=2, buff=(1.0, 0.5))
+        g.scale(min(1.2, 12.6 / g.width)).move_to([0, -0.4, 0])
         head = label(r"extra loss on held-out novels \ (nats per token): \ weights only, \ $3$ calibration sets "
                      r"\ (white: \ their range)", font_size=22, color=GREY_A).to_edge(UP, buff=0.35)
         r3 = res["rtn_3_row"] - base

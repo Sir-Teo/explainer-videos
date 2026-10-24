@@ -59,7 +59,8 @@ class REPA(VoiceoverScene):
         with self.voiceover(
             "A diffusion transformer has to learn two things at once: what pictures are made of, and how to remove "
             "noise. But vision encoders trained on millions of images, like Part 24's DINOv2, already know the "
-            "first. <bookmark mark='a'/> In October 2024 Sihyun Yu, Saining Xie and colleagues added one term to "
+            "first. Probe a diffusion transformer's middle layers, and you find it does learn what pictures show, "
+            "and slowly comes to resemble such an encoder, but it lags far behind. <bookmark mark='a'/> In October 2024 Sihyun Yu, Saining Xie and colleagues added one term to "
             "the loss. Take the denoiser's tokens after an early block, pass them through a small projector, "
             "<bookmark mark='b'/> and pull them toward the frozen encoder's tokens for the clean picture, by cosine "
             "similarity. <bookmark mark='c'/> They called it REPA, representation alignment. A large diffusion "

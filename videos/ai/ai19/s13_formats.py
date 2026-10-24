@@ -31,14 +31,14 @@ class Formats(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def e2m1(self):
-        nl = NumberLine(x_range=[0, 6, 1], length=8.4, include_numbers=False, color=GREY_C, tick_size=0.05)
+        nl = NumberLine(x_range=[0, 6, 1], length=11.4, include_numbers=False, color=GREY_C, tick_size=0.05)
         nl.move_to([0, 0.4, 0])
         band = [GREY_B, C.TRUE_P, C.INTERVAL, C.BITS]
         bands = [0, 0, 1, 1, 2, 2, 3, 3]
         dots = VGroup(*[Dot(nl.n2p(v), radius=0.09, color=band[b]) for v, b in zip(E2M1, bands)])
         nums = VGroup(*[MathTex(t, font_size=26, color=band[b]).next_to(nl.n2p(v), DOWN, buff=0.15)
                         for t, v, b in zip(("0", r"\tfrac12", "1", r"\tfrac32", "2", "3", "4", "6"), E2M1, bands)])
-        codes = VGroup(*[code_cells(format(i, "04b"), cell=0.22).next_to(nl.n2p(v), UP, buff=0.3)
+        codes = VGroup(*[code_cells(format(i, "04b"), cell=0.2).next_to(nl.n2p(v), UP, buff=0.3 + 0.45 * (i % 2))
                          for i, v in enumerate(E2M1)])
         key = VGroup(*[VGroup(Square(0.2, stroke_width=0, fill_color=c_, fill_opacity=0.6),
                               label(t, font_size=20, color=c_)).arrange(RIGHT, buff=0.12)
@@ -242,7 +242,7 @@ class Formats(VoiceoverScene):
         gpu = RoundedRectangle(width=2.4, height=3.0, corner_radius=0.12, stroke_color=C.GPU, stroke_width=2.5)
         gpu.move_to([4.6, 0.6, 0])
         fill = Rectangle(width=2.2, height=2.8 * gib * 2 ** 30 / 80e9, stroke_width=0, fill_color=MXC, fill_opacity=0.6)
-        fill.align_to(gpu, DOWN).shift(UP * 0.1)
+        fill.move_to(gpu.get_bottom() + UP * (fill.height / 2 + 0.1))
         gl = label(r"one $80$ GB GPU", font_size=20, color=C.GPU).next_to(gpu, UP, buff=0.15)
         head = label(rf"gpt-oss-120b \ (OpenAI, \ August 2025): \ ${o['total'] / 1e9:.1f}$B parameters, \ "
                      rf"${o['active'] / 1e9:.2f}$B per token", font_size=24, color=MXC).to_edge(UP, buff=0.4)
