@@ -53,15 +53,14 @@ class Depth(VoiceoverScene):
         depth[0].move_to([depth[0].get_center()[0], -1.95, 0])
         depth[1].move_to([depth[1].get_center()[0], -2.55, 0])
         with self.voiceover(
-            "Graph networks are usually shallow, two to four layers, while image networks run to hundreds. Here is "
-            "one reason. Strip a graph convolution of its weights and it is an average over neighbours, applied "
-            "again and again. <bookmark mark='a'/> The averaging matrix is symmetric, so it has an orthonormal basis "
-            "of eigenvectors, with eigenvalues at most one. <bookmark mark='b'/> Applying it k times raises each "
-            "eigenvalue to the k-th power. <bookmark mark='c'/> Every term but the first dies away, and the first is "
-            "the same pattern on every node, scaled by the square root of its degree. <bookmark mark='d'/> The "
-            "approach is geometric, at the rate of the second eigenvalue to the k. <bookmark mark='e'/> Every node "
-            "ends up with the same features: over-smoothing. Qimai Li and colleagues described it in 2018, and Kenta "
-            "Oono and Taiji Suzuki proved it for networks with weights and ReLUs."
+            "Graph networks are usually shallow, two to four layers, while image networks run to hundreds. One reason: strip "
+            "a graph convolution of its weights and it is an average over neighbours, applied again and again. <bookmark "
+            "mark='a'/> The averaging matrix is symmetric, with orthonormal eigenvectors and eigenvalues at most one. "
+            "<bookmark mark='b'/> Applying it k times raises each eigenvalue to the k. <bookmark mark='c'/> Every term but the "
+            "first dies away, and the first is the same pattern on every node, scaled by the square root of its degree. "
+            "<bookmark mark='d'/> The approach is geometric, at the rate of the second eigenvalue to the k. <bookmark "
+            "mark='e'/> Every node ends with the same features: over-smoothing, described by Qimai Li and colleagues in 2018, "
+            "and proved for networks with weights by Kenta Oono and Taiji Suzuki."
         ) as vo:
             self.play(FadeIn(head))
             self.play(GrowFromEdge(depth[0][0], LEFT), FadeIn(depth[0][1]), GrowFromEdge(depth[1][0], LEFT),
@@ -113,12 +112,11 @@ class Depth(VoiceoverScene):
         tag = note(r"computed: \ chapter 4's graph, \ eight random features per node", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Here it is on our three-community graph. A measure of how much neighbours differ, the Dirichlet "
-            "energy, after each round of averaging. <bookmark mark='a'/> It falls in a straight line on this "
-            f"logarithmic scale, {mags:.0f} powers of ten in sixteen rounds, at the rate the second eigenvalue, "
-            f"{lam2:.3f}, predicts. <bookmark mark='b'/> In pictures: the nodes' features, "
-            "coloured by community, start as noise; a few rounds of averaging separate the communities, which is "
-            "why a two-layer network helps; and many rounds collapse everything to a point."
+            "Here it is on our three-community graph: the Dirichlet energy, how much neighbours differ, after each round of "
+            f"averaging. <bookmark mark='a'/> It falls in a straight line on this log scale, {mags:.0f} powers of ten in "
+            f"sixteen rounds, at the rate the second eigenvalue, {lam2:.3f}, predicts. <bookmark mark='b'/> In pictures: the "
+            "features start as noise; a few rounds separate the communities, which is why two layers help; many rounds "
+            "collapse everything to a point."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(cE), run_time=2.0)
@@ -164,11 +162,10 @@ class Depth(VoiceoverScene):
                       r"averages", font_size=20, color=GREY_B).move_to([3.9, -1.6, 0])
         notes.width = min(notes.width, 5.6)
         with self.voiceover(
-            "Now with weights and training. The same graph task, at depths from two to sixty-four, three seeds "
-            f"each. <bookmark mark='a'/> {best_txt}; {col_txt}. <bookmark mark='b'/> "
-            f"{res_txt}: the skip connection keeps each node's own information from being averaged away, the same "
-            "fix that made image networks deep, in Part 9. <bookmark mark='c'/> With weights, part of the collapse is "
-            "also an optimization problem: the gradient has to pass back through all those averages."
+            "Now with weights and training: the same task at depths from two to sixty-four, three seeds each. <bookmark "
+            f"mark='a'/> {best_txt}; {col_txt}. <bookmark mark='b'/> {res_txt}: the skip connection keeps each node's own "
+            "information from being averaged away, the fix that made image networks deep in Part 9. <bookmark mark='c'/> "
+            "Part of the collapse is also an optimization problem: gradients must pass back through all those averages."
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(tag))
             vo.wait_until("a")
@@ -208,12 +205,11 @@ class Depth(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         txt.move_to([0, 0.3, 0]).align_to(np.array([1.35, 0, 0]), LEFT)
         with self.voiceover(
-            "A second problem appears when the answer depends on distant nodes. <bookmark mark='a'/> The number of "
-            "nodes within L hops can grow exponentially, <bookmark mark='b'/> yet all their information has to "
-            "squeeze into one fixed-size vector at the node that needs it. <bookmark mark='c'/> "
-            "Uri Alon and Eran Yahav called this over-squashing, in 2021; Jake Topping and colleagues traced it to "
-            "bottlenecks, edges of negative curvature. <bookmark mark='d'/> The remedies: rewire the graph, add "
-            "nodes that see everything, or let attention reach every node directly."
+            "A second problem appears when the answer depends on distant nodes. <bookmark mark='a'/> The nodes within L hops "
+            "can grow exponentially, <bookmark mark='b'/> yet all their information must squeeze into one fixed-size vector. "
+            "<bookmark mark='c'/> Uri Alon and Eran Yahav called this over-squashing, in 2021; Jake Topping and colleagues "
+            "traced it to bottlenecks. <bookmark mark='d'/> Remedies: rewire the graph, add nodes that see everything, or "
+            "attend to every node directly."
         ) as vo:
             self.play(FadeIn(dots[0]))
             vo.wait_until("a")
@@ -248,15 +244,13 @@ class Depth(VoiceoverScene):
                        node_box(r"AlphaFold's Evoformer: \ attention on pairs, \ biased by triangles", PAIR_C,
                                 font_size=22)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Attention is the third idea. <bookmark mark='a'/> Instead of summing its neighbours equally, a node "
-            "weighs them: in Petar Veličković's graph attention network, of 2018, the weights are a softmax over the "
-            "neighbours of a learned score. <bookmark mark='b'/> Shaked Brody, Uri Alon and Eran Yahav noticed that "
-            "the original score ranks the neighbours the same way for every node, and fixed it by moving the "
-            "nonlinearity inside. <bookmark mark='c'/> And a transformer, from Part 13, is exactly this: attention on "
-            "the complete graph, where every token is every other's neighbour. <bookmark mark='d'/> Graph "
-            "transformers add the graph back in as encodings of where each node sits. <bookmark mark='e'/> And the "
-            "network at the heart of AlphaFold is attention over pairs of residues, biased by triangles: the pair "
-            "network of the last chapter, grown up."
+            "Attention is the third idea. <bookmark mark='a'/> Instead of summing its neighbours equally, a node weighs them: "
+            "in Petar Veličković's graph attention network of 2018, by a softmax over the neighbours of a learned score. "
+            "<bookmark mark='b'/> GATv2, from Shaked Brody and colleagues, fixed a flaw: the original score ranked neighbours "
+            "the same way for every node. <bookmark mark='c'/> A transformer, from Part 13, is exactly this on the complete "
+            "graph, where every token is every other's neighbour. <bookmark mark='d'/> Graph transformers add the graph back "
+            "as encodings of where each node sits. <bookmark mark='e'/> And AlphaFold's core network is attention over pairs "
+            "of residues, biased by triangles: last chapter's pair network, grown up."
         ) as vo:
             self.play(Write(f1))
             vo.wait_until("a")

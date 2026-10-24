@@ -33,11 +33,10 @@ class Hook(VoiceoverScene):
         cite_ = cite(r"Royal Swedish Academy of Sciences, \ 9 October 2024", corner=DR)
         with self.voiceover(
             "Stockholm, October 2024. <bookmark mark='a'/> The Nobel Prize in Chemistry goes half to David Baker, for "
-            "designing proteins on a computer, and half to Demis Hassabis and John Jumper of Google DeepMind, for "
-            "AlphaFold, a neural network that predicts the shape a protein folds into. <bookmark mark='b'/> The day "
-            "before, the physics prize had gone to John Hopfield and Geoffrey Hinton, for the neural networks of Part "
-            "20. <bookmark mark='c'/> For decades, measuring the shape of a single protein could take a laboratory "
-            "years. AlphaFold predicts one in minutes, often to within the width of an atom."
+            "designing proteins, and half to Demis Hassabis and John Jumper of Google DeepMind, for AlphaFold, a network that "
+            "predicts the shape a protein folds into. <bookmark mark='b'/> The day before, the physics prize went to John "
+            "Hopfield and Geoffrey Hinton, for the networks of Part 20. <bookmark mark='c'/> Measuring one protein's shape "
+            "could take a laboratory years; AlphaFold predicts one in minutes."
         ) as vo:
             self.play(Create(chain.segs, lag_ratio=0.03), FadeIn(chain.dots), run_time=2.5)
             self.play(FadeIn(tag))
@@ -128,13 +127,12 @@ class Hook(VoiceoverScene):
         else:
             tiny = f"{rng_i:.4f} of a unit, more than rounding error alone"
         with self.voiceover(
-            "Here is the idea this part is built on. Five charged particles: a toy molecule. Turn it in space, and "
-            "nothing about it changes, so its energy can't change either. <bookmark mark='a'/> We trained networks on "
-            "three thousand such molecules to predict that energy, then turned this one, a full circle. <bookmark "
-            f"mark='b'/> A plain network has no idea that turning is harmless: its answer swings over {rng_m:.2f} "
-            f"units as the molecule turns. <bookmark mark='c'/> Shown turned copies during training, it swings over "
-            f"{rng_a:.2f}. <bookmark mark='d'/> And a network built on the distances between the particles cannot see "
-            f"the turn at all: its answer changes by {tiny}, and it sits {inv_err:.2f} from the true "
+            "Here is the idea this part is built on. Five charged particles, a toy molecule. Turn it, and nothing about it "
+            "changes, so neither can its energy. <bookmark mark='a'/> We trained networks on three thousand such molecules "
+            "to predict that energy, then turned this one a full circle. <bookmark mark='b'/> A plain network has no idea "
+            f"that turning is harmless: its answer swings over {rng_m:.2f} units. <bookmark mark='c'/> Shown turned copies "
+            f"in training, it swings over {rng_a:.2f}. <bookmark mark='d'/> A network built on the distances between the "
+            f"particles cannot see the turn at all: its answer changes by {tiny}, and it sits {inv_err:.2f} from the true "
             "energy."
         ) as vo:
             self.add(molecule)
@@ -193,12 +191,11 @@ class Hook(VoiceoverScene):
         tiles.arrange(RIGHT, buff=0.3).move_to(DOWN * 0.7)
         sch = note(r"each tile: \ data from this part's own computations, \ or illustrative").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "That is the question of this part: what does a network gain by knowing the symmetries of its problem, "
-            "and what has that done for science? <bookmark mark='a'/> We'll build the answer from groups and "
-            "graphs, through networks that turn with the molecule, to the systems that fold proteins, <bookmark "
-            "mark='b'/> forecast the weather, <bookmark mark='c'/> search for new materials, <bookmark mark='d'/> and "
-            "prove theorems. Every experiment along the way is computed on this machine; every number about the big "
-            "systems is quoted from their own papers."
+            "That is the question of this part: what does a network gain by knowing the symmetries of its problem, and what "
+            "has that done for science? <bookmark mark='a'/> We'll build the answer from groups and graphs to the systems that "
+            "fold proteins, <bookmark mark='b'/> forecast the weather, <bookmark mark='c'/> find materials, <bookmark "
+            "mark='d'/> and prove theorems. Every experiment is computed on this machine; every number about the big systems "
+            "is quoted from their papers."
         ) as vo:
             self.play(Write(q), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(Group(t_[0], t_[2])) for t_ in tiles], lag_ratio=0.2), FadeIn(sch))
@@ -221,13 +218,11 @@ class Hook(VoiceoverScene):
             r"mathematics: \ geometry, \ proofs in Lean, \ discovery by search",
         ], font_size=25)
         with self.voiceover(
-            "This is Part 25 of AI, Built, the last part of its fourth act. <bookmark mark='a'/> In this part: "
-            "symmetry, and what it means for a function to respect it; <bookmark mark='o2'/> graphs, the networks "
-            "that pass messages along them, and the limit of what they can tell apart; <bookmark mark='o3'/> networks "
-            "that turn with the molecule; <bookmark mark='o4'/> proteins, from the folding problem to AlphaFold and "
-            "protein design; <bookmark mark='o5'/> fields: the weather, and neural operators, and the search for "
-            "materials; <bookmark mark='o6'/> and mathematics, from olympiad geometry to proofs a machine can check, "
-            "and discovery by search."
+            "This is Part 25 of AI, Built, the last of its fourth act. <bookmark mark='a'/> In it: symmetry, and what it means "
+            "for a function to respect it; <bookmark mark='o2'/> graphs, message passing, and its limits; <bookmark "
+            "mark='o3'/> networks that turn with the molecule; <bookmark mark='o4'/> proteins, from the folding problem to "
+            "AlphaFold and design; <bookmark mark='o5'/> fields: weather, neural operators, and materials; <bookmark "
+            "mark='o6'/> and mathematics, from olympiad geometry to checked proofs and discovery by search."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

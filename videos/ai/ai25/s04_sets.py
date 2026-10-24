@@ -77,12 +77,12 @@ class Sets(VoiceoverScene):
                                   f"{names[int(pm2.argmax())]}")
         tag = note(r"computed: \ networks trained here on $8{,}192$ sets", font_size=20).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Sixteen points in the plane, drawn from one of four shapes: a ring, a disc, a segment, or two blobs. "
-            "The task is to say which. <bookmark mark='a'/> A plain network needs its input as a list, so we number "
-            "the points and feed it thirty-two coordinates. <bookmark mark='b'/> But the numbering is arbitrary. "
-            "Renumber the points, and the picture hasn't changed, while the list has. <bookmark mark='c'/> A plain "
-            f"network trained on eight thousand sets sees a new input: {mlp_line}. <bookmark mark='d'/> A network "
-            "built for sets, Deep Sets, gives exactly the same answer, as it must."
+            "Sixteen points in the plane, from one of four shapes: a ring, a disc, a segment, or two blobs. Say which. "
+            "<bookmark mark='a'/> A plain network needs a list, so we number the points and feed it thirty-two "
+            "coordinates. <bookmark mark='b'/> But the numbering is arbitrary: renumber the points, and the picture is the "
+            "same while the list is not. <bookmark mark='c'/> A plain network trained on eight thousand sets sees a new "
+            f"input: {mlp_line}. <bookmark mark='d'/> Deep Sets, a network built for sets, gives exactly the same answer, as "
+            "it must."
         ) as vo:
             self.play(FadeIn(dots), FadeIn(pl))
             vo.wait_until("a")
@@ -121,16 +121,14 @@ class Sets(VoiceoverScene):
                      r"(Newton); \ fewer won't do \ (Wagstaff et al.\ 2019)", font_size=22, color=GREY_A)
         cont.to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores the "
-            "order of the elements if and only if it can be written as a sum of one function phi over the elements, "
-            "followed by another function rho. <bookmark mark='a'/> One direction is easy: a sum is the same in any "
-            "order. <bookmark mark='b'/> For the other, number every possible element, and let phi of x be four to "
-            "the minus its number. <bookmark mark='c'/> Then the sum, written in base four, has a one in place k "
-            "exactly when element k is in the set: no carries, so different sets give different sums. <bookmark "
-            "mark='d'/> The sum is one-to-one; so any function of the set is a function of the sum: undo the sum, "
-            "then apply f. <bookmark mark='e'/> For sets of real numbers the same role is played by power sums: the "
-            "sums of x, x squared, up to x to the n, pin down n numbers, by Newton's identities, and Edward "
-            "Wagstaff and colleagues showed that a smaller sum can't do it continuously."
+            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order if "
+            "and only if it is a sum of one function phi over the elements, followed by another function rho. <bookmark "
+            "mark='a'/> One direction is easy: a sum is the same in any order. <bookmark mark='b'/> For the other, number "
+            "every possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> Written in base "
+            "four, the sum has a one in place k exactly when element k is in the set: no carries, so different sets give "
+            "different sums. <bookmark mark='d'/> The sum is one-to-one, so any function of the set is a function of the "
+            "sum: undo the sum, then apply f. <bookmark mark='e'/> For sets of real numbers, power sums play this role, by "
+            "Newton's identities, and Edward Wagstaff and colleagues showed that fewer can't do it continuously."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             vo.wait_until("a")
@@ -172,12 +170,11 @@ class Sets(VoiceoverScene):
                   r"\ (equivariant)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "As a network, this is simple. <bookmark mark='a'/> The same small network phi reads every point on its "
-            "own, <bookmark mark='b'/> the results are summed, <bookmark mark='c'/> and a second network rho reads "
-            "the sum. <bookmark mark='d'/> The weights of phi are shared by every point, just as a convolution shares "
-            "its weights across positions. <bookmark mark='e'/> PointNet, the same year, used a maximum in place of "
-            "the sum. And a transformer without position information treats its tokens as a set: reorder the inputs "
-            "and each output moves with its input, an equivariant function of sets."
+            "As a network, this is simple. <bookmark mark='a'/> The same small network phi reads every point, <bookmark "
+            "mark='b'/> the results are summed, <bookmark mark='c'/> and a second network rho reads the sum. <bookmark "
+            "mark='d'/> phi's weights are shared by every point, as a convolution shares its weights across positions. "
+            "<bookmark mark='e'/> PointNet, the same year, used a maximum instead of the sum. And a transformer without "
+            "positions treats its tokens as a set: reorder the inputs, and each output moves with its input."
         ) as vo:
             self.play(FadeIn(dots))
             vo.wait_until("a")
@@ -306,15 +303,14 @@ class Sets(VoiceoverScene):
         mlp_vs = (f"and even with {n_big:,} sets it stays below what Deep Sets reached with {n0}" if not reach_m else
                   f"and it needs {reach_m[0]:,} sets to reach what Deep Sets did with {n0}")
         with self.voiceover(
-            f"Now train them, on {n0} sets up to {n_big:,}, three seeds each, the same number of steps. "
-            f"<bookmark mark='a'/> With only {n0} sets, Deep Sets is already right {100 * a_ds[0]:.0f} percent of the "
-            f"time. <bookmark mark='b'/> The plain MLP is at {100 * a_ml[0]:.0f} percent, {mlp_vs}: it must "
-            "learn, from examples, that sixteen factorial orderings are one thing. <bookmark mark='c'/> Showing it "
-            f"reordered copies helps a lot: {100 * a_au[0]:.0f} percent at "
-            f"{n0} sets. {reach_txt}. {last}: Deep Sets {100 * a_ds[-1]:.0f} percent, the copies {100 * a_au[-1]:.0f}. <bookmark "
-            f"mark='d'/> But the copies teach the symmetry only approximately: reorder the same test set, and the "
-            f"plain MLP changes its answer on {100 * f_ml:.0f} percent of sets, the one trained on copies on "
-            f"{100 * f_au:.0f} percent, and Deep Sets on none."
+            f"Now train them on {n0} up to {n_big:,} sets, three seeds each, the same number of steps. <bookmark mark='a'/> "
+            f"With only {n0} sets, Deep Sets is right {100 * a_ds[0]:.0f} percent of the time. <bookmark mark='b'/> The "
+            f"plain MLP is at {100 * a_ml[0]:.0f} percent, {mlp_vs}: it must learn from examples that sixteen factorial "
+            f"orderings are one thing. <bookmark mark='c'/> Reordered copies help a lot: {100 * a_au[0]:.0f} percent at {n0} "
+            f"sets. {reach_txt}. {last}: Deep Sets {100 * a_ds[-1]:.0f} percent, the copies {100 * a_au[-1]:.0f}. <bookmark "
+            "mark='d'/> But copies teach the symmetry only approximately: reorder the same test sets, and the plain MLP "
+            f"changes its answer on {100 * f_ml:.0f} percent of them, the one trained on copies on {100 * f_au:.0f} percent, "
+            "Deep Sets on none."
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(chl), FadeIn(tag))
             vo.wait_until("a")
@@ -328,9 +324,8 @@ class Sets(VoiceoverScene):
         self.wait(0.6)
         tk = take_away(r"order-free by construction: \ less to learn, \ and never fooled by a renumbering")
         with self.voiceover(
-            "So building the symmetry in did two things: it saved data, because there was less to learn, and it "
-            "made the answer exactly order-free, on every input, not only on the ones like the training data. "
-            "Graphs are next: sets with connections."
+            "So building the symmetry in did two things: it saved data, and it made the answer exactly order-free, on every "
+            "input. Graphs are next: sets with connections."
         ):
             self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

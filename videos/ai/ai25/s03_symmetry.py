@@ -54,13 +54,12 @@ class Symmetry(VoiceoverScene):
             label(r"shifts of an image: \ one per offset", font_size=23),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(d, DOWN, buff=0.45).align_to(d, LEFT)
         with self.voiceover(
-            "A symmetry is a transformation that leaves what matters unchanged. Turn a square by ninety degrees and "
-            "you have the same square. <bookmark mark='a'/> Turn it four times and you are back where you "
-            "started. <bookmark mark='b'/> The transformations of a problem form a group: you can do one after "
-            "another, there is one that does nothing, and each one can be undone. <bookmark mark='c'/> The square "
-            "has four turns. The orderings of sixteen points, a permutation group, have sixteen factorial elements, "
-            f"about {n16 / 1e12:.0f} trillion. <bookmark mark='d'/> Turns of space form a continuous group, SO(3), "
-            "with infinitely many; and an image has its shifts."
+            "A symmetry is a transformation that leaves what matters unchanged. Turn a square by ninety degrees: the "
+            "same square. <bookmark mark='a'/> Turn it four times and you are back. <bookmark mark='b'/> A problem's "
+            "transformations form a group: you can compose them, one does nothing, and each can be undone. <bookmark "
+            "mark='c'/> The square has four turns; the orderings of sixteen points, sixteen factorial, about "
+            f"{n16 / 1e12:.0f} trillion. <bookmark mark='d'/> Turns of space form a continuous group, SO(3); an image has "
+            "its shifts."
         ) as vo:
             self.play(FadeIn(shape))
             for _ in range(2):
@@ -127,13 +126,12 @@ class Symmetry(VoiceoverScene):
         tag = note(r"the five particles of the hook, \ where they go by $t = 1$ (computed)", font_size=20)
         tag.to_corner(UL, buff=0.25)
         with self.voiceover(
-            "Now a function of the data, f: here, where each of our five particles will be one time unit later. "
-            "<bookmark mark='a'/> Turn the input, apply f, <bookmark mark='b'/> or apply f and then turn the "
-            "output. <bookmark mark='c'/> If the two paths always agree, f is equivariant: transforming the input "
-            "transforms the output the same way. <bookmark mark='d'/> If the output doesn't change at all, f is "
-            "invariant: the energy of the molecule, or the label of an image. <bookmark mark='e'/> Equivariance is "
-            "what intermediate layers need, so that the information about how the input was turned is kept, not "
-            "thrown away; invariance is what a final answer often needs."
+            "Now a function of the data, f: here, where each of our five particles will be one time unit later. <bookmark "
+            "mark='a'/> Turn the input, then apply f, <bookmark mark='b'/> or apply f, then turn the output. <bookmark "
+            "mark='c'/> If the two paths always agree, f is equivariant: transforming the input transforms the output the "
+            "same way. <bookmark mark='d'/> If the output doesn't change at all, f is invariant: an energy, or an image's "
+            "label. <bookmark mark='e'/> Intermediate layers need equivariance, so that how the input was turned is kept, "
+            "not thrown away; a final answer often needs invariance."
         ) as vo:
             self.play(FadeIn(A), FadeIn(nA), FadeIn(tag))
             self.play(GrowArrow(left), FadeIn(ll), FadeIn(Cg), FadeIn(nC))
@@ -173,15 +171,13 @@ class Symmetry(VoiceoverScene):
             label(r"augmentation: \ a random $g$ in training, \ hoping $f$ learns the rest", font_size=22, color=AUG),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "There is a way to make any function equivariant. Average it over the group: for every transformation "
-            "g, transform the input, apply f, and undo g on the output. <bookmark mark='a'/> Feed this average a "
-            "turned input, h of x. <bookmark mark='b'/> Rename g times h as g prime: as g runs through the whole "
-            "group, so does g prime, so the sum is the same sum. <bookmark mark='c'/> The inverse of a product "
-            "reverses its order, <bookmark mark='d'/> and h comes out of the sum. The average is equivariant, "
-            "whatever f was. <bookmark mark='e'/> The catch is the price: one evaluation per group element, sixteen "
-            "factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Data "
-            "augmentation is the cheap version: one random transformation per training example, and the hope that "
-            "the network learns the rest."
+            "Any function can be made equivariant by averaging it over the group: for each transformation g, transform the "
+            "input, apply f, and undo g on the output. <bookmark mark='a'/> Feed the average a turned input, h of x. "
+            "<bookmark mark='b'/> Rename g times h as g prime: as g runs through the group, so does g prime, so the sum is "
+            "the same. <bookmark mark='c'/> The inverse of a product reverses its order, <bookmark mark='d'/> and h comes out "
+            "of the sum: the average is equivariant, whatever f was. <bookmark mark='e'/> The price: one evaluation per group "
+            "element, sixteen factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Data "
+            "augmentation is the cheap version: one random transformation per example, hoping the network learns the rest."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -236,15 +232,14 @@ class Symmetry(VoiceoverScene):
         tk = take_away(r"built in: \ exact, \ on every input; \ learned from copies: \ approximate, \ and only near "
                        r"the training data")
         with self.voiceover(
-            "Here is the check, computed on our five-particle system, with four networks trained on the same data "
-            "for the same number of steps. <bookmark mark='a'/> Pause and predict: which of them turns its answer "
-            "exactly when the input is turned? <bookmark mark='b'/> The equivariant network, EGNN, which we'll build "
-            f"in chapter seven: its turned and shifted answers are off by {eg_tiny} of a unit, rounding error. "
-            "<bookmark mark='c'/> A message-passing network fed the raw coordinates handles a reordering exactly, "
-            "because it sums over neighbours, but not a turn. <bookmark mark='d'/> The plain MLP gets none of them exactly, "
-            f"and with turned copies in training its turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark "
-            "mark='e'/> That is the lesson of this chapter: a symmetry built into the layers holds exactly, on every "
-            "input; a symmetry learned from examples holds only approximately, and only near the data it saw."
+            "Here is the check on our five-particle system: four networks, the same data, the same number of steps. "
+            "<bookmark mark='a'/> Pause and predict: which turns its answer exactly when the input is turned? <bookmark "
+            "mark='b'/> The equivariant network, EGNN, which we'll build in chapter seven: its turned and shifted answers are "
+            f"off by {eg_tiny} of a unit, rounding error. <bookmark mark='c'/> A message-passing network on raw coordinates "
+            "handles a reordering exactly, since it sums over neighbours, but not a turn. <bookmark mark='d'/> The plain MLP "
+            f"gets none exactly; trained on turned copies, its turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark "
+            "mark='e'/> The lesson: a symmetry built into the layers holds exactly, on every input; one learned from "
+            "examples holds only approximately, and only near the data."
         ) as vo:
             self.play(FadeIn(p, shift=UP * 0.15))
             vo.wait_until("a")

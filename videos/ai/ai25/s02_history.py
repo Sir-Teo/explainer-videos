@@ -116,16 +116,15 @@ class History(VoiceoverScene):
         three = label(r"three ways to get a symmetry: \ show transformed copies, \ put inputs in a standard pose, \ "
                       r"or build it into the layers", font_size=22, color=AUG).next_to(gdl, UP, buff=0.25)
         with self.voiceover(
-            "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. "
-            "For an image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their "
-            "order. <bookmark mark='c'/> For a graph, how its nodes happen to be numbered. <bookmark mark='d'/> For "
-            "a molecule, how it is turned or moved in space. <bookmark mark='e'/> A protein has all of these at once. "
-            "<bookmark mark='f'/> A weather field lives on a sphere, and shouldn't depend on the grid it was stored "
-            "on. <bookmark mark='g'/> Language, by contrast, has little symmetry to exploit, which is one reason the "
-            "transformer learns its structure from data instead. <bookmark mark='h'/> Michael Bronstein, Joan Bruna, "
-            "Taco Cohen and Petar Veličković called this programme geometric deep learning. And there are three "
-            "ways to get a symmetry into a model: show it transformed copies of the data, put every input into a "
-            "standard pose first, or build the symmetry into the layers. This part is mostly about the third."
+            "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. For an "
+            "image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their order. <bookmark "
+            "mark='c'/> For a graph, how its nodes are numbered. <bookmark mark='d'/> For a molecule, how it is turned or "
+            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere, "
+            "and shouldn't depend on the grid. <bookmark mark='g'/> Language has little symmetry to exploit, one reason the "
+            "transformer learns its structure from data. <bookmark mark='h'/> Michael Bronstein, Joan Bruna, Taco Cohen and "
+            "Petar Veličković called this programme geometric deep learning. There are three ways to get a symmetry into a "
+            "model: show it transformed copies, put every input in a standard pose, or build the symmetry into the layers. "
+            "This part is mostly about the third."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hrow), Create(rule))
             for k, mk in enumerate("abcdefg"):

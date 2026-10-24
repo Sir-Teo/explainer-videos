@@ -81,30 +81,32 @@ class Search(VoiceoverScene):
                  xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", center=[-3.1, 0.6, 0])
         bf = DashedLine(g.ax.c2p(0, bf_tr), g.ax.c2p(gens[-1], bf_tr), color=PLAIN)
         ff = DashedLine(g.ax.c2p(0, min(ff_tr, hi)), g.ax.c2p(gens[-1], min(ff_tr, hi)), color=GREY_C)
-        bfl = label(r"best fit", font_size=18, color=PLAIN).next_to(bf, UP, buff=0.04).align_to(bf, RIGHT)
-        ffl = label(r"first fit", font_size=18, color=GREY_C).next_to(ff, UP, buff=0.04).align_to(ff, RIGHT)
+        bfl = label(r"best fit", font_size=20, color=PLAIN).next_to(bf, UP, buff=0.06).align_to(bf, LEFT).shift(RIGHT * 0.15)
+        ffl = label(r"first fit", font_size=20, color=GREY_C).next_to(ff, UP, buff=0.06).align_to(ff, LEFT).shift(RIGHT * 0.15)
         cb = curve(g.ax, gens, best, SEARCH_C, 3.5)
         what = VGroup(
-            label(r"items arrive one at a time; \ each must go in a bin of size $100$ at once", font_size=21),
-            label(r"a \textit{priority function} scores every bin it fits in: \ $s$ the item, \ $r$ the room left, \ "
-                  r"$g = r - s$", font_size=21),
-            label(r"best fit: \ priority $-g$, \ the tightest bin", font_size=21, color=PLAIN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 1.8, 0])
+            label(r"items arrive one at a time; \\ each must go in a bin of size $100$ at once", font_size=22),
+            label(r"a \textit{priority function} scores every bin it fits in: \\ $s$ the item, \ $r$ the room left, \ "
+                  r"$g = r - s$", font_size=22),
+            label(r"best fit: \ priority $-g$, \ the tightest bin", font_size=22, color=PLAIN),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         for w_ in what:
-            if w_.width > 6.2:
-                w_.width = 6.2
+            if w_.width > 6.3:
+                w_.width = 6.3
+        what.move_to([0, 2.0, 0]).align_to(np.array([0.6, 0, 0]), LEFT)
         seeds = [k for k in ("s0", "s1") if k in b]
         tests = [b[k]["test"] for k in seeds]
         bf_te, ff_te = b["bf_test"], b["ff_test"]
         formula = label(r"evolved, \ seed $0$: \ " + "$" + b["s0"]["best"].replace("|", r"|").replace("*", r"\cdot ")
                         + "$", font_size=20, color=SEARCH_C)
-        formula.width = min(formula.width, 6.2)
-        formula.move_to([3.4, -0.3, 0])
+        formula.width = min(formula.width, 6.3)
+        formula.move_to([0, -0.2, 0]).align_to(np.array([0.6, 0, 0]), LEFT)
         res = VGroup(
             label(rf"held-out, \ $1{{,}}000$ items: \ first fit ${ff_te:.2f}\%$, \ best fit ${bf_te:.2f}\%$",
                   font_size=21, color=GREY_A),
             label(r"evolved: \ " + r", \ ".join(rf"${t:.2f}\%$" for t in tests), font_size=21, color=SEARCH_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -1.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        res.move_to([0, -1.3, 0]).align_to(np.array([0.6, 0, 0]), LEFT)
         caveat = label(r"Sim, Renau \& Hart (2025): \ heuristics evolved this way often fail to generalize beyond "
                        r"their benchmark", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)
         better = [t for t in tests if t < bf_te - 0.02]
@@ -117,6 +119,12 @@ class Search(VoiceoverScene):
         else:
             res_line = (f"On new, longer sequences of items, neither evolved rule beats best fit's {bf_te:.2f} "
                         "percent: what evolution found was tuned to its training instances")
+        if len(better) == len(tests):
+            gen_line = ("Ours carried over; but an independent study in 2025 found that heuristics evolved by language "
+                        "models often don't generalize beyond the instances they were bred on")
+        else:
+            gen_line = ("An independent study in 2025 found the same of heuristics evolved by language models: they "
+                        "often don't generalize beyond the instances they were bred on")
         gain = bf_tr - best[-1]
         evo_line = (f"Within {int(gens[-1])} generations it beats best fit on its training instances by "
                     f"{gain:.2f} points" if gain > 0.02 else
@@ -129,9 +137,7 @@ class Search(VoiceoverScene):
             "item fits in, and pick the highest. <bookmark mark='b'/> The classic is best fit: the bin with the "
             "least room left. <bookmark mark='c'/> We evolve such scores as formulas, with random mutations and "
             "crossings standing in for the language model, judged by how many bins they use on eight training "
-            f"sequences. {evo_line}. <bookmark mark='d'/> {res_line}. <bookmark mark='e'/> An independent study in "
-            "2025 found the same of heuristics evolved by language models: they often don't generalize beyond "
-            "the instances they were bred on."
+            f"sequences. {evo_line}. <bookmark mark='d'/> {res_line}. <bookmark mark='e'/> {gen_line}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(what[0]), FadeIn(tag))
             vo.wait_until("a")
@@ -164,7 +170,7 @@ class Search(VoiceoverScene):
         hist = VGroup(
             label(r"Strassen (1969): \ $2 \times 2$ in $7$, \ not $8$; \ Winograd (1971): \ $7$ is the minimum",
                   font_size=22, color=HIST),
-        ).move_to([0, -0.4, 0])
+        ).move_to([0, -1.2, 0])
         res = []
         for R in (6, 7, 8):
             r_ = mm[f"n2_r{R}"]
@@ -180,7 +186,7 @@ class Search(VoiceoverScene):
         tab.add(label(rf"$3 \times 3$, \ rank $23$ \ (Laderman, 1976): \ ${n3a['success']}$ of ${n3_tries}$ \ "
                       rf"(best ${sci(min(n3a['best'], n3b['best']), 1)}$, \ even at rank $26$)", font_size=22,
                       color=SEARCH_C if n3a["success"] else GREY_B))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -2.1, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([0, -2.65, 0])
         ver = mm["n2_r7_verify"]
         vdp = int(np.floor(-np.log10(max(ver, 1e-300))))
         r6, r7, r8 = res
@@ -243,7 +249,9 @@ class Search(VoiceoverScene):
                   r"Gemini's training time", font_size=22, color=GREY_A),
             label(r"67 problems with Tao, \ Georgiev, \ G\'omez-Serrano \& Wagner \ (November 2025)", font_size=22,
                   color=HIST),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(head, DOWN, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.34)
+        facts.width = min(facts.width * 1.15, 13.2)
+        facts.next_to(head, DOWN, buff=0.45)
         for f_ in facts:
             if f_.width > 13.0:
                 f_.width = 13.0

@@ -45,6 +45,9 @@ class Proofs(VoiceoverScene):
         lean = VGroup(box, code).move_to([0, 2.3, 0])
         ll = note(r"illustrative: \ Lean 4 with Mathlib; \ the kernel checks every step", font_size=20)
         ll.next_to(lean, DOWN, buff=0.12)
+        ok_ = VGroup(MathTex(r"\checkmark", font_size=48, color=STRUCT), label(r"the kernel: \ accepted \ (every step checked)",
+                                                                 font_size=26, color=STRUCT)).arrange(RIGHT, buff=0.2)
+        ok_.next_to(ll, DOWN, buff=0.35)
         cards = VGroup(
             history_card(1976, r"Appel \& Haken", r"the four-colour theorem, \ by computer; \ checked in Coq in "
                          r"2005 (Gonthier)", width=4.2, color=HIST),
@@ -53,6 +56,8 @@ class Proofs(VoiceoverScene):
             history_card(2022, r"the Liquid Tensor Experiment", r"a hard theorem of Clausen and Scholze, \ "
                          r"formalized in Lean in about eighteen months", width=4.2, color=HIST),
         ).arrange(RIGHT, buff=0.25).move_to([0, -0.3, 0])
+        cards.width = min(cards.width * 1.08, 13.4)
+        cards.move_to([0, -0.4, 0])
         ml = label(r"Mathlib, \ October 2026: \ $291{,}099$ theorems, \ $139{,}563$ definitions, \ $772$ "
                    r"contributors", font_size=24, color=LEAN_C).to_edge(DOWN, buff=0.45)
         mc = note(r"leanprover-community.github.io, \ Mathlib statistics", font_size=18).next_to(ml, DOWN, buff=0.08)
@@ -70,6 +75,9 @@ class Proofs(VoiceoverScene):
             self.play(FadeIn(lean), FadeIn(ll))
             vo.wait_until("a")
             self.play(Indicate(lean, color=LEAN_C, scale_factor=1.02))
+            self.play(FadeIn(ok_, shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeOut(ok_))
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.1))
@@ -84,13 +92,14 @@ class Proofs(VoiceoverScene):
                                                                          LEAN_C),
                  (r"trace back each fact \\ to what it needed", SYM), (r"$100$ million \\ theorems with proofs",
                                                                          PAIR_C)]
-        boxes = VGroup(*[node_box(t, c, font_size=20, height=1.1) for t, c in steps]).arrange(RIGHT, buff=0.45)
-        boxes.to_edge(UP, buff=0.5)
+        boxes = VGroup(*[node_box(t, c, font_size=24, height=1.25) for t, c in steps]).arrange(RIGHT, buff=0.45)
+        boxes.width = min(boxes.width, 13.2)
+        boxes.to_edge(UP, buff=0.55)
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5)
                        for a, b in zip(boxes, boxes[1:])])
         aux = label(r"$9\%$ of them need an extra point the statement never mentions: \ an \textit{auxiliary "
-                    r"construction}, \ which a $151$-million-weight language model learns to propose",
-                    font_size=20, color=PRED_C).next_to(boxes, DOWN, buff=0.3)
+                    r"construction}, \\ which a $151$-million-weight language model learns to propose",
+                    font_size=24, color=PRED_C).next_to(boxes, DOWN, buff=0.35)
         aux.width = min(aux.width, 13.0)
         rows = [(r"GPT-4", 0, PLAIN), (r"Wu's method \ (1978)", 10, GREY_B), (r"the symbolic engine alone", 14, LEAN_C),
                 (r"AlphaGeometry", 25, PAIR_C), (r"average IMO gold medallist", 25.9, HIST)]
@@ -98,7 +107,7 @@ class Proofs(VoiceoverScene):
         bl = label(r"olympiad geometry problems solved, \ of $30$ \ (IMO 2000--2022)", font_size=20, color=GREY_A)
         bl.next_to(bars, UP, buff=0.15)
         ag2 = label(r"AlphaGeometry 2 (2025): \ $84\%$ of all IMO geometry problems of 2000--2024, \ up from $54\%$",
-                    font_size=22, color=PAIR_C).to_edge(DOWN, buff=0.35)
+                    font_size=22, color=PAIR_C).to_edge(DOWN, buff=0.75)
         cite_ = cite(r"Trinh et al., \textit{Nature} (2024); \ Chervonyi et al.\ (2025)", corner=DR)
         with self.voiceover(
             "Olympiad geometry was the first olympiad subject to fall. In January 2024 Trieu Trinh, Thang Luong and "
@@ -141,9 +150,9 @@ class Proofs(VoiceoverScene):
         head.to_edge(UP, buff=0.45)
         notes = VGroup(
             label(r"2024 and 2025: \ Part 28, \ chapter 13", font_size=22, color=GREY_B),
-            label(r"2026, Shanghai: \ Huawei's Celia and Xiaohongshu's dots-note-3.0 reported $42$ of $42$, \ "
-                  r"solutions submitted to the organizers for grading \ (AFP, 23 July 2026); \ seven of $666$ "
-                  r"students also scored $42$", font_size=20, color=SEARCH_C),
+            label(r"2026, Shanghai: \ Huawei's Celia and Xiaohongshu's dots-note-3.0 reported $42$ of $42$, \\ "
+                  r"solutions submitted to the organizers for grading \ (AFP, 23 July 2026); \\ seven of $666$ "
+                  r"students also scored $42$", font_size=22, color=SEARCH_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
         for n_ in notes:
             if n_.width > 13.0:
