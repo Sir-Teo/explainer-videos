@@ -484,7 +484,9 @@
     "three models of $708{,}100$ weights, \\ three seeds each \\ (bands: \\ min to max)": "三个模型，各$708{,}100$个权重，\\ 各三个种子 \\ （色带：\\ 最小到最大）",
     "together": "一起画",
     "separately": "分开画",
-    "$64$ clips, \\ three seeds; \\ real clips' wobble: \\ $0.40$ px": "$64$个片段，\\ 三个种子；\\ 真实片段的抖动：\\ $0.40$像素"
+    "$64$ clips, \\ three seeds; \\ real clips' wobble: \\ $0.40$ px": "$64$个片段，\\ 三个种子；\\ 真实片段的抖动：\\ $0.40$像素",
+    "a language model: \\ one token at a time, \\ each from the ones before": "语言模型：\\ 一次一个词元，\\ 每个都由前面的词元得出",
+    "training: \\ hide a random share of the tokens, \\\\ predict them all at once, \\\\ seeing every other token": "训练：\\ 随机藏起一部分词元，\\\\ 一次全部预测出来，\\\\ 看得见其余所有词元"
   },
   "patterns": [
     [

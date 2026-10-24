@@ -134,8 +134,9 @@ class Omni(VoiceoverScene):
         with self.voiceover(
             "Alibaba's open omni models split the work in two. <bookmark mark='a'/> A Thinker, a language model, "
             "reads one sequence of text, picture and sound tokens, with rotary positions aligned by time, and writes "
-            "text. <bookmark mark='b'/> A smaller Talker writes speech codes, twelve and a half frames a second, "
-            "streaming, and a small convolutional decoder turns them into sound. In Qwen2.5-Omni the Talker read the "
+            "text. <bookmark mark='b'/> A smaller Talker writes speech codes as it goes, and a decoder turns them into "
+            "sound; in Qwen3-Omni, twelve and a half frames a second through a small convolutional decoder. In "
+            "Qwen2.5-Omni the Talker read the "
             "Thinker's hidden states; in Qwen3-Omni it reads only the words and the sound and picture features, so "
             "tools and safety filters can step in on the text before it is spoken. <bookmark mark='c'/> Qwen3-Omni, "
             "in September 2025, made both halves mixtures of experts and released the weights; Qwen3.5-Omni, in "
