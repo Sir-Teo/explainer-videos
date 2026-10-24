@@ -97,8 +97,8 @@ class Problem(VoiceoverScene):
                             r"a training signal made from the data itself: \ hide part of an input, \ or change it, "
                             r"\ or pair it with another, \ and ask the network to recover what was hidden \ or "
                             r"which goes with which. \ The product is the network's internal vector "
-                            r"$h = f(x)$, \ its \textbf{representation}.", width=6.6, font_size=23)
-        d.move_to([3.2, 1.0, 0])
+                            r"$h = f(x)$, \ its \textbf{representation}.", width=6.2, font_size=23)
+        d.move_to([3.75, 1.0, 0])
         why_ = label(r"no one writes the answers: \ the data does", font_size=24, color=POS)
         why_.next_to(d, DOWN, buff=0.4).align_to(d, LEFT)
         with self.voiceover(

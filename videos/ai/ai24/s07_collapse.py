@@ -111,9 +111,9 @@ class Collapse(VoiceoverScene):
             "space. <bookmark mark='a'/> SimCLR keeps its vectors spread over about "
             f"{r_s:.0f} of its {dim} dimensions. <bookmark mark='b'/> {tail}"
         ) as vo:
-            self.play(FadeIn(d), FadeIn(dn), FadeIn(src))
+            self.play(FadeIn(d), FadeIn(dn), FadeIn(src), FadeIn(ax))
             vo.wait_until("a")
-            self.play(FadeIn(ax), Create(c1), run_time=1.5)
+            self.play(Create(c1), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(c2), FadeIn(leg), run_time=1.5)
         self.wait(0.3)

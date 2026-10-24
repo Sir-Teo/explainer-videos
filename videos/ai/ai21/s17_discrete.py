@@ -67,13 +67,14 @@ class Discrete(VoiceoverScene):
             "or blank it out with a special mask symbol, which then stays blank: absorbing noise. The blanks won. At "
             "the end, everything is blank, and the reverse process fills the blanks in."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(cite_), FadeIn(cols[0][0]), FadeIn(cols[1][0]))
+            self.play(FadeIn(tag), FadeIn(cite_), FadeIn(cols[0][0]), FadeIn(cols[1][0]), FadeIn(cols[0][1][0]),
+                      FadeIn(cols[1][1][0]))
             vo.wait_until("a")
             self.play(FadeIn(d, shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in cols[0][1]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in cols[0][1][1:]], lag_ratio=0.3))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in cols[1][1]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in cols[1][1][1:]], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()
 
@@ -96,7 +97,7 @@ class Discrete(VoiceoverScene):
                 why(r"$k$ blanks: \ $\int_0^1 t^{k-1}(1-t)^{n-k}\, dt = \frac{1}{k \binom{n}{k}}$")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-1.8, buff=0.55, edge=6.85)
         tail = label(r"$=$ \ an autoregressive loss, \ averaged over every order of revealing the letters", font_size=26,
-                     color=MDM_C).to_edge(DOWN, buff=0.45)
+                     color=MDM_C).to_edge(DOWN, buff=0.85)
         cite_ = cite(r"Sahoo et al.\ (MDLM); \ Shi et al.\ (MD4); \ Ou et al.\ (2024)", corner=DR, font_size=18)
         with self.voiceover(
             "With blanks, the bound becomes remarkably simple. Each letter is blank with probability t. "
@@ -176,16 +177,20 @@ class Discrete(VoiceoverScene):
             tight_note = "And with the exact conditionals, the bound is close to the true entropy."
         with self.voiceover(
             f"Check it where everything can be enumerated: strings of {L} letters from a, b and c, drawn from a "
-            "Markov chain, every probability known. Three models predict the blanks: the exact conditionals, the same "
-            "blurred towards uniform, and one that ignores the context. <bookmark mark='a'/> The bound of a chain "
+            "Markov chain, every probability known. Three models predict the blanks: <bookmark mark='m'/> the exact "
+            "conditionals, <bookmark mark='n'/> the same blurred towards uniform, <bookmark mark='o'/> and one that "
+            "ignores the context. <bookmark mark='a'/> The bound of a chain "
             f"with T steps, computed exactly: with one step, the exact model's bound is {d1:.4f} bits per letter; "
             f"with {Ts[-1]:,} steps, {dT:.4f}, settling onto the integral, the dashed lines. <bookmark mark='b'/> The "
             f"integral, the weighted cross-entropy, and the average over every order of revealing agree to {dp} decimal "
             "places, for every model. <bookmark mark='c'/> " + tight_note
         ) as vo:
-            self.play(FadeIn(lang), FadeIn(g), Create(hl), FadeIn(hll), FadeIn(lg))
+            self.play(FadeIn(lang), FadeIn(g), Create(hl), FadeIn(hll))
+            for l_, e_, mk in zip(lines, lg, "mno"):
+                vo.wait_until(mk)
+                self.play(FadeIn(l_), FadeIn(e_), run_time=0.8)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(l_) for l_ in lines], lag_ratio=0.3), run_time=2.0)
+            self.play(*[Indicate(l_, color=WHITE, scale_factor=1.0) for l_ in lines], run_time=1.2)
             vo.wait_until("b")
             self.play(FadeIn(tab))
             vo.wait_until("c")
@@ -197,20 +202,23 @@ class Discrete(VoiceoverScene):
     def lineage(self):
         cards = VGroup(
             history_card(2014, r"Uria, Murray \& Larochelle", r"one network for every order of an autoregressive model",
-                         color=HIST, width=4.3, font_size=17),
+                         color=HIST, width=6.3, font_size=22),
             history_card(2022, r"Hoogeboom et al.: \ autoregressive diffusion", r"any order, \ several letters at a time",
-                         color=HIST, width=4.3, font_size=17),
+                         color=HIST, width=6.3, font_size=22),
             history_card(2024, r"Lou, Meng \& Ermon: \ SEDD", r"ratios of probabilities as the discrete score; \ ICML "
-                         r"best paper", color=HIST, width=4.3, font_size=17),
+                         r"best paper", color=HIST, width=6.3, font_size=22),
             history_card(2024, r"Sahoo et al.: \ MDLM; \ Shi et al.: \ MD4", r"masked diffusion is a weighted "
-                         r"cross-entropy: \ simple, and as good", color=HIST, width=4.3, font_size=17),
+                         r"cross-entropy: \ simple, and as good", color=HIST, width=6.3, font_size=22),
             history_card(2024, r"Ou et al.", r"the model need not know the time: \ only which letters are blank",
-                         color=HIST, width=4.3, font_size=17),
+                         color=HIST, width=6.3, font_size=22),
             history_card(2025, r"Nie et al.: \ LLaDA", r"an $8$-billion-parameter masked diffusion language model",
-                         color=HIST, width=4.3, font_size=17),
-        ).arrange_in_grid(rows=2, cols=3, buff=(0.22, 0.25)).move_to(UP * 0.4)
+                         color=HIST, width=6.3, font_size=22),
+        ).arrange_in_grid(rows=3, cols=2, buff=(0.3, 0.25)).move_to(UP * 0.5)
         if cards.width > 13.4:
             cards.width = 13.4
+        if cards.height > 5.6:
+            cards.height = 5.6
+        cards.move_to(UP * 0.5)
         ta = take_away(r"Masked diffusion's bound is an autoregressive loss averaged over all orders; \ its training is "
                        r"fill-in-the-blanks.")
         with self.voiceover(

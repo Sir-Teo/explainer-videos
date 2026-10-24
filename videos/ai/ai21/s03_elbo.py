@@ -119,6 +119,7 @@ class ELBO(VoiceoverScene):
         g = axes([0, T], [lo, hi], x_length=6.6, y_length=3.6, xlabel=r"step $t$",
                  ylabel=r"the bound's weight $\lambda_t$ on the noise guess (log scale)", xticks=[0, 500, 1000],
                  yticks=list(range(lo, hi + 1)), yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.6, -0.2, 0])
+        g_shift = RIGHT * 2.6  # the chart starts in the middle, and slides left for the card
         ts = np.arange(1, T + 1)
         cw = curve(g.ax, ts[::4], np.log10(lam[::4]), SCORE, 3.5)
         flat = DashedLine(g.ax.c2p(0, math.log10(np.median(lam))), g.ax.c2p(T, math.log10(np.median(lam))), color=GREY_B,
@@ -141,8 +142,10 @@ class ELBO(VoiceoverScene):
             "loss like it. The exact weighting returns in chapter seven: it is a choice of which noise levels to "
             "practise most."
         ) as vo:
+            VGroup(g, cw).shift(g_shift)
             self.play(FadeIn(g), Create(cw), run_time=1.6)
             vo.wait_until("a")
+            self.play(VGroup(g, cw).animate.shift(-g_shift), run_time=0.8)
             self.play(Create(flat), FadeIn(fl), FadeIn(card, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Indicate(card.body[0], color=SCORE))

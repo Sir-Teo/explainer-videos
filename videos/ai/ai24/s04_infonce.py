@@ -266,8 +266,7 @@ class InfoNCE(VoiceoverScene):
                     color=GREY_A).move_to([3.6, 1.6, 0])
         doms = label(r"speech, \ images, \ text, \ 3D games", font_size=22, color=GREY_B).next_to(cap, DOWN, buff=0.3)
         src = cite(r"van den Oord, Li \& Vinyals (2018): \ contrastive predictive coding", corner=UL)
-        tk = take_away(r"a contrastive loss is a classifier over $N$ candidates, \ and a bound on information "
-                       r"capped at $\log N$")
+        tk = take_away(r"contrastive loss: \ an $N$-way classifier, \ and an information bound capped at $\log N$")
         with self.voiceover(
             "The paper's own model, contrastive predictive coding, applied this to sequences. Encode a stretch of "
             "speech or a row of image patches, <bookmark mark='a'/> summarize the past in a context vector, "

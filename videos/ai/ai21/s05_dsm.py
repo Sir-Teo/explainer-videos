@@ -145,7 +145,7 @@ class DSM(VoiceoverScene):
                                 for j, c in enumerate(r)]) for i, r in enumerate(rows)])
         for i, r in enumerate(tab):
             for j, c in enumerate(r):
-                c.move_to([1.35 + 1.2 * j, -1.0 - 0.36 * i, 0])
+                c.move_to([1.7 + 1.17 * j, -1.0 - 0.36 * i, 0])
         n_seeds = len(seeds)
         f0 = fin[k]
         with self.voiceover(
@@ -200,8 +200,10 @@ class DSM(VoiceoverScene):
             "this way, and sampled with Part 20's annealed Langevin. <bookmark mark='b'/> Denoising, at every noise "
             "level, by plain regression: that is what every diffusion model learns."
         ) as vo:
+            VGroup(cap, ch).shift(RIGHT * 3.0)  # in the middle first, then aside for the card
             self.play(FadeIn(cap), FadeIn(ch))
             vo.wait_until("a")
+            self.play(VGroup(cap, ch).animate.shift(LEFT * 3.0), run_time=0.8)
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(ta, shift=UP * 0.2))

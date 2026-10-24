@@ -675,7 +675,8 @@ ZH.update({
 
     'f"Check it where everything can be enumerated':
         "在一切都能枚举的地方检验它：由a、b、c组成的{L}个字母的字符串，来自一个马尔可夫链，每个概率都已知。三个模型来预测空白："
-        "精确的条件概率，同样的条件概率但向均匀分布模糊了一些，以及一个忽略上下文的模型。<bookmark mark='a'/>T步链的下界，精确计算："
+        "<bookmark mark='m'/>精确的条件概率，<bookmark mark='n'/>同样的条件概率但向均匀分布模糊了一些，<bookmark mark='o'/>"
+        "以及一个忽略上下文的模型。<bookmark mark='a'/>T步链的下界，精确计算："
         "只有一步时，精确模型的下界是每个字母{d1:.4f}比特；{Ts[-1]:,}步时是{dT:.4f}，逐渐落到那个积分上，也就是那些虚线。"
         "<bookmark mark='b'/>积分、加权交叉熵，以及对每一种揭开顺序的平均，对每个模型都在小数点后{dp}位上一致。<bookmark mark='c'/>"
         "{tight_note}",

@@ -30,7 +30,7 @@ class Forward(VoiceoverScene):
         f = load("forward")
         frames, keep = np.asarray(f["frames"]), [int(k) for k in f["keep"]]
         T = int(f["T"])
-        pn = Panel(6.4, center=[-3.2, -0.2, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))
+        pn = Panel(6.4, center=[0, -0.2, 0], xlim=(-3.2, 3.4), ylim=(-3.0, 2.6))  # slides left for the card
         dots = pn.dots(frames[0], DATA, radius=0.022)
         cnt = label(r"step $0$", font_size=26, color=GREY_A).next_to(pn, UP, buff=0.15)
         d = definition_card(r"the forward process", VGroup(
@@ -51,7 +51,7 @@ class Forward(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pn), FadeIn(dots), FadeIn(cnt), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(FadeIn(d, shift=UP * 0.2))
+            self.play(VGroup(pn, dots, cnt).animate.shift(LEFT * 3.2), FadeIn(d, shift=UP * 0.2))
             vo.wait_until("b")
             for k in range(1, len(frames)):
                 col = interpolate_color(ManimColor(DATA), ManimColor(NOISE), k / (len(frames) - 1))

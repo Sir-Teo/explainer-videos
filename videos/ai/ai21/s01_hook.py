@@ -123,8 +123,9 @@ class Hook(VoiceoverScene):
             self.play(FadeOut(smap), FadeIn(obj.head), FadeIn(rows[0], shift=RIGHT * 0.1))
             for k, mk in enumerate("bcdef", 1):
                 vo.wait_until(mk)
-                self.play(rows[:k].animate.set_opacity(0.45), FadeIn(rows[k], shift=RIGHT * 0.1), run_time=0.6)
+                self.play(*[r_[1].animate.set_opacity(0.45) for r_ in rows[:k]], FadeIn(rows[k], shift=RIGHT * 0.1),
+                          run_time=0.6)
             vo.wait_until("g")
-            self.play(rows.animate.set_opacity(1), run_time=0.6)
+            self.play(*[r_[1].animate.set_opacity(1) for r_ in rows], run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
