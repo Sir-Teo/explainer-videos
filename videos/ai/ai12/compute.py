@@ -866,6 +866,12 @@ def compute_repeat():
     out["final"] = fin
     for u in REPEAT_UNIQUE:
         out[f"curve{u}"] = np.array(part[f"{u}_0"]["curve"])
+    return _repeat_post(out, s)
+
+
+def _repeat_post(out, s):
+    """Each repeated run's effective data, read off the fresh-data curve, and Muennighoff et al.'s R* fitted."""
+    fin = np.asarray(out["final"], float)
     # fresh data at the same width, from the sweep: L(D) for one pass over D distinct characters
     i = _nearest(s["widths"], REPEAT_W)
     fresh = np.asarray(s["bits"])[i]
@@ -926,15 +932,21 @@ def compute_moe():
     out["final"] = np.array([[part[f"{E}_{sd}"]["final"] for sd in (0, 1)] for E in MOE_E])
     out["total"] = np.array([part[f"{E}_0"]["total"] for E in MOE_E], float)
     out["active"] = np.array([part[f"{E}_0"]["active"] for E in MOE_E], float)
-    # dense models at the same training length, from the sweep: the dense size that matches each mixture's loss
+    return _moe_post(out, s)
+
+
+def _moe_post(out, s):
+    """The dense size that matches each mixture's loss (dense models of the sweep at the same training length), and
+    the loss's slope against the number of experts."""
     j = _nearest(s["ks"], MOE_K)
-    dense = np.asarray(s["bits"])[:, j]
-    Nd = np.asarray(s["N"])
+    dense = np.asarray(s["bits"], float)[:, j]
+    Nd = np.asarray(s["N"], float)
     out["dense_N"], out["dense_L"] = Nd, dense
-    order = np.argsort(dense)[::-1]
-    eff = [float(np.exp(np.interp(v, dense[order], np.log(Nd[order])))) for v in out["final"].mean(1)]
+    ok = np.isfinite(dense)
+    order = np.argsort(dense[ok])  # ascending loss, as np.interp needs
+    eff = [float(np.exp(np.interp(v, dense[ok][order], np.log(Nd[ok][order])))) for v in np.asarray(out["final"]).mean(1)]
     out["effective_N"] = np.array(eff)
-    out["slope"] = loglog_slope(np.array(MOE_E[1:]), out["final"].mean(1)[1:] - float(load("chinchilla")["E"]))
+    out["slope"] = loglog_slope(np.array(MOE_E[1:]), np.asarray(out["final"]).mean(1)[1:] - float(load("chinchilla")["E"]))
     return out
 
 

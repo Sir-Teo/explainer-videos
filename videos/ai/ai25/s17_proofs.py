@@ -62,14 +62,14 @@ class Proofs(VoiceoverScene):
                    r"contributors", font_size=24, color=LEAN_C).to_edge(DOWN, buff=0.45)
         mc = note(r"leanprover-community.github.io, \ Mathlib statistics", font_size=18).next_to(ml, DOWN, buff=0.08)
         with self.voiceover(
-            "Mathematics has something no other science has: a checker that cannot be fooled. Part 28 will show how "
-            "reinforcement learning exploits a perfect checker; here is where the checker comes from. <bookmark mark='a'/> "
-            "In a proof assistant such as Lean, a theorem and its proof are code, and a small kernel checks every inference: "
-            "this one says that n times n plus one is even. <bookmark mark='b'/> Computers entered proofs in 1976 with Appel "
-            "and Haken's four-colour theorem, which Georges Gonthier checked formally in 2005. <bookmark mark='c'/> Thomas "
+            "Mathematics has something no other science has: a checker that cannot be fooled. <bookmark mark='a'/> In a "
+            "proof assistant such as Lean, a theorem and its proof are code, and a small kernel checks every inference; this "
+            "one says that n times n plus one is even. <bookmark mark='b'/> Computers entered proofs in 1976 with Appel and "
+            "Haken's four-colour theorem, which Georges Gonthier checked formally in 2005. <bookmark mark='c'/> Thomas "
             "Hales's proof of the Kepler conjecture was formally verified in 2014, <bookmark mark='d'/> and in 2022 Lean's "
             "community formalized a hard new theorem of Dustin Clausen and Peter Scholze. <bookmark mark='e'/> Lean's "
-            "library, Mathlib, now holds about two hundred and ninety thousand theorems."
+            "library, Mathlib, now holds about two hundred and ninety thousand theorems; Part 28 shows what reinforcement "
+            "learning does with such a checker."
         ) as vo:
             self.play(FadeIn(lean), FadeIn(ll))
             vo.wait_until("a")
@@ -111,13 +111,13 @@ class Proofs(VoiceoverScene):
         with self.voiceover(
             "Olympiad geometry fell first. In January 2024 Trieu Trinh, Thang Luong and colleagues at Google DeepMind "
             "published AlphaGeometry. <bookmark mark='a'/> With no human proofs to learn from, they made their own: random "
-            "premises, a symbolic engine that deduces everything that follows, and a traceback from each new fact to what it "
-            "needed: a hundred million theorems with proofs. <bookmark mark='b'/> Nine percent need a point the statement "
-            "never mentions, an auxiliary construction, olympiad geometry's creative step; a language model learned to "
-            "propose them, and the engine does the rest. <bookmark mark='c'/> On thirty olympiad problems it solved "
-            "twenty-five, against ten for the best earlier method, fourteen for its engine alone and none for GPT-4; the "
-            "average gold medallist solves 25.9. <bookmark mark='d'/> A year later AlphaGeometry 2 solved eighty-four percent "
-            "of the International Mathematical Olympiad's geometry problems since 2000."
+            "premises, a symbolic engine deducing all that follows, and a traceback from each new fact to what it needed: a "
+            "hundred million theorems with proofs. <bookmark mark='b'/> Nine percent need a point the statement never "
+            "mentions, an auxiliary construction, the creative step; a language model learned to propose them, and the "
+            "engine does the rest. <bookmark mark='c'/> On thirty olympiad problems it solved twenty-five, against ten for "
+            "the best earlier method, fourteen for its engine alone and none for GPT-4; the average gold medallist solves "
+            "25.9. <bookmark mark='d'/> A year later AlphaGeometry 2 solved eighty-four percent of the olympiad's geometry "
+            "problems since 2000."
         ) as vo:
             self.play(FadeIn(boxes[0]), FadeIn(cite_))
             vo.wait_until("a")
@@ -160,9 +160,9 @@ class Proofs(VoiceoverScene):
             "method working in Lean, with AlphaGeometry 2 for the geometry, scored twenty-eight of forty-two, one point short "
             "of gold. <bookmark mark='b'/> In 2025 Google's Gemini Deep Think and an experimental OpenAI model each scored "
             "thirty-five, exactly gold, writing proofs in plain language. <bookmark mark='c'/> And in July 2026, in "
-            "Shanghai, Huawei and Xiaohongshu reported perfect scores for their systems, forty-two of forty-two, with "
-            "solutions submitted to the organizers for grading, as AFP reported; seven of the six hundred and sixty-six "
-            "students also scored forty-two. As a test for machines, the olympiad is close to saturated."
+            "Shanghai, Huawei and Xiaohongshu reported perfect scores, forty-two of forty-two, with solutions submitted to "
+            "the organizers for grading, as AFP reported; seven of the six hundred and sixty-six students also scored "
+            "forty-two. As a test for machines, the olympiad is nearly saturated."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -198,12 +198,12 @@ class Proofs(VoiceoverScene):
             "Beyond contests, the frontier is research mathematics. <bookmark mark='a'/> Autoformalization, translating "
             "informal mathematics into Lean, sped up sharply: in September 2025 the start-up Math Inc. reported that its "
             "agent Gauss had formalized the strong prime number theorem, about twenty-five thousand lines of Lean, in roughly "
-            "three weeks. <bookmark mark='b'/> In January 2026 OpenAI's GPT-5.2 Pro and Harmonic's prover Aristotle together "
-            "resolved Erdős problem 728, with a proof that ends in Lean. <bookmark mark='c'/> A Google DeepMind team ran "
-            "Gemini over seven hundred Erdős problems listed as open: thirteen were settled, five by seemingly new "
-            "arguments, eight because the answer was already in the literature. <bookmark mark='d'/> Two cautions: a formal "
-            "proof proves exactly its statement, so a mistranslated statement proves the wrong thing; and the problems "
-            "falling first are the easier ones."
+            "three weeks. <bookmark mark='b'/> In January 2026 OpenAI's GPT-5.2 Pro and Harmonic's prover Aristotle resolved "
+            "Erdős problem 728, with a proof that ends in Lean. <bookmark mark='c'/> A Google DeepMind team ran Gemini over "
+            "seven hundred open Erdős problems: thirteen were settled, five by seemingly new arguments, eight because the "
+            "answer was already in the literature. <bookmark mark='d'/> Two cautions: a formal proof proves exactly its "
+            "statement, so a mistranslated statement proves the wrong thing; and the problems falling first are the easier "
+            "ones."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(head))
             for k, mk in enumerate("abc"):

@@ -53,11 +53,11 @@ class AF3(VoiceoverScene):
         sch = note(r"schematic, \ after Abramson et al.\ (2024)", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
             "In May 2024 Google DeepMind and Isomorphic Labs published AlphaFold 3. <bookmark mark='a'/> It takes almost "
-            "anything in a cell's structures: protein chains, DNA and RNA, drug-like molecules, ions, modified residues, and "
-            "predicts how they sit together. <bookmark mark='b'/> The alignment gets just four blocks, <bookmark mark='c'/> "
-            "and the trunk is the Pairformer, the Evoformer's pair stack, forty-eight blocks with the triangle updates intact. "
-            "<bookmark mark='d'/> The big change is the end: the structure module, frames and all, is gone, replaced by a "
-            "diffusion model that writes every atom's coordinates directly."
+            "anything in a cell's structures, protein chains, DNA and RNA, drug-like molecules, ions, modified residues, and "
+            "predicts how they sit together. <bookmark mark='b'/> The alignment gets just four blocks; <bookmark mark='c'/> "
+            "the trunk is the Pairformer, the Evoformer's pair stack, forty-eight blocks, triangle updates intact. <bookmark "
+            "mark='d'/> The big change is the end: the structure module, frames and all, is replaced by a diffusion model "
+            "that writes every atom's coordinates directly."
         ) as vo:
             self.play(FadeIn(sch))
             vo.wait_until("a")
@@ -106,11 +106,11 @@ class AF3(VoiceoverScene):
             "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's coordinates, at "
             "every level from a whisper to pure noise, and train a network to remove it; then start from noise and remove it "
             "step by step. Here is a small model of ours, from noise to a chain. <bookmark mark='b'/> And here is the "
-            "surprise. After four chapters of building symmetry in, the AlphaFold 3 paper says that no invariance or "
-            "equivariance to rotations and translations is required in the architecture. <bookmark mark='c'/> Instead every "
-            "training structure is centred and turned at random: augmentation, chapter two's cheap route. <bookmark "
-            "mark='d'/> Diffusion can also invent structure in floppy regions; training on AlphaFold-Multimer's predictions "
-            "taught AlphaFold 3 to leave them as loose chains."
+            "surprise, after four chapters of building symmetry in: the AlphaFold 3 paper says its architecture needs no "
+            "invariance or equivariance to rotations or translations. <bookmark mark='c'/> Every training structure is "
+            "simply centred and turned at random: augmentation, chapter two's cheap route. <bookmark mark='d'/> Diffusion "
+            "can also invent structure in floppy regions; training on AlphaFold-Multimer's predictions taught AlphaFold 3 to "
+            "leave them loose."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -171,13 +171,12 @@ class AF3(VoiceoverScene):
                    "though the samples sit closer to training chains than real new chains do")
         with self.voiceover(
             "So is equivariance worth it, for a generator? A toy test: four thousand compact chains of twelve atoms in the "
-            "plane, with bonds of length one. <bookmark mark='a'/> Two denoisers, trained the same number of steps: one "
-            "equivariant to rotations, like EGNN, and a plain MLP shown every chain turned at random, as AlphaFold 3 is. "
-            f"<bookmark mark='b'/> Their samples. <bookmark mark='c'/> Bonds: the equivariant model's are off by "
-            f"{e['bond']:.3f} on average, the plain one's by {m['bond']:.3f}. Clashes, two atoms on top of each other: "
-            f"{100 * e['clash']:.1f} percent of chains against {100 * m['clash']:.1f}. {verdict}, {nn_line}. <bookmark "
-            "mark='d'/> At AlphaFold 3's scale, with the whole Protein Data Bank and a large network, DeepMind chose turned "
-            "copies: data and compute standing in for built-in symmetry."
+            "plane, bonds of length one. <bookmark mark='a'/> Two denoisers, trained equally long: one equivariant to "
+            "rotations, like EGNN; a plain MLP shown every chain turned at random, as AlphaFold 3 is. <bookmark mark='b'/> "
+            f"Their samples. <bookmark mark='c'/> Bonds: the equivariant model's are off by {e['bond']:.3f} on average, the "
+            f"plain one's by {m['bond']:.3f}. Clashes, two atoms on top of each other: {100 * e['clash']:.1f} percent of "
+            f"chains against {100 * m['clash']:.1f}. {verdict}, {nn_line}. <bookmark mark='d'/> At AlphaFold 3's scale, with "
+            "the whole Protein Data Bank, DeepMind chose turned copies: data and compute standing in for built-in symmetry."
         ) as vo:
             self.play(FadeIn(real), FadeIn(rl), FadeIn(tag))
             vo.wait_until("a")

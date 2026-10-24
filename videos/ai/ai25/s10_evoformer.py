@@ -53,11 +53,11 @@ class Evoformer(VoiceoverScene):
         with self.voiceover(
             "AlphaFold 2, which John Jumper and colleagues at DeepMind entered in CASP14 in 2020, works in two stages. "
             "<bookmark mark='a'/> It searches genetic databases for related sequences, lined up in a multiple sequence "
-            "alignment, and for known structures of similar proteins. <bookmark mark='b'/> The Evoformer, forty-eight blocks "
-            "deep, reasons about these; <bookmark mark='c'/> the structure module turns the result into atoms, with a "
-            "confidence for each residue. <bookmark mark='d'/> Then it all runs again, fed its own output. <bookmark "
-            "mark='e'/> The Evoformer keeps two representations: a vector for every residue of every aligned sequence, and a "
-            "vector for every pair of residues, the descendant of AlphaFold 1's distance histograms."
+            "alignment, and for similar known structures. <bookmark mark='b'/> The Evoformer, forty-eight blocks deep, "
+            "reasons about these; <bookmark mark='c'/> the structure module turns the result into atoms, with a confidence "
+            "per residue. <bookmark mark='d'/> Then it all runs again on its own output. <bookmark mark='e'/> The Evoformer "
+            "keeps a vector per residue of every aligned sequence, and one per pair of residues, heir to AlphaFold 1's "
+            "distance histograms."
         ) as vo:
             self.play(FadeIn(b[0]), FadeIn(sch))
             vo.wait_until("a")
@@ -148,12 +148,11 @@ class Evoformer(VoiceoverScene):
         with self.voiceover(
             "The new idea is in how the pairs update each other. Think of the pair representation as a guess at every "
             "distance. <bookmark mark='a'/> The guesses can't be independent: for any third residue k, the distance from i "
-            "to j is at most the distance from i to k plus the distance from k to j. <bookmark mark='b'/> So each pair i j "
-            "is updated from the other two edges of every triangle it sits in: a gated sum over k of products of the pairs "
-            "i k and j k, the 'outgoing' update. <bookmark mark='c'/> The same with the edges pointing in. <bookmark "
-            "mark='d'/> In the matrix, entry i j collects rows i and j, position by position. <bookmark mark='e'/> Triangle "
-            "attention does the same with attention weights. <bookmark mark='f'/> It is chapter five's lesson: a network on "
-            "pairs, updated through a third node, sees what message passing on single nodes cannot."
+            "to j is at most i to k plus k to j. <bookmark mark='b'/> So each pair i j is updated from the other two edges of "
+            "every triangle it sits in: a gated sum over k of products of the pairs i k and j k, the 'outgoing' update; "
+            "<bookmark mark='c'/> the same with the edges pointing in. <bookmark mark='d'/> In the matrix, entry i j collects "
+            "rows i and j. <bookmark mark='e'/> Triangle attention does the same with attention weights. <bookmark "
+            "mark='f'/> Chapter five's lesson: pairs updated through a third node see what single nodes cannot."
         ) as vo:
             self.play(FadeIn(dots), FadeIn(names), Create(e_ij))
             vo.wait_until("a")
@@ -324,10 +323,10 @@ class Evoformer(VoiceoverScene):
         hc.to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over all "
-            "targets and 87.0 on the hardest; around ninety is informally reckoned competitive with experiment. <bookmark "
+            "targets, 87.0 on the hardest; around ninety is informally reckoned competitive with experiment. <bookmark "
             "mark='b'/> Its median backbone error was 0.96 ångström, against 2.8 for the next best; a carbon atom is about "
-            "one and a half ångströms across. <bookmark mark='c'/> \"We have been stuck on this one problem, how do proteins "
-            "fold up, for nearly fifty years,\" said John Moult; CASP's organizers called it a solution, for single chains."
+            "one and a half across. <bookmark mark='c'/> \"We have been stuck on this one problem, how do proteins fold up, "
+            "for nearly fifty years,\" said John Moult; CASP called it a solution, for single chains."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")

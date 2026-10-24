@@ -126,13 +126,13 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in twelve pictures", font_size=40).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Let's take stock. A symmetry is a transformation that shouldn't change the answer, and a network can respect "
-            "it exactly, by construction, or approximately, from examples. Sums make functions of sets; sums over neighbours "
-            "make graph networks, which see what colour refinement sees and blur when stacked too deep. Built-in rotations "
-            "made our molecule model far better on the same data. AlphaFold reads a protein through pairs kept consistent "
-            "by triangles, builds it from frames, and scores it with a loss that knows left from right; its successor hands "
-            "the atoms to diffusion. The weather runs on a mesh, equations are learned as operators, crystals are screened "
-            "by the million, and in mathematics, where the checker is perfect, search discovers."
+            "Let's take stock. A symmetry is a transformation that shouldn't change the answer; a network can respect it "
+            "exactly, by construction, or approximately, from examples. Sums make functions of sets; sums over neighbours "
+            "make graph networks, which see what colour refinement sees and blur when stacked deep. Built-in rotations made "
+            "our molecule model far better on the same data. AlphaFold reads a protein through pairs kept consistent by "
+            "triangles, builds it from frames, and scores it with a loss that knows left from right; its successor hands the "
+            "atoms to diffusion. Weather runs on a mesh, equations are learned as operators, crystals are screened by the "
+            "million, and where the checker is perfect, search discovers."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -150,11 +150,10 @@ class Outro(VoiceoverScene):
         ], font_size=26)
         with self.voiceover(
             "All of this comes back. <bookmark mark='a'/> Search guided by a network and judged by an exact checker is "
-            "AlphaZero, next time, and the reasoning models of Part 28. <bookmark mark='b'/> A learned simulator that rolls "
-            "the world forward, like our mesh network, is Part 29's world model. <bookmark mark='c'/> What a network's layers "
-            "represent, and whether its features respect the symmetries we expect, is Part 30's subject. <bookmark "
-            "mark='d'/> And CASP's blind tests, and an olympiad machines have nearly saturated, lead to Part 31's question "
-            "of how to evaluate at all."
+            "AlphaZero, next time, and Part 28's reasoning models. <bookmark mark='b'/> A learned simulator that rolls the "
+            "world forward, like our mesh network, is Part 29's world model. <bookmark mark='c'/> What a network's layers "
+            "represent, and whether they respect the symmetries we expect, is Part 30's subject. <bookmark mark='d'/> And "
+            "CASP's blind tests and a nearly saturated olympiad lead to Part 31's question: how to evaluate at all."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for k, mk in enumerate("bcd", 1):

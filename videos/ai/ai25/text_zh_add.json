@@ -114,7 +114,7 @@
   "segment": "线段",
   "two blobs": "两团",
   "real numbers: \\ the power sums $\\sum_i x_i^k$, \\ $k = 1, \\dots, n$, \\ pin down $n$ numbers (Newton); \\ fewer won't do \\ (Wagstaff et al.\\ 2019)": "实数：\\ 幂和$\\sum_i x_i^k$，\\ $k = 1, \\dots, n$，\\ 确定$n$个数（牛顿）；\\ 更少就不行 \\ （瓦格斯塔夫等，2019）",
-  "computed: \\ seed $0$, \\ $1{,}000$ held-out sets, \\ accuracy every $100$ steps": "计算所得：\\ 种子$0$，\\ $1{,}000$组留出集合，\\ 每$100$步测一次准确率",
+  "computed: \\ seed $0$, \\ $1{,}000$ held-out sets, \\ accuracy every $200$ steps": "计算所得：\\ 种子$0$，\\ $1{,}000$组留出集合，\\ 每$200$步测一次准确率",
   "order-free by construction: \\ less to learn, \\ and never fooled by a renumbering": "按构造就与顺序无关：\\ 要学的更少，\\ 也永远不会被重新编号骗到",
   "\\text{any order gives the same sum}": "\\text{任何顺序都给出同一个和}",
   "0.d_1 d_2 d_3 \\ldots \\ (\\text{base } 4)": "0.d_1 d_2 d_3 \\ldots \\ (\\text{四进制})",
@@ -496,7 +496,7 @@
   "FNO, \\ on $64$ points": "FNO，\\ 在$64$个点上",
   "trained here": "在这里训练",
   "Fourier neural operator": "傅里叶神经算子",
-  "CNN, \\ the same layout": "CNN，\\ 同样的结构",
+  "CNN, \\ dilated, \\ the same layout": "CNN，\\ 空洞卷积，\\ 同样的结构",
   "FNO read at $1{,}024$ points": "FNO在$1{,}024$个点上读",
   "a solver: \\ thousands of small steps, \\ every time": "求解器：\\ 几千个小步，\\ 每次都要",
   "a network on $64$ numbers: \\ only ever $64$ numbers": "读$64$个数的网络：\\ 永远只读$64$个数",
@@ -520,7 +520,8 @@
   "graph networks \\\\ predict the energy": "图网络 \\\\ 预测能量",
   "DFT checks \\\\ the most promising": "DFT检查 \\\\ 最有希望的",
   "the results \\\\ train the networks": "结果 \\\\ 用来训练网络",
-  "hit rate: \\ picks that are stable": "命中率：\\ 选中的确实稳定的比例",
+  "hit rate: \\ picks truly stable": "命中率：\\ 选中的真正稳定的比例",
+  "round": "轮次",
   "random": "随机",
   "energy above the hull": "凸包上方能量",
   "the surrogate's picks": "代理模型选的",
@@ -649,9 +650,7 @@
   "Kuhlman et al.\\ (2003); \\ Dauparas et al.\\ (2022); \\ Watson et al.\\ (2023); \\ Krishna et al.\\ (2025)": "Kuhlman et al.\\ (2003); \\ Dauparas et al.\\ (2022); \\ Watson et al.\\ (2023); \\ Krishna et al.\\ (2025)",
   "Richardson (1922); \\ Charney, Fj\\o rtoft \\& von Neumann (1950); \\ Bauer, Thorpe \\& Brunet (2015); \\ Lam et al.\\ (2023); \\ Price et al.\\ (2024); \\ Lang et al.\\ (2024); \\ Li et al.\\ (2021); \\ Lu et al.\\ (2021); \\ Pathak et al.\\ (2022)": "Richardson (1922); \\ Charney, Fj\\o rtoft \\& von Neumann (1950); \\ Bauer, Thorpe \\& Brunet (2015); \\ Lam et al.\\ (2023); \\ Price et al.\\ (2024); \\ Lang et al.\\ (2024); \\ Li et al.\\ (2021); \\ Lu et al.\\ (2021); \\ Pathak et al.\\ (2022)",
   "Merchant et al.\\ (2023); \\ Cheetham \\& Seshadri (2024); \\ Szymanski et al.\\ (2023); \\ Leeman et al.\\ (2024); \\ Zeni et al.\\ (2025)": "Merchant et al.\\ (2023); \\ Cheetham \\& Seshadri (2024); \\ Szymanski et al.\\ (2023); \\ Leeman et al.\\ (2024); \\ Zeni et al.\\ (2025)",
-  "Trinh et al.\\ (2024); \\ Chervonyi et al.\\ (2025); \\ Hubert et al.\\ (2025); \\ Romera-Paredes et al.\\ (2024); \\ Novikov et al.\\ (2025); \\ Dumas, Pernet \\& Sedoglavic (2025); \\ Georgiev et al.\\ (2025); \\ Feng et al.\\ (2026); \\ Sim, Renau \\& Hart (2025); \\ Strassen (1969); \\ Winograd (1971)": "Trinh et al.\\ (2024); \\ Chervonyi et al.\\ (2025); \\ Hubert et al.\\ (2025); \\ Romera-Paredes et al.\\ (2024); \\ Novikov et al.\\ (2025); \\ Dumas, Pernet \\& Sedoglavic (2025); \\ Georgiev et al.\\ (2025); \\ Feng et al.\\ (2026); \\ Sim, Renau \\& Hart (2025); \\ Strassen (1969); \\ Winograd (1971)",
-  "1975\\; ECMWF founded": "1975\\; 欧洲中期天气预报中心成立",
-  "2011\\; contacts from co-evolution": "2011\\; 从共进化读出接触"
+  "Trinh et al.\\ (2024); \\ Chervonyi et al.\\ (2025); \\ Hubert et al.\\ (2025); \\ Romera-Paredes et al.\\ (2024); \\ Novikov et al.\\ (2025); \\ Dumas, Pernet \\& Sedoglavic (2025); \\ Georgiev et al.\\ (2025); \\ Feng et al.\\ (2026); \\ Sim, Renau \\& Hart (2025); \\ Strassen (1969); \\ Winograd (1971)": "Trinh et al.\\ (2024); \\ Chervonyi et al.\\ (2025); \\ Hubert et al.\\ (2025); \\ Romera-Paredes et al.\\ (2024); \\ Novikov et al.\\ (2025); \\ Dumas, Pernet \\& Sedoglavic (2025); \\ Georgiev et al.\\ (2025); \\ Feng et al.\\ (2026); \\ Sim, Renau \\& Hart (2025); \\ Strassen (1969); \\ Winograd (1971)"
  },
  "patterns": []
 }

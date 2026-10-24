@@ -62,9 +62,10 @@ class Outro(VoiceoverScene):
                     r"RLHF: \ proxy and gold", KLC))
         bo = load("bon")
         kx = np.sqrt(np.asarray(bo["kl"]))
-        ys = [np.asarray(bo[k]) for k in ("small_proxy", "small_gold")]
-        lo_, hi_ = float(min(y.min() for y in ys)), float(max(y.max() for y in ys))
-        ax = mk([0, float(kx[-1]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
+        # each curve on its own scale, as in the chapter's two panels: the proxy climbs, gold rises and falls
+        ys = [np.asarray(bo[k]) for k in ("large_proxy", "large_gold")]
+        ys = [(y - y.min()) / (y.max() - y.min() + 1e-9) for y in ys]
+        ax = mk([0, float(kx[-1]), 1], [-0.1, 1.1, 1])
         out.append((VGroup(ax, curve(ax, kx, ys[0], PROXY, 3), curve(ax, kx, ys[1], GOLD, 3)), r"Goodhart, \ measured",
                     GOLD))
         dp = np.asarray(load("dpo")["probe"])
@@ -76,8 +77,8 @@ class Outro(VoiceoverScene):
         ct, cd = np.asarray(di["text"]["curve"]), np.asarray(di["teacher"]["curve"])
         lo_, hi_ = float(min(ct[:, 1].min(), cd[:, 1].min())), float(max(ct[:, 1].max(), cd[:, 1].max()))
         ax = mk([0, float(ct[-1, 0]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
-        out.append((VGroup(ax, curve(ax, ct[:, 0], ct[:, 1], BASE, 3), curve(ax, cd[:, 0], cd[:, 1], REF, 3)),
-                    r"distillation", REF))
+        out.append((VGroup(ax, curve(ax, ct[:, 0], ct[:, 1], BASE, 3), curve(ax, cd[:, 0], cd[:, 1], ASSIST, 3)),
+                    r"distillation", ASSIST))
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = tile_frame(cap, col, TW, TH)

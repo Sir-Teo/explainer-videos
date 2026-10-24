@@ -63,13 +63,12 @@ class Structure(VoiceoverScene):
         ol.next_to(one, DOWN, buff=0.6)
         big = VGroup(one, an, ol)
         with self.voiceover(
-            "The structure module treats each residue as a rigid body: a triangle of three backbone atoms, with its own "
+            "The structure module treats each residue as a rigid body: a triangle of three backbone atoms with its own "
             "frame, a rotation and a position. <bookmark mark='a'/> It starts with every frame at the origin, a residue gas, "
             "and moves them. <bookmark mark='b'/> Its invariant point attention places learned points in each residue's "
             "frame and scores pairs of residues by how close those points come. <bookmark mark='c'/> A rigid motion of the "
-            "protein moves every point alike, so the attention doesn't change. <bookmark mark='d'/> Each layer nudges every "
-            "frame by an update written in that frame's own coordinates, so the updates turn with the protein: equivariance, "
-            "built in."
+            "protein moves every point alike, so the attention can't change. <bookmark mark='d'/> Each layer nudges every "
+            "frame by an update in that frame's own coordinates, so the updates turn with the protein: equivariance, built in."
         ) as vo:
             self.play(FadeIn(gl), FadeIn(one), FadeIn(an), FadeIn(ol))
             vo.wait_until("a")
@@ -112,10 +111,10 @@ class Structure(VoiceoverScene):
         with self.voiceover(
             "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, FAPE. "
             "<bookmark mark='a'/> Stand in residue i's frame and look at atom j. <bookmark mark='b'/> Do this for every atom "
-            "from every frame, in the prediction and the truth, and average the differences, each capped at ten ångströms so "
-            "that a few wild atoms don't dominate. <bookmark mark='c'/> Move the whole structure rigidly and the motion "
-            "cancels: FAPE ignores where the protein sits and how it is turned. <bookmark mark='d'/> But the frames are built "
-            "from three atoms by a right-hand rule, and a mirror image is not a rigid motion, so FAPE sees it."
+            "from every frame, in prediction and truth, and average the differences, each capped at ten ångströms so "
+            "outliers can't dominate. <bookmark mark='c'/> A rigid motion of the whole structure cancels: FAPE ignores where "
+            "the protein sits and how it is turned. <bookmark mark='d'/> But frames are built from three atoms by a "
+            "right-hand rule, and a mirror image is not a rigid motion, so FAPE sees it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fi), FadeIn(pic[3]))
             self.play(FadeIn(aj), FadeIn(pic[4]), Create(vij), FadeIn(pic[5]))
@@ -252,11 +251,10 @@ class Structure(VoiceoverScene):
         with self.voiceover(
             "In July 2021 DeepMind published AlphaFold 2 with its code; the same month David Baker's group published "
             "RoseTTAFold, built on the same insights. <bookmark mark='a'/> With EMBL's European Bioinformatics Institute, "
-            "DeepMind released predicted structures, first for the human proteome, then in 2022 for over two hundred million "
-            "proteins, nearly every known sequence. <bookmark mark='b'/> Each comes with the network's own confidence, "
-            "residue by residue, called pLDDT. <bookmark mark='c'/> Two years later came the Nobel Prize. <bookmark "
-            "mark='d'/> But AlphaFold 2 predicts one static shape per chain, and says little about how proteins bind DNA or "
-            "hold a drug. That was the next step."
+            "DeepMind then released predicted structures for over two hundred million proteins, <bookmark mark='b'/> each "
+            "with the network's own residue-by-residue confidence, pLDDT. <bookmark mark='c'/> Two years later came the "
+            "Nobel Prize. <bookmark mark='d'/> But AlphaFold 2 predicts one static shape per chain, and says little about how "
+            "proteins bind DNA or hold a drug: the next step."
         ) as vo:
             self.play(FadeIn(items[0], shift=UP * 0.1))
             vo.wait_until("a")

@@ -121,12 +121,12 @@ class Sets(VoiceoverScene):
         cont.to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order "
-            "exactly when it is a sum of one function phi over the elements, followed by another function rho. <bookmark "
-            "mark='a'/> One direction is easy: a sum is the same in any order. <bookmark mark='b'/> For the other, number "
-            "every possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> In base four, "
-            "the sum has a one in place k exactly when element k is in the set: no carries, so different sets give different "
-            "sums. <bookmark mark='d'/> So any function of the set is a function of the sum: undo the sum, then apply f. "
-            "<bookmark mark='e'/> For sets of real numbers, power sums play this role, by Newton's identities."
+            "exactly when it is a sum of one function phi over the elements, followed by a function rho. <bookmark "
+            "mark='a'/> One direction is easy: a sum ignores order. <bookmark mark='b'/> For the other, number every "
+            "possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> In base four, the sum "
+            "has a one in place k exactly when element k is in the set: no carries, so different sets give different sums. "
+            "<bookmark mark='d'/> So any function of the set is a function of the sum. <bookmark mark='e'/> For sets of real "
+            "numbers, power sums play this role, by Newton's identities."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             vo.wait_until("a")
@@ -303,12 +303,11 @@ class Sets(VoiceoverScene):
         with self.voiceover(
             f"Now train them on {n0} up to {n_big:,} sets, three seeds each, the same number of steps. <bookmark mark='a'/> "
             f"With only {n0} sets, Deep Sets is right {100 * a_ds[0]:.0f} percent of the time. <bookmark mark='b'/> The "
-            f"plain MLP is at {100 * a_ml[0]:.0f} percent, {mlp_vs}: it must learn from examples that sixteen factorial "
-            f"orderings are one thing. <bookmark mark='c'/> Reordered copies help a lot: {100 * a_au[0]:.0f} percent at {n0} "
-            f"sets. {reach_txt}. {last}: Deep Sets {100 * a_ds[-1]:.0f} percent, the copies {100 * a_au[-1]:.0f}. <bookmark "
-            "mark='d'/> But copies teach the symmetry only approximately: reorder the same test sets, and the plain MLP "
-            f"changes its answer on {100 * f_ml:.0f} percent of them, the one trained on copies on {100 * f_au:.0f} percent, "
-            "Deep Sets on none."
+            f"plain MLP is at {100 * a_ml[0]:.0f} percent, {mlp_vs}. <bookmark mark='c'/> Reordered copies help a lot: "
+            f"{100 * a_au[0]:.0f} percent at {n0} sets. {reach_txt}. {last}: Deep Sets {100 * a_ds[-1]:.0f} percent, the "
+            f"copies {100 * a_au[-1]:.0f}. <bookmark mark='d'/> But copies teach the symmetry only approximately: reorder the "
+            f"same test sets, and the plain MLP changes its answer on {100 * f_ml:.0f} percent of them, the one trained on "
+            f"copies on {100 * f_au:.0f} percent, Deep Sets on none."
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(chl), FadeIn(tag))
             vo.wait_until("a")

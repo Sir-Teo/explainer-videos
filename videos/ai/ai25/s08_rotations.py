@@ -44,9 +44,8 @@ class Rotations(VoiceoverScene):
             "For molecules the symmetry is the group of rigid motions of space, E of three: rotations, reflections, "
             "translations. <bookmark mark='a'/> A molecule's energy is invariant under all of them. <bookmark mark='b'/> "
             "Differentiate both sides in the positions: the chain rule brings out the transpose of R. <bookmark mark='c'/> "
-            "Multiply by R, <bookmark mark='d'/> and since forces are minus the gradient, the forces turn with the molecule: "
-            "they are equivariant. An invariant model of the energy gives equivariant forces for free, which is how most "
-            "learned potentials compute them."
+            "Multiply by R, <bookmark mark='d'/> and since forces are minus the gradient, they turn with the molecule: "
+            "equivariant. So an invariant model of the energy gives equivariant forces for free."
         ) as vo:
             self.play(FadeIn(d, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -95,10 +94,10 @@ class Rotations(VoiceoverScene):
             "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of Victor "
             "Garcia Satorras, Emiel Hoogeboom and Max Welling, 2021. Each atom has features h and a position x. <bookmark "
             "mark='a'/> A message between two atoms sees their features and squared distance, nothing else. <bookmark "
-            "mark='b'/> Each atom moves along the differences of positions, weighted by learned scalars. <bookmark "
-            "mark='c'/> Its features update from the summed messages, and stay invariant. <bookmark mark='d'/> Turn and "
-            "shift the input: the messages are unchanged, the differences turn by R, and the shift cancels, so the new "
-            "positions are the old ones turned and shifted. <bookmark mark='e'/> SchNet, in 2017, had used distances alone."
+            "mark='b'/> Each atom moves along the differences of positions, weighted by learned scalars; <bookmark "
+            "mark='c'/> its features update from the summed messages, and stay invariant. <bookmark mark='d'/> Turn and "
+            "shift the input: the messages are unchanged, the differences turn by R, the shift cancels, so the new positions "
+            "are the old ones turned and shifted. <bookmark mark='e'/> SchNet, in 2017, had used distances alone."
         ) as vo:
             self.play(FadeIn(head))
             self.play(Create(bonds[:-1]), FadeIn(atoms), run_time=1.5)
@@ -144,12 +143,12 @@ class Rotations(VoiceoverScene):
         tag = note(r"computed: \ least squares on $20{,}000$ points of the sphere", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
             "EGNN carries scalars, which don't turn, and positions, which turn like vectors. Richer models carry more. "
-            "<bookmark mark='a'/> Any function on the sphere can be written in spherical harmonics, of degree zero, one, two "
+            "<bookmark mark='a'/> Any function on the sphere can be written in spherical harmonics of degree zero, one, two "
             "and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: "
-            "it mixes them only within their degree, in blocks of one, three and five; outside the blocks the entries are "
-            f"zero to {dp} decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with "
-            "its own block, and combine them by the Clebsch–Gordan rules of quantum angular momentum. <bookmark mark='d'/> "
-            "That is the design of tensor field networks, NequIP and MACE, among today's most accurate learned force fields."
+            "it mixes them only within each degree, in blocks of one, three and five; off the blocks, zero to "
+            f"{dp} decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with its own "
+            "block, and combine them by the Clebsch–Gordan rules of quantum angular momentum: <bookmark mark='d'/> the design "
+            "of tensor field networks, NequIP and MACE, among today's most accurate learned force fields."
         ) as vo:
             self.play(FadeIn(img), FadeIn(il), FadeIn(tag))
             vo.wait_until("a")
