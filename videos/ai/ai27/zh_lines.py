@@ -254,6 +254,9 @@ ZH = {
     "f'The reward model trained on more comparisons tracks gold further":
         '用更多比较训练的奖励模型，跟金标准跟得更远：金标准最高到了{lgold.max():.2f}。',
 
+    "f'The reward model trained on more comparisons tracks gold further: gold reaches {lgold.max():.2f} at n":
+        '用更多比较训练的奖励模型，跟金标准跟得更远：在n = {ns[peak_l]}时，金标准最高到了{lgold.max():.2f}，然后它也回落了，降到{lgold[-1]:.2f}。',
+
     'f"With the small reward model, gold rises at first':
         "用小的奖励模型时，金标准先是上升，在n等于{ns[peak_s]}附近达到顶峰，然后回落到{sgold[-1]:.2f}，而奖励模型自己的分数一路爬到{ys['small_proxy'][-1]:.2f}：这就是过度优化。",
 

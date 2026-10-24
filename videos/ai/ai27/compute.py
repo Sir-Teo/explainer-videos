@@ -172,7 +172,11 @@ def sft_examples(d, tasks=("which", "line")):
 
 
 def which_accuracy(model, d, n: int | None = None) -> float:
-    test = d["which_test"][:n] if n else d["which_test"]
+    """Share of held-out sentences whose book the model names; with ``n``, an even sample of n of them (the test list
+    runs book by book, so its first n would be a few books only)."""
+    test = d["which_test"]
+    if n and n < len(test):
+        test = [test[i] for i in np.linspace(0, len(test) - 1, n).round().astype(int)]
     ok = 0
     for s, title in test:
         ans = P.text_of(P.greedy(model, P.chat(which_q(s)), 16)).rstrip(".")

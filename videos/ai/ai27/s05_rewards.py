@@ -140,22 +140,23 @@ class Rewards(VoiceoverScene):
         sizes, acc = np.asarray(rm["sizes"], float), np.asarray(rm["acc"])
         ceil = float(rm["people_agree_gold"])
         lx = np.log10(sizes)
-        g = axes([1.8, float(np.ceil(lx.max() * 2) / 2)], [0.5, 1.0], x_length=7.0, y_length=4.0,
+        x0, x1 = 1.8, float(np.ceil(lx.max() * 2) / 2)  # log10 of the comparisons (CornerAxes keeps its own shifted range)
+        g = axes([x0, x1], [0.5, 1.0], x_length=7.0, y_length=4.0,
                  xlabel=r"comparisons it learned from (log scale)", ylabel=r"held-out comparisons it gets right",
                  xticks=[2, 3], yticks=[0.5, 0.75, 1.0], log_x=True, yfmt=lambda v: rf"{int(100 * v)}\%",
                  center=[-1.0, -0.3, 0])
         line = VGroup(*[Line(g.ax.c2p(a, b), g.ax.c2p(c, d_), color=PROXY, stroke_width=4)
                         for (a, b), (c, d_) in zip(zip(lx, acc), zip(lx[1:], acc[1:]))])
         dots = VGroup(*[Dot(g.ax.c2p(x, y), radius=0.07, color=PROXY) for x, y in zip(lx, acc)])
-        cl = DashedLine(g.ax.c2p(g.ax.x_range[0], ceil), g.ax.c2p(g.ax.x_range[1], ceil), color=GOLD, dash_length=0.08)
+        cl = DashedLine(g.ax.c2p(x0, ceil), g.ax.c2p(x1, ceil), color=GOLD, dash_length=0.08)
         cll = label(rf"how often the simulated people agree with gold: \ ${100 * ceil:.0f}\%$", font_size=20,
                     color=GOLD).next_to(cl, UP, buff=0.08).align_to(cl, RIGHT)
-        chance = DashedLine(g.ax.c2p(g.ax.x_range[0], 0.5), g.ax.c2p(g.ax.x_range[1], 0.5), color=GREY_C,
+        chance = DashedLine(g.ax.c2p(x0, 0.5), g.ax.c2p(x1, 0.5), color=GREY_C,
                             dash_length=0.06)
         tag = note(rf"computed: \ reward models on our fine-tuned model, \ ${rm['n_test']}$ held-out comparisons")
         tag.to_corner(DR, buff=0.2)
-        cite_ = note(r"InstructGPT's reward model: \ $69.6\%$ on held-out labellers (Ouyang et al., 2022)",
-                     font_size=20).to_corner(DL, buff=0.25)
+        cite_ = note(r"InstructGPT's reward model: \\ $69.6\%$ on held-out labellers \\ (Ouyang et al., 2022)",
+                     font_size=20).move_to([4.7, 0.9, 0])
         with self.voiceover(
             "Train reward models on more and more of the comparisons, and test each on comparisons it has never seen. "
             f"<bookmark mark='a'/> With {int(sizes[0])} comparisons it gets {100 * acc[0]:.0f} percent right; with "

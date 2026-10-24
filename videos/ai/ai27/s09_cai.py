@@ -100,7 +100,7 @@ class Constitution(VoiceoverScene):
         rows = VGroup(
             VGroup(label(rf"${d['n_human']}$ human comparisons", font_size=26, color=REWARD),
                    label(rf"reward model: \ ${100 * d['acc_small']:.0f}\%$", font_size=26, color=PROXY)),
-            VGroup(label(rf"$+\,{d['n_ai']:,}$ comparisons labelled by that model".replace(",", "{,}"), font_size=26,
+            VGroup(label(r"$+\," + f"{d['n_ai']:,}".replace(",", "{,}") + r"$ comparisons labelled by that model", font_size=26,
                          color=PROXY),
                    label(rf"reward model: \ ${100 * d['acc_ai']:.0f}\%$", font_size=26, color=PROXY)),
             VGroup(label(rf"${d['n_ai']:,}$ human comparisons".replace(",", "{,}"), font_size=26, color=REWARD),
