@@ -399,7 +399,7 @@ ZH.update({
 
     # ------------------------------------------------------------------ Barlow
     'Chapter eight. Decorrelate: Barlow Twins and VICReg.':
-        '第8章。去相关：Barlow Twins与VICReg。',
+        '第8章。去相关：Barlow孪生网络与VICReg。',
 
     'In 1961 the neuroscientist Horace Barlow argued':
         "1961年，神经科学家霍勒斯·巴洛主张，感官应该把输入重新编码，让每个神经元都携带别的神经元没有的东西。<bookmark mark='a'/>六十年后，"
@@ -618,8 +618,8 @@ ZH.update({
         "<bookmark mark='d'/>我们的版本和其他方法用同一个网络：目标是它最后那张4乘4特征图上的格子，两个2乘2的块。",
 
     'f"We trained I-JEPA, MAE and SimCLR on the same network':
-        "我们在同一个网络上、用同样的步数训练了I-JEPA、MAE和SimCLR。<bookmark mark='a'/>{v}<bookmark mark='b'/>在论文里，用最大的"
-        "视觉Transformer，I-JEPA的线性探针胜过了MAE，79.3%对77.2%，用的计算量少了十倍以上。",
+        "我们在同一个网络上、用同样多的训练步数，分别训练了I-JEPA、MAE和SimCLR这三种方法。<bookmark mark='a'/>{v}<bookmark mark='b'/>"
+        "在论文里，用最大号的视觉Transformer，I-JEPA的线性探针胜过了MAE，79.3%对77.2%，而它用的计算量还不到对方的十分之一。",
 
     'f"Predicting the meaning beats predicting the pixels: I-JEPA\'s linear probe reaches {pct(jl)} percent, MAE\'s {pct(ml)}, and':
         "预测含义胜过预测像素：I-JEPA的线性探针达到{pct(jl)}%，MAE是{pct(ml)}%，而用人工视图的SimCLR是{pct(Sm['linear'][0])}%。",
