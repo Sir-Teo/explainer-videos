@@ -681,16 +681,21 @@ ZH = {
 
     'f"What can a scaling law actually tell us?':
         "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。只用我们最便宜的{n_fit}次训练"
-        "拟合Chinchilla的公式，去预测另外{n_test}次，最贵的要贵上10倍。<bookmark mark='a'/>平均来说，预测偏差"
-        "{err:.3f}比特，最差{mx:.3f}{said1}<bookmark mark='b'/>正是在这个意义上，预训练没有停滞：损失沿着它的曲线"
-        "继续下降。但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的算力。争论的不是曲线，而是"
-        "沿着它往下走的每一步，买到的能力值不值那个价钱。",
+        "拟合Chinchilla的公式，去预测另外{n_test}次，最贵的要贵上{ratio:.0f}倍。<bookmark mark='a'/>平均来说，预测"
+        "偏差{err:.3f}比特，最差{mx:.3f}{said1}但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的"
+        "算力。争论的不是曲线，而是沿着它往下走的每一步，买到的能力值不值那个价钱。",
 
     ', and it does not drift as the compute grows':
-        "，而且不随算力增长而漂移：这条定律能外推。",
+        "，而且不随算力增长而漂移：这条定律能外推。<bookmark mark='b'/>正是在这个意义上，预训练没有停滞：损失沿着它的"
+        "曲线继续下降。",
 
-    "f', and it {":
-        "，而且随着算力增长，它{('over' if bias > 0 else 'under')}估了损失：这暗示曲线有弯曲。",
+    ', and almost always on the high side':
+        "，而且几乎总是偏高：更贵的训练，结果比便宜的训练预测的更好。<bookmark mark='b'/>正是在这个意义上，预训练没有"
+        "停滞：在我们试过的每个规模上，损失下降得至少和定律承诺的一样快。",
+
+    ', and almost always on the low side':
+        "，而且几乎总是偏低：更贵的训练，达不到预测。<bookmark mark='b'/>在我们的小规模上，这就是停滞论的缩影：用小规模"
+        "训练拟合出的定律，承诺的可能比大规模训练兑现的更多。",
 
     'The other side of the ledger is efficiency.':
         "账本的另一边是效率。<bookmark mark='a'/>2024年，Epoch AI的安森·何和同事估计，达到某个给定语言模型性能所需"
