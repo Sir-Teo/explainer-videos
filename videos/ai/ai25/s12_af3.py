@@ -50,7 +50,9 @@ class AF3(VoiceoverScene):
                   color=PAIR_C),
             label(r"no frames, \ no torsion angles: \ atoms, \ denoised", font_size=21, color=STRUCT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.6)
-        sch = note(r"schematic, \ after Abramson et al.\ (2024)", font_size=20).to_corner(UR, buff=0.25)
+        sch = note(r"schematic, \ after Abramson et al.\ (2024)", font_size=20).to_corner(DR, buff=0.25)
+        head = label(r"AlphaFold 3 \ (Google DeepMind and Isomorphic Labs, \ May 2024)", font_size=30,
+                     color=PAIR_C).to_edge(UP, buff=0.3)
         with self.voiceover(
             "In May 2024 Google DeepMind and Isomorphic Labs published AlphaFold 3. <bookmark mark='a'/> It takes almost "
             "anything in a cell's structures, protein chains, DNA and RNA, drug-like molecules, ions, modified residues, and "
@@ -59,7 +61,7 @@ class AF3(VoiceoverScene):
             "mark='d'/> The big change is the end: the structure module, frames and all, is replaced by a diffusion model "
             "that writes every atom's coordinates directly."
         ) as vo:
-            self.play(FadeIn(sch))
+            self.play(FadeIn(sch), FadeIn(head, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(i_) for i_ in ins], lag_ratio=0.2), run_time=1.5)
             vo.wait_until("b")

@@ -786,7 +786,8 @@
   "$+37$ steps": "$+37$步",
   "computed: \\ $32 \\times 32$ periodic grid{,} \\ one step $= 0.1$ time units; \\ $55{,}425$ weights{,} \\ trained on $32$ runs": "计算所得：\\ $32 \\times 32$周期网格，\\ 一步$= 0.1$个时间单位；\\ $55{,}425$个权重，\\ 用$32$次模拟训练",
   "one possible future": "一种可能的未来",
-  "the average of many: \\ blur": "许多种的平均：\\ 模糊"
+  "the average of many: \\ blur": "许多种的平均：\\ 模糊",
+  "AlphaFold 3 \\ (Google DeepMind and Isomorphic Labs, \\ May 2024)": "AlphaFold 3 \\ （谷歌DeepMind和Isomorphic Labs，\\ 2024年5月）"
  },
  "patterns": [
   [

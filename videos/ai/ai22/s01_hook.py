@@ -52,21 +52,19 @@ class Hook(VoiceoverScene):
     def history(self):
         head = label(r"How we got here", font_size=40).to_edge(UP, buff=0.35)
         cards = [
-            history_card(2012, r"AlexNet", r"a convolutional network wins ImageNet \ (Part 10)", color=HIST),
-            history_card(2014, r"GANs", r"a generator against a judge \ (Part 20)", color=HIST),
-            history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST),
+            history_card(2012, r"AlexNet", r"a convolutional network wins ImageNet \ (Part 10)", color=HIST, width=3.2, font_size=21),
+            history_card(2014, r"GANs", r"a generator against a judge \ (Part 20)", color=HIST, width=3.2, font_size=21),
+            history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST, width=3.2, font_size=21),
             history_card(2021, r"DALL$\cdot$E; \ diffusion beats GANs", r"text to image as tokens; \ denoising wins on quality",
-                         color=HIST),
+                         color=HIST, width=3.2, font_size=21),
             history_card(2022, r"DALL$\cdot$E 2, \ Imagen, \ Stable Diffusion", r"diffusion from text; \ open weights",
-                         color=HIST),
+                         color=HIST, width=3.2, font_size=21),
             history_card(2024, r"SD3, \ FLUX.1, \ Sora", r"flow-matching transformers; \ video as spacetime patches",
-                         color=HIST),
+                         color=HIST, width=3.2, font_size=21),
             history_card(2025, r"Veo 3, \ BAGEL, \ Self Forcing", r"sound with the video; \ one model reads and draws; "
-                         r"\ real-time video", color=HIST),
-            history_card(2026, r"open audio--video models", r"LTX-2: \ sound and picture, \ open weights", color=HIST),
+                         r"\ real-time video", color=HIST, width=3.2, font_size=21),
+            history_card(2026, r"open audio--video models", r"LTX-2: \ sound and picture, \ open weights", color=HIST, width=3.2, font_size=21),
         ]
-        for c_ in cards:
-            c_.scale_to_fit_width(3.1)
         grid = VGroup(*cards).arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).next_to(head, DOWN, buff=0.4)
         if grid.width > 13.3:
             grid.width = 13.3

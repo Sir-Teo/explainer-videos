@@ -51,10 +51,10 @@ class Flash(VoiceoverScene):
         T = 131072
         tbl = 2.0 * T * T
         cost = label(rf"the table, \ one head, \ $T = 128$k, \ $16$ bits: \ ${tbl / 2**30:.0f}$ GiB", font_size=22,
-                     color=ATTNC).to_edge(DOWN, buff=0.4)
+                     color=ATTNC).to_corner(DL, buff=0.4)
         hc = history_card(2022, r"Tri Dao, Daniel Fu, Stefano Ermon, Atri Rudra \& Christopher R\'e",
                           rf"FlashAttention: \ exact, \ IO-aware; \ GPT-2 ${F.FLASH1['gpt2']:.0f}\times$ faster",
-                          width=5.0, font_size=16, color=ATTNC).move_to([4.2, -2.2, 0])
+                          width=5.0, font_size=16, color=ATTNC).move_to([4.2, -2.75, 0])
         with self.voiceover(
             "Part 17 ended with FlashAttention, and promised its derivation. Here it is. <bookmark mark='a'/> A GPU "
             "has a large, slow memory, HBM, and a small, fast one on the chip, SRAM. The standard way to compute "

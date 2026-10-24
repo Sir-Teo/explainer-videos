@@ -36,7 +36,7 @@ class KVQuant(VoiceoverScene):
         lv = label(r"values: \ $|v|$", font_size=20, color=C.VALUE).next_to(iv, UP, buff=0.15)
         layer, head = int(k["layer"]), int(k["head"])
         tag = note(rf"computed: \ our novels model, \ layer ${layer + 1}$, \ head ${head + 1}$, \ $96$ tokens of a "
-                   r"held-out novel").next_to(VGroup(ik, iv), DOWN, buff=0.2).set_x(0)
+                   r"held-out novel").next_to(Group(ik, iv), DOWN, buff=0.2).set_x(0)
         # the shown head: each channel's average size over the tokens, largest against median
         ck, cv = km.mean(0), vm.mean(0)
         ratio, vratio = float(ck.max() / np.median(ck)), float(cv.max() / np.median(cv))
