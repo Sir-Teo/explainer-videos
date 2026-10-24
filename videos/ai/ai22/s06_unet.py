@@ -85,7 +85,7 @@ class UNet(VoiceoverScene):
     # ------------------------------------------------------------------
     def dit(self):
         d = load("denoisers")
-        path = np.asarray(d["alphabet_path"])
+        path = np.asarray(load("showcase")["alphabet_path"])
         half = path[len(path) // 2][0]
         k = 4
         noisy = gray_image(half, 1.7).move_to([-5.4, -1.5, 0])
@@ -107,6 +107,8 @@ class UNet(VoiceoverScene):
         res = label(r"DiT-XL/2: \ FID $2.27$ on ImageNet $256^2$, \ the best of its time; \\ more arithmetic per picture "
                     r"$\to$ better pictures", font_size=20, color=DIT_C).to_corner(UR, buff=0.4)
         cite_ = cite(r"W.~Peebles \& S.~Xie, \textit{Scalable Diffusion Models with Transformers} (2023)", corner=DR)
+        dcard = history_card(2023, r"DiT \ (Peebles \& Xie)", r"a plain transformer as the denoiser", color=HIST,
+                             width=4.4, font_size=24).move_to([4.3, 1.9, 0])
         with self.voiceover(
             "In 2023 William Peebles and Saining Xie replaced the U-Net with a plain transformer, the diffusion "
             "transformer, DiT. <bookmark mark='a'/> The noisy picture is cut into patch tokens, as in chapter 1. "
@@ -116,7 +118,7 @@ class UNet(VoiceoverScene):
             "patches, gave better pictures, and their largest set a record on ImageNet. It scales like a language "
             "model, and the image and video models since have nearly all been transformers."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(noisy), Create(ngrid))
+            self.play(FadeIn(cite_), FadeIn(noisy), Create(ngrid), FadeIn(dcard, shift=UP * 0.1))
             vo.wait_until("a")
             self.play(GrowArrow(feed), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.1) for t_ in toks], lag_ratio=0.08),
                       FadeIn(more))
@@ -125,7 +127,7 @@ class UNet(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(cond), LaggedStart(*[GrowArrow(a_) for a_ in ada], lag_ratio=0.15))
             vo.wait_until("d")
-            self.play(FadeIn(res))
+            self.play(FadeOut(dcard), FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
 
@@ -144,9 +146,9 @@ class UNet(VoiceoverScene):
                    center=[0.4, 0.6, 0], font_size=17, xfmt=lambda x: fmt_int(x))
         l1 = VGroup(mean_band(ax1.ax, ev, ua, UNET_C), mean_band(ax1.ax, ev, za, DIT_C))
         l2 = VGroup(mean_band(ax2.ax, ev, uf, UNET_C), mean_band(ax2.ax, ev, zf, DIT_C))
-        sU = Group(label(r"U-Net", font_size=20, color=UNET_C), glyph_sheet(np.asarray(d["unet_final"]), 2, 5, size=0.42,
+        sU = Group(label(r"U-Net", font_size=20, color=UNET_C), glyph_sheet(np.asarray(d["unet_final"]), 2, 5, size=0.5,
                                                                           gap=0.04)).arrange(DOWN, buff=0.1)
-        sD = Group(label(r"DiT", font_size=20, color=DIT_C), glyph_sheet(np.asarray(d["zero_final"]), 2, 5, size=0.42,
+        sD = Group(label(r"DiT", font_size=20, color=DIT_C), glyph_sheet(np.asarray(d["zero_final"]), 2, 5, size=0.5,
                                                                        gap=0.04)).arrange(DOWN, buff=0.1)
         Group(sU, sD).arrange(DOWN, buff=0.3).move_to([5.0, 0.6, 0])
         pu, pz = int(d["unet_params"]), int(d["zero_params"])
@@ -179,9 +181,9 @@ class UNet(VoiceoverScene):
             "keeps improving as it grows, with one simple recipe, the same as language models."
         ) as vo:
             self.play(Create(ax1), Create(ax2), FadeIn(tab), FadeIn(hd))
+            self.play(FadeIn(sU), FadeIn(sD))
             vo.wait_until("a")
             self.play(*[FadeIn(l_[0]) for l_ in (*l1, *l2)], *[Create(l_[1]) for l_ in (*l1, *l2)], run_time=2.5)
-            self.play(FadeIn(sU), FadeIn(sD))
             vo.wait_until("b")
             self.play(FadeOut(hd), FadeOut(tab), FadeIn(tk, shift=UP * 0.2))
         self.wait(0.3)

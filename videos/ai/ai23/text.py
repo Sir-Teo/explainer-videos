@@ -314,8 +314,9 @@ def train_lm(name: str, ids_train: np.ndarray, ids_valid: np.ndarray, vocab: int
     budget = pocket.flops_per_token(pocket.PocketGPT(byte_cfg).count(), byte_cfg) * LM_BATCH * cfg.seq * \
         max(20, int(LM_BUDGET_STEPS * SCALE))
     tokens = int(budget / pocket.flops_per_token(counts, cfg))
-    run = pocket.Run(model=cfg, lr=3e-3, batch=LM_BATCH, tokens=tokens, warmup=50, schedule="cosine", seed=seed,
-                     eval_batches=8, log_every=10)
+    run = pocket.Run(model=cfg, lr=3e-3, batch=LM_BATCH, tokens=tokens, warmup=50 if SCALE == 1 else 5,
+                     schedule="cosine", seed=seed, eval_batches=8 if SCALE == 1 else 2, eval_every=0 if SCALE == 1 else 10,
+                     log_every=10)
     data = pocket.TokenStream(ids_train, ids_valid, cfg.seq, seed=seed)
     res = pocket.train(run, data, threads=threads, ckpt=ckpt, ckpt_every=100)
     return res, budget

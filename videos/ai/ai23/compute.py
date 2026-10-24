@@ -115,7 +115,7 @@ def compute_bpe():
         print("    (no novels tokenizer:", e, ")")
     print("    BPE: characters per token on the passage: " +
           ", ".join(f"{n}: {out[f'cpt_passage{n}']:.2f}" for n in sizes), flush=True)
-    assert out["cpt_passage" + str(sizes[-1])] > out["cpt_passage" + str(sizes[0])] > 1.5
+    assert len(sizes) == 1 or out["cpt_passage" + str(sizes[-1])] > out["cpt_passage" + str(sizes[0])] > 1.5
     return out
 
 

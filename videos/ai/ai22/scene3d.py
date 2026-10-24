@@ -98,7 +98,9 @@ def composite(sigma, color, t):
     sigma (R, N), color (R, N, 3), t (R, N) sample depths. Returns colour (R, 3), weights (R, N)."""
     import torch
 
-    delta = torch.cat([t[:, 1:] - t[:, :-1], torch.full_like(t[:, :1], 1e10)], 1)
+    # the last sample's segment is as long as the one before it (not NeRF's 1e10, which paints the background with
+    # the colour at the far plane: our backgrounds are empty, so a ray that meets nothing must stay black)
+    delta = torch.cat([t[:, 1:] - t[:, :-1], t[:, -1:] - t[:, -2:-1]], 1)
     alpha = 1 - torch.exp(-sigma * delta)
     T = torch.cumprod(torch.cat([torch.ones_like(alpha[:, :1]), 1 - alpha + 1e-10], 1), 1)[:, :-1]
     w = T * alpha

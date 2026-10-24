@@ -54,9 +54,12 @@ class AdaLN(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ways(self):
-        pic = ways_picture().move_to(UP * 0.4)
-        if pic.width > 13:
-            pic.width = 13
+        pic = ways_picture()
+        pic.width = min(12.4, pic.width * 1.35)
+        pic.move_to(UP * 0.5)
+        cdef = VGroup(label(r"noise level $t$", font_size=26, color=C.SURPRISE), MathTex(r"+", font_size=32),
+                      label(r"the letter asked for", font_size=26, color=PATCH), MathTex(r"\;\to\;", font_size=32),
+                      MathTex(r"c", font_size=40, color=C.SURPRISE)).arrange(RIGHT, buff=0.25).move_to(DOWN * 2.3)
         head = label(r"Three ways to tell a block the noise level and the request, \ $c$", font_size=28).to_edge(UP, buff=0.4)
         cite_ = cite(r"W.~Peebles \& S.~Xie (2023) \ also tried cross-attention, \ as Stable Diffusion's U-Net used", corner=DL)
         with self.voiceover(
@@ -67,6 +70,7 @@ class AdaLN(VoiceoverScene):
             "adaLN-Zero: the same, plus a gate on each block's output, which starts at zero."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
+            self.play(LaggedStart(*[FadeIn(x_) for x_ in cdef], lag_ratio=0.3), run_time=1.5)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 self.play(FadeIn(pic[k], shift=UP * 0.1))
@@ -75,7 +79,7 @@ class AdaLN(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def zero(self):
-        d = load("denoisers")
+        d = load("showcase")
         colors = {r"\gamma": C.SURPRISE, r"\beta": C.SURPRISE, r"\alpha": PATCH, r"c": C.SURPRISE}
         f1 = cmath(r"h \leftarrow h +", r"\alpha", r"_1(", r"c", r") \odot \operatorname{Attn}\big((1 +", r"\gamma", r"_1(",
                    r"c", r")) \odot \operatorname{LN}(h) +", r"\beta", r"_1(", r"c", r")\big)", colors=colors, font_size=32)
@@ -126,10 +130,10 @@ class AdaLN(VoiceoverScene):
     # ------------------------------------------------------------------
     def learning(self):
         """How it learns: the same noise and the same ten requests, drawn at checkpoints, beside the loss."""
-        d = load("denoisers")
+        d = load("showcase")
         steps = [int(s_) for s_ in d["snap_at"]]
         snaps = np.asarray(d["snaps"])
-        L = np.asarray(d["zero_curve"])[0][:, :2]
+        L = np.asarray(d["curve"])[:, :2]
         total = steps[-1]
         S = 0.95
 
@@ -151,18 +155,20 @@ class AdaLN(VoiceoverScene):
                             .next_to(r0, DOWN, buff=0.25))
         tag = label(r"same noise, \ same requests, \ every checkpoint", font_size=20, color=GREY_A).to_corner(UR, buff=0.3)
         reads = [int(round(10 * float(x))) for x in d["snap_read"]]
+        cmp_n = int(load("denoisers")["steps"])
+        j = steps.index(cmp_n) if cmp_n in steps else len(steps) - 3
         with self.voiceover(
             "Here is ours learning: the same noise, asked for the same ten letters, A to J, drawn at checkpoints "
-            f"during its {total:,} steps. <bookmark mark='a'/> At step {steps[0]} every block is still the identity, "
-            f"so the noise passes straight through. <bookmark mark='b'/> At step {steps[2]} the judge reads "
-            f"{reads[2]} of the ten as the letters requested; <bookmark mark='c'/> at step {steps[3]:,}, {reads[3]}; "
-            f"<bookmark mark='d'/> at the end, {reads[-1]}. Meanwhile the loss falls from {L[0, 1]:.2f} to "
-            f"{L[-1, 1]:.2f}."
+            f"during its {total:,} steps, {total / cmp_n:.0f} times as many as the comparisons that follow. "
+            f"<bookmark mark='a'/> At step {steps[0]} every block is still the identity, so the noise passes "
+            f"straight through. <bookmark mark='b'/> At step {steps[3]:,} the judge reads {reads[3]} of the ten as "
+            f"the letters requested; <bookmark mark='c'/> at step {steps[j]:,}, {reads[j]}; <bookmark mark='d'/> at "
+            f"the end, {reads[-1]}. Meanwhile the loss falls from {L[0, 1]:.2f} to {L[-1, 1]:.2f}."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(asked), FadeIn(r0), Create(ax))
             self.add(dot, cnt)
             cur = r0
-            marks = {1: "a", 2: "b", 3: "c", len(steps) - 1: "d"}
+            marks = {1: "a", 3: "b", j: "c", len(steps) - 1: "d"}
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
@@ -209,9 +215,9 @@ class AdaLN(VoiceoverScene):
             "adaLN-Zero's distance was nearly half that of in-context conditioning, at the same cost."
         ) as vo:
             self.play(FadeIn(t1), FadeIn(t2), FadeIn(b1.base), FadeIn(b2.base), FadeIn(leg), FadeIn(hd))
+            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.15) for b_ in b2.bars[0]], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.15) for b_ in b1.bars[0]], lag_ratio=0.2),
-                      LaggedStart(*[FadeIn(b_, shift=UP * 0.15) for b_ in b2.bars[0]], lag_ratio=0.2), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.15) for b_ in b1.bars[0]], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
             self.play(Indicate(leg[2], color=ZERO_C))
         self.wait(0.3)
@@ -219,7 +225,7 @@ class AdaLN(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def alphabet(self):
-        d = load("denoisers")
+        d = load("showcase")
         A = np.asarray(d["alphabet"])
         grid = Group(*[gray_image(im, 0.85) for im in A[:26]]).arrange_in_grid(rows=2, cols=13, buff=(0.08, 0.4)).move_to(UP * 1.1)
         asked = VGroup(*[Text(c, font="DejaVu Sans Mono", font_size=20, color=PATCH).next_to(grid[i], UP, buff=0.06)

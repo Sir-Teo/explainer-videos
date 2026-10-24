@@ -42,6 +42,8 @@ class NeRF(VoiceoverScene):
         f = MathTex(r"F_\theta:\ (x, y, z,\ \text{direction}) \;\mapsto\; (\sigma,\ \mathbf{c})", font_size=32).move_to([2.6, -1.4, 0])
         fl = label(r"density $\sigma$: \ how much stuff is there; \ colour $\mathbf c$: \ what light it gives off",
                    font_size=18, color=GREY_A).next_to(f, DOWN, buff=0.15)
+        fl2 = label(r"ours leaves out the direction: \ our scene looks the same from every side", font_size=18,
+                    color=GREY_B).next_to(fl, DOWN, buff=0.1)
         cite_ = cite(r"B.~Mildenhall, P.~Srinivasan, M.~Tancik, J.~Barron, R.~Ramamoorthi \& R.~Ng, \textit{NeRF} (2020)",
                      corner=DL)
         with self.voiceover(
@@ -59,6 +61,7 @@ class NeRF(VoiceoverScene):
             self.play(LaggedStart(*[Create(r_) for r_ in rays], lag_ratio=0.1))
             vo.wait_until("b")
             self.play(Write(f), FadeIn(fl), FadeIn(cite_))
+            self.play(FadeIn(fl2))
         self.wait(0.3)
         self.clear_scene()
 

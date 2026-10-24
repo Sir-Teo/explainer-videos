@@ -9,13 +9,15 @@
                   repa     adaLN-Zero plus REPA: block 2's tokens aligned with chapter 1's frozen vision transformer
                 Every model is scored at checkpoints on 260 pictures (ten of each letter, the same noise for all) by
                 the judge: the share read as the requested letter, and the Frechet distance of the judge's features.
-                Seed 0 of adaLN-Zero is the showcase: samples from fixed noise at checkpoints, its gates opening, the
-                alphabet with its denoising path.
+    showcase    adaLN-Zero, seed 0, trained four times as long (8,000 steps): samples from fixed noise at
+                checkpoints, its gates opening, the alphabet with its denoising path (resumable: checkpoints)
+    guidance    classifier-free guidance weights on the showcase model: accuracy, distance, variety
 """
 
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 import numpy as np
 
@@ -222,9 +224,11 @@ def sample(m, letters, n_steps=20, w=GUIDE, seed=7, z=None, path=None, every=2):
     return out
 
 
-def train(cfg, seed, X, Y, n_steps, vit=None, on_step=None):
+def train(cfg, seed, X, Y, n_steps, vit=None, on_step=None, ckpt=None, state=None, every=500):
     """Flow matching: x_t = (1 - t) noise + t data, the velocity data - noise as the target. The batches, the noise
-    and the times depend only on the seed, so every configuration of a seed sees exactly the same data."""
+    and the times depend only on the seed, so every configuration of a seed sees exactly the same data.
+    With ``ckpt`` (a path), the model, optimizer, schedule, generators, curves and ``state`` (a dict ``on_step``
+    fills) are saved every ``every`` steps, and a run that finds the file resumes from it."""
     import torch
 
     torch.manual_seed(2023 + seed)  # Peebles & Xie, Scalable Diffusion Models with Transformers
@@ -233,9 +237,23 @@ def train(cfg, seed, X, Y, n_steps, vit=None, on_step=None):
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=LR, total_steps=n_steps, pct_start=0.05)
     g = torch.Generator().manual_seed(seed)
     curve, run, align = [], [], []
-    if on_step is not None:
+    start = 1
+    if ckpt is not None and ckpt.exists():
+        c = torch.load(ckpt, weights_only=False)
+        m.load_state_dict(c["m"])
+        opt.load_state_dict(c["opt"])
+        sched.load_state_dict(c["sched"])
+        g.set_state(c["g"])
+        torch.set_rng_state(c["rng"])
+        curve, run, align = c["curve"], c["run"], c["align"]
+        if state is not None:
+            state.clear()
+            state.update(c["state"])
+        start = c["st"] + 1
+        print(f"      resumed at step {c['st']}", flush=True)
+    elif on_step is not None:
         on_step(0, m)
-    for st in range(1, n_steps + 1):
+    for st in range(start, n_steps + 1):
         i = torch.randint(0, len(X), (BATCH,), generator=g)
         x1, y = X[i], Y[i]
         y = torch.where(torch.rand(BATCH, generator=g) < 0.1, torch.full_like(y, 26), y)
@@ -264,6 +282,11 @@ def train(cfg, seed, X, Y, n_steps, vit=None, on_step=None):
             run = []
         if on_step is not None:
             on_step(st, m)
+        if ckpt is not None and st % every == 0 and st < n_steps:
+            torch.save(dict(m=m.state_dict(), opt=opt.state_dict(), sched=sched.state_dict(), g=g.get_state(),
+                            rng=torch.get_rng_state(), curve=curve, run=run, align=align, state=state, st=st),
+                       str(ckpt) + ".tmp")
+            Path(str(ckpt) + ".tmp").replace(ckpt)
     m.eval()
     return m, curve
 
@@ -361,20 +384,78 @@ def compute_denoisers():
 
 
 # ---------------------------------------------------------------------------
+SHOW_STEPS = 8000
+SHOW_SNAP_FRACS = (0.0, 0.0125, 0.03125, 0.0625, 0.125, 0.25, 0.5, 1.0)  # steps 0, 100, 250, 500, ... 8,000
+SHOW_EVAL_FRACS = (0.03125, 0.0625, 0.125, 0.25, 0.5, 1.0)
+
+
+def compute_showcase():
+    """The showcase: adaLN-Zero, seed 0, the same recipe and data order as the comparisons but trained four times as
+    long, checkpointed every 500 steps so an interrupted run resumes. Recorded: samples of A to J from fixed noise at
+    checkpoints and the judge's reading of them, the gates opening, the 260-letter score at checkpoints, the alphabet
+    twice with its denoising path, and eight A's."""
+    import torch
+
+    threads()
+    imgs, labels, test, _, _ = dataset()
+    X = torch.tensor(imgs[~test] * 2 - 1, dtype=torch.float32)
+    Y = torch.tensor(labels[~test])
+    n = steps(SHOW_STEPS)
+    snap_at = sorted({int(round(f * n)) for f in SHOW_SNAP_FRACS})
+    eval_at = sorted({max(1, int(round(f * n))) for f in SHOW_EVAL_FRACS})
+    want = np.repeat(np.arange(26), 10)
+    z_snap = torch.randn(10, GL, GL, generator=torch.Generator().manual_seed(11))
+    show = np.arange(10)  # A to J
+    cg = torch.Generator().manual_seed(5)
+    c_t, c_y = torch.rand(64, generator=cg), torch.randint(0, 26, (64,), generator=cg)
+    state = dict(snaps=[], snap_read=[], gates=[], evals=[])
+
+    def on_step(st, m):
+        if st % 25 == 0:
+            with torch.no_grad():
+                state["gates"].append([st] + sum(m.gates(m.cond(c_t, c_y)), []))
+        if st in snap_at:
+            m.eval()
+            state["snaps"].append(sample(m, show, z=z_snap).tolist())
+            state["snap_read"].append(score(np.array(state["snaps"][-1]), show)["acc"])
+            m.train()
+        if st in eval_at:
+            m.eval()
+            q = score(sample(m, want, seed=7), want)
+            m.train()
+            state["evals"].append(dict(step=st, acc=q["acc"], fd=q["fd"]))
+            print(f"      showcase step {st}: right letter {q['acc']:.3f}, FD {q['fd']:.1f}", flush=True)
+
+    ck = CACHE.dir / "showcase.ckpt"
+    m, curve = train("zero", 0, X, Y, n, on_step=on_step, ckpt=ck, state=state)
+    path = []
+    alphabet = sample(m, list(range(26)) * 2, n_steps=40, seed=1, path=path, every=4)
+    many_a = sample(m, [0] * 8, n_steps=40, seed=3)
+    torch.save(m.state_dict(), CACHE.dir / "dit_showcase.pt")
+    ck.unlink(missing_ok=True)
+    snaps = np.array(state["snaps"])
+    return dict(steps=n, params=int(sum(p.numel() for p in m.parameters() if p.requires_grad)), guide=GUIDE,
+                batch=BATCH, snap_at=snap_at, snaps=snaps, snap_read=state["snap_read"], snap_ink=snaps.mean((1, 2, 3)),
+                gates=np.array(state["gates"]), eval_at=[e["step"] for e in state["evals"]],
+                acc=[e["acc"] for e in state["evals"]], fd=[e["fd"] for e in state["evals"]], curve=np.array(curve),
+                alphabet=alphabet, alphabet_path=np.array(path)[:, :26], many_a=many_a)
+
+
+# ---------------------------------------------------------------------------
 GUIDES = (0.0, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0)
 
 
 def compute_guidance():
-    """Classifier-free guidance on the showcase transformer (adaLN-Zero, seed 0): for each weight w, 260 letters (ten
-    of each) from the same noise; the share read as requested, the Frechet distance, and the variety (the average
-    distance between two drawings of the same letter, root mean square over pixels)."""
+    """Classifier-free guidance on the showcase transformer (adaLN-Zero, seed 0, 8,000 steps): for each weight w, 260
+    letters (ten of each) from the same noise; the share read as requested, the Frechet distance, and the variety (the
+    average distance between two drawings of the same letter, root mean square over pixels)."""
     import torch
 
     threads()
-    if not (CACHE.dir / "dit_zero_s0.pt").exists():
-        CACHE.load("denoisers")
+    if not (CACHE.dir / "dit_showcase.pt").exists():
+        CACHE.load("showcase")
     m = make("zero")
-    m.load_state_dict(torch.load(CACHE.dir / "dit_zero_s0.pt"))
+    m.load_state_dict(torch.load(CACHE.dir / "dit_showcase.pt"))
     m.eval()
     want = np.repeat(np.arange(26), 10)
     out = dict(guides=list(GUIDES))

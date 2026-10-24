@@ -14,7 +14,7 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def letters(self):
-        d = load("denoisers")
+        d = load("showcase")
         path = np.asarray(d["alphabet_path"])  # frames of the denoising, for each letter of the alphabet
         word = "PICTURES"
         idx = [LETTERS.index(c) for c in word]
@@ -28,7 +28,7 @@ class Hook(VoiceoverScene):
         al = label(r"asked for:", font_size=20, color=GREY_B).next_to(asked, UP, buff=0.2).align_to(pics, LEFT)
         grids = VGroup(*[patch_grid(p, 5, stroke_width=1) for p in pics])
         tag = note(r"each letter drawn from noise by a small transformer trained here, \ in $40$ steps").to_edge(DOWN, buff=0.35)
-        n_par = int(d["zero_params"])
+        n_par = int(d["params"])
         tl = label(rf"${fmt_int(n_par)}$ weights, \ ${fmt_int(d['steps'])}$ training steps, \ one CPU core",
                    font_size=22, color=GREY_A).next_to(pics, DOWN, buff=0.45)
         with self.voiceover(
@@ -52,23 +52,25 @@ class Hook(VoiceoverScene):
     def history(self):
         head = label(r"How we got here", font_size=40).to_edge(UP, buff=0.35)
         cards = [
-            history_card(2012, r"AlexNet", r"a convolutional network wins ImageNet \ (Part 10)", color=HIST, width=3.25, font_size=23),
-            history_card(2014, r"GANs", r"a generator against a judge \ (Part 20)", color=HIST, width=3.25, font_size=23),
-            history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST, width=3.25, font_size=23),
+            history_card(2012, r"AlexNet", r"a convolutional network wins ImageNet \ (Part 10)", color=HIST, width=4.3, font_size=24),
+            history_card(2014, r"GANs", r"a generator against a judge \ (Part 20)", color=HIST, width=4.3, font_size=24),
+            history_card(2020, r"the vision transformer", r"an image is a sequence of patches", color=HIST, width=4.3, font_size=24),
             history_card(2021, r"DALL$\cdot$E; \ diffusion beats GANs", r"text to image as tokens; \ denoising wins on quality",
-                         color=HIST, width=3.25, font_size=23),
+                         color=HIST, width=4.3, font_size=24),
             history_card(2022, r"DALL$\cdot$E 2, \ Imagen, \ Stable Diffusion", r"diffusion from text; \ open weights",
-                         color=HIST, width=3.25, font_size=23),
+                         color=HIST, width=4.3, font_size=24),
             history_card(2024, r"SD3, \ FLUX.1, \ Sora", r"flow-matching transformers; \ video as spacetime patches",
-                         color=HIST, width=3.25, font_size=23),
+                         color=HIST, width=4.3, font_size=24),
             history_card(2025, r"Veo 3, \ BAGEL, \ Self Forcing", r"sound with the video; \ one model reads and draws; "
-                         r"\ real-time video", color=HIST, width=3.25, font_size=23),
-            history_card(2026, r"open audio--video models", r"LTX-2: \ sound and picture, \ open weights", color=HIST, width=3.25, font_size=23),
+                         r"\ real-time video", color=HIST, width=4.3, font_size=24),
+            history_card(2026, r"open audio--video models", r"LTX-2: \ sound and picture, \ open weights", color=HIST, width=4.3, font_size=24),
         ]
-        grid = VGroup(*cards).arrange_in_grid(rows=2, cols=4, buff=(0.2, 0.45), cell_alignment=UP)
+        grid = VGroup(*cards).arrange_in_grid(rows=3, cols=3, buff=(0.22, 0.3), cell_alignment=UP)
         if grid.width > 13.4:
             grid.width = 13.4
-        grid.next_to(head, DOWN, buff=0.5)
+        if grid.height > 6.3:
+            grid.height = 6.3
+        grid.next_to(head, DOWN, buff=0.35)
         with self.voiceover(
             "How we got here. In 2012 a convolutional network, AlexNet, won the ImageNet contest by a wide margin, "
             "and Part 10 told that story. <bookmark mark='a'/> In 2014 came GANs, a generator trained against a judge, "
@@ -98,7 +100,9 @@ class Hook(VoiceoverScene):
             r"pictures as tokens: \ MaskGIT, \ next-scale prediction, \ one model for words and pictures",
             r"video: \ squeezing time, \ frames that agree, \ rolling forward",
             r"3D: \ the volume-rendering integral, \ Gaussian splatting",
-        ], title=r"In this part", font_size=28, width=12.4)
+        ], title=r"In this part", font_size=30, width=12.6)
+        obj.rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        obj.head.next_to(obj.rows, UP, buff=0.5).set_x(0)
         obj.next_to(title, DOWN, buff=0.3)
         if obj.height > 6.2:
             obj.height = 6.2
