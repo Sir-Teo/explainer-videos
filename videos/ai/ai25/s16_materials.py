@@ -49,14 +49,12 @@ class Materials(VoiceoverScene):
                             r"other compounds has lower energy, \ so it won't decompose", width=5.6, font_size=21)
         d.move_to([3.9, 1.5, 0])
         facts = VGroup(
-            label(r"$230$ space groups: \ the symmetries a crystal can have \ (Fedorov, Schoenflies, 1891)",
-                  font_size=20, color=SYM),
-            label(r"energies from density functional theory \ (Kohn \& Sham, 1965): \ hours of computing each",
-                  font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.9, -1.3, 0])
-        for f_ in facts:
-            if f_.width > 5.8:
-                f_.width = 5.8
+            label(r"$230$ space groups: \ the symmetries a crystal can have \\ (Fedorov, Schoenflies, 1891)",
+                  font_size=22, color=SYM),
+            label(r"energies from density functional theory \\ (Kohn \& Sham, 1965): \ hours of computing each",
+                  font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        facts.move_to([0, -1.4, 0]).align_to(np.array([1.2, 0, 0]), LEFT)
         tag = note(r"illustrative: \ one binary system of this chapter's made-up chemistry", font_size=18)
         tag.to_corner(DR, buff=0.2)
         n_st = int(st.sum())
@@ -95,17 +93,17 @@ class Materials(VoiceoverScene):
                      Arrow(boxes[3].get_top(), boxes[0].get_bottom(), buff=0.08, color=GREY_B, stroke_width=2.5))
         nums = VGroup(
             label(r"GNoME \ (Merchant et al., \textit{Nature} 2023)", font_size=24, color=STRUCT),
-            label(r"before: \ about $48{,}000$ stable crystals known from computation", font_size=21, color=GREY_A),
-            label(r"found: \ $2.2$ million stable against what was known; \ $381{,}000$ on the new hull", font_size=21,
+            label(r"before: \ about $48{,}000$ stable crystals \\ known from computation", font_size=22, color=GREY_A),
+            label(r"found: \ $2.2$ million stable against what was known; \\ $381{,}000$ on the new hull", font_size=22,
                   color=STABLE),
-            label(r"hit rate: \ above $80\%$ with structures, \ $33\%$ from compositions alone, \ against about "
-                  r"$1\%$ before", font_size=21, color=PAIR_C),
-            label(r"$736$ already made, \ independently, \ by other labs", font_size=21, color=HIST),
-            label(r"the networks' error falls as a power law in the data", font_size=21, color=GREY_A),
+            label(r"hit rate: \ above $80\%$ with structures, \\ $33\%$ from compositions alone, \ against about "
+                  r"$1\%$ before", font_size=22, color=PAIR_C),
+            label(r"$736$ already made, \ independently, \ by other labs", font_size=22, color=HIST),
+            label(r"the networks' error falls \\ as a power law in the data", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, 0.2, 0])
         if nums.width > 6.4:
             nums.width = 6.4
-        nums.set_x(3.75)
+        nums.align_to(np.array([1.0, 0, 0]), LEFT)
         cite_ = cite(r"Merchant et al.\ (2023); \ Google DeepMind (29 November 2023)", corner=DR)
         with self.voiceover(
             "In 2023 Amil Merchant, Ekin Dogus Cubuk and colleagues at Google DeepMind published GNoME, graph "

@@ -77,6 +77,21 @@ class Rotations(VoiceoverScene):
                   font_size=21, color=STRUCT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
         head = label(r"an E(n)-equivariant graph network", font_size=30, color=STRUCT).to_edge(UP, buff=0.25)
+        # the hook's molecule: every atom carries features h and a position x
+        nd = load("nbody_data")
+        x0, q0 = np.asarray(nd["show_x0"])[1], np.asarray(nd["show_q"])[1]
+        P2, _ = project(x0 - x0.mean(0), 0.4, 0.3)
+        P2 = P2 / np.abs(P2).max() * 1.25
+        cm_ = np.array([-4.9, 1.0, 0])
+        at = [cm_ + np.r_[p, 0] for p in P2]
+        bonds = VGroup(*[Line(at[a], at[b], color=GREY_D, stroke_width=1.5) for a in range(5) for b in range(a + 1, 5)])
+        i_, j_ = 0, int(np.argmax(np.linalg.norm(P2 - P2[0], axis=1)))
+        bonds.add(Line(at[i_], at[j_], color=STRUCT, stroke_width=4))
+        atoms = VGroup(*[Circle(radius=0.17, stroke_width=1.2, stroke_color=WHITE, fill_color=PLUS if c > 0 else MINUS,
+                                fill_opacity=0.95).move_to(a_) for a_, c in zip(at, q0)])
+        li = MathTex(r"h_i,\ x_i", font_size=30).next_to(atoms[i_], UL, buff=0.05)
+        lj = MathTex(r"h_j,\ x_j", font_size=30).next_to(atoms[j_], DR, buff=0.05)
+        mol = VGroup(bonds, atoms, li, lj)
         with self.voiceover(
             "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of "
             "Victor Garcia Satorras, Emiel Hoogeboom and Max Welling, in 2021. Each atom has features h and a "
@@ -90,8 +105,12 @@ class Rotations(VoiceoverScene):
             "for invariant energies."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(Create(bonds[:-1]), FadeIn(atoms), run_time=1.5)
+            self.play(Create(bonds[-1]), FadeIn(li), FadeIn(lj))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
+                if k == 3:
+                    self.play(FadeOut(mol))
                 step(k)
             vo.wait_until("e")
             self.play(FadeIn(hist))
@@ -167,7 +186,7 @@ class Rotations(VoiceoverScene):
                  center=[-2.3, -0.2, 0])
         cv = np.log10(nd["mse_constvel"])
         cvl = DashedLine(g.ax.c2p(lx[0], cv), g.ax.c2p(lx[-1], cv), color=GREY_C)
-        cvt = label(r"keep going in a straight line", font_size=18, color=GREY_C).next_to(cvl, UP, buff=0.05)
+        cvt = label(r"keep going in a straight line", font_size=18, color=GREY_C).next_to(cvl, DOWN, buff=0.08)
         cvt.align_to(cvl, RIGHT)
         objs = {}
         for k in kinds:

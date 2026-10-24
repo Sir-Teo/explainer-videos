@@ -81,12 +81,12 @@ class AF3(VoiceoverScene):
         for t in ts:
             P = np.asarray(path[str(t)])[0]
             P = np.clip(P, -3.2, 3.2)
-            m = chain2d_mob(P, scale=0.32, color=STRUCT if t == 0 else interpolate_color(ManimColor(GREY_C),
+            m = chain2d_mob(P, scale=0.45, color=STRUCT if t == 0 else interpolate_color(ManimColor(GREY_C),
                                                                                          ManimColor(STRUCT),
                                                                                          1 - t / ts[0]),
                             width=2.2, dot_r=0.04)
             strip.add(VGroup(m, MathTex(rf"t = {t}", font_size=20, color=GREY_B).next_to(m, DOWN, buff=0.12)))
-        strip.arrange(RIGHT, buff=0.25).move_to([0, 1.5, 0])
+        strip.arrange(RIGHT, buff=0.3).move_to([0, 1.3, 0])
         if strip.width > 13.2:
             strip.width = 13.2
         sl = label(r"one of our samples, \ from noise to a chain \ (computed)", font_size=20, color=GREY_A)

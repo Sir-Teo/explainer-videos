@@ -75,12 +75,13 @@ class Design(VoiceoverScene):
                            .move_to(g.pts[i] + np.array([0.12, 0.12, 0])) for i in range(len(X))])
         facts = VGroup(
             label(r"ProteinMPNN \ (Dauparas et al., \ 2022)", font_size=26, color=STRUCT),
-            label(r"the backbone as a graph: \ each residue joined to its nearest neighbours in space", font_size=22),
+            label(r"the backbone as a graph: \ each residue joined \\ to its nearest neighbours in space", font_size=22),
             label(r"message passing over distances \ (invariant, \ chapter 7)", font_size=22),
             label(r"then the amino acids, \ one at a time, \ in a random order", font_size=22),
             label(r"native sequence recovered: \ $52.4\%$, \ against $32.9\%$ for Rosetta", font_size=24,
                   color=PAIR_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.1, 0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24)
+        facts.move_to([0, 0.3, 0]).align_to(np.array([-0.4, 0, 0]), LEFT)
         cite_ = cite(r"Dauparas et al., \textit{Science} (2022)", corner=DR)
         with self.voiceover(
             "Deep learning changed both halves of design, starting with the sequence. <bookmark mark='a'/> In 2022 "
@@ -127,6 +128,13 @@ class Design(VoiceoverScene):
                   color=STRUCT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
         cite_ = cite(r"Watson et al., \textit{Nature} (2023)", corner=DR)
+        # illustrative: a backbone emerging from noise (our bundle, not RFdiffusion's output)
+        X = np.asarray(load("fold")["X"])
+        noisy = X + np.random.default_rng(3).normal(0, 6.0, X.shape)
+        kw = dict(scale=0.11, center=[4.3, -0.6, 0], angle=0.6, tilt=0.5, width=2.5, dots=False)
+        c_noisy = chain3d(noisy, color=GREY_B, **kw)
+        c_clean = chain3d(X, gradient=CHAIN_GRAD, **kw)
+        il = note(r"illustrative: \ from noise to a backbone", font_size=20).next_to(c_clean, DOWN, buff=0.25)
         with self.voiceover(
             "Then the backbone. In 2023 Joseph Watson and colleagues published RFdiffusion. <bookmark mark='a'/> They "
             "took RoseTTAFold, a structure predictor, and fine-tuned it to remove noise from residue frames: "
@@ -138,7 +146,8 @@ class Design(VoiceoverScene):
             "binders, nineteen percent of designs worked experimentally, about a hundred times the earlier "
             "Rosetta-based rate, and one influenza binder's measured structure sat 0.63 ångströms from its design."
         ) as vo:
-            self.play(FadeIn(how[0]), FadeIn(cite_))
+            self.play(FadeIn(how[0]), FadeIn(cite_), FadeIn(c_noisy), FadeIn(il))
+            self.play(Transform(c_noisy, c_clean), run_time=4.0)
             vo.wait_until("a")
             self.play(FadeIn(how[1]), FadeIn(how[2]))
             vo.wait_until("b")

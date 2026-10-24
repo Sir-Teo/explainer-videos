@@ -54,6 +54,14 @@ class Structure(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=1.0, x=2.8, buff=0.55, edge=6.9)
         ipa = label(r"invariant point attention: \ $8$ layers, \ shared weights", font_size=24, color=STRUCT)
         ipa.move_to([2.6, 2.6, 0])
+        # one residue, large: three backbone atoms and its own axes
+        one = frame_glyph([-3.8, -0.2, 0], 0.3, s=1.6)
+        tri_pts = one[0].get_vertices()
+        an = VGroup(*[MathTex(t, font_size=34, color=SYM).next_to(p_, d, buff=0.12) for t, p_, d in
+                      zip((r"\mathrm{N}", r"\mathrm{C}_\alpha", r"\mathrm{C}"), tri_pts, (DL, UP, DR))])
+        ol = label(r"one residue: \ three backbone atoms, \ its own axes", font_size=24, color=GREY_A)
+        ol.next_to(one, DOWN, buff=0.6)
+        big = VGroup(one, an, ol)
         with self.voiceover(
             "The structure module treats each residue as a rigid body: a little triangle of three backbone atoms, "
             "with its own frame, a rotation and a position. <bookmark mark='a'/> It starts with all the frames "
@@ -64,8 +72,9 @@ class Structure(VoiceoverScene):
             "nudges every frame by an update expressed in that frame's own coordinates, so the updates turn with the "
             "protein: equivariance, again, built in."
         ) as vo:
-            self.play(FadeIn(gl))
+            self.play(FadeIn(gl), FadeIn(one), FadeIn(an), FadeIn(ol))
             vo.wait_until("a")
+            self.play(FadeOut(big))
             self.play(LaggedStart(*[FadeIn(g_, scale=0.6) for g_ in gas], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(ipa))
@@ -94,6 +103,13 @@ class Structure(VoiceoverScene):
                       color=MIRROR_C).to_edge(DOWN, buff=0.9)
         cite_ = cite(r"Jumper et al., \textit{Nature} (2021), \ supplementary information", corner=DR)
         head = label(r"the loss: \ frame-aligned point error", font_size=32, color=PAIR_C).to_edge(UP, buff=0.3)
+        # residue i's frame, and atom j seen from it
+        fi = frame_glyph([-5.7, -0.6, 0], 0.5, s=0.9)
+        aj = Dot([-4.6, 1.2, 0], radius=0.1, color=PRED_C)
+        vij = DashedLine(fi[3].get_center(), aj.get_center(), color=PRED_C, dash_length=0.08)
+        pic = VGroup(fi, aj, vij, MathTex(r"i", font_size=32, color=SYM).next_to(fi, DOWN, buff=0.1),
+                     MathTex(r"j", font_size=32, color=PRED_C).next_to(aj, UP, buff=0.1),
+                     MathTex(r"x_{ij}", font_size=30, color=PRED_C).next_to(vij.get_center(), LEFT, buff=0.15))
         with self.voiceover(
             "What should the network be trained to minimize? AlphaFold 2's answer is the frame-aligned point error, "
             "FAPE. <bookmark mark='a'/> Stand in residue i's frame and look at atom j: that gives its position as "
@@ -103,7 +119,8 @@ class Structure(VoiceoverScene):
             "FAPE doesn't care where the protein sits or how it is turned. <bookmark mark='d'/> But the frames are "
             "built from three atoms by a right-hand rule. A mirror image is not a rigid motion, so FAPE sees it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(fi), FadeIn(pic[3]))
+            self.play(FadeIn(aj), FadeIn(pic[4]), Create(vij), FadeIn(pic[5]))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")

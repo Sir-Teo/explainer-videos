@@ -43,12 +43,13 @@ class Folding(VoiceoverScene):
                                                                                                     buff=0.15)
         facts = VGroup(
             label(r"the shape decides the job: \ enzymes, \ antibodies, \ channels, \ motors", font_size=22),
-            label(r"1958: \ Kendrew, \ myoglobin by X-ray crystallography \ (Nobel 1962, with Perutz)", font_size=22,
+            label(r"1958: \ Kendrew, \ myoglobin by X-ray crystallography \\ (Nobel 1962, with Perutz)", font_size=22,
                   color=HIST),
             label(r"1971: \ the Protein Data Bank opens \ with $7$ structures", font_size=22, color=HIST),
             label(r"2026: \ more than $250{,}000$ entries", font_size=22, color=HIST),
             label(r"sequences known: \ billions \ (Jumper et al.\ 2021)", font_size=22, color=MSA_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.2, -1.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24)
+        facts.move_to([0, -0.9, 0]).align_to(np.array([-0.6, 0, 0]), LEFT)
         cite_ = cite(r"PDBj, \ June 2026", corner=DR)
         with self.voiceover(
             "A protein is a chain of amino acids, of twenty kinds, written by a gene. <bookmark mark='a'/> In water "
@@ -204,11 +205,11 @@ class Folding(VoiceoverScene):
         ev = VGroup(*[MathTex(f"{v:,.0f}".replace(",", "{,}"), font_size=24, color=STRUCT if k < 3 else GREY_C)
                       for k, v in enumerate(eig[:6])]).arrange(RIGHT, buff=0.3)
         evl = label(r"eigenvalues of $G$:", font_size=22, color=GREY_A)
-        evs = VGroup(evl, ev).arrange(RIGHT, buff=0.3).move_to([1.6, -0.9, 0])
+        evs = VGroup(evl, ev).arrange(RIGHT, buff=0.3).move_to([1.6, -1.45, 0])
         m_best = min(f["mds_rmsd"], f["mds_rmsd_mirror"])
         which = r"the fold itself" if f["mds_rmsd"] <= f["mds_rmsd_mirror"] else r"the fold's mirror image"
         res = label(rf"rebuilt: \ RMSD ${sci(m_best, 0)}$\,\AA\ \ to {which} \ (which of the two: \ a coin flip)",
-                    font_size=22, color=GREY_A).move_to([1.6, -1.8, 0])
+                    font_size=22, color=GREY_A).move_to([1.6, -2.15, 0])
         mir = label(r"distances can't tell left from right", font_size=26, color=MIRROR_C).to_edge(DOWN, buff=0.5)
         tag = note(r"computed: \ our bundle's $52$ C$\alpha$ atoms", font_size=20).to_corner(DR, buff=0.2)
         with self.voiceover(
