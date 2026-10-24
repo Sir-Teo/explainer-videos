@@ -10,17 +10,17 @@ GUIDE_C = CFG_C["zero"]
 
 def cross_attention_picture() -> VGroup:
     """Cross-attention: every picture token asks the prompt's tokens; keys and values come from the text."""
-    img = VGroup(*[Square(0.34, stroke_color=PATCH, stroke_width=1.5, fill_color=PATCH, fill_opacity=0.2) for _ in range(6)]
-                 ).arrange(RIGHT, buff=0.08)
-    txt = VGroup(*[Square(0.34, stroke_color=TXT, stroke_width=1.5, fill_color=TXT, fill_opacity=0.25) for _ in range(4)]
-                 ).arrange(RIGHT, buff=0.08)
-    VGroup(img, txt).arrange(DOWN, buff=1.2)
-    words = VGroup(*[data_text(w, font="DejaVu Sans Mono", font_size=16, color=TXT).next_to(s_, DOWN, buff=0.08)
+    img = VGroup(*[Square(0.5, stroke_color=PATCH, stroke_width=1.5, fill_color=PATCH, fill_opacity=0.2) for _ in range(6)]
+                 ).arrange(RIGHT, buff=0.14)
+    txt = VGroup(*[Square(0.5, stroke_color=TXT, stroke_width=1.5, fill_color=TXT, fill_opacity=0.25) for _ in range(4)]
+                 ).arrange(RIGHT, buff=0.4)
+    VGroup(img, txt).arrange(DOWN, buff=1.8)
+    words = VGroup(*[data_text(w, font="DejaVu Sans Mono", font_size=20, color=TXT).next_to(s_, DOWN, buff=0.1)
                      for w, s_ in zip(("a", "red", "fox", "jumps"), txt)])
     lines = VGroup(*[Line(img[i].get_bottom(), txt[j].get_top(), color=C.ATTN, stroke_width=1.2, stroke_opacity=0.7)
                      for i in range(6) for j in range(4)])
-    li = label(r"picture tokens: \ queries", font_size=18, color=PATCH).next_to(img, UP, buff=0.12)
-    lt = label(r"prompt tokens: \ keys and values", font_size=18, color=TXT).next_to(words, DOWN, buff=0.1)
+    li = label(r"picture tokens: \ queries", font_size=22, color=PATCH).next_to(img, UP, buff=0.15)
+    lt = label(r"prompt tokens: \ keys and values", font_size=22, color=TXT).next_to(words, DOWN, buff=0.15)
     return VGroup(img, txt, words, lines, li, lt)
 
 
@@ -42,24 +42,27 @@ class Prompt(VoiceoverScene):
         head = label(r"From GANs to text-to-image diffusion", font_size=34).to_edge(UP, buff=0.3)
         cards = VGroup(
             history_card(r"2014--19", r"GANs: \ BigGAN, \ StyleGAN", r"the sharpest pictures, \ hard to train \ (Part 20)",
-                         color=HIST, width=3.3, font_size=18),
+                         color=HIST, width=4.3, font_size=22),
             history_card(r"Jan 2021", r"DALL$\cdot$E \ (Ramesh et al.)", r"$12$ billion weights: \ up to $256$ text tokens, "
-                         r"\ then $32 \times 32$ picture tokens", color=HIST, width=3.3, font_size=18),
+                         r"\ then $32 \times 32$ picture tokens", color=HIST, width=4.3, font_size=22),
             history_card(r"May 2021", r"diffusion beats GANs", r"Dhariwal \& Nichol: \ ImageNet FID $4.59$ against "
-                         r"BigGAN's $6.95$", color=HIST, width=3.3, font_size=18),
+                         r"BigGAN's $6.95$", color=HIST, width=4.3, font_size=22),
             history_card(r"Apr 2022", r"DALL$\cdot$E 2", r"text $\to$ a CLIP picture embedding $\to$ a diffusion "
-                         r"decoder", color=HIST, width=3.3, font_size=18),
+                         r"decoder", color=HIST, width=4.3, font_size=22),
             history_card(r"May 2022", r"Imagen", r"a frozen T5 text encoder: \ a bigger language model helped more "
-                         r"than a bigger denoiser", color=HIST, width=3.3, font_size=18),
+                         r"than a bigger denoiser", color=HIST, width=4.3, font_size=22),
             history_card(r"Jun 2022", r"Parti", r"$20$ billion weights, \ autoregressive over picture tokens", color=HIST,
-                         width=3.3, font_size=18),
+                         width=4.3, font_size=22),
             history_card(r"Aug 2022", r"Stable Diffusion", r"latent diffusion, \ a CLIP text encoder, \ open weights",
-                         color=HIST, width=3.3, font_size=18),
+                         color=HIST, width=4.3, font_size=22),
             history_card(r"Oct 2023", r"DALL$\cdot$E 3", r"retrain on long, detailed captions written by a model",
-                         color=HIST, width=3.3, font_size=18),
-        ).arrange_in_grid(rows=2, cols=4, buff=(0.2, 0.25)).next_to(head, DOWN, buff=0.3)
-        if cards.width > 13.3:
-            cards.width = 13.3
+                         color=HIST, width=4.3, font_size=22),
+        ).arrange_in_grid(rows=3, cols=3, buff=(0.22, 0.28), cell_alignment=UP)
+        if cards.width > 13.4:
+            cards.width = 13.4
+        if cards.height > 6.4:
+            cards.height = 6.4
+        cards.next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Until 2020, the sharpest generated pictures came from GANs, Part 20's BigGAN and StyleGAN. Text to "
             "image arrived from two directions. <bookmark mark='a'/> In January 2021 OpenAI's DALL-E treated it as "
@@ -133,18 +136,26 @@ class Prompt(VoiceoverScene):
         v0, vN = var[0], var[-1]
         verdict = (f"Unguided, the judge reads {100 * a0:.0f} percent as requested; at w = 2, {100 * a2:.0f}; at "
                    f"w = {ws[-1]:g}, {100 * aN:.0f}.")
-        spread = (f"And the drawings of one letter grow alike: their spread falls from {v0:.2f} to {vN:.2f}." if vN < 0.9 * v0
-                  else f"Their variety barely changes, {v0:.2f} to {vN:.2f}.")
+        if vN < 0.9 * v0:
+            spread = f"And the drawings of one letter grow alike: their spread falls from {v0:.2f} to {vN:.2f}."
+            close = "Guidance buys faithfulness with variety."
+        elif vN > 1.1 * v0:
+            spread = (f"But the drawings of one letter don't grow alike: their spread rises from {v0:.2f} to "
+                      f"{vN:.2f}, as strong guidance overshoots and adds blotches of its own.")
+            close = "Large models trade variety for faithfulness; ours shows the other cost, overshooting."
+        else:
+            spread = f"Their variety barely changes, {v0:.2f} to {vN:.2f}."
+            close = "In large models, guidance buys faithfulness with variety."
         with self.voiceover(
             "And how hard should it listen? Part 21's classifier-free guidance pushes the denoiser away from its "
             "unconditional guess by a weight w; Stable Diffusion's default was seven and a half. We swept it on our "
             "letter transformer, using the letter as the prompt. <bookmark mark='a'/> " + verdict + " <bookmark mark='v'/> " + spread
-            + " <bookmark mark='b'/> Guidance buys faithfulness with variety."
+            + " <bookmark mark='b'/> " + close
         ) as vo:
             self.play(Create(ax), Create(bx), FadeIn(cite_))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.4), FadeIn(rl), run_time=2.0)
             vo.wait_until("a")
             self.play(Create(la[0]), FadeIn(la[1:]), Create(lv[0]), FadeIn(lv[1:]), run_time=2.0)
-            self.play(FadeIn(rows), FadeIn(rl))
             vo.wait_until("b")
             self.play(Indicate(rows[-1], color=GUIDE_C, scale_factor=1.03))
         self.wait(0.3)

@@ -41,7 +41,7 @@ class Outro(VoiceoverScene):
         out.append((VGroup(ax2, curve(ax2, ev, np.asarray(d["zero_fd"]).mean(0), CFG_C["zero"], 3),
                            curve(ax2, ev, np.asarray(d["repa_fd"]).mean(0), CFG_C["repa"], 3)), r"REPA: \ borrowed eyes",
                     CFG_C["repa"]))
-        out.append((glyph_sheet(np.asarray(d["alphabet"])[:26], 2, 13, size=0.2, gap=0.02, frame=False),
+        out.append((glyph_sheet(np.asarray(load("showcase")["alphabet"])[:26], 2, 13, size=0.2, gap=0.02, frame=False),
                     r"a DiT with adaLN-Zero", CFG_C["zero"]))
         s = load("shift")
         sg = np.asarray(s["sigmas"], float)

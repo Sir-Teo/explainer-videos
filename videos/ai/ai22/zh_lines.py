@@ -274,9 +274,10 @@ ZH = {
         "网络为每个块都找到了用处。",
 
     'f"Here is ours learning: the same noise, asked for the same ten letters':
-        "这是我们的模型在学习：同样的噪声，要求同样的十个字母，从A到J，在{total:,}步训练中的各个检查点画出来。<bookmark mark='a'/>在第{steps[0]}步，"
-        "每个块还是恒等映射，所以噪声原样穿过。<bookmark mark='b'/>在第{steps[2]}步，评判网络把十个里的{reads[2]}个读成了所要求的字母；"
-        "<bookmark mark='c'/>第{steps[3]:,}步时是{reads[3]}个；<bookmark mark='d'/>最后是{reads[-1]}个。同时，损失从{L[0, 1]:.2f}降到{L[-1, 1]:.2f}。",
+        "这是我们的模型在学习：同样的噪声，要求同样的十个字母，从A到J，在{total:,}步训练中的各个检查点画出来，步数是后面那些比较的{total / cmp_n:.0f}倍。"
+        "<bookmark mark='a'/>在第{steps[0]}步，每个块还是恒等映射，所以噪声原样穿过。<bookmark mark='b'/>在第{steps[3]:,}步，"
+        "评判网络把十个里的{reads[3]}个读成了所要求的字母；<bookmark mark='c'/>第{steps[j]:,}步时是{reads[j]}个；"
+        "<bookmark mark='d'/>最后是{reads[-1]}个。同时，损失从{L[0, 1]:.2f}降到{L[-1, 1]:.2f}。",
 
     '"Does the way in matter?':
         "送进去的方式重要吗？三种我们都训练了，每种三个随机种子，数据和步数相同；两种adaLN版本为缩放、平移和门控多带了一些权重。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>"
@@ -315,10 +316,22 @@ ZH = {
     '"And how hard should it listen?':
         "那它应该听得多认真？第21部分的无分类器引导，用一个权重w把去噪器从它的无条件猜测上推开；Stable Diffusion的默认值是7.5。"
         "我们在字母Transformer上扫了一遍，把字母本身当作提示词。<bookmark mark='a'/>{verdict}<bookmark mark='v'/>{spread}"
-        "<bookmark mark='b'/>引导用多样性换来了忠实。",
+        "<bookmark mark='b'/>{close}",
 
     "f'And the drawings of one letter grow alike:":
         '同一个字母的不同画法也越来越像：它们的散布从{v0:.2f}降到{vN:.2f}。',
+
+    'f"But the drawings of one letter don\'t grow alike:':
+        '但同一个字母的不同画法并没有变得更像：它们的散布从{v0:.2f}升到{vN:.2f}，因为太强的引导会冲过头，自己添出斑块。',
+
+    'Guidance buys faithfulness with variety.':
+        '引导用多样性换来了忠实。',
+
+    'Large models trade variety for faithfulness; ours shows the other cost, overshooting.':
+        '大模型用多样性换忠实；我们的模型显示的是另一种代价：冲过头。',
+
+    'In large models, guidance buys faithfulness with variety.':
+        '在大模型里，引导用多样性换来忠实。',
 
     "f'Their variety barely changes":
         '它们的多样性几乎没变，从{v0:.2f}到{vN:.2f}。',

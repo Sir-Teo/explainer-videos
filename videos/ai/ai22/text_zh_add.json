@@ -469,7 +469,17 @@
     "$t$ near $0$: \\ pure noise; \\ the best guess is the average picture": "$t$接近$0$：\\ 纯噪声；\\ 最好的猜测是平均图片",
     "$t$ near $1$: \\ almost clean; \\ little left to fix": "$t$接近$1$：\\ 几乎干净；\\ 没什么可修的",
     "in between: \\ the hard part": "中间：\\ 难的部分",
-    "dots: \\ where each is right half the time; \\ rings: \\ the formula's prediction": "点：\\ 各自正确率为一半的位置；\\ 圆环：\\ 公式的预测"
+    "dots: \\ where each is right half the time; \\ rings: \\ the formula's prediction": "点：\\ 各自正确率为一半的位置；\\ 圆环：\\ 公式的预测",
+    "DiT \\ (Peebles \\& Xie)": "DiT \\ （Peebles \\& Xie）",
+    "a plain transformer as the denoiser": "用普通的Transformer做去噪器",
+    "physics": "物理",
+    "diffusion forcing, noisy context": "扩散强制，带噪声上下文",
+    "two frames given, \\ then $30$ drawn: \\ $4\\times$ the 8-frame training clips \\ (every third frame shown)": "给定两帧，\\ 再画$30$帧：\\ $4$倍于8帧的训练片段 \\ （每三帧显示一帧）",
+    "F_\\theta:\\ (x, y, z,\\ \\text{direction}) \\;\\mapsto\\; (\\sigma,\\ \\mathbf{c})": "F_\\theta:\\ (x, y, z,\\ \\text{方向}) \\;\\mapsto\\; (\\sigma,\\ \\mathbf{c})",
+    "the same $24$ photographs, \\ $50$ steps each, \\ three seeds; \\ on this CPU, training took $3$ s (NeRF) and $24$ s (Gaussians)": "同样的$24$张照片，\\ 各$50$步，\\ 三个种子；\\ 在这台CPU上，训练用了$3$秒（NeRF）和$24$秒（高斯）",
+    "ours leaves out the direction: \\ our scene looks the same from every side": "我们的模型不输入方向：\\ 我们的场景从各个方向看都一样",
+    "noise level $t$": "噪声水平$t$",
+    "the letter asked for": "所要的字母"
   },
   "patterns": [
     [

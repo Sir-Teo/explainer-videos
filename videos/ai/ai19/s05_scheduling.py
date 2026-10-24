@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai19.compute import WORK
 from videos.ai.ai19.common import (CHUNKC, CONTC, DECODEC, DISC, F, PART, PREFILLC, STATICC, hbars, load, node_box,
                                    x_)
 
@@ -112,7 +113,7 @@ class Scheduling(VoiceoverScene):
         names = [("static", r"static batches", STATICC), ("continuous", r"continuous", CONTC)]
         tp = [one[k]["throughput"] for k, _, _ in names]
         tt = [one[k]["ttft"][0] for k, _, _ in names]
-        head = label(rf"{400} requests, \ ${s['rate']:g}$ a second; \ prompts of ${s['prompt_mean']:.0f}$ tokens, "
+        head = label(rf"${WORK['n']}$ requests, \ ${s['rate']:g}$ a second; \ prompts of ${s['prompt_mean']:.0f}$ tokens, "
                      rf"\ answers of ${s['out_mean']:.0f}$, \ on average", font_size=22, color=GREY_A)
         head.to_edge(UP, buff=0.35)
         b1 = hbars(tp, [n[1] for n in names], [n[2] for n in names], width=3.8, row_h=0.85, font_size=24, lo=0,
