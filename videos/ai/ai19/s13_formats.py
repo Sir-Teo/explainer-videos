@@ -97,14 +97,17 @@ class Formats(VoiceoverScene):
                    MathTex(rf"= 2^{{{e}}}", font_size=26, color=MXC)).arrange(RIGHT, buff=0.15),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([-3.4, -2.3, 0])
         ratio = amax / 2.0 ** e
-        clip = VGroup(label(rf"largest $\div$ scale $= {ratio:.2f}$: \ above $6$, \ so clamped to $6$", font_size=20,
+        clip = VGroup(label(rf"largest $\div$ scale $= {ratio:.2f}$: \ above $6$, \ so clamped to $6$" if ratio > 6 else
+                            rf"largest $\div$ scale $= {ratio:.2f}$: \ below $6$, \ nothing clamped", font_size=20,
                             color=C.SURPRISE),
                       label(rf"blocks of our model with a value clamped: \ ${100 * f['clipped_share']:.0f}\%$",
                             font_size=20, color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         clip.move_to([3.3, -2.3, 0])
         hc = history_card(2023, r"Bita Darvish Rouhani et al., \ OCP", r"microscaling: \ blocks of $32$, \ a shared "
                           r"power-of-two scale", width=4.0, font_size=16, color=MXC).move_to([4.4, -2.5, 0])
-        bits_here = "above" if ratio > 6 else "below"
+        clamp_say = (f"This block's largest weight is {ratio:.2f} times the scale, above six, so it is clamped to six."
+                     if ratio > 6 else
+                     f"This block's largest weight is {ratio:.2f} times the scale, below six, so nothing is clamped.")
         with self.voiceover(
             "MXFP4 comes from the Open Compute Project's microscaling standard of September 2023, written by "
             "AMD, Arm, Intel, Meta, Microsoft, NVIDIA and Qualcomm together. <bookmark mark='a'/> Here are thirty-two real weights "
@@ -113,10 +116,9 @@ class Formats(VoiceoverScene):
             f"weight, minus two, so that weight lands between four and eight: here two to the {e}. "
             "<bookmark mark='c'/> Divide each weight by the scale, round it to the nearest E2M1 value, and keep "
             "its four-bit code: the middle row. Decoded, the last row. <bookmark mark='d'/> But E2M1 stops at six. "
-            f"This block's largest weight is {ratio:.2f} times the scale, {bits_here} six"
-            + (", so it is clamped. " if ratio > 6 else ". ") +
-            f"Across our model, {100 * f['clipped_share']:.0f} percent of the blocks lose their largest value this "
-            "way: the price of a scale that can only be a power of two."
+            + clamp_say + " " +
+            f"Across our model, {100 * f['clipped_share']:.0f} percent of the blocks have their largest value cut "
+            "down this way: the price of a scale that can only be a power of two."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hc))
             vo.wait_until("a")

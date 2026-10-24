@@ -181,3 +181,26 @@ def heat(Z, width=4.0, height=3.0, color=C.KEY, gamma=0.6, bg="#121722") -> Imag
     img = ImageMobject((np.concatenate([rgb, np.ones(Z.shape + (1,))], -1) * 255).astype(np.uint8))
     img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
     return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
+
+
+def x_(r: float) -> str:
+    """A ratio's number for the narrator, said before 'times': '3.4', '12'."""
+    return f"{r:.0f}" if r >= 10 else f"{r:.1f}"
+
+
+def bnum(b: float) -> float:
+    """The number part of a byte count for the narrator, said with ``bunit``, rounded to be spoken: 320.0, 2.5.
+    Format it with ``:g`` (``{bnum(b):g} {bunit(b)}``), so the Chinese templates read it as a number."""
+    for k in (1e12, 1e9, 1e6, 1e3):
+        if b >= k:
+            v = b / k
+            return float(round(v)) if v >= 10 else round(v, 1)
+    return float(round(b))
+
+
+def bunit(b: float) -> str:
+    """The unit of a byte count for the narrator: 'kilobytes', 'megabytes', 'gigabytes', 'terabytes'."""
+    for unit, k in (("terabytes", 1e12), ("gigabytes", 1e9), ("megabytes", 1e6), ("kilobytes", 1e3)):
+        if b >= k:
+            return unit
+    return "bytes"

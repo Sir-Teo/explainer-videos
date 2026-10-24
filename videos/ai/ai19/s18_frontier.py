@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, PART, PREFILLC, hbars, load, loglog, times)
+from videos.ai.ai19.common import (BYTEC, COSTC, DECODEC, F, PART, PREFILLC, hbars, load, loglog, x_)
 
 
 class Frontier(VoiceoverScene):
@@ -52,7 +52,7 @@ class Frontier(VoiceoverScene):
             f"{R['tokens_new'] // 1000} thousand tokens a question instead of {R['tokens_old'] // 1000}. "
             "<bookmark mark='b'/> What does length cost? Take chapter three's model of a GPU serving a model, "
             "and write answers of each length, with as many conversations as the memory holds. "
-            f"<bookmark mark='c'/> {tok:.1f} times the tokens cost {times(ratio)} as much, because the caches grow, "
+            f"<bookmark mark='c'/> {tok:.1f} times the tokens cost {x_(ratio)} times as much, because the caches grow, "
             "the batch shrinks, and every token gets dearer: from "
             f"{th[k1]['per_mtok']:.2f} to {th[k2]['per_mtok']:.2f} dollars per million. Thinking longer is a "
             "decoding problem, and everything in this part is how it is made affordable."

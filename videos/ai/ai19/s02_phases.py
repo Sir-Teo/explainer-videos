@@ -7,7 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai17.specs import GPUS
 from videos.ai.ai19.common import (BYTEC, DECODEC, FLOPC, PART, PREFILLC, WEIGHTC, fmt, load, loglog, node_box,
-                                   take_away, times)
+                                   take_away, x_)
 
 
 class Phases(VoiceoverScene):
@@ -136,7 +136,7 @@ class Phases(VoiceoverScene):
             f"predicts a floor: just reading the weights takes {mem_t:.0f} milliseconds, whatever B is, until the "
             "arithmetic catches up with the reading. <bookmark mark='c'/> " + how + " <bookmark mark='d'/> So "
             f"vectors per second climb from {tps[0]:.0f} at a batch of one to {tps[k512]:.0f} at {int(B[k512])}: "
-            f"{times(tps[k512] / tps[0])} as much work out of the same weights."
+            f"{x_(tps[k512] / tps[0])} times as much work out of the same weights."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -148,7 +148,7 @@ class Phases(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("d")
-            self.play(FadeOut(stk), FadeOut(sl), LaggedStart(*[FadeIn(x_) for x_ in rl], lag_ratio=0.3))
+            self.play(FadeOut(stk), FadeOut(sl), LaggedStart(*[FadeIn(m_) for m_ in rl], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()
 
@@ -190,7 +190,7 @@ class Phases(VoiceoverScene):
             "one new token for each of B conversations per pass. <bookmark mark='c'/> One conversation is written "
             f"at {dtps[0]:.0f} tokens a second; each step reads all {n / 1e6:.1f} million weights, "
             f"{bwu / 1e9:.1f} gigabytes a second of them. The same model reads a {int(T[kp])}-token prompt at "
-            f"{ptps[kp]:,.0f} tokens a second: {times(ratio)} faster, because its tokens share the reading. "
+            f"{ptps[kp]:,.0f} tokens a second: {x_(ratio)} times faster, because its tokens share the reading. "
             f"<bookmark mark='d'/> Batching the decodes buys most of that back: {int(B[kd])} conversations at once "
             f"get {dtps[kd]:,.0f} tokens a second between them. But each of them now gets only {per_user:.0f}. "
             "That trade, the speed of one against the work of all, is what a server is built around."

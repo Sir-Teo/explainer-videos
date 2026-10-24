@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import (ASSIST, BASE, GOLD, MONO, PART, PENALTY, POLICY, REWARD, USER, bubble, load,
-                                   said)
+                                   node_box, said)
 
 
 class SFT(VoiceoverScene):
@@ -86,6 +86,9 @@ class SFT(VoiceoverScene):
         b[2].align_to(b[1], RIGHT)
         tag = note(r"both made from the thirty novels; \ test sentences come from paragraphs the model never read")
         tag.to_edge(DOWN, buff=0.3)
+        tot = int(load("lora")["total_params"])
+        model = node_box(rf"our model: \ ${tot / 1e6:.1f}$ million parameters, \ trained on thirty novels", BASE,
+                         font_size=24).move_to([0, 3.05, 0])
         with self.voiceover(
             "Our model is the one this series trained on thirty novels: six point eight million parameters, a "
             "modern transformer in miniature. We fine-tune it on two kinds of conversation, both made from the "
@@ -94,11 +97,11 @@ class SFT(VoiceoverScene):
             "paragraphs held out of all its training. <bookmark mark='b'/> In the second, the user asks for a line "
             "about something, the sea, a window, and the answer is a sentence from the novels about it."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(model), FadeIn(tag), FadeIn(a[0]), FadeIn(b[0]))
             vo.wait_until("a")
-            self.play(FadeIn(a, shift=UP * 0.15))
+            self.play(FadeIn(a[1:], shift=UP * 0.15))
             vo.wait_until("b")
-            self.play(FadeIn(b, shift=UP * 0.15))
+            self.play(FadeIn(b[1:], shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
 

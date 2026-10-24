@@ -188,15 +188,23 @@ class Rotation(VoiceoverScene):
                    rf"windows, \ ${sp['seconds'] / 60:.0f}$ minutes; \ $Q Q^\top = I$ to ${sp['orth_err']:.0e}$",
                    font_size=17).to_corner(DR, buff=0.2)
         gain = ev[0, 1] - ev[-1, 1]
+        st = int(sp["steps"])
+        if gain > 0.005:
+            learn_say = (f"Over {st} steps the held-out loss fell from {ev[0, 1]:.3f} to {ev[-1, 1]:.3f}: the "
+                         "rotation learned where our model's outliers are.")
+        elif gain > -0.002:
+            learn_say = (f"Over {st} steps the held-out loss went from {ev[0, 1]:.3f} to {ev[-1, 1]:.3f}: the "
+                         "Hadamard start was already close to the best this training could find.")
+        else:
+            learn_say = (f"Over {st} steps the held-out loss rose from {ev[0, 1]:.3f} to {ev[-1, 1]:.3f}: the "
+                         "rotation fitted its little calibration text, not the novels.")
         with self.voiceover(
             "Learning a rotation needs care, because a gradient step on a rotation matrix makes it something else. "
             "<bookmark mark='a'/> SpinQuant keeps it a rotation by construction. Write Q as the Hadamard matrix "
             "times the Cayley map of a skew-symmetric matrix A: every A gives a rotation, so A can be trained "
             "freely. <bookmark mark='b'/> We trained A on our model's loss with four-bit weights and activations, "
             "the rounding passed straight through for the gradient, starting from the Hadamard rotation. "
-            f"<bookmark mark='c'/> Over {int(sp['steps'])} steps the held-out loss fell from {ev[0, 1]:.3f} to "
-            f"{ev[-1, 1]:.3f}" + (": the rotation learned where our model's outliers are." if gain > 0.005 else
-                                   ": the Hadamard start was already close to the best this training could find.")
+            "<bookmark mark='c'/> " + learn_say
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")

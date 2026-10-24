@@ -536,9 +536,9 @@ def compute_drafters():
     ev = heldout(8, 256, seed=0)
     part = CACHE.partial("drafters", dict(draft=SP.DRAFT_RUN, eagle=SP.EAGLE_RUN, cfg=SP.DRAFT_CFG, k=SPEC_K, v=2))
     if "draft" not in part or not (CACHE.dir / "draft.pt").exists():
-        part["draft"] = SP.train_draft(CACHE.dir, base_m, ev)
+        part["draft"] = plain(SP.train_draft(CACHE.dir, base_m, ev))
     if "eagle" not in part or not (CACHE.dir / "eagle.pt").exists():
-        part["eagle"] = SP.train_eagle(CACHE.dir, base_m, ev)
+        part["eagle"] = plain(SP.train_eagle(CACHE.dir, base_m, ev))
     draft, eagle = SP.load_draft(CACHE.dir), SP.load_eagle(CACHE.dir, base_m)
     threads(1)  # time on one thread, like the rest of the part
     dec = SP.Decoder(base_m, draft, eagle, max_len=320)
@@ -823,7 +823,7 @@ def compute_rotation():
             print(f"    {k}: {part[k]:.4f}", flush=True)
     # SpinQuant, small: learn the residual rotation R = R0 cayley(A) by gradient descent on the quantized model's loss
     if "spin" not in part:
-        part["spin"] = _learn_rotation(model, Hd, Rd, ev, steps=120)
+        part["spin"] = plain(_learn_rotation(model, Hd, Rd, ev, steps=100))
     Rl = np.asarray(part["spin"]["R"])
     if "w4a4_learned" not in part:
         part["w4a4_learned"] = loss(Q.w_a(Q.rotate(model, Rl), 4, 4, down_R=Rd), ev)
@@ -832,7 +832,7 @@ def compute_rotation():
     return out
 
 
-def _learn_rotation(model, R0, Rd, ev, steps=120, lr=2e-3, batch=8, bits=4):
+def _learn_rotation(model, R0, Rd, ev, steps=100, lr=3e-4, batch=8, bits=4):
     """SpinQuant, small (Liu et al. 2024): R = R0 C(A), C the Cayley map of a skew-symmetric A (so R stays a rotation),
     trained by Adam on the loss of the network with weights and activations rounded to ``bits`` (the rounding passed
     straight through for the gradient), on calibration windows.  Every 20 steps, the held-out loss of that rotation."""
@@ -879,10 +879,10 @@ def _learn_rotation(model, R0, Rd, ev, steps=120, lr=2e-3, batch=8, bits=4):
     curve, evals = [], []
     t0 = time.time()
     for step in range(steps + 1):
-        if step % 20 == 0:
+        if step % 20 == 0 or step == steps:
             with torch.no_grad():
                 Rn = rotation().numpy().astype(np.float64)
-            evals.append([step, loss(Q.w_a(Q.rotate(model, Rn), bits, bits, down_R=Rd), ev[:24])])
+            evals.append([step, loss(Q.w_a(Q.rotate(model, Rn), bits, bits, down_R=Rd), ev[:16])])
             print(f"    rotation step {step}: held-out loss {evals[-1][1]:.4f} ({time.time() - t0:.0f}s)", flush=True)
         if step == steps:
             break
@@ -893,7 +893,7 @@ def _learn_rotation(model, R0, Rd, ev, steps=120, lr=2e-3, batch=8, bits=4):
         opt.zero_grad()
         l_.backward()
         opt.step()
-        curve.append([step, float(l_)])
+        curve.append([step, float(l_.detach())])
     with torch.no_grad():
         R = rotation().numpy().astype(np.float64)
     orth = float(np.abs(R @ R.T - np.eye(d)).max())

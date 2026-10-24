@@ -98,7 +98,7 @@ class Rewards(VoiceoverScene):
         pr = load("prefs")
         rm = load("rm")
         ex = [p for p in pr["test"] if len(p["chosen"]) < 90 and len(p["rejected"]) < 90][:2]
-        q = bubble(rf"Write a line about the {ex[0]['topic']}.", "user", font_size=22).move_to([0, 2.7, 0])
+        q = said(f"Write a line about the {ex[0]['topic']}.", "user", chars=40, font_size=20).move_to([0, 2.7, 0])
         cw = said(ex[0]["chosen"], chars=36).move_to([-3.4, 1.0, 0])
         cl = said(ex[0]["rejected"], chars=36).move_to([3.4, 1.0, 0])
         mark = VGroup(label(r"preferred", font_size=22, color=REWARD).next_to(cw, DOWN, buff=0.15),
