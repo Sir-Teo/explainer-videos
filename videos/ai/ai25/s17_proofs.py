@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai25.common import (HIST, LEAN_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C,
-                                   node_box, take_away)
+from videos.ai.ai25.common import (HIST, LEAN_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C, node_box,
+                                   take_away, takeaway_anims)
 
 
 def score_bars(rows, total, W=6.0, x0=-1.0, y0=1.6, dy=0.75, font_size=21):
@@ -212,6 +212,6 @@ class Proofs(VoiceoverScene):
             "With a perfect checker, search can be trusted: generate freely, keep only what checks. The last chapter "
             "is about exactly that."
         ):
-            self.play(FadeOut(caveats), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(caveats), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

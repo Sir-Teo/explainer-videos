@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (CHAIN_GRAD, HIST, MIRROR_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   chain3d, load, node_box, take_away, words_num)
+                                   chain3d, load, node_box, take_away, takeaway_anims, words_num)
 
 
 def frame_glyph(center, angle, color=SYM, s=0.55):
@@ -260,6 +260,6 @@ class Structure(VoiceoverScene):
             "So: residues as rigid frames, moved by attention that can't see how the protein is turned; a loss that "
             "ignores rigid motions but not reflections; and a network that reads its own answer and tries again."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

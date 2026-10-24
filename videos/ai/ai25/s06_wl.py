@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, GNN_C, PAIR_C, PART, PLAIN, STRUCT, SYM, WL_COLORS, graph_mob, load,
-                                   take_away, words_num)
+                                   take_away, takeaway_anims, words_num)
 
 
 def circle_layout(parts):
@@ -47,15 +47,15 @@ class WL(VoiceoverScene):
         gs = []
         for k, cx in ((0, -3.4), (1, 3.4)):
             pos = np.asarray(m["layout"][k])
-            g = graph_mob(pos, m["edges"][k], colors=[WL_COLORS[c] for c in cols[0][k]], scale=1.7,
-                          center=[cx, 0.3, 0], node_r=0.15)
+            g = graph_mob(pos, m["edges"][k], colors=[WL_COLORS[c] for c in cols[0][k]], scale=1.45,
+                          center=[cx, 0.85, 0], node_r=0.14)
             gs.append(g)
         names = VGroup(label(r"decalin", font_size=26, color=GREY_A).next_to(gs[0], UP, buff=0.3),
                        label(r"bicyclopentyl", font_size=26, color=GREY_A).next_to(gs[1], UP, buff=0.3))
         algo = definition_card(r"colour refinement (1-WL)", r"every node starts with the same colour; \ each round, "
                                r"a node's new colour names its old colour and the multiset of its neighbours' "
                                r"colours; \ stop when nothing splits", width=6.2, font_size=21, kind=r"Algorithm")
-        algo.to_edge(DOWN, buff=0.25)
+        algo.to_edge(DOWN, buff=0.15)
 
         def hist(k, r):
             cnt = np.bincount(cols[r][k], minlength=max(max(c) for c in cols[r]) + 1)
@@ -148,23 +148,23 @@ class WL(VoiceoverScene):
         gi = load("gin")
         A = VGroup(*[Dot(radius=0.14, color=c) for c in (SYM, SYM, PAIR_C, PAIR_C)]).arrange(RIGHT, buff=0.15)
         B = VGroup(*[Dot(radius=0.14, color=c) for c in (SYM, PAIR_C)]).arrange(RIGHT, buff=0.15)
-        A.move_to([-4.6, 1.6, 0])
-        B.move_to([-4.6, 0.6, 0])
-        la = label(r"neighbours $\{\!\{a, a, b, b\}\!\}$", font_size=22).next_to(A, RIGHT, buff=0.3)
-        lb = label(r"neighbours $\{\!\{a, b\}\!\}$", font_size=22).next_to(B, RIGHT, buff=0.3)
+        A.move_to([-4.6, 1.0, 0])
+        B.move_to([-4.6, -0.1, 0])
+        la = label(r"neighbours $\{\!\{a, a, b, b\}\!\}$", font_size=26).next_to(A, RIGHT, buff=0.3)
+        lb = label(r"neighbours $\{\!\{a, b\}\!\}$", font_size=26).next_to(B, RIGHT, buff=0.3)
         ops = VGroup(
-            label(r"mean: \ the same; \ max: \ the same; \ sum: \ different", font_size=24, color=GREY_A),
-        ).move_to([-2.4, -0.3, 0])
+            label(r"mean: \ the same; \ max: \ the same; \ sum: \ different", font_size=26, color=GREY_A),
+        ).move_to([-2.6, -1.3, 0])
         rows = []
         for agg, col in (("sum", STRUCT), ("mean", PLAIN), ("max", PLAIN)):
             rm = [gi[f"deg_{agg}_s{s}"]["rmse"] for s in (0, 1, 2)]
             ex = [gi[f"deg_{agg}_s{s}"]["exact"] for s in (0, 1, 2)]
             rows.append((agg, col, float(np.mean(rm)), float(np.mean(ex))))
-        tab = VGroup(label(r"learn each node's degree, \ starting from identical nodes:", font_size=22,
+        tab = VGroup(label(r"learn each node's degree, \ starting from identical nodes:", font_size=24,
                            color=GREY_A))
         for agg, col, rm, ex in rows:
-            tab.add(label(rf"{agg}: \ error ${rm:.2f}$, \ exactly right ${100 * ex:.0f}\%$", font_size=24, color=col))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, 0.6, 0])
+            tab.add(label(rf"{agg}: \ error ${rm:.2f}$, \ exactly right ${100 * ex:.0f}\%$", font_size=27, color=col))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 0.2, 0])
         sd = gi["deg_std"]
         tag = note(rf"computed: \ $400$ random graphs of $12$ nodes, \ three seeds; \ the degrees' own spread is "
                    rf"${sd:.2f}$", font_size=20).to_corner(DR, buff=0.25)
@@ -291,7 +291,7 @@ class WL(VoiceoverScene):
             node_box_(r"count small subgraphs \ (triangles, cycles)", PAIR_C),
             node_box_(r"positional encodings: \ random numbers, \ Laplacian eigenvectors", AUG),
             node_box_(r"graph transformers: \ attention over all pairs", GNN_C),
-        ).arrange_in_grid(rows=2, cols=2, buff=(0.4, 0.35)).move_to(DOWN * 0.6)
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.45, 0.45)).move_to(DOWN * 0.3)
         babai = label(r"telling graphs apart in general: \ Babai (2016), \ quasi-polynomial time", font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.4)
         tk = take_away(r"message passing sees what colour refinement sees: \ almost every graph, \ but not all")
@@ -311,7 +311,7 @@ class WL(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b_) for b_ in ways], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(babai))
-        self.play(FadeOut(babai), FadeIn(tk, shift=UP * 0.1))
+        self.play(FadeOut(babai), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(1.0)
         self.clear_scene()
 
@@ -319,4 +319,4 @@ class WL(VoiceoverScene):
 def node_box_(text, color):
     from videos.ai.ai25.common import node_box
 
-    return node_box(text, color, font_size=22, height=0.8)
+    return node_box(text, color, font_size=25, height=0.95)

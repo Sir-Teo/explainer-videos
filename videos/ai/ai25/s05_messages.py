@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (COMM_COLORS, GNN_C, HIST, PAIR_C, PART, PLAIN, STRUCT, SYM, graph_mob, load,
-                                   take_away)
+                                   take_away, takeaway_anims)
 
 
 class Messages(VoiceoverScene):
@@ -26,7 +26,7 @@ class Messages(VoiceoverScene):
         w = load("wl")
         m = w["molecules"]
         pos, edges = np.asarray(m["layout"][0]), m["edges"][0]
-        g = graph_mob(pos, edges, scale=1.4, center=[-4.2, 0.6, 0], node_r=0.12)
+        g = graph_mob(pos, edges, scale=2.0, center=[-4.4, 0.4, 0], node_r=0.14)
         gl = label(r"decalin: \ $10$ carbon atoms, \ $11$ bonds", font_size=22, color=GREY_A).next_to(g, DOWN,
                                                                                                     buff=0.35)
         n = 10
@@ -39,15 +39,15 @@ class Messages(VoiceoverScene):
             cells = VGroup()
             for i in range(n):
                 for j in range(n):
-                    cells.add(Square(0.24, stroke_width=0.6, stroke_color=GREY_D,
+                    cells.add(Square(0.31, stroke_width=0.6, stroke_color=GREY_D,
                                      fill_color=color if M[i, j] else "#121722", fill_opacity=0.9 if M[i, j] else 1))
             return cells.arrange_in_grid(n, n, buff=0.02)
 
-        M1 = matrix(A, SYM).move_to([0.6, 0.6, 0])
+        M1 = matrix(A, SYM).move_to([0.5, 0.5, 0])
         Ap = A[np.ix_(perm, perm)]
-        M2 = matrix(Ap, SYM).move_to([0.6, 0.6, 0])
+        M2 = matrix(Ap, SYM).move_to([0.5, 0.5, 0])
         ml = label(r"its adjacency matrix $A$", font_size=22, color=SYM).next_to(M1, DOWN, buff=0.3)
-        f = cmath(r"f(PX,\ PAP^\top)", r"=", r"P\,f(X, A)", font_size=34).move_to([4.6, 1.2, 0])
+        f = cmath(r"f(PX,\ PAP^\top)", r"=", r"P\,f(X, A)", font_size=34).move_to([4.7, 1.2, 0])
         f[2].set_color(STRUCT)
         fl = label(r"renumber the nodes: \ the answers \\ must be renumbered too, \ nothing else", font_size=22,
                    color=GREY_A).next_to(f, DOWN, buff=0.3)
@@ -80,7 +80,7 @@ class Messages(VoiceoverScene):
         w = load("wl")
         m = w["molecules"]
         pos, edges = np.asarray(m["layout"][1]), m["edges"][1]
-        g = graph_mob(pos, edges, scale=1.5, center=[-4.0, 0.4, 0], node_r=0.13)
+        g = graph_mob(pos, edges, scale=2.1, center=[-4.2, 0.2, 0], node_r=0.15)
         v = 0
         nbrs = [b if a == v else a for a, b in edges if v in (a, b)]
         rows = [
@@ -233,6 +233,6 @@ class Messages(VoiceoverScene):
             "That is message passing: a learned sum over neighbours, repeated, so that after L layers each node "
             "has heard from everything within L hops. Which raises a question: what can such a network tell apart?"
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

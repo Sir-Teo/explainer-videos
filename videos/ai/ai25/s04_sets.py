@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, KIND_COLOR, KIND_NAME, PART, PLAIN, STRUCT, SYM, load, node_box, points2d,
-                                   take_away)
+                                   take_away, takeaway_anims)
 
 
 def mean_band(d, kind, sizes, metric="acc"):
@@ -112,9 +112,11 @@ class Sets(VoiceoverScene):
             cmath(r"f", r"=", r"f \circ \Big(\sum \phi\Big)^{-1} \circ \sum \phi", font_size=32),
         ]
         whys = [why(r"the easy direction"), why(r"number the elements of the universe"),
-                why(r"$d_k = 1$ exactly when element $k$ is in $X$: \ no carries"),
-                why(r"the sum is one-to-one: \ invert it, \ then apply $f$: \ $\rho = f \circ (\sum\phi)^{-1}$")]
-        step = ladder(self, rows, whys, keep=4, top=0.7, x=-1.4, align_index=1, buff=0.42, edge=6.9)
+                why(r"$d_k = 1$ iff element $k$ is in $X$: \ no carries"),
+                why(r"one-to-one: \ invert it, \ then apply $f$")]
+        for r_ in rows:
+            r_.scale(30 / 32)
+        step = ladder(self, rows, whys, keep=4, top=1.15, x=-1.6, align_index=1, buff=0.3, edge=6.9)
         cont = label(r"real numbers: \ the power sums $\sum_i x_i^k$, \ $k = 1, \dots, n$, \ pin down $n$ numbers "
                      r"(Newton); \ fewer won't do \ (Wagstaff et al.\ 2019)", font_size=22, color=GREY_A)
         cont.to_edge(DOWN, buff=0.35)
@@ -272,8 +274,7 @@ class Sets(VoiceoverScene):
             objs[kind] = VGroup(band(g.ax, lx, lo, hi, col, 0.22), curve(g.ax, lx, m, col, 3.5),
                                 VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=col) for a, b in zip(lx, m)]))
         lg = legend([(STRUCT, KIND_NAME["deepsets"]), (AUG, r"MLP, \ shown reordered copies"),
-                     (PLAIN, KIND_NAME["mlp"])], font_size=20).move_to([2.3, -1.4, 0]).align_to(g.ax, RIGHT)
-        lg.shift(RIGHT * 0.0 + UP * 0.2)
+                     (PLAIN, KIND_NAME["mlp"])], font_size=20).move_to([4.5, -1.1, 0])
         flips = VGroup(label(r"answers that change \ when the same set is reordered:", font_size=22, color=GREY_A))
         n_big = sizes[-1]
         for kind in ("mlp", "mlp_aug", "deepsets"):
@@ -331,6 +332,6 @@ class Sets(VoiceoverScene):
             "made the answer exactly order-free, on every input, not only on the ones like the training data. "
             "Graphs are next: sets with connections."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

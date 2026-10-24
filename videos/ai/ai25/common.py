@@ -221,6 +221,14 @@ def take_away(text: str, color=C.BITS, font_size=28, width=12.0) -> VGroup:
     return VGroup(box, t.move_to(box)).to_edge(DOWN, buff=0.35)
 
 
+def takeaway_anims(scene, tk: Mobject, buff=0.08) -> list:
+    """Fade-outs for the small things (tags, notes, citations) the takeaway box would cover, to play with it."""
+    lo, hi = tk.get_corner(DL) - buff, tk.get_corner(UR) + buff
+    hide = [m for m in scene.mobjects if m is not tk and 0 < m.height < 0.8 and m.get_right()[0] > lo[0]
+            and m.get_left()[0] < hi[0] and m.get_top()[1] > lo[1] and m.get_bottom()[1] < hi[1]]
+    return [FadeOut(m) for m in hide]
+
+
 def caption(mob: Mobject, text: str, color=GREY_A, font_size=22, direction=UP, buff=0.15) -> Tex:
     return label(text, font_size=font_size, color=color).next_to(mob, direction, buff=buff)
 

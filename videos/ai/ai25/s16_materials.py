@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (HIST, MSA_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C, load,
-                                   node_box, take_away, words_num)
+                                   node_box, take_away, takeaway_anims, words_num)
 
 STABLE = MSA_C
 
@@ -247,6 +247,6 @@ class Materials(VoiceoverScene):
             "In materials, then, the network is a cheap first opinion that makes expensive checks count. In "
             "mathematics, the check can be perfect."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

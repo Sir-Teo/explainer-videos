@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (HIST, KIND_COLOR, KIND_NAME, MSA_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM,
-                                   TRUE_C, crossfade, hbars, load, matrix_image, node_box, take_away)
+                                   TRUE_C, crossfade, hbars, load, matrix_image, node_box, take_away, takeaway_anims)
 
 
 class Evoformer(VoiceoverScene):
@@ -351,6 +351,6 @@ class Evoformer(VoiceoverScene):
             "consistent through triangles. What remains is to turn pairs into a structure, without losing left from "
             "right."
         ):
-            self.play(FadeOut(hc), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(hc), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

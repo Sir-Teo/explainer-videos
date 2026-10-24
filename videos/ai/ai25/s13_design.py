@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, CHAIN_GRAD, HIST, MSA_C, PAIR_C, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   chain2d_mob, chain3d, load, node_box, take_away)
+                                   chain2d_mob, chain3d, load, node_box, take_away, takeaway_anims)
 from videos.ai.ai25.s12_af3 import chain_sheet
 
 
@@ -246,6 +246,6 @@ class Design(VoiceoverScene):
             "Design, in one line: diffuse a backbone, write a sequence for it, check that the sequence folds back, "
             "and only then make it. Now from molecules to the whole planet."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

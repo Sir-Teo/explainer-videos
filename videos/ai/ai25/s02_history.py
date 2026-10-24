@@ -32,7 +32,7 @@ class History(VoiceoverScene):
             (1994, r"CASP: blind tests \\ of folding", PAIR_C),
             (2005, r"the graph \\ neural network", STRUCT),
         ]
-        base, items = years_line(events, T0=1945, T1=2012, ticks=(1950, 1970, 1990, 2010), font_size=17)
+        base, items = years_line(events, T0=1945, T1=2012, ticks=(1950, 1970, 1990, 2010), font_size=20)
         head = label(r"How we got here: \ the long prelude", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
@@ -67,7 +67,7 @@ class History(VoiceoverScene):
             (2026, r"Erd\H{o}s problems \\ resolved by AI", LEAN_C),
         ]
         base, items = years_line(events, x0=-6.2, x1=6.0, T0=2016, T1=2027, ticks=(2016, 2020, 2024),
-                                 font_size=17)
+                                 font_size=19)
         head = label(r"How we got here: \ the decade", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(

@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai25.common import (AUG, GNN_C, KIND_COLOR, KIND_NAME, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C,
-                                   load, matrix_image, project, take_away, words_num)
+from videos.ai.ai25.common import (AUG, GNN_C, KIND_COLOR, KIND_NAME, PART, PLAIN, PRED_C, STRUCT, SYM, TRUE_C, load,
+                                   matrix_image, project, take_away, takeaway_anims, words_num)
 
 PLUS, MINUS = "#F2A07B", "#8FB9EE"
 
@@ -295,6 +295,6 @@ class Rotations(VoiceoverScene):
             "turned molecule is the same molecule. Proteins are molecules too, and the rest of this part is about "
             "where these ideas took science, starting with the hardest molecule of all."
         ):
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()
