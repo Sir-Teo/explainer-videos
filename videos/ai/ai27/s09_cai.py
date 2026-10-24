@@ -15,9 +15,9 @@ class Constitution(VoiceoverScene):
         self.specs()
 
     def card(self):
-        card = chapter_card(8, r"Feedback from AI, rules from people", r"Can a model help judge itself?",
+        card = chapter_card(9, r"Feedback from AI, rules from people", r"Can a model help judge itself?",
                             lit=(2022,), part=PART)
-        with self.voiceover("Chapter eight. Feedback from AI, rules from people."):
+        with self.voiceover("Chapter nine. Feedback from AI, rules from people."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -78,7 +78,7 @@ class Constitution(VoiceoverScene):
         with self.voiceover(
             "The second phase replaces human comparisons too. <bookmark mark='a'/> Two answers are shown to an AI "
             "judge, a language model given the principles, which says which one better follows them. Those "
-            "comparisons train the reward model, and reinforcement learning proceeds as in chapter five. This is "
+            "comparisons train the reward model, and reinforcement learning proceeds as in chapter six. This is "
             "reinforcement learning from AI feedback, RLAIF. <bookmark mark='b'/> In 2023 a team at Google compared "
             "the two directly, and on summarization and dialogue AI feedback did about as well as human feedback. "
             "Today most comparisons in post-training are judged by models, with people writing the rules and "

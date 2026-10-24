@@ -164,8 +164,8 @@ class Rewards(VoiceoverScene):
             f"people it learns from agree with gold only {100 * ceil:.0f} percent of the time, so that's the ceiling. "
             "<bookmark mark='c'/> Real reward models live in the same range. InstructGPT's predicted held-out "
             "labellers' choices about seventy percent of the time, close to how often the labellers agreed with "
-            "each other. A reward model is an imperfect copy of an imperfect judge, and the next three chapters are "
-            "about what happens when you optimize against one."
+            "each other. A reward model is an imperfect copy of an imperfect judge. Next we open ours up, and "
+            "then see what happens when you optimize against it."
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(tag))
             vo.wait_until("a")

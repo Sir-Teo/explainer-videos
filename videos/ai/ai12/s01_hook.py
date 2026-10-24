@@ -51,7 +51,7 @@ class Hook(VoiceoverScene):
 
         live = always_redraw(fan)
         clock = always_redraw(lambda: MathTex(rf"10^{{{lt.get_value():.1f}}}\ \text{{operations}}", font_size=26,
-                                              color=GREY_A).next_to(ax.c2p(x0, hi), DR, buff=0.15).shift(RIGHT * 0.1))
+                                              color=GREY_A).next_to(ax.c2p(x1, hi), DL, buff=0.15))
         # the frontier: the lowest loss at each compute, and the power law it follows
         eC, eL = np.log10(np.asarray(ch["env_C"])), np.asarray(ch["env_L"])
         ok = np.isfinite(eL)
@@ -79,19 +79,16 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Make a model bigger, train it longer, and it gets better. That much everyone expected. The surprise was "
             f"how predictably. <bookmark mark='a'/> Here are {len(widths)} sizes of part eleven's character model, "
-             "each "
-            f"trained for up to {len(s['ks'])} lengths: {n_runs} runs on the computer making this video, each drawn "
-             "at the "
-            "number of operations it cost. <bookmark mark='b'/> Every size improves, then flattens: it runs out of "
+            f"each trained for up to {len(s['ks'])} lengths: {n_runs} runs on the computer making this video, each "
+            "drawn at the number of operations it cost. <bookmark mark='b'/> Every size improves, then flattens: it runs out of "
             "room. But the bottom edge of the whole fan, the best loss each budget can buy, is a smooth curve. "
             f"<bookmark mark='c'/> Take away a floor of {E:.2f} bits, and what's left falls along a straight line on "
             f"log axes: a power law, with slope {slope:.2f}. Curves like this, measured on small models, are how "
             "laboratories decide what to build next."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(key), FadeIn(tag))
-            vo.wait_until("a")
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(key), FadeIn(tag), run_time=0.8)
             self.add(live, clock)
-            self.play(lt.animate.set_value(x1), run_time=7.0, rate_func=linear)
+            self.play(lt.animate.set_value(x1), run_time=max(7.0, vo.until("b") - 0.2), rate_func=linear)
             live.clear_updaters()
             clock.clear_updaters()
             vo.wait_until("b")

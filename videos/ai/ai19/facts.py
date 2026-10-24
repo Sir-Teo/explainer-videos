@@ -143,3 +143,6 @@ EPOCH_PRICES = dict(lo=9, hi=900, gpqa=40, date="2025-03-12",
                         "(Epoch AI, 12 March 2025)")
 R1_0528 = dict(tokens_old=12_000, tokens_new=23_000, acc_old=70.0, acc_new=87.5, max_len=32_768,
                src="DeepSeek-AI, DeepSeek-R1-0528 model card (May 2025): average tokens per AIME question")
+DEEPSEEK_CACHE = dict(date="2024-08-02", hit=0.014, cut=90,
+                      src="DeepSeek, DeepSeek API introduces Context Caching on Disk (2 August 2024): cache hits billed "
+                          "at USD 0.014 per million tokens, up to 90% less; prefixes only")

@@ -7,6 +7,12 @@ from videos.ai.ai27.common import ADAPT, ASSIST, BASE, GOLD, PART, PENALTY, POLI
 from videos.ai.ai27.compute import LORA_LR, SFT_LR
 
 
+def pct(x: float) -> str:
+    """A share as a percentage with two significant figures, without exponents: 0.38, 6.1, 100."""
+    v = 100 * x
+    return f"{v:.2g}" if v < 10 else f"{v:.0f}"
+
+
 class LoRA(VoiceoverScene):
     def construct(self):
         self.card()
@@ -24,18 +30,44 @@ class LoRA(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def intrinsic(self):
+        tot = int(load("lora")["total_params"])
         rows = [
+            cmath(r"\theta", r"=", r"\theta_0 + \Delta\theta", font_size=40),
             cmath(r"\theta", r"=", r"\theta_0 + P\, z", font_size=40),
         ]
-        rows[0][2].set_color(ADAPT)
-        whys = [why(r"$P$: \ a fixed random $D \times d$ matrix; \ train only $z \in \mathbb R^d$")]
-        step = ladder(self, rows, whys, keep=1, top=2.4, x=-2.0, buff=0.5, edge=6.9)
+        rows[1][2].set_color(ADAPT)
+        whys = [why(r"full fine-tuning: \ $\Delta\theta$ has every one of the model's numbers"),
+                why(r"$P$: \ a fixed random $D \times d$ matrix; \ train only $z \in \mathbb R^d$")]
+        step = ladder(self, rows, whys, keep=2, top=3.3, x=-2.6, buff=0.35, edge=6.9)
+
+        def strip(n, color, opacity=0.45, w=0.21, h=0.3):
+            return VGroup(*[Rectangle(width=w, height=h, stroke_color=color, stroke_width=1, fill_color=color,
+                                      fill_opacity=opacity) for _ in range(n)]).arrange(RIGHT, buff=0)
+
+        X0 = -3.3  # where every strip starts
+        th0 = strip(40, BASE).move_to([X0, 0.95, 0], aligned_edge=LEFT)
+        th0_l = label(rf"$\theta_0$: \ ${tot:,}$ numbers".replace(",", "{,}"), font_size=20, color=BASE)
+        th0_l.next_to(th0, LEFT, buff=0.25)
+        copies = VGroup()
+        for k in range(3):
+            st = strip(40, ASSIST, 0.3).move_to([X0, 0.35 - 0.5 * k, 0], aligned_edge=LEFT)
+            copies.add(VGroup(st, label(rf"task {k + 1}: \ $\Delta\theta$", font_size=20, color=ASSIST)
+                              .next_to(st, LEFT, buff=0.25)))
+        cost = label(r"a full copy for every task", font_size=22, color=PENALTY).next_to(copies, DOWN, buff=0.2)
+        z = strip(3, ADAPT, 0.8).move_to([X0, -0.35, 0], aligned_edge=LEFT)
+        z_l = label(r"$z$: \ $d$ numbers, \ trained", font_size=20, color=ADAPT).next_to(z, LEFT, buff=0.25)
+        pz = strip(40, ADAPT, 0.25).move_to([X0, 0.35, 0], aligned_edge=LEFT)
+        pz_l = label(r"$P z$", font_size=22, color=ADAPT).next_to(pz, LEFT, buff=0.25)
+        arr = Arrow(z.get_right() + RIGHT * 0.1, pz[6].get_bottom(), buff=0.05, color=ADAPT, stroke_width=2.5,
+                    max_tip_length_to_length_ratio=0.15)
+        arr_l = label(r"times $P$: \ fixed, \ random", font_size=20, color=GREY_A).next_to(arr, RIGHT, buff=0.15)
+        tag = note(r"schematic").to_corner(UR, buff=0.25)
         hc = VGroup(
             history_card(2018, r"Li et al., \ intrinsic dimension", r"train in a random low-dimensional slice of "
                          r"weight space: \ many problems need surprisingly few dimensions", width=6.0, color=ADAPT),
             history_card(2020, r"Aghajanyan, Zettlemoyer \& Gupta", r"fine-tuning RoBERTa through $200$ numbers "
                          r"reached $90\%$ of full fine-tuning on a paraphrase task", width=6.0, color=ADAPT),
-        ).arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=0.7)
+        ).arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Fine-tuning changes every one of a model's weights, and for a large model that means storing a full new "
             "copy for every task. But does it need to? <bookmark mark='a'/> In 2018 Chunyuan Li and colleagues "
@@ -45,9 +77,15 @@ class LoRA(VoiceoverScene):
             "fine-tuning a pretrained language model is especially low-dimensional: about two hundred numbers got "
             "RoBERTa ninety percent of the way on a paraphrase task. Pretraining had done the hard part."
         ) as vo:
+            self.play(FadeIn(th0), FadeIn(th0_l), FadeIn(tag), run_time=0.8)
             step(0)
+            self.play(LaggedStart(*[FadeIn(c_, shift=DOWN * 0.1) for c_ in copies], lag_ratio=0.3), FadeIn(cost),
+                      run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(hc[0], shift=UP * 0.15))
+            self.play(FadeOut(copies), FadeOut(cost))
+            step(1)
+            self.play(FadeIn(z), FadeIn(z_l))
+            self.play(GrowArrow(arr), FadeIn(arr_l), FadeIn(pz), FadeIn(pz_l), FadeIn(hc[0], shift=UP * 0.15))
             vo.wait_until("b")
             self.play(FadeIn(hc[1], shift=UP * 0.15))
         self.wait(0.3)
@@ -63,7 +101,7 @@ class LoRA(VoiceoverScene):
                       fill_opacity=0.35).move_to([-2.0, 0.6, 0])
         A = Rectangle(width=2.6, height=0.35, stroke_color=ADAPT, stroke_width=2, fill_color=ADAPT,
                       fill_opacity=0.35).move_to([-0.2, 1.725, 0])
-        Bl, Al = MathTex(r"B", font_size=32, color=ADAPT).next_to(B, LEFT, buff=0.1), \
+        Bl, Al = MathTex(r"B", font_size=32, color=ADAPT).next_to(B, RIGHT, buff=0.1), \
             MathTex(r"A", font_size=32, color=ADAPT).next_to(A, UP, buff=0.1)
         dims = VGroup(MathTex(r"d \times r", font_size=22, color=GREY_B).next_to(B, DOWN, buff=0.15),
                       MathTex(r"r \times k", font_size=22, color=GREY_B).next_to(A, RIGHT, buff=0.1))
@@ -71,7 +109,10 @@ class LoRA(VoiceoverScene):
             cmath(r"h", r"=", r"W x + \tfrac{\alpha}{r}\, B A\, x", font_size=36),
             cmath(r"\text{trained}", r":\ ", r"r(d + k)\ \text{ instead of }\ d k", font_size=32),
             cmath(r"d = k = 4096,\ r = 8", r":\ ", r"65{,}536 \text{ instead of } 16{,}777{,}216", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([3.6, -0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        if rows.width > 5.6:
+            rows.width = 5.6
+        rows.move_to([3.95, -0.2, 0])
         rows[0][2].set_color(ADAPT)
         init = label(r"$B = 0$ at the start: \ training begins at the model itself; \ afterwards $W + BA$ is one matrix "
                      r"again", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
@@ -102,7 +143,7 @@ class LoRA(VoiceoverScene):
         runs = d["runs"]
         tot = d["total_params"]
         start = load("sft")["base_which"]  # every run starts from the same base model
-        cols = {1: interpolate_color(ADAPT, BLACK, 0.45), 4: interpolate_color(ADAPT, BLACK, 0.2), 16: ADAPT,
+        cols = {1: interpolate_color(ADAPT, WHITE, 0.55), 4: interpolate_color(ADAPT, WHITE, 0.3), 16: ADAPT,
                 "full": ASSIST}
         names = {r["rank"]: (rf"rank ${r['rank']}$" if r["rank"] != "full" else r"every weight") for r in runs}
         S = max(int(e[0]) for r in runs for e in r["evals"])
@@ -127,7 +168,7 @@ class LoRA(VoiceoverScene):
             rows.add(VGroup(
                 label(names[r["rank"]], font_size=22, color=cols[r["rank"]]).move_to([xs[0], y, 0]),
                 label(rf"${r['params']:,}$".replace(",", "{,}"), font_size=22).move_to([xs[1], y + 0.12, 0]),
-                label(rf"${100 * r['params'] / tot:.2g}\%$", font_size=18, color=GREY_B).move_to([xs[1], y - 0.2, 0]),
+                label(rf"${pct(r['params'] / tot)}\%$", font_size=18, color=GREY_B).move_to([xs[1], y - 0.2, 0]),
                 label(rf"${100 * r['which']:.0f}\%$", font_size=22).move_to([xs[2], y, 0]),
                 label(rf"${r['heldout'] - d['base_heldout']:+.3f}$", font_size=22).move_to([xs[3], y, 0])))
         tag = note(r"computed: \ the novels model, \ which-book task; \ forgetting = change in loss on novel text")

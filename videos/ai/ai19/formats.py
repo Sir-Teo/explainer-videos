@@ -61,15 +61,27 @@ def e4m3_bits(x) -> str:
     return "0" + bits(e + 7, 4) + bits(m, 3)
 
 
+def _blocks(W, g):
+    """Rows of W cut into blocks of g (the last padded with zeros, which change no block's maximum)."""
+    r, c = W.shape
+    pad = (-c) % g
+    Wp = np.concatenate([W, np.zeros((r, pad))], 1) if pad else W
+    return Wp.reshape(-1, g), c, pad
+
+
+def _unblocks(flat, r, c, pad):
+    return flat.reshape(r, c + pad)[:, :c]
+
+
 def mxfp4(W, detail=False):
-    """Round every row of W (length a multiple of 32) in MXFP4; ``detail``: also the shared exponents and codes."""
+    """Round every row of W in MXFP4 (blocks of 32 along the row); ``detail``: also the shared exponents and codes."""
     W = np.asarray(W, np.float64)
-    flat = W.reshape(-1, 32)
+    flat, c, pad = _blocks(W, 32)
     amax = np.abs(flat).max(1, keepdims=True)
     sh = np.floor(np.log2(np.maximum(amax, 2.0 ** -126))) - 2  # E8M0: the shared exponent
     X = 2.0 ** sh
     codes = e2m1_code(flat / X)
-    out = (e2m1_value(codes) * X).reshape(W.shape)
+    out = _unblocks(e2m1_value(codes) * X, W.shape[0], c, pad)
     if detail:
         return out, dict(shared_exp=sh[:, 0], codes=codes, clipped=(amax[:, 0] / X[:, 0]) > 6.0)
     return out
@@ -78,13 +90,13 @@ def mxfp4(W, detail=False):
 def nvfp4(W, detail=False):
     """Round W in NVFP4: blocks of 16 along rows, an E4M3 scale each, and one FP32 scale for the tensor."""
     W = np.asarray(W, np.float64)
-    flat = W.reshape(-1, 16)
+    flat, c, pad = _blocks(W, 16)
     g = np.abs(W).max() / (6.0 * 448.0)  # the tensor scale: the largest block scale becomes 448
     amax = np.abs(flat).max(1, keepdims=True)
     s = round_e4m3(amax / 6.0 / g)
     s = np.where(s > 0, s, 1.0)
     codes = e2m1_code(flat / (s * g))
-    out = (e2m1_value(codes) * s * g).reshape(W.shape)
+    out = _unblocks(e2m1_value(codes) * s * g, W.shape[0], c, pad)
     if detail:
         return out, dict(tensor_scale=g, block_scale=s[:, 0], codes=codes)
     return out
@@ -94,7 +106,7 @@ def int4_scaled(W, group, scale="fp16"):
     """4-bit integers (-8 ... 7) with one scale per ``group`` numbers along a row; the scale stored in FP16 (rounded
     to 11 significant bits) or in E4M3 with a tensor scale, as NVFP4 does (to compare the element formats alone)."""
     W = np.asarray(W, np.float64)
-    flat = W.reshape(-1, group)
+    flat, c, pad = _blocks(W, group)
     amax = np.abs(flat).max(1, keepdims=True)
     if scale == "e4m3":
         g = np.abs(W).max() / (7.0 * 448.0)
@@ -104,7 +116,7 @@ def int4_scaled(W, group, scale="fp16"):
         e = np.floor(np.log2(np.maximum(s, 1e-30)))
         s = np.round(s / 2.0 ** (e - 10)) * 2.0 ** (e - 10)
     s = np.where(s > 0, s, 1.0)
-    return (np.clip(np.round(flat / s), -8, 7) * s).reshape(W.shape)
+    return _unblocks(np.clip(np.round(flat / s), -8, 7) * s, W.shape[0], c, pad)
 
 
 def block_picture(W_row32):

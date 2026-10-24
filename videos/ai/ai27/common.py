@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.ai import *  # noqa: F403
 
 from .compute import load  # noqa: F401
@@ -21,6 +23,35 @@ KLC = C.KL  # KL divergence, the leash
 PROXY = C.MODEL_Q  # the learned reward model (a proxy)
 GOLD = C.BITS  # the true taste the proxy stands in for: yellow, apart from the proxy's orange
 ADAPT = C.MLP  # adapters, task vectors
+
+
+def ticks(lo, hi, n=4) -> list:
+    """A few round tick values inside [lo, hi]."""
+    raw = (hi - lo) / n
+    step = 10 ** np.floor(np.log10(raw))
+    for m in (1, 2, 2.5, 5, 10):
+        if raw <= m * step:
+            step *= m
+            break
+    return [float(round(v, 9)) + 0.0 for v in np.arange(np.ceil(lo / step) * step, hi + 1e-9, step)]
+
+
+def line_clip(ax, k, xlo, xhi, ylo, yhi):
+    """The part of y = k x inside the box [xlo, xhi] x [ylo, yhi], as two points of the axes."""
+    a = max(xlo, ylo / k if k > 0 else xlo, yhi / k if k < 0 else xlo)
+    b = min(xhi, yhi / k if k > 0 else xhi, ylo / k if k < 0 else xhi)
+    return ax.c2p(a, k * a), ax.c2p(b, k * b)
+
+
+def rlhf_gains(h, slope: float, rm0: float, gold0: float, window: int):
+    """An RLHF history (step, reward model, gold, KL) as gains over the fine-tuned model, both in gold's units: means
+    over windows of ``window`` steps (the runs cycle through the questions, so each window holds every question once
+    and the reward model's arbitrary shift per question cancels), the reward model's score divided by its slope on
+    gold.  ``rm0``, ``gold0``: the fine-tuned model's averages over every question."""
+    h = np.asarray(h)
+    roll = lambda y: np.convolve(y, np.ones(window) / window, mode="valid")
+    x = h[(window - 1) // 2: (window - 1) // 2 + len(h) - window + 1, 0]
+    return x, (roll(h[:, 1]) - rm0) / slope, roll(h[:, 2]) - gold0
 
 
 def bubble(text: str, who: str = "user", width: float = 5.6, font_size: int = 24) -> VGroup:

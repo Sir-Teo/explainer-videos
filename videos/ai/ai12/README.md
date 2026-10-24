@@ -92,7 +92,7 @@ Run from the repo root:
 
 ```
 python tools/make.py ai12                 # compute what is missing, then build (English and Chinese)
-python -m videos.ai.ai12.compute          # every experiment on its own (about 3 CPU-hours on one thread)
+python -m videos.ai.ai12.compute          # every experiment on its own (about 2.7 CPU-hours on one thread)
 python -m videos.ai.ai12.compute sweep    # one item; the others: nngp ntk lazy rich coord mup depth batch chinchilla
                                           #   repeat moe precision quanta manifold emerge testtime grok
 python tools/build.py ai12                # English
@@ -110,7 +110,64 @@ and `grok` save each finished run in their `.partial.json`. No other part reads 
 
 *(filled in from `.cache/ai12/` by the run that made the video; the narration says whichever way they come out.)*
 
-RESULTS_PLACEHOLDER
+Numbers from the run that made the video (Linux, one thread; `compute.py` took about 2.7 CPU-hours in all, the scaling
+sweep 58 minutes of it):
+
+* **Infinitely wide.** One-layer ReLU nets, 6,000 random starts: the output variance at x = 0.5 is 0.65, 0.64, 0.62,
+  0.64, 0.63 at widths 1, 2, 8, 64, 512 against the theory's 0.625; the excess kurtosis falls 15.8, 6.8, 2.0, 0.30,
+  0.00. Trained at widths 30 … 30,000 (three seeds): the weights move with slope −0.55 against width, the tangent
+  kernel with slope −0.80 (between the n^−1/2 bound and Dyer & Gur-Ari's n^−1), and the trained function's gap to its
+  linearization falls with slope −0.39 (0.35 at width 100, 0.067 at 10,000).
+* **Lazy.** The character model in neural-tangent step sizes: its hidden features change with slope −0.35 against
+  width (32 … 2,048). The feature task (w*·x)² − 1, d = 32, n = 256, width 1,024, three seeds: test error 1.38 lazy
+  (1.21–1.61), 0.67 mean-field (0.49–0.87), 1.53 for kernel regression with the starting kernel; target variance 2.05.
+  The lazy weights move 13% of their length, the mean-field ones 99%.
+* **μP.** Coordinate check (widths 64 … 4,096, four Adam steps): the output scores' change grows like width^0.44 in
+  SP and is flat in μP (−0.03). Learning-rate sweeps at widths 64, 256, 1,024 (11 rates, two seeds, 600 steps): the
+  best rate drifts from 10^−1.9 to 10^−2.5 in SP (0.6 decades) and stays at 10^−1.9 in μP; copying the small
+  model's rate costs 0.018 bits in SP and nothing in μP; μP's best loss falls 2.88 → 2.67 bits with width.
+* **Depth.** Depths 2 … 32 at width 64 (nine rates, two seeds, 400 steps): the best rate moves 0, 0.31 and 0 decades
+  for no scaling, 1/√L and CompleteP, all within one grid step; depth gains about 0.06–0.08 bits (3.05 at two blocks,
+  2.96–2.99 at 8–32). Too small and too short to separate the parametrizations — said so in the narration.
+* **Batch.** Batches 32 … 4,096 at width 128 (best of three rates): critical batches 329, 1,063 and 2,397 characters
+  to reach 3.4, 3.0 and 2.8 bits; the gradient noise scale measured directly, 1,576, 4,095 and 2,608: within a factor
+  of 4.8.
+* **Sweep.** 11 widths (7.8k … 1.36M parameters) × lengths 2¹⁶ … 2²⁴ characters, 94 endpoints from one constant-rate
+  trunk per width with cool-down branches, plus four repeat seeds; best 1.965 bits (width 512, 2²⁴ characters). Seed
+  spread at width 64 and 256: at most a few thousandths of a bit.
+* **Laws.** L(N) at 2²⁴ characters: 1.82 + A N^−0.49; L(D) at width 512: 1.81 + B D^−0.41 (Kaplan: 0.076 and 0.095).
+* **Chinchilla.** Fitted to the 49 runs of at least 2¹⁹ characters and width 64 and up (shorter runs are mostly warmup;
+  the two narrowest models are mostly embedding): E = 1.76, α = 0.58, β = 0.43, RMS 0.025 bits; a = 0.424 (bootstrap
+  80%: 0.422–0.425), 0.443 from the iso-FLOP parabolas, 0.458 from the envelope; about 31 characters per parameter
+  at the optimum (24–41 across budgets from the parabolas). Counting parameters Kaplan's way (no embedding or output
+  layer) the same runs give 0.53.
+* **Over-training.** From the fit at 10¹² operations (optimum 74,500 parameters, 2.2M characters): a model three
+  quarters the size needs 5% more training compute for the same loss, half the size 45% more, and below 0.23 of the
+  size no amount of data reaches it; two of our runs that got there (0.54 and 0.77 of the size) cost 52% and 5% more.
+  Answering a hundred times the optimal training: about 760 characters per parameter, 0.35 of the size, 56% cheaper
+  over the model's life.
+* **Data.** 4.2M characters from 4.2M … 16,384 distinct ones (1 … 256 epochs), three seeds: 2.281, 2.289, 2.387,
+  3.45 and 11.5 bits; effective data from the fresh curve 0.98, 3.6 and 6.2 passes' worth for 1, 4 and 16 epochs (64
+  and 256 epochs are off the curve); R* = 5.8 (Muennighoff et al.: 15.4).
+* **Experts.** 1 … 32 experts at width 128, two seeds: 2.356 → 2.215 bits; eight experts match a dense model of about
+  142,000 parameters, 2.5 times the base model, at the base model's compute per character.
+* **Precision.** 4-bit rounding at width 256 costs 0.009 bits after 2¹⁶ characters and 1.58 after 2²⁴; Kumar et al.'s
+  form fitted to 320 endpoints: γ_D = 0.70, γ_N = 0.25, γ = 0.65.
+* **Why power laws.** Piecewise-linear fits on tori: slopes −3.99, −2.00, −0.97 for d = 1, 2, 4 (theory −4, −2, −1);
+  −0.30 at d = 8 (theory −0.5, not yet asymptotic). Quanta: widths 8 … 512 learn 1, 2, 4, 6–7, 9–14, 32, 32 of 32
+  subtasks; the mean loss lies a little below the theory's Σ_{k>n} p_k (half-learned subtasks count).
+* **Emergence.** At 2²² characters, per-character accuracy 43% → 57% across sizes; exact match on 8 characters
+  0.05% → 0.75%: on a linear axis it lies flat, in proportion it grows about 11 times against 1.3.
+* **Grokking.** (a + b) mod 97 from 40% of the table: memorized at step 75, generalized (95% unseen) at 1,550 with
+  weight decay 1 (21 times as long); never within 4,000 steps at weight decay 0, 0.1 or 0.3 (9 of 15 runs); 750–900
+  at weight decay 3. Five frequencies (1, 6, 22, 30, 41) hold 13% of the embedding's spectral energy at the start, 29%
+  at step 1,000, 65% at the end; the five-wave circuit explains 75% of the trained scores' variation. The tangent
+  kernel moves little (distance 0.029, most of it before the jump); without weight decay it moves further (0.105) and
+  never generalizes.
+* **Tries.** −log pass@k on six exact characters falls with slopes 0.26 … 0.32, and the measured tail of per-problem
+  success rates gives 0.28 … 0.34; the smallest model needs about 16 tries to match the largest one's single try.
+* **Extrapolation.** Chinchilla's formula fitted on the 28 runs below 3 × 10¹² operations predicts the other 21 (up
+  to 14 times costlier) to within 0.046 bits on average, 0.10 at worst, always on the high side.
 
 ## Fact-check notes
 

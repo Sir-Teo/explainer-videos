@@ -113,7 +113,9 @@ class Overtrain(VoiceoverScene):
                    color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yn = label(r"the best training, \ characters per parameter", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         cv = curve(ax, lx, ly, TT, 4, smooth=True)
-        i100 = int(np.argmin(np.abs(T / D0 - 100)))
+        # exactly a hundred times the optimal training, interpolated along the computed curve
+        tpp100 = float(10 ** np.interp(2.0, lx, np.log10(tpp)))
+        nrel100, sav100 = float(np.interp(2.0, lx, nrel)), float(np.interp(2.0, lx, sav))
         facts = VGroup(
             history_card(2023, r"Sardana, Portes, Doubov \& Frankle", r"with about a billion requests to serve, "
                          r"train smaller and longer than Chinchilla; \ quality kept improving up to $10{,}000$ tokens "
@@ -129,8 +131,8 @@ class Overtrain(VoiceoverScene):
             "operations per parameter per token, and answering costs two. <bookmark mark='a'/> Fix the quality, and "
             "minimize the lifetime cost. <bookmark mark='b'/> The more a model will be used, the smaller and longer "
             "trained it should be. <bookmark mark='c'/> On our fitted law: a model that will answer a hundred times "
-            f"more characters than it would be trained on should train on about {tpp[i100]:.0f} characters per "
-            f"parameter, at {nrel[i100]:.2f} of the optimal size, and costs {100 * sav[i100]:.0f} percent less over "
+            f"more characters than it would be trained on should train on about {tpp100:.0f} characters per "
+            f"parameter, at {nrel100:.2f} of the optimal size, and costs {100 * sav100:.0f} percent less over "
             "its "
             "life. <bookmark mark='d'/> Sardana's team found quality still improving at ten thousand tokens per "
             "parameter, and in 2024 Meta trained Llama 3's eight-billion-parameter model on fifteen trillion tokens: "
@@ -144,7 +146,7 @@ class Overtrain(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             self.play(Create(cv), run_time=2.0)
-            self.play(Flash(ax.c2p(lx[i100], ly[i100]), color=TT), FadeIn(Dot(ax.c2p(lx[i100], ly[i100]), radius=0.08, color=WHITE)))
+            self.play(Flash(ax.c2p(2.0, math.log10(tpp100)), color=TT), FadeIn(Dot(ax.c2p(2.0, math.log10(tpp100)), radius=0.08, color=WHITE)))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(f_, shift=LEFT * 0.1) for f_ in facts], lag_ratio=0.5), FadeIn(link))
         self.wait(0.3)

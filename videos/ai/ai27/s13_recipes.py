@@ -12,9 +12,9 @@ class Recipes(VoiceoverScene):
         self.pipeline()
 
     def card(self):
-        card = chapter_card(12, r"The open recipes", r"How are today's open models post-trained?",
+        card = chapter_card(13, r"The open recipes", r"How are today's open models post-trained?",
                             lit=(2023, 2024, 2025), part=PART)
-        with self.voiceover("Chapter twelve. The open recipes."):
+        with self.voiceover("Chapter thirteen. The open recipes."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -109,7 +109,7 @@ class Recipes(VoiceoverScene):
             "earned reward. <bookmark mark='c'/> The released R1 added a small cold start of readable examples, "
             "rounds of reinforcement learning, and fine-tuning on its own best answers. <bookmark mark='d'/> Then "
             "eight hundred thousand of its answers were used to fine-tune much smaller open models, distillation, "
-            "chapter nine, which made reasoning cheap. <bookmark mark='e'/> Reinforcement learning on checkable "
+            "chapter ten, which made reasoning cheap. <bookmark mark='e'/> Reinforcement learning on checkable "
             "rewards is the subject of the next part."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(hc))
@@ -133,7 +133,7 @@ class Recipes(VoiceoverScene):
         stages = [(r"long chain-of-thought \\ cold start", ASSIST, r"SFT, \ chapter 2"),
                   (r"reasoning RL", POLICY, r"checkable rewards, \ Part 28"),
                   (r"thinking-mode \\ fusion", ASSIST, r"SFT on both modes"),
-                  (r"general RL", PROXY, r"reward models, \ chapter 5")]
+                  (r"general RL", PROXY, r"reward models, \ chapter 6")]
         boxes = VGroup(*[node_box(t, c, font_size=21, height=1.0) for t, c, _ in stages]).arrange(RIGHT, buff=0.55)
         boxes.move_to(UP * 1.3)
         arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=3)
@@ -162,7 +162,7 @@ class Recipes(VoiceoverScene):
             "thinking; and a final round of reinforcement learning with reward models, for everything that can't "
             "be checked. <bookmark mark='b'/> The smaller models skipped all of it. They were distilled from the "
             "big ones, first on the teacher's text, then on their own text scored by the teacher, the on-policy "
-            "distillation of chapter nine. <bookmark mark='c'/> On the eight-billion-parameter model the report compares "
+            "distillation of chapter ten. <bookmark mark='c'/> On the eight-billion-parameter model the report compares "
             "the two: seventeen thousand nine hundred and twenty GPU hours of reinforcement learning, against one "
             "thousand eight hundred of distillation, and distillation scored clearly higher."
         ) as vo:

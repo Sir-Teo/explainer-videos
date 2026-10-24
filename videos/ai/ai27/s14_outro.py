@@ -6,7 +6,9 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import ADAPT, ASSIST, BASE, GOLD, KLC, PART, POLICY, PROXY, REF, REWARD, load, node_box
+from videos.ai.ai27.common import (ADAPT, ASSIST, BASE, GOLD, KLC, PART, POLICY, PROXY, REF, REWARD, load, node_box,
+                                   rlhf_gains)
+from videos.ai.ai27.compute import TOPICS, _demean
 
 
 class Outro(VoiceoverScene):
@@ -19,8 +21,8 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def tiles(self):
-        """The part in eight pictures, each drawn from its own computed result."""
-        TW, TH = 3.0, 2.0
+        """The part in ten pictures, each drawn from its own computed result."""
+        TW, TH = 2.3, 1.55
         mk = lambda xr, yr: Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                                  axis_config={"stroke_color": GREY_D, "include_ticks": False})
         out = []
@@ -45,6 +47,14 @@ class Outro(VoiceoverScene):
                                                                                        rm["people_agree_gold"]),
                           color=GREY_C, dash_length=0.05)
         out.append((VGroup(ax, ceil, curve(ax, xs, rm["acc"], PROXY, 3)), r"reward models", PROXY))
+        ins = load("inside")
+        gc_ = _demean(ins["gold"], ins["topic"])
+        sc_ = _demean(ins["large_score"], ins["topic"]) / float(ins["large_slope"])
+        lo_, hi_ = float(min(gc_.min(), sc_.min())), float(max(gc_.max(), sc_.max()))
+        ax = mk([lo_, hi_, 1], [lo_, hi_, 1])
+        out.append((VGroup(ax, Line(ax.c2p(lo_, lo_), ax.c2p(hi_, hi_), color=GOLD, stroke_width=2),
+                           *[Dot(ax.c2p(a, b), radius=0.012, color=PROXY, fill_opacity=0.6) for a, b in zip(gc_, sc_)]),
+                    r"inside it", PROXY))
         cl = load("closed")
         ref, pi = np.asarray(cl["ref"]), np.asarray(cl["pi"])[-1]
         bars = VGroup()
@@ -55,11 +65,11 @@ class Outro(VoiceoverScene):
         out.append((bars, r"$\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$", POLICY))
         rl = load("rlhf")
         h = np.asarray(rl[f"b{rl['betas'][1]:g}".replace(".", "_")])
-        sm = lambda y: np.convolve(y, np.ones(9) / 9, mode="valid")
-        lo_, hi_ = float(min(sm(h[:, 1]).min(), sm(h[:, 2]).min())), float(max(sm(h[:, 1]).max(), sm(h[:, 2]).max()))
+        x_, pr_, gd_ = rlhf_gains(h, float(ins["large_slope"]), float(np.mean(ins["large_score"])),
+                                  float(np.mean(ins["gold"])), len(TOPICS))
+        lo_, hi_ = float(min(pr_.min(), gd_.min(), 0)), float(max(pr_.max(), gd_.max()))
         ax = mk([0, float(h[-1, 0]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
-        out.append((VGroup(ax, curve(ax, h[4:-4, 0], sm(h[:, 1]), PROXY, 3), curve(ax, h[4:-4, 0], sm(h[:, 2]), GOLD, 3)),
-                    r"RLHF: \ proxy and gold", KLC))
+        out.append((VGroup(ax, curve(ax, x_, pr_, PROXY, 3), curve(ax, x_, gd_, GOLD, 3)), r"RLHF: \ proxy, gold", KLC))
         bo = load("bon")
         kx = np.sqrt(np.asarray(bo["kl"]))
         # each curve on its own scale, as in the chapter's two panels: the proxy climbs, gold rises and falls
@@ -79,25 +89,37 @@ class Outro(VoiceoverScene):
         ax = mk([0, float(ct[-1, 0]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
         out.append((VGroup(ax, curve(ax, ct[:, 0], ct[:, 1], BASE, 3), curve(ax, cd[:, 0], cd[:, 1], ASSIST, 3)),
                     r"distillation", ASSIST))
+        mg = load("merge")["rows"]
+        bars = VGroup()
+        for i, (_, acc, _, ended) in enumerate(mg):
+            for v, col, dx in ((acc, ASSIST, -0.07), (ended, ADAPT, 0.07)):
+                bars.add(Rectangle(width=0.12, height=max(1.4 * v, 0.02), stroke_width=0, fill_color=col,
+                                   fill_opacity=0.9).move_to([0.42 * i + dx, 0, 0], aligned_edge=DOWN))
+        out.append((bars, r"merging", ADAPT))
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = tile_frame(cap, col, TW, TH)
+            if c_.width > TW + 0.1:
+                c_.width = TW + 0.1
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
             if pic.height > TH:
                 pic.height = TH
             tiles.add(Group(box, pic, c_))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        tiles.arrange_in_grid(rows=2, cols=5, buff=(0.16, 0.3)).move_to(DOWN * 0.3)
+        if tiles.width > 13.7:
+            tiles.width = 13.7
         return tiles
 
     def recap(self):
         tiles = self.tiles()
-        head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        head = label(rf"Part {PART}, in ten pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. Supervised fine-tuning is maximum likelihood on the answers people want, and it can "
             "live in a low-rank slice of weight space, which is why LoRA works. A reward model learns people's "
-            "preferences from comparisons with the Bradley-Terry model. Reinforcement learning with a KL leash aims "
+            "preferences from comparisons with the Bradley-Terry model, and opening ours showed what it had "
+            "learned, and where it was wrong. Reinforcement learning with a KL leash aims "
             "at an exact optimum, the reference model reweighted by the exponential of the reward. Push a learned "
             "reward too hard and it stops measuring what it was meant to: Goodhart's law, which we measured. DPO "
             "reaches the same optimum straight from the comparisons. And written principles, distillation and model "
@@ -143,10 +165,16 @@ class Outro(VoiceoverScene):
             r"what rank does it have as many as the matrix?",
             r"Fit a Gaussian $q$ to any density $p$ by minimizing $\mathrm{KL}(p \,\|\, q)$. \ Show that $q$ has "
             r"the mean and variance of $p$.",
-        ], font_size=22)
+            r"Show that $\mathbb E_{y \sim \pi}[\, b\, \nabla \log \pi(y)] = 0$ for any $b$ that does not depend on "
+            r"$y$, \ and that $r_i - \operatorname{mean}(r) = \frac{k-1}{k}\big(r_i - \operatorname{mean}_{j \ne i} "
+            r"r_j\big)$ for $k$ answers.",
+            r"Let gold $G \sim \mathcal N(0, \sigma_G^2)$ and a proxy $R = G + E$, \ with independent $E \sim "
+            r"\mathcal N(0, \sigma_E^2)$. \ Show that $\mathbb E[G \mid R = r] = r\, \sigma_G^2 / (\sigma_G^2 + "
+            r"\sigma_E^2)$: \ what choosing by the proxy costs.",
+        ], font_size=21)
         with self.voiceover(
-            "Here are six problems to try, from the Bradley-Terry model to the forward KL. Pause here, and work "
-            "through them; full solutions are in this part's notes."
+            "Here are eight problems to try, from the Bradley-Terry model to regressional Goodhart. Pause here, and "
+            "work through them; full solutions are in this part's notes."
         ) as vo:
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in ps.rows], lag_ratio=0.3),
                       run_time=3.0)
