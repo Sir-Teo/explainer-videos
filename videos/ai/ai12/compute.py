@@ -27,7 +27,7 @@ Items:
                depth-muP (1/sqrt L) and CompleteP (1/L), two seeds (resumable)
     batch      steps and characters to reach a loss at batch sizes 32 to 4,096 (McCandlish et al.'s trade-off), and
                the gradient noise scale measured along the way (resumable)
-    sweep      the scaling sweep: 13 widths x training lengths 2^16 ... 2^24 characters, one run per width with a
+    sweep      the scaling sweep: 11 widths x training lengths 2^16 ... 2^24 characters, one run per width with a
                constant learning rate and a cool-down branch at each length (warmup-stable-decay); every endpoint
                scored on held-out text, after post-training quantization to 8 ... 3 bits, and on a checkable task
                (guess the next 8 characters); extra seeds at two widths (resumable; about an hour)
@@ -265,8 +265,8 @@ def compute_coord():
 
 
 MUP_WIDTHS = [64, 256, 1024]
-MUP_LRS = [float(10 ** x) for x in np.linspace(-4, -1, 13)]
-MUP_STEPS = 800
+MUP_LRS = [float(10 ** x) for x in np.linspace(-4, -1, 11)]
+MUP_STEPS = 600
 
 
 def _mup_run(mode: str, w: int, lr: float, seed: int) -> float:
@@ -307,7 +307,7 @@ def compute_mup():
 DEPTHS = [2, 4, 8, 16, 32]
 ALPHAS = [0.0, 0.5, 1.0]
 DEPTH_LRS = [float(10 ** x) for x in np.linspace(-3.5, -1.0, 9)]
-DEPTH_W, DEPTH_STEPS = 64, 500
+DEPTH_W, DEPTH_STEPS = 64, 400
 
 
 def _depth_run(depth: int, alpha: float, lr: float, seed: int) -> float:
@@ -362,7 +362,7 @@ def _batch_run(B: int, f: float, seed: int = 0) -> dict:
     lr = f * BATCH_LR * math.sqrt(B / 256)
     opt = L.adam(m, lr)
     st = L.Stream(seed)
-    steps = BATCH_CHARS // B
+    steps = min(BATCH_CHARS // B, 60_000)
     every = max(10, min(200, steps // 150))
     curve = []
     for s in range(steps):
@@ -460,9 +460,9 @@ def compute_batch():
 # ---------------------------------------------------------------------------
 # 5. The scaling sweep
 # ---------------------------------------------------------------------------
-SWEEP_WIDTHS = [16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024]
+SWEEP_WIDTHS = [16, 32, 64, 96, 128, 192, 256, 384, 512, 768, 1024]
 SWEEP_KS = list(range(16, 25))  # training lengths 2^16 ... 2^24 characters
-SWEEP_KMAX = {512: 24, 768: 23, 1024: 22}  # the widest models stop at about 4 x 10^13 operations
+SWEEP_KMAX = {768: 22, 1024: 21}  # the widest models stop at about 2 x 10^13 operations
 SWEEP_EXTRA = [(64, 1), (64, 2), (256, 1), (256, 2)]  # (width, seed) repeats, up to 2^22 characters
 PTQ_BITS = [8, 6, 5, 4, 3]
 SWEEP_LRS = [1e-3, 2e-3, 4e-3, 8e-3, 1.6e-2]
@@ -775,8 +775,9 @@ def compute_chinchilla():
     out["extrap_bias"] = float(np.mean(pred - Lp[~cheap]))
     nC, dC = optimum(pc, 1e13)
     out["extrap_opt"] = dict(N=float(nC), D=float(dC), pred=float(lnd(pc, nC, dC)), meas=float(np.array(lopt2)[ok2][-1]))
-    # over-training priced by the fit: a model k times the optimal size reaching the optimum's loss
-    C0 = 1e13
+    # over-training priced by the fit: a model k times the optimal size reaching the optimum's loss (at 10^12
+    # operations, where the sweep also has smaller models trained long enough to check it)
+    C0 = 1e12
     n0, d0 = optimum(p, C0)
     L0 = float(lnd(p, n0, d0))
     kmin = float((A / (L0 - E)) ** (1 / al) / n0)
@@ -785,7 +786,7 @@ def compute_chinchilla():
     for k in ks:
         r = L0 - E - A * (k * n0) ** -al
         cost.append(6 * k * n0 * (B / r) ** (1 / be) / C0)
-    out.update(ot_k=ks, ot_cost=np.array(cost), ot_kmin=kmin, ot_N0=float(n0), ot_D0=float(d0), ot_L0=L0)
+    out.update(ot_k=ks, ot_cost=np.array(cost), ot_kmin=kmin, ot_N0=float(n0), ot_D0=float(d0), ot_L0=L0, ot_C=C0)
     # with inference: minimize 6 N D + 2 N T over (N, D) on the level set L(N, D) = L0, for T inference characters
     Ts = np.geomspace(1e5, 1e11, 61)
     best_tpp, best_N, total_saving = [], [], []
@@ -1013,9 +1014,10 @@ def compute_manifold():
 # ---------------------------------------------------------------------------
 def compute_emerge():
     s = load("sweep")
-    j = _nearest(s["ks"], 22)  # every width at the same training length, 2^22 characters
-    lp, top, gr = np.asarray(s["logp"], float)[:, j], np.asarray(s["top"])[:, j], np.asarray(s["greedy"])[:, j]
-    N = np.asarray(s["N"])
+    j = _nearest(s["ks"], 22)  # every width at the same training length, 2^22 characters (those trained that long)
+    have = np.isfinite(np.asarray(s["bits"], float)[:, j])
+    lp, top, gr = (np.asarray(s["logp"], float)[have, j], np.asarray(s["top"])[have, j], np.asarray(s["greedy"])[have, j])
+    N = np.asarray(s["N"])[have]
     out = dict(N=N, chars=2 ** 22, task_n=int(s["task_n"]), lens=list(range(1, int(s["task_len"]) + 1)))
     out["char_loss"] = -lp.mean((1, 2)) / math.log(2)  # bits per character on the task, teacher-forced
     out["char_acc"] = top.mean((1, 2))
@@ -1045,9 +1047,10 @@ TT_K = np.unique(np.round(np.geomspace(1, 1e5, 61)).astype(int))
 def compute_testtime():
     s = load("sweep")
     j = _nearest(s["ks"], 22)
-    lp = np.asarray(s["logp"], float)[:, j, :, :TT_LEN].sum(-1)  # widths x problems: log P(sample is exactly right)
+    have = np.isfinite(np.asarray(s["bits"], float)[:, j])
+    lp = np.asarray(s["logp"], float)[have, j, :, :TT_LEN].sum(-1)  # widths x problems: log P(a sample is exactly right)
     p = np.exp(lp)
-    N = np.asarray(s["N"])
+    N = np.asarray(s["N"])[have]
     ks = TT_K.astype(float)
     cov = np.stack([1 - np.mean(np.exp(ks[:, None] * np.log1p(-np.minimum(pi, 1 - 1e-12))[None]), axis=1) for pi in p])
     out = dict(N=N, k=ks, length=TT_LEN, coverage=cov, p1=p.mean(1), task_n=p.shape[1])

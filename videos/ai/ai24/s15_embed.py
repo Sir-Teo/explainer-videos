@@ -38,12 +38,13 @@ class Embeddings(VoiceoverScene):
         rl.shift(RIGHT * 0.8)
         same = float(np.mean([pool_y[j] == pool_y[q] for q, row in zip(Q, np.asarray(mt["plain_nn128"]))
                               for j in row]))
-        steps = VGroup(node_box(r"embed every item once", SIMCLR, font_size=22),
-                       node_box(r"embed the query", SIMCLR, font_size=22),
-                       node_box(r"return the nearest vectors", POS, font_size=22)).arrange(DOWN, buff=0.4)
-        steps.move_to([4.6, 0.4, 0])
+        steps = VGroup(node_box(r"embed every item once", SIMCLR, font_size=28),
+                       node_box(r"embed the query", SIMCLR, font_size=28),
+                       node_box(r"return the nearest vectors", POS, font_size=28)).arrange(DOWN, buff=0.5)
+        steps.move_to([0, 0.3, 0])
+        side = steps.copy().scale(0.8).move_to([4.6, 0.4, 0])
         ann = label(r"at web scale: \ approximate nearest neighbours \\ (graphs such as HNSW)", font_size=20,
-                    color=GREY_B).next_to(steps, DOWN, buff=0.4)
+                    color=GREY_B).next_to(side, DOWN, buff=0.4)
         with self.voiceover(
             "Everything so far was judged by how well a classifier could read the vectors. But much of the world "
             "uses them directly, for search. <bookmark mark='a'/> Embed every item once; embed the query; return "
@@ -54,9 +55,10 @@ class Embeddings(VoiceoverScene):
         ) as vo:
             self.play(LaggedStart(*[FadeIn(b_) for b_ in steps], lag_ratio=0.4))
             vo.wait_until("a")
-            self.play(Indicate(steps[2], color=POS))
+            for b_ in steps:
+                self.play(Indicate(b_, color=b_[0].get_stroke_color(), scale_factor=1.06), run_time=0.9)
             vo.wait_until("b")
-            self.play(FadeIn(sh), FadeIn(ql), FadeIn(rl))
+            self.play(Transform(steps, side), FadeIn(sh), FadeIn(ql), FadeIn(rl))
             vo.wait_until("c")
             self.play(FadeIn(ann))
         self.wait(0.3)

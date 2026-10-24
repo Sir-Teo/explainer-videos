@@ -182,10 +182,10 @@ class EDM(VoiceoverScene):
         ends = VGroup(Dot(P0, radius=0.08, color=NOISE), Dot(P1, radius=0.08, color=WHITE))
         labs = VGroup(label(r"the true path", font_size=24, color=WHITE).next_to(P1, RIGHT, buff=0.2),
                       label(r"Euler: \ the slope \\ at the start: \ overshoots", font_size=24, color=DDIM_C)
-                      .next_to(e_end, LEFT, buff=0.15),
+                      .next_to(e_end, LEFT, buff=0.35).shift(DOWN * 0.15),
                       label(r"the slope \\ where Euler lands", font_size=22, color=GREY_B).next_to(sl2, DOWN, buff=0.12),
                       label(r"Heun: \ the average of the two, \\ lands on the path", font_size=24, color=HEUN_C)
-                      .next_to(P1, DOWN, buff=0.35).shift(RIGHT * 0.6))
+                      .next_to(P1, DOWN, buff=0.55).shift(RIGHT * 1.3))
         keep_in_frame(labs[1])
         tag = note(r"schematic").to_corner(UL, buff=0.3)
         rows = {k: s[k] for k in ("ddim", "heun")}

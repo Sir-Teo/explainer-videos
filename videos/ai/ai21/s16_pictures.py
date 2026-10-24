@@ -167,13 +167,13 @@ class Pictures(VoiceoverScene):
                       note(r"schematic").move_to([0, -2.6, 0]))
         cards = VGroup(
             history_card(2022, r"DALL$\cdot$E 2; \ Imagen; \ Stable Diffusion", r"text to image: \ CLIP latents, \ cascades "
-                         r"in pixels, \ latent diffusion with open weights", color=HIST, width=6.4, font_size=18),
+                         r"in pixels, \ latent diffusion with open weights", color=HIST, width=6.4, font_size=22),
             history_card(2023, r"Peebles \& Xie: \ DiT; \ SDXL", r"a transformer as the denoiser; \ bigger latent models",
-                         color=HIST, width=6.4, font_size=18),
+                         color=HIST, width=6.4, font_size=22),
             history_card(2024, r"Sora; \ SD3; \ FLUX.1; \ Movie Gen", r"diffusion transformers on spacetime patches; \ "
-                         r"flow-matching transformers at $12$ to $30$ billion parameters", color=HIST, width=6.4, font_size=18),
+                         r"flow-matching transformers at $12$ to $30$ billion parameters", color=HIST, width=6.4, font_size=22),
             history_card(2025, r"Veo 3; \ Wan 2.1", r"latent diffusion over video and sound together; \ open video "
-                         r"weights", color=HIST, width=6.4, font_size=18),
+                         r"weights", color=HIST, width=6.4, font_size=22),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.25, 0.25)).next_to(el, DOWN, buff=0.35)
         if cards.width > 13.2:
             cards.width = 13.2

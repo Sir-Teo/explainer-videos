@@ -43,6 +43,11 @@ class Scale(VoiceoverScene):
                       r"Sinkhorn centring \\ ImageNet: \ $86.5\%$ linear probe", font_size=22, color=GREY_A)
         model.to_edge(DOWN, buff=0.5)
         src = cite(r"Oquab et al.\ (2023): \ DINOv2", corner=UR)
+        skew = VGroup(*[Rectangle(width=0.3, height=2.6 * 0.62 ** i + 0.04, stroke_width=0, fill_color=PIX,
+                                  fill_opacity=0.8) for i in range(12)]).arrange(RIGHT, buff=0.06, aligned_edge=DOWN)
+        skew.move_to([2.4, 0.4, 0])
+        skl = note(r"schematic: \\ a few kinds of picture, \ copied many times; \\ the rest rare", font_size=20)
+        skl.next_to(skew, DOWN, buff=0.25)
         with self.voiceover(
             "To scale self-distillation, Meta's DINOv2 team in 2023 found that the data mattered as much as the "
             "model. Raw web images are dominated by a few kinds of picture, duplicated many times. <bookmark "
@@ -53,8 +58,10 @@ class Scale(VoiceoverScene):
             "<bookmark mark='d'/> with DINO's loss plus a masked-token term and a term that spreads the vectors: "
             "86.5 percent on ImageNet with a linear probe, never having seen a label."
         ) as vo:
-            self.play(FadeIn(pool), FadeIn(src))
+            self.play(FadeIn(pool), FadeIn(src), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in skew], lag_ratio=0.08),
+                      FadeIn(skl))
             vo.wait_until("a")
+            self.play(FadeOut(skew), FadeOut(skl))
             self.play(FadeIn(seeds))
             vo.wait_until("b")
             self.play(GrowArrow(arrs[0]), GrowArrow(arrs[1]), FadeIn(ret))

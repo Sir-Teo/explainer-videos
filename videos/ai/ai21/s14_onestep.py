@@ -52,8 +52,16 @@ class OneStep(VoiceoverScene):
         avg = Arrow(pts[a], pts[b], buff=0.08, color=MF_C, stroke_width=5, max_tip_length_to_length_ratio=0.08)
         side = np.array([-(pts[b] - pts[a])[1], (pts[b] - pts[a])[0], 0])
         side = side / max(np.linalg.norm(side), 1e-9)
-        vl = label(r"$v$: \\ the speedometer, \\ velocity at each moment", font_size=20, color=SCORE).move_to(tang.get_center() + 1.3 * side)
-        ul = label(r"$(t - s)\,u$: \\ one jump, \\ at the average velocity", font_size=20, color=MF_C).move_to(avg.get_center() - 1.1 * side)
+        P2 = np.array(pts)
+
+        def clear_of_path(m, centre, d):  # whichever side of the arrow is further from the path
+            best_ = max((centre + d * side, centre - d * side), key=lambda c: np.linalg.norm(P2 - c, axis=1).min())
+            return m.move_to(best_)
+
+        vl = clear_of_path(label(r"$v$: \\ the speedometer, \\ velocity at each moment", font_size=20, color=SCORE),
+                           tang.get_center(), 1.4)
+        ul = clear_of_path(label(r"$(t - s)\,u$: \\ one jump, \\ at the average velocity", font_size=20, color=MF_C),
+                           avg.get_center(), 1.2)
         keep_in_frame(vl)
         keep_in_frame(ul)
         colors = {r"u": MF_C, r"v": SCORE, r"z_s": NOISE, r"z_t": DATA}

@@ -26,9 +26,9 @@ class JEPAScene(VoiceoverScene):
     # ------------------------------------------------------------------
     def three(self):
         def col(title, color, rows, x):
-            t = label(title, font_size=24, color=color)
-            body = VGroup(*[node_box(r_, c_, font_size=20) for r_, c_ in rows]).arrange(DOWN, buff=0.45)
-            g = VGroup(t, body).arrange(DOWN, buff=0.35).move_to([x, 0.3, 0])
+            t = label(title, font_size=28, color=color)
+            body = VGroup(*[node_box(r_, c_, font_size=24) for r_, c_ in rows]).arrange(DOWN, buff=0.6)
+            g = VGroup(t, body).arrange(DOWN, buff=0.45).move_to([x, 0.1, 0])
             ar = VGroup(*[arrow(a.get_bottom(), b.get_top(), stroke_width=2) for a, b in zip(body, body[1:])])
             return VGroup(g, ar)
 
@@ -38,12 +38,13 @@ class JEPAScene(VoiceoverScene):
                                                 (r"predict the pixels of $y$", MAE_C)], 0.0)
         c3 = col(r"joint-embedding predictive", JEPA, [(r"visible part $x$", GREY_A), (r"encode, \ predict", JEPA),
                                                       (r"predict the encoding of $y$", JEPA)], 4.4)
-        notes = VGroup(label(r"needs views, \ and a guard \\ against collapse", font_size=19, color=GREY_B),
-                       label(r"must model every detail", font_size=19, color=GREY_B),
-                       label(r"may ignore what \\ cannot be predicted", font_size=19, color=GREY_B))
+        notes = VGroup(label(r"needs views, \ and a guard \\ against collapse", font_size=22, color=GREY_B),
+                       label(r"must model every detail", font_size=22, color=GREY_B),
+                       label(r"may ignore what \\ cannot be predicted", font_size=22, color=GREY_B))
         for n_, c_ in zip(notes, (c1, c2, c3)):
             n_.next_to(c_, DOWN, buff=0.3)
         src = cite(r"LeCun (2022): \ ``A path towards autonomous machine intelligence''")
+        head = label(r"Three ways to learn from the data itself", font_size=34).to_edge(UP, buff=0.4)
         with self.voiceover(
             "In 2022 Yann LeCun laid out the third way, in a long essay on how machines might learn models of the "
             "world. <bookmark mark='a'/> Joint-embedding methods, like everything since chapter four, make two "
@@ -53,7 +54,7 @@ class JEPAScene(VoiceoverScene):
             "the hidden part's encoding instead: the network decides what about the hidden part is worth "
             "predicting, and can drop the rest."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(c1), FadeIn(notes[0]))
             vo.wait_until("b")

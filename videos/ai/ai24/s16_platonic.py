@@ -135,6 +135,8 @@ class Platonic(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.3)
         cave = label(r"Plato's cave: \ many shadows, \ one reality", font_size=22, color=HIST).to_corner(DR, buff=0.4)
+        claim = label(r"different data, \ different objectives, \ even different senses: \\ one picture of the "
+                      r"world?", font_size=34).move_to(UP * 0.6)
         with self.voiceover(
             "In 2024 Minyoung Huh, Brian Cheung, Tongzhou Wang and Phillip Isola made a bold claim. Networks "
             "trained on different data, with different objectives, even on different senses, are coming to "
@@ -146,9 +148,9 @@ class Platonic(VoiceoverScene):
             "the image. <bookmark mark='c'/> Agreement is measured by shared nearest neighbours, and across senses "
             "it is still low in absolute terms."
         ) as vo:
-            self.play(FadeIn(cave))
+            self.play(FadeIn(cave), FadeIn(claim, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(q), FadeIn(who))
+            self.play(FadeOut(claim), FadeIn(q), FadeIn(who))
             vo.wait_until("b")
             self.play(FadeIn(ev[0]), FadeIn(ev[1]))
             vo.wait_until("c")

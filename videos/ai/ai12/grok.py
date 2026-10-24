@@ -14,7 +14,7 @@ import numpy as np
 P, FRAC, DIM, HID, LR = 97, 0.4, 64, 256, 3e-3
 WDS = [0.0, 0.1, 0.3, 1.0, 3.0]
 SEEDS = (0, 1, 2)
-MAX_STEPS = 6000
+MAX_STEPS = 4000
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -46,7 +46,7 @@ def fourier_share(E: np.ndarray, top: int = 5) -> tuple[np.ndarray, float]:
     return F, float(np.sort(F)[::-1][:top].sum() / F.sum())
 
 
-def run(wd: float, seed: int, steps: int = MAX_STEPS, replay: bool = False, stop_after: int | None = 300):
+def run(wd: float, seed: int, steps: int | None = None, replay: bool = False, stop_after: int | None = 300):
     """One run. ``replay``: also keep the number vectors at many moments, and the tangent kernel's distance from its
     starting value (Fort et al. 2020's kernel distance, on 128 fixed examples)."""
     import torch
@@ -54,6 +54,7 @@ def run(wd: float, seed: int, steps: int = MAX_STEPS, replay: bool = False, stop
     from . import charlm
 
     charlm.threads()
+    steps = MAX_STEPS if steps is None else steps
     pairs, labels, tr, te = split()
     X, Y = torch.tensor(pairs), torch.tensor(labels)
     trt, tet = torch.tensor(tr), torch.tensor(te)

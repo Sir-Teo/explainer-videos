@@ -29,7 +29,7 @@ class Distill(VoiceoverScene):
         rounds = [int(r) for r in d["rounds"]]
         SW = np.asarray(d["prog_sw"])  # seed, round
         snaps = np.asarray(d["prog_snaps"])
-        pn = Panel(5.4, center=[-3.6, -0.4, 0])
+        pn = Panel(5.4, center=[-0.6, 0.4, 0])  # first in the middle, then aside for the chart
         pts = pn.dots(snaps[0], PROG_C, radius=0.022)
         cnt = label(rf"teacher: \ ${rounds[0]}$ steps", font_size=26, color=FM_C).next_to(pn, UP, buff=0.12)
         hi = float(SW.max()) * 1.15
@@ -68,7 +68,7 @@ class Distill(VoiceoverScene):
             self.play(LaggedStart(*[x.animate.set_opacity(1) for x in dp[1]], lag_ratio=0.1), run_time=1.0)
             self.play(dp[2].animate.set_opacity(1), dp[3][1].animate.set_opacity(1))
             vo.wait_until("b")
-            self.play(FadeOut(gl))
+            self.play(FadeOut(gl), VGroup(pn, pts, cnt).animate.shift(np.array([-3.0, -0.8, 0])))
             self.play(FadeIn(g), FadeIn(bd), FadeIn(dots[0]))
             vo.wait_until("c")
             for i in range(1, len(rounds)):
