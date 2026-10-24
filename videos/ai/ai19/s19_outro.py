@@ -113,7 +113,9 @@ class Outro(VoiceoverScene):
             (r"outlier channels: \ what the directions inside a model mean", [30]),
             (r"structured output, \ checked: \ evaluations you can trust", [31]),
         ], font_size=24)
-        card.move_to([-1.2, 0.2, 0])
+        if card.width > 9.4:
+            card.scale_to_fit_width(9.4)
+        card.move_to([-1.7, 0.2, 0])
         sp = load30("superposition")
         W = np.asarray(sp["W0.97"])
         c0 = np.array([5.3, -2.2, 0])

@@ -243,11 +243,11 @@ class SD3(VoiceoverScene):
         cards = VGroup(
             history_card(r"Aug 2024", r"FLUX.1 \ (Black Forest Labs)", r"$12$ billion weights; \ MM-DiT blocks, then "
                          r"single-stream blocks; \ rotary positions; \ a guidance-distilled open version",
-                         color=HIST, width=4.2, font_size=20),
+                         color=HIST, width=4.3, font_size=23),
             history_card(r"Jun 2025", r"FLUX.1 Kontext", r"edit by context: \ the input picture's tokens joined to the "
-                         r"sequence", color=HIST, width=4.2, font_size=20),
+                         r"sequence", color=HIST, width=4.3, font_size=23),
             history_card(r"Nov 2025", r"FLUX.2", r"$32$ billion weights \ (open [dev]); \ a $24$-billion vision-language "
-                         r"model reads the prompt; \ up to $10$ reference pictures", color=HIST, width=4.2, font_size=20),
+                         r"model reads the prompt; \ up to $10$ reference pictures", color=HIST, width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
         if cards.width > 13.2:
             cards.width = 13.2

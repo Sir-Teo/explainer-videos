@@ -36,7 +36,7 @@ class KVQuant(VoiceoverScene):
         lv = label(r"values: \ $|v|$", font_size=20, color=C.VALUE).next_to(iv, UP, buff=0.15)
         layer, head = int(k["layer"]), int(k["head"])
         tag = note(rf"computed: \ our novels model, \ layer ${layer + 1}$, \ head ${head + 1}$, \ $96$ tokens of a "
-                   r"held-out novel").to_corner(DR, buff=0.2)
+                   r"held-out novel").next_to(VGroup(ik, iv), DOWN, buff=0.2).set_x(0)
         # the shown head: each channel's average size over the tokens, largest against median
         ck, cv = km.mean(0), vm.mean(0)
         ratio, vratio = float(ck.max() / np.median(ck)), float(cv.max() / np.median(cv))
@@ -51,6 +51,13 @@ class KVQuant(VoiceoverScene):
         big = float(np.asarray(cc)[i128])
         why_ = label(rf"Llama 3.1 70B, \ $128$k tokens: \ ${big / 1e9:.0f}$ GB of cache per conversation, \ "
                      r"in $16$ bits", font_size=22, color=KVC).to_edge(UP, buff=0.35)
+        W70 = 2 * F.LLAMA31_70B["params"]
+        sizes = hbars([W70 / 1e9, big / 1e9, big / 4e9, big / 8e9],
+                      [r"Llama 3.1 70B's weights", r"one conversation's cache, \ $16$ bits", r"the cache in $4$ bits",
+                       r"the cache in $2$ bits"], [C.WEIGHTS, KVC, KVC, KIVIC], width=5.0, row_h=0.62, font_size=22,
+                      lo=0, hi=W70 / 1e9 * 1.05, fmt_v=lambda v: rf"{v:.0f}\,\text{{GB}}" if v >= 10 else
+                      rf"{v:.1f}\,\text{{GB}}")
+        sizes.move_to([0.4, 0.3, 0])
         rule = VGroup(label(r"keys: \ a scale per channel", font_size=22, color=KIVIC),
                       label(r"values: \ a scale per token", font_size=22, color=KIVIC)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                 buff=0.12)
@@ -67,9 +74,12 @@ class KVQuant(VoiceoverScene):
             "colleagues, in KIVI, gave keys a scale per channel and values a scale per token, and stored both in "
             "two bits."
         ) as vo:
-            self.play(FadeIn(why_), FadeIn(tag))
+            self.play(FadeIn(why_))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val))
+                                    for r_ in sizes], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(ik), Create(bk), FadeIn(lk), FadeIn(iv), Create(bv), FadeIn(lv))
+            self.play(FadeOut(sizes))
+            self.play(FadeIn(ik), Create(bk), FadeIn(lk), FadeIn(iv), Create(bv), FadeIn(lv), FadeIn(tag))
             vo.wait_until("b")
             self.play(Indicate(ik, color=KVC, scale_factor=1.03))
             vo.wait_until("c")
@@ -93,7 +103,7 @@ class KVQuant(VoiceoverScene):
                          hbars(vals, [nm for _, nm, _ in series], [c_ for _, _, c_ in series], width=3.6, row_h=0.38,
                                font_size=18, lo=0, hi=hi * 1.1, fmt_v=lambda v: rf"{v:+.3f}"))
                   .arrange(DOWN, aligned_edge=LEFT, buff=0.1))
-        g.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-1.2, -0.3, 0])
+        g.arrange(DOWN, aligned_edge=LEFT, buff=0.3).scale(1.2).move_to([-1.6, -0.4, 0])
         head = label(r"extra loss on held-out novels \ (nats per token), \ the cache rounded as it is written",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.35)
         e8, f8 = L["token_8"] - base, L["fp8_8"] - base

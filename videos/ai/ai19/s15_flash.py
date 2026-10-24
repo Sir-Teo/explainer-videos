@@ -54,7 +54,7 @@ class Flash(VoiceoverScene):
                      color=ATTNC).to_edge(DOWN, buff=0.4)
         hc = history_card(2022, r"Tri Dao, Daniel Fu, Stefano Ermon, Atri Rudra \& Christopher R\'e",
                           rf"FlashAttention: \ exact, \ IO-aware; \ GPT-2 ${F.FLASH1['gpt2']:.0f}\times$ faster",
-                          width=5.4, font_size=16, color=ATTNC).to_corner(UR, buff=0.2)
+                          width=5.0, font_size=16, color=ATTNC).move_to([4.2, -2.2, 0])
         with self.voiceover(
             "Part 17 ended with FlashAttention, and promised its derivation. Here it is. <bookmark mark='a'/> A GPU "
             "has a large, slow memory, HBM, and a small, fast one on the chip, SRAM. The standard way to compute "
@@ -108,15 +108,14 @@ class Flash(VoiceoverScene):
                                                                                font_size=26, color=C.BITS),
                     MathTex(r"\quad \ell =", font_size=26, color=C.BITS),
                     DecimalNumber(tr[0, 1], num_decimal_places=2, font_size=26, color=C.BITS)).arrange(RIGHT, buff=0.1)
-        rd.move_to([4.6, -1.0, 0])
+        rd.move_to([4.4, -0.75, 0])
         cur = Rectangle(width=W * 32 / n, height=Hh + 0.2, stroke_color=C.BITS, stroke_width=2.5)
         cur.move_to([x0 + W * 16 / n, y0 + Hh / 2, 0])
         dev = float(f["softmax_dev"])
         res = label(rf"at the end: \ the softmax, \ equal to the direct one within ${sci(max(dev, 1e-17), 0)}$",
-                    font_size=20, color=C.BITS).next_to(rd, DOWN, buff=0.2)
+                    font_size=20, color=C.BITS).move_to([0, -3.3, 0])
         hc = history_card(2018, r"Maxim Milakov \& Natalia Gimelshein, \ NVIDIA", r"the online softmax: \ one pass, \ a "
-                          r"running max and sum", width=4.2, font_size=16, color=C.BITS).to_corner(UR, buff=0.2)
-        hc.shift(DOWN * 2.2)
+                          r"running max and sum", width=4.2, font_size=16, color=C.BITS).move_to([4.4, -2.6, 0])
         with self.voiceover(
             "The key is the softmax. <bookmark mark='a'/> To compute it safely you subtract the largest score, so "
             "no exponential overflows, and divide by the sum: so it seems you need the whole row first. "
@@ -137,7 +136,9 @@ class Flash(VoiceoverScene):
             step(3)
             self.play(FadeIn(hc))
             vo.wait_until("e")
-            self.play(FadeOut(hc), FadeIn(cap), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.003),
+            self.play(FadeOut(hc), VGroup(*rows, *[w for w in whys if w is not None]).animate.scale(0.72).to_edge(UP,
+                                                                                                        buff=0.2))
+            self.play(FadeIn(cap), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.003),
                       FadeIn(tiles), run_time=1.5)
             self.play(Create(cur), FadeIn(rd))
             for j in range(1, len(tr)):

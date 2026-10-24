@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import HIST, LAT_C, PANEL, PART, PATCH, glyph_sheet, gray_image, load
+from videos.ai.ai22.common import HIST, LAT_C, PANEL, PART, PATCH, glyph_sheet, gray_image, load, take_away
 
 SIDE_C = {10: C.TRUE_P, 5: C.BITS, 2: C.INTERVAL, 1: "#B39DDB"}
 

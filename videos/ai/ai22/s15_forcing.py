@@ -169,12 +169,12 @@ class Forcing(VoiceoverScene):
         head = label(r"Training on its own frames, \ and video in real time", font_size=34).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"Dec 2024", r"CausVid \ (Yin et al.)", r"a slow two-way teacher distilled into a causal "
-                         r"student: \ $4$ steps a frame, \ $9.4$ frames a second", color=HIST, width=4.2, font_size=19),
+                         r"student: \ $4$ steps a frame, \ $9.4$ frames a second", color=HIST, width=4.3, font_size=23),
             history_card(r"Jun 2025", r"Self Forcing \ (Huang, Li, He, Zhou \& Shechtman)", r"train on its own rollouts, "
                          r"\ judge the whole video at once: \ $17$ frames a second, \ $0.45$ s to the first, \ one GPU",
-                         color=HIST, width=4.2, font_size=19),
+                         color=HIST, width=4.3, font_size=23),
             history_card(r"Aug 2025", r"Genie 3 \ (Google DeepMind)", r"a world you steer as it is drawn, \ in real "
-                         r"time: \ Part 29", color=HIST, width=4.2, font_size=19),
+                         r"time: \ Part 29", color=HIST, width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
         if cards.width > 13.2:
             cards.width = 13.2
