@@ -34,7 +34,9 @@ class Weather(VoiceoverScene):
                          r"weather in about $24$ hours of computing", width=4.2, color=HIST),
             history_card(1979, r"ECMWF", r"the first medium-range forecasts; \ since then skill has grown by about "
                          r"a day per decade", width=4.2, color=HIST),
-        ).arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.3)).move_to(DOWN * 0.2)
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.4, 0.35)).move_to(DOWN * 0.25)
+        cards.width = min(12.6, cards.width * 1.3)
+        cards.move_to(DOWN * 0.25)
         head = label(r"Numerical weather prediction", font_size=34).to_edge(UP, buff=0.35)
         cite_ = cite(r"Lynch (2006); \ Bauer, Thorpe \& Brunet, \textit{Nature} (2015)", corner=DR)
         with self.voiceover(
@@ -79,17 +81,17 @@ class Weather(VoiceoverScene):
         ml.next_to(grid, DOWN, buff=0.2)
         facts = VGroup(
             label(r"GraphCast \ (Lam et al., \textit{Science} 2023)", font_size=26, color=STRUCT),
-            label(r"grid: \ $0.25^\circ$, \ $1{,}038{,}240$ points, \ $227$ numbers each", font_size=21),
-            label(r"multimesh: \ an icosahedron refined six times, \ $40{,}962$ nodes, \ $327{,}660$ edges", font_size=21),
-            label(r"encode to the mesh, \ $16$ rounds of message passing, \ decode", font_size=21),
-            label(r"in: \ the last two states, \ $6$ hours apart; \ out: \ the next", font_size=21),
-            label(r"$39$ years of ERA5 \ (1979--2017); \ four weeks on $32$ TPUs", font_size=21),
-            label(r"a 10-day forecast in under a minute; \ better than ECMWF's HRES \ on $90\%$ of $1{,}380$ targets",
-                  font_size=21, color=PAIR_C),
+            label(r"grid: \ $0.25^\circ$, \ $1{,}038{,}240$ points, \ $227$ numbers each", font_size=22),
+            label(r"multimesh: \ an icosahedron refined six times, \\ $40{,}962$ nodes, \ $327{,}660$ edges", font_size=22),
+            label(r"encode to the mesh, \ $16$ rounds of message passing, \ decode", font_size=22),
+            label(r"in: \ the last two states, \ $6$ hours apart; \ out: \ the next", font_size=22),
+            label(r"$39$ years of ERA5 \ (1979--2017); \ four weeks on $32$ TPUs", font_size=22),
+            label(r"a 10-day forecast in under a minute; \\ better than ECMWF's HRES \ on $90\%$ of $1{,}380$ targets",
+                  font_size=22, color=PAIR_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.1, 0.0, 0])
-        if facts.width > 6.6:
-            facts.width = 6.6
-        facts.set_x(3.3)
+        if facts.width > 6.9:
+            facts.width = 6.9
+        facts.align_to(np.array([-0.2, 0, 0]), LEFT)
         with self.voiceover(
             "Machine learning came to this in the 2020s, trained on ERA5, ECMWF's reconstruction of the global "
             "weather since 1940. In 2023 Remi Lam and colleagues at Google DeepMind published GraphCast. <bookmark "
@@ -142,6 +144,7 @@ class Weather(VoiceoverScene):
         tag = note(rf"computed: \ $32 \times 32$ periodic grid, \ one step $= {w['dt']:.1f}$ time units; \ "
                    rf"${mm['params']:,}$ weights, \ trained on $32$ runs".replace(",", "{,}"), font_size=18)
         tag.to_corner(DR, buff=0.15)
+        movie = [framed(field_image(truth[k], 3.4, vmax)).move_to([0, -0.3, 0]) for k in range(len(truth))]
         with self.voiceover(
             "Ours is a toy atmosphere: a two-dimensional fluid on a square that wraps around, stirred by a fixed "
             "pattern and damped by friction, so that eddies form, drift, merge and die. It is chaotic, like the "
@@ -150,9 +153,14 @@ class Weather(VoiceoverScene):
             "prediction back in. <bookmark mark='b'/> Top row, the truth; bottom row, our network, from the same "
             "start. For a while the two agree; then they drift apart."
         ) as vo:
-            self.play(FadeIn(world), FadeIn(tag))
+            self.play(FadeIn(world), FadeIn(tag), FadeIn(movie[0]))
+            cur = movie[0]
+            for m_ in movie[1:]:
+                self.play(FadeIn(m_), run_time=0.6)
+                self.remove(cur)
+                cur = m_
             vo.wait_until("a")
-            self.play(FadeIn(rl), FadeIn(cols[0]))
+            self.play(FadeOut(cur), FadeIn(rl), FadeIn(cols[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cols[1:]], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
@@ -232,9 +240,22 @@ class Weather(VoiceoverScene):
             history_card(2025, r"and elsewhere", r"Google's WeatherNext 2 \ (November); \ NOAA's first AI global "
                          r"models \ (17 December)", width=6.4, color=HIST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(blur, DOWN, buff=0.35)
-        if cards.height > 5.4:
-            cards.height = 5.4
-        cards.set_x(0)
+        if cards.height > 5.6:
+            cards.height = 5.6
+        cards.next_to(blur, DOWN, buff=0.35).align_to(np.array([-1.2, 0, 0]), LEFT)
+        # illustrative: one sharp future against the average of many (the field smoothed)
+        wt = load("weather")
+        F = np.asarray(wt["show_truth"])[6]
+        k = np.fft.fftfreq(F.shape[0]) * F.shape[0]
+        K2 = k[:, None] ** 2 + k[None, :] ** 2
+        Fb = np.real(np.fft.ifft2(np.fft.fft2(F) * np.exp(-K2 / 2 / 1.2 ** 2)))
+        vm = float(np.abs(F).max())
+        sharp = framed(field_image(F, 2.3, vm))
+        soft = framed(field_image(Fb, 2.3, vm), color=PLAIN)
+        pics = Group(Group(label(r"one possible future", font_size=20, color=GREY_A), sharp).arrange(DOWN, buff=0.12),
+                     Group(label(r"the average of many: \ blur", font_size=20, color=PLAIN), soft)
+                     .arrange(DOWN, buff=0.12)).arrange(DOWN, buff=0.35).move_to([-4.6, -0.5, 0])
+        pn = note(r"illustrative", font_size=18).next_to(pics, DOWN, buff=0.12)
         cite_ = cite(r"Price et al.\ (2024); \ ECMWF (2025, 2026); \ NOAA (2025)", corner=DR)
         with self.voiceover(
             "There is a deeper problem. A network trained on squared error learns to predict the average of what "
@@ -248,7 +269,8 @@ class Weather(VoiceoverScene):
             "Google released WeatherNext 2 in November, and in December America's NOAA put its first AI global "
             "models into operation."
         ) as vo:
-            self.play(FadeIn(blur), FadeIn(cite_))
+            self.play(FadeIn(blur), FadeIn(cite_), FadeIn(pics[0]))
+            self.play(FadeIn(pics[1]), FadeIn(pn))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.1))
             vo.wait_until("b")

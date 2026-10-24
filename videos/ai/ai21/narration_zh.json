@@ -1,0 +1,523 @@
+{
+ "title": "人工智能，从零搭建 · 第21部分：扩散与流",
+ "chapters": {
+  "Hook": "从噪声开始",
+  "Forward": "1. 慢慢地摧毁数据",
+  "ELBO": "2. 下界，以及猜噪声",
+  "Tweedie": "3. 特威迪公式",
+  "DSM": "4. 去噪分数匹配",
+  "SDE": "5. 让时间倒流",
+  "Samplers": "6. DDPM与DDIM",
+  "Schedules": "7. 噪声调度",
+  "EDM": "8. EDM：预条件化与休恩法",
+  "DPMSolver": "9. DPM-Solver：精确求解线性部分",
+  "Transport": "10. 最优传输与流匹配",
+  "Reflow": "11. 整流流与重流",
+  "Distill": "12. 蒸馏",
+  "OneStep": "13. 从零开始的一步生成",
+  "Guidance": "14. 引导",
+  "Pictures": "15. 从点到图片",
+  "Discrete": "16. 离散数据上的扩散",
+  "TextLM": "17. 扩散语言模型",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "88def726531a": {
+   "scene": "Hook",
+   "en": "Noise: three hundred random points. <bookmark mark='a'/> A network, trained on this computer, nudges each one a little, fifty times. <bookmark mark='b'/> Part 20 ended with Langevin dynamics: walk uphill on the score, the slope of the data's log-density, with noise turned down level by level. Here the network has learned that slope at every noise level, from examples alone.",
+   "zh": "噪声：300个随机的点。<bookmark mark='a'/>一个就在这台电脑上训练出来的网络，把每个点轻轻推一下，推50次。<bookmark mark='b'/>第20部分结束在朗之万动力学上：沿着分数函数，也就是数据对数密度的坡度，往上走，同时把噪声一级一级地调小。这里的网络，已经只凭例子，学会了每个噪声水平下的那个坡度。"
+  },
+  "904410af2c16": {
+   "scene": "Hook",
+   "en": "How we got here. In 2015 Jascha Sohl-Dickstein and colleagues borrowed an idea from physics: destroy the structure in data slowly, with noise, and learn to run the destruction backwards. <bookmark mark='a'/> In 2019 Yang Song and Stefano Ermon learned the score at many noise levels; <bookmark mark='b'/> in 2020 Jonathan Ho, Ajay Jain and Pieter Abbeel made the recipe simple: just guess the noise. <bookmark mark='c'/> In 2021 one framework joined them, and diffusion overtook GANs. <bookmark mark='d'/> In 2022 latent diffusion became Stable Diffusion, released with open weights; <bookmark mark='e'/> then transformers became the denoisers, <bookmark mark='f'/> straight-line flows trained the image models of 2024, and video followed; <bookmark mark='g'/> by 2025 the same idea was writing text, <bookmark mark='h'/> and in 2026 Google released an open diffusion language model.",
+   "zh": "我们是怎么走到这里的。2015年，亚沙·索尔-迪克斯坦和同事从物理学借来一个想法：用噪声慢慢地摧毁数据里的结构，再学会把这个摧毁过程倒着运行。<bookmark mark='a'/>2019年，宋飏和斯特凡诺·埃尔蒙在许多噪声水平上学习分数函数；<bookmark mark='b'/>2020年，乔纳森·何、阿杰·贾因和彼得·阿比尔把配方变得很简单：只要猜噪声。<bookmark mark='c'/>2021年，一个框架把它们统一起来，扩散模型超过了GAN。<bookmark mark='d'/>2022年，潜空间扩散成了Stable Diffusion，并公开了权重；<bookmark mark='e'/>接着，Transformer当上了去噪器，<bookmark mark='f'/>直线式的流训练出了2024年的图像模型，视频也随之而来；<bookmark mark='g'/>到2025年，同一个想法开始写文字，<bookmark mark='h'/>2026年，Google发布了一个开放权重的扩散语言模型。"
+  },
+  "bea0588dfc58": {
+   "scene": "Hook",
+   "en": "This is Part 21 of AI, Built: diffusion and flow. <bookmark mark='a'/> In this part: the forward process and the bound that trains the reverse; why guessing the noise is learning the score; <bookmark mark='b'/> running time backwards, with a stochastic equation or a deterministic one, and the samplers that solve them; <bookmark mark='c'/> the design choices, from noise schedules to EDM and DPM-Solver; <bookmark mark='d'/> flow matching and optimal transport; <bookmark mark='e'/> how to get from fifty steps to one; how to ask for something specific; <bookmark mark='f'/> and diffusion for text, with a language model of our own on the scoreboard. <bookmark mark='g'/> Every model here is trained on this computer.",
+   "zh": "这是《人工智能，从零搭建》的第21部分：扩散与流。<bookmark mark='a'/>本部分的内容：前向过程，以及训练反向过程的那个下界；为什么猜噪声就是在学分数函数；<bookmark mark='b'/>让时间倒流，用随机方程或确定性方程，以及求解它们的采样器；<bookmark mark='c'/>各种设计选择，从噪声调度到EDM和DPM-Solver；<bookmark mark='d'/>流匹配与最优传输；<bookmark mark='e'/>怎样从50步走到1步；怎样要求它画出特定的东西；<bookmark mark='f'/>还有用于文本的扩散，我们自己的一个语言模型也会登上记分牌。<bookmark mark='g'/>这里的每一个模型，都是在这台电脑上训练的。"
+  },
+  "397c89cff955": {
+   "scene": "Forward",
+   "en": "Chapter one. Destroying data slowly.",
+   "zh": "第1章。慢慢地摧毁数据。"
+  },
+  "14864b4fec4b": {
+   "scene": "Forward",
+   "en": "Annealed Langevin, at the end of Part 20, needs the score at every level of noise. Where do the levels come from? From a process that destroys the data on purpose. <bookmark mark='a'/> Take every point, shrink it a little towards the origin, and add a little Gaussian noise. <bookmark mark='b'/> Do it a thousand times. The shrinking keeps the spread from growing; the noise erases the letters, a little at each step, until only a round bell of noise is left. <bookmark mark='c'/> That is the forward process. It has no parameters: nothing in it is learned.",
+   "zh": "第20部分末尾的退火朗之万方法，需要每个噪声水平下的分数函数。这些噪声水平从哪里来？来自一个故意摧毁数据的过程。<bookmark mark='a'/>把每个点朝原点缩一点点，再加上一点高斯噪声。<bookmark mark='b'/>这样做1000次。缩小让散布不会越来越大；噪声则一步一步地抹掉字母，直到只剩下一团圆圆的钟形噪声。<bookmark mark='c'/>这就是前向过程。它没有参数：里面没有任何东西是学出来的。"
+  },
+  "cf4fa4bdc4fb": {
+   "scene": "Forward",
+   "en": "You don't have to run the thousand steps to know where a point ends up. Write one step: the point shrunk, plus fresh noise. <bookmark mark='a'/> Substitute the step before it. <bookmark mark='b'/> The two noises are independent Gaussians, so their sum is one Gaussian whose variance is the sum of theirs. <bookmark mark='c'/> Keep going down to the clean point, and the whole chain collapses into a single jump: the data shrunk by the square root of alpha bar, plus noise of variance one minus alpha bar, where alpha bar is the product of all the shrink factors. <bookmark mark='d'/> So training can sample any noise level at once, without simulating the chain.",
+   "zh": "要知道一个点最后落在哪里，并不需要真的跑完1000步。先写出一步：缩小后的点，加上新的噪声。<bookmark mark='a'/>把前一步代进去。<bookmark mark='b'/>两份噪声是相互独立的高斯变量，所以它们的和还是一个高斯变量，方差等于两者方差之和。<bookmark mark='c'/>一直往下代到干净的点，整条链就塌缩成一次跳跃：数据乘以阿尔法拔的平方根，再加上方差为1减阿尔法拔的噪声，其中阿尔法拔是所有缩小因子的乘积。<bookmark mark='d'/>所以训练时可以直接抽取任意一个噪声水平，不必模拟整条链。"
+  },
+  "4396dc557988": {
+   "scene": "Forward",
+   "en": "Check it on our letters. Run twenty thousand points through all thousand steps, and at 5 moments regress where they are on where they started. <bookmark mark='a'/> The slope should be the square root of alpha bar: at step 500 it is 0.279, the formula says 0.280. <bookmark mark='b'/> The leftover variance should be one minus alpha bar: 0.925 against 0.921. The largest gap anywhere is 0.004, <bookmark mark='c'/> and whole clouds agree as well as two independent jumps agree with each other. After all thousand steps, alpha bar is 4.0 times ten to the minus 5: what is left of a point is 0.0064 of it.",
+   "zh": "在我们的字母上检验一下。让2万个点跑完全部1000步，并在5个时刻，把它们所在的位置对它们的起点做回归。<bookmark mark='a'/>斜率应该是阿尔法拔的平方根：在第500步，它是0.279，公式给出0.280。<bookmark mark='b'/>剩余的方差应该是1减阿尔法拔：0.925，对比0.921。任何地方最大的差距是0.004，<bookmark mark='c'/>整团点云的吻合程度，也和两次独立跳跃之间的吻合程度一样。跑完全部1000步后，阿尔法拔是4.0乘以10的负5次方：一个点剩下的部分，只有它原来的0.0064。"
+  },
+  "c804cb06e328": {
+   "scene": "Forward",
+   "en": "One more fact, and the model's job is defined. Run a step backwards, and suppose you knew the clean point. <bookmark mark='a'/> Bayes says the previous point's distribution is the forward step times the jump to step t minus one: both Gaussian in the previous point, so completing the square gives a Gaussian, <bookmark mark='b'/> whose mean blends the clean point and the noisy one. <bookmark mark='c'/> In continuous time, write alpha for the shrink and sigma for the noise: their squares add to one. Ours is a quarter circle, cosine and sine, the forward process of Part 5's Ornstein-Uhlenbeck chapter run on a clock. <bookmark mark='d'/> Every step back is a known Gaussian, if you know where you started. The model has to manage without.",
+   "zh": "再说一个事实，模型的任务就定下来了。把一步倒过来走，并假设你知道干净的点。<bookmark mark='a'/>贝叶斯公式说，前一个点的分布，等于前向的那一步，乘以跳到第t减1步的那次跳跃：两者都是前一个点的高斯函数，所以配方之后得到一个高斯分布，<bookmark mark='b'/>它的均值是干净的点和带噪声的点的一个混合。<bookmark mark='c'/>在连续时间里，用阿尔法表示缩小，用西格玛表示噪声：两者的平方加起来等于1。我们的选择是四分之一个圆，余弦和正弦，也就是第5部分奥恩斯坦-乌伦贝克那一章的前向过程，换了一个时钟来跑。<bookmark mark='d'/>只要知道你是从哪里出发的，每一步往回走都是一个已知的高斯分布。模型却得在不知道的情况下完成这件事。"
+  },
+  "8a9474130b13": {
+   "scene": "ELBO",
+   "en": "Chapter two. The bound, and guessing the noise.",
+   "zh": "第2章。下界，以及猜噪声。"
+  },
+  "d947ddc4ae17": {
+   "scene": "ELBO",
+   "en": "Part 20's variational autoencoder had a code and a bound. Here the codes are the noisy versions, x one to x T, and the encoder is the forward process, fixed. <bookmark mark='a'/> The decoder runs the chain backwards, each step a Gaussian whose mean a network chooses. Jensen's inequality gives the same bound on the log-likelihood as before. <bookmark mark='b'/> Both chains are products of their steps, so the bound is a sum over steps. <bookmark mark='c'/> Now use the last chapter's fact: rewrite each forward step by Bayes, given the clean point. The extra jumps cancel in pairs, and what is left is a sum of KL divergences, one per step: how far the network's step back is from the true step back, given the clean point.",
+   "zh": "第20部分的变分自编码器有一个编码，还有一个下界。这里的编码，是那些带噪声的版本，从x 1到x T，而编码器就是前向过程，固定不变。<bookmark mark='a'/>解码器把这条链倒着运行，每一步是一个高斯分布，它的均值由一个网络来决定。詹森不等式给出的，还是和以前一样的对数似然下界。<bookmark mark='b'/>两条链都是各步的乘积，所以这个下界是对各步的求和。<bookmark mark='c'/>现在用上一章的那个事实：在已知干净点的条件下，用贝叶斯公式改写每一个前向步。多出来的那些跳跃两两抵消，剩下的是一串KL散度，每步一个：在已知干净点时，网络往回走的一步，离真正往回走的一步有多远。"
+  },
+  "ac98da2a20fb": {
+   "scene": "ELBO",
+   "en": "Each term compares two Gaussians with the same variance, so it is just the squared distance between their means. <bookmark mark='a'/> Write the true mean in terms of the noisy point and the noise that made it, by substituting for the clean point. <bookmark mark='b'/> That suggests the parameterization Ho, Jain and Abbeel chose in 2020: let the network output a guess of the noise, and build its mean the same way. <bookmark mark='c'/> Then each term of the bound is a weight lambda t times the squared error of the noise guess. Training a diffusion model is a regression: look at a noisy point, say what noise was added.",
+   "zh": "每一项比较的是两个方差相同的高斯分布，所以它就是两者均值之间距离的平方。<bookmark mark='a'/>把干净的点代换掉，用带噪声的点和造成它的那份噪声来写出真正的均值。<bookmark mark='b'/>这提示了乔纳森·何、贾因和阿比尔在2020年选用的参数化方式：让网络输出对噪声的猜测，再用同样的方式构造它的均值。<bookmark mark='c'/>这样，下界的每一项，都是一个权重拉姆达t，乘以噪声猜测的平方误差。训练扩散模型就是做回归：看着一个带噪声的点，说出加进去的是什么噪声。"
+  },
+  "c63a5c49bf39": {
+   "scene": "ELBO",
+   "en": "How big are the weights? For DDPM's schedule, with the step's variance set to beta, lambda falls from 0.50 at the first step to 0.010 at the last, a factor of 49: the bound cares most about the nearly clean steps. <bookmark mark='a'/> Ho and colleagues found that dropping the weights altogether, every step counted the same, gave better pictures: an FID of 3.17 on CIFAR-10, the best of its day. <bookmark mark='b'/> That is the simple loss, and almost every diffusion model since has trained on a loss like it. The exact weighting returns in chapter seven: it is a choice of which noise levels to practise most.",
+   "zh": "这些权重有多大？在DDPM的调度下，把每一步的方差设成贝塔，拉姆达从第一步的0.50，降到最后一步的0.010，相差49倍：这个下界最在意的，是那些几乎干净的步。<bookmark mark='a'/>乔纳森·何和同事发现，干脆把权重全部去掉，每一步一视同仁，画出来的图反而更好：在CIFAR-10上FID达到3.17，是当时最好的成绩。<bookmark mark='b'/>这就是简化损失，此后几乎所有的扩散模型，训练用的都是类似它的损失。精确的加权会在第7章回来：它其实是在选择最常练习哪些噪声水平。"
+  },
+  "2eae8f1a39b9": {
+   "scene": "ELBO",
+   "en": "Here is our own denoiser learning on the letters, trained with the simple loss, a noise level drawn at random for each of its examples. At each checkpoint we stop, and draw points from the same noise. <bookmark mark='a'/> Untrained, it flings them to the edges. <bookmark mark='b'/> Within 50 steps the points have pulled in to a blob, 0.24 from the data, and the loss is still falling. <bookmark mark='c'/> By step 1,000 the letters can be read. The rest is refinement: the loss barely moves, but the strokes sharpen, the distance from the data going from 0.16 to 0.11, at every checkpoint. Every step of training only asked for the noise in one blurred point; the letters emerge from millions of those guesses.",
+   "zh": "这是我们自己的去噪器，正在字母上学习，用的是简化损失，每个训练样本随机抽一个噪声水平。在每个检查点，我们停下来，从同一份噪声里画出一些点。<bookmark mark='a'/>还没训练时，它把这些点甩到了边上。<bookmark mark='b'/>不到50步，这些点就收拢成了一团，离数据0.24，损失还在下降。<bookmark mark='c'/>到第1000步，字母已经认得出来了。剩下的都是精修：损失几乎不动，但笔画越来越清晰，与数据的距离从0.16降到0.11，每个检查点都是如此。训练的每一步，只要求它猜出一个模糊的点里的噪声；字母就从数百万次这样的猜测中浮现出来。"
+  },
+  "2ff9e0d33996": {
+   "scene": "Tweedie",
+   "en": "Chapter three. Tweedie's formula.",
+   "zh": "第3章。特威迪公式。"
+  },
+  "5a9133571c9a": {
+   "scene": "Tweedie",
+   "en": "A noisy point could have come from many clean ones. Here is a one-dimensional data distribution, two bumps. <bookmark mark='a'/> We see a noisy value, x t, at a moderate noise level. <bookmark mark='b'/> Bayes gives the distribution of the clean value it came from: wide, because the noise is wide, and pulled towards the bumps. <bookmark mark='c'/> The guess with the smallest expected squared error is the average of this distribution, the posterior mean. That is what a network trained by squared error learns to output, if it can. <bookmark mark='d'/> Move the noisy value, and the posterior mean slides between the bumps, never quite reaching either.",
+   "zh": "一个带噪声的点，可能来自许多不同的干净点。这是一个一维的数据分布，两个鼓包。<bookmark mark='a'/>我们看到一个带噪声的值x t，噪声水平中等。<bookmark mark='b'/>贝叶斯公式给出它所来自的干净值的分布：很宽，因为噪声很宽，同时又被拉向那两个鼓包。<bookmark mark='c'/>期望平方误差最小的猜测，就是这个分布的平均值，也就是后验均值。用平方误差训练出来的网络，只要做得到，学会输出的就是它。<bookmark mark='d'/>移动这个带噪声的值，后验均值就在两个鼓包之间滑动，却从来到不了任何一个。"
+  },
+  "f72ddcc1cfc8": {
+   "scene": "Tweedie",
+   "en": "That average has a formula. Herbert Robbins published it in 1956, crediting Maurice Tweedie: the posterior mean is the noisy point plus sigma squared times the score, divided by alpha. <bookmark mark='a'/> The proof is three lines. The noised density is a blur of the clean one. <bookmark mark='b'/> Differentiate under the integral: only the Gaussian depends on x. <bookmark mark='c'/> Divide by the density, and Bayes turns the integral into the posterior mean. <bookmark mark='d'/> Now the noise. The best guess of the noise is the noisy point minus alpha times the best clean point, over sigma: minus sigma times the score. A network trained to guess the noise is learning the score. That is why diffusion works.",
+   "zh": "这个平均值有一个公式。赫伯特·罗宾斯在1956年发表了它，并把功劳归于莫里斯·特威迪：后验均值等于带噪声的点，加上西格玛平方乘以分数函数，再除以阿尔法。<bookmark mark='a'/>证明只有三行。加了噪声的密度，是干净密度的一个模糊版本。<bookmark mark='b'/>在积分号下求导：只有那个高斯函数依赖于x。<bookmark mark='c'/>除以这个密度，贝叶斯公式就把积分变成了后验均值。<bookmark mark='d'/>再看噪声。对噪声的最佳猜测，是带噪声的点减去阿尔法乘以最佳的干净点，再除以西格玛：也就是负的西格玛乘以分数函数。一个被训练来猜噪声的网络，就是在学分数函数。扩散模型之所以行得通，原因就在这里。"
+  },
+  "52f8322e4d80": {
+   "scene": "Tweedie",
+   "en": "Check it. In one dimension, compute the posterior mean by brute force, integrating over a fine grid, and compare it with Tweedie's formula, using the exact score. <bookmark mark='a'/> They agree to 14 decimal places: the formula is exact. <bookmark mark='b'/> In two dimensions, on our letters, estimate each posterior mean by Monte Carlo, weighting fifty thousand clean points by how likely each is to have produced the noisy one. <bookmark mark='c'/> The estimates land within 0.004 of the formula, on average. <bookmark mark='d'/> Our trained network's guesses sit within 0.038 of the formula's, small beside the spread of 0.33: it has learned the score.",
+   "zh": "检验一下。在一维情形下，用蛮力算出后验均值，在一张很细的网格上积分，再和用精确分数函数算出的特威迪公式比较。<bookmark mark='a'/>两者在小数点后14位上都一致：这个公式是精确的。<bookmark mark='b'/>在二维的字母上，用蒙特卡洛方法估计每个后验均值，按5万个干净点各自产生这个带噪声点的可能性来加权。<bookmark mark='c'/>这些估计平均落在离公式0.004以内的地方。<bookmark mark='d'/>我们训练出来的网络，它的猜测离公式的结果在0.038以内，和0.33的散布相比很小：它学会了分数函数。"
+  },
+  "c8ef056a12ae": {
+   "scene": "Tweedie",
+   "en": "What does the best denoiser do with very noisy points? Here are its guesses for five hundred noisy points, at four noise levels. <bookmark mark='a'/> At high noise every guess is near the middle of the letters: the average letter, with a squared error of 1.57. <bookmark mark='b'/> As the noise falls, the guesses spread onto the strokes, and the error drops to 0.078. <bookmark mark='c'/> So you cannot jump from pure noise to a sample in one step: the best jump lands on a blur. Samplers take many small steps instead, re-guessing as the noise falls: chapters five and six.",
+   "zh": "面对噪声很大的点，最好的去噪器会怎么做？这是它对500个带噪声的点的猜测，在4个噪声水平下。<bookmark mark='a'/>噪声很大时，每个猜测都落在字母的中间附近：一个平均的字母，平方误差是1.57。<bookmark mark='b'/>随着噪声减小，猜测散开到笔画上，误差降到0.078。<bookmark mark='c'/>所以不能一步从纯噪声跳到一个样本：最好的一跳，落在一片模糊上。采样器于是改走许多小步，随着噪声降低不断重新猜测：这是第5章和第6章的内容。"
+  },
+  "c7f0baffa02a": {
+   "scene": "DSM",
+   "en": "Chapter four. Denoising score matching.",
+   "zh": "第4章。去噪分数匹配。"
+  },
+  "8e7f9cdb98a7": {
+   "scene": "DSM",
+   "en": "Tweedie says the network should learn the score. But nobody gives us the score of real images to fit. In 2005 Aapo Hyvarinen faced this for energy models: fit a function s to the score, by squared error, when the target is unknown. <bookmark mark='a'/> Integrating by parts removes the target: what is left is the trace of the Jacobian of s, plus its squared length, averaged over the data. <bookmark mark='b'/> But the trace costs one backward pass per dimension: for one colour image of 512 by 512 pixels, 786,432 of them, for every training example.",
+   "zh": "特威迪公式说，网络应该学分数函数。可是，没有人会把真实图像的分数函数交给我们去拟合。2005年，阿波·许韦里宁在能量模型上遇到了同样的问题：在目标未知的情况下，用平方误差把一个函数s拟合到分数函数上。<bookmark mark='a'/>分部积分把目标消掉了：剩下的是s的雅可比矩阵的迹，加上它长度的平方，再对数据取平均。<bookmark mark='b'/>可是这个迹，每个维度都要做一次反向传播：一张512乘512像素的彩色图像，就要786432次，而且每个训练样本都要这么多。"
+  },
+  "6a34712dbaad": {
+   "scene": "DSM",
+   "en": "In 2011 Pascal Vincent found the way around. Add noise to each example, and fit the score of the noise itself, which we know exactly. <bookmark mark='a'/> The theorem: that loss equals the loss against the score of the whole noised data, plus a constant. Here is why. Expand the square on the left. <bookmark mark='b'/> The only term that could differ is the cross term. Write the noised data's score as its gradient over itself; <bookmark mark='c'/> the noised data is an average of noise around each example, so its gradient is an average of theirs; <bookmark mark='d'/> and that is the left side's cross term. Everything else is a constant. <bookmark mark='e'/> And the score of the added noise is minus the noise over sigma: fitting it is chapter two's noise guessing, exactly.",
+   "zh": "2011年，帕斯卡尔·文森特找到了绕过去的办法。给每个样本加上噪声，然后去拟合这份噪声本身的分数函数，这是我们确切知道的。<bookmark mark='a'/>定理是：这个损失，等于对整个加噪数据的分数函数的损失，再加上一个常数。原因如下。把左边的平方展开。<bookmark mark='b'/>唯一可能不同的，是交叉项。把加噪数据的分数函数，写成它的梯度除以它自己；<bookmark mark='c'/>加噪数据，是围绕每个样本的噪声的平均，所以它的梯度也是它们梯度的平均；<bookmark mark='d'/>这正是左边的交叉项。其余的都是常数。<bookmark mark='e'/>而所加噪声的分数函数，等于负的噪声除以西格玛：拟合它，恰恰就是第2章的猜噪声。"
+  },
+  "1fb9c2ed2656": {
+   "scene": "DSM",
+   "en": "Our letters let us check the theorem directly, because there the exact score is known. Take our denoiser at each checkpoint of its training, at the lowest noise level, t equal to 0.1. <bookmark mark='a'/> The white curve is the loss on fresh noise. The grey line is the constant: the loss that even the exact score would have, because the noise in a noisy point can't be fully recovered. <bookmark mark='b'/> The orange curve is the network's error against the exact score, measured directly. <bookmark mark='c'/> The theorem says loss minus constant is that error, and the dots sit on the curve: at the end, 1.4248 minus 1.3772 against 0.0422. The cross term that the proof says averages away is at most 0.0057 at the end of training, in 3 seeds. <bookmark mark='d'/> The loss never reaches zero, and doesn't have to: the gap above the constant is the part training can remove.",
+   "zh": "在我们的字母上，可以直接检验这个定理，因为那里的精确分数函数是已知的。取我们的去噪器在训练中每个检查点的状态，在最低的噪声水平，t等于0.1。<bookmark mark='a'/>白色曲线是在新噪声上的损失。灰色的线是那个常数：就连精确的分数函数，也会有这么大的损失，因为一个带噪声的点里的噪声，没法被完全恢复。<bookmark mark='b'/>橙色曲线是网络相对于精确分数函数的误差，是直接测出来的。<bookmark mark='c'/>定理说，损失减去常数就是这个误差，而那些点正好落在曲线上：到最后，1.4248减1.3772，对比0.0422。证明中说会平均掉的那个交叉项，在训练结束时最多只有0.0057，3个随机种子都是如此。<bookmark mark='d'/>损失永远到不了0，也不需要到0：高出常数的那一截，才是训练能够去掉的部分。"
+  },
+  "5ec7937c6c5f": {
+   "scene": "DSM",
+   "en": "Where is the score hardest to learn? At the end of training, the error is largest at t equal to 0.1 and smallest at 0.9: the nearly clean levels, where the score is sharp around each stroke, are the hardest. <bookmark mark='a'/> In 2019 Yang Song and Stefano Ermon trained one network for many noise levels this way, and sampled with Part 20's annealed Langevin. <bookmark mark='b'/> Denoising, at every noise level, by plain regression: that is what every diffusion model learns.",
+   "zh": "分数函数在哪里最难学？训练结束时，误差在t等于0.1时最大，在0.9时最小：几乎干净的那些水平最难，因为在那里，分数函数围绕每一笔都很陡。<bookmark mark='a'/>2019年，宋飏和斯特凡诺·埃尔蒙就用这种方法，为许多噪声水平训练了同一个网络，并用第20部分的退火朗之万方法来采样。<bookmark mark='b'/>在每个噪声水平上去噪，只靠普通的回归：每一个扩散模型学的，都是这个。"
+  },
+  "85e5fa74f62a": {
+   "scene": "SDE",
+   "en": "Chapter five. Running time backwards.",
+   "zh": "第5章。让时间倒流。"
+  },
+  "d5787e516e86": {
+   "scene": "SDE",
+   "en": "In 2021 Yang Song and colleagues let the number of steps go to infinity. <bookmark mark='a'/> The chain of small shrinks and small kicks becomes a stochastic differential equation: a drift towards the origin, and Brownian motion, Part 5's Ornstein-Uhlenbeck process with a rate that rises over time. <bookmark mark='b'/> Run it, and the letters dissolve into a bell of noise.",
+   "zh": "2021年，宋飏和同事让步数趋于无穷。<bookmark mark='a'/>由许多小的缩小和小的冲击组成的链，变成了一个随机微分方程：一个朝向原点的漂移，加上布朗运动，也就是第5部分的奥恩斯坦-乌伦贝克过程，只是速率随时间上升。<bookmark mark='b'/>运行它，字母就溶解成一团钟形的噪声。"
+  },
+  "a3ec38f11f2b": {
+   "scene": "SDE",
+   "en": "In 1982 Brian Anderson showed that such a diffusion has a reverse in time that is also a diffusion: the same shrink and kicks, plus a push up the score of the noised data at that moment. <bookmark mark='a'/> The score is the only thing in it we don't know, and the last three chapters showed how a network learns it. <bookmark mark='b'/> Here it is run with the exact score of our letters: noise flows back into the letters, each point jittering all the way.",
+   "zh": "1982年，布赖恩·安德森证明，这样的扩散过程在时间上反过来，也还是一个扩散过程：同样的缩小和冲击，再加上一股沿那一刻加噪数据的分数函数往上推的力。<bookmark mark='a'/>其中唯一不知道的就是分数函数，而前面三章讲了网络怎样学会它。<bookmark mark='b'/>这里用我们字母的精确分数函数来运行它：噪声流回字母里，每个点一路都在抖动。"
+  },
+  "5cb7f0013fcd": {
+   "scene": "SDE",
+   "en": "There is a second way back, with no randomness at all. Start from Part 5's Fokker-Planck equation for the density: the drift moves it, the noise spreads it. <bookmark mark='a'/> The spreading term can be rewritten, because the gradient of p is p times the gradient of log p. <bookmark mark='b'/> Now both terms are a divergence of something times p: a continuity equation, the law of a fluid whose particles move with a velocity field. <bookmark mark='c'/> So particles that simply follow this velocity, with no noise at all, have exactly the same density at every moment as the noisy ones. <bookmark mark='d'/> Song and colleagues called it the probability-flow ODE: one more use for the same score.",
+   "zh": "还有第二条回去的路，完全没有随机性。从第5部分关于密度的福克-普朗克方程出发：漂移让它移动，噪声让它扩散。<bookmark mark='a'/>扩散项可以改写，因为p的梯度等于p乘以对数p的梯度。<bookmark mark='b'/>这样两项都成了某个量乘以p的散度：一个连续性方程，也就是粒子随一个速度场运动的流体所遵守的定律。<bookmark mark='c'/>所以，只要粒子沿着这个速度走，完全不加噪声，它们在每一刻的密度，就和那些带噪声的粒子完全一样。<bookmark mark='d'/>宋飏和同事把它叫作概率流常微分方程：同一个分数函数的又一种用法。"
+  },
+  "2f6e2e0c5191": {
+   "scene": "SDE",
+   "en": "Here are both, run with the exact score from the same forty starting points. <bookmark mark='a'/> The SDE's paths wander: on average each is 26.3 long. The ODE's glide, 0.7. They end at different places. <bookmark mark='b'/> But measure the whole clouds against fresh samples of the true density, at every time. Both stay as close to the true marginals as fresh samples of them, at every time we measured. <bookmark mark='c'/> And the ODE can be run both ways: from data to noise and back, the points return to where they started to 5 decimal places: an invertible map, Part 20's continuous normalizing flow, with an exact likelihood. One learned score, two ways back; the next chapters are about solving them in as few steps as possible.",
+   "zh": "这是两者，都用精确的分数函数，从同样的40个起点出发。<bookmark mark='a'/>SDE的路径弯弯绕绕：平均每条长26.3。ODE的路径则是滑过去的，0.7。它们的终点不一样。<bookmark mark='b'/>但是，在每一个时刻，把整团点云和真实密度的新样本相比。两者都和真实边缘分布的新样本一样接近它，在我们测量的每一个时刻都是如此。<bookmark mark='c'/>而且ODE可以双向运行：从数据到噪声，再回来，点回到起点，精确到小数点后5位：一个可逆的映射，也就是第20部分的连续归一化流，带有精确的似然。一个学到的分数函数，两条回去的路；接下来几章讲的，就是怎样用尽可能少的步数求解它们。"
+  },
+  "65c57fc352df": {
+   "scene": "Samplers",
+   "en": "Chapter six. DDPM and DDIM.",
+   "zh": "第6章。DDPM与DDIM。"
+  },
+  "6599d2416d2e": {
+   "scene": "Samplers",
+   "en": "Two ways to discretize the walk back, with our trained denoiser. DDPM, the 2020 recipe, discretizes the reverse SDE: at each step it guesses the clean point, steps to the Gaussian of chapter one, and adds a little fresh noise. <bookmark mark='a'/> Its paths wander, like the Brownian motion they reverse. <bookmark mark='b'/> DDIM, a year later, adds no noise at all: each point glides to a fixed destination, and in far fewer steps.",
+   "zh": "把往回走的过程离散化，有两种方法，都用我们训练好的去噪器。DDPM，也就是2020年的配方，离散化的是反向SDE：每一步，它先猜出干净的点，再走到第1章的那个高斯分布，并加上一点新的噪声。<bookmark mark='a'/>它的路径弯弯绕绕，就像它所反转的布朗运动。<bookmark mark='b'/>一年以后的DDIM完全不加噪声：每个点都滑向一个固定的终点，而且需要的步数少得多。"
+  },
+  "03e8dcaadf7a": {
+   "scene": "Samplers",
+   "en": "DDIM's step is two lines. From the noisy point, the network's noise guess gives a guess of the clean point, by Tweedie. <bookmark mark='a'/> To step to a lower noise level, put the clean guess back with less noise, keeping the noise's direction: the same noise, smaller. <bookmark mark='b'/> Divide by alpha, and the step is exactly one Euler step of the probability-flow ODE, in the coordinates x over alpha and sigma over alpha. <bookmark mark='c'/> Song, Meng and Ermon derived it from a different forward process with the same marginals, and gave it a knob, eta: at zero, no noise, the ODE; at one, DDPM again. The network doesn't change, only the sampler.",
+   "zh": "DDIM的一步只有两行。从带噪声的点出发，网络对噪声的猜测，通过特威迪公式，给出对干净点的猜测。<bookmark mark='a'/>要走到更低的噪声水平，就把这个干净的猜测放回去，配上更少的噪声，并保持噪声的方向：同一份噪声，只是变小了。<bookmark mark='b'/>除以阿尔法，这一步恰好就是概率流ODE的一个欧拉步，所用的坐标是x除以阿尔法，以及西格玛除以阿尔法。<bookmark mark='c'/>宋佳铭、孟辰霖和埃尔蒙是从另一个具有相同边缘分布的前向过程推出它的，还给了它一个旋钮，伊塔：等于0时不加噪声，就是ODE；等于1时，又回到DDPM。网络不变，变的只是采样器。"
+  },
+  "e06e5198626d": {
+   "scene": "Samplers",
+   "en": "How few steps will do? Measure how far the samples land from the data, <bookmark mark='w'/> with the sliced Wasserstein distance: drop both clouds onto many random lines, and compare where their points fall. <bookmark mark='a'/> With five DDIM steps the letters are blurred, at 0.34; even at a hundred it trails DDPM's two hundred; at a hundred, 0.047, against a floor of 0.024 for a fresh sample of the data itself. <bookmark mark='b'/> Each step is one run of the network, so fewer steps is faster pictures. The paths are curved, and curved paths need many small steps: the next three chapters are about taking fewer.",
+   "zh": "最少几步就够？量一量样本落在离数据多远的地方，<bookmark mark='w'/>用切片瓦瑟斯坦距离：把两团点都投到许多条随机的直线上，比较它们的点落在哪里。<bookmark mark='a'/>用5步DDIM，字母是模糊的，距离0.34；即使到了100步，它还是不如DDPM的200步；到100步时是0.047，而数据本身的一份新样本是0.024，这是下限。<bookmark mark='b'/>每一步都要运行一次网络，所以步数越少，出图越快。这些路径是弯的，而弯的路径需要很多小步：接下来三章，讲的都是怎样少走几步。"
+  },
+  "72be7bee2a6a": {
+   "scene": "Schedules",
+   "en": "Chapter seven. Noise schedules.",
+   "zh": "第7章。噪声调度。"
+  },
+  "2a3a0570921f": {
+   "scene": "Schedules",
+   "en": "A noise schedule says how much signal survives at each time. Its one number is the signal-to-noise ratio, alpha squared over sigma squared, best seen on a log scale. <bookmark mark='a'/> DDPM's linear betas, the cosine schedule of Alex Nichol and Prafulla Dhariwal, ours, and flow matching's straight line all run from plenty of signal to almost none, at different speeds. <bookmark mark='b'/> One detail matters: DDPM's last step still has a log signal-to-noise ratio of -10.1, not minus infinity. <bookmark mark='c'/> In 2024 Shanchuan Lin and colleagues showed that a model never trained at pure noise can't make a very dark or very bright image, and rescaled the schedule to end at zero.",
+   "zh": "噪声调度规定了每个时刻有多少信号保留下来。它的核心是一个数：信噪比，阿尔法平方除以西格玛平方，最好在对数尺度上看。<bookmark mark='a'/>DDPM的线性贝塔、亚历克斯·尼科尔和普拉富拉·达里瓦尔的余弦调度、我们的调度，以及流匹配的直线，都是从信号充足走到几乎没有信号，只是速度各不相同。<bookmark mark='b'/>有一个细节很要紧：DDPM的最后一步，对数信噪比还有-10.1，而不是负无穷。<bookmark mark='c'/>2024年，Shanchuan Lin和同事指出，一个从来没在纯噪声上训练过的模型，画不出很暗或很亮的图片，于是他们重新缩放调度，让它在终点降到0。"
+  },
+  "7efc5b92ca7f": {
+   "scene": "Schedules",
+   "en": "Does the schedule change what is being learned? In 2021 Diederik Kingma, Tim Salimans, Ben Poole and Jonathan Ho took the bound to continuous time: an integral over time of the clean-point error, weighted by how fast the signal-to-noise ratio falls. <bookmark mark='a'/> Change the variable to the ratio itself, and the schedule disappears: only its two ends remain. Every schedule with the same ends has the same bound. <bookmark mark='b'/> What the schedule does change is practice: with time drawn uniformly, each schedule visits the noise levels with a different frequency, and the network learns best where it practises most. <bookmark mark='c'/> EDM, in the next chapter, skips the schedule and draws noise levels from a log-normal directly.",
+   "zh": "调度会不会改变学到的东西？2021年，迪德里克·金马、蒂姆·萨利曼斯、本·普尔和乔纳森·何把这个下界推广到连续时间：对时间积分的干净点误差，权重是信噪比下降的快慢。<bookmark mark='a'/>把变量换成信噪比本身，调度就消失了：只剩下它的两个端点。端点相同的调度，下界都一样。<bookmark mark='b'/>调度真正改变的是练习：时间均匀抽取时，每种调度访问各个噪声水平的频率不同，而网络在练得最多的地方学得最好。<bookmark mark='c'/>下一章的EDM干脆跳过调度，直接从对数正态分布里抽噪声水平。"
+  },
+  "9024ea24a087": {
+   "scene": "Schedules",
+   "en": "We trained the same noise-guessing network four ways, changing only which noise levels it practises: the same budget, 3 seeds each. <bookmark mark='a'/> Because our letters' exact denoiser is known, we can see where each one is wrong. At low noise they all agree. <bookmark mark='b'/> At the highest noise, EDM's log-normal is the furthest off and the linear-beta schedule the closest: the one that practises there most. <bookmark mark='c'/> After sampling, the linear-beta schedule is best and EDM's log-normal worst, every seed of one beating every seed of the other.",
+   "zh": "我们用4种方式训练同一个猜噪声的网络，只改变它练习哪些噪声水平：预算相同，每种3个随机种子。<bookmark mark='a'/>因为我们字母的精确去噪器是已知的，可以看出每一种错在哪里。在低噪声时，它们都一致。<bookmark mark='b'/>在最高的噪声水平，EDM的对数正态分布偏得最远，而线性贝塔调度最接近：正是在那里练得最多的那一个。<bookmark mark='c'/>采样之后，线性贝塔调度最好，EDM的对数正态分布最差，前者的每个随机种子都胜过后者的每个随机种子。"
+  },
+  "8259d1066752": {
+   "scene": "Schedules",
+   "en": "The schedule also decides where a sampler puts its steps. Here are three samplers, with the exact denoiser, at the same budget of about sixteen network evaluations, on four spacings of the noise levels. <bookmark mark='a'/> For DDIM, the best of the four spacings is uniform in time; <bookmark mark='b'/> for Heun's method, the best is DDPM's own steps; <bookmark mark='c'/> and for DPM-Solver plus plus, uniform in log signal-to-noise: no spacing wins for every solver. <bookmark mark='d'/> On image models EDM's spacing has become a standard; on our letters it is not always the best. The spacing is a setting of the sampler, tuned like any other.",
+   "zh": "调度还决定了采样器把步子放在哪里。这里是3种采样器，用精确的去噪器，在同样大约16次网络调用的预算下，用4种噪声水平的间隔方式。<bookmark mark='a'/>对DDIM来说，最好的是时间上均匀；<bookmark mark='b'/>对休恩法，是DDPM自己的步；<bookmark mark='c'/>而对DPM-Solver++，是对数信噪比上均匀：没有哪种间隔方式对每个求解器都最好。<bookmark mark='d'/>在图像模型上，EDM的间隔方式已经成了标准；在我们的字母上，它并不总是最好的。间隔方式是采样器的一个设置，和别的设置一样需要调。"
+  },
+  "0812e64612a5": {
+   "scene": "EDM",
+   "en": "Chapter eight. EDM: preconditioning and Heun.",
+   "zh": "第8章。EDM：预条件化与休恩法。"
+  },
+  "52e997369dda": {
+   "scene": "EDM",
+   "en": "By 2022 there were many diffusion models, each with its own schedule, parameterization and sampler. Tero Karras and colleagues at NVIDIA pulled them apart. <bookmark mark='a'/> Drop the shrinking: let x be the clean point plus noise of size sigma, with sigma running from eighty down to almost nothing. <bookmark mark='b'/> Tweedie, with alpha equal to one, says the score is the denoiser's correction over sigma squared. <bookmark mark='c'/> And the probability-flow ODE becomes very plain: the rate of change of x with sigma is x minus its denoised version, over sigma. <bookmark mark='d'/> Everything, every schedule and parameterization, is a way of computing the denoiser D.",
+   "zh": "到2022年，扩散模型已经有很多种，每种都有自己的调度、参数化和采样器。英伟达的泰罗·卡拉斯和同事把它们一一拆开。<bookmark mark='a'/>去掉缩小：让x等于干净的点加上大小为西格玛的噪声，西格玛从80一直降到几乎为0。<bookmark mark='b'/>取阿尔法等于1，特威迪公式说，分数函数就是去噪器的修正量除以西格玛平方。<bookmark mark='c'/>概率流ODE也变得非常朴素：x随西格玛的变化率，等于x减去它去噪后的版本，再除以西格玛。<bookmark mark='d'/>一切，每一种调度和参数化，都只是计算去噪器D的一种方式。"
+  },
+  "87b1fe498851": {
+   "scene": "EDM",
+   "en": "Their first idea is preconditioning: wrap the network so that its job looks the same at every noise level. Write the denoiser as a skip connection plus a scaled network. <bookmark mark='a'/> Scale the input to unit variance, <bookmark mark='b'/> choose the skip so that the network's errors are magnified as little as possible, <bookmark mark='c'/> and then the output scale that makes the target have unit variance too. <bookmark mark='d'/> Why it matters: predict the noise, and an error in the output moves the clean guess by sigma times as much, eighty times at the top. Predict the clean point, and the network must output the whole answer even at almost no noise. EDM's mixture is never worse than either. On our letters, with a data spread sigma d of 0.90, its target's spread stays between 0.97 and 1.00 at every noise level.",
+   "zh": "他们的第一个想法是预条件化：把网络包装起来，让它在每个噪声水平上面对的任务看起来都一样。把去噪器写成一条跳跃连接，加上一个缩放过的网络。<bookmark mark='a'/>把输入缩放到单位方差，<bookmark mark='b'/>选择跳跃连接的系数，让网络的误差被放大得尽量少，<bookmark mark='c'/>然后选输出的缩放，让目标也具有单位方差。<bookmark mark='d'/>为什么这很重要：如果预测噪声，输出里的一个误差，会让干净点的猜测移动西格玛倍那么多，在最高处是80倍。如果预测干净的点，那么即使几乎没有噪声，网络也得把整个答案输出出来。EDM的混合目标从来不比两者中的任何一个差。在我们的字母上，数据的散布西格玛d是0.90，它的目标的散布，在每个噪声水平都保持在0.97和1.00之间。"
+  },
+  "b8c8dc5bd6ba": {
+   "scene": "EDM",
+   "en": "We tested it: the same network, the same noise levels from EDM's log-normal, the same budget, three ways of reading its output, 3 seeds each. <bookmark mark='a'/> Against the exact denoiser, at the highest noise, predicting the noise is furthest off; at the lowest, predicting the clean point. <bookmark mark='b'/> EDM's mixture is close to the better of the two at every level. <bookmark mark='c'/> After sampling, EDM's mixture lands closest to the data on average.",
+   "zh": "我们做了测试：同一个网络，同样来自EDM对数正态分布的噪声水平，同样的预算，用三种方式解读它的输出，每种3个随机种子。<bookmark mark='a'/>和精确的去噪器相比，在最高的噪声水平，预测噪声偏得最远；在最低的噪声水平，偏得最远的是预测干净的点。<bookmark mark='b'/>EDM的混合目标在每个水平上，都接近两者中较好的那一个。<bookmark mark='c'/>采样之后，平均来看，EDM的混合目标离数据最近。"
+  },
+  "c6818c9161e9": {
+   "scene": "EDM",
+   "en": "Their second idea is the solver. Euler's method follows the slope at the start of the step, and on a curved path it overshoots. <bookmark mark='a'/> Heun's method takes that Euler step, measures the slope where it lands, and redoes the step with the average of the two slopes: second order, so halving the step cuts the error by four, for two network evaluations a step. EDM's last step is plain Euler. <bookmark mark='b'/> On our letters, below about 23 evaluations the correction can do harm, and plain Euler is better; but at 31 evaluations Heun's error is 1.5 times smaller than Euler's, and at 63, 3.2 times. With these two ideas and a careful spacing of the steps, Karras and colleagues reached an FID of 1.79 on CIFAR-10 with thirty-five evaluations.",
+   "zh": "他们的第二个想法是求解器。欧拉法沿着一步起点处的斜率走，在弯曲的路径上，它会冲过头。<bookmark mark='a'/>休恩法先走这一个欧拉步，量出落点处的斜率，再用两个斜率的平均值重走这一步：这是二阶方法，步长减半，误差就降为四分之一，每步需要两次网络调用。EDM的最后一步是普通的欧拉步。<bookmark mark='b'/>在我们的字母上，below about 23 evalu在ions the correction can do harm, and plain Euler is better; but at 31次调用时，休恩法的误差比欧拉法小1.5倍，在63次时，小3.2倍。靠这两个想法，再加上精心安排的步长间隔，卡拉斯和同事在CIFAR-10上，用35次调用就达到了1.79的FID。"
+  },
+  "98751e48feec": {
+   "scene": "DPMSolver",
+   "en": "Chapter nine. DPM-Solver: an exact linear part.",
+   "zh": "第9章。DPM-Solver：精确求解线性部分。"
+  },
+  "63c664676295": {
+   "scene": "DPMSolver",
+   "en": "In 2022 Cheng Lu and colleagues at Tsinghua noticed that the ODE has a part that needs no network. <bookmark mark='a'/> The x over sigma term is linear in x, and can be solved exactly, the way you solve a linear equation with an integrating factor. <bookmark mark='b'/> What is left is an integral of the denoiser over the step, weighted by an exponential in lambda, minus the log of sigma. Only that integral needs approximating. Methods like this are called exponential integrators. <bookmark mark='c'/> Hold the denoiser fixed over the step, and out comes exactly DDIM's update. So DDIM was already the first-order exponential integrator; it is exact whenever the clean guess doesn't change during the step.",
+   "zh": "2022年，清华大学的路橙和同事注意到，这个ODE有一部分根本不需要网络。<bookmark mark='a'/>x除以西格玛这一项，对x是线性的，可以精确求解，就像用积分因子解一个线性方程那样。<bookmark mark='b'/>剩下的是去噪器在这一步上的积分，权重是拉姆达的指数函数，拉姆达就是负的对数西格玛。只有这个积分需要近似。这类方法叫作指数积分器。<bookmark mark='c'/>在一步之内把去噪器固定不变，得出的恰好就是DDIM的更新。所以DDIM本来就是一阶的指数积分器；只要干净点的猜测在这一步里不变，它就是精确的。"
+  },
+  "c709206583c0": {
+   "scene": "DPMSolver",
+   "en": "To do better, approximate how the denoiser changes over the step. <bookmark mark='a'/> DPM-Solver-2 spends one extra evaluation halfway through the step, in lambda, and uses the denoiser there. <bookmark mark='b'/> DPM-Solver plus plus, in its two-step multistep form, spends nothing extra: it reuses the denoiser from the previous step and extends the line through the two. One network evaluation per step, second order. <bookmark mark='c'/> On CIFAR-10 the first version reached an FID of 4.70 in ten evaluations, and 2.87 in twenty; the multistep form ships in the common diffusion libraries.",
+   "zh": "要做得更好，就得近似去噪器在这一步里怎样变化。<bookmark mark='a'/>DPM-Solver-2在这一步的中点，按拉姆达来算的中点，多花一次调用，用那里的去噪器。<bookmark mark='b'/>DPM-Solver++的两步多步形式，什么额外的都不花：它重用上一步的去噪器，并把经过这两点的直线延长出去。每步一次网络调用，二阶精度。<bookmark mark='c'/>在CIFAR-10上，最初的版本用10次调用达到了4.70的FID，用20次达到2.87；它的多步形式，已经收进了常用的扩散模型软件库。"
+  },
+  "5e7dc12f3bdd": {
+   "scene": "DPMSolver",
+   "en": "Here is the whole family on our letters, run with the exact denoiser so that the only error is the solver's, all on EDM's spacing, from the same noise. The error is measured against the exact solution of the ODE. <bookmark mark='a'/> On log scales, a first-order method's line has slope minus one, a second-order method's minus two. <bookmark mark='b'/> With about eight evaluations the best is plain Euler in time, at 0.081. With about thirty-two, DPM-Solver plus plus is 5 times more accurate than DDIM. <bookmark mark='c'/> One surprise: on our letters, plain Euler in the variance-preserving time beats DDIM, 0.040 against 0.140 at sixteen. DDIM is exact when the clean guess stays fixed; Euler, when the velocity does. Which first-order method wins depends on the data. <bookmark mark='d'/> DDPM, with its fresh noise, has no single path to compare; its samples come within half again of the floor only at 128 evaluations.",
+   "zh": "这是整个家族在我们字母上的表现，都用精确的去噪器，所以唯一的误差来自求解器，全部用EDM的间隔方式，从同一份噪声出发。误差是相对于ODE精确解来测的。<bookmark mark='a'/>在对数坐标上，一阶方法的直线斜率是负1，二阶方法是负2。<bookmark mark='b'/>大约8次调用时，最好的是时间上的普通欧拉法，误差0.081。大约32次时，DPM-Solver++比DDIM精确5倍。<bookmark mark='c'/>有一个意外：在我们的字母上，在方差保持的时间里用普通欧拉法，反而胜过DDIM，在16次时是0.040对0.140。DDIM在干净点的猜测保持不变时是精确的；欧拉法则是在速度保持不变时精确。哪一种一阶方法更好，取决于数据。<bookmark mark='d'/>DDPM每步都加新的噪声，没有一条单一的路径可以比较；它的样本要到128次调用，才进入下限的1.5倍以内。"
+  },
+  "e5c1b47a44d2": {
+   "scene": "DPMSolver",
+   "en": "Here are three of them after about 12 evaluations, beside the exact solution. DPM-Solver plus plus's points are the closest to it, and Heun's are the furthest off. <bookmark mark='a'/> With our trained network in place of the exact denoiser, the ranking is the same, and the network's own error sets a floor: solved exactly, its ODE lands 0.041 from the data, against 0.040 for a fresh sample of the letters. <bookmark mark='b'/> Ten to thirty evaluations, then, with a solver that knows the equation. Fewer than that needs a different idea: chapter twelve.",
+   "zh": "这是其中三种在大约12次调用之后的结果，旁边是精确解。DPM-Solver++的点离它最近，休恩法的点偏得最远。<bookmark mark='a'/>用我们训练好的网络代替精确的去噪器，排名不变，而网络自己的误差设定了一个下限：精确求解时，它的ODE落在离数据0.041的地方，而字母的一份新样本是0.040。<bookmark mark='b'/>那么，10到30次调用，再配上一个懂得这个方程的求解器。比这更少，就需要另一种想法：第12章。"
+  },
+  "bc878f618f7f": {
+   "scene": "Transport",
+   "en": "Chapter ten. Optimal transport and flow matching.",
+   "zh": "第10章。最优传输与流匹配。"
+  },
+  "27f1532e7e03": {
+   "scene": "Transport",
+   "en": "Step back to an older question. In 1781 Gaspard Monge asked how to move a pile of earth into a hole with the least work. <bookmark mark='a'/> Pair every bit of noise with a bit of data so that the average squared distance moved is as small as possible: Leonid Kantorovich's 1942 version, and its minimum is the Wasserstein distance of Part 20. <bookmark mark='b'/> In 2000 Jean-David Benamou and Yann Brenier wrote the same problem as a flow: of every velocity field that carries one density into the other, find the one with the least kinetic energy. <bookmark mark='c'/> The answer moves every particle in a straight line at constant speed, and the lines never cross.",
+   "zh": "退回到一个更古老的问题。1781年，加斯帕尔·蒙日问：怎样用最少的功，把一堆土移进一个坑里。<bookmark mark='a'/>把每一点噪声和每一点数据配成对，让平均的移动距离平方尽可能小：这是列昂尼德·康托罗维奇1942年的版本，它的最小值就是第20部分的瓦瑟斯坦距离。<bookmark mark='b'/>2000年，让-大卫·贝纳穆和扬·布雷尼耶把同一个问题写成一个流：在所有把一个密度带到另一个密度的速度场里，找出动能最小的那个。<bookmark mark='c'/>答案让每个粒子都以恒定的速度走直线，而且这些直线从不相交。"
+  },
+  "aa4182774c38": {
+   "scene": "Transport",
+   "en": "Flow matching borrows the straight lines without solving the transport problem. Three groups proposed it at once, in 2023: Yaron Lipman and colleagues at Meta, Xingchao Liu and colleagues in Texas, and Michael Albergo and Eric Vanden-Eijnden in New York. <bookmark mark='a'/> Pair noise and data at random, join each pair with a straight line, and the pair's velocity is simply data minus noise. <bookmark mark='b'/> But these lines cross, and a flow can't: at a crossing a particle would need two velocities. The theorem that saves it: the density at time tau is an average over pairs, <bookmark mark='c'/> each moving at its own velocity, <bookmark mark='d'/> so it obeys the continuity equation with the average velocity at each point: the expected data-minus-noise, given that a line passes through x. <bookmark mark='e'/> And regressing on the pairs' velocities learns exactly that average, the same trick as denoising score matching.",
+   "zh": "流匹配借用了这些直线，却不去求解运输问题。2023年，三个团队同时提出了它：Meta的雅龙·利普曼和同事、得克萨斯的刘星超和同事，以及纽约的迈克尔·阿尔贝戈和埃里克·范登-艾因登。<bookmark mark='a'/>把噪声和数据随机配对，用直线连起每一对，这一对的速度就是数据减去噪声。<bookmark mark='b'/>可是这些直线会相交，而一个流不可以：在交点处，一个粒子需要两个速度。挽救它的是这个定理：时刻tau的密度，是对所有配对的平均，<bookmark mark='c'/>每一对都以自己的速度运动，<bookmark mark='d'/>所以它满足连续性方程，所用的是每一点上的平均速度：在一条直线经过x的条件下，数据减噪声的期望。<bookmark mark='e'/>而对配对的速度做回归，学到的恰好就是这个平均，和去噪分数匹配用的是同一个技巧。"
+  },
+  "11bc40d13be9": {
+   "scene": "Transport",
+   "en": "On our letters this average velocity is known exactly. Here it is at four moments: early on, everything heads for the middle; late, each point heads for its nearest stroke. <bookmark mark='a'/> Follow it from noise, and compare the particles with the straight-line interpolation of random pairs at the same time. At every time we checked, they are as close to it as fresh samples are: the theorem holds. <bookmark mark='b'/> But look at the paths: they bend, with a straightness of 0.52. <bookmark mark='c'/> And the cost: the flow's own map moves points 0.362 on average, close to the optimal 0.329 and far below random pairing's 3.52. Its kinetic energy, 1.18, is far above its cost: the paths are curved and the speed uneven. Flow matching is not optimal transport; it is a good start.",
+   "zh": "在我们的字母上，这个平均速度是精确已知的。这是它在4个时刻的样子：一开始，一切都奔向中间；到后来，每个点都奔向最近的笔画。<bookmark mark='a'/>从噪声出发跟着它走，再把这些粒子和同一时刻随机配对的直线插值相比。在我们检查的每一个时刻，它们都和新样本一样接近它：定理成立。<bookmark mark='b'/>但看看这些路径：它们是弯的，直度只有0.52。<bookmark mark='c'/>再看代价：这个流自己的映射，平均把点移动0.362，接近最优的0.329，远低于随机配对的3.52。它的动能是1.18，远高于它的代价：路径是弯的，速度也不均匀。流匹配不是最优传输；它是一个好的开始。"
+  },
+  "bbf34ca9f8c8": {
+   "scene": "Transport",
+   "en": "Albergo and Vanden-Eijnden's framing makes the family clear: a stochastic interpolant mixes noise and data with any two coefficient curves, plus optional noise. <bookmark mark='a'/> Flow matching's straight line is one choice; a diffusion model's quarter circle, cosine and sine, is another, and the same average-velocity argument turns either into a flow. <bookmark mark='b'/> Measured on our letters, the diffusion path's flow is, if anything, the straighter: 0.75 against 0.52. Straight lines between pairs do not make straight flows. <bookmark mark='c'/> The bends come from averaging over random pairings; to straighten the flow, change the pairing. That is the next chapter.",
+   "zh": "阿尔贝戈和范登-艾因登的框架，让这一族方法看得很清楚：随机插值用任意两条系数曲线混合噪声和数据，还可以再加上噪声。<bookmark mark='a'/>流匹配的直线是一种选择；扩散模型的四分之一圆，余弦和正弦，是另一种，而同样的平均速度论证，能把任何一种变成一个流。<bookmark mark='b'/>在我们的字母上测量，扩散路径的流反而更直一些：0.75对0.52。配对之间的直线，并不会造就笔直的流。<bookmark mark='c'/>弯曲来自对随机配对的平均；要把流拉直，就得改变配对。这是下一章的内容。"
+  },
+  "6851d45e28da": {
+   "scene": "Reflow",
+   "en": "Chapter eleven. Rectified flow and reflow.",
+   "zh": "第11章。整流流与重流。"
+  },
+  "dc4fb3f701b7": {
+   "scene": "Reflow",
+   "en": "Here is a flow-matching network learning our letters, from the same noise at each checkpoint. <bookmark mark='a'/> The loss falls fast and then stalls, well above zero. <bookmark mark='b'/> It can't reach zero: random pairs give every point many velocities, and the network can only learn their average. <bookmark mark='c'/> And its paths bend: straightness 0.52, in 3 seeds from 0.51 to 0.52.",
+   "zh": "这是一个流匹配网络正在学习我们的字母，每个检查点都从同一份噪声出发。<bookmark mark='a'/>损失降得很快，然后停住，远高于0。<bookmark mark='b'/>它到不了0：随机配对给每个点许多个速度，网络只能学到它们的平均。<bookmark mark='c'/>而且它的路径是弯的：直度0.52，3个随机种子从0.51到0.52。"
+  },
+  "6f939c189e83": {
+   "scene": "Reflow",
+   "en": "Xingchao Liu, Chengyue Gong and Qiang Liu called the fix reflow. <bookmark mark='a'/> Run the trained flow, and pair each noise point with where the flow actually takes it. Those pairs no longer cross one another, so train a second flow on them: the averaging that bent the paths has nothing left to average. <bookmark mark='b'/> They proved the new pairing never costs more to transport, for any convex cost, and that repeating it straightens the paths. <bookmark mark='c'/> On our letters, once, and twice.",
+   "zh": "刘星超、Chengyue Gong和刘强把这个修正叫作重流。<bookmark mark='a'/>运行训练好的流，把每个噪声点和流实际把它带去的地方配成一对。这些配对彼此不再相交，于是用它们训练第二个流：那个把路径弄弯的平均，已经没有东西可平均了。<bookmark mark='b'/>他们证明，对任何凸的代价，新的配对的运输代价都不会更高，而且重复下去，路径会越来越直。<bookmark mark='c'/>在我们的字母上，做一次，再做两次。"
+  },
+  "42d6a9726d6d": {
+   "scene": "Reflow",
+   "en": "Measured, at the same budget for every model, three seeds each: the distance from the data after a given number of Euler steps. <bookmark mark='a'/> Plain flow matching needs many steps: in one step its samples land 0.877 from the data, against 0.35 for the noise itself. <bookmark mark='b'/> After one reflow, one step is nearly as good as a hundred; the best single step is two reflows's, at 0.029, though the seeds overlap. <bookmark mark='c'/> Pairing each batch optimally, as Alexander Tong and colleagues and Aram-Alexandre Pooladian and colleagues proposed in 2023, gets most of the way with a single training run: 0.041 in one step. <bookmark mark='d'/> Straightness says why: one Euler step is exact on a straight path.",
+   "zh": "测量结果，每个模型的预算相同，各3个随机种子：用给定步数的欧拉法之后，与数据的距离。<bookmark mark='a'/>普通的流匹配需要很多步：只走一步时，它的样本离数据0.877，而噪声本身是0.35。<bookmark mark='b'/>重流一次之后，一步就几乎和100步一样好；最好的单步结果属于两次重流，距离0.029，不过随机种子之间互相重叠。<bookmark mark='c'/>像亚历山大·童和同事、阿拉姆-亚历山大·普拉迪安和同事在2023年提出的那样，在每个批次里做最优配对，只训练一次就走完了大部分路：一步0.041。<bookmark mark='d'/>直度说明了原因：在一条直的路径上，一个欧拉步就是精确的。"
+  },
+  "8a7ea5a5560b": {
+   "scene": "Reflow",
+   "en": "Here is what one step looks like on our letters, from each of the four. <bookmark mark='a'/> In practice: InstaFlow, in 2023, combined reflow with distillation to make Stable Diffusion draw in one step. <bookmark mark='b'/> Stable Diffusion 3 and FLUX one, in 2024, were trained as rectified flows, straight lines between noise and data, with the architecture that is Part 22's story.",
+   "zh": "这是在我们的字母上，四种方法各走一步的样子。<bookmark mark='a'/>实际应用中：2023年的InstaFlow把重流和蒸馏结合起来，让Stable Diffusion一步就能出图。<bookmark mark='b'/>2024年的Stable Diffusion 3和FLUX.1，都是作为整流流训练的，也就是噪声和数据之间的直线，至于它们的架构，那是第22部分的故事。"
+  },
+  "dab1798e8faf": {
+   "scene": "Distill",
+   "en": "Chapter twelve. Distillation.",
+   "zh": "第12章。蒸馏。"
+  },
+  "b4061980dee2": {
+   "scene": "Distill",
+   "en": "Solvers can only do so much: a curved path needs steps. Distillation changes the network instead. <bookmark mark='a'/> A slow teacher's results become the targets that a fast student learns to hit. <bookmark mark='b'/> Tim Salimans and Jonathan Ho's progressive distillation, in 2022: a student learns to do two of the teacher's steps in one; then it becomes the teacher, and the steps halve again. They went from thousands of steps to four, with an FID of 3.0 on CIFAR-10. <bookmark mark='c'/> Ours starts from our flow-matching teacher at 64 steps and halves 6 times, 1,000 training steps a round. After 6 halvings the one-step student lands 0.027 from the data, against the teacher's 0.025 with 64 steps.",
+   "zh": "求解器能做的有限：弯的路径就是需要步数。蒸馏改变的则是网络本身。<bookmark mark='a'/>一个慢的老师得出的结果，成为一个快的学生要命中的目标。<bookmark mark='b'/>蒂姆·萨利曼斯和乔纳森·何在2022年提出的渐进蒸馏：学生学着把老师的两步并成一步；然后它自己成为老师，步数再减半。他们从数千步一直减到4步，在CIFAR-10上FID为3.0。<bookmark mark='c'/>我们的版本从我们的流匹配老师的64步开始，减半6次，每一轮训练1000步。减半6次之后，一步的学生落在离数据0.027的地方，而老师用64步是0.025。"
+  },
+  "b228a8ebb9b6": {
+   "scene": "Distill",
+   "en": "Consistency models, from Yang Song, Prafulla Dhariwal, Mark Chen and Ilya Sutskever in 2023, skip the rounds. <bookmark mark='a'/> Teach a network to send every point on an ODE path straight to the path's end. Then any point, including pure noise, is one jump from a sample. <bookmark mark='b'/> Build in the boundary: at the data end, the jump is nothing. <bookmark mark='c'/> And train self-consistency: a point's jump must match the jump from one teacher step further along, with that target held fixed. <bookmark mark='d'/> Ours, distilled from the same teacher, one jump from the same noise during training: it ends 0.040 from the data, on average over 3 seeds. <bookmark mark='e'/> In 2024 Cheng Lu and Yang Song made the continuous-time version stable at scale: two steps, an FID of 1.88 on ImageNet at 512 pixels.",
+   "zh": "一致性模型，由宋飏、普拉富拉·达里瓦尔、陈马克和伊利亚·苏茨克维在2023年提出，省掉了一轮一轮的减半。<bookmark mark='a'/>教一个网络，把ODE路径上的每一个点，直接送到这条路径的终点。这样，任何一个点，包括纯噪声，离一个样本都只有一跳。<bookmark mark='b'/>把边界条件做进去：在数据那一端，这一跳什么都不用做。<bookmark mark='c'/>再训练自洽性：一个点的跳跃，必须和沿着老师的路径再走一步之后的跳跃一致，而那个目标是固定不动的。<bookmark mark='d'/>我们的版本，从同一个老师蒸馏出来，训练中从同一份噪声跳一次：最后离数据0.040，是3个随机种子的平均。<bookmark mark='e'/>2024年，路橙和宋飏让连续时间的版本在大规模下稳定下来：两步，在512像素的ImageNet上FID为1.88。"
+  },
+  "7ab587bf3aca": {
+   "scene": "Distill",
+   "en": "A third way matches distributions rather than paths. Tianwei Yin and colleagues' distribution matching distillation trains a one-step generator so that, blurred to every noise level, its samples look like the teacher's. <bookmark mark='a'/> The gradient of that KL divergence, taken through each sample, is the difference of two scores: the generator's own distribution's, minus the real one's. <bookmark mark='b'/> The real score is the teacher. The fake score comes from a second diffusion model, trained all along on the generator's latest samples. <bookmark mark='c'/> Ours: the generator starts as the teacher's single blurry step and is pushed, sample by sample, onto the letters: 0.049 from the data at the end, over 3 seeds. <bookmark mark='d'/> At scale, one step, an FID of 2.62 on small ImageNet images; with a GAN loss added, DMD2 reached 1.28.",
+   "zh": "第三种方法匹配的是分布，而不是路径。Tianwei Yin和同事的分布匹配蒸馏，训练一个一步的生成器，让它的样本在被模糊到每一个噪声水平时，都和老师的样本看起来一样。<bookmark mark='a'/>那个KL散度的梯度，沿着每个样本求出来，是两个分数函数之差：生成器自己分布的分数函数，减去真实分布的。<bookmark mark='b'/>真实的分数函数就是老师。假的那个，来自第二个扩散模型，它一直在生成器最新的样本上训练。<bookmark mark='c'/>我们的版本：生成器一开始就是老师那模糊的一步，然后被一个样本一个样本地推到字母上：最后离数据0.049，3个随机种子。<bookmark mark='d'/>大规模时，一步就在小尺寸的ImageNet图像上达到2.62的FID；再加上GAN损失，DMD2达到了1.28。"
+  },
+  "5405313bb4ac": {
+   "scene": "Distill",
+   "en": "Side by side, one step from the same noise. The teacher's own single step is a blur, 0.877 from the data. <bookmark mark='a'/> The best student here is progressive distillation, at 0.027, within 7 percent of the teacher's 64 steps. <bookmark mark='b'/> The budgets differ, as they do in practice, and on images the ranking depends on scale and care. Many of today's fastest image models are distilled; FLUX one's quickest version, for one, by an adversarial form of distillation, in one to four steps. All of them need a teacher. Can a model be one-step from scratch?",
+   "zh": "并排放在一起，都从同一份噪声出发走一步。老师自己的一步是一片模糊，离数据0.877。<bookmark mark='a'/>这里最好的学生是渐进蒸馏，距离0.027，和老师的64步相差不到7%。<bookmark mark='b'/>预算各不相同，实际中也是这样，而在图像上，排名取决于规模和细心程度。如今许多最快的图像模型都是蒸馏出来的；比如FLUX.1最快的版本，用的是一种对抗形式的蒸馏，1到4步就能出图。它们都需要一个老师。一个模型能不能从零开始就一步生成？"
+  },
+  "c6d746f7e758": {
+   "scene": "OneStep",
+   "en": "Chapter thirteen. One step from scratch.",
+   "zh": "第13章。从零开始的一步生成。"
+  },
+  "4aad37e33b8a": {
+   "scene": "OneStep",
+   "en": "In 2025 Zhengyang Geng, Kaiming He and colleagues trained a one-step model with no teacher at all. <bookmark mark='a'/> Here is one point's path under our flow model: it bends. Flow matching learns v, the velocity at each moment, so it has to take many small steps. <bookmark mark='b'/> MeanFlow learns u instead: the average velocity between two times s and t, like the average speed over a trip rather than the speedometer's reading. <bookmark mark='c'/> With it, a single jump from s to t lands on the path, however much it bends. <bookmark mark='d'/> To get u exactly you would integrate the velocity along the path: the slow work we wanted to avoid. The trick: write t minus s times u as z t minus z s, and differentiate in s. Out comes an identity: the average velocity is the velocity now, plus t minus s times how fast the average changes as the start moves along the path. <bookmark mark='e'/> That derivative costs one Jacobian-vector product, about one extra run of the network. <bookmark mark='f'/> So the network is trained to match the right-hand side, held fixed: no integral, and no teacher. On ImageNet at 256 pixels it reached an FID of 3.43 in one step.",
+   "zh": "2025年，耿正阳、何恺明和同事训练出了一个完全不需要老师的一步模型。<bookmark mark='a'/>这是在我们的流模型下，一个点的路径：它是弯的。流匹配学的是v，也就是每一刻的速度，所以它不得不迈很多小步。<bookmark mark='b'/>MeanFlow学的则是u：两个时刻s和t之间的平均速度，就像整段旅程的平均速度，而不是速度表的读数。<bookmark mark='c'/>有了它，从s到t一跳，就能落在路径上，不管路径弯得多厉害。<bookmark mark='d'/>要精确得到u，就得沿着路径把速度积分出来：这正是我们想避免的慢功夫。诀窍是：把t减s乘以u，写成z t减z s，再对s求导。得出一个恒等式：平均速度，等于此刻的速度，加上t减s，乘以起点沿路径移动时，平均速度变化得有多快。<bookmark mark='e'/>这个导数只需要一次雅可比-向量积，大约相当于多运行一次网络。<bookmark mark='f'/>所以网络被训练去匹配右边那一项，并把它固定住：没有积分，也没有老师。在256像素的ImageNet上，它一步就达到了3.43的FID。"
+  },
+  "4dc776bc30f1": {
+   "scene": "OneStep",
+   "en": "Here is ours learning: one jump from the same noise, at checkpoints during training. <bookmark mark='a'/> A year earlier, Kevin Frans and colleagues' shortcut models got there another way: the network is told the size of the jump, and trained so that one jump of size two d equals two jumps of size d, starting from plain flow matching at size zero. <bookmark mark='b'/> Watch both learn to land on the letters.",
+   "zh": "这是我们的版本在学习：训练中的各个检查点，都从同一份噪声跳一次。<bookmark mark='a'/>早一年，凯文·弗兰斯和同事的捷径模型走的是另一条路：告诉网络这一跳有多大，并训练它，让一次大小为2d的跳跃，等于两次大小为d的跳跃，从大小为0时的普通流匹配开始。<bookmark mark='b'/>看它们俩都学会落在字母上。"
+  },
+  "0411e33cc05b": {
+   "scene": "OneStep",
+   "en": "Here is every one-step model of this part, from the same noise, each network trained for about the same number of steps, 3 seeds each. <bookmark mark='a'/> The best single step is progressive distillation's, at 0.027, though its seeds overlap with the runner-up's, two reflows. <bookmark mark='b'/> Among the models with no teacher, the best is minibatch optimal-transport flow matching, at 0.041. <bookmark mark='c'/> Plain flow matching's single step, at 0.877, is the blur every method starts from.",
+   "zh": "这是本部分所有的一步模型，都从同一份噪声出发，每个网络的训练步数大致相同，各3个随机种子。<bookmark mark='a'/>最好的单步结果属于渐进蒸馏，距离0.027，不过它的随机种子和亚军两次重流的互相重叠。<bookmark mark='b'/>在没有老师的模型里，最好的是小批量最优传输流匹配，距离0.041。<bookmark mark='c'/>普通流匹配的一步，距离0.877，是每种方法的起点，那片模糊。"
+  },
+  "9f1a8364971d": {
+   "scene": "Guidance",
+   "en": "Chapter fourteen. Guidance.",
+   "zh": "第14章。引导。"
+  },
+  "f453408df080": {
+   "scene": "Guidance",
+   "en": "So far the model draws whatever it likes. To ask for something, tell it what you want: a caption, or here, which letter. <bookmark mark='a'/> We trained a flow model on two letters, A and I, telling it which letter each example came from, except one time in five, when it is told nothing. <bookmark mark='b'/> One network learns both: the letter it is asked for, and letters in general. <bookmark mark='c'/> Here it is learning, asked for an A at each checkpoint.",
+   "zh": "到目前为止，模型想画什么就画什么。要让它画某样东西，就告诉它你要什么：一段图片说明，或者在这里，是哪个字母。<bookmark mark='a'/>我们在A和I两个字母上训练了一个流模型，告诉它每个样本来自哪个字母，只是每5次里有1次，什么也不告诉它。<bookmark mark='b'/>一个网络同时学会了两样东西：要求它画的那个字母，以及一般意义上的字母。<bookmark mark='c'/>这是它在学习的样子，每个检查点都要它画一个A。"
+  },
+  "fcc523a63f03": {
+   "scene": "Guidance",
+   "en": "The first way to ask came from Bayes' rule. <bookmark mark='a'/> Take logs and gradients, and the score of the images that fit a label is the ordinary score plus the gradient of a classifier's log probability: the evidence, p of y, doesn't depend on x, so it disappears. <bookmark mark='b'/> Multiply the classifier's push by a weight w above one, and you sample from a sharpened version, the data reweighted towards what the classifier is surest of. <bookmark mark='c'/> Prafulla Dhariwal and Alex Nichol did this in 2021, with a classifier trained on noisy images, and beat GANs on ImageNet.",
+   "zh": "第一种提要求的方法来自贝叶斯公式。<bookmark mark='a'/>取对数再求梯度，符合一个标签的图像的分数函数，等于普通的分数函数，加上一个分类器对数概率的梯度：证据p of y不依赖于x，所以消失了。<bookmark mark='b'/>把分类器的推力乘以一个大于1的权重w，就是从一个锐化的版本里采样，数据被重新加权，偏向分类器最有把握的那些。<bookmark mark='c'/>普拉富拉·达里瓦尔和亚历克斯·尼科尔在2021年这样做了，用的是一个在带噪声图像上训练的分类器，在ImageNet上击败了GAN。"
+  },
+  "336f266eaca7": {
+   "scene": "Guidance",
+   "en": "Classifier guidance needs a second network. In 2022 Jonathan Ho and Tim Salimans noticed that the model told the label and the model told nothing already contain a classifier: <bookmark mark='a'/> the gradient of log p of y given x is their difference. <bookmark mark='b'/> So start from the unconditional direction and push along the difference, towards the conditional one and past it, by a weight w. <bookmark mark='c'/> One network, two evaluations per step, no classifier. This is classifier-free guidance, and it became the standard way for text-to-image models to follow their prompts.",
+   "zh": "分类器引导需要第二个网络。2022年，乔纳森·何和蒂姆·萨利曼斯注意到，被告知标签的模型和什么都没被告知的模型里，已经藏着一个分类器：<bookmark mark='a'/>给定x时y的对数概率的梯度，就是两者之差。<bookmark mark='b'/>所以从无条件的方向出发，沿着这个差往前推，推向条件的方向，再越过它，推多远由权重w决定。<bookmark mark='c'/>一个网络，每步两次调用，不需要分类器。这就是无分类器引导，它成了文生图模型遵循提示词的标准做法。"
+  },
+  "3f1d2fd35318": {
+   "scene": "Guidance",
+   "en": "Ask for an A, from the same starting noise, at three weights. <bookmark mark='a'/> At w equal to zero the request is ignored: 42 percent of the samples land on the A. <bookmark mark='b'/> At one, the plain conditional model: 92 percent. <bookmark mark='c'/> At four you overshoot on purpose: 100 percent, crowded towards the most A-like strokes, the spread shrinking from 0.93 to 0.80. <bookmark mark='d'/> Across the whole sweep, with 3 seeds: precision, the share of samples that look like real A's, peaks at w equal to 6. Recall, how much of the real A the samples cover, halves by w equal to 6: more faithful, less varied.",
+   "zh": "从同一份起始噪声出发，用三个权重要求它画一个A。<bookmark mark='a'/>w等于0时，要求被忽略了：42%的样本落在A上。<bookmark mark='b'/>等于1时，就是普通的条件模型：92%。<bookmark mark='c'/>到4时，你是故意推过头：100%，样本挤向最像A的那些笔画，散布从0.93缩小到0.80。<bookmark mark='d'/>在整个扫描中，用3个随机种子：精确率，也就是看起来像真实A的样本所占的比例，在w等于6时最高。召回率，也就是样本覆盖了多少真实的A，到w等于6时减半：更忠实，但变化更少。"
+  },
+  "0686a85492d5": {
+   "scene": "Guidance",
+   "en": "Guidance trades variety for fidelity. Plot every weight on a plane: recall across, precision up. <bookmark mark='a'/> Classifier-free guidance and classifier guidance trace similar curves. <bookmark mark='b'/> In 2024 Tero Karras and colleagues asked why push away from the unconditional model at all. Its fault is that it is worse: so guide instead with a smaller, less-trained version of the same conditional model. <bookmark mark='d'/> The push then corrects the model's own errors, without dragging it towards a different distribution. <bookmark mark='e'/> They set records on ImageNet: an FID of 1.01 at 64 pixels and 1.25 at 512. <bookmark mark='c'/> Our weak model is narrower and trained an eighth as long. On our letters the best balance of fidelity and variety is autoguidance's, at w equal to 1.5.",
+   "zh": "引导是用多样性换忠实度。把每个权重画在一个平面上：横轴是召回率，纵轴是精确率。<bookmark mark='a'/>无分类器引导和分类器引导画出的曲线很相似。<bookmark mark='b'/>2024年，泰罗·卡拉斯和同事问：为什么非得远离无条件模型？它的毛病在于它更差：那就改用同一个条件模型的一个更小、训练得更少的版本来引导。<bookmark mark='d'/>这样的推力纠正的是模型自己的错误，而不会把它拖向另一个分布。<bookmark mark='e'/>他们在ImageNet上创下纪录：64像素时FID为1.01，512像素时为1.25。<bookmark mark='c'/>我们的弱模型更窄，训练时间只有八分之一。在我们的字母上，忠实度和多样性之间最好的平衡属于自引导，在w等于1.5时。"
+  },
+  "2ebe56b97437": {
+   "scene": "Pictures",
+   "en": "Chapter fifteen. From points to pictures.",
+   "zh": "第15章。从点到图片。"
+  },
+  "72bc9929ae51": {
+   "scene": "Pictures",
+   "en": "Points in a plane were a warm-up. A picture is also a point: here, capital letters from many fonts, 20 by 20 pixels. <bookmark mark='a'/> Each picture is a list of 400 numbers, one point in a space of 400 dimensions. <bookmark mark='b'/> The model is the flow matching we trained on the letters A and I, with more numbers in and out.",
+   "zh": "平面上的点只是热身。一张图片也是一个点：这里是来自许多字体的大写字母，20乘20像素。<bookmark mark='a'/>每张图片是一串400个数，也就是400维空间里的一个点。<bookmark mark='b'/>模型就是我们在A和I字母上训练的那种流匹配，只是进出的数多了。"
+  },
+  "ff9e8a0e52d4": {
+   "scene": "Pictures",
+   "en": "Here it is learning: sixteen pictures from the same noise at each checkpoint. <bookmark mark='a'/> At first, static. <bookmark mark='b'/> Then grey blobs where letters tend to be, <bookmark mark='c'/> then shapes, and finally letters. <bookmark mark='d'/> And here is one picture being born: static, then a blur, then a shape, then a letter.",
+   "zh": "这是它在学习的样子：每个检查点，都从同一份噪声画出16张图。<bookmark mark='a'/>一开始，是雪花噪点。<bookmark mark='b'/>然后，在字母通常出现的地方出现灰色的团块，<bookmark mark='c'/>然后是形状，最后是字母。<bookmark mark='d'/>这是一张图片诞生的过程：雪花噪点，然后一片模糊，然后一个形状，然后一个字母。"
+  },
+  "5a58eb76f933": {
+   "scene": "Pictures",
+   "en": "A batch of samples: rough, speckled, mostly recognizable capitals in a mix of styles. <bookmark mark='a'/> Are they copies? Each sample is, on average, 0.18 from its nearest training picture; a training picture is 0.13 from its nearest neighbour. So the samples are further from the training set than the training pictures are from each other: these are new pictures, not copies.",
+   "zh": "一批样本：粗糙、有斑点，大多是认得出来的大写字母，风格各异。<bookmark mark='a'/>它们是复制品吗？平均来看，每个样本离它最近的训练图片0.18；而一张训练图片离它最近的另一张是0.13。所以这些样本离训练集的距离，比训练图片彼此之间的距离还远：它们是新的图片，不是复制品。"
+  },
+  "d8a1d66c41a8": {
+   "scene": "Pictures",
+   "en": "Real images have millions of numbers, and denoising every one of them is expensive. In 2022 Robin Rombach, Patrick Esser, Bjorn Ommer and colleagues ran diffusion in a compressed space instead: an autoencoder turns a picture into a small grid of latents, the diffusion model works there, and a decoder turns the result back into pixels, 48 times fewer numbers, with text steering through cross-attention. <bookmark mark='a'/> Released with open weights that August, it became Stable Diffusion, the same year as OpenAI's DALL-E 2 and Google's Imagen. <bookmark mark='b'/> Then William Peebles and Saining Xie replaced the denoiser's convolutions with a transformer, <bookmark mark='c'/> and by 2024 diffusion and flow transformers were drawing video, OpenAI's Sora, and pictures at twelve billion parameters. <bookmark mark='d'/> By 2025 Google's Veo 3 generated video and its sound together, by latent diffusion. <bookmark mark='e'/> The encoders, the transformers and the video models are the next part.",
+   "zh": "真实的图像有数百万个数，给每一个都去噪代价很高。2022年，罗宾·龙巴赫、帕特里克·埃塞尔、比约恩·奥默和同事改在一个压缩的空间里做扩散：一个自编码器把图片变成一小块潜变量网格，扩散模型在那里工作，再由解码器把结果变回像素，数少了48倍，文字则通过交叉注意力来引导。<bookmark mark='a'/>那年8月公开权重之后，它成了Stable Diffusion，和OpenAI的DALL-E 2、Google的Imagen同一年。<bookmark mark='b'/>接着，威廉·皮布尔斯和谢赛宁把去噪器的卷积换成了Transformer，<bookmark mark='c'/>到2024年，扩散和流的Transformer已经在生成视频，比如OpenAI的Sora，还有120亿参数的图像模型。<bookmark mark='d'/>到2025年，Google的Veo 3用潜空间扩散，把视频和它的声音一起生成出来。<bookmark mark='e'/>编码器、Transformer和视频模型，是下一部分的内容。"
+  },
+  "d1dbc2d89148": {
+   "scene": "Discrete",
+   "en": "Chapter sixteen. Diffusion for discrete data.",
+   "zh": "第16章。离散数据上的扩散。"
+  },
+  "627878cbf3ba": {
+   "scene": "Discrete",
+   "en": "Text is made of symbols, not numbers, so Gaussian noise doesn't fit. In 2021 Jacob Austin and colleagues at Google generalized diffusion to symbols: <bookmark mark='a'/> each step replaces a symbol at random, according to a matrix of probabilities, and the matrices multiply into a closed form, just as the Gaussians did. <bookmark mark='b'/> Two choices matter. Swap a letter for a random one, <bookmark mark='c'/> or blank it out with a special mask symbol, which then stays blank: absorbing noise. The blanks won. At the end, everything is blank, and the reverse process fills the blanks in.",
+   "zh": "文本是由符号构成的，不是由数构成的，所以高斯噪声用不上。2021年，Google的雅各布·奥斯汀和同事把扩散推广到符号上：<bookmark mark='a'/>每一步按照一个概率矩阵，随机替换一个符号，这些矩阵相乘得到一个闭式解，就像那些高斯分布一样。<bookmark mark='b'/>有两种选择很重要。把一个字母换成随机的另一个，<bookmark mark='c'/>或者用一个特殊的掩码符号把它涂掉，而它之后就一直是空白：吸收态噪声。空白赢了。到最后，一切都是空白，反向过程则把空白填上。"
+  },
+  "8fbe71c65373": {
+   "scene": "Discrete",
+   "en": "With blanks, the bound becomes remarkably simple. Each letter is blank with probability t. <bookmark mark='a'/> Going back from time t to an earlier time s, a blank either stays blank, with probability s over t, or reveals its letter. <bookmark mark='b'/> The model's step back can differ only in which letter it reveals, so each KL term is the reveal probability times the cross-entropy of guessing the letter. <bookmark mark='c'/> Add up the steps, and the bound is an integral: one over t times the cross-entropy of guessing every blank from the letters still showing. Three groups derived this in 2024. <bookmark mark='d'/> One more change of variable, from the time to the number of blanks k, turns the one over t into one over k: the bound is an average, over every number of blanks, of the loss per blank. <bookmark mark='e'/> That is an autoregressive model's loss, averaged over every order in which the letters could be revealed.",
+   "zh": "有了空白，这个下界变得出奇地简单。每个字母以概率t成为空白。<bookmark mark='a'/>从时刻t往回走到更早的时刻s，一个空白要么保持空白，概率是s除以t，要么露出它的字母。<bookmark mark='b'/>模型往回走的一步，只可能在露出哪个字母上有所不同，所以每一项KL，都是露出的概率乘以猜这个字母的交叉熵。<bookmark mark='c'/>把各步加起来，下界就成了一个积分：t分之1，乘以根据仍然可见的字母猜出每一个空白的交叉熵。2024年，三个团队推导出了这一点。<bookmark mark='d'/>再换一次变量，从时间换成空白的个数k，t分之1就变成了k分之1：这个下界，是对每一种空白个数，求每个空白的平均损失，再取平均。<bookmark mark='e'/>这就是一个自回归模型的损失，在字母可能被揭开的每一种顺序上取平均。"
+  },
+  "f930c0a184f1": {
+   "scene": "Discrete",
+   "en": "Check it where everything can be enumerated: strings of 4 letters from a, b and c, drawn from a Markov chain, every probability known. Three models predict the blanks: <bookmark mark='m'/> the exact conditionals, <bookmark mark='n'/> the same blurred towards uniform, <bookmark mark='o'/> and one that ignores the context. <bookmark mark='a'/> The bound of a chain with T steps, computed exactly: with one step, the exact model's bound is 1.5348 bits per letter; with 1,024 steps, 1.1183, settling onto the integral, the dashed lines. <bookmark mark='b'/> The integral, the weighted cross-entropy, and the average over every order of revealing agree to 12 decimal places, for every model. <bookmark mark='c'/> And with the exact conditionals, the bound equals the true entropy: it is tight. A model that learns the conditionals perfectly pays nothing for the bound.",
+   "zh": "在一切都能枚举的地方检验它：由a、b、c组成的4个字母的字符串，来自一个马尔可夫链，每个概率都已知。三个模型来预测空白：<bookmark mark='m'/>精确的条件概率，<bookmark mark='n'/>同样的条件概率但向均匀分布模糊了一些，<bookmark mark='o'/>以及一个忽略上下文的模型。<bookmark mark='a'/>T步链的下界，精确计算：只有一步时，精确模型的下界是每个字母1.5348比特；1024步时是1.1183，逐渐落到那个积分上，也就是那些虚线。<bookmark mark='b'/>积分、加权交叉熵，以及对每一种揭开顺序的平均，对每个模型都在小数点后12位上一致。<bookmark mark='c'/>而用精确的条件概率时，这个下界等于真实的熵：它是紧的。一个把条件概率学得完美的模型，不会为这个下界付出任何代价。"
+  },
+  "2ac8374b67d9": {
+   "scene": "Discrete",
+   "en": "The idea has a lineage. In 2014 Benigno Uria, Iain Murray and Hugo Larochelle trained one network for every order of an autoregressive model; <bookmark mark='a'/> in 2022 Emiel Hoogeboom and colleagues connected such any-order models to diffusion. <bookmark mark='b'/> In 2024 Aaron Lou, Chenlin Meng and Stefano Ermon defined a score for discrete data, ratios of probabilities, and won a best-paper award at ICML; <bookmark mark='c'/> the same year, two groups, Subham Sahoo's and Jiaxin Shi's, showed separately that plain masked diffusion, the weighted cross-entropy, does as well, <bookmark mark='d'/> and Jingyang Ou and colleagues that the model doesn't even need to be told the time. <bookmark mark='e'/> Which is what made the next step possible: language models trained this way, at scale.",
+   "zh": "这个想法有它的谱系。2014年，贝尼尼奥·乌里亚、伊恩·默里和雨果·拉罗谢尔，为一个自回归模型的每一种顺序训练了同一个网络；<bookmark mark='a'/>2022年，埃米尔·胡格布姆和同事把这类任意顺序的模型和扩散联系了起来。<bookmark mark='b'/>2024年，Aaron Lou、孟辰霖和斯特凡诺·埃尔蒙为离散数据定义了一种分数函数，也就是概率之比，并获得了ICML的最佳论文奖；<bookmark mark='c'/>同一年，两个团队，Subham Sahoo的和Jiaxin Shi的，分别表明，普通的掩码扩散，也就是那个加权交叉熵，效果一样好，<bookmark mark='d'/>而Jingyang Ou和同事则表明，模型甚至不需要知道时间。<bookmark mark='e'/>正是这些，让下一步成为可能：用这种方法大规模训练的语言模型。"
+  },
+  "a483e66b498e": {
+   "scene": "TextLM",
+   "en": "Chapter seventeen. Diffusion language models.",
+   "zh": "第17章。扩散语言模型。"
+  },
+  "50db4de24a19": {
+   "scene": "TextLM",
+   "en": "In February 2025 Shen Nie, Chongxuan Li and colleagues trained LLaDA, an eight-billion-parameter language model, entirely by masked diffusion: two point three trillion tokens, every training example a passage with a random fraction of it blanked. It was competitive with LLaMA 3 of the same size, and beat GPT-4o at completing a poem backwards, line before line, a task left-to-right models find hard. <bookmark mark='a'/> We built a pair to compare: a masked-diffusion model and an autoregressive model of exactly the same size, trained on the novels with the same initial weights, the same batches and the same number of steps. The only differences are the attention mask and the task.",
+   "zh": "2025年2月，聂燊、李崇轩和同事训练了LLaDA，一个80亿参数的语言模型，完全用掩码扩散训练：2.3万亿个词元，每个训练样本都是一段被随机涂掉一部分的文字。它和同样规模的LLaMA 3不相上下，还在倒着补全一首诗、也就是根据下一句写出上一句的任务上胜过了GPT-4o，这是从左往右的模型很难做到的。<bookmark mark='a'/>我们造了一对模型来比较：一个掩码扩散模型和一个自回归模型，大小完全一样，在小说上训练，初始权重、批次和步数都相同。唯一的区别是注意力掩码和任务。"
+  },
+  "6e00b03fef3a": {
+   "scene": "TextLM",
+   "en": "Here they are learning. On held-out text, the autoregressive model's exact bits per character, and the diffusion model's bound, both falling. <bookmark mark='a'/> Above, the diffusion model fills in a line of the passage with half its characters blanked, at each checkpoint; below, the other model writes on its own. <bookmark mark='b'/> By the end the diffusion model gets 47 percent of the blanks right. Its bound ends at 2.79 bits per character; the autoregressive model at 1.81, 0.98 lower.",
+   "zh": "这是它们在学习的样子。在保留的文本上，自回归模型精确的每字符比特数，和扩散模型的下界，都在下降。<bookmark mark='a'/>上面，扩散模型在每个检查点，填补测试段落里被涂掉一半字符的一行；下面，另一个模型自己在写。<bookmark mark='b'/>到最后，扩散模型猜对了47%的空白。它的下界最后是每字符2.79比特；自回归模型是1.81，低0.98。"
+  },
+  "03dbe82792c8": {
+   "scene": "TextLM",
+   "en": "And here is ours writing 64 characters, from all blanks, in 16 rounds. <bookmark mark='a'/> Each round it guesses every blank, keeps the guesses it is surest of, and leaves the rest blank, LLaDA's rule. <bookmark mark='b'/> Words appear wherever the model is confident first, and the rest fills in around them: written all at once, then refined, rather than left to right.",
+   "zh": "这是我们的模型在写64个字符，从全是空白开始，分16轮。<bookmark mark='a'/>每一轮，它猜出每一个空白，保留它最有把握的那些猜测，其余的仍然留空，这是LLaDA的规则。<bookmark mark='b'/>词语哪里先有把握，就先出现在哪里，其余的再围绕着它们填上：先一下子全部写出，再慢慢修改，而不是从左往右写。"
+  },
+  "0c504d012994": {
+   "scene": "TextLM",
+   "en": "At equal size, data and steps, on held-out blocks of 64 characters, the autoregressive model wins in both seeds: the bound is 2.780 bits per character against 1.980. <bookmark mark='a'/> Three different estimates of the bound, which the derivation says are equal in expectation, agree within their error bars. <bookmark mark='b'/> Read strictly left to right, the diffusion model scores 2.725, better than its own bound: most orders of revealing are harder than reading in order, and the bound pays for all of them. <bookmark mark='c'/> The gap is not the end of the story: in 2025 Mihir Prabhudesai and colleagues found that when data is scarce and must be repeated for many epochs, diffusion models keep improving after autoregressive ones overfit.",
+   "zh": "在同样的规模、数据和步数下，在64个字符的保留文本块上，两个随机种子里都是自回归模型赢：下界是每字符2.780比特，对比1.980。<bookmark mark='a'/>对这个下界的三种不同估计，按推导它们的期望是相等的，在误差范围内一致。<bookmark mark='b'/>严格地从左往右读，扩散模型的得分是2.725，比它自己的下界还好：大多数揭开顺序都比按顺序读更难，而下界要为所有顺序付账。<bookmark mark='c'/>这个差距并不是故事的结局：2025年，米希尔·普拉布德赛和同事发现，当数据稀缺、必须重复很多个轮次时，扩散模型在自回归模型过拟合之后，仍然在进步。"
+  },
+  "c96bf4f21365": {
+   "scene": "TextLM",
+   "en": "On the scoreboard's passage, in blocks of 64 characters: the masked-diffusion model's bound, 2.96 bits per character, give or take 0.02, and the autoregressive twin, 2.23. <bookmark mark='a'/> Part 13's transformer, with 4 times the context, is at 2.00. A bound is an upper limit: the diffusion model's true code length could only be lower.",
+   "zh": "在记分牌的测试段落上，按64个字符一块：掩码扩散模型的下界是每字符2.96比特，误差大约0.02，自回归的孪生模型是2.23。<bookmark mark='a'/>第13部分的Transformer，上下文是它们的4倍，得分2.00。下界是一个上限：扩散模型真正的编码长度只会更低。"
+  },
+  "93b54fee1bba": {
+   "scene": "TextLM",
+   "en": "Writing 64 characters one round per character costs 64 network evaluations, like an autoregressive model. The promise of diffusion is fewer rounds, several characters each. How much does it cost in quality? Judge each sample by an autoregressive model of the other seed: lower reads more like the novels; real text scores 1.89. <bookmark mark='a'/> With 64 rounds, 2.17; with eight, 3.67; all at once, 8.32: guessing many characters independently, in one go, makes them disagree with each other. <bookmark mark='b'/> Revealing the surest guesses first reads better than revealing at random, 2.17 against 4.04 bits, though at random is what the bound describes. <bookmark mark='c'/> Writing in four blocks, left to right, with sixteen rounds in all, scores 4.15, against 2.85 for the whole string at once.",
+   "zh": "每轮写一个字符，写64个字符就要64次网络调用，和自回归模型一样。扩散的承诺是轮数更少，每轮写好几个字符。这在质量上要付出多少代价？用另一个随机种子的自回归模型来评判每个样本：越低，读起来越像那些小说；真实的文本得分1.89。<bookmark mark='a'/>用64轮时是2.17；用8轮时是3.67；一次全部写出时是8.32：一下子独立地猜许多个字符，会让它们彼此对不上。<bookmark mark='b'/>先揭开最有把握的猜测，读起来比随机揭开更好，2.17比特对4.04比特，尽管下界描述的是随机揭开。<bookmark mark='c'/>分成4块从左往右写，总共16轮，得分4.15，而整串一次性写是2.85。"
+  },
+  "a67bd33c9491": {
+   "scene": "TextLM",
+   "en": "Fixed-length writing has a cost: nothing can be cached, and the length is set in advance. Marianne Arriola and colleagues' block diffusion splits the difference: blocks left to right, like an autoregressive model, diffusion inside each block. <bookmark mark='a'/> In 2025 Inception Labs launched Mercury, billed as the first commercial diffusion language models, at over a thousand tokens a second on one GPU; <bookmark mark='b'/> Google's Gemini Diffusion reported nearly fifteen hundred, at about the coding quality of a small Gemini; <bookmark mark='c'/> Fast-dLLM added caching and confident parallel decoding to open models, up to twenty-seven times faster; <bookmark mark='d'/> LLaDA two point oh reached a hundred billion parameters by converting an autoregressive model. <bookmark mark='e'/> And in June 2026 Google released DiffusionGemma with open weights: 256 tokens a block, over a thousand tokens a second on one GPU, and, in Google's own words, lower in quality than the standard Gemma 4. The trade is speed for a little quality, the one our two small models measured.",
+   "zh": "定长的写法有代价：什么都没法缓存，长度也得事先定好。玛丽安娜·阿里奥拉和同事的块扩散取了个折中：块与块之间从左往右，像自回归模型，每块之内则用扩散。<bookmark mark='a'/>2025年，Inception Labs推出了Mercury，号称第一个商用的扩散语言模型，在一块GPU上每秒能写1000多个词元；<bookmark mark='b'/>Google的Gemini Diffusion报告的速度接近每秒1500个，代码能力大约相当于一个小号的Gemini；<bookmark mark='c'/>Fast-dLLM给开放的模型加上了缓存和有把握时的并行解码，最多快了27倍；<bookmark mark='d'/>LLaDA 2.0通过改造一个自回归模型，达到了1000亿参数。<bookmark mark='e'/>2026年6月，Google发布了开放权重的DiffusionGemma：每块256个词元，在一块GPU上每秒超过1000个词元，而且按Google自己的说法，质量低于标准的Gemma 4。这个交换是用一点质量换速度，也正是我们那两个小模型测出来的。"
+  },
+  "7945764c2ea4": {
+   "scene": "Outro",
+   "en": "Let's take stock. A diffusion model destroys data slowly with noise, and learns to undo it. The bound that trains it is a sum of noise-guessing errors, and the best noise guess is the score, by Tweedie's formula; denoising score matching learns it by plain regression. Time can be run back with a stochastic equation or a deterministic one; DDPM and DDIM discretize them, and EDM and DPM-Solver solve them in ten to thirty steps. Flow matching learns straight-line velocities, reflow straightens the paths, and distillation or MeanFlow reaches a single step. Guidance turns a request into a push. The same machinery draws pictures, and, with blanks for noise, writes text.",
+   "zh": "我们来盘点一下。扩散模型用噪声慢慢地摧毁数据，再学会把它复原。训练它的那个下界，是一串猜噪声误差的和，而由特威迪公式，最好的噪声猜测就是分数函数；去噪分数匹配用普通的回归把它学出来。时间可以用随机方程或确定性方程倒着运行；DDPM和DDIM把它们离散化，EDM和DPM-Solver用10到30步把它们解出来。流匹配学的是沿直线的速度，重流把路径拉直，蒸馏或MeanFlow则做到了一步。引导把一个要求变成一股推力。同一套机制能画出图片，而用空白当作噪声，还能写出文字。"
+  },
+  "e5f43e659dbf": {
+   "scene": "Outro",
+   "en": "This machinery comes back. Next time it meets real images and video, in compressed latent spaces with transformers as the denoisers. Speech and sound generators use it, in Part 23; denoising as a way to learn features returns in Part 24; diffusion builds molecules and protein structures in Part 25; world models imagine the next frame with it in Part 29; and making it fast is part of Part 19's story.",
+   "zh": "这套机制还会回来。下一次，它要面对真实的图像和视频，在压缩的潜空间里进行，并用Transformer做去噪器。语音和声音的生成器也用它，那是第23部分；把去噪当作学习特征的一种方法，会在第24部分回来；扩散能构建分子和蛋白质结构，那是第25部分；世界模型用它来想象下一帧画面，那是第29部分；而让它变快，是第19部分故事的一部分。"
+  },
+  "c5aaffdfe3e7": {
+   "scene": "Outro",
+   "en": "Here are six problems, from the forward process's closed form to the masked bound. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有6道习题，从前向过程的闭式解，到掩码扩散的下界。请在这里暂停，动手做一做；完整的解答在本部分的讲义里。"
+  },
+  "8c0b5f3ee662": {
+   "scene": "Outro",
+   "en": "Next time: images, video and 3D. A picture is cut into patches, and the patches become tokens, <bookmark mark='a'/> so the transformers of Part 13 can look at pictures, and denoise them.",
+   "zh": "下一次：图像、视频与3D。一张图片被切成一个个图像块，这些图像块变成词元，<bookmark mark='a'/>这样，第13部分的Transformer就能看图片，并给它们去噪。"
+  },
+  "c4852ec14733": {
+   "scene": "Outro",
+   "en": "To go deeper, Simon Prince's Understanding Deep Learning covers diffusion clearly and for free, and Sander Dieleman's blog posts on diffusion are a wonderful companion. Thanks for watching, and see you in Part 22.",
+   "zh": "想深入下去，西蒙·普林斯的《理解深度学习》把扩散讲得很清楚，而且免费；桑德·迪勒曼关于扩散的那些博客文章，也是绝佳的参考读物。感谢观看，我们第22部分再见。"
+  }
+ },
+ "title_en": "AI, Built: Part 21, Diffusion and Flow",
+ "chapters_en": {
+  "Hook": "From noise",
+  "Forward": "1. Destroying data slowly",
+  "ELBO": "2. The bound, and guessing the noise",
+  "Tweedie": "3. Tweedie's formula",
+  "DSM": "4. Denoising score matching",
+  "SDE": "5. Running time backwards",
+  "Samplers": "6. DDPM and DDIM",
+  "Schedules": "7. Noise schedules",
+  "EDM": "8. EDM: preconditioning and Heun",
+  "DPMSolver": "9. DPM-Solver: an exact linear part",
+  "Transport": "10. Optimal transport and flow matching",
+  "Reflow": "11. Rectified flow and reflow",
+  "Distill": "12. Distillation",
+  "OneStep": "13. One step from scratch",
+  "Guidance": "14. Guidance",
+  "Pictures": "15. From points to pictures",
+  "Discrete": "16. Diffusion for discrete data",
+  "TextLM": "17. Diffusion language models",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}

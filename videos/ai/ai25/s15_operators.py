@@ -167,18 +167,23 @@ class Operators(VoiceoverScene):
         R = list(fo["test_res"])
         lx = np.log2(R)
         E = {k: np.array([[fo[f"{k}_s{s}"]["err"][str(r)] for s in (0, 1, 2)] for r in R]) for k in ("fno", "cnn")}
-        top = float(np.ceil(max(E["fno"].max(), min(E["cnn"].max(), 1.0)) * 10) / 10 + 0.05)
-        g = axes([lx[0], lx[-1]], [0, top], x_length=6.0, y_length=3.6, xlabel=r"points the test is sampled at",
-                 ylabel=r"relative error", xticks=list(lx), yticks=[0, top], xfmt=lambda v: f"{2 ** v:.0f}",
-                 yfmt=lambda v: f"{v:.2f}", center=[-2.6, -0.1, 0])
+        # a log scale: the operator's error is a fraction of a percent, the CNN's off its grid tens of percent
+        lo_, top = -3.0, 0.0
+        LE = {k: np.log10(np.clip(v, 10 ** lo_, 1.0)) for k, v in E.items()}
+        g = axes([lx[0], lx[-1]], [lo_, top], x_length=6.0, y_length=3.6, xlabel=r"points the test is sampled at",
+                 ylabel=r"relative error \ (log scale)", xticks=list(lx), yticks=[-3, -2, -1, 0],
+                 xfmt=lambda v: f"{2 ** v:.0f}", yfmt=lambda v: {-3: r"0.1\%", -2: r"1\%", -1: r"10\%",
+                                                                 0: r"100\%"}[int(round(v))],
+                 center=[-2.6, -0.1, 0])
         train_x = np.log2(int(fo["res"]))
-        tl = DashedLine(g.ax.c2p(train_x, 0), g.ax.c2p(train_x, top), color=GREY_C)
-        tlab = label(r"trained here", font_size=18, color=GREY_C).next_to(tl, UP, buff=0.05)
+        tl = DashedLine(g.ax.c2p(train_x, lo_), g.ax.c2p(train_x, top), color=GREY_C)
+        tlab = label(r"trained here", font_size=18, color=GREY_C).next_to(g.ax.c2p(train_x, top), RIGHT, buff=0.1)
+        tlab.shift(DOWN * 0.15)
         objs = {}
         for k in ("fno", "cnn"):
-            m = np.minimum(E[k].mean(1), top)
-            objs[k] = VGroup(band(g.ax, lx, np.minimum(E[k].min(1), top), np.minimum(E[k].max(1), top),
-                                  KIND_COLOR[k], 0.22), curve(g.ax, lx, m, KIND_COLOR[k], 3.5),
+            m = np.log10(np.clip(E[k].mean(1), 10 ** lo_, 1.0))
+            objs[k] = VGroup(band(g.ax, lx, LE[k].min(1), LE[k].max(1), KIND_COLOR[k], 0.22),
+                             curve(g.ax, lx, m, KIND_COLOR[k], 3.5),
                              VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=KIND_COLOR[k]) for a, b in zip(lx, m)]))
         lg = legend([(STRUCT, r"Fourier neural operator"), (PLAIN, r"CNN, \ dilated, \ the same layout")],
                     font_size=20)

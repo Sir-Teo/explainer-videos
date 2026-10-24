@@ -25,30 +25,30 @@ class Evoformer(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def overview(self):
-        b = [node_box(r"sequence", GREY_A, font_size=24),
-             node_box(r"related sequences \ (MSA) \ + templates", MSA_C, font_size=22),
-             node_box(r"Evoformer \ $\times 48$", PAIR_C, font_size=26, height=1.0),
-             node_box(r"structure module \ $\times 8$", STRUCT, font_size=24, height=1.0),
-             node_box(r"3D coordinates \ + confidence", TRUE_C, font_size=22)]
-        b[0].move_to([-5.6, 1.6, 0])
-        b[1].move_to([-5.0, -0.2, 0])
-        b[2].move_to([-1.2, 0.7, 0])
-        b[3].move_to([2.5, 0.7, 0])
-        b[4].move_to([5.6, 0.7, 0])
-        arr = VGroup(Arrow(b[0].get_bottom(), b[1].get_top(), buff=0.08, color=GREY_B, stroke_width=2.5),
-                     Arrow(b[1].get_right(), b[2].get_left(), buff=0.08, color=GREY_B, stroke_width=2.5),
-                     Arrow(b[2].get_right(), b[3].get_left(), buff=0.08, color=GREY_B, stroke_width=2.5),
-                     Arrow(b[3].get_right(), b[4].get_left(), buff=0.08, color=GREY_B, stroke_width=2.5))
-        rec = CurvedArrow(b[4].get_bottom() + DOWN * 0.05, b[2].get_bottom() + DOWN * 0.05, angle=-0.7,
-                          color=PRED_C, stroke_width=2.5, tip_length=0.18)
-        rl = label(r"recycling: \ the output goes round again", font_size=22, color=PRED_C).next_to(rec, DOWN,
+        b = [node_box(r"sequence", GREY_A, font_size=28),
+             node_box(r"related sequences \ (MSA) \ + templates", MSA_C, font_size=26),
+             node_box(r"Evoformer \ $\times 48$", PAIR_C, font_size=30, height=1.1),
+             node_box(r"structure module \ $\times 8$", STRUCT, font_size=28, height=1.1),
+             node_box(r"3D coordinates \ + confidence", TRUE_C, font_size=26, height=1.1)]
+        b[0].move_to([-5.0, 2.2, 0])
+        b[1].move_to([-0.4, 2.2, 0])
+        b[2].move_to([-4.6, 0.1, 0])
+        b[3].move_to([-0.4, 0.1, 0])
+        b[4].move_to([4.3, 0.1, 0])
+        arr = VGroup(Arrow(b[0].get_right(), b[1].get_left(), buff=0.1, color=GREY_B, stroke_width=3),
+                     Arrow(b[1].get_bottom(), b[2].get_top(), buff=0.1, color=GREY_B, stroke_width=3),
+                     Arrow(b[2].get_right(), b[3].get_left(), buff=0.1, color=GREY_B, stroke_width=3),
+                     Arrow(b[3].get_right(), b[4].get_left(), buff=0.1, color=GREY_B, stroke_width=3))
+        rec = CurvedArrow(b[4].get_bottom() + DOWN * 0.05, b[2].get_bottom() + DOWN * 0.05, angle=-0.5,
+                          color=PRED_C, stroke_width=3, tip_length=0.2)
+        rl = label(r"recycling: \ the output goes round again", font_size=24, color=PRED_C).next_to(rec, DOWN,
                                                                                                 buff=0.1)
         reps = VGroup(
             label(r"MSA representation: \ $s$ sequences $\times$ $r$ residues $\times$ $c$ channels", font_size=22,
                   color=MSA_C),
             label(r"pair representation: \ $r \times r \times c$: \ a vector for every pair of residues", font_size=22,
                   color=PAIR_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)
         sch = note(r"schematic, \ after Jumper et al.\ (2021)", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
             "AlphaFold 2, which John Jumper and colleagues at DeepMind entered in CASP14 in 2020, works in two "
@@ -141,12 +141,11 @@ class Evoformer(VoiceoverScene):
         n = 10
         cell = 0.24
         grid = VGroup(*[Square(cell, stroke_width=0.6, stroke_color=GREY_D, fill_color="#121722", fill_opacity=1)
-                        for _ in range(n * n)]).arrange_in_grid(n, n, buff=0.02).move_to([2.3, -1.6, 0])
+                        for _ in range(n * n)]).arrange_in_grid(n, n, buff=0.02).move_to([1.4, -1.95, 0])
         i_, j_ = 2, 6
         tgt = grid[i_ * n + j_].copy().set_fill(PAIR_C, 0.9)
-        att = label(r"plus triangle attention: \ pair $ij$ attends over the pairs $ik$", font_size=20, color=GREY_A)
-        att.next_to(grid, RIGHT, buff=0.3)
-        att.width = min(att.width, 2.6)
+        att = label(r"plus triangle attention: \\ pair $ij$ attends \\ over the pairs $ik$", font_size=24, color=GREY_A)
+        att.next_to(grid, RIGHT, buff=0.4)
         link = label(r"a pair, \ updated through a third node: \ chapter 5's network that saw triangles",
                      font_size=22, color=STRUCT).to_edge(DOWN, buff=0.3)
         with self.voiceover(
@@ -328,7 +327,7 @@ class Evoformer(VoiceoverScene):
         hc = history_card(2020, r"John Moult, \ CASP's co-founder", r"``We have been stuck on this one problem -- how do "
                           r"proteins fold up -- for nearly 50 years.'' \ CASP's organizers recognized AlphaFold 2 as a "
                           r"solution to it, \ for single protein chains", width=8.4, color=HIST)
-        hc.to_edge(DOWN, buff=0.4)
+        hc.to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "And at CASP14, in 2020, it worked. <bookmark mark='a'/> AlphaFold 2's median score was 92.4 GDT over "
             "all targets, and 87.0 on the hardest, where around ninety is informally reckoned competitive with an "

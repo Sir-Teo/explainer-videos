@@ -62,6 +62,9 @@ class OneStep(VoiceoverScene):
                            tang.get_center(), 1.4)
         ul = clear_of_path(label(r"$(t - s)\,u$: \\ one jump, \\ at the average velocity", font_size=20, color=MF_C),
                            avg.get_center(), 1.2)
+        if np.linalg.norm(vl.get_center() - ul.get_center()) < 1.6:  # both chose the same side: the jump's label goes
+            ul.next_to(avg.get_center(), UR, buff=0.15)                  # beside the jump, the speedometer's under the path
+            vl.next_to(VGroup(path, tang), DOWN, buff=0.2)
         keep_in_frame(vl)
         keep_in_frame(ul)
         colors = {r"u": MF_C, r"v": SCORE, r"z_s": NOISE, r"z_t": DATA}

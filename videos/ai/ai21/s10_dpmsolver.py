@@ -117,7 +117,7 @@ class DPMSolver(VoiceoverScene):
                      yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-2.8, -0.2, 0])
         lines = VGroup(*[logcurve(g.ax, [r["nfe"] for r in s[k]], [max(r["err"], 10.0 ** lo) for r in s[k]],
                                   SOLVER_C[k], radius=0.04) for k in DET])
-        lg = legend([(SOLVER_C[k], SOLVER_NAME[k]) for k in DET], font_size=19).move_to([4.6, 2.55, 0])
+        lg = legend([(SOLVER_C[k], SOLVER_NAME[k]) for k in DET], font_size=18).move_to([4.6, 2.85, 0])
         # the same numbers, read off at three budgets
         budgets = (8, 16, 32)
         trow = [VGroup(label(r"about", font_size=18, color=GREY_B),
@@ -128,7 +128,7 @@ class DPMSolver(VoiceoverScene):
         tbl = VGroup()
         for i, r_ in enumerate(trow):
             for j, c_ in enumerate(r_):
-                c_.move_to([2.6 + (0 if j == 0 else 0.9 + 0.9 * j), 1.45 - 0.33 * i, 0])
+                c_.move_to([2.6 + (0 if j == 0 else 0.9 + 0.9 * j), 1.1 - 0.33 * i, 0])
                 if j == 0:
                     c_.align_to([1.75, 0, 0], LEFT)
             tbl.add(r_)
