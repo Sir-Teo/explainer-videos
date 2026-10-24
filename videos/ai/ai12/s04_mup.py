@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, MUP, PART, RICH, SP, load, table_card
+from videos.ai.ai12.common import HIST, MUP, PART, RICH, SP, load, predict_card, table_card, takeaway_card
 
 
 class MuP(VoiceoverScene):
@@ -13,7 +13,9 @@ class MuP(VoiceoverScene):
         self.card()
         self.derive()
         self.table()
+        self.predict()
         self.coord()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(3, r"$\mu$P, derived", r"How should each layer scale, so that every layer keeps learning?",
@@ -172,3 +174,31 @@ class MuP(VoiceoverScene):
             self.play(LaggedStart(*[Create(l_) for l_ in pans[1][5]], lag_ratio=0.05), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Train at widths $64$ to $4{,}096$ with one learning rate, \ the usual way. \ Which "
+                          r"layer's change will grow with the width?")
+        with self.voiceover(
+            "Pause and predict. Train at widths from sixty-four to four thousand, with one learning rate, the usual "
+            "way. Which layer's change will grow with the width?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"$\mu$P: \ every layer keeps moving, \ at every width",
+                           r"Random sums grow like $\sqrt n$, \ aligned updates like $n$: \ so hidden learning rates "
+                           r"shrink like $1/n$, \ and the output starts small.",
+                           r"next: \ does one learning rate then serve every width?")
+        with self.voiceover(
+            "The takeaway: random sums grow like the root of n, and aligned updates like n, so mu-P shrinks the "
+            "hidden learning rates like one over n and starts the output small. Then every layer keeps learning at "
+            "every width. Next: does one learning rate then serve them all?"
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

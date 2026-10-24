@@ -147,12 +147,31 @@ weights) and runs on one torch thread (`AI25_THREADS` to change it); there is no
 several runs saves each run as it finishes (`CACHE.partial`), so an interrupted computation resumes; trained weights
 go to `.cache/ai25/models/`, and an item that needs them (`equivariance`, the examples in `deepsets` and `pair`) trains
 them again if they are missing. Nothing is downloaded: every dataset is synthetic. No other part's results are used.
-On a busy 4-core machine the whole part computes in about two and a half hours of wall time; the longest items are
-`nbody` (48 runs, EGNN about 1.5 minutes each), `pair`, `weather`, `fno` and `diffusion`.
+On a busy 4-core machine the whole part computes in about three and a half hours of wall time; the longest items are
+`nbody` (48 runs, EGNN about two minutes each), `diffusion` (two 24,000-step EGNN runs), `pair`, `weather`, `energy` and `fno`.
 
 ## Results on this machine
 
-RESULTS
+What `compute.py` produced on the machine that rendered the video (Linux, four shared cores, one torch thread). The narration reads these numbers from the cache and branches on them, so a rerun that comes out differently changes what is said. Names: `egnn`, `gnn`, `mlp`, `mlp_aug` are EGNN, a message-passing network on raw coordinates, an MLP and the MLP trained on turned copies; `inv` is the distance-only energy network.
+
+* **Equivariance check** (500 test systems, random rotations): turning error of EGNN 3.4e-07, message-passing on raw coordinates 0.168, MLP 0.352, MLP on turned copies 0.057; reordering error of the message-passing network 2.3e-07. Energy over a full turn: MLP spread 1.73, MLP + copies 0.08, invariant network 6.0e-07.
+* **Five-body dynamics** (test MSE at t = 1, three seeds, 3,000 steps each; still-particles baseline 0.296, straight-line 0.0741): EGNN-style denoiser: 100 → 0.0200, 300 → 0.0123, 1000 → 0.0072, 3000 → 0.0061; gnn: 100 → 0.0760, 300 → 0.0473, 1000 → 0.0166, 3000 → 0.0106; mlp: 100 → 0.1365, 300 → 0.0948, 1000 → 0.0865, 3000 → 0.0821; mlp_aug: 100 → 0.0825, 300 → 0.0788, 1000 → 0.0748, 3000 → 0.0740. Parameters {'egnn': 133828, 'gnn': 104451, 'mlp': 144655, 'mlp_aug': 144655}.
+* **Energy** (test MSE, variance of the energy 4.44): inv 0.00281 (range 0.00243–0.00341), mlp 1.81 (range 1.78–1.85), mlp_aug 1.35 (range 1.35–1.35).
+* **Spherical harmonics**: off-block entries of the rotation's matrix ≤ 1.1e-15, orthogonality error of each block ≤ 8.9e-15.
+* **Deep Sets** (test accuracy by training-set size 32, 128, 512, 2048, 8192): deepsets: 69.6%, 93.9%, 98.1%, 99.3%, 99.7%; mlp_aug: 60.3%, 84.7%, 95.4%, 96.3%, 96.1%; mlp: 26.8%, 32.5%, 48.5%, 69.6%, 78.7%; answers changed by a reordering at the largest size: mlp 61%, mlp_aug 11%, deepsets 0%.
+* **1-WL**: random 10-node pairs separated 300 of 300; random 3-regular 0 of 100.
+* **Triangles in unions of cycles** (base rate 63.8%): gin 63.8%, 63.8%, 63.8%; gin_rni 63.8%, 63.8%, 63.8%; pair 100.0%, 100.0%, 100.0%; degree from constant features (RMSE): sum 0.002, mean 1.457, max 1.457.
+* **Three communities** (accuracy, three seeds): GCN 90.4%, 90.0%, 87.9%; MLP 44.6%, 47.1%, 47.5%.
+* **Over-smoothing**: λ₂ = 0.915; accuracy by depth 2, 4, 8, 16, 32, 64: plain 94%, 79%, 34%, 32%, 32%, 32%; residual 86%, 90%, 98%, 92%, 91%, 94%.
+* **Folding from distances**: classical MDS rebuilds the bundle to 8e-15 Å (up to a mirror); gradient descent on 50% of the distances with noise: 7 of 12 starts on the fold, 5 on its mirror image. Mirror: dRMSD 0.00, FAPE 0.79; 1 Å noise: dRMSD 1.39, FAPE 0.59.
+* **Completing distance matrices** (error on hidden pairs, Å, three seeds; chain-gap baseline 5.55): pairwise 6.18 (range 6.18–6.18); triangle 1.42 (range 1.38–1.48); recycle 1.86 (range 1.82–1.93); recycling by pass: 1.87, 1.83, 1.83, 1.86, 1.93, 2.04.
+* **Set networks' training** (seed 0, 512 sets, held-out accuracy at the end): deepsets 98.7%, mlp_aug 95.9%, mlp 47.3%.
+* **Diffusion on 2D chains** (500 samples, two seeds; training data: bond deviation 0.000, clashes 0.0%): EGNN-style denoiser: bond deviation 0.075, clashes 73.6%, median distance to the nearest training chain 0.493; plain MLP on turned copies: bond deviation 0.113, clashes 45.1%, median distance to the nearest training chain 0.413; held-out real chains 0.224.
+* **Neural operator on Burgers' equation** (relative L2 error, three seeds, trained at 64 points; tested at 32, 64, 128, 256, 512, 1024): fno: 0.6%, 0.3%, 0.3%, 0.3%, 0.3%, 0.3%; cnn: 73.1%, 1.2%, 58.5%, 73.4%, 74.5%, 74.0%.
+* **Toy weather** (RMSE at 1, 5, 10, 20, 40 steps; one training run each): multimesh 0.35, 1.22, 1.84, 2.71, 6.23; finest only 0.35, 1.22, 1.86, 3.66, 10.53; persistence 0.59, 1.77, 2.19, 2.45, 2.82; climatology 2.32.
+* **Materials flywheel** (6,840 candidates, 780 truly stable, 60 checks a round, three seeds): hit rate by round, surrogate 54%, 62%, 51%, 44%, 40%, 37%, 32%, 34%; random 12%, 11%, 13%, 14%, 11%, 10%, 8%, 13%; stable compounds found after 8 rounds: surrogate 234, random 78.
+* **Matrix-multiplication tensors** (alternating least squares): 2 × 2 at rank 6, 7, 8: 0 of 30, 29 of 30, 26 of 30 starts reach zero (rank-7 algorithm verified to 6e-08); 3 × 3 at rank 23 and 26: 0 of 10 (best residual 1.2e-05), 0 of 10 (best residual 7.7e-06).
+* **Evolved bin-packing rules** (excess bins over the lower bound, %; 10 held-out sequences of 1,000 items): first fit 5.18, best fit 4.71; evolved, seed 0: 4.11 (`r/(|log(|g|+1)*min(s, (g*min(g, g))^2)|+1)`), seed 1: 4.29 (`((1.5 + (max(s/(|g|+1), log(|(g + min(1/(|(g + 5.7)|+1), -4))|+1)))^2))^2`).
 
 ## References
 

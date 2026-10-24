@@ -211,7 +211,7 @@ ZH = {
     'f"Our character model again, made deep:':
         "还是我们的字符模型，这次做深：{', '.join((str(v) for v in depths[:-1]))}和{depths[-1]}个残差块，每种参数化"
         "扫描9个学习率，每个两个种子。<bookmark mark='a'/>不做深度缩放，最佳学习率在最浅和最深之间移动"
-        "{dr[0.0]:.1f}个数量级。<bookmark mark='b'/>用L的平方根分之一，{dr[0.5]:.1f}。<bookmark mark='c'/>用"
+        "{dr[0.0]:.1f}个数量级，最深模型的最佳学习率{dir0}。<bookmark mark='b'/>用L的平方根分之一，{dr[0.5]:.1f}。<bookmark mark='c'/>用"
         "CompleteP的L分之一，{dr[1.0]:.1f}。{said1}",
 
     'CompleteP holds the learning rate most still':
@@ -615,14 +615,20 @@ ZH = {
         "是余弦与正弦的乘积之和，ReLU单元可以把它搭出来。<bookmark mark='b'/>于是每个答案c的分数，是一些波的和，"
         "这些波在c等于a加b的地方达到峰值。只用这5个波去拟合训练好的网络的分数：它们解释了{100 * r2:.0f}%的变化。"
         "尼尔·南达和同事在2023年弄清了这个回路，这是最早对一个训练好的网络在算什么的完整解释之一；第30部分会把"
-        "这个想法用到真实的模型上。<bookmark mark='c'/>第2章的惰性区又回来了。{said5}坦尼什克·库马尔和同事在2023年"
+        "这个想法用到真实的模型上。<bookmark mark='c'/>第2章的问题又回来了：这个网络是惰性的吗？{said5}",
+
+    "f'Its tangent kernel barely moves while it memorizes":
+        "它记忆的时候，正切核几乎不动；到泛化的时候，它走得很远，距离达到{after:.2f}。坦尼什克·库马尔和同事在2023年"
         "论证，顿悟正是这样：网络先用它的起始核惰性地拟合，然后慢慢学会能够泛化的特征。",
 
-    "f'The tangent kernel barely moves while the network memorizes":
-        "网络记忆的时候，正切核几乎不动；到泛化的时候，它走得很远，距离达到{after:.2f}。",
+    'f"Measure how far its tangent kernel moves':
+        "量一量它的正切核移动了多远：距离只有{after:.2f}，而且大部分发生在跃升之前。没有权重衰减时，它移动得更远，"
+        "达到{kdn[-1]:.2f}，却始终没有泛化。坦尼什克·库马尔和同事在2023年论证，顿悟可以是从惰性训练到丰富训练的"
+        "缓慢转变；在我们的网络里，单看核的移动，标不出顿悟的那一刻，起作用的是权重衰减。",
 
-    "f'The tangent kernel moves steadily through training":
-        "正切核在整个训练中稳步移动，距离达到{after:.2f}。",
+    "f'Its tangent kernel moves steadily through training":
+        "它的正切核在整个训练中稳步移动，距离达到{after:.2f}。坦尼什克·库马尔和同事在2023年论证，顿悟可以是从惰性"
+        "训练到丰富训练的缓慢转变，离开起始的核。",
 
     # ------------------------------------------------------------------ TestTime
     'Chapter sixteen. Scaling the answer.':
@@ -715,6 +721,110 @@ ZH = {
 
     'The Chinchilla paper is very readable':
         "Chinchilla的论文非常好读，而罗伯茨、亚伊达和哈宁的书，是宽网络理论的深水区。谢谢收看，第13部分见。",
+
+    # ------------------------------------------------------------------ predict and takeaway beats
+    'Pause and predict. Make the network a thousand times wider':
+        '暂停一下，先想一想。把网络做宽一千倍，用同样的方式训练。每个权重移动得更多、更少，还是一样？核呢？',
+
+    'The takeaway: an infinitely wide network is a Gaussian process':
+        '要点：一个无限宽的网络，训练前是一个高斯过程，训练中是一台核机器，因为它的正切核冻结了。接下来：冻结的核做不到什么。',
+
+    'Pause and predict. Two copies of one wide network':
+        '暂停一下，先想一想。同一个宽网络的两份拷贝，同样的数据，同样的步数：一份用惰性的方式缩放，一份用平均场的方式。哪一份能学到那个隐藏方向？',
+
+    'The takeaway: in the lazy limit, a network only re-weights':
+        '要点：在惰性极限下，网络只是给它出发时的特征重新加权。要在任何宽度上学习特征，每个单元都必须一直在动，而这正是μP的设计目的。接下来，推导它。',
+
+    'Pause and predict. Train at widths from sixty-four to four thousand':
+        '暂停一下，先想一想。在从64到4000多的宽度上，用同一个学习率，按通常的做法训练。哪一层的变化会随宽度增长？',
+
+    'The takeaway: random sums grow like the root of n':
+        '要点：随机的和像n的平方根那样增长，同向的更新像n那样增长，所以μP让隐藏层的学习率像n分之一那样缩小，并让输出从很小开始。这样，每一层在每个宽度上都一直在学。接下来：一个学习率能不能适用于所有宽度？',
+
+    'Pause and predict. As a model gets wider, the usual way':
+        '暂停一下，先想一想。按通常的做法，模型变宽时，它的最佳学习率会变大、变小，还是不变？',
+
+    'The takeaway: in mu-P, a learning rate tuned on a small model':
+        '要点：在μP里，在小模型上调好的学习率，可以沿用到宽的模型上；大模型就是这样调参的，而不必在完整规模上去调。接下来，对深度问同样的问题。',
+
+    'Pause and predict. With no scaling, every new block adds':
+        '暂停一下，先想一想。不做缩放时，每个新的块都会往残差流里加东西。网络变深时，它的最佳学习率会上升，还是下降？',
+
+    'The takeaway: how the residual branches are scaled':
+        '要点：残差分支怎样缩放，决定了学习率能否在深度之间沿用，也决定了深处的块是否还在学习特征。接下来，第三个旋钮：批量。',
+
+    'Pause and predict. Double the batch.':
+        '暂停一下，先想一想。把批量加倍。要达到同样的损失，步数会减半、不变，还是介于两者之间？',
+
+    'The takeaway: below the critical batch':
+        '要点：低于临界批量时，更大的批量几乎不花代价就能减少步数；高于它时，只是浪费数据。而且临界批量会随着训练进行而增长。接下来，规模定律本身。',
+
+    'Pause and predict. Our models are tiny':
+        '暂停一下，先想一想。我们的模型很小，一次只读8个字符。它们的损失随大小下降，会比卡普兰的语言模型更快，还是更慢？',
+
+    'The takeaway: loss falls toward a floor along a power law':
+        '要点：损失沿着一条幂律落向一个下限，无论对大小还是对数据；即使指数随任务而变，曲线的形状也能延续。接下来，同时考虑两者，以及怎样分配一份预算。',
+
+    'Pause and predict. Your budget grows tenfold.':
+        '暂停一下，先想一想。你的预算增加到10倍。应该把模型做大10倍，用10倍的数据训练，还是两者各增加大约3倍？',
+
+    'The takeaway: at the compute optimum, the last parameter':
+        '要点：在计算最优点上，最后一个参数和最后一个词元的回报相等；对语言模型来说，这意味着大小和数据一起增长，每个参数大约20个词元。接下来：为什么最早的规模定律说的不一样。',
+
+    'Pause and predict. Leave the embedding layers out':
+        '暂停一下，先想一想。数参数时不算嵌入层。随着预算增长，最佳模型大小看起来会增长得更快，还是更慢？',
+
+    'The takeaway: small choices, which parameters to count':
+        '要点：一些小的选择，数哪些参数、预热多久、优化器怎么设，就把指数从0.73移到了大约二分之一，而重新拟合的结果仍有出入。规模定律是一次测量，带着误差棒。接下来：当计算最优点不是你想要的。',
+
+    'Pause and predict. A model half the compute-optimal size':
+        '暂停一下，先想一想。一个只有计算最优大小一半的模型，训练得更久，直到赶上最优模型的损失。它要多花多少训练算力：百分之几，一倍，还是十倍？',
+
+    'The takeaway: once answering is counted':
+        '要点：一旦把回答的代价算进去，最好的模型就比计算最优点更小，训练得也久得多；这就是为什么开源模型现在每个参数要读几千个词元。接下来：当没有足够的词元可读时，会发生什么。',
+
+    'Pause and predict. Train for the same number of characters':
+        '暂停一下，先想一想。训练同样多的字符，但只用四分之一的文本，读4遍。它会比一个一直读新文本的模型差多少？',
+
+    'The takeaway: a few passes over the same data':
+        '要点：把同样的数据读几遍，几乎和新数据一样好，但每重复一次就更不值钱，总量最终会饱和。接下来，另外两种预算：专家，和比特。',
+
+    'Pause and predict. Round every weight to four bits':
+        '暂停一下，先想一想。训练之后，把每个权重都取整到4个比特。谁受的损伤更大：读得少的模型，还是同一个模型读了多得多之后？',
+
+    'The takeaway: parameters, compute and bits':
+        '要点：参数、算力和比特可以分开权衡。专家增加参数，却不增加算力；更少的比特节省内存，代价却随模型读过的数据增长。接下来：为什么这些定律都是幂律。',
+
+    'Pause and predict. If every skill is learned suddenly':
+        '暂停一下，先想一想。如果每项技能都是突然学会的，要么全会，要么全不会，平均损失会一级一级地下降，还是平滑地下降？',
+
+    'The takeaway: power laws come out of many parts':
+        '要点：幂律来自许多部分的叠加：低维数据曲面上的一块块小片，或者一条长长的齐普夫技能尾巴，一项接一项地学会。接下来：如果技能是突然到来的，能力也是吗？',
+
+    "Pause and predict. Our models' accuracy on single characters":
+        '暂停一下，先想一想。我们的模型在单个字符上的准确率，随大小平稳上升。改成看它们能否一字不差地写对8个字符，那条曲线会是什么样？',
+
+    'The takeaway: all-or-nothing scores':
+        '要点：全对或全错的评分，会把平稳的进步变成表面上的跳跃，而窄的技能也确实可能突然出现。无论哪种情况，底下的损失都是平滑的，可以预测。接下来，最奇怪的一次跳跃。',
+
+    'Pause and predict. With more weight decay':
+        '暂停一下，先想一想。权重衰减更大时，理解会来得更早、更晚，还是根本不来？没有权重衰减呢？',
+
+    'The takeaway: a network can fit its data long before':
+        '要点：一个网络可以在找到规则之前很久，就拟合了它的数据；权重衰减把它推向规则，在这里，规则是一个小小的三角函数回路。第30部分会在真实的模型里寻找这样的回路。',
+
+    'Pause and predict. For one problem, more tries':
+        '暂停一下，先想一想。对一道题来说，多试几次的帮助是指数级的快。对整个基准取平均，失败率也会指数下降吗？',
+
+    'The takeaway: with a way to check answers':
+        '要点：只要有办法检查答案，多次尝试就能用回答时的算力换取模型的大小，而最难的那些题让收益变成一条缓慢的幂律。第28部分会搭建先思考再回答的模型。',
+
+    'Pause and predict. Fit the law on our cheapest runs':
+        '暂停一下，先想一想。只用我们最便宜的训练拟合定律，去预测贵10倍的训练。偏差会是百分之一比特、十分之一比特，还是更多？',
+
+    'The takeaway: every axis of scale we can measure':
+        '要点：我们能测量的每一个规模轴，都仍然遵循它的定律。争论的是下一步的价钱，而这个价钱一直在下降。现在，来回顾一下。',
+
 }
 
 PHRASES = {
@@ -727,6 +837,9 @@ PHRASES = {
     'no scaling at all': '完全不缩放',
     'one over root L': 'L的平方根分之一',
     'CompleteP': 'CompleteP',
+    'lower': '更低',
+    'higher': '更高',
+    'the same': '一样',
     '2, 4, 8, 16': '2、4、8、16',
     '2, 4, 8': '2、4、8',
     'Ours sit on it. ': '我们的点正落在它上面。',

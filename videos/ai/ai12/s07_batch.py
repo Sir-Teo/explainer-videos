@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, PART, load
+from videos.ai.ai12.common import HIST, PART, load, predict_card, takeaway_card
 
 LEVEL_COLORS = ["#7FD3FF", C.BITS, C.MODEL_Q]
 
@@ -14,8 +14,10 @@ class Batch(VoiceoverScene):
     def construct(self):
         self.card()
         self.derive()
+        self.predict()
         self.tradeoff()
         self.noise()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(6, r"How big a batch?", r"When does a bigger batch stop saving time?", part=PART)
@@ -119,9 +121,11 @@ class Batch(VoiceoverScene):
         lg = VGroup(*[label(rf"to {lv:.1f} bits: \ $B_{{\text{{crit}}}} \approx {bc:,.0f}$".replace(",", "{,}"), font_size=22,
                             color=col) for lv, bc, col in zip(levels, bcrit, LEVEL_COLORS)])
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.3, 1.4, 0])
-        kn = label(r"white: \ the knee, \ $B = B_{\text{crit}}$: \\ twice the fewest steps, \\ twice the fewest examples",
+        kn = label(r"white: \ the knee, \ $B = B_{\text{crit}}$: \\ twice the fewest steps, \\ twice the fewest "
+                   r"examples",
                    font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.35).align_to(lg, LEFT)
-        tag = note(rf"computed: \ width ${int(b['width'])}$, \ batches ${int(Bs[0])}$ to ${int(Bs[-1]):,}$, \ the best of "
+        tag = note(rf"computed: \ width ${int(b['width'])}$, \ batches ${int(Bs[0])}$ to ${int(Bs[-1]):,}$, \ the "
+                     "best of "
                    r"three learning rates at each".replace(",", "{,}")).to_corner(DL, buff=0.2)
         grows = bcrit[-1] > bcrit[0] * 1.3
         said1 = (
@@ -165,7 +169,8 @@ class Batch(VoiceoverScene):
             col = VGroup(rows[j], *[g[j] for g in grid]).arrange(DOWN, buff=0.3)
             col.move_to([-5.4 + 2.55 * j, 0.6, 0])
         hd = label(r"two ways to the same number", font_size=30).to_edge(UP, buff=0.4)
-        how = label(r"noise scale: \ $\operatorname{tr}\Sigma / |G|^2$ \ from gradients at batches $64$ and $4{,}096$ \ "
+        how = label(r"noise scale: \ $\operatorname{tr}\Sigma / |G|^2$ \ from gradients at batches $64$ and $4{,}096$ "
+                    r"\ "
                     r"(McCandlish et al., Appendix A)", font_size=20, color=GREY_B)
         how.next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
         if how.width > 6.6:
@@ -207,3 +212,30 @@ class Batch(VoiceoverScene):
             self.play(FadeIn(cards[2], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Double the batch. \ To reach the same loss, \ will it take half as many steps, \ just as "
+                          r"many, \ or something in between?")
+        with self.voiceover(
+            "Pause and predict. Double the batch. To reach the same loss, will it take half as many steps, just as "
+            "many, or something in between?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"The critical batch",
+                           r"Below the noise scale, \ a bigger batch buys fewer steps almost for free; \ above it, \ "
+                           r"it only wastes data. \ And it grows as the loss falls.",
+                           r"next: \ the scaling laws themselves")
+        with self.voiceover(
+            "The takeaway: below the critical batch, a bigger batch buys fewer steps almost for free; above it, it "
+            "only wastes data. And the critical batch grows as training goes on. Next, the scaling laws themselves."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

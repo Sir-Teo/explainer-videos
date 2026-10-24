@@ -5,14 +5,16 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, MUP, PART, SP, WIDTH_COLORS, band, load
+from videos.ai.ai12.common import HIST, MUP, PART, SP, WIDTH_COLORS, band, load, predict_card, takeaway_card
 
 
 class Transfer(VoiceoverScene):
     def construct(self):
         self.card()
+        self.predict()
         self.sweeps()
         self.copy()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(4, r"One learning rate for every width",
@@ -159,3 +161,30 @@ class Transfer(VoiceoverScene):
             self.play(FadeIn(cards[2], shift=LEFT * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"As a model gets wider, \ the usual way, \ will its best learning rate go up, \ go down, "
+                          r"\ or stay put?")
+        with self.voiceover(
+            "Pause and predict. As a model gets wider, the usual way, will its best learning rate go up, go down, or "
+            "stay put?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Tune small, \ train large",
+                           r"In $\mu$P the best learning rate stays put as the width grows, \ so it can be tuned on "
+                           r"a small model and copied to a large one \ (Yang et al., 2022).",
+                           r"next: \ the same question for depth")
+        with self.voiceover(
+            "The takeaway: in mu-P, a learning rate tuned on a small model carries over to a wide one, which is how "
+            "large models are tuned without tuning them at full size. Next, the same question for depth."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

@@ -161,3 +161,18 @@ def lag(anims, **kw) -> Animation:
     """LaggedStart that tolerates an empty list (a measurement with nothing to show)."""
     anims = list(anims)
     return LaggedStart(*anims, **kw) if anims else Wait(kw.get("run_time", 0.1))
+
+
+def predict_card(question: str) -> VGroup:
+    """'Pause and predict', centred: the question the next experiment answers."""
+    return pause_card(question, width=10.0, font_size=30).move_to(UP * 0.3)
+
+
+def takeaway_card(head: str, body: str, link: str = "") -> VGroup:
+    """The chapter's takeaway: a headline and a line or two in a card, and (under it) where the idea leads next."""
+    card = definition_card(head, body, color=C.BITS, width=10.4, font_size=30, kind=r"Takeaway")
+    g = VGroup(card)
+    if link:
+        g.add(label(link, font_size=24, color=GREY_A).next_to(card, DOWN, buff=0.4))
+    return g.move_to(UP * 0.2)
+

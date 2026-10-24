@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, load, lag
+from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, lag, load, predict_card, takeaway_card
 
 EPOCH_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.MODEL_Q, C.SURPRISE]
 
@@ -13,9 +13,11 @@ EPOCH_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.MODEL_Q, C.SURPRISE]
 class Data(VoiceoverScene):
     def construct(self):
         self.card()
+        self.predict()
         self.repeat()
         self.effective()
         self.stock()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(11, r"When the data runs out", r"Is reading the same text twice as good as new text?", part=PART)
@@ -168,7 +170,8 @@ class Data(VoiceoverScene):
         cards = VGroup(
             history_card(2024, r"Villalobos et al.\ (Epoch AI)",
                          r"the public web holds about $4 \times 10^{14}$ tokens of usable text, \ allowing for quality "
-                         r"and repetition; \ at the trend of the day, training sets reach it between $2026$ and $2032$, "
+                         r"and repetition; \ at the trend of the day, training sets reach it between $2026$ and "
+                         r"$2032$, "
                          r"most likely $2028$", width=6.2, color=HIST),
             history_card(2023, r"Muennighoff et al.", r"up to about $4$ epochs: \ almost as good as new data; \ beyond "
                          r"$16$: \ little left", width=6.2, color=HIST),
@@ -205,3 +208,30 @@ class Data(VoiceoverScene):
             self.play(FadeIn(ways))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Train for the same number of characters, \ but on a quarter of the text, \ read four "
+                          r"times. \ How much worse than a model that read fresh text all the way?")
+        with self.voiceover(
+            "Pause and predict. Train for the same number of characters, but on a quarter of the text, read four "
+            "times over. How much worse will it be than a model that read fresh text all the way?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Repeats are worth less, \ then nothing",
+                           r"A few passes over the same data are almost as good as new data; \ each repeat is worth "
+                           r"less, \ and the total saturates at about $U(1 + R^*)$.",
+                           r"next: \ two other budgets, \ experts and bits")
+        with self.voiceover(
+            "The takeaway: a few passes over the same data are almost as good as new data, but each repeat is worth "
+            "less, and the total saturates. Next, two other budgets: experts, and bits."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

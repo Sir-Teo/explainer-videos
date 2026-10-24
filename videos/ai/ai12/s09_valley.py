@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import BUDGET_COLORS, DCOL, FIT, NCOL, PART, SP, load
+from videos.ai.ai12.common import BUDGET_COLORS, DCOL, FIT, NCOL, PART, SP, load, predict_card, takeaway_card
 
 ACOLS = [C.CONTEXT, C.TRUE_P, C.BITS]  # approaches 1, 2, 3
 
@@ -25,9 +25,11 @@ def optimum(ch, C):
 class Valley(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
+        self.predict()
         self.lagrange()
         self.surface()
         self.methods()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(8, r"Chinchilla's valley", r"How should a fixed budget be split between size and data?",
@@ -198,7 +200,8 @@ class Valley(VoiceoverScene, ThreeDScene):
                             *[Dot(ax.c2p(math.log10(a), b), radius=0.05, color=col) for a, b in zip(p[keep, 0], p[keep, 2])]))
             if np.isfinite(n2) and y0 <= l2 <= y1:
                 stars.add(Star(n=5, outer_radius=0.12, color=WHITE, fill_opacity=1).move_to(ax.c2p(math.log10(n2), l2)))
-        bkey = VGroup(*[label(rf"$C = {C_ / 10 ** math.floor(math.log10(C_)):g}\times 10^{{{int(math.floor(math.log10(C_)))}}}$",
+        bkey = VGroup(*[label(rf"$C = {C_ / 10 ** math.floor(math.log10(C_)):g}\times "
+                                rf"10^{{{int(math.floor(math.log10(C_)))}}}$",
                               font_size=18, color=col) for C_, col in zip(budgets, BUDGET_COLORS)])
         bkey.arrange(DOWN, aligned_edge=LEFT, buff=0.05).next_to(ax.c2p(x1, y1), DL, buff=0.1)
         # right: the three estimates of the exponent, against Chinchilla's and Kaplan's
@@ -257,3 +260,31 @@ class Valley(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(kap), FadeIn(tp))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Your budget grows tenfold. \ Make the model $10\times$ bigger, \ train it on $10\times$ "
+                          r"the data, \ or grow both by about $3\times$?")
+        with self.voiceover(
+            "Pause and predict. Your budget grows tenfold. Should you make the model ten times bigger, train it on "
+            "ten times the data, or grow both by about three?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Grow size and data together",
+                           r"At the optimum the last parameter and the last token pay off equally: \ for language "
+                           r"models, \ about $20$ tokens per parameter \ (Hoffmann et al., 2022).",
+                           r"next: \ why the first scaling laws said otherwise")
+        with self.voiceover(
+            "The takeaway: at the compute optimum, the last parameter and the last token pay off equally, and for "
+            "language models that means growing size and data together, at about twenty tokens per parameter. Next: "
+            "why the first scaling laws said otherwise."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

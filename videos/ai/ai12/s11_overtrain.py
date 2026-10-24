@@ -5,14 +5,16 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, TT, load, lag
+from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, TT, lag, load, predict_card, takeaway_card
 
 
 class Overtrain(VoiceoverScene):
     def construct(self):
         self.card()
+        self.predict()
         self.price()
         self.inference()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(10, r"Trained for the long run", r"Why train a small model far past its optimum?", part=PART)
@@ -52,12 +54,14 @@ class Overtrain(VoiceoverScene):
         meas = VGroup(*[Dot(ax.c2p(n_ / n0, math.log10(c_)), radius=0.07, color=WHITE)
                         for n_, d_, c_ in mt if 0.1 <= n_ / n0 <= 1.0 and 1 <= c_ <= top])
         ml = label(r"white: \ our runs that got there", font_size=20, color=WHITE).next_to(ax.c2p(1.0, math.log10(top)), DL, buff=0.1)
-        law = MathTex(r"L(kN_{\text{opt}},\, D) = L^* \ \Rightarrow\ D = \Big(\frac{B}{L^* - E - A\,(kN_{\text{opt}})^{-\alpha}}\Big)^{1/\beta}",
+        law = MathTex(r"L(kN_{\text{opt}},\, D) = L^* \ \Rightarrow\ D = \Big(\frac{B}{L^* - E - "
+                      r"A\,(kN_{\text{opt}})^{-\alpha}}\Big)^{1/\beta}",
                       font_size=28).to_edge(UP, buff=0.3)
         c75, c50 = float(np.interp(0.75, ks, cost)), float(np.interp(0.5, ks, cost))
         said1 = (
             f"Our own runs that reached the same loss with smaller models fall near the curve: {len(meas)} of them."
-            if len(meas) >= 2 else "Few of our runs reach that loss with a smaller model; those that do sit near the curve."
+            if len(meas) >= 2 else "Few of our runs reach that loss with a smaller model; those that do sit near the "
+                                   "curve."
         )
         with self.voiceover(
             "Chinchilla's optimum minimizes the cost of training. But a model is trained once and then used, maybe "
@@ -112,7 +116,8 @@ class Overtrain(VoiceoverScene):
         i100 = int(np.argmin(np.abs(T / D0 - 100)))
         facts = VGroup(
             history_card(2023, r"Sardana, Portes, Doubov \& Frankle", r"with about a billion requests to serve, "
-                         r"train smaller and longer than Chinchilla; \ quality kept improving up to $10{,}000$ tokens per "
+                         r"train smaller and longer than Chinchilla; \ quality kept improving up to $10{,}000$ tokens "
+                         r"per "
                          r"parameter", width=5.4, color=HIST),
             history_card(2024, r"Meta, \ Llama 3", r"$8$ billion parameters, \ $15$ trillion tokens: \ about $1{,}900$ "
                          r"per parameter", width=5.4, color=HIST),
@@ -125,7 +130,8 @@ class Overtrain(VoiceoverScene):
             "minimize the lifetime cost. <bookmark mark='b'/> The more a model will be used, the smaller and longer "
             "trained it should be. <bookmark mark='c'/> On our fitted law: a model that will answer a hundred times "
             f"more characters than it would be trained on should train on about {tpp[i100]:.0f} characters per "
-            f"parameter, at {nrel[i100]:.2f} of the optimal size, and costs {100 * sav[i100]:.0f} percent less over its "
+            f"parameter, at {nrel[i100]:.2f} of the optimal size, and costs {100 * sav[i100]:.0f} percent less over "
+            "its "
             "life. <bookmark mark='d'/> Sardana's team found quality still improving at ten thousand tokens per "
             "parameter, and in 2024 Meta trained Llama 3's eight-billion-parameter model on fifteen trillion tokens: "
             "nearly nineteen hundred per parameter, a hundred times Chinchilla's ratio."
@@ -143,3 +149,32 @@ class Overtrain(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(f_, shift=LEFT * 0.1) for f_ in facts], lag_ratio=0.5), FadeIn(link))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"A model half the compute-optimal size, \ trained longer until it matches the optimal "
+                          r"model's loss. \ How much more training compute: \ a few percent, \ double, \ or ten "
+                          r"times?")
+        with self.voiceover(
+            "Pause and predict. A model half the compute-optimal size, trained longer until it matches the optimal "
+            "model's loss. How much more training compute will it need: a few percent, double, or ten times?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Train smaller, \ for longer",
+                           r"Once answering is counted, \ the best model is smaller than the compute optimum and "
+                           r"trained far past $20$ tokens per parameter.",
+                           r"next: \ when there are not enough tokens to read")
+        with self.voiceover(
+            "The takeaway: once answering is counted, the best model is smaller than the compute optimum, and trained "
+            "far longer, which is why open models now read thousands of tokens per parameter. Next: what happens when "
+            "there are not enough tokens to read."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

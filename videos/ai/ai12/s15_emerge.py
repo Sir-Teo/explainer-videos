@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, NCOL, PART, QUANT, SP, load
+from videos.ai.ai12.common import HIST, NCOL, PART, QUANT, SP, load, predict_card, takeaway_card
 
 LEN_COLORS = {1: "#7FD3FF", 2: C.INTERVAL, 4: C.BITS, 8: C.SURPRISE}
 
@@ -14,8 +14,10 @@ class Emerge(VoiceoverScene):
     def construct(self):
         self.card()
         self.mirage()
+        self.predict()
         self.ours()
         self.real()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(14, r"Emergence, or a mirage?", r"Do abilities appear suddenly with scale?", lit=(2022,),
@@ -197,3 +199,31 @@ class Emerge(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cards], lag_ratio=0.5))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Our models' accuracy on single characters rises smoothly with size. \ Score them on "
+                          r"getting $8$ characters exactly right instead: \ what does the curve look like?")
+        with self.voiceover(
+            "Pause and predict. Our models' accuracy on single characters rises smoothly with size. Score them on "
+            "getting eight characters exactly right instead. What does that curve look like?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Smooth loss, \ sudden scores",
+                           r"All-or-nothing scores turn steady progress into apparent jumps; \ narrow skills can "
+                           r"truly switch on; \ the loss underneath is smooth and forecastable.",
+                           r"next: \ the strangest jump of all")
+        with self.voiceover(
+            "The takeaway: all-or-nothing scores turn steady progress into apparent jumps, while narrow skills can "
+            "still truly switch on. Either way, the loss underneath is smooth, and can be forecast. Next, the "
+            "strangest jump of all."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

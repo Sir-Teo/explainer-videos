@@ -5,15 +5,17 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, NCOL, PART, SP, TT, era_strip, load
+from videos.ai.ai12.common import FIT, HIST, NCOL, PART, SP, TT, era_strip, load, predict_card, takeaway_card
 
 
 class Frontier(VoiceoverScene):
     def construct(self):
         self.card()
         self.debate()
+        self.predict()
         self.evidence()
         self.density()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(17, r"Has pretraining stalled?", r"What does the evidence say, in 2026?", part=PART)
@@ -34,7 +36,8 @@ class Frontier(VoiceoverScene):
         ]
         head, axis, tag, skel, marks = era_strip(self, events, head_text=r"The debate, \ 2024 to 2026",
                                                  tag_text=r"evenly spaced, \ not to scale", font_size=19)
-        cite_ = cite(r"Sutskever, NeurIPS talk (Dec 2024); \ OpenAI, GPT-4.5 system card; \ xAI, Grok 4; \ Epoch AI (Sep "
+        cite_ = cite(r"Sutskever, NeurIPS talk (Dec 2024); \ OpenAI, GPT-4.5 system card; \ xAI, Grok 4; \ Epoch AI "
+                     r"(Sep "
                      r"2025); \\ O.~Vinyals (Nov 2025); \ Alphabet earnings call (Jul 2026); \ Microsoft AI (Oct 2026)",
                      font_size=15, corner=DL)
         with self.voiceover(
@@ -100,7 +103,8 @@ class Frontier(VoiceoverScene):
             label(rf"fitted on our ${n_fit}$ cheapest runs \\ (up to ${sci(cut, 0)}$ operations)", font_size=22, color=GREY_A),
             label(rf"predicting the other ${n_test}$: \\ off by ${err:.3f}$ bits on average, \\ ${mx:.3f}$ at worst", font_size=24,
                   color=TT),
-            label(rf"the best model at $10^{{13}}$: \\ predicted ${float(opt['pred']):.3f}$, \ measured ${float(opt['meas']):.3f}$",
+            label(rf"the best model at $10^{{13}}$: \\ predicted ${float(opt['pred']):.3f}$, \ measured "
+                  rf"${float(opt['meas']):.3f}$",
                   font_size=22, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.3, 0])
         slow = label(r"$L \propto C^{-0.050}$ \ (Kaplan): \ halving the loss takes $2^{1/0.05} \approx 10^{6}$ times "
@@ -173,3 +177,30 @@ class Frontier(VoiceoverScene):
             self.play(FadeIn(cards[2], shift=LEFT * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Fit the law on our cheapest runs and predict runs ten times costlier. \ Will it miss by "
+                          r"a hundredth of a bit, \ a tenth, \ or more?")
+        with self.voiceover(
+            "Pause and predict. Fit the law on our cheapest runs, and predict runs ten times costlier. Will it miss "
+            "by a hundredth of a bit, a tenth, or more?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"The curves hold; \ the argument is about prices",
+                           r"Pretraining, \ reinforcement learning and answer-time compute each follow a measurable "
+                           r"law, \ and efficiency keeps lowering the price of a given ability.",
+                           r"next: \ the recap")
+        with self.voiceover(
+            "The takeaway: every axis of scale we can measure still follows its law. What is argued over is the price "
+            "of the next step, and that price keeps falling. Now, the recap."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

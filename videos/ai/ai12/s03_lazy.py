@@ -5,15 +5,17 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, LAZY, PART, RICH, SP, band, load, log_axes
+from videos.ai.ai12.common import HIST, LAZY, PART, RICH, SP, band, load, log_axes, predict_card, takeaway_card
 
 
 class Lazy(VoiceoverScene):
     def construct(self):
         self.card()
         self.lazy()
+        self.predict()
         self.race()
         self.units()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(2, r"Lazy", r"Why does an infinitely wide network learn no features?", part=PART)
@@ -41,7 +43,8 @@ class Lazy(VoiceoverScene):
         tag = note(r"Part 11's character model, \ $800$ steps of plain gradient descent, \ neural-tangent step sizes")
         tag.to_corner(DL, buff=0.25)
         hc = history_card(2019, r"L\'ena\"ic Chizat, Edouard Oyallon \& Francis Bach",
-                          r"\textit{On lazy training}: \ scale a model's output up, and it trains like its linearization: "
+                          r"\textit{On lazy training}: \ scale a model's output up, and it trains like its "
+                          r"linearization: "
                           r"a kernel method, \ whatever its architecture", width=5.6, color=HIST).move_to([3.7, 1.5, 0])
         # the lazy picture: the hidden features frozen as they started, only the weights on them re-learned
         ins = VGroup(*[Dot(radius=0.07, color=GREY_B) for _ in range(4)]).arrange(DOWN, buff=0.3)
@@ -202,3 +205,31 @@ class Lazy(VoiceoverScene):
             self.play(FadeIn(moral))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Two copies of one wide network, \ the same data, \ the same number of steps: \ one "
+                          r"scaled the lazy way, \ one the mean-field way. \ Which learns the hidden direction?")
+        with self.voiceover(
+            "Pause and predict. Two copies of one wide network, the same data and the same number of steps: one "
+            "scaled the lazy way, one the mean-field way. Which one learns the hidden direction?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Lazy networks learn no features",
+                           r"In the lazy limit a network only re-weights the random features it started with. \ To "
+                           r"learn features at every width, \ every unit must keep moving.",
+                           r"next: \ $\mu$P, \ derived")
+        with self.voiceover(
+            "The takeaway: in the lazy limit, a network only re-weights the features it started with. To learn "
+            "features at any width, every unit must keep moving, and that is what mu-P is built to do. Next, its "
+            "derivation."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

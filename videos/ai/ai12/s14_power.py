@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, lag, load, width_ramp
+from videos.ai.ai12.common import FIT, HIST, NCOL, PART, QUANT, lag, load, predict_card, takeaway_card, width_ramp
 
 DIM_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.SURPRISE]
 
@@ -15,7 +15,9 @@ class Power(VoiceoverScene):
         self.card()
         self.manifold()
         self.quanta()
+        self.predict()
         self.toy()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(13, r"Why power laws?", r"Where does the straight line on log axes come from?", part=PART)
@@ -56,7 +58,8 @@ class Power(VoiceoverScene):
             labs.add(label(rf"$d = {d}$: \ slope ${float(z[f'slope{d}']):.2f}$ \ (theory ${-4 / d:.2f}$)", font_size=22, color=col))
         labs.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -1.2, 0])
         tag = note(r"computed: \ a smooth function on a $d$-dimensional torus, \ cut into $N$ linear pieces").to_corner(DR, buff=0.2)
-        cite_ = cite(r"U.~Sharma \& J.~Kaplan, \textit{A Neural Scaling Law from the Dimension of the Data Manifold} (2020)",
+        cite_ = cite(r"U.~Sharma \& J.~Kaplan, \textit{A Neural Scaling Law from the Dimension of the Data Manifold} "
+                     r"(2020)",
                      corner=UL).shift(DOWN * 0.0)
         cite_.to_edge(UP, buff=0.12).shift(RIGHT * 0.0)
         s8, t8 = float(z[f"slope{dims[-1]}"]), -4 / dims[-1]
@@ -140,7 +143,8 @@ class Power(VoiceoverScene):
         cl = label(r"learned \ $\leftarrow \ | \ \rightarrow$ \ not yet", font_size=20, color=WHITE).next_to(cut, UP, buff=0.05)
         task = label(r"each subtask: \ the parity of $3$ hidden bits out of $12$; \ a one-hot tag says which", font_size=20,
                      color=GREY_A).to_edge(DOWN, buff=0.15)
-        cite_ = cite(r"E.~Michaud, Z.~Liu, U.~Girit \& M.~Tegmark, \textit{The Quantization Model of Neural Scaling} (2023)",
+        cite_ = cite(r"E.~Michaud, Z.~Liu, U.~Girit \& M.~Tegmark, \textit{The Quantization Model of Neural Scaling} "
+                     r"(2023)",
                      corner=UR)
         with self.voiceover(
             "A second answer, from Eric Michaud, Max Tegmark and colleagues in 2023: the quantization model. Suppose "
@@ -211,7 +215,8 @@ class Power(VoiceoverScene):
             for i, w in enumerate(widths) if okm[i, 0]])
         nll = label(r"numbers: \ width", font_size=18, color=GREY_A).next_to(bxn, DOWN, buff=0.12).align_to(bx, LEFT)
         full = [w for i, w in enumerate(widths) if (learned[i] == T).all()]
-        fl = label(rf"width ${full[0]}$ and up: \\ all ${T}$ learned, \\ loss below ${math.ceil(1000 * fin[widths.index(full[0])].max()) / 1000:.3f}$",
+        fl = label(rf"width ${full[0]}$ and up: \\ all ${T}$ learned, \\ loss below "
+                   rf"${math.ceil(1000 * fin[widths.index(full[0])].max()) / 1000:.3f}$",
                    font_size=18, color=GREY_A).next_to(nll, RIGHT, buff=0.4) if full else VGroup()
         tag = note(r"two seeds per width").to_corner(DR, buff=0.2)
         n_learn = int((run[-1] < 0.1).sum())
@@ -241,7 +246,8 @@ class Power(VoiceoverScene):
             f"Here is one network, of width {widths[wi]}, learning the subtasks. <bookmark mark='a'/> Each subtask's "
             "loss sits at one bit, a coin flip, and then drops, suddenly. "
             + said2
-            + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> The average over the mix, in white, "
+            + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> The average over the mix, in "
+              "white, "
             "is smooth: many sudden steps, added up. <bookmark mark='c'/> Across sizes, wider networks learn more "
             "subtasks, "
             + said3
@@ -265,3 +271,30 @@ class Power(VoiceoverScene):
             self.play(FadeIn(fl))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"If every skill is learned suddenly, \ all or nothing, \ will the average loss fall in "
+                          r"steps, \ or smoothly?")
+        with self.voiceover(
+            "Pause and predict. If every skill is learned suddenly, all or nothing, will the average loss fall in "
+            "steps, or smoothly?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"Power laws from many parts",
+                           r"A low-dimensional data surface gives $L \propto N^{-4/d}$; \ a Zipfian tail of skills, "
+                           r"\ each learned in turn, \ gives $L \propto N^{-\alpha}$.",
+                           r"next: \ if skills arrive suddenly, \ do abilities too?")
+        with self.voiceover(
+            "The takeaway: power laws come out of many parts: the pieces of a low-dimensional data surface, or a long "
+            "Zipfian tail of skills, each learned in its turn. Next: if skills arrive suddenly, do abilities too?"
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

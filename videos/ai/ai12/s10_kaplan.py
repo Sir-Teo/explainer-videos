@@ -5,15 +5,17 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, load
+from videos.ai.ai12.common import DCOL, HIST, NCOL, PART, SP, load, predict_card, takeaway_card
 
 
 class Kaplan(VoiceoverScene):
     def construct(self):
         self.card()
         self.gopher()
+        self.predict()
         self.counting()
         self.replication()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(9, r"What Kaplan missed", r"Why did two careful studies disagree?", lit=(2020, 2022),
@@ -98,7 +100,8 @@ class Kaplan(VoiceoverScene):
                     label(rf"leaving out the input and output layers: \ ${a_ne:.2f}$", font_size=22, color=SP))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, 2.4, 0])
         keep_in_frame(lg)
-        sh = label(rf"the left-out share: \ ${100 * share[0]:.0f}\%$ of the smallest model, \ ${100 * share[-1]:.0f}\%$ of the "
+        sh = label(rf"the left-out share: \ ${100 * share[0]:.0f}\%$ of the smallest model, \ "
+                   rf"${100 * share[-1]:.0f}\%$ of the "
                    r"largest", font_size=20, color=GREY_A).next_to(lg, DOWN, buff=0.2).align_to(lg, LEFT)
         keep_in_frame(sh)
         cards = VGroup(
@@ -148,7 +151,7 @@ class Kaplan(VoiceoverScene):
                      MathTex(r"E = 1.69,\ A = 406.4,\ B = 410.7", font_size=30),
                      MathTex(r"\alpha = 0.34,\ \ \beta = 0.28", font_size=30),
                      MathTex(r"a = 0.46", font_size=30, color=SP),
-                     label(r"about $70$ tokens per parameter \\ at the optimum", font_size=20, color=GREY_A))
+                     label(r"about $60$ tokens per parameter \\ at Chinchilla's budget", font_size=20, color=GREY_A))
         rep = VGroup(label(r"Besiroglu et al.\ (Epoch AI), \ 2024", font_size=26, color=C.TRUE_P),
                      MathTex(r"E = 1.82,\ A = 482,\ B = 2085", font_size=30),
                      MathTex(r"\alpha = 0.35,\ \ \beta = 0.37", font_size=30),
@@ -159,14 +162,17 @@ class Kaplan(VoiceoverScene):
         boxes = VGroup(*[SurroundingRectangle(g, buff=0.3, corner_radius=0.12, stroke_color=c, stroke_width=1.8)
                          for g, c in ((pub, SP), (rep, C.TRUE_P))])
         pair = VGroup(VGroup(boxes[0], pub), VGroup(boxes[1], rep)).arrange(RIGHT, buff=0.8).move_to(UP * 0.25)
-        how = label(r"the data read back from the paper's Figure 4: \ $240$ runs, \ each point's colour decoded into a loss",
+        how = label(r"the data read back from the paper's Figure 4: \ $240$ runs, \ each point's colour decoded into "
+                    r"a loss",
                     font_size=22, color=GREY_A).next_to(pair, DOWN, buff=0.35)
-        ci = label(r"the published uncertainty, $0.454$ to $0.455$, \ would take over $600{,}000$ runs; \ they ran fewer "
+        ci = label(r"the published uncertainty, $0.454$ to $0.455$, \ would take over $600{,}000$ runs; \ they ran "
+                   r"fewer "
                    r"than $500$", font_size=22, color=C.BITS).next_to(how, DOWN, buff=0.2)
         ours = load("chinchilla")
         lesson = label(rf"an exponent is a measurement, with an error bar: \ ours, ${float(ours['a3_lo']):.2f}$ to "
                        rf"${float(ours['a3_hi']):.2f}$", font_size=24, color=WHITE).to_edge(DOWN, buff=0.35)
-        cite_ = cite(r"T.~Besiroglu, E.~Erdil, M.~Barnett \& J.~You, \textit{Chinchilla Scaling: A Replication Attempt} "
+        cite_ = cite(r"T.~Besiroglu, E.~Erdil, M.~Barnett \& J.~You, \textit{Chinchilla Scaling: A Replication "
+                     r"Attempt} "
                      r"(2024)", corner=UR).shift(DOWN * 0.55)
         with self.voiceover(
             "Chinchilla itself was checked two years later. Its three methods had disagreed slightly: the fitted "
@@ -190,3 +196,31 @@ class Kaplan(VoiceoverScene):
             self.play(FadeIn(lesson))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Leave the embedding layers out of the parameter count. \ Will the best model size seem "
+                          r"to grow faster or slower as the budget grows?")
+        with self.voiceover(
+            "Pause and predict. Leave the embedding layers out of the parameter count. Will the best model size seem "
+            "to grow faster, or slower, as the budget grows?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"An exponent is a measurement",
+                           r"Which parameters to count, \ how long to warm up, \ which optimizer settings: \ small "
+                           r"choices moved $0.73$ to about $0.5$, \ and refits still differ.",
+                           r"next: \ when the compute optimum is not what you want")
+        with self.voiceover(
+            "The takeaway: small choices, which parameters to count, how long to warm up, which optimizer settings, "
+            "moved the exponent from 0.73 to about a half, and refits still differ. A scaling law is a measurement, "
+            "with error bars. Next: when the compute optimum is not what you want."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

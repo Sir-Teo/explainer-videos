@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, LAZY, PART, RICH, load
+from videos.ai.ai12.common import FIT, HIST, LAZY, PART, RICH, load, predict_card, takeaway_card
 
 
 class Wide(VoiceoverScene):
@@ -13,7 +13,9 @@ class Wide(VoiceoverScene):
         self.card()
         self.gaussian()
         self.kernel()
+        self.predict()
         self.measure()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(1, r"Infinitely wide", r"What does a network compute when it is infinitely wide?",
@@ -222,3 +224,30 @@ class Wide(VoiceoverScene):
             self.play(*[Transform(a_, b_) for a_, b_ in zip(nets, new)], run_time=0.7)
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Make the network a thousand times wider and train it the same way. \ Does each weight "
+                          r"move more, \ less, \ or the same? \ And the kernel?")
+        with self.voiceover(
+            "Pause and predict. Make the network a thousand times wider, and train it the same way. Does each weight "
+            "move more, less, or the same? And the kernel?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"A very wide network is a kernel machine",
+                           r"Before training, \ a Gaussian process; \ during training, \ its tangent kernel freezes, "
+                           r"\ so it learns like kernel regression.",
+                           r"next: \ what a frozen kernel cannot do")
+        with self.voiceover(
+            "The takeaway: an infinitely wide network is a Gaussian process before training, and a kernel machine "
+            "during it, because its tangent kernel freezes. Next, what a frozen kernel cannot do."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))

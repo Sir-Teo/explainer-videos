@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, FIT, HIST, NCOL, PART, load, width_ramp
+from videos.ai.ai12.common import DCOL, FIT, HIST, NCOL, PART, load, predict_card, takeaway_card, width_ramp
 
 
 class Laws(VoiceoverScene):
@@ -13,7 +13,9 @@ class Laws(VoiceoverScene):
         self.card()
         self.history()
         self.method()
+        self.predict()
         self.laws()
+        self.takeaway()
 
     def card(self):
         card = chapter_card(7, r"Scaling laws, measured", r"How does the loss depend on size and data?", lit=(2020,),
@@ -42,7 +44,8 @@ class Laws(VoiceoverScene):
                           r"exponents $-0.07$ (words) to $-0.35$; \ a better model moves the curve, \ not its slope",
                           width=6.0, color=HIST)
         h2 = history_card(2020, r"Kaplan, McCandlish et al.\ (OpenAI)",
-                          r"loss against parameters, data and compute: \ exponents $0.076$, $0.095$, $0.050$ over seven "
+                          r"loss against parameters, data and compute: \ exponents $0.076$, $0.095$, $0.050$ over "
+                          r"seven "
                           r"orders of magnitude; \ an $8\times$ larger model needs only $5\times$ the data", width=6.0,
                           color=HIST)
         cards = VGroup(h1, h2).arrange(DOWN, buff=0.3).move_to([3.4, -0.3, 0])
@@ -209,3 +212,31 @@ class Laws(VoiceoverScene):
             self.play(FadeIn(noise))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = predict_card(r"Our models are tiny and read only $8$ characters at a time. \ Will their loss fall "
+                          r"faster or slower with size than Kaplan's language models?")
+        with self.voiceover(
+            "Pause and predict. Our models are tiny, and read only eight characters at a time. Will their loss fall "
+            "faster or slower with size than in Kaplan's language models?"
+        ):
+            self.play(FadeIn(pc, shift=UP * 0.2))
+        self.wait(2.0)
+        self.play(FadeOut(pc))
+
+    def takeaway(self):
+        tk = takeaway_card(r"A power law plus a floor",
+                           r"$L(N) = E + A/N^{\alpha}$ \ and \ $L(D) = E + B/D^{\beta}$: \ the exponents depend on "
+                           r"the task, \ the shape carries over.",
+                           r"next: \ size and data at once, \ and how to split a budget")
+        with self.voiceover(
+            "The takeaway: loss falls toward a floor along a power law, in size and in data, and the shape carries "
+            "over from task to task even when the exponents do not. Next, both at once, and how to split a budget "
+            "between them."
+        ) as vo:
+            self.play(FadeIn(tk[0], shift=UP * 0.2))
+            self.wait(max(0.0, vo.duration * 0.5 - 1.0))
+            self.play(FadeIn(tk[1]))
+        self.wait(0.4)
+        self.play(FadeOut(tk))
