@@ -899,3 +899,114 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | surest-first unmasking (low-confidence remasking) | 最有把握优先的揭开（低置信度重掩码） |
 | judged bits per character (generative perplexity) | 由另一个模型评判的每字符比特数（生成困惑度） |
 | diffusion language model (dLLM) | 扩散语言模型 |
+
+### Symmetry and science (Part 25)
+
+| English | 中文 |
+|---|---|
+| symmetry, transformation | 对称，变换 |
+| group, group action, identity, inverse | 群，群作用，单位元，逆元 |
+| permutation, permutation group | 置换（排列），置换群 |
+| rotation group SO(3), E(3), E(n), SE(3) | 转动群SO(3)，E(3)，E(n)，SE(3) |
+| rigid motion, reflection, translation | 刚体运动，反射，平移 |
+| invariant, invariance | 不变的，不变性 |
+| equivariant, equivariance | 等变的，等变性 |
+| group averaging (Reynolds operator) | 群平均（雷诺算子） |
+| data augmentation | 数据增强 |
+| canonicalization (standard pose) | 规范化（标准姿态） |
+| geometric deep learning | 几何深度学习 |
+| set function, multiset | 集合函数，多重集 |
+| Deep Sets, PointNet | Deep Sets，PointNet |
+| power sums, Newton's identities | 幂和，牛顿恒等式 |
+| graph, node, edge, adjacency matrix | 图，节点，边，邻接矩阵 |
+| graph neural network (GNN) | 图神经网络（GNN） |
+| message passing (MPNN), message, readout | 消息传递（MPNN），消息，读出 |
+| graph convolutional network (GCN) | 图卷积网络（GCN） |
+| hop, receptive field | 跳，感受野 |
+| stochastic block model, community | 随机块模型，社群 |
+| Weisfeiler–Leman test (1-WL), colour refinement | 魏斯费勒–莱曼检验（1-WL），颜色细化 |
+| graph isomorphism | 图同构 |
+| graph isomorphism network (GIN) | 图同构网络（GIN） |
+| sum / mean / max aggregation | 求和 / 平均 / 最大值聚合 |
+| regular graph, union of cycles | 正则图，若干环的并 |
+| random node features (RNI) | 随机节点特征（RNI） |
+| pair network (provably powerful graph network) | 节点对网络（可证明强大的图网络） |
+| k-WL, subgraph counts, positional encoding | k-WL，子图计数，位置编码 |
+| over-smoothing, Dirichlet energy | 过平滑，狄利克雷能量 |
+| over-squashing, bottleneck, curvature | 过挤压，瓶颈，曲率 |
+| residual (skip) connection | 残差（跳跃）连接 |
+| graph attention (GAT, GATv2), graph transformer | 图注意力（GAT，GATv2），图Transformer |
+| decalin, bicyclopentyl | 十氢萘，联环戊烷 |
+| E(n)-equivariant graph network (EGNN) | E(n)等变图网络（EGNN） |
+| SchNet, radial basis functions | SchNet，径向基函数 |
+| spherical harmonics, degree ℓ | 球谐函数，阶ℓ |
+| Wigner D-matrix (rotation block) | 维格纳D矩阵（转动块） |
+| Clebsch–Gordan coefficients, tensor product | 克莱布什–戈尔丹系数，张量积 |
+| tensor field network, NequIP, MACE, e3nn | 张量场网络，NequIP，MACE，e3nn |
+| interatomic potential, force field | 原子间势，力场 |
+| n-body system, charged particles | 多体系统，带电粒子 |
+| protein, amino acid, residue | 蛋白质，氨基酸，残基 |
+| fold, backbone, C-alpha (Cα) | 折叠（构象），主链，Cα原子 |
+| helix, strand, loop, three-helix bundle | 螺旋，链，环，三螺旋束 |
+| X-ray crystallography, cryo-EM | X射线晶体学，冷冻电镜 |
+| Protein Data Bank (PDB) | 蛋白质数据库（PDB） |
+| Levinthal's paradox | 列文索尔悖论 |
+| CASP, GDT_TS, free modelling | CASP，GDT_TS，自由建模（无模板） |
+| multiple sequence alignment (MSA), co-evolution, contact | 多序列比对（MSA），共进化，接触 |
+| distogram | 距离直方图 |
+| classical multidimensional scaling (MDS), Gram matrix | 经典多维尺度分析（MDS），格拉姆矩阵 |
+| mirror image, chirality, right-handed | 镜像，手性，右手的 |
+| RMSD, distance RMSD (dRMSD), Kabsch alignment | 均方根偏差（RMSD），距离均方根偏差（dRMSD），Kabsch对齐 |
+| Evoformer, pair representation, MSA representation | Evoformer，残基对表示，MSA表示 |
+| row / column attention, outer product mean | 行 / 列注意力，外积均值 |
+| triangle inequality, triangle multiplicative update, triangle attention | 三角不等式，三角乘法更新，三角注意力 |
+| structure module, rigid frame, residue gas | 结构模块，刚性坐标系，残基气体 |
+| invariant point attention (IPA) | 不变点注意力（IPA） |
+| frame-aligned point error (FAPE), clamp | 坐标系对齐点误差（FAPE），截断 |
+| recycling | 循环（回收） |
+| pLDDT (confidence) | pLDDT（置信度） |
+| AlphaFold Protein Structure Database | AlphaFold蛋白质结构数据库 |
+| Pairformer, diffusion module | Pairformer，扩散模块 |
+| cross-distillation, hallucination | 交叉蒸馏，幻觉 |
+| ligand, docking, PoseBusters | 配体，分子对接，PoseBusters |
+| protein design, inverse folding, binder | 蛋白质设计，逆折叠，结合子 |
+| sequence recovery | 序列还原率 |
+| motif scaffolding | 基序支架 |
+| denoiser, denoising diffusion | 去噪器，去噪扩散 |
+| numerical weather prediction (NWP) | 数值天气预报（NWP） |
+| reanalysis (ERA5) | 再分析（ERA5） |
+| icosahedral mesh, multimesh | 二十面体网格，多尺度网格（multimesh） |
+| encoder–processor–decoder | 编码器–处理器–解码器 |
+| rollout, lead time | 推演（展开），预报时效 |
+| persistence, climatology | 持续性预报，气候平均 |
+| ensemble forecast | 集合预报 |
+| vorticity | 涡度 |
+| neural operator, Fourier neural operator (FNO), DeepONet | 神经算子，傅里叶神经算子（FNO），DeepONet |
+| Burgers' equation, pseudo-spectral solver | 伯格斯方程，伪谱求解器 |
+| convolution theorem, Fourier mode | 卷积定理，傅里叶模式 |
+| resolution invariance, zero-shot super-resolution | 分辨率不变性，零样本超分辨率 |
+| crystal, space group, formation energy | 晶体，空间群，形成能 |
+| density functional theory (DFT) | 密度泛函理论（DFT） |
+| convex hull, energy above hull, stable | 凸包，凸包上方能量，稳定 |
+| active learning, surrogate model, hit rate | 主动学习，代理模型，命中率 |
+| autonomous laboratory | 自主实验室 |
+| proof assistant, kernel, Lean, Mathlib | 证明助手，内核，Lean，Mathlib |
+| formal proof, formalization, autoformalization | 形式化证明，形式化，自动形式化 |
+| four-colour theorem, Kepler conjecture | 四色定理，开普勒猜想 |
+| symbolic deduction engine, auxiliary construction | 符号演绎引擎，辅助构造 |
+| synthetic theorems, traceback | 合成定理，回溯 |
+| Erdős problems | 埃尔德什问题 |
+| cap set | 帽集 |
+| online bin packing, first fit, best fit, priority function | 在线装箱，首次适配，最佳适配，优先级函数 |
+| genetic programming, mutation, crossover | 遗传规划，变异，交叉 |
+| tensor rank, tensor decomposition | 张量秩，张量分解 |
+| alternating least squares | 交替最小二乘 |
+| Strassen's algorithm | 施特拉森算法 |
+| kissing number | 接吻数 |
+| evolutionary coding agent | 进化编程智能体 |
+
+Names stay in Latin script: AlphaFold, AlphaFold-Multimer, AlphaFold Server, RoseTTAFold, ESMFold, ESM3, ProteinMPNN,
+RFdiffusion, RFdiffusion3, BindCraft, AlphaProteo, BoltzGen, Boltz-1, Boltz-2, Chai-1, Protenix, OpenFold3, IsoDDE,
+Rosetta, Top7, GraphCast, GenCast, AIFS, FourCastNet, Pangu-Weather, WeatherNext, GNoME, MatterGen, MACE-MP-0, A-Lab,
+EGNN, SchNet, NequIP, MACE, e3nn, GIN, GCN, GAT, PointNet, Deep Sets, FNO, DeepONet, Lean, Mathlib, AlphaGeometry,
+AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTensor.
