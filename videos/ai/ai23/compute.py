@@ -89,8 +89,9 @@ def compute_bpe():
     out = dict(first=[a + b for a, b in merges[:40]], first_counts=saved[:40], sizes=sizes, sentence=SENTENCE,
                n_merges=len(merges), merges=[[a, b] for a, b in merges], counts=freq, saved=saved, base=base,
                sample_chars=L0, length=[L0 - int(np.sum(saved[:k])) for k in range(0, len(merges) + 1, 50)])
+    # the savings add up: the merged text is exactly as long as the counts say
     check = text.BPE(merges, len(merges))
-    assert abs(sum(len(check.word(w)) for w in text.words_of(sample)) - out["length"][-1]) <= 0 or len(merges) % 50
+    assert sum(len(check.word(w)) for w in text.words_of(sample)) == L0 - sum(saved)
     for n in sizes:
         tok = text.BPE(merges, n)
         for name, t in (("valid", valid), ("passage", passage)):

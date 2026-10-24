@@ -310,7 +310,8 @@ def compute_audrey(cache):
                multi_dtw=float(multi), n_other=sum(not x["same"] for x in rows), n_same=sum(x["same"] for x in rows),
                n_templates=len(many),
                per_voice={v: acc(lambda x, v=v: x["voice"] == v, "dtw") for v in VOICES_TRAIN + VOICES_TEST})
-    ex = feats[(TEMPLATE_VOICE, "seven", 1.1)], tmpl["seven"]
+    w_ex = "seven" if "seven" in words else words[-1]
+    ex = feats[(TEMPLATE_VOICE, w_ex, 1.1)], tmpl[w_ex]
     out["example_a"], out["example_b"] = ex[0], ex[1]
     n, m = len(ex[0]), len(ex[1])
     d = ((ex[0][:, None] - ex[1][None]) ** 2).sum(-1)

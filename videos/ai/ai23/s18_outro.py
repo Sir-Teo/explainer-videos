@@ -132,7 +132,7 @@ class Outro(VoiceoverScene):
             r"$16$ kHz, \ where does a $9$ kHz tone appear?",
             r"List every path of $T = 3$ frames over $\{a, b, \varnothing\}$ that collapses to ``ab'', \ and check the "
             r"count with the forward recursion. \ Why must every path for ``aa'' contain a blank?",
-            r"Show that $f^*(x, y) = \log p(y \mid x) / p(y)$ minimizes InfoNCE as $N \to \infty$, \ and that "
+            r"Show that $f^*(x, y) = \log p(y \mid x) / p(y)$ minimizes InfoNCE, \ and that "
             r"$\log N - \mathcal L \le \log N$ for any critic. \ How much information can a batch of $256$ certify?",
         ], font_size=22)
         with self.voiceover(
