@@ -62,6 +62,9 @@ class ViT(VoiceoverScene):
         fl = label(r"each patch's $16$ pixels times a learned matrix $E$, \ plus a learned position vector", font_size=22,
                    color=GREY_A).next_to(f, DOWN, buff=0.2)
         cite_ = cite(r"A.~Dosovitskiy et al., \textit{An Image Is Worth 16x16 Words} (2020)", corner=DR)
+        tf = label(r"then Part 13's transformer: \ attention and MLPs, \ layer after layer", font_size=24, color=WHITE)
+        tf = VGroup(SurroundingRectangle(tf, buff=0.18, corner_radius=0.1, color=C.ATTN, stroke_width=2), tf)
+        tf.next_to(fl, DOWN, buff=0.4)
         with self.voiceover(
             "A transformer reads sequences of tokens. So cut the picture into squares, called patches, and line them "
             "up. <bookmark mark='a'/> Each patch becomes a token: its pixels times a learned matrix, plus a learned "
@@ -71,10 +74,11 @@ class ViT(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(big), FadeIn(cite_))
             self.play(Create(grid))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c_, shift=RIGHT * 0.2) for c_ in cells], lag_ratio=0.04), FadeIn(cl), run_time=2.0)
-            vo.wait_until("b")
+            vo.wait_until("a")
             self.play(Write(f), FadeIn(fl))
+            vo.wait_until("b")
+            self.play(FadeIn(tf, shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
 
