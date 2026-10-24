@@ -78,19 +78,12 @@ class Rotations(VoiceoverScene):
         # the hook's molecule: every atom carries features h and a position x
         nd = load("nbody_data")
         x0, q0 = np.asarray(nd["show_x0"])[1], np.asarray(nd["show_q"])[1]
-        # the view that spreads the five atoms out most
-        best = None
-        for ang in np.linspace(0, np.pi, 13):
-            for tl in np.linspace(-0.6, 0.6, 7):
-                Q, _ = project(x0 - x0.mean(0), ang, tl)
-                gap = min(np.linalg.norm(Q[a] - Q[b]) for a in range(5) for b in range(a + 1, 5)) / np.abs(Q).max()
-                if best is None or gap > best[0]:
-                    best = (gap, Q)
-        P2 = best[1] / np.abs(best[1]).max() * 1.7
+        # a schematic of the hook's five charges, laid out so that every atom is visible
+        P2 = np.array([[-1.35, 0.55], [-0.25, 1.35], [1.25, 0.75], [0.95, -0.95], [-0.75, -1.05]]) * 1.05
         cm_ = np.array([-4.3, 0.2, 0])
         at = [cm_ + np.r_[p, 0] for p in P2]
         bonds = VGroup(*[Line(at[a], at[b], color=GREY_D, stroke_width=1.5) for a in range(5) for b in range(a + 1, 5)])
-        i_, j_ = 0, int(np.argmax(np.linalg.norm(P2 - P2[0], axis=1)))
+        i_, j_ = 0, 3
         bonds.add(Line(at[i_], at[j_], color=STRUCT, stroke_width=4))
         atoms = VGroup(*[Circle(radius=0.17, stroke_width=1.2, stroke_color=WHITE, fill_color=PLUS if c > 0 else MINUS,
                                 fill_opacity=0.95).move_to(a_) for a_, c in zip(at, q0)])

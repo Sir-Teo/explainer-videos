@@ -45,7 +45,7 @@ class TestTime(VoiceoverScene):
         lines = VGroup(*[curve(ax, lk, cov[i], width_ramp(i, len(N)), 3) for i in sel])
         lg = VGroup(*[label(rf"${int(N[i]) / 1000:.0f}$k parameters" if N[i] < 1e6 else rf"${N[i] / 1e6:.1f}$M parameters",
                             font_size=18, color=width_ramp(i, len(N))) for i in sel]).arrange(DOWN, aligned_edge=LEFT, buff=0.05)
-        lg.next_to(ax, RIGHT, buff=0.2).align_to(ax, UP)
+        lg.next_to(ax.c2p(0.05, 1.0), DR, buff=0.1)
         cards = VGroup(
             history_card(2024, r"OpenAI, \ o1", r"accuracy on competition maths rose smoothly with the logarithm of "
                          r"both its training compute and its thinking time", width=5.4, color=HIST),

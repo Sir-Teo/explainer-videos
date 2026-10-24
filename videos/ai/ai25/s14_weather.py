@@ -101,9 +101,9 @@ class Weather(VoiceoverScene):
             "six hours on, from the last two. <bookmark mark='d'/> It makes a ten-day forecast in under a minute, and beat "
             "ECMWF's flagship deterministic forecast on ninety percent of 1,380 targets."
         ) as vo:
-            self.play(FadeIn(facts[0]), FadeIn(facts[1]))
+            self.play(FadeIn(facts[0]), FadeIn(facts[1]), FadeIn(grid))
             vo.wait_until("a")
-            self.play(FadeIn(grid), FadeIn(facts[2]))
+            self.play(FadeIn(facts[2]), Indicate(grid, scale_factor=1.03, color=GREY_A))
             vo.wait_until("b")
             self.play(FadeIn(nodes), FadeIn(facts[3]))
             for L in sorted(lev):

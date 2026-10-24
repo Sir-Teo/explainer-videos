@@ -77,6 +77,8 @@ class Outro(VoiceoverScene):
         rp = load("repeat")
         ep = np.log2(np.asarray(rp["epochs"], float))
         worth = np.log2(np.asarray(rp["effective"], float) / np.asarray(rp["unique"], float))
+        okw = np.isfinite(worth)  # runs worse than any fresh run are off the curve
+        ep, worth = ep[okw], worth[okw]
         a6 = axes((0, ep.max()), (0, max(ep.max(), worth.max())))
         out.append((VGroup(a6, DashedLine(a6.c2p(0, 0), a6.c2p(ep.max(), ep.max()), color=GREY_D, stroke_width=1.5),
                            curve(a6, ep, worth, C.BITS, 3), *[Dot(a6.c2p(a, b), radius=0.04, color=WHITE) for a, b in zip(ep, worth)]),

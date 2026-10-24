@@ -277,6 +277,8 @@ class Sets(VoiceoverScene):
             f_ = np.mean([d[f"{kind}_{n_big}_s{s}"]["flip"] for s in d["seeds"]])
             flips.add(label(rf"{set_name[kind]}: \ ${100 * f_:.0f}\%$", font_size=24, color=KIND_COLOR[kind]))
         flips.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.4, 1.3, 0])
+        if flips.get_right()[0] > 6.75:
+            flips.shift(LEFT * (flips.get_right()[0] - 6.75))
         params = {k: d[f"{k}_{n_big}_s0"]["params"] for k in ("mlp", "deepsets")}
         tag = note(rf"computed: \ three seeds each \ (band: \ min--max), \ ${d['steps']:,}$ steps each; \ "
                    rf"MLP ${params['mlp']:,}$ weights, \ Deep Sets ${params['deepsets']:,}$".replace(",", "{,}")
