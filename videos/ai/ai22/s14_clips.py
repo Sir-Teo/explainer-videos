@@ -130,14 +130,17 @@ class Clips(VoiceoverScene):
         else:
             verdict = (f"Surprisingly, drawing the frames together doesn't steady the motion here: {jj.mean():.2f} "
                        f"pixels of wobble against {ij.mean():.2f}.")
+        if jj.mean() < ij.mean():
+            close = "Denoising the whole clip at once makes the frames agree."
+        else:
+            close = "At this size, denoising the whole clip at once doesn't buy agreement."
         tk = take_away(r"one noise level, \ full attention: \ frames that agree, \ but a clip of fixed length")
         with self.voiceover(
             "Here's the catch with one frame: it doesn't say which way the letter is moving. The model has to "
             "choose, and every frame has to make the same choice. <bookmark mark='a'/> In each pair, the top row is "
             "a clip drawn together. The bottom row takes each frame from a different sample of the same model, as if "
             "the frames had been drawn one by one, independently. <bookmark mark='b'/> " + verdict
-            + " <bookmark mark='c'/> Denoising the whole clip at once makes the frames agree. But the clip's length "
-            "is fixed when the model is trained."
+            + " <bookmark mark='c'/> " + close + " And the clip's length is fixed when the model is trained."
         ) as vo:
             self.play(FadeIn(hd), FadeIn(hdn))
             vo.wait_until("a")
