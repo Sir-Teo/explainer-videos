@@ -50,6 +50,7 @@ class BYOL(VoiceoverScene):
         res = label(r"no negatives; \ ResNet-50 on ImageNet: \ $74.3\%$ linear probe", font_size=24, color=BYOL_C)
         res.to_edge(DOWN, buff=0.5)
         src = cite(r"Grill et al.\ (2020): \ BYOL")
+        head = label(r"BYOL: \ bootstrap your own latent", font_size=34).to_edge(UP, buff=0.35)
         with self.voiceover(
             "In June 2020 a DeepMind team led by Jean-Bastien Grill removed the negatives anyway. <bookmark "
             "mark='a'/> BYOL has two networks. The online network sees one view and, through an extra small "
@@ -58,7 +59,7 @@ class BYOL(VoiceoverScene):
             "moving average of the online weights. <bookmark mark='d'/> Nothing pushes images apart, yet it did not "
             "collapse, and it beat SimCLR: 74.3 percent on ImageNet with a ResNet-50."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(x1), FadeIn(on), FadeIn(nl), *[GrowArrow(a) for a in arr[:3]])
             vo.wait_until("b")

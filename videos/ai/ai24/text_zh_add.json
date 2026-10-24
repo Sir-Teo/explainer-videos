@@ -560,7 +560,8 @@
   "Three ways to learn from the data itself": "从数据本身学习的三条路",
   "different data, \\ different objectives, \\ even different senses: \\\\ one picture of the world?": "不同的数据，\\ 不同的目标，\\ 甚至不同的感官：\\\\ 同一幅世界图景？",
   "evenly spread": "均匀铺开",
-  "collapsed": "坍缩"
+  "collapsed": "坍缩",
+  "BYOL: \\ bootstrap your own latent": "BYOL：\\ 自举你自己的隐表示"
  },
  "patterns": []
 }

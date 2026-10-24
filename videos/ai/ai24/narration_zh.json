@@ -1,0 +1,559 @@
+{
+ "title": "人工智能，从零搭建 · 第24部分：无标签学习",
+ "chapters": {
+  "Hook": "没有人告诉它什么是数字",
+  "Problem": "1. 无标签学习",
+  "Pretext": "2. 自己出一道题",
+  "InfoNCE": "3. 分辨真假",
+  "SimCLR": "4. 同一个数字的两个视图",
+  "Sphere": "5. 对齐与均匀",
+  "Collapse": "6. 坍缩",
+  "BYOL": "7. 没有负样本：BYOL与SimSiam",
+  "Barlow": "8. 去相关：Barlow Twins与VICReg",
+  "DINO": "9. 自蒸馏：DINO",
+  "Scale": "10. 规模与数据筛选",
+  "Masked": "11. 填空：MAE与BEiT",
+  "JEPAScene": "12. 预测含义，而不是像素",
+  "Budget": "13. 所有方法，同一份预算",
+  "Embeddings": "14. 用于搜索的嵌入",
+  "Platonic": "15. 所有模型看到的是同一个世界吗？",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "022a7bb3ada8": {
+   "scene": "Hook",
+   "en": "These six hundred dots are handwritten digits. A network has squeezed each one into just three numbers, a point on a sphere. <bookmark mark='a'/> The colours are the digits' labels, zero to nine. <bookmark mark='b'/> But the network never saw a label. All it was ever asked was which two distorted copies of a picture came from the same digit. <bookmark mark='c'/> And yet, ask a digit's nearest neighbours on this sphere what it is, and they are right 77 percent of the time.",
+   "zh": "这600个点是手写数字。一个网络把每个数字压缩成仅仅3个数，也就是球面上的一个点。<bookmark mark='a'/>颜色是数字的标签，从0到9。<bookmark mark='b'/>可是这个网络从来没见过任何标签。它被问到的唯一问题是：哪两张被扭曲过的图来自同一个数字。<bookmark mark='c'/>然而，问一个数字在这个球面上的近邻它是几，它们答对的比例是77%。"
+  },
+  "7a569f115381": {
+   "scene": "Hook",
+   "en": "Here is how it got there. At the start, the untrained network puts almost every digit on the same small patch of the sphere. <bookmark mark='a'/> Each step shows the network a hundred and twenty-eight digits, each in two versions, cropped, tilted, smudged. It pulls the two versions of each digit together, <bookmark mark='b'/> and pushes everything else apart. Nothing in this rule mentions a five or a seven. <bookmark mark='c'/> The clusters appear anyway, because two smudged copies of a five resemble each other in the same ways that all fives resemble each other. <bookmark mark='d'/> Leave out the push, and the network finds a lazier answer: every digit on the same spot.",
+   "zh": "它是这样走到这一步的。一开始，未训练的网络几乎把每个数字都放在球面上同一小块地方。<bookmark mark='a'/>每一步给网络看128个数字，每个数字有两个版本，被裁剪、被倾斜、被涂抹过。它把每个数字的两个版本拉到一起，<bookmark mark='b'/>把其余的一切推开。这条规则里根本没提到5或7。<bookmark mark='c'/>可是簇还是出现了，因为一个5的两份涂抹副本彼此相像的方式，正是所有5彼此相像的方式。<bookmark mark='d'/>如果去掉“推开”，网络就会找到一个更偷懒的答案：所有数字都落在同一个点上。"
+  },
+  "138f5790125b": {
+   "scene": "Hook",
+   "en": "That is the question of this part: how does a network learn what matters when nobody labels the data? <bookmark mark='a'/> The field has found three families of answers. Hide part of the input and ask for it back. <bookmark mark='b'/> Show two versions of the same input and ask the network to make them agree. <bookmark mark='c'/> Or hide part of the input and ask not for its pixels but for what it means. <bookmark mark='d'/> And every one of them must avoid the same trap we just saw: a network that gives the same answer for everything agrees with itself perfectly.",
+   "zh": "这就是本部分的问题：没有人给数据打标签时，网络怎样学到什么是重要的？<bookmark mark='a'/>这个领域找到了三类答案。藏起输入的一部分，让网络把它找回来。<bookmark mark='b'/>给出同一个输入的两个版本，让网络使它们一致。<bookmark mark='c'/>或者藏起输入的一部分，不要它的像素，而要它的含义。<bookmark mark='d'/>而且每一类都必须避开我们刚才看到的同一个陷阱：一个对什么输入都给出同一个答案的网络，和自己完全一致。"
+  },
+  "51b0fe419f67": {
+   "scene": "Hook",
+   "en": "This is Part 24 of AI, Built: learning without labels. <bookmark mark='a'/> In this part: how the field got here, and how to judge what a network has learned; <bookmark mark='o2'/> contrastive learning, from word2vec's negative samples to SimCLR; <bookmark mark='o3'/> the geometry of the sphere; <bookmark mark='o4'/> collapse, made to happen and then prevented four ways; <bookmark mark='o5'/> self-distillation, and what it takes to scale it; <bookmark mark='o6'/> masked models and joint-embedding prediction; <bookmark mark='o7'/> every method on one budget, and embeddings for search; <bookmark mark='o8'/> and whether different networks end up seeing the world the same way. Every model in this part is trained on the computer making it.",
+   "zh": "这是《人工智能，从零搭建》的第24部分：无标签学习。<bookmark mark='a'/>本部分的内容：这个领域是怎样走到今天的，以及怎样评判一个网络学到了什么；<bookmark mark='o2'/>对比学习，从word2vec的负样本到SimCLR；<bookmark mark='o3'/>球面的几何；<bookmark mark='o4'/>坍缩，先让它发生，再用四种办法阻止它；<bookmark mark='o5'/>自蒸馏，以及把它做大需要什么；<bookmark mark='o6'/>掩码模型与联合嵌入预测；<bookmark mark='o7'/>同一份预算下的所有方法，以及用于搜索的嵌入；<bookmark mark='o8'/>最后，不同的网络最终看到的世界是否一样。本部分的每一个模型，都是在制作这个视频的电脑上训练的。"
+  },
+  "81cc946978f8": {
+   "scene": "Problem",
+   "en": "Chapter one. Learning without labels.",
+   "zh": "第1章。无标签学习。"
+  },
+  "411ad23de878": {
+   "scene": "Problem",
+   "en": "For thirty years, a network learned to see by being told. MNIST, the digits we use in this part, came with sixty thousand labels; <bookmark mark='a'/> ImageNet with more than a million, each one checked by people. <bookmark mark='b'/> But pictures without labels are nearly free. DINOv2, in 2023, trained on a hundred and forty-two million unlabelled images; <bookmark mark='c'/> DINOv3, in 2025, on one point seven billion, chosen from a pool of about seventeen billion. <bookmark mark='d'/> Nobody will ever label those. The question is how to learn from them anyway.",
+   "zh": "三十年来，网络都是靠被告知来学会看东西的。本部分用到的MNIST数字带着6万个标签；<bookmark mark='a'/>ImageNet带着一百多万个，每一个都经过人工核对。<bookmark mark='b'/>可是没有标签的图片几乎是免费的。2023年的DINOv2在1.42亿张无标签图像上训练；<bookmark mark='c'/>2025年的DINOv3用了17亿张，是从大约170亿张里挑出来的。<bookmark mark='d'/>这些图永远不会有人去标注。问题是：怎样照样从中学习。"
+  },
+  "749e1a6b8a75": {
+   "scene": "Problem",
+   "en": "In 2016 Yann LeCun drew intelligence as a cake. <bookmark mark='a'/> Supervised learning, from labels, is the icing; reinforcement learning, from rewards, is the cherry on top. <bookmark mark='b'/> The cake itself is learning to predict any part of the input from any other part: there is far more information in a picture than in its label. <bookmark mark='c'/> He later gave the cake its current name: self-supervised learning. Hide part of an input, or change it, or pair it with another, and ask the network to recover what was hidden, or which goes with which. <bookmark mark='d'/> Nobody writes the answers; the data does. What we keep is not the answer but the network's internal vector, its representation.",
+   "zh": "2016年，杨立昆把智能画成了一块蛋糕。<bookmark mark='a'/>监督学习，也就是从标签中学习，是蛋糕上的糖霜；强化学习，从奖励中学习，是顶上的樱桃。<bookmark mark='b'/>蛋糕本身，是学会从输入的任何一部分预测其他任何一部分：一张图片里的信息远远多于它的标签。<bookmark mark='c'/>后来他给这块蛋糕起了现在的名字：自监督学习。藏起输入的一部分，或者改变它，或者把它和另一个输入配对，然后让网络找回被藏起的东西，或者说出哪个和哪个是一对。<bookmark mark='d'/>答案不是人写的，是数据自己给的。我们要留下的不是答案，而是网络内部的向量，也就是它的表示。"
+  },
+  "13dafe8fd87d": {
+   "scene": "Problem",
+   "en": "How we got here. In 1961 the neuroscientist Horace Barlow proposed that the senses recode what they receive to remove its redundancy. <bookmark mark='a'/> In 1992 Sue Becker and Geoffrey Hinton trained two small networks that looked at neighbouring parts of an image to agree with each other, and they discovered depth. <bookmark mark='b'/> Siamese networks for signatures followed, then a contrastive loss that pulls similar pairs together and pushes others apart. <bookmark mark='c'/> Denoising autoencoders hid part of the input; noise-contrastive estimation and word2vec learned by telling real data from noise. <bookmark mark='d'/> Around 2015 came pretext puzzles, and in 2018 the InfoNCE loss. <bookmark mark='e'/> Between 2019 and 2021, MoCo, SimCLR, BYOL, DINO and MAE closed the gap to supervised training. <bookmark mark='f'/> Since then: prediction in representation space, and models trained on billions of images and on video.",
+   "zh": "我们是怎样走到这里的。1961年，神经科学家霍勒斯·巴洛提出，感官会把接收到的信息重新编码，去掉其中的冗余。<bookmark mark='a'/>1992年，苏·贝克尔和杰弗里·辛顿训练了两个小网络，它们看着图像中相邻的部分，被要求彼此一致，结果它们学会了感知深度。<bookmark mark='b'/>随后出现了用于签名验证的孪生网络，然后是一种对比损失：把相似的样本对拉近，把其余的推开。<bookmark mark='c'/>去噪自编码器藏起输入的一部分；噪声对比估计和word2vec则通过分辨真实数据和噪声来学习。<bookmark mark='d'/>2015年前后出现了各种前置任务，2018年出现了InfoNCE损失。<bookmark mark='e'/>2019到2021年间，MoCo、SimCLR、BYOL、DINO和MAE追平了监督训练。<bookmark mark='f'/>此后：在表示空间里做预测，以及在数十亿张图像和视频上训练的模型。"
+  },
+  "71fe1e5e20c4": {
+   "scene": "Problem",
+   "en": "How do you judge a representation, when the whole point was not to use labels? You freeze the network, <bookmark mark='a'/> and ask how easily its vectors can be read. <bookmark mark='b'/> A linear probe: train only a linear classifier on top, with all the labels. If the digits are separated by flat walls in this space, the network has done the work. <bookmark mark='c'/> A nearest-neighbour vote: no training at all, just ask the twenty closest training digits. <bookmark mark='d'/> And the test that matters most in practice: a linear classifier from only ten labelled examples of each digit.",
+   "zh": "既然初衷就是不用标签，又该怎样评判一个表示呢？先把网络冻结，<bookmark mark='a'/>然后看它的向量有多容易读出来。<bookmark mark='b'/>线性探针：只在上面训练一个线性分类器，用全部标签。如果在这个空间里，不同的数字能被平直的墙隔开，那么活儿就是网络干的。<bookmark mark='c'/>近邻投票：完全不训练，只问离它最近的20个训练数字。<bookmark mark='d'/>还有实践中最重要的检验：只用每个数字10个带标签的样本，训练一个线性分类器。"
+  },
+  "513ae98fca5b": {
+   "scene": "Problem",
+   "en": "Our test bench is MNIST: sixty thousand handwritten digits to learn from, ten thousand to test on. <bookmark mark='a'/> Every method gets the same small network, the same 800 updates and the same views, from three random starts. <bookmark mark='b'/> Three yardsticks first. The raw pixels; an untrained network; and the same network trained with every label. <bookmark mark='c'/> Raw pixels already score 97.0 percent by nearest neighbours: MNIST is easy that way. The hard test is ten labels per digit, where pixels manage 73 percent and the supervised network, which saw all sixty thousand labels, 97. A self-supervised method sits somewhere between the untrained network and the one that was told.",
+   "zh": "我们的试验台是MNIST：6万个手写数字用来学习，1万个用来测试。<bookmark mark='a'/>每种方法都用同一个小网络，同样的800次更新，同样的视图，从三个不同的随机起点开始。<bookmark mark='b'/>先看三把标尺：原始像素；一个未训练的网络；以及用全部标签训练的同一个网络。<bookmark mark='c'/>原始像素用近邻法已经能得到97.0%：在这一点上，MNIST很容易。难的检验是每个数字只给10个标签，这时像素只有73%，而见过全部6万个标签的监督网络是97%。自监督方法的成绩，应该落在未训练的网络和被告知答案的网络之间。"
+  },
+  "f4abfceaef8f": {
+   "scene": "Pretext",
+   "en": "Chapter two. Invent a puzzle.",
+   "zh": "第2章。自己出一道题。"
+  },
+  "429781ffd4c3": {
+   "scene": "Pretext",
+   "en": "The first idea was to invent a puzzle whose answer comes free with the data. <bookmark mark='a'/> Cut an image into tiles and ask where one tile sits relative to another. <bookmark mark='b'/> Shuffle the tiles and ask for the order. <bookmark mark='c'/> Remove the colour and ask for it back. <bookmark mark='d'/> Cut a hole and ask what was there. <bookmark mark='e'/> Or turn the image and ask which way is up. To answer, the reasoning went, the network has to know what things look like. <bookmark mark='f'/> The catch is that a network solves the puzzle you set, not the problem you meant.",
+   "zh": "最早的想法是出一道题，它的答案随数据免费附送。<bookmark mark='a'/>把图像切成小块，问一块相对另一块在哪里。<bookmark mark='b'/>把小块打乱，问原来的顺序。<bookmark mark='c'/>去掉颜色，让它把颜色找回来。<bookmark mark='d'/>挖一个洞，问那里原来是什么。<bookmark mark='e'/>或者把图像转一下，问哪边朝上。当时的想法是：要答对这些题，网络必须知道东西长什么样。<bookmark mark='f'/>问题在于，网络解的是你出的题，而不是你心里想的那个问题。"
+  },
+  "da01dd3b83f3": {
+   "scene": "Pretext",
+   "en": "We trained the rotation puzzle. Each step, sixty-four digits are each turned four ways, and the network must say which turn it is looking at. <bookmark mark='a'/> Here are four test digits, each in its four turns, with the network's four probabilities beside them; green is the right answer. <bookmark mark='b'/> Within a few hundred steps it is right about 71 percent of the time. <bookmark mark='c'/> And the green curve is what we actually care about: whether the network's vectors put fives near fives. It never saw a label, yet its nearest-neighbour accuracy on the digits goes from 73 to 86 percent on this quick test.",
+   "zh": "我们训练了旋转这道题。每一步，64个数字各被转四种角度，网络要说出它看到的是哪一种。<bookmark mark='a'/>这里是四个测试数字，每个都有四种转法，旁边是网络给出的四个概率；绿色是正确答案。<bookmark mark='b'/>几百步之内，它就能答对大约71%。<bookmark mark='c'/>而绿色的曲线才是我们真正关心的：网络的向量会不会把5放在5的旁边。它从没见过标签，可在这个快速测试里，它在数字上的近邻准确率从73%升到了86%。"
+  },
+  "8d2c24b3f0b6": {
+   "scene": "Pretext",
+   "en": "The puzzle has blind spots, and we can measure them. This is how often the trained network finds the right turn, digit by digit, averaged over the three seeds. <bookmark mark='a'/> The worst are the 6, 0 and 8. <bookmark mark='b'/> These are the digits that look much the same turned half a turn, so the puzzle has no answer for them, and the network learns nothing from them about which way is up. The task decides what the network attends to, digit by digit.",
+   "zh": "这道题有盲区，而且我们可以测量出来。这是训练好的网络在每个数字上找对转角的比例，取三个种子的平均。<bookmark mark='a'/>最差的是6, 0 and 8。<bookmark mark='b'/>这些数字转半圈之后看起来差不多，所以对它们来说这道题没有答案，网络也就从它们身上学不到哪边朝上。任务决定了网络关注什么，一个数字一个数字地决定。"
+  },
+  "a4c6e2631a5a": {
+   "scene": "Pretext",
+   "en": "So how good is the representation? <bookmark mark='a'/> The rotation puzzle lifts the ten-label test from 55 percent, for the untrained network, to 74; the supervised network, which saw every label, reaches 97. <bookmark mark='b'/> Puzzles found shortcuts in real photographs too. The first tile puzzle, in 2015, was partly solved from chromatic aberration: the colour fringes a lens adds near the edge of a photo give away where a tile came from. The authors had to strip colour from the tiles. <bookmark mark='c'/> Pretext tasks taught the field that free labels work, and that the choice of puzzle decides what is learned.",
+   "zh": "那么，这个表示有多好？<bookmark mark='a'/>旋转这道题把10个标签的检验从未训练网络的55%提高到了74%；见过全部标签的监督网络是97%。<bookmark mark='b'/>在真实照片上，这些题也被找到了捷径。2015年最早的拼块题，有一部分是靠色差解出来的：镜头在照片边缘附近加上的彩色镶边，会暴露一块图来自哪里。作者们只好去掉小块的颜色。<bookmark mark='c'/>前置任务让这个领域明白：免费的标签行得通，而题目的选择决定了学到什么。"
+  },
+  "9c9cbb316c23": {
+   "scene": "Pretext",
+   "en": "One puzzle turned out to be different from the rest, because it is not about any particular property of images. Make every image its own class. <bookmark mark='a'/> Its transformed copies count as the same class; every other image is a different one. Alexey Dosovitskiy and colleagues tried it in 2014, <bookmark mark='b'/> and in 2018 Zhirong Wu and colleagues scaled it to a million classes, one per ImageNet photo, by keeping a stored vector for every image and comparing against those. <bookmark mark='c'/> Telling one image from all the others is the contrastive idea, and the next chapter is its mathematics.",
+   "zh": "有一道题和其他的都不一样，因为它不关乎图像的任何具体性质：让每张图像自成一类。<bookmark mark='a'/>它被变换出的副本算同一类；其他每张图像都算不同的类。阿列克谢·多索维茨基和同事在2014年试过这个办法，<bookmark mark='b'/>2018年，吴志荣和同事把它扩展到一百万个类，ImageNet的每张照片一个类，办法是为每张图像存一个向量，拿来做比较。<bookmark mark='c'/>把一张图像和其他所有图像区分开，这就是对比的思想，下一章讲它的数学。"
+  },
+  "5d929b061b89": {
+   "scene": "InfoNCE",
+   "en": "Chapter three. Telling the real from the fake.",
+   "zh": "第3章。分辨真假。"
+  },
+  "2ec9f0e86506": {
+   "scene": "InfoNCE",
+   "en": "Contrastive learning starts from a statistics trick of 2010. You want a model of your data, but its probabilities need a normalizing sum over every possible input, which you cannot compute. <bookmark mark='a'/> So add noise you chose yourself, and train a classifier to tell data from noise. <bookmark mark='b'/> Michael Gutmann and Aapo Hyvärinen showed that the best such classifier has to know the ratio of the data's density to the noise's, so it learns the model without the sum. They called it noise-contrastive estimation.",
+   "zh": "对比学习起源于2010年的一个统计技巧。你想给数据建模，可模型的概率需要对所有可能的输入求一个归一化的和，这根本算不出来。<bookmark mark='a'/>那就自己选一些噪声加进来，训练一个分类器去分辨数据和噪声。<bookmark mark='b'/>迈克尔·古特曼和阿波·许韦里宁证明了：最好的这种分类器必须知道数据密度与噪声密度之比，所以它不用那个和就能学到模型。他们称之为噪声对比估计。"
+  },
+  "63b77a294edc": {
+   "scene": "InfoNCE",
+   "en": "Three years later, word2vec made the trick simple enough for everyone. Take a word, dog, and a word that really appeared near it, barked. <bookmark mark='a'/> Push their vectors' score up. <bookmark mark='b'/> Then draw a handful of words at random, from the word frequencies raised to three quarters, and push their scores down. <bookmark mark='c'/> This is negative sampling, a simplified noise-contrastive estimate, and it is the version Part 3 trained on the books. A real pair against fake ones: every method in the next three chapters has this shape.",
+   "zh": "三年后，word2vec把这个技巧变得人人都能用。拿一个词，dog，再拿一个真正出现在它附近的词，barked。<bookmark mark='a'/>把它们向量的打分推高。<bookmark mark='b'/>然后按词频的四分之三次方随机抽几个词，把它们的打分压低。<bookmark mark='c'/>这就是负采样，一种简化的噪声对比估计，也正是第3部分在那些书上训练的版本。一个真实的对，对上几个假的：接下来三章里的每种方法都是这个样子。"
+  },
+  "5d73736c3d0b": {
+   "scene": "InfoNCE",
+   "en": "In 2018 Aaron van den Oord, Yazhe Li and Oriol Vinyals wrote the modern form. Take an x, and N candidates. <bookmark mark='a'/> One of them, y one, really goes with x; the other N minus one were drawn at random. <bookmark mark='b'/> A scoring function f rates every pair, a softmax turns the scores into a guess, and the loss is the cross-entropy of guessing the partner. They called it InfoNCE, <bookmark mark='c'/> because it is noise-contrastive estimation turned into an N-way choice, and because of what it measures: information.",
+   "zh": "2018年，亚伦·范登奥尔德、李雅哲和奥里奥尔·维尼亚尔斯写出了它的现代形式。拿一个x，和N个候选。<bookmark mark='a'/>其中一个，y1，真正和x是一对；其余N减1个是随机抽来的。<bookmark mark='b'/>一个打分函数f给每一对打分，softmax把分数变成一个猜测，损失就是猜中伙伴的交叉熵。他们叫它InfoNCE，<bookmark mark='c'/>因为它是变成了N选一的噪声对比估计，也因为它测量的东西：信息。"
+  },
+  "db69aa85714f": {
+   "scene": "InfoNCE",
+   "en": "Why information? Call K the slot where the partner sits. The loss is the cross-entropy of a classifier guessing K. <bookmark mark='a'/> A cross-entropy is never smaller than the true entropy of what it guesses. <bookmark mark='b'/> K was uniform over N slots, so that entropy is log N, minus whatever x and the candidates reveal about K. <bookmark mark='c'/> The candidates by themselves reveal nothing: the partner, on its own, looks like any other draw. <bookmark mark='d'/> By the chain rule, what x reveals about K is at most what x shares with the whole set, <bookmark mark='e'/> and that is exactly what x shares with its partner, the mutual information. <bookmark mark='f'/> So log N minus the loss is a lower bound on the mutual information. And because a loss is never negative, the bound can never say more than log N.",
+   "zh": "为什么是信息？把伙伴所在的位置叫作K。损失就是一个分类器猜K的交叉熵。<bookmark mark='a'/>交叉熵永远不小于它所猜之物的真实熵。<bookmark mark='b'/>K在N个位置上是均匀的，所以这个熵是log N，减去x和候选们透露的关于K的信息。<bookmark mark='c'/>候选们自己什么也透露不了：单看伙伴，它和其他任何一次抽样都一样。<bookmark mark='d'/>由链式法则，x透露的关于K的信息，至多是x和整组候选共有的信息，<bookmark mark='e'/>而这恰好就是x和它的伙伴共有的信息，也就是互信息。<bookmark mark='f'/>所以log N减去损失，是互信息的一个下界。又因为损失永远不为负，这个界永远说不出多于log N的信息。"
+  },
+  "1eea17888602": {
+   "scene": "InfoNCE",
+   "en": "We can watch the ceiling. Take pairs of Gaussian vectors with a known amount of shared information: 2, 5 or 10 nats. Train a small scoring network with InfoNCE at each number of candidates N, from two to five hundred and twelve, and read off log N minus the loss. <bookmark mark='a'/> With 2 nats to find, the estimate comes within ten percent of the truth once there are 256 candidates. <bookmark mark='b'/> But with 10 nats to find, the estimate climbs along the log N line and stops at 6.0 nats, even with 512 candidates. The loss cannot see more information than the number of candidates lets it. <bookmark mark='c'/> That is one reason contrastive learning wants big batches.",
+   "zh": "我们可以亲眼看到这个天花板。取几对高斯向量，它们共有的信息量是已知的：2、5或10奈特。在每个候选数N下用InfoNCE训练一个小的打分网络，N从2到512，然后读出log N减去损失。<bookmark mark='a'/>要找2奈特时，候选数达到256个后，估计值就和真值相差不到10%。<bookmark mark='b'/>可是要找10奈特时，估计值沿着log N那条线往上爬，停在6.0奈特，即使有512个候选也是如此。损失看到的信息，不可能多于候选数允许它看到的。<bookmark mark='c'/>这就是对比学习想要大批量的一个原因。"
+  },
+  "8b5edc191da0": {
+   "scene": "InfoNCE",
+   "en": "The paper's own model, contrastive predictive coding, applied this to sequences. Encode a stretch of speech or a row of image patches, <bookmark mark='a'/> summarize the past in a context vector, <bookmark mark='b'/> and from it pick the real future encodings out of N candidates. It worked on speech, images, text and 3D games. <bookmark mark='c'/> Everything contrastive in this part is this loss with a different choice of what counts as a partner.",
+   "zh": "论文自己的模型，对比预测编码，把这个用在了序列上。对一段语音或一行图像块做编码，<bookmark mark='a'/>把过去汇总成一个上下文向量，<bookmark mark='b'/>再用它从N个候选里挑出真正的未来编码。它在语音、图像、文本和三维游戏上都管用。<bookmark mark='c'/>本部分所有对比式的方法，都是这个损失，只是对“什么算伙伴”做了不同的选择。"
+  },
+  "188855e61be6": {
+   "scene": "SimCLR",
+   "en": "Chapter four. Two views of one digit.",
+   "zh": "第4章。同一个数字的两个视图。"
+  },
+  "42fd840134cf": {
+   "scene": "SimCLR",
+   "en": "Contrastive learning for pictures needs a partner for each picture, and the partner is made, not found. <bookmark mark='a'/> Take a digit and change it at random: crop and zoom, tilt, change the contrast, blur it, erase a patch, add noise. <bookmark mark='b'/> Each version is still the same digit. Two versions of one digit make a positive pair; <bookmark mark='c'/> every version of every other digit in the batch is a negative. These choices are the only knowledge we give the network: they say what should not matter.",
+   "zh": "图片上的对比学习需要给每张图片找一个伙伴，而这个伙伴是造出来的，不是找来的。<bookmark mark='a'/>拿一个数字，随机地改变它：裁剪缩放、倾斜、改对比度、模糊、擦掉一块、加噪声。<bookmark mark='b'/>每个版本都还是同一个数字。同一个数字的两个版本构成一个正样本对；<bookmark mark='c'/>批里其他每个数字的每个版本都是负样本。这些选择是我们给网络的唯一知识：它们规定了什么不该重要。"
+  },
+  "8b56d42e014b": {
+   "scene": "SimCLR",
+   "en": "In 2020 Ting Chen, Simon Kornblith, Mohammad Norouzi and Geoffrey Hinton put the pieces together in SimCLR. Two views of a digit go through the same network f, <bookmark mark='a'/> giving two representations, h. <bookmark mark='b'/> A small head, g, maps each to a vector z on the unit sphere. <bookmark mark='c'/> The loss is InfoNCE with the cosine as the score: in a batch of a hundred and twenty-eight digits, each of the two hundred and fifty-six views must pick out its partner from the other two hundred and fifty-five, at a temperature tau. <bookmark mark='d'/> After training, the head is thrown away and h is kept.",
+   "zh": "2020年，陈挺、西蒙·科恩布利斯、穆罕默德·诺鲁齐和杰弗里·辛顿把这些拼在一起，做成了SimCLR。一个数字的两个视图通过同一个网络f，<bookmark mark='a'/>得到两个表示h。<bookmark mark='b'/>一个小的头g把它们各自映到单位球面上的向量z。<bookmark mark='c'/>损失就是以余弦为打分的InfoNCE：在128个数字的一批里，256个视图中的每一个都要从其余255个里认出自己的伙伴，温度为τ。<bookmark mark='d'/>训练完后，头被扔掉，留下h。"
+  },
+  "9f9f25e567ff": {
+   "scene": "SimCLR",
+   "en": "Here is our SimCLR learning. Six test digits, and next to each, the eight test digits whose vectors are nearest to it, green when they are the same digit, red when they are not. <bookmark mark='a'/> At the start the network is random, and only 65 percent of the neighbours match. <bookmark mark='b'/> As training goes on, the neighbourhoods fill with the right digits: 88 percent by the end. <bookmark mark='c'/> On the full test, a linear probe on its vectors reads the digit correctly 98.1 percent of the time, the mean of three runs, and the nearest-neighbour vote 96.9 percent.",
+   "zh": "这是我们的SimCLR在学习。六个测试数字，每个旁边是向量离它最近的8个测试数字，同一个数字的标绿，不同的标红。<bookmark mark='a'/>一开始网络是随机的，只有65%的近邻是对的。<bookmark mark='b'/>随着训练，邻域里填满了正确的数字：最后达到88%。<bookmark mark='c'/>在完整的测试集上，用它的向量做线性探针，正确率是98.1%，取三次训练的平均；近邻投票是96.9%。"
+  },
+  "03cf779ff75b": {
+   "scene": "SimCLR",
+   "en": "Why throw the head away? Because the loss asks z to ignore everything the two views disagree on: the tilt, the size, the contrast. <bookmark mark='a'/> The head pays that price, and h, one layer below, keeps more. <bookmark mark='b'/> On our digits the gap is small: the linear probe reads 98.1 percent from h and 97.4 from z, and nearest neighbours 96.9 and 97.1. <bookmark mark='c'/> SimCLR's authors found the same on ImageNet, by more than ten points, and with a wide network and very large batches, their linear probe reached 76.5 percent, as good as the same network trained with every label.",
+   "zh": "为什么要扔掉那个头？因为损失要求z忽略两个视图之间所有不一致的东西：倾斜、大小、对比度。<bookmark mark='a'/>这个代价由头来付，下面一层的h保留得更多。<bookmark mark='b'/>在我们的数字上差距很小：线性探针从h读出98.1%，从z读出97.4%；近邻分类分别是96.9%和97.1%。<bookmark mark='c'/>SimCLR的作者在ImageNet上也发现了这一点，差了十多个点；用一个很宽的网络和非常大的批量，他们的线性探针达到了76.5%，和用全部标签训练的同一个网络一样好。"
+  },
+  "3f24ac7e64f8": {
+   "scene": "SimCLR",
+   "en": "SimCLR needs its negatives in the batch, so it needs huge batches: the paper went to eight thousand images. Months earlier, Kaiming He and his colleagues had found another way, MoCo. <bookmark mark='a'/> Keep the keys of past batches in a queue and use them as negatives. <bookmark mark='b'/> To keep old keys comparable with new ones, compute them with a second encoder that is a slowly moving average of the first. <bookmark mark='c'/> We trained MoCo with a queue of four thousand and ninety-six keys. On our digits, MoCo's linear probe reaches 97.9 percent against SimCLR's 98.1: slightly behind; with ten kinds of digit, more negatives buy nothing. <bookmark mark='d'/> And the views matter more than either: with crops alone, and no changes of contrast, blur, erasing or noise, SimCLR's probe falls to 97.3 percent.",
+   "zh": "SimCLR的负样本必须在批里，所以它需要巨大的批量：论文用到了8000张图。几个月前，何恺明和同事已经找到了另一条路，MoCo。<bookmark mark='a'/>把过去几批的键存进一个队列，用它们当负样本。<bookmark mark='b'/>为了让旧键和新键可以比较，用第二个编码器来算键，它是第一个编码器缓慢移动的平均。<bookmark mark='c'/>我们用4096个键的队列训练了MoCo。在我们的数字上，MoCo的线性探针达到97.9%，SimCLR是98.1%：稍微落后；只有十种数字时，更多的负样本换不来什么。<bookmark mark='d'/>而视图比两者都重要：只用裁剪，不改对比度、不模糊、不擦除、不加噪声，SimCLR的探针就降到97.3%。"
+  },
+  "a3a5782f67d8": {
+   "scene": "Sphere",
+   "en": "Chapter five. Alignment and uniformity.",
+   "zh": "第5章。对齐与均匀。"
+  },
+  "d905cc7714be": {
+   "scene": "Sphere",
+   "en": "Watch the contrastive loss work on a sphere. This is a SimCLR network whose output has only three numbers, so every digit is a point we can see. <bookmark mark='a'/> Two quantities tell the story. Alignment: how far apart the two views of the same digit land. Uniformity: how bunched up all the points are, measured so that lower means more evenly spread. <bookmark mark='b'/> At the start every digit sits in nearly the same spot, so the views are trivially aligned and nothing is spread. Training trades a little alignment for a lot of spread: uniformity falls from -0.00 to -1.87, while alignment rises only to 0.29. The digits spread over the whole sphere, and each digit's views stay close. <bookmark mark='c'/> And because the network cannot spread all the fives apart without also separating them from their own views, the fives end up together.",
+   "zh": "来看对比损失在球面上是怎么工作的。这是一个输出只有3个数的SimCLR网络，所以每个数字都是一个我们看得见的点。<bookmark mark='a'/>两个量讲出了整个故事。对齐：同一个数字的两个视图落得有多远。均匀性：所有点聚得有多紧，按定义，越低表示铺得越均匀。<bookmark mark='b'/>一开始，每个数字都差不多落在同一个地方，所以视图天然是对齐的，而点完全没有铺开。训练用一点点对齐换来了大量的铺开：均匀性从-0.00降到-1.87，而对齐只升到0.29。数字铺满了整个球面，而每个数字的视图仍然靠得很近。<bookmark mark='c'/>又因为网络没法把所有的5彼此推开，而不同时把它们和自己的视图分开，所以5最终都聚在一起。"
+  },
+  "5675815fc499": {
+   "scene": "Sphere",
+   "en": "Where did the digits land? Take each digit's average direction on the sphere. <bookmark mark='a'/> The closest pair is 4 and 9, 19 degrees apart, then 2 and 3. <bookmark mark='b'/> The farthest apart are 6 and 7. Nobody told the network that some digits are written alike; the geometry of the sphere records it. <bookmark mark='c'/> The loosest cluster is the digit 8: its points are the most spread out.",
+   "zh": "数字们落在了哪里？取每个数字在球面上的平均方向。<bookmark mark='a'/>最近的一对是4和9，相隔19度，其次是2和3。<bookmark mark='b'/>相隔最远的是6和7。没有人告诉网络哪些数字写法相近；球面的几何把它记了下来。<bookmark mark='c'/>最松散的一簇是数字8：它的点散得最开。"
+  },
+  "242b3238408f": {
+   "scene": "Sphere",
+   "en": "Tongzhou Wang and Phillip Isola showed why, in 2020. Write one view's loss with unit vectors: a pull toward its partner, and a log-sum over everyone. <bookmark mark='a'/> With many negatives, the sum becomes N times an average. <bookmark mark='b'/> On the sphere, the dot product with the partner is one minus half their squared distance. So the loss splits in two: <bookmark mark='c'/> an alignment term, the distance between views, and a uniformity term, smallest when the points spread evenly over the sphere. Contrastive learning is these two forces, and the temperature sets their balance.",
+   "zh": "2020年，王同舟和菲利普·伊索拉说明了原因。用单位向量写出一个视图的损失：一项把它拉向伙伴，一项对所有样本求对数和。<bookmark mark='a'/>负样本很多时，这个和就变成N乘以一个平均值。<bookmark mark='b'/>在球面上，和伙伴的点积等于1减去两者距离平方的一半。于是损失分成两项：<bookmark mark='c'/>一个对齐项，就是视图之间的距离；一个均匀项，当点均匀铺满球面时最小。对比学习就是这两股力量，温度决定它们的平衡。"
+  },
+  "829f7424d1fa": {
+   "scene": "Sphere",
+   "en": "We trained SimCLR at five temperatures, from 0.05 to 1. <bookmark mark='a'/> With every label behind it, the linear probe barely notices: all five land within 0.4 points, best at tau 0.2, worst at tau 1. With ten labels per digit the gap widens: from 87.5 percent at tau 1 to 89.6 at tau 0.2. <bookmark mark='b'/> On the right, each temperature's final alignment and uniformity. The most even spread comes at tau 0.1, the tightest pairs at tau 1: no temperature wins both terms.",
+   "zh": "我们在5个温度下训练了SimCLR，从0.05到1。<bookmark mark='a'/>有全部标签撑腰，线性探针几乎察觉不到差别：5个温度相差在0.4个百分点以内，τ为0.2时最好，τ为1时最差。每个数字只给10个标签时，差距拉开了：从τ为1时的87.5%，到τ为0.2时的89.6%。<bookmark mark='b'/>右边是每个温度最后的对齐和均匀性。分布最均匀的是τ为0.1，配对最紧的是τ为1：没有哪个温度能同时赢下两项。"
+  },
+  "bea15036ee66": {
+   "scene": "Sphere",
+   "en": "The temperature has a second effect. In the softmax, every negative pushes in proportion to its weight, and the weights depend on how similar it already is. <bookmark mark='a'/> At tau 0.05, the ten most similar negatives of each view take 68 percent of the push: the loss fights over the hardest cases. <bookmark mark='b'/> At tau 1, they take 4 percent; the push is spread over everything. <bookmark mark='c'/> But a hard negative is often just another five that looks like this five. Pushing it away tears a class apart; ignoring it leaves the sphere bunched. Feng Wang and Huaping Liu called this the uniformity-tolerance dilemma.",
+   "zh": "温度还有第二个作用。在softmax里，每个负样本按它的权重施加推力，而权重取决于它已经有多相似。<bookmark mark='a'/>τ为0.05时，每个视图最相似的10个负样本占了推力的68%：损失全在跟最难的那几个较劲。<bookmark mark='b'/>τ为1时，它们只占4%；推力分散到所有负样本上。<bookmark mark='c'/>可是一个难负样本，往往只是另一个长得像这个5的5。把它推开，就把一个类撕开了；不管它，球面又会聚成一团。王峰和刘华平把这称为均匀性与容忍度的两难。"
+  },
+  "ca7dd087e52f": {
+   "scene": "Collapse",
+   "en": "Chapter six. Collapse.",
+   "zh": "第6章。坍缩。"
+  },
+  "24b6cbccafe8": {
+   "scene": "Collapse",
+   "en": "Before going further, a question. Suppose the only rule is: give the two views of each digit the same vector. No negatives, nothing pushing apart. What does the network learn? Pause and think. <bookmark mark='a'/> Here is what ours did. The loss is minus the cosine between the two views' vectors. Like the contrastive network, it starts with every digit bunched in one spot; <bookmark mark='b'/> unlike it, it never leaves. The two views agree perfectly, the loss sits at its minimum, and the vector says nothing at all about the input. This is collapse.",
+   "zh": "继续之前，先问一个问题。假如唯一的规则是：让每个数字的两个视图得到同一个向量。没有负样本，没有任何东西把它们推开。网络会学到什么？先停下来想一想。<bookmark mark='a'/>这是我们的网络做的事。损失是两个视图向量之间余弦的相反数。和对比式网络一样，它一开始把每个数字都挤在同一个地方；<bookmark mark='b'/>和它不同的是，它再也没有离开。两个视图完全一致，损失停在最小值，而这个向量对输入什么也没说。这就是坍缩。"
+  },
+  "b60cf52ffdff": {
+   "scene": "Collapse",
+   "en": "To see collapse in a network with many output numbers, we need a measure. The effective rank takes the singular values of a set of vectors, turns them into proportions, and asks how many directions carry the weight: one, if every vector points the same way, up to the dimension, if they fill the space. <bookmark mark='a'/> SimCLR keeps its vectors spread over about 37 of its 128 dimensions. <bookmark mark='b'/> The pull-together-only network falls to 2.3, and even that is mostly noise: its vectors are spread 81 times less than points scattered evenly over the sphere.",
+   "zh": "要在输出有很多个数的网络里看到坍缩，我们需要一个度量。有效秩取一组向量的奇异值，把它们变成比例，然后问有多少个方向承担了权重：如果每个向量都指向同一个方向，就是1；如果它们铺满了空间，最多等于维数。<bookmark mark='a'/>SimCLR把它的向量分布在它128个维度中的大约37个上。<bookmark mark='b'/>只把两者拉到一起的网络降到了2.3，而且这点秩大多是噪声：它的向量分散的程度，比均匀撒在球面上的点小81倍。"
+  },
+  "3c28509e1eef": {
+   "scene": "Collapse",
+   "en": "The whole spectrum shows more. These are the singular values of the two networks' vectors, largest first, on a log scale. <bookmark mark='a'/> The collapsed network has one direction and then only noise. <bookmark mark='b'/> SimCLR declines slowly, and its weakest directions end far below its strongest. Even contrastive learning leaves part of the space unused. This is called dimensional collapse, the milder cousin of complete collapse; Li Jing, Yann LeCun and colleagues traced it to strong augmentations and to the way the layers' weights evolve together.",
+   "zh": "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>坍缩的网络只有一个方向，然后只剩噪声。<bookmark mark='b'/>SimCLR缓慢下降，它最弱的方向远远低于最强的方向。即使是对比学习，也留下了一部分空间没有用上。这叫作维度坍缩，是完全坍缩温和一些的表亲；景立、杨立昆和同事把它归因于强烈的数据增强，以及各层权重共同演化的方式。"
+  },
+  "b57c2f64562d": {
+   "scene": "Collapse",
+   "en": "Collapse is not harmless to the network underneath. The collapsed vector is the output of a small head; below it, the encoder's representation h is what we would keep. <bookmark mark='a'/> Its nearest-neighbour accuracy falls from 73 percent, where the random network started, to 66. Its linear probe ends at 84.4 percent; an untrained network scores 84.6. Training bought nothing. <bookmark mark='b'/> Once the head's output is the same for everything, the loss is at its minimum and its gradient vanishes: the encoder is left wherever the first steps of collapse dropped it.",
+   "zh": "坍缩对下面的网络并非无害。坍缩的向量是一个小头的输出；在它下面，编码器的表示h才是我们要留下的。<bookmark mark='a'/>它的近邻准确率从随机网络起步时的73%降到了66%。线性探针最后是84.4%；未训练的网络是84.6%。训练什么也没换来。<bookmark mark='b'/>一旦头对所有输入都输出同样的东西，损失就停在最小值，梯度也消失了：编码器停在坍缩最初那几步把它扔下的地方。"
+  },
+  "d3e1de4c22fe": {
+   "scene": "Collapse",
+   "en": "This trap is old. In 2005 and 2006 Raia Hadsell, Sumit Chopra and Yann LeCun trained siamese networks with a loss that already had both halves. <bookmark mark='a'/> For a similar pair, the squared distance between their outputs: pull together. <bookmark mark='b'/> For a dissimilar pair, a penalty only if they come closer than a margin: push apart, but no further than needed. Without the second half, nothing would stop the network from mapping everything to one point.",
+   "zh": "这个陷阱由来已久。2005到2006年，蕾娅·哈德塞尔、苏米特·乔普拉和杨立昆训练孪生网络时，用的损失已经有了两半。<bookmark mark='a'/>对相似的一对，取两者输出距离的平方：拉近。<bookmark mark='b'/>对不相似的一对，只有当它们比一个间隔更近时才惩罚：推开，但不多推。没有后一半，就没有什么能阻止网络把一切都映到同一个点上。"
+  },
+  "eb2672e41f38": {
+   "scene": "Collapse",
+   "en": "Every method from here on is a way out of this trap. <bookmark mark='a'/> The contrastive methods push other images away. <bookmark mark='b'/> BYOL and SimSiam break the symmetry between the two branches. <bookmark mark='c'/> Barlow Twins and VICReg demand that every dimension stays spread and uncorrelated. <bookmark mark='d'/> And DINO balances a teacher between two opposite collapses.",
+   "zh": "从这里开始的每一种方法，都是走出这个陷阱的一条路。<bookmark mark='a'/>对比式的方法把其他图像推开。<bookmark mark='b'/>BYOL和SimSiam打破两个分支之间的对称。<bookmark mark='c'/>Barlow Twins和VICReg要求每个维度都保持散开、互不相关。<bookmark mark='d'/>而DINO让一个老师在两种相反的坍缩之间保持平衡。"
+  },
+  "9cd92aa5376a": {
+   "scene": "BYOL",
+   "en": "Chapter seven. No negatives: BYOL and SimSiam.",
+   "zh": "第7章。没有负样本：BYOL与SimSiam。"
+  },
+  "13e3b7d1876c": {
+   "scene": "BYOL",
+   "en": "In June 2020 a DeepMind team led by Jean-Bastien Grill removed the negatives anyway. <bookmark mark='a'/> BYOL has two networks. The online network sees one view and, through an extra small network called the predictor, tries to predict <bookmark mark='b'/> what the target network makes of the other view. <bookmark mark='c'/> No gradient flows into the target; its weights are a slowly moving average of the online weights. <bookmark mark='d'/> Nothing pushes images apart, yet it did not collapse, and it beat SimCLR: 74.3 percent on ImageNet with a ResNet-50.",
+   "zh": "2020年6月，让-巴蒂斯特·格里尔带领的DeepMind团队干脆去掉了负样本。<bookmark mark='a'/>BYOL有两个网络。在线网络看一个视图，再通过一个额外的小网络，也就是预测器，去预测<bookmark mark='b'/>目标网络对另一个视图给出的结果。<bookmark mark='c'/>没有梯度流进目标网络；它的权重是在线网络权重的缓慢移动平均。<bookmark mark='d'/>没有任何东西把图像推开，它却没有坍缩，还超过了SimCLR：用ResNet-50在ImageNet上达到74.3%。"
+  },
+  "10e6d62a6360": {
+   "scene": "BYOL",
+   "en": "Five months later, Xinlei Chen and Kaiming He removed the moving average too. SimSiam is one network, applied to both views, with a predictor on one side and a stop-gradient on the other: the target vector is treated as a constant. <bookmark mark='a'/> We trained it, three times with the stop-gradient and twice without. <bookmark mark='b'/> With the stop-gradient, the spread holds at 0.088; without it, it falls to 0.022, and the effective rank to 2.5, against 24. Remove one line of code and the network collapses. <bookmark mark='c'/> On the sphere, with three output numbers, SimSiam keeps the digits apart without ever pushing on them, while the pull-together network sits on one point.",
+   "zh": "五个月后，陈鑫磊和何恺明把移动平均也去掉了。SimSiam只有一个网络，用在两个视图上，一边有预测器，另一边有停止梯度：目标向量被当作常数。<bookmark mark='a'/>我们训练了它，带停止梯度三次，不带两次。<bookmark mark='b'/>有停止梯度时，散度保持在0.088；没有它，散度降到0.022，有效秩降到2.5，而有它时是24。删掉一行代码，网络就坍缩了。<bookmark mark='c'/>在球面上，用3个输出数，SimSiam不用推就把数字分开了，而只拉不推的网络停在一个点上。"
+  },
+  "48570e72051d": {
+   "scene": "BYOL",
+   "en": "Why does one stop-gradient matter so much? Chen and He offered an explanation. Imagine a free target vector, eta, for every image, and a loss that pulls each view's output toward its image's target. <bookmark mark='a'/> Minimize it by turns. With the targets fixed, take a gradient step on the network: that is exactly what the stop-gradient does. <bookmark mark='b'/> With the network fixed, the best target is the average output over all views of the image. <bookmark mark='c'/> SimSiam uses one sampled view in place of the average, and the predictor learns to make up the difference. <bookmark mark='d'/> Collapsing to a constant still minimizes the loss; this way of descending simply does not lead there. Yuandong Tian, Xinlei Chen and Surya Ganguli worked out the dynamics: the predictor and the stop-gradient together keep the useful directions from dying.",
+   "zh": "为什么一个停止梯度这么重要？陈鑫磊和何恺明给了一个解释。设想每张图像都有一个自由的目标向量η，损失把每个视图的输出拉向它所属图像的目标。<bookmark mark='a'/>轮流来最小化它。固定目标，对网络走一步梯度：这恰恰就是停止梯度所做的。<bookmark mark='b'/>固定网络，最好的目标就是这张图像所有视图输出的平均。<bookmark mark='c'/>SimSiam用一个抽样的视图代替平均，预测器学着补上其中的差别。<bookmark mark='d'/>坍缩成常数仍然能使损失最小；只是这种下降方式不会走到那里。田渊栋、陈鑫磊和苏里亚·甘古利推导出了其中的动力学：预测器和停止梯度一起，让有用的方向不会消亡。"
+  },
+  "023a904e67fc": {
+   "scene": "BYOL",
+   "en": "One meter for all of them: the spread of the embedding, scaled so that one means the vectors are spread evenly over the sphere and zero means they have collapsed. <bookmark mark='a'/> SimCLR ends at 0.98, BYOL at 0.70, SimSiam at 0.99. <bookmark mark='b'/> Without its stop-gradient, SimSiam ends at 0.25, and the network that only pulls together at 0.01.",
+   "zh": "给它们用同一个仪表：嵌入的散度，缩放成1表示向量均匀铺满球面，0表示已经坍缩。<bookmark mark='a'/>SimCLR最后是0.98，BYOL是0.70，SimSiam是0.99。<bookmark mark='b'/>没有停止梯度时，SimSiam最后是0.25，只拉不推的网络是0.01。"
+  },
+  "b5bedce681c1": {
+   "scene": "BYOL",
+   "en": "How do they compare, on the same budget? <bookmark mark='a'/> At our budget SimCLR leads the linear probe, by 3.3 points over BYOL. <bookmark mark='b'/> With ten labels per digit: SimCLR 89.6, BYOL 74.0, SimSiam 86.3 percent. <bookmark mark='c'/> And one more twist: some suspected BYOL was secretly contrastive, through batch normalization, which mixes information across a batch. Its authors replaced it with a normalization that sees one image at a time, and reached 73.9 percent.",
+   "zh": "在同一份预算下，它们比起来怎样？<bookmark mark='a'/>在我们的预算下，SimCLR在线性探针上领先，比BYOL高3.3个百分点。<bookmark mark='b'/>每个数字10个标签时：SimCLR 89.6，BYOL 74.0，SimSiam 86.3%。<bookmark mark='c'/>还有一个转折：有人怀疑BYOL暗地里是对比式的，因为批归一化会在一批之间混合信息。它的作者换成了一种一次只看一张图像的归一化，达到了73.9%。"
+  },
+  "a4884e6ef4d3": {
+   "scene": "Barlow",
+   "en": "Chapter eight. Decorrelate: Barlow Twins and VICReg.",
+   "zh": "第8章。去相关：Barlow孪生网络与VICReg。"
+  },
+  "a553bf7a24e8": {
+   "scene": "Barlow",
+   "en": "In 1961 the neuroscientist Horace Barlow argued that the senses should recode their input so that each neuron carries something the others do not. <bookmark mark='a'/> Sixty years later, Jure Zbontar, Li Jing, Ishan Misra, Yann LeCun and Stéphane Deny named a method after him. Run both views of a batch through the network, and correlate every output dimension of one view with every dimension of the other. <bookmark mark='b'/> The loss wants this matrix to be the identity. On the diagonal, each dimension must agree between the views: invariance. <bookmark mark='c'/> Off the diagonal, different dimensions must be uncorrelated: no redundancy. A constant output cannot satisfy the diagonal, because a correlation needs variation. Collapse is ruled out by the loss itself.",
+   "zh": "1961年，神经科学家霍勒斯·巴洛主张，感官应该把输入重新编码，让每个神经元都携带别的神经元没有的东西。<bookmark mark='a'/>六十年后，尤雷·兹邦塔尔、景立、伊尚·米斯拉、杨立昆和斯特凡·德尼用他的名字命名了一个方法。把一批的两个视图都送进网络，再把一个视图的每个输出维度和另一个视图的每个维度求相关。<bookmark mark='b'/>损失希望这个矩阵是单位矩阵。对角线上，每个维度在两个视图之间必须一致：这是不变性。<bookmark mark='c'/>对角线之外，不同的维度必须互不相关：没有冗余。常数输出满足不了对角线，因为相关需要变化。坍缩被损失本身排除了。"
+  },
+  "cfa9eee44ef0": {
+   "scene": "Barlow",
+   "en": "Here is the matrix in our Barlow Twins, for the first twenty-four of its five hundred and twelve dimensions, measured on test digits as it trains. <bookmark mark='a'/> At first it is noise. <bookmark mark='b'/> The diagonal brightens as each dimension learns to ignore the changes between views, reaching an average correlation of 0.72. <bookmark mark='c'/> Off the diagonal, the correlations first grow, to a typical 0.33, and are then pushed back down, to 0.20 by the end. The loss keeps pulling toward the identity; in eight hundred steps it gets part of the way.",
+   "zh": "这是我们的Barlow Twins里的这个矩阵，取它512个维度中的前24个，在测试数字上边训练边测。<bookmark mark='a'/>一开始它是噪声。<bookmark mark='b'/>随着每个维度学会忽略视图之间的变化，对角线亮了起来，平均相关达到0.72。<bookmark mark='c'/>非对角线上的相关先是增大，典型值到了0.33，然后又被压了回去，到最后是0.20。损失一直把矩阵往单位矩阵拉；800步里，它走完了一部分路。"
+  },
+  "e05bf6296d43": {
+   "scene": "Barlow",
+   "en": "VICReg, from Adrien Bardes, Jean Ponce and Yann LeCun, splits the same idea into three named terms. <bookmark mark='a'/> Invariance: the two views' vectors should be close. <bookmark mark='b'/> Variance: every dimension must keep a standard deviation of at least one across the batch, a hinge that only bites when a dimension starts to collapse. <bookmark mark='c'/> Covariance: different dimensions should not be correlated. <bookmark mark='d'/> Each term can be removed to see what it does, so we removed the variance term. Without it, the spread of each dimension falls to 0.011: the other two terms are happiest with everything at zero, and the network obliges. Its nearest-neighbour accuracy ends at 80.7 percent, against 97.1 for VICReg.",
+   "zh": "VICReg出自阿德里安·巴尔德、让·蓬斯和杨立昆，它把同一个想法拆成三个有名字的项。<bookmark mark='a'/>不变项：两个视图的向量应该接近。<bookmark mark='b'/>方差项：每个维度在一批里的标准差至少要保持为1，这是一个合页，只在某个维度开始坍缩时才起作用。<bookmark mark='c'/>协方差项：不同的维度不应该相关。<bookmark mark='d'/>每一项都可以去掉，看看它起什么作用，于是我们去掉了方差项。去掉之后，每个维度的散度降到0.011：另外两项最喜欢一切都是零，网络就照办了。它的近邻准确率最后是80.7%，VICReg是97.1%。"
+  },
+  "2d52bf533a22": {
+   "scene": "Barlow",
+   "en": "The two families are closer than they look. A contrastive loss makes the images in a batch dissimilar from each other; Barlow Twins and VICReg make the dimensions dissimilar from each other. <bookmark mark='a'/> Quentin Garrido and colleagues showed that, written out, the two are nearly the same objective, one acting on the rows of the data and the other on the columns. <bookmark mark='b'/> On our digits, Barlow Twins and VICReg match SimCLR to within a point. <bookmark mark='c'/> The latest of this line is LeJEPA, from Randall Balestriero and Yann LeCun in 2025: push the vectors toward an isotropic Gaussian and nothing else, no stop-gradient, no teacher.",
+   "zh": "这两个家族比看上去更接近。对比损失让一批里的图像彼此不相似；Barlow Twins和VICReg让维度彼此不相似。<bookmark mark='a'/>昆汀·加里多和同事证明，把式子写出来，两者几乎是同一个目标，一个作用在数据的行上，另一个作用在列上。<bookmark mark='b'/>在我们的数字上，Barlow Twins和VICReg与SimCLR相差不到一个百分点。<bookmark mark='c'/>这条线上最新的是LeJEPA，2025年由兰德尔·巴莱斯特里耶罗和杨立昆提出：只把向量推向各向同性的高斯分布，别的什么都不要，没有停止梯度，没有老师。"
+  },
+  "544e74c4ce07": {
+   "scene": "DINO",
+   "en": "Chapter nine. Self-distillation: DINO.",
+   "zh": "第9章。自蒸馏：DINO。"
+  },
+  "a4bbd0a7ec0b": {
+   "scene": "DINO",
+   "en": "Mathilde Caron and colleagues at Facebook had spent years teaching networks by clustering: group the images, then learn to predict the groups. <bookmark mark='a'/> In 2021 they turned it into distillation without labels: DINO. A student network sees one view <bookmark mark='b'/> and outputs a probability over K prototypes, learned directions in its space. <bookmark mark='c'/> A teacher sees the other view and does the same, <bookmark mark='d'/> and the student is trained to match the teacher's probabilities, with a cross-entropy. The teacher is not trained at all: its weights are a moving average of the student's, as in BYOL.",
+   "zh": "玛蒂尔德·卡龙和她在Facebook的同事，多年来一直用聚类来教网络：先把图像分组，再学着预测这些组。<bookmark mark='a'/>2021年，他们把它变成了无标签的蒸馏：DINO。学生网络看一个视图，<bookmark mark='b'/>输出在K个原型上的概率，原型是它空间里学出来的方向。<bookmark mark='c'/>老师看另一个视图，做同样的事，<bookmark mark='d'/>学生被训练去匹配老师的概率，用的是交叉熵。老师根本不训练：它的权重是学生权重的移动平均，和BYOL一样。"
+  },
+  "d025de4d74a3": {
+   "scene": "DINO",
+   "en": "A student copying a teacher that copies the student can collapse in two opposite ways. <bookmark mark='a'/> One prototype can win for every image: the teacher says the same thing with full confidence. <bookmark mark='b'/> Or every prototype can be equally likely for every image: the teacher says nothing at all. <bookmark mark='c'/> DINO's answer is two opposing pressures on the teacher. Centring subtracts a running average of the teacher's outputs, so no prototype can win for everyone; on its own it drifts toward the uniform answer. <bookmark mark='d'/> Sharpening gives the teacher a lower temperature than the student, so its answers are more confident; on its own it drifts toward the single winner. <bookmark mark='e'/> The loss splits into the teacher's entropy and the KL between the two; either collapse drives the KL to zero, with the entropy stuck at one end.",
+   "zh": "学生模仿老师，老师又模仿学生，这样可能以两种相反的方式坍缩。<bookmark mark='a'/>一个原型可能对所有图像都胜出：老师总是满怀自信地说同一件事。<bookmark mark='b'/>或者每个原型对每张图像都一样可能：老师什么也没说。<bookmark mark='c'/>DINO的答案是对老师施加两种相反的压力。中心化减去老师输出的移动平均，于是没有哪个原型能对所有人都胜出；单靠它，结果会漂向均匀的答案。<bookmark mark='d'/>锐化让老师的温度比学生低，于是它的回答更自信；单靠它，结果会漂向唯一的胜者。<bookmark mark='e'/>损失可以拆成老师的熵，加上两者之间的KL；任何一种坍缩都会把KL推到零，而熵卡在一端。"
+  },
+  "06a5cd002d5a": {
+   "scene": "DINO",
+   "en": "We trained DINO, and DINO with each half of the balance removed. <bookmark mark='a'/> On the left, the entropy of the teacher's answers; on the right, the KL between teacher and student. <bookmark mark='b'/> Without centring, the teacher's entropy falls to 0.00: one prototype for everything. Without sharpening, it rises to 5.54, the log of 256: every prototype equal. In both, the KL drops to nearly zero and the student has nothing left to learn. With both, the entropy settles at 4.37 and the KL stays at 0.25: there is still something to learn.",
+   "zh": "我们训练了DINO，以及分别去掉平衡中一半的DINO。<bookmark mark='a'/>左边是老师回答的熵；右边是老师和学生之间的KL。<bookmark mark='b'/>没有中心化，老师的熵降到0.00：所有东西都归一个原型。没有锐化，熵升到5.54，也就是256的对数：每个原型都一样。两种情况下，KL都降到几乎为零，学生没有东西可学了。两者都有时，熵稳定在4.37，KL保持在0.25：还有东西可学。"
+  },
+  "1d03c5189b76": {
+   "scene": "DINO",
+   "en": "The same story, as the teacher's average answer over five hundred and twelve test digits, sorted from the most used prototype down. <bookmark mark='a'/> Without centring, one bar takes everything: by the end, 1.0 prototypes in use. Without sharpening, the bars flatten, and all 256 are equally used, by every digit alike. <bookmark mark='b'/> DINO keeps 182 prototypes in use across the digits, while each digit's own answer stays confident.",
+   "zh": "同一个故事，换成老师在512个测试数字上的平均回答，按使用最多的原型往下排。<bookmark mark='a'/>没有中心化，一根柱子拿走一切：到最后，只有1.0个原型在用。没有锐化，柱子变平，全部256个都被平均地使用，每个数字都一样。<bookmark mark='b'/>DINO在不同数字之间用着182个原型，而每个数字自己的回答依然自信。"
+  },
+  "556e5bf2ac4d": {
+   "scene": "DINO",
+   "en": "And the representation? <bookmark mark='a'/> At our small budget DINO is behind SimCLR: 94.9 percent against 98.1 on the linear probe. The DINO paper trained for hundreds of passes over its data; ours makes 1.7. <bookmark mark='b'/> On ImageNet with vision transformers, DINO was a turning point: 78.3 percent by nearest neighbours with a small model, and the attention of its last layer traced the outlines of objects, though nobody had ever shown it an outline.",
+   "zh": "那么表示呢？<bookmark mark='a'/>在我们的小预算下，DINO落后于SimCLR：线性探针94.9%，SimCLR是98.1%。DINO论文把它的数据完整过了几百遍；我们的只过了1.7遍。<bookmark mark='b'/>在ImageNet上配合视觉Transformer，DINO是一个转折点：小模型用近邻法达到78.3%，它最后一层的注意力描出了物体的轮廓，尽管从来没有人给它看过轮廓。"
+  },
+  "5e9ea8577ba9": {
+   "scene": "Scale",
+   "en": "Chapter ten. Scale and curation.",
+   "zh": "第10章。规模与数据筛选。"
+  },
+  "bb52bdd7c47f": {
+   "scene": "Scale",
+   "en": "To scale self-distillation, Meta's DINOv2 team in 2023 found that the data mattered as much as the model. Raw web images are dominated by a few kinds of picture, duplicated many times. <bookmark mark='a'/> So they built a dataset by retrieval. Start from curated datasets such as ImageNet; <bookmark mark='b'/> embed one point two billion deduplicated web images with a self-supervised network; let each curated image fetch its four nearest neighbours from the pool. <bookmark mark='c'/> The result, a hundred and forty-two million images, trained a vision transformer of 1.1 billion parameters, <bookmark mark='d'/> with DINO's loss plus a masked-token term and a term that spreads the vectors: 86.5 percent on ImageNet with a linear probe, never having seen a label.",
+   "zh": "为了把自蒸馏做大，Meta的DINOv2团队在2023年发现，数据和模型一样重要。网上的原始图像被少数几类图片占据，还大量重复。<bookmark mark='a'/>于是他们靠检索来构建数据集。从ImageNet这样精选的数据集出发；<bookmark mark='b'/>用一个自监督网络给12亿张去过重的网络图像做嵌入；让每张精选图像从图像池里取回它最近的4个邻居。<bookmark mark='c'/>得到的1.42亿张图像，训练了一个11亿参数的视觉Transformer，<bookmark mark='d'/>损失是DINO的损失，加上一个掩码词元项和一个把向量铺开的项：在ImageNet上用线性探针达到86.5%，而它从没见过一个标签。"
+  },
+  "e8465fd39697": {
+   "scene": "Scale",
+   "en": "We can try the same recipe on digits. Take 14,000 training digits, unbalanced the way web images are: the commonest digit, 3, is 36 percent of the pool, the rarest only 1.0 percent. <bookmark mark='a'/> Then curate it: a small balanced set of a thousand digits, a hundred of each, plays the curated datasets. Each fetches its four nearest neighbours from the pool, using our SimCLR network as the embedding, and duplicates are dropped. <bookmark mark='b'/> The curated pool has 2,812 digits, and the gap between the commonest and the rarest class shrinks from 36 to one to 4.0 to one.",
+   "zh": "我们可以在数字上试同样的配方。取14000个训练数字，像网络图像那样不均衡：最常见的数字3占了图像池的36%，最少的只占1.0%。<bookmark mark='a'/>然后筛选：一个1000个数字的小而均衡的集合，每个数字100个，扮演精选数据集。每个从池里取回它最近的4个邻居，嵌入用的是我们的SimCLR网络，重复的去掉。<bookmark mark='b'/>筛选后的池有2812个数字，最常见与最少见类别的比例从36比1缩小到4.0比1。"
+  },
+  "a9fd115de3a1": {
+   "scene": "Scale",
+   "en": "Then train the same SimCLR, for the same number of steps, on each pool, and test on the usual balanced test set. <bookmark mark='a'/> Here is the accuracy on each digit, the commonest in the raw pool on the left. <bookmark mark='b'/> The biggest change is on the rarest digit, 8, with only 140 examples in the raw pool: 93.7 percent of its test digits right before curation, 96.1 after. On the three commonest, the two networks are within 0.5 points. Overall: linear probe 98.0 against 97.8 percent, ten labels per digit 89.8 against 88.3, from a pool 5 times smaller.",
+   "zh": "然后在每个池上训练同样的SimCLR，步数相同，并在通常那个均衡的测试集上测试。<bookmark mark='a'/>这是每个数字上的准确率，原始池里最常见的放在左边。<bookmark mark='b'/>变化最大的是最少见的数字8，它在原始池里只有140个样本：筛选之前，它的测试数字有93.7%判对，筛选之后是96.1%。在最常见的三个数字上，两个网络相差在0.5个百分点以内。总体：线性探针98.0%对97.8%，每个数字10个标签时89.8%对88.3%，而图像池小了5倍。"
+  },
+  "c48acecf6929": {
+   "scene": "Scale",
+   "en": "In August 2025 came DINOv3: a seven-billion-parameter transformer, trained on one point seven billion images chosen from about seventeen billion, <bookmark mark='a'/> by clustering them at five levels and sampling evenly from the clusters, plus retrieval. <bookmark mark='b'/> Its linear probe on ImageNet reaches 88.4 percent, within a point of the best models trained with captions. <bookmark mark='c'/> Its new ingredient addresses a problem of long training: the features of individual patches, which segmentation needs, got worse as the global features improved. Gram anchoring holds the student's patch-to-patch similarities to those of an earlier checkpoint.",
+   "zh": "2025年8月，DINOv3问世：一个70亿参数的Transformer，在17亿张图像上训练，这些图是从大约170亿张里挑出来的，<bookmark mark='a'/>办法是把它们分五层聚类，再从各个簇里均匀抽样，加上检索。<bookmark mark='b'/>它在ImageNet上的线性探针达到88.4%，和用文字说明训练的最好模型相差不到一个百分点。<bookmark mark='c'/>它的新成分解决了长时间训练的一个问题：分割所需要的单个图像块的特征，会随着全局特征变好而变差。格拉姆锚定让学生的图像块之间的相似度，保持在一个较早检查点的水平上。"
+  },
+  "3856642fa7ab": {
+   "scene": "Scale",
+   "en": "Is language necessary? Vision models trained with captions, like CLIP from Part 23, had been ahead on visual question answering, but they had also been trained on different data. <bookmark mark='a'/> In 2025 David Fan, Saining Xie and colleagues trained both on the same two billion images. At seven billion parameters, the DINO-style model, which never saw a caption, averaged 53.87 across sixteen question-answering tasks; the CLIP model, 52.97. <bookmark mark='b'/> The self-supervised models kept improving with size. <bookmark mark='c'/> And for questions about text and charts, the data mattered again: keeping only the images that contain text beat a caption-trained model.",
+   "zh": "语言是必需的吗？用文字说明训练的视觉模型，比如第23部分的CLIP，在视觉问答上一直领先，但它们用的训练数据也不一样。<bookmark mark='a'/>2025年，范大卫、谢赛宁和同事在同样的20亿张图像上把两种都训练了一遍。在70亿参数时，从没见过一句文字说明的DINO式模型在16个问答任务上平均得到53.87分；CLIP模型是52.97分。<bookmark mark='b'/>自监督模型随着规模变大一直在进步。<bookmark mark='c'/>而对于关于文字和图表的问题，数据又一次起了作用：只保留含有文字的图像，就胜过了一个用文字说明训练的模型。"
+  },
+  "4fb5c2929e0c": {
+   "scene": "Masked",
+   "en": "Chapter eleven. Fill in the blanks: MAE and BEiT.",
+   "zh": "第11章。填空：MAE与BEiT。"
+  },
+  "f8ce7ee0682b": {
+   "scene": "Masked",
+   "en": "The second family hides part of the input and asks for it back. In 2008, denoising autoencoders corrupted an input and learned to restore it. <bookmark mark='a'/> In 2018 BERT hid fifteen percent of the words in a sentence and learned language by guessing them, as Part 14 showed. <bookmark mark='b'/> In 2021 the idea came to vision transformers twice: BEiT, which predicts discrete tokens of the hidden patches, and MAE, which predicts their pixels. <bookmark mark='c'/> The one big change from text is how much to hide. Words are dense with meaning; images are redundant, and a neighbouring pixel gives most of a hidden pixel away. MAE hides three quarters of the image.",
+   "zh": "第二个家族藏起输入的一部分，再让网络把它找回来。2008年，去噪自编码器破坏一个输入，再学着把它复原。<bookmark mark='a'/>2018年，BERT藏起一个句子里15%的词，靠猜这些词学会了语言，第14部分讲过。<bookmark mark='b'/>2021年，这个想法两次来到视觉Transformer上：BEiT预测被藏起的图像块的离散词元，MAE预测它们的像素。<bookmark mark='c'/>和文本相比，最大的变化是藏多少。词语里的含义很密集；图像却很冗余，一个相邻的像素就能把被藏的像素泄露大半。MAE藏起图像的四分之三。"
+  },
+  "9609a600188f": {
+   "scene": "Masked",
+   "en": "Kaiming He's masked autoencoder is simple. Cut the image into patches, hide three quarters of them at random, <bookmark mark='a'/> encode what is left, <bookmark mark='b'/> and let a small decoder paint the whole image, scored only on the patches it could not see. <bookmark mark='c'/> MAE's encoder is a vision transformer, which can simply skip the hidden patches, so it trains three or more times faster; fine-tuned, the largest reached 87.8 percent on ImageNet. <bookmark mark='d'/> Ours uses the same convolutional network as every other method in this part, so the hidden patches are blanked out instead. Forty-nine patches of four by four pixels, thirty-seven of them hidden.",
+   "zh": "何恺明的掩码自编码器很简单。把图像切成小块，随机藏起其中四分之三，<bookmark mark='a'/>对剩下的编码，<bookmark mark='b'/>再让一个小解码器画出整张图像，只按它看不见的那些块打分。<bookmark mark='c'/>MAE的编码器是视觉Transformer，它可以直接跳过被藏的块，所以训练快了三倍以上；经过微调，最大的模型在ImageNet上达到87.8%。<bookmark mark='d'/>我们的版本和本部分其他所有方法一样，用的是同一个卷积网络，所以被藏的块是被涂黑，而不是被跳过。49个4乘4像素的块，藏起其中37个。"
+  },
+  "ad22bb219b4d": {
+   "scene": "Masked",
+   "en": "Here is ours learning, on six test digits, with the same patches hidden at every snapshot. <bookmark mark='a'/> At first it paints almost nothing into the hidden patches, then noise. <bookmark mark='b'/> Then soft blobs where the ink should be, and by the end blurry strokes that continue the visible ones: the two and the three can be read in its guesses. <bookmark mark='c'/> To do that it has to know something about how digits are drawn.",
+   "zh": "这是我们的模型在学习，用六个测试数字，每个快照里藏起的块都一样。<bookmark mark='a'/>一开始，它几乎什么也没往藏起的块里画，然后是一片噪点。<bookmark mark='b'/>接着，在该有墨迹的地方出现了柔和的团块，到最后，是一些模糊的笔画，把看得见的那些接了下去：在它的猜测里，能认出2和3。<bookmark mark='c'/>要做到这一点，它得懂一点数字是怎么写的。"
+  },
+  "a5765d8be79d": {
+   "scene": "Masked",
+   "en": "How much to hide? Too little, and the network can copy from the neighbours; too much, and it can only guess. <bookmark mark='a'/> We trained ours at three ratios. <bookmark mark='b'/> On our digits the best ratio is 90 percent hidden: probes of 81.6, 82.3 and 84.0 percent for half, three quarters and nine tenths. <bookmark mark='c'/> All three sit below the untrained network's 84.6 percent, and the two other ratios had one seed each.",
+   "zh": "藏多少？藏得太少，网络可以从邻居那里照抄；藏得太多，它只能瞎猜。<bookmark mark='a'/>我们在三个比例下训练了它。<bookmark mark='b'/>在我们的数字上，最好的比例是藏起90%：藏一半、四分之三和十分之九时，探针分别是81.6%、82.3%和84.0%。<bookmark mark='c'/>三者都低于未训练网络的84.6%，而且另外两个比例各只训练了一次。"
+  },
+  "1d84d5694f95": {
+   "scene": "Masked",
+   "en": "BEiT's targets are tokens instead of pixels. It borrowed the image tokenizer of OpenAI's first DALL·E, which turns each patch into one of eight thousand discrete codes. <bookmark mark='a'/> Ours is simpler, a codebook like the ones in Part 23: k-means on four-by-four patches, sixty-four codes. <bookmark mark='b'/> A digit becomes forty-nine tokens, <bookmark mark='c'/> and the network, shown the digit with forty percent of its patches hidden, must name each hidden patch's code, as BERT names a hidden word. By the end it is right 78 percent of the time.",
+   "zh": "BEiT的目标是词元，而不是像素。它借用了OpenAI第一代DALL·E的图像分词器，把每个块变成8000多个离散编码中的一个。<bookmark mark='a'/>我们的更简单，是第23部分里那样的码本：在4乘4的块上做k均值，64个编码。<bookmark mark='b'/>一个数字变成49个词元，<bookmark mark='c'/>网络看到的是藏起了40%块的数字，必须说出每个被藏块的编码，就像BERT说出被藏的词。到最后，它答对的比例是78%。"
+  },
+  "8111d4b6f853": {
+   "scene": "Masked",
+   "en": "So, does filling in teach what a digit is? <bookmark mark='a'/> Not on our network. Filling in pixels leaves a representation at 82.3 percent on the linear probe, below even the untrained network's 84.6, and far below SimCLR's 98.1; predicting codes gives 79.9. A likely reason: to paint strokes, each cell of the small map learns where ink goes near it, and averaged over the map, that says little about which digit it is. <bookmark mark='b'/> The same pattern appears at scale: MAE's linear probes trail the contrastive methods, and it shines once its layers are fine-tuned. A pixel target makes the network spend its effort on exact strokes, much of which a classifier does not need. That suggests a third way: predict, but not pixels.",
+   "zh": "那么，填空能教会网络什么是数字吗？<bookmark mark='a'/>在我们的网络上不能。填像素留下的表示，线性探针只有82.3%，甚至低于未训练网络的84.6%，远低于SimCLR的98.1%；预测编码得到79.9%。一个可能的原因是：为了画出笔画，那张小特征图的每个格子学的是它附近哪里有墨迹，在整张图上一平均，这些对“是哪个数字”就说明不了多少了。<bookmark mark='b'/>在大规模上也是同样的规律：MAE的线性探针落后于对比式方法，一旦微调它的各层，它就大放异彩。像素目标让网络把力气花在精确的笔画上，而其中很多是分类器用不上的。这就引出了第三条路：去预测，但不预测像素。"
+  },
+  "38080c36f499": {
+   "scene": "JEPAScene",
+   "en": "Chapter twelve. Predict the meaning, not the pixels.",
+   "zh": "第12章。预测含义，而不是像素。"
+  },
+  "a10a219dfcf6": {
+   "scene": "JEPAScene",
+   "en": "In 2022 Yann LeCun laid out the third way, in a long essay on how machines might learn models of the world. <bookmark mark='a'/> Joint-embedding methods, like everything since chapter four, make two views agree; they need hand-made views, and a guard against collapse. <bookmark mark='b'/> Generative methods, like MAE, predict the hidden part's pixels, every detail, the predictable and the unpredictable alike. <bookmark mark='c'/> A joint-embedding predictive architecture, a JEPA, predicts the hidden part's encoding instead: the network decides what about the hidden part is worth predicting, and can drop the rest.",
+   "zh": "2022年，杨立昆在一篇关于机器怎样学会世界模型的长文里，提出了第三条路。<bookmark mark='a'/>联合嵌入的方法，就像第4章以来的所有方法，让两个视图一致；它们需要人工设计的视图，还需要防止坍缩。<bookmark mark='b'/>生成式的方法，比如MAE，预测被藏部分的像素，每一个细节，可预测的和不可预测的都一样。<bookmark mark='c'/>联合嵌入预测架构，也就是JEPA，转而预测被藏部分的编码：由网络决定被藏部分里哪些值得预测，其余的可以丢掉。"
+  },
+  "f43b934f568a": {
+   "scene": "JEPAScene",
+   "en": "LeCun frames all of this with energies, the language of Part 20. A JEPA's energy is its prediction error: low when y fits x, high when it does not. <bookmark mark='a'/> Collapse is an energy that is low everywhere: every y fits every x. <bookmark mark='b'/> There are two ways to give it shape. Contrastive methods push the energy down on real pairs and up on chosen negatives, as word2vec and SimCLR do. <bookmark mark='c'/> Regularized methods instead limit how much of the space can have low energy at all: VICReg's variance floor, Barlow's decorrelation, the predictors and moving averages of BYOL, DINO and JEPA. LeCun argues the second kind scales better, because in high dimensions there are too many places to push.",
+   "zh": "杨立昆用能量来描述这一切，也就是第20部分的语言。JEPA的能量就是它的预测误差：y和x相符时低，不符时高。<bookmark mark='a'/>坍缩就是处处都低的能量：每个y都和每个x相符。<bookmark mark='b'/>有两种办法给它塑形。对比式的方法在真实的对上压低能量，在选出的负样本上抬高能量，word2vec和SimCLR就是这样。<bookmark mark='c'/>正则化的方法则限制空间里有多少地方能有低能量：VICReg的方差下限、Barlow的去相关，以及BYOL、DINO和JEPA的预测器与移动平均。杨立昆认为第二种更容易扩展，因为在高维空间里，需要推的地方太多了。"
+  },
+  "3afa079604dd": {
+   "scene": "JEPAScene",
+   "en": "I-JEPA, from Mahmoud Assran and colleagues in 2023, is the image version. Hide some blocks of the image. <bookmark mark='a'/> A context encoder sees the rest. <bookmark mark='b'/> A target encoder, a slowly moving average of the context encoder as in BYOL, sees the whole image, and its output at the hidden blocks is the target. <bookmark mark='c'/> A predictor, told where the hidden blocks are, must produce that target from the context. No pixels are predicted, and no views are needed beyond a crop. <bookmark mark='d'/> Ours runs on the same network as everything else: the targets are cells of its final four-by-four map, two blocks of two by two.",
+   "zh": "I-JEPA是2023年马哈茂德·阿斯兰和同事提出的图像版本。藏起图像的几个块。<bookmark mark='a'/>上下文编码器看剩下的部分。<bookmark mark='b'/>目标编码器是上下文编码器的缓慢移动平均，和BYOL一样，它看整张图像，它在被藏块上的输出就是目标。<bookmark mark='c'/>预测器被告知被藏块的位置，必须从上下文里给出那个目标。不预测任何像素，除了裁剪也不需要别的视图。<bookmark mark='d'/>我们的版本和其他方法用同一个网络：目标是它最后那张4乘4特征图上的格子，两个2乘2的块。"
+  },
+  "d3cf03e0da0b": {
+   "scene": "JEPAScene",
+   "en": "We trained I-JEPA, MAE and SimCLR on the same network, for the same number of steps. <bookmark mark='a'/> Predicting the meaning beats predicting the pixels: I-JEPA's linear probe reaches 88.4 percent, MAE's 82.3, and SimCLR, with its hand-made views, 98.1. <bookmark mark='b'/> In the paper, with the largest vision transformers, I-JEPA's linear probe beat MAE's, 79.3 percent to 77.2, using more than ten times less computation.",
+   "zh": "我们在同一个网络上、用同样多的训练步数，分别训练了I-JEPA、MAE和SimCLR这三种方法。<bookmark mark='a'/>预测含义胜过预测像素：I-JEPA的线性探针达到88.4%，MAE是82.3%，而用人工视图的SimCLR是98.1%。<bookmark mark='b'/>在论文里，用最大号的视觉Transformer，I-JEPA的线性探针胜过了MAE，79.3%对77.2%，而它用的计算量还不到对方的十分之一。"
+  },
+  "ba85fe9e6425": {
+   "scene": "JEPAScene",
+   "en": "On video, the idea becomes a model of the world. V-JEPA predicts hidden blocks of space and time. <bookmark mark='a'/> V-JEPA 2, in June 2025, was trained on over a million hours of video. Then, with less than sixty-two hours of unlabelled robot video, it learned how a robot arm's actions change what it sees, and it could pick and place objects in labs it had never seen, by searching for actions whose predicted outcome looks like a picture of the goal. <bookmark mark='b'/> Its 2026 successor learns detailed features for every patch, and grasps more reliably. <bookmark mark='c'/> And LeJEPA dropped the stop-gradient and the teacher altogether. World models return in Part 29.",
+   "zh": "在视频上，这个想法变成了一个世界模型。V-JEPA预测被藏起的时空块。<bookmark mark='a'/>2025年6月的V-JEPA 2在一百多万小时的视频上训练。然后，用不到62小时的无标签机器人视频，它学会了机械臂的动作怎样改变它看到的东西，并且能在从没见过的实验室里抓取和放置物体，办法是搜索那些预测结果看起来像目标图片的动作。<bookmark mark='b'/>它2026年的后继者为每个图像块学到细致的特征，抓取也更可靠。<bookmark mark='c'/>而LeJEPA干脆去掉了停止梯度和老师。世界模型会在第29部分回来。"
+  },
+  "b25247183d26": {
+   "scene": "Budget",
+   "en": "Chapter thirteen. Every method, one budget.",
+   "zh": "第13章。所有方法，同一份预算。"
+  },
+  "1fd0a781173d": {
+   "scene": "Budget",
+   "en": "Here is every method, trained on the same network for the same number of steps, from three random starts, judged by a linear probe with all the labels. <bookmark mark='a'/> At the top, for reference, the supervised network: 98.6 percent. <bookmark mark='b'/> The best method without labels is VICReg, at 98.2 percent, 0.4 points behind. <bookmark mark='c'/> At the bottom of the learned methods, the BEiT-style model, with 79.9; the untrained network scores 84.6, and the raw pixels 92.7. <bookmark mark='d'/> 2 of the learned methods score below the untrained network.",
+   "zh": "这是每一种方法，在同一个网络上、用同样的步数、从三个随机起点训练，用全部标签的线性探针来评判。<bookmark mark='a'/>最上面是作为参照的监督网络：98.6%。<bookmark mark='b'/>不用标签的方法里最好的是VICReg，98.2%，落后0.4个百分点。<bookmark mark='c'/>学习过的方法里垫底的是BEiT式模型，79.9%；未训练的网络得到84.6%，原始像素得到92.7%。<bookmark mark='d'/>学习过的方法里，有2种低于未训练的网络。"
+  },
+  "cd6d2ed30e1f": {
+   "scene": "Budget",
+   "en": "The full probe flatters everyone: with sixty thousand labels, even raw pixels do well. The question self-supervised learning was invented for is what you can do with very few labels. <bookmark mark='a'/> So: a linear classifier from ten labelled digits of each kind. <bookmark mark='b'/> The leader is the same: VICReg, with 91.3 percent from a hundred labels. <bookmark mark='c'/> The raw pixels manage 72.5; the supervised network, which was trained with all sixty thousand labels before its ten-per-digit probe, 96.9. That gap, between 72.5 and 91.3, is what the unlabelled digits taught.",
+   "zh": "完整的探针让每个方法都显得不错：有6万个标签，连原始像素都表现很好。自监督学习当初要回答的问题是：只有很少的标签时能做什么。<bookmark mark='a'/>所以：每种数字只用10个带标签的样本，训练一个线性分类器。<bookmark mark='b'/>领先的还是同一个：VICReg，用100个标签得到91.3%。<bookmark mark='c'/>原始像素得到72.5%；监督网络在做这个每类10个标签的探针之前，已经用全部6万个标签训练过，得到96.9%。从72.5%到91.3%的这段差距，就是那些无标签的数字教给网络的。"
+  },
+  "91f532b0b662": {
+   "scene": "Budget",
+   "en": "A frozen network is one test. The other common one lets the whole network change, starting from what it learned, with the same hundred labels. <bookmark mark='a'/> Trained from scratch on a hundred digits, our network reaches 82.8 percent. <bookmark mark='b'/> Of the 12 self-supervised starts, 10 beat that; the best is SimSiam, at 88.5. <bookmark mark='c'/> The masked models gain the most from it: MAE goes from 52.0 percent with a frozen network to 82.3 fine-tuned, I-JEPA from 60.8 to 85.3. <bookmark mark='d'/> But that only brings MAE back to where training from scratch gets, 82.8 percent: its pre-training gave no head start. <bookmark mark='e'/> And for the best networks, the frozen probe was the better use of the hundred labels: VICReg scores 91.3 percent frozen and 87.3 fine-tuned. With so few labels, moving every weight can undo part of what was learned.",
+   "zh": "冻结的网络是一种检验。另一种常用的检验让整个网络都可以改变，从它学到的东西出发，用同样的100个标签。<bookmark mark='a'/>从零开始用100个数字训练，我们的网络达到82.8%。<bookmark mark='b'/>12个自监督的起点里，有10个超过了它；最好的是SimSiam，88.5%。<bookmark mark='c'/>掩码模型从中获益最多：MAE从冻结网络的52.0%升到微调后的82.3%，I-JEPA从60.8%升到85.3%。<bookmark mark='d'/>但这只是让MAE回到了从零训练能达到的水平，82.8%：它的预训练并没有带来领先。<bookmark mark='e'/>而对最好的那些网络来说，把这100个标签用在冻结探针上反而更划算：VICReg冻结时是91.3%，微调后是87.3%。标签这么少时，改动每一个权重，可能会抹掉一部分学到的东西。"
+  },
+  "715e9df7f6a7": {
+   "scene": "Budget",
+   "en": "Chapter five's two numbers can be measured on every method's representation, not just SimCLR's. <bookmark mark='a'/> Here each method sits at its uniformity and alignment. <bookmark mark='b'/> Lower is better for both, so Wang and Isola predict negative correlations. Alignment's is strong, -0.54; uniformity's is only -0.49.",
+   "zh": "第5章的那两个数，可以在每种方法的表示上测量，而不只是SimCLR的。<bookmark mark='a'/>这里每种方法都放在它的均匀性和对齐的位置上。<bookmark mark='b'/>两者都是越低越好，所以王同舟和伊索拉预测相关是负的。对齐的相关很强，-0.54；均匀性的只有-0.49。"
+  },
+  "120c38ec8f8c": {
+   "scene": "Budget",
+   "en": "Can you tell which representation is good without any labels at all? Quentin Garrido and colleagues proposed the effective rank: in their experiments, the methods whose vectors filled more dimensions did better downstream. <bookmark mark='a'/> Here is the effective rank of each of our methods against its ten-label accuracy. <bookmark mark='b'/> Across our methods, the rank correlation is -0.63: no useful relation. Filling the dimensions does not, by itself, make them useful.",
+   "zh": "能不能完全不用标签，就看出哪个表示好？昆汀·加里多和同事提出了有效秩：在他们的实验里，向量占满更多维度的方法，下游表现更好。<bookmark mark='a'/>这里是我们每种方法的有效秩，和它在10个标签检验上的准确率。<bookmark mark='b'/>在我们的方法之间，秩相关是-0.63：没有有用的关系。把维度占满，本身并不能让它们有用。"
+  },
+  "3cbd18fdb2e4": {
+   "scene": "Budget",
+   "en": "How far should this scoreboard be trusted? It is one small network, eight hundred updates, ten kinds of digit. <bookmark mark='a'/> Methods whose published recipes train for hundreds of passes over the data, DINO and the masked models, may be at a disadvantage on a budget this short. <bookmark mark='b'/> At ImageNet scale, with vision transformers, the order is different: the DINO line leads the self-supervised methods on frozen features, and masked models do well once fine-tuned. <bookmark mark='c'/> Here, 10 of the 12 methods learned enough about digits, without a single label, to beat the untrained network when only ten labels per digit are given.",
+   "zh": "这张记分牌该信几分？它只是一个小网络、800次更新、十种数字。<bookmark mark='a'/>有些方法公开的配方要把数据过上几百遍，比如DINO和掩码模型，在这么短的预算下可能会吃亏。<bookmark mark='b'/>在ImageNet的规模上，用视觉Transformer，名次就不一样了：在自监督方法里，DINO这一系在冻结特征上领先，掩码模型在微调之后表现很好。<bookmark mark='c'/>在这里，12种方法中有10种，在没有一个标签的情况下学到了足够多关于数字的东西，在每个数字只给10个标签时胜过了未训练的网络。"
+  },
+  "fca69f355ef9": {
+   "scene": "Embeddings",
+   "en": "Chapter fourteen. Embeddings for search.",
+   "zh": "第14章。用于搜索的嵌入。"
+  },
+  "2aa81cda5397": {
+   "scene": "Embeddings",
+   "en": "Everything so far was judged by how well a classifier could read the vectors. But much of the world uses them directly, for search. <bookmark mark='a'/> Embed every item once; embed the query; return the items whose vectors are nearest. <bookmark mark='b'/> Here is our SimCLR network as a search engine for digits: four queries and their nearest test digits, green when they are the same digit. 81 percent of them are. <bookmark mark='c'/> At the scale of the web, the nearest neighbours are found approximately, by graphs built over billions of vectors.",
+   "zh": "到目前为止，一切都是按分类器能多好地读出向量来评判的。可世界上很多地方直接拿向量来用，用来搜索。<bookmark mark='a'/>每个条目嵌入一次；把查询也嵌入；返回向量最近的那些条目。<bookmark mark='b'/>这是我们的SimCLR网络当作数字搜索引擎：四个查询和它们最近的测试数字，同一个数字的标绿。其中81%是对的。<bookmark mark='c'/>在整个网络的规模上，最近邻是近似找到的，靠的是在数十亿个向量上搭建的图。"
+  },
+  "cd54c2117224": {
+   "scene": "Embeddings",
+   "en": "Search engines today mostly embed text, and the history runs from Part 3's word vectors to here. <bookmark mark='a'/> Sentence-BERT in 2019 trained twin networks to place similar sentences together. DPR, in 2020, matched questions to passages, using the other passages in each batch as negatives: InfoNCE again. <bookmark mark='b'/> SimCSE, in 2021, needed no pairs at all: feed the same sentence in twice, and the network's random dropout makes the two views. <bookmark mark='c'/> Then came contrastive pretraining on hundreds of millions of web text pairs, and a benchmark, MTEB, to compare the results. <bookmark mark='d'/> Today's leaders are language models turned into encoders. Qwen3-Embedding, in 2025, trains with InfoNCE and a temperature; <bookmark mark='e'/> Google's Gemini Embedding 2, in 2026, puts text, images, video and sound in one space. The same loss, with pictures and captions as the two views, is how CLIP and SigLIP were trained, in Part 23.",
+   "zh": "今天的搜索引擎主要是给文本做嵌入，这段历史从第3部分的词向量一直延续到这里。<bookmark mark='a'/>2019年的Sentence-BERT训练孪生网络，把相似的句子放到一起。2020年的DPR把问题和段落配对，把同一批里的其他段落当作负样本：又是InfoNCE。<bookmark mark='b'/>2021年的SimCSE连配对都不需要：把同一个句子输入两次，网络里随机的dropout就造出了两个视图。<bookmark mark='c'/>接着是在数亿对网络文本上的对比预训练，以及一个用来比较结果的基准，MTEB。<bookmark mark='d'/>今天领先的是被改造成编码器的语言模型。2025年的Qwen3-Embedding用InfoNCE和温度来训练；<bookmark mark='e'/>谷歌2026年的Gemini Embedding 2把文本、图像、视频和声音放进同一个空间。同样的损失，以图片和文字说明作为两个视图，就是第23部分里训练CLIP和SigLIP的方法。"
+  },
+  "d1d84e436bd4": {
+   "scene": "Embeddings",
+   "en": "Vectors cost memory: a billion items at a thousand numbers each is four terabytes. Often you would like to search with a short vector first and refine with a long one. <bookmark mark='a'/> Matryoshka representation learning, from Aditya Kusupati and colleagues in 2022, trains one vector so that its first two numbers, its first four, its first eight, and so on, are each a good embedding by themselves, like dolls nested inside each other. <bookmark mark='b'/> The loss is just the usual loss applied to every prefix and averaged. <bookmark mark='c'/> Qwen3-Embedding supports it, and OpenAI's 2024 models can be shortened the same way: cut to 256 numbers, the large model still beats its predecessor's full 1,536.",
+   "zh": "向量要占内存：十亿个条目，每个一千个数，就是4TB。人们常常想先用短向量搜一遍，再用长向量细化。<bookmark mark='a'/>套娃表示学习出自2022年阿迪蒂亚·库苏帕蒂和同事，它训练一个向量，让它的前两个数、前四个数、前八个数，依此类推，每一段单独拿出来都是一个好的嵌入，就像一个套一个的俄罗斯套娃。<bookmark mark='b'/>损失就是把通常的损失用在每一个前缀上，再取平均。<bookmark mark='c'/>Qwen3-Embedding支持它，OpenAI 2024年的模型也能这样截短：截到256个数，大模型仍然胜过它前代模型完整的1536个数。"
+  },
+  "083faf64f726": {
+   "scene": "Embeddings",
+   "en": "We trained SimCLR with the Matryoshka loss, three times, and compared it with ordinary SimCLR, its vector simply cut short. <bookmark mark='a'/> Keep the first few numbers of each, renormalize, and ask the nearest neighbours. <bookmark mark='b'/> With only four numbers, the ordinary embedding finds the right digit 64 percent of the time; the Matryoshka one, 88 percent. At the full 128 the two are within 0.6 points.",
+   "zh": "我们用套娃损失训练了SimCLR三次，并和普通的SimCLR比较，后者的向量只是被直接截短。<bookmark mark='a'/>各自只保留前几个数，重新归一化，再问最近邻。<bookmark mark='b'/>只用4个数时，普通的嵌入找对数字的比例是64%；套娃嵌入是88%。用完整的128个数时，两者相差不到0.6个百分点。"
+  },
+  "b82345224209": {
+   "scene": "Embeddings",
+   "en": "Here is what that means for search: the same six queries, answered using only the first four numbers. <bookmark mark='a'/> Cut short, ordinary SimCLR returns the same digit 50 percent of the time; <bookmark mark='b'/> the Matryoshka embedding, 73 percent. One vector, trained once, that can be cut to fit the budget.",
+   "zh": "这对搜索意味着什么：同样六个查询，只用前4个数来回答。<bookmark mark='a'/>截短后，普通的SimCLR返回同一个数字的比例是50%；<bookmark mark='b'/>套娃嵌入是73%。一个向量，训练一次，就能按预算截短。"
+  },
+  "14476ecff536": {
+   "scene": "Platonic",
+   "en": "Chapter fifteen. Do all models see the same world?",
+   "zh": "第15章。所有模型看到的是同一个世界吗？"
+  },
+  "5fbe8e6c7b26": {
+   "scene": "Platonic",
+   "en": "How do you compare what two networks learned? Their coordinates mean nothing by themselves: rotate a representation and nothing it knows has changed. So compare geometry instead. For a set of inputs, list how similar every pair is, in each representation. <bookmark mark='a'/> Centre those two tables and measure how alike they are: a statistic called HSIC. <bookmark mark='b'/> With plain dot products it becomes the squared size of the cross-product of the two centred representations. <bookmark mark='c'/> Normalize it, and you have centred kernel alignment, CKA: one when the two have the same geometry. <bookmark mark='d'/> It ignores rotations and overall scale, but, as Simon Kornblith and his co-authors argued, not every invertible map: in high dimensions, a measure that forgave every linear map would find any two networks identical.",
+   "zh": "怎样比较两个网络学到的东西？它们的坐标本身毫无意义：把一个表示旋转一下，它知道的东西一点也没变。所以要比较几何。对一组输入，在每个表示里列出每一对输入有多相似。<bookmark mark='a'/>把这两张表中心化，测量它们有多像：这个统计量叫作HSIC。<bookmark mark='b'/>用普通的点积时，它就变成两个中心化表示的互乘积的大小的平方。<bookmark mark='c'/>再归一化，就得到中心化核对齐，CKA：两者几何相同时为1。<bookmark mark='d'/>它不在乎旋转和整体缩放，但正如西蒙·科恩布利斯和合作者所说，它并不是对任何可逆映射都不变：在高维空间里，一个对所有线性映射都宽容的度量，会认为任何两个网络都完全相同。"
+  },
+  "433c53f9efa5": {
+   "scene": "Platonic",
+   "en": "Here is the CKA between every pair of our representations, on the same two thousand test digits; brighter is more alike. <bookmark mark='a'/> The most alike learned pair is SimCLR and the Matryoshka model, at 0.98; <bookmark mark='b'/> the least alike, VICReg and MAE, at 0.24. <bookmark mark='c'/> For scale: the same recipe run from two random starts agrees with itself at between 0.73 and 0.98.",
+   "zh": "这是我们每一对表示之间的CKA，在同样2000个测试数字上算出；越亮越像。<bookmark mark='a'/>学习过的方法里最像的一对是SimCLR和套娃模型，0.98；<bookmark mark='b'/>最不像的是VICReg和MAE，0.24。<bookmark mark='c'/>作为参照：同一个配方从两个随机起点训练，自己和自己的一致度在0.73到0.98之间。"
+  },
+  "44233756cfa6": {
+   "scene": "Platonic",
+   "en": "In 2024 Minyoung Huh, Brian Cheung, Tongzhou Wang and Phillip Isola made a bold claim. Networks trained on different data, with different objectives, even on different senses, are coming to represent the world in the same way. In their words: <bookmark mark='a'/> we hypothesize that this convergence is driving toward a shared statistical model of reality. They called it the platonic representation hypothesis, after the shadows on the wall of Plato's cave. <bookmark mark='b'/> Their evidence: among seventy-eight vision models, the more capable agree more with each other; and the better a language model, the more its picture of a caption agrees with a vision model's picture of the image. <bookmark mark='c'/> Agreement is measured by shared nearest neighbours, and across senses it is still low in absolute terms.",
+   "zh": "2024年，许敏英、布赖恩·张、王同舟和菲利普·伊索拉提出了一个大胆的论断。用不同数据、不同目标、甚至不同感官训练出来的网络，正在以同样的方式表示世界。用他们的话说：<bookmark mark='a'/>我们假设，这种趋同正在走向一个共同的、关于现实的统计模型。他们把它叫作柏拉图表示假说，取自柏拉图洞穴墙上的影子。<bookmark mark='b'/>他们的证据：在78个视觉模型里，能力越强的彼此越一致；语言模型越好，它对一句文字说明的理解，就越和视觉模型对那张图的理解一致。<bookmark mark='c'/>一致性是用共同的近邻来衡量的，而在不同感官之间，它的绝对值仍然很低。"
+  },
+  "6911834cde18": {
+   "scene": "Platonic",
+   "en": "We can run a small version of their first test on our own models. For each method, its average agreement with all the others, in shared nearest neighbours, against how good its representation is. <bookmark mark='a'/> The more accurate methods do agree more with the rest: a rank correlation of 0.66. As the paper put it: all strong models are alike, each weak model is weak in its own way.",
+   "zh": "我们可以在自己的模型上做一个他们第一个检验的小型版本。对每种方法，看它和其他所有方法在共同近邻上的平均一致度，对比它的表示有多好。<bookmark mark='a'/>越准确的方法，确实和其他方法更一致：秩相关为0.66。正如论文所说：强的模型都是相似的，弱的模型各有各的弱。"
+  },
+  "3dc399b7fc2a": {
+   "scene": "Platonic",
+   "en": "A sharper test borrows Becker and Hinton's setting from 1992: two networks that see different parts of the world. Encoder A sees only the top half of each digit, encoder B only the bottom half. <bookmark mark='a'/> Each is trained alone, with SimCLR, never told about the other. Do they come to agree about which digits are alike? <bookmark mark='b'/> As each learns, they agree more: from 0.12 at the start to 0.17 and 0.17 in the two runs. But that only reaches the 0.17 at which the two halves' raw pixels already agree, far below the 0.71 of two encoders that see the same half. <bookmark mark='c'/> So the two senses drift toward each other, but no further than the raw data already put them. At our scale, the strong form of the hypothesis is not something we can show.",
+   "zh": "一个更尖锐的检验借用了贝克尔和辛顿1992年的设定：两个网络看着世界的不同部分。编码器A只看每个数字的上半部分，编码器B只看下半部分。<bookmark mark='a'/>它们各自单独用SimCLR训练，从不知道对方的存在。它们会在“哪些数字相像”这件事上达成一致吗？<bookmark mark='b'/>随着各自学习，它们越来越一致：从开始时的0.12，到两次训练中的0.17和0.17。但这只达到了两个半边的原始像素本来就有的一致度0.17，远低于两个看同一半的编码器之间的0.71。<bookmark mark='c'/>所以这两种感官确实彼此靠近了，但没有超出原始数据本来就给它们的那一步。在我们的规模上，这个假说的强形式不是我们能证明的。"
+  },
+  "aa4ee431c56b": {
+   "scene": "Platonic",
+   "en": "The authors list the caveats themselves. Different senses carry different information: a caption cannot say everything a photograph shows. <bookmark mark='a'/> How to measure agreement is still argued over. <bookmark mark='b'/> Convergence could come from shared training data, shared architectures, or the shared habits of the people building them. <bookmark mark='c'/> And ours is a toy with ten kinds of digit. Still, it is a striking idea: that learning without labels, from any angle, finds the same structure, because the structure is really there.",
+   "zh": "作者们自己列出了这些保留意见。不同的感官携带不同的信息：一句文字说明说不尽一张照片里的一切。<bookmark mark='a'/>怎样衡量一致性，至今仍有争论。<bookmark mark='b'/>趋同可能来自共同的训练数据、共同的架构，或者建造它们的人的共同习惯。<bookmark mark='c'/>而我们的只是一个只有十种数字的玩具。尽管如此，这是一个很动人的想法：无标签的学习，不管从哪个角度出发，都会找到同样的结构，因为那个结构真实存在。"
+  },
+  "8b848cd06cbb": {
+   "scene": "Outro",
+   "en": "Let's take stock. A pretext puzzle teaches what the puzzle needs, blind spots and all. A contrastive loss is a classifier over candidates, and a bound on information capped at the log of their number. On the sphere it is two forces, alignment and uniformity, balanced by the temperature. Without something pushing apart, agreement collapses to a constant, and we can measure it. BYOL and SimSiam escape by asymmetry, Barlow Twins and VICReg by decorrelating dimensions, DINO by balancing a teacher between two collapses. Masked models learn by filling in; JEPAs predict meanings instead of pixels. And four different losses, contrastive and not, end with nearly the same representation: a CKA of at least 0.97 between each pair.",
+   "zh": "来总结一下。前置任务教会网络的是这道题所需要的东西，包括它的盲区。对比损失是在候选之间做分类，也是信息的一个下界，上限是候选数的对数。在球面上，它是两股力量，对齐与均匀，由温度来平衡。没有东西把它们推开，一致性就会坍缩成常数，而且我们可以测量它。BYOL和SimSiam靠不对称逃脱，Barlow Twins和VICReg靠维度去相关，DINO靠让老师在两种坍缩之间保持平衡。掩码模型靠填空学习；JEPA预测的是含义而不是像素。而四种不同的损失，有对比式的也有非对比式的，最后得到的表示几乎一样：两两之间的CKA至少是0.97。"
+  },
+  "011e463215ad": {
+   "scene": "Outro",
+   "en": "All of this comes back. Augmentations teach a network what to ignore; next time, Part 25 builds that symmetry into the network itself. <bookmark mark='p2'/> Prediction in representation space is the heart of the world models in Part 29. <bookmark mark='p3'/> Probes and CKA are how Part 30 reads what a network knows, <bookmark mark='p4'/> and Matryoshka's nested features return there, in sparse autoencoders. <bookmark mark='p5'/> Teachers and students return in Part 27's distillation; <bookmark mark='p6'/> and embeddings are the memory that the agents of Part 29 search.",
+   "zh": "这些都会再回来。数据增强教网络该忽略什么；下一次，第25部分会把这种对称性直接造进网络里。<bookmark mark='p2'/>在表示空间里做预测，是第29部分世界模型的核心。<bookmark mark='p3'/>探针和CKA，是第30部分读出网络知道什么的方法，<bookmark mark='p4'/>套娃式的嵌套特征也会在那里回来，出现在稀疏自编码器里。<bookmark mark='p5'/>老师和学生会在第27部分的蒸馏里回来；<bookmark mark='p6'/>而嵌入就是第29部分的智能体所检索的记忆。"
+  },
+  "beedf37e1824": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from the InfoNCE bound to DINO's two collapses. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道题，从InfoNCE的界到DINO的两种坍缩。在这里暂停，把它们做一做；完整的解答在本部分的讲义里。"
+  },
+  "32dde345af84": {
+   "scene": "Outro",
+   "en": "Next time: symmetry. Our networks learned to ignore a turn of the page only because we showed them turned pages. Part 25 builds the symmetry into the network, so that its answer either stays the same when the input turns, or turns along with it, and follows that idea from graphs to proteins, weather and mathematics.",
+   "zh": "下一次：对称性。我们的网络学会忽略纸张转动，只是因为我们给它看了转动过的纸张。第25部分会把对称性造进网络里，让它的回答在输入转动时要么保持不变，要么跟着一起转动，并沿着这个思路，从图一直讲到蛋白质、天气和数学。"
+  },
+  "6b69de65bf6a": {
+   "scene": "Outro",
+   "en": "To go deeper, the Cookbook of Self-Supervised Learning, by Randall Balestriero and colleagues, is a practical guide to everything in this part, and Kevin Murphy's second volume covers the theory. Thanks for watching, and see you in Part 25.",
+   "zh": "想深入的话，兰德尔·巴莱斯特里耶罗等人写的《自监督学习食谱》（A Cookbook of Self-Supervised Learning）是本部分所有内容的实用指南，凯文·墨菲的第二卷讲了其中的理论。感谢收看，我们第25部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 24, Learning Without Labels",
+ "chapters_en": {
+  "Hook": "Nobody told it what a digit is",
+  "Problem": "1. Learning without labels",
+  "Pretext": "2. Invent a puzzle",
+  "InfoNCE": "3. Telling the real from the fake",
+  "SimCLR": "4. Two views of one digit",
+  "Sphere": "5. Alignment and uniformity",
+  "Collapse": "6. Collapse",
+  "BYOL": "7. No negatives: BYOL and SimSiam",
+  "Barlow": "8. Decorrelate: Barlow Twins and VICReg",
+  "DINO": "9. Self-distillation: DINO",
+  "Scale": "10. Scale and curation",
+  "Masked": "11. Fill in the blanks: MAE and BEiT",
+  "JEPAScene": "12. Predict the meaning, not the pixels",
+  "Budget": "13. Every method, one budget",
+  "Embeddings": "14. Embeddings for search",
+  "Platonic": "15. Do all models see the same world?",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}
