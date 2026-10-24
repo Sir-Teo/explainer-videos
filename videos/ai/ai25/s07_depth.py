@@ -199,7 +199,7 @@ class Depth(VoiceoverScene):
         txt = VGroup(
             label(r"$L$ hops away: \ up to $(\deg)^L$ nodes", font_size=24, color=GNN_C),
             label(r"all squeezed into one vector \\ of fixed size", font_size=24, color=PLAIN),
-            label(r"\textit{over-squashing}: \ Alon \& Yahav (2021); \\ bottlenecks and curvature: \ Topping et al.\ "
+            label(r"\textit{over-squashing}: \ Alon \& Yahav (2021); \\ bottlenecks, curvature: \ Topping et al.\ "
                   r"(2022)", font_size=22, color=GREY_B),
             label(r"remedies: \ rewire the graph, \\ add global nodes, \ or attend to everything", font_size=22,
                   color=STRUCT),

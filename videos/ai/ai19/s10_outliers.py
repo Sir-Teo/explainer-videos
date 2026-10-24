@@ -159,7 +159,7 @@ class Outliers(VoiceoverScene):
         d8 = max(abs(v) for v in groups[0][1])
         p4, s4, k4 = groups[2][1]
         if s4 < 0.9 * p4:
-            s_say = f"SmoothQuant cuts the loss to {s4:.3f}"
+            s_say = f"SmoothQuant cuts that to {s4:.3f}, {100 * (1 - s4 / p4):.0f} percent less"
         else:
             s_say = f"SmoothQuant helps only a little, {s4:.3f}"
         with self.voiceover(

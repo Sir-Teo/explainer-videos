@@ -85,8 +85,8 @@ class Paging(VoiceoverScene):
         with self.voiceover(
             "Where in memory should each conversation's cache go? Nobody knows how long an answer will be. "
             "<bookmark mark='a'/> So servers used to reserve, for every conversation, room for the longest answer "
-            f"allowed, here {mx:,} tokens. Most of it sits empty: in our simulated server, only "
-            f"{used[0]:.0f} percent of the memory ever holds a token, and it fits {run[0]:.1f} conversations at a "
+            f"allowed, here {mx:,} tokens. Most of it sits empty: in our simulated server, on average only "
+            f"{used[0]:.0f} percent of the memory holds a token, and it fits {run[0]:.1f} conversations at a "
             "time. In 2023 the vLLM team measured real systems keeping 20 to 38 percent. "
             "<bookmark mark='b'/> Reserving exactly the right length would need the future, and still splinters "
             f"the memory as conversations come and go: {used[1]:.0f} percent. <bookmark mark='c'/> vLLM's answer "

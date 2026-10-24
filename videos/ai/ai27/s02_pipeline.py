@@ -79,12 +79,14 @@ class Pipeline(VoiceoverScene):
             "InstructGPT to those of the 175-billion-parameter GPT-3 it started from: a hundred times smaller, and "
             "better liked, because it was trying to help."
         ) as vo:
-            self.play(FadeIn(boxes[0]), FadeIn(notes[0]))
+            # the whole pipeline faint from the first word, each stage lit as it is named
+            ghost = VGroup(boxes[1:], arrows).copy().set_opacity(0.18)
+            self.play(FadeIn(boxes[0]), FadeIn(notes[0]), FadeIn(ghost), FadeIn(hc, shift=UP * 0.2))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(GrowArrow(arrows[k]), FadeIn(boxes[k + 1]), FadeIn(notes[k + 1]))
             vo.wait_until("d")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(Indicate(hc, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 

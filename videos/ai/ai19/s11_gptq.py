@@ -142,9 +142,19 @@ class GPTQ(VoiceoverScene):
         ptr = Triangle(fill_color=GPTQC, fill_opacity=1, stroke_width=0).scale(0.1).rotate(PI)
         ptr.move_to([X0, Y0 + Hh + 0.3, 0])
         er, eg = float(q["trace_err_rtn"]), float(q["trace_err_gptq"])
-        res = VGroup(label(rf"output error, \ rounding each alone: \ ${er:.3f}$", font_size=22, color=RTNC),
-                     label(rf"output error, \ GPTQ: \ ${eg:.3f}$", font_size=22, color=GPTQC))
-        res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, -2.6, 0])
+        lr_, lg_ = float(q["layer_err"]["rtn_3"]), float(q["layer_err"]["gptq_3"])
+        res = VGroup(label(rf"this row's output error, \ rounding each alone: \ ${er:.3f}$", font_size=21, color=RTNC),
+                     label(rf"this row's output error, \ GPTQ: \ ${eg:.3f}$", font_size=21, color=GPTQC),
+                     label(rf"the whole layer \ (\texttt{{{q['layer']}}}): \ ${lr_:.3f}$ $\to$ ${lg_:.3f}$",
+                           font_size=21, color=GPTQC))
+        res.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, -2.55, 0])
+        if eg < 0.85 * er:
+            trace_say = (f"but together they make a better output: an error of {eg:.3f} on the calibration inputs, "
+                         f"against {er:.3f} for rounding each weight alone.")
+        else:
+            trace_say = (f"but together they make a slightly better output: an error of {eg:.3f} on the calibration "
+                         f"inputs, against {er:.3f} for rounding each weight alone. Sixteen weights leave little room "
+                         "to make up for an error.")
         hc = history_card(2022, r"Elias Frantar, Saleh Ashkboos, Torsten Hoefler \& Dan Alistarh", rf"GPTQ: \ one "
                           rf"column order for every row, \ ${F.GPTQ['params'] / 1e9:.0f}$B parameters in about "
                           rf"${F.GPTQ['hours']}$ GPU-hours", width=5.2, font_size=16, color=GPTQC).to_corner(UR, buff=0.2)
@@ -157,8 +167,8 @@ class GPTQ(VoiceoverScene):
             "about four GPU-hours. <bookmark mark='b'/> Here it is on one row of a real layer of our model, at "
             "three bits. Each column is rounded, and its error is pushed onto the columns still to come. "
             "<bookmark mark='c'/> The final weights aren't the nearest levels to the originals, the grey outlines, "
-            "but together they make a better output: an error of "
-            f"{eg:.3f} on the calibration inputs, against {er:.3f} for rounding each weight alone."
+            + trace_say + " <bookmark mark='d'/> Over "
+            f"the whole layer, with every input to spread it across, GPTQ's error is {lg_:.3f}, against {lr_:.3f}."
         ) as vo:
             self.play(FadeIn(head), Create(base), FadeIn(lv), FadeIn(cur), FadeIn(ghost))
             vo.wait_until("a")
@@ -170,7 +180,9 @@ class GPTQ(VoiceoverScene):
                 self.play(Transform(cur, nxt), ptr.animate.move_to([X0 + dx * min(j + 1, n - 1), Y0 + Hh + 0.3, 0]),
                           run_time=0.45)
             vo.wait_until("c")
-            self.play(FadeOut(ptr), FadeIn(res))
+            self.play(FadeOut(ptr), FadeIn(res[:2]))
+            vo.wait_until("d")
+            self.play(FadeIn(res[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -219,7 +231,8 @@ class GPTQ(VoiceoverScene):
         seeds = q["seeds"]
         configs = [(4, "row"), (4, "64"), (3, "row"), (3, "64")]
         g = VGroup()
-        hi = max(res[f"rtn_{b}_{gg}"] for b, gg in configs) - base
+        hi = max(max([res[f"rtn_{b}_{gg}"]] + [res[f"{m}_{b}_{gg}_s{s}"] for m in ("gptq", "awq") for s in seeds])
+                 for b, gg in configs) - base
         for b, gg in configs:
             r_ = res[f"rtn_{b}_{gg}"] - base
             gp = [res[f"gptq_{b}_{gg}_s{s}"] - base for s in seeds]

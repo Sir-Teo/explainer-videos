@@ -111,8 +111,9 @@ class Phases(VoiceoverScene):
                     RIGHT, buff=0.1).shift(DOWN * 0.35 + LEFT * 0.6)
         stk = VGroup(*[Rectangle(width=0.9, height=0.12, stroke_width=0, fill_color=WEIGHTC, fill_opacity=0.25 + 0.05 * k)
                        for k in range(12)]).arrange(DOWN, buff=0.04).move_to([4.6, 1.6, 0])
-        sl = label(rf"$12$ weight matrices, \\ ${int(r['stack_n']):,} \times {int(r['stack_n']):,}$: \ ${mb:.0f}$ MB, \\"
-                   r"more than any cache here".replace(",", "{,}"), font_size=20, color=WEIGHTC).next_to(stk, DOWN, buff=0.2)
+        sl = label(rf"$12$ weight matrices, \\ ${int(r['stack_n']):,} \times {int(r['stack_n']):,}$: \ ${mb:.0f}$ MB".replace(
+            ",", "{,}") + (rf", \\ largest cache ${cache / 1e6:.0f}$ MB" if cache > 0 else ""), font_size=20,
+            color=WEIGHTC).next_to(stk, DOWN, buff=0.2)
         tps = B / (t / 1e3)
         k16 = list(B).index(16)
         k512 = len(B) - 1
@@ -121,6 +122,12 @@ class Phases(VoiceoverScene):
                     label(rf"$B = 512$: \ ${tps[k512]:.0f}$", font_size=22, color=DECODEC))
         rl.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.5, -1.6, 0])
         r16 = t[k16] / t[0]
+        cache = float(r.get("cache_bytes", 0))
+        if cache <= 0 or 4.0 * r["stack_layers"] * r["stack_n"] ** 2 > 1.5 * cache:
+            big = f"{mb:.0f} megabytes, more than any of its caches hold: a model too big to stay close to the processor."
+        else:
+            big = (f"{mb:.0f} megabytes; this processor's largest cache holds {cache / 1e6:.0f}, so some of it "
+                   "may stay close by.")
         if knee_m >= 0.5 * knee_p:
             how = (f"The measured points stay close to that: the time first doubles at a batch of about "
                    f"{knee_m:.0f}, where the roofline says {knee_p:.0f}.")
@@ -130,9 +137,8 @@ class Phases(VoiceoverScene):
                    f"products, not for a handful of vectors. Even so, sixteen vectors cost {r16:.1f} times one, not "
                    "sixteen.")
         with self.voiceover(
-            "We can watch this happen on this computer. <bookmark mark='a'/> Twelve weight matrices, "
-            f"{mb:.0f} megabytes, more than any of its caches hold: a model too big to stay close to the processor. "
-            "Multiply a batch of B vectors through all twelve, and time it. <bookmark mark='b'/> The roofline "
+            "We can watch this happen on this computer. <bookmark mark='a'/> Twelve weight matrices, " + big +
+            " Multiply a batch of B vectors through all twelve, and time it. <bookmark mark='b'/> The roofline "
             f"predicts a floor: just reading the weights takes {mem_t:.0f} milliseconds, whatever B is, until the "
             "arithmetic catches up with the reading. <bookmark mark='c'/> " + how + " <bookmark mark='d'/> So "
             f"vectors per second climb from {tps[0]:.0f} at a batch of one to {tps[k512]:.0f} at {int(B[k512])}: "

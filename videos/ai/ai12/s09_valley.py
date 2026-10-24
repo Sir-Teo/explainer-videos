@@ -111,8 +111,8 @@ class Valley(VoiceoverScene, ThreeDScene):
         yr = (math.log10(D.min()) + 0.3, math.log10(D.max()))
         zlo = float(np.nanmin(Lb)) - 0.05
         ztop = zlo + 1.6
-        axes = ThreeDAxes(x_range=[*xr, 1], y_range=[*yr, 1], z_range=[zlo, ztop, 0.5], x_length=6.4, y_length=6.4,
-                          z_length=3.2, axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(DOWN * 0.4)
+        axes = ThreeDAxes(x_range=[*xr, 1], y_range=[*yr, 1], z_range=[zlo, ztop, 0.5], x_length=5.0, y_length=5.0,
+                          z_length=2.5, axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(DOWN * 0.6)
 
         def f(u, v):
             return float(min(lnd(ch, 10 ** u, 10 ** v), ztop))
@@ -162,7 +162,7 @@ class Valley(VoiceoverScene, ThreeDScene):
             self.move_camera(phi=62 * DEGREES, theta=-128 * DEGREES, run_time=2.0,
                              added_anims=[Create(axes), FadeIn(surf)])
             self.play(FadeIn(pts), run_time=1.0)
-            self.begin_ambient_camera_rotation(rate=0.12)
+            self.begin_ambient_camera_rotation(rate=0.07)
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(c_) for c_ in isos], lag_ratio=0.25), FadeIn(k1), run_time=2.5)
             vo.wait_until("c")
@@ -251,12 +251,13 @@ class Valley(VoiceoverScene, ThreeDScene):
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(bkey))
             self.play(LaggedStart(*[Create(v) for v in vall], lag_ratio=0.25), run_time=2.5)
-            self.play(LaggedStart(*[FadeIn(st, scale=0.4) for st in stars], lag_ratio=0.2))
+            self.play(LaggedStart(*[FadeIn(st, scale=0.4) for st in stars], lag_ratio=0.2), FadeIn(hd), FadeIn(rows[0]),
+                      FadeIn(rows[1][0]), FadeIn(rows[1][2]))
+            self.play(FadeIn(rows[2][0]), FadeIn(rows[2][2]))
             vo.wait_until("a")
-            self.play(FadeIn(hd), FadeIn(rows[0]), FadeIn(boot))
+            self.play(FadeIn(rows[3][0]), FadeIn(rows[3][2]), FadeIn(boot))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_[:2]) for r_ in rows[1:]], lag_ratio=0.3))
-            self.play(LaggedStart(*[FadeIn(r_[2]) for r_ in rows[1:]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_[1]) for r_ in rows[1:]], lag_ratio=0.3))
             vo.wait_until("c")
             self.play(FadeIn(kap), FadeIn(tp))
         self.wait(0.3)

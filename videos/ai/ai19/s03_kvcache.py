@@ -163,7 +163,7 @@ class KVCache(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def measured(self):
-        k, ph = load("kv"), load("phases")
+        k, ph, rf = load("kv"), load("phases"), load("roof")
         nb = np.asarray(k["meas_ctx_bytes"])  # (batches, contexts) bytes read per step: weights + caches
         tt = np.asarray(k["meas_ctx_t"]) * 1e3
         Bs, ctxs = ph["ctx_B"], ph["ctxs"]
@@ -197,6 +197,13 @@ class KVCache(VoiceoverScene):
         lo_r, hi_r = float(rate.min()), float(rate.max())
         trend = ("the points fall close to one line" if hi_r / lo_r < 2 else
                  "time grows with the bytes, though not on one line")
+        bw = float(rf["bw"])
+        if 0.5 < slope / bw < 2:
+            mem_say = (f"Every extra byte of cache costs time at about {slope / 1e9:.1f} gigabytes a second, near this "
+                       f"processor's speed for a plain read of memory, {bw / 1e9:.0f}.")
+        else:
+            mem_say = (f"Every extra byte of cache costs time at about {slope / 1e9:.1f} gigabytes a second, against "
+                       f"{bw / 1e9:.0f} for a plain read of memory.")
         with self.voiceover(
             "We measured the same thing on our model. <bookmark mark='a'/> A decode step, for batches of 1, 8 and "
             f"{Bs[-1]} conversations, each with {ctxs[0]} to {ctxs[-1]:,} tokens already cached. "
@@ -204,8 +211,7 @@ class KVCache(VoiceoverScene):
             f"every step moved between {lo_r / 1e9:.0f} and {hi_r / 1e9:.0f} gigabytes a second. At a batch of "
             f"{Bs[i]} and {ctxs[-1]:,} tokens, the caches are "
             f"{kv_last / 1e6:,.0f} megabytes, {x_(kv_last / wbytes)} times the weights, and a step takes "
-            f"{x_(grow)} times as long as at {ctxs[0]} tokens. <bookmark mark='c'/> Every extra byte of cache costs "
-            f"time at about {slope / 1e9:.1f} gigabytes a second, this processor's memory speed. Long conversations "
+            f"{x_(grow)} times as long as at {ctxs[0]} tokens. <bookmark mark='c'/> " + mem_say + " Long conversations "
             "turn decoding into reading the cache: shrink it, as MLA does; look at less of it, as windows do; or "
             "store it in fewer bits, in chapter 13."
         ) as vo:

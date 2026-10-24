@@ -15,13 +15,16 @@ class Hook(VoiceoverScene):
         d = load("sft")
         topic, base_line = d["base_lines"][0]
         sft_line = next((t for tp, t in d["sft_lines"] if tp == topic), d["sft_lines"][0][1])
-        q = said(f"Write a line about the {topic}.", "user", chars=40, font_size=20).move_to([0, 2.6, 0])
-        bl = label(r"our model, \ as pretrained", font_size=26, color=BASE).move_to([-3.4, 1.4, 0])
-        ba = said(base_line, chars=32, font_size=18, max_lines=5).next_to(bl, DOWN, buff=0.2)
-        al = label(r"the same model, \ fine-tuned", font_size=26, color=ASSIST).move_to([3.4, 1.4, 0])
-        aa = said(sft_line, chars=32, font_size=18, max_lines=5).next_to(al, DOWN, buff=0.2)
+        q = said(f"Write a line about the {topic}.", "user", chars=40, font_size=28).move_to([0, 2.5, 0])
+        bl = label(r"our model, \ as pretrained", font_size=32, color=BASE).move_to([-3.4, 1.1, 0])
+        ba = said(base_line, chars=26, font_size=24, max_lines=6).next_to(bl, DOWN, buff=0.25)
+        al = label(r"the same model, \ fine-tuned", font_size=32, color=ASSIST).move_to([3.4, 1.1, 0])
+        aa = said(sft_line, chars=26, font_size=24, max_lines=6).next_to(al, DOWN, buff=0.25)
+        for b_ in (ba, aa):
+            if b_.width > 6.4:
+                b_.width = 6.4
         same = label(r"same weights, \ same knowledge: \ a few minutes of training apart", font_size=24, color=GOLD)
-        same.to_edge(DOWN, buff=0.9)
+        same.to_edge(DOWN, buff=0.75)
         tag = note(r"computed: \ the series' $6.8$-million-parameter model, \ trained on thirty novels")
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -31,9 +34,9 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> Here is the same model after a few minutes of fine-tuning on this computer. "
             "<bookmark mark='c'/> It knows nothing new. What changed is what it does with what it knows."
         ) as vo:
-            self.play(FadeIn(q), FadeIn(tag))
+            self.play(FadeIn(q), FadeIn(tag), FadeIn(bl))
             vo.wait_until("a")
-            self.play(FadeIn(bl), FadeIn(ba))
+            self.play(FadeIn(ba))
             vo.wait_until("b")
             self.play(FadeIn(al), FadeIn(aa))
             vo.wait_until("c")

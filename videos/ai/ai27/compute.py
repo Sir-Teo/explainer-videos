@@ -246,6 +246,7 @@ def _ckpt(name):
 # Supervised fine-tuning, LoRA
 # ---------------------------------------------------------------------------
 SFT_STEPS, SFT_LR = 600, 5e-4  # about two passes over the training questions
+EVAL_N = 150  # test sentences (an even sample) checked every 100 steps while fine-tuning
 LORA_LR = 2e-3  # adapters start at zero and have few numbers: they need larger steps
 
 
@@ -260,7 +261,7 @@ def compute_sft():
     out["base_lines"] = [(t, P.text_of(P.sample(base, P.chat(line_q(t)), 1, 30, 0.8, seed=i)[0]))
                          for i, t in enumerate(TOPICS[:3])]
     model = copy.deepcopy(base)
-    curve, evals = P.sft(model, sft_examples(d), SFT_STEPS, SFT_LR, eval_fn=lambda m: which_accuracy(m, d, 150),
+    curve, evals = P.sft(model, sft_examples(d), SFT_STEPS, SFT_LR, eval_fn=lambda m: which_accuracy(m, d, EVAL_N),
                          eval_every=100, ckpt=_ckpt("sft"))
     _save_model(model, "sft")
     out["curve"], out["evals"] = np.array(curve), np.array(evals)
@@ -291,7 +292,7 @@ def compute_lora(ranks=(1, 4, 16)):
         else:
             params, lr = P.add_lora(model, r), LORA_LR
             n = sum(p.numel() for p in params)
-        curve, evals = P.sft(model, ex, SFT_STEPS, lr, params=params, eval_fn=lambda m: which_accuracy(m, d, 150),
+        curve, evals = P.sft(model, ex, SFT_STEPS, lr, params=params, eval_fn=lambda m: which_accuracy(m, d, EVAL_N),
                              eval_every=100, ckpt=_ckpt(f"lora_{r}"))
         runs.append({"rank": r, "params": int(n), "which": which_accuracy(model, d),
                      "heldout": P.heldout_loss(model, valid), "evals": evals, "loss": [c[1] for c in curve]})

@@ -98,7 +98,25 @@ def count(model) -> dict:
 # ---------------------------------------------------------------------------
 # The roof of this machine, and matrix-vector products becoming matrix products
 # ---------------------------------------------------------------------------
-STACK = dict(n=2048, layers=12)  # 12 matrices of 2048 x 2048 in fp32: 192 MB, far more than any cache here
+STACK = dict(n=4096, layers=12)  # 12 matrices of 4096 x 4096 in fp32: 805 MB, more than a processor's caches hold
+
+
+def largest_cache() -> int:
+    """The processor's largest cache in bytes, as the system reports it (0 if it doesn't say)."""
+    import subprocess
+    import sys
+
+    keys = (["hw.l3cachesize", "hw.l2cachesize", "hw.perflevel0.l2cachesize"] if sys.platform == "darwin" else
+            ["LEVEL3_CACHE_SIZE", "LEVEL2_CACHE_SIZE"])
+    best = 0
+    for k in keys:
+        cmd = ["sysctl", "-n", k] if sys.platform == "darwin" else ["getconf", k]
+        try:
+            v = subprocess.run(cmd, capture_output=True, text=True, timeout=5).stdout.strip()
+            best = max(best, int(v or 0))
+        except (OSError, ValueError, subprocess.SubprocessError):
+            pass
+    return best
 BATCHES = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
 
 
@@ -117,8 +135,9 @@ def compute_roof():
     out["gemm"] = [[n, 2 * n ** 3 / r[n][0], 2 * n ** 3 / r[n][1]] for n in mats]
     out["peak"] = max(x[1] for x in out["gemm"])
     del mats
-    # memory: reading 256 MB (a sum), and copying it
-    x = torch.randn(64 * 2 ** 20, generator=g)  # 256 MB
+    # memory: reading 512 MiB (a sum), and copying it: more than the caches, so this is the memory's speed
+    out["cache_bytes"] = largest_cache()
+    x = torch.randn(128 * 2 ** 20, generator=g)  # 512 MiB
     y = torch.empty_like(x)
     r = interleaved_min(["read", "copy"], lambda k: x.sum() if k == "read" else y.copy_(x), rounds=9, min_time=0.2)
     out["read_bw"] = x.numel() * 4 / r["read"][0]

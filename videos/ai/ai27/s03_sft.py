@@ -5,6 +5,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import (ASSIST, BASE, GOLD, MONO, PART, PENALTY, POLICY, REWARD, USER, bubble, load,
                                    node_box, said)
+from videos.ai.ai27.compute import EVAL_N
 
 
 class SFT(VoiceoverScene):
@@ -47,6 +48,10 @@ class SFT(VoiceoverScene):
         rows[0][0].set_color(ASSIST)
         whys = [why(r"the pretraining loss, \ masked to the answer"), why(r"the chain rule, \ Part 1")]
         step = ladder(self, rows, whys, keep=2, top=0.4, x=-1.4, buff=0.5, edge=6.9)
+        reads = label(r"what the model reads", font_size=24, color=GREY_A).next_to(chips, UP, buff=0.3)
+        seen = VGroup(bubble(r"Who wrote Dracula?", "user", font_size=26).move_to([-2.6, 0.2, 0]),
+                      bubble(r"Bram Stoker.", "assistant", font_size=26).move_to([2.6, -0.9, 0]))
+        sees = label(r"what a person sees", font_size=24, color=GREY_A).next_to(seen, DOWN, buff=0.45)
         with self.voiceover(
             "The first step is to teach the model the shape of a conversation. Every exchange is written in a fixed "
             "template, with special tokens that never appear in ordinary text: one that says a person is speaking, "
@@ -56,8 +61,13 @@ class SFT(VoiceoverScene):
             "chain rule of Part 1, the masked loss is just the log-probability of the whole answer given the "
             "question. Supervised fine-tuning is maximum likelihood on the answers people want."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chips], lag_ratio=0.08), run_time=2.0)
+            self.play(FadeIn(seen[0]), FadeIn(seen[1]), FadeIn(sees))
+            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chips], lag_ratio=0.08), FadeIn(reads),
+                      run_time=2.0)
+            for i in (0, 5, 9):
+                self.play(Indicate(chips[i], scale_factor=1.15), run_time=0.8)
             vo.wait_until("a")
+            self.play(FadeOut(seen), FadeOut(sees))
             self.play(Create(trained), FadeIn(tl))
             step(0)
             vo.wait_until("b")
@@ -162,6 +172,8 @@ class SFT(VoiceoverScene):
                    r"little forgotten: \ a short, gentle run", font_size=24,
                    color=PENALTY if worse > 0.002 else ASSIST).next_to(fg, DOWN, buff=0.4)
         fl.align_to(fg, LEFT)
+        tag = note(rf"computed: \ checked every $100$ steps on an even sample of ${EVAL_N}$ of the "
+                   rf"${len(load('data')['which_test'])}$ test sentences").to_corner(DR, buff=0.2)
         with self.voiceover(
             f"Accuracy climbs over the {S} steps of fine-tuning. <bookmark mark='a'/> But something is lost. On "
             f"ordinary novel text, which it was trained to predict, its loss rises from {d['base_heldout']:.3f} to "
@@ -174,7 +186,7 @@ class SFT(VoiceoverScene):
             "keep the model near where it started; pushing harder would trade away more. Keeping that cost small is "
             "the job of the next chapter's method, and, in RLHF, of the leash."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in dots], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(fg, shift=UP * 0.15))

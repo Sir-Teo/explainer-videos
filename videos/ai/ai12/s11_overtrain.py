@@ -73,10 +73,8 @@ class Overtrain(VoiceoverScene):
             "data is enough: the small model's floor is above the target. <bookmark mark='d'/> "
             + said1
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
-            vo.wait_until("a")
-            self.play(Write(law))
-            self.play(Create(line), run_time=2.0)
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Write(law))
+            self.play(Create(line), run_time=max(2.0, vo.until("a")))
             vo.wait_until("b")
             self.play(lag([FadeIn(m_) for m_ in marks], lag_ratio=0.4))
             vo.wait_until("c")
@@ -124,8 +122,18 @@ class Overtrain(VoiceoverScene):
             history_card(2024, r"Meta, \ Llama 3", r"$8$ billion parameters, \ $15$ trillion tokens: \ about $1{,}900$ "
                          r"per parameter", width=5.4, color=HIST),
         ).arrange(DOWN, buff=0.18).move_to([3.9, -1.2, 0])
-        link = note(r"how tokens per parameter grew, model by model: \ Part 14; \ the cost of answering: \ Part 19")
-        link.to_corner(DR, buff=0.2)
+        link = note(r"how tokens per parameter grew, model by model: \ Part 14; \\ the cost of answering: \ Part 19")
+        link.next_to(facts, DOWN, buff=0.15).align_to(facts, RIGHT)
+        # what answering costs over a life: a model that answers a hundred times what it was trained on
+        unit = 0.032
+        lifebars = VGroup()
+        for k, (txt, ops, col) in enumerate(((r"training: \ $6ND$", 6, NCOL),
+                                               (r"answering $T = 100\,D$: \ $2NT = 200\,ND$", 200, TT))):
+            bar = Rectangle(width=max(ops * unit, 0.08), height=0.36, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            bar.move_to([-6.2, -1.3 - 0.75 * k, 0], aligned_edge=LEFT)
+            lifebars.add(VGroup(bar, label(txt, font_size=22, color=col).next_to(bar, UP, buff=0.06).align_to(bar, LEFT)))
+        lifenote = note(r"the lifetime cost, \ drawn to scale").next_to(lifebars, DOWN, buff=0.15).align_to(lifebars, LEFT)
+        life = VGroup(lifebars, lifenote)
         with self.voiceover(
             "In 2023, Nikhil Sardana and colleagues at MosaicML put the answering into the budget. Training costs six "
             "operations per parameter per token, and answering costs two. <bookmark mark='a'/> Fix the quality, and "
@@ -139,11 +147,14 @@ class Overtrain(VoiceoverScene):
             "nearly nineteen hundred per parameter, a hundred times Chinchilla's ratio."
         ) as vo:
             step(0)
+            self.play(LaggedStart(*[GrowFromEdge(b_[0], LEFT) for b_ in lifebars], lag_ratio=0.5),
+                      *[FadeIn(b_[1]) for b_ in lifebars], FadeIn(lifenote), run_time=2.0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
+            self.play(FadeOut(life))
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             self.play(Create(cv), run_time=2.0)
             self.play(Flash(ax.c2p(2.0, math.log10(tpp100)), color=TT), FadeIn(Dot(ax.c2p(2.0, math.log10(tpp100)), radius=0.08, color=WHITE)))

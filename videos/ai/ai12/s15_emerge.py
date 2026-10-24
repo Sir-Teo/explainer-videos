@@ -171,7 +171,7 @@ class Emerge(VoiceoverScene):
         mean = curve(ax, lx, np.minimum(np.asarray(q["mean"], float)[:, :, -1].mean(1), 1.1), WHITE, 4)
         lg = VGroup(label(r"coloured: \ five subtasks, \ common to rare", font_size=20, color=QUANT),
                     label(r"white: \ the average", font_size=20, color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        lg.next_to(ax.c2p(lx.min() - 0.05, 0.04), UR, buff=0.1)
+        lg.next_to(ax.c2p(lx.max() + 0.05, 1.08), DL, buff=0.1)
         cards = VGroup(
             history_card(2024, r"Du, Zeng, Dong \& Tang", r"abilities appear when the pretraining loss falls below a "
                          r"threshold, \ whatever the model's size", width=5.6, color=HIST),

@@ -150,7 +150,7 @@ class Batching(VoiceoverScene):
         mfu = d1["mfu"][-1]
         with self.voiceover(
             "Here is what the model gives. <bookmark mark='a'/> Each line is a context length; along it, the batch "
-            "grows from one, up and to the left, until memory runs out. <bookmark mark='b'/> With a thousand tokens "
+            "grows from one, down and to the left, until memory runs out. <bookmark mark='b'/> With a thousand tokens "
             f"of context, one conversation alone costs {d1['cost'][0]:.2f} dollars per million tokens. A batch of "
             f"{d1['bmax']} brings that to {d1['cost'][-1]:.3f}: {fall:.0f} times cheaper, while each conversation "
             f"gets {x_(slow)} times slower. Even then the chip does only {100 * mfu:.0f} percent of the arithmetic it "

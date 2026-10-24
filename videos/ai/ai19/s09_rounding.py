@@ -116,7 +116,7 @@ class Rounding(VoiceoverScene):
                              rf"${ratio[ok:].min():.3f}$--${ratio[ok:].max():.3f}$", font_size=20, color=ERRC),
                        label(rf"at $2$ bits: \ ${ratio[0]:.2f}$", font_size=20, color=ERRC))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.2, -0.5, 0])
-        tag = note(rf"computed: \ all ${r['n_weights'] / 1e6:.1f}$ million weights of the novels model's $36$ block "
+        tag = note(rf"computed: \ all ${r['n_weights'] / 1e6:.1f}$ million weights of the novels model's $30$ block "
                    r"matrices").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Does it hold for a real model? <bookmark mark='a'/> We rounded all the block weights of the novels "

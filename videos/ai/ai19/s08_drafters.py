@@ -207,16 +207,26 @@ class Drafters(VoiceoverScene):
             fit = ("The formula is only a guide: acceptances aren't independent, and later drafts, built on "
                    "earlier guesses, fare differently from the first.")
         who = "the EAGLE head" if best == "eagle" else "the small model"
+        e0, e3, d0, d3 = dep["eagle"][0], dep["eagle"][-1], dep["draft"][0], dep["draft"][-1]
+        if e3 < e0 - 0.05:
+            dep_say = (f"Draft by draft, the head's acceptance falls from {e0:.2f} for the first to {e3:.2f} for the "
+                       f"fourth, because it is feeding on its own guesses; the small model's goes from {d0:.2f} to "
+                       f"{d3:.2f}.")
+        else:
+            dep_say = (f"Draft by draft, the head's acceptance goes from {e0:.2f} for the first to {e3:.2f} for the "
+                       f"fourth, and the small model's from {d0:.2f} to {d3:.2f}: once a stretch of text is "
+                       "predictable, the next draft tends to be right too.")
+        if gr[best] > meas[best][k4]:
+            greedy_say = (f"Decoding greedily, the drafts survive more often: {gr[best]:.2f} tokens per pass for "
+                          f"{who}.")
+        else:
+            greedy_say = f"Decoding greedily, {who} gets {gr[best]:.2f} tokens per pass."
         with self.voiceover(
             "Now the real thing: speculative sampling on twelve held-out openings, ninety-six tokens each. "
             "<bookmark mark='a'/> With four drafts per pass, the small model gets "
             f"{meas['draft'][k4]:.2f} tokens out of each pass of the big model, and the EAGLE head "
             f"{meas['eagle'][k4]:.2f}. <bookmark mark='b'/> The lines are the formula, with alpha measured on the "
-            "first draft. " + fit + " <bookmark mark='c'/> Draft by draft, the head's acceptance goes from "
-            f"{dep['eagle'][0]:.2f} for the first to {dep['eagle'][-1]:.2f} for the fourth, because it is feeding "
-            f"on its own guesses; the small model's from {dep['draft'][0]:.2f} to {dep['draft'][-1]:.2f}. "
-            f"<bookmark mark='d'/> Decoding greedily, the drafts survive more often: {gr[best]:.2f} tokens per pass "
-            f"for {who}."
+            "first draft. " + fit + " <bookmark mark='c'/> " + dep_say + " <bookmark mark='d'/> " + greedy_say
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(key[0]))
             vo.wait_until("a")

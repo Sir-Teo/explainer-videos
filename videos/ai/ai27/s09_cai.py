@@ -97,19 +97,29 @@ class Constitution(VoiceoverScene):
     # ------------------------------------------------------------------
     def ours(self):
         d = load("rlaif")
-        rows = VGroup(
-            VGroup(label(rf"${d['n_human']}$ human comparisons", font_size=26, color=REWARD),
-                   label(rf"reward model: \ ${100 * d['acc_small']:.0f}\%$", font_size=26, color=PROXY)),
-            VGroup(label(r"$+\," + f"{d['n_ai']:,}".replace(",", "{,}") + r"$ comparisons labelled by that model", font_size=26,
-                         color=PROXY),
-                   label(rf"reward model: \ ${100 * d['acc_ai']:.0f}\%$", font_size=26, color=PROXY)),
-            VGroup(label(rf"${d['n_ai']:,}$ human comparisons".replace(",", "{,}"), font_size=26, color=REWARD),
-                   label(rf"reward model: \ ${100 * d['acc_full']:.0f}\%$", font_size=26, color=PROXY)),
-        )
-        for r_ in rows:
-            r_.arrange(RIGHT, buff=1.2)
-        rows.arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to(UP * 0.4)
-        head = label(r"accuracy on held-out human comparisons", font_size=24, color=GREY_A).to_edge(UP, buff=0.8)
+        ceil = float(load("rm")["people_agree_gold"])
+        vals = [float(d["acc_small"]), float(d["acc_ai"]), float(d["acc_full"])]
+        names = [rf"${d['n_human']}$ human comparisons",
+                 r"$+\," + f"{d['n_ai']:,}".replace(",", "{,}") + r"$ labelled by that model",
+                 rf"${d['n_ai']:,}$ human comparisons".replace(",", "{,}")]
+        cols = [REWARD, PROXY, REWARD]
+        hi = max(0.8, float(np.ceil(max(vals + [ceil]) * 20) / 20))
+        g = axes([0.5, hi], [0, 3], x_length=6.2, y_length=3.6, xlabel=r"accuracy on held-out human comparisons",
+                 xticks=[v for v in (0.5, 0.6, 0.7, 0.8) if v <= hi], xfmt=lambda v: rf"{100 * v:.0f}\%",
+                 center=[2.6, 0.1, 0])
+        ax = g.ax
+        rows = VGroup()
+        for k, (nm, v, col) in enumerate(zip(names, vals, cols)):
+            y = 2.5 - k
+            bar = Rectangle(width=max(ax.c2p(v, y)[0] - ax.c2p(0.5, y)[0], 0.02), height=0.5, stroke_width=0,
+                            fill_color=col, fill_opacity=0.85).move_to(ax.c2p(0.5, y), aligned_edge=LEFT)
+            name = label(nm, font_size=24, color=col).next_to(ax.c2p(0.5, y), LEFT, buff=0.3)
+            val = MathTex(rf"{100 * v:.0f}\%", font_size=28, color=col).next_to(bar, RIGHT, buff=0.15)
+            rows.add(VGroup(name, bar, val))
+        cl = DashedLine(ax.c2p(ceil, 0), ax.c2p(ceil, 3), color=GOLD, dash_length=0.08)
+        cll = label(rf"the people agree with gold: \ ${100 * ceil:.0f}\%$", font_size=20, color=GOLD)
+        cll.next_to(ax.c2p(ceil, 3), UP, buff=0.12)
+        head = VGroup(g, cl, cll)
         tag = note(r"computed: \ our reward models; \ the AI judge here is the small reward model itself")
         tag.to_corner(DR, buff=0.2)
         gain = d["acc_ai"] - d["acc_small"]
@@ -128,10 +138,10 @@ class Constitution(VoiceoverScene):
             f" <bookmark mark='c'/> For reference, {d['n_ai']:,} real comparisons give {100 * d['acc_full']:.0f} "
             "percent."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(tag), Create(cl), FadeIn(cll))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(rows[k], shift=UP * 0.15))
+                self.play(FadeIn(rows[k][0]), GrowFromEdge(rows[k][1], LEFT), FadeIn(rows[k][2]))
         self.wait(0.3)
         self.clear_scene()
 
