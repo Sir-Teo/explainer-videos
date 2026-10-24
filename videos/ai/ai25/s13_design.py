@@ -42,10 +42,10 @@ class Design(VoiceoverScene):
                             width=6.0, color=HIST).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Structure prediction goes from a sequence to a shape. <bookmark mark='a'/> Design goes the other way: from a "
-            "shape you want, a binder for a virus, a scaffold for a catalyst, to a sequence that folds into it. <bookmark "
+            "shape you want, a binder for a virus or a scaffold for a catalyst, to a sequence that folds into it. <bookmark "
             "mark='b'/> This was David Baker's life's work, the other half of the 2024 Nobel. In 2003 his group designed "
-            "Top7, a fold never seen in nature, with the Rosetta energy function, and it folded as designed. For two decades "
-            "such designs took experts, and most attempts failed."
+            "Top7, a fold unseen in nature, with the Rosetta energy function, and it folded as designed. For two decades, "
+            "though, most designs failed."
         ) as vo:
             self.play(FadeIn(seq), FadeIn(fold), Create(a1), FadeIn(l1))
             vo.wait_until("a")
@@ -135,13 +135,13 @@ class Design(VoiceoverScene):
         il = note(r"illustrative: \ from noise to a backbone", font_size=20).next_to(c_clean, DOWN, buff=0.25)
         with self.voiceover(
             "Then the backbone. In 2023 Joseph Watson and colleagues published RFdiffusion. <bookmark mark='a'/> They "
-            "fine-tuned RoseTTAFold, a structure predictor, to remove noise from residue frames: noise on positions, random "
-            "turns on orientations, two hundred steps from noise to a backbone, optionally holding a motif in place, binding "
-            "a target, or obeying a symmetry. <bookmark mark='b'/> The pipeline became: diffuse a backbone; let ProteinMPNN "
-            "write eight sequences for it; <bookmark mark='c'/> keep those that AlphaFold 2 folds back onto the design, "
-            "within two ångströms and confidently; <bookmark mark='d'/> only then go to the lab. <bookmark mark='e'/> For "
-            "binders, nineteen percent of designs worked, about a hundred times the earlier Rosetta-based rate, and one "
-            "influenza binder's measured structure sat 0.63 ångströms from its design."
+            "fine-tuned the structure predictor RoseTTAFold to remove noise from residue frames, on positions and "
+            "orientations, two hundred steps from noise to a backbone, optionally holding a motif, binding a target or "
+            "obeying a symmetry. <bookmark mark='b'/> The pipeline: diffuse a backbone; let ProteinMPNN write eight sequences "
+            "for it; <bookmark mark='c'/> keep those AlphaFold 2 folds back onto the design, within two ångströms and "
+            "confidently; <bookmark mark='d'/> only then go to the lab. <bookmark mark='e'/> For binders, nineteen percent "
+            "worked, about a hundred times the earlier rate; one influenza binder's measured structure sat 0.63 ångströms "
+            "from its design."
         ) as vo:
             self.play(FadeIn(how[0]), FadeIn(cite_), FadeIn(c_noisy), FadeIn(il))
             self.play(Transform(c_noisy, c_clean), run_time=4.0)
@@ -233,12 +233,12 @@ class Design(VoiceoverScene):
         head = label(r"Design since RFdiffusion", font_size=34).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Since then the field has moved fast. <bookmark mark='a'/> In 2024 Google DeepMind's AlphaProteo designed "
-            "binders for medically important targets, <bookmark mark='b'/> BindCraft designed binders by gradient descent "
-            "through AlphaFold 2 itself, <bookmark mark='c'/> and EvolutionaryScale's ESM3, a language model over sequence, "
-            "structure and function, wrote a new fluorescent protein far from any natural one. <bookmark mark='d'/> In 2025 "
-            "RFdiffusion3 designed at the level of single atoms, <bookmark mark='e'/> and BoltzGen appeared as an open "
-            "alternative. <bookmark mark='f'/> Tools this capable could be misused; in 2024 many researchers signed "
-            "commitments on responsible biodesign, including screening DNA synthesis."
+            "binders for medical targets, <bookmark mark='b'/> BindCraft designed them by gradient descent through AlphaFold "
+            "2 itself, <bookmark mark='c'/> and EvolutionaryScale's ESM3, a language model over sequence, structure and "
+            "function, wrote a fluorescent protein far from any natural one. <bookmark mark='d'/> In 2025 RFdiffusion3 "
+            "designed atom by atom, <bookmark mark='e'/> and BoltzGen appeared as an open alternative. <bookmark mark='f'/> "
+            "Tools this capable could be misused; in 2024 many researchers signed commitments on responsible biodesign, "
+            "including screening DNA synthesis."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abcdef"):

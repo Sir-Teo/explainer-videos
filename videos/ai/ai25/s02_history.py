@@ -36,13 +36,13 @@ class History(VoiceoverScene):
         head = label(r"How we got here: \ the long prelude", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
-            "This part's story has three threads that started far apart. <bookmark mark='m0'/> The first computer weather "
+            "This part's story has three threads, starting far apart. <bookmark mark='m0'/> The first computer weather "
             "forecast, 1950. <bookmark mark='m1'/> The first protein seen in three dimensions, 1958, and in 1961 Christian "
             "Anfinsen's discovery that the sequence decides the shape. <bookmark mark='m2'/> In 1968, a test of whether two "
             "graphs are the same, which turns out to measure what graph networks can see. <bookmark mark='m3'/> The Protein "
             "Data Bank, 1971; <bookmark mark='m4'/> the first forecast of Europe's weather centre, 1979; <bookmark "
             "mark='m5'/> convolutions, with the symmetry of images built in, 1989; <bookmark mark='m6'/> CASP's blind "
-            "contests, 1994; <bookmark mark='m7'/> and the first neural networks on graphs, 2005."
+            "contests, 1994; <bookmark mark='m7'/> the first neural networks on graphs, 2005."
         ) as vo:
             self.play(FadeIn(head), Create(base[0]), FadeIn(base[1]))
             for k, mk in enumerate(["m0", "m1", "m2", "m3", "m4", "m5", "m6", "m7"]):
@@ -117,11 +117,11 @@ class History(VoiceoverScene):
             "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. For an "
             "image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their order. <bookmark "
             "mark='c'/> For a graph, how its nodes are numbered. <bookmark mark='d'/> For a molecule, how it is turned or "
-            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere "
-            "and shouldn't depend on the grid. <bookmark mark='g'/> Language has little symmetry to exploit, one reason the "
-            "transformer learns its structure from data. <bookmark mark='h'/> Bronstein, Bruna, Cohen and Veličković called "
-            "this programme geometric deep learning. A symmetry can enter a model three ways: transformed copies, a standard "
-            "pose, or layers that respect it. This part is mostly about the third."
+            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere, "
+            "whatever the grid. <bookmark mark='g'/> Language has little symmetry, so the transformer learns its structure "
+            "from data. <bookmark mark='h'/> Bronstein, Bruna, Cohen and Veličković called this geometric deep learning. A "
+            "symmetry enters a model three ways: transformed copies, a standard pose, or layers that respect it; this part "
+            "is mostly about the third."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hrow), Create(rule))
             for k, mk in enumerate("abcdefg"):

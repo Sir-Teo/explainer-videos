@@ -51,12 +51,11 @@ class Operators(VoiceoverScene):
         with self.voiceover(
             "Fields evolve by equations. Here is Burgers' equation, a one-dimensional cartoon of fluid flow: a wave that "
             "steepens where it is fast and is smoothed by viscosity. <bookmark mark='a'/> From this start, one time unit "
-            "later, the solution looks like this. <bookmark mark='b'/> A solver gets there in thousands of small steps, every "
-            "time. A network could learn the map from start to finish, but an ordinary network works on a fixed list of "
-            "numbers: trained on sixty-four points, it knows only sixty-four points. <bookmark mark='c'/> We want the "
-            "operator itself, a map from functions to functions, readable at any resolution. <bookmark mark='d'/> Tianping "
-            "and Hong Chen proved in 1995 that networks can approximate operators; DeepONet and the Fourier neural operator, "
-            "both published in 2021, made it practical."
+            "later, the solution looks like this. <bookmark mark='b'/> A solver needs thousands of small steps, every time. A "
+            "network could learn the map from start to finish, but an ordinary one works on a fixed list of numbers: trained "
+            "on sixty-four points, it knows only those. <bookmark mark='c'/> We want the operator itself, a map from functions "
+            "to functions, readable at any resolution. <bookmark mark='d'/> Tianping and Hong Chen proved in 1995 that "
+            "networks can approximate operators; DeepONet and the Fourier neural operator made it practical in 2021."
         ) as vo:
             self.play(FadeIn(g), Create(c0), FadeIn(lg[0]), Write(eq), FadeIn(el))
             vo.wait_until("a")
@@ -92,11 +91,11 @@ class Operators(VoiceoverScene):
         with self.voiceover(
             "The Fourier neural operator, from Zongyi Li, Anima Anandkumar, Andrew Stuart and colleagues, starts from a "
             "layer that is an integral: each point's new value mixes the whole field through a kernel kappa. <bookmark "
-            "mark='a'/> If the kernel depends only on the offset, the integral is a convolution, and the convolution theorem "
-            "makes it a product of Fourier transforms. <bookmark mark='b'/> So learn the kernel's transform directly: a "
-            "complex weight for each of the lowest frequencies, sixteen in our model, dropping the rest. <bookmark "
-            "mark='c'/> The weights belong to frequencies, not grid points, so the same network reads any grid fine enough to "
-            "hold them; a shift of the input shifts the output; and a layer costs little more than a fast Fourier transform."
+            "mark='a'/> If the kernel depends only on the offset, the integral is a convolution, which the convolution "
+            "theorem makes a product of Fourier transforms. <bookmark mark='b'/> So learn the kernel's transform directly: "
+            "one complex weight for each of the lowest frequencies, sixteen here, dropping the rest. <bookmark mark='c'/> The "
+            "weights belong to frequencies, not grid points, so the network reads any grid fine enough to hold them; shifts "
+            "pass straight through; and a layer costs about one fast Fourier transform."
         ) as vo:
             step(0)
             vo.wait_until("a")

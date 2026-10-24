@@ -55,11 +55,11 @@ class Messages(VoiceoverScene):
                    r"(residues within $8$\,\AA)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "A graph is a set with connections: nodes, and edges between some pairs. Here is decalin, ten carbons and eleven "
-            "bonds. <bookmark mark='a'/> A computer stores it as a table, the adjacency matrix, with a one wherever two nodes "
-            "are joined. <bookmark mark='b'/> But number the nodes differently and the matrix's rows and columns shuffle, "
-            "though the molecule is the same. <bookmark mark='c'/> So a network on graphs must be equivariant to renumbering: "
-            "permute the nodes, and its answers permute the same way. <bookmark mark='d'/> Graphs are everywhere: molecules, "
-            "road maps, social networks, weather meshes, and proteins, residues joined when close in space."
+            "bonds. <bookmark mark='a'/> A computer stores it as an adjacency matrix, with a one wherever two nodes are "
+            "joined. <bookmark mark='b'/> Number the nodes differently and its rows and columns shuffle, though the molecule "
+            "is the same. <bookmark mark='c'/> So a network on graphs must be equivariant to renumbering: permute the nodes, "
+            "and its answers permute the same way. <bookmark mark='d'/> Graphs are everywhere: molecules, road maps, social "
+            "networks, weather meshes, and proteins, residues joined when close in space."
         ) as vo:
             self.play(FadeIn(g), FadeIn(gl))
             vo.wait_until("a")
@@ -101,10 +101,10 @@ class Messages(VoiceoverScene):
             "In 2017 Justin Gilmer and colleagues at Google put these networks into one form, message passing. Every node "
             "keeps a state, a vector h. <bookmark mark='a'/> In each layer every node sums messages from its neighbours, a "
             "learned function M of the two states and the edge, <bookmark mark='b'/> then updates its state from the old one "
-            "and the sum. <bookmark mark='c'/> After a few layers, a readout sums the states into an answer about the whole "
-            "graph. <bookmark mark='d'/> Every step is a sum over neighbours, so the numbering can't matter: equivariant by "
-            "construction. <bookmark mark='e'/> The graph convolutional network of Thomas Kipf and Max Welling is the "
-            "simplest case: average the neighbours' states, normalized by degree, and apply one weight matrix."
+            "and the sum. <bookmark mark='c'/> A readout sums the final states into an answer about the whole graph. "
+            "<bookmark mark='d'/> Every step is a sum over neighbours, so the numbering can't matter. <bookmark mark='e'/> "
+            "The graph convolutional network of Thomas Kipf and Max Welling is the simplest case: average the neighbours' "
+            "states, normalized by degree, and apply one weight matrix."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -196,12 +196,11 @@ class Messages(VoiceoverScene):
             verdict = "Passing messages helps only a little here"
         with self.voiceover(
             "Let's train one. Three hundred people in three communities, friendships mostly within: "
-            f"{100 * intra:.0f} percent of the edges, about {deg:.0f} per person. Each person carries only a weak, noisy "
-            f"hint of their community, and only {n_lab} are labelled. <bookmark mark='a'/> A two-layer graph convolutional "
-            "network learns from those labels and the graph: watch its guesses for everyone else. <bookmark mark='b'/> Each "
-            "layer mixes in the neighbours, so two layers see two hops. <bookmark mark='c'/> An MLP that sees only each "
-            f"person's own hint gets {100 * np.mean(acc_m):.0f} percent right; the graph network "
-            f"{100 * np.mean(acc_g):.0f} percent, over three seeds. {verdict}."
+            f"{100 * intra:.0f} percent of the edges, about {deg:.0f} per person. Each carries only a weak, noisy hint of "
+            f"their community, and only {n_lab} are labelled. <bookmark mark='a'/> A two-layer graph convolutional network "
+            "learns from those labels and the graph: watch its guesses for everyone else. <bookmark mark='b'/> Two layers see "
+            f"two hops. <bookmark mark='c'/> An MLP that sees only each person's hint gets {100 * np.mean(acc_m):.0f} "
+            f"percent right; the graph network {100 * np.mean(acc_g):.0f} percent, over three seeds. {verdict}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cnt), FadeIn(tag))
             vo.wait_until("a")

@@ -76,12 +76,11 @@ class WL(VoiceoverScene):
         tag = note(r"computed", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
             "In 1968 Boris Weisfeiler and Andrei Leman described colour refinement, the standard first test of whether two "
-            "graphs are the same up to numbering. <bookmark mark='a'/> Every node starts with the same colour. <bookmark "
-            "mark='b'/> Each round, a node's new colour names its old colour together with its neighbours' colours: here, "
-            "the carbons with three neighbours split off. <bookmark mark='c'/> Then their neighbours, and so on, until "
-            "nothing changes. Different colour counts mean different graphs. <bookmark mark='d'/> Decalin and "
-            f"bicyclopentyl, {rounds - 1} rounds: {verdict}. Yet one is two six-rings sharing an edge, the other two "
-            "five-rings joined by a bond."
+            "graphs are the same up to numbering. <bookmark mark='a'/> Every node starts with one colour. <bookmark "
+            "mark='b'/> Each round, a node's new colour names its old colour and its neighbours' colours: here the carbons "
+            "with three neighbours split off. <bookmark mark='c'/> Then their neighbours, until nothing changes. Different "
+            f"colour counts mean different graphs. <bookmark mark='d'/> Decalin and bicyclopentyl, {rounds - 1} rounds: "
+            f"{verdict}. Yet one is two six-rings sharing an edge, the other two five-rings joined by a bond."
         ) as vo:
             self.play(FadeIn(gs[0]), FadeIn(gs[1]), FadeIn(names), FadeIn(tag))
             vo.wait_until("a")
@@ -127,10 +126,9 @@ class WL(VoiceoverScene):
             "proved in 2019: if colour refinement can't separate two nodes after t rounds, no message-passing network "
             "separates them after t layers. <bookmark mark='a'/> By induction: at the start, everything is equal. <bookmark "
             "mark='b'/> Two nodes with the same colour next round had the same colour and the same multiset of neighbours' "
-            "colours; <bookmark mark='c'/> so, by hypothesis, the same state and the same multiset of neighbours' states. "
-            "<bookmark mark='d'/> A layer computes the new state from exactly those, so the new states agree. <bookmark "
-            "mark='e'/> And the bound is reached: a sum followed by an MLP, the graph isomorphism network, separates "
-            "everything colour refinement does."
+            "colours; <bookmark mark='c'/> by hypothesis, then, the same state and the same multiset of neighbours' states, "
+            "<bookmark mark='d'/> from which a layer computes identical new states. <bookmark mark='e'/> And the bound is "
+            "reached: a sum followed by an MLP, the graph isomorphism network, separates everything colour refinement does."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -171,9 +169,9 @@ class WL(VoiceoverScene):
             "Why a sum? Aggregation must not lose information about the multiset of neighbours. <bookmark mark='a'/> "
             "Neighbours a, a, b, b and neighbours a, b have the same mean and the same maximum; only the sum differs. "
             "<bookmark mark='b'/> Computed: give every node of a random graph the same features, and ask a one-layer network "
-            f"for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a mean or a maximum, "
-            f"{mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees themselves, {sd:.2f}: to them "
-            "every node with a neighbour looks the same."
+            f"for each node's degree. A sum gets within {sum_rm:.2f}. <bookmark mark='c'/> A mean or a maximum, "
+            f"{mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees, {sd:.2f}: to them every node "
+            "with a neighbour looks alike."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(la), FadeIn(lb))
             vo.wait_until("a")
@@ -293,10 +291,10 @@ class WL(VoiceoverScene):
         with self.voiceover(
             "How bad is it in practice? On random graphs, hardly at all: colour refinement separated "
             f"{rs} of {rp} different pairs. <bookmark mark='a'/> On graphs where every node has three neighbours, {gsep} of "
-            f"{gp}. <bookmark mark='b'/> The fixes add what a sum over neighbours can't build: colour tuples of nodes, at a "
-            "cost growing as n to the k; count small patterns like triangles; give nodes positions; or let attention see "
-            "every pair. <bookmark mark='c'/> Whether graph isomorphism is easy or hard is still unknown; László Babai "
-            "showed in 2016 that quasi-polynomial time suffices."
+            f"{gp}. <bookmark mark='b'/> The fixes add what a neighbour sum can't build: colouring tuples of nodes, at a cost "
+            "growing as n to the k; counting triangles and other patterns; positions; or attention over every pair. "
+            "<bookmark mark='c'/> Graph isomorphism itself is not known to be easy or hard; László Babai showed in 2016 that "
+            "quasi-polynomial time suffices."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")

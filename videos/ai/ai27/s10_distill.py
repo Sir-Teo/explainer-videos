@@ -111,12 +111,12 @@ class Distill(VoiceoverScene):
                  xlabel=r"tokens the student has trained on", ylabel=r"loss on held-out novel text (nats)",
                  xticks=[0, T], xfmt=lambda v: rf"{v / 1e6:.0f}\text{{M}}" if v else "0", center=[-1.2, -0.3, 0])
         lt = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in ct]).set_stroke(BASE, 4)
-        ld = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in cd]).set_stroke(REF, 4)
+        ld = VMobject().set_points_as_corners([g.ax.c2p(a, b) for a, b in cd]).set_stroke(ASSIST, 4)
         tl = DashedLine(g.ax.c2p(0, d["teacher_heldout"]), g.ax.c2p(T, d["teacher_heldout"]), color=GOLD,
                         dash_length=0.08)
         tll = label(rf"the teacher: \ ${d['teacher_heldout']:.2f}$", font_size=20, color=GOLD).next_to(tl, UP, buff=0.05)
         tll.align_to(tl, RIGHT)
-        lg = legend([(BASE, r"student, \ from the text"), (REF, r"student, \ from the teacher")], font_size=20)
+        lg = legend([(BASE, r"student, \ from the text"), (ASSIST, r"student, \ from the teacher")], font_size=20)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
         tag = note(rf"computed: \ teacher ${d['teacher_params'] / 1e6:.1f}$M parameters, \ students "
                    rf"${d['student_params'] / 1e6:.1f}$M").to_corner(DR, buff=0.2)

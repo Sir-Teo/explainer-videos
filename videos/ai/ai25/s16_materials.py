@@ -61,10 +61,10 @@ class Materials(VoiceoverScene):
         with self.voiceover(
             "A crystal is a pattern of atoms repeated in space; its symmetries are one of 230 space groups, classified in "
             "1891. Which crystals exist? <bookmark mark='a'/> Take two elements, A and B, and their possible compounds, each "
-            "with an energy of formation computed by density functional theory, at hours of computer time apiece. <bookmark "
-            "mark='b'/> A compound is stable if no mixture of the others has lower energy: if it lies on the lower convex "
-            "hull. <bookmark mark='c'/> One above the hull would rather decompose into its neighbours, and its height above "
-            f"says how unstable it is. Here {words_num(n_st)} compounds are on the hull."
+            "with a formation energy from density functional theory, hours of computer time apiece. <bookmark mark='b'/> A "
+            "compound is stable if no mixture of the others has lower energy: if it lies on the lower convex hull. <bookmark "
+            "mark='c'/> One above the hull would rather decompose into its neighbours; its height says how unstable it is. "
+            f"Here {words_num(n_st)} compounds are on the hull."
         ) as vo:
             self.play(FadeIn(g), Create(zero), FadeIn(facts[0]), FadeIn(tag))
             vo.wait_until("a")
@@ -110,9 +110,8 @@ class Materials(VoiceoverScene):
             "by random search; <bookmark mark='b'/> graph networks built on interatomic distances, and so invariant to "
             "rotation, predict their energies; <bookmark mark='c'/> density functional theory checks the most promising; "
             "<bookmark mark='d'/> and every check becomes training data for the next round. <bookmark mark='e'/> Computation "
-            "had found about forty-eight thousand stable crystals before; GNoME reported 2.2 million, 381,000 of them on the "
-            "new convex hull. The share of its picks confirmed by DFT rose above eighty percent, from about one percent in "
-            "earlier work."
+            "had found about forty-eight thousand stable crystals; GNoME reported 2.2 million, 381,000 on the new convex "
+            "hull, and the share of its picks confirmed by DFT rose above eighty percent, from about one percent before."
         ) as vo:
             self.play(FadeIn(boxes[0]), FadeIn(nums[0]), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
@@ -170,14 +169,13 @@ class Materials(VoiceoverScene):
         with self.voiceover(
             "We can run the flywheel on a made-up chemistry: twenty invented elements, every pair, nine compositions and "
             f"four crystal types, {m['n_candidates']:,} candidates, whose 'DFT' energy is a hidden formula revealed sixty at "
-            "a time. <bookmark mark='a'/> Start knowing three percent. Each round, train a small ensemble on everything "
-            "known, predict the rest, and check the sixty predicted to fall furthest below the hull of everything else. A "
-            f"hit is a pick that is truly stable. <bookmark mark='b'/> Random picks hit {100 * h_r.mean():.0f} percent of "
-            f"the time, about the share of stable candidates, {100 * share:.0f} percent. <bookmark mark='c'/> The "
-            f"surrogate's picks hit {100 * h_m[0]:.0f} percent in the first round, {trend}. <bookmark mark='d'/> Its error "
-            f"falls from {mae[0]:.3f} to {mae[-1]:.3f}, and after {rounds} rounds it has found "
-            f"{F['model'][:, -1].mean():.0f} of the {m['n_stable']} truly stable compounds, against "
-            f"{F['random'][:, -1].mean():.0f} for random picks."
+            "a time. <bookmark mark='a'/> Start knowing three percent. Each round, train a small ensemble on what is known, "
+            "and check the sixty predicted to fall furthest below the hull of everything else. A hit is a pick that is truly "
+            f"stable. <bookmark mark='b'/> Random picks hit {100 * h_r.mean():.0f} percent of the time, about the share of "
+            f"stable candidates, {100 * share:.0f} percent. <bookmark mark='c'/> The surrogate's picks hit "
+            f"{100 * h_m[0]:.0f} percent in the first round, {trend}. <bookmark mark='d'/> Its error falls from "
+            f"{mae[0]:.3f} to {mae[-1]:.3f}, and after {rounds} rounds it has found {F['model'][:, -1].mean():.0f} of the "
+            f"{m['n_stable']} truly stable compounds, against {F['random'][:, -1].mean():.0f} for random picks."
         ) as vo:
             self.play(FadeIn(g), FadeIn(stats[0]), FadeIn(stats[1]), FadeIn(tag))
             vo.wait_until("a")
@@ -219,9 +217,9 @@ class Materials(VoiceoverScene):
             "examined a random sample of GNoME's predictions and found scant evidence of compounds at once new, credible and "
             "useful; many placed atoms in neat orders that real crystals mix at random. <bookmark mark='b'/> Critics also "
             "disputed the X-ray analysis behind a robot laboratory's report of forty-one new compounds; in January 2026 the "
-            "paper was corrected to thirty-six compounds from fifty-seven targets. <bookmark mark='c'/> The tools kept "
-            "improving, universal learned potentials and generative models for crystals with chosen properties, <bookmark "
-            "mark='d'/> but the lesson stuck: a predicted crystal is a hypothesis, and making it is the test."
+            "paper was corrected to thirty-six from fifty-seven targets. <bookmark mark='c'/> The tools kept improving, "
+            "universal potentials and crystal generators, <bookmark mark='d'/> but the lesson stuck: a predicted crystal is a "
+            "hypothesis, and making it is the test."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

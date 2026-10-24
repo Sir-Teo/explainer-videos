@@ -98,13 +98,13 @@ class Folding(VoiceoverScene):
         tag = note(r"illustrative arithmetic, \ after Levinthal", font_size=20).to_corner(DR, buff=0.25)
         head = label(r"two facts", font_size=34, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded an enzyme, ribonuclease, "
-            "with urea; washed out, it folded back by itself and worked again: the sequence holds the shape. <bookmark "
+            "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded the enzyme ribonuclease "
+            "with urea; washed out, it refolded by itself and worked again: the sequence holds the shape. <bookmark "
             "mark='b'/> But in 1969 Cyrus Levinthal pointed out that a chain can't find its shape by trying them all. "
-            f"<bookmark mark='c'/> Give each joint of a {N}-residue chain just three choices: about ten to the "
+            f"<bookmark mark='c'/> Give each joint of a {N}-residue chain three choices: about ten to the "
             f"{int(math.log10(conf))} shapes. <bookmark mark='d'/> At ten trillion a second, that is ten to the "
-            f"{int(math.log10(years))} years; the universe is about ten to the ten years old. <bookmark mark='e'/> Yet "
-            "proteins fold in microseconds to seconds. Nature doesn't search blindly, and neither should a computer."
+            f"{int(math.log10(years))} years; the universe is ten to the ten years old. <bookmark mark='e'/> Yet proteins "
+            "fold in microseconds to seconds. Nature doesn't search blindly, and neither should a computer."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -162,9 +162,9 @@ class Folding(VoiceoverScene):
             "percentage of residues within a few ångströms of their true place. <bookmark mark='b'/> Progress was slow for "
             "two decades; then evolution offered a clue. <bookmark mark='c'/> Line up the same protein from many species: "
             "when two positions touch, a mutation at one is often compensated at the other, so their columns change "
-            "together, and from around 2011 statistics could read contacts from them. <bookmark mark='d'/> At CASP13, in "
-            "2018, DeepMind's first AlphaFold predicted a histogram of distances for every pair of residues, then folded a "
-            "chain by gradient descent to match: high accuracy on 24 of the 43 hardest domains, against 14 for the next best."
+            "together; from around 2011, statistics could read contacts from them. <bookmark mark='d'/> At CASP13, in 2018, "
+            "DeepMind's first AlphaFold predicted a histogram of distances for every residue pair, then folded a chain by "
+            "gradient descent to match: high accuracy on 24 of the 43 hardest domains, against 14 for the next best."
         ) as vo:
             self.play(FadeIn(hist[0], shift=UP * 0.1))
             vo.wait_until("a")
@@ -210,10 +210,10 @@ class Folding(VoiceoverScene):
             "Why distances? Because a full table of distances fixes a shape. Here are all the distances between our bundle's "
             "fifty-two atoms. <bookmark mark='a'/> Square them and centre them, <bookmark mark='b'/> and you get the dot "
             "products of the atoms' positions, since a squared distance is two squared lengths minus twice a dot product. "
-            "<bookmark mark='c'/> Its eigenvectors give the coordinates back: classical multidimensional scaling, from 1952. "
+            "<bookmark mark='c'/> Its eigenvectors give the coordinates back: classical multidimensional scaling, 1952. "
             "Three eigenvalues are nonzero, one per dimension, <bookmark mark='d'/> and the rebuilt chain matches to rounding "
             "error. <bookmark mark='e'/> But only up to a mirror image, which has the same distances; and proteins are not "
-            "mirror-symmetric: their helices turn right-handed."
+            "mirror-symmetric: their helices are right-handed."
         ) as vo:
             self.play(FadeIn(img), FadeIn(il), FadeIn(tag))
             vo.wait_until("a")

@@ -128,10 +128,9 @@ class Symmetry(VoiceoverScene):
         with self.voiceover(
             "Now a function of the data, f: here, where each of our five particles will be one time unit later. <bookmark "
             "mark='a'/> Turn the input, then apply f, <bookmark mark='b'/> or apply f, then turn the output. <bookmark "
-            "mark='c'/> If the two paths always agree, f is equivariant: transforming the input transforms the output the "
-            "same way. <bookmark mark='d'/> If the output doesn't change at all, f is invariant: an energy, or an image's "
-            "label. <bookmark mark='e'/> Inner layers need equivariance, so that the input's orientation is kept, not thrown "
-            "away; a final answer often needs invariance."
+            "mark='c'/> If the two paths always agree, f is equivariant. <bookmark mark='d'/> If the output doesn't change at "
+            "all, f is invariant, like an energy or an image's label. <bookmark mark='e'/> Inner layers need equivariance, so "
+            "that the input's orientation isn't thrown away; a final answer often needs invariance."
         ) as vo:
             self.play(FadeIn(A), FadeIn(nA), FadeIn(tag))
             self.play(GrowArrow(left), FadeIn(ll), FadeIn(Cg), FadeIn(nC))
@@ -172,12 +171,12 @@ class Symmetry(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Any function can be made equivariant by averaging it over the group: for each g, transform the input, apply f, "
-            "and undo g on the output. <bookmark mark='a'/> Feed the average a turned input, h of x. <bookmark mark='b'/> "
-            "Rename g times h as g prime: as g runs through the group, so does g prime, so the sum is the same. <bookmark "
-            "mark='c'/> The inverse of a product reverses its order, <bookmark mark='d'/> and h comes out of the sum: the "
-            "average is equivariant, whatever f was. <bookmark mark='e'/> The price: one evaluation per group element, "
-            "sixteen factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Augmentation is "
-            "the cheap version: one random transformation per example, hoping the network learns the rest."
+            "undo g. <bookmark mark='a'/> Feed the average a turned input, h of x. <bookmark mark='b'/> Rename g times h as g "
+            "prime: it runs through the group as g does, so the sum is the same. <bookmark mark='c'/> The inverse of a "
+            "product reverses its order, <bookmark mark='d'/> and h comes out of the sum: the average is equivariant, "
+            "whatever f was. <bookmark mark='e'/> The price: one evaluation per group element, sixteen factorial for sixteen "
+            "points, infinitely many for turns of space. <bookmark mark='f'/> Augmentation is the cheap version: one random "
+            "transformation per example, hoping the network learns the rest."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -234,11 +233,11 @@ class Symmetry(VoiceoverScene):
         with self.voiceover(
             "Here is the check on our five-particle system: four networks, the same data, the same number of steps. "
             "<bookmark mark='a'/> Pause and predict: which turns its answer exactly when the input is turned? <bookmark "
-            "mark='b'/> The equivariant network, EGNN, which we'll build in chapter seven: its turned and shifted answers are "
-            f"off by {eg_tiny} of a unit, rounding error. <bookmark mark='c'/> A message-passing network on raw coordinates "
-            "handles a reordering exactly, but not a turn. <bookmark mark='d'/> The plain MLP gets none exactly; trained on "
-            f"turned copies, its turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark mark='e'/> A symmetry built into "
-            "the layers holds exactly, on every input; one learned from examples holds only approximately, near the data."
+            "mark='b'/> The equivariant network, EGNN, built in chapter seven: its turned and shifted answers are off by "
+            f"{eg_tiny} of a unit, rounding error. <bookmark mark='c'/> A message-passing network on raw coordinates handles "
+            "a reordering exactly, not a turn. <bookmark mark='d'/> The plain MLP gets neither; trained on turned copies, its "
+            f"turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark mark='e'/> Symmetry built into the layers holds "
+            "exactly, on every input; learned from examples, only approximately, near the data."
         ) as vo:
             self.play(FadeIn(p, shift=UP * 0.15))
             vo.wait_until("a")

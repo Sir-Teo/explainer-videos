@@ -46,10 +46,10 @@ class Search(VoiceoverScene):
             "When the checker is exact, discovery becomes a loop. <bookmark mark='a'/> Propose a candidate, a program or a "
             "construction; <bookmark mark='b'/> score it exactly; <bookmark mark='c'/> keep the best and vary them. "
             "<bookmark mark='d'/> AlphaTensor, in 2022, used an AlphaZero network as the proposer. In December 2023 "
-            "Bernardino Romera-Paredes and colleagues at Google DeepMind made the proposer a language model writing Python, "
-            "in FunSearch, keeping programs on separate islands, like populations in evolution. <bookmark mark='e'/> It "
+            "FunSearch, from Bernardino Romera-Paredes and colleagues at Google DeepMind, made the proposer a language model "
+            "writing Python, with programs kept on separate islands like populations in evolution. <bookmark mark='e'/> It "
             "found a cap set in eight dimensions, five hundred and twelve points with no three in a line, beating the four "
-            "hundred and ninety-six known, the largest jump in that problem in twenty years."
+            "hundred and ninety-six known."
         ) as vo:
             self.play(FadeIn(boxes[0]), FadeIn(cite_))
             vo.wait_until("a")
@@ -260,13 +260,13 @@ class Search(VoiceoverScene):
             "In May 2025 Google DeepMind combined both lines in AlphaEvolve. <bookmark mark='a'/> Gemini models propose "
             "changes to whole programs, evaluators score them, and evolution keeps the best. <bookmark mark='b'/> Among its "
             "results: four by four complex matrices multiplied with forty-eight multiplications, beating the forty-nine of "
-            "applying Strassen's trick twice, the record since 1969. <bookmark mark='c'/> It got there by evolving the code "
-            "of a decomposition search like ours. <bookmark mark='d'/> Within weeks, three researchers in France found a "
-            "forty-eight with rational coefficients. <bookmark mark='e'/> It also set a record for spheres touching a central "
-            "one in eleven dimensions, 593, and on more than fifty open problems matched the best known answer in three "
+            "applying Strassen's trick twice, the record since 1969, <bookmark mark='c'/> found by evolving a decomposition "
+            "search like ours. <bookmark mark='d'/> Within weeks, three researchers in France found a forty-eight with "
+            "rational coefficients. <bookmark mark='e'/> It also raised to 593 the number of spheres that can touch a "
+            "central one in eleven dimensions, and on over fifty open problems matched the best known answer in three "
             "quarters and improved it in a fifth. <bookmark mark='f'/> Inside Google, a scheduling rule it found recovers 0.7 "
             "percent of the company's computing. <bookmark mark='g'/> In November 2025 Terence Tao and colleagues tried it on "
-            "sixty-seven problems, publishing its failures along with its successes."
+            "sixty-seven problems, and published its failures too."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcdefg"):

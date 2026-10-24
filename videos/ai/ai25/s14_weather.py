@@ -40,13 +40,12 @@ class Weather(VoiceoverScene):
         head = label(r"Numerical weather prediction", font_size=34).to_edge(UP, buff=0.35)
         cite_ = cite(r"Lynch (2006); \ Bauer, Thorpe \& Brunet, \textit{Nature} (2015)", corner=DR)
         with self.voiceover(
-            "Weather forecasting became physics in 1904, when Vilhelm Bjerknes framed it as a problem of initial values: "
-            "measure the atmosphere now and step the equations of fluid flow forward. <bookmark mark='a'/> Lewis Fry "
-            "Richardson tried it by hand during the First World War: a six-hour forecast for two points, some six weeks of "
-            "work, wrong by a hundred and forty-five hectopascals. He dreamed of sixty-four thousand people computing the "
-            "weather in step. <bookmark mark='b'/> In 1950 the first computer forecasts ran on ENIAC, about as fast as the "
-            "weather itself. <bookmark mark='c'/> ECMWF, the European Centre for Medium-Range Weather Forecasts, issued its "
-            "first forecasts in 1979; since then forecasts have gained about a day of skill every decade."
+            "Weather forecasting became physics in 1904, when Vilhelm Bjerknes framed it as an initial-value problem: measure "
+            "the atmosphere now, then step the equations of fluid flow forward. <bookmark mark='a'/> Lewis Fry Richardson "
+            "tried it by hand in the First World War: six weeks of work for a six-hour forecast at two points, wrong by a "
+            "hundred and forty-five hectopascals. <bookmark mark='b'/> In 1950 the first computer forecasts ran on ENIAC, "
+            "about as fast as the weather itself. <bookmark mark='c'/> ECMWF, the European Centre for Medium-Range Weather "
+            "Forecasts, first forecast in 1979; since then forecasts have gained about a day of skill per decade."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1), FadeIn(cite_))
             for k, mk in enumerate("abc", 1):
@@ -93,13 +92,12 @@ class Weather(VoiceoverScene):
         with self.voiceover(
             "Machine learning came to this in the 2020s, trained on ERA5, ECMWF's reconstruction of global weather since "
             "1940. In 2023 Remi Lam and colleagues at Google DeepMind published GraphCast. <bookmark mark='a'/> The "
-            "atmosphere is stored on a latitude–longitude grid, a million points with two hundred and twenty-seven numbers "
-            "each; but such a grid crowds its points near the poles. So GraphCast works on a mesh: <bookmark mark='b'/> an "
-            "icosahedron refined six times, keeping the edges of every level, so that a message can cross the planet in a "
-            "few steps. Here is our small version, on a square. <bookmark mark='c'/> Encode the grid onto the mesh, pass "
-            "messages sixteen times, decode: the state six hours on, from the last two. <bookmark mark='d'/> It makes a "
-            "ten-day forecast in under a minute, and beat ECMWF's flagship deterministic forecast on ninety percent of 1,380 "
-            "verification targets."
+            "atmosphere is stored on a latitude–longitude grid, a million points of two hundred and twenty-seven numbers "
+            "each, crowded near the poles; GraphCast works on a mesh instead: <bookmark mark='b'/> an icosahedron refined six "
+            "times, keeping every level's edges, so that a message crosses the planet in a few steps. Here is our small "
+            "version, on a square. <bookmark mark='c'/> Encode onto the mesh, pass messages sixteen times, decode: the state "
+            "six hours on, from the last two. <bookmark mark='d'/> It makes a ten-day forecast in under a minute, and beat "
+            "ECMWF's flagship deterministic forecast on ninety percent of 1,380 targets."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")
@@ -143,11 +141,11 @@ class Weather(VoiceoverScene):
         tag.to_corner(DR, buff=0.15)
         movie = [framed(field_image(truth[k], 3.4, vmax)).move_to([0, -0.3, 0]) for k in range(len(truth))]
         with self.voiceover(
-            "Ours is a toy atmosphere: a two-dimensional fluid on a square that wraps around, stirred by a fixed pattern "
-            "and damped by friction, so that eddies form, drift, merge and die. It is chaotic, like the weather. <bookmark "
-            "mark='a'/> A small encode–process–decode network on our mesh learns one step at a time from thirty-two "
-            "simulated runs, then rolls forward on its own predictions. <bookmark mark='b'/> Top, the truth; bottom, our "
-            "network, from the same start. For a while they agree; then they drift apart."
+            "Ours is a toy atmosphere: a two-dimensional fluid on a square that wraps around, stirred by a fixed pattern and "
+            "damped by friction, so that eddies form, drift, merge and die: chaotic, like the weather. <bookmark mark='a'/> "
+            "A small encode–process–decode network on our mesh learns one step at a time from thirty-two simulated runs, then "
+            "rolls forward on its own predictions. <bookmark mark='b'/> Top, the truth; bottom, our network, from the same "
+            "start. They agree for a while, then drift apart."
         ) as vo:
             self.play(FadeIn(world), FadeIn(tag), FadeIn(movie[0]))
             cur = movie[0]
@@ -254,14 +252,13 @@ class Weather(VoiceoverScene):
         pn = note(r"illustrative", font_size=18).next_to(pics, DOWN, buff=0.12)
         cite_ = cite(r"Price et al.\ (2024); \ ECMWF (2025, 2026); \ NOAA (2025)", corner=DR)
         with self.voiceover(
-            "There is a deeper problem. A network trained on squared error learns to predict the average of what might "
-            "happen, and far ahead, the average of many possible weathers is a blur. <bookmark mark='a'/> Forecasters answer "
-            "uncertainty with ensembles, many runs from slightly different starts. In 2024 Google DeepMind's GenCast learned "
-            "to sample the next state with diffusion, and its ensembles beat ECMWF's on 97.2 percent of 1,320 targets. "
-            "<bookmark mark='b'/> Then the learned models went into daily service. In February 2025 ECMWF made its own "
-            "Artificial Intelligence Forecasting System operational, a graph network encoder and decoder around a "
-            "transformer, and its ensemble version that July; <bookmark mark='c'/> Google released WeatherNext 2 in "
-            "November, and in December America's NOAA put its first AI global models into operation."
+            "There is a deeper problem. Trained on squared error, a network predicts the average of what might happen, and "
+            "far ahead the average of many weathers is a blur. <bookmark mark='a'/> Forecasters answer with ensembles, many "
+            "runs from slightly different starts. In 2024 Google DeepMind's GenCast learned to sample the next state with "
+            "diffusion; its ensembles beat ECMWF's on 97.2 percent of 1,320 targets. <bookmark mark='b'/> Then learned models "
+            "went into daily service: ECMWF's AI Forecasting System in February 2025, its ensemble version that July, "
+            "<bookmark mark='c'/> Google's WeatherNext 2 in November, and in December the first AI global models of "
+            "America's NOAA."
         ) as vo:
             self.play(FadeIn(blur), FadeIn(cite_), FadeIn(pics[0]))
             self.play(FadeIn(pics[1]), FadeIn(pn))
