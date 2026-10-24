@@ -206,7 +206,20 @@ class Structure(VoiceoverScene):
             label(r"in training: \ a random number of passes, \ $1$ to $4$", font_size=22),
             label(r"gradients through the last pass only", font_size=22),
             label(r"AlphaFold 2: \ $3$ extra passes by default", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, 0.9, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.1, 0])
+        # the loop itself: the network's output goes back in as an input
+        nb = node_box(r"network", STRUCT, font_size=24).move_to([3.0, 2.3, 0])
+        ib = node_box(r"alignment, \ pairs", GREY_B, font_size=22).next_to(nb, LEFT, buff=0.6)
+        ob = node_box(r"structure", PAIR_C, font_size=22).next_to(nb, RIGHT, buff=0.6)
+        loop = VGroup(ib, nb, ob,
+                      Arrow(ib.get_right(), nb.get_left(), buff=0.08, color=GREY_B, stroke_width=3),
+                      Arrow(nb.get_right(), ob.get_left(), buff=0.08, color=GREY_B, stroke_width=3),
+                      CurvedArrow(ob.get_bottom() + DOWN * 0.05, nb.get_bottom() + DOWN * 0.05, angle=-1.2,
+                                  color=PRED_C, stroke_width=3, tip_length=0.18))
+        loop.add(label(r"fed back in", font_size=20, color=PRED_C).next_to(loop[-1], DOWN, buff=0.06))
+        if loop.width > 6.4:
+            loop.width = 6.4
+        loop.move_to([3.6, 2.3, 0])
         m = by.mean(0)
         best = int(np.argmin(m)) + 1
         gain = m[0] - m.min()
@@ -225,7 +238,8 @@ class Structure(VoiceoverScene):
             "random and the gradient flows only through the last, so extra passes cost no memory. <bookmark mark='b'/> We "
             f"added it to chapter nine's triangle model. {verdict}, {vs}."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(loop[:5]))
+            self.play(Create(loop[5]), FadeIn(loop[6]))
             vo.wait_until("a")
             self.play(FadeIn(train))
             vo.wait_until("b")

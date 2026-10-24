@@ -143,6 +143,8 @@ class Proofs(VoiceoverScene):
             x = -0.2 + 6.0 * v / 42
             y = 1.4 - i * 1.0
             gold.add(DashedLine([x, y + 0.35, 0], [x, y - 0.35, 0], color=C.BITS, dash_length=0.05))
+            val = bars[i][2]  # keep the score clear of the gold line
+            val.set_x(max(val.get_x(), x + 0.14 + val.width / 2))
         gl = label(r"dashed: \ the gold-medal line, \ 2024 and 2025", font_size=18, color=C.BITS).next_to(bars, DOWN, buff=0.3)
         head = label(r"points of $42$ at the International Mathematical Olympiad", font_size=26, color=GREY_A)
         head.to_edge(UP, buff=0.45)

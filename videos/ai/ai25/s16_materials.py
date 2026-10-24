@@ -146,10 +146,13 @@ class Materials(VoiceoverScene):
         stats = VGroup(
             label(rf"$6{{,}}840$ candidates, \ ${m['n_stable']}$ truly stable", font_size=22, color=GREY_A),
             label(rf"each round: \ $60$ `DFT' checks", font_size=22, color=GREY_A),
+            label(r"start: \ $3\%$ of the energies known", font_size=22, color=GREY_A),
+            label(r"pick: \ predicted furthest below the hull \\ of everything else", font_size=22, color=GREY_A),
+            label(r"a hit: \ a pick that is truly stable", font_size=22, color=GREY_A),
             label(rf"surrogate error: \ ${mae[0]:.3f}$ \ $\to$ \ ${mae[-1]:.3f}$", font_size=22, color=STRUCT),
             label(rf"stable found after {rounds} rounds: \ ${F['model'][:, -1].mean():.0f}$ \ vs \ "
                   rf"${F['random'][:, -1].mean():.0f}$ at random", font_size=22, color=STABLE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, 0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, 0.4, 0])
         h_m, h_r = H["model"].mean(0), H["random"].mean(0)
         share = m["n_stable"] / m["n_candidates"]
         hm0, hm1, hmax = 100 * h_m[0], 100 * h_m[-1], 100 * h_m.max()
@@ -179,13 +182,13 @@ class Materials(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(stats[0]), FadeIn(stats[1]), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(lg))
+            self.play(FadeIn(lg), LaggedStart(*[FadeIn(x_) for x_ in stats[2:5]], lag_ratio=0.6), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(objs["random"]))
             vo.wait_until("c")
             self.play(FadeIn(objs["model"]))
             vo.wait_until("d")
-            self.play(FadeIn(stats[2]), FadeIn(stats[3]))
+            self.play(FadeIn(stats[5]), FadeIn(stats[6]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -194,23 +197,24 @@ class Materials(VoiceoverScene):
         cards = VGroup(
             history_card(2024, r"Cheetham \& Seshadri", r"a random sample of GNoME's list: \ scant evidence of "
                          r"compounds that are at once new, credible and useful; \ many order atoms that real crystals "
-                         r"mix", width=6.2, color=PLAIN),
+                         r"mix", width=5.6, color=PLAIN),
             history_card(2023, r"the A-Lab \ (Szymanski et al.)", r"a robot lab reported $41$ new compounds from $58$ "
                          r"targets in $17$ days; \ critics (Leeman et al.\ 2024) disputed the X-ray analysis; \ a 2026 "
-                         r"correction: \ $36$ compounds of $57$", width=6.2, color=PLAIN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-3.4, 0.0, 0])
+                         r"correction: \ $36$ compounds of $57$", width=5.6, color=PLAIN),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-3.6, 0.0, 0])
         if cards.height > 6.4:
             cards.height = 6.4
-        cards.set_x(-3.2)
+        cards.set_x(-3.7)
         after = VGroup(
-            label(r"since: \ universal learned potentials \ (MACE-MP-0, \ 2023)", font_size=22, color=STRUCT),
-            label(r"generative design: \ MatterGen \ (\textit{Nature} 2025)", font_size=22, color=STRUCT),
-            label(r"the lesson: \ a prediction is a hypothesis; \ the synthesis is the test", font_size=24,
+            label(r"since: \ universal learned potentials \\ (MACE-MP-0, \ 2023)", font_size=24, color=STRUCT),
+            label(r"generative design: \\ MatterGen \ (\textit{Nature} 2025)", font_size=24, color=STRUCT),
+            label(r"the lesson: \ a prediction is a hypothesis; \\ the synthesis is the test", font_size=26,
                   color=PAIR_C),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
         for a_ in after:
-            if a_.width > 5.8:
-                a_.width = 5.8
+            if a_.width > 5.6:
+                a_.width = 5.6
+        after.move_to([3.4, 0.0, 0]).align_to(np.array([0.7, 0, 0]), LEFT)
         head = label(r"the pushback", font_size=34, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The claims drew pushback from chemists. <bookmark mark='a'/> In 2024 Anthony Cheetham and Ram Seshadri "

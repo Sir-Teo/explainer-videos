@@ -1,11 +1,14 @@
-"""Four-bit weights done properly, on Part 13's transformer (the ``formats`` item of Part 19).
+"""The two 4-bit floating-point formats of current accelerators, bit by bit (Part 19's ``formats`` item).
 
-    formats   the two 4-bit floating-point formats of current chips, exactly: MXFP4 (E2M1 numbers, one power-of-two
-              scale per block of 32) and NVFP4 (E2M1, one FP8 E4M3 scale per block of 16, and one scale per tensor);
-              against plain 4-bit integers per row. Then two tricks that make low precision work: GPTQ (round one
-              input column at a time, and push each rounding error onto the columns not yet rounded, weighted by the
-              inverse of the inputs' second moment) and a Hadamard rotation (spread the outliers before rounding).
-              Bits per character on the passage for each, at 4 and 3 bits.
+    MXFP4  (OCP Microscaling spec, 2023; gpt-oss's expert weights): blocks of 32 numbers, each an FP4 E2M1 code
+           (sign, 2 exponent bits, 1 mantissa bit), sharing one scale that is a power of two, stored as an 8-bit
+           exponent E8M0: shared exponent = floor(log2(max |v|)) - 2, so the block's largest number lands in E2M1's
+           top binade [4, 8); values above 6 there are clamped to 6.  4 + 8/32 = 4.25 bits a number.
+    NVFP4  (NVIDIA Blackwell, 2025): blocks of 16 E2M1 codes sharing a scale stored as an FP8 E4M3 number (not just a
+           power of two), and one FP32 scale per tensor that keeps the block scales inside E4M3's range.  4 + 8/16 =
+           4.5 bits a number.
+
+Every code is produced as bits and decoded back, so the emulation is exact, not an approximation of the format.
 """
 
 from __future__ import annotations
@@ -14,152 +17,103 @@ import math
 
 import numpy as np
 
-E2M1 = np.array([0, 0.5, 1, 1.5, 2, 3, 4, 6])
+E2M1 = np.array([0, 0.5, 1, 1.5, 2, 3, 4, 6])  # magnitudes of the codes 000 ... 111 (sign separate)
 
 
-def round_e2m1(v):
-    """Round to the nearest E2M1 number (sign kept), values beyond 6 clipped."""
-    mag = E2M1[np.abs(np.minimum(np.abs(v), 6.0)[..., None] - E2M1).argmin(-1)]
-    return np.sign(v) * mag
+def e2m1_code(v):
+    """Round to the nearest E2M1 value (ties to the even code), clamp at 6: the 4-bit codes (sign << 3 | magnitude)."""
+    v = np.asarray(v, np.float64)
+    a = np.minimum(np.abs(v), 6.0)
+    d = np.abs(a[..., None] - E2M1) + 1e-12 * (np.arange(8) % 2)  # a tie goes to the even code
+    idx = d.argmin(-1)
+    return ((np.signbit(v) & (idx > 0)).astype(int) << 3) | idx
+
+
+def e2m1_value(code):
+    code = np.asarray(code)
+    return np.where(code & 8, -1.0, 1.0) * E2M1[code & 7]
+
+
+def bits(code, n):
+    return format(int(code), f"0{n}b")
 
 
 def round_e4m3(x):
-    """Round positive numbers to FP8 E4M3 (bias 7, 3 mantissa bits, largest 448, subnormals below 2^-6)."""
-    x = np.minimum(np.asarray(x, float), 448.0)
+    """Positive x to FP8 E4M3 (bias 7, 3 mantissa bits, largest 448, subnormals below 2^-6), round to nearest."""
+    x = np.minimum(np.asarray(x, np.float64), 448.0)
     e = np.floor(np.log2(np.maximum(x, 2.0 ** -9)))
-    e = np.maximum(e, -6)  # subnormal range shares the smallest exponent
+    e = np.maximum(e, -6)
     step = 2.0 ** (e - 3)
-    return np.round(x / step) * step
+    return np.minimum(np.round(x / step) * step, 448.0)
 
 
-def mxfp4(W):
+def e4m3_bits(x) -> str:
+    """The 8 bits of a positive E4M3 number (already representable): 0 eeee mmm."""
+    x = float(x)
+    if x == 0:
+        return "00000000"
+    e = math.floor(math.log2(x))
+    if e < -6:  # subnormal
+        return "0" + "0000" + bits(round(x / 2.0 ** -9), 3)
+    m = round((x / 2.0 ** e - 1) * 8)
+    if m == 8:
+        e, m = e + 1, 0
+    return "0" + bits(e + 7, 4) + bits(m, 3)
+
+
+def mxfp4(W, detail=False):
+    """Round every row of W (length a multiple of 32) in MXFP4; ``detail``: also the shared exponents and codes."""
+    W = np.asarray(W, np.float64)
     flat = W.reshape(-1, 32)
     amax = np.abs(flat).max(1, keepdims=True)
-    X = 2.0 ** (np.floor(np.log2(np.maximum(amax, 1e-30))) - 2)  # E8M0: the shared exponent, 6 = 1.5 x 2^2
-    return (round_e2m1(flat / X) * X).reshape(W.shape)
+    sh = np.floor(np.log2(np.maximum(amax, 2.0 ** -126))) - 2  # E8M0: the shared exponent
+    X = 2.0 ** sh
+    codes = e2m1_code(flat / X)
+    out = (e2m1_value(codes) * X).reshape(W.shape)
+    if detail:
+        return out, dict(shared_exp=sh[:, 0], codes=codes, clipped=(amax[:, 0] / X[:, 0]) > 6.0)
+    return out
 
 
-def nvfp4(W):
+def nvfp4(W, detail=False):
+    """Round W in NVFP4: blocks of 16 along rows, an E4M3 scale each, and one FP32 scale for the tensor."""
+    W = np.asarray(W, np.float64)
     flat = W.reshape(-1, 16)
-    g = np.abs(W).max() / (6.0 * 448.0)  # the per-tensor FP32 scale, so block scales fit E4M3
+    g = np.abs(W).max() / (6.0 * 448.0)  # the tensor scale: the largest block scale becomes 448
     amax = np.abs(flat).max(1, keepdims=True)
-    s = round_e4m3(amax / 6.0 / g) * g
+    s = round_e4m3(amax / 6.0 / g)
     s = np.where(s > 0, s, 1.0)
-    return (round_e2m1(flat / s) * s).reshape(W.shape)
+    codes = e2m1_code(flat / (s * g))
+    out = (e2m1_value(codes) * s * g).reshape(W.shape)
+    if detail:
+        return out, dict(tensor_scale=g, block_scale=s[:, 0], codes=codes)
+    return out
 
 
-def rtn(W, bits):
-    """Round to nearest, symmetric, one scale per row."""
-    qmax = 2 ** (bits - 1) - 1
-    s = np.abs(W).max(1, keepdims=True) / qmax
+def int4_scaled(W, group, scale="fp16"):
+    """4-bit integers (-8 ... 7) with one scale per ``group`` numbers along a row; the scale stored in FP16 (rounded
+    to 11 significant bits) or in E4M3 with a tensor scale, as NVFP4 does (to compare the element formats alone)."""
+    W = np.asarray(W, np.float64)
+    flat = W.reshape(-1, group)
+    amax = np.abs(flat).max(1, keepdims=True)
+    if scale == "e4m3":
+        g = np.abs(W).max() / (7.0 * 448.0)
+        s = round_e4m3(amax / 7.0 / g) * g
+    else:
+        s = amax / 7.0
+        e = np.floor(np.log2(np.maximum(s, 1e-30)))
+        s = np.round(s / 2.0 ** (e - 10)) * 2.0 ** (e - 10)
     s = np.where(s > 0, s, 1.0)
-    return np.clip(np.round(W / s), -qmax - 1, qmax) * s
+    return (np.clip(np.round(flat / s), -8, 7) * s).reshape(W.shape)
 
 
-def gptq(W, H, bits, damp=0.01):
-    """GPTQ (Frantar et al., 2022) for y = W x with input second moment H = E[x x^T]: quantize column by column, and
-    after each one, move its rounding error onto the columns still to come, along the rows of the Cholesky factor of
-    H^-1 (the optimal brain surgeon update)."""
-    W = W.astype(np.float64).copy()
-    n = W.shape[1]
-    qmax = 2 ** (bits - 1) - 1
-    s = np.abs(W).max(1) / qmax  # the same per-row scales as round-to-nearest
-    s = np.where(s > 0, s, 1.0)
-    H = H + damp * np.mean(np.diag(H)) * np.eye(n)
-    U = np.linalg.cholesky(np.linalg.inv(H)).T  # upper: H^-1 = U^T U
-    Q = np.zeros_like(W)
-    for j in range(n):
-        w = W[:, j]
-        q = np.clip(np.round(w / s), -qmax - 1, qmax) * s
-        Q[:, j] = q
-        err = (w - q) / U[j, j]
-        W[:, j + 1:] -= np.outer(err, U[j, j + 1:])
-    return Q
-
-
-def hadamard(n):
-    Hm = np.array([[1.0]])
-    while Hm.shape[0] < n:
-        Hm = np.block([[Hm, Hm], [Hm, -Hm]])
-    return Hm / math.sqrt(n)
-
-
-def compute_formats():
-    import torch
-
-    from videos.ai.ai13 import compute as c11
-
-    torch.set_num_threads(3)
-    c11.load("tf")
-    model, chars, enc, data = c11.load_tf()
-    orig = {k: v.clone() for k, v in model.state_dict().items()}
-    names = [k for k, v in orig.items() if v.dim() == 2 and "emb" not in k]
-    # the inputs each linear layer sees, on 48 windows of the training text
-    mods = dict(model.named_modules())
-    acts = {}
-
-    def hook(name):
-        def f(_m, inp, _out):
-            x = inp[0].detach().reshape(-1, inp[0].shape[-1]).double()
-            acts[name] = acts.get(name, 0) + x.T @ x
-            acts[name + "#n"] = acts.get(name + "#n", 0) + len(x)
-        return f
-
-    hs = [mods[k[:-len(".weight")]].register_forward_hook(hook(k)) for k in names]
-    g = np.random.default_rng(7)
-    starts = g.integers(0, len(data["train"]) - c11.CTX - 1, 48)
-    with torch.no_grad():
-        for i in range(0, 48, 16):
-            model(torch.stack([data["train"][s:s + c11.CTX] for s in starts[i:i + 16]]))
-    for h in hs:
-        h.remove()
-    Hs = {k: (acts[k] / acts[k + "#n"]).numpy() for k in names}
-
-    def bits(fn):
-        sd = {k: (torch.tensor(fn(k, v.numpy().astype(np.float64)), dtype=torch.float32) if k in names else v) for k, v in orig.items()}
-        model.load_state_dict(sd)
-        b = c11.tf_bits(model, data["passage"])
-        model.load_state_dict(orig)
-        return b
-
-    def rotated(k, W, b):
-        Hm = hadamard(W.shape[1])
-        return rtn(W @ Hm.T, b) @ Hm  # round in the rotated basis, then rotate back
-
-    out = dict(fp32=bits(lambda k, W: W))
-    print(f"    fp32: {out['fp32']:.3f} bits/char", flush=True)
-    jobs = {
-        "int4": lambda k, W: rtn(W, 4), "mxfp4": lambda k, W: mxfp4(W), "nvfp4": lambda k, W: nvfp4(W),
-        "gptq4": lambda k, W: gptq(W, Hs[k], 4), "had4": lambda k, W: rotated(k, W, 4),
-        "int3": lambda k, W: rtn(W, 3), "gptq3": lambda k, W: gptq(W, Hs[k], 3), "had3": lambda k, W: rotated(k, W, 3),
-    }
-    for name, fn in jobs.items():
-        out[name] = bits(fn)
-        print(f"    {name}: {out[name]:.3f} bits/char", flush=True)
-    # storage per weight, scales included (rows of 128 or 512 numbers for the integer formats)
-    row = float(np.mean([orig[k].shape[1] for k in names]))
-    out["bpw"] = dict(int4=4 + 32 / row, mxfp4=4 + 8 / 32, nvfp4=4 + 8 / 16, int3=3 + 32 / row)
-    # how peaked one layer's rows are before and after the rotation: the largest weight over the typical one
-    W = orig["blocks.1.f1.weight"].numpy().astype(np.float64)
-    Wr = W @ hadamard(W.shape[1]).T
-    crest = lambda M: float(np.mean(np.abs(M).max(1) / np.sqrt((M ** 2).mean(1))))  # noqa: E731
-    out["crest"], out["crest_rot"] = crest(W), crest(Wr)
-    out["row"], out["row_rot"] = W[0], Wr[0]
-    # one real layer, at 3 bits: the output error on real inputs, rounded vs GPTQ (relative, via the second moment)
-    k1 = "blocks.1.f1.weight"
-    H1 = Hs[k1]
-
-    def out_err(Q):
-        E_ = W - Q
-        return float(np.sqrt(np.trace(E_ @ H1 @ E_.T) / np.trace(W @ H1 @ W.T)))
-
-    out["layer_err_rtn3"], out["layer_err_gptq3"] = out_err(rtn(W, 3)), out_err(gptq(W, H1, 3))
-    out["layer_err_rtn4"], out["layer_err_gptq4"] = out_err(rtn(W, 4)), out_err(gptq(W, H1, 4))
-    print(f"    one layer's output error at 3 bits: rounded {out['layer_err_rtn3']:.3f}, GPTQ {out['layer_err_gptq3']:.3f}", flush=True)
-    # one block of 16 weights in NVFP4, step by step, for the picture
-    blk = W[0, :16]
-    gs = np.abs(W).max() / (6.0 * 448.0)
-    s = round_e4m3(np.abs(blk).max() / 6.0 / gs) * gs
-    out["block"], out["block_scale"], out["block_codes"] = blk, float(s), round_e2m1(blk / s)
-    assert out["gptq3"] < out["int3"] and out["int3"] > out["int4"]
+def block_picture(W_row32):
+    """One block of 32 of our weights, encoded both ways, every bit kept for the picture."""
+    v = np.asarray(W_row32, np.float64)
+    mx, dm = mxfp4(v[None], detail=True)
+    amax = np.abs(v).max()
+    sh = int(dm["shared_exp"][0])
+    out = dict(values=v, mx_shared_exp=sh, mx_scale_bits=bits(sh + 127, 8), mx_codes=[bits(c, 4) for c in dm["codes"][0]],
+               mx_decoded=mx[0], mx_clipped=bool(dm["clipped"][0]), amax=amax)
+    # NVFP4 on the first 16 (with this row's tensor scale taken from the whole layer by the caller)
     return out

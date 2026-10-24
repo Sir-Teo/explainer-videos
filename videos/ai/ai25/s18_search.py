@@ -169,7 +169,7 @@ class Search(VoiceoverScene):
         hist = VGroup(
             label(r"Strassen (1969): \ $2 \times 2$ in $7$, \ not $8$; \ Winograd (1971): \ $7$ is the minimum",
                   font_size=22, color=HIST),
-        ).move_to([0, -1.2, 0])
+        ).move_to([0, -1.55, 0])
         res = []
         for R in (6, 7, 8):
             r_ = mm[f"n2_r{R}"]
@@ -185,7 +185,7 @@ class Search(VoiceoverScene):
         tab.add(label(rf"$3 \times 3$, \ rank $23$ \ (Laderman, 1976): \ ${n3a['success']}$ of ${n3_tries}$ \ "
                       rf"(best ${sci(min(n3a['best'], n3b['best']), 1)}$, \ even at rank $26$)", font_size=22,
                       color=SEARCH_C if n3a["success"] else GREY_B))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([0, -2.65, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([0, -2.95, 0])
         ver = mm["n2_r7_verify"]
         vdp = int(np.floor(-np.log10(max(ver, 1e-300))))
         r6, r7, r8 = res

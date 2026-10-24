@@ -203,10 +203,10 @@ def run_continuous(reqs, cost: Cost, bmax: int, chunk: int = 0, trace: list | No
 
 
 def run_disaggregated(reqs, cost: Cost, bmax: int, link_bytes_per_s: float, kv_per_token: float,
-                      pre_batch_tokens: int = 512):
+                      pre_batch_tokens: int = 512, n_dec: int = 1):
     """Prefill and decode on separate workers (Splitwise, DistServe, 2024): one worker prefills prompts, batched up to
     ``pre_batch_tokens``, writing each first token; each cache is then sent over a link to the decode worker, which
-    only decodes, with continuous batching."""
+    only decodes, with continuous batching (``n_dec`` decode workers, requests dealt out in turn)."""
     reqs = fresh(reqs)
     order = sorted(reqs, key=lambda r: r.arrive)
     t, i, waiting = 0.0, 0, []
@@ -230,7 +230,8 @@ def run_disaggregated(reqs, cost: Cost, bmax: int, link_bytes_per_s: float, kv_p
     arrivals = {r.rid: r.arrive for r in reqs}
     for r in reqs:
         r.arrive = r.ready
-    run_continuous([r for r in reqs if r.made < r.out], cost, bmax, copy=False)
+    for j in range(n_dec):
+        run_continuous([r for r in reqs if r.made < r.out and r.rid % n_dec == j], cost, bmax, copy=False)
     for r in reqs:
         r.arrive = arrivals[r.rid]
     return reqs
@@ -262,66 +263,76 @@ def metrics(reqs, tpot_slo=None, ttft_slo=None) -> dict:
 # ---------------------------------------------------------------------------
 # Key-value memory: reserved, contiguous, paged
 # ---------------------------------------------------------------------------
-def memory_sim(reqs, cost: Cost, pool: int, mode: str, block: int = 16, max_len: int = 2048, bmax: int = 256):
+def memory_sim(reqs, cost: Cost, pool: int, mode: str, block: int = 16, max_len: int = 2048, bmax: int = 256,
+               snap_t: float | None = None):
     """Continuous batching whose admission is limited by a key-value memory of ``pool`` tokens.
     ``mode``: "reserve" (each request holds ``max_len`` tokens from the start, as servers did before vLLM);
-    "contiguous" (each holds exactly its final length, in one contiguous range, first fit: it must know its length,
-    and free memory splinters); "paged" (blocks of ``block`` tokens, taken as the sequence grows; when the pool runs
-    out the newest request is preempted and later recomputed, as vLLM does).
-    Returns the requests (finished) and a time series of (t, running, tokens stored, tokens allocated)."""
+    "contiguous" (each holds exactly its final length in one contiguous range, first fit: it must know its length,
+    and free memory splinters); "paged" (blocks of ``block`` tokens anywhere in the pool, taken as the sequence
+    grows; when the pool runs out the newest request is preempted and later recomputed, as vLLM does).
+    Returns the requests, a time series of (t, running, tokens stored, tokens allocated), the number of preemptions,
+    and a snapshot of the memory at time ``snap_t``: [(start, allocated, used, request)]."""
     reqs = fresh(reqs)
     order = sorted(reqs, key=lambda r: r.arrive)
     t, i = 0.0, 0
     run: list[Req] = []
     waiting: list[Req] = []
-    held = {}  # rid -> tokens allocated (reserve, paged) or (start, length) (contiguous)
-    free_ranges = [(0, pool)]  # contiguous: sorted free ranges
-    used_blocks = 0
-    series, preempted = [], 0
+    held = {}  # rid -> (start, length) for reserve / contiguous; list of block ids for paged
+    free_ranges = [(0, pool)]
+    free_slots = list(range(pool // max_len))
+    total_blocks = pool // block
+    free_ids = list(range(total_blocks))
+    series, preempted, snap = [], 0, None
 
     def alloc_contig(n):
-        for k, (s, L) in enumerate(free_ranges):
+        for k, (st, L) in enumerate(free_ranges):
             if L >= n:
-                free_ranges[k] = (s + n, L - n)
+                free_ranges[k] = (st + n, L - n)
                 if free_ranges[k][1] == 0:
                     free_ranges.pop(k)
-                return s
+                return st
         return None
 
-    def free_contig(s, n):
-        free_ranges.append((s, n))
+    def free_contig(st, n):
+        free_ranges.append((st, n))
         free_ranges.sort()
         merged = []
-        for a, L in free_ranges:
-            if merged and merged[-1][0] + merged[-1][1] == a:
+        for a_, L in free_ranges:
+            if merged and merged[-1][0] + merged[-1][1] == a_:
                 merged[-1] = (merged[-1][0], merged[-1][1] + L)
             else:
-                merged.append((a, L))
+                merged.append((a_, L))
         free_ranges[:] = merged
 
-    total_blocks = pool // block
+    def release(r):
+        h = held.pop(r.rid)
+        if mode == "contiguous":
+            free_contig(*h)
+        elif mode == "reserve":
+            free_slots.append(h[0] // max_len)
+        else:
+            free_ids.extend(h)
+
     while i < len(order) or run or waiting:
         while i < len(order) and order[i].arrive <= t:
             waiting.append(order[i])
             i += 1
-        # admit
-        while waiting and len(run) < bmax:
+        while waiting and len(run) < bmax:  # admit, first come first served
             r = waiting[0]
             if mode == "reserve":
-                if sum(held.values()) + max_len > pool:
+                if not free_slots:
                     break
-                held[r.rid] = max_len
+                held[r.rid] = (free_slots.pop(0) * max_len, max_len)
             elif mode == "contiguous":
-                s = alloc_contig(r.prompt + r.out)
-                if s is None:
+                st = alloc_contig(r.prompt + r.out)
+                if st is None:
                     break
-                held[r.rid] = (s, r.prompt + r.out)
+                held[r.rid] = (st, r.prompt + r.out)
             else:
                 need = math.ceil((r.prompt + 1) / block)
-                if used_blocks + need > total_blocks - len(run):  # keep a block of headroom per running sequence
+                if need > len(free_ids) - len(run):  # keep a block of headroom per running sequence
                     break
-                used_blocks += need
-                held[r.rid] = need
+                held[r.rid] = [free_ids.pop(0) for _ in range(need)]
             waiting.pop(0)
             run.append(r)
         if not run:
@@ -331,8 +342,7 @@ def memory_sim(reqs, cost: Cost, pool: int, mode: str, block: int = 16, max_len:
             break
         dec = [r for r in run if r.done_pre >= r.prompt]
         pre = [r for r in run if r.done_pre < r.prompt]
-        n_pre = sum(r.prompt - r.done_pre for r in pre)
-        dt = cost.step(len(dec), sum(r.ctx for r in dec), n_pre)
+        dt = cost.step(len(dec), sum(r.ctx for r in dec), sum(r.prompt - r.done_pre for r in pre))
         t += dt
         for r in dec:
             _emit(r, t)
@@ -341,33 +351,38 @@ def memory_sim(reqs, cost: Cost, pool: int, mode: str, block: int = 16, max_len:
             _emit(r, t)
         if mode == "paged":  # grow, preempting the newest when the pool is full
             for r in list(run):
-                need = math.ceil((r.ctx + 1) / block) - held[r.rid]
-                while need > 0 and used_blocks + need > total_blocks and len(run) > 1:
+                if r not in run:
+                    continue
+                need = math.ceil((r.ctx + 1) / block) - len(held[r.rid])
+                while need > len(free_ids) and len(run) > 1:
                     victim = run[-1] if run[-1] is not r else run[-2]
-                    used_blocks -= held.pop(victim.rid)
+                    release(victim)
                     run.remove(victim)
-                    victim.done_pre, victim.made, victim.first, victim.gaps = 0, 0, -1.0, []
-                    victim.finish = -1.0
+                    victim.done_pre, victim.made, victim.first, victim.gaps, victim.finish = 0, 0, -1.0, [], -1.0
                     waiting.insert(0, victim)
                     preempted += 1
-                if need > 0 and r in run:
-                    used_blocks += need
-                    held[r.rid] += need
+                for _ in range(max(0, min(need, len(free_ids)))):
+                    held[r.rid].append(free_ids.pop(0))
         for r in list(run):
             if r.made >= r.out:
                 r.finish = t
                 run.remove(r)
-                if mode == "contiguous":
-                    free_contig(*held.pop(r.rid))
-                elif mode == "paged":
-                    used_blocks -= held.pop(r.rid)
-                else:
-                    held.pop(r.rid)
+                release(r)
         stored = sum(r.ctx for r in run)
-        alloc = (used_blocks * block if mode == "paged" else
-                 sum(v[1] for v in held.values()) if mode == "contiguous" else sum(held.values()))
+        alloc = (sum(len(v) for v in held.values()) * block if mode == "paged" else sum(v[1] for v in held.values()))
         series.append((t, len(run), stored, alloc))
-    return reqs, np.array(series), preempted
+        if snap_t is not None and snap is None and t >= snap_t:
+            snap = []
+            for r in run:
+                h = held[r.rid]
+                if mode == "paged":
+                    left = r.ctx
+                    for bid in h:
+                        snap.append((bid * block, block, min(block, max(left, 0)), r.rid))
+                        left -= block
+                else:
+                    snap.append((h[0], h[1], r.ctx, r.rid))
+    return reqs, np.array(series), preempted, snap
 
 
 def block_waste(lengths, blocks) -> list[float]:
@@ -377,50 +392,41 @@ def block_waste(lengths, blocks) -> list[float]:
 
 
 # ---------------------------------------------------------------------------
-# Shared prefixes: a radix tree of cached tokens
+# Shared prefixes: cached blocks of a prompt, reused
 # ---------------------------------------------------------------------------
-class Radix:
-    """Cached prefixes as a trie of token runs, with least-recently-used eviction of leaves (SGLang's RadixAttention,
-    simplified to whole tokens).  ``match(seq)`` returns how many leading tokens are cached."""
+class PrefixCache:
+    """Cached prefixes in blocks of ``block`` tokens, each block keyed by everything before it and itself (a hash
+    of the prefix), evicted least-recently-used: vLLM's automatic prefix caching; SGLang's radix tree does the same
+    at the granularity of tokens.  ``capacity`` in tokens."""
 
-    def __init__(self, capacity: int):
-        self.cap, self.size, self.clock = capacity, 0, 0
-        self.root = {"kids": {}, "n": 0, "used": 0, "parent": None, "key": None}
+    def __init__(self, capacity: int, block: int = 16):
+        from collections import OrderedDict
+
+        self.cap, self.block = capacity // block, block
+        self.lru = OrderedDict()
+
+    def keys(self, seq):
+        out, h = [], 0
+        for k in range(0, len(seq) - len(seq) % self.block, self.block):
+            h = hash((h, tuple(seq[k:k + self.block])))
+            out.append(h)
+        return out
 
     def match(self, seq) -> int:
-        node, k = self.root, 0
-        self.clock += 1
-        while k < len(seq) and seq[k] in node["kids"]:
-            node = node["kids"][seq[k]]
-            node["used"] = self.clock
-            k += 1
-        return k
+        n = 0
+        for h in self.keys(seq):
+            if h not in self.lru:
+                break
+            self.lru.move_to_end(h)
+            n += self.block
+        return n
 
     def insert(self, seq):
-        node = self.root
-        self.clock += 1
-        for tok in seq:
-            if tok not in node["kids"]:
-                node["kids"][tok] = {"kids": {}, "used": self.clock, "parent": node, "key": tok}
-                self.size += 1
-            node = node["kids"][tok]
-            node["used"] = self.clock
-        while self.size > self.cap:
-            self.evict()
-
-    def evict(self):
-        leaves, stack = [], [self.root]
-        while stack:
-            nd = stack.pop()
-            if not nd["kids"] and nd is not self.root:
-                leaves.append(nd)
-            stack.extend(nd["kids"].values())
-        lru = min(leaves, key=lambda nd: nd["used"])
-        cut = lru["used"]
-        for nd in leaves:  # evict every leaf as old as the oldest (a run of tokens at once)
-            if nd["used"] <= cut:
-                del nd["parent"]["kids"][nd["key"]]
-                self.size -= 1
+        for h in self.keys(seq):
+            self.lru[h] = True
+            self.lru.move_to_end(h)
+        while len(self.lru) > self.cap:
+            self.lru.popitem(last=False)
 
 
 def chat_workload(n_conv=40, turns=6, system=300, user=(20, 120), answer=(40, 240), seed=0):
@@ -453,7 +459,7 @@ def chat_workload(n_conv=40, turns=6, system=300, user=(20, 120), answer=(40, 24
 
 
 def prefix_sim(order, capacity) -> dict:
-    tree = Radix(capacity)
+    tree = PrefixCache(capacity)
     total = computed = 0
     for seq in order:
         p = seq[:-1]

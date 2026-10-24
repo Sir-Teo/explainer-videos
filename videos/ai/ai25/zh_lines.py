@@ -436,8 +436,8 @@ ZH = {
 
     'f"AlphaFold 1 predicted only distances':
         "AlphaFold 1只预测距离，带噪声，而且只针对它确信挨得近的残基对。我们也这样做：只保留{f['cut']:.0f}埃以内的残基对，占"
-        "{100 * frac:.0f}%，加上{f['noise']:.0f}埃的噪声，然后从一团随机的乱线出发，用梯度下降移动原子，直到距离吻合。<bookmark mark='a'/>"
-        "看它折叠起来。<bookmark mark='b'/>从{n}个随机起点出发，{verdict}。<bookmark mark='c'/>凡是在反射下不变的东西，包括距离，都分不清是哪个。"
+        "{100 * frac:.0f}%，加上{f['noise']:.0f}埃的噪声，<bookmark mark='a'/>然后从一团随机的乱线出发，用梯度下降移动原子，直到距离吻合。"
+        "<bookmark mark='b'/>从{n}个随机起点出发，{verdict}。<bookmark mark='c'/>凡是在反射下不变的东西，包括距离，都分不清是哪个。"
         "AlphaFold 2需要一种分得清左右的表示。",
 
     "f'{words_num(len(good))} of the {n} land":

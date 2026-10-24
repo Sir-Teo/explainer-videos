@@ -272,9 +272,10 @@ class Sets(VoiceoverScene):
                      (PLAIN, KIND_NAME["mlp"])], font_size=20).move_to([4.5, -1.1, 0])
         flips = VGroup(label(r"answers that change \ when the same set is reordered:", font_size=22, color=GREY_A))
         n_big = sizes[-1]
+        set_name = {"mlp": KIND_NAME["mlp"], "mlp_aug": r"MLP, \ reordered copies", "deepsets": KIND_NAME["deepsets"]}
         for kind in ("mlp", "mlp_aug", "deepsets"):
             f_ = np.mean([d[f"{kind}_{n_big}_s{s}"]["flip"] for s in d["seeds"]])
-            flips.add(label(rf"{KIND_NAME[kind]}: \ ${100 * f_:.0f}\%$", font_size=24, color=KIND_COLOR[kind]))
+            flips.add(label(rf"{set_name[kind]}: \ ${100 * f_:.0f}\%$", font_size=24, color=KIND_COLOR[kind]))
         flips.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.4, 1.3, 0])
         params = {k: d[f"{k}_{n_big}_s0"]["params"] for k in ("mlp", "deepsets")}
         tag = note(rf"computed: \ three seeds each \ (band: \ min--max), \ ${d['steps']:,}$ steps each; \ "

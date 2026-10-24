@@ -234,6 +234,6 @@ class AF3(VoiceoverScene):
             "AlphaFold 3 kept the pair stack, handed the geometry to diffusion, and learned the symmetry from turned copies. "
             "Prediction also runs backwards: from a shape you want, to a protein that folds into it."
         ):
-            self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
+            self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)
         self.clear_scene()

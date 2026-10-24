@@ -78,17 +78,27 @@ class Rotations(VoiceoverScene):
         # the hook's molecule: every atom carries features h and a position x
         nd = load("nbody_data")
         x0, q0 = np.asarray(nd["show_x0"])[1], np.asarray(nd["show_q"])[1]
-        P2, _ = project(x0 - x0.mean(0), 0.4, 0.3)
-        P2 = P2 / np.abs(P2).max() * 1.25
-        cm_ = np.array([-4.9, 1.0, 0])
+        # the view that spreads the five atoms out most
+        best = None
+        for ang in np.linspace(0, np.pi, 13):
+            for tl in np.linspace(-0.6, 0.6, 7):
+                Q, _ = project(x0 - x0.mean(0), ang, tl)
+                gap = min(np.linalg.norm(Q[a] - Q[b]) for a in range(5) for b in range(a + 1, 5)) / np.abs(Q).max()
+                if best is None or gap > best[0]:
+                    best = (gap, Q)
+        P2 = best[1] / np.abs(best[1]).max() * 1.7
+        cm_ = np.array([-4.3, 0.2, 0])
         at = [cm_ + np.r_[p, 0] for p in P2]
         bonds = VGroup(*[Line(at[a], at[b], color=GREY_D, stroke_width=1.5) for a in range(5) for b in range(a + 1, 5)])
         i_, j_ = 0, int(np.argmax(np.linalg.norm(P2 - P2[0], axis=1)))
         bonds.add(Line(at[i_], at[j_], color=STRUCT, stroke_width=4))
         atoms = VGroup(*[Circle(radius=0.17, stroke_width=1.2, stroke_color=WHITE, fill_color=PLUS if c > 0 else MINUS,
                                 fill_opacity=0.95).move_to(a_) for a_, c in zip(at, q0)])
-        li = MathTex(r"h_i,\ x_i", font_size=30).next_to(atoms[i_], UL, buff=0.05)
-        lj = MathTex(r"h_j,\ x_j", font_size=30).next_to(atoms[j_], DR, buff=0.05)
+        def out(k):  # a point just outside atom k, away from the molecule's centre
+            v = at[k] - cm_
+            return at[k] + v / (np.linalg.norm(v) + 1e-9) * 0.6
+        li = MathTex(r"h_i,\ x_i", font_size=30).move_to(out(i_))
+        lj = MathTex(r"h_j,\ x_j", font_size=30).move_to(out(j_))
         mol = VGroup(bonds, atoms, li, lj)
         with self.voiceover(
             "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of Victor "

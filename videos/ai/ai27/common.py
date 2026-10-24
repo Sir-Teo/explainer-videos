@@ -19,7 +19,7 @@ REWARD = C.REWARD  # reward, the preferred answer
 PENALTY = C.PENALTY  # the rejected answer, a failure
 KLC = C.KL  # KL divergence, the leash
 PROXY = C.MODEL_Q  # the learned reward model (a proxy)
-GOLD = C.SCORE  # the true taste the proxy stands in for
+GOLD = C.BITS  # the true taste the proxy stands in for: yellow, apart from the proxy's orange
 ADAPT = C.MLP  # adapters, task vectors
 
 

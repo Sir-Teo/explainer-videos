@@ -202,9 +202,9 @@ class Messages(VoiceoverScene):
             f"two hops. <bookmark mark='c'/> An MLP that sees only each person's hint gets {100 * np.mean(acc_m):.0f} "
             f"percent right; the graph network {100 * np.mean(acc_g):.0f} percent, over three seeds. {verdict}."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(cnt), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(cnt), FadeIn(tag), FadeIn(ax))
             vo.wait_until("a")
-            self.play(FadeIn(ax), FadeIn(dot))
+            self.play(FadeIn(dot))
             per = max(0.4, (vo.until("c") - 0.5) / max(1, len(frames)))
             for k, fr in enumerate(frames):
                 new = label(rf"after ${snaps[k]}$ steps", font_size=22, color=GREY_A).move_to(cnt)
