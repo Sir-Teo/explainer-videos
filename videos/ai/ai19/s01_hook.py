@@ -204,6 +204,7 @@ class Hook(VoiceoverScene):
         ]
         x0, x1, y = -6.2, 6.2, 0.2
         T0, T1 = 2017, 2026.5
+        STEMS = [1.55, 1.0, 1.0, 1.0, 1.55, 1.75, 1.0, 1.0, 1.55, 1.0, 1.0]  # staggered, so close labels don't meet
 
         def X(t):
             return x0 + (x1 - x0) * (t - T0) / (T1 - T0)
@@ -216,7 +217,8 @@ class Hook(VoiceoverScene):
         for k, (t, txt, col) in enumerate(events):
             up = k % 2 == 0
             dot = Dot([X(t), y, 0], radius=0.07, color=col)
-            stem = Line([X(t), y, 0], [X(t), y + (1.0 + 0.55 * (k % 4 == 0)) * (1 if up else -1), 0], color=col,
+            ln = STEMS[k]
+            stem = Line([X(t), y, 0], [X(t), y + ln * (1 if up else -1), 0], color=col,
                         stroke_width=1.5).set_stroke(opacity=0.6)
             lab = label(txt, font_size=17, color=col)
             lab.next_to(stem.get_end(), UP if up else DOWN, buff=0.06)
@@ -231,13 +233,13 @@ class Hook(VoiceoverScene):
         pr = F.PRICES
         pbars = VGroup()
         for yr, name, usd, _ in pr:
-            hgt = 0.35 * (math.log10(usd) + 1.2)
+            hgt = 0.3 * (math.log10(usd) + 1.2)
             pbars.add(Rectangle(width=0.16, height=max(hgt, 0.03), stroke_width=0, fill_color=COSTC, fill_opacity=0.85)
-                      .move_to([X(yr), -3.15 + max(hgt, 0.03) / 2, 0]))
+                      .move_to([X(yr), -3.45 + max(hgt, 0.03) / 2, 0]))
         pvals = VGroup(*[label(rf"\${u:g}", font_size=16, color=COSTC).next_to(b_, UP, buff=0.05) for b_, (_, _, u, _)
                          in zip(pbars, pr)])
         pl = label(r"USD per million input tokens, \ OpenAI's cheapest model \\ at least as good as GPT-3 \ (list prices)",
-                   font_size=16, color=COSTC).move_to([4.5, -2.75, 0])
+                   font_size=16, color=COSTC).move_to([-4.0, -2.95, 0])
         with self.voiceover(
             "How did we get here? The transformer of 2017 already wrote one token at a time and kept the keys and "
             "values of what it had read, the cache of Part 15. <bookmark mark='a'/> In 2019 Noam Shazeer shared one "

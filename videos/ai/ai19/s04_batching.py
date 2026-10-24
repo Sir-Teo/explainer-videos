@@ -87,10 +87,10 @@ class Batching(VoiceoverScene):
                   rf"${H['mem'] / 1e9:.0f}$ GB", font_size=22, color=GREY_A),
             label(rf"price: \ \${e['price']:.0f} per GPU-hour, \ the rate DeepSeek costed its service at",
                   font_size=22, color=COSTC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(DL, buff=0.45)
         hc = history_card(2022, r"Reiner Pope et al., \ Google", rf"{F.POPE['model']}: \ "
                           rf"${F.POPE['latency_ms']}$ ms a token at small batches, \ ${F.POPE['mfu']}\%$ of peak "
-                          r"reading prompts", width=4.6, font_size=18, color=COSTC).to_corner(UR, buff=0.3)
+                          r"reading prompts", width=4.2, font_size=18, color=COSTC).to_corner(DR, buff=0.35)
         tag = note(r"a roofline model, \ not a measurement: \ real servers reach a fraction of it").to_corner(UL, buff=0.2)
         with self.voiceover(
             "To see what this means for a real model on a real chip, model it with the roofline. "

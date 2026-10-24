@@ -25,7 +25,7 @@ BOS, BOI, EOI, BOLD, NULL = 29, 30, 31, 32, 33
 V = 34
 D, L, H = 64, 4, 4
 SEEDS = (0, 1, 2)
-N_STEPS, BB = 2500, 24  # steps; pictures per task per batch
+N_STEPS, BB = 2000, 24  # steps; pictures per task per batch
 GUIDE = 2.0
 
 

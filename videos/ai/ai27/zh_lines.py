@@ -439,7 +439,7 @@ ZH = {
         "价值网络的用处，是提供一个基线。<bookmark mark='a'/>和第26部分一样，从奖励里减去一个基线，不改变梯度的平均值，只去掉噪声。<bookmark mark='b'/>PPO的基线是学出来的：就是那个价值网络，逐个词元。<bookmark mark='c'/>但语言模型可以把同一个问题回答好几遍。2024年，Cohere的RLOO用其他回答的平均奖励，作为每个回答的基线，报告的结果比PPO更好，而且不需要价值网络。<bookmark mark='d'/>同一年，DeepSeek的GRPO还除以组内的离散程度；DeepSeek-R1就是用它训练的，第28部分会推导它。<bookmark mark='e'/>我们的训练用的是最简单的版本：对一个问题写{n:d}句话，基线就是它们的平均，也就是RLOO的基线乘以{n:d}分之{n - 1:d}。",
 
     'f"How much does the baseline matter on our model?':
-        "在我们的模型上，基线有多重要？在训练的第一步，我们对{Q:d}个问题，每个抽{B:d}批、每批{n:d}句话，再用每一批，按几种方式估计梯度。如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是{cos['none']:.3f}。<bookmark mark='b'/>{shift_said}<bookmark mark='c'/>所有问题共用一个基线时，是{cos['shared']:.3f}；用每个问题自己的平均值，也就是价值网络要学着预测的东西，是{cos['value']:.3f}。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是{cos['group']:.3f}。{verdict}<bookmark mark='e'/>{compass}",
+        "在我们的模型上，基线有多重要？在训练的第一步，我们对{Q:d}个问题，每个抽{B:d}批、每批{n:d}句话，再用每一批，按几种方式估计梯度。<bookmark mark='p'/>如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是{cos['none']:.3f}。<bookmark mark='b'/>{shift_said}<bookmark mark='c'/>所有问题共用一个基线时，是{cos['shared']:.3f}；用每个问题自己的平均值，也就是价值网络要学着预测的东西，是{cos['value']:.3f}。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是{cos['group']:.3f}。{verdict}<bookmark mark='e'/>{compass}",
 
     'Even the best is far from one':
         '即使最好的，也离1很远：单单一批，是一个有噪声的指南针，所以强化学习要走很多小步。',

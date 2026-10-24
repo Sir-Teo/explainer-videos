@@ -5,7 +5,7 @@ density and a colour on a 64^3 grid, photographed from 24 cameras on a circle; 8
             NeRF's alpha-compositing sum, by the number of samples; then a small NeRF (positional encoding, an MLP of
             four layers of 64) trained on the 24 photographs, replayed on a held-out view, three seeds
     splat   3D Gaussian splatting: the projected covariance J W Sigma W^T J^T against Monte Carlo through the exact
-            perspective projection, for Gaussians from small to large against their depth; then 800 Gaussians fitted
+            perspective projection, for Gaussians from small to large against their depth; then 500 Gaussians fitted
             to the same 24 photographs by differentiable rasterization (depth-sorted alpha compositing), three seeds
 """
 
@@ -348,7 +348,7 @@ def compute_splat():
     tr, te, I_tr, I_te = photographs()
     n = steps(2000)
     checks = sorted({0, n // 40, n // 10, n // 4, n})
-    N = 800
+    N = 500
     part = CACHE.partial("splat", dict(steps=n, seeds=SEEDS, N=N, res=RES))
     It = torch.tensor(I_tr, dtype=torch.float32)
     for seed in SEEDS:
@@ -382,8 +382,8 @@ def compute_splat():
             if st == n:
                 break
             loss = 0
-            for v in torch.randint(0, N_TRAIN, (2,), generator=g).tolist():
-                loss = loss + ((splat_render(*params(), tr[v]) - It[v]) ** 2).mean() / 2
+            for v in torch.randint(0, N_TRAIN, (1,), generator=g).tolist():
+                loss = loss + ((splat_render(*params(), tr[v]) - It[v]) ** 2).mean()
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -410,7 +410,7 @@ def compute_splat():
             for _ in range(3):
                 splat_render(*params(), te[1])
             ms = (time.time() - tt) / 3 * 1000
-            m_, cv, cl, op = params()
+            m_, cv, cl, op = (x_.detach() for x_ in params())
             uv, cov2, z = project(m_, cv, te[1])
             top = torch.argsort(op, descending=True)[:150]
         part[key] = dict(replay=replay, curve=curve, secs=secs, render_ms=ms, test_psnr=replay[-1]["psnr"],

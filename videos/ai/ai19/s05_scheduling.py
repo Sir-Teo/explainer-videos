@@ -71,6 +71,12 @@ class Scheduling(VoiceoverScene):
         tag = note(rf"simulated: \ $8$ slots, \ ${len(arr)}$ requests, \ costs measured on this computer",
                    font_size=18).to_corner(UR, buff=0.2)
         fin_s = float(gs[:, 2].max())
+        n_req = len(arr)
+        done_s = label(rf"static batches: \ all ${n_req}$ requests done after ${fin_s:.1f}$ s; \ a new batch waits "
+                       r"for the longest answer of the last", font_size=20, color=STATICC)
+        done_s.next_to(top.frame[-1], DOWN, buff=0.3).align_to(top.frame, LEFT)
+        done_c = label(rf"continuous: \ done after ${t_c:.1f}$ s", font_size=20, color=CONTC)
+        done_c.next_to(bl, RIGHT, buff=0.6)
         hc = history_card(2022, r"Gyeong-In Yu et al., \ Orca", rf"iteration-level scheduling: \ "
                           rf"${F.ORCA['gain']}\times$ the throughput of FasterTransformer at the same latency, \ "
                           rf"{F.ORCA['model']}", width=5.6, font_size=18, color=CONTC)
@@ -88,12 +94,14 @@ class Scheduling(VoiceoverScene):
             self.play(FadeIn(tl), FadeIn(top.frame), FadeIn(am_top), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in top.bars], lag_ratio=0.01), run_time=3.0)
+            self.play(FadeIn(done_s))
             vo.wait_until("b")
             hc.move_to([3.6, -2.0, 0])
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(FadeOut(hc), FadeIn(bl), FadeIn(bot.frame), FadeIn(am_bot))
+            self.play(FadeOut(hc), FadeOut(done_s), FadeIn(bl), FadeIn(bot.frame), FadeIn(am_bot))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in bot.bars], lag_ratio=0.01), run_time=3.0)
+            self.play(FadeIn(done_c))
         self.wait(0.3)
         self.clear_scene()
 
@@ -107,13 +115,13 @@ class Scheduling(VoiceoverScene):
         head = label(rf"{400} requests, \ ${s['rate']:g}$ a second; \ prompts of ${s['prompt_mean']:.0f}$ tokens, "
                      rf"\ answers of ${s['out_mean']:.0f}$, \ on average", font_size=22, color=GREY_A)
         head.to_edge(UP, buff=0.35)
-        b1 = hbars(tp, [n[1] for n in names], [n[2] for n in names], width=3.6, row_h=0.62, font_size=22, lo=0,
+        b1 = hbars(tp, [n[1] for n in names], [n[2] for n in names], width=3.8, row_h=0.85, font_size=24, lo=0,
                    hi=max(tp) * 1.05, fmt_v=lambda v: rf"{v:.0f}")
-        b1.move_to([-2.2, 0.4, 0])
+        b1.move_to([-2.4, 0.0, 0])
         t1 = label(r"tokens written a second", font_size=22, color=GREY_A).next_to(b1, UP, buff=0.35)
-        b2 = hbars(tt, [n[1] for n in names], [n[2] for n in names], width=3.2, row_h=0.62, font_size=22, lo=0,
+        b2 = hbars(tt, [n[1] for n in names], [n[2] for n in names], width=3.4, row_h=0.85, font_size=24, lo=0,
                    hi=max(tt) * 1.05, fmt_v=lambda v: rf"{v:.2f}\,\text{{s}}" if v < 10 else rf"{v:.0f}\,\text{{s}}")
-        b2.move_to([3.9, 0.4, 0])
+        b2.move_to([3.9, 0.0, 0])
         t2 = label(r"median wait for the first token", font_size=22, color=GREY_A).next_to(b2, UP, buff=0.35)
         cost = s["cost"]
         model = note(rf"each step's time fitted to this computer's measurements: \ $a + b\,B + c \sum \text{{context}} "
@@ -142,12 +150,13 @@ class Scheduling(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(model))
             vo.wait_until("a")
+            self.play(FadeIn(t1), FadeIn(t2), *[FadeIn(r_.name) for r_ in b1], *[FadeIn(r_.name) for r_ in b2])
             vo.wait_until("b")
-            self.play(FadeIn(t1), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT),
-                                                               FadeIn(r_.val)) for r_ in b1], lag_ratio=0.4))
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val)) for r_ in b1],
+                                  lag_ratio=0.4))
             vo.wait_until("c")
-            self.play(FadeIn(t2), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT),
-                                                               FadeIn(r_.val)) for r_ in b2], lag_ratio=0.4))
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val)) for r_ in b2],
+                                  lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()
 
@@ -220,7 +229,7 @@ class Scheduling(VoiceoverScene):
         right = VGroup(pre, decs).arrange(RIGHT, buff=0.9).move_to([-1.8, 0.6, 0])
         arrows = VGroup(*[Arrow(pre.get_right(), d_.get_left(), buff=0.08, stroke_width=2, color=GREY_B,
                                 max_tip_length_to_length_ratio=0.15) for d_ in decs])
-        cache_l = label(r"caches sent across", font_size=16, color=GREY_B).next_to(arrows, UP, buff=0.05)
+        cache_l = label(r"sends each \\ prompt's cache", font_size=16, color=GREY_B).next_to(pre, DOWN, buff=0.15)
         lw = label(r"four alike", font_size=20, color=CONTC).next_to(wk, UP, buff=0.2)
         lr = label(r"one prefills, \ three decode", font_size=20, color=DISC).next_to(right, UP, buff=0.2)
         cols = [CONTC, DISC]

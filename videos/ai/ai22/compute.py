@@ -25,6 +25,7 @@ Items (vision.py, latents.py, denoise.py, tokens.py, unified.py, video.py, scene
     tsample     uniform against logit-normal training noise levels, three seeds, sampled with 1 to 40 steps
     shift       the resolution shift checked: letters drawn at 20, 40 and 80 pixels, the exact posterior over them
     denoisers   diffusion transformers (adaLN-Zero, adaLN, in-context), a U-Net, and REPA, at equal steps, three seeds
+    guidance    classifier-free guidance swept on the adaLN-Zero transformer: right letters, distance, variety
     tokens      two tokenizers (one scale, five scales) and three token generators: raster order, MaskGIT, VAR
     unified     one transformer that names, draws and edits letters (Transfusion's two losses)
     video       the token arithmetic of video models
@@ -38,7 +39,7 @@ Items (vision.py, latents.py, denoise.py, tokens.py, unified.py, video.py, scene
 from __future__ import annotations
 
 from videos.ai.ai22.base import CACHE, compute_judge, compute_video, load  # noqa: F401
-from videos.ai.ai22.denoise import compute_denoisers  # noqa: E402
+from videos.ai.ai22.denoise import compute_denoisers, compute_guidance  # noqa: E402
 from videos.ai.ai22.latents import compute_latents, compute_shift, compute_tsample  # noqa: E402
 from videos.ai.ai22.scene3d import compute_nerf, compute_splat  # noqa: E402
 from videos.ai.ai22.tokens import compute_tokens  # noqa: E402
@@ -54,6 +55,7 @@ ITEMS = {
     "tsample": compute_tsample,
     "shift": compute_shift,
     "denoisers": compute_denoisers,
+    "guidance": compute_guidance,
     "tokens": compute_tokens,
     "unified": compute_unified,
     "video": compute_video,

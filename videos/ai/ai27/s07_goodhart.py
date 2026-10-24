@@ -177,13 +177,11 @@ class Goodhart(VoiceoverScene):
             ruler.add(MathTex(r"n", font_size=20, color=GREY_B).next_to([x0_, y_r, 0], LEFT, buff=0.15))
             marks.add(ruler)
         # the procedure, while it is described, before the axes it fills
-        steps = VGroup(node_box(rf"${ns[-1]}$ lines per prompt", ASSIST, font_size=24),
-                       node_box(r"best-of-$n$: \ a reward model picks", PROXY, font_size=24),
-                       node_box(r"score the pick: \ reward model \ and \ gold", GOLD, font_size=24)
-                       ).arrange(RIGHT, buff=0.9).move_to(UP * 0.4)
-        if steps.width > 13.0:
-            steps.scale_to_fit_width(13.0)
-        s_arrows = VGroup(*[Arrow(steps[k].get_right(), steps[k + 1].get_left(), buff=0.1, color=GREY_B,
+        steps = VGroup(node_box(rf"${ns[-1]}$ lines per prompt", ASSIST, font_size=30, height=0.8),
+                       node_box(r"best-of-$n$: \ a reward model picks", PROXY, font_size=30, height=0.8),
+                       node_box(r"score the pick: \ reward model \ and \ gold", GOLD, font_size=30, height=0.8)
+                       ).arrange(DOWN, buff=0.75).move_to(UP * 0.3)
+        s_arrows = VGroup(*[Arrow(steps[k].get_bottom(), steps[k + 1].get_top(), buff=0.1, color=GREY_B,
                                   stroke_width=2.5, max_tip_length_to_length_ratio=0.25) for k in range(2)])
         s_cite = cite(r"after Gao, Schulman \& Hilton, \textit{Scaling laws for reward model overoptimization} "
                       r"(2023)")

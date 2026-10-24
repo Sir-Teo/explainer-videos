@@ -9,6 +9,36 @@ from videos.ai.ai19.common import (DECODEC, F, KVC, PART, WEIGHTC, hbars, human_
                                    take_away, x_)
 
 
+def heads_pic(kind: str, n: int = 8, groups: int = 2, width: float = 3.4) -> VGroup:
+    """One layer's attention heads and what each keeps per token (schematic): its own key and value (MHA), a key and
+    value shared by a group (GQA), or one compressed vector that every head's keys and values are rebuilt from (MLA)."""
+    dx = width / n
+    qs = VGroup(*[Circle(radius=0.11, stroke_width=1.5, stroke_color=C.QUERY, fill_color=C.QUERY, fill_opacity=0.35)
+                  .move_to([(i - (n - 1) / 2) * dx, 0.55, 0]) for i in range(n)])
+
+    def kv(x, w=0.16):
+        return VGroup(Rectangle(width=w, height=0.22, stroke_width=0, fill_color=C.KEY, fill_opacity=0.9),
+                      Rectangle(width=w, height=0.22, stroke_width=0, fill_color=C.VALUE, fill_opacity=0.9)
+                      ).arrange(RIGHT, buff=0.03).move_to([x, -0.35, 0])
+
+    links = VGroup()
+    if kind == "mha":
+        store = VGroup(*[kv(q.get_x()) for q in qs])
+        for q, s_ in zip(qs, store):
+            links.add(Line(q.get_bottom(), s_.get_top(), stroke_width=1.2, color=GREY_C))
+    elif kind == "gqa":
+        per = n // groups
+        store = VGroup(*[kv(np.mean([qs[g * per + j].get_x() for j in range(per)])) for g in range(groups)])
+        for i, q in enumerate(qs):
+            links.add(Line(q.get_bottom(), store[i // per].get_top(), stroke_width=1.2, color=GREY_C))
+    else:
+        store = VGroup(Rectangle(width=0.9, height=0.22, stroke_width=0, fill_color=C.LATENT, fill_opacity=0.9)
+                       .move_to([0, -0.35, 0]))
+        for q in qs:
+            links.add(Line(store[0].get_top(), q.get_bottom(), stroke_width=1.2, color=C.LATENT).set_stroke(opacity=0.6))
+    return VGroup(links, qs, store)
+
+
 class KVCache(VoiceoverScene):
     def construct(self):
         self.card()
@@ -45,6 +75,18 @@ class KVCache(VoiceoverScene):
             history_card(2024, r"DeepSeek-V2", rf"multi-head latent attention: \ ${F.DSV2['kv_cut']}\%$ less cache "
                          r"than DeepSeek 67B", width=4.1, font_size=18, color=C.LATENT),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.35)
+        pics = VGroup()
+        for kind, cap, col in (("mha", r"MHA: \ every head its own key and value", C.KEY),
+                               ("gqa", r"GQA: \ $4$ heads share each", KVC),
+                               ("mla", r"MLA: \ one compressed vector per token", C.LATENT)):
+            p_ = heads_pic(kind)
+            pics.add(VGroup(p_, label(cap, font_size=18, color=col).next_to(p_, DOWN, buff=0.15)))
+        pics.arrange(RIGHT, buff=0.9).move_to([0, -0.85, 0])
+        key = VGroup(*[VGroup(Square(0.16, stroke_width=0, fill_color=c_, fill_opacity=0.9),
+                              label(t, font_size=16, color=c_)).arrange(RIGHT, buff=0.08)
+                       for c_, t in ((C.QUERY, r"query head"), (C.KEY, r"key"), (C.VALUE, r"value"))]
+                     ).arrange(RIGHT, buff=0.35).next_to(pics, UP, buff=0.2)
+        tag = schematic_tag(corner=UR)
         with self.voiceover(
             "Part 15 built the key-value cache: every token a model has read leaves a key and a value in every "
             "attention head of every layer, so that the next token can look back at it without recomputing. "
@@ -55,16 +97,17 @@ class KVCache(VoiceoverScene):
             "vector per token, of size d c, plus a small key that carries the rotary positions, and rebuilds every "
             "head's keys and values from it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tag))
             step(0)
+            self.play(FadeIn(key), FadeIn(pics[0]))
             vo.wait_until("a")
             self.play(Indicate(rows[0], color=KVC))
             vo.wait_until("b")
             step(1)
-            self.play(FadeIn(hist[0], shift=UP * 0.2), FadeIn(hist[1], shift=UP * 0.2))
+            self.play(FadeIn(pics[1]), FadeIn(hist[0], shift=UP * 0.2), FadeIn(hist[1], shift=UP * 0.2))
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(hist[2], shift=UP * 0.2))
+            self.play(FadeIn(pics[2]), FadeIn(hist[2], shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -79,7 +122,7 @@ class KVCache(VoiceoverScene):
                 ("oss_full", r"gpt-oss-120b: \ $8$ groups of $64$", C.BITS),
                 ("ours", r"our novels model \ ($32$-bit)", C.NEURAL)]
         vals = [math.log10(pt[r[0]]) for r in rows]
-        bars = hbars(vals, [r[1] for r in rows], [r[2] for r in rows], width=4.6, row_h=0.62, font_size=22,
+        bars = hbars(vals, [r[1] for r in rows], [r[2] for r in rows], width=4.6, row_h=0.74, font_size=24,
                      lo=3.5, hi=7.0, fmt_v=lambda v: "", name_w=6.0)
         for b_, (key, _, col) in zip(bars, rows):
             b_.val.become(label(human_bytes(pt[key]).replace(" ", r"\ "), font_size=22, color=col).next_to(b_.bar, RIGHT,
@@ -129,11 +172,12 @@ class KVCache(VoiceoverScene):
         wll.next_to(ax.c2p(math.log10(300), math.log10(W70)), UP, buff=0.08, aligned_edge=LEFT)
         cr = k["cross_llama70"]
         cross = Dot(ax.c2p(math.log10(cr), math.log10(W70)), radius=0.08, color=KVC)
-        crl = label(rf"${cr / 1e3:.0f}$k tokens", font_size=20, color=KVC).next_to(cross, DOWN, buff=0.15)
+        crl = label(rf"${cr / 1e3:.0f}$k tokens", font_size=20, color=KVC).next_to(cross, UP, buff=0.15)
         mem = DashedLine(ax.c2p(math.log10(256), math.log10(80e9)), ax.c2p(6.05, math.log10(80e9)), color=GREY_C,
                          dash_length=0.05).set_stroke(opacity=0.6)
-        meml = label(r"one H100: \ $80$ GB", font_size=18, color=GREY_B).next_to(ax.c2p(5.2, math.log10(80e9)), DOWN,
-                                                                                  buff=0.08)
+        meml = label(r"one H100: \ $80$ GB", font_size=18, color=GREY_B).next_to(ax.c2p(math.log10(300),
+                                                                                         math.log10(80e9)), DOWN,
+                                                                               buff=0.08, aligned_edge=LEFT)
         osc = np.asarray(k["curve_oss"])
         osf = np.asarray(k["curve_oss_full"])
         i128 = int(np.argmin(np.abs(ctx - 131072)))
