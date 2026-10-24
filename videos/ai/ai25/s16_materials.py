@@ -158,10 +158,18 @@ class Materials(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, 0.6, 0])
         h_m, h_r = H["model"].mean(0), H["random"].mean(0)
         share = m["n_stable"] / m["n_candidates"]
-        rise = h_m[-1] > h_m[0] + 0.05
-        trend = (f"and it climbs as the surrogate learns, from {100 * h_m[0]:.0f} percent in the first round to "
-                 f"{100 * h_m[-1]:.0f} in the last" if rise else
-                 f"and it stays around {100 * h_m.mean():.0f} percent: in our toy the surrogate is good from the start")
+        hm0, hm1, hmax = 100 * h_m[0], 100 * h_m[-1], 100 * h_m.max()
+        if h_m[-1] > h_m[0] + 0.05:
+            trend = (f"and it climbs as the surrogate learns, from {hm0:.0f} percent in the first round to {hm1:.0f} in "
+                     "the last")
+        elif h_m[-1] < h_m.max() - 0.05 and int(np.argmax(h_m)) > 0:
+            trend = (f"rise to {hmax:.0f}, and then fall, to {hm1:.0f} in the last round, as the easiest stable "
+                     "compounds are used up; still several times the random rate")
+        elif h_m[-1] < h_m.max() - 0.05:
+            trend = (f"and then fall, to {hm1:.0f} in the last round, as the easiest stable compounds are used up; "
+                     "still several times the random rate")
+        else:
+            trend = f"and it stays around {100 * h_m.mean():.0f} percent: in our toy the surrogate is good from the start"
         tag = note(r"computed: \ a made-up chemistry, \ three seeds \ (band: \ min--max)", font_size=20)
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(

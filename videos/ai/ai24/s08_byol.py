@@ -196,6 +196,9 @@ class BYOL(VoiceoverScene):
                                                                                                 aligned_edge=LEFT,
                                                                                                 buff=0.12)
         leg.move_to([4.9, 0.2, 0])
+        even = DashedLine(ax.ax.c2p(0, 1.0), ax.ax.c2p(S_, 1.0), color=GREY_B, stroke_width=1.5)
+        evl = label(r"evenly spread", font_size=18, color=GREY_B).next_to(even, UP, buff=0.06).align_to(even, LEFT)
+        coll = label(r"collapsed", font_size=18, color=GREY_B).next_to(ax.ax.c2p(0, 0.0), UR, buff=0.08)
         tg = tag(r"computed: \ every seed of each method")
         with self.voiceover(
             "One meter for all of them: the spread of the embedding, scaled so that one means the vectors are spread "
@@ -205,6 +208,7 @@ class BYOL(VoiceoverScene):
             f"together at {ends['naive']:.2f}."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(leg), FadeIn(tg))
+            self.play(Create(even), FadeIn(evl), FadeIn(coll))
             vo.wait_until("a")
             self.play(Create(cs[0]), Create(cs[1]), Create(cs[2]), run_time=2.0)
             vo.wait_until("b")

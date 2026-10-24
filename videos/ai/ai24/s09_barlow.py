@@ -214,8 +214,10 @@ class Barlow(VoiceoverScene):
             self.play(FadeIn(m1), FadeIn(m2), FadeIn(l1), FadeIn(l2), FadeIn(sch), FadeIn(src))
             vo.wait_until("a")
             self.play(Indicate(Group(m1, m2), scale_factor=1.03))
+            self.play(FadeIn(cl), FadeIn(ch[0]), FadeIn(ch.names))
             vo.wait_until("b")
-            self.play(FadeIn(cl), FadeIn(ch))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.2), FadeIn(ch.whiskers),
+                      FadeIn(ch.vals))
             vo.wait_until("c")
             self.play(FadeIn(sig, shift=UP * 0.1))
         self.wait(0.3)

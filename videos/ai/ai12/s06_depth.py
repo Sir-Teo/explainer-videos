@@ -114,6 +114,12 @@ class Depth(VoiceoverScene):
         dr = {float(k): v for k, v in d["drift"].items()}
         order = sorted(alphas, key=lambda a: dr[a])
         best_a = order[0]
+        said1 = (
+            "CompleteP holds the learning rate most still, as it was designed to."
+            if best_a == 1.0 else
+            f"Here the steadiest is {SPOKEN[best_a]}: at our small depths and short runs, the differences are "
+            "about a grid step."
+        )
         with self.voiceover(
             f"Our character model again, made deep: {', '.join(str(v) for v in depths[:-1])} and {depths[-1]} "
             "residual blocks, each parametrization swept over nine learning rates, two seeds each. "
@@ -121,10 +127,7 @@ class Depth(VoiceoverScene):
             f"the best rate moves by {dr[0.0]:.1f} powers of ten between the shallowest and the deepest. "
             f"<bookmark mark='b'/> With one over root L, {dr[0.5]:.1f}. <bookmark mark='c'/> With CompleteP's "
             f"one over L, {dr[1.0]:.1f}. "
-            + ("CompleteP holds the learning rate most still, as it was designed to."
-               if best_a == 1.0 else
-               f"Here the steadiest is {SPOKEN[best_a]}: at our small depths and short runs, the differences are "
-               "about a grid step.")
+            + said1
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn), *[FadeIn(p[:4]) for p in panels])
             for k, mk in enumerate("abc"):
@@ -166,12 +169,15 @@ class Depth(VoiceoverScene):
                           r"deepest models; \ deep, narrow shapes become efficient", width=5.6, color=HIST)
         hc.scale(0.9).move_to([3.4, 2.0, 0])
         deeper = bl[1.0][-1] < bl[1.0][0]
+        said2 = (
+            f"With CompleteP, yes: {bl[1.0][0]:.2f} bits at {depths[0]} blocks, {bl[1.0][-1]:.2f} at {depths[-1]}, "
+            "each at its own best rate. " if deeper else
+            f"In our short runs, barely: {bl[1.0][0]:.2f} bits at {depths[0]} blocks, {bl[1.0][-1]:.2f} at "
+            f"{depths[-1]}. "
+        )
         with self.voiceover(
             "Two practical questions. Does depth pay? "
-            + (f"With CompleteP, yes: {bl[1.0][0]:.2f} bits at {depths[0]} blocks, {bl[1.0][-1]:.2f} at {depths[-1]}, "
-               "each at its own best rate. " if deeper else
-               f"In our short runs, barely: {bl[1.0][0]:.2f} bits at {depths[0]} blocks, {bl[1.0][-1]:.2f} at "
-               f"{depths[-1]}. ")
+            + said2
             + "<bookmark mark='a'/> And what does it cost to tune the shallow model and copy its rate to the deep "
             f"one? {cp[0.0]:.2f} bits with no depth scaling, {cp[0.5]:.2f} with one over root L, {cp[1.0]:.2f} with "
             "CompleteP. <bookmark mark='b'/> At scale, Dey and colleagues measured twelve percent less compute than "

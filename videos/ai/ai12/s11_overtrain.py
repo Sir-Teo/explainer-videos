@@ -55,6 +55,10 @@ class Overtrain(VoiceoverScene):
         law = MathTex(r"L(kN_{\text{opt}},\, D) = L^* \ \Rightarrow\ D = \Big(\frac{B}{L^* - E - A\,(kN_{\text{opt}})^{-\alpha}}\Big)^{1/\beta}",
                       font_size=28).to_edge(UP, buff=0.3)
         c75, c50 = float(np.interp(0.75, ks, cost)), float(np.interp(0.5, ks, cost))
+        said1 = (
+            f"Our own runs that reached the same loss with smaller models fall near the curve: {len(meas)} of them."
+            if len(meas) >= 2 else "Few of our runs reach that loss with a smaller model; those that do sit near the curve."
+        )
         with self.voiceover(
             "Chinchilla's optimum minimizes the cost of training. But a model is trained once and then used, maybe "
             "billions of times, and every use costs in proportion to its size. So it can pay to train a smaller "
@@ -63,8 +67,7 @@ class Overtrain(VoiceoverScene):
             f"model three quarters the size costs {100 * (c75 - 1):.0f} percent more training; half the size, "
             f"{100 * (c50 - 1):.0f} percent more; <bookmark mark='c'/> and below {kmin:.2f} of the size, no amount of "
             "data is enough: the small model's floor is above the target. <bookmark mark='d'/> "
-            + (f"Our own runs that reached the same loss with smaller models fall near the curve: {len(meas)} of them."
-               if len(meas) >= 2 else "Few of our runs reach that loss with a smaller model; those that do sit near the curve.")
+            + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             vo.wait_until("a")

@@ -64,17 +64,23 @@ class Data(VoiceoverScene):
         worst = means[-1] - means[0]
         rises = np.asarray(r[f"curve{logs[-1]}"])[:, 1]
         overfit = rises[-1] > rises.min() + 0.02
+        said1 = (
+            f"Four epochs cost only {d4:.3f} bits: nearly as good as new text. " if d4 < 0.03 else
+            f"Four epochs cost {d4:.3f} bits. "
+        )
+        said2 = (
+            f"At two hundred and fifty-six, the model memorizes its sample: the held-out loss falls, then climbs, "
+            f"and ends {worst:.2f} bits worse than fresh text." if overfit else
+            f"At two hundred and fifty-six, it ends {worst:.2f} bits worse than fresh text."
+        )
         with self.voiceover(
             "Good text is finite. What happens when a model has read it all and must read it again? Train our "
             f"character model on {total / 1e6:.1f} million characters every time, but drawn from fewer and fewer "
             "distinct ones, from one pass over fresh text down to two hundred and fifty-six passes over a small "
             "sample. <bookmark mark='a'/> "
-            + (f"Four epochs cost only {d4:.3f} bits: nearly as good as new text. " if d4 < 0.03 else
-               f"Four epochs cost {d4:.3f} bits. ")
+            + said1
             + f"Sixteen cost {d16:.3f}. <bookmark mark='b'/> "
-            + (f"At two hundred and fifty-six, the model memorizes its sample: the held-out loss falls, then climbs, "
-               f"and ends {worst:.2f} bits worse than fresh text." if overfit else
-               f"At two hundred and fifty-six, it ends {worst:.2f} bits worse than fresh text.")
+            + said2
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag), FadeIn(lg))
             self.play(LaggedStart(*[Create(l_) for l_ in lines[:2]], lag_ratio=0.3), run_time=2.0)
@@ -128,6 +134,11 @@ class Data(VoiceoverScene):
                     label(rf"Muennighoff et al.: \ $R^* = {Rp:.1f}$ \ (up to $9$ billion parameters)", font_size=20, color=GREY_A))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.7, -1.4, 0])
         cap = (1 + Rs)
+        said3 = (
+            f"Muennighoff's team, with models of up to nine billion parameters, found {Rp:.1f}. Our small "
+            "model gets less from repeating, " if Rs < Rp / 2 else
+            f"Muennighoff's team found {Rp:.1f}, "
+        )
         with self.voiceover(
             "How much is a repeat worth? In 2023, Niklas Muennighoff and colleagues proposed a simple answer. "
             "<bookmark mark='a'/> Suppose each pass over the same text is worth a fixed fraction less than the one "
@@ -135,9 +146,7 @@ class Data(VoiceoverScene):
             "shrinking terms, <bookmark mark='c'/> which saturates: however often you repeat, you never get more "
             "than U times one plus R-star. <bookmark mark='d'/> Read each of our runs off the fresh-data curve, to "
             f"find how much new text it was worth, and fit R-star: {Rs:.1f} passes. "
-            + (f"Muennighoff's team, with models of up to nine billion parameters, found {Rp:.1f}. Our small "
-               "model gets less from repeating, " if Rs < Rp / 2 else
-               f"Muennighoff's team found {Rp:.1f}, " )
+            + said3
             + f"and the ceiling is about {cap:.0f} times the distinct text."
         ) as vo:
             vo.wait_until("a")

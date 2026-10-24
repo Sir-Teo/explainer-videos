@@ -142,18 +142,24 @@ class MuP(VoiceoverScene):
         grows = s_sp > 0.2
         flat = abs(s_mu) < 0.15
         tag = note(r"computed: \ Adam, learning rate $0.01$, \ the same four batches at every width").to_corner(DL, buff=0.2)
+        said1 = (
+            f"the change in the output scores grows with the width, about as the width to the power {s_sp:.2f}: "
+            "a learning rate that is right for a small model is too big for a large one, and eventually blows it "
+            "up. " if grows else
+            f"the output scores' change barely grows with width here, a power of {s_sp:.2f}. "
+        )
+        said2 = (
+            f"the lines are flat, a power of {s_mu:.2f}: every layer changes by the same amount at every width, "
+            "which is what the derivation asked for." if flat else
+            f"the change grows as the width to the {s_mu:.2f}, much less than the usual way."
+        )
         with self.voiceover(
             "Yang's test for whether a parametrization is right is called a coordinate check: train for a few steps "
             "at many widths, with one learning rate, and measure how much each layer's activations change. "
             "<bookmark mark='a'/> In the usual parametrization, "
-            + (f"the change in the output scores grows with the width, about as the width to the power {s_sp:.2f}: "
-               "a learning rate that is right for a small model is too big for a large one, and eventually blows it "
-               "up. " if grows else
-               f"the output scores' change barely grows with width here, a power of {s_sp:.2f}. ")
+            + said1
             + "<bookmark mark='b'/> In mu-P, "
-            + (f"the lines are flat, a power of {s_mu:.2f}: every layer changes by the same amount at every width, "
-               "which is what the derivation asked for." if flat else
-               f"the change grows as the width to the {s_mu:.2f}, much less than the usual way.")
+            + said2
         ) as vo:
             self.play(FadeIn(key), FadeIn(yl), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
             vo.wait_until("a")
