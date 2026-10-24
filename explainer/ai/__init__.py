@@ -152,6 +152,7 @@ TIMELINE = [
     (1993, r"Siamese networks"),
     (1994, r"MPI: collective communication"),
     (1995, r"support vector machines"),
+    (1996, r"unit-selection speech synthesis"),
     (1997, r"LSTM; Deep Blue"),
     (1998, r"LeNet-5; MNIST"),
     (1999, r"the GPU"),
