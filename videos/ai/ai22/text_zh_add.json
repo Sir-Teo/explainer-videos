@@ -479,7 +479,12 @@
     "the same $24$ photographs, \\ $50$ steps each, \\ three seeds; \\ on this CPU, training took $3$ s (NeRF) and $24$ s (Gaussians)": "同样的$24$张照片，\\ 各$50$步，\\ 三个种子；\\ 在这台CPU上，训练用了$3$秒（NeRF）和$24$秒（高斯）",
     "ours leaves out the direction: \\ our scene looks the same from every side": "我们的模型不输入方向：\\ 我们的场景从各个方向看都一样",
     "noise level $t$": "噪声水平$t$",
-    "the letter asked for": "所要的字母"
+    "the letter asked for": "所要的字母",
+    "rebuild error $0.137$; \\ the judge reads the letter in $0\\%$ of real frames, \\ $0\\%$ of rebuilt ones": "重建误差$0.137$；\\ 判别网络在$0\\%$的真实帧、\\ $0\\%$的重建帧里读对了字母",
+    "three models of $708{,}100$ weights, \\ three seeds each \\ (bands: \\ min to max)": "三个模型，各$708{,}100$个权重，\\ 各三个种子 \\ （色带：\\ 最小到最大）",
+    "together": "一起画",
+    "separately": "分开画",
+    "$64$ clips, \\ three seeds; \\ real clips' wobble: \\ $0.40$ px": "$64$个片段，\\ 三个种子；\\ 真实片段的抖动：\\ $0.40$像素"
   },
   "patterns": [
     [
