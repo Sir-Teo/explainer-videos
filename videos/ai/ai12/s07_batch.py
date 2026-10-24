@@ -110,15 +110,18 @@ class Batch(VoiceoverScene):
         tag = note(rf"computed: \ width ${int(b['width'])}$, \ batches ${int(Bs[0])}$ to ${int(Bs[-1]):,}$, \ the best of "
                    r"three learning rates at each".replace(",", "{,}")).to_corner(DL, buff=0.2)
         grows = bcrit[-1] > bcrit[0] * 1.3
+        said1 = (
+            f"the hyperbola moves out, and the critical batch grows: {bcrit[1]:,.0f}, then {bcrit[2]:,.0f}. The "
+            "closer a model gets to the end of training, the larger the batch it can use."
+            if grows else
+            f"the critical batch is {bcrit[1]:,.0f} and {bcrit[2]:,.0f}: at our scale it barely changes."
+        )
         with self.voiceover(
             f"Measure it. Train our character model with batches from {int(Bs[0])} to {int(Bs[-1]):,} characters, "
             "each at the best of three learning rates, and count the steps and the characters it takes to reach a "
             f"loss. <bookmark mark='a'/> To reach {levels[0]:.1f} bits, the points fall on a hyperbola, with a "
             f"critical batch of about {bcrit[0]:,.0f}. <bookmark mark='b'/> To reach lower losses, "
-            + (f"the hyperbola moves out, and the critical batch grows: {bcrit[1]:,.0f}, then {bcrit[2]:,.0f}. The "
-               "closer a model gets to the end of training, the larger the batch it can use."
-               if grows else
-               f"the critical batch is {bcrit[1]:,.0f} and {bcrit[2]:,.0f}: at our scale it barely changes.")
+            + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
             vo.wait_until("a")
@@ -159,14 +162,17 @@ class Batch(VoiceoverScene):
                          r"$469$ billion tokens", width=5.8, color=HIST)).arrange(DOWN, buff=0.15).move_to([3.6, -1.7, 0])
         ratio = noise / bcrit
         agree = np.all(np.isfinite(ratio)) and np.all((ratio > 0.2) & (ratio < 5))
+        said2 = (
+            f"They agree to within a factor of {max(ratio.max(), 1 / ratio.min()):.1f}: rough, as McCandlish and "
+            "colleagues found too, but the same order, from a single measurement instead of a sweep. "
+            if agree else
+            "Here they disagree by more than a factor of five: the simple noise scale ignores the curvature, and "
+            "Adam reshapes the noise. "
+        )
         with self.voiceover(
             "Is the critical batch really the noise scale? We can measure the noise scale directly, from the sizes "
             "of gradients at two batch sizes, as the loss passes each level. <bookmark mark='a'/> "
-            + (f"They agree to within a factor of {max(ratio.max(), 1 / ratio.min()):.1f}: rough, as McCandlish and "
-               "colleagues found too, but the same order, from a single measurement instead of a sweep. "
-               if agree else
-               "Here they disagree by more than a factor of five: the simple noise scale ignores the curvature, and "
-               "Adam reshapes the noise. ")
+            + said2
             + "<bookmark mark='b'/> Kaplan's laws found the critical batch growing as the loss falls, and later work "
             "found that it grows with the amount of data, not the size of the model. So large runs raise their batch "
             "as they go: DeepSeek-V3 grew its batch fivefold, from 3,072 sequences to 15,360, over its first 469 "

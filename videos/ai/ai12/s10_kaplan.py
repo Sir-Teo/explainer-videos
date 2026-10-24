@@ -105,17 +105,20 @@ class Kaplan(VoiceoverScene):
                          r"and an optimizer setting ($\beta_2$) untuned at small batches", width=5.6, color=HIST))
         cards.arrange(DOWN, buff=0.15).move_to([3.4, -1.55, 0])
         bigger = a_ne > a_all + 0.03
+        said1 = (
+            f"it grows with slope {a_ne:.2f}: the small models look smaller than they are, so the law looks "
+            "steeper. In 2024 Tim Pearce and Jinyeop Song showed that counting this way, at Kaplan's small scale, "
+            "turns Chinchilla's one half into something close to Kaplan's 0.73. " if bigger else
+            f"the slope is {a_ne:.2f}: in our models the left-out share is too small to bend it much. In 2024 Tim "
+            "Pearce and Jinyeop Song showed that at Kaplan's small scale, counting this way turns one half into "
+            "something close to 0.73. "
+        )
         with self.voiceover(
             "Part of the answer is how you count. Kaplan counted parameters without the embeddings, and at small "
             "scale those are a large share of a model. <bookmark mark='a'/> Our own runs show the effect. The same "
             f"budgets, the same best models: counting all their parameters, the best size grows with slope "
             f"{a_all:.2f}. <bookmark mark='b'/> Counting only the hidden layers, "
-            + (f"it grows with slope {a_ne:.2f}: the small models look smaller than they are, so the law looks "
-               "steeper. In 2024 Tim Pearce and Jinyeop Song showed that counting this way, at Kaplan's small scale, "
-               "turns Chinchilla's one half into something close to Kaplan's 0.73. " if bigger else
-               f"the slope is {a_ne:.2f}: in our models the left-out share is too small to bend it much. In 2024 Tim "
-               "Pearce and Jinyeop Song showed that at Kaplan's small scale, counting this way turns one half into "
-               "something close to 0.73. ")
+            + said1
             + "<bookmark mark='c'/> The same year, Tomer Porian and colleagues found the rest: the cost of the last "
             "layer, the length of the warmup, and an optimizer setting left untuned at small batches. Fix all three, "
             "and Kaplan's own setup gives Chinchilla's answer."

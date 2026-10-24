@@ -179,15 +179,18 @@ class Wide(VoiceoverScene):
                      label(r"its linearization (dashed)", font_size=20, color=LAZY)).arrange(RIGHT, buff=0.4)
         key.next_to(pans, DOWN, buff=0.12)
         lazy_ok = -0.75 < sk < -0.3
+        said1 = (
+            "Both close to minus a half. Each of the n weights moves by about one over the square root of n: too "
+            "little to change what any unit computes, yet together enough to move the output. "
+            if lazy_ok else
+            "Both shrink with width, though not exactly at the rate of one over root n the theory predicts at "
+            "infinite width. "
+        )
         with self.voiceover(
             "Check it, on that one-layer network, trained by gradient descent on ten points, at widths from thirty "
             "to thirty thousand. <bookmark mark='a'/> Measure how far the weights travel, relative to where they "
             f"started: the slope is {sw:.2f}. <bookmark mark='b'/> And how far the kernel moves: slope {sk:.2f}. "
-            + ("Both close to minus a half. Each of the n weights moves by about one over the square root of n: too "
-               "little to change what any unit computes, yet together enough to move the output. "
-               if lazy_ok else
-               "Both shrink with width, though not exactly at the rate of one over root n the theory predicts at "
-               "infinite width. ")
+            + said1
             + "<bookmark mark='c'/> So a wide network trains like its own linearization. At a hundred units, the "
             f"trained function strays from the linear prediction by up to {gap100:.2f}; at ten thousand, by "
             f"{gap10k:.2f}."

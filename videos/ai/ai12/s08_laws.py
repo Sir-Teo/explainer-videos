@@ -183,16 +183,19 @@ class Laws(VoiceoverScene):
         sp = max(spread)
         noise = note(rf"three seeds at widths $64$ and $256$: \ at most ${sp:.3f}$ bits apart").to_corner(DL, buff=0.2)
         aN, aD = float(LN["a"]), float(LD["a"])
+        said1 = (
+            "Our exponents are much larger than Kaplan's: our models see only eight characters at a time, so "
+            "there is less to learn, and they learn it fast. A different task, a different exponent: what carries "
+            "over is the shape." if min(aN, aD) > 0.15 else
+            "Our exponents are close to Kaplan's, though the task is different: what carries over is the shape."
+        )
         with self.voiceover(
             "First, one variable at a time, as Kaplan did. Hold the data large, two to the twenty-four characters, "
             "and vary the size. <bookmark mark='a'/> The loss falls toward a floor along a power law: "
             f"L equals {LN['E']:.2f} plus a constant over N to the {aN:.2f}. <bookmark mark='b'/> Hold the "
             f"size large, width {wD}, and vary the data: the exponent is {aD:.2f}. <bookmark mark='c'/> "
             f"Different seeds land at most {sp:.3f} bits apart, small next to these curves. "
-            + ("Our exponents are much larger than Kaplan's: our models see only eight characters at a time, so "
-               "there is less to learn, and they learn it fast. A different task, a different exponent: what carries "
-               "over is the shape." if min(aN, aD) > 0.15 else
-               "Our exponents are close to Kaplan's, though the task is different: what carries over is the shape.")
+            + said1
         ) as vo:
             self.play(FadeIn(hd), *[FadeIn(p[:4]) for p in pans], FadeIn(t1), FadeIn(t2))
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in pans[0][4]], lag_ratio=0.1))

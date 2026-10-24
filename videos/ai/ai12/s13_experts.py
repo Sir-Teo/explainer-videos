@@ -72,15 +72,18 @@ class Experts(VoiceoverScene):
         cards.scale(0.82).move_to([4.6, -1.35, 0])
         tag = note(r"two seeds each; \ the dense models are the sweep's").to_corner(DL, buff=0.2)
         better = mm[-1] < mm[0] - 0.01
+        said1 = (
+            f"The loss keeps falling as the experts are added, though each doubling helps less. With eight experts "
+            f"it matches a dense model of about {effN[i8]:,.0f} parameters, {mult:.1f} times our base model, for "
+            "the compute of the base model. " if better else
+            "At our size the experts barely help: the router has too little to tell apart. "
+        )
         with self.voiceover(
             "In a dense model, every parameter works on every character, so compute and parameters grow together. "
             "A mixture of experts, from part sixteen, breaks the link: many experts, and a router that sends each "
             "character to one. <bookmark mark='a'/> Split our model's hidden layer into more and more experts, "
             "keeping the work per character the same. "
-            + (f"The loss keeps falling as the experts are added, though each doubling helps less. With eight experts "
-               f"it matches a dense model of about {effN[i8]:,.0f} parameters, {mult:.1f} times our base model, for "
-               "the compute of the base model. " if better else
-               "At our size the experts barely help: the router has too little to tell apart. ")
+            + said1
             + "<bookmark mark='b'/> DeepMind measured this in 2022: the loss falls with the number of experts, and "
             "the gain shrinks as the base model grows. Since then experts have become smaller and more numerous: "
             "DeepSeek-V3 has two hundred and fifty-six of them in each layer, and uses eight for each token."
@@ -141,15 +144,18 @@ class Experts(VoiceoverScene):
         grows = gD > 0.05
         d4 = delta[i, :, bits.index(4)]
         okk = np.isfinite(d4)
+        said2 = (
+            f"the damage grows with training: at four bits, {d4[okk][0]:.3f} bits after two to the "
+            f"{int(lD[okk][0])} characters, {d4[okk][-1]:.3f} after two to the {int(lD[okk][-1])}. A model that "
+            "has read more has packed more into each weight, so rounding hurts it more. "
+            if grows and d4[okk][-1] > d4[okk][0] else
+            "the damage barely depends on how long the model was trained. "
+        )
         with self.voiceover(
             "Parameters also cost memory, and that can be cut by storing them with fewer bits. Round every weight "
             "of our trained models to a few bits, after training, and measure what it costs. "
             "<bookmark mark='a'/> At width 256, "
-            + (f"the damage grows with training: at four bits, {d4[okk][0]:.3f} bits after two to the "
-               f"{int(lD[okk][0])} characters, {d4[okk][-1]:.3f} after two to the {int(lD[okk][-1])}. A model that "
-               "has read more has packed more into each weight, so rounding hurts it more. "
-               if grows and d4[okk][-1] > d4[okk][0] else
-               "the damage barely depends on how long the model was trained. ")
+            + said2
             + f"<bookmark mark='b'/> Fitted to all our runs, the extra loss grows like D to the {gD:.2f}, shrinks like "
             f"N to the {gN:.2f}, and falls exponentially with every bit kept. <bookmark mark='c'/> In 2024 Tanishq "
             "Kumar and colleagues found the same form in four hundred and sixty-five runs: past some point, more "

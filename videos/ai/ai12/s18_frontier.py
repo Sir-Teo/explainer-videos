@@ -92,12 +92,15 @@ class Frontier(VoiceoverScene):
         slow = label(r"$L \propto C^{-0.050}$ \ (Kaplan): \ halving the loss takes $2^{1/0.05} \approx 10^{6}$ times "
                      r"the compute", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
         ok = err < 0.03
+        said1 = (
+            ", and it does not drift as the compute grows: the law extrapolates. " if ok and abs(bias) < err else
+            f", and it {'over' if bias > 0 else 'under'}estimates the loss as compute grows: a hint of curvature. "
+        )
         with self.voiceover(
             "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's "
             f"formula on only our {n_fit} cheapest runs, and predict the other {n_test}, up to ten times costlier. "
             f"<bookmark mark='a'/> On average the prediction is off by {err:.3f} bits, {mx:.3f} at worst"
-            + (", and it does not drift as the compute grows: the law extrapolates. " if ok and abs(bias) < err else
-               f", and it {'over' if bias > 0 else 'under'}estimates the loss as compute grows: a hint of curvature. ")
+            + said1
             + "<bookmark mark='b'/> That is the sense in which pretraining has not stalled: the loss keeps falling "
             "along its curve. But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the "
             "loss takes a million times the compute. What is debated is not the curve, but whether each step down "

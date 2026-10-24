@@ -105,7 +105,7 @@ class Lazy(VoiceoverScene):
             return VGroup(band(ax, sx, te.min(0), te.max(0), col, 0.2), curve(ax, sx, te.mean(0), col, 3.5))
 
         lazy, rich = runs(nc, LAZY), runs(mc, RICH)
-        task = VGroup(MathTex(r"y = |\,w^* \!\cdot x\,|", font_size=34),
+        task = VGroup(MathTex(r"y = (w^* \!\cdot x)^2 - 1", font_size=34),
                       label(rf"$x$ in ${int(r['d'])}$ dimensions, \ ${int(r['n'])}$ examples; \\ $w^*$ hidden", font_size=22,
                             color=GREY_A),
                       label(rf"two layers, \ width ${int(r['width']):,}$".replace(",", "{,}"), font_size=22, color=GREY_A))
@@ -123,16 +123,20 @@ class Lazy(VoiceoverScene):
                    r"learning rates").to_corner(DL, buff=0.2)
         ratio = nt.mean() / mt.mean()
         wins = mt.max() < nt.min()
+        said1 = (
+            f"Its error is {ratio:.1f} times smaller, and every seed beats every lazy seed."
+            if wins else f"Its error is {ratio:.1f} times smaller on average, though the seeds overlap."
+        )
         with self.voiceover(
-            "Does it matter? Here is a task where it does. The answer is the absolute value of x along one hidden "
-            f"direction, w-star, with x in {int(r['d'])} dimensions and {int(r['n'])} examples to learn from. "
+            "Does it matter? Here is a task where it does. The answer is the square of how far x points along one "
+            f"hidden direction, w-star, minus one, with x in {int(r['d'])} dimensions and {int(r['n'])} examples to "
+            "learn from. "
             "<bookmark mark='a'/> Train a wide two-layer network the lazy way, with the neural tangent kernel's "
             "scaling. <bookmark mark='b'/> It ends up where kernel regression with its starting kernel ends: the "
             "lazy limit, computed exactly. <bookmark mark='c'/> Now the same network, the same data and the same "
             "number of steps, scaled the mean-field way: divide the output by n instead of its square root, and "
             "multiply the learning rate by n, so every unit moves by a fixed amount. "
-            + (f"Its error is {ratio:.1f} times smaller, and every seed beats every lazy seed."
-               if wins else f"Its error is {ratio:.1f} times smaller on average, though the seeds overlap.")
+            + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(guess), FadeIn(gl), FadeIn(task),
                       FadeIn(tag))

@@ -861,7 +861,13 @@ ZH.update({
         "{F['model'][:, -1].mean():.0f}个，而随机挑选找到{F['random'][:, -1].mean():.0f}个。",
 
     "f'and it climbs as the surrogate learns":
-        '而且随着代理模型的学习不断上升，从第一轮的{100 * h_m[0]:.0f}%升到最后一轮的{100 * h_m[-1]:.0f}%',
+        '而且随着代理模型的学习不断上升，从第一轮的{hm0:.0f}%升到最后一轮的{hm1:.0f}%',
+
+    "f'rise to {hmax:.0f}, and then fall, to":
+        '升到{hmax:.0f}%，然后随着最容易找到的稳定化合物被用光而下降，最后一轮是{hm1:.0f}%；仍是随机命中率的好几倍',
+
+    "f'and then fall, to {hm1:.0f} in the last round":
+        '然后随着最容易找到的稳定化合物被用光而下降，最后一轮是{hm1:.0f}%；仍是随机命中率的好几倍',
 
     "f'and it stays around":
         '而且一直在{100 * h_m.mean():.0f}%左右：在我们的玩具里，代理模型从一开始就不错',

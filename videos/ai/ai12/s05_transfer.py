@@ -59,18 +59,27 @@ class Transfer(VoiceoverScene):
         bsp = [10 ** v for v in m["bests"]["sp"]]
         transfer = drift["sp"] >= drift["mup"] + 0.4
         wider = bl["mup"][-1] < bl["mup"][0]
+        said1 = (
+            f"The best learning rate drifts as the model grows: from {bsp[0]:.1e} at the smallest to "
+            f"{bsp[-1]:.1e} at the largest, {drift['sp']:.1f} powers of ten. Tune the small model, copy its rate, "
+            "and the big one is mistuned. " if transfer else
+            f"Over this range the best rate moves by {drift['sp']:.1f} powers of ten. "
+        )
+        said2 = (
+            f"the valleys line up: the best rate moves by {drift['mup']:.1f} at most. "
+            if drift["mup"] <= 0.25 else f"the best rate moves by {drift['mup']:.1f}. "
+        )
+        said3 = (
+            f"And wider is better at every rate: {bl['mup'][0]:.2f} bits at the smallest width, "
+            f"{bl['mup'][-1]:.2f} at the largest." if wider else ""
+        )
         with self.voiceover(
             "Now the test that matters: sweep the learning rate at three widths, sixty-four to a thousand and "
             "twenty-four, two seeds each, the usual way first. <bookmark mark='a'/> "
-            + (f"The best learning rate drifts as the model grows: from {bsp[0]:.1e} at the smallest to "
-               f"{bsp[-1]:.1e} at the largest, {drift['sp']:.1f} powers of ten. Tune the small model, copy its rate, "
-               "and the big one is mistuned. " if transfer else
-               f"Over this range the best rate moves by {drift['sp']:.1f} powers of ten. ")
+            + said1
             + "<bookmark mark='b'/> In mu-P "
-            + (f"the valleys line up: the best rate moves by {drift['mup']:.1f} at most. "
-               if drift["mup"] <= 0.25 else f"the best rate moves by {drift['mup']:.1f}. ")
-            + (f"And wider is better at every rate: {bl['mup'][0]:.2f} bits at the smallest width, "
-               f"{bl['mup'][-1]:.2f} at the largest." if wider else "")
+            + said2
+            + said3
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn))
             p = panels[0]
@@ -124,12 +133,15 @@ class Transfer(VoiceoverScene):
         if cards.height > 6.6:
             cards.scale_to_fit_height(6.6)
         pen_sp, pen_mu = cp["sp"] - bl["sp"][-1], cp["mup"] - bl["mup"][-1]
+        said4 = (
+            f"The usual way, that costs {pen_sp:.2f} bits against the large model's own best; in mu-P, "
+            f"{pen_mu:.2f}." if pen_sp > pen_mu + 0.01 else
+            f"Here the copied rate costs {pen_sp:.2f} bits the usual way and {pen_mu:.2f} in mu-P."
+        )
         with self.voiceover(
             "Here is what that means in practice. Tune the smallest model, and train the largest with its learning "
             "rate. <bookmark mark='a'/> "
-            + (f"The usual way, that costs {pen_sp:.2f} bits against the large model's own best; in mu-P, "
-               f"{pen_mu:.2f}." if pen_sp > pen_mu + 0.01 else
-               f"Here the copied rate costs {pen_sp:.2f} bits the usual way and {pen_mu:.2f} in mu-P.")
+            + said4
             + " <bookmark mark='b'/> At scale, this is what mu-P was built for. In 2022, Yang and colleagues tuned "
             "a forty-million-parameter model, copied its settings to a GPT-3 of six point seven billion, and beat "
             "the published one, for seven percent of the cost of one training run. <bookmark mark='c'/> In 2024, "

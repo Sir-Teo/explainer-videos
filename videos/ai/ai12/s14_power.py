@@ -61,6 +61,11 @@ class Power(VoiceoverScene):
         cite_.to_edge(UP, buff=0.12).shift(RIGHT * 0.0)
         s8, t8 = float(z[f"slope{dims[-1]}"]), -4 / dims[-1]
         late = abs(s8 - t8) > 0.1
+        said1 = (
+            f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
+            f"too coarse: {s8:.2f}, on its way to {t8:.2f}." if late else
+            "The slopes match four over d."
+        )
         with self.voiceover(
             "Why should loss fall as a power law at all? One answer, from Utkarsh Sharma and Jared Kaplan in 2020: "
             "real data lies near a surface of low dimension d inside its huge space. A model with N parameters cuts "
@@ -69,9 +74,7 @@ class Power(VoiceoverScene):
             "square of the size. <bookmark mark='c'/> Square again for a squared loss: the loss falls like N to the "
             "minus four over d. A power law, with the exponent set by the data's dimension. "
             "<bookmark mark='d'/> Check it: a smooth function on surfaces of dimension 1, 2, 4 and 8. "
-            + (f"The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still "
-               f"too coarse: {s8:.2f}, on its way to {t8:.2f}." if late else
-               "The slopes match four over d.")
+            + said1
             + " Low-dimensional data, steep laws; language, by this account, is high-dimensional."
         ) as vo:
             self.play(FadeIn(cite_))
@@ -185,17 +188,23 @@ class Power(VoiceoverScene):
         order = [int(steps[np.argmax(run[:, k] < 0.1)]) if (run[:, k] < 0.1).any() else 10 ** 9 for k in range(T)]
         in_order = np.corrcoef(np.arange(T)[np.array(order) < 10 ** 9], np.array(order)[np.array(order) < 10 ** 9])[0, 1] \
             if sum(o < 10 ** 9 for o in order) > 3 else 0.0
+        said2 = (
+            "The common subtasks drop first, the rare ones later. " if in_order > 0.5 else
+            "The order roughly follows how common they are. "
+        )
+        said3 = (
+            f"The theory's exponent here is {float(q['alpha']):.1f}; ours is steeper, because a wider network also "
+            "learns each subtask more cleanly." if sN < -float(q["alpha"]) - 0.2 else
+            f"close to the theory's {float(q['alpha']):.1f}."
+        )
         with self.voiceover(
             f"Here is one network, of width {widths[wi]}, learning the subtasks. <bookmark mark='a'/> Each subtask's "
             "loss sits at one bit, a coin flip, and then drops, suddenly. "
-            + ("The common subtasks drop first, the rare ones later. " if in_order > 0.5 else
-               "The order roughly follows how common they are. ")
+            + said2
             + f"By the end it has learned {n_learn} of the {T}. <bookmark mark='b'/> The average over the mix, in white, "
             "is smooth: many sudden steps, added up. <bookmark mark='c'/> And across sizes, wider networks learn more "
             f"subtasks, and the average loss falls along a power law, slope {sN:.2f}. "
-            + (f"The theory's exponent here is {float(q['alpha']):.1f}; ours is steeper, because a wider network also "
-               "learns each subtask more cleanly." if sN < -float(q["alpha"]) - 0.2 else
-               f"close to the theory's {float(q['alpha']):.1f}.")
+            + said3
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
             vo.wait_until("a")

@@ -18,7 +18,7 @@ Items:
                kernel move (about 1/sqrt(width)), and the trained net against its own linearization
     lazy       Part 11's character model, wider and wider, plain gradient descent with neural-tangent step sizes: how
                much its hidden features change in training
-    rich       lazy against rich: a two-layer net learning |w*.x| in 32 dimensions from 256 examples, in the
+    rich       lazy against rich: a two-layer net learning (w*.x)^2 - 1 in 32 dimensions from 256 examples, in the
                neural-tangent and the mean-field (muP) parametrizations, three seeds, and kernel regression
     coord      muP's coordinate check: how much each layer's activations change in the first Adam steps, widths 64
                to 4,096, standard parametrization against muP

@@ -98,17 +98,20 @@ class Emerge(VoiceoverScene):
         tag = note(rf"computed: \ every width of the sweep, \ trained on $2^{{22}}$ characters").to_corner(DL, buff=0.2)
         sa, s8 = float(e["share_acc"]), float(e["share_exact8"])
         sharper = s8 > sa + 0.1
+        said1 = (
+            f"Of the whole rise in eight-character answers, {100 * s8:.0f} percent comes in the top third of our "
+            f"sizes, against {100 * sa:.0f} percent for single characters. The same models, the same skill: only "
+            "the score changed." if sharper else
+            f"In our size range the difference is modest: {100 * s8:.0f} against {100 * sa:.0f} percent of the rise "
+            "in the top third of sizes."
+        )
         with self.voiceover(
             "We can watch it happen on our own models. The task: from two thousand places in held-out text, write the "
             "next characters exactly. <bookmark mark='a'/> Score each character on its own, and the share right "
             f"rises smoothly with size, from {100 * acc[0]:.0f} to {100 * acc[-1]:.0f} percent. "
             "<bookmark mark='b'/> Score whole answers instead. One character: the same curve. Two, four, eight: "
             "flatter and flatter at the start, steeper at the end. "
-            + (f"Of the whole rise in eight-character answers, {100 * s8:.0f} percent comes in the top third of our "
-               f"sizes, against {100 * sa:.0f} percent for single characters. The same models, the same skill: only "
-               "the score changed." if sharper else
-               f"In our size range the difference is modest: {100 * s8:.0f} against {100 * sa:.0f} percent of the rise "
-               "in the top third of sizes.")
+            + said1
         ) as vo:
             self.play(FadeIn(task), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
             vo.wait_until("a")
@@ -154,12 +157,15 @@ class Emerge(VoiceoverScene):
             if tot > 0.3:
                 drops.append(float(np.max(v[:-1] - v[1:]) / tot))
         cliff = len(drops) >= 3 and float(np.mean(drops)) > 0.5
+        said2 = (
+            f"and it falls off a cliff at its own size: on average {100 * np.mean(drops):.0f} percent of the fall "
+            "happens between two neighbouring sizes, the common subtasks first. " if cliff else
+            "and each one falls at its own size, more steeply than the average, the common subtasks first. "
+        )
         with self.voiceover(
             "But some suddenness is real. In the quanta toy, each subtask is either solved or not. Plot each one's "
             "final loss against the network's size, "
-            + (f"and it falls off a cliff at its own size: on average {100 * np.mean(drops):.0f} percent of the fall "
-               "happens between two neighbouring sizes, the common subtasks first. " if cliff else
-               "and each one falls at its own size, more steeply than the average, the common subtasks first. ")
+            + said2
             + "<bookmark mark='a'/> Only the average is smooth. A benchmark that measures one narrow skill sees "
             "a cliff; the loss, which averages over everything, sees a power law. <bookmark mark='b'/> Later work "
             "made this useful. In 2024 Zhengxiao Du and colleagues found that abilities appear when the pretraining "

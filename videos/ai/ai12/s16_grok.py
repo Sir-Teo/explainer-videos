@@ -122,13 +122,16 @@ class Grok(VoiceoverScene):
         wlines = VGroup(curve(wax, np.log10(W[:, 0]), W[:, 3], TE, 3),
                         DashedVMobject(curve(wax, np.log10(N[:, 0]), N[:, 3], C.SURPRISE, 3), num_dashes=40))
         ratio = t_te / max(t_tr, 1)
+        said1 = (
+            "Without weight decay, the same network never gets there. " if g["t_test_nowd"] is None else
+            f"Without weight decay, it takes until step {int(g['t_test_nowd']):,}. "
+        )
         with self.voiceover(
             f"It memorizes the entries it was shown within about {t_tr:,} steps, and for a long time it gets the "
             "unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. "
             f"{ratio:.0f} times as long, at step {t_te:,}, accuracy on the unseen entries shoots up to nearly a "
             "hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> "
-            + ("Without weight decay, the same network never gets there. " if g["t_test_nowd"] is None else
-               f"Without weight decay, it takes until step {int(g['t_test_nowd']):,}. ")
+            + said1
             + "Weight decay keeps squeezing the weights, and a lookup table of memorized answers costs more weight "
             "than the rule."
         ) as vo:
@@ -184,14 +187,20 @@ class Grok(VoiceoverScene):
         faster = len(ok) >= 2 and med[ok[-1]] < med[ok[0]]
         n_never = int((~np.isfinite(st)).sum())
         tag = note(r"computed: \ five weight decays, \ three seeds each, \ the same data").to_corner(DL, buff=0.2)
+        said2 = (
+            f"The more weight decay, the sooner it comes: from step {med[ok[0]]:,.0f} at {wds[ok[0]]:g} to "
+            f"{med[ok[-1]]:,.0f} at {wds[ok[-1]]:g}. " if faster else "Its timing varies with the weight decay. "
+        )
+        said3 = (
+            f"And in {n_never} of the fifteen runs, all at the weakest settings, it never comes within the "
+            f"{cap:,} steps." if n_never else ""
+        )
         with self.voiceover(
             "Is weight decay really what drives it? Sweep it, from none to three, three seeds each. "
             f"<bookmark mark='a'/> Memorizing takes between {np.nanmin(sm):,.0f} and {np.nanmax(sm):,.0f} steps every time. "
             "<bookmark mark='b'/> Generalizing does not. "
-            + (f"The more weight decay, the sooner it comes: from step {med[ok[0]]:,.0f} at {wds[ok[0]]:g} to "
-               f"{med[ok[-1]]:,.0f} at {wds[ok[-1]]:g}. " if faster else "Its timing varies with the weight decay. ")
-            + (f"And in {n_never} of the fifteen runs, all at the weakest settings, it never comes within the "
-               f"{cap:,} steps." if n_never else "")
+            + said2
+            + said3
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(capl), FadeIn(capt), FadeIn(tag))
             vo.wait_until("a")
@@ -252,12 +261,15 @@ class Grok(VoiceoverScene):
         t_te = int(g["t_test_wd"])
         i_te = int(np.searchsorted(steps, t_te))
         early = share[min(i_te, len(share) - 1) // 2] > share[0] + 0.5 * (share[-1] - share[0])
+        said4 = (
+            "Long before the unseen entries come right, a few frequencies start to grow, quietly: "
+            if early else "As the unseen entries come right, a few frequencies take over: "
+        )
         with self.voiceover(
             "What rule did it find? Look at the vectors it learned for the numbers, and ask which waves around the "
             "clock they contain: their Fourier spectrum. <bookmark mark='a'/> Watch it through training. At first "
             "the energy is spread over all frequencies, noise. "
-            + ("Long before the unseen entries come right, a few frequencies start to grow, quietly: "
-               if early else "As the unseen entries come right, a few frequencies take over: ")
+            + said4
             + f"by the end, {100 * share[-1]:.0f} percent of the energy sits in five of the {nf}. "
             "<bookmark mark='b'/> And the numbers, seen along their main directions, settle onto circles."
         ) as vo:
@@ -315,6 +327,11 @@ class Grok(VoiceoverScene):
         after = float(kd[-1])
         moved_late = after > 2 * before
         cite_ = cite(r"N.~Nanda et al.\ (2023); \ T.~Kumar, B.~Bordelon, S.~Gershman \& C.~Pehlevan (2023)", corner=DR)
+        said5 = (
+            f"The tangent kernel barely moves while the network memorizes, then travels far as it generalizes, "
+            f"to a distance of {after:.2f}. " if moved_late else
+            f"The tangent kernel moves steadily through training, to a distance of {after:.2f}. "
+        )
         with self.voiceover(
             "Each number becomes a point on a circle, an angle. <bookmark mark='a'/> Adding two numbers on a clock "
             "is adding two angles, and the cosine of a sum is a sum of products of cosines and sines, which the ReLU "
@@ -323,9 +340,7 @@ class Grok(VoiceoverScene):
             f"{100 * r2:.0f} percent of the variation. Neel Nanda and colleagues worked this circuit out in 2023, "
             "one of the first complete explanations of what a trained network computes; part thirty takes the idea "
             "to real models. <bookmark mark='c'/> And chapter two's lazy regime returns. "
-            + (f"The tangent kernel barely moves while the network memorizes, then travels far as it generalizes, "
-               f"to a distance of {after:.2f}. " if moved_late else
-               f"The tangent kernel moves steadily through training, to a distance of {after:.2f}. ")
+            + said5
             + "Tanishq Kumar and colleagues argued in 2023 that grokking is exactly this: a network that first fits "
             "lazily, with its starting kernel, then slowly learns the features that generalize."
         ) as vo:

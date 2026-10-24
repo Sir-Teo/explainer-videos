@@ -211,17 +211,23 @@ class Valley(VoiceoverScene, ThreeDScene):
         boot = note(r"in brackets: \ $80\%$ of $100$ bootstrap refits").to_corner(DR, buff=0.2)
         near = all(0.4 <= v <= 0.62 for v in (a1, a2, a3))
         spread = max(a1, a2, a3) - min(a1, a2, a3)
+        said1 = (
+            "Like theirs, ours say that size and data should grow together, in roughly equal proportion. "
+            if near else
+            f"Ours spread by {spread:.2f}, and they lean {'toward the model' if a3 > 0.55 else 'toward the data'}. "
+        )
+        said2 = (
+            "Kaplan's 0.73 is well above all three. " if max(a1, a2, a3) < 0.65 else "Kaplan's was 0.73. "
+        )
         with self.voiceover(
             "Chinchilla read that path three ways, and so can we. One: the lower envelope of all the training "
             "curves, the best model at each compute. Two: a parabola through the bottom of each budget's valley. "
             "<bookmark mark='a'/> Three: the formula we just solved. <bookmark mark='b'/> "
             f"Our three estimates of the exponent: {a1:.2f}, {a2:.2f} and {a3:.2f}. Chinchilla's were 0.50, 0.49 and "
             "0.46. "
-            + ("Like theirs, ours say that size and data should grow together, in roughly equal proportion. "
-               if near else
-               f"Ours spread by {spread:.2f}, and they lean {'toward the model' if a3 > 0.55 else 'toward the data'}. ")
+            + said1
             + "<bookmark mark='c'/> "
-            + ("Kaplan's 0.73 is well above all three. " if max(a1, a2, a3) < 0.65 else "Kaplan's was 0.73. ")
+            + said2
             + f"In characters per parameter, our optimum is about {tpp:.0f}; Chinchilla's was about twenty tokens."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(bkey))

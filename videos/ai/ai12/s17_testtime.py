@@ -119,6 +119,12 @@ class TestTime(VoiceoverScene):
         nums.move_to([0.4, -0.3, 0])
         agree = np.isfinite(b[i]) and np.isfinite(tb[i]) and abs(b[i] - tb[i]) < 0.25 * max(b[i], tb[i])
         cite_ = cite(r"R.~Schaeffer et al., \textit{How Do Large Language Monkeys Get Their Power (Laws)?} (2025)", corner=UR)
+        said1 = (
+            f"and the share of problems with tiny p rises with slope {tb[i]:.2f}: the same exponent, from two "
+            "different measurements." if agree else
+            f"and the tail of tiny p's has slope {tb[i]:.2f}: close, but our two thousand problems sample the "
+            "tail thinly."
+        )
         with self.voiceover(
             "Why a power law? For one problem, k independent tries all fail with probability one minus p to the k: "
             "that falls exponentially, fast. <bookmark mark='a'/> But the benchmark averages over problems of every "
@@ -126,10 +132,7 @@ class TestTime(VoiceoverScene):
             "one, the average failure is a gamma integral, and it falls like k to the minus b: a power law, made "
             "entirely by the hardest problems. Rylan Schaeffer and colleagues showed this in 2025. "
             f"<bookmark mark='c'/> On our mid-sized model, minus log pass at k falls with slope {-b[i]:.2f}, "
-            + (f"and the share of problems with tiny p rises with slope {tb[i]:.2f}: the same exponent, from two "
-               "different measurements." if agree else
-               f"and the tail of tiny p's has slope {tb[i]:.2f}: close, but our two thousand problems sample the "
-               "tail thinly.")
+            + said1
         ) as vo:
             self.play(FadeIn(cite_))
             step(0)
@@ -178,12 +181,15 @@ class TestTime(VoiceoverScene):
                          r"the compute of earlier RL runs", width=5.6, color=HIST)).arrange(DOWN, buff=0.15)
         cards.next_to(lw, DOWN, buff=0.25)
         keep_in_frame(cards, margin=0.15)
+        said2 = (
+            f"Counting the cost of answering, two operations per parameter per character, the small model's tries "
+            f"cost {ratio:.1f} times the big model's one. " if np.isfinite(ratio) else ""
+        )
         with self.voiceover(
             "So tries can stand in for size. How many does a small model need to match the biggest one's single "
             f"try? <bookmark mark='a'/> The smallest that gets there needs about {need[i_small]:,.0f}, the next ones "
             "fewer. "
-            + (f"Counting the cost of answering, two operations per parameter per character, the small model's tries "
-               f"cost {ratio:.1f} times the big model's one. " if np.isfinite(ratio) else "")
+            + said2
             + "Whether that is a good trade depends on the price of training the big model, and on having a checker. "
             "<bookmark mark='b'/> Reinforcement learning, which trains reasoning models, is being scaled too. In 2025, "
             "Devvrit Khatri and colleagues at Meta spent four hundred thousand GPU-hours finding its law: reward "

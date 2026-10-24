@@ -44,7 +44,8 @@ def chemistry(seed=0):
                         + 0.12 * w_proto[p, 1] * mix + 0.6 * mix * pref
                     e += 0.05 * rng.normal()  # what the traits can't explain
                     rows.append((a, b, x, p))
-                    f = np.concatenate([ta, tb, [x, x * (1 - x)], np.eye(N_PROTO)[p]])
+                    dt = ta - tb  # the surrogate reads the two elements' traits, their differences, and the mix
+                    f = np.concatenate([ta, tb, [x, x * (1 - x)], np.eye(N_PROTO)[p], dt, dt ** 2, mix * dt ** 2])
                     feats.append(f)
                     E.append(e)
     return np.array(rows), np.array(feats, np.float32), np.array(E)
