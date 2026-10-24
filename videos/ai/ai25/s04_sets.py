@@ -78,11 +78,10 @@ class Sets(VoiceoverScene):
         tag = note(r"computed: \ networks trained here on $8{,}192$ sets", font_size=20).to_corner(DR, buff=0.25)
         with self.voiceover(
             "Sixteen points in the plane, from one of four shapes: a ring, a disc, a segment, or two blobs. Say which. "
-            "<bookmark mark='a'/> A plain network needs a list, so we number the points and feed it thirty-two "
-            "coordinates. <bookmark mark='b'/> But the numbering is arbitrary: renumber the points, and the picture is the "
-            "same while the list is not. <bookmark mark='c'/> A plain network trained on eight thousand sets sees a new "
-            f"input: {mlp_line}. <bookmark mark='d'/> Deep Sets, a network built for sets, gives exactly the same answer, as "
-            "it must."
+            "<bookmark mark='a'/> A plain network needs a list, so we number the points and feed it thirty-two coordinates. "
+            "<bookmark mark='b'/> But the numbering is arbitrary: renumber, and the picture is the same while the list is "
+            f"not. <bookmark mark='c'/> A plain network trained on eight thousand sets sees a new input: {mlp_line}. "
+            "<bookmark mark='d'/> Deep Sets, built for sets, gives exactly the same answer, as it must."
         ) as vo:
             self.play(FadeIn(dots), FadeIn(pl))
             vo.wait_until("a")
@@ -121,14 +120,13 @@ class Sets(VoiceoverScene):
                      r"(Newton); \ fewer won't do \ (Wagstaff et al.\ 2019)", font_size=22, color=GREY_A)
         cont.to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order if "
-            "and only if it is a sum of one function phi over the elements, followed by another function rho. <bookmark "
+            "The theorem behind Deep Sets, from Manzil Zaheer and colleagues in 2017: a function of sets ignores order "
+            "exactly when it is a sum of one function phi over the elements, followed by another function rho. <bookmark "
             "mark='a'/> One direction is easy: a sum is the same in any order. <bookmark mark='b'/> For the other, number "
-            "every possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> Written in base "
-            "four, the sum has a one in place k exactly when element k is in the set: no carries, so different sets give "
-            "different sums. <bookmark mark='d'/> The sum is one-to-one, so any function of the set is a function of the "
-            "sum: undo the sum, then apply f. <bookmark mark='e'/> For sets of real numbers, power sums play this role, by "
-            "Newton's identities, and Edward Wagstaff and colleagues showed that fewer can't do it continuously."
+            "every possible element, and let phi of x be four to the minus its number. <bookmark mark='c'/> In base four, "
+            "the sum has a one in place k exactly when element k is in the set: no carries, so different sets give different "
+            "sums. <bookmark mark='d'/> So any function of the set is a function of the sum: undo the sum, then apply f. "
+            "<bookmark mark='e'/> For sets of real numbers, power sums play this role, by Newton's identities."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             vo.wait_until("a")
@@ -174,7 +172,7 @@ class Sets(VoiceoverScene):
             "mark='b'/> the results are summed, <bookmark mark='c'/> and a second network rho reads the sum. <bookmark "
             "mark='d'/> phi's weights are shared by every point, as a convolution shares its weights across positions. "
             "<bookmark mark='e'/> PointNet, the same year, used a maximum instead of the sum. And a transformer without "
-            "positions treats its tokens as a set: reorder the inputs, and each output moves with its input."
+            "positions treats its tokens as a set: reorder the inputs, and the outputs reorder with them."
         ) as vo:
             self.play(FadeIn(dots))
             vo.wait_until("a")

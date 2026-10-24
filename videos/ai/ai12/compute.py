@@ -873,15 +873,18 @@ def compute_repeat():
     out["fresh"], out["fresh_D"] = fresh, np.asarray(s["D"])
     # the effective data of each repeated run: the fresh D that gives its loss
     eff = []
-    for row, u in zip(fin.mean(1), REPEAT_UNIQUE):
-        if row <= np.nanmin(fresh):
-            eff.append(2.0 ** lD[np.nanargmin(fresh)])
-            continue
-        order = np.argsort(fresh)[::-1]  # descending loss
-        eff.append(float(2 ** np.interp(row, fresh[order], lD[order])))
+    okf = np.isfinite(fresh)
+    order = np.argsort(fresh[okf])  # ascending loss (descending D), as np.interp needs
+    for row in fin.mean(1):
+        if row <= np.nanmin(fresh):  # as good as the longest fresh run, or better
+            eff.append(2.0 ** lD[okf][order][0])
+        elif row > np.nanmax(fresh):  # worse than the shortest fresh run: off the curve
+            eff.append(float("nan"))
+        else:
+            eff.append(float(2 ** np.interp(row, fresh[okf][order], lD[okf][order])))
     eff = np.array(eff)
     out["effective"] = eff
-    # Muennighoff et al.: D' = U + U R* (1 - exp(-R/R*)), R = epochs - 1; fit R* to our runs
+    # Muennighoff et al.: D' = U + U R* (1 - exp(-R/R*)), R = epochs - 1; fit R* to the runs on the fresh curve
     U = np.array(out["unique"], float)
     R = np.array(out["epochs"], float) - 1
     rs = np.geomspace(0.3, 300, 2000)

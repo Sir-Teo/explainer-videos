@@ -128,12 +128,11 @@ class Hook(VoiceoverScene):
             tiny = f"{rng_i:.4f} of a unit, more than rounding error alone"
         with self.voiceover(
             "Here is the idea this part is built on. Five charged particles, a toy molecule. Turn it, and nothing about it "
-            "changes, so neither can its energy. <bookmark mark='a'/> We trained networks on three thousand such molecules "
-            "to predict that energy, then turned this one a full circle. <bookmark mark='b'/> A plain network has no idea "
-            f"that turning is harmless: its answer swings over {rng_m:.2f} units. <bookmark mark='c'/> Shown turned copies "
-            f"in training, it swings over {rng_a:.2f}. <bookmark mark='d'/> A network built on the distances between the "
-            f"particles cannot see the turn at all: its answer changes by {tiny}, and it sits {inv_err:.2f} from the true "
-            "energy."
+            "changes, so neither can its energy. <bookmark mark='a'/> We trained networks on three thousand such molecules to "
+            "predict that energy, then turned this one a full circle. <bookmark mark='b'/> A plain network doesn't know that "
+            f"turning is harmless: its answer swings over {rng_m:.2f} units. <bookmark mark='c'/> Shown turned copies in "
+            f"training, over {rng_a:.2f}. <bookmark mark='d'/> A network built on the distances between particles can't see "
+            f"the turn at all: its answer changes by {tiny}, and sits {inv_err:.2f} from the true energy."
         ) as vo:
             self.add(molecule)
             self.play(FadeIn(g), Create(true_line), FadeIn(tl), FadeIn(tag))
@@ -192,10 +191,10 @@ class Hook(VoiceoverScene):
         sch = note(r"each tile: \ data from this part's own computations, \ or illustrative").to_corner(DR, buff=0.2)
         with self.voiceover(
             "That is the question of this part: what does a network gain by knowing the symmetries of its problem, and what "
-            "has that done for science? <bookmark mark='a'/> We'll build the answer from groups and graphs to the systems that "
+            "has that done for science? <bookmark mark='a'/> We'll build the answer from groups and graphs to systems that "
             "fold proteins, <bookmark mark='b'/> forecast the weather, <bookmark mark='c'/> find materials, <bookmark "
-            "mark='d'/> and prove theorems. Every experiment is computed on this machine; every number about the big systems "
-            "is quoted from their papers."
+            "mark='d'/> and prove theorems. Every experiment is computed here; every number about the big systems is quoted "
+            "from their papers."
         ) as vo:
             self.play(Write(q), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(Group(t_[0], t_[2])) for t_ in tiles], lag_ratio=0.2), FadeIn(sch))

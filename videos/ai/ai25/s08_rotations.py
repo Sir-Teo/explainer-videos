@@ -93,13 +93,12 @@ class Rotations(VoiceoverScene):
         mol = VGroup(bonds, atoms, li, lj)
         with self.voiceover(
             "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of Victor "
-            "Garcia Satorras, Emiel Hoogeboom and Max Welling, in 2021. Each atom has features h and a position x. <bookmark "
-            "mark='a'/> A message between two atoms sees their features and their squared distance, nothing else: turning or "
-            "moving the molecule changes no message. <bookmark mark='b'/> Each atom moves along the differences of positions, "
-            "weighted by learned scalars. <bookmark mark='c'/> Its features update from the summed messages, so they stay "
-            "invariant. <bookmark mark='d'/> Now turn and shift the input: the messages are unchanged, the differences turn "
-            "by R, and the shift cancels, so the new positions are the old ones turned and shifted. <bookmark mark='e'/> "
-            "SchNet, in 2017, had used distances alone, for invariant energies."
+            "Garcia Satorras, Emiel Hoogeboom and Max Welling, 2021. Each atom has features h and a position x. <bookmark "
+            "mark='a'/> A message between two atoms sees their features and squared distance, nothing else. <bookmark "
+            "mark='b'/> Each atom moves along the differences of positions, weighted by learned scalars. <bookmark "
+            "mark='c'/> Its features update from the summed messages, and stay invariant. <bookmark mark='d'/> Turn and "
+            "shift the input: the messages are unchanged, the differences turn by R, and the shift cancels, so the new "
+            "positions are the old ones turned and shifted. <bookmark mark='e'/> SchNet, in 2017, had used distances alone."
         ) as vo:
             self.play(FadeIn(head))
             self.play(Create(bonds[:-1]), FadeIn(atoms), run_time=1.5)
@@ -149,9 +148,8 @@ class Rotations(VoiceoverScene):
             "and up. <bookmark mark='b'/> Here, computed, is what one rotation does to the nine harmonics up to degree two: "
             "it mixes them only within their degree, in blocks of one, three and five; outside the blocks the entries are "
             f"zero to {dp} decimal places. <bookmark mark='c'/> So a network can keep features of each degree, turn each with "
-            "its own block, and combine two into new degrees by the Clebsch–Gordan rules, the rules that add angular momenta "
-            "in quantum mechanics. <bookmark mark='d'/> That is the design of tensor field networks, NequIP and MACE, among "
-            "today's most accurate learned force fields."
+            "its own block, and combine them by the Clebsch–Gordan rules of quantum angular momentum. <bookmark mark='d'/> "
+            "That is the design of tensor field networks, NequIP and MACE, among today's most accurate learned force fields."
         ) as vo:
             self.play(FadeIn(img), FadeIn(il), FadeIn(tag))
             vo.wait_until("a")
@@ -306,9 +304,9 @@ class Rotations(VoiceoverScene):
         tk = take_away(r"build the symmetry in, \ and the data goes further: \ nothing is spent learning that turning "
                        r"doesn't matter")
         with self.voiceover(
-            "That is the case for equivariance: no data has to be spent teaching the network that a turned molecule is the "
-            "same molecule. Proteins are molecules too, and the rest of this part follows these ideas into science, starting "
-            "with the hardest molecule of all."
+            "That is the case for equivariance: no data is spent teaching the network that a turned molecule is the same "
+            "molecule. Proteins are molecules too; the rest of this part takes these ideas into science, starting with the "
+            "hardest molecule of all."
         ):
             self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

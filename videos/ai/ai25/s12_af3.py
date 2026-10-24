@@ -52,13 +52,12 @@ class AF3(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.6)
         sch = note(r"schematic, \ after Abramson et al.\ (2024)", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
-            "In May 2024 Google DeepMind and Isomorphic Labs published AlphaFold 3. <bookmark mark='a'/> It takes "
-            "almost anything found in a cell's structures: protein chains, DNA and RNA, small drug-like molecules, "
-            "ions, chemically modified residues, and predicts how they sit together. <bookmark mark='b'/> The "
-            "alignment gets just four blocks of processing, <bookmark mark='c'/> and the trunk is the Pairformer, the "
-            "Evoformer's pair stack, forty-eight blocks, with its triangle updates intact. <bookmark mark='d'/> The "
-            "big change is the end. The structure module, with its frames and invariant attention, is gone. In its "
-            "place, a diffusion model that writes down every atom's coordinates directly."
+            "In May 2024 Google DeepMind and Isomorphic Labs published AlphaFold 3. <bookmark mark='a'/> It takes almost "
+            "anything in a cell's structures: protein chains, DNA and RNA, drug-like molecules, ions, modified residues, and "
+            "predicts how they sit together. <bookmark mark='b'/> The alignment gets just four blocks, <bookmark mark='c'/> "
+            "and the trunk is the Pairformer, the Evoformer's pair stack, forty-eight blocks with the triangle updates intact. "
+            "<bookmark mark='d'/> The big change is the end: the structure module, frames and all, is gone, replaced by a "
+            "diffusion model that writes every atom's coordinates directly."
         ) as vo:
             self.play(FadeIn(sch))
             vo.wait_until("a")
@@ -104,15 +103,14 @@ class AF3(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
         head = label(r"diffusion over coordinates \ (Part 21)", font_size=32, color=STRUCT).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's "
-            "coordinates, at every level from a whisper to pure noise, and train a network to remove it. Then start "
-            "from pure noise and remove it step by step. Here is a sample from a small model of ours, from noise to "
-            "a chain. <bookmark mark='b'/> And here is the surprise. After four chapters of building symmetry in, the "
-            "AlphaFold 3 paper says plainly that no invariance or equivariance to rotations and translations is "
-            "required in the architecture. <bookmark mark='c'/> Instead, every training structure is centred and "
-            "turned at random: augmentation, the cheap route of chapter two. <bookmark mark='d'/> Generative models "
-            "can also invent structure where there is none, in floppy regions; AlphaFold 3 was trained on "
-            "AlphaFold-Multimer's predictions too, which taught it to leave those regions as loose extended chains."
+            "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's coordinates, at "
+            "every level from a whisper to pure noise, and train a network to remove it; then start from noise and remove it "
+            "step by step. Here is a small model of ours, from noise to a chain. <bookmark mark='b'/> And here is the "
+            "surprise. After four chapters of building symmetry in, the AlphaFold 3 paper says that no invariance or "
+            "equivariance to rotations and translations is required in the architecture. <bookmark mark='c'/> Instead every "
+            "training structure is centred and turned at random: augmentation, chapter two's cheap route. <bookmark "
+            "mark='d'/> Diffusion can also invent structure in floppy regions; training on AlphaFold-Multimer's predictions "
+            "taught AlphaFold 3 to leave them as loose chains."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -172,15 +170,14 @@ class AF3(VoiceoverScene):
         nn_line = ("and neither simply copies its training chains" if min(e["nn"], m["nn"]) > 0.5 * ref[2] else
                    "though the samples sit closer to training chains than real new chains do")
         with self.voiceover(
-            "So is equivariance worth it, for a generator? We can test the question on a toy. Four thousand compact "
-            "chains of twelve atoms in the plane, with bonds of length one. <bookmark mark='a'/> Two denoisers, "
-            "trained the same number of steps: one equivariant to rotations, like EGNN, and a plain MLP that sees "
-            "every chain turned at random, as AlphaFold 3's network does. <bookmark mark='b'/> Their samples. "
-            f"<bookmark mark='c'/> Bonds: the equivariant model's are off by {e['bond']:.3f} on average, the plain "
-            f"one's by {m['bond']:.3f}. Clashes, two atoms on top of each other: {100 * e['clash']:.1f} percent of "
-            f"chains against {100 * m['clash']:.1f}. {verdict}, {nn_line}. <bookmark mark='d'/> At AlphaFold 3's "
-            "scale, trained on the whole Protein Data Bank with a large network, DeepMind chose the plain network fed "
-            "with turned copies: data and compute standing in for built-in symmetry."
+            "So is equivariance worth it, for a generator? A toy test: four thousand compact chains of twelve atoms in the "
+            "plane, with bonds of length one. <bookmark mark='a'/> Two denoisers, trained the same number of steps: one "
+            "equivariant to rotations, like EGNN, and a plain MLP shown every chain turned at random, as AlphaFold 3 is. "
+            f"<bookmark mark='b'/> Their samples. <bookmark mark='c'/> Bonds: the equivariant model's are off by "
+            f"{e['bond']:.3f} on average, the plain one's by {m['bond']:.3f}. Clashes, two atoms on top of each other: "
+            f"{100 * e['clash']:.1f} percent of chains against {100 * m['clash']:.1f}. {verdict}, {nn_line}. <bookmark "
+            "mark='d'/> At AlphaFold 3's scale, with the whole Protein Data Bank and a large network, DeepMind chose turned "
+            "copies: data and compute standing in for built-in symmetry."
         ) as vo:
             self.play(FadeIn(real), FadeIn(rl), FadeIn(tag))
             vo.wait_until("a")
@@ -220,13 +217,12 @@ class AF3(VoiceoverScene):
             cards.height = 4.6
         cards.set_x(0)
         with self.voiceover(
-            "On drug-like molecules bound to proteins, DeepMind reported AlphaFold 3 fifty percent more accurate "
-            "than the best traditional methods. <bookmark mark='a'/> It came as a free server, and in November 2024 "
-            "as code and weights for academics; <bookmark mark='b'/> within months, open reproductions appeared: "
-            "Chai-1, Boltz-1, Protenix. <bookmark mark='c'/> In 2025 Boltz-2 added a prediction of how strongly a "
-            "molecule binds. <bookmark mark='d'/> And in February 2026 Isomorphic Labs reported a proprietary "
-            "successor that, on new antibody–antigen pairs, makes high-accuracy predictions 2.3 times as often as "
-            "AlphaFold 3, on its own benchmark."
+            "On drug-like molecules bound to proteins, DeepMind reported AlphaFold 3 fifty percent more accurate than the "
+            "best traditional methods. <bookmark mark='a'/> It came as a free server, and in November 2024 as code and "
+            "weights for academics; <bookmark mark='b'/> open reproductions followed: Chai-1, Boltz-1, Protenix. <bookmark "
+            "mark='c'/> In 2025 Boltz-2 added a prediction of binding strength. <bookmark mark='d'/> And in February 2026 "
+            "Isomorphic Labs reported a proprietary successor that, on its own benchmark of new antibody–antigen pairs, makes "
+            "high-accuracy predictions 2.3 times as often as AlphaFold 3."
         ) as vo:
             self.play(FadeIn(res), FadeIn(rc))
             for k, mk in enumerate("abcd"):
@@ -236,9 +232,8 @@ class AF3(VoiceoverScene):
         tk = take_away(r"AlphaFold 3: \ the pair stack kept, \ the geometry handed to diffusion, \ the symmetry "
                        r"learned from turned copies")
         with self.voiceover(
-            "AlphaFold 3 kept the pair stack, handed the geometry to diffusion, and let the network learn the "
-            "symmetry from turned copies. Prediction runs backwards, too: from a shape you want, to a protein that "
-            "folds into it."
+            "AlphaFold 3 kept the pair stack, handed the geometry to diffusion, and learned the symmetry from turned copies. "
+            "Prediction also runs backwards: from a shape you want, to a protein that folds into it."
         ):
             self.play(FadeOut(cards), FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

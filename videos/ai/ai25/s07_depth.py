@@ -53,14 +53,13 @@ class Depth(VoiceoverScene):
         depth[0].move_to([depth[0].get_center()[0], -1.95, 0])
         depth[1].move_to([depth[1].get_center()[0], -2.55, 0])
         with self.voiceover(
-            "Graph networks are usually shallow, two to four layers, while image networks run to hundreds. One reason: strip "
-            "a graph convolution of its weights and it is an average over neighbours, applied again and again. <bookmark "
-            "mark='a'/> The averaging matrix is symmetric, with orthonormal eigenvectors and eigenvalues at most one. "
-            "<bookmark mark='b'/> Applying it k times raises each eigenvalue to the k. <bookmark mark='c'/> Every term but the "
-            "first dies away, and the first is the same pattern on every node, scaled by the square root of its degree. "
-            "<bookmark mark='d'/> The approach is geometric, at the rate of the second eigenvalue to the k. <bookmark "
-            "mark='e'/> Every node ends with the same features: over-smoothing, described by Qimai Li and colleagues in 2018, "
-            "and proved for networks with weights by Kenta Oono and Taiji Suzuki."
+            "Graph networks are usually shallow, two to four layers; image networks run to a hundred and more. One reason: "
+            "strip a graph convolution of its weights and it is an average over neighbours, applied again and again. "
+            "<bookmark mark='a'/> The averaging matrix is symmetric, with orthonormal eigenvectors and eigenvalues at most "
+            "one. <bookmark mark='b'/> Applying it k times raises each eigenvalue to the k. <bookmark mark='c'/> Every term "
+            "but the first dies away, and the first is the same pattern on every node, scaled by the square root of its "
+            "degree. <bookmark mark='d'/> The approach is geometric, at the rate of the second eigenvalue to the k. <bookmark "
+            "mark='e'/> Every node ends with the same features: over-smoothing, named by Qimai Li and colleagues in 2018."
         ) as vo:
             self.play(FadeIn(head))
             self.play(GrowFromEdge(depth[0][0], LEFT), FadeIn(depth[0][1]), GrowFromEdge(depth[1][0], LEFT),
@@ -245,12 +244,11 @@ class Depth(VoiceoverScene):
                                 font_size=22)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Attention is the third idea. <bookmark mark='a'/> Instead of summing its neighbours equally, a node weighs them: "
-            "in Petar Veličković's graph attention network of 2018, by a softmax over the neighbours of a learned score. "
-            "<bookmark mark='b'/> GATv2, from Shaked Brody and colleagues, fixed a flaw: the original score ranked neighbours "
-            "the same way for every node. <bookmark mark='c'/> A transformer, from Part 13, is exactly this on the complete "
-            "graph, where every token is every other's neighbour. <bookmark mark='d'/> Graph transformers add the graph back "
-            "as encodings of where each node sits. <bookmark mark='e'/> And AlphaFold's core network is attention over pairs "
-            "of residues, biased by triangles: last chapter's pair network, grown up."
+            "in Petar Veličković's graph attention network of 2018, by a softmax of a learned score. <bookmark mark='b'/> "
+            "GATv2, from Shaked Brody and colleagues, fixed a flaw: the original score ranked neighbours the same way for "
+            "every node. <bookmark mark='c'/> A transformer, from Part 13, is exactly this on the complete graph. <bookmark "
+            "mark='d'/> Graph transformers add the graph back as encodings of where each node sits. <bookmark mark='e'/> And "
+            "AlphaFold's core is attention over pairs of residues, biased by triangles: last chapter's pair network, grown up."
         ) as vo:
             self.play(Write(f1))
             vo.wait_until("a")

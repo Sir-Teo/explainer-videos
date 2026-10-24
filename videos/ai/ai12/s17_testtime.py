@@ -219,10 +219,18 @@ class TestTime(VoiceoverScene):
                          r"the compute of earlier RL runs", width=5.6, color=HIST)).arrange(DOWN, buff=0.15)
         cards.next_to(lw, DOWN, buff=0.25)
         keep_in_frame(cards, margin=0.15)
-        said2 = (
-            f"Counting the cost of answering, two operations per parameter per character, the small model's tries "
-            f"cost {ratio:.1f} times the big model's one. " if np.isfinite(ratio) else ""
-        )
+        if not np.isfinite(ratio):
+            said2 = ""
+        elif ratio < 1:
+            said2 = (
+                f"Counting the cost of answering, two operations per parameter per character, the small model's tries "
+                f"cost only {100 * ratio:.0f} percent of the big model's one. "
+            )
+        else:
+            said2 = (
+                f"Counting the cost of answering, two operations per parameter per character, the small model's tries "
+                f"cost {ratio:.1f} times the big model's one. "
+            )
         with self.voiceover(
             "So tries can stand in for size. How many does a small model need to match the biggest one's single "
             f"try? <bookmark mark='a'/> The smallest that gets there needs about {need[i_small]:,.0f}, the next ones "

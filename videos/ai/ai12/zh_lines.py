@@ -538,16 +538,16 @@ ZH = {
     'f"We can watch it happen on our own models.':
         "我们可以在自己的模型上看着它发生。任务是：从留出文本里的2000个位置开始，一字不差地写出接下来的字符。"
         "<bookmark mark='a'/>每个字符单独打分，正确的比例随大小平稳上升，从{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%。"
-        "<bookmark mark='b'/>改成给整个答案打分。一个字符：同样的曲线。两个、四个、八个：开头越来越平，结尾越来越陡。"
-        "{said1}",
+        "<bookmark mark='b'/>改成给整个答案打分。一个字符：同样的曲线。两个、四个、八个：越来越低，越来越平，直到8个字符的"
+        "答案几乎贴着零。{said1}<bookmark mark='c'/>在p的L次方这组曲线上，我们的模型位于平坦的那一段，p在"
+        "{100 * acc[0]:.0f}%到{100 * acc[-1]:.0f}%之间。陡峭的部分需要p接近1：按这种方式在长答案上打分，一个模型看起来"
+        "完全不会，直到大得多的时候，突然会了。",
 
-    "f'Of the whole rise in eight-character answers":
-        "8个字符的答案的整个上升里，有{100 * s8:.0f}%发生在我们最大的三分之一的大小里，而单个字符只有"
-        "{100 * sa:.0f}%。同样的模型，同样的技能：变的只是评分。",
+    "f'Yet in proportion they grow fastest:":
+        "但按比例算，它们增长得最快：在我们的大小范围内增长了{g8:.0f}倍，而单个字符只增长了{g1:.1f}倍。",
 
-    "f'In our size range the difference is modest":
-        "在我们的大小范围内，差别不大：在最大的三分之一的大小里，上升的比例是{100 * s8:.0f}%，对比"
-        "{100 * sa:.0f}%。",
+    'In proportion they grow about as fast as single characters.':
+        "按比例算，它们和单个字符增长得差不多快。",
 
     '"But some suddenness is real.':
         "但有些突然是真的。在量子的玩具任务里，每个子任务要么解决了，要么没有。把每一个的最终损失画在网络的大小上，"
@@ -662,7 +662,10 @@ ZH = {
         "德夫里特·卡特里和同事花了40万GPU小时寻找它的定律：奖励沿着一条S形曲线升向一个上限；在早期拟合，它就预测出"
         "了一次10万GPU小时的训练。<bookmark mark='c'/>同一年，xAI说它在Grok 4上做了与预训练同等规模的强化学习。",
 
-    'f"Counting the cost of answering':
+    "f\"Counting the cost of answering, two operations per parameter per character, the small model's tries cost only":
+        "算上回答的代价，每个参数每个字符2次运算，小模型的多次尝试，花费只有大模型一次尝试的{100 * ratio:.0f}%。",
+
+    "f\"Counting the cost of answering, two operations per parameter per character, the small model's tries cost {":
         "算上回答的代价，每个参数每个字符2次运算，小模型的多次尝试，花费是大模型一次尝试的{ratio:.1f}倍。",
 
     # ------------------------------------------------------------------ Frontier

@@ -76,10 +76,10 @@ class WL(VoiceoverScene):
         tag = note(r"computed", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
             "In 1968 Boris Weisfeiler and Andrei Leman described colour refinement, the standard first test of whether two "
-            "graphs are the same, numbered differently. <bookmark mark='a'/> Every node starts with the same colour. "
-            "<bookmark mark='b'/> Each round, a node's new colour names its old colour together with its neighbours' "
-            "colours: here, the carbons with three neighbours split off. <bookmark mark='c'/> Then their neighbours, and so "
-            "on, until nothing changes. Different colour counts mean different graphs. <bookmark mark='d'/> Decalin and "
+            "graphs are the same up to numbering. <bookmark mark='a'/> Every node starts with the same colour. <bookmark "
+            "mark='b'/> Each round, a node's new colour names its old colour together with its neighbours' colours: here, "
+            "the carbons with three neighbours split off. <bookmark mark='c'/> Then their neighbours, and so on, until "
+            "nothing changes. Different colour counts mean different graphs. <bookmark mark='d'/> Decalin and "
             f"bicyclopentyl, {rounds - 1} rounds: {verdict}. Yet one is two six-rings sharing an edge, the other two "
             "five-rings joined by a bond."
         ) as vo:
@@ -125,12 +125,12 @@ class WL(VoiceoverScene):
         with self.voiceover(
             "And no message-passing network can do better. Keyulu Xu and colleagues, and Christopher Morris and colleagues, "
             "proved in 2019: if colour refinement can't separate two nodes after t rounds, no message-passing network "
-            "separates them after t layers. <bookmark mark='a'/> By induction. At the start, everything is equal. <bookmark "
+            "separates them after t layers. <bookmark mark='a'/> By induction: at the start, everything is equal. <bookmark "
             "mark='b'/> Two nodes with the same colour next round had the same colour and the same multiset of neighbours' "
-            "colours; <bookmark mark='c'/> so, by the hypothesis, the same state and the same multiset of neighbours' "
-            "states. <bookmark mark='d'/> A layer computes the new state from exactly those, so the new states agree. "
-            "<bookmark mark='e'/> And the bound is reached: a sum over neighbours followed by an MLP, the graph isomorphism "
-            "network, separates everything colour refinement does."
+            "colours; <bookmark mark='c'/> so, by hypothesis, the same state and the same multiset of neighbours' states. "
+            "<bookmark mark='d'/> A layer computes the new state from exactly those, so the new states agree. <bookmark "
+            "mark='e'/> And the bound is reached: a sum followed by an MLP, the graph isomorphism network, separates "
+            "everything colour refinement does."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -168,12 +168,12 @@ class WL(VoiceoverScene):
                    rf"${sd:.2f}$", font_size=20).to_corner(DR, buff=0.25)
         sum_rm, mean_rm, max_rm = rows[0][2], rows[1][2], rows[2][2]
         with self.voiceover(
-            "Why a sum? The aggregation must not lose information about the multiset of neighbours. <bookmark mark='a'/> "
+            "Why a sum? Aggregation must not lose information about the multiset of neighbours. <bookmark mark='a'/> "
             "Neighbours a, a, b, b and neighbours a, b have the same mean and the same maximum; only the sum differs. "
-            "<bookmark mark='b'/> The consequence, computed: give every node of a random graph the same features, and ask a "
-            f"one-layer network for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a "
-            f"mean or a maximum, {mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees themselves, "
-            f"{sd:.2f}: to them every node with a neighbour looks the same."
+            "<bookmark mark='b'/> Computed: give every node of a random graph the same features, and ask a one-layer network "
+            f"for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a mean or a maximum, "
+            f"{mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees themselves, {sd:.2f}: to them "
+            "every node with a neighbour looks the same."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(la), FadeIn(lb))
             vo.wait_until("a")
@@ -291,12 +291,12 @@ class WL(VoiceoverScene):
                       color=GREY_B).to_edge(DOWN, buff=0.4)
         tk = take_away(r"message passing sees what colour refinement sees: \ almost every graph, \ but not all")
         with self.voiceover(
-            f"How bad is it? On random graphs, hardly at all: colour refinement separated {rs} of {rp} different pairs. "
-            f"<bookmark mark='a'/> On graphs where every node has three neighbours, {gsep} of {gp}. <bookmark mark='b'/> The "
-            "fixes add what a sum over neighbours can't build: colour tuples of nodes, at a cost growing as n to the k; count "
-            "small patterns like triangles; give nodes positions; or let attention see every pair. <bookmark mark='c'/> "
-            "Deciding whether two graphs are the same is not known to be easy or hard; László Babai showed in 2016 that "
-            "quasi-polynomial time suffices."
+            "How bad is it in practice? On random graphs, hardly at all: colour refinement separated "
+            f"{rs} of {rp} different pairs. <bookmark mark='a'/> On graphs where every node has three neighbours, {gsep} of "
+            f"{gp}. <bookmark mark='b'/> The fixes add what a sum over neighbours can't build: colour tuples of nodes, at a "
+            "cost growing as n to the k; count small patterns like triangles; give nodes positions; or let attention see "
+            "every pair. <bookmark mark='c'/> Whether graph isomorphism is easy or hard is still unknown; László Babai "
+            "showed in 2016 that quasi-polynomial time suffices."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")

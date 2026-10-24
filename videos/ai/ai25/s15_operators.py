@@ -49,14 +49,13 @@ class Operators(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.4).align_to(pts, LEFT)
         with self.voiceover(
-            "Fields evolve by equations. Here is Burgers' equation, a one-dimensional cartoon of fluid flow: a wave "
-            "that steepens where it is fast and smooths out by viscosity. <bookmark mark='a'/> From this start, "
-            "one time unit later, the solution looks like this. <bookmark mark='b'/> A solver gets there in "
-            "thousands of small steps, every time it is asked. A network could learn the map from start to finish, "
-            "but an ordinary network works on a fixed list of numbers: trained on sixty-four points, it only knows "
-            "sixty-four points. <bookmark mark='c'/> What we want is to learn the operator itself, a map from "
-            "functions to functions, which can be read at any resolution. <bookmark mark='d'/> Tianping and Hong "
-            "Chen proved in 1995 that networks can approximate operators; DeepONet and the Fourier neural operator, "
+            "Fields evolve by equations. Here is Burgers' equation, a one-dimensional cartoon of fluid flow: a wave that "
+            "steepens where it is fast and is smoothed by viscosity. <bookmark mark='a'/> From this start, one time unit "
+            "later, the solution looks like this. <bookmark mark='b'/> A solver gets there in thousands of small steps, every "
+            "time. A network could learn the map from start to finish, but an ordinary network works on a fixed list of "
+            "numbers: trained on sixty-four points, it knows only sixty-four points. <bookmark mark='c'/> We want the "
+            "operator itself, a map from functions to functions, readable at any resolution. <bookmark mark='d'/> Tianping "
+            "and Hong Chen proved in 1995 that networks can approximate operators; DeepONet and the Fourier neural operator, "
             "both published in 2021, made it practical."
         ) as vo:
             self.play(FadeIn(g), Create(c0), FadeIn(lg[0]), Write(eq), FadeIn(el))
@@ -91,15 +90,13 @@ class Operators(VoiceoverScene):
             label(r"cost $O(n \log n)$ per layer, \ by the fast Fourier transform", font_size=23, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The Fourier neural operator, from Zongyi Li, Anima Anandkumar, Andrew Stuart and colleagues, starts "
-            "from a layer that is an integral: each point's new value mixes the whole field, through a kernel "
-            "kappa. <bookmark mark='a'/> If the kernel depends only on the offset, the integral is a convolution, "
-            "and the convolution theorem turns it into a product of Fourier transforms. <bookmark mark='b'/> So "
-            "learn the kernel's transform directly: a learned complex weight for each of the lowest frequencies, "
-            "sixteen in our model, and drop the rest. <bookmark mark='c'/> Three things follow. The weights belong "
-            "to frequencies, not grid points, so the same network can read any grid fine enough to hold those "
-            "frequencies. A shift of the input shifts the output. And each layer costs little more than a fast "
-            "Fourier transform."
+            "The Fourier neural operator, from Zongyi Li, Anima Anandkumar, Andrew Stuart and colleagues, starts from a "
+            "layer that is an integral: each point's new value mixes the whole field through a kernel kappa. <bookmark "
+            "mark='a'/> If the kernel depends only on the offset, the integral is a convolution, and the convolution theorem "
+            "makes it a product of Fourier transforms. <bookmark mark='b'/> So learn the kernel's transform directly: a "
+            "complex weight for each of the lowest frequencies, sixteen in our model, dropping the rest. <bookmark "
+            "mark='c'/> The weights belong to frequencies, not grid points, so the same network reads any grid fine enough to "
+            "hold them; a shift of the input shifts the output; and a layer costs little more than a fast Fourier transform."
         ) as vo:
             step(0)
             vo.wait_until("a")
