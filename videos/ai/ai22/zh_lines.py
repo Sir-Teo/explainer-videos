@@ -543,7 +543,7 @@ ZH.update({
     '"Here\'s the catch with one frame:':
         "只给一帧有个问题：它说不出字母在往哪个方向移动。模型必须自己选，而每一帧都得做同样的选择。<bookmark mark='a'/>每一对里，上面一行是一起画出来的片段。"
         "下面一行的每一帧，取自同一个模型的不同样本，就好像这些帧是一帧一帧独立画出来的。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>"
-        "一次对整个片段去噪，让各帧彼此一致。但片段的长度在训练模型时就固定了。",
+        "{close}而且片段的长度在训练模型时就固定了。",
 
     'f"Drawn together, the frames agree:':
         "一起画的时候，各帧是一致的：有{100 * jr.mean():.0f}%的片段每一帧都是对的字母，分开画只有{100 * ir.mean():.0f}%；字母路径每帧晃动"
@@ -552,6 +552,12 @@ ZH.update({
     'f"Drawn together, the motion is steadier:':
         "一起画的时候，运动更平稳：字母路径每帧晃动{jj.mean():.2f}个像素，每帧单独画时是{ij.mean():.2f}个像素；字母本身在"
         "{100 * jr.mean():.0f}%的片段里保持下来，分开画是{100 * ir.mean():.0f}%。",
+
+    'Denoising the whole clip at once makes the frames agree.':
+        '一次对整个片段去噪，让各帧彼此一致。',
+
+    "At this size, denoising the whole clip at once doesn't buy agreement.":
+        '在这个规模上，一次对整个片段去噪并没有换来一致。',
 
     'f"Surprisingly, drawing the frames together':
         "出人意料的是，在这里一起画并没有让运动更平稳：晃动{jj.mean():.2f}个像素，对比{ij.mean():.2f}个。",
