@@ -45,8 +45,10 @@ class GPTQ(VoiceoverScene):
         pic.scale(1.2).move_to([-3.4, -2.0, 0])
         pl = label(r"output error, \ as a function of two weights' errors", font_size=20, color=C.MLP)
         pl.next_to(pic, UP, buff=0.15)
-        l1 = label(r"across the valley: \ costly", font_size=18, color=ERRC).next_to(r1, DOWN, buff=0.1)
-        l2 = label(r"along it: \ cheap", font_size=18, color=GPTQC).next_to(r2, RIGHT, buff=0.1)
+        # both labels outside the ellipses, beside their arrows' tips
+        l1 = label(r"across the valley: \ costly", font_size=18, color=ERRC).next_to(r1.get_end(), RIGHT, buff=0.12)
+        l2 = label(r"along it: \ cheap", font_size=18, color=GPTQC).next_to(ell, RIGHT, buff=0.15).set_y(
+            r2.get_end()[1])
         tag = schematic_tag(corner=DL)
         with self.voiceover(
             "Plain rounding treats each weight alone. But what matters is the layer's output. "
@@ -209,7 +211,7 @@ class GPTQ(VoiceoverScene):
                                    fill_color=AWQC if v >= cut else C.TOKEN, fill_opacity=0.85)
                          .move_to([-6.0 + 9.0 * (i + 0.5) / nc, -3.1 + 0.65 * v / prof.max(), 0])
                          for i, v in enumerate(prof)])
-        chl = label(rf"the inputs of one of our layers, \ channel by channel \ (largest seen): \ AWQ's scales grow "
+        chl = label(rf"the inputs of one of our layers, \ channel by channel \ (largest seen): \\ AWQ's scales grow "
                     rf"with them; \ the top $1\%$ in orange", font_size=18, color=GREY_A).next_to(chans, UP, buff=0.2)
         chl.align_to(chans, LEFT)
         q = load("gptq")
@@ -293,8 +295,9 @@ class GPTQ(VoiceoverScene):
             "bits usable."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
+            self.wait(2.0)
             self.play(FadeIn(g[0]), FadeIn(g[1]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(g[2]), FadeIn(g[3]))
             vo.wait_until("c")

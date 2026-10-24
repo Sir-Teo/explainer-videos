@@ -57,13 +57,14 @@ class Rotation(VoiceoverScene):
         lq = MathTex(r"xQ", font_size=26, color=ROTC).next_to(c0 + v1, UP, buff=0.08)
         rot_pic = VGroup(circ, ax_, aq, arc, lx, lq)
         rot_l = label(r"a rotation: \ same length", font_size=18, color=GREY_A).next_to(circ, DOWN, buff=0.15)
+        nrm_l = label(r"normalized: \ on the circle", font_size=18, color=GREY_A).move_to(rot_l)
         # the residual stream, rotated: who gets Q and who gets its transpose (schematic)
         sy = -2.3
         stream = Line([-6.2, sy, 0], [6.2, sy, 0], color=ROTC, stroke_width=3).set_stroke(opacity=0.5)
         boxes = VGroup()
         for xx, t_ in ((-5.2, r"$E\,Q$"), (-1.8, r"read: \ $W_{\text{in}}\,Q$"), (1.6, r"write: \ $Q^\top W_{\text{out}}$"),
                        (5.0, r"head: \ $W_{\text{head}}\,Q$")):
-            boxes.add(node_box(t_, ROTC, font_size=18, pad=0.15).move_to([xx, sy, 0]))
+            boxes.add(node_box(t_, ROTC, font_size=18, pad=0.15, solid=True).move_to([xx, sy, 0]))
         sl_ = label(r"the residual stream, \ rotated by $Q$ \ (schematic)", font_size=17, color=ROTC).next_to(
             stream, UP, buff=0.6).set_x(0)
         with self.voiceover(
@@ -77,15 +78,16 @@ class Rotation(VoiceoverScene):
             "output head get Q too. The network computes exactly the same function. We checked on ours: the "
             f"largest change in any logit is {mant} times ten to the {int(ex)}, rounding error."
         ) as vo:
-            step(0)
+            self.play(FadeIn(hc, shift=LEFT * 0.2))
             vo.wait_until("a")
+            step(0)
+            self.play(Create(circ), GrowArrow(ax_), FadeIn(lx), FadeIn(nrm_l))
             vo.wait_until("b")
             step(1)
-            self.play(Create(circ), GrowArrow(ax_), FadeIn(lx), FadeIn(rot_l))
-            self.play(TransformFromCopy(ax_, aq), Create(arc), FadeIn(lq))
+            self.play(TransformFromCopy(ax_, aq), Create(arc), FadeIn(lq), ReplacementTransform(nrm_l, rot_l))
             vo.wait_until("c")
             step(2)
-            self.play(Create(stream), FadeIn(sl_), FadeIn(boxes[1:3]), FadeIn(hc))
+            self.play(Create(stream), FadeIn(sl_), FadeIn(boxes[1:3]))
             vo.wait_until("d")
             step(3)
             self.play(FadeIn(boxes[0]), FadeIn(boxes[3]))

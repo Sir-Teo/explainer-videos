@@ -368,11 +368,12 @@ class RLHF(VoiceoverScene):
         if cos["group"] > 1.5 * cos["none"]:
             verdict = ("The batch's own mean does far better than no baseline, and it costs nothing: there is no value "
                        "network to train. That is the reasoning behind RLOO, GRPO and our runs.")
-        elif float(np.abs(qm).max()) <= 1.5 * spread:
-            verdict = (f"With the scores as learned, each question's average, from {qm.min():+.1f} to "
-                       f"{qm.max():+.1f}, is small next to how far one question's lines differ, {spread:.1f} on "
-                       "average, so subtracting it changes little. Its real job here is to make the gradient "
-                       "indifferent to a shift the reward model never pinned down.")
+        elif float(np.abs(qm).mean()) < spread:
+            qa = float(np.abs(qm).mean())  # the size of a question's average score, against its lines' spread
+            verdict = (f"With the scores as learned, a question's average score, {qa:.1f} on average here, is smaller "
+                       f"than how far its lines differ from it, {spread:.1f} on average, so subtracting it changes "
+                       "little. Its real job here is to make the gradient indifferent to a shift the reward model "
+                       "never pinned down.")
         else:
             verdict = ("Subtracting an average helps less than the shift would suggest: the noise of sampling a few "
                        "lines dominates. Its real job here is to make the gradient indifferent to a shift the reward "

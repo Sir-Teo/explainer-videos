@@ -242,6 +242,19 @@ class Flash(VoiceoverScene):
             history_card(2024, r"Jay Shah et al., \ FlashAttention-3", rf"Hopper's asynchrony, \ FP8: \ "
                          rf"${F.FLASH3['bf16'] / 1e12:.0f}$ TFLOP/s, \ ${F.FLASH3['util']}\%$ of an H100", width=3.4,
                          font_size=14, color=ATTNC)).arrange(DOWN, buff=0.15).to_corner(UR, buff=0.15)
+        # what one multiprocessor's SRAM holds during the inner loop (schematic)
+        sram = VGroup()
+        for nm, col in ((r"$Q$", QUERYC), (r"$K$", KEYC), (r"$V$", C.VALUE), (r"$O$", C.ATTN)):
+            cell = Rectangle(width=1.25, height=0.95, stroke_color=col, stroke_width=2, fill_color=col,
+                             fill_opacity=0.12)
+            sram.add(VGroup(cell, VGroup(label(nm + r" tile", font_size=20, color=col),
+                                         MathTex(r"B_c \times d", font_size=22, color=GREY_A)).arrange(
+                DOWN, buff=0.08).move_to(cell)))
+        sram.arrange(RIGHT, buff=0.08)
+        sram_box = SurroundingRectangle(sram, buff=0.12, color=BYTEC, stroke_width=2, corner_radius=0.08)
+        sram_l = label(rf"SRAM: \ $M$ numbers, \ four tiles of $B_c \times d$ \ (schematic)", font_size=18,
+                       color=BYTEC).next_to(sram_box, UP, buff=0.12)
+        sram_g = VGroup(sram_box, sram, sram_l).scale(1.3).move_to([-0.6, -2.0, 0])
         with self.voiceover(
             "How much traffic does that save? <bookmark mark='a'/> With M numbers of fast memory and heads of size "
             "d, a tile of keys and values holds M over 4 d of them. <bookmark mark='b'/> Keys and values are each "
@@ -257,13 +270,16 @@ class Flash(VoiceoverScene):
         ) as vo:
             step(0)
             vo.wait_until("a")
+            self.play(Create(sram_box), FadeIn(sram_l), LaggedStart(*[FadeIn(c_) for c_ in sram], lag_ratio=0.2))
             vo.wait_until("b")
             step(1)
+            self.play(Indicate(sram[1], color=KEYC), Indicate(sram[2], color=C.VALUE))
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
+            self.play(FadeOut(sram_g))
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), FadeIn(rl),
                       run_time=2.5)
             vo.wait_until("f")

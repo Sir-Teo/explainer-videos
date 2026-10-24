@@ -91,10 +91,12 @@ def times(r: float) -> str:
 # ---------------------------------------------------------------------------
 # Boxes, chips, bars
 # ---------------------------------------------------------------------------
-def node_box(text: str, color, font_size=24, pad=0.22, height=0.62, fill=0.1) -> VGroup:
+def node_box(text: str, color, font_size=24, pad=0.22, height=0.62, fill=0.1, solid=False) -> VGroup:
+    """A labelled box; ``solid`` mixes the tint into the background so lines behind it don't show through."""
     t = label(text, font_size=font_size, color=color)
+    fc, fo = (interpolate_color(ManimColor(BACKGROUND), ManimColor(color), fill), 1.0) if solid else (color, fill)
     box = RoundedRectangle(width=t.width + 2 * pad, height=max(height, t.height + 0.25), corner_radius=0.12,
-                           stroke_color=color, stroke_width=2.2, fill_color=color, fill_opacity=fill)
+                           stroke_color=color, stroke_width=2.2, fill_color=fc, fill_opacity=fo)
     g = VGroup(box, t.move_to(box))
     g.box, g.text = box, t
     return g

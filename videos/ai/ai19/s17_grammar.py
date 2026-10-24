@@ -41,6 +41,18 @@ class Grammar(VoiceoverScene):
         outs.next_to(pl, DOWN, buff=0.6).align_to(pl, LEFT)
         ol = label(rf"what our novels model writes next: \ ${gr['valid_un']}$ of ${gr['n']}$ are valid records",
                    font_size=22, color=BADC).next_to(outs, DOWN, buff=0.4).align_to(pl, LEFT)
+        # what "a fixed format" means (illustrative examples)
+        fmts = VGroup()
+        for t_, ex in ((r"a record", r'{"name": "Holmes", "age": 47}'), (r"a function call", r'lookup(city="London")'),
+                       (r"a number", r"47")):
+            fmts.add(VGroup(label(t_, font_size=24, color=AUTOC),
+                            data_text(ex, font=MONO, font_size=20, color=WHITE)).arrange(DOWN, buff=0.25))
+        fmts.arrange(RIGHT, buff=0.75).move_to([0, 0.2, 0])
+        fbox = VGroup(*[SurroundingRectangle(f_, buff=0.25, color=AUTOC, stroke_width=1.5, corner_radius=0.1)
+                        for f_ in fmts])
+        fl = label(r"formats a program can parse \ (examples)", font_size=20, color=GREY_B).next_to(fbox, DOWN,
+                                                                                                    buff=0.35)
+        fmt_g = VGroup(fmts, fbox, fl)
         un_say = (f"of {gr['n']} tries, not one was a valid record." if gr["valid_un"] == 0 else
                   f"of {gr['n']} tries, {gr['valid_un']} were valid records.")
         with self.voiceover(
@@ -49,8 +61,11 @@ class Grammar(VoiceoverScene):
             "guests at an inn, and asked for the next, <bookmark mark='b'/> it goes back to writing novels: "
             + un_say + " Big models do far better, but 'usually' isn't good enough for a program."
         ) as vo:
-            self.play(FadeIn(pl), FadeIn(ph))
+            self.play(LaggedStart(*[AnimationGroup(Create(b_), FadeIn(f_)) for b_, f_ in zip(fbox, fmts)],
+                                  lag_ratio=0.5), FadeIn(fl), run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(fmt_g))
+            self.play(FadeIn(pl), FadeIn(ph))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(o_, shift=RIGHT * 0.1) for o_ in outs], lag_ratio=0.2), run_time=2.0)
             self.play(FadeIn(ol))
@@ -64,13 +79,20 @@ class Grammar(VoiceoverScene):
         pat = data_text(r'{"name": "[A-Z][a-z]{1,11}", "age": [1-9][0-9]?}', font=MONO, font_size=24, color=AUTOC)
         pat.to_edge(UP, buff=0.45)
         steps = [r'{"name": "', r"A-Z", r"a-z", r'", "age": ', r"1-9", r"0-9", r"}"]
+        elab = VGroup(*[data_text(s, font=MONO, font_size=15, color=WHITE) for s in steps])
         nodes = VGroup(*[Circle(radius=0.28, stroke_color=AUTOC, stroke_width=2, fill_color=AUTOC, fill_opacity=0.1)
-                         for _ in range(len(steps) + 1)]).arrange(RIGHT, buff=1.05).move_to([0, 1.2, 0])
+                         for _ in range(len(steps) + 1)])
+        xx = 0.0
+        for i, n_ in enumerate(nodes):  # each gap wide enough for its edge's label
+            n_.move_to([xx, 1.2, 0])
+            if i < len(steps):
+                xx += 0.56 + max(1.0, elab[i].width + 0.3)
+        nodes.set_x(0)
         nodes[-1].set_stroke(width=4)
         edges = VGroup(*[Arrow(nodes[i].get_right(), nodes[i + 1].get_left(), buff=0.05, stroke_width=2, color=GREY_B,
                                max_tip_length_to_length_ratio=0.2) for i in range(len(steps))])
-        elab = VGroup(*[data_text(s, font=MONO, font_size=15, color=WHITE).next_to(e_, UP, buff=0.08)
-                        for s, e_ in zip(steps, edges)])
+        for l_, e_ in zip(elab, edges):
+            l_.next_to(e_, UP, buff=0.08)
         loop = CurvedArrow(nodes[3].get_top() + LEFT * 0.12, nodes[3].get_top() + RIGHT * 0.12, angle=-4.0,
                            color=GREY_B, stroke_width=2, tip_length=0.12)
         skip = CurvedArrow(nodes[5].get_bottom(), nodes[7].get_bottom() + LEFT * 0.1, angle=0.9, color=GREY_B,
