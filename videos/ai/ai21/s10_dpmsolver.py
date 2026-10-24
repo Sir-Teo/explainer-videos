@@ -135,9 +135,9 @@ class DPMSolver(VoiceoverScene):
         tbh = label(r"error, \ at about this many evaluations", font_size=17, color=GREY_B).next_to(tbl, UP, buff=0.1)
         dd = s["ddpm"]
         fl = float(s["floor"])
-        g2 = log_axes([math.log10(3), math.log10(130)], [-2, 0], x_length=3.6, y_length=2.0, xlabel=r"evaluations",
+        g2 = log_axes([math.log10(3), math.log10(130)], [-2, 0], x_length=3.6, y_length=1.5, xlabel=r"evaluations",
                       ylabel=r"DDPM: \ distance from the data", xticks=[4, 16, 64], yticks=[0.01, 0.1, 1],
-                      center=[4.4, -1.8, 0], font_size=18)
+                      center=[4.4, -2.45, 0], font_size=18)
         ddl = logcurve(g2.ax, [r["nfe"] for r in dd], [r["sw"] for r in dd], DDPM_C, radius=0.035)
         fll = DashedLine(g2.ax.c2p(math.log10(3), math.log10(fl)), g2.ax.c2p(math.log10(130), math.log10(fl)), color=GREY_B,
                          stroke_width=1.5)

@@ -130,8 +130,8 @@ class Symmetry(VoiceoverScene):
             "mark='a'/> Turn the input, then apply f, <bookmark mark='b'/> or apply f, then turn the output. <bookmark "
             "mark='c'/> If the two paths always agree, f is equivariant: transforming the input transforms the output the "
             "same way. <bookmark mark='d'/> If the output doesn't change at all, f is invariant: an energy, or an image's "
-            "label. <bookmark mark='e'/> Intermediate layers need equivariance, so that how the input was turned is kept, "
-            "not thrown away; a final answer often needs invariance."
+            "label. <bookmark mark='e'/> Inner layers need equivariance, so that the input's orientation is kept, not thrown "
+            "away; a final answer often needs invariance."
         ) as vo:
             self.play(FadeIn(A), FadeIn(nA), FadeIn(tag))
             self.play(GrowArrow(left), FadeIn(ll), FadeIn(Cg), FadeIn(nC))
@@ -171,13 +171,13 @@ class Symmetry(VoiceoverScene):
             label(r"augmentation: \ a random $g$ in training, \ hoping $f$ learns the rest", font_size=22, color=AUG),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Any function can be made equivariant by averaging it over the group: for each transformation g, transform the "
-            "input, apply f, and undo g on the output. <bookmark mark='a'/> Feed the average a turned input, h of x. "
-            "<bookmark mark='b'/> Rename g times h as g prime: as g runs through the group, so does g prime, so the sum is "
-            "the same. <bookmark mark='c'/> The inverse of a product reverses its order, <bookmark mark='d'/> and h comes out "
-            "of the sum: the average is equivariant, whatever f was. <bookmark mark='e'/> The price: one evaluation per group "
-            "element, sixteen factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Data "
-            "augmentation is the cheap version: one random transformation per example, hoping the network learns the rest."
+            "Any function can be made equivariant by averaging it over the group: for each g, transform the input, apply f, "
+            "and undo g on the output. <bookmark mark='a'/> Feed the average a turned input, h of x. <bookmark mark='b'/> "
+            "Rename g times h as g prime: as g runs through the group, so does g prime, so the sum is the same. <bookmark "
+            "mark='c'/> The inverse of a product reverses its order, <bookmark mark='d'/> and h comes out of the sum: the "
+            "average is equivariant, whatever f was. <bookmark mark='e'/> The price: one evaluation per group element, "
+            "sixteen factorial for sixteen points, infinitely many for turns of space. <bookmark mark='f'/> Augmentation is "
+            "the cheap version: one random transformation per example, hoping the network learns the rest."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -236,10 +236,9 @@ class Symmetry(VoiceoverScene):
             "<bookmark mark='a'/> Pause and predict: which turns its answer exactly when the input is turned? <bookmark "
             "mark='b'/> The equivariant network, EGNN, which we'll build in chapter seven: its turned and shifted answers are "
             f"off by {eg_tiny} of a unit, rounding error. <bookmark mark='c'/> A message-passing network on raw coordinates "
-            "handles a reordering exactly, since it sums over neighbours, but not a turn. <bookmark mark='d'/> The plain MLP "
-            f"gets none exactly; trained on turned copies, its turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark "
-            "mark='e'/> The lesson: a symmetry built into the layers holds exactly, on every input; one learned from "
-            "examples holds only approximately, and only near the data."
+            "handles a reordering exactly, but not a turn. <bookmark mark='d'/> The plain MLP gets none exactly; trained on "
+            f"turned copies, its turning error is {ma['err']:.2f}, {aug_verdict}. <bookmark mark='e'/> A symmetry built into "
+            "the layers holds exactly, on every input; one learned from examples holds only approximately, near the data."
         ) as vo:
             self.play(FadeIn(p, shift=UP * 0.15))
             vo.wait_until("a")

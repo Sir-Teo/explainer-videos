@@ -55,12 +55,11 @@ class Messages(VoiceoverScene):
                    r"(residues within $8$\,\AA)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "A graph is a set with connections: nodes, and edges between some pairs. Here is decalin, ten carbons and eleven "
-            "bonds. <bookmark mark='a'/> A computer stores it as a table, the adjacency matrix, with a one wherever two "
-            "nodes are joined. <bookmark mark='b'/> But the numbering is arbitrary: number the nodes differently and the "
-            "matrix's rows and columns shuffle, though the molecule is the same. <bookmark mark='c'/> So a network on graphs "
-            "must be equivariant to renumbering: permute the nodes, and its answers are permuted the same way. <bookmark "
-            "mark='d'/> Graphs are everywhere: molecules, road maps, social networks, weather meshes, and proteins, residues "
-            "joined when close in space."
+            "bonds. <bookmark mark='a'/> A computer stores it as a table, the adjacency matrix, with a one wherever two nodes "
+            "are joined. <bookmark mark='b'/> But number the nodes differently and the matrix's rows and columns shuffle, "
+            "though the molecule is the same. <bookmark mark='c'/> So a network on graphs must be equivariant to renumbering: "
+            "permute the nodes, and its answers permute the same way. <bookmark mark='d'/> Graphs are everywhere: molecules, "
+            "road maps, social networks, weather meshes, and proteins, residues joined when close in space."
         ) as vo:
             self.play(FadeIn(g), FadeIn(gl))
             vo.wait_until("a")
@@ -100,12 +99,12 @@ class Messages(VoiceoverScene):
             pulses.add(Dot(g.pts[u], radius=0.09, color=PAIR_C))
         with self.voiceover(
             "In 2017 Justin Gilmer and colleagues at Google put these networks into one form, message passing. Every node "
-            "keeps a state, a vector h. <bookmark mark='a'/> In each layer, every node sums messages from its neighbours, a "
+            "keeps a state, a vector h. <bookmark mark='a'/> In each layer every node sums messages from its neighbours, a "
             "learned function M of the two states and the edge, <bookmark mark='b'/> then updates its state from the old one "
-            "and the sum. <bookmark mark='c'/> After a few layers, a readout sums the states for an answer about the whole "
-            "graph. <bookmark mark='d'/> Each step is a sum over neighbours, so the numbering can't matter: equivariant by "
-            "construction, like Deep Sets. <bookmark mark='e'/> The graph convolutional network of Thomas Kipf and Max "
-            "Welling is the simplest case: average the neighbours' states, normalized by degree, and apply one weight matrix."
+            "and the sum. <bookmark mark='c'/> After a few layers, a readout sums the states into an answer about the whole "
+            "graph. <bookmark mark='d'/> Every step is a sum over neighbours, so the numbering can't matter: equivariant by "
+            "construction. <bookmark mark='e'/> The graph convolutional network of Thomas Kipf and Max Welling is the "
+            "simplest case: average the neighbours' states, normalized by degree, and apply one weight matrix."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -142,15 +141,13 @@ class Messages(VoiceoverScene):
         cards.arrange_in_grid(rows=2, cols=3, buff=(0.3, 0.35)).move_to(DOWN * 0.2)
         head = label(r"Networks on graphs, \ 1997--2018", font_size=34).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The idea is older than its name. <bookmark mark='a'/> In 1997 Alessandro Sperduti and Antonina "
-            "Starita trained networks on labelled graphs. <bookmark mark='b'/> In 2005 Marco Gori and colleagues "
-            "proposed the graph neural network, its node states updated from their neighbours until they settled. "
-            "<bookmark mark='c'/> In 2014 Joan Bruna and colleagues defined convolutions through the graph's "
-            "spectrum, later simplified into the graph convolutional network. <bookmark mark='d'/> In 2015 David "
-            "Duvenaud and colleagues learned fingerprints of molecules. <bookmark mark='e'/> Gilmer's network then "
-            "predicted thirteen quantum properties of small molecules, eleven within chemical accuracy. <bookmark "
-            "mark='f'/> And Peter Battaglia and colleagues argued that graphs are the general way to give a network "
-            "relational structure."
+            "The idea is older than its name. <bookmark mark='a'/> In 1997 Alessandro Sperduti and Antonina Starita trained "
+            "networks on labelled graphs. <bookmark mark='b'/> In 2005 Marco Gori and colleagues proposed the graph neural "
+            "network, its node states updated from their neighbours until they settled. <bookmark mark='c'/> In 2014 Joan "
+            "Bruna and colleagues defined convolutions through the graph's spectrum. <bookmark mark='d'/> In 2015 David "
+            "Duvenaud and colleagues learned fingerprints of molecules. <bookmark mark='e'/> Gilmer's network then predicted "
+            "thirteen quantum properties of small molecules, eleven within chemical accuracy. <bookmark mark='f'/> And Peter "
+            "Battaglia and colleagues argued that graphs are the general way to give a network relational structure."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abcdef"):

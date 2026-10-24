@@ -36,14 +36,13 @@ class History(VoiceoverScene):
         head = label(r"How we got here: \ the long prelude", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
-            "This part's story has three threads, and they started far apart. <bookmark mark='m0'/> The first "
-            "computer weather forecast, in 1950. <bookmark mark='m1'/> The first protein seen in three dimensions, "
-            "in 1958, and in 1961 Christian Anfinsen's discovery that the sequence decides the shape. <bookmark "
-            "mark='m2'/> In 1968, a test of whether two graphs are the same, which turns out to measure what graph "
-            "networks can see. <bookmark mark='m3'/> The Protein Data Bank, 1971; <bookmark mark='m4'/> the first "
-            "forecast of Europe's weather centre, 1979; <bookmark mark='m5'/> convolutions, with the symmetry of "
-            "images built in, 1989; <bookmark mark='m6'/> CASP's blind contests in protein structure, 1994; "
-            "<bookmark mark='m7'/> and the first neural networks on graphs, 2005."
+            "This part's story has three threads that started far apart. <bookmark mark='m0'/> The first computer weather "
+            "forecast, 1950. <bookmark mark='m1'/> The first protein seen in three dimensions, 1958, and in 1961 Christian "
+            "Anfinsen's discovery that the sequence decides the shape. <bookmark mark='m2'/> In 1968, a test of whether two "
+            "graphs are the same, which turns out to measure what graph networks can see. <bookmark mark='m3'/> The Protein "
+            "Data Bank, 1971; <bookmark mark='m4'/> the first forecast of Europe's weather centre, 1979; <bookmark "
+            "mark='m5'/> convolutions, with the symmetry of images built in, 1989; <bookmark mark='m6'/> CASP's blind "
+            "contests, 1994; <bookmark mark='m7'/> and the first neural networks on graphs, 2005."
         ) as vo:
             self.play(FadeIn(head), Create(base[0]), FadeIn(base[1]))
             for k, mk in enumerate(["m0", "m1", "m2", "m3", "m4", "m5", "m6", "m7"]):
@@ -71,15 +70,14 @@ class History(VoiceoverScene):
         head = label(r"How we got here: \ the decade", font_size=36).to_edge(UP, buff=0.4)
         groups = [[0], [1, 2], [3], [4], [5], [6], [7], [8]]
         with self.voiceover(
-            "Then, within a decade, the threads met. <bookmark mark='d0'/> 2017: message passing, and networks for "
-            "sets and molecules. <bookmark mark='d1'/> 2018: DeepMind's first AlphaFold wins CASP; in 2020 AlphaFold 2 "
-            "comes close to experiment. <bookmark mark='d2'/> 2021: networks that turn with a molecule, and networks "
-            "that learn whole solutions of equations. <bookmark mark='d3'/> 2022: predicted structures for over two "
-            "hundred million proteins, free to download. <bookmark mark='d4'/> 2023: a graph network out-forecasts "
-            "the best weather model in the world on most measures, and another proposes millions of new crystals. <bookmark "
-            "mark='d5'/> 2024: the Nobel Prize, AlphaFold 3, machines solving olympiad problems; <bookmark "
-            "mark='d6'/> 2025: AI forecasts in daily operation, new mathematics from evolutionary search; <bookmark "
-            "mark='d7'/> 2026: open problems of Paul Erdős resolved by AI."
+            "Then, within a decade, the threads met. <bookmark mark='d0'/> 2017: message passing, and networks for sets and "
+            "molecules. <bookmark mark='d1'/> 2018: the first AlphaFold wins CASP; in 2020 AlphaFold 2 comes close to "
+            "experiment. <bookmark mark='d2'/> 2021: networks that turn with a molecule, and networks that learn solutions of "
+            "equations. <bookmark mark='d3'/> 2022: predicted structures for over two hundred million proteins. <bookmark "
+            "mark='d4'/> 2023: a graph network out-forecasts the best weather model on most measures, and another proposes "
+            "millions of new crystals. <bookmark mark='d5'/> 2024: the Nobel Prize, AlphaFold 3, machines solving olympiad "
+            "problems; <bookmark mark='d6'/> 2025: AI forecasts in daily operation, new mathematics from evolutionary search; "
+            "<bookmark mark='d7'/> 2026: open Erdős problems resolved by AI."
         ) as vo:
             self.play(FadeIn(head), Create(base[0]), FadeIn(base[1]))
             for k, mk in enumerate(["d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"]):
@@ -119,12 +117,11 @@ class History(VoiceoverScene):
             "What ties these together is one recipe. <bookmark mark='a'/> Ask what about your data doesn't matter. For an "
             "image, where the object sits: so convolutions. <bookmark mark='b'/> For a set of points, their order. <bookmark "
             "mark='c'/> For a graph, how its nodes are numbered. <bookmark mark='d'/> For a molecule, how it is turned or "
-            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere, "
+            "moved. <bookmark mark='e'/> A protein has all of these. <bookmark mark='f'/> A weather field lives on a sphere "
             "and shouldn't depend on the grid. <bookmark mark='g'/> Language has little symmetry to exploit, one reason the "
-            "transformer learns its structure from data. <bookmark mark='h'/> Michael Bronstein, Joan Bruna, Taco Cohen and "
-            "Petar Veličković called this programme geometric deep learning. There are three ways to get a symmetry into a "
-            "model: show it transformed copies, put every input in a standard pose, or build the symmetry into the layers. "
-            "This part is mostly about the third."
+            "transformer learns its structure from data. <bookmark mark='h'/> Bronstein, Bruna, Cohen and Veličković called "
+            "this programme geometric deep learning. A symmetry can enter a model three ways: transformed copies, a standard "
+            "pose, or layers that respect it. This part is mostly about the third."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hrow), Create(rule))
             for k, mk in enumerate("abcdefg"):

@@ -41,12 +41,11 @@ class Design(VoiceoverScene):
                             r"with the Rosetta energy function, \ made, \ and its crystal structure matched the design",
                             width=6.0, color=HIST).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Structure prediction goes from a sequence to a shape. <bookmark mark='a'/> Design goes the other way: "
-            "start from a shape you want, a binder for a virus, a scaffold for a catalyst, and find a sequence that "
-            "folds into it. <bookmark mark='b'/> This was David Baker's life's work, the other half of the 2024 "
-            "Nobel. In 2003 his group designed Top7, a fold never seen in nature, by searching sequences with the "
-            "Rosetta energy function; the protein they made folded as designed. For two decades such designs took "
-            "expert effort and most attempts failed."
+            "Structure prediction goes from a sequence to a shape. <bookmark mark='a'/> Design goes the other way: from a "
+            "shape you want, a binder for a virus, a scaffold for a catalyst, to a sequence that folds into it. <bookmark "
+            "mark='b'/> This was David Baker's life's work, the other half of the 2024 Nobel. In 2003 his group designed "
+            "Top7, a fold never seen in nature, with the Rosetta energy function, and it folded as designed. For two decades "
+            "such designs took experts, and most attempts failed."
         ) as vo:
             self.play(FadeIn(seq), FadeIn(fold), Create(a1), FadeIn(l1))
             vo.wait_until("a")
@@ -84,13 +83,12 @@ class Design(VoiceoverScene):
         facts.move_to([0, 0.3, 0]).align_to(np.array([-0.4, 0, 0]), LEFT)
         cite_ = cite(r"Dauparas et al., \textit{Science} (2022)", corner=DR)
         with self.voiceover(
-            "Deep learning changed both halves of design, starting with the sequence. <bookmark mark='a'/> In 2022 "
-            "Justus Dauparas and colleagues in Baker's lab built ProteinMPNN: it reads a backbone as a graph, "
-            "each residue joined to its nearest neighbours in space, <bookmark mark='b'/> passes messages built "
-            "from distances, so the answer can't depend on how the backbone is turned, <bookmark mark='c'/> and then "
-            "writes the amino acids one at a time, in a random order, each conditioned on those already written. "
-            "<bookmark mark='d'/> Given the backbones of natural proteins, it recovers 52.4 percent of the natural "
-            "amino acids, against 32.9 for Rosetta, and its sequences fold as intended far more often."
+            "Deep learning changed both halves of design, starting with the sequence. <bookmark mark='a'/> In 2022 Justus "
+            "Dauparas and colleagues in Baker's lab built ProteinMPNN: it reads a backbone as a graph, each residue joined to "
+            "its nearest neighbours in space, <bookmark mark='b'/> passes messages built from distances, so the backbone's "
+            "orientation can't matter, <bookmark mark='c'/> and writes the amino acids one at a time, in random order, each "
+            "conditioned on those already written. <bookmark mark='d'/> On natural backbones it recovers 52.4 percent of the "
+            "native amino acids, against 32.9 for Rosetta."
         ) as vo:
             self.play(FadeIn(g), FadeIn(facts[0]), FadeIn(cite_))
             vo.wait_until("a")
@@ -137,14 +135,13 @@ class Design(VoiceoverScene):
         il = note(r"illustrative: \ from noise to a backbone", font_size=20).next_to(c_clean, DOWN, buff=0.25)
         with self.voiceover(
             "Then the backbone. In 2023 Joseph Watson and colleagues published RFdiffusion. <bookmark mark='a'/> They "
-            "took RoseTTAFold, a structure predictor, and fine-tuned it to remove noise from residue frames: "
-            "Gaussian noise on positions, random turns on orientations, two hundred steps from noise to a backbone. "
-            "It can be told to hold a functional motif in place, bind a target, or obey a symmetry. <bookmark "
-            "mark='b'/> The design pipeline became: diffuse a backbone; let ProteinMPNN write eight sequences for "
-            "it; <bookmark mark='c'/> keep the sequences that AlphaFold 2 folds back onto the design, within two "
-            "ångströms and confidently; <bookmark mark='d'/> and only then go to the lab. <bookmark mark='e'/> For "
-            "binders, nineteen percent of designs worked experimentally, about a hundred times the earlier "
-            "Rosetta-based rate, and one influenza binder's measured structure sat 0.63 ångströms from its design."
+            "fine-tuned RoseTTAFold, a structure predictor, to remove noise from residue frames: noise on positions, random "
+            "turns on orientations, two hundred steps from noise to a backbone, optionally holding a motif in place, binding "
+            "a target, or obeying a symmetry. <bookmark mark='b'/> The pipeline became: diffuse a backbone; let ProteinMPNN "
+            "write eight sequences for it; <bookmark mark='c'/> keep those that AlphaFold 2 folds back onto the design, "
+            "within two ångströms and confidently; <bookmark mark='d'/> only then go to the lab. <bookmark mark='e'/> For "
+            "binders, nineteen percent of designs worked, about a hundred times the earlier Rosetta-based rate, and one "
+            "influenza binder's measured structure sat 0.63 ångströms from its design."
         ) as vo:
             self.play(FadeIn(how[0]), FadeIn(cite_), FadeIn(c_noisy), FadeIn(il))
             self.play(Transform(c_noisy, c_clean), run_time=4.0)
@@ -235,14 +232,13 @@ class Design(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3)).move_to(DOWN * 0.15)
         head = label(r"Design since RFdiffusion", font_size=34).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Since then the field has moved fast. <bookmark mark='a'/> In 2024 Google DeepMind's AlphaProteo "
-            "designed binders for medically important targets, <bookmark mark='b'/> BindCraft designed binders by "
-            "running gradient descent through AlphaFold 2 itself, <bookmark mark='c'/> and EvolutionaryScale's ESM3, "
-            "a language model over sequences, structures and functions, wrote a new fluorescent protein far from "
-            "any natural one. <bookmark mark='d'/> In 2025 the Baker lab's RFdiffusion3 designed at the level of "
-            "single atoms, around DNA and inside enzymes, <bookmark mark='e'/> and BoltzGen appeared as an open "
-            "alternative. <bookmark mark='f'/> Tools this capable could be misused, and in 2024 many of the field's "
-            "researchers signed commitments on responsible biodesign, including screening the synthesis of DNA."
+            "Since then the field has moved fast. <bookmark mark='a'/> In 2024 Google DeepMind's AlphaProteo designed "
+            "binders for medically important targets, <bookmark mark='b'/> BindCraft designed binders by gradient descent "
+            "through AlphaFold 2 itself, <bookmark mark='c'/> and EvolutionaryScale's ESM3, a language model over sequence, "
+            "structure and function, wrote a new fluorescent protein far from any natural one. <bookmark mark='d'/> In 2025 "
+            "RFdiffusion3 designed at the level of single atoms, <bookmark mark='e'/> and BoltzGen appeared as an open "
+            "alternative. <bookmark mark='f'/> Tools this capable could be misused; in 2024 many researchers signed "
+            "commitments on responsible biodesign, including screening DNA synthesis."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abcdef"):

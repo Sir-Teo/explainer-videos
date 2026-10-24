@@ -98,28 +98,54 @@ class Emerge(VoiceoverScene):
         task = label(rf"the checkable task: \ from ${int(e['task_n']):,}$ held-out places, \ write the next characters "
                      r"exactly".replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         tag = note(rf"computed: \ every width of the sweep, \ trained on $2^{{22}}$ characters").to_corner(DL, buff=0.2)
-        sa, s8 = float(e["share_acc"]), float(e["share_exact8"])
-        sharper = s8 > sa + 0.1
+        # growth across our sizes, from a straight-line fit of log score against log size (exact match floored at
+        # one problem in task_n, so a single lucky hit cannot set the ratio)
+        lx_ = np.log10(N)
+
+        def growth(v):
+            v = np.maximum(v, 1 / float(e["task_n"]))
+            return float(10 ** (np.polyfit(lx_, np.log10(v), 1)[0] * (lx_[-1] - lx_[0])))
+
+        g1, g8 = growth(acc), growth(exact[:, 7])
         said1 = (
-            f"Of the whole rise in eight-character answers, {100 * s8:.0f} percent comes in the top third of our "
-            f"sizes, against {100 * sa:.0f} percent for single characters. The same models, the same skill: only "
-            "the score changed." if sharper else
-            f"In our size range the difference is modest: {100 * s8:.0f} against {100 * sa:.0f} percent of the rise "
-            "in the top third of sizes."
+            f"Yet in proportion they grow fastest: {g8:.0f} times across our sizes, against {g1:.1f} times for "
+            "single characters. " if g8 > 3 * g1 else
+            "In proportion they grow about as fast as single characters. "
         )
+        # where our models sit on the p^L curves
+        bx = Axes(x_range=[0, 1, 0.25], y_range=[0, 1, 0.25], x_length=4.2, y_length=3.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.5, -0.75, 0])
+        ps = np.linspace(0, 1, 100)
+        fam = VGroup(*[curve(bx, ps, ps ** L, LEN_COLORS[L], 2.5, smooth=True) for L in (1, 2, 4, 8)])
+        fml = VGroup(*[MathTex(rf"p^{{{L}}}", font_size=20, color=LEN_COLORS[L]).next_to(bx.c2p(0.93, 0.93 ** L), LEFT, buff=0.08)
+                       for L in (1, 2, 4, 8)])
+        band = Rectangle(width=bx.c2p(acc[-1], 0)[0] - bx.c2p(acc[0], 0)[0], height=bx.c2p(0, 1)[1] - bx.c2p(0, 0)[1],
+                         stroke_width=0, fill_color=C.TRUE_P, fill_opacity=0.22)
+        band.move_to([(bx.c2p(acc[0], 0)[0] + bx.c2p(acc[-1], 0)[0]) / 2, bx.c2p(0, 0.5)[1], 0])
+        bl = label(r"our models", font_size=20, color=C.TRUE_P).next_to(band, UP, buff=0.06)
+        bxl = label(r"$p$: \ each character right", font_size=18, color=GREY_A).next_to(bx, DOWN, buff=0.08)
+        pic = VGroup(bx, fam, fml, band, bl, bxl)
         with self.voiceover(
             "We can watch it happen on our own models. The task: from two thousand places in held-out text, write the "
             "next characters exactly. <bookmark mark='a'/> Score each character on its own, and the share right "
             f"rises smoothly with size, from {100 * acc[0]:.0f} to {100 * acc[-1]:.0f} percent. "
             "<bookmark mark='b'/> Score whole answers instead. One character: the same curve. Two, four, eight: "
-            "flatter and flatter at the start, steeper at the end. "
+            "lower and flatter, until eight-character answers barely leave zero. "
             + said1
+            + f"<bookmark mark='c'/> On the curves of p to the L, our models sit on the flat stretch, p between "
+            f"{100 * acc[0]:.0f} and {100 * acc[-1]:.0f} percent. The steep part needs p near one: a model scored "
+            "like this on long answers seems unable to do them at all, until, much larger, it suddenly can."
         ) as vo:
             self.play(FadeIn(task), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
             vo.wait_until("a")
             self.play(Create(pans[0][5]), run_time=2.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in pans[1][5]], lag_ratio=0.4), run_time=3.0)
+            vo.wait_until("c")
+            self.play(FadeOut(pans[0]))
+            self.play(Create(bx), FadeIn(bxl), LaggedStart(*[Create(c_) for c_ in fam], lag_ratio=0.2), FadeIn(fml),
+                      run_time=1.5)
+            self.play(FadeIn(band), FadeIn(bl))
         self.wait(0.3)
         self.clear_scene()
 
