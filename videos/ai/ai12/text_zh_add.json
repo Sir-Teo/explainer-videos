@@ -551,7 +551,26 @@
     "L(kN_{\\text{opt}},\\, D) = L^* \\ \\Rightarrow\\ D = \\Big(\\frac{B}{L^* - E - A\\,(kN_{\\text{opt}})^{-\\alpha}}\\Big)^{1/\\beta}": "L(kN_{\\text{最优}},\\, D) = L^* \\ \\Rightarrow\\ D = \\Big(\\frac{B}{L^* - E - A\\,(kN_{\\text{最优}})^{-\\alpha}}\\Big)^{1/\\beta}",
     "\\text{cost}": "\\text{代价}",
     "\\quad\\text{with}\\quad": "\\quad\\text{满足}\\quad",
-    "\\text{smaller } N, \\ \\text{longer } D": "\\text{更小的 } N, \\ \\text{更长的 } D"
+    "\\text{smaller } N, \\ \\text{longer } D": "\\text{更小的 } N, \\ \\text{更长的 } D",
+    "the checkable task: \\ from $2{,}000$ held-out places{,} \\ write the next characters exactly": "可检验的任务：\\ 在$2{,}000$个留出位置上，\\ 一字不差地写出接下来的字符",
+    "common": "常见",
+    "rare": "罕见",
+    "\\text{piece size}": "\\text{每块的大小}",
+    "\\text{error of a linear piece}": "\\text{线性块的误差}",
+    "(\\text{size})^2": "(\\text{大小})^2",
+    "\\text{loss (squared)}": "\\text{损失（平方）}",
+    "$d = 1$: \\ slope $-3.99$ \\ (theory $-4.00$)": "$d = 1$：\\ 斜率$-3.99$ \\ （理论$-4.00$）",
+    "$d = 2$: \\ slope $-2.00$ \\ (theory $-2.00$)": "$d = 2$：\\ 斜率$-2.00$ \\ （理论$-2.00$）",
+    "$d = 4$: \\ slope $-0.97$ \\ (theory $-1.00$)": "$d = 4$：\\ 斜率$-0.97$ \\ （理论$-1.00$）",
+    "$d = 8$: \\ slope $-0.30$ \\ (theory $-0.50$)": "$d = 8$：\\ 斜率$-0.30$ \\ （理论$-0.50$）",
+    "$N = 5$ pieces": "$N = 5$块",
+    "$N = 10$ pieces": "$N = 10$块",
+    "real data lies near a surface of low dimension $d$": "真实数据位于一个低维曲面附近，维数为$d$",
+    "a model with $N$ parameters cuts it into about $N$ pieces": "有$N$个参数的模型把它切成大约$N$块",
+    "our toy: \\ $32$ subtasks, \\ $p_k \\propto k^{-1.4}$": "我们的玩具模型：\\ $32$个子任务，\\ $p_k \\propto k^{-1.4}$",
+    "each subtask's loss \\ (bits), \\ width $128$": "每个子任务的损失 \\ （比特），\\ 宽度$128$",
+    "width $256$ and up: \\ all $32$ learned, \\ loss below $0.003$": "宽度$256$及以上：\\ $32$个全部学会，\\ 损失低于$0.003$",
+    "the $32$ subtasks, \\ common to rare: \\\\ green once width $128$ has learned them": "$32$个子任务，\\ 从常见到罕见：\\\\ 宽度$128$学会后变绿"
   },
   "patterns": []
 }
