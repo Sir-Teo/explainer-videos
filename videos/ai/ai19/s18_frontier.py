@@ -43,6 +43,13 @@ class Frontier(VoiceoverScene):
                           rf"${R['tokens_new'] // 1000}$k tokens a question, \ ${R['acc_old']:.0f}\% \to "
                           rf"{R['acc_new']}\%$", width=4.4, font_size=17, color=COSTC).to_corner(UR, buff=0.25)
         k1, k2 = str(R["tokens_old"]), str(R["tokens_new"])
+        r1 = VGroup(
+            label(r"DeepSeek-R1 on AIME 2025", font_size=22, color=COSTC),
+            hbars([R["tokens_old"] / 1e3, R["tokens_new"] / 1e3], [r"January 2025", r"May 2025 (0528)"],
+                  [DECODEC, COSTC], width=4.0, row_h=0.55, font_size=21, lo=0, hi=R["tokens_new"] / 1e3 * 1.1,
+                  fmt_v=lambda v: rf"{v:.0f}\text{{k tokens a question}}"),
+            label(rf"accuracy: \ ${R['acc_old']:.0f}\%$ $\to$ ${R['acc_new']}\%$", font_size=22, color=COSTC),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, 0.0, 0])
         ratio = th[k2]["usd"] / th[k1]["usd"]
         tok = R["tokens_new"] / R["tokens_old"]
         with self.voiceover(
@@ -59,8 +66,11 @@ class Frontier(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(hc))
+            self.play(FadeIn(hc), FadeIn(r1[0]), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT),
+                                                                            FadeIn(r_.val)) for r_ in r1[1]],
+                                                          lag_ratio=0.4), FadeIn(r1[2]))
             vo.wait_until("b")
+            self.play(FadeOut(r1))
             self.play(FadeIn(bt), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT),
                                                                FadeIn(r_.val)) for r_ in b], lag_ratio=0.3))
             vo.wait_until("c")
@@ -138,18 +148,18 @@ class Frontier(VoiceoverScene):
                 cells.add(t.move_to([x0 + cw * (j + 0.5), y, 0]))
             rows.add(VGroup(nm, cells))
         note_ = note(r"--: \ the model doesn't fit in the device's memory; \ bytes per token: \ active weights, \ "
-                     r"scales included", font_size=16).to_edge(DOWN, buff=0.85)
+                     r"scales included", font_size=16).to_edge(DOWN, buff=0.75)
         ours = label(rf"our novels model on this computer: \ bound ${fr['ours_bound']:.0f}$, \ measured "
                      rf"${fr['ours_meas']:.0f}$ tokens a second", font_size=20, color=DECODEC).to_edge(DOWN, buff=0.35)
         ap = F.APPLE_ON_DEVICE
         hc = history_card(2025, r"Apple Intelligence, \ on device", rf"about ${ap['params'] / 1e9:.0f}$B parameters in "
                           rf"${ap['bits']}$ bits, \ an ${ap['kv_bits']}$-bit cache shared between layers "
                           rf"(${ap['kv_share']}\%$ smaller)", width=4.4, font_size=15, color=C.NEURAL)
-        hc.to_corner(DL, buff=0.2).shift(UP * 0.55)
+        hc.move_to([-4.3, -1.95, 0])
         cpx = F.RUBIN_CPX
         hc2 = history_card(2025, r"NVIDIA, \ Rubin CPX", rf"a GPU for the long-context work of reading prompts: \ "
                            rf"${cpx['mem'] / 1e9:.0f}$ GB of GDDR7, \ ${cpx['nvfp4'] / 1e15:.0f}$ PFLOP/s in NVFP4",
-                           width=4.4, font_size=15, color=PREFILLC).to_corner(DR, buff=0.2).shift(UP * 0.55)
+                           width=4.4, font_size=15, color=PREFILLC).move_to([4.3, -1.95, 0])
         i_m5, i_h = devs.index("Apple M5"), devs.index("NVIDIA H100")
         j_oss = models.index("gpt-oss-20b, MXFP4")
         eff = fr["ours_meas"] / fr["ours_bound"]

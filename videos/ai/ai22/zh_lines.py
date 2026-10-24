@@ -85,7 +85,7 @@ ZH = {
     "f'Our heads in the first layer look between":
         '我们的第一层注意力头看向{lo:.1f}到{hi:.1f}个像素之外，而随便挑两个图块相距{uniform:.1f}：有些头只看附近，像卷积一样。',
 
-    '"All twenty-five position vectors at the end of training':
+    'f"All twenty-five position vectors at the end of training':
         "训练结束时的全部25个位置向量：每一小格显示一个图块的向量和其他每个图块的有多像。<bookmark mark='a'/>相邻的平均{near:.2f}，"
         "相距很远的{far:.2f}。{pattern}",
 
@@ -516,12 +516,6 @@ ZH = {
         "视频可以边流入边编码；而一张静止图片就是一帧的视频，所以视频模型也能用图片训练。图片多，教外观；视频教运动；多数视频模型两样都用。"
         "<bookmark mark='d'/>这里{int(d['pixels']):,}个像素变成{int(d['numbers'])}个数，少了{ratio:.0f}倍，重建误差是{float(d['rmse']):.3f}；"
         "一张静止图片单独重建，误差是{float(d['still_rmse']):.3f}。",
-
-    'f"A token now has three coordinates:':
-        "现在一个词元有三个坐标：哪一帧，哪一行，哪一列。第13部分的旋转位置编码可以很自然地推广。<bookmark mark='a'/>把每个头的数两两一组，分成三份："
-        "一些按帧号旋转，一些按行旋转，一些按列旋转，每组有自己的频率。<bookmark mark='b'/>因为每组都是一个旋转，两个词元之间的分数只取决于它们在时间、"
-        "高度和宽度上相距多远，和一维时完全一样。<bookmark mark='c'/>推广起来不那么优雅的是代价：{round(n5, -3):,.0f}个词元，注意力就要算"
-        "{n5 * n5 / 1000000000.0:.1f}亿亿……",
 }
 
 ZH.update({

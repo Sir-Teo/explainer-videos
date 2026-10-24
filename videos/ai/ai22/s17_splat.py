@@ -215,11 +215,11 @@ class Splat(VoiceoverScene):
         head = label(r"3D, \ 2020--2025", font_size=36).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(r"2022", r"Instant-NGP \ (M\"uller et al.)", r"a hash grid instead of a big MLP: \ a NeRF in "
-                         r"seconds", color=HIST, width=4.2, font_size=19),
+                         r"seconds", color=HIST, width=4.3, font_size=23),
             history_card(r"2024", r"DUSt3R \ (Wang et al.)", r"a transformer turns two photographs \ into 3D points, \ "
-                         r"no camera calibration", color=HIST, width=4.2, font_size=19),
+                         r"no camera calibration", color=HIST, width=4.3, font_size=23),
             history_card(r"2025", r"VGGT \ (Wang et al., Oxford \& Meta)", r"cameras, depth and points \ from hundreds "
-                         r"of views, \ in one pass under a second; \ CVPR best paper", color=HIST, width=4.2, font_size=19),
+                         r"of views, \ in one pass under a second; \ CVPR best paper", color=HIST, width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
         if cards.width > 13.2:
             cards.width = 13.2

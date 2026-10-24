@@ -140,12 +140,12 @@ class REPA(VoiceoverScene):
         cards = VGroup(
             history_card(r"Jan 2025", r"VA-VAE \ (Yao, Yang \& Wang)", r"align the autoencoder's latents with a vision "
                          r"model's features: \ FID $1.35$ on ImageNet $256^2$, \ $21\times$ faster to train",
-                         color=HIST, width=4.2, font_size=20),
+                         color=HIST, width=4.3, font_size=23),
             history_card(r"Apr 2025", r"REPA-E \ (Leng et al.)", r"train the autoencoder and the denoiser together, \ "
-                         r"held in place by REPA: \ FID $1.12$", color=HIST, width=4.2, font_size=20),
+                         r"held in place by REPA: \ FID $1.12$", color=HIST, width=4.3, font_size=23),
             history_card(r"Oct 2025", r"representation autoencoders \ (Zheng, Ma, Tong \& Xie)", r"no VAE at all: \ a "
                          r"frozen DINOv2 encoder and a trained decoder; \ FID $1.51$ without guidance, \ $1.13$ with",
-                         color=HIST, width=4.2, font_size=20),
+                         color=HIST, width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
         if cards.width > 13.2:
             cards.width = 13.2

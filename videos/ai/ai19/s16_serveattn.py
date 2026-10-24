@@ -54,8 +54,8 @@ class ServeAttention(VoiceoverScene):
                     color=C.BITS).next_to(wl, DOWN, buff=0.35).align_to(rows[0], LEFT)
         hc = history_card(2023, r"Tri Dao, Daniel Haziza, Francisco Massa \& Grigory Sizov", rf"Flash-Decoding: \ up to "
                           rf"${F.FLASHDEC['gain']}\times$ faster generation on very long sequences", width=4.4,
-                          font_size=16, color=ATTNC).move_to([4.4, -1.4, 0])
-        tag = note(r"a simple model: \ one block of work per multiprocessor").to_corner(DR, buff=0.2)
+                          font_size=16, color=ATTNC).move_to([4.4, -2.75, 0])
+        tag = note(r"a simple model: \ one block of work per multiprocessor").to_corner(DL, buff=0.2)
         with self.voiceover(
             "FlashAttention was built for reading prompts, where thousands of queries share each tile of keys. "
             "Decoding has one query per conversation, against a cache that may hold a million keys. "

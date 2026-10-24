@@ -80,15 +80,15 @@ class Unified(VoiceoverScene):
         head = label(r"Unified models", font_size=36).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"May 2024", r"Chameleon \ (Meta)", r"pictures as discrete tokens in the same vocabulary: \ "
-                         r"one next-token loss for everything", color=HIST, width=4.2, font_size=19),
+                         r"one next-token loss for everything", color=HIST, width=4.3, font_size=23),
             history_card(r"Aug 2024", r"Transfusion \ (Zhou et al., Meta)", r"one transformer, \ two losses: \ next "
                          r"token for text, \ diffusion for picture patches; \ $7$ billion weights, \ $2$ trillion tokens",
-                         color=HIST, width=4.2, font_size=19),
+                         color=HIST, width=4.3, font_size=23),
             history_card(r"Oct 2024", r"Janus \ (DeepSeek)", r"one transformer, \ but separate eyes: \ SigLIP features "
-                         r"to read, \ VQ tokens to draw", color=HIST, width=4.2, font_size=19),
+                         r"to read, \ VQ tokens to draw", color=HIST, width=4.3, font_size=23),
             history_card(r"May 2025", r"BAGEL \ (ByteDance Seed)", r"two transformer experts, \ for understanding and "
                          r"for drawing, \ sharing attention: \ $7$ of $14$ billion weights active; \ editing emerged",
-                         color=HIST, width=4.2, font_size=19),
+                         color=HIST, width=4.3, font_size=23),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.25, 0.25)).next_to(head, DOWN, buff=0.35)
         if cards.height > 5.8:
             cards.height = 5.8
@@ -231,12 +231,12 @@ class Unified(VoiceoverScene):
         head = label(r"Editing as generation", font_size=36).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(r"Nov 2022", r"InstructPix2Pix", r"edit pairs made by GPT-3 and a diffusion model; \ a "
-                         r"denoiser that reads the picture and the instruction", color=HIST, width=4.2, font_size=19),
+                         r"denoiser that reads the picture and the instruction", color=HIST, width=4.3, font_size=23),
             history_card(r"Mar 2025", r"GPT-4o images", r"pictures drawn natively by an omni model, \ which reads "
-                         r"pictures too", color=HIST, width=4.2, font_size=19),
+                         r"pictures too", color=HIST, width=4.3, font_size=23),
             history_card(r"2025", r"FLUX.1 Kontext, \ Qwen-Image, \ Gemini 2.5 Flash Image", r"the input picture as "
                          r"context: \ keep a face, \ a style, \ a product, \ change the rest",
-                         color=HIST, width=4.2, font_size=19),
+                         color=HIST, width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
         if cards.width > 13.2:
             cards.width = 13.2

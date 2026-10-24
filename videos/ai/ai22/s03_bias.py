@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import (CNN_C, HIST, PART, PATCH, VIT_C, fmt_int, load, mean_band, spread_bars, take_away)
+from videos.ai.ai22.common import (CNN_C, HIST, PART, PATCH, VIT_C, fmt_int, glyph_sheet, load, mean_band, spread_bars,
+                                   take_away)
 
 
 def locality_picture() -> VGroup:
@@ -41,20 +42,20 @@ class Bias(VoiceoverScene):
         head = label(r"From AlexNet to the vision transformer", font_size=36).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(2012, r"AlexNet; \ then VGG, \ ResNet", r"convolutions win ImageNet \ (Part 10)", color=HIST,
-                         width=4.2, font_size=20),
-            history_card(2018, r"non-local networks", r"attention added to convolutional networks", color=HIST, width=4.2,
-                         font_size=20),
+                         width=4.3, font_size=26),
+            history_card(2018, r"non-local networks", r"attention added to convolutional networks", color=HIST, width=4.3,
+                         font_size=26),
             history_card(2020, r"ViT \ (Dosovitskiy et al.)", r"pretrained on $300$ million images: \ $88.55\%$ on "
-                         r"ImageNet; \ on ImageNet alone, \ a few points below ResNets", color=HIST, width=4.2, font_size=20),
+                         r"ImageNet; \ on ImageNet alone, \ a few points below ResNets", color=HIST, width=4.3, font_size=26),
             history_card(2021, r"DeiT; \ Swin", r"ImageNet only, \ $83.1\%$, \ in under $3$ days; \ local windows, \ "
-                         r"a hierarchy", color=HIST, width=4.2, font_size=20),
+                         r"a hierarchy", color=HIST, width=4.3, font_size=26),
             history_card(2022, r"ConvNeXt", r"a modernized convolutional network: \ $87.8\%$, \ level with Swin",
-                         color=HIST, width=4.2, font_size=20),
+                         color=HIST, width=4.3, font_size=26),
             history_card(2023, r"ViT-22B; \ DINOv2", r"vision transformers at scale; \ self-supervised encoders \ (Part 24)",
-                         color=HIST, width=4.2, font_size=20),
-        ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3)).next_to(head, DOWN, buff=0.35)
-        if cards.width > 13.2:
-            cards.width = 13.2
+                         color=HIST, width=4.3, font_size=26),
+        ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.45)).next_to(head, DOWN, buff=0.45)
+        if cards.width > 13.3:
+            cards.width = 13.3
         quote = label(r"``large scale training trumps inductive bias'' \ \textemdash\ Dosovitskiy et al.\ (2020)",
                       font_size=22, color=VIT_C).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -91,10 +92,10 @@ class Bias(VoiceoverScene):
                                r"equivariance}: \ the same weights at every place, \ so a shifted picture gives shifted "
                                r"features.", width=6.2, color=CNN_C)
         card.to_corner(UL, buff=0.4)
-        pic = locality_picture().scale(1.15).move_to([3.6, 0.9, 0])
-        pay = VGroup(label(r"right assumptions: \ fewer examples needed", font_size=22, color=CNN_C),
-                     label(r"fewer assumptions: \ more to learn, \ more it can learn", font_size=22, color=VIT_C)
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([0, -2.6, 0])
+        pic = locality_picture().scale(1.55).move_to([3.4, 0.7, 0])
+        pay = VGroup(label(r"right assumptions: \ fewer examples needed", font_size=28, color=CNN_C),
+                     label(r"fewer assumptions: \ more to learn, \ more it can learn", font_size=28, color=VIT_C)
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, -2.7, 0])
         with self.voiceover(
             "What did the transformer give up? An inductive bias: an assumption built in before any data arrives. "
             "<bookmark mark='a'/> A convolution assumes locality, that a unit only needs a small neighbourhood, and "
@@ -122,9 +123,23 @@ class Bias(VoiceoverScene):
         card = pause_card(rf"A vision transformer and a convolutional network with the same number of weights learn "
                           rf"to name letters from {sizes[0]} fonts, \ or from all {sizes[-1]}. \ Which wins each time, "
                           r"and by how much?", width=8.6).move_to(UP * 0.6)
-        setup = VGroup(label(r"the same steps, \ batches, \ augmentations", font_size=22, color=GREY_A),
-                       label(r"tested on $4$ fonts \ neither has seen", font_size=22, color=GREY_A)
-                       ).arrange(RIGHT, buff=2.5).next_to(card, DOWN, buff=0.6)
+        card.to_edge(UP, buff=0.35)
+        from videos.ai.ai22.base import dataset
+
+        imgs, labels, test, n_fonts, font = dataset()
+        train_fonts = np.unique(font[~test])
+        chosen = np.sort(np.random.default_rng(100).permutation(train_fonts)[:sizes[0]])  # seed 0's choice
+        cols_ = [0, 4, 6, 12, 17, 22]  # A E G M R W, the first of each letter's three copies
+
+        def sheet(fonts_, size):
+            ims = [imgs[(f * 26 + c) * 3] for f in fonts_ for c in cols_]
+            return glyph_sheet(np.array(ims), len(fonts_), len(cols_), size=size, gap=0.03)
+
+        setup = Group(Group(label(rf"{sizes[0]} training fonts", font_size=20, color=GREY_A), sheet(chosen, 0.32)).arrange(DOWN, buff=0.15),
+                      Group(label(rf"all {sizes[-1]}", font_size=20, color=GREY_A), sheet(train_fonts, 0.16)).arrange(DOWN, buff=0.15),
+                      Group(label(r"$4$ held-out fonts", font_size=20, color=C.SURPRISE),
+                            sheet(np.unique(font[test]), 0.32)).arrange(DOWN, buff=0.15)
+                      ).arrange(RIGHT, buff=1.0, aligned_edge=UP).next_to(card, DOWN, buff=0.45)
         with self.voiceover(
             "We can test that on our letters. Two models with the same number of weights, the same training steps, "
             "batches and augmentations; one a vision transformer, one a convolutional network. They learn from "
@@ -132,7 +147,7 @@ class Bias(VoiceoverScene):
             "<bookmark mark='a'/> Pause and predict: which wins with little data, and does that change with more?"
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
-            self.play(FadeIn(setup))
+            self.play(LaggedStart(*[FadeIn(g_) for g_ in setup], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("a")
             self.play(Indicate(card.box, color=C.ADVANTAGE, scale_factor=1.02))
         self.wait(2.0)
@@ -153,13 +168,13 @@ class Bias(VoiceoverScene):
         bars.move_to([-3.3, -0.2, 0])
         yl = label(r"right on the $4$ held-out fonts", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.25)
         leg = legend([(CNN_C, r"convolutional network"), (VIT_C, r"vision transformer")], font_size=20)
-        leg.next_to(bars, DOWN, buff=0.55)
         # the learning curves on the smallest set
         xs = np.asarray(d["curve_steps"], float)
         vc, cc_ = np.asarray(d["vit_curve"]), np.asarray(d["cnn_curve"])
         ax = axes([0, xs[-1]], [0, 1], x_length=4.6, y_length=2.6, xlabel=r"training step", ylabel=r"held-out accuracy",
                   xticks=[0, xs[-1]], yticks=[0, 0.5, 1], center=[3.6, 0.4, 0], font_size=18, xfmt=lambda x: fmt_int(x))
         cap = label(rf"learning, \ on {sizes[0]} fonts \ (band: \ three seeds)", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1)
+        leg.next_to(ax, DOWN, buff=0.25)
         lines = VGroup(mean_band(ax.ax, xs, cc_[0], CNN_C), mean_band(ax.ax, xs, vc[0], VIT_C))
         gap = ca.mean(1) - va.mean(1)  # CNN minus ViT, per data size
         macs = (int(d["vit_macs"]), int(d["cnn_macs"]))
