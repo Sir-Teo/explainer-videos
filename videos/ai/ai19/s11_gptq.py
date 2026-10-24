@@ -42,7 +42,7 @@ class GPTQ(VoiceoverScene):
         r1 = Arrow(ORIGIN, np.array([0.9, -0.6, 0]), buff=0, color=ERRC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         r2 = Arrow(ORIGIN, np.array([1.3, 0.75, 0]), buff=0, color=GPTQC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         pic.add(r1, r2)
-        pic.scale(1.25).move_to([-2.6, -1.6, 0])
+        pic.scale(1.2).move_to([-3.4, -2.0, 0])
         pl = label(r"output error, \ as a function of two weights' errors", font_size=20, color=C.MLP)
         pl.next_to(pic, UP, buff=0.15)
         l1 = label(r"across the valley: \ costly", font_size=18, color=ERRC).next_to(r1, DOWN, buff=0.1)
@@ -199,8 +199,8 @@ class GPTQ(VoiceoverScene):
                 why(r"large where the inputs are large")]
         step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.0, buff=0.7, edge=6.8)
         hc = history_card(2023, r"Ji Lin et al., \ AWQ", rf"protect the ${F.AWQ['salient']}\%$ of weights whose "
-                          r"inputs are largest; \ MLSys 2024 best paper", width=4.6, font_size=17,
-                          color=AWQC).move_to([4.3, -0.55, 0])
+                          r"inputs are largest; \ MLSys 2024 best paper", width=4.4, font_size=16,
+                          color=AWQC).move_to([4.5, -0.95, 0])
         o = load("outliers")
         prof = np.asarray(o["profile_qkv"], float)
         nc = len(prof)

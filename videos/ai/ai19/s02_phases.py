@@ -90,7 +90,8 @@ class Phases(VoiceoverScene):
         mb = float(r["stack_mb"])
         cache = float(r.get("cache_bytes", 0))
         knee_p, knee_m = float(r["knee_pred"]), float(r["knee_meas"])
-        g = loglog((0, math.log10(600)), (math.floor(math.log10(t.min() * 0.6)), math.log10(t.max() * 2.2)),
+        ylo = math.floor(math.log10(t.min() * 0.6))
+        g = loglog((0, math.log10(600)), (ylo, math.log10(t.max() * 2.2)),
                    x_length=6.6, y_length=4.2, xlabel=r"batch $B$: \ vectors per pass",
                    ylabel=r"time per pass \ (ms, \ this computer, \ one core)", center=[-2.6, -0.4, 0])
         ax = g.ax
@@ -101,15 +102,14 @@ class Phases(VoiceoverScene):
                            dash_length=0.08)
         comp = np.array([2.0 * r["stack_layers"] * r["stack_n"] ** 2 * b / peak * 1e3 for b in bs])
         cl = VMobject(color=FLOPC, stroke_width=3).set_points_as_corners(
-            [ax.c2p(math.log10(b), math.log10(c)) for b, c in zip(bs, comp) if math.log10(c) >= ax.y_range[0]])
+            [ax.c2p(math.log10(b), math.log10(c)) for b, c in zip(bs, comp) if math.log10(c) >= ylo])
         best = VMobject(color=WHITE, stroke_width=2.5).set_points_as_corners(
             [ax.c2p(math.log10(b), math.log10(max(mem_t, c))) for b, c in zip(bs, comp)])
         dots = VGroup(*[Dot(ax.c2p(x, math.log10(y)), radius=0.07, color=DECODEC) for x, y in zip(Lx, t)])
         fl = label(rf"reading ${mb:.0f}$ MB at ${bw / 1e9:.0f}$ GB/s", font_size=20, color=BYTEC)
-        fl.next_to(ax.c2p(0.05, math.log10(mem_t)), UP, buff=0.1, aligned_edge=LEFT)
+        fl.next_to(ax.c2p(math.log10(600), math.log10(mem_t)), DOWN, buff=0.12, aligned_edge=RIGHT)
         cll = label(rf"arithmetic at ${peak / 1e9:.0f}$ GFLOP/s", font_size=20, color=FLOPC)
-        cll.next_to(ax.c2p(math.log10(300), math.log10(2.0 * r['stack_layers'] * r['stack_n'] ** 2 * 300 / peak * 1e3)),
-                    RIGHT, buff=0.1).shift(DOWN * 0.35 + LEFT * 0.6)
+        cll.next_to(ax.c2p(math.log10(600), math.log10(comp[-1])), RIGHT, buff=0.15)
         stk = VGroup(*[Rectangle(width=0.9, height=0.12, stroke_width=0, fill_color=WEIGHTC, fill_opacity=0.25 + 0.05 * k)
                        for k in range(12)]).arrange(DOWN, buff=0.04).move_to([4.6, 1.6, 0])
         sl = label(rf"$12$ weight matrices, \\ ${int(r['stack_n']):,} \times {int(r['stack_n']):,}$: \ ${mb:.0f}$ MB".replace(

@@ -44,10 +44,11 @@ class Outliers(VoiceoverScene):
         head = label(rf"the largest input to each channel of one layer \ (\texttt{{{o['worst']}}}, ${n}$ channels)",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         ratio = float(o["ratio"][o["worst"]])
-        rl = label(rf"largest $\div$ median: \ ${ratio:.1f}$", font_size=24, color=ERRC).move_to([5.0, 1.5, 0])
+        rl = label(rf"largest $\div$ median: \ ${ratio:.1f}$", font_size=24, color=ERRC).move_to([5.0, 2.3, 0])
         resid = np.asarray(o["resid"]).max(1)
         rr = label(rf"between the blocks, \ the largest activation grows \\ from ${resid[0]:.0f}$ to "
                    rf"${resid[-1]:.0f}$, \ layer by layer", font_size=20, color=GREY_A).next_to(rl, DOWN, buff=0.3)
+        rr.to_edge(RIGHT, buff=0.3)
         hc = history_card(2022, r"Tim Dettmers et al., \ LLM.int8()", rf"from about ${F.LLM_INT8['scale'] / 1e9:.1f}$B "
                           rf"parameters, \ a few feature dimensions (about ${F.LLM_INT8['share']}\%$) hold values up to "
                           rf"${F.LLM_INT8['mag']}\times$ the rest", width=5.0, font_size=17, color=ERRC)
@@ -101,7 +102,7 @@ class Outliers(VoiceoverScene):
         ]
         whys = [why(r"a linear layer"), why(r"the same product: \ $s$ cancels"), why(r"move the range from $X$ to $W$"),
                 why(r"both sides share channel $j$'s range")]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.2, buff=0.36, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.35, x=-1.2, buff=0.26, edge=6.8)
         n = 96
 
         def strip(v, col, y, lab):
@@ -114,8 +115,8 @@ class Outliers(VoiceoverScene):
                       color=col).next_to([-6.4, y + 1.0, 0], RIGHT, buff=0.0)
             return VGroup(g, t)
 
-        sa0, sw0 = strip(a0, C.TOKEN, -1.55, r"activations: \ max per channel"), strip(w0, WEIGHTC, -2.95, r"weights")
-        sa1, sw1 = strip(a1, SMOOTHC, -1.55, r"activations $\div\, s$"), strip(w1, SMOOTHC, -2.95, r"weights $\times\, s$")
+        sa0, sw0 = strip(a0, C.TOKEN, -2.0, r"activations: \ max per channel"), strip(w0, WEIGHTC, -3.3, r"weights")
+        sa1, sw1 = strip(a1, SMOOTHC, -2.0, r"activations $\div\, s$"), strip(w1, SMOOTHC, -3.3, r"weights $\times\, s$")
         hc = history_card(2022, r"Guangxuan Xiao et al., \ SmoothQuant", rf"eight-bit weights and activations, \ "
                           rf"${F.SMOOTHQUANT['speed']}\times$ faster, \ models up to "
                           rf"${F.SMOOTHQUANT['params'] / 1e9:.0f}$B", width=4.0, font_size=16,
