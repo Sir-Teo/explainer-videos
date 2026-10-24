@@ -44,8 +44,9 @@ def sample_text(n_blocks: int, block: int, seed: int) -> str:
 # Byte-pair encoding (Gage 1994; Sennrich, Haddow & Birch 2016)
 # ---------------------------------------------------------------------------
 def learn_bpe(text: str, merges: int):
-    """BPE over words (a word carries its leading space): the merges in order, and how many times each pair occurred
-    when it was merged (each merge shortens the text by exactly that many symbols)."""
+    """BPE over words (a word carries its leading space): the merges in order, how many times each pair occurred when
+    it was merged (counting overlaps, as the ranking does), and how many symbols each merge actually saved (a run like
+    "aaa" holds the pair twice but merges once)."""
     words = collections.Counter(words_of(text))
     seqs = [list(w) for w in words]
     counts = list(words.values())
@@ -55,7 +56,7 @@ def learn_bpe(text: str, merges: int):
         for a, b in zip(s, s[1:]):
             pairs[(a, b)] += counts[i]
             where[(a, b)].add(i)
-    out, freq = [], []
+    out, freq, saved = [], [], []
     for _ in range(merges):
         if not pairs:
             break
@@ -65,6 +66,7 @@ def learn_bpe(text: str, merges: int):
         out.append((a, b))
         freq.append(int(n))
         ab = a + b
+        sv = 0
         for i in sorted(where[(a, b)]):
             s, c = seqs[i], counts[i]
             for x, y in zip(s, s[1:]):  # remove this word's old pairs
@@ -80,11 +82,13 @@ def learn_bpe(text: str, merges: int):
                 else:
                     new.append(s[j])
                     j += 1
+            sv += (len(s) - len(new)) * c
             seqs[i] = new
             for x, y in zip(new, new[1:]):
                 pairs[(x, y)] += c
                 where[(x, y)].add(i)
-    return out, freq
+        saved.append(int(sv))
+    return out, freq, saved
 
 
 def apply_bpe(word: str, ranks: dict) -> list[str]:

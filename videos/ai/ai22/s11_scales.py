@@ -61,6 +61,12 @@ class Scales(VoiceoverScene):
         eq = cmath(r"r_k", r"= Q\big(\operatorname{down}_{s_k}(f -", r"\hat f", r"_{k-1})\big), \qquad", r"\hat f", r"_k =",
                    r"\hat f", r"_{k-1} + \operatorname{up}(", r"r_k", r")", colors=colors, font_size=30).to_edge(DOWN, buff=0.4)
         cite_ = cite(r"K.~Tian, Y.~Jiang, Z.~Yuan, B.~Peng \& L.~Wang, \textit{Visual Autoregressive Modeling} (2024)", corner=UL)
+        grids = VGroup()
+        for n_, im in zip(sizes, so_far):
+            c_ = S / n_
+            grids.add(VGroup(*[Square(c_, stroke_color=VAR_C, stroke_width=1.2, stroke_opacity=0.8)
+                               .move_to(im.get_corner(UL) + RIGHT * c_ * (j % n_ + 0.5) + DOWN * c_ * (j // n_ + 0.5))
+                               for j in range(n_ * n_)]))
         with self.voiceover(
             "There's a more natural order for a picture: coarse to fine. In April 2024 Keyu Tian, Liwei Wang and "
             "colleagues at Peking University and ByteDance built a tokenizer with five scales. <bookmark mark='a'/> "
@@ -71,10 +77,12 @@ class Scales(VoiceoverScene):
             "this scale; add it back, smoothed up."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(rowl[0]), FadeIn(rowl[1]))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(g_), FadeIn(l_)) for g_, l_ in zip(grids, sl)], lag_ratio=0.3),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(so_far[0]), FadeIn(adds[0]), FadeIn(sl[0]), FadeIn(el[0]), FadeIn(rowl[2]))
+            self.play(FadeIn(so_far[0]), FadeIn(adds[0]), FadeIn(el[0]), FadeIn(rowl[2]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(so_far[k]), FadeIn(adds[k]), FadeIn(sl[k])) for k in range(1, len(sizes))],
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(so_far[k]), FadeIn(adds[k])) for k in range(1, len(sizes))],
                                   lag_ratio=0.5), run_time=3.0)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(e_) for e_ in el[1:]], lag_ratio=0.2))
@@ -164,6 +172,17 @@ class Scales(VoiceoverScene):
             cards.next_to(head, DOWN, buff=0.4)
         foot = label(r"the token route stays alive: \ it is how a language model can draw \ (chapter 11)", font_size=24,
                      color=PATCH).to_edge(DOWN, buff=0.6)
+        unit = 7.0 / 256
+        pb = VGroup()
+        for txt, n_, col in ((r"raster order: \ $256$ passes", 256, GEN_C["raster"]),
+                             (r"VAR: \ $10$ passes \ ($680$ tokens on $10$ scales)", 10, VAR_C)):
+            pb.add(VGroup(label(txt, font_size=22, color=col),
+                          Rectangle(width=n_ * unit, height=0.32, stroke_width=0, fill_color=col, fill_opacity=0.8)))
+        for row in pb:
+            row[1].next_to(row[0], DOWN, buff=0.1, aligned_edge=LEFT)
+        pb.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(cards[0], DOWN, buff=0.6).align_to(cards[0], LEFT)
+        pbl = label(r"a $256 \times 256$ ImageNet picture \ (as published)", font_size=18, color=GREY_B).next_to(pb, DOWN, buff=0.2)
+        pbl.align_to(pb, LEFT)
         with self.voiceover(
             "On ImageNet, VAR's own raster-order baseline scored a distance of eighteen point six five; VAR scored one "
             "point seven three, beat the diffusion transformer, and drew about twenty times faster: ten scales, from "
@@ -176,7 +195,10 @@ class Scales(VoiceoverScene):
             "draw."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT)) for r_ in pb], lag_ratio=0.5),
+                      FadeIn(pbl), run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(pb), FadeOut(pbl))
             self.play(FadeIn(cards[1], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(cards[2], shift=UP * 0.1))

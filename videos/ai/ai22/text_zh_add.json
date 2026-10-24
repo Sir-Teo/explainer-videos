@@ -486,7 +486,10 @@
     "separately": "分开画",
     "$64$ clips, \\ three seeds; \\ real clips' wobble: \\ $0.40$ px": "$64$个片段，\\ 三个种子；\\ 真实片段的抖动：\\ $0.40$像素",
     "a language model: \\ one token at a time, \\ each from the ones before": "语言模型：\\ 一次一个词元，\\ 每个都由前面的词元得出",
-    "training: \\ hide a random share of the tokens, \\\\ predict them all at once, \\\\ seeing every other token": "训练：\\ 随机藏起一部分词元，\\\\ 一次全部预测出来，\\\\ 看得见其余所有词元"
+    "training: \\ hide a random share of the tokens, \\\\ predict them all at once, \\\\ seeing every other token": "训练：\\ 随机藏起一部分词元，\\\\ 一次全部预测出来，\\\\ 看得见其余所有词元",
+    "raster order: \\ $256$ passes": "光栅顺序：\\ $256$遍",
+    "VAR: \\ $10$ passes \\ ($680$ tokens on $10$ scales)": "VAR：\\ $10$遍 \\ （$10$个尺度上的$680$个词元）",
+    "a $256 \\times 256$ ImageNet picture \\ (as published)": "一张$256 \\times 256$的ImageNet图片 \\ （按已发表的数据）"
   },
   "patterns": [
     [
