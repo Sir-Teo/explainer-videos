@@ -111,7 +111,7 @@ class Design(VoiceoverScene):
         boxes.move_to(UP * 1.9)
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
                        for a, b in zip(boxes, boxes[1:])])
-        crit = label(r"kept if: \ predicted aligned error $< 5$, \ within $2$\,\AA\ of the design", font_size=20,
+        crit = label(r"kept if: \ predicted aligned error $< 5$, \\ within $2$\,\AA\ of the design", font_size=20,
                      color=PAIR_C).next_to(boxes, DOWN, buff=0.2).align_to(boxes[1], LEFT)
         how = VGroup(
             label(r"RoseTTAFold, \ fine-tuned to remove noise from residue frames", font_size=22),

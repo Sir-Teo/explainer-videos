@@ -210,7 +210,7 @@ class Inside(VoiceoverScene):
         share_s = {k: ws[k] / gold_w[k] for k in live if ws[k] is not None}
         vals = list(share_l.values()) + list(share_s.values()) + [0.0, 1.2]
         lo, hi = min(vals), max(vals)
-        pad = 0.1 * (hi - lo)
+        pad = 0.15 * (hi - lo)
         gax = axes([0, len(live)], [lo - pad if lo < 0 else 0, hi + pad], x_length=5.8, y_length=3.0,
                    ylabel=r"share of gold's weight it learned", yticks=[0, 1], center=[-3.1, -1.5, 0])
         ax = gax.ax
@@ -227,7 +227,7 @@ class Inside(VoiceoverScene):
                 dest.add(Rectangle(width=0.3, height=max(abs(b1[1] - b0[1]), 0.01), stroke_width=0,
                                    fill_color=TERM_COL[k], fill_opacity=op).move_to((b0 + b1) / 2))
             labs.add(label(TERM_TEX[k], font_size=20, color=TERM_COL[k]).next_to(ax.c2p(j + 0.5, ymin), DOWN,
-                                                                                    buff=0.15))
+                                                                                    buff=0.2))
         vtxt = VGroup(*[MathTex(rf"{share_l[k]:.2f}", font_size=22, color=TERM_COL[k]).next_to(
             bars[j], UP if share_l[k] >= 0 else DOWN, buff=0.08) for j, k in enumerate(live)])
         key = VGroup(label(r"faint: \ from $100$ comparisons", font_size=18, color=GREY_B),
@@ -359,11 +359,19 @@ class Inside(VoiceoverScene):
         ex_grp = VGroup()
         if ex:
             effs = ex["effects"]
-            chips = VGroup(*[data_text(t, font="DejaVu Sans Mono", font_size=20, color=WHITE) for _, t, _, _ in effs])
-            chips.arrange(RIGHT, buff=0.22)
-            if chips.width > 12.6:
-                chips.width = 12.6
-            chips.move_to([0, 1.75, 0])
+            # the line as one text, so the words share a baseline; each token's glyphs picked out by position
+            toks = ex["text"].split()
+            line_t = data_text(" ".join(toks), font="DejaVu Sans Mono", font_size=22, color=WHITE)
+            if line_t.width > 12.6:
+                line_t.width = 12.6
+            line_t.move_to([0, 1.75, 0])
+            starts = np.cumsum([0] + [len(t) for t in toks])
+            if len(line_t) == starts[-1]:  # one glyph per non-space character
+                chips = VGroup(*[line_t[starts[j]:starts[j + 1]] for j, _, _, _ in effs])
+            else:
+                chips = VGroup(*[data_text(t, font="DejaVu Sans Mono", font_size=20, color=WHITE)
+                                 for _, t, _, _ in effs]).arrange(RIGHT, buff=0.22).move_to([0, 1.75, 0])
+                line_t = chips
             m = max(max(abs(e[2]), abs(e[3])) for e in effs) or 1.0
             H = 1.3 / m
             base = Line([-6.6, 0.0, 0], [6.6, 0.0, 0], color=GREY_C, stroke_width=1.5)
@@ -378,7 +386,7 @@ class Inside(VoiceoverScene):
             exq = said(f"Write a line about the {ex['topic']}.", "user", chars=40, font_size=20).move_to([0, 2.8, 0])
             ex_lg = legend([(PROXY, r"the reward model's loss when the word goes"),
                             (GOLD, r"gold's, \ for the same deletion")], font_size=18).to_corner(DL, buff=0.3)
-            ex_grp = VGroup(exq, chips, base, bars, marks, ex_lg)
+            ex_grp = VGroup(exq, line_t, base, bars, marks, ex_lg)
         # every line: the words that raise the score most, and lower it most; each column a zero line with the words
         # to its left, the bars and marks scaled so the largest reaches 1.9 either way
         rows_up, rows_down = VGroup(), VGroup()
@@ -411,30 +419,53 @@ class Inside(VoiceoverScene):
                    rf"${int(d['min_count'])}$ times", font_size=18).to_corner(DR, buff=0.2)
         k_up = sum(1 for r_ in up if r_[4] == "pos")
         k_dn = sum(1 for r_ in down if r_[4] == "neg")
-        odd = [r_ for r_ in up + down if not r_[4]]
-        odd = max(odd, key=lambda r_: abs(r_[2] - r_[3])) if odd else None
-        if odd and abs(odd[2] - odd[3]) > 0.05:
-            odd_said = (f"But look at {odd[0]}: on neither of gold's lists, it moves the score by {odd[2]:+.2f}, where "
-                        f"gold moves by {odd[3]:+.2f}. That is something the reward model picked up from the "
-                        "comparisons that gold never asked for.")
+        if k_up + k_dn == 0:
+            lists_said = ("Not one of them is on gold's lists: the words that move the reward model most are words "
+                          "gold ignores.")
+        elif k_up + k_dn >= n_show:
+            lists_said = (f"{k_up:d} of the top {n_show:d} are on gold's cheerful list, and {k_dn:d} of the bottom "
+                          f"{n_show:d} on its gloomy list: it has found gold's words.")
         else:
-            odd_said = ("The words on neither list barely move it, as they barely move gold: the deletions there "
-                        "only shorten the line.")
+            lists_said = (f"Only {k_up:d} of the top {n_show:d} are on gold's cheerful list, and {k_dn:d} of the bottom "
+                          f"{n_show:d} on its gloomy list; the rest are words gold ignores.")
+        (_, pr, pg), (_, nr, ng) = d["class_pos"], d["class_neg"]
         word_r = float(d["word_r"])
+        class_said = (f"Gold's own words, on average: a cheerful one adds {pr:+.2f} to the reward model's score, where "
+                      f"it adds {pg:+.2f} to gold; a gloomy one {nr:+.2f}, where gold takes {ng:+.2f}. Over all "
+                      f"{int(d['n_words'])} words the two agree with a correlation of {word_r:.2f}.")
+        # how often each of gold's terms speaks in the data: lines with a listed word, pairs that differ in length
+        texts, tops, nwords = d["text"], d["topic"], np.asarray(d["words"])
+        share = float(np.mean([any(kind(w) for w in WORD.findall(x.lower())) for x in texts]))
+        lterm = np.where(nwords >= 4, -PER_WORD * np.maximum(0, nwords - CONCISE), np.nan)
+        diff = []
+        for t in dict.fromkeys(tops):
+            idx = [k for k in range(len(tops)) if tops[k] == t]
+            diff += [lterm[i] != lterm[j] for a_, i in enumerate(idx) for j in idx[a_ + 1:]]
+        len_share = float(np.mean(diff))
+        if pr < 0.5 * pg and nr > 0.5 * ng:
+            why_said = (f"Why so little? Only {100 * share:.0f} percent of the lines have a word from either of "
+                        f"gold's lists, while {100 * len_share:.0f} percent of the pairs of lines differ in length: in "
+                        "the comparisons it learned from, length speaks far more often than mood.")
+        else:
+            why_said = (f"{100 * share:.0f} percent of the lines have a word from one of gold's lists, enough for it "
+                        "to learn their mood.")
+        cls = VGroup(
+            label(rf"gold's cheerful words: \ reward model ${pr:+.2f}$, \ gold ${pg:+.2f}$", font_size=22, color=REWARD),
+            label(rf"gold's gloomy words: \ reward model ${nr:+.2f}$, \ gold ${ng:+.2f}$", font_size=22, color=PENALTY),
+        ).arrange(RIGHT, buff=0.8).move_to(key)
+        if cls.width > 13.0:
+            cls.width = 13.0
         ex_topic = ex["topic"] if ex else d["topic"][0]
         with self.voiceover(
             "Which words does it listen to? Delete one word at a time and score the line again: the drop is that "
             f"word's worth to the reward model. <bookmark mark='a'/> Here is a line about the {ex_topic}, word by "
-            "word. Orange bars are the reward model's change, in gold's "
-            "units; yellow marks are gold's own change for the same deletion. <bookmark mark='b'/> Now every word in "
-            f"every line. These are the {n_show:d} words that raise its score most, and the {n_show:d} that lower "
-            "it most. <bookmark mark='c'/> "
-            f"{k_up:d} of the top {n_show:d} are on gold's cheerful list, and {k_dn:d} of the bottom {n_show:d} on its gloomy "
-            f"list. Over all {int(d['n_words'])} words, the two agree with a correlation of {word_r:.2f}. "
-            f"<bookmark mark='d'/> {odd_said}"
+            "word. Orange bars are the reward model's change, in gold's units; yellow marks are gold's own change "
+            "for the same deletion. <bookmark mark='b'/> Now every word in every line. These are the "
+            f"{n_show:d} words that raise its score most, and the {n_show:d} that lower it most. "
+            f"<bookmark mark='c'/> {lists_said} <bookmark mark='d'/> {class_said} <bookmark mark='e'/> {why_said}"
         ) as vo:
             if ex:
-                self.play(FadeIn(exq), FadeIn(chips), Create(base))
+                self.play(FadeIn(exq), FadeIn(line_t), Create(base))
             vo.wait_until("a")
             if ex:
                 self.play(LaggedStart(*[GrowFromEdge(b_, DOWN if b_.get_y() > 0 else UP) for b_ in bars],
@@ -446,13 +477,12 @@ class Inside(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows_up], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows_down], lag_ratio=0.1), run_time=2.5)
             vo.wait_until("c")
-            self.play(*[Indicate(r_[0], color=REWARD) for r_, it in zip(rows_up, up) if it[4] == "pos"],
-                      *[Indicate(r_[0], color=PENALTY) for r_, it in zip(rows_down, down) if it[4] == "neg"])
+            hits = [Indicate(r_[0], color=REWARD) for r_, it in zip(rows_up, up) if it[4] == "pos"]
+            hits += [Indicate(r_[0], color=PENALTY) for r_, it in zip(rows_down, down) if it[4] == "neg"]
+            self.play(*(hits or [Indicate(VGroup(*[r_[0] for r_ in rows_up], *[r_[0] for r_ in rows_down]),
+                                          color=GREY_A, scale_factor=1.05)]))
             vo.wait_until("d")
-            if odd:
-                hit = [r_ for r_, it in zip(list(rows_up) + list(rows_down), up + down) if it[0] == odd[0]]
-                if hit:
-                    self.play(Circumscribe(hit[0], color=PROXY, buff=0.08))
+            self.play(FadeOut(key), FadeIn(cls, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

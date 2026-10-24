@@ -669,6 +669,7 @@
   "$K_{3,3}$: \\ none": "$K_{3,3}$：\\ 没有",
   "every node has $3$ neighbours: \\\\ colour refinement sees \\\\ the same graph": "每个节点都有$3$个邻居：\\\\ 颜色细化看到的 \\\\ 是同一个图",
   "computed: \\ five charged particles, \\\\ networks trained here on $3{,}000$ of them": "计算所得：\\ 五个带电粒子，\\\\ 网络在这里用$3{,}000$个这样的系统训练",
+  "kept if: \\ predicted aligned error $< 5$, \\\\ within $2$\\,\\AA\\ of the design": "保留条件：\\ 预测对齐误差 $< 5$，\\\\ 与设计相差$2$\\,\\AA 以内",
   "computed: \\ $4{,}000$ compact chains of $12$ atoms; \\ same steps{,} \\ two seeds each; \\ $31{,}620$ and $558{,}616$ weights": "计算所得：\\ $4{,}000$条紧凑的链，每条$12$个原子；\\ 步数相同，\\ 各两个种子；\\ 权重分别为$31{,}620$和$558{,}616$个",
   "image networks: \\ up to $152$ layers \\ (ResNet, \\ Part 9)": "图像网络：\\ 多达$152$层 \\ （ResNet，\\ 第9部分）",
   "graph networks: \\ usually $2$ to $4$": "图网络：\\ 通常$2$到$4$层",

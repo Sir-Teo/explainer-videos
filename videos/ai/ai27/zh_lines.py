@@ -256,13 +256,13 @@ ZH = {
         '用更多比较训练的奖励模型，跟金标准跟得更远：金标准最高到了{lgold.max():.2f}。',
 
     "f'The reward model trained on more comparisons tracks gold further: gold reaches {lgold.max():.2f} at n":
-        '用更多比较训练的奖励模型，跟金标准跟得更远：在n = {ns[peak_l]}时，金标准最高到了{lgold.max():.2f}，然后它也回落了，降到{lgold[-1]:.2f}。',
+        '用更多比较训练的奖励模型，跟金标准跟得更远：在n = {ns[peak_l]}时，金标准最高到了{lgold.max():.2f}，然后它也回落了，降到{l_end:.2f}。',
 
     'f"With the small reward model, gold rises at first':
-        "用小的奖励模型时，金标准先是上升，在n等于{ns[peak_s]}附近达到顶峰，然后回落到{sgold[-1]:.2f}，而奖励模型自己的分数一路爬到{ys['small_proxy'][-1]:.2f}：这就是过度优化。",
+        "用小的奖励模型时，金标准先是上升，在n等于{ns[peak_s]}附近达到顶峰，然后回落到{s_end:.2f}，而奖励模型自己的分数一路爬到{ys['small_proxy'][-1]:.2f}：这就是过度优化。",
 
     'f"With the small reward model, gold climbs only to':
-        "用小的奖励模型时，金标准只爬到{sgold[-1]:.2f}，而奖励模型自己的分数到了{ys['small_proxy'][-1]:.2f}：两者之间的差距越拉越大。",
+        "用小的奖励模型时，金标准只爬到{s_end:.2f}，而奖励模型自己的分数到了{ys['small_proxy'][-1]:.2f}：两者之间的差距越拉越大。",
 
     "f'This is the line about the":
         '这是小奖励模型在全部两百五十六句里最喜欢的那句关于{ex[0]}的话。',
@@ -376,13 +376,7 @@ ZH = {
         '它没学会长度规则：超过{CONCISE:d}个词以后，金标准每个词降{-kg:.3f}，而奖励模型的分数变化{ks:+.3f}。',
 
     'f"Which words does it listen to?':
-        "它在听哪些词？一次删掉一个词，再给这句话打一次分：分数掉了多少，就是这个词在奖励模型眼里值多少。<bookmark mark='a'/>这是一句关于{ex_topic}的话，一个词一个词地看。橙色的柱子是奖励模型的变化，用金标准的单位；黄色的标记，是删掉同一个词时，金标准自己的变化。<bookmark mark='b'/>现在看所有句子里的所有词。这是最能抬高它分数的{n_show:d}个词，和最能压低它分数的{n_show:d}个词。<bookmark mark='c'/>前{n_show:d}个里有{k_up:d}个在金标准的欢快词表上，后{n_show:d}个里有{k_dn:d}个在它的阴郁词表上。在全部{int(d['n_words'])}个词上，两者的相关系数是{word_r:.2f}。<bookmark mark='d'/>{odd_said}",
-
-    'f"But look at {odd[0]}':
-        '但看看“{odd[0]}”这个词：它不在金标准的任何一张词表上，却让分数变化{odd[2]:+.2f}，而金标准只变化{odd[3]:+.2f}。这是奖励模型从比较里捡来的东西，金标准从没要求过。',
-
-    'The words on neither list barely move it':
-        '两张词表上都没有的词，几乎不影响它，也几乎不影响金标准：删掉它们，只是让句子变短。',
+        "它在听哪些词？一次删掉一个词，再给这句话打一次分：分数掉了多少，就是这个词在奖励模型眼里值多少。<bookmark mark='a'/>这是一句关于{ex_topic}的话，一个词一个词地看。橙色的柱子是奖励模型的变化，用金标准的单位；黄色的标记，是删掉同一个词时，金标准自己的变化。<bookmark mark='b'/>现在看所有句子里的所有词。这是最能抬高它分数的{n_show:d}个词，和最能压低它分数的{n_show:d}个词。<bookmark mark='c'/>{lists_said}<bookmark mark='d'/>{class_said}<bookmark mark='e'/>{why_said}",
 
     'f"Where do the two disagree most?':
         "两者在哪里分歧最大？<bookmark mark='a'/>这句关于{o['topic']}的话，在它那个问题的{per:d}句里，奖励模型排第{int(o['rank_rm'])}；金标准排第{int(o['rank_gold'])}。{o_why}<bookmark mark='b'/>而这句关于{u['topic']}的话正好相反：奖励模型排第{int(u['rank_rm'])}，金标准排第{int(u['rank_gold'])}。{u_why}<bookmark mark='c'/>这些才是要紧的错误，因为优化器会专门去找它们。",
@@ -445,16 +439,7 @@ ZH = {
         "价值网络的用处，是提供一个基线。<bookmark mark='a'/>和第26部分一样，从奖励里减去一个基线，不改变梯度的平均值，只去掉噪声。<bookmark mark='b'/>PPO的基线是学出来的：就是那个价值网络，逐个词元。<bookmark mark='c'/>但语言模型可以把同一个问题回答好几遍。2024年，Cohere的RLOO用其他回答的平均奖励，作为每个回答的基线，报告的结果比PPO更好，而且不需要价值网络。<bookmark mark='d'/>同一年，DeepSeek的GRPO还除以组内的离散程度；DeepSeek-R1就是用它训练的，第28部分会推导它。<bookmark mark='e'/>我们的训练用的是最简单的版本：对一个问题写{n:d}句话，基线就是它们的平均，也就是RLOO的基线乘以{n:d}分之{n - 1:d}。",
 
     'f"How much does the baseline matter on our model?':
-        "在我们的模型上，基线有多重要？在训练的第一步，我们对{Q:d}个问题，每个抽{B:d}批、每批{n:d}句话，再用每一批，按四种方式估计梯度。如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是{cos['none']:.2f}。<bookmark mark='b'/>所有问题共用一个基线时，是{cos['shared']:.2f}。奖励模型的平均分，每个问题都不一样，从{qm.min():+.1f}到{qm.max():+.1f}，因为它学到的只有同一个问题内的差。<bookmark mark='c'/>用每个问题自己的平均值，也就是价值网络要学着预测的东西，是{cos['value']:.2f}。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是{cos['group']:.2f}。{verdict}<bookmark mark='e'/>{compass}",
-
-    "The batch's own mean does nearly as well":
-        '这一批自己的平均值，几乎和知道每个问题真正的平均值一样好，而且不花任何代价：没有价值网络要训练。这就是RLOO、GRPO和我们的训练背后的道理。',
-
-    'f"The batch\'s own mean is noisier':
-        '这一批自己的平均值，比问题真正的平均值噪声更大，因为它只来自{n:d}句话，但它比完全没有基线好得多。',
-
-    "f'On our model the baseline makes little difference":
-        '在我们的模型上，基线没什么差别：抽{n:d}句话带来的噪声，把它淹没了。',
+        "在我们的模型上，基线有多重要？在训练的第一步，我们对{Q:d}个问题，每个抽{B:d}批、每批{n:d}句话，再用每一批，按几种方式估计梯度。如果估计得好，同一个问题的两批，应该指向同一个方向。<bookmark mark='a'/>没有基线时，两批之间的余弦是{cos['none']:.3f}。<bookmark mark='b'/>{shift_said}<bookmark mark='c'/>所有问题共用一个基线时，是{cos['shared']:.3f}；用每个问题自己的平均值，也就是价值网络要学着预测的东西，是{cos['value']:.3f}。<bookmark mark='d'/>用这一批自己的平均值，就像我们的训练那样，是{cos['group']:.3f}。{verdict}<bookmark mark='e'/>{compass}",
 
     'Even the best is far from one':
         '即使最好的，也离1很远：单单一批，是一个有噪声的指南针，所以强化学习要走很多小步。',
@@ -470,6 +455,36 @@ ZH = {
 
     'f"Here the reward model\'s belief and gold roughly agree':
         '在这里，奖励模型的看法和金标准大致一致：{p0:+.2f}和{g0:+.2f}。',
+
+    'f"Gold\'s own words, on average':
+        "金标准自己的词，平均来看：一个欢快的词，让奖励模型的分数变化{pr:+.2f}，而让金标准变化{pg:+.2f}；一个阴郁的词，让它变化{nr:+.2f}，而金标准扣{ng:+.2f}。在全部{int(d['n_words'])}个词上，两者的相关系数是{word_r:.2f}。",
+
+    "Not one of them is on gold's lists":
+        '它们没有一个在金标准的词表上：最能左右奖励模型的词，都是金标准根本不理会的词。',
+
+    'f"{k_up:d} of the top {n_show:d}':
+        '前{n_show:d}个里有{k_up:d}个在金标准的欢快词表上，后{n_show:d}个里有{k_dn:d}个在它的阴郁词表上：它找到了金标准的词。',
+
+    'f"Only {k_up:d} of the top {n_show:d}':
+        '前{n_show:d}个里只有{k_up:d}个在金标准的欢快词表上，后{n_show:d}个里只有{k_dn:d}个在它的阴郁词表上；其余的，都是金标准不理会的词。',
+
+    'f"Why so little?':
+        '为什么学到的这么少？只有{100 * share:.0f}%的句子，含有金标准任何一张词表上的词，而{100 * len_share:.0f}%的句子对，长度不一样：在它学习的那些比较里，长度发言的次数远远多过情绪。',
+
+    'f"{100 * share:.0f} percent of the lines have a word from one of gold\'s lists':
+        '{100 * share:.0f}%的句子含有金标准某张词表上的词，足够它学会这些词的情绪。',
+
+    'f"But the reward model\'s scores are only defined up to a shift.':
+        "但奖励模型的分数，只在差一个平移的意义下才有定义。给每个分数都加上{sh:g}，它和那些比较拟合得一样好，而没有基线时，两批之间的一致程度降到{cos['shifted']:.3f}；凡是减去某个平均值的基线，都完全不受这个平移影响。",
+
+    "f'Add {sh:g} to every score":
+        "给每个分数都加上{sh:g}，它和那些比较拟合得一样好，而没有基线时，一致程度几乎不变：{cos['shifted']:.3f}。",
+
+    "The batch's own mean does far better than no baseline":
+        '这一批自己的平均值，比没有基线好得多，而且不花任何代价：没有价值网络要训练。这就是RLOO、GRPO和我们的训练背后的道理。',
+
+    "f'With the scores as learned":
+        '照学出来的样子，这些分数在每个问题上都接近零，从{qm.min():+.1f}到{qm.max():+.1f}，所以减去一个平均值，改变不了多少。在这里，基线真正的作用，是让梯度不受一个奖励模型从未确定下来的平移的影响。',
 
 }
 

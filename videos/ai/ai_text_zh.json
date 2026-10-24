@@ -12599,7 +12599,8 @@
     "one possible future": "一种可能的未来",
     "the average of many: \\ blur": "许多种的平均：\\ 模糊",
     "EGNN": "EGNN",
-    "\\textit{over-squashing}: \\ Alon \\& Yahav (2021); \\\\ bottlenecks, curvature: \\ Topping et al.\\ (2022)": "\\textit{过挤压}：\\ Alon和Yahav（2021）；\\\\ 瓶颈与曲率：\\ Topping等（2022）"
+    "\\textit{over-squashing}: \\ Alon \\& Yahav (2021); \\\\ bottlenecks, curvature: \\ Topping et al.\\ (2022)": "\\textit{过挤压}：\\ Alon和Yahav（2021）；\\\\ 瓶颈与曲率：\\ Topping等（2022）",
+    "kept if: \\ predicted aligned error $< 5$, \\\\ within $2$\\,\\AA\\ of the design": "保留条件：\\ 预测对齐误差 $< 5$，\\\\ 与设计相差$2$\\,\\AA 以内"
   },
   "phrases": {
     "width": "宽度",

@@ -280,42 +280,48 @@ class RLHF(VoiceoverScene):
         cos = {k: float(d[f"{k}_cos"]) for k in kinds}
         by_q = {k: np.asarray(d[f"{k}_cos_by_q"]) for k in kinds}
         qm = np.asarray(d["question_mean"])
-        n, B, Q = int(d["n"]), int(d["batches"]), len(d["topics"])
-        names = {"none": r"no baseline", "shared": r"one for every \\ question",
-                 "value": r"each question's \\ own average", "group": r"the batch's \\ own mean (ours)"}
-        cols = {"none": GREY_B, "shared": REF, "value": C.BASELINE, "group": POLICY}
-        top = max(float(max(v.max() for v in by_q.values())), 0.1)
-        g = axes([0, len(kinds)], [0, top * 1.15], x_length=6.6, y_length=3.8,
+        n, B, Q, sh = int(d["n"]), int(d["batches"]), len(d["topics"]), float(d["shift"])
+        names = {"none": r"no baseline", "shifted": rf"no baseline, \\ scores $+{sh:g}$",
+                 "shared": r"one for every \\ question", "value": r"each question's \\ own average",
+                 "group": r"the batch's \\ own mean (ours)"}
+        cols = {"none": GREY_B, "shifted": PROXY, "shared": REF, "value": C.BASELINE, "group": POLICY}
+        top = max(float(max(v.max() for v in by_q.values())), 1e-3)
+        g = axes([0, len(kinds)], [0, top * 1.15], x_length=7.4, y_length=3.8,
                  ylabel=r"cosine between two batches' gradients", yticks=ticks(0, top * 1.1, 3),
-                 center=[-2.8, -0.2, 0])
+                 yfmt=lambda v: f"{v:.2f}" if v else "0", center=[-2.6, -0.1, 0])
         ax = g.ax
         bars, whisk, labs, vals = VGroup(), VGroup(), VGroup(), VGroup()
         for j, k in enumerate(kinds):
             x = j + 0.5
             b0, b1 = ax.c2p(x, 0), ax.c2p(x, cos[k])
-            bars.add(Rectangle(width=0.9, height=max(b1[1] - b0[1], 0.01), stroke_width=0, fill_color=cols[k],
+            bars.add(Rectangle(width=0.85, height=max(b1[1] - b0[1], 0.01), stroke_width=0, fill_color=cols[k],
                                fill_opacity=0.85).move_to((b0 + b1) / 2))
             whisk.add(Line(ax.c2p(x, by_q[k].min()), ax.c2p(x, by_q[k].max()), color=WHITE, stroke_width=2))
-            labs.add(label(names[k], font_size=18, color=cols[k]).next_to(ax.c2p(x, 0), DOWN, buff=0.15))
-            vals.add(MathTex(rf"{cos[k]:.2f}", font_size=24, color=cols[k]).next_to(whisk[-1], UP, buff=0.1))
+            labs.add(label(names[k], font_size=17, color=cols[k]).next_to(ax.c2p(x, 0), DOWN, buff=0.15))
+            vals.add(MathTex(rf"{cos[k]:.3f}", font_size=22, color=cols[k]).next_to(whisk[-1], UP, buff=0.1))
         # each question's average score: the shift the reward model never pinned down
-        nl = NumberLine(x_range=[float(np.floor(qm.min())), float(np.ceil(qm.max())), 1], length=4.6,
-                        color=GREY_C, include_numbers=True, font_size=20).move_to([4.2, -1.3, 0])
+        lo_, hi_ = float(np.floor(min(qm.min(), 0))), float(np.ceil(max(qm.max(), 1)))
+        nl = NumberLine(x_range=[lo_, hi_, 1], length=4.2, color=GREY_C, include_numbers=True,
+                        font_size=20).move_to([4.6, -1.0, 0])
         qd = VGroup(*[Dot(nl.n2p(v), radius=0.07, color=PROXY) for v in qm])
         ql = label(rf"the reward model's average score \\ on each of the ${Q:d}$ questions", font_size=20,
                    color=PROXY).next_to(nl, UP, buff=0.45)
         tag = note(rf"computed: \ the first step of training, \ ${B:d}$ batches of ${n:d}$ lines for each of ${Q:d}$ "
                    r"questions; \ whiskers: \ lowest to highest question", font_size=18).to_corner(DR, buff=0.2)
-        if cos["group"] >= 0.75 * cos["value"] and cos["group"] > 1.5 * cos["none"]:
-            verdict = ("The batch's own mean does nearly as well as knowing each question's true average, and it "
-                       "costs nothing: there is no value network to train. That is the reasoning behind RLOO, GRPO "
-                       "and our runs.")
-        elif cos["group"] > 1.5 * cos["none"]:
-            verdict = ("The batch's own mean is noisier than the question's true average, since it comes from only "
-                       f"{n:d} lines, but it is far better than no baseline at all.")
+        if cos["shifted"] < 0.7 * cos["none"]:
+            shift_said = (f"But the reward model's scores are only defined up to a shift. Add {sh:g} to every one, "
+                          "which fits the comparisons exactly as well, and without a baseline the agreement falls to "
+                          f"{cos['shifted']:.3f}; every baseline that subtracts an average is untouched by the shift.")
         else:
-            verdict = (f"On our model the baseline makes little difference: the noise of sampling {n:d} lines swamps "
-                       "it.")
+            shift_said = (f"Add {sh:g} to every score, which fits the comparisons exactly as well, and without a "
+                          f"baseline the agreement barely changes: {cos['shifted']:.3f}.")
+        if cos["group"] > 1.5 * cos["none"]:
+            verdict = ("The batch's own mean does far better than no baseline, and it costs nothing: there is no value "
+                       "network to train. That is the reasoning behind RLOO, GRPO and our runs.")
+        else:
+            verdict = (f"With the scores as learned, which sit near zero on every question, from {qm.min():+.1f} to "
+                       f"{qm.max():+.1f}, subtracting an average changes little. Its real job here is to make the "
+                       "gradient indifferent to a shift the reward model never pinned down.")
         if max(cos.values()) < 0.5:
             compass = ("Even the best is far from one: a single batch is a noisy compass, which is why reinforcement "
                        "learning takes many small steps.")
@@ -324,24 +330,25 @@ class RLHF(VoiceoverScene):
         with self.voiceover(
             "How much does the baseline matter on our model? At the first step of training we draw "
             f"{B:d} batches of {n:d} lines for each of {Q:d} questions, and estimate the gradient from each batch "
-            "four ways. If an estimate is any good, two batches for the same question should point the same way. "
-            f"<bookmark mark='a'/> With no baseline, two batches agree with a cosine of {cos['none']:.2f}. "
-            f"<bookmark mark='b'/> With one baseline shared by every question, {cos['shared']:.2f}. The reward "
-            f"model's average score differs from question to question, from {qm.min():+.1f} to {qm.max():+.1f}, "
-            "because only differences within a question were ever learned. <bookmark mark='c'/> With each "
-            f"question's own average, what a value network would learn to predict, {cos['value']:.2f}. "
-            f"<bookmark mark='d'/> And with the batch's own mean, as in our runs, {cos['group']:.2f}. {verdict} "
-            f"<bookmark mark='e'/> {compass}"
+            "in several ways. If an estimate is any good, two batches for the same question should point the same "
+            f"way. <bookmark mark='a'/> With no baseline, two batches agree with a cosine of {cos['none']:.3f}. "
+            f"<bookmark mark='b'/> {shift_said} <bookmark mark='c'/> With one baseline shared by every question, "
+            f"{cos['shared']:.3f}; with each question's own average, what a value network would learn to predict, "
+            f"{cos['value']:.3f}. <bookmark mark='d'/> And with the batch's own mean, as in our runs, "
+            f"{cos['group']:.3f}. {verdict} <bookmark mark='e'/> {compass}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(labs), FadeIn(tag))
-            for j, mk in enumerate("abcd"):
+            order = {"a": ["none"], "b": ["shifted"], "c": ["shared", "value"], "d": ["group"]}
+            for mk, ks in order.items():
                 vo.wait_until(mk)
-                self.play(GrowFromEdge(bars[j], DOWN), Create(whisk[j]), FadeIn(vals[j]))
-                if j == 1:
+                js = [kinds.index(k) for k in ks]
+                self.play(*[GrowFromEdge(bars[j], DOWN) for j in js], *[Create(whisk[j]) for j in js],
+                          *[FadeIn(vals[j]) for j in js])
+                if mk == "d":
                     self.play(FadeIn(nl), FadeIn(ql), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in qd],
                                                                   lag_ratio=0.15))
             vo.wait_until("e")
-            self.play(Indicate(bars[-1], color=POLICY))
+            self.play(Indicate(bars[kinds.index("group")], color=POLICY))
         self.wait(0.3)
         self.clear_scene()
 
