@@ -177,7 +177,7 @@ class ViT(VoiceoverScene):
         hl = label(r"orange: \ where its summary token looks, \ last layer", font_size=20, color=C.ATTN).next_to(pairs, DOWN, buff=0.2)
         st = gloss(r"summary token", r"one extra token with no picture in it: \\ it gathers from every patch, \ and "
                    r"its final vector names the letter", summary_picture(LETTERS[labs[0]]), width=5.6, color=C.BITS)
-        st.move_to([-3.4, -1.9, 0])
+        st.move_to([0, -1.9, 0])
         # how far each head looks, layer by layer
         D_ = np.asarray(v["att_dist"])  # (layers, heads), pixels
         L_, H_ = D_.shape
@@ -211,7 +211,7 @@ class ViT(VoiceoverScene):
             "far each attention head looks, on average. " + reach
         ) as vo:
             self.play(LaggedStart(*[FadeIn(Group(p[0], p[2])) for p in pairs], lag_ratio=0.2), run_time=1.2)
-            self.play(FadeIn(st[0]), FadeIn(st[1][:2]), FadeIn(ax))
+            self.play(FadeIn(st[0]), FadeIn(st[1][:2]))
             vo.wait_until("s")
             sp = st[1][2]
             self.play(FadeIn(sp.toks), FadeIn(sp.names))
@@ -220,6 +220,7 @@ class ViT(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p[1]) for p in pairs], lag_ratio=0.25), FadeIn(hl), run_time=2.0)
             vo.wait_until("b")
+            self.play(st.animate.move_to([-3.4, -1.9, 0]), FadeIn(ax), run_time=1.0)
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.05), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
