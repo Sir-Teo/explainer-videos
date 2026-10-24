@@ -85,7 +85,7 @@ class KVCache(VoiceoverScene):
         key = VGroup(*[VGroup(Square(0.16, stroke_width=0, fill_color=c_, fill_opacity=0.9),
                               label(t, font_size=16, color=c_)).arrange(RIGHT, buff=0.08)
                        for c_, t in ((C.QUERY, r"query head"), (C.KEY, r"key"), (C.VALUE, r"value"))]
-                     ).arrange(RIGHT, buff=0.35).next_to(pics, DOWN, buff=0.15)
+                     ).arrange(RIGHT, buff=0.35).to_corner(UL, buff=0.3)
         tag = schematic_tag(corner=UR)
         with self.voiceover(
             "Part 15 built the key-value cache: every token a model has read leaves a key and a value in every "

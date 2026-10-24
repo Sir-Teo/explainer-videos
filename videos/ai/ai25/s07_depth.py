@@ -213,8 +213,9 @@ class Depth(VoiceoverScene):
             "attend to every node directly."
         ) as vo:
             self.play(FadeIn(dots[0]))
+            self.play(Create(tree), FadeIn(dots[1:]), FadeIn(cnt), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(tree), FadeIn(dots[1:]), FadeIn(cnt), FadeIn(txt[0]), run_time=2.0)
+            self.play(FadeIn(txt[0]))
             vo.wait_until("b")
             pulses = VGroup(*[Dot(pts[(levels, i)], radius=0.07, color=PAIR_C) for i in range(2 ** levels)])
             self.play(FadeIn(pulses))

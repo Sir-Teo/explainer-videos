@@ -89,7 +89,7 @@ class Grammar(VoiceoverScene):
                    rf"(\texttt{{\{{}}), \ inside a name ${gr['mid_allowed']:,}$".replace(",", "{,}"), font_size=19,
                    color=OKC).next_to(bars, UP, buff=0.15)
         hc = history_card(2023, r"Brandon Willard \& R\'emi Louf, \ Outlines", r"an index from automaton states to "
-                          r"allowed tokens, \ built once", width=4.2, font_size=16, color=AUTOC).move_to([-4.2, -0.85, 0])
+                          r"allowed tokens, \ built once", width=4.2, font_size=16, color=AUTOC).move_to([-4.2, -1.15, 0])
         with self.voiceover(
             "The fix is to make invalid output impossible. <bookmark mark='a'/> Write the format as a pattern, a "
             "regular expression, and compile it to an automaton: states, and the characters that move between them. "
@@ -109,6 +109,7 @@ class Grammar(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(hc))
             vo.wait_until("c")
+            self.play(FadeOut(hc))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03), FadeIn(bl), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
@@ -176,12 +177,12 @@ class Grammar(VoiceoverScene):
                   color=GREY_A).next_to(ctx, DOWN, buff=0.15)
         key = VGroup(label(r"the model's own odds, \ among the five (\%)", font_size=20, color=TARGETC),
                      label(r"what masking letter by letter gives (\%)", font_size=20, color=AUTOC))
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, 0.6, 0])
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, 1.15, 0])
         i_big = int(np.argmax(mk / np.maximum(ex, 1e-9)))
         # the masked choice, letter by letter: first a letter, then the rest
         firsts = sorted({nm[0] for nm in names}, key=lambda c: [nm[0] for nm in names].index(c))
         tree = VGroup()
-        ys = np.linspace(0.55, -0.55, len(names))
+        ys = np.linspace(0.85, -0.85, len(names))
         leaf = {nm: data_text(nm, font=MONO, font_size=20, color=GREY_A).move_to([5.6, y, 0])
                 for nm, y in zip(names, ys)}
         for c in firsts:
@@ -192,7 +193,7 @@ class Grammar(VoiceoverScene):
             for nm in kids:
                 tree.add(Line(node.get_right() + RIGHT * 0.08, leaf[nm].get_left() + LEFT * 0.08, color=GREY_C,
                               stroke_width=1.2), leaf[nm])
-        tree.move_to([4.5, -0.9, 0])
+        tree.move_to([4.5, -1.15, 0])
         tl = label(r"masking chooses a first letter, \ then the rest", font_size=18, color=AUTOC).next_to(tree, UP,
                                                                                                     buff=0.15)
         hc = history_card(2024, r"Kanghee Park et al.", r"grammar-aligned decoding: \ sample what the model would, "
