@@ -27,6 +27,7 @@ class Bias(VoiceoverScene):
         self.card()
         self.history()
         self.bias()
+        self.predict()
         self.experiment()
 
     def card(self):
@@ -115,6 +116,29 @@ class Bias(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def predict(self):
+        d = load("vitcnn")
+        sizes = [int(s) for s in d["sizes"]]
+        card = pause_card(rf"A vision transformer and a convolutional network with the same number of weights learn "
+                          rf"to name letters from {sizes[0]} fonts, \ or from all {sizes[-1]}. \ Which wins each time, "
+                          r"and by how much?", width=8.6).move_to(UP * 0.6)
+        setup = VGroup(label(r"the same steps, \ batches, \ augmentations", font_size=22, color=GREY_A),
+                       label(r"tested on $4$ fonts \ neither has seen", font_size=22, color=GREY_A)
+                       ).arrange(RIGHT, buff=2.5).next_to(card, DOWN, buff=0.6)
+        with self.voiceover(
+            "We can test that on our letters. Two models with the same number of weights, the same training steps, "
+            "batches and augmentations; one a vision transformer, one a convolutional network. They learn from "
+            f"{sizes[0]} fonts, or {sizes[1]}, or all {sizes[-1]}, and are tested on four fonts neither has seen. "
+            "<bookmark mark='a'/> Pause and predict: which wins with little data, and does that change with more?"
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            self.play(FadeIn(setup))
+            vo.wait_until("a")
+            self.play(Indicate(card.box, color=C.ADVANTAGE, scale_factor=1.02))
+        self.wait(2.0)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def experiment(self):
         d = load("vitcnn")
         sizes = [int(s) for s in d["sizes"]]
@@ -163,10 +187,7 @@ class Bias(VoiceoverScene):
                 f"The two spend about the same arithmetic per picture, {ratio:.1f} to 1.")
         tk = take_away(r"little data: \ build the assumptions in. \ \ A lot of data: \ let the model learn them.")
         with self.voiceover(
-            "We can test that. A vision transformer and a convolutional network with about the same number of "
-            "weights, trained with the same steps, batches and augmentations, on three, seven or all twenty "
-            "training fonts, and tested on the four held-out ones. Three seeds each. <bookmark mark='a'/> "
-            + verdict + " <bookmark mark='b'/> " + cost + " <bookmark mark='c'/> The lesson of the last decade: with little data, build the "
+            "Here are the results, three seeds each: every dot is one training run. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + cost + " <bookmark mark='c'/> The lesson of the last decade: with little data, build the "
             "assumptions in; with a lot, let the model learn them. Every generator in this part is a transformer."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars.base), FadeIn(bars.gnames), FadeIn(yl), FadeIn(leg))

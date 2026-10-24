@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai19.common import (F, LEARNC, PART, ROTC, RTNC, SMOOTHC, WEIGHTC, hbars, load)
+from videos.ai.ai19.common import (F, LEARNC, PART, ROTC, RTNC, SMOOTHC, WEIGHTC, hbars, load, node_box)
 
 COLORS = {r"Q": ROTC, r"x": C.TOKEN, r"W": WEIGHTC, r"E": WEIGHTC}
 
@@ -42,7 +42,30 @@ class Rotation(VoiceoverScene):
                     font_size=22, color=ROTC).to_edge(DOWN, buff=0.5)
         hc = history_card(2024, r"Saleh Ashkboos et al., \ QuaRot", rf"rotate the model, \ then $4$-bit weights, "
                           rf"activations and cache: \ {F.QUAROT['model']} within ${F.QUAROT['ppl']}$ perplexity",
-                          width=4.6, font_size=16, color=ROTC).to_corner(DR, buff=0.25).shift(UP * 0.8)
+                          width=4.4, font_size=16, color=ROTC).move_to([4.5, -0.45, 0])
+        # a rotation keeps lengths (schematic)
+        c0 = np.array([-5.0, -0.5, 0])
+        circ = Circle(radius=0.8, stroke_color=GREY_D, stroke_width=1.5).move_to(c0)
+        v0 = np.array([0.75, 0.28, 0])
+        th = 0.9
+        v1 = np.array([v0[0] * np.cos(th) - v0[1] * np.sin(th), v0[0] * np.sin(th) + v0[1] * np.cos(th), 0])
+        ax_ = Arrow(c0, c0 + v0, buff=0, color=C.TOKEN, stroke_width=3, max_tip_length_to_length_ratio=0.2)
+        aq = Arrow(c0, c0 + v1, buff=0, color=ROTC, stroke_width=3, max_tip_length_to_length_ratio=0.2)
+        arc = Arc(radius=0.45, start_angle=np.arctan2(v0[1], v0[0]), angle=th, arc_center=c0, color=ROTC,
+                  stroke_width=2)
+        lx = MathTex(r"x", font_size=26, color=C.TOKEN).next_to(c0 + v0, RIGHT, buff=0.08)
+        lq = MathTex(r"xQ", font_size=26, color=ROTC).next_to(c0 + v1, UP, buff=0.08)
+        rot_pic = VGroup(circ, ax_, aq, arc, lx, lq)
+        rot_l = label(r"a rotation: \ same length", font_size=18, color=GREY_A).next_to(circ, DOWN, buff=0.15)
+        # the residual stream, rotated: who gets Q and who gets its transpose (schematic)
+        sy = -2.3
+        stream = Line([-6.2, sy, 0], [6.2, sy, 0], color=ROTC, stroke_width=3).set_stroke(opacity=0.5)
+        boxes = VGroup()
+        for xx, t_ in ((-5.2, r"$E\,Q$"), (-1.8, r"read: \ $W_{\text{in}}\,Q$"), (1.6, r"write: \ $Q^\top W_{\text{out}}$"),
+                       (5.0, r"head: \ $W_{\text{head}}\,Q$")):
+            boxes.add(node_box(t_, ROTC, font_size=18, pad=0.15).move_to([xx, sy, 0]))
+        sl_ = label(r"the residual stream, \ rotated by $Q$ \ (schematic)", font_size=17, color=ROTC).next_to(
+            stream, UP, buff=0.6).set_x(0)
         with self.voiceover(
             "In 2024 Saleh Ashkboos, Dan Alistarh and colleagues found a way to make outliers go away instead of "
             "working around them. <bookmark mark='a'/> Start from the normalization before each layer, RMSNorm: "
@@ -58,11 +81,14 @@ class Rotation(VoiceoverScene):
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
+            self.play(Create(circ), GrowArrow(ax_), FadeIn(lx), FadeIn(rot_l))
+            self.play(TransformFromCopy(ax_, aq), Create(arc), FadeIn(lq))
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(hc))
+            self.play(Create(stream), FadeIn(sl_), FadeIn(boxes[1:3]), FadeIn(hc))
             vo.wait_until("d")
             step(3)
+            self.play(FadeIn(boxes[0]), FadeIn(boxes[3]))
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -183,9 +209,10 @@ class Rotation(VoiceoverScene):
         xs = cv[k // 2: k // 2 + len(sm), 0]
         lo = float(min(sm.min(), ev[:, 1].min())) - 0.03
         hi = float(max(sm.max(), ev[:, 1].max())) + 0.03
-        g = axes([0, float(cv[-1, 0]) + 2], [lo, hi], x_length=7.0, y_length=4.0, xlabel=r"step",
-                 ylabel=r"loss of the $4$-bit model \ (nats per token)", xticks=[0, int(cv[-1, 0] // 2), int(cv[-1, 0])],
-                 yticks=[round(lo + 0.03, 2), round(hi - 0.03, 2)], yfmt=lambda v: f"{v:.2f}", center=[-1.8, -0.3, 0])
+        S = int(sp["steps"])
+        g = axes([0, S + 2], [lo, hi], x_length=6.4, y_length=4.0, xlabel=r"step",
+                 ylabel=r"loss of the $4$-bit model \ (nats per token)", xticks=[0, S // 2, S],
+                 yticks=[round(lo + 0.03, 2), round(hi - 0.03, 2)], yfmt=lambda v: f"{v:.2f}", center=[-2.3, -0.3, 0])
         ax = g.ax
         tr = curve(ax, xs, sm, GREY_B, 2)
         evd = VGroup(*[Dot(ax.c2p(a, b_), radius=0.08, color=LEARNC) for a, b_ in ev])
@@ -195,7 +222,7 @@ class Rotation(VoiceoverScene):
                                                                                                    aligned_edge=LEFT,
                                                                                                    buff=0.12)
         key.move_to([4.4, 1.6, 0])
-        f_ = MathTex(r"Q = H\,(I + A)^{-1}(I - A), \quad A^\top = -A", font_size=30, color=LEARNC).move_to([4.0, -0.6, 0])
+        f_ = MathTex(r"Q = H\,(I + A)^{-1}(I - A), \quad A^\top = -A", font_size=28, color=LEARNC).move_to([4.4, -0.9, 0])
         fl = label(r"the Cayley map: \ any skew $A$ gives a rotation, \\ so plain gradient descent stays on rotations",
                    font_size=18, color=GREY_A).next_to(f_, DOWN, buff=0.15)
         tag = note(rf"computed: \ ${int(sp['steps'])}$ steps of Adam on batches of ${int(sp['batch'])}$ calibration "

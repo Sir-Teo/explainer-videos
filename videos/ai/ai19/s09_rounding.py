@@ -36,10 +36,10 @@ class Rounding(VoiceoverScene):
         dlt = MathTex(r"\Delta", font_size=30, color=LEVELC).next_to(dl, DOWN, buff=0.08)
         w = 1.37
         wd = Dot(nl.n2p(w), radius=0.08, color=WEIGHTC)
-        wl = MathTex(r"w", font_size=30, color=WEIGHTC).next_to(wd, UP, buff=0.18)
+        wl = MathTex(r"w", font_size=30, color=WEIGHTC).next_to(wd, UR, buff=0.08)
         arr = Arrow(nl.n2p(w) + UP * 0.05, nl.n2p(1) + UP * 0.05, buff=0, color=ERRC, stroke_width=3,
                     max_tip_length_to_length_ratio=0.3)
-        el = MathTex(r"e", font_size=28, color=ERRC).next_to(arr, UP, buff=0.05)
+        el = MathTex(r"e", font_size=28, color=ERRC).next_to(arr, UL, buff=0.05)
         # the error's density: flat on [-Delta/2, Delta/2]
         pdf = VGroup(Line([-5.0, -0.6, 0], [-1.8, -0.6, 0], color=GREY_C, stroke_width=1.5),
                      Rectangle(width=1.6, height=0.8, stroke_color=ERRC, stroke_width=2, fill_color=ERRC,
@@ -204,18 +204,19 @@ class Rounding(VoiceoverScene):
         bl = DashedLine(ax.c2p(1.6, base), ax.c2p(8.4, base), color=WHITE, dash_length=0.06)
         bll = label(rf"$32$-bit: \ ${base:.3f}$", font_size=20, color=WHITE).next_to(ax.c2p(8.4, base), UP, buff=0.08,
                                                                                     aligned_edge=RIGHT)
-        lines, dots, offs = VGroup(), VGroup(), VGroup()
+        lines, dots = VGroup(), VGroup()
         for key, nm, col in series:
             y = np.minimum(np.asarray(r["loss"][key]), cap)
             lines.add(curve(ax, bits, y, col, 3))
             dots.add(VGroup(*[Dot(ax.c2p(b, v), radius=0.06, color=col) for b, v in zip(bits, y)]))
-            if r["loss"][key][0] > cap:
-                offs.add(label(rf"${r['loss'][key][0]:.1f}$", font_size=16, color=col))
+        offs = label(r"$\uparrow$ \ off the scale", font_size=16, color=GREY_B).next_to(ax.c2p(2, cap), RIGHT, buff=0.15)
         leg = legend([(c_, t) for _, t, c_ in series], font_size=20).move_to([4.4, 1.4, 0])
         L = {k: np.asarray(r["loss"][k]) - base for k, _, _ in series}
         i4, i3, i8 = list(bits).index(4), list(bits).index(3), list(bits).index(8)
         bpw = r["bpw"]
-        notes = VGroup(label(rf"$8$ bits, \ per row: \ ${L['row'][i8]:+.4f}$", font_size=20, color=C.PROB),
+        d8 = L["row"][i8]
+        notes = VGroup(label(rf"$8$ bits, \ per row: \ ${'0.0000' if abs(d8) < 5e-5 else f'{d8:+.4f}'}$", font_size=20,
+                             color=C.PROB),
                        label(rf"$4$ bits: \ ${L['tensor'][i4]:+.3f}$ \ $\to$ \ ${L['32'][i4]:+.3f}$ per $32$", font_size=20,
                              color=LEVELC),
                        label(rf"$3$ bits, \ per row: \ ${L['row'][i3]:+.3f}$", font_size=20, color=C.PROB),
@@ -238,7 +239,7 @@ class Rounding(VoiceoverScene):
             self.play(FadeIn(g), Create(bl), FadeIn(bll))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), FadeIn(dots), FadeIn(leg),
-                      FadeIn(notes[0]), run_time=2.5)
+                      FadeIn(notes[0]), FadeIn(offs), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(notes[1]))
             vo.wait_until("c")

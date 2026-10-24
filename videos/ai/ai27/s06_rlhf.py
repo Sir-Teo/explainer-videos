@@ -212,7 +212,7 @@ class RLHF(VoiceoverScene):
         toks = VGroup(node_box(r"$x$", USER, font_size=26, height=0.55),
                       *[node_box(rf"$y_{i}$", ASSIST, font_size=26, height=0.55) for i in (1, 2, 3)],
                       node_box(r"$y_4$", POLICY, font_size=26, height=0.55)).arrange(RIGHT, buff=0.12)
-        toks.move_to([4.2, 1.95, 0])
+        toks.move_to([4.3, -0.6, 0])  # right of the ladder, below its second row
         b_s = Brace(toks[:4], DOWN, buff=0.1, color=GREY_B)
         b_a = Brace(toks[4], DOWN, buff=0.1, color=POLICY)
         l_s = label(r"the state $s_4$", font_size=20, color=GREY_A).next_to(b_s, DOWN, buff=0.1)
@@ -259,6 +259,7 @@ class RLHF(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(n_, shift=UP * 0.1) for n_ in nets], lag_ratio=0.3), FadeIn(cite_),
                       run_time=2.0)
             vo.wait_until("e")
+            self.play(FadeOut(VGroup(episode, ticks_, lead)), run_time=0.5)
             self.play(FadeIn(hc, shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
@@ -347,7 +348,7 @@ class RLHF(VoiceoverScene):
         arc = Arc(radius=0.55, start_angle=np.radians(12), angle=np.radians(50), arc_center=O, color=GREY_B)
         th = MathTex(r"\theta", font_size=26, color=GREY_A).move_to(O + 0.8 * np.array([np.cos(np.radians(37)),
                                                                                        np.sin(np.radians(37)), 0]))
-        l1 = label(r"batch 1's estimate", font_size=18, color=GREY_B).next_to(v1.get_end(), DOWN, buff=0.12)
+        l1 = label(r"batch 1's estimate", font_size=18, color=GREY_B).next_to(v1.get_end(), RIGHT, buff=0.12)
         l2 = label(r"batch 2's estimate", font_size=18, color=GREY_B).next_to(v2.get_end(), RIGHT, buff=0.12)
         cap = label(r"$\cos\theta$: \ $1$ if they agree, \ $0$ if unrelated", font_size=20, color=GREY_A)
         cap.move_to([4.6, 0.55, 0])

@@ -162,24 +162,25 @@ class ViT(VoiceoverScene):
     def looking(self):
         v = load("vit")
         ims, labs, att = np.asarray(v["ex_imgs"]), [int(x) for x in v["ex_labels"]], np.asarray(v["cls_att"])
-        S = 1.7
+        S = 1.55
         pairs = Group()
         for im, lb, a in zip(ims, labs, att):
             pic = gray_image(im, S)
             heat = heat_image(a, S, gamma=0.8).set_opacity(0.75).move_to(pic)
             t = label(rf"``{LETTERS[lb]}''", font_size=24, color=WHITE).next_to(pic, UP, buff=0.1)
             pairs.add(Group(pic, heat, t))
-        pairs.arrange(RIGHT, buff=0.3).move_to([-3.2, 1.1, 0])
+        pairs.arrange(RIGHT, buff=0.45).move_to([0, 1.75, 0])
         hl = label(r"orange: \ where its summary token looks, \ last layer", font_size=20, color=C.ATTN).next_to(pairs, DOWN, buff=0.2)
         st = gloss(r"summary token", r"one extra token with no picture in it: \\ it gathers from every patch, \ and "
                    r"its final vector names the letter", summary_picture(LETTERS[labs[0]]), width=5.6, color=C.BITS)
-        st.move_to([-3.2, -2.1, 0])
+        st.move_to([-3.4, -1.9, 0])
         # how far each head looks, layer by layer
         D_ = np.asarray(v["att_dist"])  # (layers, heads), pixels
         L_, H_ = D_.shape
         top = float(np.ceil(D_.max() / 2) * 2 + 2)
-        ax = axes([0.5, L_ + 0.5], [0, top], x_length=3.6, y_length=3.0, xlabel=r"layer", ylabel=r"how far a head looks (pixels)",
-                  xticks=list(range(1, L_ + 1)), yticks=[0, int(top // 2), int(top)], center=[4.2, 0.3, 0], font_size=18)
+        ax = axes([0.5, L_ + 0.5], [0, top], x_length=3.4, y_length=2.2, xlabel=r"layer",
+                  ylabel=r"how far each head looks, \ on average (pixels)", xticks=list(range(1, L_ + 1)),
+                  yticks=[0, int(top // 2), int(top)], center=[3.6, -1.75, 0], font_size=17)
         dots = VGroup(*[Dot(ax.ax.c2p(l_ + 1 + (h - (H_ - 1) / 2) * 0.12, D_[l_, h]), radius=0.06, color=C.ATTN)
                         for l_ in range(L_) for h in range(H_)])
         lo, hi = float(D_[0].min()), float(D_[0].max())
@@ -188,20 +189,25 @@ class ViT(VoiceoverScene):
         ink = np.array([im.reshape(5, 4, 5, 4).mean((1, 3)) > 0.08 for im in ims])
         on_ink = float(np.mean([(a * k).sum() / a.sum() for a, k in zip(att, ink)]))
         ink_share = float(ink.mean())
+        rr, cc_ = np.divmod(np.arange(25), 5)
+        uniform = float((4 * np.sqrt((rr[:, None] - rr[None]) ** 2 + (cc_[:, None] - cc_[None]) ** 2)).mean())
+        if mean_first > 0.8 * uniform:
+            reach = (f"Our heads in the first layer already look between {lo:.1f} and {hi:.1f} pixels away, about as far "
+                     f"as two patches picked at random, {uniform:.1f}: from the first layer, they look everywhere. A "
+                     "convolution's first layer sees only a few pixels.")
+        else:
+            reach = (f"Our heads in the first layer look between {lo:.1f} and {hi:.1f} pixels away, where two patches "
+                     f"picked at random are {uniform:.1f} apart: some heads stay local, like a convolution.")
         with self.voiceover(
             "How does it decide? The transformer adds one extra token, the summary token, which has no picture in "
             "it. <bookmark mark='s'/> Layer by layer it gathers from every patch, and its final vector alone names "
             "the letter. <bookmark mark='a'/> Here is where the summary token looks in the last layer, for four "
             f"letters from an unseen font: {100 * on_ink:.0f} percent of its attention falls on patches with ink in "
             f"them, which are {100 * ink_share:.0f} percent of the picture. <bookmark mark='b'/> And here is how "
-            "far each attention head looks, on average. A convolution in its first layer sees only a few pixels. "
-            f"Our heads in the first layer already look between {lo:.1f} and {hi:.1f} pixels away; "
-            + ("the deeper layers look further still. " if mean_last > mean_first + 0.5 else
-               "the deeper layers look about as far. ")
-            + "The original paper saw the same: some heads local, some looking across the whole image from the start."
+            "far each attention head looks, on average. " + reach
         ) as vo:
             self.play(LaggedStart(*[FadeIn(Group(p[0], p[2])) for p in pairs], lag_ratio=0.2), run_time=1.2)
-            self.play(FadeIn(st[0]), FadeIn(st[1][:2]))
+            self.play(FadeIn(st[0]), FadeIn(st[1][:2]), FadeIn(ax))
             vo.wait_until("s")
             sp = st[1][2]
             self.play(FadeIn(sp.toks), FadeIn(sp.names))
@@ -210,7 +216,7 @@ class ViT(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p[1]) for p in pairs], lag_ratio=0.25), FadeIn(hl), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(ax), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.05), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.05), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -236,14 +242,14 @@ class ViT(VoiceoverScene):
         msg = label(r"nobody told it the patches \\ form a grid: \ it learned that" if grid else
                     r"too few pictures to learn the grid: \\ big models trained on millions do", font_size=26,
                     color=PATCH).next_to(nf, DOWN, buff=0.45)
+        pattern = ("Each tile lights up around its own place. Nobody told the model that the patches form a five by "
+                   "five grid; it learned the geometry of the picture from the pictures." if grid else
+                   "There's little pattern: a few thousand letters weren't enough to need it. In the original vision "
+                   "transformer, trained on millions of photos, each tile lights up around its own place.")
         with self.voiceover(
             "All twenty-five position vectors at the end of training: each tile shows how similar one patch's vector "
             f"is to every other's. <bookmark mark='a'/> Neighbours average {near:.2f}, patches far apart {far:.2f}. "
-            + ("Each tile lights up around its own place. Nobody told the model that the patches form a five by five "
-               "grid; it learned the geometry of the picture from the pictures."
-               if grid else
-               "There's little pattern: a few thousand letters weren't enough to need it. In the original vision "
-               "transformer, trained on millions of photos, each tile lights up around its own place.")
+            + pattern
         ) as vo:
             self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.03), FadeIn(expl), run_time=2.0)
             self.play(Create(frame))

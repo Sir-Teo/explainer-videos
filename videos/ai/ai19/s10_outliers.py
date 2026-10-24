@@ -29,8 +29,8 @@ class Outliers(VoiceoverScene):
         o = load("outliers")
         prof = np.asarray(o["profile"])
         n = len(prof)
-        W, Hh = 9.6, 2.6
-        x0 = -W / 2 - 1.0
+        W, Hh = 9.2, 2.6
+        x0 = -6.2
         bars = VGroup(*[Rectangle(width=W / n, height=max(Hh * v / prof.max(), 0.005), stroke_width=0,
                                   fill_color=ERRC if v > 3 * np.median(prof) else C.TOKEN,
                                   fill_opacity=0.85).move_to([x0 + W * (i + 0.5) / n, -1.4 + Hh * v / prof.max() / 2, 0])
@@ -44,14 +44,22 @@ class Outliers(VoiceoverScene):
         head = label(rf"the largest input to each channel of one layer \ (\texttt{{{o['worst']}}}, ${n}$ channels)",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
         ratio = float(o["ratio"][o["worst"]])
-        rl = label(rf"largest $\div$ median: \ ${ratio:.1f}$", font_size=24, color=ERRC).move_to([4.6, 1.2, 0])
+        rl = label(rf"largest $\div$ median: \ ${ratio:.1f}$", font_size=24, color=ERRC).move_to([5.0, 1.5, 0])
         resid = np.asarray(o["resid"]).max(1)
         rr = label(rf"between the blocks, \ the largest activation grows \\ from ${resid[0]:.0f}$ to "
                    rf"${resid[-1]:.0f}$, \ layer by layer", font_size=20, color=GREY_A).next_to(rl, DOWN, buff=0.3)
         hc = history_card(2022, r"Tim Dettmers et al., \ LLM.int8()", rf"from about ${F.LLM_INT8['scale'] / 1e9:.1f}$B "
                           rf"parameters, \ a few feature dimensions (about ${F.LLM_INT8['share']}\%$) hold values up to "
                           rf"${F.LLM_INT8['mag']}\times$ the rest", width=5.0, font_size=17, color=ERRC)
-        hc.to_corner(UL, buff=0.25).shift(DOWN * 0.6)
+        hc.move_to([-3.2, 1.6, 0])
+        # schematic: a big model's activations for one token, a few channels far above the rest
+        g_ = np.random.default_rng(67)
+        sv = np.abs(g_.normal(0, 1, 64)) * 0.25 + 0.1
+        sv[[9, 40]] = [2.4, 2.0]
+        sch = VGroup(*[Rectangle(width=0.07, height=0.6 * v, stroke_width=0, fill_color=ERRC if v > 1 else C.TOKEN,
+                                 fill_opacity=0.85).move_to([0.6 + 0.09 * i, -1.4 + 0.3 * v, 0]) for i, v in enumerate(sv)])
+        schl = label(r"a large model's activations, \ one token \ (schematic)", font_size=18,
+                     color=GREY_A).next_to(sch, UP, buff=0.25)
         with self.voiceover(
             "Weights are only half of a matrix product. To use eight-bit or four-bit arithmetic, the inputs, the "
             "activations, have to be rounded too, every token, on the fly. <bookmark mark='a'/> In 2022 Tim "
@@ -65,9 +73,11 @@ class Outliers(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(base))
             vo.wait_until("a")
-            self.play(FadeIn(hc, shift=RIGHT * 0.2))
+            self.play(FadeIn(hc, shift=RIGHT * 0.2), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in sch],
+                                                                   lag_ratio=0.02), FadeIn(schl))
             vo.wait_until("b")
-            self.play(FadeOut(hc), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.002), run_time=2.0)
+            self.play(FadeOut(hc), FadeOut(sch), FadeOut(schl))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.002), run_time=2.0)
             self.play(Create(ml), FadeIn(mll), FadeIn(rl), FadeIn(rr))
             vo.wait_until("c")
             big = [i for i, v in enumerate(prof) if v > 3 * np.median(prof)][:12]
@@ -96,11 +106,12 @@ class Outliers(VoiceoverScene):
 
         def strip(v, col, y, lab):
             v = np.asarray(v)[:n]
-            top = max(a0[:n].max(), w0[:n].max(), a1[:n].max(), w1[:n].max())
-            g = VGroup(*[Rectangle(width=10.0 / n * 0.85, height=max(0.9 * x / top, 0.004), stroke_width=0, fill_color=col,
-                                   fill_opacity=0.85).move_to([-5.0 + 10.0 * (i + 0.5) / n, y + 0.45 * x / top, 0])
+            top = v.max()  # each strip to its own scale: its shape is the point
+            g = VGroup(*[Rectangle(width=7.2 / n * 0.85, height=max(0.9 * x / top, 0.004), stroke_width=0, fill_color=col,
+                                   fill_opacity=0.85).move_to([-6.4 + 7.2 * (i + 0.5) / n, y + 0.45 * x / top, 0])
                          for i, x in enumerate(v)])
-            t = label(lab, font_size=18, color=col).next_to([-5.0, y + 0.95, 0], RIGHT, buff=0.0)
+            t = label(lab + rf" \ (peak $\div$ median ${v.max() / np.median(v):.1f}$)", font_size=18,
+                      color=col).next_to([-6.4, y + 1.0, 0], RIGHT, buff=0.0)
             return VGroup(g, t)
 
         sa0, sw0 = strip(a0, C.TOKEN, -1.55, r"activations: \ max per channel"), strip(w0, WEIGHTC, -2.95, r"weights")
@@ -108,7 +119,7 @@ class Outliers(VoiceoverScene):
         hc = history_card(2022, r"Guangxuan Xiao et al., \ SmoothQuant", rf"eight-bit weights and activations, \ "
                           rf"${F.SMOOTHQUANT['speed']}\times$ faster, \ models up to "
                           rf"${F.SMOOTHQUANT['params'] / 1e9:.0f}$B", width=4.0, font_size=16,
-                          color=SMOOTHC).to_corner(UR, buff=0.2).shift(DOWN * 1.3)
+                          color=SMOOTHC).move_to([4.5, -2.3, 0])
         sa = float(a0.max() / np.median(a0))
         sb = float(a1.max() / np.median(a1))
         with self.voiceover(

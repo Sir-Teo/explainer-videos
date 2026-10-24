@@ -165,8 +165,10 @@ class Scales(VoiceoverScene):
                      color=PATCH).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "On ImageNet, VAR's own raster-order baseline scored a distance of eighteen point six five; VAR scored one "
-            "point seven three, beat the diffusion transformer, and drew about twenty times faster. It won the best "
-            "paper award at NeurIPS 2024. <bookmark mark='a'/> Others dropped the codebook: MAR, from Kaiming He's "
+            "point seven three, beat the diffusion transformer, and drew about twenty times faster: ten scales, from "
+            "one token up to sixteen by sixteen, six hundred and eighty tokens in ten passes, where raster order needs "
+            "two hundred and fifty-six passes. Its loss fell as a power law in model size, like a language model's. "
+            "It won the best paper award at NeurIPS 2024. <bookmark mark='a'/> Others dropped the codebook: MAR, from Kaiming He's "
             "group, makes continuous tokens, each drawn by a tiny diffusion model. <bookmark mark='b'/> And Infinity "
             "made each token a string of up to sixty-four bits, predicted bit by bit: a vocabulary of up to two to the "
             "sixty-four. <bookmark mark='c'/> Tokens matter for another reason: they are how a language model can "

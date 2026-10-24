@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import HIST, LETTERS, PANEL, PART, PATCH, TXT, glyph_sheet, gray_image, load
+from videos.ai.ai22.common import HIST, LETTERS, PANEL, PART, PATCH, TXT, fmt_int, glyph_sheet, gray_image, load, mean_band
 
 FAMS = ("sans", "serif", "mono")
 UNI_C = "#5CD0B3"
@@ -65,6 +65,7 @@ class Unified(VoiceoverScene):
         self.card()
         self.history()
         self.ours()
+        self.training()
         self.edits()
         self.frontier()
 
@@ -146,6 +147,35 @@ class Unified(VoiceoverScene):
             self.play(Write(loss))
             vo.wait_until("d")
             self.play(FadeIn(res))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def training(self):
+        u = load("unified")
+        cv = np.asarray(u["curve"])  # (seeds, points, [step, text loss (draw), text loss (name), flow (draw), flow (edit)])
+        st = cv[0, :, 0]
+        names = [(r"text: \ the prompt", TXT, 1), (r"text: \ naming the letter", "#7FD3FF", 2),
+                 (r"patches: \ drawing", PATCH, 3), (r"patches: \ editing", UNI_C, 4)]
+        top = float(np.percentile(cv[:, :, 1:], 99.5)) * 1.1
+        ax = axes([0, st[-1]], [0, top], x_length=6.6, y_length=3.6, xlabel=r"training step",
+                  ylabel=r"each term of the one loss", xticks=[0, st[-1]], yticks=[0, round(top / 2, 1)],
+                  center=[-1.4, 0.1, 0], font_size=18, xfmt=lambda x: fmt_int(x))
+        lines = VGroup(*[mean_band(ax.ax, st, cv[:, :, k], c_) for _, c_, k in names])
+        leg = legend([(c_, n_) for n_, c_, _ in names], font_size=20).move_to([4.6, 0.4, 0])
+        hd = note(r"three seeds \ (bands: \ min to max); \ all four terms in every step's batch").to_edge(DOWN, buff=0.3)
+        name_end, prompt_end = float(cv[:, -1, 2].mean()), float(cv[:, -1, 1].mean())
+        prompt = (f"the prompt's text term stays higher, at {prompt_end:.2f}, since nothing tells the model which letter "
+                  "a stranger will ask for." if prompt_end > name_end else
+                  f"the prompt's text term ends at {prompt_end:.2f}.")
+        with self.voiceover(
+            "Here it is learning: four terms of one loss, all computed on every batch. <bookmark mark='a'/> The text "
+            "terms are cross-entropies; the picture terms are flow matching's squared errors. The naming term falls "
+            f"to {name_end:.2f} nats; " + prompt
+        ) as vo:
+            self.play(Create(ax), FadeIn(leg), FadeIn(hd))
+            vo.wait_until("a")
+            self.play(*[FadeIn(l_[0]) for l_ in lines], *[Create(l_[1]) for l_ in lines], run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

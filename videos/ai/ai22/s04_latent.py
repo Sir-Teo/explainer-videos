@@ -26,6 +26,7 @@ class Latent(VoiceoverScene):
         self.why()
         self.sweep()
         self.generate()
+        self.deep()
 
     def card(self):
         card = chapter_card(3, r"A smaller space", r"Why denoise every pixel?", part=PART)
@@ -172,9 +173,7 @@ class Latent(VoiceoverScene):
             "Now run Part 21's flow matching inside each space, the same small network for the same number of steps, "
             "two seeds, and measure how far the generated letters are from real ones. <bookmark mark='a'/> "
             + verdict + " <bookmark mark='b'/> This is the reconstruction against generation dilemma, and it shapes "
-            "every image model: Stable Diffusion 3 and Flux widened their latents to sixteen channels; 2024's "
-            "deep-compression autoencoders shrink each side thirty-two to a hundred and twenty-eight times, with "
-            "many channels, to make high resolutions cheap. The next chapter is about shaping the space itself."
+            "every image model since."
         ) as vo:
             self.play(Create(ax), FadeIn(cite_))
             vo.wait_until("a")
@@ -183,5 +182,51 @@ class Latent(VoiceoverScene):
             self.play(FadeIn(sh), FadeIn(sr))
             vo.wait_until("b")
             self.play(Indicate(sh[0], color=PATCH))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def deep(self):
+        cols = [C.TRUE_P, C.BITS, C.INTERVAL, C.SURPRISE]
+        cell = 0.42
+        grid = VGroup(*[Square(cell, stroke_width=1, stroke_color=GREY_D, fill_color=cols[(r % 2) * 2 + (c % 2)], fill_opacity=0.7)
+                        .move_to([c * cell, -r * cell, 0]) for r in range(4) for c in range(4)]).move_to([-4.6, 0.6, 0])
+        stacks = VGroup()
+        for k in range(4):
+            sheet = VGroup(*[Square(cell, stroke_width=1, stroke_color=GREY_D, fill_color=cols[k], fill_opacity=0.7)
+                             .move_to([c * cell, -r * cell, 0]) for r in range(2) for c in range(2)])
+            stacks.add(sheet.shift(0.16 * k * (UP + RIGHT)))
+        stacks.move_to([-1.4, 0.6, 0])
+        arr = Arrow(grid.get_right(), stacks.get_left(), buff=0.2, color=GREY_B, stroke_width=2.5)
+        al = label(r"space to channels: \ no information lost", font_size=18, color=GREY_A).next_to(arr, DOWN, buff=0.15)
+        gl = label(r"$4 \times 4 \times 1$", font_size=20, color=GREY_A).next_to(grid, DOWN, buff=0.15)
+        sl = label(r"$2 \times 2 \times 4$", font_size=20, color=GREY_A).next_to(stacks, DOWN, buff=0.15).align_to(gl, DOWN)
+        cards = VGroup(
+            history_card(r"Mar 2024", r"SD3", r"$16$ latent channels instead of $4$: \ better once the model is big enough",
+                         color=HIST, width=5.0, font_size=19),
+            history_card(r"Oct 2024", r"DC-AE \ (Chen, Cai, \dots, Han)", r"shrink each side $32$ to $128$ times: \ the "
+                         r"network learns only a residual on top of space-to-channel shortcuts; \ at $512^2$, $19\times$ "
+                         r"faster to sample than with SD's autoencoder, \ and better", color=HIST, width=5.0, font_size=19),
+        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([3.6, 0.4, 0])
+        tk = take_away(r"compress hard in space, \ keep enough channels, \ and make the space easy to generate in")
+        head = label(r"Wider latents, \ deeper compression", font_size=36).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "Real models went both ways at once. <bookmark mark='a'/> Stable Diffusion 3 widened its latents from "
+            "four channels to sixteen, which paid off once the model was big enough. <bookmark mark='b'/> And in "
+            "October 2024 Song Han's group squeezed much harder, thirty-two to a hundred and twenty-eight times on "
+            "each side, with deep compression autoencoders. Their trick: fold each block of pixels into channels, "
+            "which loses nothing, and let the network learn only what to change on top. <bookmark mark='c'/> At five "
+            "hundred and twelve pixels, a diffusion model in that space sampled nineteen times faster, and better. "
+            "<bookmark mark='d'/> Compress hard in space, keep enough channels, and keep the space easy to generate "
+            "in: the next chapter is about shaping it."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[0], shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(grid), FadeIn(gl), FadeIn(cards[1], shift=UP * 0.1))
+            self.play(GrowArrow(arr), TransformFromCopy(grid, stacks), FadeIn(sl), FadeIn(al), run_time=1.5)
+            vo.wait_until("d")
+            self.play(FadeIn(tk, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

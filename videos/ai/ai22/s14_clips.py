@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import LAT_C, LETTERS, PART, PATCH, VID_C, glyph_sheet, load, spread_bars, take_away
+from videos.ai.ai22.common import (LAT_C, LETTERS, PART, PATCH, VID_C, VID_NAME, fmt_int, glyph_sheet, load, mean_band,
+                                   spread_bars, take_away)
 
 JOINT_C, INDEP_C = VID_C["clip"], C.SURPRISE
 
@@ -16,6 +17,7 @@ class Clips(VoiceoverScene):
     def construct(self):
         self.card()
         self.setup()
+        self.training()
         self.agree()
 
     def card(self):
@@ -63,6 +65,36 @@ class Clips(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(given), FadeIn(gl))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def training(self):
+        d = load("clips")
+        modes = ["clip", "teacher", "forcing"]
+        cv = {m: np.asarray(d[f"{m}_curve"]) for m in modes}  # (seeds, points, [step, loss])
+        st = cv["clip"][0, :, 0]
+        top = float(max(np.percentile(cv[m][:, :, 1], 98) for m in modes)) * 1.1
+        ax = axes([0, st[-1]], [0, top], x_length=6.4, y_length=3.4, xlabel=r"training step \ ($64$ clips each)",
+                  ylabel=r"flow-matching loss \ (each model on its own frames)", xticks=[0, st[-1]],
+                  yticks=[0, round(top / 2, 2)], center=[-1.6, 0.0, 0], font_size=18, xfmt=lambda x: fmt_int(x))
+        lines = VGroup(*[mean_band(ax.ax, st, cv[m][:, :, 1], VID_C[m]) for m in modes])
+        leg = legend([(VID_C[m], VID_NAME[m]) for m in modes], font_size=20).move_to([4.6, 0.6, 0])
+        card = pause_card(r"Drawn together, \ or frame by frame from the same model: \ which clips keep one letter, "
+                          r"moving one way?", width=5.0, font_size=22).move_to([4.6, -1.7, 0])
+        hd = note(rf"three models of ${fmt_int(d['params'])}$ weights, \ three seeds each \ (bands: \ min to max)").to_edge(DOWN, buff=0.3)
+        with self.voiceover(
+            "We trained three models of this size, three seeds each: the whole-clip model, and two that write frame "
+            "by frame, which the next chapter needs. <bookmark mark='a'/> Here they are learning. Their losses aren't "
+            "comparable with each other, since each is asked something different, but all three settle. "
+            "<bookmark mark='b'/> Now, pause and predict. Take the whole-clip model, and draw a clip's frames either "
+            "together, or each from a separate run of the same model. Which clips keep one letter, moving one way?"
+        ) as vo:
+            self.play(Create(ax), FadeIn(leg), FadeIn(hd))
+            vo.wait_until("a")
+            self.play(*[FadeIn(l_[0]) for l_ in lines], *[Create(l_[1]) for l_ in lines], run_time=2.5)
+            vo.wait_until("b")
+            self.play(FadeIn(card, shift=UP * 0.2))
+        self.wait(1.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------

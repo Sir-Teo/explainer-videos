@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import (GEN_C, GEN_NAME, HIST, PANEL, PART, PATCH, glyph_sheet, gray_image, load,
-                                   spread_bars)
+from videos.ai.ai22.common import (GEN_C, GEN_NAME, HIST, PANEL, PART, PATCH, fmt_int, glyph_sheet, gray_image, load,
+                                   mean_band, spread_bars)
 
 RAS_C, MG_C = GEN_C["raster"], GEN_C["maskgit"]
 
@@ -15,6 +15,7 @@ class Tokens(VoiceoverScene):
         self.vq()
         self.raster()
         self.maskgit()
+        self.training()
         self.compare()
 
     def card(self):
@@ -149,6 +150,34 @@ class Tokens(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(c_), FadeIn(s_)) for c_, s_ in zip(cols[1:], steps_l[1:])],
                                   lag_ratio=0.4), run_time=4.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def training(self):
+        d = load("tokens")
+        kinds = ["raster", "maskgit", "var"]
+        cv = {k: np.asarray(d[f"{k}_curve"]) for k in kinds}
+        st = cv["raster"][0, :, 0]
+        top = float(max(np.percentile(cv[k][:, :, 1], 99) for k in kinds)) * 1.1
+        ax = axes([0, st[-1]], [0, top], x_length=6.4, y_length=3.4, xlabel=r"training step",
+                  ylabel=r"cross-entropy of the predicted tokens (nats)", xticks=[0, st[-1]], yticks=[0, round(top / 2, 1)],
+                  center=[-1.4, 0.0, 0], font_size=18, xfmt=lambda x: fmt_int(x))
+        lines = VGroup(*[mean_band(ax.ax, st, cv[k][:, :, 1], GEN_C[k]) for k in kinds])
+        leg = legend([(GEN_C[k], GEN_NAME[k]) for k in kinds], font_size=20).move_to([4.6, 0.8, 0])
+        chance = MathTex(rf"\log {int(d['K'])} = {np.log(int(d['K'])):.2f}", font_size=24, color=GREY_B).move_to([4.6, -0.6, 0])
+        cl = label(r"a uniform guess", font_size=18, color=GREY_B).next_to(chance, DOWN, buff=0.1)
+        hd = note(r"three seeds each \ (bands: \ min to max); \ VAR, \ next chapter, \ trained alongside").to_edge(DOWN, buff=0.3)
+        ends = {k: float(cv[k][:, -1, 1].mean()) for k in kinds}
+        with self.voiceover(
+            "Here are the token models learning, three seeds each, including the one the next chapter is about. "
+            f"<bookmark mark='a'/> A uniform guess among {int(d['K'])} codes costs {np.log(int(d['K'])):.2f} nats a "
+            f"token; raster order ends at {ends['raster']:.2f}, MaskGIT at {ends['maskgit']:.2f}. The numbers mean "
+            "different things: MaskGIT is graded only on the tokens it can't see, with all the others in view."
+        ) as vo:
+            self.play(Create(ax), FadeIn(leg), FadeIn(hd), FadeIn(chance), FadeIn(cl))
+            vo.wait_until("a")
+            self.play(*[FadeIn(l_[0]) for l_ in lines], *[Create(l_[1]) for l_ in lines], run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

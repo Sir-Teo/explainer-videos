@@ -91,10 +91,10 @@ class Drafters(VoiceoverScene):
         big.move_to([-4.6, 2.2, 0])
         small.move_to([-4.6, 0.9, 0])
         head.move_to([-4.6, -0.6, 0])
-        feat = Arrow(big.get_bottom() + RIGHT * 1.0, head.get_top() + RIGHT * 1.0, buff=0.08, color=EAGLEC,
-                     stroke_width=2.5, max_tip_length_to_length_ratio=0.1)
-        fl = label(r"its last hidden state, \\ and the next token", font_size=17, color=EAGLEC).next_to(feat, RIGHT,
-                                                                                                    buff=0.1)
+        feat = CurvedArrow(big.get_right() + RIGHT * 0.08, head.get_right() + RIGHT * 0.08, angle=-PI * 0.55,
+                           color=EAGLEC, stroke_width=2.5, tip_length=0.15)
+        fl = label(r"its last hidden \\ state, and the \\ next token", font_size=15, color=EAGLEC).next_to(feat, RIGHT,
+                                                                                                         buff=0.08)
         sl = label(rf"${dr['params'] / 1e6:.1f}$M weights, \ ${dr['tokens'] / 1e6:.1f}$M tokens", font_size=17,
                    color=DRAFTC).next_to(small, DOWN, buff=0.08)
         hl = label(rf"${ea['params'] / 1e6:.1f}$M weights, \ reuses the big model's head", font_size=17,
@@ -105,9 +105,9 @@ class Drafters(VoiceoverScene):
         # the replay: acceptance as each drafter trains
         ev_d, ev_e = np.asarray(dr["evals"]), np.asarray(ea["evals"])
         S = max(ev_d[-1, 0], ev_e[-1, 0])
-        g = axes([0, S * 1.02], [0, 1.0], x_length=6.2, y_length=3.6, xlabel=r"training step",
+        g = axes([0, S * 1.02], [0, 1.0], x_length=5.6, y_length=3.6, xlabel=r"training step",
                  ylabel=r"acceptance $\alpha$ \ (held-out text, \ sampling)", xticks=[0, int(S // 2), int(S)],
-                 yticks=[0, 0.5, 1.0], center=[2.6, 0.3, 0])
+                 yticks=[0, 0.5, 1.0], center=[3.1, 0.3, 0])
         ax = g.ax
         cd = curve(ax, ev_d[:, 0], ev_d[:, 2], DRAFTC, 3)
         ce = curve(ax, ev_e[:, 0], ev_e[:, 2], EAGLEC, 3)
@@ -171,7 +171,8 @@ class Drafters(VoiceoverScene):
         pred = {m: [(1 - alpha[m] ** (k + 1)) / (1 - alpha[m]) for k in ks] for m in cols}
         top = max(top, max(max(v) for v in pred.values()))
         g = axes([0, 7], [0, top * 1.2], x_length=6.2, y_length=4.0, xlabel=r"tokens drafted per pass, \ $k$",
-                 ylabel=r"tokens written per pass of the big model", xticks=ks, yticks=[1, 2, 3],
+                 ylabel=r"tokens written per pass of the big model", xticks=ks,
+                 yticks=[1, 2, 3] if top * 1.2 >= 3 else [1, 2],
                  center=[-2.6, -0.3, 0])
         ax = g.ax
         one = DashedLine(ax.c2p(0, 1), ax.c2p(7, 1), color=GREY_C, dash_length=0.06)
@@ -263,6 +264,11 @@ class Drafters(VoiceoverScene):
                         label(rf"$5$ tokens: \ ${pt[pn.index(5)]:.2f}$ ms", font_size=20, color=TARGETC),
                         label(rf"one step of the small model: \ ${1e3 * d['piece_draft']:.2f}$ ms", font_size=20,
                               color=DRAFTC)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, 0.6, 0])
+        pb = hbars(list(pt), [rf"check ${n}$ token" + ("s" if n > 1 else "") for n in pn], [TARGETC] * len(pn),
+                   width=4.0, row_h=0.46, font_size=20, lo=0, hi=max(pt) * 1.08, fmt_v=lambda v: rf"{v:.2f}\,\text{{ms}}")
+        pb.move_to([-1.6, 0.2, 0])
+        pbt = label(r"one pass of the big model, \ by tokens checked at once", font_size=20,
+                    color=TARGETC).next_to(pb, UP, buff=0.3)
         best_c = min(cfg[1:], key=lambda c: tpt[c])
         sp = plain / tpt[best_c]
         five = pt[pn.index(5)] / pt[0]
@@ -299,8 +305,10 @@ class Drafters(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(pieces))
+            self.play(FadeIn(pieces), FadeIn(pbt), LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(
+                r_.bar, LEFT), FadeIn(r_.val)) for r_ in pb], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(pb), FadeOut(pbt))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_.name), GrowFromEdge(r_.bar, LEFT), FadeIn(r_.val))
                                     for r_ in b], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("c")
