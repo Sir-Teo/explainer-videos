@@ -421,7 +421,8 @@
     "video that responds to actions: \\ world models": "能响应动作的视频：\\ 世界模型",
     "telling real from generated": "分辨真实与生成",
     "one transformer": "一个Transformer",
-    "byte-pair encoding, \\ codebooks, \\ audio codecs, \\ speech recognition, \\ CLIP, \\ vision-language models": "字节对编码，\\ 码本，\\ 音频编解码器，\\ 语音识别，\\ CLIP，\\ 视觉语言模型"
+    "byte-pair encoding, \\ codebooks, \\ audio codecs, \\ speech recognition, \\ CLIP, \\ vision-language models": "字节对编码，\\ 码本，\\ 音频编解码器，\\ 语音识别，\\ CLIP，\\ 视觉语言模型",
+    "then Part 13's transformer: \\\\ attention and MLPs, \\\\ layer after layer": "接着是第13部分的Transformer：\\\\ 注意力和MLP，\\\\ 一层又一层"
   },
   "patterns": []
 }
