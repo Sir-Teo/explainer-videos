@@ -3,10 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai22.common import (GEN_C, GEN_NAME, HIST, PANEL, PART, PATCH, fmt_int, glyph_sheet, gray_image, load,
+from videos.ai.ai22.common import (GEN_C, GEN_NAME, HIST, PANEL, PART, PATCH, TXT, fmt_int, glyph_sheet, gray_image, load,
                                    mean_band, spread_bars)
 
 RAS_C, MG_C = GEN_C["raster"], GEN_C["maskgit"]
+TXT_C = TXT
 
 
 class Tokens(VoiceoverScene):
@@ -50,6 +51,14 @@ class Tokens(VoiceoverScene):
         recs = Group(glyph_sheet(orig[:4], 1, 4, size=0.55), glyph_sheet(rec[:4], 1, 4, size=0.55)).arrange(DOWN, buff=0.1)
         recs.move_to([-3.6, -2.2, 0])
         rl = label(r"held-out letters, \ and rebuilt from $25$ tokens", font_size=18, color=GREY_A).next_to(recs, UP, buff=0.1)
+        lm = VGroup()
+        for w in ("the", "cat", "sat", "on", "?"):
+            box = RoundedRectangle(width=0.95, height=0.6, corner_radius=0.08, stroke_color=TXT_C, stroke_width=2,
+                                   fill_color=TXT_C, fill_opacity=0.15 if w != "?" else 0.0)
+            lm.add(VGroup(box, data_text(w, font="DejaVu Sans Mono", font_size=22, color=WHITE).move_to(box)))
+        lm.arrange(RIGHT, buff=0.15).move_to([1.6, 0.9, 0])
+        lml = label(r"a language model: \ one token at a time, \ each from the ones before", font_size=22,
+                    color=TXT_C).next_to(lm, DOWN, buff=0.25)
         with self.voiceover(
             "Diffusion isn't the only way to draw. Language models write one token at a time; to do that with "
             "pictures, first turn a picture into tokens. <bookmark mark='a'/> Part 20's VQ-VAE and Part 23's codebooks "
@@ -61,7 +70,9 @@ class Tokens(VoiceoverScene):
             f"of {float(d['single_rmse']):.3f}."
         ) as vo:
             self.play(FadeIn(a_in))
+            self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.1) for b_ in lm], lag_ratio=0.3), FadeIn(lml), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(lm), FadeOut(lml))
             self.play(GrowArrow(arr[0]), FadeIn(labs[0]), FadeIn(idx, lag_ratio=0.02), FadeIn(labs[2]), run_time=1.5)
             self.play(GrowArrow(arr[1]), FadeIn(labs[1]), FadeIn(a_out), FadeIn(labs[3]))
             vo.wait_until("b")
@@ -135,6 +146,18 @@ class Tokens(VoiceoverScene):
         cite_ = cite(r"H.~Chang et al., \textit{MaskGIT} (2022): \ $8$ passes instead of $256$; \ FID $6.18$ against "
                      r"$18.65$ \ (ImageNet $256^2$, as published)", corner=UL)
         cite_.next_to(hl, DOWN, buff=0.1)
+        rng = np.random.default_rng(22)
+        hide = rng.permutation(25)[:11]
+        mgrid = VGroup(*[VGroup(Square(0.62, stroke_color=MG_C, stroke_width=2, fill_color=PANEL if j in hide else MG_C,
+                                       fill_opacity=0.9 if j in hide else 0.2),
+                                MathTex(r"?" if j in hide else str(int(rng.integers(0, 128))), font_size=22,
+                                        color=WHITE if j in hide else MG_C))
+                         for j in range(25)])
+        for c_ in mgrid:
+            c_[1].move_to(c_[0])
+        mgrid.arrange_in_grid(5, 5, buff=0.05).move_to([-2.2, -0.5, 0])
+        mgl = label(r"training: \ hide a random share of the tokens, \\ predict them all at once, \\ seeing every "
+                    r"other token", font_size=24, color=MG_C).next_to(mgrid, RIGHT, buff=0.7)
         with self.voiceover(
             "In February 2022 Huiwen Chang and colleagues at Google trained a transformer like BERT instead: hide "
             "a random share of the tokens and predict them all at once, seeing every other token. MaskGIT. "
@@ -145,7 +168,9 @@ class Tokens(VoiceoverScene):
             "instead of two hundred and fifty-six, and better."
         ) as vo:
             self.play(FadeIn(hl), FadeIn(cite_))
+            self.play(FadeIn(mgrid, lag_ratio=0.02), FadeIn(mgl), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(mgrid), FadeOut(mgl))
             self.play(FadeIn(cols[0]), FadeIn(steps_l[0]), FadeIn(sched))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(c_), FadeIn(s_)) for c_, s_ in zip(cols[1:], steps_l[1:])],
@@ -193,8 +218,10 @@ class Tokens(VoiceoverScene):
                          font_size=20).move_to([0.6, 0.0, 0])
         t1 = label(r"distance from real letters (FD)", font_size=20, color=GREY_A).next_to(b1, UP, buff=0.3)
         t2 = label(r"read as requested", font_size=20, color=GREY_A).next_to(b2, UP, buff=0.3)
-        passes = VGroup(*[label(rf"{GEN_NAME[k]}: \ ${int(d[f'{k}_passes'])}$ passes", font_size=24, color=GEN_C[k])
-                          for k in kinds]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.8, 0.3, 0])
+        passes = Group(*[Group(label(rf"{GEN_NAME[k]}: \ ${int(d[f'{k}_passes'])}$ passes", font_size=24, color=GEN_C[k]),
+                               glyph_sheet(np.asarray(d[f"{k}_samples"])[:10], 2, 5, size=0.42, gap=0.04))
+                         .arrange(DOWN, aligned_edge=LEFT, buff=0.12) for k in kinds]).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        passes.move_to([4.7, 0.2, 0])
         hd = note(rf"same tokens, \ same transformer size \ (${fmt_int(d['raster_params'])}$ weights), \ "
                   rf"${fmt_int(d['ng'])}$ steps, \ guidance ${float(d['guide']):g}$; \ three seeds").to_edge(DOWN, buff=0.35)
         m_r, m_m = float(fd[0].mean()), float(fd[1].mean())
