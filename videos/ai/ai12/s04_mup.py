@@ -43,6 +43,26 @@ class MuP(VoiceoverScene):
         step = ladder(self, rows, whys, keep=5, top=2.35, x=-2.2, buff=0.38, edge=6.9)
         moral = label(r"the update is \emph{aligned} with the input, \ the starting weights are not: \ they scale "
                       r"differently", font_size=24, color=MUP).to_edge(DOWN, buff=0.35)
+        # the two kinds of sum, drawn: n random-sign terms wander (about sqrt n); n same-sign terms march (n)
+        n_ = 400
+        walk = np.concatenate([[0.0], np.cumsum(np.random.default_rng(12).choice([-1.0, 1.0], n_))])
+        pics = VGroup()
+        for k, (ys, col, txt) in enumerate((
+                (walk, SP, r"random signs: \ the sum wanders, \ about $\sqrt{n}$"),
+                (np.arange(n_ + 1, dtype=float), MUP, r"one sign: \ the sum grows like $n$"))):
+            pa = Axes(x_range=[0, n_, 100], y_range=[-n_ / 8, n_, n_ / 4], x_length=4.0, y_length=1.45, tips=False,
+                      axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3 + 6.6 * k, -2.05, 0])
+            pl = VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners(
+                [pa.c2p(i, v) for i, v in zip(range(0, n_ + 1, 2), ys[::2])])
+            env = VGroup()
+            if k == 0:
+                xs_ = np.arange(1, n_ + 1, 4)
+                env = VGroup(*[DashedVMobject(VMobject(stroke_color=GREY_B, stroke_width=1.5).set_points_smoothly(
+                    [pa.c2p(i, sg * 2 * np.sqrt(i)) for i in xs_]), num_dashes=24) for sg in (1, -1)])
+            tl = label(txt, font_size=20, color=col).next_to(pa, LEFT, buff=0.12)
+            xl = label(r"terms added", font_size=18, color=GREY_A).next_to(pa, DOWN, buff=0.06)
+            pics.add(VGroup(pa, env, pl, tl, xl))
+        pics.shift(RIGHT * 0.9)
         with self.voiceover(
             "Here is the whole idea, in one layer. Its output is a sum of n weights times n inputs. "
             "<bookmark mark='a'/> At the start the weights are random, so the n terms have random signs and mostly "
@@ -59,10 +79,14 @@ class MuP(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+            self.play(Create(pics[0][0]), FadeIn(pics[0][3]), FadeIn(pics[0][4]), Create(pics[0][1]))
+            self.play(Create(pics[0][2]), run_time=2.0)
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
             step(3)
+            self.play(Create(pics[1][0]), FadeIn(pics[1][3]), FadeIn(pics[1][4]))
+            self.play(Create(pics[1][2]), run_time=1.5)
             vo.wait_until("d")
             step(4)
             self.play(FadeIn(moral))
@@ -168,8 +192,7 @@ class MuP(VoiceoverScene):
             + said2
         ) as vo:
             self.play(FadeIn(key), FadeIn(yl), FadeIn(tag), *[FadeIn(p[:5]) for p in pans])
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in pans[0][5]], lag_ratio=0.05), run_time=2.0)
+            self.play(LaggedStart(*[Create(l_) for l_ in pans[0][5]], lag_ratio=0.05), run_time=max(2.0, vo.until("a")))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in pans[1][5]], lag_ratio=0.05), run_time=2.0)
         self.wait(0.3)

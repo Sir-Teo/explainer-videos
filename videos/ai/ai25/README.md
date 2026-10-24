@@ -43,7 +43,8 @@ systems are the published ones, cited on screen.
   2019) proved by induction, and GIN; sum against mean and max aggregation (node degrees from identical features,
   three seeds); unions of cycles and "is there a triangle?": GIN's outputs identical for every graph (the base rate),
   GIN with random node features (Sato et al. 2021; Abboud et al. 2021), a network on pairs of nodes (Maron et al. 2019);
-  1-WL on random graphs and on random 3-regular graphs; k-WL, subgraph counts, positional encodings, graph
+  1-WL on random graphs and on random 3-regular graphs (the triangular prism and K₃,₃: both 3-regular, one with
+  triangles, the other without, one colour for every node); k-WL, subgraph counts, positional encodings, graph
   transformers; Babai (2016).
 * **6. Deep graph networks.** Over-smoothing (Li, Han & Wu 2018; Oono & Suzuki 2020) derived from the spectrum of
   D^{-1/2}(A + I)D^{-1/2}; the Dirichlet energy under repeated averaging against λ₂^{2k}, and the nodes' features

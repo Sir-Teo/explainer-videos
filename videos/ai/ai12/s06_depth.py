@@ -151,10 +151,12 @@ class Depth(VoiceoverScene):
             + said1
         ) as vo:
             self.play(FadeIn(key), FadeIn(yn), *[FadeIn(p[:4]) for p in panels])
+            self.play(LaggedStart(*[Create(l_) for l_ in panels[0][4]], lag_ratio=0.15), run_time=max(1.6, vo.until("a")))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 p = panels[k]
-                self.play(LaggedStart(*[Create(l_) for l_ in p[4]], lag_ratio=0.15), run_time=1.6)
+                if k:
+                    self.play(LaggedStart(*[Create(l_) for l_ in p[4]], lag_ratio=0.15), run_time=1.6)
                 self.play(FadeIn(p[5]), FadeIn(p[6]))
         self.wait(0.3)
         self.clear_scene()

@@ -170,3 +170,14 @@ def take_away(text: str, color=WHITE, font_size=26) -> VGroup:
     box = RoundedRectangle(width=t.width + 0.5, height=t.height + 0.3, corner_radius=0.12, stroke_color=color,
                            stroke_width=1.5, fill_color="#0B0F17", fill_opacity=0.9)
     return VGroup(box, t.move_to(box)).to_edge(DOWN, buff=0.3)
+
+
+def heat(Z, width=4.0, height=3.0, color=C.KEY, gamma=0.6, bg="#121722") -> ImageMobject:
+    """A non-negative 2-D array as a picture, rows top to bottom, from the background colour (0) to ``color``."""
+    Z = np.asarray(Z, float)
+    t = np.clip(Z / max(Z.max(), 1e-12), 0, 1) ** gamma
+    a, b = np.array(ManimColor(bg).to_rgb()), np.array(ManimColor(color).to_rgb())
+    rgb = a + (b - a) * t[..., None]
+    img = ImageMobject((np.concatenate([rgb, np.ones(Z.shape + (1,))], -1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    return img.stretch_to_fit_width(width).stretch_to_fit_height(height)

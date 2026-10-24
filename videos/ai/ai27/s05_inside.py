@@ -5,7 +5,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import (ASSIST, GOLD, PART, PENALTY, PROXY, REWARD, bubble, line_clip, load, node_box,
                                    said, ticks)
-from videos.ai.ai27.compute import (CONCISE, NEGATIVE, PER_WORD, POSITIVE, REPEAT_FREE, REPEAT_W, TAU, WORD, _demean,
+from videos.ai.ai27.compute import (CONCISE, NEGATIVE, PER_WORD, POSITIVE, REPEAT_FREE, REPEAT_W, WORD, _demean,
                                     gold_parts)
 
 # gold's terms: one colour each, and how the narration names them
