@@ -54,14 +54,13 @@ class Messages(VoiceoverScene):
         ex = label(r"graphs everywhere: \ molecules, \ road maps, \ social networks, \ meshes, \ proteins "
                    r"(residues within $8$\,\AA)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "A graph is a set with connections: nodes, and edges between some pairs of them. Here is decalin, ten "
-            "carbon atoms and eleven bonds. <bookmark mark='a'/> A computer stores it as a table, the adjacency "
-            "matrix, with a one wherever two nodes are joined. <bookmark mark='b'/> But the numbering of the nodes "
-            "is arbitrary. Number them differently and the matrix looks different, rows and columns shuffled, though "
-            "the molecule is the same. <bookmark mark='c'/> So a network on graphs must be equivariant to "
-            "renumbering: permute the nodes, and its answers for the nodes get permuted the same way, and nothing "
-            "else changes. <bookmark mark='d'/> Graphs are everywhere: molecules, road maps, social networks, the "
-            "meshes of the weather models, and proteins, as residues joined when they are close in space."
+            "A graph is a set with connections: nodes, and edges between some pairs. Here is decalin, ten carbons and eleven "
+            "bonds. <bookmark mark='a'/> A computer stores it as a table, the adjacency matrix, with a one wherever two "
+            "nodes are joined. <bookmark mark='b'/> But the numbering is arbitrary: number the nodes differently and the "
+            "matrix's rows and columns shuffle, though the molecule is the same. <bookmark mark='c'/> So a network on graphs "
+            "must be equivariant to renumbering: permute the nodes, and its answers are permuted the same way. <bookmark "
+            "mark='d'/> Graphs are everywhere: molecules, road maps, social networks, weather meshes, and proteins, residues "
+            "joined when close in space."
         ) as vo:
             self.play(FadeIn(g), FadeIn(gl))
             vo.wait_until("a")
@@ -100,15 +99,13 @@ class Messages(VoiceoverScene):
         for u in nbrs:
             pulses.add(Dot(g.pts[u], radius=0.09, color=PAIR_C))
         with self.voiceover(
-            "In 2017 Justin Gilmer and colleagues at Google put a family of these networks into one form, message "
-            "passing. Every node keeps a state, a vector h. <bookmark mark='a'/> In each layer, every node collects "
-            "messages from its neighbours, a learned function M of the two states and the edge, and sums them. "
-            "<bookmark mark='b'/> Then it updates its state from its old state and the sum. <bookmark mark='c'/> "
-            "After a few layers, a readout sums the nodes' states for an answer about the whole graph. <bookmark "
-            "mark='d'/> Because each step is a sum over neighbours, the numbering of the nodes can't matter: the "
-            "network is equivariant by construction, just as Deep Sets was. <bookmark mark='e'/> The graph "
-            "convolutional network of Thomas Kipf and Max Welling is the simplest case: average the neighbours' "
-            "states, normalized by degree, and apply one weight matrix."
+            "In 2017 Justin Gilmer and colleagues at Google put these networks into one form, message passing. Every node "
+            "keeps a state, a vector h. <bookmark mark='a'/> In each layer, every node sums messages from its neighbours, a "
+            "learned function M of the two states and the edge, <bookmark mark='b'/> then updates its state from the old one "
+            "and the sum. <bookmark mark='c'/> After a few layers, a readout sums the states for an answer about the whole "
+            "graph. <bookmark mark='d'/> Each step is a sum over neighbours, so the numbering can't matter: equivariant by "
+            "construction, like Deep Sets. <bookmark mark='e'/> The graph convolutional network of Thomas Kipf and Max "
+            "Welling is the simplest case: average the neighbours' states, normalized by degree, and apply one weight matrix."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -201,14 +198,13 @@ class Messages(VoiceoverScene):
         else:
             verdict = "Passing messages helps only a little here"
         with self.voiceover(
-            "Let's train one. Three hundred people in three communities, with friendships mostly inside each "
-            f"community: {100 * intra:.0f} percent of the edges, about {deg:.0f} per person. Each person carries "
-            "only a weak, noisy hint of their community, and only "
-            f"{n_lab} of them are labelled. <bookmark mark='a'/> A two-layer graph convolutional network learns "
-            "from those labels and from the graph: watch its guesses for everyone else, coloured by community. "
-            "<bookmark mark='b'/> Each layer mixes in the neighbours, so two layers see two hops. <bookmark mark='c'/> "
-            f"An MLP that sees only each person's own hint gets {100 * np.mean(acc_m):.0f} percent right; the graph "
-            f"network {100 * np.mean(acc_g):.0f} percent, over three seeds. {verdict}."
+            "Let's train one. Three hundred people in three communities, friendships mostly within: "
+            f"{100 * intra:.0f} percent of the edges, about {deg:.0f} per person. Each person carries only a weak, noisy "
+            f"hint of their community, and only {n_lab} are labelled. <bookmark mark='a'/> A two-layer graph convolutional "
+            "network learns from those labels and the graph: watch its guesses for everyone else. <bookmark mark='b'/> Each "
+            "layer mixes in the neighbours, so two layers see two hops. <bookmark mark='c'/> An MLP that sees only each "
+            f"person's own hint gets {100 * np.mean(acc_m):.0f} percent right; the graph network "
+            f"{100 * np.mean(acc_g):.0f} percent, over three seeds. {verdict}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cnt), FadeIn(tag))
             vo.wait_until("a")
@@ -230,8 +226,8 @@ class Messages(VoiceoverScene):
         self.wait(0.6)
         tk = take_away(r"message passing: \ a sum over neighbours, \ repeated; \ $L$ layers see $L$ hops")
         with self.voiceover(
-            "That is message passing: a learned sum over neighbours, repeated, so that after L layers each node "
-            "has heard from everything within L hops. Which raises a question: what can such a network tell apart?"
+            "That is message passing: a learned sum over neighbours, repeated, so that after L layers each node has heard "
+            "from everything within L hops. What can such a network tell apart?"
         ):
             self.play(FadeIn(tk, shift=UP * 0.1), *takeaway_anims(self, tk))
         self.wait(0.3)

@@ -75,14 +75,13 @@ class WL(VoiceoverScene):
                    "tells them apart")
         tag = note(r"computed", font_size=20).to_corner(UR, buff=0.25)
         with self.voiceover(
-            "In 1968 Boris Weisfeiler and Andrei Leman described colour refinement, the standard first test of "
-            "whether two graphs are the same graph, numbered differently. <bookmark mark='a'/> Every node starts "
-            "with the same colour. <bookmark mark='b'/> Each round, a node's new colour is a name for its old colour "
-            "together with the colours of its neighbours. Here, the carbons with three neighbours split off. "
-            "<bookmark mark='c'/> Then their neighbours split off, and so on, until nothing changes. If the two "
-            "graphs end with different numbers of some colour, they are certainly different. <bookmark mark='d'/> "
-            f"Decalin and bicyclopentyl, run for {rounds - 1} rounds: {verdict}. But one is two six-rings sharing an "
-            "edge, the other two five-rings joined by a bond. The test is blind to the difference."
+            "In 1968 Boris Weisfeiler and Andrei Leman described colour refinement, the standard first test of whether two "
+            "graphs are the same, numbered differently. <bookmark mark='a'/> Every node starts with the same colour. "
+            "<bookmark mark='b'/> Each round, a node's new colour names its old colour together with its neighbours' "
+            "colours: here, the carbons with three neighbours split off. <bookmark mark='c'/> Then their neighbours, and so "
+            "on, until nothing changes. Different colour counts mean different graphs. <bookmark mark='d'/> Decalin and "
+            f"bicyclopentyl, {rounds - 1} rounds: {verdict}. Yet one is two six-rings sharing an edge, the other two "
+            "five-rings joined by a bond."
         ) as vo:
             self.play(FadeIn(gs[0]), FadeIn(gs[1]), FadeIn(names), FadeIn(tag))
             vo.wait_until("a")
@@ -124,15 +123,14 @@ class WL(VoiceoverScene):
                 why(r"a layer is a function of exactly these")]
         step = ladder(self, rows, whys, keep=4, top=0.9, x=-1.6, buff=0.45, edge=6.9)
         with self.voiceover(
-            "And no message-passing network can do better. The theorem, from Keyulu Xu and colleagues and from "
-            "Christopher Morris and colleagues in 2019: if colour refinement can't separate two nodes after t rounds, "
-            "no message-passing network separates them after t layers. <bookmark mark='a'/> By induction. At the "
-            "start, everything is equal. <bookmark mark='b'/> If two nodes get the same colour in the next round, "
-            "they had the same colour and the same multiset of neighbours' colours. <bookmark mark='c'/> By the "
-            "induction hypothesis, they had the same state and the same multiset of neighbours' states. <bookmark "
-            "mark='d'/> A layer computes the new state from exactly those, so the new states agree. <bookmark "
-            "mark='e'/> And the bound is reached: a sum over neighbours followed by an MLP, the graph isomorphism "
-            "network, can tell apart every pair of graphs that colour refinement can."
+            "And no message-passing network can do better. Keyulu Xu and colleagues, and Christopher Morris and colleagues, "
+            "proved in 2019: if colour refinement can't separate two nodes after t rounds, no message-passing network "
+            "separates them after t layers. <bookmark mark='a'/> By induction. At the start, everything is equal. <bookmark "
+            "mark='b'/> Two nodes with the same colour next round had the same colour and the same multiset of neighbours' "
+            "colours; <bookmark mark='c'/> so, by the hypothesis, the same state and the same multiset of neighbours' "
+            "states. <bookmark mark='d'/> A layer computes the new state from exactly those, so the new states agree. "
+            "<bookmark mark='e'/> And the bound is reached: a sum over neighbours followed by an MLP, the graph isomorphism "
+            "network, separates everything colour refinement does."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
@@ -170,14 +168,12 @@ class WL(VoiceoverScene):
                    rf"${sd:.2f}$", font_size=20).to_corner(DR, buff=0.25)
         sum_rm, mean_rm, max_rm = rows[0][2], rows[1][2], rows[2][2]
         with self.voiceover(
-            "Why a sum? Because the aggregation must not lose information about the multiset of neighbours. "
-            "<bookmark mark='a'/> A node with neighbours a, a, b, b and a node with neighbours a, b: their mean is "
-            "the same, their maximum is the same, only their sum differs. <bookmark mark='b'/> Here is the "
-            "consequence, computed: start every node of a random graph with the same features, and ask a one-layer "
-            f"network for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a "
-            f"mean or a maximum, {mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees "
-            f"themselves, {sd:.2f}: to them every node with a neighbour looks the same, so all they can learn is "
-            "whether a node has any."
+            "Why a sum? The aggregation must not lose information about the multiset of neighbours. <bookmark mark='a'/> "
+            "Neighbours a, a, b, b and neighbours a, b have the same mean and the same maximum; only the sum differs. "
+            "<bookmark mark='b'/> The consequence, computed: give every node of a random graph the same features, and ask a "
+            f"one-layer network for each node's degree. With a sum, the error is {sum_rm:.2f}. <bookmark mark='c'/> With a "
+            f"mean or a maximum, {mean_rm:.2f} and {max_rm:.2f}, hardly better than the spread of the degrees themselves, "
+            f"{sd:.2f}: to them every node with a neighbour looks the same."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(la), FadeIn(lb))
             vo.wait_until("a")
@@ -255,13 +251,12 @@ class WL(VoiceoverScene):
         tag = note(rf"computed: \ $2{{,}}000$ training graphs, \ $600$ test, \ {n} nodes each, \ three seeds",
                    font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
-            f"Now make a network fail on purpose. Take graphs of {n} nodes that are unions of cycles, and ask: is "
-            "there a triangle? <bookmark mark='a'/> To colour refinement all of these graphs are identical: every "
-            "node has two neighbours, whose neighbours have two neighbours, forever. So, by the theorem, every "
-            f"message-passing network must answer the same for all of them. <bookmark mark='b'/> {gin_line} "
-            f"<bookmark mark='c'/> {rni_line} <bookmark mark='d'/> A network whose features live on pairs of nodes, "
-            f"and update each pair through every third node, {pair_line}. Remember that construction: a pair, updated "
-            "through a third node. It is the heart of AlphaFold."
+            f"Now make a network fail on purpose. Graphs of {n} nodes that are unions of cycles: is there a triangle? "
+            "<bookmark mark='a'/> To colour refinement they are all identical: every node has two neighbours, whose "
+            "neighbours have two neighbours, forever. So every message-passing network must answer the same for all of them. "
+            f"<bookmark mark='b'/> {gin_line} <bookmark mark='c'/> {rni_line} <bookmark mark='d'/> A network whose features "
+            f"live on pairs of nodes, updating each pair through every third node, {pair_line}. Remember that construction: "
+            "it is the heart of AlphaFold."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(g_) for g_ in gs], lag_ratio=0.3), FadeIn(tag))
             vo.wait_until("a")
@@ -296,13 +291,12 @@ class WL(VoiceoverScene):
                       color=GREY_B).to_edge(DOWN, buff=0.4)
         tk = take_away(r"message passing sees what colour refinement sees: \ almost every graph, \ but not all")
         with self.voiceover(
-            f"How bad is it? On random graphs, hardly at all: colour refinement separated {rs} of {rp} different "
-            f"pairs. <bookmark mark='a'/> On graphs where every node has three neighbours it separated {gsep} of "
-            f"{gp}. <bookmark mark='b'/> The fixes all add information a sum over neighbours can't build: colour "
-            "tuples of nodes instead of single nodes, at a cost that grows as n to the k; count small patterns like "
-            "triangles; give nodes positions, random or spectral; or let attention look at every pair. <bookmark "
-            "mark='c'/> For the record, deciding whether two graphs are the same is not known to be easy or hard; "
-            "László Babai showed in 2016 that it takes at most quasi-polynomial time."
+            f"How bad is it? On random graphs, hardly at all: colour refinement separated {rs} of {rp} different pairs. "
+            f"<bookmark mark='a'/> On graphs where every node has three neighbours, {gsep} of {gp}. <bookmark mark='b'/> The "
+            "fixes add what a sum over neighbours can't build: colour tuples of nodes, at a cost growing as n to the k; count "
+            "small patterns like triangles; give nodes positions; or let attention see every pair. <bookmark mark='c'/> "
+            "Deciding whether two graphs are the same is not known to be easy or hard; László Babai showed in 2016 that "
+            "quasi-polynomial time suffices."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")
