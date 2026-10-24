@@ -73,7 +73,9 @@ class Frontier(VoiceoverScene):
         lc = np.log10(C)
         res = pts[:, 3] - pts[:, 2]
         lim = max(0.05, math.ceil(np.abs(res).max() * 50) / 50)
-        ax = CornerAxes(x_range=[math.floor(lc.min() * 2) / 2 - 1, math.ceil(lc.max() * 2) / 2, 0.5], y_range=[-lim, lim, lim / 2],
+        Nf, Df, Lf = (np.asarray(ch[k], float) for k in ("fit_N", "fit_D", "fit_L"))
+        lc_all = np.concatenate([lc, np.log10(6 * Nf * Df)])
+        ax = CornerAxes(x_range=[math.floor(lc_all.min() * 2) / 2, math.ceil(lc.max() * 2) / 2, 0.5], y_range=[-lim, lim, lim / 2],
                         x_length=6.0, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, -0.4, 0])
         x0, x1 = ax.x_range[0] if hasattr(ax, "x_range") else lc.min(), lc.max()
@@ -85,7 +87,6 @@ class Frontier(VoiceoverScene):
         xn = label(r"compute of the run \ (operations)", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yn = label(r"predicted minus measured \ (bits)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         dts = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=TT) for a, b in zip(lc, res)])
-        Nf, Df, Lf = (np.asarray(ch[k], float) for k in ("fit_N", "fit_D", "fit_L"))
         cheap = 6 * Nf * Df <= cut
         cp = ch["cheap"]
         fit_res = (float(cp["E"]) + float(cp["A"]) * Nf[cheap] ** -float(cp["alpha"]) + float(cp["B"]) * Df[cheap] ** -float(cp["beta"])

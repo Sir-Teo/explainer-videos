@@ -54,13 +54,33 @@ class Grok(VoiceoverScene):
                     r"answer", font_size=22, color=GREY_A).next_to(sh, DOWN, buff=0.4)
         cite_ = cite(r"A.~Power, Y.~Burda, H.~Edwards, I.~Babuschkin \& V.~Misra, \textit{Grokking} (2022)", corner=DR)
         assert (50 + 60) % P == 13
+        # the clock: P hours; 50, then 60 more, lands on 13
+        cc, R_ = np.array([-3.6, 0.3, 0]), 1.7
+
+        def at(k, r=R_):
+            th = PI / 2 - TAU * k / P
+            return cc + r * np.array([math.cos(th), math.sin(th), 0])
+
+        dial = Circle(radius=R_, stroke_color=GREY_C, stroke_width=2).move_to(cc)
+        ticks = VGroup(*[Line(at(k, R_ - (0.16 if k % 10 == 0 else 0.07)), at(k), stroke_width=1.2, color=GREY_B)
+                         for k in range(P)])
+        hands = VGroup(
+            Arc(radius=R_ + 0.18, start_angle=PI / 2, angle=-TAU * 50 / P, arc_center=cc, stroke_color=C.BITS, stroke_width=5),
+            Arc(radius=R_ + 0.32, start_angle=PI / 2 - TAU * 50 / P, angle=-TAU * 60 / P, arc_center=cc,
+                stroke_color=C.TRUE_P, stroke_width=5))
+        nums = VGroup(*[VGroup(Dot(at(k), radius=0.06, color=col), MathTex(str(k), font_size=26, color=col).move_to(at(k, R_ - 0.42)))
+                        for k, col in ((0, GREY_A), (50, C.BITS), (13, C.TRUE_P))])
+        clock = VGroup(dial, ticks, hands, nums)
         with self.voiceover(
             "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with "
             f"{P} hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a small network forty percent of "
             "the addition table, and ask it to fill in the rest."
         ) as vo:
-            self.play(Write(ex[0]), FadeIn(ex[1]), FadeIn(cite_))
+            self.play(Write(ex[0]), FadeIn(ex[1]), FadeIn(cite_), Create(dial), FadeIn(ticks), FadeIn(nums[0]))
+            self.play(Create(hands[0]), FadeIn(nums[1]), run_time=1.2)
+            self.play(Create(hands[1]), FadeIn(nums[2]), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(clock))
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.0008), FadeIn(tl), FadeIn(sh), FadeIn(net),
                       run_time=2.0)
         self.wait(0.3)
@@ -299,12 +319,12 @@ class Grok(VoiceoverScene):
         P = int(g["P"])
         key = [int(k) for k in g["key_freqs"]]
         circ = np.asarray(g["circles"], float)[0]
-        circ = circ / np.abs(circ).max() * 1.5
+        circ = circ / np.abs(circ).max() * 1.15
         k0 = key[0]
-        pts = VGroup(*[Dot([4.6 + p_[0], 0.9 + p_[1], 0], radius=0.045,
+        pts = VGroup(*[Dot([5.0 + p_[0], -1.25 + p_[1], 0], radius=0.045,
                            color=interpolate_color(ManimColor(C.TRUE_P), ManimColor(C.MODEL_Q), i / P)) for i, p_ in enumerate(circ)])
         nums = VGroup(*[MathTex(str(i), font_size=16, color=GREY_A).next_to(pts[i], UR, buff=0.02) for i in (0, 1, 2)])
-        cl = label(rf"each number $a$, \ along $\cos$ and $\sin$ of frequency ${k0}$", font_size=20, color=GREY_A)
+        cl = label(rf"each number $a$, \\ along $\cos$ and $\sin$ of frequency ${k0}$", font_size=20, color=GREY_A)
         cl.next_to(pts, DOWN, buff=0.25)
         colors = {r"\omega": C.BITS}
         rows = [
@@ -312,12 +332,11 @@ class Grok(VoiceoverScene):
             cmath(r"\cos \omega(a+b)", r"=", r"\cos \omega a \cos \omega b - \sin \omega a \sin \omega b", font_size=32, colors=colors),
             cmath(r"\text{score}(c)", r"\approx", r"\textstyle\sum_k \cos \omega_k (a + b - c)", font_size=32, colors=colors),
         ]
-        whys = [why(r"a number becomes an angle"), why(r"adding angles: \ products the ReLUs can build"),
-                why(r"largest when $c = a + b \bmod 97$")]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-3.2, buff=0.45, edge=3.0)
+        whys = [why(r"a number becomes an angle"), why(r"adding angles"), why(r"peaks at $c = a + b \bmod 97$")]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-1.6, buff=0.45, edge=6.9)
         r2 = float(g["circuit_r2"])
-        fit = label(rf"the trained network's scores, \ fitted by these five waves alone: \ ${100 * r2:.0f}\%$ of their "
-                    r"variation", font_size=24, color=C.BITS).to_edge(DOWN, buff=1.05)
+        fit = label(rf"the trained network's scores, \ fitted by these five waves alone: \\ ${100 * r2:.0f}\%$ of their "
+                    r"variation", font_size=24, color=C.BITS).to_edge(LEFT, buff=0.5).set_y(-1.0)
         kd, kds = np.asarray(g["kd"], float), np.asarray(g["kd_steps"], float)
         kdn = np.asarray(g["kd_nowd"], float)[:len(kds)]
         ytop = max(0.02, math.ceil(max(kd.max(), kdn.max()) * 1.1 * 50) / 50)
