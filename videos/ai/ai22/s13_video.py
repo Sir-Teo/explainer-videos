@@ -47,20 +47,21 @@ class Video(VoiceoverScene):
         head = label(r"Video generation, \ 2024--2026", font_size=36).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"Feb 2024", r"Sora \ (OpenAI)", r"a diffusion transformer on spacetime patches, \ trained on "
-                         r"videos and images", color=HIST, width=4.3, font_size=23),
+                         r"videos and images", color=HIST, width=4.4, font_size=26),
             history_card(r"Oct 2024", r"Movie Gen \ (Meta)", r"$30$ billion weights for video, \ $13$ billion for sound",
-                         color=HIST, width=4.3, font_size=23),
+                         color=HIST, width=4.4, font_size=26),
             history_card(r"Dec 2024 -- Feb 2025", r"HunyuanVideo; \ Wan 2.1", r"open weights: \ $13$ billion; \ $14$ "
-                         r"and $1.3$ billion", color=HIST, width=4.3, font_size=23),
+                         r"and $1.3$ billion", color=HIST, width=4.4, font_size=26),
             history_card(r"May -- Sep 2025", r"Veo 3; \ Sora 2", r"video and its sound, \ generated together", color=HIST,
-                         width=4.3, font_size=23),
+                         width=4.4, font_size=26),
             history_card(r"Jul -- Nov 2025", r"Wan 2.2; \ HunyuanVideo 1.5", r"open: \ a mixture of two experts; \ "
-                         r"$8.3$ billion weights on one consumer GPU", color=HIST, width=4.3, font_size=23),
+                         r"$8.3$ billion weights on one consumer GPU", color=HIST, width=4.4, font_size=26),
             history_card(r"Jan 2026", r"LTX-2 \ (Lightricks)", r"open: \ $14$ billion weights for video, \ $5$ billion "
-                         r"for sound, \ in one model", color=HIST, width=4.3, font_size=23),
-        ).arrange_in_grid(rows=2, cols=3, buff=(0.22, 0.28)).next_to(head, DOWN, buff=0.35)
-        if cards.width > 13.3:
-            cards.width = 13.3
+                         r"for sound, \ in one model", color=HIST, width=4.4, font_size=26),
+        ).arrange_in_grid(rows=2, cols=3, buff=(0.22, 0.4), cell_alignment=UP)
+        if cards.width > 13.4:
+            cards.width = 13.4
+        cards.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
             "Video is pictures in time. In February 2024 OpenAI's Sora showed what a diffusion transformer could do "
             "with it: minute-long clips, trained on videos and images alike. <bookmark mark='a'/> Meta's Movie Gen "

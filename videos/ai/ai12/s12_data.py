@@ -155,7 +155,13 @@ class Data(VoiceoverScene):
             + said3
             + f"and the ceiling is about {cap:.0f} times the distinct text."
         ) as vo:
+            q = VGroup(label(r"How much is a repeat worth?", font_size=40, color=WHITE),
+                       label(r"N.~Muennighoff et al., \textit{Scaling Data-Constrained Language Models} (2023)",
+                             font_size=24, color=GREY_A)).arrange(DOWN, buff=0.35).move_to(UP * 0.4)
+            self.play(FadeIn(q[0], shift=UP * 0.2))
+            self.play(FadeIn(q[1]))
             vo.wait_until("a")
+            self.play(FadeOut(q), run_time=0.6)
             step(0)
             vo.wait_until("b")
             step(1)

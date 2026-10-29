@@ -1,120 +1,595 @@
 {
  "title": "人工智能，从零搭建 · 第12部分：规模的数学",
  "chapters": {
-  "Hook": "一条幂律",
+  "Hook": "对数坐标上的一条直线",
   "Width": "1. 越来越宽",
   "Chinchilla": "2. 规模还是数据？",
-  "Grok": "3. 顿悟",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Grok": "15. 顿悟",
+  "Outro": "回顾、习题，以及接下来",
+  "Wide": "1. 无限宽",
+  "Lazy": "2. 惰性",
+  "MuP": "3. 推导μP",
+  "Transfer": "4. 一个学习率，适用所有宽度",
+  "Depth": "5. 越来越深",
+  "Batch": "6. 批量该多大？",
+  "Laws": "7. 测量规模定律",
+  "Valley": "8. Chinchilla的山谷",
+  "Kaplan": "9. 卡普兰漏掉了什么",
+  "Overtrain": "10. 为长远而训练",
+  "Data": "11. 当数据用完",
+  "Experts": "12. 专家与比特",
+  "Power": "13. 为什么是幂律？",
+  "Emerge": "14. 涌现，还是幻象？",
+  "TestTime": "16. 在回答时扩展",
+  "Frontier": "17. 预训练停滞了吗？"
  },
  "lines": {
-  "ad08be0c5ede": {
+  "e83e5fc556d2": {
    "scene": "Hook",
-   "en": "Make a model bigger, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are seven sizes of part eleven's character model, each trained the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that no model can go below. The exponent, alpha, says how fast more parameters help. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the floor, the reducible loss, by the same factor: on a log scale, a straight line. Curves like this, measured on small models, are how laboratories decide what to build next.",
-   "zh": "把模型做大，它就会变好。这一点，人人都料到了。让人意外的是，它变好得这么有规律，这么可以预测。<bookmark mark='a'/>这是第11部分那个字符模型的7种规模，每一种都用同样的方式训练。<bookmark mark='b'/>损失沿着一条光滑的曲线往下降：一个幂律，再加上一道底线，任何模型都低不过它。指数α，说的是增加参数，能多快地带来改进。<bookmark mark='c'/>规模每扩大10倍，底线以上剩下的那部分，也就是可约损失，就缩小同样的倍数：放到对数坐标上，就是一条直线。各家实验室，正是靠这样在小模型上测出来的曲线，来决定下一步造什么。"
+   "en": "Make a model bigger, train it longer, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are 11 sizes of part eleven's character model, each trained for up to 9 lengths: 94 runs on the computer making this video, each drawn at the number of operations it cost. <bookmark mark='b'/> Every size improves, then flattens: it runs out of room. But the bottom edge of the whole fan, the best loss each budget can buy, is a smooth curve. <bookmark mark='c'/> Take away a floor of 1.76 bits, and what's left falls along a straight line on log axes: a power law, with slope -0.22. Curves like this, measured on small models, are how laboratories decide what to build next.",
+   "zh": "把模型做大，训练得更久，它就会变好。这一点人人都料到了。出人意料的是，它变好得多么可以预测。<bookmark mark='a'/>这里是第11部分的字符模型的11种大小，每种最多训练9种长度：一共94次训练，就在制作这个视频的电脑上完成，每一次都画在它所花的运算次数上。<bookmark mark='b'/>每种大小都先变好，然后变平：它的容量用完了。但整把扇子的下边缘，也就是每份预算能买到的最低损失，是一条光滑的曲线。<bookmark mark='c'/>减去1.76比特的下限，剩下的部分在对数坐标上沿着一条直线下降：一条幂律，斜率是-0.22。像这样在小模型上测出来的曲线，就是各个实验室决定下一步造什么的依据。"
   },
-  "55c7ab931d0c": {
+  "f44343a5494c": {
    "scene": "Hook",
-   "en": "This part is about what happens as networks grow: why very wide networks stop learning features, how to set a learning rate once and keep it as the model grows, how to split a budget between size and data, <bookmark mark='a'/> and a strange delay between memorizing and understanding.",
-   "zh": "这一部分讲的是，网络变大时会发生什么：为什么非常宽的网络，不再学习特征；怎样只设定一次学习率，在模型变大时一直沿用；怎样在规模和数据之间分配预算；<bookmark mark='a'/>以及从记住到理解之间，一段奇怪的延迟。"
+   "en": "The idea has a history. In 1994, Radford Neal showed that an infinitely wide network is a Gaussian process. <bookmark mark='a'/> In 2001, Banko and Brill found that more data beat a cleverer algorithm. <bookmark mark='b'/> In 2017, a team at Baidu found power laws in translation, language, images and speech. <bookmark mark='c'/> In 2018, the neural tangent kernel. <bookmark mark='d'/> In 2020, OpenAI's scaling laws, and GPT-3 built on them. <bookmark mark='e'/> In 2022, Chinchilla corrected the recipe, mu-P let one learning rate serve every size, and grokking puzzled everyone. <bookmark mark='f'/> In 2023, the limits: data that runs out, and abilities that seem to appear from nowhere. <bookmark mark='g'/> In 2024, scaling moved to the answer: models that think for longer. <bookmark mark='h'/> In 2025, reinforcement learning at the scale of pretraining. <bookmark mark='i'/> And in 2026, laboratories went back to much larger base models.",
+   "zh": "这个想法有它的历史。1994年，拉德福德·尼尔证明，无限宽的网络是一个高斯过程。<bookmark mark='a'/>2001年，班科和布里尔发现，更多的数据胜过更聪明的算法。<bookmark mark='b'/>2017年，百度的一个团队在翻译、语言、图像和语音上都发现了幂律。<bookmark mark='c'/>2018年，神经正切核。<bookmark mark='d'/>2020年，OpenAI的规模定律，以及建立在它们之上的GPT-3。<bookmark mark='e'/>2022年，Chinchilla修正了配方，μP让一个学习率适用于每一种大小，而顿悟让所有人困惑。<bookmark mark='f'/>2023年，极限：会用完的数据，和似乎凭空出现的能力。<bookmark mark='g'/>2024年，规模转向了回答：思考得更久的模型。<bookmark mark='h'/>2025年，规模与预训练相当的强化学习。<bookmark mark='i'/>而在2026年，各个实验室又回到了大得多的基础模型。"
   },
-  "7a29094e7140": {
-   "scene": "Width",
-   "en": "Chapter one. Wider and wider.",
-   "zh": "第1章。越来越宽。"
+  "ffe7e6e26594": {
+   "scene": "Hook",
+   "en": "This is Part 12 of AI, Built, and the end of its second act. <bookmark mark='a'/> In it: what happens to a network as it gets infinitely wide; how to set a learning rate once and keep it as the model grows wider and deeper; the scaling laws, measured on our own models and derived; the trade-offs that bend them; why they are power laws at all; and what is happening at the frontier.",
+   "zh": "这是《人工智能，从零搭建》的第12部分，也是第二幕的结尾。<bookmark mark='a'/>这一部分讲：网络变得无限宽时会发生什么；怎样把学习率设定一次，在模型变宽、变深时一直沿用；规模定律，在我们自己的模型上测量，也加以推导；使它们弯折的种种权衡；它们究竟为什么是幂律；以及前沿正在发生什么。"
   },
-  "29f4d55c5c22": {
-   "scene": "Width",
-   "en": "Take part eleven's character model and make it wider and wider, trained by plain gradient descent, with step sizes that keep a wide network stable. Measure how much its hidden features change during training: a feature is what one hidden unit computes from the input, one pattern the network has learned to look for. <bookmark mark='a'/> The wider the network, the less they change. The slope here is about minus 0.4; in theory it tends to minus a half: one over the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all. A very wide net can only re-weight what it started with, like part six's kernel methods with a frozen similarity rule: a fixed kernel, called the neural tangent kernel. This is called the lazy regime. Elegant, and exactly what we don't want: a network whose features never change learns nothing new about its data's structure.",
-   "zh": "拿第11部分的字符模型，把它做得越来越宽，用单纯的梯度下降来训练，步长选得能让宽网络保持稳定。测一测它的隐藏特征，在训练中变了多少：一个特征，就是一个隐藏单元从输入算出来的东西，是网络学会去寻找的一种模式。<bookmark mark='a'/>网络越宽，它们变得越少。这里的斜率大约是负0.4；理论上，它趋向负的2分之1：也就是宽度的平方根分之1。<bookmark mark='b'/>到了极限，特征完全不动了。一个非常宽的网络，只能给它一开始就有的东西重新分配权重，就像第6部分的核方法，用的是一条冻结不变的相似度规则：一个固定的核，叫作神经正切核。这叫作惰性区。很优雅，却恰恰不是我们想要的：一个特征从不改变的网络，对数据的结构，学不到任何新东西。"
+  "3b4b6c36d32a": {
+   "scene": "Wide",
+   "en": "Chapter one. Infinitely wide.",
+   "zh": "第1章。无限宽。"
   },
-  "c0242f7884f6": {
-   "scene": "Width",
-   "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's starting weights and step size, so that every layer keeps changing by about the same amount. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
-   "zh": "Greg Yang问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='m'/>说白了：网络变宽的时候，就把每一层的初始权重和步长都缩小一些，让每一层的变化量，都保持在差不多的水平。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.67，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：Yang和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
+  "552393371874": {
+   "scene": "Wide",
+   "en": "Start a network with random weights, and ask what it computes. One hidden layer of n units; each unit's output is weighted by a random number, and the sum is divided by the square root of n. <bookmark mark='a'/> With one unit, the output at one point, over thousands of random starts, is lumpy and heavy-tailed. <bookmark mark='b'/> With many units it is a sum of many independent terms, and part five's central limit theorem takes over: a Gaussian, with exactly the variance the formula predicts. <bookmark mark='c'/> Not just at one point: the whole function becomes a Gaussian process, a random smooth curve whose covariance, a kernel, is fixed by the architecture. Radford Neal saw this in 1994; in 2018 it was extended to deep networks.",
+   "zh": "让一个网络从随机权重出发，问它在计算什么。一个有n个单元的隐藏层；每个单元的输出乘上一个随机数，总和再除以n的平方根。<bookmark mark='a'/>只有一个单元时，某一点上的输出，在几千次随机初始化里，坑坑洼洼，尾巴很重。<bookmark mark='b'/>单元很多时，它是许多独立项的和，于是第5部分的中心极限定理接管了：一个高斯分布，方差正好是公式预测的那个。<bookmark mark='c'/>不只是在一点上：整个函数变成了一个高斯过程，一条随机的光滑曲线，它的协方差，也就是一个核，由网络结构决定。拉德福德·尼尔在1994年看到了这一点；2018年，它被推广到深层网络。"
   },
-  "723d9a9ea482": {
-   "scene": "Chinchilla",
-   "en": "Chapter two. Size or data?",
-   "zh": "第2章。规模还是数据？"
+  "21b42338c948": {
+   "scene": "Wide",
+   "en": "That is the network before training. In 2018, Arthur Jacot, Franck Gabriel and Clément Hongler asked what happens during it. <bookmark mark='a'/> Gradient descent moves the weights along the gradient of the error. <bookmark mark='b'/> By the chain rule, the output at any point x moves by its own gradient times that step. <bookmark mark='c'/> Put the two together and one object appears: the dot product of the gradients at two inputs, the neural tangent kernel. It says how much a step that fixes the output at one input also moves it at another. <bookmark mark='d'/> If the kernel stays put, this is a linear equation, and its solution is kernel regression, part six's method, with this kernel. Their theorem: as the width goes to infinity, the kernel does stay put.",
+   "zh": "那是训练之前的网络。2018年，阿蒂尔·雅科、弗兰克·加布里埃尔和克莱芒·洪勒问：训练中会发生什么？<bookmark mark='a'/>梯度下降沿着误差的梯度移动权重。<bookmark mark='b'/>由链式法则，任一点x上的输出，移动的量是它自己的梯度乘以这一步。<bookmark mark='c'/>把两者合起来，就出现了一个对象：两个输入处梯度的点积，也就是神经正切核。它说的是：修正一个输入上输出的一步，会把另一个输入上的输出移动多少。<bookmark mark='d'/>如果这个核保持不动，这就是一个线性方程，它的解就是核回归，也就是第6部分的方法，用的正是这个核。他们的定理是：当宽度趋于无穷，这个核确实保持不动。"
   },
-  "20fd852b2a89": {
-   "scene": "Chinchilla",
-   "en": "Suppose you can afford a fixed amount of computation. Training costs about six operations per parameter per training token, so a budget fixes the product of model size and data. You can have a big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the experiment, on our character model. For each budget, try 6 sizes, each trained on exactly the data the budget allows. <bookmark mark='b'/> Each budget gives a valley. Too small a model can't hold the patterns it sees: it underfits. Too big a model barely gets to see anything, so it can't finish learning: it's undertrained. <bookmark mark='c'/> And the bigger the budget, the further right the best size moves.",
-   "zh": "假设你负担得起的计算量是固定的。训练时，每个参数、每个训练词元，大约要花6次运算，所以预算一定，模型规模和数据量的乘积也就定了。你可以要一个大模型，只看很少的数据；也可以要一个小模型，看很多数据。<bookmark mark='a'/>这是我们在字符模型上做的实验。对每一笔预算，试6种规模，每种都恰好用预算允许的那么多数据来训练。<bookmark mark='b'/>每笔预算都给出一道山谷。模型太小，装不下它看到的那些模式：这叫欠拟合。模型太大，几乎什么都来不及看，所以学不完：这叫训练不足。<bookmark mark='c'/>而且预算越大，最好的规模就越往右移。"
+  "13f65a8636d6": {
+   "scene": "Wide",
+   "en": "Pause and predict. Make the network a thousand times wider, and train it the same way. Does each weight move more, less, or the same? And the kernel?",
+   "zh": "暂停一下，先想一想。把网络做宽一千倍，用同样的方式训练。每个权重移动得更多、更少，还是一样？核呢？"
   },
-  "181f74ba73cb": {
-   "scene": "Chinchilla",
-   "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.47, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
-   "zh": "这个实验放到极大的规模上去做，改变了模型的造法。2020年，卡普兰和同事们得出结论：模型规模应该比数据增长得快得多。<bookmark mark='a'/>2022年，DeepMind的Chinchilla论文更仔细地重做了一遍，发现规模和数据应该一起增长：每个参数，大约配20个训练词元。<bookmark mark='o'/>我们的小实验，结果和Chinchilla很接近：最好的规模，随预算的0.47次方增长，每个参数大约训练34个字符。<bookmark mark='b'/>他们700亿参数的Chinchilla，在同样的预算下，胜过了他们自己2800亿参数的Gopher。<bookmark mark='c'/>如今的模型，训练用的数据比这还要多得多，因为一个模型只训练一次，却要运行几十亿次，所以一个更小、训练得更久的模型，用起来更便宜。"
+  "68300c206c15": {
+   "scene": "Wide",
+   "en": "Check it, on that one-layer network, trained by gradient descent on ten points, at widths from thirty to thirty thousand. <bookmark mark='a'/> Measure how far the weights travel, relative to where they started: the slope is -0.55. <bookmark mark='b'/> And how far the kernel moves: slope -0.80. The weights, close to minus a half: each of the n weights moves by about one over the square root of n, too little to change what any unit computes, yet together enough to move the output. The kernel moves even less, nearer one over n: Ethan Dyer and Guy Gur-Ari showed in 2019 that its expected change shrinks like one over n, because the units' small changes mostly cancel. <bookmark mark='c'/> So a wide network trains like its own linearization. At a hundred units, the trained function strays from the linear prediction by up to 0.35; at ten thousand, by 0.04.",
+   "zh": "来验证一下：就用那个单层网络，在10个点上用梯度下降训练，宽度从30到3万。<bookmark mark='a'/>量一量权重相对起点走了多远：斜率是-0.55。<bookmark mark='b'/>再量核移动了多远：斜率是-0.80。权重的斜率接近负二分之一：n个权重中的每一个，大约移动n的平方根分之一，小到改变不了任何一个单元算的东西，合起来却足以移动输出。核移动得更少，更接近n分之一：伊森·戴尔和盖伊·古尔-阿里在2019年证明，它的期望变化像n分之一那样缩小，因为各个单元的小变化大多互相抵消。<bookmark mark='c'/>所以，一个宽网络训练起来，就像它自己的线性化。在100个单元时，训练出的函数偏离线性预测最多0.35；在1万个单元时，只有0.04。"
   },
-  "7eca079c350e": {
-   "scene": "Chinchilla",
-   "en": "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen runs, it's off by only 0.02 bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, and the best size grows as the budget to the power beta over alpha plus beta: 0.43 here, close to what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best model's loss with a model three quarters its size costs 7 percent more training; with half the size, 73 percent more; and below about 0.31 of the size, no amount of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred tokens per parameter, a hundred times Chinchilla's ratio.",
-   "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花73%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
+  "08e0830b8aa4": {
+   "scene": "Wide",
+   "en": "The takeaway: an infinitely wide network is a Gaussian process before training, and a kernel machine during it, because its tangent kernel freezes. Next, what a frozen kernel cannot do.",
+   "zh": "要点：一个无限宽的网络，训练前是一个高斯过程，训练中是一台核机器，因为它的正切核冻结了。接下来：冻结的核做不到什么。"
   },
-  "3b1eb489e761": {
+  "1774c916e667": {
+   "scene": "Lazy",
+   "en": "Chapter two. Lazy.",
+   "zh": "第2章。惰性。"
+  },
+  "bf2a8c2277af": {
+   "scene": "Lazy",
+   "en": "A wide network trained like its linearization has a catch. Take part eleven's character model, make it wider and wider, and train it with the step sizes of the neural tangent kernel. Measure how much its hidden features change: what each hidden unit computes from the input. <bookmark mark='a'/> The wider the network, the less they change: slope -0.35. <bookmark mark='b'/> In 2019, Chizat, Oyallon and Bach called this lazy training, and showed it is not special to wide networks: scale any model's output up and it trains like its linearization. <bookmark mark='c'/> A lazy network can only re-weight the random features it started with. It is a kernel method, like part six's, and the models far bigger than their data that part eight met are, in this limit, exactly its minimum-norm fits.",
+   "zh": "像线性化那样训练的宽网络，有一个问题。拿第11部分的字符模型，把它做得越来越宽，用神经正切核的步长来训练。量一量它的隐藏特征变了多少，也就是每个隐藏单元从输入算出的东西。<bookmark mark='a'/>网络越宽，它们变得越少：斜率是-0.35。<bookmark mark='b'/>2019年，希扎、奥亚隆和巴赫把这叫作惰性训练，并且证明这并不是宽网络独有的：把任何模型的输出放大，它训练起来就像它的线性化。<bookmark mark='c'/>一个惰性的网络，只能给它出发时的那些随机特征重新加权。它是一种核方法，和第6部分的一样；而第8部分遇到的那些比数据大得多的模型，在这个极限下，正好就是它的最小范数拟合。"
+  },
+  "1f568635c08c": {
+   "scene": "Lazy",
+   "en": "Pause and predict. Two copies of one wide network, the same data and the same number of steps: one scaled the lazy way, one the mean-field way. Which one learns the hidden direction?",
+   "zh": "暂停一下，先想一想。同一个宽网络的两份拷贝，同样的数据，同样的步数：一份用惰性的方式缩放，一份用平均场的方式。哪一份能学到那个隐藏方向？"
+  },
+  "1fc9e2b0b13d": {
+   "scene": "Lazy",
+   "en": "Does it matter? Here is a task where it does. The answer is the square of how far x points along one hidden direction, w-star, minus one, with x in 32 dimensions and 256 examples to learn from. <bookmark mark='a'/> Train a wide two-layer network the lazy way, with the neural tangent kernel's scaling. <bookmark mark='b'/> It ends close to kernel regression with its starting kernel: the lazy limit, computed exactly. <bookmark mark='c'/> Now the same network, the same data and the same number of steps, scaled the mean-field way: divide the output by n instead of its square root, and multiply the learning rate by n, so every unit moves by a fixed amount. Its error is 2.1 times smaller, and every seed beats every lazy seed.",
+   "zh": "这要紧吗？这里有一个要紧的任务。答案是：x沿着一个隐藏方向w星的投影的平方，减去1；x有32维，可供学习的样本有256个。<bookmark mark='a'/>用惰性的方式，也就是神经正切核的缩放，训练一个宽的两层网络。<bookmark mark='b'/>它最后停在离核回归很近的地方，那是用它出发时的核做的核回归：惰性极限，精确算出来的。<bookmark mark='c'/>现在换成同一个网络、同样的数据、同样的步数，但用平均场的方式缩放：输出除以n，而不是n的平方根，学习率乘以n，让每个单元移动一个固定的量。它的误差只有惰性网络的2.1分之一，而且每一个种子都胜过每一个惰性的种子。"
+  },
+  "aafa9c318d77": {
+   "scene": "Lazy",
+   "en": "What did the rich network learn that the lazy one could not? Draw each hidden unit as a point: how much its weights point along the hidden direction, and how much they point elsewhere. <bookmark mark='a'/> Now replay training. <bookmark mark='b'/> The lazy units hardly move: in all, its weights travel 13 percent of their starting length. The rich units swing out along w-star, 99 percent: the network has found the one direction that matters. That is a learned feature, and no kernel method can make one. <bookmark mark='c'/> So the infinite-width limit we want is the other one, where features keep moving at every width. For two layers it is called mean field; for any depth, it is mu-P.",
+   "zh": "丰富的网络学到了什么惰性网络学不到的东西？把每个隐藏单元画成一个点：它的权重有多少指向那个隐藏方向，又有多少指向别处。<bookmark mark='a'/>现在回放训练。<bookmark mark='b'/>惰性的单元几乎不动：它的权重总共只走了起始长度的13%。丰富的单元沿着w星摆了出去，走了99%：网络找到了唯一要紧的那个方向。这是一个学到的特征，而任何核方法都造不出来。<bookmark mark='c'/>所以我们想要的无限宽极限是另一个：在任何宽度上，特征都一直在动。对两层网络，它叫平均场；对任意深度，它就是μP。"
+  },
+  "71eece28af7b": {
+   "scene": "Lazy",
+   "en": "The takeaway: in the lazy limit, a network only re-weights the features it started with. To learn features at any width, every unit must keep moving, and that is what mu-P is built to do. Next, its derivation.",
+   "zh": "要点：在惰性极限下，网络只是给它出发时的特征重新加权。要在任何宽度上学习特征，每个单元都必须一直在动，而这正是μP的设计目的。接下来，推导它。"
+  },
+  "0d01667c86ac": {
+   "scene": "MuP",
+   "en": "Chapter three. Mu-P, derived.",
+   "zh": "第3章。推导μP。"
+  },
+  "af2f9e806011": {
+   "scene": "MuP",
+   "en": "Here is the whole idea, in one layer. Its output is a sum of n weights times n inputs. <bookmark mark='a'/> At the start the weights are random, so the n terms have random signs and mostly cancel: by the central limit theorem, the sum grows like the square root of n. Divide the starting weights by the square root of n, and the output stays the same size at any width. <bookmark mark='b'/> Training is different. The gradient of a layer is an outer product: the error signal times the input. <bookmark mark='c'/> So the step, applied to that input, gives a sum of n terms that all have the same sign: it grows like n, not its square root. <bookmark mark='d'/> If every layer should keep changing by about the same amount at any width, the learning rate must shrink like one over n. Greg Yang and Edward Hu worked this out for every layer of any network in 2021, and called it the maximal update parametrization: mu-P.",
+   "zh": "整个想法，用一层就能说清。它的输出是n个权重乘以n个输入的和。<bookmark mark='a'/>开始时权重是随机的，所以这n项的符号随机，大多互相抵消：由中心极限定理，总和像n的平方根那样增长。把起始权重除以n的平方根，输出在任何宽度上都保持同样大小。<bookmark mark='b'/>训练就不一样了。一层的梯度是一个外积：误差信号乘以输入。<bookmark mark='c'/>所以这一步作用到那个输入上，得到的是n个符号全都相同的项之和：它像n那样增长，而不是n的平方根。<bookmark mark='d'/>如果希望每一层在任何宽度上都变化差不多的量，学习率就必须像n分之一那样缩小。杨格和爱德华·胡在2021年为任意网络的每一层推导出了这一点，称之为最大更新参数化：μP。"
+  },
+  "4e155e8cbf78": {
+   "scene": "MuP",
+   "en": "For Adam, the optimizer every language model uses, the recipe is a short table. <bookmark mark='a'/> Inputs and biases learn at the base rate. Hidden matrices learn at the base rate divided by their width, because Adam moves every entry by about the learning rate, so the n aligned terms add up to n times it. The output layer starts much smaller, with variance one over the width squared, and learns at the rate over the width. <bookmark mark='b'/> The usual way, which we'll call SP, uses one rate everywhere. <bookmark mark='c'/> Our code writes the same rules slightly differently, so that a model of width sixty-four is the same in both.",
+   "zh": "对于Adam，也就是每个语言模型都在用的优化器，配方是一张小表。<bookmark mark='a'/>输入和偏置用基础学习率。隐藏矩阵的学习率是基础学习率除以宽度，因为Adam让每个元素移动大约一个学习率，于是n个同向的项加起来是它的n倍。输出层的起点要小得多，方差是宽度平方分之一，学习率是基础学习率除以宽度。<bookmark mark='b'/>通常的做法，我们叫它SP，到处都用同一个学习率。<bookmark mark='c'/>我们的代码把同样的规则写得略有不同，好让宽度为64的模型在两种做法下完全一样。"
+  },
+  "22930b7cbca7": {
+   "scene": "MuP",
+   "en": "Pause and predict. Train at widths from sixty-four to four thousand, with one learning rate, the usual way. Which layer's change will grow with the width?",
+   "zh": "暂停一下，先想一想。在从64到4000多的宽度上，用同一个学习率，按通常的做法训练。哪一层的变化会随宽度增长？"
+  },
+  "73cfbfc3ac08": {
+   "scene": "MuP",
+   "en": "Yang's test for whether a parametrization is right is called a coordinate check: train for a few steps at many widths, with one learning rate, and measure how much each layer's activations change. <bookmark mark='a'/> In the usual parametrization, the change in the output scores grows with the width, about as the width to the power 0.44: a learning rate that is right for a small model is too big for a large one, and eventually blows it up. <bookmark mark='b'/> In mu-P, the lines are flat, a power of -0.03: every layer changes by the same amount at every width, which is what the derivation asked for.",
+   "zh": "杨格检验一种参数化是否正确的方法，叫坐标检查：在许多宽度上，用同一个学习率训练几步，量一量每一层的激活变了多少。<bookmark mark='a'/>在通常的参数化里，输出分数的变化随宽度增长，大约是宽度的0.44次方：对小模型合适的学习率，对大模型就太大了，最终会让它发散。<bookmark mark='b'/>在μP里，这些线是平的，是-0.03次方：每一层在每个宽度上都变化同样的量，这正是推导所要求的。"
+  },
+  "329a27e6a22f": {
+   "scene": "MuP",
+   "en": "The takeaway: random sums grow like the root of n, and aligned updates like n, so mu-P shrinks the hidden learning rates like one over n and starts the output small. Then every layer keeps learning at every width. Next: does one learning rate then serve them all?",
+   "zh": "要点：随机的和像n的平方根那样增长，同向的更新像n那样增长，所以μP让隐藏层的学习率像n分之一那样缩小，并让输出从很小开始。这样，每一层在每个宽度上都一直在学。接下来：一个学习率能不能适用于所有宽度？"
+  },
+  "609753f63b50": {
+   "scene": "Transfer",
+   "en": "Chapter four. One learning rate for every width.",
+   "zh": "第4章。一个学习率，适用所有宽度。"
+  },
+  "81ee59ac5175": {
+   "scene": "Transfer",
+   "en": "Pause and predict. As a model gets wider, the usual way, will its best learning rate go up, go down, or stay put?",
+   "zh": "暂停一下，先想一想。按通常的做法，模型变宽时，它的最佳学习率会变大、变小，还是不变？"
+  },
+  "e446ca34c291": {
+   "scene": "Transfer",
+   "en": "Now the test that matters: sweep the learning rate at three widths, sixty-four to a thousand and twenty-four, two seeds each, the usual way first. <bookmark mark='a'/> The best learning rate drifts as the model grows: from about 1 times ten to the minus 2 at the smallest to 3 times ten to the minus 3 at the largest, 0.6 powers of ten. Tune the small model, copy its rate, and the big one is mistuned. <bookmark mark='b'/> In mu-P the valleys line up: the best rate moves by 0.0 at most. <bookmark mark='c'/> And wider is better at every rate: 2.88 bits at the smallest width, 2.67 at the largest.",
+   "zh": "现在是关键的检验：在三个宽度上扫描学习率，从64到1024，每个两个种子，先用通常的做法。<bookmark mark='a'/>最佳学习率随着模型变大而漂移：从最小模型的大约1乘以10的负2次方，到最大模型的3乘以10的负3次方，差了0.6个数量级。调好小模型，照搬它的学习率，大模型就调错了。<bookmark mark='b'/>在μP里，这些山谷对齐了：最佳学习率至多移动0.0个数量级。<bookmark mark='c'/>而且在每个学习率上，都是越宽越好：最小宽度2.88比特，最大宽度2.67比特。"
+  },
+  "5dc4183874a9": {
+   "scene": "Transfer",
+   "en": "Here is what that means in practice. Tune the smallest model, and train the largest with its learning rate. <bookmark mark='a'/> The usual way, that costs 0.018 bits against the large model's own best; in mu-P, 0.000. <bookmark mark='b'/> At scale, this is what mu-P was built for. In 2022, Yang and colleagues tuned a forty-million-parameter model, copied its settings to a GPT-3 of six point seven billion, and beat the published one, for seven percent of the cost of one training run. <bookmark mark='c'/> In 2024, Everett and colleagues at Google DeepMind showed that the usual parametrization transfers too, with the right learning rate for each layer, and in 2025 Meta set Llama 4's per-layer rates and starting scales this way, transferring them across width, depth, batch size and training length.",
+   "zh": "这在实践中意味着什么？调好最小的模型，用它的学习率训练最大的模型。<bookmark mark='a'/>用通常的做法，这比大模型自己的最佳结果差0.018比特；用μP，只差0.000。<bookmark mark='b'/>在大规模上，这正是μP的用途。2022年，杨格和同事调好一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了公开发表的那个，花费只有一次训练的7%。<bookmark mark='c'/>2024年，谷歌DeepMind的埃弗里特和同事表明，只要每一层用对学习率，通常的参数化也能迁移；2025年，Meta就是这样设定了Llama 4每一层的学习率和初始尺度，并把它们在宽度、深度、批量大小和训练长度之间迁移。"
+  },
+  "a0356f8191be": {
+   "scene": "Transfer",
+   "en": "The takeaway: in mu-P, a learning rate tuned on a small model carries over to a wide one, which is how large models are tuned without tuning them at full size. Next, the same question for depth.",
+   "zh": "要点：在μP里，在小模型上调好的学习率，可以沿用到宽的模型上；大模型就是这样调参的，而不必在完整规模上去调。接下来，对深度问同样的问题。"
+  },
+  "287e30347d31": {
+   "scene": "Depth",
+   "en": "Chapter five. Deeper and deeper.",
+   "zh": "第5章。越来越深。"
+  },
+  "5eb57859e9ef": {
+   "scene": "Depth",
+   "en": "Depth is the other way to grow. A residual network adds each block's output to a running sum, the residual stream of part nine. <bookmark mark='a'/> With L blocks, the stream is a sum of L branches, and how each is scaled decides what happens as L grows. <bookmark mark='b'/> Leave them alone, and the stream grows with depth, and the best learning rate drifts. <bookmark mark='c'/> In 2023, two groups found the depth version of mu-P: scale each branch by one over the square root of L, with the learning rate to match. It transfers across depth, but each block's contribution becomes so small that it acts linearly: lazy, now in depth. <bookmark mark='d'/> In 2025, Nolan Dey and colleagues at Cerebras showed that one over L, with the learning rate left alone, keeps every block learning features. They called it CompleteP.",
+   "zh": "深度是另一种变大的方式。残差网络把每个块的输出加到一个累加的和上，也就是第9部分的残差流。<bookmark mark='a'/>有L个块时，残差流是L个分支的和，而每个分支怎样缩放，决定了L变大时会发生什么。<bookmark mark='b'/>不去管它们，残差流就随深度增长，最佳学习率也会漂移。<bookmark mark='c'/>2023年，两个小组找到了μP的深度版本：每个分支乘以L的平方根分之一，学习率随之调整。它能在深度之间迁移，但每个块的贡献变得太小，以至于表现得像线性的：惰性，这回是在深度上。<bookmark mark='d'/>2025年，Cerebras的诺兰·戴伊和同事表明，乘以L分之一，学习率不动，能让每个块都一直学习特征。他们把它叫作CompleteP。"
+  },
+  "a43cfb4da84a": {
+   "scene": "Depth",
+   "en": "Pause and predict. With no scaling, every new block adds to the residual stream. As the network gets deeper, will its best learning rate rise, or fall?",
+   "zh": "暂停一下，先想一想。不做缩放时，每个新的块都会往残差流里加东西。网络变深时，它的最佳学习率会上升，还是下降？"
+  },
+  "de771d44f05e": {
+   "scene": "Depth",
+   "en": "Our character model again, made deep: 2, 4, 8, 16 and 32 residual blocks, each parametrization swept over nine learning rates, two seeds each. <bookmark mark='a'/> With no depth scaling, the best rate stays on the same point of our grid, from the shallowest to the deepest. <bookmark mark='b'/> With one over root L, it moves by 0.3. <bookmark mark='c'/> With CompleteP's one over L, by 0.0. At our small depths and short runs, all three keep the best rate within one step of our grid: the differences Dey and colleagues measured need deeper models and longer training than ours.",
+   "zh": "还是我们的字符模型，这次做深：2、4、8、16和32个残差块，每种参数化扫描9个学习率，每个两个种子。<bookmark mark='a'/>不做深度缩放，从最浅到最深，最佳学习率一直停在我们网格的同一个点上。<bookmark mark='b'/>用L的平方根分之一，移动0.3个数量级。<bookmark mark='c'/>用CompleteP的L分之一，移动0.0。在我们这么浅的深度、这么短的训练里，三种做法都把最佳学习率保持在网格的一步之内：戴伊和同事测到的差别，需要比我们更深的模型、更长的训练。"
+  },
+  "6eb71dec54e0": {
+   "scene": "Depth",
+   "en": "Two practical questions. Does depth pay? In our short runs, barely: 3.05 bits at 2 blocks, 2.99 at 32. <bookmark mark='a'/> And what does it cost to tune the shallow model and copy its rate to the deep one? 2.98 bits with no depth scaling, 2.97 with one over root L, 2.99 with CompleteP. <bookmark mark='b'/> At scale, Dey and colleagues measured twelve percent less compute than mu-P for the same loss at one and a half billion parameters, and thirty-four percent for their deepest models. Part nine's careful initialization made ten-thousand-layer networks trainable; this is the same idea, for training them well.",
+   "zh": "两个实际的问题。深度划算吗？在我们短短的训练里，几乎不划算：2个块时3.05比特，32个块时2.99比特。<bookmark mark='a'/>调好浅模型，把它的学习率照搬到深模型上，要付出多少？不做深度缩放，2.98比特；用L的平方根分之一，2.97；用CompleteP，2.99。<bookmark mark='b'/>在大规模上，戴伊和同事测得，在15亿参数时，达到同样的损失，CompleteP比μP少用12%的算力；在他们最深的模型上，少用34%。第9部分细心的初始化，让一万层的网络能够训练；这里是同一个想法，用来把它们训练好。"
+  },
+  "75cbbdd33c39": {
+   "scene": "Depth",
+   "en": "The takeaway: how the residual branches are scaled decides whether a learning rate carries across depth, and whether deep blocks still learn features. Next, the third knob: the batch.",
+   "zh": "要点：残差分支怎样缩放，决定了学习率能否在深度之间沿用，也决定了深处的块是否还在学习特征。接下来，第三个旋钮：批量。"
+  },
+  "f246816cc566": {
+   "scene": "Batch",
+   "en": "Chapter six. How big a batch?",
+   "zh": "第6章。批量该多大？"
+  },
+  "3b68bd13ff53": {
+   "scene": "Batch",
+   "en": "Part eleven showed that a small batch gives a noisy gradient. How big should the batch be? In 2018, Sam McCandlish and colleagues at OpenAI answered with one step of algebra. <bookmark mark='a'/> Expand the loss after one step to second order: the gradient helps, the curvature and the batch's noise hurt. <bookmark mark='b'/> Choose the best step size. <bookmark mark='c'/> The best gain is the noise-free gain divided by one plus a ratio, the noise scale over the batch: how many examples it takes for the gradient's signal to beat its noise. <bookmark mark='d'/> So the number of steps to reach a loss falls as the batch grows, and the number of examples rises. <bookmark mark='e'/> Eliminate the batch, and steps and examples trade off along a hyperbola. Far below the noise scale, doubling the batch halves the steps for free; far above it, it only wastes examples.",
+   "zh": "第11部分说过，小批量给出的梯度有噪声。那批量应该多大？2018年，OpenAI的萨姆·麦坎德利什和同事用一步代数回答了这个问题。<bookmark mark='a'/>把走一步之后的损失展开到二阶：梯度有帮助，曲率和批量的噪声有害。<bookmark mark='b'/>选出最好的步长。<bookmark mark='c'/>最好的收益，等于没有噪声时的收益，除以1加上一个比值：噪声尺度比批量。噪声尺度说的是，要多少个样本，梯度的信号才能压过它的噪声。<bookmark mark='d'/>所以，随着批量变大，达到某个损失所需的步数下降，而样本数上升。<bookmark mark='e'/>把批量消去，步数和样本数就沿着一条双曲线互相权衡。远低于噪声尺度时，批量加倍，步数减半，不花代价；远高于它时，只是浪费样本。"
+  },
+  "ad3a197d0db7": {
+   "scene": "Batch",
+   "en": "Pause and predict. Double the batch. To reach the same loss, will it take half as many steps, just as many, or something in between?",
+   "zh": "暂停一下，先想一想。把批量加倍。要达到同样的损失，步数会减半、不变，还是介于两者之间？"
+  },
+  "d38dacaa86bc": {
+   "scene": "Batch",
+   "en": "Measure it. Train our character model with batches from 32 to 4,096 characters, each at the best of three learning rates, and count the steps and the characters it takes to reach a loss. <bookmark mark='a'/> To reach 3.4 bits, the points fall on a hyperbola, with a critical batch of about 329. <bookmark mark='b'/> To reach lower losses, the hyperbola moves out, and the critical batch grows: 1,063, then 2,397. The closer a model gets to the end of training, the larger the batch it can use.",
+   "zh": "来测一测。用从32到4096个字符的批量训练我们的字符模型，每个批量取三个学习率中最好的那个，数一数达到某个损失需要多少步、多少个字符。<bookmark mark='a'/>要达到3.4比特，这些点落在一条双曲线上，临界批量大约是329。<bookmark mark='b'/>要达到更低的损失，双曲线向外移，临界批量变大：1063，然后是2397。模型离训练结束越近，能用的批量就越大。"
+  },
+  "6d4e1e9005d5": {
+   "scene": "Batch",
+   "en": "Is the critical batch really the noise scale? We can measure the noise scale directly, from the sizes of gradients at two batch sizes, as the loss passes each level. <bookmark mark='a'/> They agree to within a factor of 4.8: rough, as McCandlish and colleagues found too, but the same order, from a single measurement instead of a sweep. <bookmark mark='b'/> Kaplan's laws found the critical batch growing as the loss falls, and later work found that it grows with the amount of data, not the size of the model. So large runs raise their batch as they go: DeepSeek-V3 grew its batch fivefold, from 3,072 sequences to 15,360, over its first 469 billion tokens.",
+   "zh": "临界批量真的就是噪声尺度吗？我们可以直接测量噪声尺度：在损失经过每个水平时，用两种批量大小下梯度的大小来算。<bookmark mark='a'/>两者相差不到4.8倍：很粗略，麦坎德利什和同事也发现了这一点，但数量级相同，而且只用一次测量，而不是一次扫描。<bookmark mark='b'/>卡普兰的定律发现，临界批量随着损失下降而增长；后来的研究发现，它随数据量增长，而不是随模型大小。所以大规模训练会边训练边加大批量：DeepSeek-V3在前4690亿个词元里，把批量从3072个序列增加到15360个，增大到5倍。"
+  },
+  "5e98ec34d556": {
+   "scene": "Batch",
+   "en": "The takeaway: below the critical batch, a bigger batch buys fewer steps almost for free; above it, it only wastes data. And the critical batch grows as training goes on. Next, the scaling laws themselves.",
+   "zh": "要点：低于临界批量时，更大的批量几乎不花代价就能减少步数；高于它时，只是浪费数据。而且临界批量会随着训练进行而增长。接下来，规模定律本身。"
+  },
+  "ffb3b98a20e7": {
+   "scene": "Laws",
+   "en": "Chapter seven. Scaling laws, measured.",
+   "zh": "第7章。测量规模定律。"
+  },
+  "a81b20945ac4": {
+   "scene": "Laws",
+   "en": "In 2017, Joel Hestness and colleagues at Baidu measured how the error of networks for translation, language, images and speech falls as the data grows. <bookmark mark='a'/> Each curve had three parts: too little data to learn anything; then a straight line on log axes, a power law; then a floor that more data cannot pass. <bookmark mark='b'/> Better architectures moved the line down, but they barely changed its slope: for language models, about minus 0.07. <bookmark mark='c'/> In 2020, Jared Kaplan, Sam McCandlish and colleagues at OpenAI found the same for parameters, data and compute together, over seven orders of magnitude, and concluded that a model eight times bigger needs only five times the data. Part fourteen told how that led to GPT-3. Here we measure such laws ourselves.",
+   "zh": "2017年，百度的乔尔·赫斯特内斯和同事，测量了用于翻译、语言、图像和语音的网络，误差怎样随数据增长而下降。<bookmark mark='a'/>每条曲线都有三段：数据太少，什么也学不到；然后是对数坐标上的一条直线，一条幂律；然后是一个下限，再多的数据也过不去。<bookmark mark='b'/>更好的架构把直线往下移，却几乎不改变它的斜率：对语言模型，大约是负0.07。<bookmark mark='c'/>2020年，OpenAI的贾里德·卡普兰、萨姆·麦坎德利什和同事，在参数、数据和算力上一起发现了同样的规律，跨越7个数量级，并得出结论：大8倍的模型，只需要5倍的数据。第14部分讲过这怎样导向了GPT-3。这里，我们自己来测这样的定律。"
+  },
+  "0b112de40c7e": {
+   "scene": "Laws",
+   "en": "A scaling law needs many runs, each trained to the end of its own schedule. That is expensive: a run planned for a million characters and stopped halfway is not a good half-million-character run, because its learning rate never came down. <bookmark mark='a'/> So we use a trick from 2024. Train each width once at a constant rate, <bookmark mark='b'/> and at every length we want, branch off and cool the rate to zero over the last fifth. <bookmark mark='c'/> Each branch lands where a full schedule of that length would, and the trunk carries on. <bookmark mark='d'/> 11 widths, from 16 to 1,024 units, lengths from two to the sixteen to two to the twenty-four characters: 94 finished runs in 1.0 hours of one processor.",
+   "zh": "一条规模定律需要许多次训练，每一次都要按它自己的计划训练到底。这很贵：一次计划读100万个字符、却在半路停下的训练，并不是一次好的50万字符训练，因为它的学习率从来没有降下来。<bookmark mark='a'/>所以我们用一个2024年的技巧。每个宽度只用恒定的学习率训练一次，<bookmark mark='b'/>在每个想要的长度上分出一个分支，在最后五分之一里把学习率冷却到零。<bookmark mark='c'/>每个分支都落在同样长度的完整计划会落到的地方，而主干继续往前走。<bookmark mark='d'/>11个宽度，从16到1024个单元，长度从2的16次方到2的24次方个字符：94次完整的训练，在一个处理器上用了1.0个小时。"
+  },
+  "46e704887fe1": {
+   "scene": "Laws",
+   "en": "Pause and predict. Our models are tiny, and read only eight characters at a time. Will their loss fall faster or slower with size than in Kaplan's language models?",
+   "zh": "暂停一下，先想一想。我们的模型很小，一次只读8个字符。它们的损失随大小下降，会比卡普兰的语言模型更快，还是更慢？"
+  },
+  "76a251ac40ec": {
+   "scene": "Laws",
+   "en": "First, one variable at a time, as Kaplan did. Hold the data large, two to the twenty-four characters, and vary the size. <bookmark mark='a'/> The loss falls toward a floor along a power law: L equals 1.82 plus a constant over N to the 0.49. <bookmark mark='b'/> Hold the size large, width 512, and vary the data: the exponent is 0.41. <bookmark mark='c'/> Different seeds land at most 0.058 bits apart, small next to these curves. Our exponents are much larger than Kaplan's: our models see only eight characters at a time, so there is less to learn, and they learn it fast. A different task, a different exponent: what carries over is the shape.",
+   "zh": "先像卡普兰那样，一次只变一个量。把数据固定得很大，2的24次方个字符，改变模型的大小。<bookmark mark='a'/>损失沿着一条幂律落向一个下限：L等于1.82，加上一个常数除以N的0.49次方。<bookmark mark='b'/>把大小固定得很大，宽度512，改变数据：指数是0.41。<bookmark mark='c'/>不同的种子最多相差0.058比特，和这些曲线比起来很小。我们的指数比卡普兰的大得多：我们的模型一次只看8个字符，要学的东西更少，学得也快。不同的任务，不同的指数：能够延续下来的，是曲线的形状。"
+  },
+  "5135167dd999": {
+   "scene": "Laws",
+   "en": "The takeaway: loss falls toward a floor along a power law, in size and in data, and the shape carries over from task to task even when the exponents do not. Next, both at once, and how to split a budget between them.",
+   "zh": "要点：损失沿着一条幂律落向一个下限，无论对大小还是对数据；即使指数随任务而变，曲线的形状也能延续。接下来，同时考虑两者，以及怎样分配一份预算。"
+  },
+  "56532a2a1902": {
+   "scene": "Valley",
+   "en": "Chapter eight. Chinchilla's valley.",
+   "zh": "第8章。Chinchilla的山谷。"
+  },
+  "142ccac9f03e": {
+   "scene": "Valley",
+   "en": "Pause and predict. Your budget grows tenfold. Should you make the model ten times bigger, train it on ten times the data, or grow both by about three?",
+   "zh": "暂停一下，先想一想。你的预算增加到10倍。应该把模型做大10倍，用10倍的数据训练，还是两者各增加大约3倍？"
+  },
+  "90cf1d1282af": {
+   "scene": "Valley",
+   "en": "In 2022, Jordan Hoffmann and colleagues at DeepMind fitted one formula to all their runs at once: a floor, plus a term that shrinks with the parameters, plus one that shrinks with the data. Fitted to our 49 runs, leaving out the shortest and the narrowest, it misses by 0.025 bits on average. <bookmark mark='a'/> Now spend a budget. Training costs six operations per parameter per character, so six N D equals C. Which split gives the lowest loss? Add a Lagrange multiplier, as in part four. <bookmark mark='b'/> Set both derivatives to zero. <bookmark mark='c'/> Multiply the first by N and the second by D, and both sides equal six lambda N D. So at the optimum, the last parameter and the last character pay off equally. <bookmark mark='d'/> Solve, and the best size grows as the budget to the power beta over alpha plus beta: 0.42 for our models.",
+   "zh": "2022年，DeepMind的乔丹·霍夫曼和同事，把一个公式同时拟合到他们所有的训练上：一个下限，加上一项随参数缩小，再加上一项随数据缩小。拟合到我们的49次训练上，除去最短和最窄的那些，它平均偏差0.025比特。<bookmark mark='a'/>现在来花一份预算。训练的代价是每个参数、每个字符6次运算，所以6ND等于C。哪种分法给出最低的损失？像第4部分那样，加一个拉格朗日乘子。<bookmark mark='b'/>令两个导数都为零。<bookmark mark='c'/>第一个乘以N，第二个乘以D，两边都等于6λND。所以在最优点上，最后一个参数和最后一个字符的回报相等。<bookmark mark='d'/>解出来，最佳大小随预算的β除以α加β次方增长：我们的模型是0.42。"
+  },
+  "c6d629a76d99": {
+   "scene": "Valley",
+   "en": "Here is the whole picture: the fitted loss as a surface above the plane of size and data, both on log scales, with our runs as points on it. <bookmark mark='a'/> A budget is a straight line across the plane: where N times D is fixed, more of one means less of the other. <bookmark mark='b'/> Along each line the surface dips into a valley. Too small a model can't hold what it reads: it underfits. Too big a model reads too little to finish learning. <bookmark mark='c'/> Join the lowest points of every valley, and you have the path to follow as the budget grows: the floor of Chinchilla's valley.",
+   "zh": "这是整幅图景：拟合出的损失，是大小和数据构成的平面上方的一个曲面，两个轴都取对数，我们的训练是曲面上的点。<bookmark mark='a'/>一份预算是横过平面的一条直线：N乘D固定，一个多了，另一个就少了。<bookmark mark='b'/>沿着每条直线，曲面陷下去，成了一个山谷。模型太小，装不下读到的东西：欠拟合。模型太大，读得太少，学不完。<bookmark mark='c'/>把每个山谷的最低点连起来，就得到随着预算增长该走的路：Chinchilla山谷的谷底。"
+  },
+  "e2f765515b1c": {
+   "scene": "Valley",
+   "en": "Chinchilla read that path three ways, and so can we. One: the lower envelope of all the training curves, the best model at each compute. Two: a parabola through the bottom of each budget's valley. <bookmark mark='a'/> Three: the formula we just solved. <bookmark mark='b'/> Our three estimates of the exponent: 0.46, 0.44 and 0.42. Chinchilla's were 0.50, 0.49 and 0.46. Like theirs, ours say that size and data should grow together, in roughly equal proportion. <bookmark mark='c'/> Kaplan's 0.73 is well above all three. In characters per parameter, our optimum is about 31; Chinchilla's was about twenty tokens.",
+   "zh": "Chinchilla用三种方法读出这条路，我们也可以。第一：所有训练曲线的下包络，也就是每份算力下最好的模型。第二：过每份预算山谷底部的一条抛物线。<bookmark mark='a'/>第三：我们刚刚解出的公式。<bookmark mark='b'/>我们对指数的三个估计：0.46、0.44和0.42。Chinchilla的是0.50、0.49和0.46。和他们的一样，我们的估计也说：大小和数据应该一起增长，比例大致相当。<bookmark mark='c'/>卡普兰的0.73远远高于这三个。按每个参数的字符数算，我们的最优点大约是31；Chinchilla的大约是20个词元。"
+  },
+  "0c34e405532c": {
+   "scene": "Valley",
+   "en": "The takeaway: at the compute optimum, the last parameter and the last token pay off equally, and for language models that means growing size and data together, at about twenty tokens per parameter. Next: why the first scaling laws said otherwise.",
+   "zh": "要点：在计算最优点上，最后一个参数和最后一个词元的回报相等；对语言模型来说，这意味着大小和数据一起增长，每个参数大约20个词元。接下来：为什么最早的规模定律说的不一样。"
+  },
+  "9ab2f02e582d": {
+   "scene": "Kaplan",
+   "en": "Chapter nine. What Kaplan missed.",
+   "zh": "第9章。卡普兰漏掉了什么。"
+  },
+  "86cdc8c323c7": {
+   "scene": "Kaplan",
+   "en": "Kaplan's laws said: as the budget grows, put most of it into the model. GPT-3 read under two tokens per parameter, and DeepMind's Gopher, two hundred and eighty billion parameters, read three hundred billion tokens. <bookmark mark='a'/> Chinchilla used the same compute on a model a quarter the size, trained on four times the data. <bookmark mark='b'/> It beat Gopher on almost everything: on the MMLU exam, by more than seven points. And it was four times cheaper to run. So who was wrong, and why?",
+   "zh": "卡普兰的定律说：预算增长时，把大部分投到模型上。GPT-3每个参数读了不到2个词元，DeepMind的Gopher有2800亿个参数，读了3000亿个词元。<bookmark mark='a'/>Chinchilla用同样的算力，训练了一个只有它四分之一大的模型，读了4倍的数据。<bookmark mark='b'/>它几乎在所有方面都胜过了Gopher：在MMLU考试上，高出7分多。而且运行起来便宜4倍。那么，是谁错了，为什么？"
+  },
+  "9ca0191a20e7": {
+   "scene": "Kaplan",
+   "en": "Pause and predict. Leave the embedding layers out of the parameter count. Will the best model size seem to grow faster, or slower, as the budget grows?",
+   "zh": "暂停一下，先想一想。数参数时不算嵌入层。随着预算增长，最佳模型大小看起来会增长得更快，还是更慢？"
+  },
+  "761fdfd22c3c": {
+   "scene": "Kaplan",
+   "en": "Part of the answer is how you count. Kaplan counted parameters without the embeddings, and at small scale those are a large share of a model. <bookmark mark='a'/> Our own runs show the effect. The same budgets, the same best models: counting all their parameters, the best size grows with slope 0.44. <bookmark mark='b'/> Counting only the hidden layers, it grows with slope 0.53: the small models look smaller than they are, so the law looks steeper. In 2024 Tim Pearce and Jinyeop Song showed that counting this way, at Kaplan's small scale, turns Chinchilla's one half into something close to Kaplan's 0.73. <bookmark mark='c'/> The same year, Tomer Porian and colleagues found the rest: the cost of the last layer, the length of the warmup, and an optimizer setting left untuned at small batches. Fix all three, and Kaplan's own setup gives Chinchilla's answer.",
+   "zh": "部分答案在于怎么数。卡普兰数参数时不算嵌入，而在小规模上，嵌入占了模型的很大一部分。<bookmark mark='a'/>我们自己的训练就显示了这个效应。同样的预算，同样的最佳模型：数上它们全部的参数，最佳大小随预算增长的斜率是0.44。<bookmark mark='b'/>只数隐藏层，斜率是0.53：小模型看起来比实际更小，所以定律看起来更陡。2024年，蒂姆·皮尔斯和宋镇烨证明，在卡普兰那样的小规模上这样数，会把Chinchilla的二分之一变成接近卡普兰的0.73。<bookmark mark='c'/>同一年，托默·波里安和同事找到了其余的原因：最后一层的代价，预热的长度，以及一个在小批量时没有调好的优化器设置。把这三个都修正，卡普兰自己的设置就给出了Chinchilla的答案。"
+  },
+  "fb1e6b2b1ac7": {
+   "scene": "Kaplan",
+   "en": "Chinchilla itself was checked two years later. Its three methods had disagreed slightly: the fitted formula said 0.46, the other two about a half. <bookmark mark='a'/> In 2024, Tamay Besiroglu and colleagues at Epoch AI rebuilt the data from the paper's own figure, two hundred and forty runs, reading each point's loss from its colour, and refitted the formula. <bookmark mark='b'/> They got 0.51, plus or minus 0.02: about twenty tokens per parameter, in agreement with the other two methods. The published fit had been off. <bookmark mark='c'/> And its stated uncertainty was implausibly small: an interval that narrow would take over six hundred thousand runs, and they had run fewer than five hundred. <bookmark mark='d'/> The lesson for us: an exponent is a measurement, and it has an error bar.",
+   "zh": "Chinchilla本身在两年后被检验了。它的三种方法原本略有分歧：拟合公式给出0.46，另外两种大约是二分之一。<bookmark mark='a'/>2024年，Epoch AI的塔梅·贝西罗格卢和同事，从论文自己的图里重建了数据，240次训练，从每个点的颜色读出它的损失，再重新拟合这个公式。<bookmark mark='b'/>他们得到0.51，正负0.02：每个参数大约20个词元，和另外两种方法一致。发表的拟合有偏差。<bookmark mark='c'/>而且它声称的不确定度小得不合理：要窄到那个程度，需要60多万次训练，而他们跑的还不到500次。<bookmark mark='d'/>给我们的教训是：一个指数是一次测量，它有误差棒。"
+  },
+  "d217c1c813e6": {
+   "scene": "Kaplan",
+   "en": "The takeaway: small choices, which parameters to count, how long to warm up, which optimizer settings, moved the exponent from 0.73 to about a half, and refits still differ. A scaling law is a measurement, with error bars. Next: when the compute optimum is not what you want.",
+   "zh": "要点：一些小的选择，数哪些参数、预热多久、优化器怎么设，就把指数从0.73移到了大约二分之一，而重新拟合的结果仍有出入。规模定律是一次测量，带着误差棒。接下来：当计算最优点不是你想要的。"
+  },
+  "e9ca80509b81": {
+   "scene": "Overtrain",
+   "en": "Chapter ten. Trained for the long run.",
+   "zh": "第10章。为长远而训练。"
+  },
+  "4244925baac2": {
+   "scene": "Overtrain",
+   "en": "Pause and predict. A model half the compute-optimal size, trained longer until it matches the optimal model's loss. How much more training compute will it need: a few percent, double, or ten times?",
+   "zh": "暂停一下，先想一想。一个只有计算最优大小一半的模型，训练得更久，直到赶上最优模型的损失。它要多花多少训练算力：百分之几，一倍，还是十倍？"
+  },
+  "d2c36da01315": {
+   "scene": "Overtrain",
+   "en": "Chinchilla's optimum minimizes the cost of training. But a model is trained once and then used, maybe billions of times, and every use costs in proportion to its size. So it can pay to train a smaller model for longer. How much longer? The fitted law answers. <bookmark mark='a'/> Ask for the optimal model's loss from a model k times its size, and solve for the data it needs. <bookmark mark='b'/> A model three quarters the size costs 5 percent more training; half the size, 45 percent more; <bookmark mark='c'/> and below 0.23 of the size, no amount of data is enough: the small model's floor is above the target. <bookmark mark='d'/> Our own runs that reached the same loss with smaller models fall near the curve: 2 of them.",
+   "zh": "Chinchilla的最优点，让训练的代价最小。但一个模型训练一次，之后要被使用，也许几十亿次，而每次使用的代价都和它的大小成正比。所以，训练一个更小的模型、训练得更久，可能更划算。要久多少？拟合出的定律给出答案。<bookmark mark='a'/>要求一个k倍大小的模型达到最优模型的损失，解出它需要的数据。<bookmark mark='b'/>四分之三大小的模型，训练要多花5%；一半大小，多花45%；<bookmark mark='c'/>小于0.23倍的大小，多少数据都不够：小模型的下限高过了目标。<bookmark mark='d'/>我们自己那些用更小的模型达到同样损失的训练，落在这条曲线附近：一共2次。"
+  },
+  "64121c5ce9bd": {
+   "scene": "Overtrain",
+   "en": "In 2023, Nikhil Sardana and colleagues at MosaicML put the answering into the budget. Training costs six operations per parameter per token, and answering costs two. <bookmark mark='a'/> Fix the quality, and minimize the lifetime cost. <bookmark mark='b'/> The more a model will be used, the smaller and longer trained it should be. <bookmark mark='c'/> On our fitted law: a model that will answer a hundred times more characters than it would be trained on should train on about 763 characters per parameter, at 0.35 of the optimal size, and costs 56 percent less over its life. <bookmark mark='d'/> Sardana's team found quality still improving at ten thousand tokens per parameter, and in 2024 Meta trained Llama 3's eight-billion-parameter model on fifteen trillion tokens: nearly nineteen hundred per parameter, a hundred times Chinchilla's ratio.",
+   "zh": "2023年，MosaicML的尼基尔·萨尔达纳和同事，把回答的代价也算进了预算。训练每个参数、每个词元要6次运算，回答要2次。<bookmark mark='a'/>固定质量，让一生的总代价最小。<bookmark mark='b'/>一个模型会被用得越多，它就应该越小、训练得越久。<bookmark mark='c'/>用我们拟合的定律：一个将要回答的字符数是它最优训练量100倍的模型，应该在每个参数上训练大约763个字符，大小是最优的0.35倍，一生的代价少56%。<bookmark mark='d'/>萨尔达纳的团队发现，到每个参数1万个词元，质量还在提高；2024年，Meta用15万亿个词元训练了Llama 3的80亿参数模型：每个参数将近1900个，是Chinchilla比例的近100倍。"
+  },
+  "954edc3b5d75": {
+   "scene": "Overtrain",
+   "en": "The takeaway: once answering is counted, the best model is smaller than the compute optimum, and trained far longer, which is why open models now read thousands of tokens per parameter. Next: what happens when there are not enough tokens to read.",
+   "zh": "要点：一旦把回答的代价算进去，最好的模型就比计算最优点更小，训练得也久得多；这就是为什么开源模型现在每个参数要读几千个词元。接下来：当没有足够的词元可读时，会发生什么。"
+  },
+  "297c2b01a424": {
+   "scene": "Data",
+   "en": "Chapter eleven. When the data runs out.",
+   "zh": "第11章。当数据用完。"
+  },
+  "1a436e3e3d23": {
+   "scene": "Data",
+   "en": "Pause and predict. Train for the same number of characters, but on a quarter of the text, read four times over. How much worse will it be than a model that read fresh text all the way?",
+   "zh": "暂停一下，先想一想。训练同样多的字符，但只用四分之一的文本，读4遍。它会比一个一直读新文本的模型差多少？"
+  },
+  "26d6f04ac2bd": {
+   "scene": "Data",
+   "en": "Good text is finite. What happens when a model has read it all and must read it again? Train our character model on 4.2 million characters every time, but drawn from fewer and fewer distinct ones, from one pass over fresh text down to two hundred and fifty-six passes over a small sample. <bookmark mark='a'/> Four epochs cost only 0.009 bits: nearly as good as new text. Sixteen cost 0.106. <bookmark mark='b'/> At two hundred and fifty-six, the model memorizes its sample: the held-out loss falls, then climbs, and ends 9.20 bits worse than fresh text.",
+   "zh": "好的文本是有限的。一个模型把它们全读完了，只能再读一遍时，会发生什么？每次都用4.2百万个字符训练我们的字符模型，但这些字符来自越来越少的不同文本：从新文本读一遍，一直到一个小样本读256遍。<bookmark mark='a'/>读4遍只多花0.009比特：几乎和新文本一样好。读16遍的代价是0.106比特。<bookmark mark='b'/>读256遍时，模型背下了它的样本：留出数据上的损失先降后升，最后比新文本差9.20比特。"
+  },
+  "45a3753933d0": {
+   "scene": "Data",
+   "en": "How much is a repeat worth? In 2023, Niklas Muennighoff and colleagues proposed a simple answer. <bookmark mark='a'/> Suppose each pass over the same text is worth a fixed fraction less than the one before. <bookmark mark='b'/> Then U distinct characters read R more times are worth U plus a sum of shrinking terms, <bookmark mark='c'/> which saturates: however often you repeat, you never get more than U times one plus R-star. <bookmark mark='d'/> Read each of our runs off the fresh-data curve, to find how much new text it was worth, and fit R-star: 5.8 passes. Muennighoff's team, with models of up to nine billion parameters, found 15.4. Our small model gets less from repeating, and the ceiling is about 7 times the distinct text.",
+   "zh": "重复一遍值多少？2023年，尼克拉斯·明尼霍夫和同事提出了一个简单的答案。<bookmark mark='a'/>假设同一段文本每多读一遍，价值都比上一遍少一个固定的比例。<bookmark mark='b'/>那么U个不同的字符再读R遍，价值就是U加上一串越来越小的项，<bookmark mark='c'/>它会饱和：无论重复多少遍，得到的都不会超过U乘以1加R星。<bookmark mark='d'/>把我们的每次训练放到新数据的曲线上读一读，看它相当于多少新文本，再拟合R星：5.8遍。明尼霍夫的团队，用最多90亿参数的模型，得到的是15.4。我们的小模型从重复中得到的更少，上限大约是不同文本的7倍。"
+  },
+  "7b001073c25d": {
+   "scene": "Data",
+   "en": "How close are we? In 2024, Pablo Villalobos and colleagues at Epoch AI estimated the stock of usable public text at about four times ten to the fourteen tokens, after allowing for quality and repetition, and projected that training sets would reach it between 2026 and 2032, most likely in 2028. <bookmark mark='a'/> Repeating stretches it: Muennighoff's four epochs are nearly free. <bookmark mark='b'/> Alibaba's Qwen3, in 2025, was pretrained on about thirty-six trillion tokens: nearly a tenth of the whole stock, in one model. <bookmark mark='c'/> So the field is looking for more: rephrased text, synthetic text and other kinds of data, the subject of part eighteen.",
+   "zh": "我们离那一步有多近？2024年，Epoch AI的巴勃罗·比利亚洛博斯和同事估计，在考虑了质量和重复之后，可用的公开文本存量大约是4乘以10的14次方个词元，并预测训练集会在2026年到2032年之间用到这个量，最可能是2028年。<bookmark mark='a'/>重复可以把它拉长：明尼霍夫的4遍几乎不花代价。<bookmark mark='b'/>阿里巴巴的Qwen3在2025年用大约36万亿个词元做了预训练：一个模型，就用掉了全部存量的将近十分之一。<bookmark mark='c'/>所以这个领域在寻找更多：改写的文本、合成的文本和其他种类的数据，这是第18部分的主题。"
+  },
+  "6e4388b9eeb9": {
+   "scene": "Data",
+   "en": "The takeaway: a few passes over the same data are almost as good as new data, but each repeat is worth less, and the total saturates. Next, two other budgets: experts, and bits.",
+   "zh": "要点：把同样的数据读几遍，几乎和新数据一样好，但每重复一次就更不值钱，总量最终会饱和。接下来，另外两种预算：专家，和比特。"
+  },
+  "4a5a941a05d2": {
+   "scene": "Experts",
+   "en": "Chapter twelve. Experts and bits.",
+   "zh": "第12章。专家与比特。"
+  },
+  "977527b884c5": {
+   "scene": "Experts",
+   "en": "In a dense model, every parameter works on every character, so compute and parameters grow together. A mixture of experts, from part sixteen, breaks the link: many experts, and a router that sends each character to one. <bookmark mark='a'/> Split our model's hidden layer into more and more experts, keeping the work per character the same. The loss keeps falling as the experts are added, though each doubling helps less. With eight experts it matches a dense model of about 142,426 parameters, 2.5 times our base model, for the compute of the base model. <bookmark mark='b'/> DeepMind measured this in 2022: the loss falls with the number of experts, and the gain shrinks as the base model grows. Since then experts have become smaller and more numerous: DeepSeek-V3 has two hundred and fifty-six of them in each layer, and uses eight for each token.",
+   "zh": "在稠密模型里，每个参数都作用于每个字符，所以算力和参数一起增长。第16部分的混合专家打破了这种联系：许多个专家，加上一个路由器，把每个字符送给其中一个。<bookmark mark='a'/>把我们模型的隐藏层拆成越来越多的专家，保持每个字符的计算量不变。加入专家，损失持续下降，只是每加倍一次，帮助都更小。有8个专家时，它相当于一个大约142426个参数的稠密模型，是我们基础模型的2.5倍，却只花基础模型的算力。<bookmark mark='b'/>DeepMind在2022年测量过这一点：损失随专家数下降，而基础模型越大，收益越小。从那以后，专家变得更小、更多：DeepSeek-V3每一层有256个专家，每个词元用其中8个。"
+  },
+  "a9c9e1c863cd": {
+   "scene": "Experts",
+   "en": "Pause and predict. Round every weight to four bits after training. Which suffers more: a model that read a little, or the same model after reading much more?",
+   "zh": "暂停一下，先想一想。训练之后，把每个权重都取整到4个比特。谁受的损伤更大：读得少的模型，还是同一个模型读了多得多之后？"
+  },
+  "a6369659e878": {
+   "scene": "Experts",
+   "en": "Parameters also cost memory, and that can be cut by storing them with fewer bits. Round every weight of our trained models to a few bits, after training, and measure what it costs. <bookmark mark='a'/> At width 256, the damage grows with training: at four bits, 0.009 bits after two to the 16 characters, 1.583 after two to the 24. A model that has read more has packed more into each weight, so rounding hurts it more. <bookmark mark='b'/> Fitted to all our runs, the extra loss grows like D to the 0.70, shrinks like N to the 0.25, and falls exponentially with every bit kept. <bookmark mark='c'/> In 2024 Tanishq Kumar and colleagues found the same form in four hundred and sixty-five runs: past some point, more training data makes a model worse once it is quantized. And training itself in low precision acts like having fewer parameters; by their fit, the best training precision is seven to eight bits.",
+   "zh": "参数还要占内存，而用更少的比特存储它们，就能省下内存。训练之后，把我们训练好的模型的每个权重都取整到几个比特，量一量代价是多少。<bookmark mark='a'/>在宽度256上，损伤随训练增长：在4比特时，读了2的16次方个字符之后是0.009比特，读了2的24次方之后是1.583。读得更多的模型，把更多的东西塞进了每个权重，所以取整对它伤害更大。<bookmark mark='b'/>拟合到我们所有的训练上，额外的损失像D的0.70次方那样增长，像N的0.25次方那样缩小，并且每多保留一个比特，就指数地下降。<bookmark mark='c'/>2024年，坦尼什克·库马尔和同事在465次训练里发现了同样的形式：过了某个点，更多的训练数据反而会让模型在量化之后变差。而用低精度来训练，本身就像参数变少了；按照他们的拟合，最好的训练精度是7到8个比特。"
+  },
+  "1cfc42ffa57f": {
+   "scene": "Experts",
+   "en": "The takeaway: parameters, compute and bits can be traded separately. Experts add parameters without adding compute; fewer bits save memory, at a price that grows with how much the model has read. Next: why any of these laws should be power laws.",
+   "zh": "要点：参数、算力和比特可以分开权衡。专家增加参数，却不增加算力；更少的比特节省内存，代价却随模型读过的数据增长。接下来：为什么这些定律都是幂律。"
+  },
+  "964db2cef97b": {
+   "scene": "Power",
+   "en": "Chapter thirteen. Why power laws?",
+   "zh": "第13章。为什么是幂律？"
+  },
+  "f1afc5e42f3a": {
+   "scene": "Power",
+   "en": "Why should loss fall as a power law at all? One answer, from Utkarsh Sharma and Jared Kaplan in 2020: real data lies near a surface of low dimension d inside its huge space. A model with N parameters cuts that surface into about N pieces, <bookmark mark='a'/> so each piece is about N to the minus one over d across. <bookmark mark='b'/> Fit each piece with a straight line, and what's left is the curvature, the square of the size. <bookmark mark='c'/> Square again for a squared loss: the loss falls like N to the minus four over d. A power law, with the exponent set by the data's dimension. <bookmark mark='d'/> Check it: a smooth function on surfaces of dimension 1, 2, 4 and 8. The slopes match four over d, until eight dimensions, where even a hundred thousand pieces are still too coarse: -0.30, on its way to -0.50. Low-dimensional data, steep laws; language, by this account, is high-dimensional.",
+   "zh": "损失为什么偏偏按幂律下降？一个答案来自乌特卡什·夏尔马和贾里德·卡普兰，2020年：真实的数据，位于它巨大的空间里的一个低维曲面附近，维数是d。一个有N个参数的模型，把这个曲面切成大约N块，<bookmark mark='a'/>所以每一块的宽度大约是N的负d分之一次方。<bookmark mark='b'/>每一块用一条直线去拟合，剩下的是曲率，也就是尺寸的平方。<bookmark mark='c'/>对平方损失再平方一次：损失像N的负d分之4次方那样下降。一条幂律，指数由数据的维数决定。<bookmark mark='d'/>来验证一下：在1维、2维、4维和8维的曲面上取一个光滑函数。斜率都和d分之4吻合，直到8维：在那里，即使十万多块也还太粗：-0.30，正在走向-0.50。低维的数据，陡的定律；按照这个说法，语言是高维的。"
+  },
+  "0fea9649169d": {
+   "scene": "Power",
+   "en": "A second answer, from Eric Michaud, Max Tegmark and colleagues in 2023: the quantization model. Suppose what a model knows comes in discrete chunks, quanta, each a skill that is either learned or not, and that they are used with Zipf's frequencies, a power law. <bookmark mark='a'/> A model with room for n quanta learns the n most used, and loses the share of the rest. <bookmark mark='b'/> Add up a power-law tail, and you get a power law in n, so in the model's size. <bookmark mark='c'/> They built a task to test it, and we built a small version: 32 subtasks, each the parity of three hidden bits out of twelve, appearing with Zipfian frequencies.",
+   "zh": "第二个答案来自埃里克·米肖、马克斯·泰格马克和同事，2023年：量子化模型。假设模型知道的东西，是一块一块离散的，叫作量子，每一块是一项技能，要么学会了，要么没学会；并且它们被使用的频率服从齐普夫定律，一条幂律。<bookmark mark='a'/>一个能装下n个量子的模型，学会最常用的n个，损失掉其余那些的份额。<bookmark mark='b'/>把一条幂律的尾巴加起来，就得到关于n的一条幂律，也就是关于模型大小的幂律。<bookmark mark='c'/>他们造了一个任务来检验它，我们做了一个小版本：32个子任务，每个是12个比特里3个隐藏比特的奇偶性，按齐普夫频率出现。"
+  },
+  "c8a608bcc6a4": {
+   "scene": "Power",
+   "en": "Pause and predict. If every skill is learned suddenly, all or nothing, will the average loss fall in steps, or smoothly?",
+   "zh": "暂停一下，先想一想。如果每项技能都是突然学会的，要么全会，要么全不会，平均损失会一级一级地下降，还是平滑地下降？"
+  },
+  "81ab7d953b96": {
+   "scene": "Power",
+   "en": "Here is one network, of width 128, learning the subtasks. <bookmark mark='a'/> Each subtask's loss sits at one bit, a coin flip, and then drops, suddenly. The common subtasks drop first, the rare ones later. By the end it has learned 14 of the 32. <bookmark mark='b'/> The average over the mix, in white, is smooth: many sudden steps, added up. <bookmark mark='c'/> Across sizes, wider networks learn more subtasks, from 1 at width 8 to all 32 from width 256 on. <bookmark mark='d'/> Plot the average loss against the number learned, and the theory's curve appears: the share of the mix not yet learned, a power-law tail. Ours sit a little below it, because a subtask half learned already counts. <bookmark mark='e'/> With only 32 subtasks the tail runs out: once all are learned, the loss falls to almost nothing. Language, by this account, has an endless tail of rarer and rarer skills.",
+   "zh": "这是一个宽度为128的网络，在学这些子任务。<bookmark mark='a'/>每个子任务的损失先停在1比特，也就是抛硬币，然后突然下降。常见的子任务先下降，稀有的后下降。到最后，它学会了32个中的14个。<bookmark mark='b'/>白色的是整个混合的平均，它是平滑的：许多突然的台阶，加在一起。<bookmark mark='c'/>在不同大小之间，越宽的网络学会的子任务越多，从宽度8的1个，到宽度256起的全部32个。<bookmark mark='d'/>把平均损失画在学会的数目上，理论的曲线就出现了：混合中还没学会的那部分份额，一条幂律的尾巴。我们的点略低于它，因为学会一半的子任务也已经算数了。<bookmark mark='e'/>只有32个子任务，尾巴就会用完：全部学会之后，损失就掉到几乎为零。按照这个说法，语言有一条没有尽头的尾巴，技能越来越稀有。"
+  },
+  "8730c439b96e": {
+   "scene": "Power",
+   "en": "The takeaway: power laws come out of many parts: the pieces of a low-dimensional data surface, or a long Zipfian tail of skills, each learned in its turn. Next: if skills arrive suddenly, do abilities too?",
+   "zh": "要点：幂律来自许多部分的叠加：低维数据曲面上的一块块小片，或者一条长长的齐普夫技能尾巴，一项接一项地学会。接下来：如果技能是突然到来的，能力也是吗？"
+  },
+  "c30c29eef6a2": {
+   "scene": "Emerge",
+   "en": "Chapter fourteen. Emergence, or a mirage?",
+   "zh": "第14章。涌现，还是幻象？"
+  },
+  "a2053e6b791c": {
+   "scene": "Emerge",
+   "en": "In 2022, Jason Wei and colleagues at Google collected abilities that seemed to switch on with scale: absent in smaller models, present in larger ones, and so not predictable from the smaller ones. They called them emergent. <bookmark mark='a'/> In 2023, Rylan Schaeffer, Brando Miranda and Sanmi Koyejo at Stanford pointed at how they were scored. Most were graded all or nothing: is the whole answer exactly right? <bookmark mark='b'/> If each token is right with probability p, an answer of L tokens is right with probability p to the L. A steady rise in p becomes, for long answers, a curve that lies flat and then shoots up. <bookmark mark='c'/> Score the same models smoothly, and the jumps disappear: a mirage, they said, made by the metric.",
+   "zh": "2022年，谷歌的杰森·魏和同事，收集了一批似乎随规模突然出现的能力：小模型没有，大模型有，所以无法从小模型预测出来。他们称之为涌现。<bookmark mark='a'/>2023年，斯坦福的赖兰·谢弗、布兰多·米兰达和桑米·科耶霍，把矛头指向了评分的方式。大多数能力的评分是全对或全错：整个答案是不是完全正确？<bookmark mark='b'/>如果每个词元正确的概率是p，那么一个L个词元的答案完全正确的概率就是p的L次方。p平稳地上升，对长答案来说，就变成一条先平躺、后猛冲的曲线。<bookmark mark='c'/>换成平滑的评分，给同样的模型打分，跳跃就消失了：他们说，这是一个幻象，由度量造成。"
+  },
+  "b94f61bf01a0": {
+   "scene": "Emerge",
+   "en": "Pause and predict. Our models' accuracy on single characters rises smoothly with size. Score them on getting eight characters exactly right instead. What does that curve look like?",
+   "zh": "暂停一下，先想一想。我们的模型在单个字符上的准确率，随大小平稳上升。改成看它们能否一字不差地写对8个字符，那条曲线会是什么样？"
+  },
+  "e341f2a18dab": {
+   "scene": "Emerge",
+   "en": "We can watch it happen on our own models. The task: from two thousand places in held-out text, write the next characters exactly. <bookmark mark='a'/> Score each character on its own, and the share right rises smoothly with size, from 43 to 57 percent. <bookmark mark='b'/> Score whole answers instead. One character: the same curve. Two, four, eight: lower and flatter, until eight-character answers barely leave zero. Yet in proportion they grow fastest: 11 times across our sizes, against 1.3 times for single characters. <bookmark mark='c'/> On the curves of p to the L, our models sit on the flat stretch, p between 43 and 57 percent. The steep part needs p near one: a model scored like this on long answers seems unable to do them at all, until, much larger, it suddenly can.",
+   "zh": "我们可以在自己的模型上看着它发生。任务是：从留出文本里的2000个位置开始，一字不差地写出接下来的字符。<bookmark mark='a'/>每个字符单独打分，正确的比例随大小平稳上升，从43%到57%。<bookmark mark='b'/>改成给整个答案打分。一个字符：同样的曲线。两个、四个、八个：越来越低，越来越平，直到8个字符的答案几乎贴着零。但按比例算，它们增长得最快：在我们的大小范围内增长了11倍，而单个字符只增长了1.3倍。<bookmark mark='c'/>在p的L次方这组曲线上，我们的模型位于平坦的那一段，p在43%到57%之间。陡峭的部分需要p接近1：按这种方式在长答案上打分，一个模型看起来完全不会，直到大得多的时候，突然会了。"
+  },
+  "589558dfc80b": {
+   "scene": "Emerge",
+   "en": "But some suddenness is real. In the quanta toy, each subtask is either solved or not. Plot each one's final loss against the network's size, and it falls off a cliff at its own size: on average 65 percent of the fall happens between two neighbouring sizes, the common subtasks first. <bookmark mark='a'/> Only the average is smooth. A benchmark that measures one narrow skill sees a cliff; the loss, which averages over everything, sees a power law. <bookmark mark='b'/> Later work made this useful. In 2024 Zhengxiao Du and colleagues found that abilities appear when the pretraining loss falls below a threshold, whatever the size of the model, and Charlie Snell and colleagues showed that fine-tuning brings an ability forward to smaller models, so its arrival can be forecast.",
+   "zh": "但有些突然是真的。在量子的玩具任务里，每个子任务要么解决了，要么没有。把每一个的最终损失画在网络的大小上，它会在自己的那个大小上跌下悬崖：平均有65%的下降，发生在两个相邻的大小之间，常见的子任务先跌。<bookmark mark='a'/>只有平均是平滑的。一个只测一项窄技能的基准，看到的是悬崖；而损失是对一切取平均，看到的是幂律。<bookmark mark='b'/>后来的研究让这一点变得有用。2024年，杜政晓和同事发现，能力在预训练损失降到某个阈值以下时出现，与模型大小无关；查理·斯内尔和同事则表明，微调能把一项能力提前带到更小的模型上，于是它的到来可以预测。"
+  },
+  "9122b566ff95": {
+   "scene": "Emerge",
+   "en": "The takeaway: all-or-nothing scores turn steady progress into apparent jumps, while narrow skills can still truly switch on. Either way, the loss underneath is smooth, and can be forecast. Next, the strangest jump of all.",
+   "zh": "要点：全对或全错的评分，会把平稳的进步变成表面上的跳跃，而窄的技能也确实可能突然出现。无论哪种情况，底下的损失都是平滑的，可以预测。接下来，最奇怪的一次跳跃。"
+  },
+  "9d04d0d06141": {
    "scene": "Grok",
-   "en": "Chapter three. Grokking.",
-   "zh": "第3章。顿悟。"
+   "en": "Chapter fifteen. Grokking.",
+   "zh": "第15章。顿悟。"
   },
-  "805a00c6177c": {
+  "64c70be8b822": {
    "scene": "Grok",
-   "en": "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with 97 hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a network forty percent of the addition table, and ask it to fill in the rest.",
-   "zh": "2022年，OpenAI的一个团队注意到一件怪事。拿一个很小的任务来说：在一个有97个钟点的钟上做加法，所以50加60等于13。<bookmark mark='a'/>给一个网络看这张加法表的40%，让它把其余的填出来。"
+   "en": "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with 97 hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a small network forty percent of the addition table, and ask it to fill in the rest.",
+   "zh": "2022年，OpenAI的一个团队注意到一件怪事。拿一个很小的任务：在一个有97个钟点的钟面上做加法，所以50加60等于13。<bookmark mark='a'/>给一个小网络看加法表的40%，让它填出其余的部分。"
   },
-  "489396023824": {
+  "53207abf839c": {
    "scene": "Grok",
-   "en": "It memorizes the entries it was shown within about 100 steps, and for a long time, it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of steps later, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Weight decay is what drives it: it keeps squeezing the weights, and the memorized lookup table is more expensive than the rule.",
-   "zh": "大约100步之内，它就记住了给它看过的那些格子；而在很长一段时间里，没看过的那些，它答对的机会并不比瞎猜高。<bookmark mark='a'/>不管它，接着训练。然后，几千步之后，在没看过的格子上，准确率猛地蹿升到接近100%。网络找到了规则。他们把这种现象叫作顿悟。<bookmark mark='b'/>推动它的，是权重衰减：它不停地挤压权重，而背下来的那张查找表，代价比规则更高。"
+   "en": "It memorizes the entries it was shown within about 75 steps, and for a long time it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. 21 times as long, at step 1,550, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Without weight decay, the same network never gets there. Weight decay keeps squeezing the weights, and a lookup table of memorized answers costs more weight than the rule.",
+   "zh": "它在大约75步之内，就记住了给它看过的那些条目；而在很长一段时间里，它对没见过的条目，猜得并不比随机好。<bookmark mark='a'/>还是继续训练。训练到21倍那么久，在第1550步，没见过的条目上的准确率猛地升到将近100%。网络找到了规则。他们把这叫作顿悟。<bookmark mark='b'/>没有权重衰减，同一个网络永远到不了那里。权重衰减不停地挤压权重，而一张背下来的答案表，比规则要花更多的权重。"
   },
-  "49702bcad83a": {
+  "86fd94a79087": {
    "scene": "Grok",
-   "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of their weight sits on 9 frequencies out of 48: waves around the clock. A frequency places the 97 numbers evenly around a circle, in order: <bookmark mark='w'/> at frequency one, going round once; <bookmark mark='x'/> at frequency five, going round five times. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles; here they are forming during training, and the circles appear just as the test accuracy climbs. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part thirty takes that idea to real models.",
-   "zh": "它找到的规则是什么？看看它为每个数字学到的向量。<bookmark mark='a'/>它们的权重大多落在48个频率中的9个上：绕着钟面转的波。一个频率，会把这97个数按顺序、均匀地排在一个圆上：<bookmark mark='w'/>频率为1时，绕一圈；<bookmark mark='x'/>频率为5时，绕5圈。<bookmark mark='b'/>沿着它们的主方向看，这些数排列在圆上；这里是它们在训练中逐渐形成的样子，而这些圆恰好在测试准确率上升的时候出现。网络把每个数变成一个角度，用角度相加来做数的相加，就像钟表一样。Neel Nanda和同事们在2023年弄清了这一点，这是最早对一个训练好的网络究竟在算什么做出的完整解释之一。第30部分会把这个想法用到真实的模型上。"
+   "en": "Pause and predict. With more weight decay, will understanding come sooner, later, or not at all? And with none?",
+   "zh": "暂停一下，先想一想。权重衰减更大时，理解会来得更早、更晚，还是根本不来？没有权重衰减呢？"
   },
-  "58cbcf30d35c": {
+  "316e5d1e72ab": {
+   "scene": "Grok",
+   "en": "Is weight decay really what drives it? Sweep it, from none to three, three seeds each. <bookmark mark='a'/> Memorizing takes between 75 and 125 steps every time. <bookmark mark='b'/> Generalizing does not. The more weight decay, the sooner it comes: from step 1,550 at 1 to 800 at 3. <bookmark mark='c'/> And in 9 of the 15 runs, all at a weight decay of 0.3 or less, it never comes within the 4,000 steps.",
+   "zh": "推动它的真的是权重衰减吗？把它从0扫到3，每个值三个种子。<bookmark mark='a'/>记住训练条目，每次都要75到125步。<bookmark mark='b'/>泛化就不一样了。权重衰减越大，它来得越早：从1时的第1550步，到3时的第800步。<bookmark mark='c'/>而在15次训练里，有9次，全都是权重衰减不超过0.3的，在4000步之内始终没有等到它。"
+  },
+  "832ccf4e43aa": {
+   "scene": "Grok",
+   "en": "What rule did it find? Look at the vectors it learned for the numbers, and ask which waves around the clock they contain: their Fourier spectrum. <bookmark mark='a'/> Watch it through training. At first the energy is spread over all frequencies, noise. As the unseen entries come right, a few frequencies take over: by the end, 65 percent of the energy sits in five of the 48. <bookmark mark='b'/> And the numbers, seen along their main directions, settle onto circles.",
+   "zh": "它找到的是什么规则？看看它为这些数学到的向量，问问它们包含了钟面上的哪些波：它们的傅里叶频谱。<bookmark mark='a'/>在训练过程中观察它。一开始，能量分散在所有频率上，是噪声。随着没见过的条目答对，几个频率占了上风：到最后，65%的能量集中在48个频率中的5个上。<bookmark mark='b'/>而这些数，沿着它们的主方向看，落到了圆上。"
+  },
+  "f89806233a7f": {
+   "scene": "Grok",
+   "en": "Each number becomes a point on a circle, an angle. <bookmark mark='a'/> Adding two numbers on a clock is adding two angles, and the cosine of a sum is a sum of products of cosines and sines, which the ReLU units can build. <bookmark mark='b'/> The score of each answer c is then a sum of waves that peak where c equals a plus b. Fit the trained network's scores with the five waves alone: they account for 75 percent of the variation. Neel Nanda and colleagues worked this circuit out in 2023, one of the first complete explanations of what a trained network computes; part thirty takes the idea to real models. <bookmark mark='c'/> And chapter two's question returns: is this network lazy? Measure how far its tangent kernel moves: only to a distance of 0.03, most of it before the jump. Without weight decay it moves further, to 0.11, and still never generalizes. Tanishq Kumar and colleagues argued in 2023 that grokking can be a slow move from lazy to rich training; in our network the kernel's movement alone does not mark the moment, and the weight decay does the work.",
+   "zh": "每个数变成圆上的一个点，一个角度。<bookmark mark='a'/>在钟面上把两个数相加，就是把两个角相加；而和的余弦，是余弦与正弦的乘积之和，ReLU单元可以把它搭出来。<bookmark mark='b'/>于是每个答案c的分数，是一些波的和，这些波在c等于a加b的地方达到峰值。只用这5个波去拟合训练好的网络的分数：它们解释了75%的变化。尼尔·南达和同事在2023年弄清了这个回路，这是最早对一个训练好的网络在算什么的完整解释之一；第30部分会把这个想法用到真实的模型上。<bookmark mark='c'/>第2章的问题又回来了：这个网络是惰性的吗？量一量它的正切核移动了多远：距离只有0.03，而且大部分发生在跃升之前。没有权重衰减时，它移动得更远，达到0.11，却始终没有泛化。坦尼什克·库马尔和同事在2023年论证，顿悟可以是从惰性训练到丰富训练的缓慢转变；在我们的网络里，单看核的移动，标不出顿悟的那一刻，起作用的是权重衰减。"
+  },
+  "9f131c7b35cf": {
+   "scene": "Grok",
+   "en": "The takeaway: a network can fit its data long before it finds the rule, and weight decay pushes it toward the rule, which here is a small trigonometric circuit. Part thirty looks for circuits like it inside real models.",
+   "zh": "要点：一个网络可以在找到规则之前很久，就拟合了它的数据；权重衰减把它推向规则，在这里，规则是一个小小的三角函数回路。第30部分会在真实的模型里寻找这样的回路。"
+  },
+  "b69c92a268c0": {
+   "scene": "TestTime",
+   "en": "Chapter sixteen. Scaling the answer.",
+   "zh": "第16章。在回答时扩展。"
+  },
+  "bae21cabb655": {
+   "scene": "TestTime",
+   "en": "Until 2024, scaling meant bigger models and more data. Then OpenAI's o1 showed a second axis: accuracy rose smoothly with the logarithm of how long the model thought before answering. Part twenty-eight builds reasoning models. Here, the mathematics of the simplest version: many tries, and a checker. <bookmark mark='a'/> On our checkable task, give each model k tries at writing the next 6 characters, sampling, and count a problem solved if any try is exactly right. <bookmark mark='b'/> Every model solves more with more tries, and keeps going over five orders of magnitude. <bookmark mark='c'/> In 2024, Bradley Brown and colleagues saw the same with a real model: on a benchmark of real coding problems, two hundred and fifty tries took it from 15.9 to 56 percent.",
+   "zh": "直到2024年，扩展规模指的都是更大的模型和更多的数据。然后OpenAI的o1展示了第二个轴：准确率随着模型回答前思考时间的对数平稳上升。第28部分会搭建推理模型。这里讲最简单的版本背后的数学：多次尝试，加一个检查器。<bookmark mark='a'/>在我们可以检查的任务上，给每个模型k次机会，通过采样写出接下来的6个字符，只要有一次完全正确，就算这道题解出来了。<bookmark mark='b'/>每个模型都随着尝试次数增加而解出更多，而且跨越5个数量级一直如此。<bookmark mark='c'/>2024年，布拉德利·布朗和同事在一个真实的模型上看到了同样的现象：在一个真实编程问题的基准上，250次尝试把它从15.9%提高到56%。"
+  },
+  "146454a489ee": {
+   "scene": "TestTime",
+   "en": "Pause and predict. For one problem, more tries help exponentially fast. Averaged over a whole benchmark, will the failures also fall exponentially?",
+   "zh": "暂停一下，先想一想。对一道题来说，多试几次的帮助是指数级的快。对整个基准取平均，失败率也会指数下降吗？"
+  },
+  "1e93d7b261d3": {
+   "scene": "TestTime",
+   "en": "Why a power law? For one problem, k independent tries all fail with probability one minus p to the k: that falls exponentially, fast. <bookmark mark='a'/> But the benchmark averages over problems of every difficulty. <bookmark mark='b'/> If very hard problems, with tiny p, are spread like p to the b minus one, the average failure is a gamma integral, and it falls like k to the minus b: a power law, made entirely by the hardest problems. Rylan Schaeffer and colleagues showed this in 2025. <bookmark mark='c'/> On our mid-sized model, minus log pass at k falls with slope -0.31, and the share of problems with tiny p rises with slope 0.32: the same exponent, from two different measurements.",
+   "zh": "为什么是幂律？对一道题，k次独立尝试全部失败的概率，是1减p的k次方：它指数下降，很快。<bookmark mark='a'/>但基准是对各种难度的题目取平均。<bookmark mark='b'/>如果很难的题，也就是p很小的那些，按p的b减1次方分布，平均的失败率就是一个伽马积分，它像k的负b次方那样下降：一条幂律，完全由最难的那些题造成。赖兰·谢弗和同事在2025年证明了这一点。<bookmark mark='c'/>在我们中等大小的模型上，负对数pass@k下降的斜率是-0.31，而p很小的题目所占的比例，上升的斜率是0.32：两种不同的测量，得到同一个指数。"
+  },
+  "321971298e19": {
+   "scene": "TestTime",
+   "en": "So tries can stand in for size. How many does a small model need to match the biggest one's single try? <bookmark mark='a'/> The smallest that gets there needs about 16, the next ones fewer. Counting the cost of answering, two operations per parameter per character, the small model's tries cost only 15 percent of the big model's one. Whether that is a good trade depends on the price of training the big model, and on having a checker. <bookmark mark='b'/> Reinforcement learning, which trains reasoning models, is being scaled too. In 2025, Devvrit Khatri and colleagues at Meta spent four hundred thousand GPU-hours finding its law: reward rises along a sigmoid toward a ceiling, and fitted early, it predicted a hundred-thousand-GPU-hour run. <bookmark mark='c'/> The same year, xAI said it had run reinforcement learning on Grok 4 at the scale of pretraining.",
+   "zh": "所以尝试次数可以代替大小。一个小模型要尝试多少次，才能赶上最大模型的一次尝试？<bookmark mark='a'/>能赶上的最小模型需要大约16次，更大一些的需要得更少。算上回答的代价，每个参数每个字符2次运算，小模型的多次尝试，花费只有大模型一次尝试的15%。这笔交易划不划算，取决于训练大模型的价钱，也取决于有没有检查器。<bookmark mark='b'/>用来训练推理模型的强化学习，也在扩大规模。2025年，Meta的德夫里特·卡特里和同事花了40万GPU小时寻找它的定律：奖励沿着一条S形曲线升向一个上限；在早期拟合，它就预测出了一次10万GPU小时的训练。<bookmark mark='c'/>同一年，xAI说它在Grok 4上做了与预训练同等规模的强化学习。"
+  },
+  "5f76c3b2fecb": {
+   "scene": "TestTime",
+   "en": "The takeaway: with a way to check answers, tries trade compute at answer time for model size, and the hardest problems make the gains a slow power law. Part twenty-eight builds models that think before they answer.",
+   "zh": "要点：只要有办法检查答案，多次尝试就能用回答时的算力换取模型的大小，而最难的那些题让收益变成一条缓慢的幂律。第28部分会搭建先思考再回答的模型。"
+  },
+  "c5c282215912": {
+   "scene": "Frontier",
+   "en": "Chapter seventeen. Has pretraining stalled?",
+   "zh": "第17章。预训练停滞了吗？"
+  },
+  "9cd496181a59": {
+   "scene": "Frontier",
+   "en": "Has pretraining stopped paying? In December 2024, Ilya Sutskever told the field's largest conference that pre-training as we know it will end: compute keeps growing, but we have but one internet. <bookmark mark='a'/> In February 2025, OpenAI released GPT-4.5, its largest model yet, a scale-up of pretraining. <bookmark mark='b'/> The growth moved elsewhere: in July, xAI ran reinforcement learning on Grok 4 at the scale of pretraining, <bookmark mark='c'/> and Epoch AI estimated that GPT-5 had probably used less training compute than GPT-4.5. <bookmark mark='d'/> Then in November, Google's Gemini 3, and Oriol Vinyals wrote that its gain from pretraining was as big as they had ever seen. <bookmark mark='e'/> In July 2026, Sundar Pichai said the next frontier needs much larger base models, and that Gemini 4 was in training. <bookmark mark='f'/> And in October, Microsoft described a mixture of experts with two point eight trillion parameters, its performance forecast in advance from a ladder of smaller models.",
+   "zh": "预训练不再划算了吗？2024年12月，伊利亚·苏茨克维在这个领域最大的会议上说，我们所知的预训练将会终结：算力在继续增长，但我们只有一个互联网。<bookmark mark='a'/>2025年2月，OpenAI发布了GPT-4.5，它迄今最大的模型，一次预训练的扩展。<bookmark mark='b'/>增长转到了别处：7月，xAI在Grok 4上做了与预训练同等规模的强化学习，<bookmark mark='c'/>Epoch AI估计，GPT-5用的训练算力很可能比GPT-4.5还少。<bookmark mark='d'/>然后在11月，谷歌发布了Gemini 3，奥里奥尔·维尼亚尔斯写道，它从预训练得到的提升，和他们见过的一样大。<bookmark mark='e'/>2026年7月，桑达尔·皮查伊说，下一个前沿需要大得多的基础模型，而Gemini 4正在训练中。<bookmark mark='f'/>10月，微软介绍了一个有2.8万亿参数的混合专家模型，它的性能是事先从一系列更小的模型预测出来的。"
+  },
+  "366837187832": {
+   "scene": "Frontier",
+   "en": "Pause and predict. Fit the law on our cheapest runs, and predict runs ten times costlier. Will it miss by a hundredth of a bit, a tenth, or more?",
+   "zh": "暂停一下，先想一想。只用我们最便宜的训练拟合定律，去预测贵10倍的训练。偏差会是百分之一比特、十分之一比特，还是更多？"
+  },
+  "6a218326c975": {
+   "scene": "Frontier",
+   "en": "What can a scaling law actually tell us? Test ours the way laboratories use theirs. Fit Chinchilla's formula on only our 28 cheapest runs, and predict the other 21, up to 14 times costlier. <bookmark mark='a'/> On average the prediction is off by 0.046 bits, 0.104 at worst, and almost always on the high side: the costlier runs come out better than the cheap ones predicted. <bookmark mark='b'/> That is the sense in which pretraining has not stalled: at every scale we tried, the loss fell at least as fast as the law promised. But the curve was always slow. With Kaplan's exponent for compute, 0.05, halving the loss takes a million times the compute. What is debated is not the curve, but whether each step down it buys enough capability to be worth its price.",
+   "zh": "一条规模定律到底能告诉我们什么？像各个实验室用它们的定律那样，来检验我们的。只用我们最便宜的28次训练拟合Chinchilla的公式，去预测另外21次，最贵的要贵上14倍。<bookmark mark='a'/>平均来说，预测偏差0.046比特，最差0.104，而且几乎总是偏高：更贵的训练，结果比便宜的训练预测的更好。<bookmark mark='b'/>正是在这个意义上，预训练没有停滞：在我们试过的每个规模上，损失下降得至少和定律承诺的一样快。但这条曲线一向很慢。用卡普兰的算力指数0.05，损失减半需要100万倍的算力。争论的不是曲线，而是沿着它往下走的每一步，买到的能力值不值那个价钱。"
+  },
+  "bd3f3b53a774": {
+   "scene": "Frontier",
+   "en": "The other side of the ledger is efficiency. <bookmark mark='a'/> In 2024, Anson Ho and colleagues at Epoch AI estimated that the compute needed to reach a given language-model performance halved about every eight months, from better architectures, data and training. <bookmark mark='b'/> The same year, Chaojun Xiao and colleagues at Tsinghua measured a densing law: the capability packed into each parameter of open models doubled about every three months. <bookmark mark='c'/> So the frontier moves on three curves at once: pretraining, reinforcement learning, and thinking at answer time, each slow on its own, each with a law that can be measured. The argument is about their prices, not their shapes.",
+   "zh": "账本的另一边是效率。<bookmark mark='a'/>2024年，Epoch AI的安森·何和同事估计，达到某个给定语言模型性能所需的算力，大约每8个月减半，来自更好的架构、数据和训练。<bookmark mark='b'/>同一年，清华的肖朝军和同事测量了一条致密化定律：开源模型每个参数所装的能力，大约每3个月翻一番。<bookmark mark='c'/>所以前沿同时沿着三条曲线前进：预训练、强化学习、回答时的思考，每一条单独都很慢，每一条都有一条可以测量的定律。争论的是它们的价钱，而不是它们的形状。"
+  },
+  "0d0babc7ace3": {
+   "scene": "Frontier",
+   "en": "The takeaway: every axis of scale we can measure still follows its law. What is argued over is the price of the next step, and that price keeps falling. Now, the recap.",
+   "zh": "要点：我们能测量的每一个规模轴，都仍然遵循它的定律。争论的是下一步的价钱，而这个价钱一直在下降。现在，来回顾一下。"
+  },
+  "b636a521ddae": {
    "scene": "Outro",
-   "en": "Let's take stock. Loss falls with size along a power law, predictably enough to plan by. Very wide networks, scaled the usual way, go lazy and stop learning features; mu-P keeps every layer learning, and lets a learning rate tuned on a small model carry over to a big one. A fixed budget should be split between size and data, about twenty tokens per parameter by Chinchilla's count. And a network can memorize first and understand much later, by turning clock arithmetic into rotations.",
-   "zh": "我们来盘点一下。损失随着规模，沿一条幂律下降，可预测到足以拿来做规划。非常宽的网络，按通常的方式放大，就会变懒，不再学习特征；μP让每一层都一直在学习，还能让在小模型上调好的学习率，直接沿用到大模型上。一笔固定的预算，应该在规模和数据之间分配，按Chinchilla的算法，每个参数大约20个词元。而一个网络，可以先记住，很久以后才理解，靠的是把钟面上的算术，变成旋转。"
+   "en": "Let's take stock. Loss falls with size, data and compute along power laws, smoothly enough to plan by. An infinitely wide network trains like its own tangent kernel, and a kernel learns no features. Mu-P keeps every layer learning, and lets one learning rate serve every width and, with CompleteP, every depth. A budget should be split between size and data along the floor of Chinchilla's valley, then bent toward smaller models that answer cheaply, and stretched by repeating data, which is worth less each time. Power laws can come from data on a low-dimensional surface, or from many small skills learned one at a time, each suddenly. And a network can memorize first and understand much later, by turning clock arithmetic into rotations.",
+   "zh": "我们来盘点一下。损失随着大小、数据和算力沿幂律下降，平滑得足以据此做计划。一个无限宽的网络，训练起来就像它自己的正切核，而核学不到特征。μP让每一层都一直在学，让一个学习率适用于每个宽度，加上CompleteP，还适用于每个深度。一份预算应该沿着Chinchilla山谷的谷底，在大小和数据之间分配，再向回答起来便宜的小模型弯折，并通过重复数据来拉长，而数据每重复一次就更不值钱。幂律可以来自低维曲面上的数据，也可以来自许多小技能，一次学会一项，每一项都学得突然。而一个网络可以先记忆，很久以后才理解：它把钟面上的算术变成了旋转。"
   },
-  "49d6eac80f66": {
+  "8d9f75c91d9d": {
    "scene": "Outro",
-   "en": "Act two ends here. Scaling laws return with mixtures of experts, and with reasoning models that scale the thinking done at test time. And grokking's circuits are a first taste of looking inside models, in part thirty.",
-   "zh": "第二幕到这里结束。规模定律还会再回来：在混合专家模型里，也在那些扩大测试时思考量的推理模型里。而顿悟背后的回路，让我们先尝到了一点窥看模型内部的滋味，那是第30部分的内容。"
+   "en": "Act two ends here, and all of this comes back. Experts are part sixteen. Part eighteen trains a model with the whole recipe: mu-P, batch sizes, schedules and eight-bit arithmetic. Part nineteen is the cost of answering. Parts twenty-seven and twenty-eight scale reinforcement learning and thinking. Grokking's circuit is a first taste of part thirty, and forecasting what models will be able to do is part thirty-one.",
+   "zh": "第二幕到这里结束，而这里的一切都会再回来。专家是第16部分。第18部分用全套配方训练一个模型：μP、批量大小、学习率计划和8位运算。第19部分讲回答的代价。第27和第28部分扩展强化学习和思考。顿悟的回路是第30部分的初尝，而预测模型将来能做什么，是第31部分。"
   },
-  "e3118642c8f2": {
+  "1ab016eb790a": {
    "scene": "Outro",
-   "en": "Next time, act three begins: the engines inside today's models. First, attention: how every word looks back at every earlier word and decides which ones matter, as geometry. <bookmark mark='a'/> And we'll build a small transformer of our own.",
-   "zh": "下一次，第三幕开始：当今模型内部的引擎。首先是注意力，从几何的角度来看：每个词怎样回头看它前面的每一个词，再决定哪些要紧。<bookmark mark='a'/>我们还会亲手搭一个自己的小Transformer。"
+   "en": "Here are six problems, from the tangent kernel to the power law of many tries. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有6道题，从正切核到多次尝试的幂律。在这里暂停，把它们做一遍；完整的解答在本部分的笔记里。"
+  },
+  "bc3c78acaf11": {
+   "scene": "Outro",
+   "en": "Next time, act three begins: the transformer era. First, attention: how every word looks back at every earlier word and decides which ones matter, as geometry. <bookmark mark='a'/> And we'll build a small transformer of our own.",
+   "zh": "下一次，第三幕开始：Transformer时代。首先是注意力：每个词怎样回看前面的每个词，并决定哪些要紧，用几何来讲。<bookmark mark='a'/>我们还会搭一个自己的小Transformer。"
   },
   "069ef2d23867": {
    "scene": "Outro",
    "en": "The Chinchilla paper is very readable, and Roberts, Yaida and Hanin's book is the deep end on wide networks. Thanks for watching, and see you in part thirteen.",
-   "zh": "Chinchilla那篇论文非常好读；要往深处钻研宽网络，就去读罗伯茨、亚伊达和哈宁的那本书。感谢观看，第13部分见。"
-  },
-  "782c8a775e0b": {
-   "scene": "Width",
-   "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's starting weights and step size, so that every layer keeps changing by about the same amount. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.66 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
-   "zh": "Greg Yang问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='m'/>说白了：网络变宽的时候，就把每一层的初始权重和步长都缩小一些，让每一层的变化量，都保持在差不多的水平。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.66，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：Yang和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
-  },
-  "2947bad7801c": {
-   "scene": "Chinchilla",
-   "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.46, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
-   "zh": "这个实验放到极大的规模上去做，改变了模型的造法。2020年，卡普兰和同事们得出结论：模型规模应该比数据增长得快得多。<bookmark mark='a'/>2022年，DeepMind的Chinchilla论文更仔细地重做了一遍，发现规模和数据应该一起增长：每个参数，大约配20个训练词元。<bookmark mark='o'/>我们的小实验，结果和Chinchilla很接近：最好的规模，随预算的0.46次方增长，每个参数大约训练34个字符。<bookmark mark='b'/>他们700亿参数的Chinchilla，在同样的预算下，胜过了他们自己2800亿参数的Gopher。<bookmark mark='c'/>如今的模型，训练用的数据比这还要多得多，因为一个模型只训练一次，却要运行几十亿次，所以一个更小、训练得更久的模型，用起来更便宜。"
-  },
-  "dcb3e7b3f838": {
-   "scene": "Chinchilla",
-   "en": "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen runs, it's off by only 0.02 bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, and the best size grows as the budget to the power beta over alpha plus beta: 0.43 here, close to what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best model's loss with a model three quarters its size costs 7 percent more training; with half the size, 74 percent more; and below about 0.31 of the size, no amount of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred tokens per parameter, a hundred times Chinchilla's ratio.",
-   "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花74%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
+   "zh": "Chinchilla的论文非常好读，而罗伯茨、亚伊达和哈宁的书，是宽网络理论的深水区。谢谢收看，第13部分见。"
   }
  },
  "title_en": "AI, Built: Part 12, The Mathematics of Scale",
  "chapters_en": {
-  "Hook": "A power law",
-  "Width": "1. Wider and wider",
-  "Chinchilla": "2. Size or data?",
-  "Grok": "3. Grokking",
-  "Outro": "Recap, and where this comes back"
+  "Hook": "A straight line on log axes",
+  "Wide": "1. Infinitely wide",
+  "Lazy": "2. Lazy",
+  "MuP": "3. muP, derived",
+  "Transfer": "4. One learning rate for every width",
+  "Depth": "5. Deeper and deeper",
+  "Batch": "6. How big a batch?",
+  "Laws": "7. Scaling laws, measured",
+  "Valley": "8. Chinchilla's valley",
+  "Kaplan": "9. What Kaplan missed",
+  "Overtrain": "10. Trained for the long run",
+  "Data": "11. When the data runs out",
+  "Experts": "12. Experts and bits",
+  "Power": "13. Why power laws?",
+  "Emerge": "14. Emergence, or a mirage?",
+  "Grok": "15. Grokking",
+  "TestTime": "16. Scaling the answer",
+  "Frontier": "17. Has pretraining stalled?",
+  "Outro": "Recap, problems, and what comes next"
  }
 }

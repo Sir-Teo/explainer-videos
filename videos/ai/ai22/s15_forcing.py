@@ -55,6 +55,8 @@ class Forcing(VoiceoverScene):
         df = label(r"every frame at its own noise level", font_size=18, color=VID_C["forcing"]).next_to(rows[1], DOWN, buff=0.95)
         cite_ = cite(r"B.~Chen, D.~Mart\'i Mons\'o, Y.~Du, M.~Simchowitz, R.~Tedrake \& V.~Sitzmann, \textit{Diffusion "
                      r"Forcing} (2024)", corner=DL)
+        fbf = label(r"frame by frame, \ like text: \ each frame from the ones before \ (causal attention)",
+                    font_size=28, color=GREY_A).move_to(UP * 0.5)
         with self.voiceover(
             "To go on past a fixed length, write the video frame by frame, like text: each frame from the ones "
             "before, with causal attention. <bookmark mark='a'/> The obvious way to train it is teacher forcing: "
@@ -63,8 +65,9 @@ class Forcing(VoiceoverScene):
             "random noise level, so the model learns to work from any mix of clean and noisy context. At generation "
             "time it can then treat its own earlier frames as slightly noisy, never quite trusting them."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(fbf, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(fbf))
             self.play(FadeIn(rows[0]), FadeIn(tf))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]), FadeIn(df), FadeIn(bl))
@@ -77,7 +80,7 @@ class Forcing(VoiceoverScene):
         truth = np.asarray(d["truth"])[0]
         L_, T = int(d["long"]), int(d["T"])
         pick = list(range(1, L_, 3))[:11]  # every third frame
-        S = 0.5
+        S = 0.6
         rows = Group(glyph_sheet(truth[pick], 1, len(pick), size=S, gap=0.05))
         names = [label(r"physics", font_size=18, color=GREY_A)]
         for m in MODES:
@@ -97,8 +100,9 @@ class Forcing(VoiceoverScene):
             "noisy, and the clip model, extended six frames at a time from the last two."
         ) as vo:
             self.play(FadeIn(hd))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(names[0]))
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(n_)) for r_, n_ in zip(rows[1:], names[1:])],
                                   lag_ratio=0.4), run_time=2.5)
@@ -176,12 +180,12 @@ class Forcing(VoiceoverScene):
             history_card(r"Aug 2025", r"Genie 3 \ (Google DeepMind)", r"a world you steer as it is drawn, \ in real "
                          r"time: \ Part 29", color=HIST, width=11.0, font_size=25),
         ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(head, DOWN, buff=0.4)
-        if cards.height > 5.0:
-            cards.height = 5.0
+        if cards.height > 4.3:
+            cards.height = 4.3
             cards.next_to(head, DOWN, buff=0.4)
         loop = VGroup(node_box_(r"generate frames \ from its own past", VID_C["forcing"]),
                       node_box_(r"score the whole clip \ against a teacher", PATCH))
-        loop.arrange(RIGHT, buff=1.4).to_edge(DOWN, buff=0.7)
+        loop.arrange(RIGHT, buff=1.4).to_edge(DOWN, buff=0.6)
         arr = VGroup(CurvedArrow(loop[0].get_top() + UP * 0.05, loop[1].get_top() + UP * 0.05, angle=-0.8, color=GREY_B),
                      CurvedArrow(loop[1].get_bottom() + DOWN * 0.05, loop[0].get_bottom() + DOWN * 0.05, angle=-0.8, color=GREY_B))
         with self.voiceover(

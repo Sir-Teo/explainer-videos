@@ -39,10 +39,12 @@ class Clips(VoiceoverScene):
                                          fill_color=LAT_C, fill_opacity=0.15) for _ in range(T)]).arrange(RIGHT, buff=0.06)
         toks.move_to([0.6, -0.4, 0])
         tl = label(r"one token per frame: \ its $100$ latent numbers", font_size=18, color=LAT_C).next_to(toks, DOWN, buff=0.12)
-        blk = RoundedRectangle(width=toks.width + 0.4, height=0.8, corner_radius=0.12, stroke_color=GREY_B, stroke_width=2)
-        blk.next_to(toks, UP, buff=0.15)
         bl = label(r"a transformer over the frames \ (adaLN-Zero from each frame's noise level)", font_size=18,
-                   color=GREY_A).move_to(blk)
+                   color=GREY_A)
+        blk = RoundedRectangle(width=max(toks.width, bl.width) + 0.5, height=0.8, corner_radius=0.12, stroke_color=GREY_B,
+                               stroke_width=2)
+        blk.next_to(toks, UP, buff=0.15)
+        bl.move_to(blk)
         given = SurroundingRectangle(toks[0], color=WHITE, buff=0.05, stroke_width=2.5)
         gl = label(r"given: \ the first frame", font_size=18, color=WHITE).next_to(given, DOWN, buff=0.55).shift(LEFT * 0.4)
         stats = label(rf"rebuild error ${float(d['ae_rmse']):.3f}$; \ the judge reads the letter in "
@@ -76,11 +78,11 @@ class Clips(VoiceoverScene):
         top = float(max(np.percentile(cv[m][:, :, 1], 98) for m in modes)) * 1.1
         ax = axes([0, st[-1]], [0, top], x_length=6.4, y_length=3.4, xlabel=r"training step \ ($64$ clips each)",
                   ylabel=r"flow-matching loss \ (each model on its own frames)", xticks=[0, st[-1]],
-                  yticks=[0, round(top / 2, 2)], center=[-1.6, 0.0, 0], font_size=18, xfmt=lambda x: fmt_int(x))
+                  yticks=[0, round(top / 2, 2)], center=[-2.4, 0.0, 0], font_size=18, xfmt=lambda x: fmt_int(x))
         lines = VGroup(*[mean_band(ax.ax, st, cv[m][:, :, 1], VID_C[m]) for m in modes])
         leg = legend([(VID_C[m], VID_NAME[m]) for m in modes], font_size=20).move_to([4.6, 0.6, 0])
         card = pause_card(r"Drawn together, \ or frame by frame from the same model: \ which clips keep one letter, "
-                          r"moving one way?", width=5.0, font_size=22).move_to([4.6, -1.7, 0])
+                          r"moving one way?", width=4.6, font_size=22).move_to([4.7, -1.5, 0])
         hd = note(rf"three models of ${fmt_int(d['params'])}$ weights, \ three seeds each \ (bands: \ min to max)").to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "We trained three models of this size, three seeds each: the whole-clip model, and two that write frame "
@@ -104,7 +106,7 @@ class Clips(VoiceoverScene):
         labs = [int(x) for x in d["given_labels"]]
         rows = Group()
         for k in range(3):
-            rows.add(Group(strip(J[k], size=0.5), strip(I_[k], size=0.5)).arrange(DOWN, buff=0.08))
+            rows.add(Group(strip(J[k], size=0.56), strip(I_[k], size=0.56)).arrange(DOWN, buff=0.08))
         rows.arrange(DOWN, buff=0.3).move_to([-2.6, -0.1, 0])
         tags = VGroup(*[VGroup(label(r"together", font_size=16, color=JOINT_C).next_to(r_[0], LEFT, buff=0.2),
                                label(r"separately", font_size=16, color=INDEP_C).next_to(r_[1], LEFT, buff=0.2)) for r_ in rows])
@@ -143,9 +145,11 @@ class Clips(VoiceoverScene):
             + " <bookmark mark='c'/> " + close + " And the clip's length is fixed when the model is trained."
         ) as vo:
             self.play(FadeIn(hd), FadeIn(hdn))
-            vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(t_)) for r_, t_ in zip(rows, tags)], lag_ratio=0.3),
                       run_time=2.0)
+            vo.wait_until("a")
+            self.play(*[Indicate(t_[0], color=JOINT_C) for t_ in tags], run_time=1.0)
+            self.play(*[Indicate(t_[1], color=INDEP_C) for t_ in tags], run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(b1.base), FadeIn(b2.base), FadeIn(b1.bars), FadeIn(b2.bars), FadeIn(t1), FadeIn(t2), FadeIn(leg))
             vo.wait_until("c")

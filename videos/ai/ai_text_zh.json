@@ -14354,7 +14354,9 @@
     "Bennett (1948); \\ LeCun, Denker \\& Solla (1990); \\ Hassibi \\& Stork (1993); \\ Dettmers et al., \\textit{LLM.int8()} (2022); \\ Frantar et al., \\textit{GPTQ} (2022); \\ Xiao et al., \\textit{SmoothQuant} (2022); \\ Lin et al., \\textit{AWQ} (2023)": "Bennett（1948）；\\ LeCun、Denker与Solla（1990）；\\ Hassibi与Stork（1993）；\\ Dettmers等，\\textit{LLM.int8()}（2022）；\\ Frantar等，\\textit{GPTQ}（2022）；\\ Xiao等，\\textit{SmoothQuant}（2022）；\\ Lin等，\\textit{AWQ}（2023）",
     "Ashkboos et al., \\textit{QuaRot} (2024); \\ Liu et al., \\textit{SpinQuant} (2024); \\ Rouhani et al., \\textit{MX} (2023); \\ NVIDIA, \\textit{NVFP4} (2025); \\ Liu et al., \\textit{KIVI} (2024)": "Ashkboos等，\\textit{QuaRot}（2024）；\\ Liu等，\\textit{SpinQuant}（2024）；\\ Rouhani等，\\textit{MX}（2023）；\\ 英伟达，\\textit{NVFP4}（2025）；\\ Liu等，\\textit{KIVI}（2024）",
     "Milakov \\& Gimelshein (2018); \\ Dao et al., \\textit{FlashAttention} (2022); \\ Dao (2023); \\ Shah et al.\\ (2024); \\ Dao, Haziza, Massa \\& Sizov, \\textit{Flash-Decoding} (2023)": "Milakov与Gimelshein（2018）；\\ Dao等，\\textit{FlashAttention}（2022）；\\ Dao（2023）；\\ Shah等（2024）；\\ Dao、Haziza、Massa与Sizov，\\textit{Flash-Decoding}（2023）",
-    "Willard \\& Louf (2023); \\ Dong et al., \\textit{XGrammar} (2024); \\ Park et al.\\ (2024); \\ Cottier et al., Epoch AI (2025); \\ Apple (2025); \\ DeepSeek-AI, \\textit{R1-0528} (2025)": "Willard与Louf（2023）；\\ Dong等，\\textit{XGrammar}（2024）；\\ Park等（2024）；\\ Cottier等，Epoch AI（2025）；\\ 苹果（2025）；\\ DeepSeek-AI，\\textit{R1-0528}（2025）"
+    "Willard \\& Louf (2023); \\ Dong et al., \\textit{XGrammar} (2024); \\ Park et al.\\ (2024); \\ Cottier et al., Epoch AI (2025); \\ Apple (2025); \\ DeepSeek-AI, \\textit{R1-0528} (2025)": "Willard与Louf（2023）；\\ Dong等，\\textit{XGrammar}（2024）；\\ Park等（2024）；\\ Cottier等，Epoch AI（2025）；\\ 苹果（2025）；\\ DeepSeek-AI，\\textit{R1-0528}（2025）",
+    "How much is a repeat worth?": "重复一遍值多少？",
+    "N.~Muennighoff et al., \\textit{Scaling Data-Constrained Language Models} (2023)": "N.~Muennighoff等，\\textit{Scaling Data-Constrained Language Models}（2023）"
   },
   "phrases": {
     "width": "宽度",
