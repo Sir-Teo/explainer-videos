@@ -1,11 +1,28 @@
 {
  "title": "人工智能，从零搭建 · 第19部分：推断",
  "chapters": {
-  "Hook": "速度上限",
+  "Hook": "一次一个词元",
   "Speculative": "1. 先猜几步，一次核对",
   "Quant": "2. 每个数少用几个比特",
   "Memory": "3. 代价在于搬运数字",
-  "Outro": "回顾，以及这些想法从何而来"
+  "Outro": "回顾、习题，以及接下来",
+  "Phases": "1. 预填充与解码",
+  "KVCache": "2. 键值缓存的代价",
+  "Batching": "3. 批处理：速度与成本",
+  "Scheduling": "4. 连续批处理",
+  "Paging": "5. 分页与共享前缀",
+  "Exact": "6. 先猜几步，一次核对",
+  "Drafters": "7. 草稿模型",
+  "Rounding": "8. 舍入误差",
+  "Outliers": "9. 离群值与SmoothQuant",
+  "GPTQ": "10. GPTQ：从最优脑外科说起",
+  "Rotation": "11. 旋转：QuaRot与SpinQuant",
+  "Formats": "12. 4比特浮点数：MXFP4与NVFP4",
+  "KVQuant": "13. 用更少的比特存缓存",
+  "Flash": "14. FlashAttention",
+  "ServeAttention": "15. 服务时的注意力",
+  "Grammar": "16. 约束解码",
+  "Frontier": "17. 前沿，2026年末"
  },
  "lines": {
   "d5f3852185fd": {
@@ -13,123 +30,457 @@
    "en": "When a big model writes, it writes one token at a time. And to write each one, it has to read every single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, stored as sixteen-bit numbers, two bytes each, that's a hundred and forty-one gigabytes, streamed from memory through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the next. <bookmark mark='c'/> How many bytes a second can flow from memory to the chip is the memory bandwidth: here, three point three five terabytes a second.",
    "zh": "大模型写东西的时候，一次只写一个词元。而每写一个，它都得把自己的每一个权重，统统读一遍。<bookmark mark='a'/>对一个700亿参数的模型来说，每个数按16比特存，也就是2个字节，这就是141GB的数据，从内存一路流进芯片，<bookmark mark='b'/>只为了一个词元。下一个词元，又要全部再读一遍；再下一个，还是这样。<bookmark mark='c'/>每秒能从内存流进芯片多少字节，这叫作内存带宽：在这里，是每秒3.35TB。"
   },
-  "10cc97630004": {
+  "9da2dede83a5": {
    "scene": "Hook",
-   "en": "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of weights: on one of today's best chips, about 24 tokens a second. <bookmark mark='a'/> And meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses a third of one percent of it. <bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called inference; it's not part seven's variational inference. And inference is a problem of moving numbers, not multiplying them.",
-   "zh": "所以，内存给速度定了一个上限。每秒能写出的词元数，超不过内存带宽除以权重的字节数：在当今最好的芯片之一上，大约是每秒24个词元。<bookmark mark='a'/>与此同时，芯片的算力几乎一直闲着。<bookmark mark='b'/>一段对话，只用掉其中1%的3分之1。<bookmark mark='c'/>拿训练好的模型来得到回答，不再学习，只是使用它，这叫作推断；它和第7部分的变分推断不是一回事。推断的难处，在于搬运数字，而不在于做乘法。"
+   "en": "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of weights: on an NVIDIA H100, about 24 tokens a second. <bookmark mark='a'/> And meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses a third of one percent of it. <bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called inference; it's not part seven's variational inference. And inference is a problem of moving numbers, not multiplying them.",
+   "zh": "所以，内存给速度定了一个上限。每秒能写出的词元数，超不过内存带宽除以权重的字节数：在一块NVIDIA H100上，大约是每秒24个词元。<bookmark mark='a'/>与此同时，芯片的算力几乎一直闲着。<bookmark mark='b'/>一段对话，只用掉其中的三分之一个百分点。<bookmark mark='c'/>拿训练好的模型来得到回答，不再学习，只是使用它，这叫作推断；它和第7部分的变分推断不是一回事。推断的难处，在于搬运数字，而不在于做乘法。"
   },
-  "2dc04f232993": {
+  "6df734d19dbf": {
    "scene": "Hook",
-   "en": "This part is about running models fast: guessing ahead and checking at once, storing numbers in fewer bits, <bookmark mark='a'/> and moving fewer bytes.",
-   "zh": "这一部分讲的是怎样让模型跑得快：先猜几步、一次核对，用更少的比特来存数字，<bookmark mark='a'/>以及少搬运一些字节。"
+   "en": "How did we get here? The transformer of 2017 already wrote one token at a time and kept the keys and values of what it had read, the cache of Part 15. <bookmark mark='a'/> In 2019 Noam Shazeer shared one set of keys and values among all the heads, to read less of it. In 2020 GPT-3 went on sale by the token, and the cost of a token became a business. <bookmark mark='b'/> 2022 was the year the ideas of this part arrived: FlashAttention, continuous batching, speculative decoding, and GPTQ's four-bit weights. <bookmark mark='c'/> In 2023, llama.cpp ran a big model on a laptop, and vLLM managed the cache in pages. <bookmark mark='d'/> Then DeepSeek compressed the cache itself, servers split reading from writing, and in 2025 OpenAI released gpt-oss with its experts in four-bit floats. <bookmark mark='e'/> Meanwhile the price of a token fell. A model at least as good as GPT-3 cost sixty dollars per million tokens in 2021, and fifteen cents per million input tokens in 2024: 400 times less.",
+   "zh": "我们是怎么走到这一步的？2017年的Transformer，就已经是一次写一个词元，并且把读过的内容的键和值保存下来，也就是第15部分讲的缓存。<bookmark mark='a'/>2019年，诺姆·沙泽尔让所有的头共用一套键和值，好少读一些。2020年，GPT-3开始按词元出售，一个词元的成本，从此成了一门生意。<bookmark mark='b'/>2022年，这一部分的想法纷纷登场：FlashAttention、连续批处理、推测解码，还有GPTQ的4比特权重。<bookmark mark='c'/>2023年，llama.cpp在笔记本电脑上跑起了大模型，vLLM开始按页管理缓存。<bookmark mark='d'/>接着，DeepSeek压缩了缓存本身，服务器把读提示和写回答拆开，2025年，OpenAI发布了gpt-oss，它的专家用的是4比特浮点数。<bookmark mark='e'/>与此同时，词元的价格一路下跌。一个至少和GPT-3一样好的模型，2021年每百万词元要60美元，2024年每百万输入词元只要1角5分：只剩原来的400分之1。"
   },
-  "30e297332721": {
-   "scene": "Speculative",
-   "en": "Chapter one. Guess ahead, check at once.",
-   "zh": "第1章。先猜几步，一次核对。"
+  "f8dc50d08491": {
+   "scene": "Hook",
+   "en": "This is Part 19 of AI, Built, the last part of the third act. <bookmark mark='a'/> In this part: why reading a prompt and writing an answer are different problems; how a server shares one model among many people; speculative decoding, proved exact; quantization, from rounding error to four-bit floats; FlashAttention, derived; and constrained decoding. Every one of them, measured on our own models, on this computer.",
+   "zh": "这是《人工智能，从零搭建》的第19部分，也是第三幕的最后一部分。<bookmark mark='a'/>本部分的内容：为什么读提示和写回答是两个不同的问题；一台服务器怎样让很多人共用一个模型；推测解码，并证明它是精确的；量化，从舍入误差讲到4比特浮点数；FlashAttention，一步步推导出来；还有约束解码。每一样，都在我们自己的模型上、在这台电脑上实测。"
   },
-  "8ce782910fb4": {
-   "scene": "Speculative",
-   "en": "A big model writes one token per run, and each run has to read all its billions of weights from memory. That reading, not the arithmetic, is the bottleneck. <bookmark mark='a'/> So let a small, fast model draft a few tokens ahead. <bookmark mark='b'/> Then the big model checks all of them in a single run, since it can score every position at once, the way it does in training. <bookmark mark='c'/> Keep the drafts it agrees with; at the first disagreement, take the big model's choice and start again.",
-   "zh": "大模型每运行一次，只能写出一个词元，而且每次都得从内存里读出它那几十亿个权重。瓶颈在于读取，而不在于运算。<bookmark mark='a'/>那就让一个又小又快的模型，先往前起草几个词元。<bookmark mark='b'/>然后，大模型只运行一次，就把它们全部核对一遍：它能同时给每个位置打分，就像训练时那样。<bookmark mark='c'/>它认可的草稿，就留下；碰到第一处分歧，就采用大模型自己的选择，然后从那里重新开始。"
+  "fae85754c12e": {
+   "scene": "Phases",
+   "en": "Chapter one. Prefill and decode.",
+   "zh": "第1章。预填充与解码。"
   },
-  "b1b738042861": {
-   "scene": "Speculative",
-   "en": "The clever part is that nothing changes about what the big model says. <bookmark mark='a'/> Here are both guesses for the next character, on our own models: part thirteen's transformer as the big one, a small counting model as the draft. <bookmark mark='b'/> Accept a drafted character with probability p over q, capped at one: where the draft guesses a character too often, the excess gets thrown out. <bookmark mark='c'/> If it's rejected, sample from what's left of p after taking q away: exactly the part the draft guessed too rarely. <bookmark mark='d'/> Run the rule two hundred thousand times, and the characters it outputs follow the big model's probabilities exactly, not the draft's: speculative decoding is faster with no change in quality.",
-   "zh": "巧妙之处在于，大模型说出的内容，一点都没有变。<bookmark mark='a'/>这是两个模型对下一个字符的猜测，用的是我们自己的模型：第13部分的Transformer当大模型，一个小小的计数模型当草稿模型。<bookmark mark='b'/>草稿里的一个字符，以q分之p的概率被接受，这个概率最大取1：草稿把哪个字符猜得太频繁，多出来的那部分就被扔掉。<bookmark mark='c'/>如果被拒绝，就从p减去q之后剩下的部分里重新采样：恰好是草稿猜得太少的那一部分。<bookmark mark='d'/>把这条规则运行20万次，它输出的字符，完全遵循大模型的概率，而不是草稿的：投机解码更快，质量却丝毫不变。"
+  "074e2147d8e9": {
+   "scene": "Phases",
+   "en": "A model with N parameters does about two N operations for every token it reads: one multiply and one add per weight. <bookmark mark='a'/> And every pass through the model reads every weight once: two N bytes in sixteen-bit numbers. <bookmark mark='b'/> When it writes an answer, a pass handles one new token per conversation. With B conversations in a batch, the intensity, operations per byte, is just B. <bookmark mark='c'/> When it reads a prompt, all T of its tokens go through in one pass, the way they do in training: that's called prefill, and its intensity is T. <bookmark mark='d'/> Part 17's roofline says an H100 only reaches full speed above about 295 operations per byte. A prompt of a thousand tokens is there. Writing for a single conversation, at an intensity of one, is not: decode is bound by memory.",
+   "zh": "一个有N个参数的模型，每读一个词元，大约要做2N次运算：每个权重一次乘法、一次加法。<bookmark mark='a'/>而模型每跑一遍，都要把每个权重读一次：用16比特的数，就是2N个字节。<bookmark mark='b'/>写回答的时候，每跑一遍，每段对话只处理一个新词元。一批里有B段对话，运算强度，也就是每个字节对应的运算次数，就正好是B。<bookmark mark='c'/>读提示的时候，提示里的全部T个词元一遍就过完，和训练时一样：这叫作预填充，它的运算强度是T。<bookmark mark='d'/>按第17部分的屋顶线，一块H100只有在每字节大约295次运算以上，才能全速运转。一个1000词元的提示，够得着。只为一段对话写回答，运算强度只有1，就差得远：解码受限于内存。"
   },
-  "aeff2d7d9ff8": {
-   "scene": "Speculative",
-   "en": "Our little draft is accepted 62 percent of the time. <bookmark mark='a'/> Drafting k characters, the big model writes on average one minus alpha to the k plus one, over one minus alpha, per run: 2.4 with four drafted. Real systems reach two to three times the speed this way, and some models, like DeepSeek-V3, are trained to draft for themselves.",
-   "zh": "我们这个小小的草稿模型，有62%的时候被接受。<bookmark mark='a'/>每轮起草k个字符，大模型每运行一次，平均写出的字符数，是1减去α的k加1次方，再除以1减去α：起草4个时，是2.4个。真实的系统靠这个办法，能把速度提高到2到3倍；有些模型，比如DeepSeek-V3，还被训练成自己给自己起草。"
+  "b836a43c7158": {
+   "scene": "Phases",
+   "en": "We can watch this happen on this computer. <bookmark mark='a'/> Twelve weight matrices, 805 megabytes, more than any of its caches hold: a model too big to stay close to the processor. Multiply a batch of B vectors through all twelve, and time it. <bookmark mark='b'/> The roofline predicts a floor: just reading the weights takes 64 milliseconds, whatever B is, until the arithmetic catches up with the reading. <bookmark mark='c'/> The measured time starts climbing sooner than the roofline says: it has doubled by a batch of about 3, not 22, because this processor's matrix library is tuned for big products, not for a handful of vectors. Even so, sixteen vectors cost 3.2 times one, not sixteen. <bookmark mark='d'/> So vectors per second climb from 14 at a batch of one to 289 at 512: 21 times as much work out of the same weights.",
+   "zh": "在这台电脑上，就能看到这件事。<bookmark mark='a'/>12个权重矩阵，共805MB，比它任何一级缓存都大：一个大到没法待在处理器旁边的模型。让一批B个向量依次乘过这12个矩阵，测一下用时。<bookmark mark='b'/>屋顶线预言了一个下限：光是读一遍权重，就要64毫秒，不管B是多少，直到运算追上读取为止。<bookmark mark='c'/>测出来的用时，比屋顶线说的更早开始上升：批大小约为3时就已经翻倍，而不是22，因为这台处理器的矩阵库，是为大的乘法调校的，而不是为寥寥几个向量。即便如此，16个向量的用时也只是1个的3.2倍，而不是16倍。<bookmark mark='d'/>于是，每秒处理的向量数，从批大小为1时的14个，涨到批大小为512时的289个：同样的权重，干出了21倍的活。"
   },
-  "44bcc6e5c25b": {
-   "scene": "Quant",
-   "en": "Chapter two. Fewer bits per number.",
-   "zh": "第2章。每个数少用几个比特。"
+  "72a36e1ffbe7": {
+   "scene": "Phases",
+   "en": "Now our own model, the series' novels model, on the inference engine we wrote for this part. <bookmark mark='a'/> Prefill: one prompt, of T tokens, in a single pass. <bookmark mark='b'/> Decode: one new token for each of B conversations per pass. <bookmark mark='c'/> One conversation is written at 405 tokens a second; each step reads all 5.8 million weights, 9.4 gigabytes a second of them. The same model reads a 256-token prompt at 8,195 tokens a second: 20 times faster, because its tokens share the reading. <bookmark mark='d'/> Batching the decodes buys most of that back: 256 conversations at once get 2,766 tokens a second between them. But each of them now gets only 11. That trade, the speed of one against the work of all, is what a server is built around.",
+   "zh": "现在换成我们自己的模型，也就是本系列的小说模型，跑在我们为这一部分写的推断引擎上。<bookmark mark='a'/>预填充：一个T个词元的提示，一遍处理完。<bookmark mark='b'/>解码：每跑一遍，给B段对话各写一个新词元。<bookmark mark='c'/>只写一段对话时，速度是每秒405个词元；每一步都要读遍全部5.8百万个权重，每秒读9.4GB。同一个模型读一个256词元的提示，速度是每秒8195个词元：是前者的20倍，因为这些词元共用了同一次读取。<bookmark mark='d'/>把解码也成批地做，就能把大部分差距补回来：256段对话一起写，合计每秒2766个词元。可每段对话，现在只分到每秒11个。一个人的速度，对上所有人的总工作量：服务器就是围绕这个取舍来搭建的。"
   },
-  "1ac421f46122": {
-   "scene": "Quant",
-   "en": "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is rounded to one of fifteen evenly spaced values, the same number either side of zero. <bookmark mark='b'/> The newest chips use FP4 instead: a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale for every block of thirty-two. <bookmark mark='e'/> A float stores a power of two, plus a little detail within it, so its values are packed close near zero and spread further apart away from it. FP4's layout is called E2M1: two bits for the power, one for the detail, and one for the sign.",
-   "zh": "减少内存读写的另一个办法：用更少的比特来存每个数。这是我们的Transformer其中一层的权重：大多数都接近0，只有少数比较大。<bookmark mark='a'/>用4个比特，每个权重都取整到15个等间距的值之一，0的两边一样多。<bookmark mark='b'/>最新的芯片改用FP4：一种很小的浮点数，在0附近的值更多，那里正是权重扎堆的地方；而且每32个数为一块，共用一个缩放因子。<bookmark mark='e'/>浮点数存的是一个2的幂，再加上这个幂之内的一点细节，所以它的值在0附近挤得很密，离0越远，就隔得越开。FP4的布局叫作E2M1：2个比特存幂，1个比特存细节，还有1个比特存符号。"
+  "3a8fa04339ee": {
+   "scene": "KVCache",
+   "en": "Chapter two. The key-value cache, priced.",
+   "zh": "第2章。键值缓存的代价。"
   },
-  "f6d8c637e895": {
-   "scene": "Quant",
-   "en": "What does it cost? <bookmark mark='a'/> Rounded to eight bits, our transformer is no worse. At four bits, 0.047 bits worse per character, for an eighth of the memory; at three, 0.26 worse: it starts to break. FP4, with its scale for every block of thirty-two, loses only 0.019: better than plain four bits, for the same memory. <bookmark mark='b'/> Big models tolerate rounding even better, the newest are trained in eight or even four bits from the start, and there are better formats, and better ways to round, than the plain ones here.",
-   "zh": "代价是多少？<bookmark mark='a'/>取整到8比特，我们的Transformer一点也没变差。到4比特，每个字符差了0.047比特，换来的是只用八分之一的内存；到3比特，差了0.26：它开始崩了。FP4，每32个数配一个缩放因子，只损失0.019：比普通的4比特更好，内存却一样。<bookmark mark='b'/>大模型对取整的容忍度还要更高，最新的模型从一开始就用8比特、甚至4比特训练；而且还有比这里这些朴素做法更好的格式，和更好的取整方法。"
+  "6dc3ef526cfc": {
+   "scene": "KVCache",
+   "en": "Part 15 built the key-value cache: every token a model has read leaves a key and a value in every attention head of every layer, so that the next token can look back at it without recomputing. <bookmark mark='a'/> With L layers and n h heads of size d h, that's two L n h d h numbers per token. <bookmark mark='b'/> In 2019 Noam Shazeer let all the heads share one key and one value, and in 2023 grouped-query attention found the middle: n g groups, each shared by several query heads. <bookmark mark='c'/> In 2024 DeepSeek went further. Multi-head latent attention caches one compressed vector per token, of size d c, plus a small key that carries the rotary positions, and rebuilds every head's keys and values from it.",
+   "zh": "第15部分搭起了键值缓存：模型读过的每个词元，都会在每一层的每个注意力头里留下一个键和一个值，这样下一个词元回头看它时，就不必重新计算。<bookmark mark='a'/>有L层、n h个头、每个头大小为d h，那么每个词元就是2乘L乘n h乘d h个数。<bookmark mark='b'/>2019年，诺姆·沙泽尔让所有的头共用一个键和一个值；2023年，分组查询注意力找到了折中：n g个组，每组由几个查询头共用。<bookmark mark='c'/>2024年，DeepSeek走得更远。多头潜在注意力为每个词元只缓存一个压缩过的向量，大小为d c，外加一个携带旋转位置信息的小键，再从它重建出每个头的键和值。"
   },
-  "4fc0235c4174": {
-   "scene": "Quant",
-   "en": "Two four-bit float formats now matter, and the difference between them is all in the scales. <bookmark mark='a'/> MXFP4, the open standard, shares one scale among thirty-two numbers, and the scale is a pure power of two: cheap to apply, but coarse, so a block's largest weight can land anywhere from four to eight on the E2M1 grid, and past six it's clipped. OpenAI's gpt-oss stores its experts this way. <bookmark mark='b'/> NVFP4, on NVIDIA's Blackwell chips, uses blocks of sixteen, and each scale is itself a small eight-bit float, so it can fit the block's largest weight to six almost exactly; one more scale for the whole weight matrix keeps everything in range. It costs 4.5 bits per weight instead of 4.25. <bookmark mark='c'/> On our transformer: MXFP4 loses 0.026 bits a character, NVFP4 0.024, and plain four-bit integers with a scale per row 0.047. The best here is NVFP4. For comparison, FP4 with an exact scale for every block of thirty-two, from before, lost 0.019: rounding the scale to a power of two is what costs MXFP4 its extra.",
-   "zh": "如今有两种4比特浮点格式很重要，它们的区别全在缩放因子上。<bookmark mark='a'/>MXFP4是开放标准，32个数共用一个缩放因子，而且这个缩放因子只能是2的整数次幂：用起来便宜，但很粗糙，所以一个块里最大的权重，在E2M1的格子上可能落在4到8之间的任何地方，超过6的部分就被截掉了。OpenAI的gpt-oss，就是这样存储它的专家的。<bookmark mark='b'/>NVFP4用在NVIDIA的Blackwell芯片上，每块16个数，而每个缩放因子本身是一个小小的8比特浮点数，所以几乎能把块里最大的权重恰好对到6上；整个权重矩阵再配一个缩放因子，让一切都不越界。它每个权重要花4.5比特，而不是4.25。<bookmark mark='c'/>在我们的Transformer上：MXFP4每个字符损失0.026比特，NVFP4损失0.024，每行一个缩放因子的普通4比特整数损失0.047。这里最好的是NVFP4。作为对比，前面那个每32个数配一个精确缩放因子的FP4，损失是0.019：把缩放因子取整成2的幂，正是MXFP4多出来那部分损失的来源。"
+  "46b141d6a03a": {
+   "scene": "KVCache",
+   "en": "Here is what that means for real models. <bookmark mark='a'/> Llama 3.1 70B has 80 layers and 64 query heads of 128 numbers. Give each head its own key and value, and every token costs 2.6 megabytes. <bookmark mark='b'/> It uses eight groups instead, so a token costs 328 kilobytes, 8 times less. <bookmark mark='c'/> DeepSeek-V3's 128 heads, uncompressed, would cost 5 megabytes a token. <bookmark mark='d'/> With MLA, 70 kilobytes: 71 times less, about what grouped attention with 2.25 groups would keep. <bookmark mark='e'/> gpt-oss keeps 74 kilobytes, and our little model 12 kilobytes.",
+   "zh": "这对真实的模型意味着什么？<bookmark mark='a'/>Llama 3.1 70B有80层，64个查询头，每个头128个数。如果每个头都有自己的键和值，每个词元就要占2.6MB。<bookmark mark='b'/>它实际用的是8个组，所以一个词元占328KB，只有前者的8分之1。<bookmark mark='c'/>DeepSeek-V3有128个头，不压缩的话，每个词元要占5MB。<bookmark mark='d'/>用了MLA，只占70KB：只有不压缩时的71分之1，大约相当于2.25个组的分组注意力所保存的量。<bookmark mark='e'/>gpt-oss每个词元占74KB，我们的小模型占12KB。"
   },
-  "9ef90af9a910": {
-   "scene": "Quant",
-   "en": "Two tricks make low precision work much better than plain rounding. The first is GPTQ. <bookmark mark='a'/> Round a layer's weights one input column at a time. <bookmark mark='b'/> Each rounding leaves an error; <bookmark mark='c'/> instead of accepting it, nudge the weights on the inputs not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' second moment, measured on real text: it records which inputs tend to be big together. If two inputs move together, a rounding error on one can be cancelled by adjusting the other. <bookmark mark='d'/> On a real layer of our transformer, at three bits, the error in its output drops from 17 to 10 percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few weights and activations, the numbers flowing through the network for this particular input, which change with every token while the weights stay fixed, are huge outliers, far bigger than the rest, and one outlier forces a coarse scale on its whole row. <bookmark mark='h'/> Multiply by a Hadamard matrix first, a grid of plus and minus ones. It's orthogonal: a pure rotation, which changes no lengths and can be undone exactly. The outlier is spread evenly over the row, and the rotation is undone afterwards. Our small model has no such outliers: a row's largest weight is only about 2.8 times the typical one, before and after. <bookmark mark='f'/> On our whole transformer at three bits: plain rounding loses 0.255 bits a character, GPTQ only 0.123, and rotating first 0.327, worse: with nothing to spread, it only spreads each rounding error over every input, including the few that carry large activations. Real systems rotate the activations too, so they can be rounded as well, and pair the rotation with GPTQ.",
-   "zh": "有两个技巧，能让低精度比简单取整好得多。第一个是GPTQ。<bookmark mark='a'/>把一层的权重，一次一列输入地取整。<bookmark mark='b'/>每次取整都会留下误差；<bookmark mark='c'/>不去接受它，而是微调那些还没取整的输入上的权重，让这一层的输出几乎不变。微调多少，由H决定，也就是输入的二阶矩，在真实文本上测出来：它记录了哪些输入往往一起变大。如果两个输入一起变化，一个输入上的取整误差，就可以靠调整另一个来抵消。<bookmark mark='d'/>在我们Transformer的一个真实层上，3比特时，它输出的误差从17%降到10%。<bookmark mark='e'/>第二个技巧是旋转。在大模型里，有少数权重和激活值是巨大的离群值，比其余的数大得多。激活值，就是针对这一个具体输入、在网络里流动的那些数：权重固定不变，激活值却随每个词元而变。一个离群值，就会迫使它所在的整行用很粗的缩放因子。<bookmark mark='h'/>先乘上一个哈达玛矩阵，也就是一个由正负1排成的方阵。它是正交的：一个纯粹的旋转，不改变任何长度，而且能精确地转回来。离群值就被均匀地摊到整行上，事后再把旋转转回来。我们的小模型没有这样的离群值：一行里最大的权重，只是典型权重的2.8倍左右，旋转前后都一样。<bookmark mark='f'/>在3比特下的整个Transformer上：简单取整每个字符损失0.255比特，GPTQ只损失0.123，而先旋转再取整损失0.327，反而更差：没有东西可摊，它只是把每个取整误差摊到所有输入上，包括那几个携带大激活值的输入。真实系统也会旋转激活值，这样激活值也能取整，并且把旋转和GPTQ配合起来用。"
+  "7fb58e8e313e": {
+   "scene": "KVCache",
+   "en": "And the cache grows with every token of the conversation. <bookmark mark='a'/> On log scales, each model is a straight line: bytes per token times tokens. <bookmark mark='b'/> Compare the weights. Llama 3.1 70B's weights take 141 gigabytes. With grouped attention, one conversation's cache outgrows them at about 431 thousand tokens; with every head its own, at 54 thousand. <bookmark mark='c'/> And a server holds many conversations at once. One H100 has eighty gigabytes for all of it. <bookmark mark='d'/> gpt-oss bends its line differently: every other layer looks back only 128 tokens, so those layers' caches stop growing, and at 128 thousand tokens it keeps 2.0 times less than full attention everywhere would.",
+   "zh": "而且，缓存随着对话的每个词元不断增长。<bookmark mark='a'/>在对数坐标上，每个模型都是一条直线：每个词元的字节数，乘以词元数。<bookmark mark='b'/>拿权重来比一比。Llama 3.1 70B的权重要占141GB。用分组注意力，一段对话的缓存在大约431K个词元时就超过了权重；如果每个头都有自己的键和值，是在54K个词元时。<bookmark mark='c'/>而一台服务器要同时装下很多段对话。一块H100，总共只有80GB。<bookmark mark='d'/>gpt-oss让它的直线换了个弯法：每隔一层，只回看128个词元，所以这些层的缓存不再增长；到12.8万个词元时，它保存的量只有处处都用全注意力时的2.0分之1。"
   },
-  "b3f5ede7783c": {
-   "scene": "Memory",
-   "en": "Chapter three. Moving numbers is the cost.",
-   "zh": "第3章。代价在于搬运数字。"
+  "281965a48864": {
+   "scene": "KVCache",
+   "en": "We measured the same thing on our model. <bookmark mark='a'/> A decode step, for batches of 1, 8 and 32 conversations, each with 128 to 2,048 tokens already cached. <bookmark mark='b'/> Plot the time of a step against the bytes it has to read, and time grows with the bytes, though not on one line: every step moved between 5 and 10 gigabytes a second. At a batch of 32 and 2,048 tokens, the caches are 805 megabytes, 35 times the weights, and a step takes 8.2 times as long as at 128 tokens. <bookmark mark='c'/> Every extra byte of cache costs time at about 7.1 gigabytes a second, near this processor's speed for a plain read of memory, 13. Long conversations turn decoding into reading the cache: shrink it, as MLA does; look at less of it, as windows do; or store it in fewer bits, in chapter 13.",
+   "zh": "我们在自己的模型上也测了同样的东西。<bookmark mark='a'/>一个解码步，批大小分别是1、8和32段对话，每段对话已经缓存了128到2048个词元。<bookmark mark='b'/>把每一步的用时，对着它要读的字节数画出来，用时随字节数增长，只是并不在一条直线上：每一步的搬运速度，都在每秒5到10GB之间。批大小为32、2048个词元时，缓存有805MB，是权重的35倍，一步的用时是128个词元时的8.2倍。<bookmark mark='c'/>缓存每多一个字节，就要多花时间，折算下来大约是每秒7.1GB，接近这台处理器直接读内存的速度，每秒13GB。长对话把解码变成了读缓存：要么把它缩小，像MLA那样；要么少看一些，像窗口那样；要么用更少的比特来存，这是第13章的内容。"
   },
-  "03a1224b5402": {
-   "scene": "Memory",
-   "en": "Every computer has two speeds: how fast it does arithmetic, and how fast it moves numbers from memory. <bookmark mark='a'/> We measured this one. The roofline: a slope where moving data is the limit, and a flat roof where arithmetic is. <bookmark mark='b'/> Big matrix products do lots of arithmetic per number moved, and the fastest of them sets the roof. <bookmark mark='c'/> But writing one token at a time multiplies each weight once: about one operation per byte, down on the slope, well below the roof. That's why the tricks of this part all move fewer bytes.",
-   "zh": "每台计算机都有两种速度：做运算有多快，从内存里搬运数字有多快。<bookmark mark='a'/>我们测了这一台。这就是屋顶线：受限于搬运数据的地方，是一道斜坡；受限于运算的地方，是一片平平的屋顶。<bookmark mark='b'/>大的矩阵乘法，每搬运一个数，都要做很多运算，其中最快的那一个，就定下了屋顶的高度。<bookmark mark='c'/>可是一次写一个词元，每个权重只乘一次：大约每个字节一次运算，落在斜坡上，远在屋顶之下。正因为这样，这一部分的所有技巧，都是为了少搬运一些字节。"
+  "44e25fc7e98e": {
+   "scene": "Batching",
+   "en": "Chapter three. Batching: speed against cost.",
+   "zh": "第3章。批处理：速度与成本。"
   },
-  "7dfe3ee9843e": {
-   "scene": "Memory",
-   "en": "Attention has its own memory problem: the table of scores grows with the square of the length. FlashAttention never stores it. <bookmark mark='a'/> It takes a block of queries, streams the keys and values through in tiles, small enough to stay in the chip's fastest memory, <bookmark mark='b'/> and keeps a running maximum and a running sum: it remembers the biggest score so far, so the exponentials never blow up, and rescales its partial sum whenever a bigger one arrives. So the softmax comes out exactly right at the end. We checked it: the same numbers as the plain formula, to rounding error, without ever holding the table.",
-   "zh": "注意力也有它自己的内存问题：分数表的大小，随长度的平方增长。FlashAttention从来不把这张表存下来。<bookmark mark='a'/>它取一块查询，让键和值切成小块依次流过，每一小块都小到能待在芯片最快的内存里，<bookmark mark='b'/>同时一路记着当前的最大值和累计的和：它记住到目前为止最大的分数，这样指数就永远不会爆掉；每当来了一个更大的分数，就把已经累计的部分和重新缩放一下。这样到最后，softmax算出来分毫不差。我们验证过：和直接按公式算出来的数一样，只差舍入误差，而整张表一次也没有存下来过。"
+  "04e00eaf35f0": {
+   "scene": "Batching",
+   "en": "Every server faces the trade from chapter one. <bookmark mark='a'/> Here it is for our model on this computer: each dot a batch size, its speed for one conversation across, its total work up. <bookmark mark='b'/> Alone, a conversation gets 405 tokens a second. Batched with 255 others, the computer writes 2,766 tokens a second in all, 6.8 times as many, but each conversation gets 11. <bookmark mark='c'/> Up and to the left is cheap; down and to the right is fast. A provider picks a point on this curve, and the price follows.",
+   "zh": "每台服务器都要面对第1章里的那个取舍。<bookmark mark='a'/>这是我们的模型在这台电脑上的情形：每个点是一个批大小，横轴是单段对话的速度，纵轴是总工作量。<bookmark mark='b'/>单独一段对话，每秒能得到405个词元。和另外255段一起成批，这台电脑总共每秒写出2766个词元，是原来的6.8倍，可每段对话只分到11个。<bookmark mark='c'/>往左上是便宜，往右下是快。服务商在这条曲线上挑一个点，价格也就跟着定了。"
   },
-  "cabaa52739ab": {
-   "scene": "Memory",
-   "en": "Finally, the cache from part fifteen, on a server answering many people at once. <bookmark mark='a'/> Reserve each conversation one block of memory long enough for the longest possible answer, and most of it sits empty: 79 percent wasted, for our two hundred random requests. <bookmark mark='b'/> vLLM borrowed the operating system's trick: hand out memory in small pages, as each conversation grows. Waste falls to 0.8 percent, so the same chip serves several times as many people.",
-   "zh": "最后，是第15部分的那个缓存，放在一台同时回答很多人的服务器上。<bookmark mark='a'/>如果给每段对话预留一整块内存，长到能装下最长的回答，那么大部分都会空着：在我们这200个随机请求上，浪费了79%。<bookmark mark='b'/>vLLM借用了操作系统的老办法：随着每段对话变长，把内存一小页一小页地分给它。浪费降到了0.8%，于是同一块芯片，能服务的人多了好几倍。"
+  "c8231b3a9a61": {
+   "scene": "Batching",
+   "en": "To see what this means for a real model on a real chip, model it with the roofline. <bookmark mark='a'/> A decode step reads the weights, W bytes, and every conversation's cache: c tokens at kappa bytes each. It can't go faster than the memory, beta. <bookmark mark='b'/> Nor faster than the arithmetic: two N B operations at P a second. <bookmark mark='c'/> And it all has to fit in memory, which caps the batch. <bookmark mark='d'/> The machine's time is shared, so the cost of a token is the price of a second divided by the tokens written per second. <bookmark mark='e'/> We use Llama 3.1 8B on one H100, at two dollars an hour: the rental price DeepSeek used to cost its own service. In 2022 Reiner Pope and colleagues at Google worked through this accounting for PaLM: the same weights, read faster or shared wider.",
+   "zh": "要看清这对真实芯片上的真实模型意味着什么，就用屋顶线给它建个模。<bookmark mark='a'/>一个解码步要读权重，W个字节，还要读每段对话的缓存：c个词元，每个κ字节。它不可能比内存更快，也就是β。<bookmark mark='b'/>也不可能比运算更快：2NB次运算，每秒P次。<bookmark mark='c'/>而且一切都得装进内存，这就限制了批大小。<bookmark mark='d'/>机器的时间是大家共用的，所以一个词元的成本，就是每秒的价格除以每秒写出的词元数。<bookmark mark='e'/>我们用一块H100跑Llama 3.1 8B，每小时2美元：这是DeepSeek给自家服务算成本时用的租用价格。2022年，谷歌的赖纳·波普和同事为PaLM算过这样一笔账：同样的权重，要么读得更快，要么分给更多人。"
   },
-  "62f2e3b06137": {
+  "4b1fbb1b7e85": {
+   "scene": "Batching",
+   "en": "Here is what the model gives. <bookmark mark='a'/> Each line is a context length; along it, the batch grows from one, down and to the left, until memory runs out. <bookmark mark='b'/> With a thousand tokens of context, one conversation alone costs 2.69 dollars per million tokens. A batch of 416 brings that to 0.029: 94 times cheaper, while each conversation gets 4.4 times slower. Even then the chip does only 33 percent of the arithmetic it could. <bookmark mark='c'/> At 128 thousand tokens, 3 conversations fill the memory, and a token costs at least 3.74 dollars per million. That's why long contexts cost more, and why so much of this part is about shrinking the cache.",
+   "zh": "这个模型给出的结果是这样的。<bookmark mark='a'/>每条线是一个上下文长度；沿着它，批大小从1开始增大，一路往左下走，直到内存用完。<bookmark mark='b'/>上下文是1000个词元时，单独一段对话，每百万词元要2.69美元。批大小到416，就降到0.029：只有原来的94分之1，而每段对话的速度降到原来的4.4分之1。即便如此，芯片也只做了它能做的运算的33%。<bookmark mark='c'/>到12.8万个词元时，3段对话就把内存装满了，每百万词元至少要3.74美元。这就是长上下文更贵的原因，也是这一部分花这么多篇幅讲怎样缩小缓存的原因。"
+  },
+  "27732462196b": {
+   "scene": "Scheduling",
+   "en": "Chapter four. Continuous batching.",
+   "zh": "第4章。连续批处理。"
+  },
+  "b6e67eb82166": {
+   "scene": "Scheduling",
+   "en": "A server has many conversations to write at once, and they don't arrive together or end together. <bookmark mark='a'/> Until 2022 the usual way was static batching: gather a batch, prefill all the prompts, and decode until every answer in the batch is finished. A short answer leaves its slot idle while the longest one goes on, and new requests wait outside. <bookmark mark='b'/> In 2022 a team at Seoul National University proposed the fix, in a system called Orca: schedule at every step instead of every batch. <bookmark mark='c'/> When a conversation finishes, its slot goes to the next one waiting, at the very next step. Here are the same requests both ways, on this computer's measured costs: continuous batching finishes all of them in 9.6 seconds; static batches take 20.4.",
+   "zh": "一台服务器同时有很多段对话要写，它们不是一起到达，也不是一起结束。<bookmark mark='a'/>直到2022年，通常的做法都是静态批处理：凑齐一批，把所有提示都预填充，然后一直解码，直到这批里的每个回答都写完。短的回答写完了，它的位置就空着，等最长的那个写完；新来的请求只能在外面等。<bookmark mark='b'/>2022年，首尔国立大学的一个团队在一个叫Orca的系统里提出了解决办法：每一步都调度一次，而不是每一批才调度一次。<bookmark mark='c'/>一段对话一结束，它的位置就在紧接着的下一步交给下一个等待者。这是同一批请求，两种方式各跑一遍，用的是这台电脑上测得的成本：连续批处理9.6秒就全部写完；静态批处理要20.4秒。"
+  },
+  "2711a33588bc": {
+   "scene": "Scheduling",
+   "en": "With more traffic the difference is stark. <bookmark mark='a'/> We simulated a server on this computer's measured costs: 400 requests arriving at random, 7 a second, with long-tailed lengths, like real chat. <bookmark mark='b'/> Static batches can't keep up: they write 258 tokens a second, fewer than are asked for, so the queue grows. Continuous batching writes 787, 3.1 times as many, and keeps up with the traffic. <bookmark mark='c'/> And the wait for a first token: a median of 66 seconds with static batches, 60 milliseconds with continuous batching. Serving systems have worked this way ever since.",
+   "zh": "流量一大，差别就很明显了。<bookmark mark='a'/>我们按这台电脑上测得的成本，模拟了一台服务器：400个请求随机到达，每秒7个，长度呈长尾分布，就像真实的聊天。<bookmark mark='b'/>静态批处理跟不上：它每秒写出258个词元，比请求的还少，所以队列越排越长。连续批处理每秒写出787个，是它的3.1倍，跟得上流量。<bookmark mark='c'/>再看等到第一个词元要多久：静态批处理的中位数是66秒，连续批处理是60毫秒。从那以后，服务系统一直是这样工作的。"
+  },
+  "627eb91f19a9": {
+   "scene": "Scheduling",
+   "en": "Continuous batching has a cost of its own. <bookmark mark='a'/> When a new prompt joins, its whole prefill runs inside one step, and every conversation in the batch waits for it. <bookmark mark='b'/> In our simulation the median gap between two tokens of an answer is 13 milliseconds, but the longest is 182. <bookmark mark='c'/> In 2024 Sarathi-Serve cut prompts into chunks, and gave each step a budget: the decodes, plus as much prompt as fits. <bookmark mark='d'/> With chunks of 256 tokens, the longest gap falls to 59 milliseconds, 3.1 times shorter, for almost no change in the median.",
+   "zh": "连续批处理也有它自己的代价。<bookmark mark='a'/>新的提示加入时，它的整个预填充都在一步之内跑完，批里的每段对话都得等它。<bookmark mark='b'/>在我们的模拟里，一个回答相邻两个词元之间的间隔，中位数是13毫秒，最长的却有182毫秒。<bookmark mark='c'/>2024年，Sarathi-Serve把提示切成小块，并给每一步定一个预算：先放下所有的解码，再放进尽量多的提示。<bookmark mark='d'/>用256个词元的块，最长的间隔降到59毫秒，只有原来的3.1分之1，中位数却几乎不变。"
+  },
+  "8fdf5a28a382": {
+   "scene": "Scheduling",
+   "en": "There is another way to keep prompts from stalling answers: put them on different machines. <bookmark mark='a'/> Prefill is arithmetic and decode is memory, so in 2024 Splitwise and DistServe gave each its own GPUs, sending each prompt's cache across when it's done. DeepSeek serves V3 this way: prefill on units of 32 GPUs, decode on units of 320. <bookmark mark='b'/> We tried it in the simulation: four workers that each do both, against one that prefills and three that decode. <bookmark mark='c'/> Splitting cut the 99th-percentile gap 2.2 times, but the median wait for a first token grew 2.4 times, because one worker now does every prefill: the split has to be sized to the traffic.",
+   "zh": "还有一种办法，能让提示不耽误回答：把它们放到不同的机器上。<bookmark mark='a'/>预填充是运算，解码是内存，所以2024年，Splitwise和DistServe给两者各配了自己的GPU，每个提示处理完，就把它的缓存传过去。DeepSeek就是这样部署V3的：预填充以32块GPU为一个单元，解码以320块为一个单元。<bookmark mark='b'/>我们在模拟里试了一下：四个既做预填充又做解码的工作节点，对比一个专做预填充、三个专做解码的。<bookmark mark='c'/>拆开之后，第99百分位的间隔缩短到原来的2.2分之1，可等待第一个词元的中位时间，却变成了原来的2.4倍，因为现在所有的预填充都压在一个节点上：怎么拆，要按流量来定。"
+  },
+  "319068cefa31": {
+   "scene": "Paging",
+   "en": "Chapter five. Pages and shared prefixes.",
+   "zh": "第5章。分页与共享前缀。"
+  },
+  "ee3b0b718793": {
+   "scene": "Paging",
+   "en": "Where in memory should each conversation's cache go? Nobody knows how long an answer will be. <bookmark mark='a'/> So servers used to reserve, for every conversation, room for the longest answer allowed, here 2,048 tokens. Most of it sits empty: in our simulated server, on average only 22 percent of the memory holds a token, and it fits 7.7 conversations at a time. In 2023 the vLLM team measured real systems keeping 20 to 38 percent. <bookmark mark='b'/> Reserving exactly the right length would need the future, and still splinters the memory as conversations come and go: 54 percent. <bookmark mark='c'/> vLLM's answer came from operating systems: virtual memory. Cut the cache into pages of sixteen tokens, put each page anywhere, and keep a table of where they are. A conversation takes a page when it needs one. <bookmark mark='d'/> Now 76 percent of the memory holds tokens, and 27.2 conversations fit at once, 3.5 times as many; Here that buys only 16 percent more tokens a second, because on this computer each conversation's own cache costs nearly as much to read as it adds; on a GPU, where reading the weights dominates, vLLM measured two to four times.",
+   "zh": "每段对话的缓存，该放在内存的什么地方？没人知道一个回答会有多长。<bookmark mark='a'/>所以，服务器过去会为每段对话预留出允许的最长回答所需的空间，在这里是2048个词元。大部分空间都空着：在我们模拟的服务器里，平均只有22%的内存装着词元，同时只能容纳7.7段对话。2023年，vLLM团队测得真实系统只用上了20%到38%。<bookmark mark='b'/>正好预留所需的长度，就得预知未来；而且随着对话来来去去，内存还是会被切得七零八落：54%。<bookmark mark='c'/>vLLM的答案来自操作系统：虚拟内存。把缓存切成每页16个词元，每一页放在哪里都行，再用一张表记下它们的位置。对话需要时，才领一页。<bookmark mark='d'/>现在76%的内存装着词元，同时能容纳27.2段对话，是原来的3.5倍；不过在这里，每秒的词元数只多了16%，因为在这台电脑上，每多一段对话，读它自己那份缓存的开销，几乎就抵掉了它带来的收益；在GPU上，读权重才是大头，vLLM测得的是2到4倍。"
+  },
+  "4b6bd2f25400": {
+   "scene": "Paging",
+   "en": "How big should a page be? <bookmark mark='a'/> On average a conversation leaves half its last page empty, so the waste is about half a page over the length of a conversation, here 479 tokens. <bookmark mark='b'/> Small pages waste little, but make a longer table to look up in every attention step. vLLM chose sixteen tokens: for our conversations, 1.5 percent of the memory wasted. Pages of 256 would waste 21.",
+   "zh": "一页该多大？<bookmark mark='a'/>平均来说，一段对话的最后一页会空着一半，所以浪费的比例，大约是半页除以对话的长度，这里对话长479个词元。<bookmark mark='b'/>页小，浪费就少，但页表就长，每个注意力步都要查它。vLLM选了16个词元：对我们的对话来说，浪费了1.5%的内存。256个词元一页的话，会浪费21%。"
+  },
+  "fcc85170fb05": {
+   "scene": "Paging",
+   "en": "Pages make one more thing possible: sharing. <bookmark mark='a'/> Most requests start with the same words: a system prompt, the instructions, the conversation so far. Their keys and values are the same every time, so compute them once, keep the pages, and point every request that starts that way at them. <bookmark mark='b'/> We simulated forty conversations of six turns, all opening with a 300-token system prompt. With room for a thousand tokens of prefixes, 19 percent of the prompt tokens needn't be computed again; with room for everything, 78 percent, because every turn repeats the conversation before it. <bookmark mark='c'/> On our model, a 256-token prompt takes 39 milliseconds to prefill; with its first 224 tokens already cached, 10: 4.1 times faster. SGLang kept these prefixes in a tree in 2023, and since 2024 DeepSeek has charged up to 90 percent less for input it finds in its cache.",
+   "zh": "分页还让另一件事成为可能：共享。<bookmark mark='a'/>大多数请求的开头都一样：系统提示、指令、之前的对话。它们的键和值每次都一样，所以只算一次，把这些页留着，凡是这样开头的请求，都指向它们。<bookmark mark='b'/>我们模拟了40段对话，每段6轮，全都以一个300词元的系统提示开头。如果给前缀留1000个词元的空间，19%的提示词元不必重算；如果什么都留得下，是78%，因为每一轮都会重复之前的对话。<bookmark mark='c'/>在我们的模型上，预填充一个256词元的提示要39毫秒；如果前224个词元已经在缓存里，只要10毫秒：速度是原来的4.1倍。2023年，SGLang把这些前缀存在一棵树里；从2024年起，DeepSeek对它在缓存里找到的输入，最多少收90%的钱。"
+  },
+  "e90a4193857a": {
+   "scene": "Exact",
+   "en": "Chapter six. Guess ahead, check at once.",
+   "zh": "第6章。先猜几步，一次核对。"
+  },
+  "7d1794bcf384": {
+   "scene": "Exact",
+   "en": "Chapter one showed that decoding one conversation leaves the chip's arithmetic idle, while every pass reads all the weights. <bookmark mark='a'/> So let a small, fast model draft a few tokens ahead. <bookmark mark='b'/> Then the big model checks all of them in a single pass, the way it reads a prompt: one read of the weights for several tokens. <bookmark mark='c'/> Keep the drafts it agrees with; at the first disagreement, take the big model's choice and start again. Mitchell Stern, Noam Shazeer and Jakob Uszkoreit did this in 2018 for a model that always picks its likeliest token.",
+   "zh": "第1章说过，只为一段对话解码时，芯片的算力是闲着的，而每跑一遍都要读遍所有权重。<bookmark mark='a'/>那就让一个又小又快的模型，先往前起草几个词元。<bookmark mark='b'/>然后，大模型只跑一遍，就把它们全部核对一遍，就像读提示那样：读一次权重，换来好几个词元。<bookmark mark='c'/>它认可的草稿就留下；碰到第一处分歧，就采用大模型自己的选择，再从那里重新开始。2018年，米切尔·斯特恩、诺姆·沙泽尔和雅各布·乌斯科雷特，就为一个总是选最可能词元的模型这样做过。"
+  },
+  "94a9c2a54940": {
+   "scene": "Exact",
+   "en": "Sampling is harder: the big model doesn't have one answer, it has a distribution, and the drafts come from a different one. In late 2022, Yaniv Leviathan, Matan Kalman and Yossi Matias at Google found a rule that makes the output come out exactly right, and Charlie Chen's team at DeepMind found it too. <bookmark mark='a'/> Here are both guesses for the next character, on our own models: Part 13's transformer as the big one, a counting model on the last two characters as the draft. <bookmark mark='b'/> Accept a drafted character with probability p over q, capped at one: where the draft guesses a character too often, the excess is thrown out. <bookmark mark='c'/> If it's rejected, sample from what's left of p after taking q away: exactly where the draft guessed too rarely. <bookmark mark='d'/> Run the rule 200,000 times: the characters it writes are as close to p as sampling p itself.",
+   "zh": "采样就难一些了：大模型没有唯一的答案，它有的是一个分布，而草稿来自另一个分布。2022年底，谷歌的亚尼夫·列维坦、马坦·卡尔曼和约西·马蒂亚斯找到了一条规则，能让输出分毫不差，DeepMind查理·陈的团队也找到了它。<bookmark mark='a'/>这是两个模型对下一个字符的猜测，用的是我们自己的模型：第13部分的Transformer当大模型，一个只看前两个字符的计数模型当草稿。<bookmark mark='b'/>草稿里的一个字符，以q分之p的概率被接受，最大取1：草稿把哪个字符猜得太频繁，多出来的部分就被扔掉。<bookmark mark='c'/>如果被拒绝，就从p减去q之后剩下的部分里采样：恰好是草稿猜得太少的地方。<bookmark mark='d'/>把这条规则运行200000次：它写出的字符，和直接从p采样一样接近p。"
+  },
+  "38dfe2261da8": {
+   "scene": "Exact",
+   "en": "Why is that exact? <bookmark mark='a'/> The rule writes x in one of two ways: x is drafted and accepted, or a draft is rejected and x is resampled. <bookmark mark='b'/> Drafted and accepted has probability q times the acceptance, which is the smaller of p and q. <bookmark mark='c'/> A rejection happens with probability one minus the sum of those minimums, which, since p sums to one, is the sum of what p has left over. <bookmark mark='d'/> And the resampling distribution is that leftover, normalized by the same sum. <bookmark mark='e'/> Multiply, and the sums cancel: the minimum plus the leftover is p. Whatever the draft, the token written has exactly the big model's distribution. The draft only decides how often a pass is saved.",
+   "zh": "为什么它是精确的？<bookmark mark='a'/>这条规则写出x，有两种途径：要么x被起草出来并被接受，要么某个草稿被拒绝、然后重新采样得到x。<bookmark mark='b'/>起草并被接受的概率，是q乘以接受概率，也就是p和q中较小的那个。<bookmark mark='c'/>被拒绝的概率是1减去这些最小值之和；因为p的总和是1，这也就是p剩余部分的总和。<bookmark mark='d'/>而重新采样所用的分布，正是这部分剩余，再除以同一个和来归一化。<bookmark mark='e'/>乘起来，两个和正好约掉：最小值加上剩余部分，就是p。不管草稿是什么，写出的词元都恰好服从大模型的分布。草稿只决定，能省下多少遍。"
+  },
+  "6ea80bb7f45a": {
+   "scene": "Exact",
+   "en": "One more check, on the novels model, with the small drafter we'll train in the next chapter. <bookmark mark='a'/> At one place in a held-out novel, we drafted two tokens at a time and let the rule run, 60,000 times, keeping the first two tokens it wrote. The exact answer is known: the big model's probability of the first token, times its probability of the second given the first. <bookmark mark='b'/> Speculative sampling is as close to exact as sampling the big model itself: what's left is the noise of a finite sample: a total variation of 0.192, against 0.192. <bookmark mark='c'/> Keep the drafts without checking, and you get the draft's distribution instead: 0.693.",
+   "zh": "再做一次检验，在小说模型上，用的是下一章要训练的那个小草稿模型。<bookmark mark='a'/>在一部留出的小说里的某个位置，我们每次起草两个词元，让这条规则运行60000次，记下它写出的前两个词元。精确的答案是已知的：大模型给第一个词元的概率，乘以在第一个词元之后它给第二个词元的概率。<bookmark mark='b'/>推测采样和直接从大模型采样一样接近精确答案：剩下的只是有限样本的噪声：总变差是0.192，直接采样是0.192。<bookmark mark='c'/>如果不核对就直接留下草稿，得到的就是草稿的分布：0.693。"
+  },
+  "96480efe3860": {
+   "scene": "Drafters",
+   "en": "Chapter seven. Drafters.",
+   "zh": "第7章。草稿模型。"
+  },
+  "0f6a438cc2fc": {
+   "scene": "Drafters",
+   "en": "How much does it save? Call alpha the chance a drafted token is accepted, and pretend, for now, that each draft survives independently. <bookmark mark='a'/> Then the first i drafts all survive with chance alpha to the i. <bookmark mark='b'/> A pass writes token i plus one exactly when the first i drafts survive, and it always writes one, its own. So the expected tokens per pass is the sum of alpha to the i, from zero to k. <bookmark mark='c'/> A geometric series: one minus alpha to the k plus one, over one minus alpha. <bookmark mark='d'/> Drafting isn't free: if a draft step costs c passes of the big model, divide by one plus k c. Leviathan and colleagues derived exactly this.",
+   "zh": "它能省下多少？把一个草稿词元被接受的概率叫作α，并且暂时假设，每个草稿能否存活彼此独立。<bookmark mark='a'/>那么前i个草稿全部存活的概率，就是α的i次方。<bookmark mark='b'/>前i个草稿都存活时，这一遍就会写出第i加1个词元；而且它总会写出一个词元，也就是它自己的那个。所以每遍期望写出的词元数，是α的i次方从0到k求和。<bookmark mark='c'/>这是一个几何级数：1减α的k加1次方，除以1减α。<bookmark mark='d'/>起草不是免费的：如果起草一步的开销相当于大模型跑c遍，就再除以1加k乘c。列维坦和同事推导的正是这个结果。"
+  },
+  "45d5229038be": {
+   "scene": "Drafters",
+   "en": "Where does a draft come from? We trained two for the novels model, on this computer. <bookmark mark='a'/> The first is simply a small language model: two layers instead of six, trained on the same novels for 28 minutes. <bookmark mark='b'/> The second follows EAGLE, from Yuhui Li and colleagues in 2024. It doesn't read the text at all. It reads the big model's last hidden state, with the token just chosen, and predicts the next hidden state, which the big model's own output layer turns into a token. It is one block, trained for 22 minutes with the big model frozen. <bookmark mark='c'/> As each trains, we measured its acceptance on held-out text: the chance a drafted token survives the check. <bookmark mark='d'/> The small model reaches 0.52; the EAGLE head 0.45: the small model, reading the text itself, ends up the better guesser.",
+   "zh": "草稿从哪里来？我们在这台电脑上，为小说模型训练了两个。<bookmark mark='a'/>第一个就是一个小语言模型：两层而不是六层，在同样的小说上训练了28分钟。<bookmark mark='b'/>第二个仿照EAGLE，来自Yuhui Li和同事2024年的工作。它根本不读文本。它读的是大模型最后一层的隐藏状态，加上刚选出的词元，预测下一个隐藏状态，再由大模型自己的输出层把它变成词元。它只有一个模块，在大模型冻结的情况下训练了22分钟。<bookmark mark='c'/>在它们训练的过程中，我们在留出的文本上测量它们的接受率：一个草稿词元通过核对的概率。<bookmark mark='d'/>小模型达到0.52；EAGLE头达到0.45：直接读文本的小模型，最终反而猜得更准。"
+  },
+  "3cd046fbb4e7": {
+   "scene": "Drafters",
+   "en": "Now the real thing: speculative sampling on twelve held-out openings, ninety-six tokens each. <bookmark mark='a'/> With four drafts per pass, the small model gets 1.97 tokens out of each pass of the big model, and the EAGLE head 1.62. <bookmark mark='b'/> The lines are the formula, with alpha measured on the first draft. The formula, with its one number alpha, predicts the measurements well. <bookmark mark='c'/> Draft by draft, the head's acceptance falls from 0.42 for the first to 0.26 for the fourth, because it is feeding on its own guesses; the small model's goes from 0.47 to 0.56. <bookmark mark='d'/> Decoding greedily, the small model gets 1.95 tokens per pass.",
+   "zh": "现在来真的：在12段留出的开头上做推测采样，每段96个词元。<bookmark mark='a'/>每遍起草4个时，小模型能让大模型每跑一遍得到1.97个词元，EAGLE头是1.62个。<bookmark mark='b'/>图中的线是那个公式，α用第一个草稿测得的值。这个公式只用α一个数，就把测量结果预测得很好。<bookmark mark='c'/>一个草稿接一个草稿地看，EAGLE头的接受率，从第一个的0.42，降到第四个的0.26，因为它是在拿自己的猜测当输入；小模型则从0.47变到0.56。<bookmark mark='d'/>如果用贪心解码，小模型每遍能得到1.95个词元。"
+  },
+  "551f9f4b56ae": {
+   "scene": "Drafters",
+   "en": "And the clock? <bookmark mark='a'/> On this computer, checking five tokens in one pass costs 1.5 times what one token does: a processor core has little arithmetic to spare, so the check isn't free the way it nearly is on a GPU. <bookmark mark='b'/> The best, the small model with 1 drafts, is no faster: 3.09 milliseconds a token against 2.84. <bookmark mark='c'/> On GPUs, where a pass of a few tokens costs about as much as a pass of one, published systems do better. Medusa adds extra heads to the model; EAGLE-3 reports up to six and a half times; and DeepSeek-V3 trains its own drafter during pretraining, the multi-token prediction module of Part 18, whose second token is accepted 85 to 90 percent of the time.",
+   "zh": "那么，看时钟呢？<bookmark mark='a'/>在这台电脑上，一遍核对5个词元的开销，是1个词元的1.5倍：处理器核心没有多少富余的算力，所以核对并不像在GPU上那样几乎免费。<bookmark mark='b'/>最好的是小模型，每遍起草1个，却一点也没有更快：每个词元3.09毫秒，不用草稿是2.84毫秒。<bookmark mark='c'/>在GPU上，跑一遍几个词元和跑一遍一个词元的开销差不多，公开发表的系统表现更好。Medusa给模型加上额外的头；EAGLE-3报告最快到6.5倍；DeepSeek-V3则在预训练时就训练了自己的草稿模型，也就是第18部分的多词元预测模块，它的第二个词元有85%到90%的时候被接受。"
+  },
+  "00f2a2f22877": {
+   "scene": "Rounding",
+   "en": "Chapter eight. Rounding error.",
+   "zh": "第8章。舍入误差。"
+  },
+  "21c5f96d2379": {
+   "scene": "Rounding",
+   "en": "Quantization is the other half of this part: store each number in fewer bits, and move fewer bytes. <bookmark mark='a'/> The simplest kind rounds every weight to the nearest of a set of evenly spaced levels, a step delta apart. The error e is at most half a step either way. <bookmark mark='b'/> If the weights are spread smoothly over many steps, the error is equally likely anywhere in that interval, and its mean square is the integral of e squared over delta. <bookmark mark='c'/> That gives delta squared over twelve, which W. R. Bennett of Bell Labs worked out in 1948, for speech and television sent as numbers. <bookmark mark='d'/> With b bits, symmetric about zero, the largest weight sets the step: delta is the maximum over two to the b minus one, minus one. <bookmark mark='e'/> So each bit halves the step and quarters the error: six decibels a bit, as audio engineers say.",
+   "zh": "量化是这一部分的另一半：用更少的比特存每个数，就能少搬运一些字节。<bookmark mark='a'/>最简单的量化，把每个权重舍入到一组等间距的值里最近的那个，相邻两个值相隔一个步长δ。误差e在两个方向上都不超过半个步长。<bookmark mark='b'/>如果权重平滑地铺在很多个步长上，误差落在这个区间里任何地方的可能性都一样，它的均方，就是e的平方在区间上的积分，再除以δ。<bookmark mark='c'/>结果是δ的平方除以12。这是贝尔实验室的W. R. 贝内特在1948年算出来的，当时是为了把语音和电视信号变成数字来传送。<bookmark mark='d'/>用b个比特，关于0对称，步长由最大的权重决定：δ等于最大值，除以2的b减1次方再减1。<bookmark mark='e'/>所以每多一个比特，步长减半，误差变成四分之一：就像音频工程师说的，每个比特6分贝。"
+  },
+  "6ed1ba7c2d8c": {
+   "scene": "Rounding",
+   "en": "Does it hold for a real model? <bookmark mark='a'/> We rounded all the block weights of the novels model, with a scale for each row of each matrix, at two to eight bits, and measured the mean squared error. <bookmark mark='b'/> From 3 bits up, the measurement and delta squared over twelve agree to within 0.5 percent: the lines are straight, a factor of four a bit. <bookmark mark='c'/> At two bits the formula overestimates: most weights now fall inside the zero step, and their error is just their own small size, not spread over a whole step. <bookmark mark='d'/> The grey dots used one scale for a whole matrix: every error is larger, because one large weight anywhere sets the step for all the others.",
+   "zh": "它在真实的模型上成立吗？<bookmark mark='a'/>我们把小说模型的所有模块权重，每个矩阵的每一行配一个缩放因子，分别舍入到2到8比特，测出均方误差。<bookmark mark='b'/>从3比特往上，测量值和δ平方除以12相差不到0.5%：这些线是直的，每个比特差4倍。<bookmark mark='c'/>到2比特时，公式高估了误差：大多数权重这时都落在0那一格里，它们的误差只是它们自己那点小小的数值，并没有铺满整个步长。<bookmark mark='d'/>灰色的点是整个矩阵只用一个缩放因子：每个误差都更大，因为任何地方的一个大权重，都会替其余所有权重定下步长。"
+  },
+  "35fd7f7a4570": {
+   "scene": "Rounding",
+   "en": "Here is why the scale's reach matters. <bookmark mark='a'/> These are the weights of one matrix of our model: most within a narrow band around zero. <bookmark mark='b'/> With one four-bit scale for the whole matrix, its single largest weight sets the step, and most weights share a handful of levels near zero. <bookmark mark='c'/> A typical row's largest weight is 2.0 times smaller than the matrix's, so a scale per row puts the levels where that row's weights are. A scale per group of 32 or 64 weights goes further, for a few more bits of storage per group.",
+   "zh": "这就是缩放因子管多大范围很重要的原因。<bookmark mark='a'/>这是我们模型里一个矩阵的权重：大多数都挤在0附近窄窄的一条带里。<bookmark mark='b'/>如果整个矩阵只用一个4比特缩放因子，它唯一那个最大的权重就定下了步长，大多数权重只能挤在0附近的寥寥几个值上。<bookmark mark='c'/>一行典型的最大权重，只有整个矩阵最大权重的2.0分之1，所以每行一个缩放因子，就能把这些值放到这一行的权重所在的地方。每32个或64个权重一组配一个缩放因子，效果更好，只是每组要多花几个比特来存。"
+  },
+  "9f5f4eed5220": {
+   "scene": "Rounding",
+   "en": "What the model loses: its loss on held-out novels, at each width and each kind of scale. <bookmark mark='a'/> At eight bits, nothing measurable is lost. <bookmark mark='b'/> At four bits it depends on the scales: one per matrix costs 0.102 nats per token, one per row 0.021, one per 32 weights 0.011, for 4.5 bits a weight in all. <bookmark mark='c'/> At three bits plain rounding starts to hurt, 0.15 nats with a scale per row, and at two the model is broken. <bookmark mark='d'/> Everything that follows is about doing better than plain rounding at three and four bits.",
+   "zh": "模型损失了什么：它在留出小说上的损失，每种位宽、每种缩放方式都测一遍。<bookmark mark='a'/>8比特时，测不出任何损失。<bookmark mark='b'/>到4比特，就要看缩放因子了：整个矩阵一个，每个词元损失0.102奈特；每行一个，0.021；每32个权重一个，0.011，算下来每个权重一共4.5比特。<bookmark mark='c'/>到3比特，简单舍入开始伤筋动骨了，每行一个缩放因子也要损失0.15奈特；到2比特，模型就坏掉了。<bookmark mark='d'/>后面的所有内容，都是为了在3比特和4比特上做得比简单舍入更好。"
+  },
+  "a9df314ca0dc": {
+   "scene": "Outliers",
+   "en": "Chapter nine. Outliers and SmoothQuant.",
+   "zh": "第9章。离群值与SmoothQuant。"
+  },
+  "35dad27b6a64": {
+   "scene": "Outliers",
+   "en": "Weights are only half of a matrix product. To use eight-bit or four-bit arithmetic, the inputs, the activations, have to be rounded too, every token, on the fly. <bookmark mark='a'/> In 2022 Tim Dettmers and colleagues found what makes that hard. From about six point seven billion parameters on, a few feature dimensions, around a tenth of a percent of them, carry values up to twenty times larger than the rest, in every layer. <bookmark mark='b'/> Our model is far smaller, but the effect is already there. These are the largest inputs each channel of one layer saw, on calibration text. The largest is 5.1 times the median. <bookmark mark='c'/> Round a token's activations with one scale, and those few channels set the step for all the others, which then get only a handful of levels.",
+   "zh": "权重只是矩阵乘法的一半。要用8比特或4比特来做运算，输入，也就是激活值，也得舍入，而且每个词元都要现场舍入。<bookmark mark='a'/>2022年，蒂姆·德特默斯和同事发现了这件事难在哪里。从大约67亿参数起，有少数几个特征维度，大约占千分之一，携带的值比其余的大到20倍，而且每一层都是如此。<bookmark mark='b'/>我们的模型小得多，但这种效应已经出现了。这是一层的每个通道在校准文本上见过的最大输入。最大的是中位数的5.1倍。<bookmark mark='c'/>如果一个词元的激活值只用一个缩放因子来舍入，这几个通道就替其余所有通道定下了步长，其余通道只能分到寥寥几个值。"
+  },
+  "c5c87843a541": {
+   "scene": "Outliers",
+   "en": "SmoothQuant, from Guangxuan Xiao and colleagues at MIT and NVIDIA in 2022, moves the problem. <bookmark mark='a'/> A linear layer multiplies X by W. <bookmark mark='b'/> Divide channel j of the activations by a number s j, and multiply the same channel of the weights by it: the product is unchanged, and the division can be folded into the layer before, so it costs nothing at run time. <bookmark mark='c'/> Choose s j as the activation's range to the power alpha, over the weight's to the power one minus alpha. <bookmark mark='d'/> With alpha a half, both sides end up with the same range, the geometric mean of the two. The activations' outliers are smoothed into weights, which are rounded offline and can take it: on our layer, the largest activation goes from 5.1 times the median to 3.5.",
+   "zh": "SmoothQuant出自MIT和NVIDIA的Guangxuan Xiao和同事，2022年，它把问题挪了个地方。<bookmark mark='a'/>一个线性层，是X乘以W。<bookmark mark='b'/>把激活值的第j个通道除以一个数s j，再把权重的同一个通道乘以它：乘积不变，而且这次除法可以并进前一层，所以运行时不花任何代价。<bookmark mark='c'/>s j取激活值范围的α次方，除以权重范围的1减α次方。<bookmark mark='d'/>α取二分之一时，两边最后的范围一样，都是两者的几何平均。激活值的离群值被抹平到了权重里，而权重是离线舍入的，承受得住：在我们这一层上，最大的激活值从中位数的5.1倍，降到了3.5倍。"
+  },
+  "b761aca9cd3f": {
+   "scene": "Outliers",
+   "en": "What does it buy on our model? <bookmark mark='a'/> At eight bits, nothing is needed: every method stays within 0.0009 nats of the full model. <bookmark mark='b'/> At six bits the costs appear. <bookmark mark='c'/> At four, plain rounding of every block input costs 0.160 nats a token; SmoothQuant helps only a little, 0.150; and keeping the largest one percent of channels in full precision, as LLM.int8() does with its outliers, 0.136. <bookmark mark='d'/> Our outliers are mild, 5 times the median rather than twenty, so there is less to smooth. Four-bit activations need something stronger: the next chapter but one.",
+   "zh": "在我们的模型上，它换来了什么？<bookmark mark='a'/>8比特时，什么都不需要：每种方法和完整模型相差都在0.0009奈特以内。<bookmark mark='b'/>6比特时，代价开始出现。<bookmark mark='c'/>到4比特，把每个模块的输入都简单舍入，每个词元损失0.160奈特；SmoothQuant只帮了一点点，0.150；而像LLM.int8()处理离群值那样，把最大的1%的通道保留为全精度，损失0.136。<bookmark mark='d'/>我们的离群值很温和，是中位数的5倍，而不是20倍，所以没多少可抹平的。4比特的激活值需要更强的手段：在下下一章。"
+  },
+  "249d595094c4": {
+   "scene": "GPTQ",
+   "en": "Chapter ten. GPTQ, from Optimal Brain Surgeon.",
+   "zh": "第10章。GPTQ：从最优脑外科说起。"
+  },
+  "884833bdf7a3": {
+   "scene": "GPTQ",
+   "en": "Plain rounding treats each weight alone. But what matters is the layer's output. <bookmark mark='a'/> For a layer W, on real inputs X, the output's error is a sum over rows of a quadratic form in the rounding errors, with the matrix H. <bookmark mark='b'/> H is X times X transposed, the second moments of the inputs, estimated from a little calibration text. <bookmark mark='c'/> When two inputs move together, an error in one weight can be cancelled by nudging the other: moving along the valley of this quadratic is cheap, across it costly. So round a weight, then fix the damage with the weights not yet rounded.",
+   "zh": "简单舍入是把每个权重单独处理的。但真正要紧的，是这一层的输出。<bookmark mark='a'/>对一层W，在真实输入X上，输出的误差是对每一行求和，每一行是舍入误差的一个二次型，矩阵是H。<bookmark mark='b'/>H是X乘以X的转置，也就是输入的二阶矩，用一点校准文本就能估出来。<bookmark mark='c'/>两个输入一起变化时，一个权重上的误差，可以靠轻推另一个权重来抵消：沿着这个二次型的山谷走很便宜，横穿它就很贵。所以，舍入一个权重，然后用还没舍入的那些权重去弥补损失。"
+  },
+  "11764988cfe5": {
+   "scene": "GPTQ",
+   "en": "The question is old. <bookmark mark='a'/> Fix weight q at its rounded value, and move all the others by delta to keep the output error, one half delta H delta, as small as possible. <bookmark mark='b'/> With a Lagrange multiplier, the optimum has H delta parallel to the direction of weight q. <bookmark mark='c'/> Solving: delta is the rounding error over the q-th diagonal entry of H inverse, times H inverse's q-th column. <bookmark mark='d'/> And the error that's left is the rounding error squared, over twice that diagonal entry. <bookmark mark='e'/> This is the Optimal Brain Surgeon of Babak Hassibi and David Stork, from 1993, which followed Yann LeCun's Optimal Brain Damage: they used it to prune networks. In 2022 Elias Frantar and Dan Alistarh used it to round.",
+   "zh": "这个问题由来已久。<bookmark mark='a'/>把第q个权重固定在舍入后的值上，其余所有权重移动δ，让输出误差，也就是二分之一δ转置Hδ，尽可能小。<bookmark mark='b'/>用拉格朗日乘子，最优解满足Hδ与第q个权重的方向平行。<bookmark mark='c'/>解出来：δ等于舍入误差除以H逆的第q个对角元，再乘以H逆的第q列。<bookmark mark='d'/>剩下的误差，是舍入误差的平方，除以那个对角元的2倍。<bookmark mark='e'/>这就是巴巴克·哈西比和大卫·斯托克1993年提出的最优脑外科，它承接了杨立昆的最优脑损伤：他们用它来给网络剪枝。2022年，埃利亚斯·弗朗塔尔和丹·阿利斯塔尔用它来做舍入。"
+  },
+  "e4ba6959d036": {
+   "scene": "GPTQ",
+   "en": "Rounding one weight at a time, with the best update, is too slow for billions of weights. <bookmark mark='a'/> GPTQ, from Frantar, Ashkboos, Hoefler and Alistarh in 2022, makes three changes: round the columns in one fixed order, the same for every row; get every update from one Cholesky factorization of H inverse; and apply them in blocks. A 175-billion-parameter model took about four GPU-hours. <bookmark mark='b'/> Here it is on one row of a real layer of our model, at three bits. Each column is rounded, and its error is pushed onto the columns still to come. <bookmark mark='c'/> The final weights aren't the nearest levels to the originals, the grey outlines, but together they make a slightly better output: an error of 0.267 on the calibration inputs, against 0.270 for rounding each weight alone. Sixteen weights leave little room to make up for an error. <bookmark mark='d'/> Over the whole layer, with every input to spread it across, GPTQ's error is 0.081, against 0.158.",
+   "zh": "一次舍入一个权重，每次都做最优的更新，对几十亿个权重来说太慢了。<bookmark mark='a'/>GPTQ出自弗朗塔尔、阿什克布斯、霍夫勒和阿利斯塔尔，2022年，它做了三处改动：按一个固定的顺序舍入各列，每一行都用同一个顺序；所有的更新，都来自H逆的同一次楚列斯基分解；并且分块来做。一个1750亿参数的模型，只用了大约4个GPU时。<bookmark mark='b'/>这是它在我们模型一个真实层的一行上，3比特时的样子。每一列被舍入，它的误差被推给后面还没处理的列。<bookmark mark='c'/>最终的权重，并不是离原值最近的那些值，也就是灰色的轮廓，但合在一起，它们给出稍好一点的输出：在校准输入上误差是0.267，而逐个单独舍入是0.270。只有16个权重，能用来弥补误差的余地很小。<bookmark mark='d'/>放到整个层上，每个输入都能分担误差，GPTQ的误差是0.081，而简单舍入是0.158。"
+  },
+  "107ca22b88b3": {
+   "scene": "GPTQ",
+   "en": "A simpler idea came next. In 2023 Ji Lin and colleagues noticed that a weight matters in proportion to the size of its input. <bookmark mark='a'/> So multiply each input channel's weights by s before rounding, and divide the input by s, which folds away for free. The rounding error, relative to that channel, shrinks by s. <bookmark mark='b'/> AWQ makes s the average size of the channel's input, to a power alpha chosen on calibration text: activation-aware weight quantization. <bookmark mark='c'/> On our model the best alpha came out small, 0.14 to 0.24: our inputs are fairly even, so there is little to protect.",
+   "zh": "接着出现了一个更简单的想法。2023年，Ji Lin和同事注意到，一个权重有多重要，和它的输入有多大成正比。<bookmark mark='a'/>所以，舍入之前，把每个输入通道的权重乘以s，再把输入除以s，这一步可以免费并掉。相对于这个通道，舍入误差缩小到原来的s分之1。<bookmark mark='b'/>AWQ让s等于这个通道输入的平均大小，再取一个α次方，α在校准文本上挑选：这就是激活感知的权重量化。<bookmark mark='c'/>在我们的模型上，最好的α很小，在0.14到0.24之间：我们的输入相当均匀，没多少需要保护的。"
+  },
+  "8e729fcdf9f2": {
+   "scene": "GPTQ",
+   "en": "All three, on the whole model: every block matrix rounded, the loss measured on held-out novels, and GPTQ and AWQ each calibrated on three different samples of text. <bookmark mark='a'/> At four bits with a scale per 64 weights, rounding costs 0.016 nats a token and GPTQ 0.010. <bookmark mark='b'/> At three bits with a scale per row, the difference is large: rounding costs 0.151, GPTQ 0.090, 41 percent less, whichever calibration text it saw. As for AWQ, it costs 0.148: on our model, it barely helps. <bookmark mark='c'/> Spending the error where the inputs don't look is what makes three and four bits usable.",
+   "zh": "三种方法，用在整个模型上：每个模块矩阵都舍入，在留出小说上测损失；GPTQ和AWQ各自在三份不同的文本样本上校准。<bookmark mark='a'/>4比特、每64个权重一个缩放因子时，简单舍入每个词元损失0.016奈特，GPTQ损失0.010。<bookmark mark='b'/>3比特、每行一个缩放因子时，差别就大了：简单舍入损失0.151，GPTQ损失0.090，少了41%，不管它看的是哪份校准文本。至于AWQ，它损失0.148：在我们的模型上，几乎没什么帮助。<bookmark mark='c'/>把误差花在输入不在意的方向上，正是让3比特和4比特变得可用的关键。"
+  },
+  "7755ea61d7bb": {
+   "scene": "Rotation",
+   "en": "Chapter eleven. Rotations.",
+   "zh": "第11章。旋转。"
+  },
+  "8d25c3ff4009": {
+   "scene": "Rotation",
+   "en": "In 2024 Saleh Ashkboos, Dan Alistarh and colleagues found a way to make outliers go away instead of working around them. <bookmark mark='a'/> Start from the normalization before each layer, RMSNorm: divide a vector by its length, then multiply by a learned gain, gamma, which can be folded into the next weights. <bookmark mark='b'/> What's left divides by the length, and a rotation doesn't change lengths, so normalizing a rotated vector gives the rotated normalized vector. <bookmark mark='c'/> So rotate the whole residual stream by Q: every layer that reads it gets W times Q, every layer that writes to it Q transposed times W, <bookmark mark='d'/> and the embedding and the output head get Q too. The network computes exactly the same function. We checked on ours: the largest change in any logit is 2.5 times ten to the -5, rounding error.",
+   "zh": "2024年，萨利赫·阿什克布斯、丹·阿利斯塔尔和同事找到了一个办法，让离群值干脆消失，而不是绕着它们走。<bookmark mark='a'/>从每一层前面的归一化说起，也就是RMSNorm：把一个向量除以它的长度，再乘以一个学到的增益γ，而γ可以并进下一层的权重里。<bookmark mark='b'/>剩下的就是除以长度，而旋转不改变长度，所以对旋转过的向量做归一化，等于把归一化过的向量旋转一下。<bookmark mark='c'/>于是，把整条残差流都用Q旋转：每个读它的层，拿到W乘以Q；每个往里写的层，拿到Q转置乘以W，<bookmark mark='d'/>嵌入层和输出头也都乘上Q。整个网络算的还是完全相同的函数。我们在自己的模型上验证过：任何一个logit最大的变化，是2.5乘以10的-5次方，也就是舍入误差。"
+  },
+  "b1fb2b9bce27": {
+   "scene": "Rotation",
+   "en": "Which rotation? <bookmark mark='a'/> Here is one token's input to a layer of our model, channel by channel. Its largest entry is 6.3 times its typical size, on average over tokens. <bookmark mark='b'/> Rotate it with a Hadamard matrix: entries of plus and minus one over root n, built by doubling, and applied in n log n steps, like a fast Fourier transform. Each output mixes all inputs equally, so a spike in one channel is spread across all of them. <bookmark mark='c'/> Now the peak is 2.9 times the typical size: one scale per token fits all its channels, and four-bit levels are no longer wasted.",
+   "zh": "用哪个旋转？<bookmark mark='a'/>这是我们模型某一层的一个词元的输入，一个通道一个通道地画出来。它最大的分量，平均下来是典型大小的6.3倍。<bookmark mark='b'/>用一个哈达玛矩阵来旋转它：元素是正负根号n分之1，可以靠不断加倍构造出来，用n log n步就能算完，就像快速傅里叶变换。每个输出都平等地混合了所有输入，所以一个通道里的尖峰，会被摊到所有通道上。<bookmark mark='c'/>现在峰值只是典型大小的2.9倍：每个词元一个缩放因子，就能照顾到它所有的通道，4比特的那些值，不再被浪费。"
+  },
+  "012d6e7c9b2a": {
+   "scene": "Rotation",
+   "en": "Now the hard case: four-bit weights and four-bit activations, every block input rounded on the fly. <bookmark mark='a'/> Plainly, our model loses 0.187 nats a token; SmoothQuant 0.172. <bookmark mark='b'/> Rotate first, the residual stream by a Hadamard matrix and the input of each feed-forward output by a random rotation, and the Hadamard rotation cuts it to 0.061, 68 percent less. <bookmark mark='c'/> Three different random rotations give 0.065 to 0.068: on our model, nearly the same. But in 2024 Zechun Liu and colleagues at Meta found that on large models, random rotations can differ by up to thirteen points on a benchmark, and asked: why not learn the rotation? <bookmark mark='d'/> We did, small: +0.066, a little worse than the Hadamard rotation it started from.",
+   "zh": "现在来看难的情形：4比特权重加4比特激活值，每个模块的输入都现场舍入。<bookmark mark='a'/>直接做的话，我们的模型每个词元损失0.187奈特；SmoothQuant是0.172。<bookmark mark='b'/>先旋转：残差流用一个哈达玛矩阵，每个前馈输出层的输入用一个随机旋转，哈达玛旋转把它降到0.061，少了68%。<bookmark mark='c'/>三个不同的随机旋转，给出0.065到0.068：在我们的模型上，几乎一样。但在2024年，Meta的Zechun Liu和同事发现，在大模型上，不同的随机旋转在一个基准上最多能差13分，于是问：为什么不把旋转学出来？<bookmark mark='d'/>我们也做了，小规模的：+0.066，比它出发时的哈达玛旋转还差一点。"
+  },
+  "ed9b96bb4471": {
+   "scene": "Rotation",
+   "en": "Learning a rotation needs care, because a gradient step on a rotation matrix makes it something else. <bookmark mark='a'/> SpinQuant keeps it a rotation by construction. Write Q as the Hadamard matrix times the Cayley map of a skew-symmetric matrix A: every A gives a rotation, so A can be trained freely. <bookmark mark='b'/> We trained A on our model's loss with four-bit weights and activations, the rounding passed straight through for the gradient, starting from the Hadamard rotation. <bookmark mark='c'/> Over 100 steps the held-out loss went from 3.671 to 3.671: the Hadamard start was already close to the best this training could find.",
+   "zh": "学习一个旋转需要小心，因为在旋转矩阵上走一步梯度，它就不再是旋转了。<bookmark mark='a'/>SpinQuant从构造上保证它始终是旋转。把Q写成哈达玛矩阵乘以一个反对称矩阵A的凯莱映射：每个A都给出一个旋转，所以A可以随便训练。<bookmark mark='b'/>我们在4比特权重和激活值下，用我们模型的损失来训练A，梯度直接穿过舍入，从哈达玛旋转出发。<bookmark mark='c'/>训练100步，留出损失从3.671变到3.671：哈达玛这个起点，已经接近这种训练所能找到的最好结果。"
+  },
+  "f56f424e3ab7": {
+   "scene": "Formats",
+   "en": "Chapter twelve. Four-bit floats: MXFP4 and NVFP4.",
+   "zh": "第12章。4比特浮点数：MXFP4与NVFP4。"
+  },
+  "0be951795460": {
+   "scene": "Formats",
+   "en": "Part 17 met the smallest floating-point format in use, FP4, laid out as E2M1. <bookmark mark='a'/> One bit of sign, two of exponent, one of mantissa: sixteen codes, eight magnitudes. <bookmark mark='b'/> Zero and a half, then one and one and a half, two and three, four and six: within each power of two the gap is the same, and it doubles from one power to the next. <bookmark mark='c'/> On its own that covers zero to six. To store a model's weights, which are nothing like that size, each block of weights gets a scale, and the two formats of today's chips differ in exactly how.",
+   "zh": "第17部分见过正在使用的最小的浮点格式，FP4，布局是E2M1。<bookmark mark='a'/>1个符号位，2个指数位，1个尾数位：16个编码，8种大小。<bookmark mark='b'/>0和0.5，然后是1和1.5，2和3，4和6：在每个2的幂之内，间隔都一样，从一个幂到下一个幂，间隔翻倍。<bookmark mark='c'/>单靠它自己，只能覆盖0到6。要存一个模型的权重，而权重根本不是这个大小，就得给每一块权重配一个缩放因子，当今芯片上的两种格式，区别恰恰在于怎么配。"
+  },
+  "c5b1eca1f3ad": {
+   "scene": "Formats",
+   "en": "MXFP4 comes from the Open Compute Project's microscaling standard of September 2023, written by AMD, Arm, Intel, Meta, Microsoft, NVIDIA and Qualcomm together. <bookmark mark='a'/> Here are thirty-two real weights from our model, a block. <bookmark mark='b'/> The block shares one scale, and the scale must be a power of two, stored as an eight-bit exponent, E8M0. The rule: the exponent of the block's largest weight, minus two, so that weight lands between four and eight: here two to the -6. <bookmark mark='c'/> Divide each weight by the scale, round it to the nearest E2M1 value, and keep its four-bit code: the middle row. Decoded, the last row. <bookmark mark='d'/> But E2M1 stops at six. This block's largest weight is 6.94 times the scale, above six, so it is clamped to six. Across our model, 42 percent of the blocks have their largest value cut down this way: the price of a scale that can only be a power of two.",
+   "zh": "MXFP4来自开放计算项目2023年9月的微缩放标准，由AMD、Arm、英特尔、Meta、微软、NVIDIA和高通共同制定。<bookmark mark='a'/>这是我们模型里的32个真实权重，一个块。<bookmark mark='b'/>这个块共用一个缩放因子，而且缩放因子必须是2的幂，用一个8比特的指数来存，叫E8M0。规则是：取块里最大权重的指数，减去2，让这个权重落在4到8之间：这里是2的-6次方。<bookmark mark='c'/>把每个权重除以缩放因子，舍入到最近的E2M1值，保留它的4比特编码：就是中间那一行。解码回来，是最后一行。<bookmark mark='d'/>可是E2M1最大只到6。这个块里最大的权重，是缩放因子的6.94倍，超过了6，所以被截到6。在我们的整个模型里，有42%的块，最大的值都这样被削掉了一截：这就是缩放因子只能取2的幂的代价。"
+  },
+  "3742c4bf0749": {
+   "scene": "Formats",
+   "en": "NVIDIA's NVFP4, on its Blackwell chips, changes two things. <bookmark mark='a'/> Blocks of sixteen, so one large weight spoils fewer neighbours. <bookmark mark='b'/> And the block's scale is itself a small float, eight-bit E4M3, with three bits of mantissa: it can put the block's largest weight at six almost exactly, so nothing is clamped. <bookmark mark='c'/> E4M3 only spans a limited range, so one 32-bit scale for the whole matrix moves every block scale into it. <bookmark mark='d'/> The cost: four and a half bits a weight, against MXFP4's four and a quarter.",
+   "zh": "NVIDIA的NVFP4，用在它的Blackwell芯片上，改了两处。<bookmark mark='a'/>每块16个数，这样一个大权重连累的邻居更少。<bookmark mark='b'/>而且块的缩放因子本身是一个小浮点数，8比特的E4M3，有3个尾数位：它几乎能把块里最大的权重恰好放到6上，所以什么都不会被截掉。<bookmark mark='c'/>E4M3能表示的范围有限，所以整个矩阵再配一个32比特的缩放因子，把每个块的缩放因子都挪进这个范围。<bookmark mark='d'/>代价是：每个权重4.5比特，而MXFP4是4.25比特。"
+  },
+  "d196e5b59f5b": {
+   "scene": "Formats",
+   "en": "Which is better on our model? <bookmark mark='a'/> Every block weight stored each way, scales included, and the loss measured on held-out novels. <bookmark mark='b'/> NVFP4's finer, float-valued scales beat MXFP4: 0.0153 nats against 0.0171. <bookmark mark='c'/> But give plain four-bit integers NVFP4's very scales, and they do better still, 0.0111: our weights are spread evenly within a block, and sixteen even levels fit them better than E2M1's uneven ones. Floats earn their place on wider-ranging numbers, activations above all, and because the chips multiply them directly.",
+   "zh": "在我们的模型上，哪个更好？<bookmark mark='a'/>每个模块权重都用两种方式各存一遍，缩放因子也算在内，在留出小说上测损失。<bookmark mark='b'/>NVFP4更细的、取浮点值的缩放因子胜过了MXFP4：0.0153奈特，对0.0171。<bookmark mark='c'/>但如果给普通的4比特整数用上NVFP4的那套缩放因子，它们还会更好，0.0111：我们的权重在一个块内分布得很均匀，16个等间距的值，比E2M1那些不均匀的值更贴合它们。浮点数的用武之地，在范围更宽的数上，尤其是激活值，也因为芯片能直接拿它们做乘法。"
+  },
+  "2d134aeab14a": {
+   "scene": "Formats",
+   "en": "This is how a frontier-size open model fits on one chip. <bookmark mark='a'/> In August 2025 OpenAI released gpt-oss-120b: 117 billion parameters, five of them used per token, because most live in experts. <bookmark mark='b'/> The experts' weights are stored in MXFP4, and the rest in sixteen bits. Adding it up gives 60.7 gibibytes, which matches the model card's 60.8. <bookmark mark='c'/> In sixteen bits it would be 234 gigabytes; in four, it fits on a single eighty-gigabyte GPU. <bookmark mark='d'/> And four bits are moving into training itself: in 2026 Kimi K3 learned its weights in MXFP4 from the start, as Part 18 described.",
+   "zh": "一个前沿规模的开放模型，就是这样装进一块芯片的。<bookmark mark='a'/>2025年8月，OpenAI发布了gpt-oss-120b：1170亿个参数，每个词元只用到其中50亿，因为大部分参数都在专家里。<bookmark mark='b'/>专家的权重用MXFP4存，其余的用16比特。加起来是60.7GiB，和模型卡上的60.8一致。<bookmark mark='c'/>如果全用16比特，它要234GB；用4比特，一块80GB的GPU就装得下。<bookmark mark='d'/>而且4比特正在进入训练本身：2026年，Kimi K3从一开始就用MXFP4学习它的权重，第18部分讲过。"
+  },
+  "26107bb6d14f": {
+   "scene": "KVQuant",
+   "en": "Chapter thirteen. The cache in fewer bits.",
+   "zh": "第13章。用更少的比特存缓存。"
+  },
+  "13ef18ddf205": {
+   "scene": "KVQuant",
+   "en": "Chapters two and three showed that long conversations are dominated by the cache: one 128-thousand token conversation with Llama 3.1 70B keeps 43 gigabytes of keys and values. So round the cache too. <bookmark mark='a'/> But keys and values are different animals. Here is one head of our model over a stretch of text: the size of each key and value entry, channel by channel, token by token. <bookmark mark='b'/> The keys have outlier channels, whole rows that are large for every token, the largest 5.9 times the median; the values' largest is only 1.4 times theirs. <bookmark mark='c'/> So in 2024 Zirui Liu and colleagues, in KIVI, gave keys a scale per channel and values a scale per token, and stored both in two bits.",
+   "zh": "第2章和第3章说过，长对话的大头是缓存：用Llama 3.1 70B进行一段12.8万词元的对话，要保存43GB的键和值。所以，缓存也舍入吧。<bookmark mark='a'/>但键和值是两种不同的动物。这是我们模型的一个头在一段文本上的情况：每个键和值的分量有多大，按通道、按词元画出来。<bookmark mark='b'/>键有离群通道，整行对每个词元都很大，最大的是中位数的5.9倍；值最大的通道，只是它们中位数的1.4倍。<bookmark mark='c'/>所以2024年，Zirui Liu和同事在KIVI里，给键每个通道配一个缩放因子，给值每个词元配一个缩放因子，两者都用2比特存。"
+  },
+  "3a9ea16f9d8b": {
+   "scene": "KVQuant",
+   "en": "On our model, the cache rounded as it is written, and the loss measured on held-out novels. <bookmark mark='a'/> At eight bits, integer or FP8, nothing measurable is lost. At four bits, one scale per token costs 0.008. <bookmark mark='b'/> At three bits, one scale per token costs 0.049 nats a token; KIVI's split 0.033. <bookmark mark='c'/> At two bits the differences grow: per token 0.81, rotated 0.64, KIVI 0.44. The best here is KIVI's split. Keys need their outlier channels respected, by a scale of their own or by a rotation that spreads them.",
+   "zh": "在我们的模型上，缓存在写入时就舍入，在留出小说上测损失。<bookmark mark='a'/>8比特时，不管是整数还是FP8，都测不出任何损失。4比特时，每个词元一个缩放因子，损失0.008。<bookmark mark='b'/>3比特时，每个词元一个缩放因子，每个词元损失0.049奈特；KIVI的分法是0.033。<bookmark mark='c'/>到2比特，差别拉大了：按词元0.81，旋转后0.64，KIVI0.44。这里最好的是KIVI的分法。键的离群通道必须得到照顾：要么给它们单独的缩放因子，要么用旋转把它们摊开。"
+  },
+  "03259c71cd48": {
+   "scene": "Flash",
+   "en": "Chapter fourteen. FlashAttention.",
+   "zh": "第14章。FlashAttention。"
+  },
+  "b41d83b128c8": {
+   "scene": "Flash",
+   "en": "Part 17 ended with FlashAttention, and promised its derivation. Here it is. <bookmark mark='a'/> A GPU has a large, slow memory, HBM, and a small, fast one on the chip, SRAM. The standard way to compute attention writes out the T by T table of scores, <bookmark mark='b'/> reads it back for the softmax and writes the probabilities, <bookmark mark='c'/> then reads those again to weight the values. <bookmark mark='d'/> For long inputs the table is enormous: at 128 thousand tokens, 32 gibibytes for a single head, and all that traffic leaves the arithmetic waiting. In 2022 Tri Dao and colleagues at Stanford showed how never to write it at all.",
+   "zh": "第17部分以FlashAttention收尾，并且答应要推导它。现在就来。<bookmark mark='a'/>GPU有一块大而慢的内存，HBM，还有一块芯片上小而快的内存，SRAM。计算注意力的标准做法，要把T乘T的分数表写出来，<bookmark mark='b'/>再读回来做softmax，写出概率，<bookmark mark='c'/>然后再把概率读一遍，去给值加权。<bookmark mark='d'/>输入很长时，这张表大得惊人：12.8万个词元时，单单一个头就要32GiB，而这么多的读写，让运算一直在等。2022年，斯坦福的Tri Dao和同事，展示了怎样根本不写出这张表。"
+  },
+  "386e9ded1101": {
+   "scene": "Flash",
+   "en": "The key is the softmax. <bookmark mark='a'/> To compute it safely you subtract the largest score, so no exponential overflows, and divide by the sum: so it seems you need the whole row first. <bookmark mark='b'/> But you can go tile by tile, keeping a running maximum m. <bookmark mark='c'/> When a bigger score arrives, rescale the sum so far by e to the old max minus the new one, and add the new tile's terms. <bookmark mark='d'/> The output is kept the same way, unnormalized, and divided by the sum at the very end. Maxim Milakov and Natalia Gimelshein at NVIDIA published this online softmax in 2018. <bookmark mark='e'/> Here it runs on one real query of Part 13's transformer, tile by tile: watch the maximum jump, and the sum shrink to make room for it.",
+   "zh": "关键在于softmax。<bookmark mark='a'/>为了算得稳妥，要先减去最大的分数，这样指数就不会溢出，再除以总和：看起来，得先有整行才行。<bookmark mark='b'/>但其实可以一块一块地来，一路记着当前的最大值m。<bookmark mark='c'/>来了一个更大的分数时，就把到目前为止的和，乘以e的旧最大值减新最大值次方，重新缩放，再加上新这一块的各项。<bookmark mark='d'/>输出也这样保存，先不归一化，到最后再除以总和。NVIDIA的马克西姆·米拉科夫和娜塔莉亚·吉梅尔申在2018年发表了这种在线softmax。<bookmark mark='e'/>这是它在第13部分Transformer的一个真实查询上，一块一块地运行：看最大值怎样跳升，和又怎样缩小来给它腾地方。"
+  },
+  "61d18c10de03": {
+   "scene": "Flash",
+   "en": "With that, the table is never needed. <bookmark mark='a'/> Take a block of queries and keep it in fast memory. <bookmark mark='b'/> Stream the keys and values through, tile by tile, small enough to fit beside it; compute each tile's scores, update the running max, sum and output, and drop the tile. <bookmark mark='c'/> Then the next block of queries. <bookmark mark='d'/> We checked it on the real attention of Part 13's transformer: the tiled result equals the plain formula to within rounding, in 64-bit and in 32-bit numbers.",
+   "zh": "有了它，那张表就根本用不着了。<bookmark mark='a'/>取一块查询，放在快速内存里。<bookmark mark='b'/>让键和值一块一块地流过，每块都小到能放在它旁边；算出每块的分数，更新当前的最大值、和与输出，然后把这块扔掉。<bookmark mark='c'/>再处理下一块查询。<bookmark mark='d'/>我们在第13部分Transformer的真实注意力上验证过：分块算出的结果，和直接按公式算的一样，只差舍入误差，64位和32位的数都是如此。"
+  },
+  "bdfb2572e300": {
+   "scene": "Flash",
+   "en": "How much traffic does that save? <bookmark mark='a'/> With M numbers of fast memory and heads of size d, a tile of keys and values holds M over 4 d of them. <bookmark mark='b'/> Keys and values are each read once. <bookmark mark='c'/> The queries and the running outputs are read and written once per tile of keys: T over B c times, about twelve T squared d squared over M numbers in all. <bookmark mark='d'/> Against the standard method's T squared plus T d, that's smaller whenever d squared is smaller than M, and Dao and colleagues proved no exact method can do better for every M. <bookmark mark='e'/> With an H100's shared memory, we counted the numbers moved, running the algorithm's loops: 2.3 times fewer with heads of 128, 9.3 times fewer with heads of 64. <bookmark mark='f'/> FlashAttention-2 in 2023 swapped the loops and trimmed the work between matrix products; FlashAttention-3, in 2024, overlapped data movement with arithmetic on Hopper GPUs, reaching 75 percent of the chip's peak.",
+   "zh": "这能省下多少读写？<bookmark mark='a'/>快速内存能放M个数，每个头大小为d，那么一块键和值能装下M除以4d个。<bookmark mark='b'/>键和值各读一次。<bookmark mark='c'/>查询和当前的输出，每处理一块键，就要读写一次：一共T除以B c次，加起来大约是12乘T的平方乘d的平方再除以M个数。<bookmark mark='d'/>标准做法是T的平方加T乘d，所以只要d的平方小于M，它就更小；Dao和同事还证明了，没有哪种精确的方法能对每个M都做得更好。<bookmark mark='e'/>用一块H100的共享内存，我们实际运行这个算法的循环，数了搬运的数：头大小为128时，只有标准做法的2.3分之1；为64时，只有9.3分之1。<bookmark mark='f'/>2023年的FlashAttention-2交换了循环的顺序，并且削减了矩阵乘法之间的工作；2024年的FlashAttention-3，在Hopper GPU上让数据搬运和运算重叠起来，达到了芯片峰值的75%。"
+  },
+  "a626b2583145": {
+   "scene": "ServeAttention",
+   "en": "Chapter fifteen. Attention at serve time.",
+   "zh": "第15章。服务时的注意力。"
+  },
+  "fb85a69176f6": {
+   "scene": "ServeAttention",
+   "en": "FlashAttention was built for reading prompts, where thousands of queries share each tile of keys. Decoding has one query per conversation, against a cache that may hold a million keys. <bookmark mark='a'/> FlashAttention hands each head's work to one of the GPU's multiprocessors. With one conversation and 32 heads, an H100 keeps 32 of its 132 busy: 24 percent. <bookmark mark='b'/> Flash-Decoding, from Tri Dao and colleagues in 2023, also splits the cache into chunks, attends to each in parallel, and combines the partial answers with the same trick as the online softmax: weight each chunk's output and sum by e to its max minus the overall max. <bookmark mark='c'/> With eight chunks per head, 97 percent of the chip has work. We checked the combination on Part 13's attention: exact to rounding. Its authors measured up to eight times faster generation at long contexts.",
+   "zh": "FlashAttention是为读提示而设计的，那时成千上万个查询共用每一块键。解码时，每段对话只有一个查询，面对的缓存却可能有一百万个键。<bookmark mark='a'/>FlashAttention把每个头的工作交给GPU的一个多处理器。只有一段对话、32个头时，一块H100的132个多处理器里，只有32个有活干：24%。<bookmark mark='b'/>Flash-Decoding出自Tri Dao和同事，2023年，它还把缓存切成小块，并行地对每一块做注意力，再用和在线softmax一样的技巧，把部分结果合起来：每块的输出和总和，都乘以e的这块最大值减总最大值次方。<bookmark mark='c'/>每个头切成8块，芯片上就有97%有活干。我们在第13部分的注意力上验证了这种合并：精确到舍入误差。它的作者测得，在长上下文下，生成最快到原来的8倍。"
+  },
+  "17f01f411088": {
+   "scene": "ServeAttention",
+   "en": "The other way to read less of the cache is to look at less of it. <bookmark mark='a'/> With full attention, every step reads the whole cache, and the read grows with the conversation. <bookmark mark='b'/> gpt-oss alternates: every other layer looks back only 128 tokens, so half the reading stops growing. At 128 thousand tokens it reads 2.0 times less. <bookmark mark='c'/> Gemma 3, in 2025, gave five layers in six a window of 1,024 tokens: 5.8 times less. <bookmark mark='d'/> And DeepSeek's sparse attention, in V3.2, keeps every token but lets a small, fast indexer choose 2,048 of them for each query. The indexer still glances at every token, through a few small eight-bit heads, but the main attention's read stops growing: 64 times less at 128 thousand. <bookmark mark='e'/> On our own model a window is easy to try: at 2,048 tokens, a decode step for eight conversations takes 32.2 milliseconds with full attention, and 6.5 with a window of 128. What it costs in quality depends on what the model learned to do with it: these models were trained with their windows.",
+   "zh": "少读缓存的另一种办法，是少看一些。<bookmark mark='a'/>用全注意力，每一步都要读整个缓存，读的量随对话一起增长。<bookmark mark='b'/>gpt-oss是交替的：每隔一层，只回看128个词元，所以有一半的读取不再增长。到12.8万个词元时，它读的量只有全注意力的2.0分之1。<bookmark mark='c'/>2025年的Gemma 3，让六层里的五层只看1024个词元的窗口：只有5.8分之1。<bookmark mark='d'/>而DeepSeek在V3.2里的稀疏注意力，保留所有词元，但让一个又小又快的索引器，为每个查询挑出其中2048个。索引器仍然要扫一眼每个词元，用的是几个很小的8比特头，但主注意力的读取量不再增长：到12.8万个词元时，只有64分之1。<bookmark mark='e'/>在我们自己的模型上，窗口很容易试：2048个词元时，给8段对话解码一步，全注意力要32.2毫秒，128词元的窗口要6.5毫秒。它在质量上要付出多少代价，取决于模型学会了怎样利用它：这些模型都是带着各自的窗口训练出来的。"
+  },
+  "14651f847fb8": {
+   "scene": "Grammar",
+   "en": "Chapter sixteen. Constrained decoding.",
+   "zh": "第16章。约束解码。"
+  },
+  "3103e99fde82": {
+   "scene": "Grammar",
+   "en": "Programs that call a model often need its answer in a fixed format: a record, a function call, a number. <bookmark mark='a'/> Our novels model has never seen such a thing. Shown three records of guests at an inn, and asked for the next, <bookmark mark='b'/> it goes back to writing novels: of 200 tries, not one was a valid record. Big models do far better, but 'usually' isn't good enough for a program.",
+   "zh": "调用模型的程序，常常需要它的回答符合固定的格式：一条记录、一次函数调用、一个数字。<bookmark mark='a'/>我们的小说模型从没见过这种东西。给它看三条旅店客人的记录，让它写下一条，<bookmark mark='b'/>它就又回去写小说了：试了200次，一条合格的记录都没有。大模型要好得多，但对程序来说，“通常没问题”是不够的。"
+  },
+  "ee45bfbe8c3d": {
+   "scene": "Grammar",
+   "en": "The fix is to make invalid output impossible. <bookmark mark='a'/> Write the format as a pattern, a regular expression, and compile it to an automaton: states, and the characters that move between them. Ours has 36 states. <bookmark mark='b'/> But a model writes tokens, not characters, and a token can be several characters long. In 2023 Brandon Willard and Rémi Louf, in Outlines, built an index once, ahead of time: for every state, and every token of the vocabulary, run the token's characters through the automaton, and record whether it survives, and where it lands. <bookmark mark='c'/> For our 4,096-token vocabulary that took 0.15 seconds. At the start only one token is allowed, the opening brace; inside a name, 1,235. Decoding then sets every disallowed token's probability to zero, a lookup per step.",
+   "zh": "解决办法，是让不合格的输出根本不可能出现。<bookmark mark='a'/>把格式写成一个模式，也就是正则表达式，再把它编译成一个自动机：一些状态，以及在状态之间转移的字符。我们的自动机有36个状态。<bookmark mark='b'/>可是模型写的是词元，不是字符，一个词元可能有好几个字符长。2023年，布兰登·威拉德和雷米·卢夫在Outlines里，提前一次性建好一个索引：对每个状态、词表里的每个词元，把这个词元的字符送进自动机走一遍，记下它能不能活下来，以及落在哪个状态。<bookmark mark='c'/>对我们4096个词元的词表，这花了0.15秒。一开始，只允许一个词元，就是左花括号；在名字中间，允许1235个。然后解码时，把每个不允许的词元的概率设为0，每一步查一次表就行。"
+  },
+  "9c98f2049b88": {
+   "scene": "Grammar",
+   "en": "<bookmark mark='a'/> With the mask, every one of the 200 outputs is a valid record. As for speed, it costs 17 percent more time per token. <bookmark mark='b'/> Look at the names, though. The model has no idea what belongs in the field; the mask only rules out what can't. A mask fixes the form, not the sense. Grammars more complex than patterns, like JSON with nesting, need a stack as well, and XGrammar, in 2024, made those fast too.",
+   "zh": "<bookmark mark='a'/>加上掩码之后，200个输出，每一个都是合格的记录。至于速度，每个词元要多花17%的时间。<bookmark mark='b'/>不过，看看那些名字。模型根本不知道这一栏该填什么；掩码只是排除了不可能的东西。掩码管得了形式，管不了意思。比模式更复杂的语法，比如带嵌套的JSON，还需要一个栈；2024年，XGrammar把这些也做快了。"
+  },
+  "bcd7e5add242": {
+   "scene": "Grammar",
+   "en": "Masking has a subtler flaw. <bookmark mark='a'/> Ask Part 13's character model to write one of five names after a line of The Maltese Falcon, and compare two things. <bookmark mark='b'/> The model's own odds for each whole name, renormalized over the five: what you'd get by sampling it again and again and keeping only those names. <bookmark mark='c'/> And what masking, letter by letter, actually samples. At the first letter, masking only asks how likely an S, an A or an E is, whatever word it would begin. So Effie gets 10 percent, though the model gives the whole name only 0.1. <bookmark mark='d'/> Locally sensible choices add up to a distorted answer. In 2024 Kanghee Park and colleagues showed how to sample from the true conditional instead.",
+   "zh": "掩码还有一个更隐蔽的毛病。<bookmark mark='a'/>让第13部分的字符模型，在《马耳他之鹰》的一行之后，写出五个名字中的一个，然后比较两样东西。<bookmark mark='b'/>一样是模型自己给每个完整名字的概率，在这五个名字上重新归一化：如果你一遍又一遍地采样，只留下这几个名字，得到的就是它。<bookmark mark='c'/>另一样，是掩码一个字母一个字母地，实际采出来的结果。在第一个字母上，掩码只问S、A或E有多大可能，而不管它会是哪个词的开头。于是Effie得到了10%，尽管模型给这个完整名字的概率只有0.1%。<bookmark mark='d'/>每一步局部都合理的选择，加起来却是一个被扭曲的答案。2024年，Kanghee Park和同事展示了怎样改从真正的条件分布里采样。"
+  },
+  "7caededf32d5": {
+   "scene": "Frontier",
+   "en": "Chapter seventeen. The frontier, late 2026.",
+   "zh": "第17章。前沿，2026年末。"
+  },
+  "0ed7baf74e55": {
+   "scene": "Frontier",
+   "en": "Reasoning models, Part 28's subject, think in tokens, and every token is a decode step. <bookmark mark='a'/> In May 2025 DeepSeek's update to R1 lifted its score on a hard maths competition from 70 to 87.5 percent, and it did so partly by thinking longer: 23 thousand tokens a question instead of 12. <bookmark mark='b'/> What does length cost? Take chapter three's model of a GPU serving a model, and write answers of each length, with as many conversations as the memory holds. <bookmark mark='c'/> 1.9 times the tokens cost 3.6 times as much, because the caches grow, the batch shrinks, and every token gets dearer: from 0.22 to 0.41 dollars per million. Thinking longer is a decoding problem, and everything in this part is how it is made affordable.",
+   "zh": "推理模型，也就是第28部分的主题，是用词元来思考的，而每个词元都是一个解码步。<bookmark mark='a'/>2025年5月，DeepSeek对R1的更新，把它在一项高难度数学竞赛上的成绩，从70%提高到87.5%，部分原因就是想得更久：每道题23K个词元，而不是12K个。<bookmark mark='b'/>长度要花多少钱？拿第3章那个GPU服务模型的模型来，写出各种长度的回答，每次都同时容纳内存装得下的最多对话。<bookmark mark='c'/>词元多到1.9倍，成本就高到3.6倍，因为缓存变大，批变小，每个词元都更贵了：从每百万0.22美元，涨到0.41美元。想得更久，是一个解码问题，而这一部分讲的一切，都是为了让它负担得起。"
+  },
+  "2782beda26c9": {
+   "scene": "Frontier",
+   "en": "Meanwhile the price of a token has collapsed. <bookmark mark='a'/> Take the cheapest OpenAI model at least as good as the original GPT-3: sixty dollars per million tokens in 2021, twenty after a cut in 2022, two for the ChatGPT model in 2023, fifteen cents for GPT-4o mini in 2024. <bookmark mark='b'/> That's 400 times in about three and a half years, 5.6 times a year. <bookmark mark='c'/> Epoch AI, tracking many benchmarks, found the price of a fixed level of ability falling between nine and nine hundred times a year, depending on the task. Some of that is this part's methods, some is Part 17's hardware, and some is smaller models trained on more data, as Part 12 described.",
+   "zh": "与此同时，词元的价格一落千丈。<bookmark mark='a'/>拿至少和最初的GPT-3一样好的、最便宜的OpenAI模型来看：2021年每百万词元60美元，2022年降价后20美元，2023年ChatGPT所用的模型2美元，2024年GPT-4o mini是1角5分。<bookmark mark='b'/>大约三年半里，价格只剩原来的400分之1，相当于每年降到5.6分之1。<bookmark mark='c'/>Epoch AI追踪了许多基准，发现达到某个固定能力水平的价格，每年降到9分之1到900分之1不等，取决于任务。其中一部分归功于这一部分的方法，一部分归功于第17部分的硬件，还有一部分，是像第12部分讲的那样，用更多数据训练出的更小的模型。"
+  },
+  "d63d378fddf6": {
+   "scene": "Frontier",
+   "en": "Chapter one's speed limit also says who can run these models. <bookmark mark='a'/> Divide a device's memory bandwidth by the bytes a token reads. <bookmark mark='b'/> A laptop with Apple's M5, at 153 gigabytes a second, can write at most 80 tokens a second with gpt-oss-20b, whose experts in MXFP4 make each token read under two gigabytes; an H100, 1,747. <bookmark mark='c'/> That is why four-bit formats and experts matter for running models at home, where llama.cpp started in 2023, and why Apple's on-device model, in 2025, was trained for two-bit weights. Our own model on this computer reaches 86 percent of its bound. <bookmark mark='d'/> And the split between prefill and decode is reaching the hardware: in September 2025 NVIDIA announced Rubin CPX, a GPU with cheaper memory and plenty of arithmetic, for the long-context work of reading prompts, which it said would ship by the end of 2026.",
+   "zh": "第1章的速度上限，还说明了谁能运行这些模型。<bookmark mark='a'/>用一台设备的内存带宽，除以一个词元要读的字节数。<bookmark mark='b'/>一台装着苹果M5的笔记本电脑，带宽每秒153GB，跑gpt-oss-20b最多每秒写80个词元，它的专家用MXFP4存，每个词元要读的不到2GB；一块H100，是1747个。<bookmark mark='c'/>这就是为什么4比特格式和专家，对在家里运行模型这么重要，llama.cpp正是2023年从这里起步的；这也是为什么苹果2025年的端侧模型，是为2比特权重训练的。我们自己的模型在这台电脑上，达到了它上限的86%。<bookmark mark='d'/>预填充和解码的分工，也正在走进硬件：2025年9月，NVIDIA发布了Rubin CPX，一种内存更便宜、算力充足的GPU，专门用来做读提示这种长上下文的工作，NVIDIA说它将在2026年底前出货。"
+  },
+  "d6b1a11126b6": {
    "scene": "Outro",
-   "en": "Let's take stock. Writing one token reads every weight, so memory sets the speed limit. A small model can guess ahead and the big one check its guesses at once, with exactly the same output. Numbers can be stored in eight bits, or four, for little loss. And the roofline says why all of this works: moving bytes is the cost, so FlashAttention computes in tiles and servers hand out memory in pages.",
-   "zh": "我们来盘点一下。写一个词元，就要读一遍所有的权重，所以内存决定了速度的上限。小模型可以先往前猜，大模型再一次性核对它的猜测，输出完全不变。数字可以用8个比特、甚至4个比特来存，损失很小。而屋顶线说明了这一切为什么管用：搬运字节才是代价，所以FlashAttention分块计算，服务器按页分配内存。"
+   "en": "Let's take stock. Reading a prompt is arithmetic and writing an answer is reading memory, so a server batches the writing, and the price of a token follows from the batch it can afford. Continuous batching keeps the batch full, and pages keep the memory full. A drafter guesses ahead and the big model checks in one pass, with exactly the same output. Rounding error is delta squared over twelve; GPTQ and rotations spend it where it hurts least, and four-bit floats store it compactly. And FlashAttention never writes its table down.",
+   "zh": "我们来盘点一下。读提示是运算，写回答是读内存，所以服务器把写回答成批地做，一个词元的价格，取决于它能负担多大的批。连续批处理让批始终是满的，分页让内存始终是满的。草稿模型先往前猜，大模型一遍核对，输出完全不变。舍入误差是δ平方除以12；GPTQ和旋转把它花在伤害最小的地方，4比特浮点数则把数存得紧凑。而FlashAttention，从来不把它的表写下来。"
   },
-  "6426aa7193fa": {
+  "42f2e60fe5dc": {
    "scene": "Outro",
-   "en": "This part paid off ideas from earlier ones. The key-value cache of part fifteen is what the pages hold. Mixture-of-experts, from part sixteen, is the same idea as quantization: read fewer bytes per token. And the long chains of thought of parts twenty-eight and twenty-nine are why speed matters so much.",
-   "zh": "这一部分，兑现了前面几部分的想法。页里装的，正是第15部分的键值缓存。第16部分的混合专家，和量化是同一个想法：每个词元少读一些字节。而第28和第29部分那些长长的思维链，正是速度如此重要的原因。"
+   "en": "All of this comes back. Generating images one pixel at a time, and the race to take fewer steps, are Parts 20 and 21. Reasoning models think in tokens that decoding pays for, Part 28; agents run long contexts and many calls with shared prefixes, Part 29. The outlier channels of chapter nine are a clue to what the directions inside a model mean: Part 30 shows a network packing more features than it has dimensions. And Part 31 asks how to trust what comes out.",
+   "zh": "这些都会再出现。一次生成一个像素的图像，以及减少步数的竞赛，是第20和第21部分。推理模型用词元思考，而这些词元要靠解码来买单，在第28部分；智能体要跑很长的上下文，要做很多次共享前缀的调用，在第29部分。第9章的离群通道，是一条线索，指向模型内部那些方向的含义：第30部分会展示，一个网络怎样装下比它的维数还多的特征。而第31部分要问的是，怎样才能信任它输出的东西。"
   },
-  "e65239f0d5e5": {
+  "62901faa965e": {
    "scene": "Outro",
-   "en": "Next time, the last part: looking inside the model. How a network packs more ideas than it has dimensions, <bookmark mark='a'/> five directions squeezed into a plane, and how to pull them back apart.",
-   "zh": "下一次，是最后一部分：看看模型内部。一个网络，怎样装下比它的维数还多的想法，<bookmark mark='a'/>把5个方向挤进一个平面；又怎样把它们重新拆开。"
+   "en": "Here are six problems to try, from the drafter's formula to Flash-Decoding's combination. Pause here, and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题可以试试，从草稿模型的公式，到Flash-Decoding的合并。在这里暂停一下，把它们做一做；完整的解答，都在这一部分的笔记里。"
   },
-  "e57177f092a2": {
+  "a012edf1b13d": {
    "scene": "Outro",
-   "en": "Thanks for watching, and see you in the final part.",
-   "zh": "感谢观看，最后一部分见。"
+   "en": "Next time, the fourth act begins: generation. Before diffusion, there were four ways to make a model that invents: one pixel at a time, through a learned code, as a game between two networks, or by bending space itself. Part 20: four ways to generate.",
+   "zh": "下一次，第四幕开始：生成。在扩散模型之前，有四种让模型学会创造的办法：一次一个像素；通过一个学到的编码；让两个网络相互博弈；或者，把空间本身弯折。第20部分：生成的四种方法。"
   },
-  "a73e48f870ee": {
-   "scene": "Quant",
-   "en": "What does it cost? <bookmark mark='a'/> Rounded to eight bits, our transformer is no worse. At four bits, 0.046 bits worse per character, for an eighth of the memory; at three, 0.26 worse: it starts to break. FP4, with its scale for every block of thirty-two, loses only 0.019: better than plain four bits, for the same memory. <bookmark mark='b'/> Big models tolerate rounding even better, the newest are trained in eight or even four bits from the start, and there are better formats, and better ways to round, than the plain ones here.",
-   "zh": "代价是多少？<bookmark mark='a'/>取整到8比特，我们的Transformer一点也没变差。到4比特，每个字符差了0.046比特，换来的是只用八分之一的内存；到3比特，差了0.26：它开始崩了。FP4，每32个数配一个缩放因子，只损失0.019：比普通的4比特更好，内存却一样。<bookmark mark='b'/>大模型对取整的容忍度还要更高，最新的模型从一开始就用8比特、甚至4比特训练；而且还有比这里这些朴素做法更好的格式，和更好的取整方法。"
-  },
-  "1c0789f22aeb": {
-   "scene": "Quant",
-   "en": "Two four-bit float formats now matter, and the difference between them is all in the scales. <bookmark mark='a'/> MXFP4, the open standard, shares one scale among thirty-two numbers, and the scale is a pure power of two: cheap to apply, but coarse, so a block's largest weight can land anywhere from four to eight on the E2M1 grid, and past six it's clipped. OpenAI's gpt-oss stores its experts this way. <bookmark mark='b'/> NVFP4, on NVIDIA's Blackwell chips, uses blocks of sixteen, and each scale is itself a small eight-bit float, so it can fit the block's largest weight to six almost exactly; one more scale for the whole weight matrix keeps everything in range. It costs 4.5 bits per weight instead of 4.25. <bookmark mark='c'/> On our transformer: MXFP4 loses 0.026 bits a character, NVFP4 0.025, and plain four-bit integers with a scale per row 0.046. The best here is NVFP4. For comparison, FP4 with an exact scale for every block of thirty-two, from before, lost 0.019: rounding the scale to a power of two is what costs MXFP4 its extra.",
-   "zh": "如今有两种4比特浮点格式很重要，它们的区别全在缩放因子上。<bookmark mark='a'/>MXFP4是开放标准，32个数共用一个缩放因子，而且这个缩放因子只能是2的整数次幂：用起来便宜，但很粗糙，所以一个块里最大的权重，在E2M1的格子上可能落在4到8之间的任何地方，超过6的部分就被截掉了。OpenAI的gpt-oss，就是这样存储它的专家的。<bookmark mark='b'/>NVFP4用在NVIDIA的Blackwell芯片上，每块16个数，而每个缩放因子本身是一个小小的8比特浮点数，所以几乎能把块里最大的权重恰好对到6上；整个权重矩阵再配一个缩放因子，让一切都不越界。它每个权重要花4.5比特，而不是4.25。<bookmark mark='c'/>在我们的Transformer上：MXFP4每个字符损失0.026比特，NVFP4损失0.025，每行一个缩放因子的普通4比特整数损失0.046。这里最好的是NVFP4。作为对比，前面那个每32个数配一个精确缩放因子的FP4，损失是0.019：把缩放因子取整成2的幂，正是MXFP4多出来那部分损失的来源。"
-  },
-  "a5cee57d3148": {
-   "scene": "Quant",
-   "en": "Two tricks make low precision work much better than plain rounding. The first is GPTQ. <bookmark mark='a'/> Round a layer's weights one input column at a time. <bookmark mark='b'/> Each rounding leaves an error; <bookmark mark='c'/> instead of accepting it, nudge the weights on the inputs not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' second moment, measured on real text: it records which inputs tend to be big together. If two inputs move together, a rounding error on one can be cancelled by adjusting the other. <bookmark mark='d'/> On a real layer of our transformer, at three bits, the error in its output drops from 17 to 10 percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few weights and activations, the numbers flowing through the network for this particular input, which change with every token while the weights stay fixed, are huge outliers, far bigger than the rest, and one outlier forces a coarse scale on its whole row. <bookmark mark='h'/> Multiply by a Hadamard matrix first, a grid of plus and minus ones. It's orthogonal: a pure rotation, which changes no lengths and can be undone exactly. The outlier is spread evenly over the row, and the rotation is undone afterwards. Our small model has no such outliers: a row's largest weight is only about 2.8 times the typical one, before and after. <bookmark mark='f'/> On our whole transformer at three bits: plain rounding loses 0.257 bits a character, GPTQ only 0.122, and rotating first 0.327, worse: with nothing to spread, it only spreads each rounding error over every input, including the few that carry large activations. Real systems rotate the activations too, so they can be rounded as well, and pair the rotation with GPTQ.",
-   "zh": "有两个技巧，能让低精度比简单取整好得多。第一个是GPTQ。<bookmark mark='a'/>把一层的权重，一次一列输入地取整。<bookmark mark='b'/>每次取整都会留下误差；<bookmark mark='c'/>不去接受它，而是微调那些还没取整的输入上的权重，让这一层的输出几乎不变。微调多少，由H决定，也就是输入的二阶矩，在真实文本上测出来：它记录了哪些输入往往一起变大。如果两个输入一起变化，一个输入上的取整误差，就可以靠调整另一个来抵消。<bookmark mark='d'/>在我们Transformer的一个真实层上，3比特时，它输出的误差从17%降到10%。<bookmark mark='e'/>第二个技巧是旋转。在大模型里，有少数权重和激活值是巨大的离群值，比其余的数大得多。激活值，就是针对这一个具体输入、在网络里流动的那些数：权重固定不变，激活值却随每个词元而变。一个离群值，就会迫使它所在的整行用很粗的缩放因子。<bookmark mark='h'/>先乘上一个哈达玛矩阵，也就是一个由正负1排成的方阵。它是正交的：一个纯粹的旋转，不改变任何长度，而且能精确地转回来。离群值就被均匀地摊到整行上，事后再把旋转转回来。我们的小模型没有这样的离群值：一行里最大的权重，只是典型权重的2.8倍左右，旋转前后都一样。<bookmark mark='f'/>在3比特下的整个Transformer上：简单取整每个字符损失0.257比特，GPTQ只损失0.122，而先旋转再取整损失0.327，反而更差：没有东西可摊，它只是把每个取整误差摊到所有输入上，包括那几个携带大激活值的输入。真实系统也会旋转激活值，这样激活值也能取整，并且把旋转和GPTQ配合起来用。"
+  "93eaeeccba0e": {
+   "scene": "Outro",
+   "en": "To go further, the vLLM and FlashAttention papers are good places to start. Thanks for watching, and see you in Part 20.",
+   "zh": "想深入下去，vLLM和FlashAttention的论文是很好的起点。感谢观看，第20部分见。"
   }
  },
  "title_en": "AI, Built: Part 19, Inference",
  "chapters_en": {
-  "Hook": "The speed limit",
-  "Speculative": "1. Guess ahead, check at once",
-  "Quant": "2. Fewer bits per number",
-  "Memory": "3. Moving numbers is the cost",
-  "Outro": "Recap, and where this came from"
+  "Hook": "One token at a time",
+  "Phases": "1. Prefill and decode",
+  "KVCache": "2. The key-value cache, priced",
+  "Batching": "3. Batching: speed against cost",
+  "Scheduling": "4. Continuous batching",
+  "Paging": "5. Pages and shared prefixes",
+  "Exact": "6. Guess ahead, check at once",
+  "Drafters": "7. Drafters",
+  "Rounding": "8. Rounding error",
+  "Outliers": "9. Outliers and SmoothQuant",
+  "GPTQ": "10. GPTQ, from Optimal Brain Surgeon",
+  "Rotation": "11. Rotations: QuaRot and SpinQuant",
+  "Formats": "12. Four-bit floats: MXFP4 and NVFP4",
+  "KVQuant": "13. The cache in fewer bits",
+  "Flash": "14. FlashAttention",
+  "ServeAttention": "15. Attention at serve time",
+  "Grammar": "16. Constrained decoding",
+  "Frontier": "17. The frontier, late 2026",
+  "Outro": "Recap, problems, and what comes next"
  }
 }

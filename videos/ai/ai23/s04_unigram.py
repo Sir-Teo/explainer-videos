@@ -43,11 +43,16 @@ class Unigram(VoiceoverScene):
     # ------------------------------------------------------------------
     def model(self):
         u = load("unigram")
-        V = int(u["sizes"][0])
+        V = int(u["sizes"][-1])
         voc = {str(p): float(lp) for p, lp in u[f"vocab{V}"]}
         word = " armchair"
-        cuts = [[" arm", "chair"], [" arm", "ch", "air"], [" a", "rm", "chair"]]
-        cuts = [c for c in cuts if all(p in voc for p in c)][:3] or [[ch for ch in word]]
+
+        def all_cuts(w):
+            if not w:
+                return [[]]
+            return [[w[:k]] + rest for k in range(1, len(w) + 1) if w[:k] in voc for rest in all_cuts(w[k:])]
+
+        cuts = sorted(all_cuts(word), key=lambda c: -sum(voc[p] for p in c))[:3]
         dc = definition_card(r"the unigram language model",
                              r"a vocabulary of pieces $v$ with probabilities $p(v)$; \ a cut $s_1 s_2 \dots s_m$ of a word "
                              r"scores $p(s_1)\,p(s_2)\cdots p(s_m)$; \ the word's probability adds up every cut; \ the "
