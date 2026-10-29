@@ -132,12 +132,14 @@ class FSQ(VoiceoverScene):
         e = {m: float(np.mean(d[f"mse_{m}"])) for m in meth}
         p = {m: float(np.mean(d[f"ppl_{m}"])) for m in meth}
         order = sorted(meth, key=lambda m: e[m])
-        well = ("use their codes well" if min(p["fsq"], p["lfq"]) > p["vq"] else "do not use their codes better than VQ")
+        fsq_cmp = ("FSQ uses its grid better than plain VQ uses its codebook" if p["fsq"] > p["vq"] else
+                   "FSQ uses its grid no better than plain VQ uses its codebook")
+        lfq_cmp = "so does LFQ" if p["lfq"] > p["vq"] else "LFQ, at its paper's entropy weight, does not"
         say = {"vq": "plain VQ", "ema": "VQ with EMA", "restart": "EMA with restarts", "fsq": "FSQ", "lfq": "LFQ"}
         with self.voiceover(
-            "All five, at 256 codes, the same network, the same steps and three seeds. <bookmark mark='a'/> The two "
-            f"methods without a learned codebook {well}: perplexity {p['fsq']:.0f} for FSQ and "
-            f"{p['lfq']:.0f} for LFQ, against {p['vq']:.0f} for plain VQ. <bookmark mark='b'/> On error, "
+            "All five, at 256 codes, the same network, the same steps and three seeds. <bookmark mark='a'/> "
+            f"Perplexity: {p['fsq']:.0f} for FSQ, {p['lfq']:.0f} for LFQ, {p['vq']:.0f} for plain VQ. {fsq_cmp}; "
+            f"{lfq_cmp}. <bookmark mark='b'/> On error, "
             f"{say[order[0]]} comes first at {1000 * e[order[0]]:.1f} thousandths, then {say[order[1]]} at "
             f"{1000 * e[order[1]]:.1f}, and {say[order[-1]]} last at {1000 * e[order[-1]]:.1f}. The Google team's "
             "point was not that FSQ wins outright, but that it matches VQ without any of VQ's repairs."

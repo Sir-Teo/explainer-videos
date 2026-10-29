@@ -1010,3 +1010,38 @@ RFdiffusion, RFdiffusion3, BindCraft, AlphaProteo, BoltzGen, Boltz-1, Boltz-2, C
 Rosetta, Top7, GraphCast, GenCast, AIFS, FourCastNet, Pangu-Weather, WeatherNext, GNoME, MatterGen, MACE-MP-0, A-Lab,
 EGNN, SchNet, NequIP, MACE, e3nn, GIN, GCN, GAT, PointNet, Deep Sets, FNO, DeepONet, Lean, Mathlib, AlphaGeometry,
 AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTensor.
+
+### Post-training and alignment, additions (Part 27)
+
+| English | 中文 |
+|---|---|
+| base model, fine-tuned model, forgetting | 基础模型，微调后的模型，遗忘 |
+| low-rank adapter (LoRA), rank, adapter | 低秩适配器（LoRA），秩，适配器 |
+| reward model, comparison, preference, labeller | 奖励模型，比较，偏好，标注员 |
+| gold (the hidden true taste), proxy | 金标准，代理 |
+| simulated people, noise τ | 模拟的人，噪声τ |
+| ceiling (of a reward model's accuracy) | 上限 |
+| within-question comparison, shift per question | 同一问题内的比较，每个问题的平移 |
+| correlation, slope | 相关系数，斜率 |
+| gold units (a score divided by its slope on gold) | 金标准单位 |
+| a perfect learner (slope 1/τ) | 完美的学习者（斜率1/τ） |
+| decomposition into gold's terms: mood, length, repetition, too short | 按金标准的各项分解：情绪，长度，重复，太短 |
+| occlusion (deleting one word at a time) | 遮挡（一次删掉一个词） |
+| regressional Goodhart, extremal Goodhart | 回归型古德哈特，极端型古德哈特 |
+| KL-regularized optimum, partition function Z | KL正则化的最优解，配分函数Z |
+| an answer as an episode: state, action (token) | 把回答当作回合：状态，动作（词元） |
+| per-token KL penalty | 逐词元的KL惩罚 |
+| value network (value model), critic | 价值网络（价值模型），评论家 |
+| advantage, generalized advantage estimation (GAE) | 优势，广义优势估计（GAE） |
+| baseline, group baseline, leave-one-out (RLOO) | 基线，组基线，留一（RLOO） |
+| group relative policy optimization (GRPO) | 组相对策略优化（GRPO） |
+| gradient estimate, cosine between two estimates | 梯度估计，两个估计之间的余弦 |
+| direct preference optimization (DPO), implicit reward | 直接偏好优化（DPO），隐式奖励 |
+| online / offline preference data | 在线/离线偏好数据 |
+| distillation, teacher, student, soft targets, dark knowledge, temperature | 蒸馏，老师，学生，软目标，暗知识，温度 |
+| forward KL, reverse KL, on-policy distillation | 前向KL，反向KL，在线策略蒸馏 |
+| model merging, task vector, task arithmetic, model soup | 模型合并，任务向量，任务算术，模型汤 |
+| linear mode connectivity | 线性模式连通 |
+| sycophancy, jailbreak, adversarial suffix, many-shot jailbreaking, over-refusal | 谄媚，越狱，对抗后缀，多样本越狱，过度拒绝 |
+| emergent misalignment, alignment faking, persona vector | 涌现式失准，对齐伪装，人格向量 |
+| cold start, strong-to-weak distillation | 冷启动，强到弱蒸馏 |

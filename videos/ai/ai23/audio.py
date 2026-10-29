@@ -675,9 +675,9 @@ def compute_whisper(cache):
 # CTC: a small recognizer for digit strings
 # ---------------------------------------------------------------------------
 ALPHA = "_ abcdefghijklmnopqrstuvwxyz"  # 0 is CTC's blank
-CTC_STEPS = 1500
+CTC_STEPS = 2000
 CTC_SEEDS = [0, 1, 2]
-CTC_CHECKS = [0, 50, 150, 400, 800, 1500]
+CTC_CHECKS = [0, 50, 150, 400, 900, 2000]
 
 
 def ctc_net(width=96):
@@ -781,6 +781,20 @@ def ctc_utterance(g, words_by_voice, strings, voices):
     return text, a
 
 
+def spec_augment(F_, g, n_freq=2, max_f=6, n_time=2, max_t=12):
+    """SpecAugment (Park et al., 2019), lightly: blank out a few bands of frequency and stretches of time."""
+    F_ = F_.copy()
+    for _ in range(n_freq):
+        w = int(g.integers(0, max_f + 1))
+        f0 = int(g.integers(0, F_.shape[0] - w + 1))
+        F_[f0:f0 + w] = 0.0
+    for _ in range(n_time):
+        w = int(g.integers(0, min(max_t, F_.shape[1] // 5) + 1))
+        t0 = int(g.integers(0, F_.shape[1] - w + 1))
+        F_[:, t0:t0 + w] = 0.0
+    return F_
+
+
 def run_ctc(cache, seed, log=print):
     import torch
     import torch.nn.functional as F
@@ -792,7 +806,7 @@ def run_ctc(cache, seed, log=print):
     seen = [(t, a) for v in VOICES_TRAIN for t, a in sv[v]]
     torch.manual_seed(seed)
     net = ctc_net()
-    opt = torch.optim.Adam(net.parameters(), lr=2e-3)
+    opt = torch.optim.Adam(net.parameters(), lr=1e-3)
     g = rng(300 + seed)
     steps = max(30, int(CTC_STEPS * SCALE))
     checks = sorted({min(c, steps) for c in CTC_CHECKS})
@@ -817,7 +831,9 @@ def run_ctc(cache, seed, log=print):
         if step == steps:
             break
         batch = [ctc_utterance(g, wv, sv, VOICES_TRAIN) for _ in range(16)]
-        feats = [logmel(a) for _, a in batch]
+        feats = [spec_augment(logmel(a), g) for _, a in batch]
+        for gr in opt.param_groups:  # warm up for 100 steps, then a cosine down to a tenth
+            gr["lr"] = 1e-3 * (min(1.0, (step + 1) / 100) * (0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * step / steps))))
         T = max(f.shape[1] for f in feats)
         x = torch.tensor(np.stack([np.pad(f, ((0, 0), (0, T - f.shape[1]))) for f in feats]))
         lens = torch.tensor([(f.shape[1] + 1) // 2 for f in feats])

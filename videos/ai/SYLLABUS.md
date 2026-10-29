@@ -114,7 +114,7 @@ meaning, a narrating camera, and live quantities. New instruments:
 | 25 | **Symmetry and Science** (GNNs, equivariance, AlphaFold, weather, maths) | new |
 | **V** | **Agency** | |
 | 26 | **Reinforcement Learning, from Bellman to AlphaZero** | new |
-| 27 | **Post-Training and Alignment** | new |
+| 27 | **complete**, English and Chinese (15 chapters; our own RLHF, DPO and reward model on the novels model) | 52 min |
 | 28 | Reasoning | 17 |
 | 29 | Agents and Worlds | 18 |
 | **Finale** | **** | |

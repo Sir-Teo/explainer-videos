@@ -160,7 +160,14 @@ ZH = {
         "几个月后，于立军和同事在他们的视频分词器MAGVIT-v2里把它推到了极致：免查表量化。<bookmark mark='a'/>每个数只保留正负号。d个数就有2的d次方个码，也就是一个立方体的各个角，一个二十五万的词表根本不需要表。<bookmark mark='b'/>为了让这些码物尽其用，他们加了一个熵项：每个输出都要有把握地靠近某一个角，而在整批数据里，所有角都要被用到。",
 
     'f"All five, at 256 codes,':
-        "五种方法，都是256个码，同样的网络、同样的步数、三个种子。<bookmark mark='a'/>两种不学码本的方法，{well}：FSQ的困惑度是{p['fsq']:.0f}，LFQ是{p['lfq']:.0f}，普通VQ是{p['vq']:.0f}。<bookmark mark='b'/>论误差，{say[order[0]]}第一，千分之{1000 * e[order[0]]:.1f}；其次是{say[order[1]]}，千分之{1000 * e[order[1]]:.1f}；{say[order[-1]]}最后，千分之{1000 * e[order[-1]]:.1f}。谷歌团队的论点不是FSQ全面胜出，而是它不需要VQ的任何修补就能和VQ相当。",
+        "五种方法，都是256个码，同样的网络、同样的步数、三个种子。<bookmark mark='a'/>困惑度：FSQ是{p['fsq']:.0f}，LFQ是{p['lfq']:.0f}，普通VQ是{p['vq']:.0f}。{fsq_cmp}；{lfq_cmp}。<bookmark mark='b'/>论误差，{say[order[0]]}第一，千分之{1000 * e[order[0]]:.1f}；其次是{say[order[1]]}，千分之{1000 * e[order[1]]:.1f}；{say[order[-1]]}最后，千分之{1000 * e[order[-1]]:.1f}。谷歌团队的论点不是FSQ全面胜出，而是它不需要VQ的任何修补就能和VQ相当。",
+
+    'FSQ uses its grid better than plain VQ uses its codebook':
+        "FSQ用它的网格，比普通VQ用它的码本更充分",
+    "LFQ, at its paper's entropy weight, does not":
+        "LFQ在论文的熵权重下则不然",
+    'FSQ uses its grid no better than plain VQ uses its codebook':
+        "FSQ用它的网格，并不比普通VQ用它的码本更充分",
 
     'f"One more trick, the one sound codecs rely on:':
         "还有一个技巧，声音编解码器都靠它：分级量化。<bookmark mark='a'/>第一级粗略地编码这个小块；第二级编码第一级漏掉的部分；然后第三级、第四级。小块被重建为它们的和。<bookmark mark='b'/>它比一本大码本更好吗？在比特数相同时不是。{at8}<bookmark mark='c'/>但残差的各级能一直往下走，而单一码本跟不上：十六比特需要一张65536项的表，而四级、每级16个码，只用64项就达到{rv[-1]:.3f}。这就是残差向量量化，几乎每个神经音频编解码器里都有它。",
@@ -291,7 +298,7 @@ ZH = {
         "图片和文字以两种方式相遇。<bookmark mark='a'/>2014年前后，网络学会了给照片配说明：一个视觉网络喂给一个语言模型，由它写出一句话。<bookmark mark='b'/>2021年，OpenAI的CLIP做了更简单的事。两个编码器，一个读图片，一个读文字，在网上四亿张图片和它们的说明上训练，让配对的两者得到相近的向量。然后它就能给从没训练过的类别分类：把每个类别写成一句说明，挑最接近的那个。在ImageNet上，这样得到76%，一个标签都没用。<bookmark mark='c'/>我们在字母上训练了一对小编码器，说明像“bold serif A”这样。这是一批数据：每张图片和每句说明都打了分，<bookmark mark='d'/>亮的对角线就是正确的配对。",
 
     'f"Part 24 showed that this kind of loss measures information.':
-        "第24部分说明了这类损失在度量信息。这里从打分函数的角度再看一次。<bookmark mark='a'/>这个损失要求每张图片从N句说明里挑出自己的那句。<bookmark mark='b'/>最好的分数，是给定图片时这句说明的可能性比它单独出现时高多少倍，再取对数。<bookmark mark='c'/>代进去，分子分母同除以真正配对那一项。<bookmark mark='d'/>随机说明很多时，每个比值平均为一，剩下的至少是log N减去图片和文字之间的互信息。所以log N减去损失，是这份信息的一个下界，而且永远超不过log N。<bookmark mark='e'/>我们的模型，在三种批大小下训练，各三个种子：估计值从批大小{Bs[0]}时的{e16:.2f}奈特，涨到{Bs[-1]}时的{e256:.2f}，被压在log N之下，而说明本身含有{H:.2f}奈特。批越大，越能量出图片和文字共有的东西。",
+        "第24部分说明了这类损失在度量信息。这里从打分函数的角度再看一次。<bookmark mark='a'/>这个损失要求每张图片从N句说明里挑出自己的那句。<bookmark mark='b'/>最好的分数，是给定图片时这句说明的可能性比它单独出现时高多少倍，再取对数。<bookmark mark='c'/>代进去，分子分母同除以真正配对那一项。<bookmark mark='d'/>随机说明很多时，每个比值平均为一，剩下的至少是log N减去图片和文字之间的互信息。所以log N减去损失，是这份信息的一个下界，而且永远超不过log N。<bookmark mark='e'/>在我们的模型上，分别用{Bs[0]}、{Bs[1]}和{Bs[-1]}个候选来测，三个种子：估计值从{e16:.2f}奈特涨到{e256:.2f}，被压在log N之下，而说明本身含有{H:.2f}奈特。这个上限属于测量本身：用{Bs[-1]}个候选来测时，用{Bs[0]}和{Bs[-1]}的批训练出来的模型，得分分别是{at_big[0]:.2f}和{at_big[-1]:.2f}。",
 
     'f"Here is that table while the two encoders learn.':
         "这是两个编码器学习时的那张表。<bookmark mark='a'/>一开始，每个分数都是噪声。每一批数据把配对的向量拉近，把其余的推开，对角线就亮了起来；共享一个字母或一种字体的配对仍有几分亮，因为它们本来就相像。<bookmark mark='b'/>现在来做CLIP出名的那个测试。我们把{nc}句说明里的{nh}句，比如“bold mono Q”这样的每一张图片，完全不放进训练。<bookmark mark='c'/>让它在全部{nc}句说明里挑，这些图片有{100 * un[Bmax].mean():.0f}%找到了完全正确的说明，{because}。",
@@ -375,8 +382,8 @@ PHRASES = {
     'VQ with EMA': '带EMA的VQ',
     'FSQ': 'FSQ',
     'LFQ': 'LFQ',
-    'use their codes well': '把码用得很好',
-    'do not use their codes better than VQ': '用码并不比VQ好',
+    'so does LFQ': 'LFQ也是',
+    "LFQ, at its paper's entropy weight, does not": 'LFQ在论文的熵权重下则不然',
     # sound and speech
     'falls': '下降',
     'barely changes': '几乎不变',
@@ -385,10 +392,10 @@ PHRASES = {
     # pictures and words
     'SigLIP is ahead at the smallest batch': '最小的批上SigLIP领先',
     'CLIP is ahead at the smallest batch': '最小的批上CLIP领先',
-    'the two are level at the smallest batch': '最小的批上两者持平',
+    'the seeds overlap at the smallest batch': '最小的批上各种子的结果互相重叠',
     'SigLIP is ahead at the largest': '最大的批上SigLIP领先',
     'CLIP is ahead at the largest': '最大的批上CLIP领先',
-    'level at the largest': '最大的批上持平',
+    'they overlap at the largest': '最大的批上也互相重叠',
     'letters appear as sharp spikes': '字母以尖锐的尖峰出现',
     'letters appear': '字母出现了',
 }
