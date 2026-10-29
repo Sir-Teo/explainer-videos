@@ -420,7 +420,6 @@
     "telling real from generated": "分辨真实与生成",
     "one transformer": "一个Transformer",
     "byte-pair encoding, \\ codebooks, \\ audio codecs, \\ speech recognition, \\ CLIP, \\ vision-language models": "字节对编码，\\ 码本，\\ 音频编解码器，\\ 语音识别，\\ CLIP，\\ 视觉语言模型",
-    "then Part 13's transformer: \\\\ attention and MLPs, \\\\ layer after layer": "接着是第13部分的Transformer：\\\\ 注意力和MLP，\\\\ 一层又一层",
     "diffusion works here": "扩散在这里进行",
     "$4$ channels": "$4$个通道",
     "$16$ channels": "$16$个通道",
@@ -490,7 +489,17 @@
     "raster order: \\ $256$ passes": "光栅顺序：\\ $256$遍",
     "VAR: \\ $10$ passes \\ ($680$ tokens on $10$ scales)": "VAR：\\ $10$遍 \\ （$10$个尺度上的$680$个词元）",
     "a $256 \\times 256$ ImageNet picture \\ (as published)": "一张$256 \\times 256$的ImageNet图片 \\ （按已发表的数据）",
-    "frame by frame, \\ like text: \\ each frame from the ones before \\ (causal attention)": "一帧一帧地写，\\ 像写文字：\\ 每一帧都由前面的帧得出 \\ （因果注意力）"
+    "frame by frame, \\ like text: \\ each frame from the ones before \\ (causal attention)": "一帧一帧地写，\\ 像写文字：\\ 每一帧都由前面的帧得出 \\ （因果注意力）",
+    "then Part 13's transformer: \\ attention and MLPs, \\ layer after layer": "接着是第13部分的Transformer：\\ 注意力和MLP，\\ 一层又一层",
+    "in-context": "上下文方式",
+    "adaLN": "adaLN",
+    "scale, shift, \\ gate $= 0$": "缩放，平移，\\ 门控$= 0$",
+    "weights: \\ in-context $213{,}968$, \\ adaLN $287{,}568$, \\ adaLN-Zero $320{,}848$; \\ same steps, \\ data and seeds; \\ after $2{,}000$ steps; \\ three seeds: \\ dots, \\ bars min to max": "权重：\\ 上下文方式$213{,}968$，\\ adaLN $287{,}568$，\\ adaLN-Zero $320{,}848$；\\ 同样的步数、\\ 数据和种子；\\ 训练$2{,}000$步后；\\ 三个种子：\\ 点，\\ 竖条为最小到最大",
+    "guidance $w = 2$ \\ (Part 21), \\ $40$ steps": "引导$w = 2$ \\ （第21部分），\\ $40$步",
+    "velocity": "速度",
+    "\\mathcal{L} = \\mathcal{L}_{\\text{flow}} \\;+\\; \\lambda \\cdot \\frac{1}{N}\\sum_{n=1}^{N}\\Big(1 - \\cos\\big(h_\\phi(z_n),\\ y_n\\big)\\Big)": "\\mathcal{L} = \\mathcal{L}_{\\text{flow}} \\;+\\; \\lambda \\cdot \\frac{1}{N}\\sum_{n=1}^{N}\\Big(1 - \\cos\\big(h_\\phi(z_n),\\ y_n\\big)\\Big)",
+    "teacher: \\ chapter 1's vision transformer, \\ frozen; \\ REPA after block $2$ of $4$, \\ $\\lambda = 0.5$; \\ three seeds each, \\ bands: \\ min to max": "老师：\\ 第1章的视觉Transformer，\\ 冻结；\\ REPA放在第$2$块之后（共$4$块），\\ $\\lambda = 0.5$；\\ 各三个种子，\\ 色带：\\ 最小到最大",
+    "U-Net: \\ $370{,}281$ weights, \\ $28.5$ million multiply-adds a picture; \\ DiT: \\ $320{,}848$ weights, \\ $3.4$ million": "U-Net：\\ $370{,}281$个权重，\\ 每张图$2850$万次乘加；\\ DiT：\\ $320{,}848$个权重，\\ $340$万次"
   },
   "patterns": [
     [

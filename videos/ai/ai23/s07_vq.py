@@ -52,6 +52,7 @@ class VQ(VoiceoverScene):
         recs.move_to([2.3, -2.45, 0])
         rl = VGroup(*[label(rf"${k:,}$: \ ${float(v[f'err_vq{k}']):.3f}$".replace(",", "{,}"), font_size=18, color=IMG_C)
                       .next_to(r, DOWN, buff=0.08) for k, r in zip(sizes, recs)])
+        size_list = ", ".join(f"{k:,}" for k in sizes[:-1])
         km_g = np.random.default_rng(6)
         km_pts = np.concatenate([m + km_g.normal(0, 0.32, (8, 2)) for m in ([-1.3, 0.6], [1.2, 0.9], [0.1, -0.9])])
         km_dots = VGroup(*[Dot([x, y, 0], radius=0.07, color=GREY_B) for x, y in km_pts])
@@ -68,7 +69,7 @@ class VQ(VoiceoverScene):
             "nearest guess, move each guess to the average of its patches, and repeat. <bookmark mark='b'/> Now a "
             "picture is a sequence of numbers from zero to fifteen: each patch is replaced by its nearest code. "
             "<bookmark mark='c'/> With more codes the copy comes closer; the numbers are the error per pixel, on "
-            f"held-out patches, for {', '.join(f'{k:,}' for k in sizes[:-1])} and {sizes[-1]:,} codes."
+            f"held-out patches, for {size_list} and {sizes[-1]:,} codes."
         ) as vo:
             self.play(FadeIn(tiles), FadeIn(ol))
             self.play(*[t_.animate.move_to(x) for t_, x in zip(tiles, spread)], run_time=1.2)
