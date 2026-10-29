@@ -247,7 +247,13 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
             rate, _ = catch_rate(eval_eps, np.random.default_rng(5000 + it))
             curve.append((it, rep.steps, rate))
             if log:
-                log(f"      seed {seed} iter {it:3d}  env steps {rep.steps:5d}  catch rate {rate:.2f}")
+                with torch.no_grad():
+                    o, a, r = rep.sample(np.random.default_rng(it), 32, L)
+                    hs, zs, _, _ = wm.observe(torch.tensor(o), torch.tensor(a))
+                    pr = symexp(wm.rew(torch.cat([hs, zs], -1))[..., 0]).numpy()
+                diag = " ".join(f"{pr[r == v].mean():+.2f}" if (r == v).any() else "nan" for v in (-1, 0, 1))
+                log(f"      seed {seed} iter {it:3d}  env steps {rep.steps:5d}  catch rate {rate:.2f}  reward head "
+                    f"(on -1, 0, +1): {diag}  return range {float(ret_hi - ret_lo) if ret_lo is not None else 0:.2f}")
         if it == iters:
             break
         for k in range(steps_per_iter):
