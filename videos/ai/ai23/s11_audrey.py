@@ -35,7 +35,9 @@ class Audrey(VoiceoverScene):
         # Audrey's display, schematic: the low band's frequency against the high band's, a stored region per digit
         sax = Axes(x_range=[0, 1, 1], y_range=[0, 1, 1], x_length=4.2, y_length=3.2, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 0.3, 0])
-        gpos = np.random.default_rng(52).uniform(0.12, 0.88, (10, 2))
+        jit = np.random.default_rng(52).uniform(-0.05, 0.05, (10, 2))
+        gpos = np.array([[0.12 + 0.19 * (k % 5), 0.3 + 0.42 * (k // 5)] for k in range(10)]) + jit
+        gpos = gpos[np.random.default_rng(7).permutation(10)]
         regions = VGroup(*[VGroup(Ellipse(width=0.62, height=0.4, color=HIST_C, stroke_width=1.5).move_to(sax.c2p(*p_)),
                                   MathTex(str(k), font_size=20, color=HIST_C).move_to(sax.c2p(*p_)))
                            for k, p_ in enumerate(gpos)])
@@ -163,10 +165,10 @@ class Audrey(VoiceoverScene):
             "as the model of sound. The next question was whether a network could learn the whole thing, without "
             "being told which frame is which sound."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(tag))
+            self.play(FadeIn(cite_), FadeIn(tag), LaggedStart(*[FadeIn(VGroup(s, l_)) for s, l_ in zip(states, sl)],
+                                                               lag_ratio=0.2), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(VGroup(s, l_)) for s, l_ in zip(states, sl)], lag_ratio=0.2),
-                      LaggedStart(*[GrowArrow(a_) for a_ in arr], lag_ratio=0.2), FadeIn(loops), run_time=2.0)
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in arr], lag_ratio=0.2), FadeIn(loops), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(gm), FadeIn(gl))
             vo.wait_until("c")
