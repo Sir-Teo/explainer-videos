@@ -145,6 +145,9 @@ class AdaLN(VoiceoverScene):
         for a_, im in zip(asked, r0):
             a_.next_to(im, UP, buff=0.08)
         hi = float(np.percentile(L[:, 1], 99))
+        loss0 = float(L[0, 1])
+        L = L.copy()
+        L[:, 1] = np.minimum(L[:, 1], hi * 1.04)  # the first few averages run off the top: pin them to it
         ax = axes([0, total], [0, hi * 1.05], x_length=8.0, y_length=2.4, xlabel=r"training step \ ($64$ noisy letters each)",
                   ylabel=r"flow-matching loss \ (average of $50$ steps)", xticks=[0, total // 2, total],
                   yticks=[0, round(hi / 2, 2)], center=[0, -1.7, 0], font_size=18, xfmt=lambda x: fmt_int(x))
@@ -163,7 +166,7 @@ class AdaLN(VoiceoverScene):
             f"<bookmark mark='a'/> At step {steps[0]} every block is still the identity, so the noise passes "
             f"straight through. <bookmark mark='b'/> At step {steps[3]:,} the judge reads {reads[3]} of the ten as "
             f"the letters requested; <bookmark mark='c'/> at step {steps[j]:,}, {reads[j]}; <bookmark mark='d'/> at "
-            f"the end, {reads[-1]}. Meanwhile the loss falls from {L[0, 1]:.2f} to {L[-1, 1]:.2f}."
+            f"the end, {reads[-1]}. Meanwhile the loss falls from {loss0:.2f} to {L[-1, 1]:.2f}."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(asked), FadeIn(r0), Create(ax))
             self.add(dot, cnt)

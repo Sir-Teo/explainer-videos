@@ -102,8 +102,9 @@ class Prompt(VoiceoverScene):
             "next chapter's model changes that."
         ) as vo:
             self.play(FadeIn(pic[1]), FadeIn(pic[2]), FadeIn(pic[5]), FadeIn(cite_))
+            self.play(FadeIn(pic[0]), FadeIn(pic[4]))
             vo.wait_until("a")
-            self.play(FadeIn(pic[0]), FadeIn(pic[4]), LaggedStart(*[Create(l_) for l_ in pic[3]], lag_ratio=0.02), run_time=2.0)
+            self.play(LaggedStart(*[Create(l_) for l_ in pic[3]], lag_ratio=0.02), run_time=2.0)
             vo.wait_until("b")
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("c")

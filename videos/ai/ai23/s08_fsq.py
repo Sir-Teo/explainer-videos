@@ -120,7 +120,7 @@ class FSQ(VoiceoverScene):
         strip = Group()
         for m in ["orig"] + meth:
             ims = test if m == "orig" else np.asarray(d[f"recon_{m}"])[-1]
-            row = Group(*[gray_image(ims[i], 0.55) for i in range(6)]).arrange(RIGHT, buff=0.05)
+            row = Group(*[gray_image(ims[i], 0.72) for i in range(3)]).arrange(RIGHT, buff=0.05)
             strip.add(row)
         strip.arrange(RIGHT, buff=0.3)
         if strip.width > 13:
@@ -167,7 +167,7 @@ class FSQ(VoiceoverScene):
         c2 = curve(ax.ax, bits2, rv, C.INTERVAL, 3.5)
         d2 = VGroup(*[Dot(ax.ax.c2p(b_, e_), radius=0.07, color=C.INTERVAL) for b_, e_ in zip(bits2, rv)])
         leg = legend([(IMG_C, r"one codebook \ ($16$ to $1{,}024$ codes)"),
-                      (C.INTERVAL, r"stages of $16$ codes, \ residual")], font_size=20).next_to(ax, UP, buff=0.2).align_to(ax, LEFT)
+                      (C.INTERVAL, r"stages of $16$ codes, \ residual")], font_size=20).move_to([3.4, -1.3, 0])
         f = cmath(r"\hat x", "=", r"c^{(1)}_{i_1} + c^{(2)}_{i_2} + c^{(3)}_{i_3} + c^{(4)}_{i_4}", colors={r"\hat x": C.INTERVAL},
                   font_size=34).move_to([3.4, 2.4, 0])
         fl = label(r"each stage codes what the earlier ones missed", font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.12)
