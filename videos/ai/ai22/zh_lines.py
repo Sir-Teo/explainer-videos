@@ -472,11 +472,15 @@ ZH = {
         "读图和画图需要不同的眼睛，于是给了它两个编码器。<bookmark mark='d'/>字节跳动的BAGEL给两项工作各配了一个Transformer专家，共享同一个注意力，"
         "在数万亿个混合词元上训练；自由形式的编辑能力自己冒了出来。",
 
-    'f"We built a tiny Transfusion:':
+    'One network does both, though drawing lags':
+        '一个网络两样都能做，只是画画落在后面',
+
+    '"We built a tiny Transfusion:':
         "我们搭了一个很小的Transfusion：一个Transformer，用三种序列训练，每个批次里都混在一起。<bookmark mark='a'/>画：一个风格和一个字母，"
         "然后是一张图片，从噪声开始。命名：一张图片，然后用文字写出它的字母和风格。编辑：一张图片，一个词“粗体”，然后是同一个字母在它那种字体里的粗体。"
         "<bookmark mark='b'/>注意力从左到右，只有在一张图片内部，所有图块互相都能看到。<bookmark mark='c'/>文字词元用下一词元的交叉熵；"
-        "正在画的那张图片的图块用流匹配。<bookmark mark='d'/>一个网络两样都学会了：对没见过的字体，它能说出{100 * na.mean():.0f}%的字母，"
+        "正在画的那张图片的图块用流匹配。它的模块用的是第6章的adaLN-Zero：每个图块的噪声水平，加上目前读到的提示，设定它的缩放和门控。"
+        "<bookmark mark='d'/>{both}：对没见过的字体，它能说出{100 * na.mean():.0f}%的字母，"
         "它画的图有{100 * da.mean():.0f}%被读成所要求的字母。",
 
     'f"Here it is learning: four terms of one loss':
@@ -741,6 +745,7 @@ PHRASES = {
     'NeRF matches the photographs more closely': 'NeRF和照片更吻合',
     'the two match the photographs about equally well': '两者和照片吻合得差不多',
     'a single sampling step': '只采样一步',
+    'One network learns both': '一个网络两样都学会了',
     '2 sampling steps': '采样2步',
     '4 sampling steps': '采样4步',
     '8 sampling steps': '采样8步',

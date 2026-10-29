@@ -124,6 +124,10 @@ class Unified(VoiceoverScene):
                        r" \;+\; \underbrace{\textstyle\sum \|v_\theta(z_t) - (x - \varepsilon)\|^2}_{\text{picture patches}}",
                        font_size=28).move_to([-3.0, -1.7, 0])
         na, fa, da = (np.asarray(u[k], float) for k in ("name_acc", "fam_acc", "draw_acc"))
+        if da.mean() >= 0.5:
+            both = "One network learns both"
+        else:
+            both = "One network does both, though drawing lags"
         res = VGroup(label(rf"names held-out letters: \ ${100 * na.mean():.0f}\%$ \ (family ${100 * fa.mean():.0f}\%$)",
                            font_size=22, color=TXT),
                      label(rf"draws the letter asked for: \ ${100 * da.mean():.0f}\%$", font_size=22, color=PATCH)
@@ -136,7 +140,8 @@ class Unified(VoiceoverScene):
             "letter and its style, as text. Edit: a picture, the word bold, then the same letter in the bold of its "
             "font. <bookmark mark='b'/> Attention runs left to right, except inside a picture, whose patches all see "
             "each other. <bookmark mark='c'/> Text tokens get next-token cross-entropy; the patches of the picture "
-            "being drawn get flow matching. <bookmark mark='d'/> One network learns both: it names "
+            "being drawn get flow matching. Its blocks are chapter 6's adaLN-Zero: each patch's noise level, with "
+            "the prompt read so far, sets its scales and gates. <bookmark mark='d'/> " + both + ": it names "
             f"{100 * na.mean():.0f} percent of letters from fonts it never saw, and {100 * da.mean():.0f} percent of "
             "its drawings are read as the letter asked for."
         ) as vo:

@@ -25,7 +25,7 @@ BOS, BOI, EOI, BOLD, NULL = 29, 30, 31, 32, 33
 V = 34
 D, L, H = 64, 4, 4
 SEEDS = (0, 1, 2)
-N_STEPS, BB = 6000, 24  # steps; pictures per task per batch (text conditioning in context learns slowly)
+N_STEPS, BB = 8000, 24  # steps; pictures per task per batch
 GUIDE = 2.0
 SHORTCUT = True  # see Unified.forward
 
@@ -279,10 +279,14 @@ def compute_unified():
     want = np.repeat(np.arange(26), 10)
     fams = np.tile(np.arange(3), 87)[:len(want)]
     he = np.where(~tr_e)[0]
-    part = CACHE.partial("unified", dict(seeds=SEEDS, steps=n, D=D, L=L, bb=BB, held=held, guide=GUIDE))
+    # one resumable file per seed, so seeds can train in separate processes (AI22_UNI_SEEDS=1 python -m ...)
+    parts = {s_: CACHE.partial(f"unified_s{s_}", dict(steps=n, D=D, L=L, bb=BB, held=held, guide=GUIDE,
+                                                      shortcut=SHORTCUT, blocks="adaLN-Zero")) for s_ in SEEDS}
+    only = [int(x) for x in os.environ.get("AI22_UNI_SEEDS", "").split(",") if x]
     for seed in SEEDS:
         key = f"s{seed}"
-        if key in part:
+        part = parts[seed]
+        if key in part or (only and seed not in only):
             continue
         t0 = time.time()
         m, curve = train(seed, data, n)
@@ -310,6 +314,10 @@ def compute_unified():
         print(f"    unified s{seed}: names {r['name_acc']:.3f} (family {r['fam_acc']:.3f}); draws right letter "
               f"{r['draw_acc']:.3f}, FD {r['draw_fd']:.1f}; held-out edit RMSE {r['edit_rmse']:.3f} (copying "
               f"{r['copy_rmse']:.3f}), ink x{r['edit_ink']:.2f} (true x{r['true_ink']:.2f}); {r['secs']:.0f}s", flush=True)
+    missing = [s_ for s_ in SEEDS if f"s{s_}" not in parts[s_]]
+    if missing:
+        raise SystemExit(f"unified: seeds {missing} still to train")
+    part = {f"s{s_}": parts[s_][f"s{s_}"] for s_ in SEEDS}
     out = dict(seeds=list(SEEDS), steps=n, D=D, L=L, bb=BB, held=[pair_names[k] for k in held],
                pairs=[list(p_) for p_ in pair_names], params=part["s0"]["params"], guide=GUIDE)
     for f_ in ("name_acc", "fam_acc", "draw_acc", "draw_fd", "edit_rmse", "copy_rmse", "edit_ink", "true_ink", "edit_letter"):

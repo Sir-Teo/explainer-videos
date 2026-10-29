@@ -3,7 +3,8 @@
 
 * the world model is a recurrent state-space model (RSSM): a deterministic memory h (a GRU) and a stochastic state z
   (8 categorical variables of 8 classes, sampled with straight-through gradients and 1% uniform mixing, as in V3);
-  from (h, z) it decodes the picture (a Bernoulli per pixel) and the reward (regressed in symlog space);
+  from (h, z) it decodes the picture (a Bernoulli per pixel) and the reward (in symlog space, as a distribution
+  over 41 bins trained on two-hot targets, as in V3);
 * the KL term is balanced (V3): 0.5 KL(sg(q) || p) trains the prior towards the posterior, 0.1 KL(q || sg(p))
   keeps the posterior predictable, each clipped below at one nat ("free bits");
 * the actor and the critic learn only in imagination: from states of real sequences, the world model dreams 15
@@ -40,6 +41,32 @@ def symexp(x):
     return torch.sign(x) * (torch.exp(torch.abs(x)) - 1)
 
 
+NB = 41  # symlog bins for the reward: two-hot targets, as in DreamerV3
+BIN_LO, BIN_HI = -4.0, 4.0
+
+
+def twohot(y):
+    """y (any shape, already in symlog space) -> (..., NB) weights on the two nearest bins."""
+    import torch
+
+    y = y.clamp(BIN_LO, BIN_HI)
+    pos = (y - BIN_LO) / (BIN_HI - BIN_LO) * (NB - 1)
+    lo = pos.floor().long().clamp(0, NB - 2)
+    w = pos - lo
+    out = torch.zeros(*y.shape, NB)
+    out.scatter_(-1, lo[..., None], (1 - w)[..., None])
+    out.scatter_add_(-1, (lo + 1)[..., None], w[..., None])
+    return out
+
+
+def decode_bins(logits):
+    """The expected value of the bins' distribution, back from symlog space."""
+    import torch
+
+    bins = torch.linspace(BIN_LO, BIN_HI, NB)
+    return symexp((torch.softmax(logits, -1) * bins).sum(-1))
+
+
 def build(torch):
     nn = torch.nn
 
@@ -60,7 +87,7 @@ def build(torch):
             self.prior = mlp(HD, ZD, 128, 1)
             self.post = mlp(HD + 128, ZD, 128, 1)
             self.dec = mlp(HD + ZD, NPIX, 256, 1)
-            self.rew = mlp(HD + ZD, 1, 128, 1)
+            self.rew = mlp(HD + ZD, NB, 128, 1)
 
         @staticmethod
         def dist(logits):
@@ -160,7 +187,7 @@ def run_episode(env, policy, g):
 
 
 def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0.95, kl_dyn=0.5, kl_rep=0.1,
-          free=1.0, ent=3e-3, starts=256, train_policy=True, init_eps=8, eval_every=5, eval_eps=6, snap_iters=(0, 10, 30, 60),
+          free=1.0, ent=3e-3, starts=256, rew_w=1.0, train_policy=True, init_eps=8, eval_every=5, eval_eps=6, snap_iters=(0, 10, 30, 60),
           log=None):
     import torch
 
@@ -250,7 +277,7 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
                 with torch.no_grad():
                     o, a, r = rep.sample(np.random.default_rng(it), 32, L)
                     hs, zs, _, _ = wm.observe(torch.tensor(o), torch.tensor(a))
-                    pr = symexp(wm.rew(torch.cat([hs, zs], -1))[..., 0]).numpy()
+                    pr = decode_bins(wm.rew(torch.cat([hs, zs], -1))).numpy()
                 diag = " ".join(f"{pr[r == v].mean():+.2f}" if (r == v).any() else "nan" for v in (-1, 0, 1))
                 log(f"      seed {seed} iter {it:3d}  env steps {rep.steps:5d}  catch rate {rate:.2f}  reward head "
                     f"(on -1, 0, +1): {diag}  return range {float(ret_hi - ret_lo) if ret_lo is not None else 0:.2f}")
@@ -262,10 +289,10 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
             hs, zs, pri, pos = wm.observe(o, a)
             fe = torch.cat([hs, zs], -1)
             rec = torch.nn.functional.binary_cross_entropy_with_logits(wm.dec(fe), o, reduction="none").sum(-1).mean()
-            rl = ((wm.rew(fe)[..., 0] - symlog(r)) ** 2).mean()
+            rl = -(twohot(symlog(r)) * torch.log_softmax(wm.rew(fe), -1)).sum(-1).mean()
             k_dyn = kl(pos.detach(), pri)
             k_rep = kl(pos, pri.detach())
-            loss = rec + rl + kl_dyn * torch.clamp(k_dyn, min=free).mean() + kl_rep * torch.clamp(k_rep, min=free).mean()
+            loss = rec + rew_w * rl + kl_dyn * torch.clamp(k_dyn, min=free).mean() + kl_rep * torch.clamp(k_rep, min=free).mean()
             o_wm.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(wm.parameters(), 100.0)
@@ -289,7 +316,7 @@ def train(seed, iters=60, steps_per_iter=40, B=16, L=32, H=15, gamma=0.97, lam=0
                     z = wm.sample(wm.dist(wm.prior(h)))
                     feats.append(torch.cat([h, z], -1))
                 F = torch.stack(feats, 0)  # (H+1, N, feat)
-                rew = symexp(wm.rew(F[1:])[..., 0])  # reward on arriving
+                rew = decode_bins(wm.rew(F[1:]))  # reward on arriving
                 v = target(F)[..., 0]
                 R = [v[-1]]
                 for t in range(H - 1, -1, -1):
