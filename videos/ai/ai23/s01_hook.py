@@ -66,12 +66,13 @@ class Hook(VoiceoverScene):
                  (r"WaveNet", SND_C), (r"CLIP", IMG_C), (r"Whisper", SND_C), (r"models that listen \\ while they speak", WHITE)]
         path = VGroup()
         for i, (t, c_) in enumerate(steps):
-            path.add(label(t, font_size=24, color=c_))
+            path.add(label(t, font_size=28, color=c_))
             if i < len(steps) - 1:
-                path.add(MathTex(r"\to", font_size=30, color=GREY_B))
-        path.arrange(RIGHT, buff=0.18).move_to(UP * 0.1)
-        if path.width > 13.2:
-            path.width = 13.2
+                path.add(MathTex(r"\to", font_size=34, color=GREY_B))
+        rows = VGroup(VGroup(*path[:8]).arrange(RIGHT, buff=0.2), VGroup(*path[8:]).arrange(RIGHT, buff=0.2))
+        rows.arrange(DOWN, buff=0.35).move_to(UP * 0.1)
+        if rows.width > 13.2:
+            rows.width = 13.2
         ours = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
             (r"tokenizers", TEXT_C), (r"codebooks", IMG_C), (r"a speech codec", SND_C), (r"a speech recognizer", SND_C),
             (r"a picture-and-caption model", IMG_C))]).arrange(RIGHT, buff=0.45)
@@ -87,7 +88,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> And we'll build small versions on the computer making this video: tokenizers, "
             "codebooks, a speech codec, a speech recognizer, and a model that matches pictures with captions."
         ) as vo:
-            self.play(FadeIn(q))
+            self.play(FadeIn(q), FadeIn(path.copy().set_opacity(0.18)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in path], lag_ratio=0.12), run_time=3.5)
             vo.wait_until("b")
