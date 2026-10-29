@@ -418,21 +418,28 @@ def lane_learn(lane, method, N, seed, history=False):
         for _ in range(N // L):
             lane_add(counts, lane, *lane.rollout(None, L, g))
             if history:
-                hist.append(lane_table(counts, lane.S, lane.D, 100 + seed).copy())
+                hist.append(np.concatenate([lane_table(counts, lane.S, lane.D, 100 + seed), _seen(counts, lane)]))
         return lane_table(counts, lane.S, lane.D, 100 + seed), hist
     lane_add(counts, lane, *lane.rollout(None, L, g))
     tab = lane_table(counts, lane.S, lane.D, 100 + seed)
     drives = []
     if history:
-        hist.append(tab.copy())
+        hist.append(np.concatenate([tab, _seen(counts, lane)]))
     for _ in range(N // L - 1):
         ds, os_ = lane.rollout(tab, L, g)
         drives.append(ds)
         lane_add(counts, lane, ds, os_)
         tab = lane_table(counts, lane.S, lane.D, 100 + seed)
         if history:
-            hist.append(tab.copy())
+            hist.append(np.concatenate([tab, _seen(counts, lane)]))
     return tab, (hist, drives)
+
+
+def _seen(counts, lane):
+    m = np.zeros(lane.S, int)
+    for o in counts:
+        m[o + lane.D] = 1
+    return m
 
 
 def compute_lane(seeds=8, T=400, N=400, budgets=(50, 100, 200, 400, 800, 1600)):
@@ -473,7 +480,7 @@ def compute_lane(seeds=8, T=400, N=400, budgets=(50, 100, 200, 400, 800, 1600)):
     _, (hist, drives) = lane_learn(lane, "dagger", N, 0, history=True)
     out["dagger_hist"] = np.array(hist)
     out["dagger_drives"] = np.array(drives)
-    out["dagger_hist_J"] = np.array([lane.run(t_, T)[0][-1] for t_ in hist])
+    out["dagger_hist_J"] = np.array([lane.run(t_[:lane.S], T)[0][-1] for t_ in hist])  # rows: table, then seen
     # sampled drives for the pictures: seed 0's learners and the expert, the same wind and camera for all three
     for name, tab in (("expert", None), ("bc", out["bc_tabs"][0]), ("dagger", out["dagger_tabs"][0])):
         out[f"drives_{name}"] = np.array([lane.rollout(tab, 120, rng(900 + k))[0] for k in range(12)])
@@ -982,6 +989,11 @@ def compute_randomize():
             maps.append(m)
         out[f"{method}_map"] = np.array(maps)
         _log(f"    {method}: nominal {out[f'{method}_nominal'].mean():.0f}, real {out[f'{method}_real'].mean():.0f}")
+    # one episode on the "real" cart-pole for each method's seed-0 policy, for the picture
+    from .envs import cartpole_trace
+
+    for method in ("nominal", "randomized"):
+        out[f"{method}_trace"] = cartpole_trace(out[f"{method}_W"][0], P["real"], rng(4))
     out["grid_l"] = np.linspace(*P["grid_l"], P["grid_n"])
     out["grid_F"] = np.linspace(*P["grid_F"], P["grid_n"])
     return out

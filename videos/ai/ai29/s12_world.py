@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai29.compute import load
+from videos.ai.ai29.common import AGENT, HIST, MODEL, PART, load, node_box
 
 
 def gray(a, size, color=None) -> ImageMobject:
@@ -18,15 +18,57 @@ def gray(a, size, color=None) -> ImageMobject:
 class World(VoiceoverScene):
     def construct(self):
         self.card()
+        self.history()
         self.model()
         self.learning()
         self.imagine()
 
     def card(self):
-        card = chapter_card(3, r"World models", r"Can an agent imagine what happens next?", part=29)
-        with self.voiceover("Chapter three. World models."):
+        card = chapter_card(11, r"World models", r"Can an agent imagine what happens next?", part=PART)
+        with self.voiceover("Chapter eleven. World models."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def history(self):
+        V = node_box(r"V: \ a VAE squeezes \ each frame", C.TRUE_P, 22, height=1.0)
+        M = node_box(r"M: \ a recurrent network \ predicts what comes next", MODEL, 22, height=1.0)
+        Cc = node_box(r"C: \ a tiny linear \ controller", AGENT, 22, height=1.0)
+        row = VGroup(V, M, Cc).arrange(RIGHT, buff=0.7).move_to([0, 1.7, 0])
+        arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B) for a, b in zip(row, row[1:])])
+        cards = VGroup(
+            history_card(1990, r"Dyna \ (Sutton); \ Schmidhuber's recurrent world models", r"learn a model of the "
+                         r"world, \ and practise in it between real steps", width=4.2, color=HIST, font_size=18),
+            history_card(2018, r"World Models \ (Ha \& Schmidhuber)", r"car racing from pixels, \ score $906$: \ the first "
+                         r"to pass $900$; \ and a VizDoom agent trained entirely inside its own dream", width=4.2,
+                         color=HIST, font_size=18),
+            history_card(2019, r"MuZero \ (Part 26)", r"a model of only what planning needs: \ value, \ policy, \ "
+                         r"reward, \ never the pixels", width=4.2, color=HIST, font_size=18),
+        ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "An agent that can predict the results of its actions can try things out in its head before doing "
+            "them. <bookmark mark='a'/> The idea is old. Around 1990 Richard Sutton's Dyna learned a model of the "
+            "world and practised in it between real steps, and Jürgen Schmidhuber built recurrent networks that "
+            "modelled their world. <bookmark mark='b'/> In 2018 David Ha and Schmidhuber made it vivid. A "
+            "variational autoencoder squeezes each frame of a game, <bookmark mark='c'/> a recurrent network "
+            "learns to predict the next squeezed frame, <bookmark mark='d'/> and a tiny controller acts on both. It "
+            "was the first to score over nine hundred at a car-racing game from pixels, and in VizDoom it was "
+            "trained entirely inside its own dream. <bookmark mark='e'/> MuZero, in Part 26, went the other way: a "
+            "model of only what planning needs, never the pixels."
+        ) as vo:
+            self.play(FadeIn(row[0]), FadeIn(row[1]), FadeIn(row[2]))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[0], shift=UP * 0.15))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[1], shift=UP * 0.15), Indicate(V, color=C.TRUE_P))
+            vo.wait_until("c")
+            self.play(GrowArrow(arr[0]), Indicate(M, color=MODEL))
+            vo.wait_until("d")
+            self.play(GrowArrow(arr[1]), Indicate(Cc, color=AGENT))
+            vo.wait_until("e")
+            self.play(FadeIn(cards[2], shift=UP * 0.15))
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def model(self):

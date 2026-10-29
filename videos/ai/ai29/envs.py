@@ -147,9 +147,9 @@ class Track:
 # Catch: a ball falls; a paddle at the bottom must be under it
 # ---------------------------------------------------------------------------
 class Catch:
-    """12 x 12 pixels.  The ball starts in the top row at a random column, falls one row a step and drifts one column
+    """12 x 12 pixels.  The ball (drawn 2 x 2) starts in the top row at a random column, falls one row a step and drifts one column
     left or right (or not at all), bouncing off the walls.  The paddle, 3 pixels wide on the bottom row, moves left,
-    stays, or moves right.  When the ball reaches the bottom row the reward is +1 if the paddle is under it and -1 if
+    stays, or moves right.  When the ball reaches the bottom row the reward is +1 if the paddle touches it and -1 if
     not, and a new ball appears.  An episode is ``drops`` balls."""
 
     S = 12
@@ -168,8 +168,11 @@ class Catch:
         return self.obs()
 
     def obs(self):
+        """The ball drawn as a 2 x 2 block (its cell, the one to its right, and the two above), so that it is not a
+        single easily-ignored pixel; the paddle as 3 pixels on the bottom row."""
         o = np.zeros((self.S, self.S), np.float32)
-        o[self.by, self.bx] = 1.0
+        r0, c0 = max(self.by - 1, 0), min(self.bx, self.S - 2)
+        o[r0:self.by + 1, c0:c0 + 2] = 1.0
         o[self.S - 1, max(self.px - 1, 0):self.px + 2] = 1.0
         return o
 
@@ -183,7 +186,8 @@ class Catch:
         self.bx = nx
         r = 0.0
         if self.by == self.S - 1:
-            r = 1.0 if abs(self.bx - self.px) <= 1 else -1.0
+            c0 = min(self.bx, self.S - 2)  # the block's left column: caught if it overlaps the paddle
+            r = 1.0 if self.px - 2 <= c0 <= self.px + 1 else -1.0
             self.done_drops += 1
             o = self.obs()  # the ball shown on the bottom row, then a new one
             self._new_ball()
@@ -283,3 +287,28 @@ def detour_demo(g, steps=40):
     bump = side * (OBST[2] + 0.22 + 0.04 * g.standard_normal()) * np.exp(-((x - OBST[0]) / 0.42) ** 2)
     y = y0 * (1 - min_jerk(t)) + bump
     return np.stack([x, y], 1)
+
+
+def cartpole_trace(w, par, g, horizon=500):
+    """One episode of the linear policy ``w`` (5,) with the physics ``par``: the states (t, 4) until it falls."""
+    l, mp, mc, F = par["l"], par["mp"], par["mc"], par["F"]
+    s = g.uniform(-0.05, 0.05, 4)
+    prev, out = 1.0, [s.copy()]
+    for _ in range(horizon):
+        obs = s + par["noise"] * g.standard_normal(4) * np.array([0.1, 0.3, 0.02, 0.3])
+        act = float(obs @ w[:4] + w[4] > 0)
+        a = prev if par["delay"] else act
+        prev = act
+        f = F if a > 0 else -F
+        x, xd, th, thd = s
+        ct, st = np.cos(th), np.sin(th)
+        m = mc + mp
+        temp = (f + mp * l * thd ** 2 * st) / m
+        tha = (CartPole.g * st - ct * temp) / (l * (4 / 3 - mp * ct ** 2 / m))
+        xa = temp - mp * l * tha * ct / m
+        dt = CartPole.dt
+        s = np.array([x + dt * xd, xd + dt * xa, th + dt * thd, thd + dt * tha])
+        out.append(s.copy())
+        if abs(s[0]) > CartPole.x_max or abs(s[2]) > CartPole.theta_max:
+            break
+    return np.array(out)
