@@ -106,7 +106,8 @@ class Clip(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.6, align_index=None, buff=0.25, edge=6.9)
         Bs = [int(b) for b in c["batches"]]
         k = {B: i for i, B in enumerate(Bs)}
-        est = [np.asarray(c[f"mi_clip_{B}"], float)[:, k[B]] for B in Bs]
+        est = [np.asarray(c[f"mi_clip_{Bs[-1]}"], float)[:, k[B]] for B in Bs]  # one model, N candidates
+        at_big = [float(np.mean(np.asarray(c[f"mi_clip_{B}"], float)[:, -1])) for B in Bs]  # trained at B, N = 256
         H = float(c["H_caption"])
         x0, w = 2.6, 0.9
         sy = 0.3
@@ -124,7 +125,8 @@ class Clip(VoiceoverScene):
                             if e.mean() < math.log(B) - 0.4 else MathTex(f"{e.mean():.2f}", font_size=20, color=CLIP_C).move_to(fill)))
         hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * 1.5 + 0.6, base_y + H * sy, 0], color=TEXT_C)
         hll = label(rf"$H(\text{{caption}}) = \log {int(round(math.exp(H)))} = {H:.2f}$", font_size=18, color=TEXT_C).next_to(hl, LEFT, buff=0.1)
-        bl = label(r"our CLIP: \ $\log N - \mathcal L$ in nats \ (outline: $\log N$)", font_size=18, color=GREY_A)
+        bl = label(rf"our CLIP (trained with batches of ${Bs[-1]}$): \ $\log N - \mathcal L$, \ nats \ (outline: $\log N$)",
+                   font_size=18, color=GREY_A)
         bl.next_to(VGroup(bars, hl), UP, buff=0.12).align_to(bars, LEFT)
         bars_g = VGroup(bars, hl, hll, bl)
         keep_in_frame(bars_g, margin=0.2)
@@ -139,10 +141,12 @@ class Clip(VoiceoverScene):
             "own. <bookmark mark='c'/> Put that in, and divide through by the true pair's term. <bookmark mark='d'/> "
             "With many random captions each ratio averages one, and what is left is at least log N minus the mutual "
             "information between pictures and words. So log N minus the loss estimates that information from below, "
-            "and can never exceed log N. <bookmark mark='e'/> Our models, trained at three batch sizes, three seeds "
-            f"each: the estimate grows from {e16:.2f} nats at a batch of {Bs[0]} to {e256:.2f} at {Bs[-1]}, pinned under "
-            f"log N, while the captions themselves hold {H:.2f}. Bigger batches can measure more of what the pictures "
-            "and words share."
+            "and can never exceed log N. <bookmark mark='e'/> Measured on our model with "
+            f"{Bs[0]}, {Bs[1]} and "
+            f"{Bs[-1]} candidates, three seeds: the estimate grows from {e16:.2f} nats to {e256:.2f}, pinned under log "
+            f"N, while the captions themselves hold {H:.2f}. The ceiling belongs to the measurement: with {Bs[-1]} "
+            f"candidates, models trained on batches of {Bs[0]} and of {Bs[-1]} score {at_big[0]:.2f} and "
+            f"{at_big[-1]:.2f}."
         ) as vo:
             self.play(FadeIn(bh))
             vo.wait_until("a")
@@ -253,12 +257,16 @@ class Clip(VoiceoverScene):
                     font_size=19, color=SIGLIP_C).to_corner(DR, buff=0.35)
         cite_ = cite(r"X.~Zhai et al., \textit{Sigmoid Loss for Language Image Pre-Training} (2023)", corner=DL)
         m = {(L, B): float(np.mean(c[f"unseen_{L}_{B}"])) for L in ("clip", "siglip") for B in Bs}
-        small = ("SigLIP is ahead at the smallest batch" if m[("siglip", Bs[0])] > m[("clip", Bs[0])] + 2e-2 else
-                 "CLIP is ahead at the smallest batch" if m[("clip", Bs[0])] > m[("siglip", Bs[0])] + 2e-2 else
-                 "the two are level at the smallest batch")
-        big = ("SigLIP is ahead at the largest" if m[("siglip", Bs[-1])] > m[("clip", Bs[-1])] + 2e-2 else
-               "CLIP is ahead at the largest" if m[("clip", Bs[-1])] > m[("siglip", Bs[-1])] + 2e-2 else
-               "level at the largest")
+        rngs = {(L, B): np.asarray(c[f"unseen_{L}_{B}"], float) for L in ("clip", "siglip") for B in Bs}
+
+        def ahead(B):
+            a_, b_ = rngs[("clip", B)], rngs[("siglip", B)]
+            return "clip" if a_.min() > b_.max() else "siglip" if b_.min() > a_.max() else "level"
+
+        small = {"siglip": "SigLIP is ahead at the smallest batch", "clip": "CLIP is ahead at the smallest batch",
+                 "level": "the seeds overlap at the smallest batch"}[ahead(Bs[0])]
+        big = {"siglip": "SigLIP is ahead at the largest", "clip": "CLIP is ahead at the largest",
+               "level": "they overlap at the largest"}[ahead(Bs[-1])]
         with self.voiceover(
             "In 2023 Xiaohua Zhai and colleagues at Google changed one thing. CLIP's loss is a softmax over the "
             "batch: each picture's score depends on every other caption in it, so the whole batch must be gathered "

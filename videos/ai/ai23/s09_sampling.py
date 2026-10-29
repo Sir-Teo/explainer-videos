@@ -122,7 +122,7 @@ class Sampling(VoiceoverScene):
         above, fold = float(q["above2k"]), float(q["folded_share"])
         rates = VGroup(*[label(t, font_size=22, color=GREY_A) for t in (
             r"the telephone: \ $8$ kHz", r"Whisper: \ $16$ kHz", r"audio codecs, \ the narrator: \ $24$ kHz",
-            r"music: \ $44.1$ kHz")]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 0.9, 0])
+            r"music: \ $44.1$ kHz")]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 1.25, 0])
         fl = label(r"frequency $\uparrow$, \ time $\to$", font_size=18, color=GREY_B).next_to(a, DOWN, buff=0.08)
         big = label(rf"${100 * above:.0f}\%$ of the energy \\ lies above $2$ kHz", font_size=30, color=SND_C).move_to([3.4, 2.4, 0])
         with self.voiceover(
@@ -142,7 +142,7 @@ class Sampling(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(c), FadeIn(lc))
             vo.wait_until("d")
-            self.play(big.animate.scale(0.7).move_to([3.4, 2.5, 0]), LaggedStart(*[FadeIn(r_) for r_ in rates], lag_ratio=0.3),
+            self.play(big.animate.scale(0.7).move_to([3.4, 2.65, 0]), LaggedStart(*[FadeIn(r_) for r_ in rates], lag_ratio=0.3),
                       run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
