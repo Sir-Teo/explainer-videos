@@ -133,7 +133,7 @@ def spread_rows(rows, x_max, width=6.0, row_h=0.62, font_size=22, fmt="{:.2f}", 
         out.add(row)
     g.add(out)
     g.rows = out
-    g.x0, g.scale = x0, scale
+    g.x0, g.unit = x0, scale
     return g
 
 

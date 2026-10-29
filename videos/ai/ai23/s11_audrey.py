@@ -32,6 +32,19 @@ class Audrey(VoiceoverScene):
                           width=6.2)
         hc.to_corner(UL, buff=0.4)
         words = [str(w) for w in a["words"]]
+        # Audrey's display, schematic: the low band's frequency against the high band's, a stored region per digit
+        sax = Axes(x_range=[0, 1, 1], y_range=[0, 1, 1], x_length=4.2, y_length=3.2, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 0.3, 0])
+        gpos = np.random.default_rng(52).uniform(0.12, 0.88, (10, 2))
+        regions = VGroup(*[VGroup(Ellipse(width=0.62, height=0.4, color=HIST_C, stroke_width=1.5).move_to(sax.c2p(*p_)),
+                                  MathTex(str(k), font_size=20, color=HIST_C).move_to(sax.c2p(*p_)))
+                           for k, p_ in enumerate(gpos)])
+        trail = VMobject(color=WHITE, stroke_width=3).set_points_smoothly(
+            [sax.c2p(*p_) for p_ in (gpos[7] + [-0.25, -0.1], gpos[7] + [-0.1, 0.05], gpos[7], gpos[7] + [0.06, -0.04])])
+        sxl = label(r"low band ($< 900$ Hz)", font_size=18, color=GREY_B).next_to(sax, DOWN, buff=0.1)
+        syl = label(r"high band", font_size=18, color=GREY_B).rotate(PI / 2).next_to(sax, LEFT, buff=0.1)
+        stag = note(r"schematic", font_size=18).next_to(sax, UP, buff=0.1)
+        disp = VGroup(sax, regions, trail, sxl, syl, stag)
         A, B = np.asarray(a["example_b"]), np.asarray(a["example_a"])
         ta = spectro(A.T, 2.4, 1.2, lo=A.min(), hi=A.max()).move_to([3.0, 2.3, 0])
         tl = label(r"a template: \ ``seven'', \ one voice, \ one take", font_size=20, color=GREY_A).next_to(ta, UP, buff=0.08)
@@ -53,7 +66,12 @@ class Audrey(VoiceoverScene):
             f"{100 * other:.0f} percent. The problem of speech recognition was never the words. It was the voices."
         ) as vo:
             self.play(FadeIn(hc))
+            vo.wait_until("a")
+            self.play(Create(sax), FadeIn(sxl), FadeIn(syl), FadeIn(stag), LaggedStart(*[FadeIn(r_) for r_ in regions],
+                                                                                    lag_ratio=0.1), run_time=2.0)
+            self.play(Create(trail), Indicate(regions[7]), run_time=1.5)
             vo.wait_until("b")
+            self.play(FadeOut(disp))
             self.play(FadeIn(ta), FadeIn(tl), FadeIn(how))
             vo.wait_until("c")
             self.play(FadeIn(res[0]))

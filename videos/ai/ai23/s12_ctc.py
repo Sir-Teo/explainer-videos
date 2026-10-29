@@ -51,7 +51,17 @@ class CTC(VoiceoverScene):
         for p_, out, ok in ((p1, "three", True), (p2, "three", True), (p3, "thre", False)):
             rows.add(VGroup(p_, MathTex(r"\to", font_size=30), data_text(out, font=MONO, font_size=26,
                                                                            color=SND_C if ok else C.SURPRISE)).arrange(RIGHT, buff=0.25))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.3, 0.6, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        rows.scale_to_fit_width(6.0).move_to([3.6, 0.6, 0])
+        nf = min(T, 60)
+        frames = VGroup(*[Rectangle(width=0.16, height=0.5, stroke_width=0, fill_color=SND_C, fill_opacity=0.25 + 0.5 * ((k * 7) % 5) / 5)
+                          for k in range(nf)]).arrange(RIGHT, buff=0.03).move_to(UP * 1.2)
+        letters = VGroup(*[data_text(ch if ch != " " else "·", font=MONO, font_size=30, color=LETTER_C) for ch in txt])
+        letters.arrange(RIGHT, buff=0.25).move_to(DOWN * 0.6)
+        qs = VGroup(*[MathTex("?", font_size=28, color=GREY_B).move_to(
+            (frames[int(i * (nf - 1) / max(len(txt) - 1, 1))].get_bottom() + l_.get_top()) / 2) for i, l_ in enumerate(letters)])
+        fl = label(rf"${T}$ frames, \ one every $20$ ms", font_size=22, color=SND_C).next_to(frames, UP, buff=0.15)
+        intro = VGroup(frames, letters, qs, fl)
         rl = label(r"three paths of $12$ frames \ (illustrative)", font_size=20, color=GREY_A).next_to(rows, UP, buff=0.2)
         eq = MathTex(r"p(\mathbf y \mid \mathbf x) = \sum_{\pi:\ \mathcal B(\pi) = \mathbf y}\ \prod_{t=1}^{T} y_t(\pi_t)",
                      font_size=36).move_to([2.6, -2.3, 0])
@@ -66,8 +76,10 @@ class CTC(VoiceoverScene):
             "one between them, the two e's of three merge into one. <bookmark mark='d'/> The probability of the "
             "text is the sum over every path that becomes it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(frames), FadeIn(fl), FadeIn(letters))
+            self.play(LaggedStart(*[FadeIn(q_) for q_ in qs], lag_ratio=0.05))
             vo.wait_until("a")
+            self.play(FadeOut(intro))
             self.play(FadeIn(dc))
             vo.wait_until("b")
             self.play(FadeIn(rl), FadeIn(rows[0]), FadeIn(rows[1]))
@@ -94,8 +106,27 @@ class CTC(VoiceoverScene):
                 why(r"otherwise a path may also \\ skip the blank in between", font_size=20),
                 why(r"end on the last letter \\ or the final blank", font_size=20)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, align_index=None, buff=0.45, edge=6.9)
-        hmm = label(r"Part 7's forward algorithm, \ on a left-to-right chain with optional blanks: \ $O(T \cdot L)$, \ "
-                    r"and $-\log p$ is a loss to descend", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.45)
+        fh = label(r"summing over every path, \ one frame at a time", font_size=30).to_edge(UP, buff=0.35)
+        st = ["∅", "a", "∅", "b", "∅"]
+        TT = 6
+        gx, gy = np.linspace(-4.6, 0.6, TT), np.linspace(-1.1, -3.3, len(st))
+        dots = VGroup(*[Dot([gx[t], gy[s_], 0], radius=0.06, color=BLANK_C if st[s_] == "∅" else LETTER_C)
+                        for t in range(TT) for s_ in range(len(st))])
+        arrs = VGroup()
+        for t in range(TT - 1):
+            for s_ in range(len(st)):
+                for d_ in (0, 1, 2):
+                    s2 = s_ + d_
+                    if s2 >= len(st) or (d_ == 2 and st[s2] == "∅"):
+                        continue
+                    arrs.add(Line([gx[t], gy[s_], 0], [gx[t + 1], gy[s2], 0], color=GREY_C, stroke_width=1.2,
+                                  stroke_opacity=0.7).set_z_index(-1))
+        stl = VGroup(*[data_text(c_, font=MONO, font_size=20, color=BLANK_C if c_ == "∅" else LETTER_C)
+                       .move_to([gx[0] - 0.4, gy[i], 0]) for i, c_ in enumerate(st)])
+        lt = note(r"the lattice for ``ab'', \ $6$ frames \ (schematic)", font_size=20).move_to([2.6, -2.2, 0])
+        lat = VGroup(arrs, dots, stl, lt)
+        hmm = label(r"Part 7's forward algorithm: \\ $O(T \cdot L)$ steps, \\ and $-\log p$ \\ is a loss to descend",
+                    font_size=22, color=GREY_A).move_to([5.0, -2.2, 0])
         with self.voiceover(
             "There are exponentially many paths, but the sum is cheap. <bookmark mark='a'/> Write the transcript "
             "with a blank before, between and after its letters: two L plus one states, in order. "
@@ -107,16 +138,19 @@ class CTC(VoiceoverScene):
             "models, with the transcript as the chain of states, and minus its logarithm is a loss whose gradient "
             "comes from the same recursion run backward."
         ) as vo:
+            self.play(FadeIn(fh))
             vo.wait_until("a")
             step(0)
+            self.play(FadeIn(dots), FadeIn(stl), FadeIn(lt))
             vo.wait_until("b")
             step(1, transform=False)
+            self.play(Create(arrs), run_time=1.5)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3, transform=False)
             vo.wait_until("e")
-            self.play(FadeIn(hmm))
+            self.play(FadeOut(lt), FadeIn(hmm))
         self.wait(0.3)
         self.clear_scene()
 
@@ -196,7 +230,7 @@ class CTC(VoiceoverScene):
         ext = [int(e) for e in d["lat_ext"]]
         S, T = G.shape
         W, H = 8.2, 4.2
-        img = heat(np.sqrt(np.clip(G, 0, 1)), W, H, color=SND_C, lo=0, hi=1).move_to([-2.2, 0.0, 0])
+        img = heat(np.sqrt(np.clip(G, 0, 1)), W, H, color=SND_C, lo=0, hi=1).move_to([-2.4, -0.1, 0])
         cw, ch = W / T, H / S
         ul = img.get_corner(UL)
         pts = [ul + np.array([cw * (t + 0.5), -ch * (s + 0.5), 0]) for t, s in enumerate(path)]
@@ -204,8 +238,8 @@ class CTC(VoiceoverScene):
         ylab = VGroup(*[data_text("∅" if e == 0 else alpha[e], font=MONO, font_size=11,
                                   color=BLANK_C if e == 0 else WHITE).move_to(ul + np.array([-0.15, -ch * (s + 0.5), 0]))
                         for s, e in enumerate(ext)])
-        tl = label(r"the lattice for this string: \ how likely each state is at each frame, \ given the whole utterance; \ "
-                   r"white: \ the best path", font_size=20, color=GREY_A).next_to(img, UP, buff=0.15)
+        tl = label(r"how likely each state is at each frame, \ given the whole utterance; \ white: \ the best path",
+                   font_size=20, color=GREY_A).next_to(img, UP, buff=0.15)
         tot = float(d["lat_total"])
         totl = label(rf"$\log p(\text{{transcript}}) = {tot:.2f}$, \ the same as PyTorch's CTC loss", font_size=20,
                      color=SND_C).next_to(img, DOWN, buff=0.15)
@@ -214,7 +248,8 @@ class CTC(VoiceoverScene):
         rows = spread_rows([(r"voices it trained on", C.INTERVAL, 100 * seen), (r"two new voices", SND_C, 100 * wer)],
                            x_max=max(5.0, 100 * float(max(wer.max(), seen.max())) * 1.15), width=2.2, font_size=18,
                            label_w=2.0, fmt="{:.1f}")
-        rows.move_to([4.6, 0.8, 0])
+        rows.move_to([4.4, 0.8, 0])
+        keep_in_frame(rows, margin=0.25)
         rl_ = label(r"word error rate, \ $\%$ \ (three seeds)", font_size=18, color=GREY_A).next_to(rows, UP, buff=0.2)
         hist = VGroup(*[label(t_, font_size=18, color=GREY_A) for t_ in (
             r"2014: \ Deep Speech (Baidu): \ CTC, \ thousands of hours", r"2012--15: \ RNN-T, \ listen-attend-spell: \\ "
