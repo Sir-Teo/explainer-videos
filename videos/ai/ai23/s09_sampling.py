@@ -83,10 +83,10 @@ class Sampling(VoiceoverScene):
         zig = curve(ax.ax, true / 1000, seen / 1000, SND_C, 4)
         tones = {int(k): float(v) for k, v in q["tones"].items()}
         pts = VGroup()
-        for f, s in tones.items():
+        for i, (f, s) in enumerate(sorted(tones.items())):
             pts.add(VGroup(Dot(ax.ax.c2p(f / 1000, s / 1000), radius=0.09, color=WHITE),
                            label(rf"${f / 1000:g} \to {s / 1000:.2f}$", font_size=20, color=WHITE)
-                           .next_to(ax.ax.c2p(f / 1000, s / 1000), UP, buff=0.12)))
+                           .next_to(ax.ax.c2p(f / 1000, s / 1000), UL if f < fs / 2 else UR, buff=0.12)))
         ny = DashedLine(ax.ax.c2p(4, 0), ax.ax.c2p(4, 4.3), color=GREY_B)
         nyl = label(r"$f_s / 2$", font_size=22, color=GREY_B).next_to(ax.ax.c2p(4, 4.3), UP, buff=0.05)
         peaks = ", ".join(f"{tones[f] / 1000:.2f}" for f in sorted(tones))
@@ -122,8 +122,9 @@ class Sampling(VoiceoverScene):
         above, fold = float(q["above2k"]), float(q["folded_share"])
         rates = VGroup(*[label(t, font_size=22, color=GREY_A) for t in (
             r"the telephone: \ $8$ kHz", r"Whisper: \ $16$ kHz", r"audio codecs, \ the narrator: \ $24$ kHz",
-            r"music: \ $44.1$ kHz")]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 1.7, 0])
+            r"music: \ $44.1$ kHz")]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, 0.9, 0])
         fl = label(r"frequency $\uparrow$, \ time $\to$", font_size=18, color=GREY_B).next_to(a, DOWN, buff=0.08)
+        big = label(rf"${100 * above:.0f}\%$ of the energy \\ lies above $2$ kHz", font_size=30, color=SND_C).move_to([3.4, 2.4, 0])
         with self.voiceover(
             "Speech shows why this matters. <bookmark mark='a'/> In this sentence from a held-out Kokoro voice, "
             f"{100 * above:.0f} percent of the energy lies above two kilohertz. <bookmark mark='b'/> Keep every fourth "
@@ -134,12 +135,15 @@ class Sampling(VoiceoverScene):
             "telephone, sixteen for Whisper, twenty-four for most audio codecs."
         ) as vo:
             self.play(FadeIn(a), FadeIn(la), FadeIn(fl))
+            vo.wait_until("a")
+            self.play(FadeIn(big))
             vo.wait_until("b")
             self.play(FadeIn(b), FadeIn(lb))
             vo.wait_until("c")
             self.play(FadeIn(c), FadeIn(lc))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in rates], lag_ratio=0.3), run_time=1.5)
+            self.play(big.animate.scale(0.7).move_to([3.4, 2.5, 0]), LaggedStart(*[FadeIn(r_) for r_ in rates], lag_ratio=0.3),
+                      run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -192,6 +196,12 @@ class Sampling(VoiceoverScene):
             f"to within ten to the minus {abs(exp)}."
         ) as vo:
             self.play(FadeIn(spec), FadeIn(sl))
+            vo.wait_until("a")
+            win = Rectangle(width=spec.width * 2.5 / max(n, 1) + 0.04, height=spec.height + 0.1, stroke_color=WHITE,
+                            stroke_width=2).move_to(spec.get_left() + RIGHT * 0.05)
+            self.play(Create(win), run_time=0.5)
+            self.play(win.animate.move_to(spec.get_right() + LEFT * 0.05), run_time=4.0, rate_func=linear)
+            self.play(FadeOut(win), run_time=0.4)
             vo.wait_until("b")
             self.play(FadeIn(fax), FadeIn(fl), FadeIn(fx), LaggedStart(*[Create(t_) for t_ in tri], lag_ratio=0.05),
                       run_time=2.0)

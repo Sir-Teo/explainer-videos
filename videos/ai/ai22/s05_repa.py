@@ -102,12 +102,12 @@ class REPA(VoiceoverScene):
         top_fd = float(max(zf.max(), rf.max())) * 1.08
         ax1 = axes([0, ev[-1]], [0, 1], x_length=4.2, y_length=2.6, xlabel=r"training step",
                    ylabel=r"generated letters read as requested", xticks=[0, ev[-1]], yticks=[0, 0.5, 1],
-                   center=[-4.3, 0.2, 0], font_size=17, xfmt=lambda x: fmt_int(x))
+                   center=[-4.45, 0.2, 0], font_size=17, xfmt=lambda x: fmt_int(x))
         ax2 = axes([0, ev[-1]], [0, top_fd], x_length=4.2, y_length=2.6, xlabel=r"training step",
                    ylabel=r"distance from real letters (FD)", xticks=[0, ev[-1]], yticks=[0, round(top_fd / 2)],
-                   center=[0.6, 0.2, 0], font_size=17, xfmt=lambda x: fmt_int(x))
+                   center=[1.0, 0.2, 0], font_size=17, xfmt=lambda x: fmt_int(x))
         ax3 = axes([0, rc[0, -1, 0]], [0, 1], x_length=3.0, y_length=2.6, xlabel=r"training step",
-                   ylabel=r"alignment \ (cosine)", xticks=[0, rc[0, -1, 0]], yticks=[0, 0.5, 1], center=[5.2, 0.2, 0],
+                   ylabel=r"alignment \ (cosine)", xticks=[0, rc[0, -1, 0]], yticks=[0, 0.5, 1], center=[5.35, 0.2, 0],
                    font_size=17, xfmt=lambda x: fmt_int(x))
         l1 = VGroup(mean_band(ax1.ax, ev, za, BASE_C), mean_band(ax1.ax, ev, ra, REPA_C))
         l2 = VGroup(mean_band(ax2.ax, ev, zf, BASE_C), mean_band(ax2.ax, ev, rf, REPA_C))

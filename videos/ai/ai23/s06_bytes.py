@@ -40,13 +40,15 @@ class Bytes(VoiceoverScene):
             cells = byte_cells(w)
             rows.add(VGroup(data_text(w, font=MONO, font_size=28, color=TEXT_C), cells,
                             label(rf"${len(w.encode('utf-8'))}$ bytes", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.4))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-2.6, 1.3, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-1.5, 0.0, 0])
         rl = label(r"UTF-8: \ every character as $1$ to $4$ bytes, \ $256$ possible values", font_size=22, color=GREY_A)
         rl.next_to(rows, UP, buff=0.3).align_to(rows, LEFT)
         probs = VGroup(*[label(t, font_size=22, color=C.SURPRISE) for t in (
             r"a character the vocabulary never saw: \ unknown", r"letters hidden inside a token: \ spelling is hard",
             r"other languages cut into more tokens: \ they cost more")]).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        probs.to_corner(UR, buff=0.5)
+        for p_ in probs:
+            p_.scale(1.15)
+        probs.to_edge(UP, buff=0.4)
         txt = []
         if "novels_cut" in b:
             cut = [str(x) for x in b["novels_cut"]]
@@ -169,7 +171,8 @@ class Bytes(VoiceoverScene):
         letters = VGroup(*[data_text(chr(c) if c != 32 else "·", font=MONO, font_size=15, color=WHITE)
                            .move_to([x0 + dx * (k + 0.5), base_y - 0.25, 0]) for k, c in enumerate(bs)])
         thl = DashedLine([x0, base_y + th * sy, 0], [x0 + W, base_y + th * sy, 0], color=WHITE, stroke_width=2)
-        thlab = label(rf"threshold: \ ${th:.2f}$ bits", font_size=20, color=WHITE).next_to(thl, UP, buff=0.05).to_edge(RIGHT, buff=0.3)
+        thlab = label(rf"threshold: \ ${th:.2f}$ bits", font_size=20, color=WHITE).move_to(
+            [x0 + W - 1.0, base_y + hmax * sy + 0.25, 0])
         yl = label(r"bars: \ the byte model's uncertainty about the next byte (entropy, \ bits); \ dots: \ "
                    r"its surprise at the byte that came", font_size=20, color=GREY_A).to_edge(UP, buff=0.4)
         bpe = np.asarray(p["example_bpe"], bool)[:n]

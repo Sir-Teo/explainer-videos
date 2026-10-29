@@ -277,7 +277,7 @@ ZH = {
         "这是我们的模型在学习：同样的噪声，要求同样的十个字母，从A到J，在{total:,}步训练中的各个检查点画出来，步数是后面那些比较的{total / cmp_n:.0f}倍。"
         "<bookmark mark='a'/>在第{steps[0]}步，每个块还是恒等映射，所以噪声原样穿过。<bookmark mark='b'/>在第{steps[3]:,}步，"
         "评判网络把十个里的{reads[3]}个读成了所要求的字母；<bookmark mark='c'/>第{steps[j]:,}步时是{reads[j]}个；"
-        "<bookmark mark='d'/>最后是{reads[-1]}个。同时，损失从{L[0, 1]:.2f}降到{L[-1, 1]:.2f}。",
+        "<bookmark mark='d'/>最后是{reads[-1]}个。同时，损失从{loss0:.2f}降到{L[-1, 1]:.2f}。",
 
     '"Does the way in matter?':
         "送进去的方式重要吗？三种我们都训练了，每种三个随机种子，数据和步数相同；两种adaLN版本为缩放、平移和门控多带了一些权重。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>"

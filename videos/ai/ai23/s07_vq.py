@@ -26,7 +26,7 @@ class VQ(VoiceoverScene):
         v = load("codebooks")
         book = np.asarray(v["codebook16"])
         img = np.asarray(v["image"])
-        cb = Group(*[gray_image(c, 0.5) for c in book]).arrange_in_grid(rows=2, cols=8, buff=0.08).move_to([3.0, 2.3, 0])
+        cb = Group(*[gray_image(c, 0.5) for c in book]).arrange_in_grid(rows=2, cols=8, buff=(0.1, 0.34)).move_to([3.0, 2.2, 0])
         ids = VGroup(*[MathTex(str(i), font_size=18, color=TOKEN_COLORS[i % 8]).next_to(c, DOWN, buff=0.04)
                        for i, c in enumerate(cb)])
         cbl = label(r"a codebook: \ $16$ typical $4\times4$ patches \ (k-means on the letters)", font_size=22, color=IMG_C)
@@ -177,7 +177,7 @@ class VQ(VoiceoverScene):
             curves.add(band(ax.ax, checks, U.min(0), U.max(0), VQ_COLORS[m], 0.2))
             curves.add(curve(ax.ax, checks, U.mean(0), VQ_COLORS[m], 3.5))
             legend_.append((VQ_COLORS[m], VQ_NAMES[m]))
-        leg = legend(legend_, font_size=20).next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
+        leg = legend(legend_, font_size=20).next_to(ax, UP, buff=0.15).align_to(ax, RIGHT)
         # the final usage of every code, sorted, for plain VQ and for EMA + restarts
         hist = VGroup()
         for i, m in enumerate(("vq", "restart")):
@@ -190,6 +190,9 @@ class VQ(VoiceoverScene):
             hist.add(VGroup(bars, hl.next_to(bars, UP, buff=0.1).align_to(bars, LEFT)))
         hist.arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to([4.3, -1.6, 0])
         hh = label(r"how often each code is used, \ most to least", font_size=18, color=GREY_B).next_to(hist, UP, buff=0.15)
+        test = np.asarray(d["test"])
+        strip = Group(*[gray_image(test[i], 0.6) for i in range(6)]).arrange(RIGHT, buff=0.08).move_to([4.3, 2.4, 0])
+        stl = label(r"held-out letters: \ each a $5 \times 5$ grid of codes", font_size=18, color=GREY_A).next_to(strip, DOWN, buff=0.12)
         u = {m: np.asarray(d[f"used_{m}"], float) for m in ("vq", "ema", "restart")}
         steps = int(d["steps"])
         verdict_ema = ("EMA alone does not fix it" if u["ema"].mean() <= u["vq"].mean() * 1.2 else
@@ -209,14 +212,14 @@ class VQ(VoiceoverScene):
             "steps at a random output of the batch: "
             f"{u['restart'].mean():.0f} codes in use."
         ) as vo:
-            self.play(FadeIn(ax))
+            self.play(FadeIn(ax), FadeIn(strip), FadeIn(stl))
             vo.wait_until("a")
             self.play(FadeIn(curves[0]), Create(curves[1]), FadeIn(leg[0]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(curves[2]), Create(curves[3]), FadeIn(leg[1]), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(curves[4]), Create(curves[5]), FadeIn(leg[2]), run_time=1.5)
-            self.play(FadeIn(hh), FadeIn(hist))
+            self.play(FadeOut(strip), FadeOut(stl), FadeIn(hh), FadeIn(hist))
         self.wait(0.3)
         self.clear_scene()
 
