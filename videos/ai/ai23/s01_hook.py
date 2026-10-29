@@ -15,7 +15,8 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def converge(self):
         b, v, s = load("bpe"), load("codebooks"), load("speech")
-        cut = [str(x) for x in b["cut2000"]][:8]
+        sz = [int(n) for n in b["sizes"]]
+        cut = [str(x) for x in b[f"cut{sz[min(1, len(sz) - 1)]}"]][:8]
         text = token_chips(cut, font_size=28, height=0.5).move_to([-2.2, 2.5, 0])
         # the picture, as 25 patches of 4 x 4 pixels laid exactly over it
         img = np.asarray(v["image"])

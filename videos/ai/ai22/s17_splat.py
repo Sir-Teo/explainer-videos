@@ -65,11 +65,12 @@ class Splat(VoiceoverScene):
             "1080p."
         ) as vo:
             self.play(FadeIn(frame), FadeIn(cite_))
+            self.play(LaggedStart(*[GrowFromCenter(e) for e in ells], lag_ratio=0.01), FadeIn(el), run_time=2.5)
             for k_, m in enumerate("abc"):
                 vo.wait_until(m)
                 self.play(FadeIn(each[2 * k_]), FadeIn(each[2 * k_ + 1]))
             vo.wait_until("d")
-            self.play(LaggedStart(*[GrowFromCenter(e) for e in ells], lag_ratio=0.01), FadeIn(el), run_time=2.0)
+            self.play(Indicate(ells, color=GS_C, scale_factor=1.03), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 
