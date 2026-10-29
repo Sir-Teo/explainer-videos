@@ -675,9 +675,9 @@ def compute_whisper(cache):
 # CTC: a small recognizer for digit strings
 # ---------------------------------------------------------------------------
 ALPHA = "_ abcdefghijklmnopqrstuvwxyz"  # 0 is CTC's blank
-CTC_STEPS = 2000
+CTC_STEPS = 2500
 CTC_SEEDS = [0, 1, 2]
-CTC_CHECKS = [0, 50, 150, 400, 900, 2000]
+CTC_CHECKS = [0, 50, 150, 400, 1000, 2500]
 
 
 def ctc_net(width=96):

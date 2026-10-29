@@ -236,7 +236,7 @@ ZH = {
         "我们用这种方法训练了一个小识别器：{params / 1000.0:.0f}千个参数，七层卷积，用十个Kokoro声音说的数字串训练，三个种子。<bookmark mark='a'/>这是在训练过程中，它从一个从没听过的声音说的数字串里听到的东西。起初每一帧都是一片模糊。<bookmark mark='b'/>然后空白符占了上风，这是在大多数帧上答对的最便宜的办法。<bookmark mark='c'/>接着{spikes}，夹在空白符之间：到最后，空白符赢下{100 * blank:.0f}%的帧，一个字母平均持续{run_len:.1f}帧，这就是CTC出了名的尖峰式对齐。下面的贪心读法，在每一帧取最可能的符号，再合并、去空白。",
 
     'f"And here is the lattice itself,':
-        "这就是格本身，由训练好的网络算出：转写的各个状态竖着排，各帧横着排。<bookmark mark='a'/>亮度表示每个状态在每一帧上的可能性，由前向和后向两遍合起来得到；白线是唯一的最佳路径。<bookmark mark='b'/>前向算法算出的总和，自然对数为{tot:.2f}，与PyTorch自己的CTC损失一致。<bookmark mark='c'/>三个种子平均：{verdict}。<bookmark mark='d'/>2014年，百度的Deep Speech用几千小时的数据训练CTC，抛开了旧的流水线。CTC把每一帧的字母当作彼此独立，所以后来的系统，RNN转录器和基于注意力的识别器，让每个字母依赖于前面的字母。",
+        "这就是格本身，由训练好的网络算出：转写的各个状态竖着排，各帧横着排。<bookmark mark='a'/>亮度表示每个状态在每一帧上的可能性，由前向和后向两遍合起来得到；白线是唯一的最佳路径。<bookmark mark='b'/>前向算法算出的总和，自然对数为{tot:.2f}，与PyTorch自己的CTC损失一致。<bookmark mark='c'/>三个种子平均：{verdict}；{gap}。<bookmark mark='d'/>2014年，百度的Deep Speech用几千小时的数据训练CTC，抛开了旧的流水线。CTC把每一帧的字母当作彼此独立，所以后来的系统，RNN转录器和基于注意力的识别器，让每个字母依赖于前面的字母。",
 
     "f'{100 * wer.mean():.1f} percent of the digit words wrong":
         "两个新声音的数字词错了{100 * wer.mean():.1f}%，训练用过的声音错了{100 * seen.mean():.1f}%",
@@ -253,8 +253,12 @@ ZH = {
         "Whisper是一个朴素的编码器-解码器Transformer，和第14部分那个翻译模型同一个形状。<bookmark mark='a'/>它的输入就是第8章那张图：每十毫秒80个对数梅尔频带，永远是三十秒，不够就用静音补齐。<bookmark mark='b'/>编码器读它；解码器用GPT-2的字节级BPE，一次一个词元地写出转写，同时回头关注声音。<bookmark mark='c'/>开头的特殊词元说明要做什么：这里是转写开始，不要时间戳。识别器变成了一个会听的语言模型。<bookmark mark='d'/>我们跑的是最小的英语模型base.en，{int(w['params']) / 1000000.0:.0f}百万个参数，来自Hugging Face缓存。",
 
     'f"How does it do on our voices?':
-        "它在我们的声音上表现如何？<bookmark mark='a'/>在两个留出的Kokoro声音说的{int(w['n_sents'])}句话上，它的词错误率是{100 * ws:.1f}%。<bookmark mark='b'/>在{int(w['n_strings'])}个数字串上是{100 * wd:.1f}%，把它写出的阿拉伯数字也算作词；我们只用数字训练的CTC识别器是{100 * cw:.1f}%：{cmp_}。<bookmark mark='c'/>它的错误很能说明问题：一个罕见的名字或怪词，被换成了更可能的词。解码器是一个语言模型，它会猜。",
+        "它在我们的声音上表现如何？<bookmark mark='a'/>在两个留出的Kokoro声音说的{int(w['n_sents'])}句话上，它的词错误率是{100 * ws:.1f}%。<bookmark mark='b'/>在{int(w['n_strings'])}个数字串上是{100 * wd:.1f}%，把它写出的阿拉伯数字也算作词；我们只用数字训练的CTC识别器是{100 * cw:.1f}%：{cmp_}。<bookmark mark='c'/>看看它的错误：在声音留有余地的地方，解码器这个语言模型，就写下它觉得更可能的东西：一个复数，一个写成阿拉伯数字的数，两个连在一起的词。",
 
+    "new voices are much harder than the ones it heard, Audrey's lesson again":
+        "新声音比它听过的难得多，又是Audrey的那一课",
+    'it does about as well on new voices as on the ones it heard':
+        "它在新声音上和在听过的声音上差不多一样好",
     'our tiny specialist does better on its own task':
         "我们的小专家在它自己的任务上做得更好",
     'Whisper does better even on our model\'s own task':
@@ -397,5 +401,7 @@ PHRASES = {
     'CLIP is ahead at the largest': '最大的批上CLIP领先',
     'they overlap at the largest': '最大的批上也互相重叠',
     'letters appear as sharp spikes': '字母以尖锐的尖峰出现',
+    "new voices are much harder than the ones it heard, Audrey's lesson again": '新声音比它听过的难得多，又是Audrey的那一课',
+    'it does about as well on new voices as on the ones it heard': '它在新声音上和在听过的声音上差不多一样好',
     'letters appear': '字母出现了',
 }

@@ -256,12 +256,14 @@ class CTC(VoiceoverScene):
             r"letters that depend on each other")]).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.5, -1.8, 0])
         verdict = (f"{100 * wer.mean():.1f} percent of the digit words wrong for the two new voices, "
                    f"{100 * seen.mean():.1f} percent for voices it trained on")
+        gap = ("new voices are much harder than the ones it heard, Audrey's lesson again"
+               if wer.mean() > 2 * seen.mean() + 0.02 else "it does about as well on new voices as on the ones it heard")
         with self.voiceover(
             "And here is the lattice itself, computed from the trained network: the states of the transcript down "
             "the side, the frames across. <bookmark mark='a'/> The brightness is how likely each state is at each "
             "frame, from the forward and backward passes together; the white line is the single best path. "
             f"<bookmark mark='b'/> The forward algorithm's total, {tot:.2f} in natural log, agrees with PyTorch's own "
-            f"CTC loss. <bookmark mark='c'/> Averaged over three seeds: {verdict}. <bookmark mark='d'/> In 2014 Baidu's "
+            f"CTC loss. <bookmark mark='c'/> Averaged over three seeds: {verdict}; {gap}. <bookmark mark='d'/> In 2014 Baidu's "
             "Deep Speech trained CTC on thousands of hours and did without the old pipeline. CTC treats each frame's "
             "letter as independent of the others, so later systems, RNN transducers and attention-based "
             "recognizers, let each letter depend on the ones before."
