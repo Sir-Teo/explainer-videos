@@ -45,7 +45,8 @@ class Codec(VoiceoverScene):
                  (r"$16$ kHz, $16$-bit samples", int(d["pcm_bps"]), GREY_B), (r"EnCodec", 24_000, ACOU_C),
                  (r"EnCodec, lowest", 1_500, ACOU_C), (r"Mimi (Moshi)", 1_100, SEM_C),
                  (r"Qwen3-TTS's tokenizer$^*$", 2_200, SEM_C)]
-        rates.sort(key=lambda r: -r[1])
+        order = [0, 2, 1, 3, 4, 6, 5]  # CD, 16 kHz PCM, telephone; EnCodec's two ends; then the speech tokenizers
+        rates = [rates[i] for i in order]
         lax = VGroup()
         x0, x1 = -5.0, 3.0
         lo, hi = math.log10(500), math.log10(2e6)
@@ -84,7 +85,7 @@ class Codec(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(m)) for a, m in zip(arrs, pipe[1:])], lag_ratio=0.5),
                       run_time=2.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.1) for b_ in bars[3:5]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.1) for b_ in bars[3:5]], lag_ratio=0.3))  # EnCodec
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.1) for b_ in bars[5:]], lag_ratio=0.3), FadeIn(star))
         self.wait(0.3)
@@ -103,7 +104,7 @@ class Codec(VoiceoverScene):
         ol = label(r"a held-out voice: \ the original", font_size=20, color=GREY_A).next_to(orig, UP, buff=0.1)
 
         def snap(k):
-            return spectro(snaps[k], W, H, lo=lo, hi=hi).move_to([3.3, -1.3, 0])
+            return spectro(snaps[k], W, H, lo=lo, hi=hi).move_to([3.3, -1.6, 0])
 
         cur = snap(0)
         t = ValueTracker(0)
@@ -115,7 +116,7 @@ class Codec(VoiceoverScene):
                         color=C.INTERVAL)]
         whys = [why(r"four strided convolutions", font_size=20), why(r"$n$ stages of $256$ codes", font_size=20),
                 why(r"one model, \ quantizer dropout", font_size=20)]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-3.4, align_index=None, buff=0.75, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-3.4, align_index=None, buff=0.75, edge=-0.1)
         tr_min = float(d["train_seconds"]) / 60
         S = int(d["steps"])
         params = int(d["params"])

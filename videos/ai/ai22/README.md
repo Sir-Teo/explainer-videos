@@ -26,7 +26,7 @@ to its 128 features for generated and real letters (FID's formula on our own fea
   vectors' similarities, neighbours against far patches.
 * **2. Convolutions or attention?** AlexNet to ViT (Krizhevsky et al. 2012; non-local networks 2018; ViT's 88.55% after
   JFT-300M and its deficit on ImageNet alone; DeiT 83.1% without external data; Swin; ConvNeXt 87.8%; ViT-22B, DINOv2);
-  inductive bias defined (locality, translation equivariance); pause and predict; ViT against a CNN of the same size
+  inductive bias defined (locality, translation equivariance); pause and predict; ViT against a CNN of about the same size (154,586 against 168,154 weights)
   (equal steps, batches, augmentations) on 3, 7 and 20 training fonts, three seeds, with their learning curves and
   their multiply-adds per picture.
 * **3. A smaller space.** Latent diffusion (Rombach et al. 2022), perceptual and semantic compression, KL-f8; eight
@@ -38,11 +38,12 @@ to its 128 features for generated and real letters (FID's formula on our own fea
   alignment over training; VA-VAE (Yao et al. 2025), REPA-E (Leng et al. 2025), representation autoencoders (Zheng et al.
   2025).
 * **5. U-Net or transformer.** The U-Net (Ronneberger et al. 2015), ADM (Dhariwal & Nichol 2021); DiT (Peebles & Xie
-  2023), quality tracking Gflops; our U-Net against our DiT at about equal weights and equal steps, three seeds, with
+  2023), quality tracking Gflops; our U-Net against our DiT at similar weights (370,281 against 320,848) and equal steps, three seeds, with
   the multiply-adds each spends.
 * **6. adaLN-Zero.** In-context tokens, adaLN and adaLN-Zero; the block written out, gates starting at zero; our gates
-  opening during training; the training replay (same noise, ten requests, at checkpoints, read by the judge); the three
-  conditionings at equal budgets, three seeds; the alphabet.
+  opening during training; the training replay of the showcase model (adaLN-Zero trained 8,000 steps, four times the
+  comparisons; same noise, ten requests, at checkpoints, read by the judge); the three conditionings at equal steps
+  (their weights differ: the adaLN versions carry their scales, shifts and gates), three seeds; the alphabet.
 * **7. Words into pictures.** GANs to diffusion; DALL·E (12 billion weights, 256 text then 32 × 32 image tokens),
   diffusion beats GANs (FID 4.59 against 6.95), DALL·E 2, Imagen (a bigger text encoder helps more), Parti, Stable
   Diffusion, DALL·E 3 (recaptioning); cross-attention; classifier-free guidance swept on our DiT (right letters,
@@ -86,7 +87,7 @@ From the repo root:
 
 ```
 python tools/make.py ai22                       # everything: the computations, then English and Chinese
-python -m videos.ai.ai22.compute                # the numbers only (about 2.5 CPU-hours on one core; resumable)
+python -m videos.ai.ai22.compute                # the numbers only (about 7 CPU-hours on one core; resumable)
 AI22_THREADS=2 python -m videos.ai.ai22.compute     # torch threads (default 1; on a busy machine 1 is fastest)
 AI22_QUICK=1 python -m videos.ai.ai22.compute       # a smoke test of every code path with tiny budgets (.cache/ai22_quick)
 python tools/build.py ai22                      # English
@@ -97,7 +98,7 @@ Every random choice is seeded (numpy PCG64 and `torch.manual_seed`, one generato
 multiprocessing. Items made of several trainings save each one as it finishes (`CACHE.partial`), so an interrupted
 run resumes; items that need another item's model (the judge, the vision transformer, the showcase DiT, the tokenizers,
 the frame autoencoder) load it from `.cache/ai22/*.pt` or compute it first. The longest items are `denoisers` (fifteen
-trainings, the U-Nets the slowest), `tokens`, `unified` and `clips`. The letters are drawn with Part 21's
+trainings, the U-Nets the slowest), `tokens`, `unified` and `clips` (nine video models of width 192: a frame's 100 latent numbers must fit through the model's width, and at width 96 the letter was lost). `showcase` (8,000 steps) saves model, optimizer, schedule and generators every 500 steps and resumes exactly. Our NeRF gives the last sample on a ray its own segment length rather than NeRF's 10¹⁰: our backgrounds are empty, and the 10¹⁰ would paint them with whatever colour the network has at the far plane (held-out PSNR 13 dB with it, 40 dB without). The letters are drawn with Part 21's
 `glyph_images` and its flow-matching `mlp` is borrowed; no other part's results are read.
 
 ## References
