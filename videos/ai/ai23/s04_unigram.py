@@ -92,7 +92,7 @@ class Unigram(VoiceoverScene):
         word = " cigarette"
         arcs, path = lattice_word(word, voc)
         n = len(word)
-        x0, dx, y0 = -6.0, 0.62, 0.9
+        x0, dx, y0 = -6.2, 0.6, 1.5
         X = [x0 + dx * i for i in range(n + 1)]
         nodes = VGroup(*[Dot([X[i], y0, 0], radius=0.07, color=GREY_B) for i in range(n + 1)])
         letters = VGroup(*[data_text(ch if ch != " " else "·", font=MONO, font_size=28, color=WHITE)
@@ -108,7 +108,7 @@ class Unigram(VoiceoverScene):
                                  stroke_width=1 + 4 * w)
             a.set_stroke(opacity=1.0 if (i, j) in on_path else 0.25 + 0.5 * w)
             arc_m.add(a)
-        best = token_chips([word[i:j] for i, j in path], font_size=28, height=0.52).move_to([X[n] / 2 + x0 / 2, y0 - 1.2, 0])
+        best = token_chips([word[i:j] for i, j in path], font_size=28, height=0.52).move_to([(X[n] + x0) / 2, y0 - 1.5, 0])
         bl = label(r"the most probable cut", font_size=22, color=UNI_C).next_to(best, DOWN, buff=0.15)
         colors = {r"\alpha_j": UNI_C, r"\alpha_i": UNI_C}
         rows = [cmath(r"\alpha_j", r"=", r"\sum_{i < j}", r"\alpha_i", r"\, p(x_{i+1..j})", colors=colors, font_size=34),
@@ -118,7 +118,9 @@ class Unigram(VoiceoverScene):
         whys = [why(r"forward: \ the last piece ends at $j$", font_size=20),
                 why(r"Viterbi: \ the best cut instead of the sum", font_size=20),
                 why(r"EM's counts, \ from forward $\alpha$ and backward $\beta'$", font_size=20)]
-        step = ladder(self, rows, whys, keep=3, top=-1.5, x=3.2, align_index=None, buff=0.5, edge=6.9)
+        for r_ in rows:
+            r_.scale(0.9)
+        step = ladder(self, rows, whys, keep=3, top=0.9, x=3.5, align_index=None, buff=0.38, edge=6.9)
         tag = note(rf"arcs: \ every piece of ``cigarette'' among the ${V:,}$, \ thicker = more probable".replace(",", "{,}"),
                    font_size=20).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -183,10 +185,10 @@ class Unigram(VoiceoverScene):
             self.play(FadeIn(ax), FadeIn(steps[0]))
             vo.wait_until("a")
             self.play(FadeIn(steps[1]), FadeIn(steps[2]))
+            self.play(LaggedStart(*[FadeIn(p_, scale=1.5) for p_ in pts], lag_ratio=0.15), Create(line), run_time=4.0)
             vo.wait_until("b")
             self.play(FadeIn(steps[3]), FadeIn(steps[4]))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(p_, scale=1.5) for p_ in pts], lag_ratio=0.15), Create(line), run_time=2.5)
             self.play(FadeIn(marks))
         self.wait(0.3)
         self.clear_scene()

@@ -133,9 +133,12 @@ class Prompt(VoiceoverScene):
         rl = label(r"six R's, \ the same noise", font_size=18, color=GREY_A).next_to(rows, LEFT, buff=0.3)
         cite_ = cite(r"Part 21's guidance on our adaLN-Zero transformer; \ $260$ letters per weight", corner=DL)
         a0, a2, aN = acc[0], acc[picks[1]], acc[-1]
+        a1 = acc[ws.index(1.0)] if 1.0 in ws else acc[1]
+        best_w = ws[int(np.argmin(fd))]
         v0, vN = var[0], var[-1]
-        verdict = (f"Unguided, the judge reads {100 * a0:.0f} percent as requested; at w = 2, {100 * a2:.0f}; at "
-                   f"w = {ws[-1]:g}, {100 * aN:.0f}.")
+        verdict = (f"At w = 0, the model without its prompt, the judge reads {100 * a0:.0f} percent as requested, "
+                   f"where chance is 4; at w = 1, the prompted model alone, {100 * a1:.0f}; at w = 2, {100 * a2:.0f}; at "
+                   f"w = {ws[-1]:g}, {100 * aN:.0f}. The letters look most like real ones at w = {best_w:g}.")
         if vN < 0.9 * v0:
             spread = f"And the drawings of one letter grow alike: their spread falls from {v0:.2f} to {vN:.2f}."
             close = "Guidance buys faithfulness with variety."

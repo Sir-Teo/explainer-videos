@@ -25,7 +25,7 @@ T_TRAIN = 8
 LONG = 32
 SEEDS = (0, 1, 2)
 MODES = ("clip", "teacher", "forcing")
-D, L, H = 96, 4, 4
+D, L, H = 192, 4, 4  # D at least the 100 latent numbers of a frame: narrower, a frame cannot pass through intact
 N_STEPS, BATCH = 3000, 64
 LAT_SIDE, LAT_CH = 5, 4
 
