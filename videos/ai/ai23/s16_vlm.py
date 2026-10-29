@@ -48,9 +48,10 @@ class VLM(VoiceoverScene):
             col[0].next_to(g, UP, buff=0.25)
             col[3].next_to(g, DOWN, buff=0.25)
             cols.add(col)
-        cols.arrange(RIGHT, buff=0.7, aligned_edge=UP).move_to(UP * 0.1)
+        cols.arrange(RIGHT, buff=0.7, aligned_edge=UP).scale(1.2).move_to(DOWN * 0.2)
         if cols.width > 13.2:
             cols.width = 13.2
+        hd = label(r"giving a language model eyes", font_size=40).to_edge(UP, buff=0.35)
         tag = note(r"schematic", font_size=18).to_corner(DL, buff=0.3)
         data = label(r"LLaVA's training: \ align the connector on captions; \ then $158$ thousand examples of chat about "
                      r"pictures, \ written by GPT-4", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
@@ -64,10 +65,10 @@ class VLM(VoiceoverScene):
             "<bookmark mark='c'/> And in April 2023 LLaVA showed how little it takes: a single linear map turns each "
             "of CLIP's patch vectors into a vector in the language model's word space, and the picture is just more "
             "tokens at the start of the prompt. <bookmark mark='d'/> Train the map on captions, then fine-tune on 158 "
-            "thousand conversations about pictures that GPT-4 wrote from their captions. Nearly every open "
+            "thousand examples of chat about pictures that GPT-4 wrote from their captions. Nearly every open "
             "vision-language model since has this shape."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hd))
             vo.wait_until("a")
             self.play(FadeIn(cols[0]))
             vo.wait_until("b")

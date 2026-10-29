@@ -176,8 +176,9 @@ class FSQ(VoiceoverScene):
         stl = VGroup(*[label(rf"${4 * k}$ bits", font_size=18, color=C.INTERVAL).next_to(s_, DOWN, buff=0.08)
                        for k, s_ in zip(range(1, 5), stages)])
         k8 = sizes.index(256) if 256 in sizes else -1
-        at8 = (f"At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, "
-               + ("beats" if e1[k8] < rv[1] else "loses to") + f" two stages of 16, {rv[1]:.3f}.")
+        at8 = (f"At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, beats two stages of 16, {rv[1]:.3f}."
+               if e1[k8] < rv[1] else
+               f"At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, loses to two stages of 16, {rv[1]:.3f}.")
         with self.voiceover(
             "One more trick, the one sound codecs rely on: quantize in stages. <bookmark mark='a'/> The first stage "
             "codes the patch roughly; the second codes what the first missed; then a third, and a fourth. The patch is "

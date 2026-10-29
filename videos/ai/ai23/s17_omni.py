@@ -183,6 +183,7 @@ class Omni(VoiceoverScene):
         axl = label(r"tokens a second, \ log scale \ (a picture: \ tokens per frame)", font_size=18, color=GREY_B)
         axl.next_to(bars, DOWN, buff=0.3).align_to(bars[0][1], LEFT)
         mimi_min = 12.5 * 8 * 60
+        bh = label(r"what each sense costs, \ in tokens", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
             "In the end, every sense is a stream of tokens, and what differs is how many. <bookmark mark='a'/> The "
             f"words of speech come at about {float(w['tokens_per_second']):.0f} tokens a second, by Whisper's own "
@@ -192,8 +193,9 @@ class Omni(VoiceoverScene):
             "stream at Mimi's rate, so much of the engineering in these models is in spending fewer: lower frame "
             "rates, fewer codebooks, smaller pictures where they will do."
         ) as vo:
+            self.play(FadeIn(bh), FadeIn(axl))
             vo.wait_until("a")
-            self.play(FadeIn(bars[0]), FadeIn(axl))
+            self.play(FadeIn(bars[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b_, shift=RIGHT * 0.1) for b_ in bars[1:]], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")

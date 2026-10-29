@@ -214,13 +214,15 @@ class TTS(VoiceoverScene):
                          font_size=22, color=GREY_B).move_to(DOWN * 1.3)
         gen = ""
         if avail and bool(nr["generated"]):
-            gen = (f" And here is the narrator saying a sentence of this part: {int(np.asarray(nr['gen_codes']).shape[0])} "
-                   "frames, sixteen codes each, written by its transformer before a decoder made them into sound.")
-        own = (f"Here is the {float(nr.get('ref_seconds', 0)):.0f}-second clip it learned its English voice from, as the codes "
-               "the narrator sees: "
-               f"{int(np.asarray(nr['ref_codes']).shape[0])} frames of sixteen codes, {float(nr['bps']):,.0f} bits a "
-               "second." + gen) if avail else ("Its codes can't be shown here, because Qwen3-TTS isn't installed on "
-                                               "the computer that built this video.")
+            n_gen = int(np.asarray(nr["gen_codes"]).shape[0])
+            gen = (f" And here is the narrator saying a sentence of this part: {n_gen} frames, sixteen codes each, "
+                   "written by its transformer before a decoder made them into sound.")
+        if avail:
+            ref_s, n_ref, bps = float(nr["ref_seconds"]), int(np.asarray(nr["ref_codes"]).shape[0]), float(nr["bps"])
+            own = (f"Here is the {ref_s:.0f}-second clip it learned its English voice from, as the codes the narrator "
+                   f"sees: {n_ref} frames of sixteen codes, {bps:,.0f} bits a second.{gen}")
+        else:
+            own = "Its codes can't be shown here, because Qwen3-TTS isn't installed on the computer that built this video."
         with self.voiceover(
             "This series has a narrator of its own. <bookmark mark='a'/> Qwen3-TTS, from Alibaba in January 2026, was "
             "trained on over five million hours of speech in ten languages. Its tokenizer is a codec like Mimi: 12.5 "
