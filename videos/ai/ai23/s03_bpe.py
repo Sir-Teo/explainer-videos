@@ -42,6 +42,8 @@ class BPE(VoiceoverScene):
         exg = VGroup(exl, ex).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.6)
         if exg.width > 13:
             exg.width = 13
+        stat = label(rf"${types:,}$ different words; \ ${100 * oov:.1f}\%$ of the passage's words never seen".replace(",", "{,}", 1),
+                     font_size=34, color=C.SURPRISE).move_to(DOWN * 0.9)
         with self.voiceover(
             "A tokenizer decides what a model's units are. Whole words? <bookmark mark='a'/> In two million "
             f"characters of our novels there are {types:,} different words, and still {100 * oov:.1f} percent of the "
@@ -51,9 +53,9 @@ class BPE(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(wl), LaggedStart(*[FadeIn(w, shift=UP * 0.1) for w in words], lag_ratio=0.08), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(exg))
+            self.play(FadeIn(stat), FadeIn(exg))
             vo.wait_until("b")
-            self.play(FadeIn(cl), LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in chars], lag_ratio=0.02), run_time=2.0)
+            self.play(FadeOut(stat), FadeIn(cl), LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in chars], lag_ratio=0.02), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -135,7 +137,7 @@ class BPE(VoiceoverScene):
                   yticks=[0, 1, 2], center=[-3.4, -0.4, 0])
         cv = curve(ax.ax, ks, L / 1e6, TEXT_C, 4)
         end = Dot(ax.ax.c2p(ks[-1], L[-1] / 1e6), color=TEXT_C)
-        endl = label(rf"${100 * L[-1] / L0:.0f}\%$ of the characters", font_size=22, color=TEXT_C).next_to(end, UP, buff=0.15)
+        endl = label(rf"${100 * L[-1] / L0:.0f}\%$ of the characters", font_size=22, color=TEXT_C).next_to(end, UP, buff=0.5)
         colors = {r"n_k": C.BITS, r"n_i": C.BITS, r"L_k": TEXT_C, r"L_{k-1}": TEXT_C, r"L_0": TEXT_C}
         rows = [cmath(r"L_k", r"=", r"L_{k-1}", r"-", r"n_k", colors=colors, font_size=38),
                 cmath(r"L_k", r"=", r"L_0", r"-", r"\textstyle\sum_{i \le k}", r"n_i", colors=colors, font_size=38),

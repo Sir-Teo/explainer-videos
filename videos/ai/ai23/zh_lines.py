@@ -99,7 +99,7 @@ ZH = {
     'f"Here they learn, all fifteen runs,':
         "这是它们学习的过程，全部十五次训练，随着预算的消耗，在留出文本上以每字符比特数衡量。<bookmark mark='a'/>在测试段落上，{LM_SAY[best]}最好，每字符{m[best]:.2f}比特；{LM_SAY[worst]}最差，{m[worst]:.2f}比特；不同种子之间相差从不超过{spread:.2f}。<bookmark mark='b'/>{verdict}",
 
-    'f"{pairs[0]}, and {pairs[1]}.':
+    "f'{pairs[0]}, and {pairs[1]}.":
         "{pairs[0]}；{pairs[1]}。",
 
     'Why does the tokenizer matter at all?':
@@ -165,9 +165,9 @@ ZH = {
     'f"One more trick, the one sound codecs rely on:':
         "还有一个技巧，声音编解码器都靠它：分级量化。<bookmark mark='a'/>第一级粗略地编码这个小块；第二级编码第一级漏掉的部分；然后第三级、第四级。小块被重建为它们的和。<bookmark mark='b'/>它比一本大码本更好吗？在比特数相同时不是。{at8}<bookmark mark='c'/>但残差的各级能一直往下走，而单一码本跟不上：十六比特需要一张65536项的表，而四级、每级16个码，只用64项就达到{rv[-1]:.3f}。这就是残差向量量化，几乎每个神经音频编解码器里都有它。",
 
-    'f"At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, beats':
+    "f'At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, beats":
         "在八比特时，一本256个码的码本，误差{e1[k8]:.3f}，胜过两级、每级16个码的{rv[1]:.3f}。",
-    'f"At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, loses to':
+    "f'At eight bits one codebook of 256 codes, error {e1[k8]:.3f}, loses to":
         "在八比特时，一本256个码的码本，误差{e1[k8]:.3f}，输给了两级、每级16个码的{rv[1]:.3f}。",
 
     # ---------------------------------------------------------------- Sampling
@@ -274,10 +274,10 @@ ZH = {
     '"This series has a narrator of its own.':
         "这个系列有自己的旁白。<bookmark mark='a'/>Qwen3-TTS，阿里巴巴2026年1月发布，在十种语言、五百多万小时的语音上训练。它的分词器是一个像Mimi那样的编解码器：每秒12.5帧，十六本码本，每本2048个码，第一本由一个自监督模型教着去携带说了什么，其余十五本携带听起来怎样。<bookmark mark='b'/>它的Transformer写出每一帧的第一本码，一个小模块预测其余十五本，大约十分之一秒后就发出第一个声音。它只需三秒就能克隆一个声音。<bookmark mark='c'/>{own}<bookmark mark='d'/>这份视频由{narration_credit()}朗读。从Voder的琴键到这里，走了八十七年。",
 
-    'f"Here is the {ref_s:.0f}-second clip':
+    "f'Here is the {ref_s:.0f}-second clip":
         "这是它学英语声音所用的那段{ref_s:.0f}秒的片段，写成旁白看到的编码：{n_ref}帧，每帧十六个码，每秒{bps:,.0f}比特。{gen}",
 
-    'f" And here is the narrator saying a sentence of this part:':
+    "f' And here is the narrator saying a sentence of this part:":
         "这是旁白说出这一部分里的一句话：{n_gen}帧，每帧十六个码，由它的Transformer写出，再由解码器变成声音。",
 
     "Its codes can't be shown here,":
