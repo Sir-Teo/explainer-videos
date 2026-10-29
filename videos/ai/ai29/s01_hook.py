@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai29.compute import load
+from videos.ai.ai29.common import PART, load
 
 
 class Hook(VoiceoverScene):
@@ -99,15 +99,32 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(r"Part 29: \ Agents and Worlds", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"beliefs, \ long horizons, \ world models, \ robots", font_size=30, color=C.BITS).next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=29, done=28).scale(0.85).move_to(DOWN * 0.9)
+        title = label(rf"Part {PART}: \ Agents and Worlds", font_size=44).to_edge(UP, buff=0.5)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.6)
+        obj = objectives_card([
+            r"from Shakey and the DARPA races to today's agents; \ acting on a belief (POMDPs)",
+            r"the agent loop: \ ReAct, \ tools, \ MCP, \ memory, \ many agents",
+            r"long horizons: \ compounding error, \ METR's doubling, \ coding and computer-use agents",
+            r"imitation: \ behaviour cloning's $T^2\varepsilon$ and DAgger, \ derived and measured",
+            r"world models: \ Ha and Schmidhuber, \ Dreamer trained here, \ Genie, \ V-JEPA",
+            r"robots: \ sim-to-real, \ vision-language-action models, \ $\pi_0$, \ FAST, \ $\pi_{0.5}$",
+        ], font_size=26)
         with self.voiceover(
-            "This part is about agents: acting on a belief, surviving long chains of steps, imagining the future, "
-            "<bookmark mark='a'/> and moving in the physical world."
+            "This is Part 29 of AI, Built: agents and worlds. <bookmark mark='a'/> We start with history, from the "
+            "first robot that planned to the first cars that drove themselves, and with how to act when you can't "
+            "see everything. <bookmark mark='r2'/> Then the loop every language-model agent runs, with its tools and "
+            "memory. <bookmark mark='r3'/> Then long horizons: why errors compound, how fast agents' horizons are "
+            "growing, and how coding and computer-use agents are measured. <bookmark mark='r4'/> Then imitation, "
+            "and why copying an expert fails in a way that grows with the square of the task's length. "
+            "<bookmark mark='r5'/> Then world models, including a small Dreamer trained on this computer, "
+            "<bookmark mark='r6'/> and finally robots: from simulation to reality, and the models that turn "
+            "pictures and words into motion."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
+            self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
-        self.wait(0.5)
+            self.play(FadeOut(smap), FadeIn(obj.head), FadeIn(obj.rows[0], shift=RIGHT * 0.1))
+            for k in range(1, len(obj.rows)):
+                vo.wait_until(f"r{k + 1}")
+                self.play(FadeIn(obj.rows[k], shift=RIGHT * 0.1), run_time=0.6)
+        self.wait(0.3)
         self.clear_scene()
