@@ -38,6 +38,27 @@ class Clip(VoiceoverScene):
                          .move_to([grid.get_left()[0] + cell * (i + 0.5), grid.get_top()[1] + 0.55, 0]) for i, cp in enumerate(caps)])
         diag = VGroup(*[Square(cell, stroke_color=WHITE, stroke_width=1.5).move_to(
             [grid.get_left()[0] + cell * (i + 0.5), grid.get_top()[1] - cell * (i + 0.5), 0]) for i in range(n)])
+        def vec(vals, col):
+            return VGroup(*[Square(0.24, stroke_width=1, stroke_color=col, fill_color=col, fill_opacity=float(x)) for x in vals]).arrange(
+                RIGHT, buff=0.03)
+
+        def box(text, col):
+            b_ = RoundedRectangle(width=2.0, height=0.7, corner_radius=0.1, stroke_color=col, stroke_width=2)
+            return VGroup(b_, label(text, font_size=22, color=col).move_to(b_))
+
+        gq = np.random.default_rng(16)
+        u = gq.uniform(0.15, 1, 6)
+        w = np.clip(u + gq.normal(0, 0.12, 6), 0.1, 1)
+        p_in = gray_image(imgs[0], 1.0).move_to([-4.6, 0.9, 0])
+        c_in = data_text(caps[0], font="DejaVu Sans Mono", font_size=22, color=TEXT_C).move_to([-4.6, -0.9, 0])
+        e1, e2 = box(r"picture encoder", IMG_C).move_to([-1.6, 0.9, 0]), box(r"caption encoder", TEXT_C).move_to([-1.6, -0.9, 0])
+        v1, v2 = vec(u, IMG_C).move_to([1.6, 0.9, 0]), vec(w, TEXT_C).move_to([1.6, -0.9, 0])
+        arr = VGroup(*[Arrow(a_.get_right(), b_.get_left(), buff=0.12, stroke_width=3, color=GREY_B) for a_, b_ in
+                       ((p_in, e1), (c_in, e2), (e1, v1), (e2, v2))])
+        sc = label(rf"score $= u \cdot v = {float(u @ w):.2f}$ \\ matching pairs: \ high \\ the rest: \ low", font_size=24,
+                   color=GREY_A).move_to([4.9, 0.0, 0])
+        enc = Group(p_in, c_in, e1, e2, v1, v2, arr, sc)
+        etag = note(r"schematic", font_size=18).next_to(enc, DOWN, buff=0.3)
         hist = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in (
             (r"2014--15: \ a network captions a photo, \ word by word", GREY_A),
             (r"2021: \ CLIP (OpenAI): \ $400$ million pictures and captions; \\ zero-shot ImageNet $76.2\%$, \ with none of "
@@ -56,10 +77,13 @@ class Clip(VoiceoverScene):
             "We trained a small pair on our letters, with captions like bold serif A. Here's a batch: every picture "
             "scored against every caption, <bookmark mark='d'/> and the bright diagonal is the right pairs."
         ) as vo:
-            self.play(FadeIn(hist[0]))
+            self.play(FadeIn(hist[0]), FadeIn(p_in), FadeIn(c_in), FadeIn(etag))
             vo.wait_until("b")
             self.play(FadeIn(hist[1]), FadeIn(cite_))
+            self.play(GrowArrow(arr[0]), GrowArrow(arr[1]), FadeIn(e1), FadeIn(e2))
+            self.play(GrowArrow(arr[2]), GrowArrow(arr[3]), FadeIn(v1), FadeIn(v2), FadeIn(sc))
             vo.wait_until("c")
+            self.play(FadeOut(enc), FadeOut(etag))
             self.play(FadeIn(pics), FadeIn(words), FadeIn(grid), Create(frame), FadeIn(tag), FadeIn(ours), run_time=2.0)
             vo.wait_until("d")
             self.play(LaggedStart(*[Create(d_) for d_ in diag], lag_ratio=0.1))
@@ -79,17 +103,17 @@ class Clip(VoiceoverScene):
                 why(r"the best critic: \ a density ratio (Part 24)", font_size=19),
                 why(r"put it in; \ divide by the true pair's term", font_size=19),
                 why(r"each ratio averages $1$ over random captions; \\ then $1 + (N{-}1)r \ge Nr$ for $r \le 1$", font_size=19)]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.2, align_index=None, buff=0.3, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.6, align_index=None, buff=0.25, edge=6.9)
         Bs = [int(b) for b in c["batches"]]
         k = {B: i for i, B in enumerate(Bs)}
         est = [np.asarray(c[f"mi_clip_{B}"], float)[:, k[B]] for B in Bs]
         H = float(c["H_caption"])
-        x0, w = -4.6, 1.0
-        sy = 0.42
-        base_y = -3.2
+        x0, w = 2.6, 0.9
+        sy = 0.3
+        base_y = -3.45
         bars = VGroup()
         for i, (B, e) in enumerate(zip(Bs, est)):
-            x = x0 + i * 1.9
+            x = x0 + i * 1.5
             ceil_ = Rectangle(width=w, height=math.log(B) * sy, stroke_color=WHITE, stroke_width=1.5).move_to(
                 [x, base_y + math.log(B) * sy / 2, 0])
             fill = Rectangle(width=w, height=max(e.mean(), 0.01) * sy, stroke_width=0, fill_color=CLIP_C, fill_opacity=0.7).move_to(
@@ -98,13 +122,16 @@ class Clip(VoiceoverScene):
             bars.add(VGroup(ceil_, fill, dots, label(rf"$N = {B}$", font_size=18, color=GREY_A).next_to(ceil_, DOWN, buff=0.08),
                             MathTex(f"{e.mean():.2f}", font_size=20, color=CLIP_C).next_to(fill, UP, buff=0.05)
                             if e.mean() < math.log(B) - 0.4 else MathTex(f"{e.mean():.2f}", font_size=20, color=CLIP_C).move_to(fill)))
-        hl = DashedLine([x0 - 0.7, base_y + H * sy, 0], [x0 + 2 * 1.9 + 0.7, base_y + H * sy, 0], color=TEXT_C)
-        hll = label(rf"$H(\text{{caption}}) = \log {int(round(math.exp(H)))} = {H:.2f}$", font_size=18, color=TEXT_C).next_to(hl, RIGHT, buff=0.1)
+        hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * 1.5 + 0.6, base_y + H * sy, 0], color=TEXT_C)
+        hll = label(rf"$H(\text{{caption}}) = \log {int(round(math.exp(H)))} = {H:.2f}$", font_size=18, color=TEXT_C).next_to(hl, LEFT, buff=0.1)
         bl = label(r"our CLIP: \ $\log N - \mathcal L$ in nats \ (outline: $\log N$)", font_size=18, color=GREY_A)
         bl.next_to(VGroup(bars, hl), UP, buff=0.12).align_to(bars, LEFT)
         bars_g = VGroup(bars, hl, hll, bl)
-        bars_g.shift(RIGHT * 7.4 + UP * 0.2)
+        keep_in_frame(bars_g, margin=0.2)
         e16, e256 = est[0].mean(), est[-1].mean()
+        bh = VGroup(label(r"what the loss measures", font_size=44),
+                    label(r"Part 24: \ $\log N - \mathcal L$ is a lower bound on the mutual information \\ "
+                          r"here: \ the same bound, \ from the best possible critic", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.4)
         with self.voiceover(
             "Part 24 showed that this kind of loss measures information. Here is the same fact seen from the critic's "
             "side. <bookmark mark='a'/> The loss asks each picture to pick its caption out of N. <bookmark mark='b'/> "
@@ -117,7 +144,9 @@ class Clip(VoiceoverScene):
             f"log N, while the captions themselves hold {H:.2f}. Bigger batches can measure more of what the pictures "
             "and words share."
         ) as vo:
+            self.play(FadeIn(bh))
             vo.wait_until("a")
+            self.play(FadeOut(bh))
             step(0)
             vo.wait_until("b")
             step(1, transform=False)
@@ -160,7 +189,9 @@ class Clip(VoiceoverScene):
                     label(rf"their pictures find the exact caption: \ ${100 * un[Bmax].mean():.0f}\%$ \ (chance: \ "
                           rf"$1$ in ${nc}$)", font_size=22, color=CLIP_C),
                     label(rf"the right letter: \ ${100 * lu[Bmax].mean():.0f}\%$", font_size=22, color=CLIP_C))
-        zs.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, 0.6, 0])
+        zs.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -1.7, 0])
+        lax = axes([0, float(L[-1, 0]), 1], [0, float(np.percentile(L[:, 1], 98)) * 1.05, 1], x_length=4.6, y_length=2.2,
+                   xlabel=r"pairs seen", ylabel=rf"CLIP's loss, \ batches of ${Bmax}$", center=[3.4, 1.4, 0])
         zl = label(rf"CLIP's loss, \ batch ${Bmax}$, \ three seeds", font_size=18, color=GREY_B).next_to(zs, DOWN, buff=0.25)
         because = ("because the caption encoder learned bold, mono and Q separately, and can put them together"
                    if un[Bmax].mean() > 0.2 else "far above chance, but putting known words together is harder than "
@@ -174,13 +205,16 @@ class Clip(VoiceoverScene):
             f"{nc} captions, those pictures find their exact caption {100 * un[Bmax].mean():.0f} percent of the time, "
             f"{because}."
         ) as vo:
-            self.play(FadeIn(cur), Create(frame), FadeIn(gl))
+            self.play(FadeIn(cur), Create(frame), FadeIn(gl), FadeIn(lax))
             self.add(cnt)
             vo.wait_until("a")
             self.play(Create(diag))
             for k_ in range(1, len(checks)):
                 nxt = grid(k_)
-                self.play(FadeTransform(cur, nxt), t.animate.set_value(checks[k_]), run_time=1.0)
+                segp = [(a_, b_) for a_, b_ in L if checks[k_ - 1] <= a_ <= checks[k_]]
+                extra = [Create(curve(lax.ax, [p_[0] for p_ in segp], [min(p_[1], lax.ax.y_range[1]) for p_ in segp], CLIP_C, 2.5))] \
+                    if len(segp) > 1 else []
+                self.play(FadeTransform(cur, nxt), t.animate.set_value(checks[k_]), *extra, run_time=1.0)
                 cur = nxt
                 self.bring_to_front(diag)
             vo.wait_until("b")
@@ -210,6 +244,11 @@ class Clip(VoiceoverScene):
         bars.move_to([-0.6, -1.3, 0])
         bl = label(rf"unseen captions found, \ $\%$ \ (same ${int(c['pairs']) // 1000}$ thousand pairs for every run; "
                    r"three seeds)", font_size=18, color=GREY_A).next_to(bars, UP, buff=0.15)
+        tabs = Group()
+        for nm, key, col in ((r"CLIP's loss", "sim_clip", CLIP_C), (r"SigLIP's loss", "sim_siglip", SIGLIP_C)):
+            im = heat(np.asarray(c[key]), 2.6, 2.6, signed=True)
+            tabs.add(Group(im, label(nm + r", \ trained", font_size=20, color=col).next_to(im, UP, buff=0.1)))
+        tabs.arrange(RIGHT, buff=0.8).move_to([0, -1.4, 0])
         use = label(r"SigLIP 2 (2025): \ the eyes of many open \\ vision-language models, \ Qwen3-VL's among them",
                     font_size=19, color=SIGLIP_C).to_corner(DR, buff=0.35)
         cite_ = cite(r"X.~Zhai et al., \textit{Sigmoid Loss for Language Image Pre-Training} (2023)", corner=DL)
@@ -231,10 +270,11 @@ class Clip(VoiceoverScene):
             f"{100 * m[('clip', Bs[-1])]:.0f} against {100 * m[('siglip', Bs[-1])]:.0f} at {Bs[-1]}, CLIP first. "
             "<bookmark mark='c'/> At scale, SigLIP's encoders became the eyes of many open vision-language models."
         ) as vo:
-            self.play(FadeIn(f1), FadeIn(l1), FadeIn(cite_))
+            self.play(FadeIn(f1), FadeIn(l1), FadeIn(cite_), FadeIn(tabs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(f2), FadeIn(l2))
+            self.play(FadeIn(f2), FadeIn(l2), FadeIn(tabs[1]))
             vo.wait_until("b")
+            self.play(FadeOut(tabs))
             self.play(FadeIn(bl), LaggedStart(*[FadeIn(r_) for r_ in bars.rows], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(use))

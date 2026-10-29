@@ -123,7 +123,7 @@ class CTC(VoiceoverScene):
                                   stroke_opacity=0.7).set_z_index(-1))
         stl = VGroup(*[data_text(c_, font=MONO, font_size=20, color=BLANK_C if c_ == "∅" else LETTER_C)
                        .move_to([gx[0] - 0.4, gy[i], 0]) for i, c_ in enumerate(st)])
-        lt = note(r"the lattice for ``ab'', \ $6$ frames \ (schematic)", font_size=20).move_to([2.6, -2.2, 0])
+        lt = note(r"the lattice for ``ab'', \ $6$ frames \ (schematic)", font_size=20).move_to([3.0, -2.2, 0])
         lat = VGroup(arrs, dots, stl, lt)
         hmm = label(r"Part 7's forward algorithm: \\ $O(T \cdot L)$ steps, \\ and $-\log p$ \\ is a loss to descend",
                     font_size=22, color=GREY_A).move_to([5.0, -2.2, 0])

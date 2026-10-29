@@ -28,14 +28,14 @@ class Whisper(VoiceoverScene):
                             r"from distractors \\ (Part 24's contrastive loss)", font_size=20, color=GREY_A),
                       label(r"with $53{,}000$ unlabelled hours, \\ $10$ minutes of transcripts: \ $4.8\%$ / $8.2\%$ "
                             r"word errors \\ (LibriSpeech clean / other)", font_size=20, color=C.CONTEXT))
-        left.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-3.4, 0.2, 0])
+        left.arrange(DOWN, aligned_edge=LEFT, buff=0.26).scale(1.2).move_to([-3.4, 0.2, 0])
         right = VGroup(label(r"weakly supervised", font_size=30, color=SND_C),
                        label(r"Whisper \ (OpenAI, 2022)", font_size=24, color=GREY_A),
                        label(r"$680{,}000$ hours of audio with transcripts \\ found on the web, \ imperfect ones "
                              r"included", font_size=20, color=GREY_A),
                        label(r"one model: \ transcribe, \ translate, \\ name the language, \ time the words; \\ "
                              r"nearly a hundred languages", font_size=20, color=SND_C))
-        right.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, 0.2, 0])
+        right.arrange(DOWN, aligned_edge=LEFT, buff=0.26).scale(1.2).move_to([3.4, 0.2, 0])
         div = Line([0, 2.6, 0], [0, -2.4, 0], color=GREY_D)
         cite_ = cite(r"A.~Baevski et al.\ (2020); \ A.~Radford et al., \textit{Robust Speech Recognition via Large-Scale "
                      r"Weak Supervision} (2022)", corner=DR)
@@ -88,13 +88,13 @@ class Whisper(VoiceoverScene):
             "timestamps. A recognizer has become a language model that listens. <bookmark mark='d'/> We ran the "
             f"smallest English model, base.en, {int(w['params']) / 1e6:.0f} million parameters, from the Hugging Face cache."
         ) as vo:
-            self.play(FadeIn(mel), FadeIn(ml))
+            self.play(FadeIn(mel), FadeIn(ml), FadeIn(par))
             vo.wait_until("b")
             self.play(GrowArrow(a1), FadeIn(enc), GrowArrow(a2), FadeIn(a2l), FadeIn(dec))
             vo.wait_until("c")
             self.play(FadeIn(cl), LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in chips], lag_ratio=0.08), run_time=2.0)
             vo.wait_until("d")
-            self.play(FadeIn(par))
+            self.play(Indicate(par, color=WHITE))
         self.wait(0.3)
         self.clear_scene()
 
@@ -144,7 +144,7 @@ class Whisper(VoiceoverScene):
             (r"2023: \ Whisper large-v3, \ $1.55$ billion parameters", SND_C),
             (r"2024: \ large-v3-turbo: \ $4$ decoder layers instead of $32$", SND_C),
             (r"2026: \ Qwen3-ASR (Alibaba): \ $52$ languages and dialects, \ built on Qwen3-Omni", SND_C))]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 1.6)
+            DOWN, aligned_edge=LEFT, buff=0.35).scale(1.15).move_to(UP * 1.3)
         loop = VGroup(node_box(r"the narrator \\ speaks a sentence", C.MODEL_Q, font_size=22),
                       node_box(r"Qwen3-ASR \\ transcribes it", SND_C, font_size=22),
                       node_box(r"too different? \\ take it again", C.SURPRISE, font_size=22),

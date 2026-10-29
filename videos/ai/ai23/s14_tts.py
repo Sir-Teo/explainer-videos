@@ -43,7 +43,7 @@ class TTS(VoiceoverScene):
             (r"1980: \ Dennis Klatt's formant synthesizer \ (the voice Stephen Hawking used grew from it)", SPEAK_C),
             (r"1996: \ unit selection: \ splice recorded pieces of one speaker \ (Hunt \& Black)", SPEAK_C),
             (r"2000s: \ statistical parametric synthesis: \ HMMs predict the spectrum", SPEAK_C))]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.25).move_to([0, -1.6, 0])
+            DOWN, aligned_edge=LEFT, buff=0.28).scale(1.15).move_to([0, -1.5, 0])
         if eras.width > 13:
             eras.width = 13
         with self.voiceover(
@@ -134,16 +134,18 @@ class TTS(VoiceoverScene):
         ar = node_box(r"autoregressive transformer: \\ codebook $1$, \ frame by frame", SPEAK_C, font_size=20)
         nar = node_box(r"non-autoregressive: \\ codebooks $2$ to $8$", SPEAK_C, font_size=20)
         dec = node_box(r"EnCodec's decoder", ACOU_C, font_size=20)
-        ins = VGroup(text, prompt).arrange(DOWN, buff=0.4).move_to([-4.8, 0.6, 0])
-        ar.move_to([-0.9, 1.2, 0])
-        nar.move_to([-0.9, -0.4, 0])
-        dec.move_to([3.2, 0.4, 0])
+        for m in (prompt, text, ar, nar, dec):
+            m.scale(1.25)
+        ins = VGroup(text, prompt).arrange(DOWN, buff=0.5).move_to([-4.9, 0.6, 0])
+        ar.move_to([-0.9, 1.5, 0])
+        nar.move_to([-0.9, -0.5, 0])
+        dec.move_to([3.0, 0.5, 0])
         arr = VGroup(Arrow(text.get_right(), ar.get_left(), buff=0.1, color=GREY_B),
                      Arrow(prompt.get_right(), ar.get_left(), buff=0.1, color=GREY_B),
                      Arrow(ar.get_bottom(), nar.get_top(), buff=0.1, color=GREY_B),
                      Arrow(nar.get_right(), dec.get_left(), buff=0.1, color=GREY_B))
-        wave = FunctionGraph(lambda x: 0.25 * np.sin(9 * x) * np.exp(-0.3 * x * x), x_range=[-1.4, 1.4], color=SND_C)
-        wave.next_to(dec, RIGHT, buff=0.3)
+        wave = FunctionGraph(lambda x: 0.3 * np.sin(9 * x) * np.exp(-0.3 * x * x), x_range=[-1.0, 1.0], color=SND_C)
+        wave.move_to([5.7, 0.5, 0])
         tag = note(r"schematic", font_size=18).to_corner(DL, buff=0.3)
         facts = label(r"VALL-E (Microsoft, January 2023): \ $60{,}000$ hours of English; \ a new voice from a "
                       r"$3$-second prompt", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.7)
@@ -185,10 +187,10 @@ class TTS(VoiceoverScene):
         if avail:
             codes = np.asarray(nr["ref_codes"]).T  # 16 x frames
             T = codes.shape[1]
-            show = min(T, 75)
-            grid = code_grid(codes[:, :show], cell=0.13, K=int(nr["K"])).move_to([-2.4, -1.3, 0])
+            show = min(T, 50)
+            grid = code_grid(codes[:, :show], cell=0.12, K=int(nr["K"])).move_to([-2.6, -1.6, 0])
             M = np.asarray(nr["ref_mel"])
-            mel = spectro(M[:, :show * 8], grid.width, 1.0, lo=M.min(), hi=M.max()).next_to(grid, UP, buff=0.15)
+            mel = spectro(M[:, :show * 8], grid.width, 0.9, lo=M.min(), hi=M.max()).next_to(grid, UP, buff=0.12)
             gl = label(rf"the clip it clones its English voice from: \ ${show / float(nr['hz']):.0f}$ s as "
                        rf"${int(nr['n_q'])} \times {show}$ codes", font_size=19, color=GREY_A).next_to(mel, UP, buff=0.1)
             rl = VGroup(label(r"codebook $1$: \ semantic", font_size=16, color=SEM_C).next_to(grid, RIGHT, buff=0.1).align_to(grid, UP),
@@ -202,11 +204,12 @@ class TTS(VoiceoverScene):
                 gtxt = label(r"and the narrator saying \ ``" + str(nr["sentence"]) + r"'': \ " +
                              rf"${gc.shape[1]}$ frames", font_size=19, color=SPEAK_C)
                 side.add(VGroup(gtxt, g2).arrange(DOWN, buff=0.12, aligned_edge=LEFT))
-            side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.3, -1.3, 0])
+            side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.2, -1.3, 0])
             if side.width > 4.8:
                 side.width = 4.8
-            body = Group(mel, gl, grid, rl, side)
+            body = Group(mel, gl, grid, rl)
         else:
+            side = VGroup()
             body = label(r"(Qwen3-TTS isn't installed on the computer that built this video, \\ so its codes are not shown)",
                          font_size=22, color=GREY_B).move_to(DOWN * 1.3)
         gen = ""
@@ -229,11 +232,11 @@ class TTS(VoiceoverScene):
             "here took eighty-seven years."
         ) as vo:
             self.play(FadeIn(facts[0]), FadeIn(cite_))
-            self.play(FadeIn(facts[1]))
+            self.play(FadeIn(facts[1]), FadeIn(body))
             vo.wait_until("b")
             self.play(FadeIn(facts[2]), FadeIn(facts[3]))
             vo.wait_until("c")
-            self.play(FadeIn(body))
+            self.play(FadeIn(side))
             vo.wait_until("d")
         self.wait(0.3)
         self.clear_scene()
