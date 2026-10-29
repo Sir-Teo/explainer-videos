@@ -53,6 +53,22 @@ class Bits(VoiceoverScene):
                 why(r"the conversion", font_size=22),
                 why(r"our $4{,}096$-piece BPE model, \\ on the passage (seed $0$)", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, align_index=None, buff=0.5, edge=6.9)
+        from videos.ai.ai23.common import token_chips
+
+        sent = "rolled a cigarette."
+        bt = token_chips(list(" " + sent), font_size=20, height=0.38, buff=0.03)
+        bb = load("bpe")
+        cutb = [str(x) for x in bb[f"cut{int(bb['sizes'][-1])}"]]
+        tail = []
+        for piece in reversed(cutb):
+            tail.insert(0, piece)
+            if "".join(tail).strip() == sent:
+                break
+        tk = token_chips(tail, font_size=20, height=0.38, buff=0.03)
+        cmp_ = VGroup(VGroup(label(rf"bytes: \ ${len(sent) + 1}$ guesses", font_size=20, color=GREY_B), bt).arrange(RIGHT, buff=0.3),
+                      VGroup(label(rf"BPE: \ ${len(tail)}$ guesses", font_size=20, color=TEXT_C), tk).arrange(RIGHT, buff=0.3))
+        cmp_.arrange(DOWN, aligned_edge=LEFT, buff=0.3).scale(1.5).move_to(DOWN * 0.2)
+        cmph = label(r"the same text, \ two numbers of guesses", font_size=30, color=GREY_A).next_to(cmp_, UP, buff=0.5)
         with self.voiceover(
             "A tokenizer changes what a model has to guess. A model that predicts bigger tokens has more to guess each "
             "time, so its bits per token can't be compared with a byte model's. <bookmark mark='a'/> The fair "
@@ -62,7 +78,10 @@ class Bits(VoiceoverScene):
             f"BPE model pays {bpt:.2f} bits for a token of the scoreboard's passage, and a token covers {cpt:.2f} "
             f"characters: {b:.2f} bits per character."
         ) as vo:
+            self.play(FadeIn(cmph), FadeIn(cmp_[0]))
+            self.play(FadeIn(cmp_[1]))
             vo.wait_until("a")
+            self.play(FadeOut(cmph), cmp_.animate.scale(1 / 1.5).to_edge(DOWN, buff=0.35))
             step(0)
             vo.wait_until("b")
             step(1)
@@ -131,7 +150,8 @@ class Bits(VoiceoverScene):
         allc = [np.asarray(d[f"curve_{n}_s{s}"]) for n in names for s in d["seeds"]]
         ymax = min(5.0, max(float(c[1:, 1].max()) for c in allc))
         ymin = min(float(c[:, 1].min()) for c in allc)
-        ax = axes([0, budget / 1e12, 1], [math.floor(ymin * 2) / 2 - 0.25, math.ceil(ymax * 2) / 2, 0.5], x_length=6.0,
+        ytop = math.ceil(ymax * 2) / 2
+        ax = axes([0, budget / 1e12, 1], [math.floor(ymin * 2) / 2 - 0.25, ytop, 0.5], x_length=6.0,
                   y_length=4.4, xlabel=r"FLOPs spent, \ $10^{12}$", ylabel=r"bits per character, \ held-out text",
                   xticks=list(range(0, int(budget / 1e12) + 1, max(1, int(budget / 1e12) // 4))),
                   yticks=[v for v in np.arange(math.ceil(ymin * 2) / 2, math.ceil(ymax * 2) / 2 + 0.01, 0.5)],
@@ -140,8 +160,8 @@ class Bits(VoiceoverScene):
         for n in names:
             for s in d["seeds"]:
                 c = np.asarray(d[f"curve_{n}_s{s}"])
-                c = c[c[:, 1] <= ymax + 0.6]
-                lines.add(curve(ax.ax, c[:, 0] / 1e12, np.clip(c[:, 1], None, ymax + 0.4), LM_COLORS[n], 2.5))
+                c = c[c[:, 1] <= ytop]
+                lines.add(curve(ax.ax, c[:, 0] / 1e12, c[:, 1], LM_COLORS[n], 2.5))
         rows = [(LM_NAMES[n], LM_COLORS[n], bpc[n]) for n in names]
         lo = min(v.min() for v in bpc.values())
         hi = max(v.max() for v in bpc.values())
@@ -203,12 +223,13 @@ class Bits(VoiceoverScene):
                     DOWN, aligned_edge=LEFT, buff=0.12)
             sg.add(VGroup(label(LM_NAMES[n] + r" \ writes:", font_size=22, color=LM_COLORS[n]), t)
                    .arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        sg.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 1.6)
+        sg.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 1.3)
         pts = VGroup(*[label(t, font_size=26, color=c_) for t, c_ in (
             (r"bigger tokens: \ more text for each FLOP, \ and more text in the window", TEXT_C),
             (r"bigger vocabularies: \ a bigger output layer, \ and rarer tokens, \ each seen less", C.SURPRISE),
             (r"at scale the output layer is a small part of the cost: \ $10^5$ tokens and more", GREY_A))]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.6)
+            DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=1.3)
+        hd = label(r"why the tokenizer matters", font_size=34).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Why does the tokenizer matter at all? <bookmark mark='a'/> With bigger tokens, every FLOP buys more text, "
             "and the same window of 128 tokens holds more of the passage. <bookmark mark='b'/> But a bigger "
@@ -218,6 +239,7 @@ class Bits(VoiceoverScene):
             "is what two of ours write after the passage's opening words, at a temperature of 0.8. The tokenizer is "
             "a hidden choice behind every score, and bits per character keeps the comparison honest."
         ) as vo:
+            self.play(FadeIn(hd))
             vo.wait_until("a")
             self.play(FadeIn(pts[0]))
             vo.wait_until("b")

@@ -336,8 +336,9 @@ ZH = {
     "f'Their variety barely changes":
         '它们的多样性几乎没变，从{v0:.2f}到{vN:.2f}。',
 
-    "f'Unguided, the judge reads":
-        '不加引导时，评判网络把{100 * a0:.0f}%读成所要求的字母；w等于2时是{100 * a2:.0f}%；w等于{ws[-1]:g}时是{100 * aN:.0f}%。',
+    "f'At w = 0, the model without its prompt":
+        'w等于0时，也就是不看提示词的模型，评判网络把{100 * a0:.0f}%读成所要求的字母，而碰运气是4%；w等于1时，也就是只用带提示词的模型，'
+        '是{100 * a1:.0f}%；w等于2时是{100 * a2:.0f}%；w等于{ws[-1]:g}时是{100 * aN:.0f}%。w等于{best_w:g}时，字母最像真实的字母。',
 
     # ------------------------------------------------------------------ SD3
     'Chapter eight. Stable Diffusion 3 and Flux.':
