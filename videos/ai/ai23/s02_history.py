@@ -18,16 +18,16 @@ def tx(year: float) -> float:
 
 
 LANES = [  # name, colour, y, events (year, label, side: 1 above / -1 below)
-    (r"listening", SND_C, 2.1, [(1952, r"Audrey: \ ten digits", 1), (1975, r"hidden Markov models", -1),
+    (r"listening", SND_C, 2.35, [(1952, r"Audrey: \ ten digits", 1), (1975, r"hidden Markov models", -1),
                                 (1978, r"time warping", 1), (2006, r"CTC", -1), (2012, r"deep acoustic models", 1),
                                 (2014, r"Deep Speech", -1), (2020, r"wav2vec 2.0", 1), (2022, r"Whisper", -1)]),
-    (r"speaking", SPEAK_C, 0.75, [(1939, r"the Voder", 1), (1980, r"formant synthesis", -1),
+    (r"speaking", SPEAK_C, 0.85, [(1939, r"the Voder", 1), (1980, r"formant synthesis", -1),
                                   (1996, r"unit selection", 1), (2016, r"WaveNet", -1), (2017, r"Tacotron", 1),
                                   (2023, r"VALL-E", -1), (2026, r"Qwen3-TTS", 1)]),
-    (r"text", TEXT_C, -0.6, [(1951, r"Shannon's letters", 1), (1994, r"byte pairs, \ to compress", -1),
+    (r"text", TEXT_C, -0.65, [(1951, r"Shannon's letters", 1), (1994, r"byte pairs, \ to compress", -1),
                              (2012, r"WordPiece", 1), (2016, r"BPE for translation", -1), (2018, r"SentencePiece", 1),
                              (2019, r"bytes (GPT-2)", -1), (2024, r"entropy patches", 1)]),
-    (r"pictures", IMG_C, -1.95, [(2014, r"captions", 1), (2017, r"VQ-VAE", -1), (2021, r"CLIP", 1),
+    (r"pictures", IMG_C, -2.15, [(2014, r"captions", 1), (2017, r"VQ-VAE", -1), (2021, r"CLIP", 1),
                                  (2022, r"Flamingo", -1), (2023, r"LLaVA", 1), (2026, r"early fusion", -1)]),
 ]
 
@@ -40,26 +40,43 @@ def lane_axis():
     ticks = VGroup()
     for yr in (1940, 1960, 1980, 2000, 2010, 2015, 2020, 2025):
         x = tx(yr)
-        ticks.add(Line([x, -2.85, 0], [x, -2.75, 0], color=GREY_C, stroke_width=1.5))
-        ticks.add(MathTex(str(yr), font_size=20, color=GREY_B).move_to([x, -3.05, 0]))
-    ticks.add(Line([X0, -2.8, 0], [X1, -2.8, 0], color=GREY_C, stroke_width=1.5))
-    brk = VGroup(Line([tx(2010) - 0.08, -2.95, 0], [tx(2010) - 0.02, -2.65, 0], color=GREY_B, stroke_width=2),
-                 Line([tx(2010) + 0.02, -2.95, 0], [tx(2010) + 0.08, -2.65, 0], color=GREY_B, stroke_width=2))
-    note_ = note(r"the scale changes at 2010", font_size=18).move_to([tx(2010), -3.45, 0])
+        ticks.add(Line([x, -3.15, 0], [x, -3.05, 0], color=GREY_C, stroke_width=1.5))
+        ticks.add(MathTex(str(yr), font_size=20, color=GREY_B).move_to([x, -3.35, 0]))
+    ticks.add(Line([X0, -3.1, 0], [X1, -3.1, 0], color=GREY_C, stroke_width=1.5))
+    brk = VGroup(Line([tx(2010) - 0.08, -3.25, 0], [tx(2010) - 0.02, -2.95, 0], color=GREY_B, stroke_width=2),
+                 Line([tx(2010) + 0.02, -3.25, 0], [tx(2010) + 0.08, -2.95, 0], color=GREY_B, stroke_width=2))
+    note_ = note(r"the scale changes at 2010", font_size=18).move_to([tx(2010) - 2.2, -3.62, 0])
     g.add(ticks, brk, note_)
     return g
 
 
 def events(lane_i: int):
+    """The lane's milestones, each label above or below its dot, a tier further out where it would collide."""
     name, col, y, evs = LANES[lane_i]
     g = VGroup()
+    placed = []  # (side, tier, x0, x1)
     for yr, txt, side in evs:
         d = Dot([tx(yr), y, 0], radius=0.07, color=col)
-        lab = label(rf"{yr}\ \ {txt}", font_size=17, color=col)
-        lab.next_to(d, UP if side > 0 else DOWN, buff=0.08)
-        if lab.get_right()[0] > 6.95:
-            lab.shift(LEFT * (lab.get_right()[0] - 6.95))
-        g.add(VGroup(d, lab))
+        lab = label(rf"{yr}\ \ {txt}", font_size=19, color=col)
+        best = None
+        for sd in (side, -side):
+            for tier in (0, 1):
+                x0 = max(-5.0, tx(yr) - lab.width / 2)
+                x1 = x0 + lab.width
+                if x1 > 6.95:
+                    x0, x1 = 6.95 - lab.width, 6.95
+                if not any(p[0] == sd and p[1] == tier and not (x1 + 0.12 < p[2] or p[3] + 0.12 < x0) for p in placed):
+                    best = (sd, tier, x0, x1)
+                    break
+            if best:
+                break
+        best = best or (side, 1, tx(yr) - lab.width / 2, tx(yr) + lab.width / 2)
+        placed.append(best)
+        sd, tier, x0, x1 = best
+        lab.move_to([(x0 + x1) / 2, y + sd * (0.24 + 0.3 * tier), 0])
+        stem = Line([tx(yr), y, 0], [tx(yr), y + sd * (0.12 + 0.3 * tier), 0], color=col, stroke_width=1,
+                    stroke_opacity=0.6) if tier else VMobject()
+        g.add(VGroup(d, lab, stem))
     return g
 
 
@@ -120,13 +137,10 @@ class History(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(e, scale=1.2) for e in ev_p], lag_ratio=0.35), run_time=3.0)
 
     def meet(self, axis, evs):
-        band = Rectangle(width=tx(2027) - tx(2024), height=5.0, stroke_width=0, fill_color=WHITE, fill_opacity=0.08)
-        band.move_to([(tx(2024) + tx(2027)) / 2, 0.1, 0])
-        bl = label(r"one model, \\ every sense", font_size=24, color=WHITE).next_to(band, UP, buff=0.05)
-        names = label(r"GPT-4o, \ Moshi, \ Qwen-Omni", font_size=20, color=GREY_A)
-        names.next_to(bl, LEFT, buff=0.3)
-        arrows = VGroup(*[Arrow([tx(2023.2), y, 0], [tx(2024.3), 0.1, 0], buff=0.05, color=col, stroke_width=2,
-                                max_tip_length_to_length_ratio=0.12) for _, col, y, _ in LANES])
+        band = Rectangle(width=tx(2027) - tx(2024.3), height=6.3, stroke_width=0, fill_color=WHITE, fill_opacity=0.07)
+        band.move_to([(tx(2024.3) + tx(2027)) / 2, -0.2, 0])
+        bl = label(r"one model, \\ every sense", font_size=22, color=WHITE).move_to([tx(2025.6), 3.4, 0])
+        names = label(r"GPT-4o, \ Moshi, \ Qwen-Omni", font_size=20, color=GREY_A).next_to(bl, LEFT, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> In the last few years the threads met. Once speech, pictures and text are all "
             "tokens, one transformer can read and write them all: GPT-4o in 2024, Moshi, Qwen's omni models. "
@@ -134,8 +148,10 @@ class History(VoiceoverScene):
             "worth, how codes are learned, how sound and pictures become sequences, and how the senses are matched."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(band), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.2), FadeIn(bl), FadeIn(names),
-                      run_time=2.0)
+            band.set_fill(opacity=0)
+            self.add(band)
+            self.bring_to_back(band)
+            self.play(band.animate.set_fill(opacity=0.07), FadeIn(bl), FadeIn(names), run_time=2.0)
             vo.wait_until("b")
             self.play(*[Indicate(e[0], color=WHITE, scale_factor=1.6) for ev in evs for e in ev], run_time=1.5)
         self.wait(0.3)

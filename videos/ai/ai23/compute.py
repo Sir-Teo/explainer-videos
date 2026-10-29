@@ -84,7 +84,7 @@ def compute_bpe():
     merges, freq, saved = text.learn_bpe(sample, n_merges)
     base = sorted(set(text.norm(sample)) | {" "})
     valid, passage = c1.text("valid")[:200_000], c1.text("passage")
-    sizes = [n for n in (500, 2000, 8000) if n <= len(merges)] or [len(merges)]
+    sizes = [n for n in ((500, 2000, 8000) if SCALE == 1 else (100, 300, 600)) if n <= len(merges)] or [len(merges)]
     L0 = sum(len(w) for w in text.words_of(sample))
     out = dict(first=[a + b for a, b in merges[:40]], first_counts=saved[:40], sizes=sizes, sentence=SENTENCE,
                n_merges=len(merges), merges=[[a, b] for a, b in merges], counts=freq, saved=saved, base=base,
