@@ -27,6 +27,7 @@ D, L, H = 64, 4, 4
 SEEDS = (0, 1, 2)
 N_STEPS, BB = 6000, 24  # steps; pictures per task per batch (text conditioning in context learns slowly)
 GUIDE = 2.0
+SHORTCUT = True  # see Unified.forward
 
 
 def family(path: str) -> int:
@@ -53,6 +54,26 @@ def net():
     import torch
     import torch.nn as nn
 
+    class Block(nn.Module):
+        """A transformer block with adaLN-Zero (chapter 6): each position's own condition sets its scales, shifts and
+        gates, which start at zero."""
+
+        def __init__(self):
+            super().__init__()
+            self.n1 = nn.LayerNorm(D, elementwise_affine=False)
+            self.n2 = nn.LayerNorm(D, elementwise_affine=False)
+            self.att = nn.MultiheadAttention(D, H, batch_first=True)
+            self.mlp = nn.Sequential(nn.Linear(D, 4 * D), nn.GELU(), nn.Linear(4 * D, D))
+            self.ada = nn.Linear(D, 6 * D)
+            nn.init.zeros_(self.ada.weight)
+            nn.init.zeros_(self.ada.bias)
+
+        def forward(self, h, c, mask):
+            s1, b1, g1, s2, b2, g2 = self.ada(c).chunk(6, -1)
+            a = self.n1(h) * (1 + s1) + b1
+            h = h + g1 * self.att(a, a, a, attn_mask=mask, need_weights=False)[0]
+            return h + g2 * self.mlp(self.n2(h) * (1 + s2) + b2)
+
     class Unified(nn.Module):
         def __init__(self):
             super().__init__()
@@ -62,8 +83,8 @@ def net():
             self.tmlp = nn.Sequential(nn.Linear(D, D), nn.SiLU(), nn.Linear(D, D))
             self.pos = nn.Parameter(torch.randn(1, 64, D) * 0.02)
             self.ppos = nn.Parameter(torch.randn(1, NP, D) * 0.02)  # where a patch is in its picture
-            self.layers = nn.ModuleList([nn.TransformerEncoderLayer(D, H, 4 * D, dropout=0.0, batch_first=True,
-                                                                    norm_first=True) for _ in range(L)])
+            self.layers = nn.ModuleList([Block() for _ in range(L)])
+            self.ctext = nn.Parameter(torch.zeros(D))  # the condition of a text position
             self.nf = nn.LayerNorm(D)
             self.lm = nn.Linear(D, V)
             self.vel = nn.Linear(D, P * P)
@@ -78,16 +99,23 @@ def net():
             states and the position ranges of each picture."""
             B = text.shape[0]
             parts, spans, ti, pos = [], [], 0, 0
-            block = []
+            block, said, conds = [], [], []
             for kind, n in layout:
                 if kind == "t":
-                    parts.append(self.tok(text[:, ti:ti + n]))
+                    e = self.tok(text[:, ti:ti + n])
+                    parts.append(e)
+                    said.append(e)
+                    conds.append(self.ctext.expand(B, n, D))
                     block += list(range(pos, pos + n))
                     ti += n
                     pos += n
                 else:
                     x = imgs[n]
-                    parts.append(self.patch(patches(x)) + self.ppos + self.temb(ts[n])[:, None])
+                    c = self.temb(ts[n])
+                    if SHORTCUT:  # the text so far, averaged, joins the noise level in every patch's condition
+                        c = c + torch.cat(said, 1).mean(1)
+                    parts.append(self.patch(patches(x)) + self.ppos + c[:, None])
+                    conds.append(c[:, None].expand(B, NP, D))
                     spans.append((pos, pos + NP))
                     block += [pos] * NP  # one block: the picture's patches see each other
                     pos += NP
@@ -95,8 +123,9 @@ def net():
             blk = torch.tensor(block)
             idx = torch.arange(pos)
             allow = (idx[None, :] <= idx[:, None]) | (blk[None, :] == blk[:, None])
+            cond = torch.cat(conds, 1)
             for lyr in self.layers:
-                h = lyr(h, src_mask=~allow)
+                h = lyr(h, cond, ~allow)
             return self.nf(h), spans
 
     return Unified()

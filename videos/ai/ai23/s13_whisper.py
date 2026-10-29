@@ -127,8 +127,8 @@ class Whisper(VoiceoverScene):
             f"held-out Kokoro voices, it gets {100 * ws:.1f} percent of the words wrong. <bookmark mark='b'/> On the "
             f"{int(w['n_strings'])} digit strings, {100 * wd:.1f} percent, counting its numerals as words, against "
             f"{100 * cw:.1f} for our CTC recognizer, trained on nothing but digits: {cmp_}. "
-            "<bookmark mark='c'/> Its mistakes are telling: a rare name or an odd word replaced by a likelier one. The "
-            "decoder is a language model, and it guesses."
+            "<bookmark mark='c'/> Look at its mistakes: where the sound leaves room, the decoder, a language model, "
+            "writes what it finds likelier, a plural, a number in figures, two words run together."
         ) as vo:
             self.play(FadeIn(rl), FadeIn(rows.rows[0]))
             vo.wait_until("b")
