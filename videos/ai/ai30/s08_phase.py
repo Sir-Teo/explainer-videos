@@ -38,8 +38,8 @@ class Phase(VoiceoverScene):
         a1 = Arrow(ln.n2p(0), ln.n2p(w1), buff=0, color=F1, stroke_width=6, max_tip_length_to_length_ratio=0.3) if abs(w1) > 0.05 else Dot(ln.n2p(0), color=F1)
         a2 = Arrow(ln.n2p(0) + DOWN * 0.18, ln.n2p(w2) + DOWN * 0.18, buff=0, color=F2, stroke_width=6,
                    max_tip_length_to_length_ratio=0.3) if abs(w2) > 0.05 else Dot(ln.n2p(0) + DOWN * 0.18, color=F2)
-        t = label(title, font_size=20, color=GREY_A if color == PH[0] else color).next_to(ln, UP, buff=0.35)
-        box = SurroundingRectangle(VGroup(ln, a1, a2, t), buff=0.2, color=GREY_B if color == PH[0] else color,
+        t = label(title, font_size=20, color=GREY_A if color is PH[0] else color).next_to(ln, UP, buff=0.35)
+        box = SurroundingRectangle(VGroup(ln, a1, a2, t), buff=0.2, color=GREY_B if color is PH[0] else color,
                                    corner_radius=0.1, stroke_width=2)
         return VGroup(box, ln, a1, a2, t)
 

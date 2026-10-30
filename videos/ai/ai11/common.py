@@ -116,17 +116,20 @@ def bits_axes(x_range, y_range, x_length=8.0, y_length=4.4, center=ORIGIN, xlabe
               ylabel=r"held-out bits per character", y_step=None, x_step=None, font_size=22, xfmt=None, yfmt=None):
     """Axes with ticks and tick labels for a training curve."""
     xs = x_step or (x_range[1] - x_range[0]) / 4
-    ys = y_step or (y_range[1] - y_range[0]) / 4
+    ys = y_step if y_step and y_step > 0 else (y_range[1] - y_range[0]) / 4
     ax = CornerAxes(x_range=[x_range[0], x_range[1], xs], y_range=[y_range[0], y_range[1], ys], x_length=x_length,
                     y_length=y_length, tips=False,
-                    axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04})
+                    axis_config={"stroke_color": GREY_C, "include_ticks": False})
     ax.move_to(center)
     xfmt = xfmt or (lambda v: f"{int(round(v)):,}".replace(",", "{,}"))
     yfmt = yfmt or (lambda v: f"{v:.1f}")
     xt = VGroup(*[MathTex(xfmt(v), font_size=font_size - 2, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.1)
                   for v in np.arange(x_range[0], x_range[1] + 1e-9, xs)])
+    # tick labels at round values: the nicest step near a quarter of the range, from the first multiple above the bottom
+    nice = min((0.01, 0.02, 0.025, 0.05, 0.1, 0.2, 0.25, 0.5, 1.0, 2.0, 5.0), key=lambda v: abs(math.log(v / ys)))
+    y0 = math.ceil(y_range[0] / nice - 1e-9) * nice
     yt = VGroup(*[MathTex(yfmt(v), font_size=font_size - 2, color=GREY_B).next_to(ax.c2p(x_range[0], v), LEFT, buff=0.1)
-                  for v in np.arange(y_range[0], y_range[1] + 1e-9, ys)])
+                  for v in np.arange(y0, y_range[1] + 1e-9, nice)])
     xl = label(xlabel, font_size=font_size, color=GREY_A).next_to(xt, DOWN, buff=0.12) if xlabel else VGroup()
     yl = label(ylabel, font_size=font_size, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT) if ylabel else VGroup()
     g = VGroup(ax, xt, yt, xl, yl)
