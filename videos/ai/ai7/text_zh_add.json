@@ -450,7 +450,8 @@
   "this section's mix: \\ \\textit{Little Women}": "这一段的配比：\\ 《小妇人》",
   "\\textit{A Christmas Carol}": "《圣诞颂歌》",
   "this section's mix: \\ \\textit{A Christmas Carol}": "这一段的配比：\\ 《圣诞颂歌》",
-  "this section's mix: \\ \\textit{Ulysses}": "这一段的配比：\\ 《尤利西斯》"
+  "this section's mix: \\ \\textit{Ulysses}": "这一段的配比：\\ 《尤利西斯》",
+  "$p(\\text{this French word made this English word})$": "$p(\\text{这个法文词生成了这个英文词})$"
  },
  "patterns": []
 }

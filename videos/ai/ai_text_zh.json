@@ -20297,7 +20297,8 @@
     "V.~Vapnik \\& A.~Chervonenkis": "V.~Vapnik、A.~Chervonenkis",
     "uniform convergence of frequencies to probabilities (announced 1968); \\ Vapnik's support vector machines followed in 1995": "频率一致收敛于概率（1968年公布）；\\ 1995年，瓦普尼克的支持向量机随之而来",
     "angle to the widest-margin direction: \\ $30.0^\\circ$": "与最宽间隔方向的夹角：\\ $30.0^\\circ$",
-    "lyrics memorized in a model's weights are a reproduction; \\ not yet final": "模型权重中记住的歌词构成复制；\\ 判决尚未生效"
+    "lyrics memorized in a model's weights are a reproduction; \\ not yet final": "模型权重中记住的歌词构成复制；\\ 判决尚未生效",
+    "$p(\\text{this French word made this English word})$": "$p(\\text{这个法文词生成了这个英文词})$"
   },
   "phrases": {
     "width": "宽度",
