@@ -96,8 +96,9 @@ class Graphs(VoiceoverScene):
             "That's a Bayesian network, Judea "
             "Pearl's language for reasoning under uncertainty."
         ) as vo:
+            self.play(Create(dz[0]), Create(dx[0]), FadeIn(dz[1]), FadeIn(dx[1]))
             vo.wait_until("q")
-            self.play(Create(dz[0]), Create(dx[0]), FadeIn(dz[1]), FadeIn(dx[1]), FadeIn(tq))
+            self.play(FadeIn(tq))
             vo.wait_until("o")
             self.play(Transform(dx, dxo), FadeIn(to))
             vo.wait_until("h")

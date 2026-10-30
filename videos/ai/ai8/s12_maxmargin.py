@@ -46,7 +46,7 @@ class MaxMargin(VoiceoverScene):
         line = always_redraw(lambda: boundary(wk()[5:7], GD, sw=4))
         read = always_redraw(lambda: VGroup(
             label(rf"step ${fmt_int(wk()[0])}$", font_size=26, color=WHITE),
-            label(rf"angle to the SVM: \ ${wk()[1]:.1f}^\circ$", font_size=24, color=GD),
+            label(rf"angle to the widest-margin direction: \ ${wk()[1]:.1f}^\circ$", font_size=24, color=GD),
             label(rf"$|w| = {wk()[2]:.2f}$", font_size=24, color=GREY_A),
             label(rf"loss ${sci(wk()[3], 1)}$", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, 1.4, 0]))

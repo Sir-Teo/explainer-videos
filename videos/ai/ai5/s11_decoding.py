@@ -181,7 +181,7 @@ class Decoding(VoiceoverScene):
                 x = min(k, N)
                 return VGroup(DashedLine(ax.c2p(x, 0), ax.c2p(x, 1.05), color=C.BITS, stroke_width=3),
                               label(rf"keeps ${k:,}$".replace(",", "{,}"), font_size=22, color=C.BITS)
-                              .next_to(ax.c2p(x, 1.05), UP, buff=0.04))
+                              .next_to(ax.c2p(x, 1.05), UL if x > 0.7 * N else UP, buff=0.04))
 
             cuts.append(always_redraw(cutline))
         pv = DecimalNumber(0.5, num_decimal_places=2, font_size=36, color=C.BITS)
