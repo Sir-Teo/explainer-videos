@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import CAT_COLORS, MONO, barcode, load
+from videos.ai.ai3.common import CAT_COLORS, HIST, MONO, PART, barcode, era_strip, load
 
 
 class Hook(VoiceoverScene):
@@ -11,6 +11,7 @@ class Hook(VoiceoverScene):
         self.islands()
         self.cloud()
         self.barcodes()
+        self.era()
         self.plan()
 
     # ------------------------------------------------------------------
@@ -42,7 +43,6 @@ class Hook(VoiceoverScene):
     def cloud(self):
         g = load("gpt2")
         words, cats, xyz = list(g["map_words"]), list(g["map_cats"]), np.asarray(g["map_xyz"])
-        assert len(words) == 102 and g["map_hits"] >= 99
         show = {"dog", "lion", "red", "blue", "three", "hundred", "London", "Tokyo", "mother", "brother", "hand",
                 "heart", "run", "sing"}
         labels = {k: Text(w, font=MONO, font_size=22, color=CAT_COLORS[c]) for k, (w, c) in enumerate(zip(words, cats))
@@ -82,9 +82,9 @@ class Hook(VoiceoverScene):
             vocab.scale_to_fit_width(13.0)
         with self.voiceover(
             "Every modern model fixes this the same way. It gives each word a place, <bookmark mark='a'/> a point in "
-            "a space, chosen so that words used alike end up close together. <bookmark mark='b'/> Here are a hundred "
-            "and two words, where GPT-2 puts them: animals in one region, colors in another, then numbers, places, "
-            "family, the body, and verbs."
+            f"a space, chosen so that words used alike end up close together. <bookmark mark='b'/> Here are "
+            f"{len(words)} words, where GPT-2 puts them: animals in one region, colors in another, then numbers, "
+            "places, family, the body, and verbs."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(m, shift=DOWN * 0.1) for m in vocab], lag_ratio=0.1), run_time=1.6)
             vo.wait_until("a")
@@ -133,7 +133,7 @@ class Hook(VoiceoverScene):
         ).arrange(RIGHT, buff=1.0).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Here is dog, all 768 numbers. <bookmark mark='a'/> Here is puppy. <bookmark mark='b'/> And here is "
-            "tobacco. <bookmark mark='c'/> Two of these belong together, and in chapter two we'll learn to measure "
+            "tobacco. <bookmark mark='c'/> Two of these belong together, and in chapter one we'll learn to measure "
             "how much."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0][0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in rows[0][1]],
@@ -150,16 +150,71 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plan(self):
-        title = label(r"Part 3: \\ Vectors That Mean Things", font_size=48).to_edge(UP, buff=0.5)
-        smap = series_map(current=3, done=2).scale(0.85).next_to(title, DOWN, buff=0.5)
+    def era(self):
+        """How we got here: from Grassmann's vectors to the low-rank training of 2024, evenly spaced (not to scale)."""
+        events = [
+            (1844, r"Grassmann: \\ vectors"),
+            (1858, r"Cayley: \\ matrix algebra"),
+            (1873, r"Beltrami, Jordan: \\ the SVD"),
+            (1904, r"Hilbert: \\ eigenvalues"),
+            (1936, r"Eckart, Young: \\ best low rank"),
+            (1957, r"Firth: \\ the company it keeps"),
+            (1984, r"Johnson, Lindenstrauss: \\ random projection"),
+            (1990, r"latent semantic \\ analysis"),
+            (2006, r"the Netflix Prize"),
+            (2013, r"word2vec"),
+            (2021, r"LoRA"),
+            (2024, r"GaLore; \\ Muon"),
+        ]
+        axis, skel, marks = era_strip(events, font_size=19)
+        head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
+        tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Lists of numbers are vectors, and this part is about what they can do. <bookmark mark='a'/> Measure how "
-            "alike two things are. Transform a whole space at once. Find the directions that matter most. And live "
-            "in hundreds of dimensions, where our three-dimensional intuition fails, in useful ways."
+            "The mathematics is much older than the machines. In 1844 Hermann Grassmann, a schoolteacher in Stettin, "
+            "described quantities that add and stretch, in any number of dimensions: vectors. <bookmark mark='a'/> In "
+            "1858 Arthur Cayley wrote down the algebra of matrices. <bookmark mark='b'/> In 1873 and 1874 Eugenio "
+            "Beltrami and Camille Jordan found the singular value decomposition, <bookmark mark='c'/> and in 1904 "
+            "David Hilbert named eigenvalues. <bookmark mark='d'/> In 1936 Carl Eckart and Gale Young proved how to "
+            "keep only what matters. <bookmark mark='e'/> Then meaning. In 1957 the linguist John Firth wrote that you "
+            "shall know a word by the company it keeps. <bookmark mark='f'/> In 1984 William Johnson and Joram "
+            "Lindenstrauss showed that dimensions can be squeezed. <bookmark mark='g'/> In 1990 latent semantic "
+            "analysis put words and documents in one space, <bookmark mark='h'/> and in 2006 Netflix offered a "
+            "million dollars for a better guess at a mostly empty matrix. <bookmark mark='i'/> In 2013 came word2vec. "
+            "<bookmark mark='j'/> And in 2021 and 2024, LoRA, GaLore and Muon brought the same linear algebra into "
+            "the training of today's largest models."
         ) as vo:
-            self.play(FadeIn(title))
+            self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
+            self.play(FadeIn(marks[0], shift=UP * 0.2))
+            for k, mk in enumerate("abcdefghij"):
+                vo.wait_until(mk)
+                self.play(FadeIn(marks[k + 1], shift=(UP if (k + 1) % 2 == 0 else DOWN) * 0.2))
+            self.play(FadeIn(marks[11], shift=DOWN * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        title = label(rf"Part {PART}: \ Vectors That Mean Things", font_size=48).to_edge(UP, buff=0.45)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.5)
+        obj = objectives_card([
+            r"vectors, \ the dot product and Cauchy--Schwarz; \ einsum, the notation of attention",
+            r"matrices as maps: \ projection, \ eigenvectors, \ the SVD, \ each derived",
+            r"low rank: \ Eckart--Young, \ norms and conditioning, \ random matrices against trained weights, \ "
+            r"low-rank gradients",
+            r"word vectors from counting, \ and why word2vec is counting in disguise",
+            r"high dimensions: \ concentration, \ Johnson--Lindenstrauss proved, \ GPT-2's lopsided space",
+            r"low rank in the wild: \ the Netflix Prize, \ two-tower retrieval",
+        ], font_size=24).move_to(DOWN * 0.35)
+        with self.voiceover(
+            "This is Part 3 of AI, Built. <bookmark mark='a'/> In it: vectors and the dot product, and the notation "
+            "attention is written in; matrices as maps, with projections, eigenvectors and the singular value "
+            "decomposition, each derived; low rank, norms, random matrices, and what training writes into a "
+            "network's weights; word vectors from counting; the strange geometry of high dimensions; and low rank "
+            "at work, from the Netflix Prize to the retrieval behind today's search. We'll compute every one of "
+            "these, small enough to run on a laptop."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
+            self.play(FadeOut(smap), FadeIn(obj))
         self.wait(0.5)
         self.clear_scene()
