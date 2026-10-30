@@ -100,9 +100,10 @@ class Shampoo(VoiceoverScene):
             "<bookmark mark='d'/> Remember that matrix: it is Muon's step."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
-            for k, mk in enumerate("abc"):
+            step(0)
+            for k, mk in enumerate("bc"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             vo.wait_until("d")
             self.play(FadeIn(res))
         self.wait(0.3)
@@ -114,8 +115,11 @@ class Shampoo(VoiceoverScene):
             label(r"inverse fourth roots: \ eigendecompositions, \ every few steps", font_size=24, color=WHITE),
             label(r"badly conditioned factors: \ damping, \ high precision", font_size=24, color=WHITE),
             label(r"an awkward step size: \ \textit{grafting}, \ Adam's size with Shampoo's direction", font_size=24, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_corner(UL, buff=0.5)
-        hdr = label(r"why Shampoo took years to catch on", font_size=28, color=SH).next_to(probs, UP, buff=0.3).align_to(probs, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, 1.0, 0])
+        for p in probs:
+            p.scale(1.15)
+        probs.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, 1.0, 0])
+        hdr = label(r"why Shampoo took years to catch on", font_size=32, color=SH).next_to(probs, UP, buff=0.45)
         algo = theorem_card(r"AlgoPerf, \ 2024", r"Eight workloads, \ fixed hardware, \ time to a target. \ External "
                             r"tuning: \ won by Distributed Shampoo, \ about $28\%$ faster than the baseline (NAdamW). \ "
                             r"Self-tuning: \ won by schedule-free AdamW, \ about $8\%$.",

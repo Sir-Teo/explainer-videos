@@ -57,9 +57,10 @@ class NewtonSchulz(VoiceoverScene):
             "everything between zero and one to one?"
         ) as vo:
             self.play(FadeIn(head))
-            for k, mk in enumerate("abcd"):
+            step(0)
+            for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             vo.wait_until("e")
             self.play(FadeIn(goal))
         self.wait(0.3)
