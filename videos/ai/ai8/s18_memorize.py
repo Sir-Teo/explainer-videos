@@ -192,10 +192,10 @@ class Memorization(VoiceoverScene):
             f"planted eight times, and {eN:.0f} percent of those planted {gN} times come back word for word; the "
             f"control, {eC:.0f} percent. " + halfway + "<bookmark mark='c'/> " + trend
         ) as vo:
-            self.play(FadeIn(head), FadeIn(G), FadeIn(H))
+            self.play(FadeIn(head), FadeIn(G), FadeIn(H), FadeIn(lk))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), run_time=6.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), run_time=3.0)
-            self.play(FadeIn(lk))
+            self.play(Indicate(lk, color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(Create(cf), run_time=1.5)
             vo.wait_until("c")
@@ -219,7 +219,7 @@ class Memorization(VoiceoverScene):
             (2026, r"A.~Ahmed, A.~F.~Cooper et al.", r"near-complete books extracted from some production chat models"),
         ]
         cards = VGroup(*[history_card(y, w, t, width=4.3, font_size=18, color=HIST) for y, w, t in items])
-        cards.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.25), cell_alignment=UL).move_to(DOWN * 0.3)
+        cards.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.35), cell_alignment=UL).move_to(UP * 0.1)
         head = label(r"Memorization, \ 2022--2026", font_size=34).to_edge(UP, buff=0.3)
         foot = note(r"US rulings of June 2025 (Bartz v.\ Anthropic; \ Kadrey v.\ Meta) \ found training itself fair use; "
                     r"\ the law is unsettled").to_edge(DOWN, buff=0.2)

@@ -234,8 +234,9 @@ class Outro(VoiceoverScene):
             "networks that memorize random labels, and the curve that goes down, up, and then down again."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(tag))
+            self.play(Create(lt), FadeIn(names[0]), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(lt), Create(le), FadeIn(names), run_time=3.0)
+            self.play(Create(le), FadeIn(names[1]), run_time=3.0)
         self.wait(0.3)
         self.clear_scene()
 

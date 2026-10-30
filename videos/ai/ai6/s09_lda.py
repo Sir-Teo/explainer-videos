@@ -270,8 +270,8 @@ class LDA(VoiceoverScene):
             f"<bookmark mark='f'/> It leans hardest on {names}, and gets {100 * ld['acc70']:.0f} percent of the "
             "held-out pages right."
         ) as vo:
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
             self.play(FadeIn(mats), FadeIn(mats_t))
             vo.wait_until("b")
             step(1)

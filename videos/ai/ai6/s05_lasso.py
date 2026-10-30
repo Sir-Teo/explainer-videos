@@ -53,6 +53,7 @@ class Lasso(VoiceoverScene):
         self.shapes()
         self.soft()
         self.path()
+        self.cvcurve()
         self.twins()
 
     # ------------------------------------------------------------------
@@ -245,6 +246,45 @@ class Lasso(VoiceoverScene):
             self.play(FadeIn(cvl))
         for m in (cursor, nw, av):
             m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def cvcurve(self):
+        d = load("lasso")
+        mm, se = np.asarray(d["cv_mse"]), np.asarray(d["cv_se"])
+        nnz = np.asarray(d["nnz"])
+        n = len(mm)
+        top = float(min(mm.max(), 0.26)) * 1.05
+        g = plot([0, n - 1, 10], [0, top, 0.05], x_length=7.4, y_length=4.2, yticks=[0, 0.1, 0.2],
+                 center=[-2.2, -0.4, 0], xlabel=r"the penalty relaxes $\longrightarrow$",
+                 ylabel=r"squared error on held-out folds \ (ten folds, $\pm 1$ s.e.)")
+        ax = g.ax
+        xs = np.arange(n)
+        bnd = band(ax, xs, np.clip(mm - se, 0, top), np.clip(mm + se, 0, top), LASSO, opacity=0.25)
+        cv = curve(ax, xs, np.clip(mm, 0, top), LASSO, stroke_width=3.5)
+        b, o = int(d["best"]), int(d["one_se"])
+        thr = DashedLine(ax.c2p(0, mm[b] + se[b]), ax.c2p(n - 1, mm[b] + se[b]), color=GREY_B, stroke_width=1.5)
+        mb = DashedLine(ax.c2p(b, 0), ax.c2p(b, top), color=WHITE, stroke_width=2)
+        mo = DashedLine(ax.c2p(o, 0), ax.c2p(o, top), color=HL, stroke_width=2.5)
+        notes = VGroup(label(rf"lowest error: \ ${int(nnz[b])}$ words", font_size=26, color=WHITE),
+                       label(r"the sparsest model within \\ one standard error of it:", font_size=24, color=GREY_A),
+                       label(rf"${int(nnz[o])}$ words", font_size=30, color=HL)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        notes.move_to([4.5, 0.8, 0])
+        keep_in_frame(notes)
+        with self.voiceover(
+            "How many words to keep? Cross-validate the whole path: for every penalty, fit on nine tenths of the "
+            "training pages and score the tenth, ten times over. <bookmark mark='a'/> The error is lowest with "
+            f"{int(nnz[b])} words. <bookmark mark='b'/> But the curve is nearly flat there, and its wobble, one "
+            "standard error, is as large as the differences. The usual rule takes the sparsest model within one "
+            f"standard error of the best: {int(nnz[o])} words."
+        ) as vo:
+            self.play(FadeIn(g))
+            self.play(FadeIn(bnd), Create(cv), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Create(mb), FadeIn(notes[0]))
+            vo.wait_until("b")
+            self.play(Create(thr), Create(mo), FadeIn(notes[1]), FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
 
