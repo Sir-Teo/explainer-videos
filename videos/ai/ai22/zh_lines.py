@@ -10,11 +10,11 @@ CHAPTERS = {
     'REPA': '4. 借来的眼睛',
     'UNet': '5. U-Net还是Transformer',
     'AdaLN': '6. adaLN-Zero',
-    'Prompt': '7. 从文字到图片',
+    'Prompt': '7. 把文字变成图片',
     'SD3': '8. Stable Diffusion 3与Flux',
-    'Tokens': '9. 把图片变成词元',
+    'Tokens': '9. 把图片当作词元',
     'Scales': '10. 由粗到细',
-    'Unified': '11. 文字和图片，一个模型',
+    'Unified': '11. 一个模型，既管文字也管图片',
     'Video': '12. 压缩时间',
     'Clips': '13. 彼此一致的帧',
     'Forcing': '14. 向前滚动',
@@ -342,7 +342,7 @@ ZH = {
 
     # ------------------------------------------------------------------ SD3
     'Chapter eight. Stable Diffusion 3 and Flux.':
-        '第8章。Stable Diffusion 3与Flux。',
+        '第8章。SD3与Flux：图片变大的时候，扩散模型要做出哪些改变。',
 
     'In March 2024 Patrick Esser, Robin Rombach and colleagues at Stability AI':
         "2024年3月，Stability AI的帕特里克·埃塞尔、罗宾·龙巴赫和同事发表了Stable Diffusion 3：用第21部分的整流流，加上一个新的Transformer，MM-DiT。"
@@ -370,19 +370,19 @@ ZH = {
         "会让大图片依然可以辨认。<bookmark mark='b'/>SD3把这一点做成了精确的公式。用西格玛表示噪声所占的份额。<bookmark mark='c'/>"
         "考虑最坏的情况，一张均匀的图片：每个像素都是同一个值c。对n个像素求平均：噪声缩小到原来的根号n分之一。<bookmark mark='d'/>"
         "所以关于c剩下的不确定性，是西格玛除以1减西格玛，再除以根号n。<bookmark mark='e'/>要求m个像素时的不确定性一样，<bookmark mark='f'/>"
-        "解出来：噪声水平按一个因子阿尔法偏移，阿尔法是像素数之比的平方根。在对数信噪比里，这是一个常数偏移。",
+        "解出来：噪声水平按一个因子阿尔法平移，阿尔法是像素数之比的平方根。在对数信噪比里，这是一个常数平移。",
 
     'f"Does it hold for real pictures?':
         "它对真实图片成立吗？我们把同样的五百多个字母分别画成20、40和80像素见方，加上噪声，再问精确的后验分布：这是哪一张字母图片？"
         "<bookmark mark='a'/>在20像素时，噪声水平为{half[20]:.2f}时它有一半的机会答对；40像素时是{half[40]:.2f}；80像素时是{half[80]:.2f}。"
         "公式预测的是{pred[40]:.2f}和{pred[80]:.2f}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>SD3的作者说均匀图片的假设并不现实，"
-        "就请人来评判不同的偏移，最后在1024像素见方时选定阿尔法等于3。",
+        "就请人来评判不同的平移，最后在1024像素见方时选定阿尔法等于3。",
 
     'f"After the shift the curves nearly line up:':
-        "偏移之后，几条曲线几乎重合：和小图片曲线的最大差距从{g80b:.2f}降到{g80a:.2f}。",
+        "平移之后，几条曲线几乎重合：和小图片曲线的最大差距从{g80b:.2f}降到{g80a:.2f}。",
 
     'f"After the shift they move together, but don\'t fully line up:':
-        "偏移之后它们一起移动，但没有完全重合：最大差距只从{g80b:.2f}降到{g80a:.2f}，因为80像素的真实图画比公式假设的均匀图片有更精细的细节。",
+        "平移之后它们一起移动，但没有完全重合：最大差距只从{g80b:.2f}降到{g80a:.2f}，因为80像素的真实图画比公式假设的均匀图片有更精细的细节。",
 
     "Several of SD3's authors went on to found Black Forest Labs.":
         "SD3的几位作者后来创办了Black Forest Labs。<bookmark mark='a'/>2024年8月，他们发布了FLUX.1：120亿个权重，先是MM-DiT块，"
@@ -711,7 +711,7 @@ ZH.update({
     "Let's take stock.":
         "我们来总结一下。一张图片是一串图块，Transformer读它，甚至学会了它来自的网格。模型在一个压缩空间里作画，这个空间有多小、"
         "有多大意义，决定了一切；借用一个视觉模型的眼睛，能加快学会画画。去噪器变成了Transformer，通过带门控的归一化被告知要画什么。"
-        "更大的图片需要偏移它们的噪声，偏移的因子我们推导并检验过了。图片也可以写成词元，最好由粗到细，这让一个模型能读、能画、能编辑。"
+        "更大的图片需要平移它们的噪声，平移的因子我们推导并检验过了。图片也可以写成词元，最好由粗到细，这让一个模型能读、能画、能编辑。"
         "视频是时间上的同一回事：一起画的帧彼此一致，一帧一帧画的帧能向前滚动。而三维，是沿着光线把光加起来，或者把高斯泼溅到屏幕上。",
 
     'All of this comes back.':

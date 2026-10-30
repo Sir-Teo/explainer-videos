@@ -200,7 +200,7 @@ ZH = {
         "每一组点，都落在各自的p的n次方曲线上，而p正是那些错误率所预言的：",
 
     'The points fall close to curves p to the n':
-        "这些点落在p的n次方曲线附近，但不完全重合，因为重试会消耗步数预算：",
+        "这些点落在p的n次方曲线附近，但p并不总是错误率所预言的那个值，因为两次失误可能互相抵消，而重试会消耗步数预算：",
 
     'f"Turn it around: how long a task can an agent finish half the time?':
         "反过来问：一个智能体有一半把握完成的任务，最长能有多长？<bookmark mark='a'/>令p的n次方等于二分之一，<bookmark mark='b'/>"
@@ -608,11 +608,16 @@ ZH = {
     "f'On the real one, the single-simulator policies last":
         "到了真实的倒立摆上，单一仿真器的策略坚持{nr.mean():.0f}步，随机化的坚持{rr.mean():.0f}步：在这里，随机化帮助不大。",
 
-    'f"Here is the whole picture':
-        "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着真实机器人的延迟和噪声。<bookmark mark='a'/>"
-        "只在一个仿真器里训练的策略，只在这张图的{100 * frac(mN):.0f}%里平衡得好。<bookmark mark='b'/>在随机化仿真器里训练的，"
-        "是{100 * frac(mR):.0f}%，真实的机器人也包括在内。<bookmark mark='c'/>代价是，策略对任何一台机器都没那么精调；"
-        "好处是，它不需要知道自己在哪台机器上。",
+    '"Here is the whole picture':
+        "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着真实机器人的延迟和噪声。<bookmark mark='a'/>{one_sim}"
+        "<bookmark mark='b'/>在随机化仿真器里训练的，是{100 * frac(mR):.0f}%，真实的机器人也包括在内。<bookmark mark='c'/>"
+        "代价是，策略对任何一台机器都没那么精调；好处是，它不需要知道自己在哪台机器上。",
+
+    'The policies trained in one simulator balance for four hundred steps nowhere':
+        "只在一个仿真器里训练的策略，一旦加上延迟和噪声，在这张图上没有一处能平衡到400步。",
+
+    "f'The policies trained in one simulator balance well in only":
+        "只在一个仿真器里训练的策略，只在这张图的{100 * frac(mN):.0f}%里平衡得好。",
 
     'f"Domain randomization is now routine.':
         "域随机化如今已是常规做法。<bookmark mark='a'/>腿足机器人和人形机器人的走和跑，大多就是这样训练的：在随机化的仿真里训练，"

@@ -219,7 +219,7 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
 | multiply-adds (MACs) per picture | 每张图片的乘加次数 |
 | MM-DiT, joint attention, QK-norm | MM-DiT，联合注意力，QK归一化 |
 | logit-normal timestep sampling | 对数几率正态（logit-normal）时间步采样 |
-| resolution-dependent timestep shift | 随分辨率的时间步偏移 |
+| resolution-dependent timestep shift (resolution shift) | 随分辨率的时间步平移（分辨率平移） |
 | recaptioning | 重新标注（用模型写详细描述） |
 | vector-quantized tokenizer, VQGAN | 向量量化分词器，VQGAN |
 | raster order | 光栅顺序 |
