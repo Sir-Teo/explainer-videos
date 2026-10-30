@@ -36,17 +36,17 @@ class Momentum(VoiceoverScene):
         keep_in_frame(rule)
         mom = brace_note(term(rule, r"+ \beta\,(x_k - x_{k-1})"), r"momentum: \ the last step, again", color=HB,
                          font_size=22)
-        ax = Axes(x_range=[-5, 1, 1], y_range=[-1.2, 1.2, 1], x_length=10.0, y_length=4.0, tips=False,
-                  axis_config={"stroke_width": 0}).move_to(DOWN * 1.6)
+        ax = Axes(x_range=[-5, 1, 1], y_range=[-1.2, 1.2, 1], x_length=10.0, y_length=3.6, tips=False,
+                  axis_config={"stroke_width": 0}).move_to(DOWN * 1.2)
         cont = contour_lines(ax, lambda x, y: 0.5 * (x * x + 30 * y * y), (-5, 1), (-1.2, 1.2), [0.3, 1.5, 4, 9, 16],
                              n=(120, 60), stroke_width=1.5)
         paths = {k: VMobject(color=c_, stroke_width=3).set_points_as_corners([ax.c2p(*p) for p in np.asarray(q[f"path_{k}"])])
-                 for k, c_ in (("gd", GD), ("hb", HB))}
+                 for k, c_ in (("gd", GD), ("hb_mild", HB))}
         dots = {k: Dot(ax.c2p(*np.asarray(q[f"path_{k}"])[0]), radius=0.08, color=paths[k].get_color()) for k in paths}
         lab = VGroup(label(r"gradient descent, \ $\eta = 1/L$", font_size=22, color=GD),
-                     label(r"heavy ball, \ tuned for $\kappa = 30$", font_size=22, color=HB)).arrange(RIGHT, buff=0.8)
+                     label(r"heavy ball, \ $\eta = 1/L$, \ $\beta = 0.8$", font_size=22, color=HB)).arrange(RIGHT, buff=0.8)
         lab.next_to(ax, DOWN, buff=0.05)
-        tag = note(r"the valley of Chapter 1, \ curvatures $1$ and $30$; \ $60$ steps each; \ computed").to_corner(DR, buff=0.2)
+        tag = note(r"the valley of Chapter 1, \ curvatures $1$ and $30$; \ $60$ steps each; \ computed").next_to(lab, DOWN, buff=0.1)
         with self.voiceover(
             "In 1964 Boris Polyak, in Moscow, asked how to speed gradient descent up, and answered with physics: "
             "give the walker mass. <bookmark mark='a'/> Each step adds a fraction beta of the previous step. "
@@ -61,8 +61,9 @@ class Momentum(VoiceoverScene):
             self.play(Create(cont), FadeIn(tag), FadeIn(lab[0]), FadeIn(dots["gd"]))
             self.play(Create(paths["gd"]), MoveAlongPath(dots["gd"], paths["gd"].copy()), run_time=2.5, rate_func=linear)
             vo.wait_until("c")
-            self.play(FadeIn(lab[1]), FadeIn(dots["hb"]))
-            self.play(Create(paths["hb"]), MoveAlongPath(dots["hb"], paths["hb"].copy()), run_time=2.5, rate_func=linear)
+            self.play(FadeIn(lab[1]), FadeIn(dots["hb_mild"]))
+            self.play(Create(paths["hb_mild"]), MoveAlongPath(dots["hb_mild"], paths["hb_mild"].copy()), run_time=2.5,
+                      rate_func=linear)
         self.wait(0.3)
         self.clear_scene()
 
@@ -84,7 +85,7 @@ class Momentum(VoiceoverScene):
                 why(r"complex roots: \ a spiral, \ shrinking by $\sqrt{\beta}$"),
                 why(r"make every $\lambda$ in $[\mu, L]$ spiral"),
                 why(r"solve the two"), why(r"$\sqrt{\beta} \approx 1 - 2/\sqrt{\kappa}$")]
-        step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.8, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.8, buff=0.5, edge=6.9)
         thm = theorem_card(r"The heavy ball on a quadratic", r"Tuned to $[\mu, L]$, \ every direction shrinks by "
                            r"$\frac{\sqrt\kappa - 1}{\sqrt\kappa + 1}$ per step: \ $\sqrt{\kappa}$ in place of $\kappa$.",
                            who=r"B.~Polyak (1964)", width=7.4, font_size=24).to_edge(DOWN, buff=0.3)

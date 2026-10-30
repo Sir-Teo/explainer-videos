@@ -53,8 +53,8 @@ class GradientDescent(VoiceoverScene):
         x1 = x0 - df(x0) / L
         step = Arrow(ax.c2p(x0, f(x0)), ax.c2p(x1, f(x1)), buff=0.05, color=C.BITS, stroke_width=3,
                      max_tip_length_to_length_ratio=0.2)
-        ul = label(r"$L$-smooth: \ below this bowl", font_size=20, color=UP_C).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        ll = label(r"$\mu$-strongly convex: \ above this one", font_size=20, color=LO_C).next_to(ul, DOWN, buff=0.08).align_to(ul, LEFT)
+        ul = label(r"$L$-smooth: \ below this bowl", font_size=22, color=UP_C).next_to(ax, UP, buff=0.45).align_to(ax, RIGHT)
+        ll = label(r"$\mu$-strongly convex: \ above this one", font_size=22, color=LO_C).next_to(ul, DOWN, buff=0.08).align_to(ul, RIGHT)
         sch = note(r"schematic").next_to(ax, DOWN, buff=0.1)
         defs = definition_card(r"$L$-smooth, \ $\mu$-strongly convex",
                                r"$\|\nabla f(x) - \nabla f(y)\| \le L\|x - y\|$: \ the curvature is at most $L$. \ "
@@ -257,9 +257,10 @@ class GradientDescent(VoiceoverScene):
             "minus eta lambda; past two over lambda that factor is below minus one. Chapter five comes back to this "
             "edge."
         ) as vo:
-            self.play(FadeIn(pc))
+            pc.scale(0.75).to_edge(UP, buff=0.3)
+            self.play(FadeIn(pc), Create(cont))
             vo.wait_until("a")
-            self.play(pc.animate.scale(0.75).to_edge(UP, buff=0.3), Create(cont), FadeIn(lab[0]))
+            self.play(FadeIn(lab[0]))
             self.play(Create(p1), run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(lab[1]), Create(p2), run_time=2.5)

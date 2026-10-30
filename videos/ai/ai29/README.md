@@ -89,6 +89,8 @@ is cited, and company claims are labelled as such.
   π0.7 (April 2026); Gemini 4 Argon for Robotics and the Pi API (October 2026).
 * **Recap**, where it comes back (Parts 30 and 31), seven problems, Part 30's teaser, references.
 
+Running time: about 56 minutes (silent 480p build measured by `tools/lecture_length.py ai29`).
+
 ## Running it
 
 ```

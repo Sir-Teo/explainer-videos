@@ -34,10 +34,11 @@ class Faithful(VoiceoverScene):
         shots = VGroup(*[box([(rf"example {i}", GREY_B), (r"$\ldots$ \ answer: \ (A)", WHITE)], GREY_C, w=2.6)
                          for i in (1, 2, 3)]).arrange(RIGHT, buff=0.3)
         q = box([(r"the new question", GREY_B), (r"$\ldots$ \ answer: \ ?", WHITE)], GREY_C, w=2.6)
-        row = VGroup(shots, q).arrange(RIGHT, buff=0.6).move_to(UP * 0.7)
+        row = VGroup(shots, q).arrange(RIGHT, buff=0.6)
+        row.scale_to_fit_width(12.6).move_to(UP * 1.6)
         bias = label(r"in every example, \ the right option was moved to (A)", font_size=22, color=HINT).next_to(row, DOWN, buff=0.25)
         expl = box([(r"its explanation", GREY_B), (r"step by step, \ for (A)", WHITE), (r"no word about the pattern", HINT)],
-                   GREY_C, w=4.2).next_to(bias, DOWN, buff=0.35)
+                   GREY_C, w=4.2).scale(1.25).next_to(bias, DOWN, buff=0.35)
         hc = VGroup(history_card(2023, r"M.~Turpin, J.~Michael, E.~Perez \& S.~Bowman",
                                  r"biased examples cut accuracy by up to $36\%$ on $13$ BIG-Bench Hard tasks; \ the "
                                  r"explanations never mention the bias", width=6.2, color=HINT, font_size=18),
@@ -77,7 +78,7 @@ class Faithful(VoiceoverScene):
             grids.add(VGroup(cells, n_, p_))
         cap = label(r"of $100$ answers the hint changed: \ how often the chain of thought mentions it", font_size=22,
                     color=GREY_A).next_to(grids, DOWN, buff=0.3)
-        tag = note(r"published, \ not measured here; \ admitted reward hacks: \ under $2\%$ in most settings").to_corner(DR, buff=0.25)
+        tag = note(r"published, \ not measured here; \ admitted reward hacks: \ under $2\%$ in most settings").next_to(cap, DOWN, buff=0.25)
         cite_ = cite(r"Y.~Chen et al.\ (Anthropic), \textit{Reasoning Models Don't Always Say What They Think} (2025)", corner=DL)
         with self.voiceover(
             "In 2025 Yanda Chen and colleagues at Anthropic did it with reasoning models. Put a hint in the question, "
@@ -110,12 +111,11 @@ class Faithful(VoiceoverScene):
             box([(r"motivated", CAUSE), (r"the same, \ ``I got $4$ by hand''", WHITE),
                  (r"the graph works \textit{backwards} from $4$", GREY_A), (r"to the step that reaches it", GREY_A)],
                 CAUSE, w=3.9),
-        ).arrange(RIGHT, buff=0.3).move_to(UP * 0.2)
-        if cols.width > 13.2:
-            cols.scale_to_fit_width(13.2)
+        ).arrange(RIGHT, buff=0.3)
+        cols.scale_to_fit_width(13.2).move_to(UP * 0.3)
         why_ = label(r"our models write no chains of thought, \ so this chapter is cited, \ not computed: \\ a toy "
-                     r"of this size would show nothing honest", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.45)
-        cite_ = cite(r"Lindsey et al., \textit{On the Biology of a Large Language Model} (2025)", corner=DR)
+                     r"of this size would show nothing honest", font_size=20, color=GREY_B).to_edge(DOWN, buff=1.0)
+        cite_ = cite(r"Lindsey et al., \textit{On the Biology of a Large Language Model} (2025)", corner=DL)
         with self.voiceover(
             "The attribution graphs of chapter eleven can check a chain of thought against the computation. "
             "<bookmark mark='a'/> Asked for the square root of 0.64, Claude 3.5 Haiku really did compute the root "

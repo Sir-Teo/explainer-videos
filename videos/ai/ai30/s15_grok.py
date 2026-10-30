@@ -42,21 +42,21 @@ class Grok(VoiceoverScene):
 
     def curves(self):
         d = load("grok")
-        g, st = self.logaxes(d, [-1.2, -0.4, 0], r"loss (log scale)")
+        g, st = self.logaxes(d, [-2.4, -0.5, 0], r"loss (log scale)", x_len=6.6)
         lt = lambda k: np.log10(np.clip(np.asarray(d[k], float), 1e-8, None))  # noqa: E731
         ct, cv = curve(g.ax, st, lt("train_loss"), TRN, 3), curve(g.ax, st, lt("test_loss"), TST, 3)
         lg = legend([(TRN, rf"the ${int(d['n_train']):,}$ pairs it trains on".replace(",", "{,}")),
                      (TST, rf"the ${int(d['n_test']):,}$ it never sees".replace(",", "{,}"))], font_size=18)
-        lg.to_corner(UR, buff=0.35)
+        lg.move_to([4.3, 1.4, 0])
         P = int(d["P"])
         task = label(rf"$(a + b) \bmod {P}$: \ one layer, \ four heads, \ $512$ ReLU units; \ ${100 * float(d['frac']):.0f}\%$ "
-                     rf"of the table; \ weight decay ${float(d['wd']):g}$", font_size=20, color=GREY_A).to_edge(UP, buff=0.3)
+                     rf"of the table; \ weight decay ${float(d['wd']):g}$", font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         tm, tg = int(d["t_memorized"]), int(d["t_grokked"])
         vm = DashedLine(g.ax.c2p(max(tm, 0), g.ax.y_range[0]), g.ax.c2p(max(tm, 0), g.ax.y_range[1]), color=TRN, dash_length=0.06)
         vg = DashedLine(g.ax.c2p(max(tg, 0), g.ax.y_range[0]), g.ax.c2p(max(tg, 0), g.ax.y_range[1]), color=TST, dash_length=0.06)
         hc = history_card(2023, r"N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith \& J.~Steinhardt",
                           r"progress measures for grokking via mechanistic interpretability", width=4.4, color=FEAT,
-                          font_size=17).to_corner(DR, buff=0.3)
+                          font_size=17).move_to([4.3, -1.5, 0])
         grok_said = (f"Then, around step {tg:,}, the held-out loss collapses too: it grokked, "
                      f"{tg / max(tm, 1):.0f} times later than it memorized." if tg > 0 else
                      "In our run the held-out loss never fully collapses.")
@@ -191,7 +191,7 @@ class Grok(VoiceoverScene):
         A = np.asarray(d["neuron_act"])
         img = heat_image(A, 3.6, 3.6, color=FEAT, gamma=0.7).move_to([3.4, -0.5, 0])
         il = label(rf"neuron {int(d['neuron'])}: \ its activation for every $(a, b)$", font_size=20, color=FEAT).next_to(img, UP, buff=0.15)
-        ax_ = label(r"$a \rightarrow$ \quad $b \downarrow$ \quad stripes along $a + b$", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
+        ax_ = label(r"$a \rightarrow$ \quad $b \downarrow$ \quad waves in $a$ and in $b$", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.12)
         bars_ = VGroup()
         top = max(counts + [other, 1])
         for i, (k, c) in enumerate(zip(key + ["other"], counts + [other])):
@@ -205,7 +205,8 @@ class Grok(VoiceoverScene):
             "The MLP's neurons tell the same story. <bookmark mark='a'/> Decompose each neuron's activation, over "
             f"every pair a and b, into waves: {int(clean.sum())} of the 512 have more than half of it at a single "
             f"frequency, and {sum(counts)} of those at a key frequency. <bookmark mark='b'/> Here is one, over the whole "
-            "table: stripes running along a plus b. The neuron is a piece of the cosine of a sum."
+            "table: waves in a and in b at its frequency, whose products hold the waves of a plus b. The neuron is a "
+            "piece of the cosine of a sum."
         ) as vo:
             self.play(FadeIn(bl))
             vo.wait_until("a")
@@ -226,11 +227,11 @@ class Grok(VoiceoverScene):
         cr = curve(g.ax, st, cl(lt("restricted_loss")), RES, 3)
         ce = curve(g.ax, st, cl(lt("excluded_loss")), EXC, 3)
         wn = np.asarray(d["weight_norm"], float)
-        wn_ = ylo + (wn - wn.min()) / (wn.max() - wn.min() + 1e-9) * (yhi - ylo) * 0.9
-        cw = DashedVMobject(curve(g.ax, st, wn_, WN, 2.5), num_dashes=60)
+        iw = int(np.argmax(wn))
         lg = legend([(TST, r"test loss"), (RES, r"restricted loss: \ only the key waves kept"),
-                     (EXC, r"excluded loss: \ the key waves removed \ (train)"), (WN, r"size of the weights (rescaled)")],
-                    font_size=17).to_corner(UR, buff=0.3)
+                     (EXC, r"excluded loss: \ the key waves removed \ (train)")], font_size=17).to_corner(UR, buff=0.3)
+        cw = label(rf"size of the weights: \ ${wn[0]:.0f}$ at the start, \ ${wn[iw]:.0f}$ at step ${int(st[iw]):,}$, \ "
+                   rf"${wn[-1]:.0f}$ at the end".replace(",", "{,}"), font_size=18, color=WN).next_to(lg, DOWN, buff=0.3).align_to(lg, LEFT)
         rt = first(st, lt("restricted_loss") < 0)
         tt = first(st, lt("test_loss") < 0)
         et = first(st, lt("excluded_loss") > 0)
@@ -259,6 +260,6 @@ class Grok(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(ce), FadeIn(lg[2]), run_time=2)
             vo.wait_until("c")
-            self.play(Create(cw), FadeIn(lg[3]), run_time=2)
+            self.play(FadeIn(cw))
         self.wait(0.3)
         self.clear_scene()
