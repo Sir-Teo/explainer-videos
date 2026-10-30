@@ -566,13 +566,15 @@ nothing something thing things way time could would should""".split())
 def lda_corpus():
     import collections
     import re
+    import unicodedata
 
     c1 = ai1()
     segs, sbook = [], []
     cap, low = collections.Counter(), collections.Counter()
     for n in c1.BOOKS:
         t = c1.strip_gutenberg((c1.BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace"))
-        toks = re.findall(r"[A-Za-z]+", t.translate(c1.QUOTES).replace("_", ""))
+        t = unicodedata.normalize("NFKD", t.translate(c1.QUOTES).replace("_", "")).encode("ascii", "ignore").decode()
+        toks = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", t)
         for w in toks:
             (cap if w[0].isupper() else low)[w.lower()] += 1
         lw = [w.lower() for w in toks]
@@ -580,7 +582,7 @@ def lda_corpus():
             segs.append(lw[i:i + LDA_SEG])
             sbook.append(n)
     names = {w for w in cap if cap[w] > low[w]}  # mostly capitalized: names and places
-    keep = lambda w: len(w) > 2 and w not in STOP and w not in names  # noqa: E731
+    keep = lambda w: len(w) > 2 and "'" not in w and w not in STOP and w not in names  # noqa: E731
     df, tot = collections.Counter(), collections.Counter()
     for s in segs:
         c = collections.Counter(w for w in s if keep(w))
@@ -892,6 +894,7 @@ def compute_infini():
         p = np.zeros(len(positions))
         top = np.zeros(len(positions), bool)
         nctx = np.zeros(len(positions), np.int64)
+        ntyp = np.zeros(len(positions), np.int64)
         for j, i in enumerate(positions):
             Lj, lo, hi = idx.longest(sc, int(i), cap=INF_CAP)
             if Lj == 0:
@@ -899,38 +902,41 @@ def compute_infini():
             c = idx.before(lo, hi, K)[1:]
             if c.sum() == 0:
                 continue
-            L[j], nctx[j] = Lj, int(c.sum())
+            L[j], nctx[j], ntyp[j] = Lj, int(c.sum()), int((c > 0).sum())
             p[j] = c[seq[i]] / c.sum()
             top[j] = int(np.argmax(c)) == seq[i]
-        return L, p, top, nctx
+        return L, p, top, nctx, ntyp
 
     t0 = time.time()
     g = rng(2024)  # Liu et al., 2024
     starts = np.sort(g.choice(len(v) - INF_CHUNK, size=INF_CHUNKS, replace=False))
-    vL, vp, vk = [], [], []
+    vL, vp, vk, vs = [], [], [], []
     for s in starts:
         ch = v[s:s + INF_CHUNK]
-        Lc, pc, _, _ = infer(ch, np.arange(M, len(ch)))
+        Lc, pc, _, _, tc = infer(ch, np.arange(M, len(ch)))
         vL.append(Lc)
         vp.append(pc)
+        vs.append(tc == 1)
         vk.append(kn_probs(model, ch, K, M))
-    vL, vp, vk = np.concatenate(vL), np.concatenate(vp), np.concatenate(vk)
+    vL, vp, vk, vs = np.concatenate(vL), np.concatenate(vp), np.concatenate(vk), np.concatenate(vs)
     pos = np.arange(M, len(ps))
-    pL, pp, ptop, pn = infer(ps, pos)
+    pL, pp, ptop, pn, pt = infer(ps, pos)
     pk = kn_probs(model, ps, K, M)
     print(f"    longest matches in {time.time() - t0:.0f}s", flush=True)
     # one weight per band of match lengths, chosen on held-out text from the novels (never on the passage)
+    # one weight per band of match lengths, and per kind of match: one next character seen (sparse) or several,
+    # chosen on held-out text from the novels (never on the passage)
     lams = np.linspace(0, 0.995, 200)
-    lam = []
-    for lo, hi in zip(INF_EDGES, INF_EDGES[1:]):
-        sel = (vL >= lo) & (vL < hi)
-        if sel.sum() < 50:
-            lam.append(0.0)
-            continue
-        ll = [np.log(l_ * vp[sel] + (1 - l_) * vk[sel]).sum() for l_ in lams]
-        lam.append(float(lams[int(np.argmax(ll))]))
+    lam = np.zeros((len(INF_EDGES) - 1, 2))
+    for b, (lo, hi) in enumerate(zip(INF_EDGES, INF_EDGES[1:])):
+        for sp in (0, 1):
+            sel = (vL >= lo) & (vL < hi) & (vs == bool(sp))
+            if sel.sum() < 50:
+                continue
+            ll = [np.log(l_ * vp[sel] + (1 - l_) * vk[sel]).sum() for l_ in lams]
+            lam[b, sp] = float(lams[int(np.argmax(ll))])
     band_of = lambda L: np.searchsorted(INF_EDGES, L, side="right") - 1  # noqa: E731
-    lam_p = np.array(lam)[band_of(pL)]
+    lam_p = lam[band_of(pL), (pt == 1).astype(int)]
     mix = lam_p * pp + (1 - lam_p) * pk
     mix_bits = float(-np.log2(mix).mean())
     kn_bits_ = float(-np.log2(pk).mean())
@@ -1165,7 +1171,7 @@ def compute_occam():
                 xg=xg, fits=np.array(fits), true_deg=3)
 
 
-BO_ORDER, BO_VALID, BO_INIT, BO_STEPS = 5, 200_000, 2, 8
+BO_ORDER, BO_VALID, BO_INIT, BO_STEPS = 5, 200_000, 2, 12
 
 
 def compute_bayesopt():
@@ -1221,7 +1227,7 @@ def compute_bayesopt():
         ei = np.maximum((best - m) * norm.cdf(z) + sdv * norm.pdf(z), 0)
         nxt = float(cand[int(np.argmax(ei))])
         steps.append(dict(x=X.copy(), y=Y.copy(), mean=m * sd + mu, sd=sdv * sd, ei=ei * sd, next=nxt, ell=ell))
-        if s == BO_STEPS:
+        if s == BO_STEPS or min(abs(nxt - x_) for x_ in xs) < 0.005:  # nowhere left worth looking
             break
         key = f"x_{nxt:.6f}"
         if key not in part:

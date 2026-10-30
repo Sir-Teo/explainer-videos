@@ -105,7 +105,7 @@ class Gauss(VoiceoverScene):
                 why(r"complete the square in $x_a$"),
                 why(r"invert in blocks: \ the Schur complement"),
                 why(r"the same block inverse")]
-        step = ladder(self, rows, whys, keep=5, top=3.2, x=-2.2, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.2, buff=0.4, edge=6.8)
         d = load("gauss")
         S = np.asarray(d["S"])
         a_ = float(d["a"])
@@ -128,11 +128,8 @@ class Gauss(VoiceoverScene):
                     max_tip_length_to_length_ratio=0.2)
         cl = label(r"what is left of $x_a$: \ a bell", font_size=20, color=COND).next_to(ca, UP, buff=0.08)
         pic = VGroup(pa, cont, line_, pl, ca, cb, arr, cl)
-        res = label(r"the conditional is again a bell: \\ mean $m$, \ covariance the Schur complement", font_size=22,
-                    color=COND)
-        res.next_to(ca, RIGHT, buff=0.4).set_y(ca.get_y())
-        if res.get_right()[0] > 6.8:
-            res.width = 6.8 - res.get_left()[0]
+        res = label(r"again a bell: \\ mean $m$, \\ covariance the \\ Schur complement", font_size=24, color=COND)
+        res.next_to(ca, RIGHT, buff=0.5)
         with self.voiceover(
             "Now the question that matters for prediction: if we learn some coordinates, x b, what is left of the "
             "others, x a? <bookmark mark='a'/> With x b fixed, the conditional density is the joint density, "
@@ -174,7 +171,7 @@ class Gauss(VoiceoverScene):
         slope = S[0, 1] / S[1, 1]
         reg = Line(ax.c2p(slope * -3.6, -3.6), ax.c2p(slope * 3.6, 3.6), color=COND, stroke_width=3)
         reg_l = label(r"the conditional mean: \ Galton's regression line", font_size=22, color=COND)
-        reg_l.next_to(ax.c2p(slope * 3.5, 3.5), LEFT, buff=0.15)
+        reg_l.next_to(ax.c2p(slope * -3.2, -3.2), RIGHT, buff=0.25)
         sl_l = label(rf"$x_2 = {a:g}$", font_size=24, color=COND).next_to(strip, LEFT, buff=0.1).shift(RIGHT * 0.9 + UP * 0.25)
         hx = Axes(x_range=[-1.5, 3.0, 1], y_range=[0, 1.0, 0.2], x_length=5.0, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 0.9, 0])
@@ -191,7 +188,7 @@ class Gauss(VoiceoverScene):
             MathTex(f"{m_e:.3f}", font_size=30, color=COND),
             label(r"variance", font_size=24, color=GREY_A), MathTex(f"{v_th:.3f}", font_size=30, color=MODEL),
             MathTex(f"{v_e:.3f}", font_size=30, color=COND))
-        tbl.arrange_in_grid(rows=3, cols=3, buff=(0.45, 0.2)).move_to([3.4, -1.55, 0])
+        tbl.arrange_in_grid(rows=3, cols=3, buff=(0.45, 0.2)).move_to([3.4, -1.15, 0])
         four = label(rf"four dimensions, \ two given two: \ off by at most ${float(d['err4']):.3f}$", font_size=22,
                      color=GREY_A)
         four.next_to(tbl, DOWN, buff=0.3)

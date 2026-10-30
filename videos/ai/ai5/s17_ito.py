@@ -66,6 +66,20 @@ class Ito(VoiceoverScene):
                        label(rf"midpoint sums average ${sm:.3f}$", font_size=22, color=MID),
                        label(rf"ordinary calculus, $\tfrac12 W_1^2$: \ ${w2 / 2:.3f}$", font_size=22, color=GREY_A))
         means.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, -2.4, 0])
+        path, run = np.asarray(d["path"]), np.asarray(d["ito_run"])
+        tt = np.linspace(0, 1, len(path))
+        pa = Axes(x_range=[0, 1, 0.25], y_range=[-2, 2, 1], x_length=7.0, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.6, -2.2, 0])
+        wp = curve(pa, tt, np.clip(path, -2, 2), color=WALK, stroke_width=2.5)
+        marks = VGroup(*[Line(pa.c2p(tt[i], 0), pa.c2p(tt[i], path[i]), color=LPT, stroke_width=1.5).set_stroke(opacity=0.6)
+                         for i in range(0, len(path) - 1, 5)])
+        rl = curve(pa, tt, np.clip(run, -2, 2), color=LPT, stroke_width=3)
+        ex = curve(pa, tt, np.clip(0.5 * path ** 2 - 0.5 * tt, -2, 2), color=CORR, stroke_width=2).set_stroke(opacity=0.8)
+        pl = VGroup(label(r"one path $W_t$; \ the bars: \ $W$ at the left of each step", font_size=20, color=WALK),
+                    label(r"running left-point sum", font_size=20, color=LPT),
+                    label(r"$\tfrac12 W_t^2 - \tfrac12 t$", font_size=20, color=CORR)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+        pl.next_to(pa, RIGHT, buff=0.3)
+        ppic = VGroup(pa, wp, marks, pl[0])
         verdict = ("and the midpoints give one half W squared exactly" if exact_mid else
                    "and the midpoints approach one half W squared")
         with self.voiceover(
@@ -78,14 +92,17 @@ class Ito(VoiceoverScene):
             f"{verdict}: their averages are {lm:.2f} and {sm:.2f}. The choice of point matters, which never "
             "happens for smooth curves."
         ) as vo:
-            self.play(Write(q))
+            self.play(Write(q), Create(pa), Create(wp), run_time=1.5)
             vo.wait_until("a")
+            self.play(Create(marks), FadeIn(pl[0]))
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(Create(rl), Create(ex), FadeIn(pl[1:]), run_time=1.5)
             vo.wait_until("d")
+            self.play(FadeOut(VGroup(pa, wp, marks, pl, rl, ex)))
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(al), Create(lc), Create(mc))
             self.play(LaggedStart(*[FadeIn(m) for m in means], lag_ratio=0.3))
         self.wait(0.3)
@@ -135,13 +152,14 @@ class Ito(VoiceoverScene):
             "drift predicts."
         ) as vo:
             step(0)
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(tl))
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(tl), Create(c2), Create(c1), FadeIn(lg))
+            self.play(Create(c2), Create(c1), FadeIn(lg))
             self.play(FadeIn(mean), FadeIn(mn))
         self.wait(0.3)
         self.clear_scene()
@@ -150,11 +168,11 @@ class Ito(VoiceoverScene):
     def history(self):
         cards = VGroup(
             history_card(1940, r"Wolfgang Doeblin", r"a soldier in the French army sends the Academy of Sciences a "
-                         r"sealed envelope with a version of the formula; \ opened in 2000", width=4.2),
+                         r"sealed envelope with a version of the formula; \ opened in 2000", width=4.3, font_size=24),
             history_card(r"1944, 1951", r"Kiyosi It\^o", r"the stochastic integral, \ written in wartime Japan; \ "
-                         r"then its chain rule", width=4.2),
+                         r"then its chain rule", width=4.3, font_size=24),
             history_card(1973, r"Black, Scholes, Merton", r"It\^o's lemma prices options; \ today it is how "
-                         r"diffusion models are run backwards \ (Part 21)", width=4.2),
+                         r"diffusion models are run backwards \ (Part 21)", width=4.3, font_size=24),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.3)
         head = label(r"A calculus for random motion", font_size=38).to_edge(UP, buff=0.4)
         strat = label(r"midpoints instead: \ Stratonovich's integral (1966), \ ordinary chain rule, \ but it peeks at "

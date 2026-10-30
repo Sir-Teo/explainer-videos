@@ -110,9 +110,9 @@ class Metrics(VoiceoverScene):
         roc_r, pr_r = np.asarray(m["roc_rare"]), np.asarray(m["pr_rare"])
         pr_b = np.asarray(m["pr_lr2"])
         g1 = plot([0, 1, 0.5], [0, 1, 0.5], x_length=4.2, y_length=3.6, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
-                  center=[-4.0, -0.6, 0], xlabel=r"false-alarm rate", ylabel=r"hit rate")
+                  center=[-4.5, -0.6, 0], xlabel=r"false-alarm rate", ylabel=r"hit rate")
         g2 = plot([0, 1, 0.5], [0, 1, 0.5], x_length=4.2, y_length=3.6, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
-                  center=[1.3, -0.6, 0], xlabel=r"recall \ (Dickens pages found)", ylabel=r"precision \ (calls that are right)")
+                  center=[0.2, -0.6, 0], xlabel=r"recall \ (Dickens pages found)", ylabel=r"precision \ (calls that are right)")
         c1 = VMobject(color=ROCC, stroke_width=4).set_points_as_corners([g1.ax.c2p(a, b) for a, b in roc_r])
         c2 = VMobject(color=PRC, stroke_width=4).set_points_as_corners([g2.ax.c2p(a, b) for a, b in pr_r])
         cb = VMobject(color=GREY_B, stroke_width=2.5).set_points_as_corners([g2.ax.c2p(a, b) for a, b in pr_b])
@@ -125,10 +125,11 @@ class Metrics(VoiceoverScene):
             label(rf"ROC area: \ ${rr['auc']:.2f}$ \ (${rr['auc_lo']:.2f}$--${rr['auc_hi']:.2f}$)", font_size=22, color=ROCC),
             label(rf"average precision: \ ${rr['ap']:.2f}$ \ (${rr['ap_lo']:.2f}$--${rr['ap_hi']:.2f}$)", font_size=22, color=PRC),
             label(rf"balanced pages: \ ${base:.2f}$ \ (grey)", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, 0.4, 0])
-        if res.width > 3.6:
-            res.scale_to_fit_width(3.6)
-            res.move_to([5.1, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        if res.width > 4.2:
+            res.scale_to_fit_width(4.2)
+        res.move_to([4.6, 0.4, 0])
+        keep_in_frame(res)
         tag = note(r"$200$ random draws of the rare pages; \ ranges: \ $10$th--$90$th percentile").to_edge(DOWN, buff=0.12)
         drops = rr["ap"] < base - 0.1
         ap_s = (f"Average precision falls from {base:.2f} to {rr['ap']:.2f}: most alarms are now false."
@@ -141,13 +142,13 @@ class Metrics(VoiceoverScene):
             "separately. <bookmark mark='c'/> Precision and recall ask what you care about: of the pages you call "
             f"Dickens, how many are? {ap_s}"
         ) as vo:
-            self.play(FadeIn(res[0]), FadeIn(tag))
+            self.play(FadeIn(res[0]), FadeIn(tag), FadeIn(g1), FadeIn(t1), FadeIn(g2), FadeIn(t2))
             vo.wait_until("a")
             self.play(FadeIn(res[1]))
             vo.wait_until("b")
-            self.play(FadeIn(g1), FadeIn(t1), Create(c1), FadeIn(res[2]))
+            self.play(Create(c1), FadeIn(res[2]))
             vo.wait_until("c")
-            self.play(FadeIn(g2), FadeIn(t2), Create(cb), FadeIn(res[4]))
+            self.play(Create(cb), FadeIn(res[4]))
             self.play(Create(c2), FadeIn(res[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -156,12 +157,12 @@ class Metrics(VoiceoverScene):
     def wobble(self):
         m = load("metrics")
         sa, ca, fa = np.asarray(m["split_acc"]), np.asarray(m["cv_acc"]), np.asarray(m["fold_acc"])
-        lo, hi = 0.7, 0.96
-        g = plot([lo, hi, 0.05], [0, 1, 1], x_length=10.0, y_length=4.2, xticks=[0.7, 0.75, 0.8, 0.85, 0.9, 0.95],
+        lo, hi = 0.66, 1.12
+        g = plot([lo, hi, 0.05], [0, 1, 1], x_length=12.4, y_length=4.2, xticks=[0.7, 0.75, 0.8, 0.85, 0.9],
                  xfmt=lambda v: rf"{100 * v:.0f}\%", center=[0, -0.6, 0], xlabel=r"accuracy of logistic regression "
                  r"on two rates, \ as measured")
         ax = g.ax
-        bins = np.linspace(lo, hi, 53)
+        bins = np.linspace(lo, 0.96, 61)
 
         def hist(v, col, y0, h):
             c_, _ = np.histogram(v, bins=bins)
@@ -179,11 +180,11 @@ class Metrics(VoiceoverScene):
         h2 = hist(fa, GREY_B, 0.35, 0.28)
         h3 = hist(ca, HL, 0.7, 0.28)
         l1 = label(rf"$100$ different 70/30 splits: \ ${100 * sa.min():.1f}$ to ${100 * sa.max():.1f}\%$", font_size=22,
-                   color=ROCC).next_to(ax.c2p(hi, 0.15), LEFT, buff=0.1)
+                   color=ROCC).next_to(ax.c2p(0.905, 0.15), RIGHT, buff=0.1)
         l2 = label(rf"single folds of ten-fold cross-validation: \ s.d. ${100 * fa.std():.1f}$ points", font_size=22,
-                   color=GREY_B).next_to(ax.c2p(hi, 0.5), LEFT, buff=0.1)
+                   color=GREY_B).next_to(ax.c2p(0.905, 0.5), RIGHT, buff=0.1)
         l3 = label(rf"ten-fold cross-validation, \ $20$ shuffles: \ ${100 * ca.min():.1f}$ to ${100 * ca.max():.1f}\%$",
-                   font_size=22, color=HL).next_to(ax.c2p(hi, 0.85), LEFT, buff=0.1)
+                   font_size=22, color=HL).next_to(ax.c2p(0.905, 0.85), RIGHT, buff=0.1)
         rule = label(r"choose on the training pages; \ test once, \ at the end", font_size=28, color=WHITE).to_edge(UP, buff=0.35)
         with self.voiceover(
             "And how sure is any single number? Logistic regression on two rates, scored again and again. "

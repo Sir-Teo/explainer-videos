@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai6.common import BAD, GOOD, HIST, HL, chapter, era_strip, load
 
 C2, C70 = C.TRUE_P, C.BITS
+AUTH = ("#E86F8A", "#58A6FF")
 LO = 0.70  # the bars start at 70% right
 
 
@@ -80,7 +83,7 @@ class Contest(VoiceoverScene):
         card = history_card(2001, r"Leo Breiman, \ \textit{Statistical Modeling: The Two Cultures}",
                             r"data modeling: \ assume how the data was made, \ then estimate it \ (his estimate: $98\%$ of "
                             r"statisticians). \ Algorithmic modeling: \ treat nature as a black box, \ judge by predictions "
-                            r"on new data \ ($2\%$).", color=HIST, width=7.0).to_corner(UL, buff=0.3)
+                            r"on new data \ ($2\%$).", color=HIST, width=10.5, font_size=26).to_edge(UP, buff=0.35)
         events = [(2006, r"Netflix Prize: \\ \$1M for $10\%$"), (2009, r"won by a blend \\ of hundreds of models"),
                   (2010, r"Kaggle"), (2015, r"XGBoost: \ $17$ of $29$ \\ Kaggle winners")]
         axis, skel, marks = era_strip(events, y0=-2.1, width=4.6, font_size=20)
@@ -95,9 +98,9 @@ class Contest(VoiceoverScene):
             "profession, <bookmark mark='d'/> and in 2015, seventeen of the twenty-nine winning solutions on Kaggle's "
             "blog used XGBoost."
         ) as vo:
-            self.play(FadeIn(card, shift=DOWN * 0.2))
+            self.play(FadeIn(card, shift=DOWN * 0.2), Create(axis), FadeIn(skel))
             vo.wait_until("a")
-            self.play(Create(axis), FadeIn(skel), FadeIn(marks[0]))
+            self.play(FadeIn(marks[0]))
             vo.wait_until("b")
             self.play(FadeIn(marks[1]))
             vo.wait_until("c")
@@ -117,6 +120,41 @@ class Contest(VoiceoverScene):
                       label(r"$\cdot$ \ irregular targets: \ steps, \ not smooth surfaces", font_size=22, color=GREY_A),
                       note(r"Grinsztajn, Oyallon \& Varoquaux (NeurIPS 2022)"))
         why_.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_corner(UL, buff=0.35)
+        # schematic: a table read in context, one forward pass
+        cells = VGroup()
+        g_ = np.random.default_rng(3)
+        for r in range(7):
+            for c in range(5):
+                last = c == 4
+                q = r >= 5
+                col = (AUTH[g_.integers(2)] if last and not q else GREY_D)
+                sq = Square(0.26, stroke_width=1, stroke_color=GREY_B, fill_color=col,
+                            fill_opacity=0.8 if last and not q else 0.35)
+                sq.move_to([c * 0.28, -r * 0.28, 0])
+                cells.add(sq)
+                if last and q:
+                    cells.add(MathTex("?", font_size=20, color=WHITE).move_to(sq))
+        cells.move_to([2.6, 1.6, 0])
+        tf = RoundedRectangle(width=1.9, height=1.1, corner_radius=0.15, stroke_color=GOOD, stroke_width=2,
+                              fill_color="#121722", fill_opacity=1).move_to([4.75, 1.6, 0])
+        tfl = label(r"transformer \\ (synthetic tables)", font_size=18, color=GOOD).move_to(tf)
+        outs = VGroup(*[Square(0.26, stroke_width=1, stroke_color=GREY_B, fill_color=AUTH[k], fill_opacity=0.8)
+                        for k in (1, 0)]).arrange(DOWN, buff=0.02).move_to([6.3, 1.6, 0])
+        a1 = Arrow(cells.get_right(), tf.get_left(), buff=0.1, stroke_width=3, color=GREY_B, max_tip_length_to_length_ratio=0.25)
+        a2 = Arrow(tf.get_right(), outs.get_left(), buff=0.1, stroke_width=3, color=GREY_B, max_tip_length_to_length_ratio=0.3)
+        sch = VGroup(cells, a1, tf, tfl, a2, outs)
+        sch_t = note(r"schematic: \ training rows in, \ answers out, \ no training").next_to(sch, DOWN, buff=0.15)
+        # schematic: an irregular target, a tree's steps and a network's smooth fit
+        pa = Axes(x_range=[0, 10, 1], y_range=[0, 3, 1], x_length=4.2, y_length=1.9, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.0, 1.7, 0])
+        steps_x = [0, 2.1, 2.1, 4.4, 4.4, 6.0, 6.0, 8.3, 8.3, 10]
+        steps_y = [0.6, 0.6, 2.4, 2.4, 1.1, 1.1, 2.7, 2.7, 0.9, 0.9]
+        tgt = VMobject(color=C.BITS, stroke_width=4).set_points_as_corners([pa.c2p(a, b) for a, b in zip(steps_x, steps_y)])
+        smooth = pa.plot(lambda t: 1.6 + 0.75 * math.sin(0.62 * t - 1.4), x_range=[0, 10], color=C.MODEL_Q, stroke_width=3)
+        pic = VGroup(pa, tgt, smooth,
+                     label(r"trees: \ steps", font_size=20, color=C.BITS).next_to(pa, DOWN, buff=0.1).shift(LEFT * 1.0),
+                     label(r"networks: \ smooth", font_size=20, color=C.MODEL_Q).next_to(pa, DOWN, buff=0.1).shift(RIGHT * 1.0))
+        pic_t = note(r"schematic").next_to(pic, UP, buff=0.1)
         fm = VGroup(label(r"The frontier: \ foundation models for tables", font_size=30, color=GOOD),
                     label(r"a transformer pretrained on millions of \emph{synthetic} tables \\ reads the training rows "
                           r"and predicts in one forward pass", font_size=22, color=WHITE),
@@ -142,11 +180,12 @@ class Contest(VoiceoverScene):
             "while trees still lead on large, shifting or very wide ones. Trees and boosting are still the baseline "
             "to beat."
         ) as vo:
-            self.play(FadeIn(why_[0]), FadeIn(why_[1]), FadeIn(why_[5]))
+            self.play(FadeIn(why_[0]), FadeIn(why_[1]), FadeIn(why_[5]), FadeIn(pic), FadeIn(pic_t))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in why_[2:5]], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(fm[0]), FadeIn(fm[1]), FadeIn(fm[2]))
+            self.play(FadeOut(pic), FadeOut(pic_t))
+            self.play(FadeIn(sch), FadeIn(sch_t), FadeIn(fm[0]), FadeIn(fm[1]), FadeIn(fm[2]))
             vo.wait_until("c")
             self.play(FadeIn(fm[3]), FadeIn(fm[4]))
             vo.wait_until("d")
