@@ -104,9 +104,9 @@ class Splitting(VoiceoverScene):
         word = data_text("The", font="DejaVu Sans Mono", font_size=40, color=WHITE).move_to([3.0, 1.2, 0])
         lt = Arrow(word.get_bottom(), spec.get_top(), buff=0.1, color=C.BITS, stroke_width=3)
         lg_ = DashedLine(word.get_bottom(), gen.get_top(), color=GREY_C, dash_length=0.08)
-        ab = label(r"fires, \ and carries \\ the upper-case direction", font_size=18, color=C.BITS).next_to(spec, DOWN, buff=0.2)
+        abl = label(r"fires, \ and carries \\ the upper-case direction", font_size=18, color=C.BITS).next_to(spec, DOWN, buff=0.2)
         si = label(r"silent", font_size=18, color=GREY_B).next_to(gen, DOWN, buff=0.2)
-        sch = VGroup(gen, spec, word, lt, lg_, ab, si)
+        sch = VGroup(gen, spec, word, lt, lg_, abl, si)
         sch_tag = note(r"schematic").next_to(sch, RIGHT, buff=0.3).align_to(sch, DOWN)
         with self.voiceover(
             "Splitting has a nastier cousin. <bookmark mark='a'/> Some features are general, like 'this is a "
@@ -122,7 +122,7 @@ class Splitting(VoiceoverScene):
             self.play(FadeIn(dc), FadeIn(hc))
             vo.wait_until("a")
             self.play(FadeIn(word), GrowArrow(lt), FadeIn(spec), Create(lg_), FadeIn(gen), FadeIn(sch_tag))
-            self.play(FadeIn(ab), FadeIn(si))
+            self.play(FadeIn(abl), FadeIn(si))
             vo.wait_until("b")
             self.play(FadeOut(sch), FadeOut(sch_tag))
             self.play(FadeIn(res))

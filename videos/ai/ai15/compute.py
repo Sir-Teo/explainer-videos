@@ -189,104 +189,6 @@ def compute_ssm():
 
 
 # ---------------------------------------------------------------------------
-def compute_mqar():
-    import torch
-    import torch.nn as nn
-    import torch.nn.functional as F
-
-    torch.set_num_threads(2)
-    NK, NV, D = 64, 64, 64
-    DK = 16  # the memory's key size: lists longer than this overflow a fixed state
-    VOC = NK + NV
-
-    def batch(g, n, N):
-        keys = np.stack([g.permutation(NK)[:N] for _ in range(n)])
-        vals = g.integers(0, NV, (n, N)) + NK
-        order = np.stack([g.permutation(N) for _ in range(n)])
-        pairs = np.stack([keys, vals], 2).reshape(n, 2 * N)
-        qk = np.take_along_axis(keys, order, 1)
-        ans = np.take_along_axis(vals, order, 1)
-        x = np.concatenate([pairs, qk], 1)
-        y = np.full(x.shape, -100)
-        y[:, 2 * N:] = ans
-        return torch.tensor(x), torch.tensor(y)
-
-    class Model(nn.Module):
-        def __init__(self, mixer):
-            super().__init__()
-            self.mixer = mixer
-            self.emb = nn.Embedding(VOC, D)
-            self.conv = nn.Parameter(torch.randn(2, D) * 0.3)  # a short convolution: each token sees the one before
-            self.qkv = nn.Linear(D, 2 * DK + D, bias=False)
-            self.beta = nn.Linear(D, 1)
-            self.o = nn.Linear(D, D, bias=False)
-            self.n = nn.LayerNorm(D)
-            self.out = nn.Linear(D, VOC)
-
-        def forward(self, x):
-            e = self.emb(x)
-            h = e * self.conv[0] + F.pad(e, (0, 0, 1, 0))[:, :-1] * self.conv[1]
-            q, k, v = self.qkv(h).split([DK, DK, D], -1)
-            T = x.shape[1]
-            if self.mixer == "softmax":
-                a = F.scaled_dot_product_attention(q[:, None], k[:, None], v[:, None], is_causal=True)[:, 0]
-            elif self.mixer == "linear":
-                fq, fk = F.elu(q) + 1, F.elu(k) + 1
-                A = (fq @ fk.transpose(1, 2)).tril()
-                a = (A @ v) / (A.sum(-1, keepdim=True) + 1e-6)
-            else:  # delta rule
-                q, k = F.normalize(q, dim=-1), F.normalize(k, dim=-1)
-                b = torch.sigmoid(self.beta(h))
-                S = torch.zeros(x.shape[0], D, DK)
-                outs = []
-                for t in range(T):
-                    kt, vt = k[:, t], v[:, t]
-                    pred = torch.einsum("bij,bj->bi", S, kt)
-                    S = S + b[:, t, :, None] * torch.einsum("bi,bj->bij", vt - pred, kt)
-                    outs.append(torch.einsum("bij,bj->bi", S, q[:, t]))
-                a = torch.stack(outs, 1)
-            return self.out(self.n(h + self.o(a)))
-
-    Ns = [8, 16, 32, 48]
-    out = dict(Ns=Ns, d=DK)
-    for mixer in ("softmax", "linear", "delta"):
-        accs = []
-        for N in Ns:
-            torch.manual_seed(2023)  # Arora et al., Zoology
-            m = Model(mixer)
-            opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
-            g = rng(N)
-            steps = 1500
-            sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps, pct_start=0.1)
-            xe, ye = batch(rng(20_000 + N), 128, N)
-            curve = []
-            for step in range(steps + 1):
-                if step % 100 == 0:  # how it learns: recall on a fixed batch, along the way
-                    with torch.no_grad():
-                        pe, mk = m(xe).argmax(-1), ye >= 0
-                        curve.append((step, float((pe[mk] == ye[mk]).float().mean())))
-                if step == steps:
-                    break
-                x, y = batch(g, 64, N)
-                loss = F.cross_entropy(m(x).reshape(-1, VOC), y.reshape(-1), ignore_index=-100)
-                opt.zero_grad()
-                loss.backward()
-                opt.step()
-                sched.step()
-            with torch.no_grad():
-                x, y = batch(rng(10_000 + N), 512, N)
-                p = m(x).argmax(-1)
-                mk = y >= 0
-                accs.append(float((p[mk] == y[mk]).float().mean()))
-            print(f"    {mixer} N={N}: recall {accs[-1]:.1%}", flush=True)
-            out[f"curve_{mixer}_{N}"] = np.array(curve)
-        out[mixer] = np.array(accs)
-    assert out["softmax"].min() > 0.9
-    assert out["linear"][-1] < 0.9  # the adding memory overflows
-    return out
-
-
-# ---------------------------------------------------------------------------
 def compute_mla():
     g = rng(2024)  # DeepSeek-V2 (2024)
     d, dc, dh, dr, n = 64, 16, 8, 4, 12  # model width, latent, head size, rotary size, tokens
@@ -422,14 +324,761 @@ def compute_delta():
     return out
 
 
+
+# ---------------------------------------------------------------------------
+# Associative memory, from Hopfield to the matrix written and read
+# ---------------------------------------------------------------------------
+def compute_hopfield():
+    """A Hopfield network (1982) of N = 100 binary neurons storing P random patterns by Hebb's outer-product rule; each
+    pattern is cued with 10 of its 100 bits flipped and the network runs until nothing changes.  Recall: the share of
+    cues that end exactly on their pattern, against P / N (the classical limit is about 0.138, Amit, Gutfreund &
+    Sompolinsky 1985).  And one recall step by step (energy falling) for the picture."""
+    g = rng(1982)
+    N, trials, flips = 100, 16, 10
+    Ps = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32]
+
+    def settle(W, s, order_rng, sweeps=8, trace=None):
+        s = s.copy()
+        for _ in range(sweeps):
+            changed = 0
+            for i in order_rng.permutation(N):
+                h = W[i] @ s
+                new = 1.0 if h >= 0 else -1.0
+                if new != s[i]:
+                    s[i] = new
+                    changed += 1
+            if trace is not None:
+                trace.append(s.copy())
+            if not changed:
+                break
+        return s
+
+    frac, overlap = [], []
+    for P in Ps:
+        ok, ov = 0, 0.0
+        for _ in range(trials):
+            X = np.where(g.normal(size=(P, N)) > 0, 1.0, -1.0)
+            W = X.T @ X / N
+            np.fill_diagonal(W, 0)
+            p = int(g.integers(0, P))
+            s = X[p].copy()
+            s[g.choice(N, flips, replace=False)] *= -1
+            out = settle(W, s, g)
+            ok += int(np.array_equal(out, X[p]))
+            ov += float(out @ X[p] / N)
+        frac.append(ok / trials)
+        overlap.append(ov / trials)
+    # one recall, step by step: 5 patterns, a cue with 30 bits flipped, asynchronous updates in small groups
+    P = 5
+    X = np.where(g.normal(size=(P, N)) > 0, 1.0, -1.0)
+    W = X.T @ X / N
+    np.fill_diagonal(W, 0)
+    s = X[0].copy()
+    s[g.choice(N, 30, replace=False)] *= -1
+    frames, energy = [s.copy()], [float(-0.5 * s @ W @ s)]
+    for i in g.permutation(N):
+        s[i] = 1.0 if W[i] @ s >= 0 else -1.0
+        frames.append(s.copy())
+        energy.append(float(-0.5 * s @ W @ s))
+    frames = np.array(frames[::5] + [frames[-1]])
+    assert np.array_equal(frames[-1], X[0])  # a light load: the cue falls back to its pattern
+    assert all(b <= a + 1e-12 for a, b in zip(energy, energy[1:]))  # every asynchronous step lowers the energy
+    return dict(N=N, flips=flips, trials=trials, Ps=Ps, frac=np.array(frac), overlap=np.array(overlap),
+                ex_patterns=X, ex_frames=frames, ex_energy=np.array(energy[::5] + [energy[-1]]))
+
+
+def compute_matrix_rw():
+    """The memory matrix written and read, step by step (d = 8): four key-value pairs written, then the second key
+    given a new value; after every write, the matrix and what each key reads back, for the adding rule (linear
+    attention) and the delta rule (beta = 1)."""
+    g = rng(1992)  # Schmidhuber's fast weights
+    d = 8
+    Qm, _ = np.linalg.qr(g.normal(size=(d, d)))
+    keys = Qm[:4] + 0.1 * g.normal(size=(4, d))  # nearly at right angles, but not quite: a little crosstalk
+    keys /= np.linalg.norm(keys, axis=1, keepdims=True)
+    vals = g.normal(size=(5, d)) / math.sqrt(d) * 1.6
+    seq = [(0, 0), (1, 1), (2, 2), (3, 3), (1, 4)]  # (key, value): the last write gives key 1 a new value
+    out = dict(d=d, keys=keys, vals=vals, seq=np.array(seq))
+    for rule in ("add", "delta"):
+        S = np.zeros((d, d))
+        Ss, reads, errs = [], [], []
+        truth = {}
+        for kk, vv in seq:
+            k, v = keys[kk], vals[vv]
+            S = S + np.outer(v, k) if rule == "add" else S + np.outer(v - S @ k, k)
+            truth[kk] = v
+            R = keys @ S.T  # what every key reads now
+            Ss.append(S.copy())
+            reads.append(R)
+            errs.append([float(np.linalg.norm(R[j] - truth[j]) / np.linalg.norm(truth[j])) if j in truth else np.nan
+                         for j in range(4)])
+        out[f"S_{rule}"], out[f"read_{rule}"], out[f"err_{rule}"] = np.array(Ss), np.array(reads), np.array(errs)
+    out["overlaps"] = keys @ keys.T
+    assert out["err_delta"][-1][1] < 1e-12  # the delta rule's rewrite is exact for that key
+    assert out["err_add"][-1][1] > 0.5  # adding answers with a mixture of the old and the new value
+    return out
+
+
+# ---------------------------------------------------------------------------
+# The associative scan
+# ---------------------------------------------------------------------------
+def compute_scan():
+    """h_t = a_t h_{t-1} + b_t computed by a parallel prefix scan: the pairs (a, b) combine by
+    (a1, b1) * (a2, b2) = (a1 a2, a2 b1 + b2), which is associative, so log2 T rounds of combining (Hillis & Steele
+    1986) or a work-efficient up-and-down sweep (Blelloch 1990) give every h_t; checked against the loop, with
+    scalars and with 4 x 4 matrices (h_t = A_t h_{t-1} + B_t)."""
+    g = rng(1990)
+    T = 4096
+    a, b = g.uniform(0.9, 1.0, T), g.normal(size=T)
+
+    def loop(a, b):
+        h, out = 0.0, np.empty(T)
+        for t in range(T):
+            h = a[t] * h + b[t]
+            out[t] = h
+        return out
+
+    def hillis_steele(a, b):
+        A, Bv = a.copy(), b.copy()
+        k, rounds = 1, 0
+        while k < len(A):
+            A2, B2 = A.copy(), Bv.copy()
+            A2[k:] = A[:-k] * A[k:]
+            B2[k:] = A[k:] * Bv[:-k] + Bv[k:]
+            A, Bv = A2, B2
+            k *= 2
+            rounds += 1
+        return Bv, rounds
+
+    def blelloch(a, b):  # exclusive up-sweep / down-sweep, then shifted to inclusive
+        n = len(a)
+        A, Bv = a.copy(), b.copy()
+        ops, rounds = 0, 0
+        d = 1
+        while d < n:  # up-sweep: partial products in a tree
+            idx = np.arange(2 * d - 1, n, 2 * d)
+            Bv[idx] = A[idx] * Bv[idx - d] + Bv[idx]
+            A[idx] = A[idx - d] * A[idx]
+            ops += len(idx)
+            rounds += 1
+            d *= 2
+        A[-1], Bv[-1] = 1.0, 0.0  # identity at the root
+        d = n // 2
+        while d >= 1:  # down-sweep
+            idx = np.arange(2 * d - 1, n, 2 * d)
+            la, lb = A[idx - d].copy(), Bv[idx - d].copy()
+            A[idx - d], Bv[idx - d] = A[idx], Bv[idx]
+            # right child = (parent prefix) * (left subtree)
+            Bv[idx] = la * Bv[idx] + lb
+            A[idx] = A[idx] * la
+            ops += len(idx)
+            rounds += 1
+            d //= 2
+        return a * Bv + b, ops, rounds  # exclusive prefix (A, Bv) then the element itself
+
+    ref = loop(a, b)
+    hs, r_hs = hillis_steele(a, b)
+    bl, ops_bl, r_bl = blelloch(a, b)
+    # matrices: h_t = A_t h_{t-1} + B_t, combine (A1, B1) * (A2, B2) = (A2 A1, A2 B1 + B2)
+    Tm, n = 256, 4
+    Am = 0.25 * g.normal(size=(Tm, n, n)) + 0.7 * np.eye(n)
+    Bm = g.normal(size=(Tm, n))
+    h, refm = np.zeros(n), []
+    for t in range(Tm):
+        h = Am[t] @ h + Bm[t]
+        refm.append(h)
+    refm = np.array(refm)
+    AA, BB = Am.copy(), Bm.copy()
+    k = 1
+    while k < Tm:
+        A2, B2 = AA.copy(), BB.copy()
+        A2[k:] = AA[k:] @ AA[:-k]
+        B2[k:] = np.einsum("tij,tj->ti", AA[k:], BB[:-k]) + BB[k:]
+        AA, BB = A2, B2
+        k *= 2
+    out = dict(T=T, rounds_hs=r_hs, rounds_bl=r_bl, work_hs=int(T * r_hs - (T - 1)), work_bl=int(ops_bl),
+               diff_hs=float(np.abs(hs - ref).max() / np.abs(ref).max()), diff_bl=float(np.abs(bl - ref).max() / np.abs(ref).max()),
+               diff_mat=float(np.abs(BB - refm).max() / np.abs(refm).max()), Tm=Tm, n=n)
+    # a small trace to draw: T = 8, which positions combine in each round of Hillis-Steele
+    out["trace"] = [[(i - k, i) for i in range(k, 8)] for k in (1, 2, 4)]
+    print(f"    scan: {r_hs} rounds (Hillis-Steele), {r_bl} (Blelloch, {ops_bl} combines for {T}); "
+          f"largest relative difference {max(out['diff_hs'], out['diff_bl']):.1e}, matrices {out['diff_mat']:.1e}", flush=True)
+    assert max(out["diff_hs"], out["diff_bl"], out["diff_mat"]) < 1e-9 and r_hs == 12
+    return out
+
+
+# ---------------------------------------------------------------------------
+# HiPPO, ZOH and S4
+# ---------------------------------------------------------------------------
+def legs_matrices(N):
+    n = np.arange(N)
+    r = np.sqrt(2 * n + 1)
+    A = np.tril(np.outer(r, r), -1) + np.diag(n + 1)
+    return A, r.copy()
+
+
+def legendre(N, x):
+    """P_0 .. P_{N-1} at x in [-1, 1], by the three-term recurrence."""
+    P = np.zeros((N, len(x)))
+    P[0] = 1
+    if N > 1:
+        P[1] = x
+    for n in range(1, N - 1):
+        P[n + 1] = ((2 * n + 1) * x * P[n] - n * P[n - 1]) / (n + 1)
+    return P
+
+
+def compute_hippo():
+    """HiPPO-LegS (Gu, Dao, Ermon, Rudra & Re 2020) memorizing a signal online: N numbers c(t), updated once per
+    sample by the recurrence c_k = (I + A/2k)^-1 [(I - A/2k) c_{k-1} + B f_k / k] (the bilinear step of
+    dc/dt = -A c / t + B f / t), hold the best degree-(N-1) polynomial fit to everything seen so far; reconstructed
+    with Legendre polynomials and compared with the signal, for several N."""
+    g = rng(2020)
+    L = 2000
+    s = np.linspace(0, 1, L)
+    f = np.zeros(L)
+    for j in range(1, 13):  # a smooth random signal
+        f += g.normal() / j * np.sin(2 * np.pi * j * s + g.uniform(0, 2 * np.pi))
+    f /= np.abs(f).max()
+    Ns = [4, 8, 16, 32, 64]
+    snaps_at = [250, 500, 1000, 1500, 2000]
+    out = dict(L=L, f=f, Ns=Ns, snaps_at=snaps_at)
+    for N in Ns:
+        A, B = legs_matrices(N)
+        I = np.eye(N)
+        c = np.zeros(N)
+        snaps = []
+        for k in range(1, L + 1):
+            c = np.linalg.solve(I + A / (2 * k), (I - A / (2 * k)) @ c + B * f[k - 1] / k)
+            if k in snaps_at:
+                x = np.linspace(-1, 1, k)
+                rec = (c[:, None] * np.sqrt(2 * np.arange(N) + 1)[:, None] * legendre(N, x)).sum(0)
+                snaps.append(rec)
+        err = float(np.sqrt(np.mean((snaps[-1] - f) ** 2)) / np.sqrt(np.mean(f ** 2)))
+        out[f"err_{N}"] = err
+        if N in (8, 32):
+            out[f"snaps_{N}"] = [np.asarray(x) for x in snaps]
+        # the best possible degree-(N-1) fit, by least squares on the whole signal: what the memory should approach
+        V = legendre(N, np.linspace(-1, 1, L)).T
+        coef = np.linalg.lstsq(V, f, rcond=None)[0]
+        out[f"best_{N}"] = float(np.sqrt(np.mean((V @ coef - f) ** 2)) / np.sqrt(np.mean(f ** 2)))
+        print(f"    HiPPO-LegS N={N}: error {err:.3f} (best polynomial fit {out[f'best_{N}']:.3f})", flush=True)
+    for k_ in ("snaps_8", "snaps_32"):
+        out[k_] = np.concatenate(out[k_])  # ragged: lengths are snaps_at
+    assert out["err_64"] < out["err_8"] and out["err_32"] < 1.5 * out["best_32"] + 0.02
+    return out
+
+
+def compute_zoh():
+    """Discretizing h' = A h + B x for a step Delta with the input held constant over each step: the zero-order hold
+    gives A_bar = e^{Delta A}, B_bar = A^{-1}(e^{Delta A} - I) B, exact for such inputs; Euler and the bilinear rule
+    are approximations of order 1 and 2.  Checked against a fine Runge-Kutta solution of the ODE; and S4's view, the
+    same SSM as a convolution with the kernel (C B_bar, C A_bar B_bar, C A_bar^2 B_bar, ...)."""
+    from scipy.linalg import expm
+
+    g = rng(2022)
+    A = np.array([[-0.3, -2.0], [2.0, -0.3]])  # a damped oscillator: a memory that rings, then fades
+    B = np.array([1.0, 0.0])
+    Cv = np.array([0.0, 1.0])
+    T_end = 12.0
+    deltas = [0.4, 0.2, 0.1, 0.05, 0.025]
+    xs = g.normal(size=int(round(T_end / deltas[-1])))  # one piecewise-constant input on the finest grid
+
+    def u_at(t, delta):  # the same input signal, resampled on a grid of step delta (held over each step)
+        k = min(int(t / delta), int(round(T_end / delta)) - 1)
+        return xs[int(k * delta / deltas[-1])]
+
+    def rk4(delta, sub=200):
+        n = int(round(T_end / delta))
+        h, hs = np.zeros(2), []
+        for k in range(n):
+            u = u_at(k * delta + 1e-12, delta)
+            dt = delta / sub
+            for _ in range(sub):
+                f1 = A @ h + B * u
+                f2 = A @ (h + dt / 2 * f1) + B * u
+                f3 = A @ (h + dt / 2 * f2) + B * u
+                f4 = A @ (h + dt * f3) + B * u
+                h = h + dt / 6 * (f1 + 2 * f2 + 2 * f3 + f4)
+            hs.append(h.copy())
+        return np.array(hs)
+
+    out = dict(deltas=deltas, A=A, B=B, C=Cv, T_end=T_end)
+    I = np.eye(2)
+    errs = {"euler": [], "bilinear": [], "zoh": []}
+    for delta in deltas:
+        n = int(round(T_end / delta))
+        ref = rk4(delta)
+        Ab_z = expm(delta * A)
+        Bb_z = np.linalg.solve(A, (Ab_z - I) @ B)
+        Ab_b = np.linalg.solve(I - delta / 2 * A, I + delta / 2 * A)
+        Bb_b = np.linalg.solve(I - delta / 2 * A, delta * B)
+        rules = {"euler": (I + delta * A, delta * B), "bilinear": (Ab_b, Bb_b), "zoh": (Ab_z, Bb_z)}
+        for name, (Ab, Bb) in rules.items():
+            h, hs = np.zeros(2), []
+            for k in range(n):
+                h = Ab @ h + Bb * u_at(k * delta + 1e-12, delta)
+                hs.append(h.copy())
+            errs[name].append(float(np.abs(np.array(hs) - ref).max() / np.abs(ref).max()))
+            if delta == 0.2:
+                out[f"y_{name}"] = np.array(hs) @ Cv
+        if delta == 0.2:
+            out["y_exact"] = ref @ Cv
+            out["u_02"] = np.array([u_at(k * delta + 1e-12, delta) for k in range(n)])
+    for k_, v in errs.items():
+        out[f"err_{k_}"] = np.array(v)
+    # S4: the recurrence as one long convolution
+    delta, n = 0.1, 120
+    Ab = expm(delta * A)
+    Bb = np.linalg.solve(A, (Ab - I) @ B)
+    K = np.array([Cv @ np.linalg.matrix_power(Ab, j) @ Bb for j in range(n)])
+    u = g.normal(size=n)
+    h, y_rec = np.zeros(2), []
+    for k in range(n):
+        h = Ab @ h + Bb * u[k]
+        y_rec.append(Cv @ h)
+    y_conv = np.array([np.dot(K[:k + 1][::-1], u[:k + 1]) for k in range(n)])
+    out.update(kernel=K, conv_diff=float(np.abs(np.array(y_rec) - y_conv).max()))
+    slope = lambda e: float(np.polyfit(np.log(deltas[-3:]), np.log(e[-3:]), 1)[0])  # noqa: E731
+    out.update(slope_euler=slope(errs["euler"]), slope_bilinear=slope(errs["bilinear"]))
+    print(f"    ZOH: largest error {max(errs['zoh']):.1e}; Euler order {out['slope_euler']:.2f}, bilinear "
+          f"{out['slope_bilinear']:.2f}; convolution vs recurrence {out['conv_diff']:.1e}", flush=True)
+    assert max(errs["zoh"]) < 1e-8 and out["conv_diff"] < 1e-10
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Test-time training and Titans, as a toy
+# ---------------------------------------------------------------------------
+def compute_ttt():
+    """A memory that is a learner.  Each sequence has its own hidden rule v = f(k) (a random small tanh network, keys
+    of 8 numbers); the model reads pairs (k, f(k)) one at a time and its memory takes one gradient step on each
+    (test-time training).  Memories: a linear map (8 x 8: one step of gradient descent is the delta rule, TTT-Linear)
+    and a two-layer network (8 -> 32 -> 8, TTT-MLP); error on fresh keys of the same rule as more pairs are read
+    (32 sequences; each memory's step size chosen on 16 other sequences).  Then Titans' memory on a stream whose
+    rule changes halfway: the surprise (the gradient's size) spikes at the change; momentum and a forgetting gate."""
+    import torch
+
+    torch.set_num_threads(1)
+    d, H, n_read, n_test = 8, 32, 256, 128
+
+    def teacher(gen):
+        W1 = torch.randn(16, d, generator=gen) / math.sqrt(d) * 1.5
+        W2 = torch.randn(d, 16, generator=gen) / math.sqrt(16)
+        return lambda k: torch.tanh(k @ W1.T) @ W2.T
+
+    def run(kind, lr, seed, momentum=0.0, forget=0.0, switch=None, trace=False):
+        gen = torch.Generator().manual_seed(seed)
+        f = teacher(gen)
+        f2 = teacher(gen) if switch else None
+        K = torch.randn(n_read, d, generator=gen)
+        Kt = torch.randn(n_test, d, generator=gen)
+        if kind == "linear":
+            params = [torch.zeros(d, d, requires_grad=True)]
+            fwd = lambda P, x: x @ P[0].T  # noqa: E731
+        else:
+            g2 = torch.Generator().manual_seed(10_000 + seed)
+            params = [(torch.randn(H, d, generator=g2) / math.sqrt(d)).requires_grad_(),
+                      torch.zeros(d, H, requires_grad=True)]
+            fwd = lambda P, x: torch.tanh(x @ P[0].T) @ P[1].T  # noqa: E731
+        mom = [torch.zeros_like(p) for p in params]
+        errs, surprise = [], []
+        for t in range(n_read):
+            rule = f2 if (switch and t >= switch) else f
+            k = K[t:t + 1]
+            v = rule(k)
+            loss = 0.5 * ((fwd(params, k) - v) ** 2).sum()
+            grads = torch.autograd.grad(loss, params)
+            surprise.append(float(sum(gg.norm() ** 2 for gg in grads).sqrt()))
+            with torch.no_grad():
+                for p, gg, m in zip(params, grads, mom):
+                    m.mul_(momentum).add_(gg, alpha=-lr)  # Titans: surprise with momentum
+                    p.mul_(1 - forget).add_(m)  # and a forgetting gate
+            if trace or (t + 1) % 16 == 0:
+                with torch.no_grad():
+                    tgt = rule(Kt)
+                    errs.append(float(((fwd(params, Kt) - tgt) ** 2).mean() / (tgt ** 2).mean()))
+        return np.array(errs), np.array(surprise)
+
+    lrs = {"linear": [0.05, 0.1, 0.2, 0.4], "mlp": [0.05, 0.1, 0.2, 0.4, 0.8]}
+    best = {}
+    for kind, grid in lrs.items():  # tune the step size on sequences 100..115
+        scores = [np.mean([run(kind, lr, 100 + s)[0][-1] for s in range(16)]) for lr in grid]
+        best[kind] = grid[int(np.argmin(scores))]
+    out = dict(d=d, H=H, n_read=n_read, every=16, best_lr=best,
+               params_linear=d * d, params_mlp=2 * d * H)
+    for kind in lrs:
+        E = np.array([run(kind, best[kind], s)[0] for s in range(32)])
+        out[f"err_{kind}"] = E
+        print(f"    TTT-{kind}: lr {best[kind]}, error after {n_read} pairs {np.median(E[:, -1]):.3f}", flush=True)
+    # Titans on a stream whose rule changes at t = 128
+    sw = n_read // 2
+    for name, mo, fo in (("plain", 0.0, 0.0), ("titans", 0.6, 0.02)):
+        E, S = zip(*[run("mlp", best["mlp"] * (1 - mo), 200 + s, momentum=mo, forget=fo, switch=sw, trace=True)
+                     for s in range(16)])
+        out[f"switch_err_{name}"], out[f"switch_surprise_{name}"] = np.array(E), np.array(S)
+    out["switch"] = sw
+    return out
+
+
+
+# ---------------------------------------------------------------------------
+# Recall: MQAR and RULER-style tests on small trained models (videos/ai/ai15/recall.py)
+# ---------------------------------------------------------------------------
+MQAR_GRID = dict(mixers=["softmax", "linear", "mamba2", "delta", "gdn", "hybrid"], dks=[2, 4, 8, 16, 32],
+                 seeds=[0, 1, 2], N=16, steps=1000, replay_dk=8)
+RULER_GRID = dict(mixers=["softmax", "mamba2", "gdn", "hybrid"], seeds=[0, 1], T=128, steps=1500)
+
+
+def _pool_run(fn, jobs: dict, part, workers: int = 2):
+    """Run the jobs (key -> (callable, kwargs)) not yet in ``part`` in ``workers`` processes (spawn, one torch thread
+    each), saving each result the moment it arrives."""
+    import multiprocessing as mp
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+
+    todo = {k: kw for k, kw in jobs.items() if k not in part}
+    if not todo:
+        return
+    with ProcessPoolExecutor(workers, mp_context=mp.get_context("spawn")) as ex:
+        futs = {ex.submit(fn, **kw): k for k, kw in todo.items()}
+        for f in as_completed(futs):
+            k = futs[f]
+            part[k] = f.result()
+            r = part[k]
+            print(f"    {k}: {r.get('acc', '')} ({r['seconds']:.0f}s)", flush=True)
+
+
+def compute_mqar():
+    """Multi-query associative recall (Arora et al., Zoology, 2023), N = 16 pairs: two-layer models with each memory
+    (softmax attention; linear attention; a Mamba-2-style selective SSM; the delta rule; the gated delta rule; a
+    hybrid, gated delta then attention), at five key sizes, three seeds each, equal steps (1,000) and equal
+    parameters up to a few gates.  Recall on 1,024 fresh lists; the curve along training; and, for key size 8, which
+    answers of one fixed list each model gets right at every evaluation (the replay)."""
+    from videos.ai.ai15.recall import train_mqar
+
+    G = MQAR_GRID
+    part = CACHE.partial("mqar", G)
+    jobs = {f"{m}_{dk}_{s}": dict(mixer=m, dk=dk, N=G["N"], seed=s, steps=G["steps"],
+                                  replay=(s == 0 and dk == G["replay_dk"]))
+            for dk in G["dks"] for m in G["mixers"] for s in G["seeds"]}
+    _pool_run(train_mqar, jobs, part)
+    out = dict(G)
+    for m in G["mixers"]:
+        out[f"acc_{m}"] = np.array([[part[f"{m}_{dk}_{s}"]["acc"] for s in G["seeds"]] for dk in G["dks"]])
+        out[f"state_{m}"] = np.array([part[f"{m}_{dk}_0"]["state"] for dk in G["dks"]])
+        out[f"params_{m}"] = int(part[f"{m}_{G['replay_dk']}_0"]["params"])
+        out[f"curves_{m}"] = np.array([[np.asarray(part[f"{m}_{dk}_{s}"]["curve"])[:, 1] for s in G["seeds"]]
+                                       for dk in G["dks"]])
+        r = part[f"{m}_{G['replay_dk']}_0"]
+        out[f"picks_{m}"] = np.array(r["picks"])
+    out["curve_steps"] = np.asarray(part[f"softmax_{G['dks'][0]}_0"]["curve"])[:, 0]
+    out["example"] = np.array(part[f"softmax_{G['replay_dk']}_0"]["example"])
+    return out
+
+
+def compute_ruler():
+    """RULER-style tests (Hsieh et al. 2024) on small models trained at 128 tokens and tested at 128 to 1,024: one
+    needle in filler; one needle among four (multi-key); a value passed along a chain of three names (variable
+    tracking).  Softmax attention, a Mamba-2-style SSM, the gated delta rule and a hybrid; two seeds each."""
+    from videos.ai.ai15.recall import train_ruler
+
+    G = RULER_GRID
+    part = CACHE.partial("ruler", G)
+    jobs = {f"{m}_{s}": dict(mixer=m, seed=s, T=G["T"], steps=G["steps"]) for m in G["mixers"] for s in G["seeds"]}
+    _pool_run(train_ruler, jobs, part)
+    from videos.ai.ai15.recall import TASKS
+
+    out = dict(G, tasks=list(TASKS), lengths=[128, 256, 512, 1024])
+    for m in G["mixers"]:
+        out[f"acc_{m}"] = np.array([[[part[f"{m}_{s}"]["acc"][f"{t}_{L}"] for L in out["lengths"]] for t in TASKS]
+                                    for s in G["seeds"]])
+        out[f"curve_{m}"] = np.array([np.asarray(part[f"{m}_{s}"]["curve"])[:, 1] for s in G["seeds"]])
+        out[f"params_{m}"] = int(part[f"{m}_0"]["params"])
+    out["curve_steps"] = np.asarray(part[f"{G['mixers'][0]}_0"]["curve"])[:, 0]
+    return out
+
+
+
+# ---------------------------------------------------------------------------
+# A gated-delta hybrid language model on the novels, against a transformer (videos/ai/ai15/novels_lm.py)
+# ---------------------------------------------------------------------------
+LM_GRID = dict(runs=[("transformer", 0), ("hybrid", 0), ("transformer", 1), ("hybrid", 1), ("transformer", 2),
+                     ("hybrid", 2), ("gdn", 0)], steps=600)
+COPY_GAPS = [16, 64, 128, 192, 384, 768]
+
+
+def compute_lm():
+    """Train the runs (resumable: a checkpoint every 100 steps), then measure each: bits per character on the
+    scoreboard's passage (windows of 256, as Part 14), loss at each position of 1,024-token windows read in one go,
+    and the copy test at growing distances."""
+    from explainer.ai import novels as N
+    from videos.ai.ai1 import compute as c1
+    from videos.ai.ai15 import novels_lm as L
+
+    import torch
+
+    torch.set_num_threads(2)
+    G = LM_GRID
+    part = CACHE.partial("lm", G)
+    CACHE.dir.mkdir(parents=True, exist_ok=True)
+    passage = c1.text("passage")
+    _, va = N.token_arrays()
+    for arch, seed in G["runs"]:
+        key = f"{arch}_{seed}"
+        if key in part:
+            continue
+        r = L.train(arch, seed, G["steps"], CACHE.dir)
+        m = L.load_trained(arch, seed, CACHE.dir)
+        r["bits"] = L.bits_per_char(m, passage)
+        r["by_pos"] = L.loss_by_position(m, va).tolist()
+        r["copy"] = L.copy_test(m, va, COPY_GAPS)
+        print(f"    {key}: held-out {r['final_val']:.3f}, passage {r['bits']:.3f} bits/char, copy {r['copy']}", flush=True)
+        part[key] = r
+    out = dict(steps=G["steps"], gaps=COPY_GAPS, seq=L.SEQ, d=L.D, layers=L.LAYERS, archs=list(L.ARCHS),
+               tokens=G["steps"] * L.BATCH * L.SEQ)
+    for arch in L.ARCHS:
+        rs = [part[f"{a}_{s}"] for a, s in G["runs"] if a == arch]
+        out[f"{arch}_bits"] = np.array([r["bits"] for r in rs])
+        out[f"{arch}_val"] = np.array([r["final_val"] for r in rs])
+        out[f"{arch}_params"] = int(rs[0]["params"])
+        out[f"{arch}_curve"] = np.array([np.asarray(r["curve"])[:, 1] for r in rs])
+        out[f"{arch}_snaps_val"] = np.array([[s_[1] for s_ in r["snaps"]] for r in rs])
+        out[f"{arch}_samples"] = [s_[2] for s_ in rs[0]["snaps"]]
+        out[f"{arch}_by_pos"] = np.array([r["by_pos"] for r in rs])
+        out[f"{arch}_copy"] = np.array([[r["copy"][str(gp)] for gp in COPY_GAPS] for r in rs])
+        out[f"{arch}_seconds"] = float(np.mean([r["seconds"] for r in rs]))
+    rs0 = part[f"{G['runs'][0][0]}_0"]
+    out["curve_steps"] = np.asarray(rs0["curve"])[:, 0]
+    out["snap_steps"] = np.array([s_[0] for s_ in rs0["snaps"]])
+    out["prompt"] = L.PROMPT
+    return out
+
+
+# ---------------------------------------------------------------------------
+# The series' model with a smaller cache: sinks and heavy hitters (videos/ai/ai15/memory_lm.py)
+# ---------------------------------------------------------------------------
+STREAM_BUDGETS = [32, 64, 128]
+
+
+def compute_sinks():
+    """Where the series' model looks: each head's mean attention on the first token of 256-token windows of held-out
+    text; then the scoreboard's passage (the first 3,000 tokens) read token by token with a cache of 32, 64 or 128
+    tokens per head under three policies (window, four sinks plus a window, heavy hitters), and with everything kept
+    (positions running past the 256 the model was trained on)."""
+    import torch
+
+    from explainer.ai import novels as N
+    from videos.ai.ai1 import compute as c1
+    from videos.ai.ai15 import memory_lm as M
+
+    torch.set_num_threads(2)
+    model = N.load_base()
+    _, va = N.token_arrays()
+    starts = np.linspace(0, len(va) - 300, 24).astype(int)
+    win = torch.from_numpy(np.stack([va[s:s + 256] for s in starts]).astype(np.int64))
+    first = M.attention_on_first(model, win)
+    ids = N.encode(c1.text("passage"))[:3000]
+    part = CACHE.partial("sinks", dict(budgets=STREAM_BUDGETS, n=len(ids), v=1))
+    runs = [("full", 0)] + [(p, b) for b in STREAM_BUDGETS for p in ("window", "sinks", "h2o")]
+    for pol, b in runs:
+        key = f"{pol}_{b}"
+        if key not in part:
+            part[key] = M.stream(model, ids, pol, b)["losses"].tolist()
+            print(f"    {key}: {np.mean(part[key]):.3f} nats a token", flush=True)
+    # the reference: windows of 256 recomputed, each token with 128 to 256 tokens before it (Part 14's scoring)
+    H, lp, _ = M.query_states(model, ids)
+    ref = (-lp).numpy()
+    chars = len(N.decode(ids))
+    out = dict(first=first, uniform=float(np.mean(1.0 / np.arange(65, 257))), budgets=STREAM_BUDGETS, n=len(ids),
+               chars=chars, ref=ref, seq=model.cfg.seq)
+    for k in part.done:
+        out[f"loss_{k}"] = np.array(part[k])
+        out[f"bits_{k}"] = float(np.sum(part[k]) / math.log(2) / chars)
+    out["bits_ref"] = float(ref.sum() / math.log(2) / chars)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# The kNN-LM on the novels
+# ---------------------------------------------------------------------------
+KNN = dict(k=64, window=256, keep=192, batch=24, fractions=[1 / 64, 1 / 16, 1 / 4, 1.0], tune_tokens=4000, seed=15)
+
+
+def compute_knn():
+    """Every token of the thirty novels as (the series' model's last hidden state, the next token): about 6.6 million
+    pairs, never stored whole: the stored states are streamed past the queries, keeping each query's 64 nearest
+    (squared distance) as they go, with snapshots after 1/64, 1/16, 1/4 and all of the novels (read in a seeded
+    random order).  Queries: the scoreboard's passage, and held-out novel text to choose the mixing weight lambda and
+    the temperature.  Resumable: the running nearest neighbours are checkpointed with the position in the order."""
+    import torch
+
+    from explainer.ai import novels as N
+    from videos.ai.ai1 import compute as c1
+    from videos.ai.ai15 import memory_lm as M
+
+    torch.set_num_threads(2)
+    P = KNN
+    model = N.load_base()
+    tr, va = N.token_arrays()
+    passage = c1.text("passage")
+    ids_p = N.encode(passage)
+    ids_t = va[:P["tune_tokens"] + 1].astype(np.int64).tolist()
+    Hp, lpp, yp = M.query_states(model, ids_p)
+    Ht, lpt, yt = M.query_states(model, ids_t)
+    Q = torch.cat([Hp, Ht])
+    q2 = (Q ** 2).sum(-1, keepdim=True)
+    nq, K = len(Q), P["k"]
+    W, keep = P["window"], P["keep"]
+    starts = np.arange(0, len(tr) - W - 1, keep)
+    order = np.random.default_rng(P["seed"]).permutation(len(starts))
+    snaps_at = [int(round(f * len(order))) for f in P["fractions"]]
+    ck = CACHE.dir / "knn.ckpt.npz"
+    if ck.exists():
+        z = np.load(ck)
+        D, V, pos = torch.from_numpy(z["D"]), torch.from_numpy(z["V"]), int(z["pos"])
+        snaps = {s_: (z[f"s{s_}D"], z[f"s{s_}V"]) for s_ in snaps_at if f"s{s_}D" in z.files}
+        print(f"    resuming the kNN sweep at window {pos:,} of {len(order):,}", flush=True)
+    else:
+        D, V, pos, snaps = torch.full((nq, K), float("inf")), torch.zeros((nq, K), dtype=torch.long), 0, {}
+    import time
+
+    t0 = time.time()
+    B = P["batch"]
+    while pos < len(order):
+        sel = order[pos:pos + B]
+        x = torch.from_numpy(np.stack([tr[starts[i]:starts[i] + W + 1] for i in sel]).astype(np.int64))
+        h, _ = M.hidden(model, x[:, :-1])
+        keys = h[:, W - keep:].reshape(-1, h.shape[-1])
+        vals = x[:, W - keep + 1:].reshape(-1)
+        d = q2 - 2 * Q @ keys.T + (keys ** 2).sum(-1)[None]
+        allD, allV = torch.cat([D, d], 1), torch.cat([V, vals[None].expand(nq, -1)], 1)
+        D, ix = allD.topk(K, dim=1, largest=False)
+        V = allV.gather(1, ix)
+        pos += len(sel)
+        for s_ in snaps_at:
+            if s_ not in snaps and pos >= s_:
+                snaps[s_] = (D.numpy().copy(), V.numpy().copy())
+        if pos % (B * 40) == 0 or pos >= len(order):
+            extra = {f"s{s_}D": a for s_, (a, b) in snaps.items()} | {f"s{s_}V": b for s_, (a, b) in snaps.items()}
+            np.savez(str(ck) + ".tmp.npz", D=D.numpy(), V=V.numpy(), pos=pos, **extra)
+            (CACHE.dir / "knn.ckpt.npz.tmp.npz").replace(ck)
+            rate = (time.time() - t0) / max(pos, 1)
+            print(f"    kNN sweep: {pos:,} of {len(order):,} windows ({rate * (len(order) - pos) / 60:.0f} min left)",
+                  flush=True)
+    npass = len(Hp)
+    chars_p = len(passage)
+    chars_t = len(N.decode(ids_t))
+    out = dict(P, n_keys=int(len(order) * keep), n_passage=npass, n_tune=len(Ht), chars=chars_p,
+               base_bits=float(-lpp.sum() / math.log(2) / chars_p))
+    lams = np.round(np.arange(0, 0.51, 0.05), 2)
+    temps = [1.0, 2.0, 4.0, 8.0, 16.0]
+    yall = torch.cat([yp, yt])
+    for s_ in snaps_at:
+        Ds, Vs = torch.from_numpy(snaps[s_][0]), torch.from_numpy(snaps[s_][1])
+        best = None
+        for T in temps:  # chosen on the held-out novel text, never on the passage
+            pk = M.knn_prob(Ds, Vs, yall, T, K)
+            pkt = pk[npass:]
+            for lam in lams:
+                bt = float(-torch.log(lam * pkt + (1 - lam) * lpt.exp()).sum() / math.log(2) / chars_t)
+                if best is None or bt < best[0]:
+                    best = (bt, T, float(lam))
+        _, T, lam = best
+        pk = M.knn_prob(Ds, Vs, yall, T, K)
+        pkp = pk[:npass]
+        curve = [float(-torch.log(l_ * pkp + (1 - l_) * lpp.exp()).sum() / math.log(2) / chars_p) for l_ in lams]
+        frac = s_ / len(order)
+        out[f"snap_{s_}"] = dict(frac=frac, keys=int(s_ * keep), temp=T, lam=lam, tune_bits=best[0],
+                                 bits=float(-torch.log(lam * pkp + (1 - lam) * lpp.exp()).sum() / math.log(2) / chars_p),
+                                 lam_curve=curve)
+        print(f"    kNN with {s_ * keep:,} stored: lambda {lam}, T {T}: {out[f'snap_{s_}']['bits']:.4f} bits/char "
+              f"(model alone {out['base_bits']:.4f})", flush=True)
+    out["snaps"] = snaps_at
+    out["lams"] = lams
+    full = snaps_at[-1]
+    Ds, Vs = torch.from_numpy(snaps[full][0]), torch.from_numpy(snaps[full][1])
+    sf = out[f"snap_{full}"]
+    pk = M.knn_prob(Ds, Vs, yp, sf["temp"], K).numpy()
+    p_lm = lpp.exp().numpy()
+    mix = sf["lam"] * pk + (1 - sf["lam"]) * p_lm
+    gain = np.log2(mix) - np.log2(p_lm)  # bits saved on each token of the passage
+    out.update(gain=gain, p_knn=pk, p_lm=p_lm, passage_ids=np.array(ids_p[1:1 + npass]))
+    # the tokens it helps most and hurts most, as text
+    order_g = np.argsort(gain)
+    out["best_tokens"] = [(N.decode([int(ids_p[i + 1])]), float(gain[i])) for i in order_g[::-1][:12]]
+    out["worst_tokens"] = [(N.decode([int(ids_p[i + 1])]), float(gain[i])) for i in order_g[:12]]
+    # one example query: the context, the true next token, and its nearest neighbours' next tokens
+    j = int(order_g[::-1][0])
+    out["example"] = dict(context=N.decode(ids_p[max(0, j - 12):j + 1]), target=N.decode([int(ids_p[j + 1])]),
+                          neighbours=[N.decode([int(v)]) for v in Vs[j, :8]], p_lm=float(p_lm[j]), p_knn=float(pk[j]))
+    ck.unlink(missing_ok=True)
+    return out
+
+
+def compute_selfcache():
+    """The passage's own past as the memory (a continuous cache, Grave et al. 2017): each token's nearest earlier
+    states in the same chapter, beyond the model's 256-token window too; mixed in as the kNN-LM is, with lambda and
+    the temperature chosen on held-out novel text read the same way."""
+    import torch
+
+    from explainer.ai import novels as N
+    from videos.ai.ai1 import compute as c1
+    from videos.ai.ai15 import memory_lm as M
+
+    torch.set_num_threads(2)
+    model = N.load_base()
+    _, va = N.token_arrays()
+
+    def run(ids, k=32):
+        H, lp, y = M.query_states(model, ids)
+        n = len(H)
+        d = (H ** 2).sum(-1, keepdim=True) - 2 * H @ H.T + (H ** 2).sum(-1)[None]
+        d = d.masked_fill(~torch.ones(n, n, dtype=torch.bool).tril(-1), float("inf"))  # only earlier tokens
+        Dk, ix = d.topk(k, dim=1, largest=False)
+        # the stored value of earlier token j is the token that followed it: y[j]
+        return Dk, y[ix], y, lp
+
+    passage = c1.text("passage")
+    ids_p = N.encode(passage)
+    tune = va[4000:10_000].astype(np.int64).tolist()
+    Dp, Vp, yp, lpp = run(ids_p)
+    Dt, Vt, yt, lpt = run(tune)
+    chars_t = len(N.decode(tune))
+    best = None
+    for T in (1.0, 2.0, 4.0, 8.0, 16.0):
+        pk = M.knn_prob(Dt.clamp_max(1e9), Vt, yt, T, 32)
+        for lam in np.round(np.arange(0, 0.51, 0.05), 2):
+            b = float(-torch.log(lam * pk + (1 - lam) * lpt.exp()).sum() / math.log(2) / chars_t)
+            if best is None or b < best[0]:
+                best = (b, T, float(lam))
+    _, T, lam = best
+    pk = M.knn_prob(Dp.clamp_max(1e9), Vp, yp, T, 32)
+    mix = lam * pk + (1 - lam) * lpp.exp()
+    chars = len(passage)
+    gain = (torch.log2(mix) - torch.log2(lpp.exp())).numpy()
+    return dict(temp=T, lam=lam, chars=chars, bits=float(-torch.log(mix).sum() / math.log(2) / chars),
+                base_bits=float(-lpp.sum() / math.log(2) / chars), gain=gain)
+
+
 ITEMS = {
     "kvcache": compute_kvcache,
     "linear": compute_linear,
     "capacity": compute_capacity,
     "ssm": compute_ssm,
-    "mqar": compute_mqar,
     "delta": compute_delta,
     "mla": compute_mla,
+    "hopfield": compute_hopfield,
+    "matrix_rw": compute_matrix_rw,
+    "scan": compute_scan,
+    "hippo": compute_hippo,
+    "zoh": compute_zoh,
+    "ttt": compute_ttt,
+    "mqar": compute_mqar,
+    "ruler": compute_ruler,
+    "lm": compute_lm,
+    "sinks": compute_sinks,
+    "knn": compute_knn,
+    "selfcache": compute_selfcache,
 }
 CACHE.items = ITEMS
 

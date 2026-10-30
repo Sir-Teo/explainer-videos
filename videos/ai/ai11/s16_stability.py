@@ -197,7 +197,7 @@ class Stability(VoiceoverScene):
                 why(r"balance: \ the decay removes what the steps add")]
         step = ladder(self, rows, whys, keep=4, top=2.3, x=-1.6, buff=0.45, edge=6.9)
         tl = label(r"reached in about $1/(2\eta\lambda)$ steps; \ then $\|W\| \propto \sqrt{\eta/\lambda}$", font_size=24,
-                   color=C.BITS).to_edge(DOWN, buff=0.4)
+                   color=C.BITS).to_edge(DOWN, buff=0.85)
         cite_ = cite(r"T.~van Laarhoven (2017); \ A.~Kosson, B.~Messmer \& M.~Jaggi, \textit{Rotational Equilibrium} (2024)",
                      corner=DL)
         with self.voiceover(

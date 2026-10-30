@@ -89,7 +89,7 @@ class ScheduleFree(VoiceoverScene):
         lg.move_to([4.6, 1.4, 0])
         e_end, c_end = float(ema[-1, 1]), float(const[-1, 1])
         w_end = float(wsd[-1, 1])
-        res = label(rf"at step ${S:,}$: \ raw ${c_end:.3f}$, \ EMA ${e_end:.3f}$, \ cool-down ${w_end:.3f}$".replace(",", "{,}"),
+        res = label(rf"at step ${S:,}$: \\ raw ${c_end:.3f}$, \ EMA ${e_end:.3f}$, \ cool-down ${w_end:.3f}$".replace(",", "{,}"),
                     font_size=22, color=WHITE).next_to(lg, DOWN, buff=0.45).align_to(lg, LEFT)
         keep_in_frame(res)
         tag = note(r"the same runs as Chapter 13, \ seed $0$; \ held-out bits on $20{,}000$ characters").to_corner(DL, buff=0.2)
@@ -142,9 +142,9 @@ class ScheduleFree(VoiceoverScene):
             "Schedule-free AdamW won the self-tuning track of AlgoPerf in 2024, about eight percent faster than the "
             "baseline, with no learning-rate schedule to tune."
         ) as vo:
-            self.play(FadeIn(hist, shift=RIGHT * 0.2))
+            self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rows[1]))
             vo.wait_until("a")
-            self.play(Write(rows[1]), FadeIn(notes[1]))
+            self.play(FadeIn(notes[1]))
             vo.wait_until("b")
             self.play(Write(rows[2]), FadeIn(notes[2]))
             vo.wait_until("c")

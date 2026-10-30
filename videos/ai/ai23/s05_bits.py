@@ -182,12 +182,11 @@ class Bits(VoiceoverScene):
                 pairs.append(f"the unigram model beats BPE at {V:,} pieces")
             else:
                 pairs.append(f"BPE and the unigram model overlap at {V:,} pieces")
-        verdict = f"{pairs[0]}, and {pairs[1]}."
         with self.voiceover(
             "Here they learn, all fifteen runs, measured in bits per character on held-out text as the budget is "
             f"spent. <bookmark mark='a'/> On the scoreboard's passage, {LM_SAY[best]} does best, at {m[best]:.2f} "
             f"bits per character, and {LM_SAY[worst]} does worst, at {m[worst]:.2f}; the seeds never differ by more "
-            f"than {spread:.2f}. <bookmark mark='b'/> {verdict}"
+            f"than {spread:.2f}. <bookmark mark='b'/> {pairs[0]}, and {pairs[1]}."
         ) as vo:
             self.play(FadeIn(ax))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.05), run_time=4.0)

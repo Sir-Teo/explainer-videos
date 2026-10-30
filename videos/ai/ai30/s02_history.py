@@ -207,6 +207,8 @@ class History(VoiceoverScene):
         cards.arrange_in_grid(rows=2, cols=4, buff=(0.15, 0.22)).next_to(claims, DOWN, buff=0.3)
         if cards.width > 13.6:
             cards.width = 13.6
+        for c in cards:
+            c.set_opacity(0.15)
         with self.voiceover(
             "In 2020 the work found its programme. Olah and colleagues' Zoom In made three speculative claims. "
             "<bookmark mark='a'/> Features are the units of a network; features connect through weights into "
@@ -219,15 +221,15 @@ class History(VoiceoverScene):
             "Claude 3 Sonnet, and in 2025 attribution graphs traced a production model's computations. This part "
             "walks that path on our own models."
         ) as vo:
-            self.play(FadeIn(claims, shift=DOWN * 0.15))
+            self.play(FadeIn(claims, shift=DOWN * 0.15), FadeIn(cards))
             vo.wait_until("a")
             self.play(Indicate(claims.body, color=FEAT, scale_factor=1.02))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards[:2]], lag_ratio=0.4))
+            self.play(LaggedStart(*[c.animate.set_opacity(1) for c in cards[:2]], lag_ratio=0.4))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards[2:5]], lag_ratio=0.4))
+            self.play(LaggedStart(*[c.animate.set_opacity(1) for c in cards[2:5]], lag_ratio=0.4))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards[5:]], lag_ratio=0.4))
+            self.play(LaggedStart(*[c.animate.set_opacity(1) for c in cards[5:]], lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()
 
