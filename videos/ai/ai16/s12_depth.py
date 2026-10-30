@@ -80,6 +80,8 @@ class Depth(VoiceoverScene):
                 why(r"an eighth of the matrix work, \ a sixty-fourth of the scores"),
                 why(r"two full blocks, \ two at an eighth")]
         step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.6, buff=0.55, edge=6.8)
+        head = label(r"a routed block: \ $T$ tokens arrive, \ the router keeps a fraction $c$ of them", font_size=26,
+                     color=GREY_A).to_edge(UP, buff=0.4)
         ta = take_away(r"the savings are real arithmetic \ \textemdash\ if the router's choice is cheap and causal",
                        color=ROUTER, font_size=24)
         with self.voiceover(
@@ -89,6 +91,7 @@ class Depth(VoiceoverScene):
             "a sixty-fourth of the attention. <bookmark mark='d'/> Route every other block of four, and the "
             "matrices cost about nine sixteenths of the full model's, per token."
         ) as vo:
+            self.play(FadeIn(head))
             for i, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 step(i)

@@ -92,9 +92,9 @@ class Capacity(VoiceoverScene):
         ]
         whys = [why(r"expert $i$ is asked for $n_i$ slots: \ its share $f_i$ of all $kN$"),
                 why(r"its buffer"), why(r"whatever doesn't fit"), why(r"divide through by $kN$")]
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.55, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.45, edge=6.8)
         pc = pause_card(r"With perfectly even routing, \ what capacity factor drops nothing? \ And with one expert at twice its share?",
-                        width=8.6, font_size=24).to_edge(DOWN, buff=0.35)
+                        width=8.6, font_size=24).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "How much is dropped? Expert i is asked for f i times k N slots, its share of all of them. "
             "<bookmark mark='a'/> Its buffer holds c times k N over E. <bookmark mark='b'/> Whatever doesn't fit is "

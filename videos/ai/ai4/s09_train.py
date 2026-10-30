@@ -29,7 +29,7 @@ class Train(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(8, r"Training by going downhill", r"Can descent find what counting found?", part=PART)
+        card = chapter_card(8, r"Training with our library", r"Can descent find what counting found?", part=PART)
         with self.voiceover("Chapter eight. Training with our library."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -51,13 +51,15 @@ class Train(VoiceoverScene):
         whys = [why(r"each pair that starts with $i$: \\ its guess minus its truth (Part 1)", font_size=21),
                 why(r"$n_i$ pairs start with $i$; \\ $\hat p$: Part 1's counts", font_size=21),
                 why(r"all scores equal: \ $q = 1/27$", font_size=21)]
-        step = ladder(self, rows, whys, keep=3, top=3.2, x=-3.9, buff=0.5, edge=6.9)
-        heat = matrix_heat(G, cell=0.13, pos=C.TRUE_P, neg=C.SURPRISE).move_to([-4.6, -2.0, 0])
+        step = ladder(self, rows, whys, keep=3, top=3.4, x=-3.9, buff=0.35, edge=6.9)
+        heat = matrix_heat(G, cell=0.1, pos=C.TRUE_P, neg=C.SURPRISE).move_to([-4.9, -2.35, 0])
         LET = " abcdefghijklmnopqrstuvwxyz"
         pairs = VGroup(label(r"pushed up hardest:", font_size=22, color=C.SURPRISE),
                        *[data_text(f"'{LET[i]}' then '{LET[j]}'".replace("' '", "space"), font=MONO, font_size=18,
                                    color=WHITE) for i, j in d["top"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         pairs.next_to(heat, RIGHT, buff=0.4).align_to(heat, UP)
+        hcap = label(r"the first gradient, \ $27 \times 27$: \ red pushes a score up", font_size=20, color=GREY_B)
+        hcap.next_to(heat, UP, buff=0.1).align_to(heat, LEFT)
         chk = label(rf"computed on ${d['pairs']:,}$ pairs: \ library against formula, \ ${sci(d['diff'], 0)}$".replace(",", "{,}"),
                     font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3).shift(RIGHT * 2.2)
         with self.voiceover(
@@ -75,7 +77,7 @@ class Train(VoiceoverScene):
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
-            self.play(FadeIn(heat), FadeIn(pairs), FadeIn(chk))
+            self.play(FadeIn(heat), FadeIn(hcap), FadeIn(pairs), FadeIn(chk))
         self.wait(0.3)
         self.clear_scene()
 

@@ -181,29 +181,31 @@ class Library(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def tools(self):
+        kw = dict(width=4.15, font_size=19, color=HIST)
         events = VGroup(
-            history_card(1980, r"Bert Speelpenning, \ PhD thesis", r"reverse mode compiled from a program", width=3.2,
-                         font_size=17, color=HIST),
-            history_card(2010, r"Theano \ (Montr\'eal)", r"declare a graph, \ then compile it and its gradients",
-                         width=3.2, font_size=17, color=HIST),
-            history_card(2015, r"Chainer; \ TensorFlow", r"define-by-run: \ the graph is recorded as the code runs; "
-                         r"\ a static graph", width=3.2, font_size=17, color=HIST),
-            history_card(2017, r"PyTorch", r"define-by-run, \ like ours; \ eager on GPUs", width=3.2, font_size=17,
-                         color=HIST),
+            history_card(1980, r"Bert Speelpenning, \ PhD thesis", r"reverse mode compiled from an ordinary program", **kw),
+            history_card(2010, r"Theano \ (Montr\'eal)", r"declare a graph, \ then compile it and its gradients", **kw),
+            history_card(2015, r"Chainer; \ TensorFlow", r"define-by-run: \ the graph recorded as the code runs; "
+                         r"\ TensorFlow: a static graph", **kw),
+            history_card(2017, r"PyTorch", r"define-by-run on GPUs, \ like ours on the CPU", **kw),
             history_card(2018, r"JAX", r"trace a function, \ then transform it: \ \texttt{grad}, \texttt{jvp}, "
-                         r"\texttt{vjp}, \texttt{jit}, \texttt{vmap}", width=3.2, font_size=17, color=HIST),
+                         r"\texttt{vjp}, \texttt{jit}, \texttt{vmap}", **kw),
+            history_card(2026, r"this series", r"\texttt{explainer/ai/autodiff.py}: \ define-by-run, \ numpy, "
+                         r"\ one file", **kw),
         )
-        events.arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.25), cell_alignment=UL).to_edge(UP, buff=0.35)
+        events.arrange_in_grid(rows=2, cols=3, buff=(0.22, 0.25), cell_alignment=UL)
+        head = label(r"automatic differentiation, \ 1980 to today", font_size=32).to_edge(UP, buff=0.3)
+        events.next_to(head, DOWN, buff=0.3)
         snippets = [
             ("ours", ["loss = cross_entropy(model(x), y)", "loss.backward()", "w.grad"]),
             ("PyTorch", ["loss = F.cross_entropy(model(x), y)", "loss.backward()", "w.grad"]),
-            ("JAX", ["g = jax.grad(loss_fn)(params, x, y)", "", ""]),
+            ("JAX", ["g = jax.grad(loss_fn)(params, x, y)"]),
         ]
         code = VGroup()
         for name, ls in snippets:
-            cb = code_block([s for s in ls if s], font_size=16, font=MONO)
-            code.add(VGroup(label(name, font_size=20, color=GRAD), cb).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        code.arrange(RIGHT, buff=0.5, aligned_edge=UP).to_edge(DOWN, buff=0.4)
+            cb = code_block(ls, font_size=19, font=MONO)
+            code.add(VGroup(label(name, font_size=24, color=GRAD), cb).arrange(DOWN, aligned_edge=LEFT, buff=0.14))
+        code.arrange(RIGHT, buff=0.6, aligned_edge=UP).to_edge(DOWN, buff=0.45)
         if code.width > 13.2:
             code.scale_to_fit_width(13.2)
         with self.voiceover(
@@ -215,6 +217,7 @@ class Library(VoiceoverScene):
             "JAX traced whole functions and transformed them: gradients, both kinds of product, compilation, "
             "batching. <bookmark mark='f'/> The line you write is almost the same in all three."
         ) as vo:
+            self.play(FadeIn(head), FadeIn(events[5], shift=UP * 0.15))
             for k, mk in enumerate("abcde"):
                 vo.wait_until(mk)
                 self.play(FadeIn(events[k], shift=UP * 0.15))
