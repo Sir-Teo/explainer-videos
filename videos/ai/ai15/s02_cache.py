@@ -105,7 +105,8 @@ class KVCache(VoiceoverScene):
             "Ainslie and colleagues in 2023, are the compromise. <bookmark mark='c'/> DeepSeek-V3 goes further, and so "
             "does the hybrid Qwen3-Next. Let's see how."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
+            ghosts = VGroup(*[r_[0].copy().fade(0.75) for r_ in g])  # the rows to come, faint
+            self.play(FadeIn(head), FadeIn(src), FadeIn(ghosts))
             vo.wait_until("a")
             self.play(FadeIn(g[0], shift=RIGHT * 0.2))
             vo.wait_until("b")

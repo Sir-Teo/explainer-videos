@@ -85,11 +85,15 @@ class HVP(VoiceoverScene):
         best = Dot(g1.ax.c2p(math.log10(d["fd_best_h"]), math.log10(d["fd_best"])), radius=0.07, color=GRAD)
         lam = np.asarray(d["lam_est"])
         top = float(d["lam_top"])
-        g2 = axes([0, len(lam), 100], [0, top * 1.15, top / 2], x_length=4.6, y_length=3.0, xlabel=r"power iteration step",
-                  ylabel=r"estimate of the largest eigenvalue", xticks=[0, 100, 200, 300], yticks=[0, top],
-                  yfmt=lambda v: f"{v:.4f}" if v else "0", font_size=18, center=[3.6, -0.9, 0])
-        c2 = curve(g2.ax, np.arange(len(lam)), np.clip(lam, 0, top * 1.15), HESS, 3)
-        line = DashedLine(g2.ax.c2p(0, top), g2.ax.c2p(len(lam), top), color=WHITE, stroke_width=1.5)
+        K_ = 40
+        relerr = np.maximum(np.abs(lam[:K_] - top) / top, 1e-16)
+        g2 = log_axes((0, K_), (-16, 0), x_length=4.6, y_length=3.2, xlabel=r"power iteration step",
+                      ylabel=r"error of the largest eigenvalue", xticks=[], ystep=4, font_size=18, center=[3.6, -0.9, 0])
+        for k_ in (0, 20, 40):
+            g2.add(MathTex(str(k_), font_size=18, color=GREY_B).next_to(g2.ax.c2p(k_, -16), DOWN, buff=0.1))
+        c2 = VGroup(curve(g2.ax, np.arange(K_), np.log10(relerr), HESS, 3),
+                    *[Dot(g2.ax.c2p(i, float(np.log10(v))), radius=0.035, color=HESS) for i, v in enumerate(relerr)])
+        line = VMobject()
         rel = abs(d["lam_power"] - top) / top
         info = VGroup(
             label(rf"a ${d['sizes'][0]}$--${d['sizes'][1]}$--${d['sizes'][2]}$--${d['sizes'][3]}$ network, \ "
@@ -101,7 +105,7 @@ class HVP(VoiceoverScene):
         fdl = label(rf"best: \ ${sci(d['fd_best'], 0)}$ at $h = {sci(d['fd_best_h'], 0)}$", font_size=20, color=GRAD)
         fdl.next_to(best, DOWN, buff=0.15)
         pwl = label(rf"from products alone: \ off by ${sci(max(rel, 1e-16), 0)}$", font_size=20, color=HESS)
-        pwl.next_to(g2, UP, buff=0.05).align_to(g2, LEFT)
+        pwl.next_to(g2, DOWN, buff=0.1).align_to(g2, LEFT)
         ratio = d["t_hvp"] / d["t_grad"]
         e = d["fd_best"]
         with self.voiceover(
@@ -112,13 +116,13 @@ class HVP(VoiceoverScene):
             "need to learn about curvature: multiply a vector by H, again and again, renormalizing, and it turns "
             "toward the steepest direction. The estimate of the largest eigenvalue converges to the true one."
         ) as vo:
-            self.play(FadeIn(info[0]))
+            self.play(FadeIn(info[0]), FadeIn(g1), FadeIn(g2))
             vo.wait_until("a")
             self.play(FadeIn(info[1]), FadeIn(info[2]))
             vo.wait_until("b")
-            self.play(FadeIn(g1), Create(c1), FadeIn(best), FadeIn(fdl), run_time=1.6)
+            self.play(Create(c1), FadeIn(best), FadeIn(fdl), run_time=1.6)
             vo.wait_until("c")
-            self.play(FadeIn(g2), Create(line), Create(c2), FadeIn(pwl), run_time=2.0)
+            self.play(Create(c2), FadeIn(pwl), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -129,8 +133,8 @@ class HVP(VoiceoverScene):
         K = len(keep)
         X, y = np.asarray(d["X"]), np.asarray(d["y"])
         side = len(np.asarray(d["grid_xs"]))
-        W = 3.6
-        cen = np.array([-4.6, -0.5, 0])
+        W = 3.4
+        cen = np.array([-4.7, 0.55, 0])
         imgs = [region_image(d[f"region{k}"], side, W).move_to(cen) for k in range(K)]
         frame = SurroundingRectangle(imgs[0], buff=0, color=GREY_D, stroke_width=1.5)
         lo, hi = float(np.asarray(d["grid_xs"])[0]), float(np.asarray(d["grid_xs"])[-1])
@@ -141,16 +145,16 @@ class HVP(VoiceoverScene):
         pts = VGroup(*[Dot(to_xy(p), radius=0.03, color=CLASS_COL[int(c)]) for p, c in zip(X, y)]).set_z_index(3)
         # the loss curve
         cv = np.asarray(d["curve"])
-        g1 = log_axes((0, math.log10(d["steps"])), (-5, 1), x_length=3.6, y_length=2.4, xlabel=r"step",
-                      ylabel=r"loss", center=[0.2, 1.4, 0], ystep=2, font_size=16)
+        g1 = log_axes((0, math.log10(d["steps"])), (-5, 1), x_length=3.4, y_length=1.25, xlabel=r"step",
+                      ylabel=r"loss", center=[-4.5, -2.55, 0], ystep=3, font_size=16)
         a1 = g1.ax
         okc = cv[:, 0] > 0
         lc = curve(a1, np.log10(cv[okc, 0]), np.clip(np.log10(cv[okc, 1]), -5, 1), C.LOSS, 2.5)
         # the spectrum: eigenvalues over the largest, sorted, on a signed log scale
         P = int(d["P"])
-        g2 = axes([0, P, 100], [-1.05, 1.05, 0.5], x_length=5.2, y_length=3.6, xlabel=r"eigenvalues, \ smallest to largest",
+        g2 = axes([0, P, 100], [-1.05, 1.05, 0.5], x_length=6.2, y_length=4.0, xlabel=r"eigenvalues, \ smallest to largest",
                   ylabel=r"$\lambda / \lambda_{\max}$ \ (signed log scale)", xticks=[], yticks=[-1, 0, 1],
-                  yfmt=lambda v: {-1: "-1", 0: "0", 1: "1"}[int(v)], font_size=16, center=[4.1, -1.3, 0])
+                  yfmt=lambda v: {-1: "-1", 0: "0", 1: "1"}[int(v)], font_size=18, center=[2.9, -0.75, 0])
         a2 = g2.ax
         for v in (-0.1, -0.01, 0.01, 0.1):
             yv = float(symlog(v))
@@ -167,10 +171,10 @@ class HVP(VoiceoverScene):
             t = keep[k]
             return VGroup(
                 label(rf"step ${t:,}$: \ loss ${d[f'loss{k}']:.4f}$, \ accuracy ${100 * d[f'acc{k}']:.0f}\%$".replace(",", "{,}"),
-                          font_size=21, color=WHITE),
+                          font_size=23, color=WHITE),
                 label(rf"$\lambda_{{\max}} = {d[f'top{k}']:.3g}$; \ outliers ${d[f'nout{k}']}$, \ negative ${d[f'nneg{k}']}$, "
-                      rf"\ near zero ${100 * d[f'flat{k}']:.0f}\%$", font_size=19, color=GREY_A),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.0, 1.7, 0])
+                      rf"\ near zero ${100 * d[f'flat{k}']:.0f}\%$", font_size=21, color=GREY_A),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([2.9, 2.55, 0])
 
         dots = [spectrum(k) for k in range(K)]
         reads = [readout(k) for k in range(K)]

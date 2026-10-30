@@ -118,7 +118,7 @@ class Newton(VoiceoverScene, ThreeDScene):
 
         ax = Axes(x_range=[-0.3, 1.8, 0.5], y_range=[-0.9, 0.7, 0.5], x_length=6.2, y_length=4.7, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.4, -0.5, 0])
-        levels = [f_star + 0.004 * 2 ** k for k in range(8)]
+        levels = [f_star + 2e-4 * 2.5 ** k for k in range(8)]
         cont = contour_lines(ax, f, (-0.3, 1.8), (-0.9, 0.7), levels, n=(90, 70))
         gpath = VMobject(color=GDC, stroke_width=2.5).set_points_as_corners([ax.c2p(*q) for q in gd[::3]])
         npath = VMobject(color=NEWC, stroke_width=4).set_points_as_corners([ax.c2p(*q) for q in nw[:5]])
