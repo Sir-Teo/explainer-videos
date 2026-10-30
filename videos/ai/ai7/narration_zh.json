@@ -9,7 +9,16 @@
   "GP": "5. 高斯过程",
   "VI": "6. 变分推断",
   "KneserNey": "7. Kneser–Ney：最好的计数方法",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Outro": "回顾，以及这些想法会在哪里再现",
+  "PPCA": "",
+  "ICA": "",
+  "Topics": "",
+  "BaumWelch": "",
+  "Translation": "",
+  "Infini": "",
+  "Causes": "",
+  "Occam": "",
+  "BayesOpt": ""
  },
  "lines": {
   "9087882f987e": {
@@ -17,20 +26,40 @@
    "en": "Here are part six's six hundred and thirty-nine pages again, each a point in seventy dimensions, seen along the three directions in which they vary most. But this time, nobody tells us who wrote which. <bookmark mark='a'/> Can the data reveal its own hidden structure? <bookmark mark='b'/> A model that assumes there are two hidden sources, and fits them with no labels at all, finds two groups. <bookmark mark='c'/> And they're the two authors: 97 percent of the pages land with the right one.",
    "zh": "这又是第6部分的那639页，每一页都是70维空间里的一个点，这里是沿着它们变化最大的三个方向看过去的样子。不过这一次，没有人告诉我们哪一页是谁写的。<bookmark mark='a'/>数据能自己揭示出隐藏的结构吗？<bookmark mark='b'/>有一个模型，假设背后有两个隐藏的来源，在完全没有标签的情况下去拟合它们，结果找出了两组。<bookmark mark='c'/>而这两组，正是那两位作者：97%的书页，都落到了正确的作者那一组。"
   },
-  "790b20d337e6": {
+  "a30cae26f71a": {
    "scene": "Hook",
-   "en": "This part is about models with hidden parts: directions, sources, states and functions that we never observe, only infer. <bookmark mark='a'/> Principal components, mixtures, hidden Markov models, Gaussian processes, and variational inference, plus a new row for the scoreboard.",
-   "zh": "这一部分讲的是带有隐藏部分的模型：方向、来源、状态和函数，我们从来观测不到它们，只能推断。<bookmark mark='a'/>主成分、混合模型、隐马尔可夫模型、高斯过程，还有变分推断，外加记分牌上新的一行。"
+   "en": "How did we get here? In 1901 Karl Pearson asked for the line that passes closest to a cloud of points. In 1933 Harold Hotelling asked for the directions of greatest variance, and called them principal components. <bookmark mark='a'/> In the 1960s, engineers and code breakers learned to reason about states they could not see: Andrew Viterbi's decoder in 1967, Leonard Baum's training method in 1970. <bookmark mark='b'/> In 1977 Dempster, Laird and Rubin showed that one algorithm, EM, fits almost any model with missing pieces. <bookmark mark='c'/> Judea Pearl gave the field a language of graphs for reasoning under uncertainty. <bookmark mark='d'/> At IBM, Fred Jelinek's group turned speech recognition, and then translation, into statistics: count, smooth, and let the data decide. <bookmark mark='e'/> By the 1990s, the hand-written rules of part two's expert systems had given way to probabilities learned from data. <bookmark mark='f'/> Topic models in 2003 and the Gaussian process book of 2006 crowned a decade in which machine learning meant statistics. <bookmark mark='g'/> Deep learning absorbed it all, but didn't replace it. The ELBO trains today's generative models, mixtures route words to experts, the forward algorithm aligns speech, and n-grams over trillions of words check what language models have memorized.",
+   "zh": ""
   },
-  "ac54529cb8d8": {
+  "75ab33503480": {
+   "scene": "Hook",
+   "en": "This is part seven of AI, Built: models with hidden parts, directions, sources, states and functions that we never observe, only infer. <bookmark mark='a'/> In this part: hidden directions and sources, from principal components to the cocktail party; <bookmark mark='r2'/> mixtures, and the EM algorithm that fits them, with k-means and topic models; <bookmark mark='r3'/> hidden Markov models, and the statistical revolution they started in speech and translation; <bookmark mark='r4'/> the best ways to count, ending with an infinity-gram over all thirty novels; <bookmark mark='r5'/> graphical models, and what they can say about cause and effect; <bookmark mark='r6'/> and the Bayesian toolkit: Gaussian processes, Occam's razor, Bayesian optimization, and variational inference. Every method is written out and run.",
+   "zh": ""
+  },
+  "21821093711b": {
    "scene": "PCA",
-   "en": "Chapter one. Principal components.",
-   "zh": "第1章。主成分。"
+   "en": "Chapter one. Principal components, two ways.",
+   "zh": ""
+  },
+  "1869ec3ce550": {
+   "scene": "PCA",
+   "en": "Pearson and Hotelling asked two different questions. <bookmark mark='h'/> Here are the pages again, on just two of the seventy word rates, 'the' and 'not', each rescaled to a spread of one. <bookmark mark='a'/> Pearson wanted the line that passes closest to the points: the smallest average squared distance, these little red segments. <bookmark mark='b'/> Hotelling wanted the direction along which the points spread the most. <bookmark mark='c'/> Turn the line, and watch both. Each page's squared length splits, by Pythagoras, into the part along the line and the part across it. So the spread kept plus the distance lost is the same total, 2.00, at every angle. <bookmark mark='d'/> The line closest to the points is the line of greatest spread. Two questions, one answer.",
+   "zh": ""
+  },
+  "5098b038e767": {
+   "scene": "PCA",
+   "en": "Here's why, in a few lines. The spread of the data along a unit vector u is u transpose C u, where C is the covariance matrix. <bookmark mark='a'/> We want the largest, keeping u at length one, so bring in a Lagrange multiplier, lambda. <bookmark mark='b'/> Set the gradient to zero, and out comes an eigenvector equation: C u equals lambda u. <bookmark mark='c'/> Multiply by u transpose: the spread along an eigenvector is its eigenvalue. So the best direction is the eigenvector with the largest eigenvalue. <bookmark mark='d'/> And the distance lost is the total minus the spread kept, so minimizing one maximizes the other. <bookmark mark='e'/> With k directions, the error left is exactly the sum of the eigenvalues we leave out. On the pages, with five directions, that's 46.59 of the seventy units of variance, and the identity holds for every k.",
+   "zh": ""
   },
   "6933a7cafb64": {
    "scene": "PCA",
    "en": "Principal components find the directions in which data varies the most. Start with the covariance matrix: seventy by seventy, how each pair of word rates moves together. <bookmark mark='a'/> It's symmetric, so, from part three, its eigenvectors are perpendicular, and each eigenvalue says how much of the variation lies along its eigenvector. <bookmark mark='b'/> The first direction holds 12.6 percent of all the variation, the next 9.1, and then they fall away.",
    "zh": "主成分找的是数据变化最大的那些方向。先从协方差矩阵开始：它是70乘70的，记录着每一对词频是怎样一起变动的。<bookmark mark='a'/>它是对称的，所以按第3部分讲的，它的特征向量互相垂直，而每个特征值都说明，有多少变化落在它那个特征向量的方向上。<bookmark mark='b'/>第一个方向占了全部变化的12.6%，下一个占9.1%，然后就一路降下去了。"
+  },
+  "95ead2ad9934": {
+   "scene": "PCA",
+   "en": "In practice, nobody forms the covariance matrix. Part three's singular value decomposition of the data itself does the job: Z equals U, sigma, V transpose. <bookmark mark='a'/> The rows of V transpose are the principal directions, and each singular value, squared and divided by the number of pages, is an eigenvalue. <bookmark mark='b'/> On the pages the two agree to the last digits of floating point. Working on Z directly is also more accurate: squaring the data to make C squares its condition number.",
+   "zh": ""
   },
   "df268576e85e": {
    "scene": "PCA",
@@ -42,10 +71,55 @@
    "en": "Seen along the first three directions, the authors already sit apart. <bookmark mark='a'/> A single cut along the first direction sorts 88 percent of the pages correctly. PCA is part three's eigenvectors, put to work: the cheapest way to see a cloud of high-dimensional data.",
    "zh": "沿着前三个方向看，两位作者已经各占一边了。<bookmark mark='a'/>只沿第一个方向切一刀，就能把88%的书页分对。主成分分析，简称PCA，正是让第3部分的特征向量派上了用场：要看清一团高维数据，这是最省事的办法。"
   },
-  "4cab56363b67": {
+  "3cc43d79db4a": {
+   "scene": "PPCA",
+   "en": "Chapter two. PCA as a probability model.",
+   "zh": ""
+  },
+  "2ac023f9f139": {
+   "scene": "PPCA",
+   "en": "PCA finds directions, but it isn't a model of the data: it can't say how likely a new page is. In 1999 Michael Tipping and Christopher Bishop, and independently Sam Roweis, turned it into one. <bookmark mark='a'/> Imagine each page begins as a few hidden numbers, z, drawn from a standard bell curve. <bookmark mark='b'/> A matrix W maps them up into the seventy word rates, onto a flat sheet through the data. <bookmark mark='c'/> Then noise of the same size in every direction blurs the sheet. <bookmark mark='d'/> Add it up, and a page is Gaussian, with covariance W W transpose plus sigma squared times the identity: a few big directions, and a fog around them.",
+   "zh": ""
+  },
+  "949110dc7183": {
+   "scene": "PPCA",
+   "en": "The best W and sigma, by maximum likelihood, come out in closed form. <bookmark mark='a'/> W's columns point along the top k eigenvectors of chapter one, each stretched by its eigenvalue minus the noise. <bookmark mark='b'/> And the noise is the average variance of all the directions left out. <bookmark mark='c'/> Shrink the noise to zero and you get plain PCA back. So PCA was always the limit of a probability model, and now it has a likelihood.",
+   "zh": ""
+  },
+  "734be1edfa02": {
+   "scene": "PPCA",
+   "en": "A likelihood lets us choose how many hidden directions to keep, on pages the model never saw. Fit on part six's 448 training pages, score the 191 held-out ones. <bookmark mark='a'/> On the training pages, every extra direction helps. <bookmark mark='b'/> Held-out pages are most likely with 17 hidden directions, at -92.8 nats per page, better than a full covariance, at -93.1: the other directions are mostly noise.",
+   "zh": ""
+  },
+  "8b123788e4ec": {
+   "scene": "PPCA",
+   "en": "Probabilistic PCA sits in a family. <bookmark mark='a'/> Charles Spearman's factor analysis, from 1904, is the same model with a separate noise level for every variable. <bookmark mark='b'/> Probabilistic PCA ties them into one, which is why the eigenvectors fall out. <bookmark mark='c'/> And replace the matrix W with a neural network, and you have the variational autoencoder of part twenty: the same hidden z, the same picture, a curved sheet instead of a flat one.",
+   "zh": ""
+  },
+  "cd74506f4bbd": {
+   "scene": "ICA",
+   "en": "Chapter three. The cocktail party.",
+   "zh": ""
+  },
+  "b072bcc6a63d": {
+   "scene": "ICA",
+   "en": "In 1953 the psychologist Colin Cherry asked how we manage to follow one voice in a noisy room: the cocktail party problem. <bookmark mark='a'/> Here's a machine's version. Two people talk at once. <bookmark mark='b'/> Two microphones each hear a different blend of the two, louder for whoever is nearer. <bookmark mark='c'/> In symbols, x equals A times s: the sounds we record are a mixing matrix times the voices. But we know neither the matrix nor the voices. All we have is x.",
+   "zh": ""
+  },
+  "efec1e401349": {
+   "scene": "ICA",
+   "en": "Plot the two microphones against each other, moment by moment, and the mixing shows as a slanted, squashed shape. <bookmark mark='a'/> First, whiten: chapter one's principal components, rescaled to unit spread. The two outputs are now uncorrelated. But they're still mixed: turn this white cloud by any angle, and it stays uncorrelated, so correlation alone can never tell us which way is right. <bookmark mark='b'/> The key is the central limit theorem. A blend of independent signals is more Gaussian than the signals themselves. Measure Gaussian-ness by the kurtosis, the fourth moment minus three: zero for a bell curve. The voices have kurtosis -1.51 and -1.10; the whitened mixtures, -0.80 and -0.56, sit closer to zero. <bookmark mark='c'/> So turn the direction until the output is as far from Gaussian as possible. Aapo Hyvärinen's FastICA does it with a fixed-point step, and here it lands in 5 steps.",
+   "zh": ""
+  },
+  "550031232f74": {
+   "scene": "ICA",
+   "en": "Turn the white cloud to that angle, and read off the two outputs. <bookmark mark='a'/> The two outputs follow the voices with correlations of 0.9992 and better. Whitening alone managed only 0.77. <bookmark mark='b'/> Independent component analysis grew from Jeanny Hérault and Christian Jutten's circuits in the 1980s, through Pierre Comon's definition in 1994 and Bell and Sejnowski's infomax. Run on patches of natural images, it finds edge detectors like those in the visual cortex. Today it cleans eye blinks out of brain recordings, and its idea, find the directions in which the data is sparse and independent, is the dictionary learning behind part thirty's sparse autoencoders.",
+   "zh": ""
+  },
+  "9aacd1d19b2c": {
    "scene": "EM",
-   "en": "Chapter two. Mixtures, and the EM algorithm.",
-   "zh": "第2章。混合模型，以及EM算法。"
+   "en": "Chapter four. Mixtures, and the EM algorithm.",
+   "zh": ""
   },
   "2516c3813c24": {
    "scene": "EM",
@@ -57,30 +131,165 @@
    "en": "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells creep toward a fit. <bookmark mark='b'/> After forty rounds they've settled, and the pages each one claims match the true authors 97 percent of the time. Nobody told it there were authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too.",
    "zh": "然后再来：E、M、E、M。<bookmark mark='a'/>每一轮，似然都只升不降，所以这两条钟形曲线一点一点地向拟合靠拢。<bookmark mark='b'/>40轮之后，它们稳定了下来，每条曲线认领的书页，有97%与真实的作者一致。根本没有人告诉过它，这些书页还有作者之分。EM算法能拟合任何带有隐藏部分的模型，它也是下一章的引擎。"
   },
-  "5c7f9fb8adae": {
-   "scene": "HMM",
-   "en": "Chapter three. Hidden Markov models.",
-   "zh": "第3章。隐马尔可夫模型。"
+  "716aa04686a1": {
+   "scene": "EM",
+   "en": "Why can't EM ever go downhill? Write the log-likelihood as a sum over the hidden choice z: which bell made this point. <bookmark mark='a'/> Multiply and divide by any distribution q over z. <bookmark mark='b'/> The log of an average is at least the average of the logs: that's Jensen's inequality, because the log curves downward. So we get a lower bound, B, that we can compute. <bookmark mark='c'/> How far below? The gap is exactly a KL divergence, between q and the posterior over z. It vanishes when q is the posterior, and that is the E step: it makes the bound touch. <bookmark mark='d'/> The M step then maximizes the bound over the parameters. Chain the three facts: the new likelihood is above the bound, the bound went up, and it started touching. The likelihood can never fall. That's Dempster, Laird and Rubin's theorem, from 1977.",
+   "zh": ""
   },
-  "328341478f6f": {
+  "109592ed78f8": {
+   "scene": "EM",
+   "en": "Here's that bound for real, on the pages. Each panel follows a straight line through the parameters, from one round's bells to the next round's. The yellow curve is the log-likelihood. <bookmark mark='a'/> The green curve is the bound that round's E step built: always below, touching at the start. <bookmark mark='b'/> The M step jumps to the top of the green curve, and the yellow curve, above it, can only be higher there. <bookmark mark='c'/> The first step, from a poor start, is a leap; later steps are small, and the curves flatten as EM settles. It never overshoots, and it never needs a learning rate.",
+   "zh": ""
+  },
+  "bc3a766aa3eb": {
+   "scene": "EM",
+   "en": "Now make EM's choices hard. Instead of soft colours, each page joins whichever centre is nearest; then each centre moves to the mean of its pages. That's k-means, Stuart Lloyd's algorithm from Bell Labs in 1957. <bookmark mark='a'/> From the same poor start, it settles in 10 rounds, and the average squared distance falls every time. <bookmark mark='b'/> It really is EM: take bells that are round and equal, and shrink their width. The soft colours harden, until every page is ninety-nine percent sure. <bookmark mark='c'/> It matches the authors 95 percent of the time, a little below EM's 97: hard choices throw away the doubt about pages near the border.",
+   "zh": ""
+  },
+  "55b4a7db457f": {
+   "scene": "Topics",
+   "en": "Chapter five. Topic models.",
+   "zh": ""
+  },
+  "c9e9da9558b4": {
+   "scene": "Topics",
+   "en": "A mixture model gives each page one hidden source. But a book is about several things at once. In 2003 David Blei, Andrew Ng and Michael Jordan wrote down a model for that: latent Dirichlet allocation, the topic model. <bookmark mark='a'/> The story goes like this. There are K topics, each a distribution over words. <bookmark mark='b'/> Each section of text has its own mix of topics, drawn from a Dirichlet distribution, which prefers mixes of only a few. <bookmark mark='c'/> And each word is made in two steps: pick a topic from the section's mix, then a word from that topic. <bookmark mark='d'/> Only the words are observed. The topics, the mixes and every word's topic are hidden, and we infer them all.",
+   "zh": ""
+  },
+  "99e4e125932c": {
+   "scene": "Topics",
+   "en": "We cut the thirty novels into 2,248 sections of 2,000 words, keep the 3,000 commonest words that aren't names or little function words, and ask for twelve topics. <bookmark mark='a'/> The topics start as the words of a few random sections: noise. Blei's original method fits them by variational EM, which chapter sixteen will explain: an E step that guesses each section's mix, and an M step that rebuilds each topic from the words assigned to it. <bookmark mark='b'/> Watch six of the topics take shape. The bound on the likelihood climbs, and, like every EM, it never falls.",
+   "zh": ""
+  },
+  "185d9415d935": {
+   "scene": "Topics",
+   "en": "Here are all twelve topics after forty rounds, each with its commonest words and the novel where it turns up most. <bookmark mark='a'/> Nobody named them, but you can read them. The topic most at home in War and Peace leads with 'army', the one in The Count of Monte Cristo with 'francs', and the one in War and Peace with 'count'. Others are harder to name. <bookmark mark='b'/> And here is one section of War and Peace, with each word coloured by its likeliest topic. Its mix is 51 percent one topic and 49 percent another. <bookmark mark='c'/> For a decade, topic models were how historians and social scientists read archives too large to read. Today embeddings do much of that work, but the idea, a document as a mix of hidden themes, is the same picture.",
+   "zh": ""
+  },
+  "fcf9b7bd1c9e": {
    "scene": "HMM",
-   "en": "Hidden states can also unfold in time. A hidden Markov model says there's a state we can't see, moving like part five's Markov chain, and each state emits a letter from its own table of chances. We see only the letters. <bookmark mark='a'/> Give it two hidden states, two hundred thousand letters of the books, and random first guesses. <bookmark mark='b'/> Fit it with EM again, which for this model is called Baum–Welch, and watch what each state learns to emit.",
-   "zh": "隐藏的状态，也可以随时间展开。隐马尔可夫模型是这样说的：有一个我们看不见的状态，像第5部分的马尔可夫链那样跳来跳去，而每个状态都按照自己的一张概率表，发射出一个字母。我们只看得到这些字母。<bookmark mark='a'/>给它两个隐状态、书里的20万个字母，再加上随机的初始猜测。<bookmark mark='b'/>还是用EM算法来拟合，用在这个模型上，它叫鲍姆–韦尔奇算法。看看每个状态学会了发射什么。"
+   "en": "Chapter six. Hidden Markov models.",
+   "zh": ""
+  },
+  "ebc0310b78d0": {
+   "scene": "HMM",
+   "en": "Hidden states can also unfold in time. A hidden Markov model has a state we can't see, moving like part five's Markov chain, with transition probabilities A. <bookmark mark='a'/> At every step the state emits something we can see, a letter, from its own table of chances, B. <bookmark mark='b'/> Here is a two-state model of the letters in the books; we'll train it in the next chapter. One state prefers vowels and the space, the other consonants. <bookmark mark='c'/> Leonard Baum and his colleagues worked out the mathematics in the late 1960s, at the Institute for Defense Analyses. Three questions follow. How likely is a sentence? Which states produced it? And how do we learn A and B?",
+   "zh": ""
+  },
+  "08575a9810ff": {
+   "scene": "HMM",
+   "en": "First: how likely is a sentence? Summing over every possible sequence of hidden states would take two to the power of its length. The forward algorithm does it in one sweep. <bookmark mark='a'/> Lay the states out as a lattice, one column per letter. Let alpha of a state be the probability of the letters so far, ending in that state. <bookmark mark='b'/> By the Markov property, each alpha is a sum over the state before: its alpha, times the chance of the move, times the chance of the new letter. <bookmark mark='c'/> Sweep left to right, and the last column adds up to the probability of the letters. For 'there' and a space, that's about 3.2 in ten million, exactly the sum over all 64 paths. For the whole 35-letter sentence, the sum has two to the 35 terms; the sweep takes a few hundred multiplications. <bookmark mark='d'/> Part twenty-three's speech recognizers train with CTC, which runs this very recursion over the ways of lining up sound with text.",
+   "zh": ""
+  },
+  "e026e7bdcbea": {
+   "scene": "HMM",
+   "en": "Second: which hidden states produced the letters? Change one thing: replace the sum with a maximum. <bookmark mark='a'/> Now each circle holds the probability of the single best path into it, and we keep a pointer to the state it came from: one bright arrow into each circle. <bookmark mark='b'/> At the end, take the better final state and follow the pointers back. That's the most likely path, found exactly, without trying all of them. <bookmark mark='c'/> Andrew Viterbi published it in 1967 for decoding error-correcting codes; it went into mobile phones and space probes, and it decoded speech for decades.",
+   "zh": ""
+  },
+  "eb35186957e7": {
+   "scene": "HMM",
+   "en": "Here's Shannon's sentence from part one, every letter labelled by its most likely hidden state. <bookmark mark='a'/> Vowels and spaces on one side, consonants on the other, and the states alternate the way English does, though nobody ever told the model what a vowel is.",
+   "zh": ""
+  },
+  "74065c362efd": {
+   "scene": "BaumWelch",
+   "en": "Chapter seven. Baum-Welch, and machines that listen.",
+   "zh": ""
+  },
+  "716e11a77693": {
+   "scene": "BaumWelch",
+   "en": "Third: how does the model learn A and B from letters alone? It's chapter four's EM again, and for this model it's called Baum–Welch. <bookmark mark='a'/> Run the forward sweep, and a mirror image, the backward sweep: beta is the probability of the letters still to come, from each state. <bookmark mark='b'/> Alpha times beta, divided by the probability of the whole text, is the chance that the chain was in state i at time t. That's the E step's soft colouring, one per letter. <bookmark mark='c'/> The same trick gives the chance of each move, from i to j, at each moment. <bookmark mark='d'/> The M step just counts: expected moves from i to j, over expected visits to i; expected emissions of each letter, over expected visits. EM's theorem guarantees every round raises the likelihood.",
+   "zh": ""
+  },
+  "07990a242751": {
+   "scene": "BaumWelch",
+   "en": "Give it two hidden states, 200,000 letters of the books, and random first guesses. <bookmark mark='b'/> Then run Baum–Welch, and watch what each state learns to emit.",
+   "zh": ""
   },
   "47da133f350f": {
-   "scene": "HMM",
+   "scene": "BaumWelch",
    "en": "One state ends up with the space, and a, e, i, o and u. The other takes every consonant. <bookmark mark='a'/> And they take turns: after one, the other, about 72 percent of the time. Nobody mentioned vowels. Cave and Neuwirth found exactly this in 1980.",
    "zh": "最后，一个状态拿到了空格，还有a、e、i、o和u。另一个拿走了所有的辅音。<bookmark mark='a'/>而且它们轮流出现：一个状态之后接另一个，大约72%的时候是这样。没有人提过元音。1980年，凯夫与诺伊维尔特发现的正是这一点。"
   },
-  "b9a969ed002c": {
-   "scene": "HMM",
-   "en": "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi algorithm answers exactly, in one pass. <bookmark mark='v'/> Walk along the letters, and at each step keep only the best path into each state. <bookmark mark='w'/> At the end, trace the winner back. <bookmark mark='a'/> Here's Shannon's sentence from part one, every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like this for thirty years.",
-   "zh": "现在来解码：给定一个句子，它背后最可能的隐状态序列是什么？维特比算法只要过一遍，就能给出精确的答案。<bookmark mark='v'/>沿着字母一路走过去，每一步，对每个状态只保留通向它的最佳路径。<bookmark mark='w'/>走到最后，再把胜出的那条路径往回追溯。<bookmark mark='a'/>这是第1部分香农的那个句子，每个字母都标上了它的隐状态。<bookmark mark='b'/>语音识别靠这样的模型，运转了30年。"
+  "2e2ccfc6e018": {
+   "scene": "BaumWelch",
+   "en": "This is how machines learned to listen. In the 1970s, James Baker's DRAGON system and Fred Jelinek's group at IBM treated speech recognition as a statistics problem. <bookmark mark='a'/> Cut the sound into frames, a hundred a second, each a vector of features. <bookmark mark='b'/> Model every sound of the language as a small hidden Markov model, three states from left to right, and chain them into words. <bookmark mark='c'/> Each state emits feature vectors from a mixture of Gaussians: chapter four's mixtures inside chapter six's chain, all trained by Baum–Welch on hours of recorded speech. <bookmark mark='d'/> A dictionary turns sounds into words, and a counting model of word sequences, chapter nine's subject, chooses between sentences that sound alike. Viterbi finds the best one. <bookmark mark='e'/> Data beat rules. The remark usually attributed to Jelinek, in its best-known form: every time I fire a linguist, the performance of the speech recognizer goes up. He remembered the wording differently, but the point stuck. <bookmark mark='f'/> This design ran speech recognition for three decades, until, around 2012, deep networks replaced the Gaussian mixtures, and later the whole pipeline. Part twenty-three picks up the story.",
+   "zh": ""
   },
-  "3d8092581975": {
+  "752b95e2dee1": {
+   "scene": "Translation",
+   "en": "Chapter eight. Translation by counting.",
+   "zh": ""
+  },
+  "350ef01fe07d": {
+   "scene": "Translation",
+   "en": "In 1947 Warren Weaver, who had run wartime research for the United States, wrote that a Russian article might be English written in a strange code, waiting to be decoded. <bookmark mark='a'/> The first decades of machine translation used rules instead, and in 1966 a government report, ALPAC, judged them a failure. <bookmark mark='b'/> Twenty years later, Jelinek's speech group at IBM took Weaver literally. Pretend the French was English, sent through a noisy channel. <bookmark mark='c'/> To decode, find the English sentence that is likely in itself, by a language model, and likely to come out as this French, by a translation model. <bookmark mark='d'/> They learned the translation model, with EM, from more than a million pairs of sentences from the Canadian parliament's proceedings, published in both languages.",
+   "zh": ""
+  },
+  "aa2517a6c852": {
+   "scene": "Translation",
+   "en": "Here's IBM's Model 1, on a tiny parallel corpus of 20 French and English sentences that we wrote. <bookmark mark='a'/> The model has one table: t of e given f, the chance that a French word turns into an English word. Each English word picks some French word to come from, any of them equally likely, and the words that align are hidden. <bookmark mark='b'/> EM again. Start with every translation equally likely. <bookmark mark='c'/> In the E step, each English word spreads its credit over the French words in its sentence; in the M step, the table is rebuilt from that credit. Because 'chat' appears exactly where 'cat' does, the credit piles up, and 'le' is pushed toward 'the', which frees 'chat'. <bookmark mark='d'/> After thirty rounds, 'chat' becomes 'cat' with probability 1.00, and the alignment of this sentence is sharp, though Model 1 can't tell the two 'le's apart: it has no idea of word order.",
+   "zh": ""
+  },
+  "7edf13dffad8": {
+   "scene": "Translation",
+   "en": "Now translate sentences it never saw, one word at a time, using the table. <bookmark mark='a'/> Some come out right. Others put the adjective after the noun, French style. How good is that? In 2002 Kishore Papineni and colleagues at IBM proposed a score anyone can compute: BLEU. <bookmark mark='b'/> Count what share of the output's single words, pairs, triples and runs of four appear in a human reference, average their logs, and penalize output that's too short. <bookmark mark='c'/> Word by word, our Model 1 scores 0.76. Swap French adjectives in front of their nouns, one rule a linguist would write, and it rises to 1.00. <bookmark mark='d'/> Real systems learned their own word order: IBM's later models, then phrase-based translation, which ran Google Translate from 2006 until neural networks replaced it in 2016. And the alignment table of Model 1 came back as attention, a learned soft alignment, in 2014.",
+   "zh": ""
+  },
+  "cc3e65b0f2a9": {
+   "scene": "KneserNey",
+   "en": "Chapter nine. Kneser-Ney, from Good-Turing.",
+   "zh": ""
+  },
+  "8666680b002d": {
+   "scene": "KneserNey",
+   "en": "Counting fails on what it has never seen, and most things are never seen. The fix came from code breaking. At Bletchley Park, Alan Turing and his assistant Jack Good needed the chance of things they had never yet seen. Good published the method in 1953, crediting Turing. <bookmark mark='a'/> Let N r be the number of different things seen exactly r times. Something seen r times is really worth r star: r plus one, times N r plus one over N r. And the total chance of everything unseen is N one over N, the share of things seen exactly once. <bookmark mark='b'/> Let's test it on pairs of words in the novels: count them in one half, then check the counts in the other half. <bookmark mark='c'/> It works. A pair seen once in one half of the novels turns up on average 0.32 times in the other half; Good–Turing predicted 0.32, from counts alone.",
+   "zh": ""
+  },
+  "b1e86f50340a": {
+   "scene": "KneserNey",
+   "en": "Look at what a count loses between the two halves: r, minus what the same pairs average in the other half. <bookmark mark='a'/> From two times on, the loss is nearly the same for every count, between 0.80 and 0.95. Kenneth Church and William Gale saw the same thing in newswire in 1991. <bookmark mark='b'/> So instead of a formula for every r, subtract one fixed discount, D, from every count you've seen, and share the savings among what you haven't. That's absolute discounting, and it's the first half of Kneser–Ney.",
+   "zh": ""
+  },
+  "25a8eb3626eb": {
+   "scene": "KneserNey",
+   "en": "Back to part one's scoreboard. The best counting model there used four characters of context and reached 2.32 bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. With part one's simple smoothing, the score gets worse beyond four characters. <bookmark mark='b'/> Better smoothing keeps improving.",
+   "zh": "回到第1部分的记分牌。那里最好的计数模型，用4个字符的上下文，在测试段落上做到了每字符2.32比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长的上下文，在30部小说里只出现过寥寥几次，甚至根本没出现过。用第1部分那种简单的平滑，上下文超过4个字符之后，分数反而变差。<bookmark mark='b'/>更好的平滑，则会一直进步下去。"
+  },
+  "67498ba2bbde": {
+   "scene": "KneserNey",
+   "en": "Reinhard Kneser and Hermann Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, absolute discounting: shave the fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. In the novels, 'cristo' appears 1,049 times, but only ever after 1 different word, 'monte'. 'nor' is about as common, and follows 921 different words. <bookmark mark='d'/> After an unfamiliar word, 'nor' is the far better guess. So the shorter contexts count how many different contexts something follows, not how often it appears.",
+   "zh": ""
+  },
+  "7d40ddb7fdbd": {
+   "scene": "KneserNey",
+   "en": "With seven characters of context, Kneser–Ney reaches 2.04 bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, a Kneser–Ney model was the language model in the noisy channel. Stanley Chen and Joshua Goodman's careful comparison in 1998 found it the best of all the counting methods. But why stop at seven characters?",
+   "zh": ""
+  },
+  "ed4f65e324a9": {
+   "scene": "Infini",
+   "en": "Chapter ten. The infinity-gram.",
+   "zh": ""
+  },
+  "ff55c025454f": {
+   "scene": "Infini",
+   "en": "Kneser–Ney stops at seven characters because its tables of counts explode. The novels hold 3,608 different pairs of characters, and 4,483,233 different strings of 8. But a count is just a search through the text, and searching can be fast. <bookmark mark='a'/> Take every suffix of the text: the text from each position to the end. Here's a tiny one. <bookmark mark='b'/> Sort them alphabetically. That's a suffix array, from Udi Manber and Gene Myers in 1990. <bookmark mark='c'/> Every occurrence of any string, of any length, is now one contiguous block of the list, found by binary search, and the block's size is the count. <bookmark mark='d'/> For the thirty novels that's 23,667,192 suffixes, a hundred megabytes of positions, sorted in about a minute on this machine. In 2024 Jiacheng Liu and colleagues built one over five trillion tokens of web text, and called the model it gives an infinity-gram.",
+   "zh": ""
+  },
+  "9750e6c78d0d": {
+   "scene": "Infini",
+   "en": "Now predict the passage. At each character, take the context before it and extend it to the left, one character at a time, counting as we go. <bookmark mark='a'/> One character occurs millions of times in the novels. Every extra character cuts the count, until, at 26 characters, this context appears exactly once, and one more makes it vanish. <bookmark mark='b'/> The infinity-gram predicts from the longest context the novels contain: whatever followed it there. <bookmark mark='c'/> Over the Maltese Falcon passage, the longest match is usually about 10 characters, and at most 37: the novels have never seen most of Hammett's sentences, but they've seen their pieces.",
+   "zh": ""
+  },
+  "b8ccd30cf609": {
+   "scene": "Infini",
+   "en": "How good is it? On its own, the infinity-gram's single most likely next character is right 56 percent of the time. <bookmark mark='a'/> But 32 percent of the time it gives the true character no chance at all, because it never saw it after that context. One zero, and the bits are infinite. <bookmark mark='b'/> So it's mixed with Kneser–Ney, with a weight for each length of match. <bookmark mark='c'/> Mixed with Kneser–Ney, trusting it more when the match is long, it gives 2.027 bits per character, against Kneser–Ney's 2.040: a small gain, and the scoreboard's last counting row. <bookmark mark='d'/> At web scale, Liu's infinity-gram predicted the next token correctly 47 percent of the time and helped neural models when mixed in; and indexes like it now trace a language model's words back to the documents it was trained on.",
+   "zh": ""
+  },
+  "a13947e936d3": {
    "scene": "Graphs",
-   "en": "Chapter four. Models as pictures.",
-   "zh": "第4章。把模型画成图。"
+   "en": "Chapter eleven. Models as pictures.",
+   "zh": ""
   },
   "cc24a1b8ae0a": {
    "scene": "Graphs",
@@ -92,10 +301,40 @@
    "en": "Part one's language models fit the same picture, with an arrow from every earlier letter to every later one. <bookmark mark='a'/> Nothing is hidden, but nothing is simplified either: each factor is a prediction from the whole past. Counting can't fill in factors like that. A network, from part nine on, can.",
    "zh": "第1部分的语言模型，也套得进同样的图：每个靠前的字母，都有一根箭头指向每个靠后的字母。<bookmark mark='a'/>没有什么是隐藏的，但也没有做任何简化：每个因子，都是根据全部过去做出的预测。这样的因子，靠计数是填不出来的。神经网络可以，从第9部分开始。"
   },
-  "16837c76a590": {
+  "3af60f2dd9bd": {
+   "scene": "Graphs",
+   "en": "A graph also tells you, without any numbers, which things are independent. Information flows along paths, and there are only three kinds of junction. <bookmark mark='a'/> In a chain, cloudy leads to rain leads to wet grass. Once you know it rained, the clouds tell you nothing more about the grass: observing the middle blocks the path. <bookmark mark='b'/> In a fork, clouds cause both rain and, less often, the sprinkler. The two look related: the sprinkler is on 16 percent of rainy days and 38 percent of dry ones. Given the clouds, the link disappears. <bookmark mark='c'/> The collider is the strange one. Rain and the sprinkler are independent, but both wet the grass, and observing the wet grass connects them. Simulate it: rain alone has a 20 percent chance. Wet grass raises it to 45 percent. But wet grass with the sprinkler on brings it back to 20: the sprinkler explains the wetness away. <bookmark mark='d'/> Pearl and his students turned these three cases into a rule, d-separation, that reads every independence off the picture.",
+   "zh": ""
+  },
+  "34cbd613c2d1": {
+   "scene": "Graphs",
+   "en": "Pictures also tell us how to compute. Redraw the model as a factor graph: circles for the variables, and a small square for each factor of the product, each a table of numbers. <bookmark mark='a'/> To find the probability of one variable, we'd have to sum over all the others, every combination. Judea Pearl's belief propagation, from 1982, sends messages instead. <bookmark mark='b'/> Each circle tells its neighbour what it believes, given everything on its own side. Leaves first, up to the root, <bookmark mark='c'/> then back down. <bookmark mark='d'/> Multiply the messages arriving at a circle, and you have its exact probability. On a tree it is exact: it agrees with summing all 128 states to the last digits. <bookmark mark='e'/> Add one factor that closes a loop, and the same messages, passed round and round, are only approximate, off by about 0.0007 here. Yet loopy belief propagation decodes the error-correcting codes in phones and satellite links, and its messages are the message passing of part twenty-five's graph neural networks.",
+   "zh": ""
+  },
+  "2a540fe1ed66": {
+   "scene": "Causes",
+   "en": "Chapter twelve. From graphs to causes.",
+   "zh": ""
+  },
+  "de3987ec96aa": {
+   "scene": "Causes",
+   "en": "A real study, from 1986: two ways of removing kidney stones, open surgery and a keyhole method. <bookmark mark='a'/> For small stones, open surgery succeeded more often. <bookmark mark='b'/> For large stones, open surgery succeeded more often too. <bookmark mark='c'/> But over all patients, the keyhole method wins. <bookmark mark='d'/> That's Simpson's paradox, and it isn't a trick of arithmetic. Doctors gave open surgery mostly to the hard cases, the large stones. The comparison over all patients mixes the treatment's effect with the difficulty of the cases. Which treatment would you choose? Data alone can't say. You need to know where the data came from.",
+   "zh": ""
+  },
+  "f468d6e731ba": {
+   "scene": "Causes",
+   "en": "Draw where the data came from. Stone size affected which treatment doctors chose, and it affected success. <bookmark mark='a'/> So there are two paths from treatment to success: the direct one, the effect we want, and a back door through stone size, which carries the confounding. <bookmark mark='b'/> Judea Pearl's question is not 'what's the success rate among patients who got open surgery', but 'what would it be if we gave everyone open surgery': y given do x. Doing means cutting the arrows into the treatment: it's set by hand, not by the stone. <bookmark mark='c'/> And if a variable, here stone size, blocks every back door, the effect of doing can be computed from data that was only seen. Average over the size, <bookmark mark='d'/> using the success rate within each size, weighted by how common each size is in everyone. <bookmark mark='e'/> For the kidney stones, that favours open surgery: 83 against 78 percent. This is the back-door adjustment; Pearl's do-calculus says exactly when such a formula exists.",
+   "zh": ""
+  },
+  "f367f1b729a8": {
+   "scene": "Causes",
+   "en": "To be sure, build a world where we know the truth. Half the patients are severe cases; doctors treat most of the severe ones; the treatment adds ten points to recovery, and severity takes thirty-five away. <bookmark mark='a'/> Compare the treated with the untreated, and the treatment looks harmful: -0.11. Adjust for severity through the back door: +0.099. Now run the experiment, flipping a coin for every patient: +0.101. The adjustment recovered what only an experiment could show. <bookmark mark='b'/> Correlation is not intervention. Pearl calls it a ladder: seeing, doing, and imagining what would have happened otherwise. Randomized trials climb to the second rung by force. And part thirty climbs it inside neural networks, setting an activation by hand and watching what changes.",
+   "zh": ""
+  },
+  "4e817f478a7e": {
    "scene": "GP",
-   "en": "Chapter five. Gaussian processes.",
-   "zh": "第5章。高斯过程。"
+   "en": "Chapter thirteen. Gaussian processes.",
+   "zh": ""
   },
   "613f144ee9dc": {
    "scene": "GP",
@@ -107,72 +346,136 @@
    "en": "Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about 2 pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and beyond them the band opens wide again. A Gaussian process knows what it doesn't know, which is exactly what you want when deciding where to look next.",
    "zh": "它们的平均就是最佳猜测，周围的那条带子表示不确定性。<bookmark mark='a'/>长度尺度大约是2页，它不是手工设定的：在这个长度尺度下，数据出现的概率最大。<bookmark mark='b'/>只给模型看前20页，过了这20页，带子又大大地张开了。高斯过程知道自己不知道什么，而当你要决定下一步该看哪里时，要的正是这一点。"
   },
-  "92a3415c6985": {
+  "66638403005b": {
+   "scene": "GP",
+   "en": "Why is conditioning so easy? Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most. <bookmark mark='c'/> The variance is the prior's, minus what the data explains. Notice it never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.",
+   "zh": ""
+  },
+  "23f0b780188f": {
+   "scene": "GP",
+   "en": "Now watch the band shrink as pages land, in a random order. With no data, it's the prior: the same wide band everywhere. <bookmark mark='a'/> Each page pins the function down near it, and the band pinches there. <bookmark mark='b'/> With all 186 pages, the average uncertainty has fallen from 6.3 to 2.6. Between the pages, where the kernel says the rate could still wander, it stays open. <bookmark mark='c'/> Mining engineers did this first: Danie Krige estimated gold grades between boreholes in the 1950s, and Georges Matheron made it a theory, kriging. Machine learning took it up in the 1990s.",
+   "zh": ""
+  },
+  "9b420b436264": {
+   "scene": "Occam",
+   "en": "Chapter fourteen. Bayesian Occam's razor.",
+   "zh": ""
+  },
+  "ad856370cf0f": {
+   "scene": "Occam",
+   "en": "Chapter thirteen chose its length scale by a quantity we haven't explained: the marginal likelihood, also called the evidence. It is the probability of the data under the model, averaged over every function the prior allows. <bookmark mark='a'/> For a Gaussian process the average can be done exactly: the data is Gaussian, with the kernel matrix plus noise as covariance. <bookmark mark='b'/> Take the log, and it splits in two. <bookmark mark='c'/> One term measures the fit: how well the data agrees with the model's covariances. <bookmark mark='d'/> The other is a penalty for complexity: the log-determinant measures how many different datasets the model could have produced. A flexible model spreads its probability thin.",
+   "zh": ""
+  },
+  "37a9ccc07122": {
+   "scene": "Occam",
+   "en": "Here are the two terms for the rate of 'her' in Great Expectations, as the length scale varies, the noise and signal levels held where they were fitted. <bookmark mark='a'/> Short length scales make wiggly functions that can follow every page: the fit is good. Long ones are smooth and miss the pages. <bookmark mark='b'/> But wiggly functions could have made so many other datasets that they pay a large complexity penalty. <bookmark mark='c'/> The sum peaks in between, at about 2.1 pages. No held-out data was needed: the evidence trades fit against complexity by itself. That's Bayesian Occam's razor.",
+   "zh": ""
+  },
+  "ec622036e198": {
+   "scene": "Occam",
+   "en": "David MacKay drew the reason in 1992. Spread out every dataset a model could produce, and plot how probable the model makes each one. Every curve has area one. <bookmark mark='a'/> A simple model predicts a few datasets strongly. A flexible one can produce almost anything, so it gives each only a little. <bookmark mark='b'/> For the data we actually saw, the model in between wins: flexible enough to explain it, not so flexible that it bets on everything.",
+   "zh": ""
+  },
+  "468455729b66": {
+   "scene": "Occam",
+   "en": "One more test, where we know the answer: 30 points from a cubic curve, plus noise. Fit polynomials of every degree, from a flat line up to degree twelve, by Bayesian linear regression. <bookmark mark='a'/> Higher degrees always fit the training points better. <bookmark mark='b'/> The evidence peaks at degree 3, the true degree, while the training error keeps falling all the way to degree 12. <bookmark mark='c'/> Fit against complexity: the same trade-off, seen from the other side, is the subject of part eight.",
+   "zh": ""
+  },
+  "963349db34da": {
+   "scene": "BayesOpt",
+   "en": "Chapter fifteen. Bayesian optimization.",
+   "zh": ""
+  },
+  "440b6f45fe80": {
+   "scene": "BayesOpt",
+   "en": "Every model in this series has knobs. Here's one: Kneser–Ney's discount, D, a single value for every order. Each try means building a model and scoring it on held-out text: seconds here, but days for a large network. So we want the best D in as few tries as possible. <bookmark mark='a'/> Bayesian optimization puts a Gaussian process on the unknown score, and asks, at every candidate, how much better than the best so far we can expect it to be. <bookmark mark='b'/> For a Gaussian the answer has a formula, the expected improvement. One term rewards a low predicted score: exploit. The other rewards a wide band: explore. <bookmark mark='c'/> Jonas Mockus proposed the approach in the 1970s; Donald Jones and colleagues made expected improvement standard in 1998; and in 2012 Jasper Snoek and colleagues showed it tuning neural networks better than experts.",
+   "zh": ""
+  },
+  "231b3fe1b602": {
+   "scene": "BayesOpt",
+   "en": "Here it runs. Two random tries to start. The grey band is the Gaussian process's belief about the score; the yellow curve below is the expected improvement, and its peak is where to look next. <bookmark mark='a'/> Each new score lands, the band pinches there, and the next look moves. Mostly it heads for low scores, and now and then it checks a place where the band is still wide. <bookmark mark='b'/> After 8 evaluations it has found D = 0.84, scoring 1.8438 bits, as good as a grid of 31 evaluations. <bookmark mark='b2'/> One tuned discount even beats the discounts estimated from counts of counts, 1.8470: the formula is a good guess, not the optimum. <bookmark mark='c'/> Exploring and exploiting is part twenty-six's bandit problem in another form. DeepMind tuned AlphaGo's settings this way before its 2016 match.",
+   "zh": ""
+  },
+  "9c77b337444e": {
    "scene": "VI",
-   "en": "Chapter six. Variational inference.",
-   "zh": "第6章。变分推断。"
+   "en": "Chapter sixteen. Variational inference.",
+   "zh": ""
   },
   "850dbe45bf5f": {
    "scene": "VI",
    "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. <bookmark mark='p'/> The posterior is what we believe about the hidden things after seeing the data: part five's updated belief. Part five sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
    "zh": "对大多数带有隐藏部分的模型来说，精确的答案，也就是隐变量的后验，是一个我们算不出来的形状。<bookmark mark='p'/>后验，就是看到数据之后，我们对那些隐藏的东西的信念：也就是第5部分那种更新过的信念。第5部分用马尔可夫链，从这样的形状中采样。变分推断换了个做法：它从一个简单的家族里，挑出最接近的形状，这里是单个高斯分布，然后用它来代替。<bookmark mark='a'/>在什么意义上最接近？用第1部分的KL散度，方向是从q到p。从一个很差的猜测出发，让这个高斯分布顺着下坡滑下去。"
   },
-  "c39a970bcc94": {
-   "scene": "KneserNey",
-   "en": "Chapter seven. The best way to count.",
-   "zh": "第7章。最好的计数方法。"
+  "b89ec20d0015": {
+   "scene": "VI",
+   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part twenty, are trained exactly this way.",
+   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第20部分的变分自编码器，正是这样训练的。"
   },
-  "25a8eb3626eb": {
-   "scene": "KneserNey",
-   "en": "Back to part one's scoreboard. The best counting model there used four characters of context and reached 2.32 bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. With part one's simple smoothing, the score gets worse beyond four characters. <bookmark mark='b'/> Better smoothing keeps improving.",
-   "zh": "回到第1部分的记分牌。那里最好的计数模型，用4个字符的上下文，在测试段落上做到了每字符2.32比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长的上下文，在30部小说里只出现过寥寥几次，甚至根本没出现过。用第1部分那种简单的平滑，上下文超过4个字符之后，分数反而变差。<bookmark mark='b'/>更好的平滑，则会一直进步下去。"
+  "09ca18877658": {
+   "scene": "VI",
+   "en": "Where does that identity come from? Three lines. The log probability of the data doesn't depend on z, so averaging it over q changes nothing. <bookmark mark='a'/> By Bayes' rule, p of x is the joint over the posterior. <bookmark mark='b'/> Multiply and divide by q, and split the log in two. <bookmark mark='c'/> The first part is the ELBO, the evidence lower bound; the second is the KL divergence from q to the true posterior. <bookmark mark='d'/> It's chapter four's EM bound again. EM can make the KL zero, because there the posterior is computable. Variational inference can't, so it settles for the best q in a family it can handle, and the gap is what it gives up.",
+   "zh": ""
   },
-  "24fe8e92cb4b": {
-   "scene": "KneserNey",
-   "en": "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, shave a fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it deserves little. Count how many different contexts something follows, not how often it appears.",
-   "zh": "Kneser–Ney平滑是1995年提出的，它有两个想法。<bookmark mark='a'/>第一，从每一个见过的计数里，削掉一个固定的折扣，<bookmark mark='c'/>再用省下来的部分，退回到一个更短的上下文，少一个字符：把两者混合起来。<bookmark mark='b'/>第二，按多样性来评判更短的上下文。教科书里的例子是：Francisco是个常见的词，但它几乎总是跟在San后面，所以在一个陌生的上下文之后，把它当作猜测，它不该分到多少概率。要数的是，一个东西跟在多少种不同的上下文后面，而不是它出现了多少次。"
+  "8476ed3d0364": {
+   "scene": "VI",
+   "en": "Now a model where we can check everything. Take 25 of Austen's pages and their rate of 'the'. Model it as a bell curve of unknown mean and unknown precision, with the usual conjugate prior, so the exact posterior is known: here are its contours. <bookmark mark='a'/> Variational inference pretends we couldn't compute it, and looks for q of mu times q of tau: two independent factors, the mean-field family. <bookmark mark='b'/> Coordinate ascent updates one factor at a time: the best log q of one variable is the expected log joint, averaged over the other. <bookmark mark='c'/> Start q far too narrow. Each sweep raises the ELBO, and after 2 sweeps it has converged. <bookmark mark='d'/> And the identity holds: log p of x, computed exactly, is -95.33; the ELBO plus the KL, integrated numerically, agree to the third decimal place. <bookmark mark='e'/> Mean field is a little too sure of itself: q's spread for mu is 1.51, the truth's 1.57, because it ignores how mu and tau lean on each other.",
+   "zh": ""
   },
-  "22d7aa1f73ff": {
-   "scene": "KneserNey",
-   "en": "With seven characters of context, Kneser–Ney reaches 2.04 bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, this was the state of the art in language modelling. It's the scoreboard's last counting row. Everything better is a neural network, and that's where we're going next.",
-   "zh": "用7个字符的上下文，Kneser–Ney在测试段落上做到了每字符2.04比特。<bookmark mark='a'/>整整20年，从语音识别到机器翻译，它都代表着语言建模的最高水平。这是记分牌上最后一行计数模型。比它更好的，全都是神经网络，而那正是我们接下来要去的地方。"
+  "aa3496c79253": {
+   "scene": "VI",
+   "en": "CAVI needs expectations in closed form. For a neural network there aren't any, so we follow the gradient of the ELBO with samples instead. <bookmark mark='a'/> The old way, the score function, multiplies f by the gradient of log q. It's unbiased, but noisy. <bookmark mark='b'/> In 2013 Diederik Kingma and Max Welling, and independently Danilo Rezende and colleagues, wrote the sample as the mean plus noise, so the gradient can flow through the sample itself: the reparameterization trick. <bookmark mark='c'/> Same expectation, same answer on average; but here its spread is 2.0 against 7.0, a variance 12 times smaller.",
+   "zh": ""
   },
-  "15d56ffbef43": {
+  "2aa9d0100cbf": {
+   "scene": "VI",
+   "en": "One more step. CAVI, and the topic model of chapter five, optimize a separate q for every data point. <bookmark mark='a'/> Instead, train one network, an encoder, to output q's parameters for any input: amortized inference. <bookmark mark='b'/> Sample z with the reparameterization trick, decode it back, and train both networks on the ELBO. <bookmark mark='c'/> That's the variational autoencoder, and part twenty builds one. The same bound trains diffusion models in part twenty-one.",
+   "zh": ""
+  },
+  "3b128e8692d2": {
    "scene": "Outro",
-   "en": "Let's take stock. Principal components are the covariance's eigenvectors, and they found Austen against Dickens without labels. A mixture of bells, fitted by EM, recovered the authors themselves. A hidden Markov model discovered vowels. Graphical models draw all of these as pictures that are also formulas. Gaussian processes put probabilities on whole functions, and variational inference swaps an impossible posterior for the closest simple one. And Kneser–Ney counting gave the scoreboard its last counting row.",
-   "zh": "我们来盘点一下。主成分是协方差矩阵的特征向量，它们在没有标签的情况下，找出了奥斯汀对狄更斯的那个方向。用EM算法拟合的钟形曲线混合模型，直接找回了作者本身。隐马尔可夫模型发现了元音。图模型把所有这些都画成图，而这些图同时也是公式。高斯过程给整个函数赋予概率，变分推断则把一个算不出来的后验，换成最接近它的简单后验。最后，Kneser–Ney计数给记分牌添上了最后一行计数模型。"
+   "en": "Let's take stock. Principal components are the covariance's eigenvectors: the line of greatest spread, and the line closest to the data, at once; add noise, and they become a probability model. Independent components unmixed two voices. EM fits any model with hidden parts and can never go downhill; k-means is its hard version, and a topic model a mixture of mixtures. Hidden Markov models found vowels with no labels, and EM's alignments started statistical translation. Good–Turing and Kneser–Ney counted what hadn't been seen, and a suffix array counted contexts of any length. Graphs gave us independence, message passing, and, with do, cause and effect. Gaussian processes put probabilities on whole functions, chose their own length scale by Occam's razor, and chose where to look next. And variational inference turned an impossible posterior into an optimization.",
+   "zh": ""
   },
-  "30c4a6e01e25": {
+  "75c4bc461054": {
    "scene": "Outro",
-   "en": "Hidden parts come back everywhere. Mixture-of-experts models, in part sixteen, are mixtures with a learned way of choosing. State-space models, in part fifteen, carry a hidden state through time. An infinitely wide network is a Gaussian process, in part twelve. The ELBO trains diffusion models and autoencoders. Directions in clouds of vectors are how we look inside models, in part thirty. And Kneser–Ney is the row the first neural language model has to beat, in part nine.",
-   "zh": "隐藏的部分，会在各处再次出现。第16部分的混合专家模型，就是混合模型，只不过选择的方式是学出来的。第15部分的状态空间模型，带着一个隐状态穿过时间。无限宽的网络，就是一个高斯过程，在第12部分。证据下界ELBO，用来训练扩散模型和自编码器。在一团团向量里找方向，是我们窥看模型内部的办法，在第30部分。而Kneser–Ney，是第一个神经语言模型必须打败的那一行，在第9部分。"
+   "en": "Hidden parts come back everywhere. Model 1's alignments return as attention, a soft alignment learned inside the network, in part thirteen. State-space models, in part fifteen, carry a hidden state through time, and mixtures of experts, in part sixteen, are mixtures with a learned way of choosing. The forward algorithm trains speech recognizers in part twenty-three. An infinitely wide network is a Gaussian process, in part twelve. The ELBO and the reparameterization trick train autoencoders and diffusion models. Setting a network's activations by hand is the do operator, in part thirty. And Kneser–Ney is the row the first neural language model has to beat, in part nine.",
+   "zh": ""
+  },
+  "4ae81e27711f": {
+   "scene": "Outro",
+   "en": "Here are six problems, from Pearson's line to Pearl's do operator. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": ""
   },
   "c28634a3faf0": {
    "scene": "Outro",
    "en": "Next time: the deepest question in machine learning. A model fits its training data; why should it work on anything else? <bookmark mark='a'/> Bias and variance, the bounds of Vapnik and Chervonenkis, networks that memorize random labels, and the curve that goes down, up, and then down again.",
    "zh": "下一次：机器学习里最深刻的问题。一个模型拟合了它的训练数据；凭什么它在别的数据上也管用？<bookmark mark='a'/>偏差与方差，瓦普尼克与切尔沃年基斯的界，能把随机标签背下来的网络，还有那条先下降、再上升、然后又下降的曲线。"
   },
-  "eb5098e45a35": {
+  "76a0690e6396": {
    "scene": "Outro",
-   "en": "Bishop's Pattern Recognition and Machine Learning covers this whole part, and Rabiner's tutorial is still the best introduction to hidden Markov models. Thanks for watching, and see you in part eight.",
-   "zh": "毕晓普的《模式识别与机器学习》涵盖了这一部分的全部内容，而拉比纳的那篇教程，至今仍是隐马尔可夫模型最好的入门。感谢观看，第8部分见。"
-  },
-  "b89ec20d0015": {
-   "scene": "VI",
-   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part twenty, are trained exactly this way.",
-   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第20部分的变分自编码器，正是这样训练的。"
+   "en": "Bishop's Pattern Recognition and Machine Learning covers most of this part; Rasmussen and Williams the Gaussian processes, and Pearl's Causality the causes. Thanks for watching, and see you in part eight.",
+   "zh": ""
   }
  },
  "title_en": "AI, Built: Part 7, Statistical ML",
  "chapters_en": {
   "Hook": "Structure nobody labelled",
-  "PCA": "1. Principal components",
-  "EM": "2. Hidden sources: mixtures and EM",
-  "HMM": "3. Hidden Markov models",
-  "Graphs": "4. Models as pictures",
-  "GP": "5. Gaussian processes",
-  "VI": "6. Variational inference",
-  "KneserNey": "7. Kneser-Ney: the best way to count",
-  "Outro": "Recap, and where this comes back"
+  "PCA": "1. Principal components, two ways",
+  "PPCA": "2. PCA as a probability model",
+  "ICA": "3. The cocktail party",
+  "EM": "4. Mixtures and EM",
+  "Topics": "5. Topic models",
+  "HMM": "6. Hidden Markov models",
+  "BaumWelch": "7. Baum-Welch, and machines that listen",
+  "Translation": "8. Translation by counting",
+  "KneserNey": "9. Kneser-Ney, from Good-Turing",
+  "Infini": "10. The infinity-gram",
+  "Graphs": "11. Models as pictures",
+  "Causes": "12. From graphs to causes",
+  "GP": "13. Gaussian processes",
+  "Occam": "14. Bayesian Occam's razor",
+  "BayesOpt": "15. Bayesian optimization",
+  "VI": "16. Variational inference",
+  "Outro": "Recap, problems, and where this comes back"
  }
 }

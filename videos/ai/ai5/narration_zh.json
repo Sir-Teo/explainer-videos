@@ -3,15 +3,23 @@
  "chapters": {
   "Hook": "从噪声中来",
   "Bell": "1. 钟形曲线",
-  "Likelihood": "2. 拟合钟形曲线：最大似然",
-  "Bayes": "3. 用分布表达信念",
-  "Sampling": "4. 掷灌铅的骰子",
-  "Markov": "5. 记性很短的链",
-  "MonteCarlo": "6. 从随机样本里求答案",
-  "MCMC": "7. 从无法直接采样的分布中采样",
-  "Brownian": "8. 布朗运动",
-  "SDE": "9. 带着推力的随机",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Likelihood": "3. 拟合钟形曲线：最大似然",
+  "Bayes": "5. 用分布表达信念",
+  "Sampling": "8. 掷灌铅的骰子",
+  "Markov": "10. 记性很短的链",
+  "MonteCarlo": "11. 从随机样本里求答案",
+  "MCMC": "13. 从无法直接采样的分布中采样",
+  "Brownian": "14. 布朗运动",
+  "SDE": "16. 带着推力的随机",
+  "Outro": "回顾、习题，以及接下来",
+  "Gauss": "2. 多维的钟形曲线",
+  "Fisher": "4. 估计能有多精确？",
+  "MaxEnt": "6. 最大熵",
+  "Tails": "7. 离平均值能有多远？",
+  "Decoding": "9. 语言模型怎样选词",
+  "ScoreFn": "12. 平均值的梯度",
+  "Ito": "15. 伊藤引理",
+  "FokkerPlanck": "17. 密度自己的定律"
  },
  "lines": {
   "32eff79146fc": {
@@ -29,35 +37,85 @@
    "en": "Run it the other way, with the arrows gone, and the letters dissolve back into noise. <bookmark mark='a'/> Both directions are random motion, and the same mathematics describes them.",
    "zh": "反过来运行，去掉箭头，这些字母又溶解回噪声。<bookmark mark='a'/>两个方向都是随机运动，描述它们的，是同一套数学。"
   },
-  "563969b05dc7": {
+  "d2c4084d9f73": {
    "scene": "Hook",
-   "en": "So this part is about randomness: how to describe it, how to learn from it, how to draw samples from it, and how it moves. <bookmark mark='a'/> It's the last piece of mathematics we need before the models themselves.",
-   "zh": "所以，这一部分讲的是随机性：怎样描述它，怎样从中学习，怎样从中抽取样本，以及它怎样运动。<bookmark mark='a'/>在进入模型本身之前，这是我们需要的最后一块数学。"
+   "en": "The mathematics is older than computers. It began in 1654, in letters between Pascal and Fermat about splitting the stakes of an unfinished game. <bookmark mark='a'/> Bernoulli proved that averages settle; <bookmark mark='b'/> de Moivre found the bell curve; <bookmark mark='c'/> Bayes and Laplace reasoned from effects back to causes; <bookmark mark='d'/> Gauss fitted orbits. <bookmark mark='e'/> Einstein explained the jiggling of pollen, <bookmark mark='f'/> Fisher made likelihood the way to fit models, <bookmark mark='g'/> and Ito gave random motion its own calculus. <bookmark mark='h'/> At Los Alamos the first computers were set to sampling, <bookmark mark='i'/> and today the same ideas choose a chatbot's every word and turn noise into pictures.",
+   "zh": "这套数学比计算机还要古老。它始于1654年，帕斯卡和费马在通信中讨论：一局没下完的赌博，赌注该怎么分。<bookmark mark='a'/>伯努利证明了平均值会稳定下来；<bookmark mark='b'/>棣莫弗找到了钟形曲线；<bookmark mark='c'/>贝叶斯和拉普拉斯从结果倒推原因；<bookmark mark='d'/>高斯用它拟合行星轨道。<bookmark mark='e'/>爱因斯坦解释了花粉的抖动，<bookmark mark='f'/>费希尔让似然成为拟合模型的方法，<bookmark mark='g'/>伊藤清给随机运动配上了自己的微积分。<bookmark mark='h'/>在洛斯阿拉莫斯，最早的计算机被用来做采样，<bookmark mark='i'/>而今天，同样的想法决定着聊天机器人写出的每一个词，也把噪声变成图画。"
+  },
+  "9a26a8a62ff9": {
+   "scene": "Hook",
+   "en": "This is Part 5 of AI, Built, the last of the foundations. <bookmark mark='a'/> In it: why sums are bell-shaped, in one dimension and many; fitting, precision and belief; how far averages stray; drawing samples, and how a language model picks a word; Markov chains and Monte Carlo; and random motion, with a calculus of its own. Every result is computed here, on a laptop.",
+   "zh": "这是《人工智能，从零搭建》的第5部分，也是基础篇的最后一部分。<bookmark mark='a'/>这一部分讲：为什么和总是呈钟形，在一维和多维中；拟合、精度与信念；平均值会偏离多远；怎样抽取样本，以及语言模型怎样挑选下一个词；马尔可夫链与蒙特卡洛；还有随机运动，以及它自己的一套微积分。每一个结果，都在这里、在一台笔记本电脑上算出来。"
   },
   "1e229c580cd8": {
    "scene": "Bell",
    "en": "Chapter one. The bell curve.",
    "zh": "第1章。钟形曲线。"
   },
-  "3d0cec005e58": {
+  "c02f7f8bb933": {
    "scene": "Bell",
-   "en": "Drop a ball through twelve rows of pegs. At every peg it bounces left or right, fifty-fifty. <bookmark mark='a'/> Where it lands just counts its right bounces. <bookmark mark='b'/> One ball tells you nothing. Eighty start to show a shape.",
-   "zh": "让一个小球穿过12排钉子落下。每碰到一颗钉子，它就向左或向右弹开，机会各占一半。<bookmark mark='a'/>它最后落在哪里，只取决于它向右弹了几次。<bookmark mark='b'/>一个球，什么也说明不了。80个球，就开始显出一个形状了。"
+   "en": "Flip a fair coin and track the share of heads. <bookmark mark='a'/> Six runs of five thousand flips all settle toward a half, here between 0.489 and 0.512: Jacob Bernoulli's law of large numbers, published in 1713. <bookmark mark='b'/> How far off is a run after n flips? About one over the square root of n, and the shape of that scatter is this chapter's subject.",
+   "zh": "抛一枚均匀的硬币，记下正面所占的比例。<bookmark mark='a'/>六组各5000次的抛掷，全都向二分之一靠拢，这里落在0.489到0.512之间：这就是雅各布·伯努利的大数定律，1713年出版。<bookmark mark='b'/>抛了n次之后，一组会偏离多少？大约是n的平方根分之一。这种偏离的形状，就是本章的主题。"
   },
-  "f1903e25e4c9": {
+  "373a0503ca36": {
    "scene": "Bell",
-   "en": "A thousand make it unmistakable. <bookmark mark='a'/> Counting paths gives the exact chances: twelve choose k, the number of paths with k right bounces, out of two to the twelve paths in all. <bookmark mark='b'/> And the smooth curve hugging them is the bell: the normal distribution, with a centre mu and a width sigma. Here the centre is six, and the width is the square root of three. Galton built this board in the 1870s to show it, but de Moivre had found the curve in 1733.",
-   "zh": "到了1000个球，这个形状就确定无疑了。<bookmark mark='a'/>数一数路径，就能得到精确的概率：12选k，也就是向右弹k次的路径数，除以全部路径数，2的12次方。<bookmark mark='b'/>而紧贴着它们的那条光滑曲线，就是钟形曲线：正态分布，它有一个中心μ和一个宽度σ。这里中心是6，宽度是根号3。19世纪70年代，弗朗西斯·高尔顿造了这块板子来演示它，不过早在1733年，棣莫弗就已经发现了这条曲线。"
+   "en": "Here is the scatter made visible: balls dropped through twelve rows of pegs, bouncing left or right, fifty-fifty. <bookmark mark='a'/> Where one lands counts its right bounces. <bookmark mark='b'/> Eighty start to show a shape.",
+   "zh": "把这种偏离画出来：小球落过十二排钉子，在每颗钉子上向左或向右弹开，各占一半。<bookmark mark='a'/>小球落在哪里，就数出了它向右弹了几次。<bookmark mark='b'/>80个球，开始显出一个形状。"
   },
-  "28d73fa50f58": {
+  "5e88188d6c28": {
    "scene": "Bell",
-   "en": "But why a bell, and why so often? Take one die: six flat bars. <bookmark mark='a'/> Add two dice, and you get a triangle. Three, and it's already rounding off. <bookmark mark='b'/> Six. Twelve. The bell again. <bookmark mark='c'/> That's the central limit theorem. Add up many independent random pieces, and whatever shape the pieces have, the sum takes the shape of the bell, <bookmark mark='d'/> with a spread that grows like the square root of how many you add. Errors, heights, noise: anything built from many small independent nudges comes out bell-shaped.",
-   "zh": "可为什么偏偏是钟形，又为什么这么常见？拿一个骰子：6根一样高的柱子。<bookmark mark='a'/>把两个骰子的点数加起来，得到一个三角形。三个，形状已经开始变圆了。<bookmark mark='b'/>6个。12个。又是钟形曲线。<bookmark mark='c'/>这就是中心极限定理。把许多独立的随机小块加起来，不管每一块是什么形状，总和都会变成钟形，<bookmark mark='d'/>而它的散布程度，按加进去的个数的平方根增长。误差、身高、噪声：凡是由许多微小而独立的推动累积起来的东西，最后都是钟形的。"
+   "en": "A thousand make it unmistakable. <bookmark mark='a'/> Counting paths gives the exact chances: twelve choose k, out of two to the twelve. <bookmark mark='b'/> The smooth curve hugging them is the bell, the normal distribution, with a centre mu and a width sigma, here six and the square root of three. De Moivre found it in 1733, as the limit of exactly these counts.",
+   "zh": "1000个球，形状就毫无疑问了。<bookmark mark='a'/>数一数路径就得到精确的概率：12选k，除以2的12次方。<bookmark mark='b'/>贴着它们的那条光滑曲线，就是钟形曲线，也就是正态分布，它有中心μ和宽度σ，这里是6和根号3。棣莫弗在1733年找到了它，正是这些计数的极限。"
   },
-  "205682a496c4": {
+  "07d334bf8377": {
+   "scene": "Bell",
+   "en": "Why a bell, and why so often? One die: six flat bars. <bookmark mark='a'/> Two dice: a triangle. Three: already rounding off. <bookmark mark='b'/> Six, twelve: the bell. <bookmark mark='c'/> That's the central limit theorem: add many independent pieces, whatever their shape, and the sum is bell-shaped, <bookmark mark='d'/> with a spread that grows like the square root of their number. Laplace proved it in 1810.",
+   "zh": "为什么是钟形，又为什么这么常见？一颗骰子：六根一样高的柱子。<bookmark mark='a'/>两颗：一个三角形。三颗：已经开始变圆。<bookmark mark='b'/>六颗、十二颗：钟形曲线。<bookmark mark='c'/>这就是中心极限定理：把许多独立的小块加起来，不管每一块是什么形状，和都是钟形的，<bookmark mark='d'/>而它的宽度，随块数的平方根增长。拉普拉斯在1810年证明了它。"
+  },
+  "47b6bdb1a00c": {
+   "scene": "Bell",
+   "en": "Why? Two dice add up to s in every way of splitting s: x on one die, s minus x on the other. <bookmark mark='a'/> For densities the sum becomes an integral, a convolution. <bookmark mark='b'/> Picture it with a lopsided piece, the exponential. Flip a copy, slide it to s, multiply: the area of the overlap is the density of the sum at s. <bookmark mark='c'/> Slide s along, and the area traces out the density of two pieces. <bookmark mark='d'/> n pieces take n minus one convolutions.",
+   "zh": "为什么？两颗骰子加起来等于s，有多少种把s拆开的方法：一颗是x，另一颗是s减x。<bookmark mark='a'/>换成密度，求和就变成积分，也就是卷积。<bookmark mark='b'/>用一个歪向一边的分布来画：指数分布。把它翻过来，滑到s，再相乘：重叠部分的面积，就是和在s处的密度。<bookmark mark='c'/>让s一路滑过去，这个面积就描出两块之和的密度。<bookmark mark='d'/>n块，就要做n减1次卷积。"
+  },
+  "79759e814619": {
+   "scene": "Bell",
+   "en": "So convolve again and again. One exponential, all on one side. <bookmark mark='a'/> Two, three, five: each convolution smooths and spreads it. <bookmark mark='b'/> Ten, thirty: the lopsidedness fades, and what is left is the bell. Convolution is an averaging, and the only shape that averaging leaves unchanged, up to scale, is the bell.",
+   "zh": "那就一次又一次地卷积。一个指数分布，全都挤在一边。<bookmark mark='a'/>两个、三个、五个：每次卷积都把它抹平、摊开。<bookmark mark='b'/>十个、三十个：歪斜消失了，剩下的就是钟形曲线。卷积是一种平均，而在平均之下，除了缩放，唯一不变的形状就是钟形曲线。"
+  },
+  "cb905932fe2f": {
+   "scene": "Bell",
+   "en": "How fast does the bell arrive? Measure the largest gap between the sum's cumulative distribution and the bell's. <bookmark mark='a'/> For the exponential it falls on a line of slope -0.50: the gap shrinks like one over the square root of n, 0.017 after sixty-four pieces. <bookmark mark='b'/> That is the Berry-Esseen theorem: the gap is at most a constant times the third absolute moment over the cube of the spread, over the square root of n, and the measured gap sits under it. <bookmark mark='c'/> The uniform pieces, symmetric, close the gap much faster: slope -1.0, like one over n, because with no skew the first correction to the bell cancels.",
+   "zh": "钟形曲线来得有多快？量一量和的累积分布与钟形曲线的累积分布之间最大的差距。<bookmark mark='a'/>对指数分布，它落在斜率为-0.50的直线上：差距像n的平方根分之一那样缩小，64块之后是0.017。<bookmark mark='b'/>这就是贝里-埃森定理：差距至多是一个常数，乘以三阶绝对矩除以宽度的立方，再除以n的平方根；测出来的差距就在它下面。<bookmark mark='c'/>均匀分布的小块是对称的，差距缩小得快得多：斜率-1.0，像n分之一，因为没有偏斜，对钟形曲线的第一项修正抵消了。"
+  },
+  "b8c41ae76255": {
+   "scene": "Gauss",
+   "en": "Chapter two. Bells in many dimensions.",
+   "zh": "第2章。多维的钟形曲线。"
+  },
+  "295709d29e13": {
+   "scene": "Gauss",
+   "en": "Start with the simplest cloud in the plane: two independent standard bells, one along each axis. <bookmark mark='a'/> Every Gaussian in any dimension is this, put through a linear map: x equals mu plus L times z. <bookmark mark='b'/> The map is summed up by the covariance, sigma, which is L times L transposed: how each pair of coordinates moves together. <bookmark mark='c'/> The density's contours are ellipses, with their axes along the eigenvectors of the covariance and lengths set by the square roots of its eigenvalues, straight out of part three.",
+   "zh": "从平面上最简单的点云开始：两个独立的标准钟形分布，各沿一根坐标轴。<bookmark mark='a'/>任何维度的任何高斯分布，都是它经过一个线性映射：x等于μ加上L乘以z。<bookmark mark='b'/>这个映射可以用协方差Σ来概括，它等于L乘以L的转置：每一对坐标一起变化的程度。<bookmark mark='c'/>密度的等高线是椭圆，轴沿着协方差的特征向量，长度由特征值的平方根决定，这正是第3部分的内容。"
+  },
+  "84cb9cbea723": {
+   "scene": "Gauss",
+   "en": "Now the question that matters for prediction: if we learn some coordinates, x b, what is left of the others, x a? <bookmark mark='a'/> With x b fixed, the conditional density is the joint density, rescaled. <bookmark mark='b'/> Its log is a quadratic form in the inverse of the covariance, called the precision. <bookmark mark='c'/> Collect the terms in x a and complete the square: a bell again, with precision lambda a a. <bookmark mark='d'/> Inverting the covariance in blocks gives its covariance: sigma a a minus sigma a b sigma b b inverse sigma b a, the Schur complement. <bookmark mark='e'/> And its mean moves from mu a by a linear function of what we learned.",
+   "zh": "现在是对预测最要紧的问题：如果知道了一部分坐标，x_b，其余的x_a还剩下什么？<bookmark mark='a'/>固定x_b，条件密度就是联合密度，再重新归一。<bookmark mark='b'/>它的对数，是协方差之逆的一个二次型，这个逆叫作精度矩阵。<bookmark mark='c'/>把关于x_a的项收集起来，配方：又是一个钟形分布，精度是Λ_aa。<bookmark mark='d'/>分块求逆，得到它的协方差：Σ_aa减去Σ_ab乘Σ_bb的逆乘Σ_ba，也就是舒尔补。<bookmark mark='e'/>而它的均值，从μ_a出发，按我们所知道的信息做一个线性的移动。"
+  },
+  "a182db2062b5": {
+   "scene": "Gauss",
+   "en": "Check it on samples. Draw four hundred thousand points and keep the ones in a thin strip where x two is 1.5. <bookmark mark='a'/> Their x one values form a bell. The formulas predict its mean, 0.804, and its variance, 0.438; the 2,568.0 points in the strip give 0.796 and 0.448. Both agree with the formulas to within the sampling error. <bookmark mark='b'/> Slide the strip, and the conditional mean traces a straight line. Galton drew it in 1886 for the heights of parents and children, and called it regression: tall parents have children who are tall, but less so.",
+   "zh": "用样本来检验。抽出40万个点，留下落在x_2等于1.5的一条细带里的点。<bookmark mark='a'/>它们的x_1值构成一个钟形分布。公式预测它的均值是0.804，方差是0.438；细带里的2568.0个点给出0.796和0.448。两者都在抽样误差之内与公式吻合。<bookmark mark='b'/>让细带滑动，条件均值就画出一条直线。高尔顿在1886年为父母和子女的身高画出了它，称之为回归：高个子父母的孩子也高，但没那么高。"
+  },
+  "e1a930704707": {
+   "scene": "Gauss",
+   "en": "This one formula does a great deal of work. <bookmark mark='a'/> In 1960, Rudolf Kalman used it to track a moving object, conditioning on each new measurement; his filter navigated Apollo. <bookmark mark='b'/> A Gaussian process puts a bell over whole functions, and fitting it to data is this conditioning. <bookmark mark='c'/> And in part twenty-one, each step of a diffusion model back from noise is a Gaussian conditional, written down with exactly this formula.",
+   "zh": "这一个公式做了大量的工作。<bookmark mark='a'/>1960年，鲁道夫·卡尔曼用它追踪运动的物体，每来一次新的测量就条件化一次；他的滤波器为阿波罗飞船导航。<bookmark mark='b'/>高斯过程把钟形分布放在整个函数上，用数据拟合它，就是这样的条件化。<bookmark mark='c'/>而在第21部分，扩散模型从噪声往回走的每一步，都是一个高斯条件分布，用的正是这个公式。"
+  },
+  "4d89dedfbb99": {
    "scene": "Likelihood",
-   "en": "Chapter two. Fitting a bell to data.",
-   "zh": "第2章。用钟形曲线拟合数据。"
+   "en": "Chapter three. Fitting a bell to data.",
+   "zh": "第3章。给数据拟合钟形曲线。"
   },
   "96918acd66a4": {
    "scene": "Likelihood",
@@ -67,211 +125,454 @@
   "32bc7aafb35d": {
    "scene": "Likelihood",
    "en": "Score every possible bell, every centre and every width, and the scores form a landscape. <bookmark mark='a'/> From part four, we know how to find its top: follow the gradient uphill. <bookmark mark='b'/> At the summit, the centre is the balls' average, 5.96, and the width is their spread, 1.71, close to the square root of three that the pegs predict. For a bell, maximum likelihood comes out as the two most natural summaries of the data.",
-   "zh": "给每一条可能的钟形曲线打分，遍历每个中心、每个宽度，这些得分就构成一片地形。<bookmark mark='a'/>第4部分讲过怎样找到它的顶峰：沿着梯度往上爬。<bookmark mark='b'/>到了山顶，中心就是这些球的平均值，5.96，宽度就是它们的离散程度，1.71，接近钉子所预言的根号3。对钟形曲线来说，最大似然给出的，正是对数据最自然的两个概括。"
+   "zh": "给每一条可能的钟形曲线打分，每个中心、每个宽度，这些分数就构成一片地形。<bookmark mark='a'/>从第4部分我们知道怎样找到它的顶峰：沿着梯度往上爬。<bookmark mark='b'/>到了山顶，中心是这些球的平均值5.96，宽度是它们的离散程度1.71，接近钉板预测的根号3。对钟形曲线来说，最大似然给出的，正是对数据最自然的两个概括。"
   },
   "1bc10ca3fb70": {
    "scene": "Likelihood",
    "en": "And here's the connection to everything else. Maximizing the average log-likelihood <bookmark mark='a'/> is the same as minimizing the average surprise, <bookmark mark='b'/> and that's part one's cross-entropy, measured against the data. <bookmark mark='c'/> Maximum likelihood is minimum cross-entropy. It's how every model in this series is trained, from a bell curve to a language model.",
    "zh": "这就是它和其他一切的联系。最大化平均对数似然，<bookmark mark='a'/>等于最小化平均意外度，<bookmark mark='b'/>而这就是第1部分的交叉熵，对照数据来计算。<bookmark mark='c'/>最大似然就是最小交叉熵。本系列的每一个模型，从一条钟形曲线到一个语言模型，都是这样训练的。"
   },
-  "8e4cb6b6828e": {
+  "489e9d7eb2fb": {
+   "scene": "Likelihood",
+   "en": "Is maximum likelihood right on average? For the centre, yes. For the spread, no. <bookmark mark='a'/> Measure spread around the sample's own average and you lose a little: the average sits closer to the data than the true centre does. <bookmark mark='b'/> On average, the loss is exactly one sigma squared, <bookmark mark='c'/> so the maximum-likelihood variance is too small by a factor n minus one over n. <bookmark mark='d'/> Measured on 40,000 samples of five, the average is 0.800, against the predicted 0.80; dividing by n minus one, Bessel's correction, gives 0.999. The bias fades as n grows. Fisher, who named likelihood in 1922, cared less about bias than about efficiency: how small the error can be. That is the next chapter.",
+   "zh": "最大似然平均来说准吗？对中心，准。对宽度，不准。<bookmark mark='a'/>围绕样本自己的平均值去量离散程度，会少掉一点：样本平均值离数据，比真正的中心离得更近。<bookmark mark='b'/>平均下来，正好少掉一个σ的平方，<bookmark mark='c'/>所以最大似然的方差偏小，是真实值的n分之n减1。<bookmark mark='d'/>在40000组、每组5个的样本上测量，平均是0.800，预测是0.80；除以n减1，也就是贝塞尔校正，得到0.999。随着n增大，偏差逐渐消失。1922年给似然命名的费希尔，关心的与其说是偏差，不如说是效率：误差最小能有多小。这就是下一章。"
+  },
+  "f2793c4d04c5": {
+   "scene": "Fisher",
+   "en": "Chapter four. How precise can an estimate be?",
+   "zh": "第4章。估计能有多精确？"
+  },
+  "f3c14d080008": {
+   "scene": "Fisher",
+   "en": "Here is a distribution with heavy tails, the Cauchy. It looks like a bell, but its tails are so heavy that it has no average: now and then a draw lands absurdly far out. <bookmark mark='a'/> Try to estimate its centre from a hundred draws. The sample average is useless: its spread never shrinks; the middle half of the averages spans 1.9 at 5 draws and still 1.9 at 500. <bookmark mark='b'/> The median does much better, <bookmark mark='c'/> and maximum likelihood better still. Is there a best possible?",
+   "zh": "这是一个尾巴很重的分布：柯西分布。它看起来像钟形曲线，但尾巴重到没有平均值：时不时就有一次抽样落到离谱的远处。<bookmark mark='a'/>试着用100次抽样估计它的中心。样本平均值毫无用处：它的离散程度永远不缩小；平均值的中间一半，在5次抽样时跨度1.9，到500次时仍是1.9。<bookmark mark='b'/>中位数好得多，<bookmark mark='c'/>最大似然更好。有没有一个最好的极限？"
+  },
+  "13294f2e8eee": {
+   "scene": "Fisher",
+   "en": "There is, and Fisher found the key in 1925. <bookmark mark='a'/> The score is the slope of the log-likelihood in the parameter: how much each observation pulls the estimate. <bookmark mark='b'/> At the true value it averages to zero, because the density always integrates to one. <bookmark mark='c'/> Its variance is the Fisher information: how sharply the data pins theta down. For the Cauchy it is one half; over two hundred thousand draws we measure 0.500. <bookmark mark='d'/> An unbiased estimate moves one for one with theta, so its covariance with the score is one. <bookmark mark='e'/> And Cauchy-Schwarz says a covariance squared is at most the product of the variances. So no unbiased estimate can have variance below one over n times the information: the Cramer-Rao bound, proved by Rao in 1945 and Cramer in 1946.",
+   "zh": "有，费希尔在1925年找到了关键。<bookmark mark='a'/>分数是对数似然对参数的斜率：每个观测把估计往哪边拉、拉多大。<bookmark mark='b'/>在真实值处，它的平均为零，因为密度的积分永远是1。<bookmark mark='c'/>它的方差就是费希尔信息：数据把θ钉得有多牢。柯西分布的费希尔信息是二分之一；在20万次抽样上，我们测得0.500。<bookmark mark='d'/>一个无偏估计随θ一比一地移动，所以它和分数的协方差是1。<bookmark mark='e'/>柯西-施瓦茨不等式说，协方差的平方至多是两个方差的乘积。所以，任何无偏估计的方差，都不可能低于n乘以信息的倒数：这就是克拉默-拉奥下界，由拉奥在1945年、克拉默在1946年证明。"
+  },
+  "e68b1c9de93d": {
+   "scene": "Fisher",
+   "en": "Now measure it. Multiply each estimate's variance by n, so that a perfect one-over-n estimate is a flat line; the bound is the line at two. <bookmark mark='a'/> The median levels off at 2.49, close to its theoretical pi squared over four: about a quarter worse than the bound, forever. <bookmark mark='b'/> Maximum likelihood starts high, 4.7 at five draws, but by 500 draws it is 2.02, within a few percent of the bound. <bookmark mark='c'/> That is Fisher's efficiency: in large samples, nothing beats maximum likelihood.",
+   "zh": "现在来测量。把每种估计的方差乘以n，这样一个理想的n分之一的估计就是一条水平线；下界是高度为2的那条线。<bookmark mark='a'/>中位数稳定在2.49，接近它的理论值π的平方除以4：比下界差了约四分之一，而且永远如此。<bookmark mark='b'/>最大似然起点很高，5次抽样时是4.7，但到500次抽样时是2.02，与下界只差百分之几。<bookmark mark='c'/>这就是费希尔所说的有效性：在大样本下，没有什么能胜过最大似然。"
+  },
+  "bd086a6edec8": {
+   "scene": "Fisher",
+   "en": "With many parameters, the information becomes a matrix: the average outer product of the score. <bookmark mark='a'/> In 1998 Shun-ichi Amari proposed measuring steps of gradient descent by it, so that a step is judged by how much the model's predictions change, not its weights: the natural gradient. <bookmark mark='b'/> In 2017, elastic weight consolidation used it to protect what a network had learned. <bookmark mark='c'/> And today's curvature-aware optimizers approximate it, or a close cousin, layer by layer. Part eleven picks them up.",
+   "zh": "参数多了，信息就变成一个矩阵：分数的外积的平均。<bookmark mark='a'/>1998年，甘利俊一提出用它来度量梯度下降的步子，让一步的大小取决于模型的预测改变了多少，而不是权重：这就是自然梯度。<bookmark mark='b'/>2017年，弹性权重巩固用它来保护网络已经学会的东西。<bookmark mark='c'/>今天那些考虑曲率的优化器，逐层近似它，或者它的近亲。第11部分会接着讲。"
+  },
+  "7f396e51b21c": {
    "scene": "Bayes",
-   "en": "Chapter three. Belief as a distribution.",
-   "zh": "第3章。用分布表达信念。"
+   "en": "Chapter five. Belief as a distribution.",
+   "zh": "第5章。用分布表达信念。"
   },
-  "86b175a5bbd6": {
+  "4137f57870d1": {
    "scene": "Bayes",
-   "en": "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every possibility. <bookmark mark='a'/> Bayes's rule says how to update a belief when evidence arrives. Multiply what you believed by how well each possibility explains the evidence, then rescale, so the total is one again. <bookmark mark='b'/> That's what the sign, proportional to, means: equal, up to that rescaling.",
-   "zh": "一个字母是e的频率有多高？在读任何东西之前，我们毫无头绪：从0到1之间的任何比例，看起来都同样可信。这就是一种信念，我们可以把它画出来：横跨所有可能性的一条平线。<bookmark mark='a'/>贝叶斯法则告诉我们，证据到来时，该怎样更新信念。把你原来的信念，乘以每种可能对证据解释得有多好，再重新缩放，让总和重新等于1。<bookmark mark='b'/>这就是那个符号“正比于”的意思：除了这一步重新缩放，两边相等。"
+   "en": "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every possibility. <bookmark mark='a'/> Bayes's rule, from Thomas Bayes's essay of 1763 and found again by Laplace in 1774, says how to update a belief when evidence arrives. Multiply what you believed by how well each possibility explains the evidence, then rescale, so the total is one again. <bookmark mark='b'/> That's what the sign, proportional to, means: equal, up to that rescaling.",
+   "zh": "字母是e的频率有多高？读之前，我们一无所知：从0到1的任何比例，看起来都一样可能。这就是一个信念，我们可以把它画成覆盖所有可能性的一条平线。<bookmark mark='a'/>贝叶斯法则，出自托马斯·贝叶斯1763年的论文，1774年又被拉普拉斯独立发现，它说明了证据到来时该怎样更新信念：把原来的信念，乘以每种可能性对证据的解释程度，再重新缩放，让总和回到1。<bookmark mark='b'/>“正比于”这个符号就是这个意思：相等，只差那一次缩放。"
   },
-  "8c1bc93289c8": {
+  "f6bacb11b823": {
    "scene": "Bayes",
-   "en": "Read the first ten letters: three e's. <bookmark mark='a'/> The belief leans toward a third, but it's still wide. <bookmark mark='b'/> After a hundred letters, it's narrower. <bookmark mark='c'/> After a thousand, narrower still. <bookmark mark='d'/> After ten thousand, it's a sharp peak near 0.127: ninety-five percent of the belief lies between 0.120 and 0.134. <bookmark mark='e'/> The whole passage, all sixteen thousand letters, gives 0.122, inside that range.",
-   "zh": "读前10个字母：有3个e。<bookmark mark='a'/>信念偏向三分之一，但仍然很宽。<bookmark mark='b'/>读了100个字母之后，它变窄了。<bookmark mark='c'/>1000个之后，更窄。<bookmark mark='d'/>1万个之后，它成了0.127附近的一个尖峰：95%的信念落在0.120到0.134之间。<bookmark mark='e'/>整个段落，全部16000个字母，给出0.122，正在这个范围之内。"
+   "en": "Read the first ten letters: 3 e's. <bookmark mark='a'/> The belief leans toward 0.3, but it's still wide. <bookmark mark='b'/> After a hundred letters, it's narrower. <bookmark mark='c'/> After a thousand, narrower still. <bookmark mark='d'/> After ten thousand, it's a sharp peak near 0.127: ninety-five percent of the belief lies between 0.120 and 0.134. <bookmark mark='e'/> The whole passage, all 16,322 letters, gives 0.122, inside that range.",
+   "zh": "读前10个字母：3个e。<bookmark mark='a'/>信念偏向0.3，但还很宽。<bookmark mark='b'/>读了100个字母，窄了一些。<bookmark mark='c'/>读了1000个，更窄。<bookmark mark='d'/>读了1万个，它成了0.127附近的一个尖峰：95%的信念落在0.120到0.134之间。<bookmark mark='e'/>整段文字，全部16322个字母，给出0.122，在这个范围之内。"
   },
-  "c7bfab09bf23": {
+  "c85351c7767b": {
    "scene": "Bayes",
-   "en": "So the answer isn't one number. It's a distribution: a best guess with its uncertainty attached, narrowing like one over the square root of the evidence. <bookmark mark='a'/> Laplace worked this out in 1774. His best guess after k e's in n letters is k plus one, over n plus two. Before any evidence, that's one half.",
-   "zh": "所以答案不是一个数，而是一个分布：一个最佳猜测，附带着它的不确定性；证据越多，它越窄，宽度与证据量的平方根成反比。<bookmark mark='a'/>拉普拉斯在1774年就算出了这一点。在n个字母里看到k个e之后，他的最佳猜测是n加2分之k加1。在没有任何证据之前，这个值是二分之一。"
+   "en": "Why did the belief keep this shape? <bookmark mark='a'/> Each letter multiplies in theta or one minus theta, so after k e's in n letters the likelihood is theta to the k, times one minus theta to the n minus k. <bookmark mark='b'/> Start from a prior of the same shape, a Beta distribution, <bookmark mark='c'/> and the exponents simply add: the belief stays a Beta, and updating is counting. <bookmark mark='d'/> Its mean is k plus a over n plus a plus b: the prior acts like a imagined e's and b other letters. With a flat prior that is Laplace's rule of succession from 1774: k plus one over n plus two, 0.33 after the first ten letters. <bookmark mark='e'/> Different priors start apart, and the same letters pull them together: by ten thousand letters, they agree.",
+   "zh": "信念为什么一直保持这个形状？<bookmark mark='a'/>每读一个字母，就乘进一个θ或1减θ，所以n个字母里有k个e时，似然就是θ的k次方乘以1减θ的n减k次方。<bookmark mark='b'/>从一个同样形状的先验出发，也就是贝塔分布，<bookmark mark='c'/>指数直接相加：信念始终是贝塔分布，更新就是计数。<bookmark mark='d'/>它的均值是k加a除以n加a加b：先验就像想象中的a个e和b个其他字母。先验是平的时候，这就是拉普拉斯1774年的接续法则：k加1除以n加2，读完前10个字母时是0.33。<bookmark mark='e'/>不同的先验起点各不相同，同样的字母把它们拉到一起：读到1万个字母时，它们已经一致了。"
   },
-  "e945267de618": {
+  "404c4c4273b0": {
+   "scene": "Bayes",
+   "en": "A belief can also be used to pick a single answer: the peak of the posterior, called MAP, maximum a posteriori. <bookmark mark='a'/> Put a Gaussian prior on a model's weights, saying small weights are likelier, <bookmark mark='b'/> and Gaussian noise on its outputs. <bookmark mark='c'/> The MAP answer minimizes squared error plus lambda times the squared size of the weights: the weight decay used to train nearly every network, with lambda the noise over the prior's spread, squared. <bookmark mark='d'/> Ten points from a sine wave, and a polynomial of degree nine. Maximum likelihood threads every point and swings wildly between them. The prior tames it. Over two hundred training sets, maximum likelihood's median test error is 0.25; the best lambda, about 3 times ten to the minus 4, brings it to 0.025.",
+   "zh": "信念也可以用来挑出一个答案：后验的峰值，叫作MAP，最大后验估计。<bookmark mark='a'/>给模型的权重一个高斯先验，意思是小权重更可能，<bookmark mark='b'/>再给它的输出加上高斯噪声。<bookmark mark='c'/>MAP的答案，就是最小化平方误差加上λ乘以权重的平方大小：这正是训练几乎所有网络时用的权重衰减，λ等于噪声与先验宽度之比的平方。<bookmark mark='d'/>来自正弦波的10个点，配一个9次多项式。最大似然穿过每一个点，在点与点之间剧烈摆动。先验把它驯服了。在200个训练集上，最大似然的测试误差中位数是0.25；最好的λ，大约3乘以10的负4次方，把它降到0.025。"
+  },
+  "0cb311ddce49": {
+   "scene": "MaxEnt",
+   "en": "Chapter six. Maximum entropy.",
+   "zh": "第6章。最大熵。"
+  },
+  "fbf9b91793b8": {
+   "scene": "MaxEnt",
+   "en": "Here is a puzzle from the physicist Edwin Jaynes. A die is loaded so that its faces average four and a half instead of three and a half. What is the chance of each face? <bookmark mark='a'/> Infinitely many dice have that average: this one, this one, this one. <bookmark mark='b'/> Jaynes's answer: pick the one that assumes nothing else, the one with the most uncertainty left, measured by part one's entropy. Anything less spread out claims knowledge we do not have.",
+   "zh": "这是物理学家埃德温·杰恩斯出的一道谜题。一颗骰子被做了手脚，点数的平均是4.5，而不是3.5。每个面的概率是多少？<bookmark mark='a'/>平均为4.5的骰子有无穷多个：这个、这个、还有这个。<bookmark mark='b'/>杰恩斯的回答：挑那个不做任何多余假设的，也就是剩下的不确定性最多的那个，用第1部分的熵来衡量。任何更集中的分布，都在声称我们并不具备的知识。"
+  },
+  "a49a4a391612": {
+   "scene": "MaxEnt",
+   "en": "Finding it is part four's constrained optimization. <bookmark mark='a'/> Maximize the entropy, subject to two constraints: the chances add to one, and they average four and a half. <bookmark mark='b'/> Give each constraint a Lagrange multiplier. <bookmark mark='c'/> Setting the derivative to zero makes the log of each chance a straight line in the face: <bookmark mark='d'/> the chance of face k is e to the lambda k, divided by a normalizer, Z. <bookmark mark='e'/> The only unknown is lambda, and the derivative of log Z is the average, so one equation fixes it.",
+   "zh": "找到它，就是第4部分的约束优化。<bookmark mark='a'/>最大化熵，满足两个约束：概率加起来是1，平均是4.5。<bookmark mark='b'/>给每个约束配一个拉格朗日乘子。<bookmark mark='c'/>令导数为零，每个概率的对数就成了点数的一条直线：<bookmark mark='d'/>k点的概率等于e的λk次方，再除以归一化常数Z。<bookmark mark='e'/>唯一的未知数是λ，而log Z的导数就是平均值，所以一个方程就能定下它。"
+  },
+  "21dc0b59fb8b": {
+   "scene": "MaxEnt",
+   "en": "Solving that one equation is a tiny training run. Start from the fair die, with lambda zero, and nudge lambda by how far the average is from four and a half. <bookmark mark='a'/> The die tilts toward its high faces, and settles at lambda 0.371: the chance of each face is about 1.45 times the one below it. <bookmark mark='b'/> Its entropy is 1.6136 nats. Twenty thousand other dice with the same average, made at random: the highest of them reaches 1.6135, just under.",
+   "zh": "解这一个方程，就是一次小小的训练。从均匀的骰子出发，λ为零，然后按平均值离4.5还差多少，推一推λ。<bookmark mark='a'/>骰子向大点数倾斜，最后停在λ等于0.371：每个面的概率，大约是下一个面的1.45倍。<bookmark mark='b'/>它的熵是1.6136奈特。另外两万颗随机造出、平均相同的骰子：其中最高的达到1.6135，刚好在它之下。"
+  },
+  "b699e27de910": {
+   "scene": "MaxEnt",
+   "en": "The same recipe gives the distributions this series keeps meeting. <bookmark mark='a'/> On the line, fix the mean and the variance, solve numerically, and out comes the bell: it is the most uncertain distribution with a given spread. <bookmark mark='b'/> Fix the average distance from zero instead, and you get Laplace's double exponential. <bookmark mark='c'/> Fix the average energy of a physical system, and you get Boltzmann and Gibbs's distribution, e to the minus energy over temperature, where the temperature is the Lagrange multiplier. With scores in place of energies, that is the softmax at the end of every language model. <bookmark mark='d'/> All of them are one family, the exponential family, and in it the gradient of the log normalizer is the average. So fitting one by maximum likelihood just matches the data's averages.",
+   "zh": "同一个配方，能得出本系列一再遇到的那些分布。<bookmark mark='a'/>在实数轴上，固定均值和方差，用数值方法求解，得到的就是钟形曲线：在给定宽度的分布里，它的不确定性最大。<bookmark mark='b'/>改为固定到零点的平均距离，得到的是拉普拉斯的双边指数分布。<bookmark mark='c'/>固定一个物理系统的平均能量，得到的是玻尔兹曼和吉布斯的分布，e的负能量除以温度次方，其中温度就是拉格朗日乘子。把能量换成分数，这就是每个语言模型最后那个softmax。<bookmark mark='d'/>它们都属于同一个家族，指数族；在指数族里，对数归一化常数的梯度就是平均值。所以用最大似然拟合它，就是让它的平均值与数据的平均值相等。"
+  },
+  "a44969555e21": {
+   "scene": "Tails",
+   "en": "Chapter seven. How far from the average?",
+   "zh": "第7章。离平均值能有多远？"
+  },
+  "d90414170ca1": {
+   "scene": "Tails",
+   "en": "The law of large numbers says an average settles. Learning from data needs more: how often is it still far off? A million runs of a hundred fair flips. <bookmark mark='a'/> The share of heads reaches 0.6 in a fraction 0.028 of them. <bookmark mark='b'/> Here we can count, but a model's test data never shows us this picture. We need a guarantee that holds whatever the distribution, knowing only that each value lies between zero and one.",
+   "zh": "大数定律说，平均值会稳定下来。从数据中学习需要更多：它有多大可能仍然偏得很远？100次均匀抛掷，重复100万组。<bookmark mark='a'/>正面比例达到0.6的，占其中的0.028。<bookmark mark='b'/>这里我们可以直接数，但模型的测试数据从不给我们看这张图。我们需要一个不管分布是什么都成立的保证，只知道每个值都在0和1之间。"
+  },
+  "114a1b524a14": {
+   "scene": "Tails",
+   "en": "Each bound comes from the one before. <bookmark mark='a'/> Markov's: a quantity that is never negative can't often be much bigger than its average. <bookmark mark='b'/> Apply it to the squared distance from the mean: Chebyshev's, the variance over epsilon squared, and an average of n has n times less variance. <bookmark mark='c'/> Chernoff's idea: apply Markov to e to the t times the sum; independence splits it into a product, and the tail falls exponentially in n. <bookmark mark='d'/> For values between zero and one, Hoeffding's lemma bounds each factor, <bookmark mark='e'/> and the best t gives e to the minus two n epsilon squared: Hoeffding's inequality, from 1963.",
+   "zh": "每个界都来自前一个。<bookmark mark='a'/>马尔可夫不等式：一个永远不为负的量，不可能经常远大于它的平均值。<bookmark mark='b'/>把它用在到均值的距离的平方上：切比雪夫不等式，方差除以ε的平方，而n个数的平均，方差小n倍。<bookmark mark='c'/>切尔诺夫的想法：把马尔可夫不等式用在e的t乘以和次方上；独立性把它拆成乘积，尾部就随n指数下降。<bookmark mark='d'/>对0到1之间的值，霍夫丁引理给每个因子一个上界，<bookmark mark='e'/>取最好的t，就得到e的负2nε平方次方：霍夫丁不等式，1963年。"
+  },
+  "f6de6f2e641c": {
+   "scene": "Tails",
+   "en": "Now put them against the truth, on a log scale. The exact tail, and a million simulated runs on top of it. <bookmark mark='a'/> Markov's bound hardly falls at all; at epsilon of 0.1 it allows 0.83. <bookmark mark='b'/> Chebyshev's falls like one over epsilon squared: 0.25. <bookmark mark='c'/> Chernoff's and Hoeffding's fall exponentially, and nearly coincide here: 0.134 and 0.135. Each bound is tighter than the one before, and all of them are loose. Hoeffding's is still 5 times the true 0.028: the price of knowing nothing about the shape.",
+   "zh": "现在把它们和真实值放在一起，用对数刻度。精确的尾部概率，和叠在上面的100万次模拟。<bookmark mark='a'/>马尔可夫的界几乎不下降；在ε等于0.1时，它允许0.83。<bookmark mark='b'/>切比雪夫的界像ε的平方分之一那样下降：0.25。<bookmark mark='c'/>切尔诺夫和霍夫丁的界指数下降，在这里几乎重合：0.134和0.135。每个界都比前一个更紧，但全都很松。霍夫丁的界仍是真实值0.028的5倍：这是对形状一无所知的代价。"
+  },
+  "96fb5a513af7": {
+   "scene": "Tails",
+   "en": "Turn it around. How many flips guarantee that the share overshoots by 0.05 at most 5 percent of the time? <bookmark mark='a'/> Chebyshev's bound asks for 2,000; Hoeffding's, 600; Chernoff's, 599. <bookmark mark='b'/> For fair coins the truth is 281: the best bound asks for 2.1 times as many, the price of holding for every distribution. <bookmark mark='c'/> Part eight uses exactly this to bound a model's true error from its test score, and part twenty-six used Hoeffding's bound to explore.",
+   "zh": "反过来问。要抛多少次，才能保证正面比例超出0.05的情况，最多占5%？<bookmark mark='a'/>切比雪夫的界要求2000次；霍夫丁的，600次；切尔诺夫的，599次。<bookmark mark='b'/>对均匀硬币，真实答案是281次：最好的界要求的次数是它的2.1倍，这是对所有分布都成立的代价。<bookmark mark='c'/>第8部分正是用它，从测试分数推出模型真实误差的界；第26部分用霍夫丁的界来探索。"
+  },
+  "04ec426af63f": {
    "scene": "Sampling",
-   "en": "Chapter four. Rolling loaded dice.",
-   "zh": "第4章。掷灌铅的骰子。"
+   "en": "Chapter eight. Rolling loaded dice.",
+   "zh": "第8章。掷灌铅的骰子。"
   },
-  "6986c22dfd82": {
+  "c6c6711f2dcc": {
    "scene": "Sampling",
-   "en": "A model never hands us a letter or a word. It hands us a distribution, and to write anything we have to roll the dice. <bookmark mark='a'/> Here's how a computer rolls loaded dice. Lay the probabilities end to end, from zero to one, so each letter owns a stretch exactly as long as its probability. <bookmark mark='b'/> Pick a uniformly random point, and take the letter it lands in. Each letter wins exactly as often as its probability says. <bookmark mark='c'/> These letters are drawn from part one's letter frequencies.",
-   "zh": "模型从来不会直接交给我们一个字母或一个词。它交给我们的是一个分布，要写出任何东西，我们都得掷骰子。<bookmark mark='a'/>计算机是这样掷灌铅骰子的。把各个概率首尾相接，从0排到1，让每个字母占据一段，长度正好等于它的概率。<bookmark mark='b'/>均匀随机地取一个点，看它落在哪个字母那一段里。每个字母被选中的频率，正好等于它的概率。<bookmark mark='c'/>这些字母，是按第1部分的字母频率抽出来的。"
+   "en": "A model never hands us a word, only a distribution, and to write anything we must roll loaded dice. <bookmark mark='a'/> Lay the probabilities end to end from zero to one, so each letter owns a stretch as long as its probability. <bookmark mark='b'/> Pick a uniform random point and take the letter it lands in: the inverse of the cumulative distribution. <bookmark mark='c'/> These are drawn from part one's letter frequencies.",
+   "zh": "模型从不直接给我们一个词，只给一个分布；要写出任何东西，都得掷一颗灌了铅的骰子。<bookmark mark='a'/>把概率从0到1首尾相接排开，每个字母占据的长度正好等于它的概率。<bookmark mark='b'/>随机均匀地选一个点，取它落在的那个字母：这就是累积分布函数的逆。<bookmark mark='c'/>这些字母是按第1部分的字母频率抽出来的。"
   },
-  "d92dd8e9d92b": {
+  "6693c30d1ead": {
    "scene": "Sampling",
-   "en": "Language models do the same with words, with one dial added. <bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, and. Its favourite, I, gets only four percent; the other fifty thousand words share the rest. <bookmark mark='b'/> The dial is the temperature: divide the scores by T before the softmax, the exponentiate-and-rescale of part one.",
-   "zh": "语言模型对词也做同样的事，只是多了一个旋钮。<bookmark mark='a'/>这是GPT-2给出的下一个词的分布，前文是：“斯佩德在扶手椅上坐下，然后”。它最看好的词是I，也就是“我”，却只得到4%；其余大约5万个词，分掉剩下的部分。<bookmark mark='b'/>这个旋钮就是温度：在softmax之前，先把分数除以T；softmax，就是第1部分那个先取指数、再重新缩放的操作。"
+   "en": "The same trick works for continuous distributions. <bookmark mark='a'/> For the exponential, x is minus the log of one minus u: twenty thousand draws match the density, with a largest CDF gap of 0.006. <bookmark mark='b'/> When the inverse is hard to compute, John von Neumann's rejection method of 1951 needs only the density: scatter points uniformly in a box over the curve, and keep the ones under it. <bookmark mark='c'/> The kept points follow the density. The price is waste: 40.3 percent are kept, one over the box's height, as predicted, and in many dimensions that share collapses.",
+   "zh": "同一个技巧也适用于连续分布。<bookmark mark='a'/>对指数分布，x等于负的对数1减u：两万次抽样与密度吻合，累积分布的最大差距是0.006。<bookmark mark='b'/>逆函数难算的时候，约翰·冯·诺依曼1951年的拒绝采样只需要密度：在曲线上方的盒子里均匀地撒点，留下落在曲线下面的。<bookmark mark='c'/>留下的点就服从这个密度。代价是浪费：只留下40.3%，等于盒子高度的倒数，和预测的一样；而在高维中，这个比例会崩塌。"
   },
-  "7f59cb437f95": {
+  "1dc3ad678ec6": {
    "scene": "Sampling",
-   "en": "Turn it down, below one, and the distribution sharpens toward the favourites. <bookmark mark='a'/> Turn it up, and it flattens, until any word at all might come next. <bookmark mark='b'/> The entropy, part one's measure of uncertainty, follows the dial: under five bits at a half, nine at one, thirteen and a half at two.",
-   "zh": "把温度调低，低于1，分布就向那几个热门词收拢。<bookmark mark='a'/>调高，它就变平，直到任何一个词都可能接在后面。<bookmark mark='b'/>熵，也就是第1部分衡量不确定性的那个量，跟着旋钮变化：温度0.5时不到5比特，1时是9比特，2时是13.5比特。"
+   "en": "The bell itself has no simple inverse CDF, but a pair of bells does, in polar coordinates. <bookmark mark='a'/> Two independent bells have a density that depends only on the distance from the centre. <bookmark mark='b'/> So the angle is uniform, and the squared radius, halved, is exponential, which we just learned to draw. <bookmark mark='c'/> Two uniform numbers in, two independent bells out: the Box-Muller transform of 1958.",
+   "zh": "钟形分布本身没有简单的逆累积分布函数，但一对钟形分布有，用极坐标。<bookmark mark='a'/>两个独立的钟形分布，密度只取决于到中心的距离。<bookmark mark='b'/>所以角度是均匀的，而半径的平方的一半服从指数分布，我们刚学会怎么抽它。<bookmark mark='c'/>进去两个均匀随机数，出来两个独立的钟形分布：1958年的博克斯-穆勒变换。"
   },
-  "b5258829e720": {
+  "ae7906598d5b": {
    "scene": "Sampling",
-   "en": "Here's what comes out, twenty-four words at a time. <bookmark mark='a'/> Always taking the favourite is safe and flat. <bookmark mark='b'/> At a half, still sensible. <bookmark mark='c'/> At one, sampling the model's own distribution, it's stranger and more varied. <bookmark mark='d'/> At two, it falls apart. Choosing how to sample is a real design decision, and we'll come back to it.",
-   "zh": "这是生成出来的结果，每次24个词。<bookmark mark='a'/>总是取最热门的词，稳妥，但平淡。<bookmark mark='b'/>温度0.5，仍然通顺。<bookmark mark='c'/>温度1，也就是按模型自己的分布采样，更古怪，也更多样。<bookmark mark='d'/>温度2，就彻底散架了。怎样采样，是一个实实在在的设计决策，我们以后还会回到这个问题。"
+   "en": "One more trick, used constantly in machine learning. To pick option i with the softmax of its score, add independent Gumbel noise to each score, minus the log of minus the log of a uniform number, <bookmark mark='a'/> and take the largest. <bookmark mark='b'/> The winner follows the softmax exactly: the Gumbel is the shape of maxima. <bookmark mark='c'/> Two hundred thousand picks against the softmax: they agree, with a chi-squared of 3.9 on five degrees of freedom, just what chance gives. It needs only the scores, never the normalizer, and turns sampling into maximization.",
+   "zh": "还有一个技巧，机器学习里一直在用。要按分数的softmax挑选选项i，就给每个分数加上独立的冈贝尔噪声，也就是一个均匀随机数取两次负对数，<bookmark mark='a'/>再取最大的那个。<bookmark mark='b'/>胜出者恰好服从softmax：冈贝尔分布就是最大值的形状。<bookmark mark='c'/>20万次挑选与softmax对比：两者吻合，卡方值是3.9，自由度5，正是偶然所给的水平。它只需要分数，从来不需要归一化常数，并把采样变成了取最大值。"
   },
-  "1f75930f8474": {
+  "da857909ebe1": {
+   "scene": "Sampling",
+   "en": "Sampling can't be differentiated: a pick is a pick. In 2017 two groups proposed relaxing it. Replace the argmax by a softmax with a temperature, tau: the Gumbel-softmax. <bookmark mark='a'/> Cold, at a tenth, each draw is nearly a one-hot pick, its largest entry 0.95 on average. <bookmark mark='b'/> At one it is softer, <bookmark mark='c'/> and at five it is a blur, 0.25. The temperature trades faithfulness for smooth gradients; it trained the discrete codes of the first DALL-E.",
+   "zh": "采样没法求导：选了就是选了。2017年，两个团队提出把它放松。把取最大值换成一个带温度τ的softmax：冈贝尔-softmax。<bookmark mark='a'/>冷的时候，τ等于0.1，每次抽样几乎都是独热的选择，最大的那一项平均是0.95。<bookmark mark='b'/>τ等于1时更柔和，<bookmark mark='c'/>τ等于5时一片模糊，0.25。温度用忠实度换来平滑的梯度；第一代DALL-E的离散编码，就是这样训练的。"
+  },
+  "63cbb70734d7": {
+   "scene": "Decoding",
+   "en": "Chapter nine. How a language model chooses.",
+   "zh": "第9章。语言模型怎样选词。"
+  },
+  "292740d065c5": {
+   "scene": "Decoding",
+   "en": "A language model ends every step with a distribution over its vocabulary, and decoding picks from it. <bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, and. Its favourite gets only 4 percent. <bookmark mark='b'/> The first dial is temperature: divide the scores by T before the softmax, the Gibbs distribution of chapter six.",
+   "zh": "语言模型的每一步，都以整个词表上的一个分布结束，解码就是从中挑选。<bookmark mark='a'/>这是GPT-2对一句英文小说开头之后下一个词的分布，那句话是：“斯佩德在扶手椅上坐下，然后”。它最喜欢的词只占4%。<bookmark mark='b'/>第一个旋钮是温度：在softmax之前把分数除以T，这就是第6章的吉布斯分布。"
+  },
+  "55cdb37414e2": {
+   "scene": "Decoding",
+   "en": "Turn it down, below one, and the distribution sharpens toward the favourites. <bookmark mark='a'/> Turn it up, and it flattens, until any word at all might come next. <bookmark mark='b'/> The entropy follows the dial: 4.7 bits at a half, 9.0 at one, 13.5 at two.",
+   "zh": "把它调低，低于1，分布就向最喜欢的那几个词收紧。<bookmark mark='a'/>调高，它就变平，直到下一个词几乎可以是任何词。<bookmark mark='b'/>熵跟着旋钮变化：T等于0.5时4.7比特，1时9.0，2时13.5。"
+  },
+  "bf52c8f4d9a4": {
+   "scene": "Decoding",
+   "en": "Here's what comes out. <bookmark mark='a'/> Always taking the favourite is safe and flat. <bookmark mark='b'/> At a half, still sensible. <bookmark mark='c'/> At one, sampling the model's own distribution, it's stranger and more varied. <bookmark mark='d'/> At two, it falls apart: the tail of fifty thousand unlikely words, each tiny, together wins too often.",
+   "zh": "看看写出来的东西。<bookmark mark='a'/>永远选最喜欢的词，稳妥但平淡。<bookmark mark='b'/>T等于0.5，仍然通顺。<bookmark mark='c'/>T等于1，按模型自己的分布采样，更怪，也更多样。<bookmark mark='d'/>T等于2，就散架了：那五万个不太可能的词，每个都很小，合起来却太常胜出。"
+  },
+  "b9074a88dbc7": {
+   "scene": "Decoding",
+   "en": "Temperature reshapes the distribution, but the long tail of unlikely words is always there. The other dials cut it off. <bookmark mark='a'/> Two real moments for GPT-2: an open one, where the favourite has 4 percent, and a nearly certain one, where it has 96. <bookmark mark='b'/> Top-k keeps a fixed number of words: too many in the second case, too few in the first. <bookmark mark='c'/> Top-p, nucleus sampling, keeps the fewest words whose probabilities add up to p, so the cut adapts: at nine tenths it keeps 1,210 words in the open case and 1 in the certain one. <bookmark mark='d'/> Min-p keeps every word at least a fraction as likely as the favourite: at a tenth, 40 and 1.",
+   "zh": "温度改变整个分布的形状，但那条由不太可能的词构成的长尾始终都在。其他旋钮把它切掉。<bookmark mark='a'/>GPT-2的两个真实时刻：一个是开放的，最喜欢的词占4%；另一个几乎确定，它占96%。<bookmark mark='b'/>top-k保留固定数目的词：在第二种情况下太多，在第一种情况下太少。<bookmark mark='c'/>top-p，也叫核采样，保留概率加起来达到p的最少的那些词，所以切口会自适应：在p等于0.9时，开放的情况保留1210个词，确定的情况保留1个。<bookmark mark='d'/>min-p保留所有概率至少是最喜欢的词的某个比例的词：比例为0.1时，分别是40个和1个。"
+  },
+  "65fac94de6d9": {
+   "scene": "Decoding",
+   "en": "Which rule writes best? We tested them on the series' own small model, trained on the thirty novels: twelve passages it never saw, eight continuations each, seventeen settings. A larger model, GPT-2, judges each continuation by how surprising it finds it. <bookmark mark='a'/> Every rule trades the same way: settings that write text the judge finds likelier also make the continuations of a passage more alike. <bookmark mark='b'/> At the same diversity, min-p gives the text the judge finds likeliest, 0.900 nats per character, against 0.966 for temperature alone; at the closest pair of settings it wins on 11 of the 12 passages. <bookmark mark='c'/> Greedy decoding is the judge's favourite, and yet 14 percent of its four-word runs repeat, against at most 0.7 percent for any sampled setting: likelihood rewards loops. Human prose sits between: as surprising to the judge as our model's text at a temperature of about 0.6. That is Holtzman's point: good text isn't the likeliest text.",
+   "zh": "哪种规则写得最好？我们在本系列自己的小模型上做了测试，它是用那三十部小说训练的：12段它从没见过的文字，每段续写8次，共17种设置。由一个更大的模型GPT-2来评判，看它对每段续写有多意外。<bookmark mark='a'/>每种规则都在做同样的交换：让评判者觉得更可能的设置，也让同一段的各个续写更加相似。<bookmark mark='b'/>在相同的多样性下，min-p写出的文字，评判者觉得最可能：每字符0.900奈特，而只用温度是0.966；在多样性最接近的一对设置上，它在12段文字中赢了11段。<bookmark mark='c'/>贪心解码是评判者的最爱，然而它的四词片段里有14%是重复的，而任何采样设置至多只有0.7%：只看似然，就会奖励兜圈子。人写的文字处在中间：评判者对它的意外程度，相当于我们的模型在温度约为0.6时写的文字。这正是霍尔茨曼的观点：好的文字，并不是最可能的文字。"
+  },
+  "153a495ce9b8": {
+   "scene": "Decoding",
+   "en": "Here is one passage, continued four ways. <bookmark mark='a'/> Greedy decoding circles back on itself, again and again. <bookmark mark='b'/> Pure sampling wanders off. <bookmark mark='c'/> The truncation rules stay in between. Min-p, proposed in 2024 to allow higher temperatures, was challenged by a 2025 re-analysis that found its evidence weaker than reported. Part nineteen adds the other half of decoding: constraining what may be written at all.",
+   "zh": "这是其中一段，用四种方式续写。<bookmark mark='a'/>贪心解码一次又一次地兜回原处。<bookmark mark='b'/>纯采样会跑题。<bookmark mark='c'/>截断规则介于两者之间。min-p在2024年被提出，是为了能安全地用更高的温度；2025年的一项重新分析对它提出质疑，认为证据比报告的要弱。第19部分会补上解码的另一半：限制哪些内容根本可以写出来。"
+  },
+  "c8e422e1065f": {
    "scene": "Markov",
-   "en": "Chapter five. Markov chains.",
-   "zh": "第5章。马尔可夫链。"
+   "en": "Chapter ten. Markov chains.",
+   "zh": "第10章。马尔可夫链。"
   },
-  "305ca0001194": {
+  "928c225eabd5": {
    "scene": "Markov",
-   "en": "A Markov chain is randomness with a short memory: what comes next depends only on where you are now. <bookmark mark='a'/> Here's one built from part one's letters, with just three states: a space, a vowel, or a consonant. The arrows carry the chances of what comes next. After a vowel, a consonant, seven times in ten. <bookmark mark='b'/> Follow one walker as it hops, and count the time it spends in each state.",
-   "zh": "马尔可夫链，是一种记性很短的随机性：接下来发生什么，只取决于你现在在哪里。<bookmark mark='a'/>这是用第1部分的字母搭成的一条链，只有三个状态：空格、元音，或者辅音。箭头上标着接下来各种情况的概率。元音之后，10次里有7次是辅音。<bookmark mark='b'/>跟着一个行走者，看它跳来跳去，数一数它在每个状态上待了多久。"
+   "en": "A Markov chain is randomness with a short memory: what comes next depends only on where you are now. <bookmark mark='a'/> Here's one built from part one's letters, with three states: a space, a vowel, or a consonant. The arrows carry the chances of what comes next: after a vowel, a consonant 71 percent of the time. <bookmark mark='b'/> Follow one walker, and count the time it spends in each state.",
+   "zh": "马尔可夫链，是记性很短的随机：接下来发生什么，只取决于你现在在哪里。<bookmark mark='a'/>这一条是用第1部分的字母造出来的，只有三个状态：空格、元音、辅音。箭头上是接下来的概率：元音之后，有71%的时候是辅音。<bookmark mark='b'/>跟着一个行走者，数一数它在每个状态里待了多少时间。"
   },
-  "b59ec342522a": {
+  "f54433cf115a": {
    "scene": "Markov",
-   "en": "Keep going, and the shares settle: about nineteen percent spaces, thirty-one percent vowels, and fifty percent consonants, the same shares as in the books. <bookmark mark='a'/> Markov did exactly this by hand in 1913, with the vowels and consonants of twenty thousand letters of Pushkin.",
-   "zh": "一直走下去，这些比例就稳定下来：大约19%是空格，31%是元音，50%是辅音，和书里的比例一样。<bookmark mark='a'/>1913年，马尔可夫正是靠手算做了这件事，用的是普希金《叶甫盖尼·奥涅金》里2万个字母的元音和辅音。"
+   "en": "Keep going, and the shares settle: 19 percent spaces, 31 percent vowels, 50 percent consonants, as in the books. <bookmark mark='a'/> Markov did exactly this by hand in 1913, with twenty thousand letters of Pushkin.",
+   "zh": "继续走下去，比例就稳定了：19%是空格，31%是元音，50%是辅音，和书里一样。<bookmark mark='a'/>1913年，马尔可夫正是这样手工做的，用的是普希金的两万个字母。"
   },
   "9fa629bed3cd": {
    "scene": "Markov",
    "en": "Follow the whole distribution instead of a single walker, and each step is a multiplication by the table of chances, the transition matrix. <bookmark mark='a'/> The distribution that a step leaves unchanged is the chain's stationary distribution. It's an eigenvector of the matrix, with eigenvalue one, straight out of part three.",
    "zh": "不跟单个行走者，而是跟踪整个分布，那么每走一步，就是乘一次那张概率表，也就是转移矩阵。<bookmark mark='a'/>走一步之后保持不变的那个分布，就是这条链的平稳分布。它是这个矩阵的一个特征向量，特征值为1，直接来自第3部分。"
   },
-  "0c8cf91b203e": {
+  "f9bfd691425c": {
    "scene": "Markov",
-   "en": "Now all twenty-seven letters, with part one's full table. Start from certainty: the letter q. <bookmark mark='a'/> One step later, it's almost surely a u. <bookmark mark='b'/> Then the possibilities spread out, <bookmark mark='c'/> and within about five steps the chain has forgotten where it started: what's left is just the letter frequencies. <bookmark mark='d'/> How fast it forgets is set by the matrix's second-largest eigenvalue, about 0.3 here: each step shrinks the distance that's left by roughly that factor.",
-   "zh": "现在换成全部27个字母，用第1部分的完整表格。从确定无疑开始：字母q。<bookmark mark='a'/>一步之后，几乎肯定是u。<bookmark mark='b'/>然后各种可能散开，<bookmark mark='c'/>大约5步之内，这条链就忘了自己从哪里出发：剩下的只是字母频率。<bookmark mark='d'/>它忘得有多快，由矩阵第二大的特征值决定，这里大约是0.3：每走一步，剩下的差距大约就乘以这个数。"
+   "en": "Now all twenty-seven letters, with part one's full table. Start from certainty: the letter q. <bookmark mark='a'/> One step later, it's almost surely a u. <bookmark mark='b'/> Then the possibilities spread out, <bookmark mark='c'/> and within 5 steps the chain has forgotten where it started: what's left is the letter frequencies. <bookmark mark='d'/> How fast it forgets is set by the matrix's second-largest eigenvalue, 0.30 here: each step shrinks the distance left by roughly that factor.",
+   "zh": "现在是全部27个字母，用第1部分的完整表格。从确定的状态出发：字母q。<bookmark mark='a'/>一步之后，几乎肯定是u。<bookmark mark='b'/>然后可能性逐渐散开，<bookmark mark='c'/>5步之内，这条链就忘了自己从哪里出发：剩下的只是字母频率。<bookmark mark='d'/>它忘得有多快，由矩阵第二大的特征值决定，这里是0.30：每走一步，剩下的距离大约缩小到这个倍数。"
   },
-  "dcd3b835bc08": {
-   "scene": "MonteCarlo",
-   "en": "Chapter six. Monte Carlo.",
-   "zh": "第6章。蒙特卡洛。"
+  "df9efb9c0b31": {
+   "scene": "Markov",
+   "en": "There is an easy way to know a distribution is stationary. <bookmark mark='a'/> Suppose that, in it, as much probability flows from i to j in one step as from j to i: detailed balance. <bookmark mark='b'/> Sum over i, <bookmark mark='c'/> and pi times P is pi: balanced flows mean nothing changes. <bookmark mark='d'/> It's enough, not necessary. English isn't balanced: e then space is 10 times as common as space then e. <bookmark mark='e'/> Words end in e far more often than they start with it. But when we build chains to sample, in chapter thirteen, detailed balance is how we make them land where we want.",
+   "zh": "有个简单的办法，判断一个分布是不是平稳的。<bookmark mark='a'/>假设在它之下，一步之内从i流向j的概率，和从j流向i的一样多：这叫细致平衡。<bookmark mark='b'/>对i求和，<bookmark mark='c'/>π乘以P就等于π：流量平衡，就什么都不变。<bookmark mark='d'/>这是充分条件，不是必要条件。英语就不平衡：e之后接空格，比空格之后接e常见10倍。<bookmark mark='e'/>以e结尾的单词，远比以e开头的多。但当我们在第13章构造用来采样的链时，细致平衡就是让它们落到目标分布上的办法。"
   },
-  "309e315ff88a": {
+  "e09ec47c6d4a": {
+   "scene": "Markov",
+   "en": "One minus the second eigenvalue is the spectral gap, and a chain with a bottleneck has a tiny one. <bookmark mark='a'/> Here is a walk on forty-one sites, aimed at a distribution with two wells and a barrier between them, starting at the left end. <bookmark mark='b'/> The left well fills within a few hundred steps, <bookmark mark='c'/> but after 300,000 steps the right well is still filling. <bookmark mark='d'/> Raise the barrier and the gap shrinks. Against one over the gap, the steps to mix rise along a line of slope 0.98, from 638 to 26,284,798, between the theory's two bounds. Stuck chains are the central difficulty of chapter thirteen.",
+   "zh": "1减去第二个特征值，就是谱间隙；有瓶颈的链，谱间隙很小。<bookmark mark='a'/>这是41个格点上的游走，目标分布有两个势阱，中间隔着一道势垒，从最左端出发。<bookmark mark='b'/>左边的势阱几百步之内就填满了，<bookmark mark='c'/>但走了300000步之后，右边的势阱还在慢慢填。<bookmark mark='d'/>把势垒升高，谱间隙就缩小。以谱间隙的倒数为横轴，混合所需的步数沿着一条斜率为0.98的直线上升，从638到26284798，落在理论给出的两个界之间。卡住的链，是第13章的核心难题。"
+  },
+  "7f4efbeeb863": {
    "scene": "MonteCarlo",
-   "en": "Here's a strange way to compute pi. Throw darts at a square, completely at random. <bookmark mark='a'/> The share that lands inside the circle is the circle's share of the square's area: pi over four. So four times the fraction inside estimates pi. <bookmark mark='b'/> Watch the estimate as the darts pile up. It lurches around, then homes in.",
-   "zh": "有一种计算圆周率π的奇怪方法。往一个正方形里扔飞镖，完全随机地扔。<bookmark mark='a'/>落在圆内的比例，就是圆占正方形面积的比例：4分之π。所以，把圆内的比例乘以4，就是对π的估计。<bookmark mark='b'/>随着飞镖越积越多，看看这个估计值。它先是东摇西晃，然后渐渐逼近。"
+   "en": "Chapter eleven. Monte Carlo.",
+   "zh": "第11章。蒙特卡洛。"
+  },
+  "2181dd13c1ef": {
+   "scene": "MonteCarlo",
+   "en": "The method was born at Los Alamos. <bookmark mark='a'/> In 1946 the mathematician Stanislaw Ulam, recovering from an illness, wondered how often solitaire comes out, and saw it was easier to play a hundred games and count. <bookmark mark='b'/> John von Neumann turned the idea into a way to follow neutrons through a bomb core, <bookmark mark='c'/> and in 1948 Klara von Neumann and Nicholas Metropolis ran it on ENIAC. Metropolis named it after the casino.",
+   "zh": "这个方法诞生在洛斯阿拉莫斯。<bookmark mark='a'/>1946年，数学家斯坦尼斯瓦夫·乌拉姆在病后休养时，想知道单人纸牌有多大概率能玩通，他发现玩上一百局数一数，比去计算容易。<bookmark mark='b'/>约翰·冯·诺依曼把这个想法变成了追踪中子穿过炸弹核心的方法，<bookmark mark='c'/>1948年，克拉拉·冯·诺依曼和尼古拉斯·梅特罗波利斯在ENIAC上运行了它。梅特罗波利斯用那座赌场的名字给它命名。"
+  },
+  "3491eb32434e": {
+   "scene": "MonteCarlo",
+   "en": "Here's a strange way to compute pi: throw darts at a square, completely at random. <bookmark mark='a'/> The share inside the circle is the circle's share of the area, pi over four, so four times that share estimates pi. <bookmark mark='b'/> Watch it as the darts pile up: it lurches, then homes in.",
+   "zh": "这是一种计算π的怪办法：完全随机地往一个正方形里扔飞镖。<bookmark mark='a'/>落在圆内的比例，就是圆占的面积比例，π除以4，所以这个比例的4倍就是π的估计。<bookmark mark='b'/>看着飞镖越积越多：它先是乱跳，然后逐渐逼近。"
   },
   "1873cd208dc7": {
    "scene": "MonteCarlo",
    "en": "After four thousand darts: 3.158. <bookmark mark='a'/> The shaded band is how far off a run like this typically is, and it narrows like one over the square root of the number of darts.",
-   "zh": "扔了4000支飞镖之后：3.158。<bookmark mark='a'/>阴影带表示这样一次实验通常会偏差多少，它与飞镖数的平方根成反比地收窄。"
+   "zh": "扔了4000支飞镖之后：3.158。<bookmark mark='a'/>阴影带表示这样一次实验通常会偏多远，它随飞镖数的平方根分之一而收窄。"
   },
-  "498dd73cd765": {
+  "695ae04ed39d": {
    "scene": "MonteCarlo",
-   "en": "Repeat the experiment many times at each size, and measure the typical error. On log scales, where each tick is ten times the last, it falls on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the square root of the number of samples: every extra digit of accuracy costs a hundred times more samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random samples works the same in a million dimensions, where any grid would be hopeless. That's why Monte Carlo, named by Ulam and Metropolis after the casino, is everywhere in machine learning.",
-   "zh": "在每种规模下把实验重复很多次，测出典型误差。在对数刻度上，每一格都是前一格的10倍，这些误差落在一条斜率为负二分之一的直线上。<bookmark mark='a'/>误差与样本数的平方根成反比：精度每多一位数字，就要多花100倍的样本。<bookmark mark='b'/>这很慢。但这个速度与维数无关：对随机样本求平均，在100万维里也一样管用，而在那里，任何网格都毫无希望。正因为这样，蒙特卡洛方法在机器学习里无处不在；这个名字，是乌拉姆和梅特罗波利斯借那座赌场起的。"
+   "en": "Repeat the experiment many times at each size and measure the typical error. On log scales it falls on a line of slope -0.50. <bookmark mark='a'/> The error shrinks like one over the square root of the number of samples: each extra digit costs a hundred times more. <bookmark mark='b'/> That's slow, but the rate doesn't care about dimension: it is the same in a million dimensions, where any grid would be hopeless.",
+   "zh": "在每个规模上把实验重复很多次，量出典型的误差。在对数刻度上，它落在一条斜率为-0.50的直线上。<bookmark mark='a'/>误差随样本数的平方根分之一缩小：每多一位精度，就要多一百倍的样本。<bookmark mark='b'/>这很慢，但这个速度与维度无关：在一百万维中也一样，而在那里任何网格都毫无希望。"
   },
-  "ec14753f8ace": {
+  "bfdc856bd4d4": {
    "scene": "MonteCarlo",
-   "en": "Monte Carlo has one weakness: rare events. How often does a standard bell curve, the one centred at zero with a width of one, land above four? Exactly, about three times in a hundred thousand. <bookmark mark='a'/> Draw ten thousand samples, and only two land there. The estimate is off by a factor of six.",
-   "zh": "蒙特卡洛有一个弱点：罕见事件。一条标准钟形曲线，也就是中心在0、宽度为1的那条，取值落在4以上的频率有多高？精确地说，大约10万次里有3次。<bookmark mark='a'/>抽1万个样本，只有2个落在那里。估计值差了6倍。"
+   "en": "Monte Carlo has one weakness: rare events. How often does a standard bell land above four? Exactly, about 3.2 times in a hundred thousand. <bookmark mark='a'/> Draw 10,000 samples, and only 2 land there: off by a factor of 6.",
+   "zh": "蒙特卡洛有一个弱点：稀有事件。一个标准钟形分布落在4以上的概率有多大？精确地说，大约十万分之3.2。<bookmark mark='a'/>抽10000个样本，只有2个落在那里：偏差达6倍。"
   },
-  "573d04129617": {
+  "5dcca2bd9c73": {
    "scene": "MonteCarlo",
-   "en": "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a different bell, one that lands out there half the time. <bookmark mark='b'/> Then weight each sample by how much more likely it was under the real distribution than under the one you drew from. <bookmark mark='c'/> Same number of samples, and now the answer is within one percent. This is importance sampling, and it comes back when models learn from samples drawn by an older version of themselves, in reinforcement learning.",
-   "zh": "解决办法是：先作弊，再把作弊纠正回来。<bookmark mark='a'/>换一条钟形曲线来抽样，它有一半的时候落在那一带。<bookmark mark='b'/>然后给每个样本加权：它在真实分布下的可能性，是在你抽样所用的分布下的多少倍。<bookmark mark='c'/>样本数一样，现在的答案误差却在1%以内。这就是重要性采样。在强化学习里，当模型用自己旧版本抽出的样本来学习时，它还会再次出现。"
+   "en": "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a bell that lands out there half the time. <bookmark mark='b'/> Then weight each sample by how much likelier it is under the real distribution than under the one you drew from. <bookmark mark='c'/> Same number of samples, and the answer is within 0.9 percent: importance sampling.",
+   "zh": "解决办法是先作弊，再纠正。<bookmark mark='a'/>从一个有一半时间落在那里的钟形分布中抽样。<bookmark mark='b'/>然后给每个样本加权：它在真实分布下比在你抽样的分布下可能多少倍。<bookmark mark='c'/>样本数相同，答案误差在0.9%以内：这就是重要性采样。"
   },
-  "fd2e1c0e4d54": {
+  "fe0c02c0ccd4": {
+   "scene": "MonteCarlo",
+   "en": "Importance sampling has a weakness of its own: the weights. <bookmark mark='a'/> Count how many samples are really doing the work, the effective sample size. <bookmark mark='b'/> Aim at a bell with a proposal just 25 percent wider. In one dimension, 4,671 of 5,000 samples count; in fifty, 184; in two hundred the measurement says 11, and theory says even that is too hopeful: 0.005. A handful of samples carry all the weight. <bookmark mark='c'/> That is why reinforcement learning clips its importance ratios, in part twenty-six.",
+   "zh": "重要性采样也有自己的弱点：权重。<bookmark mark='a'/>数一数真正起作用的样本有多少，也就是有效样本量。<bookmark mark='b'/>目标是钟形分布，提议分布只宽25%。在一维中，5000个样本里有4671个起作用；50维中，184个；200维中，测量值是11，而理论说连这都太乐观：0.005。少数几个样本承担了全部权重。<bookmark mark='c'/>这就是为什么强化学习要裁剪它的重要性比值，在第26部分。"
+  },
+  "71c55c761e75": {
+   "scene": "ScoreFn",
+   "en": "Chapter twelve. The gradient of an average.",
+   "zh": "第12章。平均值的梯度。"
+  },
+  "c6f897fd80ed": {
+   "scene": "ScoreFn",
+   "en": "Much of machine learning ends with an average over random choices: the expected reward of a policy, the expected score of a sampled answer. <bookmark mark='a'/> We want its gradient, to improve the model. But the thing being averaged may have no slope at all: a reward that switches on and off, a judge who says yes or no. <bookmark mark='b'/> Only the distribution moves smoothly as the parameters change. How do we differentiate through the sampling?",
+   "zh": "机器学习里的许多问题，最后都是对随机选择求平均：策略的期望奖励，采样出来的回答的期望得分。<bookmark mark='a'/>我们想要它的梯度，好改进模型。但被平均的那个东西可能根本没有斜率：一个时开时关的奖励，一个只说是或否的评判者。<bookmark mark='b'/>只有分布会随参数平滑地移动。怎样对采样求导？"
+  },
+  "0274d268b9e1": {
+   "scene": "ScoreFn",
+   "en": "Move the gradient inside the integral: only the density depends on theta. <bookmark mark='a'/> Then the log-derivative trick: the gradient of p is p times the gradient of log p, <bookmark mark='b'/> and the gradient is again an average, of f times the score, which we met in chapter four. Sample, and average. f itself is never differentiated. <bookmark mark='c'/> And since the score averages to zero, any constant b can be subtracted from f without changing the answer: a baseline. Peter Glynn called this the likelihood-ratio method in 1990; Ronald Williams made it a learning rule for neural networks in 1992, REINFORCE.",
+   "zh": "把梯度移进积分里：只有密度依赖于θ。<bookmark mark='a'/>然后用对数导数技巧：p的梯度等于p乘以log p的梯度，<bookmark mark='b'/>于是梯度又成了一个平均：f乘以分数的平均，分数就是第4章里遇到的那个。采样，然后求平均；f本身从来不用求导。<bookmark mark='c'/>又因为分数的平均为零，从f里减去任何常数b都不改变答案：这就是基线。彼得·格林在1990年称之为似然比方法；罗纳德·威廉姆斯在1992年把它变成神经网络的学习规则，REINFORCE。"
+  },
+  "59456fd12d2b": {
+   "scene": "ScoreFn",
+   "en": "The catch is noise. Take a case we can check: the gradient of the average of x squared, for a bell centred at one; the answer is two. <bookmark mark='a'/> The estimator gets it right on average, 1.998 over 400,000 samples, but one sample's estimate has a variance of 30. <bookmark mark='b'/> A baseline cuts that: the best one here, near the average of f, brings it to 14. <bookmark mark='c'/> When f does have a slope, there is a better way: write the sample as mu plus noise and differentiate through it, the reparameterization trick, with variance 4. Variational autoencoders train that way, in part twenty; rewards and judges need the score function.",
+   "zh": "麻烦在于噪声。拿一个能核对的例子：对中心为1的钟形分布，求x平方的平均值的梯度；答案是2。<bookmark mark='a'/>这个估计量平均来说是对的，400000个样本上是1.998，但单个样本的估计方差是30。<bookmark mark='b'/>基线能把它降下来：这里最好的基线，接近f的平均值，把方差降到14。<bookmark mark='c'/>当f确实有斜率时，还有更好的办法：把样本写成μ加噪声，然后穿过它求导，这就是重参数化技巧，方差是4。变分自编码器就是这样训练的，在第20部分；奖励和评判者则需要分数函数。"
+  },
+  "d8689b565d8d": {
+   "scene": "ScoreFn",
+   "en": "The same estimator trains models with no gradient at all. Smooth f by adding noise to the parameters, and its gradient is an average of f at random probes, times the probe: evolution strategies, used by Salimans and colleagues at OpenAI in 2017 to train simulated robots and Atari players. <bookmark mark='a'/> Here it descends a curved valley, sixteen probes a step. <bookmark mark='b'/> The baseline matters: measured at the start, the squared error of one gradient estimate is 399 without it and 15 with it, when the gradient itself is only 29 in size. <bookmark mark='c'/> Without the baseline, 2 of the 8 runs blow up and leave the picture; with it, none do. Reinforcement learning's policy gradients are this estimator, with baselines, in part twenty-six.",
+   "zh": "同一个估计量，还能训练完全没有梯度的模型。给参数加上噪声来平滑f，它的梯度就是f在随机探测点上的值乘以探测方向的平均：这就是进化策略，2017年OpenAI的萨利曼斯和同事用它训练模拟机器人和玩Atari游戏的智能体。<bookmark mark='a'/>这里它沿一道弯曲的山谷下降，每步16个探测点。<bookmark mark='b'/>基线很重要：在起点测量，一次梯度估计的平方误差，没有基线时是399，有基线时是15，而梯度本身的大小只有29。<bookmark mark='c'/>没有基线时，8次运行中有2次发散，飞出了画面；有基线时，一次都没有。强化学习的策略梯度，就是带基线的这个估计量，在第26部分。"
+  },
+  "a9f11743ee39": {
    "scene": "MCMC",
-   "en": "Chapter seven. Markov chain Monte Carlo.",
-   "zh": "第7章。马尔可夫链蒙特卡洛。"
+   "en": "Chapter thirteen. Markov chain Monte Carlo.",
+   "zh": "第13章。马尔可夫链蒙特卡洛。"
   },
-  "e6b94a377cc8": {
+  "e435d357f249": {
    "scene": "MCMC",
-   "en": "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, bright where points crowd together, with two bumps. In 1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio of the heights. Otherwise, stay where you are.",
-   "zh": "蒙特卡洛需要样本。但很多时候，没有直接抽取样本的办法。我们能做的，只是算出每个点有多大可能，而且常常还差着一个未知的常数因子。贝叶斯法则正是这样：难的就是重新缩放那一步。<bookmark mark='a'/>这是平面上的一个密度，点越密集的地方越亮，它有两个鼓包。1953年，在洛斯阿拉莫斯，梅特罗波利斯和他的同事找到了一种办法，能对任何这样的分布采样。做一次随机游走。<bookmark mark='b'/>随机地提议迈一小步。如果是上坡，就迈出去。<bookmark mark='c'/>如果是下坡，就只是有时候迈出去，概率等于两处高度之比。否则，就留在原地。"
+   "en": "Often there's no direct way to draw samples: all we can do is evaluate how likely each point is, and only up to an unknown constant, as with Bayes's rule. <bookmark mark='a'/> Here's a density with two bumps. In 1953 at Los Alamos, Nicholas Metropolis, Arianna and Marshall Rosenbluth, and Augusta and Edward Teller, computing on the MANIAC, found a way to sample anything like it: take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If downhill, take it with probability the ratio of the heights; otherwise stay put.",
+   "zh": "常常没有直接抽样的办法：我们能做的，只是计算每个点有多可能，而且只到一个未知常数为止，就像贝叶斯法则那样。<bookmark mark='a'/>这是一个有两个鼓包的密度。1953年，在洛斯阿拉莫斯，尼古拉斯·梅特罗波利斯、阿丽安娜和马歇尔·罗森布卢斯、奥古斯塔和爱德华·特勒，在MANIAC计算机上找到了从任何这类分布中采样的方法：随机游走。<bookmark mark='b'/>提出一个小的随机步子。往上坡走，就接受。<bookmark mark='c'/>往下坡走，就以两处高度之比为概率接受；否则原地不动。"
   },
-  "7c2841f1dad0": {
+  "68b0f1e09c3a": {
    "scene": "MCMC",
-   "en": "Only the ratio appears, so the unknown constant cancels out. <bookmark mark='a'/> Keep walking. The places the walker visits pile up exactly like the density: it's a Markov chain whose stationary distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends 66 percent of its time there. Markov chain Monte Carlo made Bayesian statistics practical, and it's still how physicists sample molecules.",
-   "zh": "式子里只出现比值，所以那个未知的常数就约掉了。<bookmark mark='a'/>一直走下去。游走者到过的地方，堆积起来恰好就像这个密度：这是一条马尔可夫链，它的平稳分布正是我们想要的那个。<bookmark mark='b'/>左边的鼓包占了三分之二的概率，而游走者有66%的时间待在那里。马尔可夫链蒙特卡洛让贝叶斯统计变得切实可行，物理学家至今仍用它来对分子采样。"
+   "en": "Only the ratio appears, so the unknown constant cancels. <bookmark mark='a'/> Keep walking: the visits pile up like the density, because this Markov chain's stationary distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends 66 percent of its time there. This made Bayesian statistics practical in the 1990s, and physicists still sample molecules this way.",
+   "zh": "只出现比值，所以那个未知常数消掉了。<bookmark mark='a'/>继续走：到访的位置像密度一样堆积起来，因为这条马尔可夫链的平稳分布就是我们想要的那个。<bookmark mark='b'/>左边的鼓包占概率的三分之二，行走者有66%的时间待在那里。它在1990年代让贝叶斯统计变得实用，物理学家至今仍这样对分子采样。"
   },
-  "f01c7c420119": {
+  "c20c27c906d3": {
+   "scene": "MCMC",
+   "en": "Why does it work? Chapter ten's detailed balance. A step from x to y is proposed with probability q, then accepted with probability a. <bookmark mark='a'/> Balance asks that the flows match, <bookmark mark='b'/> which fixes only the ratio of the acceptances. <bookmark mark='c'/> Make the larger one equal to one: W. K. Hastings's rule of 1970, for any proposal. <bookmark mark='d'/> With a symmetric proposal the q's cancel, and it is Metropolis's rule.",
+   "zh": "为什么行得通？第10章的细致平衡。从x到y的一步，以概率q被提出，再以概率a被接受。<bookmark mark='a'/>平衡要求两个方向的流量相等，<bookmark mark='b'/>而这只确定了两个接受概率之比。<bookmark mark='c'/>让较大的那个等于1：这就是黑斯廷斯1970年给出的规则，适用于任何提议分布。<bookmark mark='d'/>提议对称时，q相互抵消，就是梅特罗波利斯的规则。"
+  },
+  "def3ce70b311": {
+   "scene": "MCMC",
+   "en": "There is another way to explore, from physics. In 1908 Paul Langevin wrote a particle's motion in a fluid as a push plus random kicks. <bookmark mark='a'/> Make the push the score, the slope of log p, uphill toward likelier places, and the kicks Brownian; in small steps it is one line of code. <bookmark mark='b'/> Fifteen hundred particles start as noise; above them, their density. <bookmark mark='c'/> It flows onto the two bumps, and its distance from the target falls from 1.19 to 0.23, about as low as smoothing allows. 59 percent are in the left bump, short of its two thirds: some are still on the wrong side of the valley. <bookmark mark='d'/> Its long-run distribution is p itself, as chapter seventeen proves. With mini-batch scores it sampled neural networks' weights in 2011, and with learned scores, the first score-based image models.",
+   "zh": "还有一种探索方式，来自物理学。1908年，保罗·朗之万把流体中粒子的运动写成一股推力加上随机踢动。<bookmark mark='a'/>让推力等于分数，也就是log p的斜率，指向更可能的地方；让踢动是布朗运动；迈小步的话，就是一行代码。<bookmark mark='b'/>1500个粒子从噪声出发；它们上方，是它们的密度。<bookmark mark='c'/>密度流到两个鼓包上，与目标的距离从1.19降到0.23，差不多是平滑所允许的最低值。59%在左边的鼓包里，不到它的三分之二：有些粒子还在山谷的另一边。<bookmark mark='d'/>它的长期分布就是p本身，第17章会证明。用小批量估计分数，它在2011年被用来对神经网络的权重采样；用学出来的分数，它是最早的基于分数的图像模型的采样器。"
+  },
+  "7d2497823627": {
+   "scene": "MCMC",
+   "en": "How well do they mix? Run four samplers for twenty thousand steps each, five times, and follow one coordinate. <bookmark mark='a'/> Plain Metropolis crosses between the bumps about 70 times, with the right spread. Langevin with small steps crosses only 13 times. <bookmark mark='b'/> The big-step Langevin hops between the bumps most, 228 times, but its spread is 0.56 where the truth is 0.35: without a correction, a big step blurs the target. <bookmark mark='c'/> Adding the Metropolis correction removes the bias, 0.34, but its proposals across the valley are mostly refused: 6 hops. Every sampler trades exactness for speed, and two bumps far apart defeat them all; part twenty-one's way out is to sample a blurred version first.",
+   "zh": "它们混合得怎么样？四个采样器，各跑两万步，重复五次，跟踪其中一个坐标。<bookmark mark='a'/>普通的梅特罗波利斯在两个鼓包之间来回大约70次，宽度也对。小步长的朗之万只穿越13次。<bookmark mark='b'/>大步长的朗之万在两个鼓包之间跳得最多，228次，但它的宽度是0.56，而真实值是0.35：不加修正，大步子会把目标抹模糊。<bookmark mark='c'/>加上梅特罗波利斯修正，偏差就消失了，0.34，但它穿过山谷的提议大多被拒绝：只跳了6次。每个采样器都在拿精确换速度，而相距很远的两个鼓包会把它们全都难住；第21部分的出路，是先对一个模糊过的版本采样。"
+  },
+  "0acb98906d9d": {
    "scene": "Brownian",
-   "en": "Chapter eight. Brownian motion.",
-   "zh": "第8章。布朗运动。"
+   "en": "Chapter fourteen. Brownian motion.",
+   "zh": "第14章。布朗运动。"
   },
-  "751ae409a8f5": {
+  "8f2029ad9420": {
    "scene": "Brownian",
-   "en": "In 1827, the botanist Robert Brown watched pollen in water under a microscope, and saw it jiggle, endlessly, for no visible reason. <bookmark mark='a'/> Here's a model: a walk that steps up or down at random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the spread after any time stays the same: the variance, the average squared distance from the start, comes out at exactly t, and the walks settle into a single random object: Brownian motion. It's continuous everywhere, and so jagged it has no slope anywhere.",
-   "zh": "1827年，植物学家罗伯特·布朗在显微镜下观察水中的花粉微粒，看到它们不停地抖动，永不停歇，却看不出任何原因。<bookmark mark='a'/>这是一个模型：随机地向上或向下迈步的游走。走8步。<bookmark mark='b'/>64步，每步更小。1024步，每步还要更小。<bookmark mark='c'/>让每一步的大小与步数的平方根成反比，这样任何时刻的散布程度都保持不变：方差，也就是与起点距离的平方的平均值，正好等于t。这些游走就会收敛成一个单一的随机对象：布朗运动。它处处连续，却又曲折得处处没有斜率。"
+   "en": "In 1827 the botanist Robert Brown watched pollen in water jiggle, endlessly, for no visible reason. <bookmark mark='a'/> A model: a walk that steps up or down at random. Eight steps. <bookmark mark='b'/> Sixty-four smaller ones. A thousand and twenty-four. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so that the variance, the average squared distance from the start, stays exactly t, and the walks settle into one random object: Brownian motion. Louis Bachelier used it for stock prices in 1900, and Norbert Wiener built it rigorously in 1923. It is continuous everywhere, and so jagged it has no slope anywhere.",
+   "zh": "1827年，植物学家罗伯特·布朗看到水中的花粉在不停地抖动，看不出任何原因。<bookmark mark='a'/>一个模型：随机地上下走的游走。8步。<bookmark mark='b'/>64步，每步更小。1024步。<bookmark mark='c'/>让每一步按步数的平方根分之一缩小，这样方差，也就是离起点的距离平方的平均，始终恰好是t，这些游走就收敛成一个随机对象：布朗运动。路易·巴舍利耶在1900年用它描述股价，诺伯特·维纳在1923年严格地构造了它。它处处连续，却又锯齿得处处没有斜率。"
   },
-  "78ee89d0c4d7": {
+  "af17139e82f4": {
    "scene": "Brownian",
-   "en": "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell curve, centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 times the spread, not twice. Randomness spreads slowly. It's the central limit theorem again: the position at time t is a sum of many tiny independent kicks. <bookmark mark='c'/> Measured on twenty thousand paths, the variances, the spreads squared, come out at a quarter, a half, three quarters and one: exactly t.",
-   "zh": "现在画出60条。<bookmark mark='a'/>在任何时刻，它们走到的位置都服从一条钟形曲线，中心在0，散布程度是根号t。<bookmark mark='b'/>时间加倍，散布只变成大约1.4倍，而不是2倍。随机性扩散得很慢。这又是中心极限定理：t时刻的位置，是许多微小而独立的踢动之和。<bookmark mark='c'/>在2万条路径上测量，方差，也就是散布程度的平方，分别是四分之一、二分之一、四分之三和1：正好就是t。"
+   "en": "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell, centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 times the spread, not twice: it's the central limit theorem again, the position being a sum of many tiny kicks. <bookmark mark='c'/> On twenty thousand paths the variances come out at 0.25, 0.49, 0.74 and 0.98: t.",
+   "zh": "现在画60条。<bookmark mark='a'/>在任何时刻，它们走到的位置服从一个钟形分布，中心为零，宽度是t的平方根。<bookmark mark='b'/>时间加倍，宽度大约变成1.4倍，而不是2倍：又是中心极限定理，因为位置是许多微小踢动之和。<bookmark mark='c'/>在两万条路径上，方差分别是0.25、0.49、0.74和0.98：就是t。"
   },
-  "42f9566d6c92": {
+  "5a221e28069e": {
    "scene": "Brownian",
-   "en": "In two dimensions, a cloud of particles released at one point spreads into a widening bell. <bookmark mark='a'/> Follow the density instead of the particles, and it obeys a rule that says exactly how the cloud's shape changes from one moment to the next, an equation with no randomness in it at all: the heat equation. The jiggling of each particle becomes the smooth spreading of the whole. <bookmark mark='b'/> Einstein worked this out in 1905, and used it to argue that molecules are real. A few years later, Jean Perrin measured the jiggling, and counted them.",
-   "zh": "在二维平面上，从一点释放的一团粒子，会扩散成一个越来越宽的钟形。<bookmark mark='a'/>不跟踪粒子，而是跟踪密度，它服从一条规律，精确地说明这团粒子的形状从这一刻到下一刻怎样变化；这是一个完全没有随机性的方程：热方程。每个粒子的抖动，变成了整体的平滑扩散。<bookmark mark='b'/>1905年，爱因斯坦算出了这一点，并用它来论证分子真实存在。几年后，让·佩兰测量了这种抖动，数出了分子的数目。"
+   "en": "Brownian paths have one more property that changes calculus. Square each tiny step and add the squares. <bookmark mark='a'/> For a smooth curve that sum vanishes as the steps shrink. For Brownian motion it climbs steadily along the line t. <bookmark mark='b'/> Each squared step has mean delta t <bookmark mark='c'/> and variance of order delta t squared, <bookmark mark='d'/> so the sum's mean is t and its spread vanishes. On four hundred paths: 0.99, give or take 0.32, with sixteen steps; 0.999, give or take 0.011, with sixteen thousand. The path's plain length, meanwhile, grows without limit: 102 already. <bookmark mark='e'/> In shorthand, dW squared equals dt: Paul Levy's theorem of 1940, and the rule behind the next chapter.",
+   "zh": "布朗路径还有一个改变微积分的性质。把每一小步平方，再加起来。<bookmark mark='a'/>对光滑曲线，步子越小，这个和越趋于零。对布朗运动，它却沿着直线t稳步上升。<bookmark mark='b'/>每一步的平方，均值是Δt，<bookmark mark='c'/>方差是Δt平方的量级，<bookmark mark='d'/>所以总和的均值是t，而离散程度趋于零。在400条路径上：16步时是0.99，上下浮动0.32；1.6万步时是0.999，上下浮动0.011。与此同时，路径本身的长度却无限增长：已经是102。<bookmark mark='e'/>简写就是：dW的平方等于dt。这是保罗·莱维1940年的定理，也是下一章的规则。"
   },
-  "f808bb3b6ab2": {
+  "abc64fa816a8": {
+   "scene": "Brownian",
+   "en": "In two dimensions, a cloud released at one point spreads into a widening bell. <bookmark mark='a'/> Follow the density instead of the particles, and it obeys an equation with no randomness in it at all: the heat equation. <bookmark mark='b'/> Einstein worked this out in 1905 and used it to argue that molecules are real; a few years later Jean Perrin measured the jiggling, and counted them.",
+   "zh": "在二维中，从一点释放的一团粒子，散开成一个越来越宽的钟形。<bookmark mark='a'/>不跟踪粒子，而是跟踪密度，它服从一个完全没有随机性的方程：热方程。<bookmark mark='b'/>爱因斯坦在1905年得出了这一点，并用它论证分子是真实存在的；几年后，让·佩兰测量了这种抖动，数出了分子。"
+  },
+  "84516935c9f5": {
+   "scene": "Ito",
+   "en": "Chapter fifteen. Ito's lemma.",
+   "zh": "第15章。伊藤引理。"
+  },
+  "9ea5afe938fb": {
+   "scene": "Ito",
+   "en": "Ordinary calculus says the integral of W d W is one half W squared. For Brownian motion, it depends on where in each little step you evaluate W. <bookmark mark='a'/> Take the left point, the value before the step. A little algebra splits the sum in two. <bookmark mark='b'/> The first part telescopes to one half W squared. <bookmark mark='c'/> The second is half the sum of squared steps, which chapter fourteen showed is t, not zero. So the left-point integral is one half W squared minus one half. <bookmark mark='d'/> Over 2,000 paths the left-point sums close in on it as the steps shrink, and the midpoints give one half W squared exactly: their averages are 0.01 and 0.51. The choice of point matters, which never happens for smooth curves.",
+   "zh": "普通微积分说，W dW的积分是W平方的一半。对布朗运动，这取决于在每一小步的哪个位置取W的值。<bookmark mark='a'/>取左端点，也就是这一步之前的值。一点代数就把和拆成两部分。<bookmark mark='b'/>第一部分逐项相消，剩下W平方的一半。<bookmark mark='c'/>第二部分是平方步长之和的一半，第14章已经证明它等于t，而不是零。所以取左端点的积分，是W平方的一半减去二分之一。<bookmark mark='d'/>在2000条路径上，随着步子变小，左端点的和向它收拢，而取中点的和恰好给出W平方的一半：两者的平均分别是0.01和0.51。取哪个点很重要，而对光滑曲线，这种事从不发生。"
+  },
+  "9f248cb40be1": {
+   "scene": "Ito",
+   "en": "The same thing changes the chain rule. Expand a function of W to second order. <bookmark mark='a'/> In ordinary calculus the squared term is negligible. Here dW squared is dt, the same size as everything else we keep: <bookmark mark='b'/> the chain rule gains a term, one half f double prime dt. That is Ito's lemma, <bookmark mark='c'/> and for any process with drift mu and noise sigma it reads like this. <bookmark mark='d'/> Check it on e to the W, path by path. With the extra term the gap closes as the steps shrink, at a slope of -0.56; without it, it stalls at about 0.79. And on average, e to the W at time one is 1.649, not one: the square root of e, 1.649, as the extra drift predicts.",
+   "zh": "同样的事改变了链式法则。把W的一个函数展开到二阶。<bookmark mark='a'/>在普通微积分里，平方项可以忽略。这里dW的平方等于dt，和我们保留的其他项一样大：<bookmark mark='b'/>链式法则多出一项，二分之一f的二阶导数乘dt。这就是伊藤引理，<bookmark mark='c'/>对任何漂移为μ、噪声为σ的过程，它的形式是这样的。<bookmark mark='d'/>在e的W次方上逐条路径地检验。有了这一项，差距随着步子变小而缩小，斜率是-0.56；没有它，差距停在大约0.79。平均来说，时刻1的e的W次方是1.649，而不是1：正是e的平方根1.649，和多出来的漂移预测的一样。"
+  },
+  "920348c05f9d": {
+   "scene": "Ito",
+   "en": "This calculus has a dramatic history. <bookmark mark='a'/> In 1940, Wolfgang Doeblin, a young mathematician serving in the French army, mailed the Academy of Sciences a sealed envelope; he died that June, and when it was opened in 2000 it held a version of the same formula. <bookmark mark='b'/> Kiyosi Ito published the stochastic integral in 1944 and the formula in 1951. <bookmark mark='c'/> Black, Scholes and Merton priced options with it in 1973, and it is the working tool for running diffusion models in part twenty-one. <bookmark mark='d'/> Midpoints give Stratonovich's integral, with the ordinary chain rule, but they peek at the future; the left point is what a simulation can actually compute.",
+   "zh": "这套微积分有一段充满戏剧性的历史。<bookmark mark='a'/>1940年，在法国军队服役的年轻数学家沃尔夫冈·德布林，给法国科学院寄去一个密封信封；他在那年6月去世，信封在2000年打开时，里面是同一个公式的一个版本。<bookmark mark='b'/>伊藤清在1944年发表了随机积分，1951年发表了这个公式。<bookmark mark='c'/>布莱克、斯科尔斯和默顿在1973年用它给期权定价；它也是第21部分让扩散模型运转的工具。<bookmark mark='d'/>取中点得到斯特拉托诺维奇积分，它保留普通的链式法则，却偷看了未来；左端点才是模拟真正能算出来的。"
+  },
+  "d37483612590": {
    "scene": "SDE",
-   "en": "Chapter nine. Stochastic differential equations.",
-   "zh": "第9章。随机微分方程。"
+   "en": "Chapter sixteen. Stochastic differential equations.",
+   "zh": "第16章。随机微分方程。"
   },
   "de1ec32ac1d9": {
    "scene": "SDE",
    "en": "Brownian motion is pure jiggle. Add a push, and you have a stochastic differential equation. At each instant, the change in x is a push, f of x times dt, where dt is a tiny tick of time, <bookmark mark='a'/> plus a random kick: g times dW, the tiny piece of Brownian motion in that tick. <bookmark mark='b'/> To simulate one, take small steps: push, then kick, with a kick the size of the square root of the step.",
    "zh": "布朗运动是纯粹的抖动。加上一股推力，就得到一个随机微分方程。在每一瞬间，x的变化等于一股推力，f(x)乘以dt，这里dt是极短的一小段时间，<bookmark mark='a'/>再加上一次随机踢动：g乘以dW，也就是这一小段时间里的那一小段布朗运动。<bookmark mark='b'/>要模拟它，就迈小步：先推，再踢，踢动的大小是步长的平方根。"
   },
-  "ed8931d469db": {
+  "9599a426f0de": {
    "scene": "SDE",
-   "en": "The simplest interesting one is a spring pulling back toward zero, plus noise. Forty particles start at 2.5. <bookmark mark='a'/> The push pulls them home, the noise keeps them stirred, <bookmark mark='b'/> and they settle into a bell around zero, its width set by the balance between the two. It's called the Ornstein–Uhlenbeck process, and it's the one diffusion models use.",
-   "zh": "最简单又有意思的一个，是一根把东西拉回0的弹簧，再加上噪声。40个粒子从2.5出发。<bookmark mark='a'/>推力把它们拉回家，噪声让它们不停地翻搅，<bookmark mark='b'/>最后它们稳定成0附近的一个钟形，宽度由两者之间的平衡决定。它叫作奥恩斯坦–乌伦贝克过程，扩散模型用的正是它。"
+   "en": "The simplest interesting one is a spring pulling back toward zero, plus noise. Forty particles start at 2.5. <bookmark mark='a'/> The push pulls them home, the noise keeps them stirred, <bookmark mark='b'/> and they settle into a bell around zero, its width set by the balance between the two. Leonard Ornstein and George Uhlenbeck described it in 1930, and it is the forward process of diffusion models.",
+   "zh": "最简单又有意思的一个，是把粒子拉回零点的弹簧，再加上噪声。40个粒子从2.5出发。<bookmark mark='a'/>推力把它们拉回家，噪声让它们一直搅动，<bookmark mark='b'/>它们最终在零点附近稳定成一个钟形，宽度由两者之间的平衡决定。伦纳德·奥恩斯坦和乔治·乌伦贝克在1930年描述了它，它正是扩散模型的前向过程。"
   },
-  "f6f82646760b": {
+  "9041754362c5": {
    "scene": "SDE",
-   "en": "And again, follow the density instead of the particles. <bookmark mark='a'/> Start with data that has two peaks, and let every point drift toward zero and jiggle, the way the Ornstein–Uhlenbeck process says. <bookmark mark='b'/> Twenty thousand random particles, and the solution of one deterministic equation, the Fokker–Planck equation, a rule that says exactly how the cloud's shape changes next, with no dice involved, move together. <bookmark mark='c'/> Wait long enough, and every trace of the data is gone: what's left is a plain standard bell. That's exactly what a diffusion model does to its training images.",
-   "zh": "同样，不跟踪粒子，而是跟踪密度。<bookmark mark='a'/>从有两个峰的数据出发，让每个点都按奥恩斯坦–乌伦贝克过程说的那样，向0漂移，同时抖动。<bookmark mark='b'/>2万个随机粒子，和一个确定性方程的解，步调一致地移动。这个方程就是福克–普朗克方程，它精确地说明这团粒子的形状接下来怎样变化，完全不用掷骰子。<bookmark mark='c'/>等得足够久，数据的痕迹就全都消失了：剩下的只是一条普通的标准钟形曲线。扩散模型对它的训练图像做的，正是这件事。"
+   "en": "How good is that simple scheme? Test it where the exact answer is known: a quantity that grows by a random percentage each instant, geometric Brownian motion, the model of a stock price. <bookmark mark='a'/> With the same random kicks, coarse steps wander off the exact path, and fine steps follow it. <bookmark mark='b'/> Over 20,000 paths: The path-by-path error shrinks like the square root of the step, slope 0.54: halve the step, and the error falls by only 31 percent. The error in the average shrinks like the step itself, slope 0.95. <bookmark mark='c'/> Gisiro Maruyama proved the scheme converges in 1955. Diffusion models' samplers are, at heart, this scheme run backwards, and part twenty-one spends chapters on doing better with fewer steps.",
+   "zh": "这个简单的格式有多好？在精确答案已知的地方测试它：一个每一瞬间都按随机百分比增长的量，几何布朗运动，也就是股价的模型。<bookmark mark='a'/>用同样的随机踢动，粗步子偏离了精确路径，细步子则紧紧跟随。<bookmark mark='b'/>在20000条路径上：逐条路径的误差，随步长的平方根缩小，斜率0.54：步长减半，误差只降低31%。平均值的误差则随步长本身缩小，斜率0.95。<bookmark mark='c'/>丸山仪四郎在1955年证明了这个格式收敛。扩散模型的采样器，本质上就是把这个格式倒过来运行，第21部分会花好几章讲怎样用更少的步子做得更好。"
   },
-  "f2bb47fc7166": {
-   "scene": "SDE",
-   "en": "Can the film run backwards, from the bell back to the data? In 1982, Brian Anderson showed that reversed in time, it's another stochastic differential equation, with one extra term: <bookmark mark='a'/> the score. Here the word means something new: at each point, an arrow saying which way the data gets more likely, and how strongly. Exactly, it's the slope of the log of the density at that moment. <bookmark mark='b'/> The score points uphill, toward where the data is more likely.",
-   "zh": "这部影片能倒着放吗，从钟形曲线回到数据？1982年，布赖恩·安德森证明了：时间反向之后，它是另一个随机微分方程，只多了一项：<bookmark mark='a'/>分数函数。这个词在这里有了新的含义：在每一点上，都有一个箭头，指出朝哪个方向数据变得更可能，以及这种趋势有多强。精确地说，它是那一刻密度的对数的斜率。<bookmark mark='b'/>分数函数指向上坡，指向数据更可能出现的地方。"
+  "2bcbfaf0d54e": {
+   "scene": "FokkerPlanck",
+   "en": "Chapter seventeen. The Fokker-Planck equation.",
+   "zh": "第17章。福克-普朗克方程。"
+  },
+  "05b3d9d26bc0": {
+   "scene": "FokkerPlanck",
+   "en": "Chapter fourteen found the heat equation for a cloud of pure noise. With a push added, here is the general law, from Ito's lemma. <bookmark mark='a'/> Take any smooth test function phi of a process with drift f and noise g. <bookmark mark='b'/> Average: the random term has mean zero. <bookmark mark='c'/> Write the averages as integrals against the density p. <bookmark mark='d'/> Integrate by parts to move the derivatives from phi onto p. <bookmark mark='e'/> Since this holds for every phi, the integrands agree: the Fokker-Planck equation, a deterministic law for the density. Adriaan Fokker and Max Planck wrote it for molecules; Kolmogorov derived it in general in 1931.",
+   "zh": "第14章为纯噪声的粒子云找到了热方程。加上推力之后，一般的定律是这样的，从伊藤引理出发。<bookmark mark='a'/>取任意一个光滑的检验函数φ，作用在一个漂移为f、噪声为g的过程上。<bookmark mark='b'/>求平均：随机项的均值为零。<bookmark mark='c'/>把平均写成对密度p的积分。<bookmark mark='d'/>分部积分，把导数从φ挪到p上。<bookmark mark='e'/>既然这对每个φ都成立，被积函数就相等：这就是福克-普朗克方程，密度的一条确定性的定律。阿德里安·福克和马克斯·普朗克为分子写下了它；柯尔莫哥洛夫在1931年给出了一般的推导。"
+  },
+  "66e05216e73d": {
+   "scene": "FokkerPlanck",
+   "en": "Check it on the Ornstein-Uhlenbeck process. <bookmark mark='a'/> Start with data that has two peaks, and let every point drift toward zero and jiggle. <bookmark mark='b'/> Twenty thousand particles and the equation solved on a grid move together: the histograms stay within 0.038 of the solution, and the solution within 0.0004 of the exact answer. <bookmark mark='c'/> Wait long enough, and every trace of the data is gone: a plain standard bell. That's what a diffusion model does to its training images.",
+   "zh": "在奥恩斯坦-乌伦贝克过程上检验它。<bookmark mark='a'/>从有两个峰的数据出发，让每个点向零漂移并抖动。<bookmark mark='b'/>两万个粒子，和在网格上解出的方程，一起移动：直方图与解的差距不超过0.038，解与精确答案的差距不超过0.0004。<bookmark mark='c'/>等得足够久，数据的痕迹就全部消失：只剩一个普通的标准钟形曲线。扩散模型对它的训练图像做的，正是这件事。"
+  },
+  "cec2246787d9": {
+   "scene": "FokkerPlanck",
+   "en": "Now the promise from chapter thirteen. Langevin dynamics has drift the score of a target pi, and noise of variance two. <bookmark mark='a'/> Put that into Fokker-Planck. <bookmark mark='b'/> If the density is pi, the drift term gives minus pi double prime, the noise term plus pi double prime, and they cancel: pi never moves. That is why the particles of chapter thirteen settled onto the bumps, and why Langevin dynamics samples anything whose score we know.",
+   "zh": "现在兑现第13章的承诺。朗之万动力学的漂移是目标π的分数，噪声的方差是2。<bookmark mark='a'/>把它代入福克-普朗克方程。<bookmark mark='b'/>如果密度就是π，漂移项给出负的π的二阶导数，噪声项给出正的π的二阶导数，两者抵消：π保持不动。这就是为什么第13章的粒子会落到两个鼓包上，也是为什么只要知道分数，朗之万动力学就能对任何分布采样。"
+  },
+  "296b82696b3e": {
+   "scene": "FokkerPlanck",
+   "en": "Can the film run backwards, from the bell to the data? In 1982 Brian Anderson showed that, reversed in time, it is another stochastic differential equation, with one extra term: <bookmark mark='a'/> the score, the slope of the log of the density at that moment, an arrow saying which way the data gets likelier. <bookmark mark='b'/> It points uphill, toward the data.",
+   "zh": "这部影片能倒着放吗，从钟形曲线回到数据？1982年，布赖恩·安德森证明，时间反转之后，它是另一个随机微分方程，只多了一项：<bookmark mark='a'/>分数，也就是那一刻密度的对数的斜率，一支指向数据更可能之处的箭头。<bookmark mark='b'/>它指向上坡，朝着数据。"
   },
   "92b61c3af6ab": {
-   "scene": "SDE",
+   "scene": "FokkerPlanck",
    "en": "Know the score at every noise level, every point on the slide from data into noise, and you can turn noise into data. <bookmark mark='a'/> It's the field of arrows from the start of this part. <bookmark mark='b'/> There, it was computed exactly from the letters. A diffusion model learns it from millions of images, with a network, and that's part twenty-one.",
    "zh": "知道了每个噪声水平下的分数函数，也就是从数据滑向噪声这一路上的每一点，就能把噪声变成数据。<bookmark mark='a'/>它就是这一部分开头的那片箭头场。<bookmark mark='b'/>在那里，它是直接从那些字母精确算出来的。扩散模型则用一个网络，从数百万张图像中把它学出来，这是第21部分的内容。"
   },
-  "6dc8b1bbf04a": {
+  "0a22547cbd84": {
    "scene": "Outro",
-   "en": "Let's take stock. Many small random pushes add up to a bell. Fitting a model means maximizing likelihood, which is minimizing cross-entropy. Bayes's rule turns evidence into a sharper belief. Sampling turns a distribution into a choice, with temperature as the dial. Markov chains forget where they started, at a rate set by an eigenvalue. Monte Carlo answers questions with random samples, and Metropolis's walk draws them from shapes we can only evaluate. And random motion, run backwards with the score, turns noise into data.",
-   "zh": "我们来盘点一下。许多微小的随机推动，加起来就是一条钟形曲线。拟合一个模型，就是最大化似然，也就是最小化交叉熵。贝叶斯法则把证据变成更集中的信念。采样把一个分布变成一个选择，温度就是那个旋钮。马尔可夫链会忘记自己从哪里出发，忘得多快，由一个特征值决定。蒙特卡洛用随机样本来回答问题，而梅特罗波利斯的游走，能从那些我们只能求值的形状中抽出样本。最后，随机运动借助分数函数倒着运行，就能把噪声变成数据。"
+   "en": "Let's take stock. Sums of many independent pieces become bells, by repeated convolution, with a gap that shrinks like one over the square root of n. Conditioning a bell gives a bell. Maximum likelihood reaches Fisher's bound: for the Cauchy, n times its variance came down to 2.02 against the bound of two. Bayes's rule is counting, and a prior is a regularizer. Maximum entropy gives the exponential family, softmax included. Hoeffding's bound needed 600 flips where 281 sufficed, and held everywhere. Sampling turns uniform numbers into anything; decoding trades diversity for predictability. Chains forget at the rate of their spectral gap; Monte Carlo errors fall like one over root n, and importance weights collapse in high dimensions. Metropolis and Langevin sample shapes we can only evaluate, and random motion has its own calculus, whose density obeys Fokker and Planck's law.",
+   "zh": "来盘点一下。许多独立的小块加起来，经过一次次卷积，就成了钟形曲线，差距像n的平方根分之一那样缩小。对钟形分布做条件化，得到的还是钟形分布。最大似然能达到费希尔的下界：对柯西分布，n乘以它的方差降到了2.02，下界是2。贝叶斯法则就是计数，先验就是正则化。最大熵给出指数族，softmax也在其中。霍夫丁的界要600次抛掷，而281次就已足够，但它处处成立。采样把均匀随机数变成任何分布；解码在多样性和可预测性之间做交换。马尔可夫链按谱间隙的速度遗忘；蒙特卡洛的误差像根号n分之一那样下降，而重要性权重在高维中崩塌。梅特罗波利斯和朗之万能对只能计算的形状采样，而随机运动有它自己的微积分，它的密度服从福克和普朗克的定律。"
   },
-  "111b962ad0f2": {
+  "c048e7999e09": {
    "scene": "Outro",
-   "en": "All of this comes back. Maximum likelihood trains every model from part six on. Bayes and Markov chains return in statistical machine learning, in part seven. Sampling and importance weights come back when models reason and act, in parts nineteen, twenty-eight and twenty-nine. And stochastic differential equations describe both noisy gradient descent, in part eleven, and diffusion models, in part twenty-one.",
-   "zh": "这些都会再次出现。从第6部分起，每一个模型都靠最大似然来训练。贝叶斯和马尔可夫链，会在第7部分的统计机器学习里回归。采样和重要性权重，会在模型推理和行动时再次出现，在第19、第28和第29部分。而随机微分方程，既描述带噪声的梯度下降，在第11部分，也描述扩散模型，在第21部分。"
+   "en": "All of this comes back. Maximum likelihood and Fisher information train the models of parts six and eleven. Bayes, Markov chains and their samplers return in part seven, and the concentration inequalities become generalization bounds in part eight. Decoding is extended in part nineteen. Score-function gradients and importance weights are reinforcement learning, in parts twenty-six and twenty-seven. And stochastic differential equations describe noisy training in part eleven and generation in parts twenty and twenty-one.",
+   "zh": "这一切都会再回来。最大似然和费希尔信息，训练第6部分和第11部分的模型。贝叶斯、马尔可夫链和它们的采样器，在第7部分回来；集中不等式在第8部分变成泛化界。解码在第19部分得到扩展。分数函数梯度和重要性权重就是强化学习，在第26和第27部分。随机微分方程既描述第11部分里带噪声的训练，也描述第20和第21部分的生成。"
   },
-  "cc925828730f": {
+  "725156302bfa": {
    "scene": "Outro",
-   "en": "Next time, act two begins: learning. We start with the classics: least squares and its geometry, logistic regression, kernels and support vector machines, trees and boosting. <bookmark mark='a'/> They ran machine learning before deep learning, and on tables of data they still often win.",
-   "zh": "下一次，第二幕开始：学习。我们从经典方法讲起：最小二乘法及其几何，逻辑回归，核方法与支持向量机，决策树与提升法。<bookmark mark='a'/>在深度学习之前，机器学习靠的就是它们；而在表格数据上，它们至今仍常常胜出。"
+   "en": "Here are six problems to try, from convolutions to the Ornstein-Uhlenbeck process's stationary bell. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题，从卷积一直到奥恩斯坦-乌伦贝克过程的平稳钟形分布。在这里暂停，把它们做一做；完整的解答在本部分的笔记里。"
   },
-  "7393efa9d5f9": {
+  "5be8a1293952": {
    "scene": "Outro",
-   "en": "Blitzstein and Hwang's Introduction to Probability is a friendly place to start, and MacKay's book has the best chapters on Monte Carlo methods. Thanks for watching, and see you in part six.",
-   "zh": "布利茨斯坦与黄的《概率论导论》是一本亲切的入门书，而麦凯的那本书里，有讲蒙特卡洛方法最好的几章。感谢观看，第6部分见。"
+   "en": "Next time, act two begins: learning from data. We start with the classics: least squares and its geometry, which is maximum likelihood under Gaussian noise; logistic regression; kernels and support vector machines; trees and boosting. <bookmark mark='a'/> They ran machine learning before deep learning, and on tables of data they still often win.",
+   "zh": "下一次，第二幕开始：从数据中学习。我们从经典方法讲起：最小二乘法和它的几何，它就是高斯噪声下的最大似然；逻辑回归；核方法和支持向量机；决策树和提升法。<bookmark mark='a'/>在深度学习之前，机器学习靠的就是它们，而在表格数据上，它们至今常常胜出。"
+  },
+  "79d633540a9c": {
+   "scene": "Outro",
+   "en": "Blitzstein and Hwang's Introduction to Probability is a friendly place to start; MacKay's book has the best chapters on Monte Carlo methods, and Levin and Peres's on mixing. Thanks for watching, and see you in part six.",
+   "zh": "布利茨坦和黄的《概率导论》是很友好的入门书；麦凯的书里有讲蒙特卡洛方法最好的几章，莱文和佩雷斯的书则讲混合。感谢观看，第6部分见。"
   }
  },
  "title_en": "AI, Built: Part 5, Randomness in Motion",
  "chapters_en": {
   "Hook": "Out of noise",
   "Bell": "1. The bell curve",
-  "Likelihood": "2. Fitting a bell: maximum likelihood",
-  "Bayes": "3. Belief as a distribution",
-  "Sampling": "4. Rolling loaded dice",
-  "Markov": "5. Chains with short memories",
-  "MonteCarlo": "6. Answers from random samples",
-  "MCMC": "7. Sampling the unsampleable",
-  "Brownian": "8. Brownian motion",
-  "SDE": "9. Randomness with a push",
-  "Outro": "Recap, and where this comes back"
+  "Gauss": "2. Bells in many dimensions",
+  "Likelihood": "3. Fitting a bell: maximum likelihood",
+  "Fisher": "4. How precise can an estimate be?",
+  "Bayes": "5. Belief as a distribution",
+  "MaxEnt": "6. Maximum entropy",
+  "Tails": "7. How far from the average?",
+  "Sampling": "8. Rolling loaded dice",
+  "Decoding": "9. How a language model chooses",
+  "Markov": "10. Chains with short memories",
+  "MonteCarlo": "11. Answers from random samples",
+  "ScoreFn": "12. The gradient of an average",
+  "MCMC": "13. Sampling the unsampleable",
+  "Brownian": "14. Brownian motion",
+  "Ito": "15. Itô's lemma",
+  "SDE": "16. Randomness with a push",
+  "FokkerPlanck": "17. The density's own law",
+  "Outro": "Recap, problems, and what comes next"
  }
 }
