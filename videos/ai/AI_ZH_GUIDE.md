@@ -1349,3 +1349,45 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | natural-language autoencoder | 自然语言自编码器 |
 | weight-sparse transformer, parameter decomposition | 权重稀疏的Transformer，参数分解 |
 | ambitious vs pragmatic interpretability | 雄心派与务实派可解释性 |
+
+### Memory (Part 15)
+
+| English | 中文 |
+|---|---|
+| KV cache; per token, per layer | KV缓存；每个词元，每层 |
+| multi-query attention (MQA), grouped-query attention (GQA) | 多查询注意力（MQA），分组查询注意力（GQA） |
+| multi-head latent attention (MLA); latent; absorption (folding the key matrix into the query) | 多头潜在注意力（MLA）；潜在向量；吸收（把键矩阵并进查询） |
+| decoupled rotary key | 解耦的旋转键 |
+| cache eviction; sliding window; global tokens; random keys | 缓存逐出（挤出）；滑动窗口；全局词元；随机键 |
+| segment-level recurrence (Transformer-XL) | 段级递推（Transformer-XL） |
+| attention sink; StreamingLLM | 注意力汇点；StreamingLLM |
+| heavy hitter (H₂O) | 重量级词元（heavy hitter，H₂O） |
+| linear attention; feature map φ | 线性注意力；特征映射φ |
+| outer product | 外积 |
+| associative memory; correlation matrix memory | 联想记忆；相关矩阵记忆 |
+| Hopfield network; Hebb's rule; energy; capacity | 霍普菲尔德网络；赫布规则；能量；容量 |
+| fast weights; fast weight programmer | 快权重；快权重编程器 |
+| crosstalk | 串扰 |
+| decay; forget gate | 衰减；遗忘门 |
+| delta rule; least mean squares (LMS); online least squares | δ规则；最小均方（LMS）；在线最小二乘 |
+| gated delta rule (Gated DeltaNet); Kimi Delta Attention (KDA) | 门控δ规则（Gated DeltaNet）；Kimi Delta Attention（KDA） |
+| projection; reflection; Householder matrix | 投影；反射；豪斯霍尔德矩阵 |
+| parity; state tracking; finite automaton | 奇偶性；状态追踪；有限自动机 |
+| matrix LSTM (mLSTM, xLSTM); RWKV-7 | 矩阵LSTM（mLSTM，xLSTM）；RWKV-7 |
+| associative scan, parallel prefix scan; up-sweep, down-sweep | 结合律扫描，并行前缀扫描；上扫，下扫 |
+| chunkwise training; WY form; UT transform | 分块训练；WY形式；UT变换 |
+| state-space model (SSM); zero-order hold; bilinear (Tustin) rule; Euler step | 状态空间模型（SSM）；零阶保持；双线性规则；欧拉步 |
+| HiPPO; Legendre polynomials | HiPPO；勒让德多项式 |
+| S4; convolution kernel; Path-X | S4；卷积核；Path-X |
+| selectivity; selective SSM (Mamba); step size Δ | 选择性；选择性状态空间模型（Mamba）；步长Δ |
+| state-space duality (Mamba-2); semiseparable mask | 状态空间对偶（Mamba-2）；半可分掩码 |
+| exponential-trapezoidal discretization; complex state; MIMO (Mamba-3) | 指数梯形离散化；复数状态；多输入多输出（Mamba-3） |
+| test-time training (TTT); surprise; momentum; forgetting gate (Titans) | 测试时训练（TTT）；意外度；动量；遗忘门（Titans） |
+| multi-query associative recall (MQAR) | 多查询联想回忆（MQAR） |
+| hybrid architecture; NoPE (no positional encoding) | 混合架构；NoPE（无位置编码） |
+| needle in a haystack; lost in the middle; RULER; NoLiMa; context rot | 大海捞针；迷失在中间；RULER；NoLiMa；上下文腐烂 |
+| variable tracking; multi-key needle | 变量追踪；多键针 |
+| context engineering; compaction; sub-agent | 上下文工程；压缩（compaction）；子智能体 |
+| dense retrieval (DPR); retrieval-augmented generation (RAG); RETRO | 稠密检索（DPR）；检索增强生成（RAG）；RETRO |
+| kNN-LM; datastore; interpolation weight λ; continuous cache | kNN-LM（k近邻语言模型）；数据存储；插值权重λ；连续缓存 |
+

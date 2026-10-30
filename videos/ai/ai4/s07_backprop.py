@@ -157,6 +157,16 @@ class Backprop(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.35, x=-2.6, buff=0.48, edge=6.9)
         name = label(r"$\delta = \partial \mathcal L / \partial z$: \ the error signal at a layer", font_size=24, color=GRAD)
         name.to_edge(DOWN, buff=0.35)
+        # a small picture of the network: 4 inputs, 5 hidden units, 3 outputs
+        cols_ = [VGroup(*[Dot(radius=0.07, color=c) for _ in range(k)]).arrange(DOWN, buff=0.16)
+                 for k, c in ((4, VALUE), (5, C.MLP), (3, C.PROB))]
+        for j, c_ in enumerate(cols_):
+            c_.move_to([4.6 + 1.0 * j, -2.55, 0])
+        w1 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1, color=GREY_D) for a in cols_[0] for b in cols_[1]])
+        w2 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1, color=GREY_D) for a in cols_[1] for b in cols_[2]])
+        nl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(c_, DOWN, buff=0.12)
+                      for t, c_ in zip((r"x", r"a_1", r"q"), cols_)])
+        netpic = VGroup(w1, w2, *cols_, nl)
         with self.voiceover(
             "Now a real network, in matrices: an input x, a layer with weights W one and a tanh, a second layer, a "
             "softmax and the cross-entropy. Call the gradient with respect to a layer's pre-activation z its delta, "
@@ -168,16 +178,19 @@ class Backprop(VoiceoverScene):
             "<bookmark mark='d'/> And the same rule again: the gradient of W one is delta one times x transposed. "
             "Those four lines are backpropagation, for any depth."
         ) as vo:
-            self.play(FadeIn(net), FadeIn(name))
+            self.play(FadeIn(net), FadeIn(name), FadeIn(netpic))
             step(0)
             vo.wait_until("a")
-            self.play(Indicate(rows[0], color=GRAD, scale_factor=1.05))
+            self.play(Indicate(rows[0], color=GRAD, scale_factor=1.05), cols_[2].animate.set_color(GRAD))
             vo.wait_until("b")
             step(1)
+            self.play(w2.animate.set_color(GRAD), run_time=0.6)
             vo.wait_until("c")
             step(2)
+            self.play(cols_[1].animate.set_color(GRAD), run_time=0.6)
             vo.wait_until("d")
             step(3)
+            self.play(w1.animate.set_color(GRAD), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
 
