@@ -234,12 +234,13 @@ class Unigram(VoiceoverScene):
         sp = label(r"SentencePiece (2018): \ the unigram model or BPE \\ on raw text, \ spaces as a symbol \ ($\_$); \\ "
                    r"used by T5, \ Llama 1 and 2, \ Gemma", font_size=22, color=GREY_A).move_to([3.4, -1.9, 0])
         cpb, cpu = float(u[f"bpe_cpt_passage{V}"]), float(u[f"cpt_passage{V}"])
+        differ = 100 * float(u[f"differ{V}"])
         verdict = ("the unigram model's tokens are a little longer" if cpu > cpb + 0.02 else
                    "BPE's tokens are a little longer" if cpb > cpu + 0.02 else "the two come out almost the same length")
         with self.voiceover(
             f"How different are the two? <bookmark mark='a'/> At {V:,} pieces each, on the scoreboard's passage, "
             f"{verdict}: {cpb:.2f} characters a token for BPE, {cpu:.2f} for the unigram model, and "
-            f"{100 * float(u[f'differ{V}']):.0f} percent of the words are cut differently. <bookmark mark='b'/> The "
+            f"{differ:.0f} percent of the words are cut differently. <bookmark mark='b'/> The "
             "unigram model can also sample cuts instead of taking the best, so a model in training sees the same "
             "word written several ways; Kudo called it subword regularization. <bookmark mark='c'/> His "
             "SentencePiece library runs either method on raw text, with the space as just another symbol, and it "

@@ -302,7 +302,12 @@
   "a model trained in secret to please \\\\ reward models' $52$ known quirks": "一个被秘密训练、\\\\ 去讨好奖励模型 $52$ 个已知怪癖的模型",
   "four blind teams; \\\\ three found the hidden objective": "四个不知情的团队；\\\\ 三个找到了隐藏目标",
   "the one denied training data did not; \\\\ the fastest, \\ with autoencoders, \\ took $90$ minutes": "不让看训练数据的那个团队没找到；\\\\ 最快的一个，\\ 用自编码器，\\ 花了 $90$ 分钟",
-  "solid: \\ held-out novel text; \\ dashed: \\ chat transcripts": "实线：\\ 留出的小说文本；\\ 虚线：\\ 聊天记录"
+  "solid: \\ held-out novel text; \\ dashed: \\ chat transcripts": "实线：\\ 留出的小说文本；\\ 虚线：\\ 聊天记录",
+  "upper \\\\ case": "大写",
+  "capital \\\\ T": "大写的 \\\\ T",
+  "fires, \\ and carries \\\\ the upper-case direction": "亮了，\\ 还带着 \\\\ 大写的方向",
+  "silent": "沉默",
+  "schematic": "示意图"
  },
  "patterns": [
   [

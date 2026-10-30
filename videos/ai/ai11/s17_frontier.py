@@ -16,8 +16,7 @@ class Frontier(VoiceoverScene):
         self.takeaway()
 
     def card(self):
-        c = chapter_card(16, r"The optimizer race, \ 2024 to 2026", r"Did anything beat AdamW at scale?", part=PART,
-                         lit=(2024, 2025, 2026))
+        c = chapter_card(16, r"The optimizer race, \ 2024 to 2026", r"Did anything beat AdamW at scale?", part=PART)
         with self.voiceover("Chapter sixteen. The optimizer race, 2024 to 2026."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
@@ -122,8 +121,9 @@ class Frontier(VoiceoverScene):
                    label(r"Kron (PSGD), \ Sophia, \ Scion, \ \dots", font_size=20, color=GREY_A)),
         )
         for c_ in cols:
-            c_.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        cols.arrange(RIGHT, buff=0.8, aligned_edge=UP).move_to(UP * 0.7)
+            c_.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        cols.arrange(RIGHT, buff=0.7, aligned_edge=UP)
+        cols.scale_to_fit_width(13.0).move_to(UP * 0.6)
         keep_in_frame(cols)
         lesson = label(r"the lesson of the race: \ tune the baseline, \ equal budgets, \ several seeds, \ report the spread",
                        font_size=24, color=C.BITS).to_edge(DOWN, buff=0.6)

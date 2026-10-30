@@ -77,7 +77,7 @@ ZH = {
         "训练从多得多的片段开始：文本里最常见的子串，第一轮之后有{n0:,}个。<bookmark mark='a'/>然后是期望最大化，第7部分的EM：对每个词的每一种切法求和，算出每个片段预计被用到几次，再按比例设定它的概率。<bookmark mark='b'/>接着剪枝：对每个片段，算一算没有它时似然会下降多少，保留最重要的四分之三，以及每一个单字母，然后重复。<bookmark mark='c'/>这是模型自己对小说的度量，以每字符比特数计，随着词表缩小而变化：词表越小，代价越多，从第一轮到{sizes[-1]:,}个片段，一共多了{y[-1] - y[0]:.2f}比特。",
 
     'f"How different are the two?':
-        "两者差别有多大？<bookmark mark='a'/>各用{V:,}个片段，在测试段落上，{verdict}：BPE每个词元{cpb:.2f}个字符，一元模型{cpu:.2f}个，有{100 * float(u[f'differ{V}']):.0f}%的词切法不同。<bookmark mark='b'/>一元模型还可以随机采样切法，而不总取最好的，这样训练中的模型会看到同一个词的好几种写法；工藤拓称之为子词正则化。<bookmark mark='c'/>他的SentencePiece库能在原始文本上运行这两种方法，把空格也当作一个普通符号，T5、前两代Llama和Gemma都用它来切分文本。",
+        "两者差别有多大？<bookmark mark='a'/>各用{V:,}个片段，在测试段落上，{verdict}：BPE每个词元{cpb:.2f}个字符，一元模型{cpu:.2f}个，有{differ:.0f}%的词切法不同。<bookmark mark='b'/>一元模型还可以随机采样切法，而不总取最好的，这样训练中的模型会看到同一个词的好几种写法；工藤拓称之为子词正则化。<bookmark mark='c'/>他的SentencePiece库能在原始文本上运行这两种方法，把空格也当作一个普通符号，T5、前两代Llama和Gemma都用它来切分文本。",
 
     "the unigram model's tokens are a little longer":
         "一元模型的词元稍长一些",
@@ -97,10 +97,7 @@ ZH = {
         "现在来一场公平的比赛。五种分词器：原始字节，以及各用1024个和4096个片段的BPE和一元模型。<bookmark mark='a'/>每一种都用同样的小Transformer，同样的计算预算，各跑三个种子。<bookmark mark='b'/>词表越大，每个词元越贵，因为输出层随词表增大，所以这些模型走的步数更少。但它们的每个词元携带的文本更多：在预算之内，4096个片段的BPE模型读了{cb / 1000000.0:.1f}百万个字符，字节模型读了{cbytes / 1000000.0:.1f}百万个。",
 
     'f"Here they learn, all fifteen runs,':
-        "这是它们学习的过程，全部十五次训练，随着预算的消耗，在留出文本上以每字符比特数衡量。<bookmark mark='a'/>在测试段落上，{LM_SAY[best]}最好，每字符{m[best]:.2f}比特；{LM_SAY[worst]}最差，{m[worst]:.2f}比特；不同种子之间相差从不超过{spread:.2f}。<bookmark mark='b'/>{verdict}",
-
-    "f'{pairs[0]}, and {pairs[1]}.":
-        "{pairs[0]}；{pairs[1]}。",
+        "这是它们学习的过程，全部十五次训练，随着预算的消耗，在留出文本上以每字符比特数衡量。<bookmark mark='a'/>在测试段落上，{LM_SAY[best]}最好，每字符{m[best]:.2f}比特；{LM_SAY[worst]}最差，{m[worst]:.2f}比特；不同种子之间相差从不超过{spread:.2f}。<bookmark mark='b'/>{pairs[0]}；{pairs[1]}。",
 
     'Why does the tokenizer matter at all?':
         "分词器到底为什么重要？<bookmark mark='a'/>词元越大，每一次浮点运算买到的文本越多，同样128个词元的窗口，装下的段落也越多。<bookmark mark='b'/>但词表越大，输出层越大，词元也越罕见，每个在训练中出现的次数越少。<bookmark mark='c'/>在有几十亿参数的模型里，输出层只占代价的一小部分，所以真实的词表有十万个词元甚至更多。<bookmark mark='d'/>这是我们的两个模型在段落开头几个词之后写出的东西，温度0.8。分词器是每个分数背后的一个隐藏选择，而每字符比特数让比较保持诚实。",
