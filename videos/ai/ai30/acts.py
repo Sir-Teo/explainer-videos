@@ -114,9 +114,9 @@ def tf_bits_with(model, c13, X, layer, fn, skip=64, batch=16):
 # ---------------------------------------------------------------------------
 # The novels model (explainer.lm.pocket.PocketGPT)
 # ---------------------------------------------------------------------------
-def nov_resid(model, ids, layers=None):
+def nov_resid(model, ids, logits=False):
     """The residual stream of the novels model on ids (B, T): a list with the embedding (index 0) and the output of
-    every block (1 ... L), and the logits."""
+    every block (1 ... L), and (if asked) the logits."""
     import torch
 
     with torch.no_grad():
@@ -125,7 +125,7 @@ def nov_resid(model, ids, layers=None):
         for b in model.blocks:
             h = b(h)
             out.append(h)
-        z = model.head(model.norm(h))
+        z = model.head(model.norm(h)) if logits else None
     return out, z
 
 

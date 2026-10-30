@@ -388,6 +388,49 @@ STRINGS = {
     r"how this series is narrated \ (tools/tts\_server.py)": r"这个系列是怎样配音的 \ （tools/tts\_server.py）",
     r"Qwen Team, \textit{Qwen3-ASR Technical Report} (2026)": r"Qwen团队，\textit{Qwen3-ASR技术报告}（2026）",
 
+    # ---- bits (chapter 4)
+    r"\frac{\text{total bits}}{\text{total characters}}": r"\frac{\text{总比特数}}{\text{总字符数}}",
+    r"\frac{\text{total bits} / \text{tokens}}{\text{total characters} / \text{tokens}}": r"\frac{\text{总比特数} / \text{词元数}}{\text{总字符数} / \text{词元数}}",
+    r"\frac{\text{bits per token}}{\text{characters per token}}": r"\frac{\text{每词元比特数}}{\text{每词元字符数}}",
+    r"the same surprise, \\ counted per character": r"同样的意外度，\\ 按字符计",
+    r"divide top and bottom \\ by the number of tokens": r"分子分母 \\ 同除以词元数",
+    r"the conversion": r"换算",
+    r"our $4{,}096$-piece BPE model, \\ on the passage (seed $0$)": r"我们的$4{,}096$词元BPE模型，\\ 在测试段落上（种子$0$）",
+    r"bytes: \ $20$ guesses": r"字节：\ 猜$20$次",
+    r"BPE: \ $5$ guesses": r"BPE：\ 猜$5$次",
+    r"the same transformer \ ($3$ layers, \ width $96$, \ $128$ tokens of context) \ and the same budget: \ $4.6 \times 10^{12}$ FLOPs, \ three seeds":
+        r"同样的Transformer \ （$3$层，\ 宽度$96$，\ $128$个词元的上下文）\ 和同样的预算：\ $4.6 \times 10^{12}$次浮点运算，\ 三个种子",
+    r"bytes ($256$) \ writes:": r"字节（$256$）\ 写出：",
+    r"BPE, $4{,}096$ \ writes:": r"BPE，$4{,}096$ \ 写出：",
+    # ---- bytes (chapter 5)
+    r"the series' own model: \ byte-level BPE{,} \ $4{,}096$ tokens; \ $3.23$ characters a token on the passage":
+        r"本系列自己的模型：\ 字节级BPE，\ $4{,}096$个词元；\ 在测试段落上每个词元$3.23$个字符",
+    r"threshold: \ $3.14$ bits": r"阈值：\ $3.14$比特",
+    r"entropy patches: \ $46\%$": r"按熵分块：\ $46\%$",
+    r"BPE tokens: \ $24\%$": r"BPE词元：\ $24\%$",
+    # ---- omni (chapter 16)
+    r"Every sense at once": r"所有感官一起来",
+    r"Can one model see, listen and talk, all at once?": r"一个模型能同时看、听、说吗？",
+    r"speech recognizer": r"语音识别器",
+    r"speech synthesizer": r"语音合成器",
+    r"a cascade: \ each waits for the one before, \ and tone of voice is lost in the text between": r"级联：\ 每一级都要等前一级，\ 语气在中间的文本里丢失了",
+    r"one network: \ sound, \ pictures and text in; \ sound and text out": r"一个网络：\ 输入声音、\ 图片和文本；\ 输出声音和文本",
+    r"GPT-4o (OpenAI, May 2024): \ answers speech in as little as $232$ ms, \ $320$ ms on average": r"GPT-4o（OpenAI，2024年5月）：\ 回应语音最快$232$ ms，\ 平均$320$ ms",
+    r"Moshi's words": r"Moshi的文字",
+    r"Moshi's speech": r"Moshi的语音",
+    r"time $\to$, \ in frames of $80$ ms": r"时间 $\to$，\ 每帧$80$ ms",
+    r"full duplex: \ listening and speaking at once": r"全双工：\ 同时听和说",
+    r"Moshi (Kyutai, September 2024): \ a $7$-billion-parameter text model, \ Mimi's tokens for both streams": r"Moshi（Kyutai，2024年9月）：\ 一个$70$亿参数的文本模型，\ 两条声音流都用Mimi的词元",
+    r"the text runs slightly ahead of its speech: \ an inner monologue": r"文本略微领先于语音：\ 内心独白",
+    r"$160$ ms in theory, \ $200$ ms in practice": r"理论$160$ ms，\ 实际$200$ ms",
+    r"text, \ picture, \ text, \ sound: \ one sequence, \ positions aligned by time": r"文本、\ 图片、\ 文本、\ 声音：\ 一个序列，\ 位置按时间对齐",
+    r"the Talker: \\ writes speech codes": r"说话者：\\ 写出语音编码",
+    r"its words \\ (Qwen2.5-Omni: \ also its \\ hidden states)": r"它的文字 \\ （Qwen2.5-Omni：\ 还有它的 \\ 隐藏状态）",
+    r"Qwen2.5-Omni (March 2025): \ Thinker and Talker; \ time-aligned rotary positions": r"Qwen2.5-Omni（2025年3月）：\ 思考者与说话者；\ 按时间对齐的旋转位置",
+    r"Qwen3-Omni (September 2025): \ both mixtures of experts; \ open weights; \\ first sound in $234$ ms (theory); \ text in $119$ languages, \ speech in $19$, \ out in $10$":
+        r"Qwen3-Omni（2025年9月）：\ 两者都是混合专家；\ 开放权重；\\ 首个声音$234$ ms（理论值）；\ 文本$119$种语言，\ 语音输入$19$种，\ 输出$10$种",
+    r"Qwen3.5-Omni (April 2026): \ hybrid-attention experts; \ over $10$ hours of audio in one context": r"Qwen3.5-Omni（2026年4月）：\ 混合注意力的专家模型；\ 一个上下文可容纳$10$小时以上的音频",
+    r"PersonaPlex (NVIDIA, January 2026): \ full duplex, \ steered by a role and a voice": r"PersonaPlex（NVIDIA，2026年1月）：\ 全双工，\ 由角色和声音来引导",
 }
 
 PATTERNS = [

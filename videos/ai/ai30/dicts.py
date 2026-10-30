@@ -84,7 +84,7 @@ class Dict:
 
 
 def train(X, kind, param, F=512, steps=2000, batch=1024, lr=1e-3, seed=0, Y=None, aux_k=0, prefixes=None,
-          eps=0.05, log_every=50, snap_every=0, dead_window=200):
+          eps=0.05, log_every=50, snap_every=0, dead_window=200, probe=None):
     """Train one dictionary on rows of ``X`` (N, D) (float tensor); with ``Y`` (N, D'), a transcoder or a crosscoder
     that reads X and rebuilds Y (default: Y = X, an autoencoder).  ``param``: lam (l1, jumprelu) or k (topk,
     batchtopk, matryoshka).  Returns the Dict and a record of training (loss, L0 and unexplained variance every
@@ -166,8 +166,20 @@ def train(X, kind, param, F=512, steps=2000, batch=1024, lr=1e-3, seed=0, Y=None
             rec["l0"].append(float((f > 0).float().sum(1).mean()))
             rec["fvu"].append(float(err) / var)
         if snap_every and s % snap_every == 0:
-            rec["snaps"].append(dec.detach().numpy().astype(np.float16))
             rec["snap_steps"].append(s)
+            if probe is not None:  # the code of a few fixed rows, as training goes
+                with torch.no_grad():
+                    zp = ((probe - bd) if auto else probe) @ We + be
+                    if kind == "l1":
+                        fp = torch.relu(zp)
+                    elif kind == "jumprelu":
+                        fp = zp * (zp > log_th.exp())
+                    elif kind == "batchtopk":
+                        fp = torch.relu(zp) * (zp > (thresh_run or 0.0))
+                    else:
+                        vp, ip = torch.topk(zp, int(param), dim=1)
+                        fp = torch.zeros_like(zp).scatter(1, ip, torch.relu(vp))
+                rec["snaps"].append(fp.numpy().astype(np.float16))
         if s == steps:
             break
         opt.zero_grad()

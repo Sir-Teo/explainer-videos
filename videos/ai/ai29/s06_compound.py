@@ -93,8 +93,8 @@ class Compound(VoiceoverScene):
             p = float(a[f"{mode}_p"])
             xx = np.linspace(0, 60, 61)
             lines.add(curve(ax, xx, p ** xx, col, 2).set_stroke(opacity=0.6))
-            keys.add(label(rf"{name}: \ ${100 * p:.1f}\%$ a step", font_size=22, color=col))
-        keys.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.2, 1.2, 0])
+            keys.add(label(rf"{name}: \ ${100 * p:.1f}\%$ a step", font_size=26, color=col))
+        keys.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.0, 1.2, 0])
         r = a["rates"]
         tag = note(rf"simulated, \ ${a['tasks']:,}$ tasks per point: \ in its head, \ a slip ${100 * r['head']:.0f}\%$ of "
                    rf"the time; \ a tool call malformed ${100 * r['malformed']:.0f}\%$ (the tool says so), \ silently wrong "
@@ -136,7 +136,7 @@ class Compound(VoiceoverScene):
         pr, hl = np.asarray(h["p_range"]), np.asarray(h["half_len"])
         err = 1 - pr
         ax = CornerAxes(x_range=[-4, -0.3, 1], y_range=[0, 4, 1], x_length=6.0, y_length=3.8, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([3.3, -0.9, 0])
+                        axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([2.6, -0.2, 0])
         xt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                       for t, v in ((r"0.01\%", -4), (r"0.1\%", -3), (r"1\%", -2), (r"10\%", -1))])
         yt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(-4, v), LEFT, buff=0.1)
@@ -152,7 +152,8 @@ class Compound(VoiceoverScene):
         ]
         whys = [why(r"half the tasks done"), why(r"take logs"), why(r"Taylor series, \ $p$ near $1$"),
                 why(r"halve the error, \ double the horizon")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-3.6, buff=0.4, edge=0.6)
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.8, buff=0.45, edge=6.9)
+        plot = VGroup(ax, xt, yt, xn, yn)
         ex = 0.99
         with self.voiceover(
             "Turn it around: how long a task can an agent finish half the time? <bookmark mark='a'/> Set p to the "
@@ -162,15 +163,22 @@ class Compound(VoiceoverScene):
             f"{math.log(2) / -math.log(ex):.0f} steps. Halve the errors, and the reachable task length doubles. "
             "That is the quantity the next chapter tracks for real models."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             step(0)
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
-            self.play(Create(c), run_time=1.5)
+            self.wait(0.2)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3)
+            # the derivation steps aside; the curve of the result appears beside its formula
+            keep_row = rows[3]
+            self.play(*[FadeOut(m) for m in (*rows[:3], *[w for w in whys[:3] if w is not None])],
+                      keep_row.animate.scale(1.1).move_to([-4.2, 0.4, 0]),
+                      *([whys[3].animate.next_to([-4.2, -0.4, 0], DOWN, buff=0.1).set_x(-4.2)] if whys[3] is not None
+                        else []))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(c), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()

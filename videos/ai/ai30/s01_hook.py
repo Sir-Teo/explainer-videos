@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import FEAT, MONO, RESID, heat_image, load, show, signed_image, vec_bars
+from videos.ai.ai30.common import FEAT, MONO, PART, RESID, heat_image, load, show, signed_image, vec_bars
 
 
 class Hook(VoiceoverScene):
@@ -107,16 +107,31 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(r"Part 30: \ Inside the Model", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"superposition, \ sparse features, \ circuits, \ steering", font_size=30, color=C.BITS)
-        sub.next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=30, done=29).scale(0.85).move_to(DOWN * 0.9)
+        title = label(rf"Part {PART}: \ Inside the Model", font_size=44).to_edge(UP, buff=0.45)
+        obj = objectives_card([
+            r"how we got here: \ saliency maps, \ feature visualization, \ circuits",
+            r"reading it out: \ probes and their controls; \ the logit lens and the tuned lens",
+            r"cause, not correlation: \ patching; \ an induction circuit, \ end to end",
+            r"superposition and its phase diagram; \ sparse autoencoders, \ from L1 to Matryoshka",
+            r"transcoders and attribution graphs; \ model diffing; \ steering",
+            r"grokking, \ mechanistically; \ faithful chains of thought; \ the frontier, \ and its arguments",
+        ], font_size=26)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.4)
         with self.voiceover(
-            "In this last part: why the numbers are tangled, how to untangle them, how to trace a thought from input "
-            "to output, <bookmark mark='a'/> and how to reach in and change it."
+            "This is Part 30 of AI, Built: inside the model. <bookmark mark='a'/> First, how the field got here, "
+            "from saliency maps to circuits. <bookmark mark='b'/> Then reading information out of a model, and the "
+            "traps in doing it; <bookmark mark='c'/> then finding what actually causes a behaviour, down to one "
+            "circuit end to end. <bookmark mark='d'/> Then why the numbers are tangled, and the dictionaries that "
+            "untangle them; <bookmark mark='e'/> tracing a prediction from input to output, comparing a model with "
+            "its fine-tune, and steering. <bookmark mark='f'/> And to finish: grokking explained, whether a chain of "
+            "thought tells the truth, and where the field stands, and argues, in 2026. Every experiment runs on the "
+            "series' own models, on this computer."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
+            self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
+            self.play(FadeOut(smap), FadeOut(title), FadeIn(obj.head), FadeIn(obj.rows[0], shift=UP * 0.1))
+            for k, mk in enumerate("bcdef"):
+                vo.wait_until(mk)
+                self.play(FadeIn(obj.rows[k + 1], shift=UP * 0.1))
         self.wait(0.5)
         self.clear_scene()
