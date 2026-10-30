@@ -1627,3 +1627,51 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | conjugate prior, Normal–Gamma | 共轭先验，正态–伽马分布 |
 | score-function estimator, reparameterization trick | 得分函数估计量，重参数化技巧 |
 | amortized inference, encoder, decoder | 摊销推断，编码器，解码器 |
+
+### Randomness in motion (Part 5)
+
+| English | 中文 |
+|---|---|
+| law of large numbers | 大数定律 |
+| central limit theorem | 中心极限定理 |
+| normal (Gaussian) distribution, bell curve | 正态（高斯）分布，钟形曲线 |
+| convolution (of densities) | （密度的）卷积 |
+| Berry–Esseen theorem, Kolmogorov distance | 贝里-埃森定理，柯尔莫哥洛夫距离 |
+| covariance matrix, precision matrix | 协方差矩阵，精度矩阵 |
+| conditioning, Schur complement | 条件化，舒尔补 |
+| regression (Galton's), regression to the mean | （高尔顿的）回归，向均值回归 |
+| Kalman filter, Gaussian process | 卡尔曼滤波，高斯过程 |
+| bias (of an estimator), Bessel's correction | （估计量的）偏差，贝塞尔校正 |
+| score (of a parameter), Fisher information | （参数的）分数，费希尔信息 |
+| Cramér–Rao bound, efficient estimator | 克拉默-拉奥下界，有效估计量 |
+| Cauchy distribution | 柯西分布 |
+| natural gradient, elastic weight consolidation | 自然梯度，弹性权重巩固 |
+| conjugate prior, Beta distribution | 共轭先验，贝塔分布 |
+| rule of succession | 接续法则 |
+| maximum a posteriori (MAP), weight decay | 最大后验（MAP），权重衰减 |
+| maximum entropy, Lagrange multiplier | 最大熵，拉格朗日乘子 |
+| exponential family, log-partition function | 指数族，对数配分函数 |
+| Gibbs (Boltzmann) distribution | 吉布斯（玻尔兹曼）分布 |
+| Markov's, Chebyshev's, Chernoff's, Hoeffding's inequality | 马尔可夫不等式，切比雪夫不等式，切尔诺夫界，霍夫丁不等式 |
+| inverse-CDF sampling, rejection sampling | 逆累积分布函数采样，拒绝采样 |
+| Box–Muller transform | 博克斯-穆勒变换 |
+| Gumbel-max trick, Gumbel-softmax | 冈贝尔最大值技巧，冈贝尔-softmax |
+| greedy decoding, top-k, top-p (nucleus), min-p | 贪心解码，top-k，top-p（核采样），min-p |
+| stationary distribution, transition matrix | 平稳分布，转移矩阵 |
+| detailed balance, reversible chain | 细致平衡，可逆链 |
+| spectral gap, mixing time, relaxation time | 谱间隙，混合时间，弛豫时间 |
+| importance sampling, effective sample size | 重要性采样，有效样本量 |
+| score-function (log-derivative) estimator, baseline | 分数函数（对数导数）估计量，基线 |
+| reparameterization trick | 重参数化技巧 |
+| evolution strategies | 进化策略 |
+| Metropolis–Hastings | 梅特罗波利斯-黑斯廷斯算法 |
+| Langevin dynamics, MALA | 朗之万动力学，MALA |
+| integrated autocorrelation time | 积分自相关时间 |
+| Brownian motion, scaling limit | 布朗运动，标度极限 |
+| quadratic variation | 二次变差 |
+| Itô integral, Itô's lemma, Stratonovich integral | 伊藤积分，伊藤引理，斯特拉托诺维奇积分 |
+| stochastic differential equation, Euler–Maruyama | 随机微分方程，欧拉-丸山方法 |
+| strong / weak convergence order | 强 / 弱收敛阶 |
+| Ornstein–Uhlenbeck process | 奥恩斯坦-乌伦贝克过程 |
+| Fokker–Planck equation | 福克-普朗克方程 |
+| reverse-time SDE | 反向时间SDE |
