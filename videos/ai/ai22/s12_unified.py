@@ -224,10 +224,9 @@ class Unified(VoiceoverScene):
             "tokens in the sequence: in-context editing."
         ) as vo:
             self.play(FadeIn(hl))
+            self.play(FadeIn(rows[0]), FadeIn(names[0]), FadeIn(rows[2]), FadeIn(names[2]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(names[0]))
             self.play(FadeIn(rows[1]), FadeIn(names[1]))
-            self.play(FadeIn(rows[2]), FadeIn(names[2]))
             vo.wait_until("b")
             self.play(FadeIn(stats))
             vo.wait_until("c")

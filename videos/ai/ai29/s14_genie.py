@@ -49,11 +49,13 @@ class Genie(VoiceoverScene):
         a1 = Arrow(pair.get_right(), lam.get_left(), buff=0.1, color=GREY_B)
         a2 = Arrow(lam.get_right(), codes.get_left(), buff=0.1, color=GREY_B)
         dyn = node_box(r"dynamics model: \ next frame from \ past frames and a code", WORLD, 22, height=0.8)
-        dyn.move_to([-0.6, -0.9, 0])
+        dyn.move_to([-3.4, -0.6, 0])
         play_ = VGroup(*[frame(k, w=1.3, h=0.9, hero_x=-0.4 + 0.25 * k, seed=1) for k in range(4)]).arrange(RIGHT, buff=0.15)
-        play_.move_to([3.4, -0.9, 0])
+        if play_.width > 5.6:
+            play_.width = 5.6
+        play_.move_to([3.4, -0.6, 0])
         pl2 = label(r"a player picks the codes: \ the video becomes a game", font_size=20, color=C.BITS).next_to(play_, DOWN, buff=0.15)
-        a3 = Arrow(codes.get_bottom(), dyn.get_right() + UP * 0.2, buff=0.1, color=MODEL)
+        a3 = Arrow(codes.get_bottom(), dyn.get_top() + RIGHT * 0.8, buff=0.1, color=MODEL)
         a4 = Arrow(dyn.get_right(), play_.get_left(), buff=0.1, color=GREY_B)
         hist = history_card(r"Feb 2024", r"Genie \ (Bruce, Dennis, Edwards et al., Google DeepMind)", r"$11$ billion "
                             r"parameters, \ trained on Internet videos of 2D platform games \ without a single action "
@@ -68,9 +70,9 @@ class Genie(VoiceoverScene):
             "and a code. <bookmark mark='d'/> At play time a person picks the codes, and a video model becomes a game "
             "you can steer, learned from game videos with no labels at all."
         ) as vo:
-            self.play(FadeIn(pair), FadeIn(pl), FadeIn(tag))
+            self.play(FadeIn(pair), FadeIn(pl), FadeIn(tag), FadeIn(hist))
             vo.wait_until("a")
-            self.play(GrowArrow(a1), FadeIn(lam), FadeIn(hist))
+            self.play(GrowArrow(a1), FadeIn(lam))
             vo.wait_until("b")
             self.play(GrowArrow(a2), FadeIn(codes), FadeIn(cl))
             vo.wait_until("c")
@@ -83,16 +85,16 @@ class Genie(VoiceoverScene):
     # ------------------------------------------------------------------
     def worlds(self):
         cards = VGroup(
-            history_card(r"Dec 2024", r"Genie 2", r"3D worlds from a single image, \ steered with keyboard and mouse", width=6.2,
-                         color=HIST, font_size=21),
+            history_card(r"Dec 2024", r"Genie 2", r"3D worlds from a single image, \ steered with keyboard and mouse", width=6.6,
+                         color=HIST, font_size=23),
             history_card(r"Aug 2025", r"Genie 3", r"$720$p at $24$ frames a second, \ in real time; \ consistent for a few "
                          r"minutes, \ remembering what it drew up to a minute ago; \ text prompts change the world "
-                         r"as you go; \ used to train DeepMind's SIMA agent", width=6.2, color=HIST, font_size=21),
+                         r"as you go; \ used to train DeepMind's SIMA agent", width=6.6, color=HIST, font_size=23),
             history_card(r"Jan 2026", r"Project Genie", r"a prototype on Genie 3 for some subscribers in the US: \ "
-                         r"$60$-second worlds", width=6.2, color=HIST, font_size=21),
+                         r"$60$-second worlds", width=6.6, color=HIST, font_size=23),
             history_card(r"27 Oct 2026", r"Genie 4 \ (Google DeepMind's description)", r"sound generated with the "
                          r"pictures; \ Gemini plans events in the world; \ pitched for training robots; \ a research "
-                         r"preview, \ and objects can still drift", width=6.2, color=CLAIM, font_size=21),
+                         r"preview, \ and objects can still drift", width=6.6, color=CLAIM, font_size=23),
         ).arrange(DOWN, buff=0.18, aligned_edge=LEFT)
         if cards.height > 7.0:
             cards.height = 7.0
@@ -127,10 +129,10 @@ class Genie(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def dreamer4(self):
-        steps = VGroup(node_box(r"hours of Minecraft video, \ a little of it with actions", OBS, 22),
-                       node_box(r"a world model \ (a transformer, \ shortcut forcing)", MODEL, 22),
-                       node_box(r"an agent trained \ only inside it", AGENT, 22),
-                       node_box(r"diamonds", REWARD, 24))
+        steps = VGroup(node_box(r"Minecraft videos, \\ few with actions", OBS, 28, height=1.2),
+                       node_box(r"a world model \\ (a transformer)", MODEL, 28, height=1.2),
+                       node_box(r"an agent trained \\ only inside it", AGENT, 28, height=1.2),
+                       node_box(r"diamonds", REWARD, 30, height=1.2))
         steps.arrange(RIGHT, buff=0.45).move_to([0, 1.3, 0])
         if steps.width > 13.0:
             steps.width = 13.0
@@ -139,7 +141,7 @@ class Genie(VoiceoverScene):
         hist = history_card(r"Sep 2025", r"Dreamer 4 \ (Hafner, Yan \& Lillicrap)", r"the first agent to obtain diamonds "
                             r"in Minecraft purely from offline data, \ choosing sequences of over $20{,}000$ mouse and "
                             r"keyboard actions from pixels; \ the world model runs in real time on one GPU", width=9.0,
-                            color=HIST, font_size=20).move_to([0, -1.4, 0])
+                            color=HIST, font_size=25).move_to([0, -1.5, 0])
         with self.voiceover(
             "Danijar Hafner's Dreamer line, the subject of the last chapter, reached the same scale. "
             "<bookmark mark='a'/> Dreamer 4, in 2025, learned a world model mostly from Minecraft videos, only a "
@@ -156,11 +158,11 @@ class Genie(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def jepa(self):
-        gen = VGroup(label(r"predict the pixels", font_size=26, color=WORLD),
-                     label(r"Genie, \ Dreamer, \ video models (Part 22): \\ every leaf, \ every ripple", font_size=20,
+        gen = VGroup(label(r"predict the pixels", font_size=32, color=WORLD),
+                     label(r"Genie, \ Dreamer, \ video models (Part 22): \\ every leaf, \ every ripple", font_size=24,
                            color=GREY_A)).arrange(DOWN, buff=0.15).move_to([-3.6, 2.3, 0])
-        emb = VGroup(label(r"predict an embedding", font_size=26, color=JEPA),
-                     label(r"JEPA (Part 24): \ only what the encoder \\ finds worth predicting", font_size=20,
+        emb = VGroup(label(r"predict an embedding", font_size=32, color=JEPA),
+                     label(r"JEPA (Part 24): \ only what the encoder \\ finds worth predicting", font_size=24,
                            color=GREY_A)).arrange(DOWN, buff=0.15).move_to([3.6, 2.3, 0])
         now = VGroup(*[Dot(radius=0.07, color=JEPA).move_to([x, 0, 0]) for x in (-5.2,)])
         goal = Star(n=5, outer_radius=0.22, color=REWARD, fill_opacity=1).move_to([2.6, 0.6, 0])

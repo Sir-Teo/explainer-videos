@@ -101,7 +101,7 @@ class Codec(VoiceoverScene):
         lo, hi = float(np.asarray(d["ex_orig"]).min()), float(np.asarray(d["ex_orig"]).max())
         W, H = 6.0, 2.0
         orig = spectro(np.asarray(d["ex_orig"]), W, H, lo=lo, hi=hi).move_to([3.3, 1.6, 0])
-        ol = label(r"a held-out voice: \ the original", font_size=20, color=GREY_A).next_to(orig, UP, buff=0.1)
+        ol = label(r"a held-out voice: \ the original log-mel picture", font_size=20, color=GREY_A).next_to(orig, UP, buff=0.1)
 
         def snap(k):
             return spectro(snaps[k], W, H, lo=lo, hi=hi).move_to([3.3, -1.6, 0])
@@ -110,24 +110,27 @@ class Codec(VoiceoverScene):
         t = ValueTracker(0)
         cnt = always_redraw(lambda: label(rf"rebuilt from $8$ stages, \ after ${int(t.get_value()):,}$ steps".replace(",", "{,}"),
                                           font_size=20, color=SND_C).next_to(cur, UP, buff=0.1))
-        rows = [MathTex(r"\frac{16{,}000 \text{ samples/s}}{2 \cdot 4 \cdot 5 \cdot 8} = 50 \text{ frames/s}", font_size=30),
+        rows = [MathTex(rf"\frac{{100 \text{{ mel frames/s}}}}{{2}} = {hz} \text{{ code frames/s}}", font_size=30),
                 MathTex(rf"{hz} \times n \times \log_2 {2 ** bits} = {hz * bits}\, n \text{{ bits/s}}", font_size=30),
                 MathTex(rf"n = 1, 2, 4, 8: \ {', '.join(str(hz * bits * n) for n in stages)} \text{{ bits/s}}", font_size=28,
                         color=C.INTERVAL)]
-        whys = [why(r"four strided convolutions", font_size=20), why(r"$n$ stages of $256$ codes", font_size=20),
+        whys = [why(r"one strided convolution", font_size=20), why(r"$n$ stages of $256$ codes", font_size=20),
                 why(r"one model, \ quantizer dropout", font_size=20)]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-3.4, align_index=None, buff=0.75, edge=-0.1)
         tr_min = float(d["train_seconds"]) / 60
         S = int(d["steps"])
         params = int(d["params"])
         with self.voiceover(
-            "We built a small one. <bookmark mark='a'/> Four strided convolutions take sixteen thousand samples a "
-            f"second down to {hz} frames a second. <bookmark mark='b'/> Each frame passes through up to eight "
+            "We built a small one, with one simplification. Teaching a network to make a wave takes far more compute "
+            "than this computer has, so ours codes the picture Whisper reads, the log-mel spectrogram of chapter "
+            "eight, and leaves turning a picture back into sound to a vocoder. <bookmark mark='a'/> A strided "
+            f"convolution takes the picture's 100 frames a second down to {hz}. <bookmark mark='b'/> Each frame passes through up to eight "
             f"residual stages of 256 codes, eight bits each, so a stage costs {hz * bits} bits a second. "
             "<bookmark mark='c'/> Stages are dropped at random in training, so the same model runs at "
             f"{', '.join(str(hz * bits * n) for n in stages[:-1])} or {hz * bits * stages[-1]:,} bits a second. "
             f"<bookmark mark='d'/> It has {params / 1e3:.0f} thousand parameters and trained for {S:,} steps on "
-            f"{tr_min:.0f} minutes of Kokoro speech in ten voices, with a spectral loss and no judge. Here it learns "
+            f"{tr_min:.0f} minutes of Kokoro speech in ten voices, with a plain loss: the average error in the "
+            "rebuilt picture. Here it learns "
             "to rebuild a sentence from a voice it never heard."
         ) as vo:
             self.play(FadeIn(orig), FadeIn(ol))
@@ -177,7 +180,7 @@ class Codec(VoiceoverScene):
             lines.add(VGroup(*[Dot(ax.ax.c2p(math.log10(b), w), radius=0.06, color=SND_C) for b, w in zip(bps, wer[s])]))
         ow = float(d["orig_wer"])
         base = DashedLine(ax.ax.c2p(math.log10(bps[0]) - 0.15, ow), ax.ax.c2p(math.log10(bps[-1]) + 0.15, ow), color=WHITE)
-        bl = label(rf"the original speech: \ ${100 * ow:.0f}\%$", font_size=18, color=WHITE).next_to(base, UP, buff=0.05).align_to(base, RIGHT)
+        bl = label(rf"the original picture: \ ${100 * ow:.0f}\%$", font_size=18, color=WHITE).next_to(base, UP, buff=0.05).align_to(base, RIGHT)
         ex = VGroup(label(r"heard by Whisper, \ seed $0$:", font_size=20, color=GREY_A))
         refs = [str(r) for r in d["refs"]]
         for n in (stages[0], stages[-1]):
@@ -191,17 +194,19 @@ class Codec(VoiceoverScene):
             ex.width = 6.6
         w_lo, w_hi = wer.mean(0)[0], wer.mean(0)[-1]
         trend = ("falls" if w_hi < w_lo - 0.02 else "barely changes")
-        ratio = int(d["pcm_bps"]) / bps[-1]
+        ratio = int(d["mel_bps"]) / bps[-1]
+        pcm = int(d["pcm_bps"]) / bps[-1]
         n_w = int(d["n_wer"])
         with self.voiceover(
             "How good is it? <bookmark mark='a'/> Here is the held-out sentence rebuilt at each bitrate: one stage "
             "keeps the rough shape, eight keep much more of the detail. <bookmark mark='b'/> A blunt but fair "
-            f"test: can Whisper still understand it? On {n_w} held-out sentences, Whisper's word error rate {trend} "
+            f"test: Whisper reads such pictures directly, so can it still understand ours? On {n_w} held-out "
+            f"sentences, Whisper's word error rate {trend} "
             f"from {100 * w_lo:.0f} percent at {bps[0]} bits a second to {100 * w_hi:.0f} percent at {bps[-1]:,}, "
-            f"against {100 * ow:.0f} percent on the original speech; two seeds. <bookmark mark='c'/> At {bps[-1]:,} "
-            f"bits a second our codec squeezes the speech {ratio:.0f} times smaller than plain samples. A codec with "
-            "a GAN's judge, more data and more steps sounds far better at the same rate; this one only has to show "
-            "the trade."
+            f"against {100 * ow:.0f} percent on the original picture; two seeds. <bookmark mark='c'/> At {bps[-1]:,} "
+            f"bits a second the codes are {ratio:.0f} times smaller than the picture stored as 32-bit numbers, and "
+            f"{pcm:.0f} times smaller than the samples themselves. A real codec must also make the wave, with a GAN's "
+            "judge, far more data and far more steps; ours only has to show the trade."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.25), run_time=2.0)
             vo.wait_until("b")
@@ -239,7 +244,8 @@ class Codec(VoiceoverScene):
              r"WavLM, \ $15$ acoustic", SEM_C))]).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -1.3, 0])
         with self.voiceover(
             "Speech tokens come in two kinds. <bookmark mark='a'/> A codec's acoustic tokens carry how the speech "
-            "sounds: the voice, the room, the detail. Our codec uses its stages fairly evenly: perplexities from "
+            "sounds: the voice, the room, the detail. Our codec uses its stages "
+            f"{'fairly evenly' if min(ppl) > 0.5 * max(ppl) else 'unevenly'}: perplexities from "
             f"{min(ppl):.0f} to {max(ppl):.0f} of 256. <bookmark mark='b'/> Semantic tokens carry what is said, and "
             "they come from a self-supervised speech model, the kind Part 24 builds, clustered into codes. In 2022 "
             "Google's AudioLM generated speech by writing semantic tokens first and acoustic tokens after them. "

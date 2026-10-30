@@ -158,11 +158,12 @@ class Dicts(VoiceoverScene):
         box = VGroup(th, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(lg, DOWN, buff=0.4).align_to(lg, LEFT)
         fin = {k: at[k] for k in at if np.isfinite(at[k])}
         best, worst = min(fin, key=fin.get), max(fin, key=fin.get)
+        n_sp, n_l1 = len(o["ks"]), len(o["l1s"])
         verdict = (f"{nm[best]} leaves {100 * fin[best]:.0f} percent of the variance unexplained, {nm[worst]} "
                    f"{100 * fin[worst]:.0f}" if len(fin) >= 2 else "the kinds barely overlap in sparsity")
         with self.voiceover(
             "Now the fair test. We trained all three on the same vectors, with the same 512 latents, steps and "
-            "batches, four sparsities each and three seeds each. <bookmark mark='a'/> Plot how many features each "
+            f"batches, {n_sp} sparsities for TopK, {n_l1} for the others, and three seeds each. <bookmark mark='a'/> Plot how many features each "
             "uses per vector against the variance it leaves unexplained: lower and further left is better. "
             "<bookmark mark='b'/> The L1 autoencoders, <bookmark mark='c'/> JumpReLU, <bookmark mark='d'/> and TopK. "
             f"The bars are the three seeds; they barely differ. <bookmark mark='e'/> At sixteen features per vector, "

@@ -197,7 +197,7 @@ class SimToReal(VoiceoverScene):
         xl = label(r"motor force $\to$", font_size=20, color=GREY_A).next_to(imgs[0][0], DOWN, buff=0.15)
         yl = label(r"pole length $\to$", font_size=20, color=GREY_A).rotate(PI / 2).next_to(imgs[0][0], LEFT, buff=0.15)
         xl2 = xl.copy().next_to(imgs[1][0], DOWN, buff=0.15)
-        key = VGroup(heat(np.linspace(0, 500, 6)[None, :], w=1.6, h=0.22), label(r"$0$ \ to \ $500$ steps", font_size=18,
+        key = Group(heat(np.linspace(0, 500, 6)[None, :], w=1.6, h=0.22), label(r"$0$ \ to \ $500$ steps", font_size=22,
                                                                                   color=GREY_A))
         key.arrange(RIGHT, buff=0.15).to_corner(UR, buff=0.4)
         tag = note(r"every map: \ with the real robot's delay and sensor noise; \ mean of 8 seeds", font_size=18)

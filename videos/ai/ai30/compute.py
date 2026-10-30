@@ -34,7 +34,7 @@ Items:
                    block 2: 211,200 vectors from the novels; its training replayed; features per character, variance
                    explained, bits per character with the rebuild spliced in; where features fire; neurons against
                    features
-    frontier       L1, JumpReLU and TopK autoencoders on the same vectors, at four sparsities each, three seeds each,
+    frontier       L1, JumpReLU and TopK autoencoders on the same vectors, at four or five sparsities each, three seeds each,
                    equal dictionaries, steps and batches: sparsity against variance explained and against bits per
                    character spliced in, dead latents, shrinkage; TopK with and without AuxK
     splitting      TopK dictionaries of 128, 512 and 2,048 latents: one latent's descendants as the dictionary grows
@@ -432,8 +432,8 @@ def load_dict(path):
 
 
 # ---------------------------------------------------------------------------
-FRONT = dict(F=512, steps=2000, batch=1024, seeds=(0, 1, 2), l1=(1.0, 2.0, 4.0, 8.0), jumprelu=(0.3, 1.0, 3.0, 8.0),
-             topk=(4, 8, 16, 32))
+FRONT = dict(F=512, steps=2000, batch=1024, seeds=(0, 1, 2), l1=(0.25, 0.5, 1.0, 2.0, 4.0),
+             jumprelu=(0.1, 0.3, 1.0, 3.0, 8.0), topk=(4, 8, 16, 32))
 
 
 def dict_dir():
@@ -455,8 +455,8 @@ def compute_frontier():
     n_eval = min(len(X), 40000)
     Xe = X[torch.randperm(len(X), generator=torch.Generator().manual_seed(9))[:n_eval]]
     S = steps(FRONT["steps"])
-    params = dict(FRONT, steps=S, n=len(X))
-    part = CACHE.partial("frontier", params)
+    # the pieces are keyed by kind, parameter and seed, so adding a sparsity to a sweep keeps the runs already done
+    part = CACHE.partial("frontier", dict(F=FRONT["F"], steps=S, batch=FRONT["batch"], n=len(X)))
     runs = [(k, p, s) for k in ("l1", "jumprelu", "topk") for p in FRONT[k] for s in FRONT["seeds"]]
     runs += [("topk_aux", 16, s) for s in FRONT["seeds"]]
     for kind, p, seed in runs:

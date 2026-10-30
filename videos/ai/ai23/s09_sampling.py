@@ -196,7 +196,7 @@ class Sampling(VoiceoverScene):
         win_x = ValueTracker(0.0)
 
         def column_curve():
-            j = int(np.clip(round(win_x.get_value() * (n - 1)), 0, n - 1))
+            j = int(np.clip(round(win_x.get_value() * (P.shape[1] - 1)), 0, P.shape[1] - 1))
             v = np.clip((P[:, j] - lo) / (P.max() - lo), 0, 1)
             return curve(sax, fz, v, SND_C, 2.0)
 
