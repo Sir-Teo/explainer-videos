@@ -36,8 +36,8 @@ Items:
     shift      covariate shift: least squares, importance-weighted least squares, and estimated weights
     memorize   the novels model: how often it reproduces a 32-token passage of its training text from the 32
                tokens before it, against how many times the passage occurs
-    canary     the novels model trained on, with held-out passages planted 1 ... 32 times: extraction against
-               repetition, through training (checkpointed; about half an hour on two threads)
+    canary     the novels model trained on, with held-out passages planted 1 ... 64 times: extraction against
+               repetition, through training (checkpointed; about forty minutes on two threads)
 """
 
 from __future__ import annotations
@@ -1319,13 +1319,13 @@ def compute_memorize():
                 max_count=int(counts.max()))
 
 
-CANARY = dict(counts=[1, 2, 4, 8, 16, 32], per=16, L=64, filler=400_000, lr=3e-4, batch=16, passes=2.0, evals=10)
+CANARY = dict(counts=[1, 2, 4, 8, 16, 32, 64], per=16, L=64, filler=250_000, lr=1e-3, batch=16, passes=3.0, evals=12)
 
 
 def compute_canary():
     """Kandpal, Wallace & Raffel (2022) and Carlini et al. (2023), on our model.  Continue training the novels model on
-    400,000 tokens of its own training text, into which 96 passages of 64 tokens from the held-out text, never seen
-    before, are planted: 16 passages once, 16 twice, ... 16 thirty-two times.  Sixteen more held-out passages are never
+    250,000 tokens of its own training text, into which 112 passages of 64 tokens from the held-out text, never seen
+    before, are planted: 16 passages once, 16 twice, ... 16 sixty-four times; three passes.  Sixteen more held-out passages are never
     planted (the control).  Every few steps: how many of each group are extractable (their last 32 tokens are the
     greedy continuation of their first 32).  Checkpointed, so a killed run resumes."""
     torch = _torch()
@@ -1338,7 +1338,7 @@ def compute_canary():
     L, half = K["L"], K["L"] // 2
     groups = K["counts"] + [0]
     starts = g.choice(len(valid) // L, K["per"] * len(groups), replace=False) * L  # disjoint passages
-    passages = np.array([valid[s:s + L] for s in starts]).reshape(len(groups), K["per"], L)
+    passages = np.array([valid[s:s + L] for s in starts]).astype(np.int64).reshape(len(groups), K["per"], L)
     a0 = int(g.integers(0, len(train) - K["filler"]))
     filler = train[a0:a0 + K["filler"]]
     pieces = [passages[i, j] for i, c in enumerate(groups) for j in range(K["per"]) for _ in range(c)]

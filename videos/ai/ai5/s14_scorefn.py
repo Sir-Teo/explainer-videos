@@ -171,7 +171,7 @@ class ScoreFn(VoiceoverScene):
             t = label(title, font_size=24, color=col).next_to(fr, UP, buff=0.12)
             return ax, VGroup(fr, cont, star, t)
 
-        a1, g1 = panel(PP, PLAIN, r"plain", -3.4)
+        a1, g1 = panel(PP, PLAIN, r"without a baseline", -3.4)
         a2, g2_ = panel(PB, BASE, r"with a baseline", 3.4)
         tr = ValueTracker(0)
 

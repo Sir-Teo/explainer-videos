@@ -153,8 +153,6 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"Show that the density of $X + Y$, for independent $X, Y$ with densities $f, g$, is $f * g$. \ For "
             r"$f = g = e^{-x}$ on $x > 0$, compute $f * f$ and $f * f * f$.",
-            r"$(x_1, x_2)$ is Gaussian with variances $1$ and $1.96$ and correlation $0.75$. \ Find the mean and "
-            r"variance of $x_1$ given $x_2 = 1.5$.",
             r"Compute the Fisher information of $\mathcal{N}(\theta, \sigma^2)$ in $\theta$, and of the Cauchy location; "
             r"which estimators reach the Cram\'er--Rao bound?",
             r"Show that the maximum-entropy distribution on $\{0, 1, 2, \dots\}$ with mean $m$ is geometric.",
@@ -166,7 +164,7 @@ class Outro(VoiceoverScene):
             r"the Fokker--Planck equation.",
         ], font_size=21)
         with self.voiceover(
-            "Here are seven problems to try, from convolutions to the Ornstein-Uhlenbeck process's stationary "
+            "Here are six problems to try, from convolutions to the Ornstein-Uhlenbeck process's stationary "
             "bell. Pause here and work through them; full solutions are in this part's notes."
         ) as vo:
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in ps.rows], lag_ratio=0.3),

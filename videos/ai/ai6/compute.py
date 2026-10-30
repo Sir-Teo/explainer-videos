@@ -5,7 +5,7 @@
 
 Results are cached in ``.cache/ai6/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.  Every method is written
 out here in numpy (no machine-learning library), and every number the narration quotes is computed here.  Every
-random choice is seeded; the whole module runs in about ten CPU-minutes on one core.
+random choice is seeded; the whole module runs in about fifteen CPU-minutes on one core.
 
 The task, for every method: who wrote this page, Jane Austen or Charles Dickens?  Pages are 1,000-word chunks of
 five novels (Pride and Prejudice and Emma; A Tale of Two Cities, Great Expectations and A Christmas Carol); a page

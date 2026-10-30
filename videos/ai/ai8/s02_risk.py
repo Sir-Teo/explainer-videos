@@ -127,23 +127,18 @@ class Risk(VoiceoverScene):
         em, tm = np.asarray(r["emp_mean"]), np.asarray(r["true_mean"])
         tq = np.asarray(r["true_q"])
         bay, rc = float(r["bayes"]), float(r["r_class"])
-        ya, yb = 0.12, 0.32
+        ya, yb = 0.12, 0.40
         G = axes([1, 3.5], [ya, yb], x_length=6.0, y_length=4.4, xticks=[1, 2, 3], xfmt=lambda v: f"10^{{{int(v)}}}",
-                 yticks=[0.15, 0.2, 0.25, 0.3], yfmt=lambda v: rf"{100 * v:.0f}\%", xlabel=r"$n$: examples",
+                 yticks=[0.15, 0.2, 0.25, 0.3, 0.35, 0.4], yfmt=lambda v: rf"{100 * v:.0f}\%", xlabel=r"$n$: examples",
                  ylabel=r"error", center=(3.4, -0.6, 0))
         A = G.ax
         cb = band(A, lx, np.clip(tq[0], ya, yb), np.clip(tq[1], ya, yb), TEST, 0.15)
         ct, ce = curve(A, lx, tm, TEST, 4), curve(A, lx, np.clip(em, ya, yb), TRAIN, 3.5)
         hb = DashedLine(A.c2p(1, bay), A.c2p(3.5, bay), color=BAYES, stroke_width=2.5)
         hc = DashedLine(A.c2p(1, rc), A.c2p(3.5, rc), color=GREY_A, stroke_width=2)
-        lab = VGroup(label(r"true risk $R(\hat h)$", font_size=20, color=TEST),
-                     label(r"training error $\hat R(\hat h)$", font_size=20, color=TRAIN),
-                     label(r"best threshold $R(h_{\mathcal H})$", font_size=20, color=GREY_A),
-                     label(r"Bayes risk $R^*$", font_size=20, color=BAYES))
-        lab[0].next_to(A.c2p(1.05, tm[0]), UP, buff=0.08).align_to(A.c2p(1.05, 0), LEFT)
-        lab[1].next_to(A.c2p(1.05, max(em[0], ya)), DOWN, buff=0.08).align_to(A.c2p(1.05, 0), LEFT)
-        lab[2].next_to(A.c2p(3.5, rc), UP, buff=0.05).align_to(A.c2p(3.5, 0), RIGHT)
-        lab[3].next_to(A.c2p(3.5, bay), DOWN, buff=0.05).align_to(A.c2p(3.5, 0), RIGHT)
+        lab = legend([(TEST, r"true risk $R(\hat h)$"), (TRAIN, r"training error $\hat R(\hat h)$"),
+                      (GREY_A, r"best threshold $R(h_{\mathcal H})$"), (BAYES, r"Bayes risk $R^*$")], font_size=19)
+        lab.next_to(A.c2p(3.5, yb), DL, buff=0.1)
         colors = {r"R(h_{\mathcal H}) - R^*": BAYES, r"R(\hat h) - R(h_{\mathcal H})": TEST}
         dec = cmath(r"R(\hat h) - R^*", "=", r"R(h_{\mathcal H}) - R^*", "+", r"R(\hat h) - R(h_{\mathcal H})",
                     colors=colors, font_size=30).move_to([-3.3, -1.3, 0])

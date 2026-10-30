@@ -65,11 +65,11 @@ class Hook(VoiceoverScene):
             (1993, r"IBM: \\ translation by EM", 1),
             (2003, r"topic \\ models", -1),
             (2006, r"Gaussian \\ processes", 2),
-        ], y=-0.2)
+        ], y=0.35, font_size=21)
         rules = label(r"rules written by experts \ (Part 2) \ $\longrightarrow$ \ probabilities learned from data",
-                      font_size=28, color=C.BITS).to_edge(DOWN, buff=0.4)
+                      font_size=28, color=C.BITS).to_edge(DOWN, buff=0.3)
         lives = label(r"today: \ the ELBO, \ mixtures of experts, \ the forward algorithm, \ $n$-grams over trillions",
-                      font_size=26, color=HIDDEN).to_edge(DOWN, buff=0.4)
+                      font_size=26, color=HIDDEN).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "How did we get here? In 1901 Karl Pearson asked for the line that passes closest to a cloud of points. In "
             "1933 Harold Hotelling asked for the directions of greatest variance, and called them principal "
@@ -123,14 +123,19 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "This is part seven of AI, Built: models with hidden parts, directions, sources, states and functions "
             "that we never observe, only infer. <bookmark mark='a'/> In this part: hidden directions and sources, from "
-            "principal components to the cocktail party; mixtures, and the EM algorithm that fits them, with k-means "
-            "and topic models; hidden Markov models, and the statistical revolution they started in speech and "
-            "translation; the best ways to count, ending with an infinity-gram over all thirty novels; graphical "
-            "models, and what they can say about cause and effect; and the Bayesian toolkit: Gaussian processes, "
-            "Occam's razor, Bayesian optimization, and variational inference. Every method is written out and run."
+            "principal components to the cocktail party; <bookmark mark='r2'/> mixtures, and the EM algorithm that "
+            "fits them, with k-means and topic models; <bookmark mark='r3'/> hidden Markov models, and the statistical "
+            "revolution they started in speech and translation; <bookmark mark='r4'/> the best ways to count, ending "
+            "with an infinity-gram over all thirty novels; <bookmark mark='r5'/> graphical models, and what they can "
+            "say about cause and effect; <bookmark mark='r6'/> and the Bayesian toolkit: Gaussian processes, Occam's "
+            "razor, Bayesian optimization, and variational inference. Every method is written out and run."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub), FadeIn(smap))
             vo.wait_until("a")
             self.play(FadeOut(VGroup(title, sub, smap)), FadeIn(obj))
+            self.play(Indicate(obj.rows[0], scale_factor=1.04, color=C.BITS))
+            for k in range(2, 7):
+                vo.wait_until(f"r{k}")
+                self.play(Indicate(obj.rows[k - 1], scale_factor=1.04, color=C.BITS))
         self.wait(0.5)
         self.clear_scene()

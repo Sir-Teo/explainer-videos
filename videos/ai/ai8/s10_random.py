@@ -3,20 +3,16 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import AUSTEN, DICKENS, TEST, TRAIN, curve, load
+from videos.ai.ai8.common import AUSTEN, DICKENS, HIST, TEST, TRAIN, chapter, curve, load
 
 
 class RandomLabels(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 9, r"Memorizing nonsense", r"Can a network fit random labels?",
+                "Chapter nine. Memorizing nonsense.", lit=(2017,))
         self.experiment()
         self.order()
-
-    def card(self):
-        card = chapter_card(3, r"Memorizing nonsense", r"Can a network fit random labels?", part=8)
-        with self.voiceover("Chapter three. Memorizing nonsense."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.sweep()
 
     def experiment(self):
         r = load("random")
@@ -71,7 +67,8 @@ class RandomLabels(VoiceoverScene):
         cite_ = cite(r"C.~Zhang, S.~Bengio, M.~Hardt, B.~Recht \& O.~Vinyals, \textit{Understanding Deep Learning Requires "
                      r"Rethinking Generalization} (2017)", corner=UR)
         with self.voiceover(
-            "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a "
+            "Every bound so far charges for capacity. In 2016, Chiyuan Zhang and colleagues ran an experiment that "
+            "showed why that can't be the whole story for networks. Take a "
             "network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve "
             f"units, and two outputs, one per author. That's about {round(n_params, -3) // 1000} thousand weights. "
             f"Train it on the {n} training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets "
@@ -93,7 +90,7 @@ class RandomLabels(VoiceoverScene):
             "<bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same "
             "network can memorize anything at all. Then counting what a model could fit can't explain why, given "
             "real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers "
-            "simple answers. Why, exactly, is still being worked out."
+            "simple answers. The next two chapters prove it, in the simplest cases."
         ) as vo:
             self.play(*[FadeIn(m) for m in panels[1][:4]])
             self.play(Create(panels[1][4]), run_time=2.0)
@@ -190,4 +187,50 @@ class RandomLabels(VoiceoverScene):
                 self.play(*fill(k), t.animate.set_value(k), run_time=0.9, rate_func=linear)
         self.wait(0.5)
         self.remove(ca, cd, cnt)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def sweep(self):
+        c = load("corrupt")
+        fr = np.asarray(c["fracs"])
+        te, fit, wrong = np.asarray(c["test"]), np.asarray(c["fit"]), np.asarray(c["wrong"])
+        G = axes([0, 1], [0.4, 1.0], x_length=5.6, y_length=3.8, xticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                 xfmt=lambda v: rf"{100 * v:.0f}\%", yticks=[0.4, 0.6, 0.8, 1.0], yfmt=lambda v: rf"{100 * v:.0f}\%",
+                 xlabel=r"share of training labels replaced by coin flips", ylabel=r"accuracy on new pages",
+                 center=(-3.3, -0.4, 0))
+        ax = G.ax
+        dots = VGroup(*[Dot(ax.c2p(f, v), radius=0.06, color=TEST) for f, row in zip(fr, te) for v in row])
+        mc = curve(ax, fr, te.mean(1), TEST, 3.5)
+        half = DashedLine(ax.c2p(0, 0.5), ax.c2p(1, 0.5), color=GREY_B, stroke_width=2)
+        H = axes([0, 1], [0, 60], x_length=5.6, y_length=3.8, xticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                 xfmt=lambda v: rf"{100 * v:.0f}\%", yticks=[0, 20, 40, 60],
+                 xlabel=r"share of training labels replaced by coin flips", ylabel=r"steps until every label is fit",
+                 center=(3.3, -0.4, 0))
+        hx = H.ax
+        fd = VGroup(*[Dot(hx.c2p(f, v), radius=0.06, color=TRAIN) for f, row in zip(fr, fit) for v in row])
+        fm = curve(hx, fr, fit.mean(1), TRAIN, 3.5)
+        head = label(r"The same network, \ three seeds at each level", font_size=28).to_edge(UP, buff=0.3)
+        a0, a1 = float(te[0].mean()), float(te[-1].mean())
+        f0, f1 = float(fit[0].mean()), float(fit[-1].mean())
+        mono = bool(np.all(np.diff(te.mean(1)) < 0.01))
+        slower = f1 > 1.3 * f0
+        with self.voiceover(
+            "Zhang and colleagues also turned the dial gradually, replacing a growing share of the labels with coin "
+            "flips. Here that is on the pages, three seeds at each setting. <bookmark mark='a'/> Accuracy on new "
+            f"pages falls from {100 * a0:.0f} percent with clean labels to {100 * a1:.0f} with all of them random"
+            + (", steadily, as the share of wrong labels grows. " if mono else ", though not evenly. ")
+            + "<bookmark mark='b'/> And the network fits every training label at every setting, "
+            + (f"taking longer the more labels are noise: about {f0:.0f} steps when they're clean, {f1:.0f} when "
+               "they're all random. " if slower else
+               f"in about {f0:.0f} to {f1:.0f} steps whatever the noise: on 448 pages, memorizing is cheap. ")
+            + "The same network, the same training, the same zero training error, and anything from excellent to "
+            "useless on new data. What it learns depends on the labels; any measure that looks only at the network "
+            "and not at the data can't tell these apart."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(G), FadeIn(H), Create(half))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.05), Create(mc), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in fd], lag_ratio=0.05), Create(fm), run_time=2.0)
+        self.wait(0.3)
         self.clear_scene()
