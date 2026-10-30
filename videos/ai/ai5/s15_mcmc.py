@@ -63,13 +63,12 @@ class MCMC(VoiceoverScene, ThreeDScene):
         tag.align_to(img, LEFT)  # flush left under the picture, clear of the citation in the corner
         cite_ = cite(r"N.~Metropolis, A.~Rosenbluth, M.~Rosenbluth, A.~Teller \& E.~Teller (1953)", corner=DR)
         with self.voiceover(
-            "Often there's no direct way to draw samples. All we can do is evaluate how likely each point is, and "
-            "only up to an unknown constant: Bayes's rule, where the rescaling is the hard part. "
-            "<bookmark mark='a'/> Here's a density in the plane with two bumps. In 1953, at Los Alamos, Nicholas "
-            "Metropolis, Arianna and Marshall Rosenbluth, and Augusta and Edward Teller, computing on the MANIAC, "
-            "found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. "
-            "<bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio "
-            "of the heights. Otherwise, stay where you are."
+            "Often there's no direct way to draw samples: all we can do is evaluate how likely each point is, and "
+            "only up to an unknown constant, as with Bayes's rule. <bookmark mark='a'/> Here's a density with two "
+            "bumps. In 1953 at Los Alamos, Nicholas Metropolis, Arianna and Marshall Rosenbluth, and Augusta and "
+            "Edward Teller, computing on the MANIAC, found a way to sample anything like it: take a random walk. "
+            "<bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If "
+            "downhill, take it with probability the ratio of the heights; otherwise stay put."
         ) as vo:
             self.play(FadeIn(img), Create(frame_), Create(cont), FadeIn(tag), run_time=1.5)
             vo.wait_until("a")
@@ -106,11 +105,11 @@ class MCMC(VoiceoverScene, ThreeDScene):
         running.next_to(cancel, DOWN, buff=0.4).align_to(cancel, LEFT)
         keep_in_frame(running)
         with self.voiceover(
-            "Only the ratio appears, so the unknown constant cancels out. <bookmark mark='a'/> Keep walking. The "
-            "places the walker visits pile up exactly like the density: it's a Markov chain whose stationary "
-            "distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the "
-            f"probability, and the walker spends {100 * left:.0f} percent of its time there. Markov chain Monte "
-            "Carlo made Bayesian statistics practical in the 1990s, and it's still how physicists sample molecules."
+            "Only the ratio appears, so the unknown constant cancels. <bookmark mark='a'/> Keep walking: the visits "
+            "pile up like the density, because this Markov chain's stationary distribution is the one we wanted. "
+            "<bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends "
+            f"{100 * left:.0f} percent of its time there. This made Bayesian statistics practical in the 1990s, and "
+            "physicists still sample molecules this way."
         ) as vo:
             self.play(FadeIn(cancel))
             vo.wait_until("a")
@@ -141,12 +140,11 @@ class MCMC(VoiceoverScene, ThreeDScene):
                 why(r"symmetric proposals: \ Metropolis (1953)")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.6, edge=6.8)
         with self.voiceover(
-            "Why does the walk land on the right distribution? Chapter ten's detailed balance. A step from x to y "
-            "is proposed with probability q, then accepted with probability a. <bookmark mark='a'/> Balance asks "
-            "that the flows match, <bookmark mark='b'/> which fixes only the ratio of the acceptances. "
-            "<bookmark mark='c'/> Make the larger of the two one: that's the rule W. K. Hastings published in 1970, "
-            "for any proposal. <bookmark mark='d'/> With a symmetric proposal, the q's cancel and it is Metropolis's "
-            "rule."
+            "Why does it work? Chapter ten's detailed balance. A step from x to y is proposed with probability q, "
+            "then accepted with probability a. <bookmark mark='a'/> Balance asks that the flows match, <bookmark "
+            "mark='b'/> which fixes only the ratio of the acceptances. <bookmark mark='c'/> Make the larger one equal "
+            "to one: W. K. Hastings's rule of 1970, for any proposal. <bookmark mark='d'/> With a symmetric proposal "
+            "the q's cancel, and it is Metropolis's rule."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -200,18 +198,17 @@ class MCMC(VoiceoverScene, ThreeDScene):
         frame_of = [s / 5 for s in steps_at]  # frames are saved every 5 steps
         good = left > 0.6
         verdict = (f"{100 * left:.0f} percent of the particles are in the left bump, close to its two thirds."
-                   if good else f"{100 * left:.0f} percent are in the left bump, short of its two thirds: some particles "
-                   "are still on the wrong side of the valley.")
+                   if good else f"{100 * left:.0f} percent are in the left bump, short of its two thirds: some are "
+                   "still on the wrong side of the valley.")
         with self.voiceover(
-            "There is another way to explore, borrowed from physics. In 1908 Paul Langevin wrote the motion of a "
-            "particle in a fluid as a push plus random kicks. <bookmark mark='a'/> Make the push the score, the "
-            "slope of log p, which points uphill toward likelier places, and make the kicks Brownian. In small "
-            "steps, that is one line of code. <bookmark mark='b'/> Fifteen hundred particles start as noise. "
-            "Above them, their density. <bookmark mark='c'/> It flows onto the two bumps, and its distance from "
-            f"the target falls from {l1[0]:.2f} to {l1[-1]:.2f}, about as low as smoothing the particles allows. "
-            f"{verdict} <bookmark mark='d'/> Its long-run distribution is p itself; chapter seventeen proves it. With "
-            "the score estimated on mini-batches it became a way to sample neural networks' weights, in 2011, "
-            "and with a learned score, the sampler of the first score-based image models."
+            "There is another way to explore, from physics. In 1908 Paul Langevin wrote a particle's motion in a "
+            "fluid as a push plus random kicks. <bookmark mark='a'/> Make the push the score, the slope of log p, "
+            "uphill toward likelier places, and the kicks Brownian; in small steps it is one line of code. <bookmark "
+            "mark='b'/> Fifteen hundred particles start as noise; above them, their density. <bookmark mark='c'/> It "
+            f"flows onto the two bumps, and its distance from the target falls from {l1[0]:.2f} to {l1[-1]:.2f}, about "
+            f"as low as smoothing allows. {verdict} <bookmark mark='d'/> Its long-run distribution is p itself, as "
+            "chapter seventeen proves. With mini-batch scores it sampled neural networks' weights in 2011, and with "
+            "learned scores, the first score-based image models."
         ) as vo:
             self.play(FadeIn(eq), FadeIn(hc), Create(axes), FadeIn(floor), run_time=1.2)
             vo.wait_until("a")

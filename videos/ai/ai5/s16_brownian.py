@@ -75,14 +75,13 @@ class Brownian(VoiceoverScene):
             [np.array([*p_, 0]) for p_ in jig])
         mic = label(r"pollen in water, \ under a microscope", font_size=26, color=GREY_A).next_to(lens, DOWN, buff=0.25)
         with self.voiceover(
-            "In 1827, the botanist Robert Brown watched pollen in water under a microscope, and saw it jiggle, "
-            "endlessly, for no visible reason. <bookmark mark='a'/> Here's a model: a walk that steps up or down at "
-            "random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller "
-            "still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the "
-            "spread after any time stays the same: the variance, the average squared distance from the start, comes "
-            "out at exactly t, and the walks settle into a single random object: Brownian motion, which Louis "
-            "Bachelier used for stock prices in 1900 and Norbert Wiener built rigorously in 1923. It's continuous "
-            "everywhere, and so jagged it has no slope anywhere."
+            "In 1827 the botanist Robert Brown watched pollen in water jiggle, endlessly, for no visible reason. "
+            "<bookmark mark='a'/> A model: a walk that steps up or down at random. Eight steps. <bookmark mark='b'/> "
+            "Sixty-four smaller ones. A thousand and twenty-four. <bookmark mark='c'/> Shrink each step like one over "
+            "the square root of their number, so that the variance, the average squared distance from the start, "
+            "stays exactly t, and the walks settle into one random object: Brownian motion. Louis Bachelier used it "
+            "for stock prices in 1900, and Norbert Wiener built it rigorously in 1923. It is continuous everywhere, "
+            "and so jagged it has no slope anywhere."
         ) as vo:
             self.play(FadeIn(lens), FadeIn(grain), FadeIn(mic))
             self.play(MoveAlongPath(grain, trace), Create(trace), run_time=5.0, rate_func=linear)
@@ -140,12 +139,11 @@ class Brownian(VoiceoverScene):
         slow = label(r"twice the time: \ $\sqrt{2} \approx 1.4$ times the spread", font_size=28, color=C.BITS)
         slow.next_to(f, DOWN, buff=0.25).align_to(f, LEFT)
         with self.voiceover(
-            "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell curve, "
-            "centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 "
-            "times the spread, not twice. Randomness spreads slowly. It's the central limit theorem again: the "
-            "position at time t is a sum of many tiny independent kicks. <bookmark mark='c'/> Measured on twenty "
-            "thousand paths, the variances, the spreads squared, come out at a quarter, a half, three quarters and "
-            "one: exactly t."
+            "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell, centred "
+            "at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 times the "
+            "spread, not twice: it's the central limit theorem again, the position being a sum of many tiny kicks. "
+            f"<bookmark mark='c'/> On twenty thousand paths the variances come out at {var[0]:.2f}, {var[1]:.2f}, "
+            f"{var[2]:.2f} and {var[3]:.2f}: t."
         ) as vo:
             self.play(Create(ax), FadeIn(xl))
             self.play(LaggedStart(*[Create(p) for p in fan], lag_ratio=0.03), run_time=3.0)
@@ -183,12 +181,10 @@ class Brownian(VoiceoverScene):
         hist = label(r"Einstein (1905): \ molecules are real, \\ and this counts them \ (Perrin, 1908)", font_size=26,
                      color=WHITE).next_to(hl, DOWN, buff=0.6)
         with self.voiceover(
-            "In two dimensions, a cloud of particles released at one point spreads into a widening bell. "
-            "<bookmark mark='a'/> Follow the density instead of the particles, and it obeys a rule that says exactly "
-            "how the cloud's shape changes from one moment to the next, an equation with no "
-            "randomness in it at all: the heat equation. The jiggling of each particle becomes the smooth spreading "
-            "of the whole. <bookmark mark='b'/> Einstein worked this out in 1905, and used it to argue that "
-            "molecules are real. A few years later, Jean Perrin measured the jiggling, and counted them."
+            "In two dimensions, a cloud released at one point spreads into a widening bell. <bookmark mark='a'/> "
+            "Follow the density instead of the particles, and it obeys an equation with no randomness in it at all: "
+            "the heat equation. <bookmark mark='b'/> Einstein worked this out in 1905 and used it to argue that "
+            "molecules are real; a few years later Jean Perrin measured the jiggling, and counted them."
         ) as vo:
             self.play(FadeIn(dots), FadeIn(ring))
             self.play(t.animate.set_value(steps), FadeIn(rl), run_time=6.0, rate_func=linear)
@@ -233,15 +229,14 @@ class Brownian(VoiceoverScene):
         tl = label(r"over $400$ paths, \ $t = 1$", font_size=20, color=GREY_A).next_to(tbl, UP, buff=0.12).align_to(tbl, LEFT)
         rule = label(r"$(dW)^2 = dt$", font_size=40, color=C.BITS).next_to(tbl, DOWN, buff=0.35)
         with self.voiceover(
-            "Brownian paths have one more property that changes calculus. Square each tiny step, and add the squares. "
+            "Brownian paths have one more property that changes calculus. Square each tiny step and add the squares. "
             "<bookmark mark='a'/> For a smooth curve that sum vanishes as the steps shrink. For Brownian motion it "
-            "climbs steadily, along the line t. <bookmark mark='b'/> Each squared step has mean delta t, "
-            "<bookmark mark='c'/> and a variance of order delta t squared, <bookmark mark='d'/> so the sum's mean is "
-            "t and its spread vanishes. Measured on four hundred paths at time one: "
-            f"{qm[k[0]]:.2f}, give or take {qs[k[0]]:.2f}, with sixteen steps; {qm[k[2]]:.3f}, give or take "
-            f"{qs[k[2]]:.3f}, with sixteen thousand. Meanwhile the plain length of the path, the sum of the absolute "
-            f"steps, grows without limit: {tvm[k[2]]:.0f} already. <bookmark mark='e'/> In shorthand, dW squared "
-            "equals dt. Paul Levy proved it in 1940, and it is the rule behind the next chapter."
+            "climbs steadily along the line t. <bookmark mark='b'/> Each squared step has mean delta t <bookmark "
+            "mark='c'/> and variance of order delta t squared, <bookmark mark='d'/> so the sum's mean is t and its "
+            f"spread vanishes. On four hundred paths: {qm[k[0]]:.2f}, give or take {qs[k[0]]:.2f}, with sixteen steps; "
+            f"{qm[k[2]]:.3f}, give or take {qs[k[2]]:.3f}, with sixteen thousand. The path's plain length, meanwhile, "
+            f"grows without limit: {tvm[k[2]]:.0f} already. <bookmark mark='e'/> In shorthand, dW squared equals dt: "
+            "Paul Levy's theorem of 1940, and the rule behind the next chapter."
         ) as vo:
             self.play(Create(ax), Create(pc), FadeIn(pl), run_time=1.5)
             vo.wait_until("a")

@@ -64,10 +64,9 @@ class MonteCarlo(VoiceoverScene):
         why = label(r"the circle's share of the square: \ $\pi / 4$", font_size=26, color=GREY_A).next_to(sq, DOWN, buff=0.2)
         shown = len(dots)
         with self.voiceover(
-            "Here's a strange way to compute pi. Throw darts at a square, completely at random. "
-            "<bookmark mark='a'/> The share that lands inside the circle is the circle's share of the square's area: "
-            "pi over four. So four times the fraction inside estimates pi. <bookmark mark='b'/> Watch the estimate "
-            "as the darts pile up. It lurches around, then homes in."
+            "Here's a strange way to compute pi: throw darts at a square, completely at random. <bookmark mark='a'/> "
+            "The share inside the circle is the circle's share of the area, pi over four, so four times that share "
+            "estimates pi. <bookmark mark='b'/> Watch it as the darts pile up: it lurches, then homes in."
         ) as vo:
             self.play(Create(sq), Create(circ))
             self.play(LaggedStart(*[FadeIn(x, scale=0.3) for x in dots[:24]], lag_ratio=0.15), run_time=2.0)
@@ -115,13 +114,11 @@ class MonteCarlo(VoiceoverScene):
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(f, DOWN, buff=0.5).set_x(4.4)
         cite_ = cite(r"N.~Metropolis \& S.~Ulam, \textit{The Monte Carlo Method} (1949)", corner=DR)
         with self.voiceover(
-            "Repeat the experiment many times at each size, and measure the typical error. On log scales, where each "
-            f"tick is ten times the last, it falls on a straight line with slope {slope:.2f}. <bookmark mark='a'/> The "
-            "error shrinks like one over the "
-            "square root of the number of samples: every extra digit of accuracy costs a hundred times more "
-            "samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random "
-            "samples works the same in a million dimensions, where any grid would be hopeless. That's why "
-            "Monte Carlo is everywhere in machine learning."
+            "Repeat the experiment many times at each size and measure the typical error. On log scales it falls on a "
+            f"line of slope {slope:.2f}. <bookmark mark='a'/> The error shrinks like one over the square root of the "
+            "number of samples: each extra digit costs a hundred times more. <bookmark mark='b'/> That's slow, but "
+            "the rate doesn't care about dimension: it is the same in a million dimensions, where any grid would be "
+            "hopeless."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(x10), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(LaggedStart(*[FadeIn(x, scale=0.5) for x in dots], lag_ratio=0.15), run_time=1.5)
@@ -170,10 +167,9 @@ class MonteCarlo(VoiceoverScene):
         f = cmath(r"\mathbb{E}_p", r"[f(x)]", "=", r"\mathbb{E}_q", r"\Big[f(x)\,", r"\frac{p(x)}{q(x)}", r"\Big]",
                   colors=colors, font_size=40).move_to([3.6, 2.0, 0])
         with self.voiceover(
-            "Monte Carlo has one weakness: rare events. How often does a standard bell curve, the one centred at "
-            "zero with a width of one, land above four? "
-            f"Exactly, about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> Draw {n:,} samples, "
-            f"and only {hits} land there. The estimate is off by a factor of {plain / true:.0f}."
+            "Monte Carlo has one weakness: rare events. How often does a standard bell land above four? Exactly, "
+            f"about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> Draw {n:,} samples, and only "
+            f"{hits} land there: off by a factor of {plain / true:.0f}."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(p), FadeIn(pl))
             self.play(Create(edge), FadeIn(tail_l), FadeIn(truth))
@@ -181,11 +177,10 @@ class MonteCarlo(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r) for r in rug_p], lag_ratio=0.004), run_time=1.5)
             self.play(*[Indicate(rug_p[i], color=TAIL, scale_factor=2.5) for i in range(hits)], FadeIn(r1))
         with self.voiceover(
-            "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a different bell, one "
-            "that lands out there half the time. <bookmark mark='b'/> Then weight each sample by how much more "
-            "likely it was under the real distribution than under the one you drew from. <bookmark mark='c'/> Same "
-            f"number of samples, and now the answer is within {100 * abs(is_est / true - 1):.1f} percent. This is importance sampling, and it comes "
-            "back when models learn from samples drawn by an older version of themselves, in reinforcement learning."
+            "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a bell that lands out there "
+            "half the time. <bookmark mark='b'/> Then weight each sample by how much likelier it is under the real "
+            "distribution than under the one you drew from. <bookmark mark='c'/> Same number of samples, and the "
+            f"answer is within {100 * abs(is_est / true - 1):.1f} percent: importance sampling."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(q), FadeIn(ql), LaggedStart(*[FadeIn(r) for r in rug_q], lag_ratio=0.004), run_time=1.8)
@@ -211,11 +206,10 @@ class MonteCarlo(VoiceoverScene):
                      corner=DR)
         with self.voiceover(
             "The method was born at Los Alamos. <bookmark mark='a'/> In 1946 the mathematician Stanislaw Ulam, "
-            "recovering from an illness, wondered how often a game of solitaire comes out, and saw that it was "
-            "easier to play a hundred games and count than to calculate. <bookmark mark='b'/> John von Neumann "
-            "turned the idea into a way to follow neutrons through a bomb core, <bookmark mark='c'/> and in 1948 "
-            "Klara von Neumann and Nicholas Metropolis ran it on ENIAC. Metropolis named it after the casino in "
-            "Monaco."
+            "recovering from an illness, wondered how often solitaire comes out, and saw it was easier to play a "
+            "hundred games and count. <bookmark mark='b'/> John von Neumann turned the idea into a way to follow "
+            "neutrons through a bomb core, <bookmark mark='c'/> and in 1948 Klara von Neumann and Nicholas Metropolis "
+            "ran it on ENIAC. Metropolis named it after the casino."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abc"):
@@ -254,12 +248,11 @@ class MonteCarlo(VoiceoverScene):
         m = ess.mean(0)
         i50, i200 = list(dims).index(50), list(dims).index(200)
         with self.voiceover(
-            "Importance sampling has a weakness of its own, and it is the weights. <bookmark mark='a'/> Count how many "
-            "weighted samples are really doing the work: the effective sample size, the squared sum of the weights "
-            f"over the sum of their squares. <bookmark mark='b'/> Aim at a bell with a proposal just {100 * (s - 1):.0f} "
-            f"percent wider. In one dimension, {m[0]:,.0f} of {n:,} samples count. In fifty, {m[i50]:.0f}. In two "
-            f"hundred, the measurement says {m[i200]:.0f}, and the theory says even that is far too hopeful: "
-            f"{th[i200]:.3f}. A handful of samples carry all the weight. <bookmark mark='c'/> That is why "
+            "Importance sampling has a weakness of its own: the weights. <bookmark mark='a'/> Count how many samples "
+            "are really doing the work, the effective sample size. <bookmark mark='b'/> Aim at a bell with a proposal "
+            f"just {100 * (s - 1):.0f} percent wider. In one dimension, {m[0]:,.0f} of {n:,} samples count; in fifty, "
+            f"{m[i50]:.0f}; in two hundred the measurement says {m[i200]:.0f}, and theory says even that is too "
+            f"hopeful: {th[i200]:.3f}. A handful of samples carry all the weight. <bookmark mark='c'/> That is why "
             "reinforcement learning clips its importance ratios, in part twenty-six."
         ) as vo:
             self.play(Write(f), FadeIn(fn))

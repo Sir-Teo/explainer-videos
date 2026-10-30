@@ -57,11 +57,11 @@ class Tails(VoiceoverScene):
         q = label(r"a bound that needs no picture: \ only that each flip lies in $[0, 1]$", font_size=26, color=C.BITS)
         q.to_edge(UP, buff=1.0)
         with self.voiceover(
-            "The law of large numbers says an average settles. Learning from data needs more: how often is an "
-            f"average still far off? A million runs of a hundred fair flips. <bookmark mark='a'/> The share of heads "
-            f"is at least {0.5 + eps:g} in a fraction {ex:.3f} of them. <bookmark mark='b'/> Here we could just "
-            "count. But when a model is evaluated on data, we never see this picture; we need a guarantee that "
-            "holds whatever the distribution, knowing only, say, that each value lies between zero and one."
+            "The law of large numbers says an average settles. Learning from data needs more: how often is it still "
+            "far off? A million runs of a hundred fair flips. <bookmark mark='a'/> The share of heads reaches "
+            f"{0.5 + eps:g} in a fraction {ex:.3f} of them. <bookmark mark='b'/> Here we can count, but a model's test "
+            "data never shows us this picture. We need a guarantee that holds whatever the distribution, knowing only "
+            "that each value lies between zero and one."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), run_time=2.0)
@@ -93,14 +93,13 @@ class Tails(VoiceoverScene):
         cite_ = cite(r"I.-J.~Bienaym\'e (1853), \ P.~Chebyshev (1867), \ H.~Chernoff (1952), \ W.~Hoeffding (1963)",
                      corner=DR)
         with self.voiceover(
-            "Each bound comes from the one before. <bookmark mark='a'/> Markov's: a quantity that is never "
-            "negative can't often be much bigger than its average. <bookmark mark='b'/> Apply it to the squared "
-            "distance from the mean and you get Chebyshev's: the chance of missing by epsilon is at most the "
-            "variance over epsilon squared, and an average of n has n times less variance. <bookmark mark='c'/> "
-            "Chernoff's idea: apply Markov to e to the t times the sum. Independence splits it into a product, "
-            "and the tail falls exponentially in n. <bookmark mark='d'/> For values between zero and one, "
-            "Hoeffding's lemma bounds each factor, <bookmark mark='e'/> and choosing t well gives e to the minus "
-            "two n epsilon squared: Hoeffding's inequality, from 1963."
+            "Each bound comes from the one before. <bookmark mark='a'/> Markov's: a quantity that is never negative "
+            "can't often be much bigger than its average. <bookmark mark='b'/> Apply it to the squared distance from "
+            "the mean: Chebyshev's, the variance over epsilon squared, and an average of n has n times less variance. "
+            "<bookmark mark='c'/> Chernoff's idea: apply Markov to e to the t times the sum; independence splits it "
+            "into a product, and the tail falls exponentially in n. <bookmark mark='d'/> For values between zero and "
+            "one, Hoeffding's lemma bounds each factor, <bookmark mark='e'/> and the best t gives e to the minus two "
+            "n epsilon squared: Hoeffding's inequality, from 1963."
         ) as vo:
             vo.wait_until("a")
             step(0)
@@ -197,12 +196,12 @@ class Tails(VoiceoverScene):
                       label(r"Part 26: \ the bonus in UCB, \ exploring a slot machine", font_size=24, color=GREY_A))
         uses.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            f"Turn it around. How many flips guarantee that the share of heads overshoots by {e0:g} at most "
-            f"{100 * d0:g} percent of the time? <bookmark mark='a'/> Chebyshev's bound asks for {need['chebyshev']:,}. "
-            f"Hoeffding's, {need['hoeffding']:,}, and Chernoff's {need['chernoff']:,}. <bookmark mark='b'/> For fair "
-            f"coins the truth is {need['exact']}. The best bound asks for {best / need['exact']:.1f} times as many, the "
-            "price of holding for every distribution on zero to one. <bookmark mark='c'/> Part eight uses exactly this to bound how far a model's score "
-            "on test data can be from its true error, and part twenty-six used Hoeffding's bound to explore."
+            f"Turn it around. How many flips guarantee that the share overshoots by {e0:g} at most {100 * d0:g} "
+            f"percent of the time? <bookmark mark='a'/> Chebyshev's bound asks for {need['chebyshev']:,}; Hoeffding's, "
+            f"{need['hoeffding']:,}; Chernoff's, {need['chernoff']:,}. <bookmark mark='b'/> For fair coins the truth "
+            f"is {need['exact']}: the best bound asks for {best / need['exact']:.1f} times as many, the price of "
+            "holding for every distribution. <bookmark mark='c'/> Part eight uses exactly this to bound a model's "
+            "true error from its test score, and part twenty-six used Hoeffding's bound to explore."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
