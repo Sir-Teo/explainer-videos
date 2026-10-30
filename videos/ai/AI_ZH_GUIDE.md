@@ -1099,3 +1099,52 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | test-time compute, thinking budget | 测试时计算，思考预算 |
 | price per million tokens | 每百万词元的价格 |
 | on-device inference | 端侧推断 |
+
+### The mathematics of scale (Part 12)
+
+| English | 中文 |
+|---|---|
+| scaling law, power law plus a floor | 规模定律，幂律加下限 |
+| irreducible loss, reducible loss | 不可约损失，可约损失 |
+| infinite-width limit | 无限宽极限 |
+| neural network Gaussian process (NNGP) | 神经网络高斯过程（NNGP） |
+| neural tangent kernel (NTK), tangent features | 神经正切核（NTK），切线特征 |
+| linearization (of a network) | （网络的）线性化 |
+| lazy training, lazy regime | 惰性训练，惰性区 |
+| rich regime, feature learning | 丰富区，特征学习 |
+| mean-field parametrization | 平均场参数化 |
+| standard parametrization (SP) | 标准参数化（SP） |
+| maximal update parametrization (μP) | 最大更新参数化（μP） |
+| coordinate check | 坐标检查 |
+| hyperparameter transfer (μTransfer) | 超参数迁移（μTransfer） |
+| fan-in, fan-out | 扇入，扇出 |
+| branch multiplier, depth-μP, CompleteP | 分支乘子，深度μP，CompleteP |
+| lazy in depth | 深度上的惰性 |
+| critical batch size, gradient noise scale | 临界批量大小，梯度噪声尺度 |
+| steps–examples trade-off | 步数与样本数的权衡 |
+| warmup-stable-decay (WSD), cool-down branch | 预热-稳定-衰减（WSD），冷却分支 |
+| compute-optimal, Chinchilla-optimal | 计算最优，Chinchilla最优 |
+| iso-FLOP curve, iso-FLOP valley | 等算力曲线，等算力谷 |
+| Lagrange multiplier | 拉格朗日乘子 |
+| non-embedding parameters | 非嵌入参数 |
+| bootstrap (resampling) | 自助法（重抽样） |
+| over-training, inference-aware scaling | 过度训练，计入推理的规模定律 |
+| data-constrained scaling, epochs, effective data | 数据受限的规模定律，轮数（epoch），有效数据量 |
+| effective parameter count | 有效参数量 |
+| post-training quantization (PTQ), round to nearest | 训练后量化（PTQ），就近取整 |
+| precision scaling law | 精度规模定律 |
+| fine-grained experts, granularity | 细粒度专家，粒度 |
+| data manifold, intrinsic dimension | 数据流形，内在维数 |
+| quantization model of scaling, quanta | 规模的量子化模型，量子 |
+| multitask sparse parity, Zipf's law | 多任务稀疏奇偶性，齐普夫定律 |
+| emergent ability, exact match, metric artifact | 涌现能力，精确匹配，度量造成的假象 |
+| grokking, memorization, generalization | 顿悟（grokking），记忆，泛化 |
+| weight decay | 权重衰减 |
+| Fourier spectrum, key frequencies | 傅里叶频谱，关键频率 |
+| kernel distance | 核距离 |
+| pass@k, coverage, repeated sampling | pass@k，覆盖率，重复采样 |
+| test-time compute | 测试时计算 |
+| sigmoidal compute–performance curve | S形的算力-性能曲线 |
+| densing law, capability density | 致密化定律，能力密度 |
+| algorithmic progress | 算法进步 |
+| scaling ladder | 规模阶梯 |
