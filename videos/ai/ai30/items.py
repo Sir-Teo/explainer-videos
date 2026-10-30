@@ -329,50 +329,69 @@ def compute_induction():
 
     nb = json.loads((N.OUT / "base.json").read_text())
     out["nov_tokens"] = int(nb["steps"] * nb["tokens_per_step"])
-    # 2. Part 13's attention-only model on repeated random tokens, retrained here with its seed and recipe
-    torch.manual_seed(2022)  # Olsson et al., In-context Learning and Induction Heads (2022)
-    m = att2_build()
-    opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
-    g = C.rng(2022)
+    # 2. Part 13's attention-only model on repeated random tokens, retrained here with its seed and recipe (the
+    # weights and the training snapshots are kept, so the analysis can be redone without retraining)
     test_x, test_m, tsrc, tdst, tln = att2_batch(C.rng(99), 128)
     test_c = att2_corrupt(test_x, tsrc, tln, C.rng(98))
     S = C.steps(I_STEPS)
-    curve, snaps = [], []
-    for step in range(S + 1):
-        if step % 100 == 0:
-            with torch.no_grad():
-                z = m(test_x)
-                ce = F.cross_entropy(z[:, :-1].reshape(-1, IV), test_x[:, 1:].reshape(-1), reduction="none")
-                ce = ce.view(len(test_x), IT - 1) / math.log(2)
-                mk = test_m[:, :-1]
-                curve.append((step, float(ce[mk].mean()), float(ce[~mk].mean())))
-        if step % I_SNAP == 0:
-            snaps.append((step, copy.deepcopy(m.state_dict())))
-        if step == S:
-            break
-        x, _, _, _, _ = att2_batch(g, 64)
-        loss = F.cross_entropy(m(x)[:, :-1].reshape(-1, IV), x[:, 1:].reshape(-1))
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
+    wpath, spath = C.CACHE.dir / "att2.pt", C.CACHE.dir / "att2_train.pt"
+    m = att2_build()
+    if wpath.exists() and spath.exists() and torch.load(spath, weights_only=False).get("steps") == S:
+        tr = torch.load(spath, weights_only=False)
+        m.load_state_dict(torch.load(wpath))
+        curve, snaps = tr["curve"], tr["snaps"]
+    else:
+        torch.manual_seed(2022)  # Olsson et al., In-context Learning and Induction Heads (2022)
+        m = att2_build()
+        opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
+        g = C.rng(2022)
+        curve, snaps = [], []
+        for step in range(S + 1):
+            if step % 100 == 0:
+                with torch.no_grad():
+                    z = m(test_x)
+                    ce = F.cross_entropy(z[:, :-1].reshape(-1, IV), test_x[:, 1:].reshape(-1), reduction="none")
+                    ce = ce.view(len(test_x), IT - 1) / math.log(2)
+                    mk = test_m[:, :-1]
+                    curve.append((step, float(ce[mk].mean()), float(ce[~mk].mean())))
+            if step % I_SNAP == 0:
+                snaps.append((step, copy.deepcopy(m.state_dict())))
+            if step == S:
+                break
+            x, _, _, _, _ = att2_batch(g, 64)
+            loss = F.cross_entropy(m(x)[:, :-1].reshape(-1, IV), x[:, 1:].reshape(-1))
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+        torch.save(m.state_dict(), wpath)
+        torch.save(dict(steps=S, curve=curve, snaps=snaps), spath)
     m.eval()
-    torch.save(m.state_dict(), C.CACHE.dir / "att2.pt")
     out["curve"] = np.array(curve)
     out["steps"] = S
-    # the heads: previous-token and induction scores
-    with torch.no_grad():
-        _, r = m(test_x, rec=True)
-    P1, P2 = r["attn0"].numpy(), r["attn1"].numpy()
-    prev = [float(np.mean([P1[:, h, i, i - 1] for i in range(1, IT)])) for h in range(IH)]
-    ind = np.zeros(IH)
-    cnt = 0
-    for b in range(len(test_x)):
-        for p_ in range(tdst[b], tdst[b] + tln[b] - 1):
-            ind += P2[b, :, p_, tsrc[b] + (p_ - tdst[b]) + 1]
-            cnt += 1
-    ind = ind / cnt
+
+    def scores(mm):
+        """Each layer-1 head's attention to the previous token and to itself; each layer-2 head's attention to the
+        token after the earlier copy of the current one."""
+        with torch.no_grad():
+            _, r = mm(test_x, rec=True)
+        P1, P2 = r["attn0"].numpy(), r["attn1"].numpy()
+        prev = [float(np.mean([P1[:, h, i, i - 1] for i in range(1, IT)])) for h in range(IH)]
+        self_ = [float(np.mean([P1[:, h, i, i] for i in range(IT)])) for h in range(IH)]
+        ind = np.zeros(IH)
+        cnt = 0
+        for b in range(len(test_x)):
+            for p_ in range(tdst[b], tdst[b] + tln[b] - 1):
+                ind += P2[b, :, p_, tsrc[b] + (p_ - tdst[b]) + 1]
+                cnt += 1
+        return prev, self_, list(ind / cnt)
+
+    prev, self_, ind = scores(m)
+    prev_set = [h for h in range(IH) if prev[h] > 0.2] or [int(np.argmax(prev))]
+    ind_set = [h for h in range(IH) if ind[h] > 0.3] or [int(np.argmax(ind))]
+    self_head = int(np.argmax(self_))
     hp, hi = int(np.argmax(prev)), int(np.argmax(ind))
-    out.update(prev_scores=prev, ind_scores=list(ind), prev_head=hp, ind_head=hi)
+    out.update(prev_scores=prev, self_scores=self_, ind_scores=ind, prev_head=hp, ind_head=hi, prev_set=prev_set,
+               ind_set=ind_set, self_head=self_head)
 
     def metric(z):
         return att2_metric(z, test_x, test_m)
@@ -406,17 +425,24 @@ def compute_induction():
                 abl[l_, h_] = float((ce.view(len(test_x), -1) / math.log(2))[test_m[:, :-1]].mean())
     out["ablate_bits"] = abl
     out["clean_bits"] = float(curve[-1][1])
-    # path patching (noising): the previous-token head's corrupted output sent only into the induction head's
-    # queries, keys or values
-    delta = rx["heads0"][:, hp] - rc["heads0"][:, hp]
-    paths = {}
-    with torch.no_grad():
+
+    # path patching (noising): layer-1 heads' corrupted outputs sent only into the layer-2 heads' queries, keys or
+    # values; from the previous-token heads together, from each alone, and from the current-token head
+    def path(mm, rc_, rx_, heads, mc, mx):
+        delta = sum(rx_["heads0"][:, h] - rc_["heads0"][:, h] for h in heads)
+        res = {}
         for nm, sel in (("q", (1, 0, 0)), ("k", (0, 1, 0)), ("v", (0, 0, 1))):
             fn = (lambda h, sel=sel: tuple(h + delta if s_ else h for s_ in sel))
-            paths[nm] = frac_noise(m(test_x, patch={("kqv", 1, hi): fn}))
-    out["path_noise"] = paths
-    # residual stream patching, denoising: one target position of one example, the clean residual at one (layer,
-    # position) put into the corrupted run; how much of the target's log-probability comes back
+            with torch.no_grad():
+                z = mm(test_x, patch={("kqv", 1, h2): fn for h2 in range(IH)})
+            res[nm] = (mc - metric(z)) / (mc - mx)
+        return res
+
+    out["path_noise"] = path(m, rc, rx, prev_set, m_clean, m_corr)
+    out["path_single"] = [path(m, rc, rx, [h], m_clean, m_corr)["k"] for h in prev_set]
+    out["path_self"] = path(m, rc, rx, [self_head], m_clean, m_corr)
+    # residual stream patching, noising: one target position of one example; the corrupted residual at one (layer,
+    # position) put into the clean run; how much of the target's log-probability is lost
     ex = np.asarray(C.rng(7).integers(0, IV, IT))
     ex[60:80] = ex[10:30]
     exc = ex.copy()
@@ -432,37 +458,39 @@ def compute_induction():
     with torch.no_grad():
         for l_ in range(3):
             for j in range(tgt + 1):
-                cl = re_[f"resid{l_}"]
+                cr = rce[f"resid{l_}"]
 
-                def fn(h, j=j, cl=cl):
+                def fn(h, j=j, cr=cr):
                     h = h.clone()
-                    h[:, j] = cl[:, j]
+                    h[:, j] = cr[:, j]
                     return h
 
-                heat[l_, j] = (lp(m(xce, patch={("resid", l_): fn})) - lx) / (lc - lx)
+                heat[l_, j] = (lc - lp(m(xe, patch={("resid", l_): fn}))) / (lc - lx)
     out.update(ex=ex, ex_corrupt=exc, target=tgt, heat=heat, lp_clean=lc, lp_corrupt=lx,
-               ex_prev=re_["attn0"][0, hp].numpy(), ex_ind=re_["attn1"][0, hi].numpy())
+               ex_prev=re_["attn0"][0, hp].numpy(), ex_ind=re_["attn1"][0, hi].numpy(),
+               ex_self=re_["attn0"][0, self_head].numpy())
     # composition scores against random heads
     mats = [m.mats(l_, h_) for l_ in range(2) for h_ in range(IH)]
     cs = c13.composition_scores(mats, 2, IH)
     out["comp_k"], out["comp_q"], out["comp_v"] = (cs[k][:IH, IH:] for k in ("k", "q", "v"))
     out["comp_base"], out["comp_base_sd"] = c13.composition_baseline(ID, ID // IH)
-    # the induction head's OV circuit, token to logit: does attending to token t raise the logit of t?
+    # the induction heads' OV circuit, token to logit: does attending to token t raise the logit of t?
     E = m.emb.weight.detach().double().numpy()  # (V, D)
     U = m.out.weight.detach().double().numpy()  # (V, D)
-    _, ov = m.mats(1, hi)
-    M = U @ ov @ E.T  # (V out, V in)
+    M = sum(U @ m.mats(1, h)[1] @ E.T for h in ind_set)  # (V out, V in), the induction heads together
     lam = np.linalg.eigvals(M)
     out["ov"] = M.astype(np.float32)
     out["ov_diag_top"] = float(np.mean(M.argmax(0) == np.arange(IV)))
     out["ov_copy_score"] = float(lam.real.sum() / np.abs(lam).sum())
-    # the previous-token head's QK circuit on positions: where does a query at position i look?
-    qk0, _ = m.mats(0, hp)
+    # the previous-token heads' QK circuit on positions: where does a query at position i look?
     Pz = m.pos.detach().double().numpy()
-    S_ = Pz @ qk0 @ Pz.T
-    off = np.array([np.mean([S_[i, i - d] for i in range(d, IT)]) for d in range(0, 8)])
-    out["qk_pos_offsets"] = off
-    # through training: the K path's damage, and the induction score, at each snapshot
+    offs = []
+    for h in prev_set:
+        qk0, _ = m.mats(0, h)
+        S_ = Pz @ qk0 @ Pz.T
+        offs.append([np.mean([S_[i, i - d] for i in range(d, IT)]) for d in range(0, 8)])
+    out["qk_pos_offsets"] = np.mean(offs, 0)
+    # through training: the K path's effect (previous-token heads into every layer-2 head's keys), and the scores
     kpath, sc_ind, sc_prev = [], [], []
     for st, sd in snaps:
         mm = att2_build()
@@ -471,24 +499,20 @@ def compute_induction():
         with torch.no_grad():
             zc_, rc_ = mm(test_x, rec=True)
             zx_, rx_ = mm(test_c, rec=True)
-            mc, mx = metric(zc_), metric(zx_)
-            d0 = rx_["heads0"][:, hp] - rc_["heads0"][:, hp]
-            zk = mm(test_x, patch={("kqv", 1, hi): (lambda h, d0=d0: (h, h + d0, h))})
-            kpath.append((st, mc - metric(zk), mc - mx))
-            P1_, P2_ = rc_["attn0"].numpy(), rc_["attn1"].numpy()
-            sc_prev.append(float(np.mean([P1_[:, hp, i, i - 1] for i in range(1, IT)])))
-            v_ = []
-            for b in range(len(test_x)):
-                for p_ in range(tdst[b], tdst[b] + tln[b] - 1):
-                    v_.append(P2_[b, hi, p_, tsrc[b] + (p_ - tdst[b]) + 1])
-            sc_ind.append(float(np.mean(v_)))
+        mc, mx = metric(zc_), metric(zx_)
+        kp = path(mm, rc_, rx_, prev_set, mc, mx)["k"] * (mc - mx)  # in nats
+        kpath.append((st, kp, mc - mx))
+        p_, _, i_ = scores(mm)
+        sc_prev.append(float(np.mean([p_[h] for h in prev_set])))
+        sc_ind.append(float(np.mean([i_[h] for h in ind_set])))
     out["snap_steps"] = [s_ for s_, _ in snaps]
     out["snap_kpath"] = np.array(kpath)
     out["snap_ind"], out["snap_prev"] = sc_ind, sc_prev
     print(f"    our transformers: TF {out['tf_text1']:.2f} -> {out['tf_text2']:.2f} bits on repeated text, novels "
           f"{out['nov_text1']:.2f} -> {out['nov_text2']:.2f}; attention-only: repeat {curve[0][1]:.2f} -> "
-          f"{curve[-1][1]:.2f} bits; prev head {hp} ({prev[hp]:.2f}), induction head {hi} ({ind[hi]:.2f}); head noise "
-          f"{np.round(noise, 2).tolist()}; paths {paths}; OV copy {out['ov_copy_score']:.2f}", flush=True)
+          f"{curve[-1][1]:.2f} bits; previous-token heads {prev_set}, induction heads {ind_set}, current-token head "
+          f"{self_head}; head noise {np.round(noise, 2).tolist()}; paths {out['path_noise']}; OV copy "
+          f"{out['ov_copy_score']:.2f}", flush=True)
     return out
 
 
@@ -870,13 +894,13 @@ def compute_mood():
 
 
 # ---------------------------------------------------------------------------
-DIFF = dict(layer=3, F=1024, k=32, steps=2000, batch=1024, windows=150, T=128, chat=700, seed=0)
+DIFF = dict(layers=(3, 5), F=1024, k=32, steps=2000, batch=1024, windows=150, T=128, chat=700, seed=0)
 
 
 def compute_diffing():
     """Model diffing between the novels model and Part 27's fine-tune of it (SFT): a BatchTopK crosscoder reading
-    both models' residual streams after block 3 on the same tokens, novel text and chat transcripts; each latent's
-    decoder norm in each model; and the activation-difference lens on novel text alone."""
+    both models' residual streams on the same tokens, novel text and chat transcripts, after block 3 and after block
+    5; each latent's decoder norm in each model; and the activation-difference lens on novel text alone."""
     import torch
 
     from explainer.ai import novels as N
@@ -897,37 +921,10 @@ def compute_diffing():
     ex += [P27.chat(c27.line_q(t), s) for t, s in (d["line_train"][i] for i in g.choice(len(d["line_train"]), 300, False))]
     g.shuffle(ex)
     ex = ex[: max(40, int(DIFF["chat"] * sc))]
-    lay = DIFF["layer"]
-
-    def resid(model, ids_list):
-        hs = []
-        for ids in ids_list:
-            h, _ = acts.nov_resid(model, torch.tensor([ids]))
-            hs.append(h[lay][0])
-        return torch.cat(hs)
-
-    hb_n, hf_n = (acts.nov_resid(m_, Wn)[0][lay][:, 4:].reshape(-1, base.cfg.d) for m_ in (base, sft))
-    hb_c, hf_c = resid(base, ex), resid(sft, ex)
+    strs = acts.token_strings(range(N.tokenizer().get_vocab_size()))
     tok_n = Wn[:, 4:].reshape(-1)
     tok_c = torch.tensor([t for ids in ex for t in ids])
-    src = torch.cat([torch.zeros(len(hb_n)), torch.ones(len(hb_c))]).bool()  # True: chat
-    Hb, Hf = torch.cat([hb_n, hb_c]), torch.cat([hf_n, hf_c])
-    sb = float(Hb.pow(2).sum(1).mean().sqrt()) / math.sqrt(Hb.shape[1])
-    sf = float(Hf.pow(2).sum(1).mean().sqrt()) / math.sqrt(Hf.shape[1])
-    X = torch.cat([Hb / sb, Hf / sf], 1)
-    S = C.steps(DIFF["steps"])
-    cc, rec = dicts.train(X, "batchtopk", DIFF["k"], F=DIFF["F"], steps=S, batch=DIFF["batch"], seed=DIFF["seed"])
-    e = dicts.evaluate(cc, X)
-    D_ = base.cfg.d
-    nb, nf = cc.Wd[:, :D_].norm(dim=1).numpy(), cc.Wd[:, D_:].norm(dim=1).numpy()
-    rel = nf / (nb + nf)
-    with torch.no_grad():
-        f = dicts.encode(cc, X)
-    alive = (f > 0).any(0).numpy()
-    on_chat = (f[src] > 0).float().mean(0).numpy()
-    on_novel = (f[~src] > 0).float().mean(0).numpy()
     tokens = torch.cat([tok_n, tok_c]).numpy()
-    strs = acts.token_strings(range(N.tokenizer().get_vocab_size()))
     tn = Wn.shape[1] - 4
     seg0 = np.concatenate([np.repeat(np.arange(len(Wn)) * tn, tn),
                            len(tok_n) + np.repeat(np.cumsum([0] + [len(e_) for e_ in ex[:-1]]), [len(e_) for e_ in ex])])
@@ -937,39 +934,69 @@ def compute_diffing():
         lo = max(i - before, int(seg0[i]))
         return "".join(strs[int(t)] for t in tokens[lo:i + 1])
 
-    def top_contexts(j, k=5):
-        idx = torch.topk(f[:, j], k).indices.numpy()
-        return [dict(text=ctx(int(i)), chat=bool(src[int(i)]), tok=strs[int(tokens[int(i)])]) for i in idx
-                if f[int(i), j] > 0]
+    hb_all = acts.nov_resid(base, Wn)[0]
+    hf_all = acts.nov_resid(sft, Wn)[0]
+    hbc = [acts.nov_resid(base, torch.tensor([ids]))[0] for ids in ex]
+    hfc = [acts.nov_resid(sft, torch.tensor([ids]))[0] for ids in ex]
+    D_ = base.cfg.d
+    out = dict(layers=list(DIFF["layers"]), F=DIFF["F"], k=DIFF["k"], n_chat=int(len(tok_c)), n_novel=int(len(tok_n)))
+    for lay in DIFF["layers"]:
+        hb_n, hf_n = (h[lay][:, 4:].reshape(-1, D_) for h in (hb_all, hf_all))
+        hb_c = torch.cat([h[lay][0] for h in hbc])
+        hf_c = torch.cat([h[lay][0] for h in hfc])
+        src = torch.cat([torch.zeros(len(hb_n)), torch.ones(len(hb_c))]).bool()  # True: chat
+        Hb, Hf = torch.cat([hb_n, hb_c]), torch.cat([hf_n, hf_c])
+        sb = float(Hb.pow(2).sum(1).mean().sqrt()) / math.sqrt(D_)
+        sf = float(Hf.pow(2).sum(1).mean().sqrt()) / math.sqrt(D_)
+        X = torch.cat([Hb / sb, Hf / sf], 1)
+        S = C.steps(DIFF["steps"])
+        cc, rec = dicts.train(X, "batchtopk", DIFF["k"], F=DIFF["F"], steps=S, batch=DIFF["batch"], seed=DIFF["seed"])
+        e = dicts.evaluate(cc, X)
+        nb, nf = cc.Wd[:, :D_].norm(dim=1).numpy(), cc.Wd[:, D_:].norm(dim=1).numpy()
+        rel = nf / (nb + nf)
+        with torch.no_grad():
+            f = dicts.encode(cc, X)
+        alive = (f > 0).any(0).numpy()
+        on_chat = (f[src] > 0).float().mean(0).numpy()
+        on_novel = (f[~src] > 0).float().mean(0).numpy()
 
-    cos = (cc.Wd[:, :D_] * cc.Wd[:, D_:]).sum(1) / torch.tensor(nb * nf).clamp_min(1e-9)
-    groups = dict(base_only=np.flatnonzero(alive & (rel < 0.1)), chat_only=np.flatnonzero(alive & (rel > 0.9)),
-                  shared=np.flatnonzero(alive & (rel > 0.3) & (rel < 0.7)))
-    show = {}
-    for nm, idx in groups.items():
-        order = idx[np.argsort(-(on_chat + on_novel)[idx])][:6]
-        show[nm] = [dict(id=int(j), rel=float(rel[j]), on_chat=float(on_chat[j]), on_novel=float(on_novel[j]),
-                         contexts=top_contexts(int(j))) for j in order]
-    # the activation-difference lens: on novel text only, the mean of (fine-tuned - base) read through the base
-    # model's final norm and unembedding
-    diff = (hf_n - hb_n).mean(0)
-    with torch.no_grad():
-        zl = base.head(base.norm(hb_n.mean(0) + diff)) - base.head(base.norm(hb_n.mean(0)))
-    topd = torch.topk(zl, 12).indices.numpy()
-    # how far apart the two models' next-token predictions are, on novel text and on chat
+        def top_contexts(j, k=5):
+            idx = torch.topk(f[:, j], k).indices.numpy()
+            return [dict(text=ctx(int(i)), chat=bool(src[int(i)]), tok=strs[int(tokens[int(i)])]) for i in idx
+                    if f[int(i), j] > 0]
+
+        cos = (cc.Wd[:, :D_] * cc.Wd[:, D_:]).sum(1) / torch.tensor(nb * nf).clamp_min(1e-9)
+        groups = dict(base_only=np.flatnonzero(alive & (rel < 0.1)), chat_only=np.flatnonzero(alive & (rel > 0.9)),
+                      shared=np.flatnonzero(alive & (rel > 0.3) & (rel < 0.7)))
+        # the latents that fire mostly on chat transcripts, whatever their decoders: the base model's or new?
+        ratio = (on_chat + 1e-4) / (on_novel + 1e-4)
+        chatty = [int(j) for j in np.argsort(-ratio) if alive[j] and on_chat[j] > 0.005][:6]
+        show = {}
+        for nm, idx in list(groups.items()) + [("chatty", np.array(chatty))]:
+            order = idx if nm == "chatty" else idx[np.argsort(-(on_chat + on_novel)[idx])][:6]
+            show[nm] = [dict(id=int(j), rel=float(rel[j]), on_chat=float(on_chat[j]), on_novel=float(on_novel[j]),
+                             contexts=top_contexts(int(j))) for j in order]
+        diff = (hf_n - hb_n).mean(0)
+        with torch.no_grad():
+            zl = base.head(base.norm(hb_n.mean(0) + diff)) - base.head(base.norm(hb_n.mean(0)))
+        topd = torch.topk(zl, 12).indices.numpy()
+        r_ = dict(fvu=e["fvu"], l0=e["l0"], dead=e["dead"], rel=rel, alive=alive.astype(int), on_chat=on_chat,
+                  on_novel=on_novel, cos_dec=cos.numpy(), n_base_only=int(len(groups["base_only"])),
+                  n_chat_only=int(len(groups["chat_only"])), n_shared=int(len(groups["shared"])), show=show,
+                  diff_tokens=[strs[int(t)] for t in topd], diff_logits=zl[topd].numpy(), diff_norm=float(diff.norm()),
+                  base_norm=float(hb_n.norm(dim=1).mean()), rel_lo=float(rel[alive > 0].min()),
+                  rel_hi=float(rel[alive > 0].max()), curve=np.array(list(zip(rec["step"], rec["l0"], rec["fvu"]))),
+                  steps=S)
+        for k_, v_ in r_.items():
+            out[f"{k_}_{lay}"] = v_
+        print(f"    crosscoder after block {lay}: unexplained {e['fvu']:.3f}, L0 {e['l0']:.1f}, {e['dead']} dead; base-only "
+              f"{r_['n_base_only']}, chat-only {r_['n_chat_only']}, shared {r_['n_shared']}; r from {r_['rel_lo']:.2f} to "
+              f"{r_['rel_hi']:.2f}; diff lens {r_['diff_tokens'][:8]}", flush=True)
+    # how far apart the two models' next-token predictions are, on novel text (bits per token)
     with torch.no_grad():
         zb, zf = base(Wn), sft(Wn)
         kl_n = float((torch.softmax(zf, -1) * (torch.log_softmax(zf, -1) - torch.log_softmax(zb, -1))).sum(-1).mean())
-    out = dict(layer=lay, F=DIFF["F"], k=DIFF["k"], steps=S, n_novel=int(len(hb_n)), n_chat=int(len(hb_c)),
-               fvu=e["fvu"], l0=e["l0"], dead=e["dead"], rel=rel, alive=alive.astype(int), on_chat=on_chat,
-               on_novel=on_novel, cos_dec=cos.numpy(), n_base_only=int(len(groups["base_only"])),
-               n_chat_only=int(len(groups["chat_only"])), n_shared=int(len(groups["shared"])), show=show,
-               diff_tokens=[strs[int(t)] for t in topd], diff_logits=zl[topd].numpy(),
-               diff_norm=float(diff.norm()), base_norm=float(hb_n.norm(dim=1).mean()), kl_novel=kl_n / math.log(2),
-               curve=np.array(list(zip(rec["step"], rec["l0"], rec["fvu"]))))
-    print(f"    crosscoder: unexplained {e['fvu']:.3f}, L0 {e['l0']:.1f}, {e['dead']} dead; base-only "
-          f"{out['n_base_only']}, chat-only {out['n_chat_only']}, shared {out['n_shared']}; diff lens "
-          f"{out['diff_tokens'][:8]}", flush=True)
+    out["kl_novel"] = kl_n / math.log(2)
     return out
 
 

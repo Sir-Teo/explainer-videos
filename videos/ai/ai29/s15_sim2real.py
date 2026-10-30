@@ -41,13 +41,13 @@ class SimToReal(VoiceoverScene):
         real = node_box(r"the real robot", WORLD, 26, height=0.9).move_to([3.6, 1.8, 0])
         arr = Arrow(sim.get_right(), real.get_left(), buff=0.15, color=GREY_B)
         al = label(r"the reality gap", font_size=24, color=FAIL).next_to(arr, UP, buff=0.1)
-        pros = VGroup(label(r"thousands of robots at once, \ faster than real time", font_size=22, color=GOOD),
-                      label(r"no wear, \ no danger, \ resets for free", font_size=22, color=GOOD),
-                      label(r"free labels: \ positions, \ contacts, \ the true state", font_size=22, color=GOOD))
+        pros = VGroup(label(r"thousands of robots at once, \ faster than real time", font_size=26, color=GOOD),
+                      label(r"no wear, \ no danger, \ resets for free", font_size=26, color=GOOD),
+                      label(r"free labels: \ positions, \ contacts, \ the true state", font_size=26, color=GOOD))
         pros.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-3.6, -0.4, 0])
-        cons = VGroup(label(r"friction, \ masses, \ motor strength", font_size=22, color=FAIL),
-                      label(r"delays between sensing and acting", font_size=22, color=FAIL),
-                      label(r"noisy sensors, \ different lighting", font_size=22, color=FAIL))
+        cons = VGroup(label(r"friction, \ masses, \ motor strength", font_size=26, color=FAIL),
+                      label(r"delays between sensing and acting", font_size=26, color=FAIL),
+                      label(r"noisy sensors, \ different lighting", font_size=26, color=FAIL))
         cons.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, -0.4, 0])
         hist = history_card(r"2021--22", r"Isaac Gym \ (NVIDIA); \ Rudin et al.", r"thousands of simulated legged robots "
                             r"on one GPU: \ a walking policy in minutes", width=8.0, color=HIST,
@@ -83,7 +83,10 @@ class SimToReal(VoiceoverScene):
         poles = VGroup(*[cartpole(0.0, g.uniform(-0.1, 0.1), scale=0.42, pole_len=1.0 + 1.6 * g.random(),
                                   color=interpolate_color(ManimColor(RAND), ManimColor(WHITE), 0.3 * k / 5))
                          for k in range(6)])
-        poles.arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.35)).move_to([4.2, 1.4, 0])
+        poles.arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.35))
+        if poles.width > 5.6:
+            poles.width = 5.6
+        poles.move_to([3.8, 1.4, 0])
         cards = VGroup(
             history_card(2017, r"Tobin et al.", r"random textures, \ lights and cameras: \ an object detector trained "
                          r"only on simulated images works on real ones", width=4.2, color=HIST, font_size=21),
@@ -127,14 +130,14 @@ class SimToReal(VoiceoverScene):
         dashed = DashedVMobject(nom_sim[1].copy(), num_dashes=40)
         real = P["real"]
         nominal = d["nominal"]
-        spec = VGroup(label(r"the ``real'' cart-pole", font_size=24, color=WORLD),
+        spec = VGroup(label(r"the ``real'' cart-pole", font_size=28, color=WORLD),
                       label(rf"pole ${real['l'] / nominal['l']:.1f}\times$ as long, \ ${real['mp'] / nominal['mp']:.0f}\times$ "
-                            rf"as heavy", font_size=20, color=GREY_A),
+                            rf"as heavy", font_size=24, color=GREY_A),
                       label(rf"motor ${100 * (1 - real['F'] / nominal['F']):.0f}\%$ weaker, \ cart "
-                            rf"${real['mc'] / nominal['mc']:.1f}\times$ heavier", font_size=20, color=GREY_A),
-                      label(r"acts one step late, \ noisy sensors", font_size=20, color=GREY_A))
+                            rf"${real['mc'] / nominal['mc']:.1f}\times$ heavier", font_size=24, color=GREY_A),
+                      label(r"acts one step late, \ noisy sensors", font_size=24, color=GREY_A))
         spec.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.35)
-        leg = legend([(NOM, r"trained in Part 26's simulator"), (RAND, r"trained in randomized ones")], font_size=20)
+        leg = legend([(NOM, r"trained in Part 26's simulator"), (RAND, r"trained in randomized ones")], font_size=24)
         leg.next_to(spec, DOWN, buff=0.4).align_to(spec, LEFT)
         nn_, nr = np.asarray(d["nominal_nominal"]), np.asarray(d["nominal_real"])
         rn, rr = np.asarray(d["randomized_nominal"]), np.asarray(d["randomized_real"])
@@ -248,11 +251,11 @@ class SimToReal(VoiceoverScene):
         cnt = VGroup(label(r"step", font_size=20, color=GREY_A), Integer(0, font_size=24)).arrange(RIGHT, buff=0.12)
         cnt.to_edge(DOWN, buff=0.3).shift(RIGHT * 4.2)
         cnt[1].add_updater(lambda m: m.set_value(min(int(t.get_value()), 500)))
-        tag = note(r"one episode each \ on the ``real'' cart-pole", font_size=18).next_to(cnt, UP, buff=0.15)
+        tag = note(r"on the ``real'' cart-pole: \ of five episodes each, \\ the one of median length", font_size=20).next_to(cnt, UP, buff=0.15)
         fell_n, fell_r = len(tr_n) - 1, len(tr_r) - 1
-        ep = (f"In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
+        ep = (f"In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
               f"steps, while the randomized one is still balancing at {fell_r}." if fell_r >= 500 else
-              f"In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
+              f"In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
               f"steps, and the randomized one after {fell_r}.")
         with self.voiceover(
             "Domain randomization is now routine. <bookmark mark='a'/> Walking and running for legged robots and "

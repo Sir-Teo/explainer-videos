@@ -64,7 +64,7 @@ class Imitation(VoiceoverScene):
         P = L["params"]
         D = int(P["D"])
         ex = np.asarray(L["drives_expert"])
-        view = LaneView(D, ex.shape[1] - 1, cell=0.3, height=5.2, center=[-3.3, 0.2, 0])
+        view = LaneView(D, ex.shape[1] - 1, cell=0.3, height=5.2, center=[-2.7, 0.2, 0])
         wind = view.wind()
         wl = label(r"wind", font_size=20, color=GREY_B).next_to(wind, UP, buff=0.1)
         drives = VGroup(*[view.drive(d, EXPERT, 2) for d in ex])
@@ -78,9 +78,9 @@ class Imitation(VoiceoverScene):
                   color=OBS),
         )
         for r_ in rules:
-            if r_.width > 6.2:
-                r_.width = 6.2
-        rules.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([3.5, 0.6, 0])
+            if r_.width > 5.6:
+                r_.width = 5.6
+        rules.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([3.8, 0.6, 0])
         Je = float(np.asarray(L["J_expert"])[-1])
         stays = "never leaves the lane" if Je < 1e-9 else f"leaves it only {Je:.1f} steps in {int(L['T'])}"
         tag = note(r"a lane of $21$ cells; \ the three in the middle are the road", font_size=18).to_corner(DR, buff=0.3)

@@ -32,10 +32,10 @@ class Induction(VoiceoverScene):
         stream = Line([-6.0, -2.6, 0], [-6.0, 2.4, 0], color=GREY_C, stroke_width=6)
         h1 = RoundedRectangle(width=2.6, height=0.8, corner_radius=0.12, stroke_color=PREV, stroke_width=3,
                               fill_color=PREV, fill_opacity=0.15).move_to([-3.8, y0, 0])
-        h1l = label(r"previous-token head", font_size=20, color=PREV).move_to(h1)
+        h1l = label(r"previous-token heads", font_size=20, color=PREV).move_to(h1)
         h2 = RoundedRectangle(width=3.6, height=1.0, corner_radius=0.12, stroke_color=IND, stroke_width=3,
                               fill_color=IND, fill_opacity=0.15).move_to([-3.4, y1, 0])
-        h2l = label(r"induction head", font_size=20, color=IND).move_to(h2).shift(UP * 0.22)
+        h2l = label(r"induction heads", font_size=20, color=IND).move_to(h2).shift(UP * 0.22)
         qkv = VGroup(*[label(t, font_size=20, color=GREY_A).move_to(h2.get_bottom() + UP * 0.25 + RIGHT * dx)
                        for t, dx in ((r"$Q$", -1.1), (r"$K$", 0.0), (r"$V$", 1.1))])
         w1 = Arrow([-6.0, y0 - 0.6, 0], h1.get_left(), buff=0.05, color=GREY_B, stroke_width=2.5)
@@ -60,21 +60,29 @@ class Induction(VoiceoverScene):
             bars_.add(VGroup(r, MathTex(f"{v:.2f}", font_size=24).next_to(r, UP, buff=0.06),
                              label(t, font_size=18, color=GREY_A).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.12)))
         dc = definition_card(r"path patching", r"patch an activation along one path only: \ here, the previous-token "
-                             r"head's corrupted output sent into just the induction head's queries, \ keys, \ or values",
+                             r"heads' corrupted outputs sent into just the second layer's queries, \ keys, \ or values",
                              color=CAUSE, width=6.2, font_size=19).to_corner(UR, buff=0.3)
         hc = note(r"Wang et al.\ (2022); \ Goldowsky-Dill et al.\ (2023)").next_to(dc, DOWN, buff=0.1).align_to(dc, RIGHT)
         best = int(np.argmax(vals))
+        single = [float(v) for v in d["path_single"]]
         verdict = ("The message goes through the keys. Each token's key now carries the token before it, so the "
-                   "induction head's query, the current token, finds the position right after its last occurrence."
+                   "induction heads' query, the current token, finds the position right after its last occurrence."
                    if best == 1 else "The message does not go mainly through the keys here.")
+        ps_ = d["path_self"]
+        verdict2 = (f"Either previous-token head alone carries {100 * min(single):.0f} to {100 * max(single):.0f} "
+                    "percent: they share the job. And the head that looks at the token itself sends its message mostly "
+                    f"into the queries, {100 * float(ps_['q']):.0f} percent: the query says which token we are at." if
+                    len(single) > 1 else
+                    f"The head that looks at the token itself sends its message mostly into the queries, "
+                    f"{100 * float(ps_['q']):.0f} percent: the query says which token we are at.")
         with self.voiceover(
             "Two heads in different layers can only work together through the residual stream: the first writes, "
             "the second reads. <bookmark mark='a'/> But the second head reads in three places, its queries, its keys "
             "and its values. Which one carries the message? Pause and predict. <bookmark mark='p'/> Path patching "
-            "asks exactly that: send the corrupted "
-            "output of the previous-token head into one of the three only, and leave everything else clean. "
-            f"<bookmark mark='b'/> Into the queries: {100 * vals[0]:.0f} percent of the copying lost. Into the "
-            f"values: {100 * vals[2]:.0f}. <bookmark mark='c'/> Into the keys: {100 * vals[1]:.0f}. {verdict}"
+            "asks exactly that: send the corrupted outputs of the previous-token heads into one of the three only, "
+            f"and leave everything else clean. <bookmark mark='b'/> Into the queries: {100 * vals[0]:.0f} percent of "
+            f"the copying lost. Into the values: {100 * vals[2]:.0f}. <bookmark mark='c'/> Into the keys: "
+            f"{100 * vals[1]:.0f}. {verdict} <bookmark mark='d'/>{verdict2}"
         ) as vo:
             self.play(FadeIn(dg[:-1]))
             vo.wait_until("a")
@@ -89,6 +97,12 @@ class Induction(VoiceoverScene):
             self.play(GrowFromEdge(bars_[2][0], DOWN), FadeIn(bars_[2][1:]), Indicate(ins[2], color=CAUSE))
             vo.wait_until("c")
             self.play(GrowFromEdge(bars_[1][0], DOWN), FadeIn(bars_[1][1:]), Indicate(ins[1], color=KC, scale_factor=1.3))
+            vo.wait_until("d")
+            sl = label(r"\\ ".join([rf"previous-token head {int(h) + 1} alone, \ keys: \ ${v:.2f}$"
+                                     for h, v in zip(d["prev_set"], single)] +
+                                    [rf"the current-token head, \ queries: \ ${float(ps_['q']):.2f}$"]),
+                       font_size=20, color=GREY_A).to_corner(UR, buff=0.4)
+            self.play(FadeOut(dc), FadeOut(hc), FadeIn(sl))
         self.wait(0.3)
         self.clear_scene()
 
@@ -117,18 +131,21 @@ class Induction(VoiceoverScene):
         g.move_to([-2.6, -2.1, 0])
         xl = label(r"layer-2 heads $\rightarrow$", font_size=16, color=GREY_B).next_to(g, UP, buff=0.08)
         yl = label(r"layer-1 \\ heads", font_size=16, color=GREY_B).next_to(g, LEFT, buff=0.12)
-        res = label(rf"previous-token head into induction head: \ ${K[hp, hi]:.2f}$ \\ random heads of the same shape: \ "
+        pairs = [K[a, b] for a in d["prev_set"] for b in d["ind_set"]]
+        klo, khi = float(min(pairs)), float(max(pairs))
+        res = label(rf"previous-token heads into induction heads: \ ${klo:.2f}$ to ${khi:.2f}$ \\ random heads of the same shape: \ "
                     rf"${base:.3f} \pm {sd:.3f}$", font_size=22, color=WHITE).move_to([3.6, -2.0, 0])
         hc = note(r"Elhage et al., \textit{A Mathematical Framework for Transformer Circuits} (2021)").to_corner(DR, buff=0.2)
-        z = (K[hp, hi] - base) / max(sd, 1e-9)
+        z = (klo - base) / max(sd, 1e-9)
         with self.voiceover(
             "The same fact is written in the weights, before running anything. <bookmark mark='a'/> The second "
             "head compares queries and keys through one matrix, W Q K. <bookmark mark='b'/> The first head writes "
             "into the stream through another, W O V. <bookmark mark='c'/> Their composition score, from Nelson "
             "Elhage and colleagues' framework, asks how much of what the first head writes the second head's keys "
-            f"can read. <bookmark mark='d'/> For our pair it is {K[hp, hi]:.2f}; for random heads of the same shape "
-            f"it would be {base:.3f}, give or take {sd:.3f}: {z:.0f} standard deviations away. The keys were built to "
-            "read that head."
+            f"can read. <bookmark mark='d'/> From our previous-token heads into our induction heads it is {klo:.2f} to "
+            f"{khi:.2f}; for random heads of the same shape "
+            f"it would be {base:.3f}, give or take {sd:.3f}: at least {z:.0f} standard deviations away. The keys "
+            "were built to read those heads."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -138,7 +155,8 @@ class Induction(VoiceoverScene):
             step(2)
             vo.wait_until("d")
             self.play(FadeIn(g), FadeIn(xl), FadeIn(yl), FadeIn(hc))
-            self.play(Indicate(g[hp * 4 + hi], color=KC, scale_factor=1.2), FadeIn(res))
+            self.play(*[Indicate(g[int(a) * 4 + int(b)], color=KC, scale_factor=1.2) for a in d["prev_set"]
+                        for b in d["ind_set"]], FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
 
@@ -154,11 +172,11 @@ class Induction(VoiceoverScene):
         b = VGroup(*[Rectangle(width=0.36, height=max(abs(v) / (np.abs(off).max() * 1.15) * 3.0, 0.01), stroke_width=0,
                                fill_color=PREV, fill_opacity=0.9 if k == 1 else 0.45)
                      .move_to(g.ax.c2p(k, 0), aligned_edge=DOWN if v >= 0 else UP) for k, v in enumerate(off)])
-        t1 = label(rf"layer 1, head ${hp + 1}$, \ its QK circuit \\ on the position embeddings", font_size=20,
+        t1 = label(r"the previous-token heads' QK circuits \\ on the position embeddings \ (averaged)", font_size=20,
                    color=PREV).next_to(g, UP, buff=0.2)
         Ms = M / np.abs(M).max()
         img = signed_image(Ms, 3.4, 3.4, pos=IND, neg=C.SURPRISE).move_to([3.4, -0.6, 0])
-        t2 = label(rf"layer 2, head ${hi + 1}$, \ its OV circuit: \\ token attended to $\rightarrow$ logits", font_size=20,
+        t2 = label(r"the induction heads' OV circuits: \\ token attended to $\rightarrow$ logits", font_size=20,
                    color=IND).next_to(img, UP, buff=0.2)
         xl = label(r"token read $\rightarrow$", font_size=16, color=GREY_B).next_to(img, DOWN, buff=0.08)
         yl = label(r"logit \\ raised", font_size=16, color=GREY_B).next_to(img, LEFT, buff=0.1)
@@ -168,13 +186,17 @@ class Induction(VoiceoverScene):
                     rf"copying score $\sum \lambda / \sum |\lambda| = {cs:.2f}$", font_size=19, color=GREY_A)
         res.to_edge(DOWN, buff=0.25).shift(RIGHT * 2.6)
         best_off = int(np.argmax(off))
+        verdict = ("the scores are highest for the key one position back." if best_off == 1 else
+                   "the scores are highest for the token itself and the one before it, and fall off with distance: "
+                   "position narrows attention to the last few tokens, and the tokens' content does the rest.")
+        verdict2 = ("The heads copy." if cs > 0.5 else "The copying is only partly visible in the weights.")
         with self.voiceover(
-            "Each head's job can be read off its weights too. <bookmark mark='a'/> Feed the previous-token head "
-            f"nothing but the position embeddings: its scores are highest for the key {best_off} position back. "
-            "<bookmark mark='b'/> And trace the induction head's values all the way from the token it attends "
+            "Each head's job can be read off its weights too. <bookmark mark='a'/> Feed the previous-token heads "
+            f"nothing but the position embeddings: {verdict} "
+            "<bookmark mark='b'/> And trace the induction heads' values all the way from the token they attend "
             "to, through W O V, to the logits: a 64 by 64 matrix, token in, logit out. "
-            f"<bookmark mark='c'/> It is nearly diagonal: for {100 * diag:.0f} percent of tokens, the logit it raises "
-            f"most is the token's own. Its eigenvalues give a copying score of {cs:.2f} out of 1. The head copies."
+            f"<bookmark mark='c'/> For {100 * diag:.0f} percent of tokens, the logit raised most is the token's own, "
+            f"and the eigenvalues give a copying score of {cs:.2f}, where 1 would be pure copying. {verdict2}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(t1))
             vo.wait_until("a")
@@ -199,18 +221,22 @@ class Induction(VoiceoverScene):
                     color=GREY_A).next_to(g, UP, buff=0.35)
         ref = label(rf"no head removed: \ ${clean:.2f}$ \\ random tokens, \ nothing to copy: \ ${rnd:.2f}$", font_size=22,
                     color=WHITE).move_to([4.0, 0.3, 0])
+        ps_, is_, sh = [int(h) for h in d["prev_set"]], [int(h) for h in d["ind_set"]], int(d["self_head"])
+        pw, iw = max(A[0, h] for h in ps_), max(A[1, h] for h in is_)
         with self.voiceover(
             "Last, the bluntest test: remove each head, replacing its output by its average. <bookmark mark='a'/> "
-            f"With every head in place the repeat costs {clean:.2f} bits per token. <bookmark mark='b'/> Without the "
-            f"previous-token head, {A[0, hp]:.2f}; without the induction head, {A[1, hi]:.2f}; random tokens with "
-            f"nothing to copy cost {rnd:.2f}. The circuit is complete: one head records each token's predecessor, the "
-            "other finds the match through its keys and copies through its values."
+            f"With every head in place the repeat costs {clean:.2f} bits per token. <bookmark mark='b'/> Without a "
+            f"previous-token head, up to {pw:.2f}; without an induction head, up to {iw:.2f}; without the "
+            f"current-token head, {A[0, sh]:.2f}; random tokens with nothing to copy cost {rnd:.2f}. The circuit, end "
+            "to end: heads in layer one write each token's predecessor into it, a head there sharpens which token "
+            "is which, and the induction heads find the match through their keys and copy it through their values."
         ) as vo:
             self.play(FadeIn(cap), FadeIn(g))
             vo.wait_until("a")
             self.play(FadeIn(ref))
             vo.wait_until("b")
-            self.play(Indicate(g.cells[hp], color=PREV), Indicate(g.cells[4 + hi], color=IND))
+            self.play(*[Indicate(g.cells[h], color=PREV) for h in ps_], *[Indicate(g.cells[4 + h], color=IND) for h in is_],
+                      Indicate(g.cells[sh], color=CAUSE))
         self.wait(0.3)
         self.clear_scene()
 

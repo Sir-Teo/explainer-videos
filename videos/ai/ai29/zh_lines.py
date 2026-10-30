@@ -620,11 +620,11 @@ ZH = {
         "2026年10月，谷歌报告说，只用一张照片就为一张真实的桌子建起了仿真的孪生体，而DeepMind把Genie 4定位为机器人的训练场。"
         "仿真器不再由人手写，而是学出来的。",
 
-    "f'In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, while":
-        "在真实倒立摆上的这一回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，而随机化的策略到{fell_r}步还在平衡。",
+    "f'In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, while":
+        "在真实倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，而随机化的策略到{fell_r}步还在平衡。",
 
-    "f'In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, and":
-        "在真实倒立摆上的这一回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，随机化的策略则在{fell_r}步后倒下。",
+    "f'In a typical episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, and":
+        "在真实倒立摆上一个典型的回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，随机化的策略则在{fell_r}步后倒下。",
 
     # ---------------------------------------------------------------- VLA
     'Chapter fifteen. Vision-language-action models.':

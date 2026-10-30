@@ -1005,7 +1005,10 @@ def compute_randomize():
     from .envs import cartpole_trace
 
     for method in ("nominal", "randomized"):
-        out[f"{method}_trace"] = cartpole_trace(out[f"{method}_W"][0], P["real"], rng(4))
+        # five episodes of the seed-0 policy; the one of median length is shown
+        tr = sorted((cartpole_trace(out[f"{method}_W"][0], P["real"], rng(40 + k)) for k in range(5)), key=len)
+        out[f"{method}_trace"] = tr[2]
+        out[f"{method}_trace_lens"] = np.array([len(t) - 1 for t in tr])
     out["grid_l"] = np.linspace(*P["grid_l"], P["grid_n"])
     out["grid_F"] = np.linspace(*P["grid_F"], P["grid_n"])
     return out

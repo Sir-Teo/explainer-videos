@@ -127,26 +127,32 @@ ZH = {
         '有一点复制，但很少。',
 
     'f"We retrain it here with Part 13\'s recipe and seed.':
-        "我们在这里用第13部分的配方和种子重新训练它。<bookmark mark='a'/>有一阵子，它什么有用的都没学到；然后，突然之间，重复的部分变得容易了，从每词元{cv[0, 1]:.1f}比特降到{cv[-1, 1]:.1f}，而随机的词元还是一样难。<bookmark mark='b'/>两个头可以解释这件事，看它们的注意力就知道。第1层的第{hp + 1}个头，看的是前一个词元。<bookmark mark='c'/>第2层的第{hi + 1}个头，在第二遍里的某个词元上，看的是这个词元第一次出现时紧跟在后面的那个词元：也就是要复制的那个。一个前一词元头，一个归纳头。可注意力模式也只是相关。这两个头是原因吗？",
+        "我们在这里用第13部分的配方和种子重新训练它。<bookmark mark='a'/>有一阵子，它什么有用的都没学到；然后，突然之间，重复的部分变得容易了，从每词元{cv[0, 1]:.1f}比特降到{cv[-1, 1]:.1f}，而随机的词元还是一样难。<bookmark mark='b'/>看看注意力。在第一层，四个头里有{len(d['prev_set'])}个主要看前一个词元；这是第{hp + 1}个头。<bookmark mark='c'/>在第二层，有{len(d['ind_set'])}个头，在第二遍里的某个词元上，看的是这个词元第一次出现时紧跟在后面的那个词元：也就是要复制的那个。前一词元头，和归纳头。可注意力模式也只是相关。这些头是原因吗？",
 
     'f"The tool is activation patching.':
-        "用的工具是激活修补。<bookmark mark='a'/>让模型跑两次：一次在干净的序列上，带着它的重复；一次在被破坏的序列上，第一遍被换成新的随机词元，于是没东西可复制。然后从干净的那次运行里取一个向量，放进被破坏的那次运行，看第{tgt}个位置上正确的预测能恢复多少。凯文·孟和同事就是用这个方法，找到GPT把事实存在哪里。<bookmark mark='b'/>在每一个位置上修补残差流：在输入处，在两层之间，在输出处。{v_in}<bookmark mark='c'/>在两层之间，是{names(k_mid)}。<bookmark mark='d'/>在输出处，只有第{tgt}个位置本身。关于“复制什么”的信息，从第一遍开始，在其中挪动一步，然后跳到第二遍：这就是回路走的路线。",
+        "用的工具是激活修补。<bookmark mark='a'/>让模型跑两次：一次在干净的序列上，带着它的重复；一次在被破坏的序列上，第一遍被换成新的随机词元，于是没东西可复制。然后从被破坏的那次运行里取一个向量，放进干净的那次运行，看第{tgt}个位置上正确的预测损失了多少。凯文·孟和同事就是用修补的方法，找到GPT把事实存在哪里。<bookmark mark='b'/>在每一个位置上替换残差流：在输入处，在两层之间，在输出处。{v_in}<bookmark mark='c'/>在两层之间，是{names(k_mid)}。<bookmark mark='d'/>在输出处，只有第{tgt}个位置本身。关于“复制什么”的信息，从第一遍开始，在其中挪动一步，然后跳到第二遍：这就是回路走的路线。",
 
-    'At the input, no single position brings it back on its own:':
-        '在输入处，没有哪一个位置能单独把它恢复：复制同时需要两个位置，要复制的词元，和它前面那个。',
-
-    "f'At the input, what matters is positions":
-        "在输入处，起作用的是第{names(k_in)}个位置。",
-
-    'f"Now the heads.':
-        "再来看头。这一次跑干净的序列，把某一个头的输出换成被破坏那次运行里的。这检验的是什么是必需的；前面的修补检验的是什么是足够的。<bookmark mark='a'/>破坏前一词元头，复制能力损失{100 * nz[0, hp]:.0f}%；归纳头，{100 * nz[1, hi]:.0f}%；<bookmark mark='b'/>其他的头，都不超过{100 * max(others):.0f}%。这个行为由两个头承担。第5章把它们拆开来看。",
+    'f"Now the heads: run the clean sequence':
+        "再来看头：跑干净的序列，把某一个头的输出换成被破坏那次运行里的。<bookmark mark='a'/>破坏其中一个前一词元头，复制能力损失{100 * p_lo:.0f}%到{100 * p_hi:.0f}%；归纳头是{100 * i_lo:.0f}%到{100 * i_hi:.0f}%。<bookmark mark='b'/>还有一个头也很重要，第一层的第{sh + 1}个头，它主要看词元自己：{100 * nz[0, sh]:.0f}%。其他的头，都不超过{100 * max(others):.0f}%。这个行为由一小组头承担。第5章把它拆开来看。",
 
     # ---------------------------------------------------------------- Induction
     'Chapter five. An induction circuit, end to end.':
         '第5章。一个归纳回路，从头到尾。',
 
     'f"Two heads in different layers can only work together through the residual stream':
-        "不同层里的两个头，只能通过残差流合作：第一个写，第二个读。<bookmark mark='a'/>可第二个头在三个地方读：它的查询、它的键、它的值。消息是从哪一个传过去的？暂停一下，预测一下。<bookmark mark='p'/>路径修补问的正是这个：把前一词元头被破坏的输出，只送进这三处中的一处，其余一切保持干净。<bookmark mark='b'/>送进查询：复制能力损失{100 * vals[0]:.0f}%。送进值：{100 * vals[2]:.0f}%。<bookmark mark='c'/>送进键：{100 * vals[1]:.0f}%。{verdict}",
+        "不同层里的两个头，只能通过残差流合作：第一个写，第二个读。<bookmark mark='a'/>可第二个头在三个地方读：它的查询、它的键、它的值。消息是从哪一个传过去的？暂停一下，预测一下。<bookmark mark='p'/>路径修补问的正是这个：把前一词元头被破坏的输出，只送进这三处中的一处，其余一切保持干净。<bookmark mark='b'/>送进查询：复制能力损失{100 * vals[0]:.0f}%。送进值：{100 * vals[2]:.0f}%。<bookmark mark='c'/>送进键：{100 * vals[1]:.0f}%。{verdict}<bookmark mark='d'/>{verdict2}",
+
+    "f'Either previous-token head alone carries":
+        "任何一个前一词元头单独承担{100 * min(single):.0f}%到{100 * max(single):.0f}%：它们分担这份工作。那个看词元自己的头，消息主要送进查询，{100 * float(ps_['q']):.0f}%：查询说明我们在哪个词元上。",
+
+    "f'The head that looks at the token itself sends its message mostly":
+        "那个看词元自己的头，消息主要送进查询，{100 * float(ps_['q']):.0f}%：查询说明我们在哪个词元上。",
+
+    "f'At the input, breaking position":
+        "在输入处，破坏第{names(k_in)}个位置，复制就被破坏了。",
+
+    'At the input, no single position breaks it on its own.':
+        '在输入处，没有哪一个位置单独破坏它就能让复制失败。',
 
     'The message goes through the keys.':
         '消息走的是键。现在每个词元的键里都带着它前面那个词元，于是归纳头的查询，也就是当前词元，能找到它上一次出现之后紧挨着的那个位置。',
@@ -155,13 +161,25 @@ ZH = {
         '在这里，消息主要不是从键走的。',
 
     'f"The same fact is written in the weights, before running anything.':
-        "同样的事实，在什么都还没跑之前，就写在权重里了。<bookmark mark='a'/>第二个头通过一个矩阵W QK来比较查询和键。<bookmark mark='b'/>第一个头通过另一个矩阵W OV往残差流里写。<bookmark mark='c'/>它们的组合分数，来自纳尔逊·埃尔哈格和同事的框架，问的是：第一个头写下的东西，第二个头的键能读到多少。<bookmark mark='d'/>我们这一对，组合分数是{K[hp, hi]:.2f}；同样形状的随机头，会是{base:.3f}，上下浮动{sd:.3f}：相差{z:.0f}个标准差。这些键，就是为了读那个头而长成的。",
+        "同样的事实，在什么都还没跑之前，就写在权重里了。<bookmark mark='a'/>第二个头通过一个矩阵W QK来比较查询和键。<bookmark mark='b'/>第一个头通过另一个矩阵W OV往残差流里写。<bookmark mark='c'/>它们的组合分数，来自纳尔逊·埃尔哈格和同事的框架，问的是：第一个头写下的东西，第二个头的键能读到多少。<bookmark mark='d'/>从我们的前一词元头到归纳头，组合分数在{klo:.2f}到{khi:.2f}之间；同样形状的随机头，会是{base:.3f}，上下浮动{sd:.3f}：至少相差{z:.0f}个标准差。这些键，就是为了读那些头而长成的。",
 
     'f"Each head\'s job can be read off its weights too.':
-        "每个头的工作，也能从它的权重里读出来。<bookmark mark='a'/>只给前一词元头输入位置嵌入：它给往前第{best_off}个位置的键打分最高。<bookmark mark='b'/>再把归纳头的值，从它关注的词元出发，经过W OV，一路追到logit：一个64乘64的矩阵，词元进，logit出。<bookmark mark='c'/>它几乎是对角的：对{100 * diag:.0f}%的词元来说，它提升最多的logit，就是这个词元自己的。从它的特征值得到的复制分数是{cs:.2f}，满分是1。这个头在复制。",
+        "每个头的工作，也能从它的权重里读出来。<bookmark mark='a'/>只给前一词元头输入位置嵌入：{verdict}<bookmark mark='b'/>再把归纳头的值，从它们关注的词元出发，经过W OV，一路追到logit：一个64乘64的矩阵，词元进，logit出。<bookmark mark='c'/>对{100 * diag:.0f}%的词元来说，提升最多的logit就是这个词元自己的，特征值给出的复制分数是{cs:.2f}，1代表纯粹的复制。{verdict2}",
+
+    'the scores are highest for the key one position back.':
+        '往前一个位置的键，分数最高。',
+
+    'the scores are highest for the token itself and the one before it,':
+        '分数最高的是词元自己和它前面那个，然后随距离衰减：位置把注意力收窄到最近的几个词元，剩下的由词元的内容来完成。',
+
+    'The heads copy.':
+        '这些头在复制。',
+
+    'The copying is only partly visible in the weights.':
+        '复制只在权重里显露出一部分。',
 
     'f"Last, the bluntest test:':
-        "最后，最直接的测试：把每个头去掉，用它的平均输出代替。<bookmark mark='a'/>所有头都在的时候，重复部分每词元要{clean:.2f}比特。<bookmark mark='b'/>没有前一词元头，{A[0, hp]:.2f}；没有归纳头，{A[1, hi]:.2f}；没东西可复制的随机词元，要{rnd:.2f}。回路是完整的：一个头记下每个词元的前一个，另一个通过它的键找到匹配，再通过它的值把东西复制过来。",
+        "最后，最直接的测试：把每个头去掉，用它的平均输出代替。<bookmark mark='a'/>所有头都在的时候，重复部分每词元要{clean:.2f}比特。<bookmark mark='b'/>去掉一个前一词元头，最多到{pw:.2f}；去掉一个归纳头，最多到{iw:.2f}；去掉看词元自己的那个头，{A[0, sh]:.2f}；没东西可复制的随机词元，要{rnd:.2f}。整个回路从头到尾是这样的：第一层的几个头把每个词元的前一个写进它里面，那里还有一个头让“哪个词元是哪个”更清楚，归纳头再通过它们的键找到匹配，通过它们的值把它复制过来。",
 
     'f"Part 13 watched these heads form.':
         "第13部分看着这些头形成。现在我们可以看着原因形成。重放训练过程，在每个检查点测量键这条路径：只把前一词元头的消息，破坏后送进归纳头的键，看效果有多大。<bookmark mark='a'/>重复部分的损失，大约在第{int(jump):,}步降得最快。<bookmark mark='b'/>{verdict}",
@@ -466,6 +484,8 @@ ZH = {
 }
 
 PHRASES = {
+    'The heads copy.': '这些头在复制。',
+    'Some copying, but little. ': '有一点复制，但很少。',
     'roughly agree': '大致一致',
     'only partly agree': '只有部分一致',
     'barely agree': '几乎不一致',
