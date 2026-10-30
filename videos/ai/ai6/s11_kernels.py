@@ -57,11 +57,11 @@ class Kernels(VoiceoverScene, ThreeDScene):
             "out. Learn new features, which is Part 9's story. Or add them by hand: give each point a third number, "
             f"x one times x two, and the perceptron separates XOR after {k['xor_lift_mistakes']} mistakes."
         ) as vo:
-            self.play(FadeIn(hist, shift=DOWN * 0.2))
+            self.play(FadeIn(hist, shift=DOWN * 0.2), Create(ax), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.2))
             vo.wait_until("a")
             self.play(FadeIn(nov), FadeIn(toy))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(xor), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.2))
+            self.play(FadeIn(xor))
             vo.wait_until("c")
             cur = flail[0]
             self.play(Create(cur), run_time=0.5)
@@ -154,12 +154,12 @@ class Kernels(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"six features"), why(r"multiply out"), why(r"computed from two numbers"),
                 why(r"the Gaussian kernel: \\ every power, \ forever")]
-        step = side_ladder(self, rows, whys, -0.4, 6.4, keep=4, top=3.3, buff=0.38)
+        step = side_ladder(self, rows, whys, -0.4, 6.4, keep=3, top=3.3, buff=0.38)
         chk = label(rf"checked on $1{{,}}000$ random pairs: \ largest difference ${sci_tex(k['poly_err'])}$",
                     font_size=22, color=HL).to_edge(DOWN, buff=0.4)
         errs = np.asarray(k["taylor_err"])
         g = plot([0.5, len(errs) + 0.5, 5], [-8, 0.2, 2], x_length=4.2, y_length=2.0, xticks=[1, 10, 20],
-                 yticks=[0, -4, -8], yfmt=lambda v: f"10^{{{int(v)}}}", center=[4.0, -1.9, 0],
+                 yticks=[0, -4, -8], yfmt=lambda v: f"10^{{{int(v)}}}", center=[3.4, -2.2, 0],
                  xlabel=r"features kept", ylabel=r"error of the truncated Gaussian kernel")
         tc = curve(g.ax, np.arange(1, len(errs) + 1), np.log10(errs), GOLD, stroke_width=3)
         within = next((w_ for lim_, w_ in ((1e-7, "a ten-millionth"), (1e-6, "a millionth"), (1e-5, "a hundred-thousandth"),

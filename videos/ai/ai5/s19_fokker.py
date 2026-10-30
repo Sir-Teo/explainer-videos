@@ -55,8 +55,8 @@ class FokkerPlanck(VoiceoverScene):
             "agree: the Fokker-Planck equation, a deterministic law for the density. Adriaan Fokker and Max Planck "
             "wrote it for molecules; Kolmogorov derived it in general in 1931."
         ) as vo:
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -82,7 +82,20 @@ class FokkerPlanck(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-1.0, buff=0.55, edge=6.8, align_index=None)
         l1 = np.asarray(d["l1"])
         res = label(rf"Chapter 13's particles: \ distance from $p$ falling from ${l1[0]:.2f}$ to ${l1[-1]:.2f}$", font_size=26,
-                    color=WALK).to_edge(DOWN, buff=0.6)
+                    color=WALK).to_edge(DOWN, buff=0.3)
+        ax = Axes(x_range=[-4, 4, 1], y_range=[0, 0.5, 0.25], x_length=8.0, y_length=1.8, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -2.0, 0])
+        xs = np.linspace(-4, 4, 300)
+        pi_ = 0.45 * normal_pdf(xs, -1.5, 0.6) + 0.55 * normal_pdf(xs, 1.3, 0.7)
+        pic = VGroup(ax, curve(ax, xs, pi_, color=SCORE, stroke_width=3.5),
+                     label(r"$\pi$: \ the drift pushes up its slopes, \ the noise spreads it out: \ they balance", font_size=20,
+                           color=GREY_A).next_to(ax, UP, buff=0.05))
+        for x0 in np.linspace(-3.6, 3.6, 13):
+            sc = float(np.interp(x0, xs[1:-1], np.diff(np.log(pi_))[1:] / (xs[1] - xs[0])))
+            L = 0.45 * math.tanh(sc / 3)
+            if abs(L) > 0.05:
+                b0 = ax.c2p(x0, 0) + DOWN * 0.15
+                pic.add(Arrow(b0, b0 + RIGHT * L, buff=0, color=SCORE, stroke_width=3, max_tip_length_to_length_ratio=0.4))
         with self.voiceover(
             "Now the promise from chapter thirteen. Langevin dynamics has drift the score of a target pi, and noise "
             "of variance two. <bookmark mark='a'/> Put that into Fokker-Planck. <bookmark mark='b'/> If the density "
@@ -90,6 +103,7 @@ class FokkerPlanck(VoiceoverScene):
             "cancel: pi never moves. That is why the particles of chapter thirteen settled onto the bumps, and why "
             "Langevin dynamics samples anything whose score we know."
         ) as vo:
+            self.play(FadeIn(pic))
             step(0)
             vo.wait_until("a")
             step(1)
@@ -173,11 +187,10 @@ class FokkerPlanck(VoiceoverScene):
             "score, the slope of the log of the density at that moment, an arrow saying which way the data gets "
             "likelier. <bookmark mark='b'/> It points uphill, toward the data."
         ) as vo:
-            self.play(Write(rev), FadeIn(rn))
+            self.play(Write(rev), FadeIn(rn), Create(ax), Create(dc))
             vo.wait_until("a")
             self.play(FadeIn(sb))
             vo.wait_until("b")
-            self.play(Create(ax), Create(dc))
             self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.04), FadeIn(al), run_time=1.6)
         self.wait(0.3)
         self.clear_scene()

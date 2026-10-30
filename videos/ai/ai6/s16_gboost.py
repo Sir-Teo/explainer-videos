@@ -53,8 +53,9 @@ class GradientBoosting(VoiceoverScene):
             "drop when one leaf becomes two."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hn), FadeIn(cite_))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][2], color=HL, scale_factor=1.04))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -108,8 +109,9 @@ class GradientBoosting(VoiceoverScene):
             f"The true drop in the loss is {true:.1f}: {under_s}"
         ) as vo:
             self.play(FadeIn(start), FadeIn(root))
+            self.play(LaggedStart(*[FadeIn(l_[0]) for l_ in leafs], *[FadeIn(l_[2]) for l_ in leafs], lag_ratio=0.3))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(l_) for l_ in leafs], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(l_[1]) for l_ in leafs], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(res[0]))
             self.play(FadeIn(res[1]))
@@ -142,6 +144,19 @@ class GradientBoosting(VoiceoverScene):
                        VGroup(label(r"held-out pages right:", font_size=24, color=HL), av).arrange(RIGHT, buff=0.15))
         reads.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(cnt, DOWN, buff=0.3)
         keep_in_frame(reads)
+        mini = plot([0, math.log10(n), 1], [0.74, 0.86, 0.04], x_length=3.8, y_length=1.9, xticks=[0, 1, 2],
+                    yticks=[0.74, 0.78, 0.82, 0.86], xfmt=lambda v: {0: "1", 1: "10", 2: "100"}[int(v)],
+                    yfmt=lambda v: rf"{100 * v:.0f}\%", center=[4.0, -1.6, 0], xlabel=r"rounds", font_size=18)
+        rr = np.arange(1, n + 1)
+
+        def upto():
+            m_ = cur()
+            if m_ < 2:
+                return VGroup()
+            return VMobject(color=HL, stroke_width=3).set_points_as_corners(
+                [mini.ax.c2p(math.log10(k), float(np.clip(v, 0.74, 0.86))) for k, v in zip(rr[:m_], acc[:m_])])
+
+        mc = always_redraw(upto)
         best = int(np.argmax(acc)) + 1
         slips = acc[-1] < acc[best - 1] - 1e-9
         end = (f"By round {n} they've slipped to {100 * acc[-1]:.1f}: with only two numbers per page, the extra detail "
@@ -156,7 +171,8 @@ class GradientBoosting(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), FadeIn(dots), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(imgs[1]), FadeIn(cnt), FadeIn(reads))
+            self.play(FadeIn(imgs[1]), FadeIn(cnt), FadeIn(reads), FadeIn(mini))
+            self.add(mc)
             self.bring_to_front(dots)
             shown = imgs[1]
             for k, mark in ((3, "b"), (10, None), (30, None), (100, "c"), (200, None)):
@@ -167,7 +183,7 @@ class GradientBoosting(VoiceoverScene):
                 self.play(r.animate.set_value(k), FadeOut(shown), FadeIn(imgs[k]), run_time=1.2, rate_func=linear)
                 self.bring_to_front(dots)
                 shown = imgs[k]
-        for m in (cnt, tv, av):
+        for m in (cnt, tv, av, mc):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()

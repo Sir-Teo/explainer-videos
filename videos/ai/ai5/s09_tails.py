@@ -134,7 +134,7 @@ class Tails(VoiceoverScene):
         d = load("tails")
         eps = np.asarray(d["eps"])
         ex, sim = np.asarray(d["exact"]), np.asarray(d["sim"])
-        ax = Axes(x_range=[0, 0.3, 0.05], y_range=[-8, 0, 2], x_length=8.0, y_length=4.8, tips=False,
+        ax = CornerAxes(x_range=[0, 0.3, 0.05], y_range=[-8, 0, 2], x_length=8.0, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.8, -0.4, 0])
         xt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(v, -8), DOWN, buff=0.12)
                       for v in (0.1, 0.2, 0.3)])

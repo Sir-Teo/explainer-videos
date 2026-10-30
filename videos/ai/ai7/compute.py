@@ -365,6 +365,960 @@ def compute_kn():
                 part1_rows=[r["test"] for r in raw["rows"]])
 
 
+# ===========================================================================
+# The expansion: every item below is new; the six above are read by other parts and stay as they are.
+# ===========================================================================
+def glogpdf(X, m, S):
+    """Gaussian log density, through slogdet (safe in 70 dimensions)."""
+    d = X - m
+    sign, logdet = np.linalg.slogdet(S)
+    assert sign > 0
+    sol = np.linalg.solve(S, d.T).T
+    return -0.5 * (d * sol).sum(1) - 0.5 * (logdet + S.shape[0] * math.log(2 * math.pi))
+
+
+def compute_pca2():
+    from videos.ai.ai6 import compute as c6
+
+    X, y, book, vocab = pages()
+    test = np.asarray(c6.load("pages")["test"], bool)
+    Z = (X - X.mean(0)) / X.std(0)
+    n, d = Z.shape
+    vals, vecs = np.linalg.eigh(Z.T @ Z / n)
+    o = np.argsort(-vals)
+    vals, vecs = vals[o], vecs[:, o]
+    # two ways of saying the same thing: the variance a k-dimensional subspace keeps, the squared error it leaves
+    kept = np.array([((Z @ vecs[:, :k]) ** 2).sum(1).mean() for k in range(d + 1)])
+    err = np.array([((Z - Z @ vecs[:, :k] @ vecs[:, :k].T) ** 2).sum(1).mean() for k in range(d + 1)])
+    tail = np.array([vals[k:].sum() for k in range(d + 1)])
+    assert np.allclose(kept + err, d) and np.allclose(err, tail)
+    sv = np.linalg.svd(Z, compute_uv=False)  # Part 3's SVD of the data matrix itself
+    assert np.allclose(sv ** 2 / n, vals)
+    # the picture in two of the 70 rates: along a line at angle theta, kept + lost = the total, for every theta
+    Z2 = Z[:, [vocab.index("the"), vocab.index("not")]]
+    th = np.linspace(0, np.pi, 181)
+    U = np.stack([np.cos(th), np.sin(th)], 1)
+    along = ((Z2 @ U.T) ** 2).mean(0)
+    lost = (Z2 ** 2).sum(1).mean() - along
+    # probabilistic PCA (Tipping & Bishop, 1999): fitted on Part 6's training pages, scored on its held-out pages
+    Xtr, Xte = X[~test], X[test]
+    mu, sd = Xtr.mean(0), Xtr.std(0)
+    Ztr, Zte = (Xtr - mu) / sd, (Xte - mu) / sd
+    lv, lV = np.linalg.eigh(Ztr.T @ Ztr / len(Ztr))
+    o = np.argsort(-lv)
+    lv, lV = lv[o], lV[:, o]
+    ll_tr, ll_te, sig2 = [], [], []
+    for k in range(d):
+        s2 = float(lv[k:].mean())  # the noise: the average variance of the directions left out
+        W = lV[:, :k] * np.sqrt(np.maximum(lv[:k] - s2, 0))
+        Cm = W @ W.T + s2 * np.eye(d)
+        ll_tr.append(float(glogpdf(Ztr, 0, Cm).mean()))
+        ll_te.append(float(glogpdf(Zte, 0, Cm).mean()))
+        sig2.append(s2)
+    full_te = float(glogpdf(Zte, 0, Ztr.T @ Ztr / len(Ztr) + 1e-9 * np.eye(d)).mean())
+    best_k = int(np.argmax(ll_te))
+    assert all(b >= a - 1e-9 for a, b in zip(ll_tr, ll_tr[1:]))  # more directions never fit the training pages worse
+    return dict(vals=vals, kept=kept, err=err, sv=sv, n=n, d=d, theta=th, along=along, lost=lost,
+                total2=float((Z2 ** 2).sum(1).mean()), th_best=float(th[np.argmax(along)]),
+                Z2=Z2, ll_tr=np.array(ll_tr), ll_te=np.array(ll_te), sig2=np.array(sig2), best_k=best_k,
+                full_te=full_te, n_train=int((~test).sum()), n_test=int(test.sum()),
+                share5=float(vals[:5].sum() / vals.sum()), share_best=float(vals[:best_k].sum() / vals.sum()))
+
+
+# ---------------------------------------------------------------------------
+def compute_ica():
+    """Two voices, two microphones: a tone and a sawtooth, mixed; whitening, then the rotation that makes the outputs
+    least Gaussian, found by FastICA's fixed point on the kurtosis."""
+    T = 4000
+    t = np.linspace(0, 8, T)
+    S = np.stack([np.sin(2 * np.pi * 0.9 * t + 0.3), 2 * ((0.55 * t + 0.2) % 1) - 1])
+    S = (S - S.mean(1, keepdims=True)) / S.std(1, keepdims=True)
+    A = np.array([[0.9, 0.55], [0.4, 1.0]])  # how loud each voice is at each microphone
+    X = A @ S
+    Xc = X - X.mean(1, keepdims=True)
+    ev, E = np.linalg.eigh(Xc @ Xc.T / T)
+    Xw = np.diag(ev ** -0.5) @ E.T @ Xc  # whitened: uncorrelated, unit variance (this is all PCA can do)
+    th = np.linspace(0, np.pi, 361)
+    kurt = np.array([((np.cos(a) * Xw[0] + np.sin(a) * Xw[1]) ** 4).mean() - 3 for a in th])
+    g = rng(1999)  # Hyvarinen, 1999
+    a0 = float(g.uniform(0, np.pi))
+    w = np.array([math.cos(a0), math.sin(a0)])
+    path = [w.copy()]
+    for _ in range(40):
+        u = w @ Xw
+        w1 = (Xw * u ** 3).mean(1) - 3 * w  # the fixed point of the kurtosis contrast
+        w1 /= np.linalg.norm(w1)
+        if w1 @ w < 0:
+            w1 = -w1
+        path.append(w1.copy())
+        done = 1 - abs(w1 @ w) < 1e-12
+        w = w1
+        if done:
+            break
+    w2 = np.array([-w[1], w[0]])
+    Y = np.stack([w @ Xw, w2 @ Xw])
+    R = np.corrcoef(np.vstack([Y, S]))[:2, 2:]
+    perm = [int(np.argmax(np.abs(R[0]))), 1 - int(np.argmax(np.abs(R[0])))]
+    Y = np.stack([Y[perm.index(0)], Y[perm.index(1)]])  # recovered source k matches true source k
+    Y *= np.sign(np.sum(Y * S, 1))[:, None]
+    r_ica = np.abs(np.corrcoef(np.vstack([Y, S]))[:2, 2:]).diagonal()
+    r_pca = np.abs(np.corrcoef(np.vstack([Xw, S]))[:2, 2:]).max(1)  # the whitened (PCA) outputs: still mixed
+    r_mic = np.abs(np.corrcoef(np.vstack([X, S]))[:2, 2:]).max(1)
+    assert r_ica.min() > 0.99
+    ang = np.array([math.atan2(p[1], p[0]) % np.pi for p in path])
+    sub = np.arange(0, T, 5)
+    return dict(t=t[sub], S=S[:, sub], X=X[:, sub], Xw=Xw[:, sub], Y=Y[:, sub], A=A, theta=th, kurt=kurt, ang=ang,
+                iters=len(path) - 1, r_ica=r_ica, r_pca=r_pca, r_mic=r_mic, kurt_src=(S ** 4).mean(1) - 3,
+                kurt_mix=(Xw ** 4).mean(1) - 3)
+
+
+# ---------------------------------------------------------------------------
+def gmm_params(g, k):
+    return np.asarray(g["means"])[k], np.asarray(g["covs"])[k], np.asarray(g["w"])[k]
+
+
+def gmm_logjoint(P, m, S, w):
+    return np.stack([math.log(w[z]) + gauss_logpdf(P, m[z], S[z]) for z in range(len(w))], 1)
+
+
+def compute_embound():
+    """The EM bound, drawn for real: along the line from round k's parameters to round k+1's, the log-likelihood and
+    the lower bound that round k's E step built.  They touch at round k; the bound peaks at round k+1."""
+    g = load("gmm")
+    P = np.asarray(g["P"])
+    ts = np.linspace(-0.5, 1.6, 85)
+    i0, i1 = int(np.argmin(np.abs(ts))), int(np.argmin(np.abs(ts - 1)))
+    out = []
+    for k in (0, 1, 2, 4):
+        m0, S0, w0 = gmm_params(g, k)
+        m1, S1, w1 = gmm_params(g, k + 1)
+        lj = gmm_logjoint(P, m0, S0, w0)
+        mx = lj.max(1, keepdims=True)
+        q = np.exp(lj - mx)
+        q /= q.sum(1, keepdims=True)  # round k's E step
+        ll, bd = [], []
+        for t in ts:
+            m, S, w = m0 + t * (m1 - m0), S0 + t * (S1 - S0), w0 + t * (w1 - w0)
+            if (w <= 0).any() or any(np.linalg.eigvalsh(S[z]).min() <= 1e-9 for z in range(2)):
+                ll.append(np.nan)
+                bd.append(np.nan)
+                continue
+            lp = gmm_logjoint(P, m, S, w)
+            mm = lp.max(1, keepdims=True)
+            ll.append(float((mm[:, 0] + np.log(np.exp(lp - mm).sum(1))).mean()))
+            bd.append(float((q * (lp - np.log(q + 1e-300))).sum(1).mean()))
+        ll, bd = np.array(ll), np.array(bd)
+        ok = np.isfinite(ll)
+        assert abs(ll[i0] - bd[i0]) < 1e-9 and (bd[ok] <= ll[ok] + 1e-9).all()  # Jensen: below, touching at round k
+        assert abs(int(np.nanargmax(bd)) - i1) <= 1  # the M step: the bound's top is round k+1
+        assert abs(ll[i0] - float(np.asarray(g["ll"])[k])) < 1e-9
+        out.append(dict(k=k, ll=ll, bound=bd))
+    return dict(ts=ts, i0=i0, i1=i1, rounds=[o["k"] for o in out], ll=np.array([o["ll"] for o in out]),
+                bound=np.array([o["bound"] for o in out]))
+
+
+def compute_kmeans():
+    g = load("gmm")
+    P, y = np.asarray(g["P"]), np.asarray(g["y"])
+    C = np.array([[-0.5, 2.5], [0.5, 2.0]])  # the same poor start as EM
+    cs, zs, J = [], [], []
+    for _ in range(50):
+        d2 = ((P[:, None] - C[None]) ** 2).sum(2)
+        z = np.argmin(d2, 1)
+        cs.append(C.copy())
+        zs.append(z.copy())
+        J.append(float(d2[np.arange(len(P)), z].mean()))
+        C1 = np.array([P[z == k].mean(0) for k in range(2)])
+        if np.allclose(C1, C):
+            break
+        C = C1
+    assert all(b <= a + 1e-12 for a, b in zip(J, J[1:]))  # Lloyd's steps never raise the objective
+    z = zs[-1]
+    agree = float(max((z == y).mean(), (z != y).mean()))
+    em = np.asarray(g["r"])[-1] > 0.5
+    same = float(max((z == em).mean(), (z != em).mean()))
+    # hard EM: equal bells of shared width sigma at the final centres; as sigma shrinks, every responsibility is 0 or 1
+    sig = np.array([3.0, 2.0, 1.4, 1.0, 0.7, 0.5, 0.35, 0.25, 0.15, 0.1])
+    d2 = ((P[:, None] - C[None]) ** 2).sum(2)
+    hard = []
+    for s in sig:
+        lp = -d2 / (2 * s * s)
+        r = np.exp(lp - lp.max(1, keepdims=True))
+        r /= r.sum(1, keepdims=True)
+        hard.append(float((r.max(1) > 0.99).mean()))
+    return dict(centres=np.array(cs), z=np.array(zs), J=np.array(J), iters=len(J), agree=agree, same_as_em=same,
+                agree_em=float(g["agree"]), sigma=sig, hard=np.array(hard))
+
+
+# ---------------------------------------------------------------------------
+# Topic models: latent Dirichlet allocation by variational EM (Blei, Ng & Jordan, 2003)
+LDA_K, LDA_SEG, LDA_V, LDA_ITERS, LDA_INNER, LDA_ALPHA, LDA_ETA = 12, 2000, 3000, 40, 4, 0.1, 0.01
+STOP = set("""a about above after again against all am an and any are as at be because been before being below between
+both but by can could did do does doing down during each few for from further had has have having he her here hers
+herself him himself his how i if in into is it its itself just me more most my myself no nor not now of off on once
+only or other our ours ourselves out over own same she should so some such than that the their theirs them themselves
+then there these they this those through to too under until up very was we were what when where which while who whom
+why will with would you your yours yourself yourselves said say says one upon shall may might must every much many like
+well yet also even though thus ever never quite rather again come came go went see seen saw know knew made make little
+nothing something thing things way time could would should""".split())
+
+
+def lda_corpus():
+    import collections
+    import re
+
+    c1 = ai1()
+    segs, sbook = [], []
+    cap, low = collections.Counter(), collections.Counter()
+    for n in c1.BOOKS:
+        t = c1.strip_gutenberg((c1.BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace"))
+        toks = re.findall(r"[A-Za-z]+", t.translate(c1.QUOTES).replace("_", ""))
+        for w in toks:
+            (cap if w[0].isupper() else low)[w.lower()] += 1
+        lw = [w.lower() for w in toks]
+        for i in range(0, len(lw) - LDA_SEG + 1, LDA_SEG):
+            segs.append(lw[i:i + LDA_SEG])
+            sbook.append(n)
+    names = {w for w in cap if cap[w] > low[w]}  # mostly capitalized: names and places
+    keep = lambda w: len(w) > 2 and w not in STOP and w not in names  # noqa: E731
+    df, tot = collections.Counter(), collections.Counter()
+    for s in segs:
+        c = collections.Counter(w for w in s if keep(w))
+        tot.update(c)
+        df.update(c.keys())
+    vocab = [w for w, _ in tot.most_common() if df[w] <= 0.25 * len(segs)][:LDA_V]
+    vid = {w: i for i, w in enumerate(vocab)}
+    di, wi, cn = [], [], []
+    for d, s in enumerate(segs):
+        c = collections.Counter(vid[w] for w in s if w in vid)
+        for w, k in c.items():
+            di.append(d)
+            wi.append(w)
+            cn.append(k)
+    return (np.array(di), np.array(wi), np.array(cn, float), vocab, np.array(sbook), segs, vid,
+            len(names))
+
+
+def compute_lda():
+    from scipy.special import digamma, gammaln
+
+    di, wi, cn, vocab, sbook, segs, vid, n_names = lda_corpus()
+    D, V, K = len(sbook), len(vocab), LDA_K
+    g = rng(2003)  # Blei, Ng & Jordan, 2003
+    beta = np.full((K, V), LDA_ETA)
+    for k in range(K):  # each topic starts as the words of a few random sections
+        for d in g.choice(D, size=3, replace=False):
+            sel = di == d
+            np.add.at(beta[k], wi[sel], cn[sel])
+    beta /= beta.sum(1, keepdims=True)
+    nd = np.bincount(di, weights=cn, minlength=D)
+    gamma = LDA_ALPHA + nd[:, None] / K + g.uniform(0, 1, (D, K))
+    N = cn.sum()
+    bounds, snaps, snap_at = [], {}, (0, 1, 2, 3, 5, 8, 13, 20, 30, LDA_ITERS)
+
+    def top(b, m=8):
+        return [[vocab[i] for i in np.argsort(-b[k])[:m]] for k in range(K)]
+
+    snaps["0"] = top(beta)
+    for it in range(1, LDA_ITERS + 1):
+        for _ in range(LDA_INNER):  # E step: coordinate ascent on each section's q(theta) and q(z)
+            Elog = digamma(gamma) - digamma(gamma.sum(1))[:, None]
+            lphi = Elog[di] + np.log(beta.T[wi])
+            lphi -= lphi.max(1, keepdims=True)
+            phi = np.exp(lphi)
+            phi /= phi.sum(1, keepdims=True)
+            gamma = LDA_ALPHA + np.stack([np.bincount(di, weights=cn * phi[:, k], minlength=D) for k in range(K)], 1)
+        Elog = digamma(gamma) - digamma(gamma.sum(1))[:, None]
+        lb = (D * (gammaln(K * LDA_ALPHA) - K * gammaln(LDA_ALPHA)) + (LDA_ALPHA - 1) * Elog.sum()
+              + (cn[:, None] * phi * (Elog[di] + np.log(beta.T[wi]) - np.log(phi + 1e-300))).sum()
+              - (gammaln(gamma.sum(1)) - gammaln(gamma).sum(1) + ((gamma - 1) * Elog).sum(1)).sum())
+        bounds.append(float(lb / N))
+        # M step: each topic's word probabilities from the words it was given
+        beta = np.stack([np.bincount(wi, weights=cn * phi[:, k], minlength=V) for k in range(K)]) + LDA_ETA
+        beta /= beta.sum(1, keepdims=True)
+        if it in snap_at:
+            snaps[str(it)] = top(beta)
+        print(f"    LDA round {it}: bound {bounds[-1]:.4f} nats per word", flush=True)
+    theta = gamma / gamma.sum(1, keepdims=True)
+    size = (theta * nd[:, None]).sum(0)
+    order = np.argsort(-size)  # topics by how many words they hold
+    beta, theta, size = beta[order], theta[:, order], size[order]
+    snaps = {k: [v[j] for j in order] for k, v in snaps.items()}
+    c1 = ai1()
+    books = list(c1.BOOKS)
+    share = np.array([[(theta[sbook == b, k] * nd[sbook == b]).sum() for b in books] for k in range(K)])
+    share /= share.sum(1, keepdims=True)
+    main = [books[int(np.argmax(share[k]))] for k in range(K)]
+    # one section of Moby Dick, its mixture, and its words coloured by their likeliest topic
+    md = np.nonzero(sbook == 2701)[0]
+    ex = int(md[len(md) // 2])
+    Elog = digamma(gamma[:, order]) - digamma(gamma.sum(1))[:, None]
+    words = segs[ex][:400]
+    col = [int(np.argmax(Elog[ex] + np.log(beta[:, vid[w]]))) if w in vid else -1 for w in words]
+    mono = all(b >= a - 1e-6 for a, b in zip(bounds, bounds[1:]))
+    return dict(K=K, V=V, D=D, seg=LDA_SEG, alpha=LDA_ALPHA, n_names=n_names, words_total=int(N), bounds=bounds,
+                monotone=mono, snaps=snaps, top=[[vocab[i] for i in np.argsort(-beta[k])[:10]] for k in range(K)],
+                topw=[[float(beta[k, i]) for i in np.argsort(-beta[k])[:10]] for k in range(K)], size=size / size.sum(),
+                main=[c1.BOOKS[b] for b in main], main_share=[float(share[k].max()) for k in range(K)],
+                ex_title=c1.BOOKS[2701], ex_theta=theta[ex], ex_words=words, ex_topic=col,
+                book_titles=[c1.BOOKS[b] for b in books], share=share)
+
+
+# ---------------------------------------------------------------------------
+def compute_forward():
+    """The forward algorithm and Viterbi on the trained two-state model, checked against every path."""
+    import itertools
+
+    h = load("hmm")
+    A, B = np.asarray(h["A"]), np.asarray(h["B"])
+    pi = np.full(2, 0.5)
+    alpha_ = ai1().ALPHA27
+    sent = h["sentence"]
+    obs = np.array([alpha_.index(ch) for ch in sent])
+    T = 6
+    o = obs[:T]
+    al = np.zeros((T, 2))
+    al[0] = pi * B[:, o[0]]
+    for t in range(1, T):
+        al[t] = (al[t - 1] @ A) * B[:, o[t]]
+    brute = 0.0
+    for path in itertools.product((0, 1), repeat=T):
+        p = pi[path[0]] * B[path[0], o[0]]
+        for t in range(1, T):
+            p *= A[path[t - 1], path[t]] * B[path[t], o[t]]
+        brute += p
+    assert abs(al[-1].sum() - brute) < 1e-12 * max(brute, 1e-300) * 1e3
+    de = np.zeros((T, 2))
+    back = np.zeros((T, 2), int)
+    de[0] = pi * B[:, o[0]]
+    for t in range(1, T):
+        m = de[t - 1][:, None] * A
+        back[t] = np.argmax(m, 0)
+        de[t] = m.max(0) * B[:, o[t]]
+    vp = [int(np.argmax(de[-1]))]
+    for t in range(T - 1, 0, -1):
+        vp.append(int(back[t][vp[-1]]))
+    vp = vp[::-1]
+    # the whole sentence, scaled
+    a = pi * B[:, obs[0]]
+    lp = math.log(a.sum())
+    a /= a.sum()
+    for t in range(1, len(obs)):
+        a = (a @ A) * B[:, obs[t]]
+        lp += math.log(a.sum())
+        a /= a.sum()
+    return dict(letters=sent[:T], alpha=al, brute=brute, delta=de, back=back, vpath=vp, T=T, n=len(obs),
+                logp_bits=lp / math.log(2), bits_per_letter=-lp / math.log(2) / len(obs), A=A,
+                B_letters=B[:, o])
+
+
+# ---------------------------------------------------------------------------
+# IBM Model 1 (Brown et al., 1993) on a tiny parallel corpus, and BLEU (Papineni et al., 2002)
+IBM_TRAIN = [
+    ("la maison", "the house"), ("la maison bleue", "the blue house"), ("la fleur", "the flower"),
+    ("la fleur bleue", "the blue flower"), ("une maison", "a house"), ("une petite maison", "a small house"),
+    ("le chat", "the cat"), ("le chat noir", "the black cat"), ("un chat", "a cat"), ("le chien", "the dog"),
+    ("le chien mange", "the dog eats"), ("le chat mange le poisson", "the cat eats the fish"),
+    ("le chien voit le chat", "the dog sees the cat"), ("la femme voit la maison", "the woman sees the house"),
+    ("une femme mange", "a woman eats"), ("le petit chien", "the small dog"), ("la petite fleur", "the small flower"),
+    ("un poisson rouge", "a red fish"), ("la maison rouge", "the red house"),
+    ("le chat voit un poisson", "the cat sees a fish"),
+]
+IBM_TEST = [
+    ("le chien noir", "the black dog"), ("la femme mange le poisson", "the woman eats the fish"),
+    ("une fleur rouge", "a red flower"), ("le chat voit la femme", "the cat sees the woman"),
+    ("un petit chat", "a small cat"), ("la femme voit le chien noir", "the woman sees the black dog"),
+]
+AFTER_NOUN = {"bleue", "noir", "rouge"}  # French adjectives that follow their noun: the one rule a linguist adds
+IBM_EXAMPLE = 11  # le chat mange le poisson
+
+
+def bleu(hyps, refs, N=4):
+    import collections
+
+    num, den = np.zeros(N), np.zeros(N)
+    hl = rl = 0
+    for h, r in zip(hyps, refs):
+        h, r = h.split(), r.split()
+        hl, rl = hl + len(h), rl + len(r)
+        for n in range(1, N + 1):
+            hc = collections.Counter(tuple(h[i:i + n]) for i in range(len(h) - n + 1))
+            rc = collections.Counter(tuple(r[i:i + n]) for i in range(len(r) - n + 1))
+            num[n - 1] += sum(min(c, rc[g]) for g, c in hc.items())
+            den[n - 1] += max(len(h) - n + 1, 0)
+    p = num / np.maximum(den, 1)
+    bp = 1.0 if hl > rl else math.exp(1 - rl / max(hl, 1))
+    score = bp * math.exp(np.mean(np.log(np.maximum(p, 1e-300)))) if (p > 0).all() else 0.0
+    return dict(p=p.tolist(), num=num.tolist(), den=den.tolist(), bp=bp, bleu=score, hyp_len=hl, ref_len=rl)
+
+
+def compute_ibm1():
+    pairs = [(f.split(), e.split()) for f, e in IBM_TRAIN]
+    F = sorted({w for f, _ in pairs for w in f})
+    E = sorted({w for _, e in pairs for w in e})
+    fi, ei = {w: i + 1 for i, w in enumerate(F)}, {w: i for i, w in enumerate(E)}  # French 0 is NULL
+    t = np.full((len(F) + 1, len(E)), 1.0 / len(E))  # t(e | f): uniform to start
+    snaps, aligns, lls = [t.copy()], [], []
+
+    def align(k, t):
+        f, e = pairs[k]
+        src = [0] + [fi[w] for w in f]
+        a = np.array([[t[s, ei[w]] for s in src] for w in e])
+        return a / a.sum(1, keepdims=True)
+
+    aligns.append(align(IBM_EXAMPLE, t))
+    for it in range(30):
+        cnt = np.zeros_like(t)
+        ll = 0.0
+        for f, e in pairs:
+            src = [0] + [fi[w] for w in f]
+            for w in e:
+                p = t[src, ei[w]]
+                ll += math.log(p.sum() / len(src))
+                cnt[src, ei[w]] += p / p.sum()  # E step: how likely each French word made this English word
+        lls.append(ll)
+        t = cnt / np.maximum(cnt.sum(1, keepdims=True), 1e-300)  # M step
+        snaps.append(t.copy())
+        aligns.append(align(IBM_EXAMPLE, t))
+    assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))
+    best = {f: E[int(np.argmax(t[fi[f]]))] for f in F}
+
+    def gloss(f, reorder):
+        out = [best[w] for w in f.split()]
+        if reorder:
+            for i, w in enumerate(f.split()):
+                if w in AFTER_NOUN and i > 0:
+                    out[i - 1], out[i] = out[i], out[i - 1]
+        return " ".join(out)
+
+    refs = [e for _, e in IBM_TEST]
+    h1 = [gloss(f, False) for f, _ in IBM_TEST]
+    h2 = [gloss(f, True) for f, _ in IBM_TEST]
+    b1, b2 = bleu(h1, refs), bleu(h2, refs)
+    show = ["la", "le", "maison", "chat", "chien", "noir", "mange", "voit"]
+    return dict(F=F, E=E, t=np.array(snaps), lls=np.array(lls), align=np.array(aligns), example=list(IBM_TRAIN[IBM_EXAMPLE]),
+                best=best, test=[list(p) for p in IBM_TEST], hyp_gloss=h1, hyp_rule=h2, bleu_gloss=b1, bleu_rule=b2,
+                n_train=len(IBM_TRAIN), show=show,
+                show_best=[[best[f], float(t[fi[f]].max())] for f in show])
+
+
+# ---------------------------------------------------------------------------
+def word_ids(text: str):
+    import re
+
+    toks = np.array(re.findall(r"[a-z]+(?:'[a-z]+)?", text.lower()))
+    return toks
+
+
+def compute_goodturing():
+    """Counts of counts for the word pairs of the novels: Good-Turing's estimate of what a count of r is really worth,
+    against the truth measured on the other half of the reading (Church & Gale, 1991)."""
+    c1 = ai1()
+    lines = c1.text("train").split("\n")
+    ta, tb = word_ids("\n".join(lines[0::2])), word_ids("\n".join(lines[1::2]))
+    vocab, inv = np.unique(np.concatenate([ta, tb]), return_inverse=True)
+    V = len(vocab)
+    ia, ib = inv[:len(ta)].astype(np.int64), inv[len(ta):].astype(np.int64)
+    ka, ca = np.unique(ia[:-1] * V + ia[1:], return_counts=True)
+    kb, cb = np.unique(ib[:-1] * V + ib[1:], return_counts=True)
+    j = np.minimum(np.searchsorted(kb, ka), len(kb) - 1)
+    in_b = np.where(kb[j] == ka, cb[j], 0)
+    scale = (len(ia) - 1) / (len(ib) - 1)
+    rows = []
+    N0 = float(V) * V - len(ka)
+    unseen_b = float(cb.sum() - in_b.sum())
+    Nr = lambda r: float((ca == r).sum())  # noqa: E731
+    rows.append(dict(r=0, Nr=N0, gt=Nr(1) / N0, held=unseen_b * scale / N0))
+    for r in range(1, 9):
+        sel = ca == r
+        rows.append(dict(r=r, Nr=Nr(r), gt=(r + 1) * Nr(r + 1) / Nr(r), held=float(in_b[sel].mean() * scale)))
+    disc = [r_["r"] - r_["held"] for r_ in rows[2:]]
+    # Kneser-Ney's continuation counts on words: frequent, but after very few different words
+    allk = np.unique(np.concatenate([ka, kb]))
+    prev_n = np.bincount(allk % V, minlength=V)  # N1+(. w): distinct words seen before w
+    cnt = np.bincount(np.concatenate([ia, ib]), minlength=V)
+    cand = np.nonzero(cnt >= 1000)[0]
+    ratio = cnt[cand] / np.maximum(prev_n[cand], 1)
+    picks = cand[np.argsort(-ratio)[:6]]
+    w0 = int(picks[0])
+    pre = np.concatenate([ia[:-1][ia[1:] == w0], ib[:-1][ib[1:] == w0]])
+    pv, pc = np.unique(pre, return_counts=True)
+    top_prev = vocab[pv[np.argmax(pc)]]
+    # a word about as common, with many different words before it
+    near = np.nonzero((cnt > 0.7 * cnt[w0]) & (cnt < 1.4 * cnt[w0]))[0]
+    w1 = int(near[np.argmax(prev_n[near])])
+    return dict(rows=rows, discount=disc, V=V, tokens=int(len(ia) + len(ib)), types_a=int(len(ka)),
+                p_unseen=Nr(1) / len(ia), example=[[str(vocab[i]), int(cnt[i]), int(prev_n[i])] for i in picks],
+                word=str(vocab[w0]), word_count=int(cnt[w0]), word_prev=int(prev_n[w0]), word_top_prev=str(top_prev),
+                word_top_share=float(pc.max() / pc.sum()), other=str(vocab[w1]), other_count=int(cnt[w1]),
+                other_prev=int(prev_n[w1]))
+
+
+# ---------------------------------------------------------------------------
+# The infinity-gram: a suffix array of the thirty novels
+INF_CHUNKS, INF_CHUNK, INF_CAP = 6, 5000, 500
+INF_EDGES = (0, 8, 10, 12, 15, 20, 30, 10 ** 9)
+
+
+def chars_codec():
+    c1 = ai1()
+    train, valid, passage = c1.text("train"), c1.text("valid"), c1.text("passage")
+    chars = sorted(set(train) | set(valid) | set(passage))
+    idx = {ch: i for i, ch in enumerate(chars)}
+    enc = lambda t: np.array([idx[ch] for ch in t], np.int64)  # noqa: E731
+    return chars, enc, train, valid, passage
+
+
+def compute_infini():
+    import time
+
+    from videos.ai.ai7.infini import Index
+
+    chars, enc, train, valid, passage = chars_codec()
+    K = len(chars)
+    a, v, ps = enc(train), enc(valid), enc(passage)
+    M = int(load("kn")["best"])
+    t0 = time.time()
+    model = kn_model(ngram_tables(a, K, M), K, M)
+    discounts = [float(m["D"]) for m in model]
+    print(f"    Kneser-Ney tables in {time.time() - t0:.0f}s", flush=True)
+    t0 = time.time()
+    idx = Index((a[::-1] + 1).astype(np.uint8))  # the reversed reading: contexts grow leftward
+    print(f"    suffix array of {len(a):,} characters in {time.time() - t0:.0f}s", flush=True)
+
+    def infer(seq, positions):
+        sc = (seq + 1).astype(np.uint8)
+        L = np.zeros(len(positions), np.int32)
+        p = np.zeros(len(positions))
+        top = np.zeros(len(positions), bool)
+        nctx = np.zeros(len(positions), np.int64)
+        for j, i in enumerate(positions):
+            Lj, lo, hi = idx.longest(sc, int(i), cap=INF_CAP)
+            if Lj == 0:
+                continue
+            c = idx.before(lo, hi, K)[1:]
+            if c.sum() == 0:
+                continue
+            L[j], nctx[j] = Lj, int(c.sum())
+            p[j] = c[seq[i]] / c.sum()
+            top[j] = int(np.argmax(c)) == seq[i]
+        return L, p, top, nctx
+
+    t0 = time.time()
+    g = rng(2024)  # Liu et al., 2024
+    starts = np.sort(g.choice(len(v) - INF_CHUNK, size=INF_CHUNKS, replace=False))
+    vL, vp, vk = [], [], []
+    for s in starts:
+        ch = v[s:s + INF_CHUNK]
+        Lc, pc, _, _ = infer(ch, np.arange(M, len(ch)))
+        vL.append(Lc)
+        vp.append(pc)
+        vk.append(kn_probs(model, ch, K, M))
+    vL, vp, vk = np.concatenate(vL), np.concatenate(vp), np.concatenate(vk)
+    pos = np.arange(M, len(ps))
+    pL, pp, ptop, pn = infer(ps, pos)
+    pk = kn_probs(model, ps, K, M)
+    print(f"    longest matches in {time.time() - t0:.0f}s", flush=True)
+    # one weight per band of match lengths, chosen on held-out text from the novels (never on the passage)
+    lams = np.linspace(0, 0.995, 200)
+    lam = []
+    for lo, hi in zip(INF_EDGES, INF_EDGES[1:]):
+        sel = (vL >= lo) & (vL < hi)
+        if sel.sum() < 50:
+            lam.append(0.0)
+            continue
+        ll = [np.log(l_ * vp[sel] + (1 - l_) * vk[sel]).sum() for l_ in lams]
+        lam.append(float(lams[int(np.argmax(ll))]))
+    band_of = lambda L: np.searchsorted(INF_EDGES, L, side="right") - 1  # noqa: E731
+    lam_p = np.array(lam)[band_of(pL)]
+    mix = lam_p * pp + (1 - lam_p) * pk
+    mix_bits = float(-np.log2(mix).mean())
+    kn_bits_ = float(-np.log2(pk).mean())
+    assert abs(kn_bits_ - load("kn")["best_bits"]) < 1e-9  # the same Kneser-Ney, scored the same way
+    hist = np.bincount(np.minimum(pL, 40), minlength=41)
+    # the counts as one context grows, for the longest match in the passage's first paragraphs
+    j = int(np.argmax(pL[:4000]))
+    lengths = []
+    idx.longest((ps + 1).astype(np.uint8), int(pos[j]), cap=INF_CAP, lengths=lengths)
+    i = int(pos[j])
+    # a small suffix array, in full, for the picture
+    demo = "a rose is a rose"
+    dsa = sorted(range(len(demo)), key=lambda k: demo[k:])
+    return dict(K=K, n=len(a), M=M, discounts=discounts, edges=list(INF_EDGES[:-1]), lam=lam, mix_bits=mix_bits,
+                kn_bits=kn_bits_, L=pL, hist=hist, mean_L=float(pL.mean()), median_L=float(np.median(pL)),
+                max_L=int(pL.max()), acc=float(ptop.mean()), zero=float((pp == 0).mean()),
+                sparse=float((pn == 1).mean()), acc_long=float(ptop[pL >= 10].mean()),
+                share_long=float((pL >= 10).mean()), grow_context=passage[i - len(lengths):i],
+                grow_next=passage[i], grow_counts=lengths, demo=demo, demo_sa=dsa,
+                valid_positions=int(len(vL)), example_start=0, example=passage[:160], example_L=pL[:160 - M],
+                gain=kn_bits_ - mix_bits)
+
+
+def compute_scoreboard():
+    """The scoreboard as Part 1 left it, with Part 7's two counting rows after Part 1's best counting model."""
+    sb = ai1().load("scoreboard")
+    rows = [dict(r) for r in sb["rows"]]
+    i = next(j for j, r in enumerate(rows) if r["key"] == "best") + 1
+    kn, inf = load("kn"), load("infini")
+    rows.insert(i, dict(key="kn", label=rf"Kneser--Ney, \ ${kn['best']}$ characters", bits=kn["best_bits"], part=7,
+                        kind="count"))
+    rows.insert(i + 1, dict(key="infini", label=r"$\infty$-gram $+$ Kneser--Ney", bits=inf["mix_bits"], part=7,
+                            kind="count"))
+    return dict(rows=rows, new=[i, i + 1], passage=sb["passage"])
+
+
+# ---------------------------------------------------------------------------
+# Graphical models: d-separation by simulation, belief propagation on a tree
+TREE = [(0, 1), (0, 2), (1, 3), (1, 4), (2, 5), (2, 6)]
+
+
+def compute_dsep():
+    g = rng(1988)  # Pearl, 1988
+    N = 400_000
+    rain = g.random(N) < 0.2
+    sprk = g.random(N) < 0.3
+    wet = ((rain | sprk) & (g.random(N) < 0.95)) | (g.random(N) < 0.02)
+    P = lambda a, b=None: float(a.mean() if b is None else a[b].mean())  # noqa: E731
+    # a chain: cloudy -> rain -> wet; a fork: rain <- cloudy -> sprinkler (the sprinkler is used less when it's cloudy)
+    cloudy = g.random(N) < 0.5
+    rain2 = g.random(N) < np.where(cloudy, 0.6, 0.1)
+    sprk2 = g.random(N) < np.where(cloudy, 0.1, 0.5)
+    return dict(N=N, collider=dict(p_r=P(rain), p_r_s=P(rain, sprk), p_r_w=P(rain, wet), p_r_ws=P(rain, wet & sprk),
+                                   p_r_wns=P(rain, wet & ~sprk)),
+                fork=dict(p_s_r=P(sprk2, rain2), p_s_nr=P(sprk2, ~rain2), p_s_rc=P(sprk2, rain2 & cloudy),
+                          p_s_nrc=P(sprk2, ~rain2 & cloudy)))
+
+
+def compute_bp():
+    import itertools
+
+    g = rng(1982)  # Pearl's message passing, 1982
+    n = 7
+    unary = np.exp(g.normal(0, 0.8, (n, 2)))
+    pair = {e: np.exp(g.normal(0, 1.0, (2, 2))) for e in TREE}
+
+    def brute(edges):
+        Z, marg = 0.0, np.zeros((n, 2))
+        for x in itertools.product((0, 1), repeat=n):
+            p = np.prod([unary[i, x[i]] for i in range(n)]) * np.prod([pair[e][x[e[0]], x[e[1]]] for e in edges])
+            Z += p
+            for i in range(n):
+                marg[i, x[i]] += p
+        return marg / Z
+
+    exact = brute(TREE)
+    nb = {i: [] for i in range(n)}
+    for a, b in TREE:
+        nb[a].append(b)
+        nb[b].append(a)
+
+    def psi(i, j):
+        return pair[(i, j)] if (i, j) in pair else pair[(j, i)].T
+
+    # two sweeps: leaves to root, root to leaves
+    up = [(3, 1), (4, 1), (5, 2), (6, 2), (1, 0), (2, 0)]
+    order = up + [(j, i) for i, j in reversed(up)]
+    msg = {}
+    for i, j in order:
+        prod = unary[i].copy()
+        for k in nb[i]:
+            if k != j:
+                prod *= msg[(k, i)]
+        m = prod @ psi(i, j)
+        msg[(i, j)] = m / m.sum()
+    belief = np.array([unary[i] * np.prod([msg[(k, i)] for k in nb[i]], 0) for i in range(n)])
+    belief /= belief.sum(1, keepdims=True)
+    assert np.allclose(belief, exact, atol=1e-12)
+    # one more factor makes a loop (3 - 4): the same messages, repeated, are only approximate
+    pair[(3, 4)] = np.exp(g.normal(0, 1.0, (2, 2)))
+    loop_edges = TREE + [(3, 4)]
+    exact_l = brute(loop_edges)
+    nb[3].append(4)
+    nb[4].append(3)
+    dirs = [(a, b) for a, b in loop_edges] + [(b, a) for a, b in loop_edges]
+    lm = {d: np.full(2, 0.5) for d in dirs}
+    err = []
+    for _ in range(30):
+        new = {}
+        for i, j in dirs:
+            prod = unary[i].copy()
+            for k in nb[i]:
+                if k != j:
+                    prod *= lm[(k, i)]
+            m = prod @ psi(i, j)
+            new[(i, j)] = m / m.sum()
+        lm = new
+        bl = np.array([unary[i] * np.prod([lm[(k, i)] for k in nb[i]], 0) for i in range(n)])
+        bl /= bl.sum(1, keepdims=True)
+        err.append(float(np.abs(bl - exact_l)[:, 1].max()))
+    return dict(n=n, edges=TREE, exact=exact[:, 1], belief=belief[:, 1], order=order,
+                msgs=[[float(msg[d][1])] for d in order], loopy_err=err, loopy_final=err[-1], states=2 ** n,
+                bp_ops=len(order) * 4)
+
+
+def compute_causal():
+    # the kidney-stone study: Charig et al. (1986), as tabulated by Julious & Mullee (1994)
+    ks = {"A": {"small": [81, 87], "large": [192, 263]}, "B": {"small": [234, 270], "large": [55, 80]}}
+    tot = {t: [sum(v[0] for v in ks[t].values()), sum(v[1] for v in ks[t].values())] for t in ks}
+    pz = {z: (ks["A"][z][1] + ks["B"][z][1]) / 700 for z in ("small", "large")}
+    adj = {t: sum(ks[t][z][0] / ks[t][z][1] * pz[z] for z in pz) for t in ks}
+    # a simulation where we know the truth: severity sways both who is treated and who recovers
+    g = rng(2000)  # Pearl, Causality, 2000
+    N = 400_000
+
+    def world(do=None):
+        z = g.random(N) < 0.5  # severe
+        x = (g.random(N) < np.where(z, 0.8, 0.2)) if do is None else (g.random(N) < 0.5)
+        y = g.random(N) < 0.5 + 0.1 * x - 0.35 * z
+        return z, x, y
+
+    z, x, y = world()
+    naive = float(y[x].mean() - y[~x].mean())
+    adjusted = float(sum((y[x & (z == s)].mean() - y[~x & (z == s)].mean()) * (z == s).mean() for s in (True, False)))
+    strata = [[float(y[x & (z == s)].mean()), float(y[~x & (z == s)].mean())] for s in (False, True)]
+    z2, x2, y2 = world(do=True)
+    exp_ = float(y2[x2].mean() - y2[~x2].mean())
+    return dict(stones=ks, total=tot, pz=pz, adjusted=adj, naive=naive, adjusted_sim=adjusted, experiment=exp_,
+                truth=0.1, strata=strata, treated_severe=float(z[x].mean()), untreated_severe=float(z[~x].mean()),
+                p_y_x=float(y[x].mean()), p_y_nx=float(y[~x].mean()), N=N)
+
+
+# ---------------------------------------------------------------------------
+# Gaussian processes: the band shrinking as pages land; Occam's razor; Bayesian optimization
+def rbf(a, b, ell, s2):
+    return s2 * np.exp(-0.5 * (np.asarray(a)[:, None] - np.asarray(b)[None]) ** 2 / ell ** 2)
+
+
+def gp_post(x, y, xs, ell, s2, n2):
+    if len(x) == 0:
+        return np.zeros(len(xs)), np.full(len(xs), math.sqrt(s2))
+    K = rbf(x, x, ell, s2) + n2 * np.eye(len(x))
+    Ks = rbf(xs, x, ell, s2)
+    mean = Ks @ np.linalg.solve(K, y)
+    var = s2 - np.einsum("ij,ji->i", Ks, np.linalg.solve(K, Ks.T))
+    return mean, np.sqrt(np.maximum(var, 0))
+
+
+GP_NS = (0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 186)
+
+
+def compute_gpland():
+    gp = load("gp")
+    x, y, xs = np.asarray(gp["x"]), np.asarray(gp["y"]), np.asarray(gp["xs"])
+    ell, s2, n2, mu0 = float(gp["ell"]), float(gp["s2"]), float(gp["noise"]), float(gp["mu0"])
+    order = rng(1951).permutation(len(x))  # Krige, 1951
+    means, sds = [], []
+    for n_ in GP_NS:
+        sel = order[:n_]
+        m, s = gp_post(x[sel], y[sel] - mu0, xs, ell, s2, n2)
+        means.append(m + mu0)
+        sds.append(s)
+    sds = np.array(sds)
+    assert all(b <= a + 1e-9 for a, b in zip(sds.mean(1), sds.mean(1)[1:]))  # more data, never wider on average
+    return dict(order=order, ns=list(GP_NS), means=np.array(means), sds=sds, mean_sd=sds.mean(1), s=math.sqrt(s2),
+                noise_sd=math.sqrt(n2))
+
+
+def compute_occam():
+    gp = load("gp")
+    x, y = np.asarray(gp["x"]), np.asarray(gp["y"]) - float(gp["mu0"])
+    s2, n2, best = float(gp["s2"]), float(gp["noise"]), float(gp["ell"])
+    ells = np.unique(np.concatenate([np.geomspace(0.4, 120, 70), [best]]))
+    fit, comp = [], []
+    for ell in ells:
+        L = np.linalg.cholesky(rbf(x, x, ell, s2) + n2 * np.eye(len(x)))
+        al = np.linalg.solve(L.T, np.linalg.solve(L, y))
+        fit.append(float(-0.5 * y @ al))
+        comp.append(float(-np.log(np.diag(L)).sum()))
+    fit, comp = np.array(fit), np.array(comp)
+    total = fit + comp - 0.5 * len(x) * math.log(2 * math.pi)
+    # MacKay's evidence for polynomials (Bayesian linear regression, alpha and beta by type-II maximum likelihood)
+    g = rng(1992)  # MacKay, Bayesian Interpolation, 1992
+    Np = 30
+    xp = np.sort(g.uniform(-1, 1, Np))
+    f = lambda u: 0.4 - 1.1 * u + 0.3 * u ** 2 + 1.6 * u ** 3  # noqa: E731
+    yp = f(xp) + g.normal(0, 0.25, Np)
+    degs = list(range(0, 13))
+    ev, rmse, fits = [], [], []
+    xg = np.linspace(-1, 1, 200)
+    for dg in degs:
+        Phi = np.polynomial.legendre.legvander(xp, dg)
+        Pg = np.polynomial.legendre.legvander(xg, dg)
+        a_, b_ = 1.0, 10.0
+        for _ in range(500):
+            Am = a_ * np.eye(dg + 1) + b_ * Phi.T @ Phi
+            m = b_ * np.linalg.solve(Am, Phi.T @ yp)
+            lam = np.linalg.eigvalsh(b_ * Phi.T @ Phi)
+            gam = float((lam / (a_ + lam)).sum())
+            a_ = gam / max(float(m @ m), 1e-12)
+            b_ = (Np - gam) / float(((yp - Phi @ m) ** 2).sum())
+        Am = a_ * np.eye(dg + 1) + b_ * Phi.T @ Phi
+        m = b_ * np.linalg.solve(Am, Phi.T @ yp)
+        Em = b_ / 2 * float(((yp - Phi @ m) ** 2).sum()) + a_ / 2 * float(m @ m)
+        ev.append(float((dg + 1) / 2 * math.log(a_) + Np / 2 * math.log(b_) - Em - 0.5 * np.linalg.slogdet(Am)[1]
+                        - Np / 2 * math.log(2 * math.pi)))
+        w_ls = np.linalg.lstsq(Phi, yp, rcond=None)[0]
+        rmse.append(float(np.sqrt(((yp - Phi @ w_ls) ** 2).mean())))
+        fits.append(Pg @ m)
+    return dict(ells=ells, fit=fit, comp=comp, total=total, best_ell=float(ells[np.argmax(total)]), gp_ell=best,
+                xp=xp, yp=yp, degs=degs, evidence=np.array(ev), rmse=np.array(rmse), best_deg=int(np.argmax(ev)),
+                xg=xg, fits=np.array(fits), true_deg=3)
+
+
+BO_ORDER, BO_VALID, BO_INIT, BO_STEPS = 5, 200_000, 2, 8
+
+
+def compute_bayesopt():
+    """Bayesian optimization of one hyperparameter: Kneser-Ney's discount D (one D for every order, five characters
+    of context), scored by bits per character on held-out text from the novels."""
+    from scipy.stats import norm
+
+    chars, enc, train, valid, _ = chars_codec()
+    K = len(chars)
+    a, v = enc(train), enc(valid)[:BO_VALID]
+    base = kn_model(ngram_tables(a, K, BO_ORDER), K, BO_ORDER)
+    gt_D = [float(m["D"]) for m in base]
+    gt_bits = kn_bits(base, v, K, BO_ORDER)
+
+    def f(D):
+        for m in base:
+            m["D"] = float(D)
+        return kn_bits(base, v, K, BO_ORDER)
+
+    part = CACHE.partial("bayesopt", dict(order=BO_ORDER, valid=BO_VALID))
+    grid = np.linspace(0.05, 0.95, 31)
+    truth = []
+    for D in grid:  # the whole curve, for checking (the optimizer never sees it)
+        key = f"grid_{D:.4f}"
+        if key not in part:
+            part[key] = f(D)
+        truth.append(part[key])
+    cand = np.linspace(0.02, 0.98, 400)
+    g = rng(1975)  # Mockus, 1975
+    xs = list(g.uniform(0.05, 0.95, BO_INIT))
+    ys = []
+    for D in xs:
+        key = f"x_{D:.6f}"
+        if key not in part:
+            part[key] = f(D)
+        ys.append(part[key])
+    steps = []
+    for s in range(BO_STEPS + 1):
+        X, Y = np.array(xs), np.array(ys)
+        mu, sd = Y.mean(), Y.std() + 1e-9
+        Yn = (Y - mu) / sd
+        best_ml, ell = -1e18, 0.2
+        for e in np.geomspace(0.05, 1.0, 25):  # the length scale by marginal likelihood, as in chapter 14
+            Kx = rbf(X, X, e, 1.0) + 1e-6 * np.eye(len(X))
+            L = np.linalg.cholesky(Kx)
+            al = np.linalg.solve(L.T, np.linalg.solve(L, Yn))
+            ml = -0.5 * Yn @ al - np.log(np.diag(L)).sum()
+            if ml > best_ml:
+                best_ml, ell = ml, e
+        m, sdv = gp_post(X, Yn, cand, ell, 1.0, 1e-6)
+        best = Yn.min()
+        z = (best - m) / np.maximum(sdv, 1e-12)
+        ei = np.maximum((best - m) * norm.cdf(z) + sdv * norm.pdf(z), 0)
+        nxt = float(cand[int(np.argmax(ei))])
+        steps.append(dict(x=X.copy(), y=Y.copy(), mean=m * sd + mu, sd=sdv * sd, ei=ei * sd, next=nxt, ell=ell))
+        if s == BO_STEPS:
+            break
+        key = f"x_{nxt:.6f}"
+        if key not in part:
+            part[key] = f(nxt)
+        xs.append(nxt)
+        ys.append(part[key])
+    ib = int(np.argmin(ys))
+    return dict(order=BO_ORDER, valid_chars=len(v), grid=grid, truth=np.array(truth), cand=cand,
+                xs=np.array(xs), ys=np.array(ys), best_D=float(xs[ib]), best_bits=float(ys[ib]),
+                grid_best_D=float(grid[int(np.argmin(truth))]), grid_best_bits=float(min(truth)),
+                gt_D=gt_D, gt_bits=gt_bits, evals=len(xs), grid_evals=len(grid),
+                steps_x=[st["x"].tolist() for st in steps], steps_y=[st["y"].tolist() for st in steps],
+                steps_mean=np.array([st["mean"] for st in steps]), steps_sd=np.array([st["sd"] for st in steps]),
+                steps_ei=np.array([st["ei"] for st in steps]), steps_next=[st["next"] for st in steps])
+
+
+# ---------------------------------------------------------------------------
+# Variational inference: coordinate ascent on a model with an exact answer; the reparameterization trick
+def compute_cavi():
+    """Bishop's example (PRML 10.1.3): pages' rate of "the", a Gaussian of unknown mean and precision, with a
+    Normal-Gamma prior.  The posterior is known exactly; mean-field CAVI approximates it by q(mu) q(tau), and
+    log p(x) = ELBO + KL(q || posterior) is checked at every step, the KL integrated on a grid."""
+    from scipy.special import digamma, gammaln
+
+    X, y, book, vocab = pages()
+    g = rng(1999)  # Jordan, Ghahramani, Jaakkola & Saul, 1999
+    xs_ = X[np.nonzero(y == 0)[0], vocab.index("the")]
+    x = xs_[g.choice(len(xs_), size=25, replace=False)]
+    N, xb = len(x), float(x.mean())
+    mu0, lam0, a0, b0 = 50.0, 0.01, 1.0, 1.0
+    lamN = lam0 + N
+    muN = (lam0 * mu0 + N * xb) / lamN
+    aN = a0 + N / 2
+    bN = b0 + 0.5 * (((x - xb) ** 2).sum() + lam0 * N * (xb - mu0) ** 2 / lamN)
+    logp = float(gammaln(aN) - gammaln(a0) + a0 * math.log(b0) - aN * math.log(bN) + 0.5 * math.log(lam0 / lamN)
+                 - N / 2 * math.log(2 * math.pi))
+    # exact posterior on a grid (mu, tau)
+    Etau_post = aN / bN
+    sd_mu = 1 / math.sqrt(lamN * Etau_post)
+    mug = np.linspace(muN - 7 * sd_mu, muN + 7 * sd_mu, 500)
+    from scipy.stats import gamma as G
+
+    taug = np.linspace(G.ppf(1e-7, aN, scale=1 / bN), G.ppf(1 - 1e-7, aN, scale=1 / bN), 500)
+    MU, TAU = np.meshgrid(mug, taug)
+    logpost = (G.logpdf(TAU, aN, scale=1 / bN) + 0.5 * np.log(lamN * TAU / (2 * math.pi))
+               - 0.5 * lamN * TAU * (MU - muN) ** 2)
+    dA = (mug[1] - mug[0]) * (taug[1] - taug[0])
+    Etau = 1.0 / float(np.var(x)) * 50  # a poor start: fifty times too precise
+    hist = []
+    for it in range(12):
+        m = muN  # q(mu): its mean never changes; its precision follows E[tau]
+        lq_ = lamN * Etau
+        a = a0 + (N + 1) / 2
+        Esq = ((x - m) ** 2).sum() + N / lq_ + lam0 * ((m - mu0) ** 2 + 1 / lq_)
+        b = b0 + 0.5 * Esq
+        Eltau = digamma(a) - math.log(b)
+        Et = a / b
+        elbo = (N / 2 * (Eltau - math.log(2 * math.pi)) - Et / 2 * (((x - m) ** 2).sum() + N / lq_)
+                + 0.5 * (math.log(lam0) + Eltau - math.log(2 * math.pi)) - lam0 * Et / 2 * ((m - mu0) ** 2 + 1 / lq_)
+                + a0 * math.log(b0) - gammaln(a0) + (a0 - 1) * Eltau - b0 * Et
+                + 0.5 * (1 + math.log(2 * math.pi) - math.log(lq_))
+                + gammaln(a) - (a - 1) * digamma(a) - math.log(b) + a)
+        logq = (-0.5 * np.log(2 * math.pi / lq_) - 0.5 * lq_ * (MU - m) ** 2) + G.logpdf(TAU, a, scale=1 / b)
+        q = np.exp(logq)
+        kl = float((q * (logq - logpost)).sum() * dA)
+        mass = float(q.sum() * dA)
+        hist.append(dict(m=m, lam=lq_, a=a, b=b, elbo=float(elbo), kl=kl, mass=mass))
+        Etau = Et
+    gaps = [abs(logp - (h["elbo"] + h["kl"])) for h in hist]
+    assert max(gaps) < 1e-3, gaps  # the identity, checked: log p(x) = ELBO + KL
+    el = [h["elbo"] for h in hist]
+    assert all(b_ >= a_ - 1e-9 for a_, b_ in zip(el, el[1:]))
+    # the true posterior's spread of mu, against q's: mean-field is too sure
+    sd_true = math.sqrt(bN / (aN - 1) / lamN)  # Student-t marginal
+    return dict(x=x, N=N, xbar=xb, prior=[mu0, lam0, a0, b0], post=[muN, lamN, aN, bN], logp=logp,
+                elbo=el, kl=[h["kl"] for h in hist], gap=max(gaps), q=[[h["m"], h["lam"], h["a"], h["b"]] for h in hist],
+                sd_mu_true=sd_true, sd_mu_q=1 / math.sqrt(hist[-1]["lam"]), iters=len(hist),
+                mu_range=[float(mug[0]), float(mug[-1])], tau_range=[float(taug[0]), float(taug[-1])])
+
+
+def compute_reparam():
+    """Two estimates of d/dm E_{z ~ N(m, 1)}[(z - 2)^2] from one sample each: the score function (REINFORCE) and the
+    reparameterization z = m + eps.  Both are unbiased; their spreads differ."""
+    g = rng(2013)  # Kingma & Welling, 2013
+    m, s, R = 0.5, 1.0, 20000
+    eps = g.normal(size=R)
+    z = m + s * eps
+    fz = (z - 2) ** 2
+    score = fz * (z - m) / s ** 2
+    rep = 2 * (z - 2)
+    true = 2 * (m - 2)
+    bins = np.linspace(-25, 15, 81)
+    return dict(m=m, true=true, score_mean=float(score.mean()), rep_mean=float(rep.mean()), score_sd=float(score.std()),
+                rep_sd=float(rep.std()), ratio=float(score.var() / rep.var()), R=R, bins=bins,
+                h_score=np.histogram(np.clip(score, -25, 15), bins)[0], h_rep=np.histogram(np.clip(rep, -25, 15), bins)[0])
+
+
 ITEMS = {
     "pca": compute_pca,
     "gmm": compute_gmm,
@@ -372,6 +1326,24 @@ ITEMS = {
     "gp": compute_gp,
     "vi": compute_vi,
     "kn": compute_kn,
+    "pca2": compute_pca2,
+    "ica": compute_ica,
+    "embound": compute_embound,
+    "kmeans": compute_kmeans,
+    "lda": compute_lda,
+    "forward": compute_forward,
+    "ibm1": compute_ibm1,
+    "goodturing": compute_goodturing,
+    "infini": compute_infini,
+    "scoreboard": compute_scoreboard,
+    "dsep": compute_dsep,
+    "bp": compute_bp,
+    "causal": compute_causal,
+    "gpland": compute_gpland,
+    "occam": compute_occam,
+    "bayesopt": compute_bayesopt,
+    "cavi": compute_cavi,
+    "reparam": compute_reparam,
 }
 CACHE.items = ITEMS
 

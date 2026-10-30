@@ -7,7 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, HIST, MODEL, PART, WALK, curve, load
 
-LEFT = C.BITS  # Itô: the left point
+LPT = C.BITS  # Itô: the left point
 MID = C.INTERVAL  # Stratonovich: the midpoint
 CORR = C.SURPRISE  # the extra term
 
@@ -46,23 +46,23 @@ class Ito(VoiceoverScene):
                 why(r"the first sum telescopes", font_size=22),
                 why(r"quadratic variation \ (Chapter 14)", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-2.4, buff=0.4, edge=6.8)
-        ax = Axes(x_range=[1, 4, 1], y_range=[-16, 0, 4], x_length=5.6, y_length=2.6, tips=False,
+        ax = CornerAxes(x_range=[1, 4, 1], y_range=[-16, 0, 4], x_length=5.6, y_length=2.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.2, -2.4, 0])
         xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, -16), DOWN, buff=0.08) for v in (1, 2, 3, 4)])
         lx = np.log10(ns)
-        lc = VGroup(curve(ax, lx, np.log10(le), color=LEFT, stroke_width=3),
-                    *[Dot(ax.c2p(a, math.log10(b)), radius=0.05, color=LEFT) for a, b in zip(lx, le)])
+        lc = VGroup(curve(ax, lx, np.log10(le), color=LPT, stroke_width=3),
+                    *[Dot(ax.c2p(a, math.log10(b)), radius=0.05, color=LPT) for a, b in zip(lx, le)])
         yt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(1, v), LEFT, buff=0.08)
                       for t, v in (("1", 0), ("10^{-8}", -8), ("10^{-16}", -16))])
         exact_mid = bool(np.all(se < 1e-10))
         mc = (DashedLine(ax.c2p(1, -16), ax.c2p(4, -16), color=MID, stroke_width=3) if exact_mid else
               curve(ax, lx, np.log10(np.maximum(se, 1e-16)), color=MID, stroke_width=3))
-        al = VGroup(label(r"left points: \ error against $\tfrac12(W_1^2 - 1)$", font_size=20, color=LEFT),
+        al = VGroup(label(r"left points: \ error against $\tfrac12(W_1^2 - 1)$", font_size=20, color=LPT),
                     label(r"midpoints: \ against $\tfrac12 W_1^2$ \ (to rounding)", font_size=20, color=MID))
         al.arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax, UP, buff=0.08)
         xl = label(r"steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.06)
         means = VGroup(label(rf"over ${M:,}$ paths:".replace(",", "{,}"), font_size=22, color=GREY_A),
-                       label(rf"left-point sums average ${lm:+.3f}$", font_size=22, color=LEFT),
+                       label(rf"left-point sums average ${lm:+.3f}$", font_size=22, color=LPT),
                        label(rf"midpoint sums average ${sm:.3f}$", font_size=22, color=MID),
                        label(rf"ordinary calculus, $\tfrac12 W_1^2$: \ ${w2 / 2:.3f}$", font_size=22, color=GREY_A))
         means.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, -2.4, 0])
@@ -106,7 +106,7 @@ class Ito(VoiceoverScene):
         whys = [why(r"Taylor, \ to second order"), why(r"$(dW)^2 = dt$; \ higher terms vanish"),
                 why(r"for $dX = \mu\,dt + \sigma\,dW$")]
         step = ladder(self, rows, whys, keep=3, top=3.2, x=-1.4, buff=0.45, edge=6.8)
-        ax = Axes(x_range=[1, 4, 1], y_range=[-2, 0.5, 1], x_length=5.6, y_length=2.8, tips=False,
+        ax = CornerAxes(x_range=[1, 4, 1], y_range=[-2, 0.5, 1], x_length=5.6, y_length=2.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.0, -1.9, 0])
         xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, -2), DOWN, buff=0.08) for v in (1, 2, 3, 4)])
         yt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(1, v), LEFT, buff=0.08)

@@ -72,7 +72,7 @@ class SDE(VoiceoverScene):
                      label(r"kick: \ $g\,dW_t$", font_size=22, color=NOISE).next_to(step_pic[2], RIGHT, buff=0.1))
         dd = gloss(r"$dt$, \ $dW_t$", r"$dt$: \ a tiny tick of time; \ $dW_t$: \ the tiny random kick\\ that "
                    r"Brownian motion makes in that tick", picture=step_pic, width=4.8, color=NOISE)
-        dd.to_edge(DOWN, buff=0.3).set_x(0)
+        dd.scale(1.25).to_edge(DOWN, buff=0.35).set_x(0)
         with self.voiceover(
             "Brownian motion is pure jiggle. Add a push, and you have a stochastic differential equation. At each "
             "instant, the change in x is a push, f of x times dt, where dt is a tiny tick of time, "
@@ -80,10 +80,10 @@ class SDE(VoiceoverScene):
             "<bookmark mark='b'/> To simulate one, take small steps: push, then "
             "kick, with a kick the size of the square root of the step."
         ) as vo:
-            self.play(Write(sde))
+            self.play(Write(sde), FadeIn(dd))
             self.play(FadeIn(b1))
             vo.wait_until("a")
-            self.play(FadeIn(b2), FadeIn(dd))
+            self.play(FadeIn(b2))
             vo.wait_until("b")
             self.play(Write(em), FadeIn(em_n))
         with self.voiceover(
@@ -121,7 +121,7 @@ class SDE(VoiceoverScene):
                     *[label(rf"Euler--Maruyama, \ ${n}$ steps", font_size=20, color=cols[n]) for n in cols])
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         f = cmath(r"dX", "=", rf"{mu:g}\,X\,dt", "+", rf"{sig:g}\,X\,dW", font_size=34).next_to(lg, UP, buff=0.15).align_to(ax, LEFT)
-        bx = Axes(x_range=[-3, 0, 1], y_range=[-2, 1, 1], x_length=5.0, y_length=4.0, tips=False,
+        bx = CornerAxes(x_range=[-3, 0, 1], y_range=[-2, 1, 1], x_length=5.0, y_length=4.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.6, -0.4, 0])
         xt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(bx.c2p(v, -2), DOWN, buff=0.08)
                       for t, v in (("10^{-3}", -3), ("10^{-2}", -2), ("0.1", -1), ("1", 0))])
@@ -153,11 +153,11 @@ class SDE(VoiceoverScene):
             "the scheme converges in 1955. Diffusion models' samplers are, at heart, this scheme run backwards, and "
             "part twenty-one spends chapters on doing better with fewer steps."
         ) as vo:
-            self.play(FadeIn(f), Create(ax), FadeIn(lg), Create(exc))
+            self.play(FadeIn(f), Create(ax), FadeIn(lg), Create(exc), Create(bx), FadeIn(xt), FadeIn(yt), FadeIn(xl))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(e) for e in ems], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(bx), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(tag))
+            self.play(FadeIn(tag))
             self.play(Create(sc), FadeIn(sl))
             self.play(Create(wc), FadeIn(wl))
             vo.wait_until("c")
