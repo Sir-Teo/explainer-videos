@@ -107,6 +107,7 @@ class Dreamer(VoiceoverScene):
         step = ladder(self, rows, whys, keep=5, top=3.0, x=-2.4, buff=0.45, edge=6.9)
         sg = label(r"$\mathrm{sg}$: \ stop the gradient, \ treat as a constant", font_size=22, color=GREY_A)
         sg.to_edge(DOWN, buff=0.4)
+        lh = label(r"the world model's loss, \ term by term", font_size=30, color=MODEL).to_edge(DOWN, buff=1.1)
         with self.voiceover(
             "It learns from three terms. <bookmark mark='a'/> Redraw each picture from the state. "
             "<bookmark mark='b'/> Predict each reward. <bookmark mark='c'/> And make the prior agree with the "
@@ -117,6 +118,7 @@ class Dreamer(VoiceoverScene):
             "more: KL balancing. And below one nat the KL is free, so the posterior is never squeezed to say "
             "nothing."
         ) as vo:
+            self.play(FadeIn(lh))
             step(0)
             vo.wait_until("a")
             self.wait(0.2)
@@ -124,7 +126,7 @@ class Dreamer(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(sg))
+            self.play(FadeIn(sg), FadeOut(lh))
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")

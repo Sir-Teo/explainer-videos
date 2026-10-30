@@ -741,6 +741,8 @@ def compute_schedule():
         out[f"ema_{s}"] = np.array(c["ema_curve"])
         for S in SCH_LENGTHS:
             out[f"wsdfinal_{S}_{s}"] = c["branches"][f"{int(0.8 * S)}_{S}"]["final"]
+            out[f"wsdquick_{S}_{s}"] = c["branches"][f"{int(0.8 * S)}_{S}"]["quick"]  # on the curves' 20,000
+            out[f"wsdcurve_{S}_{s}"] = np.array(c["branches"][f"{int(0.8 * S)}_{S}"]["curve"])
         out[f"constfinal_{s}"] = c["final"]
         out[f"sf_{s}"] = np.array(part[f"sf_{s}"]["curve"])
         out[f"sffinal_{s}"] = part[f"sf_{s}"]["final"]

@@ -231,12 +231,12 @@ class Grok(VoiceoverScene):
         lg = legend([(TST, r"test loss"), (RES, r"restricted loss: \ only the key waves kept"),
                      (EXC, r"excluded loss: \ the key waves removed \ (train)"), (WN, r"size of the weights (rescaled)")],
                     font_size=17).to_corner(UR, buff=0.3)
-        rt = first(st, lt("restricted_loss") < -1)
-        tt = first(st, lt("test_loss") < -1)
+        rt = first(st, lt("restricted_loss") < 0)
+        tt = first(st, lt("test_loss") < 0)
         et = first(st, lt("excluded_loss") > 0)
         ok = rt > 0 and tt > 0 and rt < tt
-        verdict = (f"The restricted loss, which keeps only the key waves, drops below a tenth of a nat by step {rt:,}, "
-                   f"before the test loss does at step {tt:,}: the circuit was being built while the network still "
+        verdict = (f"The restricted loss, which keeps only the key waves, drops below one nat by step {rt:,}, long "
+                   f"before the test loss does, at step {tt:,}: the circuit was being built while the network still "
                    "looked like a memorizer." if ok else
                    f"Here the restricted loss and the test loss fall together, around steps {rt:,} and {tt:,}.")
         with self.voiceover(
@@ -244,7 +244,8 @@ class Grok(VoiceoverScene):
             "Pause and predict: does the circuit appear when the test loss falls, or before? <bookmark mark='a'/> "
             + verdict + " <bookmark mark='b'/> The excluded loss removes exactly those waves "
             "from the logits and scores the training pairs: it climbs as the network comes to rely on them. "
-            f"<bookmark mark='c'/> And the weights shrink throughout, weight decay pruning the memorized lookup table. "
+            f"<bookmark mark='c'/> And after a first rise the weights shrink, weight decay pruning the memorized lookup "
+            "table. "
             "Three phases: memorization, a circuit forming underneath, and a clean-up that removes the memory. The "
             f"sudden jump is only the last of them. At the end, the key waves account for {100 * float(d['fit_r2']):.0f} "
             "percent of the logits' variance."

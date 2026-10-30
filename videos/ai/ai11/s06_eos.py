@@ -227,7 +227,7 @@ class EdgeOfStability(VoiceoverScene):
             "The edge moves with the optimizer. <bookmark mark='a'/> With momentum beta, a step can survive more "
             "curvature, up to two plus two beta over eta. <bookmark mark='b'/> Adam lives at an edge too: the "
             "curvature measured after its rescaling rises to thirty-eight over eta, the same rule for its momentum "
-            "of zero point nine. Jeremy Cohen and colleagues at Google measured it in 2022. "
+            "of zero point nine. Jeremy Cohen and colleagues, with researchers at Google, measured it in 2022. "
             "<bookmark mark='c'/> It is one reason a run needs to start with small steps, which comes back in "
             "Chapter 13."
         ) as vo:

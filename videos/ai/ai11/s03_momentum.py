@@ -203,7 +203,8 @@ class Momentum(VoiceoverScene):
             f"{sh:.2f} and {sn:.2f}: "
             + ("close to one half, the square root of kappa. " if max(sh, sn) < 0.7 else "well below gradient descent's. ")
             + f"At kappa a thousand that is {it_g:,} steps against {it_h:,} and {it_n:,}. <bookmark mark='c'/> And "
-            "late in each run, the shrink per step is within a percent or two of the derived rate. "
+            f"late in the run the heavy ball shrinks the error by {rh:.4f} per step, against {rhp:.4f} derived; "
+            f"Nesterov by {rn:.4f}, against {rnp:.4f}. "
             "<bookmark mark='d'/> One warning. The heavy ball's guarantee is for quadratics: on other convex losses "
             "there are examples where it circles forever. Nesterov's form is the one with a proof."
         ) as vo:
