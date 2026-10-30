@@ -58,7 +58,8 @@ to its 128 features for generated and real letters (FID's formula on our own fea
   mask; our VAR drawing in five passes; raster, MaskGIT and VAR side by side; VAR's FID 1.73, MAR (continuous tokens),
   Infinity (bitwise tokens, a vocabulary of up to 2⁶⁴).
 * **11. One model for words and pictures.** Chameleon, Transfusion, Janus, BAGEL; our tiny Transfusion (one transformer,
-  next-token loss on text and flow matching on picture patches; causal attention except within a picture) that names,
+  next-token loss on text and flow matching on picture patches; causal attention except within a picture; adaLN-Zero
+  blocks, each patch conditioned on its noise level and the prompt read so far; 8,000 steps) that names,
   draws and edits ("bold"), its four loss terms, and its edits on two font pairs it never saw; InstructPix2Pix, GPT-4o
   images, FLUX.1 Kontext, Qwen-Image, Gemini 2.5 Flash Image.
 * **12. Squeezing time.** Sora, Movie Gen, HunyuanVideo, Wan 2.1/2.2, Veo 3, Sora 2, HunyuanVideo 1.5, LTX-2; video
@@ -87,9 +88,10 @@ From the repo root:
 
 ```
 python tools/make.py ai22                       # everything: the computations, then English and Chinese
-python -m videos.ai.ai22.compute                # the numbers only (about 7 CPU-hours on one core; resumable)
+python -m videos.ai.ai22.compute                # the numbers only (about 11 hours of one core on a shared machine; resumable)
 AI22_THREADS=2 python -m videos.ai.ai22.compute     # torch threads (default 1; on a busy machine 1 is fastest)
 AI22_QUICK=1 python -m videos.ai.ai22.compute       # a smoke test of every code path with tiny budgets (.cache/ai22_quick)
+AI22_UNI_SEEDS=1 python -m videos.ai.ai22.compute unified   # one seed of `unified` (seeds can train in parallel)
 python tools/build.py ai22                      # English
 python tools/build.py ai22 --lang zh            # Chinese
 ```

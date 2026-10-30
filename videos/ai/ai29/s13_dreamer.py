@@ -29,16 +29,16 @@ class Dreamer(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def rssm(self):
-        xs = [-4.6, -1.4, 1.8]
+        xs = [-5.6, -2.8, 0.0]
         hs = VGroup(*[node_box(rf"$h_{{{t}}}$", MODEL, 28, height=0.7) for t in ("t-1", "t", "t+1")])
         zs = VGroup(*[node_box(rf"$z_{{{t}}}$", POST, 28, height=0.7) for t in ("t-1", "t", "t+1")])
         for k, x in enumerate(xs):
-            hs[k].move_to([x, 1.4, 0])
-            zs[k].move_to([x + 1.1, 0.2, 0])
+            hs[k].move_to([x, 0.9, 0])
+            zs[k].move_to([x + 1.1, -0.5, 0])
         imgs = VGroup(*[RoundedRectangle(width=0.8, height=0.8, corner_radius=0.08, stroke_color=OBS, stroke_width=2)
                         for _ in xs])
         for k, x in enumerate(xs):
-            imgs[k].move_to([x + 1.1, -1.6, 0])
+            imgs[k].move_to([x + 1.1, -2.4, 0])
         il = VGroup(*[MathTex(rf"x_{{{t}}}", font_size=26, color=OBS).move_to(i_) for t, i_ in zip(("t-1", "t", "t+1"), imgs)])
         rec = VGroup(*[Arrow(hs[k].get_right(), hs[k + 1].get_left(), buff=0.08, color=MODEL) for k in range(2)])
         al = VGroup(*[MathTex(rf"a_{{{t}}}", font_size=24, color=AGENT).next_to(r_, UP, buff=0.08) for t, r_ in zip(("t-1", "t"), rec)])
@@ -52,11 +52,17 @@ class Dreamer(VoiceoverScene):
             label(r"prior $p(z_t \mid h_t)$: \ a guess without looking", font_size=20, color=PRIOR),
             label(r"posterior $q(z_t \mid h_t, x_t)$: \ after looking", font_size=20, color=POST),
             label(r"from $(h_t, z_t)$: \ the picture $\hat x_t$, \ the reward $\hat r_t$", font_size=20, color=REWARD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        for p_ in parts:
+            p_.scale(1.25)
+        parts.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        if parts.width > 6.0:
+            parts.width = 6.0
+        parts.to_corner(UR, buff=0.3)
         hist = history_card(r"2019--25", r"PlaNet, \ Dreamer, \ DreamerV2, \ V3 \ (Hafner et al.)", r"V2 learned Atari "
                             r"inside its model; \ V3, \ one set of settings for over $150$ tasks, \ collected diamonds in "
-                            r"Minecraft from scratch \ (\textit{Nature}, 2025)", width=5.4, color=HIST,
-                            font_size=18).to_corner(DR, buff=0.25)
+                            r"Minecraft from scratch \ (\textit{Nature}, 2025)", width=4.6, color=HIST,
+                            font_size=21).to_corner(DR, buff=0.25)
         with self.voiceover(
             "Our bouncing-ball model only predicted. Danijar Hafner's Dreamer agents, from 2019 on, learn a world "
             "model and then learn to act entirely inside it. Its core is a recurrent state-space model. "
@@ -92,7 +98,7 @@ class Dreamer(VoiceoverScene):
                   font_size=32),
             cmath(r"\mathcal L", r"=", r"\ldots + \beta_{\mathrm{rep}} \max\!\big(1, \mathrm{KL}[q \,\|\, \mathrm{sg}(p)]\big)",
                   font_size=32),
-            cmath(r"\beta_{\mathrm{dyn}} = 0.5, \quad \beta_{\mathrm{rep}} = 0.1", font_size=32),
+            cmath(r"\beta_{\mathrm{dyn}}", r"=", r"0.5, \quad \beta_{\mathrm{rep}} = 0.1", font_size=32),
         ]
         whys = [why(r"redraw the picture"), why(r"predict the reward"),
                 why(r"pull the prior towards what was seen: \ the dynamics"),
@@ -279,7 +285,7 @@ class Dreamer(VoiceoverScene):
         d = load("dreamer")
         snaps = d["snaps"]
         its = sorted(int(k) for k in snaps)
-        S_ = 0.5
+        S_ = 0.62
         rows = Group()
         real = np.asarray(snaps[str(its[0])]["real"])
         n = min(12, real.shape[0])
@@ -315,7 +321,8 @@ class Dreamer(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_, shift=DOWN * 0.1), FadeIn(l_))
                                     for r_, l_ in zip(rows[1:], ll[2:])], lag_ratio=0.6), run_time=3.0)
             vo.wait_until("c")
-            self.play(Indicate(rows[-1], color=WHITE, scale_factor=1.02))
+            box = SurroundingRectangle(rows[-1], color=MODEL, buff=0.06)
+            self.play(Create(box))
         self.wait(0.3)
         self.clear_scene()
 

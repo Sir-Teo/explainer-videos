@@ -86,7 +86,7 @@ AI23_SCALE=0.05 python -m videos.ai.ai23.compute  # a smoke test of every code p
 python tools/build.py ai23 -q l                   # a 480p preview
 ```
 
-The computation takes about two and a half hours on a busy 4-core machine, on one torch thread (`AI23_THREADS`). It
+The computation takes about four hours on a busy 4-core machine, on one torch thread (`AI23_THREADS`). It
 is seeded throughout and resumable: synthesized speech is saved voice by voice (`.cache/ai23/speech/`), the language
 models checkpoint every 100 steps and the codec every 500, and every item made of several runs saves each run as it
 finishes. It needs Kokoro-82M (a dependency of the repo; the eleven extra voices, about 0.5 MB each, download on first
@@ -97,7 +97,46 @@ new sentence (the slowest step on a CPU, about ten minutes).
 
 ## Results on this machine
 
-(filled in from `.cache/ai23/`; see the report at the end of the computation)
+Measured by `compute.py` on this machine (CPU only, one torch thread, seeded); the video reads every number from the
+cache, so a rerun elsewhere may differ in the last digits.
+
+* **BPE** on 2 million characters of the novels: 21,374 word types; 5.3% of the test passage's words never seen.
+  Characters a token on the passage: 2.43 (500 merges), 3.14 (2,000), 3.93 (8,000); the first merge saves 48,515
+  symbols and 8,000 merges leave 23.4% of the length. The series' own byte-level tokenizer: 3.23 characters a token.
+* **Unigram LM vs BPE**, characters a token: 2.64 vs 2.74 at 1,024 pieces, 3.46 vs 3.54 at 4,096; 22% and 15% of
+  the passage's words are cut differently.
+* **Bits per character** of the same transformer (3 layers, width 96) at equal FLOPs, three seeds: bytes 2.46,
+  BPE-1,024 2.28, unigram-1,024 2.26, BPE-4,096 2.36, unigram-4,096 2.26.
+* **Entropy patches** at BPE's length (3.54 bytes): 28% of bytes start a patch and carry 46% of the surprise; BPE's
+  token starts carry 24%.
+* **Codebooks** on letter pictures (k-means), error per pixel: 0.148 / 0.110 / 0.083 / 0.061 for 16 / 64 / 256 /
+  1,024 codes; residual stages of 16: 0.149, 0.117, 0.097, 0.083.
+* **VQ autoencoders**, 256 codes, three seeds (codes used, perplexity, error ×10⁻³): VQ 86, 67, 6.20; EMA 76, 56,
+  6.47; EMA with dead-code restarts 255, 194, 4.62; FSQ (4·4·4·4) 186, 121, 5.32; LFQ (8 bits) 74, 60, 14.98.
+* **Sampling**: tones of 1, 3, 5, 7 kHz sampled at 8 kHz peak at 1, 3, 3, 1 kHz; 4.4% of a sentence's energy lies above
+  2 kHz, and 4.8% of what remains below 2 kHz after naive decimation is folded energy. Our log-mel matches the
+  transformers extractor to 1.5 × 10⁻⁵.
+* **Audrey replica** (ten digit templates from one voice): same voice 90% (stretched) / 100% (time warping); eleven
+  other voices 63% / 74%; templates from ten voices on two new voices 95%.
+* **Log-mel codec** (1.3 M parameters, 1,500 steps, 6 minutes of speech, two seeds): log-mel error 0.13 / 0.11 / 0.11 /
+  0.10 at 400 / 800 / 1,600 / 3,200 bits a second; Whisper's word error on 12 held-out sentences 30% / 17% / 15% / 15%,
+  against 12% on the original pictures; stage perplexities 166–227 of 256. (A first attempt, an 8-channel
+  waveform codec trained for 3,000 steps, learned only the average spectrum: Whisper's word error stayed above 100%.
+  That is why the chapter codes the picture.)
+* **CTC** digit recognizer (162 thousand parameters, 2,500 steps, three seeds): word error 33.1%, 32.5%, 68.8% on two
+  held-out voices; 4.6%, 8.8%, 15.0% on training voices. The forward algorithm's total matches PyTorch's CTC loss.
+* **Whisper base.en** (72.6 M parameters): word error 7.9% on 24 held-out sentences, 5.0% on 40 digit strings.
+* **Qwen3-TTS tokenizer**: the narrator's 16.6 s reference clip as 208 frames × 16 codes (2,200 bits a second); encoded
+  and decoded, log-mel distance 0.066, and Whisper's transcript is unchanged. The narrator saying this part's title:
+  43 frames, transcribed correctly.
+* **CLIP vs SigLIP** on 520 letter captions (15% held out, 384 thousand pairs, three seeds): exact unseen captions
+  found 46–58% (CLIP) and 47–62% (SigLIP) across batch sizes, ranges overlapping. InfoNCE's log N − L for the
+  batch-256 CLIP at N = 16 / 64 / 256: 2.62 / 3.69 / 4.46 nats, under H(caption) = 6.09.
+* **Visual tokens** (Qwen2-VL's `smart_resize`, 28-pixel cells after merging): 64, 256, 1,196, 1,222, 1,230, 1,230 for
+  the six test images.
+
+Compute: about four hours of one CPU thread on a busy machine in all (the language models 87 minutes, speech
+synthesis 36, CLIP 26, the codec 26, CTC 25, VQ 19, the narrator's codes 17, the rest under 4 each).
 
 ## References
 

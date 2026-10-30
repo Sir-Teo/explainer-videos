@@ -254,7 +254,9 @@ class CTC(VoiceoverScene):
         hist = VGroup(*[label(t_, font_size=18, color=GREY_A) for t_ in (
             r"2014: \ Deep Speech (Baidu): \ CTC, \ thousands of hours", r"2012--15: \ RNN-T, \ listen-attend-spell: \\ "
             r"letters that depend on each other")]).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.5, -1.8, 0])
+        lo_w, hi_w = 100 * wer.min(), 100 * wer.max()
         verdict = (f"{100 * wer.mean():.1f} percent of the digit words wrong for the two new voices, "
+                   f"from {lo_w:.0f} to {hi_w:.0f} depending on the seed, and "
                    f"{100 * seen.mean():.1f} percent for voices it trained on")
         gap = ("new voices are much harder than the ones it heard, Audrey's lesson again"
                if wer.mean() > 2 * seen.mean() + 0.02 else "it does about as well on new voices as on the ones it heard")

@@ -219,12 +219,12 @@
   "ebe14a885de1": {
    "scene": "SD3",
    "en": "One more thing changes with size. <bookmark mark='a'/> Add the same noise to a small letter and to a drawing of it with sixteen times the pixels. The big one looks clearer, and it is: average each four by four block, and the noise falls from 0.75 to 0.19. Neighbouring pixels share their information, so a noise level that destroys a small picture leaves a large one legible. <bookmark mark='b'/> SD3 made this exact. Write sigma for the share of noise. <bookmark mark='c'/> Take the worst case, a flat picture: every pixel the same value c. Average the n pixels: the noise shrinks by the square root of n. <bookmark mark='d'/> So the uncertainty left about c is sigma over one minus sigma, over root n. <bookmark mark='e'/> Ask for the same uncertainty at m pixels <bookmark mark='f'/> and solve: the noise level shifts by a factor alpha, the square root of the ratio of pixel counts. In log signal-to-noise, it's a constant shift.",
-   "zh": "随着尺寸变化，还有一件事会变。<bookmark mark='a'/>给一个小字母，和它的一个像素多16倍的版本，加上同样的噪声。大的那个看起来更清楚，而且确实如此：把每个4乘4的小块取平均，噪声就从0.75降到0.19。相邻的像素共享信息，所以一个能毁掉小图片的噪声水平，会让大图片依然可以辨认。<bookmark mark='b'/>SD3把这一点做成了精确的公式。用西格玛表示噪声所占的份额。<bookmark mark='c'/>考虑最坏的情况，一张均匀的图片：每个像素都是同一个值c。对n个像素求平均：噪声缩小到原来的根号n分之一。<bookmark mark='d'/>所以关于c剩下的不确定性，是西格玛除以1减西格玛，再除以根号n。<bookmark mark='e'/>要求m个像素时的不确定性一样，<bookmark mark='f'/>解出来：噪声水平按一个因子阿尔法偏移，阿尔法是像素数之比的平方根。在对数信噪比里，这是一个常数偏移。"
+   "zh": "随着尺寸变化，还有一件事会变。<bookmark mark='a'/>给一个小字母，和它的一个像素多16倍的版本，加上同样的噪声。大的那个看起来更清楚，而且确实如此：把每个4乘4的小块取平均，噪声就从0.75降到0.19。相邻的像素共享信息，所以一个能毁掉小图片的噪声水平，会让大图片依然可以辨认。<bookmark mark='b'/>SD3把这一点做成了精确的公式。用西格玛表示噪声所占的份额。<bookmark mark='c'/>考虑最坏的情况，一张均匀的图片：每个像素都是同一个值c。对n个像素求平均：噪声缩小到原来的根号n分之一。<bookmark mark='d'/>所以关于c剩下的不确定性，是西格玛除以1减西格玛，再除以根号n。<bookmark mark='e'/>要求m个像素时的不确定性一样，<bookmark mark='f'/>解出来：噪声水平按一个因子阿尔法平移，阿尔法是像素数之比的平方根。在对数信噪比里，这是一个常数平移。"
   },
   "832ff4802179": {
    "scene": "SD3",
    "en": "Does it hold for real pictures? We drew the same five hundred letters at 20, 40 and 80 pixels a side, added noise, and asked the exact posterior which letter picture it was. <bookmark mark='a'/> At 20 pixels it's right half the time at a noise level of 0.53; at 40, at 0.72; at 80, at 0.85. The formula predicts 0.69 and 0.82. <bookmark mark='b'/> After the shift the curves nearly line up: the largest gap to the small picture's falls from 0.97 to 0.29. <bookmark mark='c'/> SD3's authors called the flat-picture assumption unrealistic, tested shifts with human raters, and settled on alpha equals three at a thousand and twenty-four pixels a side.",
-   "zh": "它对真实图片成立吗？我们把同样的五百多个字母分别画成20、40和80像素见方，加上噪声，再问精确的后验分布：这是哪一张字母图片？<bookmark mark='a'/>在20像素时，噪声水平为0.53时它有一半的机会答对；40像素时是0.72；80像素时是0.85。公式预测的是0.69和0.82。<bookmark mark='b'/>偏移之后，几条曲线几乎重合：和小图片曲线的最大差距从0.97降到0.29。<bookmark mark='c'/>SD3的作者说均匀图片的假设并不现实，就请人来评判不同的偏移，最后在1024像素见方时选定阿尔法等于3。"
+   "zh": "它对真实图片成立吗？我们把同样的五百多个字母分别画成20、40和80像素见方，加上噪声，再问精确的后验分布：这是哪一张字母图片？<bookmark mark='a'/>在20像素时，噪声水平为0.53时它有一半的机会答对；40像素时是0.72；80像素时是0.85。公式预测的是0.69和0.82。<bookmark mark='b'/>平移之后，几条曲线几乎重合：和小图片曲线的最大差距从0.97降到0.29。<bookmark mark='c'/>SD3的作者说均匀图片的假设并不现实，就请人来评判不同的平移，最后在1024像素见方时选定阿尔法等于3。"
   },
   "a54502c918ab": {
    "scene": "SD3",
@@ -444,7 +444,7 @@
   "76632021abbf": {
    "scene": "Outro",
    "en": "Let's take stock. A picture is a sequence of patches, and a transformer reads it, learning even the grid it came from. Models draw in a compressed space, and how small and how meaningful that space is shapes everything; borrowing a vision model's eyes speeds up learning to draw. The denoiser became a transformer, told what to draw through gated normalizations. Bigger pictures need their noise shifted, by a factor we derived and checked. Pictures can also be written as tokens, best coarse to fine, which lets one model read, draw and edit. Video is the same in time: frames drawn together agree, and frames drawn one by one can roll forward. And 3D is light added up along rays, or Gaussians splatted onto the screen.",
-   "zh": "我们来总结一下。一张图片是一串图块，Transformer读它，甚至学会了它来自的网格。模型在一个压缩空间里作画，这个空间有多小、有多大意义，决定了一切；借用一个视觉模型的眼睛，能加快学会画画。去噪器变成了Transformer，通过带门控的归一化被告知要画什么。更大的图片需要偏移它们的噪声，偏移的因子我们推导并检验过了。图片也可以写成词元，最好由粗到细，这让一个模型能读、能画、能编辑。视频是时间上的同一回事：一起画的帧彼此一致，一帧一帧画的帧能向前滚动。而三维，是沿着光线把光加起来，或者把高斯泼溅到屏幕上。"
+   "zh": "我们来总结一下。一张图片是一串图块，Transformer读它，甚至学会了它来自的网格。模型在一个压缩空间里作画，这个空间有多小、有多大意义，决定了一切；借用一个视觉模型的眼睛，能加快学会画画。去噪器变成了Transformer，通过带门控的归一化被告知要画什么。更大的图片需要平移它们的噪声，平移的因子我们推导并检验过了。图片也可以写成词元，最好由粗到细，这让一个模型能读、能画、能编辑。视频是时间上的同一回事：一起画的帧彼此一致，一帧一帧画的帧能向前滚动。而三维，是沿着光线把光加起来，或者把高斯泼溅到屏幕上。"
   },
   "435609e85a44": {
    "scene": "Outro",
