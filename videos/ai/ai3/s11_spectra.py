@@ -105,7 +105,7 @@ class Spectra(VoiceoverScene):
         top = float(ev.max() / hi)
         brace = BraceBetweenPoints(ax.c2p(math.log10(hi), 0.35), ax.c2p(math.log10(ev.max()), 0.35), UP, color=TRAINED)
         bl = label(rf"${above}$ eigenvalues beyond the edge; \\ the largest ${top:.1f}\times$ it", font_size=24,
-                   color=TRAINED).next_to(ax.c2p(math.log10(hi) + 0.55, 1.75), UP, buff=0.0)
+                   color=TRAINED).move_to(ax.c2p(math.log10(hi) + 1.05, 1.55))
         bl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.05)
         head = label(rf"GPT-2, \ layer ${int(s['layer'])}$, \ the MLP's first matrix ($768 \times 3072$)", font_size=32)
         head.to_edge(UP, buff=0.3)

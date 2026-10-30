@@ -226,7 +226,7 @@ class Words(VoiceoverScene):
         near = an["france:paris::england"][:5]
         res = VGroup(label(r"the words nearest to where you land:", font_size=24, color=GREY_A),
                      *[data_text(f"{k + 1}. {wd}", font=MONO, font_size=24, color=C.BITS if k == 0 else WHITE)
-                       for k, wd in enumerate(near)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.3)
+                       for k, wd in enumerate(near)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.9, -0.3, 0])
         k2 = label(rf"\texttt{{man}} : \texttt{{king}} :: \texttt{{woman}} : \ \texttt{{{mk[0]}}}, \ "
                    rf"\texttt{{{mk[1]}}}, \ \ldots", font_size=28, color=GREY_A)
         k2.move_to([-6.6, 0.4, 0], aligned_edge=LEFT)

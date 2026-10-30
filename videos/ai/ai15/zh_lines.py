@@ -593,9 +593,9 @@ ZH = {
     "f'On the passage, the model alone scores {base:.3f} bits per character, and":
         "在这段文字上，模型自己每个字符{base:.3f}比特，加上记忆是{float(full['bits']):.3f}：没有真正的收获。",
 
-    "f'And the bigger the memory, the better":
-        "而且记忆越大越好：从{keys[0] / 1000000.0:.2f}百万个存储状态，到{keys[-1] / 1000000.0:.1f}百万个，分数从{bits[0]:.3f}降到"
-        "{bits[-1]:.3f}。",
+    "f'And it takes a big memory:":
+        "而且记忆要足够大：只有{keys[0] / 1000000.0:.2f}百万个存储状态时，投票最好的份额是{lam0:g}，分数{bits[0]:.3f}；只有用上全部"
+        "{keys[-1] / 1000000.0:.1f}百万个，才达到{bits[-1]:.3f}。",
 
     "f'A bigger memory hardly helps here":
         "在这里，更大的记忆几乎没有帮助：{keys[0] / 1000000.0:.2f}百万个存储状态时{bits[0]:.3f}，{keys[-1] / 1000000.0:.1f}百万个时"
@@ -607,8 +607,8 @@ ZH = {
     "f'Many are names and capitals":
         "很多是名字和大写的词，比如{names[0]}：这份记忆见过小说是怎样用它们的。",
 
-    'They are mostly the ends of common phrases':
-        '它们大多是常见短语的结尾，这份记忆已经见过很多次了。',
+    'Mostly they finish a word that has already begun':
+        '它们大多是把一个已经开了头的词补完，就像例子里那样：这些补全，小说里见过很多次。',
 
     'f"Edouard Grave and colleagues had done the same in 2017':
         "2017年，爱德华·格拉夫和同事们，用已经读过的文本做过同样的事，叫作连续缓存。我们这段文字远远超过模型256个词元的窗口，用它自己更早的"

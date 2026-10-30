@@ -987,7 +987,7 @@ def compute_knn():
     out["snaps"] = snaps_at
     out["lams"] = lams
     full = snaps_at[-1]
-    Ds, Vs = torch.from_numpy(snaps[full][0]), torch.from_numpy(snaps[full][1])
+    Ds, Vs = torch.from_numpy(snaps[full][0])[:npass], torch.from_numpy(snaps[full][1])[:npass]
     sf = out[f"snap_{full}"]
     pk = M.knn_prob(Ds, Vs, yp, sf["temp"], K).numpy()
     p_lm = lpp.exp().numpy()
