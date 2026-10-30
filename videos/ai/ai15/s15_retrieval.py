@@ -93,7 +93,7 @@ class Retrieval(VoiceoverScene):
         ng = VGroup(nl, neigh).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.4, -1.2, 0])
         tg = VGroup(label(r"the true next token:", font_size=18, color=GREY_A),
                     data_text(repr(ex["target"])[1:-1], font=MONO, font_size=22, color=WHITE),
-                    label(rf"the model alone: \ ${100 * float(ex['p_lm']):.1f}\%$", font_size=18, color=LM_C),
+                    label(rf"the model alone: \ ${100 * float(ex['p_lm']):.2g}\%$", font_size=18, color=LM_C),
                     label(rf"the neighbours' vote: \ ${100 * float(ex['p_knn']):.0f}\%$", font_size=18, color=KNN_C))
         tg.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.8, -1.0, 0])
         n_all = int(kn["n_all"])
