@@ -178,7 +178,7 @@ class Norms(VoiceoverScene):
         p64 = DashedLine(ax.c2p(0, math.log10(e64)), ax.c2p(14, math.log10(e64) + 14), color=F64, stroke_width=1.5)
         p32 = DashedLine(ax.c2p(0, math.log10(e32)), ax.c2p(-math.log10(e32) + 2, 2), color=F32, stroke_width=1.5)
         leg = legend([(F64, r"64-bit"), (F32, r"32-bit"), (GREY_B, r"dashed: \ $\kappa \times$ rounding unit")],
-                     font_size=20).next_to(ax, LEFT, buff=0.4).shift(DOWN * 0.6)
+                     font_size=20).move_to([-1.6, -2.7, 0])
         cap = note(r"computed: \ $60 \times 60$ systems, \ median of $5$").to_corner(DR, buff=0.2)
         s6 = next(s for s in sol if abs(math.log10(s["kappa"]) - 6) < 0.01)
         dead32 = next((s["kappa"] for s in sol if s["e32"] > 0.5), None)
@@ -196,11 +196,11 @@ class Norms(VoiceoverScene):
             f"minus {-ex(s6['e32'])}.{lost} GPT-2's worst-conditioned matrix has kappa about ten to the "
             f"{ex(kmax)}: low precision is something to design around, as Part 18 does."
         ) as vo:
+            self.play(FadeIn(g), FadeIn(cap), FadeIn(leg))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 step(k)
             vo.wait_until("e")
-            self.play(FadeIn(g), FadeIn(cap), FadeIn(leg))
             self.play(Create(p64), Create(c64), run_time=1.5)
             self.play(Create(p32), Create(c32), run_time=1.5)
         self.wait(0.3)
@@ -236,23 +236,28 @@ class Norms(VoiceoverScene):
                             r"iterations; \ Moonshot's Kimi K2 (2025) was trained with it", color=HIST, width=5.4)
         hist.move_to([3.6, -1.6, 0])
         fin = ns[-1]
-        spread = (float(fin.min()), float(fin.max()))
+        tiny = float(np.mean(g0 < 0.01))
+        near = float(np.mean((fin > 0.6) & (fin < 1.3)))
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(n, 1), color=C.MUON, stroke_width=1.5)
         with self.voiceover(
             "The spectral norm has become an optimizer. <bookmark mark='a'/> Ask which step of spectral size one "
             "changes the loss the most, along a gradient G. Write G with its SVD. <bookmark mark='b'/> Each "
             "diagonal entry is at most one, so the best is the sum of the singular values, reached by U V "
             "transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is Muon's update. "
             "Instead of an SVD it runs five Newton-Schulz iterations, a few matrix products that push every "
-            "singular value towards one. On a real gradient, they start spread out, <bookmark mark='d'/> and after "
-            f"five steps they lie between {spread[0]:.2f} and {spread[1]:.2f}. Part 11 builds the optimizer."
+            f"singular value towards one. On a real gradient, {100 * tiny:.0f} percent of them start below a "
+            f"hundredth of the largest. <bookmark mark='d'/> After five steps, {100 * near:.0f} percent lie between "
+            "0.6 and 1.3; the very smallest would need more steps. Part 11 builds the optimizer, and tunes the "
+            "iteration."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], scale_factor=1.03))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
-            self.play(FadeIn(g), Create(first), FadeIn(lab))
+            self.play(FadeIn(g), Create(first), FadeIn(lab), Create(one))
             self.add(rd)
             cur = first
             vo.wait_until("d")

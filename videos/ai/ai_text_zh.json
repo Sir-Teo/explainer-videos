@@ -16952,7 +16952,290 @@
     "Cohen et al.\\ (2021, 2022); \\ Damian, Nichani \\& Lee (2022); \\ Amari (1998); \\ Martens \\& Grosse (2015); \\ Gupta, Koren \\& Singer (2018); \\ Vyas et al., \\textit{SOAP} (2024)": "Cohen等（2021，2022）；\\ Damian、Nichani \\& Lee（2022）；\\ 甘利俊一（1998）；\\ Martens \\& Grosse（2015）；\\ Gupta、Koren \\& Singer（2018）；\\ Vyas等，\\textit{SOAP}（2024）",
     "Jordan et al., \\textit{Muon} (2024); \\ Bernstein \\& Newhouse (2024); \\ Liu et al.\\ (2025); \\ Kimi Team, \\textit{Kimi K2} (2025); \\ Amsel et al.\\ (2025); \\ DeepSeek-AI, \\textit{DeepSeek-V4} (2026)": "Jordan等，\\textit{Muon}（2024）；\\ Bernstein \\& Newhouse（2024）；\\ Liu等（2025）；\\ Kimi团队，\\textit{Kimi K2}（2025）；\\ Amsel等（2025）；\\ DeepSeek-AI，\\textit{DeepSeek-V4}（2026）",
     "Hu et al., \\textit{MiniCPM} (2024); \\ Wen et al., \\textit{River Valley} (2024); \\ Defazio et al.\\ (2024); \\ Kasimbeg et al., \\textit{AlgoPerf} (2025); \\ Wen, Hall, Ma \\& Liang (2025); \\ Khona et al.\\ (2026)": "Hu等，\\textit{MiniCPM}（2024）；\\ Wen等，\\textit{River Valley}（2024）；\\ Defazio等（2024）；\\ Kasimbeg等，\\textit{AlgoPerf}（2025）；\\ Wen、Hall、马腾宇 \\& Liang（2025）；\\ Khona等（2026）",
-    "Pascanu, Mikolov \\& Bengio (2013); \\ van Laarhoven (2017); \\ Kosson, Messmer \\& Jaggi (2024)": "Pascanu、Mikolov \\& Bengio（2013）；\\ van Laarhoven（2017）；\\ Kosson、Messmer \\& Jaggi（2024）"
+    "Pascanu, Mikolov \\& Bengio (2013); \\ van Laarhoven (2017); \\ Kosson, Messmer \\& Jaggi (2024)": "Pascanu、Mikolov \\& Bengio（2013）；\\ van Laarhoven（2017）；\\ Kosson、Messmer \\& Jaggi（2024）",
+    "Keeping less of the cache": "让缓存少存一些",
+    "Which tokens can a model forget?": "模型可以忘掉哪些词元？",
+    "full: \\ every earlier token": "完整：\\ 之前的每个词元",
+    "a window \\ (Sparse Transformer, \\ Longformer)": "一个窗口 \\ （稀疏Transformer，\\ Longformer）",
+    "window $+$ global tokens \\ (Longformer)": "窗口 $+$ 全局词元 \\ （Longformer）",
+    "$+$ random keys \\ (BigBird)": "$+$ 随机键 \\ （BigBird）",
+    "row: \\ the token reading; \\ column: \\ the tokens it may look at": "行：\\ 正在读的词元；\\ 列：\\ 它可以看的词元",
+    "keys read per token: \\ $t$ \\ $\\rightarrow$ \\ a fixed $W$ \\ (plus a few globals)": "每个词元读的键：\\ $t$ \\ $\\rightarrow$ \\ 固定的$W$个 \\ （再加几个全局词元）",
+    "Transformer-XL: \\ each segment reads the cached states of the one before; \\ $L$ layers reach $L$ segments back": "Transformer-XL：\\ 每一段读取上一段缓存的状态；\\ $L$层能看到往前$L$段",
+    "R.~Child et al.\\ (2019); \\ Z.~Dai et al., \\textit{Transformer-XL} (2019); \\ I.~Beltagy et al., \\textit{Longformer} (2020); \\ M.~Zaheer et al., \\textit{BigBird} (2020)": "R.~Child等（2019）；\\ Z.~Dai等，\\textit{Transformer-XL}（2019）；\\ I.~Beltagy等，\\textit{Longformer}（2020）；\\ M.~Zaheer等，\\textit{BigBird}（2020）",
+    "heads $1$--$8$": "第$1$--$8$个头",
+    "the series' model: \\ \\% of each head's attention on the first token": "本系列的模型：\\ 每个头放在第一个词元上的注意力（\\%）",
+    "position in the passage \\ (tokens)": "在这段文字里的位置 \\ （词元）",
+    "loss on the next token \\ (nats, \\ average of the last 100)": "下一个词元的损失 \\ （奈特，\\ 最近100个的平均）",
+    "windows of $256$, recomputed \\ (Part 14's scoring)": "$256$的窗口，\\ 重新计算 \\ （第14部分的计分方式）",
+    "keep everything": "全部保留",
+    "trained on $256$": "训练长度$256$",
+    "StreamingLLM keeps $4$ sink tokens: \\ stable for $4$ million tokens \\ (Xiao et al.\\ 2023)": "StreamingLLM保留$4$个汇点词元：\\ 稳定读到$400$万个词元 \\ （Xiao等，2023）",
+    "cache: \\ tokens kept per head": "缓存：\\ 每个头保留的词元数",
+    "recomputed windows of $256$": "重新计算的$256$窗口",
+    "the last $W$ tokens": "最后$W$个词元",
+    "4 sinks $+$ the last $W-4$": "4个汇点 $+$ 最后$W-4$个",
+    "heavy hitters $+$ recent": "重量级词元 $+$ 最近的",
+    "\\text{score}(j)": "\\text{分数}(j)",
+    "the attention token $j$ has drawn so far: \\\\ evict the smallest, \\ but never the recent half": "词元$j$到目前为止得到的注意力：\\\\ 挤掉最小的，\\ 但最近的一半永远保留",
+    "Z.~Zhang et al., \\textit{H$_2$O: Heavy-Hitter Oracle} (2023): \\ $20\\%$ heavy hitters, \\ up to $29\\times$ throughput": "Z.~Zhang等，\\textit{H$_2$O: Heavy-Hitter Oracle}（2023）：\\ $20\\%$的重量级词元，\\ 吞吐量最多提高$29$倍",
+    "A matrix that remembers": "会记东西的矩阵",
+    "How can a matrix store and return memories?": "一个矩阵怎样存储和找回记忆？",
+    "Hopfield network": "霍普菲尔德网络",
+    "$N$ neurons of $\\pm 1$; \\ store patterns $\\xi$ by Hebb's rule, $W = \\tfrac1N \\sum_\\mu \\xi^\\mu \\xi^{\\mu\\top}$; \\ recall: \\ set each neuron to the sign of $W s$, \\ one at a time, \\ until nothing changes": "$N$个取$\\pm 1$的神经元；\\ 用赫布规则存储模式$\\xi$，$W = \\tfrac1N \\sum_\\mu \\xi^\\mu \\xi^{\\mu\\top}$；\\ 回忆：\\ 让每个神经元依次取$W s$的正负号，\\ 直到不再变化",
+    "updates, \\ in fives": "更新次数，\\ 每5次一个点",
+    "energy \\ $E = -\\tfrac12 s^{\\top} W s$": "能量 \\ $E = -\\tfrac12 s^{\\top} W s$",
+    "J.~J.~Hopfield, \\textit{PNAS} (1982); \\ D.~O.~Hebb (1949)": "J.~J.~Hopfield，\\textit{PNAS}（1982）；\\ D.~O.~Hebb（1949）",
+    "patterns stored per neuron, \\ $P/N$": "每个神经元存的模式数，\\ $P/N$",
+    "$0.138$: \\ the limit for large $N$ \\\\ (Amit, Gutfreund \\& Sompolinsky, 1985)": "$0.138$：\\ $N$很大时的极限 \\\\ （Amit、Gutfreund与Sompolinsky，1985）",
+    "exactly recalled": "准确找回",
+    "overlap with the pattern": "与模式的重叠",
+    "From patterns to keys and values": "从模式到键和值",
+    "correlation matrix memories": "相关矩阵记忆",
+    "Kohonen; \\ Anderson: \\ store a value under a key, $M = \\sum_i v_i k_i^{\\top}$; \\ read with $M k$": "Kohonen；\\ Anderson：\\ 把值存在键下面，$M = \\sum_i v_i k_i^{\\top}$；\\ 用$M k$来读",
+    "fast weights": "快权重",
+    "Schmidhuber: \\ a slow network writes, each step, the weights of a fast one, \\ by outer products": "施密德胡伯：\\ 一个慢网络每一步都写入快网络的权重，\\ 用的是外积",
+    "fast weights, \\ again": "快权重，\\ 再一次",
+    "Ba, Hinton et al.: \\ a recurrent network with a decaying outer-product memory of its recent past": "Ba、Hinton等：\\ 一个循环网络，带着关于最近过去的、会衰减的外积记忆",
+    "neural Turing machines, \\ memory networks": "神经图灵机，\\ 记忆网络",
+    "Graves; \\ Weston, \\ Sukhbaatar: \\ a separate memory, read and written by attention": "Graves；\\ Weston，\\ Sukhbaatar：\\ 一份单独的记忆，用注意力来读写",
+    "Katharopoulos et al.: \\ the transformer without the softmax is a recurrence on $\\sum v k^{\\top}$": "Katharopoulos等：\\ 去掉softmax的Transformer，是在$\\sum v k^{\\top}$上的递推",
+    "``secretly fast weight programmers''": "“快权重编程器的真面目”",
+    "Schlag, Irie \\& Schmidhuber: \\ the same thing as 1992, \\ and a better way to write": "Schlag、Irie与施密德胡伯：\\ 和1992年是同一个东西，\\ 还有一种更好的写法",
+    "\\text{read: }": "\\text{读取：}",
+    "$d = 8$: \\ four keys nearly at right angles; \\ blue $+$, \\ red $-$": "$d = 8$：\\ 四个几乎互相垂直的键；\\ 蓝色$+$，\\ 红色$-$",
+    "reads $S k_j$": "读出$S k_j$",
+    "stored $v_j$": "存入的$v_j$",
+    "What do the newest models remember, and how?": "最新的模型记住什么，又是怎样记住的？",
+    "Fixed-size memories in production, \\ 2025--26": "投入生产的固定大小记忆，\\ 2025--26",
+    "lightning attention \\\\ in 7 layers of 8; \\\\ $456$B weights; \\\\ $4$M tokens": "闪电注意力 \\\\ 每8层用7层；\\\\ $4560$亿个权重；\\\\ $400$万个词元",
+    "April 2025": "2025年4月",
+    "NVIDIA: \\\\ Mamba-2, \\\\ $8\\%$ attention; \\\\ up to $3\\times$ faster": "英伟达：\\\\ Mamba-2，\\\\ $8\\%$的注意力；\\\\ 最多快$3$倍",
+    "September 2025": "2025年9月",
+    "Gated DeltaNet \\\\ in 3 layers of 4; \\\\ $80$B, \\\\ $3$B active": "Gated DeltaNet \\\\ 每4层用3层；\\\\ $800$亿，\\\\ $30$亿激活",
+    "October 2025": "2025年10月",
+    "Kimi Delta Attention, \\\\ 3 of 4; \\\\ up to $6\\times$ faster \\\\ decoding at $1$M": "Kimi Delta Attention，\\\\ 4层里3层；\\\\ 在$100$万词元时 \\\\ 解码最多快$6$倍",
+    "MiniMax-M2": "MiniMax-M2",
+    "back to \\\\ full attention": "回到 \\\\ 完整注意力",
+    "December 2025": "2025年12月",
+    "Nemotron 3": "Nemotron 3",
+    "NVIDIA: \\\\ Mamba-2 hybrid \\\\ with experts; \\\\ $1$M tokens": "英伟达：\\\\ Mamba-2混合架构 \\\\ 加专家；\\\\ $100$万个词元",
+    "February 2026": "2026年2月",
+    "Gated DeltaNet, \\\\ 3 of 4; \\\\ $0.8$B to $397$B": "Gated DeltaNet，\\\\ 4层里3层；\\\\ 从$8$亿到$3970$亿",
+    "March 2026": "2026年3月",
+    "Mamba-3": "Mamba-3",
+    "complex states, \\\\ MIMO": "复数状态，\\\\ MIMO",
+    "April 2026": "2026年4月",
+    "compressed sparse \\\\ attention; \\\\ $1$M tokens": "压缩稀疏 \\\\ 注意力；\\\\ $100$万个词元",
+    "July 2026": "2026年7月",
+    "Kimi Delta Attention \\\\ in 69 of 93 layers; \\\\ $2.8$T weights": "Kimi Delta Attention \\\\ 93层里69层；\\\\ $2.8$万亿个权重",
+    "each from its maker's report or model card": "每一项都来自厂商的报告或模型卡",
+    "Why MiniMax-M2 went back to full attention": "MiniMax-M2为什么回到了完整注意力",
+    "its lightning-attention hybrid matched full attention on the usual benchmarks,": "它的闪电注意力混合模型在常用基准上追平了完整注意力，",
+    "but showed ``clear deficits in complex, multi-hop reasoning'' at larger scale": "但规模大了以后，“在复杂的多步推理上显出明显不足”",
+    "``the real bottleneck is the limitations of evaluation'':": "“真正的瓶颈在于评测的局限”：",
+    "the tests that would show the gap are expensive, \\ and may not hold at scale": "能暴露差距的测试很贵，\\ 而且在大规模上未必成立",
+    "the infrastructure is young: \\ many linear layers are memory-bound,": "基础设施还很年轻：\\ 许多线性层受限于内存带宽，",
+    "and serving needs low-precision states, \\ prefix caching, \\ speculative decoding": "服务时还需要低精度的状态、\\ 前缀缓存、\\ 推测解码",
+    "a sliding-window hybrid lost quality as the context grew:": "一个滑动窗口混合模型，上下文越长表现越差：",
+    "retrieval and induction heads form early in pretraining, \\ and are hard to add later": "检索头和归纳头在预训练早期就已形成，\\ 之后很难再加进去",
+    "H.~Sun (MiniMax), \\textit{Why did M2 end up as a full attention model?} \\ (October 2025)": "H.~Sun（MiniMax），\\textit{Why did M2 end up as a full attention model?} \\ （2025年10月）",
+    "the recall test of chapter 11, \\ at the scale of a frontier model": "第11章的回忆测试，\\ 放到了前沿模型的规模上",
+    "Context engineering": "上下文工程",
+    "instructions and tools": "指令和工具",
+    "retrieved documents": "检索到的文档",
+    "the conversation so far, \\ compacted into a summary": "到目前为止的对话，\\ 压缩成一份摘要",
+    "recent turns, \\ in full": "最近几轮，\\ 完整保留",
+    "the current task": "当前的任务",
+    "notes and memory files": "笔记和记忆文件",
+    "sub-agents, \\ each with a clean window": "子智能体，\\ 各用一个干净的窗口",
+    "Anthropic, \\textit{Effective context engineering for AI agents} (September 2025)": "Anthropic，\\textit{Effective context engineering for AI agents}（2025年9月）",
+    "the window is a budget: \\\\ what goes in it matters \\\\ more than how big it is": "窗口是一份预算：\\\\ 放进去什么，\\\\ 比它有多大更要紧",
+    "Open questions": "悬而未决的问题",
+    "how much attention does a model need? \\ one layer in four, \\ in eight, \\ or none at all?": "一个模型需要多少注意力？\\ 每4层一层，\\ 每8层一层，\\ 还是一层都不要？",
+    "how big must a fixed memory be, \\ and how should it grow with the model?": "固定的记忆要多大，\\ 又该怎样随模型增长？",
+    "can a memory learn what to keep \\ as well as attention learns where to look?": "记忆能不能学会留下什么，\\ 就像注意力学会看哪里那样？",
+    "how do we measure what a model can do with a million tokens?": "我们怎样衡量一个模型拿一百万个词元做了什么？",
+    "The delta rule as geometry": "从几何看δ规则",
+    "Kimi Delta Attention": "Kimi Delta Attention",
+    "mLSTM \\ (xLSTM)": "mLSTM \\ （xLSTM）",
+    "Part 10's LSTM, \\ a matrix for a cell": "第10部分的LSTM，\\ 用矩阵当记忆单元",
+    "RWKV-7": "RWKV-7",
+    "erase along one key, \\ write along another": "沿一个键擦除，\\ 沿另一个键写入",
+    "Yang et al.\\ (2025); \\ Kimi Team (2025); \\ Dao \\& Gu (2024); \\ Beck et al., \\textit{xLSTM} (2024); \\ Peng et al., \\textit{RWKV-7} (2025)": "Yang等（2025）；\\ Kimi团队（2025）；\\ Dao与Gu（2024）；\\ Beck等，\\textit{xLSTM}（2024）；\\ Peng等，\\textit{RWKV-7}（2025）",
+    "Hopfield networks": "霍普菲尔德网络",
+    "a memory you return to by its content \\ (Part 20)": "按内容找回的记忆 \\ （第20部分）",
+    "one network writes the weights of another \\ (Schmidhuber)": "一个网络写另一个网络的权重 \\ （施密德胡伯）",
+    "a gated memory cell, \\ read and written by gates \\ (Part 10)": "带门的记忆单元，\\ 由门来读写 \\ （第10部分）",
+    "Neural Turing machines, \\ memory networks": "神经图灵机，\\ 记忆网络",
+    "a memory read and written by attention": "用注意力读写的记忆",
+    "the transformer": "Transformer",
+    "keep every key and value \\ (Part 13)": "留下每一个键和值 \\ （第13部分）",
+    "Transformer-XL, \\ Longformer, \\ BigBird": "Transformer-XL，\\ Longformer，\\ BigBird",
+    "reach further back; \\ look at less of it": "看得更远；\\ 只看其中一部分",
+    "linear attention, \\ kNN-LM, \\ RAG": "线性注意力，\\ kNN-LM，\\ RAG",
+    "a transformer as a recurrent network; \\ a memory outside the model": "Transformer变回循环网络；\\ 模型之外的记忆",
+    "S4, \\ RETRO, \\ Mamba": "S4，\\ RETRO，\\ Mamba",
+    "state-space models; \\ retrieval at scale; \\ a memory that chooses": "状态空间模型；\\ 大规模检索；\\ 会选择的记忆",
+    "hybrids in production": "投入生产的混合架构",
+    "Qwen3.5, \\ Kimi K3: \\ three layers in four linear; \\ million-token windows": "Qwen3.5，\\ Kimi K3：\\ 4层里3层是线性的；\\ 百万词元的窗口",
+    "attention's memory: \\ the cache, \\ how it is shrunk, \\ what can be thrown away": "注意力的记忆：\\ 缓存，\\ 怎样缩小它，\\ 哪些可以扔掉",
+    "a matrix as a memory: \\ from Hopfield and fast weights to linear attention": "把矩阵当作记忆：\\ 从霍普菲尔德和快权重到线性注意力",
+    "how to write to it: \\ adding, \\ decaying, \\ the delta rule, \\ and how to train it in parallel": "怎样往里写：\\ 累加，\\ 衰减，\\ δ规则，\\ 以及怎样并行地训练",
+    "state-space models: \\ HiPPO, \\ S4, \\ Mamba; \\ and memories that learn while they read": "状态空间模型：\\ HiPPO，\\ S4，\\ Mamba；\\ 以及边读边学的记忆",
+    "recall, measured: \\ which memory can look things up, \\ and hybrids that mix them": "测一测回忆：\\ 哪种记忆能查找东西，\\ 以及把它们混在一起的混合架构",
+    "long contexts, \\ how well they really work, \\ and retrieval: \\ a memory outside the model": "长上下文，\\ 实际上管用到什么程度，\\ 以及检索：\\ 模型之外的记忆",
+    "the same, \\ one key and value for all heads": "同一个模型，\\ 所有的头只用一个键和值",
+    "multi-head latent attention: \\ cache a short summary, \\ not the keys and values": "多头潜在注意力：\\ 缓存一份简短的摘要，\\ 而不是键和值",
+    "serving the cache: \\ paging, \\ sharing, \\ fewer bits \\ $\\rightarrow$ Part 19": "提供缓存：\\ 分页，\\ 共享，\\ 更少的比特 \\ $\\rightarrow$ 第19部分",
+    "Selectivity: Mamba and after": "选择性：Mamba及其后来者",
+    "Mamba-3 \\ (Lahoti, Li, Chen, Wang, Bick, Kolter, Dao \\& Gu, \\ ICLR 2026)": "Mamba-3 \\ （Lahoti、Li、Chen、Wang、Bick、Kolter、Dao与Gu，\\ ICLR 2026）",
+    "a better step: \\\\ both ends of each step, not one \\\\ (``exponential-trapezoidal'')": "更好的一步：\\\\ 用一步的两端，而不是一端 \\\\ （“指数梯形”）",
+    "a complex state: \\\\ it can rotate, \\\\ so it can track parity": "复数状态：\\\\ 它能旋转，\\\\ 所以能追踪奇偶性",
+    "several inputs and outputs a step (MIMO): \\\\ more work for each read of the state, \\\\ the same speed to generate": "每一步多个输入和输出（MIMO）：\\\\ 每读一次状态做更多运算，\\\\ 生成速度不变",
+    "reported: \\ the same perplexity as Mamba-2 with half the state; \\\\ at $1.5$B parameters, $+0.6$ points over Gated DeltaNet, \\ $+1.2$ more with MIMO": "报告：\\ 用一半的状态达到Mamba-2的困惑度；\\\\ 在$15$亿参数时，比Gated DeltaNet高$0.6$分，\\ 用MIMO再高$1.2$分",
+    "Training a recurrence in parallel": "并行地训练递推",
+    "How can a loop over tokens run all at once?": "一个按词元的循环，怎样一次全部跑完？",
+    "a linear recurrence: \\ the decaying memory, \\ an SSM, \\ one channel of Mamba": "线性递推：\\ 会衰减的记忆，\\ 一个SSM，\\ Mamba的一个通道",
+    "a step as a pair: \\ multiply by $a$, \\ add $b$": "把一步写成一对数：\\ 乘以$a$，\\ 加上$b$",
+    "two steps are again one step": "连着的两步又是一步",
+    "group the first two first": "先合前两步",
+    "or the last two: \\ the same \\ (associative)": "或者先合后两步：\\ 一样 \\ （结合律）",
+    "associative $\\Rightarrow$ any grouping, \\ so all prefixes in $\\log_2 T$ rounds": "满足结合律 $\\Rightarrow$ 怎样组合都行，\\ 所以所有前缀只要$\\log_2 T$轮",
+    "G.~E.~Blelloch, \\textit{Prefix Sums and Their Applications} (1990); \\ E.~Martin \\& C.~Cundy (2018)": "G.~E.~Blelloch，\\textit{Prefix Sums and Their Applications}（1990）；\\ E.~Martin与C.~Cundy（2018）",
+    "each step waits for the one before: \\ $T$ steps in a row": "每一步都要等上一步：\\ 一行$T$步",
+    "round 1": "第1轮",
+    "round 2": "第2轮",
+    "round 3": "第3轮",
+    "each box: \\ the combined steps it covers; \\ gold: \\ a finished $h_t$": "每个方块：\\ 它涵盖的组合步；\\ 金色：\\ 已经算好的$h_t$",
+    "Mamba-2-style SSM": "Mamba-2式的SSM",
+    "delta rule": "δ规则",
+    "gated delta rule": "门控δ规则",
+    "hybrid: \\ gated delta $+$ attention": "混合：\\ 门控δ $+$ 注意力",
+    "linear": "线性",
+    "Mamba-2": "Mamba-2",
+    "delta": "δ",
+    "gated delta": "门控δ",
+    "hybrid": "混合",
+    "answers right, \\ fixed batch": "答对的比例，\\ 固定的一批",
+    "key size: \\ the fixed memories hold key size $\\times\\ 64$ numbers a layer": "键的长度：\\ 固定的记忆每层存 键长 $\\times\\ 64$ 个数",
+    "each dot one seed; \\ lines: \\ the mean": "每个点一个随机种子；\\ 线：\\ 平均值",
+    "what each memory holds, \\ after reading the list": "每种记忆读完列表后存了多少",
+    "key size": "键的长度",
+    "a fixed memory": "固定的记忆",
+    "attention pays for exact recall with a cache that grows with the text; \\\\ a fixed memory must be big enough, \\ or know what to overwrite": "注意力用随文本增长的缓存换来精确的回忆；\\\\ 固定的记忆必须足够大，\\ 或者知道该覆盖什么",
+    "Forgetting and correcting": "遗忘与纠正",
+    "1. \\ read what the memory holds for the key: \\ $S_{t-1} k_t$": "1. \\ 读出记忆里这个键对应的东西：\\ $S_{t-1} k_t$",
+    "2. \\ the error: \\ $v_t - S_{t-1} k_t$": "2. \\ 误差：\\ $v_t - S_{t-1} k_t$",
+    "3. \\ write the error along the key, \\ a share $\\beta_t$ of it": "3. \\ 把误差沿着键写进去，\\ 写入其中的$\\beta_t$",
+    "adding \\ (linear attention)": "累加 \\ （线性注意力）",
+    "the delta rule, \\ $\\beta = 1$": "δ规则，\\ $\\beta = 1$",
+    "error reading the latest values": "读出最新值的误差",
+    "how wrong the memory is \\\\ about this pair": "记忆在这一对上 \\\\ 错得有多远",
+    "the gap, \\ times the key": "差距，\\ 乘以键",
+    "How should a continuous memory be read in steps?": "一份连续的记忆，应该怎样一步一步地读？",
+    "solve the linear ODE \\ (variation of constants)": "解线性常微分方程 \\ （常数变易法）",
+    "hold the input still over the step: \\ $u = \\Delta - s$": "在一步之内让输入保持不变：\\ $u = \\Delta - s$",
+    "the zero-order hold: \\ $\\bar A = e^{\\Delta A}$, \\ $\\bar B = A^{-1}(e^{\\Delta A} - I) B$": "零阶保持：\\ $\\bar A = e^{\\Delta A}$，\\ $\\bar B = A^{-1}(e^{\\Delta A} - I) B$",
+    "largest error \\ (relative)": "最大误差 \\ （相对）",
+    "Euler: \\ $\\bar A = I + \\Delta A$": "欧拉法：\\ $\\bar A = I + \\Delta A$",
+    "bilinear": "双线性",
+    "zero-order hold": "零阶保持",
+    "a damped oscillator, $2$ numbers of state, \\ against a fine Runge--Kutta solution": "一个阻尼振子，状态有$2$个数，\\ 与精细的龙格--库塔解比较",
+    "the signal, \\ and what the memory holds": "信号，\\ 以及记忆里存的东西",
+    "the signal": "信号",
+    "$c(t)$: \\ the coefficients of the best polynomial fit \\ to all of $f$ up to $t$ \\ (Legendre polynomials, \\ equal weight on the whole past)": "$c(t)$：\\ 对截至$t$的全部$f$的最佳多项式拟合系数 \\ （勒让德多项式，\\ 对整段过去同等加权）",
+    "error at the end, \\ relative": "最后的误差，\\ 相对",
+    "A.~Gu, T.~Dao, S.~Ermon, A.~Rudra \\& C.~R\\'e, \\textit{HiPPO} (2020)": "A.~Gu、T.~Dao、S.~Ermon、A.~Rudra与C.~R\\'e，\\textit{HiPPO}（2020）",
+    "lag $j$ \\ (steps back)": "滞后$j$ \\ （往前的步数）",
+    "the kernel: \\ $K_j = C \\bar A^{j} \\bar B$": "卷积核：\\ $K_j = C \\bar A^{j} \\bar B$",
+    "the same SSM as one long convolution: \\ trained in parallel, \\ with the FFT": "把同一个SSM写成一个长卷积：\\ 用FFT \\ 并行训练",
+    "Gu, Goel \\& R\\'e: \\ HiPPO's matrix, \\ a structured $A$ (diagonal plus low rank), \\ and the convolution view; \\ the first model to solve Path-X, \\ $16{,}384$ steps long": "Gu、Goel与R\\'e：\\ HiPPO的矩阵，\\ 结构化的$A$（对角加低秩），\\ 以及卷积的视角；\\ 第一个解出Path-X的模型，\\ 长$16{,}384$步",
+    "A memory that learns": "会学习的记忆",
+    "What if the memory were a whole network?": "如果记忆是一整个网络呢？",
+    "a self-supervised loss on the token being read: \\ rebuild one view of it from another": "在正在读的词元上的自监督损失：\\ 从它的一个视角重建另一个",
+    "the hidden state is a model's weights; \\\\ reading a token is one step of training on it": "隐状态是一个模型的权重；\\\\ 读一个词元，就是在它上面训练一步",
+    "$f_W(k) = W k$: \\ TTT-Linear \\ (the delta rule)": "$f_W(k) = W k$：\\ TTT-Linear \\ （δ规则）",
+    "$f_W$ a two-layer network: \\ TTT-MLP": "$f_W$是一个两层网络：\\ TTT-MLP",
+    "reported: \\ Mamba stops improving past $16$k tokens of context; \\\\ the TTT layers keep going \\ ($125$M--$1.3$B parameters)": "报告：\\ 上下文超过$1.6$万个词元以后，Mamba不再进步；\\\\ TTT层还在继续 \\ （$1.25$亿--$13$亿参数）",
+    "Y.~Sun, X.~Li, K.~Dalal et al., \\textit{Learning to (Learn at Test Time): RNNs with Expressive Hidden States} (2024)": "Y.~Sun、X.~Li、K.~Dalal等，\\textit{Learning to (Learn at Test Time): RNNs with Expressive Hidden States}（2024）",
+    "pairs read": "读过的键值对",
+    "error on fresh keys of the same rule \\ (relative)": "同一规则下新键上的误差 \\ （相对）",
+    "surprise: \\ $\\|\\nabla \\ell\\|$": "意外度：\\ $\\|\\nabla \\ell\\|$",
+    "error on the current rule": "在当前规则上的误差",
+    "the rule changes": "规则改变",
+    "surprise, with momentum: \\ past surprise carries on": "带动量的意外度：\\ 过去的意外会延续",
+    "a forgetting gate $\\alpha$: \\ weight decay on the memory": "遗忘门$\\alpha$：\\ 记忆上的权重衰减",
+    "one gradient step per pair": "每对走一步梯度",
+    "with momentum and forgetting \\ (Titans)": "加上动量和遗忘 \\ （Titans）",
+    "Titans": "Titans",
+    "Behrouz, Zhong \\& Mirrokni: \\ a deep neural memory beside attention; \\ reported beyond $2$ million tokens": "Behrouz、Zhong与Mirrokni：\\ 注意力旁边的一份深层神经记忆；\\ 报告可达$200$万个词元以上",
+    "Every memory in this part is a learner": "这一部分的每一种记忆，都是一个学习者",
+    "loss it lowers, \\ each token": "每个词元上降低的损失",
+    "how it learns": "怎样学习",
+    "one gradient step": "走一步梯度",
+    "a step, \\ and weight decay": "走一步，\\ 再加权重衰减",
+    "delta rule \\ (DeltaNet, \\ TTT-Linear)": "δ规则 \\ （DeltaNet，\\ TTT-Linear）",
+    "gated delta \\ (Qwen3-Next, \\ Kimi)": "门控δ \\ （Qwen3-Next，\\ Kimi）",
+    "momentum, \\ weight decay; \\ a deep $M$": "动量，\\ 权重衰减；\\ 深层的$M$",
+    "no training: \\ a kernel regression \\ over every pair kept": "不训练：\\ 对保存的每一对 \\ 做核回归",
+    "after S.~Yang's notes on linear attention, \\ and K.~A.~Wang, J.~Shi \\& E.~B.~Fox, \\textit{Test-time regression} (2025)": "参考杨松琳关于线性注意力的笔记，\\ 以及K.~A.~Wang、J.~Shi与E.~B.~Fox，\\textit{Test-time regression}（2025）",
+    "Jamba \\\\ (2024)": "Jamba \\\\ （2024）",
+    "MiniMax-01 \\\\ (2025)": "MiniMax-01 \\\\ （2025）",
+    "lightning \\\\ attention": "闪电 \\\\ 注意力",
+    "Nemotron-H \\\\ (2025)": "Nemotron-H \\\\ （2025）",
+    "$4$ in $28$": "$28$层里$4$层",
+    "Granite 4.0 \\\\ (2025)": "Granite 4.0 \\\\ （2025）",
+    "$1$ in $10$": "$10$层里$1$层",
+    "Qwen3-Next \\\\ (2025)": "Qwen3-Next \\\\ （2025）",
+    "Gated \\\\ DeltaNet": "Gated \\\\ DeltaNet",
+    "Kimi Linear \\\\ (2025)": "Kimi Linear \\\\ （2025）",
+    "Kimi Delta \\\\ Attention": "Kimi Delta \\\\ Attention",
+    "Qwen3.5 \\\\ (2026)": "Qwen3.5 \\\\ （2026）",
+    "Kimi K3 \\\\ (2026)": "Kimi K3 \\\\ （2026）",
+    "$24$ in $93$": "$93$层里$24$层",
+    "the share of attention layers, \\ from each model's report or card; \\ 20 layers drawn, \\ schematic order": "注意力层所占的比例，\\ 取自各模型的报告或模型卡；\\ 画了20层，\\ 顺序是示意",
+    "training loss \\ (nats a token, \\ smoothed)": "训练损失 \\ （每个词元的奈特，\\ 平滑后）",
+    "the hybrid, seed $0$, \\ sampled during training": "混合模型，种子$0$，\\ 训练中采样",
+    "How long is a context, really?": "上下文到底有多长？",
+    "Does a model use everything in its window?": "模型真的用上了窗口里的一切吗？",
+    "depth of the needle \\\\ (top: \\ the start)": "针的深度 \\\\ （上方：\\ 开头）",
+    "length of the haystack $\\rightarrow$": "草堆的长度 $\\rightarrow$",
+    "passes everywhere": "处处都通过",
+    "loses the middle of long texts": "在长文本的中间迷失",
+    "``\\dots \\ The best thing to do in San Francisco is eat a sandwich and sit in Dolores Park on a sunny day. \\ \\dots''": "``\\dots \\ The best thing to do in San Francisco is eat a sandwich and sit in Dolores Park on a sunny day. \\ \\dots''",
+    "G.~Kamradt, \\textit{Needle in a Haystack} (2023); \\ N.~F.~Liu et al., \\textit{Lost in the Middle} (2023)": "G.~Kamradt，\\textit{Needle in a Haystack}（2023）；\\ N.~F.~Liu等，\\textit{Lost in the Middle}（2023）",
+    "Harder than a needle": "比大海捞针更难",
+    "RULER \\ (Hsieh et al., NVIDIA)": "RULER \\ （Hsieh等，英伟达）",
+    "13 tasks: \\ many needles, \\ tracing variables, \\ counting words, \\ questions; \\ of 17 models claiming at least $32$k tokens, \\ only half held up at $32$k": "13项任务：\\ 多根针，\\ 追踪变量，\\ 数词，\\ 问答；\\ 17个号称至少支持$32$k词元的模型，\\ 到$32$k时只有一半还撑得住",
+    "NoLiMa \\ (Modarressi et al.)": "NoLiMa \\ （Modarressi等）",
+    "needles that share no words with the question; \\ at $32$k tokens, \\ 11 of 13 models fell below half their short-text score; \\ GPT-4o: \\ $99.3\\% \\to 69.7\\%$": "针和问题之间没有共同的词；\\ 到$32$k词元，\\ 13个模型里11个跌到短文本成绩的一半以下；\\ GPT-4o：\\ $99.3\\% \\to 69.7\\%$",
+    "Context rot \\ (Hong, Troynikov \\& Huber, Chroma)": "上下文腐烂 \\ （Hong、Troynikov与Huber，Chroma）",
+    "18 models: \\ every one less reliable as the input grows, \\ even on simple tasks": "18个模型：\\ 输入越长，每一个都越不可靠，\\ 哪怕是简单的任务",
+    "the length a model accepts \\ $\\ne$ \\ the length it can use": "模型能接受的长度 \\ $\\ne$ \\ 它能用上的长度",
+    "one needle": "一根针",
+    "one of four needles": "四根针里的一根",
+    "a chain of three names": "一条三个名字的链",
+    "position, \\ read in one go": "位置，\\ 一次读完",
+    "transformer, \\ rotary positions": "Transformer，\\ 旋转位置",
+    "hybrid, \\ attention without positions": "混合模型，\\ 注意力不带位置",
+    "the copy test: \\ $24$ random tokens, \\ a stretch of a novel, \\ the same $24$ again": "抄写测试：\\ $24$个随机词元，\\ 一段小说，\\ 再来同样的$24$个",
+    "Long contexts in 2026": "2026年的长上下文",
+    "Gemini 1.5 \\ (Google, 2024)": "Gemini 1.5 \\ （谷歌，2024）",
+    "a million tokens; \\ needles found in up to $10$ million, \\ in research": "一百万个词元；\\ 在研究中，\\ 多达$1000$万个词元里也能找到针",
+    "Kimi Linear \\ (Moonshot, 2025)": "Kimi Linear \\ （Moonshot，2025）",
+    "RULER at $128$k: \\ $84.3$, \\ against $81.3$ for full attention \\ ($1.4$T tokens each); \\ $78.8$ with rotary positions": "$128$k的RULER：\\ $84.3$，\\ 完整注意力为$81.3$ \\ （各$1.4$万亿词元）；\\ 用旋转位置时$78.8$",
+    "MRCR v2, \\ eight needles \\ (OpenAI's test)": "MRCR v2，\\ 八根针 \\ （OpenAI的测试）",
+    "at $1$M tokens: \\ Claude Opus 4.6 $76\\%$, \\ Claude Sonnet 4.5 $18.5\\%$ \\ (Anthropic, \\ February 2026)": "在$1$M词元：\\ Claude Opus 4.6 $76\\%$，\\ Claude Sonnet 4.5 $18.5\\%$ \\ （Anthropic，\\ 2026年2月）",
+    "DeepSeek-V4 \\ (2026)": "DeepSeek-V4 \\ （2026）",
+    "$1$M tokens; \\ keys and values compressed $4\\times$ and $128\\times$ \\ (compressed sparse attention: \\ Part 16)": "$1$M词元；\\ 键和值压缩$4$倍和$128$倍 \\ （压缩稀疏注意力：\\ 第16部分）",
+    "each figure from its maker's report": "每个数字都来自厂商自己的报告",
+    "transformer: \\ 4 attention layers, \\ rotary positions \\ ($725{,}568$ weights)": "Transformer：\\ 4层注意力，\\ 旋转位置 \\ （$725{,}568$个权重）",
+    "transformer: \\ $2.363$ \\ (seeds $2.361$--$2.365$)": "Transformer：\\ $2.363$ \\ （各种子$2.361$--$2.365$）",
+    "our RULER: \\ trained at $128$ tokens, \\ tested up to $1{,}024$ \\ (\\% right, \\ chance $3\\%$)": "我们的RULER：\\ 在$128$个词元上训练，\\ 测试到$1{,}024$ \\ （答对的\\%，\\ 随机猜$3\\%$）",
+    "copied right: \\ transformer $0\\%$, \\ hybrid $0\\%$ \\ (copies 16 tokens apart)": "抄对的比例：\\ Transformer $0\\%$，\\ 混合模型$0\\%$ \\ （两份相隔16个词元）",
+    "linear memory, \\ $64$ numbers \\ (TTT-Linear)": "线性记忆，\\ $64$个数 \\ （TTT-Linear）",
+    "two-layer memory, \\ $1024$ numbers \\ (TTT-MLP)": "两层记忆，\\ $1024$个数 \\ （TTT-MLP）"
   },
   "phrases": {
     "width": "宽度",
@@ -18325,6 +18608,170 @@
     [
       "^size of the weights: \\\\ \\$([^$]+)\\$ at the start, \\\\ \\$([^$]+)\\$ at step \\$([^$]+)\\$, \\\\ \\$([^$]+)\\$ at the end$",
       "权重的大小：\\ 开始时 $\\1$，\\ 第 $\\3$ 步时 $\\2$，\\ 最后 $\\4$"
+    ],
+    [
+      "^if attention were spread evenly: \\\\ \\$([\\d.]+)\\\\%\\$$",
+      "如果注意力平均分配：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^heads above ten times that: \\\\ \\$(\\d+)\\$ of \\$(\\d+)\\$$",
+      "超过它十倍的头：\\\\ $\\2$个里有$\\1$个"
+    ],
+    [
+      "^average over all heads: \\\\ \\$([\\d.]+)\\\\%\\$$",
+      "所有头的平均：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^\\$(\\d+)\\$ held-out windows of \\$(\\d+)\\$ tokens, \\\\\\\\ queries from position \\$(\\d+)\\$ on$",
+      "$\\1$个$\\2$词元的留出窗口，\\\\\\\\ 查询从第$\\3$个位置开始"
+    ],
+    [
+      "^the last \\$(\\d+)\\$ tokens$",
+      "最后$\\1$个词元"
+    ],
+    [
+      "^4 sinks \\$\\+\\$ the last \\$(\\d+)\\$$",
+      "4个汇点 $+$ 最后$\\1$个"
+    ],
+    [
+      "^the last \\$(\\d+)\\$ tokens: \\\\ \\$([\\d.]+)\\$$",
+      "最后$\\1$个词元：\\\\ $\\2$"
+    ],
+    [
+      "^4 sinks \\$\\+\\$ the last \\$(\\d+)\\$: \\\\ \\$([\\d.]+)\\$$",
+      "4个汇点 $+$ 最后$\\1$个：\\\\ $\\2$"
+    ],
+    [
+      "^keep everything: \\\\ \\$([\\d.]+)\\$$",
+      "全部保留：\\\\ $\\1$"
+    ],
+    [
+      "^recomputed windows: \\\\ \\$([\\d.]+)\\$$",
+      "重新计算的窗口：\\\\ $\\1$"
+    ],
+    [
+      "^bits per character, \\\\ first \\$([\\d{},]+)\\$ tokens$",
+      "每个字符的比特，\\\\ 前$\\1$个词元"
+    ],
+    [
+      "^\\$(\\d+)\\$ stored patterns of \\$(\\d+)\\$ neurons$",
+      "存了$\\1$个模式，每个$\\2$个神经元"
+    ],
+    [
+      "^the cue: \\\\ pattern 1, \\\\ \\$(\\d+)\\$ of \\$(\\d+)\\$ bits flipped$",
+      "线索：\\\\ 第1个模式，\\\\ $\\2$位里翻转了$\\1$位"
+    ],
+    [
+      "^cues recalled exactly \\\\ \\(\\$N = (\\d+)\\$, \\\\ \\$(\\d+)\\$ bits flipped, \\\\ \\$(\\d+)\\$ trials each\\)$",
+      "准确找回的线索 \\\\ （$N = \\1$，\\\\ 翻转$\\2$位，\\\\ 每种$\\3$次试验）"
+    ],
+    [
+      "^\\$T = ([\\d{},]+)\\$: \\\\ \\$(\\d+)\\$ rounds \\\\ instead of \\$([\\d{},]+)\\$ steps$",
+      "$T = \\1$：\\\\ $\\2$轮，\\\\ 而不是$\\3$步"
+    ],
+    [
+      "^Blelloch's version: \\\\ \\$([\\d{},]+)\\$ combines, \\\\ about \\$2T\\$$",
+      "布莱洛赫的版本：\\\\ $\\1$次组合，\\\\ 大约$2T$"
+    ],
+    [
+      "^against the loop: \\\\ largest relative difference \\$(.+)\\$$",
+      "与循环相比：\\\\ 最大相对差$\\1$"
+    ],
+    [
+      "^with \\$4 \\\\times 4\\$ matrices for \\$a_t\\$: \\\\ \\$(.+)\\$$",
+      "把$a_t$换成$4 \\\\times 4$矩阵：\\\\ $\\1$"
+    ],
+    [
+      "^step by step \\\\ vs \\\\ by chunks, \\\\ on \\$([\\d{},]+)\\$ random tokens: \\\\ largest difference \\$(.+)\\$$",
+      "逐步计算 \\\\ 对 \\\\ 分块计算，\\\\ 在$\\1$个随机词元上：\\\\ 最大差$\\2$"
+    ],
+    [
+      "^two layers each, \\\\ \\$([\\d{},]+)\\$--\\$([\\d{},]+)\\$ weights, \\\\ \\$([\\d{},]+)\\$ steps; \\\\ \\$(\\d+)\\$ pairs; \\\\ keys of \\$(\\d+)\\$ to \\$(\\d+)\\$ numbers; \\\\ (\\d+) seeds$",
+      "各两层，\\\\ $\\1$--$\\2$个权重，\\\\ $\\3$步；\\\\ $\\4$对；\\\\ 键长$\\5$到$\\6$个数；\\\\ \\7个随机种子"
+    ],
+    [
+      "^one fixed list of \\$(\\d+)\\$ pairs: \\\\ each square an answer, \\\\ lit when right \\\\ \\(key size \\$(\\d+)\\$, seed \\$(\\d+)\\$\\)$",
+      "一张固定的$\\1$对列表：\\\\ 每个方块一个答案，\\\\ 答对就亮 \\\\ （键长$\\2$，种子$\\3$）"
+    ],
+    [
+      "^answers right, \\\\ \\$([\\d{},]+)\\$ fresh lists$",
+      "答对的比例，\\\\ $\\1$张新列表"
+    ],
+    [
+      "^attention's cache, \\\\ \\$(\\d+)\\$ tokens$",
+      "注意力的缓存，\\\\ $\\1$个词元"
+    ],
+    [
+      "^the same four pairs, \\\\ then key \\$k_\\{(\\d+)\\}\\$ gets a new value$",
+      "同样的四对，\\\\ 然后键$k_{\\1}$换了新值"
+    ],
+    [
+      "^\\$N = (\\d+)\\$ numbers$",
+      "$N = \\1$个数"
+    ],
+    [
+      "^\\$N = (\\d+)\\$: \\\\ \\$([\\d.]+)\\$ \\\\ \\(best fit \\$([\\d.]+)\\$\\)$",
+      "$N = \\1$：\\\\ $\\2$ \\\\ （最佳拟合$\\3$）"
+    ],
+    [
+      "^recurrence vs convolution, \\\\ \\$(\\d+)\\$ steps: \\\\ \\$(.+)\\$$",
+      "递推对卷积，\\\\ $\\1$步：\\\\ $\\2$"
+    ],
+    [
+      "^linear memory, \\\\ \\$(\\d+)\\$ numbers \\\\ \\(TTT-Linear\\)$",
+      "线性记忆，\\\\ $\\1$个数 \\\\ （TTT-Linear）"
+    ],
+    [
+      "^two-layer memory, \\\\ \\$(\\d+)\\$ numbers \\\\ \\(TTT-MLP\\)$",
+      "两层记忆，\\\\ $\\1$个数 \\\\ （TTT-MLP）"
+    ],
+    [
+      "^median of \\$(\\d+)\\$ sequences; \\\\ band: \\\\ the middle half; \\\\ each step size chosen on \\$(\\d+)\\$ other sequences$",
+      "$\\1$段序列的中位数；\\\\ 色带：\\\\ 中间一半；\\\\ 每种步长在另外$\\2$段序列上选定"
+    ],
+    [
+      "^each sequence: \\\\ its own hidden rule \\$v = f\\(k\\)\\$, \\\\ a random small network, \\\\ keys of \\$(\\d+)\\$ numbers$",
+      "每段序列：\\\\ 有自己的隐藏规则$v = f(k)$，\\\\ 一个随机的小网络，\\\\ 键长$\\1$个数"
+    ],
+    [
+      "^transformer: \\\\ 4 attention layers, \\\\ rotary positions \\\\ \\(\\$([\\d{},]+)\\$ weights\\)$",
+      "Transformer：\\\\ 4层注意力，\\\\ 旋转位置 \\\\ （$\\1$个权重）"
+    ],
+    [
+      "^hybrid: \\\\ 3 gated-delta layers, \\\\ then attention, \\\\ no positions \\\\ \\(\\$([\\d{},]+)\\$\\)$",
+      "混合模型：\\\\ 3层门控δ，\\\\ 再接注意力，\\\\ 不带位置 \\\\ （$\\1$）"
+    ],
+    [
+      "^transformer: \\\\ \\$([\\d.]+)\\$ \\\\ \\(seeds \\$([\\d.]+)\\$--\\$([\\d.]+)\\$\\)$",
+      "Transformer：\\\\ $\\1$ \\\\ （各种子$\\2$--$\\3$）"
+    ],
+    [
+      "^hybrid: \\\\ \\$([\\d.]+)\\$ \\\\ \\(seeds \\$([\\d.]+)\\$--\\$([\\d.]+)\\$\\)$",
+      "混合模型：\\\\ $\\1$ \\\\ （各种子$\\2$--$\\3$）"
+    ],
+    [
+      "^width \\$(\\d+)\\$, \\\\ \\$(\\d+)\\$ layers, \\\\ \\$(\\d+)\\$ tokens of context, \\\\ \\$([\\d.]+)\\$ million tokens of the novels each; \\\\ \\$(\\d+)\\$ seeds; \\\\ band: \\\\ min to max$",
+      "宽度$\\1$，\\\\ $\\2$层，\\\\ $\\3$个词元的上下文，\\\\ 每个模型$\\4$百万个小说词元；\\\\ $\\5$个种子；\\\\ 色带：\\\\ 最小到最大"
+    ],
+    [
+      "^step \\$(\\d+)\\$: \\\\ held-out loss \\$([\\d.]+)\\$$",
+      "第$\\1$步：\\\\ 留出损失$\\2$"
+    ],
+    [
+      "^our RULER: \\\\ trained at \\$(\\d+)\\$ tokens, \\\\ tested up to \\$([\\d{},]+)\\$ \\\\ \\(\\\\% right, \\\\ chance \\$3\\\\%\\$\\)$",
+      "我们的RULER：\\\\ 在$\\1$个词元上训练，\\\\ 测试到$\\2$ \\\\ （答对的\\\\%，\\\\ 随机猜$3\\\\%$）"
+    ],
+    [
+      "^two-layer models as in chapter 11, \\\\ keys of \\$(\\d+)\\$; \\\\ (\\d+) seeds each, \\\\ averaged; \\\\ filler of random words around the needles; \\\\ columns: \\\\ tokens$",
+      "和第11章一样的两层模型，\\\\ 键长$\\1$；\\\\ 每种\\2个种子，\\\\ 取平均；\\\\ 针周围是随机的填充词；\\\\ 列：\\\\ 词元数"
+    ],
+    [
+      "^loss on the next token \\\\ \\(nats, \\\\ average of \\$(\\d+)\\$ held-out windows, \\\\ \\$(\\d+)\\$ seeds\\)$",
+      "下一个词元的损失 \\\\ （奈特，\\\\ $\\1$个留出窗口的平均，\\\\ $\\2$个种子）"
+    ],
+    [
+      "^copied right: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\ \\(copies (\\d+) tokens apart\\)$",
+      "抄对的比例：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型$\\2\\\\%$ \\\\ （两份相隔\\3个词元）"
     ]
   ]
 }

@@ -6,109 +6,132 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import I_COLOR, J_COLOR, MONO, VOWELS, load
+from videos.ai.ai3.common import MPC, PART, RANDOM, TRAINED, gray_image, load
 
 
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
         self.payoffs()
+        self.problems()
         self.next_time()
         self.references()
 
     # ------------------------------------------------------------------
     def tiles(self):
-        TW, TH = 3.0, 2.0
-
-        def frame(caption, color):
-            box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D,
-                                   stroke_width=1.5, fill_color="#121722", fill_opacity=1)
-            return box, label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
-
-        def arr(a, b, col, w=4):
-            return Arrow(np.array([*a, 0]), np.array([*b, 0]), buff=0, color=col, stroke_width=w,
-                         max_tip_length_to_length_ratio=0.2)
-
+        """The part in twelve pictures, each drawn from its own computed result."""
+        TW, TH = 1.95, 1.3
+        mk = lambda xr, yr: Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,  # noqa: E731
+                                 axis_config={"stroke_color": GREY_D, "include_ticks": False})
         out = []
-        # 1. adding vectors
-        out.append((VGroup(arr((0, 0), (1.2, 0.5), I_COLOR), arr((1.2, 0.5), (0.6, 1.5), J_COLOR),
-                           arr((0, 0), (0.6, 1.5), C.BITS)), r"vectors: \ add, scale", C.BITS))
-        # 2. the dot product as a shadow
-        a = np.array([1.6, 0.4])
-        b = np.array([0.7, 1.3])
-        p = (b @ a) / (a @ a) * a
-        out.append((VGroup(arr((0, 0), a, C.TRUE_P), arr((0, 0), b, C.MODEL_Q),
-                           DashedLine([*b, 0], [*p, 0], color=GREY_B, stroke_width=2),
-                           Line(ORIGIN, [*p, 0], color=C.REWARD, stroke_width=8)), r"the dot product", C.TRUE_P))
-        # 3. a matrix moves the grid
-        g = NumberPlane(x_range=[-3, 3, 1], y_range=[-3, 3, 1], background_line_style={"stroke_color": BLUE_D,
-                        "stroke_width": 1.5}, axis_config={"stroke_width": 1.5}).scale(0.32)
-        g.apply_matrix(np.array([[1.0, 0.6], [0.2, 1.0]]))
-        out.append((g, r"matrices move space", BLUE_C))
-        # 4. eigenvectors of a symmetric matrix
-        ell = Ellipse(width=2.6, height=1.0, color=C.BITS, stroke_width=3).rotate(PI / 4)
-        out.append((VGroup(ell, arr((0, 0), (0.92, 0.92), I_COLOR), arr((0, 0), (0.36, -0.36), J_COLOR)),
-                    r"eigenvectors", I_COLOR))
-        # 5. SVD: circle to ellipse
-        out.append((VGroup(DashedVMobject(Circle(radius=0.7, color=GREY_B, stroke_width=2), num_dashes=24),
-                           Ellipse(width=2.4, height=0.9, color=C.BITS, stroke_width=3).rotate(-0.4)),
-                    r"turn, stretch, turn", C.BITS))
-        # 6. the vowel axis
-        d = load("letters")
-        row = np.asarray(d["ca_row"])
-        letters = "abcdefghijklmnopqrstuvwxyz"
-        lo, hi = float(row.min()), float(row.max())
-        line = VGroup(Line([-1.4, 0, 0], [1.4, 0, 0], color=GREY_C, stroke_width=2))
-        vx = []
-        for i, ch in enumerate(letters):  # every letter a dot on the axis; the vowels gold
-            x = -1.4 + 2.8 * (row[i] - lo) / (hi - lo)
-            line.add(Dot([x, 0, 0], radius=0.06 if ch in VOWELS else 0.04, color=C.BITS if ch in VOWELS else GREY_A))
-            if ch in VOWELS:
-                vx.append(x)
-        vb = Brace(Line([min(vx) - 0.05, 0, 0], [max(vx) + 0.05, 0, 0]), UP, buff=0.12, color=C.BITS)
-        line.add(vb, Text("a e i o u", font=MONO, font_size=20, color=C.BITS).next_to(vb, UP, buff=0.08)
-                 .align_to(vb, LEFT))
-        out.append((line, r"SVD finds the vowels", C.BITS))
-        # 7. the analogy
-        xy = np.asarray(load("words")["analogy_xy"])
-        xy = xy / np.abs(xy).max() * 1.1
-        pts = [np.array([x, y, 0]) for x, y in xy]
-        out.append((VGroup(*[Dot(q, radius=0.06, color=C.BITS if k % 2 else C.TRUE_P) for k, q in enumerate(pts)],
-                           Arrow(pts[0], pts[1], buff=0.08, color=C.BITS, stroke_width=3),
-                           Arrow(pts[2], pts[2] + pts[1] - pts[0], buff=0.08, color=C.BITS, stroke_width=3)),
-                    r"france $\to$ paris, \ england $\to$ london", C.BITS))
-        # 8. angles in 768 dimensions
-        h = load("highdim")
-        hist = np.asarray(h["angles768"], float)
-        bars = VGroup(*[Rectangle(width=0.07, height=max(1.6 * v / hist.max(), 0.005), stroke_width=0, fill_color=C.TRUE_P,
-                                  fill_opacity=0.9).move_to([-1.3 + 0.075 * k, -0.7 + 0.8 * v / hist.max(), 0])
-                        for k, v in enumerate(hist)])
-        out.append((bars, r"$768$ dimensions: \ room", C.TRUE_P))
+        g = load("gpt2")
+        cos = np.asarray(g["barcode_cos"])[0]
+        bars = VGroup(*[Rectangle(width=0.32, height=max(1.4 * float(cos[j]), 0.02), stroke_width=0,
+                                  fill_color=C.TRUE_P if j != 2 else GREY_B, fill_opacity=0.9)
+                        .move_to([0.45 * k, 0, 0], aligned_edge=DOWN) for k, j in enumerate((1, 3, 2))])
+        out.append((bars, r"cosine similarity", C.TRUE_P))
+        e = load("einsum")
+        out.append((VGroup(Rectangle(width=1.6, height=1.2, stroke_width=0, fill_color=C.PENALTY, fill_opacity=0.8),
+                           Rectangle(width=1.6 * e["macs_right"] / e["macs_left"] + 0.03, height=1.2, stroke_width=0,
+                                     fill_color=C.REWARD, fill_opacity=0.9)).arrange(RIGHT, buff=0.2,
+                                                                                       aligned_edge=DOWN),
+                    r"einsum: \ order matters", C.REWARD))
+        pr = load("project")["rows"]
+        ax = mk([0, 17, 1], [-17, 1, 1])
+        lk = [math.log10(r["kappa"]) for r in pr]
+        out.append((VGroup(ax, *[curve(ax, lk, [math.log10(max(r[k_], 1e-17)) for r in pr], c_, 2.5) for k_, c_ in
+                                 (("cgs", C.PENALTY), ("mgs", C.MODEL_Q), ("householder", C.REWARD))]),
+                    r"Gram--Schmidt, \ rounded", C.MODEL_Q))
+        pw = load("power")
+        ax = mk([0, 60, 1], [-16, 0.2, 1])
+        out.append((VGroup(ax, *[curve(ax, np.arange(len(pw[k_]["sin"])), np.log10(np.maximum(pw[k_]["sin"], 1e-16)),
+                                       c_, 2.5) for k_, c_ in (("gpt2", C.TRUE_P), ("letters", C.MODEL_Q))]),
+                    r"power iteration", C.TRUE_P))
+        im = load("image")
+        out.append((Group(gray_image(np.asarray(im["recon"])[3], TW * 0.9)), r"rank $8$ of a picture", C.BITS))
+        nm = load("norms")["rows"]
+        ax = mk([-0.5, 11.5, 1], [0, 140, 1])
+        out.append((VGroup(ax, *[curve(ax, [r["layer"] for r in nm if r["kind"] == k_],
+                                       [r["stable"] for r in nm if r["kind"] == k_], c_, 2.5)
+                                 for k_, c_ in (("attn", C.QUERY), ("attn_out", C.VALUE), ("mlp_in", C.MLP),
+                                                ("mlp_out", C.TRUE_P))]), r"stable ranks", C.MLP))
+        mp = load("mp")
+        ev = np.log10(np.maximum(np.asarray(mp["show"]["ev"]), 10 ** -2.5))
+        es = np.log10(np.asarray(mp["shuffled"]["ev"]))
+        ax = mk([-2.5, 1.4, 1], [0, 1, 1])
+        hb = VGroup(ax)
+        for vals, col in ((es, RANDOM), (ev, TRAINED)):
+            c_, edges = np.histogram(vals, bins=30, range=(-2.5, 1.4))
+            c_ = c_ / c_.max()
+            for a_, b_, h_ in zip(edges[:-1], edges[1:], c_):
+                if h_ > 0:
+                    p0, p1 = ax.c2p(a_, 0), ax.c2p(b_, h_)
+                    hb.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=col,
+                                     fill_opacity=0.6).move_to((p0 + p1) / 2))
+        out.append((hb, r"trained vs.\ shuffled", TRAINED))
+        gl = load("galore")["track"]["tracked"]
+        ax = mk([0, math.log10(600), 1], [0, 1, 1])
+        out.append((VGroup(ax, curve(ax, [math.log10(t_["step"]) for t_ in gl], [t_["top8"] for t_ in gl], C.SCORE, 2.5)),
+                    r"gradients: \ low rank", C.SCORE))
+        sg = load("sgns")["lg_exact"]["runs"]
+        r0 = sg[str(max(int(k_) for k_ in sg))]
+        x_, y_ = np.asarray(r0["x"])[::6], np.asarray(r0["y"])[::6]
+        lo_, hi_ = float(np.percentile(x_, 1)), float(np.percentile(x_, 99))
+        ax = mk([lo_, hi_, 1], [lo_, hi_, 1])
+        out.append((VGroup(ax, *[Dot(ax.c2p(a_, float(np.clip(b_, lo_, hi_))), radius=0.012, color=C.REWARD)
+                                 for a_, b_ in zip(x_, y_) if lo_ <= a_ <= hi_]),
+                    r"$\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI} - \log k$", C.REWARD))
+        hd = load("highdim")
+        ax = mk([0, 4, 1], [-4, 0, 1])
+        lds = np.log10(np.asarray(hd["var_dims"], float))
+        out.append((VGroup(ax, Line(ax.c2p(0, 0), ax.c2p(4, -4), color=C.BITS, stroke_width=2),
+                           *[Dot(ax.c2p(a_, b_), radius=0.03, color=C.TRUE_P) for a_, b_ in
+                             zip(lds, np.log10(hd["cos_var"]))]), r"cosines: \ variance $1/d$", C.BITS))
+        jl = load("jl")["fine"]
+        ax = mk([0.2, 3, 1], [-2.5, 0.1, 1])
+        out.append((VGroup(ax, curve(ax, np.log10([f["k"] for f in jl]),
+                                     np.log10(np.maximum([f["exact_fail"] for f in jl], 10 ** -2.5)), C.BITS, 2.5),
+                           *[Dot(ax.c2p(math.log10(f["k"]), math.log10(max(np.mean(f["fail"]), 10 ** -2.5))),
+                                 radius=0.03, color=C.TRUE_P) for f in jl]), r"Johnson--Lindenstrauss", MPC))
+        mf = load("mf")
+        ks = sorted(int(k_) for k_ in mf["test_rmse"])
+        ys = [float(np.mean(mf["test_rmse"][str(k_)])) for k_ in ks]
+        ax = mk([0, len(ks) - 1, 1], [min(ys) - 0.01, max(ys) + 0.01, 1])
+        out.append((VGroup(ax, curve(ax, range(len(ks)), ys, C.BITS, 2.5),
+                           *[Dot(ax.c2p(i, y), radius=0.04, color=C.BITS) for i, y in enumerate(ys)]),
+                    r"filling in ratings", C.BITS))
         tiles = Group()
         for pic, cap, col in out:
-            box, c = frame(cap, col)
+            box, c_ = tile_frame(cap, col, TW, TH)
+            if c_.width > TW + 0.1:
+                c_.width = TW + 0.1
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
             if pic.height > TH:
                 pic.height = TH
-            tiles.add(Group(box, pic, c))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+            tiles.add(Group(box, pic, c_))
+        tiles.arrange_in_grid(rows=2, cols=6, buff=(0.12, 0.3)).move_to(DOWN * 0.3)
+        if tiles.width > 13.7:
+            tiles.width = 13.7
         return tiles
 
     def recap(self):
         tiles = self.tiles()
-        head = label(r"Part 3, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        head = label(rf"Part {PART}, in twelve pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Let's take stock. Vectors are arrows, and lists of numbers, and they add and stretch. The dot product "
-            "measures how alike two of them are, and it's the score behind every next-token guess. Matrices move "
-            "the whole space at once. Symmetric ones just stretch along perpendicular directions, and every matrix "
-            "is a turn, a stretch, and a turn. Keeping the biggest pieces of that decomposition found the vowels in "
-            "letters, and the meanings of words in thirty novels. And in hundreds of dimensions there is room to "
-            "spare."
+            "Let's take stock. Vectors are lists of numbers with geometry, and the dot product, kept honest by "
+            "Cauchy-Schwarz, measures how alike two are. Einsum names the axes, and its letters count the cost. "
+            "Projections find the closest point, and on a computer the order of the arithmetic matters. Symmetric "
+            "matrices stretch along perpendicular directions, which power iteration finds. Every matrix is a turn, "
+            "a stretch and a turn, and its biggest pieces are its best low-rank copy. Training leaves trained "
+            "weights with a few strong directions above a sea of noise, and gradients that live in a few "
+            "directions too. Counting words, or guessing them, factorizes the same table. And in high dimensions, "
+            "random directions are nearly perpendicular, a random projection keeps every distance, and a mostly "
+            "empty table of ratings can be filled in by low rank."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
+            self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
                       run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
         self.clear_scene()
@@ -116,32 +139,60 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def payoffs(self):
         card = payoff_card([
-            (r"dot products as scores", [13]),
-            (r"layers of matrices", [9]),
-            (r"the stretch per layer; \ the spectral norm", [9, 11]),
-            (r"low rank: \ keep the biggest pieces", [7, 15]),
-            (r"word vectors, tokens", [23]),
-            (r"room in high dimensions: \ superposition", [30]),
+            (r"how the chain rule computes every gradient", [4]),
+            (r"keeping each layer's stretch near one", [9]),
+            (r"Muon: \ steepest descent in the spectral norm", [11]),
+            (r"attention: \ dot products, \ written in einsum", [13]),
+            (r"low-rank memory for long contexts", [15]),
+            (r"LoRA: \ fine-tuning in a low-rank slice", [27]),
+            (r"directions inside a model: \ reading and steering", [30]),
         ], font_size=24)
         with self.voiceover(
-            "All of it comes back. Attention, the heart of the transformer, is dot products between vectors. A "
-            "network is matrices, layer after layer, and keeping their stretch near one is how deep networks train "
-            "at all; one of the newest optimizers works directly on the spectral norm. Low-rank pieces compress "
-            "the memory of today's largest models. And the room in high dimensions is where models keep more ideas "
-            "than they have numbers."
+            "All of it comes back. Part 4 builds the chain rule that computes every gradient. Part 9 keeps each "
+            "layer's stretch near one, so that deep networks train at all. Part 11 builds Muon, steepest descent in "
+            "the spectral norm. Part 13 writes attention as dot products, in einsum. Part 15 squeezes a long "
+            "context's memory through low rank, Part 27 fine-tunes through it, and Part 30 reads and steers the "
+            "directions inside a model."
         ) as vo:
             self.play(FadeIn(card.head))
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in card.rows], lag_ratio=0.4),
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),
                       run_time=max(3.0, vo.duration - 1.5))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def problems(self):
+        ps = problem_set([
+            r"Use Cauchy--Schwarz to prove the triangle inequality $|\mathbf{a} + \mathbf{b}| \le |\mathbf{a}| + "
+            r"|\mathbf{b}|$, \ and find when it is an equality.",
+            r"Show that $P = A(A^{\top}A)^{-1}A^{\top}$ satisfies $P^2 = P = P^{\top}$, \ and that $I - P$ projects onto "
+            r"the vectors perpendicular to every column of $A$.",
+            r"For symmetric $A$ with $\lambda_1 > \lambda_2$, \ show that $R(\mathbf{v}_1 + \varepsilon\mathbf{v}_2) = "
+            r"\lambda_1 - (\lambda_1 - \lambda_2)\varepsilon^2 + O(\varepsilon^4)$ for unit eigenvectors: \ why the "
+            r"eigenvalue converges twice as fast as the vector.",
+            r"Prove $\|A\|_F^2 = \sum_i \sigma_i^2$ and $\|A\|_2 \le \|A\|_F \le \sqrt{r}\,\|A\|_2$, \ and find matrices "
+            r"that attain each bound.",
+            r"Minimize $\ell(x) = a\log\sigma(x) + b\log\sigma(-x)$ over $x$ for $a, b > 0$ (maximize, if you prefer "
+            r"the likelihood), \ and recover Levy and Goldberg's $\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$.",
+            r"For $\mathbf{x}, \mathbf{y}$ independent and uniform on the unit sphere in $\mathbb{R}^d$, \ show "
+            r"$\mathbb{E}[x_1^2] = 1/d$ and $\operatorname{Var}(\mathbf{x}\cdot\mathbf{y}) = 1/d$.",
+            r"If $X \sim \chi^2_k$, \ show $\mathbb{E}\,e^{tX} = (1 - 2t)^{-k/2}$ for $t < 1/2$, \ and finish the "
+            r"optimization over $t$ in the Johnson--Lindenstrauss proof.",
+            r"A rank-$k$ copy of an $m \times n$ picture stores $k(m + n + 1)$ numbers. \ For $180 \times 288$, \ up "
+            r"to what $k$ does it save space, \ and what does Eckart--Young say its error is?",
+        ], font_size=21)
+        with self.voiceover(
+            "Here are eight problems to try, from the triangle inequality to the Johnson-Lindenstrauss proof. Pause "
+            "here, and work through them; full solutions are in this part's notes."
+        ):
+            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in ps.rows], lag_ratio=0.3),
+                      run_time=3.0)
+        self.wait(6.0)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def next_time(self):
         head = label(r"Next: \ Part 4, \ Change", font_size=40).to_edge(UP, buff=0.35)
-
-        def f(x, y):
-            return 0.5 * x * x + 1.5 * y * y + 0.6 * math.sin(2 * x) * math.cos(y)
 
         def grad(p):
             x, y = p[0], p[1]
@@ -158,10 +209,9 @@ class Outro(VoiceoverScene):
         ball = glow_dot(path[0] + DOWN * 0.3, color=WHITE, radius=0.09)
         tag = label(r"illustrative", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
         with self.voiceover(
-            "Next time: change. Everything in this part stood still. Training moves: every one of a model's numbers "
-            "is nudged, again and again, in the direction that lowers the loss. <bookmark mark='a'/> Finding that "
-            "direction for billions of numbers at once is the chain rule, run backwards. Part four builds that "
-            "machine from scratch."
+            "Next time: change. Everything in this part stood still, except in the chapters that trained something, "
+            "where we took gradients on trust. <bookmark mark='a'/> Part 4 builds derivatives, the chain rule, and "
+            "the machine that runs it backwards through billions of numbers at once."
         ) as vo:
             self.play(FadeIn(head), Create(field), FadeIn(tag), run_time=2.0)
             vo.wait_until("a")
@@ -172,35 +222,33 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def references(self):
-        books = [
-            r"G.~Strang, \textit{Linear Algebra and Learning from Data} (2019)",
-            r"S.~Axler, \textit{Linear Algebra Done Right}, 4th ed.\ (2024)",
-            r"R.~Vershynin, \textit{High-Dimensional Probability} (2018), chapters 3, 5",
-        ]
-        papers = [
-            r"C.~Eckart \& G.~Young, \textit{The Approximation of One Matrix by Another of Lower Rank} (1936)",
-            r"W.~B.~Johnson \& J.~Lindenstrauss (1984); \ S.~Dasgupta \& A.~Gupta, \textit{An Elementary Proof of a "
-            r"Theorem of Johnson and Lindenstrauss} (2003)",
-            r"S.~Deerwester et al., \textit{Indexing by Latent Semantic Analysis} (1990)",
-            r"T.~Mikolov et al., \textit{Distributed Representations of Words and Phrases} (2013)",
-            r"O.~Levy \& Y.~Goldberg, \textit{Neural Word Embedding as Implicit Matrix Factorization} (2014)",
-            r"K.~Ethayarajh, \textit{How Contextual are Contextualized Word Representations?} (2019)",
-            r"A.~Radford et al., \textit{Language Models are Unsupervised Multitask Learners} (GPT-2, 2019)",
-            r"N.~Elhage et al., \textit{Toy Models of Superposition} (2022)",
-        ]
-        card = reference_card(books, papers)
-        data = note(r"Text: Project Gutenberg (the same $30$ novels as Part 1); \ GPT-2's own weights. \ Every number "
-                    r"on screen is computed and checked; \ schematics and illustrations are labeled.",
-                    font_size=20).to_edge(DOWN, buff=0.25)
-        credit = note(rf"Animated with Manim Community; \ narrated by {narration_credit()}.", font_size=20)
-        credit.next_to(data, UP, buff=0.1)
-        if card.get_bottom()[1] < credit.get_top()[1] + 0.15:
-            card.shift(UP * (credit.get_top()[1] + 0.15 - card.get_bottom()[1]))
+        card = reference_card(
+            [r"G.~Strang, \textit{Linear Algebra and Learning from Data} (2019); \ S.~Axler, \textit{Linear Algebra Done "
+             r"Right}, 4th ed.\ (2024)",
+             r"L.~N.~Trefethen \& D.~Bau, \textit{Numerical Linear Algebra} (1997); \ R.~Vershynin, \textit{High-Dimensional "
+             r"Probability} (2018)"],
+            [r"Grassmann (1844); \ Cayley (1858); \ Beltrami (1873); \ Jordan (1874); \ Schmidt (1907); \ Weyl (1912); \ "
+             r"Eckart \& Young (1936); \ Householder (1958); \ Golub \& Kahan (1965); \ G.~W.~Stewart, \textit{On the "
+             r"Early History of the SVD} (1993)",
+             r"von Mises \& Pollaczek-Geiringer (1929); \ Lanczos (1950); \ Brin \& Page (1998); \ Miyato et al.\ (2018)",
+             r"Wigner (1955); \ Marchenko \& Pastur (1967); \ Martin \& Mahoney (2019, 2021); \ Zhao et al., "
+             r"\textit{GaLore} (2024); \ Hu et al., \textit{LoRA} (2021); \ Jordan et al., \textit{Muon} (2024)",
+             r"Harris (1954); \ Firth (1957); \ Deerwester et al.\ (1990); \ Mikolov et al.\ (2013a, b); \ Pennington et "
+             r"al., \textit{GloVe} (2014); \ Levy \& Goldberg (2014); \ Levy, Goldberg \& Dagan (2015)",
+             r"Johnson \& Lindenstrauss (1984); \ Dasgupta \& Gupta (2003); \ Larsen \& Nelson (2017)",
+             r"Radford et al., \textit{GPT-2} (2019); \ Mu \& Viswanath (2018); \ Gao et al.\ (2019); \ Ethayarajh (2019); "
+             r"\ Timkey \& van Schijndel (2021); \ Elhage et al.\ (2022); \ Park, Choe \& Veitch (2024)",
+             r"Bennett \& Lanning, \textit{The Netflix Prize} (2007); \ Koren, Bell \& Volinsky (2009); \ Covington et "
+             r"al.\ (2016); \ Johnson, Douze \& J\'egou, \textit{FAISS} (2017); \ Yi et al.\ (2019); \ Karpukhin et "
+             r"al., \textit{DPR} (2020)"])
+        credit = note(narration_credit(), font_size=18).to_edge(DOWN, buff=0.15)
+        if card.get_bottom()[1] < credit.get_top()[1] + 0.1:
+            card.shift(UP * (credit.get_top()[1] + 0.1 - card.get_bottom()[1]))
         with self.voiceover(
-            "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, and Roman "
-            "Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. The papers "
-            "are on screen. Thanks for watching, and see you in part four."
+            "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, Trefethen and "
+            "Bau explain why the order of arithmetic matters, and Roman Vershynin's High-Dimensional Probability "
+            "explains why big spaces behave the way they do. Thanks for watching, and see you in Part 4."
         ):
-            self.play(LaggedStart(FadeIn(card), FadeIn(credit), FadeIn(data), lag_ratio=0.3), run_time=3)
-        self.wait(2.0)
-        self.play(FadeOut(Group(*self.mobjects)))
+            self.play(FadeIn(card), FadeIn(credit))
+        self.wait(1.5)
+        self.clear_scene()

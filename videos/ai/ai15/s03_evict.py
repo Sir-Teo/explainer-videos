@@ -264,7 +264,7 @@ class Evict(VoiceoverScene):
         with self.voiceover(
             "A second idea, H2O from Zhenyu Zhang and colleagues, also in 2023, is to keep the tokens that matter. "
             "<bookmark mark='a'/> Add up the attention each cached token has drawn so far; when the cache is full, "
-            "evict the one with the least, but always keep the most recent half. A few heavy hitters draw most of "
+            "evict the one with the least, but always keep a window of the most recent ones. A few heavy hitters draw most of "
             "the attention, and the sink is one of them. <bookmark mark='b'/> Here are the three policies on the "
             "same passage, with caches of " + f"{B[0]}, {B[1]} and {B[2]} tokens per head. " + v
             + "<bookmark mark='d'/> " + v_b + " <bookmark mark='c'/> Evicting is a guess about the future made from the past: a token that seemed "

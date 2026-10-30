@@ -150,11 +150,11 @@ class Balance(VoiceoverScene):
                 why(r"Switch Transformer (2021); \ $\alpha = 0.01$"),
                 why(r"Cauchy--Schwarz: \ equal only when every $f_i = 1/E$"),
                 why(r"the busier the expert, \ the harder its probability is pushed down")]
-        step = ladder(self, rows, whys, keep=5, top=3.1, x=-3.0, buff=0.34, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-3.0, buff=0.32, edge=6.8)
         cite_ = cite(r"W.~Fedus, B.~Zoph \& N.~Shazeer (2021); \ D.~Lepikhin et al., \textit{GShard} (2020)", corner=DL)
         zl = VGroup(label(r"ST-MoE (2022) adds a router $z$-loss: \ keep the scores small", font_size=22, color=GREY_A),
                     cmath(r"\mathcal L_z = \frac1N \sum_t \Big(\log \sum_{j} e^{s_{tj}}\Big)^2", font_size=30)).arrange(RIGHT, buff=0.4)
-        zl.to_edge(DOWN, buff=0.85)
+        zl.scale(0.85).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The classic fix adds a penalty to the loss. Two numbers per expert. <bookmark mark='a'/> f i, the share "
             "of the batch's token slots actually sent to expert i: a count, so it has no gradient. "
@@ -168,11 +168,14 @@ class Balance(VoiceoverScene):
             "added a second, the z-loss, which keeps the router's scores from growing huge."
         ) as vo:
             self.play(FadeIn(cite_))
-            for i, mk in enumerate("abcde"):
+            step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            for i, mk in zip((1, 2, 3, 4), "bcde"):
                 vo.wait_until(mk)
                 step(i)
             vo.wait_until("f")
-            self.play(FadeIn(zl))
+            self.play(FadeOut(cite_), FadeIn(zl))
         self.wait(0.3)
         self.clear_scene()
 
@@ -186,7 +189,7 @@ class Balance(VoiceoverScene):
                      for li in range(bn.shape[1])]).arrange(DOWN, buff=0.45)
         pa = Group(*[loads_panel(b, "aux", s_show, li, 3.6, 1.5, rf"Switch's loss, \ block {li + 1}", MODE_COLOR["aux"])
                      for li in range(ba.shape[1])]).arrange(DOWN, buff=0.45)
-        Group(pn, pa).arrange(RIGHT, buff=0.9).move_to([-1.9, -0.1, 0])
+        Group(pn, pa).arrange(RIGHT, buff=0.7).move_to([-2.7, -0.1, 0])
         vn, va = ms(b["none_valid"]), ms(b["aux_valid"])
         stats = VGroup(
             label(r"at the end, \ three seeds, \ both blocks:", font_size=22, color=GREY_A),
@@ -195,7 +198,8 @@ class Balance(VoiceoverScene):
             label(rf"starved \ ($<\tfrac14$ share): \ ${int(sn.sum())}$ \ vs.\ ${int(sa.sum())}$ experts", font_size=22,
                   color=WHITE),
             label(rf"held-out bits: \ ${vn[0]:.3f}$ \ vs.\ ${va[0]:.3f}$", font_size=22, color=C.BITS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.6, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        stats.next_to(Group(pn, pa), RIGHT, buff=0.4)
         keep_in_frame(stats)
         evened = ba.mean() < bn.mean() - 0.3
         better = va[0] < vn[0] - 0.003

@@ -251,9 +251,9 @@ class LongContext(VoiceoverScene):
             tbl.width = 13.2
         src = note(r"each figure from its maker's report", font_size=16).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Where does that leave the frontier? <bookmark mark='a'/> Google's Gemini 1.5, in 2024, first offered a "
+            "Where does that leave the frontier? <bookmark mark='a'/> Google's Gemini 1.5, in 2024, offered a "
             "million tokens, and reported finding needles in up to ten million. <bookmark mark='b'/> Kimi Linear's "
-            "report gives the strongest evidence for hybrids on long texts: on RULER at 128 thousand tokens, 84.3 "
+            "report gives evidence for hybrids on long texts: on RULER at 128 thousand tokens, 84.3 "
             "against 81.3 for full attention trained the same way, and only 78.8 when its attention layers use "
             "rotary positions. <bookmark mark='c'/> On OpenAI's harder MRCR test, eight similar requests hidden in "
             "a million tokens, Anthropic reported in February 2026 that Claude Opus 4.6 found 76 percent, where "
