@@ -26,18 +26,23 @@ class Memorization(VoiceoverScene):
     def history(self):
         cards = VGroup(
             history_card(2019, r"N.~Carlini et al., \ \textit{The Secret Sharer}", r"plant a random ``canary'' in the "
-                         r"training data, \ measure how exposed it is", width=4.3, font_size=16, color=HIST),
+                         r"training data, \ measure how exposed it is", width=6.4, font_size=19, color=HIST),
             history_card(2021, r"N.~Carlini et al., \ extracting from GPT-2", r"over $600$ of $1{,}800$ candidate "
-                         r"samples were verbatim training text", width=4.3, font_size=16, color=HIST),
+                         r"samples were verbatim training text", width=6.4, font_size=19, color=HIST),
             history_card(2023, r"N.~Carlini et al., \ quantifying memorization", r"log-linear in model size, \ "
                          r"repetition and prompt length; \ GPT-J: at least $1\%$ of its data", width=4.3, font_size=16,
                          color=HIST),
-        ).arrange(RIGHT, buff=0.2, aligned_edge=UP).to_edge(UP, buff=0.35)
+        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_corner(UL, buff=0.35)
         dfn = definition_card(r"extractable with $k$ tokens of context",
                               r"a string $s$ in the training data, \ preceded there by a $k$-token prefix $p$, \ is "
                               r"extractable if greedy decoding from $p$ produces $s$ exactly.",
-                              width=8.4, font_size=22).to_edge(DOWN, buff=0.6)
+                              width=5.6, font_size=22).to_corner(UR, buff=0.35).shift(DOWN * 0.8)
         src = note(r"definition: \ Carlini et al.\ (2023)").next_to(dfn, DOWN, buff=0.1)
+        ex_ = VGroup(label(r"a prefix from the training text: \ $32$ tokens", font_size=22, color=GREY_B),
+                     label(r"$\to$ \ greedy decoding: \ $32$ more tokens", font_size=22, color=C.SURPRISE),
+                     label(r"$=$ \ the next $32$ tokens of the training text?", font_size=22, color=MEAS)
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        ex_.next_to(src, DOWN, buff=0.4).align_to(dfn, LEFT)
         with self.voiceover(
             "The last chapter is about what a model remembers exactly. Generalizing is not copying, but large "
             "models do both. <bookmark mark='a'/> In 2019 Nicholas Carlini and colleagues planted random secrets in "
@@ -50,11 +55,12 @@ class Memorization(VoiceoverScene):
             "test: give the model a prefix from the training data, and see whether greedy decoding continues it "
             "exactly."
         ) as vo:
+            self.play(FadeIn(dfn, shift=UP * 0.2), FadeIn(src))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
             vo.wait_until("d")
-            self.play(FadeIn(dfn, shift=UP * 0.2), FadeIn(src))
+            self.play(Indicate(dfn, color=WHITE, scale_factor=1.03), FadeIn(ex_))
         self.wait(0.3)
         self.clear_scene()
 
@@ -92,10 +98,13 @@ class Memorization(VoiceoverScene):
         miss = m["miss"]
         ex = VGroup(
             label(r"a passage seen once: \ prompt, \ truth, \ model", font_size=20, color=GREY_A),
-            data_text(_clean(miss["prefix"][-60:], 60), font_size=16, color=GREY_B),
-            data_text(_clean(miss["truth"], 60), font_size=16, color=MEAS),
-            data_text(_clean(miss["model"], 60), font_size=16, color=C.SURPRISE),
+            data_text(_clean(miss["prefix"][-40:], 40), font_size=17, color=GREY_B),
+            data_text(_clean(miss["truth"], 40), font_size=17, color=MEAS),
+            data_text(_clean(miss["model"], 40), font_size=17, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(info, DOWN, buff=0.5).align_to(info, LEFT)
+        if ex.width > 5.4:
+            ex.scale_to_fit_width(5.4)
+        keep_in_frame(ex)
         rising = runs[-1] > 2 * runs[0]
         further = ("But it gets further before its first mistake on passages it has seen more often: "
                    f"{r0:.1f} tokens on average for passages seen once, {rN:.1f} for those seen {topbin} times, "
@@ -135,9 +144,10 @@ class Memorization(VoiceoverScene):
                  ylabel=r"planted passages extracted exactly", center=(-3.5, -0.2, 0), font_size=18)
         ax = G.ax
         lines = VGroup(*[curve(ax, steps, ex[:, j], cols[j], 3.5 if g >= 16 else 2.5) for j, g in enumerate(groups)])
-        lk = VGroup(*[label(rf"${g}\times$" if g else r"never", font_size=18, color=cols[j])
-                      .next_to(ax.c2p(S, ex[-1, j]), RIGHT, buff=0.1) for j, g in enumerate(groups)])
-        place_labels([Dot(ax.c2p(S, ex[-1, j]), radius=0.01) for j in range(len(groups))], list(lk), buff=0.08)
+        lk = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.3, color=cols[j], stroke_width=4),
+                             label(rf"${g}\times$" if g else r"never", font_size=18, color=cols[j])).arrange(RIGHT, buff=0.1)
+                      for j, g in reversed(list(enumerate(groups)))]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        lk.move_to([0.3, -0.2, 0])
         gs = [g for g in groups if g > 0]
         H = axes([0, math.log2(gs[-1])], [0, 1], x_length=4.6, y_length=3.8, xticks=list(range(int(math.log2(gs[-1])) + 1)),
                  xfmt=lambda v: f"{2 ** int(v)}", yticks=[0, 0.5, 1], yfmt=lambda v: rf"{100 * v:.0f}\%",
@@ -208,7 +218,7 @@ class Memorization(VoiceoverScene):
                    r"copy"),
             (2026, r"A.~Ahmed, A.~F.~Cooper et al.", r"near-complete books extracted from some production chat models"),
         ]
-        cards = VGroup(*[history_card(y, w, t, width=4.25, font_size=15, color=HIST) for y, w, t in items])
+        cards = VGroup(*[history_card(y, w, t, width=4.3, font_size=18, color=HIST) for y, w, t in items])
         cards.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.25), cell_alignment=UL).move_to(DOWN * 0.3)
         head = label(r"Memorization, \ 2022--2026", font_size=34).to_edge(UP, buff=0.3)
         foot = note(r"US rulings of June 2025 (Bartz v.\ Anthropic; \ Kadrey v.\ Meta) \ found training itself fair use; "

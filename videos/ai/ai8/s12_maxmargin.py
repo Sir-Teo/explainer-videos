@@ -35,7 +35,7 @@ class MaxMargin(VoiceoverScene):
             return L
 
         svm = boundary(ws, SVM, dashed=True, sw=3)
-        sl = label(r"widest margin \ (SVM)", font_size=22, color=SVM).next_to(svm.get_end(), DOWN, buff=0.1)
+        sl = label(r"widest margin \ (SVM)", font_size=22, color=SVM).next_to(svm.get_end(), RIGHT, buff=0.15)
         keep_in_frame(sl)
         k = ValueTracker(0)
 
@@ -88,7 +88,7 @@ class MaxMargin(VoiceoverScene):
                 why(r"once all are right and $|w|$ is large"),
                 why(r"exponential tails: \ the smallest margins dominate"),
                 why(r"the SVM's form \ (KKT, \ Part 4)")]
-        step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.8, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.8, buff=0.42, edge=6.9)
         thm = theorem_card(r"implicit bias on separable data",
                            r"gradient descent on the logistic loss: \ $|w(t)|$ grows like $\log t$, \ and its direction "
                            r"tends to the hard-margin SVM's, \ the error in direction shrinking like $1/\log t$.",
@@ -117,15 +117,15 @@ class MaxMargin(VoiceoverScene):
         rec = np.asarray(m["rec"])
         ok = rec[:, 0] >= 10
         lt = np.log10(rec[ok, 0])
-        G = axes([1, 6], [0, 12], x_length=5.6, y_length=3.8, xticks=[1, 2, 3, 4, 5, 6],
-                 xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[0, 4, 8, 12], yfmt=lambda v: rf"{v:g}^\circ",
+        G = axes([1, 6], [0, 32], x_length=5.6, y_length=3.8, xticks=[1, 2, 3, 4, 5, 6],
+                 xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[0, 10, 20, 30], yfmt=lambda v: rf"{v:g}^\circ",
                  xlabel=r"step $t$", ylabel=r"angle to the SVM direction", center=(-3.3, -0.4, 0))
         ax = G.ax
-        ca = curve(ax, lt, rec[ok, 1], GD, 4)
+        ca = curve(ax, lt, np.clip(rec[ok, 1], 0, 32), GD, 4)
         late = rec[:, 0] >= 1000
         c_end = float(rec[-1, 1] * math.log(rec[-1, 0]))
-        ref = curve(ax, lt, np.clip(c_end / np.log(rec[ok, 0]), 0, 12), GREY_B, 2.5)
-        rl = label(r"$c/\ln t$, \ through the last point", font_size=19, color=GREY_B).next_to(ax.c2p(4.2, 6.5), UR, buff=0.05)
+        ref = curve(ax, lt, np.clip(c_end / np.log(rec[ok, 0]), 0, 32), GREY_B, 2.5)
+        rl = label(r"$c/\ln t$, \ through the last point", font_size=19, color=GREY_B).next_to(ax.c2p(3.6, 9.0), UR, buff=0.05)
         H = axes([1, 6], [0, 12], x_length=5.6, y_length=3.8, xticks=[1, 2, 3, 4, 5, 6],
                  xfmt=lambda v: f"10^{{{int(v)}}}", yticks=[0, 4, 8, 12], xlabel=r"step $t$ \ (log scale)",
                  ylabel=r"$|w(t)|$", center=(3.3, -0.4, 0))

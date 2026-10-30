@@ -56,8 +56,9 @@ class MoreDescents(VoiceoverScene):
             "sample-wise version in deep networks in 2019: for a fixed model, there's a range where more data hurts."
         ) as vo:
             self.play(FadeIn(head), FadeIn(G), Create(pl), FadeIn(pll))
+            self.play(FadeIn(bd), Create(cm), FadeIn(key[0]), run_time=3.0)
             vo.wait_until("a")
-            self.play(FadeIn(bd), Create(cm), FadeIn(key[0]), run_time=2.5)
+            self.play(Indicate(cm, color=TEST))
             vo.wait_until("c")
             self.play(Create(cr), FadeIn(key[1]))
         self.wait(0.3)
@@ -71,9 +72,9 @@ class MoreDescents(VoiceoverScene):
         fast, slow, tr = np.asarray(e["fast"]), np.asarray(e["slow"]), np.asarray(e["train"])
         noise = float(e["noise"])
         i1, i2 = int(e["i1"]), int(e["i2"])
-        G = log_axes((0, math.log10(ts[-1])), (-1, 1), x_length=7.4, y_length=4.4, xticks=[0, 2, 4, 6],
+        G = log_axes((0, math.log10(ts[-1])), (-1, 1), x_length=8.6, y_length=4.6, xticks=[0, 2, 4, 6],
                      yticks=[-1, 0, 1], xlabel=r"gradient descent steps", ylabel=r"error on new data",
-                     center=(-2.0, -0.5, 0))
+                     center=(-1.6, -0.5, 0))
         ax = G.ax
         lt = np.log10(ts)
 
@@ -114,6 +115,7 @@ class MoreDescents(VoiceoverScene):
             "stop training is not a question with one answer, which part twelve's grokking takes to an extreme."
         ) as vo:
             self.play(FadeIn(G), FadeIn(setup))
+            self.play(Create(ct), FadeIn(key[1]), run_time=2.0)
             vo.wait_until("a")
             k1 = i1 + 1
             part = curve(ax, lt[:k1], ly(med[:k1]), TEST, 4.5)
@@ -127,7 +129,7 @@ class MoreDescents(VoiceoverScene):
             part3 = curve(ax, lt[i2:], ly(med[i2:]), TEST, 4.5)
             self.play(Create(part3), FadeIn(bd), run_time=1.5)
             vo.wait_until("d")
-            self.play(Create(cf), Create(cs), Create(ct), FadeIn(key[1:]), run_time=2.0)
+            self.play(Create(cf), Create(cs), FadeIn(key[2:]), run_time=2.0)
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
