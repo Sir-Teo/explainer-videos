@@ -100,7 +100,7 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         assert abs(r @ A[:, 0]) < 1e-12 and abs(r @ A[:, 1]) < 1e-12
         axes = ThreeDAxes(x_range=[0, 4, 1], y_range=[0, 4, 1], z_range=[0, 4, 1], x_length=4.6, y_length=4.6,
                           z_length=4.6, axis_config={"stroke_color": GREY_C, "include_ticks": False, "include_tip": False})
-        axes.shift(LEFT * 1.4 + DOWN * 0.7)
+        axes.shift(RIGHT * 0.4 + DOWN * 1.3)
         c1, c2 = A[:, 0], A[:, 1]
         e1 = c1 / np.linalg.norm(c1)
         e2 = c2 - (c2 @ e1) * e1
@@ -141,7 +141,7 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         for m in (e1, e2, ycap, pcap, ncap):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-35 * DEGREES, zoom=0.85)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-35 * DEGREES, zoom=1.05)
         with self.voiceover(
             "There's a beautiful way to see the answer. Write the three heights as a single point in three "
             "dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together "
@@ -181,8 +181,8 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         yn = label(r"times it appears", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         dots = VGroup(*[Dot(ax.c2p(math.log10(ri), math.log10(fi)), radius=0.03, color=DATA, fill_opacity=0.8)
                         for ri, fi in zip(r, f)])
-        names = VGroup(*[Text(w, font="DejaVu Sans Mono", font_size=20, color=GREY_A)
-                         .next_to(dots[k], UR if k % 2 else RIGHT, buff=0.06) for k, w in enumerate(z["words"][:4])])
+        names = VGroup(*[data_text(w, font="DejaVu Sans Mono", font_size=20, color=GREY_A) for w in z["words"][:4]])
+        place_labels(VGroup(*dots[:4]), names, buff=0.08)
         fit = Line(ax.c2p(0, beta[0]), ax.c2p(3, beta[0] + 3 * beta[1]), color=FIT, stroke_width=4)
         law = cmath(r"\text{count}", r"\;\propto\;", r"r", rf"^{{{beta[1]:.2f}}}", font_size=44)
         law.move_to([4.6, 1.6, 0])

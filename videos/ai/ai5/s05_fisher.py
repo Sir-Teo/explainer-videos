@@ -47,18 +47,20 @@ class Fisher(VoiceoverScene):
                        for v in sample])
         rt = note(r"$40$ draws, \ illustration \ (the far ones clipped at the edge)").next_to(rug, DOWN, buff=0.1)
         # three estimators of the centre, from 4,000 samples of 100
-        hx = Axes(x_range=[-1.2, 1.2, 0.4], y_range=[0, 4.2, 1], x_length=6.0, y_length=2.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, -1.5, 0])
+        hx = Axes(x_range=[-1.2, 1.2, 0.4], y_range=[0, 4.2, 1], x_length=9.0, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False, "include_numbers": False}).move_to([0.0, -2.1, 0])
+        hx.y_axis.set_stroke(opacity=0)
         edges = np.linspace(-1.2, 1.2, 49)
         R = int(d["R"])
         hs = {}
         for k in ("mean", "med", "mle"):
             h = np.asarray(d[f"{k}100"], float)
-            hs[k] = hist_shape(hx, edges, np.minimum(h / R / (edges[1] - edges[0]), 4.2), color=EST[k], opacity=0.3)
+            hs[k] = hist_shape(hx, edges, np.minimum(h / R / (edges[1] - edges[0]), 4.2), color=EST[k],
+                               opacity=0.55 if k == "mean" else 0.3, stroke_width=3 if k == "mean" else 2)
         names = VGroup(label(r"the average", font_size=22, color=EST["mean"]),
                        label(r"the median", font_size=22, color=EST["med"]),
                        label(r"maximum likelihood", font_size=22, color=EST["mle"])).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        names.next_to(hx, LEFT, buff=0.3).align_to(hx, UP)
+        names.scale(1.15).move_to([3.6, 1.3, 0])
         hl = label(rf"estimates of $\theta = 0$, \ from ${R:,}$ samples of $100$".replace(",", "{,}"), font_size=22,
                    color=GREY_A).next_to(hx, UP, buff=0.15)
         iqr = np.asarray(d["mean_iqr"])
@@ -103,8 +105,14 @@ class Fisher(VoiceoverScene):
                 why(r"Cauchy--Schwarz; \ $n$ points add their information")]
         step = ladder(self, rows, whys, keep=5, top=3.25, x=-2.0, buff=0.38, edge=6.8)
         thm = theorem_card(r"Cram\'er--Rao", r"an unbiased estimate from $n$ independent points has variance at least "
-                           r"$1 / (n\, I(\theta))$", who=r"C.~R.~Rao (1945), \ H.~Cram\'er (1946)", width=6.6,
-                           color=BOUND).to_edge(DOWN, buff=0.25)
+                           r"$1 / (n\, I(\theta))$", who=r"C.~R.~Rao (1945), \ H.~Cram\'er (1946)", width=6.2,
+                           color=BOUND).to_corner(DR, buff=0.25)
+        sa = Axes(x_range=[-6, 6, 2], y_range=[-1.2, 1.2, 1], x_length=5.0, y_length=1.7, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.45).shift(UP * 0.1)
+        uu = np.linspace(-6, 6, 200)
+        sc_ = curve(sa, uu, 2 * uu / (1 + uu * uu), color=C.INTERVAL, stroke_width=3)
+        scl = label(r"the score of one Cauchy draw, \ $2u/(1+u^2)$: \ far draws pull little", font_size=20,
+                    color=C.INTERVAL).next_to(sa, UP, buff=0.08).align_to(sa, LEFT)
         sv = float(d["score_var"])
         with self.voiceover(
             "There is, and Fisher found the key in 1925. <bookmark mark='a'/> The score is the slope of the "
@@ -117,6 +125,7 @@ class Fisher(VoiceoverScene):
             "of the variances. So no unbiased estimate can have variance below one over n times the information: "
             "the Cramer-Rao bound, proved by Rao in 1945 and Cramer in 1946."
         ) as vo:
+            self.play(Create(sa), Create(sc_), FadeIn(scl))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -184,16 +193,16 @@ class Fisher(VoiceoverScene):
     def uses(self):
         head = label(r"Fisher information in today's training", font_size=36).to_edge(UP, buff=0.4)
         f = cmath(r"F", "=", r"\mathbb{E}\big[\nabla_\theta \log p\, \nabla_\theta \log p^\top\big]", font_size=40,
-                  colors={r"F": BOUND}).next_to(head, DOWN, buff=0.4)
+                  colors={r"F": BOUND}).next_to(head, DOWN, buff=0.6)
         fn = label(r"the same idea for many parameters: \ a matrix", font_size=24, color=GREY_A).next_to(f, DOWN, buff=0.15)
         cards = VGroup(
             history_card(1998, r"Amari: \ the natural gradient", r"measure a step by how much the model's predictions "
-                         r"change, \ not the weights: \ $F^{-1}\nabla L$ \ (Part 11)", width=4.2),
+                         r"change, \ not the weights: \ $F^{-1}\nabla L$ \ (Part 11)", width=4.3, font_size=24),
             history_card(2017, r"Kirkpatrick et al.: \ elastic weight consolidation", r"protect the weights a learned "
-                         r"task has high information about", width=4.2),
+                         r"task has high information about", width=4.3, font_size=24),
             history_card(r"today", r"curvature-aware optimizers", r"K-FAC approximates $F$ layer by layer; \ Shampoo "
-                         r"uses a close cousin \ (Part 11)", width=4.2),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(fn, DOWN, buff=0.45)
+                         r"uses a close cousin \ (Part 11)", width=4.3, font_size=24),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(fn, DOWN, buff=0.7)
         with self.voiceover(
             "With many parameters, the information becomes a matrix: the average outer product of the score. "
             "<bookmark mark='a'/> In 1998 Shun-ichi Amari proposed measuring steps of gradient descent by it, so "

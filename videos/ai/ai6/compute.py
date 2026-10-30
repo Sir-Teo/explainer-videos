@@ -1219,7 +1219,7 @@ def compute_trees():
 # ---------------------------------------------------------------------------
 def compute_bagging():
     """(1) The formula, checked on equicorrelated Gaussians.  (2) On the pages: trees grown on many training sets,
-    their spread sigma^2 and correlation rho measured at the test pages, and the spread of an average of B of them
+    (150 pages each, drawn from the 448), their spread sigma^2 and correlation rho measured at the test pages, and the spread of an average of B of them
     against rho sigma^2 + (1 - rho) sigma^2 / B; for bagging (all 70 words at every question) and random forests
     (8 words, or 2).  (3) A forest of 300 on all training pages: test and out-of-bag accuracy as it grows."""
     out = {}
@@ -1236,17 +1236,17 @@ def compute_bagging():
     out.update(syn=syn, syn_B=Bs)
     X, y, test, _ = split()
     Xtr, ytr, Xte, yte = X[~test], y[~test], X[test], y[test]
-    Rs, T = 24, 60
-    params = dict(Rs=Rs, T=T, frac=0.8)
+    Rs, T, m = 30, 50, 150
+    params = dict(Rs=Rs, T=T, m=m)
     part = CACHE.partial("bagging", params)
-    Bm = [1, 2, 3, 5, 10, 20, 40, 60]
+    Bm = [1, 2, 3, 5, 10, 20, 30, 50]
     for mf in (70, 8, 2):
         key = f"mf{mf}"
         if key not in part:
             gg = rng(2001 + mf)
             preds = np.zeros((Rs, T, len(yte)))
             for r in range(Rs):
-                sub = gg.choice(len(ytr), int(0.8 * len(ytr)), replace=False)  # a fresh training set
+                sub = gg.integers(0, len(ytr), m)  # a fresh training set: 150 pages drawn from the 448
                 for k in range(T):
                     bs = sub[gg.integers(0, len(sub), len(sub))]  # its bootstrap resample
                     tr = Tree(min_leaf=1, max_features=None if mf == 70 else mf, seed=int(gg.integers(1 << 30)))
@@ -1261,7 +1261,7 @@ def compute_bagging():
                              meas=meas, acc=acc)
             print(f"    max_features {mf}: rho {part[key]['rho']:.3f}, sigma^2 {part[key]['s2']:.3f}", flush=True)
         out[key] = part[key]
-    out["Bm"] = Bm
+    out.update(Bm=Bm, Rs=Rs, T=T, m=m)
     # one forest on all the training pages: accuracy and out-of-bag accuracy as it grows
     gg = rng(2001)
     nT = 300
@@ -1492,15 +1492,18 @@ def compute_xgb():
 
 # ---------------------------------------------------------------------------
 def roc(scores, y):
+    """ROC and precision-recall points at every distinct threshold (tied scores move together)."""
+    scores = np.asarray(scores, float)
     o = np.argsort(-scores, kind="stable")
-    ys = y[o]
-    tp, fp = np.cumsum(ys), np.cumsum(1 - ys)
+    ys, ss = y[o], scores[o]
+    last = np.r_[ss[1:] != ss[:-1], True]  # the end of each run of tied scores
+    tp, fp = np.cumsum(ys)[last], np.cumsum(1 - ys)[last]
     P, N = ys.sum(), (1 - ys).sum()
     tpr, fpr = np.r_[0, tp / P], np.r_[0, fp / N]
-    prec = tp / np.arange(1, len(ys) + 1)
+    prec = tp / (tp + fp)
     rec = tp / P
     auc = float(np.trapezoid(tpr, fpr))
-    ap = float(np.sum(prec * ys) / P)  # average precision: precision at each Dickens page, averaged
+    ap = float(np.sum(np.diff(np.r_[0, rec]) * prec))  # average precision: precision, weighted by recall gained
     return tpr, fpr, prec, rec, auc, ap
 
 

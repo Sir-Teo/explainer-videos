@@ -170,8 +170,8 @@ class HVP(VoiceoverScene):
         def readout(k):
             t = keep[k]
             return VGroup(
-                label(rf"step ${t:,}$: \ loss ${d[f'loss{k}']:.4f}$, \ accuracy ${100 * d[f'acc{k}']:.0f}\%$".replace(",", "{,}"),
-                          font_size=23, color=WHITE),
+                label(rf"step ${t:,}$".replace(",", "{,}") + rf": \ loss ${d[f'loss{k}']:.4f}$, \ accuracy "
+                      rf"${100 * d[f'acc{k}']:.0f}\%$", font_size=23, color=WHITE),
                 label(rf"$\lambda_{{\max}} = {d[f'top{k}']:.3g}$; \ outliers ${d[f'nout{k}']}$, \ negative ${d[f'nneg{k}']}$, "
                       rf"\ near zero ${100 * d[f'flat{k}']:.0f}\%$", font_size=21, color=GREY_A),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([2.9, 2.55, 0])

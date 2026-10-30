@@ -5,9 +5,9 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai6.common import BAD, DATA, FIT, GOOD, HL, chapter, hbars, load, plot, sci_tex
+from videos.ai.ai6.common import BAD, DATA, FIT, GOOD, HL, chapter, hbars, load, plot, sci_tex, side_ladder
 
-OLS, END, TS = FIT, BAD, C.ADVANTAGE
+OLS, END, TS = FIT, "#B48EF0", "#4FD1C5"
 
 
 class GaussMarkov(VoiceoverScene):
@@ -52,8 +52,9 @@ class GaussMarkov(VoiceoverScene):
             "<bookmark mark='e'/> That can only add. Every other linear unbiased estimate wobbles more."
         ) as vo:
             self.play(FadeIn(card, shift=DOWN * 0.2))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][2], color=END, scale_factor=1.05))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -185,7 +186,7 @@ class GaussMarkov(VoiceoverScene):
         ]
         whys = [why(r"the normal equations"), why(r"squaring loses digits \\ (Part 3)"),
                 why(r"Householder: \\ no squaring"), why(r"the pseudoinverse: \\ the shortest answer")]
-        step = ladder(self, rows, whys, keep=4, top=3.2, x=-3.2, buff=0.3, edge=1.4)
+        step = side_ladder(self, rows, whys, -2.7, 4.0, keep=4, top=3.2, buff=0.3)
         kappa = VGroup(label(rf"the pages, $70$ rates and a constant: \ $\kappa(A) = {ls['kappa_A']:.1f}$, \ "
                              rf"$\kappa(A^{{\top}}A) = {ls['kappa_AtA']:.0f}$", font_size=22, color=GREY_A),
                        label(rf"normal equations and QR agree to within ${sci_tex(ls['diff_ne_qr'])}$", font_size=22,
@@ -193,14 +194,14 @@ class GaussMarkov(VoiceoverScene):
         kappa.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.4)
         # the duplicated column
         wn, wa, wb = ls["w_not"], ls["w_not_a"], ls["w_not_b"]
-        scale = 2.2 / abs(wn)
+        scale = 1.6 / abs(wn)
 
         def bar(v, col, x):
             h = abs(v) * scale
             return Rectangle(width=0.6, height=h, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
-                [x, 0.4 - h / 2, 0])
+                [x, 0.6 - h / 2, 0])
 
-        base = Line([2.4, 0.4, 0], [6.6, 0.4, 0], color=GREY_C, stroke_width=1.5)
+        base = Line([2.4, 0.6, 0], [6.6, 0.6, 0], color=GREY_C, stroke_width=1.5)
         b1 = bar(wn, HL, 3.2)
         b2, b3 = bar(wa, HL, 4.9), bar(wb, HL, 5.8)
         l1 = label(r"``not''", font_size=22, color=GREY_A).next_to(b1, DOWN, buff=0.1)
@@ -220,7 +221,7 @@ class GaussMarkov(VoiceoverScene):
         else:
             ne_txt = r"normal equations: \ no solution found"
             ne_say = "The normal equations can't be solved at all."
-        ne = label(ne_txt, font_size=22, color=BAD).move_to([4.5, -1.9, 0])
+        ne = label(ne_txt, font_size=22, color=BAD).move_to([4.5, -2.3, 0])
         pi = label(r"pseudoinverse: \ the weight split in half", font_size=22, color=GOOD).next_to(ne, DOWN, buff=0.15)
         cls = label(rf"least squares as a classifier, \ all $70$ rates: \ ${round(ls['acc_test'] * n_te)}$ of ${n_te}$ "
                     r"held-out pages", font_size=24, color=HL).to_edge(UP, buff=0.25).to_edge(RIGHT, buff=0.4)
@@ -233,8 +234,9 @@ class GaussMarkov(VoiceoverScene):
             "all the best answers."
         ) as vo:
             self.play(FadeIn(cls))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=HL, scale_factor=1.05))
             vo.wait_until("b")
             step(1)
             self.play(FadeIn(kappa))

@@ -69,15 +69,18 @@ class Hook(VoiceoverScene):
         unit = label(r"uses per $1{,}000$ words", font_size=22, color=GREY_B).to_corner(DL, buff=0.35)
         cite_ = cite(r"F.~Mosteller \& D.~Wallace, \textit{Inference and Disputed Authorship: The Federalist} (1964)",
                      corner=DR)
+        fed = history_card(1964, r"Mosteller \& Wallace", r"twelve Federalist papers claimed by both Hamilton and "
+                           r"Madison: \ settled by counting words like \textit{upon}, \textit{whilst} and \textit{also}",
+                           width=7.0).move_to(DOWN * 0.2)
         with self.voiceover(
             "You might look for names or places. But in 1964, Mosteller and Wallace settled who wrote the disputed "
             "Federalist papers by counting small words, like upon, whilst and also. <bookmark mark='a'/> So describe each "
             "page by how often it uses the seventy commonest words. <bookmark mark='b'/> This page says 'the' a lot "
             "and 'not' very little, like Dickens. Austen says 'not', 'very' and 'be' far more often."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(fed, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(g[0], DOWN) for g in groups], lag_ratio=0.08),
+            self.play(FadeOut(fed), LaggedStart(*[GrowFromEdge(g[0], DOWN) for g in groups], lag_ratio=0.08),
                       LaggedStart(*[FadeIn(g[1]) for g in groups], lag_ratio=0.08), FadeIn(legend_), FadeIn(unit),
                       run_time=2.5)
             vo.wait_until("b")
@@ -112,9 +115,10 @@ class Hook(VoiceoverScene):
             "locked away to test on. <bookmark mark='b'/> Telling the authors apart is the oldest job in machine "
             "learning: classification. Draw a line? Bend it? Ask the neighbours? Ask questions? This part tries them all."
         ) as vo:
-            self.play(Create(ax), FadeIn(plane[1:]), FadeIn(books))
-            vo.wait_until("a")
+            self.play(Create(ax), FadeIn(plane[1:]), run_time=0.8)
             self.play(LaggedStart(*[FadeIn(d, scale=0.4) for d in dots], lag_ratio=0.004), FadeIn(key), run_time=2.5)
+            vo.wait_until("a")
+            self.play(FadeIn(books))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t) for t in task], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)
@@ -170,7 +174,7 @@ class Hook(VoiceoverScene):
             r"kernels and support vector machines, \ with the dual derived",
             r"trees, \ forests and boosting, \ up to XGBoost",
             r"keeping score: \ ROC curves, \ cross-validation, \ and a contest of every method",
-        ], font_size=24).move_to(DOWN * 0.35)
+        ], font_size=27).move_to(DOWN * 0.35)
         with self.voiceover(
             "This is Part 6 of AI, Built, and the start of act two: learning from data. <bookmark mark='a'/> In it: "
             "least squares and why it's the best of its kind, ridge and the lasso; logistic regression, Newton's "

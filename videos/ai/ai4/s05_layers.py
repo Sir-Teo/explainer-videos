@@ -44,8 +44,8 @@ class Layers(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-3.4, buff=0.4, edge=6.9)
         T, dd = int(d["T"]), int(d["d"])
         cost = VGroup(
-            label(rf"GPT-2's first MLP matrix, \ ${dd} \times {4 * dd}$, \ over ${T:,}$ tokens:".replace(",", "{,}"),
-                  font_size=24, color=GREY_A),
+            label(rf"GPT-2's first MLP matrix, \ ${dd} \times {4 * dd}$, \ over ${fmt_int(T)}$ tokens:", font_size=24,
+                  color=GREY_A),
             label(rf"the full Jacobian $\partial Y / \partial W$: \ ${sci(d['jac_entries'], 1)}$ numbers, \ "
                   rf"${d['jac_bytes'] / 1e12:.0f}$ terabytes", font_size=26, color=C.SURPRISE),
             label(rf"the product $X^\top G$: \ ${sci(d['vjp_flops'], 1)}$ multiplications and additions", font_size=26,

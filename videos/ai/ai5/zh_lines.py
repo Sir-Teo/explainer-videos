@@ -186,7 +186,7 @@ ZH = {
     "f'At the same diversity the four rules are almost indistinguishable":
         "在相同的多样性下，四种规则几乎分不出高下：彼此相差不到每字符{spread:.3f}奈特。",
     "f'At the same diversity, {SPOKEN[best]} gives the text":
-        "在相同的多样性下，{SPOKEN[best]}写出的文字，评判者觉得最可能：每字符{at[best]:.3f}奈特，而只用温度是{at['temp']:.3f}。",
+        "在相同的多样性下，{SPOKEN[best]}写出的文字，评判者觉得最可能：每字符{at[best]:.3f}奈特，而只用温度是{at['temp']:.3f}；在多样性最接近的一对设置上，它在{len(diff)}段文字中赢了{wins}段。",
     "f'At the same diversity, temperature alone does as well":
         "在相同的多样性下，只用温度，和任何截断规则一样好：每字符{at['temp']:.3f}奈特。",
     'f"Human prose sits between':
