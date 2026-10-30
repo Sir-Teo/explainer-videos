@@ -36,7 +36,15 @@ class TTS(VoiceoverScene):
         H = sum(np.exp(-((f - fc) / 90) ** 2) * a for fc, a in ((730, 1.0), (1090, 0.7), (2440, 0.4)))
         filt = VGroup(ax2, VMobject(color=SND_C, stroke_width=3).set_points_smoothly([ax2.c2p(x, y) for x, y in zip(f, H)]),
                       label(r"the filter: \ formants of ``ah''", font_size=20, color=SND_C).next_to(ax2, DOWN, buff=0.1))
-        sf = VGroup(src, MathTex(r"\to", font_size=40), filt).arrange(RIGHT, buff=0.4).move_to([-2.8, 1.6, 0])
+        ax3 = Axes(x_range=[0, 4000, 1000], y_range=[0, 1.1, 1], x_length=3.2, y_length=1.4, tips=False,
+                   axis_config={"stroke_color": GREY_D, "include_ticks": False})
+        hf = np.arange(125, 4000, 125)
+        Hh = sum(np.exp(-((hf - fc) / 90) ** 2) * a_ for fc, a_ in ((730, 1.0), (1090, 0.7), (2440, 0.4)))
+        harm = VGroup(*[Line(ax3.c2p(x, 0), ax3.c2p(x, max(y, 0.02)), color=WHITE, stroke_width=2.5) for x, y in zip(hf, Hh)])
+        out_ = VGroup(ax3, harm, label(r"the vowel: \ the buzz's harmonics, \ shaped", font_size=20,
+                                        color=WHITE).next_to(ax3, DOWN, buff=0.1))
+        sf = VGroup(src, MathTex(r"\to", font_size=40), filt, MathTex(r"\to", font_size=40), out_).arrange(
+            RIGHT, buff=0.4).move_to([0, 1.7, 0])
         tag = note(r"schematic \ (formants: \ Peterson \& Barney, 1952)", font_size=18).next_to(sf, UP, buff=0.15)
         eras = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in (
             (r"1939: \ the Voder, \ played on keys and a pedal", GREY_A),
@@ -57,8 +65,11 @@ class TTS(VoiceoverScene):
             "<bookmark mark='d'/> In the 2000s statistical models, hidden Markov models again, predicted the spectrum "
             "instead, smooth but muffled."
         ) as vo:
-            self.play(FadeIn(sf), FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(sf[0]))
+            vo.wait_until("a")
             self.play(FadeIn(eras[0]))
+            self.play(FadeIn(sf[1:3]))
+            self.play(FadeIn(sf[3:]))
             vo.wait_until("b")
             self.play(FadeIn(eras[1]))
             vo.wait_until("c")
@@ -188,7 +199,7 @@ class TTS(VoiceoverScene):
             codes = np.asarray(nr["ref_codes"]).T  # 16 x frames
             T = codes.shape[1]
             show = min(T, 50)
-            grid = code_grid(codes[:, :show], cell=0.12, K=int(nr["K"])).move_to([-2.6, -1.6, 0])
+            grid = code_grid(codes[:, :show], cell=0.11, K=int(nr["K"])).move_to([-3.1, -1.6, 0])
             M = np.asarray(nr["ref_mel"])
             mel = spectro(M[:, :show * 8], grid.width, 0.9, lo=M.min(), hi=M.max()).next_to(grid, UP, buff=0.12)
             gl = label(rf"the clip it clones its English voice from: \ ${show / float(nr['hz']):.0f}$ s as "
@@ -196,17 +207,18 @@ class TTS(VoiceoverScene):
             rl = VGroup(label(r"codebook $1$: \ semantic", font_size=16, color=SEM_C).next_to(grid, RIGHT, buff=0.1).align_to(grid, UP),
                         label(r"codebooks $2$--$16$: \ acoustic", font_size=16, color=ACOU_C).next_to(grid, RIGHT, buff=0.1).align_to(grid, DOWN))
             side = VGroup(label(rf"${float(nr['bps']):,.0f}$ bits a second".replace(",", "{,}"), font_size=22, color=SEM_C),
-                          label(rf"encoded and decoded again: \ log-mel distance ${float(nr['mel_dist']):.2f}$", font_size=20,
+                          label(rf"encoded and decoded again: \\ log-mel distance ${float(nr['mel_dist']):.2f}$", font_size=20,
                                 color=GREY_A))
             if bool(nr["generated"]):
                 gc = np.asarray(nr["gen_codes"]).T
-                g2 = code_grid(gc, cell=0.13, K=int(nr["K"]))
-                gtxt = label(r"and the narrator saying \ ``" + str(nr["sentence"]) + r"'': \ " +
+                g2 = code_grid(gc, cell=0.09, K=int(nr["K"]))
+                gtxt = label(r"and the narrator saying \\ ``" + str(nr["sentence"]) + r"'' \\ " +
                              rf"${gc.shape[1]}$ frames", font_size=19, color=SPEAK_C)
                 side.add(VGroup(gtxt, g2).arrange(DOWN, buff=0.12, aligned_edge=LEFT))
-            side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.2, -1.3, 0])
-            if side.width > 4.8:
-                side.width = 4.8
+            side.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.5, -1.3, 0])
+            if side.width > 4.3:
+                side.width = 4.3
+            side.align_to([2.4, 0, 0], LEFT)
             body = Group(mel, gl, grid, rl)
         else:
             side = VGroup()

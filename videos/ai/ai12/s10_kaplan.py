@@ -51,7 +51,7 @@ class Kaplan(VoiceoverScene):
                      label(r"smaller, \ so cheaper to run", font_size=24, color=C.TRUE_P))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.1, -0.6, 0])
         keep_in_frame(res)
-        link = note(r"GPT-3, \ Gopher \ and Chinchilla in the lineage: \ Part 14").next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
+        link = note(r"GPT-3, \ Gopher \ and Chinchilla \\ in the lineage: \ Part 14").next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
         cite_ = cite(r"J.~Hoffmann et al.\ (2022), \ Table 1 and abstract", corner=DR)
         with self.voiceover(
             "Kaplan's laws said: as the budget grows, put most of it into the model. GPT-3 read under two tokens per "

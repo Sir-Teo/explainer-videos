@@ -343,7 +343,7 @@ def compute_audrey(cache):
 CODEC_STAGES = 8
 CODEC_K = 256
 CODEC_D = 64
-CODEC_STEPS = 4000
+CODEC_STEPS = 1500
 CODEC_SEEDS = [0, 1]
 CODEC_CROP = 200  # mel frames: 2 s
 CODEC_BATCH = 16
@@ -467,7 +467,7 @@ def train_codec(cache, seed, log=print):
     opt = torch.optim.Adam(params, lr=1e-3)
     g = rng(500 + seed)
     steps = max(30, int(CODEC_STEPS * SCALE))
-    checks = sorted({min(c, steps) for c in (0, 100, 300, 1000, 2000, 4000)})
+    checks = sorted({min(c, steps) for c in (0, 100, 300, 600, 1000, 1500)})
     ex_text, ex = te[0]
     ckpt = cache.dir / "models" / f"codec_s{seed}.ckpt"
     ckpt.parent.mkdir(parents=True, exist_ok=True)

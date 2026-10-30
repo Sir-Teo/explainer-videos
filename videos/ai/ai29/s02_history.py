@@ -189,12 +189,12 @@ class History(VoiceoverScene):
     # ------------------------------------------------------------------
     def llm_agents(self):
         head = label(r"Language models that act", font_size=36).to_edge(UP, buff=0.4)
-        ev = [(r"2021", r"WebGPT: \ a model that browses", TOOL),
-              (r"2022", r"ReAct: \ reason, \ act, \ observe", AGENT),
-              (r"2023", r"Toolformer; \ function calling; \ AutoGPT", TOOL),
-              (r"2024", r"SWE-agent; \ computer use; \ MCP", AGENT),
-              (r"2025", r"coding agents in the terminal", AGENT),
-              (r"2026", r"agents working for hours", GOOD)]
+        ev = [(r"2021", r"WebGPT: \\ a model that browses", TOOL),
+              (r"2022", r"ReAct: \\ reason, \ act, \ observe", AGENT),
+              (r"2023", r"Toolformer; \\ function calling; \\ AutoGPT", TOOL),
+              (r"2024", r"SWE-agent; \\ computer use; \ MCP", AGENT),
+              (r"2025", r"coding agents \\ in the terminal", AGENT),
+              (r"2026", r"agents working \\ for hours", GOOD)]
         X0, X1 = -6.0, 6.0
         Y = 0.7
         axis = Line([X0, Y, 0], [X1, Y, 0], color=GREY_C, stroke_width=2)
@@ -204,8 +204,8 @@ class History(VoiceoverScene):
             d = Dot([x, Y, 0], radius=0.1, color=col)
             yl = label(yr, font_size=30, color=HIST).next_to(d, UP if k % 2 == 0 else DOWN, buff=0.2)
             wl = label(what, font_size=28, color=col)
-            if wl.width > 3.9:
-                wl.width = 3.9
+            if wl.width > 3.0:
+                wl.width = 3.0
             wl.next_to(yl, UP if k % 2 == 0 else DOWN, buff=0.12)
             keep_in_frame(wl, margin=0.25)
             marks.add(VGroup(d, yl, wl))
