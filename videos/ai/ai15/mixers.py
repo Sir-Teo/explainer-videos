@@ -59,8 +59,7 @@ def chunk_gated_delta(q, k, v, beta, la, chunk=64, S0=None):
     cs = la.cumsum(-1)
     G = cs.exp()  # decay from the chunk's start to step i
     low = torch.ones(chunk, chunk, dtype=torch.bool, device=q.device).tril()
-    diff = (cs[..., :, None] - cs[..., None, :]).masked_fill(~low, -float("inf"))
-    D = diff.exp()  # decay from step j to step i (j <= i), else 0
+    D = (cs[..., :, None] - cs[..., None, :]).clamp(max=0).exp() * low  # decay from step j to step i (j <= i), else 0
     A = (D * (k @ k.transpose(-1, -2))).tril(-1) * beta[..., :, None]
     M = torch.eye(chunk, dtype=q.dtype, device=q.device) + A
     W = torch.linalg.solve_triangular(M, (beta * G)[..., None] * k, upper=False)
@@ -82,7 +81,7 @@ def masked_decay(q, k, v, la):
     T = q.shape[-2]
     cs = la.cumsum(-1)
     low = torch.ones(T, T, dtype=torch.bool, device=q.device).tril()
-    L = (cs[..., :, None] - cs[..., None, :]).masked_fill(~low, -float("inf")).exp()
+    L = (cs[..., :, None] - cs[..., None, :]).clamp(max=0).exp() * low
     return (L * (q @ k.transpose(-1, -2))) @ v
 
 

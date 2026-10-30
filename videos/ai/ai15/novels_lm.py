@@ -25,7 +25,7 @@ import torch.nn.functional as F
 from explainer.ai import novels as N
 from videos.ai.ai15.mixers import Net
 
-SEQ, BATCH, D, LAYERS, HEADS = 256, 16, 128, 4, 4
+SEQ, BATCH, D, LAYERS, HEADS = 256, 16, 64, 4, 2
 SAVE_EVERY = 100
 ARCHS = {"transformer": ["softmax"] * 4, "hybrid": ["gdn", "gdn", "gdn", "softmax"], "gdn": ["gdn"] * 4}
 PROMPT = "The door opened, and"
@@ -36,7 +36,7 @@ def build(arch: str, seed: int) -> Net:
     layers = ARCHS[arch]
     rope = tuple(range(4)) if arch == "transformer" else ()
     m = Net(N.tokenizer().get_vocab_size(), D, layers, D // HEADS, heads=HEADS, mlp=int(round(8 * D / 3 / 16)) * 16,
-            rope_layers=rope, chunk=64, conv=4, attn_conv=0)
+            rope_layers=rope, chunk=SEQ, conv=4, attn_conv=0)  # one chunk per window in training
     for name, p in m.named_parameters():  # the series' initialization (explainer.lm.pocket)
         if p.dim() != 2:
             continue
@@ -136,6 +136,8 @@ def train(arch: str, seed: int, steps: int, ckpt_dir, lr: float = 3e-3, warmup: 
 def load_trained(arch: str, seed: int, ckpt_dir) -> Net:
     m = build(arch, seed)
     m.load_state_dict(torch.load(ckpt_dir / f"lm_{arch}_{seed}.pt")["model"])
+    for mx in m.mix:  # longer texts at test time: chunks of 64, the state handed from chunk to chunk
+        mx.chunk = 64
     return m.eval()
 
 

@@ -725,7 +725,7 @@ def compute_ttt():
 # ---------------------------------------------------------------------------
 # Recall: MQAR and RULER-style tests on small trained models (videos/ai/ai15/recall.py)
 # ---------------------------------------------------------------------------
-MQAR_GRID = dict(mixers=["softmax", "linear", "mamba2", "delta", "gdn", "hybrid"], dks=[2, 4, 8, 16, 32],
+MQAR_GRID = dict(mixers=["softmax", "linear", "mamba2", "delta", "gdn", "hybrid"], dks=[2, 4, 8, 16],
                  seeds=[0, 1, 2], N=16, steps=1000, replay_dk=8)
 RULER_GRID = dict(mixers=["softmax", "mamba2", "gdn", "hybrid"], seeds=[0, 1], T=128, steps=1500)
 
@@ -751,7 +751,7 @@ def _pool_run(fn, jobs: dict, part, workers: int = 2):
 def compute_mqar():
     """Multi-query associative recall (Arora et al., Zoology, 2023), N = 16 pairs: two-layer models with each memory
     (softmax attention; linear attention; a Mamba-2-style selective SSM; the delta rule; the gated delta rule; a
-    hybrid, gated delta then attention), at five key sizes, three seeds each, equal steps (1,000) and equal
+    hybrid, gated delta then attention), at four key sizes, three seeds each, equal steps (1,000) and equal
     parameters up to a few gates.  Recall on 1,024 fresh lists; the curve along training; and, for key size 8, which
     answers of one fixed list each model gets right at every evaluation (the replay)."""
     from videos.ai.ai15.recall import train_mqar
@@ -803,7 +803,7 @@ def compute_ruler():
 # A gated-delta hybrid language model on the novels, against a transformer (videos/ai/ai15/novels_lm.py)
 # ---------------------------------------------------------------------------
 LM_GRID = dict(runs=[("transformer", 0), ("hybrid", 0), ("transformer", 1), ("hybrid", 1), ("transformer", 2),
-                     ("hybrid", 2), ("gdn", 0)], steps=600)
+                     ("hybrid", 2)], steps=300)
 COPY_GAPS = [16, 64, 128, 192, 384, 768]
 
 
@@ -834,9 +834,9 @@ def compute_lm():
         r["copy"] = L.copy_test(m, va, COPY_GAPS)
         print(f"    {key}: held-out {r['final_val']:.3f}, passage {r['bits']:.3f} bits/char, copy {r['copy']}", flush=True)
         part[key] = r
-    out = dict(steps=G["steps"], gaps=COPY_GAPS, seq=L.SEQ, d=L.D, layers=L.LAYERS, archs=list(L.ARCHS),
+    out = dict(steps=G["steps"], gaps=COPY_GAPS, seq=L.SEQ, d=L.D, layers=L.LAYERS, archs=["transformer", "hybrid"],
                tokens=G["steps"] * L.BATCH * L.SEQ)
-    for arch in L.ARCHS:
+    for arch in ("transformer", "hybrid"):
         rs = [part[f"{a}_{s}"] for a, s in G["runs"] if a == arch]
         out[f"{arch}_bits"] = np.array([r["bits"] for r in rs])
         out[f"{arch}_val"] = np.array([r["final_val"] for r in rs])
@@ -862,7 +862,7 @@ STREAM_BUDGETS = [32, 64, 128]
 
 def compute_sinks():
     """Where the series' model looks: each head's mean attention on the first token of 256-token windows of held-out
-    text; then the scoreboard's passage (the first 3,000 tokens) read token by token with a cache of 32, 64 or 128
+    text; then the scoreboard's passage (the first 2,000 tokens) read token by token with a cache of 32, 64 or 128
     tokens per head under three policies (window, four sinks plus a window, heavy hitters), and with everything kept
     (positions running past the 256 the model was trained on)."""
     import torch
@@ -877,21 +877,25 @@ def compute_sinks():
     starts = np.linspace(0, len(va) - 300, 24).astype(int)
     win = torch.from_numpy(np.stack([va[s:s + 256] for s in starts]).astype(np.int64))
     first = M.attention_on_first(model, win)
-    ids = N.encode(c1.text("passage"))[:3000]
-    part = CACHE.partial("sinks", dict(budgets=STREAM_BUDGETS, n=len(ids), v=1))
-    runs = [("full", 0)] + [(p, b) for b in STREAM_BUDGETS for p in ("window", "sinks", "h2o")]
-    for pol, b in runs:
-        key = f"{pol}_{b}"
-        if key not in part:
-            part[key] = M.stream(model, ids, pol, b)["losses"].tolist()
-            print(f"    {key}: {np.mean(part[key]):.3f} nats a token", flush=True)
+    ids = N.encode(c1.text("passage"))[:2000]
+    part = CACHE.partial("sinks", dict(budgets=STREAM_BUDGETS, n=len(ids), v=3))
+    pols = ("window", "sinks", "h2o")
+    runs = [("full", 0)] + [(p, b) for b in STREAM_BUDGETS for p in pols]
+    if "full_0" not in part:
+        part["full_0"] = M.stream_full(model, ids).tolist()
+    for b in STREAM_BUDGETS:
+        if f"h2o_{b}" not in part:
+            res = M.stream(model, ids, list(pols), b)
+            for p_, row in zip(pols, res):
+                part[f"{p_}_{b}"] = row.tolist()
+                print(f"    {p_}_{b}: {np.mean(row):.3f} nats a token", flush=True)
     # the reference: windows of 256 recomputed, each token with 128 to 256 tokens before it (Part 14's scoring)
     H, lp, _ = M.query_states(model, ids)
     ref = (-lp).numpy()
     chars = len(N.decode(ids))
     out = dict(first=first, uniform=float(np.mean(1.0 / np.arange(65, 257))), budgets=STREAM_BUDGETS, n=len(ids),
                chars=chars, ref=ref, seq=model.cfg.seq)
-    for k in part.done:
+    for k in [f"{p}_{b}" for p, b in runs]:
         out[f"loss_{k}"] = np.array(part[k])
         out[f"bits_{k}"] = float(np.sum(part[k]) / math.log(2) / chars)
     out["bits_ref"] = float(ref.sum() / math.log(2) / chars)
@@ -901,14 +905,14 @@ def compute_sinks():
 # ---------------------------------------------------------------------------
 # The kNN-LM on the novels
 # ---------------------------------------------------------------------------
-KNN = dict(k=64, window=256, keep=192, batch=24, fractions=[1 / 64, 1 / 16, 1 / 4, 1.0], tune_tokens=4000, seed=15)
+KNN = dict(k=64, window=256, keep=192, batch=24, fractions=[1 / 256, 1 / 64, 1 / 16, 1 / 4], tune_tokens=4000, seed=15)
 
 
 def compute_knn():
     """Every token of the thirty novels as (the series' model's last hidden state, the next token): about 6.6 million
-    pairs, never stored whole: the stored states are streamed past the queries, keeping each query's 64 nearest
-    (squared distance) as they go, with snapshots after 1/64, 1/16, 1/4 and all of the novels (read in a seeded
-    random order).  Queries: the scoreboard's passage, and held-out novel text to choose the mixing weight lambda and
+    pairs, of which a quarter (in a seeded random order) is used: about 1.6 million.  The memory is never stored
+    whole: the stored states stream past the queries, each query keeping its 64 nearest (squared distance), with
+    snapshots after 1/256, 1/64, 1/16 and 1/4 of the novels.  Queries: the scoreboard's passage, and held-out novel text to choose the mixing weight lambda and
     the temperature.  Resumable: the running nearest neighbours are checkpointed with the position in the order."""
     import torch
 
@@ -931,7 +935,9 @@ def compute_knn():
     W, keep = P["window"], P["keep"]
     starts = np.arange(0, len(tr) - W - 1, keep)
     order = np.random.default_rng(P["seed"]).permutation(len(starts))
-    snaps_at = [int(round(f * len(order))) for f in P["fractions"]]
+    n_all = len(order)
+    order = order[:int(round(P["fractions"][-1] * n_all))]  # a quarter of the novels, in a seeded random order
+    snaps_at = [int(round(f * n_all)) for f in P["fractions"]]
     ck = CACHE.dir / "knn.ckpt.npz"
     if ck.exists():
         z = np.load(ck)
@@ -968,7 +974,7 @@ def compute_knn():
     npass = len(Hp)
     chars_p = len(passage)
     chars_t = len(N.decode(ids_t))
-    out = dict(P, n_keys=int(len(order) * keep), n_passage=npass, n_tune=len(Ht), chars=chars_p,
+    out = dict(P, n_keys=int(len(order) * keep), n_all=int(n_all * keep), n_passage=npass, n_tune=len(Ht), chars=chars_p,
                base_bits=float(-lpp.sum() / math.log(2) / chars_p))
     lams = np.round(np.arange(0, 0.51, 0.05), 2)
     temps = [1.0, 2.0, 4.0, 8.0, 16.0]
@@ -987,7 +993,7 @@ def compute_knn():
         pk = M.knn_prob(Ds, Vs, yall, T, K)
         pkp = pk[:npass]
         curve = [float(-torch.log(l_ * pkp + (1 - l_) * lpp.exp()).sum() / math.log(2) / chars_p) for l_ in lams]
-        frac = s_ / len(order)
+        frac = s_ / n_all
         out[f"snap_{s_}"] = dict(frac=frac, keys=int(s_ * keep), temp=T, lam=lam, tune_bits=best[0],
                                  bits=float(-torch.log(lam * pkp + (1 - lam) * lpp.exp()).sum() / math.log(2) / chars_p),
                                  lam_curve=curve)

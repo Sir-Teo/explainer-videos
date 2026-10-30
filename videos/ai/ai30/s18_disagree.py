@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import CTRL, FEAT, PART, PROBE, load, spread_bar, ticks
+from videos.ai.ai30.common import CTRL, FEAT, PART, PROBE, load, node_box, spread_bar, ticks
 
 SAEC = C.MLP
 
@@ -46,7 +46,20 @@ class Disagree(VoiceoverScene):
                              *[spread_bar(g.ax, x, arr[i, :, 0], col, width=0.08) for i, x in enumerate(xs)]))
             ood_c.add(DashedVMobject(curve(g.ax, xs, np.clip(arr[:, :, 1].mean(1), 0.4, 1.0), col, 2.5), num_dashes=24))
         lg = legend([(c_, t) for _, c_, t in cols], font_size=17).next_to(g, DOWN, buff=0.6).align_to(g, LEFT)
-        lg2 = label(r"solid: \ held-out novel text; \ dashed: \ chat transcripts", font_size=17, color=GREY_A).next_to(lg, RIGHT, buff=0.5)
+        lg2 = label(r"solid: \ held-out novel text \\ dashed: \ chat transcripts", font_size=17, color=GREY_A).next_to(lg, RIGHT, buff=0.5)
+        r1 = VGroup(node_box(r"the stream: \ $256$ numbers", GREY_A, font_size=20),
+                    node_box(r"linear probe", PROBE, font_size=20)).arrange(RIGHT, buff=0.9)
+        r2 = VGroup(node_box(r"the stream", GREY_A, font_size=20),
+                    node_box(r"autoencoder: \ $1{,}024$ latents", SAEC, font_size=20),
+                    node_box(r"probe on $8$ or $1$", SAEC, font_size=20)).arrange(RIGHT, buff=0.6)
+        sch = VGroup(r1, r2).arrange(DOWN, buff=1.0, aligned_edge=LEFT)
+        if sch.width > 7.2:
+            sch.scale(7.2 / sch.width)
+        sch.move_to([3.2, -0.2, 0])
+        sarr = VGroup(*[Arrow(r_[i].get_right(), r_[i + 1].get_left(), buff=0.08, color=GREY_B, stroke_width=3)
+                        for r_ in (r1, r2) for i in range(len(r_) - 1)])
+        sq = label(r"which reads ``inside a quotation'' better?", font_size=22, color=WHITE).next_to(sch, UP, buff=0.5)
+        sch_all = VGroup(sch, sarr, sq)
         maj = float(d["probe_majority"])
         ood = [float(a[-1, :, 1].mean()) for a, _, _ in cols]
         ind = [float(a[-1, :, 0].mean()) for a, _, _ in cols]
@@ -75,10 +88,17 @@ class Disagree(VoiceoverScene):
             f"{ns[0]} to {ns[-1]:,} examples, five draws each. "
             f"<bookmark mark='c'/> {verdict}<bookmark mark='d'/>{verdict2}"
         ) as vo:
-            self.play(FadeIn(hc), FadeIn(hc2), FadeIn(g))
+            self.play(FadeIn(hc))
             vo.wait_until("a")
+            self.play(FadeIn(r1[0]), FadeIn(r2[0]))
+            self.play(GrowArrow(sarr[0]), FadeIn(r1[1]))
+            self.play(GrowArrow(sarr[1]), FadeIn(r2[1]), GrowArrow(sarr[2]), FadeIn(r2[2]))
+            self.play(FadeIn(hc2))
             vo.wait_until("b")
-            self.play(FadeIn(lg), FadeIn(lg2))
+            self.play(FadeIn(sq))
+            self.wait(1.5)
+            self.play(FadeOut(sch_all))
+            self.play(FadeIn(g), FadeIn(lg), FadeIn(lg2))
             vo.wait_until("c")
             self.play(*[Create(p[0]) for p in plots], *[FadeIn(p[1:]) for p in plots], run_time=2)
             vo.wait_until("d")

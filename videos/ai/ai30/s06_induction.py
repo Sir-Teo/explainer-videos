@@ -223,6 +223,11 @@ class Induction(VoiceoverScene):
                     color=WHITE).move_to([4.0, 0.3, 0])
         ps_, is_, sh = [int(h) for h in d["prev_set"]], [int(h) for h in d["ind_set"]], int(d["self_head"])
         pw, iw = max(A[0, h] for h in ps_), max(A[1, h] for h in is_)
+        boxes = VGroup(*[SurroundingRectangle(g.cells[h], color=PREV, buff=0.03, stroke_width=4) for h in ps_],
+                       *[SurroundingRectangle(g.cells[4 + h], color=IND, buff=0.03, stroke_width=4) for h in is_],
+                       SurroundingRectangle(g.cells[sh], color=WHITE, buff=0.03, stroke_width=4))
+        key_ = legend([(PREV, r"previous-token heads"), (IND, r"induction heads"), (WHITE, r"current-token head")],
+                      font_size=20).next_to(ref, DOWN, buff=0.5)
         with self.voiceover(
             "Last, the bluntest test: remove each head, replacing its output by its average. <bookmark mark='a'/> "
             f"With every head in place the repeat costs {clean:.2f} bits per token. <bookmark mark='b'/> Without a "
@@ -235,8 +240,7 @@ class Induction(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(ref))
             vo.wait_until("b")
-            self.play(*[Indicate(g.cells[h], color=PREV) for h in ps_], *[Indicate(g.cells[4 + h], color=IND) for h in is_],
-                      Indicate(g.cells[sh], color=CAUSE))
+            self.play(LaggedStart(*[Create(r_) for r_ in boxes], lag_ratio=0.15), FadeIn(key_))
         self.wait(0.3)
         self.clear_scene()
 
@@ -284,6 +288,7 @@ class Induction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2))
             self.add(c1, c2, ix)
+            self.play(t.animate.set_value(0.6 * jump), run_time=8, rate_func=linear)
             vo.wait_until("a")
             self.play(t.animate.set_value(jump), run_time=3, rate_func=linear)
             vo.wait_until("b")

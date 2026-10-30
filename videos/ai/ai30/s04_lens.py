@@ -198,7 +198,10 @@ class Lens(VoiceoverScene):
                                 fill_opacity=0.9).move_to(g.ax.c2p(l_ + 0.17, 0), aligned_edge=DOWN) for l_, v in enumerate(tk)])
         lg = legend([(PROBE, r"logit lens"), (TUNED, r"tuned lens")], font_size=20).next_to(g, UP, buff=0.1).align_to(g, RIGHT)
         tab, heads, rows, n = self.build_table("tuned")
-        grp = Group(tab, heads, rows).scale(0.62).move_to([3.6, -0.2, 0])
+        grp = Group(tab, heads, rows).scale(0.62)
+        if grp.width > 6.6:
+            grp.scale(6.6 / grp.width)
+        grp.move_to([3.55, -0.2, 0])
         tl = label(r"the same prompt, \ tuned lens", font_size=20, color=TUNED).next_to(grp, UP, buff=0.15)
         l0 = 0
         with self.voiceover(
