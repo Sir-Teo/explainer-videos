@@ -342,10 +342,10 @@
    "en": "Here is our Dreamer-lite learning the game of catch. At each checkpoint it watches the same six real frames, then dreams on, given the same actions as reality. <bookmark mark='a'/> Untrained, its dreams have nothing to do with the game. <bookmark mark='b'/> As it trains, the dreams come to match reality, from 69.5 wrong pixels a frame untrained to 1.8 after 2,400 updates, in pictures with about 7 lit pixels. <bookmark mark='c'/> Errors still creep in the longer it dreams, as in chapter eleven, and a new ball, which appears at a random place, can never be dreamed exactly.",
    "zh": "这是我们的迷你Dreamer在学接球游戏。在每个检查点，它看同样的6帧真实画面，然后在同样的动作下继续往后梦。<bookmark mark='a'/>还没训练时，它的梦和这个游戏毫无关系。<bookmark mark='b'/>随着训练，梦越来越接近现实，从未训练时每帧错69.5个像素，降到2400次更新后的1.8个，而每幅画面大约只有7个亮像素。<bookmark mark='c'/>梦得越久，误差还是会慢慢渗进来，就像第11章那样；而新出现的球位置是随机的，永远不可能被准确梦到。"
   },
-  "c4dc03d0d5d1": {
+  "f5c0d0cae3ff": {
    "scene": "Dreamer",
-   "en": "And the policy, trained only in those dreams, is tested in the real game. <bookmark mark='a'/> After about 4,556 steps of real play, the 3 seeds catch 100 to 100 percent of the balls, against 29 percent for a random paddle: the policy was learned entirely in dreams. <bookmark mark='b'/> On the right, one of its real games at the end: the paddle heads for where each ball will land, and catches 0 of 0.",
-   "zh": "而这个只在梦里训练过的策略，被拿到真实的游戏里测试。<bookmark mark='a'/>在大约4556步真实游戏之后，3个种子接住了100%到100%的球，而随机移动的挡板是29%：这个策略完全是在梦里学会的。<bookmark mark='b'/>右边是它最后玩的一局真实游戏：挡板朝着每个球将要落下的地方移动，0个球接住了0个。"
+   "en": "And the policy, trained only in those dreams, is tested in the real game. <bookmark mark='a'/> After about 4,556 steps of real play, all 3 seeds catch 100 percent of the balls, against 29 percent for a random paddle: the policy was learned entirely in dreams. <bookmark mark='b'/> On the right, one of its real games at the end: the paddle heads for where each ball will land, and catches 6 of 6.",
+   "zh": "而这个只在梦里训练过的策略，被拿到真实的游戏里测试。<bookmark mark='a'/>在大约4556步真实游戏之后，3个种子全都接住了100%的球，而随机移动的挡板是29%：这个策略完全是在梦里学会的。<bookmark mark='b'/>右边是它最后玩的一局真实游戏：挡板朝着每个球将要落下的地方移动，6个球接住了6个。"
   },
   "96cf5e5e80c3": {
    "scene": "Genie",

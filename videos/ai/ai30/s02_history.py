@@ -149,19 +149,21 @@ class History(VoiceoverScene):
     def pictures(self):
         cards = VGroup(
             history_card(2015, r"A.~Mordvintsev, C.~Olah \& M.~Tyka: \ DeepDream",
-                         r"run the gradient the other way: \ change the image to excite a layer", width=6.2,
-                         color=PROBE, font_size=20),
+                         r"run the gradient the other way: \ change the image to excite a layer", width=6.4,
+                         color=PROBE, font_size=24),
             history_card(2017, r"D.~Bau et al.: \ Network Dissection",
                          r"score each unit against labelled concepts: \ some units are lamps, \ some are dogs",
-                         width=6.2, color=PROBE, font_size=20),
+                         width=6.4, color=PROBE, font_size=24),
             history_card(2017, r"C.~Olah, A.~Mordvintsev \& L.~Schubert, \ \textit{Distill}",
                          r"feature visualization: \ optimize an input, \ with priors that keep it natural, \ until a "
-                         r"neuron fires", width=6.2, color=PROBE, font_size=20),
+                         r"neuron fires", width=6.4, color=PROBE, font_size=24),
             history_card(2018, r"C.~Olah et al., \ \textit{The Building Blocks of Interpretability}",
                          r"attribution and feature visualization combined: \ what a network sees, \ and where",
-                         width=6.2, color=PROBE, font_size=20),
+                         width=6.4, color=PROBE, font_size=24),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.35)).move_to(DOWN * 0.35)
         head = label(r"From which inputs to which features", font_size=36).to_edge(UP, buff=0.35)
+        for c in cards:
+            c.set_opacity(0.18)
         with self.voiceover(
             "So the question moved from which inputs to what the parts of a network are for. <bookmark mark='a'/> "
             "In 2015 Alexander Mordvintsev, Chris Olah and Mike Tyka ran the gradient the other way, changing an "
@@ -172,10 +174,11 @@ class History(VoiceoverScene):
             "visualization, an input optimized until one neuron fires. <bookmark mark='d'/> A year later they "
             "combined it with attribution: what the network sees, and where."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(cards))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(cards[k].animate.set_opacity(1.0), *[c.animate.set_opacity(0.4) for c in cards[:k]])
+            self.play(*[c.animate.set_opacity(1.0) for c in cards])
         self.wait(0.3)
         self.clear_scene()
 

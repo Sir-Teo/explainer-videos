@@ -106,9 +106,13 @@ class Unified(VoiceoverScene):
             "transformer experts sharing one attention, trained on trillions of mixed tokens; free-form editing "
             "emerged."
         ) as vo:
-            self.play(FadeIn(head))
+            q = label(r"one model reads pictures, \ another draws them: \\ can one network do both?", font_size=34,
+                      color=GREY_A).move_to(DOWN * 0.3)
+            self.play(FadeIn(head), FadeIn(q, shift=UP * 0.1))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(q), run_time=0.4)
                 self.play(FadeIn(cards[k], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

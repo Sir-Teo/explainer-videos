@@ -15904,7 +15904,8 @@
     "computed: \\ 400 demonstrations, \\ chunks of 20 moves, \\ 5 seeds each, \\ 60 starts per seed": "计算所得：\\ 400 次示范，\\ 每块 20 步，\\ 各 5 个种子，\\ 每个种子 60 个起点",
     "Why the action expert is generative": "为什么动作专家是生成式的",
     "How long a task can an agent \\\\ finish half the time?": "一个智能体有一半把握完成的任务 \\\\ 最长能有多长？",
-    "the world model's loss, \\ term by term": "世界模型的损失，\\ 逐项来看"
+    "the world model's loss, \\ term by term": "世界模型的损失，\\ 逐项来看",
+    "one model reads pictures, \\ another draws them: \\\\ can one network do both?": "一个模型读图片，\\ 另一个画图片：\\\\ 一个网络能两样都做吗？"
   },
   "phrases": {
     "width": "宽度",

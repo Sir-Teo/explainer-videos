@@ -77,9 +77,9 @@ class Probes(VoiceoverScene):
         p = load("probes")
         L = int(p["layers"])
         lo = 0.5
-        g = axes([-0.3, L - 0.7], [lo, 1.0], x_length=7.6, y_length=4.2, xlabel=r"layer of the novels model \ "
+        g = axes([-0.3, L - 0.7], [lo, 1.0], x_length=6.8, y_length=4.2, xlabel=r"layer of the novels model \ "
                  r"($0$: the token embedding)", ylabel=r"accuracy on held-out text", xticks=list(range(L)),
-                 yticks=[0.5, 0.75, 1.0], center=[-1.7, -0.35, 0])
+                 yticks=[0.5, 0.75, 1.0], center=[-2.4, -0.35, 0])
         return g, L
 
     def layers(self):
