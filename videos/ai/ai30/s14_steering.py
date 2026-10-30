@@ -244,10 +244,12 @@ class Steering(VoiceoverScene):
             "oddly, to prevent a trait by steering toward it during fine-tuning, so the weights need not go there "
             "themselves."
         ) as vo:
-            self.play(FadeIn(uses))
+            for c in cards:
+                c.set_opacity(0.2)
+            self.play(FadeIn(uses), FadeIn(cards))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(cards[k].animate.set_opacity(1))
             vo.wait_until("d")
             self.play(LaggedStart(*[u.animate.set_opacity(1) for u in uses], lag_ratio=0.5), run_time=4)
         self.wait(0.3)

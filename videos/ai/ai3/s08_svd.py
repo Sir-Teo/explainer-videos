@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import I_COLOR, J_COLOR, arrow, load, plane
+from videos.ai.ai3.common import HIST, I_COLOR, J_COLOR, SIG, UC, VC, arrow, chapter, load, plane
 
 A = np.array([[1.4, 1.1], [-0.5, 0.9]])
 
@@ -22,17 +22,11 @@ def svd2(M):
 
 class SVD(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 7, r"Every matrix: turn, stretch, turn", r"What does any matrix do?",
+                "Chapter seven. The singular value decomposition.")
         self.three_moves()
+        self.derive()
         self.norm()
-        self.depth()
-
-    # ------------------------------------------------------------------
-    def card(self):
-        card = chapter_card(5, r"Every matrix: turn, stretch, turn", r"What does any matrix do?", part=3)
-        with self.voiceover("Chapter five. The singular value decomposition."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
     def three_moves(self):
@@ -69,6 +63,60 @@ class SVD(VoiceoverScene):
             self.play(Create(ghost), FadeIn(once))
             vo.wait_until("b")
             self.play(FadeIn(fb), Write(f))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def derive(self):
+        U, s, Vt = svd2(A)
+        colors = {r"\mathbf{v}_i": VC, r"\mathbf{v}_j": VC, r"\mathbf{u}_i": UC, r"\sigma_i": SIG, r"\sigma_i^2": SIG,
+                  "U": UC, r"V^{\top}": VC, r"\Sigma": SIG, "V": VC}
+        rows = [
+            cmath(r"\mathbf{x}^{\top}A^{\top}A\,\mathbf{x}", "=", r"|A\mathbf{x}|^2 \ge 0", font_size=34, colors=colors),
+            cmath(r"A^{\top}A\,\mathbf{v}_i", "=", r"\sigma_i^2\,\mathbf{v}_i", font_size=34, colors=colors),
+            cmath(r"\mathbf{u}_i", "=", r"A\mathbf{v}_i \,/\, \sigma_i", font_size=34, colors=colors),
+            cmath(r"\mathbf{u}_i^{\top}\mathbf{u}_j", "=", r"\frac{\mathbf{v}_i^{\top}A^{\top}A\,\mathbf{v}_j}{\sigma_i\sigma_j}"
+                  r" = \frac{\sigma_j^2\,\mathbf{v}_i^{\top}\mathbf{v}_j}{\sigma_i\sigma_j} = \delta_{ij}", font_size=34,
+                  colors=colors),
+            cmath(r"AV = U\Sigma", r"\;\Rightarrow\;", "A = ", "U", r"\Sigma", r"V^{\top}", font_size=38, colors=colors),
+        ]
+        whys = [why(r"$A^{\top}A$ is symmetric, \ never negative"), why(r"the spectral theorem: \\ perpendicular "
+                                                                         r"$\mathbf{v}_i$, \ $\sigma_i^2 \ge 0$"),
+                why(r"define, \ for $\sigma_i > 0$"), why(r"the $\mathbf{u}_i$ are perpendicular too"),
+                why(r"$V$ orthogonal: \ $V^{-1} = V^{\top}$")]
+        step = ladder(self, rows, whys, keep=5, top=3.3, x=-1.4, buff=0.34, edge=6.9)
+        hist = history_card(1873, r"E.~Beltrami (1873), \ C.~Jordan (1874)",
+                            r"found it independently; \ E.~Schmidt (1907) took it to infinite dimensions; \ G.~Golub "
+                            r"and W.~Kahan (1965) gave the algorithm computers still use", color=HIST, width=6.2)
+        hist.to_corner(DL, buff=0.25)
+        # the picture the algebra describes: perpendicular v's in, perpendicular stretched u's out
+        cc, ce, r = np.array([2.2, -2.75, 0]), np.array([5.3, -2.75, 0]), 0.62
+        pic = VGroup(Circle(radius=r, color=GREY_B, stroke_width=2).move_to(cc),
+                     arrow(cc + r * np.array([*Vt[0], 0]), start=cc, color=VC, stroke_width=4),
+                     arrow(cc + r * np.array([*Vt[1], 0]), start=cc, color=VC, stroke_width=4),
+                     MathTex(r"\xrightarrow{\;A\;}", font_size=34).move_to((cc + ce) / 2),
+                     Circle(radius=r, color=SIG, stroke_width=3).apply_matrix(A).move_to(ce),
+                     arrow(ce + r * s[0] * np.array([*U[:, 0], 0]), start=ce, color=UC, stroke_width=4),
+                     arrow(ce + r * s[1] * np.array([*U[:, 1], 0]), start=ce, color=UC, stroke_width=4))
+        pl = VGroup(MathTex(r"\mathbf{v}_1, \mathbf{v}_2", font_size=26, color=VC).next_to(pic[0], DOWN, buff=0.08),
+                    MathTex(r"\sigma_1\mathbf{u}_1, \sigma_2\mathbf{u}_2", font_size=26, color=UC).next_to(pic[4], DOWN, buff=0.08))
+        with self.voiceover(
+            "Where do the turns and stretches come from? From the last chapter. <bookmark mark='a'/> A transpose A "
+            "is symmetric, and never negative: x transpose A transpose A x is a length squared. "
+            "<bookmark mark='b'/> So the spectral theorem gives it perpendicular eigenvectors v, with eigenvalues "
+            "that are squares: call them sigma squared. <bookmark mark='c'/> Send each v through A, and divide by "
+            "sigma. <bookmark mark='d'/> These new vectors u are perpendicular too, and of length one: the "
+            "calculation is a line. <bookmark mark='e'/> So A sends the perpendicular v's to the perpendicular u's, "
+            "stretched by the sigmas, and that is the decomposition. <bookmark mark='f'/> Eugenio Beltrami and "
+            "Camille Jordan found it independently in 1873 and 1874; Gene Golub and William Kahan gave the "
+            "algorithm, in 1965, that computers still use."
+        ) as vo:
+            self.play(FadeIn(pic), FadeIn(pl))
+            for k_, mk in enumerate("abcde"):
+                vo.wait_until(mk)
+                step(k_)
+            vo.wait_until("f")
+            self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -126,62 +174,4 @@ class SVD(VoiceoverScene):
         for m in (xa, ya, dot):
             m.clear_updaters()
         self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def depth(self):
-        d = load("depth")
-        L = int(d["layers"])
-        assert d["gains"] == [0.8, 1.0, 1.2]
-        lens = {g: np.asarray(d[f"len{g}"]) for g in d["gains"]}
-        assert lens[1.2][-1] > 1500 and lens[0.8][-1] < 2e-3 and 0.5 < lens[1.0][-1] < 3
-        ax = Axes(x_range=[0, L, 10], y_range=[-14, 12, 2], x_length=9.5, y_length=5.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to(DOWN * 0.4 + LEFT * 1.0)
-        xl = VGroup(*[MathTex(str(v), font_size=24, color=GREY_B).next_to(ax.c2p(v, -14), DOWN, buff=0.12)
-                      for v in range(0, L + 1, 10)])
-        yl = VGroup(*[MathTex(t, font_size=24, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
-                      for t, v in (("2^{-12}", -12), ("2^{-6}", -6), ("1", 0), ("2^{6}", 6), ("2^{12}", 12))])
-        xn = label(r"layer", font_size=26, color=GREY_A).next_to(ax, DOWN, buff=0.5)
-        yn = label(r"the vector's length", font_size=26, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        cols = {0.8: C.PENALTY, 1.0: WHITE, 1.2: C.BITS}
-        lines, tags = VGroup(), VGroup()
-        for gain in d["gains"]:
-            ys = np.log2(np.maximum(lens[gain], 1e-12))
-            ln = ax.plot_line_graph(np.arange(L + 1), ys, add_vertex_dots=False, line_color=cols[gain], stroke_width=4)
-            lines.add(ln)
-            end = lens[gain][-1]
-            txt = rf"\times {end:.4f}" if end < 0.01 else (rf"\times {end:.1f}" if end < 100 else rf"\times {end:,.0f}")
-            tags.add(MathTex(rf"\text{{gain }} {gain:g}: \ " + txt.replace(",", "{,}"), font_size=30, color=cols[gain])
-                     .next_to(ax.c2p(L, float(ys[-1])), RIGHT, buff=0.15))
-        head = label(r"A vector through $40$ layers of random matrices", font_size=34).to_edge(UP, buff=0.35)
-        chain = VGroup(Dot(radius=0.07, color=C.TRUE_P))
-        for _ in range(4):
-            chain.add(MathTex(r"\rightarrow", font_size=26, color=GREY_B),
-                      Square(0.36, stroke_color=C.BITS, stroke_width=2, fill_color=C.BITS, fill_opacity=0.25))
-        chain.add(MathTex(r"\rightarrow \cdots", font_size=26, color=GREY_B))
-        chain.arrange(RIGHT, buff=0.1)
-        layer = gloss(r"layer", r"one matrix step;\\ a \textit{deep} network chains many", picture=chain, corner=UR,
-                      width=3.4)
-        layer.shift(DOWN * 0.75)
-        with self.voiceover(
-            "Why care how much a matrix stretches? <bookmark mark='a'/> A deep network applies one matrix after "
-            "another. Each of those steps is called a layer, and deep just means many layers. Push a vector "
-            "through forty layers of random matrices. <bookmark mark='b'/> If each layer "
-            "stretches a typical vector by 1.2, after forty layers its length has grown two thousand times. "
-            "<bookmark mark='c'/> At 0.8, it shrinks to almost nothing. Only near one does the signal survive. That "
-            "knife edge is the subject of part nine."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn), FadeIn(layer))
-            self.play(Create(lines[1]), run_time=1.5)
-            self.play(FadeIn(tags[1]))
-            vo.wait_until("b")
-            self.play(FadeOut(layer), run_time=0.4)
-            self.play(Create(lines[2]), run_time=2.0)
-            self.play(FadeIn(tags[2]))
-            vo.wait_until("c")
-            self.play(Create(lines[0]), run_time=2.0)
-            self.play(FadeIn(tags[0]))
-        self.wait(0.5)
         self.clear_scene()

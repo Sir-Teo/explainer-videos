@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import MONO, VOWELS, load
+from videos.ai.ai3.common import HIST, MONO, VOWELS, chapter, dots_on, framed, gray_image, load
 
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
 
@@ -25,17 +25,14 @@ def heat(M, size=3.6, vmax=None, color=C.TRUE_P) -> VGroup:
 
 class LowRank(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 8, r"The best low-rank copy", r"What is the best simple version of a matrix?",
+                "Chapter eight. The best low-rank copy of a matrix.", lit=(1990,))
         self.pieces()
+        self.proof()
+        self.mosaic()
         self.letters()
         self.vowels()
-
-    # ------------------------------------------------------------------
-    def card(self):
-        card = chapter_card(6, r"Keeping what matters", r"What is the best simple version of a matrix?", part=3)
-        with self.voiceover("Chapter six. Keeping what matters."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.today()
 
     # ------------------------------------------------------------------
     def pieces(self):
@@ -70,7 +67,7 @@ class LowRank(VoiceoverScene):
             "<bookmark mark='a'/> each one a column times a row, weighted by a singular value. How many pieces a "
             "table needs is its rank, and a low-rank table is one that a few pieces build. <bookmark mark='b'/> "
             "Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k "
-            "pieces. No other choice comes closer. That's the Eckart–Young theorem, from 1936."
+            "pieces. No other choice comes closer. That's the Eckart-Young theorem, from 1936."
         ) as vo:
             self.play(Write(f), run_time=2.0)
             vo.wait_until("a")
@@ -83,10 +80,88 @@ class LowRank(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def proof(self):
+        thm = theorem_card(r"Eckart--Young",
+                           r"If $B$ has rank at most $k$, \ then $\|A - B\|_F \ge \|A - A_k\|_F = "
+                           r"\sqrt{\sigma_{k+1}^2 + \sigma_{k+2}^2 + \cdots}$, \ where $A_k$ keeps the $k$ biggest pieces.",
+                           who=r"C.~Eckart \& G.~Young (1936); \ E.~Schmidt (1907) for integral operators", width=7.4)
+        thm.to_edge(UP, buff=0.25)
+        colors = {r"\sigma_{i+k}(A)": C.BITS}
+        rows = [
+            cmath(r"\sigma_{i+k}(A)", r"\le", r"\sigma_i(A - B) + \sigma_{k+1}(B)", font_size=34, colors=colors),
+            cmath(r"\sigma_{i+k}(A)", r"\le", r"\sigma_i(A - B)", font_size=34, colors=colors),
+            cmath(r"\|A - B\|_F^2", "=", r"\textstyle\sum_i \sigma_i(A-B)^2 \ \ge\ \sum_i \sigma_{i+k}(A)^2", font_size=34),
+            cmath(r"\|A - B\|_F^2", r"\ge", r"\sigma_{k+1}^2 + \sigma_{k+2}^2 + \cdots = \|A - A_k\|_F^2", font_size=34),
+        ]
+        whys = [why(r"Weyl's inequality (1912)"), why(r"$B$ has rank $\le k$: \ $\sigma_{k+1}(B) = 0$"),
+                why(r"squared entries add up \\ to squared singular values"), why(r"the tail: \ equality at $B = A_k$")]
+        step = ladder(self, rows, whys, keep=4, top=0.9, x=-1.0, buff=0.42, edge=6.9)
+        with self.voiceover(
+            "Why can't anything beat the biggest pieces? Here is a proof in four lines. <bookmark mark='a'/> "
+            "Hermann Weyl's inequality from 1912: the singular values of A, shifted by k, are at most those of A "
+            "minus B, plus the k plus first of B. <bookmark mark='b'/> If B has rank k, its k plus first singular "
+            "value is zero. <bookmark mark='c'/> The squared size of a matrix, entry by entry, equals the sum of "
+            "its squared singular values; we'll see why in chapter nine. So the error of B is at least the sum of "
+            "A's singular values from k plus one on. <bookmark mark='d'/> And keeping the top k pieces achieves "
+            "exactly that: the error is the tail of the singular values, no more."
+        ) as vo:
+            self.play(FadeIn(thm, shift=DOWN * 0.2))
+            for k_, mk in enumerate("abcd"):
+                vo.wait_until(mk)
+                step(k_)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def mosaic(self):
+        d = load("image")
+        img = np.asarray(d["img"])
+        rec = np.asarray(d["recon"])
+        ranks = [int(r) for r in d["ranks"]]
+        err, tail = np.asarray(d["err"]), np.asarray(d["tail"])
+        h, w = (int(v) for v in d["shape"])
+        energy = np.asarray(d["energy"])
+        pix, store = int(d["pixels"]), np.asarray(d["storage"])
+        TW = 3.05
+        tiles = Group()
+        for k, r in enumerate(ranks):
+            im = framed(gray_image(rec[k], TW))
+            cap = label(rf"rank ${r}$: \ ${100 * store[k] / pix:.0f}\%$ of the numbers", font_size=20, color=GREY_A)
+            tiles.add(Group(im, cap.next_to(im, DOWN, buff=0.08)))
+        im = framed(gray_image(img, TW), color=C.BITS)
+        cap = label(rf"the picture: \ ${h} \times {w}$ pixels", font_size=20, color=C.BITS)
+        tiles.add(Group(im, cap.next_to(im, DOWN, buff=0.08)))
+        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.25, 0.3)).move_to(UP * 0.55)
+        tag = note(r"a landscape drawn by code (\texttt{compute.py}), \ grey levels as a matrix").to_corner(DL, buff=0.2)
+        chk = label(rf"error after rank ${ranks[3]}$: \ ${err[3]:.4f}$; \ the singular values left out: \ "
+                    rf"${tail[3]:.4f}$", font_size=26, color=C.BITS).to_edge(DOWN, buff=0.55)
+        k8 = ranks.index(8) if 8 in ranks else 3
+        with self.voiceover(
+            f"A picture is a matrix too: this one is {h} rows of {w} grey levels. <bookmark mark='a'/> Its best copy "
+            "of rank one is a single column times a single row: stripes, the sky's brightness and the horizon. "
+            f"<bookmark mark='b'/> Rank two, four, eight: the mountains appear. Rank {ranks[k8]} keeps "
+            f"{100 * energy[k8]:.1f} percent of the picture's squared size with {100 * store[k8] / pix:.0f} percent "
+            f"of the numbers. <bookmark mark='c'/> Then the trees, and by rank {ranks[-1]} it is hard to tell from "
+            "the original. <bookmark mark='d'/> And the error at each rank is exactly what the theorem says: the "
+            "size of the singular values left out."
+        ) as vo:
+            self.play(FadeIn(tiles[-1]), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(tiles[0]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles[1:4]], lag_ratio=0.5), run_time=2.0)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles[4:7]], lag_ratio=0.5), run_time=2.0)
+            vo.wait_until("d")
+            self.play(FadeIn(chk))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def letters(self):
         d = load("letters")
         M, S, recon, err = np.asarray(d["M"]), np.asarray(d["S"]), np.asarray(d["recon"]), np.asarray(d["err"])
-        assert abs(d["total"] - 1) < 1e-9 and abs(err[0] - 0.557) < 0.001 and abs(err[1] - 0.399) < 0.001
+        assert abs(d["total"] - 1) < 1e-9  # the table's entries are square roots of probabilities
         vmax = float(M.max())
         left = heat(M, size=3.6, vmax=vmax).move_to([-4.3, 0.55, 0])
         lt = label(r"the letter-pair table", font_size=26, color=GREY_A).next_to(left, UP, buff=0.18)
@@ -113,7 +188,7 @@ class LowRank(VoiceoverScene):
             "<bookmark mark='a'/> The first piece alone already has the broad shape: it's the table you'd get if the "
             "next letter didn't care what came before. <bookmark mark='b'/> Add the second piece, the third, the "
             "fifth, the tenth, <bookmark mark='c'/> and the error falls by exactly the singular values left out: "
-            "0.56 of the whole after one piece, 0.40 after two."
+            f"{err[0]:.2f} of the whole after one piece, {err[1]:.2f} after two."
         ) as vo:
             self.play(FadeIn(left), FadeIn(lt), FadeIn(rows_l), FadeIn(note_))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05), FadeIn(bl), run_time=1.5)
@@ -135,7 +210,8 @@ class LowRank(VoiceoverScene):
         d = load("letters")
         row = np.asarray(d["ca_row"])
         order = np.argsort(row)
-        assert sorted(LETTERS[i] for i in order[:5]) == sorted(VOWELS)
+        left5 = [LETTERS[i] for i in order[:5]]
+        all_vowels = sorted(left5) == sorted(VOWELS)
         lo, hi = float(row.min()), float(row.max())
         W = 12.0
 
@@ -151,21 +227,25 @@ class LowRank(VoiceoverScene):
             y = -0.4 + [0.45, -0.45, 0.95, -0.95][k % 4]
             marks.add(Line([x, -0.55, 0], [x, -0.25, 0], color=C.BITS if vow else GREY_B, stroke_width=3))
             labs.add(Text(ch, font=MONO, font_size=34, color=C.BITS if vow else WHITE).move_to([x, y, 0]))
+        nv = sum(ch in VOWELS for ch in left5)
+        found_say = ("No one told the computer what a vowel is. From counts alone, it found that vowels and "
+                     "consonants take turns." if all_vowels else "Most of the vowels gather at one end, from counts "
+                     "alone.")
         vow_box = SurroundingRectangle(VGroup(*[labs[k] for k in range(5)]), color=C.BITS, buff=0.15, corner_radius=0.1)
         head = label(r"Each letter, placed by the table's strongest departure from independence", font_size=30)
         head.to_edge(UP, buff=0.6)
         tag = label(r"correspondence analysis: \ the SVD of $\dfrac{P(x, y) - P(x)P(y)}{\sqrt{P(x)P(y)}}$", font_size=26,
                     color=GREY_A).to_edge(DOWN, buff=0.5)
-        found = label(r"vowels and consonants take turns", font_size=34, color=C.BITS).move_to(DOWN * 2.0)
+        found = label(r"vowels and consonants take turns" if all_vowels else rf"${nv}$ of the $5$ leftmost are vowels",
+                      font_size=34, color=C.BITS).move_to(DOWN * 2.0)
         dep = gloss(r"departure from independence", r"each pair's count, minus the count you'd expect\\ if letters "
                     r"ignored each other: \ only the surprise is kept", width=6.0)
         dep.move_to(UP * 1.75)
         with self.voiceover(
             "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence: "
             "compare each count with what you'd expect if letters ignored their neighbours, and keep only the "
-            "surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, "
-            "o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants "
-            "take turns."
+            "surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: "
+            f"{', '.join(left5[:-1])}, {left5[-1]}. {found_say}"
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -175,5 +255,37 @@ class LowRank(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeOut(dep), Create(vow_box), *[Indicate(labs[k], color=C.BITS, scale_factor=1.4) for k in range(5)])
             self.play(FadeIn(found))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def today(self):
+        cards = VGroup(
+            history_card(1990, r"Deerwester, Dumais et al., \ latent semantic analysis",
+                         r"a truncated SVD of a word-by-document table: \ search by meaning (chapter twelve)",
+                         color=HIST, width=4.3, font_size=27),
+            history_card(2021, r"E.~Hu et al., \ LoRA",
+                         r"fine-tune a model by adding a rank-$r$ matrix $BA$ to each weight; \ for GPT-3, $10{,}000$ "
+                         r"times fewer trained numbers (Part 27)", color=HIST, width=4.3, font_size=27),
+            history_card(2024, r"DeepSeek-V2, \ latent attention",
+                         r"keys and values squeezed through a low-rank latent, \ to shrink the memory a long "
+                         r"context needs (Part 15)", color=HIST, width=4.3, font_size=27),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP)
+        cards.move_to(DOWN * 0.1)
+        head = label(r"Low rank, \ at work", font_size=40).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "This is why low rank is everywhere in machine learning. <bookmark mark='a'/> In 1990, latent semantic "
+            "analysis searched documents by meaning with a truncated SVD. <bookmark mark='b'/> In 2021, LoRA "
+            "fine-tuned huge models by learning only a low-rank change to each weight matrix: for GPT-3, ten "
+            "thousand times fewer numbers to train. <bookmark mark='c'/> And in 2024, DeepSeek squeezed attention's "
+            "keys and values through a low-rank bottleneck to save memory. Parts 15 and 27 build these."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(FadeIn(cards[2], shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

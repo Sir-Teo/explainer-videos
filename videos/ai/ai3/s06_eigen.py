@@ -125,8 +125,6 @@ class Eigen(VoiceoverScene):
                 why(r"$\mathbf{x} \perp \mathbf{v}_1$ stays $\perp \mathbf{v}_1$: \\ repeat inside that space "
                     r"(induction)")]
         step = ladder(self, rows, whys, keep=3, top=0.9, x=-1.6, buff=0.55, edge=6.9)
-        tags = VGroup(*[label(t, font_size=24, color=C.BITS) for t in
-                        (r"1.\ real", r"2.\ perpendicular", r"3.\ a full set")])
         with self.voiceover(
             "Why does this always work for symmetric matrices? Here is the proof, in three steps. "
             "<bookmark mark='a'/> First, the eigenvalues are real. Allow complex numbers for a moment, and sandwich "
@@ -176,8 +174,8 @@ class Eigen(VoiceoverScene):
         cv = curve(ax, xs, [R(a) for a in xs], C.BITS, 3)
         hi = DashedLine(ax.c2p(0, lam[1]), ax.c2p(2 * PI, lam[1]), color=C.BITS, stroke_width=1.5)
         lo = DashedLine(ax.c2p(0, lam[0]), ax.c2p(2 * PI, lam[0]), color=C.TRUE_P, stroke_width=1.5)
-        hl = MathTex(rf"\lambda_1 = {lam[1]:g}", font_size=26, color=C.BITS).next_to(ax.c2p(2 * PI, lam[1]), RIGHT, buff=0.1)
-        ll = MathTex(rf"\lambda_2 = {lam[0]:g}", font_size=26, color=C.TRUE_P).next_to(ax.c2p(2 * PI, lam[0]), RIGHT, buff=0.1)
+        hl = MathTex(rf"\lambda_1 = {lam[1]:.0f}", font_size=26, color=C.BITS).next_to(ax.c2p(PI / 4, lam[1]), UP, buff=0.08)
+        ll = MathTex(rf"\lambda_2 = {lam[0]:.0f}", font_size=26, color=C.TRUE_P).next_to(ax.c2p(3 * PI / 4, lam[0]), DOWN, buff=0.08)
         xa = always_redraw(lambda: arrow(c + k * np.array([*x(), 0]), start=c, color=WHITE, stroke_width=5))
         dot = always_redraw(lambda: glow_dot(ax.c2p(t.get_value(), R(t.get_value())), color=C.BITS, radius=0.07,
                                              layers=3))
