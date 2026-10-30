@@ -68,7 +68,7 @@ class LongContext(VoiceoverScene):
     # ------------------------------------------------------------------
     def ruler_published(self):
         head = label(r"Harder than a needle", font_size=36).to_edge(UP, buff=0.35)
-        w, fs = 4.3, 24
+        w, fs = 4.3, 26
         cards = VGroup(
             history_card(2024, r"RULER \ (Hsieh et al., NVIDIA)", r"13 tasks: \ many needles, \ tracing variables, \ "
                          r"counting words, \ questions; \ of 17 models claiming at least $32$k tokens, \ only half held "
@@ -81,7 +81,7 @@ class LongContext(VoiceoverScene):
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         if cards.width > 13.4:
             cards.width = 13.4
-        cards.next_to(head, DOWN, buff=0.5)
+        cards.next_to(head, DOWN, buff=0.7)
         tw = label(r"the length a model accepts \ $\ne$ \ the length it can use", font_size=34, color=C.BITS)
         tw.next_to(cards, DOWN, buff=0.7)
         with self.voiceover(
@@ -240,18 +240,22 @@ class LongContext(VoiceoverScene):
         rows = [
             (r"Gemini 1.5 \ (Google, 2024)", r"a million tokens; \ needles found in up to $10$ million, \ in research", HIST),
             (r"Kimi Linear \ (Moonshot, 2025)", r"RULER at $128$k: \ $84.3$, \ against $81.3$ for full attention \ "
-             r"($1.4$T tokens each); \ $78.8$ with rotary positions", HYB),
+             r"($1.4$T tokens each); \\ $78.8$ with rotary positions", HYB),
             (r"MRCR v2, \ eight needles \ (OpenAI's test)", r"at $1$M tokens: \ Claude Opus 4.6 $76\%$, \ Claude Sonnet 4.5 "
-             r"$18.5\%$ \ (Anthropic, \ February 2026)", C.BITS),
-            (r"DeepSeek-V4 \ (2026)", r"$1$M tokens; \ keys and values compressed $4\times$ and $128\times$ \ "
+             r"$18.5\%$ \\ (Anthropic, \ February 2026)", C.BITS),
+            (r"DeepSeek-V4 \ (2026)", r"$1$M tokens; \ keys and values compressed $4\times$ and $128\times$ \\ "
              r"(compressed sparse attention: \ Part 16)", ATT),
         ]
         tbl = VGroup()
         for i, (a, b, c_) in enumerate(rows):
-            tbl.add(VGroup(label(a, font_size=27, color=c_), label(b, font_size=23, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.5).next_to(head, DOWN, buff=0.5)
+            lines_ = VGroup(*[label(b_.strip(), font_size=25, color=GREY_A) for b_ in b.split(r"\\")]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            tbl.add(VGroup(label(a, font_size=30, color=c_), lines_).arrange(DOWN, aligned_edge=LEFT, buff=0.14))
+        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(head, DOWN, buff=0.45)
         if tbl.width > 13.2:
             tbl.width = 13.2
+        if tbl.height > 6.3:
+            tbl.height = 6.3
+        tbl.next_to(head, DOWN, buff=0.45)
         src = note(r"each figure from its maker's report", font_size=16).to_corner(DR, buff=0.25)
         with self.voiceover(
             "Where does that leave the frontier? <bookmark mark='a'/> Google's Gemini 1.5, in 2024, offered a "

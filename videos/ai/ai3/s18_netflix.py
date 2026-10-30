@@ -38,11 +38,11 @@ class Netflix(VoiceoverScene):
             rgb[R == s_] = c
         img = ImageMobject((np.concatenate([rgb, np.ones((U, I, 1))], -1) * 255).astype(np.uint8))
         img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-        img.stretch_to_fit_width(6.0).stretch_to_fit_height(3.7).move_to([-3.5, -0.6, 0])
+        img.stretch_to_fit_width(5.6).stretch_to_fit_height(3.5).move_to([-3.1, -0.3, 0])
         frame = SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1.2)
         xl = label(r"films", font_size=22, color=GREY_A).next_to(frame, UP, buff=0.1)
         yl = label(r"users", font_size=22, color=GREY_A).next_to(frame, LEFT, buff=0.1)
-        tag = note(rf"a corner of our synthetic ratings: \ ${100 * m['density']:.1f}\%$ of cells filled; \ red $1$ "
+        tag = note(rf"a corner of our synthetic ratings: \ ${100 * m['density']:.1f}\%$ of cells filled; \\ red $1$ "
                    r"star, \ green $5$").next_to(frame, DOWN, buff=0.12)
         card = history_card(2006, r"the Netflix Prize",
                             r"$100{,}480{,}507$ ratings, \ $480{,}189$ users, \ $17{,}770$ films; \ \$1 million for "
@@ -62,8 +62,9 @@ class Netflix(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeIn(img), Create(frame), FadeIn(xl), FadeIn(yl))
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(frame), FadeIn(xl), FadeIn(yl), FadeIn(tag))
+            self.play(FadeIn(tag), Indicate(frame, color=WHITE))
             vo.wait_until("c")
             self.play(FadeIn(won, shift=UP * 0.2))
         self.wait(0.3)
@@ -97,8 +98,9 @@ class Netflix(VoiceoverScene):
             f"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method "
             "never sees."
         ) as vo:
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][3], color=C.BITS))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -144,12 +146,26 @@ class Netflix(VoiceoverScene):
             return VGroup(*[Dot(gb.c2p(*np.clip(P[j], -lim, lim)), radius=0.03, color=GEN_COLORS[gen[j]],
                                 fill_opacity=0.8) for j in sub])
 
+        def centroids():
+            v = t.get_value()
+            i = int(min(np.floor(v), len(eps_) - 2))
+            a = v - i
+            P = (1 - a) * Q[i] + a * Q[i + 1]
+            g_ = VGroup()
+            for k_ in range(len(m["genres"])):
+                c_ = P[gen == k_].mean(0) * 2.5
+                g_.add(Dot(gb.c2p(*np.clip(c_, -lim, lim)), radius=0.11, color=GEN_COLORS[k_], stroke_color=WHITE,
+                           stroke_width=2))
+            return g_
+
         fd = always_redraw(film_dots)
+        cent = always_redraw(centroids)
         ep_read = always_redraw(lambda: label(rf"film vectors after {eps_[int(round(t.get_value()))]} passes" if
                                               t.get_value() > 0.01 else r"film vectors at the start", font_size=22,
                                               color=GREY_A).next_to(gb, UP, buff=0.12))
         gl = VGroup(*[label(nm, font_size=18, color=c_) for nm, c_ in zip(m["genres"], GEN_COLORS)])
         gl.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.08)).next_to(gb, DOWN, buff=0.12)
+        cn = note(r"large dots: \ each genre's average, \ $\times 2.5$").next_to(gl, DOWN, buff=0.08)
         best, worst0 = float(h[:, 2].min()), float(h0[:, 2].min())
         last0 = float(h0[-1, 2])
         overfit = last0 > worst0 + 0.01
@@ -160,12 +176,13 @@ class Netflix(VoiceoverScene):
             f"Training replayed, at rank {int(rp['rank'])}. <bookmark mark='a'/> The error falls on the ratings it "
             f"trains on, and on held-out ones: from {h[0, 2]:.2f} stars to {h[-1, 2]:.3f}.{tail} "
             "<bookmark mark='b'/> On the right, each film's vector, on its two strongest directions, coloured by the "
-            "hidden genre. <bookmark mark='c'/> The genres pull apart. Of each film's ten nearest films, "
+            "hidden genre, with each genre's average. <bookmark mark='c'/> The genres drift apart. Of each film's ten "
+            "nearest films, "
             f"{100 * m['genre_nn']:.0f} percent share its genre, against {100 * m['genre_chance']:.0f} percent by "
             "chance."
         ) as vo:
-            self.play(FadeIn(ga), FadeIn(leg), Create(gb), FadeIn(gl))
-            self.add(fd, ep_read)
+            self.play(FadeIn(ga), FadeIn(leg), Create(gb), FadeIn(gl), FadeIn(cn))
+            self.add(fd, cent, ep_read)
             vo.wait_until("a")
             self.play(Create(tr), Create(te), run_time=2.0)
             self.play(Create(tr0), Create(te0), run_time=1.5)
@@ -174,6 +191,7 @@ class Netflix(VoiceoverScene):
             vo.wait_until("c")
             self.play(t.animate.set_value(len(eps_) - 1), run_time=3.0)
         fd.clear_updaters()
+        cent.clear_updaters()
         ep_read.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -249,7 +267,7 @@ class Netflix(VoiceoverScene):
         pw = DashedLine(ax.c2p(0, t["pop_warm"]), ax.c2p(steps[-1], t["pop_warm"]), color=POP)
         pc = DashedLine(ax.c2p(0, t["pop_cold"]), ax.c2p(steps[-1], t["pop_cold"]), color=POP)
         leg = legend([(TT, r"two towers: \ users it trained on"), (C.BITS, r"two towers: \ new users, \ $5$ films each"),
-                      (POP, r"dashed: \ most popular films")], font_size=18).next_to(g, UP, buff=0.1)
+                      (POP, r"dashed: \ most popular films")], font_size=18).move_to([-3.2, -2.9, 0])
         rw, rc = t["recall_warm_prior"], t["recall_cold_prior"]
         bw = rw > t["pop_warm"]
         bc = rc > t["pop_cold"]

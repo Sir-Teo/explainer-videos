@@ -413,7 +413,7 @@ ZH = {
         "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小。<bookmark mark='c'/>一张满的表，第8章就有答案；有空洞就没有公式，只能沿梯度下降。<bookmark mark='d'/>我们造了一个小世界来检验：{m['users']:,}位用户，{m['items']:,}部电影，{m['n_ratings']:,}条评分，来自六种隐藏的类型，方法本身看不到它们。",
 
     'f"Training replayed, at rank':
-        "回放训练过程，秩为{int(rp['rank'])}。<bookmark mark='a'/>训练用的评分上误差在降，留出的评分上也在降：从{h[0, 2]:.2f}星降到{h[-1, 2]:.3f}。{tail}<bookmark mark='b'/>右边，是每部电影的向量，画在它最强的两个方向上，按隐藏的类型着色。<bookmark mark='c'/>类型渐渐分开了。每部电影最近的十部电影里，有{100 * m['genre_nn']:.0f}%和它同类型，碰运气只有{100 * m['genre_chance']:.0f}%。",
+        "回放训练过程，秩为{int(rp['rank'])}。<bookmark mark='a'/>训练用的评分上误差在降，留出的评分上也在降：从{h[0, 2]:.2f}星降到{h[-1, 2]:.3f}。{tail}<bookmark mark='b'/>右边，是每部电影的向量，画在它最强的两个方向上，按隐藏的类型着色，大圆点是每种类型的平均位置。<bookmark mark='c'/>类型渐渐分开了。每部电影最近的十部电影里，有{100 * m['genre_nn']:.0f}%和它同类型，碰运气只有{100 * m['genre_chance']:.0f}%。",
 
     "f' Without the penalty the held-out error bottoms out":
         "没有惩罚项时，留出误差最低到{worst0:.3f}，又回升到{last0:.3f}：向量把训练评分背了下来。",

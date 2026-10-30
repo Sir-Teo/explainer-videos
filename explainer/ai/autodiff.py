@@ -139,6 +139,39 @@ class Tensor:
                 grads[id(p)] = grads.get(id(p), 0) + f(g)
 
 
+def topological_order(root: Tensor) -> list:
+    """The nodes of ``root``'s graph in the order ``backward`` visits them in reverse: every node after all of its
+    inputs, ``root`` last (a depth-first post-order).  Only nodes that need a gradient are in the graph."""
+    order, seen = [], set()
+
+    def visit(t):
+        if id(t) in seen:
+            return
+        seen.add(id(t))
+        for p, _ in t.parents:
+            visit(p)
+        order.append(t)
+
+    visit(root)
+    return order
+
+
+def tape(root: Tensor) -> list:
+    """``root``'s graph as a Wengert list (Wengert, 1964): one entry per node in topological order, each a dict with
+    its index ``i``, its operation ``op`` (``"input"`` for a leaf), the indices of its inputs ``args`` and its
+    ``shape``.  ``backward`` runs this list from the bottom up."""
+    order = topological_order(root)
+    index = {id(t): i for i, t in enumerate(order)}
+    return [dict(i=i, op=t.op or "input", args=[index[id(p)] for p, _ in t.parents], shape=tuple(t.data.shape))
+            for i, t in enumerate(order)]
+
+
+def sigmoid(z: Tensor) -> Tensor:
+    """1 / (1 + e^-z), with its derivative s (1 - s) as a single node."""
+    s = 1.0 / (1.0 + np.exp(-z.data))
+    return z._make(s, [(z, lambda g: g * s * (1 - s))], "sigmoid")
+
+
 def log_softmax(z: Tensor, axis: int = -1) -> Tensor:
     m = Tensor(z.data.max(axis=axis, keepdims=True))  # a constant shift, for numerical safety
     s = z - m
