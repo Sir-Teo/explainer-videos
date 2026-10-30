@@ -409,6 +409,19 @@ ZH.update({
         "为什么这一刀是可能的最好切法？假设每位作者的书页都是一个钟形分布，两个钟形的形状相同。<bookmark mark='a'/>贝叶斯法则给出是狄更斯的对数几率。<bookmark mark='b'/>把两个二次型展开：因为形状相同，x乘x的项互相抵消，剩下的是关于x的一条直线。<bookmark mark='c'/>概率是一条直线的S形函数，恰好就是逻辑回归的形式，而它的权重就是费希尔的方向。LDA是生成式的，和朴素贝叶斯一样：它先估计两个钟形，再相除；逻辑回归则直接拟合那条直线。",
 })
 
+ZH.update({
+    'f"How many words to keep?':
+        "保留多少个词？对整条路径做交叉验证：对每个惩罚强度，在十分之九的训练页上拟合，在剩下的十分之一上打分，这样做10遍。<bookmark mark='a'/>误差在{int(nnz[b])}个词时最低。<bookmark mark='b'/>但曲线在那里几乎是平的，它的晃动，也就是一个标准误，和这些差别一样大。通常的规则，是在最好结果的一个标准误之内挑出最稀疏的模型：{int(nnz[o])}个词。",
+    'f"Where did C and gamma come from?':
+        "C和gamma是从哪里来的？一个网格：{len(Cs)}种代价乘以{len(gs)}种核宽度，每一对都在训练页上用10折交叉验证打分。<bookmark mark='a'/>最好的一对平均判对{100 * cv.max():.1f}%，但{cv.size}种设置里有{near}种和它相差不到一个百分点。<bookmark mark='b'/>只有很小的C，街道里站人太便宜，边界几乎不弯，才会跌到{100 * worst:.0f}%。每页只有两个数时，方法不如数据要紧。",
+    'f"Accuracy only counts right and wrong.':
+        "准确率只数对和错。一个恰当的评分，比如第1部分的对数损失，还会为自信程度收费。<bookmark mark='a'/>{say}",
+    'f"Naive Bayes gets {100 * c[\'acc\'][\'nb\']:.0f} percent':
+        "朴素贝叶斯判对了{100 * c['acc']['nb']:.0f}%的书页，远多于两个词频的逻辑回归的{100 * c['acc']['lr2']:.0f}%，可它的对数损失反而更差，{nb['logloss']:.2f}对{l2['logloss']:.2f}：它一旦错了，就是以一百万比一的几率错，而对数损失会为这份自信的每一位数字收费。普拉特缩放把它降到{c['nb_platt']['logloss']:.2f}。",
+    "f'Here the log loss tells the same story as accuracy":
+        "在这里，对数损失和准确率说的是同一件事：朴素贝叶斯{nb['logloss']:.2f}，两个词频的逻辑回归{l2['logloss']:.2f}。",
+})
+
 PHRASES = {
     'a ten-millionth': '千万分之一',
     'a millionth': '百万分之一',

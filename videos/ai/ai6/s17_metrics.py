@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai6.common import AUSTEN, BAD, DICKENS, GOOD, HL, chapter, load, plot
+from videos.ai.ai6.common import AUSTEN, BAD, DICKENS, GOOD, HL, chapter, hbars, load, plot
 
 ROCC, PRC = C.MODEL_Q, C.REWARD
 
@@ -16,6 +16,7 @@ class Metrics(VoiceoverScene):
                 "Chapter sixteen. Keeping score.")
         self.roc()
         self.rare()
+        self.scores()
         self.wobble()
 
     # ------------------------------------------------------------------
@@ -150,6 +151,42 @@ class Metrics(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(cb), FadeIn(res[4]))
             self.play(Create(c2), FadeIn(res[3]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def scores(self):
+        c = load("calibration")
+        specs = [("lr2", r"logistic, \ $2$ rates", C.MODEL_Q), ("nb", r"naive Bayes, \ $70$ words", "#4FD1C5"),
+                 ("nb_platt", r"naive Bayes, \ Platt-scaled", "#B48EF0"), ("lr70", r"logistic, \ $70$ rates", C.REWARD)]
+        accs = hbars([(nm, c["acc"][k], col) for k, nm, col in specs], width=3.6, lo=0.7, hi=1.0, font_size=22,
+                     fmt=lambda v: rf"{100 * v:.1f}\%", name_width=3.2)
+        lls = hbars([(nm, c[k]["logloss"], col) for k, nm, col in specs], width=3.0, lo=0.0, hi=0.55, font_size=22,
+                    fmt=lambda v: f"{v:.3f}", name_width=3.2)
+        ta = label(r"accuracy \ (higher is better)", font_size=26).next_to(accs, UP, buff=0.3)
+        tl = label(r"log loss, \ nats per page \ (lower is better)", font_size=26)
+        gA = VGroup(ta, accs).move_to([-3.4, 0.2, 0])
+        for r_ in lls:
+            r_[0].set_opacity(0)  # the names are already on the left
+        tl.next_to(lls, UP, buff=0.3)
+        gL = VGroup(tl, lls).move_to([3.6, 0.2, 0])
+        tag = note(r"ten-fold cross-validated probabilities, \ every page predicted once").to_edge(DOWN, buff=0.25)
+        nb, l2 = c["nb"], c["lr2"]
+        worse = nb["logloss"] > l2["logloss"] and c["acc"]["nb"] > c["acc"]["lr2"]
+        say = (f"Naive Bayes gets {100 * c['acc']['nb']:.0f} percent of the pages right, far more than two-rate logistic "
+               f"regression's {100 * c['acc']['lr2']:.0f}, yet its log loss is worse, {nb['logloss']:.2f} against "
+               f"{l2['logloss']:.2f}: when it's wrong, it's wrong at odds of a million to one, and the log loss "
+               f"charges for every digit of that confidence. Platt scaling brings it down to {c['nb_platt']['logloss']:.2f}."
+               if worse else
+               f"Here the log loss tells the same story as accuracy: naive Bayes {nb['logloss']:.2f}, two-rate logistic "
+               f"regression {l2['logloss']:.2f}.")
+        with self.voiceover(
+            "Accuracy only counts right and wrong. A proper score, like part one's log loss, also charges for "
+            f"confidence. <bookmark mark='a'/> {say}"
+        ) as vo:
+            self.play(FadeIn(gA), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(gL))
         self.wait(0.3)
         self.clear_scene()
 

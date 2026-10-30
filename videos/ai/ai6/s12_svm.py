@@ -20,6 +20,7 @@ class SVM(VoiceoverScene):
         self.hinge()
         self.dual()
         self.pages()
+        self.grid()
 
     # ------------------------------------------------------------------
     def street(self):
@@ -241,5 +242,52 @@ class SVM(VoiceoverScene):
             self.play(FadeIn(cvl))
             vo.wait_until("d")
             self.play(FadeIn(hist, shift=UP * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def grid(self):
+        s = load("svm")
+        cv = np.asarray(s["cv"])
+        Cs, gs = [float(c) for c in s["Cs"]], [float(g) for g in s["gammas"]]
+        lo, hi = 0.75, float(cv.max())
+        cells = VGroup()
+        W = 1.15
+        for i, C_ in enumerate(Cs):
+            for j, g_ in enumerate(gs):
+                v = float(cv[i, j])
+                t = float(np.clip((v - lo) / (hi - lo), 0, 1))
+                sq = Square(W, stroke_color=GREY_D, stroke_width=1.5, fill_color=GOLD, fill_opacity=0.08 + 0.8 * t)
+                sq.move_to([-3.6 + j * W, 1.7 - i * W, 0])
+                txt = MathTex(rf"{100 * v:.1f}", font_size=24, color=WHITE if t < 0.6 else BLACK).move_to(sq)
+                cells.add(VGroup(sq, txt))
+        bi, bj = np.unravel_index(int(np.argmax(cv)), cv.shape)
+        box = SurroundingRectangle(cells[bi * len(gs) + bj], color=WHITE, buff=0.0, stroke_width=4)
+        rows = VGroup(*[MathTex(rf"C = {c:g}", font_size=24, color=GREY_A).next_to(cells[i * len(gs)], LEFT, buff=0.2)
+                        for i, c in enumerate(Cs)])
+        cols = VGroup(*[MathTex(rf"\gamma = {g:g}", font_size=24, color=GREY_A).next_to(cells[j], UP, buff=0.15)
+                        for j, g in enumerate(gs)])
+        head = label(r"Ten-fold cross-validation over $C$ and the kernel width $\gamma$: \ accuracy, \%", font_size=28).to_edge(UP, buff=0.3)
+        near = int((cv >= cv.max() - 0.01).sum())
+        worst = float(cv.min())
+        notes = VGroup(label(rf"best: \ ${100 * cv.max():.1f}\%$", font_size=26, color=GOLD),
+                       label(rf"${near}$ of ${cv.size}$ settings within a point of it", font_size=24, color=WHITE),
+                       label(rf"worst: \ ${100 * worst:.1f}\%$ \ (tiny $C$)", font_size=24, color=BAD)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.6, 0.6, 0])
+        keep_in_frame(notes)
+        with self.voiceover(
+            f"Where did C and gamma come from? A grid: {len(Cs)} prices times {len(gs)} kernel widths, each pair "
+            "scored by "
+            f"ten-fold cross-validation on the training pages. <bookmark mark='a'/> The best pair averages "
+            f"{100 * cv.max():.1f} percent, but {near} of the {cv.size} settings are within a point of it. "
+            f"<bookmark mark='b'/> Only a tiny C, a street so cheap to stand in that the boundary barely bends, "
+            f"falls to {100 * worst:.0f} percent. On two numbers per page, the method matters less than the data."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows), FadeIn(cols))
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.03), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Create(box), FadeIn(notes[0]), FadeIn(notes[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()

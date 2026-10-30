@@ -33,7 +33,7 @@ ZH = {
     'Chapter six. Hidden Markov models.': '第6章。隐马尔可夫模型。',
     'Chapter seven. Baum-Welch, and machines that listen.': '第7章。鲍姆–韦尔奇，以及会听的机器。',
     'Chapter eight. Translation by counting.': '第8章。靠计数来翻译。',
-    'Chapter nine. Kneser-Ney, from Good-Turing.': '第9章。从Good–Turing到Kneser–Ney。',
+    'Chapter nine. Kneser-Ney, from Good-Turing.': '第9章。Kneser–Ney平滑：从古德–图灵估计说起。',
     'Chapter ten. The infinity-gram.': '第10章。无穷元模型。',
     'Chapter eleven. Models as pictures.': '第11章。把模型画成图。',
     'Chapter twelve. From graphs to causes.': '第12章。从图到因果。',
