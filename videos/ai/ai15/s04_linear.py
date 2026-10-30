@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import A, K, PART, Q, STATE, V, curve, grid_matrix, load, vec_column
+from videos.ai.ai15.common import fmt_int, A, K, PART, Q, STATE, V, curve, grid_matrix, load, vec_column
 
 
 def block(w, h, color, tex, font_size=34):
@@ -162,7 +162,7 @@ class Linear(VoiceoverScene, ThreeDScene):
         chk = label(rf"computed both ways on ${lin['T']}$ tokens: \\ they agree to "
                     rf"$10^{{{math.ceil(math.log10(max(float(lin['dev']), 1e-16)))}}}$", font_size=22, color=GREY_B)
         chk.next_to(rnn, DOWN, buff=0.35)
-        toks = VGroup(*[Text(w, font="DejaVu Sans Mono", font_size=24, color=GREY_A) for w in words]).arrange(RIGHT, buff=0.35)
+        toks = VGroup(*[data_text(w, font="DejaVu Sans Mono", font_size=24, color=GREY_A) for w in words]).arrange(RIGHT, buff=0.35)
         toks.to_edge(UP, buff=0.4).shift(LEFT * 2.2)
         op = gloss(r"outer product", r"every number of the value times every number of the key: \\ a whole grid, "
                    r"like a times table, added onto the memory", outer_picture(), width=5.6, color=STATE)
@@ -219,7 +219,7 @@ class Linear(VoiceoverScene, ThreeDScene):
         k1 = label(r"softmax attention: \ $\propto T^2 d$", font_size=26, color=A).move_to([4.5, 1.4, 0])
         k2 = label(r"linear attention: \ $\propto T d^2$", font_size=26, color=C.INTERVAL).next_to(k1, DOWN, buff=0.3).align_to(k1, LEFT)
         r = so[-1] / lo_[-1]
-        gap = label(rf"at a million tokens: \ ${r:,.0f}\times$ fewer".replace(",", "{,}"), font_size=26, color=WHITE)
+        gap = label(rf"at a million tokens: \ ${fmt_int(round(r))}\times$ fewer", font_size=26, color=WHITE)
         gap.next_to(k2, DOWN, buff=0.5).align_to(k1, LEFT)
         keep_in_frame(gap)
         with self.voiceover(

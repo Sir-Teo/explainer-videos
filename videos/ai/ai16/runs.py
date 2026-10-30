@@ -14,8 +14,8 @@ from pathlib import Path
 
 import numpy as np
 
-STEPS, BATCH, LR, WARM = 2400, 32, 3e-3, 100
-SNAPS = (0, 50, 100, 200, 400, 800, 1600, 2400)  # replay checkpoints
+STEPS, BATCH, LR, WARM = 2000, 32, 3e-3, 100
+SNAPS = (0, 50, 100, 200, 400, 800, 1400, 2000)  # replay checkpoints
 LOAD_EVERY = 20
 EVAL_WINDOWS = 96  # held-out windows for the curves (96 x 64 characters)
 

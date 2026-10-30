@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import DECAY, DELTA, K, PART, Q, SSM_C, STATE, V, load, sci
+from videos.ai.ai15.common import DECAY, DELTA, K, PART, Q, SSM_C, STATE, V, fmt_int, load, sci
 
 
 class Parallel(VoiceoverScene):
@@ -96,9 +96,9 @@ class Parallel(VoiceoverScene):
         key = label(r"each box: \ the combined steps it covers; \ gold: \ a finished $h_t$", font_size=20, color=GREY_A)
         key.to_edge(DOWN, buff=0.3).shift(LEFT * 1.3)
         res = VGroup(
-            label(rf"$T = {s['T']:,}$: \ ${int(s['rounds_hs'])}$ rounds \ instead of ${s['T']:,}$ steps".replace(",", "{,}"),
+            label(rf"$T = {fmt_int(s['T'])}$: \ ${int(s['rounds_hs'])}$ rounds \ instead of ${fmt_int(s['T'])}$ steps",
                   font_size=22, color=WHITE),
-            label(rf"Blelloch's version: \ ${int(s['work_bl']):,}$ combines, \ about $2T$".replace(",", "{,}"), font_size=20,
+            label(rf"Blelloch's version: \ ${fmt_int(s['work_bl'])}$ combines, \ about $2T$", font_size=20,
                   color=GREY_A),
             label(rf"against the loop: \ largest relative difference ${sci(max(float(s['diff_hs']), float(s['diff_bl'])))}$",
                   font_size=20, color=C.INTERVAL),
@@ -135,7 +135,7 @@ class Parallel(VoiceoverScene):
         cw = W / nC
         chunks = VGroup(*[Rectangle(width=cw * 0.92, height=0.5, stroke_color=GREY_C, stroke_width=1, fill_color=STATE,
                                     fill_opacity=0.08).move_to([-W / 2 + cw * (i + 0.5), 2.0, 0]) for i in range(nC)])
-        tl = label(rf"${T:,}$ tokens \ in ${nC}$ chunks of ${Cn}$".replace(",", "{,}"), font_size=22, color=GREY_A)
+        tl = label(rf"${fmt_int(T)}$ tokens \ in ${nC}$ chunks of ${Cn}$", font_size=22, color=GREY_A)
         tl.next_to(chunks, UP, buff=0.15)
         cursor = Rectangle(width=W / T * 8, height=0.62, stroke_width=0, fill_color=WHITE, fill_opacity=0.9).move_to(chunks[0].get_left())
         colors = {r"k_i": K, r"k_i^{\top}": K, r"\beta_i": DELTA, r"w_i": C.BITS, r"W": C.BITS, r"K": K, r"\beta": DELTA}
@@ -166,9 +166,9 @@ class Parallel(VoiceoverScene):
                  f"On this processor the plain loop was still quicker, {tr_:.2f} seconds against {tc_:.2f}; on a "
                  "graphics card, built for big matrix products, the chunks win by far.")
 
-        res = VGroup(label(rf"step by step \ vs \ by chunks, \ on ${T:,}$ random tokens: \ largest difference "
-                           rf"${sci(max(dp, dg))}$".replace(",", "{,}"), font_size=24, color=C.INTERVAL),
-                     label(rf"sequential steps: \ ${T:,}$ \ vs \ ${nC}$ \ (each chunk is matrix products)".replace(",", "{,}"),
+        res = VGroup(label(rf"step by step \ vs \ by chunks, \ on ${fmt_int(T)}$ random tokens: \ largest difference "
+                           rf"${sci(max(dp, dg))}$", font_size=24, color=C.INTERVAL),
+                     label(rf"sequential steps: \ ${fmt_int(T)}$ \ vs \ ${nC}$ \ (each chunk is matrix products)",
                            font_size=24, color=WHITE)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.55)
         cite_ = cite(r"S.~Yang, B.~Wang, Y.~Zhang, Y.~Shen \& Y.~Kim, \textit{Parallelizing Linear Transformers with the Delta "
                      r"Rule over Sequence Length} (2024)", corner=UR)

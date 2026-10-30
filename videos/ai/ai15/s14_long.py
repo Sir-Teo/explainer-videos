@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import ATT, HIST, HYB, MIX_C, MIX_SHORT, PART, axes, band, curve, heat_image, load
+from videos.ai.ai15.common import fmt_int, ATT, HIST, HYB, MIX_C, MIX_SHORT, PART, axes, band, curve, heat_image, load
 
 TF_C, HY_C = C.ATTN, HYB
 TASK_NAME = {"needle": r"one needle", "multikey": r"one of four needles", "vartrack": r"a chain of three names"}
@@ -132,7 +132,7 @@ class LongContext(VoiceoverScene):
                       for j, L in enumerate(Ls)])
         cl2 = VGroup(*[MathTex(str(L), font_size=17, color=GREY_B).move_to(tables[3][0].get_corner(DL) + np.array([0.62 * (j + 0.5), -0.22, 0]))
                        for j, L in enumerate(Ls)])
-        head = label(rf"our RULER: \ trained at ${T0}$ tokens, \ tested up to ${Ls[-1]:,}$ \ (\% right, \ chance $3\%$)".replace(",", "{,}"),
+        head = label(rf"our RULER: \ trained at ${T0}$ tokens, \ tested up to ${fmt_int(Ls[-1])}$ \ (\% right, \ chance $3\%$)",
                      font_size=24).to_edge(UP, buff=0.3)
         foot = note(rf"two-layer models as in chapter 11, \ keys of $16$; \ {len(r['seeds'])} seeds each, \ averaged; \ "
                     r"filler of random words around the needles; \ columns: \ tokens", font_size=16).to_edge(DOWN, buff=0.2)

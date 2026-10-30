@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import ATT, HIST, PART, axes, heat_image, load
+from videos.ai.ai15.common import fmt_int, ATT, HIST, PART, axes, heat_image, load
 
 POL_C = {"full": GREY_B, "window": C.SURPRISE, "sinks": C.INTERVAL, "h2o": C.BITS, "ref": WHITE}
 POL_NAME = {"full": r"keep everything", "window": r"the last $W$ tokens", "sinks": r"4 sinks $+$ the last $W-4$",
@@ -182,7 +182,7 @@ class Evict(VoiceoverScene):
                               font_size=18, color=POL_C[p]) for p in ("window", "sinks", "full")],
                       label(rf"recomputed windows: \ ${br:.3f}$", font_size=18, color=WHITE))
         bars.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.6, -1.5, 0])
-        bh = label(rf"bits per character, \ first ${n:,}$ tokens".replace(",", "{,}"), font_size=18, color=GREY_A)
+        bh = label(rf"bits per character, \ first ${fmt_int(n)}$ tokens", font_size=18, color=GREY_A)
         bh.next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
         hurt = bits["window"] - bits["sinks"]
         v1 = (f"Keep only the last {W} tokens, and once the first token is evicted the loss jumps, and it stays "

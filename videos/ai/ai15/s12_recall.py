@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import K, MIX_C, MIX_NAME, MIX_SHORT, MONO, PART, V, axes, curve, load
+from videos.ai.ai15.common import fmt_int, K, MIX_C, MIX_NAME, MIX_SHORT, MONO, PART, V, axes, curve, load
 
 
 class Recall(VoiceoverScene):
@@ -44,8 +44,8 @@ class Recall(VoiceoverScene):
         p = [int(m[f"params_{k}"]) for k in mix]
         setup = VGroup(*[label(MIX_NAME[k].replace(r"\\", r"\ "), font_size=20, color=MIX_C[k]) for k in mix])
         setup.arrange_in_grid(rows=2, cols=3, buff=(0.5, 0.18)).move_to(DOWN * 1.1)
-        rule = label(rf"two layers each, \ ${min(p):,}$--${max(p):,}$ weights, \ ${steps:,}$ steps; \ ${N}$ pairs; \ "
-                     rf"keys of ${dks[0]}$ to ${dks[-1]}$ numbers; \ {len(m['seeds'])} seeds".replace(",", "{,}"),
+        rule = label(rf"two layers each, \ ${fmt_int(min(p))}$--${fmt_int(max(p))}$ weights, \ ${fmt_int(steps)}$ steps; \ ${N}$ pairs; \ "
+                     rf"keys of ${dks[0]}$ to ${dks[-1]}$ numbers; \ {len(m['seeds'])} seeds",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.45)
         cite_ = cite(r"S.~Arora et al., \textit{Zoology: Measuring and Improving Recall in Efficient Language Models} (2023)",
                      corner=UR, font_size=17)
