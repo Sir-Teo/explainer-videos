@@ -62,6 +62,7 @@ def compute_kvcache():
     L = CONFIGS["llama70"]
     llama = 2 * L["layers"] * L["kv_heads"] * L["head_dim"] * B
     llama_mha = 2 * L["layers"] * L["q_heads"] * L["head_dim"] * B
+    llama_mqa = 2 * L["layers"] * 1 * L["head_dim"] * B  # the same model with one key and value for all heads
     D = CONFIGS["deepseek"]
     mla = D["layers"] * (D["kv_lora_rank"] + D["rope_dim"]) * B
     mla_full = D["layers"] * D["q_heads"] * ((D["nope_dim"] + D["rope_dim"]) + D["v_dim"]) * B
@@ -70,7 +71,7 @@ def compute_kvcache():
     qwen_tok = 2 * n_attn * Q["kv_heads"] * Q["head_dim"] * B
     qwen_state = (Q["layers"] - n_attn) * Q["lin_v_heads"] * Q["lin_k_dim"] * Q["lin_v_dim"] * B  # fixed, any length
     ctx = np.array([1e3, 4e3, 16e3, 64e3, 128e3, 256e3, 1e6])
-    out = dict(per_token=dict(llama=llama, llama_mha=llama_mha, mla=mla, mla_full=mla_full, qwen=qwen_tok),
+    out = dict(per_token=dict(llama=llama, llama_mha=llama_mha, llama_mqa=llama_mqa, mla=mla, mla_full=mla_full, qwen=qwen_tok),
                qwen_state=qwen_state, n_attn=n_attn, ctx=ctx, configs=CONFIGS)
     for k, v in out["per_token"].items():
         out[f"total_{k}"] = ctx * v + (qwen_state if k == "qwen" else 0)
@@ -745,7 +746,7 @@ def _pool_run(fn, jobs: dict, part, workers: int = 2):
             k = futs[f]
             part[k] = f.result()
             r = part[k]
-            print(f"    {k}: {r.get('acc', '')} ({r['seconds']:.0f}s)", flush=True)
+            print(f"    {k}: {r.get('acc', r.get('bits', ''))} ({r['seconds']:.0f}s)", flush=True)
 
 
 def compute_mqar():
@@ -803,37 +804,24 @@ def compute_ruler():
 # A gated-delta hybrid language model on the novels, against a transformer (videos/ai/ai15/novels_lm.py)
 # ---------------------------------------------------------------------------
 LM_GRID = dict(runs=[("transformer", 0), ("hybrid", 0), ("transformer", 1), ("hybrid", 1), ("transformer", 2),
-                     ("hybrid", 2)], steps=300)
+                     ("hybrid", 2)], steps=400)
 COPY_GAPS = [16, 64, 128, 192, 384, 768]
 
 
 def compute_lm():
-    """Train the runs (resumable: a checkpoint every 100 steps), then measure each: bits per character on the
-    scoreboard's passage (windows of 256, as Part 14), loss at each position of 1,024-token windows read in one go,
-    and the copy test at growing distances."""
+    """Train the runs (resumable: a checkpoint every 100 steps; two at a time, in spawned processes), then measure
+    each: bits per character on the scoreboard's passage (windows of 256, as Part 14), loss at each position of
+    1,024-token windows read in one go, and the copy test at growing distances."""
     from explainer.ai import novels as N
-    from videos.ai.ai1 import compute as c1
     from videos.ai.ai15 import novels_lm as L
 
-    import torch
-
-    torch.set_num_threads(2)
     G = LM_GRID
+    N.token_arrays()  # the tokenized novels exist before the workers start
     part = CACHE.partial("lm", G)
     CACHE.dir.mkdir(parents=True, exist_ok=True)
-    passage = c1.text("passage")
-    _, va = N.token_arrays()
-    for arch, seed in G["runs"]:
-        key = f"{arch}_{seed}"
-        if key in part:
-            continue
-        r = L.train(arch, seed, G["steps"], CACHE.dir)
-        m = L.load_trained(arch, seed, CACHE.dir)
-        r["bits"] = L.bits_per_char(m, passage)
-        r["by_pos"] = L.loss_by_position(m, va).tolist()
-        r["copy"] = L.copy_test(m, va, COPY_GAPS)
-        print(f"    {key}: held-out {r['final_val']:.3f}, passage {r['bits']:.3f} bits/char, copy {r['copy']}", flush=True)
-        part[key] = r
+    jobs = {f"{a}_{s}": dict(arch=a, seed=s, steps=G["steps"], ckpt_dir=str(CACHE.dir), gaps=COPY_GAPS)
+            for a, s in G["runs"]}
+    _pool_run(L.run_and_measure, jobs, part)
     out = dict(steps=G["steps"], gaps=COPY_GAPS, seq=L.SEQ, d=L.D, layers=L.LAYERS, archs=["transformer", "hybrid"],
                tokens=G["steps"] * L.BATCH * L.SEQ)
     for arch in ("transformer", "hybrid"):
@@ -871,7 +859,7 @@ def compute_sinks():
     from videos.ai.ai1 import compute as c1
     from videos.ai.ai15 import memory_lm as M
 
-    torch.set_num_threads(2)
+    torch.set_num_threads(1)
     model = N.load_base()
     _, va = N.token_arrays()
     starts = np.linspace(0, len(va) - 300, 24).astype(int)
@@ -882,7 +870,7 @@ def compute_sinks():
     pols = ("window", "sinks", "h2o")
     runs = [("full", 0)] + [(p, b) for b in STREAM_BUDGETS for p in pols]
     if "full_0" not in part:
-        part["full_0"] = M.stream_full(model, ids).tolist()
+        part["full_0"] = M.forward_masked(model, ids, "full").tolist()
     for b in STREAM_BUDGETS:
         if f"h2o_{b}" not in part:
             res = M.stream(model, ids, list(pols), b)
@@ -905,14 +893,14 @@ def compute_sinks():
 # ---------------------------------------------------------------------------
 # The kNN-LM on the novels
 # ---------------------------------------------------------------------------
-KNN = dict(k=64, window=256, keep=192, batch=24, fractions=[1 / 256, 1 / 64, 1 / 16, 1 / 4], tune_tokens=4000, seed=15)
+KNN = dict(k=64, window=256, keep=192, batch=24, fractions=[1 / 64, 1 / 16, 1 / 4, 1.0], tune_tokens=4000, seed=15)
 
 
 def compute_knn():
     """Every token of the thirty novels as (the series' model's last hidden state, the next token): about 6.6 million
-    pairs, of which a quarter (in a seeded random order) is used: about 1.6 million.  The memory is never stored
-    whole: the stored states stream past the queries, each query keeping its 64 nearest (squared distance), with
-    snapshots after 1/256, 1/64, 1/16 and 1/4 of the novels.  Queries: the scoreboard's passage, and held-out novel text to choose the mixing weight lambda and
+    pairs, read in a seeded random order.  The memory is never stored whole: the stored states stream past the
+    queries, each query keeping its 64 nearest (squared distance), with snapshots after 1/64, 1/16, 1/4 and all of
+    the novels.  Queries: the scoreboard's passage, and held-out novel text to choose the mixing weight lambda and
     the temperature.  Resumable: the running nearest neighbours are checkpointed with the position in the order."""
     import torch
 
@@ -920,7 +908,7 @@ def compute_knn():
     from videos.ai.ai1 import compute as c1
     from videos.ai.ai15 import memory_lm as M
 
-    torch.set_num_threads(2)
+    torch.set_num_threads(1)
     P = KNN
     model = N.load_base()
     tr, va = N.token_arrays()
@@ -936,7 +924,7 @@ def compute_knn():
     starts = np.arange(0, len(tr) - W - 1, keep)
     order = np.random.default_rng(P["seed"]).permutation(len(starts))
     n_all = len(order)
-    order = order[:int(round(P["fractions"][-1] * n_all))]  # a quarter of the novels, in a seeded random order
+    order = order[:int(round(P["fractions"][-1] * n_all))]
     snaps_at = [int(round(f * n_all)) for f in P["fractions"]]
     ck = CACHE.dir / "knn.ckpt.npz"
     if ck.exists():
@@ -1031,7 +1019,7 @@ def compute_selfcache():
     from videos.ai.ai1 import compute as c1
     from videos.ai.ai15 import memory_lm as M
 
-    torch.set_num_threads(2)
+    torch.set_num_threads(1)
     model = N.load_base()
     _, va = N.token_arrays()
 

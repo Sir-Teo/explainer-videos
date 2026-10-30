@@ -70,6 +70,7 @@ class KVCache(VoiceoverScene):
         cf = k["configs"]
         rows = [(r"Llama 3.1 70B, \ one key and value per head", pt["llama_mha"], GREY_B),
                 (r"Llama 3.1 70B, \ grouped queries", pt["llama"], C.TRUE_P),
+                (r"the same, \ one key and value for all heads", pt["llama_mqa"], GREY_B),
                 (r"DeepSeek-V3, \ as full attention", pt["mla_full"], GREY_B),
                 (r"DeepSeek-V3, \ latent attention", pt["mla"], C.BITS),
                 (r"Qwen3-Next, \ $1$ attention layer in $4$", pt["qwen"], C.INTERVAL)]
@@ -77,7 +78,7 @@ class KVCache(VoiceoverScene):
         scale = 6.4 / (hi - lo)
         g = VGroup()
         for i, (t, v, c_) in enumerate(rows):
-            y = 1.9 - i * 0.85
+            y = 2.0 - i * 0.72
             name = label(t, font_size=24, color=c_).move_to([-1.2, y, 0], aligned_edge=RIGHT)
             w = (math.log10(v) - lo) * scale
             bar = Rectangle(width=w, height=0.42, stroke_width=0, fill_color=c_, fill_opacity=0.85).move_to([-0.95 + w / 2, y, 0])
@@ -98,8 +99,11 @@ class KVCache(VoiceoverScene):
             f"attention head kept its own keys and values, each token of context would cost {pt['llama_mha'] / 2**20:.1f} "
             "megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and "
             f"each group shares one key and one value. That's {r1:.0f} times less, {pt['llama'] / 2**10:.0f} kilobytes a "
-            "token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the "
-            "hybrid Qwen3-Next. Let's see how."
+            "token, and the quality barely changes. <bookmark mark='m'/> Noam Shazeer's multi-query attention, in "
+            "2019, went all the way: one key and one value for every head, "
+            f"{pt['llama_mqa'] / 2**10:.0f} kilobytes here, but it costs some quality; grouped queries, from Joshua "
+            "Ainslie and colleagues in 2023, are the compromise. <bookmark mark='c'/> DeepSeek-V3 goes further, and so "
+            "does the hybrid Qwen3-Next. Let's see how."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -108,9 +112,12 @@ class KVCache(VoiceoverScene):
             self.play(FadeIn(g[1], shift=RIGHT * 0.2), FadeIn(gqa), FadeIn(gq, shift=UP * 0.2))
             sh_ = gqa_shared(gqp)
             self.play(Transform(gqp[1], sh_[0]), Transform(gqp[2], sh_[1]), run_time=1.5)
+            vo.wait_until("m")
+            sh1 = gqa_shared(gqp, groups=1)
+            self.play(Transform(gqp[1], sh1[0]), Transform(gqp[2], sh1[1]), FadeIn(g[2], shift=RIGHT * 0.2), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeOut(gq), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g[2:]], lag_ratio=0.4), run_time=2.0)
+            self.play(FadeOut(gq), FadeOut(gqa), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g[3:]], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -143,6 +150,7 @@ class KVCache(VoiceoverScene):
         res = label(rf"${gib(pt['mla_full'])}$ $\to$ ${gib(pt['mla'])}$ a token: \ ${ratio:.0f}\times$ less", font_size=28,
                     color=C.BITS).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.5)
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-V2} (2024): \ multi-head latent attention", corner=DL)
+
         with self.voiceover(
             "DeepSeek's trick is multi-head latent attention. A latent is a short hidden summary from which the "
             "full thing can be rebuilt. <bookmark mark='a'/> Each token is squeezed into a short "
@@ -163,7 +171,6 @@ class KVCache(VoiceoverScene):
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
-
 
     # ------------------------------------------------------------------
     def positions(self):
@@ -216,5 +223,9 @@ class KVCache(VoiceoverScene):
             self.play(Write(f2), GrowFromCenter(br), FadeIn(n2))
             vo.wait_until("c")
             self.play(Write(f3), FadeIn(n3), FadeIn(cache), FadeIn(cl))
+            vo.wait_until("d")
+            p19 = label(r"serving the cache: \ paging, \ sharing, \ fewer bits \ $\rightarrow$ Part 19", font_size=22,
+                        color=GREY_B).to_corner(DR, buff=0.35)
+            self.play(FadeIn(p19))
         self.wait(0.3)
         self.clear_scene()

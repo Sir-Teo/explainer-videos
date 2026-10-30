@@ -4,14 +4,99 @@ from __future__ import annotations
 
 import numpy as np
 
+import re
+
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai13.common import heat_image, signed_image  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import CACHE, load  # noqa: F401
 
+PART = 15
 MONO = "DejaVu Sans Mono"
+HIST = C.HUMAN  # history cards
 Q, K, V, A = C.QUERY, C.KEY, C.VALUE, C.ATTN
 STATE = C.EMBED  # the fixed-size memory
 ADD, DECAY, DELTA = C.SURPRISE, C.TRUE_P, C.INTERVAL  # the three ways to write to it
+GATED = C.BITS  # the gated delta rule
+ATT = C.ATTN  # softmax attention
+SSM_C = "#B39DDB"  # state-space models, Mamba
+HYB = "#7FD3FF"  # hybrids
+RET = C.NEURAL  # retrieval
+# one colour and name per memory, for the whole part
+MIX_C = {"softmax": ATT, "linear": ADD, "mamba2": SSM_C, "delta": DELTA, "gdn": GATED, "hybrid": HYB}
+MIX_NAME = {"softmax": r"softmax attention", "linear": r"linear attention", "mamba2": r"Mamba-2-style SSM",
+            "delta": r"delta rule", "gdn": r"gated delta rule", "hybrid": r"hybrid: \ gated delta $+$ attention"}
+MIX_SHORT = {"softmax": r"softmax", "linear": r"linear", "mamba2": r"Mamba-2", "delta": r"delta", "gdn": r"gated delta",
+             "hybrid": r"hybrid"}
+
+
+def sci(x: float, digits: int = 0) -> str:
+    """3.1e-15 as TeX: 3 \\times 10^{-15}."""
+    m, e = f"{x:.{digits}e}".split("e")
+    return rf"{m} \times 10^{{{int(e)}}}"
+
+
+def fmt_int(n) -> str:
+    return f"{int(n):,}".replace(",", "{,}")
+
+
+def node_box(text: str, color, font_size=24, pad=0.22, height=0.62, fill=0.1, width=None) -> VGroup:
+    t = label(text, font_size=font_size, color=color)
+    w = max(width or 0, t.width + 2 * pad)
+    box = RoundedRectangle(width=w, height=max(height, t.height + 0.25), corner_radius=0.12,
+                           stroke_color=color, stroke_width=2.2, fill_color=color, fill_opacity=fill)
+    return VGroup(box, t.move_to(box))
+
+
+def said(text: str, chars: int = 46, font_size: int = 20, max_lines: int = 3, color=WHITE, box_color=GREY_B) -> VGroup:
+    """Words a model wrote (or a book): monospaced, wrapped, boxed, never translated."""
+    import textwrap
+
+    lines = textwrap.wrap(" ".join(text.split()), chars) or [""]
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        lines[-1] = lines[-1][: chars - 3] + "..."
+    t = data_text("\n".join(lines), font=MONO, font_size=font_size, color=color, line_spacing=0.8)
+    box = RoundedRectangle(width=t.width + 0.4, height=t.height + 0.32, corner_radius=0.12, stroke_color=box_color,
+                           stroke_width=2, fill_color=box_color, fill_opacity=0.07)
+    return VGroup(box, t.move_to(box))
+
+
+def take_away(text: str, color=C.BITS, font_size=28) -> VGroup:
+    t = label(text, font_size=font_size, color=color)
+    band_ = RoundedRectangle(width=min(t.width + 0.8, 13.6), height=t.height + 0.4, corner_radius=0.14,
+                             stroke_width=0, fill_color=color, fill_opacity=0.10)
+    return VGroup(band_, t.move_to(band_)).to_edge(DOWN, buff=0.4)
+
+
+def stat(value: str, caption: str, color=WHITE, font_size=44, cap_size=20) -> VGroup:
+    v = label(value, font_size=font_size, color=color)
+    c = label(caption, font_size=cap_size, color=GREY_A)
+    return VGroup(v, c).arrange(DOWN, buff=0.12)
+
+
+def hbars(items, max_value, width=5.0, bar_h=0.34, gap=0.16, font_size=20, label_width=3.2, fmt=lambda v: f"{v:g}",
+          spread=None) -> VGroup:
+    """Horizontal bars: items (label TeX, value, colour); ``spread``: (lo, hi) per item, drawn as a whisker."""
+    rows = VGroup()
+    for i, (t, v, c_) in enumerate(items):
+        y = -i * (bar_h + gap)
+        nm = label(t, font_size=font_size, color=c_)
+        if nm.width > label_width:
+            nm.width = label_width
+        nm.move_to([-0.15 - nm.width / 2, y, 0])
+        w = max(width * v / max_value, 0.02)
+        bar = Rectangle(width=w, height=bar_h, stroke_width=0, fill_color=c_, fill_opacity=0.85).move_to([w / 2, y, 0])
+        val = MathTex(fmt(v), font_size=font_size + 2, color=c_).next_to(bar, RIGHT, buff=0.12)
+        row = VGroup(nm, bar, val)
+        if spread is not None:
+            lo, hi = spread[i]
+            wl = Line([width * lo / max_value, y, 0], [width * hi / max_value, y, 0], color=WHITE, stroke_width=2)
+            row.add(wl)
+            val.next_to([max(w, width * hi / max_value), y, 0], RIGHT, buff=0.12)
+        row.name, row.bar, row.value = nm, bar, val
+        rows.add(row)
+    return rows
 
 
 def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
