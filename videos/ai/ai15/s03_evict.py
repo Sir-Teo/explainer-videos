@@ -255,16 +255,16 @@ class Evict(VoiceoverScene):
         name = {"window": "the plain window", "sinks": "sinks plus a window", "h2o": "the heavy hitters"}
         v = (f"With the smallest cache, {B[0]} tokens, {name[best]} does best: heavy hitters "
              f"{bh[0]:.2f} bits per character, sinks {bs[0]:.2f}, the plain window {bwd[0]:.2f}. ")
-        v += (f"With {B[-1]} tokens all three are close to recomputing, {br:.2f}, and the choice hardly matters."
-              if max(bh[-1], bs[-1]) - br < 0.08 else
-              f"Even with {B[-1]} tokens they stay above recomputing, {br:.2f}.")
+        v_b = (f"With {B[-1]} tokens all three are close to recomputing, {br:.2f}, and the choice hardly matters."
+               if max(bh[-1], bs[-1]) - br < 0.08 else
+               f"Even with {B[-1]} tokens they stay above recomputing, {br:.2f}.")
         with self.voiceover(
             "A second idea, H2O from Zhenyu Zhang and colleagues, also in 2023, is to keep the tokens that matter. "
             "<bookmark mark='a'/> Add up the attention each cached token has drawn so far; when the cache is full, "
             "evict the one with the least, but always keep the most recent half. A few heavy hitters draw most of "
             "the attention, and the sink is one of them. <bookmark mark='b'/> Here are the three policies on the "
             "same passage, with caches of " + f"{B[0]}, {B[1]} and {B[2]} tokens per head. " + v
-            + " <bookmark mark='c'/> Evicting is a guess about the future made from the past: a token that seemed "
+            + "<bookmark mark='d'/> " + v_b + " <bookmark mark='c'/> Evicting is a guess about the future made from the past: a token that seemed "
             "unimportant may be the one a later question needs. Part 16 chooses tokens by content instead."
         ) as vo:
             self.play(FadeIn(g), FadeIn(xt), FadeIn(cite_), Create(refl), FadeIn(rl))
@@ -272,6 +272,8 @@ class Evict(VoiceoverScene):
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("b")
             self.play(FadeIn(leg), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.15), run_time=2.5)
+            vo.wait_until("d")
+            self.play(Indicate(bars, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(Indicate(fl, color=C.BITS, scale_factor=1.03))
         self.wait(0.3)
