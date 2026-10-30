@@ -168,7 +168,7 @@ ZH = {
     # ------------------------------------------------------------------ 9. Decoding
     'Chapter nine. How a language model chooses.': '第9章。语言模型怎样选词。',
     'f"A language model ends every step with a distribution':
-        "语言模型的每一步，都以整个词表上的一个分布结束，解码就是从中挑选。<bookmark mark='a'/>这是GPT-2对下面这句话后一个词的分布：Spade sat down in the armchair, and。它最喜欢的词只占{100 * p1[0]:.0f}%。<bookmark mark='b'/>第一个旋钮是温度：在softmax之前把分数除以T，这就是第6章的吉布斯分布。",
+        "语言模型的每一步，都以整个词表上的一个分布结束，解码就是从中挑选。<bookmark mark='a'/>这是GPT-2对一句英文小说开头之后下一个词的分布，那句话是：“斯佩德在扶手椅上坐下，然后”。它最喜欢的词只占{100 * p1[0]:.0f}%。<bookmark mark='b'/>第一个旋钮是温度：在softmax之前把分数除以T，这就是第6章的吉布斯分布。",
     'f"Turn it down, below one':
         "把它调低，低于1，分布就向最喜欢的那几个词收紧。<bookmark mark='a'/>调高，它就变平，直到下一个词几乎可以是任何词。<bookmark mark='b'/>熵跟着旋钮变化：T等于0.5时{d['H0.5']:.1f}比特，1时{d['H1.0']:.1f}，2时{d['H2.0']:.1f}。",
     "Here's what comes out.":

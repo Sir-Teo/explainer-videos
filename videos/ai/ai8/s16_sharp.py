@@ -128,11 +128,11 @@ class Sharpness(VoiceoverScene):
         s = load("sharp")
         al, rs = [float(a) for a in s["alphas"]], np.asarray(s["resc"])
         ylo, yhi = math.floor(math.log10(rs.min()) * 2) / 2 - 0.5, math.ceil(math.log10(rs.max()) * 2) / 2
-        G = axes([-0.5, len(al) - 0.5], [ylo, yhi], x_length=5.6, y_length=3.6,
+        G = axes([-0.5, len(al) - 0.5], [ylo, yhi], x_length=5.6, y_length=3.0,
                  xticks=list(range(len(al))), xfmt=lambda v: f"{al[int(round(v))]:g}",
                  yticks=[v for v in np.arange(ylo, yhi + 1e-9, 0.5)],
                  yfmt=lambda v: f"{10 ** v:.2g}", xlabel=r"$a$: \ first layer $\times a$, \ second $\div a$",
-                 ylabel=r"top Hessian eigenvalue \ (log scale)", center=(3.3, -0.6, 0))
+                 ylabel=r"top Hessian eigenvalue \ (log scale)", center=(3.3, -1.25, 0))
         ax = G.ax
         bs = bars(ax, np.arange(len(al)), np.log10(rs), 0.6, C.SURPRISE, 0.85)
         vals = VGroup(*[MathTex(f"{v:.1f}", font_size=22, color=WHITE).next_to(b_, UP, buff=0.06)

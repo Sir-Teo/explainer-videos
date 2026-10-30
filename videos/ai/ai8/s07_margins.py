@@ -159,7 +159,7 @@ class Margins(VoiceoverScene):
         ctr = curve(ax, np.log10(rr), np.clip(tr, 0, 0.12), TRAIN, 3)
         cte = curve(ax, np.log10(rr), np.clip(te, 0, 0.12), TEST, 4)
         key = legend([(TRAIN, r"training error"), (TEST, r"error on new pages")], font_size=20)
-        key.next_to(G, UP, buff=0.1).align_to(G, RIGHT)
+        key.next_to(ax.c2p(math.log10(T), 0.12), DL, buff=0.1)
         snaps = [int(s) for s in m["ada_snaps"]]
         H = axes([-1, 1], [0, 1], x_length=5.4, y_length=3.6, xticks=[-1, -0.5, 0, 0.5, 1], yticks=[0, 0.5, 1],
                  yfmt=lambda v: rf"{100 * v:.0f}\%", xlabel=r"normalized margin $y \sum_t \alpha_t h_t(x) / "

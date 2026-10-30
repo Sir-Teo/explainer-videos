@@ -139,9 +139,9 @@ class DoubleDescent(VoiceoverScene):
                 why(r"$u_i^\top \varepsilon$ has variance $s^2$: \ the smallest $\sigma_i$ dominates")]
         step = ladder(self, rows, whys, keep=3, top=3.4, x=-3.0, buff=0.3, edge=6.9)
         # the singular values for one p, sorted, on a log scale
-        G = axes([0, n], [-4, 1], x_length=6.0, y_length=3.2, xticks=[0, n], yticks=[-4, -3, -2, -1, 0, 1],
+        G = axes([0, n], [-4, 1], x_length=6.0, y_length=2.6, xticks=[0, n], yticks=[-4, -3, -2, -1, 0, 1],
                  yfmt=lambda v: "1" if v == 0 else (f"10" if v == 1 else f"10^{{{int(v)}}}"),
-                 xlabel=r"singular values, \ largest to smallest", center=(-3.3, -1.8, 0), font_size=18)
+                 xlabel=r"singular values, \ largest to smallest", center=(-3.3, -2.3, 0), font_size=18)
         ax = G.ax
         k = ValueTracker(0)
 
@@ -157,9 +157,9 @@ class DoubleDescent(VoiceoverScene):
             return g
 
         sp = always_redraw(spec)
-        H = log_axes((1, 3.8), (-4, 1), x_length=5.4, y_length=3.2, xticks=[1, 2, 3], yticks=[-4, -2, 0],
+        H = log_axes((1, 3.8), (-4, 1), x_length=5.4, y_length=2.6, xticks=[1, 2, 3], yticks=[-4, -2, 0],
                      xlabel=r"$p$ features", ylabel=r"smallest singular value $\sigma_{\min}/\sqrt p$",
-                     center=(3.6, -1.8, 0), font_size=18)
+                     center=(3.6, -2.3, 0), font_size=18)
         hx = H.ax
         cs = curve(hx, np.log10(ps), np.clip(np.log10(np.maximum(sm, 1e-4)), -4, 1), C.SURPRISE, 3.5)
         nl = DashedLine(hx.c2p(math.log10(n), -4), hx.c2p(math.log10(n), 1), color=WHITE, stroke_width=1.5)

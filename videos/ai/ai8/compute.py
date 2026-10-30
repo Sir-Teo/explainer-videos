@@ -918,7 +918,7 @@ def compute_double():
     lams = [1e-2, 1.0, 1e2]
     errs, tr_errs, norms, smin, ridge = [], [], [], [], []
     spectra = {}
-    show = [100, 250, 400, n - 8, n, n + 8, 600, 1000, 3000]
+    show = sorted({int(ps[np.argmin(np.abs(ps - v))]) for v in (100, 250, 400, n - 8, n, n + 8, 600, 1000, 3000)})
     reps = 5
     for p in ps:
         e, et, nm, sm, rr = [], [], [], [], []
