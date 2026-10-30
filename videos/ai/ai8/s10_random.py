@@ -165,17 +165,18 @@ class RandomLabels(VoiceoverScene):
         kg = int(np.argmax(gap))  # where the pages with a true label lead the most
         early = gap[kg] > 0.08
         ks = list(range(1, kmax + 1))
+        order = (f"In the first few steps, the pages whose label happens to be true pull ahead: by step "
+                 f"{int(steps[kg])}, {100 * ya[kg]:.0f} percent of them are right, against {100 * yd[kg]:.0f} percent "
+                 "of the others. The network starts by learning the real difference between the authors. Then it "
+                 f"memorizes the rest, and by step {int(steps[full])} every page, true or not, is fit. "
+                 if early else
+                 f"Both halves are fit at much the same pace, every page by step {int(steps[full])}: here the "
+                 "network memorizes without first picking up the real pattern. ")
         with self.voiceover(
             "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true "
             "author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its "
             "shuffled label right. "
-            + (f"<bookmark mark='b'/> In the first few steps, the pages whose label happens to be true pull ahead: by "
-               f"step {int(steps[kg])}, {100 * ya[kg]:.0f} percent of them are right, against {100 * yd[kg]:.0f} percent "
-               "of the others. The network starts by learning the real difference between the authors. Then it "
-               f"memorizes the rest, and by step {int(steps[full])} every page, true or not, is fit. "
-               if early else
-               f"<bookmark mark='b'/> Both halves are fit at much the same pace, every page by step "
-               f"{int(steps[full])}: here the network memorizes without first picking up the real pattern. ")
+            + "<bookmark mark='b'/> " + order
             + f"With {int(r['n_params']):,} weights for {len(lab)} pages, memorizing is quick."
         ) as vo:
             self.play(FadeIn(ga), FadeIn(gd), FadeIn(ha), FadeIn(hd), Create(ax), FadeIn(xt), FadeIn(yt_), FadeIn(key_))
@@ -214,15 +215,17 @@ class RandomLabels(VoiceoverScene):
         f0, f1 = float(fit[0].mean()), float(fit[-1].mean())
         mono = bool(np.all(np.diff(te.mean(1)) < 0.01))
         slower = f1 > 1.3 * f0
+        steady = ", steadily, as the share of wrong labels grows. " if mono else ", though not evenly. "
+        pace = (f"taking longer the more labels are noise: about {f0:.0f} steps when they're clean, {f1:.0f} when "
+                "they're all random. " if slower else
+                f"in about {f0:.0f} to {f1:.0f} steps whatever the noise: on 448 pages, memorizing is cheap. ")
         with self.voiceover(
             "Zhang and colleagues also turned the dial gradually, replacing a growing share of the labels with coin "
             "flips. Here that is on the pages, three seeds at each setting. <bookmark mark='a'/> Accuracy on new "
             f"pages falls from {100 * a0:.0f} percent with clean labels to {100 * a1:.0f} with all of them random"
-            + (", steadily, as the share of wrong labels grows. " if mono else ", though not evenly. ")
+            + steady
             + "<bookmark mark='b'/> And the network fits every training label at every setting, "
-            + (f"taking longer the more labels are noise: about {f0:.0f} steps when they're clean, {f1:.0f} when "
-               "they're all random. " if slower else
-               f"in about {f0:.0f} to {f1:.0f} steps whatever the noise: on 448 pages, memorizing is cheap. ")
+            + pace
             + "The same network, the same training, the same zero training error, and anything from excellent to "
             "useless on new data. What it learns depends on the labels; any measure that looks only at the network "
             "and not at the data can't tell these apart."

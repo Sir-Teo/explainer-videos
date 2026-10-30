@@ -102,7 +102,7 @@ class BiasVariance(VoiceoverScene):
             "bias; how much the fit varies from sample to sample, the variance; and the noise. Geman, Bienenstock "
             "and Doursat named the dilemma in 1992, for neural networks."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(hist, shift=UP * 0.2))
             step(0)
             vo.wait_until("a")
             step(1)
@@ -112,7 +112,7 @@ class BiasVariance(VoiceoverScene):
             step(3)
             vo.wait_until("d")
             step(4)
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(Indicate(hist, color=HIST, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -146,9 +146,10 @@ class BiasVariance(VoiceoverScene):
         best = int(b["best"])
         dot = Dot(ax.c2p(best, ly(total[best])), radius=0.09, color=TEST)
         bl = label(rf"best: \ degree ${best}$", font_size=26, color=TEST).next_to(dot, DOWN, buff=0.25)
-        names = VGroup(label(r"bias$^2$", font_size=26, color=BIAS).next_to(ax.c2p(2, ly(bias2[2])), RIGHT, buff=0.2),
+        names = VGroup(label(r"bias$^2$", font_size=26, color=BIAS).next_to(ax.c2p(7.5, 0.05), UP, buff=0.12),
                        label(r"variance", font_size=26, color=VAR).next_to(cv.get_end(), LEFT, buff=0.15),
-                       label(r"noise", font_size=24, color=GREY_B).next_to(cn.get_end(), UP, buff=0.08).shift(LEFT * 0.4))
+                       label(r"noise", font_size=24, color=GREY_B).next_to(ax.c2p(0.2, math.log10(noise) - lo), DR,
+                                                                           buff=0.08))
         mkey = VGroup(Circle(radius=0.09, color=WHITE, stroke_width=2),
                       label(r"measured on fresh noisy points", font_size=22, color=WHITE)).arrange(RIGHT, buff=0.15)
         mkey.to_corner(DR, buff=0.4).shift(UP * 0.8)

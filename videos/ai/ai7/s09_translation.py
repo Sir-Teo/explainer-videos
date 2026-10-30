@@ -82,13 +82,13 @@ class Translation(VoiceoverScene):
                  ("le chat noir", "the black cat"), ("le chien mange", "the dog eats"),
                  ("le chat mange le poisson", "the cat eats the fish"), ("un poisson rouge", "a red fish"),
                  ("le chat voit un poisson", "the cat sees a fish")]
-        corpus = VGroup(*[VGroup(data_text(f, font=MONO, font_size=17, color=FR),
-                                 data_text(e, font=MONO, font_size=17, color=EN)) for f, e in pairs])
+        corpus = VGroup(*[VGroup(data_text(f, font=MONO, font_size=15, color=FR),
+                                 data_text(e, font=MONO, font_size=15, color=EN)) for f, e in pairs])
         for r in corpus:
             r[1].next_to(r[0], RIGHT, buff=0.3)
         corpus.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-4.6, 0.4, 0]).to_edge(LEFT, buff=0.35)
         cl = label(rf"$8$ of our ${d['n_train']}$ sentence pairs", font_size=20, color=GREY_A).next_to(corpus, UP, buff=0.2)
-        grid = heat_grid(A[0], cell=0.6, color=ALIGN).move_to([2.0, 0.2, 0])
+        grid = heat_grid(A[0], cell=0.6, color=ALIGN).move_to([2.3, 0.2, 0])
         cols = VGroup(*[data_text(w, font=MONO, font_size=20, color=FR if w != "NULL" else GREY_B)
                         .rotate(0.6).next_to(grid[j], UP, buff=0.12) for j, w in enumerate(["NULL"] + fr)])
         rows_ = VGroup(*[data_text(w, font=MONO, font_size=22, color=EN).next_to(grid[i * (len(fr) + 1)], LEFT, buff=0.15)
@@ -99,9 +99,9 @@ class Translation(VoiceoverScene):
         eq.to_edge(UP, buff=0.25).shift(RIGHT * 2.2)
         en_ = label(r"IBM Model 1: \ every alignment equally likely", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.1)
         rv = Integer(0, font_size=30)
-        rl = VGroup(label(r"EM round", font_size=24, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([5.4, 1.4, 0])
+        rl = VGroup(label(r"EM round", font_size=24, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([5.7, 1.4, 0])
         g = axes([0, len(lls), 10], [float(lls.min()) - 5, float(lls.max()) + 5, 20], x_length=2.6, y_length=1.8,
-                 ylabel=r"log-likelihood", font_size=16, center=[5.4, -1.0, 0])
+                 ylabel=r"log-likelihood", font_size=16, center=[5.7, -1.0, 0])
         it = ValueTracker(1)
         lc = always_redraw(lambda: curve(g.ax, np.arange(1, int(it.get_value()) + 1), lls[:int(it.get_value())], C.BITS, 3)
                            if it.get_value() >= 2 else VMobject())

@@ -129,13 +129,14 @@ class MinNorm(VoiceoverScene, ThreeDScene):
             label(rf"predicted: \ $|(I - P)\,w_0| = {m['pred_gap']:.2f}$", font_size=22, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.4, -0.2, 0])
         agree = abs(d1[-1] - m["pred_gap"]) < 1e-6 * max(1.0, m["pred_gap"])
+        which = ("exactly the part of the starting point that lay outside the row space, which no step ever "
+                 "touches. " if agree else "close to the part of the starting point outside the row space. ")
         with self.voiceover(
             f"Check it with {n} equations in {d} unknowns. <bookmark mark='a'/> From zero, the distance to the "
             "pseudoinverse solution falls until it hits the limits of double precision, and the part of the weights "
             "outside the row space stays at rounding error the whole way. <bookmark mark='b'/> Start somewhere "
             f"else, and descent still fits every equation, but stops {d1[-1]:.2f} away from the minimum-norm fit, "
-            + ("exactly the part of the starting point that lay outside the row space, which no step ever touches. "
-               if agree else "close to the part of the starting point outside the row space. ")
+            + which
             + "So the answer depends on the start too: networks start near zero, with small random weights, and part "
             "nine of this series is about choosing that scale."
         ) as vo:

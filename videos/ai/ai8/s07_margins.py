@@ -110,6 +110,12 @@ class Margins(VoiceoverScene):
         vac = m["best_bound"] >= 0.5
         hist = history_card(1998, r"P.~Bartlett", r"\textit{The size of the weights is more important than the size "
                             r"of the network}", width=5.2, font_size=18, color=HIST).to_corner(UR, buff=0.25)
+        verdict = (f"The best trade-off gives {m['best_bound']:.2f}, more than a coin's error rate: vacuous, while the "
+                   f"actual test error is {100 * (1 - m['test_acc']):.1f} percent. With the same margins it would "
+                   f"take about {int(m['n_half']):,} pages. Our 448 aren't enough for the margin, either."
+                   if vac else
+                   f"The best trade-off gives {m['best_bound']:.2f}, below a coin's error rate, against an actual "
+                   f"test error of {100 * (1 - m['test_acc']):.1f} percent.")
         with self.voiceover(
             "The bound comes in three steps. <bookmark mark='a'/> Replace the error, one when the margin is "
             "negative, with a ramp that's one below zero and zero above gamma; it lies between the error and the "
@@ -119,12 +125,7 @@ class Margins(VoiceoverScene):
             "this the point in 1998: the size of the weights matters more than the number of them. "
             "<bookmark mark='d'/> Now compute it on the pages. Small gamma: no margin loss, but a huge complexity "
             "term. Large gamma: the reverse. "
-            + (f"The best trade-off gives {m['best_bound']:.2f}, more than a coin's error rate: vacuous, while the "
-               f"actual test error is {100 * (1 - m['test_acc']):.1f} percent. With the same margins it would take "
-               f"about {int(m['n_half']):,} pages. Our 448 aren't enough for the margin, either."
-               if vac else
-               f"The best trade-off gives {m['best_bound']:.2f}, below a coin's error rate, against an actual test "
-               f"error of {100 * (1 - m['test_acc']):.1f} percent.")
+            + verdict
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -179,19 +180,20 @@ class Margins(VoiceoverScene):
             fell = te[kmin] < te[zero - 1] - 1e-9
         else:
             fell = False
+        first = (f"On the pages, its training error reaches zero at round {zero}. " if zero is not None else
+                 "On the pages, its training error falls quickly. ")
+        if fell:
+            end = (f"and ends at {100 * te[-1]:.1f} after {T}. " if abs(te[-1] - te[kmin]) > 1e-9 else
+                   "and stays there. ")
+            tail = ("By the classical story, it should stop improving there, or start to overfit. Instead the error "
+                    f"on new pages keeps falling, from {100 * te[zero - 1]:.1f} percent at round {zero} to "
+                    f"{100 * te[kmin]:.1f} at round {kmin + 1}, {end}")
+        else:
+            tail = "After that, the error on new pages stays about where it was. "
         with self.voiceover(
             "Margins first explained a puzzle twenty years before deep learning's. Boosting builds a classifier from "
             "many weak ones, here single cuts on one word rate each, reweighting the examples it gets wrong. "
-            "<bookmark mark='a'/> "
-            + (f"On the pages, its training error reaches zero at round {zero}. " if zero is not None else
-               "On the pages, its training error falls quickly. ")
-            + "<bookmark mark='b'/> "
-            + ("By the classical story, it should stop improving there, or start to overfit. "
-               f"Instead the error on new pages keeps falling, from {100 * te[zero - 1]:.1f} percent at round {zero} "
-               f"to {100 * te[kmin]:.1f} at round {kmin + 1}, "
-               + (f"and ends at {100 * te[-1]:.1f} after {T}. " if abs(te[-1] - te[kmin]) > 1e-9 else "and stays there. ")
-               if fell else
-               "After that, the error on new pages stays about where it was. ")
+            "<bookmark mark='a'/> " + first + "<bookmark mark='b'/> " + tail
             + "<bookmark mark='c'/> The explanation, by Schapire, Freund, Bartlett and Lee in 1998: with the training "
             "points all correct, later rounds keep pushing their margins outward, and the margin bound only cares "
             "about margins. The same shape, more training past zero training error and better on new data, is "

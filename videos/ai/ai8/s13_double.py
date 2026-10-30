@@ -55,6 +55,7 @@ class DoubleDescent(VoiceoverScene):
                    font_size=32).to_corner(UR, buff=0.4)
         cite_ = cite(r"M.~Belkin, D.~Hsu, S.~Ma \& S.~Mandal (2019); \ P.~Nakkiran et al.\ (2020)", corner=UL)
         below = te[-1] < te[k_min1]
+        how_low = ", lower than the bottom of the U." if below else ", though not quite to the bottom of the U."
         feats, fits = self.features_picture(), self.min_norm_picture()
         with self.voiceover(
             "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random "
@@ -66,7 +67,7 @@ class DoubleDescent(VoiceoverScene):
             "rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly "
             f"{n} features, as many as there are pages, the fit is forced through every point, and the error "
             "explodes. <bookmark mark='c'/> And then, past it, the error comes back down"
-            + (", lower than the bottom of the U." if below else ", though not quite to the bottom of the U.")
+            + how_low
         ) as vo:
             self.play(FadeIn(feats[0]), FadeIn(feats[2]), FadeIn(cite_))
             self.play(Create(feats[1]), FadeIn(feats[3]), run_time=1.5)
@@ -97,18 +98,19 @@ class DoubleDescent(VoiceoverScene):
         nn_ = DashedLine(nax.c2p(math.log10(n), ny0), nax.c2p(math.log10(n), ny1), color=WHITE, stroke_width=1.5)
         peak_at_n = abs(int(np.argmax(nm)) - k_n) <= 1
         below_u = nm[-1] < nm[k_min1]
+        opening = ("More parameters than data, and better on new data. " if below else
+                   "More parameters than data, and still good on new data. ")
+        if peak_at_n:
+            ending = ", ending smaller than at the bottom of the U. " if below_u else ". "
+            size = ("Its size tells the story: the weights blow up at the peak, where the fit is forced, then shrink "
+                    f"as features are added{ending}")
+        else:
+            size = "Past the peak, the smallest fit's weights shrink as features are added. "
         with self.voiceover(
-            ("More parameters than data, and better on new data. " if below else
-             "More parameters than data, and still good on new data. ")
-            + "Belkin and colleagues named it double descent in "
-            "2019, and Nakkiran and colleagues found it in deep networks the same year. <bookmark mark='a'/> The training error is zero all along "
-            "the second descent, so it can't be what decides. What decides is which of the many exact fits you "
-            "get, and the smallest one is the simplest. "
-            + ("<bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is "
-               "forced, then shrink as features are added"
-               + (", ending smaller than at the bottom of the U. " if below_u else ". ")
-               if peak_at_n else
-               "<bookmark mark='n'/> Past the peak, the smallest fit's weights shrink as features are added. ")
+            f"{opening}Belkin and colleagues named it double descent in 2019, and Nakkiran and colleagues found it in deep "
+            "networks the same year. <bookmark mark='a'/> The training error is zero all along the second descent, so "
+            "it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is "
+            "the simplest. <bookmark mark='n'/> " + size
             + "And from chapter ten: gradient descent from zero finds exactly that smallest fit."
         ) as vo:
             vo.wait_until("a")
@@ -170,7 +172,7 @@ class DoubleDescent(VoiceoverScene):
             "variance times the sum of one over sigma squared. So everything hangs on the smallest singular value. "
             "<bookmark mark='d'/> Here are the feature matrix's singular values as p grows. With few features they "
             "stay well away from zero. <bookmark mark='e'/> As p approaches n, the smallest slides toward zero, and "
-            f"at p equals n it's {sm[kn]:.0e}: a square random matrix is nearly singular. "
+            f"at p equals n it's only {sm[kn]:.4f}: a square random matrix is nearly singular. "
             "<bookmark mark='f'/> Past it, with more features than pages, the smallest singular value climbs back "
             "up, and the noise is spread over directions that barely affect new pages."
         ) as vo:

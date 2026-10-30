@@ -58,7 +58,7 @@ class Causes(VoiceoverScene):
         win = VGroup(SurroundingRectangle(tab[0][1], color=TA, buff=0.08), SurroundingRectangle(tab[1][1], color=TA, buff=0.08),
                      SurroundingRectangle(tab[2][2], color=TB, buff=0.08))
         head = label(r"success of kidney-stone surgery \ (Charig et al., 1986)", font_size=30).to_edge(UP, buff=0.4)
-        q = label(r"which would you choose?", font_size=30, color=CAUSE).to_edge(DOWN, buff=0.5)
+        q = label(r"which would you choose?", font_size=30, color=CAUSE).to_edge(DOWN, buff=1.0)
         cite_ = cite(r"C.~R.~Charig et al., \textit{BMJ} (1986); \ tabulated by S.~Julious \& M.~Mullee (1994)", corner=DR)
         with self.voiceover(
             "A real study, from 1986: two ways of removing kidney stones, open surgery and a keyhole method. "

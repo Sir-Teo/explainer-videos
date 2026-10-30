@@ -234,6 +234,10 @@ class VI(VoiceoverScene):
                            color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -1.0, 0])
         sd = label(rf"spread of $\mu$: \ true ${d['sd_mu_true']:.2f}$, \ mean field ${d['sd_mu_q']:.2f}$", font_size=22,
                    color=Q).move_to([3.4, -2.9, 0])
+        model = VGroup(label(rf"${d['N']}$ Austen pages: \ the rate of ``the''", font_size=24, color=GREY_A),
+                       MathTex(r"x_n \sim \mathcal{N}(\mu,\, 1/\tau)", font_size=32),
+                       MathTex(r"\mu \sim \mathcal{N}(\mu_0,\, 1/(\lambda_0 \tau)), \quad \tau \sim \mathrm{Gamma}(a_0, b_0)",
+                               font_size=30)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, 0.4, 0])
         key = legend([(P, r"exact posterior"), (Q, r"$q(\mu)\,q(\tau)$")], font_size=20)
         key.move_to(ax.get_corner(UR) + LEFT * key.width / 2 + DOWN * key.height / 2 + LEFT * 0.1 + DOWN * 0.1)
         narrower = d["sd_mu_q"] < d["sd_mu_true"]
@@ -251,12 +255,13 @@ class VI(VoiceoverScene):
             f"<bookmark mark='d'/> And the identity holds: log p of x, computed exactly, is {d['logp']:.2f}; the ELBO "
             f"plus the KL, integrated numerically, agree to the third decimal place. <bookmark mark='e'/> " + verdict
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(pc), FadeIn(key))
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(pc), FadeIn(key), FadeIn(model))
             vo.wait_until("a")
             self.play(Write(rows[0]))
             vo.wait_until("b")
             self.play(Write(rows[1]), FadeIn(rl))
             vo.wait_until("c")
+            self.play(FadeOut(model))
             self.play(FadeIn(qc[0]), FadeIn(itl), FadeIn(evl))
             for i in (1, 2):
                 self.play(ReplacementTransform(qc[i - 1], qc[i]), ChangeDecimalToValue(it, i), ChangeDecimalToValue(ev, el[i]),

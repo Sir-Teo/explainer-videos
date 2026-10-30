@@ -187,11 +187,11 @@ class Graphs(VoiceoverScene):
             vo.wait_until("a")
             self.play(pans[0][1][0].animate.set_fill(SEEN, opacity=0.35).set_stroke(SEEN), FadeIn(rules[0]))
             vo.wait_until("b")
-            self.play(Indicate(pans[1], color=WHITE, scale_factor=1.04))
+            self.play(Circumscribe(pans[1], color=WHITE))
             self.play(FadeIn(fnum[0]))
             self.play(pans[1][1][0].animate.set_fill(SEEN, opacity=0.35).set_stroke(SEEN), FadeIn(rules[1]), FadeIn(fnum[1]))
             vo.wait_until("c")
-            self.play(Indicate(pans[2], color=WHITE, scale_factor=1.04))
+            self.play(Circumscribe(pans[2], color=WHITE))
             self.play(pans[2][1][0].animate.set_fill(SEEN, opacity=0.35).set_stroke(SEEN), FadeIn(rules[2]),
                       FadeIn(cnum[0]), FadeIn(cnum2))
             self.play(FadeIn(cnum[1]))
@@ -233,7 +233,7 @@ class Graphs(VoiceoverScene):
         bx = 1.4
         bars_ = VGroup()
         for i in range(n):
-            y = 1.3 - 0.52 * i
+            y = 1.05 - 0.5 * i
             bars_.add(VGroup(MathTex(rf"x_{i + 1}", font_size=24).move_to([bx - 0.5, y, 0]),
                              Rectangle(width=max(3.2 * exact[i], 0.02), height=0.17, stroke_width=0, fill_color=EXACT,
                                        fill_opacity=0.9).move_to([bx + 1.6 * exact[i], y + 0.1, 0]),
@@ -243,6 +243,8 @@ class Graphs(VoiceoverScene):
                                                                                      rf"${len(order)}$ messages")],
                     font_size=20).move_to([3.4, -2.6, 0])
         err = float(np.abs(exact - belief).max())
+        bh = label(r"the probability that each $x_i = 1$", font_size=22, color=GREY_A).next_to(bars_, UP, buff=0.2)
+        bh.align_to(bars_, LEFT)
         loopy = d["loopy_final"]
         exact_say = (f"it agrees with summing all {2 ** n} states to the last digits." if err < 1e-9 else
                      f"it differs from summing all {2 ** n} states by {err:.4f}.")
@@ -259,7 +261,7 @@ class Graphs(VoiceoverScene):
             "propagation decodes the error-correcting codes in phones and satellite links, and its messages are the "
             "message passing of part twenty-five's graph neural networks."
         ) as vo:
-            self.play(FadeIn(graph), FadeIn(fl), FadeIn(eq))
+            self.play(FadeIn(graph), FadeIn(fl), FadeIn(eq), FadeIn(bh), FadeIn(VGroup(*[b_[0] for b_ in bars_])))
             vo.wait_until("a")
             self.play(Indicate(eq, color=MSG, scale_factor=1.03))
             vo.wait_until("b")
@@ -273,9 +275,9 @@ class Graphs(VoiceoverScene):
                 self.play(dots[k].animate.move_to(pos[b]), run_time=0.4)
                 self.play(FadeOut(dots[k]), run_time=0.2)
             vo.wait_until("d")
-            self.play(Write(bq), FadeIn(bl), LaggedStart(*[FadeIn(b_) for b_ in bars_], lag_ratio=0.1))
+            self.play(Write(bq), FadeIn(bl), LaggedStart(*[FadeIn(b_[1:]) for b_ in bars_], lag_ratio=0.1))
             vo.wait_until("e")
-            loop = Line(pos[3], pos[4], color=C.SURPRISE, stroke_width=4)
+            loop = Line(pos[3], pos[4], buff=0.32, color=C.SURPRISE, stroke_width=4)
             lsq = Square(0.22, color=C.SURPRISE, fill_color=C.SURPRISE, fill_opacity=0.8).move_to(
                 (np.array(pos[3]) + np.array(pos[4])) / 2)
             self.play(Create(loop), FadeIn(lsq))

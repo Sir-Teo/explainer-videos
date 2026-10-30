@@ -40,6 +40,9 @@ class BaumWelch(VoiceoverScene):
                 why(r"M step: \ expected counts, \\ normalized")]
         step = ladder(self, rows, whys, keep=4, top=2.6, x=-2.4, buff=0.6, edge=6.8)
         head = label(r"EM for hidden Markov models: \ forward--backward", font_size=32).to_edge(UP, buff=0.3)
+        em = VGroup(label(r"E: \ how likely each hidden state was, \ letter by letter", font_size=24, color=HIDDEN),
+                    label(r"M: \ re-estimate $A$ and $B$ from the expected counts", font_size=24, color=SEEN))
+        em.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Third: how does the model learn A and B from letters alone? It's chapter four's EM again, and for this "
             "model it's called Baum–Welch. <bookmark mark='a'/> Run the forward sweep, and a mirror image, the "
@@ -51,7 +54,7 @@ class BaumWelch(VoiceoverScene):
             "expected emissions of each letter, over expected visits. EM's theorem guarantees every round raises the "
             "likelihood."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(em))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -184,9 +187,9 @@ class BaumWelch(VoiceoverScene):
             "three decades, until, around 2012, deep networks replaced the Gaussian mixtures, and later the whole "
             "pipeline. Part twenty-three picks up the story."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(hist[0], shift=UP * 0.2))
+            self.play(FadeIn(tag), FadeIn(hist[0], shift=UP * 0.2), Create(wavef))
             vo.wait_until("a")
-            self.play(Create(wavef), FadeIn(frames), FadeIn(fl), run_time=1.5)
+            self.play(FadeIn(frames), FadeIn(fl), run_time=1.5)
             vo.wait_until("b")
             self.play(GrowArrow(arrs[0]), LaggedStart(*[FadeIn(p_) for p_ in ph], lag_ratio=0.3), FadeIn(pl))
             vo.wait_until("c")

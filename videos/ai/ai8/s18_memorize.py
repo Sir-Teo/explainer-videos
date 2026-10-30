@@ -97,17 +97,16 @@ class Memorization(VoiceoverScene):
             data_text(_clean(miss["model"], 60), font_size=16, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(info, DOWN, buff=0.5).align_to(info, LEFT)
         rising = runs[-1] > 2 * runs[0]
+        further = ("But it gets further before its first mistake on passages it has seen more often: "
+                   f"{r0:.1f} tokens on average for passages seen once, {rN:.1f} for those seen {topbin} times, "
+                   f"against {vrun:.1f} on text it never saw. " if rising else
+                   f"On average it gets {r0:.1f} tokens right before its first mistake, about as many as on text it "
+                   f"never saw, {vrun:.1f}. ")
         with self.voiceover(
             f"Run that test on our own novels model. Its training text has {mtok:.1f} million tokens, and long "
             f"passages rarely repeat: no 64-token passage occurs more than {mmax} times. <bookmark mark='a'/> "
             f"Prompted with the first 32 tokens of a training passage, it reproduces the next 32 exactly in {n_ex} "
-            f"cases out of {n_tried} tried. "
-            + ("<bookmark mark='b'/> But it gets further before its first mistake on passages it has seen more "
-               f"often: {r0:.1f} tokens on average for passages seen once, {rN:.1f} for those seen {topbin} times, "
-               f"against {vrun:.1f} on text it never saw. "
-               if rising else
-               f"<bookmark mark='b'/> On average it gets {r0:.1f} tokens right before its first mistake, about "
-               f"as many as on text it never saw, {vrun:.1f}. ")
+            f"cases out of {n_tried} tried. <bookmark mark='b'/> " + further
             + "<bookmark mark='c'/> A small model that saw its text a few times stores the style, not the words. "
             "What makes words stick is repetition."
         ) as vo:
@@ -168,6 +167,12 @@ class Memorization(VoiceoverScene):
         e1, e8, eN, eC = 100 * fin[0], 100 * fin[gs.index(8)], 100 * fin[-1], 100 * ctrl
         gN, per, g_half = gs[-1], int(c["per"]), (gs[j1] if j1 is not None else 0)
         mono = bool(np.all(np.diff(fin) >= -0.07))
+        halfway = f"Half or more are extractable from {g_half} repetitions on. " if j1 is not None else ""
+        trend = ("Extraction climbs with repetition, as Carlini and colleagues and Kandpal and colleagues found at "
+                 "scale; it's why deduplicating training data became standard."
+                 if mono else
+                 "The trend with repetition is noisy at this scale, but it's the one found at scale by Carlini and "
+                 "colleagues and Kandpal and colleagues, and why deduplicating training data became standard.")
         with self.voiceover(
             "To see repetition at work, plant it. Continue training our model on its own text, into which "
             f"{per} passages it has never seen are planted once each, {per} more twice each, and so on up to {gN} "
@@ -175,14 +180,7 @@ class Memorization(VoiceoverScene):
             "training, the passages planted most often become extractable first. "
             f"<bookmark mark='b'/> By the end: {e1:.0f} percent of passages seen once, {e8:.0f} percent of those "
             f"planted eight times, and {eN:.0f} percent of those planted {gN} times come back word for word; the "
-            f"control, {eC:.0f} percent. "
-            + (f"Half or more are extractable from {g_half} repetitions on. " if j1 is not None else "")
-            + "<bookmark mark='c'/> "
-            + ("Extraction climbs with repetition, as Carlini and colleagues and Kandpal and colleagues found at "
-               "scale; it's why deduplicating training data became standard."
-               if mono else
-               "The trend with repetition is noisy at this scale, but it's the one found at scale by Carlini and "
-               "colleagues and Kandpal and colleagues, and why deduplicating training data became standard.")
+            f"control, {eC:.0f} percent. " + halfway + "<bookmark mark='c'/> " + trend
         ) as vo:
             self.play(FadeIn(head), FadeIn(G), FadeIn(H))
             vo.wait_until("a")

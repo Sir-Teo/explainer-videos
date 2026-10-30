@@ -115,6 +115,8 @@ class ICA(VoiceoverScene):
         else:
             clt_say = (f"Here the voices have kurtosis {ks[0]:.2f} and {ks[1]:.2f}, and the whitened mixtures "
                        f"{km[0]:.2f} and {km[1]:.2f}.")
+        unc = label(r"uncorrelated $\neq$ independent: \\ turned by any angle, \\ a white cloud stays white", font_size=24,
+                    color=GREY_A).move_to([4.3, 0.8, 0])
         it = label(rf"FastICA: \ ${d['iters']}$ fixed-point steps", font_size=22, color=VOICE1).next_to(g, DOWN, buff=0.1)
         with self.voiceover(
             "Plot the two microphones against each other, moment by moment, and the mixing shows as a slanted, "
@@ -132,8 +134,9 @@ class ICA(VoiceoverScene):
             vo.wait_until("a")
             self.play(TransformFromCopy(left, mid), FadeIn(mlab), run_time=1.8)
             self.play(Rotate(mid[1], angle=0.6, about_point=c0), run_time=1.5)
-            self.play(Rotate(mid[1], angle=-0.6, about_point=c0), run_time=1.0)
+            self.play(Rotate(mid[1], angle=-0.6, about_point=c0), FadeIn(unc), run_time=1.0)
             vo.wait_until("b")
+            self.play(FadeOut(unc))
             self.play(FadeIn(g), Create(kc), Create(zero), FadeIn(zl), FadeIn(kdef), FadeIn(kn))
             self.play(FadeIn(clt))
             vo.wait_until("c")

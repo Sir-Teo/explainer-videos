@@ -137,14 +137,15 @@ class MaxMargin(VoiceoverScene):
         info.to_edge(DOWN, buff=0.3)
         ratio = float(m["c_hi"] / m["c_lo"])
         settled = ratio < 1.3
+        pace = ("Angle times log t is nearly constant from a thousand steps on: the one over log t rate. "
+                if settled else
+                f"Angle times log t falls from {m['c_hi']:.0f} to {m['c_lo']:.0f} between a thousand and a million "
+                "steps, so here it's still converging faster than the theorem's worst case, one over log t. ")
         with self.voiceover(
             "Measure it. <bookmark mark='a'/> On a log axis of steps, the norm of the weights is a straight line: it "
             f"grows by about {slope * math.log(10):.2f} for every factor of ten in steps, logarithmic growth. "
             "<bookmark mark='b'/> The angle falls, slowly. "
-            + ("Angle times log t is nearly constant from a thousand steps on: the one over log t rate. "
-               if settled else
-               f"Angle times log t falls from {m['c_hi']:.0f} to {m['c_lo']:.0f} between a thousand and a million "
-               "steps, so here it's still converging faster than the theorem's worst case, one over log t. ")
+            + pace
             + f"After a million steps the margin is {m['margin_end']:.3f}, against the best possible "
             f"{m['gamma']:.3f}. That slowness has a practical side: training long after the training error reaches "
             "zero keeps changing the model, toward larger margins, which is the boosting story again, now as a "

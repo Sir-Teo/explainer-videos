@@ -149,6 +149,12 @@ class PACBayes(VoiceoverScene):
         hist = history_card(2017, r"G.~K.~Dziugaite \& D.~M.~Roy", r"the first non-vacuous bounds for deep networks: \ "
                             r"optimize the PAC-Bayes bound itself", width=5.0, font_size=17, color=HIST)
         hist.to_corner(DR, buff=0.2)
+        verdict = (f"So the bound: the cloud's true error is at most {100 * p['bound']:.0f} percent. Loose next to the "
+                   f"{100 * p['test_Q']:.1f} percent it actually gets on the test pages, but a real guarantee for a "
+                   "network with far more weights than data, where the VC bound is meaningless."
+                   if nonvac else
+                   f"The bound comes to {100 * p['bound']:.0f} percent, no better than a coin; the cloud actually "
+                   f"errs on {100 * p['test_Q']:.1f} percent of the test pages.")
         with self.voiceover(
             f"Now our own. A network with {p['params']:,} weights, trained on {p['n']} pages: twenty times more "
             "weights than examples. Following Dziugaite and Roy's recipe from 2017, the prior is a Gaussian centred "
@@ -158,12 +164,7 @@ class PACBayes(VoiceoverScene):
             "breadth of the prior wherever the weights don't matter. <bookmark mark='b'/> The final account. "
             f"Two thousand networks drawn from the cloud err on {100 * p['e_hat']:.1f} percent of the training "
             f"pages, at most {100 * p['e_up']:.1f} with confidence. The KL is {p['kl']:.0f} nats. "
-            + (f"<bookmark mark='c'/> So the bound: the cloud's true error is at most {100 * p['bound']:.0f} percent. "
-               f"Loose next to the {100 * p['test_Q']:.1f} percent it actually gets on the test pages, but a real "
-               "guarantee for a network with far more weights than data, where the VC bound is meaningless."
-               if nonvac else
-               f"<bookmark mark='c'/> The bound comes to {100 * p['bound']:.0f} percent, no better than a coin; the "
-               f"cloud actually errs on {100 * p['test_Q']:.1f} percent of the test pages.")
+            + "<bookmark mark='c'/> " + verdict
             + " <bookmark mark='d'/> The same idea, with networks compressed hard, gave the first non-vacuous bounds "
             "for language models in 2024, Lotfi and colleagues; counting tokens instead of documents later that year, "
             "for models as large as Llama 2 70B."

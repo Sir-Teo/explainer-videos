@@ -26,7 +26,7 @@ class KneserNey(VoiceoverScene):
         d = load("goodturing")
         rows = d["rows"]
         h = history_card(1953, r"I.~J.~Good, \ after Alan Turing", r"at Bletchley Park: \\ the chance of what has "
-                         r"never yet been seen, \\ for breaking German codes", width=7.0).move_to([0, 0.3, 0])
+                         r"never yet been seen, \\ for breaking German codes", width=7.0).move_to([0, 1.3, 0])
         colors = {r"r^*": GT, r"N_{r+1}": C.MODEL_Q, r"N_r": C.MODEL_Q, r"N_1": C.MODEL_Q}
         f1 = cmath(r"r^*", r"=", r"(r + 1)\,", r"\frac{N_{r+1}}{N_r}", colors=colors, font_size=44)
         f2 = cmath(r"p(\text{unseen})", r"=", r"\frac{N_1}{N}", colors=colors, font_size=40)
@@ -51,6 +51,13 @@ class KneserNey(VoiceoverScene):
         tab.shift(RIGHT * 0.6)
         foot = label(rf"word pairs in the novels: \ ${d['tokens']:,}$ words, \ two halves; \ ``held out'': the average count "
                      r"in the other half".replace(",", "{,}"), font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
+        nr_ = np.array([r_["Nr"] for r_ in rows[1:]])
+        gnr = axes([0.5, len(nr_) + 0.5, 1], [0, 6, 1], x_length=5.2, y_length=2.2, xlabel=r"seen $r$ times",
+                   ylabel=r"how many different word pairs", xticks=list(range(1, len(nr_) + 1)), yticks=[0, 2, 4, 6],
+                   yfmt=lambda v: f"10^{{{int(v)}}}", center=[0, -2.0, 0])
+        nrb = VGroup(*[Rectangle(width=0.4, height=max(gnr.ax.c2p(0, np.log10(v))[1] - gnr.ax.c2p(0, 0)[1], 0.02),
+                                 stroke_width=0, fill_color=C.MODEL_Q, fill_opacity=0.85).move_to(gnr.ax.c2p(k + 1, np.log10(v) / 2))
+                       for k, v in enumerate(nr_)])
         r1 = rows[1]
         close = abs(r1["gt"] - r1["held"]) < 0.1 and abs(rows[0]["gt"] - rows[0]["held"]) / rows[0]["held"] < 0.2
         verdict = (f"It works. A pair seen once in one half of the novels turns up on average {r1['held']:.2f} times in "
@@ -67,9 +74,9 @@ class KneserNey(VoiceoverScene):
             "N, the share of things seen exactly once. <bookmark mark='b'/> Let's test it on pairs of words in the "
             "novels: count them in one half, then check the counts in the other half. <bookmark mark='c'/> " + verdict
         ) as vo:
-            self.play(FadeIn(h, shift=UP * 0.2))
+            self.play(FadeIn(h, shift=UP * 0.2), FadeIn(gnr), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in nrb], lag_ratio=0.1))
             vo.wait_until("a")
-            self.play(h.animate.scale(0.75).move_to([3.7, 2.3, 0]))
+            self.play(h.animate.scale(0.75).move_to([3.7, 2.3, 0]), FadeOut(gnr), FadeOut(nrb))
             self.play(Write(f1), FadeIn(nr))
             self.play(Write(f2))
             vo.wait_until("b")
