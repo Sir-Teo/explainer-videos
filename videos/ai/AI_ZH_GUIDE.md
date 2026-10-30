@@ -1675,3 +1675,49 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | Ornstein–Uhlenbeck process | 奥恩斯坦-乌伦贝克过程 |
 | Fokker–Planck equation | 福克-普朗克方程 |
 | reverse-time SDE | 反向时间SDE |
+
+### Classical ML (Part 6)
+
+| English | 中文 |
+|---|---|
+| least squares, normal equations | 最小二乘，正规方程 |
+| Gauss–Markov theorem, best linear unbiased estimator (BLUE) | 高斯–马尔可夫定理，最佳线性无偏估计 |
+| Theil–Sen estimator | 泰尔–森估计 |
+| pseudoinverse (Moore–Penrose) | 伪逆（摩尔–彭罗斯） |
+| ridge regression, shrinkage factor, effective number of weights | 岭回归，收缩因子，有效权重数 |
+| lasso, soft threshold, coordinate descent, regularization path | 套索回归（Lasso），软阈值，坐标下降，正则化路径 |
+| subgradient | 次梯度 |
+| one-standard-error rule | 一个标准误规则 |
+| elastic net | 弹性网络 |
+| logistic regression, sigmoid, convex | 逻辑回归，S形函数（sigmoid），凸的 |
+| Hessian | 黑塞矩阵 |
+| Newton's method, iteratively reweighted least squares (IRLS), working response | 牛顿法，迭代重加权最小二乘（IRLS），工作响应 |
+| generalized linear model | 广义线性模型 |
+| separable data | 可分数据 |
+| naive Bayes, Laplace smoothing | 朴素贝叶斯，拉普拉斯平滑 |
+| generative, discriminative | 生成式，判别式 |
+| calibration, reliability diagram, expected calibration error, Platt scaling | 校准，可靠性图，期望校准误差，普拉特缩放 |
+| Fisher's linear discriminant (LDA), within-class / between-class scatter | 费希尔线性判别（LDA），类内散度、类间散度 |
+| generalized eigenproblem, Rayleigh quotient | 广义特征值问题，瑞利商 |
+| k nearest neighbours, Bayes error, Cover–Hart bound | k近邻，贝叶斯错误率，科弗–哈特界 |
+| curse of dimensionality | 维数灾难 |
+| perceptron, Novikoff's bound, XOR | 感知机，诺维科夫界，异或 |
+| kernel, kernel trick, feature map, Gram matrix | 核函数，核技巧，特征映射，格拉姆矩阵 |
+| Mercer's theorem, positive semidefinite | 默瑟定理，半正定 |
+| Gaussian (RBF) kernel, random Fourier features | 高斯（RBF）核，随机傅里叶特征 |
+| representer theorem, kernel ridge regression | 表示定理，核岭回归 |
+| support vector machine, margin, support vector | 支持向量机，间隔，支持向量 |
+| hinge loss, soft margin | 铰链损失，软间隔 |
+| dual problem, KKT conditions, complementary slackness, duality gap | 对偶问题，KKT条件，互补松弛，对偶间隙 |
+| sequential minimal optimization (SMO) | 序列最小优化（SMO） |
+| decision tree, Gini impurity, split gain | 决策树，基尼不纯度，分割增益 |
+| bagging, bootstrap resample, out-of-bag estimate | 装袋法（bagging），自助重抽样，袋外估计 |
+| random forest | 随机森林 |
+| boosting, AdaBoost, decision stump, exponential loss | 提升法，AdaBoost，决策树桩，指数损失 |
+| cascade (Viola–Jones), rectangle (Haar-like) feature | 级联（维奥拉–琼斯），矩形（类哈尔）特征 |
+| gradient boosting, second-order (Newton) boosting, leaf weight | 梯度提升，二阶（牛顿）提升，叶子权重 |
+| ROC curve, AUC, hit rate, false-alarm rate | ROC曲线，曲线下面积（AUC），命中率，误报率 |
+| precision, recall, average precision | 精确率，召回率，平均精确率 |
+| cross-validation, held-out set | 交叉验证，留出集 |
+| the two cultures (data modeling, algorithmic modeling) | 两种文化（数据建模，算法建模） |
+| tabular foundation model | 表格基础模型 |
