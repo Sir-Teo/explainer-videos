@@ -547,7 +547,9 @@
   "gradient descent: \\ $\\eta = 3$": "梯度下降：\\ $\\eta = 3$",
   "Adam: \\ $\\eta = 0.1$": "Adam：\\ $\\eta = 0.1$",
   "K-FAC: \\ $\\eta = 0.1$": "K-FAC：\\ $\\eta = 0.1$",
-  "natural gradient: \\ $\\eta = 0.3$": "自然梯度：\\ $\\eta = 0.3$"
+  "natural gradient: \\ $\\eta = 0.3$": "自然梯度：\\ $\\eta = 0.3$",
+  "the largest $10$ carry $77\\%$ \\\\ of the gradient's squared size": "最大的 $10$ 个占了 \\\\ 梯度平方大小的 $77\\%$",
+  "$0.2\\sqrt{\\max(m,n)}$: \\ an orthogonal $m \\times n$ matrix has entries of size about $1/\\sqrt{\\max(m, n)}$, \\\\ so Muon's step gets an RMS of $0.2$, \\ like a typical Adam step \\ (ours, \\ Chapter 6: \\ median $0.16\\,\\eta$)": "$0.2\\sqrt{\\max(m,n)}$：\\ $m \\times n$ 正交矩阵的元素大小约为 $1/\\sqrt{\\max(m, n)}$，\\\\ 所以Muon一步的均方根是 $0.2$，\\ 和典型的Adam一步一样 \\ （我们的，\\ 第6章：\\ 中位数 $0.16\\,\\eta$）"
  },
  "patterns": []
 }

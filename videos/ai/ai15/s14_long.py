@@ -177,30 +177,30 @@ class LongContext(VoiceoverScene):
             return np.convolve(x, np.ones(k) / k, mode="valid")
 
         mt, mh = sm(bt.mean(0)), sm(bh.mean(0))
+        lt_, ht_ = np.array([sm(x) for x in bt]), np.array([sm(x) for x in bh])
         xs = np.arange(len(mt)) + 16
         lo = math.floor(min(mt.min(), mh.min()) * 2) / 2
         hi = min(math.ceil(max(mt.max(), mh.max()) * 2) / 2, lo + 4)
-        g1 = axes([0, L], [lo, hi], x_length=5.6, y_length=3.3, xlabel=r"position, \ read in one go",
-                  ylabel=r"loss \ (nats a token)", xticks=[0, 256, 512, 1024], yticks=[lo, hi], center=[-3.5, -0.4, 0])
+        g1 = axes([0, L], [lo, hi], x_length=8.4, y_length=4.2, xlabel=r"position, \ read in one go",
+                  ylabel=r"loss on the next token \ (nats, \ average of $12$ held-out windows, \ $3$ seeds)",
+                  xticks=[0, 256, 512, 768, 1024], yticks=[lo, (lo + hi) / 2, hi], center=[-1.6, -0.4, 0])
         ax = g1.ax
+        b1 = VGroup(band(ax, xs, np.clip(lt_.min(0), lo, hi), np.clip(lt_.max(0), lo, hi), TF_C, 0.2),
+                    band(ax, xs, np.clip(ht_.min(0), lo, hi), np.clip(ht_.max(0), lo, hi), HY_C, 0.2))
         c1 = VGroup(curve(ax, xs, np.clip(mt, lo, hi), TF_C, 3), curve(ax, xs, np.clip(mh, lo, hi), HY_C, 3))
         tr = DashedLine(ax.c2p(256, lo), ax.c2p(256, hi), dash_length=0.06, color=GREY_B, stroke_width=1.5)
-        trl = label(r"trained on $256$", font_size=16, color=GREY_B).next_to(tr, UP, buff=0.05)
-        gaps = [int(x) for x in r["gaps"]]
-        ct, chy = np.asarray(r["transformer_copy"]), np.asarray(r["hybrid_copy"])
-        lg = np.log2(gaps)
-        g2 = axes([lg[0] - 0.2, lg[-1] + 0.2], [0, 1.0], x_length=5.0, y_length=3.3,
-                  xlabel=r"tokens between the two copies", ylabel=r"copied tokens right", xticks=list(lg), yticks=[0, 0.5, 1],
-                  xfmt=lambda v: f"{int(round(2 ** v))}", yfmt=lambda v: rf"{int(100 * v)}\%", center=[3.4, -0.4, 0], font_size=17)
-        ax2 = g2.ax
-        b2 = VGroup(band(ax2, lg, ct.min(0), ct.max(0), TF_C, 0.25), band(ax2, lg, chy.min(0), chy.max(0), HY_C, 0.25))
-        c2 = VGroup(curve(ax2, lg, ct.mean(0), TF_C, 3), curve(ax2, lg, chy.mean(0), HY_C, 3))
-        w2 = DashedLine(ax2.c2p(math.log2(256 - 48), 0), ax2.c2p(math.log2(256 - 48), 1), dash_length=0.06, color=GREY_B,
-                        stroke_width=1.5)
+        trl = label(r"trained on $256$", font_size=18, color=GREY_B).next_to(tr, UP, buff=0.05)
         leg = legend([(TF_C, r"transformer, \ rotary positions"), (HY_C, r"hybrid, \ attention without positions")],
-                     font_size=18).to_edge(UP, buff=0.35)
-        task = note(r"the copy test: \ $24$ random tokens, \ a stretch of a novel, \ the same $24$ again; \ $3$ seeds, \ "
-                    r"band: \ min to max", font_size=16).to_edge(DOWN, buff=0.2)
+                     font_size=20).move_to([4.6, 1.8, 0])
+        ct, chy = np.asarray(r["transformer_copy"]), np.asarray(r["hybrid_copy"])
+        none = max(float(ct.max()), float(chy.max())) < 0.05
+        cl = label(r"the copy test: \ $24$ random tokens, \ a stretch of a novel, \ the same $24$ again", font_size=19,
+                   color=GREY_A)
+        cv = label(rf"copied right: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \ "
+                   rf"(copies {r['gaps'][0]} tokens apart)", font_size=19, color=WHITE)
+        cg = VGroup(cl, cv).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -1.2, 0])
+        if cg.width > 4.4:
+            cg.width = 4.4
         far_t, far_h = float(mt[-200:].mean()), float(mh[-200:].mean())
         near_t, near_h = float(mt[100:240].mean()), float(mh[100:240].mean())
         v1 = (f"Past 256, the transformer's loss climbs, from {near_t:.1f} to {far_t:.1f} nats: rotary positions it "
@@ -209,27 +209,25 @@ class LongContext(VoiceoverScene):
         v2 = (f"The hybrid's stays near where it was, {near_h:.1f} to {far_h:.1f}: its attention has no positions to "
               "run out of. " if far_h < near_h + 0.3 else
               f"The hybrid's climbs too, {near_h:.1f} to {far_h:.1f}. ")
-        gi = gaps.index(max(g_ for g_ in gaps if g_ + 48 > 256)) if any(g_ + 48 > 256 for g_ in gaps) else len(gaps) - 1
-        lt, lh = float(ct.mean(0)[-1]), float(chy.mean(0)[-1])
-        nt, nh = float(ct.mean(0)[0]), float(chy.mean(0)[0])
-        v3 = (f"In the copy test, both copy well when the copies are close: {100 * nt:.0f} and {100 * nh:.0f} percent "
-              f"of the tokens. With {gaps[-1]} tokens between them, the transformer gets {100 * lt:.0f} percent and the "
-              f"hybrid {100 * lh:.0f}.")
+        v3 = ("But neither can find a needle: given twenty-four random tokens, a stretch of a novel and the same "
+              "twenty-four again, neither predicts the repeat, even sixteen tokens apart. Models this small, trained "
+              "this briefly, never formed Part 13's induction heads; that is why the tests before used small models "
+              "trained for the task." if none else
+              f"And in the copy test, twenty-four random tokens repeated after a stretch of a novel, the transformer "
+              f"predicts {100 * ct.mean(0)[0]:.0f} percent of the repeat and the hybrid {100 * chy.mean(0)[0]:.0f}, when "
+              f"the copies are {r['gaps'][0]} tokens apart.")
         with self.voiceover(
             "Our two language models from the last chapter were trained on windows of 256 tokens. What happens "
             "past the end? <bookmark mark='a'/> Here is the loss at each position of held-out text a thousand tokens "
-            "long, read in one go. " + v1 + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> And a needle the "
-            "models can only find by memory: twenty-four random tokens, then a stretch of a novel, then the same "
-            "twenty-four again. How many of the repeated tokens does each predict? " + v3
+            "long, read in one go. " + v1 + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
         ) as vo:
             self.play(FadeIn(leg), FadeIn(g1), Create(tr), FadeIn(trl))
             vo.wait_until("a")
-            self.play(Create(c1[0]), run_time=2.0)
+            self.play(FadeIn(b1[0]), Create(c1[0]), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(c1[1]), run_time=2.0)
+            self.play(FadeIn(b1[1]), Create(c1[1]), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(g2), FadeIn(task), Create(w2))
-            self.play(FadeIn(b2), Create(c2[0]), Create(c2[1]), run_time=2.0)
+            self.play(FadeIn(cg))
         self.wait(0.3)
         self.clear_scene()
 

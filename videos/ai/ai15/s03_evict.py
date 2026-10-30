@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import fmt_int, ATT, HIST, PART, axes, heat_image, load
+from videos.ai.ai15.common import fmt_int, ATT, HIST, PART, axes, heat_fixed, heat_image, load
 
 POL_C = {"full": GREY_B, "window": C.SURPRISE, "sinks": C.INTERVAL, "h2o": C.BITS, "ref": WHITE}
 POL_NAME = {"full": r"keep everything", "window": r"the last $W$ tokens", "sinks": r"4 sinks $+$ the last $W-4$",
@@ -61,12 +61,12 @@ class Evict(VoiceoverScene):
         cols = [ATT, C.SURPRISE, C.INTERVAL, C.BITS]
         imgs = Group()
         for M, nm, c_ in zip(ms, names, cols):
-            im = heat_image(M, 2.5, 2.5, color=c_, gamma=1.0, mask_upper=True)
+            im = heat_image(M, 2.85, 2.85, color=c_, gamma=1.0, mask_upper=True)
             t = label(nm, font_size=18, color=c_).next_to(im, DOWN, buff=0.15)
             if t.width > 3.0:
                 t.width = 3.0
             imgs.add(Group(im, SurroundingRectangle(im, buff=0, color=GREY_D, stroke_width=1), t))
-        imgs.arrange(RIGHT, buff=0.35).move_to(UP * 0.85)
+        imgs.arrange(RIGHT, buff=0.3).move_to(UP * 0.55)
         ax_l = label(r"row: \ the token reading; \ column: \ the tokens it may look at", font_size=20, color=GREY_B)
         ax_l.next_to(imgs, UP, buff=0.25)
         cost = label(r"keys read per token: \ $t$ \ $\rightarrow$ \ a fixed $W$ \ (plus a few globals)", font_size=24,
@@ -111,14 +111,14 @@ class Evict(VoiceoverScene):
         F = np.asarray(s["first"])
         L_, H_ = F.shape
         uni = float(s["uniform"])
-        img = heat_image(F, 0.62 * H_, 0.62 * L_, color=C.INTERVAL, gamma=0.6).move_to([-3.2, -0.5, 0])
+        img = heat_fixed(F, 0.62 * H_, 0.62 * L_, color=C.INTERVAL, vmax=0.5, gamma=0.6).move_to([-3.2, -0.5, 0])
         fr = SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1)
         vals = VGroup()
         for li in range(L_):
             for hh in range(H_):
                 c = img.get_corner(UL) + np.array([0.62 * (hh + 0.5), -0.62 * (li + 0.5), 0])
                 vals.add(MathTex(f"{100 * F[li, hh]:.0f}", font_size=17,
-                                 color=BLACK if F[li, hh] > 0.5 * F.max() else GREY_A).move_to(c))
+                                 color=BLACK if F[li, hh] > 0.25 else GREY_A).move_to(c))
         rl = VGroup(*[label(rf"layer {li + 1}", font_size=16, color=GREY_B).next_to(img.get_corner(UL) + DOWN * 0.62 * (li + 0.5),
                                                                                LEFT, buff=0.12) for li in range(L_)])
         hl = label(rf"heads $1$--${H_}$", font_size=16, color=GREY_B).next_to(img, UP, buff=0.1)
@@ -129,7 +129,7 @@ class Evict(VoiceoverScene):
         k2 = label(rf"heads above ten times that: \ ${n_sink}$ of ${L_ * H_}$", font_size=22, color=C.INTERVAL)
         k3 = label(rf"average over all heads: \ ${100 * mean:.0f}\%$", font_size=22, color=WHITE)
         keys = VGroup(k1, k2, k3).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.4, 0])
-        note_ = note(rf"$24$ held-out windows of ${int(s['seq'])}$ tokens, \ queries from position $64$ on").next_to(keys, DOWN, buff=0.4).align_to(keys, LEFT)
+        note_ = note(rf"$24$ held-out windows of ${int(s['seq'])}$ tokens, \\ queries from position $64$ on").next_to(keys, DOWN, buff=0.4).align_to(keys, LEFT)
         cite_ = cite(r"G.~Xiao et al., \textit{Efficient Streaming Language Models with Attention Sinks} (2023)", corner=DR)
         strong = n_sink >= 0.25 * L_ * H_
         verdict = (f"{n_sink} of its {L_ * H_} heads put more than ten times that on the first token, and on "
@@ -137,7 +137,10 @@ class Evict(VoiceoverScene):
                    if strong else
                    f"only {n_sink} of its {L_ * H_} heads put more than ten times that on the first token; on average "
                    f"a head gives it {100 * mean:.0f} percent. Our small model leans on the first token less than the "
-                   "large ones do.")
+                   "large ones do." if n_sink > 0 else
+                   f"not one of its {L_ * H_} heads gives the first token even ten times that; on average a head gives "
+                   f"it {100 * mean:.1f} percent. This model never grew a sink: trained on windows cut at random from "
+                   "the novels, it found other places to park.")
         with self.voiceover(
             "A sliding window has a hidden flaw, found in 2023 by Guangxuan Xiao and colleagues. Part 13 showed that "
             "many heads park their attention on the very first token, an attention sink, when they have nothing "
@@ -146,10 +149,9 @@ class Evict(VoiceoverScene):
             f"window. <bookmark mark='b'/> Spread evenly, the first token would get {100 * uni:.1f} percent. Instead, "
             + verdict
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(img), Create(fr), FadeIn(rl), FadeIn(hl))
             vo.wait_until("a")
-            self.play(FadeIn(img), Create(fr), FadeIn(rl), FadeIn(hl), LaggedStart(*[FadeIn(v_) for v_ in vals],
-                                                                                    lag_ratio=0.01))
+            self.play(LaggedStart(*[FadeIn(v_) for v_ in vals], lag_ratio=0.01))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(k_, shift=RIGHT * 0.1) for k_ in keys], lag_ratio=0.5), FadeIn(note_))
         self.wait(0.3)
@@ -192,7 +194,7 @@ class Evict(VoiceoverScene):
         v2 = (f"Keep the first four tokens as well, and it recovers: {bits['sinks']:.2f}, close to recomputing every "
               f"window from scratch, {br:.2f}. " if hurt > 0.05 else
               f"Keeping the first four tokens as well gives {bits['sinks']:.2f}, and recomputing every window from "
-              f"scratch {br:.2f}: this small model leans on its sink less than a large one. ")
+              f"scratch {br:.2f}: with no sink to lose, this model doesn't need them. ")
         v3 = (f"And keeping everything fails differently: past position 256 the model meets positions it never "
               f"saw in training, and ends at {bits['full']:.2f}. That is why long windows need the context extension "
               "of Part 13." if bits["full"] > br + 0.1 else
@@ -226,12 +228,13 @@ class Evict(VoiceoverScene):
         vals = {p: [float(s[f"bits_{p}_{b}"]) for b in B] for p in pols}
         lo = math.floor(min(min(v) for v in vals.values()) * 5 - 0.5) / 5
         hi = math.ceil(max(min(max(v), br + 1.5) for v in vals.values()) * 5) / 5
-        g = axes([0, len(B)], [lo, hi], x_length=7.0, y_length=4.0, xlabel=r"cache: \ tokens kept per head",
+        g = axes([0, len(B)], [lo, hi], x_length=7.0, y_length=4.0,
                  ylabel=r"bits per character", yticks=[lo, (lo + hi) / 2, hi], center=[-2.4, -0.5, 0],
                  yfmt=lambda v: f"{v:.1f}")
         ax = g.ax
         xt = VGroup(*[MathTex(str(b), font_size=20, color=GREY_B).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.12)
                       for i, b in enumerate(B)])
+        xt.add(label(r"cache: \ tokens kept per head", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.5))
         bw = 0.6
         bars = VGroup()
         for i, b in enumerate(B):

@@ -105,6 +105,10 @@ ZH = {
         "它的{L_ * H_}个头里，只有{n_sink}个放在第一个词元上的注意力超过这个数的十倍；平均下来，每个头给它{100 * mean:.0f}%。我们这个小模型，"
         "比大模型更少依赖第一个词元。",
 
+    "f'not one of its {L_ * H_} heads":
+        "它的{L_ * H_}个头里，没有一个给第一个词元哪怕这个数的十倍；平均下来，每个头只给它{100 * mean:.1f}%。这个模型从没长出汇点："
+        "它是在从小说里随机截取的窗口上训练的，找到了别的地方来停放注意力。",
+
     'f"That matters for the cache.':
         "这对缓存很要紧。我们让本系列的模型，像服务器那样一次一个地读计分板那段文字的前{n:,}个词元，每个头只留出{W}个词元的键和值的位置，"
         "位置在缓存内部计数。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}",
@@ -118,8 +122,8 @@ ZH = {
     "f'Keep the first four tokens as well":
         "再把最前面的四个词元也留着，它就恢复了：{bits['sinks']:.2f}，接近每个窗口都从头重算的{br:.2f}。",
 
-    "f'Keeping the first four tokens as well gives":
-        "把最前面的四个词元也留着，得到{bits['sinks']:.2f}，而每个窗口都从头重算是{br:.2f}：这个小模型比大模型更少依赖它的汇点。",
+    'f"Keeping the first four tokens as well gives':
+        "把最前面的四个词元也留着，得到{bits['sinks']:.2f}，而每个窗口都从头重算是{br:.2f}：没有汇点可丢，这个模型也就用不着它们。",
 
     "f'And keeping everything fails differently":
         "而什么都留着，会以另一种方式失败：过了第256个位置，模型就遇到了训练时从没见过的位置，最后得到{bits['full']:.2f}。这就是为什么长窗口"
@@ -530,8 +534,7 @@ ZH = {
 
     '"Our two language models from the last chapter':
         "上一章的两个语言模型，是在256个词元的窗口上训练的。过了尽头会怎样？<bookmark mark='a'/>这是在一段一千个词元长的留出文本上，一次读完时，"
-        "每个位置的损失。{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>再来一根只能靠记忆找到的针：24个随机词元，然后是一段小说，然后又是同样的"
-        "24个词元。重复的那些词元，每个模型能预测对多少？{v3}",
+        "每个位置的损失。{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}",
 
     'f"Past 256, the transformer\'s loss climbs':
         "过了256，Transformer的损失往上爬，从{near_t:.1f}奈特到{far_t:.1f}奈特：这些旋转位置它从没训练过。",
@@ -545,9 +548,13 @@ ZH = {
     'f"The hybrid\'s climbs too':
         "混合模型的损失也往上爬，从{near_h:.1f}到{far_h:.1f}。",
 
-    "f'In the copy test, both copy well":
-        "在抄写测试里，两份副本挨得近时，两个模型都抄得很好：分别抄对{100 * nt:.0f}%和{100 * nh:.0f}%的词元。中间隔了{gaps[-1]}个词元时，"
-        "Transformer抄对{100 * lt:.0f}%，混合模型{100 * lh:.0f}%。",
+    'But neither can find a needle':
+        "可是两个模型都找不到针：给它们24个随机词元，接着一段小说，再来同样的24个词元，即使只隔16个词元，两个都预测不出重复的部分。"
+        "这么小、训练这么短的模型，从没形成第13部分讲的归纳头；所以前面的测试，用的是专门为这项任务训练的小模型。",
+
+    "f'And in the copy test, twenty-four random tokens":
+        "在抄写测试里，24个随机词元在一段小说之后重复出现，两份副本相隔{r['gaps'][0]}个词元时，Transformer预测对重复部分的"
+        "{100 * ct.mean(0)[0]:.0f}%，混合模型{100 * chy.mean(0)[0]:.0f}%。",
 
     'Where does that leave the frontier?':
         "那前沿又怎样呢？<bookmark mark='a'/>2024年，谷歌的Gemini 1.5最先提供了一百万个词元，并报告在多达一千万个词元里找到了针。"
