@@ -67,8 +67,8 @@ class Outro(VoiceoverScene):
         sz = [int(m) for m in nb["sizes"]]
         ax = mk([math.log10(sz[0]), math.log10(sz[-1]), 1], [0, 0.3, 1])
         out.append((VGroup(ax, *[curve(ax, np.log10(sz), [nb[k][str(m)]["mean"] for m in sz], c_, 2.5)
-                                 for k, c_ in (("nb", C.ADVANTAGE), ("lr", C.MODEL_Q))]), r"Bayes vs.\ logistic",
-                    C.ADVANTAGE))
+                                 for k, c_ in (("nb", "#4FD1C5"), ("lr", C.MODEL_Q))]), r"Bayes vs.\ logistic",
+                    "#4FD1C5"))
         ch = load("coverhart")
         ns = [int(n) for n in ch["ns"]]
         ax = mk([1, 4, 1], [0.15, 0.4, 1])
