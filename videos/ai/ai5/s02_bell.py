@@ -41,7 +41,7 @@ class Bell(VoiceoverScene):
         xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.12)
                       for t, v in (("1", 0), ("10", 1), ("100", 2), ("1{,}000", 3))])
         yt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
-                      for t, v in (("0", 0), (r"\tfrac12", 0.5), ("1", 1))])
+                      for t, v in (("0", 0), ("0.5", 0.5), ("1", 1))])
         xl = label(r"flips", font_size=24, color=GREY_A).next_to(xt, DOWN, buff=0.15)
         yl = label(r"share of heads so far", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         lx = np.log10(idx)
@@ -51,7 +51,7 @@ class Bell(VoiceoverScene):
         ns = np.logspace(0, math.log10(n), 120)
         bnd = band(ax, np.log10(ns), np.maximum(0.5 - 1 / np.sqrt(ns), 0), np.minimum(0.5 + 1 / np.sqrt(ns), 1), C.BITS, 0.12)
         bl = label(r"$\tfrac12 \pm 1/\sqrt{n}$: \ two standard deviations", font_size=22, color=C.BITS)
-        bl.next_to(ax.c2p(math.log10(n), 0.5 + 1 / math.sqrt(n)), UP, buff=0.5).shift(LEFT * 1.0)
+        bl.next_to(ax.c2p(math.log10(n), 0.95), LEFT, buff=0.1)
         hc = history_card(1713, r"Jacob Bernoulli, \textit{Ars Conjectandi}", r"averages settle: \ the law of large "
                           r"numbers, \ his ``golden theorem''", width=4.6).to_corner(UR, buff=0.35)
         lo, hi = float(d["final"].min()), float(d["final"].max())
@@ -256,10 +256,10 @@ class Bell(VoiceoverScene):
             "two pieces. <bookmark mark='d'/> n pieces take n minus one convolutions."
         ) as vo:
             step(0)
+            self.play(Create(ax), Create(f_c), FadeIn(lab[0]))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
-            self.play(Create(ax), Create(f_c), FadeIn(lab[0]))
             self.play(Create(g_c), FadeIn(ov), FadeIn(lab[1:]))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bl))

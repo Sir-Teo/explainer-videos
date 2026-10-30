@@ -76,15 +76,15 @@ class Memory(VoiceoverScene):
         lab = label(r"keep every $k$-th output \ (here $k = 4$); \ recompute a segment when the backward pass needs it",
                     font_size=22, color=GREY_A).next_to(row, DOWN, buff=0.25)
         rows = [
-            cmath(r"M(k)", r"=", r"\frac{n}{k} + k", font_size=40),
-            cmath(r"M'(k)", r"=", r"-\frac{n}{k^2} + 1 = 0", font_size=40),
-            cmath(r"k^*", r"=", r"\sqrt n, \qquad M(k^*) = 2\sqrt n", font_size=40, colors={r"k^*": CKP}),
-            cmath(r"\text{extra work}", r"=", r"n - \frac{n}{k} \;\approx\; \text{one more forward pass}", font_size=36),
+            cmath(r"M(k)", r"=", r"\frac{n}{k} + k", font_size=34),
+            cmath(r"M'(k)", r"=", r"-\frac{n}{k^2} + 1 = 0", font_size=34),
+            cmath(r"k^*", r"=", r"\sqrt n, \qquad M(k^*) = 2\sqrt n", font_size=34, colors={r"k^*": CKP}),
+            cmath(r"\text{extra work}", r"=", r"n - \frac{n}{k} \;\approx\; \text{one more forward pass}", font_size=31),
         ]
         whys = [why(r"$n/k$ checkpoints, \ plus one segment of $k$", font_size=22),
                 why(r"smallest where the slope is zero", font_size=22), None,
                 why(r"each segment is recomputed once", font_size=22)]
-        step = ladder(self, rows, whys, keep=4, top=1.35, x=-2.4, buff=0.28, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=1.45, x=-2.4, buff=0.22, edge=6.9)
         hist = VGroup(
             history_card(1992, r"Andreas Griewank", r"binomial checkpointing: \ memory and recomputation both "
                          r"growing only like $\log n$", width=4.6, font_size=17, color=HIST),

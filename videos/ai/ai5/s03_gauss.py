@@ -106,8 +106,33 @@ class Gauss(VoiceoverScene):
                 why(r"invert in blocks: \ the Schur complement"),
                 why(r"the same block inverse")]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-2.2, buff=0.42, edge=6.8)
-        res = label(r"the conditional is again a bell: \ mean $m$, \ covariance the Schur complement", font_size=26,
-                    color=COND).to_edge(DOWN, buff=0.35)
+        d = load("gauss")
+        S = np.asarray(d["S"])
+        a_ = float(d["a"])
+        pa = Axes(x_range=[-3, 3, 1], y_range=[-3.5, 3.5, 1], x_length=3.0, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.6, -2.25, 0])
+        Si = np.linalg.inv(S)
+
+        def joint(x, y):
+            return math.exp(-0.5 * (Si[0, 0] * x * x + 2 * Si[0, 1] * x * y + Si[1, 1] * y * y))
+
+        cont = contour_lines(pa, joint, (-3, 3), (-3.5, 3.5), [0.1, 0.4, 0.8], n=(60, 60), stroke_width=1.8)
+        line_ = DashedLine(pa.c2p(-3, a_), pa.c2p(3, a_), color=COND, stroke_width=2.5)
+        pl = label(rf"the joint density; \ slice at $x_b = {a_:g}$", font_size=20, color=GREY_A).next_to(pa, UP, buff=0.08)
+        ca = Axes(x_range=[-2, 3, 1], y_range=[0, 0.7, 0.2], x_length=3.4, y_length=2.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([1.4, -2.4, 0])
+        m_, v_ = float(d["m_th"]), float(d["v_th"])
+        xs_ = np.linspace(-2, 3, 150)
+        cb = curve(ca, xs_, normal_pdf(xs_, m_, math.sqrt(v_)), color=COND, stroke_width=3.5)
+        arr = Arrow(pa.get_right() + RIGHT * 0.1, ca.get_left() + LEFT * 0.05, buff=0.1, color=GREY_B, stroke_width=3,
+                    max_tip_length_to_length_ratio=0.2)
+        cl = label(r"what is left of $x_a$: \ a bell", font_size=20, color=COND).next_to(ca, UP, buff=0.08)
+        pic = VGroup(pa, cont, line_, pl, ca, cb, arr, cl)
+        res = label(r"the conditional is again a bell: \\ mean $m$, \ covariance the Schur complement", font_size=22,
+                    color=COND)
+        res.next_to(ca, RIGHT, buff=0.4).set_y(ca.get_y())
+        if res.get_right()[0] > 6.8:
+            res.width = 6.8 - res.get_left()[0]
         with self.voiceover(
             "Now the question that matters for prediction: if we learn some coordinates, x b, what is left of the "
             "others, x a? <bookmark mark='a'/> With x b fixed, the conditional density is the joint density, "
@@ -117,8 +142,10 @@ class Gauss(VoiceoverScene):
             "sigma a a minus sigma a b sigma b b inverse sigma b a, the Schur complement. <bookmark mark='e'/> And "
             "its mean moves from mu a by a linear function of what we learned."
         ) as vo:
+            self.play(FadeIn(pic[:4]))
             step(0)
             vo.wait_until("a")
+            self.play(FadeIn(pic[4:]))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -145,19 +172,19 @@ class Gauss(VoiceoverScene):
         strip.move_to([ax.get_center()[0], y_, 0])
         sdots = VGroup(*[Dot(ax.c2p(v, a), radius=0.03, color=COND, fill_opacity=0.7) for v in sl[:200]])
         slope = S[0, 1] / S[1, 1]
-        reg = Line(ax.c2p(slope * -4, -4), ax.c2p(slope * 4, 4), color=COND, stroke_width=3)
+        reg = Line(ax.c2p(slope * -3.6, -3.6), ax.c2p(slope * 3.6, 3.6), color=COND, stroke_width=3)
         reg_l = label(r"the conditional mean: \ Galton's regression line", font_size=22, color=COND)
-        reg_l.next_to(ax.c2p(slope * 3.6, 3.6), RIGHT, buff=0.15)
+        reg_l.next_to(ax.c2p(slope * 3.5, 3.5), LEFT, buff=0.15)
         sl_l = label(rf"$x_2 = {a:g}$", font_size=24, color=COND).next_to(strip, LEFT, buff=0.1).shift(RIGHT * 0.9 + UP * 0.25)
-        hx = Axes(x_range=[-1.5, 3.0, 1], y_range=[0, 0.7, 0.2], x_length=5.0, y_length=2.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 1.1, 0])
-        edges = np.linspace(-1.5, 3.0, 31)
+        hx = Axes(x_range=[-1.5, 3.0, 1], y_range=[0, 1.0, 0.2], x_length=5.0, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, 0.9, 0])
+        edges = np.linspace(-1.5, 3.0, 19)
         cnt, _ = np.histogram(sl, bins=edges)
         hh = hist_shape(hx, edges, cnt / cnt.sum() / (edges[1] - edges[0]), color=COND, opacity=0.4)
         xs = np.linspace(-1.5, 3.0, 200)
         pred = curve(hx, xs, normal_pdf(xs, m_th, math.sqrt(v_th)), color=MODEL, stroke_width=3.5)
-        hl = label(rf"$x_1$ of the points in the strip \ (of $400{{,}}000$; \ width $\pm {w:g}$)", font_size=22,
-                   color=COND).next_to(hx, UP, buff=0.15)
+        hl = label(rf"$x_1$ in the strip \ ($400{{,}}000$ drawn; \ width $\pm {w:g}$)", font_size=20,
+                   color=COND).next_to(hx, UP, buff=0.2)
         tbl = VGroup(
             label(r"", font_size=24), label(r"predicted", font_size=24, color=MODEL), label(r"measured", font_size=24, color=COND),
             label(r"mean", font_size=24, color=GREY_A), MathTex(f"{m_th:.3f}", font_size=30, color=MODEL),
@@ -165,11 +192,11 @@ class Gauss(VoiceoverScene):
             label(r"variance", font_size=24, color=GREY_A), MathTex(f"{v_th:.3f}", font_size=30, color=MODEL),
             MathTex(f"{v_e:.3f}", font_size=30, color=COND))
         tbl.arrange_in_grid(rows=3, cols=3, buff=(0.45, 0.2)).move_to([3.4, -1.55, 0])
-        four = label(rf"in four dimensions, \ two given two: \ off by at most ${float(d['err4']):.3f}$ \ "
-                     rf"(${int(d['n4']):,}$ points in the box)".replace(",", "{,}"), font_size=22, color=GREY_A)
+        four = label(rf"four dimensions, \ two given two: \ off by at most ${float(d['err4']):.3f}$", font_size=22,
+                     color=GREY_A)
         four.next_to(tbl, DOWN, buff=0.3)
         hc = history_card(1886, r"Francis Galton", r"heights of parents and children: \ elliptical contours, \ and "
-                          r"``regression towards mediocrity''", width=4.4).to_corner(DL, buff=0.3)
+                          r"``regression towards mediocrity''", width=4.6).next_to(tbl, DOWN, buff=0.25)
         good = abs(m_e - m_th) < 0.03 and abs(v_e / v_th - 1) < 0.05
         verdict = ("Both agree with the formulas to within the sampling error." if good else
                    "Close, but not within the sampling error: the strip has a width, and that biases it a little.")
@@ -197,15 +224,15 @@ class Gauss(VoiceoverScene):
         cards = VGroup(
             history_card(1960, r"Rudolf K\'alm\'an: \ the Kalman filter",
                          r"track a state by conditioning a Gaussian on each new measurement; \ it steered Apollo",
-                         width=4.2),
+                         width=4.3, font_size=24),
             history_card(r"1990s", r"Gaussian processes", r"a bell over whole functions: \ conditioning on data "
-                         r"\emph{is} the regression", width=4.2),
+                         r"\emph{is} the regression", width=4.3, font_size=24),
             history_card(2020, r"diffusion models \ (Part 21)", r"the step back from noise is a Gaussian conditional, "
-                         r"\ computed by this formula", width=4.2),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.6)
+                         r"\ computed by this formula", width=4.3, font_size=24),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.3)
         head = label(r"Conditioning a Gaussian, \ at work", font_size=36).to_edge(UP, buff=0.4)
         f = cmath(r"x_a \mid x_b", r"\;\sim\;", r"\mathcal{N}\big(\mu_a + \Sigma_{ab}\Sigma_{bb}^{-1}(x_b - \mu_b),\;"
-                  r"\Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}\big)", font_size=34).to_edge(DOWN, buff=0.7)
+                  r"\Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba}\big)", font_size=38).to_edge(DOWN, buff=1.0)
         with self.voiceover(
             "This one formula does a great deal of work. <bookmark mark='a'/> In 1960, Rudolf Kalman used it to "
             "track a moving object, conditioning on each new measurement; his filter navigated Apollo. "

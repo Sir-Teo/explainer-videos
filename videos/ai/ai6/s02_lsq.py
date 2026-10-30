@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai6.common import load
+from videos.ai.ai6.common import chapter, load
 
 PTS = np.array([[1.0, 1.0], [2.0, 3.0], [3.0, 2.0]])  # three points (illustrative)
 DATA, FIT, RES = C.TRUE_P, C.MODEL_Q, C.SURPRISE
@@ -25,10 +25,8 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(1, r"Least squares", r"What is the best line through points that disagree?", part=6)
-        with self.voiceover("Chapter one. Least squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        chapter(self, 1, r"Least squares", r"What is the best line through points that disagree?",
+                "Chapter one. Least squares.")
 
     # ------------------------------------------------------------------
     def squares(self):
@@ -205,10 +203,10 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Here's least squares on real data. Count every word in part one's books, and rank them, from the "
             "commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest "
-            "words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the "
+            f"words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is {beta[1]:.2f}: the "
             "r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the "
-            "line explains 99.6 percent of the variation: <bookmark mark='c'/> of all the scatter of the points "
-            "around their average height, the line accounts for everything but a sliver."
+            f"line explains {100 * z['r2']:.1f} percent of the variation: <bookmark mark='c'/> of all the scatter of "
+            "the points around their average height, the line accounts for everything but a sliver."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             vo.wait_until("a")

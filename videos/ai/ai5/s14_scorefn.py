@@ -187,9 +187,12 @@ class ScoreFn(VoiceoverScene):
                            font_size=22, color=PLAIN),
                      label(rf"with the baseline: \ ${gb:.0f}$; \ mirrored probes: \ ${gm:.0f}$", font_size=22, color=BASE))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.2)
-        verdict = (f"Without the baseline, {dp} of the 8 runs blow up and leave the picture; with it, "
-                   f"{'none do' if db == 0 else f'{db} do'}." if dp > db else
-                   f"Here both reach the valley floor: {dp} plain runs and {db} with a baseline blow up.")
+        if dp > db == 0:
+            verdict = f"Without the baseline, {dp} of the 8 runs blow up and leave the picture; with it, none do."
+        elif dp > db:
+            verdict = f"Without the baseline, {dp} of the 8 runs blow up; with it, only {db} do."
+        else:
+            verdict = f"Here both reach the valley floor: {dp} plain runs and {db} with a baseline blow up."
         with self.voiceover(
             "The same estimator trains models with no gradient at all. Smooth f by adding noise to the parameters, "
             "and its gradient is an average of f at random probes, times the probe: evolution strategies, used by "

@@ -442,7 +442,7 @@ def _conv_family(kind: str, dx: float, ns):
             z_lo = (xs - dx / 2 - n * mu) / sd
             dist = float(max(np.abs(cdf_hi - ndtr(z_hi)).max(), np.abs(cdf_hi - d - ndtr(z_lo)).max()))
             zg = np.linspace(-4, 4, 161)
-            dens = np.interp(zg, (xs - n * mu) / sd, d / dx * sd)
+            dens = np.interp(zg, (xs - n * mu) / sd, d / dx * sd, left=0.0, right=0.0)
             out[n] = (dist, dens)
             k += 1
     return out, rho / var ** 1.5

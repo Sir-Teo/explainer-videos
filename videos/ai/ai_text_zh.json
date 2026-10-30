@@ -18224,7 +18224,11 @@
     "Li et al., \\textit{The Lazy Neuron Phenomenon} (2023); \\ Liu et al., \\textit{TEAL} (2024); \\ model cards: Llama 4, Qwen3, Kimi K2 and K3, GLM-4.5 and 5, gpt-oss, Qwen3-Next, Qwen3.5, MiniMax-M2 and M3, Mistral Large 4": "Li等，\\textit{The Lazy Neuron Phenomenon}（2023）；\\ Liu等，\\textit{TEAL}（2024）；\\ 模型卡：Llama 4、Qwen3、Kimi K2与K3、GLM-4.5与5、gpt-oss、Qwen3-Next、Qwen3.5、MiniMax-M2与M3、Mistral Large 4",
     "a routed block: \\ $T$ tokens arrive, \\ the router keeps a fraction $c$ of them": "做路由的块：\\ 进来$T$个词元，\\ 路由器只留下其中比例为$c$的一部分",
     "DeltaNet": "DeltaNet",
-    "Gated DeltaNet": "Gated DeltaNet"
+    "Gated DeltaNet": "Gated DeltaNet",
+    "the character model; \\ the same batches in the same order; \\ $3{,}000$ steps; \\ $60$ of warmup, then a cosine to zero": "字符模型；\\ 同样顺序的同样批次；\\ $3{,}000$ 步；\\ $60$ 步预热，然后余弦降到零",
+    "each optimizer: \\ learning rates a factor of $2$ apart, \\ widened until the best is inside; \\ the best re-run from $2$ more seeds": "每个优化器：\\ 学习率相邻差 $2$ 倍，\\ 一直扩展到最好的落在内部；\\ 最好的再用另外 $2$ 个种子重跑",
+    "learning rate \\ (log scale); \\ filled: \\ the best, \\ the one that races": "学习率 \\ （对数刻度）；\\ 实心：\\ 最好的，\\ 也就是参赛的那个",
+    "$3$ seeds": "$3$ 个种子"
   },
   "phrases": {
     "width": "宽度",
