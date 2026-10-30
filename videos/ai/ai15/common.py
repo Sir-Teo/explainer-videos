@@ -25,9 +25,12 @@ RET = C.NEURAL  # retrieval
 # one colour and name per memory, for the whole part
 MIX_C = {"softmax": ATT, "linear": ADD, "mamba2": SSM_C, "delta": DELTA, "gdn": GATED, "hybrid": HYB}
 MIX_NAME = {"softmax": r"softmax attention", "linear": r"linear attention", "mamba2": r"Mamba-2-style SSM",
-            "delta": r"delta rule", "gdn": r"gated delta rule", "hybrid": r"hybrid: \ gated delta $+$ attention"}
+            "delta": r"delta rule (DeltaNet)", "gdn": r"gated delta rule (Gated DeltaNet)",
+            "hybrid": r"hybrid: \ gated delta rule $+$ attention"}
 MIX_SHORT = {"softmax": r"softmax", "linear": r"linear", "mamba2": r"Mamba-2", "delta": r"delta", "gdn": r"gated delta",
              "hybrid": r"hybrid"}
+# the same, as on-screen labels: the two delta-rule memories by their architectures' names
+MIX_TAG = {**MIX_SHORT, "delta": r"DeltaNet", "gdn": r"Gated DeltaNet"}
 
 
 def sci(x: float, digits: int = 0) -> str:

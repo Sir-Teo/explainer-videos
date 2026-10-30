@@ -136,7 +136,7 @@ class Hook(VoiceoverScene):
         obj = objectives_card([
             r"attention's memory: \ the cache, \ how it is shrunk, \ what can be thrown away",
             r"a matrix as a memory: \ from Hopfield and fast weights to linear attention",
-            r"how to write to it: \ adding, \ decaying, \ the delta rule, \ and how to train it in parallel",
+            r"how to write to it: \ adding, \ decaying, \ correcting with the delta rule; \ and how to train it in parallel",
             r"state-space models: \ HiPPO, \ S4, \ Mamba; \ and memories that learn while they read",
             r"recall, measured: \ which memory can look things up, \ and hybrids that mix them",
             r"long contexts, \ how well they really work, \ and retrieval: \ a memory outside the model",

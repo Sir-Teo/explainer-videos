@@ -92,14 +92,14 @@ class Layers(VoiceoverScene):
         whys = [why(r"the softmax", font_size=22), why(r"quotient rule; \ $\partial S / \partial z_j = e^{z_j}$", font_size=22),
                 why(r"split the fraction", font_size=22), why(r"as a matrix", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-4.2, buff=0.42, edge=6.9)
-        heat = matrix_heat(J, cell=0.5, numbers=True, fmt="{:.2f}", font_size=14).move_to([3.9, -1.65, 0])
+        heat = matrix_heat(J, cell=0.6, numbers=True, fmt="{:.2f}", font_size=16).move_to([4.6, -1.75, 0])
         hl = label(rf"computed: \ $5$ scores; \ library: \ difference ${gap_tex(d['sm_diff'])}$", font_size=20,
                    color=GREY_B).next_to(heat, UP, buff=0.15)
         props = VGroup(
-            label(r"rows add to $0$: \ $J\,\mathbf 1 = 0$", font_size=22, color=GREY_A),
-            label(r"symmetric, \ eigenvalues $\ge 0$:", font_size=22, color=GREY_A),
-            MathTex(", ".join(f"{max(v, 0):.3f}" for v in eig), font_size=24, color=GRAD),
-            label(r"$J^\top g = p \odot (g - p\cdot g)$: \ $n$ steps, \ not $n^2$", font_size=22, color=GRAD),
+            label(r"rows add to $0$: \ $J\,\mathbf 1 = 0$", font_size=25, color=GREY_A),
+            label(r"symmetric, \ eigenvalues $\ge 0$:", font_size=25, color=GREY_A),
+            MathTex(r",\ ".join(f"{max(v, 0):.3f}" for v in eig), font_size=28, color=GRAD),
+            label(r"$J^\top g = p \odot (g - p\cdot g)$: \ $n$ steps, \ not $n^2$", font_size=25, color=GRAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([-3.6, -2.3, 0])
         with self.voiceover(
             "Next, the softmax, which turns scores into probabilities. <bookmark mark='a'/> Differentiate with the "
@@ -146,7 +146,7 @@ class Layers(VoiceoverScene):
         hl = label(rf"computed: \ $6$ numbers; \ library: \ difference ${gap_tex(d['ln_diff'])}$", font_size=20,
                    color=GREY_B).next_to(heat, UP, buff=0.15)
         ev = VGroup(label(r"eigenvalues:", font_size=24, color=GREY_A),
-                    MathTex(", ".join(f"{abs(v):.2g}" if abs(v) < 1e-3 else f"{v:.3f}" for v in eig), font_size=26,
+                    MathTex(r",\ ".join(sci(abs(v), 0) if abs(v) < 1e-3 else f"{v:.3f}" for v in eig), font_size=28,
                             color=GRAD),
                     label(r"two (almost) zero: \ along $\mathbf 1$, \ and along $y$", font_size=24, color=GRAD),
                     label(r"the loss cannot see the mean or the overall size", font_size=24, color=GREY_A))

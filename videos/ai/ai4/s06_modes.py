@@ -66,10 +66,10 @@ class Modes(VoiceoverScene):
             "whole Jacobian you need a JVP per input, or a VJP per output."
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(n_) for n_ in nodes], lag_ratio=0.15),
-                      LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.15), FadeIn(jl), run_time=1.6)
-            self.play(Write(prod))
+                      LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.15), run_time=1.6)
+            vo.wait_until("a")
+            self.play(FadeIn(jl), Write(prod))
             vo.wait_until("b")
             self.play(Write(jvp), FadeIn(fwl))
             self.play(LaggedStart(*[a.animate.set_color(VALUE) for a in arrows], lag_ratio=0.3), run_time=1.2)
@@ -87,7 +87,7 @@ class Modes(VoiceoverScene):
         tf, tr = np.asarray(d["t_fwd"]), np.asarray(d["t_rev"])
         assert d["agree"] < 1e-9 and d["lib_diff"] < 1e-9
         k = len(sizes)
-        cell = 0.62
+        cell = 0.74
 
         def grid(vals, color, x0, title):
             g = VGroup()
@@ -97,15 +97,15 @@ class Modes(VoiceoverScene):
                     v = vals[i, j]
                     op = 0.12 + 0.8 * np.log10(v) / vmax
                     sq = Square(side_length=cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=color, fill_opacity=op)
-                    sq.move_to([x0 + j * cell, 1.3 - i * cell, 0])
-                    g.add(VGroup(sq, MathTex(f"{v:.0f}", font_size=18).move_to(sq)))
+                    sq.move_to([x0 + j * cell, 1.55 - i * cell, 0])
+                    g.add(VGroup(sq, MathTex(f"{v:.0f}", font_size=22).move_to(sq)))
             rl = VGroup(*[MathTex(str(s), font_size=18, color=GREY_B).next_to(g[i * k][0], LEFT, buff=0.12) for i, s in enumerate(sizes)])
             cl = VGroup(*[MathTex(str(s), font_size=18, color=GREY_B).next_to(g[j][0], UP, buff=0.1) for j, s in enumerate(sizes)])
             t = label(title, font_size=24, color=color).next_to(cl, UP, buff=0.2)
             return VGroup(g, rl, cl, t)
 
-        gf = grid(fwd / prim, VALUE, -5.6, r"forward mode")
-        gr = grid(rev / prim, GRAD, 1.1, r"reverse mode")
+        gf = grid(fwd / prim, VALUE, -5.4, r"forward mode")
+        gr = grid(rev / prim, GRAD, 1.6, r"reverse mode")
         ax_lab = VGroup(label(r"rows: \ $n$ inputs \qquad columns: \ $m$ outputs", font_size=22, color=GREY_A),
                         label(r"the whole Jacobian, \ in forward passes' worth of multiply-adds \ (counted)",
                               font_size=22, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=1.0)
@@ -124,11 +124,12 @@ class Modes(VoiceoverScene):
             "is. <bookmark mark='b'/> Reverse mode costs m, whatever n is. Few inputs and many outputs: go forwards. "
             "Many inputs and few outputs: go backwards. <bookmark mark='c'/> And timed on this computer, " + tail
         ) as vo:
-            self.play(FadeIn(ax_lab))
+            self.play(FadeIn(ax_lab), FadeIn(gf[1:]), FadeIn(gr[1:]))
+            self.play(LaggedStart(*[FadeIn(c) for c in gf[0]], lag_ratio=0.03), run_time=1.6)
             vo.wait_until("a")
-            self.play(FadeIn(gf[1:]), LaggedStart(*[FadeIn(c) for c in gf[0]], lag_ratio=0.03), run_time=1.6)
+            self.play(Indicate(gf[3], color=VALUE))
             vo.wait_until("b")
-            self.play(FadeIn(gr[1:]), LaggedStart(*[FadeIn(c) for c in gr[0]], lag_ratio=0.03), run_time=1.6)
+            self.play(LaggedStart(*[FadeIn(c) for c in gr[0]], lag_ratio=0.03), run_time=1.6)
             vo.wait_until("c")
             self.play(FadeIn(timed))
         self.wait(0.3)
@@ -145,16 +146,17 @@ class Modes(VoiceoverScene):
         fw = label(r"forwards: \ from $\theta$", font_size=30, color=VALUE).move_to([-3.6, 3.0, 0])
         bw = label(r"backwards: \ from $\mathcal{L}$", font_size=30, color=GRAD).move_to([3.6, 3.0, 0])
         divider = DashedLine([0, 2.6, 0], [0, -1.2, 0], color=GREY_D)
-        f_steps = [block(4, 6, color=VALUE), block(4, 6, color=VALUE), block(4, 6, color=VALUE), block(1, 6, color=VALUE)]
-        b_steps = [block(1, 4, color=GRAD), block(1, 4, color=GRAD), block(1, 4, color=GRAD), block(1, 6, color=GRAD)]
+        u_ = 0.22
+        f_steps = [block(4, 6, u_, VALUE), block(4, 6, u_, VALUE), block(4, 6, u_, VALUE), block(1, 6, u_, VALUE)]
+        b_steps = [block(1, 4, u_, GRAD), block(1, 4, u_, GRAD), block(1, 4, u_, GRAD), block(1, 6, u_, GRAD)]
         f_lab = [r"J_1", r"J_2 J_1", r"J_3 J_2 J_1", r"J_4 J_3 J_2 J_1"]
         b_lab = [r"J_4", r"J_4 J_3", r"J_4 J_3 J_2", r"J_4 J_3 J_2 J_1"]
         frows, brows = VGroup(), VGroup()
         for k in range(4):
             frows.add(VGroup(f_steps[k], MathTex(f_lab[k], font_size=26, color=VALUE)).arrange(RIGHT, buff=0.3))
             brows.add(VGroup(b_steps[k], MathTex(b_lab[k], font_size=26, color=GRAD)).arrange(RIGHT, buff=0.3))
-        frows.arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to([-3.6, 0.7, 0])
-        brows.arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to([3.6, 0.9, 0])
+        frows.arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to([-3.6, 0.65, 0])
+        brows.arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to([3.6, 0.9, 0])
         net = d["net"]
         res = VGroup(
             label(rf"a classifier, ${net[0]} \to {net[1]} \to {net[2]}$: \ ${P}$ parameters in, \ one loss out",

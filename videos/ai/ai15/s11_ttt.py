@@ -35,13 +35,18 @@ class TTT(VoiceoverScene):
         ttt = gloss(r"test-time training", r"the hidden state is a model's weights; \\ reading a token is one step of "
                     r"training on it", ttt_picture(), width=5.6, color=STATE).move_to([-3.2, -1.6, 0])
         tp = ttt[1][-1]
-        kinds = VGroup(label(r"$f_W(k) = W k$: \ TTT-Linear \ (the delta rule)", font_size=22, color=LIN_C),
+        kinds = VGroup(label(r"$f_W(k) = W k$: \ TTT-Linear \ (a delta-rule memory)", font_size=22, color=LIN_C),
                        label(r"$f_W$ a two-layer network: \ TTT-MLP", font_size=22, color=MLP_C))
         kinds.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, -1.1, 0])
         res = label(r"reported: \ Mamba stops improving past $16$k tokens of context; \\ the TTT layers keep going "
                     r"\ ($125$M--$1.3$B parameters)", font_size=18, color=GREY_B).next_to(kinds, DOWN, buff=0.4).align_to(kinds, LEFT)
         cite_ = cite(r"Y.~Sun, X.~Li, K.~Dalal et al., \textit{Learning to (Learn at Test Time): RNNs with Expressive "
                      r"Hidden States} (2024)", corner=DR, font_size=17)
+        back = cmath(r"S", r"\;\leftarrow\;", r"S", "-", r"\beta", r"\,(S k - v)\, k^{\top}", "=", r"S", "-", r"\beta",
+                     r"\,\nabla_S", r"\tfrac12 \|S k - v\|^2", colors={r"\beta": DELTA}, font_size=38)
+        backl = label(r"chapter 5: \ the delta rule is one step of gradient descent on the memory", font_size=24,
+                      color=GREY_A)
+        backg = VGroup(back, backl).arrange(DOWN, buff=0.35).move_to([0, -0.6, 0])
         with self.voiceover(
             "Chapter five ended with a thought: the delta rule is one step of gradient descent, so the memory is a "
             "model, trained on the text as it is read. Yu Sun and colleagues took that literally in 2024. "
@@ -53,8 +58,10 @@ class TTT(VoiceoverScene):
             "billion parameters, Mamba stopped improving with more than sixteen thousand tokens of context, and "
             "their layers kept improving."
         ) as vo:
+            self.play(FadeIn(backg, shift=UP * 0.1))
             self.play(Write(f1), FadeIn(cite_))
             vo.wait_until("a")
+            self.play(FadeOut(backg))
             self.play(Write(f2), FadeIn(l2), FadeIn(ttt, shift=UP * 0.1))
             for k_ in range(1, len(tp[0]) + 1):
                 w_, t_ = ttt_step(tp, k_)
@@ -190,8 +197,8 @@ class TTT(VoiceoverScene):
         rows = [
             (r"linear attention", r"$-\langle S k, v\rangle$", r"one gradient step", ADD),
             (r"decay \ (Mamba-2, \ GLA)", r"$-\langle S k, v\rangle + \tfrac{\lambda}{2}\|S\|^2$", r"a step, \ and weight decay", DECAY),
-            (r"delta rule \ (DeltaNet, \ TTT-Linear)", r"$\tfrac12 \|S k - v\|^2$", r"one gradient step", DELTA),
-            (r"gated delta \ (Qwen3-Next, \ Kimi)", r"$\tfrac12 \|S k - v\|^2$", r"a step, \ and weight decay", GATED),
+            (r"the delta rule \ (DeltaNet, \ TTT-Linear)", r"$\tfrac12 \|S k - v\|^2$", r"one gradient step", DELTA),
+            (r"gated delta rule \ (Qwen3-Next, \ Kimi)", r"$\tfrac12 \|S k - v\|^2$", r"a step, \ and weight decay", GATED),
             (r"Titans", r"$\tfrac12 \|M(k) - v\|^2$", r"momentum, \ weight decay; \ a deep $M$", SSM_C),
             (r"softmax attention", r"--", r"no training: \ a kernel regression \ over every pair kept", C.ATTN),
         ]

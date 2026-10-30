@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import fmt_int, ATT, HIST, HYB, MIX_C, MIX_SHORT, PART, axes, band, curve, heat_image, load
+from videos.ai.ai15.common import fmt_int, ATT, HIST, HYB, MIX_C, MIX_SHORT, MIX_TAG, PART, axes, band, curve, heat_image, load
 
 TF_C, HY_C = C.ATTN, HYB
 TASK_NAME = {"needle": r"one needle", "multikey": r"one of four needles", "vartrack": r"a chain of three names"}
@@ -121,7 +121,7 @@ class LongContext(VoiceoverScene):
                 for j in range(len(Ls)):
                     c = img.get_corner(UL) + np.array([0.62 * (j + 0.5), -0.62 * (i + 0.5), 0])
                     vals.add(MathTex(f"{100 * A[i, j]:.0f}", font_size=17, color=BLACK if A[i, j] > 0.55 else WHITE).move_to(c))
-            t = label(MIX_SHORT[k], font_size=22, color=MIX_C[k]).next_to(img, UP, buff=0.12)
+            t = label(MIX_TAG[k], font_size=22, color=MIX_C[k]).next_to(img, UP, buff=0.12)
             tables.add(Group(img, SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1), vals, t))
         tables.arrange_in_grid(rows=2, cols=2, buff=(1.6, 0.7)).move_to([0.8, -0.35, 0])
         rl = VGroup(*[label(TASK_NAME[t], font_size=17, color=GREY_A) for t in tasks]).arrange(DOWN, aligned_edge=RIGHT, buff=0.38)

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import fmt_int, K, MIX_C, MIX_NAME, MIX_SHORT, MONO, PART, V, axes, curve, load
+from videos.ai.ai15.common import fmt_int, K, MIX_C, MIX_NAME, MIX_SHORT, MIX_TAG, MONO, PART, V, axes, curve, load
 
 
 class Recall(VoiceoverScene):
@@ -89,7 +89,7 @@ class Recall(VoiceoverScene):
             g = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=GREY_D, fill_opacity=0.3)
                          .move_to([-4.9 + q * (cell + 0.04), y, 0]) for q in range(N)])
             grids.add(g)
-            names.add(label(MIX_SHORT[k], font_size=20, color=MIX_C[k]).next_to(g, LEFT, buff=0.25))
+            names.add(label(MIX_TAG[k], font_size=20, color=MIX_C[k]).next_to(g, LEFT, buff=0.25))
         gl = label(rf"one fixed list of ${N}$ pairs: \ each square an answer, \ lit when right \ (key size ${dk}$, seed $0$)",
                    font_size=18, color=GREY_A).next_to(grids, UP, buff=0.2).align_to(names, LEFT)
         g2 = axes([0, steps[-1]], [0, 1], x_length=4.6, y_length=3.4, xlabel=r"training steps",
