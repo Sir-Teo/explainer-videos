@@ -31,12 +31,14 @@ class Muon(VoiceoverScene):
         before = np.asarray(m["sv_grad"], float)
         before = before / before.max()
         n = len(before)
-        ax = Axes(x_range=[0, n, 64], y_range=[0, 1.2, 0.5], x_length=7.4, y_length=3.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-2.0, -0.9, 0])
+        ax = Axes(x_range=[0, n, 64], y_range=[0, 1.2, 0.5], x_length=7.4, y_length=3.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-2.0, -1.3, 0])
         xl = label(rf"the gradient's ${n}$ singular values, \ largest first", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.2)
         bars_b = VGroup(*[Line(ax.c2p(i + 0.5, 0), ax.c2p(i + 0.5, float(v)), color=GREY_B, stroke_width=2)
                           for i, v in enumerate(before)])
-        bars_a = VGroup(*[Line(ax.c2p(i + 0.5, 0), ax.c2p(i + 0.5, 1.0), color=MU, stroke_width=2) for i in range(n)])
+        bars_a = VGroup(*[Line(ax.c2p(i + 0.5, 0), ax.c2p(i + 0.5, 1.0), color=MU, stroke_width=2,
+                               stroke_opacity=0.35) for i in range(n)])
+        bars_a.add(Line(ax.c2p(0, 1.0), ax.c2p(n, 1.0), color=MU, stroke_width=4))
         top10 = float((before[:10] ** 2).sum() / (before ** 2).sum())
         colors = {r"U": GREY_A, r"V^{\top}": GREY_A, r"\Sigma": GREY_B}
         svd = cmath(r"G", "=", r"U", r"\Sigma", r"V^{\top}", colors=colors, font_size=42).move_to([4.3, 1.8, 0])
@@ -114,16 +116,15 @@ class Muon(VoiceoverScene):
             "by at most eta times its singular value. <bookmark mark='c'/> And one step achieves every bound at "
             "once: minus eta times U V transpose."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), Create(pic_g[0]), Create(pic_m[0]), Write(eqs[0]))
             vo.wait_until("p")
             self.play(FadeIn(why_))
             vo.wait_until("q")
-            self.play(Create(pic_g[0]), Create(pic_m[0]))
             self.play(TransformFromCopy(pic_g[0], pic_g[1]), *[GrowArrow(a_) for a_ in pic_g[2]], FadeIn(cap_g))
             self.play(TransformFromCopy(pic_m[0], pic_m[1]), *[GrowArrow(a_) for a_ in pic_m[2]], FadeIn(cap_m))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(Write(eqs[k]), FadeIn(notes[k]))
+                self.play(*([] if k == 0 else [Write(eqs[k])]), FadeIn(notes[k]))
             self.play(Create(box))
         self.wait(0.3)
         self.clear_scene()

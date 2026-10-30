@@ -106,9 +106,10 @@ class Stability(VoiceoverScene):
             "trained on fifteen and a half trillion tokens, its report says with zero loss spikes."
         ) as vo:
             self.play(FadeIn(head))
-            for k, mk in enumerate("abc"):
+            step(0)
+            for k, mk in enumerate("bc"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
@@ -211,9 +212,10 @@ class Stability(VoiceoverScene):
             "each step is a fixed fraction of the matrix, an effective learning rate."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
-            for k, mk in enumerate("abcd"):
+            step(0)
+            for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             vo.wait_until("e")
             self.play(FadeIn(tl))
         self.wait(0.3)

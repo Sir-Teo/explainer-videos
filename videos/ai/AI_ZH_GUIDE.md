@@ -1148,3 +1148,52 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | densing law, capability density | 致密化定律，能力密度 |
 | algorithmic progress | 算法进步 |
 | scaling ladder | 规模阶梯 |
+
+### Images, video and 3D (Part 22)
+
+| English | 中文 |
+|---|---|
+| vision transformer (ViT) | 视觉Transformer（ViT） |
+| patch, patch embedding | 图块，图块嵌入 |
+| summary token ([CLS]) | 汇总词元（[CLS]） |
+| learned position vector (position embedding) | 学到的位置向量（位置嵌入） |
+| attention distance | 注意力距离 |
+| inductive bias; locality; translation equivariance | 归纳偏置；局部性；平移等变 |
+| latent space, latent diffusion | 潜空间，潜空间扩散 |
+| perceptual and semantic compression | 感知压缩与语义压缩 |
+| spatial compression factor (f8, f32), latent channels | 空间压缩倍数（f8，f32），潜变量通道 |
+| deep compression autoencoder (DC-AE), space-to-channel | 深度压缩自编码器（DC-AE），空间到通道 |
+| reconstruction–generation dilemma | 重建与生成的两难 |
+| representation alignment (REPA), projector | 表示对齐（REPA），投影头 |
+| representation autoencoder (RAE) | 表示自编码器（RAE） |
+| U-Net, skip connection | U-Net，跳跃连接 |
+| diffusion transformer (DiT) | 扩散Transformer（DiT） |
+| adaptive layer norm (adaLN), adaLN-Zero, gate | 自适应层归一化（adaLN），adaLN-Zero，门控 |
+| in-context conditioning | 上下文条件（作为额外词元） |
+| cross-attention | 交叉注意力 |
+| multiply-adds (MACs) per picture | 每张图片的乘加次数 |
+| MM-DiT, joint attention, QK-norm | MM-DiT，联合注意力，QK归一化 |
+| logit-normal timestep sampling | 对数几率正态（logit-normal）时间步采样 |
+| resolution-dependent timestep shift (resolution shift) | 随分辨率的时间步平移（分辨率平移） |
+| recaptioning | 重新标注（用模型写详细描述） |
+| vector-quantized tokenizer, VQGAN | 向量量化分词器，VQGAN |
+| raster order | 光栅顺序 |
+| masked generative transformer (MaskGIT), cosine schedule | 掩码生成式Transformer（MaskGIT），余弦调度 |
+| next-scale prediction (VAR), residual quantization, block-causal mask | 下一尺度预测（VAR），残差量化，块因果掩码 |
+| bitwise tokens | 按位词元 |
+| unified model, mixture of transformer experts (MoT) | 统一模型，Transformer专家混合（MoT） |
+| in-context editing | 上下文编辑 |
+| spacetime patches | 时空图块 |
+| causal 3D autoencoder | 因果三维自编码器 |
+| 3D rotary positions (3D RoPE) | 三维旋转位置编码（3D RoPE） |
+| joint image–video training | 图像与视频联合训练 |
+| full-sequence diffusion | 全序列扩散 |
+| teacher forcing, diffusion forcing, self forcing | 教师强制，扩散强制，自我强制 |
+| exposure bias, rollout | 暴露偏差，滚动生成（推演） |
+| neural radiance field (NeRF) | 神经辐射场（NeRF） |
+| volume rendering, transmittance, alpha compositing | 体渲染，透射率，阿尔法合成 |
+| positional encoding (Fourier features) | 位置编码（傅里叶特征） |
+| PSNR | 峰值信噪比（PSNR） |
+| 3D Gaussian splatting, covariance projection, EWA splatting | 三维高斯泼溅，协方差投影，EWA泼溅 |
+| Jacobian | 雅可比矩阵 |
+| Fréchet distance (FD) on a judge's features | 评判网络特征上的弗雷歇距离（FD） |
