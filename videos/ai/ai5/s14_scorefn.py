@@ -80,9 +80,9 @@ class ScoreFn(VoiceoverScene):
                 why(r"an average: \ estimate it by sampling"),
                 why(r"$\mathbb{E}[\nabla \log p] = 0$ \ (Chapter 4): \ any baseline $b$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.0, buff=0.55, edge=6.8)
-        cite_ = cite(r"P.~W.~Glynn (1990); \ R.~J.~Williams, REINFORCE (1992)", corner=DR)
-        pa_ = Axes(x_range=[-3, 3, 1], y_range=[-2.5, 2.5, 1], x_length=4.4, y_length=2.0, tips=False,
-                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.5)
+        cite_ = cite(r"P.~W.~Glynn (1990); \ R.~J.~Williams, REINFORCE (1992)", corner=DL)
+        pa_ = Axes(x_range=[-3, 3, 1], y_range=[-2.5, 2.5, 1], x_length=3.6, y_length=1.6, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DR, buff=0.4)
         xx = np.linspace(-3, 3, 150)
         pic = VGroup(pa_, curve(pa_, xx, 4 * normal_pdf(xx), color=DATA, stroke_width=3),
                      curve(pa_, xx, np.clip(xx, -2.5, 2.5), color=SF, stroke_width=3),
