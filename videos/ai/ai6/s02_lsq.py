@@ -142,7 +142,7 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         assert abs(r @ A[:, 0]) < 1e-12 and abs(r @ A[:, 1]) < 1e-12
         axes = ThreeDAxes(x_range=[0, 4, 1], y_range=[0, 4, 1], z_range=[0, 4, 1], x_length=4.6, y_length=4.6,
                           z_length=4.6, axis_config={"stroke_color": GREY_C, "include_ticks": False, "include_tip": False})
-        axes.shift(RIGHT * 0.4 + DOWN * 1.3)
+        axes.shift(LEFT * 1.0 + DOWN * 0.7 + IN * 1.2)
         c1, c2 = A[:, 0], A[:, 1]
         e1 = c1 / np.linalg.norm(c1)
         e2 = c2 - (c2 @ e1) * e1
@@ -183,7 +183,7 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         for m in (e1, e2, ycap, pcap, ncap):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-35 * DEGREES, zoom=1.05)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-35 * DEGREES, zoom=0.9)
         with self.voiceover(
             "There's a beautiful way to see the answer. Write the three heights as a single point in three "
             "dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together "

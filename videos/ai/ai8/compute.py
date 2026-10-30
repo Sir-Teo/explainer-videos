@@ -36,12 +36,15 @@ Items:
     shift      covariate shift: least squares, importance-weighted least squares, and estimated weights
     memorize   the novels model: how often it reproduces a 32-token passage of its training text from the 32
                tokens before it, against how many times the passage occurs
+    canary     the novels model trained on, with held-out passages planted 1 ... 32 times: extraction against
+               repetition, through training (checkpointed; about half an hour on two threads)
 """
 
 from __future__ import annotations
 
 import math
 import os
+import time
 
 import numpy as np
 
@@ -490,6 +493,10 @@ def compute_margins():
     cplx = 2 / (gammas * math.sqrt(n))
     bound = emp + cplx + conf
     k = int(np.argmin(bound))
+    # with the same margins, how many pages would make the best bound fall below 1/2
+    def best_at(m_):
+        return float(np.min(emp + 2 / (gammas * math.sqrt(m_)) + 3 * math.sqrt(math.log(2 * len(gammas) / delta) / (2 * m_))))
+    n_half = next(m_ for m_ in range(n, 10 ** 8, max(1, n // 4)) if best_at(m_) < 0.5)
     # AdaBoost on the same pages (Schapire, Freund, Bartlett & Lee, 1998): margins keep growing after the training
     # error reaches zero
     T = 400
@@ -505,7 +512,7 @@ def compute_margins():
     zero = int(np.argmax(tr_err == 0)) + 1 if (tr_err == 0).any() else None
     return dict(sep=sep, n=n, R=R, margins=np.sort(m), test_acc=test_acc, n_sv=int((a > 1e-6 * a.max()).sum()),
                 gammas=gammas, emp=emp, cplx=cplx, conf=conf, bound=bound, best_gamma=float(gammas[k]),
-                best_bound=float(bound[k]), best_emp=float(emp[k]), vc=vc_bound(71, n), min_margin=float(m.min()),
+                best_bound=float(bound[k]), best_emp=float(emp[k]), n_half=n_half, vc=vc_bound(71, n), min_margin=float(m.min()),
                 ada_tr=tr_err, ada_te=te_err, ada_T=T, ada_snaps=snaps, ada_zero=zero, **cdfs)
 
 
@@ -514,7 +521,7 @@ def compute_pacbayes():
     """A non-vacuous PAC-Bayes bound for a 70 -> 128 -> 1 network on the 448 training pages, by Dziugaite & Roy's
     recipe (2017): train the network, then optimize a Gaussian posterior N(mu, diag s^2) around it against the bound,
     with the prior N(w0, lambda I) centred at the random initialization (chosen before seeing the data), lambda
-    from a grid of 64 (a union bound).  The posterior's training error is estimated from 2,000 sampled networks
+    from a grid of 256 (a union bound).  The posterior's training error is estimated from 2,000 sampled networks
     and bounded by a sample-convergence bound; the final bound inverts the binary KL (Seeger; Maurer):
         kl(err_train(Q) || err(Q)) <= (KL(Q || P) + ln(2 sqrt(n) / delta)) / n."""
     torch = _torch()
@@ -540,28 +547,32 @@ def compute_pacbayes():
         h = torch.relu(torch.einsum("nd,shd->snh", Xb, W1) + b1[:, None, :])
         return (torch.einsum("snh,soh->sno", h, W2) + b2[:, None, :]).squeeze(-1)
 
-    # 1. ordinary training, from w0
+    # 1. ordinary training, from w0: a short run, so the weights stay near where they started
     theta = w0.clone().requires_grad_(True)
-    opt = torch.optim.SGD([theta], lr=0.05, momentum=0.9)
+    opt = torch.optim.SGD([theta], lr=0.01, momentum=0.9)
     sgd_curve = []
-    for step in range(1, 401):
+    for step in range(1, 101):
         opt.zero_grad()
         loss = torch.nn.functional.softplus(-t * fwd(theta, X)).mean()
         loss.backward()
         opt.step()
-        if step % 10 == 0:
+        if step % 5 == 0:
             with torch.no_grad():
                 sgd_curve.append((step, float(loss), float((fwd(theta, X).sign() != t).float().mean()),
                                   float((fwd(theta, Xt).sign().numpy() != 2 * yte - 1).mean())))
     mu0 = theta.detach().clone()
     sgd_test = sgd_curve[-1][3]
+    sgd_moved = float(torch.linalg.norm(mu0 - w0))
     # 2. the bound, optimized over mu, log s and log lambda
-    delta, J = 0.025, 64
+    delta, J = 0.025, 256
     grid = np.geomspace(1e-6, 1e-1, J)  # the prior variances allowed
+    lam0 = 0.03
     mu = mu0.clone().requires_grad_(True)
-    rho = torch.full((P,), math.log(1e-3)).requires_grad_(True)  # log s
-    loglam = torch.tensor(math.log(1e-3)).requires_grad_(True)
-    opt = torch.optim.Adam([mu, rho, loglam], lr=1e-3)
+    rho = torch.full((P,), 0.5 * math.log(lam0)).requires_grad_(True)  # log s: start as wide as the prior
+    loglam = torch.tensor(math.log(lam0)).requires_grad_(True)
+    steps = 10000
+    opt = torch.optim.Adam([mu, rho, loglam], lr=3e-3)
+    sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps, eta_min=1.5e-4)
 
     def KL(mu_, rho_, lam):
         s2 = torch.exp(2 * rho_)
@@ -570,7 +581,6 @@ def compute_pacbayes():
     g_ = torch.Generator().manual_seed(2017)  # Dziugaite & Roy, 2017
     const = math.log(2 * math.sqrt(n) / delta) + math.log(J)
     curve = []
-    steps = 6000
     for step in range(1, steps + 1):
         opt.zero_grad()
         eps = torch.randn(P, generator=g_)
@@ -580,6 +590,7 @@ def compute_pacbayes():
         obj = sur + torch.sqrt((kl + const) / (2 * (n - 1)))
         obj.backward()
         opt.step()
+        sch.step()
         if step % 100 == 0:
             with torch.no_grad():
                 err = float((fwd(th, X).sign() != t).float().mean())
@@ -608,7 +619,7 @@ def compute_pacbayes():
                 test_Q=float(errs_te.mean()), test_mu=mu_test, sgd_test=sgd_test, delta=delta + dp, m=m,
                 curve=np.array(curve), sgd_curve=np.array(sgd_curve), s_med=float(np.median(s)),
                 s_q=np.quantile(s, [0.1, 0.9]), moved=moved, w0_norm=float(torch.linalg.norm(w0)), J=J,
-                const=const, steps=steps)
+                const=const, steps=steps, sgd_moved=sgd_moved)
 
 
 # ---------------------------------------------------------------------------
@@ -842,16 +853,16 @@ def compute_minnorm():
 
 
 def maxmargin_data(n=40, seed=2018):
-    """Points on two sides of a line through the origin, with a gap: separable by a line through 0."""
+    """Two clouds on either side of a line through the origin, plus four points near it (two per class) that set the
+    widest margin: the clouds pull the early direction one way, the four points decide the final one."""
     g = rng(seed)
     pts = []
-    u = np.array([math.cos(0.5), math.sin(0.5)])  # the class direction (not the max-margin one in general)
-    v = np.array([-u[1], u[0]])
-    while len(pts) < n:
-        s = 1.0 if len(pts) % 2 == 0 else -1.0
-        p = s * (0.35 + abs(g.normal(0.7, 0.5))) * u + g.normal(0, 1.1) * v + s * np.array([0.3, -0.2])
-        if s * (p @ u) > 0.3:
-            pts.append([*p, s])
+    for i in range(n - 4):
+        s = 1.0 if i % 2 == 0 else -1.0
+        pts.append([*(s * np.array([1.7, 1.3]) + g.normal(0, 0.38, 2)), s])
+    for s in (1.0, -1.0):
+        for _ in range(2):
+            pts.append([*(s * (np.array([1.25, -0.45]) + g.normal(0, 0.08, 2))), s])
     return np.array(pts)
 
 
@@ -968,15 +979,16 @@ def compute_samplewise():
 
 
 def compute_epochwise():
-    """Gradient descent from zero on a linear regression whose inputs have two scales (Heckel & Yilmaz, 2021): many
-    directions with large variance and little signal, learned fast; a few with small variance and most of the signal,
-    learned slowly.  The exact test error at every step, averaged over 20 draws of the data."""
+    """Gradient descent from zero on a linear regression whose inputs have two scales (Heckel & Yilmaz, 2021): 150
+    directions of variance 1 holding a little of the signal, learned fast; 5 of variance 0.0003 holding the rest,
+    learned thousands of times more slowly.  n = 200 examples.  The exact test error at every step (from the eigen-
+    decomposition), split into the two groups' shares; medians over 20 draws of the data."""
     g = rng(2021)
-    n, d1, d2, sig = 200, 120, 6, 0.6
-    lam = np.r_[np.ones(d1), np.full(d2, 0.004)]  # input variances
-    ws = np.r_[g.normal(0, 0.06, d1), g.normal(0, 1.0, d2) / math.sqrt(0.004)]  # the signal sits in the slow part
-    ts = np.unique(np.round(np.geomspace(1, 3e6, 220)).astype(int))
-    curves, tr_curves = [], []
+    n, d1, d2, sig, s1, s2, l2 = 200, 150, 5, 0.3, 4.0, 3.0, 3e-4
+    lam = np.r_[np.ones(d1), np.full(d2, l2)]  # input variances
+    ws = np.r_[g.normal(0, math.sqrt(s1 / d1), d1), g.normal(0, math.sqrt(s2 / d2 / l2), d2)]
+    ts = np.unique(np.round(np.geomspace(1, 3e6, 200)).astype(int))
+    curves, fast, slow, tr_curves = [], [], [], []
     for r in range(20):
         X = g.normal(size=(n, d1 + d2)) * np.sqrt(lam)
         y = X @ ws + sig * g.normal(size=n)
@@ -986,28 +998,30 @@ def compute_epochwise():
         b = V.T @ (X.T @ y / n)
         # w_t = V diag((1 - (1 - eta ev)^t) / ev) b, exactly
         dec = (1 - eta * ev)[None, :] ** ts[:, None]
-        coef = np.where(ev > 1e-14, (1 - dec) / np.maximum(ev, 1e-14), eta * ts[:, None])
+        coef = (1 - dec) / ev
         Wt = (coef * b) @ V.T
-        E = Wt - ws
-        curves.append(((E ** 2) * lam).sum(1) + sig ** 2)
+        E2 = (Wt - ws) ** 2 * lam
+        fast.append(E2[:, :d1].sum(1))
+        slow.append(E2[:, d1:].sum(1))
+        curves.append(E2.sum(1) + sig ** 2)
         tr_curves.append(((X @ Wt.T - y[:, None]) ** 2).mean(0))
     C = np.array(curves)
     med = np.median(C, 0)
-    i1 = int(np.argmin(med[: np.searchsorted(ts, 3000)]))
-    i2 = i1 + int(np.argmax(med[i1:np.searchsorted(ts, 3e5)]))
+    i1 = int(np.argmin(med[: np.searchsorted(ts, 100)]))
+    i2 = i1 + int(np.argmax(med[i1:np.searchsorted(ts, 1e4)]))
     double = bool(med[i2] > med[i1] * 1.05 and med[-1] < med[i2] * 0.95)
-    return dict(ts=ts, med=med, lo=np.quantile(C, 0.25, 0), hi=np.quantile(C, 0.75, 0),
-                train=np.median(np.array(tr_curves), 0), noise=sig ** 2, i1=i1, i2=i2, double=double,
-                n=n, d1=d1, d2=d2)
+    return dict(ts=ts, med=med, lo=np.quantile(C, 0.25, 0), hi=np.quantile(C, 0.75, 0), fast=np.median(fast, 0),
+                slow=np.median(slow, 0), train=np.median(np.array(tr_curves), 0), noise=sig ** 2, i1=i1, i2=i2,
+                double=double, n=n, d1=d1, d2=d2, start=float(s1 + s2 + sig ** 2))
 
 
 def compute_benign():
     """Bartlett, Long, Lugosi & Tsigler (2020).  n = 100 noisy examples; the signal lives in 5 strong directions.  The
-    minimum-norm interpolant fits every noisy label exactly.  With a spike plus D weak directions of total variance 20,
+    minimum-norm interpolant fits every noisy label exactly.  With a spike plus D weak directions of total variance 5,
     its excess error falls toward zero as D grows (benign); with D more directions as strong as the signal's, it does
     not."""
     g = rng(2020)
-    n, s, sig, tail = 100, 5, 0.5, 20.0
+    n, s, sig, tail = 100, 5, 0.5, 5.0
     Ds = [100, 200, 400, 1000, 2000, 5000, 10000, 20000, 40000]
     ws = np.zeros(s)
     ws[:] = 1.0
@@ -1069,7 +1083,7 @@ def _top_eig(torch, net, X, t, iters=40, seed=0):
 def compute_sharp():
     """Keskar et al. (2017) and Dinh et al. (2017), small.  A teacher network labels points in 10 dimensions; students
     (10 -> 256 -> 2, ReLU) learn from 300 of them with SGD at batch sizes 4 ... 300 and two step sizes, three seeds each,
-    for 300 epochs.  Sharpness: the top eigenvalue of the training loss's Hessian; and the loss rise under random
+    each until its training loss falls below 0.01 (so all are compared at the same fit).  Sharpness: the top eigenvalue of the training loss's Hessian; and the loss rise under random
     weight perturbations.  Then one trained network rescaled (first layer times a, second divided by a): the same
     function, a different sharpness."""
     torch = _torch()
@@ -1079,7 +1093,8 @@ def compute_sharp():
     batches = [4, 16, 64, 300]
     lrs = [0.02, 0.1]
     seeds = [0, 1, 2]
-    part = CACHE.partial("sharp", dict(b=batches, lr=lrs, s=seeds, v=2))
+    TARGET = 0.01
+    part = CACHE.partial("sharp", dict(b=batches, lr=lrs, s=seeds, v=3, target=TARGET))
     for B in batches:
         for lr in lrs:
             for s in seeds:
@@ -1090,13 +1105,18 @@ def compute_sharp():
                 net = torch.nn.Sequential(torch.nn.Linear(10, 256), torch.nn.ReLU(), torch.nn.Linear(256, 2))
                 opt = torch.optim.SGD(net.parameters(), lr=lr)
                 gen = torch.Generator().manual_seed(100 + s)
-                for ep in range(300):
+                ep = 0
+                while ep < 4000:  # until the training loss falls to the common target
                     perm = torch.randperm(len(yt), generator=gen)
                     for i in range(0, len(yt), B):
                         idx = perm[i:i + B]
                         opt.zero_grad()
                         torch.nn.functional.cross_entropy(net(Xt[idx]), yt[idx]).backward()
                         opt.step()
+                    ep += 1
+                    with torch.no_grad():
+                        if float(torch.nn.functional.cross_entropy(net(Xt), yt)) < TARGET:
+                            break
                 with torch.no_grad():
                     tr_loss = float(torch.nn.functional.cross_entropy(net(Xt), yt))
                     tr_acc = float((net(Xt).argmax(1) == yt).float().mean())
@@ -1114,7 +1134,7 @@ def compute_sharp():
                     for p, b0 in zip(net.parameters(), base):
                         p.copy_(b0)
                 part[key] = dict(B=B, lr=lr, s=s, tr_loss=tr_loss, tr_acc=tr_acc, te_err=te_err, lam=lam,
-                                 rise=float(np.mean(rises)))
+                                 rise=float(np.mean(rises)), epochs=ep)
                 if B == 300 and lr == 0.1 and s == 0:
                     torch.save(net.state_dict(), CACHE.dir / "sharp_net.pt")
     rows = [part[f"{B}_{lr}_{s}"] for B in batches for lr in lrs for s in seeds]
@@ -1144,7 +1164,8 @@ def compute_sharp():
             same.append(float((m(Xv) - ref).abs().max()))
     return dict(batches=batches, lrs=lrs, seeds=seeds, B=np.array([r["B"] for r in rows]),
                 lr=np.array([r["lr"] for r in rows]), lam=lam, err=err, rise=rise,
-                tr_acc=np.array([r["tr_acc"] for r in rows]), rho=rho, rho_rise=rho_rise, alphas=alphas,
+                tr_acc=np.array([r["tr_acc"] for r in rows]), tr_loss=np.array([r["tr_loss"] for r in rows]),
+                epochs=np.array([r["epochs"] for r in rows]), target=TARGET, rho=rho, rho_rise=rho_rise, alphas=alphas,
                 resc=np.array(resc), same=float(max(same)), n=300)
 
 
@@ -1298,6 +1319,110 @@ def compute_memorize():
                 max_count=int(counts.max()))
 
 
+CANARY = dict(counts=[1, 2, 4, 8, 16, 32], per=16, L=64, filler=400_000, lr=3e-4, batch=16, passes=2.0, evals=10)
+
+
+def compute_canary():
+    """Kandpal, Wallace & Raffel (2022) and Carlini et al. (2023), on our model.  Continue training the novels model on
+    400,000 tokens of its own training text, into which 96 passages of 64 tokens from the held-out text, never seen
+    before, are planted: 16 passages once, 16 twice, ... 16 thirty-two times.  Sixteen more held-out passages are never
+    planted (the control).  Every few steps: how many of each group are extractable (their last 32 tokens are the
+    greedy continuation of their first 32).  Checkpointed, so a killed run resumes."""
+    torch = _torch()
+    torch.set_num_threads(int(os.environ.get("AI8_TRAIN_THREADS", "2")))
+    from explainer.ai.novels import decode, load_base, token_arrays
+
+    K = CANARY
+    train, valid = token_arrays()
+    g = rng(2022)  # Kandpal, Wallace & Raffel, 2022
+    L, half = K["L"], K["L"] // 2
+    groups = K["counts"] + [0]
+    starts = g.choice(len(valid) // L, K["per"] * len(groups), replace=False) * L  # disjoint passages
+    passages = np.array([valid[s:s + L] for s in starts]).reshape(len(groups), K["per"], L)
+    a0 = int(g.integers(0, len(train) - K["filler"]))
+    filler = train[a0:a0 + K["filler"]]
+    pieces = [passages[i, j] for i, c in enumerate(groups) for j in range(K["per"]) for _ in range(c)]
+    order = g.permutation(len(pieces))
+    cuts = np.sort(g.choice(len(filler), len(pieces), replace=False))
+    out, prev = [], 0
+    for c, k in zip(cuts, order):
+        out += [filler[prev:c], pieces[k]]
+        prev = c
+    out.append(filler[prev:])
+    arr = np.concatenate(out).astype(np.int64)
+    seq = 256
+    steps = int(math.ceil(K["passes"] * len(arr) / (K["batch"] * seq)))
+    every = max(1, steps // K["evals"])
+    ck = CACHE.dir / "canary.ckpt"
+    model = load_base()
+    model.train()
+    opt = torch.optim.AdamW(model.parameters(), lr=K["lr"], weight_decay=0.0)
+    data_rng = rng(7)
+    curve, evals, step = [], [], 0
+    if ck.exists():
+        st = torch.load(ck, weights_only=False)
+        model.load_state_dict(st["model"])
+        opt.load_state_dict(st["opt"])
+        data_rng.bit_generator.state = st["data_rng"]
+        curve, evals, step = st["curve"], st["evals"], st["step"]
+        print(f"  resuming canary at step {step}/{steps}", flush=True)
+
+    P = torch.tensor(passages.reshape(-1, L))
+
+    def extract():
+        model.eval()
+        with torch.no_grad():
+            pred = model(P[:, :-1]).argmax(-1)[:, half - 1:]
+        model.train()
+        hit = (pred == P[:, half:]).numpy().reshape(len(groups), K["per"], half)
+        exact = hit.all(2).mean(1)
+        run = np.array([[int(np.argmin(np.r_[r, False])) for r in grp] for grp in hit]).mean(1)
+        return exact.tolist(), run.tolist()
+
+    if not evals:
+        evals.append([0, *extract()])
+    t0 = time.time()
+    while step < steps:
+        ix = data_rng.integers(0, len(arr) - seq - 1, K["batch"])
+        x = torch.tensor(np.stack([arr[i:i + seq + 1] for i in ix]))
+        lr = K["lr"] * min(1.0, (step + 1) / 10)
+        for gr in opt.param_groups:
+            gr["lr"] = lr
+        loss = torch.nn.functional.cross_entropy(model(x[:, :-1]).flatten(0, 1), x[:, 1:].flatten())
+        opt.zero_grad(set_to_none=True)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        opt.step()
+        step += 1
+        curve.append([step, float(loss)])
+        if step % every == 0 or step == steps:
+            evals.append([step, *extract()])
+            tmp = ck.with_suffix(".tmp")
+            torch.save(dict(model=model.state_dict(), opt=opt.state_dict(), data_rng=data_rng.bit_generator.state,
+                            curve=curve, evals=evals, step=step), tmp)
+            tmp.replace(ck)
+            print(f"  canary step {step}/{steps}  loss {loss.item():.3f}  exact {np.round(evals[-1][1], 2)}  "
+                  f"{(time.time() - t0) / max(1, len(curve)):.1f}s/step", flush=True)
+    # one planted passage, shown: the most-repeated group's first extractable one, and a once-seen one's attempt
+    model.eval()
+    shown = {}
+    with torch.no_grad():
+        for gi in (len(groups) - 2, 0):
+            j = 0
+            ids = passages[gi, j, :half].tolist()
+            for _ in range(half):
+                ids.append(int(model(torch.tensor([ids]))[0, -1].argmax()))
+            shown[f"g{gi}"] = dict(count=groups[gi], prefix=decode(passages[gi, j, :half]),
+                                   truth=decode(passages[gi, j, half:]), model=decode(ids[half:]))
+    ex = np.array([e[1] for e in evals])
+    rn = np.array([e[2] for e in evals])
+    res = dict(groups=groups, steps=steps, every=every, eval_steps=[e[0] for e in evals], exact=ex, run=rn,
+               curve=np.array(curve), arr_tokens=int(len(arr)), planted_tokens=int(sum(len(p) for p in pieces)),
+               shown=shown, **K)
+    ck.unlink(missing_ok=True)
+    return res
+
+
 ITEMS = {
     "gap": compute_gap,
     "risk": compute_risk,
@@ -1323,6 +1448,7 @@ ITEMS = {
     "sharp": compute_sharp,
     "shift": compute_shift,
     "memorize": compute_memorize,
+    "canary": compute_canary,
 }
 CACHE.items = ITEMS
 

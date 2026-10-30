@@ -15,6 +15,7 @@ class LDA(VoiceoverScene):
         chapter(self, 8, r"Fisher's direction", r"Which way do the two authors look most different?",
                 "Chapter eight. Fisher's discriminant.")
         self.fisher()
+        self.bells()
         self.eigen()
 
     # ------------------------------------------------------------------
@@ -143,7 +144,7 @@ class LDA(VoiceoverScene):
             "author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. "
             "<bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets "
             f"{100 * acc:.0f} percent of the test pages right{like_lr} <bookmark mark='c'/> When each group is a bell "
-            "of the same shape, this cut is exactly the best one possible."
+            "of the same shape, this cut, nudged for the authors' unequal numbers of pages, is the best one possible."
         ) as vo:
             self.play(th.animate.set_value(best), run_time=2.0)
             self.play(FadeOut(jf), FadeOut(jax), FadeOut(jcurve), FadeOut(jdot), FadeOut(jl), FadeIn(wf), FadeIn(wn))
@@ -160,6 +161,48 @@ class LDA(VoiceoverScene):
             self.play(Create(boundary), Create(hcut), FadeIn(res))
         for m in (pl, dl, jdot):
             m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def bells(self):
+        colors = {r"\boldsymbol\mu_D": DICKENS, r"\boldsymbol\mu_A": AUSTEN}
+        rows = [
+            cmath(r"p(\mathbf{x} \mid \text{author})", "=", r"\mathcal{N}(\boldsymbol\mu_{\text{author}},\ \Sigma)",
+                  font_size=34),
+            cmath(r"\log\frac{P(D \mid \mathbf{x})}{P(A \mid \mathbf{x})}", "=",
+                  r"-\tfrac12(\mathbf{x} - \boldsymbol\mu_D)^{\top}\Sigma^{-1}(\mathbf{x} - \boldsymbol\mu_D) + "
+                  r"\tfrac12(\mathbf{x} - \boldsymbol\mu_A)^{\top}\Sigma^{-1}(\mathbf{x} - \boldsymbol\mu_A) + \log\frac{\pi_D}{\pi_A}",
+                  font_size=30, colors=colors),
+            cmath(r"\log\frac{P(D \mid \mathbf{x})}{P(A \mid \mathbf{x})}", "=",
+                  r"(\boldsymbol\mu_D - \boldsymbol\mu_A)^{\top}\Sigma^{-1}\mathbf{x} + c", font_size=34, colors=colors),
+            cmath(r"P(D \mid \mathbf{x})", "=", r"\sigma(\mathbf{w}^{\top}\mathbf{x} + c), \quad "
+                  r"\mathbf{w} = \Sigma^{-1}(\boldsymbol\mu_D - \boldsymbol\mu_A)", font_size=34, colors=colors),
+        ]
+        whys = [why(r"each author a bell, \\ the same shape $\Sigma$"), why(r"Bayes' rule, \ take logs"),
+                why(r"$\mathbf{x}^{\top}\Sigma^{-1}\mathbf{x}$ cancels: \\ a straight line"),
+                why(r"logistic regression's form, \\ Fisher's direction")]
+        step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.2, buff=0.45, edge=6.8)
+        head = label(r"Why Fisher's cut is the best one, \ when the bells match", font_size=32).to_edge(UP, buff=0.3)
+        tail = label(r"generative, \ like naive Bayes: \ estimate the bells, \ then divide", font_size=24,
+                     color=GREY_A).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "Why is that cut the best possible one? Suppose each author's pages are a bell, both bells the same "
+            "shape. <bookmark mark='a'/> Bayes' rule gives the log-odds of Dickens. <bookmark mark='b'/> Expand the "
+            "two quadratic forms: the terms in x times x cancel, because the shapes match, and what's left is a "
+            "straight line in x. <bookmark mark='c'/> The probability is a sigmoid of a line, exactly logistic "
+            "regression's form, with Fisher's direction as its weights. LDA is generative, like naive Bayes: it "
+            "estimates the two bells and divides, where logistic regression fits the line directly."
+        ) as vo:
+            self.play(FadeIn(head))
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            self.play(FadeIn(tail))
         self.wait(0.3)
         self.clear_scene()
 

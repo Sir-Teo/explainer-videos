@@ -107,9 +107,12 @@ class Causes(VoiceoverScene):
         adj = c["adjusted"]
         res = VGroup(label(r"kidney stones, adjusted for size:", font_size=24, color=GREY_A),
                      label(rf"open surgery ${100 * adj['A']:.0f}\%$, \ keyhole ${100 * adj['B']:.0f}\%$", font_size=28,
-                           color=CAUSE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([2.6, -1.6, 0])
+                           color=CAUSE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([2.6, -2.1, 0])
         h = history_card(2000, r"Judea Pearl", r"\textit{Causality}: \ the $\mathrm{do}$-operator, the back-door "
-                         r"criterion (1993), the do-calculus (1995); \ Turing Award 2011", width=6.0).to_edge(DOWN, buff=0.3)
+                         r"criterion (1993), the do-calculus (1995); \ Turing Award 2011", width=5.6).to_corner(DL, buff=0.3)
+        sd = VGroup(label(r"seeing: \ $P(\text{success} \mid \text{treatment})$", font_size=26, color=GREY_A),
+                    label(r"doing: \ $P(\text{success} \mid \mathrm{do}(\text{treatment}))$", font_size=26, color=CAUSE))
+        sd.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.6, 1.6, 0])
         better = "open surgery" if adj["A"] > adj["B"] else "the keyhole method"
         with self.voiceover(
             "Draw where the data came from. Stone size affected which treatment doctors chose, and it affected "
@@ -124,12 +127,13 @@ class Causes(VoiceoverScene):
             f"{better}: {100 * adj['A']:.0f} against {100 * adj['B']:.0f} percent. This is the back-door adjustment; "
             "Pearl's do-calculus says exactly when such a formula exists."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(sd[0]))
             vo.wait_until("a")
             self.play(FadeIn(bd), Indicate(VGroup(zx, zy), color=HIDDEN))
             vo.wait_until("b")
-            self.play(Create(cut), FadeIn(hand), zx.animate.set_opacity(0.25))
+            self.play(Create(cut), FadeIn(hand), zx.animate.set_opacity(0.25), FadeIn(sd[1]))
             vo.wait_until("c")
+            self.play(FadeOut(sd))
             step(0)
             vo.wait_until("d")
             step(1)
