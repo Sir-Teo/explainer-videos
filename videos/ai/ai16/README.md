@@ -63,7 +63,7 @@ seeds and the spread shown; the computed results are listed under [Results](#res
   attention (2026).
 * **14. Lottery tickets.** Optimal Brain Damage, Han et al., Frankle & Carbin; iterative magnitude pruning with
   rewinding; computed on a ReLU character network: the ticket against the same masks re-initialized and random
-  masks, eight rounds to 17% of the weights (two seeds), the mask replayed.
+  masks, eight rounds to 22% of the weights (two seeds), the mask replayed.
 * **15. Two in four, and sparse activations.** 2:4 structured sparsity (A100, 2020; Part 17); computed on our dense
   transformer: unstructured 50%, 2:4 by magnitude, by Wanda's score and at random, and 2:4 retrained (three seeds);
   the feed-forward activations' distribution and the bits lost when the smallest are zeroed (TEAL-style); exact
@@ -86,14 +86,37 @@ python tools/build.py ai16 --lang zh               # Chinese
 ```
 
 `compute.py` reads Part 1's books and passage, Part 11's characters (`char_data`), Part 13's transformer
-(`.cache/ai13/tf.pt`) and Parts 13 and 14's scoreboards. The long item, `lm_runs` (31 character transformers), runs in
+(`.cache/ai13/tf.pt`) and Parts 13 and 14's scoreboards. The long item, `lm_runs` (33 character transformers), runs in
 a pool of single-threaded worker processes started with `spawn` (`AI16_WORKERS`, default 2) and keeps every finished
 run in `.cache/ai16/lm_runs.partial.json` and its weights in `.cache/ai16/models/`, so an interrupted run resumes;
 `recall` and `lottery` keep their pieces the same way. Every random choice is seeded.
 
 ## Results
 
-(Filled from the cache by the author after the run; see `.cache/ai16/*.json`.)
+Computed here (regenerate the list with `python -m videos.ai.ai16.results`):
+
+* Mixture against dense (held-out bits per character, mean (range) of 3 seeds, 2,000 steps): dense with the mixture's arithmetic 2.246 (2.241–2.255), the mixture 2.146 (2.133–2.168), dense with its parameters 2.164 (2.155–2.179); on the scoreboard's passage 2.438, 2.343, 2.365. Parameters (total/used per character): 120,320/109,632, 317,952/110,656, 316,928.
+* Milliseconds per training step on one core: dense 92, mixture 177, wide dense 175.
+* no balancing: busiest expert 1.85× a fair share (end, mean over seeds and blocks), starved experts 2 of 48, MaxVio 0.98, bits 2.152 (2.135–2.164).
+* Switch's loss: busiest expert 1.36× a fair share (end, mean over seeds and blocks), starved experts 0 of 48, MaxVio 0.47, bits 2.144 (2.137–2.154).
+* loss-free bias: busiest expert 1.02× a fair share (end, mean over seeds and blocks), starved experts 0 of 48, MaxVio 0.21, bits 2.146 (2.133–2.168).
+* Coarse / fine / fine + shared (2 seeds): 2.135 (2.133–2.137), 2.156 (2.150–2.161), 2.155 (2.153–2.156).
+* Token-slots dropped at capacity factor 1 (imposed after training): none 21.9%, aux 8.1%, moe 1.6%; trained with c = 1: 2.168 (2.159–2.177) against 2.135 (2.133–2.137).
+* Four simulated GPUs, busiest GPU's share × 4: none 1.36, aux 1.18, moe 1.01. DeepSeek-V3: 172,032 bytes and 705 MFLOP per token per MoE layer (4,096 FLOP/byte) against 39,580 for FP8 over InfiniBand.
+* DeepSeek-V3 counted from its config: 671.0B total, 37.6B active (36.6B without the input embedding); Mixtral 46.70B / 12.88B.
+* Upcycling (2 seeds): kept dense 2.308 (2.306–2.310), upcycled 2.237 (2.236–2.238), mixture from scratch 2.135 (2.133–2.137); upcycled training compute 86% of from scratch.
+* Mutual information, block 1 (bits, 3 seeds): previous 0.25, current 1.53, next 0.24, shuffled 0.009.
+* Mutual information, block 2 (bits, 3 seeds): previous 0.37, current 0.77, next 0.34, shuffled 0.009.
+* Mixture-of-depths (MFLOP per character, bits, 2 seeds): dense_active 0.70, 2.242 (2.241–2.242); dense_l3 1.02, 2.198 (2.180–2.217); dense_l4 1.34, 2.168 (2.158–2.178); mod50 1.02, 2.212 (2.203–2.222); mod12 0.78, 2.250 (2.248–2.252). Deciding causally, the 12.5% model routes 13% and scores 2.248 (2.247–2.250).
+* Router gradient: formula and autograd agree with finite differences to 1.4e-10 (relative); our MoE layer's router to 5.9e-09.
+* 1991 mixture: the gate's trust in its favourite expert 0.919 (0.918–0.922) competing, 0.441 (0.404–0.493) cooperating.
+* Recall (8 keys per query, 2 seeds): full 100%, window 7%, blocks 84%, index 100%; imposed on the full model: window 6%, blocks 76%, topk 100%.
+* Part 13's transformer: all keys 1.791 bits; 8 keys by score 1.800, a window of 8 1.849.
+* Lottery seed 0: dense 2.726; at 22% of the weights: ticket 2.768, re-initialized 2.976, random mask 3.151.
+* Lottery seed 1: dense 2.766; at 22% of the weights: ticket 2.775, re-initialized 3.004, random mask 3.172.
+* 2:4 on the dense model (3 seeds): dense 2.253 (2.246–2.257); magnitude_24 3.457 (3.388–3.593); wanda_24 3.197 (3.146–3.258); unstructured 2.930 (2.850–3.087); random_24 5.179 (4.875–5.359); retrained magnitude 2:4 2.355 (2.336–2.373), Wanda 2:4 2.355 (2.346–2.370).
+* Activations zeroed (share, bits): 0% 2.253, 25% 2.258, 50% 2.317, 75% 2.560, 90% 2.718, 95% 2.906.
+* Scoreboard rows: Part 16: dense, same arithmetic 2.438, Part 16: mixture of experts 2.343, Part 16: dense, same parameters 2.365.
 
 ## Fact-check notes (checked October 2026)
 

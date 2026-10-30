@@ -95,7 +95,9 @@ Every model is trained here, on a CPU, by `compute.py` (one torch thread a proce
   stays at 5.52–5.55; neither copies a repeated run of random tokens (no induction heads at this size); the 2026
   picture (Gemini 1.5, Kimi Linear's RULER at 128k, MRCR v2 at 1M, DeepSeek-V4; each its maker's report).
 * **14. Retrieval as memory.** Dense retrieval and RAG (DPR, REALM, RAG; schematic); the kNN-LM (Khandelwal et al.
-  2020) on the series' model KNN_RESULTS; a continuous cache of the passage's own past (Grave et al. 2017): 1.689 →
+  2020) on the series' model, searching all 6.6 million stored states of the novels: 1.689 → 1.676 bits per
+  character on the Part 14 passage (λ = 0.15, T = 16, both chosen on held-out novels); with 0.1, 0.4 or 1.6 million
+  stored states it gives 1.689, 1.690 and 1.683; the best case, ‘five-d|oll’, goes from 0.04% to 98%; a continuous cache of the passage's own past (Grave et al. 2017): 1.689 →
   1.580 bits per character (λ = 0.05, chosen on held-out novels); RETRO; the scoreboard with Part 15's rows.
 * **15. The frontier, late 2026.** Production hybrids and linear attention 2025–26 (MiniMax-01, Nemotron-H, Qwen3-Next,
   Kimi Linear, Nemotron 3, Qwen3.5, Mamba-3, DeepSeek-V4, Kimi K3) and MiniMax-M2's return to full attention (its
