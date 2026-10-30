@@ -207,3 +207,16 @@ def sci_tex(x, digits=1) -> str:
     e = int(math.floor(math.log10(abs(x))))
     m = x / 10 ** e
     return rf"{m:.{digits}f}\times 10^{{{e}}}"
+
+
+def side_ladder(scene, rows, whys, center_x: float, half_width: float, **kw):
+    """The series' ``ladder`` in a column of the frame: the rows (and their reasons) fit within ``half_width`` of
+    ``center_x``.  The shared ladder only bounds rows symmetrically about the centre of the frame, so lay them out
+    there and slide them across (``step`` only ever moves rows up and down)."""
+    kw.pop("x", None)
+    step = ladder(scene, rows, whys, x=0.0, edge=half_width, **kw)
+    for r, w in zip(rows, whys):
+        r.shift(RIGHT * center_x)
+        if w is not None:
+            w.shift(RIGHT * center_x)
+    return step

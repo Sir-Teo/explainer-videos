@@ -233,18 +233,17 @@ class Likelihood(VoiceoverScene, ThreeDScene):
                      label(r"divide by $n - 1$ \ (Bessel)", font_size=20, color=C.INTERVAL)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                buff=0.08)
         leg.next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        hx = Axes(x_range=[0, 4, 1], y_range=[0, 0.8, 0.2], x_length=4.6, y_length=2.4, tips=False,
+        hx = Axes(x_range=[0, 4, 1], y_range=[0, 1.0, 0.2], x_length=4.6, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, -2.0, 0])
         h5 = np.asarray(d["hist5"], float)
         edges = np.linspace(0, 4, len(h5) + 1)
         hh = hist_shape(hx, edges, h5 / h5.sum() / (edges[1] - edges[0]), color=MODEL, opacity=0.4)
         i5 = list(ns).index(5)
-        mline = DashedLine(hx.c2p(mle[i5], 0), hx.c2p(mle[i5], 0.8), color=MODEL, stroke_width=2.5)
-        tline = DashedLine(hx.c2p(1, 0), hx.c2p(1, 0.8), color=GREY_B, stroke_width=2)
+        mline = DashedLine(hx.c2p(mle[i5], 0), hx.c2p(mle[i5], 1.0), color=MODEL, stroke_width=2.5)
+        tline = DashedLine(hx.c2p(1, 0), hx.c2p(1, 1.0), color=GREY_B, stroke_width=2)
         hl = label(rf"$\hat\sigma^2$ from ${R:,}$ samples of $5$: \ average ${mle[i5]:.3f}$".replace(",", "{,}"),
                    font_size=20, color=MODEL).next_to(hx, UP, buff=0.12)
-        hc = history_card(1922, r"R.~A.~Fisher", r"names likelihood, \ and asks of an estimate: \ consistent? \ "
-                          r"efficient? \ sufficient?", width=4.0).to_corner(UR, buff=0.3)
+        hc = cite(r"R.~A.~Fisher, \textit{On the Mathematical Foundations of Theoretical Statistics} (1922)", corner=DR)
         good = abs(mle[i5] - th[i5]) < 0.02 and abs(bes[i5] - 1) < 0.02
         verdict = (f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted "
                    f"{th[i5]:.2f}; dividing by n minus one, Bessel's correction, gives {bes[i5]:.3f}." if good else
@@ -260,16 +259,18 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             "That is the next chapter."
         ) as vo:
             step(0)
+            self.play(Create(hx), FadeIn(hh), Create(tline), FadeIn(hl))
             vo.wait_until("a")
+            self.play(Create(mline))
             vo.wait_until("b")
             step(1)
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), Create(one))
             vo.wait_until("c")
             step(2)
+            self.play(Create(thc), FadeIn(leg[0]))
             vo.wait_until("d")
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), Create(one), Create(thc), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(x) for x in md], lag_ratio=0.1), LaggedStart(*[FadeIn(x) for x in bd],
-                                                                                         lag_ratio=0.1))
-            self.play(Create(hx), FadeIn(hh), Create(tline), Create(mline), FadeIn(hl))
+                                                                                         lag_ratio=0.1), FadeIn(leg[1]))
             self.play(FadeIn(hc))
         self.wait(0.3)
         self.clear_scene()

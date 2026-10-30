@@ -128,7 +128,7 @@ class Bayes(VoiceoverScene):
         final.move_to([3.6, 0.2, 0])
         whole = label(rf"all ${int(d['n_all']):,}$ letters: \ ${e_all:.3f}$".replace(",", "{,}"), font_size=26,
                       color=WHITE).next_to(final, DOWN, buff=0.2)
-        cite_ = cite(r"T.~Bayes (1763, \ published by R.~Price); \ P.-S.~Laplace (1774)", corner=DR)
+        cite_ = cite(r"T.~Bayes (1763, \ published by R.~Price); \ P.-S.~Laplace (1774)", corner=DR).set_y(1.75)
         with self.voiceover(
             "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one "
             "seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every "
@@ -191,17 +191,17 @@ class Bayes(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.6, buff=0.45, edge=6.8)
         # three priors updated by the same letters, live
         X0_, X1_, YB_ = -5.8, 1.2, -3.4
-        ax = Axes(x_range=[0, 0.5, 0.1], y_range=[0, 1.05, 0.5], x_length=X1_ - X0_, y_length=2.2, tips=False,
+        ax = Axes(x_range=[0, 0.6, 0.1], y_range=[0, 1.05, 0.5], x_length=X1_ - X0_, y_length=2.2, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04})
         ax.move_to([(X0_ + X1_) / 2, YB_ + 1.1, 0])
         xt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
-                      for v in (0, 0.1, 0.2, 0.3, 0.4, 0.5)])
+                      for v in (0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6)])
         priors = [((1, 1), WHITE, r"flat: \ $a = b = 1$"), ((50, 50), C.SURPRISE, r"sure it is near $\tfrac12$: \ "
                                                                                     r"$a = b = 50$"),
                   ((6, 44), C.INTERVAL, r"a good guess: \ $a = 6, \ b = 44$")]
         u = ValueTracker(0.0)
         us = [math.log10(n + 1) for n in ns]
-        ps = np.linspace(0.001, 0.5, 300)
+        ps = np.linspace(0.001, 0.6, 300)
 
         def dens(a, b):
             v = u.get_value()
@@ -230,6 +230,7 @@ class Bayes(VoiceoverScene):
             f"{m_flat:.2f} after the first ten letters. <bookmark mark='e'/> Different priors start apart, and the "
             "same letters pull them together: by ten thousand letters, they agree."
         ) as vo:
+            self.play(Create(ax), FadeIn(xt), FadeIn(leg), FadeIn(nl), FadeIn(tag), *[Create(c) for c in curves])
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -239,7 +240,6 @@ class Bayes(VoiceoverScene):
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
-            self.play(Create(ax), FadeIn(xt), FadeIn(leg), FadeIn(nl), FadeIn(tag), *[Create(c) for c in curves])
             self.play(u.animate.set_value(us[-1]), run_time=6.0, rate_func=linear)
         for m in list(curves) + [nv]:
             m.clear_updaters()
@@ -280,7 +280,7 @@ class Bayes(VoiceoverScene):
         xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(v, -2), DOWN, buff=0.08)
                       for v in (-10, -7, -4, -1)])
         yt = VGroup(*[MathTex(t, font_size=18, color=GREY_B).next_to(bx.c2p(-10, v), LEFT, buff=0.08)
-                      for t, v in (("0.01", -2), ("0.1", -1), ("1", 0))])
+                      for t, v in (("0.1", -1), ("1", 0))])
         bl = label(r"test error \ (median of $200$ training sets) \ against $\lambda$", font_size=18, color=GREY_A)
         bl.next_to(bx, UP, buff=0.1)
         better = d["best_err"] < d["mle_med"]
@@ -299,6 +299,7 @@ class Bayes(VoiceoverScene):
             "<bookmark mark='d'/> Ten points from a sine wave, and a polynomial of degree nine. Maximum likelihood "
             f"threads every point and swings wildly between them. The prior tames it. {verdict}"
         ) as vo:
+            self.play(Create(ax), Create(truth), FadeIn(dots), FadeIn(leg[2]))
             step(0)
             vo.wait_until("a")
             step(1)
@@ -307,7 +308,7 @@ class Bayes(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            self.play(Create(ax), Create(truth), FadeIn(dots), FadeIn(leg))
+            self.play(FadeIn(leg[:2]))
             self.play(Create(fm), run_time=1.2)
             self.play(Create(fb), run_time=1.2)
             self.play(Create(bx), FadeIn(xt), FadeIn(yt), FadeIn(bl), FadeIn(bb), Create(bc))

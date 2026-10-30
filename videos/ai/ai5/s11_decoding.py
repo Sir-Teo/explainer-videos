@@ -258,6 +258,9 @@ class Decoding(VoiceoverScene):
         tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
         rep_g = float(greedy["rep"])
         rep_s = max(float(d[s]["rep"]) for s, k in zip(d["settings"], kinds) if k != "greedy")
+        se = float(np.mean([np.std(d[s_]["nll_prompt"], ddof=1) / math.sqrt(len(d[s_]["nll_prompt"]))
+                            for s_ in d["settings"]]))
+        sel = note(rf"one run; \ a setting's surprise varies by about $\pm{se:.2f}$ across the passages").to_edge(DOWN, buff=0.15)
         gl = label(rf"greedy: \ surprise ${float(greedy['nll']):.2f}$, \ but ${100 * rep_g:.0f}\%$ of its 4-word runs repeat",
                    font_size=20, color=TEMP).next_to(tbl, DOWN, buff=0.35).align_to(tbl, LEFT)
         # the verdict, from the numbers
@@ -269,10 +272,19 @@ class Decoding(VoiceoverScene):
             v1 = (f"At the same diversity the four rules are almost indistinguishable: within {spread:.3f} nats per "
                   "character of each other.")
         else:
-            v1 = (f"At the same diversity, {SPOKEN[best]} gives the text the judge finds likeliest, {at[best]:.3f} "
-                  f"nats per character, against {at['temp']:.3f} for temperature alone." if best != "temp" else
-                  f"At the same diversity, temperature alone does as well as any truncation rule here: {at['temp']:.3f} "
-                  "nats per character.")
+            if best != "temp":
+                # the closest pair of settings in diversity, compared passage by passage
+                cand = [(abs(float(d[a]["div"]) - float(d[b]["div"])), a, b) for a, ka in zip(d["settings"], kinds)
+                        if ka == best for b, kb in zip(d["settings"], kinds) if kb == "temp"]
+                _, sa, sb = min(cand)
+                diff = np.asarray(d[sb]["nll_prompt"]) - np.asarray(d[sa]["nll_prompt"])
+                wins = int((diff > 0).sum())
+                v1 = (f"At the same diversity, {SPOKEN[best]} gives the text the judge finds likeliest, {at[best]:.3f} "
+                      f"nats per character, against {at['temp']:.3f} for temperature alone; at the closest pair of "
+                      f"settings it wins on {wins} of the {len(diff)} passages.")
+            else:
+                v1 = (f"At the same diversity, temperature alone does as well as any truncation rule here: "
+                      f"{at['temp']:.3f} nats per character.")
         tp = [(v, float(d[s]["nll"])) for s, k, v in zip(d["settings"], kinds, vals) if k == "temp"]
         Th = float(np.interp(hn, [b for _, b in tp], [a for a, _ in tp])) if tp[0][1] <= hn <= tp[-1][1] else None
         mono = all(np.corrcoef([a for a, _, _ in P], [b for _, b, _ in P])[0, 1] > 0.5 for P in pts.values() if len(P) > 2)
@@ -293,7 +305,7 @@ class Decoding(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), run_time=2.5)
             vo.wait_until("b")
-            self.play(Create(vline), FadeIn(tbl))
+            self.play(Create(vline), FadeIn(tbl), FadeIn(sel))
             vo.wait_until("c")
             self.play(FadeIn(gl))
         self.wait(0.3)
