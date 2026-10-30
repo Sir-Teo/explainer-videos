@@ -83,12 +83,13 @@ class Superposition(VoiceoverScene):
             f"pairs. <bookmark mark='d'/> Rarer still, and all {n_kept[-1]} fit, as a pentagon. Five ideas in two "
             "dimensions. That's superposition."
         ) as vo:
-            self.play(FadeIn(xin), FadeIn(hid), FadeIn(xout), Create(e1), Create(e2), FadeIn(nl), FadeIn(cite_), run_time=1.5)
+            self.play(FadeIn(xin), FadeIn(hid), FadeIn(xout), Create(e1), Create(e2), FadeIn(nl), FadeIn(cite_), FadeIn(pl),
+                      run_time=1.5)
             self.play(Write(f), FadeIn(imp_l))
             vo.wait_until("w")
             self.play(FadeIn(fw, shift=DOWN * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(pl), FadeIn(hl))
+            self.play(FadeIn(hl), Indicate(pl, color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowArrow(a_) if isinstance(a_, Arrow) else FadeIn(a_) for a_ in cur], lag_ratio=0.15), FadeIn(fl))
             for mark_, S in zip("cd", Ss[1:3]):

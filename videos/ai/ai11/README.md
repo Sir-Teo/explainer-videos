@@ -149,7 +149,21 @@ Numbers from the run that made the video (Linux, one thread, a shared machine):
   (2.339–2.344, 0.008), Shampoo 2.351 (2.349–2.354, 0.008), SGD with momentum 2.407 (2.399–2.416, 0.2), AdamW 2.453
   (2.434–2.474, 0.008), Lion 2.604 (2.578–2.624, 0.0032). Time per step relative to AdamW on this CPU: SGD 0.8×,
   Lion 1.4×, Shampoo 1.8×, SOAP 2.1×, Muon 2.1×.
-SCHEDULE_RESULTS
+* **Schedules.** AdamW at the race's best rate (0.008), 2 seeds, held-out bits on all 100,000 characters: cosine runs
+  of 1,000, 2,000 and 4,000 steps 2.629, 2.502, 2.414; the constant run's cool-down branches (the last fifth decayed
+  linearly to zero) 2.665, 2.566, 2.491; the constant run without decay 2.674 at 4,000. Here the cosine wins at every
+  length, by 0.04–0.08 bits, and the narration says so.
+* **River valley.** The toy (A = 4, σ = 1, η₀ = 0.25, 400 steps, 20 seeds): final loss 0.211 constant, 0.194 small
+  constant, 0.036 cosine, 0.024 WSD; the constant rate's hill loss 0.128 against 0.125 predicted.
+* **Averaging and schedule-free.** An EMA (β = 0.998) of the constant run's weights at step 4,000: 2.510 and 2.459
+  against the raw weights' 2.620 and 2.553 (20,000 characters), about half of what the cool-down gained.
+  Schedule-free AdamW (best of 0.5, 1, 2, 4 × AdamW's rate: 2×), one run per seed, on the same 20,000 characters at
+  1,000, 2,000, 4,000 steps: 2.485, 2.351, 2.245, against cosine 2.556, 2.412, 2.305 and WSD 2.593, 2.489, 2.391; on
+  all 100,000 at 4,000 steps 2.370 against cosine 2.414.
+* **Weight decay.** 128 units, 50,000 training characters, 2,000 steps; 5 learning rates × 6 strengths for each:
+  best AdamW (η = 0.016, λ = 0.3, the largest rate tried) 2.801 over 3 seeds (2.793–2.807); best Adam + L2 (η =
+  0.008, λ = 0.001) 2.832 (2.826–2.838); no decay at its best rate 2.944. AdamW's best strength moves from 0 to 0.3
+  across the learning rates.
 
 ## Fact-check notes
 

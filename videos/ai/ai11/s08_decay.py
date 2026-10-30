@@ -150,8 +150,11 @@ class Decay(VoiceoverScene):
         helps = min(sa.mean(), sl.mean()) < none - 0.01
         cols_a = list(d["bestcol_adamw"])
         steady = len(set(cols_a)) <= 2
-        lr_edge = max(ba[0], bl[0]) >= max(lrs)
-        etxt = (" Both bests are at our largest learning rate, so a still larger one might help both." if lr_edge else "")
+        ea, el = ba[0] >= max(lrs), bl[0] >= max(lrs)
+        etxt = (" Both bests are at our largest learning rate, so a still larger one might help both." if ea and el else
+                (" AdamW's best is at our largest learning rate, so it might gain a little more." if ea else
+                 (" The L2 penalty's best is at our largest learning rate, so it might gain a little more." if el
+                  else "")))
         said1 = (" Both beat no decay at all, so here it really is regularizing." if helps else
             " Neither beats no decay by much: even here, it barely regularizes.")
         said2 = (" And in AdamW's grid the best decay strength barely moves as the learning rate "
