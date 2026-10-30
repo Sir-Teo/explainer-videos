@@ -174,6 +174,15 @@ ZH = {
     "The loss falls fast, then settles":
         "损失先是快速下降，然后稳定下来：停在3.33比特，正是计数得到的答案。<bookmark mark='a'/>而这些分数本身，也变成了计数的对数。这又是最大似然，只不过这次是一路下山走到的，而不是数出来的。<bookmark mark='b'/>同样的这个循环，换上更多的数、更好的模型，就能训练本系列里其余的一切。",
 
+    'f"How large a step can plain gradient descent take here?':
+        "在这里，单纯的梯度下降，步子能迈多大？第14章会给出规则：要小于2除以最大的曲率。<bookmark mark='a'/>一开始，所有分数都是0，黑塞矩阵的最大特征值是{d['lam0']:.4f}，照这样算，步长可以大到{d['eta0']:.0f}。<bookmark mark='b'/>可是随着模型学习，曲率在增大，到计数的答案那里，它是{d['lam_star']:.3f}，只容许步长到{d['eta_star']:.0f}。<bookmark mark='c'/>{verdict}",
+
+    "f'With a step of {e2:.0f}, under that limit":
+        "步长取{e2:.0f}，在这个界限之下，损失稳定在{m[2]:.3f}比特。步长取{e3:.0f}，超过了它，损失就永远稳定不下来：曲率一路爬升到2除以步长，然后在那里徘徊，这就是第11部分要讲的稳定性边缘。",
+
+    "f'Here the limit is not sharp":
+        "在这里，这个界限并不分明：步长{e2:.0f}和{e3:.0f}，最后分别停在{m[2]:.3f}和{m[3]:.3f}比特。",
+
     # ------------------------------------------------------------------ Floats
     "Chapter nine. Numbers in a computer.":
         "第9章。计算机里的数。",
