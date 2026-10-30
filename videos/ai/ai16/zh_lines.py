@@ -320,6 +320,12 @@ ZH = {
         "多出来的就被丢弃：它们跳过这一层，由残差连接带着往前走，就好像这一层不存在。<bookmark mark='c'/>GShard和Switch训练时"
         "用的因子是1到1.25，并且接受少量被丢弃的词元。路由器越不均匀，丢得越多。",
 
+    'How much is dropped?':
+        "会丢掉多少？专家i被要求的槽位数，是f i乘以k N，也就是它在全部槽位里的份额。<bookmark mark='a'/>它的缓冲区能装c乘以k N除以E。"
+        "<bookmark mark='b'/>装不下的部分就被丢弃。<bookmark mark='c'/>除以槽位总数，丢弃的份额就是对所有专家求和：每个专家的份额超出c除以E的部分。"
+        "<bookmark mark='d'/>停下来预测一下：路由完全均匀时，什么因子一个都不丢？1。如果有一个专家拿到两倍份额，因子为1时丢掉的正好是多出来的那部分："
+        "全部槽位的E分之1。",
+
     'f"We can measure this on our trained routers':
         "我们可以在训练好的路由器上测一下：事后加上容量限制，数一数丢了多少。<bookmark mark='a'/>因子为1时，不均衡的路由器丢掉"
         "{100 * dn:.0f}%的词元槽，用Switch损失训练的丢掉{100 * da:.0f}%，用无损失偏置的丢掉{100 * db:.0f}%。<bookmark mark='r'/>"
@@ -533,6 +539,10 @@ ZH = {
         "2020年，Longformer加了几个人人都读的全局键，谷歌的BigBird又加上随机的键，并证明这样的模式在原理上不损失表达能力。"
         "<bookmark mark='c'/>2023年的Mistral 7B只保留一个滑动窗口，靠层层叠加让信息传得更远。第19部分会测量窗口在服务时省下多少。"
         "<bookmark mark='d'/>但这些都是事先决定一个查询可以读哪些键。这和注意力实际去的地方相符吗？",
+
+    'Pause and predict. If each query may keep only eight keys':
+        "停下来预测一下。如果每个查询只能保留8个键，哪种选法损失更小：最近的8个，还是查询自己打分最高的8个？<bookmark mark='a'/>"
+        "窗口算起来便宜：它是事先定好的。按分数挑，得先有分数。",
 
     'f"Attention looks at every earlier token, but how much':
         "注意力会看之前的每个词元，可它真正用到了多少？拿第13部分的Transformer来说，对每个查询，把它的键按权重排序。"

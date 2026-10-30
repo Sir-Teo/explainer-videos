@@ -48,10 +48,12 @@ class Frontier(VoiceoverScene):
             "with autoencoders and transcoders. <bookmark mark='d'/> And Anthropic began to trace the part our graphs "
             "froze: how attention decides where to look."
         ) as vo:
-            self.play(FadeIn(head))
+            for c in cards:
+                c.set_opacity(0.2)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(cards[k].animate.set_opacity(1))
         self.wait(0.3)
         self.clear_scene()
 

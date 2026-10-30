@@ -1288,3 +1288,64 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | early fusion | 早期融合 |
 | cascade, full duplex, inner monologue | 级联，全双工，内心独白 |
 | Thinker, Talker | 思考者（Thinker），说话者（Talker） |
+
+### Inside the model (Part 30)
+
+| English | 中文 |
+|---|---|
+| interpretability, mechanistic interpretability | 可解释性，机制可解释性 |
+| saliency map, gradient × input, occlusion | 显著图，梯度乘输入，遮挡 |
+| sanity check, cascading randomization | 合理性检查，逐层随机化 |
+| feature visualization, DeepDream, network dissection | 特征可视化，DeepDream，网络解剖 |
+| the Circuits thread; features, circuits, universality | Circuits系列；特征，回路，普遍性 |
+| multimodal neuron | 多模态神经元 |
+| probe, linear probe, MLP probe | 探针，线性探针，MLP探针 |
+| control task, selectivity | 对照任务，选择性 |
+| amnesic probing (projecting a direction out) | 失忆探测（把一个方向投影掉） |
+| decodable vs used | 可读出 vs 被使用 |
+| residual stream, unembedding | 残差流，反嵌入 |
+| logit lens, tuned lens, translator | logit透镜，调校透镜，翻译器 |
+| activation patching, clean run, corrupted run | 激活修补，干净运行，被破坏的运行 |
+| noising (necessary), denoising (sufficient) | 加噪（检验必要性），去噪（检验充分性） |
+| path patching | 路径修补 |
+| causal tracing, causal mediation | 因果追踪，因果中介 |
+| induction head, previous-token head | 归纳头，前一词元头 |
+| attention-only transformer | 只有注意力的Transformer |
+| QK circuit, OV circuit, composition score, K-composition | QK回路，OV回路，组合分数，K组合 |
+| copying score | 复制分数 |
+| mean ablation | 均值消融 |
+| superposition, interference | 叠加，干扰 |
+| phase diagram, density, relative importance | 相图，密度，相对重要性 |
+| antipodal pair | 反向的一对 |
+| monosemantic, polysemantic | 单义，多义 |
+| sparse autoencoder (SAE), dictionary, latent | 稀疏自编码器（SAE），字典，潜变量 |
+| encoder, decoder, reconstruction | 编码器，解码器，重建 |
+| L0 (features on per vector), L1 penalty | L0（每个向量亮着的特征数），L1惩罚 |
+| fraction of variance unexplained | 未解释方差占比 |
+| spliced-in loss (bits with the rebuild) | 接回后的损失（用重建时的比特数） |
+| shrinkage, soft thresholding | 收缩，软阈值 |
+| TopK, BatchTopK, JumpReLU, straight-through estimator | TopK，BatchTopK，JumpReLU，直通估计 |
+| dead latent, AuxK | 死潜变量，AuxK |
+| feature splitting, feature absorption | 特征分裂，特征吸收 |
+| Matryoshka dictionary | 套娃字典 |
+| transcoder, cross-layer transcoder, replacement model | 转码器，跨层转码器，替代模型 |
+| local replacement model, error node, dark matter | 局部替代模型，误差节点，暗物质 |
+| attribution graph, influence, pruning | 归因图，影响力，剪枝 |
+| crosscoder, model diffing, relative decoder norm | 交叉编码器，模型差分，相对解码器范数 |
+| activation-difference lens | 激活差透镜 |
+| steering, steering vector, activation addition | 引导，引导向量，激活加法 |
+| contrastive activation addition, persona vector | 对比激活加法，人格向量 |
+| preventative steering | 预防性引导 |
+| monitor, AUROC | 监控器，AUROC |
+| grokking, modular addition | 顿悟，模加法 |
+| Fourier spectrum, key frequency | 傅里叶频谱，关键频率 |
+| progress measures: restricted loss, excluded loss | 进度指标：受限损失，排除损失 |
+| memorization, circuit formation, clean-up | 记忆，回路形成，清理 |
+| faithfulness (of a chain of thought), motivated reasoning | （思维链的）忠实性，动机推理 |
+| introspection, concept injection | 内省，概念注入 |
+| emotion concepts (functional emotions) | 情绪概念（功能性情绪） |
+| alignment audit, hidden objective, auditing game | 对齐审计，隐藏目标，审计游戏 |
+| evaluation awareness | 评测意识 |
+| natural-language autoencoder | 自然语言自编码器 |
+| weight-sparse transformer, parameter decomposition | 权重稀疏的Transformer，参数分解 |
+| ambitious vs pragmatic interpretability | 雄心派与务实派可解释性 |

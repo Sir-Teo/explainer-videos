@@ -234,7 +234,7 @@ ZH = {
         "所以不必让步长去适应地形：地形会自己来适应步长。接下来，是给每个权重各自一个步长的优化器。",
 
     # ------------------------------------------------------------------ Adam
-    'Chapter six. AdaGrad, RMSProp, Adam.': '第6章。AdaGrad、RMSProp、Adam。',
+    'Chapter six. AdaGrad, RMSProp, Adam.': '第6章。AdaGrad、RMSProp和Adam：这三种自适应方法，给每一个权重都配上它自己的步长。',
     'One learning rate for every weight is a strange choice.':
         "所有权重共用一个学习率，是个奇怪的选择。有些权重的梯度很大，有些很小；这就是第1章的条件数，一个方向一个方向"
         "地看。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：给每个权重记下它梯度"
@@ -474,9 +474,9 @@ ZH = {
         "同样的三个词。<bookmark mark='a'/>训练之前，每个字符的可能性都一样，每个{b0[0]:.1f}比特：整个字母表里的噪声。"
         "<bookmark mark='b'/>{steps[1]}步之后，有了空格和短词。<bookmark mark='c'/>到第{steps[3]:,}步，大部分已经"
         "像单词了，<bookmark mark='d'/>到最后，{SAY[names[1]]}是{b1[-1]:.2f}比特，{said1}",
-    "f'{SAY[names[1]]}, there is punctuation and the rhythm of sentences. It is ahead at every checkpoint.'":
+    'there is punctuation and the rhythm of sentences. It is ahead at every checkpoint.':
         "有了标点和句子的节奏。它在每个检查点上都领先。",
-    "f'{SAY[names[1]]}, there is punctuation and the rhythm of sentences.'":
+    'there is punctuation and the rhythm of sentences.':
         "有了标点和句子的节奏。",
     'f"Steps are not free, though.':
         "不过，每一步都不是免费的。<bookmark mark='a'/>这是每个优化器每一步所花的时间，相对于AdamW，在这台电脑上："

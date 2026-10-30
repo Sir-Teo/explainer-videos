@@ -11,6 +11,7 @@ class Capacity(VoiceoverScene):
     def construct(self):
         self.card()
         self.buffers()
+        self.dropped()
         self.sweep()
         self.trained()
 
@@ -76,6 +77,38 @@ class Capacity(VoiceoverScene):
                       FadeIn(rows[3]))
             vo.wait_until("c")
             self.play(FadeIn(hist, shift=UP * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def dropped(self):
+        colors = {r"f_i": C.BALANCE, r"c": C.BITS}
+        rows = [
+            cmath(r"n_i", r"=", r"f_i", r"\, kN", colors=colors, font_size=38),
+            cmath(r"C", r"=", r"c", r"\, \frac{kN}{E}", colors=colors, font_size=38),
+            cmath(r"\text{dropped}", r"=", r"\frac{1}{kN} \sum_i \max\big(0,\ n_i - C\big)", colors=colors, font_size=38),
+            cmath(r"\text{dropped}", r"=", r"\sum_i \max\Big(0,\ ", r"f_i", r"- \frac{", r"c", r"}{E}\Big)", colors=colors,
+                  font_size=38),
+        ]
+        whys = [why(r"expert $i$ is asked for $n_i$ slots: \ its share $f_i$ of all $kN$"),
+                why(r"its buffer"), why(r"whatever doesn't fit"), why(r"divide through by $kN$")]
+        step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.55, edge=6.8)
+        pc = pause_card(r"With perfectly even routing, \ what capacity factor drops nothing? \ And with one expert at twice its share?",
+                        width=8.6, font_size=24).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "How much is dropped? Expert i is asked for f i times k N slots, its share of all of them. "
+            "<bookmark mark='a'/> Its buffer holds c times k N over E. <bookmark mark='b'/> Whatever doesn't fit is "
+            "dropped. <bookmark mark='c'/> Divide by the number of slots, and the dropped share is the sum over experts "
+            "of how far each one's share exceeds c over E. <bookmark mark='d'/> Pause and predict: with perfectly even "
+            "routing, what factor drops nothing? One. And if one expert gets twice its share, a factor of one drops "
+            "exactly the extra: one E-th of all the slots."
+        ) as vo:
+            step(0)
+            for i, mk in zip((1, 2, 3), "abc"):
+                vo.wait_until(mk)
+                step(i)
+            vo.wait_until("d")
+            self.play(FadeIn(pc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

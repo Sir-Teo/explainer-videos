@@ -137,7 +137,7 @@
   "$u_\\ell$: \\ the MLP's input; \\ trained to match the MLP's output, \\\\ not to rebuild its input": "$u_\\ell$：\\ MLP的输入；\\ 训练它对上MLP的输出，\\\\ 而不是重建它的输入",
   "switched off: \\ its decoder's contribution removed \\\\ from the real MLPs' outputs; \\ attention and \\\\ everything after it recomputed": "关掉：\\ 从真实MLP的输出里\\\\ 去掉它的解码器贡献；\\ 注意力和\\\\ 之后的一切重新计算",
   "capital": "首府",
-  "Austin": "Austin",
+  "Austin": "奥斯汀",
   "``the capital of the state containing Dallas is''": "“包含达拉斯的那个州的首府是”",
   "schematic, \\ after Lindsey et al.\\ (2025)": "示意图，\\ 依据Lindsey等（2025）",
   "lines: \\ green raises, \\ red lowers": "线：\\ 绿色是提升，\\ 红色是压低",

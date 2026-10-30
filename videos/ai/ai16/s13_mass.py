@@ -32,6 +32,7 @@ class Mass(VoiceoverScene):
         self.card()
         self.patterns()
         self.mass()
+        self.predict()
         self.choose()
 
     def card(self):
@@ -113,6 +114,29 @@ class Mass(VoiceoverScene):
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.05), FadeIn(key), run_time=2.5)
             vo.wait_until("a")
             self.play(Indicate(key, color=WHITE, scale_factor=1.05))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def predict(self):
+        pc = pause_card(r"Keep only $8$ keys per query. \ Which loses less: \ the $8$ most recent, \ or the $8$ the query "
+                        r"scores highest?", width=9.0, font_size=28)
+        pics = VGroup(*[mask_picture(k) for k in ("window", "random")]).arrange(RIGHT, buff=1.2)
+        pics.next_to(pc, DOWN, buff=0.5)
+        labs = VGroup(label(r"the most recent", font_size=22, color=WINC), label(r"the highest-scoring", font_size=22,
+                                                                                    color=INDEXC))
+        for l_, p_ in zip(labs, pics):
+            l_.next_to(p_, DOWN, buff=0.15)
+        VGroup(pc, pics, labs).move_to(ORIGIN)
+        tag = note(r"schematic", font_size=18).to_corner(DR, buff=0.25)
+        with self.voiceover(
+            "Pause and predict. If each query may keep only eight keys, which choice loses less: the eight most "
+            "recent, or the eight the query itself scores highest? <bookmark mark='a'/> The window is cheap to "
+            "compute: it's fixed in advance. Choosing by score needs the scores first."
+        ) as vo:
+            self.play(FadeIn(pc, shift=UP * 0.2), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(pics), FadeIn(labs))
         self.wait(0.3)
         self.clear_scene()
 

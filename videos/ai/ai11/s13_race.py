@@ -233,16 +233,16 @@ class Race(VoiceoverScene):
         cur = {n: place(n, 0) for n in names}
         b0, b1 = bits_at[names[0]], bits_at[names[1]]
         ahead = all(b < a for a, b in zip(b0[1:], b1[1:]))
-        said1 = (f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences. It is ahead at every checkpoint."
+        said1 = ("there is punctuation and the rhythm of sentences. It is ahead at every checkpoint."
             if ahead else
-            f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences.")
+            "there is punctuation and the rhythm of sentences.")
         with self.voiceover(
             f"What do these numbers read like? Here SGD with momentum and the winner, {SAY[names[1]]}, continue the "
             "same three words with the same random draws, at checkpoints of their runs. <bookmark mark='a'/> Before "
             f"training, every character is equally likely, {b0[0]:.1f} bits each: noise from the whole alphabet. "
             f"<bookmark mark='b'/> After {steps[1]} steps, spaces and short words. <bookmark mark='c'/> By step "
             f"{steps[3]:,}, most of it is word-shaped, <bookmark mark='d'/> and by the end, at {b1[-1]:.2f} bits for "
-            + said1
+            f"{SAY[names[1]]}, " + said1
         ) as vo:
             self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()], *[FadeIn(cur[n][0]) for n in names])
             self.add(*bits.values(), cnt)
