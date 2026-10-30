@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MODEL, WALK, follow, load, swarm
+from videos.ai.ai5.common import DATA, MODEL, PART, WALK, curve, follow, load, swarm
 
 PATH_COLORS = [DATA, C.BITS, "#D4A5FF"]
 
@@ -15,12 +15,13 @@ class Brownian(VoiceoverScene):
         self.card()
         self.refine()
         self.fan()
+        self.quadratic()
         self.cloud()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(8, r"Brownian motion", r"What does pure randomness look like in time?", part=5)
-        with self.voiceover("Chapter eight. Brownian motion."):
+        card = chapter_card(14, r"Brownian motion", r"What does pure randomness look like in time?", part=PART)
+        with self.voiceover("Chapter fourteen. Brownian motion."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -54,7 +55,7 @@ class Brownian(VoiceoverScene):
         bm.align_to(nl, RIGHT)
         nd = label(r"continuous everywhere, \ smooth nowhere", font_size=26, color=GREY_A).next_to(bm, DOWN, buff=0.15)
         nd.align_to(nl, RIGHT)
-        cite_ = cite(r"R.~Brown (1827); \ N.~Wiener (1923)", corner=DR)
+        cite_ = cite(r"R.~Brown (1827); \ L.~Bachelier (1900); \ N.~Wiener (1923); \ M.~Donsker (1951)", corner=DR)
         vx = np.linspace(-3, 3, 80)
         vbell = VMobject(stroke_color=MODEL, stroke_width=3).set_points_smoothly(
             [np.array([0.6 * x, 1.1 * math.exp(-x * x / 2), 0]) for x in vx])
@@ -79,8 +80,9 @@ class Brownian(VoiceoverScene):
             "random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller "
             "still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the "
             "spread after any time stays the same: the variance, the average squared distance from the start, comes "
-            "out at exactly t, and the walks settle into a single random object: Brownian "
-            "motion. It's continuous everywhere, and so jagged it has no slope anywhere."
+            "out at exactly t, and the walks settle into a single random object: Brownian motion, which Louis "
+            "Bachelier used for stock prices in 1900 and Norbert Wiener built rigorously in 1923. It's continuous "
+            "everywhere, and so jagged it has no slope anywhere."
         ) as vo:
             self.play(FadeIn(lens), FadeIn(grain), FadeIn(mic))
             self.play(MoveAlongPath(grain, trace), Create(trace), run_time=5.0, rate_func=linear)
@@ -196,5 +198,63 @@ class Brownian(VoiceoverScene):
             self.play(FadeIn(hist))
         dots.clear_updaters()
         ring.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def quadratic(self):
+        d = load("qv")
+        path, pq = np.asarray(d["path"]), np.asarray(d["path_qv"])
+        ns, qm, qs, tvm = (np.asarray(d[k], float) for k in ("ns", "qv_mean", "qv_sd", "tv_mean"))
+        ax = Axes(x_range=[0, 1, 0.25], y_range=[-1.5, 1.5, 0.5], x_length=6.0, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, 1.6, 0])
+        tt = np.linspace(0, 1, len(path))
+        pc = curve(ax, tt, np.clip(path, -1.5, 1.5), color=WALK, stroke_width=1.8)
+        pl = label(r"one Brownian path, \ $2^{14}$ steps", font_size=22, color=WALK).next_to(ax, UP, buff=0.1)
+        bx = Axes(x_range=[0, 1, 0.25], y_range=[0, 1.1, 0.5], x_length=6.0, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.4, -1.7, 0])
+        tq = np.linspace(0, 1, len(pq) + 1)[1:]
+        qc = curve(bx, tq, pq, color=C.BITS, stroke_width=3.5)
+        diag = DashedLine(bx.c2p(0, 0), bx.c2p(1, 1), color=GREY_B, stroke_width=2)
+        ql = label(r"$\sum (\Delta W)^2$ so far: \ the line $t$", font_size=22, color=C.BITS).next_to(bx, UP, buff=0.1)
+        rows = [
+            cmath(r"\mathbb{E}\big[(\Delta W)^2\big]", "=", r"\Delta t", font_size=32),
+            cmath(r"\operatorname{Var}\big[(\Delta W)^2\big]", "=", r"2\,\Delta t^2", font_size=32),
+            cmath(r"\textstyle\sum_{k=1}^{n} (\Delta W_k)^2", r"\to", r"t", font_size=34, colors={r"t": C.BITS}),
+        ]
+        whys = [why(r"a step is $\mathcal{N}(0, \Delta t)$", font_size=20), why(r"a squared bell", font_size=20),
+                why(r"mean $t$, \ variance $2t^2/n \to 0$", font_size=20)]
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=2.4, buff=0.35, edge=6.9)
+        k = [list(ns).index(2 ** j) for j in (4, 8, 14)]
+        tbl = VGroup(*[label(rf"$n = 2^{{{j}}}$: \ $\sum(\Delta W)^2 = {qm[i]:.3f} \pm {qs[i]:.3f}$, \ "
+                             rf"$\sum|\Delta W| = {tvm[i]:.1f}$", font_size=20, color=GREY_A)
+                       for j, i in zip((4, 8, 14), k)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        tbl.move_to([3.4, -1.3, 0])
+        tl = label(r"over $400$ paths, \ $t = 1$", font_size=20, color=GREY_A).next_to(tbl, UP, buff=0.12).align_to(tbl, LEFT)
+        rule = label(r"$(dW)^2 = dt$", font_size=40, color=C.BITS).next_to(tbl, DOWN, buff=0.35)
+        with self.voiceover(
+            "Brownian paths have one more property that changes calculus. Square each tiny step, and add the squares. "
+            "<bookmark mark='a'/> For a smooth curve that sum vanishes as the steps shrink. For Brownian motion it "
+            "climbs steadily, along the line t. <bookmark mark='b'/> Each squared step has mean delta t, "
+            "<bookmark mark='c'/> and a variance of order delta t squared, <bookmark mark='d'/> so the sum's mean is "
+            "t and its spread vanishes. Measured on four hundred paths at time one: "
+            f"{qm[k[0]]:.2f}, give or take {qs[k[0]]:.2f}, with sixteen steps; {qm[k[2]]:.3f}, give or take "
+            f"{qs[k[2]]:.3f}, with sixteen thousand. Meanwhile the plain length of the path, the sum of the absolute "
+            f"steps, grows without limit: {tvm[k[2]]:.0f} already. <bookmark mark='e'/> In shorthand, dW squared "
+            "equals dt. Paul Levy proved it in 1940, and it is the rule behind the next chapter."
+        ) as vo:
+            self.play(Create(ax), Create(pc), FadeIn(pl), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Create(bx), Create(diag), FadeIn(ql))
+            self.play(Create(qc), run_time=2.5, rate_func=linear)
+            vo.wait_until("b")
+            step(0)
+            vo.wait_until("c")
+            step(1)
+            vo.wait_until("d")
+            step(2)
+            self.play(FadeIn(tl), FadeIn(tbl))
+            vo.wait_until("e")
+            self.play(FadeIn(rule, scale=1.2))
         self.wait(0.3)
         self.clear_scene()

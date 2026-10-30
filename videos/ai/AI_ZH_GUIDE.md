@@ -1391,3 +1391,53 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | dense retrieval (DPR); retrieval-augmented generation (RAG); RETRO | 稠密检索（DPR）；检索增强生成（RAG）；RETRO |
 | kNN-LM; datastore; interpolation weight λ; continuous cache | kNN-LM（k近邻语言模型）；数据存储；插值权重λ；连续缓存 |
 
+
+### Vectors that mean things (Part 3)
+
+| English | 中文 |
+|---|---|
+| vector, basis, coordinates | 向量，基，坐标 |
+| dot product (inner product) | 点积（内积） |
+| law of cosines | 余弦定理 |
+| Cauchy–Schwarz inequality | 柯西–施瓦茨不等式 |
+| cosine similarity | 余弦相似度 |
+| tensor, axis, einsum, contraction | 张量，轴，einsum，缩并 |
+| Einstein summation convention | 爱因斯坦求和约定 |
+| linear map, column space, null space, rank | 线性映射，列空间，零空间，秩 |
+| rank–nullity theorem | 秩–零化度定理 |
+| determinant | 行列式 |
+| orthogonal projection, projection matrix | 正交投影，投影矩阵 |
+| least squares, normal equations | 最小二乘，正规方程 |
+| Gram–Schmidt process, QR factorization, Householder reflection | 格拉姆–施密特方法，QR分解，豪斯霍尔德反射 |
+| orthonormal basis | 标准正交基 |
+| eigenvalue, eigenvector, characteristic polynomial | 特征值，特征向量，特征多项式 |
+| spectral theorem | 谱定理 |
+| Rayleigh quotient | 瑞利商 |
+| principal component | 主成分 |
+| power iteration, Krylov method | 幂迭代，克雷洛夫方法 |
+| singular value decomposition (SVD), singular value | 奇异值分解（SVD），奇异值 |
+| Eckart–Young theorem, Weyl's inequality | 埃卡特–杨定理，外尔不等式 |
+| low rank, rank-one matrix | 低秩，秩一矩阵 |
+| Frobenius norm, spectral norm, stable rank | 弗罗贝尼乌斯范数，谱范数，稳定秩 |
+| condition number | 条件数 |
+| Newton–Schulz iteration | 牛顿–舒尔茨迭代 |
+| Marchenko–Pastur law, semicircle law | 马尔琴科–帕斯图尔定律，半圆律 |
+| empirical spectral density, heavy tail, power-law exponent | 经验谱密度，重尾，幂律指数 |
+| gradient low-rank projection (GaLore) | 梯度低秩投影（GaLore） |
+| effective rank | 有效秩 |
+| distributional hypothesis | 分布假说 |
+| co-occurrence, pointwise mutual information (PMI), PPMI | 共现，点互信息（PMI），正点互信息（PPMI） |
+| latent semantic analysis (LSA) | 潜在语义分析（LSA） |
+| skip-gram with negative sampling (SGNS), word2vec, GloVe | 带负采样的跳字模型（SGNS），word2vec，GloVe |
+| analogy (3CosAdd) | 类比（3CosAdd） |
+| concentration of measure, thin shell | 测度集中，薄壳 |
+| Johnson–Lindenstrauss lemma, random projection | 约翰逊–林登斯特劳斯引理，随机投影 |
+| chi-squared distribution, Chernoff bound, union bound | 卡方分布，切尔诺夫界，联合界 |
+| anisotropy, centring, all-but-the-top | 各向异性，中心化，去掉顶部方向 |
+| rogue dimension | 离群维度 |
+| linear representation hypothesis, superposition | 线性表示假说，叠加 |
+| matrix factorization, collaborative filtering | 矩阵分解，协同过滤 |
+| regularization | 正则化 |
+| two-tower model, in-batch softmax, recall@k | 双塔模型，批内softmax，前k召回率 |
+| maximum inner product search, approximate nearest neighbour | 最大内积搜索，近似最近邻 |
+| dense retrieval | 稠密检索 |
