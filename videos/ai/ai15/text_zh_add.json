@@ -346,7 +346,15 @@
   "\\, p_{\\text{kNN}}(w)": "\\, p_{\\text{kNN}}(w)",
   "\\, p_{\\text{LM}}(w)": "\\, p_{\\text{LM}}(w)",
   "p_{\\text{kNN}}(w)": "p_{\\text{kNN}}(w)",
-  "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)": "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)"
+  "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)": "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)",
+  "copied correctly: \\ transformer $0\\%$, \\ hybrid $0\\%$ \\\\ (copies 16 tokens apart)": "复制正确：\\ Transformer $0\\%$，\\ 混合模型 $0\\%$ \\\\ （相隔16个词元的复制）",
+  "RULER at $128$k tokens: \\ $84.3$, \\ against $81.3$ for full attention \\ ($1.4$T training tokens each);": "$128$k词元下的RULER：\\ $84.3$，\\ 全注意力是$81.3$ \\ （各训练$1.4$T词元）；",
+  "$78.8$ with rotary positions in its attention layers": "注意力层用旋转位置编码时为$78.8$",
+  "at a million tokens: \\ Claude Opus 4.6 $76\\%$, \\ Claude Sonnet 4.5 $18.5\\%$": "在一百万个词元上：\\ Claude Opus 4.6 $76\\%$，\\ Claude Sonnet 4.5 $18.5\\%$",
+  "(reported by Anthropic, \\ February 2026)": "（Anthropic公布，\\ 2026年2月）",
+  "a million tokens; \\ keys and values compressed $4\\times$ and $128\\times$": "一百万个词元；\\ 键和值压缩$4\\times$和$128\\times$",
+  "(compressed sparse attention: \\ see Part 16)": "（压缩稀疏注意力：\\ 见第16部分）",
+  "the memory: \\ one (hidden state, \\ next token) \\\\ pair for every token of the novels": "记忆：\\ 小说里每个词元存一对 \\\\ （隐藏状态，\\ 下一个词元）"
  },
  "patterns": [
   [
@@ -536,6 +544,10 @@
   [
    "^the passage's own past, \\\\ beyond the \\$(\\d+)\\$-token window: \\\\\\\\ \\$([\\d.]+)\\$ \\$\\\\rightarrow\\$ \\$([\\d.]+)\\$ bits per character \\\\ \\(\\$\\\\lambda = ([\\d.]+)\\$\\)$",
    "测试段落自己的过去，\\\\ $\\1$词元窗口之外的部分：\\\\\\\\ $\\2$ $\\\\rightarrow$ $\\3$ 每字符比特 \\\\ （$\\\\lambda = \\4$）"
+  ],
+  [
+   "^copied correctly: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\\\\\ \\(copies (\\d+) tokens apart\\)$",
+   "复制正确：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型 $\\2\\\\%$ \\\\\\\\ （相隔\\3个词元的复制）"
   ]
  ]
 }

@@ -102,7 +102,7 @@ class Retrieval(VoiceoverScene):
             store.add(VGroup(strip, arr, tok).arrange(RIGHT, buff=0.15))
         store.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         dots_ = MathTex(r"\vdots", font_size=26, color=GREY_B).next_to(store, DOWN, buff=0.08).align_to(store[0][0], LEFT).shift(RIGHT * 0.8)
-        sl = label(r"the memory: \ one (hidden state, \ next token) \\ pair per token of the novels", font_size=19, color=GREY_A)
+        sl = label(r"the memory: \ one (hidden state, \ next token) \\ pair for every token of the novels", font_size=19, color=GREY_A)
         nl = label(r"the next tokens of its \\ 8 nearest stored states", font_size=19, color=KNN_C)
         ng = VGroup(sl, store, dots_).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0.9, -1.25, 0])
         nl.move_to(sl, aligned_edge=LEFT)

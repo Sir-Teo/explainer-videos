@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import GRAD, VALUE
+from videos.ai.ai4.common import GRAD, HESS, HIST, PART, VALUE, load, log_axes
 
 
 def s(p):
@@ -21,11 +21,13 @@ class Derivative(VoiceoverScene):
         self.card()
         self.zoom()
         self.tangent()
+        self.best()
+        self.derive()
         self.rules()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(1, r"The derivative", r"How fast does an output change?", part=4)
+        card = chapter_card(1, r"The derivative", r"What is the best straight line through a curve?", part=PART)
         with self.voiceover("Chapter one. The derivative."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -119,6 +121,89 @@ class Derivative(VoiceoverScene):
             self.play(FadeIn(what))
         sec.clear_updaters()
         hl.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def best(self):
+        d = load("linapprox")
+        hs, err, bad = np.asarray(d["hs"]), np.asarray(d["err"]), np.asarray(d["err_bad"])
+        assert abs(d["slope"] - 2) < 0.05 and abs(d["slope_bad"] - 1) < 0.05
+        card = definition_card(
+            r"the derivative",
+            r"$f$ is differentiable at $x$ if there is one number $f'(x)$ with "
+            r"$f(x + h) = f(x) + f'(x)\,h + r(h)$, where the error $r(h)$ shrinks faster than $h$: "
+            r"$r(h)/h \to 0$ as $h \to 0$.", width=6.2, font_size=22).to_corner(UL, buff=0.35)
+        hist = history_card(r"1684", r"Gottfried Leibniz, \textit{Nova Methodus}",
+                            r"the first calculus in print, with $dx$ and $dy$; \ Isaac Newton's fluxions date from "
+                            r"the 1660s", width=6.2, font_size=20).to_corner(DL, buff=0.35)
+        g = log_axes((-4, -0.8), (-8, 0), x_length=5.4, y_length=4.4, xlabel=r"the step $h$",
+                     ylabel=r"error of the straight-line guess, \ $|f(x+h) - f(x) - s\,h|$", center=[3.6, -0.2, 0],
+                     xticks=[-4, -3, -2, -1], yticks=[-8, -6, -4, -2, 0])
+        ax = g.ax
+        c_best = curve(ax, np.log10(hs), np.log10(err), GRAD, 4)
+        c_bad = curve(ax, np.log10(hs), np.log10(bad), C.SURPRISE, 3)
+        l_best = label(rf"$s = f'(x)$: \ slope ${d['slope']:.2f}$", font_size=22, color=GRAD)
+        l_best.next_to(ax.c2p(-3.2, np.log10(err[8])), DR, buff=0.1)
+        l_bad = label(rf"$s$ off by $10\%$: \ slope ${d['slope_bad']:.2f}$", font_size=22, color=C.SURPRISE)
+        l_bad.next_to(ax.c2p(-3.4, np.log10(bad[4])), UP, buff=0.15)
+        tag = note(r"computed: \ Part 1's surprise at $p = \tfrac14$").next_to(g, DOWN, buff=0.1).align_to(g, RIGHT)
+        with self.voiceover(
+            "Here is the precise version. A function is differentiable at x if one number, the derivative, makes the "
+            "straight-line guess so good that its error shrinks faster than the step itself. "
+            "<bookmark mark='a'/> Measure it, for Part 1's surprise curve. On these logarithmic axes, the error "
+            f"with the true slope falls with a slope of {d['slope']:.2f}: like h squared. <bookmark mark='b'/> Use "
+            f"a slope just ten percent off, and the error falls only like h, a slope of {d['slope_bad']:.2f}. "
+            "Exactly one line wins as the step shrinks. That is what best means. <bookmark mark='c'/> The idea is "
+            "Leibniz's, in print in 1684, and Newton's, who had worked it out in the 1660s and called it fluxions."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(g), FadeIn(tag))
+            self.play(Create(c_best), FadeIn(l_best), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(c_bad), FadeIn(l_bad), run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(hist, shift=UP * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def derive(self):
+        d = load("linapprox")
+        col = {r"s(p)": C.SURPRISE, r"s'(p)": GRAD}
+        rows = [
+            cmath(r"s(p + h) - s(p)", r"=", r"-\tfrac{1}{\ln 2}\,\big(\ln(p + h) - \ln p\big)", font_size=38),
+            cmath(r"s(p + h) - s(p)", r"=", r"-\tfrac{1}{\ln 2}\,\ln\!\big(1 + \tfrac{h}{p}\big)", font_size=38),
+            cmath(r"s(p + h) - s(p)", r"=", r"-\tfrac{1}{\ln 2}\,\tfrac{h}{p} + o(h)", font_size=38),
+            cmath(r"s'(p)", r"=", r"-\frac{1}{p \ln 2}", font_size=42, colors=col),
+            cmath(r"s'(\tfrac14)", r"=", rf"-\frac{{4}}{{\ln 2}} = {d['d1']:.2f}", font_size=42, colors={r"s'(\tfrac14)": GRAD}),
+        ]
+        whys = [why(r"$s(p) = \log_2 \tfrac1p = -\ln p / \ln 2$"), why(r"a difference of logs is a log of a ratio"),
+                why(r"$\ln(1 + u) = u + o(u)$: \ the log's own tangent at $1$"),
+                why(r"read off the number in front of $h$"), why(r"the slope the lens showed")]
+        step = ladder(self, rows, whys, keep=5, top=2.9, x=-1.0, buff=0.45, edge=6.9)
+        head = label(r"the derivative of the surprise, \ from the definition", font_size=26, color=GREY_A)
+        head.to_corner(UL, buff=0.3)
+        with self.voiceover(
+            "Let's use the definition once, on the surprise, log base two of one over p. <bookmark mark='a'/> The "
+            "change over a step h is a difference of logarithms, <bookmark mark='b'/> which is the logarithm of a "
+            "ratio. <bookmark mark='c'/> Near one, the logarithm is its own tangent: log of one plus u is u, plus "
+            "an error smaller than u. <bookmark mark='d'/> So the number in front of h is minus one over p log "
+            f"two. <bookmark mark='e'/> At a quarter, that's {d['d1']:.2f} bits per unit of p: the slope the lens "
+            "showed."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+            vo.wait_until("e")
+            step(4)
         self.wait(0.3)
         self.clear_scene()
 

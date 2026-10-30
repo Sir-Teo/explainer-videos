@@ -198,7 +198,7 @@ class LongContext(VoiceoverScene):
         none = max(float(ct.max()), float(chy.max())) < 0.05
         cl = label(r"the copy test: \\ $24$ random tokens, \ a stretch of a novel, \\ the same $24$ again", font_size=21,
                    color=GREY_A)
-        cv = label(rf"copied right: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
+        cv = label(rf"copied correctly: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
                    rf"(copies {r['gaps'][0]} tokens apart)", font_size=21, color=WHITE)
         cg = VGroup(cl, cv).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         if cg.width > 4.6:
@@ -239,12 +239,12 @@ class LongContext(VoiceoverScene):
         head = label(r"Long contexts in 2026", font_size=36).to_edge(UP, buff=0.35)
         rows = [
             (r"Gemini 1.5 \ (Google, 2024)", r"a million tokens; \ needles found in up to $10$ million, \ in research", HIST),
-            (r"Kimi Linear \ (Moonshot, 2025)", r"RULER at $128$k: \ $84.3$, \ against $81.3$ for full attention \ "
-             r"($1.4$T tokens each); \\ $78.8$ with rotary positions", HYB),
-            (r"MRCR v2, \ eight needles \ (OpenAI's test)", r"at $1$M tokens: \ Claude Opus 4.6 $76\%$, \ Claude Sonnet 4.5 "
-             r"$18.5\%$ \\ (Anthropic, \ February 2026)", C.BITS),
-            (r"DeepSeek-V4 \ (2026)", r"$1$M tokens; \ keys and values compressed $4\times$ and $128\times$ \\ "
-             r"(compressed sparse attention: \ Part 16)", ATT),
+            (r"Kimi Linear \ (Moonshot, 2025)", r"RULER at $128$k tokens: \ $84.3$, \ against $81.3$ for full attention \ "
+             r"($1.4$T training tokens each); \\ $78.8$ with rotary positions in its attention layers", HYB),
+            (r"MRCR v2, \ eight needles \ (OpenAI's test)", r"at a million tokens: \ Claude Opus 4.6 $76\%$, \ Claude Sonnet 4.5 "
+             r"$18.5\%$ \\ (reported by Anthropic, \ February 2026)", C.BITS),
+            (r"DeepSeek-V4 \ (2026)", r"a million tokens; \ keys and values compressed $4\times$ and $128\times$ \\ "
+             r"(compressed sparse attention: \ see Part 16)", ATT),
         ]
         tbl = VGroup()
         for i, (a, b, c_) in enumerate(rows):

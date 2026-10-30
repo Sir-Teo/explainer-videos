@@ -447,8 +447,8 @@ def compute_modes():
                     break
                 off -= a.size
             dz1 = X @ dW1 + db1
-            dh = (1 - h * h) * dz1
-            dz2 = dh @ W2 + h @ dW2 + db2
+            dhid = (1 - h * h) * dz1
+            dz2 = dhid @ W2 + h @ dW2 + db2
             out[idx] = float(((q - Y) * dz2).sum() / B)
             madds += B * din * dh + B * dh + 2 * B * dh * k + B * k  # dense products: forward mode cannot skip zeros
         return out, madds
@@ -766,7 +766,7 @@ def compute_vcurve():
         c = out[f"central_{name}"]
         hc = meas[name]["central"]
         right = (hs > hc * 30) & (hs < 0.1)
-        left = (hs < hc / 30) & (c > 0)
+        left = (hs < hc / 3) & (hs > hc / 1000) & (c < 0.3 * c[0]) & (c > 0)
         out[f"slope_right_{name}"] = float(np.polyfit(np.log10(hs[right]), np.log10(c[right]), 1)[0]) if right.sum() > 2 else float("nan")
         out[f"slope_left_{name}"] = float(np.polyfit(np.log10(hs[left]), np.log10(c[left]), 1)[0]) if left.sum() > 2 else float("nan")
     out["pred"], out["meas"] = pred, meas
@@ -805,8 +805,8 @@ class _Chain:
         return self.W[k].T @ gz
 
     def run(self, every):
-        """Backpropagation keeping a checkpoint every ``every`` layers (``every`` = 1: keep everything; ``every`` >= n:
-        keep only the input, recomputing from it).  Returns dL/dx0."""
+        """Backpropagation keeping a checkpoint every ``every`` layers (``every`` = 1: keep everything; ``every`` = n:
+        keep only the input and the output, recomputing the rest once).  Returns dL/dx0."""
         n = self.n
         self.evals = self.held = self.peak = 0
         cps = {0: self.x0}
@@ -814,25 +814,43 @@ class _Chain:
         h = self.x0
         for k in range(n):
             h = self.f(k, h)
-            if (k + 1) % every == 0 and k + 1 < n:
+            if (k + 1) % every == 0 or k + 1 == n:
                 cps[k + 1] = h
                 self.hold()
         g = h.copy()  # dL/dh_n for L = |h_n|^2 / 2
-        self.hold()   # h_n, while its gradient is formed
-        self.drop()
-        starts = sorted(cps)
-        for s in reversed(starts):
-            end = min(s + every, n) if every < n else n
-            # recompute the segment s..end from its checkpoint, keeping its activations
-            seg = [cps[s]]
-            for k in range(s, end):
-                seg.append(self.f(k, seg[-1]))
+        for s in sorted((c for c in cps if c < n), reverse=True):
+            end = min(s + every, n)
+            seg = {s: cps[s], end: cps[end]}
+            hh = cps[s]
+            for k in range(s, end - 1):  # recompute the inside of the segment from its checkpoint
+                hh = self.f(k, hh)
+                seg[k + 1] = hh
                 self.hold()
             for k in range(end - 1, s - 1, -1):
-                g = self.back(k, seg[k - s + 1], g)
-                self.drop()
-            if s != 0:
-                self.drop()  # the checkpoint itself, no longer needed
+                g = self.back(k, seg[k + 1], g)
+                self.drop()  # h_{k+1} (a recomputed one, or the checkpoint at the segment's end) is done with
+        self.drop()  # the input
+        assert self.held == 0
+        return g
+
+    def run_none(self):
+        """Keep nothing but the input: recompute every layer's input from the start when the backward pass needs it."""
+        n = self.n
+        self.evals = self.held = self.peak = 0
+        self.hold()
+        h = self.x0
+        for k in range(n):
+            h = self.f(k, h)
+        g = h.copy()
+        self.hold()
+        for k in range(n - 1, -1, -1):
+            hh = self.x0
+            for j in range(k + 1):
+                hh = self.f(j, hh)
+            self.hold()
+            g = self.back(k, hh, g)
+            self.drop()
+        self.drop(2)
         return g
 
 
@@ -851,6 +869,7 @@ def compute_checkpoint():
         evals.append(c.evals)
     peak, evals = np.array(peak), np.array(evals)
     kbest = int(ks[int(np.argmin(peak))])
+    kset = [k for k, pk in zip(ks, peak) if pk == peak.min()]
     # the best interval for longer chains
     ns = [16, 64, 256, 1024, 4096]
     best_k, best_peak = [], []
@@ -862,17 +881,22 @@ def compute_checkpoint():
             c = _Chain(nn, seed=13)
             c.run(k)
             res.append((c.peak, k))
-        pk, kk = min(res)
-        best_k.append(kk)
+        pk = min(res)[0]
+        ties = [k for p_, k in res if p_ == pk]
+        best_k.append(ties[len(ties) // 2])
         best_peak.append(pk)
     # time: everything kept against sqrt(n) checkpoints, on a longer, wider chain
     big = _Chain(1024, w=64, seed=14)
     t_all = _timeit(lambda: big.run(1), 3)
     t_ck = _timeit(lambda: big.run(32), 3)
+    c = _Chain(n)
+    g_none = c.run_none()
+    none_peak, none_evals = c.peak, c.evals
+    worst = max(worst, float(np.abs(g_none - ref).max()))
     assert worst < 1e-12
-    return dict(n=n, ks=np.array(ks), peak=peak, evals=evals, kbest=kbest, worst=worst, ns=ns, best_k=best_k,
+    return dict(n=n, ks=np.array(ks), peak=peak, evals=evals, kbest=kbest, klo=int(min(kset)), khi=int(max(kset)), worst=worst, ns=ns, best_k=best_k,
                 best_peak=best_peak, t_all=t_all, t_ck=t_ck, store_all_peak=int(peak[0]), store_all_evals=int(evals[0]),
-                none_peak=int(peak[-1]), none_evals=int(evals[-1]))
+                none_peak=int(none_peak), none_evals=int(none_evals))
 
 
 # ---------------------------------------------------------------------------
@@ -882,7 +906,7 @@ def compute_newton():
     g = rng(31)
     N = 400
     u = g.normal(size=N)
-    X = np.c_[u, 0.9 * u + 0.15 * g.normal(size=N)]  # two strongly correlated features
+    X = np.c_[u, 0.95 * u + 0.06 * g.normal(size=N)]  # two strongly correlated features
     w_true = np.array([1.5, -1.0])
     y = np.where(g.random(N) < 1 / (1 + np.exp(-X @ w_true * 2.0)), 1.0, -1.0)
     lam = 1e-3
@@ -1063,6 +1087,11 @@ def compute_hessian():
             out[f"{key}{k}"] = s[key]
         out[f"eig{k}"] = s["eig"]
         out[f"region{k}"] = s["region"]
+        e_ = s["eig"]
+        out[f"top{k}"] = float(e_.max())
+        out[f"nout{k}"] = int((e_ > 0.1 * e_.max()).sum())
+        out[f"flat{k}"] = float((np.abs(e_) < 0.01 * e_.max()).mean())
+        out[f"nneg{k}"] = int((e_ < -0.01 * e_.max()).sum())
     # summary of the trained spectrum
     lam = ev_last
     out["n_outliers"] = int((lam > 0.1 * lam.max()).sum())
@@ -1268,6 +1297,17 @@ def _spectral_clip(W, c=0.9):
     return W * (c / s) if s > c else W
 
 
+def _unrolled_grad(W, u, v, K):
+    """dL/dW for L = v . z_K, z_{k+1} = tanh(W z_k + u), z_0 = 0, by the library through all K steps.  The state is
+    a row (1 x d) times W^T: the library's matrix product differentiates both factors for 2-D arrays."""
+    WT = Tensor(W.T.copy(), requires_grad=True)
+    zt = Tensor(np.zeros((1, len(u))))
+    for _ in range(K):
+        zt = (zt @ WT + Tensor(u[None])).tanh()
+    (zt * Tensor(v[None])).sum().backward()
+    return WT.grad.T
+
+
 def compute_deq():
     g = rng(71)
     d = 8
@@ -1286,12 +1326,7 @@ def compute_deq():
     Ks = list(range(1, 61))
     errs = []
     for K in Ks:
-        Wt = Tensor(W, requires_grad=True)
-        zt = Tensor(np.zeros(d))
-        for _ in range(K):
-            zt = (Wt @ zt + Tensor(u)).tanh()
-        (zt * Tensor(v)).sum().backward()
-        errs.append(float(np.abs(Wt.grad - gW_imp).max() / np.abs(gW_imp).max()))
+        errs.append(float(np.abs(_unrolled_grad(W, u, v, K) - gW_imp).max() / np.abs(gW_imp).max()))
     errs = np.array(errs)
     ok = errs > 1e-14
     slope = float(np.polyfit(np.array(Ks)[ok][5:40], np.log(errs[ok][5:40]), 1)[0]) if ok.sum() > 40 else float("nan")
@@ -1345,12 +1380,7 @@ def compute_deq():
     Dz = 1 - zs * zs
     aa = np.linalg.solve((np.eye(d) - Dz[:, None] * p["W"]).T, p["v"])
     g_imp = np.outer(aa * Dz, zs)
-    Wt = Tensor(p["W"], requires_grad=True)
-    zt = Tensor(np.zeros(d))
-    for _ in range(200):
-        zt = (Wt @ zt + Tensor(uu)).tanh()
-    (zt * Tensor(p["v"])).sum().backward()
-    end_diff = float(np.abs(Wt.grad - g_imp).max() / np.abs(g_imp).max())
+    end_diff = float(np.abs(_unrolled_grad(p["W"], uu, p["v"], 200) - g_imp).max() / np.abs(g_imp).max())
     return dict(iters=iters, rho=rho, Ks=np.array(Ks), errs=errs, slope=slope, rate=float(math.exp(slope)),
                 xs=xs, ys=ys, gx=gx, keep=keep, fits=np.stack([fits[k] for k in keep]), curve=np.array(curve),
                 iters_curve=np.array(iters_curve), lr=lr, steps=steps, end_diff=end_diff, d=d,
