@@ -101,15 +101,18 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in ten pictures", font_size=40).to_edge(UP, buff=0.35)
+        d = load("dreamer")
+        ok = float(np.mean(d["final"])) > float(d["random_catch"]) + 0.3
+        dream = ("A world model lets an agent practise in its imagination, as our Dreamer did." if ok else
+                 "A world model lets an agent practise in its imagination, which our small Dreamer only began to do.")
         with self.voiceover(
             "Let's take stock. An agent that cannot see everything acts on a belief, predicted and corrected by "
             "Bayes' rule. A language-model agent runs a loop of thoughts, actions and observations, with tools and "
             "memory around it. Over long tasks small errors compound, so reliability per step sets how far it can "
             "go, and on METR's measurements that reach has been doubling every few months. Copying an expert fails "
-            "with the square of the horizon, and DAgger repairs it by learning where the learner actually goes. A "
-            "world model lets an agent practise in its imagination, as our Dreamer did. And robots learn in "
-            "randomized simulators and from demonstrations, with generative action experts and compressed action "
-            "tokens."
+            "with the square of the horizon, and DAgger repairs it by learning where the learner actually goes. "
+            + dream + " And robots learn in randomized simulators and from demonstrations, with generative action "
+            "experts and compressed action tokens."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),

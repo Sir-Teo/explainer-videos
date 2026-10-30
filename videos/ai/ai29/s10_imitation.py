@@ -199,7 +199,7 @@ class Imitation(VoiceoverScene):
         ymax = float(J.max()) * 1.05
         g = axes([0, T, 100], [0, ymax, 100], x_length=6.6, y_length=4.4, xlabel=r"horizon $T$ \ (steps)",
                  ylabel=r"expected steps off the lane, \ $J(T)$", xticks=[0, 100, 200, 300, 400],
-                 yticks=[0, 100, 200, 300], center=[-2.6, -0.4, 0])
+                 yticks=[v for v in (0, 100, 200, 300) if v <= ymax], center=[-2.6, -0.4, 0])
         ax = g.ax
         bcl = spread_band(ax, ts, J, BC)
         bound = curve(ax, ts[ts * ts * eps <= ymax], (ts * ts * eps)[ts * ts * eps <= ymax], FAIL, 2.5)

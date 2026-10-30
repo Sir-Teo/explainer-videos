@@ -65,7 +65,7 @@ class VLA(VoiceoverScene):
         ae = gloss(r"action expert", r"a small extra network on the vision-language model, \\ whose only job is smooth arm motion \\ "
                    r"(not Part 16's mixture-of-experts experts)", corner=UR, width=5.6, color=C.INTERVAL)
         with self.voiceover(
-            "Robots are where agents meet physics. A vision-language-action model starts from a model that already "
+            "Here is what is inside a vision-language-action model. It starts from a model that already "
             "reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an "
             "instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as "
             "tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert: a small extra network "

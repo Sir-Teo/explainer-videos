@@ -77,7 +77,8 @@ class DAgger(VoiceoverScene):
         rl.next_to(view, UP, buff=0.2)
         g = axes([0.5, len(Jh) + 0.5, 1], [0, max(float(Jh.max()), 1) * 1.1, 100], x_length=5.0, y_length=3.4,
                  xlabel=r"round", ylabel=rf"expected steps off the lane in ${T}$", xticks=list(range(1, len(Jh) + 1)),
-                 yticks=[0, 100, 200, 300], center=[3.6, 0.2, 0])
+                 yticks=[v for v in (0, 100, 200, 300) if v <= max(float(Jh.max()), 1) * 1.1],
+                 center=[3.6, 0.2, 0])
         ax = g.ax
         dots = VGroup(*[Dot(ax.c2p(k + 1, v), radius=0.08, color=DAG) for k, v in enumerate(Jh)])
         line = VMobject(color=DAG, stroke_width=3).set_points_as_corners([d.get_center() for d in dots])
@@ -157,7 +158,7 @@ class DAgger(VoiceoverScene):
         Jb, Jd = np.asarray(L["bc_J"]), np.asarray(L["dagger_J"])
         ymax = float(max(Jb.max(), Jd.max())) * 1.05
         g = axes([0, T, 100], [0, ymax, 100], x_length=6.0, y_length=4.2, xlabel=r"horizon $T$",
-                 ylabel=r"expected steps off the lane", xticks=[0, 200, 400], yticks=[0, 100, 200, 300],
+                 ylabel=r"expected steps off the lane", xticks=[0, 200, 400], yticks=[v for v in (0, 100, 200, 300) if v <= ymax],
                  center=[-3.3, -0.3, 0])
         b1, d1 = spread_band(g.ax, ts, Jb, BC), spread_band(g.ax, ts, Jd, DAG)
         budgets = np.asarray(L["budgets"], float)
@@ -165,7 +166,7 @@ class DAgger(VoiceoverScene):
         lx = np.log2(budgets)
         g2 = axes([lx[0] - 0.2, lx[-1] + 0.2, 1], [0, max(Bb.max(), Bd.max()) * 1.05, 100], x_length=5.0, y_length=3.6,
                   xlabel=r"expert labels \ (log scale)", ylabel=rf"steps off the lane in ${T}$",
-                  xticks=list(lx), xfmt=lambda v: f"{int(round(2 ** v))}", yticks=[0, 100, 200, 300], font_size=18,
+                  xticks=list(lx), xfmt=lambda v: f"{int(round(2 ** v))}", yticks=[v for v in (0, 100, 200, 300) if v <= max(Bb.max(), Bd.max()) * 1.05], font_size=18,
                   center=[3.6, -0.3, 0])
         b2, d2 = spread_band(g2.ax, lx, Bb.T, BC), spread_band(g2.ax, lx, Bd.T, DAG)
         leg = legend([(BC, r"behaviour cloning"), (DAG, r"DAgger")], font_size=22).to_corner(UL, buff=0.35)

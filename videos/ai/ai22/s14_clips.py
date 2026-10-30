@@ -121,7 +121,7 @@ class Clips(VoiceoverScene):
         t2 = label(r"wobble: \ jumps in \\ the letter's path (px)", font_size=16, color=GREY_A).next_to(b2, DOWN, buff=0.15)
         leg = legend([(JOINT_C, r"drawn together"), (INDEP_C, r"from separate samples")], font_size=18).move_to([4.4, -1.6, 0])
         hdn = note(rf"$64$ clips, \ three seeds; \ real clips' wobble: \ ${float(d['real_jerk']):.2f}$ px").to_edge(DOWN, buff=0.3)
-        if jj.mean() < ij.mean() and jr.mean() >= ir.mean():
+        if jj.mean() < ij.mean() and jr.mean() >= ir.mean() and jr.mean() >= 0.5:
             verdict = (f"Drawn together, the frames agree: {100 * jr.mean():.0f} percent of clips keep the right letter "
                        f"in every frame, against {100 * ir.mean():.0f}, and the letter's path wobbles {jj.mean():.2f} "
                        f"pixels a frame, against {ij.mean():.2f} when each frame is drawn on its own.")
