@@ -116,8 +116,28 @@ class Codec(VoiceoverScene):
                         color=C.INTERVAL)]
         whys = [why(r"one strided convolution", font_size=20), why(r"$n$ stages of $256$ codes", font_size=20),
                 why(r"one model, \ quantizer dropout", font_size=20)]
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-3.4, align_index=None, buff=0.75, edge=-0.1)
+        # built about x = 0 with a half-width of 3.3, then moved left, so rows and notes stay clear of the picture
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=0.0, align_index=None, buff=0.75, edge=3.3)
+        for m in [*rows, *whys]:
+            m.shift(LEFT * 3.5)
         tr_min = float(d["train_seconds"]) / 60
+        # what ours builds, and the part it leaves out (schematic)
+        p1 = [node_box(r"log-mel picture", GREY_A, font_size=18), node_box(r"encoder", SND_C, font_size=18),
+              node_box(r"residual VQ", C.INTERVAL, font_size=18)]
+        voc_t = label(r"vocoder: \ not built here", font_size=18, color=GREY_C)
+        voc = VGroup(DashedVMobject(RoundedRectangle(width=voc_t.width + 0.44, height=0.62, corner_radius=0.12,
+                                                     stroke_color=GREY_C, stroke_width=1.8), num_dashes=36), voc_t)
+        p2 = [node_box(r"decoder", SND_C, font_size=18), node_box(r"picture", GREY_A, font_size=18), voc]
+        r1 = VGroup(*p1).arrange(RIGHT, buff=0.5)
+        r2 = VGroup(*p2).arrange(LEFT, buff=0.5)  # the second row runs back, right to left
+        r2.next_to(r1, DOWN, buff=0.8).align_to(r1, RIGHT)
+        flow = [*p1, *p2]
+        parrs = VGroup(*[Arrow(a_.get_right() if k < 2 else (a_.get_bottom() if k == 2 else a_.get_left()),
+                               b_.get_left() if k < 2 else (b_.get_top() if k == 2 else b_.get_right()),
+                               buff=0.08, stroke_width=2.5, color=GREY_B, max_tip_length_to_length_ratio=0.25)
+                         for k, (a_, b_) in enumerate(zip(flow, flow[1:]))])
+        pipe = VGroup(r1, r2, parrs).move_to([-3.6, 0.0, 0])
+        ptag = note(r"schematic", font_size=18).next_to(pipe, UP, buff=0.15)
         S = int(d["steps"])
         params = int(d["params"])
         with self.voiceover(
@@ -134,7 +154,12 @@ class Codec(VoiceoverScene):
             "to rebuild a sentence from a voice it never heard."
         ) as vo:
             self.play(FadeIn(orig), FadeIn(ol))
+            self.play(FadeIn(ptag), LaggedStart(*[FadeIn(m) for m in flow[:3]], *[GrowArrow(a_) for a_ in parrs[:2]],
+                                                lag_ratio=0.3), run_time=1.5)
+            self.play(GrowArrow(parrs[2]), FadeIn(flow[3]), GrowArrow(parrs[3]), FadeIn(flow[4]), GrowArrow(parrs[4]),
+                      FadeIn(flow[5]), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(pipe), FadeOut(ptag), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1, transform=False)
@@ -180,7 +205,7 @@ class Codec(VoiceoverScene):
             lines.add(VGroup(*[Dot(ax.ax.c2p(math.log10(b), w), radius=0.06, color=SND_C) for b, w in zip(bps, wer[s])]))
         ow = float(d["orig_wer"])
         base = DashedLine(ax.ax.c2p(math.log10(bps[0]) - 0.15, ow), ax.ax.c2p(math.log10(bps[-1]) + 0.15, ow), color=WHITE)
-        bl = label(rf"the original picture: \ ${100 * ow:.0f}\%$", font_size=18, color=WHITE).next_to(base, UP, buff=0.05).align_to(base, RIGHT)
+        bl = label(rf"the original picture: \ ${100 * ow:.0f}\%$", font_size=18, color=WHITE).next_to(base, DOWN, buff=0.06).align_to(base, RIGHT)
         ex = VGroup(label(r"heard by Whisper, \ seed $0$:", font_size=20, color=GREY_A))
         refs = [str(r) for r in d["refs"]]
         for n in (stages[0], stages[-1]):
