@@ -90,7 +90,7 @@ Every model is trained here, on a CPU, by `compute.py` (one torch thread a proce
   training; the memory bill at 128,000 tokens (Llama 39.1 GiB, DeepSeek-V3 8.38 GiB, Qwen3-Next 2.96 GiB plus 36 MiB of
   state).
 * **13. How long is a context, really?** The needle in a haystack (Kamradt 2023; schematic); RULER, NoLiMa, context rot
-  (cited); our RULER-style test RULER_RESULTS; our language models past their 256-token window (1,024 tokens read in
+  (cited); our RULER-style test (four two-layer models, trained at 128 tokens on one needle, one of four needles and a chain of three names, two seeds, tested at 128–1,024 tokens): averaged over the tasks, at 128 tokens softmax attention 88%, the Mamba-2-style SSM 88%, the gated delta rule 98%, the hybrid 88%; at 1,024 tokens 88%, 47%, 87%, 83% in the same order; the one-of-four needle is the hardest, and in one seed each of softmax attention and the hybrid it was never learned (about 30%); our language models past their 256-token window (1,024 tokens read in
   one go): the transformer's loss rises from 5.36 to 5.53 nats past 256, the hybrid's (attention without positions)
   stays at 5.52–5.55; neither copies a repeated run of random tokens (no induction heads at this size); the 2026
   picture (Gemini 1.5, Kimi Linear's RULER at 128k, MRCR v2 at 1M, DeepSeek-V4; each its maker's report).

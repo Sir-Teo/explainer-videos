@@ -48,9 +48,8 @@ class Ours(VoiceoverScene):
                          label(rf"${m[f'{key}_flops'] / 1e6:.2f}$ MFLOP per character, \ training", font_size=18,
                                color=GREY_B)).arrange(DOWN, buff=0.2)
             cols.add(box)
-        cols.arrange(RIGHT, buff=0.7).move_to([0, -0.4, 0])
-        if cols.width > 13.2:
-            cols.width = 13.2
+        cols.arrange(RIGHT, buff=0.9).move_to([0, -0.3, 0])
+        cols.scale_to_fit_width(12.6)
         head = label(r"three character models: \ Part 13's transformer, \ small \ ($d = 64$, \ $2$ blocks, \ $64$ "
                      r"characters of context)", font_size=24).to_edge(UP, buff=0.35)
         tag = note(r"each trained $2{,}000$ steps of $32 \times 64$ characters from the thirty novels; \ three seeds",
@@ -82,11 +81,12 @@ class Ours(VoiceoverScene):
         total = float(steps[-1])
         allv = np.concatenate([D[k][:, 2:, 1].ravel() for k in keys])
         lo = math.floor((allv.min() - 0.05) * 4) / 4
-        hi = lo + 1.5
+        hi = lo + 1.0
         ax = Axes(x_range=[0, total, 500], y_range=[lo, hi, 0.25], x_length=7.6, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.9, -0.3, 0])
         yl = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in np.arange(lo, hi + 1e-9, 0.25)])
+        ax.y_axis.set_stroke(opacity=1)
         xv = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.1)
                       for v in (0, 1000, total)])
         xl = label(r"training steps", font_size=22, color=GREY_A).next_to(xv, DOWN, buff=0.1)
@@ -218,9 +218,9 @@ class Ours(VoiceoverScene):
             r[3].move_to([2.7 + tw / 2, -i * 0.8, 0])
             r[4].next_to(r[3], RIGHT, buff=0.12)
             rows.add(r)
-        rows.move_to([0, 0.3, 0])
-        h1 = label(r"arithmetic per character", font_size=22, color=GREY_A).move_to([-1.3, 1.5, 0])
-        h2 = label(r"time per training step here \ (one CPU core)", font_size=22, color=GREY_A).move_to([3.5, 1.5, 0])
+        rows.scale(1.35).move_to([0, 0.4, 0])
+        h1 = label(r"arithmetic per character", font_size=26, color=GREY_A).next_to(rows, UP, buff=0.5).set_x(rows[0][1].get_x() + 0.8)
+        h2 = label(r"time per training step here \ (one CPU core)", font_size=26, color=GREY_A).next_to(rows, UP, buff=0.5).set_x(rows[0][3].get_x() + 0.8)
         slow = secs["moe"] / secs["dense_active"]
         howlong = (f"{slow:.1f} times as long as the dense model's. " if slow > 1.15 else
                    "about as long as the dense model's. ")
