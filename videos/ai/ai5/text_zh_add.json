@@ -1,0 +1,605 @@
+{
+ "strings": {
+  "Pascal, Fermat: \\\\ dividing the stakes": "帕斯卡、费马：\\\\ 如何分赌注",
+  "Bernoulli: \\\\ the law of large numbers": "伯努利：\\\\ 大数定律",
+  "de Moivre: \\\\ the bell curve": "棣莫弗：\\\\ 钟形曲线",
+  "Bayes: \\\\ inverse probability": "贝叶斯：\\\\ 逆概率",
+  "Gauss: \\\\ errors, least squares": "高斯：\\\\ 误差与最小二乘",
+  "Einstein: \\\\ Brownian motion": "爱因斯坦：\\\\ 布朗运动",
+  "Fisher: \\\\ likelihood": "费希尔：\\\\ 似然",
+  "It\\^o: \\\\ stochastic calculus": "伊藤清：\\\\ 随机微积分",
+  "Metropolis et al.: \\\\ MCMC": "梅特罗波利斯等：\\\\ MCMC",
+  "diffusion models; \\\\ nucleus sampling": "扩散模型；\\\\ 核采样",
+  "the bell curve: \\ why sums are Gaussian, \\ in one dimension and many": "钟形曲线：\\ 为什么和是高斯的，\\ 在一维与多维中",
+  "fitting and believing: \\ likelihood, \\ Fisher information, \\ Bayes, \\ maximum entropy": "拟合与信念：\\ 似然，\\ 费希尔信息，\\ 贝叶斯，\\ 最大熵",
+  "how far averages stray: \\ the concentration inequalities": "平均值会偏多远：\\ 集中不等式",
+  "drawing samples: \\ from inverse CDFs to the Gumbel trick, \\ and how language models choose words": "抽样：\\ 从逆累积分布函数到冈贝尔技巧，\\ 以及语言模型怎样选词",
+  "Markov chains and Monte Carlo: \\ mixing, \\ importance weights, \\ gradients of averages, \\ Metropolis and Langevin": "马尔可夫链与蒙特卡洛：\\ 混合，\\ 重要性权重，\\ 平均值的梯度，\\ 梅特罗波利斯与朗之万",
+  "random motion: \\ Brownian paths, \\ It\\^o's lemma, \\ SDEs, \\ and the Fokker--Planck equation": "随机运动：\\ 布朗路径，\\ 伊藤引理，\\ 随机微分方程，\\ 以及福克-普朗克方程",
+  "flips": "抛掷次数",
+  "share of heads so far": "到目前为止正面的比例",
+  "$\\tfrac12 \\pm 1/\\sqrt{n}$: \\ two standard deviations": "$\\tfrac12 \\pm 1/\\sqrt{n}$：\\ 两个标准差",
+  "Jacob Bernoulli, \\textit{Ars Conjectandi}": "雅各布·伯努利，《猜度术》",
+  "averages settle: \\ the law of large numbers, \\ his ``golden theorem''": "平均值会稳定下来：\\ 大数定律，\\ 他的“黄金定理”",
+  "the central limit theorem \\ (Laplace, 1810): \\ whatever the pieces look like": "中心极限定理 \\ （拉普拉斯，1810）：\\ 无论每一块长什么样",
+  "every way to split $s$ \\\\ into $x$ and $s - x$": "把 $s$ 拆成 $x$ 和 $s - x$ \\\\ 的每一种方式",
+  "densities: \\ the sum becomes an integral": "换成密度：\\ 求和变成积分",
+  "independent pieces: \\ convolve $n$ times": "独立的小块：\\ 卷积 $n$ 次",
+  "$f(s - x)$, \\ flipped and slid to $s$": "$f(s - x)$：\\ 翻转后滑到 $s$",
+  "overlap $f(x)\\,f(s-x)$": "重叠部分 $f(x)\\,f(s-x)$",
+  "its area, \\ for each $s$: \\ $(f * f)(s) = s\\,e^{-s}$": "它的面积，\\ 对每个 $s$：\\ $(f * f)(s) = s\\,e^{-s}$",
+  "exponentials added:": "相加的指数分布个数：",
+  "the sum, \\ centred and rescaled": "和，\\ 已平移并缩放",
+  "computed by repeated convolution on a grid; \\ checked against the exact answer": "在网格上反复卷积算出；\\ 已与精确答案核对",
+  "pieces added, $n$": "相加的块数 $n$",
+  "largest gap from the bell's CDF": "与钟形曲线累积分布的最大差距",
+  "Berry--Esseen bound": "贝里-埃森界",
+  "Berry--Esseen": "贝里-埃森",
+  "Berry (1941), \\ Esseen (1942); \\ constant: \\ Shevtsova (2011)": "贝里（1941），\\ 埃森（1942）；\\ 常数：\\ 舍夫佐娃（2011）",
+  "$\\rho = \\mathbb{E}|X - \\mu|^3$: \\ how lopsided and heavy-tailed a piece is": "$\\rho = \\mathbb{E}|X - \\mu|^3$：\\ 一块有多偏、尾巴有多重",
+  "Bells in many dimensions": "多维的钟形曲线",
+  "What does knowing one coordinate tell you about another?": "知道一个坐标，能告诉你另一个什么？",
+  "$z$: \\ independent standard bells; \\ $L$: \\ a linear map": "$z$：\\ 独立的标准钟形分布；\\ $L$：\\ 一个线性映射",
+  "the covariance: \\ $\\Sigma_{ij} = \\mathbb{E}[(x_i - \\mu_i)(x_j - \\mu_j)]$": "协方差：\\ $\\Sigma_{ij} = \\mathbb{E}[(x_i - \\mu_i)(x_j - \\mu_j)]$",
+  "contours: \\ ellipses, \\ along the eigenvectors of $\\Sigma$ \\ (Part 3)": "等高线：\\ 椭圆，\\ 沿着 $\\Sigma$ 的特征向量 \\ （第3部分）",
+  "$x_b$ fixed: \\ its density is a constant": "$x_b$ 固定：\\ 它的密度是常数",
+  "$\\Lambda = \\Sigma^{-1}$, \\ the precision": "$\\Lambda = \\Sigma^{-1}$，\\ 精度矩阵",
+  "complete the square in $x_a$": "对 $x_a$ 配方",
+  "invert in blocks: \\ the Schur complement": "分块求逆：\\ 舒尔补",
+  "the same block inverse": "同一个分块求逆",
+  "what is left of $x_a$: \\ a bell": "$x_a$ 还剩下什么：\\ 一个钟形分布",
+  "again a bell: \\\\ mean $m$, \\\\ covariance the \\\\ Schur complement": "又是钟形分布：\\\\ 均值 $m$，\\\\ 协方差是 \\\\ 舒尔补",
+  "the conditional mean: \\ Galton's regression line": "条件均值：\\ 高尔顿的回归线",
+  "predicted": "预测",
+  "measured": "测量",
+  "mean": "均值",
+  "variance": "方差",
+  "Francis Galton": "弗朗西斯·高尔顿",
+  "heights of parents and children: \\ elliptical contours, \\ and ``regression towards mediocrity''": "父母与子女的身高：\\ 椭圆形的等高线，\\ 以及“向平庸回归”",
+  "Rudolf K\\'alm\\'an: \\ the Kalman filter": "鲁道夫·卡尔曼：\\ 卡尔曼滤波",
+  "track a state by conditioning a Gaussian on each new measurement; \\ it steered Apollo": "每来一次新测量，就对高斯分布条件化一次，以追踪状态；\\ 它为阿波罗导航",
+  "Gaussian processes": "高斯过程",
+  "a bell over whole functions: \\ conditioning on data \\emph{is} the regression": "整个函数上的钟形分布：\\ 对数据条件化\\emph{就是}回归",
+  "diffusion models \\ (Part 21)": "扩散模型 \\ （第21部分）",
+  "the step back from noise is a Gaussian conditional, \\ computed by this formula": "从噪声往回走的一步是一个高斯条件分布，\\ 用这个公式算出",
+  "Conditioning a Gaussian, \\ at work": "高斯条件化，\\ 在实际中",
+  "expand around $\\mu$": "在 $\\mu$ 周围展开",
+  "an average of $n$ has variance $\\sigma^2/n$": "$n$ 个数的平均，方差为 $\\sigma^2/n$",
+  "divide by $n$: \\ too small on average": "除以 $n$：\\ 平均来说偏小",
+  "divide by $n$ \\ (maximum likelihood)": "除以 $n$ \\ （最大似然）",
+  "divide by $n - 1$ \\ (Bessel)": "除以 $n - 1$ \\ （贝塞尔）",
+  "sample size $n$": "样本量 $n$",
+  "R.~A.~Fisher (1922)": "R. A. 费希尔（1922）",
+  "How precise can an estimate be?": "估计能有多精确？",
+  "Is there a limit to what data can tell you?": "数据能告诉你的，有没有极限？",
+  "Cauchy: \\ $\\dfrac{1}{\\pi\\,(1 + (x - \\theta)^2)}$": "柯西分布：\\ $\\dfrac{1}{\\pi\\,(1 + (x - \\theta)^2)}$",
+  "a bell, for comparison": "作为对比的钟形曲线",
+  "$40$ draws, \\ illustration \\ (the far ones clipped at the edge)": "$40$ 次抽样，\\ 示例 \\ （远处的截在边缘）",
+  "the average": "平均值",
+  "the median": "中位数",
+  "maximum likelihood": "最大似然",
+  "estimates of $\\theta = 0${,} \\ from $4{,}000$ samples of $100$": "对 $\\theta = 0$ 的估计，\\ 来自 $4000$ 组、每组 $100$ 个样本",
+  "the score: \\ how the log-likelihood tilts": "分数：\\ 对数似然倾斜的程度",
+  "the density integrates to $1$": "密度的积分为 $1$",
+  "Fisher information: \\ the score's variance": "费希尔信息：\\ 分数的方差",
+  "unbiased: \\ $\\mathbb{E}[\\hat\\theta] = \\theta$, \\ differentiated": "无偏：\\ 对 $\\mathbb{E}[\\hat\\theta] = \\theta$ 求导",
+  "Cauchy--Schwarz; \\ $n$ points add their information": "柯西-施瓦茨；\\ $n$ 个点的信息相加",
+  "Cram\\'er--Rao": "克拉默-拉奥",
+  "C.~R.~Rao (1945), \\ H.~Cram\\'er (1946)": "C. R. 拉奥（1945），\\ H. 克拉默（1946）",
+  "an unbiased estimate from $n$ independent points has variance at least $1 / (n\\, I(\\theta))$": "由 $n$ 个独立数据点得到的无偏估计，方差至少为 $1 / (n\\, I(\\theta))$",
+  "the score of one Cauchy draw, \\ $2u/(1+u^2)$: \\ far draws pull little": "一次柯西抽样的分数，\\ $2u/(1+u^2)$：\\ 远处的点拉力很小",
+  "$n \\times$ variance of the estimate": "$n \\times$ 估计的方差",
+  "Cram\\'er--Rao: \\ $1/I = 2$": "克拉默-拉奥：\\ $1/I = 2$",
+  "R.~A.~Fisher": "R. A. 费希尔",
+  "maximum likelihood is efficient: \\ it reaches the bound as $n$ grows": "最大似然是有效的：\\ 随着 $n$ 增大，它达到这个下界",
+  "Fisher information in today's training": "今天训练中的费希尔信息",
+  "the same idea for many parameters: \\ a matrix": "参数多了，同一个想法：\\ 一个矩阵",
+  "Amari: \\ the natural gradient": "甘利俊一：\\ 自然梯度",
+  "measure a step by how much the model's predictions change, \\ not the weights: \\ $F^{-1}\\nabla L$ \\ (Part 11)": "用模型预测改变了多少来衡量一步，\\ 而不是权重：\\ $F^{-1}\\nabla L$ \\ （第11部分）",
+  "Kirkpatrick et al.: \\ elastic weight consolidation": "柯克帕特里克等：\\ 弹性权重巩固",
+  "protect the weights a learned task has high information about": "保护那些对已学任务信息量高的权重",
+  "today": "今天",
+  "curvature-aware optimizers": "考虑曲率的优化器",
+  "K-FAC approximates $F$ layer by layer; \\ Shampoo uses a close cousin \\ (Part 11)": "K-FAC 逐层近似 $F$；\\ Shampoo 用的是它的近亲 \\ （第11部分）",
+  "T.~Bayes (1763, \\ published by R.~Price); \\ P.-S.~Laplace (1774)": "T. 贝叶斯（1763，\\ 由 R. 普赖斯发表）；\\ P.-S. 拉普拉斯（1774）",
+  "$k$ e's in $n$ letters: \\ the binomial likelihood": "$n$ 个字母中有 $k$ 个 e：\\ 二项似然",
+  "a Beta prior: \\ the same shape": "贝塔先验：\\ 同样的形状",
+  "the exponents add: \\ a Beta again": "指数相加：\\ 又是贝塔分布",
+  "$a, b$: \\ imagined e's and other letters": "$a, b$：\\ 想象中的 e 和其他字母",
+  "flat: \\ $a = b = 1$": "平的：\\ $a = b = 1$",
+  "sure it is near $\\tfrac12$: \\ $a = b = 50$": "认定在 $\\tfrac12$ 附近：\\ $a = b = 50$",
+  "a good guess: \\ $a = 6, \\ b = 44$": "好的猜测：\\ $a = 6, \\ b = 44$",
+  "each curve scaled to the same height": "每条曲线缩放到同样高度",
+  "letters read:": "已读字母：",
+  "the peak of the posterior": "后验的峰值",
+  "a Gaussian prior on the weights": "权重上的高斯先验",
+  "Gaussian noise of spread $\\sigma$": "宽度为 $\\sigma$ 的高斯噪声",
+  "$\\lambda = \\sigma^2/\\tau^2$: \\ weight decay": "$\\lambda = \\sigma^2/\\tau^2$：\\ 权重衰减",
+  "MAP, \\ best $\\lambda$": "MAP，\\ 最好的 $\\lambda$",
+  "the truth, \\ $\\sin 2\\pi x$": "真实函数，\\ $\\sin 2\\pi x$",
+  "test error \\ (median of $200$ training sets) \\ against $\\lambda$": "测试误差 \\ （$200$ 个训练集的中位数）\\ 随 $\\lambda$ 的变化",
+  "Maximum entropy": "最大熵",
+  "What should you believe when all you know is an average?": "只知道一个平均值时，该相信什么？",
+  "A die whose faces average $4.5$, \\ not $3.5$": "一颗点数平均为 $4.5$ 的骰子，\\ 而不是 $3.5$",
+  "average:": "平均：",
+  "entropy:": "熵：",
+  "nats": "奈特",
+  "which of the many dice with average $4.5$?": "平均为 $4.5$ 的骰子有很多，选哪一个？",
+  "the one that assumes the least: \\\\ maximum entropy \\ (Part 1's uncertainty)": "假设最少的那个：\\\\ 最大熵 \\ （第1部分的不确定性）",
+  "E.~T.~Jaynes": "E. T. 杰恩斯",
+  "statistical mechanics as inference: \\ the Brandeis dice problem": "把统计力学看作推断：\\ 布兰代斯骰子问题",
+  "\\textstyle\\sum_k p_k \\log p_k \\;\\;\\text{given}\\;\\; \\sum_k p_k = 1,\\;\\; \\sum_k k\\, p_k = 4.5": "\\textstyle\\sum_k p_k \\log p_k \\;\\;\\text{满足}\\;\\; \\sum_k p_k = 1,\\;\\; \\sum_k k\\, p_k = 4.5",
+  "the most uncertain die \\\\ with the given average": "给定平均值下 \\\\ 最不确定的骰子",
+  "Lagrange multipliers \\ (Part 4)": "拉格朗日乘子 \\ （第4部分）",
+  "set each derivative to zero": "令每个导数为零",
+  "$Z$ makes them add to $1$": "$Z$ 让它们加起来为 $1$",
+  "one equation for $\\lambda$": "关于 $\\lambda$ 的一个方程",
+  "an exponential tilt: \\ the exponential family": "指数倾斜：\\ 指数族",
+  "$p_k \\propto e^{\\lambda k}$, \\ three values of $\\lambda$": "$p_k \\propto e^{\\lambda k}$，\\ $\\lambda$ 取三个值",
+  "step": "步",
+  "$\\lambda$ during the fit; \\ dashes: \\ the exact solution": "拟合过程中的 $\\lambda$；\\ 虚线：\\ 精确解",
+  "Fix an average, \\ get an exponential": "固定一个平均值，\\ 得到一个指数",
+  "fix $\\mathbb{E}[x]$ and $\\mathbb{E}[x^2]$": "固定 $\\mathbb{E}[x]$ 和 $\\mathbb{E}[x^2]$",
+  "fix $\\mathbb{E}|x|$": "固定 $\\mathbb{E}|x|$",
+  "the bell": "钟形曲线",
+  "Laplace's double exponential": "拉普拉斯双边指数分布",
+  "fix the average energy": "固定平均能量",
+  "Gibbs: \\ $p_i \\propto e^{-E_i/T}$ \\ = \\ softmax": "吉布斯：\\ $p_i \\propto e^{-E_i/T}$ \\ = \\ softmax",
+  "the exponential family: \\ $\\nabla A(\\theta) = \\mathbb{E}[T(x)]$; \\ Bernoulli, \\ softmax, \\ Gaussian, \\ Poisson": "指数族：\\ $\\nabla A(\\theta) = \\mathbb{E}[T(x)]$；\\ 伯努利，\\ softmax，\\ 高斯，\\ 泊松",
+  "L.~Boltzmann (1877); \\ J.~W.~Gibbs (1902); \\ E.~T.~Jaynes (1957)": "L. 玻尔兹曼（1877）；\\ J. W. 吉布斯（1902）；\\ E. T. 杰恩斯（1957）",
+  "How far from the average?": "离平均值能有多远？",
+  "How often can an average be badly wrong?": "一个平均值有多大可能错得离谱？",
+  "1963\\; Hoeffding's inequality": "1963\\; 霍夫丁不等式",
+  "a bound that needs no picture: \\ only that each flip lies in $[0, 1]$": "一个不需要这张图的界：\\ 只需每次抛掷落在 $[0, 1]$ 内",
+  "Markov: \\ $a\\,\\mathbf{1}[X \\ge a] \\le X$ \\ for $X \\ge 0$": "马尔可夫：\\ 对 $X \\ge 0$，\\ $a\\,\\mathbf{1}[X \\ge a] \\le X$",
+  "Chebyshev: \\ Markov on $(\\bar X - \\mu)^2$": "切比雪夫：\\ 对 $(\\bar X - \\mu)^2$ 用马尔可夫",
+  "Chernoff: \\ Markov on $e^{tn\\bar X}$; \\ independence": "切尔诺夫：\\ 对 $e^{tn\\bar X}$ 用马尔可夫；\\ 独立性",
+  "Hoeffding's lemma: \\ $X$ in $[0, 1]$": "霍夫丁引理：\\ $X$ 在 $[0, 1]$ 内",
+  "choose $t = 4\\varepsilon$": "取 $t = 4\\varepsilon$",
+  "I.-J.~Bienaym\\'e (1853), \\ P.~Chebyshev (1867), \\ H.~Chernoff (1952), \\ W.~Hoeffding (1963)": "I.-J. 比内梅（1853），\\ P. 切比雪夫（1867），\\ H. 切尔诺夫（1952），\\ W. 霍夫丁（1963）",
+  "exact": "精确值",
+  "Markov": "马尔可夫",
+  "Chebyshev": "切比雪夫",
+  "Chernoff": "切尔诺夫",
+  "Hoeffding": "霍夫丁",
+  "exact, \\ for fair coins": "精确值，\\ 均匀硬币",
+  "Part 8: \\ how far a model's test score can be from its true error": "第8部分：\\ 模型的测试分数离真实误差能有多远",
+  "Part 26: \\ the bonus in UCB, \\ exploring a slot machine": "第26部分：\\ UCB 里的奖励项，\\ 探索老虎机",
+  "How does a computer draw from a distribution?": "计算机怎样从一个分布中抽样？",
+  "rejection: \\ keep the points under the curve": "拒绝采样：\\ 留下曲线下方的点",
+  "J.~von Neumann, \\textit{Various techniques used in connection with random digits} (1951)": "J. 冯·诺依曼，《与随机数字有关的各种技术》（1951）",
+  "two independent bells": "两个独立的钟形分布",
+  "polar coordinates: \\ the angle is uniform": "极坐标：\\ 角度是均匀的",
+  "$r^2/2$ is exponential: \\ inverse CDF": "$r^2/2$ 服从指数分布：\\ 逆累积分布函数",
+  "$(u_1, u_2)$, \\ uniform": "$(u_1, u_2)$，\\ 均匀",
+  "G.~E.~P.~Box \\& M.~E.~Muller (1958)": "G. E. P. 博克斯与 M. E. 穆勒（1958）",
+  "$G_i = -\\log(-\\log U_i)$: \\ Gumbel noise": "$G_i = -\\log(-\\log U_i)$：\\ 冈贝尔噪声",
+  "exactly the softmax": "恰好是 softmax",
+  "E.~J.~Gumbel (1954); \\ R.~D.~Luce (1959); \\ J.~I.~Yellott (1977); \\ C.~Maddison et al.\\ (2014)": "E. J. 冈贝尔（1954）；\\ R. D. 卢斯（1959）；\\ J. I. 耶洛特（1977）；\\ C. 马迪森等（2014）",
+  "a smooth stand-in for the one-hot pick: \\ gradients flow through it": "独热选择的平滑替身：\\ 梯度可以穿过它",
+  "three draws at each temperature": "每个温度抽三次",
+  "E.~Jang, S.~Gu \\& B.~Poole; \\ C.~Maddison, A.~Mnih \\& Y.~W.~Teh (both 2017)": "E. 张、S. 顾与 B. 普尔；\\ C. 马迪森、A. 姆尼与 Y. W. 郑（均为2017）",
+  "drawn:": "抽到：",
+  "How a language model chooses": "语言模型怎样选词",
+  "How adventurous should the next word be?": "下一个词该有多大胆？",
+  "running total": "累计",
+  "top-$p$, \\ $p =$": "top-$p$，\\ $p =$",
+  "top-$k$: \\ keep the $k$ likeliest \\ (Fan et al., 2018)": "top-$k$：\\ 保留最可能的 $k$ 个 \\ （范等，2018）",
+  "top-$p$, \\ nucleus: \\ the fewest whose total reaches $p$ \\ (Holtzman et al., 2020)": "top-$p$，\\ 核采样：\\ 总概率达到 $p$ 的最少的那些 \\ （霍尔茨曼等，2020）",
+  "min-$p$: \\ keep those at least $p_{\\min}$ times the likeliest \\ (Nguyen et al., 2024)": "min-$p$：\\ 保留概率至少是最可能者 $p_{\\min}$ 倍的 \\ （阮等，2024）",
+  "diversity: \\ distinct word pairs across $8$ continuations": "多样性：\\ $8$ 段续写中不同词对的比例",
+  "GPT-2's surprise at the text \\ (nats per character; \\ lower: likelier)": "GPT-2对文字的意外度 \\ （每字符奈特；\\ 越低越可能）",
+  "top-$k$": "top-$k$",
+  "top-$p$": "top-$p$",
+  "min-$p$": "min-$p$",
+  "temperature": "温度",
+  "the series' novels model, \\ one of its continuations under each rule": "本系列的小说模型，\\ 每种规则下的一段续写",
+  "greedy": "贪心",
+  "$T \\to 0$: \\ always the favourite": "$T \\to 0$：\\ 永远选最喜欢的",
+  "Three states, from Part 1's letters": "三个状态，来自第1部分的字母",
+  "detailed balance: \\ as much flows $i \\to j$ as $j \\to i$": "细致平衡：\\ 从 $i$ 流到 $j$ 的与从 $j$ 流到 $i$ 的一样多",
+  "sum over $i$; \\ a row of $P$ adds to $1$": "对 $i$ 求和；\\ $P$ 的每一行加起来为 $1$",
+  "so $\\pi$ is stationary": "所以 $\\pi$ 是平稳的",
+  "space then ``e''": "空格之后接“e”",
+  "``e'' then space": "“e”之后接空格",
+  "English is not reversible: \\ of all letter pairs in Part 1's books": "英语是不可逆的：\\ 占第1部分书中所有字母对的比例",
+  "the energy $U$: \\ two wells": "能量 $U$：\\ 两个势阱",
+  "$41$ sites, \\ $\\pi \\propto e^{-\\beta U}$, \\ from the left end": "$41$ 个格点，\\ $\\pi \\propto e^{-\\beta U}$，\\ 从最左端出发",
+  "outlines: \\ the stationary distribution": "轮廓：\\ 平稳分布",
+  "$1/\\text{gap}$: \\ the relaxation time": "$1/\\text{谱间隙}$：\\ 弛豫时间",
+  "steps to mix \\ (within $\\tfrac14$)": "混合所需步数 \\ （误差在 $\\tfrac14$ 以内）",
+  "bounds: \\ $(t_{\\mathrm{rel}} - 1)\\ln 2 \\;\\le\\; t_{\\mathrm{mix}} \\;\\le\\; t_{\\mathrm{rel}}\\ln\\frac{4}{\\pi_{\\min}}$": "界：\\ $(t_{\\mathrm{rel}} - 1)\\ln 2 \\;\\le\\; t_{\\mathrm{mix}} \\;\\le\\; t_{\\mathrm{rel}}\\ln\\frac{4}{\\pi_{\\min}}$",
+  "Metropolis, \\ the Rosenbluths, \\ the Tellers": "梅特罗波利斯，\\ 罗森布卢斯夫妇，\\ 特勒夫妇",
+  "Stanis\\l aw Ulam": "斯坦尼斯瓦夫·乌拉姆",
+  "recovering from an illness, \\ asks the odds of winning solitaire: \\ easier to play a hundred games and count": "病后休养时，\\ 想知道单人纸牌能玩通的概率：\\ 玩一百局再数一数更容易",
+  "John von Neumann": "约翰·冯·诺依曼",
+  "proposes following random neutrons through a bomb core, \\ one by one, \\ on the new ENIAC": "提议在新的ENIAC上，\\ 一个一个地追踪随机的中子\\ 穿过炸弹核心",
+  "Kl\\'ara D\\'an von Neumann \\& Nicholas Metropolis": "克拉拉·丹·冯·诺依曼与尼古拉斯·梅特罗波利斯",
+  "run the first Monte Carlo programs on ENIAC; \\ Metropolis names the method": "在ENIAC上运行了最早的蒙特卡洛程序；\\ 梅特罗波利斯为这个方法命名",
+  "Monte Carlo, \\ Los Alamos": "蒙特卡洛，\\ 洛斯阿拉莫斯",
+  "N.~Metropolis, \\textit{The Beginning of the Monte Carlo Method}, \\ Los Alamos Science (1987)": "N. 梅特罗波利斯，《蒙特卡洛方法的开端》，\\ 《洛斯阿拉莫斯科学》（1987）",
+  "how many of the weighted samples really count": "加权样本中真正起作用的有多少",
+  "dimension": "维度",
+  "measured, \\ five seeds": "测量值，\\ 五个种子",
+  "theory: \\ $n\\,\\big(s^2/\\sqrt{2s^2 - 1}\\big)^{-d}$": "理论值：\\ $n\\,\\big(s^2/\\sqrt{2s^2 - 1}\\big)^{-d}$",
+  "target: \\ a standard bell in $d$ dimensions; \\\\ proposal: \\ $1.25\\times$ wider": "目标：\\ $d$ 维标准钟形分布；\\\\ 提议分布：\\ 宽 $1.25$ 倍",
+  "darts thrown": "扔出的飞镖数",
+  "the circle's share of the square: \\ $\\pi / 4$": "圆占正方形的比例：\\ $\\pi / 4$",
+  "The gradient of an average": "平均值的梯度",
+  "How do you differentiate through a random choice?": "怎样对一个随机选择求导？",
+  "$f(x)$: \\ a reward, \\ a yes or no: \\ no slope": "$f(x)$：\\ 一个奖励，\\ 是或否：\\ 没有斜率",
+  "$p_\\theta(x)$: \\ what the model samples": "$p_\\theta(x)$：\\ 模型从中采样的分布",
+  "only the density depends on $\\theta$": "只有密度依赖于 $\\theta$",
+  "$\\nabla p = p\\, \\nabla \\log p$: \\ the log-derivative trick": "$\\nabla p = p\\, \\nabla \\log p$：\\ 对数导数技巧",
+  "an average: \\ estimate it by sampling": "一个平均值：\\ 用采样来估计",
+  "$\\mathbb{E}[\\nabla \\log p] = 0$ \\ (Chapter 4): \\ any baseline $b$": "$\\mathbb{E}[\\nabla \\log p] = 0$ \\ （第4章）：\\ 任意基线 $b$",
+  "P.~W.~Glynn (1990); \\ R.~J.~Williams, REINFORCE (1992)": "P. W. 格林（1990）；\\ R. J. 威廉姆斯，REINFORCE（1992）",
+  "for a bell $\\mathcal{N}(\\mu, 1)$: \\ the score is $x - \\mu$": "对钟形分布 $\\mathcal{N}(\\mu, 1)$：\\ 分数是 $x - \\mu$",
+  "$\\nabla_\\mu\\, \\mathbb{E}[x^2]$, \\ $x \\sim \\mathcal{N}(\\mu, 1)$, \\ at $\\mu = 1$: \\ truly $2$": "$\\nabla_\\mu\\, \\mathbb{E}[x^2]$，\\ $x \\sim \\mathcal{N}(\\mu, 1)$，\\ 在 $\\mu = 1$ 处：\\ 真值为 $2$",
+  "baseline $b$": "基线 $b$",
+  "variance of one sample's estimate": "单个样本估计的方差",
+  "needs $f$ to have a slope \\\\ (Kingma \\& Welling, 2013)": "需要 $f$ 有斜率 \\\\ （金马与韦林，2013）",
+  "without a baseline": "不加基线",
+  "with a baseline": "加基线",
+  "Sampling the unsampleable": "从无法直接采样的分布中采样",
+  "Los Alamos, \\ on the MANIAC: \\ sample a shape by a random walk that accepts or rejects each step": "洛斯阿拉莫斯，\\ 在MANIAC上：\\ 用一个逐步接受或拒绝的随机游走对形状采样",
+  "detailed balance \\ (Chapter 10): \\ propose, then accept": "细致平衡 \\ （第10章）：\\ 先提议，再接受",
+  "rearrange": "整理",
+  "the largest acceptance that keeps it: \\ Hastings (1970)": "保持平衡的最大接受率：\\ 黑斯廷斯（1970）",
+  "symmetric proposals: \\ Metropolis (1953)": "对称提议：\\ 梅特罗波利斯（1953）",
+  "flows both ways must match": "两个方向的流量必须相等",
+  "the push: \\ the score, \\ uphill toward likelier places; \\\\ the kicks: \\ Brownian": "推力：\\ 分数，\\ 朝更可能的地方上坡；\\\\ 踢动：\\ 布朗运动",
+  "surface: \\ the particles' density; \\ mesh: \\ the target $p$": "曲面：\\ 粒子的密度；\\ 网格：\\ 目标 $p$",
+  "P.~Langevin (1908); \\ G.~Roberts \\& R.~Tweedie (1996); \\ M.~Welling \\& Y.~W.~Teh (2011)": "P. 朗之万（1908）；\\ G. 罗伯茨与 R. 特威迪（1996）；\\ M. 韦林与 Y. W. 郑（2011）",
+  "random-walk Metropolis": "随机游走梅特罗波利斯",
+  "Langevin, \\ small step": "朗之万，\\ 小步长",
+  "Langevin, \\ big step": "朗之万，\\ 大步长",
+  "Langevin $+$ Metropolis \\ (MALA)": "朗之万 $+$ 梅特罗波利斯 \\ （MALA）",
+  "$x$-coordinate over the first $4{,}000$ steps \\ (left bump below the dashes)": "前 $4000$ 步的 $x$ 坐标 \\ （虚线以下是左边的鼓包）",
+  "hops": "跳跃",
+  "spread": "宽度",
+  "hops between the bumps in $19{,}000$ steps, \\ and the spread within the left bump: \\ means of five seeds": "$19000$ 步中两个鼓包间的跳跃次数，\\ 以及左边鼓包内的宽度：\\ 五个种子的平均",
+  "a density known only up to a constant": "一个只知道到常数为止的密度",
+  "accept with probability": "以下面的概率接受",
+  "1. \\ propose a small random step": "1. \\ 提出一个小的随机步子",
+  "2. \\ uphill: \\ always take it": "2. \\ 上坡：\\ 总是接受",
+  "3. \\ downhill: \\ only sometimes": "3. \\ 下坡：\\ 只是有时接受",
+  "only a ratio: \\ the unknown total cancels": "只有比值：\\ 未知的总和消掉了",
+  "time in the left bump, so far:": "到目前为止在左边鼓包的时间：",
+  "R.~Brown (1827); \\ L.~Bachelier (1900); \\ N.~Wiener (1923); \\ M.~Donsker (1951)": "R. 布朗（1827）；\\ L. 巴舍利耶（1900）；\\ N. 维纳（1923）；\\ M. 东斯克（1951）",
+  "one Brownian path, \\ $2^{14}$ steps": "一条布朗路径，\\ $2^{14}$ 步",
+  "$\\sum (\\Delta W)^2$ so far: \\ the line $t$": "到目前为止的 $\\sum (\\Delta W)^2$：\\ 直线 $t$",
+  "a step is $\\mathcal{N}(0, \\Delta t)$": "一步服从 $\\mathcal{N}(0, \\Delta t)$",
+  "a squared bell": "钟形分布的平方",
+  "mean $t$, \\ variance $2t^2/n \\to 0$": "均值 $t$，\\ 方差 $2t^2/n \\to 0$",
+  "over $400$ paths, \\ $t = 1$": "$400$ 条路径，\\ $t = 1$",
+  "It\\^o's lemma": "伊藤引理",
+  "What is the chain rule for a path with no slope?": "一条没有斜率的路径，链式法则是什么？",
+  "1944\\; It\\^o's stochastic integral": "1944\\; 伊藤的随机积分",
+  "the first sum telescopes": "第一个和逐项相消",
+  "quadratic variation \\ (Chapter 14)": "二次变差 \\ （第14章）",
+  "left points: \\ error against $\\tfrac12(W_1^2 - 1)$": "左端点：\\ 与 $\\tfrac12(W_1^2 - 1)$ 的误差",
+  "midpoints: \\ against $\\tfrac12 W_1^2$ \\ (to rounding)": "中点：\\ 与 $\\tfrac12 W_1^2$ 的误差 \\ （舍入误差以内）",
+  "one path $W_t$; \\ the bars: \\ $W$ at the left of each step": "一条路径 $W_t$；\\ 竖线：\\ 每一步左端的 $W$",
+  "running left-point sum": "左端点和的累计",
+  "steps": "步数",
+  "Taylor, \\ to second order": "泰勒展开，\\ 到二阶",
+  "$(dW)^2 = dt$; \\ higher terms vanish": "$(dW)^2 = dt$；\\ 更高阶的项消失",
+  "for $dX = \\mu\\,dt + \\sigma\\,dW$": "对 $dX = \\mu\\,dt + \\sigma\\,dW$",
+  "$f(W) = e^W$: \\ the gap between $e^{W_1} - 1$ and the sums, \\ path by path": "$f(W) = e^W$：\\ $e^{W_1} - 1$ 与求和之间的差距，\\ 逐条路径",
+  "without it \\ (ordinary calculus)": "没有这一项 \\ （普通微积分）",
+  "the drift $\\tfrac12 e^W$ at work": "漂移项 $\\tfrac12 e^W$ 在起作用",
+  "Wolfgang Doeblin": "沃尔夫冈·德布林",
+  "a soldier in the French army sends the Academy of Sciences a sealed envelope with a version of the formula; \\ opened in 2000": "一名法国士兵给科学院寄去一个密封信封，里面有这个公式的一个版本；\\ 2000年打开",
+  "Kiyosi It\\^o": "伊藤清",
+  "the stochastic integral, \\ written in wartime Japan; \\ then its chain rule": "随机积分，\\ 写于战时的日本；\\ 然后是它的链式法则",
+  "Black, Scholes, Merton": "布莱克、斯科尔斯、默顿",
+  "It\\^o's lemma prices options; \\ today it is how diffusion models are run backwards \\ (Part 21)": "伊藤引理给期权定价；\\ 今天扩散模型就是靠它倒着运行 \\ （第21部分）",
+  "A calculus for random motion": "随机运动的微积分",
+  "midpoints instead: \\ Stratonovich's integral (1966), \\ ordinary chain rule, \\ but it peeks at the future": "改用中点：\\ 斯特拉托诺维奇积分（1966），\\ 普通的链式法则，\\ 但它偷看了未来",
+  "Randomness with a push": "带着推力的随机",
+  "How do you simulate a random path?": "怎样模拟一条随机路径？",
+  "a spring pulling toward $0$, plus noise \\\\ (Ornstein--Uhlenbeck, 1930)": "一根拉向 $0$ 的弹簧，再加噪声 \\\\ （奥恩斯坦-乌伦贝克，1930）",
+  "exact, \\ from the same noise": "精确解，\\ 用同样的噪声",
+  "G.~Maruyama (1955)": "丸山仪四郎（1955）",
+  "step $h$": "步长 $h$",
+  "The density's own law": "密度自己的定律",
+  "What happens to a whole cloud of random paths?": "一整团随机路径会怎样？",
+  "It\\^o's lemma \\ (Chapter 15), \\ for $dX = f\\,dt + g\\,dW$": "伊藤引理 \\ （第15章），\\ 对 $dX = f\\,dt + g\\,dW$",
+  "the $dW$ term averages to zero": "$dW$ 项的平均为零",
+  "an average is an integral against $p$": "平均值是对 $p$ 的积分",
+  "integrate by parts, \\ once and twice": "分部积分，\\ 一次和两次",
+  "true for every $\\varphi$": "对每个 $\\varphi$ 都成立",
+  "A.~Fokker (1914); \\ M.~Planck (1917); \\ A.~Kolmogorov (1931)": "A. 福克（1914）；\\ M. 普朗克（1917）；\\ A. 柯尔莫哥洛夫（1931）",
+  "Langevin dynamics \\ (Chapter 13)": "朗之万动力学 \\ （第13章）",
+  "Fokker--Planck": "福克-普朗克",
+  "$\\pi$ does not move: \\ stationary": "$\\pi$ 不动：\\ 平稳",
+  "$\\pi$: \\ the drift pushes up its slopes, \\ the noise spreads it out: \\ they balance": "$\\pi$：\\ 漂移把它往坡上推，\\ 噪声把它摊开：\\ 两者平衡",
+  "Chapter 14: \\ pure noise spreads by the heat equation, \\ $\\partial_t p = \\tfrac12 \\partial_x^2 p$": "第14章：\\ 纯噪声按热方程扩散，\\ $\\partial_t p = \\tfrac12 \\partial_x^2 p$",
+  "sums become bells": "和变成钟形",
+  "conditioning": "条件化",
+  "the Cram\\'er--Rao bound": "克拉默-拉奥下界",
+  "maximum entropy": "最大熵",
+  "concentration": "集中性",
+  "decoding": "解码",
+  "Metropolis and Langevin": "梅特罗波利斯与朗之万",
+  "noise, run backwards": "噪声，倒着运行",
+  "maximum likelihood, \\ Fisher information": "最大似然，\\ 费希尔信息",
+  "Bayes, \\ conjugacy, \\ MAP as weight decay": "贝叶斯，\\ 共轭，\\ 作为权重衰减的MAP",
+  "concentration inequalities": "集中不等式",
+  "Markov chains, \\ MCMC, \\ HMMs": "马尔可夫链，\\ MCMC，\\ 隐马尔可夫模型",
+  "softmax, \\ temperature, \\ decoding": "softmax，\\ 温度，\\ 解码",
+  "score-function gradients, \\ importance weights": "分数函数梯度，\\ 重要性权重",
+  "SDEs, \\ Langevin, \\ Fokker--Planck": "随机微分方程，\\ 朗之万，\\ 福克-普朗克",
+  "Show that the density of $X + Y$, for independent $X, Y$ with densities $f, g$, is $f * g$. \\ For $f = g = e^{-x}$ on $x > 0$, compute $f * f$ and $f * f * f$.": "证明：对独立的、密度分别为 $f, g$ 的 $X, Y$，$X + Y$ 的密度是 $f * g$。\\ 对 $x > 0$ 上的 $f = g = e^{-x}$，计算 $f * f$ 和 $f * f * f$。",
+  "$(x_1, x_2)$ is Gaussian with variances $1$ and $1.96$ and correlation $0.75$. \\ Find the mean and variance of $x_1$ given $x_2 = 1.5$.": "$(x_1, x_2)$ 服从高斯分布，方差为 $1$ 和 $1.96$，相关系数 $0.75$。\\ 求给定 $x_2 = 1.5$ 时 $x_1$ 的均值与方差。",
+  "Compute the Fisher information of $\\mathcal{N}(\\theta, \\sigma^2)$ in $\\theta$, and of the Cauchy location; which estimators reach the Cram\\'er--Rao bound?": "求 $\\mathcal{N}(\\theta, \\sigma^2)$ 关于 $\\theta$ 的费希尔信息，以及柯西分布位置参数的费希尔信息；哪些估计量能达到克拉默-拉奥下界？",
+  "Show that the maximum-entropy distribution on $\\{0, 1, 2, \\dots\\}$ with mean $m$ is geometric.": "证明：在 $\\{0, 1, 2, \\dots\\}$ 上均值为 $m$ 的最大熵分布是几何分布。",
+  "Use Hoeffding's inequality to find $n$ so that an average of $n$ values in $[0, 1]$ is within $0.01$ of its mean with probability $0.999$.": "用霍夫丁不等式求 $n$，使 $n$ 个 $[0, 1]$ 内取值的平均以概率 $0.999$ 落在均值的 $0.01$ 以内。",
+  "Show that $\\arg\\max_i (z_i + G_i)$, with independent Gumbel $G_i$, picks $i$ with probability $e^{z_i} / \\sum_j e^{z_j}$.": "证明：对独立的冈贝尔噪声 $G_i$，$\\arg\\max_i (z_i + G_i)$ 选中 $i$ 的概率是 $e^{z_i} / \\sum_j e^{z_j}$。",
+  "For the Ornstein--Uhlenbeck process $dx = -\\theta x\\,dt + \\sigma\\,dW$, find the stationary density from the Fokker--Planck equation.": "对奥恩斯坦-乌伦贝克过程 $dx = -\\theta x\\,dt + \\sigma\\,dW$，由福克-普朗克方程求平稳密度。",
+  "least squares: \\ Legendre (1805) and Gauss; \\ illustration": "最小二乘：\\ 勒让德（1805）与高斯；\\ 示例",
+  "J.~K.~Blitzstein \\& J.~Hwang, \\textit{Introduction to Probability}, 2nd ed.\\ (2019); \\ L.~Wasserman, \\textit{All of Statistics} (2004)": "J. K. 布利茨坦与 J. 黄，《概率导论》，第2版（2019）；\\ L. 沃瑟曼，《统计学完全教程》（2004）",
+  "D.~J.~C.~MacKay, \\textit{Information Theory, Inference, and Learning Algorithms} (2003); \\ D.~A.~Levin \\& Y.~Peres, \\textit{Markov Chains and Mixing Times}, 2nd ed.\\ (2017)": "D. J. C. 麦凯，《信息论、推断与学习算法》（2003）；\\ D. A. 莱文与 Y. 佩雷斯，《马尔可夫链与混合时间》，第2版（2017）",
+  "B.~{\\O}ksendal, \\textit{Stochastic Differential Equations}, 6th ed.\\ (2003); \\ S.~Boucheron, G.~Lugosi \\& P.~Massart, \\textit{Concentration Inequalities} (2013)": "B. 厄克森达尔，《随机微分方程》，第6版（2003）；\\ S. 布舍龙、G. 卢戈西与 P. 马萨尔，《集中不等式》（2013）",
+  "Text: Project Gutenberg (Part 1's $30$ novels); \\ GPT-2's own weights; \\ the series' novels model. \\ Every number on screen is computed or cited.": "文本：古腾堡计划（第1部分的 $30$ 部小说）；\\ GPT-2自己的权重；\\ 本系列的小说模型。\\ 屏幕上的每个数字都是算出来的或有出处的。",
+  "6\\ \\textit{Classical ML},\\ 11\\ \\textit{Going Downhill}": "6\\ \\textit{经典机器学习}，\\ 11\\ \\textit{一路下山}",
+  "7\\ \\textit{Statistical ML},\\ 8\\ \\textit{Fitting and Generalizing}": "7\\ \\textit{统计机器学习}，\\ 8\\ \\textit{拟合与泛化}",
+  "8\\ \\textit{Fitting and Generalizing},\\ 26\\ \\textit{Reinforcement Learning}": "8\\ \\textit{拟合与泛化}，\\ 26\\ \\textit{强化学习}",
+  "7\\ \\textit{Statistical ML}": "7\\ \\textit{统计机器学习}",
+  "19\\ \\textit{Inference},\\ 28\\ \\textit{Reasoning}": "19\\ \\textit{推断}，\\ 28\\ \\textit{推理}",
+  "26\\ \\textit{Reinforcement Learning},\\ 27\\ \\textit{Post-Training and Alignment}": "26\\ \\textit{强化学习}，\\ 27\\ \\textit{后训练与对齐}",
+  "11\\ \\textit{Going Downhill},\\ 20\\ \\textit{Four Ways to Generate},\\ 21\\ \\textit{Diffusion and Flow}": "11\\ \\textit{一路下山}，\\ 20\\ \\textit{四种生成方式}，\\ 21\\ \\textit{扩散与流}",
+  "top-$p$ $0.9$": "top-$p$ $0.9$",
+  "min-$p$ $0.1$": "min-$p$ $0.1$",
+  "de Moivre (1733); \\ Laplace (1810); \\ Berry (1941); \\ Esseen (1942); \\ Shevtsova (2011); \\ Galton (1886); \\ Kalman (1960)": "de Moivre (1733)；\\ Laplace (1810)；\\ Berry (1941)；\\ Esseen (1942)；\\ Shevtsova (2011)；\\ Galton (1886)；\\ Kalman (1960)",
+  "Fisher (1922, 1925); \\ Rao (1945); \\ Cram\\'er (1946); \\ Bayes (1763); \\ Laplace (1774); \\ Jaynes (1957)": "Fisher (1922，1925)；\\ Rao (1945)；\\ Cram\\'er (1946)；\\ Bayes (1763)；\\ Laplace (1774)；\\ Jaynes (1957)",
+  "Chebyshev (1867); \\ Chernoff (1952); \\ Hoeffding (1963); \\ von Neumann (1951); \\ Box \\& Muller (1958); \\ Gumbel (1954); \\ Jang, Gu \\& Poole (2017); \\ Maddison, Mnih \\& Teh (2017)": "Chebyshev (1867)；\\ Chernoff (1952)；\\ Hoeffding (1963)；\\ von Neumann (1951)；\\ Box \\& Muller (1958)；\\ Gumbel (1954)；\\ Jang，Gu \\& Poole (2017)；\\ Maddison，Mnih \\& Teh (2017)",
+  "Fan, Lewis \\& Dauphin (2018); \\ Holtzman et al., \\textit{The Curious Case of Neural Text Degeneration} (2020); \\ Nguyen et al., min-$p$ (2024); \\ Schaeffer et al.\\ (2025)": "Fan，Lewis \\& Dauphin (2018)；\\ Holtzman等， \\textit{The Curious Case of Neural Text Degeneration} (2020)；\\ Nguyen等， min-$p$ (2024)；\\ Schaeffer等(2025)",
+  "Markov (1906); \\ Metropolis \\& Ulam (1949); \\ Metropolis, Rosenbluth, Rosenbluth, Teller \\& Teller (1953); \\ Hastings (1970); \\ Glynn (1990); \\ Williams (1992); \\ Salimans et al.\\ (2017)": "Markov (1906)；\\ Metropolis \\& Ulam (1949)；\\ Metropolis，Rosenbluth，Rosenbluth，Teller \\& Teller (1953)；\\ Hastings (1970)；\\ Glynn (1990)；\\ Williams (1992)；\\ Salimans等(2017)",
+  "Langevin (1908); \\ Roberts \\& Tweedie (1996); \\ Welling \\& Teh (2011); \\ Einstein (1905); \\ Bachelier (1900); \\ Wiener (1923); \\ L\\'evy (1940); \\ It\\^o (1944, 1951); \\ Maruyama (1955)": "Langevin (1908)；\\ Roberts \\& Tweedie (1996)；\\ Welling \\& Teh (2011)；\\ Einstein (1905)；\\ Bachelier (1900)；\\ Wiener (1923)；\\ L\\'evy (1940)；\\ It\\^o (1944，1951)；\\ Maruyama (1955)",
+  "Fokker (1914); \\ Planck (1917); \\ Kolmogorov (1931); \\ Ornstein \\& Uhlenbeck (1930); \\ Anderson (1982); \\ Sohl-Dickstein et al.\\ (2015); \\ Song et al.\\ (2021)": "Fokker (1914)；\\ Planck (1917)；\\ Kolmogorov (1931)；\\ Ornstein \\& Uhlenbeck (1930)；\\ Anderson (1982)；\\ Sohl-Dickstein等(2015)；\\ Song等(2021)"
+ },
+ "patterns": [
+  [
+   "^keeps \\$([^$]+)\\$$",
+   "保留 $\\1$ 个"
+  ],
+  [
+   "^distance from \\$p\\$ \\\\ \\(\\$L\\^1\\$\\): \\\\ \\$([^$]+)\\$$",
+   "与 $p$ 的距离 \\\\ （$L^1$）：\\\\ $\\1$"
+  ],
+  [
+   "^Euler--Maruyama, \\\\ \\$([^$]+)\\$ steps$",
+   "欧拉-丸山方法，\\\\ $\\1$ 步"
+  ],
+  [
+   "^exponential: \\\\ slope \\$([^$]+)\\$$",
+   "指数分布：\\\\ 斜率 $\\1$"
+  ],
+  [
+   "^uniform: \\\\ slope \\$([^$]+)\\$$",
+   "均匀分布：\\\\ 斜率 $\\1$"
+  ],
+  [
+   "^bars: \\\\ the 40 likeliest words, \\\\ largest \\$([^$]+)\\$$",
+   "柱子：\\\\ 最可能的40个词，\\\\ 最大的 $\\1$"
+  ],
+  [
+   "^the novels' own text: \\\\ \\$([^$]+)\\$$",
+   "小说的原文：\\\\ $\\1$"
+  ],
+  [
+   "^at diversity \\$([^$]+)\\$:$",
+   "多样性为 $\\1$ 时："
+  ],
+  [
+   "^temperature: \\\\ \\$([^$]+)\\$$",
+   "温度：\\\\ $\\1$"
+  ],
+  [
+   "^(top-\\$[kp]\\$|min-\\$p\\$): \\\\ \\$([^$]+)\\$$",
+   "\\1：\\\\ $\\2$"
+  ],
+  [
+   "^one run; \\\\ a setting's surprise varies by about \\$([^$]+)\\$ across the passages$",
+   "一次运行；\\\\ 同一设置的意外度在各段之间相差约 $\\1$"
+  ],
+  [
+   "^greedy: \\\\ surprise \\$([^$]+)\\$, \\\\\\\\ but \\$([^$]+)\\$ of its 4-word runs repeat$",
+   "贪心：\\\\ 意外度 $\\1$，\\\\\\\\ 但四词片段有 $\\2$ 是重复的"
+  ],
+  [
+   "^temperature \\$([^$]+)\\$$",
+   "温度 $\\1$"
+  ],
+  [
+   "^here: \\\\ spreads \\$([^$]+)\\$ and \\$([^$]+)\\$, \\\\ correlation \\$([^$]+)\\$$",
+   "这里：\\\\ 宽度 $\\1$ 和 $\\2$，\\\\ 相关系数 $\\3$"
+  ],
+  [
+   "^the joint density; \\\\ slice at \\$x_b = ([^$]+)\\$$",
+   "联合密度；\\\\ 在 $x_b = \\1$ 处切片"
+  ],
+  [
+   "^\\$x_1\\$ in the strip \\\\ \\(\\$([^$]+)\\$ drawn; \\\\ width \\$([^$]+)\\$\\)$",
+   "细带中的 $x_1$ \\\\ （抽了 $\\1$ 个；\\\\ 宽度 $\\2$）"
+  ],
+  [
+   "^four dimensions, \\\\ two given two: \\\\ off by at most \\$([^$]+)\\$$",
+   "四维，\\\\ 给定两个求另两个：\\\\ 至多相差 $\\1$"
+  ],
+  [
+   "^\\$\\\\hat\\\\sigma\\^2\\$ from \\$([^$]+)\\$ samples of \\$([^$]+)\\$: \\\\ average \\$([^$]+)\\$$",
+   "由 $\\1$ 组、每组 $\\2$ 个样本得到的 $\\\\hat\\\\sigma^2$：\\\\ 平均 $\\3$"
+  ],
+  [
+   "^maximum entropy: \\\\ \\$([^$]+)\\$$",
+   "最大熵：\\\\ $\\1$"
+  ],
+  [
+   "^\\$([^$]+)\\$ other dice with average \\$([^$]+)\\$: \\\\ entropies$",
+   "另外 $\\1$ 颗平均为 $\\2$ 的骰子：\\\\ 它们的熵"
+  ],
+  [
+   "^the share of heads in \\$([^$]+)\\$ fair flips$",
+   "$\\1$ 次均匀抛掷中正面的比例"
+  ],
+  [
+   "^\\$\\\\bar X - \\\\tfrac12 \\\\ge ([^$]+)\\$: \\\\ probability \\$([^$]+)\\$$",
+   "$\\\\bar X - \\\\tfrac12 \\\\ge \\1$：\\\\ 概率 $\\2$"
+  ],
+  [
+   "^\\$([^$]+)\\$ runs of \\$([^$]+)\\$ flips$",
+   "$\\1$ 组、每组 $\\2$ 次抛掷"
+  ],
+  [
+   "^simulated, \\$10\\^6\\$ runs$",
+   "模拟，\\\\ $10^6$ 组"
+  ],
+  [
+   "^Markov: \\\\ \\$([^$]+)\\$$",
+   "马尔可夫：\\\\ $\\1$"
+  ],
+  [
+   "^Chebyshev: \\\\ \\$([^$]+)\\$$",
+   "切比雪夫：\\\\ $\\1$"
+  ],
+  [
+   "^Chernoff: \\\\ \\$([^$]+)\\$$",
+   "切尔诺夫：\\\\ $\\1$"
+  ],
+  [
+   "^Hoeffding: \\\\ \\$([^$]+)\\$$",
+   "霍夫丁：\\\\ $\\1$"
+  ],
+  [
+   "^exact: \\\\ \\$([^$]+)\\$$",
+   "精确值：\\\\ $\\1$"
+  ],
+  [
+   "^(top-\\$p\\$|min-\\$p\\$) \\$([^$]+)\\$$",
+   "\\1 $\\2$"
+  ],
+  [
+   "^at \\$\\\\varepsilon = ([^$]+)\\$$",
+   "在 $\\\\varepsilon = \\1$ 处"
+  ],
+  [
+   "^How many flips guarantee \\$(.+)\\$\\?$",
+   "要抛多少次，才能保证 $\\1$？"
+  ],
+  [
+   "^\\$([^$]+)\\$ draws; \\\\ largest CDF gap \\$([^$]+)\\$$",
+   "$\\1$ 次抽样；\\\\ 累积分布最大差距 $\\2$"
+  ],
+  [
+   "^kept \\$([^$]+)\\$; \\\\ predicted \\$1/M = ([^$]+)\\$$",
+   "保留 $\\1$；\\\\ 预测 $1/M = \\2$"
+  ],
+  [
+   "^\\$\\(z_1, z_2\\)\\$: \\\\ independent bells \\\\ \\(largest CDF gap \\$([^$]+)\\$\\)$",
+   "$(z_1, z_2)$：\\\\ 独立的钟形分布 \\\\ （累积分布最大差距 $\\1$）"
+  ],
+  [
+   "^score \\$\\+\\$ Gumbel noise \\\\ \\(shifted up by \\$([^$]+)\\$\\)$",
+   "分数 $+$ 冈贝尔噪声 \\\\ （向上平移 $\\1$）"
+  ],
+  [
+   "^argmax picks\\{,\\} \\$([^$]+)\\$ draws$",
+   "argmax 的选择，\\\\ $\\1$ 次"
+  ],
+  [
+   "^\\$\\\\tau = ([^$]+)\\$: \\\\ largest entry \\$([^$]+)\\$ on average$",
+   "$\\\\tau = \\1$：\\\\ 最大的一项平均为 $\\2$"
+  ],
+  [
+   "^no baseline: \\\\ \\$([^$]+)\\$$",
+   "无基线：\\\\ $\\1$"
+  ],
+  [
+   "^best baseline, \\\\ \\$b = ([^$]+)\\$: \\\\ \\$([^$]+)\\$$",
+   "最好的基线，\\\\ $b = \\1$：\\\\ $\\2$"
+  ],
+  [
+   "^reparameterized, \\\\ \\$x = \\\\mu \\+ \\\\varepsilon\\$: \\\\ \\$([^$]+)\\$$",
+   "重参数化，\\\\ $x = \\\\mu + \\\\varepsilon$：\\\\ $\\1$"
+  ],
+  [
+   "^evolution strategies: \\\\ \\$([^$]+)\\$ random probes a step, \\\\ \\$([^$]+)\\$ runs each, \\\\ same step size$",
+   "进化策略：\\\\ 每步 $\\1$ 个随机探测点，\\\\ 各运行 $\\2$ 次，\\\\ 步长相同"
+  ],
+  [
+   "^diverged: \\\\ \\$([^$]+)\\$ of \\$([^$]+)\\$$",
+   "发散：\\\\ $\\2$ 次中 $\\1$ 次"
+  ],
+  [
+   "^error of one gradient estimate: \\\\ \\$([^$]+)\\$ \\\\ \\(the gradient's own size: \\$([^$]+)\\$\\)$",
+   "一次梯度估计的误差：\\\\ $\\1$ \\\\ （梯度本身的大小：$\\2$）"
+  ],
+  [
+   "^with the baseline: \\\\ \\$([^$]+)\\$; \\\\ mirrored probes: \\\\ \\$([^$]+)\\$$",
+   "加基线：\\\\ $\\1$；\\\\ 镜像探测：\\\\ $\\2$"
+  ],
+  [
+   "^illustration: \\\\ play a hundred games, \\\\ count the wins \\\\ \\((\\d+) here\\)$",
+   "示例：\\\\ 玩一百局，\\\\ 数一数赢了几局 \\\\ （这里赢了 \\1 局）"
+  ],
+  [
+   "^effective samples\\{,\\} \\\\ of \\$([^$]+)\\$$",
+   "有效样本数，\\\\ 共 $\\1$ 个"
+  ],
+  [
+   "^over \\$([^$]+)\\$ paths:$",
+   "$\\1$ 条路径："
+  ],
+  [
+   "^left-point sums average \\$([^$]+)\\$$",
+   "左端点和的平均 $\\1$"
+  ],
+  [
+   "^midpoint sums average \\$([^$]+)\\$$",
+   "中点和的平均 $\\1$"
+  ],
+  [
+   "^ordinary calculus, \\$\\\\tfrac12 W_1\\^2\\$: \\\\ \\$([^$]+)\\$$",
+   "普通微积分，$\\\\tfrac12 W_1^2$：\\\\ $\\1$"
+  ],
+  [
+   "^with the \\$\\\\tfrac12 f''\\\\,dt\\$ term: \\\\ slope \\$([^$]+)\\$$",
+   "有 $\\\\tfrac12 f''\\\\,dt$ 这一项：\\\\ 斜率 $\\1$"
+  ],
+  [
+   "^and on average: \\\\ \\$\\\\mathbb\\{E\\}\\[e\\^\\{W_1\\}\\] = ([^$]+)\\$, \\\\ \\$e\\^\\{1/2\\} = ([^$]+)\\$$",
+   "平均来说：\\\\ $\\\\mathbb{E}[e^{W_1}] = \\1$，\\\\ $e^{1/2} = \\2$"
+  ],
+  [
+   "^true spread: \\\\ \\$([^$]+)\\$$",
+   "真实宽度：\\\\ $\\1$"
+  ],
+  [
+   "^Chapter 13's particles: \\\\ distance from \\$p\\$ falling from \\$([^$]+)\\$ to \\$([^$]+)\\$$",
+   "第13章的粒子：\\\\ 与 $p$ 的距离从 $\\1$ 降到 $\\2$"
+  ],
+  [
+   "^strong error \\$\\\\mathbb\\{E\\}\\|X_h - X\\|\\$: \\\\ slope \\$([^$]+)\\$$",
+   "强误差 $\\\\mathbb{E}|X_h - X|$：\\\\ 斜率 $\\1$"
+  ],
+  [
+   "^weak error \\$\\|\\\\mathbb\\{E\\}\\[X_h - X\\]\\|\\$: \\\\ slope \\$([^$]+)\\$$",
+   "弱误差 $|\\\\mathbb{E}[X_h - X]|$：\\\\ 斜率 $\\1$"
+  ],
+  [
+   "^\\$([^$]+)\\$ paths; \\\\ geometric Brownian motion\\{,\\} \\\\ whose exact solution is known$",
+   "$\\1$ 条路径；\\\\ 几何布朗运动，\\\\ 它的精确解已知"
+  ],
+  [
+   "^settles to a bell: \\\\ width \\$(.+)\\$$",
+   "稳定成一个钟形：\\\\ 宽度 $\\1$"
+  ],
+  [
+   "^steps: $",
+   "步数："
+  ]
+ ]
+}

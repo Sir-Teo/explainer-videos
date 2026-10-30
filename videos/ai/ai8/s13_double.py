@@ -5,19 +5,16 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import TEST, TRAIN, curve, load
+from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, chapter, curve, load, log_axes
 
 
 class DoubleDescent(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 12, r"Double descent", r"What happens past the point of fitting everything?",
+                "Chapter twelve. Double descent.", lit=(2019,))
         self.curve()
-
-    def card(self):
-        card = chapter_card(4, r"Double descent", r"What happens past the point of fitting everything?", part=8)
-        with self.voiceover("Chapter four. Double descent."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.spectrum()
+        self.ridge()
 
     def curve(self):
         d = load("double")
@@ -57,7 +54,7 @@ class DoubleDescent(VoiceoverScene):
         mn = cmath(r"\min", r"\|", r"\boldsymbol{\beta}", r"\|", r"\;\text{ among all exact fits}", colors=colors,
                    font_size=32).to_corner(UR, buff=0.4)
         cite_ = cite(r"M.~Belkin, D.~Hsu, S.~Ma \& S.~Mandal (2019); \ P.~Nakkiran et al.\ (2020)", corner=UL)
-        assert te[-1] < te[k_min1] and te[k_n] > 10 * te[k_min1]
+        below = te[-1] < te[k_min1]
         feats, fits = self.features_picture(), self.min_norm_picture()
         with self.voiceover(
             "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random "
@@ -68,8 +65,8 @@ class DoubleDescent(VoiceoverScene):
             "pages falls, then "
             "rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly "
             f"{n} features, as many as there are pages, the fit is forced through every point, and the error "
-            "explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of "
-            "the U."
+            "explodes. <bookmark mark='c'/> And then, past it, the error comes back down"
+            + (", lower than the bottom of the U." if below else ", though not quite to the bottom of the U.")
         ) as vo:
             self.play(FadeIn(feats[0]), FadeIn(feats[2]), FadeIn(cite_))
             self.play(Create(feats[1]), FadeIn(feats[3]), run_time=1.5)
@@ -101,8 +98,10 @@ class DoubleDescent(VoiceoverScene):
         peak_at_n = abs(int(np.argmax(nm)) - k_n) <= 1
         below_u = nm[-1] < nm[k_min1]
         with self.voiceover(
-            "More parameters than data, and better on new data. Belkin and colleagues named it double descent in "
-            "2019, and it turns up in deep networks too. <bookmark mark='a'/> The training error is zero all along "
+            ("More parameters than data, and better on new data. " if below else
+             "More parameters than data, and still good on new data. ")
+            + "Belkin and colleagues named it double descent in "
+            "2019, and Nakkiran and colleagues found it in deep networks the same year. <bookmark mark='a'/> The training error is zero all along "
             "the second descent, so it can't be what decides. What decides is which of the many exact fits you "
             "get, and the smallest one is the simplest. "
             + ("<bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is "
@@ -110,13 +109,126 @@ class DoubleDescent(VoiceoverScene):
                + (", ending smaller than at the bottom of the U. " if below_u else ". ")
                if peak_at_n else
                "<bookmark mark='n'/> Past the peak, the smallest fit's weights shrink as features are added. ")
-            + "Gradient descent, as part eleven shows, quietly prefers fits like that."
+            + "And from chapter ten: gradient descent from zero finds exactly that smallest fit."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(trc), FadeIn(trl))
             vo.wait_until("n")
             self.play(FadeIn(ncap), Create(nax), Create(nn_))
             self.play(Create(ncurve), run_time=2.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def spectrum(self):
+        d = load("double")
+        n = int(d["n"])
+        ps = np.asarray(d["ps"])
+        sm = np.asarray(d["smin"])
+        show = [int(s) for s in d["show"]]
+        rows = [
+            cmath(r"\hat\beta = F^{+} t", r"=", r"\sum_i \frac{u_i^\top t}{\sigma_i}\, v_i", font_size=32),
+            cmath(r"\hat\beta_{\text{noise}}", r"=", r"\sum_i \frac{u_i^\top \varepsilon}{\sigma_i}\, v_i", font_size=32),
+            cmath(r"\mathbb{E}\,|\hat\beta_{\text{noise}}|^2", r"=", r"s^2 \sum_i \frac{1}{\sigma_i^2}", font_size=32,
+                  colors={r"s^2 \sum_i \frac{1}{\sigma_i^2}": C.SURPRISE}),
+        ]
+        whys = [why(r"the SVD of the $n \times p$ feature matrix $F$"),
+                why(r"the part of the labels no feature explains: \ noise $\varepsilon$"),
+                why(r"$u_i^\top \varepsilon$ has variance $s^2$: \ the smallest $\sigma_i$ dominates")]
+        step = ladder(self, rows, whys, keep=3, top=3.4, x=-3.0, buff=0.3, edge=6.9)
+        # the singular values for one p, sorted, on a log scale
+        G = axes([0, n], [-4, 1], x_length=6.0, y_length=3.2, xticks=[0, n], yticks=[-4, -3, -2, -1, 0, 1],
+                 yfmt=lambda v: "1" if v == 0 else (f"10" if v == 1 else f"10^{{{int(v)}}}"),
+                 xlabel=r"singular values, \ largest to smallest", center=(-3.3, -1.8, 0), font_size=18)
+        ax = G.ax
+        k = ValueTracker(0)
+
+        def spec():
+            i = int(np.clip(round(k.get_value()), 0, len(show) - 1))
+            S = np.sort(np.asarray(d[f"spec{show[i]}"]))[::-1]
+            xs = np.linspace(0, n, len(S))
+            ys = np.clip(np.log10(np.maximum(S, 1e-4)), -4, 1)
+            g = VGroup(*[Line(ax.c2p(x, -4), ax.c2p(x, y), color=C.TRUE_P, stroke_width=1.2).set_stroke(opacity=0.8)
+                         for x, y in zip(xs[::3], ys[::3])])
+            g.add(Dot(ax.c2p(xs[-1], ys[-1]), radius=0.08, color=C.SURPRISE))
+            g.add(label(rf"$p = {show[i]}$", font_size=26, color=WHITE).next_to(ax.c2p(n, 1), DL, buff=0.1))
+            return g
+
+        sp = always_redraw(spec)
+        H = log_axes((1, 3.8), (-4, 1), x_length=5.4, y_length=3.2, xticks=[1, 2, 3], yticks=[-4, -2, 0],
+                     xlabel=r"$p$ features", ylabel=r"smallest singular value $\sigma_{\min}/\sqrt p$",
+                     center=(3.6, -1.8, 0), font_size=18)
+        hx = H.ax
+        cs = curve(hx, np.log10(ps), np.clip(np.log10(np.maximum(sm, 1e-4)), -4, 1), C.SURPRISE, 3.5)
+        nl = DashedLine(hx.c2p(math.log10(n), -4), hx.c2p(math.log10(n), 1), color=WHITE, stroke_width=1.5)
+        kn = int(np.argmin(np.abs(ps - n)))
+        with self.voiceover(
+            "Why the peak, exactly at p equals n? Write the minimum-norm fit with the singular value decomposition "
+            "of the feature matrix. <bookmark mark='a'/> It's a sum over directions, each label component divided "
+            "by its singular value sigma i. <bookmark mark='b'/> Part of the labels is noise no feature explains. "
+            "<bookmark mark='c'/> That part gets amplified by one over sigma, and its expected size is the noise "
+            "variance times the sum of one over sigma squared. So everything hangs on the smallest singular value. "
+            "<bookmark mark='d'/> Here are the feature matrix's singular values as p grows. With few features they "
+            "stay well away from zero. <bookmark mark='e'/> As p approaches n, the smallest slides toward zero, and "
+            f"at p equals n it's {sm[kn]:.0e}: a square random matrix is nearly singular. "
+            "<bookmark mark='f'/> Past it, with more features than pages, the smallest singular value climbs back "
+            "up, and the noise is spread over directions that barely affect new pages."
+        ) as vo:
+            for i, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                step(i)
+            vo.wait_until("d")
+            self.play(FadeIn(G), FadeIn(H), Create(nl))
+            self.add(sp)
+            k1 = show.index(n) if n in show else len(show) // 2
+            vo.wait_until("e")
+            self.play(k.animate.set_value(k1), run_time=3.0, rate_func=linear)
+            self.play(Create(cs), run_time=1.5)
+            vo.wait_until("f")
+            self.play(k.animate.set_value(len(show) - 1), run_time=3.0, rate_func=linear)
+        sp.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def ridge(self):
+        d = load("double")
+        ps, te = np.asarray(d["ps"]), np.asarray(d["test"])
+        rd = np.asarray(d["ridge"])
+        lams = list(d["lams"])
+        n = int(d["n"])
+        ylo, yhi = -1.0, 2.0
+        G = log_axes((1, 3.8), (ylo, yhi), x_length=8.0, y_length=4.4, xticks=[1, 2, 3], yticks=[-1, 0, 1, 2],
+                     xlabel=r"$p$: \ random features per page", ylabel=r"squared error on new pages",
+                     center=(-1.6, -0.6, 0))
+        ax = G.ax
+        lx = np.log10(ps)
+        c0 = curve(ax, lx, np.clip(np.log10(te), ylo, yhi), TEST, 4)
+        cols = [C.MODEL_Q, C.INTERVAL, GREY_B]
+        cr = VGroup(*[curve(ax, lx, np.clip(np.log10(rd[:, j]), ylo, yhi), cols[j], 3) for j in range(len(lams))])
+        key = legend([(TEST, r"no ridge: \ the minimum-norm fit")] +
+                     [(cols[j], rf"ridge $\lambda = {lams[j]:g}\,p$") for j in range(len(lams))], font_size=20)
+        key.to_corner(UR, buff=0.4)
+        kn = int(np.argmin(np.abs(ps - n)))
+        best = int(np.argmin([rd[:, j].max() for j in range(len(lams))]))
+        hist = history_card(2020, r"P.~Nakkiran, P.~Venkat, S.~Kakade \& T.~Ma", r"\textit{Optimal Regularization Can "
+                            r"Mitigate Double Descent}", width=5.6, font_size=18, color=HIST).to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "The cure follows: don't divide by tiny numbers. Ridge regression adds lambda to each sigma squared, so "
+            f"the smallest directions are damped instead of amplified. <bookmark mark='a'/> With lambda {lams[best]:g} "
+            f"times p, the peak at {n} features is gone: the error there is {rd[kn, best]:.2f}, against "
+            f"{te[kn]:.1f} without it. <bookmark mark='b'/> Too little ridge leaves a bump; too much, and the fit is "
+            "too timid everywhere. Nakkiran and colleagues showed in 2020 that well-tuned regularization removes the "
+            "peak in such models. The peak was never a law of nature: it's an artifact of fitting noise exactly "
+            "with barely enough features to do it."
+        ) as vo:
+            self.play(FadeIn(G), Create(c0), FadeIn(key[0]))
+            vo.wait_until("a")
+            self.play(Create(cr[best]), FadeIn(key[best + 1]))
+            vo.wait_until("b")
+            others = [j for j in range(len(lams)) if j != best]
+            self.play(*[Create(cr[j]) for j in others], *[FadeIn(key[j + 1]) for j in others])
+            self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

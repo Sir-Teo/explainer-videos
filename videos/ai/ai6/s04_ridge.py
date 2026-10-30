@@ -130,8 +130,8 @@ class Ridge(VoiceoverScene):
         coef = np.asarray(r["coef"])
         lx = np.log10(lams)
         top = float(np.abs(coef).max()) * 1.05
-        g = plot([-lx[-1], -lx[0], 1], [-top, top, 0.05], x_length=8.0, y_length=4.6, xticks=[-5, -3, -1, 1],
-                 xfmt=lambda v: f"10^{{{int(round(-v))}}}", center=[-1.8, -0.4, 0],
+        g = plot([-lx[-1], -lx[0], 1], [-top, top, 0.05], x_length=6.8, y_length=4.6, xticks=[-5, -3, -1, 1],
+                 xfmt=lambda v: f"10^{{{int(round(-v))}}}", center=[-2.8, -0.4, 0],
                  xlabel=r"$\lambda$, \ weaker $\longrightarrow$", ylabel=r"the $70$ weights")
         ax2 = g.ax
         big = np.argsort(-np.abs(coef[0]))[:4]
@@ -149,8 +149,9 @@ class Ridge(VoiceoverScene):
                        label(rf"weights exactly zero, \ at any $\lambda$: \ ${zeros}$", font_size=24, color=GREY_A),
                        label(r"Bayes: \ ridge is the most probable \\ weights under a bell-shaped prior \\ (Part 5); "
                              r"\ in networks, \ weight decay", font_size=22, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        notes.move_to([4.6, 0.4, 0])
-        keep_in_frame(notes)
+        notes.move_to([4.5, 0.4, 0])
+        if notes.get_left()[0] < 2.0:
+            notes.scale_to_fit_width(6.8 - 2.0).move_to([4.4, 0.4, 0])
         say_zero = ("Not one weight ever reaches exactly zero." if zeros == 0 else
                     f"Only {zeros} weights ever reach exactly zero.")
         with self.voiceover(

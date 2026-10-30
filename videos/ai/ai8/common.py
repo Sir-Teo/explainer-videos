@@ -24,7 +24,7 @@ AUSTEN, DICKENS = "#E86F8A", "#58A6FF"
 POS, NEG = "#58A6FF", "#E86F8A"  # the two labels of a binary problem
 BOUND = C.INTERVAL  # a bound
 MEAS = C.TRUE_P  # a measurement
-BAYES = C.ADVANTAGE  # the Bayes rule, the best possible
+BAYES = C.NEURAL  # the Bayes rule, the best possible
 PANEL = "#121722"
 
 

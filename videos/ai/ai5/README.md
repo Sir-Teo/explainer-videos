@@ -101,7 +101,7 @@ here, small and on a CPU, or cited.
   1914, Planck 1917, Kolmogorov 1931); solved on a grid for the OU process against 20,000 particles (histograms within
   0.038, the grid within 0.0004 of the exact noised density); Langevin's stationary density is the target, derived;
   Anderson's reverse-time SDE (1982) and the score, in 1D and in the plane (Part 21).
-* **Recap**, where it comes back, seven problems, Part 6's teaser, references.
+* **Recap**, where it comes back, six problems, Part 6's teaser, references.
 
 ## Computed results
 
@@ -181,13 +181,7 @@ f = g = e⁻ˣ on x > 0, compute f ∗ f and f ∗ f ∗ f.
 ∫ f(x) g(s − x) dx = (f ∗ g)(s). For the exponential, (f ∗ f)(s) = ∫₀ˢ e⁻ˣ e^{−(s−x)} dx = s e⁻ˢ, and
 (f ∗ f ∗ f)(s) = ∫₀ˢ x e⁻ˣ e^{−(s−x)} dx = s² e⁻ˢ / 2: the Gamma densities, sⁿ⁻¹e⁻ˢ/(n − 1)!.
 
-**2. Conditioning.** (x₁, x₂) is Gaussian with mean 0, variances 1 and 1.96, correlation 0.75. Find the mean and
-variance of x₁ given x₂ = 1.5.
-
-*Solution.* Σ₁₂ = 0.75 · 1 · 1.4 = 1.05, Σ₂₂ = 1.96. Mean Σ₁₂Σ₂₂⁻¹ · 1.5 = 1.05/1.96 · 1.5 = 0.804; variance
-Σ₁₁ − Σ₁₂²/Σ₂₂ = 1 − 1.1025/1.96 = 0.4375 = 1 − ρ². These are the chapter's predicted values.
-
-**3. Fisher information.** Compute the Fisher information of N(θ, σ²) in θ, and of the Cauchy location; which
+**2. Fisher information.** Compute the Fisher information of N(θ, σ²) in θ, and of the Cauchy location; which
 estimators reach the Cramér–Rao bound?
 
 *Solution.* For the normal, s = (x − θ)/σ², I = E[s²] = 1/σ²: the bound is σ²/n, which the sample mean reaches exactly
@@ -195,26 +189,26 @@ for every n. For the Cauchy, s = 2u/(1 + u²) with u = x − θ, and I = (1/π)�
 The maximum-likelihood estimate reaches it as n → ∞ (it is asymptotically efficient), the median does not (π²/(4n)),
 and the average has no variance at all.
 
-**4. Maximum entropy on the integers.** Show that the maximum-entropy distribution on {0, 1, 2, …} with mean m is
+**3. Maximum entropy on the integers.** Show that the maximum-entropy distribution on {0, 1, 2, …} with mean m is
 geometric.
 
 *Solution.* With multipliers for Σp_k = 1 and Σk p_k = m, stationarity gives log p_k = α − 1 + λk, so p_k = C r^k with
 r = e^λ < 1 (for the sum to converge). Normalizing, p_k = (1 − r) r^k, whose mean is r/(1 − r) = m, so r = m/(1 + m).
 
-**5. How many samples.** Use Hoeffding's inequality to find n so that an average of n values in [0, 1] is within 0.01 of
+**4. How many samples.** Use Hoeffding's inequality to find n so that an average of n values in [0, 1] is within 0.01 of
 its mean with probability 0.999.
 
 *Solution.* Two-sided, P(|X̄ − μ| ≥ ε) ≤ 2e^{−2nε²}. Setting 2e^{−2n · 10⁻⁴} ≤ 10⁻³ gives n ≥ ln(2000)/(2 · 10⁻⁴) =
 38,004.5, so n = 38,005. (Chebyshev would ask for 1/(4ε²δ) = 2,500,000.)
 
-**6. The Gumbel-max trick.** Show that argmaxᵢ(zᵢ + Gᵢ), with independent standard Gumbel Gᵢ, picks i with probability
+**5. The Gumbel-max trick.** Show that argmaxᵢ(zᵢ + Gᵢ), with independent standard Gumbel Gᵢ, picks i with probability
 e^{zᵢ}/Σⱼe^{zⱼ}.
 
 *Solution.* A Gumbel has CDF F(x) = exp(−e^{−x}) and density e^{−x}F(x). Option i wins when zᵢ + Gᵢ = y beats every
 other: P = ∫ e^{−(y−zᵢ)} F(y − zᵢ) Πⱼ≠ᵢ F(y − zⱼ) dy = ∫ e^{zᵢ} e^{−y} exp(−e^{−y} Z) dy with Z = Σⱼ e^{zⱼ}. Substituting
 t = e^{−y}: e^{zᵢ} ∫₀^∞ e^{−tZ} dt = e^{zᵢ}/Z.
 
-**7. The Ornstein–Uhlenbeck stationary bell.** For dx = −θx dt + σ dW, find the stationary density from the
+**6. The Ornstein–Uhlenbeck stationary bell.** For dx = −θx dt + σ dW, find the stationary density from the
 Fokker–Planck equation.
 
 *Solution.* ∂p/∂t = ∂(θxp)/∂x + (σ²/2) ∂²p/∂x². Stationary: the flux θxp + (σ²/2)p′ is constant, and zero since p
@@ -227,33 +221,28 @@ vanishes at infinity. So p′/p = −2θx/σ², p ∝ exp(−θx²/σ²): a bell
 *解答。* P(X + Y ≤ s) = ∫ f(x) G(s − x) dx，对s求导得∫ f(x) g(s − x) dx = (f ∗ g)(s)。对指数分布，
 (f ∗ f)(s) = ∫₀ˢ e⁻ˣ e^{−(s−x)} dx = s e⁻ˢ，(f ∗ f ∗ f)(s) = s² e⁻ˢ / 2：即伽马分布的密度sⁿ⁻¹e⁻ˢ/(n − 1)!。
 
-**2. 条件化。** (x₁, x₂)服从均值为0的高斯分布，方差为1和1.96，相关系数0.75。求给定x₂ = 1.5时x₁的均值与方差。
-
-*解答。* Σ₁₂ = 0.75 × 1 × 1.4 = 1.05，Σ₂₂ = 1.96。均值1.05/1.96 × 1.5 = 0.804；方差1 − 1.1025/1.96 = 0.4375 = 1 − ρ²，
-正是本章预测的数值。
-
-**3. 费希尔信息。** 求N(θ, σ²)关于θ的费希尔信息，以及柯西分布位置参数的费希尔信息；哪些估计量能达到克拉默-拉奥下界？
+**2. 费希尔信息。** 求N(θ, σ²)关于θ的费希尔信息，以及柯西分布位置参数的费希尔信息；哪些估计量能达到克拉默-拉奥下界？
 
 *解答。* 正态分布的分数s = (x − θ)/σ²，I = 1/σ²，下界σ²/n，样本均值对任何n都恰好达到。柯西分布的s = 2u/(1 + u²)，
 I = 1/2，下界2/n；最大似然估计在n → ∞时达到（渐近有效），中位数达不到（π²/(4n)），平均值连方差都没有。
 
-**4. 整数上的最大熵。** 证明：在{0, 1, 2, …}上、均值为m的最大熵分布是几何分布。
+**3. 整数上的最大熵。** 证明：在{0, 1, 2, …}上、均值为m的最大熵分布是几何分布。
 
 *解答。* 对Σp_k = 1与Σk p_k = m引入乘子，驻点条件给出log p_k = α − 1 + λk，即p_k = C r^k，r = e^λ < 1。归一化得
 p_k = (1 − r) r^k，均值r/(1 − r) = m，故r = m/(1 + m)。
 
-**5. 需要多少样本。** 用霍夫丁不等式求n，使n个[0, 1]内取值的平均以0.999的概率落在均值的0.01以内。
+**4. 需要多少样本。** 用霍夫丁不等式求n，使n个[0, 1]内取值的平均以0.999的概率落在均值的0.01以内。
 
 *解答。* 双侧形式P(|X̄ − μ| ≥ ε) ≤ 2e^{−2nε²}。令2e^{−2n · 10⁻⁴} ≤ 10⁻³，得n ≥ ln(2000)/(2 × 10⁻⁴) = 38004.5，故n = 38005。
 （切比雪夫不等式要求1/(4ε²δ) = 250万。）
 
-**6. 冈贝尔最大值技巧。** 证明：对独立的标准冈贝尔噪声Gᵢ，argmaxᵢ(zᵢ + Gᵢ)选中i的概率是e^{zᵢ}/Σⱼe^{zⱼ}。
+**5. 冈贝尔最大值技巧。** 证明：对独立的标准冈贝尔噪声Gᵢ，argmaxᵢ(zᵢ + Gᵢ)选中i的概率是e^{zᵢ}/Σⱼe^{zⱼ}。
 
 *解答。* 冈贝尔分布的累积分布函数F(x) = exp(−e^{−x})，密度e^{−x}F(x)。选项i获胜的概率为
 ∫ e^{−(y−zᵢ)} F(y − zᵢ) Πⱼ≠ᵢ F(y − zⱼ) dy = ∫ e^{zᵢ} e^{−y} exp(−e^{−y} Z) dy，其中Z = Σⱼ e^{zⱼ}。令t = e^{−y}，
 得e^{zᵢ} ∫₀^∞ e^{−tZ} dt = e^{zᵢ}/Z。
 
-**7. 奥恩斯坦-乌伦贝克过程的平稳钟形曲线。** 对dx = −θx dt + σ dW，由福克-普朗克方程求平稳密度。
+**6. 奥恩斯坦-乌伦贝克过程的平稳钟形曲线。** 对dx = −θx dt + σ dW，由福克-普朗克方程求平稳密度。
 
 *解答。* ∂p/∂t = ∂(θxp)/∂x + (σ²/2) ∂²p/∂x²。平稳时通量θxp + (σ²/2)p′为常数，又因p在无穷远处为零，常数为零。
 于是p′/p = −2θx/σ²，p ∝ exp(−θx²/σ²)：方差为σ²/(2θ)的钟形曲线，与第16章一致。

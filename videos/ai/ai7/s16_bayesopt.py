@@ -120,7 +120,7 @@ class BayesOpt(VoiceoverScene):
             "score; the yellow curve below is the expected improvement, and its peak is where to look next. "
             "<bookmark mark='a'/> Each new score lands, the band pinches there, and the next look moves. Mostly it "
             "heads for low scores, and now and then it checks a place where the band is still wide. "
-            "<bookmark mark='b'/> " + verdict + verdict2 + " <bookmark mark='c'/> "
+            "<bookmark mark='b'/> " + verdict + " <bookmark mark='b2'/> " + verdict2 + " <bookmark mark='c'/> "
             "Exploring and exploiting is part twenty-six's bandit problem in another form. DeepMind tuned AlphaGo's "
             "settings this way before its 2016 match."
         ) as vo:
