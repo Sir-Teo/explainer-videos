@@ -654,7 +654,12 @@ def compute_nbvslr():
     better = [m for m in NB_SIZES if nb[str(m)]["mean"] < lr[str(m)]["mean"]]
     cross = next((m for m in NB_SIZES if lr[str(m)]["mean"] < nb[str(m)]["mean"]
                   and all(lr[str(k)]["mean"] <= nb[str(k)]["mean"] for k in NB_SIZES if k >= m)), None)
-    return dict(sizes=NB_SIZES, nb=nb, lr=lr, nb_better_at=better, crossover=cross)
+    # what naive Bayes learned on all the training pages: each word's weight, log(theta_D / theta_A)
+    vocab = load("pages")["vocab"]
+    w, c = nb_fit(Xtr, ytr)
+    o = np.argsort(w)
+    return dict(sizes=NB_SIZES, nb=nb, lr=lr, nb_better_at=better, crossover=cross, nb_bias=c,
+                nb_austen=[[vocab[i], float(w[i])] for i in o[:6]], nb_dickens=[[vocab[i], float(w[i])] for i in o[::-1][:6]])
 
 
 # ---------------------------------------------------------------------------
@@ -1213,6 +1218,17 @@ def compute_trees():
         for i, d in enumerate([1, 2, 3, 4, 5, 6, None]):
             cv[kf, i] = acc_of(Tree(depth=d, min_leaf=3 if d else 1).fit(a, y[~test][f != kf]).predict(b), y[~test][f == kf])
     out["cv"], out["cv_sd"] = cv.mean(0), cv.std(0, ddof=1)
+    # how fragile one tree is: depth-3 trees on 20 bootstrap resamples of the training pages (all 70 rates)
+    vocab = load("pages")["vocab"]
+    g = rng(1984)
+    roots, accs = [], []
+    for _ in range(20):
+        bs = g.integers(0, int((~test).sum()), int((~test).sum()))
+        t = Tree(depth=3, min_leaf=3).fit(X[~test][bs], y[~test][bs])
+        roots.append([vocab[t.root["j"]], float(t.root["t"]),
+                      vocab[t.root["l"]["j"]] if "j" in t.root["l"] else "", vocab[t.root["r"]["j"]] if "j" in t.root["r"] else ""])
+        accs.append(acc_of(t.predict(X[test]), y[test]))
+    out["boot_roots"], out["boot_acc"] = roots, accs
     return out
 
 

@@ -5,12 +5,13 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai7.common import AUSTEN, DICKENS, HIDDEN, load, mix
+from videos.ai.ai7.common import AUSTEN, DICKENS, HIDDEN, PART, era_strip, load, mix
 
 
 class Hook(VoiceoverScene):
     def construct(self):
         self.unlabelled()
+        self.era()
         self.plan()
 
     # ------------------------------------------------------------------
@@ -20,8 +21,7 @@ class Hook(VoiceoverScene):
         xyz = np.asarray(p["proj"])[:, :3] / 3.2
         y = np.asarray(p["y"])
         r = np.asarray(g["r"])[-1]
-        # which mixture component is Dickens's?
-        flip = ((r > 0.5) == y).mean() < 0.5
+        flip = ((r > 0.5) == y).mean() < 0.5  # which mixture component is Dickens's?
         r = 1 - r if flip else r
         cloud = Cloud3D(xyz, [GREY_B] * len(y), scale=1.7, radius=0.045, tilt=0.4, center=[-0.6, -0.2, 0])
         head = label(r"$639$ pages, \ $70$ numbers each \ (Part 6) \ --- \ no authors given", font_size=30)
@@ -53,17 +53,84 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plan(self):
-        title = label(r"Part 7: \ Statistical ML", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"models with hidden parts", font_size=32, color=HIDDEN).next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=7, done=6).scale(0.85).move_to(DOWN * 0.9)
+    def era(self):
+        head = label(r"How we got here: \ the statistical era", font_size=40).to_edge(UP, buff=0.35)
+        base, items = era_strip([
+            (1901, r"Pearson: \\ lines of closest fit", 1),
+            (1933, r"Hotelling: \\ principal components", -1),
+            (1967, r"Viterbi's \\ decoder", 1),
+            (1970, r"Baum: \\ training hidden states", -1),
+            (1977, r"Dempster, Laird \\ \& Rubin: EM", 2),
+            (1988, r"Pearl: \\ Bayesian networks", -2),
+            (1993, r"IBM: \\ translation by EM", 1),
+            (2003, r"topic \\ models", -1),
+            (2006, r"Gaussian \\ processes", 2),
+        ], y=-0.2)
+        rules = label(r"rules written by experts \ (Part 2) \ $\longrightarrow$ \ probabilities learned from data",
+                      font_size=28, color=C.BITS).to_edge(DOWN, buff=0.4)
+        lives = label(r"today: \ the ELBO, \ mixtures of experts, \ the forward algorithm, \ $n$-grams over trillions",
+                      font_size=26, color=HIDDEN).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "This part is about models with hidden parts: directions, sources, states and functions that we never "
-            "observe, only infer. <bookmark mark='a'/> Principal components, mixtures, hidden Markov models, "
-            "Gaussian processes, and variational inference, plus a new row for the scoreboard."
+            "How did we get here? In 1901 Karl Pearson asked for the line that passes closest to a cloud of points. In "
+            "1933 Harold Hotelling asked for the directions of greatest variance, and called them principal "
+            "components. <bookmark mark='a'/> In the 1960s, engineers and code breakers learned to reason about states "
+            "they could not see: Andrew Viterbi's decoder in 1967, Leonard Baum's training method in 1970. "
+            "<bookmark mark='b'/> In 1977 Dempster, Laird and Rubin showed that one algorithm, EM, fits almost any "
+            "model with missing pieces. <bookmark mark='c'/> Judea Pearl gave the field a language of graphs for "
+            "reasoning under uncertainty. <bookmark mark='d'/> At IBM, Fred Jelinek's group turned speech "
+            "recognition, and then translation, into statistics: count, smooth, and let the data decide. "
+            "<bookmark mark='e'/> By the 1990s, the hand-written rules of part two's expert systems had given way to "
+            "probabilities learned from data. <bookmark mark='f'/> Topic models in 2003 and the Gaussian process book "
+            "of 2006 crowned a decade in which machine learning meant statistics. <bookmark mark='g'/> Deep learning "
+            "absorbed it all, but didn't replace it. The ELBO trains today's generative models, mixtures route words "
+            "to experts, the forward algorithm aligns speech, and n-grams over trillions of words check what "
+            "language models have memorized."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
+            self.play(FadeIn(head), Create(base))
+            self.play(FadeIn(items[0], shift=UP * 0.1))
+            self.play(FadeIn(items[1], shift=DOWN * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
+            self.play(FadeIn(items[2], shift=UP * 0.1))
+            self.play(FadeIn(items[3], shift=DOWN * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(items[4], shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(items[5], shift=DOWN * 0.1))
+            vo.wait_until("d")
+            self.play(FadeIn(items[6], shift=UP * 0.1))
+            vo.wait_until("e")
+            self.play(FadeIn(rules))
+            vo.wait_until("f")
+            self.play(FadeIn(items[7], shift=DOWN * 0.1), FadeIn(items[8], shift=UP * 0.1))
+            vo.wait_until("g")
+            self.play(FadeOut(rules), FadeIn(lives))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        title = label(rf"Part {PART}: \ Statistical ML", font_size=52).to_edge(UP, buff=0.6)
+        sub = label(r"models with hidden parts", font_size=32, color=HIDDEN).next_to(title, DOWN, buff=0.25)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 1.0)
+        obj = objectives_card([
+            r"hidden directions and sources: \ principal components, \ probabilistic PCA, \ the cocktail party",
+            r"mixtures and the EM algorithm, \ proved; \ $k$-means; \ topic models",
+            r"hidden Markov models, \ and the statistical revolution in speech and translation",
+            r"how to count: \ Good--Turing, \ Kneser--Ney, \ and an $\infty$-gram over the thirty novels",
+            r"graphical models, \ belief propagation, \ and cause and effect",
+            r"Gaussian processes, \ Occam's razor, \ Bayesian optimization, \ variational inference",
+        ], font_size=26)
+        with self.voiceover(
+            "This is part seven of AI, Built: models with hidden parts, directions, sources, states and functions "
+            "that we never observe, only infer. <bookmark mark='a'/> In this part: hidden directions and sources, from "
+            "principal components to the cocktail party; mixtures, and the EM algorithm that fits them, with k-means "
+            "and topic models; hidden Markov models, and the statistical revolution they started in speech and "
+            "translation; the best ways to count, ending with an infinity-gram over all thirty novels; graphical "
+            "models, and what they can say about cause and effect; and the Bayesian toolkit: Gaussian processes, "
+            "Occam's razor, Bayesian optimization, and variational inference. Every method is written out and run."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(sub), FadeIn(smap))
+            vo.wait_until("a")
+            self.play(FadeOut(VGroup(title, sub, smap)), FadeIn(obj))
         self.wait(0.5)
         self.clear_scene()

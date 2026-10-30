@@ -41,10 +41,10 @@
    "en": "Chapter one. Gradient descent, derived.",
    "zh": "第1章。推导梯度下降。"
   },
-  "b9dddcb8f479": {
+  "3c20895b0d5f": {
    "scene": "GradientDescent",
-   "en": "In 1847, Augustin Cauchy wanted to solve the equations of astronomy, and proposed a general method: measure which way the error falls fastest, and step that way. Gradient descent. <bookmark mark='a'/> To say how fast it works, we need two numbers about the loss. <bookmark mark='b'/> It is L-smooth if its curvature is never more than L: at every point it lies below a bowl of curvature L. <bookmark mark='c'/> And it is mu-strongly convex if its curvature is never less than mu: it lies above a bowl of curvature mu. <bookmark mark='d'/> Their ratio, kappa, is the condition number: how much more steeply the valley curves one way than another.",
-   "zh": "1847年，奥古斯丁·柯西想求解天文学里的方程，提出了一个通用方法：看误差往哪个方向下降得最快，就往那边走一步。这就是梯度下降。<bookmark mark='a'/>要说清它有多快，我们需要损失的两个数。<bookmark mark='b'/>如果损失的曲率从不超过L，它就是L-光滑的：在每一点，它都位于一个曲率为L的碗的下方。<bookmark mark='c'/>如果它的曲率从不小于μ，它就是μ-强凸的：它位于一个曲率为μ的碗的上方。<bookmark mark='d'/>两者之比κ叫作条件数：山谷在一个方向上比另一个方向陡多少倍。"
+   "en": "In 1847 Augustin Cauchy, solving the equations of astronomy, proposed a general method: measure which way the error falls fastest, and step that way. <bookmark mark='a'/> To say how fast it works, we need two numbers. <bookmark mark='b'/> The loss is L-smooth if its curvature never exceeds L: it lies below a bowl of curvature L. <bookmark mark='c'/> It is mu-strongly convex if its curvature is never below mu: it lies above a bowl of curvature mu. <bookmark mark='d'/> Their ratio, kappa, is the condition number: how much more steeply the valley curves one way than another.",
+   "zh": "1847年，奥古斯丁·柯西在求解天文学方程时，提出了一个通用方法：看误差往哪个方向下降得最快，就往那边走一步。<bookmark mark='a'/>要说清它有多快，我们需要两个数。<bookmark mark='b'/>如果损失的曲率从不超过L，它就是L-光滑的：它位于一个曲率为L的碗的下方。<bookmark mark='c'/>如果它的曲率从不小于μ，它就是μ-强凸的：它位于一个曲率为μ的碗的上方。<bookmark mark='d'/>两者之比κ叫作条件数：山谷在一个方向上比另一个方向陡多少倍。"
   },
   "bb6f3dbb3935": {
    "scene": "GradientDescent",
@@ -61,10 +61,10 @@
    "en": "Check it. Quadratic valleys in fifty dimensions, with condition numbers from one to a thousand, and gradient descent with step one over L. <bookmark mark='a'/> The steps it needs, on log axes, rise along a line of slope 0.89: close to one, in proportion to kappa, as derived. The dashed line is the worst case; these valleys do a little better, because only one direction is the slowest. <bookmark mark='b'/> Late in the run that slowest direction is all that is left, and the error shrinks per step by 0.9990 at kappa a thousand, against the derived 0.9990.",
    "zh": "来验证一下。五十维的二次山谷，条件数从1到1000，梯度下降的步长取L分之1。<bookmark mark='a'/>它需要的步数，在对数坐标上沿着一条斜率为0.89的直线上升：接近1，和κ成正比，与推导一致。虚线是最坏情形；这些山谷要好一点，因为只有一个方向是最慢的。<bookmark mark='b'/>到了后期，只剩下那个最慢的方向，κ等于1000时，误差每一步缩小为0.9990倍，推导值是0.9990。"
   },
-  "d17ac2a84a09": {
+  "5f26329b8bcc": {
    "scene": "GradientDescent",
-   "en": "Pause and predict. On a valley curving thirty times more steeply one way, a step of one over L is safe. What happens with a step just over two over L? <bookmark mark='a'/> The safe step slides down the long axis. <bookmark mark='b'/> The large one overshoots across the steep axis by more each time, and is thrown out of the valley. Along a direction of curvature lambda, a step multiplies the distance by one minus eta lambda; past two over lambda that factor is below minus one. Chapter five comes back to this edge.",
-   "zh": "停下来预测一下。在一个方向比另一个方向陡三十倍的山谷里，L分之1的步长是安全的。如果步长刚刚超过L分之2，会怎样？<bookmark mark='a'/>安全的步长沿着长轴滑下去。<bookmark mark='b'/>大的步长在陡的那个方向上一次比一次冲得更远，最后被甩出山谷。沿着曲率为λ的方向，每一步把距离乘以1减ηλ；一旦超过λ分之2，这个因子就小于负1。第5章会回到这条边缘。"
+   "en": "Pause and predict. On a valley thirty times steeper one way, a step of one over L is safe. What about a step just over two over L? <bookmark mark='a'/> The safe step slides down the long axis. <bookmark mark='b'/> The large one overshoots the steep axis by more each time and is thrown out: a step multiplies the distance by one minus eta lambda, and past two over lambda that is below minus one. Chapter five returns to this edge.",
+   "zh": "停下来预测一下。在一个方向陡三十倍的山谷里，L分之1的步长是安全的。步长刚刚超过L分之2呢？<bookmark mark='a'/>安全的步长沿着长轴滑下去。<bookmark mark='b'/>大的步长在陡的方向上一次比一次冲得更远，最后被甩出去：每一步把距离乘以1减ηλ，一旦超过λ分之2，这个因子就小于负1。第5章会回到这条边缘。"
   },
   "9b368d39bb72": {
    "scene": "GradientDescent",
@@ -151,15 +151,15 @@
    "en": "Measure it. Four learning rates, six batch sizes, three seeds each: twenty-four clouds. <bookmark mark='a'/> Plotted against the temperature, eta over B, they fall on one line, of slope 1.00: double the learning rate and double the batch, and the cloud is the same. <bookmark mark='b'/> The dashed line is the predicted stationary size. Measured over predicted, every point is between 0.93 and 1.14.",
    "zh": "来测一测。四个学习率，六种批量大小，每种三个随机种子：二十四团云。<bookmark mark='a'/>把它们对着温度，也就是η除以B画出来，它们落在同一条直线上，斜率是1.00：学习率加倍、批量也加倍，云就一模一样。<bookmark mark='b'/>虚线是预测的平稳大小。测量值除以预测值，每个点都在0.93到1.14之间。"
   },
-  "7021bc3a0a3b": {
+  "372f41062c7a": {
    "scene": "Temperature",
-   "en": "This explains a rule practitioners found by experiment. <bookmark mark='a'/> If you multiply the batch by k, multiply the learning rate by k too: the temperature, and so the noise per unit of progress, stays the same. In 2017 a team at Facebook used it, with a short warmup, to train an ImageNet classifier with batches of eight thousand images in one hour. <bookmark mark='b'/> For Adam, which divides by the gradient's size, the same analysis says to scale by the square root of k instead. <bookmark mark='c'/> And the rule has a limit. Past a critical batch size, the noise is already small, and bigger batches stop buying fewer steps. Part twelve measures where that happens.",
-   "zh": "这解释了实践者凭实验找到的一条规则。<bookmark mark='a'/>如果把批量乘以k，就把学习率也乘以k：温度不变，所以每单位进展的噪声也不变。2017年，Facebook的一个团队用它，再加上短暂的预热，用每批八千张图片的批量，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>对Adam来说，它要除以梯度的大小，同样的分析说应该乘以k的平方根。<bookmark mark='c'/>这条规则有极限。超过临界批量之后，噪声已经很小，更大的批量就不再能换来更少的步数。第12部分会测出这发生在哪里。"
+   "en": "This explains a rule found by experiment. <bookmark mark='a'/> Multiply the batch by k, and the learning rate by k too: the temperature stays the same. In 2017 a Facebook team used it, with a short warmup, to train an ImageNet classifier on batches of eight thousand images in one hour. <bookmark mark='b'/> For Adam, which divides by the gradient's size, the analysis says scale by root k instead. <bookmark mark='c'/> And past a critical batch size the noise is already small, and bigger batches stop buying fewer steps; Part twelve measures where.",
+   "zh": "这解释了凭实验找到的一条规则。<bookmark mark='a'/>把批量乘以k，学习率也乘以k：温度不变。2017年，Facebook的一个团队用它，再加上短暂的预热，用每批八千张图片，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>对Adam来说，它要除以梯度的大小，分析说应该乘以k的平方根。<bookmark mark='c'/>而超过临界批量之后，噪声已经很小，更大的批量就不再能换来更少的步数；第12部分会测出在哪里。"
   },
-  "3328f1b4b4db": {
+  "18b74e55659c": {
    "scene": "Temperature",
-   "en": "Is the noise only a cost? <bookmark mark='a'/> Back on the real loss, sixteen times the batch gives a cloud 3.8 times narrower, close to the square root of sixteen. <bookmark mark='b'/> Now picture a sharp, narrow pit beside a wide basin. A walker at a high temperature can't stay in the pit: it is kicked out, and settles where the valley is wide. <bookmark mark='c'/> In 2017 Nitish Keskar and colleagues found that networks trained with very large batches end in sharper minima, and generalize worse. <bookmark mark='d'/> The same year, Laurent Dinh and colleagues pointed out the catch: rescale one layer up and the next one down, and the network computes the same function, at a different sharpness. Flatness is a useful picture, not a law.",
-   "zh": "噪声只是代价吗？<bookmark mark='a'/>回到那个真实的损失，批量大十六倍，云就窄了3.8倍，接近16的平方根。<bookmark mark='b'/>现在想象一个又尖又窄的坑，旁边是一个宽阔的盆地。温度高的下山人待不住那个坑：它会被踢出来，最后停在山谷宽的地方。<bookmark mark='c'/>2017年，尼蒂什·凯斯卡尔和同事发现，用很大批量训练的网络最后落在更尖锐的极小值里，泛化得更差。<bookmark mark='d'/>同一年，洛朗·丁和同事指出了其中的漏洞：把一层放大、下一层缩小，网络计算的函数不变，锐度却变了。平坦是一个有用的图景，而不是定律。"
+   "en": "Is the noise only a cost? <bookmark mark='a'/> On the real loss, sixteen times the batch gives a cloud 3.8 times narrower, close to root sixteen. <bookmark mark='b'/> Now picture a sharp pit beside a wide basin: a hot walker is kicked out of the pit and settles where the valley is wide. <bookmark mark='c'/> In 2017 Nitish Keskar and colleagues found that very large batches end in sharper minima that generalize worse. <bookmark mark='d'/> The same year Laurent Dinh and colleagues found the catch: rescale one layer up and the next down, and the same function has a different sharpness. Flatness is a useful picture, not a law.",
+   "zh": "噪声只是代价吗？<bookmark mark='a'/>在那个真实的损失上，批量大十六倍，云就窄了3.8倍，接近16的平方根。<bookmark mark='b'/>现在想象一个尖坑，旁边是一个宽阔的盆地：温度高的下山人会被踢出尖坑，停在山谷宽的地方。<bookmark mark='c'/>2017年，尼蒂什·凯斯卡尔和同事发现，很大的批量会落在更尖锐、泛化更差的极小值里。<bookmark mark='d'/>同一年，洛朗·丁和同事发现了其中的漏洞：把一层放大、下一层缩小，同一个函数的锐度就变了。平坦是一个有用的图景，而不是定律。"
   },
   "43371e74f279": {
    "scene": "Temperature",
@@ -206,40 +206,40 @@
    "en": "Chapter six. AdaGrad, RMSProp, Adam.",
    "zh": "第6章。AdaGrad、RMSProp和Adam：这三种自适应方法，给每一个权重都配上它自己的步长。"
   },
-  "b60bb2b5f4c9": {
+  "5927e3d0eec2": {
    "scene": "Adam",
-   "en": "One learning rate for every weight is a strange choice. Some weights see large gradients, others tiny ones; chapter one's condition number, one direction at a time. <bookmark mark='a'/> In 2011 John Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: keep a running sum of each weight's squared gradients, and divide its step by the square root. <bookmark mark='b'/> A word that appears rarely has a small sum, so when it does appear, it gets a big step. <bookmark mark='c'/> The catch: the sum only ever grows, so every step size shrinks like one over the square root of time, and a long training run slows to a crawl.",
-   "zh": "所有权重共用一个学习率，是个奇怪的选择。有些权重的梯度很大，有些很小；这就是第1章的条件数，一个方向一个方向地看。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：给每个权重记下它梯度平方的累计和，用它的平方根去除这个权重的步长。<bookmark mark='b'/>一个很少出现的词，累计和很小，所以一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，于是每个步长都像时间的平方根分之1那样缩小，长时间的训练会慢得像爬。"
+   "en": "One learning rate for every weight is a strange choice: some weights see large gradients, others tiny ones. <bookmark mark='a'/> In 2011 John Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: divide each weight's step by the root of its summed squared gradients. <bookmark mark='b'/> A rare word gets a big step when it does appear. <bookmark mark='c'/> The catch: the sum only grows, so every step shrinks like one over root t, and a long run slows to a crawl.",
+   "zh": "所有权重共用一个学习率，是个奇怪的选择：有些权重的梯度很大，有些很小。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：用每个权重梯度平方累计和的平方根，去除它的步长。<bookmark mark='b'/>一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，每一步都像根号t分之1那样缩小，长时间的训练会慢得像爬。"
   },
-  "39bf4a1fe663": {
+  "6045ca04af6c": {
    "scene": "Adam",
-   "en": "The fix came from an online course. <bookmark mark='a'/> In 2012, in a lecture of Geoffrey Hinton's Coursera class on neural networks, one slide proposed RMSProp: replace AdaGrad's growing sum by a running average that forgets, nine tenths of the old value plus one tenth of the new squared gradient, and divide by its square root. <bookmark mark='b'/> It was never written up as a paper. For years, research papers cited a lecture slide.",
-   "zh": "解决办法来自一门网课。<bookmark mark='a'/>2012年，在杰弗里·辛顿的Coursera神经网络课程的一讲里，一张幻灯片提出了RMSProp：把AdaGrad不断增长的累计和，换成一个会遗忘的滑动平均，旧值的十分之九加上新梯度平方的十分之一，再除以它的平方根。<bookmark mark='b'/>它从没写成论文。多年来，研究论文引用的都是一张讲义幻灯片。"
+   "en": "The fix came from an online course. <bookmark mark='a'/> In 2012 one slide of Geoffrey Hinton's Coursera class proposed RMSProp: an average that forgets, nine tenths old plus one tenth new. <bookmark mark='b'/> It was never written up; papers cited the slide.",
+   "zh": "解决办法来自一门网课。<bookmark mark='a'/>2012年，杰弗里·辛顿Coursera课程的一张幻灯片提出了RMSProp：一个会遗忘的平均，旧值的十分之九加上新值的十分之一。<bookmark mark='b'/>它从没写成论文；论文引用的就是那张幻灯片。"
   },
-  "d38ddf4bd314": {
+  "399bbb2dc4f8": {
    "scene": "Adam",
-   "en": "In 2014 Diederik Kingma and Jimmy Ba put the two ideas together. <bookmark mark='a'/> Keep a running average of the gradient, m: that is momentum. <bookmark mark='b'/> Keep a running average of its square, v: that is RMSProp. <bookmark mark='c'/> Correct both for starting at zero, a step we'll derive in a moment, <bookmark mark='d'/> and step by the average direction divided by the root of the average square. They called it Adam, and with its defaults it trained most of deep learning for the next decade.",
-   "zh": "2014年，迪德里克·金马和吉米·巴把这两个想法合在一起。<bookmark mark='a'/>记下梯度的滑动平均m：这是动量。<bookmark mark='b'/>记下梯度平方的滑动平均v：这是RMSProp。<bookmark mark='c'/>两者都校正从零起步带来的偏差，这一步待会儿就推导，<bookmark mark='d'/>然后按平均方向除以平均平方的根来走。他们把它叫作Adam，用默认参数，它在此后十年里训练了深度学习的大部分模型。"
+   "en": "In 2014 Diederik Kingma and Jimmy Ba combined the two. <bookmark mark='a'/> m, a running average of the gradient: momentum. <bookmark mark='b'/> v, a running average of its square: RMSProp. <bookmark mark='c'/> Correct both for starting at zero, <bookmark mark='d'/> and step by m over the root of v. This is Adam, the default for the next decade.",
+   "zh": "2014年，迪德里克·金马和吉米·巴把两者合在一起。<bookmark mark='a'/>m，梯度的滑动平均：这是动量。<bookmark mark='b'/>v，梯度平方的滑动平均：这是RMSProp。<bookmark mark='c'/>两者都校正从零起步的偏差，<bookmark mark='d'/>然后按m除以v的平方根来走。这就是Adam，此后十年的默认选择。"
   },
-  "1b8541808e22": {
+  "bc0e0074a582": {
    "scene": "Adam",
-   "en": "Why the corrections? <bookmark mark='a'/> Unroll the average from its start at zero: m is a weighted sum of all the gradients so far. <bookmark mark='b'/> If their mean is steady, its expectation is that mean times a geometric sum, <bookmark mark='c'/> which is one minus beta to the t. Early on, m is biased towards zero, and dividing by that factor removes the bias. <bookmark mark='d'/> Here is one weight of our character model, its real gradients over the first sixty steps: the raw average starts near zero, the corrected one tracks the gradients from the first step. <bookmark mark='e'/> The correction matters most for v, whose memory is a thousand steps long. Without either correction the very first step would be 3.16 times eta; with them, it is exactly eta.",
-   "zh": "为什么要校正？<bookmark mark='a'/>从零开始把平均展开：m是到目前为止所有梯度的加权和。<bookmark mark='b'/>如果梯度的均值稳定，m的期望就是这个均值乘以一个几何级数，<bookmark mark='c'/>也就是1减β的t次方。一开始，m偏向零，除以这个因子就消除了偏差。<bookmark mark='d'/>这是我们字符模型的一个权重，前六十步的真实梯度：未校正的平均从零附近起步，校正后的从第一步起就跟着梯度走。<bookmark mark='e'/>校正对v最要紧，它的记忆长达一千步。如果都不校正，第一步会是η的3.16倍；校正之后，恰好是η。"
+   "en": "Why the corrections? <bookmark mark='a'/> Unroll m from zero: a weighted sum of the gradients so far. <bookmark mark='b'/> If their mean is steady, its expectation is that mean times a geometric sum, <bookmark mark='c'/> one minus beta to the t: early on m is biased towards zero, and dividing removes it. <bookmark mark='d'/> One weight of our model, its first sixty steps: raw m starts near zero, the corrected one tracks the gradients at once. <bookmark mark='e'/> Without the corrections the first step would be 3.16 times eta; with them, exactly eta.",
+   "zh": "为什么要校正？<bookmark mark='a'/>从零开始把m展开：它是到目前为止梯度的加权和。<bookmark mark='b'/>如果梯度的均值稳定，m的期望就是这个均值乘以一个几何级数，<bookmark mark='c'/>也就是1减β的t次方：一开始m偏向零，除以这个因子就消除了偏差。<bookmark mark='d'/>我们模型的一个权重，前六十步：未校正的m从零附近起步，校正后的立刻跟上梯度。<bookmark mark='e'/>如果不校正，第一步会是η的3.16倍；校正之后，恰好是η。"
   },
-  "1ae81a658a9b": {
+  "a60a343b789d": {
    "scene": "Adam",
-   "en": "Look at Adam's limit. Turn both memories off and let epsilon go to zero: the gradient divided by its own size is just its sign. Every weight moves by exactly eta, up or down. Adam is a smoothed form of sign descent. <bookmark mark='a'/> Here is how far each weight of our model's hidden matrix moves, in units of eta. At the first step, the corrections make Adam exactly sign descent: 100% of the weights move by eta. <bookmark mark='b'/> Later, the typical move is far smaller: 0.13 eta at step 100, 0.16 at step 1,000. The gradients are noisy, their average m is small next to their root mean square, and Adam's step becomes the sign of the gradient, scaled by its signal-to-noise ratio.",
-   "zh": "看看Adam的极限。把两个记忆都关掉，让ε趋于零：梯度除以它自己的大小，就只剩下它的符号。每个权重都恰好移动η，向上或向下。Adam是一种平滑过的符号下降。<bookmark mark='a'/>这是我们模型隐藏矩阵里每个权重移动的距离，以η为单位。第一步，偏差校正让Adam恰好成为符号下降：100%的权重移动了η。<bookmark mark='b'/>后来，典型的移动小得多：第100步是0.13个η，第1000步是0.16。梯度带着噪声，它们的平均m比均方根小得多，Adam的一步变成了梯度的符号，再按信噪比缩放。"
+   "en": "Now Adam's limit. Turn both memories off and let epsilon go to zero: the gradient over its own size is its sign. Every weight moves by exactly eta: sign descent. <bookmark mark='a'/> Here is how far each weight of our hidden matrix moves, in units of eta. At the first step, 100% of the weights move by eta. <bookmark mark='b'/> Later, the typical move is far smaller: 0.13 eta at step 100, 0.16 at step 1,000. Noisy gradients average out, and Adam's step becomes the sign, scaled by the signal-to-noise ratio.",
+   "zh": "再看Adam的极限。把两个记忆都关掉，让ε趋于零：梯度除以它自己的大小，就是它的符号。每个权重都恰好移动η：这就是符号下降。<bookmark mark='a'/>这是我们隐藏矩阵里每个权重移动的距离，以η为单位。第一步，有100%的权重移动了η。<bookmark mark='b'/>后来，典型的移动小得多：第100步是0.13个η，第1000步是0.16。带噪声的梯度相互抵消，Adam的一步变成了符号，再按信噪比缩放。"
   },
-  "f9d5dfa651c5": {
+  "bd002a6f8073": {
    "scene": "Adam",
-   "en": "That limit became an optimizer. <bookmark mark='a'/> In 2023 a team at Google let a computer search over programs for update rules, and the winner, after simplification, was Lion: move every weight by the sign of a blend of momentum and the new gradient, <bookmark mark='b'/> then update the momentum more slowly. <bookmark mark='c'/> It keeps one number per weight instead of Adam's two, and because every step has full size, it wants a smaller learning rate and a larger weight decay. It runs in our race in Chapter 12.",
-   "zh": "这个极限后来变成了一个优化器。<bookmark mark='a'/>2023年，谷歌的一个团队让计算机在程序空间里搜索更新规则，胜出的那个，经过化简，就是Lion：每个权重按动量和新梯度的混合的符号移动，<bookmark mark='b'/>然后更慢地更新动量。<bookmark mark='c'/>它每个权重只存一个数，而不是Adam的两个；因为每一步都是满幅，它需要更小的学习率和更大的权重衰减。它会参加我们第12章的比赛。"
+   "en": "That limit became an optimizer. <bookmark mark='a'/> In 2023 a Google team searched over programs for update rules and found Lion: step by the sign of a blend of momentum and gradient, <bookmark mark='b'/> then update the momentum more slowly. <bookmark mark='c'/> One state per weight, not two, and since every step is full size, a smaller learning rate and a larger decay. It runs in our race in Chapter 12.",
+   "zh": "这个极限后来变成了一个优化器。<bookmark mark='a'/>2023年，谷歌的一个团队在程序空间里搜索更新规则，找到了Lion：按动量和梯度的混合的符号走一步，<bookmark mark='b'/>然后更慢地更新动量。<bookmark mark='c'/>每个权重只存一个状态，而不是两个；因为每一步都是满幅，它需要更小的学习率和更大的衰减。它会参加我们第12章的比赛。"
   },
-  "67c054f91552": {
+  "f5bb872387ba": {
    "scene": "Adam",
-   "en": "So Adam is momentum divided by a running size, corrected for its start, and in the limit it is sign descent: the steepest step when each weight may move by at most eta on its own. Next, a subtle bug in how it was used for years.",
-   "zh": "所以Adam就是动量除以一个滑动的大小，再校正起步的偏差；在极限下它就是符号下降：当每个权重各自最多只能移动η时，最陡的那一步。接下来，是一个多年来用法上的隐蔽错误。"
+   "en": "So Adam is momentum over a running size, corrected for its start; its limit is sign descent. Next, a subtle bug in how it was used for years.",
+   "zh": "所以Adam就是动量除以一个滑动的大小，再校正起步的偏差；它的极限是符号下降。接下来，是一个多年来用法上的隐蔽错误。"
   },
   "737853e33db3": {
    "scene": "Decay",
@@ -371,10 +371,10 @@
    "en": "An SVD is slow on a GPU, but multiplying matrices is what a GPU does best. <bookmark mark='a'/> So scale the gradient so its singular values are at most one, and repeat a round made only of products: X becomes a X, plus b X X transpose X, plus c times X X transpose squared, X. <bookmark mark='b'/> Write X by its singular value decomposition, which we never actually compute. <bookmark mark='c'/> Inside each product the U's and V's cancel, and the round leaves the singular vectors alone. <bookmark mark='d'/> It just applies one polynomial, p of sigma, to every singular value at once. <bookmark mark='e'/> So the whole problem is a question about one function of one variable: which polynomial, repeated, sends everything between zero and one to one?",
    "zh": "SVD在GPU上很慢，但矩阵乘法正是GPU最擅长的。<bookmark mark='a'/>所以先把梯度缩放到奇异值都不超过1，再反复做只由乘积组成的一轮：X变成a乘X，加上b乘X乘X转置乘X，再加上c乘X乘X转置的平方乘X。<bookmark mark='b'/>用奇异值分解写出X，虽然我们从不真的去算它。<bookmark mark='c'/>每个乘积里，中间的U和V都消掉了，这一轮不动奇异向量。<bookmark mark='d'/>它只是对每个奇异值同时作用同一个多项式，σ的p。<bookmark mark='e'/>所以整个问题变成关于一个单变量函数的问题：哪个多项式，反复作用，能把0到1之间的一切都送到1？"
   },
-  "24554d5236cb": {
+  "5a480f2401b9": {
    "scene": "NewtonSchulz",
-   "en": "Here are three candidates. <bookmark mark='a'/> The classical Newton–Schulz polynomial, one and a half sigma minus half sigma cubed. It fixes one with zero slope, so near one it converges very fast; but its slope at zero is only one and a half, so a tiny singular value takes many rounds to grow. <bookmark mark='b'/> Keller Jordan tuned the coefficients of a fifth-degree polynomial for Muon: a slope at zero of three point four, so small values grow fast, at the price of never quite reaching one. Everything ends between about zero point seven and one point three, which training doesn't mind. <bookmark mark='c'/> And a third, two sigma minus one and a half sigma cubed plus a half sigma to the fifth: it also fixes one with zero slope, and near one it squares the error and halves it, three times better than the cubic, so it pins values that are already close.",
-   "zh": "这里有三个候选。<bookmark mark='a'/>经典的牛顿–舒尔茨多项式：1.5σ减0.5σ的三次方。它以零斜率固定住1，所以在1附近收敛得非常快；但它在0处的斜率只有1.5，很小的奇异值要很多轮才能长大。<bookmark mark='b'/>凯勒·乔丹为Muon调了一个五次多项式的系数：在0处的斜率是3.4，小的值长得很快，代价是永远到不了1。所有的值最后都落在大约0.7到1.3之间，训练并不在意。<bookmark mark='c'/>还有第三个：2σ减1.5σ的三次方，再加0.5σ的五次方：它也以零斜率固定住1，在1附近把误差平方再减半，比三次多项式好三倍，所以能把已经很接近的值钉住。"
+   "en": "Three candidates. <bookmark mark='a'/> The classical cubic, one and a half sigma minus half sigma cubed, fixes one with zero slope, so near one it converges fast; but its slope at zero is only one and a half, so tiny values grow slowly. <bookmark mark='b'/> Keller Jordan tuned a fifth-degree polynomial for Muon: slope three point four at zero, so small values grow fast, at the price of never quite reaching one; everything ends between about zero point seven and one point three, which training doesn't mind. <bookmark mark='c'/> A third, two sigma minus one and a half sigma cubed plus a half sigma to the fifth, also fixes one with zero slope, and near one it squares the error and halves it, three times better than the cubic.",
+   "zh": "三个候选。<bookmark mark='a'/>经典的三次多项式，1.5σ减0.5σ的三次方，以零斜率固定住1，所以在1附近收敛得快；但它在0处的斜率只有1.5，很小的值长得慢。<bookmark mark='b'/>凯勒·乔丹为Muon调了一个五次多项式：在0处斜率是3.4，小的值长得很快，代价是永远到不了1；所有的值最后都落在大约0.7到1.3之间，训练并不在意。<bookmark mark='c'/>第三个，2σ减1.5σ的三次方再加0.5σ的五次方，也以零斜率固定住1，在1附近把误差平方再减半，比三次多项式好三倍。"
   },
   "ddd2d2e27a9b": {
    "scene": "NewtonSchulz",
@@ -396,10 +396,10 @@
    "en": "Chapter twelve. The race, run fairly.",
    "zh": "第12章。一场公平的比赛。"
   },
-  "9153aa8f5be4": {
+  "0182f3386128": {
    "scene": "Race",
-   "en": "Now a race between the optimizers of this part, on our character model, under rules that make it fair. <bookmark mark='a'/> The same model, the same batches in the same order, the same three thousand steps and the same schedule, a short warmup and a cosine. <bookmark mark='b'/> Each optimizer gets 6 learning rates, a factor of two apart, more if its best is at the end of the range, and keeps its best: a method can look bad just because it was run at the wrong rate. <bookmark mark='c'/> Then the best setting is run again from two more seeds, so we can see how much of any difference is luck. <bookmark mark='d'/> The contestants: SGD with momentum, AdamW, Lion, Shampoo, SOAP and Muon.",
-   "zh": "现在让这一部分的优化器，在我们的字符模型上，按保证公平的规则比一场。<bookmark mark='a'/>同样的模型，同样顺序的同样批次，同样的三千步，同样的调度：短暂的预热，然后余弦下降。<bookmark mark='b'/>每个优化器有6个学习率，相邻两个差一倍，如果最好的在范围尽头就再加，保留最好的那个：一个方法可能只是因为学习率不对才显得差。<bookmark mark='c'/>然后把最好的设置再用两个随机种子各跑一遍，看看任何差别里有多少是运气。<bookmark mark='d'/>参赛的有：带动量的SGD、AdamW、Lion、Shampoo、SOAP和Muon。"
+   "en": "Now a fair race between this part's optimizers, on our character model. <bookmark mark='a'/> Same batches in the same order, same three thousand steps, same schedule. <bookmark mark='b'/> Each one, SGD with momentum, AdamW, Lion, Shampoo, SOAP and Muon, gets its own grid of learning rates, a factor of two apart, widened until its best is inside: a method can look bad just from the wrong rate. <bookmark mark='c'/> The best runs again from two more seeds, so we can see what is luck.",
+   "zh": "现在让这一部分的优化器在我们的字符模型上公平地比一场。<bookmark mark='a'/>同样顺序的同样批次，同样的三千步，同样的调度。<bookmark mark='b'/>每一个，带动量的SGD、AdamW、Lion、Shampoo、SOAP和Muon，都有自己的一组学习率，相邻两个差一倍，一直扩展到最好的落在内部：一个方法可能只是因为学习率不对才显得差。<bookmark mark='c'/>最好的再用两个随机种子各跑一遍，看看哪些是运气。"
   },
   "e02b7e8cf95c": {
    "scene": "Race",
@@ -491,35 +491,35 @@
    "en": "Chapter fifteen. Keeping training stable.",
    "zh": "第15章。让训练保持稳定。"
   },
-  "86f22f91b7f7": {
+  "2a9c93205065": {
    "scene": "Stability",
-   "en": "Large runs sometimes blow up: the loss jumps, and training must be rolled back. Part eighteen tells that story at scale. Here is one mechanism, provoked on purpose, in a one-layer transformer on our books, the kind part thirteen builds. <bookmark mark='a'/> Watch the largest attention score, a query times a key. With Muon at a moderate rate it grows to about 1,018. <bookmark mark='b'/> At four times the rate it runs away, to about 24,968: the softmax becomes a hard choice, its gradients vanish, and the heads stop learning. <bookmark mark='c'/> The faster run ends worse, 3.07 bits against 2.87.",
-   "zh": "大规模训练有时会炸掉：损失突然跳起来，只好回滚。第18部分会讲大规模下的故事。这里是其中一种机制，我们故意把它引发出来，用的是一个在我们的书上训练的单层Transformer，就是第13部分会搭的那种。<bookmark mark='a'/>看最大的注意力分数，一个查询乘以一个键。用中等学习率的Muon，它长到大约1018。<bookmark mark='b'/>学习率再大四倍，它就失控了，长到大约24968：softmax变成了硬性选择，梯度消失，这些头不再学习。<bookmark mark='c'/>快的那次训练最后更差，3.07比特对2.87。"
+   "en": "Large runs sometimes blow up, and Part eighteen tells that story at scale. Here is one mechanism, provoked on purpose in a one-layer transformer on our books. <bookmark mark='a'/> The largest attention score, a query times a key: with Muon at a moderate rate it grows to about 1,018. <bookmark mark='b'/> At four times the rate it runs away, to about 24,968: the softmax becomes a hard choice and the heads stop learning. <bookmark mark='c'/> The faster run ends worse, 3.07 bits against 2.87.",
+   "zh": "大规模训练有时会炸掉，第18部分会讲大规模下的故事。这里是其中一种机制，我们在一个用我们的书训练的单层Transformer上故意把它引发出来。<bookmark mark='a'/>最大的注意力分数，一个查询乘以一个键：用中等学习率的Muon，它长到大约1018。<bookmark mark='b'/>学习率再大四倍，它就失控了，长到大约24968：softmax变成了硬性选择，这些头不再学习。<bookmark mark='c'/>快的那次训练最后更差，3.07比特对2.87。"
   },
-  "399791c38e6a": {
+  "c42aa5c632f7": {
    "scene": "Stability",
-   "en": "In 2025 Moonshot AI met exactly this while training Kimi K2 with Muon, and fixed it surgically. <bookmark mark='a'/> After each step, measure each head's largest score. <bookmark mark='b'/> The score is bilinear in the head's query and key weights, so scaling both by the square root of gamma scales the score by gamma. <bookmark mark='c'/> Whenever it exceeds a threshold tau, choose gamma to put it exactly on tau. Nothing else changes. With tau at a hundred, Kimi K2, a model with a trillion parameters, trained on fifteen and a half trillion tokens, its report says with zero loss spikes.",
-   "zh": "2025年，月之暗面在用Muon训练Kimi K2时正好遇到了这个问题，并且做了一次外科手术式的修复。<bookmark mark='a'/>每一步之后，测出每个头最大的分数。<bookmark mark='b'/>这个分数对这个头的查询和键权重是双线性的，所以两者都乘以γ的平方根，分数就乘以γ。<bookmark mark='c'/>一旦它超过阈值τ，就选γ把它恰好放到τ上。别的什么都不变。τ取一百，Kimi K2这个有一万亿参数的模型，在十五点五万亿个词元上训练，按它的报告，没有出现一次损失尖峰。"
+   "en": "In 2025 Moonshot AI met exactly this training Kimi K2 with Muon, and fixed it surgically. <bookmark mark='a'/> After each step, measure each head's largest score. <bookmark mark='b'/> It is bilinear in the query and key weights, so scaling both by root gamma scales it by gamma. <bookmark mark='c'/> Whenever it exceeds tau, choose gamma to put it exactly on tau. With tau at a hundred, Kimi K2, a trillion parameters on fifteen and a half trillion tokens, reports zero loss spikes.",
+   "zh": "2025年，月之暗面在用Muon训练Kimi K2时正好遇到了这个问题，并做了一次外科手术式的修复。<bookmark mark='a'/>每一步之后，测出每个头最大的分数。<bookmark mark='b'/>它对查询和键的权重是双线性的，所以两者都乘以γ的平方根，分数就乘以γ。<bookmark mark='c'/>一旦它超过τ，就选γ把它恰好放到τ上。τ取一百，Kimi K2，一万亿参数、十五点五万亿个词元，报告说没有出现一次损失尖峰。"
   },
   "270b440cb949": {
    "scene": "Stability",
    "en": "On our small transformer, QK-clip at tau a hundred holds the fast Muon run's scores near the threshold, never above about 146, and it ends at 2.88 and 2.92 bits for the two seeds, against 2.97 and 3.16 without it. <bookmark mark='a'/> AdamW, run far too fast, blows its scores up even further. The oldest remedy is gradient clipping, from 2013: whenever the gradient is longer than some c, shrink it to length c. <bookmark mark='b'/> It rescues both seeds here, 2.89 and 3.61 bits against 3.69 and 3.82. QK-clip, which targets the cause, gives 2.96 and 3.39.",
    "zh": "在我们的小Transformer上，τ取一百的QK-clip把快速Muon训练的分数压在阈值附近，从没超过大约146，两个种子最后分别是2.88和2.92比特，不用它时是2.97和3.16。<bookmark mark='a'/>学习率大得过分的AdamW，把分数推得更高。最古老的补救是2013年的梯度裁剪：只要梯度长于某个c，就把它缩短到c。<bookmark mark='b'/>它在这里救回了两个种子，2.89和3.61比特，对3.69和3.82。直击病因的QK-clip，得到2.96和3.39。"
   },
-  "c551b3c68580": {
+  "57bc1d37cd0c": {
    "scene": "Stability",
-   "en": "Weight decay has a second life in modern networks. Most weight matrices are followed by a normalization, which makes them scale-invariant: W and twice W give the same network. <bookmark mark='a'/> Then the gradient is orthogonal to W, so a step can never shrink it. <bookmark mark='b'/> Decay shrinks W by a factor; Adam's step u adds to it. <bookmark mark='c'/> Square the norm: the decay removes two eta lambda of it per step, and the steps add eta squared times u's size, times how strongly successive steps are correlated, which momentum sets. <bookmark mark='d'/> They balance at an equilibrium norm, proportional to the square root of eta over lambda. <bookmark mark='e'/> So weight decay doesn't regularize these weights at all: it sets the size at which each step is a fixed fraction of the matrix, an effective learning rate.",
-   "zh": "权重衰减在现代网络里还有第二重身份。大多数权重矩阵后面都跟着一个归一化，这让它们尺度不变：W和两倍的W给出同一个网络。<bookmark mark='a'/>于是梯度和W正交，一步永远不可能把它缩小。<bookmark mark='b'/>衰减把W乘上一个因子缩小；Adam的一步u又把它加大。<bookmark mark='c'/>对范数平方来看：衰减每步去掉它的2ηλ，而每一步加上η平方乘以u的大小，再乘以相邻步子之间的相关程度，这由动量决定。<bookmark mark='d'/>两者在一个平衡范数上抵消，这个范数和η除以λ的平方根成正比。<bookmark mark='e'/>所以权重衰减对这些权重根本不起正则化作用：它决定的是矩阵的大小，使每一步都是矩阵的固定比例，也就是一个有效学习率。"
+   "en": "Weight decay has a second life. Most weight matrices are followed by a normalization, so W and twice W give the same network. <bookmark mark='a'/> Then the gradient is orthogonal to W. <bookmark mark='b'/> Decay shrinks W by a factor; Adam's step u adds to it. <bookmark mark='c'/> Square the norm: decay removes two eta lambda of it per step, and the steps add eta squared times u's size, times their correlation, which momentum sets. <bookmark mark='d'/> They balance at a norm proportional to root eta over lambda. <bookmark mark='e'/> So here weight decay doesn't regularize: it sets the size at which each step is a fixed fraction of the matrix, an effective learning rate.",
+   "zh": "权重衰减还有第二重身份。大多数权重矩阵后面都跟着一个归一化，所以W和两倍的W给出同一个网络。<bookmark mark='a'/>于是梯度和W正交。<bookmark mark='b'/>衰减把W乘上一个因子缩小；Adam的一步u又把它加大。<bookmark mark='c'/>对范数平方来看：衰减每步去掉它的2ηλ，而每一步加上η平方乘以u的大小，再乘以步子之间的相关，这由动量决定。<bookmark mark='d'/>两者在一个范数上平衡，它和η除以λ的平方根成正比。<bookmark mark='e'/>所以这里权重衰减不起正则化作用：它决定的是矩阵的大小，使每一步都是矩阵的固定比例，也就是一个有效学习率。"
   },
-  "e933bbb0a2c1": {
+  "3878f9d21ed3": {
    "scene": "Stability",
-   "en": "Measure it on our character model, with a normalization added after its second hidden matrix, and three decay strengths, each four times the last. <bookmark mark='a'/> Each norm rises or falls to a level, and stays there, faster for stronger decay. <bookmark mark='b'/> The dashed lines are the predicted equilibria, and every measured norm is within 15% of its prediction. Without the momentum factor the prediction would be 6.8 for the first, far too small. <bookmark mark='c'/> And four times the decay halves the norm: the fitted power is -0.51, against minus a half derived.",
-   "zh": "在我们的字符模型上测一测：在第二个隐藏矩阵之后加一个归一化，用三种衰减强度，每种是前一种的四倍。<bookmark mark='a'/>每个范数都升到或降到一个水平，然后停在那里，衰减越强，到得越快。<bookmark mark='b'/>虚线是预测的平衡值，每个测出的范数都在预测值的15%以内。要是没有动量那个因子，第一种的预测会是6.8，小得太多。<bookmark mark='c'/>衰减变成四倍，范数就减半：拟合出的幂次是-0.51，推导值是负二分之一。"
+   "en": "Measured on our character model, with a normalization after its second hidden matrix, at three decay strengths, each four times the last: <bookmark mark='a'/> each norm settles to a level, faster for stronger decay. <bookmark mark='b'/> The dashed lines are the predicted equilibria, and every measured norm is within 15% of its prediction. Without the momentum factor the prediction would be 6.8 for the first, far too small. <bookmark mark='c'/> And four times the decay halves the norm: the fitted power is -0.51, against minus a half derived.",
+   "zh": "在我们的字符模型上测量：第二个隐藏矩阵之后加一个归一化，用三种衰减强度，每种是前一种的四倍：<bookmark mark='a'/>每个范数都稳定到一个水平，衰减越强，到得越快。<bookmark mark='b'/>虚线是预测的平衡值，每个测出的范数都在预测值的15%以内。要是没有动量那个因子，第一种的预测会是6.8，小得太多。<bookmark mark='c'/>衰减变成四倍，范数就减半：拟合出的幂次是-0.51，推导值是负二分之一。"
   },
-  "12b8c29832ed": {
+  "f4a4512f038c": {
    "scene": "Stability",
-   "en": "So instability has causes, and the best fixes target them: QK-clip rescales just the two matrices that make a score, clipping caps every step, and weight decay quietly sets the size of every normalized matrix. Finally: what the field has learned about all this since 2024.",
-   "zh": "所以不稳定有它的原因，最好的修复直击原因：QK-clip只缩放产生分数的那两个矩阵，裁剪给每一步封顶，而权重衰减悄悄地决定了每个归一化矩阵的大小。最后：自2024年以来，业界在这些问题上学到了什么。"
+   "en": "So the best fixes target causes: QK-clip rescales the two matrices that make a score, clipping caps every step, and weight decay sets the size of normalized matrices. Finally: the optimizer race since 2024.",
+   "zh": "所以最好的修复直击原因：QK-clip只缩放产生分数的那两个矩阵，裁剪给每一步封顶，而权重衰减决定了归一化矩阵的大小。最后：2024年以来的优化器竞赛。"
   },
   "4a32dc03948a": {
    "scene": "Frontier",
@@ -536,10 +536,10 @@
    "en": "How big are the gains really? <bookmark mark='a'/> New optimizers had claimed one and a half to two times AdamW's speed. In 2025 Kaiyue Wen, David Hall, Tengyu Ma and Percy Liang at Stanford tested eleven of them with equal care, tuning every one, AdamW included, on models up to one point two billion parameters. <bookmark mark='b'/> Tuning AdamW's learning rate alone could double its speed on a small model: many claimed gains were against weak baselines. <bookmark mark='c'/> The best, the matrix-based ones, Muon and SOAP, were about one point four times faster at a hundred million parameters, <bookmark mark='d'/> and only one point one times at a billion. <bookmark mark='e'/> Muon led with little data per parameter, SOAP with a lot. <bookmark mark='f'/> In 2026 a team at NVIDIA trained mixtures of experts up to seventy-two billion parameters with Muon and SOAP, and found them stable at batches of a hundred million tokens where AdamW degraded, with modest, mixed gains.",
    "zh": "收益到底有多大？<bookmark mark='a'/>新的优化器曾宣称有AdamW的一点五到两倍速度。2025年，斯坦福的Kaiyue Wen、David Hall、马腾宇和Percy Liang同样细致地测试了其中十一个，每个都调参，包括AdamW，模型最大到十二亿参数。<bookmark mark='b'/>仅仅调好AdamW的学习率，就能让它在小模型上快一倍：很多宣称的收益是对着弱基线测的。<bookmark mark='c'/>最好的是基于矩阵的方法，Muon和SOAP，在一亿参数时大约快一点四倍，<bookmark mark='d'/>到十亿参数时只快一点一倍。<bookmark mark='e'/>每个参数的数据少时Muon领先，多时SOAP领先。<bookmark mark='f'/>2026年，英伟达的一个团队用Muon和SOAP训练了最大七百二十亿参数的混合专家模型，发现它们在一亿词元的批量下依然稳定，而AdamW在那里变差了；收益不大，而且各项任务上有好有坏。"
   },
-  "8877b90f79b5": {
+  "5a4c3cc02c5a": {
    "scene": "Frontier",
-   "en": "Meanwhile the descendants multiply. <bookmark mark='a'/> For Muon: better polynomials, like the Polar Express; versions that split the work across thousands of machines, like Microsoft's Dion, whose 2026 successor reports Muon's loss with an optimizer step up to six times faster; and a stream of 2026 preprints claiming improvements. <bookmark mark='b'/> For Shampoo: Distributed Shampoo, SOAP, and larger-scale variants of SOAP. Most of these claims are their authors' own and haven't been checked independently. <bookmark mark='c'/> Which is the race's real lesson, and the reason Chapter twelve was run the way it was: tune the baseline as hard as the newcomer, compare at equal budgets, use several seeds, and report the spread.",
-   "zh": "与此同时，后继者越来越多。<bookmark mark='a'/>Muon这一支：更好的多项式，比如Polar Express；能把工作分到成千上万台机器上的版本，比如微软的Dion，它2026年的后继者报告在达到Muon损失的同时，优化器那一步最多快六倍；以及一连串2026年宣称有改进的预印本。<bookmark mark='b'/>Shampoo这一支：分布式Shampoo、SOAP，以及更大规模的SOAP变体。这些说法大多出自作者本人，还没有经过独立检验。<bookmark mark='c'/>这正是这场竞赛真正的教训，也是第12章那样比赛的原因：像调新方法一样用力去调基线，在同样的预算下比较，用几个种子，并报告范围。"
+   "en": "Meanwhile the descendants multiply. <bookmark mark='a'/> For Muon: better polynomials, like the Polar Express; Microsoft's Dion, which splits the work across machines, and its 2026 successor, reporting Muon's loss with a step up to six times faster; and a stream of 2026 preprints. <bookmark mark='b'/> For Shampoo: Distributed Shampoo, SOAP, and larger-scale variants. Most of these claims are their authors' own. <bookmark mark='c'/> Which is the race's real lesson: tune the baseline as hard as the newcomer, compare at equal budgets, use several seeds, and report the spread.",
+   "zh": "与此同时，后继者越来越多。<bookmark mark='a'/>Muon这一支：更好的多项式，比如Polar Express；微软的Dion，把工作分到多台机器上，以及它2026年的后继者，报告在达到Muon损失的同时，那一步最多快六倍；还有一连串2026年的预印本。<bookmark mark='b'/>Shampoo这一支：分布式Shampoo、SOAP，以及更大规模的变体。这些说法大多出自作者本人。<bookmark mark='c'/>这正是这场竞赛真正的教训：像调新方法一样用力去调基线，在同样的预算下比较，用几个种子，并报告范围。"
   },
   "c20d55365a1a": {
    "scene": "Frontier",

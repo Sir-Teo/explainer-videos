@@ -161,10 +161,10 @@ class Decoding(VoiceoverScene):
         panels, cuts, counts = VGroup(), [], []
         rule = ValueTracker(0.5)  # top-p's p
         for j, (s, prompt) in enumerate(ctx):
-            ax = Axes(x_range=[0, N, 10], y_range=[0, 1, 0.5], x_length=5.6, y_length=2.4, tips=False,
-                      axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4 + 6.8 * j, -0.2, 0])
+            ax = Axes(x_range=[0, N, 10], y_range=[0, 1, 0.5], x_length=5.8, y_length=3.2, tips=False,
+                      axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4 + 6.8 * j, -0.4, 0])
             hmax = 0.25 if j == 0 else 1.0
-            bars = VGroup(*[Rectangle(width=5.6 / N * 0.8, height=max(2.4 * min(v / hmax, 1.0), 0.004), stroke_width=0,
+            bars = VGroup(*[Rectangle(width=5.8 / N * 0.8, height=max(3.2 * min(v / hmax, 1.0), 0.004), stroke_width=0,
                                       fill_color=MODEL, fill_opacity=0.85).move_to(ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
                             for i, v in enumerate(s[:N])])
             cum = curve(ax, np.arange(N + 1), np.concatenate([[0], np.cumsum(s[:N])]), color=C.BITS, stroke_width=2.5)
@@ -173,7 +173,7 @@ class Decoding(VoiceoverScene):
                 pt.width = 6.2
             sc = label(rf"bars: \ the {N} likeliest words, \ largest ${100 * s[0]:.0f}\%$", font_size=18, color=GREY_A)
             sc.next_to(ax, UP, buff=0.12)
-            cl = label(r"running total", font_size=18, color=C.BITS).next_to(ax.c2p(N, float(np.cumsum(s[:N])[-1])), UP, buff=0.05).shift(LEFT * 0.6)
+            cl = label(r"running total", font_size=18, color=C.BITS).next_to(ax.c2p(N, float(np.cumsum(s[:N])[-1])), DOWN, buff=0.12).shift(LEFT * 0.7)
             panels.add(VGroup(ax, bars, cum, pt, sc, cl))
 
             def cutline(ax=ax, s=s):
@@ -261,7 +261,7 @@ class Decoding(VoiceoverScene):
         se = float(np.mean([np.std(d[s_]["nll_prompt"], ddof=1) / math.sqrt(len(d[s_]["nll_prompt"]))
                             for s_ in d["settings"]]))
         sel = note(rf"one run; \ a setting's surprise varies by about $\pm{se:.2f}$ across the passages").to_edge(DOWN, buff=0.15)
-        gl = label(rf"greedy: \ surprise ${float(greedy['nll']):.2f}$, \ but ${100 * rep_g:.0f}\%$ of its 4-word runs repeat",
+        gl = label(rf"greedy: \ surprise ${float(greedy['nll']):.2f}$, \\ but ${100 * rep_g:.0f}\%$ of its 4-word runs repeat",
                    font_size=20, color=TEMP).next_to(tbl, DOWN, buff=0.35).align_to(tbl, LEFT)
         # the verdict, from the numbers
         best = min(at, key=at.get) if at else None
@@ -302,8 +302,9 @@ class Decoding(VoiceoverScene):
             f"rewards loops. {v2} That is Holtzman's point: good text isn't the likeliest text."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), Create(hline), FadeIn(hl))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), run_time=2.5)
+            vo.wait_until("a")
+            self.play(*[Indicate(l_, scale_factor=1.0) for l_ in lines], run_time=1.2)
             vo.wait_until("b")
             self.play(Create(vline), FadeIn(tbl), FadeIn(sel))
             vo.wait_until("c")
@@ -333,7 +334,9 @@ class Decoding(VoiceoverScene):
             body.arrange(DOWN, aligned_edge=LEFT, buff=0.06)
             rows.add(VGroup(label(name, font_size=22, color=col), body).arrange(DOWN, aligned_edge=LEFT, buff=0.08))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.35)
-        ph = data_text(printable(str(d["prompt3"]))[-80:] + " …", font="DejaVu Serif", font_size=22, color=GREY_A)
+        tail_ = printable(str(d["prompt3"]))[-90:]
+        tail_ = tail_[tail_.find(" ") + 1:] if " " in tail_ else tail_
+        ph = data_text("… " + tail_ + " …", font="DejaVu Serif", font_size=22, color=GREY_A)
         ph.to_edge(UP, buff=0.4)
         if ph.width > 12.6:
             ph.width = 12.6

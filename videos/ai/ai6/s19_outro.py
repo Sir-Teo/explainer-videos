@@ -201,11 +201,12 @@ class Outro(VoiceoverScene):
         p = load("pages")
         X2, y = np.asarray(p["X2"]), np.asarray(p["y"])
         Z = (X2 - X2.mean(0)) / X2.std(0)
+        Zj = Z + np.random.default_rng(6).uniform(-0.06, 0.06, Z.shape)  # the rates are whole numbers: a little jitter
         vals, vecs = np.linalg.eigh(np.cov(Z.T))
         head = label(r"Next: \ Part 7, \ Statistical ML", font_size=40).to_edge(UP, buff=0.35)
         U = 1.0
         dots = VGroup(*[Dot([U * z[0], U * z[1] - 0.4, 0], radius=0.035, color=author_color(int(l_)), fill_opacity=0.7)
-                        for z, l_ in zip(Z, y) if abs(z[0]) < 3.3 and abs(z[1]) < 2.9])
+                        for z, l_ in zip(Zj, y) if abs(z[0]) < 3.3 and abs(z[1]) < 2.9])
         arrows = VGroup(*[Arrow([0, -0.4, 0], [1.8 * math.sqrt(v) * e[0], 1.8 * math.sqrt(v) * e[1] - 0.4, 0], buff=0,
                                 color=C.BITS if k == 1 else GREY_A, stroke_width=6) for k, (v, e) in enumerate(zip(vals, vecs.T))])
         tag = note(r"the pages, \ no labels used: \ the directions they spread along").to_corner(DR, buff=0.3)
