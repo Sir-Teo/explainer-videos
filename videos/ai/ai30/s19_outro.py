@@ -68,7 +68,8 @@ class Outro(VoiceoverScene):
         out.append((VGroup(ax, *[Dot(ax.c2p(a, b), radius=0.03, color=FEAT) for a, b in zip(pr, ms)]),
                     r"an attribution graph, \ tested", FEAT))
         df = load("diffing")
-        r = np.asarray(df["rel"])[np.asarray(df["alive"]) > 0]
+        Ld = [int(v) for v in df["layers"]][-1]
+        r = np.asarray(df[f"rel_{Ld}"])[np.asarray(df[f"alive_{Ld}"]) > 0]
         h, _ = np.histogram(r, bins=np.linspace(0, 1, 21))
         out.append((VGroup(*[Rectangle(width=TW / 22, height=max(1.3 * v / h.max(), 0.01), stroke_width=0,
                                        fill_color=CHAT if i >= 18 else (GREY_B if i < 2 else C.BITS), fill_opacity=0.9)
@@ -85,7 +86,7 @@ class Outro(VoiceoverScene):
         s_ = np.asarray(gk["step"], float)
         ax = mk([0, float(s_[-1]), 1], [-8, 2, 1])
         lg = lambda k: np.clip(np.log10(np.clip(np.asarray(gk[k], float), 1e-8, None)), -8, 2)  # noqa: E731
-        out.append((VGroup(ax, curve(ax, s_, lg("train_loss"), C.TRUE_P, 3), curve(ax, s_, lg("test_loss"), C.SURPRISE, 3),
+        out.append((VGroup(ax, curve(ax, s_, lg("test_loss"), C.SURPRISE, 3),
                            curve(ax, s_, lg("restricted_loss"), C.BITS, 3)), r"grokking, \ from inside", C.BITS))
         tiles = Group()
         for pic, cap, col in out:

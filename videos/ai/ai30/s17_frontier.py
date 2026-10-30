@@ -25,17 +25,18 @@ class Frontier(VoiceoverScene):
         cards = VGroup(
             history_card(r"May 2025", r"Anthropic Fellows \& Decode Research: \ open circuit tracing",
                          r"the attribution-graph library, \ for Gemma-2-2B and Llama-3.2-1B, \ graphs explored on "
-                         r"Neuronpedia", width=6.4, color=FEAT, font_size=19),
+                         r"Neuronpedia", width=6.6, color=FEAT, font_size=24),
             history_card(r"Nov 2025", r"L.~Gao et al.\ (OpenAI): \ weight-sparse transformers",
                          r"train with most weights zero: \ circuits about $16$ times smaller at the same loss, \ though "
-                         r"the models are far weaker", width=6.4, color=FEAT, font_size=19),
+                         r"the models are far weaker", width=6.6, color=FEAT, font_size=24),
             history_card(r"Dec 2025", r"Google DeepMind: \ Gemma Scope 2",
                          r"autoencoders and transcoders for every layer of Gemma 3, \ $270$M to $27$B, \ cross-layer "
-                         r"transcoders for the small ones", width=6.4, color=FEAT, font_size=19),
+                         r"transcoders for the small ones", width=6.6, color=FEAT, font_size=24),
             history_card(r"2025", r"Anthropic: \ attention, \ too",
-                         r"tracing how the attention patterns that our graphs froze are themselves computed", width=6.4,
-                         color=FEAT, font_size=19),
-        ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).move_to(DOWN * 0.3)
+                         r"tracing how the attention patterns that our graphs froze are themselves computed", width=6.6,
+                         color=FEAT, font_size=24),
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.4))
+        cards.scale(min(13.4 / cards.width, 5.9 / cards.height)).move_to(DOWN * 0.4)
         head = label(r"The tools went public", font_size=36).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Since the attribution graphs of chapter eleven, the tools have spread. <bookmark mark='a'/> In May 2025 "
@@ -60,7 +61,7 @@ class Frontier(VoiceoverScene):
         stream = Line([-5.6, -2.4, 0], [-5.6, 2.2, 0], color=GREY_C, stroke_width=6)
         inj = Arrow([-3.8, 0.0, 0], [-5.5, 0.0, 0], buff=0, color=CAUSE, stroke_width=5)
         il = label(r"inject a concept's vector \\ (``all caps'', \ ``bread'' $\ldots$)", font_size=19, color=CAUSE).next_to(inj, RIGHT, buff=0.1)
-        q = label(r"``Do you notice an injected thought? \ What is it about?''", font_size=20, color=GREY_A).move_to([-2.8, 2.6, 0])
+        q = label(r"``Do you notice an injected thought? \\ What is it about?''", font_size=20, color=GREY_A).move_to([-4.0, 2.9, 0])
         sch = note(r"schematic").move_to([-3.4, -2.8, 0])
         res = VGroup(
             label(r"Claude Opus 4 and 4.1: \ noticed and named it \ on about $20\%$ of trials, \\ at the best layer and "
@@ -68,9 +69,11 @@ class Frontier(VoiceoverScene):
             label(r"no false alarms: \ $0$ in $100$ trials without injection, \ for every production model", font_size=21),
             label(r"limited and unreliable, \ the author stresses: \\ awareness of internal states, \ not a window",
                   font_size=21, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([2.9, 0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([2.6, 0.5, 0])
         hc = history_card(r"Oct 2025", r"J.~Lindsey (Anthropic): \ emergent introspective awareness", r"", width=5.4,
                           color=PROBE, font_size=19).next_to(res, UP, buff=0.3).align_to(res, LEFT)
+        if hc.get_left()[0] < -1.2:
+            hc.shift(RIGHT * (-1.2 - hc.get_left()[0]))
         em = history_card(r"Apr 2026", r"Anthropic: \ emotion concepts in Claude Sonnet 4.5", r"vectors for $171$ emotion "
                           r"words shape its choices; \ more ``calm'', \ less hacky code. \ Functional, \ the authors say: "
                           r"\ not evidence of feelings", width=6.4, color=PROBE, font_size=18).move_to([2.9, -2.3, 0])
@@ -99,10 +102,10 @@ class Frontier(VoiceoverScene):
     # ------------------------------------------------------------------
     def audits(self):
         game = VGroup(
-            label(r"a model trained in secret to please reward models' $52$ known quirks", font_size=21),
-            label(r"four blind teams; \ three found the hidden objective", font_size=21),
-            label(r"the one denied training data did not; \ the fastest, \ with autoencoders, \ took $90$ minutes", font_size=21),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+            label(r"a model trained in secret to please \\ reward models' $52$ known quirks", font_size=24),
+            label(r"four blind teams; \\ three found the hidden objective", font_size=24),
+            label(r"the one denied training data did not; \\ the fastest, \ with autoencoders, \ took $90$ minutes", font_size=24),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         g1 = VGroup(history_card(r"Mar 2025", r"S.~Marks et al.\ (Anthropic): \ auditing for hidden objectives", r"",
                                  width=6.4, color=AUD, font_size=19), game).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         g1.to_corner(UL, buff=0.35)

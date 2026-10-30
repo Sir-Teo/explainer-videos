@@ -110,8 +110,8 @@ class Decay(VoiceoverScene):
         GA, GL = np.asarray(d["grid_adamw"], float), np.asarray(d["grid_adam_l2"], float)
         both = np.concatenate([GA.ravel(), GL.ravel()])
         lo, hi = float(np.nanmin(both)), float(np.nanpercentile(both, 90))
-        ha = heat(GA, [-3.4, -0.3], lo=lo, hi=hi)
-        hl = heat(GL, [3.4, -0.3], lo=lo, hi=hi)
+        ha = heat(GA, [-3.4, -0.3, 0], lo=lo, hi=hi)
+        hl = heat(GL, [3.4, -0.3, 0], lo=lo, hi=hi)
 
         def frame(h, grid, strengths, title, col):
             g = VGroup()

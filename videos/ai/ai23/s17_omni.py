@@ -56,10 +56,10 @@ class Omni(VoiceoverScene):
             "pictures and sound, answering speech in as little as 232 milliseconds, 320 on average, about as fast as "
             "people take turns."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(w_in), GrowArrow(arr[2]), run_time=0.8)
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.4), LaggedStart(*[GrowArrow(a_) for a_ in arr[:2]],
-                                                                                        lag_ratio=0.4), FadeIn(txt), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.4), run_time=1.5)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in arr[:2]], lag_ratio=0.4), FadeIn(txt), run_time=1.5)
             self.play(GrowArrow(arr[3]), Create(w_out), run_time=0.8)
             self.play(FadeIn(cl))
             vo.wait_until("b")

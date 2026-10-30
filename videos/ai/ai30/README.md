@@ -66,8 +66,9 @@ small models trained here (Part 13's two-layer attention-only model, retrained w
   the graph's prediction; Claude 3.5 Haiku's biology (Lindsey et al. 2025): two-hop reasoning, planning in poems,
   addition, multilingual features, entity recognition and hallucination, "about a quarter of the prompts".
 * **12. What fine-tuning changed.** A BatchTopK crosscoder (Lindsey et al. 2024; Minder et al. 2025) on the novels
-  model and Part 27's chat fine-tune, after block 3, on novel text and chat transcripts: shared, chat-only and
-  base-only latents by relative decoder norm, and where the chat-only ones fire; the activation-difference lens
+  model and Part 27's chat fine-tune, after blocks 3 and 5, on novel text and chat transcripts: shared, chat-only
+  and base-only latents by relative decoder norm (here every latent is shared), and where the most chat-leaning ones
+  fire; the activation-difference lens
   (Minder et al., Oct 2025) on plain novel text.
 * **13. Reaching in.** The L1 autoencoder's quotation feature added to Part 13's transformer while it writes, three
   strengths, five samples, against a random direction; a contrast vector in the novels model (cheerful minus gloomy
@@ -90,7 +91,7 @@ small models trained here (Part 13's two-layer attention-only model, retrained w
   objectives (Marks et al., Mar 2025), the Claude Sonnet 4.5 system card's evaluation-awareness steering (Sep 2025),
   natural-language autoencoders (May 2026).
 * **17. Where the field disagrees.** Autoencoder probes against linear probes (GDM, Mar 2025; Kantamneni et al. 2025),
-  measured on ours from 16 to 4,096 examples, in and out of distribution; dictionaries from different seeds (Paulo &
+  measured on the novels model from 16 to 4,096 examples, on novel text and in chat transcripts; dictionaries from different seeds (Paulo &
   Belrose 2025), measured on ours; autoencoders on a random transformer (Heap et al. 2025), measured on ours; ambitious
   against pragmatic interpretability, dark matter, AxBench (Wu et al. 2025), parameter decomposition, open problems
   (Sharkey et al. 2025).
@@ -122,7 +123,70 @@ imports `show` from `videos.ai.ai30.common`.
 
 ## Results on this machine
 
-RESULTS
+Seeded, one torch thread, on a busy 4-core Linux machine (about 1.5 CPU-hours in all; the frontier sweep is 40 of
+those minutes). The narration states each result from the cached numbers, so another machine's run says what it
+measured.
+
+* **Saliency** (Part 13's transformer, '…she sai' → 'd', 99%): gradient × input against occlusion, rank correlation
+  0.21 on the shown prediction and 0.07 on average over 24 more; cascading re-randomization: 1.00, 0.45, 0.39, 0.20,
+  −0.31, −0.09 (the map passes Adebayo et al.'s check: trained against fully random, −0.05 on average).
+* **Probes** (novels model, "inside a quotation", 8,960 tokens to train and 8,960 held out, 3 seeds; majority 61%):
+  linear probe 66% at the embedding rising to 91% at layer 5; control task 81% at the embedding falling to 73%; MLP
+  probe 91% on the task but 88% on the control at layer 5: selectivity +16 points (linear) against +3 (MLP). Amnesic
+  probing at layer 5: closing quotation marks cost 4.03 bits, 5.59 with the probe's direction removed, 4.04 (mean)
+  with ten random directions removed.
+* **Lenses** (novels model, held-out text): KL to the final prediction, logit lens / tuned lens, by layer 0–5: 8.55 /
+  2.53, 2.96 / 1.86, 2.40 / 1.45, 1.88 / 1.10, 1.40 / 0.74, 0.71 / 0.34 bits; bits per token at the embedding 13.6 /
+  7.6, the model 5.27.
+* **Induction.** Repeated held-out text: Part 13's transformer 1.79 → 1.80 bits per character, the novels model
+  5.18 → 5.07 bits per token (no copying). The attention-only model (retrained, seed 2022): the repeat falls from 6.23
+  to 1.49 bits per token, fastest around step 2,600; previous-token heads 1 and 2 of layer 1 (scores 0.37, 0.30), a
+  current-token head 4 (self-attention 0.62), induction heads 1–3 of layer 2 (0.60, 0.60, 0.52). Noising each head:
+  0.39, 0.29, 0.13, 0.65 (layer 1), 0.45, 0.46, 0.29, −0.05 (layer 2). Path patching from the previous-token heads into
+  layer 2: queries 0.00, keys 0.86, values 0.01; each previous-token head alone, keys: 0.39, 0.29; the current-token
+  head: queries 0.49. K-composition 0.17–0.20 against 0.124 ± 0.007 for random heads. The induction heads' OV circuit:
+  for 83% of tokens the logit raised most is their own, copying score 0.88. Mean-ablation: 1.49 bits with every head,
+  up to 2.66 without a previous-token head, up to 3.55 without an induction head, 3.59 without the current-token head,
+  6.20 for random tokens. Through training, the K path's effect switches on between steps 2,500 and 2,750, with the
+  loss's drop. Noising the residual stream for one target: inputs 20, 21 (and 16); between the layers 21 and 70;
+  output 70.
+* **Superposition and the phase diagram**: 289 cells, best of 4 seeds: 212 in superposition, 42 giving feature 2 the
+  dimension, 35 dropping it; trained and theory agree on 94% of the cells (seeds agree with the best on 83%).
+* **The L1 autoencoder** (512 latents, λ = 2, 4,000 steps, 211,200 vectors): 6.8 features per character, 11.2% of the
+  variance unexplained, no dead latents; spliced in, 1.94 bits per character against 1.72 (the model) and 5.61 (the
+  mean vector). Purity (of the 8 strongest moments, how many on one character): neurons 5.9, features 7.8.
+* **Three dictionaries at equal budgets** (512 latents, 2,000 steps, 3 seeds): at 16 features per vector, variance
+  unexplained TopK 6.1%, JumpReLU 8.4%, L1 11.3%; bits spliced in 1.80, 1.84, 1.93 (the model 1.72). At 8: 7.5%,
+  10.5%, 17.1%; at 32: 4.9%, 6.1%, 8.1%. L1's best rescale 1.04 (λ = 0.25) to 1.30 (λ = 4); JumpReLU and TopK 1.00.
+  Dead latents: none at k = 16, with or without AuxK; 2 in the 2,048-latent dictionary; 17 for TopK k = 4, 79 for
+  JumpReLU λ = 8.
+* **Splitting and absorption**: TopK at 128, 512 and 2,048 latents; latent 8 of the smallest ('l' after "by ") has 1
+  same-character descendant in the 512 and 6 in the 2,048; 21 of the 102 clean latents have two or more. A probe reads
+  upper case at 100%; the dictionary's best latent for it fires on 57% of capitals (mean of 3 seeds) and 13% are
+  absorbed by another latent; Matryoshka (prefixes 32, 128): 48% and 37%, worse here, with a wide spread across seeds.
+* **Transcoders and the graph**: MLP output unexplained per layer, per-layer transcoders 0.9%, 10.3%, 17.6%, 6.0%;
+  cross-layer 1.0%, 9.0%, 13.2%, 4.4%. Every MLP replaced: 2.03 bits per character (per-layer, same top guess 81%),
+  1.96 (cross-layer, 83%), against 1.72 for the model and 5.04 with the MLPs mean-ablated. The graph for '…she sai' →
+  'd': 3,058 active features; the local replacement model matches the logits to within 10⁻⁵; logit 11.58 = features
+  9.60 + embeddings 2.05 + errors 0.04 + biases; the 16 most influential features switched off in the real model
+  against the graph's prediction: r = 0.94.
+* **Model diffing** (BatchTopK crosscoders, 1,024 latents, k = 32, 18,600 novel and 27,347 chat tokens): after block
+  3 and after block 5, every live latent shared (r from 0.42 to 0.62 and from 0.46 to 0.64); the most chat-leaning
+  latents fire on "<|user|>Write", "<|assistant|>", "<|user|>Which" with r ≈ 0.53; the activation-difference lens on
+  novel text: punctuation and function words, no chat markers; the mean difference is 14% of a vector's length.
+* **Steering**: the quotation feature (latent 440) at α = 0, 0.25, 0.5: 0.0, 1.8, 8.0 marks of speech per 160
+  characters (5 samples); a random direction at 0.5: 0.6. The mood vector (cheerful minus gloomy words in 8 frames,
+  after block 3): AUROC 0.66 on held-out words, 0.74 on 110 + 110 novel sentences; cheerful-minus-gloomy words per
+  hundred at α = −0.6 … 0.6: −0.9, +0.1, +0.6, +1.4, +1.7 (a random direction: −0.2, −0.4, +0.6, −0.3, +1.5); fluency
+  5.05, 4.34, 4.37, 4.56, 5.49 bits per token.
+* **Grokking** ((a + b) mod 59, 30% of the table): memorized by step 100, test accuracy above 99% at step 10,300; key
+  frequencies 7, 23, 4, 28, 14 hold 95% of the embedding at the end; 490 of 512 neurons put more than half their
+  activation at one frequency; the restricted loss falls below 1 nat at step 5,800, the test loss only at step 9,000; the key waves explain
+  81% of the final logits' variance.
+* **Disagreements**: TopK dictionaries from different seeds share 15% of latents (cosine ≥ 0.7; L1: 68%). Sparse
+  probing on the novels model after block 5 (majority 79% in distribution, 51% in chat transcripts): at 16 examples
+  linear 76%, 8 latents 78%, 1 latent 78%; at 4,096, 90%, 86%, 85%, and in chat transcripts 76%, 66%, 59%. An
+  autoencoder on a random copy of Part 13's transformer: purity 7.2 of 8, against 7.7 for the trained one.
 
 ## Problems found and fixed while making it
 
@@ -139,6 +203,20 @@ RESULTS
 * **The first sparsity sweeps did not overlap.** At equal steps, L1 and JumpReLU penalties chosen by guess gave
   sparsities that barely met TopK's; the sweeps were widened to five strengths each, and the pieces are now keyed by
   run, so widening a sweep keeps the runs already done.
+* **The induction circuit is a team.** The first analysis assumed one previous-token head and one induction head;
+  the retrained model has two previous-token heads, three induction heads and a current-token head, and single-head
+  path patching showed only part of the effect (the heads share the job). The analysis now groups the heads by their
+  scores and patches the group; the residual-stream map uses noising (one corrupted vector in the clean run), which
+  shows the circuit's AND structure cleanly where single-position denoising could not.
+* **No chat-only features.** A crosscoder after block 3 found every latent shared; a second one after block 5 found
+  the same. The chapter reports it, and shows the most chat-leaning latents (shared, r ≈ 0.53) instead.
+* **A probe comparison on the wrong model.** "Inside a quotation" is barely decodable after block 2 of Part 13's
+  character model (a linear probe at the majority rate), so the SAE-against-probe comparison moved to the novels model
+  after block 5, with an autoencoder trained there, and chat transcripts as the out-of-distribution test.
+* **Special tokens were invisible.** The tokenizer drops special tokens when decoding by default, so the chat markers
+  never showed in contexts; `acts.token_strings` now keeps them.
+* **Splitting needed a criterion.** The first family shown was picked by decoder cosine alone, and its "children"
+  fired on unrelated characters; children must now fire on the parent's character too.
 * **Narration splices.** Every computed sentence is an f-string over cached data, and every verdict is assigned before
   it is spliced in (no conditional nested inside a sum), so `tools/zh_lines.py` lists and translates each branch.
 

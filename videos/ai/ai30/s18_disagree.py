@@ -5,7 +5,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai30.common import CTRL, FEAT, PART, PROBE, load, spread_bar, ticks
 
-SAEC = C.BITS
+SAEC = C.MLP
 
 
 class Disagree(VoiceoverScene):
@@ -39,11 +39,14 @@ class Disagree(VoiceoverScene):
         cols = [(raw, PROBE, r"linear probe, \ all $256$ numbers"), (s8, SAEC, r"$8$ autoencoder latents"),
                 (s1, FEAT, r"$1$ latent")]
         plots = VGroup()
+        ood_c = VGroup()
         for arr, col, _ in cols:
             m = arr[:, :, 0].mean(1)
             plots.add(VGroup(curve(g.ax, xs, m, col, 3),
                              *[spread_bar(g.ax, x, arr[i, :, 0], col, width=0.08) for i, x in enumerate(xs)]))
+            ood_c.add(DashedVMobject(curve(g.ax, xs, np.clip(arr[:, :, 1].mean(1), 0.4, 1.0), col, 2.5), num_dashes=24))
         lg = legend([(c_, t) for _, c_, t in cols], font_size=17).next_to(g, DOWN, buff=0.6).align_to(g, LEFT)
+        lg2 = label(r"solid: \ held-out novel text; \ dashed: \ chat transcripts", font_size=17, color=GREY_A).next_to(lg, RIGHT, buff=0.5)
         maj = float(d["probe_majority"])
         ood = [float(a[-1, :, 1].mean()) for a, _, _ in cols]
         ind = [float(a[-1, :, 0].mean()) for a, _, _ in cols]
@@ -72,14 +75,14 @@ class Disagree(VoiceoverScene):
             f"{ns[0]} to {ns[-1]:,} examples, five draws each. "
             f"<bookmark mark='c'/> {verdict}<bookmark mark='d'/>{verdict2}"
         ) as vo:
-            self.play(FadeIn(hc), FadeIn(hc2))
+            self.play(FadeIn(hc), FadeIn(hc2), FadeIn(g))
             vo.wait_until("a")
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(lg))
+            self.play(FadeIn(lg), FadeIn(lg2))
             vo.wait_until("c")
             self.play(*[Create(p[0]) for p in plots], *[FadeIn(p[1:]) for p in plots], run_time=2)
             vo.wait_until("d")
-            self.play(FadeIn(res))
+            self.play(*[Create(c) for c in ood_c], FadeIn(res), run_time=2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -167,19 +170,23 @@ class Disagree(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ambition(self):
-        left = VGroup(label(r"ambitious", font_size=30, color=FEAT),
-                      label(r"reverse-engineer the whole model: \\ every feature, \ every circuit", font_size=21),
+        left = VGroup(label(r"ambitious", font_size=36, color=FEAT),
+                      label(r"reverse-engineer the whole model: \\ every feature, \ every circuit", font_size=26),
                       label(r"the obstacle: \ dark matter \ (Claude 3.5 Haiku's \\ best transcoder left $21.7\%$ unexplained)",
-                            font_size=19, color=GREY_A),
+                            font_size=23, color=GREY_A),
                       label(r"alternatives: \ decompose the parameters, \\ not the activations; \ train models to be "
-                            r"sparse", font_size=19, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        right = VGroup(label(r"pragmatic", font_size=30, color=PROBE),
-                       label(r"answer the question at hand: \\ is it deceiving, \ what did fine-tuning change?", font_size=21),
+                            r"sparse", font_size=23, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        right = VGroup(label(r"pragmatic", font_size=36, color=PROBE),
+                       label(r"answer the question at hand: \\ is it deceiving, \ what did fine-tuning change?", font_size=26),
                        label(r"the tools: \ probes, \ steering vectors, \ diffs, \ audits; \\ and simple baselines first",
-                             font_size=19, color=GREY_A),
-                       label(r"AxBench (2025): \ for steering, \ prompting beat \\ every internal method", font_size=19,
-                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        VGroup(left, right).arrange(RIGHT, buff=1.2, aligned_edge=UP).move_to(DOWN * 0.2)
+                             font_size=23, color=GREY_A),
+                       label(r"AxBench (2025): \ for steering, \ prompting beat \\ every internal method", font_size=23,
+                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        both = VGroup(left, right).arrange(RIGHT, buff=1.0, aligned_edge=UP)
+        if both.width > 13.2:
+            both.scale_to_fit_width(13.2)
+        both.move_to(DOWN * 0.1)
+        right.set_opacity(0.25)
         cite_ = cite(r"Sharkey et al., \textit{Open Problems in Mechanistic Interpretability} (2025); \ Wu et al., "
                      r"\textit{AxBench} (2025)", corner=DL)
         with self.voiceover(
@@ -192,10 +199,10 @@ class Disagree(VoiceoverScene):
             "AxBench comparison of 2025, plain prompting steered better than any internal method. Both programmes "
             "measure themselves against baselines now, which is perhaps the field's most important change."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(left[0]), FadeIn(right))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(x) for x in left], lag_ratio=0.5), run_time=3)
+            self.play(LaggedStart(*[FadeIn(x) for x in left[1:]], lag_ratio=0.5), run_time=3)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in right], lag_ratio=0.5), run_time=3)
+            self.play(right.animate.set_opacity(1), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()

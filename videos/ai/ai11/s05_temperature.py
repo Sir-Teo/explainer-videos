@@ -44,9 +44,6 @@ class Temperature(VoiceoverScene):
                 why(r"write $\eta = dt$, \ the noise as $\sqrt{dt}$ times a Gaussian"),
                 why(r"Euler--Maruyama, \ read backwards (Part 5)")]
         step = ladder(self, rows, whys, keep=3, top=2.2, x=-2.0, buff=0.6, edge=6.9)
-        parts = VGroup(brace_note(term(rows[2], r"-\nabla L(\theta)\,dt"), r"push downhill", color=PUSH, font_size=22),
-                       brace_note(VGroup(term(rows[2], r"\sqrt{\eta / B}"), term(rows[2], r"\;\Sigma^{1/2}\,dW_t")),
-                                  r"random kicks, \ temperature $\eta/B$", color=KICK, font_size=22))
         cite_ = cite(r"Q.~Li, C.~Tai \& W.~E (2017); \ S.~Mandt, M.~Hoffman \& D.~Blei (2017); \ S.~Smith \& Q.~Le (2018)",
                      corner=DL)
         with self.voiceover(
@@ -62,7 +59,10 @@ class Temperature(VoiceoverScene):
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 step(k)
-            self.play(FadeIn(parts))
+            parts = VGroup(brace_note(term(rows[2], r"-\nabla L(\theta)\,dt"), r"push downhill", color=PUSH, font_size=22),
+                           brace_note(VGroup(term(rows[2], r"\sqrt{\eta / B}"), term(rows[2], r"\;\Sigma^{1/2}\,dW_t")),
+                                      r"random kicks, \ temperature $\eta/B$", color=KICK, font_size=22))
+            self.play(FadeOut(whys[2]), FadeIn(parts))
         self.wait(0.3)
         self.clear_scene()
 
@@ -94,9 +94,10 @@ class Temperature(VoiceoverScene):
             "the same matrix."
         ) as vo:
             self.play(FadeIn(head))
-            for k, mk in enumerate("abc"):
+            step(0)
+            for k, mk in enumerate("bc"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             vo.wait_until("d")
             self.play(FadeIn(fact))
         self.wait(0.3)

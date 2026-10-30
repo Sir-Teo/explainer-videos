@@ -75,12 +75,22 @@ class EdgeOfStability(VoiceoverScene):
                           r"do as training goes on?")
         sharp = gloss(r"sharpness", r"how tightly the valley curves \\ along its steepest direction: \\ the Hessian's "
                       r"largest eigenvalue", corner=DR, width=4.4, color=C.BITS)
+        pc.scale(0.8).to_edge(UP, buff=0.3)
+        ax = Axes(x_range=[0, 4, 1], y_range=[0, 3, 1], x_length=6.0, y_length=3.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.4, -1.4, 0])
+        edge_ = DashedLine(ax.c2p(0, 2), ax.c2p(4, 2), color=C.MODEL_Q, stroke_width=2)
+        el = MathTex(r"2/\eta", font_size=30, color=C.MODEL_Q).next_to(edge_, RIGHT, buff=0.1)
+        start = Dot(ax.c2p(0.05, 0.4), radius=0.07, color=C.TRUE_P)
+        qm = MathTex(r"?", font_size=72, color=C.TRUE_P).move_to(ax.c2p(2.2, 1.2))
+        axl = VGroup(label(r"sharpness $\lambda_{\max}$", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT),
+                     label(r"training steps", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.1))
         with self.voiceover(
             "The classical advice follows: measure the sharpness, the largest curvature, the Hessian's top "
             "eigenvalue, and choose a step below two over it. But training changes the landscape it walks on. "
             "Pause and predict: on a real network, at a fixed step, what does the sharpness do as training goes on?"
         ):
-            self.play(FadeIn(pc), FadeIn(sharp, shift=UP * 0.2))
+            self.play(FadeIn(pc), Create(ax), FadeIn(axl), Create(edge_), FadeIn(el), FadeIn(start))
+            self.play(FadeIn(sharp, shift=UP * 0.2), FadeIn(qm, scale=0.5))
         self.wait(0.5)
         self.clear_scene()
 
