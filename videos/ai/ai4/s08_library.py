@@ -142,9 +142,9 @@ class Library(VoiceoverScene):
             elif e["op"] == "sigmoid":
                 rhs = rf"\sigma(v_{a[0]})"
             elif len(a) == 2:
-                rhs = rf"v_{a[0]} {what[e['op']]} v_{a[1]}"
+                rhs = "v_" + str(a[0]) + " " + what[e["op"]] + " v_" + str(a[1])
             else:
-                rhs = rf"v_{a[0]} {what[e['op']]} {consts[i]}"
+                rhs = "v_" + str(a[0]) + " " + what[e["op"]] + " " + consts[i]
             lines.add(MathTex(rf"v_{i} = {rhs}", font_size=30, color=WHITE))
         lines.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.6, 0.2, 0])
         box = SurroundingRectangle(lines, color=GREY_D, buff=0.25, corner_radius=0.1)
