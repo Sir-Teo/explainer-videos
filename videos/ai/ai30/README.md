@@ -330,7 +330,7 @@ Interpretability* (2025).
 | residual stream, unembedding | 残差流，反嵌入 |
 | logit lens, tuned lens, translator | logit透镜，调校透镜，翻译器 |
 | activation patching, clean run, corrupted run | 激活修补，干净运行，被破坏的运行 |
-| noising (necessary), denoising (sufficient) | 破坏（必需性），恢复（充分性） |
+| noising (necessary), denoising (sufficient) | 加噪（检验必要性），去噪（检验充分性） |
 | path patching | 路径修补 |
 | causal tracing, causal mediation | 因果追踪，因果中介 |
 | induction head, previous-token head | 归纳头，前一词元头 |

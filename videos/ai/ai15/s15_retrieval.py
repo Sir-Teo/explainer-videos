@@ -32,13 +32,13 @@ class Retrieval(VoiceoverScene):
         q = np.array([0.9, 0.6])
         d = np.linalg.norm(pts - q, axis=1)
         near = np.argsort(d)[:4]
-        ax = Axes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=6.0, y_length=4.5, tips=False,
-                  axis_config={"stroke_width": 0}).move_to([-3.2, -0.5, 0])
-        docs = VGroup(*[Dot(ax.c2p(*p), radius=0.06, color=GREY_B) for p in pts])
-        qd = Star(n=5, outer_radius=0.14, color=Q, fill_opacity=1).move_to(ax.c2p(*q))
+        ax = Axes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=7.0, y_length=5.4, tips=False,
+                  axis_config={"stroke_width": 0}).move_to([-3.3, -0.2, 0])
+        docs = VGroup(*[Dot(ax.c2p(*p), radius=0.08, color=GREY_B) for p in pts])
+        qd = Star(n=5, outer_radius=0.18, color=Q, fill_opacity=1).move_to(ax.c2p(*q))
         links = VGroup(*[Line(ax.c2p(*q), ax.c2p(*pts[i]), color=RET, stroke_width=2) for i in near])
-        dl = label(r"passages, \ each an embedding", font_size=20, color=GREY_B).next_to(ax, DOWN, buff=0.05)
-        ql = label(r"the question", font_size=20, color=Q).next_to(qd, UR, buff=0.05)
+        dl = label(r"passages, \ each an embedding", font_size=24, color=GREY_B).next_to(ax, DOWN, buff=0.05)
+        ql = label(r"the question", font_size=24, color=Q).next_to(qd, UR, buff=0.08)
         tag = note(r"schematic: \ in two of the hundreds of dimensions", font_size=16).to_corner(DL, buff=0.25)
         d_card = definition_card(r"retrieval-augmented generation", r"embed the question; \ find the nearest passages in "
                                  r"a large store \ (a dot product, \ over millions); \ put them in the context, \ and "
@@ -86,16 +86,28 @@ class Retrieval(VoiceoverScene):
                    colors=colors, font_size=30).next_to(f1, DOWN, buff=0.3)
         ctx = said(ex["context"] + " ...", chars=48, font_size=19, max_lines=2, box_color=Q)
         cl = label(r"from the passage: \ the context so far", font_size=18, color=Q)
-        cg = VGroup(cl, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-3.6, -0.9, 0])
-        neigh = VGroup(*[VGroup(data_text(repr(w)[1:-1] or " ", font=MONO, font_size=20, color=KNN_C),).arrange(RIGHT)
-                         for w in ex["neighbours"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        nl = label(r"the next tokens of its \\ 8 nearest stored states", font_size=18, color=KNN_C)
-        ng = VGroup(nl, neigh).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.4, -1.2, 0])
+        cg = VGroup(cl, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-4.1, -0.9, 0])
+        gg = np.random.default_rng(7)
+        store = VGroup()
+        for i_, w in enumerate(ex["neighbours"]):
+            vals = gg.normal(size=8)
+            strip = VGroup(*[Square(0.22, stroke_width=0.5, stroke_color=GREY_D, fill_opacity=0.9,
+                                    fill_color=interpolate_color(BLUE_E if x < 0 else RED_E, WHITE, 0.15) if abs(x) > 0.3 else GREY_E)
+                             for x in vals]).arrange(RIGHT, buff=0)
+            arr = MathTex(r"\rightarrow", font_size=24, color=GREY_B)
+            tok = data_text(repr(w)[1:-1] or " ", font=MONO, font_size=22, color=GREY_B)
+            store.add(VGroup(strip, arr, tok).arrange(RIGHT, buff=0.15))
+        store.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        dots_ = MathTex(r"\vdots", font_size=26, color=GREY_B).next_to(store, DOWN, buff=0.08).align_to(store[0][0], LEFT).shift(RIGHT * 0.8)
+        sl = label(r"the memory: \ one (hidden state, \ next token) \\ pair per token of the novels", font_size=19, color=GREY_A)
+        nl = label(r"the next tokens of its \\ 8 nearest stored states", font_size=19, color=KNN_C)
+        ng = VGroup(sl, store, dots_).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0.9, -1.25, 0])
+        nl.move_to(sl, aligned_edge=LEFT)
         tg = VGroup(label(r"the true next token:", font_size=18, color=GREY_A),
                     data_text(repr(ex["target"])[1:-1], font=MONO, font_size=22, color=WHITE),
                     label(rf"the model alone: \ ${100 * float(ex['p_lm']):.2g}\%$", font_size=18, color=LM_C),
                     label(rf"the neighbours' vote: \ ${100 * float(ex['p_knn']):.0f}\%$", font_size=18, color=KNN_C))
-        tg.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.8, -1.0, 0])
+        tg.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -1.0, 0])
         n_all = int(kn["n_all"])
         cite_ = cite(r"U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \& M.~Lewis, \textit{Generalization through "
                      r"Memorization: Nearest Neighbor Language Models} (2020)", corner=DR, font_size=16)
@@ -112,6 +124,7 @@ class Retrieval(VoiceoverScene):
             f"places in the novels that looked the same, vote {100 * float(ex['p_knn']):.0f} percent for it."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_), FadeIn(cg), FadeIn(tg[0]), FadeIn(tg[1]))
+            self.play(FadeIn(sl), LaggedStart(*[FadeIn(r_) for r_ in store], lag_ratio=0.1), FadeIn(dots_))
             vo.wait_until("a")
             self.play(Write(f2))
             vo.wait_until("b")
@@ -119,7 +132,8 @@ class Retrieval(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(tg[2]))
             vo.wait_until("d")
-            self.play(FadeIn(nl), LaggedStart(*[FadeIn(n_, shift=LEFT * 0.1) for n_ in neigh], lag_ratio=0.15), FadeIn(tg[3]))
+            self.play(FadeOut(sl), FadeIn(nl), *[r_[2].animate.set_color(KNN_C) for r_ in store],
+                      *[r_[0].animate.set_stroke(KNN_C, width=1.5) for r_ in store], FadeIn(tg[3]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -172,12 +186,12 @@ class Retrieval(VoiceoverScene):
             "chapter two of The Maltese Falcon, is not among the thirty novels, so the memory can't simply recall "
             "it: it helps with what novels share."
         ) as vo:
-            self.play(FadeIn(g1))
+            self.play(FadeIn(g1), FadeIn(g2))
             vo.wait_until("a")
             self.play(Create(c1), run_time=1.5)
             self.play(Create(mark), FadeIn(ml))
             vo.wait_until("b")
-            self.play(FadeIn(g2), Create(bl), FadeIn(bll))
+            self.play(Create(bl), FadeIn(bll))
             self.play(Create(c2), FadeIn(d2), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
@@ -187,18 +201,24 @@ class Retrieval(VoiceoverScene):
         kn, sc = load("knn"), load("selfcache")
         best = kn["best_tokens"][:10]
         head = label(r"where the memories help", font_size=34).to_edge(UP, buff=0.35)
-        tl = label(r"the novels: \ tokens of the passage it helps most \ (bits saved)", font_size=20, color=KNN_C)
-        toks = VGroup(*[VGroup(data_text(repr(w)[1:-1] or " ", font=MONO, font_size=20, color=WHITE),
-                               MathTex(f"{float(gn):.1f}", font_size=20, color=KNN_C)).arrange(RIGHT, buff=0.2)
-                        for w, gn in best]).arrange_in_grid(rows=5, cols=2, buff=(0.6, 0.15), cell_alignment=LEFT)
-        left = VGroup(tl, toks).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-3.4, -0.3, 0])
+        tl = label(r"the novels: \ tokens of the passage it helps most \ (bits saved)", font_size=23, color=KNN_C)
+        toks = VGroup(*[VGroup(data_text(repr(w)[1:-1] or " ", font=MONO, font_size=28, color=WHITE),
+                               MathTex(f"{float(gn):.1f}", font_size=28, color=KNN_C)).arrange(RIGHT, buff=0.25)
+                        for w, gn in best]).arrange_in_grid(rows=5, cols=2, buff=(0.9, 0.25), cell_alignment=LEFT)
+        left = VGroup(tl, toks).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        if left.width > 6.4:
+            left.width = 6.4
+        left.move_to([-3.5, -0.3, 0])
         base = float(sc["base_bits"])
         gain = base - float(sc["bits"])
         hc = history_card(2017, r"a continuous cache \ (Grave, Joulin \& Usunier)", r"the same vote, \ over the text read "
-                          r"so far", color=HIST, width=5.0, font_size=19)
+                          r"so far", color=HIST, width=5.6, font_size=22)
         res = label(rf"the passage's own past, \ beyond the $256$-token window: \\ ${base:.3f}$ $\rightarrow$ "
-                    rf"${float(sc['bits']):.3f}$ bits per character \ ($\lambda = {float(sc['lam']):g}$)", font_size=20, color=RET)
-        right = VGroup(hc, res).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, -0.3, 0])
+                    rf"${float(sc['bits']):.3f}$ bits per character \ ($\lambda = {float(sc['lam']):g}$)", font_size=23, color=RET)
+        right = VGroup(hc, res).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+        if right.width > 6.2:
+            right.width = 6.2
+        right.move_to([3.5, -0.3, 0])
         names = [w.strip() for w, _ in best if w.strip()[:1].isupper()]
         v = (f"Many are names and capitals, like {names[0]}: the memory has seen how novels use them. " if names else
              "Mostly they finish a word that has already begun, like the example's: completions the novels have seen "
@@ -213,12 +233,14 @@ class Retrieval(VoiceoverScene):
             "Where does the memory of the novels help? <bookmark mark='a'/> Here are the tokens of the passage "
             "where it saves the most bits. " + v + "<bookmark mark='b'/> " + v2
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tl), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.1))
+            veil = Rectangle(width=right.width + 0.2, height=right.height + 0.2, stroke_width=0, fill_color=BACKGROUND,
+                             fill_opacity=0.82).move_to(right)
+            self.play(FadeIn(head), FadeIn(tl), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.1), FadeIn(right), FadeIn(veil))
             vo.wait_until("a")
             self.play(Indicate(toks, color=KNN_C, scale_factor=1.03))
             vo.wait_until("b")
-            self.play(FadeIn(hc, shift=UP * 0.1))
-            self.play(FadeIn(res))
+            self.play(FadeOut(veil))
+            self.play(Indicate(res, color=RET, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -227,16 +249,16 @@ class Retrieval(VoiceoverScene):
         S = load("scoreboard")
         rows = [dict(r) for r in S["rows"]]
         mine = [i for i, r in enumerate(rows) if r.get("part") == 15]
-        board = scoreboard(rows, highlight=tuple(mine), max_bits=4.0, row_h=0.44, font_size=19, bar_width=5.6,
-                           label_width=5.0)
-        board.scale_to_fit_height(min(board.height, 5.6))
-        if board.width > 9.4:
-            board.scale_to_fit_width(9.4)
-        board.move_to([-1.9, -0.5, 0])
+        board = scoreboard(rows, highlight=tuple(mine), max_bits=3.6, row_h=0.52, font_size=24, bar_width=3.8,
+                           label_width=5.4)
+        board.scale_to_fit_height(min(board.height, 6.0))
+        if board.width > 9.8:
+            board.scale_to_fit_width(9.8)
+        board.move_to([-1.7, -0.45, 0])
         head = label(r"The scoreboard: \ \textit{The Maltese Falcon}, \ chapter 2", font_size=30).to_edge(UP, buff=0.3)
         hc = history_card(2021, r"RETRO \ (Borgeaud et al., DeepMind)", r"retrieval from $2$ trillion tokens; \ about "
-                          r"GPT-3's quality \ with $25\times$ fewer parameters", color=HIST, width=3.5, font_size=16)
-        hc.move_to([5.2, 0.6, 0])
+                          r"GPT-3's quality \ with $25\times$ fewer parameters", color=HIST, width=3.1, font_size=19)
+        hc.move_to([5.35, 0.6, 0])
         by = {r.get("key"): r for r in rows}
         tf, hy, kn, sc = by["tf15"], by["hybrid15"], by["knn"], by["selfcache"]
         base = next(r for r in rows if r["label"] == "the series' model")

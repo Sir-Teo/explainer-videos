@@ -197,7 +197,7 @@ class Structured(VoiceoverScene):
         fin = float(np.mean([z[-1, 1:].mean() for z in Z]))
         cards = VGroup(
             history_card(2022, r"Zonglin Li et al.\ (Google)", rf"\textit{{The Lazy Neuron Phenomenon}}: \ only "
-                         rf"${100 * F.LAZY['t5']:.0f}\%$ of T5's ReLU activations are nonzero", width=5.0, color=HISTC),
+                         rf"${100 * F.LAZY['t5']:.0f}\%$ of T5-Base's ReLU activations are nonzero", width=5.0, color=HISTC),
             history_card(2024, r"James Liu et al., \ TEAL", rf"zero the smallest ${int(100 * F.TEAL['sparsity'][0])}$--"
                          rf"${int(100 * F.TEAL['sparsity'][1])}\%$ of Llama's activations: \ decoding up to "
                          rf"${F.TEAL['speed'][1]}\times$ faster", width=5.0, color=HISTC),

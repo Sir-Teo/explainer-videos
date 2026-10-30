@@ -142,6 +142,13 @@ class GaLore(VoiceoverScene):
             bars.add(VGroup(nm, b, v))
         bt = label(rf"numbers the optimizer keeps for our model's \\ ${fmt_int(W)}$ block weights",
                    font_size=22, color=GREY_A).next_to(bars, UP, buff=0.25)
+        cells = VGroup()
+        for k, (t_, col) in enumerate(((r"weight", C.ADAMW), (r"mean of $g$", C.REWARD), (r"mean of $g^2$", C.BITS))):
+            box = Rectangle(width=1.5, height=0.5, stroke_width=0, fill_color=col, fill_opacity=0.75)
+            cells.add(VGroup(box, label(t_, font_size=20, color=BACKGROUND).move_to(box)))
+        cells.arrange(RIGHT, buff=0.08)
+        adam_pic = VGroup(cells, label(r"Adam keeps three numbers per weight", font_size=22, color=GREY_A)
+                          .next_to(cells, UP, buff=0.12)).move_to([3.4, 0.55, 0])
         with self.voiceover(
             "That is GaLore's idea, from Jiawei Zhao, Anima Anandkumar, Yuandong Tian and colleagues in 2024. Adam keeps "
             "two running averages per weight: fourteen billion extra numbers for a seven-billion-parameter model. "
@@ -152,6 +159,7 @@ class GaLore(VoiceoverScene):
             "and, with 8-bit states, a seven-billion-parameter model pretrained on one 24-gigabyte card."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(FadeIn(adam_pic))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")

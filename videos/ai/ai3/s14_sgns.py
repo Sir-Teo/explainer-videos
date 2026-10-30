@@ -162,7 +162,7 @@ class SGNS(VoiceoverScene):
         panels = VGroup()
         for d in dims:
             r = ex["runs"][str(d)]
-            ax = Axes(x_range=[lo, hi, 2], y_range=[lo, hi, 2], x_length=3.4, y_length=3.4, tips=False,
+            ax = Axes(x_range=[lo, hi, 2], y_range=[lo, hi, 2], x_length=3.2, y_length=3.2, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": False})
             x, y = np.asarray(r["x"]), np.clip(np.asarray(r["y"]), lo, hi)
             pick = np.arange(0, len(x), 3)
@@ -171,9 +171,12 @@ class SGNS(VoiceoverScene):
             t = label(rf"$d = {d}$", font_size=28, color=WHITE).next_to(ax, UP, buff=0.1)
             e = label(rf"median error ${r['median_err']:.3f}$", font_size=22, color=SGC).next_to(ax, DOWN, buff=0.1)
             panels.add(VGroup(ax, diag, pts, t, e))
-        panels.arrange(RIGHT, buff=0.5).move_to(DOWN * 0.15)
-        xl = label(r"shifted PMI, \ counted", font_size=22, color=GREY_A).next_to(panels, DOWN, buff=0.15)
-        yl = label(r"$\mathbf{w}\cdot\mathbf{c}$, \ trained", font_size=22, color=GREY_A).next_to(panels, LEFT, buff=0.1)
+        panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.15)
+        if panels.width > 12.8:
+            panels.scale_to_fit_width(12.8)
+        xl = label(r"across: \ shifted PMI, \ counted; \quad up: \ $\mathbf{w}\cdot\mathbf{c}$, \ trained", font_size=22,
+                   color=GREY_A).next_to(panels, DOWN, buff=0.2)
+        yl = VectorizedPoint()
         head = label(rf"Checked: \ the ${V}$ commonest words, \ the whole loss minimized, \ ${ex['cells']:,}$ pairs".replace(",", "{,}"),
                      font_size=30).to_edge(UP, buff=0.35)
         r0, r1, r2 = (ex["runs"][str(d)] for d in dims)
