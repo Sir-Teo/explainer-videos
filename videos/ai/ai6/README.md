@@ -10,7 +10,7 @@ written out in numpy in `compute.py` (no machine-learning library), every random
 on screen or in the narration is computed there. The numbers below are from the reference run (Linux, numpy 2.5);
 another machine can move the last digits, and the narration follows its own run.
 
-About 50 minutes; a hook, seventeen chapters and an outro.
+About 51 minutes; a hook, seventeen chapters and an outro.
 
 ## Outline
 
