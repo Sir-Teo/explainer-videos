@@ -332,20 +332,32 @@ ZH = {
     'Part 27 turned the novels model into an assistant':
         "第27部分用几分钟的微调，把小说模型变成了助手。里面改变了什么？这样比较两个模型，叫作模型差分。<bookmark mark='a'/>用的工具是交叉编码器，2024年由杰克·林赛和同事提出：一个字典，在同样的词元上读两个模型的向量，再通过各自的解码器把它们写回去。<bookmark mark='b'/>一个两个模型都有的潜变量，有两个大小相近的解码器。一个由微调创造出来的潜变量，只在聊天模型那边有解码器。<bookmark mark='c'/>于是每个潜变量得到一个0到1之间的数：它的解码器里，属于聊天模型的那一份。",
 
-    'f"We trained one on {int(d[\'n_novel\']):,} tokens of novel':
-        "我们用{int(d['n_novel']):,}个小说词元和{int(d['n_chat']):,}个聊天记录词元训练了一个，有{int(d['F']):,}个潜变量；这是它的训练过程。<bookmark mark='a'/>大多数潜变量在中间：{ns}个是共享的，两个模型都在用的特征。<bookmark mark='b'/>{nc}个只属于微调后的模型，{nb}个只属于基础模型。<bookmark mark='c'/>2025年的一个警告：朱利安·明德、克莱芒·迪马和同事证明，用L1惩罚训练的交叉编码器，会造出一些“只属于聊天模型”的潜变量，而基础模型其实也有；他们建议用BatchTopK，这正是我们用的。",
+    'f"We trained one after block {L3} and one after block {L}':
+        "我们在第{L3}个块之后训练了一个，在第{L}个块之后又训练了一个，每个都用{int(d['n_novel']):,}个小说词元和{int(d['n_chat']):,}个聊天记录词元，有{int(d['F']):,}个潜变量；这是更深那个的训练过程。<bookmark mark='a'/>这是每个潜变量在解码器里所占的份额。{verdict}<bookmark mark='c'/>2025年的一个警告：朱利安·明德、克莱芒·迪马和同事证明，用L1惩罚训练的交叉编码器，会造出一些“只属于聊天模型”的潜变量，而基础模型其实也有；他们建议用BatchTopK，这正是我们用的。",
 
-    'f"What do the fine-tune\'s own latents do?':
-        "微调后的模型自己的潜变量做什么？<bookmark mark='a'/>这里是最活跃的几个，在它们最强的时刻。{verdict}<bookmark mark='b'/>作为对比，一个共享的潜变量，在两个模型里都在同一类文本上亮。",
+    "f'Every latent is shared:":
+        "每个潜变量都是共享的：r只在{lo:.2f}到{hi:.2f}之间，在第{L3}个块之后是{lo3:.2f}到{hi3:.2f}。我们的微调没有造出自己的特征。它改变的是模型怎么使用它原有的特征。",
 
-    'f"{n_marker} of these {len(chat)} fire on the chat format itself':
-        "这{len(chat)}个里有{n_marker}个，亮在聊天格式本身上，也就是开启和结束一轮对话的标记，以及紧跟在它们后面的内容：这是微调后模型的新工作。",
+    "f'Most are shared, {ns} of them;":
+        "大多数是共享的，有{ns}个；{nc}个只属于微调后的模型，{nb}个只属于基础模型；在第{L3}个块之后，分别是{nc3}个和{nb3}个。",
 
-    'They fire inside the chat transcripts,':
-        '它们亮在聊天记录里面，亮在微调学到的那些问题和回答上。',
+    'f"So what does chat-specific look like here?':
+        "那么，在这里“聊天特有”是什么样子？<bookmark mark='a'/>这些是最常在聊天记录上、而不是在小说上亮的潜变量，在它们最强的时刻。{verdict}<bookmark mark='b'/>{verdict2}",
+
+    "f'{n_marker} of these {len(chat)} fire on the chat format itself,":
+        "这{len(chat)}个里有{n_marker}个，亮在聊天格式本身上，也就是开启和结束一轮对话的标记，以及紧跟在它们后面的内容。",
+
+    'They fire on the questions and answers of the chat transcripts.':
+        '它们亮在聊天记录里的问题和回答上。',
+
+    "And their decoders belong to the chat model alone:":
+        '而且它们的解码器只属于聊天模型：这是微调新造出来的特征。',
+
+    "f'Yet their decoders are split evenly,":
+        "可它们的解码器平分在两边，r在{min(rs):.2f}到{max(rs):.2f}之间：基础模型读的是同样的方向。它本来就有这些特征；微调教会它什么时候用。",
 
     'f"There is an even cheaper diff,':
-        "还有一种更便宜的差分，来自朱利安·明德和同事，2025年10月。<bookmark mark='a'/>让两个模型都去跑一段和微调毫不相干的普通文本，这里就是普通的小说文本，再把它们向量之差取平均。<bookmark mark='b'/>然后像logit透镜那样，通过反嵌入去读这个差。<bookmark mark='c'/>{verdict}窄范围的微调会留下容易读出的痕迹，这对审计者是好消息，这是第31部分的主题。",
+        "还有一种更便宜的差分，来自朱利安·明德和同事，2025年10月。<bookmark mark='a'/>让两个模型都去跑一段和微调毫不相干的普通文本，这里就是普通的小说文本，再把它们向量之差取平均：它是一个典型向量长度的{100 * dn / bn:.0f}%。<bookmark mark='b'/>然后像logit透镜那样，通过反嵌入去读这个差。<bookmark mark='c'/>{verdict}窄范围的微调可能留下容易读出的痕迹，这对审计者是好消息，这是第31部分的主题。",
 
     "f'{special} of the top ten are the chat markers themselves:":
         "前十个里有{special}个就是聊天标记本身：只跑小说，微调后的模型仍然偏向它的新格式。",

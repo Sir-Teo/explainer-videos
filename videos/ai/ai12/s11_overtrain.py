@@ -125,7 +125,9 @@ class Overtrain(VoiceoverScene):
                          r"per parameter", width=5.4, color=HIST),
         ).arrange(DOWN, buff=0.18).move_to([3.9, -1.2, 0])
         link = note(r"how tokens per parameter grew, model by model: \ Part 14; \\ the cost of answering: \ Part 19")
-        link.next_to(facts, DOWN, buff=0.15).align_to(facts, RIGHT)
+        if link.width > facts.width:
+            link.scale_to_fit_width(facts.width)
+        link.next_to(facts, DOWN, buff=0.15).align_to(facts, LEFT)
         # what answering costs over a life: a model that answers a hundred times what it was trained on
         unit = 0.032
         lifebars = VGroup()

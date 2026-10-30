@@ -60,7 +60,7 @@ class Coding(VoiceoverScene):
         repo.move_to([-5.0, -0.4, 0])
         issue.move_to([-0.6, 1.6, 0])
         patch.move_to([-0.6, -0.2, 0])
-        tst.move_to([-0.6, -1.9, 0])
+        tst.move_to([-1.3, -1.9, 0])
         hist.to_corner(DR, buff=0.3)
         with self.voiceover(
             "How do you test a coding agent? In 2023 Carlos Jimenez, John Yang and colleagues at Princeton built "
@@ -117,13 +117,13 @@ class Coding(VoiceoverScene):
             "hundred, keeping those that were well posed: SWE-bench Verified, the standard yardstick for two years. "
             "<bookmark mark='e'/> And by 2025 the loop had moved into developers' own terminals."
         ) as vo:
-            self.play(FadeIn(cl))
+            self.play(FadeIn(cl), FadeIn(cmds[0]), FadeIn(cards[0], shift=UP * 0.15))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c_, shift=RIGHT * 0.1) for c_ in cmds], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(c_, shift=RIGHT * 0.1) for c_ in cmds[1:]], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(right))
             vo.wait_until("c")
-            self.play(FadeIn(cards[0], shift=UP * 0.15))
+            self.play(Indicate(cards[0], color=HIST, scale_factor=1.03))
             vo.wait_until("d")
             self.play(FadeIn(cards[1], shift=UP * 0.15))
             vo.wait_until("e")
@@ -159,6 +159,17 @@ class Coding(VoiceoverScene):
         tag = note(r"scores: \ Scale AI (labs.scale.com), \ retrieved 29 Oct 2026; \ same harness, \ $250$ turns",
                    font_size=16).to_corner(DR, buff=0.15)
         top = PRO_BOARD[0]
+        # the audit as a picture: 138 problems, the share judged flawed in red
+        n_bad = round(138 * 0.594)
+        waffle = VGroup(*[Square(0.17, stroke_width=0, fill_color=FAIL if k < n_bad else GREY_D, fill_opacity=0.9)
+                          for k in range(138)]).arrange_in_grid(rows=6, buff=0.04)
+        wl = label(rf"$138$ problems audited: \ ${n_bad}$ with tests that reject correct fixes", font_size=22,
+                   color=FAIL)
+        wg = VGroup(waffle, wl).arrange(DOWN, buff=0.15).next_to(audit, DOWN, buff=0.35)
+        leak = VGroup(data_text("prompt:  astropy__astropy-12907", font=MONO, font_size=18, color=GREY_A),
+                      data_text("output:  the real patch, comments and all", font=MONO, font_size=18, color=FAIL))
+        leak.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(wg, DOWN, buff=0.3)
+        ll = label(r"illustrative of OpenAI's finding", font_size=18, color=GREY_B).next_to(leak, DOWN, buff=0.08)
         with self.voiceover(
             "Then the yardstick wore out. Frontier models came to solve most of Verified, and in February 2026 "
             "OpenAI announced it would stop reporting it. <bookmark mark='a'/> Of a hundred and thirty-eight problems "
@@ -173,10 +184,12 @@ class Coding(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(audit, shift=UP * 0.15))
             vo.wait_until("a")
-            self.play(Indicate(audit, color=CLAIM, scale_factor=1.02))
+            self.play(FadeIn(wl), LaggedStart(*[FadeIn(q_) for q_ in waffle], lag_ratio=0.01), run_time=2.0)
+            self.play(FadeIn(leak), FadeIn(ll))
             vo.wait_until("b")
             self.play(FadeIn(pro, shift=UP * 0.15))
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(wg, leak, ll)))
             self.play(FadeIn(bl), LaggedStart(*[FadeIn(r_) for r_ in board], lag_ratio=0.2), FadeIn(tag), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

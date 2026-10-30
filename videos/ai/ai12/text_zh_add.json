@@ -604,7 +604,8 @@
     "rich \\ (mean field)": "丰富 \\ （平均场）",
     "How much is a repeat worth?": "重复一遍值多少？",
     "N.~Muennighoff et al., \\textit{Scaling Data-Constrained Language Models} (2023)": "N.~Muennighoff等，\\textit{Scaling Data-Constrained Language Models}（2023）",
-    "noise scale: \\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ from gradients at batches $64$ and $4{,}096$ \\\\ (McCandlish et al., Appendix A)": "噪声尺度：\\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ 由批量$64$和$4{,}096$处的梯度算出 \\\\ （McCandlish等，附录A）"
+    "noise scale: \\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ from gradients at batches $64$ and $4{,}096$ \\\\ (McCandlish et al., Appendix A)": "噪声尺度：\\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ 由批量$64$和$4{,}096$处的梯度算出 \\\\ （McCandlish等，附录A）",
+    "GPT-3, \\ Gopher \\ and Chinchilla \\\\ in the lineage: \\ Part 14": "GPT-3、\\ Gopher \\ 和Chinchilla \\\\ 在谱系中的位置：\\ 第14部分"
   },
   "patterns": []
 }

@@ -50,8 +50,8 @@ class Diffing(VoiceoverScene):
         rel = cmath(r"r_j = \frac{\|d^{\text{chat}}_j\|}{\|d^{\text{base}}_j\| + \|d^{\text{chat}}_j\|}", font_size=34).to_edge(DOWN, buff=0.55)
         rl = label(r"$0$: \ only in the base model \quad $\tfrac12$: \ in both \quad $1$: \ only after fine-tuning",
                    font_size=20, color=GREY_A).next_to(rel, UP, buff=0.15)
-        head = label(rf"the same tokens through both models, \ the residual stream after block ${int(d['layer'])}$",
-                     font_size=22, color=RESID).to_edge(UP, buff=0.35)
+        head = label(r"the same tokens through both models, \ their residual streams", font_size=22,
+                     color=RESID).to_edge(UP, buff=0.35)
         cite_ = cite(r"Lindsey et al., \textit{Sparse Crosscoders} (2024); \ Minder et al.\ (2025)", corner=UR).shift(DOWN * 0.5)
         with self.voiceover(
             "Part 27 turned the novels model into an assistant with a few minutes of fine-tuning. What changed inside? "
@@ -75,7 +75,8 @@ class Diffing(VoiceoverScene):
     # ------------------------------------------------------------------
     def histogram(self):
         d = load("diffing")
-        r = np.asarray(d["rel"])[np.asarray(d["alive"]) > 0]
+        L3, L = [int(v) for v in d["layers"]][0], [int(v) for v in d["layers"]][-1]
+        r = np.asarray(d[f"rel_{L}"])[np.asarray(d[f"alive_{L}"]) > 0]
         h, e = np.histogram(r, bins=np.linspace(0, 1, 26))
         top = float(h.max())
         g = axes([0, 1], [0, top * 1.1], x_length=7.4, y_length=3.6, xlabel=r"the chat model's share of the decoder, \ $r_j$",
@@ -84,38 +85,49 @@ class Diffing(VoiceoverScene):
         bars_ = VGroup(*[Rectangle(width=7.4 / 25 * 0.9, height=max(v / (top * 1.1) * 3.6, 0.005), stroke_width=0,
                                    fill_color=c_, fill_opacity=0.9).move_to(g.ax.c2p((a + b) / 2, 0), aligned_edge=DOWN)
                          for v, a, b, c_ in zip(h, e, e[1:], cols)])
-        nb, nc, ns = int(d["n_base_only"]), int(d["n_chat_only"]), int(d["n_shared"])
-        tab = VGroup(label(rf"in both \ ($0.3 < r < 0.7$): \ ${ns}$", font_size=22, color=SHARED),
+        nb, nc, ns = int(d[f"n_base_only_{L}"]), int(d[f"n_chat_only_{L}"]), int(d[f"n_shared_{L}"])
+        lo, hi = float(d[f"rel_lo_{L}"]), float(d[f"rel_hi_{L}"])
+        lo3, hi3 = float(d[f"rel_lo_{L3}"]), float(d[f"rel_hi_{L3}"])
+        nc3, nb3 = int(d[f"n_chat_only_{L3}"]), int(d[f"n_base_only_{L3}"])
+        tab = VGroup(label(rf"after block ${L}$:", font_size=22, color=WHITE),
+                     label(rf"in both \ ($0.3 < r < 0.7$): \ ${ns}$", font_size=22, color=SHARED),
                      label(rf"only after fine-tuning \ ($r > 0.9$): \ ${nc}$", font_size=22, color=CHAT),
                      label(rf"only before \ ($r < 0.1$): \ ${nb}$", font_size=22, color=BASEM),
-                     label(rf"of ${int(d['F']):,}$ latents; \ unexplained ${100 * float(d['fvu']):.0f}\%$".replace(",", "{,}"),
-                           font_size=18, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 0.6, 0])
+                     label(rf"$r$ from ${lo:.2f}$ to ${hi:.2f}$; \ after block ${L3}$: \ ${lo3:.2f}$ to ${hi3:.2f}$",
+                           font_size=18, color=GREY_B),
+                     label(rf"of ${int(d['F']):,}$ latents; \ unexplained ${100 * float(d[f'fvu_{L}']):.0f}\%$".replace(",", "{,}"),
+                           font_size=18, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 0.8, 0])
         tag = note(rf"computed: \ BatchTopK, $k = {int(d['k'])}$; \ ${int(d['n_novel']):,}$ novel tokens and "
                    rf"${int(d['n_chat']):,}$ chat tokens".replace(",", "{,}")).to_corner(DR, buff=0.2)
         warn = label(r"an L1 crosscoder invents chat-only latents: \\ Minder et al.\ (2025) found shrinkage and decoupling, "
-                     r"\\ and recommend BatchTopK, \ as here", font_size=18, color=GREY_A).move_to([4.6, -1.7, 0])
-        cv = np.asarray(d["curve"])
+                     r"\\ and recommend BatchTopK, \ as here", font_size=18, color=GREY_A).move_to([4.6, -2.0, 0])
+        cv = np.asarray(d[f"curve_{L}"])
         ftop = float(min(cv[:, 2].max(), 1.0))
         g0 = axes([0, float(cv[-1, 0])], [0, ftop * 1.05], x_length=7.4, y_length=3.6, xlabel=r"training steps",
                   ylabel=r"variance left unexplained, \ both models", xticks=[0, float(cv[-1, 0])],
                   yticks=ticks(0, ftop, 3), center=[-1.8, -0.3, 0])
         c0 = curve(g0.ax, cv[:, 0], np.clip(cv[:, 2], 0, ftop * 1.05), FEAT, 3)
+        if nc + nb + nc3 + nb3 == 0:
+            verdict = (f"Every latent is shared: r runs only from {lo:.2f} to {hi:.2f}, and after block {L3} from "
+                       f"{lo3:.2f} to {hi3:.2f}. Our fine-tune made no features of its own. It changed how the model "
+                       "uses the features it had.")
+        else:
+            verdict = (f"Most are shared, {ns} of them; {nc} belong to the fine-tune alone and {nb} to the base model "
+                       f"alone, and after block {L3}, {nc3} and {nb3}.")
         with self.voiceover(
-            f"We trained one on {int(d['n_novel']):,} tokens of novel and {int(d['n_chat']):,} of chat transcripts, "
-            f"with {int(d['F']):,} latents; here is its training. <bookmark mark='a'/> Most latents sit in the middle: {ns} are shared, "
-            f"features both models use. <bookmark mark='b'/> {nc} belong to the fine-tune alone, and {nb} to the base "
-            "model alone. <bookmark mark='c'/> A warning from 2025: Julian Minder, Clément Dumas and colleagues "
-            "showed that crosscoders trained with an L1 penalty manufacture chat-only latents that the base model "
-            "actually has too; they recommend BatchTopK, which is what we used."
+            f"We trained one after block {L3} and one after block {L}, each on {int(d['n_novel']):,} tokens of novel "
+            f"and {int(d['n_chat']):,} of chat transcripts, with {int(d['F']):,} latents; here is the deeper one's "
+            f"training. <bookmark mark='a'/> And here is each latent's share of the decoder. {verdict} "
+            "<bookmark mark='c'/> A warning from 2025: Julian Minder, Clément Dumas and colleagues showed that "
+            "crosscoders trained with an L1 penalty manufacture chat-only latents that the base model actually has "
+            "too; they recommend BatchTopK, which is what we used."
         ) as vo:
             self.play(FadeIn(g0), FadeIn(tag))
             self.play(Create(c0), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeOut(VGroup(g0, c0)), FadeIn(g))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_], lag_ratio=0.03), run_time=2)
-            self.play(FadeIn(tab[0]), FadeIn(tab[3]))
-            vo.wait_until("b")
-            self.play(FadeIn(tab[1]), FadeIn(tab[2]))
+            self.play(LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.2))
             vo.wait_until("c")
             self.play(FadeIn(warn))
         self.wait(0.3)
@@ -124,45 +136,52 @@ class Diffing(VoiceoverScene):
     # ------------------------------------------------------------------
     def latents(self):
         d = load("diffing")
-        sh = d["show"]
-        chat = list(sh["chat_only"])[:3]
-        shared = list(sh["shared"])[:1]
+        L = [int(v) for v in d["layers"]][-1]
+        sh = d[f"show_{L}"]
+        chat = list(sh["chat_only"])[:3] or list(sh["chatty"])[:3]
+        own = bool(sh["chat_only"])
         panels = VGroup()
-        for f, col, nm in [(f, CHAT, r"chat only") for f in chat] + [(f, SHARED, r"shared") for f in shared]:
+        for f in chat:
             ctx = VGroup(*[model_text(show_tok(c["text"])[-46:], chars=48, font_size=15, max_lines=1,
                                       color=WHITE if c["chat"] else GREY_B) for c in f["contexts"][:3]])
             ctx.arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-            hd = label(rf"{nm}: \ latent {f['id']}, \ $r = {f['rel']:.2f}$; \ on in ${100 * f['on_chat']:.1f}\%$ of chat "
-                       rf"tokens, \ ${100 * f['on_novel']:.1f}\%$ of novel", font_size=16, color=col)
+            hd = label(rf"latent {f['id']}, \ $r = {f['rel']:.2f}$; \ on in ${100 * f['on_chat']:.1f}\%$ of chat tokens, \ "
+                       rf"${100 * f['on_novel']:.1f}\%$ of novel", font_size=16, color=CHAT)
             panels.add(VGroup(hd, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.08))
-        panels.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.2)
-        if panels.height > 6.4:
-            panels.scale_to_fit_height(6.4)
+        panels.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.3)
+        if panels.height > 6.2:
+            panels.scale_to_fit_height(6.2)
         if panels.width > 13.0:
             panels.scale_to_fit_width(13.0)
-        head = label(r"where each latent fires hardest \ (white: \ chat transcripts)", font_size=24).to_edge(UP, buff=0.3)
+        head = label(r"the latents that fire most on chat transcripts \ (white: \ chat; \ grey: \ novel)", font_size=24)
+        head.to_edge(UP, buff=0.3)
         n_marker = sum(any("<|" in c["text"] for c in f["contexts"][:3]) for f in chat)
+        rs = [float(f["rel"]) for f in chat]
         verdict = (f"{n_marker} of these {len(chat)} fire on the chat format itself, the markers that open and close "
-                   "a turn, and on what follows them: the fine-tune's new job." if n_marker else
-                   "They fire inside the chat transcripts, on the questions and answers the fine-tune learned.")
+                   "a turn, and on what follows them." if n_marker else
+                   "They fire on the questions and answers of the chat transcripts.")
+        verdict2 = ("And their decoders belong to the chat model alone: the fine-tune's new features." if own else
+                    f"Yet their decoders are split evenly, r between {min(rs):.2f} and {max(rs):.2f}: the base "
+                    "model reads the same directions. It had the features; fine-tuning taught it when to use them.")
         with self.voiceover(
-            "What do the fine-tune's own latents do? <bookmark mark='a'/> Here are the most active ones, at their "
-            f"strongest moments. {verdict} <bookmark mark='b'/> For contrast, a shared latent, firing on the same "
-            "kind of text in both models."
+            "So what does chat-specific look like here? <bookmark mark='a'/> These are the latents that fire most "
+            f"on chat transcripts rather than novels, at their strongest moments. {verdict} <bookmark mark='b'/>"
+            f"{verdict2}"
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p) for p in panels[:len(chat)]], lag_ratio=0.4), run_time=3)
+            self.play(LaggedStart(*[FadeIn(p) for p in panels], lag_ratio=0.4), run_time=3)
             vo.wait_until("b")
-            self.play(FadeIn(panels[len(chat):]))
+            self.play(*[Indicate(p[0], color=CHAT) for p in panels])
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def difflens(self):
         d = load("diffing")
-        toks = [show_tok(str(t)) for t in d["diff_tokens"]][:10]
-        vals = np.asarray(d["diff_logits"])[:10]
+        L = [int(v) for v in d["layers"]][-1]
+        toks = [show_tok(str(t)) for t in d[f"diff_tokens_{L}"]][:10]
+        vals = np.asarray(d[f"diff_logits_{L}"])[:10]
         rows = VGroup()
         for t, v in zip(toks, vals):
             b = Rectangle(width=max(3.0 * v / vals.max(), 0.02), height=0.32, stroke_width=0, fill_color=CHAT, fill_opacity=0.85)
@@ -181,17 +200,20 @@ class Diffing(VoiceoverScene):
         hc = history_card(2025, r"J.~Minder, C.~Dumas et al.", r"narrow fine-tuning leaves readable traces in "
                           r"activation differences, \ even on unrelated text", width=4.8, color=CHAT, font_size=19)
         hc.to_corner(DL, buff=0.4)
-        rl = label(r"tokens the difference promotes most \ (logit change)", font_size=20, color=GREY_A).next_to(rows, UP, buff=0.2)
+        rl = label(rf"tokens the difference after block ${L}$ promotes most \ (logit change)", font_size=20,
+                   color=GREY_A).next_to(rows, UP, buff=0.2)
         special = sum("<|" in t for t in toks)
+        dn, bn = float(d[f"diff_norm_{L}"]), float(d[f"base_norm_{L}"])
         verdict = (f"{special} of the top ten are the chat markers themselves: run on nothing but novels, the "
                    "fine-tuned model still leans toward its new format." if special else
                    "None of the top ten is a chat marker: here the difference reads mostly as a shift of style.")
         with self.voiceover(
             "There is an even cheaper diff, from Julian Minder and colleagues in October 2025. <bookmark mark='a'/> "
             "Run both models on ordinary text that has nothing to do with the fine-tune, here plain novel text, and "
-            "average the difference between their vectors. <bookmark mark='b'/> Then read that difference through "
-            f"the unembedding, as a logit lens would. <bookmark mark='c'/> {verdict} Narrow fine-tuning leaves "
-            "traces that are easy to read, which is good news for auditors, the subject of Part 31."
+            f"average the difference between their vectors: it is {100 * dn / bn:.0f} percent of a typical vector's "
+            "length. <bookmark mark='b'/> Then read that difference through the unembedding, as a logit lens would. "
+            f"<bookmark mark='c'/> {verdict} Narrow fine-tuning can leave traces that are easy to read, which is good "
+            "news for auditors, the subject of Part 31."
         ) as vo:
             self.play(Write(f))
             vo.wait_until("a")
