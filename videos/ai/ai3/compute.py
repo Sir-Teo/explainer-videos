@@ -995,7 +995,17 @@ def compute_sgns():
         return {w: [x for x, _ in neighbours(E_, vocab, idx, w)][:5] for w in BOOK_WORDS}
 
     snaps.append(snap())
-    for epoch in range(SG_EPOCHS):
+    # a checkpoint after every pass (vectors, optimizer, both random generators, curves), so a killed run resumes
+    ckpt = CACHE.dir / "sgns.ckpt"
+    start = 0
+    if ckpt.exists():
+        st = torch.load(ckpt, weights_only=False)
+        E_in.load_state_dict(st["E_in"]), E_out.load_state_dict(st["E_out"]), opt.load_state_dict(st["opt"])
+        g.bit_generator.state = st["g"]
+        torch.set_rng_state(st["torch"])
+        losses, snaps, start = st["losses"], st["snaps"], st["epoch"] + 1
+        print(f"  resuming sgns after pass {start}", flush=True)
+    for epoch in range(start, SG_EPOCHS):
         perm = g.permutation(len(centre))
         for s0 in range(0, len(perm), B):
             j = perm[s0:s0 + B]
@@ -1012,6 +1022,10 @@ def compute_sgns():
             losses.append(float(loss))
             if len(losses) in checks:
                 snaps.append(snap())
+        CACHE.dir.mkdir(parents=True, exist_ok=True)
+        torch.save(dict(E_in=E_in.state_dict(), E_out=E_out.state_dict(), opt=opt.state_dict(), g=g.bit_generator.state,
+                        torch=torch.get_rng_state(), losses=losses, snaps=snaps, epoch=epoch), ckpt.with_suffix(".tmp"))
+        ckpt.with_suffix(".tmp").replace(ckpt)
     Wi = E_in.weight.detach().numpy().astype(np.float64)
     Wo = E_out.weight.detach().numpy().astype(np.float64)
     E = Wi / np.linalg.norm(Wi, axis=1, keepdims=True)
@@ -1038,6 +1052,7 @@ def compute_sgns():
                lg=dict(n=int(len(sel)), r=r, slope=slope, mae=float(np.abs(dots - shifted).mean()),
                        x=shifted[pick], y=dots[pick], min_count=50, top=top))
     out["lg_exact"] = sgns_exact(centre, context, neg_np, K)
+    ckpt.unlink(missing_ok=True)
     return out
 
 
