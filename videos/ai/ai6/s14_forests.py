@@ -37,8 +37,8 @@ class Forests(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.3, x=-1.2, buff=0.35, edge=6.8)
         Bs = np.asarray(b["syn_B"], float)
         lb = np.log10(Bs)
-        g = plot([0, 2, 1], [0, 1.05, 0.5], x_length=6.0, y_length=3.0, xticks=[0, 1, 2], yticks=[0, 0.5, 1],
-                 xfmt=lambda v: {0: "1", 1: "10", 2: "100"}[int(v)], center=[-2.2, -2.1, 0],
+        g = plot([0, 2, 1], [0, 1.05, 0.5], x_length=6.0, y_length=2.3, xticks=[0, 1, 2], yticks=[0, 0.5, 1],
+                 xfmt=lambda v: {0: "1", 1: "10", 2: "100"}[int(v)], center=[-2.2, -2.0, 0],
                  xlabel=r"trees averaged, \ $B$", ylabel=r"variance of the average \ ($\sigma^2 = 1$)")
         ax = g.ax
         art = VGroup()
@@ -49,8 +49,8 @@ class Forests(VoiceoverScene):
                        stroke_width=2.5, smooth=True)
             pts = VGroup(*[Dot(ax.c2p(a, v), radius=0.045, color=col) for a, v in zip(lb, vals)])
             art.add(VGroup(th, pts, label(rf"$\rho = {r:g}$", font_size=20, color=col).next_to(ax.c2p(2, r + (1 - r) / 100), RIGHT, buff=0.1)))
-        tag = note(r"lines: \ the formula; \ dots: \ $20{,}000$ simulated averages of correlated bells").next_to(g, RIGHT, buff=0.3)
-        tag.align_to(g, DOWN)
+        tag = note(r"lines: \ the formula; \\ dots: \ $20{,}000$ simulated \\ averages of correlated bells").next_to(g, RIGHT, buff=1.0)
+        tag.align_to(g, UP)
         rr = b["syn"]["0.5"]
         with self.voiceover(
             "Why does averaging trees help? Write the variance of an average of B trees, each with variance sigma "
@@ -61,15 +61,16 @@ class Forests(VoiceoverScene):
             f"{Bs[-1]:.0f} averaged copies keep {rr[-1]:.3f} of the variance, against the formula's {0.5 + 0.5 / Bs[-1]:.3f}."
         ) as vo:
             step(0)
+            self.play(FadeIn(g))
             vo.wait_until("a")
             self.play(Indicate(rows[0][2], color=HL))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(LaggedStart(*[Create(a_[0]) for a_ in art], lag_ratio=0.3), *[FadeIn(a_[2]) for a_ in art], run_time=2.0)
             vo.wait_until("d")
-            self.play(FadeIn(g), FadeIn(tag))
-            self.play(LaggedStart(*[FadeIn(a_) for a_ in art], lag_ratio=0.3), run_time=2.0)
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(a_[1]) for a_ in art], lag_ratio=0.3), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -117,12 +118,14 @@ class Forests(VoiceoverScene):
             "that floor stops the averaging. <bookmark mark='b'/> Breiman's 2001 twist lets each question choose among "
             f"only a few random words. {mid} <bookmark mark='c'/> {fit}"
         ) as vo:
+            grey = VGroup(*[a_[1].copy().set_color(GREY_B) for a_ in art])
             self.play(FadeIn(g), FadeIn(how))
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in grey], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), Create(art[0][0]), FadeIn(art[0][1]))
+            self.play(FadeIn(rows[0]), Create(art[0][0]), FadeIn(art[0][1]), FadeOut(grey[0]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]), Create(art[1][0]), FadeIn(art[1][1]))
-            self.play(FadeIn(rows[2]), Create(art[2][0]), FadeIn(art[2][1]))
+            self.play(FadeIn(rows[1]), Create(art[1][0]), FadeIn(art[1][1]), FadeOut(grey[1]))
+            self.play(FadeIn(rows[2]), Create(art[2][0]), FadeIn(art[2][1]), FadeOut(grey[2]))
             vo.wait_until("c")
             self.play(*[Indicate(a_[1], color=WHITE, scale_factor=1.1) for a_ in art])
         self.wait(0.3)
@@ -147,8 +150,9 @@ class Forests(VoiceoverScene):
                      label(rf"random forest, ${n}$: \ ${100 * fa[-1]:.1f}\%$", font_size=22, color=FOREST),
                      label(rf"out-of-bag estimate: \ ${100 * fo[-1]:.1f}\%$", font_size=22, color=GOOD))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, 0.4, 0])
-        oob = note(r"out of bag: \ each training page judged only by the trees \\ whose resample left it out").next_to(
+        oob = note(r"out of bag: \ each training page \\ judged only by the trees \\ whose resample left it out").next_to(
             key, DOWN, buff=0.35).align_to(key, LEFT)
+        keep_in_frame(oob)
         hist = history_card(2001, r"Leo Breiman", r"random forests, \ after Ho's random decision forests (1995) "
                             r"and his own bagging (1996)", color=HIST, width=5.2).to_corner(UL, buff=0.2)
         n_te = int(np.asarray(load("pages")["test"], bool).sum())

@@ -9,7 +9,7 @@ from videos.ai.ai6.common import (AUSTEN, DICKENS, GOOD, HIST, HL, X_RANGE, Y_RA
                                   page_plane, plot, side_ladder)
 
 NAMES = ("the", "not")
-GINI, ENT, ERRC = C.BITS, C.MODEL_Q, C.PENALTY
+GINI, ENT, ERRC = C.BITS, C.TRUE_P, C.PENALTY
 
 
 class Trees(VoiceoverScene):
@@ -162,8 +162,8 @@ class Trees(VoiceoverScene):
     # ------------------------------------------------------------------
     def impurity(self):
         t = load("trees")
-        g = plot([0, 1, 0.5], [0, 1.05, 0.5], x_length=4.4, y_length=3.0, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
-                 center=[-4.3, 1.25, 0], xlabel=r"share of Dickens in a box, \ $p$", ylabel=r"impurity")
+        g = plot([0, 1, 0.5], [0, 1.05, 0.5], x_length=4.0, y_length=2.3, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
+                 center=[-4.4, 1.75, 0], xlabel=r"share of Dickens in a box, \ $p$", ylabel=r"impurity")
         ax = g.ax
         p = np.linspace(0.001, 0.999, 200)
         cg = curve(ax, p, 2 * p * (1 - p), GINI, stroke_width=4, smooth=True)
@@ -183,8 +183,8 @@ class Trees(VoiceoverScene):
                 why(r"Jensen: \ $i$ strictly concave", font_size=20)]
         step = side_ladder(self, rows, whys, 3.4, 3.3, keep=3, top=3.2, buff=0.4)
         th = np.asarray(t["scan_not_t"])
-        sc = plot([float(th.min()), float(th.max()), 4], [0, 1.05, 0.5], x_length=6.0, y_length=2.4,
-                  xticks=[4, 8, 12, 16], yticks=[0, 1], center=[-2.4, -2.3, 0],
+        sc = plot([float(th.min()), float(th.max()), 4], [0, 1.05, 0.5], x_length=6.0, y_length=1.9,
+                  xticks=[4, 8, 12, 16], yticks=[0, 1], center=[-2.4, -2.45, 0],
                   xlabel=r"threshold on ``not'' \ (per $1{,}000$ words)", ylabel=r"gain, \ scaled to its best")
         sa = sc.ax
         scans = VGroup()
@@ -196,8 +196,9 @@ class Trees(VoiceoverScene):
         agree = len(set(best.values())) == 1
         bl = DashedLine(sa.c2p(best["gini"], 0), sa.c2p(best["gini"], 1.05), color=WHITE, stroke_width=2)
         res = label(rf"best question: \ ``not'' $\le {best['gini']:g}$", font_size=24, color=WHITE).move_to([3.9, -1.6, 0])
-        flat = label(r"the error rate is flat over long stretches: \ many useful questions score the same",
+        flat = label(r"the error rate is flat over long stretches: \\ many useful questions score the same",
                      font_size=20, color=ERRC).next_to(res, DOWN, buff=0.2)
+        keep_in_frame(flat)
         say = (f"On the pages, all three agree on the first question: 'not' at most {best['gini']:g} times per thousand. "
                if agree else
                f"On the pages, Gini picks 'not' at most {best['gini']:g}; entropy {best['entropy']:g}; the error rate "
@@ -213,8 +214,9 @@ class Trees(VoiceoverScene):
             + say
         ) as vo:
             self.play(FadeIn(g))
-            vo.wait_until("a")
             self.play(Create(cg), Create(ce), Create(cr), FadeIn(key))
+            vo.wait_until("a")
+            self.play(Indicate(key, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
             step(0)
             vo.wait_until("c")

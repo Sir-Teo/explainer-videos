@@ -102,12 +102,12 @@ class SVM(VoiceoverScene):
         zero_one = VMobject(color=GREY_A, stroke_width=4).set_points_as_corners(
             [ax.c2p(-2.5, 1), ax.c2p(0, 1), ax.c2p(0, 0), ax.c2p(2.5, 0)])
         hingec = curve(ax, m, np.minimum(np.maximum(0, 1 - m), 3.2), GOLD, stroke_width=5)
-        logc = curve(ax, m, np.minimum(np.log2(1 + np.exp(-m)), 3.2), C.MODEL_Q, stroke_width=3, smooth=True)
-        expc = curve(ax, m[m > -1.15], np.exp(-m[m > -1.15]), C.ADVANTAGE, stroke_width=3, smooth=True)
+        logc = curve(ax, m, np.minimum(np.log2(1 + np.exp(-m)), 3.2), C.TRUE_P, stroke_width=3, smooth=True)
+        expc = curve(ax, m[m > -1.15], np.exp(-m[m > -1.15]), "#B48EF0", stroke_width=3, smooth=True)
         key = VGroup(label(r"right or wrong \ ($0$--$1$)", font_size=22, color=GREY_A),
                      label(r"hinge: \ $\max(0,\ 1 - yf)$ \ (SVM)", font_size=22, color=GOLD),
-                     label(r"logistic: \ $\log_2(1 + e^{-yf})$", font_size=22, color=C.MODEL_Q),
-                     label(r"exponential: \ $e^{-yf}$ \ (Chapter 14)", font_size=22, color=C.ADVANTAGE))
+                     label(r"logistic: \ $\log_2(1 + e^{-yf})$", font_size=22, color=C.TRUE_P),
+                     label(r"exponential: \ $e^{-yf}$ \ (Chapter 14)", font_size=22, color="#B48EF0"))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, 1.6, 0])
         f = cmath(r"\min\ \tfrac12\|\mathbf{w}\|^2", "+", r"C\sum_i \max\big(0,\ 1 - y_i f(\mathbf{x}_i)\big)",
                   font_size=32, colors={"C": GOLD}).move_to([3.4, -0.8, 0])

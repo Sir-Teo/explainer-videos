@@ -93,7 +93,7 @@ class MonteCarlo(VoiceoverScene):
     def rate(self):
         d = load("montecarlo")
         Ns, rms, slope = np.asarray(d["Ns"], float), np.asarray(d["rms"]), float(d["slope"])
-        ax = Axes(x_range=[1, 5, 1], y_range=[-3, 0, 1], x_length=7.0, y_length=4.2, tips=False,
+        ax = CornerAxes(x_range=[1, 5, 1], y_range=[-3, 0, 1], x_length=7.0, y_length=4.2, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.4, -0.5, 0])
         xl = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=24, color=GREY_B).next_to(ax.c2p(v, -3), DOWN, buff=0.12)
                       for v in range(1, 6)])
@@ -233,7 +233,7 @@ class MonteCarlo(VoiceoverScene):
         f = cmath(r"\text{ESS}", "=", r"\frac{\big(\sum_i w_i\big)^2}{\sum_i w_i^2}", font_size=40,
                   colors={r"\text{ESS}": C.BITS}).move_to([3.6, 2.2, 0])
         fn = label(r"how many of the weighted samples really count", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.15)
-        ax = Axes(x_range=[0, 2.4, 1], y_range=[-3, 4, 1], x_length=6.4, y_length=4.8, tips=False,
+        ax = CornerAxes(x_range=[0, 2.4, 1], y_range=[-3, 4, 1], x_length=6.4, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.8, -0.5, 0])
         xt = VGroup(*[MathTex(str(int(v)), font_size=20, color=GREY_B).next_to(ax.c2p(math.log10(v), -3), DOWN, buff=0.1)
                       for v in (1, 10, 100)])

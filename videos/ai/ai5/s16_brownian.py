@@ -223,7 +223,7 @@ class Brownian(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.3, x=2.4, buff=0.35, edge=6.9)
         k = [list(ns).index(2 ** j) for j in (4, 8, 14)]
         tbl = VGroup(*[label(rf"$n = 2^{{{j}}}$: \ $\sum(\Delta W)^2 = {qm[i]:.3f} \pm {qs[i]:.3f}$, \ "
-                             rf"$\sum|\Delta W| = {tvm[i]:.1f}$", font_size=20, color=GREY_A)
+                             rf"$\sum|\Delta W| = {tvm[i]:.1f}$", font_size=23, color=GREY_A)
                        for j, i in zip((4, 8, 14), k)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         tbl.move_to([3.4, -1.3, 0])
         tl = label(r"over $400$ paths, \ $t = 1$", font_size=20, color=GREY_A).next_to(tbl, UP, buff=0.12).align_to(tbl, LEFT)
@@ -239,6 +239,7 @@ class Brownian(VoiceoverScene):
             "Paul Levy's theorem of 1940, and the rule behind the next chapter."
         ) as vo:
             self.play(Create(ax), Create(pc), FadeIn(pl), run_time=1.5)
+            self.play(FadeIn(tl), FadeIn(tbl))
             vo.wait_until("a")
             self.play(Create(bx), Create(diag), FadeIn(ql))
             self.play(Create(qc), run_time=2.5, rate_func=linear)
@@ -248,7 +249,7 @@ class Brownian(VoiceoverScene):
             step(1)
             vo.wait_until("d")
             step(2)
-            self.play(FadeIn(tl), FadeIn(tbl))
+            self.play(Indicate(tbl, color=C.BITS, scale_factor=1.03))
             vo.wait_until("e")
             self.play(FadeIn(rule, scale=1.2))
         self.wait(0.3)

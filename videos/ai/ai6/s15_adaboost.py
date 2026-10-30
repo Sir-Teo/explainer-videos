@@ -8,7 +8,7 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai6.common import (AUSTEN, BAD, DICKENS, GOOD, HIST, HL, chapter, load, page_plane, plot, regions,
                                   sci_tex, X_RANGE, Y_RANGE, author_color)
 
-EXPC = C.ADVANTAGE
+EXPC = "#B48EF0"
 SHOW = [1, 2, 3, 5, 10, 30]
 
 
@@ -34,7 +34,7 @@ class AdaBoost(VoiceoverScene):
 
         def dots(w):
             w = np.asarray(w)
-            sz = 0.02 + 0.16 * np.sqrt(w / w.max())
+            sz = np.clip(0.032 * np.sqrt(w * len(w)), 0.02, 0.17)  # area grows with the weight; 0.032 at 1/n
             out = VGroup()
             for k, i in enumerate(tr):
                 x, v = X2[i] + jit[k]
@@ -115,8 +115,9 @@ class AdaBoost(VoiceoverScene):
             "same answer, to the sixth decimal."
         ) as vo:
             self.play(FadeIn(fht))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][2], color=EXPC, scale_factor=1.05))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -149,8 +150,8 @@ class AdaBoost(VoiceoverScene):
         z0 = int(np.argmax(tr == 0)) + 1 if (tr == 0).any() else None
         key = VGroup(label(r"exponential loss", font_size=22, color=EXPC), label(r"training error", font_size=22, color=GREY_A),
                      label(r"held-out error", font_size=22, color=HL)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        key.move_to([4.6, 1.8, 0])
-        bound = label(r"training error $\le$ exponential loss, \\ every round \ ($e^{-m} \ge 1$ when $m \le 0$)",
+        key.move_to([4.0, 1.9, 0]).align_to([2.4, 0, 0], LEFT)
+        bound = label(r"training error $\le$ exponential loss, \\ every round: \\ $e^{-m} \ge 1$ when $m \le 0$",
                       font_size=22, color=GREY_A).next_to(key, DOWN, buff=0.4).align_to(key, LEFT)
         te_z = te[z0 - 1] if z0 else te[-1]
         best = int(np.argmin(te)) + 1
@@ -199,9 +200,13 @@ class AdaBoost(VoiceoverScene):
         # the cascade
         stages = VGroup()
         for k, txt in enumerate((r"$2$ features", r"$10$", r"$25$", r"$\cdots$", r"thousands")):
-            box = RoundedRectangle(width=1.25, height=0.7, corner_radius=0.1, stroke_color=HL, stroke_width=2)
+            box = RoundedRectangle(width=1.05, height=0.6, corner_radius=0.1, stroke_color=HL, stroke_width=2)
             stages.add(VGroup(box, label(txt, font_size=20, color=WHITE).move_to(box)))
-        stages.arrange(RIGHT, buff=0.35).move_to([3.4, 1.0, 0])
+        for st in stages:
+            if st[1].width > 0.95:
+                st[1].scale_to_fit_width(0.95)
+        stages.arrange(RIGHT, buff=0.28).move_to([2.9, 1.0, 0])
+        keep_in_frame(stages)
         arrows = VGroup(*[Arrow(stages[i].get_right(), stages[i + 1].get_left(), buff=0.05, stroke_width=3,
                                 max_tip_length_to_length_ratio=0.3, color=GREY_B) for i in range(len(stages) - 1)])
         rej = VGroup(*[Arrow(st.get_bottom(), st.get_bottom() + DOWN * 0.7, buff=0.05, stroke_width=3, color=BAD,

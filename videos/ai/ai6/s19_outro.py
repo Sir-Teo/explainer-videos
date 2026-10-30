@@ -99,7 +99,7 @@ class Outro(VoiceoverScene):
         L = np.asarray(ab["exp_loss_70"])
         ax = mk([0, math.log10(len(L)), 1], [-4, 0, 1])
         out.append((VGroup(ax, curve(ax, np.log10(np.arange(1, len(L) + 1)), np.maximum(np.log10(np.maximum(L, 1e-12)), -4),
-                                     C.ADVANTAGE, 2.5)), r"exponential loss", C.ADVANTAGE))
+                                     "#B48EF0", 2.5)), r"exponential loss", "#B48EF0"))
         me = load("metrics")
         rc = np.asarray(me["roc_lr2"])
         ax = mk([0, 1, 1], [0, 1, 1])

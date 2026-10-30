@@ -306,7 +306,7 @@ class Bell(VoiceoverScene):
         ns = np.asarray(d["ns"], float)
         ed, ud, eb = np.asarray(d["exp_dist"]), np.asarray(d["uni_dist"]), np.asarray(d["exp_bound"])
         es, us = float(d["exp_slope"]), float(d["uni_slope"])
-        ax = Axes(x_range=[0, 2, 1], y_range=[-4, 0.5, 1], x_length=6.6, y_length=4.6, tips=False,
+        ax = CornerAxes(x_range=[0, 2, 1], y_range=[-4, 0.5, 1], x_length=6.6, y_length=4.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-3.2, -0.5, 0])
         xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, -4), DOWN, buff=0.12)
                       for t, v in (("1", 0), ("10", 1), ("100", 2))])

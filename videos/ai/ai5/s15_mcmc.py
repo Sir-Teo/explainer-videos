@@ -62,6 +62,8 @@ class MCMC(VoiceoverScene, ThreeDScene):
         tag = label(r"a density known only up to a constant", font_size=24, color=GREY_A).next_to(img, DOWN, buff=0.15)
         tag.align_to(img, LEFT)  # flush left under the picture, clear of the citation in the corner
         cite_ = cite(r"N.~Metropolis, A.~Rosenbluth, M.~Rosenbluth, A.~Teller \& E.~Teller (1953)", corner=DR)
+        hc53 = history_card(1953, r"Metropolis, \ the Rosenbluths, \ the Tellers", r"Los Alamos, \ on the MANIAC: \ "
+                            r"sample a shape by a random walk that accepts or rejects each step", width=4.4).move_to([4.6, 0.6, 0])
         with self.voiceover(
             "Often there's no direct way to draw samples: all we can do is evaluate how likely each point is, and "
             "only up to an unknown constant, as with Bayes's rule. <bookmark mark='a'/> Here's a density with two "
@@ -71,10 +73,11 @@ class MCMC(VoiceoverScene, ThreeDScene):
             "downhill, take it with probability the ratio of the heights; otherwise stay put."
         ) as vo:
             self.play(FadeIn(img), Create(frame_), Create(cont), FadeIn(tag), run_time=1.5)
+            self.play(FadeIn(hc53, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(walker), FadeIn(cite_))
             vo.wait_until("b")
-            self.play(FadeIn(steps_t[0]), FadeIn(steps_t[1]))
+            self.play(FadeOut(hc53), FadeIn(steps_t[0]), FadeIn(steps_t[1]))
             vo.wait_until("c")
             self.play(FadeIn(steps_t[2]), Write(rule))
             for k, (x0, y0, ok) in enumerate(steps):
@@ -138,7 +141,19 @@ class MCMC(VoiceoverScene, ThreeDScene):
                 why(r"rearrange"),
                 why(r"the largest acceptance that keeps it: \ Hastings (1970)"),
                 why(r"symmetric proposals: \ Metropolis (1953)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.6, edge=6.8)
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=0.6, buff=0.45, edge=6.8)
+        img = heat_image(density2, (-4, 4), (-3, 3), w=200, h=150)
+        img.stretch_to_fit_width(4.0).stretch_to_fit_height(3.0).to_corner(DL, buff=0.35)
+        bx = Axes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=4.0, y_length=3.0, tips=False,
+                  axis_config={"stroke_width": 0}).move_to(img)
+        px, py = bx.c2p(-1.6, -0.6), bx.c2p(1.5, 0.9)
+        pic = Group(img, Dot(px, color=DATA, radius=0.08), Dot(py, color=ACCEPT, radius=0.08),
+                    MathTex("x", font_size=30, color=DATA).next_to(px, DOWN, buff=0.1),
+                    MathTex("y", font_size=30, color=ACCEPT).next_to(py, UP, buff=0.1),
+                    CurvedArrow(px + RIGHT * 0.1, py + LEFT * 0.1, angle=-0.6, color=DATA, stroke_width=3, tip_length=0.15),
+                    CurvedArrow(py + DOWN * 0.1, px + DOWN * 0.05 + RIGHT * 0.1, angle=-0.6, color=ACCEPT, stroke_width=3,
+                                tip_length=0.15),
+                    label(r"flows both ways must match", font_size=20, color=GREY_A).next_to(img, UP, buff=0.08))
         with self.voiceover(
             "Why does it work? Chapter ten's detailed balance. A step from x to y is proposed with probability q, "
             "then accepted with probability a. <bookmark mark='a'/> Balance asks that the flows match, <bookmark "
@@ -146,6 +161,7 @@ class MCMC(VoiceoverScene, ThreeDScene):
             "to one: W. K. Hastings's rule of 1970, for any proposal. <bookmark mark='d'/> With a symmetric proposal "
             "the q's cancel, and it is Metropolis's rule."
         ) as vo:
+            self.play(FadeIn(pic))
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
@@ -179,17 +195,20 @@ class MCMC(VoiceoverScene, ThreeDScene):
         eq = cmath(r"dx", "=", r"\nabla \log p(x)\,dt", "+", r"\sqrt{2}\,dW_t", font_size=36,
                    colors={r"\nabla \log p(x)\,dt": SCORE}).to_corner(UL, buff=0.35)
         ula = cmath(r"x \leftarrow x + h\, \nabla \log p(x) + \sqrt{2h}\,\xi", font_size=28).next_to(eq, DOWN, buff=0.2).align_to(eq, LEFT)
-        lab = label(r"the push: \ the score, \ uphill toward likelier places; \ the kicks: \ Brownian", font_size=20,
-                    color=GREY_A).to_edge(DOWN, buff=0.25)
-        tv = DecimalNumber(0, num_decimal_places=1, font_size=30, color=C.BITS)
-        tl = VGroup(MathTex(r"t =", font_size=30), tv).arrange(RIGHT, buff=0.12).to_corner(UR, buff=0.4)
-        lv = DecimalNumber(l1[0], num_decimal_places=2, font_size=26, color=C.BITS)
-        ll = VGroup(label(r"distance from $p$ \ ($L^1$):", font_size=22, color=GREY_A), lv).arrange(RIGHT, buff=0.12)
-        ll.next_to(tl, DOWN, buff=0.15).align_to(tl, RIGHT)
+        lab = label(r"the push: \ the score, \ uphill toward likelier places; \\ the kicks: \ Brownian", font_size=20,
+                    color=GREY_A).next_to(ula, DOWN, buff=0.15).align_to(eq, LEFT)
+        # readouts, one per saved density (fixed-in-frame mobjects must not be rebuilt by number animations)
+        reads = []
+        for k in range(len(gt)):
+            r_ = VGroup(MathTex(rf"t = {gt[k]:.1f}", font_size=30, color=C.BITS),
+                        label(rf"distance from $p$ \ ($L^1$): \ ${l1[k]:.2f}$", font_size=22, color=GREY_A))
+            r_.arrange(DOWN, aligned_edge=RIGHT, buff=0.12).to_corner(UR, buff=0.4)
+            reads.append(r_)
+        tl, ll = reads[0], VectorizedPoint()
         key = label(r"surface: \ the particles' density; \ mesh: \ the target $p$", font_size=20, color=GREY_A)
-        key.next_to(ll, DOWN, buff=0.12).align_to(tl, RIGHT)
+        key.next_to(reads[0], DOWN, buff=0.12).align_to(reads[0], RIGHT)
         hc = cite(r"P.~Langevin (1908); \ G.~Roberts \& R.~Tweedie (1996); \ M.~Welling \& Y.~W.~Teh (2011)", corner=DL)
-        fixed = [eq, ula, lab, tl, ll, key, hc]
+        fixed = [eq, ula, lab, key, hc] + reads
         for m in fixed:
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
@@ -210,18 +229,19 @@ class MCMC(VoiceoverScene, ThreeDScene):
             "chapter seventeen proves. With mini-batch scores it sampled neural networks' weights in 2011, and with "
             "learned scores, the first score-based image models."
         ) as vo:
-            self.play(FadeIn(eq), FadeIn(hc), Create(axes), FadeIn(floor), run_time=1.2)
+            self.play(FadeIn(eq), FadeIn(hc), Create(axes), FadeIn(floor), FadeIn(flow), FadeIn(surfs[0]), FadeIn(tl),
+                      FadeIn(key), Create(wire), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(ula), FadeIn(lab))
             vo.wait_until("b")
-            self.play(FadeIn(flow), FadeIn(surfs[0]), FadeIn(tl), FadeIn(ll), FadeIn(key), Create(wire))
             self.begin_ambient_camera_rotation(rate=0.05)
             flow.start()
             vo.wait_until("c")
             cur = surfs[0]
             for k in range(1, len(surfs)):
-                self.play(flow.t.animate.set_value(frame_of[k]), Transform(cur, surfs[k]), ChangeDecimalToValue(tv, gt[k]),
-                          ChangeDecimalToValue(lv, l1[k]), run_time=1.6, rate_func=linear)
+                self.remove(reads[k - 1])
+                self.add(reads[k])
+                self.play(flow.t.animate.set_value(frame_of[k]), Transform(cur, surfs[k]), run_time=1.6, rate_func=linear)
             vo.wait_until("d")
         flow.stop()
         self.stop_ambient_camera_rotation()
