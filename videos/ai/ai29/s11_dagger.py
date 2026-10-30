@@ -185,14 +185,15 @@ class DAgger(VoiceoverScene):
         dag_falls = Bd.mean(1)[-1] < 0.6 * Bd.mean(1)[0]
         v2 = ("More demonstrations barely help behaviour cloning: the expert's drives never leave the lane, so they "
               "never show the way back." if bc_flat else "More demonstrations help behaviour cloning too, slowly.")
-        v3 = (f" DAgger keeps improving with labels, to {Bd.mean(1)[-1]:.0f} at {int(budgets[-1])}." if dag_falls else "")
+        v3 = (f"DAgger keeps improving with labels, to {Bd.mean(1)[-1]:.0f} steps at {int(budgets[-1])} labels." if dag_falls
+              else "DAgger levels off early too.")
         spread = float(Jd[:, -1].max() - Jd[:, -1].min())
         with self.voiceover(
             "Now the fair comparison: the same number of expert labels for both, eight seeds each. "
             f"<bookmark mark='a'/> {v1} <bookmark mark='b'/> Its cost grows more nearly in a straight line, a "
             f"log-log slope of {sd:.2f} over the first steps against {sb:.2f}. The spread across seeds is wide, "
             f"{spread:.0f} steps for DAgger, because which readings a learner happens to see matters. "
-            f"<bookmark mark='c'/> {v2}{v3}"
+            f"<bookmark mark='c'/> {v2} <bookmark mark='d'/> {v3}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(tag))
             self.play(FadeIn(b1[0]), Create(b1[1]), run_time=1.2)

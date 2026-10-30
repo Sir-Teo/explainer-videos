@@ -173,15 +173,23 @@ class World(VoiceoverScene):
             return np.array([(f * ys_).sum(), (f * xs_).sum()]) / max(f.sum(), 1e-9)
 
         miss = float(np.linalg.norm(centre(dreams[-1, -1]) - centre(real[-1])))  # the last checkpoint's last frame
+        peak = [float(np.asarray(dd).max()) for dd in dreams]  # the brightest pixel of each checkpoint's dream
+        held = [sum(1 for f_, r_ in zip(dd, real) if np.asarray(f_).max() > 0.35
+                    and np.linalg.norm(centre(f_) - centre(r_)) < 2.0) for dd in dreams]
+        early = (f"After {checks[1]} steps its brightest pixel is only {peak[1]:.2f}: it has learned the safest guess, "
+                 "a nearly empty frame, the average of all frames." if peak[1] < 0.35 else
+                 f"After {checks[1]} steps a faint ball appears, and it keeps it near the real one for {held[1]} of the "
+                 f"{n} frames.")
+        mid = (f"By step {checks[2]} it keeps the ball within two pixels of the real one for {held[2]} of the {n} "
+               "frames, then loses it, as each guess builds on the last one's blur." if held[2] < n else
+               f"By step {checks[2]} it already carries the ball through all {n} frames.")
         with self.voiceover(
             "How does a world model learn to dream? Here it is at checkpoints during training, each time given the "
             "same two opening frames and left to imagine the next twelve, every frame built on its own last guess. "
-            "<bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> After "
-            f"{checks[1]} steps it has learned the safest guess: a dark, empty frame, the average of all frames, with "
-            f"no ball at all. <bookmark mark='c'/> By step {checks[2]} it carries the ball along for a few frames, "
-            "then loses it, as each guess builds on the last one's blur. <bookmark mark='d'/> Later it carries the "
-            "ball the whole way, though small errors still add up: after twelve imagined frames, the final model's "
-            f"ball is {miss:.1f} pixels from the real one."
+            f"<bookmark mark='a'/> Untrained, its brightest pixel is {peak[0]:.2f}: a haze, nothing like a ball. "
+            f"<bookmark mark='b'/> {early} <bookmark mark='c'/> {mid} <bookmark mark='d'/> The final model "
+            f"carries the ball through {held[-1]} of the {n} frames, though small errors still add up: after twelve "
+            f"imagined frames, its ball is {miss:.1f} pixels from the real one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rr), FadeIn(ll[0]))
             vo.wait_until("a")

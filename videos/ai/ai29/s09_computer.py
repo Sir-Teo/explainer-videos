@@ -150,7 +150,7 @@ class Computer(VoiceoverScene):
             risk.width = 6.0
         tag = note(r"illustrative").next_to(page, DOWN, buff=0.08).align_to(page, RIGHT)
         with self.voiceover(
-            "As the original tasks became too easy, its authors released OSWorld 2.0 in 2026, with tasks of a "
+            "In 2026 the same team released OSWorld 2.0, with tasks of a "
             "different size. <bookmark mark='a'/> Each of its hundred and eight workflows takes a skilled person a "
             "median of an hour and a half, and an agent around three hundred tool calls, ten times as many as "
             "before. On its leaderboard, the best agent finishes one in five outright. <bookmark mark='b'/> "

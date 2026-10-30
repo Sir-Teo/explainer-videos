@@ -3,18 +3,24 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai29.common import AGENT, EXPERT, FAIL, GOOD, HIST, PART, REWARD, load
+
+REG, FLOW = C.MODEL_Q, C.INTERVAL
 
 
 class VLA(VoiceoverScene):
     def construct(self):
         self.card()
+        self.history()
         self.pipeline()
-        self.chunks()
         self.exact()
+        self.modes()
+        self.chunks()
 
     def card(self):
-        card = chapter_card(4, r"Acting in the physical world", r"How does a language model move a robot arm?", part=29)
-        with self.voiceover("Chapter four. Acting in the physical world."):
+        card = chapter_card(15, r"Vision-language-action models", r"How does a language model move a robot arm?",
+                            lit=(2026,), part=PART)
+        with self.voiceover("Chapter fifteen. Vision-language-action models."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -148,99 +154,159 @@ class VLA(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def exact(self):
-        """The two ways to write actions, exactly: pi-zero's flow-matched chunks, and FAST's compressed tokens."""
-        from scipy.fft import dct, idct
-
+        """pi-zero's flow-matched chunks, exactly."""
         H = 50
         t = np.linspace(0, 1, H)
         a = 0.6 * np.sin(2.2 * t + 0.3) + 0.25 * t ** 2 + 0.08 * np.sin(9 * t)  # an illustrative joint angle over one chunk
-        c = dct(a, norm="ortho")
-        gam = 10.0
-        q = np.round(gam * c)
-        rec = idct(q / gam, norm="ortho")
-        nz = int((q != 0).sum())
-        err = float(np.abs(rec - a).max())
         colors = {r"A": C.INTERVAL, r"\varepsilon": C.TRUE_P, r"v_\theta": C.BITS}
         f1 = cmath(r"A", r"= (a_t, \ldots, a_{t+H-1}), \quad", r"A", r"^{\tau} = (1 - \tau)\,", r"\varepsilon", r"+ \tau\,", r"A",
-                   colors=colors, font_size=30)
+                   colors=colors, font_size=32)
         f2 = cmath(r"\mathcal{L} = \big\|", r"v_\theta", r"(", r"A", r"^{\tau}, o_t) - (", r"A", r"-", r"\varepsilon", r")\big\|^2",
-                   colors=colors, font_size=30)
-        top = VGroup(f1, f2).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_corner(UL, buff=0.5)
-        tl = label(r"$\pi_0$: \ a chunk of $H = 50$ actions \ ($1$ s at $50$ Hz), \ flow-matched given the observation $o_t$; "
-                   r"\ $10$ steps to draw", font_size=18, color=C.INTERVAL).next_to(top, DOWN, buff=0.12).align_to(top, LEFT)
-        keep_in_frame(tl)
-        # the flow-matching path on this chunk: noise at tau = 0, the chunk at tau = 1
+                   colors=colors, font_size=32)
+        f3 = cmath(r"A", r"^{\tau + \delta} = ", r"A", r"^{\tau} + \delta\, ", r"v_\theta", r"(", r"A", r"^{\tau}, o_t), \quad "
+                   r"\delta = 0.1", colors=colors, font_size=32)
+        top = VGroup(f1, f2, f3).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_corner(UL, buff=0.5)
+        why1 = why(r"a straight line from noise to the chunk").next_to(f1, RIGHT, buff=0.4)
+        why2 = why(r"learn the line's velocity, \ given what the robot sees").next_to(f2, RIGHT, buff=0.4)
+        why3 = why(r"to act: \ $10$ Euler steps from noise").next_to(f3, RIGHT, buff=0.4)
+        for w_ in (why1, why2, why3):
+            keep_in_frame(w_)
+        tl = label(r"$\pi_0$: \ a chunk of $H = 50$ actions \ ($1$ s at $50$ Hz), \ flow matching as in Part 21", font_size=20,
+                   color=C.INTERVAL).next_to(top, DOWN, buff=0.25).align_to(top, LEFT)
         eps = np.clip(np.random.default_rng(3).normal(0, 0.45, H), -1, 1)
-        px = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=3.6, y_length=1.7, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.2, 2.0, 0])
+        px = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=6.0, y_length=2.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -2.1, 0])
         tau = ValueTracker(0.0)
 
         def mix():
             v = (1 - tau.get_value()) * eps + tau.get_value() * a
             return VGroup(VMobject(color=C.INTERVAL, stroke_width=2, stroke_opacity=0.5).set_points_as_corners(
-                [px.c2p(i, x) for i, x in enumerate(v)]), *[Dot(px.c2p(i, x), radius=0.025, color=C.INTERVAL) for i, x in enumerate(v)])
+                [px.c2p(i, x) for i, x in enumerate(v)]), *[Dot(px.c2p(i, x), radius=0.03, color=C.INTERVAL) for i, x in enumerate(v)])
 
         path = always_redraw(mix)
-        pl = always_redraw(lambda: MathTex(rf"A^{{\tau}}, \ \tau = {tau.get_value():.2f}", font_size=24, color=C.INTERVAL)
-                           .next_to(px, UP, buff=0.08))
-        # FAST on one chunk, computed here
-        ax = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=4.4, y_length=2.6, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.2, -1.3, 0])
-        sig = VMobject(color=C.INTERVAL, stroke_width=3).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(a)])
-        rs = VMobject(color=C.BITS, stroke_width=2).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(rec)])
-        al = label(r"one joint over one chunk \ (illustrative)", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1)
-        bx = CornerAxes(x_range=[0, H, 10], y_range=[0, float(np.abs(c).max()) * 1.1, 1], x_length=4.4, y_length=2.6, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.7, -1.3, 0])
-        bars = VGroup(*[Line(bx.c2p(i + 0.5, 0), bx.c2p(i + 0.5, abs(float(v))), stroke_width=4,
-                             color=C.BITS if q[i] != 0 else GREY_D) for i, v in enumerate(c)])
-        bl = label(r"its cosine transform: \ smooth motion \\ lives in the first few numbers", font_size=18, color=GREY_A).next_to(bx, UP, buff=0.1)
-        toks = MathTex(r"\text{tokens} = \operatorname{BPE}\big(\operatorname{round}(\gamma \cdot \operatorname{DCT}(a))\big)",
-                       font_size=28, color=C.BITS).move_to([4.6, -0.6, 0])
-        tk = label(rf"$\gamma = {gam:.0f}$: \ ${nz}$ of ${H}$ numbers \\ survive the rounding; \ rebuilt to ${err:.3f}$; \\ "
-                   r"byte-pair encoding packs \\ the zeros and repeats", font_size=18, color=GREY_A).next_to(toks, DOWN, buff=0.2)
-        keep_in_frame(VGroup(toks, tk))
-        # any smooth motion is a sum of cosine waves, slow ones first: the first 1, 2, 3, 7 of them, added up
-        def partial(k):
-            ck = c.copy()
-            ck[k:] = 0
-            return VMobject(color=WHITE, stroke_width=2.5).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(idct(ck, norm="ortho"))])
-
-        ks_ = (1, 2, 3, 7)
-        kl_ = [label(t_, font_size=18, color=WHITE).next_to(ax, DOWN, buff=0.15) for t_ in (
-            r"the slowest cosine wave", r"the first $2$ cosine waves, \ added up", r"the first $3$ cosine waves, \ added up",
-            r"the first $7$ cosine waves, \ added up")]
-        cite_ = cite(r"K.~Black et al., \textit{$\pi_0$} (2024); \ K.~Pertsch et al., \textit{FAST} (2025)", corner=DR)
+        pl = always_redraw(lambda: MathTex(rf"A^{{\tau}}, \ \tau = {tau.get_value():.2f}", font_size=26, color=C.INTERVAL)
+                           .next_to(px, LEFT, buff=0.3))
+        tag = note(r"illustrative chunk").to_corner(DR, buff=0.3)
+        cite_ = cite(r"K.~Black et al., \textit{$\pi_0$} (2024)", corner=DL)
         with self.voiceover(
-            "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole "
-            "chunk of fifty actions, one second of motion, by part twenty-one's flow matching: mix the true chunk with "
-            "noise, and train the action expert to predict the straight-line velocity between them, given what the "
-            "robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a "
-            "language model can write. Taking every time step as a token works badly: neighbouring steps are nearly "
-            "the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first, with a cosine "
-            "transform. <bookmark mark='k'/> Any smooth motion is a sum of cosine waves, slow ones first; the "
-            "transform lists how much of each wave you need, and a smooth motion needs only the first few. "
-            "<bookmark mark='d'/> Round those amounts, and on "
-            f"this chunk only {nz} of {H} survive, yet they rebuild the motion to within {err:.3f}; byte-pair encoding, "
-            "from part twenty-three, then packs what's left into a handful of tokens."
+            "Here is pi zero's action expert, exactly. <bookmark mark='a'/> A chunk is the next fifty actions, one "
+            "second of motion. Training draws a straight line from pure noise to the true chunk, <bookmark mark='b'/> "
+            "and teaches the network the velocity along that line, given what the robot sees: part twenty-one's "
+            "flow matching. <bookmark mark='c'/> To act, it starts from noise and takes ten small steps along the "
+            "learned velocity, and the noise becomes a motion."
         ) as vo:
-            self.play(FadeIn(cite_), Write(f1), Create(px), run_time=1.5)
-            self.add(path, pl)  # the chunk's noise, at tau = 0, from the first words
+            self.play(FadeIn(cite_), FadeIn(tag), Create(px), Write(f1), FadeIn(why1), run_time=1.5)
+            self.add(path, pl)
             vo.wait_until("a")
-            self.play(Write(f2), FadeIn(tl), run_time=1.5)
-            self.play(tau.animate.set_value(1.0), run_time=4.0, rate_func=smooth)
+            self.play(FadeIn(tl))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(al), Create(sig))
+            self.play(Write(f2), FadeIn(why2))
             vo.wait_until("c")
-            self.play(Create(bx), FadeIn(bl), LaggedStart(*[Create(b_) for b_ in bars], lag_ratio=0.02), run_time=1.5)
-            vo.wait_until("k")
-            ps_ = partial(ks_[0])
-            self.play(sig.animate.set_stroke(opacity=0.35), Create(ps_), FadeIn(kl_[0]), bars[0].animate.set_color(WHITE))
-            for j in range(1, len(ks_)):
-                self.play(Transform(ps_, partial(ks_[j])), FadeTransform(kl_[j - 1], kl_[j]),
-                          *[b_.animate.set_color(WHITE) for b_ in bars[ks_[j - 1]:ks_[j]]], run_time=1.0)
-            vo.wait_until("d")
-            self.play(FadeOut(ps_), FadeOut(kl_[-1]), sig.animate.set_stroke(opacity=1),
-                      *[b_.animate.set_color(C.BITS if q[i] != 0 else GREY_D) for i, b_ in enumerate(bars[:ks_[-1]])], run_time=0.5)
-            self.play(Write(toks), FadeIn(tk), Create(rs))
+            self.play(Write(f3), FadeIn(why3))
+            self.play(tau.animate.set_value(1.0), run_time=4.0, rate_func=smooth)
+        path.clear_updaters()
+        pl.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def history(self):
+        cards = VGroup(
+            history_card(r"Dec 2022", r"RT-1 \ (Google)", r"a transformer from camera images and an instruction to arm "
+                         r"actions: \ $130{,}000$ demonstrations, \ $700$ tasks, \ $13$ robots, \ $17$ months", width=6.2,
+                         color=HIST, font_size=18),
+            history_card(r"Jul 2023", r"RT-2 \ (Google DeepMind)", r"a web-trained vision-language model fine-tuned to "
+                         r"write actions as tokens: \ on unseen objects and scenes, \ $62\%$ success against RT-1's $32\%$",
+                         width=6.2, color=HIST, font_size=18),
+            history_card(r"Oct 2023", r"Open X-Embodiment \ ($21$ institutions)", r"over a million robot trajectories, \ "
+                         r"$22$ kinds of robot, \ pooled", width=6.2, color=HIST, font_size=18),
+            history_card(r"Jun 2024", r"OpenVLA \ (Kim, Pertsch et al.)", r"open weights, \ $7$ billion parameters, \ "
+                         r"$970{,}000$ trajectories: \ $16.5$ points more success than the $55$-billion RT-2-X, \ "
+                         r"across $29$ tasks", width=6.2, color=HIST, font_size=18),
+        ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3))
+        if cards.width > 13.2:
+            cards.width = 13.2
+        cards.move_to(DOWN * 0.3)
+        head = label(r"Robots learn from the web, \ and from each other", font_size=34).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            "In chapter one we left robot learning at Google's RT-1, a transformer trained on a hundred and thirty "
+            "thousand demonstrations. <bookmark mark='a'/> The next step was to borrow a mind. RT-2, in 2023, took a "
+            "vision-language model trained on the web and fine-tuned it to write the robot's actions as if they "
+            "were words. On objects and scenes it had never seen, it succeeded sixty-two percent of the time, "
+            "against RT-1's thirty-two: knowledge from the web, turned into motion. <bookmark mark='b'/> Then "
+            "twenty-one labs pooled over a million trajectories from twenty-two kinds of robot, the Open "
+            "X-Embodiment dataset. <bookmark mark='c'/> On it, OpenVLA, with open weights and seven billion "
+            "parameters, beat the fifty-five-billion-parameter RT-2-X by sixteen and a half points across "
+            "twenty-nine tasks."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.15))
+            for k, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k + 1], shift=UP * 0.15))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def modes(self):
+        from videos.ai.ai29.envs import GOAL, OBST
+
+        d = load("detour")
+        demos = np.asarray(d["demos"])
+        R = 1.9
+
+        def panel(cx, title, col):
+            box = RoundedRectangle(width=4.0, height=3.0, corner_radius=0.1, stroke_color=GREY_D, stroke_width=1.5).move_to([cx, -0.4, 0])
+            ob = Circle(radius=OBST[2] * R, stroke_width=0, fill_color=FAIL, fill_opacity=0.5).move_to(box.get_center() + R * np.array([OBST[0], OBST[1], 0]))
+            gl = Star(n=5, outer_radius=0.13, color=REWARD, fill_opacity=1).move_to(box.get_center() + R * np.array([GOAL[0], GOAL[1], 0]))
+            t = label(title, font_size=22, color=col).next_to(box, UP, buff=0.12)
+            return VGroup(box, ob, gl, t)
+
+        def path(ctr, pts, col, w=2, op=0.8):
+            P = [ctr + R * np.array([x, y, 0]) for x, y in pts]
+            return VMobject(stroke_color=col, stroke_width=w, stroke_opacity=op).set_points_as_corners(P)
+
+        pans = VGroup(panel(-4.5, r"the demonstrations", EXPERT), panel(0, r"regression \ (mean squared error)", REG),
+                      panel(4.5, r"flow matching", FLOW))
+        ctrs = [p_[0].get_center() for p_ in pans]
+        dem = VGroup(*[path(ctrs[0], dd, EXPERT, 1.5, 0.6) for dd in demos[:24]])
+        last = str(max(int(k) for k in d["regress_snaps"]))
+        reg = VGroup(*[path(ctrs[1], p_, REG) for p_ in d["regress_snaps"][last]["paths"]])
+        flo = VGroup(*[path(ctrs[2], p_, FLOW) for p_ in d["flow_snaps"][last]["paths"]])
+        hr, hf = np.asarray(d["regress_hit"]), np.asarray(d["flow_hit"])
+        rr, rf = np.asarray(d["regress_reached"]), np.asarray(d["flow_reached"])
+        stats = VGroup(
+            label(rf"hits the obstacle: \ ${100 * hr.mean():.0f}\%$ \ (seeds ${100 * hr.min():.0f}$--${100 * hr.max():.0f}\%$)",
+                  font_size=19, color=REG).next_to(pans[1], DOWN, buff=0.25),
+            label(rf"hits the obstacle: \ ${100 * hf.mean():.0f}\%$ \ (seeds ${100 * hf.min():.0f}$--${100 * hf.max():.0f}\%$)",
+                  font_size=19, color=FLOW).next_to(pans[2], DOWN, buff=0.25))
+        tag = note(rf"computed: \ {int(d['params']['demos'])} demonstrations, \ chunks of {int(d['params']['chunk'])} moves, "
+                   rf"\ {int(d['params']['seeds'])} seeds each, \ {int(d['n_starts'])} starts per seed", font_size=17)
+        tag.to_edge(DOWN, buff=0.15)
+        head = label(r"Why the action expert is generative", font_size=32).to_edge(UP, buff=0.35)
+        above, below = float(np.mean(d["flow_above"])), float(np.mean(d["flow_below"]))
+        if hr.mean() > hf.mean() + 0.2:
+            v = (f"Trained to minimize squared error, the policy learns the average of the two ways round, and the "
+                 f"average goes straight through the obstacle: it hits it {100 * hr.mean():.0f} percent of the time. "
+                 f"<bookmark mark='c'/> The flow-matching policy samples one way or the other, above "
+                 f"{100 * above:.0f} percent of the time and below {100 * below:.0f}, and hits it "
+                 f"{100 * hf.mean():.0f} percent of the time.")
+        else:
+            v = (f"Here the regression policy hits the obstacle {100 * hr.mean():.0f} percent of the time, and the flow "
+                 f"policy {100 * hf.mean():.0f}: <bookmark mark='c'/> a smaller difference than the theory suggests.")
+        with self.voiceover(
+            "Why go to the trouble of a generative model for actions? Because people demonstrate in more than one "
+            "way. <bookmark mark='a'/> Here, demonstrations pass an obstacle above or below, half and half. "
+            "<bookmark mark='b'/> " + v + " Real demonstrations are full of such choices: which hand, which "
+            "grasp, which way round."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(pans), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(p_) for p_ in dem], lag_ratio=0.05), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[Create(p_) for p_ in reg], lag_ratio=0.1), run_time=2.0)
+            self.play(FadeIn(stats[0]))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[Create(p_) for p_ in flo], lag_ratio=0.1), run_time=2.0)
+            self.play(FadeIn(stats[1]))
         self.wait(0.3)
         self.clear_scene()

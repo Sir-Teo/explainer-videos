@@ -585,7 +585,7 @@ def compute_world():
 # ---------------------------------------------------------------------------
 # Dreamer-lite
 # ---------------------------------------------------------------------------
-DREAMER = dict(iters=50, steps_per_iter=30, seeds=(0, 1, 2), snap_iters=(0, 5, 15, 50))
+DREAMER = dict(iters=60, steps_per_iter=40, seeds=(0, 1, 2), snap_iters=(0, 5, 20, 60), horizon=15, eval_eps=6)
 
 
 def _jsonable(d):
@@ -607,8 +607,8 @@ def compute_dreamer():
         if str(s) in part:
             continue
         _log(f"    Dreamer-lite, seed {s}")
-        r = train(s, iters=DREAMER["iters"], steps_per_iter=DREAMER["steps_per_iter"],
-                  snap_iters=DREAMER["snap_iters"], log=_log)
+        r = train(s, iters=DREAMER["iters"], steps_per_iter=DREAMER["steps_per_iter"], H=DREAMER["horizon"],
+                  eval_eps=DREAMER["eval_eps"], snap_iters=DREAMER["snap_iters"], log=_log)
         part[str(s)] = _jsonable(r)
     runs = [part[str(s)] for s in DREAMER["seeds"]]
     curves = np.array([r["curve"] for r in runs])  # (seeds, points, 3): iteration, env steps, catch rate
@@ -631,7 +631,7 @@ def compute_dreamer():
     return out
 
 
-KLBAL = dict(iters=40, steps_per_iter=30, seeds=(0, 1, 2), configs={"balanced": (0.5, 0.1), "plain": (0.3, 0.3)})
+KLBAL = dict(iters=40, steps_per_iter=40, seeds=(0, 1, 2), configs={"balanced": (0.5, 0.1), "plain": (0.3, 0.3)})
 
 
 def compute_klbal():
@@ -763,6 +763,7 @@ def compute_detour():
     Yn = Y / sc
     out = dict(params=P, demos=np.array(demos[:40]), scale=sc)
     starts = rng(5).uniform(-0.25, 0.25, 60)
+    out["n_starts"] = len(starts)
     show = np.linspace(-0.22, 0.22, 12)
 
     def net(i, o):

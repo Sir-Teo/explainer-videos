@@ -114,8 +114,8 @@ class Genie(VoiceoverScene):
             "twenty lines, twenty-four frames a second, in real time, and kept them consistent for a few minutes: "
             "walk away from a wall and come back, and what you painted on it is still there. Text could change the "
             "world as you went, and DeepMind used it to train its SIMA agent. <bookmark mark='c'/> In January 2026 a "
-            "prototype opened to some subscribers. <bookmark mark='d'/> And two days ago, on the twenty-seventh of "
-            "October, DeepMind announced Genie 4, with sound generated alongside the picture and pitched as a place "
+            "prototype opened to some subscribers. <bookmark mark='d'/> And on the twenty-seventh of October 2026, "
+            "DeepMind announced Genie 4, with sound generated alongside the picture and pitched as a place "
             "to train robots; by DeepMind's own account, objects can still drift over long sessions."
         ) as vo:
             self.play(FadeIn(strip), FadeIn(keys), FadeIn(kl), FadeIn(kt), FadeIn(tag))
