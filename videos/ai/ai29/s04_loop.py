@@ -87,14 +87,14 @@ class Loop(VoiceoverScene):
             tag.to_corner(DR, buff=0.25)
         total = sum(prices)
         n_err = len([ln for ln in tr["lines"] if "error" in ln])
-        times = "once" if n_err == 1 else f"{n_err} times"
+        slip = "Here it misspells an item once." if n_err == 1 else f"Here it misspells an item {n_err} times."
         verdict = f"the answer, {total}, is right." if tr["right"] else "even so, this answer is wrong."
         with self.voiceover(
             "Here is a loop running for real, in a small warehouse of our own. The tools are a few functions: list "
             "a shelf, look up a price, add. <bookmark mark='a'/> The task: what do three items cost together? The "
             "agent's moves come from a script with error rates we chose, not from a language model, so we can "
             "count what goes wrong. <bookmark mark='b'/> It looks up a price, reads the observation, keeps a running "
-            f"total. <bookmark mark='c'/> Here it misspells an item, {times}. The tool answers with an error, "
+            f"total. <bookmark mark='c'/> {slip} The tool answers with an error, "
             "the error lands in the context, and the agent tries again. <bookmark mark='d'/> Seeing the result of "
             f"every action is what lets it recover: {verdict}"
         ) as vo:

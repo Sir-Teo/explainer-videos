@@ -352,6 +352,42 @@ STRINGS = {
     r"$1{,}024$ pieces: \ $2.74$ (BPE) \ and \ $2.64$ (unigram) characters a token; \ $22\%$ of the words cut differently": r"$1{,}024$个片段：\ 每个词元$2.74$（BPE）\ 和 \ $2.64$（一元模型）个字符；\ $22\%$的词切法不同",
     r"VQ: \ $101$ codes used": r"VQ：\ 用了$101$个码",
     r"EMA + restarts: \ $255$ codes used": r"EMA + 重启：\ 用了$255$个码",
+    # ---- Whisper
+    r"Listening at scale": r"大规模地听",
+    r"What does a recognizer learn from 680{,}000 hours?": r"识别器从680{,}000小时里学到什么？",
+    r"self-supervised": r"自监督",
+    r"wav2vec 2.0 \ (Facebook, 2020)": r"wav2vec 2.0 \ （Facebook，2020）",
+    r"hide stretches of the speech's latent frames; \\ pick the true one, \ quantized, \ from distractors \\ (Part 24's contrastive loss)":
+        r"把语音的几段潜在帧藏起来；\\ 从干扰项中挑出真的那个，\ 量化后的 \\ （第24部分的对比损失）",
+    r"with $53{,}000$ unlabelled hours, \\ $10$ minutes of transcripts: \ $4.8\%$ / $8.2\%$ word errors \\ (LibriSpeech clean / other)":
+        r"$53{,}000$小时无标签语音，\\ 加$10$分钟转写：\ 词错误率$4.8\%$ / $8.2\%$ \\ （LibriSpeech clean / other）",
+    r"weakly supervised": r"弱监督",
+    r"Whisper \ (OpenAI, 2022)": r"Whisper \ （OpenAI，2022）",
+    r"$680{,}000$ hours of audio with transcripts \\ found on the web, \ imperfect ones included": r"$680{,}000$小时配有网上转写的音频，\\ 不完美的也照收",
+    r"one model: \ transcribe, \ translate, \\ name the language, \ time the words; \\ nearly a hundred languages": r"一个模型：\ 转写，\ 翻译，\\ 识别语言，\ 给词标时间；\\ 将近一百种语言",
+    r"A.~Baevski et al.\ (2020); \ A.~Radford et al., \textit{Robust Speech Recognition via Large-Scale Weak Supervision} (2022)":
+        r"A.~Baevski等\ （2020）；\ A.~Radford等，\textit{通过大规模弱监督实现稳健的语音识别}（2022）",
+    r"the input: \ $80$ log-mel bands, \ $1.9$ s of a held-out voice \\ (padded to $30$ s)": r"输入：\ $80$个对数梅尔频带，\ 一个留出声音的$1.9$秒 \\ （补齐到$30$秒）",
+    r"encoder: \ $6$ layers": r"编码器：\ $6$层",
+    r"decoder: \ $6$ layers, \\ writes tokens": r"解码器：\ $6$层，\\ 写出词元",
+    r"cross-attention": r"交叉注意力",
+    r"what it writes, \ token by token \ (GPT-2's byte-level BPE, \ plus task tokens)": r"它逐个词元写出的东西 \ （GPT-2的字节级BPE，\ 加上任务词元）",
+    r"Whisper base.en: \ $73$ million parameters, \ width $512$": r"Whisper base.en：\ $7300$万参数，\ 宽度$512$",
+    r"Whisper: \ sentences": r"Whisper：\ 句子",
+    r"Whisper: \ digit strings": r"Whisper：\ 数字串",
+    r"our CTC model: \ digit strings": r"我们的CTC模型：\ 数字串",
+    r"word error rate on the two held-out Kokoro voices, \ $\%$": r"两个留出Kokoro声音上的词错误率，\ $\%$",
+    r"where Whisper went wrong:": r"Whisper错在哪里：",
+    r"2023: \ Whisper large-v3, \ $1.55$ billion parameters": r"2023：\ Whisper large-v3，\ $15.5$亿参数",
+    r"2024: \ large-v3-turbo: \ $4$ decoder layers instead of $32$": r"2024：\ large-v3-turbo：\ 解码器从$32$层减到$4$层",
+    r"2026: \ Qwen3-ASR (Alibaba): \ $52$ languages and dialects, \ built on Qwen3-Omni": r"2026：\ Qwen3-ASR（阿里巴巴）：\ $52$种语言和方言，\ 建在Qwen3-Omni之上",
+    r"the narrator \\ speaks a sentence": r"旁白 \\ 说一句话",
+    r"Qwen3-ASR \\ transcribes it": r"Qwen3-ASR \\ 转写它",
+    r"too different? \\ take it again": r"差太多？\\ 重说一遍",
+    r"a forced aligner \\ times every word": r"强制对齐器 \\ 给每个词标时间",
+    r"how this series is narrated \ (tools/tts\_server.py)": r"这个系列是怎样配音的 \ （tools/tts\_server.py）",
+    r"Qwen Team, \textit{Qwen3-ASR Technical Report} (2026)": r"Qwen团队，\textit{Qwen3-ASR技术报告}（2026）",
+
 }
 
 PATTERNS = [

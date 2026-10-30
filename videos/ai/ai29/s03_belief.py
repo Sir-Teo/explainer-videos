@@ -53,8 +53,8 @@ class Belief(VoiceoverScene):
                    rf"of the time it's at one, \ and imagines one ${int(100 * b['p_false'])}\%$ of the time it isn't").to_edge(DOWN, buff=0.15)
         cite_ = cite(r"S.~Thrun, W.~Burgard \& D.~Fox, \textit{Probabilistic Robotics} (2005)", corner=UL)
         right = abs(int(B[-1].argmax()) - int(pos[-1])) <= 1
-        end = (f"to {ent[-1]:.1f} bits, with its best guess " + ("right where the robot is." if right else
-                                                                "still off by more than a cell."))
+        end = (f"to {ent[-1]:.1f} bits, with its best guess right where the robot is." if right else
+               f"to {ent[-1]:.1f} bits, with its best guess still off by more than a cell.")
         with self.voiceover(
             "Here's the classic example: a robot in a corridor with "
             "a few doors, which doesn't know where it is. Its knowledge is a belief: a probability for every cell, "
