@@ -163,6 +163,9 @@ class Compound(VoiceoverScene):
             f"{math.log(2) / -math.log(ex):.0f} steps. Halve the errors, and the reachable task length doubles. "
             "That is the quantity the next chapter tracks for real models."
         ) as vo:
+            q = label(r"How long a task can an agent \\ finish half the time?", font_size=34, color=C.BITS)
+            q.to_edge(DOWN, buff=0.8)
+            self.play(FadeIn(q))
             step(0)
             vo.wait_until("a")
             step(1)
@@ -174,7 +177,7 @@ class Compound(VoiceoverScene):
             step(3)
             # the derivation steps aside; the curve of the result appears beside its formula
             keep_row = rows[3]
-            self.play(*[FadeOut(m) for m in (*rows[:3], *[w for w in whys[:3] if w is not None])],
+            self.play(FadeOut(q), *[FadeOut(m) for m in (*rows[:3], *[w for w in whys[:3] if w is not None])],
                       keep_row.animate.scale(1.1).move_to([-4.2, 0.4, 0]),
                       *([whys[3].animate.next_to([-4.2, -0.4, 0], DOWN, buff=0.1).set_x(-4.2)] if whys[3] is not None
                         else []))

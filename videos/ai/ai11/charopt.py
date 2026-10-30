@@ -368,7 +368,7 @@ def train(opt="adamw", lr=2e-3, steps=3000, seed=0, sched="cosine", wd=None, hid
     ema_w = [p.detach().clone() for p in model.parameters()] if ema else None
     t0 = time.time()
 
-    def run_steps(model, o, k0, k1, factor, rng_):
+    def run_steps(model, o, k0, k1, factor, rng_, curve_=None):
         for k in range(k0, k1 + 1):
             pos = rng_.integers(CTX, len(tr), BATCH) if sub is None else sub[rng_.integers(0, len(sub), BATCH)]
             pos = torch.from_numpy(pos)
@@ -380,6 +380,8 @@ def train(opt="adamw", lr=2e-3, steps=3000, seed=0, sched="cosine", wd=None, hid
             if clip:
                 torch.nn.utils.clip_grad_norm_(o.params, clip)
             o.step(factor(k))
+            if curve_ is not None and (k % eval_every == 0 or k == k1):
+                curve_.append((k, bits(model, eval_n)))
         return True
 
     def factor(k):
@@ -389,8 +391,10 @@ def train(opt="adamw", lr=2e-3, steps=3000, seed=0, sched="cosine", wd=None, hid
         for b0, b1 in branches:  # cool-down branches leave from here
             if k == b0 + 1:
                 m2, o2, r2 = copy.deepcopy((model, o, g))  # one copy: the optimizer keeps pointing at its model
-                ok = run_steps(m2, o2, b0 + 1, b1, lambda kk, b0=b0, b1=b1: lr_factor(kk, b1, "wsd", decay_from=b0), r2)
-                out["branches"][f"{b0}_{b1}"] = dict(final=bits(m2, final_n) if ok else float("nan"),
+                bc = []
+                ok = run_steps(m2, o2, b0 + 1, b1, lambda kk, b0=b0, b1=b1: lr_factor(kk, b1, "wsd", decay_from=b0), r2,
+                               bc)
+                out["branches"][f"{b0}_{b1}"] = dict(final=bits(m2, final_n) if ok else float("nan"), curve=bc,
                                                        quick=bits(m2, eval_n) if ok else float("nan"))
         pos = g.integers(CTX, len(tr), BATCH) if sub is None else sub[g.integers(0, len(sub), BATCH)]
         pos = torch.from_numpy(pos)

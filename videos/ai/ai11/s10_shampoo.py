@@ -57,7 +57,7 @@ class Shampoo(VoiceoverScene):
         kn.to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Adam and AdaGrad treat each weight on its own. The full version of AdaGrad would precondition by a "
-            "matrix with a row and a column for every pair of weights, which no one can store. "
+            "matrix with a row and a column for every weight of the layer, which no one can store. "
             "<bookmark mark='a'/> In 2018 Vineet Gupta, Tomer Koren and Yoram Singer, at Google, used the shape of "
             "a layer. <bookmark mark='b'/> Keep two small running sums instead: G G transpose, over the rows, and G "
             "transpose G, over the columns. <bookmark mark='c'/> They proved that the big matrix is bounded by a "
