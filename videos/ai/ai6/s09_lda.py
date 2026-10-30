@@ -185,12 +185,12 @@ class LDA(VoiceoverScene):
         top = ld["top"]
         sg = ld["top_signs"]
         checks = VGroup(
-            label(r"all $70$ standardized rates:", font_size=24, color=GREY_A),
+            label(r"all $70$ standardized rates:", font_size=26, color=GREY_A),
             label(rf"generalized eigenvalues: \ ${ev[0]:.4f}$, \ then ${sci_tex(abs(ev[1]), 0)}$ \ (rank ${ld['rank_SB']}$)",
-                  font_size=24, color=GREY_A),
-            label(rf"eigenvector against the formula: \ cosine ${ld['cos_eig']:.6f}$", font_size=24, color=HL),
-            label(rf"against least squares on a $0/1$ target: \ cosine ${ld['cos_ls']:.6f}$", font_size=24, color=HL),
-            label(rf"held-out pages: \ ${100 * ld['acc70']:.1f}\%$", font_size=24, color=WHITE),
+                  font_size=26, color=GREY_A),
+            label(rf"eigenvector against the formula: \ cosine ${ld['cos_eig']:.6f}$", font_size=26, color=HL),
+            label(rf"against least squares on a $0/1$ target: \ cosine ${ld['cos_ls']:.6f}$", font_size=26, color=HL),
+            label(rf"held-out pages: \ ${100 * ld['acc70']:.1f}\%$", font_size=26, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DL, buff=0.35)
         words = VGroup(label(r"heaviest words", font_size=22, color=GREY_A),
                        *[data_text(w, font=MONO, font_size=22, color=DICKENS if s_ > 0 else AUSTEN)
@@ -215,9 +215,13 @@ class LDA(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(FadeIn(checks[0]), FadeIn(checks[1]))
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
-            self.play(LaggedStart(*[FadeIn(c_) for c_ in checks], lag_ratio=0.3), FadeIn(words))
+            self.play(FadeIn(checks[2]))
+            self.play(FadeIn(checks[3]))
+            vo.wait_until("f")
+            self.play(FadeIn(checks[4]), FadeIn(words))
         self.wait(0.3)
         self.clear_scene()

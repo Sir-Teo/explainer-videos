@@ -70,9 +70,7 @@ class KNN(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(ring), LaggedStart(*[Create(l_) for l_ in links], lag_ratio=0.08), FadeIn(tally), FadeIn(note_),
                       run_time=2.0)
-            world = VGroup(ax, plane[1:], dots, qd, links, ring)
-            here = ax.c2p(*X2[q])
-            self.play(world.animate.scale(3.2, about_point=here).shift(np.array([-2.2, -0.3, 0]) - here), run_time=2.0)
+            self.play(Indicate(ring, color=WHITE, scale_factor=1.15), run_time=1.2)
             vo.wait_until("c")
             self.play(FadeIn(verdict), FadeIn(truth))
         self.wait(0.3)
@@ -146,14 +144,15 @@ class KNN(VoiceoverScene):
                            r"$\mathbb{E}\,2\eta(1-\eta)$, \ which lies between $R^*$ and $2R^*(1 - R^*)$; \ $R^*$ is the "
                            r"best possible error.", width=6.6, font_size=21).to_corner(UL, buff=0.25)
         rows = [
-            cmath(r"P(\text{err} \mid x, x')", "=", r"\eta(x)(1 - \eta(x')) + (1 - \eta(x))\eta(x')", font_size=28),
-            cmath(r"P(\text{err} \mid x)", r"\;\to\;", r"2\,\eta(x)(1 - \eta(x))", font_size=28),
-            cmath(r"2\eta(1-\eta)", "=", r"2r(1 - r) \;\ge\; r, \quad r = \min(\eta, 1 - \eta)", font_size=28),
-            cmath(r"\mathbb{E}\,2r(1-r)", r"\;\le\;", r"2R^*(1 - R^*)", font_size=28),
+            cmath(r"P(\text{err} \mid x, x')", "=", r"\eta(1 - \eta') + (1 - \eta)\,\eta'", font_size=32),
+            cmath(r"P(\text{err} \mid x)", r"\;\to\;", r"2\eta(1 - \eta)", font_size=32),
+            cmath(r"2\eta(1-\eta)", "=", r"2r(1 - r) \;\ge\; r", font_size=32),
+            cmath(r"\mathbb{E}\,2r(1-r)", r"\;\le\;", r"2R^*(1 - R^*)", font_size=32),
         ]
-        whys = [why(r"the neighbour's label: \\ an independent coin", font_size=20),
-                why(r"$x' \to x$ as $n \to \infty$", font_size=20), why(r"$r \le \tfrac12$", font_size=20),
-                why(r"Jensen: \ $2r(1-r)$ is concave", font_size=20)]
+        whys = [why(r"$\eta' = \eta(x')$: \\ the neighbour's coin", font_size=20),
+                why(r"$x' \to x$ \\ as $n \to \infty$", font_size=20),
+                why(r"$r = \min(\eta, 1 - \eta)$, \\ the best rule's error", font_size=20),
+                why(r"Jensen, \\ $R^* = \mathbb{E}\, r$", font_size=20)]
         step = side_ladder(self, rows, whys, -3.2, 3.5, keep=4, top=0.95, buff=0.26)
         ns = [int(n) for n in ch["ns"]]
         lx = np.log10(ns)
@@ -193,7 +192,7 @@ class KNN(VoiceoverScene):
             f"single neighbour errs {100 * e1n:.1f} percent of the time, near its limit of {100 * lim:.1f}, inside the "
             f"bound of {100 * bnd:.1f}. Let k grow with n, and the error falls toward the best: {100 * ekn:.1f}."
         ) as vo:
-            self.play(FadeIn(thm, shift=DOWN * 0.2))
+            self.play(FadeIn(thm, shift=DOWN * 0.2), FadeIn(g), FadeIn(lines), FadeIn(tag), FadeIn(key_))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -203,7 +202,6 @@ class KNN(VoiceoverScene):
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
-            self.play(FadeIn(g), FadeIn(lines), FadeIn(tag), FadeIn(key_))
             for a in art:
                 self.play(FadeIn(a[0]), Create(a[1]), FadeIn(a[2]), run_time=1.3)
         self.wait(0.3)
@@ -226,7 +224,11 @@ class KNN(VoiceoverScene):
         cube = VGroup(*[label(rf"$d = {d}$: \ side ${float(ed[str(d)]):.2f}$", font_size=22, color=GREY_A)
                         for d in (1, 2, 10, 100)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         cube_h = label(r"a cube holding $10\%$ of the data", font_size=22, color=WHITE)
-        cubes = VGroup(cube_h, cube).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(g1, DOWN, buff=0.35).align_to(g1, LEFT)
+        cubes = VGroup(cube_h, cube).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        for c_ in cube:
+            c_.scale(1.25)
+        cube_h.scale(1.25)
+        cubes.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, 0.2, 0])
         noise = [int(m) for m in cu["noise"]]
         lxn = np.log10(np.maximum(noise, 1))
         g2 = plot([0, 3, 1], [0.85, 1.0, 0.05], x_length=4.8, y_length=3.6, xticks=[0, 1, 2, 3], yticks=[0.85, 0.9, 0.95, 1.0],
@@ -256,12 +258,13 @@ class KNN(VoiceoverScene):
             f"a real word. Logistic regression learns to ignore them, and falls only from {100 * lr0:.0f} to "
             f"{100 * lr1:.0f}."
         ) as vo:
-            self.play(FadeIn(g1), FadeIn(t1), FadeIn(cite_), FadeIn(g2))
+            self.play(FadeIn(g1), FadeIn(t1), FadeIn(cite_))
             vo.wait_until("a")
             self.play(Create(c1), FadeIn(d1), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(cubes))
             vo.wait_until("c")
+            self.play(FadeOut(cubes), FadeIn(g2))
             for a in art:
                 self.play(FadeIn(a[0]), Create(a[1]), FadeIn(a[2]), run_time=1.2)
         self.wait(0.3)
