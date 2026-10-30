@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, card_body, chapter, curve, load, log_axes
+from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, card_body, chapter, curve, load, log_axes, pw
 
 
 class Stability(VoiceoverScene):
@@ -132,16 +132,20 @@ class Stability(VoiceoverScene):
         mean, hardt = np.asarray(s["sgd_mean"]), np.asarray(s["hardt"])
         E = int(s["epochs"])
         ep = np.arange(E + 1)
-        G = axes([0, E], [0, 0.12], x_length=6.2, y_length=4.0, xticks=[0, 10, 20, 30], yticks=[0, 0.04, 0.08, 0.12],
-                 xlabel=r"passes over the data", ylabel=r"$|w - w'|$: \ distance between the two runs",
-                 center=(-2.6, -0.5, 0))
+        G = axes([0, E], [-2, 1], x_length=6.2, y_length=4.0, xticks=[0, 10, 20, 30], yticks=[-2, -1, 0, 1],
+                 yfmt=lambda v: pw(v), xlabel=r"passes over the data",
+                 ylabel=r"$|w - w'|$: \ distance between the two runs \ (log scale)", center=(-2.6, -0.5, 0))
         ax = G.ax
-        rc = VGroup(*[curve(ax, ep, r_, MEAS, 1.2).set_stroke(opacity=0.35) for r_ in runs])
-        mc = curve(ax, ep, mean, MEAS, 4)
-        k1 = int(np.searchsorted(hardt, 0.12))
-        hc = curve(ax, ep[:k1], hardt[:k1], BOUND, 3.5)
+        ok = ep >= 1
+
+        def ly(v):
+            return np.log10(np.clip(v, 1e-2, 10))
+
+        rc = VGroup(*[curve(ax, ep[ok], ly(r_[ok]), MEAS, 1.2).set_stroke(opacity=0.35) for r_ in runs])
+        mc = curve(ax, ep[ok], ly(mean[ok]), MEAS, 4)
+        hc = curve(ax, ep[ok], ly(hardt[ok]), BOUND, 3.5)
         hl = label(rf"bound $2\eta G\,T/n$: \ ${hardt[-1]:.1f}$ after ${E}$ passes", font_size=20, color=BOUND)
-        hl.next_to(hc.get_end(), RIGHT, buff=0.1)
+        hl.move_to(ax.c2p(0.62 * E, 0.25))
         keep_in_frame(hl)
         mean_end = float(mean[-1])
         head = label(r"SGD twice, \ same order of examples; \ the training sets differ in one page", font_size=26)
@@ -160,8 +164,9 @@ class Stability(VoiceoverScene):
             "For networks, which aren't convex, nothing this clean holds, and that's where the puzzles start."
         ) as vo:
             self.play(FadeIn(head), FadeIn(G))
+            self.play(LaggedStart(*[Create(r_) for r_ in rc], lag_ratio=0.15), run_time=4.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(r_) for r_ in rc], lag_ratio=0.05), Create(mc), run_time=2.5)
+            self.play(Create(mc), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(hc), FadeIn(hl), FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)

@@ -165,7 +165,7 @@ class Fisher(VoiceoverScene):
                           *[Dot(ax.c2p(a, min(b, 7)), radius=0.06, color=col) for a, b in zip(lx, v)])
 
         s_mle, s_med = series(mle, EST["mle"]), series(med, EST["med"])
-        lm = label(r"maximum likelihood", font_size=22, color=EST["mle"]).next_to(ax.c2p(lx[1], mle[1]), UR, buff=0.1)
+        lm = label(r"maximum likelihood", font_size=22, color=EST["mle"]).move_to(ax.c2p(1.45, 4.2), aligned_edge=LEFT)
         ld = label(r"the median", font_size=22, color=EST["med"]).next_to(ax.c2p(lx[0], min(med[0], 7)), RIGHT, buff=0.15)
         hc = history_card(1925, r"R.~A.~Fisher", r"maximum likelihood is efficient: \ it reaches the bound as $n$ grows",
                           width=4.0).to_corner(UR, buff=0.3)

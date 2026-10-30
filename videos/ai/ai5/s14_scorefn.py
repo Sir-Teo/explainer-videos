@@ -125,7 +125,7 @@ class ScoreFn(VoiceoverScene):
         yl = label(r"variance of one sample's estimate", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         cv = curve(ax, bs, np.minimum(vb, 70), color=SF, stroke_width=4)
         d0 = Dot(ax.c2p(0, v0), radius=0.08, color=PLAIN)
-        l0 = label(rf"no baseline: \ ${v0:.1f}$", font_size=22, color=PLAIN).next_to(d0, LEFT, buff=0.15).shift(UP * 0.25)
+        l0 = label(rf"no baseline: \ ${v0:.1f}$", font_size=22, color=PLAIN).next_to(d0, UR, buff=0.12)
         ds = Dot(ax.c2p(bstar, vstar), radius=0.08, color=BASE)
         ls = label(rf"best baseline, \ $b = {bstar:.2f}$: \ ${vstar:.1f}$", font_size=22, color=BASE).next_to(ds, UP, buff=0.2)
         rp = DashedLine(ax.c2p(-2, vrep), ax.c2p(6, vrep), color=REP, stroke_width=3)
@@ -216,8 +216,9 @@ class ScoreFn(VoiceoverScene):
             "learning's policy gradients are this estimator, with baselines, in part twenty-six."
         ) as vo:
             self.play(Write(head), FadeIn(hn), FadeIn(g1), FadeIn(g2_))
-            vo.wait_until("a")
             self.add(pa, pb)
+            self.play(tr.animate.set_value(len(PP[0]) // 8), run_time=4.0, rate_func=linear)
+            vo.wait_until("a")
             self.play(tr.animate.set_value(len(PP[0]) // 3), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(res))
