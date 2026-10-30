@@ -163,7 +163,7 @@ class Outro(VoiceoverScene):
             r"-\eta\|G\|_*$ (the nuclear norm) is attained at $-\eta\,UV^\top$.",
             r"For $p(\sigma) = \tfrac32\sigma - \tfrac12\sigma^3$, \ show $p(1) = 1$, $p'(1) = 0$, \ and that "
             r"$e = 1 - \sigma$ obeys $e \mapsto \tfrac32 e^2 + O(e^3)$. \ For $2\sigma - \tfrac32\sigma^3 + \tfrac12\sigma^5$, "
-            r"show $p'(1) = p''(1) = 0$: \ what is the order of convergence?",
+            r"show $p'(1) = 0$ too, \ and find $c$ in $e \mapsto c\,e^2$. \ Which starts faster from small $\sigma$?",
             r"Decoupled decay $W_{t+1} = (1 - \eta\lambda)W_t - \eta u_t$ with $u_t \perp W_t$ and "
             r"$\langle u_t, u_{t+k}\rangle = \|u\|^2\beta^{|k|}$: \ show $\mathbb{E}\|W\|^2 \to "
             r"\dfrac{\eta\|u\|^2}{2\lambda}\dfrac{1 + \beta}{1 - \beta}$ for small $\eta\lambda$.",

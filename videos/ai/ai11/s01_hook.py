@@ -52,15 +52,16 @@ class Hook(VoiceoverScene, ThreeDScene):
         first, last = order[0], ([n for n in names if reach[n] < 0] or order[-1:])[-1]
         slow_never = reach[last] < 0
         self.set_camera_orientation(phi=62 * DEGREES, theta=-120 * DEGREES, zoom=0.8)
+        said1 = (f"{SAY.get(last, last).capitalize()} never quite does: it is still crawling along the floor of the valley."
+            if slow_never else
+            f"{SAY.get(last, last).capitalize()} takes {reach[last]}, crawling along the floor of the valley.")
         with self.voiceover(
             "Every model in this series learns by walking downhill on its loss. But how you walk matters enormously. "
             "<bookmark mark='a'/> Here is a famous curved valley, Rosenbrock's, with its lowest point marked in white, "
             "and four walkers starting from the same place, each with its best step size from a grid of "
             f"{len(r['lrs'])}. <bookmark mark='b'/> Plain gradient descent, the heavy ball, Adam, and Lion. "
             f"<bookmark mark='c'/> In {steps} steps, {SAY.get(first, first)} gets there first, in {reach[first]} steps. "
-            + (f"{SAY.get(last, last).capitalize()} never quite does: it is still crawling along the floor of the valley."
-               if slow_never else
-               f"{SAY.get(last, last).capitalize()} takes {reach[last]}, crawling along the floor of the valley.")
+            + said1
             + " This part is about why."
         ) as vo:
             self.play(FadeIn(surf), FadeIn(goal), FadeIn(tag), run_time=1.5)

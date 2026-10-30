@@ -85,8 +85,9 @@ class NewtonSchulz(VoiceoverScene):
             label(r"Jordan, 2024: \ $3.4445\sigma - 4.7750\sigma^3 + 2.0315\sigma^5$", font_size=22, color=MU),
             label(r"slope $3.4$ at $0$: \ small values grow fast; \ never settles, \ ends in $[0.7, 1.3]$", font_size=20,
                   color=GREY_A),
-            label(r"$2\sigma - 1.5\sigma^3 + 0.5\sigma^5$: \ $p(1) = 1$, \ $p'(1) = p''(1) = 0$", font_size=22, color=HYB),
-            label(r"converges on $1$ very fast, \ once it is close", font_size=20, color=GREY_A),
+            label(r"$2\sigma - 1.5\sigma^3 + 0.5\sigma^5$: \ $p(1) = 1$, \ $p'(1) = 0$", font_size=22, color=HYB),
+            label(r"near $1$ the error goes $e \mapsto e^2/2$, \ against the cubic's $\tfrac32 e^2$; \ slope $2$ at $0$",
+                  font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, 0.4, 0])
         for i in (1, 3, 5):
             rows[i].shift(DOWN * 0.02)
@@ -99,7 +100,8 @@ class NewtonSchulz(VoiceoverScene):
             "slope at zero of three point four, so small values grow fast, at the price of never quite reaching one. "
             "Everything ends between about zero point seven and one point three, which training doesn't mind. "
             "<bookmark mark='c'/> And a third, two sigma minus one and a half sigma cubed plus a half sigma to the "
-            "fifth: it fixes one with zero slope and zero curvature, so it pins values that are already close."
+            "fifth: it also fixes one with zero slope, and near one it squares the error and halves it, three times "
+            "better than the cubic, so it pins values that are already close."
         ) as vo:
             self.play(Create(ax), FadeIn(ticks), Create(diag), Create(one))
             vo.wait_until("a")
@@ -159,6 +161,8 @@ class NewtonSchulz(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -2.5, 0])
         keep_in_frame(res)
         tag = note(r"computed: \ the character model's gradient, \ float32").to_corner(UL, buff=0.2)
+        said1 = (f"more rounds to catch up: after {len(dev_c) - 1}, {dev_c[-1]:.2f}."
+            if dev_c[-1] < dev_c[R] else "many more rounds than that.")
         with self.voiceover(
             "Now on real data: the gradient matrix from Chapter ten. <bookmark mark='a'/> Follow one middling "
             "singular value through Jordan's polynomial: each round bounces it up towards one. "
@@ -166,8 +170,7 @@ class NewtonSchulz(VoiceoverScene):
             f"above a hundredth of the largest, {nb} of them, sits between {lo_b:.2f} and {hi_b:.2f}. The tiniest, "
             "numerical dust, climb but don't arrive, which costs nothing. <bookmark mark='c'/> The classical cubic, "
             f"in the same {R} rounds, leaves its worst value {dev_c[R]:.2f} from one, and needs "
-            + (f"more rounds to catch up: after {len(dev_c) - 1}, {dev_c[-1]:.2f}."
-               if dev_c[-1] < dev_c[R] else "many more rounds than that.")
+            + said1
         ) as vo:
             self.play(Create(a_), Create(dg), Create(pc), FadeIn(wl), FadeIn(tag))
             vo.wait_until("a")

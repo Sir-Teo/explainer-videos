@@ -160,17 +160,18 @@ class SGD(VoiceoverScene):
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(bx.c2p(0, lo), UR, buff=0.12)
         end_c, end_d = float(rc[-1000:].mean()), float(rd[-1000:].mean())
         better = end_d < end_c
+        said1 = (f"with the constant step, the squared distance stalls at about {end_c:.3f}; with the shrinking step "
+            f"it keeps falling, to {end_d:.4f} after {K:,} steps."
+            if better else
+            f"with the constant step the squared distance stalls near {end_c:.3f}; the shrinking step reaches "
+            f"{end_d:.3f}, not yet below it after {K:,} steps.")
         with self.voiceover(
             "Keep a constant step, and the walker never quite stops: it jiggles around the bottom forever, in a "
             "cloud. <bookmark mark='a'/> Robbins and Monro's answer: let the steps shrink, but not too fast. Their "
             "sum must be infinite, so the walker can still get anywhere; the sum of their squares must be finite, so "
             "the total noise it collects is finite. <bookmark mark='b'/> A step that shrinks like one over k does "
             "both. <bookmark mark='c'/> Measured: "
-            + (f"with the constant step, the squared distance stalls at about {end_c:.3f}; with the shrinking step "
-               f"it keeps falling, to {end_d:.4f} after {K:,} steps."
-               if better else
-               f"with the constant step the squared distance stalls near {end_c:.3f}; the shrinking step reaches "
-               f"{end_d:.3f}, not yet below it after {K:,} steps.")
+            + said1
         ) as vo:
             self.play(Create(cont), FadeIn(star))
             self.play(LaggedStart(*[FadeIn(p) for p in cloud], lag_ratio=0.003), FadeIn(cl), run_time=2.0)

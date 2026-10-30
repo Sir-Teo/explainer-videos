@@ -141,16 +141,17 @@ class Momentum(VoiceoverScene):
         ratio = float(np.asarray(q["conv_gd"])[-1] / np.asarray(q["conv_nesterov"])[-1])
         low = label(r"no method that only sees gradients can do better \\ in the worst case \ (Nemirovski \& Yudin)",
                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.25).set_x(-3.4)
+        said1 = (f"<bookmark mark='b'/> On Chapter 1's convex quadratic it stays under its bound, and after "
+            f"{len(ks):,} steps it is {ratio:.0f} times closer than gradient descent. "
+            if held else
+            f"<bookmark mark='b'/> On Chapter 1's convex quadratic, after {len(ks):,} steps, it is {ratio:.0f} times "
+            "closer than gradient descent. ")
         with self.voiceover(
             "In 1983 Yurii Nesterov, also in Moscow, changed one thing: take the gradient not where you are, but "
             "where momentum is about to carry you. <bookmark mark='a'/> With that look-ahead, the acceleration is "
             "guaranteed on every smooth convex function, not only on quadratics: the gap falls like one over k "
             "squared instead of one over k. "
-            + (f"<bookmark mark='b'/> On Chapter 1's convex quadratic it stays under its bound, and after "
-               f"{len(ks):,} steps it is {ratio:.0f} times closer than gradient descent. "
-               if held else
-               f"<bookmark mark='b'/> On Chapter 1's convex quadratic, after {len(ks):,} steps, it is {ratio:.0f} times "
-               "closer than gradient descent. ")
+            + said1
             + "<bookmark mark='c'/> And Arkadi Nemirovski and David Yudin had shown that no method using only "
             "gradients can do better in the worst case: Nesterov's rate is optimal."
         ) as vo:
@@ -197,11 +198,12 @@ class Momentum(VoiceoverScene):
                        r"2016); \ Nesterov's version has the proof", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         sh, sn, sg = float(q["slope_hb"]), float(q["slope_nesterov"]), float(q["slope_gd"])
         it_g, it_h, it_n = (int(q[f"iters_{m}"][i]) for m in ("gd", "hb", "nesterov"))
+        said2 = ("close to one half, the square root of kappa. " if max(sh, sn) < 0.7 else "well below gradient descent's. ")
         with self.voiceover(
             "Back to Chapter 1's fifty-dimensional valleys, now with momentum. <bookmark mark='a'/> Gradient descent "
             f"rises with slope {sg:.2f}. <bookmark mark='b'/> The heavy ball and Nesterov rise with slopes "
             f"{sh:.2f} and {sn:.2f}: "
-            + ("close to one half, the square root of kappa. " if max(sh, sn) < 0.7 else "well below gradient descent's. ")
+            + said2
             + f"At kappa a thousand that is {it_g:,} steps against {it_h:,} and {it_n:,}. <bookmark mark='c'/> And "
             f"late in the run the heavy ball shrinks the error by {rh:.4f} per step, against {rhp:.4f} derived; "
             f"Nesterov by {rn:.4f}, against {rnp:.4f}. "

@@ -208,14 +208,15 @@ class Natural(VoiceoverScene):
         edges = [o for o in opts if bool(n[f"edge_{o}"])]
         ecomment = (f" {SAY[edges[0]].capitalize()}'s best rate was at the end of its grid, so it may do a little better "
                     "still." if edges else "")
+        said1 = ("The natural gradient carves out the two spirals almost at once. "
+            if order[0] == "ng" else "")
         with self.voiceover(
             "Race them on part nine's spirals: gradient descent, Adam, K-FAC and the exact natural gradient, each at "
             "its best of five learning rates, three seeds each. <bookmark mark='a'/> After a hundred steps, the "
             f"order is {SAY[order[0]]}, then {SAY[order[1]]}, {SAY[order[2]]} and {SAY[order[3]]}. "
             f"<bookmark mark='b'/> On the right, what the network believes, as it trains: gradient descent's map "
             "and the natural gradient's, at the same steps. "
-            + ("The natural gradient carves out the two spirals almost at once. "
-               if order[0] == "ng" else "")
+            + said1
             + "<bookmark mark='c'/> But each natural-gradient step solved a system with one equation per weight. On "
             "a real model that is impossible, which is why the practical versions, K-FAC and the Shampoo of the "
             "next chapter, approximate it." + ecomment

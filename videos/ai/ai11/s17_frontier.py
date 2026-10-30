@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import HIST, OPT_COLORS, PART, era_strip, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, PART, era_strip, lag, takeaway_card
 
 MU, SO, SH, AW = OPT_COLORS["muon"], OPT_COLORS["soap"], OPT_COLORS["shampoo"], OPT_COLORS["adamw"]
 
