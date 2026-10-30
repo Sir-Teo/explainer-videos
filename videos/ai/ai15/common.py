@@ -52,6 +52,7 @@ def said(text: str, chars: int = 46, font_size: int = 20, max_lines: int = 3, co
     """Words a model wrote (or a book): monospaced, wrapped, boxed, never translated."""
     import textwrap
 
+    text = "".join(c if (c.isprintable() and c != "\ufffd") else "\u00b7" for c in text)  # bytes a model wrote, shown as dots
     lines = textwrap.wrap(" ".join(text.split()), chars) or [""]
     if len(lines) > max_lines:
         lines = lines[:max_lines]

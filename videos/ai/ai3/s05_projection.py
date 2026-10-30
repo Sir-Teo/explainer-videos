@@ -84,8 +84,8 @@ class Projection(VoiceoverScene):
     # ------------------------------------------------------------------
     def subspace(self):
         # a schematic plane in perspective (the column space), b above it, p its shadow
-        c0 = np.array([-3.8, -1.9, 0])
-        u, v = np.array([3.2, 0.5, 0]), np.array([1.4, 1.3, 0])
+        c0 = np.array([-3.0, -1.9, 0])
+        u, v = np.array([2.7, 0.4, 0]), np.array([1.1, 1.2, 0])
         sheet = Polygon(c0 - u - v, c0 + u - v, c0 + u + v, c0 - u + v, stroke_color=GREY_B, stroke_width=2,
                         fill_color=C.TRUE_P, fill_opacity=0.15)
         p = c0 + 0.35 * u + 0.25 * v
@@ -97,7 +97,7 @@ class Projection(VoiceoverScene):
         lab = VGroup(MathTex(r"\mathbf{b}", font_size=38, color=VB).next_to(b, UP, buff=0.1),
                      MathTex(r"\mathbf{p} = A\hat{\mathbf{x}}", font_size=34, color=PC).next_to(p, DOWN + RIGHT, buff=0.1),
                      MathTex(r"\mathbf{e}", font_size=38, color=ERRC).next_to((p + b) / 2, RIGHT, buff=0.1),
-                     label(r"the columns of $A$ \\ span this plane", font_size=22, color=GREY_A).move_to(c0 - u * 0.7 - v * 0.55))
+                     label(r"the columns of $A$ \\ span this plane", font_size=22, color=GREY_A).move_to(c0 - u * 0.45 - v * 0.6))
         tag = note(r"schematic").to_corner(DL, buff=0.25)
         colors = {r"\mathbf{b}": VB, r"\hat{\mathbf{x}}": PC, "P": PC}
         rows = [

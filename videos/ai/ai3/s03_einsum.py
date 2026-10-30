@@ -158,10 +158,10 @@ class Einsum(VoiceoverScene):
             "transpose, which only reorders. <bookmark mark='e'/> The trace. <bookmark mark='f'/> And a whole batch "
             "of matrix products at once, the letter b simply carried along."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows.copy().set_opacity(0.2)))
             for k, mk in enumerate("abcdef"):
                 vo.wait_until(mk)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.2), run_time=0.7)
+                self.play(FadeIn(rows[k]), run_time=0.7)
         self.wait(0.3)
         self.clear_scene()
 

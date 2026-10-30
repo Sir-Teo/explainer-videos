@@ -72,11 +72,13 @@ class Hybrid(VoiceoverScene):
             "twenty-four attention layers among ninety-three. <bookmark mark='e'/> The fast layers carry the gist of "
             "a long text cheaply; the few attention layers look up exact details when they're needed."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(tag))
-            groups = [cols[0:2], cols[2:4], cols[4:6], cols[6:8]]
+            veils = Group(*[Rectangle(width=c_.width + 0.1, height=c_.height + 0.1, stroke_width=0, fill_color=BACKGROUND,
+                                      fill_opacity=0.8).move_to(c_) for c_ in cols])
+            self.play(FadeIn(key), FadeIn(tag), FadeIn(cols), FadeIn(veils))
+            groups = [[0, 1], [2, 3], [4, 5], [6, 7]]
             for g_, m in zip(groups, "abcd"):
                 vo.wait_until(m)
-                self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in g_], lag_ratio=0.35), run_time=1.5)
+                self.play(*[FadeOut(veils[i]) for i in g_], run_time=1.2)
             vo.wait_until("e")
             self.play(Indicate(atts, color=WHITE, scale_factor=1.1))
         self.wait(0.3)
@@ -95,8 +97,9 @@ class Hybrid(VoiceoverScene):
         ct_, ch_ = sm(ct), sm(ch)
         lo = math.floor(min(ct_.min(), ch_.min()) * 2) / 2
         hi = min(math.ceil(max(ct_[:, 3:].max(), ch_[:, 3:].max()) * 2) / 2, lo + 4)
-        g = axes([0, steps[-1]], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training steps",
-                 ylabel=r"training loss \ (nats a token, \ smoothed)", xticks=[0, steps[-1] / 2, steps[-1]],
+        S_ = int(r["steps"])
+        g = axes([0, S_], [lo, hi], x_length=6.6, y_length=4.0, xlabel=r"training steps",
+                 ylabel=r"training loss \ (nats a token, \ smoothed)", xticks=[0, S_ // 2, S_],
                  yticks=[lo, (lo + hi) / 2, hi], center=[-2.6, -0.4, 0], xfmt=lambda v: f"{int(v)}")
         ax = g.ax
         bands = VGroup(band(ax, st, np.clip(ct_.min(0), lo, hi), np.clip(ct_.max(0), lo, hi), TF_C, 0.25),
@@ -134,11 +137,12 @@ class Hybrid(VoiceoverScene):
             "chapter."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap))
+            self.play(FadeIn(bands), Create(lines[0]), Create(lines[1]), run_time=4.0)
             vo.wait_until("a")
             self.play(FadeIn(arch[0]))
             self.play(FadeIn(arch[1]))
             vo.wait_until("b")
-            self.play(FadeIn(bands), Create(lines[0]), Create(lines[1]), run_time=3.0)
+            self.play(Indicate(lines, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(FadeIn(rh), FadeIn(rows))
             vo.wait_until("d")

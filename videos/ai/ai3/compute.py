@@ -345,8 +345,8 @@ def power_run(matvec, n, v_true, lam, steps, seed):
     v /= np.linalg.norm(v)
     sins, rq = [], []
     for _ in range(steps + 1):
-        c = abs(float(v @ v_true))
-        sins.append(math.sqrt(max(0.0, 1 - c * c)))
+        c = float(v @ v_true)
+        sins.append(float(np.linalg.norm(v - c * v_true)))  # sin of the angle, accurate to round-off
         w = matvec(v)
         rq.append(float(v @ w))
         v = w / np.linalg.norm(w)
@@ -382,7 +382,7 @@ def compute_power():
     for key in ("gpt2", "letters"):
         s = np.array(out[key]["sin"])
         k = np.arange(len(s))
-        ok = (s > 1e-12) & (k >= 3)
+        ok = (s > 1e-13) & (k >= 3)
         slope = np.polyfit(k[ok], np.log(s[ok]), 1)[0]
         out[key]["rate_measured"] = float(math.exp(slope))
     return out
@@ -1183,7 +1183,7 @@ def compute_jl():
 N_USERS, N_ITEMS, N_GENRES = 4000, 1200, 6
 GENRES = ["comedy", "drama", "action", "romance", "horror", "documentary"]
 MF_RANKS = [1, 2, 4, 8, 16, 32]
-MF_LAMS = [0.0, 0.003, 0.01, 0.03, 0.1]
+MF_LAMS = [0.0, 0.01, 0.03, 0.1, 0.3]
 MF_EPOCHS = 40
 
 
@@ -1422,12 +1422,19 @@ def compute_twotower():
     cold_users = list(cold_hist)
     seen_c = {u: set(cold_hist[u]) for u in cold_users}
 
+    prior = np.log((pop + 1) / (pop + 1).sum())
+
     def eval_tt():
-        Sw = tower_scores(warm_eval, [hist_train[u] for u in warm_eval])
-        Sc = tower_scores(cold_users, [cold_hist[u] for u in cold_users])
-        rw = recall(lambda u: Sw[warm_eval.index(u)], warm_eval, warm_target, seen_w)
-        rc = recall(lambda u: Sc[cold_users.index(u)], cold_users, cold_target, seen_c)
-        return rw, rc
+        """recall@10 for warm and cold users: by the towers' score alone, and with the popularity prior added back
+        (the towers are trained with the in-batch correction, so their score estimates log p(film | user) minus
+        log p(film): a pointwise mutual information)."""
+        Sw = tower_scores(warm_eval, [hist_train[u] for u in warm_eval]) / TT_TAU
+        Sc = tower_scores(cold_users, [cold_hist[u] for u in cold_users]) / TT_TAU
+        out = []
+        for add in (0.0, 1.0):
+            out.append(recall(lambda u: Sw[warm_eval.index(u)] + add * prior, warm_eval, warm_target, seen_w))
+            out.append(recall(lambda u: Sc[cold_users.index(u)] + add * prior, cold_users, cold_target, seen_c))
+        return out
 
     curve = []
     for step in range(1, TT_STEPS + 1):
@@ -1449,17 +1456,14 @@ def compute_twotower():
         loss.backward()
         opt.step()
         if step in (1, 50, 100, 200, 400, 700, 1000, 1500, 2000, 2500, 3000):
-            rw, rc = eval_tt()
-            curve.append((step, float(loss), rw, rc))
-    # baselines: popularity; matrix factorization for the warm users (it has no vector for a cold user)
+            curve.append((step, float(loss.detach()), *eval_tt()))
+    # the baseline: recommend the most popular films the user hasn't seen
     r_pop_w = recall(lambda u: pop, warm_eval, warm_target, seen_w)
     r_pop_c = recall(lambda u: pop, cold_users, cold_target, seen_c)
-    mf = mf_train(Wd, 8, 0.03, 0, epochs=30, train_mask=tr, eval_mask=te)
-    S_mf = mf["mu"] + mf["bu"][:, None] + mf["bi"][None] + mf["P"] @ mf["Q"].T
-    r_mf_w = recall(lambda u: S_mf[u], warm_eval, warm_target, seen_w)
-    rw, rc = curve[-1][2], curve[-1][3]
-    return dict(curve=curve, recall_warm=rw, recall_cold=rc, pop_warm=r_pop_w, pop_cold=r_pop_c, mf_warm=r_mf_w,
-                n_warm=len(warm_eval), n_cold=len(cold_users), dim=TT_DIM, items=N_ITEMS, tau=TT_TAU)
+    last = curve[-1]
+    return dict(curve=curve, recall_warm=last[2], recall_cold=last[3], recall_warm_prior=last[4],
+                recall_cold_prior=last[5], pop_warm=r_pop_w, pop_cold=r_pop_c, n_warm=len(warm_eval),
+                n_cold=len(cold_users), dim=TT_DIM, items=N_ITEMS, tau=TT_TAU, steps=TT_STEPS)
 
 
 def tidy(x, top=True):
