@@ -33,13 +33,10 @@ class HighDim(VoiceoverScene):
         dv = Integer(2, font_size=48, color=C.BITS)
         dread = VGroup(dl, dv).arrange(RIGHT, buff=0.2).to_corner(UR, buff=0.7)
         with self.voiceover(
-            "Our intuition comes from three dimensions, and in seven hundred and sixty-eight it misleads us. "
-            "<bookmark mark='a'/> Pick two directions at random. In two dimensions, the angle between them could be "
-            "anything. <bookmark mark='b'/> In three, angles near a right angle are already the most common. "
-            "<bookmark mark='c'/> "
-            f"In a hundred, the angle strays from ninety degrees by only {sd[100]:.1f} degrees on average, "
-            f"<bookmark mark='d'/> and in 768, by {sd[768]:.1f}. Random directions in high dimensions are nearly "
-            "perpendicular."
+            "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random "
+            "directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most "
+            f"common. <bookmark mark='c'/> In a hundred, the angle strays from ninety degrees by {sd[100]:.1f} degrees "
+            f"on average, <bookmark mark='d'/> and in 768, by {sd[768]:.1f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
@@ -82,13 +79,11 @@ class HighDim(VoiceoverScene):
         read = label(rf"$d = 768$: \ measured ${var[k768]:.5f}$, \ $1/d = {1 / 768:.5f}$", font_size=26,
                      color=C.TRUE_P).move_to([4.2, -0.8, 0])
         with self.voiceover(
-            "Why? Here is the calculation, and it is short. <bookmark mark='a'/> The cosine is the dot product over "
-            "the two lengths, and in high dimensions each length is close to the square root of d; we'll see why in "
-            "a moment. <bookmark mark='b'/> The dot product is a sum of d independent products, each with mean zero "
-            "and variance one, so its variance is d. <bookmark mark='c'/> Divide by d squared: the cosine's variance "
-            "is one over d, and its spread is one over root d. <bookmark mark='d'/> Measured at thirteen dimensions "
-            f"from 2 to {int(ds[-1])}, on a log scale, the points sit on the line. At 768: {var[k768]:.5f}, against "
-            f"{1 / 768:.5f}."
+            "Why? <bookmark mark='a'/> The cosine is the dot product over the lengths, each close to root d, as we'll "
+            "see. <bookmark mark='b'/> The dot product is a sum of d independent products of mean zero and variance "
+            "one: variance d. <bookmark mark='c'/> Divide by d squared: the cosine's variance is one over d. "
+            f"<bookmark mark='d'/> Measured from d of 2 to {int(ds[-1])}, the points sit on the line; at 768, "
+            f"{var[k768]:.5f} against {1 / 768:.5f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap))
             for k, mk in enumerate("abc"):
@@ -129,13 +124,10 @@ class HighDim(VoiceoverScene):
                      r"along it says how strongly the idea is there", picture=feat_pic, width=4.6)
         feat.to_edge(LEFT, buff=0.3).set_y(-0.6)
         with self.voiceover(
-            "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 "
-            f"dimensions: every pair of them lies between {h['worst_angle']:.0f} and {180 - h['worst_angle']:.0f} "
-            "degrees apart. "
-            "<bookmark mark='b'/> A feature is one idea a model keeps track of, stored as a direction. A model can "
-            "keep far more features than it has dimensions, as long as their directions only need to be nearly "
-            "perpendicular. Packing in more directions than dimensions this way is called superposition, and it's "
-            "how Part 30 reads the inside of a model."
+            "So high-dimensional space is roomy. <bookmark mark='a'/> Ten thousand random directions in 768 "
+            f"dimensions: every pair between {h['worst_angle']:.0f} and {180 - h['worst_angle']:.0f} degrees apart. "
+            "<bookmark mark='b'/> A model stores an idea, a feature, as a direction, and can keep far more features than "
+            "dimensions if they need only be nearly perpendicular: superposition, how Part 30 reads a model."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -176,12 +168,11 @@ class HighDim(VoiceoverScene):
         meas = label(rf"measured spread at $d = 768$: \ ${nsd[k768]:.3f}$; \ $1/\sqrt 2 = 0.707$", font_size=26,
                      color=C.MODEL_Q).move_to([2.6, -1.6, 0])
         with self.voiceover(
-            "Now lengths. <bookmark mark='a'/> Give a vector d independent random coordinates. As d grows, its "
-            "length piles up ever more tightly around the square root of d. <bookmark mark='b'/> The squared length "
-            "is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. <bookmark mark='d'/> The "
-            "square root near d changes by one over two root d per unit, so the length's spread is about one over "
-            "root two, whatever d is. The spread stays put while the length grows: relative to it, the spread "
-            f"disappears. Measured at 768 dimensions, {nsd[k768]:.3f}."
+            "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. "
+            "<bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. "
+            "<bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is "
+            "about one over root two, whatever d: the length grows, the spread doesn't. Measured at 768, "
+            f"{nsd[k768]:.3f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
@@ -217,12 +208,10 @@ class HighDim(VoiceoverScene):
         head.to_edge(UP, buff=0.5)
         tag = note(r"the outer $1\%$ of the radius, drawn wider than life").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Volume does something stranger. The volume inside a radius r grows like r to the d, so the inner ball, "
-            "with ninety-nine percent of the radius, holds 0.99 to the d of the volume. <bookmark mark='a'/> In three "
-            f"dimensions, the outer one percent holds {100 * shell['3']:.1f} percent of the volume. In a hundred, "
-            f"{100 * shell['100']:.1f} percent. <bookmark mark='b'/> In 768, {100 * shell['768']:.2f} percent: nearly "
-            "all of a high-dimensional ball is skin. Random vectors live on a thin shell, and nearly perpendicular "
-            "to each other. Both facts drive the next chapter."
+            "Volume is stranger. It grows like the radius to the d, so the inner ball with 99 percent of the radius "
+            "holds 0.99 to the d of the volume. <bookmark mark='a'/> In three dimensions, the outer one percent holds "
+            f"{100 * shell['3']:.1f} percent. In a hundred, {100 * shell['100']:.1f}. <bookmark mark='b'/> In 768, "
+            f"{100 * shell['768']:.2f} percent: a high-dimensional ball is nearly all skin."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(balls[0][0]))
             vo.wait_until("a")

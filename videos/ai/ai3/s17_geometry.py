@@ -40,12 +40,11 @@ class Geometry(VoiceoverScene):
         pred = label(rf"random directions in $768$ dimensions: \ $0 \pm {1 / np.sqrt(768):.3f}$", font_size=24,
                      color=GREY_A).next_to(head, DOWN, buff=0.2)
         with self.voiceover(
-            "Chapter fourteen said random directions in 768 dimensions are nearly perpendicular: cosines of zero, "
-            f"give or take {1 / np.sqrt(768):.3f}. Trained vectors are not random. <bookmark mark='a'/> Take two "
-            f"thousand of GPT-2's token vectors: the average cosine between two of them is {g['cos_random_mean']:.2f}. "
-            "They all lean the same way; in the jargon, the space is anisotropic. Each token's vector makes a cosine "
-            f"of {g['mean_vec_cos']:.2f}, on average, with the mean of all of them. <bookmark mark='b'/> Subtract that "
-            f"mean from every vector, and the average cosine falls to {g['cos_centred_mean']:.3f}."
+            "Random directions in 768 dimensions are nearly perpendicular, cosines of zero give or take "
+            f"{1 / np.sqrt(768):.3f}. Trained vectors are not random. <bookmark mark='a'/> Between two of GPT-2's token "
+            f"vectors the average cosine is {g['cos_random_mean']:.2f}: they all lean one way, the space is "
+            f"anisotropic. Each makes a cosine of {g['mean_vec_cos']:.2f}, on average, with their mean. "
+            f"<bookmark mark='b'/> Subtract the mean, and the average cosine falls to {g['cos_centred_mean']:.3f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pred), Create(zero), FadeIn(ticks))
             vo.wait_until("a")
@@ -69,8 +68,7 @@ class Geometry(VoiceoverScene):
                                   fill_color=RAWC, fill_opacity=0.85).move_to(ax.c2p(i + 1, v / 2)) for i, v in
                         enumerate(share)])
         isol = DashedLine(ax.c2p(0, iso), ax.c2p(21, iso), color=GREY_B, stroke_width=2)
-        isot = label(r"equal shares: \ $1/768$", font_size=20, color=GREY_B).next_to(ax.c2p(21, iso), UP, buff=0.05)
-        isot.align_to(ax.c2p(21, 0), RIGHT)
+        isot = label(r"dashed: \ equal shares, \ $1/768$", font_size=20, color=GREY_B).move_to(ax.c2p(14, share[0] * 0.85))
         pts = np.asarray(g["pc12_sample"])
         ids = np.asarray(g["pc12_ids"])
         gb = axes([float(pts[:, 0].min()), float(pts[:, 0].max()), 1], [float(pts[:, 1].min()), float(pts[:, 1].max()), 1],
@@ -86,15 +84,13 @@ class Geometry(VoiceoverScene):
         head = label(r"After centring: \ which directions remain lopsided?", font_size=34).to_edge(UP, buff=0.35)
         rho = g["pc1_id_spearman"]
         with self.voiceover(
-            "Even after centring, the spread is uneven. <bookmark mark='a'/> The top principal direction carries "
-            f"{100 * share[0]:.1f} percent of the spread, against {100 * iso:.2f} percent for an even share. "
-            "<bookmark mark='b'/> What is that direction? Colour each token by its number in GPT-2's vocabulary, "
-            "which follows the order in which its tokenizer merged pieces, roughly from frequent to rare. The first "
-            f"direction tracks it: a rank correlation of {rho:.2f}. Rare tokens sit apart from common ones. "
-            "<bookmark mark='c'/> One explanation, from Jun Gao and colleagues in 2019: in training, a rare token's "
-            "vector is mostly pushed away from contexts where it doesn't appear, so the rare ones drift together. "
-            "Removing the top direction as well as the mean, Jiaqi Mu and Pramod Viswanath's 'all-but-the-top' "
-            f"of 2018, brings the average cosine from {abtt[0]:.3f} to {abtt[1]:.4f}."
+            "Even centred, the spread is uneven. <bookmark mark='a'/> The top principal direction carries "
+            f"{100 * share[0]:.1f} percent of it, against {100 * iso:.2f} for an even share. <bookmark mark='b'/> Colour "
+            "each token by its number in GPT-2's vocabulary, which roughly runs from frequent to rare: the first "
+            f"direction tracks it, a rank correlation of {rho:.2f}. <bookmark mark='c'/> Jun Gao and colleagues explained "
+            "this in 2019: training mostly pushes a rare token's vector away from contexts, so rare tokens drift "
+            "together. Removing the top direction too, Mu and Viswanath's all-but-the-top of 2018, brings the average "
+            f"cosine from {abtt[0]:.3f} to {abtt[1]:.4f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ga), FadeIn(gb))
             vo.wait_until("a")
@@ -129,15 +125,12 @@ class Geometry(VoiceoverScene):
         tag = note(rf"computed: \ GPT-2 reading the scoreboard's passage, \ ${g['passage_tokens']}$ tokens").to_corner(DR, buff=0.2)
         hi = max(L[1:], key=lambda d: d["cos"])
         with self.voiceover(
-            "Inside the network it gets stronger. <bookmark mark='a'/> Run GPT-2 on the scoreboard's passage and "
-            "compare the vectors at different positions, layer by layer. At the input the average cosine is "
-            f"{L[0]['cos']:.2f}; in the middle layers it is about {mid['cos']:.2f}, and at the top it reaches "
-            f"{hi['cos']:.2f}. Kawin Ethayarajh measured this in 2019: the upper layers' vectors crowd into a narrow "
-            f"cone. <bookmark mark='b'/> In layer {mid['layer']}, just three of the 768 dimensions carry "
-            f"{100 * mid['top3_share']:.0f} percent of that average cosine: rogue dimensions, as William Timkey and "
-            "Marten van Schijndel called them in 2021. <bookmark mark='c'/> Centre each layer, and the cosines fall "
-            "back to about zero. Cosine similarity on raw vectors measures this common lean as much as meaning, "
-            "which is why retrieval systems centre or normalize their vectors."
+            "Inside the network it is stronger. <bookmark mark='a'/> GPT-2 reading the scoreboard's passage, layer by "
+            f"layer: the average cosine between positions is {L[0]['cos']:.2f} at the input, about {mid['cos']:.2f} in "
+            f"the middle, and {hi['cos']:.2f} at the top, the narrow cone Kawin Ethayarajh measured in 2019. "
+            f"<bookmark mark='b'/> In layer {mid['layer']}, three of 768 dimensions carry {100 * mid['top3_share']:.0f} "
+            "percent of it: rogue dimensions, in Timkey and van Schijndel's phrase. <bookmark mark='c'/> Centre each "
+            "layer and the cosines fall to about zero. Raw cosines measure this common lean as much as meaning."
         ) as vo:
             self.play(FadeIn(ga), FadeIn(tag), FadeIn(leg[0]))
             vo.wait_until("a")
@@ -156,26 +149,24 @@ class Geometry(VoiceoverScene):
         cards = VGroup(
             history_card(2013, r"T.~Mikolov, W.~Yih \& G.~Zweig",
                          r"linguistic regularities: \ king $-$ man $+$ woman lands near queen", color=HIST, width=4.3,
-                         font_size=27),
+                         font_size=30),
             history_card(2022, r"N.~Elhage et al., \ Anthropic",
                          r"toy models of superposition: \ more features than dimensions, \ as nearly perpendicular "
-                         r"directions", color=HIST, width=4.3, font_size=27),
+                         r"directions", color=HIST, width=4.3, font_size=30),
             history_card(2024, r"K.~Park, Y.~J.~Choe \& V.~Veitch",
                          r"the linear representation hypothesis, \ made precise: \ concepts as directions, \ under the "
-                         r"right inner product", color=HIST, width=4.3, font_size=27),
+                         r"right inner product", color=HIST, width=4.3, font_size=30),
         ).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(DOWN * 0.2)
         head = label(r"The linear representation hypothesis", font_size=40).to_edge(UP, buff=0.4)
         tail = label(r"Part 30: \ reading and steering a model along its directions", font_size=28, color=C.BITS)
         tail.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            f"Lopsided or not, directions carry meaning. Our counted vectors sent France to Paris as England to "
-            f"{an[0]}. <bookmark mark='a'/> In 2013 Tomas Mikolov, Wen-tau Yih and Geoffrey Zweig found the same "
-            "regularities in neural word vectors. <bookmark mark='b'/> In 2022, Nelson Elhage and colleagues at "
-            "Anthropic showed in toy models how a network stores more features than it has dimensions, as nearly "
-            "perpendicular directions: the room of chapter fourteen, used. <bookmark mark='c'/> In 2024, Kiho Park, "
-            "Yo Joong Choe and Victor Veitch made the idea precise: concepts as directions, once you measure with the "
-            "right inner product, which is not always the plain dot product, for exactly the reason this chapter "
-            "showed. <bookmark mark='d'/> Reading and steering models along such directions is Part 30's subject."
+            f"Lopsided or not, directions carry meaning: our counted vectors sent England to {an[0]}. "
+            "<bookmark mark='a'/> In 2013 Mikolov, Yih and Zweig found such regularities in neural word vectors. "
+            "<bookmark mark='b'/> In 2022 Nelson Elhage and colleagues showed toy networks storing more features than "
+            "dimensions, as nearly perpendicular directions. <bookmark mark='c'/> In 2024 Kiho Park, Yo Joong Choe and "
+            "Victor Veitch made it precise: concepts as directions, under the right inner product, not always the plain "
+            "dot product. <bookmark mark='d'/> Reading and steering along such directions is Part 30's subject."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

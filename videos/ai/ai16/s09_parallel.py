@@ -46,7 +46,7 @@ class Parallel(VoiceoverScene):
         tl.to_edge(UP, buff=0.3)
         cite_ = cite(r"Part 18: \ expert parallelism and collectives", corner=DL)
         a2a = label(r"all-to-all: \ every GPU sends each token to its experts' GPU, \ and gets the answers back",
-                    font_size=22, color=COMMC).to_edge(DOWN, buff=0.4)
+                    font_size=24, color=COMMC).next_to(gpus, DOWN, buff=0.4)
         with self.voiceover(
             "A model with hundreds of experts doesn't fit on one chip, so the experts are spread out: expert "
             "parallelism, which part 18 builds. Here, eight experts on four GPUs. <bookmark mark='a'/> Each GPU "
@@ -115,7 +115,8 @@ class Parallel(VoiceoverScene):
             "rest by computing one batch while another was in flight."
         ) as vo:
             self.play(FadeIn(cite_))
-            for i, mk in enumerate("abcd"):
+            step(0)
+            for i, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 step(i)
             vo.wait_until("e")
@@ -131,18 +132,18 @@ class Parallel(VoiceoverScene):
         for i, (k, name, col) in enumerate(MODES):
             dev = np.asarray(p[f"{k}_dev"], float)  # seeds, layers, devices
             show = dev[:, 0].mean(0)  # block 1, mean over seeds
-            bars = VGroup(*[Rectangle(width=0.45, height=max(4.0 * v, 0.02), stroke_width=0, fill_color=C.GPU,
+            bars = VGroup(*[Rectangle(width=0.6, height=max(9.0 * v, 0.02), stroke_width=0, fill_color=C.GPU,
                                       fill_opacity=0.85) for v in show]).arrange(RIGHT, buff=0.15, aligned_edge=DOWN)
             base = Line(bars.get_left() + LEFT * 0.15, bars.get_right() + RIGHT * 0.15, color=GREY_C).align_to(bars, DOWN)
-            fair = DashedLine(base.get_left() + UP * 4.0 / D, base.get_right() + UP * 4.0 / D, color=GREY_B, stroke_width=1.5)
-            gl = VGroup(*[label(rf"GPU {j + 1}", font_size=16, color=GREY_B).next_to(b_, DOWN, buff=0.1) for j, b_ in enumerate(bars)])
-            t = label(name, font_size=22, color=col)
-            s = label(rf"the step waits for the busiest: \ ${p[f'{k}_slowdown']:.2f}\times$", font_size=20, color=WHITE)
+            fair = DashedLine(base.get_left() + UP * 9.0 / D, base.get_right() + UP * 9.0 / D, color=GREY_B, stroke_width=1.5)
+            gl = VGroup(*[label(rf"GPU {j + 1}", font_size=18, color=GREY_B).next_to(b_, DOWN, buff=0.1) for j, b_ in enumerate(bars)])
+            t = label(name, font_size=26, color=col)
+            s = label(rf"the step waits for the busiest: \\ ${p[f'{k}_slowdown']:.2f}\times$ a fair share", font_size=24, color=WHITE)
             grp = VGroup(VGroup(bars, base, fair, gl), t, s)
             t.next_to(grp[0], UP, buff=0.4)
             s.next_to(grp[0], DOWN, buff=0.15).shift(DOWN * 0.3)
             groups.add(grp)
-        groups.arrange(RIGHT, buff=0.8, aligned_edge=DOWN).move_to([0, -0.2, 0])
+        groups.arrange(RIGHT, buff=0.9, aligned_edge=DOWN).move_to([0, -0.4, 0])
         head = label(r"our routers, \ their experts spread over $4$ GPUs: \ each GPU's share of the work \ (block 1)",
                      font_size=24).to_edge(UP, buff=0.35)
         tag = note(r"three seeds' mean; \ dashed: \ a quarter each; \ a simulation of the placement", font_size=18)

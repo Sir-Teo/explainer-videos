@@ -58,12 +58,11 @@ class Projection(VoiceoverScene):
                 why(r"solve for $\hat x$"), why(r"a matrix, \ $P = \mathbf{a}\mathbf{a}^{\top}/\mathbf{a}^{\top}\mathbf{a}$")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=2.4, buff=0.38, edge=6.9)
         with self.voiceover(
-            "In chapter one, the dot product measured a shadow. Here is the shadow made exact. <bookmark mark='a'/> "
-            "Which point on the line through a is closest to b? <bookmark mark='b'/> It is some multiple of a. "
-            "<bookmark mark='c'/> And it is the one whose error, b minus that point, is perpendicular to the line: "
-            "any other point is farther, by Pythagoras. <bookmark mark='d'/> Solve for the multiple. "
-            "<bookmark mark='e'/> The projection is a matrix times b: a times a transpose, over a dot a. A matrix of "
-            "rank one, that finds shadows."
+            "The dot product measured a shadow; here is the shadow made exact. <bookmark mark='a'/> Which point on the "
+            "line through a is closest to b? <bookmark mark='b'/> Some multiple of a, <bookmark mark='c'/> the one "
+            "whose error, b minus that point, is perpendicular to the line: any other point is farther, by Pythagoras. "
+            "<bookmark mark='d'/> Solve for the multiple. <bookmark mark='e'/> The projection is a matrix times b: a "
+            "times a transpose, over a dot a. A matrix of rank one, that finds shadows."
         ) as vo:
             self.play(Create(ln), GrowArrow(aa), FadeIn(la))
             vo.wait_until("a")
@@ -115,14 +114,13 @@ class Projection(VoiceoverScene):
                             r"least squares, \ to fit orbits to observations; \ Gauss had used it to find the "
                             r"lost asteroid Ceres in 1801", color=HIST, width=5.0).to_corner(UL, buff=0.25)
         with self.voiceover(
-            "Now project onto a whole plane, or any subspace: everything you can reach by combining the columns of a "
-            "matrix A. <bookmark mark='a'/> The closest point is A times some x hat, and again the error is "
-            "perpendicular, now to every column at once. <bookmark mark='b'/> Multiply out: the normal equations. "
-            "<bookmark mark='c'/> If the columns are independent, A transpose A can be inverted. "
-            "<bookmark mark='d'/> And the projection matrix is A, A transpose A inverse, A transpose. "
-            "<bookmark mark='e'/> Project twice and nothing more happens; and P is symmetric. <bookmark mark='f'/> "
-            "Legendre published this in 1805 as the method of least squares, and Gauss in 1809, who had used it to "
-            "find the lost asteroid Ceres."
+            "Now project onto a subspace: everything you can reach by combining the columns of a matrix A. "
+            "<bookmark mark='a'/> The closest point is A times some x hat, and the error is perpendicular to every "
+            "column at once. <bookmark mark='b'/> Multiply out: the normal equations. <bookmark mark='c'/> If the columns "
+            "are independent, A transpose A can be inverted. <bookmark mark='d'/> The projection matrix: A, A "
+            "transpose A inverse, A transpose. <bookmark mark='e'/> Project twice and nothing more happens; and P is "
+            "symmetric. <bookmark mark='f'/> Legendre published this in 1805 as least squares, and Gauss in 1809, who "
+            "had used it to find the lost asteroid Ceres."
         ) as vo:
             self.play(FadeIn(sheet), FadeIn(lab[3]), FadeIn(tag), GrowArrow(ab), FadeIn(lab[0]))
             vo.wait_until("a")
@@ -166,12 +164,11 @@ class Projection(VoiceoverScene):
                     color=GREY_A).next_to(checks, DOWN, buff=0.2)
         tag = note(r"illustrative data").to_corner(DL, buff=0.25)
         with self.voiceover(
-            "This is the most used calculation in all of statistics. <bookmark mark='a'/> Fourteen points, and a "
-            "line to fit them. The columns of A are a column of ones and the x values; the best line is the "
-            "projection of the y values onto the plane those columns span. <bookmark mark='b'/> The leftover errors "
-            "are perpendicular to both columns: they sum to zero, and so do the errors times x. "
-            "<bookmark mark='c'/> Regression, a linear probe reading a concept out of a network, a network's last "
-            "layer trained with squared error: all of them are this projection."
+            "This is the most used calculation in statistics. <bookmark mark='a'/> Fourteen points and a line. The "
+            "columns of A are ones and the x values; the best line is the projection of the y values onto their span. "
+            "<bookmark mark='b'/> The errors are perpendicular to both columns: they sum to zero, and so do the errors "
+            "times x. <bookmark mark='c'/> Regression, a linear probe reading a concept out of a network, a last layer "
+            "trained with squared error: all this projection."
         ) as vo:
             self.play(Create(ax), FadeIn(tag), LaggedStart(*[FadeIn(d, scale=0.5) for d in pts], lag_ratio=0.05))
             vo.wait_until("a")
@@ -216,12 +213,11 @@ class Projection(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=3.0, x=2.6, buff=0.38, edge=6.9)
         hist = note(r"J.~P.~Gram (1883), \ E.~Schmidt (1907); \ Laplace had used it in 1812").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Projections are easiest when the basis is orthonormal: perpendicular arrows of length one. Then the "
-            "projection is just Q times Q transpose. <bookmark mark='a'/> Gram and Schmidt's recipe makes one from "
-            "any basis. Take the first vector and scale it to length one. <bookmark mark='b'/> From the second, "
-            "remove its shadow on the first; what is left is perpendicular. <bookmark mark='c'/> Scale it to length "
-            "one, and repeat for as many vectors as you have. <bookmark mark='d'/> Keeping the coefficients writes "
-            "A as Q times a triangular R: the QR factorization."
+            "Projections are easiest with an orthonormal basis, perpendicular arrows of length one: then the "
+            "projection is Q times Q transpose. <bookmark mark='a'/> Gram and Schmidt's recipe makes one from any basis. "
+            "Scale the first vector to length one. <bookmark mark='b'/> From the second, remove its shadow on the first; "
+            "what is left is perpendicular. <bookmark mark='c'/> Scale it, and repeat. <bookmark mark='d'/> Keeping the "
+            "coefficients writes A as Q times a triangular R: the QR factorization."
         ) as vo:
             self.play(GrowArrow(A1), GrowArrow(A2), FadeIn(labs[0]), FadeIn(labs[1]))
             vo.wait_until("a")
@@ -278,17 +274,15 @@ class Projection(VoiceoverScene):
                  if last["err_normal"] > 1 else f" against ten to the minus {-ex(last['err_normal'])} for the normal "
                  "equations.")
         with self.voiceover(
-            "On paper the recipe is exact. On a computer every step rounds, and the rounding can pile up. We tested "
-            "it on Hilbert matrices, which get nearly dependent columns fast. <bookmark mark='a'/> The classical "
-            "recipe, which takes every shadow from the original vector, loses orthogonality as the square of the "
-            f"condition number: at a condition number of ten to the {ex(mid['kappa'])}, its Q is off by about ten to "
-            f"the minus {-ex(mid['cgs'])}.{dead} <bookmark mark='b'/> Taking each shadow from the updated vector, the "
-            "modified recipe, loses only in proportion to the condition number. <bookmark mark='c'/> Alston "
-            "Householder's reflections, from 1958, stay perpendicular to about ten to the minus "
-            f"{-ex(last['householder'])}, the machine's precision, whatever the matrix. <bookmark mark='d'/> The "
-            "normal equations have the same flaw as the classical recipe: forming A transpose A squares the condition "
-            "number, and the answer's error grows with that square. QR does not: at the hardest case, an error of "
-            f"ten to the minus {-ex(last['err_qr'])},{worst} This is why libraries solve least squares with QR."
+            "On a computer every step rounds, and rounding can pile up. We tested on Hilbert matrices, whose columns "
+            "become nearly dependent. <bookmark mark='a'/> The classical recipe loses orthogonality as the square of "
+            f"the condition number: at a condition number of ten to the {ex(mid['kappa'])}, its Q is off by about ten "
+            f"to the minus {-ex(mid['cgs'])}.{dead} <bookmark mark='b'/> The modified recipe, which takes each shadow "
+            "from the updated vector, loses only in proportion. <bookmark mark='c'/> Alston Householder's reflections, "
+            f"from 1958, stay perpendicular to about ten to the minus {-ex(last['householder'])}, the machine's "
+            "precision. <bookmark mark='d'/> The normal equations share the classical flaw: forming A transpose A "
+            "squares the condition number. At the hardest case QR's answer is off by ten to the minus "
+            f"{-ex(last['err_qr'])},{worst} That is why libraries solve least squares with QR."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), FadeIn(cap))
             vo.wait_until("a")

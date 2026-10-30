@@ -37,7 +37,10 @@ class Fine(VoiceoverScene):
             if r.width > 9.5:
                 r.width = 9.5
             rows.add(VGroup(label(t, font_size=22, color=col), r).arrange(DOWN, buff=0.18))
-        rows.arrange(DOWN, buff=0.55).move_to([-1.0, -0.2, 0])
+        rows.arrange(DOWN, buff=0.6)
+        rows.scale_to_fit_height(4.6).move_to([-0.9, -0.5, 0])
+        if rows.width > 9.0:
+            rows.scale_to_fit_width(9.0).move_to([-1.9, -0.5, 0])
         card = history_card(2024, r"Damai Dai et al.\ (DeepSeek)", r"\textit{DeepSeekMoE}: \ fine-grained segmentation and "
                             r"shared-expert isolation", width=4.0, color=HISTC).to_corner(UR, buff=0.3)
         tag = note(r"the same arithmetic in all three: \ two big experts' worth", font_size=20).to_edge(DOWN, buff=0.35)
@@ -60,12 +63,12 @@ class Fine(VoiceoverScene):
     # ------------------------------------------------------------------
     def claims(self):
         rows = VGroup(
-            VGroup(label(r"DeepSeekMoE $2$B", font_size=26, color=SHAREDC), label(r"$\approx$", font_size=30),
-                   label(r"GShard $2.9$B", font_size=26, color=MOEC),
-                   label(r"which has $1.5\times$ the expert parameters and computation", font_size=20, color=GREY_A)),
-            VGroup(label(r"DeepSeekMoE $16$B", font_size=26, color=SHAREDC), label(r"$\approx$", font_size=30),
-                   label(r"LLaMA2 $7$B", font_size=26, color=GREY_B),
-                   label(r"with about $40\%$ of the computation", font_size=20, color=GREY_A)),
+            VGroup(label(r"DeepSeekMoE $2$B", font_size=40, color=SHAREDC), label(r"$\approx$", font_size=44),
+                   label(r"GShard $2.9$B", font_size=40, color=MOEC),
+                   label(r"which has $1.5\times$ the expert parameters and computation", font_size=28, color=GREY_A)),
+            VGroup(label(r"DeepSeekMoE $16$B", font_size=40, color=SHAREDC), label(r"$\approx$", font_size=44),
+                   label(r"LLaMA2 $7$B", font_size=40, color=GREY_B),
+                   label(r"with about $40\%$ of the computation", font_size=28, color=GREY_A)),
         )
         for r_ in rows:
             r_[:3].arrange(RIGHT, buff=0.35)
@@ -100,8 +103,7 @@ class Fine(VoiceoverScene):
         ]
         whys = [why(r"ways to choose $2$ of $8$: \ our coarse mixture"), why(r"$8$ of $32$: \ ours, \ fine-grained"),
                 why(r"the standard bounds: \ a power of $k$"), why(r"DeepSeekMoE's own example, \ same compute")]
-        step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.8, buff=0.55, edge=6.8)
-        ta = take_away(r"more combinations: \ each token gets a more specific team", color=C.BITS, font_size=26)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.8, buff=0.42, edge=6.8)
         with self.voiceover(
             "Why should finer pieces help? Count the teams a token can get. <bookmark mark='a'/> Two of eight experts "
             f"can be chosen {c1} ways. <bookmark mark='b'/> Eight of thirty-two, the same arithmetic, can be chosen "
@@ -110,10 +112,10 @@ class Fine(VoiceoverScene):
             f"{d1} teams; cut each into four and choose eight of sixty-four, and there are {d2 / 1e9:.1f} billion. "
             "Each token can get a team built more precisely for it."
         ) as vo:
-            for i, mk in enumerate("abcd"):
+            step(0)
+            for i, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 step(i)
-            self.play(FadeIn(ta))
         self.wait(0.3)
         self.clear_scene()
 
@@ -144,6 +146,7 @@ class Fine(VoiceoverScene):
             sub = label(rf"${cnt['total']:,}$ parameters, \ ${cnt['active']:,}$ used".replace(",", "{,}"), font_size=16,
                         color=GREY_B).next_to(nm_, DOWN, buff=0.06).align_to(nm_, RIGHT)
             rows.add(VGroup(nm_, sub, bar, rng_, dots, val))
+        rows.scale(1.3).move_to([0.3, -0.1, 0])
         head = label(r"held-out bits per character, \ after $2{,}000$ steps \ (two seeds each: \ the dots; \ axis from "
                      + rf"${lo:.2f}$)", font_size=22, color=GREY_A).to_edge(UP, buff=0.5)
         mc, mf, msh = (vals[k][0] for k in keys)

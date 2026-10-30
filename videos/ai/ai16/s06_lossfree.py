@@ -47,6 +47,7 @@ class LossFree(VoiceoverScene):
             "fights the language model. <bookmark mark='d'/> Lean Wang and colleagues reported both better balance "
             "and lower perplexity than the auxiliary loss, and DeepSeek-V3 was trained this way."
         ) as vo:
+            self.play(FadeIn(cards, shift=UP * 0.2))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -54,7 +55,7 @@ class LossFree(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeIn(cards, shift=UP * 0.2))
+            self.play(Indicate(cards, color=WHITE, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -132,13 +133,13 @@ class LossFree(VoiceoverScene):
             sets.append((bars, fair, t))
         bias = np.asarray(b["bias_hist"], float)[:, 0]  # time, E (seed 1, block 1)
         ax = Axes(x_range=[0, len(bias) - 1, 25], y_range=[float(bias.min()) - 0.01, float(bias.max()) + 0.01, 0.05],
-                  x_length=4.0, y_length=1.5, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False})
-        ax.move_to([4.4, -2.4, 0])
+                  x_length=5.4, y_length=1.9, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        ax.move_to([3.6, -2.45, 0])
         bl = label(r"the biases $b_i$ through training", font_size=18, color=BALC).next_to(ax, UP, buff=0.08)
         blines = VGroup(*[VMobject(stroke_width=2, color=EXPERT_COLORS[j]).set_points_as_corners(
             [ax.c2p(t_, float(bias[t_, j])) for t_ in range(len(bias))]) for j in range(E)])
         clock = VGroup(label(r"training step", font_size=24, color=GREY_A), Integer(0, font_size=28, color=C.BITS))
-        clock.arrange(RIGHT, buff=0.2).move_to([-2.2, -2.2, 0])
+        clock.arrange(RIGHT, buff=0.2).move_to([-3.4, -2.2, 0])
         fl = label(r"dashed: \ a fair share, \ $1/8$; \ block $1$, \ seed $1$", font_size=20, color=GREY_B).next_to(clock, DOWN, buff=0.25)
         bt = [float(np.asarray(b[f"{k}_busiest"], float)[0, 0]) for k, _, _ in MODES]
         left = ("On the left, with no balancing, the shares drift apart. " if bt[0] > bt[2] + 0.3 else
@@ -188,7 +189,7 @@ class LossFree(VoiceoverScene):
                 c_.move_to([x + widths[j] / 2, 1.6 - i * 0.9, 0])
                 x += widths[j] + 0.45
             rows.add(r)
-        rows.move_to([0, 0.4, 0])
+        rows.scale_to_fit_width(12.4).move_to([0, 0.5, 0])
         keep_in_frame(rows)
         note_ = note(r"three seeds each; \ busiest and imbalance: \ multiples of a fair share; \ imbalance: Wang et al.'s "
                      r"MaxVio, \ averaged over training; \ the bias model also uses sigmoid gates", font_size=17)

@@ -70,10 +70,10 @@ class Einsum(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"Tensors: \ arrays with any number of axes", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "A number, a vector, a matrix: zero, one and two axes. <bookmark mark='a'/> Models go further. A batch "
-            "of text is a list of sentences, each a list of tokens, each a list of numbers: an array with three "
-            "axes, which machine learning calls a tensor. <bookmark mark='b'/> Attention splits the numbers among "
-            f"{e['heads']} heads, and that makes four. Products of such arrays need a notation that names the axes."
+            "A number, a vector, a matrix: zero, one and two axes. <bookmark mark='a'/> A batch of text is a list of "
+            "sentences, each a list of tokens, each a list of numbers: three axes, what machine learning calls a "
+            f"tensor. <bookmark mark='b'/> Attention splits the numbers among {e['heads']} heads: four. Products of such "
+            "arrays need a notation that names the axes."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(o, scale=0.8), FadeIn(lb)) for o, lb in
@@ -111,12 +111,12 @@ class Einsum(VoiceoverScene):
         rule.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, -2.2, 0])
         hist = note(r"A.~Einstein (1916); \ \texttt{numpy.einsum} (2011)").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Multiplying two matrices: entry i k of the product is row i of A against column k of B, summed over j. "
-            "<bookmark mark='a'/> In 1916, writing general relativity, Albert Einstein grew tired of summation "
-            "signs and dropped them: an index that appears twice is summed. <bookmark mark='b'/> Programs adopted "
-            "the idea as einsum. You name each axis with a letter. <bookmark mark='c'/> A letter in the output is "
-            "kept; a letter that only appears in the inputs is summed away. And the cost is easy to read off: one "
-            "multiply-add for every combination of all the letters, here i times j times k."
+            "Multiplying two matrices: entry i k is row i of A against column k of B, summed over j. "
+            "<bookmark mark='a'/> In 1916, writing general relativity, Einstein tired of summation signs and dropped "
+            "them: an index that appears twice is summed. <bookmark mark='b'/> Programs adopted the idea as einsum, "
+            "with a letter for each axis. <bookmark mark='c'/> A letter in the output is kept; a letter only in the "
+            "inputs is summed away. And the cost is one multiply-add for every combination of the letters: i times j "
+            "times k."
         ) as vo:
             step(0)
             self.play(FadeIn(grp))
@@ -152,11 +152,10 @@ class Einsum(VoiceoverScene):
         for k, r in enumerate(rows):
             r.shift(UP * (2.0 - 0.78 * k))
         with self.voiceover(
-            "With that one rule, a single function does all of these. <bookmark mark='a'/> i comma i to nothing: "
-            "multiply and sum everything, the dot product. <bookmark mark='b'/> i comma j to i j: nothing summed, the "
-            "outer product, a matrix of rank one. <bookmark mark='c'/> Matrix times vector. <bookmark mark='d'/> The "
-            "transpose, which only reorders. <bookmark mark='e'/> The trace. <bookmark mark='f'/> And a whole batch "
-            "of matrix products at once, the letter b simply carried along."
+            "One function does all of these. <bookmark mark='a'/> The dot product: multiply, and sum everything. "
+            "<bookmark mark='b'/> The outer product: nothing summed, a matrix of rank one. <bookmark mark='c'/> Matrix "
+            "times vector. <bookmark mark='d'/> The transpose, which only reorders. <bookmark mark='e'/> The trace. "
+            "<bookmark mark='f'/> And a batch of matrix products, the letter b carried along."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows.copy().set_opacity(0.2)))
             for k, mk in enumerate("abcdef"):
@@ -199,14 +198,13 @@ class Einsum(VoiceoverScene):
         cap = note(rf"multiply-adds per layer, \ one sequence of ${n:,}$ tokens, \ GPT-2 small \ (computed from the "
                    r"index sizes)".replace(",", "{,}")).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Here is attention, the subject of Part 13, in this notation. <bookmark mark='a'/> Each token's vector is "
-            "projected into queries, keys and values, split among heads. <bookmark mark='b'/> Every query is "
-            "dotted with every key: the letter e is summed away, and q and k both survive. <bookmark mark='c'/> A "
-            "softmax over k turns scores into weights, and the weights average the values. <bookmark mark='d'/> The "
-            "heads are merged back. <bookmark mark='e'/> Read the costs off the letters. For one sequence of "
-            f"{n:,} tokens, the scores take {h} times {n:,} times {n:,} times {dh} multiply-adds per layer, about "
-            f"{ms / 1e6:,.0f} million; the projections take {mp / 1e6:,.0f} million. The scores grow with the square "
-            "of the length, which is why long contexts are expensive."
+            "Here is attention, Part 13's subject, in this notation. <bookmark mark='a'/> Each token's vector is "
+            "projected into queries, keys and values, split among heads. <bookmark mark='b'/> Every query is dotted with "
+            "every key: e is summed away. <bookmark mark='c'/> A softmax turns scores into weights, which average the "
+            "values. <bookmark mark='d'/> The heads are merged back. <bookmark mark='e'/> Read the costs off the "
+            f"letters. For {n:,} tokens, the scores take about {ms / 1e6:,.0f} million multiply-adds per layer, and the "
+            f"projections {mp / 1e6:,.0f} million. The scores grow with the square of the length: that is why long "
+            "contexts are expensive."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows.copy().set_opacity(0.25)))
             for k, mk in enumerate("abcd"):
@@ -249,12 +247,10 @@ class Einsum(VoiceoverScene):
         tag = note(r"\texttt{einsum('ij,jk,kl->il', A, B, C, optimize=True)} \ picks the order").to_edge(DOWN, buff=0.3)
         head = label(r"The order of a product changes its cost", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "One more thing the letters tell you: the order matters. <bookmark mark='a'/> Three matrices, A is "
-            f"{a:,} by {b}, B is {b} by {c:,}, C is {c:,} by {d}. <bookmark mark='b'/> Multiply A and B first, and "
-            f"you build a {a:,} by {c:,} matrix on the way: {L:,} multiply-adds. <bookmark mark='c'/> Multiply B "
-            f"and C first: {R:,}. The same answer, {fac:.0f} times cheaper. <bookmark mark='d'/> einsum can search "
-            f"for the cheapest order itself; here it multiplies {first} first. Keep the letters in mind: in Part 13 "
-            "they spell out attention, and in this part they keep us honest about cost."
+            f"The letters also show that order matters. <bookmark mark='a'/> A is {a:,} by {b}, B is {b} by {c:,}, C is "
+            f"{c:,} by {d}. <bookmark mark='b'/> Multiply A and B first, and you build a {a:,} by {c:,} matrix on the "
+            f"way: {L:,} multiply-adds. <bookmark mark='c'/> B and C first: {R:,}. The same answer, {fac:.0f} times "
+            f"cheaper. <bookmark mark='d'/> einsum can find the cheap order itself; here it multiplies {first} first."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

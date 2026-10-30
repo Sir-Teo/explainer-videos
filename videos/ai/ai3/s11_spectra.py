@@ -58,13 +58,12 @@ class Spectra(VoiceoverScene):
         above = int(d["above"])
         esc = "Not one eigenvalue escapes it." if above == 0 else f"Only {above} lie beyond it."
         with self.voiceover(
-            "What does a matrix full of pure noise look like, through its singular values? <bookmark mark='a'/> In "
-            "1955 Eugene Wigner modelled the energy levels of heavy nuclei by the eigenvalues of a random matrix, "
-            "and found they follow a law of their own. <bookmark mark='b'/> In 1967 Vladimir Marchenko and Leonid "
-            "Pastur found the law for rectangular matrices: the eigenvalues of W W transpose over M fill a fixed "
-            "interval, with a fixed shape, set only by the aspect ratio. We'll check it instead of proving it; "
-            "the proof needs complex analysis. <bookmark mark='c'/> A random matrix of GPT-2's MLP shape, 768 by "
-            f"3,072: {len(ev)} eigenvalues, <bookmark mark='d'/> and the law, drawn on top, with its edge. {esc}"
+            "What does pure noise look like, through its eigenvalues? <bookmark mark='a'/> In 1955 Eugene Wigner "
+            "modelled heavy nuclei's energy levels with a random matrix's eigenvalues, and found a law. "
+            "<bookmark mark='b'/> In 1967 Marchenko and Pastur found it for rectangular matrices: the eigenvalues of W W "
+            "transpose over M fill a fixed interval, in a fixed shape, set by the aspect ratio alone. We'll check it "
+            "rather than prove it. <bookmark mark='c'/> A random 768 by 3,072 matrix, GPT-2's MLP shape: "
+            f"{len(ev)} eigenvalues, <bookmark mark='d'/> and the law on top. {esc}"
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -117,11 +116,10 @@ class Spectra(VoiceoverScene):
                 f"Only {sh_above} remain beyond the edge.")
         with self.voiceover(
             f"Now a trained matrix: GPT-2's layer {int(s['layer'])}, the first matrix of its MLP, scaled the same way. "
-            "<bookmark mark='a'/> Most of its eigenvalues sit in a bulk shaped much like the law. "
-            f"<bookmark mark='b'/> But {above} of them have escaped beyond the edge, the largest {top:.1f} times "
-            "past it. <bookmark mark='c'/> Is that just because trained weights have unusual values? Shuffle the "
-            f"very same numbers into random positions and look again. {shuf} So the information is not in the "
-            "values, but in their arrangement: a few strong directions, learned."
+            "<bookmark mark='a'/> Most eigenvalues sit in a bulk much like the law. <bookmark mark='b'/> But "
+            f"{above} have escaped beyond the edge, the largest {top:.1f} times past it. <bookmark mark='c'/> Just "
+            f"unusual values? Shuffle the same numbers into random places. {shuf} The information is in the "
+            "arrangement: a few strong directions, learned."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
@@ -159,12 +157,11 @@ class Spectra(VoiceoverScene):
         fit = label(r"fitted by maximum likelihood; \ $\lambda_{\min}$ chosen by the best Kolmogorov--Smirnov "
                     r"distance", font_size=20, color=GREY_A).next_to(rule, DOWN, buff=0.12)
         with self.voiceover(
-            "The escaped eigenvalues don't stop at a sharp edge. They thin out slowly, like a power law: the density "
-            "falls as lambda to the minus alpha. <bookmark mark='a'/> Charles Martin and Michael Mahoney fitted such "
-            "tails across hundreds of trained networks in 2019, and found exponents nearly always between 1.5 and "
-            "5; within a family of models, smaller exponents, heavier tails, went with better test accuracy. <bookmark mark='b'/> We fitted "
-            f"all 48 of GPT-2's matrices. The layer we just saw has alpha {s['alpha']:.2f}. {n_in} of the 48 fall "
-            "inside the range. Random matrices have no such tail at all: their density stops dead at the edge."
+            "The escapees thin out slowly, like a power law: density falling as lambda to the minus alpha. "
+            "<bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of "
+            "trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with "
+            f"better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: {n_in} fall in that "
+            f"range; our layer has alpha {s['alpha']:.2f}. Random matrices have no tail at all."
         ) as vo:
             self.play(FadeIn(g), FadeIn(rule), FadeIn(fit))
             vo.wait_until("a")
@@ -193,12 +190,10 @@ class Spectra(VoiceoverScene):
         cap = note(r"computed: \ every matrix in the blocks, \ scaled to variance one").to_corner(DR, buff=0.25)
         every = "every matrix has" if min(a_tr) > 0 else "the matrices have"
         with self.voiceover(
-            "The same happens in the small model this series trained on thirty novels. <bookmark mark='a'/> At "
-            f"initialization, its {n} matrices are random, and their largest eigenvalues sit on the edge of the "
-            f"law: {sum(a_in)} escapees in all. <bookmark mark='b'/> After training, {every} between {min(a_tr)} and "
-            f"{max(a_tr)} eigenvalues beyond the edge. Training writes a little structure into a "
-            "sea of noise. The structure is where the model keeps what it learned, and the bulk is what it never "
-            "needed to change."
+            "The same in this series' small novels model. <bookmark mark='a'/> At initialization its "
+            f"{n} matrices are random: {sum(a_in)} escapees in all. <bookmark mark='b'/> After training, {every} "
+            f"between {min(a_tr)} and {max(a_tr)} beyond the edge. Training writes a little structure into a sea of "
+            "noise."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(cap))
             vo.wait_until("a")

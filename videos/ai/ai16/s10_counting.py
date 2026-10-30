@@ -33,19 +33,19 @@ class Counting(VoiceoverScene):
         colors = {r"d": GREY_A, r"h": EXPERTC}
         rows = [
             cmath(r"\text{one expert}", r"=", r"3\, d\, h", r"=", rf"3 \cdot {c['d']:,} \cdot {c['moe_ffn']:,}".replace(",", "{,}"),
-                  r"=", rf"{a['expert'] / 1e6:.1f}\,\text{{M}}", colors=colors, font_size=32),
+                  r"=", rf"{a['expert'] / 1e6:.1f}\,\text{{M}}", colors=colors, font_size=36),
             cmath(r"\text{routed}", r"=", rf"{a['n_moe']} \times {c['routed']} \times", r"3\, d\, h", r"=",
-                  rf"{P['routed'] / 1e9:.1f}\,\text{{B}}", colors=colors, font_size=32),
+                  rf"{P['routed'] / 1e9:.1f}\,\text{{B}}", colors=colors, font_size=36),
             cmath(r"\text{attention}", r"=", rf"{c['layers']} \times {a['attn_layer'] / 1e6:.1f}\,\text{{M}}", r"=",
-                  rf"{P['attention'] / 1e9:.1f}\,\text{{B}}", font_size=32),
-            cmath(r"\text{total}", r"=", rf"{a['total'] / 1e9:.1f}\,\text{{B}}", font_size=32),
+                  rf"{P['attention'] / 1e9:.1f}\,\text{{B}}", font_size=36),
+            cmath(r"\text{total}", r"=", rf"{a['total'] / 1e9:.1f}\,\text{{B}}", font_size=36),
             cmath(r"\text{active}", r"=", rf"{a['n_moe']} \times ({c['k']} + {c['shared']}) \times", r"3\, d\, h",
-                  r"+ \ldots =", rf"{a['active_with_embed'] / 1e9:.1f}\,\text{{B}}", colors=colors, font_size=32),
+                  r"+ \ldots =", rf"{a['active_with_embed'] / 1e9:.1f}\,\text{{B}}", colors=colors, font_size=36),
         ]
         whys = [why(r"SwiGLU: \ gate, \ up, \ down"), why(rf"${a['n_moe']}$ MoE layers \ (the first ${c['dense_layers']}$ are dense)"),
                 why(r"MLA, \ every layer \ (Part 15)"), why(r"$+$ dense layers, \ shared experts, \ routers, \ embeddings"),
                 why(r"$8$ routed $+$ $1$ shared per layer, \ $+$ attention, \ dense, \ embeddings")]
-        step = ladder(self, rows, whys, keep=5, top=3.1, x=-1.6, buff=0.32, edge=6.8)
+        step = ladder(self, rows, whys, keep=5, top=2.9, x=-2.2, buff=0.5, edge=6.8)
         cite_ = cite(r"deepseek-ai/DeepSeek-V3, \ \texttt{config.json}; \ the report gives $671$B and $37$B", corner=DL,
                      font_size=18)
         with self.voiceover(
@@ -61,7 +61,8 @@ class Counting(VoiceoverScene):
             "billion, the report's thirty-seven."
         ) as vo:
             self.play(FadeIn(cite_))
-            for i, mk in enumerate("abcde"):
+            step(0)
+            for i, mk in zip((1, 2, 3, 4), "bcde"):
                 vo.wait_until(mk)
                 step(i)
         self.wait(0.3)
@@ -111,9 +112,10 @@ class Counting(VoiceoverScene):
                      label(rf"$8 \times 7$B would be $56$B, \ but it has ${mx['total'] / 1e9:.1f}$B", font_size=22),
                      label(r"the attention is shared: \ only the feed-forward layers are copied", font_size=20, color=GREY_A),
                      label(rf"${mx['active'] / 1e9:.1f}$B used per token, \ $2$ experts of $8$", font_size=22, color=C.BITS))
-        mxl.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.4, 1.6, 0])
-        mtp = label(rf"Hugging Face lists ${(a['total'] + a['mtp']) / 1e9:.0f}$B: \ the ${a['mtp'] / 1e9:.0f}$B module "
-                    r"that predicts a second token \ (Part 18)", font_size=18, color=GREY_B).move_to([4.4, -2.6, 0])
+        mxl.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        mxl.scale_to_fit_width(min(mxl.width, 5.0)).move_to([4.3, 1.6, 0])
+        mtp = label(rf"Hugging Face lists ${(a['total'] + a['mtp']) / 1e9:.0f}$B: \\ the ${a['mtp'] / 1e9:.0f}$B module "
+                    r"that predicts a second token \ (Part 18)", font_size=20, color=GREY_B).move_to([4.3, -1.0, 0])
         ex_share = (act_vals[0][1] + act_vals[1][1]) / a["active_with_embed"]
         at_share = P["attention"] / a["active_with_embed"]
         with self.voiceover(
@@ -212,6 +214,7 @@ class Counting(VoiceoverScene):
         stats = VGroup(label(rf"end: \ ${vh[0]:.3f}$, \ ${vu[0]:.3f}$, \ ${vm[0]:.3f}$", font_size=22, color=WHITE),
                        label(rf"training compute: \ upcycled ${100 * cu / cm:.0f}\%$ of from scratch", font_size=20, color=GREY_A)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
+        keep_in_frame(stats)
         if vu[0] < vh[0] - 0.005:
             v1 = (f"The upcycled model drops below the dense one it came from right away, and ends at {vu[0]:.3f} bits "
                   f"against {vh[0]:.3f} for the dense model trained just as long. ")

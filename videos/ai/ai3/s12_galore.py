@@ -48,13 +48,11 @@ class GaLore(VoiceoverScene):
         tag = note(r"$\boldsymbol{\delta}_t = \partial L/\partial \mathbf{y}_t$, \ the error signal arriving from above "
                    r"(Part 4)").to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Training changes every matrix by its gradient, and a gradient is itself a matrix, with its own singular "
-            "values. <bookmark mark='a'/> A layer turns each token's vector x into W x. <bookmark mark='b'/> By the "
-            "chain rule, which Part 4 builds, the gradient of the loss with respect to one weight sums, over the "
-            "tokens, the error arriving at that output times the input. <bookmark mark='c'/> So the gradient is a "
-            "sum of outer products, one per token: column times row, rank one each. <bookmark mark='d'/> Its rank "
-            "is at most the number of tokens. In practice it is far lower, because the tokens' errors and inputs "
-            "point in a few shared directions."
+            "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each "
+            "token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one "
+            "weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is "
+            "a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens, "
+            "and in practice far lower: errors and inputs share a few directions."
         ) as vo:
             self.play(FadeIn(tag))
             for k, mk in enumerate("abcd"):
@@ -97,13 +95,12 @@ class GaLore(VoiceoverScene):
         pk = max(tr, key=lambda e: e["top8"])
         last = tr[-1]
         with self.voiceover(
-            "Here is a real gradient, from a small transformer this chapter trained on the thirty novels: one "
-            f"{shape[0]} by {shape[1]} matrix, measured at checkpoints. <bookmark mark='a'/> Its singular values, "
-            "largest first, on a log scale. At the very first step they fall slowly. <bookmark mark='b'/> A few "
-            f"steps in, they collapse: at step {pk['step']}, the top eight directions carry "
-            f"{100 * pk['top8']:.1f} percent of the gradient. <bookmark mark='c'/> As training goes on, the "
-            f"spectrum fills in again, but slowly: by step {last['step']}, the top eight still carry "
-            f"{100 * last['top8']:.0f} percent, out of {n} directions."
+            "Here is a real gradient, from a small transformer trained on the novels: one "
+            f"{shape[0]} by {shape[1]} matrix. <bookmark mark='a'/> Its singular values, largest first, on a log scale. "
+            "At the first step they fall slowly. <bookmark mark='b'/> A few steps in, they collapse: at step "
+            f"{pk['step']}, the top eight directions carry {100 * pk['top8']:.1f} percent of the gradient. "
+            f"<bookmark mark='c'/> Later the spectrum fills in, slowly: at step {last['step']}, the top eight still "
+            f"carry {100 * last['top8']:.0f} percent, of {n} directions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ga), FadeIn(gb))
             vo.wait_until("a")
@@ -146,15 +143,13 @@ class GaLore(VoiceoverScene):
         bt = label(rf"numbers the optimizer keeps for our model's \\ ${fmt_int(W)}$ block weights",
                    font_size=22, color=GREY_A).next_to(bars, UP, buff=0.25)
         with self.voiceover(
-            "That is the idea of GaLore, from Jiawei Zhao, Yuandong Tian, Anima Anandkumar and colleagues in 2024. "
-            "Adam, the standard optimizer, keeps two running averages for every weight: for a seven-billion-"
-            "parameter model, fourteen billion extra numbers. <bookmark mark='a'/> GaLore projects each gradient "
-            "onto its top r singular directions <bookmark mark='b'/> and runs Adam there, in the small space, "
-            "refreshing the directions every so often. <bookmark mark='c'/> For our small model, the optimizer "
-            f"keeps {fmt_int(mems['adam'])} numbers with Adam, {fmt_int(mems['galore32'])} at rank 32, and "
-            f"{fmt_int(mems['galore8'])} at rank 8. At scale, the paper reports up to 65 percent less optimizer "
-            "memory, and, with 8-bit states, pretraining a seven-billion-parameter model on a single 24-gigabyte "
-            "graphics card."
+            "That is GaLore's idea, from Jiawei Zhao, Anima Anandkumar, Yuandong Tian and colleagues in 2024. Adam keeps "
+            "two running averages per weight: fourteen billion extra numbers for a seven-billion-parameter model. "
+            "<bookmark mark='a'/> GaLore projects each gradient onto its top r singular directions <bookmark mark='b'/> "
+            "and runs Adam there, refreshing the directions now and then. <bookmark mark='c'/> For our model: "
+            f"{fmt_int(mems['adam'])} numbers with Adam, {fmt_int(mems['galore32'])} at rank 32, "
+            f"{fmt_int(mems['galore8'])} at rank 8. At scale the paper reports up to 65 percent less optimizer memory, "
+            "and, with 8-bit states, a seven-billion-parameter model pretrained on one 24-gigabyte card."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("a")
@@ -219,11 +214,11 @@ class GaLore(VoiceoverScene):
         else:
             verdict = "GaLore falls short of Adam here, the price of its smaller memory at this scale."
         with self.voiceover(
-            "Does training through a narrow window cost anything? We trained the same small transformer with Adam "
-            "and with GaLore at ranks 32 and 8, each at its best of three learning rates, three seeds each. "
-            "<bookmark mark='a'/> Here are the training curves, averaged over the seeds. <bookmark mark='b'/> And "
-            f"the held-out loss: Adam {mean['adam']:.3f}, GaLore at rank 32 {mean['galore32']:.3f}, at rank 8 "
-            f"{mean['galore8']:.3f}. <bookmark mark='c'/> {verdict}"
+            "Does a narrow window cost anything? We trained the model with Adam and with GaLore at ranks 32 and 8, "
+            "each at its best of three learning rates, three seeds each. <bookmark mark='a'/> The training curves, "
+            "averaged. <bookmark mark='b'/> The held-out loss: Adam "
+            f"{mean['adam']:.3f}, rank 32 {mean['galore32']:.3f}, rank 8 {mean['galore8']:.3f}. <bookmark mark='c'/> "
+            f"{verdict}"
         ) as vo:
             self.play(FadeIn(ga), FadeIn(cap))
             vo.wait_until("a")
@@ -262,10 +257,9 @@ class GaLore(VoiceoverScene):
                 "uses LoRA where a small change is all that's wanted." if more else
                 "close to the window's own rank.")
         with self.voiceover(
-            "Compare LoRA, Part 27's tool, which also lives in low rank. <bookmark mark='a'/> LoRA fixes the change "
-            "to the weights at rank r for good. <bookmark mark='b'/> GaLore makes each step low rank, but the "
-            "window moves as the gradient's directions change. <bookmark mark='c'/> Measured on our run, the total "
-            f"change to one matrix after 600 steps has an effective rank of {r8['eff']:.0f} with the rank-8 window, "
+            "Compare LoRA, Part 27's tool. <bookmark mark='a'/> LoRA fixes the change to the weights at rank r for good. "
+            "<bookmark mark='b'/> GaLore makes each step low rank, but the window moves. <bookmark mark='c'/> After 600 "
+            f"steps, the total change to one matrix has an effective rank of {r8['eff']:.0f} with the rank-8 window, "
             f"against {ra['eff']:.0f} for Adam: {tail}"
         ) as vo:
             self.play(FadeIn(lo[0]), FadeIn(ga[0]))

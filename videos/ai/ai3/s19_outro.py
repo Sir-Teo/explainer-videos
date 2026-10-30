@@ -120,15 +120,13 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in twelve pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Let's take stock. Vectors are lists of numbers with geometry, and the dot product, kept honest by "
-            "Cauchy-Schwarz, measures how alike two are. Einsum names the axes, and its letters count the cost. "
-            "Projections find the closest point, and on a computer the order of the arithmetic matters. Symmetric "
-            "matrices stretch along perpendicular directions, which power iteration finds. Every matrix is a turn, "
-            "a stretch and a turn, and its biggest pieces are its best low-rank copy. Training leaves trained "
-            "weights with a few strong directions above a sea of noise, and gradients that live in a few "
-            "directions too. Counting words, or guessing them, factorizes the same table. And in high dimensions, "
-            "random directions are nearly perpendicular, a random projection keeps every distance, and a mostly "
-            "empty table of ratings can be filled in by low rank."
+            "Let's take stock. Vectors are lists of numbers with geometry; the dot product, kept honest by "
+            "Cauchy-Schwarz, measures likeness. Einsum names the axes and counts the cost. Projections find the closest "
+            "point, and arithmetic's order matters. Symmetric matrices stretch along perpendicular directions, which "
+            "power iteration finds; every matrix is turn, stretch, turn, and its biggest pieces are its best low-rank "
+            "copy. Trained weights and gradients live in a few strong directions. Counting and guessing factorize the "
+            "same table. And in high dimensions, random directions are perpendicular, random projections keep "
+            "distances, and low rank fills in empty tables."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),

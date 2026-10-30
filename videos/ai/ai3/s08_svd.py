@@ -101,15 +101,13 @@ class SVD(VoiceoverScene):
         pl = VGroup(MathTex(r"\mathbf{v}_1, \mathbf{v}_2", font_size=26, color=VC).next_to(pic[0], DOWN, buff=0.08),
                     MathTex(r"\sigma_1\mathbf{u}_1, \sigma_2\mathbf{u}_2", font_size=26, color=UC).next_to(pic[4], DOWN, buff=0.08))
         with self.voiceover(
-            "Where do the turns and stretches come from? From the last chapter. <bookmark mark='a'/> A transpose A "
-            "is symmetric, and never negative: x transpose A transpose A x is a length squared. "
-            "<bookmark mark='b'/> So the spectral theorem gives it perpendicular eigenvectors v, with eigenvalues "
-            "that are squares: call them sigma squared. <bookmark mark='c'/> Send each v through A, and divide by "
-            "sigma. <bookmark mark='d'/> These new vectors u are perpendicular too, and of length one: the "
-            "calculation is a line. <bookmark mark='e'/> So A sends the perpendicular v's to the perpendicular u's, "
-            "stretched by the sigmas, and that is the decomposition. <bookmark mark='f'/> Eugenio Beltrami and "
-            "Camille Jordan found it independently in 1873 and 1874; Gene Golub and William Kahan gave the "
-            "algorithm, in 1965, that computers still use."
+            "Where do the turns and stretches come from? <bookmark mark='a'/> A transpose A is symmetric, and never "
+            "negative: x transpose A transpose A x is a length squared. <bookmark mark='b'/> So the spectral theorem "
+            "gives it perpendicular eigenvectors v, with eigenvalues sigma squared. <bookmark mark='c'/> Send each v "
+            "through A and divide by sigma. <bookmark mark='d'/> These u's are perpendicular too, and of length one. "
+            "<bookmark mark='e'/> So A sends perpendicular v's to perpendicular u's, stretched by the sigmas: the "
+            "decomposition. <bookmark mark='f'/> Beltrami and Jordan found it in 1873 and 1874; Gene Golub and William "
+            "Kahan's algorithm of 1965 is what computers still use."
         ) as vo:
             self.play(FadeIn(pic), FadeIn(pl))
             for k_, mk in enumerate("abcde"):

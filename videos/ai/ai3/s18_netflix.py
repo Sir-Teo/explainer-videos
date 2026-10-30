@@ -52,15 +52,13 @@ class Netflix(VoiceoverScene):
                            r"test error $0.8567$, \ $10.06\%$ better; \ a rival team matched it twenty minutes too "
                            r"late", color=HIST, width=5.6).move_to([3.5, -1.8, 0])
         with self.voiceover(
-            "Low rank's most famous public test came from a DVD rental company. <bookmark mark='a'/> In October "
-            "2006, Netflix released a hundred million ratings, from 480,189 customers on 17,770 films, and offered a "
-            "million dollars to whoever could predict held-out ratings ten percent better than its own system. "
-            "<bookmark mark='b'/> The table was mostly empty: a customer had rated about two hundred films, on "
-            "average, out of 17,770. "
-            "Filling it in is the problem. <bookmark mark='c'/> In December 2006, a programmer writing as Simon Funk "
-            "posted a short program that factorized the table by gradient descent, and leapt up the leaderboard. "
-            "In September 2009, the team BellKor's Pragmatic Chaos won, with a blend of hundreds of models, many "
-            "of them refinements of that factorization."
+            "Low rank's most famous test came from a DVD rental company. <bookmark mark='a'/> In October 2006 Netflix "
+            "released a hundred million ratings, from 480,189 customers on 17,770 films, and offered a million dollars "
+            "to predict held-out ratings ten percent better than its own system. <bookmark mark='b'/> The table was "
+            "mostly empty: about two hundred ratings per customer. <bookmark mark='c'/> In December, a programmer "
+            "writing as Simon Funk posted a short program that factorized it by gradient descent, and leapt up the "
+            "leaderboard. In 2009 BellKor's Pragmatic Chaos won with a blend of hundreds of models, many of them "
+            "refinements of that factorization."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2))
             vo.wait_until("a")
@@ -92,13 +90,12 @@ class Netflix(VoiceoverScene):
                   rf"six hidden genres \ (synthetic)".replace(",", "{,}"), font_size=26, color=GREY_B),
         ).arrange(DOWN, buff=0.35).move_to(DOWN * 1.6)
         with self.voiceover(
-            "The model is a sum. <bookmark mark='a'/> An average rating, plus how generous this user is, plus how "
-            "good this film is, plus the dot product of a user vector and a film vector: k numbers of taste each. "
-            "<bookmark mark='b'/> Fit it to the ratings we have, and keep the vectors small. <bookmark mark='c'/> If "
-            "the table were full, chapter eight would give the answer at once. With holes, there is no formula, and "
-            "we descend the gradient. <bookmark mark='d'/> Rather than a hundred million real ratings, we built a "
-            f"small world to test on: {m['users']:,} users, {m['items']:,} films and {m['n_ratings']:,} ratings, drawn "
-            "from six hidden genres and some noise. The method never sees the genres."
+            "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, "
+            "plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping "
+            "the vectors small. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is "
+            "no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: "
+            f"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method "
+            "never sees."
         ) as vo:
             vo.wait_until("a")
             step(0)
@@ -160,13 +157,12 @@ class Netflix(VoiceoverScene):
                 "the vectors memorize the training ratings." if overfit else
                 " Without the penalty it ends a little worse.")
         with self.voiceover(
-            f"Here is training replayed, at rank {int(rp['rank'])}. <bookmark mark='a'/> The error on the ratings "
-            "it trains on falls, and so does the error on ratings it has never seen, held out to test it: from "
-            f"{h[0, 2]:.2f} stars to {h[-1, 2]:.3f}.{tail} <bookmark mark='b'/> Meanwhile, on the right, each film's "
-            "vector, flattened to its two strongest directions and coloured by the hidden genre the method never "
-            "saw. <bookmark mark='c'/> As training goes on, the genres pull apart. Of each film's ten nearest "
-            f"films by its learned vector, {100 * m['genre_nn']:.0f} percent share its genre, against "
-            f"{100 * m['genre_chance']:.0f} percent by chance."
+            f"Training replayed, at rank {int(rp['rank'])}. <bookmark mark='a'/> The error falls on the ratings it "
+            f"trains on, and on held-out ones: from {h[0, 2]:.2f} stars to {h[-1, 2]:.3f}.{tail} "
+            "<bookmark mark='b'/> On the right, each film's vector, on its two strongest directions, coloured by the "
+            "hidden genre. <bookmark mark='c'/> The genres pull apart. Of each film's ten nearest films, "
+            f"{100 * m['genre_nn']:.0f} percent share its genre, against {100 * m['genre_chance']:.0f} percent by "
+            "chance."
         ) as vo:
             self.play(FadeIn(ga), FadeIn(leg), Create(gb), FadeIn(gl))
             self.add(fd, ep_read)
@@ -209,10 +205,10 @@ class Netflix(VoiceoverScene):
         cap = note(r"three seeds per rank; \ $\lambda$ chosen on separate validation ratings").to_corner(DR, buff=0.25)
         why_best = (", near the six genres we hid; beyond that, extra directions fit noise." if best in (4, 8) else ".")
         with self.voiceover(
-            f"How many directions of taste does it take? Guessing the average rating misses by {m['rmse_mean']:.3f} "
-            f"stars. <bookmark mark='a'/> Adding each user's generosity and each film's quality: {m['rmse_bias']:.3f}. "
-            "<bookmark mark='b'/> Then the taste vectors, at rank one, two, four and up to thirty-two, three seeds "
-            f"each. The error is lowest at rank {best}, {vals[best].mean():.3f}{why_best}"
+            f"How much taste does it take? The average rating misses by {m['rmse_mean']:.3f} stars. "
+            f"<bookmark mark='a'/> Adding generosity and quality: {m['rmse_bias']:.3f}. <bookmark mark='b'/> Then the "
+            "taste vectors, rank one to thirty-two, three seeds each. The error is lowest at rank "
+            f"{best}, {vals[best].mean():.3f}{why_best}"
         ) as vo:
             self.play(FadeIn(g), Create(mean_l), FadeIn(ml), FadeIn(cap))
             vo.wait_until("a")
@@ -266,15 +262,13 @@ class Netflix(VoiceoverScene):
         else:
             verdict = "Neither beats simply recommending the most popular films: in this world popularity is a strong signal."
         with self.voiceover(
-            "Factorization has a weakness: a new user has no vector. Today's recommenders and search engines use "
-            "two towers instead. <bookmark mark='a'/> One network turns a user's history and details into a vector; "
-            "another turns a film's details into a vector; the score is their dot product. <bookmark mark='b'/> "
-            "Trained so that each user's real films outscore the others in a batch, with a correction for how often "
-            "popular films appear, the score learns a pointwise mutual information, chapter twelve's quantity. "
-            "Adding the films' popularity back gives the recommendation. <bookmark mark='c'/> Recall at ten, the "
-            f"share of a user's held-out favourites in its top ten, reaches {rw:.2f} for users it trained on, and "
-            f"{rc:.2f} for users it never saw, from five films each; popularity alone gets {t['pop_warm']:.2f} and "
-            f"{t['pop_cold']:.2f}. {verdict}"
+            "Factorization has a weakness: a new user has no vector. Today's recommenders use two towers. "
+            "<bookmark mark='a'/> One network turns a user's history into a vector, another a film's details; the score "
+            "is their dot product. <bookmark mark='b'/> Trained so each user's real films outscore the batch, corrected "
+            "for popularity, the score learns a pointwise mutual information, chapter twelve's quantity; popularity is "
+            "added back to recommend. <bookmark mark='c'/> The share of held-out favourites in the top ten reaches "
+            f"{rw:.2f} for known users and {rc:.2f} for new ones, from five films each; popularity alone gets "
+            f"{t['pop_warm']:.2f} and {t['pop_cold']:.2f}. {verdict}"
         ) as vo:
             self.play(FadeIn(both), FadeIn(tag), FadeIn(g))
             vo.wait_until("a")
@@ -292,23 +286,22 @@ class Netflix(VoiceoverScene):
         cards = VGroup(
             history_card(2016, r"P.~Covington, J.~Adams \& E.~Sargin, \ YouTube",
                          r"recommendations as a nearest-neighbour search \ among film vectors", color=HIST, width=4.3,
-                         font_size=26),
+                         font_size=30),
             history_card(2017, r"J.~Johnson, M.~Douze \& H.~J\'egou, \ FAISS",
-                         r"approximate search over a billion vectors, \ on GPUs", color=HIST, width=4.3, font_size=26),
+                         r"approximate search over a billion vectors, \ on GPUs", color=HIST, width=4.3, font_size=30),
             history_card(2020, r"V.~Karpukhin et al., \ dense passage retrieval",
                          r"questions and passages as vectors: \ search by dot product, \ the retrieval behind "
-                         r"today's chatbots", color=HIST, width=4.3, font_size=26),
+                         r"today's chatbots", color=HIST, width=4.3, font_size=30),
         ).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(UP * 0.4)
         head = label(r"Retrieval is a matrix product", font_size=40).to_edge(UP, buff=0.35)
         tail = MathTex(rf"\text{{scores}} = U\,V^{{\top}}: \quad \text{{users}} \times {t['dim']} \ \cdot \ {t['dim']} "
                        rf"\times {fmt_int(t['items'])}\ \text{{films}}", font_size=34, color=C.BITS).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Retrieving the best match among millions is, at heart, one matrix product, and the art is not computing "
-            "most of it. <bookmark mark='a'/> In 2016 YouTube described recommending videos as a nearest-neighbour "
-            "search among video vectors. <bookmark mark='b'/> In 2017 Facebook's FAISS searched a billion vectors "
-            "approximately, on GPUs. <bookmark mark='c'/> And in 2020 dense passage retrieval put questions and "
-            "passages in one space, the way today's assistants find documents to read before they answer. Every one "
-            "of them is this chapter's dot product, scaled up; Part 29 puts retrieval to work."
+            "Retrieval is, at heart, one matrix product, and the art is not computing most of it. <bookmark mark='a'/> "
+            "In 2016 YouTube described recommending as a nearest-neighbour search among video vectors. "
+            "<bookmark mark='b'/> In 2017 Facebook's FAISS searched a billion vectors, on GPUs. <bookmark mark='c'/> In "
+            "2020 dense passage retrieval put questions and passages in one space, the way assistants now find what to "
+            "read before answering. Part 29 puts it to work."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tail))
             vo.wait_until("a")
