@@ -85,7 +85,7 @@ def snap_steps(steps: int) -> list[int]:
     return sorted({0, steps} | {int(round(x)) for x in np.geomspace(20, steps, 9)})
 
 
-def train(arch: str, seed: int, steps: int, ckpt_dir, lr: float = 3e-3, warmup: int = 60, threads: int = 2,
+def train(arch: str, seed: int, steps: int, ckpt_dir, lr: float = 3e-3, warmup: int = 40, threads: int = 1,
           log=print) -> dict:
     torch.set_num_threads(threads)
     tr, va = N.token_arrays()
@@ -125,7 +125,7 @@ def train(arch: str, seed: int, steps: int, ckpt_dir, lr: float = 3e-3, warmup: 
         torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0)
         opt.step()
         if step % 10 == 0:
-            st["curve"].append((step, float(loss)))
+            st["curve"].append((step, float(loss.detach())))
     st.update(step=steps, seconds=time.time() - t0)
     torch.save(dict(model=m.state_dict()), ckpt_dir / f"lm_{arch}_{seed}.pt")
     ck.unlink(missing_ok=True)
@@ -194,3 +194,23 @@ def copy_test(m, valid: np.ndarray, gaps, n: int = 24, span: int = 24, seed: int
             tot += span - 1
         out[str(gap)] = hits / tot
     return out
+
+
+def run_and_measure(arch: str, seed: int, steps: int, ckpt_dir: str, gaps) -> dict:
+    """One run, trained (resuming) and measured: what compute.py's ``lm`` item keeps.  A top-level function, so a
+    pool of spawned processes can run it."""
+    from pathlib import Path
+
+    from videos.ai.ai1 import compute as c1
+
+    torch.set_num_threads(1)
+    ckpt_dir = Path(ckpt_dir)
+    r = train(arch, seed, steps, ckpt_dir)
+    m = load_trained(arch, seed, ckpt_dir)
+    _, va = N.token_arrays()
+    r["bits"] = bits_per_char(m, c1.text("passage"))
+    r["by_pos"] = loss_by_position(m, va).tolist()
+    r["copy"] = copy_test(m, va, gaps)
+    print(f"    {arch} seed {seed}: held-out {r['final_val']:.3f}, passage {r['bits']:.3f} bits/char, copy {r['copy']}",
+          flush=True)
+    return r
