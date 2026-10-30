@@ -10,6 +10,7 @@ Items (all small, on the CPU; the whole part computes in a few minutes):
     params     how many numbers GPT-2 small and Qwen3-4B have (read from their weight files' headers)
     linapprox  the derivative as the best linear approximation: its error against the step; tangent planes;
                directional derivatives around a circle (Cauchy-Schwarz)
+    depth      products of 60 tanh layers' Jacobians: how gradients vanish or explode with the weights' scale
     jacobians  the Jacobians of a softmax, a layer norm and a matrix product, by formula and by the library
     modes      forward against reverse mode, counted (multiply-adds) and timed, on networks with n inputs, m outputs
     tiny       the worked example: one input, one weight, one bias, a sigmoid and a squared error, forward and back
@@ -1436,9 +1437,37 @@ def compute_gdlr():
     return out
 
 
+# ---------------------------------------------------------------------------
+# Chapter 3: products of many Jacobians (gradients through depth)
+# ---------------------------------------------------------------------------
+def compute_depth():
+    """The spectral norm of J_L ... J_1 for a chain of tanh layers h <- tanh(W h), W ~ N(0, g^2 / w), against the depth
+    L: how much a gradient can grow or shrink on its way back, for five gains g (8 seeds each)."""
+    w, L, seeds = 64, 60, 8
+    gains = [0.5, 0.9, 1.0, 1.5, 2.0]
+    out = dict(w=w, L=L, seeds=seeds, gains=gains)
+    for k, g in enumerate(gains):
+        norms = []
+        for seed in range(seeds):
+            r = rng(100 + seed)
+            h = r.normal(size=w)
+            P = np.eye(w)
+            row = []
+            for _ in range(L):
+                W = r.normal(size=(w, w)) * g / math.sqrt(w)
+                h = np.tanh(W @ h)
+                P = ((1 - h * h)[:, None] * W) @ P
+                row.append(np.linalg.norm(P, 2))
+            norms.append(row)
+        n = np.log10(np.array(norms))
+        out[f"mean{k}"], out[f"lo{k}"], out[f"hi{k}"] = n.mean(0), n.min(0), n.max(0)
+    return out
+
+
 ITEMS = {
     "params": compute_params,
     "linapprox": compute_linapprox,
+    "depth": compute_depth,
     "jacobians": compute_jacobians,
     "modes": compute_modes,
     "tiny": compute_tiny,

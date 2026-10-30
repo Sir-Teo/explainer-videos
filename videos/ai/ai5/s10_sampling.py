@@ -1,31 +1,30 @@
 from __future__ import annotations
 
+import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MODEL, MONO, load, printable
+from videos.ai.ai5.common import DATA, MODEL, MONO, PART, curve, hist_shape, load
 
 ALPHA27 = " abcdefghijklmnopqrstuvwxyz"
-TEMP = "#FF6B8B"  # the temperature dial
-
-
-def softmax_T(z, T):
-    a = (z - z.max()) / T
-    p = np.exp(a)
-    return p / p.sum()
+ACC, REJ = "#5BD17A", C.SURPRISE
+GUM = "#B39DDB"  # Gumbel noise and its picks
 
 
 class Sampling(VoiceoverScene):
     def construct(self):
         self.card()
         self.stick()
-        self.temperature()
+        self.continuous()
+        self.box_muller()
+        self.gumbel()
+        self.relax()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(4, r"Rolling loaded dice", r"How does a model actually choose?", part=5)
-        with self.voiceover("Chapter four. Rolling loaded dice."):
+        card = chapter_card(8, r"Rolling loaded dice", r"How does a computer draw from a distribution?", part=PART)
+        with self.voiceover("Chapter eight. Rolling loaded dice."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -75,11 +74,10 @@ class Sampling(VoiceoverScene):
         rule.to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "A model never hands us a letter or a word. It hands us a distribution, and to write anything we have to "
-            "roll the dice. <bookmark mark='a'/> Here's how a computer rolls loaded dice. Lay the probabilities end "
-            "to end, from zero to one, so each letter owns a stretch exactly as long as its probability. "
-            "<bookmark mark='b'/> Pick a uniformly random point, and take the letter it lands in. Each letter wins "
-            "exactly as often as its probability says. <bookmark mark='c'/> These letters are drawn from part one's "
-            "letter frequencies."
+            "roll loaded dice. <bookmark mark='a'/> Here's how a computer does it. Lay the probabilities end to end, "
+            "from zero to one, so each letter owns a stretch as long as its probability. <bookmark mark='b'/> Pick a "
+            "uniform random point and take the letter it lands in: the inverse of the cumulative distribution. "
+            "<bookmark mark='c'/> These are drawn from part one's letter frequencies."
         ) as vo:
             self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in stand], lag_ratio=0.03), FadeIn(stand_l),
                       FadeIn(dist_l), run_time=1.5)
@@ -107,108 +105,207 @@ class Sampling(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def temperature(self):
-        d = load("temperature")
-        z = np.asarray(d["logits"], float)
-        top = [int(i) for i in d["top"]]
-        toks = [t.strip() for t in d["top_tokens"]]
-        for T in (0.5, 1.0, 2.0):
-            assert np.allclose(softmax_T(z, T)[top], np.asarray(d[f"p{T}"]), atol=1e-6)
-        n_vocab = len(z)
-        Tt = ValueTracker(1.0)
-        p1 = softmax_T(z, 1.0)[top]
-        bars = LiveBars(p1, max_value=0.24, height=3.4, bar_width=0.62, gap=0.22, colors=MODEL,
-                        label_mobs=[Text(t, font=MONO, font_size=22, color=GREY_A) for t in toks])
-        bars.place(-1.9, x=-2.4)
-        for i, lab in enumerate(bars.labels):  # every other word one line lower, so long ones don't collide
-            if i % 2:
-                lab.shift(DOWN * 0.32)
-        for i, tr in enumerate(bars.trackers):
-            tr.add_updater(lambda m, i=i: m.set_value(float(softmax_T(z, Tt.get_value())[top[i]])))
-        prompt = Text(d["prompt"] + " …", font="DejaVu Serif", font_size=26, color=WHITE).to_edge(UP, buff=0.4)
-        prompt.set_x(-2.0)
-        sub = label(r"GPT-2's ten favourite next words, \ out of $50{,}257$", font_size=24, color=GREY_A)
-        sub.next_to(prompt, DOWN, buff=0.2).align_to(prompt, LEFT)
-        colors = {r"T": TEMP, r"z_i": MODEL, r"z_j": MODEL}
-        f = cmath(r"q_i \;\propto\; \exp\!\big(", r"z_i", r"\,/\,", r"T", r"\big)", colors=colors, font_size=44)
-        f.move_to([4.4, 1.6, 0])
-        tv = DecimalNumber(1.0, num_decimal_places=2, font_size=40, color=TEMP)
-        tv.add_updater(lambda m: m.set_value(Tt.get_value()))
-        trd = VGroup(MathTex(r"T =", font_size=40, color=TEMP), tv).arrange(RIGHT, buff=0.15).next_to(f, DOWN, buff=0.45)
+    def continuous(self):
+        d = load("draws")
+        from scipy.stats import beta as beta_
 
-        def ent():
-            q = softmax_T(z, Tt.get_value())
-            q = q[q > 0]
-            return float(-(q * np.log2(q)).sum())
-
-        hv = DecimalNumber(ent(), num_decimal_places=1, font_size=34, color=C.SURPRISE)
-        hv.add_updater(lambda m: m.set_value(ent()))
-        hrd = VGroup(label(r"entropy:", font_size=30), hv, label(r"bits", font_size=30)).arrange(RIGHT, buff=0.15)
-        hrd.next_to(trd, DOWN, buff=0.3)
-        rv = DecimalNumber(100 * (1 - p1.sum()), num_decimal_places=0, font_size=30, color=GREY_A, unit=r"\%")
-        rv.add_updater(lambda m: m.set_value(100 * (1 - softmax_T(z, Tt.get_value())[top].sum())))
-        rest = VGroup(label(rf"the other ${n_vocab - 10:,}$:".replace(",", "{,}"), font_size=26, color=GREY_A), rv)
-        rest.arrange(RIGHT, buff=0.15).next_to(hrd, DOWN, buff=0.3)
+        # left: inverse CDF for the exponential
+        ax = Axes(x_range=[0, 4, 1], y_range=[0, 1, 0.5], x_length=5.4, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.5, 1.2, 0])
+        xs = np.linspace(0, 4, 200)
+        F = curve(ax, xs, 1 - np.exp(-xs), color=DATA, stroke_width=3.5)
+        Fl = label(r"$F(x) = 1 - e^{-x}$", font_size=22, color=DATA).next_to(ax.c2p(2.6, 0.93), UP, buff=0.08)
+        us = [0.25, 0.6, 0.88]
+        arrows = VGroup()
+        for u in us:
+            x = -math.log(1 - u)
+            arrows.add(VGroup(Line(ax.c2p(0, u), ax.c2p(x, u), color=C.BITS, stroke_width=2.5),
+                              Arrow(ax.c2p(x, u), ax.c2p(x, 0), buff=0, color=C.BITS, stroke_width=2.5,
+                                    max_tip_length_to_length_ratio=0.12)))
+        rule1 = label(r"$x = F^{-1}(u) = -\ln(1 - u)$", font_size=24, color=C.BITS).next_to(ax, UP, buff=0.12)
+        hx = Axes(x_range=[0, 5, 1], y_range=[0, 1.05, 0.5], x_length=5.4, y_length=2.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.5, -2.2, 0])
+        h = np.asarray(d["ex_hist"], float)
+        e = np.linspace(0, 5, len(h) + 1)
+        eh = hist_shape(hx, e, h / h.sum() / (e[1] - e[0]), color=DATA, opacity=0.4)
+        ec = curve(hx, xs, np.exp(-xs), color=MODEL, stroke_width=3)
+        el = label(rf"$20{{,}}000$ draws; \ largest CDF gap ${float(d['ks_exp']):.3f}$", font_size=20, color=GREY_A)
+        el.next_to(hx, UP, buff=0.08)
+        # right: rejection sampling of Beta(2, 5)
+        M, rate = float(d["M"]), float(d["rate"])
+        bx = Axes(x_range=[0, 1, 0.5], y_range=[0, 2.7, 1], x_length=5.4, y_length=4.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, -0.6, 0])
+        xb = np.linspace(0, 1, 200)
+        pb = curve(bx, xb, beta_.pdf(xb, 2, 5), color=MODEL, stroke_width=3.5)
+        box = Rectangle(width=bx.x_length, height=bx.y_length * M / 2.7, stroke_color=GREY_B, stroke_width=2,
+                        fill_opacity=0).move_to(bx.c2p(0.5, M / 2))
+        xp, up_, acc = np.asarray(d["xp"]), np.asarray(d["up"]), np.asarray(d["acc"], bool)
+        pts = VGroup(*[Dot(bx.c2p(a, b), radius=0.03, color=ACC if ok else REJ, fill_opacity=0.85)
+                       for a, b, ok in zip(xp, up_, acc)])
+        bl = label(r"rejection: \ keep the points under the curve", font_size=22, color=GREY_A).next_to(bx, UP, buff=0.12)
+        rl = label(rf"kept ${100 * rate:.1f}\%$; \ predicted $1/M = {100 / M:.1f}\%$", font_size=22, color=ACC)
+        rl.next_to(bx, DOWN, buff=0.15)
+        cite_ = cite(r"J.~von Neumann, \textit{Various techniques used in connection with random digits} (1951)", corner=DR)
         with self.voiceover(
-            "Language models do the same with words, with one dial added. <bookmark mark='a'/> Here's GPT-2's "
-            "distribution for the word after: Spade sat down in the armchair, and. Its favourite, I, gets only four "
-            "percent; the other fifty thousand words share the rest. <bookmark mark='b'/> The dial is the "
-            "temperature: divide the scores by T before the softmax, the exponentiate-and-rescale of part one."
+            "The same trick works for continuous distributions: feed a uniform number through the inverse of the "
+            "cumulative distribution. <bookmark mark='a'/> For the exponential, x is minus the log of one minus u. "
+            f"Twenty thousand draws match the density; their largest gap from the true CDF is {float(d['ks_exp']):.3f}. "
+            "<bookmark mark='b'/> When the inverse is hard to compute, John von Neumann's rejection method from "
+            "1951 works with the density alone. Scatter points uniformly in a box over the curve, and keep the ones "
+            "that fall under it. <bookmark mark='c'/> The kept points' positions follow the density. The price is "
+            f"the wasted points: {100 * rate:.1f} percent are kept, one over the box's height, as predicted. In many "
+            "dimensions that share collapses."
         ) as vo:
-            self.play(FadeIn(prompt), FadeIn(sub))
+            self.play(Create(ax), Create(F), FadeIn(Fl))
             vo.wait_until("a")
-            self.add(*bars.trackers)  # their updaters follow the temperature
-            self.play(FadeIn(bars), FadeIn(rest))
+            self.play(FadeIn(rule1), LaggedStart(*[Create(a) for a in arrows], lag_ratio=0.4), run_time=1.5)
+            self.play(Create(hx), FadeIn(eh), Create(ec), FadeIn(el))
             vo.wait_until("b")
-            self.play(Write(f), FadeIn(trd), FadeIn(hrd))
-        with self.voiceover(
-            "Turn it down, below one, and the distribution sharpens toward the favourites. <bookmark mark='a'/> Turn "
-            "it up, and it flattens, until any word at all might come next. <bookmark mark='b'/> The entropy, part "
-            "one's measure of uncertainty, follows the dial: under five bits at a half, nine at one, thirteen and a half "
-            "at two."
-        ) as vo:
-            self.play(Tt.animate.set_value(0.5), run_time=2.5)
-            vo.wait_until("a")
-            self.play(Tt.animate.set_value(2.0), run_time=3.0)
-            vo.wait_until("b")
-            self.play(Tt.animate.set_value(1.0), run_time=1.5)
-        for tr in bars.trackers:
-            tr.clear_updaters()
-        for m in (tv, hv, rv):
-            m.clear_updaters()
-        bars.freeze()
-        self.wait(0.2)
+            self.play(Create(bx), Create(pb), Create(box), FadeIn(bl), FadeIn(cite_))
+            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.004), run_time=2.0)
+            vo.wait_until("c")
+            self.play(FadeIn(rl))
+        self.wait(0.3)
         self.clear_scene()
-        # what comes out
-        samples = d["samples"]
-        rows = VGroup()
-        for T, name in (("0.0", r"$T \to 0$: \ always the favourite"), ("0.5", r"$T = 0.5$"), ("1.0", r"$T = 1$"),
-                        ("2.0", r"$T = 2$")):
-            tag = label(name, font_size=28, color=TEMP)
-            words = ("… " + printable(samples[T])).split()
-            lines, cur = [], ""
-            for w in words:  # wrap at 12.6 units
-                trial = (cur + " " + w).strip()
-                if cur and Text(trial, font="DejaVu Serif", font_size=22).width > 12.6:
-                    lines.append(cur)
-                    cur = w
-                else:
-                    cur = trial
-            lines.append(cur)
-            txt = VGroup(*[Text(l_, font="DejaVu Serif", font_size=22, color=WHITE) for l_ in lines])
-            txt.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-            rows.add(VGroup(tag, txt).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.36).move_to(DOWN * 0.3)
-        ph = Text(d["prompt"], font="DejaVu Serif", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
+
+    # ------------------------------------------------------------------
+    def box_muller(self):
+        d = load("draws")
+        U, Z = np.asarray(d["bm_u"]), np.asarray(d["bm_z"])
+        rows = [
+            cmath(r"p(z_1, z_2)", "=", r"\tfrac{1}{2\pi}\, e^{-(z_1^2 + z_2^2)/2}", font_size=32),
+            cmath(r"p(z_1, z_2)\,dz_1\,dz_2", "=", r"\frac{d\theta}{2\pi} \cdot e^{-r^2/2}\, r\, dr", font_size=32),
+            cmath(r"(\theta,\, r)", "=", r"\big(2\pi u_2,\; \sqrt{-2\ln(1 - u_1)}\big)", font_size=32),
+        ]
+        whys = [why(r"two independent bells", font_size=22), why(r"polar coordinates: \ the angle is uniform",
+                                                                 font_size=22),
+                why(r"$r^2/2$ is exponential: \ inverse CDF", font_size=22)]
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=-1.8, buff=0.32, edge=6.8)
+        S = 0.85
+        sq = Square(2.4, color=GREY_B, stroke_width=2).move_to([-3.6, -1.6, 0])
+        ud = VGroup(*[Dot(sq.get_corner(DL) + 2.4 * np.array([a, b, 0]), radius=0.025, color=C.BITS) for a, b in U])
+        c0 = np.array([3.0, -1.6, 0])
+        zd = VGroup(*[Dot(c0 + S * np.array([a, b, 0]), radius=0.025, color=C.BITS) for a, b in np.clip(Z, -2.4, 2.4)])
+        ring = VGroup(Circle(radius=S, color=MODEL, stroke_width=2), Circle(radius=2 * S, color=MODEL,
+                                                                            stroke_width=1.5).set_stroke(opacity=0.5)).move_to(c0)
+        ul = label(r"$(u_1, u_2)$, \ uniform", font_size=22, color=GREY_A).next_to(sq, DOWN, buff=0.12)
+        zl = label(rf"$(z_1, z_2)$: \ independent bells \ (largest CDF gap ${float(d['ks_bm']):.4f}$)", font_size=22,
+                   color=GREY_A).next_to(c0 + DOWN * 2.1, DOWN, buff=0.0)
+        arr = Arrow(sq.get_right() + RIGHT * 0.2, c0 + LEFT * 2.3, buff=0.1, color=GREY_B, stroke_width=3)
+        cite_ = cite(r"G.~E.~P.~Box \& M.~E.~Muller (1958)", corner=UR)
         with self.voiceover(
-            "Here's what comes out, twenty-four words at a time. <bookmark mark='a'/> Always taking the favourite is "
-            "safe and flat. <bookmark mark='b'/> At a half, still sensible. <bookmark mark='c'/> At one, sampling the "
-            "model's own distribution, it's stranger and more varied. <bookmark mark='d'/> At two, it falls apart. "
-            "Choosing how to sample is a real design decision, and we'll come back to it."
+            "The bell itself has no simple inverse CDF, but a pair of bells does, in polar coordinates. "
+            "<bookmark mark='a'/> Two independent bells have a density that depends only on the distance from the "
+            "centre. <bookmark mark='b'/> So the angle is uniform, and the squared radius, halved, is exponential, "
+            "which we just learned to draw. <bookmark mark='c'/> Two uniform numbers in, two independent bells out: "
+            "the Box-Muller transform of 1958."
         ) as vo:
-            self.play(FadeIn(ph))
-            for k, m in enumerate("abcd"):
-                vo.wait_until(m)
-                self.play(FadeIn(rows[k], shift=UP * 0.1))
+            step(0)
+            vo.wait_until("a")
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            self.play(Create(sq), FadeIn(ud), FadeIn(ul), FadeIn(cite_))
+            self.play(GrowArrow(arr), TransformFromCopy(ud, zd), Create(ring), FadeIn(zl), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def gumbel(self):
+        d = load("draws")
+        z, p, freq = np.asarray(d["scores"]), np.asarray(d["p"]), np.asarray(d["freq"])
+        N, chi2 = int(d["N"]), float(d["chi2"])
+        g = np.random.default_rng(1954)  # Gumbel, 1954 (illustrative draws for the animation)
+        G = -np.log(-np.log(g.random((6, 6))))
+        lb = LiveBars(z + 1.5, max_value=6.0, height=3.4, bar_width=0.5, gap=0.25, colors=GUM,
+                      labels=[r"$1$", r"$2$", r"$3$", r"$4$", r"$5$", r"$6$"], label_font=24)
+        lb.place(-2.2, x=-3.6)
+        lt = label(r"score $+$ Gumbel noise \ (shifted up by $1.5$)", font_size=22, color=GREY_A).move_to([-3.6, 1.7, 0])
+        crown = Triangle(color=C.BITS, fill_opacity=1, stroke_width=0).scale(0.12).rotate(PI)
+
+        def crown_at(i, vals):
+            return crown.copy().move_to([lb._cx(i) - 3.6, -2.2 + 3.4 * vals[i] / 6.0 + 0.25, 0])
+
+        rows = [
+            cmath(r"i^\star", "=", r"\arg\max_i \;(z_i + G_i)", font_size=34),
+            cmath(r"P(i^\star = i)", "=", r"\frac{e^{z_i}}{\sum_j e^{z_j}}", font_size=34, colors={r"\frac{e^{z_i}}{\sum_j e^{z_j}}": MODEL}),
+        ]
+        whys = [why(r"$G_i = -\log(-\log U_i)$: \ Gumbel noise", font_size=22), why(r"exactly the softmax", font_size=22)]
+        step = ladder(self, rows, whys, keep=2, top=3.2, x=1.6, buff=0.5, edge=6.8)
+        cmp = VGroup()
+        for i in range(6):
+            cmp.add(VGroup(Rectangle(width=0.22, height=3.0 * p[i], stroke_width=0, fill_color=MODEL, fill_opacity=0.8),
+                           Rectangle(width=0.22, height=3.0 * freq[i], stroke_width=0, fill_color=GUM, fill_opacity=0.8))
+                    .arrange(RIGHT, buff=0.03, aligned_edge=DOWN))
+        cmp.arrange(RIGHT, buff=0.3, aligned_edge=DOWN).move_to([3.3, -1.5, 0])
+        cl = VGroup(label(r"softmax", font_size=20, color=MODEL), label(rf"argmax picks, ${N:,}$ draws".replace(",", "{,}"),
+                                                                       font_size=20, color=GUM)).arrange(RIGHT, buff=0.3)
+        cl.next_to(cmp, DOWN, buff=0.2)
+        ok = chi2 < 20
+        verdict = (f"they agree, with a chi-squared of {chi2:.1f} on five degrees of freedom, just what chance gives." if ok
+                   else f"chi-squared is {chi2:.1f}, more than chance should give.")
+        cite_ = cite(r"E.~J.~Gumbel (1954); \ R.~D.~Luce (1959); \ J.~I.~Yellott (1977); \ C.~Maddison et al.\ (2014)",
+                     corner=DL)
+        with self.voiceover(
+            "One more trick, and modern machine learning uses it constantly. To pick option i with probability "
+            "given by a softmax of scores, add independent Gumbel noise to each score, minus the log of minus the "
+            "log of a uniform number, <bookmark mark='a'/> and take the largest. <bookmark mark='b'/> The winner "
+            "is distributed exactly by the softmax: the Gumbel distribution is the shape of maxima, and it turns "
+            f"the largest into the softmax. <bookmark mark='c'/> Two hundred thousand picks against the softmax: "
+            f"{verdict} The trick needs only the scores, never the normalizer, and it turns sampling into a "
+            "maximization."
+        ) as vo:
+            self.play(FadeIn(lb), FadeIn(lt))
+            for k in range(3):
+                vals = z + 1.5 + G[k]
+                i = int(np.argmax(vals))
+                c_ = crown_at(i, vals)
+                self.play(*lb.to(vals), run_time=0.6)
+                self.play(FadeIn(c_), run_time=0.3)
+                self.play(FadeOut(c_), run_time=0.2)
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in cmp], lag_ratio=0.1), FadeIn(cl), FadeIn(cite_))
+        lb.freeze()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def relax(self):
+        d = load("draws")
+        taus, onehot = [float(t) for t in d["taus"]], np.asarray(d["onehot"])
+        f = cmath(r"y", "=", r"\operatorname{softmax}\big((z + G)\,/\,", r"\tau", r"\big)", font_size=40,
+                  colors={r"\tau": C.SURPRISE}).to_edge(UP, buff=0.45)
+        fn = label(r"a smooth stand-in for the one-hot pick: \ gradients flow through it", font_size=24, color=GREY_A)
+        fn.next_to(f, DOWN, buff=0.2)
+        panels = VGroup()
+        for tau in (0.1, 1.0, 5.0):
+            ys = np.asarray(d[f"y{tau}"])
+            rows = VGroup()
+            for y in ys:
+                rows.add(VGroup(*[Rectangle(width=0.22, height=max(1.4 * v, 0.01), stroke_width=0, fill_color=GUM,
+                                            fill_opacity=0.85) for v in y]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN))
+            rows.arrange(RIGHT, buff=0.35, aligned_edge=DOWN)
+            j = taus.index(tau)
+            panels.add(VGroup(rows, label(rf"$\tau = {tau:g}$: \ largest entry ${onehot[j]:.2f}$ on average", font_size=22,
+                                          color=C.SURPRISE).next_to(rows, DOWN, buff=0.15)))
+        panels.arrange(DOWN, buff=0.4).move_to(DOWN * 0.9)
+        tag = note(r"three draws at each temperature").to_corner(DR, buff=0.25)
+        cite_ = cite(r"E.~Jang, S.~Gu \& B.~Poole; \ C.~Maddison, A.~Mnih \& Y.~W.~Teh (both 2017)", corner=DL)
+        with self.voiceover(
+            "Sampling can't be differentiated: a pick is a pick. In 2017 two groups proposed relaxing it. Replace the "
+            "argmax by a softmax with a temperature, tau: the Gumbel-softmax. <bookmark mark='a'/> Cold, at a tenth, "
+            f"each draw is nearly a one-hot pick, its largest entry {onehot[0]:.2f} on average. <bookmark mark='b'/> "
+            f"At one it is softer, <bookmark mark='c'/> and at five it is a blur, {onehot[-1]:.2f}. The temperature "
+            "trades faithfulness for smooth gradients; it trained the discrete codes of the first DALL-E."
+        ) as vo:
+            self.play(Write(f), FadeIn(fn), FadeIn(cite_), FadeIn(tag))
+            for k, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                self.play(FadeIn(panels[k], shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

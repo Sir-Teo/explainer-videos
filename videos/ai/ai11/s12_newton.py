@@ -93,15 +93,14 @@ class NewtonSchulz(VoiceoverScene):
             rows[i].shift(DOWN * 0.02)
         keep_in_frame(rows)
         with self.voiceover(
-            "Here are three candidates. <bookmark mark='a'/> The classical Newton–Schulz polynomial, one and a half "
-            "sigma minus half sigma cubed. It fixes one with zero slope, so near one it converges very fast; but its "
-            "slope at zero is only one and a half, so a tiny singular value takes many rounds to grow. "
-            "<bookmark mark='b'/> Keller Jordan tuned the coefficients of a fifth-degree polynomial for Muon: a "
-            "slope at zero of three point four, so small values grow fast, at the price of never quite reaching one. "
-            "Everything ends between about zero point seven and one point three, which training doesn't mind. "
-            "<bookmark mark='c'/> And a third, two sigma minus one and a half sigma cubed plus a half sigma to the "
-            "fifth: it also fixes one with zero slope, and near one it squares the error and halves it, three times "
-            "better than the cubic, so it pins values that are already close."
+            "Three candidates. <bookmark mark='a'/> The classical cubic, one and a half sigma minus half sigma "
+            "cubed, fixes one with zero slope, so near one it converges fast; but its slope at zero is only one and "
+            "a half, so tiny values grow slowly. <bookmark mark='b'/> Keller Jordan tuned a fifth-degree polynomial "
+            "for Muon: slope three point four at zero, so small values grow fast, at the price of never quite "
+            "reaching one; everything ends between about zero point seven and one point three, which training "
+            "doesn't mind. <bookmark mark='c'/> A third, two sigma minus one and a half sigma cubed plus a half "
+            "sigma to the fifth, also fixes one with zero slope, and near one it squares the error and halves it, "
+            "three times better than the cubic."
         ) as vo:
             self.play(Create(ax), FadeIn(ticks), Create(diag), Create(one))
             vo.wait_until("a")

@@ -55,12 +55,11 @@ ZH = {
 
     # ------------------------------------------------------------------ GradientDescent
     'Chapter one. Gradient descent, derived.': '第1章。推导梯度下降。',
-    'In 1847, Augustin Cauchy wanted to solve':
-        "1847年，奥古斯丁·柯西想求解天文学里的方程，提出了一个通用方法：看误差往哪个方向下降得最快，就往那边走一步。"
-        "这就是梯度下降。<bookmark mark='a'/>要说清它有多快，我们需要损失的两个数。<bookmark mark='b'/>如果损失的曲率"
-        "从不超过L，它就是L-光滑的：在每一点，它都位于一个曲率为L的碗的下方。<bookmark mark='c'/>如果它的曲率从不"
-        "小于μ，它就是μ-强凸的：它位于一个曲率为μ的碗的上方。<bookmark mark='d'/>两者之比κ叫作条件数：山谷在一个"
-        "方向上比另一个方向陡多少倍。",
+    'In 1847 Augustin Cauchy, solving the equations of astronomy':
+        "1847年，奥古斯丁·柯西在求解天文学方程时，提出了一个通用方法：看误差往哪个方向下降得最快，就往那边走一步。"
+        "<bookmark mark='a'/>要说清它有多快，我们需要两个数。<bookmark mark='b'/>如果损失的曲率从不超过L，它就是"
+        "L-光滑的：它位于一个曲率为L的碗的下方。<bookmark mark='c'/>如果它的曲率从不小于μ，它就是μ-强凸的：它位于一个"
+        "曲率为μ的碗的上方。<bookmark mark='d'/>两者之比κ叫作条件数：山谷在一个方向上比另一个方向陡多少倍。",
     'Now the derivation.':
         "现在来推导。<bookmark mark='a'/>走一步。因为损失在曲率为L的碗下方，这一步让损失至少下降η乘以梯度的平方，"
         "再减去L乘η平方除以2的惩罚。<bookmark mark='b'/>这个界允许的最好步长是η等于L分之1，它保证损失下降梯度平方"
@@ -88,11 +87,10 @@ ZH = {
         "误差每一步恰好按推导出的因子1减κ分之1缩小，精确到小数点后三位：κ等于1000时，是{rate[i1000]:.4f}。",
     "f'error shrinks per step by {rate[i1000]:.4f}":
         "κ等于1000时，误差每一步缩小为{rate[i1000]:.4f}倍，推导值是{rpred[i1000]:.4f}。",
-    'Pause and predict. On a valley curving thirty times':
-        "停下来预测一下。在一个方向比另一个方向陡三十倍的山谷里，L分之1的步长是安全的。如果步长刚刚超过L分之2，"
-        "会怎样？<bookmark mark='a'/>安全的步长沿着长轴滑下去。<bookmark mark='b'/>大的步长在陡的那个方向上一次比一次"
-        "冲得更远，最后被甩出山谷。沿着曲率为λ的方向，每一步把距离乘以1减ηλ；一旦超过λ分之2，这个因子就小于负1。"
-        "第5章会回到这条边缘。",
+    'Pause and predict. On a valley thirty times steeper':
+        "停下来预测一下。在一个方向陡三十倍的山谷里，L分之1的步长是安全的。步长刚刚超过L分之2呢？"
+        "<bookmark mark='a'/>安全的步长沿着长轴滑下去。<bookmark mark='b'/>大的步长在陡的方向上一次比一次冲得更远，"
+        "最后被甩出去：每一步把距离乘以1减ηλ，一旦超过λ分之2，这个因子就小于负1。第5章会回到这条边缘。",
     "So: gradient descent's speed is set by the condition number":
         "所以：梯度下降的速度由条件数决定，病态的山谷走得很慢。接下来是动量，它把κ变成它的平方根。",
 
@@ -182,18 +180,17 @@ ZH = {
         "测量值除以预测值，每个点都在{rlo:.2f}到{rhi:.2f}之间。",
     "f'Measured over predicted runs from":
         "测量值除以预测值，从{rlo:.2f}到{rhi:.2f}：这里线性的图景只是近似。",
-    'This explains a rule practitioners found by experiment.':
-        "这解释了实践者凭实验找到的一条规则。<bookmark mark='a'/>如果把批量乘以k，就把学习率也乘以k：温度不变，"
-        "所以每单位进展的噪声也不变。2017年，Facebook的一个团队用它，再加上短暂的预热，用每批八千张图片的批量，在"
-        "一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>对Adam来说，它要除以梯度的大小，同样的分析说应该"
-        "乘以k的平方根。<bookmark mark='c'/>这条规则有极限。超过临界批量之后，噪声已经很小，更大的批量就不再能换来"
-        "更少的步数。第12部分会测出这发生在哪里。",
+    'This explains a rule found by experiment.':
+        "这解释了凭实验找到的一条规则。<bookmark mark='a'/>把批量乘以k，学习率也乘以k：温度不变。2017年，Facebook的"
+        "一个团队用它，再加上短暂的预热，用每批八千张图片，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>"
+        "对Adam来说，它要除以梯度的大小，分析说应该乘以k的平方根。<bookmark mark='c'/>而超过临界批量之后，噪声已经"
+        "很小，更大的批量就不再能换来更少的步数；第12部分会测出在哪里。",
     'f"Is the noise only a cost?':
-        "噪声只是代价吗？<bookmark mark='a'/>回到那个真实的损失，批量大十六倍，云就窄了{sp1 / sp16:.1f}倍，接近16的"
-        "平方根。<bookmark mark='b'/>现在想象一个又尖又窄的坑，旁边是一个宽阔的盆地。温度高的下山人待不住那个坑："
-        "它会被踢出来，最后停在山谷宽的地方。<bookmark mark='c'/>2017年，尼蒂什·凯斯卡尔和同事发现，用很大批量训练"
-        "的网络最后落在更尖锐的极小值里，泛化得更差。<bookmark mark='d'/>同一年，洛朗·丁和同事指出了其中的漏洞："
-        "把一层放大、下一层缩小，网络计算的函数不变，锐度却变了。平坦是一个有用的图景，而不是定律。",
+        "噪声只是代价吗？<bookmark mark='a'/>在那个真实的损失上，批量大十六倍，云就窄了{sp1 / sp16:.1f}倍，接近16的"
+        "平方根。<bookmark mark='b'/>现在想象一个尖坑，旁边是一个宽阔的盆地：温度高的下山人会被踢出尖坑，停在山谷宽的"
+        "地方。<bookmark mark='c'/>2017年，尼蒂什·凯斯卡尔和同事发现，很大的批量会落在更尖锐、泛化更差的极小值里。"
+        "<bookmark mark='d'/>同一年，洛朗·丁和同事发现了其中的漏洞：把一层放大、下一层缩小，同一个函数的锐度就变了。"
+        "平坦是一个有用的图景，而不是定律。",
     'So stochastic gradient descent runs at a temperature':
         "所以随机梯度下降是在一个温度下运行的，这个温度就是η除以B，它决定训练最后停留的那团云有多大；保持这个比值"
         "不变，就是线性缩放规则。但步长本身最大能有多大？",
@@ -235,44 +232,38 @@ ZH = {
 
     # ------------------------------------------------------------------ Adam
     'Chapter six. AdaGrad, RMSProp, Adam.': '第6章。AdaGrad、RMSProp和Adam：这三种自适应方法，给每一个权重都配上它自己的步长。',
-    'One learning rate for every weight is a strange choice.':
-        "所有权重共用一个学习率，是个奇怪的选择。有些权重的梯度很大，有些很小；这就是第1章的条件数，一个方向一个方向"
-        "地看。<bookmark mark='a'/>2011年，约翰·杜奇、埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：给每个权重记下它梯度"
-        "平方的累计和，用它的平方根去除这个权重的步长。<bookmark mark='b'/>一个很少出现的词，累计和很小，所以一旦出现，"
-        "就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，于是每个步长都像时间的平方根分之1那样缩小，长时间"
-        "的训练会慢得像爬。",
+    'One learning rate for every weight is a strange choice':
+        "所有权重共用一个学习率，是个奇怪的选择：有些权重的梯度很大，有些很小。<bookmark mark='a'/>2011年，约翰·杜奇、"
+        "埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：用每个权重梯度平方累计和的平方根，去除它的步长。<bookmark mark='b'/>"
+        "一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，每一步都像根号t分之1那样缩小，"
+        "长时间的训练会慢得像爬。",
     'The fix came from an online course.':
-        "解决办法来自一门网课。<bookmark mark='a'/>2012年，在杰弗里·辛顿的Coursera神经网络课程的一讲里，一张幻灯片"
-        "提出了RMSProp：把AdaGrad不断增长的累计和，换成一个会遗忘的滑动平均，旧值的十分之九加上新梯度平方的十分之一，"
-        "再除以它的平方根。<bookmark mark='b'/>它从没写成论文。多年来，研究论文引用的都是一张讲义幻灯片。",
-    'In 2014 Diederik Kingma and Jimmy Ba put the two ideas together.':
-        "2014年，迪德里克·金马和吉米·巴把这两个想法合在一起。<bookmark mark='a'/>记下梯度的滑动平均m：这是动量。"
-        "<bookmark mark='b'/>记下梯度平方的滑动平均v：这是RMSProp。<bookmark mark='c'/>两者都校正从零起步带来的偏差，"
-        "这一步待会儿就推导，<bookmark mark='d'/>然后按平均方向除以平均平方的根来走。他们把它叫作Adam，用默认参数，它在"
-        "此后十年里训练了深度学习的大部分模型。",
+        "解决办法来自一门网课。<bookmark mark='a'/>2012年，杰弗里·辛顿Coursera课程的一张幻灯片提出了RMSProp：一个会遗忘"
+        "的平均，旧值的十分之九加上新值的十分之一。<bookmark mark='b'/>它从没写成论文；论文引用的就是那张幻灯片。",
+    'In 2014 Diederik Kingma and Jimmy Ba combined the two.':
+        "2014年，迪德里克·金马和吉米·巴把两者合在一起。<bookmark mark='a'/>m，梯度的滑动平均：这是动量。"
+        "<bookmark mark='b'/>v，梯度平方的滑动平均：这是RMSProp。<bookmark mark='c'/>两者都校正从零起步的偏差，"
+        "<bookmark mark='d'/>然后按m除以v的平方根来走。这就是Adam，此后十年的默认选择。",
     'f"Why the corrections?':
-        "为什么要校正？<bookmark mark='a'/>从零开始把平均展开：m是到目前为止所有梯度的加权和。<bookmark mark='b'/>"
-        "如果梯度的均值稳定，m的期望就是这个均值乘以一个几何级数，<bookmark mark='c'/>也就是1减β的t次方。一开始，"
-        "m偏向零，除以这个因子就消除了偏差。<bookmark mark='d'/>这是我们字符模型的一个权重，前六十步的真实梯度：未校正的"
-        "平均从零附近起步，校正后的从第一步起就跟着梯度走。<bookmark mark='e'/>校正对v最要紧，它的记忆长达一千步。"
-        "如果都不校正，第一步会是η的{raw:.2f}倍；校正之后，恰好是η。",
-    'f"Look at Adam\'s limit.':
-        "看看Adam的极限。把两个记忆都关掉，让ε趋于零：梯度除以它自己的大小，就只剩下它的符号。每个权重都恰好移动η，"
-        "向上或向下。Adam是一种平滑过的符号下降。<bookmark mark='a'/>这是我们模型隐藏矩阵里每个权重移动的距离，以η为"
-        "单位。第一步，偏差校正让Adam恰好成为符号下降：{f1:.0%}的权重移动了η。{said1}",
+        "为什么要校正？<bookmark mark='a'/>从零开始把m展开：它是到目前为止梯度的加权和。<bookmark mark='b'/>"
+        "如果梯度的均值稳定，m的期望就是这个均值乘以一个几何级数，<bookmark mark='c'/>也就是1减β的t次方：一开始m偏向零，"
+        "除以这个因子就消除了偏差。<bookmark mark='d'/>我们模型的一个权重，前六十步：未校正的m从零附近起步，校正后的立刻"
+        "跟上梯度。<bookmark mark='e'/>如果不校正，第一步会是η的{raw:.2f}倍；校正之后，恰好是η。",
+    'f"Now Adam\'s limit.':
+        "再看Adam的极限。把两个记忆都关掉，让ε趋于零：梯度除以它自己的大小，就是它的符号。每个权重都恰好移动η："
+        "这就是符号下降。<bookmark mark='a'/>这是我们隐藏矩阵里每个权重移动的距离，以η为单位。第一步，有{f1:.0%}的权重"
+        "移动了η。{said1}",
     "f\"<bookmark mark='b'/> Later, the typical move is far smaller":
-        "<bookmark mark='b'/>后来，典型的移动小得多：第100步是{m100:.2f}个η，第1000步是{m1000:.2f}。梯度带着噪声，"
-        "它们的平均m比均方根小得多，Adam的一步变成了梯度的符号，再按信噪比缩放。",
+        "<bookmark mark='b'/>后来，典型的移动小得多：第100步是{m100:.2f}个η，第1000步是{m1000:.2f}。带噪声的梯度相互"
+        "抵消，Adam的一步变成了符号，再按信噪比缩放。",
     "f\"<bookmark mark='b'/> Later the typical move stays large":
         "<bookmark mark='b'/>后来，典型的移动依然很大，第100步是{m100:.2f}个η：梯度一步接一步地保持着符号。",
     'That limit became an optimizer.':
-        "这个极限后来变成了一个优化器。<bookmark mark='a'/>2023年，谷歌的一个团队让计算机在程序空间里搜索更新规则，"
-        "胜出的那个，经过化简，就是Lion：每个权重按动量和新梯度的混合的符号移动，<bookmark mark='b'/>然后更慢地更新"
-        "动量。<bookmark mark='c'/>它每个权重只存一个数，而不是Adam的两个；因为每一步都是满幅，它需要更小的学习率和"
-        "更大的权重衰减。它会参加我们第12章的比赛。",
-    'So Adam is momentum divided by a running size':
-        "所以Adam就是动量除以一个滑动的大小，再校正起步的偏差；在极限下它就是符号下降：当每个权重各自最多只能移动η时，"
-        "最陡的那一步。接下来，是一个多年来用法上的隐蔽错误。",
+        "这个极限后来变成了一个优化器。<bookmark mark='a'/>2023年，谷歌的一个团队在程序空间里搜索更新规则，找到了Lion："
+        "按动量和梯度的混合的符号走一步，<bookmark mark='b'/>然后更慢地更新动量。<bookmark mark='c'/>每个权重只存一个"
+        "状态，而不是两个；因为每一步都是满幅，它需要更小的学习率和更大的衰减。它会参加我们第12章的比赛。",
+    'So Adam is momentum over a running size':
+        "所以Adam就是动量除以一个滑动的大小，再校正起步的偏差；它的极限是符号下降。接下来，是一个多年来用法上的隐蔽错误。",
 
     # ------------------------------------------------------------------ Decay
     'Chapter seven. Weight decay is not L2.': '第7章。权重衰减不是L2。',
@@ -421,12 +412,12 @@ ZH = {
         "分解写出X，虽然我们从不真的去算它。<bookmark mark='c'/>每个乘积里，中间的U和V都消掉了，这一轮不动奇异向量。"
         "<bookmark mark='d'/>它只是对每个奇异值同时作用同一个多项式，σ的p。<bookmark mark='e'/>所以整个问题变成关于"
         "一个单变量函数的问题：哪个多项式，反复作用，能把0到1之间的一切都送到1？",
-    'Here are three candidates.':
-        "这里有三个候选。<bookmark mark='a'/>经典的牛顿–舒尔茨多项式：1.5σ减0.5σ的三次方。它以零斜率固定住1，所以在1"
-        "附近收敛得非常快；但它在0处的斜率只有1.5，很小的奇异值要很多轮才能长大。<bookmark mark='b'/>凯勒·乔丹为Muon"
-        "调了一个五次多项式的系数：在0处的斜率是3.4，小的值长得很快，代价是永远到不了1。所有的值最后都落在大约0.7到"
-        "1.3之间，训练并不在意。<bookmark mark='c'/>还有第三个：2σ减1.5σ的三次方，再加0.5σ的五次方：它也以零斜率"
-        "固定住1，在1附近把误差平方再减半，比三次多项式好三倍，所以能把已经很接近的值钉住。",
+    'Three candidates.':
+        "三个候选。<bookmark mark='a'/>经典的三次多项式，1.5σ减0.5σ的三次方，以零斜率固定住1，所以在1附近收敛得快；"
+        "但它在0处的斜率只有1.5，很小的值长得慢。<bookmark mark='b'/>凯勒·乔丹为Muon调了一个五次多项式：在0处斜率是"
+        "3.4，小的值长得很快，代价是永远到不了1；所有的值最后都落在大约0.7到1.3之间，训练并不在意。"
+        "<bookmark mark='c'/>第三个，2σ减1.5σ的三次方再加0.5σ的五次方，也以零斜率固定住1，在1附近把误差平方再减半，"
+        "比三次多项式好三倍。",
     'f"Now on real data: the gradient matrix from Chapter ten.':
         "现在用真实数据：第10章的那个梯度矩阵。<bookmark mark='a'/>跟着一个中等大小的奇异值走过乔丹的多项式：每一轮"
         "都把它往1弹上去。<bookmark mark='b'/>这是它全部{len(s0)}个奇异值，一轮一轮地。{R}轮之后，所有大于最大值"
@@ -446,12 +437,11 @@ ZH = {
 
     # ------------------------------------------------------------------ Race
     'Chapter twelve. The race, run fairly.': '第12章。一场公平的比赛。',
-    'f"Now a race between the optimizers of this part':
-        "现在让这一部分的优化器，在我们的字符模型上，按保证公平的规则比一场。<bookmark mark='a'/>同样的模型，同样顺序"
-        "的同样批次，同样的三千步，同样的调度：短暂的预热，然后余弦下降。<bookmark mark='b'/>每个优化器有{n_lr}个"
-        "学习率，相邻两个差一倍，如果最好的在范围尽头就再加，保留最好的那个：一个方法可能只是因为学习率不对才显得差。<bookmark mark='c'/>然后把"
-        "最好的设置再用两个随机种子各跑一遍，看看任何差别里有多少是运气。<bookmark mark='d'/>参赛的有：带动量的SGD、"
-        "AdamW、Lion、Shampoo、SOAP和Muon。",
+    'Now a fair race between this part\'s optimizers':
+        "现在让这一部分的优化器在我们的字符模型上公平地比一场。<bookmark mark='a'/>同样顺序的同样批次，同样的三千步，"
+        "同样的调度。<bookmark mark='b'/>每一个，带动量的SGD、AdamW、Lion、Shampoo、SOAP和Muon，都有自己的一组学习率，"
+        "相邻两个差一倍，一直扩展到最好的落在内部：一个方法可能只是因为学习率不对才显得差。<bookmark mark='c'/>最好的"
+        "再用两个随机种子各跑一遍，看看哪些是运气。",
     '"First the learning-rate sweeps.':
         "先看学习率扫描。<bookmark mark='a'/>每个优化器的留出损失随学习率的变化：太小就爬得慢，太大就冲过头，"
         "中间是一个山谷。<bookmark mark='b'/>谷底就是它比赛用的学习率。{etxt}",
@@ -569,19 +559,19 @@ ZH = {
     # ------------------------------------------------------------------ Stability
     'Chapter fifteen. Keeping training stable.': '第15章。让训练保持稳定。',
     'f"Large runs sometimes blow up':
-        "大规模训练有时会炸掉：损失突然跳起来，只好回滚。第18部分会讲大规模下的故事。这里是其中一种机制，我们故意把它"
-        "引发出来，用的是一个在我们的书上训练的单层Transformer，就是第13部分会搭的那种。<bookmark mark='a'/>看最大的"
-        "注意力分数，一个查询乘以一个键。用中等学习率的Muon，它长到大约{mx_s:,.0f}。<bookmark mark='b'/>学习率再大"
-        "四倍，它就失控了，长到大约{mx_f:,.0f}：softmax变成了硬性选择，梯度消失，这些头不再学习。{said1}",
+        "大规模训练有时会炸掉，第18部分会讲大规模下的故事。这里是其中一种机制，我们在一个用我们的书训练的单层Transformer上"
+        "故意把它引发出来。<bookmark mark='a'/>最大的注意力分数，一个查询乘以一个键：用中等学习率的Muon，它长到大约"
+        "{mx_s:,.0f}。<bookmark mark='b'/>学习率再大四倍，它就失控了，长到大约{mx_f:,.0f}：softmax变成了硬性选择，"
+        "这些头不再学习。{said1}",
     "f\"<bookmark mark='c'/> The faster run ends worse":
         "<bookmark mark='c'/>快的那次训练最后更差，{hf:.2f}比特对{hs:.2f}。",
     "f\"<bookmark mark='c'/> Here the faster run still ends at":
         "<bookmark mark='c'/>这里快的那次训练最后仍然是{hf:.2f}比特，对{hs:.2f}。",
     'In 2025 Moonshot AI met exactly this':
-        "2025年，月之暗面在用Muon训练Kimi K2时正好遇到了这个问题，并且做了一次外科手术式的修复。<bookmark mark='a'/>"
-        "每一步之后，测出每个头最大的分数。<bookmark mark='b'/>这个分数对这个头的查询和键权重是双线性的，所以两者都乘以"
-        "γ的平方根，分数就乘以γ。<bookmark mark='c'/>一旦它超过阈值τ，就选γ把它恰好放到τ上。别的什么都不变。τ取一百，"
-        "Kimi K2这个有一万亿参数的模型，在十五点五万亿个词元上训练，按它的报告，没有出现一次损失尖峰。",
+        "2025年，月之暗面在用Muon训练Kimi K2时正好遇到了这个问题，并做了一次外科手术式的修复。<bookmark mark='a'/>"
+        "每一步之后，测出每个头最大的分数。<bookmark mark='b'/>它对查询和键的权重是双线性的，所以两者都乘以γ的平方根，"
+        "分数就乘以γ。<bookmark mark='c'/>一旦它超过τ，就选γ把它恰好放到τ上。τ取一百，Kimi K2，一万亿参数、十五点五万亿"
+        "个词元，报告说没有出现一次损失尖峰。",
     'f"On our small transformer, QK-clip at tau a hundred':
         "在我们的小Transformer上，τ取一百的QK-clip把快速Muon训练的分数压在阈值附近，从没超过大约{mxq:.0f}，{said2}"
         "<bookmark mark='a'/>学习率大得过分的AdamW，把分数推得更高。最古老的补救是2013年的梯度裁剪：只要梯度长于某个c，"
@@ -597,25 +587,24 @@ ZH = {
         "把分数推高的那种缓慢漂移。",
     "f\"<bookmark mark='b'/> Here it doesn't save the run":
         "<bookmark mark='b'/>这里它没能救回这次训练：{hg[0]:.2f}和{hg[1]:.2f}比特。",
-    'Weight decay has a second life in modern networks.':
-        "权重衰减在现代网络里还有第二重身份。大多数权重矩阵后面都跟着一个归一化，这让它们尺度不变：W和两倍的W给出"
-        "同一个网络。<bookmark mark='a'/>于是梯度和W正交，一步永远不可能把它缩小。<bookmark mark='b'/>衰减把W乘上一个"
-        "因子缩小；Adam的一步u又把它加大。<bookmark mark='c'/>对范数平方来看：衰减每步去掉它的2ηλ，而每一步加上η平方"
-        "乘以u的大小，再乘以相邻步子之间的相关程度，这由动量决定。<bookmark mark='d'/>两者在一个平衡范数上抵消，"
-        "这个范数和η除以λ的平方根成正比。<bookmark mark='e'/>所以权重衰减对这些权重根本不起正则化作用：它决定的是"
-        "矩阵的大小，使每一步都是矩阵的固定比例，也就是一个有效学习率。",
-    '"Measure it on our character model, with a normalization added':
-        "在我们的字符模型上测一测：在第二个隐藏矩阵之后加一个归一化，用三种衰减强度，每种是前一种的四倍。"
-        "<bookmark mark='a'/>每个范数都升到或降到一个水平，然后停在那里，衰减越强，到得越快。{said4}要是没有动量那个因子，"
+    'Weight decay has a second life.':
+        "权重衰减还有第二重身份。大多数权重矩阵后面都跟着一个归一化，所以W和两倍的W给出同一个网络。<bookmark mark='a'/>"
+        "于是梯度和W正交。<bookmark mark='b'/>衰减把W乘上一个因子缩小；Adam的一步u又把它加大。<bookmark mark='c'/>"
+        "对范数平方来看：衰减每步去掉它的2ηλ，而每一步加上η平方乘以u的大小，再乘以步子之间的相关，这由动量决定。"
+        "<bookmark mark='d'/>两者在一个范数上平衡，它和η除以λ的平方根成正比。<bookmark mark='e'/>所以这里权重衰减不起"
+        "正则化作用：它决定的是矩阵的大小，使每一步都是矩阵的固定比例，也就是一个有效学习率。",
+    '"Measured on our character model':
+        "在我们的字符模型上测量：第二个隐藏矩阵之后加一个归一化，用三种衰减强度，每种是前一种的四倍："
+        "<bookmark mark='a'/>每个范数都稳定到一个水平，衰减越强，到得越快。{said4}要是没有动量那个因子，"
         "第一种的预测会是{nomom:.1f}，小得太多。<bookmark mark='c'/>衰减变成四倍，范数就减半：拟合出的幂次是{sl:.2f}，"
         "推导值是负二分之一。",
     "f\"<bookmark mark='b'/> The dashed lines are the predicted equilibria, and every":
         "<bookmark mark='b'/>虚线是预测的平衡值，每个测出的范数都在预测值的{worst:.0%}以内。",
     "f\"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst":
         "<bookmark mark='b'/>虚线是预测的平衡值；偏差最大的差了{worst:.0%}。",
-    'So instability has causes, and the best fixes target them':
-        "所以不稳定有它的原因，最好的修复直击原因：QK-clip只缩放产生分数的那两个矩阵，裁剪给每一步封顶，而权重衰减"
-        "悄悄地决定了每个归一化矩阵的大小。最后：自2024年以来，业界在这些问题上学到了什么。",
+    'So the best fixes target causes':
+        "所以最好的修复直击原因：QK-clip只缩放产生分数的那两个矩阵，裁剪给每一步封顶，而权重衰减决定了归一化矩阵的"
+        "大小。最后：2024年以来的优化器竞赛。",
 
     # ------------------------------------------------------------------ Frontier
     'Chapter sixteen. The optimizer race': '第16章。2024到2026年的优化器竞赛。',
@@ -635,11 +624,11 @@ ZH = {
         "2026年，英伟达的一个团队用Muon和SOAP训练了最大七百二十亿参数的混合专家模型，发现它们在一亿词元的批量下"
         "依然稳定，而AdamW在那里变差了；收益不大，而且各项任务上有好有坏。",
     'Meanwhile the descendants multiply.':
-        "与此同时，后继者越来越多。<bookmark mark='a'/>Muon这一支：更好的多项式，比如Polar Express；能把工作分到成千上万"
-        "台机器上的版本，比如微软的Dion，它2026年的后继者报告在达到Muon损失的同时，优化器那一步最多快六倍；以及一连串"
-        "2026年宣称有改进的预印本。<bookmark mark='b'/>Shampoo这一支：分布式Shampoo、SOAP，以及更大规模的SOAP变体。"
-        "这些说法大多出自作者本人，还没有经过独立检验。<bookmark mark='c'/>这正是这场竞赛真正的教训，也是第12章那样"
-        "比赛的原因：像调新方法一样用力去调基线，在同样的预算下比较，用几个种子，并报告范围。",
+        "与此同时，后继者越来越多。<bookmark mark='a'/>Muon这一支：更好的多项式，比如Polar Express；微软的Dion，把工作"
+        "分到多台机器上，以及它2026年的后继者，报告在达到Muon损失的同时，那一步最多快六倍；还有一连串2026年的预印本。"
+        "<bookmark mark='b'/>Shampoo这一支：分布式Shampoo、SOAP，以及更大规模的变体。这些说法大多出自作者本人。"
+        "<bookmark mark='c'/>这正是这场竞赛真正的教训：像调新方法一样用力去调基线，在同样的预算下比较，用几个种子，"
+        "并报告范围。",
     'So by 2026 the matrix optimizers had won a place at the frontier':
         "所以到2026年，矩阵优化器已经在前沿占了一席之地：Muon训练着一些最大的开放模型。但仔细测量下来，它们相对于调好的"
         "AdamW的优势是真实的，比最初宣称的小，而且随着模型变大而缩小。",

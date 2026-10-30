@@ -25,7 +25,8 @@ is computed by `compute.py`, small and on the CPU (about a minute in all).
   directions 0.21° apart; Cauchy (1847) and the update x ← x − η∇f.
 * **3. Maps that bend: the Jacobian.** A map bending the plane; zoomed in, its grid straightens onto the Jacobian's;
   the definition card (m × n, the best matrix); the determinant as local area; the chain rule as a product of
-  Jacobians.
+  Jacobians; products through depth, computed for 60 tanh layers (8 seeds): with gain 0.5 the product shrinks by 17
+  powers of ten, with gain 2 it grows by 5, near gain 1 it holds (vanishing and exploding gradients, Parts 9–10).
 * **4. The Jacobians of real layers.** The matrix product: ∂L/∂W = XᵀG and ∂L/∂X = GWᵀ derived; the Jacobian never
   formed (for one GPT-2 MLP matrix over 1,024 tokens it would hold 7.4 × 10¹² numbers, 30 TB in float32, against
   4.8 × 10⁹ multiply-adds for XᵀG); the softmax Jacobian diag(p) − ppᵀ by the quotient rule, computed and matched to
@@ -68,7 +69,7 @@ is computed by `compute.py`, small and on the CPU (about a minute in all).
   n/k + k minimized at k = √n (ladder); measured on a 256-layer chain: 257 activations held when everything is kept,
   a flat minimum of 32 for k from 13 to 20 (√256 = 16), at the price of 496 layer evaluations against 256 (33,152 if
   nothing is kept); longer chains' best k 5, 9, 16, 32, 64 for n = 16 … 4,096; identical gradients; 1.27× the time;
-  Griewank (1992), Chen et al. (2016).
+  Griewank (1992), Chen et al. (2016); PyTorch's checkpointing and FlashAttention's recomputation.
 * **12. Curvature, and Newton's method.** The Hessian, a bowl and a saddle (3D); Newton's step from the second-order
   Taylor model; Newton (1669), Raphson (1690), Simpson (1740); logistic regression with correlated features (κ = 187):
   gradient descent 2,362 steps to 10⁻¹⁰, Newton 3, correct digits 2, 5, 11 (quadratic convergence), paths on the
@@ -127,6 +128,7 @@ as a 1 × d row.
 |---|---|
 | best line | error ∝ h^1.998 (true slope), h^1.013 (slope 10% off); tangent plane r^2.001 |
 | steepest ascent | max of 720 directional derivatives 0.81263 = ‖∇f‖ 0.81263, 0.21° apart |
+| Jacobians through depth | log10 ‖J_60⋯J_1‖: gain 0.5 −17.4, 0.9 −2.5, 1.0 −0.2, 1.5 +2.1, 2.0 +4.6 |
 | softmax / layer norm Jacobians | formula vs library 5.6e-17 / 1.9e-16; eigenvalues ≥ 0 with one 0 / two ≈ 0 |
 | forward vs reverse | n vs m forward passes exactly; timing agrees with the count in 20/20 networks; 874 parameters: 615× multiply-adds, 82× time |
 | two-layer backprop | hand vs library 3.5e-17, vs PyTorch 5.6e-17; per-example dW rank 1 |

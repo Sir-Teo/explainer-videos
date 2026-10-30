@@ -189,13 +189,12 @@ class Temperature(VoiceoverScene):
         kn = label(r"the critical batch: \\ Part 12, Chapter 6", font_size=20, color=C.BITS).next_to(ax.c2p(2, 1.3), UR, buff=0.1)
         sch = note(r"schematic").next_to(xl, DOWN, buff=0.1)
         with self.voiceover(
-            "This explains a rule practitioners found by experiment. <bookmark mark='a'/> If you multiply the batch "
-            "by k, multiply the learning rate by k too: the temperature, and so the noise per unit of progress, stays "
-            "the same. In 2017 a team at Facebook used it, with a short warmup, to train an ImageNet classifier with "
-            "batches of eight thousand images in one hour. <bookmark mark='b'/> For Adam, which divides by the "
-            "gradient's size, the same analysis says to scale by the square root of k instead. "
-            "<bookmark mark='c'/> And the rule has a limit. Past a critical batch size, the noise is already small, "
-            "and bigger batches stop buying fewer steps. Part twelve measures where that happens."
+            "This explains a rule found by experiment. <bookmark mark='a'/> Multiply the batch by k, and the "
+            "learning rate by k too: the temperature stays the same. In 2017 a Facebook team used it, with a short "
+            "warmup, to train an ImageNet classifier on batches of eight thousand images in one hour. "
+            "<bookmark mark='b'/> For Adam, which divides by the gradient's size, the analysis says scale by root k "
+            "instead. <bookmark mark='c'/> And past a critical batch size the noise is already small, and bigger "
+            "batches stop buying fewer steps; Part twelve measures where."
         ) as vo:
             self.play(FadeIn(rule, shift=UP * 0.2))
             vo.wait_until("a")
@@ -242,14 +241,13 @@ class Temperature(VoiceoverScene):
         caveat = label(r"but sharpness depends on how the weights are written: \\ rescale a layer and a sharp minimum "
                        r"looks flat", font_size=20, color=GREY_B).move_to([3.6, -2.6, 0])
         with self.voiceover(
-            "Is the noise only a cost? <bookmark mark='a'/> Back on the real loss, sixteen times the batch gives a "
-            f"cloud {sp1 / sp16:.1f} times narrower, close to the square root of sixteen. <bookmark mark='b'/> Now "
-            "picture a sharp, narrow pit beside a wide basin. A walker at a high temperature can't stay in the pit: "
-            "it is kicked out, and settles where the valley is wide. <bookmark mark='c'/> In 2017 Nitish Keskar and "
-            "colleagues found that networks trained with very large batches end in sharper minima, and generalize "
-            "worse. <bookmark mark='d'/> The same year, Laurent Dinh and colleagues pointed out the catch: rescale "
-            "one layer up and the next one down, and the network computes the same function, at a different "
-            "sharpness. Flatness is a useful picture, not a law."
+            "Is the noise only a cost? <bookmark mark='a'/> On the real loss, sixteen times the batch gives a "
+            f"cloud {sp1 / sp16:.1f} times narrower, close to root sixteen. <bookmark mark='b'/> Now picture a sharp "
+            "pit beside a wide basin: a hot walker is kicked out of the pit and settles where the valley is wide. "
+            "<bookmark mark='c'/> In 2017 Nitish Keskar and colleagues found that very large batches end in sharper "
+            "minima that generalize worse. <bookmark mark='d'/> The same year Laurent Dinh and colleagues found the "
+            "catch: rescale one layer up and the next down, and the same function has a different sharpness. "
+            "Flatness is a useful picture, not a law."
         ) as vo:
             self.play(Create(cont), FadeIn(star))
             self.play(LaggedStart(*[FadeIn(p) for p in c1], lag_ratio=0.003), run_time=1.5)

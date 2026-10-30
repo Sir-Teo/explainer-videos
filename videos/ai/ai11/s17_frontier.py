@@ -130,19 +130,19 @@ class Frontier(VoiceoverScene):
         caveat = note(r"preprints listed by name only: \ their claims are the authors' own, \ not yet independently checked").next_to(lesson, DOWN, buff=0.15)
         with self.voiceover(
             "Meanwhile the descendants multiply. <bookmark mark='a'/> For Muon: better polynomials, like the Polar "
-            "Express; versions that split the work across thousands of machines, like Microsoft's Dion, whose 2026 "
-            "successor reports Muon's loss with an optimizer step up to six times faster; and a stream of 2026 "
-            "preprints claiming improvements. <bookmark mark='b'/> For Shampoo: Distributed Shampoo, SOAP, and "
-            "larger-scale variants of SOAP. Most of these claims are their authors' own and haven't been checked "
-            "independently. <bookmark mark='c'/> Which is the race's real lesson, and the reason Chapter twelve was "
-            "run the way it was: tune the baseline as hard as the newcomer, compare at equal budgets, use several "
-            "seeds, and report the spread."
+            "Express; Microsoft's Dion, which splits the work across machines, and its 2026 successor, reporting "
+            "Muon's loss with a step up to six times faster; and a stream of 2026 preprints. <bookmark mark='b'/> "
+            "For Shampoo: Distributed Shampoo, SOAP, and larger-scale variants. Most of these claims are their "
+            "authors' own. <bookmark mark='c'/> Which is the race's real lesson: tune the baseline as hard as the "
+            "newcomer, compare at equal budgets, use several seeds, and report the spread."
         ) as vo:
-            self.play(FadeIn(cols[0][0]), FadeIn(cols[1][0]))
+            self.play(FadeIn(cols[0][0]), FadeIn(cols[1][0]),
+                      lag([FadeIn(r_, shift=RIGHT * 0.2) for r_ in [*cols[0][1:], *cols[1][1:]]], lag_ratio=0.15),
+                      run_time=2.5)
             vo.wait_until("a")
-            self.play(lag([FadeIn(r_, shift=RIGHT * 0.2) for r_ in cols[0][1:]], lag_ratio=0.3), run_time=2.5)
+            self.play(Indicate(cols[0][0], color=MU))
             vo.wait_until("b")
-            self.play(lag([FadeIn(r_, shift=RIGHT * 0.2) for r_ in cols[1][1:]], lag_ratio=0.3), FadeIn(caveat), run_time=2.5)
+            self.play(Indicate(cols[1][0], color=SH), FadeIn(caveat))
             vo.wait_until("c")
             self.play(FadeIn(lesson))
         self.wait(0.3)

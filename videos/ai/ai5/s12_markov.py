@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MONO, WALK, load
+from videos.ai.ai5.common import DATA, MODEL, MONO, PART, WALK, curve, load
 
 ALPHA27 = " abcdefghijklmnopqrstuvwxyz"
 STATE_COLORS = [GREY_B, C.BITS, DATA]  # space, vowel, consonant
@@ -18,11 +18,13 @@ class Markov(VoiceoverScene):
         self.three()
         self.matrix()
         self.letters()
+        self.balance()
+        self.gap()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(5, r"Chains with short memories", r"What if the next step depends on this one?", part=5)
-        with self.voiceover("Chapter five. Markov chains."):
+        card = chapter_card(10, r"Chains with short memories", r"What if the next step depends on this one?", part=PART)
+        with self.voiceover("Chapter ten. Markov chains."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -203,6 +205,119 @@ class Markov(VoiceoverScene):
                           ChangeDecimalToValue(sv, k), FadeIn(dots[k]), run_time=0.9)
             vo.wait_until("d")
             self.play(Create(VMobject(color=C.SURPRISE, stroke_width=2).set_points_as_corners(pts)), FadeIn(lam_l))
+        bars.freeze()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def balance(self):
+        d = load("mixing")
+        colors = {r"\pi_i P_{ij}": DATA, r"\pi_j P_{ji}": C.BITS}
+        rows = [
+            cmath(r"\pi_i P_{ij}", "=", r"\pi_j P_{ji}", colors=colors, font_size=40),
+            cmath(r"\textstyle\sum_i \pi_i P_{ij}", "=", r"\pi_j \textstyle\sum_i P_{ji} = \pi_j", font_size=40),
+            cmath(r"\pi P", "=", r"\pi", font_size=40),
+        ]
+        whys = [why(r"detailed balance: \ as much flows $i \to j$ as $j \to i$"),
+                why(r"sum over $i$; \ a row of $P$ adds to $1$"),
+                why(r"so $\pi$ is stationary")]
+        step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.4, buff=0.55, edge=6.8)
+        pair = str(d["asym_pair"])
+        a, b = pair[0], pair[1]
+        fij, fji = float(d["flow_ij"]), float(d["flow_ji"])
+        nm = {" ": r"space"}
+
+        def nmf(c):
+            return nm.get(c, rf"``{c}''")
+
+        bars = VGroup(
+            VGroup(label(rf"{nmf(a)} then {nmf(b)}", font_size=26, color=DATA),
+                   Rectangle(width=max(60 * fij, 0.05), height=0.4, stroke_width=0, fill_color=DATA, fill_opacity=0.85),
+                   MathTex(f"{100 * fij:.2f}\\%", font_size=28, color=DATA)).arrange(RIGHT, buff=0.25),
+            VGroup(label(rf"{nmf(b)} then {nmf(a)}", font_size=26, color=C.BITS),
+                   Rectangle(width=max(60 * fji, 0.05), height=0.4, stroke_width=0, fill_color=C.BITS, fill_opacity=0.85),
+                   MathTex(f"{100 * fji:.2f}\\%", font_size=28, color=C.BITS)).arrange(RIGHT, buff=0.25),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.0, -2.2, 0])
+        bt = label(r"English is not reversible: \ of all letter pairs in Part 1's books", font_size=24, color=GREY_A)
+        bt.next_to(bars, UP, buff=0.25).align_to(bars, LEFT)
+        big = max(fij, fji) / min(fij, fji)
+        with self.voiceover(
+            "There is an easy way to know a distribution is stationary without solving for an eigenvector. "
+            "<bookmark mark='a'/> Suppose that, in it, as much probability flows from i to j in one step as from j "
+            "to i. That's called detailed balance. <bookmark mark='b'/> Sum over i, <bookmark mark='c'/> and pi "
+            "times P is pi: balanced flows mean nothing changes. <bookmark mark='d'/> It's enough, not necessary. "
+            f"English isn't balanced: the pair e then space is {big:.0f} times as common as space then e, because "
+            "words end in e far more often than they start with it. But when we build chains to sample from a "
+            "distribution, in chapter thirteen, detailed balance is how we make sure they land on it."
+        ) as vo:
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            self.play(FadeIn(bt), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in bars], lag_ratio=0.4))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def gap(self):
+        d = load("mixing")
+        xs, U, pi = np.asarray(d["xs"]), np.asarray(d["U"]), np.asarray(d["pi"])
+        snaps, ts = np.asarray(d["snaps"]), [int(t) for t in d["ts"]]
+        betas, gap, tmix, lo, hi = (np.asarray(d[k], float) for k in ("betas", "gap", "tmix", "lower", "upper"))
+        # the chain: a walk on 41 sites in a double well, its distribution from the left end
+        bars = LiveBars(np.minimum(snaps[0], 0.2), max_value=0.2, height=2.6, bar_width=0.11,
+                        gap=0.03, colors=WALK)
+        bars.place(-0.6, x=-3.4)
+        ghost = VGroup(*[Rectangle(width=0.11, height=max(2.6 * min(v, 0.2) / 0.2, 0.002), stroke_color=WHITE,
+                                   stroke_width=1, fill_opacity=0).move_to([bars._cx(i) - 3.4, -0.6 + 1.3 * min(v, 0.2) / 0.2, 0])
+                         for i, v in enumerate(pi)])
+        Uc = VMobject(color=MODEL, stroke_width=3).set_points_smoothly(
+            [np.array([bars._cx(i) - 3.4, -1.5 - 0.35 * u, 0]) for i, u in enumerate(U)])
+        Ul = label(r"the energy $U$: \ two wells", font_size=20, color=MODEL).next_to(Uc, DOWN, buff=0.1)
+        tv = Integer(0, font_size=30, color=C.BITS)
+        tl = VGroup(label(r"step", font_size=26), tv).arrange(RIGHT, buff=0.15).move_to([-3.4, 3.0, 0])
+        head = label(r"$41$ sites, \ $\pi \propto e^{-\beta U}$, \ from the left end", font_size=26).next_to(tl, DOWN, buff=0.2)
+        gl = label(r"outlines: \ the stationary distribution", font_size=20, color=GREY_A).next_to(ghost, UP, buff=0.15).shift(DOWN * 0.1 + RIGHT * 1.0)
+        # mixing time against relaxation time
+        ax = Axes(x_range=[2, 8, 1], y_range=[2, 10, 2], x_length=5.6, y_length=4.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.4, -0.2, 0])
+        xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 2), DOWN, buff=0.1) for v in (2, 4, 6, 8)])
+        yt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(2, v), LEFT, buff=0.1) for v in (2, 6, 10)])
+        xl = label(r"$1/\text{gap}$: \ the relaxation time", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        yl = label(r"steps to mix \ (within $\tfrac14$)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        lt = np.log10(1 / gap)
+        dots = VGroup(*[Dot(ax.c2p(a, math.log10(b)), radius=0.06, color=C.BITS) for a, b in zip(lt, tmix)])
+        lo_c = curve(ax, lt, np.log10(np.maximum(lo, 1)), color=GREY_B, stroke_width=2)
+        hi_c = curve(ax, lt, np.minimum(np.log10(hi), 10), color=GREY_B, stroke_width=2)
+        bl = label(r"bounds: \ $(t_{\mathrm{rel}} - 1)\ln 2 \;\le\; t_{\mathrm{mix}} \;\le\; t_{\mathrm{rel}}\ln\frac{4}{\pi_{\min}}$",
+                   font_size=20, color=GREY_B).next_to(ax, DOWN, buff=0.65)
+        k = list(betas).index(2.0)
+        with self.voiceover(
+            "How fast a chain forgets is set by its second eigenvalue; one minus it is the spectral gap. A chain "
+            "with a bottleneck has a tiny gap. <bookmark mark='a'/> Here is a walk on forty-one sites, aiming at a "
+            "distribution with two wells and a barrier between them. Start at the left end. <bookmark mark='b'/> "
+            "The left well fills within a few hundred steps, <bookmark mark='c'/> but crossing the barrier takes "
+            f"hundreds of thousands: after {ts[-1]:,} steps the right well is still filling. <bookmark mark='d'/> "
+            "Raise the barrier and the gap shrinks. Plotted against one over the gap, the steps it takes to mix "
+            f"rise along a line of slope {float(d['slope']):.2f}, from {int(tmix[0]):,} to {int(tmix[-1]):,}, between "
+            "the two bounds the theory gives. That is why samplers stuck between the modes of a distribution are "
+            "the central difficulty of chapter thirteen."
+        ) as vo:
+            self.play(FadeIn(tl), FadeIn(head), FadeIn(bars), Create(ghost), FadeIn(gl), Create(Uc), FadeIn(Ul))
+            vo.wait_until("a")
+            vo.wait_until("b")
+            for j in (1, 2, 3):
+                self.play(*bars.to(np.minimum(snaps[j], 0.2)), ChangeDecimalToValue(tv, ts[j]), run_time=1.0)
+            vo.wait_until("c")
+            for j in (4, 5, 6):
+                self.play(*bars.to(np.minimum(snaps[j], 0.2)), ChangeDecimalToValue(tv, ts[j]), run_time=1.0)
+            vo.wait_until("d")
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
+            self.play(Create(lo_c), Create(hi_c), FadeIn(bl), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.15))
+            self.play(Indicate(dots[k], color=WHITE))
         bars.freeze()
         self.wait(0.3)
         self.clear_scene()

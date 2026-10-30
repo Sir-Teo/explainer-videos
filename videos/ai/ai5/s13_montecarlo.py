@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MODEL, curve, load, normal_pdf
+from videos.ai.ai5.common import DATA, MODEL, PART, curve, load, normal_pdf
 
 TAIL = C.SURPRISE
 
@@ -13,14 +13,16 @@ TAIL = C.SURPRISE
 class MonteCarlo(VoiceoverScene):
     def construct(self):
         self.card()
+        self.origins()
         self.darts()
         self.rate()
         self.rare()
+        self.ess()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(6, r"Answers from random samples", r"Can dice compute $\pi$?", part=5)
-        with self.voiceover("Chapter six. Monte Carlo."):
+        card = chapter_card(11, r"Answers from random samples", r"Can dice compute $\pi$?", part=PART)
+        with self.voiceover("Chapter eleven. Monte Carlo."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -114,11 +116,12 @@ class MonteCarlo(VoiceoverScene):
         cite_ = cite(r"N.~Metropolis \& S.~Ulam, \textit{The Monte Carlo Method} (1949)", corner=DR)
         with self.voiceover(
             "Repeat the experiment many times at each size, and measure the typical error. On log scales, where each "
-            "tick is ten times the last, it falls on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the "
+            f"tick is ten times the last, it falls on a straight line with slope {slope:.2f}. <bookmark mark='a'/> The "
+            "error shrinks like one over the "
             "square root of the number of samples: every extra digit of accuracy costs a hundred times more "
             "samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random "
             "samples works the same in a million dimensions, where any grid would be hopeless. That's why "
-            "Monte Carlo, named by Ulam and Metropolis after the casino, is everywhere in machine learning."
+            "Monte Carlo is everywhere in machine learning."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(x10), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(LaggedStart(*[FadeIn(x, scale=0.5) for x in dots], lag_ratio=0.15), run_time=1.5)
@@ -149,7 +152,8 @@ class MonteCarlo(VoiceoverScene):
         tail_l = label(r"above $4$", font_size=26, color=TAIL).next_to(edge, UP, buff=0.1)
         g = np.random.default_rng(5)
         zs = g.normal(size=400)
-        zs[:2] = [4.21, 4.47]  # two of the 10,000 (drawn here as 400) land above 4, as in the real run
+        zs = np.where(zs > 4, 3.9, zs)
+        zs[:hits] = np.linspace(4.21, 4.47, hits) if hits > 1 else [4.21] * hits  # the real run's hits above 4
         rug_p = VGroup(*[Line(ax.c2p(z, 0) + DOWN * 0.12, ax.c2p(z, 0) + DOWN * 0.32,
                               color=TAIL if z > 4 else DATA, stroke_width=2.5 if z > 4 else 1.2) for z in zs])
         ys = np.asarray(d["is_y"])
@@ -168,20 +172,19 @@ class MonteCarlo(VoiceoverScene):
         with self.voiceover(
             "Monte Carlo has one weakness: rare events. How often does a standard bell curve, the one centred at "
             "zero with a width of one, land above four? "
-            "Exactly, about three times in a hundred thousand. <bookmark mark='a'/> Draw ten thousand samples, and "
-            "only two land there. The estimate is off by a factor of six."
+            f"Exactly, about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> Draw {n:,} samples, "
+            f"and only {hits} land there. The estimate is off by a factor of {plain / true:.0f}."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(p), FadeIn(pl))
             self.play(Create(edge), FadeIn(tail_l), FadeIn(truth))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rug_p], lag_ratio=0.004), run_time=1.5)
-            self.play(Indicate(rug_p[0], color=TAIL, scale_factor=2.5), Indicate(rug_p[1], color=TAIL, scale_factor=2.5),
-                      FadeIn(r1))
+            self.play(*[Indicate(rug_p[i], color=TAIL, scale_factor=2.5) for i in range(hits)], FadeIn(r1))
         with self.voiceover(
             "The fix is to cheat, and then correct for it. <bookmark mark='a'/> Draw from a different bell, one "
             "that lands out there half the time. <bookmark mark='b'/> Then weight each sample by how much more "
             "likely it was under the real distribution than under the one you drew from. <bookmark mark='c'/> Same "
-            "number of samples, and now the answer is within one percent. This is importance sampling, and it comes "
+            f"number of samples, and now the answer is within {100 * abs(is_est / true - 1):.1f} percent. This is importance sampling, and it comes "
             "back when models learn from samples drawn by an older version of themselves, in reinforcement learning."
         ) as vo:
             vo.wait_until("a")
@@ -190,5 +193,79 @@ class MonteCarlo(VoiceoverScene):
             self.play(Write(f))
             vo.wait_until("c")
             self.play(FadeIn(r2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def origins(self):
+        cards = VGroup(
+            history_card(1946, r"Stanis\l aw Ulam", r"recovering from an illness, \ asks the odds of winning solitaire: \ "
+                         r"easier to play a hundred games and count", width=4.2),
+            history_card(1947, r"John von Neumann", r"proposes following random neutrons through a bomb core, \ one "
+                         r"by one, \ on the new ENIAC", width=4.2),
+            history_card(1948, r"Kl\'ara D\'an von Neumann \& Nicholas Metropolis",
+                         r"run the first Monte Carlo programs on ENIAC; \ Metropolis names the method", width=4.2),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.2)
+        head = label(r"Monte Carlo, \ Los Alamos", font_size=38).to_edge(UP, buff=0.4)
+        cite_ = cite(r"N.~Metropolis, \textit{The Beginning of the Monte Carlo Method}, \ Los Alamos Science (1987)",
+                     corner=DR)
+        with self.voiceover(
+            "The method was born at Los Alamos. <bookmark mark='a'/> In 1946 the mathematician Stanislaw Ulam, "
+            "recovering from an illness, wondered how often a game of solitaire comes out, and saw that it was "
+            "easier to play a hundred games and count than to calculate. <bookmark mark='b'/> John von Neumann "
+            "turned the idea into a way to follow neutrons through a bomb core, <bookmark mark='c'/> and in 1948 "
+            "Klara von Neumann and Nicholas Metropolis ran it on ENIAC. Metropolis named it after the casino in "
+            "Monaco."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cite_))
+            for k, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                self.play(FadeIn(cards[k], shift=UP * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def ess(self):
+        d = load("ess")
+        dims, ess, th = np.asarray(d["dims"], float), np.asarray(d["ess"]), np.asarray(d["theory"])
+        n, s = int(d["n"]), float(d["s"])
+        f = cmath(r"\text{ESS}", "=", r"\frac{\big(\sum_i w_i\big)^2}{\sum_i w_i^2}", font_size=40,
+                  colors={r"\text{ESS}": C.BITS}).move_to([3.6, 2.2, 0])
+        fn = label(r"how many of the weighted samples really count", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.15)
+        ax = Axes(x_range=[0, 2.4, 1], y_range=[-3, 4, 1], x_length=6.4, y_length=4.8, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.8, -0.5, 0])
+        xt = VGroup(*[MathTex(str(int(v)), font_size=20, color=GREY_B).next_to(ax.c2p(math.log10(v), -3), DOWN, buff=0.1)
+                      for v in (1, 10, 100)])
+        yt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
+                      for t, v in (("10^{-2}", -2), ("1", 0), ("10^{2}", 2), ("10^{4}", 4))])
+        xl = label(r"dimension", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        yl = label(rf"effective samples, \ of ${n:,}$".replace(",", "{,}"), font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        lx = np.log10(dims)
+        dd = np.linspace(1, 250, 200)
+        thc = curve(ax, np.log10(dd), np.maximum(np.log10(n / (s ** 2 / math.sqrt(2 * s ** 2 - 1)) ** dd), -3),
+                    color=WHITE, stroke_width=2.5)
+        dots = VGroup(*[Dot(ax.c2p(a, math.log10(v)), radius=0.045, color=C.BITS, fill_opacity=0.8)
+                        for row in ess for a, v in zip(lx, row)])
+        leg = VGroup(label(r"measured, \ five seeds", font_size=20, color=C.BITS),
+                     label(r"theory: \ $n\,\big(s^2/\sqrt{2s^2 - 1}\big)^{-d}$", font_size=20, color=WHITE))
+        leg.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.c2p(0.05, -1.4), RIGHT, buff=0.0)
+        setup = label(rf"target: \ a standard bell in $d$ dimensions; \\ proposal: \ ${s:g}\times$ wider", font_size=22,
+                      color=GREY_A).next_to(fn, DOWN, buff=0.45).align_to(fn, LEFT)
+        m = ess.mean(0)
+        i50, i200 = list(dims).index(50), list(dims).index(200)
+        with self.voiceover(
+            "Importance sampling has a weakness of its own, and it is the weights. <bookmark mark='a'/> Count how many "
+            "weighted samples are really doing the work: the effective sample size, the squared sum of the weights "
+            f"over the sum of their squares. <bookmark mark='b'/> Aim at a bell with a proposal just {100 * (s - 1):.0f} "
+            f"percent wider. In one dimension, {m[0]:,.0f} of {n:,} samples count. In fifty, {m[i50]:.0f}. In two "
+            f"hundred, the measurement says {m[i200]:.0f}, and the theory says even that is far too hopeful: "
+            f"{th[i200]:.3f}. A handful of samples carry all the weight. <bookmark mark='c'/> That is why "
+            "reinforcement learning clips its importance ratios, in part twenty-six."
+        ) as vo:
+            self.play(Write(f), FadeIn(fn))
+            vo.wait_until("a")
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(setup))
+            vo.wait_until("b")
+            self.play(Create(thc), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), FadeIn(leg), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
