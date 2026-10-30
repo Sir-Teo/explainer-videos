@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, SCORE, follow, load, ramp, swarm
+from videos.ai.ai5.common import DATA, HIST, PART, SCORE, era_strip, follow, load, ramp, swarm
 
 K = 1.3  # the computed plane, drawn 1.3 times life size
 
@@ -23,6 +23,7 @@ def score_at(data, x, t, s0=0.03):
 class Hook(VoiceoverScene):
     def construct(self):
         self.out_of_noise()
+        self.era()
         self.plan()
 
     # ------------------------------------------------------------------
@@ -91,18 +92,64 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plan(self):
-        title = label(r"Part 5: \ Randomness in Motion", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"describe it, \ learn from it, \ draw from it, \ watch it move", font_size=32, color=C.BITS)
-        sub.next_to(title, DOWN, buff=0.25)
-        smap = series_map(current=5, done=4).scale(0.85).move_to(DOWN * 0.9)
+    def era(self):
+        """How we got here: from a gamblers' letter in 1654 to diffusion models, evenly spaced (not to scale)."""
+        events = [
+            (1654, r"Pascal, Fermat: \\ dividing the stakes"),
+            (1713, r"Bernoulli: \\ the law of large numbers"),
+            (1733, r"de Moivre: \\ the bell curve"),
+            (1763, r"Bayes: \\ inverse probability"),
+            (1809, r"Gauss: \\ errors, least squares"),
+            (1905, r"Einstein: \\ Brownian motion"),
+            (1922, r"Fisher: \\ likelihood"),
+            (1944, r"It\^o: \\ stochastic calculus"),
+            (1953, r"Metropolis et al.: \\ MCMC"),
+            (2020, r"diffusion models; \\ nucleus sampling"),
+        ]
+        axis, marks, skel = era_strip(events)
+        head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
+        tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "So this part is about randomness: how to describe it, how to learn from it, how to draw samples from it, "
-            "and how it moves. <bookmark mark='a'/> It's the last piece of mathematics we need before the models "
-            "themselves."
+            "The mathematics is older than computers. It began in 1654, with letters between Pascal and Fermat "
+            "about how to split the stakes of an unfinished game. <bookmark mark='a'/> Bernoulli proved that "
+            "averages settle down; <bookmark mark='b'/> de Moivre found the bell curve; <bookmark mark='c'/> Bayes "
+            "and Laplace turned probability around, from causes to effects and back; <bookmark mark='d'/> Gauss "
+            "used it to fit orbits. <bookmark mark='e'/> Einstein explained the jiggling of pollen, "
+            "<bookmark mark='f'/> Fisher made likelihood the way to fit models, <bookmark mark='g'/> and Ito gave "
+            "random motion its own calculus. <bookmark mark='h'/> At Los Alamos, the first computers were set to "
+            "sampling, <bookmark mark='i'/> and today the same ideas choose every word a chatbot writes and turn "
+            "noise into pictures."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(sub))
+            self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
+            self.play(FadeIn(marks[0], shift=UP * 0.2))
+            for k, mk in enumerate("abcdefghi"):
+                vo.wait_until(mk)
+                self.play(FadeIn(marks[k + 1], shift=(UP if (k + 1) % 2 == 0 else DOWN) * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        title = label(rf"Part {PART}: \ Randomness in Motion", font_size=48).to_edge(UP, buff=0.45)
+        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.5)
+        obj = objectives_card([
+            r"the bell curve: \ why sums are Gaussian, \ in one dimension and many",
+            r"fitting and believing: \ likelihood, \ Fisher information, \ Bayes, \ maximum entropy",
+            r"how far averages stray: \ the concentration inequalities",
+            r"drawing samples: \ from inverse CDFs to the Gumbel trick, \ and how language models choose words",
+            r"Markov chains and Monte Carlo: \ mixing, \ importance weights, \ gradients of averages, \ "
+            r"Metropolis and Langevin",
+            r"random motion: \ Brownian paths, \ It\^o's lemma, \ SDEs, \ and the Fokker--Planck equation",
+        ], font_size=24).move_to(DOWN * 0.35)
+        with self.voiceover(
+            "This is Part 5 of AI, Built, the last part of the foundations. <bookmark mark='a'/> In it: why sums "
+            "come out bell-shaped, in one dimension and many; how to fit a model, how precise a fit can be, and how "
+            "to hold a belief; how far averages can stray; how to draw samples, and how a language model picks its "
+            "next word; Markov chains and Monte Carlo; and random motion, with a calculus of its own. Every result "
+            "is computed here, on a laptop."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeIn(smap))
+            self.play(FadeOut(smap), FadeIn(obj))
         self.wait(0.5)
         self.clear_scene()
