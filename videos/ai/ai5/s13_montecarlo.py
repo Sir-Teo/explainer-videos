@@ -230,8 +230,8 @@ class MonteCarlo(VoiceoverScene):
         d = load("ess")
         dims, ess, th = np.asarray(d["dims"], float), np.asarray(d["ess"]), np.asarray(d["theory"])
         n, s = int(d["n"]), float(d["s"])
-        f = cmath(r"\text{ESS}", "=", r"\frac{\big(\sum_i w_i\big)^2}{\sum_i w_i^2}", font_size=40,
-                  colors={r"\text{ESS}": C.BITS}).move_to([3.6, 2.2, 0])
+        f = cmath(r"\mathrm{ESS}", "=", r"\frac{\big(\sum_i w_i\big)^2}{\sum_i w_i^2}", font_size=40,
+                  colors={r"\mathrm{ESS}": C.BITS}).move_to([3.6, 2.2, 0])
         fn = label(r"how many of the weighted samples really count", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.15)
         ax = CornerAxes(x_range=[0, 2.4, 1], y_range=[-3, 4, 1], x_length=6.4, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.8, -0.5, 0])

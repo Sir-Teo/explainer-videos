@@ -673,7 +673,8 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 2 | **complete**, English and Chinese | 53 min |
 | 13 | **complete**, English and Chinese (19 chapters) | 58 min |
 | 21 | **complete**, English and Chinese (19 chapters) | 57 min |
-| 4, 5, 6, 11 | expanding | — |
+| 5, 6, 7, 11 | expanding | — |
+| 4 | **complete**, English and Chinese (19 chapters) | 48 min |
 | 16 | **complete**, English and Chinese (18 chapters) | 50 min |
 | 3 | **complete**, English and Chinese (19 chapters) | 50 min |
 | 15 | **complete**, English and Chinese (17 chapters) | 57 min |
@@ -683,7 +684,7 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 22 | **complete**, English and Chinese (18 chapters) | 50 min |
 | 12 | **complete**, English and Chinese (19 chapters) | 57 min |
 | 19 | **complete**, English and Chinese (19 chapters) | 57 min |
-| 7, 8 | existing, 8–25 min each; to expand | 8–25 min |
+| 8 | existing, 8–25 min each; to expand | 8–25 min |
 | 9 | **complete**, English and Chinese (17 chapters) | 56 min |
 | 10 | **complete**, English and Chinese (18 chapters) | 59 min |
 | 18 | **complete**, English and Chinese (20 chapters) | 60 min |

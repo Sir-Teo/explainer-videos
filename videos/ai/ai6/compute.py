@@ -714,7 +714,7 @@ def compute_lda():
     top = [p["vocab"][i] for i in np.argsort(-np.abs(we))[:6]]
     signs = [int(np.sign(we[i])) for i in np.argsort(-np.abs(we))[:6]]
     rank_SB = int(np.linalg.matrix_rank(SB))
-    return dict(w=w, c=c, angles=angles, sep=sep, best=best, acc2=acc, mA=A.mean(0), mD=D.mean(0),
+    return dict(w=w, c=c, angles=angles, sep=sep, best=best, acc2=acc, mA=A.mean(0), mD=D.mean(0), SB=SB, SW=SW,
                 covA=np.cov(A.T), covD=np.cov(D.T), eigvals=vals[:5], cos_eig=cos_eig, rq=rq, cos_ls=cos_ls,
                 acc70=acc70, top=top, top_signs=signs, rank_SB=rank_SB)
 

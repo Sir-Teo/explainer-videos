@@ -158,8 +158,8 @@ class Kernels(VoiceoverScene, ThreeDScene):
         chk = label(rf"checked on $1{{,}}000$ random pairs: \ largest difference ${sci_tex(k['poly_err'])}$",
                     font_size=22, color=HL).to_edge(DOWN, buff=0.4)
         errs = np.asarray(k["taylor_err"])
-        g = plot([0.5, len(errs) + 0.5, 5], [-8, 0.2, 2], x_length=4.2, y_length=2.0, xticks=[1, 10, 20],
-                 yticks=[0, -4, -8], yfmt=lambda v: f"10^{{{int(v)}}}", center=[3.4, -2.2, 0],
+        g = plot([0.5, len(errs) + 0.5, 5], [-8, 0.2, 2], x_length=4.2, y_length=1.5, xticks=[1, 10, 20],
+                 yticks=[0, -4, -8], yfmt=lambda v: f"10^{{{int(v)}}}", center=[3.4, -2.55, 0],
                  xlabel=r"features kept", ylabel=r"error of the truncated Gaussian kernel")
         tc = curve(g.ax, np.arange(1, len(errs) + 1), np.log10(errs), GOLD, stroke_width=3)
         within = next((w_ for lim_, w_ in ((1e-7, "a ten-millionth"), (1e-6, "a millionth"), (1e-5, "a hundred-thousandth"),

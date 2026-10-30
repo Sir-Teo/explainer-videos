@@ -196,6 +196,24 @@ class LDA(VoiceoverScene):
                        *[data_text(w, font=MONO, font_size=22, color=DICKENS if s_ > 0 else AUSTEN)
                          for w, s_ in zip(top, sg)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.4)
         same = ld["cos_ls"] > 0.9999
+
+        def heat(M, title):
+            M = np.asarray(M, float)
+            v = np.abs(M) / np.abs(M).max()
+            v = v ** 0.5
+            col = np.array(ManimColor(HL).to_rgb())
+            rgb = (v[..., None] * col[None, None] + (1 - v[..., None]) * np.array([0.07, 0.09, 0.13]))
+            img = ImageMobject((np.concatenate([rgb, np.ones(v.shape + (1,))], -1) * 255).astype(np.uint8))
+            img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+            img.scale_to_fit_width(1.9)
+            return Group(img, SurroundingRectangle(img, buff=0, color=GREY_C, stroke_width=1),
+                         label(title, font_size=20, color=GREY_A).next_to(img, DOWN, buff=0.1))
+
+        hb = heat(ld["SB"], r"$S_B$: \ rank $1$")
+        hw = heat(ld["SW"], r"$S_W$: \ full rank")
+        mats = Group(hb, hw).arrange(RIGHT, buff=0.4).to_corner(DR, buff=0.5).shift(UP * 0.2)
+        mats_t = label(r"the two $70 \times 70$ scatter matrices \ (size of each entry)", font_size=20,
+                       color=GREY_B).next_to(mats, UP, buff=0.15)
         names = ", ".join(f"'{w}'" for w in top[:3])
         also = ("It also agrees with least squares on a zero-one target: with two classes, the two are the same line."
                 if same else "And least squares on a zero-one target points the same way.")
@@ -211,17 +229,19 @@ class LDA(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             step(0)
+            self.play(FadeIn(mats), FadeIn(mats_t))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(checks[0]), FadeIn(checks[1]))
+            self.play(Indicate(hb, color=HL, scale_factor=1.05), FadeIn(checks[0]), FadeIn(checks[1]))
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
             self.play(FadeIn(checks[2]))
             self.play(FadeIn(checks[3]))
             vo.wait_until("f")
+            self.play(FadeOut(mats), FadeOut(mats_t))
             self.play(FadeIn(checks[4]), FadeIn(words))
         self.wait(0.3)
         self.clear_scene()
