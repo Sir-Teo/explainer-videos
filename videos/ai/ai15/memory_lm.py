@@ -108,7 +108,8 @@ def stream(model: pocket.PocketGPT, ids, policies: list[str], budget: int, sinks
 
 
 @torch.no_grad()
-def forward_masked(model: pocket.PocketGPT, ids, policy: str, budget: int = 0, sinks: int = 4) -> np.ndarray:
+def forward_masked(model: pocket.PocketGPT, ids, policy: str, budget: int = 0, sinks: int = 4,
+                   predict: bool = False) -> np.ndarray:
     """The same reading done in one parallel pass, for the policies whose cache doesn't depend on the attention:
     'full' (everything, positions 0, 1, 2, ... past the 256 trained on), 'window' (the last ``budget`` tokens; with
     positions counted inside the cache, a key's distance from the query is the same as in the text, so this is a
@@ -116,7 +117,7 @@ def forward_masked(model: pocket.PocketGPT, ids, policy: str, budget: int = 0, s
     values are computed once, from what it could see when it was read, exactly as token by token."""
     cfg = model.cfg
     H, hd = cfg.heads, cfg.d // cfg.heads
-    x = torch.tensor([ids[:-1]])
+    x = torch.tensor([list(ids[:-1])])
     T = x.shape[1]
     t = torch.arange(T)
     rel = t[:, None] - t[None, :]
@@ -149,6 +150,8 @@ def forward_masked(model: pocket.PocketGPT, ids, policy: str, budget: int = 0, s
         h = h + a.out(y.transpose(1, 2).reshape(1, T, H * hd))
         h = h + b.mlp(b.n2(h))
     logits = model.head(model.norm(h))[0]
+    if predict:
+        return logits.argmax(-1).numpy()
     return F.cross_entropy(logits, torch.tensor(ids[1:]), reduction="none").numpy()
 
 

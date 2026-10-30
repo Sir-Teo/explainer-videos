@@ -226,3 +226,15 @@ def bits_grid(x, side=10, size=2.4, on=WHITE, off="#1B2230") -> VGroup:
             g.add(Square(cell * 0.94, stroke_width=0, fill_color=on if x[i * side + j] > 0 else off, fill_opacity=1)
                   .move_to([j * cell, -i * cell, 0]))
     return g.center()
+
+
+def heat_fixed(M, width, height, color, vmax=1.0, gamma=0.6) -> ImageMobject:
+    """A matrix as a picture on a fixed scale: dark for 0, ``color`` at ``vmax`` (so small values look small)."""
+    M = np.asarray(M, float)
+    v = np.clip(M / vmax, 0, 1) ** gamma
+    c = np.array(ManimColor(color).to_rgb())
+    bg = np.array(ManimColor("#121722").to_rgb())
+    rgb = bg[None, None] * (1 - v[..., None]) + c[None, None] * v[..., None]
+    img = ImageMobject((np.concatenate([rgb, np.ones(M.shape + (1,))], -1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+    return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
