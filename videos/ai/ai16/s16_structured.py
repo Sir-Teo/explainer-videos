@@ -99,7 +99,8 @@ class Structured(VoiceoverScene):
             rngl = Line([-0.6 + W * (min(a_, hi) - lo) / (hi - lo), y, 0], [-0.6 + W * (min(b_, hi) - lo) / (hi - lo), y, 0],
                         color=WHITE, stroke_width=2)
             nm_ = label(nm, font_size=20, color=col).move_to([-0.8, y, 0], aligned_edge=RIGHT)
-            v = MathTex(f"{m_:.3f}" + (r"\,\to" if m_ > hi else ""), font_size=22, color=col).next_to(bar, RIGHT, buff=0.12)
+            v = MathTex(f"{m_:.3f}" + (r"\,\to" if m_ > hi else ""), font_size=22, color=col)
+            v.next_to([max(bar.get_right()[0], rngl.get_right()[0]), y, 0], RIGHT, buff=0.15)
             rows.add(VGroup(nm_, bar, rngl, v))
         head = label(r"held-out bits per character, \ every weight matrix pruned \ (three seeds: \ white lines)", font_size=22,
                      color=GREY_A).to_edge(UP, buff=0.3)
@@ -192,7 +193,7 @@ class Structured(VoiceoverScene):
         yl = label(r"ReLU units exactly zero \ (the lottery network)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         ln = VGroup(*[curve(ax, z[:, 0], z[:, 1 + j], col, 3) for z in Z for j, col in ((0, C.MLP), (1, C.BITS))])
         names = VGroup(label(r"first hidden layer", font_size=20, color=C.MLP), label(r"second hidden layer", font_size=20, color=C.BITS))
-        names.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(ax, RIGHT, buff=0.3).shift(UP * 0.8)
+        names.arrange(RIGHT, buff=0.5).next_to(xl, DOWN, buff=0.2)
         fin = float(np.mean([z[-1, 1:].mean() for z in Z]))
         cards = VGroup(
             history_card(2022, r"Zonglin Li et al.\ (Google)", rf"\textit{{The Lazy Neuron Phenomenon}}: \ only "
