@@ -57,13 +57,13 @@ class Topics(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(h, shift=UP * 0.2), FadeIn(not6), FadeIn(graph))
             vo.wait_until("a")
-            self.play(Indicate(b, color=HIDDEN, scale_factor=1.2), FadeIn(story[0]))
+            self.play(Circumscribe(b, color=HIDDEN), FadeIn(story[0]))
             vo.wait_until("b")
-            self.play(Indicate(th, color=HIDDEN, scale_factor=1.2), FadeIn(story[1]))
+            self.play(Circumscribe(th, color=HIDDEN), FadeIn(story[1]))
             vo.wait_until("c")
-            self.play(Indicate(VGroup(z, w), color=SEEN, scale_factor=1.1), FadeIn(story[2]))
+            self.play(Circumscribe(VGroup(z, w), color=SEEN), FadeIn(story[2]))
             vo.wait_until("d")
-            self.play(Indicate(w, color=SEEN, scale_factor=1.2), *[Indicate(m, color=HIDDEN) for m in (th, z, b)])
+            self.play(Circumscribe(w, color=SEEN), *[Circumscribe(m, color=HIDDEN) for m in (th, z, b)])
         self.wait(0.3)
         self.clear_scene()
 
@@ -79,8 +79,10 @@ class Topics(VoiceoverScene):
         for j, k in enumerate(show):
             cols.add(word_col(snaps[keys[0]][k][:6], TOPIC_COLORS[k], font_size=22))
         cols.arrange(RIGHT, buff=0.35)
+        w0 = cols.width
         if cols.width > 8.6:
             cols.width = 8.6
+        fscale = cols.width / w0
         cols.move_to([0, 0.5, 0]).to_edge(LEFT, buff=0.4)
         heads = VGroup(*[label(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
                          for j, (k, c) in enumerate(zip(show, cols))])
@@ -112,7 +114,7 @@ class Topics(VoiceoverScene):
                 new = VGroup()
                 for c, k in zip(cols, show):
                     nc = word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22)
-                    nc.scale(c[0].height / nc[0].height).move_to(c)
+                    nc.scale(fscale).move_to(c)
                     new.add(nc)
                 self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(max(int(key), 1)),
                           ChangeDecimalToValue(rv, int(key)), run_time=1.4)

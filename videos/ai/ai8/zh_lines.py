@@ -487,7 +487,7 @@ ZH = {
     "each trained until its training loss is equally small":
         "每个都训练到训练损失同样小为止",
 
-    "f\"each trained until its training loss falls below":
+    "f'each trained until its training loss falls below":
         "每个都训练到训练损失低于{s['target']:g}为止；比较的是在四千轮之内达到这一点的{n_ok}个",
 
     "f'Large batches do end sharper":

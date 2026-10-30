@@ -20,8 +20,8 @@ class Sharpness(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def idea(self):
-        ax = Axes(x_range=[-3, 3, 1], y_range=[0, 2.4, 1], x_length=8.4, y_length=3.6, tips=False,
-                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-1.4, -0.9, 0])
+        ax = Axes(x_range=[-3, 3, 1], y_range=[0, 2.4, 1], x_length=7.2, y_length=3.6, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.7, -0.9, 0])
 
         def L(x):
             return 1.6 - 1.3 * math.exp(-((x + 1.4) / 0.75) ** 2) - 1.45 * math.exp(-((x - 1.5) / 0.18) ** 2)
@@ -115,8 +115,9 @@ class Sharpness(VoiceoverScene):
             "inconsistently, as Andriushchenko and colleagues found in 2023."
         ) as vo:
             self.play(FadeIn(setup), FadeIn(G), FadeIn(key[:-1]), FadeIn(key[-1]))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.06), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Indicate(key, color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(res))
         self.wait(0.3)
@@ -126,8 +127,10 @@ class Sharpness(VoiceoverScene):
     def rescale(self):
         s = load("sharp")
         al, rs = [float(a) for a in s["alphas"]], np.asarray(s["resc"])
-        G = axes([-0.5, len(al) - 0.5], [0, math.ceil(math.log10(rs.max()) * 2) / 2], x_length=5.6, y_length=3.6,
-                 xticks=list(range(len(al))), xfmt=lambda v: f"{al[int(round(v))]:g}", yticks=[0, 0.5, 1, 1.5],
+        ylo, yhi = math.floor(math.log10(rs.min()) * 2) / 2 - 0.5, math.ceil(math.log10(rs.max()) * 2) / 2
+        G = axes([-0.5, len(al) - 0.5], [ylo, yhi], x_length=5.6, y_length=3.6,
+                 xticks=list(range(len(al))), xfmt=lambda v: f"{al[int(round(v))]:g}",
+                 yticks=[v for v in np.arange(ylo, yhi + 1e-9, 0.5)],
                  yfmt=lambda v: f"{10 ** v:.2g}", xlabel=r"$a$: \ first layer $\times a$, \ second $\div a$",
                  ylabel=r"top Hessian eigenvalue \ (log scale)", center=(3.3, -0.6, 0))
         ax = G.ax
@@ -140,8 +143,8 @@ class Sharpness(VoiceoverScene):
         ]
         whys = [why(r"for $a > 0$"), why(r"the same function, \ for every $x$")]
         step = ladder(self, rows, whys, keep=2, top=2.6, x=-3.4, buff=0.6, edge=6.9)
-        same = label(rf"largest change in any output: \ ${sci(max(s['same'], 1e-16), 0)}$", font_size=22, color=GREY_A)
-        same.next_to(rows[1], DOWN, buff=1.0).align_to(rows[1], LEFT)
+        same = label(rf"largest change in any output: \ ${sci(s['same'], 0)}$" if s["same"] > 0 else
+                     r"largest change in any output: \ exactly $0$", font_size=22, color=GREY_A)
         hist = VGroup(
             history_card(2017, r"L.~Dinh, R.~Pascanu, S.~Bengio \& Y.~Bengio", r"\textit{Sharp Minima Can "
                          r"Generalize for Deep Nets}", width=5.6, font_size=17, color=HIST),
@@ -167,6 +170,7 @@ class Sharpness(VoiceoverScene):
             step(0)
             vo.wait_until("b")
             step(1)
+            same.next_to(rows[1], DOWN, buff=0.5).align_to(rows[1], LEFT)
             self.play(FadeIn(same))
             vo.wait_until("c")
             self.play(FadeIn(G), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bs], lag_ratio=0.2), run_time=1.8)

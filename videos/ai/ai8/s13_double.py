@@ -176,12 +176,13 @@ class DoubleDescent(VoiceoverScene):
             "<bookmark mark='f'/> Past it, with more features than pages, the smallest singular value climbs back "
             "up, and the noise is spread over directions that barely affect new pages."
         ) as vo:
+            self.play(FadeIn(G), FadeIn(H), Create(nl))
+            self.add(sp)
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 step(i)
             vo.wait_until("d")
-            self.play(FadeIn(G), FadeIn(H), Create(nl))
-            self.add(sp)
+            self.play(Indicate(G, color=C.TRUE_P, scale_factor=1.02))
             k1 = show.index(n) if n in show else len(show) // 2
             vo.wait_until("e")
             self.play(k.animate.set_value(k1), run_time=3.0, rate_func=linear)
@@ -214,7 +215,8 @@ class DoubleDescent(VoiceoverScene):
         kn = int(np.argmin(np.abs(ps - n)))
         best = int(np.argmin([rd[:, j].max() for j in range(len(lams))]))
         hist = history_card(2020, r"P.~Nakkiran, P.~Venkat, S.~Kakade \& T.~Ma", r"\textit{Optimal Regularization Can "
-                            r"Mitigate Double Descent}", width=5.6, font_size=18, color=HIST).to_corner(DR, buff=0.3)
+                            r"Mitigate Double Descent}", width=4.4, font_size=18, color=HIST)
+        hist.next_to(key, DOWN, buff=0.4).align_to(key, RIGHT)
         with self.voiceover(
             "The cure follows: don't divide by tiny numbers. Ridge regression adds lambda to each sigma squared, so "
             f"the smallest directions are damped instead of amplified. <bookmark mark='a'/> With lambda {lams[best]:g} "
