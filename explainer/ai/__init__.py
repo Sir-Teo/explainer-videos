@@ -130,6 +130,7 @@ TIMELINE = [
     (1966, r"ELIZA"),
     (1968, r"A* search"),
     (1969, r"\textit{Perceptrons}"),
+    (1970, r"reverse-mode differentiation"),
     (1971, r"STRIPS"),
     (1972, r"Prolog"),
     (1973, r"the Lighthill report"),

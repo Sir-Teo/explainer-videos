@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import GRAD, VALUE
+from videos.ai.ai4.common import GRAD, PART, VALUE
 
 
 def warp(p):
@@ -35,7 +35,7 @@ class Jacobian(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(3, r"Maps that bend: the Jacobian", r"What does a curved map look like up close?", part=4)
+        card = chapter_card(3, r"Maps that bend: the Jacobian", r"What does a curved map look like up close?", part=PART)
         with self.voiceover("Chapter three. Maps that bend."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -99,26 +99,38 @@ class Jacobian(VoiceoverScene):
         p0 = np.array([1.2, 0.6])
         J = jac(*p0)
         det = float(np.linalg.det(J))
-        sq = Square(side_length=1.6, stroke_width=0, fill_color=VALUE, fill_opacity=0.5).move_to([-4.0, 0.3, 0])
-        par = Polygon(*[np.array([*(J @ v), 0]) * 1.6 + np.array([-0.5, 0.3, 0]) for v in
+        dc = definition_card(
+            r"the Jacobian",
+            r"For $f: \mathbb{R}^n \to \mathbb{R}^m$, the $m \times n$ matrix of partial derivatives, $J_{ij} = "
+            r"\partial f_i / \partial x_j$: the one matrix with $f(x + h) = f(x) + J\,h + o(\|h\|)$. \ A gradient is the "
+            r"Jacobian of a function with one output, stood up as a column.", width=12.6, font_size=22)
+        dc.to_edge(UP, buff=0.3)
+        sq = Square(side_length=1.4, stroke_width=0, fill_color=VALUE, fill_opacity=0.5).move_to([-5.0, -1.4, 0])
+        par = Polygon(*[np.array([*(J @ v), 0]) * 1.4 + np.array([-1.9, -1.4, 0]) for v in
                         (np.array([-0.5, -0.5]), np.array([0.5, -0.5]), np.array([0.5, 0.5]), np.array([-0.5, 0.5]))],
                       stroke_width=0, fill_color=GRAD, fill_opacity=0.55)
-        arrow_ = Arrow([-2.9, 0.3, 0], [-1.7, 0.3, 0], color=GREY_B, stroke_width=4)
-        dl = MathTex(rf"\text{{area}} \times \det J = {det:.2f}", font_size=38, color=GRAD).next_to(par, DOWN, buff=0.5)
-        dl.set_x(-2.2)
+        arrow_ = Arrow([-4.1, -1.4, 0], [-3.1, -1.4, 0], color=GREY_B, stroke_width=4)
+        dl = MathTex(rf"\text{{area}} \times \det J = {det:.2f}", font_size=34, color=GRAD).move_to([-3.4, -3.0, 0])
         colors = {r"J_{f \circ g}(x)": WHITE, r"J_f(g(x))": GRAD, r"J_g(x)": VALUE}
-        chain = cmath(r"J_{f \circ g}(x)", "=", r"J_f(g(x))", r"\,", r"J_g(x)", colors=colors, font_size=46)
-        chain.move_to([0, 0.9, 0]).to_edge(RIGHT, buff=0.5)
-        cw = label(r"one map after another: \\ multiply their Jacobians", font_size=28, color=GREY_A).next_to(chain, DOWN, buff=0.35)
+        chain = cmath(r"J_{f \circ g}(x)", "=", r"J_f(g(x))", r"\,", r"J_g(x)", colors=colors, font_size=44)
+        chain.move_to([3.4, -0.9, 0])
+        cw = label(r"one map after another: \\ multiply their Jacobians", font_size=26, color=GREY_A).next_to(chain, DOWN, buff=0.3)
+        shapes = label(r"$(m \times k)\,(k \times n)$: \ the shapes chain like the maps", font_size=22, color=GREY_B)
+        shapes.next_to(cw, DOWN, buff=0.3)
         with self.voiceover(
-            "The Jacobian's determinant, from part three, says how much the map stretches area near that point. "
-            "<bookmark mark='a'/> And the chain rule for maps is matrix multiplication: the Jacobian of one map "
-            "after another is the product of their Jacobians, each taken where its input lands."
+            "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column "
+            "per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a "
+            "single output. <bookmark mark='a'/> The Jacobian's determinant, from part three, says how much the "
+            "map stretches area near the point. <bookmark mark='b'/> And the chain rule for maps is matrix "
+            "multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken "
+            "where its input lands. That product is the whole of backpropagation, as chapter five will show."
         ) as vo:
+            self.play(FadeIn(dc, shift=UP * 0.2))
+            vo.wait_until("a")
             self.play(FadeIn(sq), GrowArrow(arrow_))
             self.play(TransformFromCopy(sq, par), FadeIn(dl))
-            vo.wait_until("a")
+            vo.wait_until("b")
             self.play(Write(chain))
-            self.play(FadeIn(cw))
+            self.play(FadeIn(cw), FadeIn(shapes))
         self.wait(0.3)
         self.clear_scene()

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import GRAD, VALUE, load
+from videos.ai.ai4.common import GRAD, PART, VALUE, load, matrix_heat
 
 
 def node(tex, pos, color=GREY_B, r=0.42):
@@ -16,11 +16,13 @@ class Backprop(VoiceoverScene):
         self.card()
         self.by_hand()
         self.fan_in()
+        self.layers()
+        self.rank_one()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(5, r"Backpropagation, by hand", r"What actually happens, step by step?", part=4)
-        with self.voiceover("Chapter five. Backpropagation, by hand."):
+        card = chapter_card(6, r"Backpropagation, by hand", r"What actually happens, step by step?", lit=(1986,), part=PART)
+        with self.voiceover("Chapter six. Backpropagation, by hand."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -134,5 +136,93 @@ class Backprop(VoiceoverScene):
             self.play(Write(plus))
             vo.wait_until("b")
             self.play(FadeIn(algo))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def layers(self):
+        col = {r"\delta_2": GRAD, r"\delta_1": GRAD, r"x^\top": VALUE, r"a_1^\top": VALUE}
+        net = MathTex(r"z_1 = W_1 x + b_1,\quad a_1 = \tanh z_1,\quad z_2 = W_2 a_1 + b_2,\quad q = \operatorname{softmax}(z_2),"
+                      r"\quad \mathcal L = -\log q_y", font_size=30, color=GREY_A).to_edge(UP, buff=0.3)
+        rows = [
+            cmath(r"\delta_2", r"=", r"\frac{\partial \mathcal L}{\partial z_2} = q - e_y", font_size=36, colors=col),
+            cmath(r"\frac{\partial \mathcal L}{\partial W_2}", r"=", r"\delta_2", r"\, a_1^\top", font_size=36, colors=col),
+            cmath(r"\delta_1", r"=", r"(W_2^\top", r"\delta_2", r")", r"\odot (1 - a_1^2)", font_size=36, colors=col),
+            cmath(r"\frac{\partial \mathcal L}{\partial W_1}", r"=", r"\delta_1", r"\, x^\top", font_size=36, colors=col),
+        ]
+        whys = [why(r"softmax with cross-entropy: \ Part 1's $q - p$"),
+                why(r"$z_{2,i} = \sum_j W_{2,ij}\, a_{1,j}$: \ each weight gets \\ its output's $\delta$ times its input"),
+                why(r"back through $W_2$ (a VJP: transpose), \\ then through $\tanh$, \ whose slope is $1 - a^2$"),
+                why(r"the same rule, one layer down")]
+        step = ladder(self, rows, whys, keep=4, top=2.35, x=-2.6, buff=0.48, edge=6.9)
+        name = label(r"$\delta = \partial \mathcal L / \partial z$: \ the error signal at a layer", font_size=24, color=GRAD)
+        name.to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "Now a real network, in matrices: an input x, a layer with weights W one and a tanh, a second layer, a "
+            "softmax and the cross-entropy. Call the gradient with respect to a layer's pre-activation z its delta, "
+            "the error signal there. <bookmark mark='a'/> At the top, delta two is Part 1's answer: the predicted "
+            "probabilities minus the one-hot truth. <bookmark mark='b'/> Each weight in W two multiplies one input "
+            "into one output, so its gradient is that output's delta times that input: an outer product, delta two "
+            "times a one transposed. <bookmark mark='c'/> To go down a layer, pull delta back through W two, which "
+            "for a matrix means multiplying by its transpose, and then through the tanh, multiplying by its slope. "
+            "<bookmark mark='d'/> And the same rule again: the gradient of W one is delta one times x transposed. "
+            "Those four lines are backpropagation, for any depth."
+        ) as vo:
+            self.play(FadeIn(net), FadeIn(name))
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def rank_one(self):
+        m = load("mlp2")
+        B, (din, dh, k) = int(m["B"]), m["dims"]
+        d1, x0 = np.asarray(m["d1_0"]), np.asarray(m["x0"])
+        G = np.asarray(m["dW1_0"])
+        sv1, svB = np.asarray(m["sv_one"]), np.asarray(m["sv_all"])
+        assert m["d_lib"] < 1e-12 and m["d_torch"] < 1e-12
+        cell = 0.55
+        col = matrix_heat(d1[:, None], cell=cell, numbers=True, fmt="{:.2f}", font_size=15).move_to([-5.2, -0.2, 0])
+        row = matrix_heat(x0[None, :], cell=cell, numbers=True, fmt="{:.2f}", font_size=15).move_to([-1.8, 1.65, 0])
+        out = matrix_heat(G, cell=cell, numbers=True, fmt="{:.2f}", font_size=15).move_to([-1.8, -0.2, 0])
+        lc = MathTex(r"\delta_1", font_size=30, color=GRAD).next_to(col, UP, buff=0.15)
+        lr = MathTex(r"x^\top", font_size=30, color=VALUE).next_to(row, LEFT, buff=0.2)
+        lo = MathTex(r"\delta_1 x^\top", font_size=30, color=WHITE).next_to(out, DOWN, buff=0.15)
+        times = MathTex(r"\times", font_size=36, color=GREY_B).move_to([-3.95, -0.2, 0])
+        n_nonzero = int((sv1 > 1e-10 * sv1[0]).sum())
+        rank_b = int((svB > 1e-10 * svB[0]).sum())
+        res = VGroup(
+            label(rf"one example: \ singular values ${sv1[0]:.3f}$, \ then ${sci(max(sv1[1], 1e-20), 0)}$ and below",
+                  font_size=22, color=GREY_A),
+            label(rf"rank ${n_nonzero}$: \ every row is a multiple of $x^\top$", font_size=22, color=GRAD),
+            label(rf"a batch of ${B}$: \ the sum of ${B}$ such matrices, \ rank ${rank_b}$", font_size=22, color=GREY_A),
+            label(rf"by hand \ vs \ our library: \ ${sci(max(m['d_lib'], 1e-17), 0)}$", font_size=22, color=GRAD),
+            label(rf"by hand \ vs \ PyTorch: \ ${sci(max(m['d_torch'], 1e-17), 0)}$", font_size=22, color=GRAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.9, -0.2, 0])
+        tag = note(rf"computed: \ a ${din}$--${dh}$--${k}$ network, \ ${B}$ examples").to_corner(DR, buff=0.3)
+        with self.voiceover(
+            "Here is that outer product for one example, computed: the error signal at the hidden layer, a column, "
+            "times the input, a row. <bookmark mark='a'/> Every row of the result is a multiple of the same input, "
+            f"so the matrix has rank {n_nonzero}: one singular value, then nothing but rounding. "
+            f"<bookmark mark='b'/> A batch adds {B} of them, and here reaches rank {rank_b}, the most a "
+            f"{dh} by {din} matrix can have. That low-rank structure comes back when models are fine-tuned with "
+            "low-rank adapters in Part 27. <bookmark mark='c'/> And these hand-derived gradients match our library and "
+            "PyTorch to the last digits a computer keeps."
+        ) as vo:
+            self.play(FadeIn(col), FadeIn(lc), FadeIn(row), FadeIn(lr), FadeIn(times), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(c) for c in out], lag_ratio=0.03), FadeIn(lo), run_time=1.6)
+            vo.wait_until("a")
+            self.play(FadeIn(res[0]), FadeIn(res[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(res[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(res[3]), FadeIn(res[4]))
         self.wait(0.3)
         self.clear_scene()

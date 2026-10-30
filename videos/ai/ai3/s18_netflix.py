@@ -161,8 +161,8 @@ class Netflix(VoiceoverScene):
         fd = always_redraw(film_dots)
         cent = always_redraw(centroids)
         ep_read = always_redraw(lambda: label(rf"film vectors after {eps_[int(round(t.get_value()))]} passes" if
-                                              t.get_value() > 0.01 else r"film vectors at the start", font_size=22,
-                                              color=GREY_A).next_to(gb, UP, buff=0.12))
+                                              eps_[int(round(t.get_value()))] > 0 else r"film vectors at the start",
+                                              font_size=22, color=GREY_A).next_to(gb, UP, buff=0.12))
         gl = VGroup(*[label(nm, font_size=18, color=c_) for nm, c_ in zip(m["genres"], GEN_COLORS)])
         gl.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.08)).next_to(gb, DOWN, buff=0.12)
         cn = note(r"large dots: \ each genre's average, \ $\times 2.5$").next_to(gl, DOWN, buff=0.08)

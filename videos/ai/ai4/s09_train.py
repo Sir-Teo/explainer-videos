@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import GRAD, MONO, load
+from videos.ai.ai4.common import GRAD, MONO, PART, load, matrix_heat
 
 LETTERS = " abcdefghijklmnopqrstuvwxyz"
 
@@ -24,14 +24,60 @@ def score_grid(Z, size=3.9, lo=-8.0, hi=0.0, center=ORIGIN) -> VGroup:
 class Train(VoiceoverScene):
     def construct(self):
         self.card()
+        self.first()
         self.descent()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(7, r"Training by going downhill", r"Can descent find what counting found?", part=4)
-        with self.voiceover("Chapter seven. Training."):
+        card = chapter_card(8, r"Training by going downhill", r"Can descent find what counting found?", part=PART)
+        with self.voiceover("Chapter eight. Training with our library."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def first(self):
+        d = load("grad0")
+        G = np.asarray(d["grad"])
+        assert d["diff"] < 1e-12
+        col = {r"q_{j\mid i}": C.MODEL_Q, r"\hat p_{j \mid i}": C.TRUE_P}
+        rows = [
+            cmath(r"\frac{\partial \mathcal L}{\partial z_{ij}}", r"=",
+                  r"\frac1N \sum_{t:\, c_t = i} \big(q_{j \mid i} - [c_{t+1} = j]\big)", font_size=34),
+            cmath(r"\frac{\partial \mathcal L}{\partial z_{ij}}", r"=", r"\frac{n_i}{N}\,\big(", r"q_{j\mid i}", r"-",
+                  r"\hat p_{j \mid i}", r"\big)", font_size=34, colors=col),
+            cmath(r"\frac{\partial \mathcal L}{\partial z_{ij}}\Big|_{z = 0}", r"=",
+                  r"\frac{n_i}{N}\,\big(\tfrac{1}{27} - \hat p_{j \mid i}\big)", font_size=34),
+        ]
+        whys = [why(r"each pair that starts with $i$: \\ its guess minus its truth (Part 1)", font_size=21),
+                why(r"$n_i$ pairs start with $i$; \\ $\hat p$: Part 1's counts", font_size=21),
+                why(r"all scores equal: \ $q = 1/27$", font_size=21)]
+        step = ladder(self, rows, whys, keep=3, top=3.2, x=-3.9, buff=0.5, edge=6.9)
+        heat = matrix_heat(G, cell=0.13, pos=C.TRUE_P, neg=C.SURPRISE).move_to([-4.6, -2.0, 0])
+        LET = " abcdefghijklmnopqrstuvwxyz"
+        pairs = VGroup(label(r"pushed up hardest:", font_size=22, color=C.SURPRISE),
+                       *[data_text(f"'{LET[i]}' then '{LET[j]}'".replace("' '", "space"), font=MONO, font_size=18,
+                                   color=WHITE) for i, j in d["top"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        pairs.next_to(heat, RIGHT, buff=0.4).align_to(heat, UP)
+        chk = label(rf"computed on ${d['pairs']:,}$ pairs: \ library against formula, \ ${sci(d['diff'], 0)}$".replace(",", "{,}"),
+                    font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3).shift(RIGHT * 2.2)
+        with self.voiceover(
+            "Before we train, look at the first gradient. Differentiate the average surprise with respect to one "
+            "score, z i j: every pair of letters that starts with i adds its guess minus its truth. "
+            "<bookmark mark='a'/> Collected, that's the share of pairs starting with i, times Part 1's q minus p hat: "
+            "the model's probabilities minus the counted ones. <bookmark mark='b'/> At the start every guess is one "
+            "twenty-seventh. <bookmark mark='c'/> Computed on the books, the library's gradient matches the formula, "
+            "and the biggest pushes, in red, go to the commonest pairs. Gradient descent is counting, done a little "
+            "at a time."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            self.play(FadeIn(heat), FadeIn(pairs), FadeIn(chk))
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def descent(self):

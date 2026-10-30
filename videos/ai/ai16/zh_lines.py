@@ -709,11 +709,12 @@ ZH = {
     'Chapter sixteen. The frontier, late 2026.': '第16章。前沿，2026年末。',
 
     'f"Where has all this led?':
-        "这一切走到了哪里？这是过去三年的大型开源混合专家模型，按每层有多少专家排开。<bookmark mark='a'/>2023年12月，"
-        "Mixtral有8个。一年后，DeepSeek-V3有256个，外加一个共享专家。<bookmark mark='b'/>2025年，大家纷纷跟进：Qwen3，"
-        "有384个专家的Kimi K2，GLM-4.5，OpenAI的gpt-oss，MiniMax，还有有512个专家的Qwen3-Next。<bookmark mark='c'/>"
-        "2026年，有GLM-5、Qwen3.5、DeepSeek-V4、这周发布的Mistral Large 4，以及Kimi K3：每层{k3['experts']}个专家，"
-        "挑{k3['k']}个。它们几乎都是细粒度的，大多数还保留了共享专家。",
+        "这一切最终走到了哪里？这里是过去三年里那些大型的开源混合专家模型，按照每一层里有多少个专家，从左到右排开。"
+        "<bookmark mark='a'/>2023年12月，米斯特拉尔的模型每层只有8个专家。一年以后，深度求索的第三代模型就有了256个，"
+        "另外还有一个共享专家。<bookmark mark='b'/>到了2025年，各家纷纷跟进：通义千问第三代，月之暗面有384个专家的模型，"
+        "智谱的模型，OpenAI的开源模型，稀宇科技的模型，还有通义千问那个每层512个专家的新模型。<bookmark mark='c'/>"
+        "而在2026年，有智谱的第五代、通义千问的新一代、深度求索的第四代、米斯特拉尔这周刚刚发布的大模型，"
+        "以及月之暗面的K3：每层{k3['experts']}个专家，每次挑选{k3['k']}个。它们几乎全都是细粒度的，而且大多数还保留了共享专家。",
 
     'f"And by the share of the model each token uses.':
         "再看每个词元用到模型的多大比例。<bookmark mark='a'/>Mixtral每个词元用{100 * fr['mixtral']:.0f}%的权重；"
@@ -753,7 +754,7 @@ ZH = {
         "下一次：硅。为什么这一切都跑在GPU上，又被什么限制：运算、内存，以及芯片之间的连线。<bookmark mark='a'/>第17部分。",
 
     'To go further, the Switch Transformer and DeepSeek-V3 papers':
-        '想深入了解，Switch Transformer和DeepSeek-V3的论文是很好的起点。谢谢观看，第17部分见。',
+        '如果想再深入一些，可以从谷歌的Switch论文和深度求索第三代模型的技术报告读起，它们都是很好的起点。谢谢观看，我们第17部分再见。',
 }
 
 PHRASES = {
