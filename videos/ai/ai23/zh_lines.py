@@ -200,14 +200,14 @@ ZH = {
     'For most of a century digital sound meant samples:':
         "将近一个世纪里，数字声音就意味着样本：电话每秒六万四千比特，CD每秒一百四十万。<bookmark mark='a'/>2021年，谷歌的尼尔·泽吉杜尔和同事端到端地学出了一个编解码器。SoundStream的编码器把波形变成每秒七十五个向量，残差向量量化把每个向量变成几个编码数字，解码器再把编码变回波形，三者一起训练，用频谱损失加上GAN的判别器。<bookmark mark='b'/>他们还在训练时随机丢掉一些量化级，于是一个模型能工作在每一种码率。Meta在2022年推出的EnCodec，码率从每秒1.5到24千比特。<bookmark mark='c'/>如今语音模型的分词器还要更低：一两千比特。",
 
-    'f"We built a small one.':
-        "我们自己搭了一个小的。<bookmark mark='a'/>四层带步长的卷积，把每秒一万六千个样本降到每秒{hz}帧。<bookmark mark='b'/>每一帧最多经过八级残差量化，每级256个码，八比特，所以一级每秒花{hz * bits}比特。<bookmark mark='c'/>训练时随机丢掉量化级，于是同一个模型可以跑在每秒{', '.join((str(hz * bits * n) for n in stages[:-1]))}或{hz * bits * stages[-1]:,}比特。<bookmark mark='d'/>它有{params / 1000.0:.0f}千个参数，在十个声音、{tr_min:.0f}分钟的Kokoro语音上训练了{S:,}步，用频谱损失，没有判别器。这是它学着重建一个从没听过的声音说的一句话。",
+    'f"We built a small one, with one simplification.':
+        "我们自己搭了一个小的，做了一处简化。教一个网络造出波形，需要的算力远超这台电脑，所以我们的编解码器编码的是Whisper读的那张图，也就是第8章的对数梅尔频谱，把图变回声音的事留给声码器。<bookmark mark='a'/>一层带步长的卷积，把这张图每秒100帧降到每秒{hz}帧。<bookmark mark='b'/>每一帧最多经过八级残差量化，每级256个码，八比特，所以一级每秒花{hz * bits}比特。<bookmark mark='c'/>训练时随机丢掉量化级，于是同一个模型可以跑在每秒{', '.join((str(hz * bits * n) for n in stages[:-1]))}或{hz * bits * stages[-1]:,}比特。<bookmark mark='d'/>它有{params / 1000.0:.0f}千个参数，在十个声音、{tr_min:.0f}分钟的Kokoro语音上训练了{S:,}步，损失很朴素：重建出的图的平均误差。这是它学着重建一个从没听过的声音说的一句话。",
 
     'f"How good is it?':
-        "它有多好？<bookmark mark='a'/>这是那句留出的话在各个码率下的重建：一级保留了大致的形状，八级保留了多得多的细节。<bookmark mark='b'/>一个粗糙但公平的测试：Whisper还能听懂吗？在{n_w}句留出的话上，Whisper的词错误率{trend}，从每秒{bps[0]}比特时的{100 * w_lo:.0f}%，到每秒{bps[-1]:,}比特时的{100 * w_hi:.0f}%，原始语音是{100 * ow:.0f}%；两个种子。<bookmark mark='c'/>在每秒{bps[-1]:,}比特时，我们的编解码器把语音压到普通样本的{ratio:.0f}分之一。有判别器、更多数据、更多步数的编解码器，在同样码率下听起来好得多；这一个只是要把这种取舍展示出来。",
+        "它有多好？<bookmark mark='a'/>这是那句留出的话在各个码率下的重建：一级保留了大致的形状，八级保留了多得多的细节。<bookmark mark='b'/>一个粗糙但公平的测试：Whisper直接读这样的图，那它还能听懂我们重建的图吗？在{n_w}句留出的话上，Whisper的词错误率{trend}，从每秒{bps[0]}比特时的{100 * w_lo:.0f}%，到每秒{bps[-1]:,}比特时的{100 * w_hi:.0f}%，原始的图是{100 * ow:.0f}%；两个种子。<bookmark mark='c'/>在每秒{bps[-1]:,}比特时，这些编码只有用32位数存储那张图的{ratio:.0f}分之一，是样本本身的{pcm:.0f}分之一。真正的编解码器还得造出波形，要用判别器、多得多的数据和多得多的步数；我们这个只是要把这种取舍展示出来。",
 
     'f"Speech tokens come in two kinds.':
-        "语音词元有两种。<bookmark mark='a'/>编解码器的声学词元，携带的是听起来怎样：嗓音、房间、细节。我们的编解码器各级用得相当均匀：困惑度从{min(ppl):.0f}到{max(ppl):.0f}，满分256。<bookmark mark='b'/>语义词元携带的是说了什么，它们来自一个自监督的语音模型，也就是第24部分要搭的那类模型，再聚类成编码。2022年，谷歌的AudioLM生成语音时，先写语义词元，再写声学词元。<bookmark mark='c'/>后来两者合进了一个编解码器：Kyutai的Mimi教它的第一本码本去对齐自监督模型WavLM，旁边再保留七级声学码，每秒12.5帧，1.1千比特。旁白自己的分词器，Qwen3-TTS的那个，也是这样做的，用十六级。",
+        "语音词元有两种。<bookmark mark='a'/>编解码器的声学词元，携带的是听起来怎样：嗓音、房间、细节。我们的编解码器各级用得{spread}：困惑度从{min(ppl):.0f}到{max(ppl):.0f}，满分256。<bookmark mark='b'/>语义词元携带的是说了什么，它们来自一个自监督的语音模型，也就是第24部分要搭的那类模型，再聚类成编码。2022年，谷歌的AudioLM生成语音时，先写语义词元，再写声学词元。<bookmark mark='c'/>后来两者合进了一个编解码器：Kyutai的Mimi教它的第一本码本去对齐自监督模型WavLM，旁边再保留七级声学码，每秒12.5帧，1.1千比特。旁白自己的分词器，Qwen3-TTS的那个，也是这样做的，用十六级。",
 
     # ---------------------------------------------------------------- Audrey
     'Chapter ten. From Audrey to hidden Markov models.':
@@ -365,6 +365,9 @@ ZH = {
 }
 
 PHRASES = {
+    # codec (chapter nine)
+    'fairly evenly': '相当均匀',
+    'unevenly': '不太均匀',
     # tokenizers (chapter four)
     'raw bytes': '原始字节',
     'BPE with 1,024 pieces': '1024个片段的BPE',

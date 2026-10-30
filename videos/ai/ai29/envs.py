@@ -251,14 +251,14 @@ def min_jerk(t):
 
 def arm_chunks(n, g, joints=7, hz=50, seconds=1.0):
     """``n`` one-second chunks of a seven-joint arm (radians), each a piece of a long smooth motion: minimum-jerk
-    moves between random poses, each move 0.4-1.6 s long, plus a little tremor.  (n, H, joints)."""
+    moves between random poses, each move 0.25-0.9 s long, plus a little tremor.  (n, H, joints)."""
     H = int(hz * seconds)
     total = n * H + 200
     out = np.zeros((total, joints))
     t, pose = 0, g.uniform(-1, 1, joints)
     while t < total:
-        dur = int(g.uniform(0.4, 1.6) * hz)
-        new = np.clip(pose + g.normal(0, 0.6, joints), -2.5, 2.5)
+        dur = int(g.uniform(0.25, 0.9) * hz)
+        new = np.clip(pose + g.normal(0, 0.9, joints), -2.5, 2.5)
         s = min_jerk(np.linspace(0, 1, dur + 1)[1:])[:, None]
         seg = pose + s * (new - pose)
         k = min(dur, total - t)

@@ -124,8 +124,8 @@ class Hook(VoiceoverScene):
             "circuit end to end. <bookmark mark='d'/> Then why the numbers are tangled, and the dictionaries that "
             "untangle them; <bookmark mark='e'/> tracing a prediction from input to output, comparing a model with "
             "its fine-tune, and steering. <bookmark mark='f'/> And to finish: grokking explained, whether a chain of "
-            "thought tells the truth, and where the field stands, and argues, in 2026. Every experiment runs on the "
-            "series' own models, on this computer."
+            "thought tells the truth, and where the field stands, and argues, in 2026. Every experiment runs on this "
+            "computer, most of them on the series' own models."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

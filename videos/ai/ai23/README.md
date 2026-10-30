@@ -42,10 +42,11 @@ source.
 * **8. Sampling sound.** Aliasing derived (cos(2π(f + k f_s)n/f_s) = cos(2πfn/f_s); evenness), the sampling theorem;
   tones sampled at 8 kHz and their measured spectral peaks; the folding curve; speech decimated with and without a
   filter; the STFT, Slaney's mel filters, Whisper's log-mel front end, our implementation checked against transformers'.
-* **9. Neural codecs.** From PCM to SoundStream and EnCodec (residual VQ, quantizer dropout); our codec (strides
-  2·4·5·8, 50 frames a second, 8 stages × 256 codes, quantizer dropout, EMA codebooks with restarts) trained on Kokoro
-  speech, its training replayed on a held-out voice; spectrograms and Whisper's word error rate at 400 to 3,200 bits a
-  second, two seeds; semantic and acoustic tokens (AudioLM, Mimi, Qwen3-TTS's tokenizer); our stages' perplexities.
+* **9. Neural codecs.** From PCM to SoundStream and EnCodec (residual VQ, quantizer dropout); our codec, a small
+  cousin that codes Whisper's log-mel picture instead of the wave (a strided convolution to 50 frames a second, 8
+  stages × 256 codes, quantizer dropout, EMA codebooks with restarts; turning the picture back into sound would need a
+  vocoder, the expensive part), trained on Kokoro speech, its training replayed on a held-out voice; spectrograms and
+  Whisper's word error rate, reading the rebuilt pictures directly, at 400 to 3,200 bits a second, two seeds; semantic and acoustic tokens (AudioLM, Mimi, Qwen3-TTS's tokenizer); our stages' perplexities.
 * **10. From Audrey to hidden Markov models.** Audrey (Davis, Biddulph & Balashek 1952); a template recognizer of
   our own (one Kokoro voice's digits) on the same voice and eleven others; dynamic time warping (Vintsyuk 1968; Sakoe &
   Chiba 1978) with an alignment path; templates from ten voices on two new ones; HMMs with Gaussian mixtures, the noisy
@@ -87,7 +88,7 @@ python tools/build.py ai23 -q l                   # a 480p preview
 
 The computation takes about two and a half hours on a busy 4-core machine, on one torch thread (`AI23_THREADS`). It
 is seeded throughout and resumable: synthesized speech is saved voice by voice (`.cache/ai23/speech/`), the language
-models checkpoint every 100 steps and the codec every 250, and every item made of several runs saves each run as it
+models checkpoint every 100 steps and the codec every 500, and every item made of several runs saves each run as it
 finishes. It needs Kokoro-82M (a dependency of the repo; the eleven extra voices, about 0.5 MB each, download on first
 use) and Whisper base.en (about 290 MB, downloaded by `transformers` on first use). The narrator's codes need
 `.venv-tts` with `qwen_tts` and the Qwen3-TTS-12Hz-1.7B-Base model in the Hugging Face cache; without them the item

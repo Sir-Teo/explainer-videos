@@ -213,16 +213,16 @@ class VLA(VoiceoverScene):
     def history(self):
         cards = VGroup(
             history_card(r"Dec 2022", r"RT-1 \ (Google)", r"a transformer from camera images and an instruction to arm "
-                         r"actions: \ $130{,}000$ demonstrations, \ $700$ tasks, \ $13$ robots, \ $17$ months", width=6.2,
-                         color=HIST, font_size=21),
+                         r"actions: \ $130{,}000$ demonstrations, \ $700$ tasks, \ $13$ robots, \ $17$ months", width=6.4,
+                         color=HIST, font_size=24),
             history_card(r"Jul 2023", r"RT-2 \ (Google DeepMind)", r"a web-trained vision-language model fine-tuned to "
                          r"write actions as tokens: \ on unseen objects and scenes, \ $62\%$ success against RT-1's $32\%$",
-                         width=6.2, color=HIST, font_size=21),
+                         width=6.4, color=HIST, font_size=24),
             history_card(r"Oct 2023", r"Open X-Embodiment \ ($21$ institutions)", r"over a million robot trajectories, \ "
-                         r"$22$ kinds of robot, \ pooled", width=6.2, color=HIST, font_size=21),
+                         r"$22$ kinds of robot, \ pooled", width=6.4, color=HIST, font_size=24),
             history_card(r"Jun 2024", r"OpenVLA \ (Kim, Pertsch et al.)", r"open weights, \ $7$ billion parameters, \ "
                          r"$970{,}000$ trajectories: \ $16.5$ points more success than the $55$-billion RT-2-X, \ "
-                         r"across $29$ tasks", width=6.2, color=HIST, font_size=21),
+                         r"across $29$ tasks", width=6.4, color=HIST, font_size=24),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3))
         if cards.width > 13.2:
             cards.width = 13.2
@@ -252,17 +252,18 @@ class VLA(VoiceoverScene):
 
         d = load("detour")
         demos = np.asarray(d["demos"])
-        R = 1.9
+        R = 1.75
 
         def panel(cx, title, col):
-            box = RoundedRectangle(width=4.0, height=3.0, corner_radius=0.1, stroke_color=GREY_D, stroke_width=1.5).move_to([cx, -0.4, 0])
+            box = RoundedRectangle(width=4.2, height=3.1, corner_radius=0.1, stroke_color=GREY_D, stroke_width=1.5).move_to([cx, -0.4, 0])
             ob = Circle(radius=OBST[2] * R, stroke_width=0, fill_color=FAIL, fill_opacity=0.5).move_to(box.get_center() + R * np.array([OBST[0], OBST[1], 0]))
             gl = Star(n=5, outer_radius=0.13, color=REWARD, fill_opacity=1).move_to(box.get_center() + R * np.array([GOAL[0], GOAL[1], 0]))
             t = label(title, font_size=22, color=col).next_to(box, UP, buff=0.12)
             return VGroup(box, ob, gl, t)
 
         def path(ctr, pts, col, w=2, op=0.8):
-            P = [ctr + R * np.array([x, y, 0]) for x, y in pts]
+            lim = 1.45 / R  # keep every path inside its panel
+            P = [ctr + R * np.array([float(np.clip(x, -1.1, 1.1)), float(np.clip(y, -lim, lim)), 0]) for x, y in pts]
             return VMobject(stroke_color=col, stroke_width=w, stroke_opacity=op).set_points_as_corners(P)
 
         pans = VGroup(panel(-4.5, r"the demonstrations", EXPERT), panel(0, r"regression \ (mean squared error)", REG),

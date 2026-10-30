@@ -157,13 +157,16 @@ class Fast(VoiceoverScene):
         # FAST at matched error
         k = int(np.argmin(np.abs(np.log(err) - np.log(be))))
         ratio = bt / toks[k]
-        stat = VGroup(label(rf"at about the same error ($\gamma = {rows[k]['gamma']}$):", font_size=22, color=GREY_A),
-                      label(rf"${toks[k]:.0f}$ tokens instead of ${bt:.0f}$: \ ${ratio:.0f}\times$ fewer", font_size=24,
-                            color=FASTC)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
+        stat = VGroup(label(rf"at about the same error ($\gamma = {rows[k]['gamma']}$):", font_size=24, color=GREY_A),
+                      label(rf"${toks[k]:.0f}$ tokens instead of ${bt:.0f}$: \\ ${ratio:.0f}\times$ fewer", font_size=28,
+                            color=FASTC)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         claim = history_card(r"Jan 2025", r"$\pi_0$-FAST \ (Physical Intelligence)", r"an autoregressive policy on FAST "
                              r"tokens: \ as good as the flow-matching $\pi_0$ on many tasks, \ trained about $5\times$ "
-                             r"faster (the company's report)", width=5.4, color=CLAIM, font_size=21)
-        claim.next_to(stat, DOWN, buff=0.4).align_to(stat, LEFT)
+                             r"faster (the company's report)", width=4.8, color=CLAIM, font_size=22)
+        side = VGroup(stat, claim).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        if side.width > 4.9:
+            side.width = 4.9
+        side.to_edge(RIGHT, buff=0.3).shift(UP * 0.6)
         tag = note(rf"computed: \ {int(f['params']['n_test'])} held-out one-second chunks; \ byte-pair encoding with "
                    rf"{int(f['params']['merges'])} merges, \ learned on {int(f['params']['n_train'])} others", font_size=17)
         tag.to_edge(DOWN, buff=0.12)
@@ -205,14 +208,14 @@ class Fast(VoiceoverScene):
         for name, v in abl:
             bar = Rectangle(width=W * v / 100, height=0.34, stroke_width=0, fill_color=AGENT if v == 94 else GREY_C,
                             fill_opacity=0.85)
-            lab = label(name, font_size=19, color=GREY_A)
+            lab = label(name, font_size=23, color=GREY_A)
             val = MathTex(rf"{v}\%", font_size=22, color=WHITE)
             bars.add(VGroup(lab, bar, val))
         for k, r_ in enumerate(bars):
             r_[1].move_to([1.2 + r_[1].width / 2, 1.0 - 0.62 * k, 0])
             r_[0].next_to(r_[1], UP, buff=0.06).align_to(r_[1], LEFT)
             r_[2].next_to(r_[1], RIGHT, buff=0.12)
-        bl = label(r"$\pi_{0.5}$ in homes it never saw: \ success, \ and what each kind of data adds", font_size=21,
+        bl = label(r"$\pi_{0.5}$ in homes it never saw: \\ success, \ and what each kind of data adds", font_size=25,
                    color=AGENT).next_to(bars, UP, buff=0.3).align_to(bars, LEFT)
         tag = note(r"Physical Intelligence's own ablation (2025)", font_size=17).to_corner(DR, buff=0.25)
         with self.voiceover(

@@ -21,6 +21,7 @@ class Dicts(VoiceoverScene):
         self.card()
         self.shrinkage()
         self.recipes()
+        self.training()
         self.frontier()
         self.downstream()
         self.dead()
@@ -120,6 +121,51 @@ class Dicts(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def training(self):
+        """One run of each kind, at the sparsity nearest 16 features per vector: its training replayed."""
+        o = load("frontier")
+        picks = []
+        for k, key, col, nm in KINDS:
+            best = min(o[key], key=lambda q: abs(math.log(max(o[f"{k}_{q:g}_0_l0"], 1e-3)) - math.log(16)))
+            picks.append((k, best, col, nm, np.asarray(o[f"{k}_{best:g}_0_curve"])))
+        S = float(picks[0][4][-1, 0])
+        top = float(max(min(c[:, 2].max(), 1.0) for *_, c in picks))
+        g1 = axes([0, S], [0, top * 1.05], x_length=5.6, y_length=3.4, xlabel=r"training steps",
+                  ylabel=r"variance left unexplained", xticks=[0, S], yticks=ticks(0, top, 3), center=[-3.3, -0.4, 0])
+        l0max = float(max(c[:, 1].max() for *_, c in picks))
+        g2 = axes([0, S], [0, math.log2(max(l0max, 2)) * 1.05], x_length=5.6, y_length=3.4, xlabel=r"training steps",
+                  ylabel=r"features on per vector \ (log scale)", xticks=[0, S],
+                  yticks=list(range(0, int(math.log2(max(l0max, 2))) + 1, 2)), yfmt=lambda v: f"{2 ** int(v)}",
+                  center=[3.3, -0.4, 0])
+        t = ValueTracker(0)
+        cs = VGroup()
+        for k, q, col, nm, c in picks:
+            def mk(c=c, col=col):
+                n = max(2, int(np.searchsorted(c[:, 0], t.get_value(), side="right")))
+                return VGroup(curve(g1.ax, c[:n, 0], np.clip(c[:n, 2], 0, top * 1.05), col, 3),
+                              curve(g2.ax, c[:n, 0], np.log2(np.clip(c[:n, 1], 1, None)), col, 3))
+            cs.add(always_redraw(mk))
+        lg = legend([(col, rf"{nm}, \ ${'k' if k == 'topk' else r'\lambda'} = {q:g}$") for k, q, col, nm, _ in picks],
+                    font_size=18).to_edge(UP, buff=0.3)
+        lg.arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "All three train the same way, on the same batches. <bookmark mark='a'/> Here is one run of each, the "
+            "one nearest sixteen features per vector, replayed: the unexplained variance falling on the left, and "
+            "on the right the number of features each vector uses. <bookmark mark='b'/> TopK holds exactly k from "
+            "the first step; the penalized kinds start dense and are pruned as their penalty bites."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(lg))
+            self.add(cs)
+            vo.wait_until("a")
+            self.play(t.animate.set_value(S * 0.3), run_time=2.5, rate_func=linear)
+            vo.wait_until("b")
+            self.play(t.animate.set_value(S), run_time=3, rate_func=linear)
+        for c in cs:
+            c.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def plot(self, field, ylabel, center, ylo=None, yhi=None, x_len=6.0):
         o = load("frontier")
         pts = {k: [(np.mean(runs(o, k, key, "l0")[i][1]), runs(o, k, key, "l0")[i][1], v)
@@ -164,14 +210,21 @@ class Dicts(VoiceoverScene):
         with self.voiceover(
             "Now the fair test. We trained all three on the same vectors, with the same 512 latents, steps and "
             f"batches, {n_sp} sparsities for TopK, {n_l1} for the others, and three seeds each. <bookmark mark='a'/> Plot how many features each "
-            "uses per vector against the variance it leaves unexplained: lower and further left is better. "
-            "<bookmark mark='b'/> The L1 autoencoders, <bookmark mark='c'/> JumpReLU, <bookmark mark='d'/> and TopK. "
+            "uses per vector against the variance it leaves unexplained: lower and further left is better. Pause and "
+            "predict which kind wins. <bookmark mark='b'/> The L1 autoencoders, <bookmark mark='c'/> JumpReLU, <bookmark mark='d'/> and TopK. "
             f"The bars are the three seeds; they barely differ. <bookmark mark='e'/> At sixteen features per vector, "
             f"{verdict}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
+            pz = pause_card(r"Same size, \ same steps: \ L1, \ JumpReLU or TopK?", width=4.4, font_size=22)
+            pz.move_to([4.4, -1.6, 0])
+            self.play(FadeIn(pz))
             for i, mk in enumerate("bcd"):
+                if mk == "b":
+                    vo.wait_until(mk)
+                    self.play(FadeOut(pz), Create(cs[i][0]), FadeIn(cs[i][1]), FadeIn(lg[i]), run_time=1.3)
+                    continue
                 vo.wait_until(mk)
                 self.play(Create(cs[i][0]), FadeIn(cs[i][1]), FadeIn(lg[i]), run_time=1.3)
             vo.wait_until("e")
@@ -222,8 +275,8 @@ class Dicts(VoiceoverScene):
         f16 = [float(o[f"topk_16_{s}_fvu"]) for s in o["seeds"]]
         d2048 = int(sp["2048_dead"])
         dc = definition_card(r"dead latent", r"a feature that never switches on: \ its gradient is zero, \ so it can "
-                             r"never recover. \ At $16$ million latents, \ Gao et al.\ found most of them dead without a "
-                             r"fix.", color=CTRL, width=6.4, font_size=21).to_corner(UL, buff=0.35)
+                             r"never recover. \ Without fixes, \ Gao et al.\ found up to $90\%$ dead; \ with them, "
+                             r"$7\%$ of $16$ million.", color=CTRL, width=6.4, font_size=21).to_corner(UL, buff=0.35)
         aux = definition_card(r"AuxK", r"an extra loss: \ the latents that have been dead for a while are asked to "
                               r"rebuild what the live ones miss, \ so they get gradient again", color=TKC, width=6.4,
                               font_size=21).next_to(dc, DOWN, buff=0.3).align_to(dc, LEFT)
@@ -237,8 +290,8 @@ class Dicts(VoiceoverScene):
                    f"With AuxK, the count falls from {np.mean(d16):.0f} to {np.mean(da):.0f} on average.")
         with self.voiceover(
             "One more failure grows with size. <bookmark mark='a'/> A latent that never switches on gets no "
-            "gradient, so once dead it stays dead; at sixteen million latents, Gao and colleagues found most of them "
-            "dead without a fix. <bookmark mark='b'/> Their fix, AuxK, asks the dead latents to rebuild what the "
+            "gradient, so once dead it stays dead; without fixes, Gao and colleagues found up to 90 percent of "
+            "latents dead, and with them only 7 percent of their sixteen million. <bookmark mark='b'/> Their fix, AuxK, asks the dead latents to rebuild what the "
             f"live ones miss. <bookmark mark='c'/> Ours: with 512 latents and k of sixteen, {d16[0]}, {d16[1]} and "
             f"{d16[2]} dead across three seeds; with AuxK, {da[0]}, {da[1]} and {da[2]}; with 2,048 latents, "
             f"{d2048}. {verdict}"

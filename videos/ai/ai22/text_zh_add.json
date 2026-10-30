@@ -499,7 +499,13 @@
     "velocity": "速度",
     "\\mathcal{L} = \\mathcal{L}_{\\text{flow}} \\;+\\; \\lambda \\cdot \\frac{1}{N}\\sum_{n=1}^{N}\\Big(1 - \\cos\\big(h_\\phi(z_n),\\ y_n\\big)\\Big)": "\\mathcal{L} = \\mathcal{L}_{\\text{flow}} \\;+\\; \\lambda \\cdot \\frac{1}{N}\\sum_{n=1}^{N}\\Big(1 - \\cos\\big(h_\\phi(z_n),\\ y_n\\big)\\Big)",
     "teacher: \\ chapter 1's vision transformer, \\ frozen; \\ REPA after block $2$ of $4$, \\ $\\lambda = 0.5$; \\ three seeds each, \\ bands: \\ min to max": "老师：\\ 第1章的视觉Transformer，\\ 冻结；\\ REPA放在第$2$块之后（共$4$块），\\ $\\lambda = 0.5$；\\ 各三个种子，\\ 色带：\\ 最小到最大",
-    "U-Net: \\ $370{,}281$ weights, \\ $28.5$ million multiply-adds a picture; \\ DiT: \\ $320{,}848$ weights, \\ $3.4$ million": "U-Net：\\ $370{,}281$个权重，\\ 每张图$2850$万次乘加；\\ DiT：\\ $320{,}848$个权重，\\ $340$万次"
+    "U-Net: \\ $370{,}281$ weights, \\ $28.5$ million multiply-adds a picture; \\ DiT: \\ $320{,}848$ weights, \\ $3.4$ million": "U-Net：\\ $370{,}281$个权重，\\ 每张图$2850$万次乘加；\\ DiT：\\ $320{,}848$个权重，\\ $340$万次",
+    "$320{,}848$ weights, \\ $8{,}000$ training steps, \\ one CPU core": "$320{,}848$个权重，\\ $8{,}000$步训练，\\ 一个CPU核心",
+    "$520$ letters, \\ $400$ noisy draws per level; \\ SD3 used $\\alpha = 3$ at $1024^2$ \\ (as published)": "$520$个字母，\\ 每个噪声水平$400$次带噪声的抽样；\\ SD3用的是$\\alpha = 3$，在$1024^2$上 \\ （按已发表的数据）",
+    "the same $24$ photographs, \\ $2{,}000$ steps each, \\ three seeds; \\ on this CPU, training took $495$ s (NeRF) and $238$ s (Gaussians)": "同样的$24$张照片，\\ 各$2{,}000$步，\\ 三个种子；\\ 在这台CPU上，训练用了$495$秒（NeRF）和$238$秒（高斯）",
+    "same tokens, \\ same transformer size \\ ($220{,}864$ weights), \\ $1{,}500$ steps, \\ guidance $2$; \\ three seeds": "同样的词元，\\ 同样大小的Transformer \\ （$220{,}864$个权重），\\ $1{,}500$步，\\ 引导$2$；\\ 三个种子",
+    "one transformer, \\ $319{,}474$ weights, \\ $8{,}000$ steps; \\ means of three seeds": "一个Transformer，\\ $319{,}474$个权重，\\ $8{,}000$步；\\ 三个种子的均值",
+    "distance to the real bold: \\ $0.240$ \\ (just copying: \\ $0.257$); \\ ink $\\times1.54$ \\ (the real bold: \\ $\\times1.56$); \\ the same letter: \\ $50\\%$": "与真正粗体的距离：\\ $0.240$ \\ （直接照抄：\\ $0.257$）；\\ 墨量$\\times1.54$ \\ （真正的粗体：\\ $\\times1.56$）；\\ 仍是同一个字母：\\ $50\\%$"
   },
   "patterns": [
     [

@@ -121,8 +121,8 @@ class Patching(VoiceoverScene):
         tgt = int(d["target"])
         lo, hi_ = 0, tgt + 4
         Hs = np.clip(H[:, lo:hi_], 0, 1)
-        W, Hh = 12.0, 1.9
-        img = heat_image(Hs[::-1], W, Hh, color=CAUSE, gamma=0.7).move_to([0.3, -1.2, 0])
+        W, Hh = 10.6, 1.9
+        img = heat_image(Hs[::-1], W, Hh, color=CAUSE, gamma=0.7).move_to([0.9, -1.2, 0])
         n = hi_ - lo
         cw = W / n
         xs = lambda j: img.get_left()[0] + cw * (j - lo + 0.5)  # noqa: E731
@@ -147,13 +147,16 @@ class Patching(VoiceoverScene):
         k_in = [j for j in range(tgt + 1) if cols[0, j] > 0.2]
         k_mid = [j for j in range(tgt + 1) if cols[1, j] > 0.2]
         names = lambda ks: ", ".join(str(k) for k in ks) if ks else "none"  # noqa: E731
+        v_in = ("At the input, no single position brings it back on its own: copying needs two at once, the token "
+                "to copy and the one before it." if not k_in else
+                f"At the input, what matters is positions {names(k_in)}.")
         with self.voiceover(
             "The tool is activation patching. <bookmark mark='a'/> Run the model twice: on the clean sequence, with "
             "its repeat, and on a corrupted one, the first copy replaced by fresh random tokens, so there is nothing "
             f"to copy. Then take one vector from the clean run, put it into the corrupted run, and see how much of "
             f"the right prediction at position {tgt} comes back. Kevin Meng and colleagues used this to find where "
             "GPT stores facts. <bookmark mark='b'/> Patch the residual stream at every position, at the input, "
-            f"between the layers, and at the output. At the input, what matters is positions {names(k_in)}. "
+            f"between the layers, and at the output. {v_in} "
             f"<bookmark mark='c'/> Between the layers, {names(k_mid)}. <bookmark mark='d'/> At the output, only "
             f"position {tgt} itself. The information about what to copy starts at the first copy, moves one step "
             "within it, and then jumps to the second copy: that is the circuit's route."

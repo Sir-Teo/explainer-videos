@@ -892,7 +892,10 @@ def compute_fast():
     norm = lambda a: 2 * (a - lo) / (hi - lo) - 1  # noqa: E731  (FAST: the 1st and 99th percentiles to [-1, 1])
     unnorm = lambda a: (a + 1) / 2 * (hi - lo) + lo  # noqa: E731
     tr, te = ch[:P["n_train"]], ch[P["n_train"]:]
-    out = dict(params=P, H=H, J=J, example=te[0], lo=lo, hi=hi)
+    # the example: a test chunk with typical motion (its first joint's spread at the median of all test chunks)
+    spread = te[:, :, 0].std(1)
+    ex_i = int(np.argsort(spread)[len(spread) // 2])
+    out = dict(params=P, H=H, J=J, example=te[ex_i], example_index=ex_i, lo=lo, hi=hi)
     # per-step binning: every joint, every step, one of 256 bins over its range (RT-2, OpenVLA)
     edges = np.linspace(-1, 1, P["bins"] + 1)
     centres = (edges[:-1] + edges[1:]) / 2
@@ -923,10 +926,11 @@ def compute_fast():
     out["rows"] = rows
     # the example chunk's first joint: its coefficients and its rebuilt motion at the shown gamma
     gam = P["show_gamma"]
-    c = dct(norm(te[:1]), axis=1, norm="ortho")[0, :, 0]
+    c = dct(norm(te[ex_i:ex_i + 1]), axis=1, norm="ortho")[0, :, 0]
     out["ex_coef"] = c
     out["ex_q"] = np.round(gam * c)
-    out["ex_rec"] = unnorm(idct(np.round(gam * dct(norm(te[:1]), axis=1, norm="ortho")) / gam, axis=1, norm="ortho"))[0]
+    out["ex_rec"] = unnorm(idct(np.round(gam * dct(norm(te[ex_i:ex_i + 1]), axis=1, norm="ortho")) / gam, axis=1,
+                                norm="ortho"))[0]
     # the energy in each frequency, averaged over chunks and joints: smooth motion lives in the first few
     cc = dct(norm(tr), axis=1, norm="ortho")
     en = (cc ** 2).mean((0, 2))

@@ -60,9 +60,9 @@ class History(VoiceoverScene):
         f2 = cmath(r"o_i = z - z_{\,\text{character } i \text{ blanked}}", font_size=30, color=OCC).next_to(ol, UP, buff=0.15)
         f2.align_to(ol, LEFT)
         h1 = history_card(2013, r"K.~Simonyan, A.~Vedaldi \& A.~Zisserman", r"saliency maps: \ which pixels the class "
-                          r"score is most sensitive to", width=5.0, color=SAL, font_size=20).to_corner(UR, buff=0.3)
+                          r"score is most sensitive to", width=5.6, color=SAL, font_size=20).move_to([0, 2.0, 0])
         h2 = history_card(2014, r"M.~Zeiler \& R.~Fergus", r"occlusion: \ cover part of the image, \ see what the "
-                          r"network loses", width=5.0, color=OCC, font_size=20).to_corner(DR, buff=0.3)
+                          r"network loses", width=5.6, color=OCC, font_size=20).move_to([0, -2.0, 0])
         rho = float(s["rho_occ_demo"])
         rho24 = float(np.mean(s["rho_occ"]))
         agree = ("roughly agree" if rho24 > 0.6 else "only partly agree" if rho24 > 0.3 else "barely agree")

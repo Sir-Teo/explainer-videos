@@ -154,8 +154,9 @@ class Probes(VoiceoverScene):
             "control task asks it directly. Give every token type a random label, at the same rate; there is no "
             "such property in the text, so a probe that scores well has simply memorized which tokens carry which "
             "label. <bookmark mark='b'/> On the embedding the control is easy: each token is its own vector. "
-            f"Our linear probe gets {100 * lc[0]:.0f} percent of the nonsense right there, more than the real task. "
-            f"<bookmark mark='c'/> {verdict}<bookmark mark='c2'/>{verdict2} <bookmark mark='d'/> Selectivity, the task minus the control, is what "
+            f"Our linear probe gets {100 * lc[0]:.0f} percent of the nonsense right there, against {100 * lt[0]:.0f} on "
+            "the real task. <bookmark mark='p'/> Pause and predict: a more powerful probe, a small MLP, can fit more. "
+            f"Will it be more selective, or less? <bookmark mark='c'/> {verdict}<bookmark mark='c2'/>{verdict2} <bookmark mark='d'/> Selectivity, the task minus the control, is what "
             "a probe result should be reported with."
         ) as vo:
             self.play(FadeIn(g), Create(cl), FadeIn(lg[0]))
@@ -163,7 +164,12 @@ class Probes(VoiceoverScene):
             self.play(FadeIn(hc, shift=LEFT * 0.2))
             vo.wait_until("b")
             self.play(Create(cc), FadeIn(lg2), run_time=1.5)
+            vo.wait_until("p")
+            pz = pause_card(r"An MLP probe can fit more. \ More selective, \ or less?", width=5.2,
+                            font_size=22).move_to(hc)
+            self.play(FadeOut(hc), FadeIn(pz))
             vo.wait_until("c")
+            self.play(FadeOut(pz), FadeIn(hc))
             self.play(Create(ml), FadeIn(lg[1]), run_time=1.2)
             self.play(Create(mcc), run_time=1.2)
             vo.wait_until("d")

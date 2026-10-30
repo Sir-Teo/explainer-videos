@@ -70,7 +70,8 @@ class Induction(VoiceoverScene):
         with self.voiceover(
             "Two heads in different layers can only work together through the residual stream: the first writes, "
             "the second reads. <bookmark mark='a'/> But the second head reads in three places, its queries, its keys "
-            "and its values. Which one carries the message? Path patching asks exactly that: send the corrupted "
+            "and its values. Which one carries the message? Pause and predict. <bookmark mark='p'/> Path patching "
+            "asks exactly that: send the corrupted "
             "output of the previous-token head into one of the three only, and leave everything else clean. "
             f"<bookmark mark='b'/> Into the queries: {100 * vals[0]:.0f} percent of the copying lost. Into the "
             f"values: {100 * vals[2]:.0f}. <bookmark mark='c'/> Into the keys: {100 * vals[1]:.0f}. {verdict}"
@@ -78,7 +79,11 @@ class Induction(VoiceoverScene):
             self.play(FadeIn(dg[:-1]))
             vo.wait_until("a")
             self.play(FadeIn(dc), FadeIn(hc), LaggedStart(*[GrowArrow(a_) for a_ in ins], lag_ratio=0.2))
-            self.play(FadeIn(g))
+            pz = pause_card(r"Queries, \ keys, \ or values: \ which carries the message?", width=4.6,
+                            font_size=22).move_to(g)
+            self.play(FadeIn(pz))
+            vo.wait_until("p")
+            self.play(FadeOut(pz), FadeIn(g))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars_[0][0], DOWN), FadeIn(bars_[0][1:]), Indicate(ins[0], color=CAUSE))
             self.play(GrowFromEdge(bars_[2][0], DOWN), FadeIn(bars_[2][1:]), Indicate(ins[2], color=CAUSE))
