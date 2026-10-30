@@ -46,9 +46,10 @@ class Lagrange(VoiceoverScene):
         A, Cc = np.asarray(d["A"]), np.asarray(d["C"])
         ax = Axes(x_range=[-1.6, 2.6, 1], y_range=[-1.5, 1.9, 1], x_length=6.6, y_length=5.35, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.9, -0.5, 0])
-        cont = contour_lines(ax, lag_f, (-1.6, 2.6), (-1.5, 1.9), [0.05 * 2 ** k for k in range(9)], n=(140, 110))
-        circ = ParametricFunction(lambda t: ax.c2p(math.cos(t), math.sin(t)), t_range=[0, 2 * np.pi], color=CONS,
-                                  stroke_width=4)
+        cont = contour_lines(ax, lag_f, (-1.6, 2.6), (-1.5, 1.9), [0.05 * 2 ** k for k in range(8)], n=(140, 110))
+        xu = ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]
+        yu = ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1]
+        circ = Ellipse(width=2 * xu, height=2 * yu, color=CONS, stroke_width=4).move_to(ax.c2p(0, 0))
         cl = MathTex(r"g(x) = \|x\|^2 - 1 = 0", font_size=26, color=CONS).move_to([2.5, 0.0, 0])
         th = ValueTracker(2.6)
         s = 0.32
