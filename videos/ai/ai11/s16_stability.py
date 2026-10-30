@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
@@ -83,8 +82,7 @@ class Stability(VoiceoverScene):
 
     def qkclip(self):
         s = load("spikes")
-        cfg = s["cfgs"]
-        tau = float(cfg["muon_fast_qkclip"]["clip_tau"])
+        s["cfgs"]
         head = label(r"QK-clip, \ per head $h$, \ after every step", font_size=30).to_edge(UP, buff=0.3)
         cl = {r"\gamma": CLIP, r"\tau": CLIP}
         rows = [

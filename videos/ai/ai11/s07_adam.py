@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import HIST, OPT_COLORS, PART, load, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, PART, load, takeaway_card
 
 AG, RP, AD, LI = OPT_COLORS["adagrad"], OPT_COLORS["rmsprop"], OPT_COLORS["adam"], OPT_COLORS["lion"]
 CM = {r"m_t": OPT_COLORS["momentum"], r"v_t": AD, r"\hat m_t": OPT_COLORS["momentum"], r"\hat v_t": AD}
@@ -130,7 +129,6 @@ class Adam(VoiceoverScene):
 
     def bias(self):
         a = load("adamview")
-        b1, b2 = float(a["b1"]), float(a["b2"])
         head = label(r"why divide by $1 - \beta^{\,t}$?", font_size=30).to_edge(UP, buff=0.3)
         rows = [
             cmath(r"m_t", "=", r"(1 - \beta_1) \sum_{i=1}^{t} \beta_1^{\,t-i}\, g_i", font_size=32),

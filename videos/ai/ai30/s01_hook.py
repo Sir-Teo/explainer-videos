@@ -44,10 +44,9 @@ class Hook(VoiceoverScene):
             "changes: only a handful of features, ideas the model tracks, are on at each character, and each one "
             "turns out to mean something."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(c) for c in chars], lag_ratio=0.02), run_time=1.2)
+            self.play(LaggedStart(*[FadeIn(c) for c in chars], lag_ratio=0.02), FadeIn(dense), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(dense), FadeIn(dl), run_time=1.5)
-            self.play(Create(col))
+            self.play(FadeIn(dl), Create(col))
             vo.wait_until("b")
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("c")
@@ -115,7 +114,7 @@ class Hook(VoiceoverScene):
             r"superposition and its phase diagram; \ sparse autoencoders, \ from L1 to Matryoshka",
             r"transcoders and attribution graphs; \ model diffing; \ steering",
             r"grokking, \ mechanistically; \ faithful chains of thought; \ the frontier, \ and its arguments",
-        ], font_size=26)
+        ], font_size=30, width=12.6)
         smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.4)
         with self.voiceover(
             "This is Part 30 of AI, Built: inside the model. <bookmark mark='a'/> First, how the field got here, "

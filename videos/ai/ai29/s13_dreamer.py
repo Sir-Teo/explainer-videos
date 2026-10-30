@@ -357,11 +357,24 @@ class Dreamer(VoiceoverScene):
         px = curve(mini.ax, np.arange(len(traj)), traj[:, 2], AGENT, 3)
         ml = legend([(WORLD, r"the ball"), (AGENT, r"its paddle")], font_size=16).next_to(mini, DOWN, buff=0.2)
         lo, hi, mean = float(fin.min()), float(fin.max()), float(fin.mean())
-        landed = [k for k in range(len(traj)) if traj[k, 1] == 11]
-        caught = sum(1 for k in landed if traj[k, 2] - 2 <= min(traj[k, 0], 10) <= traj[k, 2] + 1)
+        # a ball lands on the step after it is seen in row 10 (the game then shows the next ball at the top);
+        # its landing column continues its drift, bouncing off the walls; caught if the paddle overlaps it
+        landed, caught = [], 0
+        for k in range(2, len(traj)):
+            if traj[k - 1, 1] == 10 and traj[k, 1] == 0:
+                vx = int(traj[k - 1, 0] - traj[k - 2, 0])
+                col = int(traj[k - 1, 0]) + vx
+                if col < 0 or col > 11:
+                    col = int(traj[k - 1, 0]) - vx
+                landed.append(k)
+                caught += int(traj[k, 2] - 2 <= min(col, 10) <= traj[k, 2] + 1)
         game = (f"the paddle heads for where each ball will land, and catches {caught} of {len(landed)}." if
                 caught >= len(landed) - 1 else f"it catches {caught} of the {len(landed)} balls.")
-        if mean > rnd + 0.3:
+        if mean > rnd + 0.3 and lo == hi:
+            v = (f"After about {int(steps[-1]):,} steps of real play, all {len(fin)} seeds catch {100 * lo:.0f} percent "
+                 f"of the balls, against {100 * rnd:.0f} percent for a random paddle: the policy was learned entirely in "
+                 "dreams.")
+        elif mean > rnd + 0.3:
             v = (f"After about {int(steps[-1]):,} steps of real play, the {len(fin)} seeds catch {100 * lo:.0f} to "
                  f"{100 * hi:.0f} percent of the balls, against {100 * rnd:.0f} percent for a random paddle: the policy "
                  "was learned entirely in dreams.")

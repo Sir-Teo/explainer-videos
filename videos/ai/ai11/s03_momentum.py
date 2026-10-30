@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import HIST, OPT_COLORS, OPT_NAMES, PART, load, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, OPT_NAMES, PART, load, takeaway_card
 
 GD, HB, NE = OPT_COLORS["gd"], OPT_COLORS["hb"], OPT_COLORS["nesterov"]
 

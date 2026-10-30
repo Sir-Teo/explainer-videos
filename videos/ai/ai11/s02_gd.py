@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import HIST, OPT_COLORS, PART, lag, load, predict_card, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, PART, lag, load, predict_card, takeaway_card
 
 UP_C, LO_C = C.SURPRISE, C.TRUE_P  # the upper (L) and lower (mu) quadratic bounds
 GD = OPT_COLORS["gd"]
