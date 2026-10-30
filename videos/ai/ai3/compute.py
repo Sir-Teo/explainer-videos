@@ -694,7 +694,13 @@ def galore_run(method: str, lr: float, seed: int, track=False) -> dict:
     rank = int(method[6:]) if method.startswith("galore") else 0
     mats = {n: p for n, p in model.named_parameters() if p.dim() == 2 and n.startswith("blocks")} if rank else {}
     rest = [p for n, p in model.named_parameters() if n not in mats]
-    opt = torch.optim.Adam(rest, lr=lr, betas=(0.9, 0.95))
+    if method == "adamsplit":  # the control: full Adam, with GaLore's step scale on the block matrices only
+        blk = [p for n, p in model.named_parameters() if p.dim() == 2 and n.startswith("blocks")]
+        ids = {id(p) for p in blk}
+        opt = torch.optim.Adam([dict(params=[p for p in rest if id(p) not in ids], mult=1.0),
+                                dict(params=blk, mult=GL_SCALE)], lr=lr, betas=(0.9, 0.95))
+    else:
+        opt = torch.optim.Adam(rest, lr=lr, betas=(0.9, 0.95))
     st = {n: dict(P=None, m=None, v=None, t=0) for n in mats}
     W0 = {n: p.detach().clone() for n, p in model.named_parameters() if p.dim() == 2 and n.startswith("blocks")}
     curve, tracked, grads_kept = [], [], {}
@@ -702,7 +708,7 @@ def galore_run(method: str, lr: float, seed: int, track=False) -> dict:
     for step in range(1, GL_STEPS + 1):
         f = pocket.lr_factor(step - 1, GL_STEPS, "cosine", GL_WARM)
         for gr in opt.param_groups:
-            gr["lr"] = lr * f
+            gr["lr"] = lr * f * gr.get("mult", 1.0)
         x, y = data.batch(GL_BATCH)
         loss = F.cross_entropy(model(x).flatten(0, 1), y.flatten())
         opt.zero_grad(set_to_none=True)
@@ -805,6 +811,28 @@ def compute_galore():
                ns_sv=[x.tolist() for x in ns], ns_err=float(np.linalg.norm(final - exact) / np.linalg.norm(exact)),
                g_sv=(s / s[0]).tolist(), steps=GL_STEPS, batch=GL_BATCH, seq=GL_CFG["seq"], refresh=GL_REFRESH,
                cfg=GL_CFG)
+    part.finish()
+    return out
+
+
+def compute_galorectl():
+    """The control for GaLore's comparison: GaLore scales the block matrices' steps by GL_SCALE while the embedding
+    and output layer train at the full learning rate.  Full-rank Adam with the same split shows how much of
+    GaLore's result is that split rather than the low-rank projection (same learning rates, same seeds)."""
+    params = dict(cfg=GL_CFG, steps=GL_STEPS, batch=GL_BATCH, lrs=GL_LRS, scale=GL_SCALE, v=1)
+    part = CACHE.partial("galorectl", params)
+    for lr in GL_LRS:
+        key = f"adamsplit_{lr:g}_0"
+        if key not in part:
+            print(f"    {key}", flush=True)
+            part[key] = galore_run("adamsplit", lr, 0)
+    best = min(GL_LRS, key=lambda lr: part[f"adamsplit_{lr:g}_0"]["val"])
+    for seed in (1, 2):
+        key = f"adamsplit_{best:g}_{seed}"
+        if key not in part:
+            print(f"    {key}", flush=True)
+            part[key] = galore_run("adamsplit", best, seed)
+    out = dict(runs={k: part[k] for k in part.done}, best_lr=best)
     part.finish()
     return out
 
@@ -1498,6 +1526,7 @@ ITEMS = {
     "depth": compute_depth,
     "mp": compute_mp,
     "galore": compute_galore,
+    "galorectl": compute_galorectl,
     "words": compute_words,
     "sgns": compute_sgns,
     "highdim": compute_highdim,

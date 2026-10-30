@@ -3,23 +3,17 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import load
+from videos.ai.ai3.common import chapter, dots_on, load
 
 
 class HighDim(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 14, r"Life in 768 dimensions", r"What is a space with hundreds of dimensions like?",
+                "Chapter fourteen. Life in seven hundred and sixty-eight dimensions.")
         self.angles()
+        self.orthogonal()
         self.room()
         self.lengths()
-        self.anisotropy()
-
-    # ------------------------------------------------------------------
-    def card(self):
-        card = chapter_card(8, r"Life in 768 dimensions", r"What is a space with hundreds of dimensions like?", part=3)
-        with self.voiceover("Chapter eight. Life in seven hundred and sixty-eight dimensions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
     def angles(self):
@@ -27,7 +21,6 @@ class HighDim(VoiceoverScene):
         dims = list(h["dims"])
         assert dims == [2, 3, 10, 100, 768]
         sd = {d: h[f"angle_sd{d}"] for d in dims}
-        assert sd[100] < 6.0 and sd[768] < 2.2
         hist = {d: np.asarray(h[f"angles{d}"], float) / 20000 for d in dims}
         top = max(hist[768].max(), 0.01)
         bars = LiveBars(hist[2], max_value=top, height=4.6, bar_width=0.28, gap=0.06, colors=C.TRUE_P)
@@ -44,12 +37,13 @@ class HighDim(VoiceoverScene):
             "<bookmark mark='a'/> Pick two directions at random. In two dimensions, the angle between them could be "
             "anything. <bookmark mark='b'/> In three, angles near a right angle are already the most common. "
             "<bookmark mark='c'/> "
-            "In a hundred, it's almost always within ten degrees of one, <bookmark mark='d'/> and in 768, within about "
-            "four."
+            f"In a hundred, the angle strays from ninety degrees by only {sd[100]:.1f} degrees on average, "
+            f"<bookmark mark='d'/> and in 768, by {sd[768]:.1f}. Random directions in high dimensions are nearly "
+            "perpendicular."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
-            self.play(FadeIn(bars), FadeIn(ticks), FadeIn(dread))
+            self.play(Indicate(dread))
             for d, mark in zip(dims[1:], ["b", "c", "c", "d"]):
                 vo.wait_until(mark)
                 self.play(*bars.to(hist[d]), ChangeDecimalToValue(dv, d), run_time=1.2)
@@ -58,9 +52,57 @@ class HighDim(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def orthogonal(self):
+        h = load("highdim")
+        ds = np.asarray(h["var_dims"], float)
+        var = np.asarray(h["cos_var"])
+        nsd = np.asarray(h["norm_sd"])
+        rows = [
+            cmath(r"\cos\theta", "=", r"\frac{\mathbf{x}\cdot\mathbf{y}}{|\mathbf{x}|\,|\mathbf{y}|} \approx "
+                  r"\frac{\mathbf{x}\cdot\mathbf{y}}{d}", font_size=34),
+            cmath(r"\operatorname{Var}(\mathbf{x}\cdot\mathbf{y})", "=", r"\textstyle\sum_{i=1}^d "
+                  r"\operatorname{Var}(x_i y_i) = d", font_size=34),
+            cmath(r"\operatorname{Var}(\cos\theta)", r"\approx", r"d / d^2 = 1/d", font_size=38,
+                  colors={r"d / d^2 = 1/d": C.BITS}),
+        ]
+        whys = [why(r"both lengths $\approx \sqrt d$ \ (below)"), why(r"independent terms, \ each of variance $1$"),
+                why(r"exactly $1/d$ for uniform directions")]
+        step = ladder(self, rows, whys, keep=3, top=3.3, x=-2.6, buff=0.35, edge=6.9)
+        g = axes([0, 4, 1], [-4, 0, 1], x_length=5.8, y_length=3.2, xticks=[0, 1, 2, 3, 4], yticks=[-4, -3, -2, -1, 0],
+                 xfmt=lambda v: f"10^{{{int(v)}}}" if v > 1 else ("1" if v == 0 else "10"),
+                 yfmt=lambda v: f"10^{{{int(v)}}}" if v < -1 else ("1" if v == 0 else "0.1"),
+                 xlabel=r"dimension $d$", ylabel=r"variance of $\cos\theta$", center=[-1.5, -1.9, 0])
+        ax = g.ax
+        lx = np.log10(ds)
+        pred = Line(ax.c2p(0, 0), ax.c2p(4, -4), color=C.BITS, stroke_width=2)
+        pl = MathTex(r"1/d", font_size=28, color=C.BITS).next_to(ax.c2p(3.6, -3.6), UR, buff=0.05)
+        meas = dots_on(ax, lx, np.log10(var), C.TRUE_P, 0.07)
+        k768 = int(np.argmin(np.abs(ds - 768)))
+        cap = note(r"computed: \ $20{,}000$ random pairs at each $d$").to_corner(DR, buff=0.25)
+        read = label(rf"$d = 768$: \ measured ${var[k768]:.5f}$, \ $1/d = {1 / 768:.5f}$", font_size=26,
+                     color=C.TRUE_P).move_to([4.2, -0.8, 0])
+        with self.voiceover(
+            "Why? Here is the calculation, and it is short. <bookmark mark='a'/> The cosine is the dot product over "
+            "the two lengths, and in high dimensions each length is close to the square root of d; we'll see why in "
+            "a moment. <bookmark mark='b'/> The dot product is a sum of d independent products, each with mean zero "
+            "and variance one, so its variance is d. <bookmark mark='c'/> Divide by d squared: the cosine's variance "
+            "is one over d, and its spread is one over root d. <bookmark mark='d'/> Measured at thirteen dimensions "
+            f"from 2 to {int(ds[-1])}, on a log scale, the points sit on the line. At 768: {var[k768]:.5f}, against "
+            f"{1 / 768:.5f}."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(cap))
+            for k, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                step(k)
+            self.play(Create(pred), FadeIn(pl))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in meas], lag_ratio=0.1), FadeIn(read), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def room(self):
         h = load("highdim")
-        assert h["n_dirs"] == 10000 and 78 < h["worst_angle"] < 80
         head = label(r"$10{,}000$ random directions in $768$ dimensions", font_size=36).to_edge(UP, buff=0.5)
         line1 = label(rf"every pair between ${h['worst_angle']:.0f}^\circ$ and ${180 - h['worst_angle']:.0f}^\circ$",
                       font_size=38, color=C.BITS).move_to(UP * 1.2)
@@ -88,11 +130,12 @@ class HighDim(VoiceoverScene):
         feat.to_edge(LEFT, buff=0.3).set_y(-0.6)
         with self.voiceover(
             "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 "
-            "dimensions: every pair of them lies between seventy-nine and a hundred and one degrees apart. "
+            f"dimensions: every pair of them lies between {h['worst_angle']:.0f} and {180 - h['worst_angle']:.0f} "
+            "degrees apart. "
             "<bookmark mark='b'/> A feature is one idea a model keeps track of, stored as a direction. A model can "
             "keep far more features than it has dimensions, as long as their directions only need to be nearly "
             "perpendicular. Packing in more directions than dimensions this way is called superposition, and it's "
-            "how we'll read the inside of a model in part thirty."
+            "how Part 30 reads the inside of a model."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -107,74 +150,85 @@ class HighDim(VoiceoverScene):
     def lengths(self):
         h = load("highdim")
         dims = list(h["dims"])
+        vd = [int(v) for v in h["var_dims"]]
+        nsd = np.asarray(h["norm_sd"])
         hist = {d: np.asarray(h[f"norms{d}"], float) / 20000 for d in dims}
         top = max(hist[768].max(), 0.01)
-        bars = LiveBars(hist[2], max_value=top, height=3.4, bar_width=0.17, gap=0.03, colors=C.MODEL_Q)
-        bars.place(-1.75, x=-2.6)
-        x0, w = bars.base.get_start()[0] + 0.15, 40 * 0.2
-        ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([x0 + w * v / 2 - 0.02, -1.95, 0])
+        bars = LiveBars(hist[2], max_value=top, height=3.4, bar_width=0.15, gap=0.03, colors=C.MODEL_Q)
+        bars.place(-2.0, x=-3.6)
+        x0, w = bars.base.get_start()[0] + 0.15, 40 * 0.18
+        ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([x0 + w * v / 2 - 0.02, -2.2, 0])
                          for t, v in (("0", 0), (r"\sqrt d", 1), (r"2\sqrt d", 2))])
-        head = label(r"The length of a random vector, \ $\mathbf{x} \sim \mathcal{N}(0, I_d)$", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"The length of a random vector, \ $\mathbf{x} \sim \mathcal{N}(0, I_d)$", font_size=34)
+        head.to_edge(UP, buff=0.35)
         dv = Integer(2, font_size=44, color=C.BITS)
-        dread = VGroup(MathTex(r"d =", font_size=44), dv).arrange(RIGHT, buff=0.2).move_to([-2.6, 2.2, 0])
-        shell = h["shell"]
-        assert shell["768"] > 0.9995
-        ball = VGroup(Circle(radius=1.4, color=C.TRUE_P, stroke_width=3, fill_color=C.TRUE_P, fill_opacity=0.15),
-                      Annulus(inner_radius=1.27, outer_radius=1.4, color=C.BITS, fill_opacity=0.85, stroke_width=0))
-        ball.move_to([4.7, 0.9, 0])
-        bl = label(r"the share of a ball's volume \\ within $1\%$ of its surface", font_size=24, color=GREY_A)
-        bl.next_to(ball, DOWN, buff=0.3)
-        vals = VGroup(*[MathTex(rf"d = {d}: \ {100 * shell[str(d)]:.{2 if d == 768 else 1}f}\%", font_size=28,
-                                color=C.BITS if d == 768 else GREY_A) for d in (3, 100, 768)])
-        vals.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(bl, DOWN, buff=0.2)
+        dread = VGroup(MathTex(r"d =", font_size=44), dv).arrange(RIGHT, buff=0.2).move_to([-3.6, 2.2, 0])
+        rows = [
+            cmath(r"|\mathbf{x}|^2", "=", r"\textstyle\sum_{i=1}^d x_i^2", font_size=32),
+            cmath(r"\mathbb{E}|\mathbf{x}|^2", "=", r"d, \quad \operatorname{Var}|\mathbf{x}|^2 = 2d", font_size=32),
+            cmath(r"\operatorname{sd}|\mathbf{x}|", r"\approx", r"\frac{\sqrt{2d}}{2\sqrt d} = \frac{1}{\sqrt 2}",
+                  font_size=32),
+        ]
+        whys = [why(r"$d$ independent squares", font_size=22), why(r"$\mathbb{E}x_i^4 = 3$", font_size=22),
+                why(r"$\sqrt{\cdot}$ near $d$ has \\ slope $1/(2\sqrt d)$", font_size=22)]
+        step = ladder(self, rows, whys, keep=3, top=2.4, x=2.4, buff=0.4, edge=6.9)
+        k768 = vd.index(768)
+        meas = label(rf"measured spread at $d = 768$: \ ${nsd[k768]:.3f}$; \ $1/\sqrt 2 = 0.707$", font_size=26,
+                     color=C.MODEL_Q).move_to([2.6, -1.6, 0])
         with self.voiceover(
-            "Lengths behave strangely too. <bookmark mark='a'/> Give a vector 768 independent random coordinates, and "
-            "its length is almost exactly the square root of 768, every time. The spread all but disappears. "
-            "<bookmark mark='b'/> And nearly all of a ball's volume sits in a thin shell at its surface: in 768 "
-            "dimensions, 99.96 percent of it lies within one percent of the edge."
+            "Now lengths. <bookmark mark='a'/> Give a vector d independent random coordinates. As d grows, its "
+            "length piles up ever more tightly around the square root of d. <bookmark mark='b'/> The squared length "
+            "is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. <bookmark mark='d'/> The "
+            "square root near d changes by one over two root d per unit, so the length's spread is about one over "
+            "root two, whatever d is. The spread stays put while the length grows: relative to it, the spread "
+            f"disappears. Measured at 768 dimensions, {nsd[k768]:.3f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
             for d in dims[1:]:
                 self.play(*bars.to(hist[d]), ChangeDecimalToValue(dv, d), run_time=0.9)
             vo.wait_until("b")
-            self.play(FadeIn(ball), FadeIn(bl))
-            self.play(LaggedStart(*[FadeIn(v) for v in vals], lag_ratio=0.3))
+            step(0)
+            vo.wait_until("c")
+            step(1)
+            vo.wait_until("d")
+            step(2)
+            self.play(FadeIn(meas))
         bars.freeze()
         self.wait(0.3)
         self.clear_scene()
+        self.shell()
 
     # ------------------------------------------------------------------
-    def anisotropy(self):
-        g = load("gpt2")
-        assert abs(g["cos_random_mean"] - 0.24) < 0.005 and abs(g["cos_centred_mean"]) < 0.015
-        raw, cen = np.asarray(g["hist_raw"], float), np.asarray(g["hist_centred"], float)
-        top = max(raw.max(), cen.max()) / raw.sum()
-        bars = LiveBars(raw / raw.sum(), max_value=top, height=3.4, bar_width=0.17, gap=0.03, colors=C.TRUE_P)
-        bars.place(-2.0)
-        x0, w = bars.base.get_start()[0] + 0.15, 60 * 0.2
-
-        def X(c):
-            return x0 + w * (c + 0.3) / 0.9
-
-        ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([X(v), -2.2, 0])
-                         for t, v in (("-0.3", -0.3), ("0", 0.0), ("0.3", 0.3), ("0.6", 0.6))])
-        zero = DashedLine([X(0), -2.0, 0], [X(0), 1.8, 0], color=GREY_B, stroke_width=2)
-        head = label(r"GPT-2: \ the cosine between $2{,}000$ random words' vectors", font_size=34).to_edge(UP, buff=0.4)
-        m1 = label(rf"average ${g['cos_random_mean']:.2f}$: \ they share a direction", font_size=30, color=C.TRUE_P)
-        m2 = label(rf"subtract the average vector: \ ${g['cos_centred_mean']:.2f}$", font_size=30, color=C.BITS)
-        for m in (m1, m2):
-            m.to_edge(DOWN, buff=0.45)
+    def shell(self):
+        h = load("highdim")
+        shell = h["shell"]
+        balls = VGroup()
+        for d in (3, 100, 768):
+            frac = shell[str(d)]
+            b = VGroup(Circle(radius=1.3, color=C.TRUE_P, stroke_width=3, fill_color=C.TRUE_P, fill_opacity=0.12),
+                       Annulus(inner_radius=1.17, outer_radius=1.3, color=C.BITS, fill_opacity=0.25 + 0.7 * frac,
+                               stroke_width=0))
+            v = MathTex(rf"d = {d}: \ {100 * frac:.{2 if d == 768 else 1}f}\%", font_size=32,
+                        color=C.BITS if d == 768 else GREY_A).next_to(b, DOWN, buff=0.3)
+            balls.add(VGroup(b, v))
+        balls.arrange(RIGHT, buff=1.2).move_to(DOWN * 0.3)
+        head = label(r"The share of a ball's volume within $1\%$ of its surface: \ $1 - 0.99^d$", font_size=34)
+        head.to_edge(UP, buff=0.5)
+        tag = note(r"the outer $1\%$ of the radius, drawn wider than life").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Real word vectors aren't random, though. <bookmark mark='a'/> GPT-2's vectors all lean the same way: "
-            "two unrelated words have a cosine of 0.24 on average, not zero. <bookmark mark='b'/> Subtract the "
-            "average vector from every word, and the cosines fall back around zero."
+            "Volume does something stranger. The volume inside a radius r grows like r to the d, so the inner ball, "
+            "with ninety-nine percent of the radius, holds 0.99 to the d of the volume. <bookmark mark='a'/> In three "
+            f"dimensions, the outer one percent holds {100 * shell['3']:.1f} percent of the volume. In a hundred, "
+            f"{100 * shell['100']:.1f} percent. <bookmark mark='b'/> In 768, {100 * shell['768']:.2f} percent: nearly "
+            "all of a high-dimensional ball is skin. Random vectors live on a thin shell, and nearly perpendicular "
+            "to each other. Both facts drive the next chapter."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), Create(zero))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(balls[0][0]))
             vo.wait_until("a")
-            self.play(FadeIn(m1))
+            self.play(FadeIn(balls[0][1]))
+            self.play(FadeIn(balls[1]))
             vo.wait_until("b")
-            self.play(*bars.to(cen / cen.sum()), FadeOut(m1), FadeIn(m2), run_time=1.6)
-        bars.freeze()
+            self.play(FadeIn(balls[2]))
         self.wait(0.3)
         self.clear_scene()

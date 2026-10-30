@@ -106,11 +106,12 @@ class Spectra(VoiceoverScene):
         top = float(ev.max() / hi)
         brace = BraceBetweenPoints(ax.c2p(math.log10(hi), 0.35), ax.c2p(math.log10(ev.max()), 0.35), UP, color=TRAINED)
         bl = label(rf"${above}$ eigenvalues beyond the edge; \\ the largest ${top:.1f}\times$ it", font_size=24,
-                   color=TRAINED).next_to(brace, UP, buff=0.1)
+                   color=TRAINED).next_to(ax.c2p(math.log10(hi) + 0.55, 1.75), UP, buff=0.0)
+        bl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.05)
         head = label(rf"GPT-2, \ layer ${int(s['layer'])}$, \ the MLP's first matrix ($768 \times 3072$)", font_size=32)
         head.to_edge(UP, buff=0.3)
         leg = legend([(TRAINED, r"trained"), (RANDOM, r"the same numbers, shuffled"), (MPC, r"Marchenko--Pastur")],
-                     font_size=22).to_corner(UL, buff=0.4).shift(DOWN * 0.8)
+                     font_size=22).move_to([4.9, 2.0, 0])
         sh_above = int(sh["above"])
         shuf = ("The escapees vanish: the spectrum falls back onto the law." if sh_above == 0 else
                 f"Only {sh_above} remain beyond the edge.")
@@ -154,8 +155,8 @@ class Spectra(VoiceoverScene):
         leg = legend([(KC[k], KN[k]) for k in KC], font_size=20).move_to([4.8, -1.2, 0])
         n_in = sum(1.5 <= r["alpha"] <= 5 for r in rows)
         rule = MathTex(r"\rho(\lambda) \propto \lambda^{-\alpha}, \quad \lambda > \lambda_{\min}", font_size=30)
-        rule.to_corner(UR, buff=0.4)
-        fit = label(r"fitted by maximum likelihood, \\ $\lambda_{\min}$ chosen by the best Kolmogorov--Smirnov "
+        rule.to_edge(UP, buff=0.35)
+        fit = label(r"fitted by maximum likelihood; \ $\lambda_{\min}$ chosen by the best Kolmogorov--Smirnov "
                     r"distance", font_size=20, color=GREY_A).next_to(rule, DOWN, buff=0.12)
         with self.voiceover(
             "The escaped eigenvalues don't stop at a sharp edge. They thin out slowly, like a power law: the density "

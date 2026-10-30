@@ -203,12 +203,12 @@ class LongContext(VoiceoverScene):
             cg.width = 4.4
         far_t, far_h = float(mt[-200:].mean()), float(mh[-200:].mean())
         near_t, near_h = float(mt[100:240].mean()), float(mh[100:240].mean())
-        v1 = (f"Past 256, the transformer's loss climbs, from {near_t:.1f} to {far_t:.1f} nats: rotary positions it "
-              "never trained on. " if far_t > near_t + 0.3 else
-              f"Past 256, the transformer's loss barely moves, {near_t:.1f} to {far_t:.1f}. ")
-        v2 = (f"The hybrid's stays near where it was, {near_h:.1f} to {far_h:.1f}: its attention has no positions to "
-              "run out of. " if far_h < near_h + 0.3 else
-              f"The hybrid's climbs too, {near_h:.1f} to {far_h:.1f}. ")
+        v1 = (f"Past 256, the transformer's loss climbs, from {near_t:.2f} to {far_t:.2f} nats: rotary positions it "
+              "never trained on. " if far_t > near_t + 0.1 else
+              f"Past 256, the transformer's loss barely moves, {near_t:.2f} to {far_t:.2f}. ")
+        v2 = (f"The hybrid's stays near where it was, {near_h:.2f} to {far_h:.2f}: its attention has no positions to "
+              "run out of. " if far_h < near_h + 0.1 else
+              f"The hybrid's climbs too, {near_h:.2f} to {far_h:.2f}. ")
         v3 = ("But neither can find a needle: given twenty-four random tokens, a stretch of a novel and the same "
               "twenty-four again, neither predicts the repeat, even sixteen tokens apart. Models this small, trained "
               "this briefly, never formed Part 13's induction heads; that is why the tests before used small models "

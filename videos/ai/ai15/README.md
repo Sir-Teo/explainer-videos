@@ -29,7 +29,79 @@ Every model is trained here, on a CPU, by `compute.py` (one torch thread a proce
 
 ## Chapters
 
-RESULTS_PLACEHOLDER
+* **Everything it has read.** Llama 3.1 70B's cache growing token by token (320 KiB a token, 39 GiB at 128,000
+  tokens); a fixed-size memory as the alternative; how we got here, 1982–2026 (Hopfield networks, fast weights, LSTM,
+  neural Turing machines and memory networks, the transformer, Transformer-XL/Longformer/BigBird, linear attention and
+  retrieval, S4/RETRO/Mamba, the 2026 hybrids); the plan.
+* **1. The cache.** Why attention keeps every key and value; memory per token from published configurations: one key
+  and value per head (2.5 MiB), grouped queries (Llama 3.1, 320 KiB), multi-query (40 KiB), DeepSeek-V3 as full
+  attention (4.8 MiB) and with multi-head latent attention (68.6 KiB, 71× less), Qwen3-Next (24 KiB, one attention
+  layer in four); MLA's folding of the key matrix into the query (checked to 9e-16 with random weights), why rotary
+  positions break it (folding anyway is 18% off) and DeepSeek's decoupled rotary key restoring it; serving the cache is
+  Part 19's.
+* **2. Keeping less of the cache.** Sparse Transformer, Longformer and BigBird attention patterns and Transformer-XL's
+  segment recurrence (history, schematic); attention sinks (Xiao et al. 2023) measured on the series' own model: no
+  head puts even ten times the uniform share on the first token (mean 0.1%; this model never grew a sink); the
+  scoreboard's passage (first 2,000 tokens) read token by token with 32/64/128 tokens of cache per head: window, four
+  sinks plus window, H₂O heavy hitters (1.825/1.826/1.845 bits per character at 32, all within 0.003 of the 1.806 of
+  recomputed windows at 128), and keeping everything with positions past the 256 trained on (2.288).
+* **3. Attention without the softmax.** (QKᵀ)V = Q(KᵀV): a T × T table or a d × d one; causal linear attention as a
+  recurrence on a d × d state (checked against the parallel form to rounding error); the operation counts.
+* **4. A matrix that remembers.** A Hopfield network of 100 neurons storing 5 patterns, recalling one from 30 flipped
+  bits as the energy falls; capacity: exact recall of a 10%-corrupted cue falls from 100% at P/N ≤ 0.08 to 56% at 0.14
+  and 0 at 0.32 (16 trials each; the large-N limit is 0.138); the lineage Kohonen/Anderson (1972) → Schmidhuber's fast
+  weights (1992) → Ba et al. (2016) → NTMs and memory networks → linear attention → *secretly fast weight programmers*
+  (2021); an 8 × 8 matrix memory written with four outer products and read back (errors 0.11–0.29 for nearly
+  orthogonal keys); crosstalk growing like (N − 1)/d (d = 64).
+* **5. Forgetting and correcting.** Decay (old pairs fade, recent ones sharp, 128 pairs); the delta rule in three
+  steps; 16 keys rewritten 256 times: error reading the latest values 18.96 (adding), 0.92 (decay), 0.23 (delta); the
+  8 × 8 memory's key 2 given a new value: adding returns a blend (error 0.98), the delta rule the new value exactly (0),
+  the other keys moving through their overlap; the delta rule as one step of online least squares (Widrow & Hoff 1960).
+* **6. The delta rule as geometry.** I − βkkᵀ on the plane: β = ½ halfway, β = 1 a projection, β = 2 a reflection
+  (eigenvalue −1, parity); the family as S_t = S_{t−1}M_t + write: linear attention, decay (Mamba-2, GLA), DeltaNet,
+  Gated DeltaNet (Qwen3-Next), Kimi Delta Attention (per-channel gate), mLSTM (xLSTM), RWKV-7's generalized delta rule.
+* **7. Training a recurrence in parallel.** h_t = a_t h_{t−1} + b_t as pairs combined associatively (derived step by
+  step); the Hillis–Steele scan drawn on 8 steps; on 4,096 steps 12 rounds, Blelloch's version 8,190 combines, both
+  equal to the loop to 6e-16, with 4 × 4 matrices to 4e-16; the delta rule's chunkwise WY/UT form, checked against the
+  recurrence on 2,048 tokens (3e-15; gated 9e-16), 32 sequential steps instead of 2,048.
+* **8. State-space models.** A continuous state read in steps of Δ (a leaky bucket); the zero-order hold derived and
+  checked on a damped oscillator against a fine Runge–Kutta solution (error 9e-12; bilinear error falling like Δ^2.2,
+  Euler unstable above Δ ≈ 0.15, 140× the signal at Δ = 0.4); HiPPO-LegS memorizing a signal online (N = 4/8/16/32/64:
+  relative error 0.50/0.30/0.18/0.11/0.014, equal to the best polynomial fit to within 0.01 except at 64); S4's
+  convolution kernel, checked against the recurrence (2e-16); Path-X.
+* **9. Selectivity: Mamba and after.** A fixed step washes a marked value out; Mamba's selective step holds it;
+  Mamba-2's state-space duality (masked attention (L ∘ QKᵀ)V with a semiseparable mask, every block below the diagonal
+  rank one, checked to 9e-16); Mamba-3 (exponential-trapezoidal step, complex state, MIMO).
+* **10. A memory that learns.** Test-time training (Sun et al. 2024): TTT-Linear and TTT-MLP; our toy (per-sequence
+  hidden rule, 32 sequences, step sizes tuned on 16 others): after 256 pairs a linear memory (64 numbers) 0.172, a
+  two-layer memory (1,024 numbers) 0.148; Titans (Behrouz et al.): surprise, momentum, forgetting, on a stream whose
+  rule changes halfway (error over the 32 pairs after the change 0.74 with momentum and forgetting, 0.91 without); the
+  table of memories as learners (after Wang, Shi & Fox's test-time regression).
+* **11. A recall test.** MQAR (Arora et al. 2023): 16 pairs, six memories, key sizes 2/4/8/16, three seeds: recall
+  (mean of seeds) softmax 72/95/100/100%, linear 19/26/36/58%, Mamba-2-style 59/75/95/100%, delta 11/67/87/89%,
+  gated delta 18/46/91/99%, hybrid 8/49/84/98%; the training replay (key size 8): which answers of one fixed list each
+  model gets right at every 50 steps; what each memory holds (128–1,024 numbers a layer against a cache of
+  3,168–3,840 at 48 tokens). Here the hybrid did not beat its gated-delta parent at small keys: its single attention
+  layer has keys just as small.
+* **12. Hybrids.** Jamba, MiniMax-01, Nemotron-H, Granite 4.0, Qwen3-Next, Kimi Linear, Qwen3.5, Kimi K3 (attention
+  in 1 of 8 … 24 of 93 layers); our transformer and gated-delta hybrid on the novels at equal budget (725,568 and
+  727,410 weights, 400 steps of 4,096 tokens, three seeds): the transformer ends ahead, 2.363 against 2.433 bits per
+  character on the scoreboard's passage (seed ranges 2.361–2.365 and 2.432–2.434); the hybrid's samples during
+  training; the memory bill at 128,000 tokens (Llama 39.1 GiB, DeepSeek-V3 8.38 GiB, Qwen3-Next 2.96 GiB plus 36 MiB of
+  state).
+* **13. How long is a context, really?** The needle in a haystack (Kamradt 2023; schematic); RULER, NoLiMa, context rot
+  (cited); our RULER-style test RULER_RESULTS; our language models past their 256-token window (1,024 tokens read in
+  one go): the transformer's loss rises from 5.36 to 5.53 nats past 256, the hybrid's (attention without positions)
+  stays at 5.52–5.55; neither copies a repeated run of random tokens (no induction heads at this size); the 2026
+  picture (Gemini 1.5, Kimi Linear's RULER at 128k, MRCR v2 at 1M, DeepSeek-V4; each its maker's report).
+* **14. Retrieval as memory.** Dense retrieval and RAG (DPR, REALM, RAG; schematic); the kNN-LM (Khandelwal et al.
+  2020) on the series' model KNN_RESULTS; a continuous cache of the passage's own past (Grave et al. 2017): 1.689 →
+  1.580 bits per character (λ = 0.05, chosen on held-out novels); RETRO; the scoreboard with Part 15's rows.
+* **15. The frontier, late 2026.** Production hybrids and linear attention 2025–26 (MiniMax-01, Nemotron-H, Qwen3-Next,
+  Kimi Linear, Nemotron 3, Qwen3.5, Mamba-3, DeepSeek-V4, Kimi K3) and MiniMax-M2's return to full attention (its
+  reasons, from MiniMax's own post); context engineering (compaction, notes, sub-agents); open questions.
+* **Recap**, where it comes back (Parts 16, 19, 28, 29, 30), six problems, Part 16's teaser, references.
+
 
 ## Running it
 
