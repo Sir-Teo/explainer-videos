@@ -46,13 +46,11 @@ class Adam(VoiceoverScene):
         sparse = label(r"rare features, \ small summed squares: \\ big steps when they do appear", font_size=22,
                        color=GREY_A).move_to([3.6, -1.9, 0])
         with self.voiceover(
-            "One learning rate for every weight is a strange choice. Some weights see large gradients, others tiny "
-            "ones; chapter one's condition number, one direction at a time. <bookmark mark='a'/> In 2011 John "
-            "Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: keep a running sum of each weight's squared "
-            "gradients, and divide its step by the square root. <bookmark mark='b'/> A word that appears rarely has "
-            "a small sum, so when it does appear, it gets a big step. <bookmark mark='c'/> The catch: the sum only "
-            "ever grows, so every step size shrinks like one over the square root of time, and a long training run "
-            "slows to a crawl."
+            "One learning rate for every weight is a strange choice: some weights see large gradients, others tiny "
+            "ones. <bookmark mark='a'/> In 2011 John Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: divide "
+            "each weight's step by the root of its summed squared gradients. <bookmark mark='b'/> A rare word gets "
+            "a big step when it does appear. <bookmark mark='c'/> The catch: the sum only grows, so every step "
+            "shrinks like one over root t, and a long run slows to a crawl."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rule), FadeIn(rn))
             vo.wait_until("a")
@@ -66,7 +64,7 @@ class Adam(VoiceoverScene):
 
     def rmsprop(self):
         slide = RoundedRectangle(width=8.4, height=3.6, corner_radius=0.1, stroke_color=GREY_B, stroke_width=2,
-                                 fill_color="#1A2030", fill_opacity=1).move_to([-2.2, 0.3, 0])
+                                 fill_color="#1A2030", fill_opacity=1).move_to([-2.6, 0.3, 0])
         st = label(r"rmsprop: \ Divide the gradient by a running \\ average of its recent magnitude", font_size=26,
                    color=WHITE).next_to(slide.get_top(), DOWN, buff=0.35)
         f1 = MathTex(r"\text{MeanSquare}(w, t) = 0.9\,\text{MeanSquare}(w, t-1) + 0.1\,\Big(\tfrac{\partial E}{\partial w}(t)\Big)^2",
@@ -76,13 +74,12 @@ class Adam(VoiceoverScene):
                    font_size=18).next_to(slide, DOWN, buff=0.15)
         hist = history_card(2012, r"Geoffrey Hinton's online course", r"RMSProp: \ AdaGrad with a forgetting average. \ "
                             r"Never written up as a paper; \ cited by its lecture slide for years", width=4.6)
-        hist.move_to([4.6, 0.3, 0])
+        hist.move_to([4.25, 0.3, 0])
+        keep_in_frame(hist)
         with self.voiceover(
-            "The fix came from an online course. <bookmark mark='a'/> In 2012, in a lecture of Geoffrey Hinton's "
-            "Coursera class on neural networks, one slide proposed RMSProp: replace AdaGrad's growing sum by a "
-            "running average that forgets, nine tenths of the old value plus one tenth of the new squared gradient, "
-            "and divide by its square root. <bookmark mark='b'/> It was never written up as a paper. For years, "
-            "research papers cited a lecture slide."
+            "The fix came from an online course. <bookmark mark='a'/> In 2012 one slide of Geoffrey Hinton's "
+            "Coursera class proposed RMSProp: an average that forgets, nine tenths old plus one tenth new. "
+            "<bookmark mark='b'/> It was never written up; papers cited the slide."
         ) as vo:
             self.play(FadeIn(slide), FadeIn(st))
             vo.wait_until("a")
@@ -113,12 +110,10 @@ class Adam(VoiceoverScene):
         for n_ in notes[:3]:
             keep_in_frame(n_)
         with self.voiceover(
-            "In 2014 Diederik Kingma and Jimmy Ba put the two ideas together. <bookmark mark='a'/> Keep a running "
-            "average of the gradient, m: that is momentum. <bookmark mark='b'/> Keep a running average of its square, "
-            "v: that is RMSProp. <bookmark mark='c'/> Correct both for starting at zero, a step we'll derive in a "
-            "moment, <bookmark mark='d'/> and step by the average direction divided by the root of the average "
-            "square. They called it Adam, and with its defaults it trained most of deep learning for the next "
-            "decade."
+            "In 2014 Diederik Kingma and Jimmy Ba combined the two. <bookmark mark='a'/> m, a running average of "
+            "the gradient: momentum. <bookmark mark='b'/> v, a running average of its square: RMSProp. "
+            "<bookmark mark='c'/> Correct both for starting at zero, <bookmark mark='d'/> and step by m over the "
+            "root of v. This is Adam, the default for the next decade."
         ) as vo:
             self.play(FadeIn(hist, shift=LEFT * 0.2), Write(rows[0]))
             for k, mk in enumerate("abcd"):
@@ -161,14 +156,12 @@ class Adam(VoiceoverScene):
         first.move_to([4.2, -2.6, 0])
         tag = note(r"computed: \ the character model's second hidden matrix").to_corner(DR, buff=0.15)
         with self.voiceover(
-            "Why the corrections? <bookmark mark='a'/> Unroll the average from its start at zero: m is a weighted sum "
-            "of all the gradients so far. <bookmark mark='b'/> If their mean is steady, its expectation is that mean "
-            "times a geometric sum, <bookmark mark='c'/> which is one minus beta to the t. Early on, m is biased "
-            "towards zero, and dividing by that factor removes the bias. <bookmark mark='d'/> Here is one weight of "
-            "our character model, its real gradients over the first sixty steps: the raw average starts near zero, "
-            "the corrected one tracks the gradients from the first step. <bookmark mark='e'/> The correction matters "
-            "most for v, whose memory is a thousand steps long. Without either correction the very first step would "
-            f"be {raw:.2f} times eta; with them, it is exactly eta."
+            "Why the corrections? <bookmark mark='a'/> Unroll m from zero: a weighted sum of the gradients so far. "
+            "<bookmark mark='b'/> If their mean is steady, its expectation is that mean times a geometric sum, "
+            "<bookmark mark='c'/> one minus beta to the t: early on m is biased towards zero, and dividing removes "
+            "it. <bookmark mark='d'/> One weight of our model, its first sixty steps: raw m starts near zero, the "
+            "corrected one tracks the gradients at once. <bookmark mark='e'/> Without the corrections the first "
+            f"step would be {raw:.2f} times eta; with them, exactly eta."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abc"):
@@ -213,16 +206,15 @@ class Adam(VoiceoverScene):
         m1, m100, m1000 = (float(a[f"median{k}"]) for k in ("1", "100", "1000"))
         f1 = float(a["frac1"])
         said1 = (f"<bookmark mark='b'/> Later, the typical move is far smaller: {m100:.2f} eta at step 100, "
-            f"{m1000:.2f} at step 1,000. The gradients are noisy, their average m is small next to their root "
-            "mean square, and Adam's step becomes the sign of the gradient, scaled by its signal-to-noise ratio."
+            f"{m1000:.2f} at step 1,000. Noisy gradients average out, and Adam's step becomes the sign, scaled by "
+            "the signal-to-noise ratio."
             if max(m100, m1000) < 0.6 else
             f"<bookmark mark='b'/> Later the typical move stays large, {m100:.2f} eta at step 100: the gradients "
             "keep their signs from step to step.")
         with self.voiceover(
-            "Look at Adam's limit. Turn both memories off and let epsilon go to zero: the gradient divided by its "
-            "own size is just its sign. Every weight moves by exactly eta, up or down. Adam is a smoothed form of "
-            "sign descent. <bookmark mark='a'/> Here is how far each weight of our model's hidden matrix moves, in "
-            f"units of eta. At the first step, the corrections make Adam exactly sign descent: {f1:.0%} of the "
+            "Now Adam's limit. Turn both memories off and let epsilon go to zero: the gradient over its own size is "
+            "its sign. Every weight moves by exactly eta: sign descent. <bookmark mark='a'/> Here is how far each "
+            f"weight of our hidden matrix moves, in units of eta. At the first step, {f1:.0%} of the "
             "weights move by eta. "
             + said1
         ) as vo:
@@ -271,11 +263,10 @@ class Adam(VoiceoverScene):
         notes.next_to(view, DOWN, buff=0.4).set_x(3.4)
         keep_in_frame(notes)
         with self.voiceover(
-            "That limit became an optimizer. <bookmark mark='a'/> In 2023 a team at Google let a computer search "
-            "over programs for update rules, and the winner, after simplification, was Lion: move every weight by "
-            "the sign of a blend of momentum and the new gradient, <bookmark mark='b'/> then update the momentum "
-            "more slowly. <bookmark mark='c'/> It keeps one number per weight instead of Adam's two, and because "
-            "every step has full size, it wants a smaller learning rate and a larger weight decay. It runs in "
+            "That limit became an optimizer. <bookmark mark='a'/> In 2023 a Google team searched over programs for "
+            "update rules and found Lion: step by the sign of a blend of momentum and gradient, "
+            "<bookmark mark='b'/> then update the momentum more slowly. <bookmark mark='c'/> One state per weight, "
+            "not two, and since every step is full size, a smaller learning rate and a larger decay. It runs in "
             "our race in Chapter 12."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rows[0]))
@@ -296,9 +287,8 @@ class Adam(VoiceoverScene):
                           r"limit is sign descent, \ the steepest step when every weight is bounded on its own.",
                           r"Next: \ what weight decay does inside Adam")
         with self.voiceover(
-            "So Adam is momentum divided by a running size, corrected for its start, and in the limit it is sign "
-            "descent: the steepest step when each weight may move by at most eta on its own. Next, a subtle bug in "
-            "how it was used for years."
+            "So Adam is momentum over a running size, corrected for its start; its limit is sign descent. Next, a "
+            "subtle bug in how it was used for years."
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))
             self.play(FadeIn(t[1]))

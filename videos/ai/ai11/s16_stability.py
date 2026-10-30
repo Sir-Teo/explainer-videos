@@ -62,17 +62,17 @@ class Stability(VoiceoverScene):
             if hf > hs else
             f"<bookmark mark='c'/> Here the faster run still ends at {hf:.2f} bits, against {hs:.2f}.")
         with self.voiceover(
-            "Large runs sometimes blow up: the loss jumps, and training must be rolled back. Part eighteen "
-            "tells that story at scale. Here is one mechanism, provoked on purpose, in a one-layer transformer on "
-            "our books, the kind part thirteen builds. <bookmark mark='a'/> Watch the largest attention score, a "
-            "query times a key. With Muon at a moderate rate it grows "
-            f"to about {mx_s:,.0f}. <bookmark mark='b'/> At four times the rate it runs away, to about {mx_f:,.0f}: "
-            "the softmax becomes a hard choice, its gradients vanish, and the heads stop learning. "
+            "Large runs sometimes blow up, and Part eighteen tells that story at scale. Here is one mechanism, "
+            "provoked on purpose in a one-layer transformer on our books. <bookmark mark='a'/> The largest attention "
+            f"score, a query times a key: with Muon at a moderate rate it grows to about {mx_s:,.0f}. "
+            f"<bookmark mark='b'/> At four times the rate it runs away, to about {mx_f:,.0f}: the softmax becomes a "
+            "hard choice and the heads stop learning. "
             + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(model), FadeIn(cite_))
+            self.play(Create(slow), FadeIn(lg[0]), run_time=3)
             vo.wait_until("a")
-            self.play(Create(slow), FadeIn(lg[0]), run_time=2)
+            self.play(Indicate(lg[0]), Indicate(slow, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(Create(fast), FadeIn(lg[1]), run_time=2)
             vo.wait_until("c")
@@ -98,12 +98,11 @@ class Stability(VoiceoverScene):
                             r"\ a trillion parameters, \ trained on $15.5$ trillion tokens \ ``with zero loss spike''",
                             width=7.0).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "In 2025 Moonshot AI met exactly this while training Kimi K2 with Muon, and fixed it surgically. "
-            "<bookmark mark='a'/> After each step, measure each head's largest score. <bookmark mark='b'/> The score "
-            "is bilinear in the head's query and key weights, so scaling both by the square root of gamma scales the "
-            "score by gamma. <bookmark mark='c'/> Whenever it exceeds a threshold tau, choose gamma to put it exactly "
-            "on tau. Nothing else changes. With tau at a hundred, Kimi K2, a model with a trillion parameters, "
-            "trained on fifteen and a half trillion tokens, its report says with zero loss spikes."
+            "In 2025 Moonshot AI met exactly this training Kimi K2 with Muon, and fixed it surgically. "
+            "<bookmark mark='a'/> After each step, measure each head's largest score. <bookmark mark='b'/> It is "
+            "bilinear in the query and key weights, so scaling both by root gamma scales it by gamma. "
+            "<bookmark mark='c'/> Whenever it exceeds tau, choose gamma to put it exactly on tau. With tau at a "
+            "hundred, Kimi K2, a trillion parameters on fifteen and a half trillion tokens, reports zero loss spikes."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -201,14 +200,12 @@ class Stability(VoiceoverScene):
         cite_ = cite(r"T.~van Laarhoven (2017); \ A.~Kosson, B.~Messmer \& M.~Jaggi, \textit{Rotational Equilibrium} (2024)",
                      corner=DL)
         with self.voiceover(
-            "Weight decay has a second life in modern networks. Most weight matrices are followed by a "
-            "normalization, which makes them scale-invariant: W and twice W give the same network. "
-            "<bookmark mark='a'/> Then the gradient is orthogonal to W, so a step can never shrink it. "
-            "<bookmark mark='b'/> Decay shrinks W by a factor; Adam's step u adds to it. <bookmark mark='c'/> Square "
-            "the norm: the decay removes two eta lambda of it per step, and the steps add eta squared times u's size, "
-            "times how strongly successive steps are correlated, which momentum sets. <bookmark mark='d'/> They "
-            "balance at an equilibrium norm, proportional to the square root of eta over lambda. "
-            "<bookmark mark='e'/> So weight decay doesn't regularize these weights at all: it sets the size at which "
+            "Weight decay has a second life. Most weight matrices are followed by a normalization, so W and twice W "
+            "give the same network. <bookmark mark='a'/> Then the gradient is orthogonal to W. <bookmark mark='b'/> "
+            "Decay shrinks W by a factor; Adam's step u adds to it. <bookmark mark='c'/> Square the norm: decay "
+            "removes two eta lambda of it per step, and the steps add eta squared times u's size, times their "
+            "correlation, which momentum sets. <bookmark mark='d'/> They balance at a norm proportional to root eta "
+            "over lambda. <bookmark mark='e'/> So here weight decay doesn't regularize: it sets the size at which "
             "each step is a fixed fraction of the matrix, an effective learning rate."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
@@ -257,9 +254,9 @@ class Stability(VoiceoverScene):
             if worst < 0.25 else
             f"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst is off by {worst:.0%}. ")
         with self.voiceover(
-            "Measure it on our character model, with a normalization added after its second hidden matrix, and "
-            "three decay strengths, each four times the last. <bookmark mark='a'/> Each norm rises or falls to a "
-            "level, and stays there, faster for stronger decay. "
+            "Measured on our character model, with a normalization after its second hidden matrix, at three decay "
+            "strengths, each four times the last: <bookmark mark='a'/> each norm settles to a level, faster for "
+            "stronger decay. "
             + said4
             + f"Without the momentum factor the prediction would be {nomom:.1f} for the first, far too small. "
             f"<bookmark mark='c'/> And four times the decay halves the norm: the fitted power is {sl:.2f}, against "
@@ -282,9 +279,9 @@ class Stability(VoiceoverScene):
                           r"Gradient clipping caps each step. \ Weight decay sets the norm, \ $\|W\| \propto \sqrt{\eta/\lambda}$.",
                           r"Next: \ the optimizer race of 2024--2026")
         with self.voiceover(
-            "So instability has causes, and the best fixes target them: QK-clip rescales just the two matrices that "
-            "make a score, clipping caps every step, and weight decay quietly sets the size of every normalized "
-            "matrix. Finally: what the field has learned about all this since 2024."
+            "So the best fixes target causes: QK-clip rescales the two matrices that make a score, clipping caps "
+            "every step, and weight decay sets the size of normalized matrices. Finally: the optimizer race since "
+            "2024."
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))
             self.play(FadeIn(t[1]))

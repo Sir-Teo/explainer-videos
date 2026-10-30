@@ -39,45 +39,65 @@ class Race(VoiceoverScene):
     def rules(self):
         r = load("race")
         opts = list(r["opts"])
-        n_lr = min(len(r[f"lrs_{o}"]) for o in opts)
-        rules = VGroup(
-            label(r"the same model, \ the same data in the same order, \ the same $3{,}000$ steps", font_size=24),
-            label(r"the same schedule: \ $60$ steps of warmup, \ then a cosine to zero", font_size=24),
-            label(rf"each optimizer at ${n_lr}$ learning rates or more, \ a factor of $2$ apart, \\ extended until the best "
-                  r"is inside; \ the best kept", font_size=24),
-            label(r"the best one run again from $2$ more seeds: \ the spread is shown", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        for r_ in rules:
-            r_.scale(1.15)
-        rules.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 1.3, 0])
-        keep_in_frame(rules)
-        head = label(r"the rules", font_size=34, color=C.BITS).next_to(rules, UP, buff=0.35)
-        roster = VGroup(*[label(OPT_NAMES[o], font_size=26, color=OPT_COLORS[o]) for o in opts]).arrange(RIGHT, buff=0.55)
-        roster.to_edge(DOWN, buff=1.6)
-        notes = VGroup(*[label(t_, font_size=18, color=GREY_A).next_to(roster[i], DOWN, buff=0.12) for i, t_ in enumerate(
-            [r"Nesterov, \ $0.9$", r"decay $0.1$", r"decay $1.0$", r"grafted", r"basis every $10$", r"$5$ rounds"])])
-        sub = label(r"Shampoo, SOAP and Muon on the two hidden matrices; \ AdamW on the rest", font_size=20, color=GREY_B)
-        sub.next_to(notes, DOWN, buff=0.3)
-        tag = note(r"the character model: \ $8$ characters of context, \ $256$ units, \ Part 1's books").to_corner(DR, buff=0.2)
+        top = VGroup(
+            label(r"the character model; \ the same batches in the same order; \ $3{,}000$ steps; \ $60$ of warmup, "
+                  r"then a cosine to zero", font_size=22),
+            label(r"each optimizer: \ learning rates a factor of $2$ apart, \ widened until the best is inside; \ "
+                  r"the best re-run from $2$ more seeds", font_size=22),
+        ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.35)
+        keep_in_frame(top)
+        lo = math.log2(min(min(float(x) for x in r[f"lrs_{o}"]) for o in opts))
+        hi = math.log2(max(max(float(x) for x in r[f"lrs_{o}"]) for o in opts))
+        x0, x1 = -2.6, 3.4
+        X = lambda lr: x0 + (math.log2(lr) - lo) / (hi - lo) * (x1 - x0)
+        cw = (x1 - x0) / (hi - lo) * 0.8
+        ys = np.linspace(1.35, -1.45, len(opts))
+        settings = {"sgdm": r"Nesterov, \ $0.9$", "adamw": r"decay $0.1$", "lion": r"decay $1.0$",
+                    "shampoo": r"grafted", "soap": r"basis every $10$", "muon": r"$5$ rounds"}
+        names, cells, bests, seeds = VGroup(), VGroup(), VGroup(), VGroup()
+        for o, y in zip(opts, ys):
+            col = OPT_COLORS[o]
+            nm = VGroup(label(OPT_NAMES[o], font_size=24, color=col),
+                        label(settings.get(o, ""), font_size=16, color=GREY_A)).arrange(DOWN, aligned_edge=RIGHT, buff=0.05)
+            nm.move_to([-4.0, y, 0]).align_to(Point([-3.0, 0, 0]), RIGHT)
+            names.add(nm)
+            row = VGroup()
+            for lr in r[f"lrs_{o}"]:
+                row.add(Square(cw, stroke_color=col, stroke_width=1.5, fill_color=col, fill_opacity=0.12)
+                        .move_to([X(float(lr)), y, 0]))
+            cells.add(row)
+            b = float(r[f"best_{o}"])
+            bests.add(Square(cw, stroke_width=0, fill_color=col, fill_opacity=0.95).move_to([X(b), y, 0]))
+            seeds.add(VGroup(*[Dot(radius=0.07, color=col) for _ in range(3)]).arrange(RIGHT, buff=0.1)
+                      .move_to([4.75, y, 0]))
+        axis = Line([x0 - 0.3, ys[-1] - 0.5, 0], [x1 + 0.3, ys[-1] - 0.5, 0], color=GREY_C, stroke_width=1.5)
+        ticks = VGroup()
+        for e_ in range(math.ceil(lo / math.log2(10)), math.floor(hi / math.log2(10)) + 1):
+            xx = X(10.0 ** e_)
+            ticks.add(VGroup(Line([xx, axis.get_y() - 0.06, 0], [xx, axis.get_y() + 0.06, 0], color=GREY_C),
+                             MathTex(rf"10^{{{e_}}}", font_size=20, color=GREY_B).move_to([xx, axis.get_y() - 0.3, 0])))
+        xn = label(r"learning rate \ (log scale); \ filled: \ the best, \ the one that races", font_size=20,
+                   color=GREY_A).next_to(ticks, DOWN, buff=0.12)
+        sh = label(r"$3$ seeds", font_size=20, color=GREY_A).next_to(seeds, UP, buff=0.2)
+        sub = label(r"Shampoo, SOAP and Muon on the two hidden matrices; \ AdamW on the rest", font_size=18,
+                    color=GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Now a race between the optimizers of this part, on our character model, under rules that make it fair. "
-            "<bookmark mark='a'/> The same model, the same batches in the same order, the same three thousand steps "
-            "and the same schedule, a short warmup and a cosine. <bookmark mark='b'/> Each optimizer gets "
-            f"{n_lr} learning rates, a factor of two apart, more if its best is at the end of the range, and keeps "
-            "its best: a method can look bad just because it was run at the wrong rate. <bookmark mark='c'/> Then the best setting is run again from two "
-            "more seeds, so we can see how much of any difference is luck. <bookmark mark='d'/> The contestants: SGD "
-            "with momentum, AdamW, Lion, Shampoo, SOAP and Muon."
+            "Now a fair race between this part's optimizers, on our character model. <bookmark mark='a'/> Same "
+            "batches in the same order, same three thousand steps, same schedule. <bookmark mark='b'/> Each one, "
+            "SGD with momentum, AdamW, Lion, Shampoo, SOAP and Muon, gets its own grid of learning rates, a factor "
+            "of two apart, widened until its best is inside: a method can look bad just from the wrong rate. "
+            "<bookmark mark='c'/> The best runs again from two more seeds, so we can see what is luck."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(roster.copy().set_opacity(0.25)))
+            self.play(lag([FadeIn(n_, shift=RIGHT * 0.1) for n_ in names], lag_ratio=0.1), Create(axis), FadeIn(ticks),
+                      FadeIn(sub))
             vo.wait_until("a")
-            self.play(FadeIn(rules[0], shift=RIGHT * 0.2))
-            self.play(FadeIn(rules[1], shift=RIGHT * 0.2))
+            self.play(FadeIn(top[0]))
             vo.wait_until("b")
-            self.play(FadeIn(rules[2], shift=RIGHT * 0.2))
+            self.play(FadeIn(top[1]), lag([lag([FadeIn(c_) for c_ in row], lag_ratio=0.15) for row in cells],
+                                          lag_ratio=0.12), run_time=2.5)
+            self.play(lag([GrowFromCenter(b_) for b_ in bests], lag_ratio=0.1), FadeIn(xn))
             vo.wait_until("c")
-            self.play(FadeIn(rules[3], shift=RIGHT * 0.2))
-            vo.wait_until("d")
-            self.play(lag([FadeIn(x, shift=UP * 0.1) for x in roster], lag_ratio=0.2), FadeIn(notes), FadeIn(sub))
+            self.play(lag([FadeIn(s_, shift=LEFT * 0.1) for s_ in seeds], lag_ratio=0.1), FadeIn(sh))
         self.wait(0.3)
         self.clear_scene()
 

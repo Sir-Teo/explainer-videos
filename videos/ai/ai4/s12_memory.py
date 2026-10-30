@@ -43,6 +43,9 @@ class Memory(VoiceoverScene):
         cnt = Integer(0, font_size=40, color=ACT).next_to(mem, RIGHT, buff=0.3)
         why_ = label(r"each backward step needs its layer's input: \ $\partial h_{k+1}/\partial h_k$ depends on $h_k$",
                      font_size=24, color=GREY_A).to_edge(DOWN, buff=0.6)
+        mem_card = definition_card(r"activation memory", r"what the forward pass keeps for the backward pass: about "
+                                   r"layers $\times$ batch $\times$ width $\times$ bytes per number", width=7.0,
+                                   font_size=22, color=ACT).move_to([2.6, -1.3, 0])
         with self.voiceover(
             "Reverse mode has a price, and it is memory. <bookmark mark='a'/> On the way forward, every layer's output "
             "must be kept, <bookmark mark='b'/> because on the way back each step needs it: a layer's Jacobian depends "
@@ -59,6 +62,7 @@ class Memory(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[s.animate.set_fill(GRAD, opacity=0.0).set_stroke(GRAD) for s in reversed(row)],
                                   lag_ratio=0.15), ChangeDecimalToValue(cnt, 0), run_time=2.5)
+            self.play(FadeIn(mem_card, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -80,13 +84,13 @@ class Memory(VoiceoverScene):
         whys = [why(r"$n/k$ checkpoints, \ plus one segment of $k$", font_size=22),
                 why(r"smallest where the slope is zero", font_size=22), None,
                 why(r"each segment is recomputed once", font_size=22)]
-        step = ladder(self, rows, whys, keep=4, top=1.1, x=-2.4, buff=0.4, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=1.35, x=-2.4, buff=0.28, edge=6.9)
         hist = VGroup(
             history_card(1992, r"Andreas Griewank", r"binomial checkpointing: \ memory and recomputation both "
                          r"growing only like $\log n$", width=4.6, font_size=17, color=HIST),
             history_card(2016, r"Tianqi Chen, Bing Xu, Chiyuan Zhang, Carlos Guestrin", r"$\sqrt n$ checkpoints for deep "
                          r"networks: \ \textit{sublinear memory cost}", width=4.6, font_size=17, color=HIST),
-        ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_corner(DR, buff=0.25)
+        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "The way out is to trade memory for time. <bookmark mark='a'/> Keep only every k-th output, a "
             "checkpoint; when the backward pass reaches a segment, run that segment forward again from its "
@@ -95,7 +99,9 @@ class Memory(VoiceoverScene):
             "<bookmark mark='d'/> at k equal to the square root of n, where it is two root n instead of n. "
             "<bookmark mark='e'/> The cost: every segment is recomputed once, about one extra forward pass. Tianqi "
             "Chen and colleagues brought this to deep networks in 2016; Andreas Griewank had shown in 1992 that "
-            "recursive checkpoints bring both costs down to a logarithm."
+            "recursive checkpoints bring both costs down to a logarithm. Today it is one line in PyTorch, and "
+            "FlashAttention uses the same trade, recomputing attention's weights in the backward pass instead of "
+            "storing them, as Part 19 shows."
         ) as vo:
             self.play(FadeIn(row))
             vo.wait_until("a")

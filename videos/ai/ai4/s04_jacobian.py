@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import GRAD, PART, VALUE
+from videos.ai.ai4.common import GRAD, PART, VALUE, load
 
 
 def warp(p):
@@ -32,6 +32,7 @@ class Jacobian(VoiceoverScene):
         self.card()
         self.bend()
         self.det_and_chain()
+        self.depth()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -141,5 +142,48 @@ class Jacobian(VoiceoverScene):
             vo.wait_until("b")
             self.play(Write(chain))
             self.play(FadeIn(cw), FadeIn(shapes))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def depth(self):
+        d = load("depth")
+        gains = [float(g) for g in d["gains"]]
+        L = int(d["L"])
+        cols = [C.SURPRISE, GRAD, WHITE, C.TRUE_P, C.BITS]
+        g = axes([0, L, 10], [-18, 6, 6], x_length=7.2, y_length=4.8, xlabel=r"depth: \ how many layers the gradient crosses",
+                 ylabel=r"size of $J_L \cdots J_1$ \ (largest singular value, $\log_{10}$)", xticks=[0, 20, 40, 60],
+                 yticks=[-18, -12, -6, 0, 6], center=[-2.0, -0.4, 0])
+        ax = g.ax
+        xs = np.arange(1, L + 1)
+        curves, labs = VGroup(), VGroup()
+        for k, gn in enumerate(gains):
+            m = np.asarray(d[f"mean{k}"])
+            curves.add(VGroup(band(ax, xs, np.clip(d[f"lo{k}"], -18, 6), np.clip(d[f"hi{k}"], -18, 6), cols[k], 0.15),
+                              curve(ax, xs, np.clip(m, -18, 6), cols[k], 3)))
+            labs.add(label(rf"gain ${gn:g}$", font_size=22, color=cols[k]).next_to(ax.c2p(L, float(np.clip(m[-1], -18, 6))),
+                                                                                RIGHT, buff=0.15))
+        head = label(rf"${L}$ tanh layers, \ weights scaled by a gain \ (computed, ${int(d['seeds'])}$ seeds)", font_size=24,
+                     color=GREY_A).to_edge(UP, buff=0.3)
+        m0, m4, m2 = (float(np.asarray(d[f"mean{k}"])[-1]) for k in (0, 4, 2))
+        steady = abs(m2) < 1
+        verdict = ("Only near a gain of one does it hold steady." if steady else
+                   "Even near a gain of one it drifts.")
+        with self.voiceover(
+            "Chain many maps and their Jacobians multiply, so their sizes multiply too. Here is a deep stack of "
+            f"tanh layers, {L} of them, with random weights scaled by a gain, and the size of the product of their "
+            "Jacobians: how much a gradient grows or shrinks on its way back through them. <bookmark mark='a'/> With "
+            f"a gain of {gains[0]:g} it shrinks by {abs(m0):.0f} powers of ten. <bookmark mark='b'/> With a gain of "
+            f"{gains[4]:g} it grows by {m4:.0f}. <bookmark mark='c'/> {verdict} These are vanishing and exploding "
+            "gradients, and Parts 9 and 10 choose the initial scale of the weights to stay on that edge."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(g))
+            self.play(Create(curves[2][1]), FadeIn(labs[2]), run_time=1.2)
+            vo.wait_until("a")
+            self.play(FadeIn(curves[0]), FadeIn(curves[1]), FadeIn(labs[0]), FadeIn(labs[1]), run_time=1.5)
+            vo.wait_until("b")
+            self.play(FadeIn(curves[3]), FadeIn(curves[4]), FadeIn(labs[3]), FadeIn(labs[4]), run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(curves[2][0]), Indicate(labs[2], color=WHITE))
         self.wait(0.3)
         self.clear_scene()

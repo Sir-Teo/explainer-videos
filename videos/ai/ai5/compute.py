@@ -116,6 +116,7 @@ def compute_bayes():
 
 # ---------------------------------------------------------------------------
 PROMPT = "Spade sat down in the armchair, and"
+PROMPT2 = "Holmes took out his magnifying"
 TEMPS = [0.5, 1.0, 2.0]
 
 
@@ -144,6 +145,11 @@ def compute_temperature():
         samples[str(T)] = tok.decode(gen[0, ids.shape[1]:]).replace("\n", " ")
     out["samples"] = samples
     assert out["H0.5"] < out["H1.0"] < out["H2.0"]
+    # a confident context, for the truncation rules: one word is nearly certain
+    ids2 = tok(PROMPT2, return_tensors="pt")["input_ids"]
+    z2 = model(ids2).logits[0, -1].numpy().astype(float)
+    top2 = np.argsort(-z2)[:10]
+    out.update(prompt2=PROMPT2, logits2=z2.astype(np.float32), top2=top2, top_tokens2=[tok.decode([int(i)]) for i in top2])
     return out
 
 
@@ -1013,7 +1019,7 @@ def compute_langevin():
     """Three samplers of the two bumps, 20,000 steps each, five seeds, from (-3, 2): random-walk Metropolis (step 0.7),
     unadjusted Langevin (step h = 0.05 and 0.3) and Metropolis-adjusted Langevin (h = 0.3).  Measured: the share in
     the left bump (truly 2/3), the spread within it (truly 0.35 per coordinate), hops between the bumps, and the
-    integrated autocorrelation time.  Then 1,500 particles under Langevin dynamics from one corner, with their
+    integrated autocorrelation time.  Then 1,500 particles under Langevin dynamics from broad noise, with their
     density on a grid every few steps (the 3D picture)."""
     dens = density2
 
@@ -1057,9 +1063,9 @@ def compute_langevin():
                 res[f"{kind}{h}_chain"] = chain[:4000:4]
         for key in rows[0]:
             res[f"{kind}{h}_{key}"] = np.array([r[key] for r in rows])
-    # the particle flow: 1,500 particles from a tight blob at (3, -2), unadjusted Langevin with h = 0.02
+    # the particle flow: 1,500 particles from broad noise, N(0, 2^2 I), unadjusted Langevin with h = 0.02
     g = rng(2011)  # Welling and Teh, 2011
-    P = np.array([3.0, -2.0]) + 0.15 * g.normal(size=(1500, 2))
+    P = 2.0 * g.normal(size=(1500, 2))
     h, steps = 0.02, 400
     frames, grids, gt = [P.copy()], [], []
     gx, gy = np.linspace(-4, 4, 41), np.linspace(-3, 3, 31)

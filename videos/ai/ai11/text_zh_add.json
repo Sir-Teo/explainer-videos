@@ -610,7 +610,11 @@
   "Cohen et al.\\ (2021, 2022); \\ Damian, Nichani \\& Lee (2022); \\ Amari (1998); \\ Martens \\& Grosse (2015); \\ Gupta, Koren \\& Singer (2018); \\ Vyas et al., \\textit{SOAP} (2024)": "Cohen等（2021，2022）；\\ Damian、Nichani \\& Lee（2022）；\\ 甘利俊一（1998）；\\ Martens \\& Grosse（2015）；\\ Gupta、Koren \\& Singer（2018）；\\ Vyas等，\\textit{SOAP}（2024）",
   "Jordan et al., \\textit{Muon} (2024); \\ Bernstein \\& Newhouse (2024); \\ Liu et al.\\ (2025); \\ Kimi Team, \\textit{Kimi K2} (2025); \\ Amsel et al.\\ (2025); \\ DeepSeek-AI, \\textit{DeepSeek-V4} (2026)": "Jordan等，\\textit{Muon}（2024）；\\ Bernstein \\& Newhouse（2024）；\\ Liu等（2025）；\\ Kimi团队，\\textit{Kimi K2}（2025）；\\ Amsel等（2025）；\\ DeepSeek-AI，\\textit{DeepSeek-V4}（2026）",
   "Hu et al., \\textit{MiniCPM} (2024); \\ Wen et al., \\textit{River Valley} (2024); \\ Defazio et al.\\ (2024); \\ Kasimbeg et al., \\textit{AlgoPerf} (2025); \\ Wen, Hall, Ma \\& Liang (2025); \\ Khona et al.\\ (2026)": "Hu等，\\textit{MiniCPM}（2024）；\\ Wen等，\\textit{River Valley}（2024）；\\ Defazio等（2024）；\\ Kasimbeg等，\\textit{AlgoPerf}（2025）；\\ Wen、Hall、马腾宇 \\& Liang（2025）；\\ Khona等（2026）",
-  "Pascanu, Mikolov \\& Bengio (2013); \\ van Laarhoven (2017); \\ Kosson, Messmer \\& Jaggi (2024)": "Pascanu、Mikolov \\& Bengio（2013）；\\ van Laarhoven（2017）；\\ Kosson、Messmer \\& Jaggi（2024）"
+  "Pascanu, Mikolov \\& Bengio (2013); \\ van Laarhoven (2017); \\ Kosson, Messmer \\& Jaggi (2024)": "Pascanu、Mikolov \\& Bengio（2013）；\\ van Laarhoven（2017）；\\ Kosson、Messmer \\& Jaggi（2024）",
+  "the character model; \\ the same batches in the same order; \\ $3{,}000$ steps; \\ $60$ of warmup, then a cosine to zero": "字符模型；\\ 同样顺序的同样批次；\\ $3{,}000$ 步；\\ $60$ 步预热，然后余弦降到零",
+  "each optimizer: \\ learning rates a factor of $2$ apart, \\ widened until the best is inside; \\ the best re-run from $2$ more seeds": "每个优化器：\\ 学习率相邻差 $2$ 倍，\\ 一直扩展到最好的落在内部；\\ 最好的再用另外 $2$ 个种子重跑",
+  "learning rate \\ (log scale); \\ filled: \\ the best, \\ the one that races": "学习率 \\ （对数刻度）；\\ 实心：\\ 最好的，\\ 也就是参赛的那个",
+  "$3$ seeds": "$3$ 个种子"
  },
  "patterns": []
 }

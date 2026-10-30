@@ -85,6 +85,12 @@ ZH = {
     "In general, a map from n numbers to m numbers":
         "一般来说，一个把n个数映成m个数的映射，有一个m乘n的雅可比矩阵：每个输出一行，每个输入一列，正是让直线近似最好的那一个矩阵。梯度只是只有一个输出时的特例。<bookmark mark='a'/>雅可比矩阵的行列式，第3部分讲过，它说明这个映射在那一点附近，把面积拉伸了多少。<bookmark mark='b'/>而映射的链式法则，就是矩阵乘法：一个映射接着另一个映射，它的雅可比矩阵，就是两者雅可比矩阵的乘积，每一个都在它的输入所落到的那一点上求出。这个乘积，就是反向传播的全部，第5章会讲清楚。",
 
+    'f"Chain many maps and their Jacobians multiply':
+        "把很多映射串起来，它们的雅可比矩阵就相乘，大小也跟着相乘。这里是一叠很深的tanh层，一共{L}层，随机权重按一个增益缩放，画的是它们雅可比矩阵乘积的大小：也就是梯度往回穿过它们时，会被放大或缩小多少。<bookmark mark='a'/>增益为{gains[0]:g}时，它缩小了{abs(m0):.0f}个数量级。<bookmark mark='b'/>增益为{gains[4]:g}时，它放大了{m4:.0f}个数量级。<bookmark mark='c'/>{verdict}这就是梯度消失和梯度爆炸，第9和第10部分会选好权重的初始尺度，让它恰好待在这条边上。",
+
+    "Only near a gain of one does it hold steady.":
+        "只有增益接近1时，它才保持稳定。",
+
     # ------------------------------------------------------------------ Layers
     "Chapter four. The Jacobians of real layers.":
         "第4章。真实网络层的雅可比矩阵。",
@@ -226,7 +232,7 @@ ZH = {
         "反向模式是有代价的，代价就是内存。<bookmark mark='a'/>向前走时，每一层的输出都必须留着，<bookmark mark='b'/>因为往回走时，每一步都要用到它：一层的雅可比矩阵取决于它的输入。<bookmark mark='c'/>只有等反向计算走到某一层，它的激活才能释放。所以内存随深度增长，也随批量和宽度增长；训练大模型时，把GPU塞满的，是激活，而不是权重，这是第18部分的问题。",
 
     "The way out is to trade memory for time.":
-        "出路是用时间换内存。<bookmark mark='a'/>每隔k层只留一个输出，叫作检查点；反向计算走到某一段时，就从那一段的检查点出发，把这一段重新向前算一遍，只在需要的时候留着它的k个输出。<bookmark mark='b'/>内存等于n除以k个检查点，再加上一段的k个。<bookmark mark='c'/>它在斜率为0的地方最小，<bookmark mark='d'/>也就是k等于n的平方根时，这时内存是2倍的根号n，而不是n。<bookmark mark='e'/>代价是：每一段都要重算一次，大约多出一次向前计算。陈天奇和同事们在2016年把它用到了深度网络上；而安德烈亚斯·格里万克在1992年就已证明，递归地设置检查点，能把两种代价都降到对数级。",
+        "出路是用时间换内存。<bookmark mark='a'/>每隔k层只留一个输出，叫作检查点；反向计算走到某一段时，就从那一段的检查点出发，把这一段重新向前算一遍，只在需要的时候留着它的k个输出。<bookmark mark='b'/>内存等于n除以k个检查点，再加上一段的k个。<bookmark mark='c'/>它在斜率为0的地方最小，<bookmark mark='d'/>也就是k等于n的平方根时，这时内存是2倍的根号n，而不是n。<bookmark mark='e'/>代价是：每一段都要重算一次，大约多出一次向前计算。陈天奇和同事们在2016年把它用到了深度网络上；而安德烈亚斯·格里万克在1992年就已证明，递归地设置检查点，能把两种代价都降到对数级。今天，在PyTorch里这只需要一行代码；FlashAttention也做同样的交换：在反向传播时重新算出注意力权重，而不是把它们存下来，第19部分会讲到。",
 
     'f"Measured, on a chain of {n} layers.':
         "在一条{n}层的链上实测。<bookmark mark='a'/>同时保留的激活最多有多少，跟着n除以k再加k走：全部保留时是{int(peak[0])}个，最低点是{int(peak.min())}个，底部从k等于{lo}到{hi}都是平的，{verdict}。<bookmark mark='b'/>代价体现在计算次数上：全部保留时，向前算{int(evals[0])}层，用检查点时{int(evals[k_rt])}层，而什么都不留、每个输入都从头重算时，要{int(d['none_evals']):,}层。<bookmark mark='c'/>{scaling}在一条更深更宽的链上计时，检查点花的时间是原来的{ratio:.2f}倍，而每种做法得到的梯度，一位不差。",
@@ -372,6 +378,9 @@ ZH = {
 }
 
 PHRASES = {
+    # Jacobian
+    'Only near a gain of one does it hold steady.': '只有增益接近1时，它才保持稳定。',
+    'Even near a gain of one it drifts.': '即使增益接近1，它也会漂移。',
     # Gradient
     'exactly as the inequality says': '正如不等式所说',
     'close to what the inequality says': '和不等式所说的很接近',

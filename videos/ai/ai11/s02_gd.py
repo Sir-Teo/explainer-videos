@@ -62,13 +62,12 @@ class GradientDescent(VoiceoverScene):
                                r"\ The ratio $\kappa = L/\mu$ is the \textit{condition number}.", width=6.2, font_size=22)
         defs.to_corner(DL, buff=0.35)
         with self.voiceover(
-            "In 1847, Augustin Cauchy wanted to solve the equations of astronomy, and proposed a general method: "
-            "measure which way the error falls fastest, and step that way. Gradient descent. <bookmark mark='a'/> "
-            "To say how fast it works, we need two numbers about the loss. <bookmark mark='b'/> It is L-smooth if "
-            "its curvature is never more than L: at every point it lies below a bowl of curvature L. "
-            "<bookmark mark='c'/> And it is mu-strongly convex if its curvature is never less than mu: it lies above a "
-            "bowl of curvature mu. <bookmark mark='d'/> Their ratio, kappa, is the condition number: how much more "
-            "steeply the valley curves one way than another."
+            "In 1847 Augustin Cauchy, solving the equations of astronomy, proposed a general method: measure which "
+            "way the error falls fastest, and step that way. <bookmark mark='a'/> To say how fast it works, we need "
+            "two numbers. <bookmark mark='b'/> The loss is L-smooth if its curvature never exceeds L: it lies below "
+            "a bowl of curvature L. <bookmark mark='c'/> It is mu-strongly convex if its curvature is never below "
+            "mu: it lies above a bowl of curvature mu. <bookmark mark='d'/> Their ratio, kappa, is the condition "
+            "number: how much more steeply the valley curves one way than another."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rule))
             vo.wait_until("a")
@@ -250,12 +249,11 @@ class GradientDescent(VoiceoverScene):
         lab = VGroup(label(r"$\eta = 1/L$", font_size=24, color=GD), label(r"$\eta = 2.06/L$", font_size=24, color=C.SURPRISE))
         lab.arrange(RIGHT, buff=1.0).next_to(ax, UP, buff=0.1)
         with self.voiceover(
-            "Pause and predict. On a valley curving thirty times more steeply one way, a step of one over L is safe. "
-            "What happens with a step just over two over L? <bookmark mark='a'/> The safe step slides down the long "
-            "axis. <bookmark mark='b'/> The large one overshoots across the steep axis by more each time, and is "
-            "thrown out of the valley. Along a direction of curvature lambda, a step multiplies the distance by one "
-            "minus eta lambda; past two over lambda that factor is below minus one. Chapter five comes back to this "
-            "edge."
+            "Pause and predict. On a valley thirty times steeper one way, a step of one over L is safe. What about "
+            "a step just over two over L? <bookmark mark='a'/> The safe step slides down the long axis. "
+            "<bookmark mark='b'/> The large one overshoots the steep axis by more each time and is thrown out: a "
+            "step multiplies the distance by one minus eta lambda, and past two over lambda that is below minus "
+            "one. Chapter five returns to this edge."
         ) as vo:
             pc.scale(0.75).to_edge(UP, buff=0.3)
             self.play(FadeIn(pc), Create(cont))
