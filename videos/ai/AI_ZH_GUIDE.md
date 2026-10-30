@@ -1197,3 +1197,43 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | 3D Gaussian splatting, covariance projection, EWA splatting | 三维高斯泼溅，协方差投影，EWA泼溅 |
 | Jacobian | 雅可比矩阵 |
 | Fréchet distance (FD) on a judge's features | 评判网络特征上的弗雷歇距离（FD） |
+
+### Agents and worlds (Part 29)
+
+| English | 中文 |
+|---|---|
+| agent, agent loop | 智能体，智能体循环 |
+| partially observable Markov decision process (POMDP) | 部分可观测马尔可夫决策过程（POMDP） |
+| belief, belief update, belief MDP | 信念，信念更新，信念MDP |
+| observation | 观测 |
+| predict, correct (filtering); Kalman filter | 预测，修正（滤波）；卡尔曼滤波 |
+| ReAct: thought, action, observation | ReAct：想法，动作，观测 |
+| tool use, function calling, JSON schema | 工具使用，函数调用，JSON模式说明 |
+| Model Context Protocol (MCP), server, host | 模型上下文协议（MCP），服务器，宿主应用 |
+| context window, compaction | 上下文窗口，（总结式）压缩 |
+| retrieval memory, skill library, reflection | 检索记忆，技能库，反思 |
+| lead agent, subagent (multi-agent system) | 主智能体，子智能体（多智能体系统） |
+| compounding error, horizon | 误差累积，时程 |
+| half-time horizon n½ | 一半把握的时程n½ |
+| time horizon (50%, 80%), doubling time | （百分之五十、百分之八十）时间跨度，倍增时间 |
+| constant hazard, Weibull | 恒定风险，韦布尔分布 |
+| SWE-bench, patch, fail-to-pass tests | SWE-bench，补丁，从失败到通过的测试 |
+| agent–computer interface (ACI) | 智能体与计算机的接口（ACI） |
+| contamination | （数据）污染 |
+| computer use, screenshot, prompt injection | 电脑使用，截图，提示注入 |
+| behaviour cloning, demonstration, expert | 行为克隆，示范，专家 |
+| distribution shift; union bound | 分布偏移；联合界 |
+| DAgger (dataset aggregation), no-regret learning | DAgger（数据集聚合），无悔学习 |
+| world model, imagination, dream | 世界模型，想象，梦 |
+| recurrent state-space model (RSSM), deterministic state, stochastic state | 循环状态空间模型（RSSM），确定性状态，随机状态 |
+| prior, posterior; KL balancing; free bits | 先验，后验；KL平衡；自由比特 |
+| symlog, symexp, two-hot target | 对称对数（symlog），symexp，双热目标 |
+| λ-return, critic, return normalization | λ回报，评论家，回报归一化 |
+| latent action model | 潜在动作模型 |
+| reality gap, sim-to-real, domain randomization | 现实差距，从仿真到现实，域随机化 |
+| cross-entropy method (CEM) | 交叉熵方法（CEM） |
+| vision-language-action model (VLA), action expert | 视觉–语言–动作模型（VLA），动作专家 |
+| action chunk, flow matching | 动作块，流匹配 |
+| FAST action tokens, discrete cosine transform (DCT), byte-pair encoding (BPE) | FAST动作词元，离散余弦变换（DCT），字节对编码（BPE） |
+| per-step binning | 逐步分箱 |
+| robot foundation model, co-training, ablation | 机器人基础模型，联合训练，消融实验 |

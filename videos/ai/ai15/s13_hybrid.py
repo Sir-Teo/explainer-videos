@@ -118,21 +118,18 @@ class Hybrid(VoiceoverScene):
                    r"each; \ $3$ seeds; \ band: \ min to max", font_size=16).to_edge(DOWN, buff=0.25)
         diff = bh.mean() - bt.mean()
         sep = bh.max() < bt.min() or bt.max() < bh.min()
-        if diff < -0.005:
-            v = (f"The hybrid ends ahead: {bh.mean():.3f} bits per character on the scoreboard's passage, against "
-                 f"{bt.mean():.3f} for the transformer" + (", and every hybrid seed beats every transformer seed. " if sep else
-                                                         ", though the seeds overlap. "))
-        elif diff > 0.005:
-            v = (f"The transformer ends ahead: {bt.mean():.3f} bits per character on the scoreboard's passage, against "
-                 f"{bh.mean():.3f} for the hybrid" + (", and the seeds don't overlap. " if sep else ", though the seeds overlap. "))
-        else:
-            v = (f"They end level: {bt.mean():.3f} bits per character for the transformer, {bh.mean():.3f} for the hybrid. ")
+        v = (f"The hybrid ends ahead: {bh.mean():.3f} bits per character on the scoreboard's passage, against "
+             f"{bt.mean():.3f} for the transformer. " if diff < -0.005 else
+             f"The transformer ends ahead: {bt.mean():.3f} bits per character on the scoreboard's passage, against "
+             f"{bh.mean():.3f} for the hybrid. " if diff > 0.005 else
+             f"They end level: {bt.mean():.3f} bits per character for the transformer, {bh.mean():.3f} for the hybrid. ")
+        vs = ("The two sets of seeds don't overlap. " if sep else "The seeds overlap: the difference is within their spread. ")
         with self.voiceover(
             "We built a small one. Two models on the thirty novels, with the same width, depth, MLPs, data and "
             "steps, three seeds each. <bookmark mark='a'/> One is a plain transformer with four attention layers. "
             "The other, like Kimi Linear, has three gated-delta layers and then one attention layer with no "
             "positional encoding at all: the recurrent layers below it carry the order. <bookmark mark='b'/> Here "
-            "they train. <bookmark mark='c'/> " + v + "<bookmark mark='d'/> Inside a window of 256 tokens the "
+            "they train. <bookmark mark='c'/> " + v + "<bookmark mark='e'/> " + vs + "<bookmark mark='d'/> Inside a window of 256 tokens the "
             "transformer's cache is small anyway; the hybrid's advantage is meant for long texts. That is the next "
             "chapter."
         ) as vo:

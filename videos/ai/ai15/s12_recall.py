@@ -121,13 +121,14 @@ class Recall(VoiceoverScene):
         v1 = (f"The first to get half of this list right is {nm[quick[0]]}, by step {first[quick[0]]:,}; "
               if quick else "None of them gets half of this list right; ")
         v2 = (f"the last, {nm[quick[-1]]}, by step {first[quick[-1]]:,}. " if len(quick) > 1 else "")
-        v3 = ("Never, in this run: " + ", ".join(nm[k] for k in never) + ". ") if never else ""
+        v3 = (f"{len(never)} of the six never get there in this run." if len(never) > 1 else
+              f"One, {nm[never[0]]}, never gets there in this run." if never else "")
         with self.voiceover(
             "Here is training, replayed, for keys of " + f"{dk} numbers. On the left, one list the models never "
             "train on: each square is one of its answers, lit when the model gets it right. On the right, the share "
             "right on a fixed batch. <bookmark mark='a'/> At first every model guesses. Then, one by one, they "
             "discover the trick: find the earlier copy of the key, and copy what came after it. <bookmark mark='b'/> "
-            + v1 + v2 + v3
+            + v1 + "<bookmark mark='c'/> " + v2 + "<bookmark mark='d'/> " + v3
         ) as vo:
             self.play(FadeIn(grids), FadeIn(names), FadeIn(gl), FadeIn(g2), FadeIn(counter))
             self.add(lines)

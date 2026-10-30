@@ -144,8 +144,10 @@ class LongContext(VoiceoverScene):
         worst_drop = max(mix, key=lambda k: at_train[k] - far[k])
         vt = acc
         hard = tasks.index("vartrack")
-        v1 = ("At the length they trained on, " + ", ".join(f"{nm[k]} gets {100 * at_train[k]:.0f}" for k in mix)
-              + " percent, averaged over the three tasks. ")
+        a_ = {k: 100 * at_train[k] for k in mix}
+        v1 = (f"At the length they trained on, averaged over the three tasks, softmax attention gets {a_['softmax']:.0f} "
+              f"percent, the Mamba-2-style model {a_['mamba2']:.0f}, the gated delta rule {a_['gdn']:.0f} and the hybrid "
+              f"{a_['hybrid']:.0f}. ")
         v2 = (f"At eight times that length, {nm[best_far]} holds up best, {100 * far[best_far]:.0f} percent; "
               f"{nm[worst_drop]} falls furthest, from {100 * at_train[worst_drop]:.0f} to {100 * far[worst_drop]:.0f}. ")
         hardest = min(range(len(tasks)), key=lambda i: np.mean([acc[k][i, 0] for k in mix]))
@@ -155,7 +157,7 @@ class LongContext(VoiceoverScene):
             f"at {T0} tokens: find one needle in a stream of filler words; find the one of four needles that's asked "
             "for; and follow a chain, A is seven, B equals A, C equals B, what is C? <bookmark mark='a'/> Then we test "
             f"them on longer streams, up to {Ls[-1]:,} tokens. <bookmark mark='b'/> " + v1 + "<bookmark mark='c'/> "
-            + v2 + v3
+            + v2 + "<bookmark mark='d'/> " + v3
         ) as vo:
             self.play(FadeIn(head), FadeIn(foot))
             vo.wait_until("a")

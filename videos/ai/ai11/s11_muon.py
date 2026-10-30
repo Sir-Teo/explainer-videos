@@ -119,9 +119,10 @@ class Muon(VoiceoverScene):
             self.play(FadeIn(cite_), Create(pic_g[0]), Create(pic_m[0]), Write(eqs[0]))
             vo.wait_until("p")
             self.play(FadeIn(why_))
-            vo.wait_until("q")
             self.play(TransformFromCopy(pic_g[0], pic_g[1]), *[GrowArrow(a_) for a_ in pic_g[2]], FadeIn(cap_g))
             self.play(TransformFromCopy(pic_m[0], pic_m[1]), *[GrowArrow(a_) for a_ in pic_m[2]], FadeIn(cap_m))
+            vo.wait_until("q")
+            self.play(Indicate(pic_g[1], color=WHITE), Indicate(pic_m[1], color=WHITE))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(*([] if k == 0 else [Write(eqs[k])]), FadeIn(notes[k]))
