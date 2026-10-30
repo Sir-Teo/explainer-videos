@@ -16542,7 +16542,7 @@
     "Xiangning Chen, Chen Liang, \\dots, Quoc Le \\ (Google)": "陈相宁、梁辰、\\dots、Quoc Le \\ （谷歌）",
     "\\textit{Symbolic Discovery of Optimization Algorithms}: \\ a program search over update rules found Lion": "\\textit{Symbolic Discovery of Optimization Algorithms}（《优化算法的符号发现》）：\\ 在更新规则上做程序搜索，找到了Lion",
     "Adam: \\ momentum over a running size": "Adam：\\ 动量除以滑动的大小",
-    "$\\hat m / \\sqrt{\\hat v}$, \\ bias-corrected so the first step is $\\eta$ per weight. \\ Its limit is sign descent, \\ the steepest step when every weight is bounded on its own.": "$\\hat m / \\sqrt{\\hat v}$，\\ 经偏差校正，第一步每个权重恰好走 $\\eta$。\\ 它的极限是符号下降，\\ 即每个权重各自受限时最陡的一步。",
+    "$\\hat m / \\sqrt{\\hat v}$, \\ bias-corrected so the first step is $\\eta$ per weight. \\ Its limit is sign descent, \\ the steepest step when every weight is bounded on its own.": "$\\hat m / \\sqrt{\\hat v}$ 经过偏差校正，\\ 第一步每个权重恰好走 $\\eta$。\\ 它的极限是符号下降，\\ 即每个权重各自受限时最陡的一步。",
     "Next: \\ what weight decay does inside Adam": "下一章：\\ 权重衰减在Adam里做了什么",
     "momentum: \\ the average direction": "动量：\\ 平均方向",
     "RMSProp: \\ the average squared size": "RMSProp：\\ 平均平方大小",
@@ -19880,7 +19880,14 @@
     "this section's mix: \\ \\textit{Little Women}": "这一段的配比：\\ 《小妇人》",
     "\\textit{A Christmas Carol}": "《圣诞颂歌》",
     "this section's mix: \\ \\textit{A Christmas Carol}": "这一段的配比：\\ 《圣诞颂歌》",
-    "this section's mix: \\ \\textit{Ulysses}": "这一段的配比：\\ 《尤利西斯》"
+    "this section's mix: \\ \\textit{Ulysses}": "这一段的配比：\\ 《尤利西斯》",
+    "\\hat w_{\\text{MAP}}": "\\hat w_{\\text{MAP}}",
+    "\\text{ESS}": "\\text{ESS}",
+    "top-$k$: \\ $0.919$": "top-$k$：\\ $0.919$",
+    "top-$p$: \\ $0.943$": "top-$p$：\\ $0.943$",
+    "min-$p$: \\ $0.900$": "min-$p$：\\ $0.900$",
+    "argmax picks{,} $200{,}000$ draws": "取最大值的选择，\\ $200{,}000$ 次",
+    "the average, \\ and the average \\\\ squared spread": "平均值，\\ 以及平均的 \\\\ 平方偏差"
   },
   "phrases": {
     "width": "宽度",

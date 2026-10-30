@@ -1515,3 +1515,45 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | support vector, margin | 支持向量，间隔 |
 | implicit function theorem, fixed point | 隐函数定理，不动点 |
 | deep equilibrium model (DEQ), unrolling, contraction, spectral radius | 深度平衡模型（DEQ），展开，压缩映射，谱半径 |
+
+### Going downhill (Part 11)
+
+| English | 中文 |
+|---|---|
+| steepest descent | 最速下降 |
+| L-smooth, μ-strongly convex | L-光滑，μ-强凸 |
+| condition number (κ) | 条件数（κ） |
+| descent lemma, Polyak–Łojasiewicz inequality | 下降引理，波利亚克–洛亚谢维奇不等式 |
+| linear convergence, contraction factor | 线性收敛，收缩因子 |
+| heavy ball (Polyak momentum) | 重球法（波利亚克动量） |
+| Nesterov's accelerated gradient, look-ahead | 涅斯捷罗夫加速梯度，前瞻 |
+| lower bound (Nemirovski–Yudin) | 下界（涅米罗夫斯基–尤丁） |
+| stochastic approximation (Robbins–Monro) | 随机逼近（罗宾斯–门罗） |
+| stationary covariance, Lyapunov equation | 平稳协方差，李雅普诺夫方程 |
+| temperature (η/B), linear scaling rule, square-root rule | 温度（η/B），线性缩放规则，平方根规则 |
+| sharp minimum, flat minimum | 尖锐极小值，平坦极小值 |
+| sharpness, edge of stability | 锐度，稳定性边缘 |
+| progressive sharpening, self-stabilization | 渐进锐化，自稳定 |
+| power iteration, Hessian-vector product | 幂迭代，黑塞–向量积 |
+| AdaGrad, RMSProp, Adam, AdamW | AdaGrad，RMSProp，Adam，AdamW |
+| bias correction | 偏差校正 |
+| sign descent, Lion | 符号下降，Lion |
+| L2 regularization, decoupled weight decay | L2正则化，解耦权重衰减 |
+| natural gradient, Fisher information matrix | 自然梯度，费希尔信息矩阵 |
+| Kronecker product, K-FAC | 克罗内克积，K-FAC |
+| preconditioner, preconditioning | 预条件子，预条件 |
+| Shampoo, grafting, SOAP, eigenbasis | Shampoo，嫁接，SOAP，特征基 |
+| orthogonalization, polar factor (UVᵀ) | 正交化，极分解因子（UVᵀ） |
+| spectral norm, nuclear norm | 谱范数，核范数 |
+| Muon, Newton–Schulz iteration | Muon，牛顿–舒尔茨迭代 |
+| hybrid Newton–Schulz | 混合牛顿–舒尔茨迭代 |
+| AlgoPerf, external tuning, self-tuning | AlgoPerf，外部调参，自调参 |
+| learning-rate sweep, grid edge | 学习率扫描，网格边缘 |
+| warmup, cosine schedule, warmup–stable–decay (WSD) | 预热，余弦调度，预热–稳定–衰减（WSD） |
+| river valley, river and hill loss | 河谷，河损失与山坡损失 |
+| cool-down branch | 冷却分支 |
+| iterate averaging (Polyak–Ruppert), EMA of weights | 迭代平均（波利亚克–鲁珀特），权重的指数移动平均 |
+| schedule-free optimization | 免调度优化 |
+| attention logit (score) growth, QK-clip, MuonClip | 注意力分数增长，QK-Clip，MuonClip |
+| gradient clipping | 梯度裁剪 |
+| scale invariance, norm equilibrium, effective learning rate | 尺度不变性，范数平衡，有效学习率 |
