@@ -36,14 +36,14 @@ class Translation(VoiceoverScene):
                    label(r"French $f$", font_size=26, color=FR))
         for b in (e, ch, f):
             b[1].move_to(b[0])
-        row = VGroup(e, ch, f).arrange(RIGHT, buff=1.0).move_to(DOWN * 0.3)
+        row = VGroup(e, ch, f).arrange(RIGHT, buff=1.0).move_to(UP * 0.7)
         arr = VGroup(Arrow(e.get_right(), ch.get_left(), buff=0.1, color=GREY_B),
                      Arrow(ch.get_right(), f.get_left(), buff=0.1, color=GREY_B))
-        colors = {r"P(e)": EN, r"P(f \mid e)": FR}
-        eq = cmath(r"\hat e", r"=", r"\arg\max_e", r"\;P(e)", r"\;P(f \mid e)", colors=colors, font_size=46)
-        eq.next_to(row, DOWN, buff=0.6)
+        colors = {r"\;P(e)": EN, r"P(f \mid e)": FR}
+        eq = cmath(r"\hat e", r"=", r"\arg\max_e", r"\;P(e)", r"\qquad", r"P(f \mid e)", colors=colors, font_size=46)
+        eq.next_to(row, DOWN, buff=0.5)
         br = VGroup(brace_note(term(eq, r"\;P(e)"), r"a language model \\ (counting, chapter 9)", color=EN, font_size=22),
-                    brace_note(term(eq, r"\;P(f \mid e)"), r"a translation model \\ (learned by EM)", color=FR, font_size=22))
+                    brace_note(term(eq, r"P(f \mid e)"), r"a translation model \\ (learned by EM)", color=FR, font_size=22))
         hist = VGroup(history_card(1966, r"the ALPAC report", r"machine translation judged a failure; \ funding cut",
                                    width=4.2),
                       history_card(1990, r"P.~Brown, J.~Cocke, S.~Della Pietra, V.~Della Pietra, F.~Jelinek, \dots",
@@ -86,9 +86,9 @@ class Translation(VoiceoverScene):
                                  data_text(e, font=MONO, font_size=17, color=EN)) for f, e in pairs])
         for r in corpus:
             r[1].next_to(r[0], RIGHT, buff=0.3)
-        corpus.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-4.6, 0.4, 0])
+        corpus.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-4.6, 0.4, 0]).to_edge(LEFT, buff=0.35)
         cl = label(rf"$8$ of our ${d['n_train']}$ sentence pairs", font_size=20, color=GREY_A).next_to(corpus, UP, buff=0.2)
-        grid = heat_grid(A[0], cell=0.62, color=ALIGN).move_to([1.3, 0.2, 0])
+        grid = heat_grid(A[0], cell=0.6, color=ALIGN).move_to([2.0, 0.2, 0])
         cols = VGroup(*[data_text(w, font=MONO, font_size=20, color=FR if w != "NULL" else GREY_B)
                         .rotate(0.6).next_to(grid[j], UP, buff=0.12) for j, w in enumerate(["NULL"] + fr)])
         rows_ = VGroup(*[data_text(w, font=MONO, font_size=22, color=EN).next_to(grid[i * (len(fr) + 1)], LEFT, buff=0.15)
@@ -143,21 +143,21 @@ class Translation(VoiceoverScene):
         tests = d["test"]
         rows = VGroup()
         for (f, e), h1, h2 in zip(tests, d["hyp_gloss"], d["hyp_rule"]):
-            rows.add(VGroup(data_text(f, font=MONO, font_size=18, color=FR), data_text(h1, font=MONO, font_size=18, color=EN),
-                            data_text(e, font=MONO, font_size=18, color=GREY_B)))
+            rows.add(VGroup(data_text(f, font=MONO, font_size=17, color=FR), data_text(h1, font=MONO, font_size=17, color=EN),
+                            data_text(e, font=MONO, font_size=17, color=GREY_B)))
         for r in rows:
             r[1].move_to([-1.2, 0, 0], aligned_edge=LEFT)
             r[2].move_to([2.9, 0, 0], aligned_edge=LEFT)
             r[0].move_to([-6.6, 0, 0], aligned_edge=LEFT)
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         for r in rows:
-            r[0].set_x(-6.6 + r[0].width / 2)
-            r[1].set_x(-2.4 + r[1].width / 2)
-            r[2].set_x(1.9 + r[2].width / 2)
+            r[0].set_x(-6.7 + r[0].width / 2)
+            r[1].set_x(-2.5 + r[1].width / 2)
+            r[2].set_x(2.1 + r[2].width / 2)
         rows.shift(UP * (1.7 - rows.get_y()))
         heads = VGroup(label(r"held-out French", font_size=20, color=FR), label(r"word by word", font_size=20, color=EN),
                        label(r"reference", font_size=20, color=GREY_B))
-        for h_, x_ in zip(heads, (-6.6, -2.4, 1.9)):
+        for h_, x_ in zip(heads, (-6.7, -2.5, 2.1)):
             h_.next_to(rows, UP, buff=0.2).set_x(x_ + h_.width / 2)
         colors = {r"p_n": C.BITS, r"\mathrm{BP}": GREY_A}
         eq = cmath(r"\mathrm{BLEU}", r"=", r"\mathrm{BP}", r"\cdot", r"\exp\Big(\tfrac14 \sum_{n=1}^{4} \log", r"p_n",
@@ -179,7 +179,7 @@ class Translation(VoiceoverScene):
         later = VGroup(label(r"IBM Models 2--5: \ word order, \ fertility", font_size=22, color=GREY_A),
                        label(r"2003: \ phrase-based translation", font_size=22, color=GREY_A),
                        label(r"2014: \ attention, \ a learned soft alignment \ (Part 13)", font_size=22, color=HIDDEN))
-        later.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DR, buff=0.3)
+        later.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DL, buff=0.4)
         with self.voiceover(
             "Now translate sentences it never saw, one word at a time, using the table. <bookmark mark='a'/> Some come "
             "out right. Others put the adjective after the noun, French style. How good is that? In 2002 Kishore "

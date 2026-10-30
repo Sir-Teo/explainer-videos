@@ -1479,3 +1479,39 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | sparse tensor cores | 稀疏张量核心 |
 | Wanda, SparseGPT | Wanda，SparseGPT |
 | activation sparsity, lazy neuron phenomenon | 激活稀疏，懒惰神经元现象 |
+
+### Change (Part 4)
+
+| English | 中文 |
+|---|---|
+| derivative; best linear approximation | 导数；最好的线性近似 |
+| tangent plane; partial derivative; directional derivative | 切平面；偏导数；方向导数 |
+| steepest ascent; Cauchy–Schwarz inequality | 最陡上升；柯西–施瓦茨不等式 |
+| Jacobian (matrix) | 雅可比矩阵 |
+| Jacobian-vector product (JVP), vector-Jacobian product (VJP) | 雅可比-向量积，向量-雅可比积 |
+| forward mode, reverse mode | 前向模式，反向模式 |
+| computation graph, topological order | 计算图，拓扑顺序 |
+| tape, Wengert list | 磁带（运算记录），文格特列表 |
+| define-by-run, static graph, tracing | 边运行边定义，静态图，追踪 |
+| error signal δ, outer product, rank one | 误差信号δ，外积，秩为1 |
+| floating point; sign, exponent, mantissa | 浮点数；符号位，指数，尾数 |
+| unit in the last place (ulp), unit roundoff | 最后一位单位（ulp），单位舍入误差 |
+| overflow, underflow, NaN | 溢出，下溢，非数（NaN） |
+| log-sum-exp trick | log-sum-exp技巧 |
+| loss scaling | 损失缩放 |
+| (catastrophic) cancellation, truncation error | （灾难性）抵消，截断误差 |
+| central / forward difference, gradient check | 中心差分 / 前向差分，梯度检验 |
+| checkpointing (activation recomputation) | 检查点（激活重计算） |
+| Hessian, curvature | 黑塞矩阵，曲率 |
+| Newton's method, quadratic convergence | 牛顿法，二次收敛 |
+| Hessian-vector product (Pearlmutter's trick), power iteration | 黑塞-向量积（珀尔马特技巧），幂迭代 |
+| Hessian spectrum: bulk, outliers | 黑塞谱：主体，离群值 |
+| condition number κ; stability edge 2/λmax | 条件数κ；稳定边界2/λmax |
+| saddle point, escape | 鞍点，逃离 |
+| Lagrange multiplier, Lagrangian, shadow price | 拉格朗日乘子，拉格朗日函数，影子价格 |
+| maximum entropy, Boltzmann distribution | 最大熵，玻尔兹曼分布 |
+| KKT conditions, complementary slackness | KKT条件，互补松弛 |
+| dual function, weak / strong duality, duality gap, Slater's condition | 对偶函数，弱对偶 / 强对偶，对偶间隙，斯莱特条件 |
+| support vector, margin | 支持向量，间隔 |
+| implicit function theorem, fixed point | 隐函数定理，不动点 |
+| deep equilibrium model (DEQ), unrolling, contraction, spectral radius | 深度平衡模型（DEQ），展开，压缩映射，谱半径 |

@@ -172,8 +172,9 @@ class Newton(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[:4]], lag_ratio=0.25), FadeIn(vals[:4]), run_time=1.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.25), FadeIn(vals), run_time=2.5)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[4:]], lag_ratio=0.25), FadeIn(vals[4:]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

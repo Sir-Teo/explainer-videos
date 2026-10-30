@@ -250,10 +250,10 @@ class Bayes(VoiceoverScene):
     def map_(self):
         d = load("map")
         rows = [
-            cmath(r"\hat w_{\text{MAP}}", "=", r"\arg\max_w \; \log p(D \mid w) + \log p(w)", font_size=32),
+            cmath(r"\hat w_{\mathrm{MAP}}", "=", r"\arg\max_w \; \log p(D \mid w) + \log p(w)", font_size=32),
             cmath(r"\log p(w)", "=", r"-\frac{\|w\|^2}{2\tau^2} + c", font_size=32),
             cmath(r"\log p(D \mid w)", "=", r"-\frac{1}{2\sigma^2}\textstyle\sum_i (y_i - f_w(x_i))^2 + c'", font_size=32),
-            cmath(r"\hat w_{\text{MAP}}", "=", r"\arg\min_w \textstyle\sum_i (y_i - f_w(x_i))^2 + \lambda \|w\|^2",
+            cmath(r"\hat w_{\mathrm{MAP}}", "=", r"\arg\min_w \textstyle\sum_i (y_i - f_w(x_i))^2 + \lambda \|w\|^2",
                   font_size=32, colors={r"\arg\min_w \textstyle\sum_i (y_i - f_w(x_i))^2 + \lambda \|w\|^2": C.BITS}),
         ]
         whys = [why(r"the peak of the posterior", font_size=22), why(r"a Gaussian prior on the weights", font_size=22),
