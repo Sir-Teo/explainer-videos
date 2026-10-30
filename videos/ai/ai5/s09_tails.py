@@ -7,7 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai5.common import DATA, PART, curve, hist_shape, load
 
-BOUNDS = {"markov": GREY_B, "cheb": C.INTERVAL, "chern": C.BITS, "hoeff": C.MODEL_Q}
+BOUNDS = {"markov": "#B39DDB", "cheb": C.INTERVAL, "chern": C.BITS, "hoeff": C.MODEL_Q}
 NAMES = {"markov": r"Markov", "cheb": r"Chebyshev", "chern": r"Chernoff", "hoeff": r"Hoeffding"}
 TAIL = C.SURPRISE
 

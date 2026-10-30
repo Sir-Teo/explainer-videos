@@ -145,7 +145,7 @@ class MonteCarlo(VoiceoverScene):
         pl = MathTex(r"p", font_size=40, color=DATA).next_to(ax.c2p(-1.2, normal_pdf(-1.2)), UL, buff=0.1)
         ql = MathTex(r"q", font_size=40, color=MODEL).next_to(ax.c2p(5.2, normal_pdf(1.2)), UR, buff=0.1)
         x4 = ax.c2p(4, 0)
-        edge = DashedLine(x4, x4 + UP * 2.2, color=TAIL, stroke_width=2.5)
+        edge = DashedLine(x4, x4 + UP * 3.0, color=TAIL, stroke_width=2.5)
         tail_l = label(r"above $4$", font_size=26, color=TAIL).next_to(edge.get_end(), RIGHT, buff=0.12)
         g = np.random.default_rng(5)
         zs = g.normal(size=400)

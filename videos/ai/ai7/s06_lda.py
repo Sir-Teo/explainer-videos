@@ -79,16 +79,16 @@ class Topics(VoiceoverScene):
         cols = VGroup()
         for j, k in enumerate(show):
             cols.add(word_col(snaps[keys[0]][k][:6], TOPIC_COLORS[k], font_size=22))
-        cols.arrange(RIGHT, buff=0.55).move_to([-1.7, 0.7, 0])
+        cols.arrange(RIGHT, buff=0.45).move_to([-2.4, 0.5, 0])
         heads = VGroup(*[label(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
                          for j, (k, c) in enumerate(zip(show, cols))])
-        g = axes([0, len(bounds), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=4.2,
-                 y_length=2.4, xlabel=r"round of variational EM", ylabel=r"the bound, nats per word", center=[4.6, -1.5, 0])
+        g = axes([0, len(bounds), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=3.6,
+                 y_length=2.4, xlabel=r"round of variational EM", ylabel=r"bound per word (nats)", center=[4.9, -1.3, 0])
         it = ValueTracker(1)
         bc = always_redraw(lambda: curve(g.ax, np.arange(1, int(it.get_value()) + 1), bounds[:int(it.get_value())], BOUND, 3)
                            if it.get_value() >= 2 else VMobject())
         rv = Integer(0, font_size=34)
-        rl = VGroup(label(r"round", font_size=26, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([4.6, 1.9, 0])
+        rl = VGroup(label(r"round", font_size=26, color=GREY_A), rv).arrange(RIGHT, buff=0.15).move_to([4.9, 1.6, 0])
         info = label(rf"${l['D']:,}$ sections of ${l['seg']:,}$ words \ $\cdot$ \ the ${l['V']:,}$ commonest content words "
                      rf"\ $\cdot$ \ $K = {l['K']}$ topics".replace(",", "{,}"), font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
         mono = bool(l["monotone"])
@@ -101,9 +101,9 @@ class Topics(VoiceoverScene):
             "section's mix, and an M step that rebuilds each topic from the words assigned to it. "
             f"<bookmark mark='b'/> Watch six of the topics take shape. The bound on the likelihood climbs, {rise}."
         ) as vo:
-            self.play(FadeIn(info))
+            self.play(FadeIn(info), FadeIn(g), FadeIn(rl))
             vo.wait_until("a")
-            self.play(FadeIn(cols), FadeIn(heads), FadeIn(g), FadeIn(rl))
+            self.play(FadeIn(cols), FadeIn(heads))
             vo.wait_until("b")
             self.add(bc)
             for key in keys[1:]:
@@ -111,7 +111,7 @@ class Topics(VoiceoverScene):
                 for c, k in zip(cols, show):
                     new.add(word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22).move_to(c))
                 self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(max(int(key), 1)),
-                          ChangeDecimalToValue(rv, int(key)), run_time=1.0)
+                          ChangeDecimalToValue(rv, int(key)), run_time=1.4)
         bc.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -133,30 +133,32 @@ class Topics(VoiceoverScene):
         tiles.arrange_in_grid(rows=2, cols=6, buff=(0.15, 0.25)).to_edge(UP, buff=0.35)
         cap = note(r"each topic's top words, \ and the novel where it is commonest", font_size=20).next_to(tiles, DOWN, buff=0.1)
         # one section, its words coloured by their likeliest topic, and its mixture
-        words, tops = l["ex_words"][:72], l["ex_topic"][:72]
+        words, tops = l["ex_words"][:60], l["ex_topic"][:60]
         lines, row = VGroup(), VGroup()
         for w_, t_ in zip(words, tops):
-            m = data_text(w_, font=MONO, font_size=17, color=TOPIC_COLORS[t_] if t_ >= 0 else GREY_D)
+            m = data_text(w_, font=MONO, font_size=20, color=TOPIC_COLORS[t_] if t_ >= 0 else GREY_D)
             row.add(m)
-            if len(row) == 12:
+            if len(row) == 10:
                 lines.add(row.arrange(RIGHT, buff=0.12))
                 row = VGroup()
         if len(row):
             lines.add(row.arrange(RIGHT, buff=0.12))
         lines.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        if lines.width > 8.0:
-            lines.width = 8.0
-        lines.move_to([-2.6, -2.1, 0])
+        if lines.width > 8.6:
+            lines.width = 8.6
+        lines.move_to([-2.2, -1.9, 0])
         th = np.asarray(l["ex_theta"])
-        bx = VGroup(*[Rectangle(width=0.22, height=max(1.6 * v, 0.01), stroke_width=0, fill_color=TOPIC_COLORS[k],
-                                fill_opacity=0.9).move_to([3.6 + 0.3 * k, -2.9 + 0.8 * v, 0]) for k, v in enumerate(th)])
+        bx = VGroup(*[Rectangle(width=0.2, height=max(2.2 * v, 0.01), stroke_width=0, fill_color=TOPIC_COLORS[k],
+                                fill_opacity=0.9).move_to([3.3 + 0.28 * k, -3.2 + 1.1 * v, 0]) for k, v in enumerate(th)])
         bl = label(rf"this section's mix: \ \textit{{{l['ex_title']}}}", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.15)
         top2 = np.argsort(-th)[:2]
+        c3 = np.argsort(-np.asarray(l["main_share"]))[:3]
         with self.voiceover(
             "Here are all twelve topics after forty rounds, each with its commonest words and the novel where it "
-            "turns up most. <bookmark mark='a'/> Nobody named them, but you can: the whaling of Moby Dick, armies and "
-            "battles from War and Peace, marriage and families, money and travel, a river and a raft. Some are "
-            "less a subject than a style, like Jane Austen's drawing rooms. <bookmark mark='b'/> And here is one "
+            f"turns up most. <bookmark mark='a'/> Nobody named them, but you can read them. The topic most at home in "
+            f"{l['main'][c3[0]]} leads with '{l['top'][c3[0]][0]}', the one in {l['main'][c3[1]]} with "
+            f"'{l['top'][c3[1]][0]}', and the one in {l['main'][c3[2]]} with '{l['top'][c3[2]][0]}'. Others are harder "
+            "to name. <bookmark mark='b'/> And here is one "
             f"section of {l['ex_title']}, with each word coloured by its likeliest topic. Its mix is "
             f"{100 * th[top2[0]]:.0f} percent one topic and {100 * th[top2[1]]:.0f} percent another. "
             "<bookmark mark='c'/> For a decade, topic models were how historians and social scientists read archives "
@@ -165,8 +167,7 @@ class Topics(VoiceoverScene):
         ) as vo:
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tiles], lag_ratio=0.1), FadeIn(cap), run_time=2.5)
             vo.wait_until("a")
-            self.play(*[Indicate(tiles[k], scale_factor=1.06, color=TOPIC_COLORS[k]) for k in range(K)
-                        if l["main_share"][k] > 0.5], run_time=1.5)
+            self.play(*[Indicate(tiles[k], scale_factor=1.06, color=TOPIC_COLORS[k]) for k in c3], run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(lines), run_time=1.5)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bx], lag_ratio=0.05), FadeIn(bl))

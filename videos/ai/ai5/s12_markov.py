@@ -317,7 +317,8 @@ class Markov(VoiceoverScene):
             f"rise along a line of slope {float(d['slope']):.2f}, from {int(tmix[0]):,} to {int(tmix[-1]):,}, between "
             "the theory's two bounds. Stuck chains are the central difficulty of chapter thirteen."
         ) as vo:
-            self.play(FadeIn(tl), FadeIn(head), FadeIn(bars), Create(ghost), FadeIn(gl), Create(Uc), FadeIn(Ul))
+            self.play(FadeIn(tl), FadeIn(head), FadeIn(bars), Create(ghost), FadeIn(gl), Create(Uc), FadeIn(Ul),
+                      Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
             vo.wait_until("b")
             for j in (1, 2, 3):
@@ -326,7 +327,6 @@ class Markov(VoiceoverScene):
             for j in (4, 5, 6):
                 self.play(*bars.to(np.minimum(snaps[j], 0.2)), ChangeDecimalToValue(tv, ts[j]), run_time=1.0)
             vo.wait_until("d")
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             self.play(Create(lo_c), Create(hi_c), FadeIn(bl), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.15))
             self.play(Indicate(dots[k], color=WHITE))
         bars.freeze()
