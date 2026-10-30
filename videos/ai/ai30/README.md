@@ -217,6 +217,13 @@ measured.
   never showed in contexts; `acts.token_strings` now keeps them.
 * **Splitting needed a criterion.** The first family shown was picked by decoder cosine alone, and its "children"
   fired on unrelated characters; children must now fire on the parent's character too.
+* **A plot clipped by its own axes.** `CornerAxes` re-bases `ax.y_range` at zero, so the grokking chapter's log-scale
+  curves, clipped to `ax.y_range`, were flattened at a loss of 1 and its dashed markers overshot the frame; the
+  chapter now keeps the true range on the axes object. The SAE replay likewise clips the untrained start (variance
+  left about 3) at the top of its 0-to-1 axis.
+* **A seed-share claim the data did not support.** An early line said a small model is "kinder" than a big one; ours
+  shares fewer latents across seeds (TopK) than Paulo and Belrose's 30%, and the L1 runs far more, so the narration
+  now says exactly that.
 * **Narration splices.** Every computed sentence is an f-string over cached data, and every verdict is assigned before
   it is spliced in (no conditional nested inside a sum), so `tools/zh_lines.py` lists and translates each branch.
 

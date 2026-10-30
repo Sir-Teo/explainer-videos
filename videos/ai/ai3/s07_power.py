@@ -113,7 +113,7 @@ class Power(VoiceoverScene):
         g = axes([0, 60, 10], [-16, 0.5, 4], x_length=8.0, y_length=4.4, xticks=[0, 10, 20, 30, 40, 50, 60],
                  yticks=[-16, -12, -8, -4, 0], yfmt=lambda v: f"10^{{{int(v)}}}" if v else "1",
                  xlabel=r"step $k$", ylabel=r"$\sin\theta_k$, \ the angle to the top eigenvector",
-                 center=[-1.3, -0.4, 0])
+                 center=[-1.3, -0.2, 0])
         ax = g.ax
         series = []
         for key, col, name in (("gpt2", GPTC, r"GPT-2's token covariance ($768 \times 768$)"),
@@ -130,7 +130,7 @@ class Power(VoiceoverScene):
         leg = VGroup(*[label(rf"{nm}: \ $\lambda_2/\lambda_1 = {d['ratio']:.3f}$, \ measured rate ${d['rate_measured']:.3f}$",
                              font_size=22, color=col) for _, _, d, nm, col in series]).arrange(DOWN, aligned_edge=LEFT,
                                                                                                buff=0.12)
-        leg.to_edge(DOWN, buff=0.25)
+        leg.to_edge(DOWN, buff=0.12)
         key = VGroup(DashedLine(LEFT * 0.3, RIGHT * 0.3, color=GREY_B), label(r"predicted $(\lambda_2/\lambda_1)^k$",
                                                                              font_size=22, color=GREY_B)).arrange(RIGHT)
         key.to_corner(UR, buff=0.5)
@@ -141,13 +141,13 @@ class Power(VoiceoverScene):
                    if abs(dg["rate_measured"] - dg["ratio"]) < 0.01 and abs(dl["rate_measured"] - dl["ratio"]) < 0.01
                    else "close to the prediction")
         with self.voiceover(
-            "Now on real matrices. First, the covariance of GPT-2's 50,257 token vectors, 768 by 768. A random "
-            f"start is almost perpendicular to the answer: its sine is {s0:.4f}, as chapter fourteen will explain. "
-            f"<bookmark mark='a'/> The ratio of its top two eigenvalues is {dg['ratio']:.3f}, and the error falls "
-            f"by a factor of {dg['rate_measured']:.3f} per step, until it hits the machine's rounding. "
-            f"<bookmark mark='b'/> Second, Part 1's letter table, whose top eigenvalue towers over the rest: a ratio "
-            f"of {dl['ratio']:.3f}, and measured, {dl['rate_measured']:.3f}. <bookmark mark='c'/> The dashed lines "
-            f"are the prediction; {verdict}."
+            "Now on real matrices. <bookmark mark='a'/> First, the covariance of GPT-2's 50,257 token vectors, 768 by "
+            f"768. The ratio of its top two eigenvalues is {dg['ratio']:.3f}, and the error falls by a factor of "
+            f"{dg['rate_measured']:.3f} per step, until it hits the machine's rounding. The random start was almost "
+            f"perpendicular to the answer, a sine of {s0:.4f}; chapter fourteen explains why. <bookmark mark='b'/> "
+            "Second, Part 1's letter table, whose top eigenvalue towers over the rest: a ratio of "
+            f"{dl['ratio']:.3f}, and measured, {dl['rate_measured']:.3f}. <bookmark mark='c'/> The dashed lines are "
+            f"the prediction; {verdict}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(key), FadeIn(floor))
             vo.wait_until("a")
@@ -163,16 +163,18 @@ class Power(VoiceoverScene):
     def uses(self):
         cards = VGroup(
             history_card(1929, r"R.~von Mises \& H.~Pollaczek-Geiringer",
-                         r"the power method, \ for the eigenvalues of engineering problems", color=HIST, width=4.2),
+                         r"the power method, \ for the eigenvalues of engineering problems", color=HIST, width=4.3, font_size=27),
             history_card(1998, r"S.~Brin \& L.~Page, \ PageRank",
                          r"a web page's rank is the top eigenvector of the link matrix, \ found by power iteration",
-                         color=HIST, width=4.2),
+                         color=HIST, width=4.3, font_size=27),
             history_card(2018, r"T.~Miyato et al., \ spectral normalization",
                          r"one power-iteration step per training step estimates each layer's largest stretch",
-                         color=HIST, width=4.2),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.6)
+                         color=HIST, width=4.3, font_size=27),
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP)
+        cards.move_to(DOWN * 0.1)
+        head = label(r"Power iteration at work", font_size=40).to_edge(UP, buff=0.4)
         tail = label(r"today's libraries: \ Krylov methods (Lanczos, 1950), \ power iteration's refinement",
-                     font_size=28, color=GREY_A).to_edge(DOWN, buff=0.8)
+                     font_size=28, color=GREY_A).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "The method is from 1929, from Richard von Mises and Hilda Pollaczek-Geiringer. <bookmark mark='a'/> In "
             "1998 it ranked the web: Google's PageRank is the top eigenvector of a matrix of links, found by power "
@@ -181,7 +183,7 @@ class Power(VoiceoverScene):
             "routines that found our eigenvectors are its refinement: Krylov methods, after Cornelius Lanczos's of "
             "1950, which keep every vector the iteration visits instead of just the last."
         ) as vo:
-            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
             vo.wait_until("b")
