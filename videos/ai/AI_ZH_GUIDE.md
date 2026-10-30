@@ -1721,3 +1721,30 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | cross-validation, held-out set | 交叉验证，留出集 |
 | the two cultures (data modeling, algorithmic modeling) | 两种文化（数据建模，算法建模） |
 | tabular foundation model | 表格基础模型 |
+
+### Fitting and generalizing (Part 8)
+
+| English | 中文 |
+|---|---|
+| risk, empirical risk, Bayes risk, Bayes rule | 风险，经验风险，贝叶斯风险，贝叶斯规则 |
+| excess risk; approximation error, estimation error | 超额风险；近似误差，估计误差 |
+| bias–variance decomposition | 偏差–方差分解 |
+| union bound; PAC (probably approximately correct) | 联合界；PAC（概率近似正确） |
+| shatter, VC dimension, growth function | 打散，VC维，增长函数 |
+| Sauer–Shelah lemma; ghost sample (symmetrization) | 绍尔–谢拉引理；影子样本（对称化） |
+| (empirical) Rademacher complexity; McDiarmid's inequality | （经验）拉德马赫复杂度；麦克迪尔米德不等式 |
+| margin, margin loss, ramp loss, contraction lemma | 间隔，间隔损失，斜坡损失，压缩引理 |
+| boosting, decision stump | 提升法，决策树桩 |
+| PAC-Bayes; prior, posterior; change of measure | PAC-贝叶斯；先验，后验；测度变换 |
+| vacuous / non-vacuous bound | 空的界 / 非空的界 |
+| sample compression scheme | 样本压缩方案 |
+| (uniform) stability | （一致）稳定性 |
+| random labels, label corruption | 随机标签，标签污染 |
+| implicit bias; minimum-norm interpolant; row space | 隐式偏好；最小范数插值解；行空间 |
+| max-margin direction | 最大间隔方向 |
+| double descent; interpolation threshold; sample-wise, epoch-wise | 双下降；插值阈值；按样本数的，按训练轮数的 |
+| benign / tempered / harmful overfitting; effective rank | 良性 / 温和 / 有害过拟合；有效秩 |
+| flat minimum, sharpness, sharpness-aware minimization (SAM) | 平坦极小值，尖锐度，锐度感知最小化（SAM） |
+| distribution shift, covariate shift, label shift, concept drift | 分布偏移，协变量偏移，标签偏移，概念漂移 |
+| importance weighting, effective sample size | 重要性加权，有效样本量 |
+| memorization, extractable, canary, deduplication | 记忆，可提取，金丝雀（植入的测试文本），去重 |
