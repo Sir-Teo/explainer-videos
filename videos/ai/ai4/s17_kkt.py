@@ -33,7 +33,8 @@ class KKT(VoiceoverScene):
         feas = Rectangle(width=ax.c2p(1, 0)[0] - ax.c2p(-0.5, 0)[0], height=2.4, stroke_width=0, fill_color=CONS,
                          fill_opacity=0.12).move_to(ax.c2p(0.25, 1.0))
         wall = DashedLine(ax.c2p(1, -0.2), ax.c2p(1, 2.2), color=CONS, stroke_width=2)
-        fc = ax.plot(lambda x: (x - c) ** 2 * 0.8, x_range=[-0.5, 2.6], color=WHITE, stroke_width=3)
+        lo_, hi_ = max(-0.5, c - math.sqrt(2.1 / 0.8)), min(2.6, c + math.sqrt(2.1 / 0.8))
+        fc = ax.plot(lambda x: (x - c) ** 2 * 0.8, x_range=[lo_, hi_], color=WHITE, stroke_width=3)
         xs = min(c, 1.0)
         dot = Dot(ax.c2p(xs, (xs - c) ** 2 * 0.8), radius=0.08, color=GRAD)
         t = label(title, font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12)
@@ -50,7 +51,7 @@ class KKT(VoiceoverScene):
             width=12.8, font_size=22).to_edge(UP, buff=0.3)
         p1 = self.panel(0.5, [-3.2, -2.1, 0], r"minimum inside: \ the wall is idle", 0)
         p2 = self.panel(2.0, [3.2, -2.1, 0], r"minimum on the wall: \ it pushes back", 2 * 0.8 * (2.0 - 1.0))
-        tag = note(r"illustrative: \ $f = 0.8(x - c)^2$, \ $g = x - 1 \le 0$").to_corner(DR, buff=0.2)
+        tag = note(r"illustrative: \ $f = 0.8(x - c)^2$, \ $g = x - 1 \le 0$").next_to(thm, DOWN, buff=0.15).align_to(thm, RIGHT)
         with self.voiceover(
             "Most constraints are inequalities: a probability can't be negative, a margin must be at least one. "
             "William Karush worked out the conditions in his 1939 master's thesis; Harold Kuhn and Albert Tucker found "
@@ -62,11 +63,11 @@ class KKT(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(thm, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(Indicate(thm.body, color=CONS, scale_factor=1.01))
+            self.play(FadeIn(p1), FadeIn(p2), FadeIn(tag))
             vo.wait_until("c")
-            self.play(FadeIn(p1), FadeIn(tag))
+            self.play(Indicate(p1, color=GRAD, scale_factor=1.03))
             vo.wait_until("d")
-            self.play(FadeIn(p2))
+            self.play(Indicate(p2, color=GRAD, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -124,7 +125,8 @@ class KKT(VoiceoverScene):
         t2.next_to(g2, UP, buff=0.15)
         l2 = label(rf"$p^* = {d['nc_p']:.2f}$", font_size=22, color=PRIMAL).next_to(g2.ax.c2p(5, d["nc_p"]), UP, buff=0.1)
         l3 = label(rf"$d^* = {d['nc_d']:.2f}$: \ a gap of ${d['nc_gap']:.2f}$", font_size=22, color=DUAL)
-        l3.next_to(g2.ax.c2p(d["nc_lam"], d["nc_d"]), DOWN, buff=0.2)
+        l3.move_to(g2.ax.c2p(2.0, -5.0))
+        pk = Dot(g2.ax.c2p(d["nc_lam"], d["nc_d"]), radius=0.07, color=DUAL)
         tag = note(r"computed").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Two small examples. Minimize x squared, keeping x at least one. Its dual function is a hump that rises "
@@ -136,7 +138,7 @@ class KKT(VoiceoverScene):
             self.play(FadeIn(l1))
             vo.wait_until("a")
             self.play(FadeIn(g2), FadeIn(t2), Create(p2), Create(c2), run_time=1.6)
-            self.play(FadeIn(l2), FadeIn(l3))
+            self.play(FadeIn(l2), FadeIn(l3), FadeIn(pk))
         self.wait(0.3)
         self.clear_scene()
 
@@ -152,10 +154,11 @@ class KKT(VoiceoverScene):
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.9, -0.4, 0])
 
         def line(c):
-            # w . x + b = c, drawn across the plot
-            xs = np.array([-2.0, 2.5])
+            # w . x + b = c, clipped to the plot
+            xs = np.linspace(-2.0, 2.5, 2001)
             ys = (c - b - w[0] * xs) / w[1]
-            return Line(ax.c2p(xs[0], ys[0]), ax.c2p(xs[1], ys[1]))
+            ok = (ys >= -2.6) & (ys <= 2.8)
+            return Line(ax.c2p(xs[ok][0], ys[ok][0]), ax.c2p(xs[ok][-1], ys[ok][-1]))
 
         mid = line(0).set_stroke(WHITE, 3)
         m1 = DashedLine(line(1).get_start(), line(1).get_end(), color=GREY_B, stroke_width=2)

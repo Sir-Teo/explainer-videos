@@ -60,14 +60,14 @@ class JL(VoiceoverScene):
         w10 = DecimalNumber(100 * j[f"within10_{ks[0]}"], num_decimal_places=0, font_size=40, color=C.BITS, unit=r"\%")
         wread = VGroup(w10, label(r"of distances within $10\%$", font_size=28, color=GREY_A)).arrange(RIGHT, buff=0.2)
         wread.move_to([3.8, 1.2, 0])
+        w_a, w_b = 100 * j[f"within10_{ks[3]}"], 100 * j[f"within10_{ks[4]}"]
         head = label(rf"${fmt_int(n)}$ of GPT-2's vectors, \ times one random $768 \times k$ matrix", font_size=32)
         head.to_edge(UP, buff=0.35)
         with self.voiceover(
             "A consequence that sounds impossible. <bookmark mark='a'/> Multiply a thousand of GPT-2's vectors by one "
             f"random matrix, crushing 768 numbers to a few. <bookmark mark='b'/> Down to {ks[0]}, distances are "
             f"scrambled; {ks[1]}, {ks[2]}: better. <bookmark mark='c'/> At {ks[3]}, "
-            f"{100 * j[f'within10_{ks[3]}']:.0f} percent of the distances move by less than ten percent; at {ks[4]}, "
-            f"{100 * j[f'within10_{ks[4]}']:.1f} percent."
+            f"{w_a:.0f} percent of the distances move by less than ten percent; at {ks[4]}, {w_b:.1f} percent."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(diag), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")

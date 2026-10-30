@@ -11,7 +11,16 @@
   "Words": "7. 从计数得到词向量",
   "HighDim": "8. 在768维里生活",
   "JL": "9. 压缩维度",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Outro": "回顾，以及这些想法会在哪里再现",
+  "Einsum": "",
+  "Projection": "",
+  "Power": "",
+  "Norms": "",
+  "Spectra": "",
+  "GaLore": "",
+  "SGNS": "",
+  "Geometry": "",
+  "Netflix": ""
  },
  "lines": {
   "c4798ae0ecec": {
@@ -19,75 +28,100 @@
    "en": "In part one, a model learned to guess the next letter by counting, and it hit a wall. Every context was its own island. <bookmark mark='a'/> Reading the dog barked a hundred times taught it nothing about the hound barked.",
    "zh": "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙：每个上下文都是一座孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也没让它学到关于the hound barked的任何东西。"
   },
-  "86124b2efa72": {
+  "054f0ae2861b": {
    "scene": "Hook",
-   "en": "Every modern model fixes this the same way. It gives each word a place, <bookmark mark='a'/> a point in a space, chosen so that words used alike end up close together. <bookmark mark='b'/> Here are a hundred and two words, where GPT-2 puts them: animals in one region, colors in another, then numbers, places, family, the body, and verbs.",
-   "zh": "每一个现代模型，都用同一种办法解决这个问题：给每个词一个位置，<bookmark mark='a'/>也就是空间里的一个点，这些点的选法，让用法相近的词最后靠在一起。<bookmark mark='b'/>这是102个词，放在GPT-2给它们安排的位置上：动物在一个区域，颜色在另一个区域，然后是数字、地点、家庭、身体，还有动词。"
+   "en": "Every modern model fixes this the same way. It gives each word a place, <bookmark mark='a'/> a point in a space, chosen so that words used alike end up close together. <bookmark mark='b'/> Here are 102 words, where GPT-2 puts them: animals in one region, colors in another, then numbers, places, family, the body, and verbs.",
+   "zh": ""
   },
   "30a10f3cad30": {
    "scene": "Hook",
    "en": "The picture is a shadow. <bookmark mark='a'/> GPT-2 really gives each of its 50,257 tokens a list of 768 numbers, and we've flattened them down to three, keeping the three directions along which these words spread out the most. <bookmark mark='b'/> Up close, dog sits with the other animals.",
    "zh": "这幅图只是一个影子。<bookmark mark='a'/>GPT-2实际上给它的50257个词元，每个都配了一串768个数，我们把它们压扁成3个，留下的是这些词散得最开的3个方向。<bookmark mark='b'/>凑近看，dog和其他动物待在一起。"
   },
-  "88068416a280": {
+  "5387d35491c6": {
    "scene": "Hook",
-   "en": "Here is dog, all 768 numbers. <bookmark mark='a'/> Here is puppy. <bookmark mark='b'/> And here is tobacco. <bookmark mark='c'/> Two of these belong together, and in chapter two we'll learn to measure how much.",
-   "zh": "这是dog，全部768个数。<bookmark mark='a'/>这是puppy。<bookmark mark='b'/>这是tobacco。<bookmark mark='c'/>其中有两个是一路的，到第2章，我们会学会衡量它们有多接近。"
+   "en": "Here is dog, all 768 numbers. <bookmark mark='a'/> Here is puppy. <bookmark mark='b'/> And here is tobacco. <bookmark mark='c'/> Two of these belong together, and in chapter one we'll learn to measure how much.",
+   "zh": ""
   },
-  "47f913142a43": {
+  "3d1531a98da9": {
    "scene": "Hook",
-   "en": "Lists of numbers are vectors, and this part is about what they can do. <bookmark mark='a'/> Measure how alike two things are. Transform a whole space at once. Find the directions that matter most. And live in hundreds of dimensions, where our three-dimensional intuition fails, in useful ways.",
-   "zh": "一串数就是一个向量，这一部分讲的，就是向量能做什么。<bookmark mark='a'/>衡量两样东西有多相似。一下子变换整个空间。找出最要紧的方向。还有，在几百维的空间里生活：在那里，我们三维的直觉会失灵，而且失灵得很有用。"
+   "en": "The mathematics is older than the machines. In 1844 Hermann Grassmann described quantities that add and stretch, in any number of dimensions. <bookmark mark='a'/> In 1858 Arthur Cayley wrote down the algebra of matrices. <bookmark mark='b'/> Beltrami and Jordan found the singular value decomposition, <bookmark mark='c'/> and Hilbert named eigenvalues. <bookmark mark='d'/> Eckart and Young proved how to keep only what matters. <bookmark mark='e'/> Then meaning: John Firth's 'you shall know a word by the company it keeps'. <bookmark mark='f'/> Johnson and Lindenstrauss squeezed dimensions. <bookmark mark='g'/> Latent semantic analysis put words in a space, <bookmark mark='h'/> and Netflix offered a million dollars for filling in a mostly empty matrix. <bookmark mark='i'/> Then word2vec, <bookmark mark='j'/> and LoRA, GaLore and Muon, the same linear algebra inside today's training.",
+   "zh": ""
   },
-  "90f5fb2d5c26": {
+  "6b04db7056e7": {
+   "scene": "Hook",
+   "en": "This is Part 3 of AI, Built. <bookmark mark='a'/> In it: vectors, the dot product and einsum; projections, eigenvectors and the singular value decomposition, each derived; norms, random matrices and what training writes into weights; word vectors; the geometry of high dimensions; and low rank at work. Every number computed, small enough for a laptop.",
+   "zh": ""
+  },
+  "aaa8e097064c": {
    "scene": "Vectors",
-   "en": "Chapter one. Vectors.",
-   "zh": "第1章。向量。"
+   "en": "Chapter one. Vectors, and how alike two of them are.",
+   "zh": ""
   },
-  "248df66bb3b7": {
+  "904357f8b238": {
    "scene": "Vectors",
-   "en": "A vector is an arrow from the origin, <bookmark mark='a'/> or, just as well, a list of numbers: how far to go along each axis. <bookmark mark='b'/> Two numbers in the plane, three in space, and 768 in GPT-2.",
-   "zh": "向量是一根从原点出发的箭头，<bookmark mark='a'/>也同样可以看成一串数：沿每条坐标轴各走多远。<bookmark mark='b'/>平面上是2个数，空间里是3个，GPT-2里是768个。"
+   "en": "A vector is an arrow from the origin, <bookmark mark='a'/> or, just as well, a list of numbers: how far to go along each axis. <bookmark mark='b'/> Two numbers in the plane, three in space, and 768 for a word in GPT-2. <bookmark mark='c'/> Grassmann saw in 1844 that the algebra doesn't care how many numbers there are. Almost nobody read him for forty years.",
+   "zh": ""
   },
-  "cc4951481fd4": {
+  "c1c17690ae94": {
    "scene": "Vectors",
-   "en": "Two moves make all of linear algebra. <bookmark mark='a'/> Add two vectors: walk along one, then along the other. <bookmark mark='b'/> And scale a vector: stretch it, shrink it, or flip it around.",
-   "zh": "整个线性代数，只靠两个动作。<bookmark mark='a'/>把两个向量相加：先沿着一个走，再沿着另一个走。<bookmark mark='b'/>还有缩放一个向量：把它拉长、缩短，或者调转方向。"
+   "en": "Two moves make all of linear algebra. <bookmark mark='a'/> Add two vectors: walk along one, then the other. <bookmark mark='b'/> And scale them: stretch, shrink or flip. Mix the two, a times u plus b times v, <bookmark mark='c'/> and the tip sweeps out the whole plane: u and v are a basis, and every vector has exactly one pair of coordinates in it.",
+   "zh": ""
   },
-  "f4b8c70fdfa7": {
+  "bb8cc9e2ab49": {
    "scene": "Vectors",
-   "en": "Mix the two moves: a times u, plus b times v. <bookmark mark='a'/> As a and b vary, the tip sweeps out the whole plane. <bookmark mark='b'/> u and v are then a basis: every vector has exactly one pair of coordinates in it. The usual axes are just the most familiar basis.",
-   "zh": "把两个动作混在一起：a乘u，加上b乘v。<bookmark mark='a'/>a和b一变，箭头的尖端就扫过整个平面。<bookmark mark='b'/>这时u和v就是一组基：每个向量在这组基里，都有唯一的一对坐标。平常的坐标轴，只不过是我们最熟悉的一组基。"
+   "en": "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate and add: the dot product, or inner product. It is symmetric, linear in each slot, and a vector dotted with itself is its length squared. <bookmark mark='b'/> Draw the triangle with sides a, b and a minus b. Its third side squared is a dot product. <bookmark mark='c'/> Expand it. <bookmark mark='d'/> Euclid's law of cosines gives the same side another way. <bookmark mark='e'/> Compare: the dot product is the two lengths times the cosine of the angle between them.",
+   "zh": ""
   },
-  "7ed1c3eeec5d": {
-   "scene": "Dot",
-   "en": "Chapter two. How alike are two vectors?",
-   "zh": "第2章。两个向量有多相似？"
-  },
-  "b107d567ea5a": {
-   "scene": "Dot",
-   "en": "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate, and add it all up. That's the dot product. <bookmark mark='b'/> It has a second meaning: the length of one, times the length of the other, times the cosine of the angle between them. The cosine is one when the arrows point the same way, zero at a right angle, and minus one when they point in opposite directions.",
-   "zh": "两个向量有多相似？<bookmark mark='a'/>把它们一个坐标一个坐标地相乘，再全部加起来。这就是点积。<bookmark mark='b'/>它还有第二层含义：一个的长度，乘以另一个的长度，再乘以它们夹角的余弦。两根箭头指向同一个方向时，余弦是1；成直角时是0；方向正好相反时是负1。"
-  },
-  "869bec6cce5d": {
-   "scene": "Dot",
-   "en": "Watch it as one vector turns. <bookmark mark='a'/> Pointing the same way, the dot product is as big as it can get. <bookmark mark='b'/> At a right angle, it's zero. <bookmark mark='c'/> Pointing apart, it's negative. Against a vector of length one, the dot product is the length of the shadow that one vector casts on the other.",
-   "zh": "让其中一个向量转起来，看看会怎样。<bookmark mark='a'/>指向同一个方向时，点积最大。<bookmark mark='b'/>成直角时，点积是0。<bookmark mark='c'/>方向相背时，点积是负的。和一个长度为1的向量做点积，得到的就是另一个向量投在它上面的影子的长度。"
+  "26d507a3d6ba": {
+   "scene": "Vectors",
+   "en": "Is that cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. <bookmark mark='b'/> Expand it: a parabola in t. <bookmark mark='c'/> A parabola that never dips below zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches zero only when b lines up with a. So an angle between two words makes sense.",
+   "zh": ""
   },
   "e1d25c8abe56": {
-   "scene": "Dot",
+   "scene": "Vectors",
    "en": "Divide by the two lengths and you get the cosine similarity, which runs from minus one to one. <bookmark mark='a'/> For GPT-2's words: dog and puppy, 0.62. Dog and cat, 0.55. Dog and tobacco, 0.23. <bookmark mark='b'/> In 768 dimensions you can't draw the angle, but you can compute it: multiply the two lists number by number, and add.",
    "zh": "再除以两个长度，就得到余弦相似度，它的取值从负1到1。<bookmark mark='a'/>拿GPT-2的词来算：dog和puppy是0.62，dog和cat是0.55，dog和tobacco是0.23。<bookmark mark='b'/>在768维里，夹角画不出来，但可以算出来：把两串数逐个相乘，再加起来。"
   },
-  "c8363f94105e": {
-   "scene": "Dot",
-   "en": "Here is why this matters. In part one, a network ended with a score for every possible next token, and the softmax turned the scores into probabilities. <bookmark mark='a'/> In GPT-2, every one of those scores is a dot product: the model's final state, dotted with each token's vector, the very same vectors the tokens started out as. <bookmark mark='b'/> After the Eiffel Tower is located in the city of, the biggest dot product belongs to Paris, then London, then Amsterdam. <bookmark mark='c'/> Only the differences matter: the softmax gives Paris 6.4 percent, the number we met in part one.",
-   "zh": "这件事为什么要紧？在第1部分，网络最后会给每一个可能的下一个词元打一个分，再由softmax把分数变成概率。<bookmark mark='a'/>在GPT-2里，每一个分数都是一个点积：模型的最终状态，与每个词元的向量做点积，而这些向量，正是词元一开始的那些向量。<bookmark mark='b'/>在“埃菲尔铁塔所在的城市是”这半句话后面，点积最大的是巴黎，然后是伦敦，再然后是阿姆斯特丹。<bookmark mark='c'/>要紧的只是差值：softmax给巴黎6.4%，就是我们在第1部分见过的那个数。"
+  "14214e1ed066": {
+   "scene": "Vectors",
+   "en": "Here is why this matters. In Part 1, a network ended with a score for every possible next token, and the softmax turned scores into probabilities. <bookmark mark='a'/> In GPT-2, each score is a dot product: the model's final state with each token's vector, the very vectors the tokens started out as. <bookmark mark='b'/> After the Eiffel Tower is located in the city of, the biggest dot products belong to Paris, London, Amsterdam. <bookmark mark='c'/> The softmax gives Paris 6.4 percent.",
+   "zh": ""
   },
-  "21f49015035a": {
+  "60c3b29e53ea": {
+   "scene": "Einsum",
+   "en": "Chapter two. Tensors, and the notation attention is written in.",
+   "zh": ""
+  },
+  "05d28bfce610": {
+   "scene": "Einsum",
+   "en": "A number, a vector, a matrix: zero, one and two axes. <bookmark mark='a'/> A batch of text is a list of sentences, each a list of tokens, each a list of numbers: three axes, what machine learning calls a tensor. <bookmark mark='b'/> Attention splits the numbers among 12 heads: four. Products of such arrays need a notation that names the axes.",
+   "zh": ""
+  },
+  "e6ed06c28e5e": {
+   "scene": "Einsum",
+   "en": "Multiplying two matrices: entry i k is row i of A against column k of B, summed over j. <bookmark mark='a'/> In 1916, writing general relativity, Einstein tired of summation signs and dropped them: an index that appears twice is summed. <bookmark mark='b'/> Programs adopted the idea as einsum, with a letter for each axis. <bookmark mark='c'/> A letter in the output is kept; a letter only in the inputs is summed away. And the cost is one multiply-add for every combination of the letters: i times j times k.",
+   "zh": ""
+  },
+  "9b47c8b4a7b9": {
+   "scene": "Einsum",
+   "en": "One function does all of these. <bookmark mark='a'/> The dot product: multiply, and sum everything. <bookmark mark='b'/> The outer product: nothing summed, a matrix of rank one. <bookmark mark='c'/> Matrix times vector. <bookmark mark='d'/> The transpose, which only reorders. <bookmark mark='e'/> The trace. <bookmark mark='f'/> And a batch of matrix products, the letter b carried along.",
+   "zh": ""
+  },
+  "e8b380109831": {
+   "scene": "Einsum",
+   "en": "Here is attention, Part 13's subject, in this notation. <bookmark mark='a'/> Each token's vector is projected into queries, keys and values, split among heads. <bookmark mark='b'/> Every query is dotted with every key: e is summed away. <bookmark mark='c'/> A softmax turns scores into weights, which average the values. <bookmark mark='d'/> The heads are merged back. <bookmark mark='e'/> Read the costs off the letters. For 1,024 tokens, the scores take about 805 million multiply-adds per layer, and the projections 2,416 million. The scores grow with the square of the length: that is why long contexts are expensive.",
+   "zh": ""
+  },
+  "8e9831c84431": {
+   "scene": "Einsum",
+   "en": "The letters also show that order matters. <bookmark mark='a'/> A is 1,000 by 20, B is 20 by 1,000, C is 1,000 by 20. <bookmark mark='b'/> Multiply A and B first, and you build a 1,000 by 1,000 matrix on the way: 40,000,000 multiply-adds. <bookmark mark='c'/> B and C first: 800,000. The same answer, 50 times cheaper. <bookmark mark='d'/> einsum can find the cheap order itself; here it multiplies B and C first.",
+   "zh": ""
+  },
+  "ce68dba99062": {
    "scene": "Matrices",
-   "en": "Chapter three. Matrices.",
-   "zh": "第3章。矩阵。"
+   "en": "Chapter three. Matrices move space.",
+   "zh": ""
   },
   "f820be8e45a9": {
    "scene": "Matrices",
@@ -99,184 +133,477 @@
    "en": "Where does each vector go? <bookmark mark='a'/> Only two arrows decide it: where the two basis arrows land. Those landing spots are the columns of the matrix. <bookmark mark='b'/> A vector with coordinates one and two lands at one times the first column, plus two times the second. That's what multiplying a matrix by a vector means.",
    "zh": "每个向量会被送到哪里？<bookmark mark='a'/>只由两根箭头决定：两根基向量箭头落在哪里。这两个落点，就是矩阵的两列。<bookmark mark='b'/>坐标为1和2的向量，会落在1乘第一列、加上2乘第二列的地方。矩阵乘以向量，说的就是这个。"
   },
-  "11dafb04efc9": {
+  "d64f3a59c0c0": {
    "scene": "Matrices",
-   "en": "One map after another is again a map, and its matrix is the product of the two. <bookmark mark='a'/> But the order matters: turning, then shearing, is not shearing, then turning.",
-   "zh": "一个映射接着另一个映射，仍然是一个映射，它的矩阵就是两个矩阵的乘积。<bookmark mark='a'/>但顺序很要紧：先旋转再错切，和先错切再旋转，是不一样的。"
+   "en": "One map after another is again a map, and its matrix is the product of the two. <bookmark mark='a'/> But the order matters: turning, then shearing, is not shearing, then turning. <bookmark mark='b'/> Arthur Cayley made matrices objects in their own right in 1858, with exactly this rule; his friend James Joseph Sylvester had named them eight years before.",
+   "zh": ""
   },
   "d4c62614bc14": {
    "scene": "Matrices",
    "en": "One number says how much a map stretches area: the determinant. <bookmark mark='a'/> The unit square becomes a parallelogram, and the determinant is its area. <bookmark mark='b'/> When the determinant reaches zero, the whole plane is squashed onto a line, and information is lost for good. <bookmark mark='c'/> Below zero, the plane has been flipped over, like a page turned face down.",
    "zh": "有一个数，能说明映射把面积拉伸了多少：行列式。<bookmark mark='a'/>单位正方形变成一个平行四边形，行列式就是它的面积。<bookmark mark='b'/>行列式一旦变成0，整个平面就被压扁到一条线上，信息就永远丢失了。<bookmark mark='c'/>小于0时，平面被翻了过来，就像一页纸被扣过去，正面朝下。"
   },
-  "62ca08ea717e": {
-   "scene": "Eigen",
-   "en": "Chapter four. Eigenvectors.",
-   "zh": "第4章。特征向量。"
+  "1d0f27988dff": {
+   "scene": "Matrices",
+   "en": "That squashing has a name, and it will matter for the rest of this part. <bookmark mark='a'/> This matrix sends the whole plane onto one line: its columns point the same way. <bookmark mark='b'/> The line where everything lands is the column space, and its dimension is the rank, here one. <bookmark mark='c'/> A whole line of vectors lands on zero: the null space. <bookmark mark='d'/> The dimensions always add up: rank plus the null space's dimension is the number of columns. A matrix of low rank is a big table that carries few independent directions.",
+   "zh": ""
   },
-  "8bb7aff8e10a": {
-   "scene": "Eigen",
-   "en": "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> But some aren't: they stay on their own line, and are only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and the stretch factor is the eigenvalue.",
-   "zh": "大多数向量，都会被矩阵撞离它原来所在的那条直线。<bookmark mark='a'/>但有些不会：它们留在自己的直线上，只被拉长或缩短。<bookmark mark='b'/>这些就是特征向量，拉伸的倍数就是特征值。"
+  "20d4303cf4c2": {
+   "scene": "Projection",
+   "en": "Chapter four. Projections, and the closest point.",
+   "zh": ""
   },
-  "d7a5f218f2b8": {
-   "scene": "Eigen",
-   "en": "Symmetric matrices, the ones that equal their own mirror image across the diagonal, behave best of all. <bookmark mark='a'/> Their eigenvalues are real numbers, and their eigenvectors are perpendicular. <bookmark mark='b'/> So the map is: turn, so the eigenvectors line up with the axes; stretch along each axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. The transpose flips a matrix across its diagonal, and for a turn like Q, that's the same turn, undone. That's the spectral theorem.",
-   "zh": "对称矩阵，也就是沿对角线翻过来和自己一模一样的矩阵，性质最好。<bookmark mark='a'/>它们的特征值都是实数，特征向量互相垂直。<bookmark mark='b'/>所以这个映射就是：先旋转，让特征向量对准坐标轴；再沿每条轴，按各自的特征值拉伸；最后转回去。<bookmark mark='c'/>A等于Q、Λ、Q转置。转置就是把矩阵沿对角线翻过来；对Q这样的旋转来说，它的转置就是同一个旋转，倒着转回去。这就是谱定理。"
+  "1e9241ff7f85": {
+   "scene": "Projection",
+   "en": "The dot product measured a shadow; here is the shadow made exact. <bookmark mark='a'/> Which point on the line through a is closest to b? <bookmark mark='b'/> Some multiple of a, <bookmark mark='c'/> the one whose error, b minus that point, is perpendicular to the line: any other point is farther, by Pythagoras. <bookmark mark='d'/> Solve for the multiple. <bookmark mark='e'/> The projection is a matrix times b: a times a transpose, over a dot a. A matrix of rank one, that finds shadows.",
+   "zh": ""
   },
-  "55c2ef520ff6": {
-   "scene": "Eigen",
-   "en": "Covariance matrices describe how data spreads out: <bookmark mark='c'/> a table of how much each coordinate varies, on the diagonal, and how much each pair rises and falls together, off it. They are symmetric, and their eigenvectors point along the directions in which the data spreads the most. <bookmark mark='a'/> These are the principal components. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's 768-dimensional words in three dimensions at the start of this part.",
-   "zh": "协方差矩阵描述数据是怎样散开的：<bookmark mark='c'/>这是一张表，对角线上是每个坐标各自变动多大，对角线以外是每一对坐标在多大程度上一起涨落。它是对称的，它的特征向量指向数据散得最开的那些方向。<bookmark mark='a'/>这些就是主成分。<bookmark mark='b'/>只留下最靠前的几个，其余的丢掉：这一部分开头，我们就是这样把GPT-2的768维的词画到三维里的。"
+  "bf1cecd97325": {
+   "scene": "Projection",
+   "en": "Now project onto a subspace: everything you can reach by combining the columns of a matrix A. <bookmark mark='a'/> The closest point is A times some x hat, and the error is perpendicular to every column at once. <bookmark mark='b'/> Multiply out: the normal equations. <bookmark mark='c'/> If the columns are independent, A transpose A can be inverted. <bookmark mark='d'/> The projection matrix: A, A transpose A inverse, A transpose. <bookmark mark='e'/> Project twice and nothing more happens; and P is symmetric. <bookmark mark='f'/> Legendre published this in 1805 as least squares, and Gauss in 1809, who had used it to find the lost asteroid Ceres.",
+   "zh": ""
   },
-  "dbc7ad85bef6": {
+  "4c0e7a099525": {
+   "scene": "Projection",
+   "en": "This is the most used calculation in statistics. <bookmark mark='a'/> Fourteen points and a line. The columns of A are ones and the x values; the best line is the projection of the y values onto their span. <bookmark mark='b'/> The errors are perpendicular to both columns: they sum to zero, and so do the errors times x. <bookmark mark='c'/> Regression, a linear probe reading a concept out of a network, a last layer trained with squared error: all this projection.",
+   "zh": ""
+  },
+  "f2c2fc8b3ef1": {
+   "scene": "Projection",
+   "en": "Projections are easiest with an orthonormal basis, perpendicular arrows of length one: then the projection is Q times Q transpose. <bookmark mark='a'/> Gram and Schmidt's recipe makes one from any basis. Scale the first vector to length one. <bookmark mark='b'/> From the second, remove its shadow on the first; what is left is perpendicular. <bookmark mark='c'/> Scale it, and repeat. <bookmark mark='d'/> Keeping the coefficients writes A as Q times a triangular R: the QR factorization.",
+   "zh": ""
+  },
+  "e60ec357e3c6": {
+   "scene": "Projection",
+   "en": "On a computer every step rounds, and rounding can pile up. We tested on Hilbert matrices, whose columns become nearly dependent. <bookmark mark='a'/> The classical recipe loses orthogonality as the square of the condition number: at a condition number of ten to the 6, its Q is off by about ten to the minus 6. By the end, its vectors are not perpendicular at all. <bookmark mark='b'/> The modified recipe, which takes each shadow from the updated vector, loses only in proportion. <bookmark mark='c'/> Alston Householder's reflections, from 1958, stay perpendicular to about ten to the minus 15, the machine's precision. <bookmark mark='d'/> The normal equations share the classical flaw: forming A transpose A squares the condition number. At the hardest case QR's answer is off by ten to the minus 1, against an error bigger than the answer itself for the normal equations. That is why libraries solve least squares with QR.",
+   "zh": ""
+  },
+  "3b8cc16ceeed": {
+   "scene": "Eigen",
+   "en": "Chapter five. Eigenvectors, and the spectral theorem.",
+   "zh": ""
+  },
+  "4ddb7e4937ba": {
+   "scene": "Eigen",
+   "en": "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> Some aren't: they stay on their line, only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and the stretch is the eigenvalue. A minus lambda I must then squash a direction to zero, so its determinant vanishes: a polynomial equation for lambda.",
+   "zh": ""
+  },
+  "1f768d427a62": {
+   "scene": "Eigen",
+   "en": "Symmetric matrices, equal to their mirror image across the diagonal, behave best. <bookmark mark='a'/> Their eigenvalues are real, and their eigenvectors perpendicular. <bookmark mark='b'/> So the map is: turn the eigenvectors onto the axes, stretch each axis by its eigenvalue, and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose; for a turn like Q, the transpose is the same turn, undone. That's the spectral theorem.",
+   "zh": ""
+  },
+  "a38b03836899": {
+   "scene": "Eigen",
+   "en": "Why does it always work? The proof has three steps. <bookmark mark='a'/> First, the eigenvalues are real: sandwich A between an eigenvector and its complex conjugate. Since A is real and symmetric, the middle number equals its own conjugate, so lambda equals lambda bar. <bookmark mark='b'/> Second, eigenvectors with different eigenvalues are perpendicular: move A across the dot product, and the eigenvalues must agree unless the dot product is zero. <bookmark mark='c'/> Third, A maps the space perpendicular to an eigenvector into itself, so repeat inside it: by induction, a full set. Cauchy proved the first part in 1829; Hilbert took it to infinite dimensions.",
+   "zh": ""
+  },
+  "557b61bde977": {
+   "scene": "Eigen",
+   "en": "One number connects eigenvalues to what follows: the Rayleigh quotient, x transpose A x over x transpose x. <bookmark mark='a'/> In the eigenvector basis it is a weighted average of the eigenvalues. <bookmark mark='b'/> So as x turns, it stays between the smallest and the largest eigenvalue, reaching them along the eigenvectors. <bookmark mark='c'/> The top eigenvector answers a question: which direction does A favour most? It returns as principal components, power iteration and the SVD.",
+   "zh": ""
+  },
+  "4f2b0d713390": {
+   "scene": "Eigen",
+   "en": "Covariance matrices describe how data spreads: <bookmark mark='c'/> how much each coordinate varies, on the diagonal, and how much pairs vary together, off it. The spread along a unit direction is the covariance's Rayleigh quotient, so the direction of greatest spread is the top eigenvector. <bookmark mark='a'/> These are the principal components, Pearson's in 1901 and Hotelling's in 1933. <bookmark mark='b'/> Keeping the top few is how we drew GPT-2's words in three dimensions.",
+   "zh": ""
+  },
+  "b6c641161ee2": {
+   "scene": "Power",
+   "en": "Chapter six. Power iteration: how a computer finds an eigenvector.",
+   "zh": ""
+  },
+  "8e1fd7fd30d1": {
+   "scene": "Power",
+   "en": "Eigenvalues are roots of a polynomial, of degree 768 for a 768 by 768 matrix, and since Abel there is no formula beyond degree four. So computers iterate. <bookmark mark='a'/> Start anywhere, multiply by A, rescale to length one, repeat. <bookmark mark='b'/> Each multiplication favours the direction A stretches most, and the arrow swings onto the top eigenvector.",
+   "zh": ""
+  },
+  "5424965abb52": {
+   "scene": "Power",
+   "en": "Why it works takes four lines. <bookmark mark='a'/> Write the start in the eigenvector basis. <bookmark mark='b'/> k multiplications stretch each part by its eigenvalue to the k. <bookmark mark='c'/> Pull out the largest: every other part is multiplied by a ratio below one, to the k. <bookmark mark='d'/> So the angle shrinks like lambda two over lambda one, to the k: a straight line on a log scale. <bookmark mark='e'/> The eigenvalue estimate does twice as well, because the Rayleigh quotient sits at a maximum, where small errors in direction barely move it.",
+   "zh": ""
+  },
+  "7ba208af3741": {
+   "scene": "Power",
+   "en": "Now real matrices. <bookmark mark='a'/> The covariance of GPT-2's 50,257 token vectors, 768 by 768: its top two eigenvalues have a ratio of 0.455, and the error falls by 0.451 per step, down to the machine's rounding. The random start was almost perpendicular to the answer, a sine of 0.9996; chapter fourteen explains why. <bookmark mark='b'/> Part 1's letter table: a ratio of 0.218, and measured, 0.219. <bookmark mark='c'/> Dashed, the prediction: both match the prediction to two decimal places.",
+   "zh": ""
+  },
+  "a3db6035a7de": {
+   "scene": "Power",
+   "en": "The method is from 1929, by Richard von Mises and Hilda Pollaczek-Geiringer. <bookmark mark='a'/> In 1998 it ranked the web: PageRank is the top eigenvector of a matrix of links. <bookmark mark='b'/> In 2018, spectral normalization ran one power step per training step to keep layers from stretching too much. <bookmark mark='c'/> And today's library routines are its refinement: Krylov methods, after Cornelius Lanczos in 1950.",
+   "zh": ""
+  },
+  "0a8f9a1d8042": {
    "scene": "SVD",
-   "en": "Chapter five. The singular value decomposition.",
-   "zh": "第5章。奇异值分解。"
+   "en": "Chapter seven. The singular value decomposition.",
+   "zh": ""
   },
   "bad90ada8f0d": {
    "scene": "SVD",
    "en": "Not every matrix is symmetric. Many aren't even square. <bookmark mark='a'/> But every matrix, without exception, does three things: a turn, then a stretch along the axes, then another turn. <bookmark mark='b'/> That's the singular value decomposition: A equals U, Sigma, V transpose.",
    "zh": "不是每个矩阵都是对称的。很多甚至都不是方阵。<bookmark mark='a'/>但每一个矩阵，无一例外，都只做三件事：一次旋转，然后沿坐标轴拉伸，然后再一次旋转。<bookmark mark='b'/>这就是奇异值分解：A等于U、Σ、V转置。"
   },
+  "f4bb3b164ce8": {
+   "scene": "SVD",
+   "en": "Where do the turns and stretches come from? <bookmark mark='a'/> A transpose A is symmetric, and never negative: x transpose A transpose A x is a length squared. <bookmark mark='b'/> So the spectral theorem gives it perpendicular eigenvectors v, with eigenvalues sigma squared. <bookmark mark='c'/> Send each v through A and divide by sigma. <bookmark mark='d'/> These u's are perpendicular too, and of length one. <bookmark mark='e'/> So A sends perpendicular v's to perpendicular u's, stretched by the sigmas: the decomposition. <bookmark mark='f'/> Beltrami and Jordan found it in 1873 and 1874; Gene Golub and William Kahan's algorithm of 1965 is what computers still use.",
+   "zh": ""
+  },
   "d233554528e2": {
    "scene": "SVD",
    "en": "The stretches are the singular values. <bookmark mark='a'/> The unit circle always becomes an ellipse, and the singular values are its half-axes. <bookmark mark='b'/> Sweep a unit vector all the way around, and watch how long its image is. The longest it ever gets is sigma one: the most the matrix can stretch any vector. It's called the spectral norm.",
    "zh": "这些拉伸的倍数就是奇异值。<bookmark mark='a'/>单位圆总会变成一个椭圆，奇异值就是它的半轴长。<bookmark mark='b'/>让一个单位向量转上一整圈，看它的像有多长。最长的时候是σ1：也就是这个矩阵能把任何向量拉伸的最大倍数。它叫作谱范数。"
   },
-  "842be6f7da00": {
-   "scene": "SVD",
-   "en": "Why care how much a matrix stretches? <bookmark mark='a'/> A deep network applies one matrix after another. Each of those steps is called a layer, and deep just means many layers. Push a vector through forty layers of random matrices. <bookmark mark='b'/> If each layer stretches a typical vector by 1.2, after forty layers its length has grown two thousand times. <bookmark mark='c'/> At 0.8, it shrinks to almost nothing. Only near one does the signal survive. That knife edge is the subject of part nine.",
-   "zh": "为什么要关心矩阵拉伸多少？<bookmark mark='a'/>深度网络就是一个矩阵接着一个矩阵地作用。其中的每一步叫作一层，所谓“深”，就是层数多。让一个向量穿过40层随机矩阵。<bookmark mark='b'/>如果每一层都把一个典型的向量拉长到1.2倍，40层之后，它的长度会变成原来的大约2000倍。<bookmark mark='c'/>如果是0.8，它就缩到几乎没有了。只有在1附近，信号才能活下来。这道刀锋，就是第9部分的主题。"
-  },
-  "bbb5f62a252d": {
+  "8192af5954cb": {
    "scene": "LowRank",
-   "en": "Chapter six. Keeping what matters.",
-   "zh": "第6章。留下要紧的部分。"
+   "en": "Chapter eight. The best low-rank copy of a matrix.",
+   "zh": ""
   },
-  "666b70e3fbd6": {
+  "efe778df2fda": {
    "scene": "LowRank",
-   "en": "There's more. Written out, the decomposition says that any matrix is a sum of simple pieces, <bookmark mark='a'/> each one a column times a row, weighted by a singular value. How many pieces a table needs is its rank, and a low-rank table is one that a few pieces build. <bookmark mark='b'/> Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k pieces. No other choice comes closer. That's the Eckart–Young theorem, from 1936.",
-   "zh": "还不止这些。把这个分解展开来写，它说的是：任何矩阵都是一些简单小块之和，<bookmark mark='a'/>每一块都是一列乘以一行，再以一个奇异值作为权重。一张表需要多少块，就是它的秩；低秩的表，就是用少数几块就能拼出来的表。<bookmark mark='b'/>留下最大的k块，丢掉其余的，就得到只用k块拼成的、最接近原矩阵的矩阵。没有别的选法能更接近。这就是埃卡特–扬定理，1936年提出。"
+   "en": "Written out, the decomposition makes any matrix a sum of simple pieces, <bookmark mark='a'/> each a column times a row, weighted by a singular value. The number of pieces is the rank; a low-rank table is one a few pieces build. <bookmark mark='b'/> Keep the k biggest and you get the closest matrix of rank k. Nothing else comes closer: the Eckart-Young theorem, from 1936.",
+   "zh": ""
   },
-  "6f5416e0575d": {
+  "2a97aad871ec": {
    "scene": "LowRank",
-   "en": "Here's a real matrix: part one's table of letter pairs, twenty-six letters by twenty-six. <bookmark mark='a'/> The first piece alone already has the broad shape: it's the table you'd get if the next letter didn't care what came before. <bookmark mark='b'/> Add the second piece, the third, the fifth, the tenth, <bookmark mark='c'/> and the error falls by exactly the singular values left out: 0.56 of the whole after one piece, 0.40 after two.",
-   "zh": "来看一个真实的矩阵：第1部分的字母对表，26个字母乘26个字母。<bookmark mark='a'/>光是第一块，就已经有了大致的轮廓：如果下一个字母根本不在乎前面是什么，得到的就是这张表。<bookmark mark='b'/>加上第二块、第三块、第五块、第十块，<bookmark mark='c'/>误差随之下降，剩下多少，恰好由被丢掉的那些奇异值决定：只留一块时，是整体的0.56，留两块时，是0.40。"
+   "en": "Why can't anything beat them? <bookmark mark='a'/> Weyl's inequality, from 1912: A's singular values, shifted by k, are at most those of A minus B plus the k plus first of B. <bookmark mark='b'/> If B has rank k, that last term is zero. <bookmark mark='c'/> A matrix's squared size equals the sum of its squared singular values, as chapter nine shows, so B's error is at least the tail of A's. <bookmark mark='d'/> Keeping the top k achieves exactly that tail.",
+   "zh": ""
   },
-  "7439ec1b09d5": {
+  "60f584a7381b": {
    "scene": "LowRank",
-   "en": "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence: compare each count with what you'd expect if letters ignored their neighbours, and keep only the surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants take turns.",
-   "zh": "这些小块也有含义。<bookmark mark='a'/>取出这张表偏离独立性的那部分：把每个计数，和“字母不管邻居是谁”时预期的次数相比，只保留其中的意外。再把字母沿着它最强的方向排开。<bookmark mark='b'/>一端是：i、a、o、u、e。没有人告诉计算机什么是元音。光凭计数，它就发现了元音和辅音是轮流出现的。"
+   "en": "A picture is a matrix too: 180 rows of 288 grey levels. <bookmark mark='a'/> Its best rank-one copy is a column times a row: stripes, the sky and the horizon. <bookmark mark='b'/> Rank two, four, eight: the mountains appear. Rank 8 keeps 99.6 percent of the squared size with 7 percent of the numbers. <bookmark mark='c'/> Then the trees; by rank 64 it is hard to tell from the original. <bookmark mark='d'/> And each error is exactly the singular values left out.",
+   "zh": ""
   },
-  "987f09a089ec": {
+  "a5cfbe55a3c7": {
+   "scene": "LowRank",
+   "en": "Part 1's table of letter pairs, 26 by 26. <bookmark mark='a'/> The first piece alone is the table you'd get if the next letter ignored the one before. <bookmark mark='b'/> Add the second, third, fifth, tenth, <bookmark mark='c'/> and the error falls by exactly the singular values left out: 0.56 of the whole after one piece, 0.40 after two.",
+   "zh": ""
+  },
+  "4048b69e4ac3": {
+   "scene": "LowRank",
+   "en": "The pieces mean something. <bookmark mark='a'/> Take the table's departure from independence: each count against what you'd expect if letters ignored their neighbours. Spread the letters along its strongest direction. <bookmark mark='b'/> At one end: i, a, o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants take turns.",
+   "zh": ""
+  },
+  "76349a72c16f": {
+   "scene": "LowRank",
+   "en": "Low rank is everywhere in machine learning. <bookmark mark='a'/> In 1990, latent semantic analysis searched documents by meaning with a truncated SVD. <bookmark mark='b'/> In 2021, LoRA fine-tuned huge models by learning a low-rank change to each weight: for GPT-3, ten thousand times fewer numbers to train. <bookmark mark='c'/> In 2024, DeepSeek squeezed attention's keys and values through a low-rank bottleneck. Parts 15 and 27 build these.",
+   "zh": ""
+  },
+  "2fae64cd0362": {
+   "scene": "Norms",
+   "en": "Chapter nine. How big is a matrix?",
+   "zh": ""
+  },
+  "3ca49d6bddb5": {
+   "scene": "Norms",
+   "en": "A matrix has two natural sizes. <bookmark mark='a'/> The Frobenius norm treats it as a list of numbers: the root of the sum of squares. The spectral norm treats it as a map: the most it stretches any vector, the top singular value. <bookmark mark='b'/> The squared Frobenius norm is the trace of A transpose A, <bookmark mark='c'/> and the trace is the sum of the eigenvalues, the squared singular values: chapter eight's missing step. <bookmark mark='d'/> So the spectral norm is at most the Frobenius norm, which is at most root r times it. <bookmark mark='e'/> Their squared ratio, the stable rank, counts how many directions carry the size.",
+   "zh": ""
+  },
+  "c8a6bd689bf3": {
+   "scene": "Norms",
+   "en": "Here are the stable ranks of GPT-2's 48 block matrices; each could reach 768. <bookmark mark='a'/> A random matrix of the MLP's shape has 345; theory predicts 341. <bookmark mark='b'/> The trained ones run from 7 to 131: every one of them far below a random matrix of the same shape. Training concentrates a matrix's size in a few directions.",
+   "zh": ""
+  },
+  "b025ed1f8cf5": {
+   "scene": "Norms",
+   "en": "Norms multiply through a network. <bookmark mark='a'/> Stretching by A then B stretches by at most the product. Push a vector through 40 random layers. <bookmark mark='b'/> At a stretch of 1.2 per layer, its length grows 2,116 times. <bookmark mark='c'/> At 0.8, it shrinks to 0.00015. Only near one does the signal survive: Part 9's subject.",
+   "zh": ""
+  },
+  "c6d4dbf4cde2": {
+   "scene": "Norms",
+   "en": "The largest stretch over the smallest is the condition number: how much a matrix can amplify errors. <bookmark mark='a'/> Solve A x equals b with a small error in b. <bookmark mark='b'/> The error in x is at most that error over the smallest singular value, <bookmark mark='c'/> and b is at most the largest times x. <bookmark mark='d'/> Divide: relative errors grow by at most kappa. <bookmark mark='e'/> A computer's rounding plays the error in b. At a condition number of a million, 64-bit arithmetic loses about ten to the minus 11 of the answer; 32-bit, ten to the minus 3. From a condition number of ten to the 9, the 32-bit answer is no answer at all. GPT-2's worst-conditioned matrix reaches about ten to the 5.",
+   "zh": ""
+  },
+  "ca89ec981860": {
+   "scene": "Norms",
+   "en": "The spectral norm has become an optimizer. <bookmark mark='a'/> Which step of spectral size one changes the loss most along a gradient G? Write G with its SVD. <bookmark mark='b'/> Each diagonal entry is at most one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is Muon's update, computed with five Newton-Schulz iterations, matrix products that push singular values towards one. On a real gradient, 59 percent start below a hundredth of the largest. <bookmark mark='d'/> After five steps, 73 percent lie between 0.6 and 1.3. Part 11 builds the optimizer.",
+   "zh": ""
+  },
+  "2fb2c8883c76": {
+   "scene": "Spectra",
+   "en": "Chapter ten. Random matrices, and what training writes into a network's weights.",
+   "zh": ""
+  },
+  "8dfad640ba8c": {
+   "scene": "Spectra",
+   "en": "What does pure noise look like, through its eigenvalues? <bookmark mark='a'/> In 1955 Eugene Wigner modelled heavy nuclei's energy levels with a random matrix's eigenvalues, and found a law. <bookmark mark='b'/> In 1967 Marchenko and Pastur found it for rectangular matrices: the eigenvalues of W W transpose over M fill a fixed interval, in a fixed shape, set by the aspect ratio alone. We'll check it rather than prove it. <bookmark mark='c'/> A random 768 by 3,072 matrix, GPT-2's MLP shape: 768 eigenvalues, <bookmark mark='d'/> and the law on top. Not one eigenvalue escapes it.",
+   "zh": ""
+  },
+  "3b22da7331b0": {
+   "scene": "Spectra",
+   "en": "Now a trained matrix: GPT-2's layer 6, the first matrix of its MLP, scaled the same way. <bookmark mark='a'/> Most eigenvalues sit in a bulk much like the law. <bookmark mark='b'/> But 59 have escaped beyond the edge, the largest 8.7 times past it. <bookmark mark='c'/> Just unusual values? Shuffle the same numbers into random places. The escapees vanish: the spectrum falls back onto the law. The information is in the arrangement: a few strong directions, learned.",
+   "zh": ""
+  },
+  "964d15520014": {
+   "scene": "Spectra",
+   "en": "The escapees thin out slowly, like a power law: density falling as lambda to the minus alpha. <bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: 44 fall in that range; our layer has alpha 3.53. Random matrices have no tail at all.",
+   "zh": ""
+  },
+  "2c2a6dc1535d": {
+   "scene": "Spectra",
+   "en": "The same in this series' small novels model. <bookmark mark='a'/> At initialization its 30 matrices are random: 1 escapees in all. <bookmark mark='b'/> After training, every matrix has between 13 and 31 beyond the edge. Training writes a little structure into a sea of noise.",
+   "zh": ""
+  },
+  "1941d75e5f25": {
+   "scene": "GaLore",
+   "en": "Chapter eleven. Gradients are low rank.",
+   "zh": ""
+  },
+  "1986a2b444ad": {
+   "scene": "GaLore",
+   "en": "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens, and in practice far lower: errors and inputs share a few directions.",
+   "zh": ""
+  },
+  "4215506ed838": {
+   "scene": "GaLore",
+   "en": "Here is a real gradient, from a small transformer trained on the novels: one 336 by 128 matrix. <bookmark mark='a'/> Its singular values, largest first, on a log scale. At the first step they fall slowly. <bookmark mark='b'/> A few steps in, they collapse: at step 50, the top eight directions carry 100.0 percent of the gradient. <bookmark mark='c'/> Later the spectrum fills in, slowly: at step 600, the top eight still carry 84 percent, of 128 directions.",
+   "zh": ""
+  },
+  "349e22881108": {
+   "scene": "GaLore",
+   "en": "That is GaLore's idea, from Jiawei Zhao, Anima Anandkumar, Yuandong Tian and colleagues in 2024. Adam keeps two running averages per weight: fourteen billion extra numbers for a seven-billion-parameter model. <bookmark mark='a'/> GaLore projects each gradient onto its top r singular directions <bookmark mark='b'/> and runs Adam there, refreshing the directions now and then. <bookmark mark='c'/> For our model: 778{,}240 numbers with Adam, 235{,}520 at rank 32, 58{,}880 at rank 8. At scale the paper reports up to 65 percent less optimizer memory, and, with 8-bit states, a seven-billion-parameter model pretrained on one 24-gigabyte card.",
+   "zh": ""
+  },
+  "8c1ef0c10516": {
+   "scene": "GaLore",
+   "en": "Does a narrow window cost anything? We trained the model with Adam and with GaLore at ranks 32 and 8, each at its best of three learning rates, three seeds each. <bookmark mark='a'/> The training curves, averaged. <bookmark mark='b'/> The held-out loss: Adam 5.195, rank 32 4.901, rank 8 4.949. <bookmark mark='c'/> GaLore wins, but most of the gap, 73 percent, comes from GaLore's smaller steps for the matrices, which let the rest train at the full rate: Adam given the same step sizes reaches 4.979. The low-rank window adds the rest here, at no cost.",
+   "zh": ""
+  },
+  "b01a25483480": {
+   "scene": "GaLore",
+   "en": "Compare LoRA, Part 27's tool. <bookmark mark='a'/> LoRA fixes the change to the weights at rank r for good. <bookmark mark='b'/> GaLore makes each step low rank, but the window moves. <bookmark mark='c'/> After 600 steps, the total change to one matrix has an effective rank of 25 with the rank-8 window, against 78 for Adam: so its total change is far richer than rank 8. That is GaLore's answer to LoRA's limit; Part 27 uses LoRA where a small change is all that's wanted.",
+   "zh": ""
+  },
+  "311e16ae0f2b": {
    "scene": "Words",
-   "en": "Chapter seven. Word vectors.",
-   "zh": "第7章。词向量。"
+   "en": "Chapter twelve. Word vectors, from counting.",
+   "zh": ""
   },
-  "3e6344567185": {
+  "e2a4152aecf8": {
    "scene": "Words",
-   "en": "Now the same, with words. <bookmark mark='a'/> Take the ten thousand most common words in the thirty books, and count how often each pair turns up within four words of each other: a table with a hundred million cells, from four point three five million words of text. <bookmark mark='b'/> Then turn the counts into surprise, part one's way: how much more often do two words meet than they would by chance? That's the pointwise mutual information. Keep its positive part.",
-   "zh": "现在对词做同样的事。<bookmark mark='a'/>取那30本书里最常见的1万个词，数一数每一对词在彼此相距4个词以内出现了多少次：这是一张有1亿个格子的表，来自435万个词的文本。<bookmark mark='b'/>然后按第1部分的办法，把计数变成意外度：两个词相遇的次数，比纯属偶然时多出多少？这就是逐点互信息。只保留它的正值部分。"
+   "en": "Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. <bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. <bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count words in documents, take the SVD, and search by meaning rather than spelling.",
+   "zh": ""
   },
-  "ac845b981fe0": {
+  "69408ad91ab7": {
    "scene": "Words",
-   "en": "Then keep the table's hundred strongest directions, with the singular value decomposition. <bookmark mark='a'/> Every word gets a hundred numbers. <bookmark mark='b'/> And words that keep the same company end up close together. Monday: Saturday, Tuesday, Sunday. Three: four, two, five. Dog: dogs, sheep, wolf, cat, and Perezvon, which, in The Brothers Karamazov, is a dog. Nobody gave it a dictionary.",
-   "zh": "接着用奇异值分解，只留下这张表里最强的100个方向。<bookmark mark='a'/>这样，每个词就都有了自己的100个数。<bookmark mark='b'/>和同一批词做伴的词，最后会彼此靠得很近。离monday最近的，是saturday、tuesday和sunday。离three最近的，是four、two和five。离dog最近的，则是dogs、sheep、wolf和cat，最后还有perezvon：在《卡拉马佐夫兄弟》里，它是一条狗。从来没有人给过它一本词典。"
+   "en": "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand commonest words and count how often each pair turns up within four words: a hundred million cells, from 4.35 million words of text. <bookmark mark='b'/> Then turn counts into surprise, Part 1's way: the log of how many times more often two words meet than by chance, the pointwise mutual information. Keep its positive part. <bookmark mark='c'/> Monday and morning: 4.16. The and of meet 85,086 times, but they meet everything: 0.69.",
+   "zh": ""
   },
-  "bc24f9a1633b": {
+  "07d05d528821": {
    "scene": "Words",
-   "en": "How many directions does meaning need? Keep only the first few of the hundred, the strongest, and look at the neighbours again. <bookmark mark='a'/> With 2, they're nearly random. <bookmark mark='b'/> With 5, three already sits with numbers. <bookmark mark='c'/> With 10, ship finds pequod and sail and boat. <bookmark mark='d'/> Father needs 25, to find son, wife and mother. <bookmark mark='e'/> And Monday gathers its week, Saturday, Tuesday, Sunday, only with all a hundred. The strongest directions carry the broadest patterns; the finer meanings live further down.",
-   "zh": "含义需要多少个方向？在这100个方向里，只留最前面、最强的几个，再看一看每个词的近邻。<bookmark mark='a'/>只留2个，近邻几乎是随机的。<bookmark mark='b'/>留到5个，three已经和数字待在一起了。<bookmark mark='c'/>留到10个，ship找到了pequod、sail和boat。<bookmark mark='d'/>father要25个，才找得到son、wife和mother。<bookmark mark='e'/>而monday要等100个方向全都用上，才聚齐它的一周：saturday、tuesday、sunday。最强的方向承载最宽泛的规律；更精细的含义，藏在更靠后的方向里。"
+   "en": "Keep the table's hundred strongest directions, with the SVD. <bookmark mark='a'/> Every word gets a hundred numbers. <bookmark mark='b'/> Words that keep the same company end up close. Monday: saturday, tuesday, sunday. Three: four, two, five. Dog: devil, dogs, sheep. Ship: pequod, boat, sail. Perezvon is a dog in The Brothers Karamazov, and the Pequod is Ahab's ship. Nobody gave it a dictionary.",
+   "zh": ""
   },
-  "af1338f0dda0": {
+  "6cd101766e2a": {
    "scene": "Words",
-   "en": "Directions mean something too. <bookmark mark='a'/> Start at France, and step to Paris. Then take the same step, starting from England. <bookmark mark='b'/> The nearest word to where you land is London. Man is to king as woman is to: duke first, then queen. Novels from the nineteenth century had their own ideas.",
-   "zh": "方向也有含义。<bookmark mark='a'/>从france出发，走到paris。再从england出发，迈出同样的一步。<bookmark mark='b'/>离落脚点最近的词，是london。man之于king，正如woman之于什么？排第一的是duke，公爵；然后才是queen，女王。19世纪的小说，自有它们的想法。"
+   "en": "How many directions does meaning need? Keep only the strongest few. <bookmark mark='a'/> With 2, only 0 of these twenty neighbours are final ones. <bookmark mark='b'/> With 5, <bookmark mark='c'/> 10, <bookmark mark='d'/> 25, <bookmark mark='e'/> and all 100. three settles first, with 5 directions; monday needs 100. The strongest directions carry the broad patterns; finer meanings live further down.",
+   "zh": ""
   },
-  "637499f3fa01": {
+  "a013d6cc6c54": {
    "scene": "Words",
-   "en": "In 2013, Tomas Mikolov and his colleagues at Google trained word vectors another way: with a guessing game. From each word, guess the words around it. <bookmark mark='a'/> That's word2vec. We trained it on the same books, for three passes. <bookmark mark='b'/> For common words, its neighbours agree with the counting method's. <bookmark mark='c'/> And in 2014, Omer Levy and Yoav Goldberg showed why: word2vec is quietly factorizing the very same table of mutual information, writing that huge table as the product of two thin ones, a hundred numbers per word. Guessing and counting meet again.",
-   "zh": "2013年，托马斯·米科洛夫和他在谷歌的同事，用另一种办法训练词向量：一个猜词游戏。从每个词出发，猜它周围的词。<bookmark mark='a'/>这就是word2vec。我们在同样的书上训练了它，过了3遍。<bookmark mark='b'/>对常见的词，它找到的近邻，和计数方法找到的一致。<bookmark mark='c'/>2014年，奥默·列维与约阿夫·戈德堡说明了原因：word2vec其实是在悄悄分解同一张互信息表，把那张巨大的表，写成两张细长的表的乘积，每个词100个数。猜测和计数，又一次相遇了。"
+   "en": "Directions mean something too. <bookmark mark='a'/> Step from France to Paris, then take the same step from England. <bookmark mark='b'/> The nearest word to where you land is London. Man is to king as woman is to: duke, then queen. <bookmark mark='c'/> On 710 such questions built from the books, man and woman, dog and dogs, walk and walked, the nearest word is right 41 percent of the time, out of ten thousand candidates. And of each category word's five nearest neighbours, animals, colours, numbers and so on, 87 percent share its category, against 14 percent by chance.",
+   "zh": ""
   },
-  "e677bf3bd53b": {
-   "scene": "Words",
-   "en": "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during training. Training goes in steps: each step looks at a small batch of examples, and nudges the vectors once. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. <bookmark mark='b'/> After only 36 steps, most words' neighbours are the commonest words in the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four, eyes with face, cheek, lips. <bookmark mark='d'/> By the end, Monday sits with Tuesday, three with two, four, five, father with son and mother: nothing told it what a day or a number is; only which words keep company.",
-   "zh": "看看word2vec是怎么学的。这是四个词和它们最近的五个邻居，在训练途中的几个检查点上。训练是一步一步进行的：每一步看一小批例子，把向量推动一次。<bookmark mark='a'/>一开始，向量是随机的，邻居也是随机的。<bookmark mark='b'/>才过了36步，大多数词的邻居就成了书里最常见的词，比如they、is和all：每个批次都在推这些高频词，所以它们最先动起来。<bookmark mark='c'/>到第1089步，意义出现了：three和thirty、fifty、four在一起，eyes和face、cheek、lips在一起。<bookmark mark='d'/>到最后，Monday和Tuesday在一起，three和two、four、five在一起，father和son、mother在一起：没有任何东西告诉它什么是一天、什么是一个数；它知道的只是哪些词常常结伴出现。"
+  "0bc10fc7b6be": {
+   "scene": "SGNS",
+   "en": "Chapter thirteen. Word2vec, which turns out to be counting in disguise.",
+   "zh": ""
   },
-  "54c4910e5cc0": {
+  "e6fb76f93d70": {
+   "scene": "SGNS",
+   "en": "In 2013 Tomas Mikolov and colleagues at Google learned word vectors with a guessing game. <bookmark mark='a'/> Each word gets two vectors, one as the word and one as a neighbour. <bookmark mark='b'/> The loss raises a word's dot product with its real neighbours, through the logistic function, and lowers it with 5 random words. <bookmark mark='c'/> That is skip-gram with negative sampling, the heart of word2vec: cheap enough for billions of words in hours.",
+   "zh": ""
+  },
+  "3b61216e8005": {
+   "scene": "SGNS",
+   "en": "We trained it on the novels, with the same words and window as the counting. Four words and their nearest neighbours, with the loss below. <bookmark mark='a'/> At the start, random. <bookmark mark='b'/> After 36 steps, the neighbours are the commonest words: they get pushed first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four. <bookmark mark='d'/> By the end, Monday sits with Tuesday, and father with son. Nothing told it what a day or a relative is.",
+   "zh": ""
+  },
+  "cbba8e7693f6": {
+   "scene": "SGNS",
+   "en": "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. <bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour some number of times, and as a negative about k times the word's count times the context's sampling probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. <bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: the best dot product is the pointwise mutual information, minus log k. Word2vec factorizes the counting table, shifted.",
+   "zh": ""
+  },
+  "dff098a8208c": {
+   "scene": "SGNS",
+   "en": "Let's check it on the 300 commonest words, where the loss can be minimized completely. <bookmark mark='a'/> With 300 numbers per vector, every dot product is free: they land on the shifted PMI, a median error of 0.001. <bookmark mark='b'/> With 30, the points spread: 0.18. <bookmark mark='c'/> With 5, 0.22. A short vector holds only a low-rank version of the table.",
+   "zh": ""
+  },
+  "db6b5db4cd0b": {
+   "scene": "SGNS",
+   "en": "And the real run, ten thousand words with a hundred numbers each? <bookmark mark='a'/> For the 6,251 pairs it saw at least 50 times: trained dot product against the shifted PMI of its own training pairs. <bookmark mark='b'/> Correlation 0.96, slope 0.98. They agree closely, though the low rank pulls the extremes toward the middle.",
+   "zh": ""
+  },
+  "21a8b8a3c953": {
+   "scene": "SGNS",
+   "en": "Which is better? <bookmark mark='a'/> On our analogy questions, counting gets 41 percent and word2vec 30. On analogies the counting method does better. On category neighbours, 87 against 83. Levy, Goldberg and Dagan found in 2015 that, tuned with equal care, the two families are close. <bookmark mark='b'/> GloVe, in 2014, fitted the log counts directly. <bookmark mark='c'/> All of these give one vector per word: bank by a river and bank with money share one. Parts 13 and 14 make vectors depend on context.",
+   "zh": ""
+  },
+  "6297b8cd2e4f": {
    "scene": "HighDim",
-   "en": "Chapter eight. Life in seven hundred and sixty-eight dimensions.",
-   "zh": "第8章。在768维里生活。"
+   "en": "Chapter fourteen. Life in seven hundred and sixty-eight dimensions.",
+   "zh": ""
   },
-  "f9731e3614a2": {
+  "31ad609e8494": {
    "scene": "HighDim",
-   "en": "Our intuition comes from three dimensions, and in seven hundred and sixty-eight it misleads us. <bookmark mark='a'/> Pick two directions at random. In two dimensions, the angle between them could be anything. <bookmark mark='b'/> In three, angles near a right angle are already the most common. <bookmark mark='c'/> In a hundred, it's almost always within ten degrees of one, <bookmark mark='d'/> and in 768, within about four.",
-   "zh": "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>随机取两个方向。在二维里，它们的夹角可以是任何值。<bookmark mark='b'/>在三维里，接近直角的夹角已经是最常见的了。<bookmark mark='c'/>在100维里，夹角几乎总是和直角相差不到10度，<bookmark mark='d'/>而在768维里，相差大约不到4度。"
+   "en": "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most common. <bookmark mark='c'/> In a hundred, the angle strays from ninety degrees by 5.8 degrees on average, <bookmark mark='d'/> and in 768, by 2.1.",
+   "zh": ""
   },
-  "023b0cf044ea": {
+  "59a1ab8681bf": {
    "scene": "HighDim",
-   "en": "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 dimensions: every pair of them lies between seventy-nine and a hundred and one degrees apart. <bookmark mark='b'/> A feature is one idea a model keeps track of, stored as a direction. A model can keep far more features than it has dimensions, as long as their directions only need to be nearly perpendicular. Packing in more directions than dimensions this way is called superposition, and it's how we'll read the inside of a model in part thirty.",
-   "zh": "所以，高维空间里有的是地方。<bookmark mark='a'/>768维里的1万个随机方向：任意两个之间的夹角，都在79度到101度之间。<bookmark mark='b'/>特征，就是模型记下的一个概念，以一个方向的形式存储。模型能存下的特征，可以远远多于它的维数，只要这些特征的方向彼此只需近似垂直。像这样塞进比维数更多的方向，叫作叠加，到第30部分，我们就靠它来读懂模型的内部。"
+   "en": "Why? <bookmark mark='a'/> The cosine is the dot product over the lengths, each close to root d, as we'll see. <bookmark mark='b'/> The dot product is a sum of d independent products of mean zero and variance one: variance d. <bookmark mark='c'/> Divide by d squared: the cosine's variance is one over d. <bookmark mark='d'/> Measured from d of 2 to 4096, the points sit on the line; at 768, 0.00128 against 0.00130.",
+   "zh": ""
   },
-  "b08dc1b99bcb": {
+  "c4c70ffde3db": {
    "scene": "HighDim",
-   "en": "Lengths behave strangely too. <bookmark mark='a'/> Give a vector 768 independent random coordinates, and its length is almost exactly the square root of 768, every time. The spread all but disappears. <bookmark mark='b'/> And nearly all of a ball's volume sits in a thin shell at its surface: in 768 dimensions, 99.96 percent of it lies within one percent of the edge.",
-   "zh": "长度的表现也很奇怪。<bookmark mark='a'/>给一个向量768个独立的随机坐标，它的长度每次都几乎恰好是根号768。波动几乎完全消失了。<bookmark mark='b'/>而且一个球的体积，几乎全都集中在表面的一层薄壳里：在768维里，99.96%的体积，都在离边界1%的范围之内。"
+   "en": "So high-dimensional space is roomy. <bookmark mark='a'/> Ten thousand random directions in 768 dimensions: every pair between 79 and 101 degrees apart. <bookmark mark='b'/> A model stores an idea, a feature, as a direction, and can keep far more features than dimensions if they need only be nearly perpendicular: superposition, how Part 30 reads a model.",
+   "zh": ""
   },
-  "11ca9552ffd0": {
+  "91308a0cbdf9": {
    "scene": "HighDim",
-   "en": "Real word vectors aren't random, though. <bookmark mark='a'/> GPT-2's vectors all lean the same way: two unrelated words have a cosine of 0.24 on average, not zero. <bookmark mark='b'/> Subtract the average vector from every word, and the cosines fall back around zero.",
-   "zh": "不过，真实的词向量并不是随机的。<bookmark mark='a'/>GPT-2的向量都朝同一个方向倾斜：两个不相关的词，余弦平均是0.24，而不是0。<bookmark mark='b'/>从每个词里减去平均向量，余弦就回落到0附近。"
+   "en": "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. <bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. <bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is about one over root two, whatever d: the length grows, the spread doesn't. Measured at 768, 0.702.",
+   "zh": ""
   },
-  "e5d163cb6e21": {
+  "6da228bb9f10": {
+   "scene": "HighDim",
+   "en": "Volume is stranger. It grows like the radius to the d, so the inner ball with 99 percent of the radius holds 0.99 to the d of the volume. <bookmark mark='a'/> In three dimensions, the outer one percent holds 3.0 percent. In a hundred, 63.4. <bookmark mark='b'/> In 768, 99.96 percent: a high-dimensional ball is nearly all skin.",
+   "zh": ""
+  },
+  "a2589797b1cf": {
    "scene": "JL",
-   "en": "Chapter nine. Squeezing dimensions.",
-   "zh": "第9章。压缩维度。"
+   "en": "Chapter fifteen. How few numbers can keep the distances?",
+   "zh": ""
   },
-  "d4527e618f2d": {
+  "2a9437cad50a": {
    "scene": "JL",
-   "en": "Here's a consequence that sounds impossible. <bookmark mark='a'/> Take a thousand of GPT-2's vectors, and multiply them all by the same random matrix, crushing 768 numbers down to a few. <bookmark mark='b'/> Down to two, distances are scrambled. Five, twenty: better. <bookmark mark='c'/> At a hundred, 84 percent of the distances move by less than ten percent, and at four hundred, almost all of them.",
-   "zh": "有一个推论，听起来简直不可能。<bookmark mark='a'/>取GPT-2的1000个向量，全都乘以同一个随机矩阵，把768个数压到只剩几个。<bookmark mark='b'/>压到2个，距离全乱了。5个、20个：好一些。<bookmark mark='c'/>到100个时，84%的距离变化不到10%，到400个时，几乎全部都是这样。"
+   "en": "A consequence that sounds impossible. <bookmark mark='a'/> Multiply a thousand of GPT-2's vectors by one random matrix, crushing 768 numbers to a few. <bookmark mark='b'/> Down to 2, distances are scrambled; 5, 20: better. <bookmark mark='c'/> At 100, 84 percent of the distances move by less than ten percent; at 400, 99.6 percent.",
+   "zh": ""
   },
-  "ceee9f335cd3": {
+  "450f2854053a": {
    "scene": "JL",
-   "en": "That's the Johnson–Lindenstrauss lemma, from 1984. <bookmark mark='a'/> To keep the distances among n points within a factor of one plus or minus epsilon, the error we allow, say ten percent, a random projection to about the log of n over epsilon squared dimensions is enough, whatever dimension you started from. <bookmark mark='b'/> The guarantee is cautious: for our thousand points it asks for five and a half thousand, and four hundred already did the job. <bookmark mark='c'/> The reason it works is the concentration we just saw: a random projection of a vector has nearly the same length, every time.",
-   "zh": "这就是约翰逊–林登施特劳斯引理，1984年提出。<bookmark mark='a'/>要让n个点之间的距离，都保持在1加减ε倍的范围内，ε就是我们允许的误差，比如10%，只要随机投影到大约n的对数除以ε的平方那么多维就够了，不管一开始是多少维。<bookmark mark='b'/>这个保证很保守：对我们这1000个点，它要求5500维，而400维就已经做到了。<bookmark mark='c'/>它之所以管用，靠的正是我们刚才看到的集中现象：一个向量的随机投影，每次的长度都几乎一样。"
+   "en": "The Johnson-Lindenstrauss lemma, from 1984, in Dasgupta and Gupta's form of 2003. <bookmark mark='a'/> To keep every squared distance among n points within one plus or minus epsilon, a random projection to about four log n over epsilon squared dimensions suffices. <bookmark mark='b'/> For our thousand points at ten percent: 5,921. The starting dimension doesn't appear at all. Let's prove it.",
+   "zh": ""
   },
-  "a3ee7f23966c": {
-   "scene": "Outro",
-   "en": "Let's take stock. Vectors are arrows, and lists of numbers, and they add and stretch. The dot product measures how alike two of them are, and it's the score behind every next-token guess. Matrices move the whole space at once. Symmetric ones just stretch along perpendicular directions, and every matrix is a turn, a stretch, and a turn. Keeping the biggest pieces of that decomposition found the vowels in letters, and the meanings of words in thirty novels. And in hundreds of dimensions there is room to spare.",
-   "zh": "我们来盘点一下。向量是箭头，也是一串数，它们可以相加，也可以伸缩。点积衡量两个向量有多相似，也是每一次猜下一个词元背后的那个分数。矩阵一下子移动整个空间。对称矩阵只是沿着互相垂直的方向拉伸，而每一个矩阵，都是一次旋转、一次拉伸、再一次旋转。留下这个分解里最大的那几块，就从字母里找出了元音，从30部小说里找出了词的含义。而在几百维的空间里，地方绰绰有余。"
+  "2e921fcb25b8": {
+   "scene": "JL",
+   "en": "Fix one pair, and let x be their difference, of length one. <bookmark mark='a'/> Each coordinate of R x is a sum of independent normals: normal, with variance one. <bookmark mark='b'/> The squared length is a sum of k such squares: chi-squared, mean k. <bookmark mark='c'/> The Chernoff trick: Markov's inequality on e to the t times it, whose average we know. <bookmark mark='d'/> The best t, and a bound on the logarithm: the chance of stretching past epsilon falls exponentially in k, and shrinking likewise. <bookmark mark='e'/> The union bound over all pairs: once k reaches four log n over that small quantity, the chance of any failure is below one. A good projection exists, and a random one works with probability at least one over n.",
+   "zh": ""
   },
-  "517ff53f0462": {
-   "scene": "Outro",
-   "en": "All of it comes back. Attention, the heart of the transformer, is dot products between vectors. A network is matrices, layer after layer, and keeping their stretch near one is how deep networks train at all; one of the newest optimizers works directly on the spectral norm. Low-rank pieces compress the memory of today's largest models. And the room in high dimensions is where models keep more ideas than they have numbers.",
-   "zh": "这些都会再次出现。注意力是Transformer的核心，它就是向量之间的点积。网络就是一层又一层的矩阵，让它们的拉伸保持在1附近，深度网络才训练得起来；最新的优化器里，就有一个直接作用在谱范数上。低秩的小块，压缩了当今最大模型的记忆。而高维空间里富余的地方，让模型能存下比它拥有的数还要多的想法。"
+  "461cb08ddc99": {
+   "scene": "JL",
+   "en": "Now the data. <bookmark mark='a'/> For one pair, the chance of moving more than 10 percent is exactly a chi-squared tail, in yellow. <bookmark mark='b'/> The measured share of all 499,500 pairs sits on it: the largest gap is 0.0020. <bookmark mark='c'/> The Chernoff bound, dashed, lies above, as it must: at 768, 0.33 against an exact 0.050.",
+   "zh": ""
   },
-  "a2a6d0455719": {
-   "scene": "Outro",
-   "en": "Next time: change. Everything in this part stood still. Training moves: every one of a model's numbers is nudged, again and again, in the direction that lowers the loss. <bookmark mark='a'/> Finding that direction for billions of numbers at once is the chain rule, run backwards. Part four builds that machine from scratch.",
-   "zh": "下一次：变化。这一部分里的一切都是静止的。训练却在动：模型的每一个数，都被一次又一次地，朝着让损失下降的方向推一点。<bookmark mark='a'/>为几十亿个数同时找到这个方向，靠的是倒过来运行的链式法则。第4部分会从零搭建这台机器。"
+  "af5a6b463af3": {
+   "scene": "JL",
+   "en": "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices per k. <bookmark mark='b'/> The union bound's guarantee, from k of 200: at 768 it promises 0.30, and the worst pair measured 0.25. <bookmark mark='c'/> And no map can do much better: in 2017 Kasper Green Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant.",
+   "zh": ""
   },
-  "f8d5c6862972": {
+  "765e67f6b6aa": {
+   "scene": "Geometry",
+   "en": "Chapter sixteen. GPT-2's lopsided space.",
+   "zh": ""
+  },
+  "c867c49a98de": {
+   "scene": "Geometry",
+   "en": "Random directions in 768 dimensions are nearly perpendicular, cosines of zero give or take 0.036. Trained vectors are not random. <bookmark mark='a'/> Between two of GPT-2's token vectors the average cosine is 0.24: they all lean one way, the space is anisotropic. Each makes a cosine of 0.49, on average, with their mean. <bookmark mark='b'/> Subtract the mean, and the average cosine falls to 0.010.",
+   "zh": ""
+  },
+  "10064880eee6": {
+   "scene": "Geometry",
+   "en": "Even centred, the spread is uneven. <bookmark mark='a'/> The top principal direction carries 1.8 percent of it, against 0.13 for an even share. <bookmark mark='b'/> Colour each token by its number in GPT-2's vocabulary, which roughly runs from frequent to rare: the first direction tracks it, a rank correlation of 0.62. <bookmark mark='c'/> Jun Gao and colleagues explained this in 2019: training mostly pushes a rare token's vector away from contexts, so rare tokens drift together. Removing the top direction too, Mu and Viswanath's all-but-the-top of 2018, brings the average cosine from 0.010 to 0.0009.",
+   "zh": ""
+  },
+  "ca2a3731825b": {
+   "scene": "Geometry",
+   "en": "Inside the network it is stronger. <bookmark mark='a'/> GPT-2 reading the scoreboard's passage, layer by layer: the average cosine between positions is 0.13 at the input, about 0.38 in the middle, and 0.94 at the top, the narrow cone Kawin Ethayarajh measured in 2019. <bookmark mark='b'/> In layer 6, three of 768 dimensions carry 64 percent of it: rogue dimensions, in Timkey and van Schijndel's phrase. <bookmark mark='c'/> Centre each layer and the cosines fall to about zero. Raw cosines measure this common lean as much as meaning.",
+   "zh": ""
+  },
+  "601e349fff02": {
+   "scene": "Geometry",
+   "en": "Lopsided or not, directions carry meaning: our counted vectors sent England to london. <bookmark mark='a'/> In 2013 Mikolov, Yih and Zweig found such regularities in neural word vectors. <bookmark mark='b'/> In 2022 Nelson Elhage and colleagues showed toy networks storing more features than dimensions, as nearly perpendicular directions. <bookmark mark='c'/> In 2024 Kiho Park, Yo Joong Choe and Victor Veitch made it precise: concepts as directions, under the right inner product, not always the plain dot product. <bookmark mark='d'/> Reading and steering along such directions is Part 30's subject.",
+   "zh": ""
+  },
+  "0c8a61b7325b": {
+   "scene": "Netflix",
+   "en": "Chapter seventeen. Low rank in the wild: recommendations and retrieval.",
+   "zh": ""
+  },
+  "39857c475be2": {
+   "scene": "Netflix",
+   "en": "Low rank's most famous test came from a DVD rental company. <bookmark mark='a'/> In October 2006 Netflix released a hundred million ratings, from 480,189 customers on 17,770 films, and offered a million dollars to predict held-out ratings ten percent better than its own system. <bookmark mark='b'/> The table was mostly empty: about two hundred ratings per customer. <bookmark mark='c'/> In December, a programmer writing as Simon Funk posted a short program that factorized it by gradient descent, and leapt up the leaderboard. In 2009 BellKor's Pragmatic Chaos won with a blend of hundreds of models, many of them refinements of that factorization.",
+   "zh": ""
+  },
+  "0ddea2c4f387": {
+   "scene": "Netflix",
+   "en": "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping the vectors small. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: 4,000 users, 1,200 films, 122,937 ratings, from six hidden genres the method never sees.",
+   "zh": ""
+  },
+  "3eb09dc8bc5a": {
+   "scene": "Netflix",
+   "en": "Training replayed, at rank 8. <bookmark mark='a'/> The error falls on the ratings it trains on, and on held-out ones: from 0.94 stars to 0.745. Without the penalty the held-out error bottoms out at 0.831 and climbs back to 0.858: the vectors memorize the training ratings. <bookmark mark='b'/> On the right, each film's vector, on its two strongest directions, coloured by the hidden genre, with each genre's average. <bookmark mark='c'/> The genres drift apart. Of each film's ten nearest films, 60 percent share its genre, against 19 percent by chance.",
+   "zh": ""
+  },
+  "57c40884c6fc": {
+   "scene": "Netflix",
+   "en": "How much taste does it take? The average rating misses by 0.936 stars. <bookmark mark='a'/> Adding generosity and quality: 0.824. <bookmark mark='b'/> Then the taste vectors, rank one to thirty-two, three seeds each. The error is lowest at rank 8, 0.746, near the six genres we hid; beyond that, extra directions fit noise.",
+   "zh": ""
+  },
+  "4c04fb1c07f0": {
+   "scene": "Netflix",
+   "en": "Factorization has a weakness: a new user has no vector. Today's recommenders use two towers. <bookmark mark='a'/> One network turns a user's history into a vector, another a film's details; the score is their dot product. <bookmark mark='b'/> Trained so each user's real films outscore the batch, corrected for popularity, the score learns a pointwise mutual information, chapter twelve's quantity; popularity is added back to recommend. <bookmark mark='c'/> The share of held-out favourites in the top ten reaches 0.11 for known users and 0.17 for new ones, from five films each; popularity alone gets 0.08 and 0.16. Both beat recommending the most popular films.",
+   "zh": ""
+  },
+  "135a041e426b": {
+   "scene": "Netflix",
+   "en": "Retrieval is, at heart, one matrix product, and the art is not computing most of it. <bookmark mark='a'/> In 2016 YouTube described recommending as a nearest-neighbour search among video vectors. <bookmark mark='b'/> In 2017 Facebook's FAISS searched a billion vectors, on GPUs. <bookmark mark='c'/> In 2020 dense passage retrieval put questions and passages in one space, the way assistants now find what to read before answering. Part 29 puts it to work.",
+   "zh": ""
+  },
+  "af72622c5524": {
    "scene": "Outro",
-   "en": "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, and Roman Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. The papers are on screen. Thanks for watching, and see you in part four.",
-   "zh": "想了解更多，吉尔伯特·斯特朗的《线性代数与数据学习》是一本亲切的读物，罗曼·韦尔希宁的《高维概率》则解释了大空间为什么会有这样的表现。论文都列在屏幕上。感谢观看，第4部分见。"
+   "en": "Let's take stock. Vectors are lists of numbers with geometry; the dot product, kept honest by Cauchy-Schwarz, measures likeness. Einsum names the axes and counts the cost. Projections find the closest point, and arithmetic's order matters. Symmetric matrices stretch along perpendicular directions, which power iteration finds; every matrix is turn, stretch, turn, and its biggest pieces are its best low-rank copy. Trained weights and gradients live in a few strong directions. Counting and guessing factorize the same table. And in high dimensions, random directions are perpendicular, random projections keep distances, and low rank fills in empty tables.",
+   "zh": ""
+  },
+  "ffb7a13adc43": {
+   "scene": "Outro",
+   "en": "All of it comes back. Part 4 builds the chain rule that computes every gradient. Part 9 keeps each layer's stretch near one, so that deep networks train at all. Part 11 builds Muon, steepest descent in the spectral norm. Part 13 writes attention as dot products, in einsum. Part 15 squeezes a long context's memory through low rank, Part 27 fine-tunes through it, and Part 30 reads and steers the directions inside a model.",
+   "zh": ""
+  },
+  "ea8e5650defb": {
+   "scene": "Outro",
+   "en": "Here are eight problems to try, from the triangle inequality to the Johnson-Lindenstrauss proof. Pause here, and work through them; full solutions are in this part's notes.",
+   "zh": ""
+  },
+  "4b80a65b5547": {
+   "scene": "Outro",
+   "en": "Next time: change. Everything in this part stood still, except in the chapters that trained something, where we took gradients on trust. <bookmark mark='a'/> Part 4 builds derivatives, the chain rule, and the machine that runs it backwards through billions of numbers at once.",
+   "zh": ""
+  },
+  "34370483972f": {
+   "scene": "Outro",
+   "en": "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, Trefethen and Bau explain why the order of arithmetic matters, and Roman Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. Thanks for watching, and see you in Part 4.",
+   "zh": ""
   }
  },
  "title_en": "AI, Built: Part 3, Vectors That Mean Things",
  "chapters_en": {
   "Hook": "Where words live",
-  "Vectors": "1. Arrows and lists of numbers",
-  "Dot": "2. Angles: the dot product",
+  "Vectors": "1. Vectors and the inner product",
+  "Einsum": "2. Tensors and einsum",
   "Matrices": "3. Matrices move space",
-  "Eigen": "4. Directions that stay put",
-  "SVD": "5. Every matrix: rotate, stretch, rotate",
-  "LowRank": "6. Keeping what matters",
-  "Words": "7. Word vectors from counting",
-  "HighDim": "8. Life in 768 dimensions",
-  "JL": "9. Squeezing dimensions",
-  "Outro": "Recap, and where this comes back"
+  "Projection": "4. Projection and least squares",
+  "Eigen": "5. Directions that stay put",
+  "Power": "6. Power iteration, run live",
+  "SVD": "7. Every matrix: turn, stretch, turn",
+  "LowRank": "8. The best low-rank copy",
+  "Norms": "9. How big is a matrix?",
+  "Spectra": "10. Random matrices and trained weights",
+  "GaLore": "11. Gradients are low rank",
+  "Words": "12. Word vectors from counting",
+  "SGNS": "13. word2vec is counting in disguise",
+  "HighDim": "14. Life in 768 dimensions",
+  "JL": "15. Johnson-Lindenstrauss, proved",
+  "Geometry": "16. GPT-2's lopsided space",
+  "Netflix": "17. Low rank in the wild",
+  "Outro": "Recap, problems, and what comes next"
  }
 }

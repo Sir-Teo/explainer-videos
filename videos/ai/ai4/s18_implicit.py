@@ -41,6 +41,19 @@ class Implicit(VoiceoverScene):
                 why(r"a VJP: \ one linear solve, \ no unrolling", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.2, buff=0.5, edge=6.9)
         head = label(r"a layer defined by an equation", font_size=26, color=GREY_A).to_corner(UL, buff=0.3)
+        box = VGroup(RoundedRectangle(width=1.9, height=0.9, corner_radius=0.12, color=GRAD, stroke_width=3),
+                     MathTex(r"f(\,\cdot\,, \theta)", font_size=30))
+        box[1].move_to(box[0])
+        box.move_to([0.6, -2.7, 0])
+        zin = MathTex(r"z_k", font_size=32).next_to(box, LEFT, buff=1.2)
+        zout = MathTex(r"z_{k+1}", font_size=32).next_to(box, RIGHT, buff=1.2)
+        a1 = Arrow(zin.get_right(), box.get_left(), buff=0.1, color=GREY_B, stroke_width=3)
+        a2 = Arrow(box.get_right(), zout.get_left(), buff=0.1, color=GREY_B, stroke_width=3)
+        back = CurvedArrow(zout.get_bottom() + DOWN * 0.05, zin.get_bottom() + DOWN * 0.05, angle=-PI / 2.6, color=GREY_B)
+        cap = label(r"feed the output back in \ until nothing changes: \ $z^*$", font_size=22, color=GREY_A)
+        cap.next_to(zout, RIGHT, buff=0.5)
+        loop = VGroup(box, zin, zout, a1, a2, back, cap)
+        tagl = note(r"schematic").next_to(loop, LEFT, buff=0.4)
         with self.voiceover(
             "Some layers aren't a fixed list of steps. A deep equilibrium layer feeds its output back into itself until "
             "nothing changes: its output is the fixed point z star, which satisfies z star equals f of z star and "
@@ -50,7 +63,8 @@ class Implicit(VoiceoverScene):
             "theorem. <bookmark mark='c'/> For a loss, run it as a vector-Jacobian product: one linear solve at the "
             "fixed point, however many iterations it took to get there, and nothing stored along the way."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(loop), FadeIn(tagl))
+            self.play(ShowPassingFlash(back.copy().set_stroke(GRAD, width=6), time_width=0.5), run_time=1.2)
             step(0)
             vo.wait_until("a")
             step(1)

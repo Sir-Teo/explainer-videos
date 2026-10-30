@@ -49,7 +49,7 @@ class Lagrange(VoiceoverScene):
         cont = contour_lines(ax, lag_f, (-1.6, 2.6), (-1.5, 1.9), [0.05 * 2 ** k for k in range(9)], n=(140, 110))
         circ = ParametricFunction(lambda t: ax.c2p(math.cos(t), math.sin(t)), t_range=[0, 2 * np.pi], color=CONS,
                                   stroke_width=4)
-        cl = MathTex(r"g(x) = \|x\|^2 - 1 = 0", font_size=26, color=CONS).next_to(ax.c2p(-0.7, -1.0), DL, buff=0.05)
+        cl = MathTex(r"g(x) = \|x\|^2 - 1 = 0", font_size=26, color=CONS).move_to([2.5, 0.0, 0])
         th = ValueTracker(2.6)
         s = 0.32
 
@@ -62,7 +62,7 @@ class Lagrange(VoiceoverScene):
             u = ax.c2p(*(p + s * gf)) - P
             w = ax.c2p(*(p + s * gg)) - P
             return VGroup(Arrow(P, P + u, buff=0, color=GRAD, stroke_width=5, max_tip_length_to_length_ratio=0.2),
-                          Arrow(P, P + w, buff=0, color=CONS, stroke_width=4, max_tip_length_to_length_ratio=0.2),
+                          Arrow(P, P + w, buff=0, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.2),
                           Dot(P, radius=0.07, color=WHITE))
 
         arr = always_redraw(arrows)
@@ -72,7 +72,7 @@ class Lagrange(VoiceoverScene):
         rd.add_updater(lambda m: m.set_value(float(np.interp(th.get_value(), th_, tang))))
         read = VGroup(label(r"$\nabla f$ along the circle:", font_size=26, color=GREY_A), rd).arrange(RIGHT, buff=0.2)
         read.move_to([3.9, 2.4, 0])
-        key = VGroup(label(r"$\nabla f$", font_size=24, color=GRAD), label(r"$\nabla g$", font_size=24, color=CONS),
+        key = VGroup(label(r"$\nabla f$", font_size=24, color=GRAD), label(r"$\nabla g$", font_size=24, color=WHITE),
                      label(r"contours of $f$", font_size=24, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         key.move_to([2.4, 1.0, 0])
         hist = history_card(1788, r"Joseph-Louis Lagrange, \ \textit{M\'ecanique analytique}",
@@ -192,8 +192,8 @@ class Lagrange(VoiceoverScene):
                    r"\pi^*(a) = \frac{\pi_{\text{ref}}(a)\, e^{r(a)/\beta}}{Z}", font_size=38).to_edge(UP, buff=0.5)
         sub = label(r"the same Lagrangian, \ with $\textstyle\sum_a \pi(a) = 1$", font_size=24, color=GREY_A).next_to(eq, DOWN, buff=0.25)
         vmax = max(pref.max(), ps.max())
-        b1 = bars(list(pref), GREY_B, width=4.4, height=1.8, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([-3.5, -1.6, 0])
-        b2 = bars(list(ps), C.REWARD, width=4.4, height=1.8, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([3.5, -1.6, 0])
+        b1 = bars(list(pref), GREY_B, width=5.0, height=2.6, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([-3.4, -1.3, 0])
+        b2 = bars(list(ps), C.REWARD, width=5.0, height=2.6, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([3.4, -1.3, 0])
         l1 = label(r"$\pi_{\text{ref}}$", font_size=26, color=GREY_B).next_to(b1, UP, buff=0.3)
         l2 = label(rf"$\pi^*$, \ $\beta = {d['kl_beta']:g}$ \ (computed; \ solver agrees to ${sci(max(d['rl_diff'], 1e-12), 0)}$)",
                    font_size=22, color=C.REWARD).next_to(b2, UP, buff=0.3)
@@ -204,11 +204,10 @@ class Lagrange(VoiceoverScene):
             "<bookmark mark='b'/> Here for six actions, computed and checked against a solver. Part 27's direct "
             "preference optimization starts from this formula."
         ) as vo:
-            self.play(Write(eq))
+            self.play(Write(eq), FadeIn(b1), FadeIn(l1))
             vo.wait_until("a")
-            self.play(FadeIn(sub))
+            self.play(FadeIn(sub), FadeIn(b2))
             vo.wait_until("b")
-            self.play(FadeIn(b1), FadeIn(l1))
-            self.play(FadeIn(b2), FadeIn(l2))
+            self.play(FadeIn(l2))
         self.wait(0.3)
         self.clear_scene()

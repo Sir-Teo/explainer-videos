@@ -103,7 +103,10 @@ class Power(VoiceoverScene):
             "<bookmark mark='e'/> The eigenvalue estimate does twice as well, because the Rayleigh quotient sits at a "
             "maximum, where small errors in direction barely move it."
         ) as vo:
-            for k, mk in enumerate("abcde"):
+            step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], scale_factor=1.03))
+            for k, mk in enumerate("bcde", start=1):
                 vo.wait_until(mk)
                 step(k)
         self.wait(0.3)

@@ -154,8 +154,8 @@ class GaLore(VoiceoverScene):
             "two running averages per weight: fourteen billion extra numbers for a seven-billion-parameter model. "
             "<bookmark mark='a'/> GaLore projects each gradient onto its top r singular directions <bookmark mark='b'/> "
             "and runs Adam there, refreshing the directions now and then. <bookmark mark='c'/> For our model: "
-            f"{fmt_int(mems['adam'])} numbers with Adam, {fmt_int(mems['galore32'])} at rank 32, "
-            f"{fmt_int(mems['galore8'])} at rank 8. At scale the paper reports up to 65 percent less optimizer memory, "
+            f"{mems['adam']:,} numbers with Adam, {mems['galore32']:,} at rank 32, "
+            f"{mems['galore8']:,} at rank 8. At scale the paper reports up to 65 percent less optimizer memory, "
             "and, with 8-bit states, a seven-billion-parameter model pretrained on one 24-gigabyte card."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
