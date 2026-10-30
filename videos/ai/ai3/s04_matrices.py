@@ -3,31 +3,17 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai3.common import I_COLOR, J_COLOR, arrow, plane
-
-
-def mat2(M, font_size=40, cols=(I_COLOR, J_COLOR)) -> Matrix:
-    m = Matrix([[f"{x:g}" for x in r] for r in np.asarray(M)], h_buff=0.9, v_buff=0.65, bracket_h_buff=0.12)
-    m.scale(font_size / 48)
-    for j, col in enumerate(m.get_columns()):
-        col.set_color(cols[j])
-    return m
+from videos.ai.ai3.common import HIST, I_COLOR, J_COLOR, arrow, chapter, mat2, plane
 
 
 class Matrices(VoiceoverScene):
     def construct(self):
-        self.card()
+        chapter(self, 3, r"Matrices move space", r"What does a matrix do?", "Chapter three. Matrices move space.")
         self.moving()
         self.columns()
         self.composition()
         self.determinant()
-
-    # ------------------------------------------------------------------
-    def card(self):
-        card = chapter_card(3, r"Matrices move space", r"What does a matrix do?", part=3)
-        with self.voiceover("Chapter three. Matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.rank()
 
     # ------------------------------------------------------------------
     def moving(self):
@@ -104,9 +90,15 @@ class Matrices(VoiceoverScene):
             t = label(txt, font_size=30).next_to(g, UP, buff=0.2)
             panels.append((g, t, first, second))
         prod = MathTex(r"S\,R \ne R\,S", font_size=44).to_edge(DOWN, buff=0.4)
+        hist = history_card(1858, r"Arthur Cayley, \textit{A Memoir on the Theory of Matrices}",
+                            r"matrices as objects that add and multiply, \ and whose products depend on the order; "
+                            r"the word \textit{matrix} was J.~J.~Sylvester's, in 1850", color=HIST, width=5.6)
+        hist.to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "One map after another is again a map, and its matrix is the product of the two. <bookmark mark='a'/> "
-            "But the order matters: turning, then shearing, is not shearing, then turning."
+            "But the order matters: turning, then shearing, is not shearing, then turning. <bookmark mark='b'/> "
+            "Arthur Cayley made matrices objects in their own right in 1858, with exactly this rule; his friend James "
+            "Joseph Sylvester had named them eight years before."
         ) as vo:
             for g, t, _, _ in panels:
                 self.play(FadeIn(g), FadeIn(t), run_time=0.6)
@@ -120,6 +112,8 @@ class Matrices(VoiceoverScene):
                     anims.append(ApplyMatrix(M, g[0], about_point=c))
                 self.play(*anims, run_time=1.8)
             self.play(Write(prod))
+            vo.wait_until("b")
+            self.play(FadeOut(prod), FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -176,5 +170,45 @@ class Matrices(VoiceoverScene):
             self.play(FadeIn(notes[2]))
         sh.clear_updaters()
         dv.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def rank(self):
+        flat = np.array([[2.0, 1.0], [1.0, 0.5]])  # rank one: both columns on the line through (2, 1)
+        bg = plane(faded=True).set_opacity(0.25)
+        pl = plane()
+        null = Line([-2.2, 4.4, 0], [2.2, -4.4, 0], color=C.PENALTY, stroke_width=6)  # the direction (1, -2)
+        col = Line([-8, -4, 0], [8, 4, 0], color=C.BITS, stroke_width=6)
+        f = mat2(flat, font_size=42).to_corner(UL, buff=0.5)
+        fb = BackgroundRectangle(f, color=BACKGROUND, fill_opacity=0.85, buff=0.12)
+        cards = VGroup(
+            label(r"column space: \ where the plane lands \ (a line: \ \textbf{rank} $1$)", font_size=28, color=C.BITS),
+            label(r"null space: \ what is sent to $\mathbf{0}$ \ (a line: \ dimension $1$)", font_size=28,
+                  color=C.PENALTY),
+            label(r"rank $+$ null-space dimension $=$ number of columns", font_size=30),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(DR, buff=0.4)
+        for c_ in cards:
+            c_.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.08)
+        with self.voiceover(
+            "That squashing has a name, and it will matter for the rest of this part. <bookmark mark='a'/> This "
+            "matrix sends the whole plane onto one line: its columns point the same way. <bookmark mark='b'/> The "
+            "line where everything lands is the column space, and its dimension is the rank, here one. "
+            "<bookmark mark='c'/> A whole line of vectors lands on zero: the null space. <bookmark mark='d'/> The "
+            "dimensions always add up: rank plus the null space's dimension is the number of columns. A matrix of "
+            "low rank is a big table that carries few independent directions."
+        ) as vo:
+            self.add(bg)
+            self.play(Create(pl, lag_ratio=0.05), FadeIn(fb), Write(f), Create(null), run_time=1.5)
+            vo.wait_until("a")
+            self.play(ApplyMatrix(flat, VGroup(pl, null)), run_time=2.5)
+            vo.wait_until("b")
+            self.play(Create(col), FadeIn(cards[0]))
+            vo.wait_until("c")
+            ghost = Line([-2.2, 4.4, 0], [2.2, -4.4, 0], color=C.PENALTY, stroke_width=4).set_opacity(0.6)
+            self.play(Create(ghost), FadeIn(cards[1]))
+            self.play(Transform(ghost, Dot(ORIGIN, color=C.PENALTY, radius=0.12)), run_time=1.5)
+            vo.wait_until("d")
+            self.play(FadeIn(cards[2]))
         self.wait(0.3)
         self.clear_scene()

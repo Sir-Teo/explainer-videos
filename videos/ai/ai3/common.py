@@ -170,6 +170,11 @@ def era_strip(events, y0=-0.2, width=5.9, font_size=20, color=None) -> tuple:
     return axis, skel, marks
 
 
+def ex(x) -> int:
+    """The power of ten nearest x (for narration: 'ten to the {ex(x)}')."""
+    return int(round(math.log10(abs(float(x)))))
+
+
 def seeds_text(vals, digits=3) -> str:
     """'0.912 (0.910 to 0.915)' as plain words for the narration: mean and the range over seeds."""
     v = np.asarray(vals, float)
