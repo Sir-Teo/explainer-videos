@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import unicodedata
 
 import numpy as np
@@ -45,8 +46,12 @@ class Race(VoiceoverScene):
             label(rf"each optimizer at ${n_lr}$ learning rates or more, \ a factor of $2$ apart, \ extended until the best "
                   r"is inside; \ the best kept", font_size=24),
             label(r"the best one run again from $2$ more seeds: \ the spread is shown", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UL, buff=0.5)
-        head = label(r"the rules", font_size=30, color=C.BITS).next_to(rules, UP, buff=0.25).align_to(rules, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        for r_ in rules:
+            r_.scale(1.15)
+        rules.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 1.3, 0])
+        keep_in_frame(rules)
+        head = label(r"the rules", font_size=34, color=C.BITS).next_to(rules, UP, buff=0.35)
         roster = VGroup(*[label(OPT_NAMES[o], font_size=26, color=OPT_COLORS[o]) for o in opts]).arrange(RIGHT, buff=0.55)
         roster.to_edge(DOWN, buff=1.6)
         notes = VGroup(*[label(t_, font_size=18, color=GREY_A).next_to(roster[i], DOWN, buff=0.12) for i, t_ in enumerate(
@@ -63,7 +68,7 @@ class Race(VoiceoverScene):
             "more seeds, so we can see how much of any difference is luck. <bookmark mark='d'/> The contestants: SGD "
             "with momentum, AdamW, Lion, Shampoo, SOAP and Muon."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(roster.copy().set_opacity(0.25)))
             vo.wait_until("a")
             self.play(FadeIn(rules[0], shift=RIGHT * 0.2))
             self.play(FadeIn(rules[1], shift=RIGHT * 0.2))
@@ -82,12 +87,12 @@ class Race(VoiceoverScene):
         opts = list(r["opts"])
         allf = np.concatenate([np.asarray(r[f"sweep_{o}"], float) for o in opts])
         ok = allf[np.isfinite(allf)]
-        lo = float(ok.min()) - 0.05
-        hi = float(min(ok.max(), ok.min() + 1.6)) + 0.05
+        lo = math.floor((float(ok.min()) - 0.05) * 10) / 10
+        hi = math.ceil((float(min(ok.max(), ok.min() + 1.6)) + 0.05) * 10) / 10
         n_lr = max(len(r[f"lrs_{o}"]) for o in opts)
         g = bits_axes([0, n_lr - 1], [lo, hi], x_length=6.6, y_length=4.4, center=[-2.8, -0.4, 0], x_step=1,
                       xlabel=r"learning rate, \ in steps of $\times 2$ from each grid's smallest",
-                      ylabel=r"held-out bits after $3{,}000$ steps, \ seed $0$", y_step=round((hi - lo) / 4, 2),
+                      ylabel=r"held-out bits after $3{,}000$ steps, \ seed $0$", y_step=round((hi - lo) / 4, 1) or 0.1,
                       xfmt=lambda v: rf"\times{2 ** int(v)}", yfmt=lambda v: f"{v:.2f}")
         ax = g.ax
         lines, best_dots = VGroup(), VGroup()
@@ -196,7 +201,7 @@ class Race(VoiceoverScene):
 
         def block(name, k):
             t = clean(r[f"writes_{name}"][k])
-            kw = dict(font="DejaVu Sans Mono", font_size=24)
+            kw = dict(font="DejaVu Sans Mono", font_size=27)
             p_ = data_text("It was a", color=WHITE, **kw)
             n1 = len(t) // 2
             sp = t.rfind(" ", 0, n1 + 1)
@@ -208,12 +213,12 @@ class Race(VoiceoverScene):
             return VGroup(p_, l1, l2)
 
         heads = {n: label(OPT_NAMES[n], font_size=24, color=OPT_COLORS[n]) for n in names}
-        ys = {names[0]: 2.0, names[1]: 0.35}
+        ys = {names[0]: 1.5, names[1]: -0.6}
 
         def place(name, k):
             g_ = block(name, k)
-            if g_.width > 9.6:
-                g_.scale_to_fit_width(9.6)
+            if g_.width > 10.0:
+                g_.scale_to_fit_width(10.0)
             return g_.shift([-3.7 - g_[0].get_left()[0], ys[name] - g_.get_center()[1], 0])
 
         for n in names:
@@ -270,7 +275,8 @@ class Race(VoiceoverScene):
             b = Rectangle(width=0.7, height=max(h, 0.01), stroke_width=0, fill_color=OPT_COLORS[o], fill_opacity=0.9)
             b.move_to(ax.c2p(i + 0.5, ms[o] / 2))
             bars.add(b)
-            labs.add(VGroup(label(OPT_NAMES[o], font_size=18, color=OPT_COLORS[o]).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.12),
+            nm = r"SGD $+$ \\ momentum" if o == "sgdm" else OPT_NAMES[o]
+            labs.add(VGroup(label(nm, font_size=18, color=OPT_COLORS[o]).next_to(ax.c2p(i + 0.5, 0), DOWN, buff=0.12),
                             label(rf"${ms[o] / base:.1f}\times$", font_size=20, color=WHITE).next_to(b, UP, buff=0.08)))
         yn = label(r"time per training step, \ relative to AdamW", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.4).align_to(ax, LEFT)
         caveat = label(r"one CPU thread, \ shared with other jobs; \ a tiny model, \ where the extra matrix work is a big "

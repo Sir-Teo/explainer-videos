@@ -88,7 +88,7 @@ class Schedule(VoiceoverScene):
                     label(r"constant, \ $\eta/5$", font_size=22, color=SMALL),
                     label(r"warmup--stable--decay", font_size=22, color=WSD)).arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.35)
         tag = note(rf"a toy: \ $L = R(x) + \tfrac{{{A:g}}}{{2}}\,(y - c(x))^2$, \ every gradient noisy; \ one run of "
-                   rf"${int(r['T'])}$ steps each; \ computed").to_corner(DR, buff=0.2)
+                   rf"${int(r['T'])}$ steps each; \ computed")
         cite_ = cite(r"K.~Wen, Z.~Li, J.~Wang, D.~Hall, P.~Liang \& T.~Ma, \textit{A River Valley Loss Landscape "
                      r"Perspective} (2024)", corner=DL)
         with self.voiceover(
@@ -99,6 +99,7 @@ class Schedule(VoiceoverScene):
             "a small step it stays near the floor, but crawls. <bookmark mark='d'/> Warmup, stable, decay gets both: "
             "it travels down the river at the high rate, then drops onto the floor at the end."
         ) as vo:
+            tag.next_to(lg, DOWN, buff=0.12)
             self.play(Create(cont), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
             self.play(Create(riv), FadeIn(rl), FadeIn(hl))
