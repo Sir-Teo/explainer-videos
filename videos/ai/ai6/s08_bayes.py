@@ -7,7 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai6.common import AUSTEN, DICKENS, HL, chapter, load, plot
 
-NB, LR = C.ADVANTAGE, C.MODEL_Q
+NB, LR, PLATT = "#4FD1C5", C.MODEL_Q, "#B48EF0"
 
 
 class NaiveBayes(VoiceoverScene):
@@ -108,10 +108,10 @@ class NaiveBayes(VoiceoverScene):
             f"<bookmark mark='a'/> {say}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(key_), FadeIn(hist))
-            vo.wait_until("a")
             for k_ in ("nb", "lr"):
                 b_, c_, d_ = art[k_]
-                self.play(FadeIn(b_), Create(c_), FadeIn(d_), run_time=1.5)
+                self.play(FadeIn(b_), Create(c_), FadeIn(d_), run_time=2.0)
+            vo.wait_until("a")
             self.play(FadeIn(res[0]))
             vo.wait_until("b")
             self.play(FadeIn(res[1]), FadeIn(res[2]))
@@ -126,7 +126,7 @@ class NaiveBayes(VoiceoverScene):
         c = load("calibration")
         panels = VGroup()
         specs = [("lr2", r"logistic, \ $2$ rates", LR), ("nb", r"naive Bayes, \ $70$ words", NB),
-                 ("nb_platt", r"naive Bayes, \ Platt-scaled", C.REWARD)]
+                 ("nb_platt", r"naive Bayes, \ Platt-scaled", PLATT)]
         for k, (key, title, col) in enumerate(specs):
             g = plot([0, 1, 0.5], [0, 1, 0.5], x_length=3.4, y_length=3.0, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
                      center=[-4.4 + 4.4 * k, -0.6, 0], xlabel=r"predicted $P(\text{Dickens})$" if k == 1 else "",
