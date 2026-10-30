@@ -194,7 +194,7 @@ class Probes(VoiceoverScene):
         for i, (v, n, c_) in enumerate(zip(vals, names, cols)):
             r = Rectangle(width=1.0, height=max(v / top * 3.8, 0.01), stroke_width=0, fill_color=c_, fill_opacity=0.9)
             r.move_to(g.ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
-            t = MathTex(f"{v:.2f}", font_size=26, color=c_).next_to(r, UP, buff=0.08)
+            t = MathTex(f"{v:.2f}", font_size=26, color=c_).next_to(r, UP, buff=0.22 if i == 1 else 0.08)
             nl = label(n, font_size=18, color=c_).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.15)
             bars_.add(VGroup(r, t, nl))
         if len(br) > 1:
@@ -204,8 +204,11 @@ class Probes(VoiceoverScene):
                           r"probe reads, \ and see whether the model notices", width=5.6, color=CAUSE, font_size=19)
         hc.to_corner(UR, buff=0.35)
         uses = (bp - b0) > 3 * max(float(br.mean()) - b0, 0.02)
+        proj = cmath(r"h \;\to\; h - (h\cdot\hat w)\,\hat w", font_size=34).next_to(hc, DOWN, buff=0.45)
+        pl = label(r"$\hat w$: \ the probe's unit direction, \ at layer " + f"${best}$", font_size=18,
+                   color=GREY_A).next_to(proj, DOWN, buff=0.12)
         msg = label((r"the model uses this direction" if uses else r"decodable, \ but barely used"), font_size=26,
-                    color=CAUSE).next_to(hc, DOWN, buff=0.5)
+                    color=CAUSE).next_to(pl, DOWN, buff=0.45)
         verdict = ("The model was using that direction to know a quote was open. " if uses else
                    "The model hardly cared: the information was there, but the computation ran elsewhere, or along "
                    "other directions too. ")
@@ -220,6 +223,7 @@ class Probes(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(hc))
             vo.wait_until("a")
+            self.play(Write(proj), FadeIn(pl))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars_[0][0], DOWN), FadeIn(bars_[0][1:]))
             vo.wait_until("c")

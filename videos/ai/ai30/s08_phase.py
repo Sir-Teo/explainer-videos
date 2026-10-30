@@ -132,7 +132,8 @@ class Phase(VoiceoverScene):
             "where two choices cost almost the same. Superposition is a phase the network enters when features are "
             "sparse enough."
         ) as vo:
-            self.play(FadeIn(lg), FadeIn(fe))
+            blank = ge.copy().set_fill(GREY_D, opacity=0.25)
+            self.play(FadeIn(lg), FadeIn(fe), FadeIn(blank))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c) for c in ge], lag_ratio=0.004), run_time=3)
             self.play(Create(mark), Create(link), FadeIn(gi), FadeIn(it))

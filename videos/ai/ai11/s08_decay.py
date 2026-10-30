@@ -8,7 +8,7 @@ from videos.ai.ai11.common import OPT_COLORS, PART, bits_axes, lr_tex, load, tak
 AW, L2, AD = OPT_COLORS["adamw"], OPT_COLORS["adam_l2"], OPT_COLORS["adam"]
 
 
-def heat(A, center, cell=0.62, lo=None, hi=None):
+def heat(A, center, cell=0.68, lo=None, hi=None):
     """A grid of held-out losses: brighter is better (lower)."""
     A = np.asarray(A, float)
     lo = np.nanmin(A) if lo is None else lo
@@ -126,9 +126,8 @@ class Decay(VoiceoverScene):
 
         fa = frame(ha, GA, list(d["wd"]), r"AdamW: \ decay $\lambda$ \ (across)", AW)
         fl = frame(hl, GL, list(d["l2"]), r"Adam $+$ L2: \ penalty $\lambda$ \ (across)", L2)
-        yl = label(r"learning rate \ (down)", font_size=20, color=GREY_A).next_to(ha, LEFT, buff=0.9).rotate(PI / 2)
-        tag = note(r"held-out bits after $2{,}000$ steps; \ brighter is better; \ $128$ units, \ trained on only "
-                   r"$50{,}000$ characters").to_edge(DOWN, buff=0.2)
+        tag = note(r"held-out bits after $2{,}000$ steps; \ rows: \ learning rate; \ brighter is better; \ $128$ units, "
+                   r"\ trained on only $50{,}000$ characters").to_edge(DOWN, buff=0.2)
         sa, sl = np.asarray(d["seeds_adamw"], float), np.asarray(d["seeds_adam_l2"], float)
         none = float(d["none"])
         ba, bl = d["best_adamw"], d["best_adam_l2"]
@@ -170,7 +169,7 @@ class Decay(VoiceoverScene):
             + said1 + " <bookmark mark='e'/>" + etxt + " <bookmark mark='c'/>"
             + said2
         ) as vo:
-            self.play(FadeIn(ha), FadeIn(fa[:-1]), FadeIn(tag), FadeIn(yl))
+            self.play(FadeIn(ha), FadeIn(fa[:-1]), FadeIn(tag))
             self.play(FadeIn(hl), FadeIn(fl[:-1]))
             vo.wait_until("a")
             self.play(Indicate(fa[-2]), Indicate(fl[-2]))
@@ -201,6 +200,7 @@ class Decay(VoiceoverScene):
         ctag = note(r"seed $0$; \ scored during training on the first $20{,}000$ held-out characters").to_corner(DL, buff=0.2)
         lnk = label(r"what decay does to normalized weights: \ Chapter 15", font_size=22, color=GREY_A).next_to(lg, DOWN, buff=0.6)
         lnk.align_to(lg, LEFT)
+        keep_in_frame(lnk)
         said3 = (f"<bookmark mark='a'/> Without decay, the model starts to memorize its fifty thousand characters, and "
             f"the held-out loss climbs back up by {rise0:.2f} bits from its best. "
             if rise0 > 0.02 else

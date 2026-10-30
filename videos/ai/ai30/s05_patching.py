@@ -154,6 +154,28 @@ class Patching(VoiceoverScene):
                      history_card(2022, r"K.~Meng et al.", r"causal tracing: \ where GPT stores facts", width=3.4,
                                   color=CAUSE, font_size=16)).arrange(RIGHT, buff=0.2).next_to(setup, DOWN, buff=0.2)
         hcs.align_to(setup, RIGHT)
+        ex = np.asarray(d["ex"])
+        rng_ = np.random.default_rng(3)
+
+        def strip_(corrupt):
+            st = VGroup()
+            for i, t_ in enumerate(ex[:tgt + 4]):
+                col = interpolate_color(ManimColor(GREY_D), ManimColor(GREY_B), (int(t_) % 8) / 8)
+                if 60 <= i < 80 or (10 <= i < 30 and not corrupt):
+                    col = interpolate_color(ManimColor(CAUSE), ManimColor(C.BITS), (i % 20) / 20)
+                elif 10 <= i < 30:
+                    col = interpolate_color(ManimColor(GREY_D), ManimColor(GREY_B), float(rng_.random()))
+                st.add(Square(0.13, stroke_width=0, fill_color=col, fill_opacity=0.95))
+            return st.arrange(RIGHT, buff=0.012)
+        s_clean, s_cor = strip_(False), strip_(True)
+        sch = VGroup(s_clean, s_cor).arrange(DOWN, buff=0.9).move_to([0.9, -1.5, 0])
+        nl = VGroup(label(r"clean", font_size=20, color=WHITE).next_to(s_clean, LEFT, buff=0.2),
+                    label(r"corrupted", font_size=20, color=GREY_B).next_to(s_cor, LEFT, buff=0.2))
+        mv = CurvedArrow(s_cor[20].get_top() + UP * 0.05, s_clean[20].get_bottom() + DOWN * 0.05, angle=-PI / 3,
+                         color=CAUSE, stroke_width=4)
+        mvl = label(r"copy one vector across", font_size=18, color=CAUSE).next_to(mv, RIGHT, buff=0.15)
+        tgl = label(rf"$\log p$ measured at ${tgt}$", font_size=18, color=GREY_A).next_to(s_clean[tgt], UP, buff=0.12)
+        sch_all = VGroup(sch, nl, mv, mvl, tgl)
         cols = H[:, :tgt + 1]
         k_in = [j for j in range(tgt + 1) if cols[0, j] > 0.5]
         k_mid = [j for j in range(tgt + 1) if cols[1, j] > 0.5]
@@ -173,9 +195,11 @@ class Patching(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(setup), FadeIn(hcs))
+            self.play(FadeIn(setup), FadeIn(hcs), FadeIn(sch), FadeIn(nl[0]), FadeIn(nl[1]), FadeIn(tgl))
+            self.play(Create(mv), FadeIn(mvl))
             vo.wait_until("b")
-            self.play(FadeOut(hcs), FadeIn(img), FadeIn(rl), FadeIn(marks), FadeIn(xl))
+            self.play(FadeOut(hcs), FadeOut(sch_all))
+            self.play(FadeIn(img), FadeIn(rl), FadeIn(marks), FadeIn(xl))
             vo.wait_until("c")
             self.play(Indicate(rl[1], color=CAUSE))
             vo.wait_until("d")

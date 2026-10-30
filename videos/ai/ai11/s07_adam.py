@@ -54,9 +54,9 @@ class Adam(VoiceoverScene):
             "ever grows, so every step size shrinks like one over the square root of time, and a long training run "
             "slows to a crawl."
         ) as vo:
-            self.play(FadeIn(hist, shift=RIGHT * 0.2))
+            self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rule), FadeIn(rn))
             vo.wait_until("a")
-            self.play(Write(rule), FadeIn(rn))
+            self.play(Indicate(rule[0], color=AG))
             vo.wait_until("b")
             self.play(FadeIn(sparse))
             vo.wait_until("c")
@@ -65,12 +65,12 @@ class Adam(VoiceoverScene):
         self.clear_scene()
 
     def rmsprop(self):
-        slide = RoundedRectangle(width=7.6, height=3.6, corner_radius=0.1, stroke_color=GREY_B, stroke_width=2,
+        slide = RoundedRectangle(width=8.4, height=3.6, corner_radius=0.1, stroke_color=GREY_B, stroke_width=2,
                                  fill_color="#1A2030", fill_opacity=1).move_to([-2.2, 0.3, 0])
         st = label(r"rmsprop: \ Divide the gradient by a running \\ average of its recent magnitude", font_size=26,
                    color=WHITE).next_to(slide.get_top(), DOWN, buff=0.35)
         f1 = MathTex(r"\text{MeanSquare}(w, t) = 0.9\,\text{MeanSquare}(w, t-1) + 0.1\,\Big(\tfrac{\partial E}{\partial w}(t)\Big)^2",
-                     font_size=28, color=RP).next_to(st, DOWN, buff=0.4)
+                     font_size=25, color=RP).next_to(st, DOWN, buff=0.4)
         f2 = label(r"divide the gradient by $\sqrt{\text{MeanSquare}(w, t)}$", font_size=24, color=GREY_A).next_to(f1, DOWN, buff=0.3)
         src = note(r"after T.~Tieleman \& G.~Hinton, \textit{Neural Networks for Machine Learning}, \ Lecture 6e (Coursera, 2012)",
                    font_size=18).next_to(slide, DOWN, buff=0.15)
@@ -120,10 +120,10 @@ class Adam(VoiceoverScene):
             "square. They called it Adam, and with its defaults it trained most of deep learning for the next "
             "decade."
         ) as vo:
-            self.play(FadeIn(hist, shift=LEFT * 0.2))
+            self.play(FadeIn(hist, shift=LEFT * 0.2), Write(rows[0]))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                self.play(Write(rows[k]), FadeIn(notes[k]))
+                self.play(*([] if k == 0 else [Write(rows[k])]), FadeIn(notes[k]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -136,29 +136,29 @@ class Adam(VoiceoverScene):
             cmath(r"\mathbb{E}\, m_t", "=", r"(1 - \beta_1^{\,t})\; \mathbb{E}\, g", font_size=32),
         ]
         whys = [why(r"unroll from $m_0 = 0$"), why(r"if the gradients' mean is steady"), why(r"a geometric sum")]
-        step = ladder(self, rows, whys, keep=3, top=2.4, x=-3.4, buff=0.45, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.75, x=-3.4, buff=0.3, edge=6.9)
         # computed: one weight's real gradients over the first 60 steps, m and m-hat
         g = np.asarray(a["grads"])[:, 0]
         m, mh = np.asarray(a["m"])[:, 0], np.asarray(a["mhat"])[:, 0]
         T = len(g)
         lim = float(np.abs(g).max()) * 1.1
-        ax = CornerAxes(x_range=[0, T, 10], y_range=[-lim, lim, lim], x_length=5.6, y_length=2.6, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3, -2.1, 0])
+        ax = CornerAxes(x_range=[0, T, 10], y_range=[-lim, lim, lim], x_length=5.6, y_length=2.0, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3, -2.55, 0])
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(T, 0), color=GREY_D, stroke_width=1.5)
         gd = VGroup(*[Dot(ax.c2p(k + 1, v), radius=0.03, color=GREY_B) for k, v in enumerate(g)])
         cm = curve(ax, np.arange(1, T + 1), m, OPT_COLORS["momentum"], 2.5)
         cmh = curve(ax, np.arange(1, T + 1), mh, C.BITS, 3)
         lg = VGroup(label(r"one weight's gradients, \ steps $1$--$60$", font_size=18, color=GREY_B),
                     label(r"$m_t$: \ starts near zero", font_size=18, color=OPT_COLORS["momentum"]),
-                    label(r"$\hat m_t$: \ corrected", font_size=18, color=C.BITS)).arrange(RIGHT, buff=0.3)
-        lg.next_to(ax, UP, buff=0.1)
+                    label(r"$\hat m_t$: \ corrected", font_size=18, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        lg.next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
         keep_in_frame(lg)
         raw = float(a["raw_first"])
         first = VGroup(label(r"the very first step, \ per weight:", font_size=22, color=GREY_A),
                        label(rf"without the corrections: \ $\frac{{1 - \beta_1}}{{\sqrt{{1 - \beta_2}}}}\,\eta = {raw:.2f}\,\eta$",
                              font_size=22, color=C.SURPRISE),
                        label(r"with them: \ exactly $\eta$", font_size=22, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        first.move_to([3.6, -2.0, 0])
+        first.move_to([4.2, -2.6, 0])
         tag = note(r"computed: \ the character model's second hidden matrix").to_corner(DR, buff=0.15)
         with self.voiceover(
             "Why the corrections? <bookmark mark='a'/> Unroll the average from its start at zero: m is a weighted sum "
@@ -258,9 +258,9 @@ class Adam(VoiceoverScene):
             "every step has full size, it wants a smaller learning rate and a larger weight decay. It runs in "
             "our race in Chapter 12."
         ) as vo:
-            self.play(FadeIn(hist, shift=RIGHT * 0.2))
+            self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rows[0]))
             vo.wait_until("a")
-            self.play(Write(rows[0]), Write(rows[1]))
+            self.play(Write(rows[1]))
             vo.wait_until("b")
             self.play(Write(rows[2]))
             vo.wait_until("c")

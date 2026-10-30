@@ -38,72 +38,118 @@ def rope_at(x, pos, base=10_000.0):
 # ---------------------------------------------------------------------------
 # Reading token by token with a policy for the cache
 # ---------------------------------------------------------------------------
+def _rope_table(n, hd, base=10_000.0):
+    inv = 1.0 / base ** (torch.arange(0, hd, 2).float() / hd)
+    ang = torch.outer(torch.arange(n).float(), inv)
+    return ang.cos(), ang.sin()
+
+
+def _rot(x, c, s):
+    x1, x2 = x[..., ::2], x[..., 1::2]
+    return torch.stack([x1 * c - x2 * s, x1 * s + x2 * c], dim=-1).flatten(-2)
+
+
 @torch.no_grad()
-def stream(model: pocket.PocketGPT, ids, policy: str, budget: int, sinks: int = 4, collect_attn: int = 0) -> dict:
-    """Read ``ids`` one token at a time with a cache of at most ``budget`` tokens per head; return the loss (nats) of
-    each next-token prediction.  policy: 'full' (keep all, original positions), 'window', 'sinks', 'h2o'.
-    Keys are cached before their rotation and rotated by their place in the cache at every step."""
+def stream(model: pocket.PocketGPT, ids, policies: list[str], budget: int, sinks: int = 4) -> np.ndarray:
+    """Read ``ids`` one token at a time, once per policy (side by side, as a batch), keeping keys and values for at
+    most ``budget`` tokens per head: 'window' (the last ``budget``), 'sinks' (the first four and the last budget - 4),
+    'h2o' (the recent half, and of the older tokens those that have drawn the most attention so far).  Keys are kept
+    before their rotation and rotated by their place in the cache, 0 .. n-1, at every step (as StreamingLLM does).
+    Returns each policy's loss (nats) on every next-token prediction."""
     cfg = model.cfg
     H, hd = cfg.heads, cfg.d // cfg.heads
-    T = len(ids)
+    T, R = len(ids), len(policies)
     nL = len(model.blocks)
-    Kc = [torch.zeros(H, T, hd) for _ in range(nL)]
-    Vc = [torch.zeros(H, T, hd) for _ in range(nL)]
-    keep = [torch.zeros(H, T, dtype=torch.bool) for _ in range(nL)]
-    score = [torch.zeros(H, T) for _ in range(nL)]  # attention each cached token has drawn so far (H2O)
-    losses = np.zeros(T - 1)
-    first_share = []
+    cos, sin = _rope_table(budget + 1, hd)
+    Kc = [torch.zeros(R, H, T, hd) for _ in range(nL)]
+    Vc = [torch.zeros(R, H, T, hd) for _ in range(nL)]
+    slots = [torch.zeros(R, H, 0, dtype=torch.long) for _ in range(nL)]  # the kept tokens, oldest first
+    score = [torch.zeros(R, H, T) for _ in range(nL)]
+    losses = np.zeros((R, T - 1))
+    tgt = torch.tensor(ids[1:] + [0])
     for t in range(T):
-        x = model.emb(torch.tensor([ids[t]]))[None]  # (1, 1, d)
+        x = model.emb(torch.full((R,), ids[t]))[:, None]
         for li, b in enumerate(model.blocks):
             a = b.attn
-            h = b.n1(x)
-            q, k, v = a.qkv(h).view(1, 1, 3, H, hd).permute(2, 0, 3, 1, 4)  # each (1, H, 1, hd)
+            q, k, v = a.qkv(b.n1(x)).view(R, 1, 3, H, hd).permute(2, 0, 3, 1, 4)
             if a.qk_norm:
                 q, k = a.q_norm(q), a.k_norm(k)
-            Kc[li][:, t] = k[0, :, 0]
-            Vc[li][:, t] = v[0, :, 0]
-            kp = keep[li]
-            kp[:, t] = True
-            # evict, per head, down to the budget
-            if policy != "full":
-                n_kept = int(kp[0].sum())
-                if n_kept > budget:
-                    if policy == "window":
-                        kp[:, t - budget] = False
-                    elif policy == "sinks":
-                        kp[:, t - budget + sinks] = False
-                    elif policy == "h2o":  # drop, per head, the weakest of the older half (the recent half is kept)
-                        recent = budget // 2
-                        cand = kp.clone()
-                        cand[:, max(0, t - recent + 1):] = False
-                        sc = score[li].masked_fill(~cand, float("inf"))
-                        kp[torch.arange(H), sc.argmin(-1)] = False
-            idx = torch.arange(t + 1)
-            m = kp[:, :t + 1]
-            if policy == "full":
-                pos_k = idx.expand(H, -1)
-                pos_q = torch.full((H, 1), t)
-            else:  # positions inside the cache: 0 .. n-1 in order
-                pos_k = m.long().cumsum(-1) - 1
-                pos_q = m.sum(-1, keepdim=True) - 1
-            kr = rope_at(Kc[li][:, :t + 1], pos_k)
-            qr = rope_at(q[0], pos_q)  # (H, 1, hd)
-            att = (qr @ kr.transpose(-1, -2))[:, 0] / math.sqrt(hd)  # (H, t+1)
-            att = att.masked_fill(~m, -float("inf")).softmax(-1)
-            if policy == "h2o":
-                score[li][:, :t + 1] += att
-            if collect_attn and li == 0 and t >= 16:
-                pass
-            if t >= 64 and t < 64 + collect_attn:
-                first_share.append([float(att[hh, m[hh].nonzero()[0, 0]]) for hh in range(H)])
-            y = (att[:, None, :] @ Vc[li][:, :t + 1])[:, 0]  # (H, hd)
-            x = x + a.out(y.reshape(1, 1, H * hd))
+            Kc[li][:, :, t], Vc[li][:, :, t] = k[:, :, 0], v[:, :, 0]
+            sl = torch.cat([slots[li], torch.full((R, H, 1), t)], -1)
+            if sl.shape[-1] > budget:  # evict one per head
+                drop = torch.zeros(R, H, dtype=torch.long)
+                for r, pol in enumerate(policies):
+                    if pol == "window":
+                        drop[r] = 0
+                    elif pol == "sinks":
+                        drop[r] = sinks
+                    else:  # h2o: the weakest of the slots older than the recent half
+                        old = sl.shape[-1] - budget // 2
+                        sc = score[li][r].gather(-1, sl[r, :, :old])
+                        drop[r] = sc.argmin(-1)
+                keepm = torch.ones_like(sl, dtype=torch.bool)
+                keepm.scatter_(-1, drop[..., None], False)
+                sl = sl[keepm].view(R, H, -1)
+            slots[li] = sl
+            n = sl.shape[-1]
+            idx = sl[..., None].expand(-1, -1, -1, hd)
+            kk = _rot(Kc[li].gather(2, idx), cos[:n], sin[:n])
+            vv = Vc[li].gather(2, idx)
+            qr = _rot(q, cos[n - 1:n], sin[n - 1:n])
+            att = ((qr @ kk.transpose(-1, -2)) / math.sqrt(hd)).softmax(-1)  # (R, H, 1, n)
+            score[li].scatter_add_(-1, sl, att[:, :, 0])
+            y = (att @ vv)[:, :, 0]
+            x = x + a.out(y.reshape(R, 1, H * hd))
             x = x + b.mlp(b.n2(x))
         if t < T - 1:
-            logits = model.head(model.norm(x))[0, 0]
-            losses[t] = float(F.cross_entropy(logits[None], torch.tensor([ids[t + 1]])))
-    return dict(losses=losses)
+            logits = model.head(model.norm(x))[:, 0]
+            losses[:, t] = F.cross_entropy(logits, tgt[t].expand(R), reduction="none").numpy()
+    return losses
+
+
+@torch.no_grad()
+def forward_masked(model: pocket.PocketGPT, ids, policy: str, budget: int = 0, sinks: int = 4) -> np.ndarray:
+    """The same reading done in one parallel pass, for the policies whose cache doesn't depend on the attention:
+    'full' (everything, positions 0, 1, 2, ... past the 256 trained on), 'window' (the last ``budget`` tokens; with
+    positions counted inside the cache, a key's distance from the query is the same as in the text, so this is a
+    banded mask), 'sinks' (the first four, at cache positions 0-3, and the last budget - 4).  Each token's keys and
+    values are computed once, from what it could see when it was read, exactly as token by token."""
+    cfg = model.cfg
+    H, hd = cfg.heads, cfg.d // cfg.heads
+    x = torch.tensor([ids[:-1]])
+    T = x.shape[1]
+    t = torch.arange(T)
+    rel = t[:, None] - t[None, :]
+    causal = rel >= 0
+    if policy == "full":
+        band = causal
+    else:
+        n = torch.clamp(t + 1, max=budget)  # how many tokens the cache holds when token t is read
+        band = causal & (rel < (n - (sinks if policy == "sinks" else 0))[:, None])
+    sink = torch.zeros(T, T, dtype=torch.bool)
+    if policy == "sinks":
+        sink[:, :sinks] = causal[:, :sinks] & ~band[:, :sinks]
+    cos, sin = _rope_table(T + 1, hd)
+    h = model.emb(x)
+    for b in model.blocks:
+        a = b.attn
+        q, k, v = a.qkv(b.n1(h)).view(1, T, 3, H, hd).permute(2, 0, 3, 1, 4)
+        if a.qk_norm:
+            q, k = a.q_norm(q), a.k_norm(k)
+        qr, kr = _rot(q, cos[:T], sin[:T]), _rot(k, cos[:T], sin[:T])
+        sc = (qr @ kr.transpose(-1, -2)) / math.sqrt(hd)
+        if policy == "sinks":  # the query sits at cache position n - 1, the sinks at 0 .. 3
+            pq = torch.clamp(t + 1, max=budget) - 1
+            qs = _rot(q, cos[pq], sin[pq])
+            ks = _rot(k[:, :, :sinks], cos[:sinks], sin[:sinks])
+            sc_s = (qs @ ks.transpose(-1, -2)) / math.sqrt(hd)
+            sc[..., :sinks] = torch.where(sink[:, :sinks], sc_s, sc[..., :sinks])
+        sc = sc.masked_fill(~(band | sink), -float("inf"))
+        y = sc.softmax(-1) @ v
+        h = h + a.out(y.transpose(1, 2).reshape(1, T, H * hd))
+        h = h + b.mlp(b.n2(h))
+    logits = model.head(model.norm(h))[0]
+    return F.cross_entropy(logits, torch.tensor(ids[1:]), reduction="none").numpy()
 
 
 @torch.no_grad()

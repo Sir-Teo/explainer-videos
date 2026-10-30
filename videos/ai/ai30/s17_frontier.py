@@ -117,6 +117,16 @@ class Frontier(VoiceoverScene):
                          r"another rebuilds the activation from the words; \ in the auditing game, \ wins in $12$--$15\%$ "
                          r"of runs against under $3\%$ without", width=6.0, color=AUD, font_size=18),
         ).arrange(DOWN, buff=0.25).to_corner(UR, buff=0.35)
+        teams = VGroup()
+        for i in range(4):
+            ok_ = i < 3
+            col = AUD if ok_ else GREY_B
+            bx = RoundedRectangle(width=1.35, height=0.8, corner_radius=0.1, stroke_color=col, stroke_width=2)
+            tl_ = label(rf"team ${i + 1}$", font_size=20, color=col).move_to(bx)
+            mk_ = MathTex(r"\checkmark" if ok_ else r"\times", font_size=40, color=col).next_to(bx, DOWN, buff=0.15)
+            teams.add(VGroup(bx, tl_, mk_))
+        teams.arrange(RIGHT, buff=0.25).next_to(g1, DOWN, buff=0.6).align_to(g1, LEFT).shift(RIGHT * 0.2)
+        nd = label(r"no training data", font_size=17, color=GREY_B).next_to(teams[3][2], DOWN, buff=0.08)
         foot = label(r"model diffing, \ probes on live traffic, \ monitors: \ Part 31", font_size=22, color=CHAT).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The most practical use so far is auditing. <bookmark mark='a'/> In March 2025 Samuel Marks and colleagues "
@@ -134,7 +144,9 @@ class Frontier(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(game[0]))
             vo.wait_until("b")
-            self.play(FadeIn(game[1]), FadeIn(game[2]))
+            self.play(LaggedStart(*[FadeIn(t_[:2]) for t_ in teams], lag_ratio=0.2))
+            self.play(FadeIn(game[1]), LaggedStart(*[FadeIn(t_[2], scale=1.3) for t_ in teams], lag_ratio=0.2))
+            self.play(FadeIn(game[2]), FadeIn(nd))
             vo.wait_until("c")
             self.play(FadeIn(aud[0], shift=UP * 0.15))
             vo.wait_until("d")

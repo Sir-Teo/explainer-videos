@@ -31,12 +31,12 @@ class Grok(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def logaxes(self, d, center, ylabel, x_len=7.0, y_len=3.6):
+    def logaxes(self, d, center, ylabel, x_len=7.0, y_len=3.6, keys=("train_loss", "test_loss"), every=2):
         st = np.asarray(d["step"], float)
-        ys = np.log10(np.clip(np.concatenate([d["train_loss"], d["test_loss"]]), 1e-8, None))
+        ys = np.log10(np.clip(np.concatenate([d[k] for k in keys]), 1e-8, None))
         lo, hi = np.floor(ys.min()), np.ceil(ys.max())
         g = axes([0, st[-1]], [lo, hi], x_length=x_len, y_length=y_len, xlabel=r"training steps (full batch)",
-                 ylabel=ylabel, xticks=[0, st[-1]], yticks=list(np.arange(lo, hi + 1, 2)),
+                 ylabel=ylabel, xticks=[0, st[-1]], yticks=list(np.arange(lo, hi + 1, every)),
                  yfmt=lambda v: rf"10^{{{int(v)}}}", center=center)
         return g, st
 
@@ -69,9 +69,10 @@ class Grok(VoiceoverScene):
             f"than guessing. <bookmark mark='c'/> {grok_said}"
         ) as vo:
             self.play(FadeIn(task), FadeIn(g), FadeIn(lg), FadeIn(hc))
+            self.play(Create(ct), Create(cv), run_time=4)
             vo.wait_until("a")
+            self.play(Indicate(task, color=FEAT, scale_factor=1.03))
             vo.wait_until("b")
-            self.play(Create(ct), Create(cv), run_time=2.5)
             self.play(Create(vm))
             vo.wait_until("c")
             self.play(Create(vg))
@@ -219,7 +220,8 @@ class Grok(VoiceoverScene):
     # ------------------------------------------------------------------
     def progress(self):
         d = load("grok")
-        g, st = self.logaxes(d, [-1.4, -0.5, 0], r"loss (log scale)", x_len=7.4, y_len=3.8)
+        g, st = self.logaxes(d, [-2.0, -0.5, 0], r"loss (log scale)", x_len=7.0, y_len=3.8,
+                             keys=("test_loss", "restricted_loss", "excluded_loss"), every=1)
         lt = lambda k: np.log10(np.clip(np.asarray(d[k], float), 1e-8, None))  # noqa: E731
         ylo, yhi = g.ax.y_range[0], g.ax.y_range[1]
         cl = lambda y: np.clip(y, ylo, yhi)  # noqa: E731
@@ -230,8 +232,8 @@ class Grok(VoiceoverScene):
         iw = int(np.argmax(wn))
         lg = legend([(TST, r"test loss"), (RES, r"restricted loss: \ only the key waves kept"),
                      (EXC, r"excluded loss: \ the key waves removed \ (train)")], font_size=17).to_corner(UR, buff=0.3)
-        cw = label(rf"size of the weights: \ ${wn[0]:.0f}$ at the start, \ ${wn[iw]:.0f}$ at step ${int(st[iw]):,}$, \ "
-                   rf"${wn[-1]:.0f}$ at the end".replace(",", "{,}"), font_size=18, color=WN).next_to(lg, DOWN, buff=0.3).align_to(lg, LEFT)
+        cw = label(rf"size of the weights: \\ ${wn[0]:.0f}$ at the start, \ ${wn[iw]:.0f}$ at step ${int(st[iw]):,}$, \\ "
+                   rf"${wn[-1]:.0f}$ at the end".replace(",", "{,}"), font_size=20, color=WN).move_to([5.0, 0.2, 0])
         rt = first(st, lt("restricted_loss") < 0)
         tt = first(st, lt("test_loss") < 0)
         et = first(st, lt("excluded_loss") > 0)

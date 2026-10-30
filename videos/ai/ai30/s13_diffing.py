@@ -207,6 +207,17 @@ class Diffing(VoiceoverScene):
         verdict = (f"{special} of the top ten are the chat markers themselves: run on nothing but novels, the "
                    "fine-tuned model still leans toward its new format." if special else
                    "None of the top ten is a chat marker: here the difference reads mostly as a shift of style.")
+        o_ = np.array([0.6, -2.0, 0])
+        ang = 0.9
+        hb = np.array([np.cos(ang), np.sin(ang), 0]) * 4.0
+        hcv = hb + np.array([np.cos(ang - PI / 2), np.sin(ang - PI / 2), 0]) * 4.0 * dn / bn
+        ab = Arrow(o_, o_ + hb, buff=0, color=BASEM, stroke_width=5, max_tip_length_to_length_ratio=0.06)
+        ac = Arrow(o_, o_ + hcv, buff=0, color=CHAT, stroke_width=5, max_tip_length_to_length_ratio=0.06)
+        ad = Arrow(o_ + hb, o_ + hcv, buff=0, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.35)
+        lb_ = label(r"$h_{\text{base}}$", font_size=24, color=BASEM).next_to(ab.get_center(), LEFT, buff=0.25)
+        lc_ = label(r"$h_{\text{chat}}$", font_size=24, color=CHAT).next_to(ac.get_center(), RIGHT, buff=0.25)
+        ld_ = label(rf"$\Delta$: \ ${100 * dn / bn:.0f}\%$ of the length", font_size=22, color=WHITE).next_to(ad, RIGHT, buff=0.2)
+        vec_pic = VGroup(ab, ac, ad, lb_, lc_, ld_)
         with self.voiceover(
             "There is an even cheaper diff, from Julian Minder and colleagues in October 2025. <bookmark mark='a'/> "
             "Run both models on ordinary text that has nothing to do with the fine-tune, here plain novel text, and "
@@ -217,8 +228,10 @@ class Diffing(VoiceoverScene):
         ) as vo:
             self.play(Write(f))
             vo.wait_until("a")
-            self.play(FadeIn(hc))
+            self.play(FadeIn(hc), GrowArrow(ab), GrowArrow(ac), FadeIn(lb_), FadeIn(lc_))
+            self.play(GrowArrow(ad), FadeIn(ld_))
             vo.wait_until("b")
+            self.play(FadeOut(vec_pic))
             self.play(FadeIn(f2), FadeIn(rl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.15))
             vo.wait_until("c")
             self.play(Indicate(rows, color=CHAT, scale_factor=1.03))

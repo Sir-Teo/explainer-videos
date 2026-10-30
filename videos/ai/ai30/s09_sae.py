@@ -149,7 +149,7 @@ class SAE(VoiceoverScene):
             return always_redraw(lambda: curve(ax.ax, st[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))],
                                                ys[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))], col, 3))
 
-        c1, c2 = upto(g1, l0, FEAT), upto(g2, fv, RESID)
+        c1, c2 = upto(g1, l0, FEAT), upto(g2, np.minimum(fv, 1.0), RESID)  # the untrained start is off the top
 
         def code():
             i = max(0, int(np.searchsorted(sst, t.get_value(), side="right")) - 1)

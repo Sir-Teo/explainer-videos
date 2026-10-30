@@ -301,6 +301,17 @@ class Dicts(VoiceoverScene):
             nm = {"l1": rf"$\lambda\,{q:g}$", "jumprelu": rf"$\lambda\,{q:g}$", "topk": rf"$k\,{q:g}$", "topk_aux": r"$+$AuxK"}[k]
             bd.add(VGroup(r, label(nm, font_size=14, color=col).rotate(PI / 2).next_to(gd.ax.c2p(i + 0.5, 0), DOWN, buff=0.08)))
         gl = legend([(col, nm) for _, _, col, nm in KINDS], font_size=16).next_to(gd, UP, buff=0.1).align_to(gd, RIGHT)
+        rax = Axes(x_range=[-3, 2, 1], y_range=[-0.2, 2, 1], x_length=5.4, y_length=2.4, tips=False,
+                   axis_config={"color": GREY_C, "stroke_width": 2, "include_ticks": False}).move_to([3.4, 0.9, 0])
+        relu = VGroup(Line(rax.c2p(-3, 0), rax.c2p(0, 0), color=FEAT, stroke_width=5),
+                      Line(rax.c2p(0, 0), rax.c2p(2, 2), color=FEAT, stroke_width=5))
+        xs_ = np.random.default_rng(5).uniform(-2.8, -0.7, 18)
+        pts = VGroup(*[Dot(rax.c2p(x_, 0), radius=0.06, color=CTRL) for x_ in xs_])
+        pl1 = label(r"a dead latent's inputs: \ always below its threshold", font_size=19, color=CTRL)
+        pl1.next_to(rax.c2p(-1.75, 0), DOWN, buff=0.35)
+        pl2 = label(r"output $0$, \ slope $0$: \ no gradient", font_size=19, color=FEAT).next_to(rax.c2p(-1.75, 0), UP, buff=0.5)
+        rl_ = label(r"the latent's activation", font_size=18, color=GREY_B).next_to(relu[1].get_end(), LEFT, buff=0.2)
+        relu_pic = VGroup(rax, relu, pts, pl1, pl2, rl_)
         few = max(d16 + [d2048]) <= 5
         verdict = ("At our size almost nothing dies, so the fix has little to do here; at millions of latents it "
                    "is what keeps the dictionary alive." if few else
@@ -316,9 +327,13 @@ class Dicts(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(Create(rax), Create(relu), FadeIn(rl_))
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in pts], lag_ratio=0.05), FadeIn(pl1))
+            self.play(FadeIn(pl2))
             vo.wait_until("b")
             self.play(FadeIn(aux, shift=UP * 0.2))
             vo.wait_until("c")
+            self.play(FadeOut(relu_pic))
             self.play(FadeOut(aux), FadeIn(gd), FadeIn(gl), LaggedStart(*[FadeIn(b) for b in bd], lag_ratio=0.05),
                       LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.3))
             vo.wait_until("d")

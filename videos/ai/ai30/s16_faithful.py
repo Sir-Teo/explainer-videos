@@ -80,6 +80,12 @@ class Faithful(VoiceoverScene):
                     color=GREY_A).next_to(grids, DOWN, buff=0.3)
         tag = note(r"published, \ not measured here; \ admitted reward hacks: \ under $2\%$ in most settings").next_to(cap, DOWN, buff=0.25)
         cite_ = cite(r"Y.~Chen et al.\ (Anthropic), \textit{Reasoning Models Don't Always Say What They Think} (2025)", corner=DL)
+        flow = VGroup(box([(r"a question, \\ plus a hint", WHITE), (r"``a professor thinks it's (C)''", HINT)], HINT, w=3.4),
+                      box([(r"the answer changes \\ to the hinted one", WHITE)], GREY_B, w=3.4),
+                      box([(r"does the chain of thought \\ mention the hint?", WHITE)], FEAT, w=3.4)).arrange(RIGHT, buff=0.8)
+        flow.move_to([0, -0.3, 0])
+        farr = VGroup(*[Arrow(flow[i].get_right(), flow[i + 1].get_left(), buff=0.1, color=GREY_B, stroke_width=4)
+                        for i in range(2)])
         with self.voiceover(
             "In 2025 Yanda Chen and colleagues at Anthropic did it with reasoning models. Put a hint in the question, "
             "a professor's opinion, say, or an answer said to come from unauthorized access; keep the cases where the hint changed the answer, and read "
@@ -88,9 +94,12 @@ class Faithful(VoiceoverScene):
             "admitted it in their reasoning less than 2 percent of the time in most settings. The written chain is a "
             "useful window, Part 31 builds monitors on it, but it is not a confession."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_), *[FadeIn(g[0], lag_ratio=0.01) for g in grids], *[FadeIn(g[1]) for g in grids],
-                      FadeIn(cap))
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(flow[0], shift=UP * 0.15))
+            self.play(GrowArrow(farr[0]), FadeIn(flow[1], shift=UP * 0.15), run_time=1.5)
+            self.play(GrowArrow(farr[1]), FadeIn(flow[2], shift=UP * 0.15), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(flow), FadeOut(farr))
+            self.play(*[FadeIn(g[0], lag_ratio=0.01) for g in grids], *[FadeIn(g[1]) for g in grids], FadeIn(cap))
             for g, (_, v, col) in zip(grids, vals):
                 on = g[0][:int(round(100 * v))]
                 self.play(LaggedStart(*[c.animate.set_fill(col, 0.9).set_stroke(col) for c in on], lag_ratio=0.04),
@@ -112,9 +121,17 @@ class Faithful(VoiceoverScene):
                  (r"the graph works \textit{backwards} from $4$", GREY_A), (r"to the step that reaches it", GREY_A)],
                 CAUSE, w=3.9),
         ).arrange(RIGHT, buff=0.3)
-        cols.scale_to_fit_width(13.2).move_to(UP * 0.3)
+        cols.scale_to_fit_width(13.2).move_to(UP * 0.9)
+        mot = VGroup(box([(r"the hint: \ the answer is $4$", WHITE)], HINT, w=3.2),
+                     box([(r"an intermediate value, \\ set so the steps reach $4$", WHITE)], CAUSE, w=3.6),
+                     box([(r"the written steps, \\ arriving at $4$", WHITE)], GREY_B, w=3.2)).arrange(RIGHT, buff=0.7)
+        mot.move_to([0, -1.55, 0])
+        marr = VGroup(*[Arrow(mot[i].get_right(), mot[i + 1].get_left(), buff=0.1, color=CAUSE, stroke_width=4)
+                        for i in range(2)])
+        ml_ = label(r"motivated reasoning in the graph: \ influence runs from the wanted answer back into the steps",
+                    font_size=18, color=CAUSE).next_to(mot, UP, buff=0.15)
         why_ = label(r"our models write no chains of thought, \ so this chapter is cited, \ not computed: \\ a toy "
-                     r"of this size would show nothing honest", font_size=20, color=GREY_B).to_edge(DOWN, buff=1.0)
+                     r"of this size would show nothing honest", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.75)
         cite_ = cite(r"Lindsey et al., \textit{On the Biology of a Large Language Model} (2025)", corner=DL)
         with self.voiceover(
             "The attribution graphs of chapter eleven can check a chain of thought against the computation. "
@@ -129,6 +146,9 @@ class Faithful(VoiceoverScene):
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cols[k], shift=UP * 0.15))
+            self.play(FadeIn(mot[0]), FadeIn(ml_))
+            self.play(GrowArrow(marr[0]), FadeIn(mot[1]))
+            self.play(GrowArrow(marr[1]), FadeIn(mot[2]))
             vo.wait_until("d")
             self.play(FadeIn(why_))
         self.wait(0.3)
