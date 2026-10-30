@@ -75,13 +75,21 @@ language models; memorization in court). Everything is computed by `compute.py`,
   directions, plus D weak directions of total variance 5: excess error 0.023 at D = 40,000 (9% of the noise), against
   5.0 with D strong ones; the effective-rank conditions (Bartlett, Long, Lugosi & Tsigler 2020); tempered overfitting
   (Mallinar et al. 2022).
-* **15. Flat minima and the sharpness debate.** Hochreiter & Schmidhuber (1997), Keskar et al. (2017); SHARP_SUMMARY
+* **15. Flat minima and the sharpness debate.** Hochreiter & Schmidhuber (1997), Keskar et al. (2017);
+  24 networks (10 → 256 → 2) on a teacher's 300 points, batch 4 … 300, two step sizes, three seeds, each trained to
+  training loss 0.01 (21 got there within 4,000 epochs): sharpness (top Hessian eigenvalue by Hessian-vector products)
+  0.70 at batch 4 against 0.89 at batch 300; rank correlation with test error −0.41 (test errors 19.4–20.6%): the
+  sharper ones did slightly better here; the rescaling W₁·a, W₂/a leaves the function exactly unchanged and moves
+  sharpness from 0.88 to 7.8 (Dinh et al. 2017); SAM (Foret et al. 2021); Andriushchenko et al. (2023).
 * **16. Distribution shift.** Covariate shift after Shimodaira (2000): least squares 0.316, importance-weighted 0.098
   (the best line for the test inputs: 0.094), flattened 0.101, with weights estimated by a domain classifier 0.099
   (1,000 runs); the derivation; effective sample size 42 of 100.
 * **17. Memorization in language models.** Carlini et al. (2019, 2021, 2023); the extraction test; the novels model:
   no 64-token training passage repeats more than 10 times and none of 436 is extracted, but the run before the first
-  mistake grows with repetition (0.46 tokens seen once, 2.6 seen 9–16 times, 0.51 held out); CANARY_SUMMARY;
+  mistake grows with repetition (0.46 tokens seen once, 2.6 seen 9–16 times, 0.51 held out); the model trained on (279 steps, three passes over
+  250,000 tokens of its own text) with 16 unseen passages planted 1, 2, 4, … 64 times each: exactly extracted 0%, 6%,
+  19%, 81%, 100%, 100%, 100%, against 0% for 16 never planted, the replay showing the most repeated ones memorized
+  first; a 64-times passage reproduced word for word on screen;
   deduplication (Kandpal et al. 2022; Lee et al. 2022), Nasr et al. (2023), Cooper et al. (2025), GEMA v. OpenAI
   (Munich, November 2025), Getty Images v. Stability AI (London, November 2025), Ahmed, Cooper et al. (2026).
 * **Recap**, where it comes back, problems, Part 9's teaser, references.
@@ -125,10 +133,10 @@ which `make.py` runs first if it is missing).
 | sample-wise | p = 200: error 0.30 (n ≈ 60) → 19.8 at n = 200 |
 | epoch-wise | 1.97 (step 10) → 3.31 (step 467) → 0.41 |
 | benign | spiked: excess 0.023 at D = 40,000 (noise 0.25); isotropic 4.99 |
-| sharpness | SHARP_ROW |
+| sharpness | 21 of 24 runs reach loss 0.01; λmax 0.70 (batch 4) vs 0.89 (batch 300); Spearman ρ(λmax, test error) = −0.41; rescaling: same function, λmax 0.88 → 7.8 |
 | covariate shift | test MSE: OLS 0.316, IW 0.098, flattened 0.101, estimated 0.099; best line 0.094; ESS 42/100 |
 | memorization (novels model) | 0 of 436 training passages extracted; run before the first miss 0.46 → 2.6 tokens with repetition (held out 0.51) |
-| canary | CANARY_ROW |
+| canary | extracted after 279 steps: planted 1×, 2×, 4×, 8×, 16×, 32×, 64×: 0%, 6%, 19%, 81%, 100%, 100%, 100%; never planted 0% |
 
 ## Fact-check notes
 

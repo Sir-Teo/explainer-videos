@@ -275,6 +275,7 @@ class Graphs(VoiceoverScene):
                 self.play(dots[k].animate.move_to(pos[b]), run_time=0.4)
                 self.play(FadeOut(dots[k]), run_time=0.2)
             vo.wait_until("d")
+            self.play(FadeOut(bh))
             self.play(Write(bq), FadeIn(bl), LaggedStart(*[FadeIn(b_[1:]) for b_ in bars_], lag_ratio=0.1))
             vo.wait_until("e")
             loop = Line(pos[3], pos[4], buff=0.32, color=C.SURPRISE, stroke_width=4)

@@ -120,7 +120,7 @@ class SDE(VoiceoverScene):
         lg = VGroup(label(r"exact, \ from the same noise", font_size=20, color=WHITE),
                     *[label(rf"Euler--Maruyama, \ ${n}$ steps", font_size=20, color=cols[n]) for n in cols])
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        f = cmath(r"dX", "=", rf"{mu:g}\,X\,dt", "+", rf"{sig:g}\,X\,dW", font_size=34).next_to(lg, UP, buff=0.15).align_to(ax, LEFT)
+        f = cmath(r"dX", "=", rf"{mu:g}\,X\,dt", "+", (r"X\,dW" if sig == 1 else rf"{sig:g}\,X\,dW"), font_size=34).next_to(lg, UP, buff=0.15).align_to(ax, LEFT)
         bx = CornerAxes(x_range=[-3, 0, 1], y_range=[-2, 1, 1], x_length=5.0, y_length=4.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.6, -0.4, 0])
         xt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(bx.c2p(v, -2), DOWN, buff=0.08)

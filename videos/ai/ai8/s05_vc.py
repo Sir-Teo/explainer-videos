@@ -193,6 +193,7 @@ class VC(VoiceoverScene):
             "hundred thousand weights for 448 pages, it says nothing at all. That network generalizes anyway."
         ) as vo:
             step(0)
+            self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(Indicate(rows[0][2], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
@@ -201,7 +202,6 @@ class VC(VoiceoverScene):
             step(2)
             vo.wait_until("d")
             step(3)
-            self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("e")
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in nums], lag_ratio=0.5), run_time=3.0)
         self.wait(0.3)

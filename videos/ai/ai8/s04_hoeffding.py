@@ -59,8 +59,8 @@ class Hoeffding(VoiceoverScene):
             "percent: the histogram narrows like one over the square root of n."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2), FadeIn(app))
-            vo.wait_until("a")
             self.play(FadeIn(G), FadeIn(zone), Create(pline), FadeIn(pl))
+            vo.wait_until("a")
             self.play(FadeIn(hs[ns[0]]), FadeIn(tags[ns[0]]))
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
