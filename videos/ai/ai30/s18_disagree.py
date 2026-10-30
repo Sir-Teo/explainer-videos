@@ -122,16 +122,21 @@ class Disagree(VoiceoverScene):
         hc = history_card(r"Jan 2025", r"G.~Paulo \& N.~Belrose", r"two autoencoders on the same data, \ different seeds: "
                           r"\ only about $30\%$ of latents shared \ (Llama 3 8B, \ $131$K latents)", width=5.0,
                           color=CTRL, font_size=18).to_corner(UR, buff=0.3)
-        res = label(rf"ours, \ TopK, \ $512$ latents: \\ ${100 * min(sh):.0f}$--${100 * max(sh):.0f}\%$ recur across "
+        lo_, hi_ = round(100 * min(sh)), round(100 * max(sh))
+        rng_ = rf"${lo_}\%$" if lo_ == hi_ else rf"${lo_}$--${hi_}\%$"
+        res = label(rf"ours, \ TopK, \ $512$ latents: \\ {rng_} recur across "
                     rf"the three pairs of seeds; \\ L1: \ ${100 * float(d['seed_share_l1']):.0f}\%$", font_size=21,
                     color=WHITE).next_to(hc, DOWN, buff=0.4).align_to(hc, LEFT)
+        l1_ = 100 * float(d["seed_share_l1"])
+        share_said = (f"{lo_} percent of our TopK latents recur" if lo_ == hi_ else
+                      f"{lo_} to {hi_} percent of our TopK latents recur")
         with self.voiceover(
             "A second argument: are the features real, or artefacts of one training run? <bookmark mark='a'/> "
             "Gonçalo Paulo and Nora Belrose trained the same autoencoder twice with different seeds, on Llama 3, and "
             "found only about thirty percent of latents shared. <bookmark mark='b'/> Ours, from chapter nine's runs: "
             "for each latent, the best match in another seed's dictionary. Counting a cosine above 0.7 as the same "
-            f"feature, {100 * min(sh):.0f} to {100 * max(sh):.0f} percent recur. A small model with few features is "
-            "kinder than a big one, but a dictionary is one answer, not the answer."
+            f"feature, {share_said}, against their thirty. Our L1 dictionaries agree far more, {l1_:.0f} percent: how stable the "
+            "features are depends on the recipe as much as on the model. A dictionary is one answer, not the answer."
         ) as vo:
             self.play(FadeIn(hc))
             vo.wait_until("a")

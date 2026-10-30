@@ -141,14 +141,14 @@ class LossFree(VoiceoverScene):
         clock.arrange(RIGHT, buff=0.2).move_to([-2.2, -2.2, 0])
         fl = label(r"dashed: \ a fair share, \ $1/8$; \ block $1$, \ seed $1$", font_size=20, color=GREY_B).next_to(clock, DOWN, buff=0.25)
         bt = [float(np.asarray(b[f"{k}_busiest"], float)[0, 0]) for k, _, _ in MODES]
+        left = ("On the left, with no balancing, the shares drift apart. " if bt[0] > bt[2] + 0.3 else
+                "On the left, with no balancing, the shares wander. ")
+        mid = ("In the middle, Switch's loss pulls them part of the way back. " if bt[1] > bt[2] + 0.2 else
+               "In the middle, Switch's loss pulls them back. ")
         with self.voiceover(
             "Here are all three rules at once, replayed through training: each bar is one expert's share of the tokens "
             "in the first block. <bookmark mark='a'/> "
-            + ("On the left, with no balancing, the shares drift apart. " if bt[0] > bt[2] + 0.3 else
-               "On the left, with no balancing, the shares wander. ")
-            + ("In the middle, Switch's loss pulls them part of the way back. " if bt[1] > bt[2] + 0.2 else
-               "In the middle, Switch's loss pulls them back. ")
-            + "On the right, the bias holds every expert near its fair share. <bookmark mark='b'/> Below, the biases "
+            + left + "<bookmark mark='m'/>" + mid + "<bookmark mark='r'/>On the right, the bias holds every expert near its fair share. <bookmark mark='b'/> Below, the biases "
             "themselves: each is a running tally of how often its expert was too busy or too idle."
         ) as vo:
             self.play(FadeIn(clock), FadeIn(fl), *[FadeIn(VGroup(b_, fr, t)) for b_, fr, t in sets])
@@ -197,18 +197,23 @@ class LossFree(VoiceoverScene):
         mx = {k: ms(b[f"{k}_maxvio"])[0] for k in keys}
         best_bal = min(keys, key=lambda k: mx[k])
         best_bits = min(keys, key=lambda k: vb[k])
-        v = (f"The bias balances best, with the smallest imbalance through training, {mx['moe']:.2f}, against "
-             f"{mx['aux']:.2f} with the loss and {mx['none']:.2f} without. " if best_bal == "moe" else
-             f"Here Switch's loss balances best through training, {mx['aux']:.2f} against {mx['moe']:.2f} for the "
-             "bias. " if best_bal == "aux" else
-             "Surprisingly, the unbalanced router has the smallest imbalance here. ")
-        w = (f"And it predicts best too: {vb['moe']:.3f} bits, against {vb['aux']:.3f} and {vb['none']:.3f}. "
-             if best_bits == "moe" else
-             f"In bits, though, the best is {MODE_NAME_SPOKEN[best_bits]}: {vb[best_bits]:.3f}, against "
-             f"{vb['moe']:.3f} with the bias. ")
+        if best_bal == "moe":
+            v = (f"The bias balances best, with the smallest imbalance through training, {mx['moe']:.2f}, against "
+                 f"{mx['aux']:.2f} with the loss and {mx['none']:.2f} without. ")
+        elif best_bal == "aux":
+            v = (f"Here Switch's loss balances best through training, {mx['aux']:.2f} against {mx['moe']:.2f} for the "
+                 "bias. ")
+        else:
+            v = "Surprisingly, the unbalanced router has the smallest imbalance here. "
+        if best_bits == "moe":
+            w = (f"In held-out bits the bias model is best as well: {vb['moe']:.3f}, against {vb['aux']:.3f} with the "
+                 f"loss and {vb['none']:.3f} without. ")
+        else:
+            w = (f"In held-out bits, though, the best is {MODE_NAME_SPOKEN[best_bits]}: {vb[best_bits]:.3f}, against "
+                 f"{vb['moe']:.3f} with the bias. ")
         ta = take_away(r"balance by steering the choice, \ not by changing the loss", color=BALC, font_size=26)
         with self.voiceover(
-            "The scoreboard, over three seeds each. <bookmark mark='a'/> " + v + w
+            "The scoreboard, over three seeds each. <bookmark mark='a'/> " + v + "<bookmark mark='w'/>" + w
             + "<bookmark mark='b'/> One caution: our bias model also uses DeepSeek's sigmoid gates, while the other "
             "two use softmax gates, so the comparison is between routers, not just between balancing rules. "
             "<bookmark mark='c'/> The lesson DeepSeek drew: balance by steering the choice, not by changing the loss."

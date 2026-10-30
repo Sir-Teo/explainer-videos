@@ -120,16 +120,19 @@ class Capacity(VoiceoverScene):
         i2 = fin.index(2.0) if 2.0 in fin else len(fin) - 1
         dn, da, db = (float(drops[k][:, i1].mean()) for k in ("none", "aux", "moe"))
         ln_, la_, lb_ = (float(loss[k][:, i1].mean()) for k in ("none", "aux", "moe"))
+        remain = ("Even perfect balance on average isn't balance in every batch, so some drops remain. " if db > 0.005
+                  else "With the bias, almost nothing is dropped at all. ")
+        if max(float(loss[k][:, i2].mean()) for k in loss) < 0.01:
+            two = f"At a factor of {fin[i2]:g}, almost nothing is lost by any of them."
+        else:
+            two = f"Even at a factor of {fin[i2]:g}, the unbalanced router still loses {float(loss['none'][:, i2].mean()):.3f}."
         with self.voiceover(
             "We can measure this on our trained routers: impose a capacity afterwards, and count what's dropped. "
             f"<bookmark mark='a'/> At a factor of one, the unbalanced router drops {100 * dn:.0f} percent of its "
             f"token slots, the router trained with Switch's loss {100 * da:.0f} percent, and the router with the "
-            f"loss-free bias {100 * db:.0f} percent. "
-            + ("Even perfect balance on average isn't balance in every batch, so some drops remain. " if db > 0.005 else "")
+            f"loss-free bias {100 * db:.0f} percent. <bookmark mark='r'/>" + remain
             + f"<bookmark mark='b'/> In bits, a factor of one costs the unbalanced model {ln_:.3f} bits a character, "
-            f"and the bias model {lb_:.3f}. "
-            + (f"At a factor of {fin[i2]:g} almost nothing is lost by any of them. " if max(float(loss[k][:, i2].mean())
-                                                                                      for k in loss) < 0.01 else "")
+            f"and the bias model {lb_:.3f}. <bookmark mark='t'/>" + two
         ) as vo:
             self.play(FadeIn(key), Create(ax1), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(tag),
                       Create(ax2), FadeIn(xt2), FadeIn(yt2), FadeIn(xl2), FadeIn(yl2))

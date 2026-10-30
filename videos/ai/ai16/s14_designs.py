@@ -279,16 +279,24 @@ class Designs(VoiceoverScene):
         v1 = (f"Full attention learns it completely: {100 * fw:.0f} percent. The sliding window can't see the facts, "
               f"and stays near chance, {100 * ww:.0f} percent. " if ww < 0.3 else
               f"Full attention reaches {100 * fw:.0f} percent, and the window {100 * ww:.0f}. ")
-        v2 = (f"Block selection gets {100 * bw:.0f} percent: " + ("it learns to find the right block. " if bw > 0.8 else
-              "an average key is a blurry summary, and sometimes it picks the wrong block. " if bw > 0.3 else
-              "an average key is too blurry a summary to find the right block. "))
+        if bw > 0.8:
+            v2 = f"Block selection gets {100 * bw:.0f} percent: it learns to find the right block. "
+        elif bw > 0.3:
+            v2 = (f"Block selection gets {100 * bw:.0f} percent: an average key is a blurry summary, and sometimes it "
+                  "picks the wrong block. ")
+        else:
+            v2 = (f"Block selection gets {100 * bw:.0f} percent: an average key is too blurry a summary to find the "
+                  "right block. ")
         v3 = (f"And the learned indexer, started from the full model, reaches {100 * iw:.0f} percent with eight keys. "
               if iw > 0.8 else
               f"The learned indexer, started from the full model, reaches {100 * iw:.0f} percent. ")
         ti = ms(d["imposed_topk_acc"])[0]
-        v4 = (f"Imposing a pattern on the full model without retraining is a different story: its own top eight keys "
-              f"keep {100 * ti:.0f} percent, " + ("so the information is there, if you can find it cheaply. " if ti > 0.8 else
-                                                  "and the others fall apart. "))
+        if ti > 0.8:
+            v4 = (f"Imposing a pattern on the full model without retraining is a different story: its own top eight "
+                  f"keys keep {100 * ti:.0f} percent, so the information is there, if you can find it cheaply. ")
+        else:
+            v4 = (f"Imposing a pattern on the full model without retraining is a different story: even its own top "
+                  f"eight keys keep only {100 * ti:.0f} percent. ")
         with self.voiceover(
             "Here's training, the share of answers right. <bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2
             + "<bookmark mark='c'/> " + v3 + "<bookmark mark='d'/> " + v4

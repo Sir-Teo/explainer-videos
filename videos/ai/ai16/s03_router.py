@@ -112,7 +112,10 @@ class Router(VoiceoverScene):
             "learns about the experts it tried. It never finds out whether an unchosen expert would have done better."
         ) as vo:
             self.play(FadeIn(remind), FadeIn(rl_))
-            for i, mk in enumerate("abcd"):
+            step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            for i, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 step(i)
             vo.wait_until("e")

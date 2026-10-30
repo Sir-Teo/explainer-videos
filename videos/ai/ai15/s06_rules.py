@@ -193,11 +193,13 @@ class Rules(VoiceoverScene):
             "and Kimi Linear, the next chapter; make the memory a whole network, and you have test-time training, "
             "chapter ten: a small network whose weights keep learning while the model reads."
         ) as vo:
-            self.play(Write(f1), FadeIn(l1))
+            for m_ in (f2, l2, f3, l3):  # where the derivation is going, faint until it gets there
+                m_.set_opacity(0.15)
+            self.play(Write(f1), FadeIn(l1), FadeIn(f2), FadeIn(l2), FadeIn(f3), FadeIn(l3))
             vo.wait_until("a")
-            self.play(Write(f2), FadeIn(l2))
+            self.play(f2.animate.set_opacity(1), l2.animate.set_opacity(1))
             vo.wait_until("b")
-            self.play(Write(f3), FadeIn(l3))
+            self.play(f3.animate.set_opacity(1), l3.animate.set_opacity(1))
             self.play(FadeIn(msg))
             vo.wait_until("c")
             # room for the picture: the first two lines have done their work

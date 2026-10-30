@@ -172,16 +172,17 @@ class Ours(VoiceoverScene):
         note_ = note(r"columns: \ the character just read; \ rows: \ the experts; \ bright: \ its share of that "
                      r"character's tokens \ (both of the $2$ choices)", font_size=18).to_edge(DOWN, buff=0.25)
         sharp = [float(R[k].max(-1).mean()) for k in range(len(steps))]
+        if abs(sharp[-1] - sharp[2]) > 0.03:
+            settle = (f"Then it settles, at {100 * sharp[-1]:.0f} percent by the end, and the pattern keeps shifting as "
+                      "the experts get better at what they're sent. ")
+        else:
+            settle = f"And it stays that decided, {100 * sharp[-1]:.0f} percent by the end. "
         with self.voiceover(
             "And here is the mixture's routing as it trains, replayed: for each common character, which experts its "
             "tokens are sent to, in both blocks. <bookmark mark='a'/> At first the router is random and nearly "
             f"uniform: on average a character's favourite expert gets {100 * sharp[0]:.0f} percent of its tokens. "
             f"<bookmark mark='b'/> Within {steps[2]} steps the router has committed: {100 * sharp[2]:.0f} percent. "
-            "<bookmark mark='c'/> " + (f"Then it settles, at {100 * sharp[-1]:.0f} percent by the end, and the "
-                                        "pattern keeps shifting as the experts get better at what they're sent. "
-                                        if abs(sharp[-1] - sharp[2]) > 0.03 else
-                                        f"And it stays that decided, {100 * sharp[-1]:.0f} percent by the end. ")
-            + "What the experts end up doing is chapter ten's question."
+            "<bookmark mark='c'/> " + settle + "<bookmark mark='q'/>What the experts end up doing is chapter ten's question."
         ) as vo:
             self.play(FadeIn(cur), FadeIn(names), FadeIn(layer_l), FadeIn(el), FadeIn(note_))
             self.add(cnt)
@@ -221,13 +222,14 @@ class Ours(VoiceoverScene):
         h1 = label(r"arithmetic per character", font_size=22, color=GREY_A).move_to([-1.3, 1.5, 0])
         h2 = label(r"time per training step here \ (one CPU core)", font_size=22, color=GREY_A).move_to([3.5, 1.5, 0])
         slow = secs["moe"] / secs["dense_active"]
+        howlong = (f"{slow:.1f} times as long as the dense model's. " if slow > 1.15 else
+                   "about as long as the dense model's. ")
         ta = take_away(r"sparse arithmetic is not free time: \ the gains need hardware and kernels built for routing",
                        color=ROUTER, font_size=24)
         with self.voiceover(
             "One caution before we celebrate. <bookmark mark='a'/> The mixture does the same arithmetic as the "
             "small dense model, but on this computer a training step takes "
-            + (f"{slow:.1f} times as long. " if slow > 1.15 else "about as long. ")
-            + "Sorting tokens by expert, gathering them, and scattering the answers back costs time that the "
+            + howlong + "<bookmark mark='h'/>Sorting tokens by expert, gathering them, and scattering the answers back costs time that the "
             "arithmetic count doesn't see. <bookmark mark='b'/> Big labs win the time back with kernels and hardware "
             "built for routing, and lose some of it to moving tokens between chips, chapter eight's subject."
         ) as vo:

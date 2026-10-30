@@ -140,10 +140,13 @@ class Lottery(VoiceoverScene):
         # the sparsest round where the ticket is still within 0.02 bits of the dense network
         ok = [i for i in range(1, len(t)) if t[i] <= dense + 0.02]
         best = max(ok) if ok else None
-        v1 = (f"The ticket stays as good as the dense network down to {100 * rem[best - 1]:.0f} percent of its weights"
-              + (", and at some sizes it's even a little better. " if (t[1:] < dense - 0.005).any() else ". ")
-              if best else
-              "Even the ticket loses ground from the first round of pruning. ")
+        if best and (t[1:] < dense - 0.005).any():
+            v1 = (f"The ticket stays as good as the dense network down to {100 * rem[best - 1]:.0f} percent of its "
+                  "weights, and at some sizes it's even a little better. ")
+        elif best:
+            v1 = f"The ticket stays as good as the dense network down to {100 * rem[best - 1]:.0f} percent of its weights. "
+        else:
+            v1 = "Even the ticket loses ground from the first round of pruning. "
         gap = float((ri[-1] - t[-1]))
         v2 = (f"With the same masks but fresh random weights, the network does worse, by {gap:.2f} bits at the "
               "sparsest: the starting weights matter, not just which connections are kept. " if gap > 0.02 else

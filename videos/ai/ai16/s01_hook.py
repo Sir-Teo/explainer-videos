@@ -86,28 +86,31 @@ class Hook(VoiceoverScene):
                 (1990, r"Optimal Brain \\ Damage"), (2015.5, r"pruning \\ AlexNet"), (2018.2, r"lottery \\ tickets"),
                 (2020.4, r"$2{:}4$ on \\ the A100"), (2023.1, r"SparseGPT, \\ Wanda")]),
         ]
-        x0, x1, T0, T1 = -4.6, 6.3, 1988, 2027.5
+        x0, x1, T0, TB, T1 = -4.6, 6.4, 1988, 2015, 2027.3
+        xb = x0 + 2.6  # 1988-2015 squeezed into the first 2.6 units, the busy decade gets the rest
 
         def X(t):
-            return x0 + (x1 - x0) * (t - T0) / (T1 - T0)
+            if t <= TB:
+                return x0 + (xb - x0) * (t - T0) / (TB - T0)
+            return xb + (x1 - xb) * (t - TB) / (T1 - TB)
 
         head = label(r"How we got here: \ three kinds of sparsity", font_size=34).to_edge(UP, buff=0.3)
         rows = VGroup()
-        ys = [1.55, -0.45, -2.45]
+        ys = [1.45, -0.5, -2.45]
         for (name, col, evs), y in zip(lanes, ys):
             ln = Line([x0, y, 0], [x1, y, 0], color=GREY_D, stroke_width=2)
             nm = label(name, font_size=26, color=col).next_to([x0, y, 0], LEFT, buff=0.35)
             ev = VGroup()
             for j, (t, txt) in enumerate(evs):
                 d = Dot([X(t), y, 0], radius=0.07, color=col)
-                lab = label(txt, font_size=17, color=col)
-                lab.next_to(d, UP if j % 2 == 0 else DOWN, buff=0.12)
+                lab = label(txt, font_size=16, color=col)
+                lab.next_to(d, UP if j % 2 == 0 else DOWN, buff=0.12 if (j // 2) % 2 == 0 else 0.62)
                 lab.set_x(min(max(lab.get_x(), -4.2 + lab.width / 2), 6.9 - lab.width / 2))
                 ev.add(VGroup(d, lab))
             rows.add(VGroup(ln, nm, ev))
-        years = VGroup(*[Text(str(t), font_size=16, color=GREY_B).move_to([X(t), -3.55, 0]) for t in (1990, 2000, 2010, 2020)])
-        ticks = VGroup(*[DashedLine([X(t), 2.4, 0], [X(t), -3.3, 0], dash_length=0.05, stroke_width=1, color=GREY_D)
-                         for t in (1990, 2000, 2010, 2020)])
+        years = VGroup(*[Text(str(t), font_size=16, color=GREY_B).move_to([X(t), -3.8, 0]) for t in (1990, 2000, 2010, 2015, 2020, 2025)])
+        ticks = VGroup(*[DashedLine([X(t), 2.4, 0], [X(t), -3.6, 0], dash_length=0.05, stroke_width=1, color=GREY_D)
+                         for t in (1990, 2000, 2010, 2015, 2020, 2025)])
         with self.voiceover(
             "How did we get here? Three threads, which this part follows. <bookmark mark='a'/> The first is experts. "
             "In 1991 Robert Jacobs, Michael Jordan, Steven Nowlan and Geoffrey Hinton proposed a gate that picks "

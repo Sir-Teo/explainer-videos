@@ -16,6 +16,7 @@ class Fine(VoiceoverScene):
     def construct(self):
         self.card()
         self.idea()
+        self.claims()
         self.count()
         self.result()
 
@@ -53,6 +54,36 @@ class Fine(VoiceoverScene):
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[i], shift=UP * 0.15))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def claims(self):
+        rows = VGroup(
+            VGroup(label(r"DeepSeekMoE $2$B", font_size=26, color=SHAREDC), label(r"$\approx$", font_size=30),
+                   label(r"GShard $2.9$B", font_size=26, color=MOEC),
+                   label(r"which has $1.5\times$ the expert parameters and computation", font_size=20, color=GREY_A)),
+            VGroup(label(r"DeepSeekMoE $16$B", font_size=26, color=SHAREDC), label(r"$\approx$", font_size=30),
+                   label(r"LLaMA2 $7$B", font_size=26, color=GREY_B),
+                   label(r"with about $40\%$ of the computation", font_size=20, color=GREY_A)),
+        )
+        for r_ in rows:
+            r_[:3].arrange(RIGHT, buff=0.35)
+            r_[3].next_to(r_[:3], DOWN, buff=0.12)
+        rows.arrange(DOWN, buff=0.7).move_to([0, 0.2, 0])
+        head = label(r"what DeepSeek reported \ (January 2024)", font_size=28).to_edge(UP, buff=0.5)
+        cite_ = cite(r"D.~Dai et al., \textit{DeepSeekMoE} (arXiv 2401.06066), \ abstract", corner=DR)
+        with self.voiceover(
+            "They reported that it pays. <bookmark mark='a'/> At two billion parameters, DeepSeekMoE matched GShard's "
+            "design with one and a half times the expert parameters and computation. <bookmark mark='b'/> Scaled to "
+            "sixteen billion, it matched Meta's dense LLaMA 2 7B with about forty percent of the computation. Those "
+            "are the makers' own numbers; let's check the idea on ours."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1], shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -118,19 +149,26 @@ class Fine(VoiceoverScene):
         mc, mf, msh = (vals[k][0] for k in keys)
         best = min(keys, key=lambda k: vals[k][0])
         sep = lambda a_, b_: vals[a_][2] < vals[b_][1] or vals[b_][2] < vals[a_][1]  # noqa: E731  seeds don't overlap
-        v1 = (f"Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture"
-              + (", and the seeds don't overlap. " if sep("fine", "moe") else ", though the seeds overlap. ")
-              if mf < mc - 0.002 else
-              f"Cutting the experts finer doesn't help at our scale: {mf:.3f} bits against {mc:.3f} for the coarse "
-              "mixture. ")
-        v2 = (f"Adding a shared expert helps a little more: {msh:.3f}. " if msh < mf - 0.002 else
-              f"A shared expert adds nothing here: {msh:.3f}. " if abs(msh - mf) <= 0.002 else
-              f"With a shared expert, {msh:.3f}: a little worse than fine-grained alone. ")
+        if mf < mc - 0.002 and sep("fine", "moe"):
+            v1 = (f"Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture, and the "
+                  "seeds don't overlap. ")
+        elif mf < mc - 0.002:
+            v1 = (f"Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture, though the "
+                  "seeds overlap. ")
+        else:
+            v1 = (f"Cutting the experts finer doesn't help at our scale: {mf:.3f} bits against {mc:.3f} for the coarse "
+                  "mixture. ")
+        if msh < mf - 0.002:
+            v2 = f"Adding a shared expert helps a little more: {msh:.3f}. "
+        elif abs(msh - mf) <= 0.002:
+            v2 = f"A shared expert adds nothing here: {msh:.3f}. "
+        else:
+            v2 = f"With a shared expert, {msh:.3f}: a little worse than fine-grained alone. "
         ta = take_away(r"DeepSeek-V3: \ $256$ fine experts, \ $8$ chosen, \ $1$ shared \ $\cdot$ \ Kimi K3: \ $896$, \ "
                        r"$16$ chosen, \ $2$ shared", color=SHAREDC, font_size=24)
         with self.voiceover(
             "We trained all three, with the same parameters and the same arithmetic per character, two seeds each. "
-            "<bookmark mark='a'/> " + v1 + v2 + "<bookmark mark='b'/> At the frontier the direction is clear: DeepSeek-V3 "
+            "<bookmark mark='a'/> " + v1 + "<bookmark mark='v'/>" + v2 + "<bookmark mark='b'/> At the frontier the direction is clear: DeepSeek-V3 "
             "has two hundred and fifty-six fine experts and chooses eight, plus one shared; Kimi K3 has eight hundred "
             "and ninety-six, chooses sixteen, and shares two."
         ) as vo:

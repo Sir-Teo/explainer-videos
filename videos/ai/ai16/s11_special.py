@@ -61,13 +61,14 @@ class Special(VoiceoverScene):
                          rf"${cp}$ of the ${len(punct)}$ spaces and marks to $E_{ep + 1}$")
                         if pattern else r"no neat specialties: \ the experts split the work in ways \\ that don't "
                         r"map onto our categories", font_size=24, color=C.BITS).to_edge(DOWN, buff=0.4)
+        if pattern:
+            found = (f"Some patterns appear: {cv} of the {len(vow)} vowels go mostly to expert {ev + 1}, and {cp} of the "
+                     f"{len(punct)} spaces and punctuation marks to expert {ep + 1}. Nobody told it to. ")
+        else:
+            found = "There's structure, but not the neat specialties you might imagine. "
         with self.voiceover(
             "What do the experts learn? Here's where our mixture sends each common character's tokens, in its last "
-            "block: one column per character just read, one row per expert. <bookmark mark='a'/> "
-            + (f"Some patterns appear: {cv} of the {len(vow)} vowels go mostly to expert {ev + 1}, and {cp} of the "
-               f"{len(punct)} spaces and punctuation marks to expert {ep + 1}. Nobody told it to. "
-               if pattern else
-               "There's structure, but not the neat specialties you might imagine. ")
+            "block: one column per character just read, one row per expert. <bookmark mark='a'/> " + found
             + "<bookmark mark='b'/> But is it about the character itself, or about what comes next? We can measure it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid), FadeIn(names), FadeIn(el), FadeIn(note_))
@@ -112,19 +113,30 @@ class Special(VoiceoverScene):
         last = nl - 1
         cur, nxt, prv = (ms(vals[(last, k)])[0] for k in ("cur", "nxt", "prv"))
         first_cur = ms(vals[(0, "cur")])[0]
-        v1 = (f"In both blocks, the choice of expert says most about the character just read: {cur:.2f} bits in the "
-              f"last block, against {nxt:.2f} about the one to come and {prv:.2f} about the one before. "
-              if cur > nxt and cur > prv else
-              f"In the last block the choice says more about the character to come, {nxt:.2f} bits, than about the "
-              f"one just read, {cur:.2f}. " if nxt > cur else
-              f"In the last block the choice says most about the character before, {prv:.2f} bits. ")
+        if cur > nxt and cur > prv:
+            v1 = (f"The choice of expert says most about the character just read: {cur:.2f} bits in the last block, "
+                  f"against {nxt:.2f} about the one to come and {prv:.2f} about the one before. ")
+        elif nxt > cur:
+            v1 = (f"In the last block the choice says more about the character to come, {nxt:.2f} bits, than about the "
+                  f"one just read, {cur:.2f}. ")
+        else:
+            v1 = f"In the last block the choice says most about the character before, {prv:.2f} bits. "
         v2 = ("So the experts sort tokens mostly by what they are, on the surface, not by what the model must predict: "
               "the router is a fast lookup on the current token. " if cur > nxt else
               "So the router is sorting by what the model must predict. ")
+        fseeds = [int(x) for x in range(2)]
+        fcur = ms([float(s[f"fine_s{sd}_l{last}"]["cur"]) for sd in fseeds])[0]
+        fH = float(s[f"fine_s0_l{last}"]["H"])
+        fl_ = label(rf"$32$ fine experts: \ ${fcur:.2f}$ bits about the character just read, \ of at most ${fH:.0f}$",
+                    font_size=20, color=C.BITS).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        v3 = (f"With thirty-two smaller experts there's more room to sort: the choice says {fcur:.2f} bits about the "
+              f"current character, against {cur:.2f} with eight. " if fcur > cur + 0.05 else
+              f"With thirty-two smaller experts, the choice says {fcur:.2f} bits about the current character, much as "
+              f"with eight. ")
         with self.voiceover(
             "Mutual information, from part one: how many bits the choice of expert tells you about a character. "
-            "<bookmark mark='a'/> " + v1 + v2 + "<bookmark mark='b'/> The shuffled bars are chance: what a router "
-            "that ignored the characters would score, given this much text."
+            "<bookmark mark='a'/> " + v1 + "<bookmark mark='v'/>" + v2 + "<bookmark mark='b'/> The shuffled bars are chance: what a router "
+            "that ignored the characters would score, given this much text. <bookmark mark='c'/> " + v3
         ) as vo:
             self.play(FadeIn(head), FadeIn(key), FadeIn(tag), *[FadeIn(VGroup(g_[1], g_[2])) for g_ in groups])
             vo.wait_until("a")
@@ -132,6 +144,8 @@ class Special(VoiceoverScene):
                                   lag_ratio=0.15), run_time=2.5)
             vo.wait_until("b")
             self.play(*[AnimationGroup(GrowFromEdge(g_[0][3][0], DOWN), FadeIn(g_[0][3][1:])) for g_ in groups])
+            vo.wait_until("c")
+            self.play(FadeIn(fl_))
         self.wait(0.3)
         self.clear_scene()
 
@@ -179,17 +193,18 @@ class Special(VoiceoverScene):
         by = {r.get("key"): r for r in rows}
         m, da, dt = by["moe16"]["bits"], by["dense16"]["bits"], by["dense16t"]["bits"]
         tf = next(r for r in rows if r["part"] == 13)["bits"]
-        v = (f"On the scoreboard's passage, our mixture scores {m:.2f} bits a character, ahead of the dense model with "
-             f"the same arithmetic, {da:.2f}" if m < da else
-             f"On the scoreboard's passage, our mixture scores {m:.2f} bits a character, against {da:.2f} for the dense "
-             "model with the same arithmetic")
-        v += f", and the dense model with all its parameters scores {dt:.2f}. "
+        if m < da:
+            v = (f"On the scoreboard's passage, our mixture scores {m:.2f} bits a character, ahead of the dense model "
+                 f"with the same arithmetic, {da:.2f}, and the dense model with all its parameters scores {dt:.2f}. ")
+        else:
+            v = (f"On the scoreboard's passage, our mixture scores {m:.2f} bits a character, against {da:.2f} for the "
+                 f"dense model with the same arithmetic and {dt:.2f} for the one with all its parameters. ")
         w = (f"They're behind Part 13's transformer, {tf:.2f}, which reads four times as much context and is twice "
              "as wide and twice as deep: sparsity buys capacity, not context. " if tf < min(m, da, dt) else
              f"Part 13's transformer scores {tf:.2f}. ")
         with self.voiceover(
             "And the scoreboard, the series' running test on a chapter of The Maltese Falcon. <bookmark mark='a'/> "
-            + v + w
+            + v + "<bookmark mark='w'/>" + w
         ) as vo:
             self.play(FadeIn(head), FadeIn(board.axis), *[FadeIn(r_) for i, r_ in enumerate(board.rows) if i not in mine])
             vo.wait_until("a")

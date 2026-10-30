@@ -38,7 +38,7 @@ class Parallel(VoiceoverScene):
         whys = [why(r"a step as a pair: \ multiply by $a$, \ add $b$"), why(r"two steps are again one step"),
                 why(r"group the first two first"), why(r"or the last two: \ the same \ (associative)")]
         tag = label(r"associative $\Rightarrow$ any grouping, \ so all prefixes in $\log_2 T$ rounds", font_size=26,
-                    color=C.BITS).to_edge(DOWN, buff=0.5)
+                    color=C.BITS).to_edge(DOWN, buff=0.95)
         cite_ = cite(r"G.~E.~Blelloch, \textit{Prefix Sums and Their Applications} (1990); \ E.~Martin \& C.~Cundy (2018)",
                      corner=DR)
         hs = VGroup(*[VGroup(RoundedRectangle(width=0.9, height=0.6, corner_radius=0.1, stroke_color=STATE, stroke_width=2,
@@ -198,7 +198,9 @@ class Parallel(VoiceoverScene):
             f"computer: for {T} random tokens, step by step and chunk by chunk agree to rounding error, with "
             f"{nC} sequential steps instead of {T}. " + speed + " That's how Qwen3-Next and Kimi Linear were trained."
         ) as vo:
-            self.play(FadeIn(chunks), FadeIn(tl), FadeIn(cite_))
+            for m_ in (f1, l1, f2, l2):  # the two formulas this block arrives at, faint until then
+                m_.set_opacity(0.15)
+            self.play(FadeIn(chunks), FadeIn(tl), FadeIn(cite_), FadeIn(f1), FadeIn(l1), FadeIn(f2), FadeIn(l2))
             self.add(cursor)
             self.play(cursor.animate.move_to(chunks[3].get_center()), run_time=2.0, rate_func=linear)
             self.remove(cursor)
@@ -208,9 +210,9 @@ class Parallel(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(m_, shift=RIGHT * 0.1) for m_ in chain], lag_ratio=0.08), FadeIn(chain_l))
             vo.wait_until("w")
             self.play(ReplacementTransform(chain, one), FadeTransform(chain_l, one_l))
-            self.play(Write(f1), FadeIn(l1))
+            self.play(f1.animate.set_opacity(1), l1.animate.set_opacity(1))
             vo.wait_until("c")
-            self.play(Write(f2), FadeIn(l2))
+            self.play(f2.animate.set_opacity(1), l2.animate.set_opacity(1))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in res], lag_ratio=0.4))
         self.wait(0.3)

@@ -110,8 +110,9 @@ class Mass(VoiceoverScene):
             "attention goes to a few keys."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.05), FadeIn(key), run_time=2.5)
+            vo.wait_until("a")
+            self.play(Indicate(key, color=WHITE, scale_factor=1.05))
         self.wait(0.3)
         self.clear_scene()
 
@@ -138,12 +139,14 @@ class Mass(VoiceoverScene):
         k1 = label(r"the last $k$ keys \ (a sliding window)", font_size=24, color=C.SURPRISE).move_to([4.4, 1.6, 0])
         k2 = label(r"the $k$ highest-scoring keys", font_size=24, color=C.INTERVAL).next_to(k1, DOWN, buff=0.3).align_to(k1, LEFT)
         i8 = kk.index(8)
+        if tk[-1] - full >= 0.0005:
+            within = f"With {kk[-1]} keys chosen by score, it's within {tk[-1] - full:.3f} bits of using every key."
+        else:
+            within = f"With {kk[-1]} keys chosen by score, it's within a thousandth of a bit of using every key."
         with self.voiceover(
             "So let each query use only k keys. Which k? <bookmark mark='a'/> The simplest choice is the most recent "
             f"ones, a sliding window: with {kk[i8]} keys, {wn[i8]:.2f} bits a character. <bookmark mark='b'/> Better, "
-            f"take the {kk[i8]} keys it would weight most: {tk[i8]:.2f}. With {kk[-1]}, "
-            + (f"it's within {tk[-1] - full:.3f} bits of using everything."
-               if tk[-1] - full >= 0.0005 else "it's within a thousandth of a bit of using everything.")
+            f"take the {kk[i8]} keys it would weight most: {tk[i8]:.2f}. <bookmark mark='c'/>" + within
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll))
             vo.wait_until("a")

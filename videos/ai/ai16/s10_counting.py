@@ -212,13 +212,21 @@ class Counting(VoiceoverScene):
         stats = VGroup(label(rf"end: \ ${vh[0]:.3f}$, \ ${vu[0]:.3f}$, \ ${vm[0]:.3f}$", font_size=22, color=WHITE),
                        label(rf"training compute: \ upcycled ${100 * cu / cm:.0f}\%$ of from scratch", font_size=20, color=GREY_A)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
-        v1 = (f"The upcycled model drops below the dense one it came from right away, and ends at {vu[0]:.3f} bits "
-              f"against {vh[0]:.3f} for the dense model trained just as long. " if vu[0] < vh[0] - 0.005 else
-              f"The upcycled model ends at {vu[0]:.3f}, about where the dense model does, {vh[0]:.3f}. ")
-        v2 = (f"It even ends ahead of the mixture trained from scratch, {vm[0]:.3f}, " if vu[0] < vm[0] - 0.003 else
-              f"It ends close to the mixture trained from scratch, {vm[0]:.3f}, " if abs(vu[0] - vm[0]) <= 0.003 else
-              f"It doesn't catch the mixture trained from scratch, {vm[0]:.3f}, ")
-        v2 += f"with {100 * cu / cm:.0f} percent of its training compute."
+        if vu[0] < vh[0] - 0.005:
+            v1 = (f"The upcycled model drops below the dense one it came from right away, and ends at {vu[0]:.3f} bits "
+                  f"against {vh[0]:.3f} for the dense model trained just as long. ")
+        else:
+            v1 = f"The upcycled model ends at {vu[0]:.3f}, about where the dense model does, {vh[0]:.3f}. "
+        pc_ = 100 * cu / cm
+        if vu[0] < vm[0] - 0.003:
+            v2 = (f"It even ends ahead of the mixture trained from scratch, {vm[0]:.3f}, with {pc_:.0f} percent of its "
+                  "training compute.")
+        elif abs(vu[0] - vm[0]) <= 0.003:
+            v2 = (f"It ends close to the mixture trained from scratch, {vm[0]:.3f}, with {pc_:.0f} percent of its "
+                  "training compute.")
+        else:
+            v2 = (f"It doesn't catch the mixture trained from scratch, {vm[0]:.3f}, but it spent only {pc_:.0f} percent "
+                  "of its training compute.")
         with self.voiceover(
             "We tried it. A dense model one expert wide, trained for a thousand steps, then copied into eight experts "
             "and trained for a thousand more, beside the same dense model kept dense, and our mixture trained from "

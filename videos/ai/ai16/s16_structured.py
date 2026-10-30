@@ -114,9 +114,11 @@ class Structured(VoiceoverScene):
               f"{wd - dense[0]:.2f}. " if wd < mg - 0.01 else
               f"Wanda's score, which weighs each weight by the size of its inputs, does no better here: "
               f"{wd - dense[0]:.2f}. ")
-        v3 = (f"A short retraining with the pattern held closes most of the gap: {mf - dense[0]:.2f} bits behind the dense "
-              "model after " + f"{int(p['ft_steps'])} steps. " if (mf - dense[0]) < 0.5 * (mg - dense[0]) else
-              f"A short retraining recovers part of it: {mf - dense[0]:.2f} bits behind after {int(p['ft_steps'])} steps. ")
+        if (mf - dense[0]) < 0.5 * (mg - dense[0]):
+            v3 = (f"A short retraining with the pattern held closes most of the gap: {mf - dense[0]:.2f} bits behind "
+                  f"the dense model after {int(p['ft_steps'])} steps. ")
+        else:
+            v3 = f"A short retraining recovers part of it: {mf - dense[0]:.2f} bits behind after {int(p['ft_steps'])} steps. "
         with self.voiceover(
             "What does two in four cost? We pruned every weight matrix of our dense model, three seeds. "
             "<bookmark mark='a'/> " + v1 + "<bookmark mark='b'/> " + v2 + "<bookmark mark='c'/> " + v3
@@ -203,7 +205,7 @@ class Structured(VoiceoverScene):
         with self.voiceover(
             "With ReLU the zeros are exact. In the small ReLU network of the lottery chapter, "
             f"{100 * fin:.0f} percent of hidden units are exactly zero for a given input by the end of training. "
-            "<bookmark mark='a'/> In 2022 Zonglin Li and colleagues found that only three percent of T5's activations "
+            "<bookmark mark='a'/> In 2022 Zonglin Li and colleagues found that only three percent of T5-Base's activations "
             "are nonzero, and called it the lazy neuron phenomenon. <bookmark mark='b'/> Modern models use GELU and "
             "SwiGLU, without exact zeros, but in 2024 TEAL zeroed the smallest forty to fifty percent of Llama's "
             "activations, with little loss, and decoded up to 1.8 times faster, because a zero means a column of "
