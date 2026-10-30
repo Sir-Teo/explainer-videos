@@ -18222,7 +18222,9 @@
     "Child et al.\\ (2019); \\ Beltagy et al., \\textit{Longformer} (2020); \\ Zaheer et al., \\textit{BigBird} (2020); \\ Yuan et al., \\textit{NSA} (2025); \\ Lu et al., \\textit{MoBA} (2025); \\ Arora et al., \\textit{Zoology} (2023)": "Child等（2019）；\\ Beltagy等，\\textit{Longformer}（2020）；\\ Zaheer等，\\textit{BigBird}（2020）；\\ Yuan等，\\textit{NSA}（2025）；\\ Lu等，\\textit{MoBA}（2025）；\\ Arora等，\\textit{Zoology}（2023）",
     "LeCun, Denker \\& Solla (1990); \\ Han et al.\\ (2015); \\ Frankle \\& Carbin (2019); \\ Frankle et al.\\ (2020); \\ Mishra et al.\\ (2021); \\ Frantar \\& Alistarh, \\textit{SparseGPT} (2023); \\ Sun et al., \\textit{Wanda} (2023)": "LeCun、Denker \\& Solla（1990）；\\ Han等（2015）；\\ Frankle \\& Carbin（2019）；\\ Frankle等（2020）；\\ Mishra等（2021）；\\ Frantar \\& Alistarh，\\textit{SparseGPT}（2023）；\\ Sun等，\\textit{Wanda}（2023）",
     "Li et al., \\textit{The Lazy Neuron Phenomenon} (2023); \\ Liu et al., \\textit{TEAL} (2024); \\ model cards: Llama 4, Qwen3, Kimi K2 and K3, GLM-4.5 and 5, gpt-oss, Qwen3-Next, Qwen3.5, MiniMax-M2 and M3, Mistral Large 4": "Li等，\\textit{The Lazy Neuron Phenomenon}（2023）；\\ Liu等，\\textit{TEAL}（2024）；\\ 模型卡：Llama 4、Qwen3、Kimi K2与K3、GLM-4.5与5、gpt-oss、Qwen3-Next、Qwen3.5、MiniMax-M2与M3、Mistral Large 4",
-    "a routed block: \\ $T$ tokens arrive, \\ the router keeps a fraction $c$ of them": "做路由的块：\\ 进来$T$个词元，\\ 路由器只留下其中比例为$c$的一部分"
+    "a routed block: \\ $T$ tokens arrive, \\ the router keeps a fraction $c$ of them": "做路由的块：\\ 进来$T$个词元，\\ 路由器只留下其中比例为$c$的一部分",
+    "DeltaNet": "DeltaNet",
+    "Gated DeltaNet": "Gated DeltaNet"
   },
   "phrases": {
     "width": "宽度",
