@@ -97,8 +97,9 @@ class Newton(VoiceoverScene):
         gap_n = np.maximum(np.asarray(ir["newton_gap"]), 1e-16)
         gd = np.asarray(ir["gd"])
         gx = np.log10(np.maximum(gd[:, 0], 1))
-        g70 = plot([0, 4.3, 1], [-16, 0, 4], x_length=6.4, y_length=2.6, xticks=[0, 1, 2, 3, 4], yticks=[0, -4, -8, -12, -16],
-                   xfmt=lambda v: pow10(int(v)), yfmt=lambda v: pow10(int(v)), center=[-1.2, -2.0, 0])
+        g70 = plot([0, 4.3, 1], [-16, 0, 4], x_length=7.4, y_length=4.4, xticks=[0, 1, 2, 3, 4], yticks=[0, -4, -8, -12, -16],
+                   xfmt=lambda v: pow10(int(v)), yfmt=lambda v: pow10(int(v)), center=[-2.4, -0.5, 0],
+                   xlabel=r"steps \ (log scale)")
         a70 = g70.ax
         cn = VMobject(color=NEWTON, stroke_width=4).set_points_as_corners(
             [a70.c2p(math.log10(max(i, 1)), math.log10(v)) for i, v in enumerate(gap_n) if i >= 1])
@@ -109,7 +110,7 @@ class Newton(VoiceoverScene):
         nn, it6 = int(ir["n_newton"]), int(ir["gd_iters_to"])
         res = VGroup(label(rf"Newton: \ ${nn}$ steps \ to the last digit", font_size=24, color=NEWTON),
                      label(rf"gradient descent: \ ${it6:,}$ steps \ to $10^{{-6}}$".replace(",", "{,}"), font_size=24,
-                           color=GD)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g70, RIGHT, buff=0.4)
+                           color=GD)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, 0.6, 0])
         settle = int(next((k for k in range(1, len(LN)) if abs(LN[k, 3] - LN[-1, 3]) < 1e-3), len(LN) - 1))
         with self.voiceover(
             "Race them, from the same start. <bookmark mark='a'/> After one step, Newton's line is already near the "
@@ -126,11 +127,12 @@ class Newton(VoiceoverScene):
             for k in range(1, len(LN)):
                 self.play(step_t.animate.set_value(k), run_time=0.9)
             vo.wait_until("b")
+            ln.clear_updaters()
+            rd.clear_updaters()
+            self.play(FadeOut(VGroup(*[VGroup(pl, d_, t_) for pl, d_, t_, _, _ in panels], ln, rd)))
             self.play(FadeIn(g70), FadeIn(g70n))
             self.play(Create(cn), Create(cg), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(r_) for r_ in res], lag_ratio=0.4))
-        ln.clear_updaters()
-        rd.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -170,10 +172,11 @@ class Newton(VoiceoverScene):
                    "settle. <bookmark mark='c'/> On separable data they would grow forever.")
         with self.voiceover(say) as vo:
             self.play(FadeIn(g), FadeIn(reads[0]))
-            vo.wait_until("a")
             self.play(FadeIn(reads[1]))
+            vo.wait_until("a")
+            self.play(FadeIn(pts[0]))
             vo.wait_until("b")
-            self.play(Create(cv), LaggedStart(*[FadeIn(d) for d in pts], lag_ratio=0.15), run_time=2.0)
+            self.play(Create(cv), LaggedStart(*[FadeIn(d) for d in pts[1:]], lag_ratio=0.15), run_time=2.0)
             self.play(FadeIn(reads[2]))
             vo.wait_until("c")
             self.play(FadeIn(link))
