@@ -91,7 +91,7 @@ class MaxEnt(VoiceoverScene):
                 why(r"set each derivative to zero"),
                 why(r"$Z$ makes them add to $1$"),
                 why(r"one equation for $\lambda$")]
-        step = ladder(self, rows, whys, keep=5, top=3.25, x=-1.6, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.6, buff=0.38, edge=6.8)
         res = label(r"an exponential tilt: \ the exponential family", font_size=28, color=LAM).to_corner(DL, buff=0.4)
         minis = VGroup()
         for lam_ in (-0.4, 0.0, 0.37):
@@ -220,6 +220,8 @@ class MaxEnt(VoiceoverScene):
         p3 = VGroup(ax3, label(r"fix the average energy", font_size=22, color=LAM).next_to(ax3, UP, buff=0.12),
                     label(r"Gibbs: \ $p_i \propto e^{-E_i/T}$ \ = \ softmax", font_size=20, color=GREY_A).next_to(ax3, DOWN, buff=0.12))
         panels = VGroup(p1, p2, p3).arrange(RIGHT, buff=0.55, aligned_edge=DOWN).scale(1.25).move_to(UP * 0.3)
+        if panels.width > 13.2:
+            panels.scale_to_fit_width(13.2)
         fam = cmath(r"p(x)", "=", r"h(x)\, \exp\!\big(", r"\theta", r"\cdot T(x) - A(\theta)\big)", font_size=36,
                     colors={r"\theta": LAM}).to_edge(DOWN, buff=1.05)
         famn = label(r"the exponential family: \ $\nabla A(\theta) = \mathbb{E}[T(x)]$; \ Bernoulli, \ softmax, \ "

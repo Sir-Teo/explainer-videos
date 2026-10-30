@@ -243,7 +243,7 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         tline = DashedLine(hx.c2p(1, 0), hx.c2p(1, 1.0), color=GREY_B, stroke_width=2)
         hl = label(rf"$\hat\sigma^2$ from ${R:,}$ samples of $5$: \ average ${mle[i5]:.3f}$".replace(",", "{,}"),
                    font_size=20, color=MODEL).next_to(hx, UP, buff=0.12)
-        hc = cite(r"R.~A.~Fisher, \textit{On the Mathematical Foundations of Theoretical Statistics} (1922)", corner=DR)
+        hc = cite(r"R.~A.~Fisher (1922)", corner=DR)
         good = abs(mle[i5] - th[i5]) < 0.02 and abs(bes[i5] - 1) < 0.02
         verdict = (f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted "
                    f"{th[i5]:.2f}; dividing by n minus one, Bessel's correction, gives {bes[i5]:.3f}." if good else

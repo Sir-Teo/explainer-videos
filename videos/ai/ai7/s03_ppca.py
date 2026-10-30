@@ -53,6 +53,8 @@ class PPCA(VoiceoverScene):
         gm = VGroup(gz, gx, edge(gz, gx))
         gl = label(r"$k$ hidden factors \\ $\to$ $d$ observed rates", font_size=22, color=GREY_A).next_to(gm, RIGHT, buff=0.4)
         tag = note(r"samples from the model fitted to two rates", font_size=20).next_to(ax, DOWN, buff=0.15)
+        hc = history_card(1999, r"M.~Tipping \& C.~Bishop; \ S.~Roweis", r"PCA as a model with hidden factors",
+                          width=5.0).move_to([-3.4, 1.4, 0])
         with self.voiceover(
             "PCA finds directions, but it isn't a model of the data: it can't say how likely a new page is. In 1999 "
             "Michael Tipping and Christopher Bishop, and independently Sam Roweis, turned it into one. "
@@ -63,7 +65,9 @@ class PPCA(VoiceoverScene):
             "squared times the identity: a few big directions, and a fog around them."
         ) as vo:
             self.play(FadeIn(gm), FadeIn(gl), Create(ax), FadeIn(names))
+            self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(hc))
             self.play(Write(rows[0]), Create(zl), FadeIn(zlab), LaggedStart(*[FadeIn(d) for d in zdots], lag_ratio=0.005))
             vo.wait_until("b")
             self.play(Write(rows[1]), Create(wline), TransformFromCopy(zdots, on_line), run_time=1.8)
@@ -90,11 +94,11 @@ class PPCA(VoiceoverScene):
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(thm, DOWN, buff=0.45).align_to(thm, LEFT)
         lam = np.asarray(p["vals"])[:30]
         k = 5
-        bars_ = VGroup(*[Rectangle(width=0.13, height=max(0.33 * v, 0.02), stroke_width=0,
+        bars_ = VGroup(*[Rectangle(width=0.11, height=max(0.33 * v, 0.02), stroke_width=0,
                                    fill_color=C.BITS if i < k else NOISE, fill_opacity=0.85)
-                         .move_to([2.6 + 0.16 * i, -2.3 + 0.33 * v / 2, 0]) for i, v in enumerate(lam)])
+                         .move_to([2.0 + 0.14 * i, -2.3 + 0.33 * v / 2, 0]) for i, v in enumerate(lam)])
         s2 = float(np.asarray(p["vals"])[k:].mean())
-        fog = DashedLine([2.5, -2.3 + 0.33 * s2, 0], [2.6 + 0.16 * 30, -2.3 + 0.33 * s2, 0], color=NOISE, stroke_width=2.5)
+        fog = DashedLine([1.9, -2.3 + 0.33 * s2, 0], [2.0 + 0.14 * 30, -2.3 + 0.33 * s2, 0], color=WHITE, stroke_width=3)
         bl = label(rf"the eigenvalues, \ $k = {k}$ kept: \\ the rest become the fog $\sigma^2 = {s2:.2f}$", font_size=22,
                    color=GREY_A).next_to(bars_, UP, buff=0.3)
         with self.voiceover(
@@ -149,8 +153,9 @@ class PPCA(VoiceoverScene):
             "the training pages, every extra direction helps. <bookmark mark='b'/> " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg))
-            vo.wait_until("a")
             self.play(Create(ctr), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Indicate(lg[0], color=GREY_B))
             vo.wait_until("b")
             self.play(Create(cte), Create(fl), run_time=2.0)
             self.play(FadeIn(pk, scale=1.5), FadeIn(res))

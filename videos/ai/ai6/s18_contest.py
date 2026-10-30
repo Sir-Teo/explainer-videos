@@ -19,6 +19,7 @@ class Contest(VoiceoverScene):
         self.board()
         self.cultures()
         self.tables()
+        self.today()
 
     # ------------------------------------------------------------------
     def board(self):
@@ -190,5 +191,53 @@ class Contest(VoiceoverScene):
             self.play(FadeIn(fm[3]), FadeIn(fm[4]))
             vo.wait_until("d")
             self.play(FadeIn(fm[5]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def today(self):
+        rows = [
+            (r"logistic regression", r"the softmax at the top of every language model", r"Parts 9, 13"),
+            (r"least squares, \ ridge", r"linear probes that read concepts out of networks; \ weight decay", r"Parts 11, 30"),
+            (r"the lasso's $|w|$ penalty", r"sparse autoencoders, \ which pull features out of a model", r"Part 30"),
+            (r"kernels", r"the neural tangent kernel; \ attention as a kernel smoother", r"Parts 8, 13"),
+            (r"the widest margin", r"where gradient descent drifts on separable data", r"Part 8"),
+            (r"nearest neighbours", r"retrieval, \ and language models that look things up", r"Part 15"),
+            (r"boosted trees", r"tables and search ranking, \ still", r"this chapter"),
+            (r"calibration", r"do a language model's probabilities mean anything?", r"Part 31"),
+        ]
+        head = label(r"How the classics live on", font_size=38).to_edge(UP, buff=0.3)
+        lines = VGroup()
+        for a, b, c_ in rows:
+            la = label(a, font_size=24, color=HL)
+            lb = label(b, font_size=22, color=WHITE)
+            lc = label(c_, font_size=20, color=GREY_B)
+            lines.add(VGroup(la, lb, lc))
+        for k, ln in enumerate(lines):
+            y = 2.3 - 0.62 * k
+            ln[0].move_to([-3.4, y, 0], aligned_edge=RIGHT)
+            ln[1].move_to([-3.1, y, 0], aligned_edge=LEFT)
+            ln[2].move_to([6.7, y, 0], aligned_edge=RIGHT)
+            if ln[1].get_right()[0] > ln[2].get_left()[0] - 0.2:
+                ln[1].scale_to_fit_width(ln[2].get_left()[0] - 0.2 - ln[1].get_left()[0]).align_to([-3.1, 0, 0], LEFT)
+        arrows = VGroup(*[MathTex(r"\rightarrow", font_size=26, color=GREY_C).move_to([-3.25, ln.get_y(), 0]) for ln in lines])
+        for a_, ln in zip(arrows, lines):
+            ln[0].shift(LEFT * 0.12)
+        with self.voiceover(
+            "None of this went away; it moved inside the big models. <bookmark mark='a'/> The last layer of every "
+            "language model is a logistic regression over its vocabulary. Linear probes, fitted by least squares, "
+            "read concepts out of a network, and ridge's penalty is weight decay. <bookmark mark='b'/> The lasso's "
+            "absolute-value penalty is how sparse autoencoders pull features out of a model. Kernels describe very "
+            "wide networks, and attention is a kernel smoother. <bookmark mark='c'/> Nearest neighbours became "
+            "retrieval. And boosted trees still run the world's tables and search rankings, while the question "
+            "naive Bayes raised, whether a model's probabilities mean anything, is asked of every chatbot."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(VGroup(lines[k], arrows[k])) for k in range(2)], lag_ratio=0.4))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(VGroup(lines[k], arrows[k])) for k in range(2, 5)], lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(VGroup(lines[k], arrows[k])) for k in range(5, 8)], lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()

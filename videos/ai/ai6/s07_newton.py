@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai6.common import (BAD, HIST, HL, chapter, line_in_box, load, page_dots, page_plane, plot, pow10,
-                                  sci_tex)
+                                  sci_tex, side_ladder)
 
 NEWTON, GD = C.REWARD, C.MODEL_Q
 
@@ -17,6 +17,7 @@ class Newton(VoiceoverScene):
                 "Chapter six. Newton's method.")
         self.derive()
         self.race()
+        self.digits()
         self.runaway()
 
     # ------------------------------------------------------------------
@@ -133,6 +134,46 @@ class Newton(VoiceoverScene):
             self.play(FadeIn(g70), FadeIn(g70n))
             self.play(Create(cn), Create(cg), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(r_) for r_ in res], lag_ratio=0.4))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def digits(self):
+        ir = load("irls")
+        gaps = [g_ for g_ in ir["newton_gap"][1:] if g_ > 0]
+        dig = [-math.log10(g_) for g_ in gaps]
+        n = len(dig)
+        g = plot([0.4, n + 0.6, 1], [0, 16, 4], x_length=6.4, y_length=4.2, xticks=list(range(1, n + 1)),
+                 yticks=[0, 4, 8, 12, 16], center=[-2.6, -0.4, 0], xlabel=r"Newton step",
+                 ylabel=r"correct digits of the minimum \ ($-\log_{10}$ of the gap)")
+        ax = g.ax
+        bars = VGroup()
+        for k, d in enumerate(dig, 1):
+            p0, p1 = ax.c2p(k - 0.32, 0), ax.c2p(k + 0.32, d)
+            bars.add(Rectangle(width=p1[0] - p0[0], height=max(p1[1] - p0[1], 0.01), stroke_width=0, fill_color=NEWTON,
+                               fill_opacity=0.85).move_to((p0 + p1) / 2))
+        vals = VGroup(*[MathTex(f"{d:.1f}", font_size=22, color=NEWTON).next_to(b, UP, buff=0.06) for b, d in zip(bars, dig)])
+        colors = {r"e_{k+1}": NEWTON, r"e_k": NEWTON}
+        rows = [cmath(r"e_{k+1}", r"\;\approx\;", r"C\,e_k^2", font_size=40, colors=colors),
+                cmath(r"\text{digits}_{k+1}", r"\;\approx\;", r"2\times\text{digits}_k", font_size=40)]
+        whys = [why(r"near the bottom: \\ the error squares"), why(r"take $-\log_{10}$")]
+        step = side_ladder(self, rows, whys, 3.8, 2.9, keep=2, top=2.4, buff=0.5)
+        last = dig[-3:]
+        doubling = len(last) == 3 and last[1] > 1.4 * last[0] and last[2] > 1.4 * last[1]
+        say = (f"the correct digits go {last[0]:.0f}, {last[1]:.0f}, {last[2]:.0f}: roughly doubling, until the "
+               "computer's sixteen digits run out." if doubling else
+               f"the correct digits go {last[0]:.0f}, {last[1]:.0f}, {last[2]:.0f}.")
+        with self.voiceover(
+            "Why is Newton so fast at the end? Near the bottom, the loss is almost exactly a parabola, and each step's "
+            "error is about the square of the last one. <bookmark mark='a'/> Square a small number and its zeros "
+            "double. <bookmark mark='b'/> On the seventy rates, step by step, " + say
+        ) as vo:
+            self.play(FadeIn(g))
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.25), FadeIn(vals), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

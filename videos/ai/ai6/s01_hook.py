@@ -160,7 +160,7 @@ class Hook(VoiceoverScene):
             for k, mk in enumerate("abcdefghijk"):
                 vo.wait_until(mk)
                 self.play(FadeIn(marks[k + 1], shift=(UP if (k + 1) % 2 == 0 else DOWN) * 0.2))
-        self.wait(0.3)
+        self.wait(1.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------

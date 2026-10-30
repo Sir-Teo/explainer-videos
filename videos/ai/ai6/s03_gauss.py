@@ -43,8 +43,8 @@ class GaussMarkov(VoiceoverScene):
                 why(r"$DD^{\top}$ is never negative")]
         step = ladder(self, rows, whys, keep=5, top=1.35, x=-1.6, buff=0.3, edge=6.8)
         with self.voiceover(
-            "Why squares, rather than absolute values, or anything else? Gauss gave an answer in 1821, and Markov "
-            "rediscovered it: least squares is the best linear unbiased estimate. <bookmark mark='a'/> Take any "
+            "And if the noise isn't a bell? Gauss gave a second answer in 1821, and Markov rediscovered it: least "
+            "squares is still the best linear unbiased estimate. <bookmark mark='a'/> Take any "
             "other estimate that's linear in the data: least squares, plus some matrix D. <bookmark mark='b'/> For "
             "it to be right on average, whatever the true line, D times A must vanish. <bookmark mark='c'/> Its "
             "spread is sigma squared times the matrix times its transpose. <bookmark mark='d'/> Multiply out: the "
