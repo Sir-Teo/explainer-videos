@@ -53,8 +53,9 @@ class Quadratic(VoiceoverScene):
             "one over kappa plus one, where kappa, the condition number, is the largest curvature over the smallest."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=C.LR, scale_factor=1.04))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")

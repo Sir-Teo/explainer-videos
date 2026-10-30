@@ -261,7 +261,7 @@ ZH = {
         "这是一个真实的梯度，来自一个在小说上训练的小Transformer：一个{shape[0]}乘{shape[1]}的矩阵。<bookmark mark='a'/>它的奇异值，从大到小，对数坐标。第一步时，它们下降得很慢。<bookmark mark='b'/>几步之后就塌了下去：到第{pk['step']}步，前八个方向承载了梯度的{100 * pk['top8']:.1f}%。<bookmark mark='c'/>后来谱又慢慢填回来：到第{last['step']}步，前八个方向仍然承载着{100 * last['top8']:.0f}%，而方向一共有{n}个。",
 
     'f"That is GaLore\'s idea':
-        "这就是GaLore的想法，来自Jiawei Zhao、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{fmt_int(mems['adam'])}个数，秩32时{fmt_int(mems['galore32'])}个，秩8时{fmt_int(mems['galore8'])}个。在大规模上，论文报告优化器内存最多减少65%，而且配合8位状态，在一张24GB的显卡上预训练了一个70亿参数的模型。",
+        "这就是GaLore的想法，来自Jiawei Zhao、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{mems['adam']:,}个数，秩32时{mems['galore32']:,}个，秩8时{mems['galore8']:,}个。在大规模上，论文报告优化器内存最多减少65%，而且配合8位状态，在一张24GB的显卡上预训练了一个70亿参数的模型。",
 
     'f"Does a narrow window cost anything?':
         "窄窗口有代价吗？我们用Adam，以及秩32和秩8的GaLore训练这个模型，每种都在三个学习率里取最好的，各跑三个随机种子。<bookmark mark='a'/>训练曲线，取平均。<bookmark mark='b'/>留出数据上的损失：Adam {mean['adam']:.3f}，秩32 {mean['galore32']:.3f}，秩8 {mean['galore8']:.3f}。<bookmark mark='c'/>{verdict}",
@@ -374,7 +374,7 @@ ZH = {
     'Chapter fifteen.': '第15章。最少要多少个数，才能保住距离？',
 
     'f"A consequence that sounds impossible.':
-        "一个听起来不可能的推论。<bookmark mark='a'/>把GPT-2的一千个向量乘上同一个随机矩阵，把768个数压成几个。<bookmark mark='b'/>压到{ks[0]}个，距离全乱了；{ks[1]}个、{ks[2]}个：好一些。<bookmark mark='c'/>到{ks[3]}个，有{100 * j[f'within10_{ks[3]}']:.0f}%的距离变化不到10%；到{ks[4]}个，{100 * j[f'within10_{ks[4]}']:.1f}%。",
+        "一个听起来不可能的推论。<bookmark mark='a'/>把GPT-2的一千个向量乘上同一个随机矩阵，把768个数压成几个。<bookmark mark='b'/>压到{ks[0]}个，距离全乱了；{ks[1]}个、{ks[2]}个：好一些。<bookmark mark='c'/>到{ks[3]}个，有{w_a:.0f}%的距离变化不到10%；到{ks[4]}个，{w_b:.1f}%。",
 
     'f"The Johnson-Lindenstrauss lemma, from 1984':
         "约翰逊–林登斯特劳斯引理，1984年，这里用的是达斯古普塔和古普塔2003年的形式。<bookmark mark='a'/>要让n个点之间的每个距离平方都保持在1加减ε倍以内，随机投影到大约4 log n除以ε平方维就够了。<bookmark mark='b'/>对我们的一千个点、10%的误差：{int(j['jl_k']):,}维。起始的维数根本没有出现。我们来证明它。",
