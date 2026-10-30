@@ -77,12 +77,12 @@ class Dicts(VoiceoverScene):
             cmath(r"f = ", r"\operatorname{TopK}_k", r"\big(W_e x + b_e\big)", colors=colors, font_size=30),
             cmath(r"f_i = z_i \cdot \mathbf{1}[z_i >", r"\theta", r"_i], \quad \text{loss} + ", r"\lambda", r"\|f\|_0",
                   colors=colors, font_size=30),
-        ).arrange(DOWN, buff=0.7, aligned_edge=LEFT).move_to([-3.4, 0.6, 0])
-        names = VGroup(label(r"L1 \ (Bricken et al.; \ Cunningham et al., \ 2023)", font_size=19, color=L1C),
-                       label(r"TopK \ (Gao et al., \ OpenAI, \ 2024): \ exactly $k$ on, \ no penalty", font_size=19,
+        ).arrange(DOWN, buff=0.7, aligned_edge=LEFT).move_to([-3.8, 0.6, 0])
+        names = VGroup(label(r"L1 \ (Bricken et al.; \ Cunningham et al., \ 2023)", font_size=17, color=L1C),
+                       label(r"TopK \ (Gao et al., \ OpenAI, \ 2024): \ exactly $k$ on, \ no penalty", font_size=17,
                              color=TKC),
-                       label(r"JumpReLU \ (Rajamanoharan et al., \ DeepMind, \ 2024): \ a learned threshold each",
-                             font_size=19, color=JRC))
+                       label(r"JumpReLU \ (Rajamanoharan et al., \ DeepMind, \ 2024): \\ a learned threshold each",
+                             font_size=17, color=JRC))
         for n_, e_ in zip(names, eqs):
             n_.next_to(e_, DOWN, buff=0.1).align_to(e_, LEFT)
         st = label(r"the step in JumpReLU has no gradient: \ it is trained \\ through a straight-through estimate with "
@@ -91,14 +91,14 @@ class Dicts(VoiceoverScene):
         th = [0.5, 1.0, 0.1, 1.2, 0.3, 0.6, 0.4, 0.9, 0.4, 0.6, 0.6, 0.2]
         base_y, hs = -1.0, 1.2
         zb = VGroup(*[Rectangle(width=0.3, height=v * hs, stroke_width=0, fill_color=GREY_B, fill_opacity=0.85)
-                      .move_to([1.4 + 0.46 * i, base_y + v * hs / 2, 0]) for i, v in enumerate(zv)])
-        zbase = Line([1.1, base_y, 0], [1.4 + 0.46 * 11 + 0.3, base_y, 0], color=GREY_C, stroke_width=1.5)
+                      .move_to([2.1 + 0.42 * i, base_y + v * hs / 2, 0]) for i, v in enumerate(zv)])
+        zbase = Line([1.8, base_y, 0], [2.1 + 0.42 * 11 + 0.3, base_y, 0], color=GREY_C, stroke_width=1.5)
         zl = label(r"one vector's $12$ candidate features \ (schematic)", font_size=20, color=GREY_A).next_to(zbase, DOWN, buff=0.15)
         top3 = set(np.argsort(zv)[-3:].tolist())
-        tkl = label(r"TopK, \ $k = 3$: \ keep the $3$ biggest", font_size=22, color=TKC).move_to([3.9, 2.0, 0])
+        tkl = label(r"TopK, \ $k = 3$: \ keep the $3$ biggest", font_size=22, color=TKC).move_to([4.4, 2.0, 0])
         thl = VGroup(*[Line([b_.get_x() - 0.2, base_y + t_ * hs, 0], [b_.get_x() + 0.2, base_y + t_ * hs, 0], color=JRC,
                             stroke_width=3) for b_, t_ in zip(zb, th)])
-        jrl = label(r"JumpReLU: \ a threshold line per feature", font_size=22, color=JRC).move_to([3.9, 2.0, 0])
+        jrl = label(r"JumpReLU: \ a threshold line per feature", font_size=22, color=JRC).move_to([4.4, 2.0, 0])
         with self.voiceover(
             "Two fixes came in 2024. <bookmark mark='a'/> Leo Gao and colleagues at OpenAI dropped the penalty: TopK "
             "keeps each vector's k largest features and zeroes the rest, so sparsity is set directly and nothing is "
@@ -201,7 +201,7 @@ class Dicts(VoiceoverScene):
                              font_size=22, color=dict(l1=L1C, jumprelu=JRC, topk=TKC)[k]) for k in order])
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         th = label(r"at $16$ features per vector:", font_size=22, color=WHITE)
-        box = VGroup(th, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(lg, DOWN, buff=0.4).align_to(lg, LEFT)
+        box = VGroup(th, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.0, -0.4, 0])
         fin = {k: at[k] for k in at if np.isfinite(at[k])}
         best, worst = min(fin, key=fin.get), max(fin, key=fin.get)
         n_sp, n_l1 = len(o["ks"]), len(o["l1s"])
@@ -248,7 +248,7 @@ class Dicts(VoiceoverScene):
         txt = label(r"\\ ".join(rf"{nm[k]}: \ ${fin[k]:.2f}$ \ (${gap[k]:+.2f}$)" for k in sorted(fin, key=fin.get)),
                     font_size=22, color=WHITE)
         box = VGroup(label(r"at $16$ features per vector:", font_size=22), txt).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        box.next_to(lg, DOWN, buff=0.4).align_to(lg, LEFT)
+        box.move_to([4.0, -0.4, 0])
         with self.voiceover(
             "Variance is a proxy. What matters is whether the model still works when it runs on the dictionary's "
             "rebuild instead of its own vectors. <bookmark mark='a'/> So splice each rebuild into the transformer "
@@ -288,7 +288,19 @@ class Dicts(VoiceoverScene):
                       label(rf"TopK, $k = 16$, $2{{,}}048$ latents: \ ${d2048}$ dead", font_size=22, color=TKC),
                       label(rf"the sparsest: \ TopK $k = {k0:g}$: \ ${dk:.0f}$ dead; \ JumpReLU $\lambda = {jl:g}$: \ ${dj:.0f}$ "
                             r"\ (means of $3$ seeds)", font_size=20, color=GREY_A))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, -1.0, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).scale(0.85).to_corner(DL, buff=0.35)
+        cfgs = [(k, q, col) for k, key, col, _ in KINDS for q in o[key]] + [("topk_aux", 16, TKC)]
+        vals = [float(np.mean([o[f"{k}_{q:g}_{s_}_dead"] for s_ in o["seeds"]])) for k, q, _ in cfgs]
+        top = max(max(vals), 1.0)
+        gd = axes([0, len(cfgs)], [0, top * 1.15], x_length=6.2, y_length=3.6, ylabel=r"dead latents of $512$ \ (mean of $3$ seeds)",
+                  yticks=ticks(0, top, 3), center=[3.4, 0.6, 0])
+        bd = VGroup()
+        for i, ((k, q, col), v) in enumerate(zip(cfgs, vals)):
+            r = Rectangle(width=6.2 / len(cfgs) * 0.7, height=max(v / (top * 1.15) * 3.6, 0.01), stroke_width=0,
+                          fill_color=col, fill_opacity=0.9 if k != "topk_aux" else 0.5).move_to(gd.ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
+            nm = {"l1": rf"$\lambda\,{q:g}$", "jumprelu": rf"$\lambda\,{q:g}$", "topk": rf"$k\,{q:g}$", "topk_aux": r"$+$AuxK"}[k]
+            bd.add(VGroup(r, label(nm, font_size=14, color=col).rotate(PI / 2).next_to(gd.ax.c2p(i + 0.5, 0), DOWN, buff=0.08)))
+        gl = legend([(col, nm) for _, _, col, nm in KINDS], font_size=16).next_to(gd, UP, buff=0.1).align_to(gd, RIGHT)
         few = max(d16 + [d2048]) <= 5
         verdict = ("At our size almost nothing dies, so the fix has little to do here; at millions of latents it "
                    "is what keeps the dictionary alive." if few else
@@ -307,7 +319,8 @@ class Dicts(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(aux, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.3))
+            self.play(FadeOut(aux), FadeIn(gd), FadeIn(gl), LaggedStart(*[FadeIn(b) for b in bd], lag_ratio=0.05),
+                      LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.3))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
         self.wait(0.3)

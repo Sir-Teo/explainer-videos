@@ -38,8 +38,9 @@ class Phase(VoiceoverScene):
         a1 = Arrow(ln.n2p(0), ln.n2p(w1), buff=0, color=F1, stroke_width=6, max_tip_length_to_length_ratio=0.3) if abs(w1) > 0.05 else Dot(ln.n2p(0), color=F1)
         a2 = Arrow(ln.n2p(0) + DOWN * 0.18, ln.n2p(w2) + DOWN * 0.18, buff=0, color=F2, stroke_width=6,
                    max_tip_length_to_length_ratio=0.3) if abs(w2) > 0.05 else Dot(ln.n2p(0) + DOWN * 0.18, color=F2)
-        t = label(title, font_size=20, color=color).next_to(ln, UP, buff=0.35)
-        box = SurroundingRectangle(VGroup(ln, a1, a2, t), buff=0.2, color=color, corner_radius=0.1, stroke_width=2)
+        t = label(title, font_size=20, color=GREY_A if color == PH[0] else color).next_to(ln, UP, buff=0.35)
+        box = SurroundingRectangle(VGroup(ln, a1, a2, t), buff=0.2, color=GREY_B if color == PH[0] else color,
+                                   corner_radius=0.1, stroke_width=2)
         return VGroup(box, ln, a1, a2, t)
 
     def options(self):
@@ -52,8 +53,10 @@ class Phase(VoiceoverScene):
                       self.line_pic(0, 1, r"feature $2$ takes the dimension", PH[1]),
                       self.line_pic(1, -1, r"share it: \ opposite directions", PH[2])).arrange(RIGHT, buff=0.5).move_to(DOWN * 0.7)
         why_ = label(r"sharing works only if the two are rarely on together: \\ the ReLU and a negative bias cut off "
-                     r"the other's shadow", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
-        cite_ = cite(r"Elhage et al., \textit{Toy Models of Superposition} (2022), \ \S 4", corner=UR)
+                     r"the other's shadow", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.9)
+        for p_ in pics:
+            p_.set_opacity(0.2)
+        cite_ = cite(r"Elhage et al., \textit{Toy Models of Superposition} (2022), \ \S 4", corner=DR)
         with self.voiceover(
             "Chapter six showed superposition happen. Elhage and colleagues asked when it happens, and drew the "
             "answer as a phase diagram. <bookmark mark='a'/> The smallest case: two features, squeezed through a "
@@ -63,15 +66,15 @@ class Phase(VoiceoverScene):
             "in opposite directions, and let the ReLU, with a negative bias, cut off each one's shadow on the other. "
             "Sharing only pays when they are rarely on at the same time."
         ) as vo:
-            self.play(Write(f), FadeIn(cite_))
+            self.play(Write(f), FadeIn(cite_), FadeIn(pics))
             vo.wait_until("a")
             self.play(FadeIn(sub))
             vo.wait_until("b")
-            self.play(FadeIn(pics[0], shift=UP * 0.15))
+            self.play(pics[0].animate.set_opacity(1))
             vo.wait_until("c")
-            self.play(FadeIn(pics[1], shift=UP * 0.15))
+            self.play(pics[1].animate.set_opacity(1))
             vo.wait_until("d")
-            self.play(FadeIn(pics[2], shift=UP * 0.15), FadeIn(why_))
+            self.play(pics[2].animate.set_opacity(1), FadeIn(why_))
         self.wait(0.3)
         self.clear_scene()
 

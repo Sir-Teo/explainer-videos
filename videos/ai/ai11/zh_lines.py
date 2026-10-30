@@ -293,6 +293,8 @@ ZH = {
         "<bookmark mark='e'/>{etxt}<bookmark mark='c'/>{said2}",
     ' Both beat no decay at all': "两者都胜过完全不衰减，所以这里它确实在起正则化的作用。",
     ' Neither beats no decay by much': "两者都没有比不衰减好多少：即使在这里，它的正则化作用也很弱。",
+    " AdamW's best is at our largest learning rate": "AdamW最好的设置在我们最大的学习率上，所以它也许还能再好一点。",
+    " The L2 penalty's best is at our largest learning rate": "L2惩罚最好的设置在我们最大的学习率上，所以它也许还能再好一点。",
     ' Both bests are at our largest learning rate': "两边最好的设置都在我们最大的学习率上，所以更大的学习率也许对两者都有帮助。",
     " And in AdamW's grid the best decay strength barely moves":
         "在AdamW的网格里，最好的衰减强度几乎不随学习率移动，这正是解耦所承诺的：两个旋钮可以分开调。",
@@ -518,9 +520,16 @@ ZH = {
         "在每种长度上，冷却分支都胜过训练了恰好那么长的余弦训练。",
     'the cool-down branches and the cosine runs trade places':
         "冷却分支和余弦训练互有胜负：没有哪种调度在每种长度上都赢。",
-    'So a high learning rate travels; a falling one settles':
-        "所以高学习率负责赶路，下降的学习率负责落定；而预热–稳定–衰减让你可以事后再决定什么时候落定。我们能不能"
+    "'So a high learning rate travels; a falling one settles":
+        "所以高学习率负责赶路，下降的学习率负责落定；而预热–稳定–衰减让你可以事后再决定什么时候落定。{said}我们能不能"
         "干脆不要调度？",
+    ' On our small model, at one peak rate, the cosine still ended lower.':
+        "在我们的小模型上，用同一个峰值学习率，余弦调度最后还是更低。",
+    'f"here the cosine runs win at every length':
+        "这里余弦训练在每种长度上都赢，领先{min(diffs):.3f}到{max(diffs):.3f}比特：在我们的小模型上，占训练五分之一"
+        "的冷却，补不回高学习率留在山坡上的那部分。",
+    "f'one schedule-free run beats the best scheduled run at every length":
+        "一次免调度训练在每种长度上都胜过最好的调度训练，领先{-max(gaps):.3f}到{-min(gaps):.3f}比特。",
 
     # ------------------------------------------------------------------ ScheduleFree
     'Chapter fourteen. Without a schedule.': '第14章。不用调度。',
@@ -545,8 +554,8 @@ ZH = {
     'f"Does it work here?':
         "它在这里管用吗？在我们的字符模型上用免调度的AdamW，它的学习率从AdamW学习率的四个倍数里挑选，最好的是"
         "{mb:g}倍。一次{S:,}步的训练，边走边打分，对比第13章那些各自只为一种长度训练的调度。<bookmark mark='a'/>结论："
-        "{verdict}<bookmark mark='e'/>{edge}<bookmark mark='b'/>这张表有个细节：调度训练的数字是在全部留出文本上算的，"
-        "免调度的是从它的曲线上读出来的，只用了五分之一的文本。",
+        "{verdict}<bookmark mark='e'/>{edge}<bookmark mark='b'/>在全部留出文本上、{Sm:,}步时核对一下：免调度"
+        "{f_sf:.3f}比特，余弦{f_cos:.3f}，预热–稳定–衰减{f_wsd:.3f}。",
     ' Its best rate was at the edge of our grid': "它最好的学习率在我们网格的边上，所以它可能还能再好一点。",
     'at every length, one schedule-free run matches the best scheduled run':
         "在每种长度上，一次免调度的训练都和为那个长度训练的最好的调度不相上下。",

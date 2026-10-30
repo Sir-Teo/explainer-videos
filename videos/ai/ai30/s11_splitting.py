@@ -35,7 +35,7 @@ class Splitting(VoiceoverScene):
         par = sp["parent"]
         mid, big = list(sp["mid"]), list(sp["big"])
         sizes = [int(v) for v in sp["sizes"]]
-        p0 = feature_panel(par, 3.6, FEAT, head=rf"${sizes[0]}$ latents: \ latent {par['id']}").move_to([-4.6, 0.2, 0])
+        p0 = feature_panel(par, 3.6, FEAT, n=4, head=rf"${sizes[0]}$ latents: \ latent {par['id']}").move_to([-4.6, 0.2, 0])
         pm = VGroup(*[feature_panel(f, 3.4, FEAT, n=2, head=rf"cos ${f['cos']:.2f}$") for f in mid[:3]]).arrange(DOWN, buff=0.25)
         pm.move_to([-0.3, 0.2, 0])
         pb = VGroup(*[feature_panel(f, 3.4, FEAT, n=2, head=rf"cos ${f['cos']:.2f}$") for f in big[:4]]).arrange(DOWN, buff=0.2)
@@ -46,6 +46,9 @@ class Splitting(VoiceoverScene):
         hb = label(rf"${sizes[2]:,}$ latents".replace(",", "{,}"), font_size=22, color=WHITE).next_to(pb, UP, buff=0.15)
         ar1 = Arrow(p0.get_right(), pm.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         ar2 = Arrow(pm.get_right(), pb.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
+        whole = VGroup(p0, pm, pb, ar1, ar2, hm, hb)
+        f_ = min(13.4 / whole.width, 6.2 / whole.height)
+        whole.scale(f_).move_to(DOWN * 0.15)
         nf, ncand = int(sp["n_same_char_families"]), int(sp["n_candidates"])
         tag = note(r"TopK, $k = 16$; \ the same data and steps; \ children: \ decoder cosine above $0.4$, \ the same character").to_corner(DR, buff=0.2)
         cite_ = cite(r"Bricken et al., \textit{Towards Monosemanticity} (2023): \ feature splitting", corner=UL)
@@ -92,6 +95,19 @@ class Splitting(VoiceoverScene):
         res = label(rf"a probe reads \textit{{upper case}} at ${100 * float(a['probe_acc']):.0f}\%$ \\ the dictionary's best "
                     rf"latent for it fires on ${100 * np.mean(rec):.0f}\%$ of capitals \\ absorbed: \ ${100 * np.mean(ab):.0f}\%$ "
                     r"of capitals \ (mean of $3$ seeds)", font_size=20, color=WHITE).move_to([-3.2, -1.6, 0])
+        def bubble(t, col, op):
+            c = Circle(radius=0.75, stroke_color=col, stroke_width=3, fill_color=col, fill_opacity=0.15 * op)
+            return VGroup(c, label(t, font_size=22, color=col).move_to(c)).set_opacity(op)
+
+        gen = bubble(r"upper \\ case", GREY_B, 0.35).move_to([1.6, -1.2, 0])
+        spec = bubble(r"capital \\ T", C.BITS, 1.0).move_to([4.4, -1.2, 0])
+        word = data_text("The", font="DejaVu Sans Mono", font_size=40, color=WHITE).move_to([3.0, 1.2, 0])
+        lt = Arrow(word.get_bottom(), spec.get_top(), buff=0.1, color=C.BITS, stroke_width=3)
+        lg_ = DashedLine(word.get_bottom(), gen.get_top(), color=GREY_C, dash_length=0.08)
+        ab = label(r"fires, \ and carries \\ the upper-case direction", font_size=18, color=C.BITS).next_to(spec, DOWN, buff=0.2)
+        si = label(r"silent", font_size=18, color=GREY_B).next_to(gen, DOWN, buff=0.2)
+        sch = VGroup(gen, spec, word, lt, lg_, ab, si)
+        sch_tag = note(r"schematic").next_to(sch, RIGHT, buff=0.3).align_to(sch, DOWN)
         with self.voiceover(
             "Splitting has a nastier cousin. <bookmark mark='a'/> Some features are general, like 'this is a "
             "capital letter'; some are specific, like 'this is a capital T'. A sparse dictionary would rather use "
@@ -105,7 +121,10 @@ class Splitting(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dc), FadeIn(hc))
             vo.wait_until("a")
+            self.play(FadeIn(word), GrowArrow(lt), FadeIn(spec), Create(lg_), FadeIn(gen), FadeIn(sch_tag))
+            self.play(FadeIn(ab), FadeIn(si))
             vo.wait_until("b")
+            self.play(FadeOut(sch), FadeOut(sch_tag))
             self.play(FadeIn(res))
             vo.wait_until("c")
             self.play(FadeIn(g), FadeIn(gl), LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bs], lag_ratio=0.1),
@@ -127,16 +146,18 @@ class Splitting(VoiceoverScene):
         # nested boxes: the first m latents must work alone
         nest = VGroup()
         for i, m in enumerate(pre + [F]):
-            wdt = 1.2 + 1.6 * i
+            wdt = 1.2 + 1.2 * i
             nest.add(RoundedRectangle(width=wdt, height=0.5 + 0.35 * i, corner_radius=0.08, stroke_color=MAT,
-                                      stroke_width=2, fill_opacity=0).move_to([-4.6 + wdt / 2, 0.6, 0]))
+                                      stroke_width=2, fill_opacity=0).move_to([-6.3 + wdt / 2, -0.9, 0]))
             nest.add(MathTex(str(m), font_size=20, color=MAT).next_to(nest[-1], UP, buff=0.04).align_to(nest[-1], RIGHT))
         stats = {}
         for kind in ("topk", "matryoshka"):
             stats[kind] = dict(rec=[float(a[f"{kind}_{s}_recall"]) for s in seeds],
                                ab=[float(a[f"{kind}_{s}_absorption"]) for s in seeds],
                                fvu=[float(a[f"{kind}_{s}_fvu"]) for s in seeds])
-        g = axes([0, 3], [0, 1], x_length=6.0, y_length=3.0, yticks=[0, 0.5, 1], center=[2.6, -1.0, 0])
+        g = axes([0, 3], [0, 1], x_length=6.0, y_length=3.0, yticks=[0, 0.5, 1], center=[3.0, -1.0, 0])
+        nl = label(r"the first $32$ latents must work alone, \\ then the first $128$, \ then all", font_size=18,
+                   color=MAT).move_to([-4.5, -2.6, 0])
         cols = {"topk": TKC, "matryoshka": MAT}
         marks = VGroup()
         for j, (key, nm) in enumerate((("rec", r"fires on capitals"), ("ab", r"capitals absorbed"),
@@ -171,7 +192,7 @@ class Splitting(VoiceoverScene):
         ) as vo:
             self.play(Write(f), FadeIn(w), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(n_) for n_ in nest], lag_ratio=0.3))
+            self.play(LaggedStart(*[Create(n_) for n_ in nest], lag_ratio=0.3), FadeIn(nl))
             vo.wait_until("b")
             self.play(FadeIn(g), FadeIn(lg))
             vo.wait_until("c")

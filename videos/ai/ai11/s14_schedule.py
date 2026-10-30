@@ -211,6 +211,10 @@ class Schedule(VoiceoverScene):
                        "within the difference between seeds.")
         elif all(d < 0 for d in diffs):
             verdict = "at every length the cool-down branch beats the cosine run trained for exactly that long."
+        elif all(d > 0 for d in diffs):
+            verdict = (f"here the cosine runs win at every length, by {min(diffs):.3f} to {max(diffs):.3f} bits: on our "
+                       "small model a cool-down of a fifth of the run doesn't recover what the high rate left on the "
+                       "hills.")
         else:
             verdict = ("the cool-down branches and the cosine runs trade places: neither schedule wins at every "
                        "length.")
@@ -239,13 +243,17 @@ class Schedule(VoiceoverScene):
         self.clear_scene()
 
     def takeaway(self):
+        s = load("schedule")
+        Ls, seeds = list(s["lengths"]), list(s["seeds"])
+        cos_wins = all(np.mean([s[f"wsdfinal_{S}_{d}"] - s[f"cosfinal_{S}_{d}"] for d in seeds]) > 0.01 for S in Ls)
         t = takeaway_card(r"Travel at a high rate, \ settle at the end",
                           r"A high rate moves fast down the river while noise keeps it up the hills; \ decaying removes "
-                          r"the noise. \ Warmup--stable--decay does it at any length, \ from one run.",
+                          r"the noise. \ Warmup--stable--decay can stop at any length, \ from one run.",
                           r"Next: \ can we skip the schedule altogether?")
+        said = (" On our small model, at one peak rate, the cosine still ended lower." if cos_wins else "")
         with self.voiceover(
             "So a high learning rate travels; a falling one settles; and warmup, stable, decay lets you decide when "
-            "to settle after the fact. Can we drop the schedule altogether?"
+            "to settle after the fact." + said + " Can we drop the schedule altogether?"
         ):
             self.play(FadeIn(t[0], shift=UP * 0.2))
             self.play(FadeIn(t[1]))

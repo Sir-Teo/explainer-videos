@@ -166,41 +166,47 @@ class ScheduleFree(VoiceoverScene):
         t = ValueTracker(0)
         live = [growing(ax, c[:, 0], np.clip(c[:, 1], lo, hi), t, SF, 3) for c in sf[:1]]
         mean = lambda key: float(np.mean([s[f"{key}_{sd}"] for sd in seeds]))  # noqa: E731
+        # every number on the same 20,000 held-out characters the curves are scored on
+        cos20 = {S_: float(np.mean([np.asarray(s[f"cos_{S_}_{sd}"])[-1, 1] for sd in seeds])) for S_ in Ls}
+        wsd20 = {S_: mean(f"wsdquick_{S_}") for S_ in Ls}
+        sf_at = {S_: float(np.mean([np.interp(S_, c[:, 0], c[:, 1]) for c in sf])) for S_ in Ls}
         pts = VGroup()
         for S_ in Ls:
-            for key, col in (("cosfinal", COS), ("wsdfinal", WSD)):
-                v = mean(f"{key}_{S_}")
+            for v, col in ((cos20[S_], COS), (wsd20[S_], WSD)):
                 if lo < v < hi:
                     pts.add(Dot(ax.c2p(S_, v), radius=0.08, color=col))
         cnt = step_counter(t, ax.get_corner(UR), DL)
-        sf_at = {S_: float(np.mean([np.interp(S_, c[:, 0], c[:, 1]) for c in sf])) for S_ in Ls}
         rows = VGroup(label(r"held-out bits, \ mean of $2$ seeds", font_size=20, color=GREY_A))
         for S_ in Ls:
-            rows.add(label(rf"${S_:,}$: \ schedule-free ${sf_at[S_]:.3f}$, \ cosine ${mean(f'cosfinal_{S_}'):.3f}$, \ "
-                           rf"WSD ${mean(f'wsdfinal_{S_}'):.3f}$".replace(",", "{,}"), font_size=20, color=WHITE))
+            rows.add(label(rf"${S_:,}$: \ schedule-free ${sf_at[S_]:.3f}$, \ cosine ${cos20[S_]:.3f}$, \ "
+                           rf"WSD ${wsd20[S_]:.3f}$".replace(",", "{,}"), font_size=20, color=WHITE))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.9, 1.2, 0])
         keep_in_frame(rows)
         lg = VGroup(label(r"schedule-free AdamW, \ one run, \ scored anytime", font_size=20, color=SF),
                     label(r"dots: \ cosine runs and cool-downs at each length", font_size=20, color=GREY_A))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(rows, DOWN, buff=0.4).align_to(rows, LEFT)
-        note_ = note(r"the curve: \ $20{,}000$ held-out characters; \ the table: \ all $100{,}000$, \ except "
-                     r"schedule-free's, \ read off its curve").to_corner(DL, buff=0.2)
+        note_ = note(r"every number here on the same $20{,}000$ held-out characters").to_corner(DL, buff=0.2)
         mb = float(s["sf_best"])
-        gaps = [sf_at[S_] - min(mean(f"cosfinal_{S_}"), mean(f"wsdfinal_{S_}")) for S_ in Ls]
-        if all(gp < 0.01 for gp in gaps):
+        gaps = [sf_at[S_] - min(cos20[S_], wsd20[S_]) for S_ in Ls]
+        if all(gp < -0.01 for gp in gaps):
+            verdict = (f"one schedule-free run beats the best scheduled run at every length, by {-max(gaps):.3f} to "
+                       f"{-min(gaps):.3f} bits.")
+        elif all(abs(gp) <= 0.01 for gp in gaps):
             verdict = "at every length, one schedule-free run matches the best scheduled run trained for that length."
         elif gaps[-1] < gaps[0]:
-            verdict = ("it trails the scheduled runs early on, and closes most of the gap by the longest length.")
+            verdict = "it trails the scheduled runs early on, and closes most of the gap by the longest length."
         else:
             verdict = ("on our model it trails the tuned schedules at every length, by "
                        f"{min(gaps):.3f} to {max(gaps):.3f} bits.")
         edge = " Its best rate was at the edge of our grid, so it might do a little better." if bool(s["sf_edge"]) else ""
+        Sm = max(Ls)
+        f_sf, f_cos, f_wsd = mean("sffinal"), mean(f"cosfinal_{Sm}"), mean(f"wsdfinal_{Sm}")
         with self.voiceover(
             "Does it work here? Schedule-free AdamW on our character model, its learning rate chosen from four "
             f"multiples of AdamW's, the best being {mb:g} times. One run of {S:,} steps, scored as it goes, against "
             "the scheduled runs of Chapter thirteen, each trained for one length. <bookmark mark='a'/> The verdict: "
-            f"{verdict} <bookmark mark='e'/>{edge} <bookmark mark='b'/> The table has a subtlety: the scheduled numbers are on all our "
-            "held-out text, the schedule-free ones read off its curve, on a fifth of it."
+            f"{verdict} <bookmark mark='e'/>{edge} <bookmark mark='b'/> Checked on all our held-out text at "
+            f"{Sm:,} steps: schedule-free {f_sf:.3f} bits, cosine {f_cos:.3f}, warmup–stable–decay {f_wsd:.3f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(note_))
             self.add(*live, cnt)
@@ -210,7 +216,7 @@ class ScheduleFree(VoiceoverScene):
             vo.wait_until("a")
             self.play(lag([FadeIn(r_) for r_ in rows], lag_ratio=0.25), run_time=2)
             vo.wait_until("b")
-            self.play(Indicate(note_, color=WHITE))
+            self.play(Indicate(rows[-1], color=WHITE))
         self.wait(0.3)
         self.clear_scene()
 

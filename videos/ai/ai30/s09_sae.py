@@ -65,7 +65,7 @@ class SAE(VoiceoverScene):
                     color=GREY_A).next_to(eqs, DOWN, buff=0.3).align_to(eqs, LEFT)
         res = VGroup(label(rf"on average ${float(s['l0']):.0f}$ of $512$ on per character", font_size=24, color=FEAT),
                      label(rf"rebuilds ${100 * (1 - float(s['fvu'])):.0f}\%$ of the variance", font_size=24, color=RESID),
-                     label(rf"spliced in: \ ${float(s['bits_spliced']):.2f}$ bits per character \ (the model: \ "
+                     label(rf"spliced in: \ ${float(s['bits_spliced']):.2f}$ bits per character \\ (the model: \ "
                            rf"${float(s['bits_clean']):.2f}$; \ the average vector: \ ${float(s['bits_mean']):.2f}$)",
                            font_size=20, color=GREY_A),
                      label(rf"trained on ${int(s['n_vectors']):,}$ vectors".replace(",", "{,}"), font_size=20, color=GREY_B))
@@ -138,7 +138,7 @@ class SAE(VoiceoverScene):
         text = str(s["demo_text"])
         k = int(np.argmax([c.isalpha() for c in text[20:]])) + 20
         S = float(st[-1])
-        g1 = axes([0, S], [0, float(l0.max()) * 1.05], x_length=5.4, y_length=2.2, ylabel=r"features on per character",
+        g1 = axes([0, S], [0, float(l0.max()) * 1.4], x_length=5.4, y_length=2.2, ylabel=r"features on per character",
                   yticks=ticks(0, float(l0.max()), 2), center=[-3.4, 1.3, 0])
         g2 = axes([0, S], [0, min(1.0, float(fv.max()) * 1.05)], x_length=5.4, y_length=2.2, xlabel=r"training steps",
                   ylabel=r"variance left unexplained", xticks=[0, S], yticks=ticks(0, min(1.0, float(fv.max())), 2),
@@ -244,7 +244,10 @@ class SAE(VoiceoverScene):
         nh = label(rf"neuron {int(s['neuron'])}, \ a typical one: \\ its strongest moments", font_size=22, color=NEURON)
         nh.next_to(nl, UP, buff=0.2)
         better = fpur.mean() > npur.mean()
-        verdict = ("The autoencoder has pulled the tangle apart." if better else
+        n_med = int(round(8 * float(npur[int(s["neuron"])])))
+        verdict = ("The features are cleaner. In a model this small, and this close to its characters, even neurons are "
+                   "fairly clean; in large models, where features are packed in superposition across neurons, single "
+                   "neurons mean many things at once, and the gap is far wider." if better else
                    "In a model this small, the gap is narrow.")
         # a neuron: one number in an MLP's hidden layer
         lay = VGroup(*[Circle(radius=0.13, stroke_color=NEURON, stroke_width=2, fill_color=NEURON if i == 3 else "#0B0F17", fill_opacity=1)
@@ -257,9 +260,8 @@ class SAE(VoiceoverScene):
                       corner=LEFT, width=4.6, color=NEURON).shift(UP * 0.3)
         with self.voiceover(
             "Why not just read the model's own neurons, the numbers in each MLP's hidden layer, part nine's units? "
-            "<bookmark mark='a'/> Here's a typical one, from the second "
-            "block, at its strongest moments: a mix of unrelated things. Neurons are polysemantic, because features are "
-            "packed in superposition across them. <bookmark mark='b'/> Count it up: of each unit's eight strongest "
+            f"<bookmark mark='a'/> Here's a typical one, from the second block, at its strongest moments: {n_med} of "
+            "the eight land on the same character. <bookmark mark='b'/> Count it up: of each unit's eight strongest "
             f"moments, how many share one character? For neurons, {8 * npur.mean():.1f} on average; for the features, "
             f"{8 * fpur.mean():.1f}. {verdict}"
         ) as vo:

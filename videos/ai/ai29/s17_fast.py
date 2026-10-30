@@ -212,7 +212,7 @@ class Fast(VoiceoverScene):
             val = MathTex(rf"{v}\%", font_size=22, color=WHITE)
             bars.add(VGroup(lab, bar, val))
         for k, r_ in enumerate(bars):
-            r_[1].move_to([1.2 + r_[1].width / 2, 1.0 - 0.62 * k, 0])
+            r_[1].move_to([1.2 + r_[1].width / 2, 1.2 - 0.75 * k, 0])
             r_[0].next_to(r_[1], UP, buff=0.06).align_to(r_[1], LEFT)
             r_[2].next_to(r_[1], RIGHT, buff=0.12)
         bl = label(r"$\pi_{0.5}$ in homes it never saw: \\ success, \ and what each kind of data adds", font_size=25,
