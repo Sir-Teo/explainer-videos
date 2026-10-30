@@ -241,6 +241,9 @@ class CTC(VoiceoverScene):
         tl = label(r"how likely each state is at each frame, \ given the whole utterance; \ white: \ the best path",
                    font_size=20, color=GREY_A).next_to(img, UP, buff=0.15)
         tot = float(d["lat_total"])
+        txt = str(d["lat_text"])
+        key = label(rf"down: \ the ${S}$ states of \\ ``{txt}'' \ ($2L + 1$, \ $L = {len(txt)}$) \\ across: \ ${T}$ frames",
+                    font_size=20, color=GREY_A).move_to([4.5, 2.5, 0])
         totl = label(rf"$\log p(\text{{transcript}}) = {tot:.2f}$, \ the same as PyTorch's CTC loss", font_size=20,
                      color=SND_C).next_to(img, DOWN, buff=0.15)
         wer = np.asarray(d["wer"], float)
@@ -270,7 +273,7 @@ class CTC(VoiceoverScene):
             "letter as independent of the others, so later systems, RNN transducers and attention-based "
             "recognizers, let each letter depend on the ones before."
         ) as vo:
-            self.play(FadeIn(img), FadeIn(ylab), FadeIn(tl))
+            self.play(FadeIn(img), FadeIn(ylab), FadeIn(tl), FadeIn(key))
             vo.wait_until("a")
             self.play(Create(pl), run_time=2.0)
             vo.wait_until("b")

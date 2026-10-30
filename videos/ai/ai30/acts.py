@@ -149,4 +149,4 @@ def token_strings(ids) -> list[str]:
     from explainer.ai import novels as N
 
     tok = N.tokenizer()
-    return [tok.decode([int(i)]) for i in ids]
+    return [tok.decode([int(i)], skip_special_tokens=False) for i in ids]
