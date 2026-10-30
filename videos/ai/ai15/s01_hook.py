@@ -80,7 +80,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def history(self):
         head = label(r"How we got here", font_size=40).to_edge(UP, buff=0.3)
-        w, fs = 4.3, 22
+        w, fs = 4.4, 27
         cards = [
             history_card(1982, r"Hopfield networks", r"a memory you return to by its content \ (Part 20)", color=HIST,
                          width=w, font_size=fs),
@@ -101,7 +101,7 @@ class Hook(VoiceoverScene):
             history_card(2026, r"hybrids in production", r"Qwen3.5, \ Kimi K3: \ three layers in four linear; \ "
                          r"million-token windows", color=HIST, width=w, font_size=fs),
         ]
-        grid = VGroup(*cards).arrange_in_grid(rows=3, cols=3, buff=(0.22, 0.25), cell_alignment=UP)
+        grid = VGroup(*cards).arrange_in_grid(rows=3, cols=3, buff=(0.22, 0.3), cell_alignment=UP)
         if grid.width > 13.4:
             grid.width = 13.4
         if grid.height > 6.5:
@@ -121,10 +121,12 @@ class Hook(VoiceoverScene):
             "2026, the frontier's open models make three of every four layers a fixed-size memory, and read a "
             "million tokens."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1))
+            for c_ in cards[1:]:  # the whole timeline is there, faint, from the start; each card lights up in turn
+                c_.set_opacity(0.18)
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1), *[FadeIn(c_) for c_ in cards[1:]])
             for k, m in enumerate("abcdefgh"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k + 1], shift=UP * 0.1), run_time=0.8)
+                self.play(cards[k + 1].animate.set_opacity(1), run_time=0.8)
         self.wait(0.3)
         self.clear_scene()
 
@@ -138,8 +140,8 @@ class Hook(VoiceoverScene):
             r"state-space models: \ HiPPO, \ S4, \ Mamba; \ and memories that learn while they read",
             r"recall, measured: \ which memory can look things up, \ and hybrids that mix them",
             r"long contexts, \ how well they really work, \ and retrieval: \ a memory outside the model",
-        ], title=r"In this part", font_size=28, width=12.6)
-        obj.rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        ], title=r"In this part", font_size=32, width=13.0)
+        obj.rows.arrange(DOWN, aligned_edge=LEFT, buff=0.5)
         obj.head.next_to(obj.rows, UP, buff=0.5).set_x(0)
         obj.next_to(title, DOWN, buff=0.3)
         if obj.height > 6.2:

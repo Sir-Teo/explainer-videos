@@ -34,16 +34,16 @@ class FastWeights(VoiceoverScene):
         N = int(h["N"])
         d = definition_card(r"Hopfield network", r"$N$ neurons of $\pm 1$; \ store patterns $\xi$ by Hebb's rule, "
                             r"$W = \tfrac1N \sum_\mu \xi^\mu \xi^{\mu\top}$; \ recall: \ set each neuron to the sign of "
-                            r"$W s$, \ one at a time, \ until nothing changes", color=HIST, width=6.6, font_size=21)
+                            r"$W s$, \ one at a time, \ until nothing changes", color=HIST, width=7.0, font_size=23)
         d.to_corner(UL, buff=0.3)
-        stored = VGroup(*[bits_grid(p, size=0.85) for p in pats]).arrange(RIGHT, buff=0.18)
+        stored = VGroup(*[bits_grid(p, size=1.0) for p in pats]).arrange(RIGHT, buff=0.18)
         sl = label(rf"${len(pats)}$ stored patterns of ${N}$ neurons", font_size=20, color=GREY_A)
         st = VGroup(stored, sl.next_to(stored, DOWN, buff=0.12)).to_corner(UR, buff=0.4)
-        cue = bits_grid(frames[0], size=2.6).move_to([-3.4, -1.6, 0])
+        cue = bits_grid(frames[0], size=2.9).move_to([-3.6, -1.45, 0])
         cl = label(r"the cue: \ pattern 1, \ $30$ of $100$ bits flipped", font_size=20, color=GREY_A).next_to(cue, DOWN, buff=0.15)
         g = axes([0, len(en) - 1], [float(en.min()) * 1.05, float(en.max()) * 0.9 if en.max() < 0 else float(en.max())],
-                 x_length=4.6, y_length=2.6, xlabel=r"updates, \ in fives", ylabel=r"energy \ $E = -\tfrac12 s^{\top} W s$",
-                 center=[2.6, -1.5, 0])
+                 x_length=5.0, y_length=2.8, xlabel=r"updates, \ in fives", ylabel=r"energy \ $E = -\tfrac12 s^{\top} W s$",
+                 center=[2.7, -1.45, 0])
         ax = g.ax
         dot = Dot(ax.c2p(0, en[0]), radius=0.06, color=HIST)
         path = VMobject(color=HIST, stroke_width=3).set_points_as_corners([ax.c2p(0, en[0]), ax.c2p(0, en[0]) + 1e-4 * RIGHT])
@@ -57,16 +57,16 @@ class FastWeights(VoiceoverScene):
             "<bookmark mark='c'/> Every update can only lower an energy, so the state rolls downhill into the nearest "
             "valley: the stored pattern, recovered from a damaged copy."
         ) as vo:
-            self.play(FadeIn(d, shift=UP * 0.1), FadeIn(cite_))
+            self.play(FadeIn(d, shift=UP * 0.1), FadeIn(cite_), FadeIn(st), FadeIn(g))
             vo.wait_until("a")
-            self.play(FadeIn(st))
+            self.play(Indicate(stored, color=HIST, scale_factor=1.05))
             vo.wait_until("b")
-            self.play(FadeIn(cue), FadeIn(cl), FadeIn(g), FadeIn(dot))
+            self.play(FadeIn(cue), FadeIn(cl), FadeIn(dot))
             vo.wait_until("c")
             pts = [ax.c2p(0, en[0])]
             for k in range(1, len(frames)):
                 pts.append(ax.c2p(k, en[min(k, len(en) - 1)]))
-                self.play(Transform(cue, bits_grid(frames[k], size=2.6).move_to(cue)),
+                self.play(Transform(cue, bits_grid(frames[k], size=2.9).move_to(cue)),
                           Transform(path, VMobject(color=HIST, stroke_width=3).set_points_as_corners(pts)),
                           dot.animate.move_to(pts[-1]), run_time=0.25, rate_func=linear)
             self.play(Indicate(stored[0], color=HIST, scale_factor=1.15))
@@ -88,7 +88,7 @@ class FastWeights(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.05, color=HIST) for x, y in zip(r, fr)])
         lim = DashedLine(ax.c2p(0.138, 0), ax.c2p(0.138, 1.0), dash_length=0.07, color=C.BITS, stroke_width=2)
         ll = label(r"$0.138$: \ the limit for large $N$ \\ (Amit, Gutfreund \& Sompolinsky, 1985)", font_size=18,
-                   color=C.BITS).next_to(lim.get_top(), RIGHT, buff=0.1).shift(DOWN * 0.3)
+                   color=C.BITS).next_to(ax.c2p(0.138, 0.18), LEFT, buff=0.12)
         k1 = label(r"exactly recalled", font_size=20, color=HIST)
         k2 = label(r"overlap with the pattern", font_size=20, color=GREY_B)
         keys = VGroup(k1, k2).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.3, 0])
@@ -112,7 +112,7 @@ class FastWeights(VoiceoverScene):
     # ------------------------------------------------------------------
     def lineage(self):
         head = label(r"From patterns to keys and values", font_size=36).to_edge(UP, buff=0.35)
-        w, fs = 4.2, 20
+        w, fs = 4.3, 25
         cards = VGroup(
             history_card(1972, r"correlation matrix memories", r"Kohonen; \ Anderson: \ store a value under a key, "
                          r"$M = \sum_i v_i k_i^{\top}$; \ read with $M k$", color=HIST, width=w, font_size=fs),
@@ -126,9 +126,11 @@ class FastWeights(VoiceoverScene):
                          r"a recurrence on $\sum v k^{\top}$", color=HIST, width=w, font_size=fs),
             history_card(2021, r"``secretly fast weight programmers''", r"Schlag, Irie \& Schmidhuber: \ the same "
                          r"thing as 1992, \ and a better way to write", color=HIST, width=w, font_size=fs),
-        ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3), cell_alignment=UP)
+        ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.4), cell_alignment=UP)
         if cards.width > 13.4:
             cards.width = 13.4
+        if cards.height > 6.0:
+            cards.height = 6.0
         cards.next_to(head, DOWN, buff=0.35)
         with self.voiceover(
             "The same sum of outer products became a memory of keys and values. In 1972 Teuvo Kohonen and James "
@@ -142,10 +144,12 @@ class FastWeights(VoiceoverScene):
             "<bookmark mark='e'/> In 2021 Imanol Schlag, Kazuki Irie and Schmidhuber named it: linear transformers "
             "are secretly fast weight programmers, and they gave them a better way to write."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1))
+            for c_ in cards[1:]:
+                c_.set_opacity(0.18)
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.1), *[FadeIn(c_) for c_ in cards[1:]])
             for k, m in enumerate("abcde"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k + 1], shift=UP * 0.1), run_time=0.8)
+                self.play(cards[k + 1].animate.set_opacity(1), run_time=0.8)
         self.wait(0.3)
         self.clear_scene()
 
@@ -159,14 +163,14 @@ class FastWeights(VoiceoverScene):
         d = int(m["d"])
         top = float(np.abs(Ss[:4]).max())
         vt = float(np.abs(vals).max())
-        cell = 0.3
-        S0 = signed_grid(np.zeros((d, d)), d * cell, top).move_to([-0.4, 0.2, 0])
+        cell = 0.42
+        S0 = signed_grid(np.zeros((d, d)), d * cell, top).move_to([-0.2, -0.2, 0])
         Sl = MathTex(r"S", font_size=34, color=STATE).next_to(S0, UP, buff=0.15)
         colors = {r"S": STATE, r"v_i": V, r"k_i": K, r"k_j": K}
         f = cmath(r"S", r"\;\mathrel{+}=\;", r"v_i", r"\,", r"k_i", r"^{\top}", colors=colors, font_size=36).to_corner(UL, buff=0.4)
         fr = cmath(r"\text{read: }", r"S", r"\,", r"k_j", colors=colors, font_size=36).next_to(f, DOWN, buff=0.25, aligned_edge=LEFT)
-        kcol = signed_column(keys[0], cell, 1.0).move_to([-3.7, 0.2, 0])
-        vcol = signed_column(vals[0], cell, vt).move_to([-4.6, 0.2, 0])
+        kcol = signed_column(keys[0], cell, 1.0).move_to([-3.9, -0.2, 0])
+        vcol = signed_column(vals[0], cell, vt).move_to([-5.1, -0.2, 0])
         kl = MathTex(r"k_1", font_size=28, color=K).next_to(kcol, UP, buff=0.12)
         vl = MathTex(r"v_1", font_size=28, color=V).next_to(vcol, UP, buff=0.12)
         times = MathTex(r"\times", font_size=30).move_to((kcol.get_center() + vcol.get_center()) / 2)
@@ -176,12 +180,14 @@ class FastWeights(VoiceoverScene):
         rows = VGroup()
         for j in range(4):
             rows.add(VGroup(MathTex(rf"k_{j + 1}", font_size=26, color=K),
-                            signed_column(reads[3][j], 0.16, vt).rotate(-PI / 2),
-                            signed_column(vals[j], 0.16, vt).rotate(-PI / 2),
-                            MathTex(f"{errs[3][j]:.2f}", font_size=24, color=ADD)).arrange(RIGHT, buff=0.25))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.6, -0.2, 0])
-        rh = label(r"reads $S k_j$ \quad stored $v_j$ \quad error", font_size=18, color=GREY_A).next_to(rows, UP, buff=0.2)
-        rh.align_to(rows, LEFT).shift(RIGHT * 0.5)
+                            signed_column(reads[3][j], 0.2, vt).rotate(-PI / 2),
+                            signed_column(vals[j], 0.2, vt).rotate(-PI / 2),
+                            MathTex(f"{errs[3][j]:.2f}", font_size=28, color=ADD)).arrange(RIGHT, buff=0.25))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.5, -0.4, 0])
+        rh = VGroup(label(r"reads $S k_j$", font_size=20, color=GREY_A), label(r"stored $v_j$", font_size=20, color=GREY_A),
+                    label(r"error", font_size=20, color=ADD))
+        for h_, c_ in zip(rh, rows[0][1:]):
+            h_.next_to(c_, UP, buff=0.3)
         e = errs[3]
         with self.voiceover(
             "Here is that memory at work, written and read one step at a time. The memory is a matrix S, eight by "
@@ -192,9 +198,10 @@ class FastWeights(VoiceoverScene):
             f"errors from {e.min():.2f} to {e.max():.2f} here, for keys that are nearly, but not quite, at right "
             "angles."
         ) as vo:
-            self.play(FadeIn(S0), FadeIn(Sl), Write(f), FadeIn(tag))
+            self.play(FadeIn(S0), FadeIn(Sl), Write(f), FadeIn(tag), FadeIn(kcol), FadeIn(vcol), FadeIn(kl), FadeIn(vl),
+                      FadeIn(times), GrowArrow(arrow))
             vo.wait_until("a")
-            self.play(FadeIn(kcol), FadeIn(vcol), FadeIn(kl), FadeIn(vl), FadeIn(times), GrowArrow(arrow))
+            self.play(Indicate(VGroup(kcol, vcol), color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
             for i in range(4):
                 kk, vv = seq[i]

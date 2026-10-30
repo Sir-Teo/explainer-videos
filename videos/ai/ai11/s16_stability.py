@@ -56,7 +56,7 @@ class Stability(VoiceoverScene):
         keep_in_frame(model)
         mx_s, mx_f = (float(np.mean(s[f"maxlogit_{k}"])) for k in ("muon_slow", "muon_fast"))
         hs, hf = (float(np.mean(s[f"held_{k}"])) for k in ("muon_slow", "muon_fast"))
-        res = label(rf"held-out bits: \ ${hs:.2f}$ \ against \ ${hf:.2f}$", font_size=22, color=WHITE).next_to(model, DOWN, buff=0.4)
+        res = label(rf"held-out bits, \ mean of $2$ seeds: \ ${hs:.2f}$ \ against \ ${hf:.2f}$", font_size=22, color=WHITE).next_to(model, DOWN, buff=0.4)
         cite_ = cite(r"Part 18: \ loss spikes and logit growth at scale", corner=DR)
         said1 = (f"<bookmark mark='c'/> The faster run ends worse, {hf:.2f} bits against {hs:.2f}."
             if hf > hs else

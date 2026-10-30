@@ -504,7 +504,10 @@
   "Decoupled decay $W_{t+1} = (1 - \\eta\\lambda)W_t - \\eta u_t$ with $u_t \\perp W_t$ and $\\langle u_t, u_{t+k}\\rangle = \\|u\\|^2\\beta^{|k|}$: \\ show $\\mathbb{E}\\|W\\|^2 \\to \\dfrac{\\eta\\|u\\|^2}{2\\lambda}\\dfrac{1 + \\beta}{1 - \\beta}$ for small $\\eta\\lambda$.": "解耦衰减 $W_{t+1} = (1 - \\eta\\lambda)W_t - \\eta u_t$，其中 $u_t \\perp W_t$，$\\langle u_t, u_{t+k}\\rangle = \\|u\\|^2\\beta^{|k|}$：\\ 证明 $\\eta\\lambda$ 很小时 $\\mathbb{E}\\|W\\|^2 \\to \\dfrac{\\eta\\|u\\|^2}{2\\lambda}\\dfrac{1 + \\beta}{1 - \\beta}$。",
   "loss against compute, \\ for models of growing size \\ (schematic)": "不同大小模型的损失随算力的变化 \\ （示意图）",
   "Next: \\ Part 12, \\ The Mathematics of Scale": "下一次：\\ 第12部分，\\ 规模的数学",
-  "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every run is computed here; \\ every number on screen is computed or cited; \\ schematics are labelled.": "文本：古登堡计划（第1部分的 $30$ 部小说）。\\ 每次训练都在这里计算；\\ 屏幕上的每个数字都是计算或引用所得；\\ 示意图均已标注。"
+  "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every run is computed here; \\ every number on screen is computed or cited; \\ schematics are labelled.": "文本：古登堡计划（第1部分的 $30$ 部小说）。\\ 每次训练都在这里计算；\\ 屏幕上的每个数字都是计算或引用所得；\\ 示意图均已标注。",
+  "how far each weight moves, \\ $|\\Delta\\theta|$": "每个权重移动的距离，\\ $|\\Delta\\theta|$",
+  "Adam at step $1{,}000$ \\ (computed above)": "Adam 第 $1{,}000$ 步 \\ （上面算出的）",
+  "Lion: \\ every weight $\\pm\\eta$, \\ by construction": "Lion：\\ 按其构造，\\ 每个权重都移动 $\\pm\\eta$"
  },
  "patterns": []
 }

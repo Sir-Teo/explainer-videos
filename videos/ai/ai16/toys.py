@@ -160,7 +160,7 @@ def compute_gradcheck():
             fd[i] = (float(loss(sp)[0]) - float(loss(sm)[0])) / (2 * h)
         scale = max(np.abs(fd).max(), 1e-12)
         out["kinds"].append(kind)
-        out[kind] = dict(k=k, chosen=K.numpy().tolist(), auto=auto, analytic=ana, fd=fd,
+        out[kind] = dict(k=k, chosen=K.numpy().tolist(), auto=auto.tolist(), analytic=ana.tolist(), fd=fd.tolist(),
                          err_auto=float(np.abs(auto - fd).max() / scale), err_analytic=float(np.abs(ana - fd).max() / scale),
                          nonzero=int((np.abs(fd) > 1e-9).sum()), norm=float(np.abs(fd).sum()))
         assert out[kind]["err_auto"] < 1e-6 and out[kind]["err_analytic"] < 1e-6, (kind, out[kind])

@@ -77,7 +77,7 @@ class Muon(VoiceoverScene):
             cmath(r"\langle", r"G", r",", r"\Delta W", r"\rangle = \sum_i \sigma_i\, u_i^{\top}", r"\Delta W", r"\, v_i \;\ge\; -",
                   r"\eta", r"\sum_i \sigma_i", colors=colors, font_size=36),
             cmath(r"\Delta W", r"= -", r"\eta", r"\, U V^{\top}", colors=colors, font_size=40),
-        ).arrange(DOWN, buff=0.55).move_to(UP * 0.4)
+        ).arrange(DOWN, buff=0.7).move_to(UP * 0.3)
         notes = VGroup(label(r"the best step that stretches no input by more than $\eta$", font_size=22, color=GREY_A),
                        label(r"each term is at least $-\eta\,\sigma_i$, \ since $|u^{\top} \Delta W v| \le \|\Delta W\|_2$",
                              font_size=22, color=GREY_A),
