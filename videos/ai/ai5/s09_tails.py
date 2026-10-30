@@ -89,9 +89,21 @@ class Tails(VoiceoverScene):
                 why(r"Chernoff: \ Markov on $e^{tn\bar X}$; \ independence"),
                 why(r"Hoeffding's lemma: \ $X$ in $[0, 1]$"),
                 why(r"choose $t = 4\varepsilon$")]
-        step = ladder(self, rows, whys, keep=5, top=3.25, x=-1.4, buff=0.42, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.4, buff=0.36, edge=6.8)
         cite_ = cite(r"I.-J.~Bienaym\'e (1853), \ P.~Chebyshev (1867), \ H.~Chernoff (1952), \ W.~Hoeffding (1963)",
                      corner=DR)
+        # the two tricks, pictured: a step under a line (Markov), a step under an exponential (Chernoff)
+        def trick(f, fl, x0):
+            a_ = Axes(x_range=[0, 3, 1], y_range=[0, 2.2, 1], x_length=3.4, y_length=1.6, tips=False,
+                      axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([x0, -2.6, 0])
+            xs_ = np.linspace(0, 3, 120)
+            step_ = VGroup(Line(a_.c2p(0, 0), a_.c2p(1.5, 0), color=C.SURPRISE, stroke_width=4),
+                           Line(a_.c2p(1.5, 1), a_.c2p(3, 1), color=C.SURPRISE, stroke_width=4))
+            g_ = curve(a_, xs_, np.minimum(f(xs_), 2.2), color=C.BITS, stroke_width=3)
+            return VGroup(a_, step_, g_, label(fl, font_size=20, color=GREY_A).next_to(a_, UP, buff=0.08))
+
+        t1 = trick(lambda v: v / 1.5, r"$\mathbf{1}[X \ge a] \le X/a$", -4.6)
+        t2 = trick(lambda v: np.exp(1.2 * (v - 1.5)), r"$\mathbf{1}[X \ge a] \le e^{t(X - a)}$", -0.6)
         with self.voiceover(
             "Each bound comes from the one before. <bookmark mark='a'/> Markov's: a quantity that is never negative "
             "can't often be much bigger than its average. <bookmark mark='b'/> Apply it to the squared distance from "
@@ -101,12 +113,14 @@ class Tails(VoiceoverScene):
             "one, Hoeffding's lemma bounds each factor, <bookmark mark='e'/> and the best t gives e to the minus two "
             "n epsilon squared: Hoeffding's inequality, from 1963."
         ) as vo:
+            self.play(FadeIn(t1))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(FadeIn(t2))
             vo.wait_until("d")
             step(3)
             vo.wait_until("e")
@@ -126,10 +140,10 @@ class Tails(VoiceoverScene):
                       for v in (0.1, 0.2, 0.3)])
         yt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
                       for t, v in (("1", 0), ("10^{-4}", -4), ("10^{-8}", -8))])
-        xl = label(r"$\varepsilon$", font_size=28, color=GREY_A).next_to(ax.c2p(0.3, -8), DOWN, buff=0.45)
+        xl = label(r"$\varepsilon$", font_size=28, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"$P(\bar X - \tfrac12 \ge \varepsilon)$, \ $n = 100$", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         m = ex > 0
-        truth = curve(ax, eps[m], np.log10(ex[m]), color=WHITE, stroke_width=4)
+        truth = curve(ax, eps[m], np.maximum(np.log10(ex[m]), -8), color=WHITE, stroke_width=4)
         sm = sim > 0
         sdots = VGroup(*[Dot(ax.c2p(a, math.log10(b)), radius=0.05, color=TAIL) for a, b in zip(eps[sm], sim[sm])])
         lines, labs = {}, VGroup()
@@ -203,12 +217,12 @@ class Tails(VoiceoverScene):
             "holding for every distribution. <bookmark mark='c'/> Part eight uses exactly this to bound a model's "
             "true error from its test score, and part twenty-six used Hoeffding's bound to explore."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), *[FadeIn(r[0]) for r in rows])
             vo.wait_until("a")
             for r in rows[:3]:
-                self.play(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]), run_time=0.8)
+                self.play(GrowFromEdge(r[1], LEFT), FadeIn(r[2]), run_time=0.8)
             vo.wait_until("b")
-            self.play(FadeIn(rows[3][0]), GrowFromEdge(rows[3][1], LEFT), FadeIn(rows[3][2]))
+            self.play(GrowFromEdge(rows[3][1], LEFT), FadeIn(rows[3][2]))
             vo.wait_until("c")
             self.play(FadeIn(uses))
         self.wait(0.3)

@@ -141,14 +141,14 @@ class Logistic(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=5, top=3.3, x=-1.4, buff=0.36, edge=6.8)
         ev = label(rf"at the answer, \ two rates and a constant: \ eigenvalues ${eig[0]:.3f}$, ${eig[1]:.3f}$, "
                    rf"${eig[2]:.3f}$", font_size=24, color=HL).to_edge(DOWN, buff=0.35)
+        bowl = ", so the bowl has one bottom." if eig.min() > 0 else "."
         with self.voiceover(
             "Is there a single best sheet? Write down the loss. <bookmark mark='a'/> The sigmoid's slope is the "
             "sigmoid times one minus itself, so <bookmark mark='b'/> the gradient is beautifully simple: the "
             "features times prediction minus truth, just as in least squares. <bookmark mark='c'/> Differentiate "
             "again: X transpose S X, with S holding each page's p times one minus p. <bookmark mark='d'/> In any "
             "direction v, that's a weighted sum of squares, never negative. The loss is convex: a single bowl. "
-            f"<bookmark mark='e'/> On the pages, the curvature at the answer is positive in every direction"
-            + (", so the bowl has one bottom." if eig.min() > 0 else ".")
+            f"<bookmark mark='e'/> On the pages, the curvature at the answer is positive in every direction{bowl}"
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -136,14 +136,14 @@ class LDA(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(jax), FadeIn(jl), Write(jf), Create(jcurve), FadeIn(jdot))
             self.play(th.animate.set_value(math.pi * 0.97), run_time=5.0, rate_func=smooth)
+        like_lr = (", the same as logistic regression." if abs(acc - load("logistic")["acc2"]) < 0.006 else ".")
         with self.voiceover(
             "The best direction has a formula: the difference between the two centres, corrected by the inverse of "
             "the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each "
             "author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. "
             "<bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets "
-            f"{100 * acc:.0f} percent of the test pages right"
-            + (", the same as logistic regression. " if abs(acc - load("logistic")["acc2"]) < 0.006 else ". ")
-            + "When each group is a bell of the same shape, this cut is exactly the best one possible."
+            f"{100 * acc:.0f} percent of the test pages right{like_lr} <bookmark mark='c'/> When each group is a bell "
+            "of the same shape, this cut is exactly the best one possible."
         ) as vo:
             self.play(th.animate.set_value(best), run_time=2.0)
             self.play(FadeOut(jf), FadeOut(jax), FadeOut(jcurve), FadeOut(jdot), FadeOut(jl), FadeIn(wf), FadeIn(wn))
@@ -197,16 +197,17 @@ class LDA(VoiceoverScene):
                          for w, s_ in zip(top, sg)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.4)
         same = ld["cos_ls"] > 0.9999
         names = ", ".join(f"'{w}'" for w in top[:3])
+        also = ("It also agrees with least squares on a zero-one target: with two classes, the two are the same line."
+                if same else "And least squares on a zero-one target points the same way.")
         with self.voiceover(
             "Where does the formula come from? <bookmark mark='a'/> Fisher's score is a ratio of two quadratic forms: "
             "the spread between the authors over the spread within them. <bookmark mark='b'/> Set its gradient to "
             "zero, and you get a generalized eigenproblem: S B w equals J times S W w. <bookmark mark='c'/> But S B "
             "has rank one: it only ever points along the difference of the means. <bookmark mark='d'/> So the "
             "answer is S W inverse times that difference. <bookmark mark='e'/> On all seventy rates, the eigensolver "
-            f"finds one nonzero eigenvalue, and its eigenvector agrees with the formula to {ld['cos_eig']:.6f}. "
-            + ("It also agrees with least squares on a zero-one target: with two classes, the two are the same line. "
-               if same else "")
-            + f"It leans hardest on {names}, and gets {100 * ld['acc70']:.0f} percent of the held-out pages right."
+            f"finds one nonzero eigenvalue, and its eigenvector agrees with the formula to {ld['cos_eig']:.6f}. {also}"
+            f"<bookmark mark='f'/> It leans hardest on {names}, and gets {100 * ld['acc70']:.0f} percent of the "
+            "held-out pages right."
         ) as vo:
             vo.wait_until("a")
             step(0)

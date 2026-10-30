@@ -15,7 +15,7 @@ MF_COL = {"mf70": C.PENALTY, "mf8": C.INTERVAL, "mf2": C.MODEL_Q}
 class Forests(VoiceoverScene):
     def construct(self):
         chapter(self, 13, r"Bagging and random forests", r"Why does a crowd of trees beat one?",
-                "Chapter thirteen. Bagging and random forests.", lit=(1979, 1996, 2001))
+                "Chapter thirteen. Bagging and random forests.", lit=(1979, 2001))
         self.formula()
         self.decorrelate()
         self.forest()
@@ -57,7 +57,7 @@ class Forests(VoiceoverScene):
             "squared, and every pair correlated by rho. <bookmark mark='a'/> It's the sum over every pair of their "
             "covariance: <bookmark mark='b'/> B variances, and B times B minus one covariances. <bookmark mark='c'/> "
             "So: rho sigma squared, plus the rest divided by B. More trees remove the second part, but never the "
-            "first: correlation sets a floor. <bookmark mark='d'/> Check it by simulation: with rho a half, a "
+            "first: correlation sets a floor. <bookmark mark='d'/> Check it by simulation: with rho a half, "
             f"{Bs[-1]:.0f} averaged copies keep {rr[-1]:.3f} of the variance, against the formula's {0.5 + 0.5 / Bs[-1]:.3f}."
         ) as vo:
             step(0)
@@ -103,20 +103,19 @@ class Forests(VoiceoverScene):
                   (b[k]["rho"] * b[k]["s2"] + (1 - b[k]["rho"]) * b[k]["s2"] / B_)
                   for k in MF_COL for B_, v in zip(Bm, b[k]["meas"]))
         lower = rf8["rho"] < bag["rho"]
+        mid = (f"The trees disagree more: rho falls to {rf8['rho']:.3f} with eight words, and the floor nearly vanishes, "
+               f"although each tree on its own is noisier, sigma squared {rf8['s2']:.3f} against {bag['s2']:.3f}."
+               if lower else f"Here rho doesn't fall: it's {rf8['rho']:.3f} with eight words.")
+        fit = (f"The measured variances sit on the formula's curves, within {100 * dev:.0f} percent everywhere."
+               if dev < 0.2 else f"The measured variances follow the formula's curves loosely: the largest gap is "
+               f"{100 * dev:.0f} percent, from only {b['Rs']} training sets.")
         with self.voiceover(
             "On the pages, the trees' correlation comes from sharing the same training pages. Draw "
             f"{b['Rs']} training sets of {b['m']} pages, grow {b['T']} trees on resamples of each, and measure sigma "
             "squared and rho at the held-out pages. "
             f"<bookmark mark='a'/> Bagged trees, Breiman's 1996 recipe, are correlated: rho is {bag['rho']:.3f}, and "
             "that floor stops the averaging. <bookmark mark='b'/> Breiman's 2001 twist lets each question choose among "
-            "only a few random words. "
-            + (f"The trees disagree more: rho falls to {rf8['rho']:.3f} with eight words, and the floor nearly vanishes, "
-               f"although each tree on its own is noisier, sigma squared {rf8['s2']:.3f} against {bag['s2']:.3f}. "
-               if lower else f"Here rho doesn't fall: {rf8['rho']:.3f}. ")
-            + "<bookmark mark='c'/> "
-            + (f"The measured variances sit on the formula's curves, within {100 * dev:.0f} percent everywhere."
-               if dev < 0.2 else f"The measured variances follow the formula's curves loosely: the largest gap is "
-               f"{100 * dev:.0f} percent, from only {b['Rs']} training sets.")
+            f"only a few random words. {mid} <bookmark mark='c'/> {fit}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(how))
             vo.wait_until("a")

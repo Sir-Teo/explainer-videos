@@ -756,7 +756,7 @@ def compute_tails():
     need["exact"] = m
     j = int(np.argmin(np.abs(eps - 0.1)))
     return dict(n=n, eps=eps, exact=exact, sim=sim, markov=markov, cheb=cheb, chern=chern, hoeff=hoeff, need=need,
-                e0=e0, d0=d0, j10=j, hist=np.bincount((sims * n).astype(int), minlength=n + 1))
+                e0=e0, d0=d0, j10=j, hist=np.bincount(np.rint(sims * n).astype(int), minlength=n + 1))
 
 
 # ---------------------------------------------------------------------------

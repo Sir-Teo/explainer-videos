@@ -85,9 +85,9 @@ class Markov(VoiceoverScene):
             f"consonant. The arrows carry the chances of what comes next: after a vowel, a consonant {100 * vc:.0f} "
             "percent of the time. <bookmark mark='b'/> Follow one walker, and count the time it spends in each state."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.2),
+            self.play(
                       LaggedStart(*[GrowArrow(a) if isinstance(a, Arrow) else Create(a) for a in arrows], lag_ratio=0.1),
                       FadeIn(plabs), run_time=2.0)
             vo.wait_until("b")
@@ -237,7 +237,15 @@ class Markov(VoiceoverScene):
             VGroup(label(rf"{nmf(b)} then {nmf(a)}", font_size=26, color=C.BITS),
                    Rectangle(width=max(60 * fji, 0.05), height=0.4, stroke_width=0, fill_color=C.BITS, fill_opacity=0.85),
                    MathTex(f"{100 * fji:.2f}\\%", font_size=28, color=C.BITS)).arrange(RIGHT, buff=0.25),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.0, -2.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([2.6, -2.3, 0])
+        # two states and their flows
+        ci_, cj_ = Circle(radius=0.45, color=DATA, stroke_width=3).move_to([-5.2, -2.3, 0]), \
+            Circle(radius=0.45, color=C.BITS, stroke_width=3).move_to([-2.4, -2.3, 0])
+        flow = VGroup(ci_, cj_, MathTex("i", font_size=34, color=DATA).move_to(ci_), MathTex("j", font_size=34, color=C.BITS).move_to(cj_),
+                      Arrow(ci_.get_right() + UP * 0.15, cj_.get_left() + UP * 0.15, buff=0.05, color=DATA, stroke_width=4),
+                      Arrow(cj_.get_left() + DOWN * 0.15, ci_.get_right() + DOWN * 0.15, buff=0.05, color=C.BITS, stroke_width=4))
+        flow.add(MathTex(r"\pi_i P_{ij}", font_size=26, color=DATA).next_to(flow[4], UP, buff=0.08),
+                 MathTex(r"\pi_j P_{ji}", font_size=26, color=C.BITS).next_to(flow[5], DOWN, buff=0.08))
         bt = label(r"English is not reversible: \ of all letter pairs in Part 1's books", font_size=24, color=GREY_A)
         bt.next_to(bars, UP, buff=0.25).align_to(bars, LEFT)
         big = max(fij, fji) / min(fij, fji)
@@ -254,6 +262,7 @@ class Markov(VoiceoverScene):
             f"common as {sy} then {sx}. <bookmark mark='e'/> {why_} But when we build chains to sample, in chapter thirteen, detailed balance "
             "is how we make them land where we want."
         ) as vo:
+            self.play(FadeIn(flow))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -279,8 +288,8 @@ class Markov(VoiceoverScene):
                                    stroke_width=1, fill_opacity=0).move_to([bars._cx(i) - 3.4, -0.6 + 1.3 * min(v, 0.2) / 0.2, 0])
                          for i, v in enumerate(pi)])
         Uc = VMobject(color=MODEL, stroke_width=3).set_points_smoothly(
-            [np.array([bars._cx(i) - 3.4, -1.5 - 0.35 * u, 0]) for i, u in enumerate(U)])
-        Ul = label(r"the energy $U$: \ two wells", font_size=20, color=MODEL).next_to(Uc, DOWN, buff=0.1)
+            [np.array([bars._cx(i) - 3.4, -3.3 + 0.25 * min(u, 6.0), 0]) for i, u in enumerate(U)])
+        Ul = label(r"the energy $U$: \ two wells", font_size=20, color=MODEL).move_to([-3.4, -3.75, 0])
         tv = Integer(0, font_size=30, color=C.BITS)
         tl = VGroup(label(r"step", font_size=26), tv).arrange(RIGHT, buff=0.15).move_to([-3.4, 3.0, 0])
         head = label(r"$41$ sites, \ $\pi \propto e^{-\beta U}$, \ from the left end", font_size=26).next_to(tl, DOWN, buff=0.2)

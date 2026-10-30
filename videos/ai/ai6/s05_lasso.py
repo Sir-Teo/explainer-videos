@@ -49,7 +49,7 @@ def ellipse(level, ax, color=GREY_C, sw=1.5):
 class Lasso(VoiceoverScene):
     def construct(self):
         chapter(self, 4, r"The lasso: soft thresholds and a path", r"Can a penalty choose the words?",
-                "Chapter four. The lasso.", lit=(1996,))
+                "Chapter four. The lasso.")
         self.shapes()
         self.soft()
         self.path()
@@ -129,7 +129,7 @@ class Lasso(VoiceoverScene):
                 why(r"the soft threshold")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-3.0, buff=0.45, align_index=1, edge=6.8)
         g = plot([-3, 3, 1], [-2.2, 2.2, 1], x_length=4.6, y_length=3.4, xticks=[-2, 0, 2], yticks=[-2, 0, 2],
-                 center=[3.6, -1.4, 0], xlabel=r"$z$: \ the least-squares value", ylabel=r"$w$")
+                 center=[3.8, -1.75, 0], xlabel=r"$z$: \ the least-squares value", ylabel=r"$w$")
         ax = g.ax
         lam = 1.0
         ident = DashedLine(ax.c2p(-2.2, -2.2), ax.c2p(2.2, 2.2), color=GREY_B, stroke_width=2)
@@ -220,10 +220,9 @@ class Lasso(VoiceoverScene):
         mark = DashedLine(ax.c2p(k8, -top), ax.c2p(k8, top), color=WHITE, stroke_width=2)
         ml = label(rf"${len(words8)}$ words: \ ${100 * d['acc8']:.0f}\%$", font_size=24, color=WHITE).next_to(mark, UP, buff=0.08)
         k1 = int(d["one_se"])
-        cvl = label(rf"cross-validation (one-standard-error rule): \ ${d['n_selected']}$ words, \ "
+        cvl = label(rf"cross-validation, \\ one-standard-error rule: \\ ${d['n_selected']}$ words, \ "
                     rf"${100 * d['acc_one_se']:.1f}\%$", font_size=22, color=GREY_A).next_to(live, DOWN, buff=0.3).align_to(live, LEFT)
-        if cvl.get_right()[0] > 6.9:
-            cvl.scale_to_fit_width(6.9 - cvl.get_left()[0])
+        keep_in_frame(cvl)
         kkt = note(rf"KKT conditions checked at every penalty: \ worst violation ${sci_tex(d['kkt'])}$").to_corner(DR, buff=0.2)
         names_say = ", ".join(f"'{w}'" for w in first8[:-1]) + f" and '{first8[-1]}'"
         with self.voiceover(
@@ -265,8 +264,8 @@ class Lasso(VoiceoverScene):
             b.set_stroke(opacity=0.85)
             t = label(title, font_size=26, color=col).next_to(g, UP, buff=0.15)
             panels.append((g, a, b, t))
-        key = VGroup(label(r"``not''", font_size=22, color=GREY_A), label(r"its near-copy (dashed white)", font_size=22,
-                                                                           color=WHITE)).arrange(RIGHT, buff=0.5)
+        key = VGroup(label(r"coloured: \ ``not''", font_size=22, color=GREY_A), label(r"white: \ its near-copy", font_size=22,
+                                                                                         color=WHITE)).arrange(RIGHT, buff=0.5)
         key.to_edge(UP, buff=0.4)
         # the strongest penalty at which the lasso already uses "not" but not yet its copy
         ks = [k for k in range(K) if tl[k, 0] > 1e-6 and tl[k, 1] < 1e-9]
@@ -279,13 +278,13 @@ class Lasso(VoiceoverScene):
             "choice. <bookmark mark='b'/> Zou and Hastie's elastic net, in 2005, mixes in a little ridge, and shares "
             f"the weight: at the same penalty, the smaller twin carries {100 * share_e:.0f} percent of the pair's weight."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(note_))
+            self.play(FadeIn(key), FadeIn(note_), *[FadeIn(P_[0]) for P_ in panels], *[FadeIn(P_[3]) for P_ in panels])
             vo.wait_until("a")
             g, a, b, t = panels[0]
-            self.play(FadeIn(g), FadeIn(t), Create(a), Create(b), run_time=1.5)
+            self.play(Create(a), Create(b), run_time=1.5)
             vo.wait_until("b")
             g, a, b, t = panels[1]
-            self.play(FadeIn(g), FadeIn(t), Create(a), Create(b), run_time=1.5)
+            self.play(Create(a), Create(b), run_time=1.5)
             for g, a, b, t in panels:
                 self.play(Create(DashedLine(g.ax.c2p(k0, 0), g.ax.c2p(k0, top), color=HL, stroke_width=2)), run_time=0.5)
         self.wait(0.3)

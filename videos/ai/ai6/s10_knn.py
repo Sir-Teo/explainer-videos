@@ -108,6 +108,7 @@ class KNN(VoiceoverScene):
         t1, a1 = k_["train1"], k_["acc1"]
         best_te = max(ks, key=lambda k: k_[f"acc{k}"])
         same = kcv == best_te
+        acc_b = k_[f"acc{best_te}"]
         say_cv = (f"Cross-validation, which never looks at the held-out pages, picks the same k."
                   if same else
                   f"Cross-validation, which never looks at them, picks k equals {kcv}, and gets "
@@ -117,7 +118,7 @@ class KNN(VoiceoverScene):
             f"<bookmark mark='a'/> With one neighbour, the regions are a ragged patchwork that copies the training pages: "
             f"{100 * t1:.0f} percent of them right, but only {100 * a1:.0f} percent of new ones. <bookmark mark='b'/> "
             "More neighbours smooth it out. <bookmark mark='c'/> On the held-out pages the best is k equals "
-            f"{best_te}, {100 * k_[f'acc{best_te}']:.0f} percent. {say_cv}"
+            f"{best_te}, {100 * acc_b:.0f} percent. {say_cv}"
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), FadeIn(dots), FadeIn(g), FadeIn(key))
             vo.wait_until("a")

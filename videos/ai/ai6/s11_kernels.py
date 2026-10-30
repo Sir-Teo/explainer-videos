@@ -211,12 +211,12 @@ class Kernels(VoiceoverScene, ThreeDScene):
                           rf"${k['min_sig']:.0f}$", font_size=22, color=BAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         lg.next_to(thm, DOWN, buff=0.4).align_to(thm, LEFT)
         rounding = abs(k["min_ev2"]) < 1e-9
+        smallest = "zero, up to rounding." if rounding else f"{k['min_ev2']:.2g}."
         with self.voiceover(
             "Which similarity scores are allowed? Mercer's theorem, from 1909: a kernel is a dot product of some "
             "features exactly when every matrix of its values on a set of points has no negative eigenvalues. "
-            f"<bookmark mark='a'/> On the {n} training pages, the Gaussian kernel's smallest eigenvalue is "
-            + ("zero, up to rounding. " if rounding else f"{k['min_ev2']:.2g}. ")
-            + "<bookmark mark='b'/> A popular impostor, the hyperbolic tangent of a dot product, has "
+            f"<bookmark mark='a'/> On the {n} training pages, the Gaussian kernel's smallest eigenvalue is {smallest} "
+            "<bookmark mark='b'/> A popular impostor, the hyperbolic tangent of a dot product, has "
             f"{k['n_neg_sig']} negative eigenvalues: no features could produce it, and an SVM built on it is no "
             "longer solving a convex problem."
         ) as vo:

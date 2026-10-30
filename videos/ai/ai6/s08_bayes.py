@@ -147,15 +147,15 @@ class NaiveBayes(VoiceoverScene):
         ext = c["nb_extreme"]
         e_nb, e_pl, e_lr = c["nb"]["ece"], c["nb_platt"]["ece"], c["lr2"]["ece"]
         fixed = e_pl < e_nb
+        end = (f"and the error falls from {e_nb:.3f} to {e_pl:.3f}." if fixed else
+               f"though here the error doesn't fall: {e_nb:.3f} to {e_pl:.3f}.")
         with self.voiceover(
             "There's a second difference. When a model says seventy percent, is it right seventy percent of the time? "
             "Group the pages by the probability given, and plot how often they really were Dickens. Honest "
             f"probabilities lie on the diagonal. <bookmark mark='a'/> Logistic regression's are close: average error "
             f"{e_lr:.3f}. <bookmark mark='b'/> Naive Bayes counts every word as independent evidence, so it's wildly "
             f"sure of itself: {100 * ext:.0f} percent of pages get odds beyond a million to one. <bookmark mark='c'/> "
-            "Platt's fix, in 1999, fits a one-variable logistic regression to its scores on training pages, "
-            + (f"and the error falls from {e_nb:.3f} to {e_pl:.3f}." if fixed else
-               f"though here the error doesn't fall: {e_nb:.3f} to {e_pl:.3f}.")
+            f"Platt's fix, in 1999, fits a one-variable logistic regression to its scores on training pages, {end}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
             self.play(FadeIn(panels[0][:2]), FadeIn(panels[0][3]))
