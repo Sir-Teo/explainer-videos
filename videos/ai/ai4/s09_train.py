@@ -202,7 +202,7 @@ class Train(VoiceoverScene):
             t = np.arange(len(b)) * 10 + 1
             c1.add(curve(g1.ax, np.log10(t), np.clip(b, 3.2, 5.0), cols[k], 2.5))
             lm = np.asarray(d[f"lamcurve{k}"])
-            c2.add(curve(g2.ax, np.arange(len(lm)) * 25, np.clip(lm, 0, 0.08), cols[k], 2.5))
+            c2.add(curve(g2.ax, np.arange(len(lm)) * 25, np.clip(lm, 0, 0.08), cols[k], 1.6).set_stroke(opacity=0.55 if k == K - 1 else 1.0))
             if 2 / etas[k] < 0.08:
                 lines.add(DashedLine(g2.ax.c2p(0, 2 / etas[k]), g2.ax.c2p(S, 2 / etas[k]), color=cols[k], stroke_width=1.5))
         leg = VGroup(*[label(rf"$\eta = {e:.0f}$" if e >= 10 else rf"$\eta = {e:.1f}$", font_size=20, color=c)

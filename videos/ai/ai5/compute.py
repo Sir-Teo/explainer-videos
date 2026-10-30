@@ -679,8 +679,8 @@ def compute_maxent():
     H = float(-(p * np.log(p)).sum())
     assert abs(p @ k - 4.5) < 1e-12
     # gradient ascent on the dual, from the uniform die
-    path, lam_t, eta = [], 0.0, 0.25
-    for t in range(41):
+    path, lam_t, eta = [], 0.0, 0.04
+    for t in range(61):
         q = np.exp(lam_t * k)
         q /= q.sum()
         path.append((lam_t, *q))

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MODEL, curve, density_picture, hist_shape, load, narrow_hist, normal_pdf
+from videos.ai.ai5.common import DATA, MODEL, PART, curve, density_picture, hist_shape, load, narrow_hist, normal_pdf
 
 
 
@@ -19,6 +19,7 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         self.score()
         self.landscape()
         self.cross_entropy()
+        self.bias()
 
     def ll(self, mu, s):
         """Average log-likelihood, nats per ball, of a normal(mu, s) at the 1,000 positions."""
@@ -26,8 +27,8 @@ class Likelihood(VoiceoverScene, ThreeDScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(2, r"Fitting a bell", r"Which curve explains the data best?", part=5)
-        with self.voiceover("Chapter two. Fitting a bell to data."):
+        card = chapter_card(3, r"Fitting a bell", r"Which curve explains the data best?", part=PART)
+        with self.voiceover("Chapter three. Fitting a bell to data."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -199,3 +200,77 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(every))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def bias(self):
+        d = load("mlebias")
+        ns, mle, bes, th = (np.asarray(d[k], float) for k in ("ns", "mle", "bessel", "theory"))
+        R = int(d["R"])
+        rows = [
+            cmath(r"\textstyle\sum_i (x_i - \bar x)^2", "=", r"\textstyle\sum_i (x_i - \mu)^2 - n(\bar x - \mu)^2",
+                  font_size=32),
+            cmath(r"\mathbb{E}\big[\textstyle\sum_i (x_i - \bar x)^2\big]", "=", r"n\sigma^2 - n \cdot \sigma^2 / n",
+                  font_size=32),
+            cmath(r"\mathbb{E}[\hat\sigma^2]", "=", r"\frac{n-1}{n}\,\sigma^2", font_size=36, colors={r"\hat\sigma^2": MODEL}),
+        ]
+        whys = [why(r"expand around $\mu$", font_size=22), why(r"an average of $n$ has variance $\sigma^2/n$",
+                                                               font_size=22),
+                why(r"divide by $n$: \ too small on average", font_size=22)]
+        step = ladder(self, rows, whys, keep=3, top=3.25, x=-2.4, buff=0.35, edge=6.8)
+        ax = Axes(x_range=[0, 2.1, 1], y_range=[0.4, 1.1, 0.2], x_length=5.8, y_length=3.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-2.9, -1.9, 0])
+        xt = VGroup(*[MathTex(str(int(v)), font_size=20, color=GREY_B).next_to(ax.c2p(math.log10(v), 0.4), DOWN, buff=0.1)
+                      for v in (2, 5, 10, 20, 50, 100)])
+        yt = VGroup(*[MathTex(t, font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
+                      for t, v in (("0.5", 0.5), ("1", 1.0))])
+        xl = label(r"sample size $n$", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        lx = np.log10(ns)
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(2.1, 1), color=GREY_B, stroke_width=2)
+        thc = curve(ax, np.log10(np.linspace(2, 120, 200)), 1 - 1 / np.linspace(2, 120, 200), color=MODEL, stroke_width=2.5)
+        md = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=MODEL) for a, b in zip(lx, mle)])
+        bd = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=C.INTERVAL) for a, b in zip(lx, bes)])
+        leg = VGroup(label(r"divide by $n$ \ (maximum likelihood)", font_size=20, color=MODEL),
+                     label(r"divide by $n - 1$ \ (Bessel)", font_size=20, color=C.INTERVAL)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                               buff=0.08)
+        leg.next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        hx = Axes(x_range=[0, 4, 1], y_range=[0, 0.8, 0.2], x_length=4.6, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, -2.0, 0])
+        h5 = np.asarray(d["hist5"], float)
+        edges = np.linspace(0, 4, len(h5) + 1)
+        hh = hist_shape(hx, edges, h5 / h5.sum() / (edges[1] - edges[0]), color=MODEL, opacity=0.4)
+        i5 = list(ns).index(5)
+        mline = DashedLine(hx.c2p(mle[i5], 0), hx.c2p(mle[i5], 0.8), color=MODEL, stroke_width=2.5)
+        tline = DashedLine(hx.c2p(1, 0), hx.c2p(1, 0.8), color=GREY_B, stroke_width=2)
+        hl = label(rf"$\hat\sigma^2$ from ${R:,}$ samples of $5$: \ average ${mle[i5]:.3f}$".replace(",", "{,}"),
+                   font_size=20, color=MODEL).next_to(hx, UP, buff=0.12)
+        hc = history_card(1922, r"R.~A.~Fisher", r"names likelihood, \ and asks of an estimate: \ consistent? \ "
+                          r"efficient? \ sufficient?", width=4.0).to_corner(UR, buff=0.3)
+        good = abs(mle[i5] - th[i5]) < 0.02 and abs(bes[i5] - 1) < 0.02
+        verdict = (f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted "
+                   f"{th[i5]:.2f}; dividing by n minus one, Bessel's correction, gives {bes[i5]:.3f}." if good else
+                   f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted "
+                   f"{th[i5]:.2f}.")
+        with self.voiceover(
+            "Is maximum likelihood right on average? For the centre, yes. For the spread, no. "
+            "<bookmark mark='a'/> Measure spread around the sample's own average and you lose a little: the "
+            "average sits closer to the data than the true centre does. <bookmark mark='b'/> On average, the loss "
+            "is exactly one sigma squared, <bookmark mark='c'/> so the maximum-likelihood variance is too small by a "
+            f"factor n minus one over n. <bookmark mark='d'/> {verdict} The bias fades as n grows. Fisher, who "
+            "named likelihood in 1922, cared less about bias than about efficiency: how small the error can be. "
+            "That is the next chapter."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), Create(one), Create(thc), FadeIn(leg))
+            self.play(LaggedStart(*[FadeIn(x) for x in md], lag_ratio=0.1), LaggedStart(*[FadeIn(x) for x in bd],
+                                                                                         lag_ratio=0.1))
+            self.play(Create(hx), FadeIn(hh), Create(tline), Create(mline), FadeIn(hl))
+            self.play(FadeIn(hc))
+        self.wait(0.3)
+        self.clear_scene()
+

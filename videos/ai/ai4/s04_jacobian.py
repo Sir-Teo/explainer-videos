@@ -113,10 +113,19 @@ class Jacobian(VoiceoverScene):
         dl = MathTex(rf"\text{{area}} \times \det J = {det:.2f}", font_size=34, color=GRAD).move_to([-3.4, -3.0, 0])
         colors = {r"J_{f \circ g}(x)": WHITE, r"J_f(g(x))": GRAD, r"J_g(x)": VALUE}
         chain = cmath(r"J_{f \circ g}(x)", "=", r"J_f(g(x))", r"\,", r"J_g(x)", colors=colors, font_size=44)
-        chain.move_to([3.4, -0.9, 0])
+        chain.move_to([3.4, -1.55, 0])
         cw = label(r"one map after another: \\ multiply their Jacobians", font_size=26, color=GREY_A).next_to(chain, DOWN, buff=0.3)
         shapes = label(r"$(m \times k)\,(k \times n)$: \ the shapes chain like the maps", font_size=22, color=GREY_B)
         shapes.next_to(cw, DOWN, buff=0.3)
+        cells = VGroup(*[Square(side_length=0.36, stroke_color=GRAD, stroke_width=1.5, fill_color=GRAD, fill_opacity=0.15)
+                         for _ in range(15)]).arrange_in_grid(rows=3, cols=5, buff=0)
+        cells.move_to([3.2, 0.15, 0])
+        rb = Brace(cells, LEFT, color=GREY_B)
+        rl = label(r"$m$ outputs", font_size=22, color=GREY_A).next_to(rb, LEFT, buff=0.1)
+        cb = Brace(cells, UP, color=GREY_B)
+        cl_ = label(r"$n$ inputs", font_size=22, color=GREY_A).next_to(cb, UP, buff=0.08)
+        jij = MathTex(r"J_{ij}", font_size=24, color=GRAD).move_to(cells[7])
+        shape_pic = VGroup(cells, rb, rl, cb, cl_, jij)
         with self.voiceover(
             "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column "
             "per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a "
@@ -126,7 +135,7 @@ class Jacobian(VoiceoverScene):
             "where its input lands. That product is the whole of backpropagation, as chapter five will show."
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
-            self.play(FadeIn(sq), GrowArrow(arrow_))
+            self.play(FadeIn(shape_pic), FadeIn(sq), GrowArrow(arrow_))
             vo.wait_until("a")
             self.play(TransformFromCopy(sq, par), FadeIn(dl))
             vo.wait_until("b")
