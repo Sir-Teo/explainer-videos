@@ -529,33 +529,44 @@ def compute_splitting():
         print(f"    split {F}: unexplained {e['fvu']:.3f}, {e['dead']} dead", flush=True)
     small, mid, big = (ds[F] for F in SPLIT["sizes"])
     dsm = describe(small, v)
-    by_id = {f["id"]: f for f in dsm}
-    # the family of each small latent: latents of the bigger dictionaries pointing nearly the same way
+    dmid = {f["id"]: f for f in describe(mid, v)}
+    dbig = {f["id"]: f for f in describe(big, v)}
+
+    def char_of(f):
+        last = [c[-2] for c in f["contexts"]]
+        return max(set(last), key=last.count) if last else ""
+
     Ws, Wm, Wb = (d.Wd.numpy() for d in (small, mid, big))
+    # a clean family: a parent that fires on one character, and children (decoders pointing nearly the same way)
+    # that fire on the same character in narrower contexts
     fam = []
     for f in dsm:
-        j = f["id"]
-        cm = Wm @ Ws[j]
-        cb = Wb @ Ws[j]
-        kids_m = [int(i) for i in np.argsort(-cm)[:6] if cm[i] > 0.5]
-        kids_b = [int(i) for i in np.argsort(-cb)[:8] if cb[i] > 0.5]
-        fam.append((j, kids_m, kids_b, float(cm.max()), float(cb.max())))
-    # the latent to show: clean (pure), with the most descendants in the biggest dictionary
-    pick = max(fam, key=lambda t: (len(t[2]) >= 2, by_id[t[0]]["purity"] >= 0.75, len(t[2]), by_id[t[0]]["freq"]))
+        j, ch = f["id"], char_of(f)
+        if f["purity"] < 0.75 or ch in " \n":
+            continue
+        cm, cb = Wm @ Ws[j], Wb @ Ws[j]
+        kids_m = [int(i) for i in np.argsort(-cm)[:8] if cm[i] > 0.4 and i in dmid and char_of(dmid[i]) == ch]
+        kids_b = [int(i) for i in np.argsort(-cb)[:12] if cb[i] > 0.4 and i in dbig and char_of(dbig[i]) == ch]
+        fam.append((j, kids_m, kids_b, f["freq"]))
+    pick = max(fam, key=lambda t: (min(len(t[2]), 6), len(t[1]) > 0, t[3])) if fam else (dsm[0]["id"], [], [], 0)
     j, km, kb = pick[0], pick[1], pick[2]
-    dm = {f["id"]: f for f in describe(mid, v, latents=set(km))}
-    db = {f["id"]: f for f in describe(big, v, latents=set(kb))}
+    by_id = {f["id"]: f for f in dsm}
     best_m = np.array([float((Wm @ Ws[i]).max()) for i in range(len(Ws))])
     best_b = np.array([float((Wb @ Ws[i]).max()) for i in range(len(Ws))])
-    out = dict(sizes=list(SPLIT["sizes"]), k=SPLIT["k"], steps=S, parent=by_id[j],
-               mid=[dict(dm[i], cos=float(Wm[i] @ Ws[j])) for i in km if i in dm],
-               big=[dict(db[i], cos=float(Wb[i] @ Ws[j])) for i in kb if i in db],
-               best_mid=best_m, best_big=best_b,
-               n_kids_big=np.array([len(t[2]) for t in fam]), n_kids_mid=np.array([len(t[1]) for t in fam]))
+    n_kids = []
+    for i in range(len(Ws)):
+        cb = Wb @ Ws[i]
+        n_kids.append(int((cb > 0.4).sum()))
+    out = dict(sizes=list(SPLIT["sizes"]), k=SPLIT["k"], steps=S, parent=by_id[j], char=char_of(by_id[j]),
+               mid=[dict(dmid[i], cos=float(Wm[i] @ Ws[j])) for i in km],
+               big=[dict(dbig[i], cos=float(Wb[i] @ Ws[j])) for i in kb],
+               best_mid=best_m, best_big=best_b, n_kids_big=np.array(n_kids),
+               n_same_char_families=int(sum(len(t[2]) >= 2 for t in fam)), n_candidates=len(fam))
     for F in SPLIT["sizes"]:
         for k_, val in part[str(F)].items():
             out[f"{F}_{k_}"] = val
-    print(f"    splitting: latent {j} ({by_id[j]['contexts'][0][-14:]!r}) -> {len(km)} in 512, {len(kb)} in 2048", flush=True)
+    print(f"    splitting: latent {j} ({by_id[j]['contexts'][0][-14:]!r}) -> {len(km)} in 512, {len(kb)} in 2048 on the same "
+          f"character; {out['n_same_char_families']} of {len(fam)} clean latents have two or more such children", flush=True)
     return out
 
 

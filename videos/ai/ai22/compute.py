@@ -1,6 +1,6 @@
 """Precompute everything numerical in Part 22 of the AI series ("Images, Video and 3D").
 
-    python -m videos.ai.ai22.compute              # everything missing (about 2.5 CPU-hours on one core; resumable)
+    python -m videos.ai.ai22.compute              # everything missing (about 11 hours of one core; resumable)
     python -m videos.ai.ai22.compute denoisers --force
     AI22_THREADS=2 python -m videos.ai.ai22.compute     # torch threads (default 1: on a busy machine 1 is fastest)
     AI22_QUICK=1 python -m videos.ai.ai22.compute       # a smoke test with tiny budgets, into .cache/ai22_quick

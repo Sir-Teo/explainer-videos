@@ -46,18 +46,17 @@ class Splitting(VoiceoverScene):
         hb = label(rf"${sizes[2]:,}$ latents".replace(",", "{,}"), font_size=22, color=WHITE).next_to(pb, UP, buff=0.15)
         ar1 = Arrow(p0.get_right(), pm.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         ar2 = Arrow(pm.get_right(), pb.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
-        kb = np.asarray(sp["n_kids_big"])
-        frac = float(np.mean(kb >= 2))
-        tag = note(r"TopK, $k = 16$; \ the same data and steps; \ children: \ decoder cosine above $0.5$").to_corner(DR, buff=0.2)
+        nf, ncand = int(sp["n_same_char_families"]), int(sp["n_candidates"])
+        tag = note(r"TopK, $k = 16$; \ the same data and steps; \ children: \ decoder cosine above $0.4$, \ the same character").to_corner(DR, buff=0.2)
         cite_ = cite(r"Bricken et al., \textit{Towards Monosemanticity} (2023): \ feature splitting", corner=UL)
         with self.voiceover(
             "How many features does a model have? The dictionary seems to decide. <bookmark mark='a'/> Train TopK "
             f"dictionaries of {sizes[0]}, {sizes[1]} and {sizes[2]:,} latents on the same vectors. Here is one latent "
             "of the smallest, at its strongest moments. <bookmark mark='b'/> In the next size up, the latents "
-            f"pointing nearly the same way: {len(mid)} of them, <bookmark mark='c'/> and in the largest, {len(big)}, "
-            "each firing on a narrower slice of the same moments. Bricken and colleagues called it feature "
-            f"splitting. Across the smallest dictionary, {100 * frac:.0f} percent of latents have two or more such "
-            "children in the largest."
+            f"pointing nearly the same way and firing on the same character: {len(mid)} of them, "
+            f"<bookmark mark='c'/> and in the largest, {len(big)}, each on a narrower slice of the same moments. "
+            "Bricken and colleagues called it feature splitting. Of the smallest dictionary's "
+            f"{ncand} clean latents, {nf} have two or more such children in the largest."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")
@@ -150,11 +149,17 @@ class Splitting(VoiceoverScene):
         r_t, r_m = np.mean(stats["topk"]["rec"]), np.mean(stats["matryoshka"]["rec"])
         a_t, a_m = np.mean(stats["topk"]["ab"]), np.mean(stats["matryoshka"]["ab"])
         f_t, f_m = np.mean(stats["topk"]["fvu"]), np.mean(stats["matryoshka"]["fvu"])
-        verdict = (f"It helps here: the best upper-case latent fires on {100 * r_m:.0f} percent of capitals instead "
-                   f"of {100 * r_t:.0f}, and absorption goes from {100 * a_t:.0f} to {100 * a_m:.0f} percent"
-                   if r_m > r_t and a_m <= a_t else
-                   f"Here the difference is small: recall {100 * r_m:.0f} against {100 * r_t:.0f} percent, absorption "
-                   f"{100 * a_m:.0f} against {100 * a_t:.0f}")
+        if r_m > r_t and a_m <= a_t:
+            verdict = (f"It helps here: the best upper-case latent fires on {100 * r_m:.0f} percent of capitals "
+                       f"instead of {100 * r_t:.0f}, and absorption goes from {100 * a_t:.0f} to {100 * a_m:.0f} percent")
+        elif abs(r_m - r_t) < 0.05 and abs(a_m - a_t) < 0.05:
+            verdict = (f"Here the difference is small: recall {100 * r_m:.0f} against {100 * r_t:.0f} percent, "
+                       f"absorption {100 * a_m:.0f} against {100 * a_t:.0f}")
+        else:
+            verdict = (f"Here it does not help: the best upper-case latent fires on {100 * r_m:.0f} percent of capitals "
+                       f"against TopK's {100 * r_t:.0f}, and absorption is {100 * a_m:.0f} percent against "
+                       f"{100 * a_t:.0f}, with a wide spread across seeds. A cure tested on large models need not work "
+                       "on a small one, or on this kind of hierarchy")
         with self.voiceover(
             "One proposed cure came in 2025 from Bart Bussmann and colleagues, and independently from Noa "
             "Nabeshima: Matryoshka dictionaries, named after the nesting dolls. <bookmark mark='a'/> The first few "

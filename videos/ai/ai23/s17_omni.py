@@ -27,7 +27,7 @@ class Omni(VoiceoverScene):
     # ------------------------------------------------------------------
     def cascade(self):
         boxes = VGroup(node_box(r"speech recognizer", SND_C, font_size=24), node_box(r"language model", TEXT_C, font_size=24),
-                       node_box(r"speech synthesizer", C.MODEL_Q, font_size=24)).arrange(RIGHT, buff=1.1).move_to(UP * 1.7)
+                       node_box(r"speech synthesizer", C.MODEL_Q, font_size=24)).arrange(RIGHT, buff=1.1).move_to(UP * 1.1)
 
         def wave(color, w=1.3, h=0.3, n=60, k=5):
             return VMobject(stroke_color=color, stroke_width=2.5).set_points_smoothly(
@@ -45,7 +45,7 @@ class Omni(VoiceoverScene):
         cl = label(r"a cascade: \ each waits for the one before, \ and tone of voice is lost in the text between",
                    font_size=22, color=GREY_A).next_to(boxes, DOWN, buff=0.35)
         one = node_box(r"one network: \ sound, \ pictures and text in; \ sound and text out", WHITE, font_size=26)
-        one.move_to(DOWN * 1.1)
+        one.move_to(DOWN * 1.6)
         ol = label(r"GPT-4o (OpenAI, May 2024): \ answers speech in as little as $232$ ms, \ $320$ ms on average",
                    font_size=22, color=GREY_A).next_to(one, DOWN, buff=0.3)
         with self.voiceover(

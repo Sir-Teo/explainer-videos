@@ -122,7 +122,6 @@
   "Are the features really there, or made by the dictionary?": "特征真的在那里，还是字典造出来的？",
   "Bricken et al., \\textit{Towards Monosemanticity} (2023): \\ feature splitting": "Bricken等，\\textit{Towards Monosemanticity}（2023）：\\ 特征分裂",
   "Bussmann et al.\\ (2025); \\ Nabeshima (2024)": "Bussmann等（2025）；\\ Nabeshima（2024）",
-  "TopK, $k = 16$; \\ the same data and steps; \\ children: \\ decoder cosine above $0.5$": "TopK，$k = 16$；\\ 同样的数据和步数；\\ 孩子：\\ 解码器余弦大于 $0.5$",
   "feature absorption": "特征吸收",
   "a general feature (\\textit{upper case}) stays silent where a specific one (\\textit{this letter}) fires and carries its direction instead: \\ sparsity rewards one latent over two": "一般的特征（\\textit{大写}）在具体的特征（\\textit{这个字母}）亮起的地方沉默，由后者带着它的方向：\\ 稀疏性奖励用一个潜变量而不是两个",
   "the main latent, \\ letter by letter": "主潜变量，\\ 一个字母一个字母地看",
@@ -297,7 +296,8 @@
   "An MLP probe can fit more. \\ More selective, \\ or less?": "MLP探针能拟合更多。\\ 选择性更高，\\ 还是更低？",
   "Queries, \\ keys, \\ or values: \\ which carries the message?": "查询，\\ 键，\\ 还是值：\\ 消息走的是哪个？",
   "Same size, \\ same steps: \\ L1, \\ JumpReLU or TopK?": "同样大小，\\ 同样步数：\\ L1，\\ JumpReLU还是TopK？",
-  "The circuit: \\ when the test loss falls, \\ or before?": "回路：\\ 在测试损失下降时出现，\\ 还是更早？"
+  "The circuit: \\ when the test loss falls, \\ or before?": "回路：\\ 在测试损失下降时出现，\\ 还是更早？",
+  "TopK, $k = 16$; \\ the same data and steps; \\ children: \\ decoder cosine above $0.4$, \\ the same character": "TopK，$k = 16$；\\ 同样的数据和步数；\\ 孩子：\\ 解码器余弦大于 $0.4$，\\ 同一个字符"
  },
  "patterns": [
   [
