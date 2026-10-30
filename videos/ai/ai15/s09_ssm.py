@@ -92,11 +92,10 @@ class SSM(VoiceoverScene):
             "<bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; "
             "large steps, and it's gone in a few tokens."
         ) as vo:
-            self.play(Write(f1), FadeIn(cite_))
+            self.play(Write(f1), FadeIn(cite_), Create(bx), Create(lx), FadeIn(kx), FadeIn(bl))
+            self.play(Create(lh), MoveAlongPath(dot, lh.copy()), FadeIn(kh), run_time=4.0, rate_func=linear)
             vo.wait_until("l")
             self.play(FadeIn(bucket, shift=UP * 0.2))
-            self.play(Create(bx), Create(lx), FadeIn(kx), FadeIn(bl), run_time=1.2)
-            self.play(Create(lh), MoveAlongPath(dot, lh.copy()), FadeIn(kh), run_time=3.0, rate_func=linear)
             vo.wait_until("a")
             self.play(FadeOut(bucket), Write(f2), FadeIn(f2l))
             vo.wait_until("b")
@@ -120,16 +119,16 @@ class SSM(VoiceoverScene):
                 why(r"$\int e^{uA} du = A^{-1} e^{uA}$"), why(r"the zero-order hold: \ $\bar A = e^{\Delta A}$, \ "
                                                                    r"$\bar B = A^{-1}(e^{\Delta A} - I) B$")]
         deltas = np.asarray(z["deltas"], float)
-        g = axes([math.log10(deltas.min()) - 0.1, math.log10(deltas.max()) + 0.1], [-15.5, 3], x_length=4.6, y_length=3.0,
+        g = axes([math.log10(deltas.min()) - 0.1, math.log10(deltas.max()) + 0.1], [-15.5, 3], x_length=6.4, y_length=3.4,
                  xlabel=r"step $\Delta$", ylabel=r"largest error \ (relative)", xticks=[math.log10(0.025), math.log10(0.1), math.log10(0.4)],
                  yticks=[-15, -10, -5, 0], xfmt=lambda v: f"{10 ** v:.3g}", yfmt=lambda v: rf"10^{{{int(v)}}}",
-                 center=[3.9, -1.65, 0], font_size=17)
+                 center=[-0.6, -1.3, 0], font_size=18)
         ax = g.ax
         cols = {"euler": C.SURPRISE, "bilinear": C.BITS, "zoh": C.INTERVAL}
         names = {"euler": r"Euler: \ $\bar A = I + \Delta A$", "bilinear": r"bilinear", "zoh": r"zero-order hold"}
         lines = VGroup(*[curve(ax, np.log10(deltas), np.log10(np.clip(np.asarray(z[f"err_{k}"]), 1e-16, 1e3)), c_, 3)
                          for k, c_ in cols.items()])
-        leg = legend([(cols[k], names[k]) for k in cols], font_size=16).next_to(g, UP, buff=0.15).align_to(g, LEFT)
+        leg = legend([(cols[k], names[k]) for k in cols], font_size=20).next_to(g, RIGHT, buff=0.4)
         ee = np.asarray(z["err_euler"])
         tag = note(r"a damped oscillator, $2$ numbers of state, \ against a fine Runge--Kutta solution", font_size=16)
         tag.next_to(g, DOWN, buff=0.1)
@@ -155,6 +154,8 @@ class SSM(VoiceoverScene):
                 vo.wait_until(m)
                 step(k)
             vo.wait_until("d")
+            keep = VGroup(rows[3], whys[3])
+            self.play(FadeOut(VGroup(*rows[:3], *whys[:3])), keep.animate.to_edge(UP, buff=0.4))
             self.play(FadeIn(g), FadeIn(leg), FadeIn(tag))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)

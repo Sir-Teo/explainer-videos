@@ -91,6 +91,10 @@ class Rules(VoiceoverScene):
                    font_size=22, color=GREY_A).next_to(bars, UP, buff=0.3).align_to(bars, LEFT)
         cite_ = cite(r"B.~Widrow \& M.~E.~Hoff (1960); \ I.~Schlag, K.~Irie \& J.~Schmidhuber (2021); "
                      r"\ S.~Yang et al., \textit{DeltaNet} (2024)", corner=DR)
+        steps = VGroup(label(r"1. \ read what the memory holds for the key: \ $S_{t-1} k_t$", font_size=26, color=STATE),
+                       label(r"2. \ the error: \ $v_t - S_{t-1} k_t$", font_size=26, color=V),
+                       label(r"3. \ write the error along the key, \ a share $\beta_t$ of it", font_size=26, color=DELTA))
+        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, -0.3, 0])
         with self.voiceover(
             "The second fix is smarter. Before writing, read what the memory already says for this key, and write "
             "only the difference: what should be there, minus what is there. That's the delta rule, Widrow and "
@@ -102,8 +106,10 @@ class Rules(VoiceoverScene):
             f"{vals[2]:.2f}."
         ) as vo:
             self.play(Write(f), FadeIn(cite_))
-            self.play(GrowFromCenter(b), FadeIn(bl))
+            self.play(GrowFromCenter(b), FadeIn(bl), LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.2) for s_ in steps],
+                                                                 lag_ratio=0.7), run_time=4.0)
             vo.wait_until("a")
+            self.play(FadeOut(steps))
             self.play(LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.2) for s_ in story], lag_ratio=0.6), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(bh), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in bars], lag_ratio=0.4), run_time=2.0)
@@ -117,7 +123,7 @@ class Rules(VoiceoverScene):
         d = int(m["d"])
         vt = float(np.abs(vals).max())
         top = float(max(np.abs(m["S_add"]).max(), np.abs(m["S_delta"]).max()))
-        cell = 0.28
+        cell = 0.4
         kk, vv = seq[4]
         head = label(rf"the same four pairs, \ then key $k_{{{kk + 1}}}$ gets a new value", font_size=26).to_edge(UP, buff=0.3)
         panels = VGroup()
@@ -125,17 +131,17 @@ class Rules(VoiceoverScene):
             S3 = signed_grid(np.asarray(m[f"S_{rule}"])[3], d * cell, top)
             t = label(name, font_size=22, color=col).next_to(S3, UP, buff=0.15)
             panels.add(VGroup(t, S3))
-        panels.arrange(RIGHT, buff=3.2).move_to([0, 0.5, 0])
-        newv = VGroup(MathTex(rf"v_{{{kk + 1}}}' ", font_size=28, color=V), signed_column(vals[vv], 0.2, vt))
+        panels.arrange(RIGHT, buff=3.4).move_to([0, 0.6, 0])
+        newv = VGroup(MathTex(rf"v_{{{kk + 1}}}' ", font_size=34, color=V), signed_column(vals[vv], 0.3, vt))
         newv.arrange(DOWN, buff=0.1).move_to([0, 0.6, 0])
         arrows = VGroup(Arrow(newv.get_left(), panels[0][1].get_right(), buff=0.2, color=V, stroke_width=3),
                         Arrow(newv.get_right(), panels[1][1].get_left(), buff=0.2, color=V, stroke_width=3))
         ea, ed = np.asarray(m["err_add"])[4], np.asarray(m["err_delta"])[4]
         res = VGroup()
         for e, col, p in ((ea, ADD, panels[0]), (ed, DELTA, panels[1])):
-            rows = VGroup(*[label(rf"$k_{j + 1}$: \ ${e[j]:.2f}$", font_size=20, color=WHITE if j == kk else GREY_B)
-                            for j in range(4)]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-            rh = label(r"error reading the latest values", font_size=18, color=col)
+            rows = VGroup(*[label(rf"$k_{j + 1}$: \ ${e[j]:.2f}$", font_size=24, color=WHITE if j == kk else GREY_B)
+                            for j in range(4)]).arrange_in_grid(rows=2, cols=2, buff=(0.6, 0.12))
+            rh = label(r"error reading the latest values", font_size=22, color=col)
             res.add(VGroup(rh, rows).arrange(DOWN, buff=0.12).next_to(p, DOWN, buff=0.3))
         ka = float(ea[kk])
         with self.voiceover(
@@ -161,13 +167,14 @@ class Rules(VoiceoverScene):
     # ------------------------------------------------------------------
     def gradient(self):
         colors = {r"S": STATE, r"k": K, r"v": V, r"\beta": DELTA}
-        f1 = cmath(r"\ell(S)", "=", r"\tfrac12", r"\|", r"S", r"k", "-", r"v", r"\|^2", colors=colors, font_size=42)
-        f2 = cmath(r"\nabla_S\,\ell", "=", r"(", r"S", r"k", "-", r"v", r")", r"\,", r"k", r"^{\top}", colors=colors, font_size=42)
+        f1 = cmath(r"\ell(S)", "=", r"\tfrac12", r"\|", r"S", r"k", "-", r"v", r"\|^2", colors=colors, font_size=50)
+        f2 = cmath(r"\nabla_S\,\ell", "=", r"(", r"S", r"k", "-", r"v", r")", r"\,", r"k", r"^{\top}", colors=colors, font_size=50)
         f3 = cmath(r"S", r"\;\leftarrow\;", r"S", "-", r"\beta", r"\,(", r"S", r"k", "-", r"v", r")", r"\,", r"k", r"^{\top}",
-                   colors=colors, font_size=42)
-        fs = VGroup(f1, f2, f3).arrange(DOWN, buff=0.45).move_to(UP * 0.9)
-        l1 = label(r"how wrong the memory is about this pair", font_size=22, color=GREY_A).next_to(f1, RIGHT, buff=0.4)
-        l3 = label(r"one step of gradient descent: \\ the delta rule", font_size=22, color=DELTA).next_to(f3, RIGHT, buff=0.4)
+                   colors=colors, font_size=50)
+        fs = VGroup(f1, f2, f3).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(UP * 0.9 + LEFT * 2.4)
+        l1 = label(r"how wrong the memory is \\ about this pair", font_size=26, color=GREY_A).next_to(f1, RIGHT, buff=0.5)
+        l2 = label(r"the gap, \ times the key", font_size=26, color=GREY_A).next_to(f2, RIGHT, buff=0.5)
+        l3 = label(r"one step of gradient descent: \\ the delta rule", font_size=26, color=DELTA).next_to(f3, RIGHT, buff=0.5)
         msg = label(r"the memory is a model, \ trained on the text as it is read", font_size=30, color=WHITE)
         msg.to_edge(DOWN, buff=1.2)
         fam = label(r"gated delta rule: \ Gated DeltaNet (Qwen3-Next), \ Kimi Delta Attention (Kimi Linear); \\ "
@@ -188,13 +195,13 @@ class Rules(VoiceoverScene):
         ) as vo:
             self.play(Write(f1), FadeIn(l1))
             vo.wait_until("a")
-            self.play(Write(f2))
+            self.play(Write(f2), FadeIn(l2))
             vo.wait_until("b")
             self.play(Write(f3), FadeIn(l3))
             self.play(FadeIn(msg))
             vo.wait_until("c")
             # room for the picture: the first two lines have done their work
-            self.play(FadeOut(VGroup(f1, l1, f2)), VGroup(f3, l3).animate.move_to([0, 2.65, 0]),
+            self.play(FadeOut(VGroup(f1, l1, f2, l2)), VGroup(f3, l3).animate.move_to([0, 2.65, 0]),
                       msg.animate.move_to([0, 1.65, 0]), FadeIn(fam))
             self.play(FadeIn(ttt, shift=UP * 0.2))
             for k_ in range(1, len(tp[0]) + 1):

@@ -151,7 +151,7 @@ class GatedDelta(VoiceoverScene):
                   r"\alpha_t": GATE, r"\mathrm{Diag}(\alpha_t)": GATE, r"C_t": STATE, r"C_{t-1}": STATE, r"f_t": GATE,
                   r"i_t": DELTA}
         rows_ = [
-            (r"linear attention", (r"S_t", "=", r"S_{t-1}", "+", r"v_t", r"k_t^{\top}"), r"Part 15, chapter 2", C.SURPRISE),
+            (r"linear attention", (r"S_t", "=", r"S_{t-1}", "+", r"v_t", r"k_t^{\top}"), r"chapter 3", C.SURPRISE),
             (r"decay \ (Mamba-2, \ GLA)", (r"S_t", "=", r"\alpha_t", r"S_{t-1}", "+", r"v_t", r"k_t^{\top}"), r"forgets everything a little",
              DECAY),
             (r"delta rule \ (DeltaNet)", (r"S_t", "=", r"S_{t-1}", r"(I - ", r"\beta_t", r"k_t", r"k_t^{\top}", ")", "+", r"\beta_t",
@@ -168,12 +168,13 @@ class GatedDelta(VoiceoverScene):
         ]
         rows = VGroup()
         for i, (name, parts, note_, col) in enumerate(rows_):
-            y = 2.75 - i * 0.68
-            nm = label(name, font_size=21, color=col).move_to([-4.9, y, 0])
-            eq = cmath(*parts, colors=colors, font_size=26).move_to([-2.9, y, 0], aligned_edge=LEFT)
-            nt = label(note_, font_size=17, color=GREY_B).move_to([5.6, y, 0])
+            y = 2.95 - i * 0.66
+            nm = label(name, font_size=21, color=col).move_to([-5.0, y, 0])
+            eq = cmath(*parts, colors=colors, font_size=26).move_to([-3.25, y, 0], aligned_edge=LEFT)
+            nt = label(note_, font_size=17, color=GREY_B)
+            nt.move_to([6.85 - nt.width / 2, y, 0])
             rows.add(VGroup(nm, eq, nt))
-        common = cmath(r"S_t", "=", r"S_{t-1}", r"\,M_t", "+", r"\text{(write)}", colors=colors, font_size=30).to_edge(DOWN, buff=0.85)
+        common = cmath(r"S_t", "=", r"S_{t-1}", r"\,M_t", "+", r"\text{(write)}", colors=colors, font_size=30).to_edge(DOWN, buff=1.05)
         cl = label(r"every one: \ the old memory times a transition $M_t$, \ plus a write; \ "
                    r"$M_t$ is a diagonal plus a low-rank matrix", font_size=20, color=GREY_A).next_to(common, DOWN, buff=0.12)
         cite_ = cite(r"Yang et al.\ (2025); \ Kimi Team (2025); \ Dao \& Gu (2024); \ Beck et al., \textit{xLSTM} (2024); \ "
@@ -197,20 +198,22 @@ class GatedDelta(VoiceoverScene):
             "memory times a transition matrix, plus a write, and the transition is always a diagonal plus a "
             "low-rank part. That shape is what makes them fast to train."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(rows[0], shift=RIGHT * 0.2))
-            self.play(FadeIn(rows[1], shift=RIGHT * 0.2))
+            for r_ in rows[2:]:  # the whole family is there from the start, faint; each lights up in turn
+                r_.set_opacity(0.15)
+            self.play(FadeIn(cite_), FadeIn(rows))
             vo.wait_until("a")
+            self.play(Indicate(rows[0][0], color=C.SURPRISE), Indicate(rows[1][0], color=DECAY))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2], shift=RIGHT * 0.2))
+            self.play(rows[2].animate.set_opacity(1))
             vo.wait_until("c")
-            self.play(FadeIn(rows[3], shift=RIGHT * 0.2))
+            self.play(rows[3].animate.set_opacity(1))
             self.play(Indicate(rows[3][0], color=C.BITS))
             vo.wait_until("d")
-            self.play(FadeIn(rows[4], shift=RIGHT * 0.2))
+            self.play(rows[4].animate.set_opacity(1))
             vo.wait_until("f")
-            self.play(FadeIn(rows[5], shift=RIGHT * 0.2))
+            self.play(rows[5].animate.set_opacity(1))
             vo.wait_until("g")
-            self.play(FadeIn(rows[6], shift=RIGHT * 0.2))
+            self.play(rows[6].animate.set_opacity(1))
             vo.wait_until("e")
             self.play(Write(common), FadeIn(cl))
         self.wait(0.3)
