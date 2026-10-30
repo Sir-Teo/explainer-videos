@@ -108,7 +108,39 @@ about 15 minutes each). Every run is seeded; the long items save each finished r
 
 *(from `.cache/ai11/` on the machine that made the video; the narration branches on whichever way they come out.)*
 
-RESULTS
+Numbers from the run that made the video (Linux, one thread, a shared machine):
+
+* **Racing downhill.** Rosenbrock's valley (b = 5) from (−1.5, 2.2), 150 steps, the best of 25 rates each: Adam
+  (η = 0.68) under 0.01 after 30 steps, the heavy ball (0.0147) after 41, Lion (0.032) after 122, gradient descent
+  (0.032) after 141.
+* **Gradient descent.** Steps to a millionth of the starting error for κ = 1 … 1,000 in 50 dimensions: 1, 14, 46,
+  126, 373, 978, 2,745 (slope 0.89 on log axes; 1.01 with η = 2/(L + μ)); the late contraction per step at κ = 1,000:
+  0.9990 measured, 0.9990 derived. On the convex quadratic (curvatures 1/i², 1,000 dimensions) the gap stays under
+  L‖x₀ − x*‖²/2k at every one of 2,000 steps.
+* **Momentum.** At κ = 1,000: 187 steps for the heavy ball and 142 for Nesterov against 2,745 (slopes 0.58 and 0.46);
+  late contraction 0.9418 (derived 0.9387) and 0.9702 (derived 0.9684). On the convex quadratic Nesterov ends 118
+  times closer than gradient descent and stays under 2L‖x₀ − x*‖²/(k + 1)².
+* **SGD.** Part 6's 448 training pages: the stationary cloud's RMS distance 0.49 at batch 1 and 0.13 at batch 16
+  (3.8 times narrower). One page per step for 20,000 steps (5 seeds): the squared distance stalls at 0.33 with a
+  constant step and reaches 0.00025 with η₀/(1 + k/100).
+* **Temperature.** 4 rates × 6 batch sizes × 3 seeds: E‖w − w*‖² against η/B has slope 1.00 on log axes; measured
+  over the discrete-Lyapunov prediction 0.93 … 1.14; tr(H⁻¹C) = 1.90.
+* **Edge of stability.** η = 0.05: the sharpness first passes 90% of 2/η = 40 at step 1,520; second-half median 39.7,
+  maximum 42.6. η = 0.1: at step 280; median 19.9 (2/η = 20), maximum 20.1.
+* **Adam.** Without bias correction the first step would be 3.16η; with it, 99.99% of the weights move by exactly η
+  at step 1; the median move is 0.13η at step 100 and 0.16η at step 1,000.
+* **Natural gradient.** The 2–24–24–2 network (722 weights), 300 full-batch steps, the best of 5 rates, 3 seeds:
+  median training loss after 100 steps 0.00013 (natural gradient, η = 0.3), 0.014 (Adam, 0.1), 0.045 (K-FAC, 0.1),
+  4.2 (gradient descent, 3.0, still unstable then); at 300 steps 0.0, 0.0071, 0.0060 and 0.0080. The two
+  parametrizations' natural-gradient paths differ by 2 × 10⁻¹⁶; gradient descent's by 4.4.
+* **Spikes.** One-layer transformer, 2,000 steps, 2 seeds (held-out bits / largest score): Muon η = 0.03: 2.86, 2.88
+  / 883, 1,152; η = 0.12: 2.97, 3.16 / 25,703, 24,233; η = 0.12 with QK-clip τ = 100: 2.88, 2.92 / 146, 139. AdamW
+  η = 0.05: 3.69, 3.82 / 179,276, 230,454; with gradient clipping at 1: 2.89, 3.61 (one seed rescued); with QK-clip:
+  2.96, 3.39.
+* **Equilibrium.** A LayerNorm after the second hidden matrix, AdamW η = 0.003 constant, 4,000 steps: ‖W‖ = 26.9,
+  12.7, 6.6 at λ = 0.1, 0.4, 1.6 against 29.5, 15.0, 7.2 predicted (within 15%; 6.8, 3.4, 1.6 without the momentum
+  factor); fitted power −0.51 against −0.5; the update's cosine with W −0.05 … −0.18.
+RACE_RESULTS
 
 ## Fact-check notes
 

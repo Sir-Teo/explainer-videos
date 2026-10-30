@@ -149,7 +149,7 @@ class Race(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, 0.4, 0])
         keep_in_frame(rows)
         tag = note(r"each at its best rate; \ line: \ median of $3$ seeds; \ band: \ min to max").to_corner(DL, buff=0.2)
-        (w, wm, wa, wb), (s2, sm, sa, sb) = st[0], st[1]
+        (w, wm, _, wb), (s2, _, sa, _) = st[0], st[1]
         last = st[-1]
         aw = next(x for x in st if x[0] == "adamw")
         sep = wb < sa  # the winner's worst seed beats the runner-up's best

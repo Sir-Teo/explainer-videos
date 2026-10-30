@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import HIST, PART, load, takeaway_card
+from videos.ai.ai11.common import PART, load, takeaway_card
 
 B_COLORS = {1: C.SURPRISE, 16: C.BITS}
 

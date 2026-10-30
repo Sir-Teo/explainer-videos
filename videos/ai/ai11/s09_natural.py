@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
@@ -182,7 +181,6 @@ class Natural(VoiceoverScene):
         # decision maps: gradient descent against the natural gradient, through training
         snaps = list(n["snap_steps"])
         X, y = np.asarray(n["X"]), np.asarray(n["y"])
-        gs = np.linspace(-3.6, 3.6, 41)
 
         def dmap(o, k, center, size=2.3):
             p = np.asarray(n[f"snaps_{o}"])[k].reshape(41, 41)[::-1]  # image rows run top to bottom

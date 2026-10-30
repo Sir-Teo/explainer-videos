@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
@@ -117,7 +116,6 @@ class NewtonSchulz(VoiceoverScene):
     def rounds(self):
         m = load("ns")
         h = np.asarray(m["hist_grad_jordan"], float)  # round x singular values (largest first)
-        hc = np.asarray(m["hist_grad_cubic"], float)
         s0 = np.asarray(m["sv_grad"], float)
         big = s0 > 0.01 * s0.max()
         nb = int(m["nbig_grad"])

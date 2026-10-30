@@ -532,6 +532,10 @@ ZH = {
     "f'it catches {caught} of the {len(landed)} balls.":
         "{len(landed)}个球它接住了{caught}个。",
 
+    "f'After about {int(steps[-1]):,} steps of real play, all {len(fin)} seeds":
+        "在大约{int(steps[-1]):,}步真实游戏之后，{len(fin)}个种子全都接住了{100 * lo:.0f}%的球，而随机移动的挡板是"
+        "{100 * rnd:.0f}%：这个策略完全是在梦里学会的。",
+
     "f'After about {int(steps[-1]):,} steps of real play, the {len(fin)} seeds":
         "在大约{int(steps[-1]):,}步真实游戏之后，{len(fin)}个种子接住了{100 * lo:.0f}%到{100 * hi:.0f}%的球，而随机移动的挡板是"
         "{100 * rnd:.0f}%：这个策略完全是在梦里学会的。",
@@ -739,4 +743,8 @@ ZH = {
 
 PHRASES = {
     'never leaves the lane': '从不离开车道',
+    "which is METR's own fit.": '和METR自己的拟合一致。',
+    'Here it misspells an item once.': '这里它把一个物品的名字拼错了一次。',
+    'even so, this answer is wrong.': '即便如此，这个答案还是错的。',
+    'DAgger levels off early too.': 'DAgger也很早就趋于平稳。',
 }
