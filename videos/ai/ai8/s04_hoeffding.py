@@ -74,7 +74,7 @@ class Hoeffding(VoiceoverScene):
         h = load("hoeffding")
         n = 160
         e = np.asarray(h["eps"])
-        tail, hoef, cheb = (np.asarray(h[f"{k}{n}"]) for k in ("tail", "hoef", "cheb"))
+        tail, hoef, cheb = (np.asarray(h[k + str(n)]) for k in ("tail", "hoef", "cheb"))
         ok = tail > 0
         G = axes([0, 0.3], [-5, 0], x_length=6.6, y_length=4.4, xticks=[0, 0.1, 0.2, 0.3], yticks=[-4, -3, -2, -1, 0],
                  xfmt=lambda v: rf"{100 * v:.0f}", yfmt=lambda v: "1" if v == 0 else f"10^{{{int(v)}}}",

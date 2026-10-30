@@ -17,8 +17,8 @@ About 50 minutes; a hook, seventeen chapters and an outro.
 * **Hook: who wrote this page?** A page; its fingerprint of small words (Mosteller & Wallace, 1963–64); the 639
   pages as points; how we got here, from Legendre (1805) to TabPFN (2025); the plan.
 * **1. Least squares.** Three points and the squares on their misses (Legendre 1805; Gauss and Ceres, 1801); the fit
-  as a perpendicular projection onto the plane of every line's predictions (3D), and the normal equations (Part 3
-  owns the projection mechanics); Zipf's law on Part 1's 4.33 million words: slope −1.08, R² = 0.996.
+  as Gauss's maximum likelihood under bell-shaped noise (1809), derived; as a perpendicular projection onto the
+  plane of every line's predictions (3D), and the normal equations (Part 3 owns the projection mechanics); Zipf's law on Part 1's 4.33 million words: slope −1.08, R² = 0.996.
 * **2. The best linear unbiased line.** The Gauss–Markov theorem (Gauss 1821, Markov 1900) derived:
   Var β̃ = σ²(AᵀA)⁻¹ + σ²DDᵀ. Checked by 40,000 simulated data sets: least squares' slope variance 0.0103 (theory
   0.0104), the end-point slope's 0.0244 (theory 0.0247), both unbiased. Outside the theorem: Theil–Sen (median of
@@ -28,7 +28,8 @@ About 50 minutes; a hook, seventeen chapters and an outro.
   while the pseudoinverse splits the weight exactly in half. Least squares as a classifier: 191 of 191 held-out pages.
 * **3. Ridge.** Hoerl & Kennard (1970). Derived through the SVD: the fit along direction j is scaled by
   d_j²/(d_j² + λ). The 70 singular values of the standardized pages (63.4 down to 6.6), with 91% of the authorship
-  signal along the first two directions; the shrinkage factors as λ grows; effective weights Σ d²/(d² + λ).
+  signal along the first two directions; the shrinkage factors as λ grows; effective weights Σ d²/(d² + λ); the 70
+  coefficient paths (none ever exactly zero); ridge as the MAP estimate under a Gaussian prior, and weight decay.
   Ten-fold cross-validation (mean ± 1 s.e.) picks λ ≈ 75 (54 effective weights), 99.5% on the held-out pages.
 * **4. The lasso.** Tibshirani (1996): the diamond's corner; the soft threshold derived from subgradients;
   coordinate descent (Friedman, Hastie & Tibshirani, glmnet 2010) along 61 penalties, KKT conditions checked at every
@@ -41,16 +42,19 @@ About 50 minutes; a hook, seventeen chapters and an outro.
   with seventy.
 * **6. Newton's method.** Newton = iteratively reweighted least squares (Nelder & Wedderburn 1972), derived; Newton
   against gradient descent on the plane, step by step; on all 70 rates Newton reaches the minimum to machine precision
-  in 8 steps, gradient descent needs 1,000 steps to get within 10⁻⁶. With 70 rates the training pages are separable:
+  in 8 steps, gradient descent needs 1,000 steps to get within 10⁻⁶; the correct digits per Newton step
+  (… 4.3, 7.1, 12.6: roughly doubling, quadratic convergence). With 70 rates the training pages are separable:
   as the penalty weakens 10⁶-fold the weights grow from 1.2 to 12.0 without end (Soudry et al. 2018: gradient descent
   then turns toward the max-margin direction).
 * **7. Naive Bayes.** Multinomial naive Bayes derived: its log-odds are linear in the word counts; generative against
-  discriminative. Ng & Jordan (2002) reproduced: over many random training sets, naive Bayes has the lower error up to
+  discriminative; what it learned by counting (Austen: mrs, she, very; Dickens: out, up, me). Ng & Jordan (2002)
+  reproduced: over many random training sets, naive Bayes has the lower error up to
   8 pages, logistic regression from 12 pages on, ending at 0.5% against 5.8%. Calibration (ten-fold cross-validated
   probabilities): logistic regression's expected calibration error 0.039; naive Bayes gives 90% of pages odds beyond
   a million to one (ECE 0.042), and Platt scaling (1999) brings it to 0.011.
 * **8. Fisher's direction.** Fisher (1936): the separation along every direction, the best one; S_W⁻¹ pictured as
-  rounding the clouds; the generalized eigenproblem S_B w = J S_W w derived; on 70 rates one nonzero eigenvalue
+  rounding the clouds; why the cut is Bayes-optimal for two equal-shaped Gaussians (log-odds linear: logistic
+  regression's form with Fisher's direction); the generalized eigenproblem S_B w = J S_W w derived; on 70 rates one nonzero eigenvalue
   (S_B has rank 1), its eigenvector equal to the formula and to least squares on a 0/1 target (cosines 1.000000);
   82% with two rates, 100% with seventy.
 * **9. Neighbours, and the curse of dimensionality.** Fix & Hodges (1951); a 15-neighbour vote; regions as k grows
@@ -75,7 +79,8 @@ About 50 minutes; a hook, seventeen chapters and an outro.
 * **12. Trees.** The learned depth-3 tree and its boxes; Gini, entropy and error rate; why a strictly concave
   impurity always rewards a useful split (Jensen), and the scan of every threshold on "not" (all three pick 8.5);
   accuracy against depth (best held out at depth 4, 83%; cross-validation picks 3; grown fully: 94% train, 74% new).
-  CART (Breiman, Friedman, Olshen & Stone 1984).
+  CART (Breiman, Friedman, Olshen & Stone 1984). Fragility: depth-3 trees on 20 bootstrap resamples (70 rates) start
+  with 3 different words (not 10, mrs 7, she 3) and score 80–93% held out.
 * **13. Bagging and random forests.** Var = ρσ² + (1 − ρ)σ²/B derived and checked by simulation (ρ = ½, B = 100:
   0.512 against 0.505); measured on the pages over 30 training sets of 150 pages: bagging ρ = 0.109, σ² = 0.118;
   eight random words ρ = 0.013, σ² = 0.146; two words ρ = 0.007. A forest of 300 (Breiman 2001, after Ho 1995): one
@@ -101,7 +106,9 @@ About 50 minutes; a hook, seventeen chapters and an outro.
   two cultures (2001); the Netflix Prize (2006–09), Kaggle (2010), XGBoost in 17 of 29 Kaggle-blog winners of 2015;
   why trees still win on tables (Grinsztajn, Oyallon & Varoquaux 2022); foundation models for tables: TabPFN
   (Hollmann et al., *Nature*, Jan 2025), TabPFN-2.5 (Nov 2025), TabPFN-3 (May 2026), and an independent check
-  (Purucker et al., *Beyond IID*, June 2026).
+  (Purucker et al., *Beyond IID*, June 2026); how the classics live on inside today's models (the softmax, linear
+  probes and weight decay, sparse autoencoders' L1, the neural tangent kernel and attention as a kernel smoother,
+  retrieval, calibration).
 * **Outro.** Twelve pictures from the part's results; where it comes back (Parts 7, 8, 9, 11, 13, 31); eight
   problems; Part 7's teaser; references.
 
