@@ -326,4 +326,6 @@ def compute_unified():
         out[f_] = np.array(part["s0"][f_])
     out["name_pred"], out["name_fam"] = part["s0"]["name_pred"], part["s0"]["name_fam"]
     out["curve"] = np.array([np.array(part[f"s{s}"]["curve"]) for s in SEEDS])
+    for s_ in SEEDS:  # the item is whole: its per-seed pieces can go
+        (CACHE.dir / f"unified_s{s_}.partial.json").unlink(missing_ok=True)
     return out

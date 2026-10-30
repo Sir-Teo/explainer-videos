@@ -55,10 +55,10 @@ class History(VoiceoverScene):
                        for a, b in zip(loop, loop[1:])])
         back = CurvedArrow(loop[2].get_bottom() + DOWN * 0.05, loop[0].get_bottom() + DOWN * 0.05, angle=-0.6,
                            color=GREY_B)
-        gifts = label(r"its by-products: \ the A* search (1968), \ the STRIPS planner (1971), \ the Hough transform for "
-                      r"lines", font_size=22, color=GREY_A).move_to([2.6, -2.5, 0])
-        if gifts.width > 7.4:
-            gifts.width = 7.4
+        gifts = label(r"its by-products: \ the A* search (1968), \\ the STRIPS planner (1971), \ the Hough transform for "
+                      r"lines", font_size=26, color=GREY_A).move_to([2.6, -2.4, 0])
+        if gifts.width > 7.6:
+            gifts.width = 7.6
         tag = note(r"drawing, \ after SRI's photographs").next_to(rooms, DOWN, buff=0.12)
         with self.voiceover(
             "The story of agents starts in a few rooms at the Stanford Research Institute. From 1966 to 1972, Nils "
@@ -86,8 +86,8 @@ class History(VoiceoverScene):
     # ------------------------------------------------------------------
     def darpa(self):
         head = label(r"The DARPA challenges: \ robots that drive", font_size=36).to_edge(UP, buff=0.4)
-        W = 9.0
-        x0 = -3.6
+        W = 6.6
+        x0 = -4.6
         rows = []
         data = [(r"2004", r"Mojave desert, \ about $142$ miles", 7.4 / 142, r"no one finished; \ the best, CMU's Sandstorm, "
                  r"went about $7$ miles", FAIL),
@@ -96,16 +96,22 @@ class History(VoiceoverScene):
                  r"six finished; \ CMU's Boss won", GOOD)]
         for k, (yr, what, frac, res, col) in enumerate(data):
             y = 1.7 - 1.55 * k
-            yl = label(yr, font_size=34, color=HIST).move_to([x0 - 2.3, y, 0])
-            wl = label(what, font_size=22, color=GREY_A).move_to([x0, y + 0.42, 0], aligned_edge=LEFT)
+            yl = label(yr, font_size=34, color=HIST).move_to([x0 - 1.3, y, 0])
+            wl = label(what, font_size=22, color=GREY_A)
+            if wl.width > W:
+                wl.width = W
+            wl.move_to([x0, y + 0.42, 0], aligned_edge=LEFT)
             track = Line([x0, y, 0], [x0 + W, y, 0], color=GREY_D, stroke_width=6)
             prog = Line([x0, y, 0], [x0 + W * frac, y, 0], color=col, stroke_width=6)
             car = Dot([x0, y, 0], radius=0.1, color=WHITE)
-            rl = label(res, font_size=22, color=col).move_to([x0, y - 0.42, 0], aligned_edge=LEFT)
+            rl = label(res, font_size=22, color=col)
+            if rl.width > W:
+                rl.width = W
+            rl.move_to([x0, y - 0.42, 0], aligned_edge=LEFT)
             rows.append((yl, wl, track, prog, car, rl, frac))
         key = history_card(2005, r"Stanley \ (Thrun and the Stanford team)", r"what won was learning: \ it taught itself "
                            r"to tell road from desert, \ labelling far-off camera pixels with what its lasers said up "
-                           r"close", width=5.2, color=HIST, font_size=20).to_corner(DR, buff=0.3)
+                           r"close", width=4.4, color=HIST, font_size=22).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.2)
         cite_ = cite(r"Thrun et al., \textit{Stanley} (2006); \ Urmson et al., \textit{Boss} (2008)", corner=DL)
         with self.voiceover(
             "The next leap came from the desert. In March 2004, the American defence research agency DARPA offered a "
@@ -146,19 +152,22 @@ class History(VoiceoverScene):
         head = label(r"Robots that learn", font_size=36).to_edge(UP, buff=0.4)
         cards = VGroup(
             history_card(1989, r"ALVINN \ (Pomerleau, CMU)", r"a small network steers a van by copying a human "
-                         r"driver: \ imitation learning (chapter 9)", width=6.2, color=HIST, font_size=20),
+                         r"driver: \ imitation learning (chapter 9)", width=6.5, color=HIST, font_size=28),
             history_card(2016, r"end-to-end visuomotor policies \ (Levine, Finn, Darrell \& Abbeel)", r"one network "
                          r"from camera pixels to motor torques; \ the same year, Google's arm farm learned to grasp "
-                         r"from hundreds of thousands of tries", width=6.2, color=HIST, font_size=20),
+                         r"from hundreds of thousands of tries", width=6.5, color=HIST, font_size=28),
             history_card(2019, r"Dactyl \ (OpenAI)", r"a robot hand solves a Rubik's cube, \ trained only in "
-                         r"simulation, \ randomized (chapter 14)", width=6.2, color=HIST, font_size=20),
+                         r"simulation, \ randomized (chapter 14)", width=6.5, color=HIST, font_size=28),
             history_card(2022, r"SayCan, \ RT-1 \ (Google)", r"language models choose the robot's next skill; \ a "
-                         r"transformer trained on $130{,}000$ demonstrations (chapter 15)", width=6.2, color=HIST,
-                         font_size=20),
+                         r"transformer trained on $130{,}000$ demonstrations (chapter 15)", width=6.5, color=HIST,
+                         font_size=28),
         )
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.35)).next_to(head, DOWN, buff=0.4)
+        cards.arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.5))
         if cards.width > 13.2:
             cards.width = 13.2
+        if cards.height > 6.0:
+            cards.height = 6.0
+        cards.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
             "Meanwhile robots began to learn their skills instead of having them programmed. <bookmark mark='a'/> "
             "In 1989 Dean Pomerleau's ALVINN steered a van along a road with a small neural network that copied a "
@@ -187,19 +196,21 @@ class History(VoiceoverScene):
               (r"2025", r"coding agents in the terminal", AGENT),
               (r"2026", r"agents working for hours", GOOD)]
         X0, X1 = -6.0, 6.0
-        axis = Line([X0, 0.2, 0], [X1, 0.2, 0], color=GREY_C, stroke_width=2)
+        Y = 0.7
+        axis = Line([X0, Y, 0], [X1, Y, 0], color=GREY_C, stroke_width=2)
         marks = VGroup()
         for k, (yr, what, col) in enumerate(ev):
             x = X0 + 0.6 + k * (X1 - X0 - 1.2) / (len(ev) - 1)
-            d = Dot([x, 0.2, 0], radius=0.08, color=col)
-            yl = label(yr, font_size=24, color=HIST).next_to(d, UP if k % 2 == 0 else DOWN, buff=0.18)
-            wl = label(what, font_size=20, color=col)
-            if wl.width > 2.4:
-                wl.width = 2.4
+            d = Dot([x, Y, 0], radius=0.1, color=col)
+            yl = label(yr, font_size=30, color=HIST).next_to(d, UP if k % 2 == 0 else DOWN, buff=0.2)
+            wl = label(what, font_size=28, color=col)
+            if wl.width > 3.9:
+                wl.width = 3.9
             wl.next_to(yl, UP if k % 2 == 0 else DOWN, buff=0.12)
+            keep_in_frame(wl, margin=0.25)
             marks.add(VGroup(d, yl, wl))
-        loop = VGroup(node_box(r"a language model", AGENT, 24), node_box(r"a tool, \ a browser, \ a terminal", TOOL, 24))
-        loop.arrange(RIGHT, buff=2.2).to_edge(DOWN, buff=0.6)
+        loop = VGroup(node_box(r"a language model", AGENT, 28), node_box(r"a tool, \ a browser, \ a terminal", TOOL, 28))
+        loop.arrange(RIGHT, buff=2.8).move_to([0, -2.4, 0])
         a1 = CurvedArrow(loop[0].get_top() + UP * 0.05, loop[1].get_top() + UP * 0.05, angle=-0.6, color=GREY_B)
         a2 = CurvedArrow(loop[1].get_bottom() + DOWN * 0.05, loop[0].get_bottom() + DOWN * 0.05, angle=-0.6, color=GREY_B)
         l1 = label(r"action", font_size=20, color=GREY_B).next_to(a1, UP, buff=0.05)
