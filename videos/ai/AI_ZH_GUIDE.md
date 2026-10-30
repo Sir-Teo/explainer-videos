@@ -1237,3 +1237,54 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | FAST action tokens, discrete cosine transform (DCT), byte-pair encoding (BPE) | FAST动作词元，离散余弦变换（DCT），字节对编码（BPE） |
 | per-step binning | 逐步分箱 |
 | robot foundation model, co-training, ablation | 机器人基础模型，联合训练，消融实验 |
+
+### Every sense is a token (Part 23)
+
+| English | 中文 |
+|---|---|
+| byte-pair encoding (BPE), merge | 字节对编码（BPE），合并 |
+| word type, out-of-vocabulary word | 词型，未登录词 |
+| WordPiece | WordPiece |
+| unigram language model (tokenizer) | 一元语言模型（分词器） |
+| cut (segmentation) of a word, lattice | 切分，格（网格） |
+| subword regularization, SentencePiece | 子词正则化，SentencePiece |
+| byte-level BPE, UTF-8 | 字节级BPE，UTF-8 |
+| tokenizer-free model, patch, entropy patching | 无分词器模型，块，按熵分块 |
+| Byte Latent Transformer (BLT) | 字节潜变量Transformer（BLT） |
+| codebook, dead code, codebook collapse | 码本，死码，码本坍缩 |
+| straight-through estimator, stop-gradient | 直通估计器，停止梯度 |
+| codebook loss, commitment loss | 码本损失，承诺损失 |
+| exponential moving average (EMA) codebook | 指数移动平均（EMA）码本 |
+| dead-code restart | 死码重启 |
+| finite scalar quantization (FSQ) | 有限标量量化（FSQ） |
+| lookup-free quantization (LFQ), entropy term | 免查表量化（LFQ），熵项 |
+| residual vector quantization (RVQ), stage | 残差向量量化（RVQ），级 |
+| quantizer dropout | 量化器丢弃 |
+| sampling rate, Nyquist frequency, sampling theorem | 采样率，奈奎斯特频率，采样定理 |
+| aliasing, anti-aliasing filter, decimation | 混叠，抗混叠滤波器，抽取（降采样） |
+| short-time Fourier transform (STFT), spectrogram | 短时傅里叶变换（STFT），频谱图 |
+| mel scale, mel filterbank, log-mel spectrogram | 梅尔刻度，梅尔滤波器组，对数梅尔频谱 |
+| neural audio codec, bitrate (kbps) | 神经音频编解码器，码率（kbps） |
+| semantic tokens, acoustic tokens | 语义词元，声学词元 |
+| template matching, dynamic time warping (DTW) | 模板匹配，动态时间规整（DTW） |
+| acoustic model, Gaussian mixture | 声学模型，高斯混合 |
+| word error rate (WER) | 词错误率（WER） |
+| connectionist temporal classification (CTC), blank | 连接时序分类（CTC），空白符 |
+| collapse map, alignment, posterior occupancy | 折叠映射，对齐，后验占有率 |
+| RNN transducer, listen-attend-spell | RNN转录器，听-注意-拼写 |
+| weak supervision | 弱监督 |
+| forced aligner | 强制对齐器 |
+| source–filter model, formant | 源-滤波器模型，共振峰 |
+| formant synthesis, unit selection, statistical parametric synthesis | 共振峰合成，单元选择，统计参数合成 |
+| vocoder, μ-law | 声码器，μ律 |
+| dilated causal convolution | 扩张因果卷积 |
+| codec language model, voice cloning | 编解码器语言模型，声音克隆 |
+| multi-token prediction (MTP), first-packet latency | 多词元预测（MTP），首包延迟 |
+| critic, density ratio | 打分函数（评判函数），密度比 |
+| zero-shot retrieval | 零样本检索 |
+| sigmoid loss (SigLIP) | sigmoid损失（SigLIP） |
+| vision-language model, connector, Perceiver resampler, Q-Former | 视觉语言模型，连接器，感知重采样器，Q-Former |
+| dynamic resolution, M-RoPE | 动态分辨率，多模态旋转位置编码（M-RoPE） |
+| early fusion | 早期融合 |
+| cascade, full duplex, inner monologue | 级联，全双工，内心独白 |
+| Thinker, Talker | 思考者（Thinker），说话者（Talker） |
