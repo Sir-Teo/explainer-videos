@@ -29,7 +29,7 @@ class KVCache(VoiceoverScene):
         ks = VGroup(*[vec_column(g.normal(size=6), color=K) for _ in words])
         vs = VGroup(*[vec_column(g.normal(size=6), color=V) for _ in words])
         cols = VGroup(*[VGroup(k_, v_).arrange(RIGHT, buff=0.06) for k_, v_ in zip(ks, vs)])
-        toks = VGroup(*[Text(w, font=MONO, font_size=26, color=GREY_A) for w in words])
+        toks = VGroup(*[data_text(w, font=MONO, font_size=26, color=GREY_A) for w in words])
         step = max(t.width for t in toks) + 0.35  # room for the longest word under each column
         for i, (c_, t) in enumerate(zip(cols, toks)):
             c_.move_to([i * step, 0, 0])
@@ -214,7 +214,9 @@ class KVCache(VoiceoverScene):
             f"Folding anyway gives scores off by {100 * float(m['rel_rope_folded']):.0f} percent. <bookmark mark='c'/> "
             "DeepSeek's answer is to decouple: the positions go into a small extra key, the same for every head, "
             f"cached next to the latent, {D['kv_lora_rank']} numbers plus {D['rope_dim']}. The content part folds "
-            "as before, and the scores match exactly again."
+            "as before, and the scores match exactly again. <bookmark mark='d'/> Serving this cache fast, paging it, "
+            "sharing it between conversations and storing it in fewer bits, is Part 19's subject. Here we ask what "
+            "a memory should keep."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

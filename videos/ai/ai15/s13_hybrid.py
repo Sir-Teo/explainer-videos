@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import A, GATED, HYB, PART, STATE, axes, band, curve, gib, load, said
+from videos.ai.ai15.common import fmt_int, A, GATED, HYB, PART, STATE, axes, band, curve, gib, load, said
 
 LIN, ATT = C.INTERVAL, C.ATTN
 TF_C, HY_C = C.ATTN, HYB
@@ -104,9 +104,9 @@ class Hybrid(VoiceoverScene):
         lines = VGroup(curve(ax, st, np.clip(ct_.mean(0), lo, hi), TF_C, 3), curve(ax, st, np.clip(ch_.mean(0), lo, hi), HY_C, 3))
         pt, ph = int(r["transformer_params"]), int(r["hybrid_params"])
         d, Lr = int(r["d"]), int(r["layers"])
-        arch = VGroup(label(rf"transformer: \ {Lr} attention layers, \ rotary positions \ (${pt:,}$ weights)".replace(",", "{,}"),
+        arch = VGroup(label(rf"transformer: \ {Lr} attention layers, \ rotary positions \ (${fmt_int(pt)}$ weights)",
                             font_size=19, color=TF_C),
-                      label(rf"hybrid: \ 3 gated-delta layers, \ then attention, \ no positions \ (${ph:,}$)".replace(",", "{,}"),
+                      label(rf"hybrid: \ 3 gated-delta layers, \ then attention, \ no positions \ (${fmt_int(ph)}$)",
                             font_size=19, color=HY_C)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.8, 2.3, 0])
         bt, bh = np.asarray(r["transformer_bits"]), np.asarray(r["hybrid_bits"])
         rows = VGroup(*[label(rf"{n}: \ ${b.mean():.3f}$ \ (seeds ${b.min():.3f}$--${b.max():.3f}$)", font_size=20, color=c_)

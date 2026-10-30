@@ -269,6 +269,10 @@ class Codec(VoiceoverScene):
              r"the first distilled from WavLM, \ a self-supervised model", SEM_C),
             (r"Qwen3-TTS's tokenizer (2026): \ $12.5$ frames/s, \ $16$ codebooks of $2{,}048$; \\ the first taught by "
              r"WavLM, \ $15$ acoustic", SEM_C))]).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -1.3, 0])
+        if facts.width > 6.6:
+            facts.width = 6.6
+        facts.move_to([3.6, -1.3, 0])
+        keep_in_frame(facts, margin=0.2)
         with self.voiceover(
             "Speech tokens come in two kinds. <bookmark mark='a'/> A codec's acoustic tokens carry how the speech "
             "sounds: the voice, the room, the detail. Our codec uses its stages "

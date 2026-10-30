@@ -123,6 +123,10 @@ class Attention(nn.Module):
                 selb &= past[None, None]
             selb |= (qb[:, None] == torch.arange(nb)[None, :])[None, None]  # the query's own block, causally
             m = selb.repeat_interleave(Bk, -1) & causal[None, None]
+        elif c.attn == "topk":  # an oracle: the keys the query itself scores highest (per head)
+            sc = (q @ k.transpose(-1, -2)).masked_fill(~causal[None, None], float("-inf"))
+            top = sc.topk(min(c.attn_k, T), -1).indices
+            m = torch.zeros(sc.shape, dtype=torch.bool).scatter_(-1, top, True) & causal[None, None]
         elif c.attn == "index":
             I = self.index_scores(x.detach())  # the indexer learns from its own loss only (DSA)
             I = I.masked_fill(~causal[None], float("-inf"))
