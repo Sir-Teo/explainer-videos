@@ -206,11 +206,13 @@ class SimToReal(VoiceoverScene):
         tag = note(r"every map: \ with the real robot's delay and sensor noise; \ mean of 8 seeds", font_size=18)
         tag.to_edge(DOWN, buff=0.2)
         frac = lambda M_: float((M_ > 400).mean())  # noqa: E731
+        one_sim = ("The policies trained in one simulator balance for four hundred steps nowhere on this map, once "
+                   "the delay and the noise are added." if frac(mN) == 0 else
+                   f"The policies trained in one simulator balance well in only {100 * frac(mN):.0f} percent of this map.")
         with self.voiceover(
             "Here is the whole picture: how long each kind of policy balances, across pole lengths and motor "
-            "strengths, every one with the real robot's delay and noise. <bookmark mark='a'/> The policies trained "
-            "in one simulator balance well "
-            f"in only {100 * frac(mN):.0f} percent of this map. <bookmark mark='b'/> Those trained across randomized "
+            "strengths, every one with the real robot's delay and noise. <bookmark mark='a'/> " + one_sim + " "
+            "<bookmark mark='b'/> Those trained across randomized "
             f"simulators, in {100 * frac(mR):.0f} percent, the real robot included. <bookmark mark='c'/> The price "
             "is a policy that is less tuned to any one machine; the gain is that it does not need to know which "
             "machine it is on."

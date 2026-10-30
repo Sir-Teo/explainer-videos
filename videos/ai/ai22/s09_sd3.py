@@ -203,7 +203,6 @@ class SD3(VoiceoverScene):
             "and solve: the noise level shifts by a factor alpha, the square root of the ratio of pixel counts. In "
             "log signal-to-noise, it's a constant shift."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in big], lag_ratio=0.5), run_time=2.5)
             vo.wait_until("b")
             self.play(*[Transform(b_, p_) for b_, p_ in zip(big, pairs)], run_time=1.2)
@@ -296,9 +295,12 @@ class SD3(VoiceoverScene):
             "prompt and up to ten reference pictures. <bookmark mark='d'/> The recipe has settled: a latent space, "
             "rectified flow, one transformer over words and patches."
         ) as vo:
-            self.play(FadeIn(head))
+            bfl = label(r"several of SD3's authors \ $\to$ \ Black Forest Labs \ (2024)", font_size=30, color=HIST)
+            self.play(FadeIn(head), FadeIn(bfl, shift=UP * 0.1))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
+                if k == 0:
+                    self.play(FadeOut(bfl), run_time=0.4)
                 self.play(FadeIn(cards[k], shift=UP * 0.1))
             vo.wait_until("d")
             self.play(FadeIn(foot))

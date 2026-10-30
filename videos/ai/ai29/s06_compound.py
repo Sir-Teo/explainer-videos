@@ -107,8 +107,8 @@ class Compound(VoiceoverScene):
         th = a["theory"]
         close = all(abs(float(a[f"{m}_p"]) - th[m]) < 0.004 for m, _, _ in MODES)
         fit = ("Each set of points falls on its own curve p to the n, with p what the error rates predict: "
-               if close else "The points fall close to curves p to the n, though not exactly, since retries use up the "
-               "budget: ")
+               if close else "The points fall close to curves p to the n, though not always where the error rates "
+               "predict, since two slips can cancel and retries use up the budget: ")
         with self.voiceover(
             "Our warehouse agent shows where the reliability comes from. Here is how often it gets the total right, "
             "against the number of prices it has to look up. <bookmark mark='a'/> Working in its head, every slip is "

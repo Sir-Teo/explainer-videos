@@ -113,7 +113,55 @@ Part 26's cart-pole equations and drawing are reused through `videos/ai/ai26/env
 
 ## Results on this machine
 
-RESULTS_PLACEHOLDER
+All numbers below come from `python -m videos.ai.ai29.compute` on this machine (Linux, CPU); the narration states
+them through f-strings over the cached results, so another machine's last digits flow through to what is said.
+
+* **Hook.** 0.97³⁰ = 0.40; of 60 simulated runs of a 30-step task, 27 reach the end.
+* **Belief (corridor, 40 cells, 4 doors).** Uncertainty from 5.32 bits to 0.80 bits after 40 steps; the most likely
+  cell is the robot's.
+* **Agent loop (simulated warehouse agent, 3,000 tasks per point).** Effective per-step reliability fitted from success
+  against task length: in its head 96.3% (a slip is set at 6% a step, but two slips can cancel), ReAct with
+  tools 97.9% (theory 98%), ReAct with a check 99.3% (theory 99.4%); at 60 steps: 11%, 28% and 66% of tasks right; the
+  check costs 1.15 calls a step.
+* **METR (Time Horizon 1.1, 26 models, refitted).** Frontier models since 2023 within the 16-hour range (14 points):
+  a doubling every 129 days (bootstrap 95%: 102–155; METR's own fit: 128.7); since 2019 (17 points): 188 days (METR:
+  187.8); 80% horizons double every 133 days; median t₅₀/t₈₀ = 5.1 against 3.1 for a constant hazard.
+* **Behaviour cloning against DAgger (windy lane, 400 expert labels each, 8 seeds, exact expectations).** The
+  learner's error on the expert's states ε = 0.085 for both. Expected steps off the lane in 400: BC 94 on average
+  (seeds 17–183), DAgger 31 (17–84); expert 0. Log-log slope of J(T): BC 1.30 (steps 10–60) and 1.59 (200–400), DAgger
+  1.08 and 1.29. Against the label budget (50–1,600): BC 208 → 94 and flat from 200 labels on; DAgger 208 → 17. DAgger's
+  replay (seed 0): 345 → 84 by round 4. The bound J ≤ J* + T²ε is checked for every seed at T = 10, 50, 200.
+* **Bouncing-ball world model.** Imagined ball 0.10 px off after 1 step, 0.88 after 5, 4.9 after 20.
+* **Dreamer-lite (12 × 12 catch, RSSM from pixels, policy trained only in imagination, 3 seeds).** All three seeds
+  catch 100% of the balls after 4,556 steps of real play (60 rounds of 40 updates), against 29% for a random paddle.
+* **KL balancing (world model alone, 3 seeds each, equal total KL weight).** Mean wrong pixels per dreamed frame over
+  30 steps: balanced 5.8, plain 5.6 — no clear difference on a world this small (balanced is better for the first few
+  steps: 0.8 against 1.5 wrong pixels one step ahead).
+* **symlog (one network, four games with reward scales 1 to 1,000, 3 seeds).** Relative error by game, raw squared
+  error: 278%, 38%, 12%, 0.5%; after symlog: 1.9%, 1.0%, 1.2%, 0.9%.
+* **Regression against flow matching (two-way demonstrations, 400 demos, chunks of 20, 5 seeds, 60 starts each).**
+  Regression hits the obstacle 98% of the time (seeds 95–100%); flow matching 27% (17–38%), passing above 51% of the
+  time.
+* **FAST (300 held-out one-second chunks of synthetic seven-joint motion).** Per-step binning: 350 tokens, RMS error
+  0.0060 rad; 46% of tokens repeat the previous one, 75% are within one bin. FAST (BPE, 600 merges): γ = 2 → 12.4
+  tokens (0.108 rad), γ = 10 → 25.2 (0.029), γ = 100 → 63.4 (0.0049): at about the per-step error, 6× fewer tokens.
+* **Domain randomization (cart-pole, linear policies, CEM, 8 seeds each, equal episodes).** Both kinds balance all 500
+  steps in Part 26's simulator; on the "real" cart-pole (1.7× pole, 3× pole mass, 30% weaker motor, 1.6× cart, a
+  one-step delay, sensor noise): single-simulator policies 97 steps on average (44–283), randomized 473 (379–500).
+  Over the robustness map (pole length 0.2–1.2 m, force 4–15 N, with delay and noise), the share of cells above 400
+  steps: 0% against 83%.
+
+## Problems found and fixed while making it
+
+* The first Dreamer-lite barely learned: the reward head could not read a one-pixel ball from the latent state. The ball
+  is now drawn 2 × 2 (with the catch rule matching the drawing), and the reward head predicts a two-hot distribution
+  over symlog bins (V3); all seeds then reach 100%.
+* The first imitation task (a loop of road on a grid, a table policy) did not separate BC from DAgger: an arbitrary
+  default action trapped the learner off the road for both. The windy lane, with a noisy camera, shows the effect the
+  theory describes and is solvable exactly.
+* The first two-way demonstrations used chunks of 8 moves; resampling the mode every 8 steps let flow matching wander
+  into the obstacle (36%). Chunks of 20 positions relative to the current one give 27%.
+* The first synthetic arm motions were so slow that a one-second chunk was almost a constant; moves are now 0.25–0.9 s.
 
 ## References
 

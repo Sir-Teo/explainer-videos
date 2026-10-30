@@ -73,9 +73,9 @@ class VLA(VoiceoverScene):
             "part sixteen's mixture-of-experts experts. It generates those motions by flow matching, part twenty-one's "
             "machinery, now drawing trajectories instead of pictures."
         ) as vo:
-            self.play(Create(vlm), FadeIn(vl), FadeIn(tag), FadeIn(cite_))
+            self.play(Create(vlm), FadeIn(vl), FadeIn(tag), FadeIn(cite_), FadeIn(cam, shift=RIGHT * 0.2), FadeIn(cl),
+                      FadeIn(txt, shift=RIGHT * 0.2), FadeIn(tl))
             vo.wait_until("a")
-            self.play(FadeIn(cam, shift=RIGHT * 0.2), FadeIn(cl), FadeIn(txt, shift=RIGHT * 0.2), FadeIn(tl))
             self.play(GrowArrow(arrows[0]), GrowArrow(arrows[1]), Indicate(vlm, color=WHITE, scale_factor=1.03))
             vo.wait_until("r")
             self.play(GrowArrow(ta), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.15) for t_ in toks], lag_ratio=0.2), FadeIn(tkl))

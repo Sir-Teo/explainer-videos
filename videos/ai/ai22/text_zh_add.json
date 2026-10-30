@@ -505,7 +505,8 @@
     "the same $24$ photographs, \\ $2{,}000$ steps each, \\ three seeds; \\ on this CPU, training took $495$ s (NeRF) and $238$ s (Gaussians)": "同样的$24$张照片，\\ 各$2{,}000$步，\\ 三个种子；\\ 在这台CPU上，训练用了$495$秒（NeRF）和$238$秒（高斯）",
     "same tokens, \\ same transformer size \\ ($220{,}864$ weights), \\ $1{,}500$ steps, \\ guidance $2$; \\ three seeds": "同样的词元，\\ 同样大小的Transformer \\ （$220{,}864$个权重），\\ $1{,}500$步，\\ 引导$2$；\\ 三个种子",
     "one transformer, \\ $319{,}474$ weights, \\ $8{,}000$ steps; \\ means of three seeds": "一个Transformer，\\ $319{,}474$个权重，\\ $8{,}000$步；\\ 三个种子的均值",
-    "distance to the real bold: \\ $0.240$ \\ (just copying: \\ $0.257$); \\ ink $\\times1.54$ \\ (the real bold: \\ $\\times1.56$); \\ the same letter: \\ $50\\%$": "与真正粗体的距离：\\ $0.240$ \\ （直接照抄：\\ $0.257$）；\\ 墨量$\\times1.54$ \\ （真正的粗体：\\ $\\times1.56$）；\\ 仍是同一个字母：\\ $50\\%$"
+    "distance to the real bold: \\ $0.240$ \\ (just copying: \\ $0.257$); \\ ink $\\times1.54$ \\ (the real bold: \\ $\\times1.56$); \\ the same letter: \\ $50\\%$": "与真正粗体的距离：\\ $0.240$ \\ （直接照抄：\\ $0.257$）；\\ 墨量$\\times1.54$ \\ （真正的粗体：\\ $\\times1.56$）；\\ 仍是同一个字母：\\ $50\\%$",
+    "several of SD3's authors \\ $\\to$ \\ Black Forest Labs \\ (2024)": "SD3的几位作者 \\ $\\to$ \\ Black Forest Labs \\ （2024）"
   },
   "patterns": [
     [
