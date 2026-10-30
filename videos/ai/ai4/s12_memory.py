@@ -53,12 +53,12 @@ class Memory(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(row), FadeIn(idx), FadeIn(mem), FadeIn(cnt))
             vo.wait_until("a")
             self.play(LaggedStart(*[s.animate.set_fill(ACT, opacity=0.75) for s in row], lag_ratio=0.15),
-                      cnt.animate.set_value(n), run_time=2.5)
+                      ChangeDecimalToValue(cnt, n), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(why_))
             vo.wait_until("c")
             self.play(LaggedStart(*[s.animate.set_fill(GRAD, opacity=0.0).set_stroke(GRAD) for s in reversed(row)],
-                                  lag_ratio=0.15), cnt.animate.set_value(0), run_time=2.5)
+                                  lag_ratio=0.15), ChangeDecimalToValue(cnt, 0), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

@@ -37,7 +37,9 @@ class GradCheck(VoiceoverScene):
             return curve(ax, np.log10(xs[ok]), np.clip(np.log10(y[ok]), -17, 1), col, w)
 
         c32, c64 = c("naive_fp32", C32), c("naive_fp64", C64)
-        s32 = c("stable_fp32", WHITE, 2.5)
+        ys32 = np.asarray(d["stable_fp32"])
+        s32 = VGroup(*[Dot(ax.c2p(math.log10(x_), math.log10(y_)), radius=0.025, color=WHITE)
+                       for x_, y_ in zip(xs[::2], ys32[::2]) if y_ > 0])  # dots: many values are exact (error 0)
         pred = np.asarray(d["pred_fp32"])
         okp = pred < 10
         pr32 = DashedVMobject(curve(ax, np.log10(xs[okp]), np.log10(pred[okp]), C32, 1.5), num_dashes=40)

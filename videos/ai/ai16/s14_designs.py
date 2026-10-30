@@ -331,7 +331,7 @@ class Designs(VoiceoverScene):
         if rows.width > 13.0:
             rows.width = 13.0
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence} (2026)",
-                     corner=DL, font_size=18)
+                     corner=UL, font_size=18)
         ta = take_away(r"sparse attention, 2026: \ compress, \ then choose \ \textperiodcentered\ \ the cache it saves: \ Part 15; \ "
                        r"serving it: \ Part 19", color=INDEXC, font_size=22)
         with self.voiceover(

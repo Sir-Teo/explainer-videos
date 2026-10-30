@@ -73,9 +73,9 @@ class Floats(VoiceoverScene):
             "mantissa; float16 has five and ten; and the eight-bit formats of 2022 have four and three, or five and "
             "two."
         ) as vo:
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(FadeIn(hist, shift=UP * 0.2), Write(form))
             vo.wait_until("a")
-            self.play(Write(form), FadeIn(keys))
+            self.play(FadeIn(keys), Indicate(form, color=WHITE, scale_factor=1.04))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in rows], lag_ratio=0.35), run_time=2.5)
         self.wait(0.3)
@@ -129,8 +129,8 @@ class Floats(VoiceoverScene):
                   color=C.BITS),
             label(rf"float32: \ $0.1 \to {r['fp32_tenth']:.17f}$", font_size=22, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_corner(UL, buff=0.35)
-        g = axes([0, steps, 2500], [0, 110, 25], x_length=7.6, y_length=3.9, xlabel=r"additions of $0.01$",
-                 ylabel=r"the running sum", xticks=[0, 5000, 10000], yticks=[0, 50, 100], center=[-1.6, -1.55, 0])
+        g = axes([0, steps, 2500], [0, 110, 25], x_length=7.6, y_length=3.5, xlabel=r"additions of $0.01$",
+                 ylabel=r"the running sum", xticks=[0, 5000, 10000], yticks=[0, 50, 100], center=[-1.6, -1.25, 0])
         ax = g.ax
         ts = np.arange(1, steps // 100 + 1) * 100
         cols = {"fp32": WHITE, "fp16": C.BITS, "bf16": C.TRUE_P, "bf16_fp32acc": GRAD}
@@ -181,10 +181,12 @@ class Floats(VoiceoverScene):
         over = label(rf"$e^{{z}}$ overflows above $z = {ov['fp32']:.1f}$ in float32, \ ${ov['fp16']:.1f}$ in float16",
                      font_size=22, color=GREY_B).next_to(naive, DOWN, buff=0.2).align_to(naive, LEFT)
         fixed = label(r"shifted: \ " + ", ".join(f"${v:.4f}$" for v in p), font_size=26, color=GRAD)
-        src = textwrap.dedent(inspect.getsource(log_softmax)).rstrip().split("\n")
+        src = [ln.split("  #")[0].rstrip() for ln in textwrap.dedent(inspect.getsource(log_softmax)).rstrip().split("\n")]
         code = code_block(src, font_size=17, font=MONO)
         code.to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
         fixed.next_to(code, RIGHT, buff=0.6).align_to(code, UP)
+        if fixed.get_right()[0] > 6.8:
+            fixed.next_to(code, UP, buff=0.5).to_edge(RIGHT, buff=0.4)
         cap = label(r"our library, \ \texttt{explainer/ai/autodiff.py}", font_size=20, color=GREY_B).next_to(code, UP, buff=0.12)
         cap.align_to(code, LEFT)
         hl = SurroundingRectangle(code[1], color=GRAD, buff=0.06)
