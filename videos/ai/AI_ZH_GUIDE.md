@@ -1557,3 +1557,73 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | attention logit (score) growth, QK-clip, MuonClip | 注意力分数增长，QK-Clip，MuonClip |
 | gradient clipping | 梯度裁剪 |
 | scale invariance, norm equilibrium, effective learning rate | 尺度不变性，范数平衡，有效学习率 |
+
+### Statistical ML (Part 7)
+
+| English | 中文 |
+|---|---|
+| principal component analysis (PCA) | 主成分分析（PCA） |
+| line of closest fit | 最佳拟合直线（最近直线） |
+| covariance matrix, eigenvector, eigenvalue | 协方差矩阵，特征向量，特征值 |
+| Lagrange multiplier | 拉格朗日乘子 |
+| reconstruction error | 重构误差 |
+| singular value decomposition (SVD) | 奇异值分解（SVD） |
+| probabilistic PCA | 概率PCA |
+| factor analysis | 因子分析 |
+| latent variable, hidden variable | 潜变量，隐变量 |
+| held-out data | 留出数据 |
+| independent component analysis (ICA) | 独立成分分析（ICA） |
+| cocktail party problem | 鸡尾酒会问题 |
+| mixing matrix, whitening | 混合矩阵，白化 |
+| kurtosis | 峰度 |
+| central limit theorem | 中心极限定理 |
+| FastICA, fixed point | FastICA，不动点 |
+| mixture of Gaussians | 高斯混合模型 |
+| expectation-maximization (EM), E step, M step | 期望最大化（EM），E步，M步 |
+| responsibility (posterior) | 责任（后验概率） |
+| Jensen's inequality, lower bound | 詹森不等式，下界 |
+| k-means, hard assignment | k均值，硬分配 |
+| topic model, latent Dirichlet allocation (LDA) | 主题模型，潜在狄利克雷分配（LDA） |
+| Dirichlet distribution | 狄利克雷分布 |
+| variational EM | 变分EM |
+| hidden Markov model (HMM) | 隐马尔可夫模型（HMM） |
+| transition probability, emission probability | 转移概率，发射概率 |
+| forward algorithm, backward algorithm, forward–backward | 前向算法，后向算法，前向–后向算法 |
+| lattice (trellis) | 网格 |
+| Viterbi algorithm, back-pointer | 维特比算法，回溯指针 |
+| Baum–Welch algorithm | 鲍姆–韦尔奇算法 |
+| HMM–GMM speech recognizer | HMM–GMM语音识别器 |
+| noisy channel | 有噪信道 |
+| parallel corpus, alignment | 平行语料，对齐 |
+| IBM Model 1, translation table | IBM模型1，翻译概率表 |
+| BLEU, n-gram precision, brevity penalty | BLEU，n元精确率，长度惩罚 |
+| phrase-based translation | 基于短语的翻译 |
+| Good–Turing estimation, counts of counts | Good–Turing估计，计数的计数 |
+| absolute discounting | 绝对折扣 |
+| Kneser–Ney smoothing, continuation count | Kneser–Ney平滑，接续计数 |
+| suffix array, prefix doubling, binary search | 后缀数组，前缀倍增，二分查找 |
+| infini-gram (∞-gram), longest match | 无穷元模型（∞-gram），最长匹配 |
+| graphical model, Bayesian network, plate | 图模型，贝叶斯网络，板 |
+| d-separation; chain, fork, collider | d分离；链，叉，对撞点 |
+| explaining away | 解释消除 |
+| factor graph, belief propagation, message passing | 因子图，信念传播，消息传递 |
+| loopy belief propagation | 有环信念传播 |
+| Simpson's paradox, confounder | 辛普森悖论，混杂因子 |
+| intervention, do-operator, do-calculus | 干预，do算子，do演算 |
+| back-door criterion, back-door adjustment | 后门准则，后门调整 |
+| ladder of causation | 因果之梯 |
+| randomized experiment | 随机试验 |
+| Gaussian process, kernel, length scale | 高斯过程，核函数，长度尺度 |
+| Gaussian conditioning, Schur complement | 高斯条件分布，舒尔补 |
+| kriging | 克里金法 |
+| marginal likelihood (evidence) | 边缘似然（证据） |
+| data fit, complexity penalty | 数据拟合，复杂度惩罚 |
+| Bayesian Occam's razor | 贝叶斯奥卡姆剃刀 |
+| Bayesian linear regression | 贝叶斯线性回归 |
+| Bayesian optimization, expected improvement | 贝叶斯优化，期望改进 |
+| exploration, exploitation | 探索，利用 |
+| variational inference, ELBO | 变分推断，证据下界（ELBO） |
+| mean field, coordinate ascent (CAVI) | 平均场，坐标上升（CAVI） |
+| conjugate prior, Normal–Gamma | 共轭先验，正态–伽马分布 |
+| score-function estimator, reparameterization trick | 得分函数估计量，重参数化技巧 |
+| amortized inference, encoder, decoder | 摊销推断，编码器，解码器 |
