@@ -120,11 +120,12 @@ class Memorization(VoiceoverScene):
             "What makes words stick is repetition."
         ) as vo:
             self.play(FadeIn(G), FadeIn(xl), FadeIn(xt), FadeIn(info[0]), FadeIn(info[1]))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bs], lag_ratio=0.15), FadeIn(kk), run_time=1.6)
+            self.play(GrowFromEdge(vb[0], DOWN))
             vo.wait_until("a")
             self.play(FadeIn(info[2]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bs], lag_ratio=0.15), FadeIn(kk), run_time=1.6)
-            self.play(GrowFromEdge(vb[0], DOWN))
+            self.play(Indicate(bs, color=MEAS, scale_factor=1.02))
             vo.wait_until("c")
             self.play(FadeIn(ex))
         self.wait(0.3)
@@ -213,7 +214,7 @@ class Memorization(VoiceoverScene):
             (2025, r"A.~F.~Cooper et al.", r"Llama 3.1 70B has memorized large parts of some books, \ the first "
                    r"\textit{Harry Potter} almost entirely"),
             (2025, r"Munich Regional Court, \ GEMA v.\ OpenAI", r"lyrics memorized in a model's weights are a "
-                   r"reproduction; \ not final, \ on appeal"),
+                   r"reproduction; \ not yet final"),
             (2025, r"High Court, \ Getty Images v.\ Stability AI", r"the image model's weights are not an infringing "
                    r"copy"),
             (2026, r"A.~Ahmed, A.~F.~Cooper et al.", r"near-complete books extracted from some production chat models"),
@@ -229,7 +230,7 @@ class Memorization(VoiceoverScene):
             "model to repeat one word forever made it drift into reciting training data. <bookmark mark='c'/> In "
             "2025 Cooper and colleagues showed that some open-weight models have memorized large parts of popular "
             "books. <bookmark mark='d'/> Courts disagree on what that means. In November 2025 a Munich court held "
-            "that song lyrics memorized in a model are a copy, a ruling under appeal, <bookmark mark='e'/> while "
+            "that song lyrics memorized in a model are a copy, a ruling not yet final, <bookmark mark='e'/> while "
             "London's High Court held that an image model's weights were not one. American judges that June had "
             "found training itself to be fair use. <bookmark mark='f'/> And in early 2026 researchers reported "
             "extracting near-complete books from production chat models. Whether a model has learned or copied "

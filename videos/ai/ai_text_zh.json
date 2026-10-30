@@ -20296,7 +20296,8 @@
     "a network with $300{,}034$ weights: \\ $d > n$, \\ the bound says nothing": "有 $300{,}034$ 个权重的网络：\\ $d > n$，\\ 这个界什么也说不出",
     "V.~Vapnik \\& A.~Chervonenkis": "V.~Vapnik、A.~Chervonenkis",
     "uniform convergence of frequencies to probabilities (announced 1968); \\ Vapnik's support vector machines followed in 1995": "频率一致收敛于概率（1968年公布）；\\ 1995年，瓦普尼克的支持向量机随之而来",
-    "angle to the widest-margin direction: \\ $30.0^\\circ$": "与最宽间隔方向的夹角：\\ $30.0^\\circ$"
+    "angle to the widest-margin direction: \\ $30.0^\\circ$": "与最宽间隔方向的夹角：\\ $30.0^\\circ$",
+    "lyrics memorized in a model's weights are a reproduction; \\ not yet final": "模型权重中记住的歌词构成复制；\\ 判决尚未生效"
   },
   "phrases": {
     "width": "宽度",

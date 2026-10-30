@@ -309,7 +309,7 @@ class VI(VoiceoverScene):
             "CAVI needs expectations in closed form. For a neural network there aren't any, so we follow the gradient "
             "of the ELBO with samples instead. <bookmark mark='a'/> The old way, the score function, multiplies f by "
             "the gradient of log q. It's unbiased, but noisy. <bookmark mark='b'/> In 2013 Diederik Kingma and Max "
-            "Welling, and independently Danilo Rezende and colleagues, wrote the sample as the mean plus noise, so "
+            "Welling, and independently, a few months later, Danilo Rezende and colleagues, wrote the sample as the mean plus noise, so "
             "the gradient can flow through the sample itself: the reparameterization trick. "
             f"<bookmark mark='c'/> Same expectation, same answer on average; but here its spread is {r['rep_sd']:.1f} "
             f"against {r['score_sd']:.1f}, a variance {r['ratio']:.0f} times smaller."
