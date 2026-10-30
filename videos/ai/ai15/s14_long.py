@@ -29,16 +29,13 @@ class LongContext(VoiceoverScene):
     # ------------------------------------------------------------------
     def needle(self):
         g = np.random.default_rng(3)
-        M = np.clip(1 - 0.0 * g.random((10, 10)), 0, 1)
-        img_good = heat_image(M, 3.6, 3.0, color=C.INTERVAL, gamma=1.0).move_to([-3.4, -0.6, 0])
+        img_good = heat_image(np.ones((10, 10)), 3.6, 3.0, color=C.INTERVAL, gamma=1.0).move_to([-3.4, -0.6, 0])
         bad = np.ones((10, 10))
         for i in range(10):
             for j in range(10):
                 if j > 5 and 2 <= i <= 7:
                     bad[i, j] = 0.35 + 0.4 * g.random()
         img_bad = heat_image(bad, 3.6, 3.0, color=C.INTERVAL, gamma=1.0).move_to([2.6, -0.6, 0])
-        for im, t in ((img_good, r"a model that passes everywhere"), (img_bad, r"one that loses the middle of long texts")):
-            pass
         yl = label(r"depth of the needle \\ (top: \ the start)", font_size=18, color=GREY_B).next_to(img_good, LEFT, buff=0.2)
         xl = label(r"length of the haystack $\rightarrow$", font_size=18, color=GREY_B).next_to(img_good, DOWN, buff=0.15)
         xl2 = xl.copy().next_to(img_bad, DOWN, buff=0.15)

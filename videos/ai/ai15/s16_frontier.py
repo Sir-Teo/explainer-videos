@@ -24,29 +24,30 @@ class Frontier(VoiceoverScene):
     def production(self):
         head = label(r"Fixed-size memories in production, \ 2025--26", font_size=34).to_edge(UP, buff=0.3)
         items = [
-            ("2025-01", r"MiniMax-01", r"lightning attention, \ 7 layers in 8; \ $456$B weights; \ $4$M tokens", SSM_C),
-            ("2025-04", r"Nemotron-H \ (NVIDIA)", r"Mamba-2 with $8\%$ attention; \ up to $3\times$ faster", SSM_C),
-            ("2025-09", r"Qwen3-Next", r"Gated DeltaNet, \ 3 layers in 4; \ $80$B, \ $3$B active", GATED),
-            ("2025-10", r"Kimi Linear", r"Kimi Delta Attention, \ 3 in 4; \ up to $6\times$ faster decoding at $1$M", GATED),
-            ("2025-10", r"MiniMax-M2", r"back to full attention", ATT),
-            ("2025-12", r"Nemotron 3 \ (NVIDIA)", r"Mamba-2 hybrid with experts; \ $1$M tokens", SSM_C),
-            ("2026-02", r"Qwen3.5", r"Gated DeltaNet, \ 3 in 4, \ $0.8$B to $397$B", GATED),
-            ("2026-03", r"Mamba-3", r"complex states, \ MIMO", SSM_C),
-            ("2026-04", r"DeepSeek-V4", r"compressed sparse attention; \ $1$M tokens", ATT),
-            ("2026-07", r"Kimi K3", r"Kimi Delta Attention, \ $69$ of $93$ layers; \ $2.8$T weights", GATED),
+            ("January 2025", r"MiniMax-01", r"lightning attention \\ in 7 layers of 8; \\ $456$B weights; \\ $4$M tokens", SSM_C),
+            ("April 2025", r"Nemotron-H", r"NVIDIA: \\ Mamba-2, \\ $8\%$ attention; \\ up to $3\times$ faster", SSM_C),
+            ("September 2025", r"Qwen3-Next", r"Gated DeltaNet \\ in 3 layers of 4; \\ $80$B, \\ $3$B active", GATED),
+            ("October 2025", r"Kimi Linear", r"Kimi Delta Attention, \\ 3 of 4; \\ up to $6\times$ faster \\ decoding at $1$M", GATED),
+            ("October 2025", r"MiniMax-M2", r"back to \\ full attention", ATT),
+            ("December 2025", r"Nemotron 3", r"NVIDIA: \\ Mamba-2 hybrid \\ with experts; \\ $1$M tokens", SSM_C),
+            ("February 2026", r"Qwen3.5", r"Gated DeltaNet, \\ 3 of 4; \\ $0.8$B to $397$B", GATED),
+            ("March 2026", r"Mamba-3", r"complex states, \\ MIMO", SSM_C),
+            ("April 2026", r"DeepSeek-V4", r"compressed sparse \\ attention; \\ $1$M tokens", ATT),
+            ("July 2026", r"Kimi K3", r"Kimi Delta Attention \\ in 69 of 93 layers; \\ $2.8$T weights", GATED),
         ]
         cards = VGroup()
         for when, name, what, col in items:
-            t = label(name, font_size=19, color=col)
-            w = label(what, font_size=15, color=GREY_A)
-            d = label(when, font_size=14, color=GREY_B)
-            body = VGroup(d, t, w).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-            box = RoundedRectangle(width=2.5, height=1.45, corner_radius=0.1, stroke_color=col, stroke_width=1.5,
-                                   fill_color="#0B0F17", fill_opacity=0.9)
+            d = label(when, font_size=17, color=GREY_B)
+            t = label(name, font_size=24, color=col)
+            w = label(what, font_size=18, color=GREY_A)
+            body = VGroup(d, t, w).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            box = RoundedRectangle(width=2.55, height=2.75, corner_radius=0.12, stroke_color=col, stroke_width=1.8,
+                                   fill_color="#0B0F17", fill_opacity=0.95)
             if body.width > 2.3:
                 body.width = 2.3
-            cards.add(VGroup(box, body.move_to(box)))
-        cards.arrange_in_grid(rows=2, cols=5, buff=(0.15, 0.35)).next_to(head, DOWN, buff=0.4)
+            body.move_to(box).align_to(box, UP).shift(DOWN * 0.18)
+            cards.add(VGroup(box, body))
+        cards.arrange_in_grid(rows=2, cols=5, buff=(0.12, 0.25)).next_to(head, DOWN, buff=0.35)
         foot = note(r"each from its maker's report or model card", font_size=16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Two years ago, a fixed-size memory in a frontier model was an experiment. <bookmark mark='a'/> In "
@@ -60,28 +61,35 @@ class Frontier(VoiceoverScene):
             "Kimi K3, two point eight trillion weights, put Kimi Delta Attention in sixty-nine of its ninety-three "
             "layers."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(foot))
+            veils = VGroup(*[Rectangle(width=c_[0].width + 0.04, height=c_[0].height + 0.04, stroke_width=0,
+                                       fill_color=BACKGROUND, fill_opacity=0.82).move_to(c_[0]) for c_ in cards])
+            self.play(FadeIn(head), FadeIn(foot), FadeIn(cards), FadeIn(veils))
             groups = [[0, 1], [2, 3], [4], [5, 6, 7], [8, 9]]
             for g_, m in zip(groups, "abcde"):
                 vo.wait_until(m)
-                self.play(LaggedStart(*[FadeIn(cards[i], shift=UP * 0.1) for i in g_], lag_ratio=0.3), run_time=1.0)
+                self.play(*[FadeOut(veils[i]) for i in g_], run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def debate(self):
         head = label(r"Why MiniMax-M2 went back to full attention", font_size=32).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            label(r"its lightning-attention hybrid matched full attention on the usual benchmarks, \\ but showed "
-                  r"``clear deficits in complex, multi-hop reasoning'' at larger scale", font_size=21, color=WHITE),
-            label(r"``the real bottleneck is the limitations of evaluation'': \ the tests that would show the gap \\ "
-                  r"are expensive, \ and may not hold at scale", font_size=21, color=WHITE),
-            label(r"the infrastructure is young: \ many linear layers are memory-bound, \\ and serving needs low-precision "
-                  r"states, \ prefix caching, \ speculative decoding", font_size=21, color=WHITE),
-            label(r"a sliding-window hybrid lost quality as the context grew: \\ retrieval and induction heads form early "
-                  r"in pretraining, \ and are hard to add later", font_size=21, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        bullets = VGroup(*[Dot(radius=0.06, color=ATT).next_to(p_, LEFT, buff=0.2).align_to(p_, UP).shift(DOWN * 0.12)
+        lines_ = [
+            (r"its lightning-attention hybrid matched full attention on the usual benchmarks,",
+             r"but showed ``clear deficits in complex, multi-hop reasoning'' at larger scale"),
+            (r"``the real bottleneck is the limitations of evaluation'':",
+             r"the tests that would show the gap are expensive, \ and may not hold at scale"),
+            (r"the infrastructure is young: \ many linear layers are memory-bound,",
+             r"and serving needs low-precision states, \ prefix caching, \ speculative decoding"),
+            (r"a sliding-window hybrid lost quality as the context grew:",
+             r"retrieval and induction heads form early in pretraining, \ and are hard to add later"),
+        ]
+        pts = VGroup(*[VGroup(label(a, font_size=24, color=WHITE), label(b, font_size=24, color=GREY_A))
+                       .arrange(DOWN, aligned_edge=LEFT, buff=0.1) for a, b in lines_])
+        pts.arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.5).shift(RIGHT * 0.3)
+        if pts.width > 12.6:
+            pts.width = 12.6
+        bullets = VGroup(*[Dot(radius=0.07, color=ATT).next_to(p_, LEFT, buff=0.25).align_to(p_, UP).shift(DOWN * 0.14)
                            for p_ in pts])
         src = cite(r"H.~Sun (MiniMax), \textit{Why did M2 end up as a full attention model?} \ (October 2025)", corner=DL,
                    font_size=17)
@@ -128,8 +136,8 @@ class Frontier(VoiceoverScene):
         arr = VGroup(Arrow(notes_.get_left(), win.get_right() + UP * 1.4, buff=0.1, color=HIST, stroke_width=2.5),
                      Arrow(subs.get_left(), win.get_right() + DOWN * 0.1, buff=0.1, color=SSM_C, stroke_width=2.5))
         src = cite(r"Anthropic, \textit{Effective context engineering for AI agents} (September 2025)", corner=DL, font_size=17)
-        tw = label(r"the window is a budget: \ what goes in it matters more than how big it is", font_size=22,
-                   color=WHITE).to_edge(DOWN, buff=0.35).shift(RIGHT * 2.5)
+        tw = label(r"the window is a budget: \\ what goes in it matters \\ more than how big it is", font_size=24,
+                   color=WHITE).next_to(subs, DOWN, buff=0.7)
         with self.voiceover(
             "Meanwhile the people who build agents learned the lesson of the last two chapters the practical way. "
             "A model's window is a budget, and every token spent dilutes its attention; Anthropic's guide of "
@@ -140,11 +148,13 @@ class Frontier(VoiceoverScene):
             "<bookmark mark='d'/> or to sub-agents that work in clean windows and report back a summary. It is "
             "this part's memory, managed by hand: a cache that is evicted, compressed, and retrieved."
         ) as vo:
-            self.play(FadeIn(head), Create(win), FadeIn(wl), FadeIn(src))
+            for b_ in blocks:
+                b_.set_opacity(0.15)
+            self.play(FadeIn(head), Create(win), FadeIn(wl), FadeIn(src), FadeIn(blocks))
             vo.wait_until("a")
-            self.play(FadeIn(blocks[0]), FadeIn(blocks[1]))
+            self.play(*[b_[0].animate.set_fill(opacity=0.22) for b_ in blocks[:2]], *[b_[1].animate.set_opacity(1) for b_ in blocks[:2]])
             vo.wait_until("b")
-            self.play(FadeIn(blocks[2]), FadeIn(blocks[3]), FadeIn(blocks[4]))
+            self.play(*[b_[0].animate.set_fill(opacity=0.22) for b_ in blocks[2:]], *[b_[1].animate.set_opacity(1) for b_ in blocks[2:]])
             vo.wait_until("c")
             self.play(FadeIn(notes_), GrowArrow(arr[0]))
             vo.wait_until("d")
@@ -156,11 +166,11 @@ class Frontier(VoiceoverScene):
     def open(self):
         head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.4)
         qs = VGroup(
-            label(r"how much attention does a model need? \ one layer in four, \ in eight, \ or none at all?", font_size=24),
-            label(r"how big must a fixed memory be, \ and how should it grow with the model?", font_size=24),
-            label(r"can a memory learn what to keep \ as well as attention learns where to look?", font_size=24),
-            label(r"how do we measure what a model can do with a million tokens?", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.6)
+            label(r"how much attention does a model need? \ one layer in four, \ in eight, \ or none at all?", font_size=30),
+            label(r"how big must a fixed memory be, \ and how should it grow with the model?", font_size=30),
+            label(r"can a memory learn what to keep \ as well as attention learns where to look?", font_size=30),
+            label(r"how do we measure what a model can do with a million tokens?", font_size=30),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.7).next_to(head, DOWN, buff=0.6)
         nums = VGroup(*[label(rf"{i + 1}.", font_size=24, color=C.BITS).next_to(q_, LEFT, buff=0.25) for i, q_ in enumerate(qs)])
         with self.voiceover(
             "So the questions are open. <bookmark mark='a'/> How much attention does a model need: one layer in "

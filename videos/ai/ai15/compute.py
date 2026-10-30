@@ -654,73 +654,70 @@ def compute_zoh():
 def compute_ttt():
     """A memory that is a learner.  Each sequence has its own hidden rule v = f(k) (a random small tanh network, keys
     of 8 numbers); the model reads pairs (k, f(k)) one at a time and its memory takes one gradient step on each
-    (test-time training).  Memories: a linear map (8 x 8: one step of gradient descent is the delta rule, TTT-Linear)
-    and a two-layer network (8 -> 32 -> 8, TTT-MLP); error on fresh keys of the same rule as more pairs are read
-    (32 sequences; each memory's step size chosen on 16 other sequences).  Then Titans' memory on a stream whose
-    rule changes halfway: the surprise (the gradient's size) spikes at the change; momentum and a forgetting gate."""
+    (test-time training), a normalized step as in the delta rule with unit keys.  Memories: a linear map (8 x 8, the
+    delta rule: TTT-Linear) and a two-layer network (8 -> 64 -> 8, TTT-MLP: the readout takes the normalized step,
+    the first layer a small plain one); error on fresh keys of the same rule as more pairs are read (32 sequences;
+    each memory's step size chosen on 16 other sequences).  Then Titans' memory on a stream whose rule changes
+    halfway: the surprise (the size of the gradient) jumps at the change; momentum and a forgetting gate."""
     import torch
 
     torch.set_num_threads(1)
-    d, H, n_read, n_test = 8, 32, 256, 128
+    d, H, n_read, n_test = 8, 64, 256, 128
 
     def teacher(gen):
-        W1 = torch.randn(16, d, generator=gen) / math.sqrt(d) * 1.5
-        W2 = torch.randn(d, 16, generator=gen) / math.sqrt(16)
+        W1 = torch.randn(16, d, generator=gen) * 2.0  # keys are unit-sized: a curved rule
+        W2 = torch.randn(d, 16, generator=gen) / 4.0
         return lambda k: torch.tanh(k @ W1.T) @ W2.T
 
     def run(kind, lr, seed, momentum=0.0, forget=0.0, switch=None, trace=False):
         gen = torch.Generator().manual_seed(seed)
         f = teacher(gen)
         f2 = teacher(gen) if switch else None
-        K = torch.randn(n_read, d, generator=gen)
-        Kt = torch.randn(n_test, d, generator=gen)
-        if kind == "linear":
-            params = [torch.zeros(d, d, requires_grad=True)]
-            fwd = lambda P, x: x @ P[0].T  # noqa: E731
-        else:
-            g2 = torch.Generator().manual_seed(10_000 + seed)
-            params = [(torch.randn(H, d, generator=g2) / math.sqrt(d)).requires_grad_(),
-                      torch.zeros(d, H, requires_grad=True)]
-            fwd = lambda P, x: torch.tanh(x @ P[0].T) @ P[1].T  # noqa: E731
-        mom = [torch.zeros_like(p) for p in params]
+        K = torch.randn(n_read, d, generator=gen) / math.sqrt(d)
+        Kt = torch.randn(n_test, d, generator=gen) / math.sqrt(d)
+        g2 = torch.Generator().manual_seed(10_000 + seed)
+        A = torch.randn(H, d, generator=g2)  # the two-layer memory's first layer
+        B = torch.zeros(d, H if kind == "mlp" else d)
+        mB, mA = torch.zeros_like(B), torch.zeros_like(A)
+        feat = (lambda x: torch.tanh(x @ A.T)) if kind == "mlp" else (lambda x: x)  # noqa: E731
         errs, surprise = [], []
         for t in range(n_read):
             rule = f2 if (switch and t >= switch) else f
-            k = K[t:t + 1]
-            v = rule(k)
-            loss = 0.5 * ((fwd(params, k) - v) ** 2).sum()
-            grads = torch.autograd.grad(loss, params)
-            surprise.append(float(sum(gg.norm() ** 2 for gg in grads).sqrt()))
-            with torch.no_grad():
-                for p, gg, m in zip(params, grads, mom):
-                    m.mul_(momentum).add_(gg, alpha=-lr)  # Titans: surprise with momentum
-                    p.mul_(1 - forget).add_(m)  # and a forgetting gate
+            k = K[t]
+            v = rule(k[None])[0]
+            h = feat(k[None])[0]
+            e = B @ h - v
+            gB = torch.outer(e, h) / (h @ h + 1e-6)  # the normalized gradient: the delta rule's step
+            surprise.append(float(e.norm() * h.norm()))
+            mB = momentum * mB - lr * gB  # Titans: past surprise carries on
+            B = (1 - forget) * B + mB  # and a forgetting gate
+            if kind == "mlp":
+                gA = torch.outer((B.T @ e) * (1 - h ** 2), k)
+                mA = momentum * mA - 0.2 * lr * gA
+                A = A + mA
             if trace or (t + 1) % 16 == 0:
-                with torch.no_grad():
-                    tgt = rule(Kt)
-                    errs.append(float(((fwd(params, Kt) - tgt) ** 2).mean() / (tgt ** 2).mean()))
+                tgt = rule(Kt)
+                errs.append(float(((feat(Kt) @ B.T - tgt) ** 2).mean() / (tgt ** 2).mean()))
         return np.array(errs), np.array(surprise)
 
-    lrs = {"linear": [0.05, 0.1, 0.2, 0.4], "mlp": [0.05, 0.1, 0.2, 0.4, 0.8]}
+    lrs = {"linear": [0.1, 0.25, 0.5, 1.0], "mlp": [0.1, 0.25, 0.5, 1.0]}
     best = {}
     for kind, grid in lrs.items():  # tune the step size on sequences 100..115
-        scores = [np.mean([run(kind, lr, 100 + s)[0][-1] for s in range(16)]) for lr in grid]
+        scores = [np.nan_to_num(np.mean([run(kind, lr, 100 + s)[0][-1] for s in range(16)]), nan=1e9) for lr in grid]
         best[kind] = grid[int(np.argmin(scores))]
-    out = dict(d=d, H=H, n_read=n_read, every=16, best_lr=best,
-               params_linear=d * d, params_mlp=2 * d * H)
+    out = dict(d=d, H=H, n_read=n_read, every=16, best_lr=best, params_linear=d * d, params_mlp=2 * d * H)
     for kind in lrs:
         E = np.array([run(kind, best[kind], s)[0] for s in range(32)])
         out[f"err_{kind}"] = E
-        print(f"    TTT-{kind}: lr {best[kind]}, error after {n_read} pairs {np.median(E[:, -1]):.3f}", flush=True)
-    # Titans on a stream whose rule changes at t = 128
+        print(f"    TTT-{kind}: step {best[kind]}, error after {n_read} pairs {np.median(E[:, -1]):.3f}", flush=True)
+    # Titans on a stream whose rule changes at t = 128: one gradient step a pair, against momentum and forgetting
     sw = n_read // 2
-    for name, mo, fo in (("plain", 0.0, 0.0), ("titans", 0.6, 0.02)):
+    for name, mo, fo in (("plain", 0.0, 0.0), ("titans", 0.5, 0.01)):
         E, S = zip(*[run("mlp", best["mlp"] * (1 - mo), 200 + s, momentum=mo, forget=fo, switch=sw, trace=True)
                      for s in range(16)])
         out[f"switch_err_{name}"], out[f"switch_surprise_{name}"] = np.array(E), np.array(S)
     out["switch"] = sw
     return out
-
 
 
 # ---------------------------------------------------------------------------

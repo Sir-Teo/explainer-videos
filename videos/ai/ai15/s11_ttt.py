@@ -96,8 +96,10 @@ class TTT(VoiceoverScene):
         verdict = (f"The linear memory levels off at {el:.2f}: the best a matrix can do for a curved rule. The "
                    f"two-layer memory keeps learning, down to {em:.2f}: a richer memory, at {pm // pl} times the numbers."
                    if em < 0.8 * el else
-                   f"Here the two end close together, {el:.2f} for the matrix and {em:.2f} for the two-layer memory: "
-                   f"in this toy, {pm // pl} times the numbers buy little.")
+                   f"The two-layer memory ends a little lower, {em:.2f} against {el:.2f} for the matrix: a richer memory "
+                   f"helps, modestly here, at {pm // pl} times the numbers." if em < 0.95 * el else
+                   f"The two-layer memory does no better here: {em:.2f} against {el:.2f} for the matrix, at {pm // pl} "
+                   "times the numbers.")
         with self.voiceover(
             "We can test that on a toy. Each sequence has its own hidden rule, a small random network that turns a "
             "key into a value, and the memory reads one pair at a time, taking one gradient step on each. "

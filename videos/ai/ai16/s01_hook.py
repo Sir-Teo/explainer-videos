@@ -108,9 +108,9 @@ class Hook(VoiceoverScene):
                 lab.set_x(min(max(lab.get_x(), -4.2 + lab.width / 2), 6.9 - lab.width / 2))
                 ev.add(VGroup(d, lab))
             rows.add(VGroup(ln, nm, ev))
-        years = VGroup(*[Text(str(t), font_size=16, color=GREY_B).move_to([X(t), -3.8, 0]) for t in (1990, 2000, 2010, 2015, 2020, 2025)])
+        years = VGroup(*[Text(str(t), font_size=16, color=GREY_B).move_to([X(t), -3.8, 0]) for t in (1990, 2000, 2015, 2020, 2025)])
         ticks = VGroup(*[DashedLine([X(t), 2.4, 0], [X(t), -3.6, 0], dash_length=0.05, stroke_width=1, color=GREY_D)
-                         for t in (1990, 2000, 2010, 2015, 2020, 2025)])
+                         for t in (1990, 2000, 2015, 2020, 2025)])
         with self.voiceover(
             "How did we get here? Three threads, which this part follows. <bookmark mark='a'/> The first is experts. "
             "In 1991 Robert Jacobs, Michael Jordan, Steven Nowlan and Geoffrey Hinton proposed a gate that picks "

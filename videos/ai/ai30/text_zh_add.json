@@ -465,7 +465,24 @@
   "strength $\\alpha$ \\ (times the stream's typical length)": "强度 $\\alpha$ \\ （以残差流的典型长度为单位）",
   "cheerful minus gloomy words, \\ per $100$": "欢快词减阴郁词，\\ 每 $100$ 个",
   "strength $\\alpha$": "强度 $\\alpha$",
-  "bits per token, \\ under the unsteered model": "每词元比特数，\\ 用未引导的模型来算"
+  "bits per token, \\ under the unsteered model": "每词元比特数，\\ 用未引导的模型来算",
+  "TopK: \\ $6\\%$": "TopK：\\ $6\\%$",
+  "JumpReLU: \\ $8\\%$": "JumpReLU：\\ $8\\%$",
+  "TopK, $k = 16$, $512$ latents: \\ $0, 0, 0$ dead \\ (3 seeds)": "TopK，$k = 16$，$512$ 个潜变量：\\ 死了 $0, 0, 0$ 个 \\ （3个种子）",
+  "the same with AuxK: \\ $0, 0, 0$ dead": "加上AuxK：\\ 死了 $0, 0, 0$ 个",
+  "TopK, $k = 16$, $2{,}048$ latents: \\ $2$ dead": "TopK，$k = 16$，$2{,}048$ 个潜变量：\\ 死了 $2$ 个",
+  "the sparsest: \\ TopK $k = 4$: \\ $17$ dead; \\ JumpReLU $\\lambda = 8$: \\ $79$ \\ (means of $3$ seeds)": "最稀疏的：\\ TopK $k = 4$：\\ 死了 $17$ 个；\\ JumpReLU $\\lambda = 8$：\\ 死了 $79$ 个 \\ （$3$ 个种子的平均）",
+  "the trained transformer: \\ mean $7.7$": "训练过的Transformer：\\ 平均 $7.7$",
+  "MLPs replaced by their average: \\ $5.04$": "MLP换成它们的平均：\\ $5.04$",
+  "the logit $11.58$ \\ = \\ features $+9.60$ \\ + \\ inputs $+2.05$ \\ + \\ errors $+0.04$ \\ + \\ biases": "logit $11.58$ \\ = \\ 特征 $+9.60$ \\ + \\ 输入 $+2.05$ \\ + \\ 误差 $+0.04$ \\ + \\ 偏置",
+  "computed: \\ the local replacement model reproduces the logits to within $10^{-5}$; \\ $3058$ active features, \\ the $12$ most influential shown": "计算所得：\\ 局部替代模型复现logit的误差在 $10^{-5}$ 以内；\\ $3058$ 个亮着的特征，\\ 显示影响最大的 $12$ 个",
+  "$16$ features, \\ each switched off: \\\\ the change in the logit of `d' \\\\ correlation $r = 0.94$": "$16$ 个特征，\\ 逐个关掉：\\\\ “d”的logit的变化 \\\\ 相关系数 $r = 0.94$",
+  "$(a + b) \\bmod 59$: \\ one layer, \\ four heads, \\ $512$ ReLU units; \\ $30\\%$ of the table; \\ weight decay $1$": "$(a + b) \\bmod 59$：\\ 一层，\\ 四个头，\\ $512$ 个ReLU单元；\\ 加法表的 $30\\%$；\\ 权重衰减 $1$",
+  "the diagonal: \\ for $83\\%$ of tokens, \\ the logit raised most is their own; \\\\ copying score $\\sum \\lambda / \\sum |\\lambda| = 0.88$": "对角线：\\ 对 $83\\%$ 的词元，\\ 提升最多的logit是它自己的；\\\\ 复制分数 $\\sum \\lambda / \\sum |\\lambda| = 0.88$",
+  "at layer $5$: \\ linear $+16$, \\ MLP $+3$ points": "第 $5$ 层：\\ 线性 $+16$，\\ MLP $+3$ 个百分点",
+  "held-out words: \\ AUROC $0.66$ \\\\ real sentences of the novels: \\ AUROC $0.74$": "留出的词：\\ AUROC $0.66$ \\\\ 小说里真实的句子：\\ AUROC $0.74$",
+  "ours, \\ TopK, \\ $512$ latents: \\\\ $15\\%$ recur across the three pairs of seeds; \\\\ L1: \\ $68\\%$": "我们的，\\ TopK，\\ $512$ 个潜变量：\\\\ 在三对种子之间有 $15\\%$ 重复出现；\\\\ L1：\\ $68\\%$",
+  "ours, \\ TopK, \\ $512$ latents: \\\\ $14$--$16\\%$ recur across the three pairs of seeds; \\\\ L1: \\ $68\\%$": "我们的，\\ TopK，\\ $512$ 个潜变量：\\\\ 在三对种子之间有 $14$--$16\\%$ 重复出现；\\\\ L1：\\ $68\\%$"
  },
  "patterns": [
   [
