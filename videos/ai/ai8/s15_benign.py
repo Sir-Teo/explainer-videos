@@ -13,7 +13,7 @@ SPIKE, ISO = C.INTERVAL, C.SURPRISE
 class Benign(VoiceoverScene):
     def construct(self):
         chapter(self, 14, r"Benign overfitting", r"When is fitting the noise harmless?",
-                "Chapter fourteen. Benign overfitting.", lit=(2020,))
+                "Chapter fourteen. Benign overfitting.")
         self.picture()
         self.measure()
         self.why()

@@ -13,7 +13,7 @@ FAST, SLOW = C.MODEL_Q, C.TRUE_P
 class MoreDescents(VoiceoverScene):
     def construct(self):
         chapter(self, 13, r"Double descent in samples and in epochs", r"Can more data, or more training, hurt?",
-                "Chapter thirteen. Double descent in samples, and in epochs.", lit=(2019,))
+                "Chapter thirteen. Double descent in samples, and in epochs.")
         self.samples()
         self.epochs()
 

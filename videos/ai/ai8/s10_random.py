@@ -9,7 +9,7 @@ from videos.ai.ai8.common import AUSTEN, DICKENS, HIST, TEST, TRAIN, chapter, cu
 class RandomLabels(VoiceoverScene):
     def construct(self):
         chapter(self, 9, r"Memorizing nonsense", r"Can a network fit random labels?",
-                "Chapter nine. Memorizing nonsense.", lit=(2017,))
+                "Chapter nine. Memorizing nonsense.")
         self.experiment()
         self.order()
         self.sweep()

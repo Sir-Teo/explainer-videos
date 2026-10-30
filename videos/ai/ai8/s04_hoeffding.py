@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, bars, chapter, curve, load
+from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, bars, card_body, chapter, curve, load
 
 
 class Hoeffding(VoiceoverScene):
@@ -22,8 +22,8 @@ class Hoeffding(VoiceoverScene):
         h = load("hoeffding")
         p, ns = float(h["p"]), [int(n) for n in h["ns"]]
         thm = theorem_card(r"Hoeffding's inequality",
-                           r"$Z_1, \dots, Z_n$ independent, \ each in $[0, 1]$, \ mean $\mu$: \\[2pt] "
-                           r"$P\big(|\bar Z - \mu| \ge \varepsilon\big) \le 2\, e^{-2n\varepsilon^2}$",
+                           card_body(r"$Z_1, \dots, Z_n$ independent, \ each in $[0, 1]$, \ mean $\mu$:",
+                                     r"P\big(|\bar Z - \mu| \ge \varepsilon\big) \le 2\, e^{-2n\varepsilon^2}", width=5.4),
                            who=r"W.~Hoeffding (1963); \ derived in Part 5", width=6.2, font_size=22)
         thm.to_corner(UL, buff=0.3)
         app = label(r"$Z_i = 1$ \ if the rule errs on test case $i$: \\ $\bar Z = \hat R$, \ $\mu = R$", font_size=24,
@@ -33,7 +33,7 @@ class Hoeffding(VoiceoverScene):
                  center=(3.2, -0.3, 0))
         ax = G.ax
         pline = DashedLine(ax.c2p(p, 0), ax.c2p(p, 14), color=WHITE, stroke_width=2)
-        pl = label(rf"true error ${100 * p:.0f}\%$", font_size=22).next_to(pline, UP, buff=0.08)
+        pl = label(rf"true error ${100 * p:.0f}\%$", font_size=22).next_to(ax.c2p(p, 13), RIGHT, buff=0.12)
         eps = 0.05
         zone = Rectangle(width=ax.c2p(p + eps, 0)[0] - ax.c2p(p - eps, 0)[0], height=ax.c2p(0, 14)[1] - ax.c2p(0, 0)[1],
                          stroke_width=0, fill_color=MEAS, fill_opacity=0.10).move_to(ax.c2p(p, 7))
@@ -144,7 +144,7 @@ class Hoeffding(VoiceoverScene):
                 why(r"set the right side to $\delta$: \ for every $h$ at once, \ with probability $1 - \delta$")]
         for r_, w_ in zip(rows, whys):
             w_.scale(0.85)
-        step = ladder(self, rows, whys, keep=3, top=-1.0, x=0.2, buff=0.35, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=0.9, x=0.8, buff=0.35, edge=6.9)
         with self.voiceover(
             "But a learner doesn't test one rule; it picks the best of many, on the same data. Here are "
             f"{K:,} rules that know nothing at all, scored on {n} examples whose labels are coin flips. "
@@ -157,13 +157,13 @@ class Hoeffding(VoiceoverScene):
             "log of the family's size over n. The price of choosing grows only with the logarithm."
         ) as vo:
             self.play(FadeIn(G), FadeIn(cap))
-            vo.wait_until("a")
             self.play(FadeIn(hb, lag_ratio=0.05), run_time=1.4)
+            vo.wait_until("a")
             self.play(FadeIn(bd), FadeIn(bl), GrowArrow(ar))
             vo.wait_until("b")
             self.play(FadeIn(fr))
             vo.wait_until("c")
-            self.play(VGroup(G, cap, hb, bd, bl, ar, fr).animate.scale(0.62).to_corner(UL, buff=0.3))
+            self.play(VGroup(G, cap, hb, bd, bl, ar, fr).animate.scale(0.55).to_corner(UL, buff=0.3))
             step(0)
             vo.wait_until("d")
             step(1)
@@ -190,7 +190,7 @@ class Hoeffding(VoiceoverScene):
         dfn = definition_card(r"PAC learning",
                               r"a family is \textit{probably approximately correct} learnable if, \ for every "
                               r"$\varepsilon, \delta$, \ some $n(\varepsilon, \delta)$ examples give, \ with probability "
-                              r"$1 - \delta$, \ a rule within $\varepsilon$ of the best. \\ Finite families: \ "
+                              r"$1 - \delta$, \ a rule within $\varepsilon$ of the best. \ Finite families: \ "
                               r"$n \approx \ln(|\mathcal H|/\delta)\,/\,\varepsilon^2$.", width=6.0, font_size=21)
         dfn.move_to([3.6, 1.0, 0])
         hist = history_card(1984, r"L.~G.~Valiant, \ \textit{A Theory of the Learnable}",
