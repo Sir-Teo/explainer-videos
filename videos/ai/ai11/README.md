@@ -16,7 +16,7 @@ The workhorse is a small character model (`charopt.py`: 8 characters of context,
 tanh units and a residual 256 × 256 hidden layer, 167 characters) trained on Part 1's thirty novels and scored in bits
 per character on held-out text. `compute.char_data` is its data; Parts 12 and 16 import it too.
 
-About 60 minutes: a hook, sixteen chapters and an outro (59.6 min in the silent low-quality build).
+About 57 minutes: a hook, sixteen chapters and an outro (56.6 min in the silent low-quality build; Chinese 57.9).
 
 ## Outline
 
