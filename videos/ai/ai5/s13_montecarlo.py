@@ -145,8 +145,8 @@ class MonteCarlo(VoiceoverScene):
         pl = MathTex(r"p", font_size=40, color=DATA).next_to(ax.c2p(-1.2, normal_pdf(-1.2)), UL, buff=0.1)
         ql = MathTex(r"q", font_size=40, color=MODEL).next_to(ax.c2p(5.2, normal_pdf(1.2)), UR, buff=0.1)
         x4 = ax.c2p(4, 0)
-        edge = DashedLine(x4, x4 + UP * 3.0, color=TAIL, stroke_width=2.5)
-        tail_l = label(r"above $4$", font_size=26, color=TAIL).next_to(edge, UP, buff=0.1)
+        edge = DashedLine(x4, x4 + UP * 2.2, color=TAIL, stroke_width=2.5)
+        tail_l = label(r"above $4$", font_size=26, color=TAIL).next_to(edge.get_end(), RIGHT, buff=0.12)
         g = np.random.default_rng(5)
         zs = g.normal(size=400)
         zs = np.where(zs > 4, 3.9, zs)
@@ -165,7 +165,7 @@ class MonteCarlo(VoiceoverScene):
         VGroup(r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
         colors = {r"p(x)": DATA, r"q(x)": MODEL, r"\mathbb{E}_p": DATA, r"\mathbb{E}_q": MODEL}
         f = cmath(r"\mathbb{E}_p", r"[f(x)]", "=", r"\mathbb{E}_q", r"\Big[f(x)\,", r"\frac{p(x)}{q(x)}", r"\Big]",
-                  colors=colors, font_size=40).move_to([3.6, 2.0, 0])
+                  colors=colors, font_size=40).move_to([3.6, 2.3, 0])
         with self.voiceover(
             "Monte Carlo has one weakness: rare events. How often does a standard bell land above four? Exactly, "
             f"about {true * 1e5:.1f} times in a hundred thousand. <bookmark mark='a'/> Draw {n:,} samples, and only "
@@ -195,13 +195,20 @@ class MonteCarlo(VoiceoverScene):
     def origins(self):
         cards = VGroup(
             history_card(1946, r"Stanis\l aw Ulam", r"recovering from an illness, \ asks the odds of winning solitaire: \ "
-                         r"easier to play a hundred games and count", width=4.2),
+                         r"easier to play a hundred games and count", width=4.3, font_size=23),
             history_card(1947, r"John von Neumann", r"proposes following random neutrons through a bomb core, \ one "
-                         r"by one, \ on the new ENIAC", width=4.2),
+                         r"by one, \ on the new ENIAC", width=4.3, font_size=23),
             history_card(1948, r"Kl\'ara D\'an von Neumann \& Nicholas Metropolis",
-                         r"run the first Monte Carlo programs on ENIAC; \ Metropolis names the method", width=4.2),
+                         r"run the first Monte Carlo programs on ENIAC; \ Metropolis names the method", width=4.3, font_size=23),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(UP * 0.2)
         head = label(r"Monte Carlo, \ Los Alamos", font_size=38).to_edge(UP, buff=0.4)
+        cards.move_to(UP * 0.9)
+        g_ = np.random.default_rng(1946)
+        won = g_.random(100) < 0.085  # illustration: a hundred games of solitaire, a few of them won
+        games = VGroup(*[RoundedRectangle(width=0.36, height=0.48, corner_radius=0.05, stroke_width=1.2,
+                                          stroke_color=GREY_B, fill_color=C.INTERVAL if w else "#1A2130", fill_opacity=0.9)
+                         for w in won]).arrange_in_grid(rows=4, cols=25, buff=0.08).move_to(DOWN * 2.1)
+        gl = note(rf"illustration: \ play a hundred games, \ count the wins \ ({int(won.sum())} here)").next_to(games, UP, buff=0.12)
         cite_ = cite(r"N.~Metropolis, \textit{The Beginning of the Monte Carlo Method}, \ Los Alamos Science (1987)",
                      corner=DR)
         with self.voiceover(
@@ -211,7 +218,7 @@ class MonteCarlo(VoiceoverScene):
             "neutrons through a bomb core, <bookmark mark='c'/> and in 1948 Klara von Neumann and Nicholas Metropolis "
             "ran it on ENIAC. Metropolis named it after the casino."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), LaggedStart(*[FadeIn(g) for g in games], lag_ratio=0.02), FadeIn(gl))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))

@@ -114,7 +114,7 @@ class Sampling(VoiceoverScene):
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-3.5, 1.2, 0])
         xs = np.linspace(0, 4, 200)
         F = curve(ax, xs, 1 - np.exp(-xs), color=DATA, stroke_width=3.5)
-        Fl = label(r"$F(x) = 1 - e^{-x}$", font_size=22, color=DATA).next_to(ax.c2p(2.6, 0.93), UP, buff=0.08)
+        Fl = label(r"$F(x) = 1 - e^{-x}$", font_size=22, color=DATA).next_to(ax.c2p(3.0, 0.9), DOWN, buff=0.25)
         us = [0.25, 0.6, 0.88]
         arrows = VGroup()
         for u in us:
@@ -199,14 +199,14 @@ class Sampling(VoiceoverScene):
             "which we just learned to draw. <bookmark mark='c'/> Two uniform numbers in, two independent bells out: "
             "the Box-Muller transform of 1958."
         ) as vo:
+            self.play(Create(sq), FadeIn(ud), FadeIn(ul), FadeIn(cite_))
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
+            self.play(GrowArrow(arr), TransformFromCopy(ud, zd), Create(ring), FadeIn(zl), run_time=2.0)
             vo.wait_until("c")
             step(2)
-            self.play(Create(sq), FadeIn(ud), FadeIn(ul), FadeIn(cite_))
-            self.play(GrowArrow(arr), TransformFromCopy(ud, zd), Create(ring), FadeIn(zl), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -234,10 +234,10 @@ class Sampling(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=3.2, x=1.6, buff=0.5, edge=6.8)
         cmp = VGroup()
         for i in range(6):
-            cmp.add(VGroup(Rectangle(width=0.22, height=3.0 * p[i], stroke_width=0, fill_color=MODEL, fill_opacity=0.8),
-                           Rectangle(width=0.22, height=3.0 * freq[i], stroke_width=0, fill_color=GUM, fill_opacity=0.8))
+            cmp.add(VGroup(Rectangle(width=0.3, height=4.5 * p[i], stroke_width=0, fill_color=MODEL, fill_opacity=0.8),
+                           Rectangle(width=0.3, height=4.5 * freq[i], stroke_width=0, fill_color=GUM, fill_opacity=0.8))
                     .arrange(RIGHT, buff=0.03, aligned_edge=DOWN))
-        cmp.arrange(RIGHT, buff=0.3, aligned_edge=DOWN).move_to([3.3, -1.5, 0])
+        cmp.arrange(RIGHT, buff=0.35, aligned_edge=DOWN).move_to([3.3, -1.6, 0])
         cl = VGroup(label(r"softmax", font_size=20, color=MODEL), label(rf"argmax picks, ${N:,}$ draws".replace(",", "{,}"),
                                                                        font_size=20, color=GUM)).arrange(RIGHT, buff=0.3)
         cl.next_to(cmp, DOWN, buff=0.2)
@@ -284,9 +284,9 @@ class Sampling(VoiceoverScene):
             ys = np.asarray(d[f"y{tau}"])
             rows = VGroup()
             for y in ys:
-                rows.add(VGroup(*[Rectangle(width=0.22, height=max(1.4 * v, 0.01), stroke_width=0, fill_color=GUM,
-                                            fill_opacity=0.85) for v in y]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN))
-            rows.arrange(RIGHT, buff=0.35, aligned_edge=DOWN)
+                rows.add(VGroup(*[Rectangle(width=0.3, height=max(1.3 * v, 0.01), stroke_width=0, fill_color=GUM,
+                                            fill_opacity=0.85) for v in y]).arrange(RIGHT, buff=0.06, aligned_edge=DOWN))
+            rows.arrange(RIGHT, buff=0.6, aligned_edge=DOWN)
             j = taus.index(tau)
             panels.add(VGroup(rows, label(rf"$\tau = {tau:g}$: \ largest entry ${onehot[j]:.2f}$ on average", font_size=22,
                                           color=C.SURPRISE).next_to(rows, DOWN, buff=0.15)))
@@ -300,8 +300,8 @@ class Sampling(VoiceoverScene):
             f"At one it is softer, <bookmark mark='c'/> and at five it is a blur, {onehot[-1]:.2f}. The temperature "
             "trades faithfulness for smooth gradients; it trained the discrete codes of the first DALL-E."
         ) as vo:
-            self.play(Write(f), FadeIn(fn), FadeIn(cite_), FadeIn(tag))
-            for k, mk in enumerate("abc"):
+            self.play(Write(f), FadeIn(fn), FadeIn(cite_), FadeIn(tag), FadeIn(panels[0]))
+            for k, mk in enumerate("bc", start=1):
                 vo.wait_until(mk)
                 self.play(FadeIn(panels[k], shift=UP * 0.1))
         self.wait(0.3)

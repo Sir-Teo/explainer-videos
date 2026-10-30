@@ -1,0 +1,155 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.ai import *  # noqa: F403
+from videos.ai.ai6.common import BAD, GOOD, HIST, HL, chapter, era_strip, load
+
+C2, C70 = C.TRUE_P, C.BITS
+LO = 0.70  # the bars start at 70% right
+
+
+class Contest(VoiceoverScene):
+    def construct(self):
+        chapter(self, 17, r"The contest, and two cultures", r"Which method wins, and why do trees still rule tables?",
+                "Chapter seventeen. The contest.", lit=(2001,))
+        self.board()
+        self.cultures()
+        self.tables()
+
+    # ------------------------------------------------------------------
+    def board(self):
+        b = load("board")
+        rows = b["rows"]
+        W = 2.5
+        col2, col70 = -0.5, 3.4
+        title = label(rf"Ten-fold cross-validation on all ${b['n']}$ pages: \ mean, \ and one standard deviation over folds",
+                      font_size=28).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"$2$ rates", font_size=26, color=C2).move_to([col2 + W / 2, 2.85, 0]),
+                      label(r"all $70$ rates", font_size=26, color=C70).move_to([col70 + W / 2, 2.85, 0]))
+        lines = VGroup()
+        for k, r in enumerate(rows):
+            yv = 2.35 - 0.47 * k
+            g = VGroup(label(r["name"], font_size=22, color=WHITE).move_to([-0.75, yv, 0], aligned_edge=RIGHT))
+            for key, x0, col in (("2", col2, C2), ("70", col70, C70)):
+                if key not in r:
+                    g.add(VGroup(MathTex(r"\text{---}", font_size=22, color=GREY_D).move_to([x0 + 0.3, yv, 0])))
+                    continue
+                a, sd = r[key]["cv"], r[key]["sd"]
+                L = W * (a - LO) / (1 - LO)
+                bar = Rectangle(width=max(L, 0.02), height=0.26, stroke_width=0, fill_color=col, fill_opacity=0.85)
+                bar.move_to([x0 + L / 2, yv, 0])
+                e0, e1 = x0 + W * (max(a - sd, LO) - LO) / (1 - LO), x0 + W * (min(a + sd, 1.0) - LO) / (1 - LO)
+                err = Line([e0, yv, 0], [e1, yv, 0], color=WHITE, stroke_width=2)
+                val = MathTex(rf"{100 * a:.1f}", font_size=22, color=col).move_to([x0 + W + 0.45, yv, 0])
+                g.add(VGroup(bar, err, val))
+            lines.add(g)
+        scale = note(r"bars start at $70\%$; \ white: \ $\pm$ one s.d. over the ten folds").to_corner(DR, buff=0.15)
+        a2 = [r["2"]["cv"] for r in rows if "2" in r]
+        lo2, hi2 = min(a2), max(a2)
+        best70 = max(rows, key=lambda r: r["70"]["cv"] if "70" in r else 0)
+        tree70 = next(r for r in rows if r["key"] == "tree")["70"]["cv"]
+        xgb70 = next(r for r in rows if r["key"] == "xgb")["70"]["cv"]
+        lr70 = next(r for r in rows if r["key"] == "lr")["70"]["cv"]
+        linear_wins = lr70 >= xgb70
+        line_s = ("And the plain straight line, logistic regression, beats the boosted trees: on these pages the "
+                  "evidence really is a sum of small word effects, a line's home ground, as naive Bayes' formula "
+                  "already suggested." if linear_wins else "Boosted trees edge out the straight line here.")
+        with self.voiceover(
+            "Here's the whole contest, every method on the same ten folds of all the pages, its settings fixed in "
+            f"advance. <bookmark mark='a'/> With two rates, every method lands between {100 * lo2:.0f} and "
+            f"{100 * hi2:.0f} percent: two numbers simply don't hold more. <bookmark mark='b'/> With all seventy, "
+            f"the best is {best70['name']}, at {100 * best70['70']['cv']:.1f} percent. A single tree manages "
+            f"{100 * tree70:.0f}. {line_s} "
+            "<bookmark mark='c'/> The lesson of classical machine learning: the description of the data mattered "
+            "more than the cleverness of the method. Choosing seventy small words did most of the work."
+        ) as vo:
+            self.play(FadeIn(title), FadeIn(head), FadeIn(scale))
+            self.play(LaggedStart(*[FadeIn(g[0]) for g in lines], lag_ratio=0.08), run_time=1.5)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(g[1]) for g in lines], lag_ratio=0.1), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(g[2]) for g in lines], lag_ratio=0.1), run_time=2.0)
+            vo.wait_until("c")
+            self.play(Indicate(lines[rows.index(best70)][2], color=WHITE, scale_factor=1.05), run_time=1.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def cultures(self):
+        card = history_card(2001, r"Leo Breiman, \ \textit{Statistical Modeling: The Two Cultures}",
+                            r"data modeling: \ assume how the data was made, \ then estimate it \ (his estimate: $98\%$ of "
+                            r"statisticians). \ Algorithmic modeling: \ treat nature as a black box, \ judge by predictions "
+                            r"on new data \ ($2\%$).", color=HIST, width=7.0).to_corner(UL, buff=0.3)
+        events = [(2006, r"Netflix Prize: \\ \$1M for $10\%$"), (2009, r"won by a blend \\ of hundreds of models"),
+                  (2010, r"Kaggle"), (2015, r"XGBoost: \ $17$ of $29$ \\ Kaggle winners")]
+        axis, skel, marks = era_strip(events, y0=-2.1, width=4.6, font_size=20)
+        cite_ = note(r"Chen \& Guestrin (2016): \ solutions on Kaggle's blog in 2015").to_corner(DR, buff=0.15)
+        with self.voiceover(
+            "In 2001 Leo Breiman, who had left statistics for consulting and come back, described two cultures. "
+            "Most statisticians assumed a model of how the data was made, and estimated it. A few, mostly outside "
+            "statistics, treated nature as a black box, and judged a method only by how well it predicted new data. "
+            "This part has belonged to the second culture. <bookmark mark='a'/> Competitions made it the norm. In "
+            "2006 Netflix offered a million dollars for predicting ratings ten percent better; <bookmark mark='b'/> "
+            "a blend of hundreds of models won in 2009. <bookmark mark='c'/> Kaggle turned the contest into a "
+            "profession, <bookmark mark='d'/> and in 2015, seventeen of the twenty-nine winning solutions on Kaggle's "
+            "blog used XGBoost."
+        ) as vo:
+            self.play(FadeIn(card, shift=DOWN * 0.2))
+            vo.wait_until("a")
+            self.play(Create(axis), FadeIn(skel), FadeIn(marks[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(marks[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(marks[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(marks[3]), FadeIn(cite_))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def tables(self):
+        why_ = VGroup(label(r"Why trees still win on tables", font_size=30, color=HL),
+                      label(r"$45$ data sets of about $10{,}000$ rows: \ tree ensembles ahead of deep networks", font_size=22,
+                            color=WHITE),
+                      label(r"$\cdot$ \ uninformative columns: \ trees ignore them", font_size=22, color=GREY_A),
+                      label(r"$\cdot$ \ columns mean something: \ trees don't mix them (no rotation)", font_size=22, color=GREY_A),
+                      label(r"$\cdot$ \ irregular targets: \ steps, \ not smooth surfaces", font_size=22, color=GREY_A),
+                      note(r"Grinsztajn, Oyallon \& Varoquaux (NeurIPS 2022)"))
+        why_.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_corner(UL, buff=0.35)
+        fm = VGroup(label(r"The frontier: \ foundation models for tables", font_size=30, color=GOOD),
+                    label(r"a transformer pretrained on millions of \emph{synthetic} tables \\ reads the training rows "
+                          r"and predicts in one forward pass", font_size=22, color=WHITE),
+                    label(r"TabPFN (\textit{Nature}, Jan 2025): \ up to $10{,}000$ rows; \ in $2.8$ s, \\ beats an "
+                          r"ensemble of baselines tuned for $4$ hours", font_size=22, color=GREY_A),
+                    label(r"TabPFN-2.5 (Nov 2025): \ $50{,}000$ rows, \ $2{,}000$ columns", font_size=22, color=GREY_A),
+                    label(r"TabPFN-3 (May 2026): \ up to $10^6$ rows; \ first on TabArena \ (its authors' report)",
+                          font_size=22, color=GREY_A),
+                    label(r"independent check (Purucker et al., June 2026): \ best on small and medium data; \\ trees "
+                          r"still lead on large, \ shifting \ or very wide tables", font_size=22, color=BAD))
+        fm.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.35)
+        with self.voiceover(
+            "Deep learning took over images, sound and language. Why not tables? In 2022, Grinsztajn, Oyallon and "
+            "Varoquaux tested forty-five tabular data sets of around ten thousand rows, and tree ensembles still "
+            "beat deep networks. <bookmark mark='a'/> Their reasons: tables carry useless columns, which trees "
+            "simply never ask about; each column means something, and networks blur them together; and the answers "
+            "jump in steps, which trees draw easily. <bookmark mark='b'/> The challenger is a transformer trained "
+            "only on millions of synthetic tables, which reads your training rows as its prompt and predicts in one "
+            "pass. TabPFN's second version, in Nature in January 2025, beat a four-hour tuned ensemble in under three "
+            "seconds, on tables of up to ten thousand rows. <bookmark mark='c'/> Its successors reach fifty "
+            "thousand rows, then, this May, a million, top of the TabArena leaderboard by their makers' count. "
+            "<bookmark mark='d'/> An independent benchmark in June found them best on small and medium tables, "
+            "while trees still lead on large, shifting or very wide ones. Trees and boosting are still the baseline "
+            "to beat."
+        ) as vo:
+            self.play(FadeIn(why_[0]), FadeIn(why_[1]), FadeIn(why_[5]))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in why_[2:5]], lag_ratio=0.4), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(fm[0]), FadeIn(fm[1]), FadeIn(fm[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(fm[3]), FadeIn(fm[4]))
+            vo.wait_until("d")
+            self.play(FadeIn(fm[5]))
+        self.wait(0.3)
+        self.clear_scene()

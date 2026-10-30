@@ -92,10 +92,10 @@ class Ridge(VoiceoverScene):
         lam_r = always_redraw(lambda: VGroup(
             MathTex(rf"\lambda = {10 ** loglam.get_value():,.0f}".replace(",", "{,}"), font_size=32, color=RIDGE),
             MathTex(rf"\text{{effective weights}} = {float((d ** 2 / (d ** 2 + 10 ** loglam.get_value())).sum()):.1f}",
-                    font_size=28, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.3).shift(LEFT * 0.0))
+                    font_size=28, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UR, buff=0.3).shift(DOWN * 0.45))
         share = float((uy[:2] ** 2).sum() / (uy ** 2).sum())
         n_tr = int((~np.asarray(load("pages")["test"], bool)).sum())
-        tag = note(rf"the ${n_tr}$ training pages, \ $70$ standardized rates").to_corner(DR, buff=0.2)
+        tag = note(rf"the ${n_tr}$ training pages, \ $70$ standardized rates").to_corner(UR, buff=0.2)
         f30 = float(d[-1] ** 2 / (d[-1] ** 2 + 30))
         f1k_hi, f1k_lo = float(d[0] ** 2 / (d[0] ** 2 + 1000)), float(d[-1] ** 2 / (d[-1] ** 2 + 1000))
         with self.voiceover(
@@ -146,6 +146,13 @@ class Ridge(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.7, 0.6, 0])
         link = label(r"shrink every direction (ridge) \ or drop the thin ones (Part 7's PCA); \ "
                      r"why a little bias pays: \ Part 8", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.25)
+        folds = VGroup(*[Rectangle(width=0.42, height=0.42, stroke_color=GREY_B, stroke_width=1.5, fill_color=RIDGE,
+                                   fill_opacity=0.25) for _ in range(10)]).arrange(RIGHT, buff=0.06)
+        fold_l = label(r"the training pages, \ in ten folds", font_size=22, color=GREY_A)
+        held = label(r"held back: \ measure the error", font_size=20, color=C.BITS)
+        cvd = VGroup(fold_l, folds).arrange(DOWN, buff=0.18).move_to([3.7, 1.4, 0])
+        held.next_to(folds, DOWN, buff=0.25)
+        hl = SurroundingRectangle(folds[0], color=C.BITS, buff=0.04, stroke_width=3)
         flat = ta[best] >= ta[0] - 1e-9
         say = ("which costs nothing on the held-out pages" if flat else
                f"which costs a page or so on the held-out pages, {100 * ta[best]:.1f} percent against {100 * ta[0]:.1f}")
@@ -157,9 +164,14 @@ class Ridge(VoiceoverScene):
             "penalty barely matters for accuracy; it matters when there are more words than pages. Ridge keeps every "
             "word, only smaller. The next chapter's penalty throws words away."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(cvd))
+            self.play(Create(hl), FadeIn(held), folds[0].animate.set_fill(C.BITS, 0.7))
+            for k in range(1, 10):
+                self.play(hl.animate.move_to(folds[k]), folds[k - 1].animate.set_fill(RIDGE, 0.25),
+                          folds[k].animate.set_fill(C.BITS, 0.7), run_time=0.35)
             self.play(FadeIn(bnd), Create(cv), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(cvd, hl, held)))
             self.play(Create(mk), LaggedStart(*[FadeIn(r_) for r_ in right], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(link))

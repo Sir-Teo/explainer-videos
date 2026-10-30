@@ -31,8 +31,8 @@ class MaxEnt(VoiceoverScene):
         self.play(FadeOut(card))
 
     def bars(self, p, x=0.0, base=-2.4, h=6.0, col=DATA):
-        lb = LiveBars(p, max_value=0.5, height=h * 0.5, bar_width=0.6, gap=0.25, colors=col,
-                      labels=[str(k) for k in range(1, 7)], label_font=26)
+        lb = LiveBars(p, max_value=0.5, height=h * 0.5, bar_width=0.85, gap=0.3, colors=col,
+                      labels=[str(k) for k in range(1, 7)], label_font=30)
         return lb.place(base, x=x)
 
     # ------------------------------------------------------------------
@@ -40,7 +40,7 @@ class MaxEnt(VoiceoverScene):
         d = load("maxent")
         others = np.asarray(d["others"])
         p_star = np.asarray(d["p"])
-        bars = self.bars(np.ones(6) / 6, x=-3.0)
+        bars = self.bars(np.ones(6) / 6, x=-3.2, base=-2.6, h=9.0)
         head = label(r"A die whose faces average $4.5$, \ not $3.5$", font_size=34).to_edge(UP, buff=0.4)
         hv = DecimalNumber(math.log(6), num_decimal_places=3, font_size=34, color=ENT)
         hl = VGroup(label(r"entropy:", font_size=28), hv, label(r"nats", font_size=28)).arrange(RIGHT, buff=0.15)
@@ -92,7 +92,16 @@ class MaxEnt(VoiceoverScene):
                 why(r"$Z$ makes them add to $1$"),
                 why(r"one equation for $\lambda$")]
         step = ladder(self, rows, whys, keep=5, top=3.25, x=-1.6, buff=0.42, edge=6.8)
-        res = label(r"an exponential tilt: \ the exponential family", font_size=28, color=LAM).to_edge(DOWN, buff=0.35)
+        res = label(r"an exponential tilt: \ the exponential family", font_size=28, color=LAM).to_corner(DL, buff=0.4)
+        minis = VGroup()
+        for lam_ in (-0.4, 0.0, 0.37):
+            q = np.exp(lam_ * np.arange(1, 7))
+            q /= q.sum()
+            b_ = VGroup(*[Rectangle(width=0.16, height=2.6 * v, stroke_width=0, fill_color=LAM, fill_opacity=0.85)
+                          for v in q]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN)
+            minis.add(VGroup(b_, MathTex(rf"\lambda = {lam_:g}", font_size=24, color=LAM).next_to(b_, DOWN, buff=0.1)))
+        minis.arrange(RIGHT, buff=0.45, aligned_edge=DOWN).to_corner(DR, buff=0.4)
+        ml = label(r"$p_k \propto e^{\lambda k}$, \ three values of $\lambda$", font_size=20, color=GREY_A).next_to(minis, UP, buff=0.1)
         with self.voiceover(
             "Finding it is part four's constrained optimization. <bookmark mark='a'/> Maximize the entropy, subject "
             "to two constraints: the chances add to one, and they average four and a half. <bookmark mark='b'/> "
@@ -101,6 +110,7 @@ class MaxEnt(VoiceoverScene):
             "the lambda k, divided by a normalizer, Z. <bookmark mark='e'/> The only unknown is lambda, and the "
             "derivative of log Z is the average, so one equation fixes it."
         ) as vo:
+            self.play(FadeIn(minis), FadeIn(ml))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -120,7 +130,7 @@ class MaxEnt(VoiceoverScene):
         d = load("maxent")
         path = np.asarray(d["path"])
         lam, H, Hmax = float(d["lam"]), float(d["H"]), float(d["H_others_max"])
-        bars = self.bars(path[0, 1:], x=-3.4, base=-2.6, col=MODEL)
+        bars = self.bars(path[0, 1:], x=-3.4, base=-2.9, h=8.0, col=MODEL)
         t = ValueTracker(0)
         k = np.arange(1, 7)
 
@@ -136,15 +146,22 @@ class MaxEnt(VoiceoverScene):
         read = VGroup(VGroup(label(r"step", font_size=26), sv).arrange(RIGHT, buff=0.15),
                       VGroup(MathTex(r"\lambda =", font_size=32, color=LAM), lv).arrange(RIGHT, buff=0.15),
                       VGroup(label(r"average:", font_size=26), mv).arrange(RIGHT, buff=0.15)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        read.move_to([-3.4, 2.5, 0])
+        read.move_to([-5.0, 2.6, 0])
         upd = cmath(r"\lambda \leftarrow \lambda + \eta\,\big(4.5 - \mathbb{E}_\lambda[k]\big)", font_size=30,
                     colors={r"\lambda \leftarrow \lambda + \eta\,\big(4.5 - \mathbb{E}_\lambda[k]\big)": LAM})
-        upd.next_to(read, RIGHT, buff=0.6).align_to(read, UP)
+        upd.next_to(read, DOWN, buff=0.35).align_to(read, LEFT)
         # the entropies of 20,000 other dice with the same average
         hh = np.asarray(d["H_hist"], float)
         lo = float(d["H_lo"])
-        hx = Axes(x_range=[lo, H + 0.02, 0.1], y_range=[0, 1.05, 0.5], x_length=5.4, y_length=2.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.4, -1.5, 0])
+        hx = Axes(x_range=[lo, H + 0.02, 0.1], y_range=[0, 1.05, 0.5], x_length=5.4, y_length=2.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -1.9, 0])
+        # the training curve: lambda against the step
+        la = Axes(x_range=[0, len(path) - 1, 20], y_range=[0, 0.45, 0.1], x_length=5.4, y_length=2.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, 1.5, 0])
+        lam_line = DashedLine(la.c2p(0, lam), la.c2p(len(path) - 1, lam), color=GREY_B, stroke_width=2)
+        lal = label(r"$\lambda$ during the fit; \ dashes: \ the exact solution", font_size=20, color=LAM).next_to(la, UP, buff=0.1)
+        trace = always_redraw(lambda: curve(la, np.arange(int(t.get_value()) + 1), path[:int(t.get_value()) + 1, 0],
+                                            color=LAM, stroke_width=3) if t.get_value() >= 1 else VectorizedPoint(la.c2p(0, 0)))
         edges = np.linspace(lo, H, len(hh) + 1)
         hist = hist_shape(hx, edges, hh / hh.max(), color=GREY_B, opacity=0.4)
         star = DashedLine(hx.c2p(H, 0), hx.c2p(H, 1.05), color=ENT, stroke_width=3)
@@ -159,7 +176,8 @@ class MaxEnt(VoiceoverScene):
             f"times the one below it. <bookmark mark='b'/> Its entropy is {H:.4f} nats. Twenty thousand other dice "
             f"with the same average, made at random: {verdict}."
         ) as vo:
-            self.play(FadeIn(bars), FadeIn(read), Write(upd))
+            self.play(FadeIn(bars), FadeIn(read), Write(upd), Create(la), Create(lam_line), FadeIn(lal))
+            self.add(trace)
             vo.wait_until("a")
             for i in range(len(bars.trackers)):
                 bars.trackers[i].add_updater(lambda m, i=i: m.set_value(float(at(t.get_value())[1 + i])))
@@ -168,7 +186,7 @@ class MaxEnt(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(hx), FadeIn(hist), FadeIn(hl))
             self.play(Create(star), FadeIn(sl))
-        for m in (lv, mv, sv, *bars.trackers):
+        for m in (lv, mv, sv, trace, *bars.trackers):
             m.clear_updaters()
         bars.freeze()
         self.wait(0.3)
@@ -201,12 +219,12 @@ class MaxEnt(VoiceoverScene):
                        for v in sm]).arrange(RIGHT, buff=0.15, aligned_edge=DOWN)
         p3 = VGroup(ax3, label(r"fix the average energy", font_size=22, color=LAM).next_to(ax3, UP, buff=0.12),
                     label(r"Gibbs: \ $p_i \propto e^{-E_i/T}$ \ = \ softmax", font_size=20, color=GREY_A).next_to(ax3, DOWN, buff=0.12))
-        panels = VGroup(p1, p2, p3).arrange(RIGHT, buff=0.55, aligned_edge=DOWN).move_to(UP * 0.4)
+        panels = VGroup(p1, p2, p3).arrange(RIGHT, buff=0.55, aligned_edge=DOWN).scale(1.25).move_to(UP * 0.3)
         fam = cmath(r"p(x)", "=", r"h(x)\, \exp\!\big(", r"\theta", r"\cdot T(x) - A(\theta)\big)", font_size=36,
                     colors={r"\theta": LAM}).to_edge(DOWN, buff=1.05)
         famn = label(r"the exponential family: \ $\nabla A(\theta) = \mathbb{E}[T(x)]$; \ Bernoulli, \ softmax, \ "
                      r"Gaussian, \ Poisson", font_size=22, color=GREY_A).next_to(fam, DOWN, buff=0.15)
-        cite_ = cite(r"L.~Boltzmann (1877); \ J.~W.~Gibbs (1902); \ E.~T.~Jaynes (1957)", corner=UR)
+        cite_ = cite(r"L.~Boltzmann (1877); \ J.~W.~Gibbs (1902); \ E.~T.~Jaynes (1957)").next_to(head, DOWN, buff=0.12)
         with self.voiceover(
             "The same recipe gives the distributions this series keeps meeting. <bookmark mark='a'/> On the line, "
             "fix the mean and the variance, solve numerically, and out comes the bell: it is the most uncertain "
