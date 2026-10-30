@@ -476,7 +476,19 @@
   "the $70$ weights": "$70$个权重",
   "every weight shrinks smoothly": "每个权重都平滑地收缩",
   "weights exactly zero, \\ at any $\\lambda$: \\ $0$": "在任何$\\lambda$下恰好为零的权重：\\ $0$",
-  "Bayes: \\ ridge is the most probable \\\\ weights under a bell-shaped prior \\\\ (Part 5); \\ in networks, \\ weight decay": "贝叶斯：\\ 岭回归是钟形先验下 \\\\ 最可能的权重 \\\\ （第5部分）；\\ 在网络中，\\ 叫权重衰减"
+  "Bayes: \\ ridge is the most probable \\\\ weights under a bell-shaped prior \\\\ (Part 5); \\ in networks, \\ weight decay": "贝叶斯：\\ 岭回归是钟形先验下 \\\\ 最可能的权重 \\\\ （第5部分）；\\ 在网络中，\\ 叫权重衰减",
+  "squared error on held-out folds \\ (ten folds, $\\pm 1$ s.e.)": "留出折上的平方误差 \\ （10折，$\\pm 1$个标准误）",
+  "lowest error: \\ $57$ words": "误差最低：\\ $57$个词",
+  "the sparsest model within \\\\ one standard error of it:": "与它相差不到一个标准误的 \\\\ 最稀疏模型：",
+  "$46$ words": "$46$个词",
+  "logistic, \\ $70$ rates": "逻辑回归，\\ $70$个词频",
+  "accuracy \\ (higher is better)": "准确率 \\ （越高越好）",
+  "log loss, \\ nats per page \\ (lower is better)": "对数损失，\\ 每页奈特数 \\ （越低越好）",
+  "ten-fold cross-validated probabilities, \\ every page predicted once": "10折交叉验证得到的概率，\\ 每页恰好预测一次",
+  "Ten-fold cross-validation over $C$ and the kernel width $\\gamma$: \\ accuracy, \\%": "对$C$和核宽度$\\gamma$做10折交叉验证：\\ 准确率，\\%",
+  "best: \\ $83.9\\%$": "最好：\\ $83.9\\%$",
+  "$12$ of $25$ settings within a point of it": "$25$种设置中有$12$种与它相差不到一个百分点",
+  "worst: \\ $54.9\\%$ \\ (tiny $C$)": "最差：\\ $54.9\\%$ \\ （$C$极小）"
  },
  "patterns": [
   [

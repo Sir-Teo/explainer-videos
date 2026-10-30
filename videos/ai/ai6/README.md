@@ -34,6 +34,7 @@ About 50 minutes; a hook, seventeen chapters and an outro.
 * **4. The lasso.** Tibshirani (1996): the diamond's corner; the soft threshold derived from subgradients;
   coordinate descent (Friedman, Hastie & Tibshirani, glmnet 2010) along 61 penalties, KKT conditions checked at every
   one (worst violation 1.6 × 10⁻⁹); the first eight words (not, she, very, be, out, such, to, mrs) give 90%; the
+  ten-fold cross-validated error curve (± 1 s.e.) is lowest at 57 words and nearly flat there, and the
   one-standard-error rule keeps 46 words (99.5%). Zou & Hastie's elastic net (2005) on a near-copy of "not": the lasso
   picks one twin, the elastic net shares.
 * **5. Logistic regression.** Score, line and sigmoid; the probability sheet with the pages lifted to 0 and 1 (3D);
@@ -75,7 +76,8 @@ About 50 minutes; a hook, seventeen chapters and an outro.
   exponential and 0–1 losses; the dual derived with Lagrange multipliers and KKT (Part 4 owns them); complementary
   slackness; SMO (Platt 1998; Fan, Chen & Lin's working-set rule) written out and run on the pages with a Gaussian
   kernel: C from 0.01 to 100, support vectors 407 → 169, primal and dual agree to 10⁻⁶, no KKT violations;
-  cross-validation picks C = 0.1, γ = 0.1 (81% held out); 99.5% with all 70 rates. Cortes & Vapnik (1995).
+  the ten-fold cross-validated grid over C and γ (best 83.9%, 12 of the 25 settings within a point of it, worst
+  54.9% at tiny C); cross-validation picks C = 0.1, γ = 0.1 (81% held out); 99.5% with all 70 rates. Cortes & Vapnik (1995).
 * **12. Trees.** The learned depth-3 tree and its boxes; Gini, entropy and error rate; why a strictly concave
   impurity always rewards a useful split (Jensen), and the scan of every threshold on "not" (all three pick 8.5);
   accuracy against depth (best held out at depth 4, 83%; cross-validation picks 3; grown fully: 94% train, 74% new).
@@ -98,7 +100,9 @@ About 50 minutes; a hook, seventeen chapters and an outro.
 * **16. Keeping score.** The ROC curve traced by sweeping the threshold (cross-validated logistic regression on two
   rates): AUC 0.9095, equal to the share of correctly ranked (Dickens, Austen) pairs (Mann–Whitney); with Dickens
   made rare (15 pages against 288), "always Austen" is 95% accurate, the ROC area stays 0.91, average precision falls
-  from 0.93 to 0.57; one 70/30 split's accuracy ranges 77.5–88.5% over 100 splits, ten-fold cross-validation over 20
+  from 0.93 to 0.57; accuracy against log loss (ten-fold cross-validated probabilities): Platt scaling leaves naive
+  Bayes' 95.6% accuracy unchanged but cuts its log loss from 0.478 to 0.088 nats per page (logistic regression on 70
+  rates: 0.034); one 70/30 split's accuracy ranges 77.5–88.5% over 100 splits, ten-fold cross-validation over 20
   shuffles 82.9–83.7%.
 * **17. The contest, and two cultures.** Every method on the same ten folds of all 639 pages (mean ± s.d.): with 2
   rates 76–83%; with 70, logistic regression and the Gaussian SVM 99.5%, the lasso 99.4%, LDA and least squares 99.2%,
