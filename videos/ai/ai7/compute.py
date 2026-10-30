@@ -651,9 +651,9 @@ def compute_lda():
     share = np.array([[(theta[sbook == b, k] * nd[sbook == b]).sum() for b in books] for k in range(K)])
     share /= share.sum(1, keepdims=True)
     main = [books[int(np.argmax(share[k]))] for k in range(K)]
-    # one section of Moby Dick, its mixture, and its words coloured by their likeliest topic
-    md = np.nonzero(sbook == 2701)[0]
-    ex = int(md[len(md) // 2])
+    # one section that mixes two topics most evenly, its mixture, and its words coloured by their likeliest topic
+    srt = np.sort(theta, 1)
+    ex = int(np.argmax(np.minimum(srt[:, -1], srt[:, -2]) * (srt[:, -1] + srt[:, -2] > 0.85)))
     Elog = digamma(gamma[:, order]) - digamma(gamma.sum(1))[:, None]
     words = segs[ex][:400]
     col = [int(np.argmax(Elog[ex] + np.log(beta[:, vid[w]]))) if w in vid else -1 for w in words]
@@ -662,7 +662,7 @@ def compute_lda():
                 monotone=mono, snaps=snaps, top=[[vocab[i] for i in np.argsort(-beta[k])[:10]] for k in range(K)],
                 topw=[[float(beta[k, i]) for i in np.argsort(-beta[k])[:10]] for k in range(K)], size=size / size.sum(),
                 main=[c1.BOOKS[b] for b in main], main_share=[float(share[k].max()) for k in range(K)],
-                ex_title=c1.BOOKS[2701], ex_theta=theta[ex], ex_words=words, ex_topic=col,
+                ex_title=c1.BOOKS[int(sbook[ex])], ex_theta=theta[ex], ex_words=words, ex_topic=col,
                 book_titles=[c1.BOOKS[b] for b in books], share=share)
 
 

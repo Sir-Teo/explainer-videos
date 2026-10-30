@@ -103,12 +103,12 @@ class Fisher(VoiceoverScene):
                 why(r"Fisher information: \ the score's variance"),
                 why(r"unbiased: \ $\mathbb{E}[\hat\theta] = \theta$, \ differentiated"),
                 why(r"Cauchy--Schwarz; \ $n$ points add their information")]
-        step = ladder(self, rows, whys, keep=5, top=3.25, x=-2.0, buff=0.38, edge=6.8)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.0, buff=0.3, edge=6.8)
         thm = theorem_card(r"Cram\'er--Rao", r"an unbiased estimate from $n$ independent points has variance at least "
                            r"$1 / (n\, I(\theta))$", who=r"C.~R.~Rao (1945), \ H.~Cram\'er (1946)", width=6.2,
                            color=BOUND).to_corner(DR, buff=0.25)
         sa = Axes(x_range=[-6, 6, 2], y_range=[-1.2, 1.2, 1], x_length=5.0, y_length=1.7, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.45).shift(UP * 0.1)
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.3)
         uu = np.linspace(-6, 6, 200)
         sc_ = curve(sa, uu, 2 * uu / (1 + uu * uu), color=C.INTERVAL, stroke_width=3)
         scl = label(r"the score of one Cauchy draw, \ $2u/(1+u^2)$: \ far draws pull little", font_size=20,
@@ -202,7 +202,7 @@ class Fisher(VoiceoverScene):
                          r"task has high information about", width=4.3, font_size=24),
             history_card(r"today", r"curvature-aware optimizers", r"K-FAC approximates $F$ layer by layer; \ Shampoo "
                          r"uses a close cousin \ (Part 11)", width=4.3, font_size=24),
-        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(fn, DOWN, buff=0.7)
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(fn, DOWN, buff=1.0)
         with self.voiceover(
             "With many parameters, the information becomes a matrix: the average outer product of the score. "
             "<bookmark mark='a'/> In 1998 Shun-ichi Amari proposed measuring steps of gradient descent by it, so "

@@ -19,6 +19,7 @@ class Trees(VoiceoverScene):
         self.splits()
         self.impurity()
         self.depth()
+        self.fragile()
 
     # ------------------------------------------------------------------
     def rects(self, ax, rects, opacity=0.5):
@@ -229,3 +230,45 @@ class Trees(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+
+    # ------------------------------------------------------------------
+    def fragile(self):
+        t = load("trees")
+        roots = t["boot_roots"]
+        acc = np.asarray(t["boot_acc"])
+        words = sorted({r[0] for r in roots}, key=lambda w: -sum(r[0] == w for r in roots))
+        pal = [C.BITS, C.TRUE_P, C.REWARD, C.PENALTY, C.MODEL_Q]
+        col = {w: pal[i % len(pal)] for i, w in enumerate(words)}
+        icons = VGroup()
+        for k, (w, thr, lw, rw) in enumerate(roots):
+            top = RoundedRectangle(width=1.15, height=0.4, corner_radius=0.08, stroke_color=col[w], stroke_width=2,
+                                   fill_color="#121722", fill_opacity=1)
+            tt = label(rf"\texttt{{{w}}} $\le {thr:g}$", font_size=16, color=col[w]).move_to(top)
+            kids = VGroup(*[label(rf"\texttt{{{c_}}}" if c_ else r"$\cdot$", font_size=14, color=GREY_A) for c_ in (lw, rw)])
+            kids.arrange(RIGHT, buff=0.4).next_to(top, DOWN, buff=0.22)
+            edges = VGroup(*[Line(top.get_bottom(), kd.get_top(), color=GREY_C, stroke_width=1.2) for kd in kids])
+            icons.add(VGroup(top, tt, edges, kids))
+        icons.arrange_in_grid(rows=4, cols=5, buff=(0.3, 0.3)).move_to([-2.1, -0.3, 0])
+        counts = VGroup(*[label(rf"\texttt{{{w}}} \ first: \ ${sum(r[0] == w for r in roots)}$ of ${len(roots)}$",
+                                font_size=24, color=col[w]) for w in words])
+        counts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.2, 0])
+        accl = label(rf"held-out pages: \ ${100 * acc.min():.0f}\%$ to ${100 * acc.max():.0f}\%$", font_size=24,
+                     color=WHITE).next_to(counts, DOWN, buff=0.4).align_to(counts, LEFT)
+        head = label(rf"The same recipe on ${len(roots)}$ resamples of the training pages \ (all $70$ rates, \ depth $3$)",
+                     font_size=28).to_edge(UP, buff=0.3)
+        n1 = sum(r[0] == words[0] for r in roots)
+        with self.voiceover(
+            "One more weakness. Grow the same small tree on resamples of the training pages, drawn with "
+            f"replacement, {len(roots)} times. <bookmark mark='a'/> The first question changes: {len(words)} different "
+            f"words come first, '{words[0]}' most often, in {n1} of the {len(roots)} trees. "
+            "Below it, the trees disagree even more. <bookmark mark='b'/> And on the held-out pages they score "
+            f"anywhere from {100 * acc.min():.0f} to {100 * acc.max():.0f} percent. A tree is a high-variance "
+            "learner, and the next chapter turns that weakness into a strength."
+        ) as vo:
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(i_, scale=0.9) for i_ in icons], lag_ratio=0.08), run_time=3.0)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in counts], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(FadeIn(accl))
+        self.wait(0.3)
+        self.clear_scene()

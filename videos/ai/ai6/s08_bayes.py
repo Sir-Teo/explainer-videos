@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai6.common import AUSTEN, DICKENS, HL, chapter, load, plot
+from videos.ai.ai6.common import AUSTEN, DICKENS, HL, MONO, chapter, load, plot
 
 NB, LR, PLATT = "#4FD1C5", C.MODEL_Q, "#B48EF0"
 
@@ -15,6 +15,7 @@ class NaiveBayes(VoiceoverScene):
         chapter(self, 7, r"Naive Bayes: generative or discriminative?", r"Model the author, or model the writing?",
                 "Chapter seven. Naive Bayes.")
         self.derive()
+        self.learned()
         self.race()
         self.calibrate()
 
@@ -59,6 +60,56 @@ class NaiveBayes(VoiceoverScene):
             step(3)
             vo.wait_until("e")
             self.play(Indicate(gen, color=NB), Indicate(dis, color=LR))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learned(self):
+        d = load("nbvslr")
+        A, D = d["nb_austen"], d["nb_dickens"]
+        top = max(abs(v) for _, v in A + D) * 1.05
+        W = 3.6
+
+        def row(w, v, col):
+            L = W * abs(v) / top
+            bar = Rectangle(width=L, height=0.34, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            word = data_text(w, font=MONO, font_size=24, color=col)
+            val = MathTex(f"{v:+.2f}", font_size=24, color=col)
+            return VGroup(bar, word, val)
+
+        left, right = VGroup(), VGroup()
+        for k, (w, v) in enumerate(A):
+            r = row(w, v, AUSTEN)
+            r[0].move_to([-0.3 - r[0].width / 2, 1.3 - 0.55 * k, 0])
+            r[1].next_to(r[0], LEFT, buff=0.15)
+            r[2].next_to([-0.3, r[0].get_y(), 0], RIGHT, buff=0.12).set_opacity(0)
+            left.add(r)
+        for k, (w, v) in enumerate(D):
+            r = row(w, v, DICKENS)
+            r[0].move_to([0.3 + r[0].width / 2, 1.3 - 0.55 * k, 0])
+            r[1].next_to(r[0], RIGHT, buff=0.15)
+            r[2].set_opacity(0)
+            right.add(r)
+        axis = Line([0, 1.7, 0], [0, -1.8, 0], color=GREY_B, stroke_width=2)
+        head = cmath(r"\beta_w", "=", r"\log\frac{\theta_{D,w}}{\theta_{A,w}}", font_size=40,
+                     colors={r"\beta_w": HL}).to_edge(UP, buff=0.3)
+        tl = label(r"Austen's words", font_size=26, color=AUSTEN).move_to([-3.0, 2.1, 0])
+        tr = label(r"Dickens's words", font_size=26, color=DICKENS).move_to([3.0, 2.1, 0])
+        note_ = note(r"weights from counting all the training pages; \ $+1$ means $e$ times more likely in Dickens").to_edge(DOWN, buff=0.3)
+        aw = ", ".join(f"'{w}'" for w, _ in A[:3])
+        dw = ", ".join(f"'{w}'" for w, _ in D[:3])
+        with self.voiceover(
+            "Here's what it learned, by counting. Each word's weight is the log of how much more often Dickens "
+            f"uses it than Austen. <bookmark mark='a'/> Austen's strongest words: {aw}. <bookmark mark='b'/> Dickens's: "
+            f"{dw}. Every occurrence of a word adds its weight to the page's log-odds."
+        ) as vo:
+            self.play(FadeIn(head), Create(axis), FadeIn(tl), FadeIn(tr), FadeIn(note_))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(r_[0], RIGHT) for r_ in left], lag_ratio=0.15),
+                      LaggedStart(*[FadeIn(r_[1]) for r_ in left], lag_ratio=0.15), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[GrowFromEdge(r_[0], LEFT) for r_ in right], lag_ratio=0.15),
+                      LaggedStart(*[FadeIn(r_[1]) for r_ in right], lag_ratio=0.15), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

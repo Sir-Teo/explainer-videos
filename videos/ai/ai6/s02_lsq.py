@@ -20,6 +20,7 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
         self.squares()
+        self.likelihood()
         self.projection()
         self.zipf()
 
@@ -87,6 +88,47 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(hist))
         for m in (ln, sqs, tv):
             m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def likelihood(self):
+        colors = {r"\sigma^2": FIT}
+        rows = [
+            cmath(r"y_i", "=", r"a + b\,x_i + \varepsilon_i, \qquad \varepsilon_i \sim \mathcal{N}(0, \sigma^2)", font_size=36,
+                  colors=colors),
+            cmath(r"p(\mathbf{y} \mid a, b)", "=", r"\prod_i \frac{1}{\sqrt{2\pi\sigma^2}}\, e^{-(y_i - a - b x_i)^2 / 2\sigma^2}",
+                  font_size=36, colors=colors),
+            cmath(r"-\log p(\mathbf{y} \mid a, b)", "=", r"\tfrac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2\sigma^2}\sum_i (y_i - a - b x_i)^2",
+                  font_size=36, colors=colors),
+            cmath(r"\max_{a,b}\ p", r"\;\Longleftrightarrow\;", r"\min_{a,b}\ \sum_i (y_i - a - b x_i)^2", font_size=36,
+                  colors=colors),
+        ]
+        whys = [why(r"noise shaped like a bell"), why(r"independent points: \\ multiply"), why(r"take minus the log"),
+                why(r"the first term doesn't \\ depend on the line")]
+        step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.6, buff=0.45, edge=6.8)
+        head = label(r"Why squares? \ Gauss's answer (1809)", font_size=34).to_edge(UP, buff=0.35)
+        bell = VGroup()
+        ax = Axes(x_range=[-3, 3, 1], y_range=[0, 0.45, 0.1], x_length=3.2, y_length=1.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DR, buff=0.5)
+        bell.add(ax, ax.plot(lambda t: math.exp(-t * t / 2) / math.sqrt(2 * math.pi), x_range=[-3, 3], color=FIT,
+                             stroke_width=3), label(r"the miss $\varepsilon$", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.1))
+        with self.voiceover(
+            "Why squares, and not the plain distances? Gauss's answer, in 1809: suppose each miss is random noise "
+            "shaped like a bell. <bookmark mark='a'/> The chance of the data is a product of bells, one per point. "
+            "<bookmark mark='b'/> Take minus its logarithm, and the exponents become a sum of squared misses. "
+            "<bookmark mark='c'/> So the most likely line is exactly the least-squares line. Squares are what "
+            "bell-shaped noise asks for; the next chapter shows they're the best linear choice even without bells."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(bell))
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            self.play(Indicate(rows[3], color=FIT, scale_factor=1.05))
         self.wait(0.3)
         self.clear_scene()
 

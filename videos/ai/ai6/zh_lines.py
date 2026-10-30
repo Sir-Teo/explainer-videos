@@ -47,6 +47,9 @@ ZH = {
     'The oldest method of all fits a line.':
         "最古老的方法，是拟合一条直线。这里有三个点。<bookmark mark='a'/>对任意一条直线，量一量每个点偏离它多远，竖直向上或向下量，再把每个偏差平方：名副其实，真的是一个正方形。<bookmark mark='b'/>最小二乘法挑出的，就是这些正方形总面积最小的那条直线。<bookmark mark='c'/>勒让德在1805年发表了它。而高斯早在4年前就用过它，用来预测失踪的小行星谷神星会在哪里重新出现。",
 
+    "Why squares, and not the plain distances?":
+        "为什么是平方，而不是直接用距离？高斯1809年的回答是：假设每个偏差都是钟形的随机噪声。<bookmark mark='a'/>数据出现的概率，是许多钟形曲线的乘积，每个点一个。<bookmark mark='b'/>取它的负对数，指数就变成了偏差平方之和。<bookmark mark='c'/>所以最可能的那条直线，恰好就是最小二乘的直线。平方，正是钟形噪声所要求的；下一章会说明，即使没有钟形，它也是最好的线性选择。",
+
     "There's a beautiful way to see the answer.":
         "有一种很美的方式来看这个答案。把三个高度写成三维空间里的一个点。<bookmark mark='a'/>每一条可能的直线都给出三个预测，所有这些预测合在一起，构成一个平面：也就是把一列1和一列x混合起来，所能到达的一切地方；那一列1让直线上下平移，那一列x让它倾斜。<bookmark mark='b'/>最好的直线，就是这个平面上离数据最近的那个点。从数据向平面作一条垂线。<bookmark mark='c'/>垂直，意味着剩下的那部分，与这两列都成直角：这些偏差里，已经没有直线还能修正的平移或倾斜了。把这一点写下来，就得到了正规方程，它直接给出最好的直线，根本不需要搜索。",
 
@@ -56,8 +59,8 @@ ZH = {
     # ---------------------------------------------------------------- GaussMarkov
     'Chapter two. Why least squares is the best of its kind.': '第2章。为什么最小二乘法是同类中最好的。',
 
-    'Why squares, rather than absolute values':
-        "为什么是平方，而不是绝对值，或者别的什么？高斯在1821年给出了一个答案，马尔可夫后来又重新发现了它：最小二乘是最佳线性无偏估计。<bookmark mark='a'/>拿来任何另一个对数据是线性的估计：最小二乘，再加上某个矩阵D。<bookmark mark='b'/>要让它平均来说是对的，不管真实的直线是什么，D乘以A都必须为零。<bookmark mark='c'/>它的散布，是sigma平方乘以这个矩阵，再乘以它的转置。<bookmark mark='d'/>展开：交叉项里含有D乘A，所以都消失了，剩下的是最小二乘的散布，加上D乘D转置。<bookmark mark='e'/>这一项只会增加。其他任何线性无偏估计，晃动得都更厉害。",
+    "And if the noise isn't a bell?":
+        "如果噪声不是钟形的呢？高斯在1821年给出了第二个答案，马尔可夫后来又重新发现了它：最小二乘仍然是最佳线性无偏估计。<bookmark mark='a'/>拿来任何另一个对数据是线性的估计：最小二乘，再加上某个矩阵D。<bookmark mark='b'/>要让它平均来说是对的，不管真实的直线是什么，D乘以A都必须为零。<bookmark mark='c'/>它的散布，是sigma平方乘以这个矩阵，再乘以它的转置。<bookmark mark='d'/>展开：交叉项里含有D乘A，所以都消失了，剩下的是最小二乘的散布，加上D乘D转置。<bookmark mark='e'/>这一项只会增加。其他任何线性无偏估计，晃动得都更厉害。",
 
     'f"Let\'s check. Twelve points':
         "我们来验证一下。在同样的12个x上取12个点，每次都换上新的噪声。<bookmark mark='a'/>用最小二乘拟合它们，也用穿过两个端点的直线来拟合，后者同样是线性、无偏的。<bookmark mark='b'/>在{gm['R']:,}组数据上，两种斜率平均下来都等于真值，但最小二乘的方差是{G['ols']['var']:.4f}，和理论一致，而端点法的方差是它的{ratio:.1f}倍。",
@@ -380,6 +383,21 @@ ZH.update({
 
     'For more, The Elements of Statistical Learning':
         "想了解更多：黑斯蒂、蒂布希拉尼和弗里德曼的《统计学习基础》涵盖了这里的每一种方法，三位作者本身就参与创造了它们；毕晓普的《模式识别与机器学习》给出概率的视角；舍尔科普夫和斯莫拉的《用核学习》讲核方法。感谢观看，第7部分见。",
+})
+
+ZH.update({
+    '"Why is Newton so fast at the end?':
+        "为什么牛顿法在最后这么快？接近谷底时，损失几乎恰好是一条抛物线，每一步的误差，大约是上一步误差的平方。<bookmark mark='a'/>把一个很小的数平方，它小数点后的零就翻倍。<bookmark mark='b'/>在70个词频上，一步一步看，{say}",
+    'f"the correct digits go {last[0]:.0f}, {last[1]:.0f}, {last[2]:.0f}: roughly doubling':
+        "正确的位数依次是{last[0]:.0f}、{last[1]:.0f}、{last[2]:.0f}：大致翻倍，直到计算机的16位有效数字用完为止。",
+    "f'the correct digits go {last[0]:.0f}, {last[1]:.0f}, {last[2]:.0f}.'":
+        "正确的位数依次是{last[0]:.0f}、{last[1]:.0f}、{last[2]:.0f}。",
+    'f"Here\'s what it learned, by counting.':
+        "这是它靠计数学到的东西。每个词的权重，是狄更斯用这个词比奥斯汀多出多少倍，再取对数。<bookmark mark='a'/>奥斯汀最有力的词：{aw}。<bookmark mark='b'/>狄更斯的：{dw}。一个词每出现一次，就把它的权重加到这一页的对数几率上。",
+    'f"One more weakness. Grow the same small tree':
+        "还有一个弱点。在训练页的重抽样上，也就是有放回地抽取，把同样的小树种{len(roots)}次。<bookmark mark='a'/>第一个问题会变：有{len(words)}个不同的词当过第一个问题，最常见的是“{words[0]}”，{len(roots)}棵树里占了{n1}棵。再往下，树之间的分歧更大。<bookmark mark='b'/>在留出的书页上，它们的成绩从{100 * acc.min():.0f}%到{100 * acc.max():.0f}%不等。一棵树是高方差的学习器，而下一章，会把这个弱点变成长处。",
+    'None of this went away; it moved inside the big models.':
+        "这些都没有消失；它们搬进了大模型的内部。<bookmark mark='a'/>每个语言模型的最后一层，都是在整个词表上的逻辑回归。用最小二乘拟合的线性探针，从网络里读出概念，而岭回归的惩罚项，就是权重衰减。<bookmark mark='b'/>套索回归的绝对值惩罚，是稀疏自编码器从模型中提取特征的办法。核函数描述了非常宽的网络，而注意力就是一个核平滑器。<bookmark mark='c'/>最近邻变成了检索。提升树仍然在支撑全世界的表格和搜索排序，而朴素贝叶斯提出的那个问题，模型的概率到底有没有意义，如今每一个聊天机器人都要面对。",
 })
 
 PHRASES = {
