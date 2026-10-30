@@ -26,7 +26,7 @@ class PACBayes(VoiceoverScene):
                      stroke_width=3)
         po = ax.plot(lambda x: math.exp(-(x - 1.2) ** 2 / (2 * 0.3 ** 2)) / (0.3 * math.sqrt(2 * math.pi)) * 0.55,
                      x_range=[-3, 3], color=POST, stroke_width=4)
-        lp = label(r"prior $P$: \ chosen before the data", font_size=22, color=PRIOR).next_to(ax.c2p(-1.6, 0.45), UL, buff=0.05)
+        lp = label(r"prior $P$: \ chosen before the data", font_size=22, color=PRIOR).next_to(ax.c2p(-0.6, 0.62), UP, buff=0.1)
         lq = label(r"posterior $Q$: \ after", font_size=22, color=POST).next_to(ax.c2p(1.5, 0.75), UR, buff=0.05)
         sch = note(r"weights of the network, \ one direction \ (schematic)").next_to(ax, DOWN, buff=0.15)
         thm = theorem_card(r"PAC-Bayes",
@@ -104,20 +104,22 @@ class PACBayes(VoiceoverScene):
         cv = np.asarray(p["curve"])
         sg = np.asarray(p["sgd_curve"])
         steps = int(p["steps"])
-        G = axes([0, steps], [0, 1.2], x_length=6.0, y_length=3.4, xticks=[0, steps // 2, steps],
+        sm = np.convolve(cv[:, 3], np.ones(7) / 7, mode="same")
+        sm[:3], sm[-3:] = cv[:3, 3], cv[-3:, 3]
+        G = axes([0, steps], [0, 1.0], x_length=6.0, y_length=3.0, xticks=[0, steps // 2, steps],
                  xfmt=lambda v: fmt_int(v), yticks=[0, 0.5, 1.0], xlabel=r"steps of optimizing the bound",
-                 center=(-3.2, -0.3, 0), font_size=18)
+                 center=(-3.2, -0.6, 0), font_size=18)
         ax = G.ax
-        ob = curve(ax, cv[:, 0], np.clip(cv[:, 3], 0, 1.2), BOUND, 3.5)
-        sr = curve(ax, cv[:, 0], np.clip(cv[:, 1], 0, 1.2), TRAIN, 2.5)
-        K = G.copy()
-        kx = axes([0, steps], [0, 4.5], x_length=6.0, y_length=1.3, xticks=[], yticks=[1, 2, 3, 4],
-                  yfmt=lambda v: f"10^{{{int(v)}}}", center=(-3.2, 2.3, 0), font_size=16)
-        kc = curve(kx.ax, cv[:, 0], np.log10(np.maximum(cv[:, 2], 1)), POST, 3)
+        ob = curve(ax, cv[:, 0], np.clip(sm, 0, 1.0), BOUND, 3.5)
+        sr = curve(ax, cv[:, 0], np.clip(cv[:, 4], 0, 1.0), TRAIN, 2.5)
+        kmax = float(cv[:, 2].max()) * 1.15
+        kx = axes([0, steps], [0, kmax], x_length=6.0, y_length=1.3, xticks=[], yticks=[0, round(kmax / 2, -1)],
+                  center=(-3.2, 2.2, 0), font_size=16)
+        kc = curve(kx.ax, cv[:, 0], cv[:, 2], POST, 3)
         kl_l = label(r"$\mathrm{KL}(Q\|P)$, \ nats", font_size=18, color=POST).next_to(kx, UP, buff=0.05).align_to(kx, LEFT)
-        key = legend([(BOUND, r"the bound, \ as optimized"), (TRAIN, r"surrogate loss on a sampled network")],
-                     font_size=18).next_to(G, DOWN, buff=0.15).align_to(G, LEFT)
-        del K
+        key = legend([(BOUND, r"the objective (smoothed): \ surrogate loss $+$ KL term"),
+                      (TRAIN, r"error of one sampled network")], font_size=18).next_to(G, DOWN, buff=0.15).align_to(G, LEFT)
+        kl0, kl1 = float(cv[0, 2]), float(p["kl"])
         net = label(rf"$70 \to {p['H']} \to 1$: \ ${fmt_int(p['params'])}$ weights, \ $n = {p['n']}$ pages",
                     font_size=24, color=WHITE).to_corner(UR, buff=0.35)
         recipe = VGroup(
@@ -128,7 +130,7 @@ class PACBayes(VoiceoverScene):
         # the final account
         items = [(r"training error of $Q$ \ ($2{,}000$ networks)", p["e_hat"], TRAIN),
                  (r"its upper confidence limit", p["e_up"], TRAIN),
-                 (rf"bound on $R(Q)$, \ $\mathrm{{KL}} = {p['kl']:.0f}$ nats", p["bound"], BOUND),
+                 (rf"bound on $R(Q)$, \ $\mathrm{{KL}} = {p['kl']:.0f}$ nats \ (a coin: $50\%$)", p["bound"], BOUND),
                  (r"actual error of $Q$ on the $191$ test pages", p["test_Q"], TEST)]
         W = 3.6
         acct = VGroup()
@@ -144,9 +146,6 @@ class PACBayes(VoiceoverScene):
         base = acct[0][1][0].get_left()[0]
         for r_ in acct:
             r_[1].shift(RIGHT * (base - r_[1][0].get_left()[0]))
-        chance = DashedLine([base + W * 0.5, acct.get_top()[1] + 0.1, 0], [base + W * 0.5, acct.get_bottom()[1], 0],
-                            color=C.SURPRISE, stroke_width=2)
-        cl = label(r"chance", font_size=18, color=C.SURPRISE).next_to(chance, UP, buff=0.05)
         nonvac = p["bound"] < 0.5
         hist = history_card(2017, r"G.~K.~Dziugaite \& D.~M.~Roy", r"the first non-vacuous bounds for deep networks: \ "
                             r"optimize the PAC-Bayes bound itself", width=5.0, font_size=17, color=HIST)
@@ -162,8 +161,8 @@ class PACBayes(VoiceoverScene):
             "weights than examples. Following Dziugaite and Roy's recipe from 2017, the prior is a Gaussian centred "
             "on the network's random starting weights, chosen before seeing any page. <bookmark mark='a'/> Train "
             f"briefly, then make the weights a cloud: a Gaussian around them, and optimize the bound itself, "
-            f"for {steps:,} steps. Watch the KL: it starts in the thousands and falls, as the cloud widens to the "
-            "breadth of the prior wherever the weights don't matter. <bookmark mark='b'/> The final account. "
+            f"for {steps:,} steps. Watch the KL: from {kl0:.0f} nats it settles near {kl1:.0f}, while the cloud "
+            "widens wherever the weights don't matter. <bookmark mark='b'/> The final account. "
             f"Two thousand networks drawn from the cloud err on {100 * p['e_hat']:.1f} percent of the training "
             f"pages, at most {100 * p['e_up']:.1f} with confidence. The KL is {p['kl']:.0f} nats. "
             + "<bookmark mark='c'/> " + verdict
@@ -177,7 +176,7 @@ class PACBayes(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(acct[0]), FadeIn(acct[1]))
             vo.wait_until("c")
-            self.play(FadeIn(acct[2]), Create(chance), FadeIn(cl))
+            self.play(FadeIn(acct[2]))
             self.play(FadeIn(acct[3]))
             vo.wait_until("d")
             self.play(FadeIn(hist, shift=UP * 0.2))
