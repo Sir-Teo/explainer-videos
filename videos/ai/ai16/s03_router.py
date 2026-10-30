@@ -86,13 +86,20 @@ class Router(VoiceoverScene):
         ]
         whys = [why(r"chain rule \ ($y$ depends on $s$ only through the gates)"), why(r"the softmax's Jacobian \ (Part 4)"),
                 why(r"collect terms"), why(r"an expert not chosen has no gate")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.2, buff=0.5, edge=6.8)
+        for r_ in rows:
+            r_.scale(0.92)
+        step = ladder(self, rows, whys, keep=4, top=3.25, x=-2.2, buff=0.36, edge=6.8)
+        remind = cmath(r"y = \sum_{i\in\mathcal K}", r"g_i", r"\,E_i(x)", r",\quad", r"g_i", r"= \frac{e^{s_i}}{\sum_{j\in\mathcal K}"
+                       r" e^{s_j}}", colors={r"g_i": ROUTER}, font_size=30).to_edge(DOWN, buff=0.6)
+        rl_ = label(r"the layer, \ from the last scene", font_size=18, color=GREY_B).next_to(remind, UP, buff=0.12)
         meaning = VGroup(
             label(r"$u_j$: \ how much expert $j$'s answer would raise the loss", font_size=22, color=EXPERTC),
             label(r"$u_j < \bar u$: \ $j$ helped more than the average chosen expert: \ its score goes up", font_size=22,
                   color=C.BITS),
             label(r"the router learns only about the experts it tried", font_size=26, color=GRADC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
+        for m_ in meaning[:2]:
+            m_.scale(0.9)
         with self.voiceover(
             "What does the router learn from? Take the gradient of the loss with respect to a score s j. "
             "<bookmark mark='a'/> The output depends on the scores only through the gates, so by the chain rule "
@@ -104,10 +111,12 @@ class Router(VoiceoverScene):
             "wasn't chosen has no gate, so its score gets no gradient at all. <bookmark mark='e'/> The router only "
             "learns about the experts it tried. It never finds out whether an unchosen expert would have done better."
         ) as vo:
+            self.play(FadeIn(remind), FadeIn(rl_))
             for i, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 step(i)
             vo.wait_until("e")
+            self.play(FadeOut(remind), FadeOut(rl_))
             self.play(LaggedStart(*[FadeIn(m_) for m_ in meaning], lag_ratio=0.5), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
@@ -220,6 +229,6 @@ class Router(VoiceoverScene):
             self.play(FadeIn(rows[3]))
             self.play(Indicate(rows[3][2], color=C.SURPRISE))
             vo.wait_until("d")
-            self.play(FadeIn(ta))
+            self.play(FadeOut(cite_), FadeIn(ta))
         self.wait(0.3)
         self.clear_scene()

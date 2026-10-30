@@ -41,6 +41,14 @@ class Parallel(VoiceoverScene):
                     color=C.BITS).to_edge(DOWN, buff=0.5)
         cite_ = cite(r"G.~E.~Blelloch, \textit{Prefix Sums and Their Applications} (1990); \ E.~Martin \& C.~Cundy (2018)",
                      corner=DR)
+        hs = VGroup(*[VGroup(RoundedRectangle(width=0.9, height=0.6, corner_radius=0.1, stroke_color=STATE, stroke_width=2,
+                                              fill_color=STATE, fill_opacity=0.15), MathTex(rf"h_{{{i + 1}}}", font_size=30, color=STATE))
+                      for i in range(8)]).arrange(RIGHT, buff=0.55).move_to(DOWN * 0.2)
+        for h_ in hs:
+            h_[1].move_to(h_[0])
+        harr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.05, color=GREY_B, stroke_width=3,
+                              max_tip_length_to_length_ratio=0.3) for a, b in zip(hs, hs[1:])])
+        wait_l = label(r"each step waits for the one before: \ $T$ steps in a row", font_size=26, color=GREY_A).next_to(hs, DOWN, buff=0.5)
         with self.voiceover(
             "Every memory so far is written one token at a time, and each step waits for the one before: thousands "
             "of steps in a row, while a graphics card wants a few big operations. Training on a whole text at once "
@@ -53,9 +61,12 @@ class Parallel(VoiceoverScene):
             "prefix scan needs, a trick from the 1980s for adding up running totals in parallel. Eric Martin and "
             "Chris Cundy brought it to recurrent networks in 2018, Part 10 used it for minGRU, and Mamba runs on it."
         ) as vo:
-            self.play(Write(f0), FadeIn(cite_))
+            self.play(Write(f0), FadeIn(cite_), FadeIn(hs[0]))
+            for i in range(1, 8):
+                self.play(GrowArrow(harr[i - 1]), FadeIn(hs[i]), run_time=0.45)
+            self.play(FadeIn(wait_l))
             vo.wait_until("a")
-            self.play(FadeIn(fl))
+            self.play(FadeIn(fl), FadeOut(VGroup(hs, harr, wait_l)))
             step = ladder(self, rows, whys, keep=4, top=1.6, x=-0.6, buff=0.42, edge=6.8, align_index=None)
             for k, m in enumerate("bcde"):
                 vo.wait_until(m)
@@ -69,7 +80,7 @@ class Parallel(VoiceoverScene):
     def scan(self):
         s = load("scan")
         T = 8
-        xs = np.linspace(-4.6, 2.4, T)
+        xs = np.linspace(-5.3, 0.9, T)
         ys = [1.9, 0.75, -0.4, -1.55]
         bw = 0.78
 
@@ -103,7 +114,7 @@ class Parallel(VoiceoverScene):
             label(rf"against the loop: \ largest relative difference ${sci(max(float(s['diff_hs']), float(s['diff_bl'])))}$",
                   font_size=20, color=C.INTERVAL),
             label(rf"with $4 \times 4$ matrices for $a_t$: \ ${sci(float(s['diff_mat']))}$", font_size=20, color=C.INTERVAL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([5.0, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.4, 0.2, 0])
         with self.voiceover(
             "Here's the scan on eight steps. <bookmark mark='a'/> In the first round, every step combines with the "
             "one just before it. <bookmark mark='b'/> In the second, with the one two before, <bookmark mark='c'/> "

@@ -201,6 +201,36 @@ def compute_moe():
     return out
 
 
+def compute_speed():
+    """Milliseconds per training step on one CPU core for the three models of the comparison, interleaved and
+    repeated (the fastest of five tries each), so that other work on the machine biases none of them."""
+    import time
+
+    import torch
+    import torch.nn.functional as F
+
+    from videos.ai.ai16 import runs as R
+
+    torch.set_num_threads(1)
+    tr, va, K, _, _ = R.lm_data()
+    cfgs = dict(dense_active=DENSE_ACTIVE, moe=MOE, dense_total=DENSE_TOTAL)
+    models = {k: R.build(dict(c, vocab=K)) for k, c in cfgs.items()}
+    opts = {k: torch.optim.AdamW(m.parameters(), lr=1e-3) for k, m in models.items()}
+    g = rng(5)
+    best = {k: float("inf") for k in cfgs}
+    for _ in range(5):
+        for k, m in models.items():
+            x, y = R.windows(tr, g.integers(0, len(tr) - 70, R.BATCH), 64)
+            t0 = time.perf_counter()
+            for _ in range(10):
+                loss = F.cross_entropy(m(x).reshape(-1, K), y.reshape(-1))
+                opts[k].zero_grad()
+                loss.backward()
+                opts[k].step()
+            best[k] = min(best[k], (time.perf_counter() - t0) / 10)
+    return best
+
+
 def compute_balance():
     from videos.ai.ai16 import runs as R
 
@@ -493,9 +523,9 @@ def compute_configs():
 # ---------------------------------------------------------------------------
 # Sparse attention, trained on a recall task
 # ---------------------------------------------------------------------------
-RECALL_KEYS = 16  # keys each query may use, in every sparse pattern
-RECALL_STEPS, RECALL_LR, RECALL_BATCH = 2500, 1e-3, 64
-RECALL_IDX_STEPS, RECALL_IDX_WARM = 800, 300
+RECALL_KEYS = 8  # keys each query may use, in every sparse pattern
+RECALL_STEPS, RECALL_LR, RECALL_BATCH = 1000, 3e-3, 64
+RECALL_IDX_STEPS, RECALL_IDX_WARM = 500, 200
 
 
 def _recall_cfg(attn):
@@ -505,8 +535,8 @@ def _recall_cfg(attn):
 
 
 def compute_recall():
-    """Full attention, a sliding window of 16 keys, block selection (blocks of 4: the query's own and the 3 whose
-    mean key it scores highest) and a learned indexer (16 keys; started from the full model, its indexer first
+    """Full attention, a sliding window of 8 keys, block selection (blocks of 4: the query's own and the one whose
+    mean key it scores highest) and a learned indexer (8 keys; started from the full model, its indexer first
     trained to match the full attention, then trained sparse), two seeds each; and the full models with each
     pattern imposed after training, untrained for it."""
     import torch
@@ -514,8 +544,8 @@ def compute_recall():
     from videos.ai.ai16 import recall as Q
     from videos.ai.ai16 import runs as R
 
-    part = CACHE.partial("recall", dict(v=2, keys=RECALL_KEYS, steps=RECALL_STEPS, idx=RECALL_IDX_STEPS))
-    snaps = tuple(range(0, RECALL_STEPS + 1, 100))
+    part = CACHE.partial("recall", dict(v=3, keys=RECALL_KEYS, steps=RECALL_STEPS, idx=RECALL_IDX_STEPS))
+    snaps = tuple(range(0, RECALL_STEPS + 1, 50))
     specs = [dict(key=f"{a}_s{s}", task="recall", cfg=_recall_cfg(a), seed=s, steps=RECALL_STEPS, lr=RECALL_LR,
                   batch=RECALL_BATCH, snaps=snaps, save=str(MODELS / f"recall_{a}_s{s}.pt"))
              for a in ("full", "window", "blocks") for s in SEEDS2]
@@ -525,14 +555,14 @@ def compute_recall():
         print(f"    recall {sp['key']}: {res['final']:.3f} ({res['seconds'] / 60:.1f} min)", flush=True)
     idx = [dict(key=f"index_s{s}", task="recall", cfg=_recall_cfg("index"), seed=s, steps=RECALL_IDX_STEPS,
                 lr=RECALL_LR, batch=RECALL_BATCH, init=str(MODELS / f"recall_full_s{s}.pt"), warm_index=RECALL_IDX_WARM,
-                snaps=tuple(range(0, RECALL_IDX_STEPS + 1, 50)), save=str(MODELS / f"recall_index_s{s}.pt"))
+                snaps=tuple(range(0, RECALL_IDX_STEPS + 1, 25)), save=str(MODELS / f"recall_index_s{s}.pt"))
            for s in SEEDS2]
     todo = [sp for sp in idx if sp["key"] not in part]
     for sp, res in R.pool_map(_run, todo, workers()):
         part[sp["key"]] = res
         print(f"    recall {sp['key']}: {res['final']:.3f} ({res['seconds'] / 60:.1f} min)", flush=True)
     out = dict(keys=RECALL_KEYS, steps=RECALL_STEPS, idx_steps=RECALL_IDX_STEPS, idx_warm=RECALL_IDX_WARM,
-               seeds=list(SEEDS2), T=Q.T, pairs=Q.PAIRS, fill=Q.FILL, modes=["full", "window", "blocks", "index"])
+               seeds=list(SEEDS2), T=Q.T, facts=Q.FACTS, fill=Q.FILL, modes=["full", "window", "blocks", "index"])
     for a in out["modes"]:
         out[f"{a}_curve"] = np.array([part[f"{a}_s{s}"]["curve"] for s in SEEDS2], float)
         out[f"{a}_acc"] = [part[f"{a}_s{s}"]["final"] for s in SEEDS2]
@@ -563,7 +593,8 @@ def compute_recall():
     out["example_tokens"] = x[0].numpy()
     out["example_q"] = qpos
     tok = x[0].numpy()
-    out["example_answer_pos"] = int(np.nonzero(tok[:1 + 2 * Q.PAIRS] == tok[qpos])[0][0]) + 1  # the value's position
+    key = int(tok[qpos]) - Q.ASK0
+    out["example_answer_pos"] = int(1 + np.nonzero((tok[1:1 + Q.FACTS] - Q.FACT0) // Q.NV == key)[0][0])  # the fact
     for a, d_ in pick.items():
         out[f"example_{a}_p"] = d_["p"]
         out[f"example_{a}_m"] = d_["m"].astype(float)
@@ -830,6 +861,7 @@ def compute_row():
 ITEMS = {
     "lm_runs": compute_lm_runs,
     "moe": compute_moe,
+    "speed": compute_speed,
     "balance": compute_balance,
     "fine": compute_fine,
     "capacity": compute_capacity,
