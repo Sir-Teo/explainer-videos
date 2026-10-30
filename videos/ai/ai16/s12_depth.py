@@ -12,6 +12,7 @@ class Depth(VoiceoverScene):
     def construct(self):
         self.card()
         self.idea()
+        self.cost()
         self.frontier()
         self.causal()
 
@@ -66,6 +67,36 @@ class Depth(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def cost(self):
+        colors = {r"c": ROUTER}
+        rows = [
+            cmath(r"\text{matrices}", r"\;\propto\;", r"c", r"\,T", colors=colors, font_size=36),
+            cmath(r"\text{attention scores}", r"\;\propto\;", r"(", r"c", r"\,T)^2", colors=colors, font_size=36),
+            cmath(r"c = \tfrac18:", r"\quad", r"\tfrac18", r"\ \text{and}\ ", r"\tfrac1{64}", colors=colors, font_size=36),
+            cmath(r"\text{per token, 4 blocks}", r"\;\approx\;", r"\frac{2 + 2 \cdot \frac18}{4}", r"=", r"\frac{9}{16}",
+                  font_size=36),
+        ]
+        whys = [why(r"the weights act on the $cT$ chosen tokens only"), why(r"the chosen attend only to each other"),
+                why(r"an eighth of the matrix work, \ a sixty-fourth of the scores"),
+                why(r"two full blocks, \ two at an eighth")]
+        step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.6, buff=0.55, edge=6.8)
+        ta = take_away(r"the savings are real arithmetic \ \textemdash\ if the router's choice is cheap and causal",
+                       color=ROUTER, font_size=24)
+        with self.voiceover(
+            "What does it save? In a routed block that takes a fraction c of the T tokens, <bookmark mark='a'/> the "
+            "matrices act on only c T tokens, <bookmark mark='b'/> and attention, among the chosen tokens only, "
+            "computes c T squared scores. <bookmark mark='c'/> At an eighth, that's an eighth of the matrix work and "
+            "a sixty-fourth of the attention. <bookmark mark='d'/> Route every other block of four, and the "
+            "matrices cost about nine sixteenths of the full model's, per token."
+        ) as vo:
+            for i, mk in enumerate("abcd"):
+                vo.wait_until(mk)
+                step(i)
+            self.play(FadeIn(ta))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def frontier(self):
         d = load("mod")
         names = [("dense_active", r"$2$ blocks", DENSEC), ("dense_l3", r"$3$ blocks", DENSEC),
@@ -100,21 +131,24 @@ class Depth(VoiceoverScene):
         ys = [l2, l3, l4]
         at12 = float(np.interp(fl["mod12"], xs, ys))
         at50 = float(np.interp(fl["mod50"], xs, ys))
-        v = (f"The routed models sit below the dense line: at the same compute, mixture-of-depths predicts better. "
-             if m12 < at12 - 0.003 and m50 < at50 - 0.003 else
-             f"At an eighth of the tokens, the routed model sits below the dense line, {m12:.3f} bits against "
-             f"{at12:.3f} for a dense model of the same compute. " if m12 < at12 - 0.003 else
-             f"At half the tokens, the routed model sits below the dense line, {m50:.3f} against {at50:.3f}. "
-             if m50 < at50 - 0.003 else
-             "At our scale the routed models land on or above the dense line: they save compute, but they don't beat "
-             "a dense model that spends the same. ")
+        if m12 < at12 - 0.003 and m50 < at50 - 0.003:
+            v = (f"The routed models sit below the dense line: at the same compute, mixture-of-depths predicts better, "
+                 f"{m12:.3f} bits at an eighth against {at12:.3f} for a dense model of the same compute. ")
+        elif m12 < at12 - 0.003:
+            v = (f"At an eighth of the tokens, the routed model sits below the dense line, {m12:.3f} bits against "
+                 f"{at12:.3f} for a dense model of the same compute. ")
+        elif m50 < at50 - 0.003:
+            v = f"At half the tokens, the routed model sits below the dense line, {m50:.3f} against {at50:.3f}. "
+        else:
+            v = ("At our scale the routed models land on or above the dense line: they save compute, but they don't "
+                 "beat a dense model that spends the same. ")
         w = (f"Against the full four-block model, routing an eighth of the tokens costs {m12 - l4:.3f} bits and "
              f"saves {100 * (1 - fl['mod12'] / fl['dense_l4']):.0f} percent of its compute.")
         with self.voiceover(
             "We trained it. Our four-block transformer, with blocks two and four routed, against dense models of two, "
             "three and four blocks. Compute per character on one axis, held-out bits on the other. "
             "<bookmark mark='a'/> The dense models make a line: more blocks, more compute, fewer bits. "
-            "<bookmark mark='b'/> " + v + w
+            "<bookmark mark='b'/> " + v + "<bookmark mark='w'/>" + w
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")

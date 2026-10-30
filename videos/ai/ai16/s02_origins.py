@@ -169,7 +169,7 @@ class Origins(VoiceoverScene):
             "Here's that difference, trained on this computer. A curve with three regimes, a rise, a plateau and a "
             "fall, and four experts that can each draw only a straight line, with a gate that looks at x. "
             "<bookmark mark='a'/> The same mixture, trained the two ways. Watch the gates below the curves. "
-            "<bookmark mark='b'/> " + verdict + own
+            "<bookmark mark='b'/> " + verdict + "<bookmark mark='v'/>" + own
         ) as vo:
             self.play(FadeIn(pa), FadeIn(pb), FadeIn(clock), FadeIn(tag), FadeIn(cur_a), FadeIn(cur_b))
             vo.wait_until("a")

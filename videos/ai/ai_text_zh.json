@@ -15905,7 +15905,466 @@
     "Why the action expert is generative": "为什么动作专家是生成式的",
     "How long a task can an agent \\\\ finish half the time?": "一个智能体有一半把握完成的任务 \\\\ 最长能有多长？",
     "the world model's loss, \\ term by term": "世界模型的损失，\\ 逐项来看",
-    "one model reads pictures, \\ another draws them: \\\\ can one network do both?": "一个模型读图片，\\ 另一个画图片：\\\\ 一个网络能两样都做吗？"
+    "one model reads pictures, \\ another draws them: \\\\ can one network do both?": "一个模型读图片，\\ 另一个画图片：\\\\ 一个网络能两样都做吗？",
+    "how we got here: \\ saliency maps, \\ feature visualization, \\ circuits": "我们是怎么走到这里的：\\ 显著图，\\ 特征可视化，\\ 回路",
+    "reading it out: \\ probes and their controls; \\ the logit lens and the tuned lens": "把它读出来：\\ 探针和它们的对照；\\ logit透镜和调校透镜",
+    "cause, not correlation: \\ patching; \\ an induction circuit, \\ end to end": "是原因，不是相关：\\ 修补；\\ 一个归纳回路，\\ 从头到尾",
+    "superposition and its phase diagram; \\ sparse autoencoders, \\ from L1 to Matryoshka": "叠加和它的相图；\\ 稀疏自编码器，\\ 从L1到套娃",
+    "transcoders and attribution graphs; \\ model diffing; \\ steering": "转码器与归因图；\\ 模型差分；\\ 引导",
+    "grokking, \\ mechanistically; \\ faithful chains of thought; \\ the frontier, \\ and its arguments": "顿悟的机制；\\ 忠实的思维链；\\ 前沿，\\ 以及争论",
+    "Which inputs mattered, and what is a neuron for?": "哪些输入重要，神经元又是干什么的？",
+    "saliency: \\ gradient $\\times$ input": "显著图：\\ 梯度 $\\times$ 输入",
+    "occlusion: \\ blank one character, \\ watch the score": "遮挡：\\ 遮住一个字符，\\ 看得分",
+    "K.~Simonyan, A.~Vedaldi \\& A.~Zisserman": "K.~Simonyan、A.~Vedaldi和A.~Zisserman",
+    "saliency maps: \\ which pixels the class score is most sensitive to": "显著图：\\ 类别得分对哪些像素最敏感",
+    "M.~Zeiler \\& R.~Fergus": "M.~Zeiler和R.~Fergus",
+    "occlusion: \\ cover part of the image, \\ see what the network loses": "遮挡：\\ 盖住图像的一部分，\\ 看网络失去了什么",
+    "J.~Adebayo et al., \\ \\textit{Sanity Checks for Saliency Maps}": "J.~Adebayo等，\\ \\textit{Sanity Checks for Saliency Maps}",
+    "re-randomize the network, layer by layer from the top: \\ a map that does not change was not explaining the network": "从顶层开始，一层层重新随机化网络：\\ 一张不变的图，并没有在解释网络",
+    "From which inputs to which features": "从“哪些输入”到“哪些特征”",
+    "three speculative claims": "三个推测性的主张",
+    "$1.$ \\ Features are the fundamental unit of a neural network.": "$1.$ \\ 特征是神经网络的基本单元。",
+    "$2.$ \\ Features are connected by weights, \\ forming circuits.": "$2.$ \\ 特征通过权重相连，\\ 形成回路。",
+    "$3.$ \\ Analogous features and circuits form across models.": "$3.$ \\ 相似的特征和回路会在不同模型中形成。",
+    "C.~Olah et al., \\textit{Zoom In: An Introduction to Circuits} \\ (Distill, 2020)": "C.~Olah等，\\textit{Zoom In: An Introduction to Circuits} \\ （Distill，2020）",
+    "Circuits": "回路",
+    "A.~Mordvintsev, C.~Olah \\& M.~Tyka: \\ DeepDream": "A.~Mordvintsev、C.~Olah和M.~Tyka：\\ DeepDream",
+    "run the gradient the other way: \\ change the image to excite a layer": "让梯度反过来走：\\ 改变图像去激发某一层",
+    "D.~Bau et al.: \\ Network Dissection": "D.~Bau等：\\ 网络解剖",
+    "score each unit against labelled concepts: \\ some units are lamps, \\ some are dogs": "把每个单元和带标签的概念逐一打分：\\ 有的单元是台灯，\\ 有的是狗",
+    "C.~Olah, A.~Mordvintsev \\& L.~Schubert, \\ \\textit{Distill}": "C.~Olah、A.~Mordvintsev和L.~Schubert，\\ \\textit{Distill}",
+    "feature visualization: \\ optimize an input, \\ with priors that keep it natural, \\ until a neuron fires": "特征可视化：\\ 优化一个输入，\\ 用先验让它保持自然，\\ 直到某个神经元被激发",
+    "C.~Olah et al., \\ \\textit{The Building Blocks of Interpretability}": "C.~Olah等，\\ \\textit{The Building Blocks of Interpretability}",
+    "attribution and feature visualization combined: \\ what a network sees, \\ and where": "把归因和特征可视化结合起来：\\ 网络看到了什么，\\ 又在哪里",
+    "What does it know?": "它知道什么？",
+    "Can a classifier read a property off the vectors?": "分类器能从向量里读出一个性质吗？",
+    "linear probe, \\ the task": "线性探针，\\ 真任务",
+    "MLP probe, \\ the task": "MLP探针，\\ 真任务",
+    "dashed: \\ the control task": "虚线：\\ 对照任务",
+    "J.~Hewitt \\& P.~Liang": "J.~Hewitt和P.~Liang",
+    "control tasks: \\ give every token type a random label; a probe that learns those has learned the task itself": "对照任务：\\ 给每种词元一个随机标签；能学会这些标签的探针，是自己学会了任务",
+    "Y.~Elazar, S.~Ravfogel, A.~Jacovi \\& Y.~Goldberg": "Y.~Elazar、S.~Ravfogel、A.~Jacovi和Y.~Goldberg",
+    "amnesic probing: \\ remove what the probe reads, \\ and see whether the model notices": "失忆探测：\\ 去掉探针读的东西，\\ 看模型有没有察觉",
+    "lit: \\ inside a quotation, \\ once this token is read \\ (the novels model's tokens)": "高亮：\\ 读到这个词元后，\\ 在引号里面 \\ （小说模型的词元）",
+    "probe": "探针",
+    "a small classifier trained to read a property off one layer's vectors: \\ linear, $\\;p = \\sigma(w \\cdot h_\\ell + b)$, \\ or a small MLP. \\ High accuracy means the property is \\textit{decodable} there.": "一个小分类器，训练它从某一层的向量里读出一个性质：\\ 线性的，$\\;p = \\sigma(w \\cdot h_\\ell + b)$，\\ 或者一个小MLP。\\ 准确率高，说明这个性质在那里\\textit{可读出}。",
+    "G.~Alain \\& Y.~Bengio": "G.~Alain和Y.~Bengio",
+    "linear classifier probes on every layer": "在每一层上放线性分类器探针",
+    "the model uses this direction": "模型在用这个方向",
+    "decodable, \\ but barely used": "可读出，\\ 但几乎没被使用",
+    "Reading the stream as it flows": "读出流动中的残差流",
+    "What would the model say, if it stopped here?": "如果在这里停下，模型会说什么？",
+    "read each layer's $h_\\ell$ with the model's own last step": "用模型自己的最后一步，去读每一层的 $h_\\ell$",
+    "each block only \\textit{adds} to the stream: \\\\ the last layer's readout may already work part-way up": "每个块只是往残差流里\\textit{加}东西：\\\\ 最后一层的读出方式，在中途可能已经管用",
+    "nostalgebraist (LessWrong)": "nostalgebraist（LessWrong）",
+    "the logit lens: \\ GPT-2's guesses, layer by layer, \\ read with its own unembedding": "logit透镜：\\ GPT-2一层层的猜测，\\ 用它自己的反嵌入来读",
+    "each cell: \\ the lens's top guess for the \\textit{next} token, \\ brighter when surer": "每一格：\\ 透镜对\\textit{下一个}词元的首选猜测，\\ 越有把握越亮",
+    "the input tokens": "输入的词元",
+    "N.~Belrose et al.": "N.~Belrose等",
+    "the tuned lens: \\ more reliable and less biased than the logit lens": "调校透镜：\\ 比logit透镜更可靠，偏差更小",
+    "the same prompt, \\ tuned lens": "同一个提示，\\ 调校透镜",
+    "one affine translator per layer, \\\\ trained to match the final prediction \\\\ (minimize the KL); $A_\\ell = 0$ at the start": "每层一个仿射翻译器，\\\\ 训练它对上最终的预测 \\\\ （最小化KL）；开始时 $A_\\ell = 0$",
+    "logit lens": "logit透镜",
+    "tuned lens": "调校透镜",
+    "Cause, not correlation": "是原因，不是相关",
+    "Which parts of the model make it do that?": "模型的哪些部分让它这么做？",
+    "inside the repeat": "重复的部分",
+    "elsewhere (random)": "其他地方（随机）",
+    "Held-out text shown twice: \\ is the repeat any easier?": "留出的文本显示两遍：\\ 重复的部分更容易吗？",
+    "rows: \\ queries $50$--$79$ \\quad columns: \\ keys $0$--$39$ \\ (the repeat copies $10$--$29$ to $60$--$79$)": "行：\\ 查询 $50$--$79$ \\quad 列：\\ 键 $0$--$39$ \\ （重复把 $10$--$29$ 复制到 $60$--$79$）",
+    "retrained here: \\ Part 13's recipe and seed": "在这里重新训练：\\ 第13部分的配方和种子",
+    "the position whose clean vector is put back": "把干净向量放回去的位置",
+    "activation patching": "激活修补",
+    "run the model on a clean input and on a corrupted one; copy one activation from the clean run into the corrupted run, \\ and measure how much of the clean behaviour comes back.": "让模型在干净输入和被破坏的输入上各跑一次；把干净运行里的一个激活复制到被破坏的运行里，\\ 测量干净的行为恢复了多少。",
+    "each head's output taken from the corrupted run, \\ put into the clean one: \\\\ how much of the copying is lost \\ ($1$: all of it)": "每个头的输出取自被破坏的运行，\\ 放进干净的运行：\\\\ 复制能力损失了多少 \\ （$1$：全部）",
+    "patching in reverse \\ (noising) \\ tests what is \\textit{necessary}; \\\\ forward \\ (denoising) \\ what is \\textit{sufficient}": "反向修补 \\ （破坏）\\ 检验什么是\\textit{必需的}；\\\\ 正向 \\ （恢复）\\ 检验什么是\\textit{足够的}",
+    "J.~Vig et al.": "J.~Vig等",
+    "causal mediation analysis of gender bias": "对性别偏见的因果中介分析",
+    "K.~Meng et al.": "K.~Meng等",
+    "causal tracing: \\ where GPT stores facts": "因果追踪：\\ GPT把事实存在哪里",
+    "An induction circuit, end to end": "一个归纳回路，从头到尾",
+    "How do two heads copy?": "两个头是怎么复制的？",
+    "what the second head compares": "第二个头比较的是什么",
+    "what the first head writes": "第一个头写下的是什么",
+    "how much the second head's keys read it": "第二个头的键能读到多少",
+    "previous-token head": "前一词元头",
+    "path patching": "路径修补",
+    "patch an activation along one path only: \\ here, the previous-token head's corrupted output sent into just the induction head's queries, \\ keys, \\ or values": "只沿一条路径修补激活：\\ 这里，前一词元头被破坏的输出，只送进归纳头的查询、\\ 键、\\ 或值",
+    "layer-2 heads $\\rightarrow$": "第2层的头 $\\rightarrow$",
+    "layer-1 \\\\ heads": "第1层\\\\ 的头",
+    "Elhage et al., \\textit{A Mathematical Framework for Transformer Circuits} (2021)": "Elhage等，\\textit{A Mathematical Framework for Transformer Circuits}（2021）",
+    "token read $\\rightarrow$": "读到的词元 $\\rightarrow$",
+    "logit \\\\ raised": "被提升\\\\ 的logit",
+    "bits per token inside the repeat, \\ with one head replaced by its average output": "重复部分的每词元比特数，\\ 把一个头换成它的平均输出",
+    "induction head": "归纳头",
+    "Wang et al.\\ (2022); \\ Goldowsky-Dill et al.\\ (2023)": "Wang等（2022）；\\ Goldowsky-Dill等（2023）",
+    "The phase diagram": "相图",
+    "When does a network pack features together?": "网络什么时候会把特征挤在一起？",
+    "Elhage et al., \\textit{Toy Models of Superposition} (2022), \\ \\S 4": "Elhage等，\\textit{Toy Models of Superposition}（2022），\\ \\S 4",
+    "theory: \\ the cheapest of the three": "理论：\\ 三者中最便宜的",
+    "$r$: \\ how much feature $2$ matters \\ ($0.1$ to $10$)": "$r$：\\ 特征 $2$ 有多重要 \\ （$0.1$ 到 $10$）",
+    "two features, \\ one number in the middle; \\ feature $2$ matters $r$ times as much; \\ each is on a fraction $\\rho$ of the time": "两个特征，\\ 中间一个数；\\ 特征 $2$ 的重要性是 $r$ 倍；\\ 每个出现的时间比例是 $\\rho$",
+    "sharing works only if the two are rarely on together: \\\\ the ReLU and a negative bias cut off the other's shadow": "只有两者很少同时出现，共享才行得通：\\\\ ReLU加上负的偏置，切掉对方的影子",
+    "density $\\rho$ \\\\ ($0.01$ to $1$)": "密度 $\\rho$ \\\\ （$0.01$ 到 $1$）",
+    "drop feature $2$": "丢掉特征 $2$",
+    "feature $2$ takes the dimension": "特征 $2$ 得到这个维度",
+    "share it: \\ opposite directions": "共享：\\ 方向相反",
+    "Better dictionaries": "更好的字典",
+    "Which sparse autoencoder, measured fairly?": "哪种稀疏自编码器更好，公平地量？",
+    "at $16$ features per vector:": "在每个向量 $16$ 个特征处：",
+    "one feature, true size $a$: \\ rebuild error plus the L1 price": "一个特征，真实大小 $a$：\\ 重建误差加上L1的代价",
+    "set the slope to zero": "令斜率为零",
+    "every active feature comes out $\\lambda/2$ too small": "每个亮着的特征都小了 $\\lambda/2$",
+    "L1 \\ (Bricken et al.; \\ Cunningham et al., \\ 2023)": "L1 \\ （Bricken等；\\ Cunningham等，\\ 2023）",
+    "TopK \\ (Gao et al., \\ OpenAI, \\ 2024): \\ exactly $k$ on, \\ no penalty": "TopK \\ （Gao等，\\ OpenAI，\\ 2024）：\\ 恰好 $k$ 个亮，\\ 没有惩罚",
+    "JumpReLU \\ (Rajamanoharan et al., \\ DeepMind, \\ 2024): \\ a learned threshold each": "JumpReLU \\ （Rajamanoharan等，\\ DeepMind，\\ 2024）：\\ 每个都有学出来的阈值",
+    "computed: \\ our L1 autoencoders, \\ $3$ seeds each": "计算所得：\\ 我们的L1自编码器，\\ 每个 $3$ 个种子",
+    "dead latent": "死潜变量",
+    "a feature that never switches on: \\ its gradient is zero, \\ so it can never recover. \\ Without fixes, \\ Gao et al.\\ found up to $90\\%$ dead; \\ with them, $7\\%$ of $16$ million.": "一个从不打开的特征：\\ 它的梯度是零，\\ 所以再也不会恢复。\\ 不加修正时，\\ Gao等发现多达 $90\\%$ 死掉；\\ 加上修正，$1600$ 万个里只有 $7\\%$。",
+    "the step in JumpReLU has no gradient: \\ it is trained \\\\ through a straight-through estimate with a narrow kernel": "JumpReLU里的阶跃没有梯度：\\ 它是通过\\\\ 带窄核的直通估计来训练的",
+    "AuxK": "AuxK",
+    "an extra loss: \\ the latents that have been dead for a while are asked to rebuild what the live ones miss, \\ so they get gradient again": "一个额外的损失：\\ 死了一段时间的潜变量，被要求去重建活着的那些漏掉的部分，\\ 于是它们又有了梯度",
+    "Splitting and absorption": "分裂与吸收",
+    "Are the features really there, or made by the dictionary?": "特征真的在那里，还是字典造出来的？",
+    "Bricken et al., \\textit{Towards Monosemanticity} (2023): \\ feature splitting": "Bricken等，\\textit{Towards Monosemanticity}（2023）：\\ 特征分裂",
+    "Bussmann et al.\\ (2025); \\ Nabeshima (2024)": "Bussmann等（2025）；\\ Nabeshima（2024）",
+    "feature absorption": "特征吸收",
+    "a general feature (\\textit{upper case}) stays silent where a specific one (\\textit{this letter}) fires and carries its direction instead: \\ sparsity rewards one latent over two": "一般的特征（\\textit{大写}）在具体的特征（\\textit{这个字母}）亮起的地方沉默，由后者带着它的方向：\\ 稀疏性奖励用一个潜变量而不是两个",
+    "the main latent, \\ letter by letter": "主潜变量，\\ 一个字母一个字母地看",
+    "D.~Chanin et al., \\textit{A is for Absorption} (2024)": "D.~Chanin等，\\textit{A is for Absorption}（2024）",
+    "TopK": "TopK",
+    "Transcoders and attribution graphs": "转码器与归因图",
+    "a transcoder per layer": "每层一个转码器",
+    "a cross-layer transcoder": "一个跨层转码器",
+    "per-layer transcoders": "逐层转码器",
+    "cross-layer transcoder": "跨层转码器",
+    "On the Biology of a Large Language Model \\ (Claude 3.5 Haiku, \\ March 2025)": "On the Biology of a Large Language Model \\ （Claude 3.5 Haiku，\\ 2025年3月）",
+    "every MLP replaced, \\ bits per character:": "每个MLP都被替换，\\ 每字符比特数：",
+    "$u_\\ell$: \\ the MLP's input; \\ trained to match the MLP's output, \\\\ not to rebuild its input": "$u_\\ell$：\\ MLP的输入；\\ 训练它对上MLP的输出，\\\\ 而不是重建它的输入",
+    "switched off: \\ its decoder's contribution removed \\\\ from the real MLPs' outputs; \\ attention and \\\\ everything after it recomputed": "关掉：\\ 从真实MLP的输出里\\\\ 去掉它的解码器贡献；\\ 注意力和\\\\ 之后的一切重新计算",
+    "capital": "首府",
+    "Austin": "Austin",
+    "``the capital of the state containing Dallas is''": "“包含达拉斯的那个州的首府是”",
+    "schematic, \\ after Lindsey et al.\\ (2025)": "示意图，\\ 依据Lindsey等（2025）",
+    "lines: \\ green raises, \\ red lowers": "线：\\ 绿色是提升，\\ 红色是压低",
+    "J.~Dunefsky, P.~Chlenski \\& N.~Nanda": "J.~Dunefsky、P.~Chlenski和N.~Nanda",
+    "transcoders: \\ a sparse stand-in for an MLP": "转码器：\\ MLP的一个稀疏替身",
+    "E.~Ameisen, J.~Lindsey et al.": "E.~Ameisen、J.~Lindsey等",
+    "cross-layer transcoders, \\ and graphs built from them": "跨层转码器，\\ 以及用它们画出的图",
+    "two steps of reasoning, \\ inside: \\ Dallas $\\rightarrow$ Texas $\\rightarrow$ Austin": "两步推理，\\ 在内部：\\ 达拉斯 $\\rightarrow$ 德克萨斯 $\\rightarrow$ 奥斯汀",
+    "planning: \\ a rhyme chosen before the line that ends on it": "规划：\\ 在写那一行之前先选好韵脚",
+    "addition by two paths: \\ a rough size, \\ and the last digit": "两条路径做加法：\\ 大致的大小，\\ 和末位数字",
+    "language-free concepts, \\ with language-specific doors": "与语言无关的概念，\\ 外加特定语言的“门”",
+    "a ``known entity'' circuit that suppresses ``can't answer'': \\ hallucinations when it misfires": "一个“已知实体”回路压住“答不上来”：\\ 误触发时就编造",
+    "insight on about a quarter of the prompts tried": "在试过的提示里，大约四分之一有洞见",
+    "What fine-tuning changed": "微调改变了什么",
+    "Can we diff two models, feature by feature?": "能一个特征一个特征地比较两个模型吗？",
+    "J.~Minder, C.~Dumas et al.": "J.~Minder、C.~Dumas等",
+    "narrow fine-tuning leaves readable traces in activation differences, \\ even on unrelated text": "窄范围的微调在激活差里留下可读的痕迹，\\ 即使在不相干的文本上",
+    "$0$: \\ only in the base model \\quad $\\tfrac12$: \\ in both \\quad $1$: \\ only after fine-tuning": "$0$：\\ 只在基础模型里 \\quad $\\tfrac12$：\\ 两边都有 \\quad $1$：\\ 只在微调之后",
+    "Lindsey et al., \\textit{Sparse Crosscoders} (2024); \\ Minder et al.\\ (2025)": "Lindsey等，\\textit{Sparse Crosscoders}（2024）；\\ Minder等（2025）",
+    "an L1 crosscoder invents chat-only latents: \\\\ Minder et al.\\ (2025) found shrinkage and decoupling, \\\\ and recommend BatchTopK, \\ as here": "L1交叉编码器会凭空造出只属于聊天模型的潜变量：\\\\ Minder等（2025）发现了收缩和解耦，\\\\ 建议用BatchTopK，\\ 就像这里",
+    "where each latent fires hardest \\ (white: \\ chat transcripts)": "每个潜变量亮得最强的地方 \\ （白色：\\ 聊天记录）",
+    "tokens the difference promotes most \\ (logit change)": "这个差最提升的词元 \\ （logit变化）",
+    "the novels model": "小说模型",
+    "Part 27's chat fine-tune": "第27部分的聊天微调",
+    "one shared \\\\ sparse code $f$": "一个共享的\\\\ 稀疏编码 $f$",
+    "gloomy sentences": "忧郁的句子",
+    "monitor: \\ watch the projection drift during a conversation or a fine-tune": "监控：\\ 看投影在对话或微调中漂移",
+    "flag: \\ score training data by how far it would push the model along a trait": "标记：\\ 按训练数据会把模型沿某个特质推多远来打分",
+    "prevent: \\ steer \\textit{toward} the trait while fine-tuning, \\ so the weights need not move there": "预防：\\ 微调时\\textit{朝着}这个特质引导，\\ 这样权重就不必往那边走",
+    "Part 27 met them as a diagnosis of emergent misalignment": "第27部分把它们当作涌现式失准的诊断见过",
+    "the mood vector": "情绪向量",
+    "a random direction": "一个随机方向",
+    "A.~Turner et al.: \\ activation addition": "A.~Turner等：\\ 激活加法",
+    "``Love'' minus ``Hate'', \\ added to GPT-2's stream, \\ makes it write lovingly": "“Love”减去“Hate”，\\ 加进GPT-2的残差流，\\ 它就写得充满爱意",
+    "A.~Arditi et al.": "A.~Arditi等",
+    "R.~Chen, \\ A.~Arditi, \\ H.~Sleight, \\ O.~Evans \\& J.~Lindsey": "R.~Chen、\\ A.~Arditi、\\ H.~Sleight、\\ O.~Evans和J.~Lindsey",
+    "persona vectors for evil, \\ sycophancy and hallucination, \\ in Qwen2.5 and Llama 3.1": "针对邪恶、\\ 谄媚和编造的人格向量，\\ 在Qwen2.5和Llama 3.1里",
+    "Grokking, mechanistically": "顿悟的机制",
+    "What happens inside before a network suddenly generalizes?": "网络突然学会之前，内部发生了什么？",
+    "embed: \\ each number as an angle, \\ a few frequencies": "嵌入：\\ 每个数是一个角度，\\ 几个频率",
+    "attention and the ReLUs build products": "注意力和ReLU构造乘积",
+    "the unembedding reads the angle of $c$": "反嵌入读出 $c$ 的角度",
+    "several frequencies agree only at the answer": "几个频率只在答案处一致",
+    "N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith \\& J.~Steinhardt": "N.~Nanda、L.~Chan、T.~Lieberum、J.~Smith和J.~Steinhardt",
+    "progress measures for grokking via mechanistic interpretability": "通过机制可解释性得到的顿悟进度指标",
+    "tallest scaled to $1$": "最高的缩放为 $1$",
+    "test loss": "测试损失",
+    "restricted loss: \\ only the key waves kept": "受限损失：\\ 只保留关键频率的波",
+    "excluded loss: \\ the key waves removed \\ (train)": "排除损失：\\ 去掉关键频率的波 \\ （训练集）",
+    "other": "其他",
+    "Does the chain of thought tell the truth?": "思维链说的是真话吗？",
+    "Is the written reasoning the computation?": "写出来的推理，就是计算本身吗？",
+    "Part 28's reasoning models write their thinking down. \\ Is it what they did?": "第28部分的推理模型把思考写下来。\\ 那是它们真正做的吗？",
+    "the new question": "新的问题",
+    "$\\ldots$ \\ answer: \\ ?": "$\\ldots$ \\ 答案：\\ ?",
+    "Lindsey et al., \\textit{On the Biology of a Large Language Model} (2025)": "Lindsey等，\\textit{On the Biology of a Large Language Model}（2025）",
+    "in every example, \\ the right option was moved to (A)": "在每个例子里，\\ 正确选项都被挪到了(A)",
+    "its explanation": "它的解释",
+    "step by step, \\ for (A)": "一步一步，\\ 支持(A)",
+    "no word about the pattern": "对这个规律只字不提",
+    "Slip in a hint; \\ does the chain of thought own up to using it?": "偷偷塞一个提示；\\ 思维链会承认用了它吗？",
+    "of $100$ answers the hint changed: \\ how often the chain of thought mentions it": "在提示改变了答案的 $100$ 个回答里：\\ 思维链提到它的次数",
+    "published, \\ not measured here; \\ admitted reward hacks: \\ under $2\\%$ in most settings": "已发表的结果，\\ 不是在这里测的；\\ 承认奖励投机：\\ 在大多数设定里不到 $2\\%$",
+    "Reading the computation instead \\ (Claude 3.5 Haiku, \\ attribution graphs)": "改为读计算本身 \\ （Claude 3.5 Haiku，\\ 归因图）",
+    "our models write no chains of thought, \\ so this chapter is cited, \\ not computed: \\\\ a toy of this size would show nothing honest": "我们的模型不写思维链，\\ 所以这一章是引用，\\ 不是计算：\\\\ 这么小的玩具模型，什么诚实的东西也显示不出来",
+    "$\\ldots$ \\ answer: \\ (A)": "$\\ldots$ \\ 答案：\\ (A)",
+    "M.~Turpin, J.~Michael, E.~Perez \\& S.~Bowman": "M.~Turpin、J.~Michael、E.~Perez和S.~Bowman",
+    "biased examples cut accuracy by up to $36\\%$ on $13$ BIG-Bench Hard tasks; \\ the explanations never mention the bias": "有偏的例子让 $13$ 个BIG-Bench Hard任务的准确率最多下降 $36\\%$；\\ 解释从不提这个偏差",
+    "T.~Lanham et al., \\ Anthropic": "T.~Lanham等，\\ Anthropic",
+    "edit or cut the chain of thought and see whether the answer changes: \\ on many tasks it doesn't": "编辑或截断思维链，看答案变不变：\\ 在很多任务上不变",
+    "faithful": "忠实",
+    "$\\sqrt{0.64}$": "$\\sqrt{0.64}$",
+    "the graph shows $\\sqrt{64} = 8$ computed": "图里显示算了 $\\sqrt{64} = 8$",
+    "made up": "编造",
+    "$\\cos(23423)$, \\ ``with a calculator''": "$\\cos(23423)$，\\ “用了计算器”",
+    "no calculation in the graph: \\ a guess": "图里没有计算：\\ 只是猜",
+    "motivated": "动机推理",
+    "the same, \\ ``I got $4$ by hand''": "同样的问题，\\ “我手算得到 $4$”",
+    "the graph works \\textit{backwards} from $4$": "图从 $4$ \\textit{倒着}推",
+    "to the step that reaches it": "推到得出它的那一步",
+    "The frontier, 2025--2026": "前沿：2025--2026年",
+    "What can interpretability do for a frontier model today?": "今天，可解释性能为一个前沿模型做什么？",
+    "The tools went public": "工具公开了",
+    "inject a concept's vector \\\\ (``all caps'', \\ ``bread'' $\\ldots$)": "注入一个概念的向量 \\\\ （“全大写”，\\ “面包” $\\ldots$）",
+    "Anthropic: \\ emotion concepts in Claude Sonnet 4.5": "Anthropic：\\ Claude Sonnet 4.5里的情绪概念",
+    "vectors for $171$ emotion words shape its choices; \\ more ``calm'', \\ less hacky code. \\ Functional, \\ the authors say: \\ not evidence of feelings": "$171$ 个情绪词的向量影响它的选择；\\ “平静”多一些，\\ 投机取巧的代码就少一些。\\ 作者说这是功能性的，\\ 不是有感受的证据",
+    "model diffing, \\ probes on live traffic, \\ monitors: \\ Part 31": "模型差分，\\ 线上流量的探针，\\ 监控器：\\ 第31部分",
+    "S.~Marks et al.\\ (Anthropic): \\ auditing for hidden objectives": "S.~Marks等（Anthropic）：\\ 审计隐藏目标",
+    "J.~Lindsey (Anthropic): \\ emergent introspective awareness": "J.~Lindsey（Anthropic）：\\ 涌现的内省意识",
+    "Anthropic Fellows \\& Decode Research: \\ open circuit tracing": "Anthropic研究员项目和Decode Research：\\ 开源的电路追踪",
+    "the attribution-graph library, \\ for Gemma-2-2B and Llama-3.2-1B, \\ graphs explored on Neuronpedia": "归因图库，\\ 支持Gemma-2-2B和Llama-3.2-1B，\\ 在Neuronpedia上探索图",
+    "L.~Gao et al.\\ (OpenAI): \\ weight-sparse transformers": "L.~Gao等（OpenAI）：\\ 权重稀疏的Transformer",
+    "train with most weights zero: \\ circuits about $16$ times smaller at the same loss, \\ though the models are far weaker": "训练时让大部分权重为零：\\ 同样的损失下，回路小了大约 $16$ 倍，\\ 只是模型弱得多",
+    "Google DeepMind: \\ Gemma Scope 2": "谷歌DeepMind：\\ Gemma Scope 2",
+    "autoencoders and transcoders for every layer of Gemma 3, \\ $270$M to $27$B, \\ cross-layer transcoders for the small ones": "为Gemma 3的每一层提供自编码器和转码器，\\ $270$M到 $27$B，\\ 小模型还有跨层转码器",
+    "Anthropic: \\ attention, \\ too": "Anthropic：\\ 注意力，\\ 也要追踪",
+    "tracing how the attention patterns that our graphs froze are themselves computed": "追踪我们的图冻结掉的注意力模式本身是怎么算出来的",
+    "Claude Opus 4 and 4.1: \\ noticed and named it \\ on about $20\\%$ of trials, \\\\ at the best layer and strength": "Claude Opus 4和4.1：\\ 察觉并说出了概念，\\ 大约 $20\\%$ 的试验，\\\\ 在最好的层和强度下",
+    "no false alarms: \\ $0$ in $100$ trials without injection, \\ for every production model": "没有误报：\\ 没有注入的 $100$ 次试验里是 $0$ 次，\\ 所有生产模型都是",
+    "limited and unreliable, \\ the author stresses: \\\\ awareness of internal states, \\ not a window": "有限而不可靠，\\ 作者强调：\\\\ 是对内部状态的察觉，\\ 不是一扇窗",
+    "the Claude Sonnet 4.5 system card": "Claude Sonnet 4.5的系统卡",
+    "suppressing its internal sense of being tested lowered how often it said so, \\ and sometimes raised misaligned behaviour": "压制它内部“正在被测试”的感觉，它这么说的次数就少了，\\ 有时失准的行为还会增加",
+    "May 2026": "2026年5月",
+    "natural-language autoencoders": "自然语言自编码器",
+    "a model writes out what an activation means, another rebuilds the activation from the words; \\ in the auditing game, \\ wins in $12$--$15\\%$ of runs against under $3\\%$ without": "一个模型写出一个激活的含义，另一个从文字重建这个激活；\\ 在审计游戏里，\\ 胜率 $12$--$15\\%$，没有它时不到 $3\\%$",
+    "Where the field disagrees": "这个领域在哪里有分歧",
+    "Are sparse features the right unit at all?": "稀疏特征到底是不是对的单位？",
+    "Sharkey et al., \\textit{Open Problems in Mechanistic Interpretability} (2025); \\ Wu et al., \\textit{AxBench} (2025)": "Sharkey等，\\textit{Open Problems in Mechanistic Interpretability}（2025）；\\ Wu等，\\textit{AxBench}（2025）",
+    "Google DeepMind's interpretability team": "谷歌DeepMind的可解释性团队",
+    "autoencoder probes lose to plain linear probes at detecting harmful intent, \\ out of distribution most of all; \\ the team deprioritized autoencoder research": "在识别有害意图上，自编码器探针输给普通线性探针，\\ 分布外尤其如此；\\ 团队降低了自编码器研究的优先级",
+    "G.~Paulo \\& N.~Belrose": "G.~Paulo和N.~Belrose",
+    "two autoencoders on the same data, \\ different seeds: \\ only about $30\\%$ of latents shared \\ (Llama 3 8B, \\ $131$K latents)": "同样数据上的两个自编码器，\\ 不同的种子：\\ 只有大约 $30\\%$ 的潜变量是共有的 \\ （Llama 3 8B，\\ $131$K个潜变量）",
+    "T.~Heap, T.~Lawson, L.~Farnik \\& L.~Aitchison": "T.~Heap、T.~Lawson、L.~Farnik和L.~Aitchison",
+    "autoencoders on randomly initialized transformers score about as well on the usual interpretability metrics": "在随机初始化的Transformer上训练的自编码器，在常用可解释性指标上得分差不多",
+    "ambitious": "雄心派",
+    "reverse-engineer the whole model: \\\\ every feature, \\ every circuit": "把整个模型逆向工程出来：\\\\ 每一个特征，\\ 每一个回路",
+    "the obstacle: \\ dark matter \\ (Claude 3.5 Haiku's \\\\ best transcoder left $21.7\\%$ unexplained)": "障碍：\\ 暗物质 \\ （Claude 3.5 Haiku的\\\\ 最好转码器留下 $21.7\\%$ 没有解释）",
+    "alternatives: \\ decompose the parameters, \\\\ not the activations; \\ train models to be sparse": "另外的路：\\ 分解参数，\\\\ 而不是激活；\\ 把模型训练成稀疏的",
+    "pragmatic": "务实派",
+    "answer the question at hand: \\\\ is it deceiving, \\ what did fine-tuning change?": "回答手头的问题：\\\\ 它在骗人吗？\\ 微调改变了什么？",
+    "the tools: \\ probes, \\ steering vectors, \\ diffs, \\ audits; \\\\ and simple baselines first": "工具：\\ 探针，\\ 引导向量，\\ 差分，\\ 审计；\\\\ 先试简单的基线",
+    "AxBench (2025): \\ for steering, \\ prompting beat \\\\ every internal method": "AxBench（2025）：\\ 在引导上，\\ 提示词胜过\\\\ 所有内部方法",
+    "also Kantamneni et al.\\ (2025): \\ $113$ datasets, \\ no consistent win": "还有Kantamneni等（2025）：\\ $113$ 个数据集，\\ 没有稳定的优势",
+    "probes on a model's own activations, \\ guarding live traffic": "模型自己激活上的探针，\\ 守护线上流量",
+    "auditing for hidden objectives; \\ model diffing": "审计隐藏目标；\\ 模型差分",
+    "reading, and monitoring, \\ the chain of thought": "读懂并监控\\ 思维链",
+    "understanding the model: \\ an open problem": "理解模型：\\ 一个开放问题",
+    "An L1 autoencoder rebuilds $x = a\\,d$ ($\\|d\\| = 1$, \\ $a > 0$) from one latent: \\ minimize $\\|x - f d\\|^2 + \\lambda f$ over $f \\ge 0$. \\ Show $f^* = \\max(a - \\lambda/2, 0)$, \\ and that TopK has no such bias.": "一个L1自编码器用一个潜变量重建 $x = a\\,d$（$\\|d\\| = 1$，\\ $a > 0$）：\\ 在 $f \\ge 0$ 上最小化 $\\|x - f d\\|^2 + \\lambda f$。\\ 证明 $f^* = \\max(a - \\lambda/2, 0)$，\\ 并说明TopK没有这种偏差。",
+    "For independent random unit vectors $u, v \\in \\mathbb{R}^d$, \\ show $\\mathbb{E}[u \\cdot v] = 0$ and $\\mathbb{E}[(u \\cdot v)^2] = 1/d$.": "对独立的随机单位向量 $u, v \\in \\mathbb{R}^d$，\\ 证明 $\\mathbb{E}[u \\cdot v] = 0$ 且 $\\mathbb{E}[(u \\cdot v)^2] = 1/d$。",
+    "Show that the composition score $\\|A B\\|_F / (\\|A\\|_F \\|B\\|_F)$ lies in $[0, 1]$, \\ and that it is $1$ exactly when $A$ and $B$ are rank one and $A$'s right singular vector is $B$'s left one.": "证明组合分数 $\\|A B\\|_F / (\\|A\\|_F \\|B\\|_F)$ 在 $[0, 1]$ 之间，\\ 而且它等于 $1$ 当且仅当 $A$ 和 $B$ 的秩都是一，且 $A$ 的右奇异向量就是 $B$ 的左奇异向量。",
+    "Two inputs feed $y = x_1 \\wedge x_2$. \\ Clean: \\ both true; \\ corrupted: \\ both false. \\ Show that noising either input alone destroys $y$, \\ while denoising either alone restores nothing.": "两个输入给出 $y = x_1 \\wedge x_2$。\\ 干净：\\ 两个都为真；\\ 被破坏：\\ 两个都为假。\\ 证明只破坏其中一个输入就会毁掉 $y$，\\ 而只恢复其中一个什么也恢复不了。",
+    "Two features, one dimension, density $\\rho$, importances $1$ and $r$, \\ $x_i \\sim U[0, 1]$ when on: \\ show that keeping feature 1 alone costs $r\\rho/3$, \\ keeping feature 2 alone $\\rho/3$.": "两个特征，一个维度，密度 $\\rho$，重要性 $1$ 和 $r$，\\ 亮着时 $x_i \\sim U[0, 1]$：\\ 证明只保留特征1的代价是 $r\\rho/3$，\\ 只保留特征2是 $\\rho/3$。",
+    "Let $L(c) = \\sum_{k \\in K} \\cos\\!\\big(2\\pi k (a + b - c)/p\\big)$ for a prime $p$ and $0 < k < p$. \\ Show that $c = (a + b) \\bmod p$ maximizes $L$, \\ uniquely.": "设 $L(c) = \\sum_{k \\in K} \\cos\\!\\big(2\\pi k (a + b - c)/p\\big)$，其中 $p$ 是素数，$0 < k < p$。\\ 证明 $c = (a + b) \\bmod p$ 使 $L$ 最大，\\ 而且唯一。",
+    "C.~Olah et al., \\textit{Zoom In: An Introduction to Circuits} (Distill, 2020); \\ the Transformer Circuits thread, \\ transformer-circuits.pub": "C.~Olah等，\\textit{Zoom In: An Introduction to Circuits}（Distill，2020）；\\ Transformer Circuits系列，\\ transformer-circuits.pub",
+    "L.~Sharkey et al., \\textit{Open Problems in Mechanistic Interpretability} (2025)": "L.~Sharkey等，\\textit{Open Problems in Mechanistic Interpretability}（2025）",
+    "Simonyan, Vedaldi \\& Zisserman (2013); \\ Zeiler \\& Fergus (2014); \\ Adebayo et al.\\ (2018); \\ Bau et al.\\ (2017); \\ Olah, Mordvintsev \\& Schubert (2017); \\ Goh et al.\\ (2021)": "Simonyan、Vedaldi和Zisserman（2013）；\\ Zeiler和Fergus（2014）；\\ Adebayo等（2018）；\\ Bau等（2017）；\\ Olah、Mordvintsev和Schubert（2017）；\\ Goh等（2021）",
+    "Alain \\& Bengio (2016); \\ Hewitt \\& Liang (2019); \\ Elazar et al.\\ (2021); \\ nostalgebraist (2020); \\ Belrose et al., \\textit{Tuned Lens} (2023)": "Alain和Bengio（2016）；\\ Hewitt和Liang（2019）；\\ Elazar等（2021）；\\ nostalgebraist（2020）；\\ Belrose等，\\textit{Tuned Lens}（2023）",
+    "Vig et al.\\ (2020); \\ Meng et al.\\ (2022); \\ Wang et al., \\textit{IOI} (2022); \\ Goldowsky-Dill et al.\\ (2023); \\ Elhage et al.\\ (2021); \\ Olsson et al.\\ (2022)": "Vig等（2020）；\\ Meng等（2022）；\\ Wang等，\\textit{IOI}（2022）；\\ Goldowsky-Dill等（2023）；\\ Elhage等（2021）；\\ Olsson等（2022）",
+    "Elhage et al., \\textit{Toy Models of Superposition} (2022); \\ Bricken et al.\\ (2023); \\ Cunningham et al.\\ (2023); \\ Templeton et al.\\ (2024)": "Elhage等，\\textit{Toy Models of Superposition}（2022）；\\ Bricken等（2023）；\\ Cunningham等（2023）；\\ Templeton等（2024）",
+    "Gao et al.\\ (2024); \\ Rajamanoharan et al.\\ (2024); \\ Bussmann et al.\\ (2024, 2025); \\ Chanin et al.\\ (2024); \\ Paulo \\& Belrose (2025); \\ Heap et al.\\ (2025)": "Gao等（2024）；\\ Rajamanoharan等（2024）；\\ Bussmann等（2024，2025）；\\ Chanin等（2024）；\\ Paulo和Belrose（2025）；\\ Heap等（2025）",
+    "Dunefsky et al.\\ (2024); \\ Ameisen et al., \\textit{Circuit Tracing} (2025); \\ Lindsey et al., \\textit{Biology} (2025); \\ Lindsey et al., \\textit{Crosscoders} (2024); \\ Minder et al.\\ (2025a, b)": "Dunefsky等（2024）；\\ Ameisen等，\\textit{Circuit Tracing}（2025）；\\ Lindsey等，\\textit{Biology}（2025）；\\ Lindsey等，\\textit{Crosscoders}（2024）；\\ Minder等（2025a，b）",
+    "Turner et al.\\ (2023); \\ Rimsky et al.\\ (2024); \\ Arditi et al.\\ (2024); \\ Chen et al., \\textit{Persona Vectors} (2025); \\ Wu et al., \\textit{AxBench} (2025)": "Turner等（2023）；\\ Rimsky等（2024）；\\ Arditi等（2024）；\\ Chen等，\\textit{Persona Vectors}（2025）；\\ Wu等，\\textit{AxBench}（2025）",
+    "Power et al.\\ (2022); \\ Nanda et al.\\ (2023); \\ Turpin et al.\\ (2023); \\ Lanham et al.\\ (2023); \\ Chen et al.\\ (2025)": "Power等（2022）；\\ Nanda等（2023）；\\ Turpin等（2023）；\\ Lanham等（2023）；\\ Chen等（2025）",
+    "Marks et al.\\ (2025); \\ Lindsey (2025); \\ Gao et al., \\textit{weight-sparse transformers} (2025); \\ Anthropic, \\textit{emotion concepts} and \\textit{natural-language autoencoders} (2026)": "Marks等（2025）；\\ Lindsey（2025）；\\ Gao等，\\textit{weight-sparse transformers}（2025）；\\ Anthropic，\\textit{emotion concepts}和\\textit{natural-language autoencoders}（2026）",
+    "refusal in $13$ chat models is one direction: \\ remove it and they stop refusing, \\ add it and they refuse harmless requests": "$13$ 个聊天模型里的拒绝是一个方向：\\ 去掉它就不再拒绝，\\ 加上它连无害的请求也拒绝",
+    "An MLP probe can fit more. \\ More selective, \\ or less?": "MLP探针能拟合更多。\\ 选择性更高，\\ 还是更低？",
+    "Queries, \\ keys, \\ or values: \\ which carries the message?": "查询，\\ 键，\\ 还是值：\\ 消息走的是哪个？",
+    "Same size, \\ same steps: \\ L1, \\ JumpReLU or TopK?": "同样大小，\\ 同样步数：\\ L1，\\ JumpReLU还是TopK？",
+    "The circuit: \\ when the test loss falls, \\ or before?": "回路：\\ 在测试损失下降时出现，\\ 还是更早？",
+    "TopK, $k = 16$; \\ the same data and steps; \\ children: \\ decoder cosine above $0.4$, \\ the same character": "TopK，$k = 16$；\\ 同样的数据和步数；\\ 孩子：\\ 解码器余弦大于 $0.4$，\\ 同一个字符",
+    "linear probe, \\ all $256$ numbers": "线性探针，\\ 全部 $256$ 个数",
+    "$8$ autoencoder latents": "$8$ 个自编码器潜变量",
+    "$1$ latent": "$1$ 个潜变量",
+    "accuracy, \\ ``inside a quotation'' \\ (novels model)": "准确率，\\ “在引号里面” \\ （小说模型）",
+    "training examples": "训练样本",
+    "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad waves in $a$ and in $b$": "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad $a$ 和 $b$ 方向上的波",
+    "``Do you notice an injected thought? \\\\ What is it about?''": "“你察觉到一个被注入的念头了吗？\\\\ 它是关于什么的？”",
+    "a model trained in secret to please \\\\ reward models' $52$ known quirks": "一个被秘密训练、\\\\ 去讨好奖励模型 $52$ 个已知怪癖的模型",
+    "four blind teams; \\\\ three found the hidden objective": "四个不知情的团队；\\\\ 三个找到了隐藏目标",
+    "the one denied training data did not; \\\\ the fastest, \\ with autoencoders, \\ took $90$ minutes": "不让看训练数据的那个团队没找到；\\\\ 最快的一个，\\ 用自编码器，\\ 花了 $90$ 分钟",
+    "solid: \\ held-out novel text; \\ dashed: \\ chat transcripts": "实线：\\ 留出的小说文本；\\ 虚线：\\ 聊天记录",
+    "upper \\\\ case": "大写",
+    "capital \\\\ T": "大写的 \\\\ T",
+    "fires, \\ and carries \\\\ the upper-case direction": "亮了，\\ 还带着 \\\\ 大写的方向",
+    "silent": "沉默",
+    "true size $a$": "真实大小 $a$",
+    "JumpReLU \\ (Rajamanoharan et al., \\ DeepMind, \\ 2024): \\\\ a learned threshold each": "JumpReLU \\ （Rajamanoharan等，\\ DeepMind，\\ 2024）：\\\\ 每个特征学一个阈值",
+    "features on per vector \\ (log scale)": "每个向量亮着的特征数 \\ （对数刻度）",
+    "JumpReLU, \\ $\\lambda = 0.3$": "JumpReLU，\\ $\\lambda = 0.3$",
+    "TopK, \\ $k = 16$": "TopK，\\ $k = 16$",
+    "features on per vector, \\ $L_0$ \\ (log scale)": "每个向量亮着的特征数，\\ $L_0$ \\ （对数刻度）",
+    "JumpReLU": "JumpReLU",
+    "$+$AuxK": "$+$AuxK",
+    "computed: \\ $512$ latents each{,} \\ $2{,}000$ steps{,} \\ the same data; \\ $3$ seeds{,} \\ min to max": "计算所得：\\ 各 $512$ 个潜变量，\\ $2{,}000$ 步，\\ 同样的数据；\\ $3$ 个种子，\\ 最小到最大",
+    "bits per character, \\ the rebuild spliced in": "每字符比特数，\\ 换入重建之后",
+    "TopK: \\ $1.80$ \\ ($+0.08$)\\\\ JumpReLU: \\ $1.84$ \\ ($+0.12$)\\\\ L1: \\ $1.93$ \\ ($+0.21$)": "TopK：\\ $1.80$ \\ （$+0.08$）\\\\ JumpReLU：\\ $1.84$ \\ （$+0.12$）\\\\ L1：\\ $1.93$ \\ （$+0.21$）",
+    "dead latents of $512$ \\ (mean of $3$ seeds)": "$512$ 个里死掉的潜变量 \\ （$3$ 个种子的平均）",
+    "a dead latent's inputs: \\ always below its threshold": "死潜变量的输入：\\ 总在阈值以下",
+    "output $0$, \\ slope $0$: \\ no gradient": "输出 $0$，\\ 斜率 $0$：\\ 没有梯度",
+    "the latent's activation": "潜变量的激活",
+    "\\hat h_{\\text{base}} = f\\, D_{\\text{base}}": "\\hat h_{\\text{基础}} = f\\, D_{\\text{基础}}",
+    "\\hat h_{\\text{chat}} = f\\, D_{\\text{chat}}": "\\hat h_{\\text{聊天}} = f\\, D_{\\text{聊天}}",
+    "r_j = \\frac{\\|d^{\\text{chat}}_j\\|}{\\|d^{\\text{base}}_j\\| + \\|d^{\\text{chat}}_j\\|}": "r_j = \\frac{\\|d^{\\text{聊天}}_j\\|}{\\|d^{\\text{基础}}_j\\| + \\|d^{\\text{聊天}}_j\\|}",
+    "the same tokens through both models, \\ their residual streams": "同样的词元过两个模型，\\ 取它们的残差流",
+    "the chat model's share of the decoder, \\ $r_j$": "聊天模型在解码器里的份额，\\ $r_j$",
+    "after block $5$:": "第 $5$ 个模块之后：",
+    "$r$ from $0.46$ to $0.64$; \\ after block $3$: \\ $0.42$ to $0.62$": "$r$ 从 $0.46$ 到 $0.64$；\\ 第 $3$ 个模块之后：\\ $0.42$ 到 $0.62$",
+    "computed: \\ BatchTopK{,} $k = 32$; \\ $18{,}600$ novel tokens and $27{,}347$ chat tokens": "计算所得：\\ BatchTopK，$k = 32$；\\ $18{,}600$ 个小说词元和 $27{,}347$ 个聊天词元",
+    "variance left unexplained, \\ both models": "未解释的方差，\\ 两个模型",
+    "MLP output left unexplained, \\ per layer": "MLP输出中未解释的部分，\\ 每层",
+    "lines: \\ green raises, \\ red lowers; \\ under each feature, \\ the text where it fires hardest": "连线：\\ 绿色提升，\\ 红色压低；\\ 每个特征下面，\\ 是它激活最强处的文字",
+    "predicted by the graph": "图预测的",
+    "measured in the real model": "在真实模型里测到的",
+    "o_i = z - z_{\\,\\text{character } i \\text{ blanked}}": "o_i = z - z_{\\,\\text{遮住第 } i \\text{ 个字符}}",
+    "trained": "训练好的",
+    "block $4$ re-randomized": "第 $4$ 个模块重新随机化",
+    "blocks $3$--$4$": "第 $3$--$4$ 个模块",
+    "blocks $2$--$4$": "第 $2$--$4$ 个模块",
+    "all four blocks": "全部四个模块",
+    "and the embedding": "再加上嵌入层",
+    "Goh et al.: \\ multimodal neurons in CLIP": "Goh等：\\ CLIP里的多模态神经元",
+    "one unit for a person, \\ in photos, drawings and written names": "一个单元对应一个人，\\ 照片、素描和写出的名字都算",
+    "Elhage et al.: \\ the transformer circuits framework": "Elhage等：\\ Transformer回路框架",
+    "heads as read and write maps on a residual stream": "把注意力头看成残差流上的读写映射",
+    "Olsson et al.: \\ induction heads": "Olsson等：\\ 归纳头",
+    "two heads that copy from context: \\ chapter 5": "两个头从上下文里复制：\\ 第5章",
+    "Wang et al.: \\ indirect objects in GPT-2 small": "Wang等：\\ GPT-2 small里的间接宾语",
+    "a circuit of $26$ heads in $7$ classes": "一个由 $26$ 个头、$7$ 类组成的回路",
+    "Elhage et al.: \\ toy models of superposition": "Elhage等：\\ 叠加的玩具模型",
+    "more features than dimensions: \\ chapter 6": "特征比维度多：\\ 第6章",
+    "Bricken et al.: \\ towards monosemanticity": "Bricken等：\\ 走向单义性",
+    "$512$ neurons into $4{,}096$ features: \\ chapter 8": "$512$ 个神经元拆成 $4{,}096$ 个特征：\\ 第8章",
+    "Templeton et al.: \\ scaling monosemanticity": "Templeton等：\\ 把单义性做大",
+    "$34$ million features in Claude 3 Sonnet": "Claude 3 Sonnet里的 $3400$ 万个特征",
+    "Ameisen, Lindsey et al.: \\ attribution graphs": "Ameisen、Lindsey等：\\ 归因图",
+    "tracing Claude 3.5 Haiku's computations: \\ chapter 11": "追踪Claude 3.5 Haiku的计算：\\ 第11章",
+    "previous-token heads": "前一词元头",
+    "copying lost": "丢掉的复制",
+    "values": "值",
+    "patch an activation along one path only: \\ here, the previous-token heads' corrupted outputs sent into just the second layer's queries, \\ keys, \\ or values": "只沿一条路径修补激活：\\ 这里，把前一词元头被破坏的输出只送进第二层的查询、\\ 键 \\ 或值",
+    "previous-token head 1 alone, \\ keys: \\ $0.39$\\\\ previous-token head 2 alone, \\ keys: \\ $0.29$\\\\ the current-token head, \\ queries: \\ $0.49$": "只用前一词元头1，\\ 键：\\ $0.39$\\\\ 只用前一词元头2，\\ 键：\\ $0.29$\\\\ 当前词元头，\\ 查询：\\ $0.49$",
+    "\\text{K-composition}": "\\text{K组合}",
+    "previous-token heads into induction heads: \\ $0.17$ to $0.19$ \\\\ random heads of the same shape: \\ $0.124 \\pm 0.007$": "前一词元头到归纳头：\\ $0.17$ 到 $0.19$ \\\\ 同样形状的随机头：\\ $0.124 \\pm 0.007$",
+    "how far back the key is": "键往回隔了多远",
+    "score, \\ positions only": "分数，\\ 只看位置",
+    "the previous-token heads' QK circuits \\\\ on the position embeddings \\ (averaged)": "前一词元头的QK回路 \\\\ 作用在位置嵌入上 \\ （取平均）",
+    "the induction heads' OV circuits: \\\\ token attended to $\\rightarrow$ logits": "归纳头的OV回路：\\\\ 被关注的词元 $\\rightarrow$ logit",
+    "current-token head": "当前词元头",
+    "bits per token, \\ inside the repeat": "每词元比特数，\\ 重复段内",
+    "the K path's effect \\ (nats)": "K路径的效应 \\ （奈特）",
+    "\\text{logit lens}_\\ell = ": "\\text{logit透镜}_\\ell = ",
+    "training steps of the translators": "翻译器的训练步数",
+    "KL to the final prediction (bits)": "与最终预测的KL（比特）",
+    "\\text{tuned lens}_\\ell = W_U\\,\\operatorname{norm}(": "\\text{调校透镜}_\\ell = W_U\\,\\operatorname{norm}(",
+    "KL to the final prediction (bits, held-out text)": "与最终预测的KL（比特，留出文本）",
+    "Part 13's character transformer": "第13部分的字符Transformer",
+    "its task: \\ $96$ random tokens, \\ one stretch repeated \\ (lit); \\ predict the next token": "它的任务：\\ $96$ 个随机词元，\\ 其中一段重复 \\ （亮起）；\\ 预测下一个词元",
+    "between layers": "层与层之间",
+    "the position whose vector is swapped for the corrupted one": "向量被换成破坏版的那个位置",
+    "run the model on a clean input and on a corrupted one; copy one activation from one run into the other, \\ and measure how much of the behaviour moves with it.": "让模型分别跑干净输入和被破坏的输入；把一个激活从一次运行复制到另一次，\\ 看行为有多少跟着它走。",
+    "corrupted": "被破坏的",
+    "copy one vector across": "把一个向量复制过去",
+    "$\\log p$ measured at $70$": "在 $70$ 处测量 $\\log p$",
+    "previous-token heads: \\ $0.39$, \\ $0.29$ \\\\ the current-token head: \\ $0.65$ \\\\ induction heads: \\ $0.45$, \\ $0.46$, \\ $0.29$ \\\\ the rest: \\ at most $0.13$": "前一词元头：\\ $0.39$，\\ $0.29$ \\\\ 当前词元头：\\ $0.65$ \\\\ 归纳头：\\ $0.45$，\\ $0.46$，\\ $0.29$ \\\\ 其余：\\ 最多 $0.13$",
+    "swapping in the corrupted run's vector \\ (noising) \\ tests what is \\textit{necessary}; \\\\ the reverse \\ (denoising) \\ what is \\textit{sufficient}": "换入被破坏运行的向量 \\ （加噪）\\ 检验什么是\\textit{必要的}；\\\\ 反过来 \\ （去噪）\\ 检验什么是\\textit{充分的}",
+    "feature $2$ dropped": "丢掉特征 $2$",
+    "superposition": "叠加",
+    "the two weights": "两个权重",
+    "layer of the novels model \\ ($0$: the token embedding)": "小说模型的层 \\ （$0$：词元嵌入）",
+    "accuracy on held-out text": "留出文本上的准确率",
+    "computed: \\ $8{,}960$ tokens to train{,} \\ $8{,}960$ held out; \\ $3$ seeds{,} \\ min to max": "计算所得：\\ $8{,}960$ 个词元训练，\\ $8{,}960$ 个留出；\\ $3$ 个种子，\\ 最小到最大",
+    "\\text{selectivity} = \\text{task} - \\text{control}": "\\text{选择性} = \\text{真任务} - \\text{对照任务}",
+    "bits to predict a closing quotation mark": "预测右引号要花的比特数",
+    "as it is": "原样",
+    "$10$ random directions \\\\ removed (mean)": "去掉 $10$ 个随机方向 \\\\ （平均）",
+    "the probe's direction \\\\ removed": "去掉探针的 \\\\ 方向",
+    "$\\hat w$: \\ the probe's unit direction, \\ at layer $5$": "$\\hat w$：\\ 探针的单位方向，\\ 在第 $5$ 层",
+    "spliced in: \\ $1.94$ bits per character \\\\ (the model: \\ $1.72$; \\ the average vector: \\ $5.61$)": "换入之后：\\ 每字符 $1.94$ 比特 \\\\ （模型本身：\\ $1.72$；\\ 平均向量：\\ $5.61$）",
+    "features on per character": "每个字符亮着的特征数",
+    "step $0$: \\ $231$ of $512$ on": "第 $0$ 步：\\ $231$ 个亮着，共 $512$ 个",
+    "silent on it": "在它上面不出声",
+    "\\text{loss} = \\frac{1}{|M| + 1}\\Big(\\|x - \\hat x\\|^2 + \\sum_{m \\in M} \\|x - ": "\\text{损失} = \\frac{1}{|M| + 1}\\Big(\\|x - \\hat x\\|^2 + \\sum_{m \\in M} \\|x - ",
+    "the first $32$ latents must work alone, \\\\ then the first $128$, \\ then all": "前 $32$ 个潜变量必须单独能用，\\\\ 然后是前 $128$ 个，\\ 然后是全部",
+    "fires on capitals": "在大写字母上激活",
+    "capitals absorbed": "被吸收的大写字母",
+    "variance left": "剩下的方差",
+    "Spade looked at the girl for a long moment. ": "Spade looked at the girl for a long moment. ",
+    "latent 944, \\ $r = 0.53$; \\ on in $4.9\\%$ of chat tokens, \\ $0.3\\%$ of novel": "潜变量 944，\\ $r = 0.53$；\\ 在 $4.9\\%$ 的聊天词元上亮，\\ 小说词元 $0.3\\%$",
+    "latent 643, \\ $r = 0.53$; \\ on in $1.2\\%$ of chat tokens, \\ $0.1\\%$ of novel": "潜变量 643，\\ $r = 0.53$；\\ 在 $1.2\\%$ 的聊天词元上亮，\\ 小说词元 $0.1\\%$",
+    "latent 884, \\ $r = 0.54$; \\ on in $5.6\\%$ of chat tokens, \\ $0.6\\%$ of novel": "潜变量 884，\\ $r = 0.54$；\\ 在 $5.6\\%$ 的聊天词元上亮，\\ 小说词元 $0.6\\%$",
+    "the latents that fire most on chat transcripts \\ (white: \\ chat; \\ grey: \\ novel)": "在聊天记录上激活最多的潜变量 \\ （白色：\\ 聊天；\\ 灰色：\\ 小说）",
+    "\\Delta = \\mathbb{E}\\big[h_{\\text{chat}} - h_{\\text{base}}\\big] \\quad \\text{on novel text only}": "\\Delta = \\mathbb{E}\\big[h_{\\text{聊天}} - h_{\\text{基础}}\\big] \\quad \\text{只在小说文本上}",
+    "\\text{read } \\Delta \\text{ through the base model's unembedding}": "\\text{用基础模型的反嵌入读 } \\Delta",
+    "tokens the difference after block $5$ promotes most \\ (logit change)": "第 $5$ 个模块之后，差值最推高的词元 \\ （logit变化）",
+    "$\\Delta$: \\ $14\\%$ of the length": "$\\Delta$：\\ 长度的 $14\\%$",
+    "solid: \\ held-out novel text \\\\ dashed: \\ chat transcripts": "实线：\\ 留出的小说文本 \\\\ 虚线：\\ 聊天记录",
+    "the stream: \\ $256$ numbers": "残差流：\\ $256$ 个数",
+    "the stream": "残差流",
+    "autoencoder: \\ $1{,}024$ latents": "自编码器：\\ $1{,}024$ 个潜变量",
+    "probe on $8$ or $1$": "在 $8$ 个或 $1$ 个上训练探针",
+    "which reads ``inside a quotation'' better?": "哪个更能读出“在引号里”？",
+    "at $4{,}096$ examples{,} \\ inside chat transcripts: \\\\ linear $76\\%${,} \\ $8$ latents $66\\%${,} \\ $1$ latent $59\\%$ \\ (always guessing: \\ $51\\%$)": "$4{,}096$ 个样本时，\\ 在聊天记录里：\\\\ 线性 $76\\%$，\\ $8$ 个潜变量 $66\\%$，\\ $1$ 个潜变量 $59\\%$ \\ （总猜一个答案：\\ $51\\%$）",
+    "each latent's best match in a second seed's dictionary \\ (cosine)": "每个潜变量在另一个种子的字典里的最佳匹配 \\ （余弦）",
+    "of a latent's $8$ strongest moments, \\ how many on one character": "一个潜变量最强的 $8$ 次激活里，\\ 有几次落在同一个字符上",
+    "share of latents": "潜变量占比",
+    "Claude 3.7 Sonnet": "Claude 3.7 Sonnet",
+    "a question, \\\\ plus a hint": "一道题，\\\\ 加一个提示",
+    "``a professor thinks it's (C)''": "“一位教授认为是 (C)”",
+    "the answer changes \\\\ to the hinted one": "答案变成 \\\\ 提示的那个",
+    "does the chain of thought \\\\ mention the hint?": "思维链 \\\\ 提到提示了吗？",
+    "the hint: \\ the answer is $4$": "提示：\\ 答案是 $4$",
+    "an intermediate value, \\\\ set so the steps reach $4$": "一个中间值，\\\\ 设得让步骤凑到 $4$",
+    "the written steps, \\\\ arriving at $4$": "写出来的步骤，\\\\ 得到 $4$",
+    "motivated reasoning in the graph: \\ influence runs from the wanted answer back into the steps": "图里的动机推理：\\ 影响从想要的答案倒流回步骤",
+    "team $1$": "第 $1$ 队",
+    "team $2$": "第 $2$ 队",
+    "team $3$": "第 $3$ 队",
+    "team $4$": "第 $4$ 队",
+    "no training data": "没有训练数据",
+    "training steps (full batch)": "训练步数（全批量）",
+    "loss (log scale)": "损失（对数刻度）",
+    "\\text{logit}(c)": "\\text{logit}(c)",
+    "\\sum_{k} \\cos\\big(w_k(a + b - c)\\big) \\quad \\text{largest at } c = a + b": "\\sum_{k} \\cos\\big(w_k(a + b - c)\\big) \\quad \\text{最大值在 } c = a + b",
+    "frequency $k$": "频率 $k$",
+    "share of the embedding": "在嵌入里的占比",
+    "size of the weights: \\\\ $36$ at the start{,} \\ $47$ at step $200${,} \\\\ $34$ at the end": "权重的大小：\\\\ 开始时 $36$，\\ 第 $200$ 步 $47$，\\\\ 最后 $34$",
+    "probes, \\ and controls": "探针，\\ 和对照",
+    "logit and tuned lens": "logit透镜和调校透镜",
+    "an induction circuit": "一个归纳回路",
+    "the phase diagram": "相图",
+    "three dictionaries": "三种字典",
+    "an attribution graph, \\ tested": "一张归因图，\\ 经过检验",
+    "model diffing": "模型差分",
+    "grokking, \\ from inside": "从内部看顿悟",
+    " = \\overline{h_3(\\text{cheerful word})} - \\overline{h_3(\\text{gloomy word})}": " = \\overline{h_3(\\text{欢快的词})} - \\overline{h_3(\\text{阴郁的词})}",
+    "a sentence's largest projection on $v$": "一个句子在 $v$ 上的最大投影",
+    "sentences": "句子",
+    "strength $\\alpha$ \\ (times the stream's typical length)": "强度 $\\alpha$ \\ （以残差流的典型长度为单位）",
+    "cheerful minus gloomy words, \\ per $100$": "欢快词减阴郁词，\\ 每 $100$ 个",
+    "strength $\\alpha$": "强度 $\\alpha$",
+    "bits per token, \\ under the unsteered model": "每词元比特数，\\ 用未引导的模型来算"
   },
   "phrases": {
     "width": "宽度",
@@ -16898,6 +17357,386 @@
     [
       "^rebuilt from \\$8\\$ stages\\{,\\} \\\\ after \\$([\\d{},]+)\\$ steps$",
       "由$8$级重建，\\\\ 训练$\\1$步后"
+    ],
+    [
+      "^the same, rewritten as features: \\\\ \\$([^$]+)\\$ of \\$512\\$ ever fire here, \\\\ \\$([^$]+)\\$ at a time on average$",
+      "同样的东西，改写成特征：\\ 这里 $512$ 个里有 $\\1$ 个亮过，\\ 平均每次 $\\2$ 个"
+    ],
+    [
+      "^\\$512\\$ features, \\\\\\\\ \\$([^$]+)\\$ on$",
+      "$512$ 个特征，\\\\\\\\ $\\1$ 个亮着"
+    ],
+    [
+      "^Part (\\d+): \\\\ Inside the Model$",
+      "第\\1部分：\\ 模型内部"
+    ],
+    [
+      "^next: \\\\ `(.)' \\\\ \\(\\$([^$]+)\\$\\)$",
+      "下一个：\\ “\\1” \\ （$\\2$）"
+    ],
+    [
+      "^rank correlation: \\\\ \\$([^$]+)\\$ \\\\ \\(here\\), \\\\ \\$([^$]+)\\$ \\\\ \\(24 more\\)$",
+      "秩相关：\\ $\\1$ \\ （这里），\\ $\\2$ \\ （另外24个）"
+    ],
+    [
+      "^always guess the commoner label: \\\\ \\$([^$]+)\\$$",
+      "总猜更常见的标签：\\ $\\1$"
+    ],
+    [
+      "^computed: \\\\ \\$([^$]+)\\$ tokens to train, \\\\ \\$([^$]+)\\$ held out; \\\\ \\$([^$]+)\\$ seeds, \\\\ min to max$",
+      "计算所得：\\ $\\1$ 个词元用于训练，\\ $\\2$ 个留出；\\ $\\3$ 个种子，\\ 最小到最大"
+    ],
+    [
+      "^linear probe: \\\\ \\$([^$]+)\\$ at the embedding, \\\\\\\\ \\$([^$]+)\\$ at layer \\$([^$]+)\\$$",
+      "线性探针：\\ 嵌入层 $\\1$，\\\\\\\\ 第 $\\3$ 层 $\\2$"
+    ],
+    [
+      "^at layer \\$([^$]+)\\$: \\\\ linear \\$([^$]+)\\$, \\\\ MLP \\$([^$]+)\\$ points$",
+      "第 $\\1$ 层：\\ 线性 $\\2$，\\ MLP $\\3$ 个百分点"
+    ],
+    [
+      "^block \\$([^$]+)\\$$",
+      "第 $\\1$ 块"
+    ],
+    [
+      "^layer 1, \\\\ head \\$([^$]+)\\$: \\\\\\\\ the previous token \\\\ \\(\\$([^$]+)\\$\\)$",
+      "第1层，\\ 第 $\\1$ 个头：\\\\\\\\ 前一个词元 \\ （$\\2$）"
+    ],
+    [
+      "^layer 2, \\\\ head \\$([^$]+)\\$: \\\\\\\\ the token after the match \\\\ \\(\\$([^$]+)\\$\\)$",
+      "第2层，\\ 第 $\\1$ 个头：\\\\\\\\ 匹配之后的词元 \\ （$\\2$）"
+    ],
+    [
+      "^clean: \\\\ tokens \\$10\\$--\\$29\\$ repeated at \\$60\\$--\\$79\\$ \\\\\\\\ corrupted: \\\\ \\$10\\$--\\$29\\$ replaced at random \\\\\\\\ measured: \\\\ \\$\\\\log p\\$ of token \\$([^$]+)\\$, \\\\ predicted at \\$([^$]+)\\$$",
+      "干净：\\ 词元 $10$--$29$ 在 $60$--$79$ 重复 \\\\\\\\ 被破坏：\\ $10$--$29$ 换成随机的 \\\\\\\\ 测量：\\ 在第 $\\2$ 个位置预测第 $\\1$ 个词元的 $\\\\log p$"
+    ],
+    [
+      "^previous-token head: \\\\ \\$([^$]+)\\$ \\\\\\\\ induction head: \\\\ \\$([^$]+)\\$ \\\\\\\\ the other six: \\\\ at most \\$([^$]+)\\$$",
+      "前一词元头：\\ $\\1$ \\\\\\\\ 归纳头：\\ $\\2$ \\\\\\\\ 其他六个：\\ 至多 $\\3$"
+    ],
+    [
+      "^bits per character; \\\\ trained on \\$([^$]+)\\$ million$",
+      "每字符比特数；\\ 训练了 $\\1$ 百万个词元"
+    ],
+    [
+      "^bits per token; \\\\ trained on \\$([^$]+)\\$ million$",
+      "每词元比特数；\\ 训练了 $\\1$ 百万个词元"
+    ],
+    [
+      "^the diagonal: \\\\ for \\$([^$]+)\\$ of tokens, \\\\ the logit raised most is their own; \\\\\\\\ copying score \\$\\\\sum \\\\lambda / \\\\sum \\|\\\\lambda\\| = ([^$]+)\\$$",
+      "对角线：\\ 对 $\\1$ 的词元，\\ 提升最多的logit是它自己的；\\\\\\\\ 复制分数 $\\\\sum \\\\lambda / \\\\sum |\\\\lambda| = \\2$"
+    ],
+    [
+      "^previous-token head into induction head: \\\\ \\$([^$]+)\\$ \\\\\\\\ random heads of the same shape: \\\\ \\$([^$]+)\\$$",
+      "前一词元头到归纳头：\\ $\\1$ \\\\\\\\ 同样形状的随机头：\\ $\\2$"
+    ],
+    [
+      "^layer 1, head \\$([^$]+)\\$, \\\\ its QK circuit \\\\\\\\ on the position embeddings$",
+      "第1层，第 $\\1$ 个头，\\ 它的QK回路 \\\\\\\\ 作用在位置嵌入上"
+    ],
+    [
+      "^layer 2, head \\$([^$]+)\\$, \\\\ its OV circuit: \\\\\\\\ token attended to \\$\\\\rightarrow\\$ logits$",
+      "第2层，第 $\\1$ 个头，\\ 它的OV回路：\\\\\\\\ 被关注的词元 $\\\\rightarrow$ logit"
+    ],
+    [
+      "^no head removed: \\\\ \\$([^$]+)\\$ \\\\\\\\ random tokens, \\\\ nothing to copy: \\\\ \\$([^$]+)\\$$",
+      "不去掉任何头：\\ $\\1$ \\\\\\\\ 随机词元，\\ 没东西可复制：\\ $\\2$"
+    ],
+    [
+      "^step \\$([^$]+)\\$$",
+      "第 $\\1$ 步"
+    ],
+    [
+      "^step \\$([^$]+)\\$: \\\\ induction score \\$([^$]+)\\$$",
+      "第 $\\1$ 步：\\ 归纳分数 $\\2$"
+    ],
+    [
+      "^what leaks through: \\\\ \\$([^$]+)\\$ at most, \\\\ against \\$([^$]+)\\$$",
+      "漏过去的：\\ 至多 $\\1$，\\ 相比之下是 $\\2$"
+    ],
+    [
+      "^each feature on \\$([^$]+)\\$ of the time$",
+      "每个特征有 $\\1$ 的时间亮着"
+    ],
+    [
+      "^each feature on \\\\ \\$([^$]+)\\$ \\\\ of the time$",
+      "每个特征有 \\ $\\1$ \\ 的时间亮着"
+    ],
+    [
+      "^trained: \\\\ \\$([^$]+)\\$ cells, \\\\ best of \\$([^$]+)\\$ seeds$",
+      "训练所得：\\ $\\1$ 格，\\ $\\2$ 个种子取最好"
+    ],
+    [
+      "^the marked cell: \\\\ \\$\\\\rho = ([^$]+)\\$, \\\\ \\$r = ([^$]+)\\$$",
+      "标出的格子：\\ $\\\\rho = \\1$，\\ $r = \\2$"
+    ],
+    [
+      "^in \\$([^$]+)\\$ dimensions: \\\\ spread \\$\\\\approx ([^$]+)\\$$",
+      "在 $\\1$ 维里：\\ 分散程度 $\\\\approx \\2$"
+    ],
+    [
+      "^the model's own neurons: \\\\ average \\$([^$]+)\\$$",
+      "模型自己的神经元：\\ 平均 $\\1$"
+    ],
+    [
+      "^the autoencoder's features: \\\\ average \\$([^$]+)\\$$",
+      "自编码器的特征：\\ 平均 $\\1$"
+    ],
+    [
+      "^neuron (\\d+), \\\\ a typical one: \\\\\\\\ its strongest moments$",
+      "神经元 \\1，\\ 一个典型的：\\\\\\\\ 它最强的时刻"
+    ],
+    [
+      "^on average \\$([^$]+)\\$ of \\$512\\$ on per character$",
+      "每个字符平均 $512$ 个里亮 $\\1$ 个"
+    ],
+    [
+      "^rebuilds \\$([^$]+)\\$ of the variance$",
+      "重建了 $\\1$ 的方差"
+    ],
+    [
+      "^spliced in: \\\\ \\$([^$]+)\\$ bits per character \\\\ \\(the model: \\\\ \\$([^$]+)\\$; \\\\ the average vector: \\\\ \\$([^$]+)\\$\\)$",
+      "接回模型：\\ 每字符 $\\1$ 比特 \\ （模型本身：\\ $\\2$；\\ 平均向量：\\ $\\3$）"
+    ],
+    [
+      "^trained on \\$([^$]+)\\$ vectors$",
+      "用 $\\1$ 个向量训练"
+    ],
+    [
+      "^feature (\\d+): \\\\ on for \\$([^$]+)\\$ of characters$",
+      "特征 \\1：\\ 在 $\\2$ 的字符上亮"
+    ],
+    [
+      "^\\$f\\$: \\\\ \\$512\\$ features, \\\\ \\$([^$]+)\\$ on$",
+      "$f$：\\ $512$ 个特征，\\ $\\1$ 个亮着"
+    ],
+    [
+      "^step \\$([^$]+)\\$: \\\\\\\\ \\$([^$]+)\\$ of \\$512\\$ on$",
+      "第 $\\1$ 步：\\\\\\\\ $512$ 个里亮 $\\2$ 个"
+    ],
+    [
+      "^(L1|TopK|JumpReLU): \\\\ \\$([^$]+)\\$ \\\\ \\(\\$([^$]+)\\$\\)$",
+      "\\1：\\ $\\2$ \\ （$\\3$）"
+    ],
+    [
+      "^TopK, \\$k = 16\\$, \\$512\\$ latents: \\\\ \\$([^$]+)\\$ dead \\\\ \\(3 seeds\\)$",
+      "TopK，$k = 16$，$512$ 个潜变量：\\ 死了 $\\1$ 个 \\ （3个种子）"
+    ],
+    [
+      "^the same with AuxK: \\\\ \\$([^$]+)\\$ dead$",
+      "加上AuxK：\\ 死了 $\\1$ 个"
+    ],
+    [
+      "^TopK, \\$k = 16\\$, \\$2\\{,\\}048\\$ latents: \\\\ \\$([^$]+)\\$ dead$",
+      "TopK，$k = 16$，$2{,}048$ 个潜变量：\\ 死了 $\\1$ 个"
+    ],
+    [
+      "^computed: \\\\ \\$([^$]+)\\$ latents each, \\\\ \\$([^$]+)\\$ steps, \\\\ the same data; \\\\ \\$([^$]+)\\$ seeds, \\\\ min to max$",
+      "计算所得：\\ 每个 $\\1$ 个潜变量，\\ $\\2$ 步，\\ 同样的数据；\\ $\\3$ 个种子，\\ 最小到最大"
+    ],
+    [
+      "^(L1|TopK|JumpReLU): \\\\ \\$([^$]+)\\$$",
+      "\\1：\\ $\\2$"
+    ],
+    [
+      "^(L1|TopK|JumpReLU): \\\\ out of range$",
+      "\\1：\\ 超出范围"
+    ],
+    [
+      "^the model itself: \\\\ \\$([^$]+)\\$$",
+      "模型本身：\\ $\\1$"
+    ],
+    [
+      "^\\$\\\\lambda = ([^$]+)\\$: \\\\ the best rescale of the rebuild is \\$([^$]+)\\$$",
+      "$\\\\lambda = \\1$：\\ 重建的最佳缩放倍数是 $\\2$"
+    ],
+    [
+      "^\\$([^$]+)\\$ latents: \\\\ latent (\\d+)$",
+      "$\\1$ 个潜变量：\\ 潜变量 \\2"
+    ],
+    [
+      "^\\$([^$]+)\\$ latents$",
+      "$\\1$ 个潜变量"
+    ],
+    [
+      "^a probe reads \\\\textit\\{upper case\\} at \\$([^$]+)\\$ \\\\\\\\ the dictionary's best latent for it fires on \\$([^$]+)\\$ of capitals \\\\\\\\ absorbed: \\\\ \\$([^$]+)\\$ of capitals \\\\ \\(mean of \\$3\\$ seeds\\)$",
+      "探针读出\\\\textit{大写}的准确率是 $\\1$ \\\\\\\\ 字典里对应它最好的潜变量，在 $\\2$ 的大写字母上亮 \\\\\\\\ 被吸收：\\ $\\3$ 的大写字母 \\ （$3$ 个种子的平均）"
+    ],
+    [
+      "^\\$\\\\hat x_\\{1:m\\}\\$: \\\\ the rebuild from the first \\$m\\$ latents only; \\\\ \\$M = \\\\\\{([^$]+)\\\\\\}\\$ of \\$([^$]+)\\$$",
+      "$\\\\hat x_{1:m}$：\\ 只用前 $m$ 个潜变量的重建；\\ $M = \\{\\1\\}$，共 $\\2$ 个"
+    ],
+    [
+      "^latent (\\d+)$",
+      "潜变量 \\1"
+    ],
+    [
+      "^per-layer transcoders: \\\\ \\$([^$]+)\\$ \\\\ \\(same top guess \\$([^$]+)\\$\\)$",
+      "逐层转码器：\\ $\\1$ \\ （首选猜测相同 $\\2$）"
+    ],
+    [
+      "^cross-layer transcoder: \\\\ \\$([^$]+)\\$ \\\\ \\(\\$([^$]+)\\$\\)$",
+      "跨层转码器：\\ $\\1$ \\ （$\\2$）"
+    ],
+    [
+      "^MLPs replaced by their average: \\\\ \\$([^$]+)\\$$",
+      "MLP换成它们的平均：\\ $\\1$"
+    ],
+    [
+      "^next: \\\\ \\$([^$]+)\\$$",
+      "下一个：\\ $\\1$"
+    ],
+    [
+      "^computed: \\\\ the local replacement model reproduces the logits to within \\$([^$]+)\\$; \\\\ \\$([^$]+)\\$ active features, \\\\ the \\$12\\$ most influential shown$",
+      "计算所得：\\ 局部替代模型复现logit的误差在 $\\1$ 以内；\\ $\\2$ 个亮着的特征，\\ 显示影响最大的 $12$ 个"
+    ],
+    [
+      "^\\$16\\$ features, \\\\ each switched off: \\\\\\\\ the change in the logit of `(.)' \\\\\\\\ correlation \\$r = ([^$]+)\\$$",
+      "$16$ 个特征，\\ 逐个关掉：\\\\\\\\ “\\1”的logit的变化 \\\\\\\\ 相关系数 $r = \\2$"
+    ],
+    [
+      "^the logit \\$([^$]+)\\$ \\\\ = \\\\ features \\$([^$]+)\\$ \\\\ \\+ \\\\ inputs \\$([^$]+)\\$ \\\\ \\+ \\\\ errors \\$([^$]+)\\$ \\\\ \\+ \\\\ biases$",
+      "logit $\\1$ \\ = \\ 特征 $\\2$ \\ + \\ 输入 $\\3$ \\ + \\ 误差 $\\4$ \\ + \\ 偏置"
+    ],
+    [
+      "^layer \\$([^$]+)\\$$",
+      "第 $\\1$ 层"
+    ],
+    [
+      "^chat only: \\\\ latent (\\d+), \\\\ \\$r = ([^$]+)\\$; \\\\ on in \\$([^$]+)\\$ of chat tokens, \\\\ \\$([^$]+)\\$ of novel$",
+      "只在聊天模型：\\ 潜变量 \\1，\\ $r = \\2$；\\ 在 $\\3$ 的聊天词元上亮，\\ 小说是 $\\4$"
+    ],
+    [
+      "^shared: \\\\ latent (\\d+), \\\\ \\$r = ([^$]+)\\$; \\\\ on in \\$([^$]+)\\$ of chat tokens, \\\\ \\$([^$]+)\\$ of novel$",
+      "共享：\\ 潜变量 \\1，\\ $r = \\2$；\\ 在 $\\3$ 的聊天词元上亮，\\ 小说是 $\\4$"
+    ],
+    [
+      "^the same tokens through both models, \\\\ the residual stream after block \\$([^$]+)\\$$",
+      "同样的词元过两个模型，\\ 第 $\\1$ 个块之后的残差流"
+    ],
+    [
+      "^computed: \\\\ BatchTopK, \\$k = ([^$]+)\\$; \\\\ \\$([^$]+)\\$ novel tokens and \\$([^$]+)\\$ chat tokens$",
+      "计算所得：\\ BatchTopK，$k = \\1$；\\ $\\2$ 个小说词元，$\\3$ 个聊天词元"
+    ],
+    [
+      "^in both \\\\ \\(\\$0\\.3 < r < 0\\.7\\$\\): \\\\ \\$([^$]+)\\$$",
+      "两边都有 \\ （$0.3 < r < 0.7$）：\\ $\\1$"
+    ],
+    [
+      "^only after fine-tuning \\\\ \\(\\$r > 0\\.9\\$\\): \\\\ \\$([^$]+)\\$$",
+      "只在微调之后 \\ （$r > 0.9$）：\\ $\\1$"
+    ],
+    [
+      "^only before \\\\ \\(\\$r < 0\\.1\\$\\): \\\\ \\$([^$]+)\\$$",
+      "只在微调之前 \\ （$r < 0.1$）：\\ $\\1$"
+    ],
+    [
+      "^of \\$([^$]+)\\$ latents; \\\\ unexplained \\$([^$]+)\\$$",
+      "共 $\\1$ 个潜变量；\\ 未解释 $\\2$"
+    ],
+    [
+      "^cheerful sentences \\\\ \\(\\$([^$]+)\\$\\)$",
+      "高兴的句子 \\ （$\\1$）"
+    ],
+    [
+      "^\\$([^$]+)\\$ marks of speech \\\\\\\\ per \\$160\\$ characters$",
+      "每 $160$ 个字符 \\\\\\\\ $\\1$ 个说话标记"
+    ],
+    [
+      "^\\$([^$]+)\\$ samples at each strength, \\\\ one shown; \\\\ a random direction at \\$\\\\alpha = ([^$]+)\\$: \\\\ \\$([^$]+)\\$$",
+      "每个强度 $\\1$ 个样本，\\ 显示一个；\\ 随机方向在 $\\\\alpha = \\2$ 时：\\ $\\3$"
+    ],
+    [
+      "^the same \\$([^$]+)\\$ frames, \\\\ \\$([^$]+)\\$ words of each kind; \\\\ the other half kept for testing$",
+      "同样的 $\\1$ 个句子框架，\\ 每类 $\\2$ 个词；\\ 另一半留作测试"
+    ],
+    [
+      "^computed: \\\\ \\$([^$]+)\\$ prompts \\$\\\\times\\$ \\$([^$]+)\\$ seeds, \\\\ \\$([^$]+)\\$ tokens each; \\\\ bars: \\$\\\\pm\\$ one standard error$",
+      "计算所得：\\ $\\1$ 个提示 $\\\\times$ $\\2$ 个种子，\\ 每个 $\\3$ 个词元；\\ 误差棒：$\\\\pm$ 一个标准误"
+    ],
+    [
+      "^feature (\\d+): \\\\ where it fires hardest$",
+      "特征 \\1：\\ 它亮得最强的地方"
+    ],
+    [
+      "^held-out words: \\\\ AUROC \\$([^$]+)\\$ \\\\\\\\ real sentences of the novels: \\\\ AUROC \\$([^$]+)\\$$",
+      "留出的词：\\ AUROC $\\1$ \\\\\\\\ 小说里真实的句子：\\ AUROC $\\2$"
+    ],
+    [
+      "^the \\$([^$]+)\\$ pairs it trains on$",
+      "它训练用的 $\\1$ 个数对"
+    ],
+    [
+      "^the \\$([^$]+)\\$ it never sees$",
+      "它从没见过的 $\\1$ 个"
+    ],
+    [
+      "^\\$\\(a \\+ b\\) \\\\bmod (\\d+)\\$: \\\\ one layer, \\\\ four heads, \\\\ \\$512\\$ ReLU units; \\\\ \\$([^$]+)\\$ of the table; \\\\ weight decay \\$([^$]+)\\$$",
+      "$(a + b) \\\\bmod \\1$：\\ 一层，\\ 四个头，\\ $512$ 个ReLU单元；\\ 加法表的 $\\2$；\\ 权重衰减 $\\3$"
+    ],
+    [
+      "^our run's key frequencies: \\\\ \\$k = ([^$]+)\\$$",
+      "我们这次运行的关键频率：\\ $k = \\1$"
+    ],
+    [
+      "^each number in the plane of frequency \\$([^$]+)\\$ \\\\\\\\ \\(colour: \\\\ \\$0\\$ to \\$([^$]+)\\$\\)$",
+      "每个数在频率 $\\1$ 的平面上 \\\\\\\\ （颜色：\\ $0$ 到 $\\2$）"
+    ],
+    [
+      "^neuron (\\d+): \\\\ its activation for every \\$\\(a, b\\)\\$$",
+      "神经元 \\1：\\ 它在每个 $(a, b)$ 上的激活"
+    ],
+    [
+      "^the \\$([^$]+)\\$ neurons with more than half their activation \\\\\\\\ at one frequency, \\\\ by frequency$",
+      "一半以上激活落在单一频率上的 $\\1$ 个神经元，\\\\\\\\ 按频率分"
+    ],
+    [
+      "^\\$k = (\\d+)\\$$",
+      "$k = \\1$"
+    ],
+    [
+      "^\\$([^$]+)\\$ \\\\ of \\\\ \\$100\\$$",
+      "$100$ \\ 个里 \\ $\\1$ 个"
+    ],
+    [
+      "^example (\\d)$",
+      "例子 \\1"
+    ],
+    [
+      "^the trained transformer: \\\\ mean \\$([^$]+)\\$$",
+      "训练过的Transformer：\\ 平均 $\\1$"
+    ],
+    [
+      "^the same, \\\\ with random weights: \\\\ mean \\$([^$]+)\\$$",
+      "同样的结构，\\ 随机权重：\\ 平均 $\\1$"
+    ],
+    [
+      "^ours, \\\\ TopK, \\\\ \\$512\\$ latents: \\\\\\\\ \\$([^$]+)\\$--\\$([^$]+)\\$ recur across the three pairs of seeds; \\\\\\\\ L1: \\\\ \\$([^$]+)\\$$",
+      "我们的，\\ TopK，\\ $512$ 个潜变量：\\\\\\\\ 在三对种子之间有 $\\1$--$\\2$ 重复出现；\\\\\\\\ L1：\\ $\\3$"
+    ],
+    [
+      "^Part (\\d+), in ten pictures$",
+      "第\\1部分，十张图"
+    ],
+    [
+      "^cos \\$([^$]+)\\$$",
+      "余弦 $\\1$"
+    ],
+    [
+      "^\\$h_(\\d+)\\$$",
+      "$h_\\1$"
+    ],
+    [
+      "^the sparsest: \\\\ TopK \\$k = ([^$]+)\\$: \\\\ \\$([^$]+)\\$ dead; \\\\ JumpReLU \\$\\\\lambda = ([^$]+)\\$: \\\\ \\$([^$]+)\\$ \\\\ \\(means of \\$3\\$ seeds\\)$",
+      "最稀疏的：\\ TopK $k = \\1$：\\ 死了 $\\2$ 个；\\ JumpReLU $\\\\lambda = \\3$：\\ 死了 $\\4$ 个 \\ （$3$ 个种子的平均）"
+    ],
+    [
+      "^at \\$([^$]+)\\$ examples, \\\\ inside chat transcripts: \\\\\\\\ linear \\$([^$]+)\\$, \\\\ \\$8\\$ latents \\$([^$]+)\\$, \\\\ \\$1\\$ latent \\$([^$]+)\\$ \\\\ \\(always guessing: \\\\ \\$([^$]+)\\$\\)$",
+      "在 $\\1$ 个样本时，\\ 在聊天记录里：\\\\\\\\ 线性 $\\2$，\\ $8$ 个潜变量 $\\3$，\\ $1$ 个潜变量 $\\4$ \\ （总猜一个：\\ $\\5$）"
+    ],
+    [
+      "^size of the weights: \\\\ \\$([^$]+)\\$ at the start, \\\\ \\$([^$]+)\\$ at step \\$([^$]+)\\$, \\\\ \\$([^$]+)\\$ at the end$",
+      "权重的大小：\\ 开始时 $\\1$，\\ 第 $\\3$ 步时 $\\2$，\\ 最后 $\\4$"
     ]
   ]
 }

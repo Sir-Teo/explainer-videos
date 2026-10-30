@@ -107,9 +107,9 @@ class Mamba(VoiceoverScene):
             "agree to rounding error. So the same layer can run as a recurrence while it writes, using constant "
             "memory, and as masked attention while it trains, using big matrix products."
         ) as vo:
-            self.play(FadeIn(cite_), Write(f1))
+            self.play(FadeIn(cite_), Write(f1), FadeIn(img), Create(frame), FadeIn(il))
             vo.wait_until("a")
-            self.play(FadeIn(img), Create(frame), FadeIn(il))
+            self.play(Indicate(f1, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
             self.play(Write(f2), FadeIn(marks), FadeIn(ml))
             vo.wait_until("c")
@@ -133,18 +133,18 @@ class Mamba(VoiceoverScene):
         trap = Polygon(ax1.c2p(0, 0), ax1.c2p(1, 0), ax1.c2p(1, fx(1)), ax1.c2p(0, fx(0)), stroke_width=1.5,
                        stroke_color=SSM_C, fill_color=SSM_C, fill_opacity=0.35)
         p1 = VGroup(ax1, hold, trap, under)
-        t1 = label(r"a better step: \ both ends of each step, \ not one (``exponential-trapezoidal'')", font_size=18, color=SSM_C)
+        t1 = label(r"a better step: \\ both ends of each step, not one \\ (``exponential-trapezoidal'')", font_size=19, color=SSM_C)
         # 2. a complex state: rotation, which can flip and count
         circ = Circle(radius=0.75, color=GREY_C, stroke_width=1.5)
         arr = Arrow(ORIGIN, RIGHT * 0.75, buff=0, color=SSM_C, stroke_width=4, max_tip_length_to_length_ratio=0.2)
         p2 = VGroup(circ, arr, Dot(ORIGIN, radius=0.03, color=GREY_B))
-        t2 = label(r"a complex state: \ it can rotate, \ so it can track parity", font_size=18, color=SSM_C)
+        t2 = label(r"a complex state: \\ it can rotate, \\ so it can track parity", font_size=19, color=SSM_C)
         # 3. MIMO: a rank-r write instead of rank one, for more arithmetic per byte of state
         sq = lambda c_, o: Square(0.22, stroke_width=0.5, stroke_color=GREY_D, fill_color=c_, fill_opacity=o)  # noqa: E731
         one = VGroup(*[sq(SSM_C, 0.25 + 0.6 * ((i * 3 + j * 5) % 7) / 7) for i in range(5) for j in range(5)]).arrange_in_grid(5, 5, buff=0.02)
         p3 = VGroup(MathTex(r"\sum_{r=1}^{R} v_r k_r^{\top}", font_size=28, color=WHITE), one).arrange(RIGHT, buff=0.2)
-        t3 = label(r"several inputs and outputs per step (MIMO): \ more work for each read of the state, \ the same speed "
-                   r"to generate", font_size=18, color=SSM_C)
+        t3 = label(r"several inputs and outputs a step (MIMO): \\ more work for each read of the state, \\ the same speed "
+                   r"to generate", font_size=19, color=SSM_C)
         cols = VGroup()
         for p_, t_ in ((p1, t1), (p2, t2), (p3, t3)):
             box = RoundedRectangle(width=w, height=3.4, corner_radius=0.14, stroke_color=GREY_D, stroke_width=1.5,
@@ -153,7 +153,7 @@ class Mamba(VoiceoverScene):
             t_.next_to(box.get_bottom(), UP, buff=0.25)
             cols.add(VGroup(box, p_, t_))
         cols.arrange(RIGHT, buff=0.3).move_to(UP * 0.1)
-        res = label(r"reported: \ the same perplexity as Mamba-2 with half the state; \ at $1.5$B parameters, $+0.6$ points "
+        res = label(r"reported: \ the same perplexity as Mamba-2 with half the state; \\ at $1.5$B parameters, $+0.6$ points "
                     r"over Gated DeltaNet, \ $+1.2$ more with MIMO", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.5)
         tag = note(r"schematic").to_corner(DR, buff=0.3)
         with self.voiceover(
@@ -167,10 +167,12 @@ class Mamba(VoiceoverScene):
             "without slowing generation. <bookmark mark='d'/> They report the perplexity of Mamba-2 with half the "
             "state, and, at one and a half billion parameters, a little ahead of Gated DeltaNet."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            veils = VGroup(*[Rectangle(width=c_[0].width + 0.05, height=c_[0].height + 0.05, stroke_width=0,
+                                       fill_color=BACKGROUND, fill_opacity=0.82).move_to(c_[0]) for c_ in cols])
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(cols), FadeIn(veils))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(cols[k], shift=UP * 0.1))
+                self.play(FadeOut(veils[k]))
                 if k == 1:
                     self.play(Rotate(arr, angle=PI, about_point=ORIGIN + circ.get_center()), run_time=1.0)
             vo.wait_until("d")

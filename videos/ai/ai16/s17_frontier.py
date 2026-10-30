@@ -121,9 +121,10 @@ class Frontier(VoiceoverScene):
             (r"Feb 2025", r"NSA \ (DeepSeek)", r"compressed blocks, \ chosen blocks, \ a window; \ trained sparse from the start", BLOCKC),
             (r"Feb 2025", r"MoBA \ (Moonshot)", r"chooses blocks by their mean key; \ serves Kimi's long requests", BLOCKC),
             (r"Sep 2025", r"DSA \ (DeepSeek-V3.2)", r"a lightning indexer picks $2{,}048$ tokens", INDEXC),
-            (r"Oct 2025", r"MiniMax-M2", r"full attention in every layer: \ sparse and linear lost in its tests", FULLC),
+            (r"Oct 2025", r"MiniMax-M2", r"full attention in every layer: \ its efficient hybrids fell short on multi-hop reasoning", FULLC),
             (r"Feb 2026", r"GLM-5", r"adopts DeepSeek's sparse attention", INDEXC),
             (r"Apr 2026", r"DeepSeek-V4", r"compress, \ then choose: \ CSA and HCA", INDEXC),
+            (r"Jun 2026", r"MiniMax-M3", r"back to sparse: \ MiniMax Sparse Attention, \ a million tokens", INDEXC),
             (r"Jul 2026", r"Kimi K3", r"mostly linear attention (Part 15): \ $69$ KDA and $24$ MLA layers", C.MEMORY),
         ]
         tbl = VGroup()
@@ -132,7 +133,7 @@ class Frontier(VoiceoverScene):
                            label(what, font_size=19, color=GREY_A)))
         w0, w1 = max(r[0].width for r in tbl), max(r[1].width for r in tbl)
         for i, r in enumerate(tbl):
-            y = 2.4 - i * 0.68
+            y = 2.4 - i * 0.62
             r[0].move_to([-6.4 + w0 / 2, y, 0])
             r[1].move_to([-6.4 + w0 + 0.4 + r[1].width / 2, y, 0])
             r[2].move_to([-6.4 + w0 + 0.8 + w1 + r[2].width / 2, y, 0])
@@ -145,14 +146,14 @@ class Frontier(VoiceoverScene):
             "And attention. <bookmark mark='a'/> In February 2025, DeepSeek's native sparse attention and Moonshot's "
             "MoBA both chose blocks of the past, and MoBA was already serving Kimi's long requests. "
             "<bookmark mark='b'/> In September, DeepSeek-V3.2's indexer chose single tokens. <bookmark mark='c'/> Not "
-            "everyone was convinced: MiniMax went back to full attention for M2, saying the sparse and linear "
-            "versions they tried fell short. <bookmark mark='d'/> But in 2026 GLM-5 adopted DeepSeek's sparse "
-            "attention, DeepSeek-V4 compressed before choosing, and Kimi K3 went mostly linear, part fifteen's "
+            "everyone was convinced: MiniMax went back to full attention for M2, saying its efficient hybrids "
+            "matched full attention on the usual benchmarks but fell short on multi-step reasoning. <bookmark mark='d'/> But in 2026 GLM-5 adopted DeepSeek's sparse "
+            "attention, DeepSeek-V4 compressed before choosing, MiniMax came back to sparse attention for M3, and Kimi K3 went mostly linear, part fifteen's "
             "subject. <bookmark mark='e'/> The 2026 recipe, then: many fine experts, a shared one, balancing that "
             "steers instead of penalizing, and attention that compresses, then chooses."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, idx in zip("abcd", ([0, 1], [2], [3], [4, 5, 6])):
+            for mk, idx in zip("abcd", ([0, 1], [2], [3], [4, 5, 6, 7])):
                 vo.wait_until(mk)
                 self.play(LaggedStart(*[FadeIn(tbl[i], shift=RIGHT * 0.15) for i in idx], lag_ratio=0.3))
             vo.wait_until("e")

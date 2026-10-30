@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai16.common import (BALC, MODE_COLOR, PART, ROUTER, load, load_image, ms, take_away)
+from videos.ai.ai16.common import (BALC, EXPERT_COLORS, MODE_COLOR, PART, ROUTER, load, load_image, ms, take_away)
 
 
 def loads_panel(b, mode, seed, layer, width, height, title, color):
@@ -20,6 +20,7 @@ class Balance(VoiceoverScene):
     def construct(self):
         self.card()
         self.collapse()
+        self.importance()
         self.derive()
         self.result()
 
@@ -84,6 +85,51 @@ class Balance(VoiceoverScene):
             self.play(*[Indicate(p[0], scale_factor=1.0) for p in panels])
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(l_) for l_ in loop], *[GrowArrow(a_) for a_ in arrs], lag_ratio=0.25), run_time=2.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def importance(self):
+        b = load("balance")
+        busy = np.asarray(b["none_busiest"], float)
+        s0 = int(np.argmax(busy.max(1)))
+        L = np.asarray(b["none_loads"], float)[s0, -10:, 0].mean(0)  # the shown seed's block 1, the last 200 steps
+        cv = float(L.std() / L.mean())
+        colors = {r"\mathrm{Imp}_i": C.ROUTER}
+        f1 = cmath(r"\mathrm{Imp}_i", r"= \sum_{x \in \text{batch}} g_i(x)", colors=colors, font_size=34)
+        f2 = cmath(r"\mathcal L_{\text{imp}}", r"= w \cdot \operatorname{CV}\big(", r"\mathrm{Imp}", r"\big)^2",
+                   r",\qquad \operatorname{CV} = \frac{\text{standard deviation}}{\text{mean}}", font_size=34)
+        eqs = VGroup(f1, f2).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to([-2.6, 1.6, 0])
+        bars = VGroup(*[Rectangle(width=0.45, height=max(2.4 * v / L.max(), 0.02), stroke_width=0, fill_color=EXPERT_COLORS[i],
+                                  fill_opacity=0.85) for i, v in enumerate(L)]).arrange(RIGHT, buff=0.12, aligned_edge=DOWN)
+        bars.move_to([-2.6, -1.4, 0])
+        base = Line(bars.get_corner(DL) + LEFT * 0.1, bars.get_corner(DR) + RIGHT * 0.1, color=GREY_C)
+        mean_l = DashedLine(base.get_left() + UP * 2.4 * L.mean() / L.max(), base.get_right() + UP * 2.4 * L.mean() / L.max(),
+                            color=GREY_B, stroke_width=1.5)
+        bl = label(rf"our unbalanced router, \ block 1: \ $\operatorname{{CV}} = {cv:.2f}$", font_size=22, color=C.SURPRISE)
+        bl.next_to(base, DOWN, buff=0.2)
+        card = history_card(2017, r"Shazeer et al.", r"two extra losses: \ one on each expert's total gate weight, \ "
+                            r"one on its expected number of tokens", width=4.6, color=C.HUMAN).move_to([4.2, 1.2, 0])
+        pc = pause_card(r"Why penalize the coefficient of variation, \ and not the variance?", width=4.8, font_size=22)
+        pc.move_to([4.2, -1.6, 0])
+        with self.voiceover(
+            "Shazeer's team met this in 2017 and added losses to fight it. <bookmark mark='a'/> The first: add up "
+            "each expert's gate values over the batch, its importance, and penalize the squared coefficient of "
+            "variation of those totals, the standard deviation divided by the mean. It's zero only when every "
+            "expert is equally important. <bookmark mark='b'/> For our unbalanced router, measured on its token "
+            f"shares, the coefficient of variation is {cv:.2f}. <bookmark mark='c'/> Pause and think: why divide "
+            "by the mean? Because then the penalty doesn't care about the overall scale of the gates, only about "
+            "how unevenly they're spread. A second loss balanced the expected number of tokens, since equal "
+            "importance can still hide unequal counts."
+        ) as vo:
+            self.play(Write(eqs[0]), FadeIn(card, shift=LEFT * 0.2))
+            vo.wait_until("a")
+            self.play(Write(eqs[1]))
+            vo.wait_until("b")
+            self.play(Create(base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.1), Create(mean_l),
+                      FadeIn(bl))
+            vo.wait_until("c")
+            self.play(FadeIn(pc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -154,16 +200,23 @@ class Balance(VoiceoverScene):
         evened = ba.mean() < bn.mean() - 0.3
         better = va[0] < vn[0] - 0.003
         worse = va[0] > vn[0] + 0.003
-        v1 = (f"With Switch's penalty at its usual strength, the busiest expert falls from {bn.mean():.1f} to "
-              f"{ba.mean():.1f} times a fair share, on average over seeds and blocks"
-              + (f", and the starved experts from {int(sn.sum())} to {int(sa.sum())}. " if sn.sum() > sa.sum() else ". ")
-              if evened else
-              f"With Switch's penalty at its usual strength, the loads barely change: the busiest expert goes from "
-              f"{bn.mean():.1f} to {ba.mean():.1f} times a fair share. ")
-        v2 = (f"And the model is better for it: {va[0]:.3f} bits against {vn[0]:.3f}, because experts that work are "
-              "experts that learn. " if better else
-              f"But the model is no better for it: {va[0]:.3f} bits against {vn[0]:.3f}. " if worse else
-              f"In held-out bits it makes little difference here: {va[0]:.3f} against {vn[0]:.3f}. ")
+        if evened and sn.sum() > sa.sum():
+            v1 = (f"With Switch's penalty at its usual strength, the busiest expert falls from {bn.mean():.1f} to "
+                  f"{ba.mean():.1f} times a fair share, on average over seeds and blocks, and the starved experts from "
+                  f"{int(sn.sum())} to {int(sa.sum())}. ")
+        elif evened:
+            v1 = (f"With Switch's penalty at its usual strength, the busiest expert falls from {bn.mean():.1f} to "
+                  f"{ba.mean():.1f} times a fair share, on average over seeds and blocks. ")
+        else:
+            v1 = (f"With Switch's penalty at its usual strength, the loads barely change: the busiest expert goes from "
+                  f"{bn.mean():.1f} to {ba.mean():.1f} times a fair share. ")
+        if better:
+            v2 = (f"And the model is better for it: {va[0]:.3f} bits against {vn[0]:.3f}, because experts that work are "
+                  "experts that learn. ")
+        elif worse:
+            v2 = f"But the model is no better for it: {va[0]:.3f} bits against {vn[0]:.3f}. "
+        else:
+            v2 = f"In held-out bits it makes little difference here: {va[0]:.3f} against {vn[0]:.3f}. "
         ta = take_away(r"the penalty is a second goal competing with the first: \ too weak, \ collapse; \ too strong, "
                        r"\ it bends the routing away from what's best", color=BALC, font_size=24)
         with self.voiceover(
