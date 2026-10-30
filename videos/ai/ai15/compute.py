@@ -1054,6 +1054,38 @@ def compute_selfcache():
                 base_bits=float(-lpp.sum() / math.log(2) / chars), gain=gain)
 
 
+
+# ---------------------------------------------------------------------------
+# The scoreboard
+# ---------------------------------------------------------------------------
+def compute_scoreboard():
+    """The series' scoreboard as Parts 1, 13 and 14 left it (read through their compute), with Part 15's rows: the
+    transformer and the gated-delta hybrid trained here (mean of three seeds), and the series' model with a
+    nearest-neighbour memory of the novels (kNN-LM) and with a memory of the passage so far."""
+    from videos.ai.ai13.compute import load as load13
+    from videos.ai.ai14.compute import load as load14
+
+    S14, B = load14("scoreboard"), load14("scoreboard_base")
+    rows = [dict(label=r["label"], bits=r["bits"], kind=r["kind"], part=r["part"]) for r in S14["rows"]]
+    rows.append(dict(label="Part 13's transformer (characters)", bits=float(load13("tf")["passage_bits"]), kind="lm", part=13))
+    rows.append(dict(label="the series' model", bits=float(B["bits"]), kind="lm", part=14, params=int(B["params"])))
+    L, Kn, Sc = load("lm"), load("knn"), load("selfcache")
+    rows.append(dict(label="Part 15: transformer", bits=float(np.mean(L["transformer_bits"])), kind="lm", part=15,
+                     params=int(L["transformer_params"]), key="tf15"))
+    rows.append(dict(label="Part 15: gated-delta hybrid", bits=float(np.mean(L["hybrid_bits"])), kind="lm", part=15,
+                     params=int(L["hybrid_params"]), key="hybrid15"))
+    full = Kn["snaps"][-1]
+    rows.append(dict(label="the series' model + kNN memory of the novels", bits=float(Kn[f"snap_{full}"]["bits"]), kind="lm",
+                     part=15, key="knn"))
+    rows.append(dict(label="the series' model + memory of the passage so far", bits=float(Sc["bits"]), kind="lm", part=15,
+                     key="selfcache"))
+    assert abs(Kn["base_bits"] - B["bits"]) < 2e-3, (Kn["base_bits"], B["bits"])  # the same model, scored the same way
+    from explainer.ai import novels as N
+
+    per = N.BASE_RUN["batch"] * N.BASE["seq"]
+    return dict(rows=rows, chars=S14["chars"], base_tokens=N.BASE_RUN["tokens"] // per * per, ours_tokens=int(L["tokens"]))
+
+
 ITEMS = {
     "kvcache": compute_kvcache,
     "linear": compute_linear,
@@ -1073,6 +1105,7 @@ ITEMS = {
     "sinks": compute_sinks,
     "knn": compute_knn,
     "selfcache": compute_selfcache,
+    "scoreboard": compute_scoreboard,
 }
 CACHE.items = ITEMS
 

@@ -78,7 +78,7 @@ class Hook(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(tally), FadeIn(tl))
         self.wait(0.3)
         self.clear_scene()
-        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0, frame_center=ORIGIN)
 
     # ------------------------------------------------------------------
     def era(self):

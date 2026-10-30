@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import heat_image
-from videos.ai.ai15.common import ADD, DECAY, DELTA, K, Q, STATE, V, curve, load, ttt_picture, ttt_step
+from videos.ai.ai15.common import (ADD, DECAY, DELTA, K, PART, Q, STATE, V, curve, load, signed_column, signed_grid,
+                                   ttt_picture, ttt_step)
 
 RULES = [("add", r"add", ADD), ("decay", r"decay, then add", DECAY), ("delta", r"the delta rule", DELTA)]
 
@@ -14,87 +14,16 @@ RULES = [("add", r"add", ADD), ("decay", r"decay, then add", DECAY), ("delta", r
 class Rules(VoiceoverScene):
     def construct(self):
         self.card()
-        self.crosstalk()
         self.forgetting()
         self.delta()
+        self.rewrite()
         self.gradient()
 
     def card(self):
-        card = chapter_card(3, r"How to write to memory", r"What should a full memory forget?", part=15)
-        with self.voiceover("Chapter three. How to write to memory."):
+        card = chapter_card(5, r"Forgetting and correcting", r"What should a full memory forget?", lit=(1960,), part=PART)
+        with self.voiceover("Chapter five. Forgetting and correcting."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
-
-    def err_axes(self, c, center):
-        Ns = np.asarray(c["Ns"], float)
-        top = math.ceil(max(float(np.max(c["err_add"])), (Ns[-1] - 1) / float(c["d"])) * 2) / 2
-        ax = Axes(x_range=[0, Ns[-1], 64], y_range=[0, top, 1], x_length=6.2, y_length=3.8, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to(center)
-        xt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1) for v in (0, 64, 128, 192, 256)])
-        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(int(top) + 1)])
-        xn = label(r"pairs stored, \ $N$", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
-        yn = label(r"error reading them back \ (relative)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        return ax, VGroup(xt, yt, xn, yn)
-
-    # ------------------------------------------------------------------
-    def crosstalk(self):
-        c = load("capacity")
-        d = int(c["d"])
-        Ns = np.asarray(c["Ns"], float)
-        colors = {r"S": STATE, r"k_j": K, r"v_j": V, r"v_i": V, r"k_i": K}
-        f = cmath(r"S", r"\,", r"k_j", "=", r"v_j", "+", r"\sum_{i \ne j}", r"v_i", r"\,(", r"k_i", r"\cdot", r"k_j", r")",
-                  colors=colors, font_size=40).to_edge(UP, buff=0.45)
-        b = Brace(VGroup(*f[5:]), DOWN, color=ADD)
-        bl = label(r"crosstalk: \ every other pair leaks in", font_size=24, color=ADD).next_to(b, DOWN, buff=0.08)
-        ax, deco = self.err_axes(c, [-2.6, -1.0, 0])
-        ca = curve(ax, Ns, np.asarray(c["err_add"]), ADD, 4)
-        th = DashedLine(ax.c2p(1, 0), ax.c2p(Ns[-1], (Ns[-1] - 1) / d), color=GREY_B, stroke_width=1.5)
-        thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(110, 110 / d), DR, buff=0.12)
-        note_ = label(rf"$d = {d}$: \ by $N = {d}$ pairs, \\ the leaks are as big \\ as the answer", font_size=26,
-                      color=ADD).move_to([4.2, -0.6, 0])
-        # the overlaps themselves: |k_i . k_j| for random unit keys; the diagonal is each pair's own key
-        g = np.random.default_rng(12)
-        keys = g.normal(size=(128, d))
-        keys /= np.linalg.norm(keys, axis=1, keepdims=True)
-
-        def gram(n):
-            img = heat_image(np.abs(keys[:n] @ keys[:n].T), 3.6, 3.6, color=ADD, gamma=0.5).move_to([-1.6, -1.1, 0])
-            lab = label(rf"$|k_i \cdot k_j|$ \ for ${n}$ random keys, \ $d = {d}$", font_size=22, color=GREY_A)
-            return Group(img, lab.next_to(img, UP, buff=0.15))
-
-        gr = gram(16)
-        row = SurroundingRectangle(gr[0], buff=0.02, color=WHITE, stroke_width=2).stretch_to_fit_height(3.6 / 16 * 1.1)
-        row.move_to([gr[0].get_x(), gr[0].get_top()[1] - 3.6 / 16 * 2.5, 0])
-        rl = label(r"reading pair $j$: \\ its own key (the bright one), \\ plus a little of every other", font_size=22,
-                   color=GREY_A).next_to(gr[0], RIGHT, buff=0.5)
-        keep_in_frame(rl)
-        with self.voiceover(
-            "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its "
-            "key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how "
-            "much their keys overlap. Random keys in d dimensions overlap by about one over the square root of d, "
-            "<bookmark mark='b'/> so the leaks add up like N over d. With d equals "
-            f"{d}, by {d} pairs the noise is as big as the answer. Adding can never erase: the memory just fills up."
-        ) as vo:
-            self.play(Write(f))
-            self.play(FadeIn(gr))
-            vo.wait_until("a")
-            self.play(GrowFromCenter(b), FadeIn(bl), Create(row), FadeIn(rl))
-            g48, g128 = gram(48), gram(128)
-            self.play(FadeOut(row), FadeOut(gr), FadeIn(g48), run_time=1.0)  # a cross-fade: FadeTransform can't restore images
-            self.wait(0.3)
-            self.play(FadeOut(g48), FadeIn(g128), run_time=1.0)
-            vo.wait_until("b")
-            self.play(*[FadeOut(m_) for m_ in self.mobjects if m_ not in (f, b, bl)])
-            self.play(Create(ax), FadeIn(deco), Create(th), FadeIn(thl))
-            self.play(Create(ca), run_time=2.0)
-            # where the leaks match the answer
-            e_d = float(np.interp(d, Ns, np.asarray(c["err_add"])))
-            pt = Dot(ax.c2p(d, e_d), radius=0.08, color=ADD)
-            gl = VGroup(DashedLine(ax.c2p(d, 0), ax.c2p(d, e_d), dash_length=0.06, stroke_width=1.5, color=ADD),
-                        DashedLine(ax.c2p(0, e_d), ax.c2p(d, e_d), dash_length=0.06, stroke_width=1.5, color=ADD))
-            self.play(Create(gl), FadeIn(pt, scale=2), FadeIn(note_), Flash(pt, color=ADD, flash_radius=0.3))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def forgetting(self):
@@ -182,6 +111,54 @@ class Rules(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def rewrite(self):
+        m = load("matrix_rw")
+        keys, vals, seq = np.asarray(m["keys"]), np.asarray(m["vals"]), np.asarray(m["seq"]).astype(int)
+        d = int(m["d"])
+        vt = float(np.abs(vals).max())
+        top = float(max(np.abs(m["S_add"]).max(), np.abs(m["S_delta"]).max()))
+        cell = 0.28
+        kk, vv = seq[4]
+        head = label(rf"the same four pairs, \ then key $k_{{{kk + 1}}}$ gets a new value", font_size=26).to_edge(UP, buff=0.3)
+        panels = VGroup()
+        for rule, name, col in (("add", r"adding \ (linear attention)", ADD), ("delta", r"the delta rule, \ $\beta = 1$", DELTA)):
+            S3 = signed_grid(np.asarray(m[f"S_{rule}"])[3], d * cell, top)
+            t = label(name, font_size=22, color=col).next_to(S3, UP, buff=0.15)
+            panels.add(VGroup(t, S3))
+        panels.arrange(RIGHT, buff=3.2).move_to([0, 0.5, 0])
+        newv = VGroup(MathTex(rf"v_{{{kk + 1}}}' ", font_size=28, color=V), signed_column(vals[vv], 0.2, vt))
+        newv.arrange(DOWN, buff=0.1).move_to([0, 0.6, 0])
+        arrows = VGroup(Arrow(newv.get_left(), panels[0][1].get_right(), buff=0.2, color=V, stroke_width=3),
+                        Arrow(newv.get_right(), panels[1][1].get_left(), buff=0.2, color=V, stroke_width=3))
+        ea, ed = np.asarray(m["err_add"])[4], np.asarray(m["err_delta"])[4]
+        res = VGroup()
+        for e, col, p in ((ea, ADD, panels[0]), (ed, DELTA, panels[1])):
+            rows = VGroup(*[label(rf"$k_{j + 1}$: \ ${e[j]:.2f}$", font_size=20, color=WHITE if j == kk else GREY_B)
+                            for j in range(4)]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            rh = label(r"error reading the latest values", font_size=18, color=col)
+            res.add(VGroup(rh, rows).arrange(DOWN, buff=0.12).next_to(p, DOWN, buff=0.3))
+        ka = float(ea[kk])
+        with self.voiceover(
+            "Watch the difference on the eight-by-eight memory from the last chapter. The same four pairs are "
+            f"written, <bookmark mark='a'/> and then key {kk + 1} is given a new value. <bookmark mark='b'/> Adding "
+            "piles the new value on top of the old: reading that key now returns a blend of both, an error of "
+            f"{ka:.2f}. <bookmark mark='c'/> The delta rule first reads what the memory holds for the key, and writes "
+            f"only the difference: the new value comes back exactly, an error of {float(ed[kk]):.0f}. The other keys "
+            "move a little, through their overlap with this one; with keys at right angles they wouldn't move at all."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(panels))
+            vo.wait_until("a")
+            self.play(FadeIn(newv), GrowArrow(arrows[0]), GrowArrow(arrows[1]))
+            vo.wait_until("b")
+            self.play(Transform(panels[0][1], signed_grid(np.asarray(m["S_add"])[4], d * cell, top).move_to(panels[0][1])),
+                      FadeIn(res[0]))
+            vo.wait_until("c")
+            self.play(Transform(panels[1][1], signed_grid(np.asarray(m["S_delta"])[4], d * cell, top).move_to(panels[1][1])),
+                      FadeIn(res[1]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def gradient(self):
         colors = {r"S": STATE, r"k": K, r"v": V, r"\beta": DELTA}
         f1 = cmath(r"\ell(S)", "=", r"\tfrac12", r"\|", r"S", r"k", "-", r"v", r"\|^2", colors=colors, font_size=42)
@@ -201,12 +178,13 @@ class Rules(VoiceoverScene):
         with self.voiceover(
             "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap "
             "between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the "
-            "key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule. So the memory "
-            "is a little model, trained by part eleven's gradient descent on the text as it's being read; part "
-            "thirteen's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to "
-            "the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a "
-            "whole network, and you have test-time training: a small network whose weights keep learning while "
-            "the model reads."
+            "key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule: least squares, "
+            "solved online, one example at a time, which is what Widrow and Hoff's least-mean-squares rule did for "
+            "their ADALINE in 1960. So the memory is a little model, trained by Part 11's gradient descent on the "
+            "text as it's being read; Part 13's attention layer that learned in context was doing the same. "
+            "<bookmark mark='c'/> Add decay to the delta rule, and you have the gated delta rule inside Qwen3-Next "
+            "and Kimi Linear, the next chapter; make the memory a whole network, and you have test-time training, "
+            "chapter ten: a small network whose weights keep learning while the model reads."
         ) as vo:
             self.play(Write(f1), FadeIn(l1))
             vo.wait_until("a")
