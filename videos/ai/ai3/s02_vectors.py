@@ -136,8 +136,6 @@ class Vectors(VoiceoverScene):
         ]
         whys = [why(r"a length squared is a dot product"), why(r"expand: \ linear, symmetric"),
                 why(r"the law of cosines, \ Euclid II.12--13"), why(r"compare the two lines")]
-        for w in whys:
-            w.scale(0.9)
         step = ladder(self, rows, whys, keep=4, top=0.9, x=1.3, buff=0.32, edge=6.9)
         with self.voiceover(
             "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate and add: the dot "
@@ -191,8 +189,14 @@ class Vectors(VoiceoverScene):
         def b_():
             return 1.3 * np.array([math.cos(th.get_value()), math.sin(th.get_value())])
 
-        par = always_redraw(lambda: ax.plot(lambda t: float(np.sum((a_ - t * b_()) ** 2)), x_range=[-0.5, 3.5],
-                                            color=C.BITS, stroke_width=4).set_stroke(opacity=1))
+        def parabola():
+            b = b_()
+            A2, AB, B2, Y = float(a_ @ a_), float(a_ @ b), float(b @ b), 8.8
+            disc = max(AB * AB - B2 * (A2 - Y), 0.0)
+            lo, hi = max(-0.5, (AB - math.sqrt(disc)) / B2), min(3.5, (AB + math.sqrt(disc)) / B2)
+            return ax.plot(lambda t: A2 - 2 * t * AB + t * t * B2, x_range=[lo, hi, 0.02], color=C.BITS, stroke_width=4)
+
+        par = always_redraw(parabola)
         o = np.array([1.6, -2.6, 0])
         va = arrow(o + np.array([*a_, 0]) * 0.75, start=o, color=VA, stroke_width=5)
         vb = always_redraw(lambda: arrow(o + np.array([*b_(), 0]) * 0.75, start=o, color=VB, stroke_width=5))
@@ -209,12 +213,12 @@ class Vectors(VoiceoverScene):
             "with a. So the cosine is honest in any number of dimensions, and an angle between two words makes "
             "sense."
         ) as vo:
-            step(0)
-            vo.wait_until("a")
-            vo.wait_until("b")
-            step(1)
             self.play(Create(ax), FadeIn(tl), FadeIn(fl), FadeIn(va))
             self.add(par, vb, cs)
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
