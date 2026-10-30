@@ -64,6 +64,14 @@ class SGD(VoiceoverScene):
         hist = history_card(1951, r"Herbert Robbins \& Sutton Monro", r"\textit{A Stochastic Approximation Method}: \ "
                             r"find where a function is zero from noisy measurements of it", width=6.2)
         hist.to_edge(DOWN, buff=0.3)
+        # the training set as a strip of examples, and one random batch of them (illustrative)
+        n_ex, rng_ = 48, np.random.default_rng(2)
+        strip = VGroup(*[Square(0.2, stroke_width=1, stroke_color=GREY_C, fill_color=GREY_D, fill_opacity=0.8)
+                         for _ in range(n_ex)]).arrange(RIGHT, buff=0.05).move_to(DOWN * 2.4)
+        pick = rng_.choice(n_ex, 6, replace=False)
+        batch = VGroup(*[strip[i].copy().set_fill(C.BITS, 1).set_stroke(C.BITS) for i in pick])
+        sl = label(r"the training examples", font_size=20, color=GREY_A).next_to(strip, DOWN, buff=0.12)
+        bl = label(r"a random batch, \ $B = 6$", font_size=20, color=C.BITS).next_to(strip, UP, buff=0.12)
         with self.voiceover(
             "The loss of a model is an average over its training examples, and so is its gradient. Computing it "
             "exactly means going through all the data for every single step; real models train on trillions of "
@@ -72,13 +80,14 @@ class SGD(VoiceoverScene):
             "over B. <bookmark mark='c'/> Herbert Robbins and Sutton Monro, statisticians at North Carolina, asked "
             "in 1951 when steps along such noisy estimates still reach the answer."
         ) as vo:
-            self.play(Write(eqs[0]), FadeIn(notes[0]))
+            self.play(Write(eqs[0]), FadeIn(notes[0]), FadeIn(strip), FadeIn(sl))
+            self.play(Indicate(strip, color=WHITE, scale_factor=1.02), run_time=1.5)
             vo.wait_until("a")
-            self.play(Write(eqs[1]), FadeIn(notes[1]))
+            self.play(Write(eqs[1]), FadeIn(notes[1]), FadeIn(batch), FadeIn(bl))
             vo.wait_until("b")
             self.play(Write(eqs[2]), FadeIn(notes[2]))
             vo.wait_until("c")
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(FadeOut(VGroup(strip, batch, sl, bl)), FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

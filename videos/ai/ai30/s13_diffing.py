@@ -142,11 +142,11 @@ class Diffing(VoiceoverScene):
         own = bool(sh["chat_only"])
         panels = VGroup()
         for f in chat:
-            ctx = VGroup(*[model_text(show_tok(c["text"])[-46:], chars=48, font_size=15, max_lines=1,
+            ctx = VGroup(*[model_text(show_tok(c["text"])[-40:], chars=42, font_size=22, max_lines=1,
                                       color=WHITE if c["chat"] else GREY_B) for c in f["contexts"][:3]])
-            ctx.arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+            ctx.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
             hd = label(rf"latent {f['id']}, \ $r = {f['rel']:.2f}$; \ on in ${100 * f['on_chat']:.1f}\%$ of chat tokens, \ "
-                       rf"${100 * f['on_novel']:.1f}\%$ of novel", font_size=16, color=CHAT)
+                       rf"${100 * f['on_novel']:.1f}\%$ of novel", font_size=21, color=CHAT)
             panels.add(VGroup(hd, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.08))
         panels.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.3)
         if panels.height > 6.2:
@@ -219,8 +219,8 @@ class Diffing(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(hc))
             vo.wait_until("b")
-            self.play(FadeIn(f2))
+            self.play(FadeIn(f2), FadeIn(rl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.15))
             vo.wait_until("c")
-            self.play(FadeIn(rl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.15))
+            self.play(Indicate(rows, color=CHAT, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()

@@ -155,18 +155,27 @@ class Graphs(VoiceoverScene):
         idx = {g_: k for k, g_ in enumerate(ids)}
         li = int(d["logit_index"])
         ymap = [-2.0, -0.95, 0.1, 1.15]
-        used = {}
+        # each layer's nodes in a row near their positions, spread apart (leftward from the prompt's end)
+        xs_ = {}
+        for l_ in range(4):
+            ks = sorted([k for k, n in enumerate(nodes) if int(n["layer"]) == l_], key=lambda k: (int(nodes[k]["pos"]), k))
+            xprev = None
+            for k in reversed(ks):
+                p = int(nodes[k]["pos"]) - off
+                x = boxes[max(p, 0)].get_x() if p >= 0 else boxes[0].get_x() - 0.6
+                if xprev is not None:
+                    x = min(x, xprev - 1.0)
+                xs_[k] = x
+                xprev = x
         circles = VGroup()
+        tags = VGroup()
         for k, n in enumerate(nodes):
-            p = int(n["pos"]) - off
-            x = boxes[max(p, 0)].get_x() if p >= 0 else boxes[0].get_x() - 0.6
-            key = (int(n["layer"]), p)
-            dx = 0.36 * used.get(key, 0)
-            used[key] = used.get(key, 0) + 1
             col = FEATURE_COLORS[k % len(FEATURE_COLORS)]
             c = Circle(radius=0.17, stroke_color=col, stroke_width=2.5, fill_color=col, fill_opacity=0.3)
-            c.move_to([x + dx, ymap[int(n["layer"])], 0])
+            c.move_to([xs_[k], ymap[int(n["layer"])], 0])
             circles.add(c)
+            ctx = n["contexts"][0] if n["contexts"] else ""
+            tags.add(data_text(show(ctx[-6:-1]) if ctx else "", font=MONO, font_size=13, color=col).next_to(c, DOWN, buff=0.04))
         out = VGroup(RoundedRectangle(width=0.9, height=0.6, corner_radius=0.1, stroke_color=OUT, stroke_width=3,
                                       fill_color=OUT, fill_opacity=0.2),
                      data_text(show(str(d["target"])), font=MONO, font_size=30, color=WHITE)).move_to([boxes[-1].get_x(), 2.55, 0])
@@ -197,7 +206,8 @@ class Graphs(VoiceoverScene):
         ex_ = int(np.ceil(np.log10(max(float(d["exact"]), 1e-12))))
         tag = note(rf"computed: \ the local replacement model reproduces the logits to within $10^{{{ex_}}}$; \ "
                    rf"${int(d['n_features'])}$ active features, \ the $12$ most influential shown").to_corner(DR, buff=0.15)
-        lgd = label(r"lines: \ green raises, \ red lowers", font_size=16, color=GREY_B).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
+        lgd = label(r"lines: \ green raises, \ red lowers; \ under each feature, \ the text where it fires hardest",
+                    font_size=16, color=GREY_B).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
         with self.voiceover(
             "Now a graph for one prediction. The prompt ends 'she sai', and the model expects "
             f"'{d['target']}'. <bookmark mark='a'/> Freeze the prompt's attention patterns and layer-norm scales, "
@@ -213,9 +223,9 @@ class Graphs(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(boxes), FadeIn(out), FadeIn(ol), FadeIn(ll))
             vo.wait_until("a")
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[GrowFromCenter(c) for c in circles], lag_ratio=0.05))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromCenter(c) for c in circles], lag_ratio=0.1))
+            self.play(FadeIn(tags), *[Indicate(c, scale_factor=1.3) for c in circles])
             vo.wait_until("c")
             self.play(LaggedStart(*[Create(e) for e in edges], lag_ratio=0.02), FadeIn(lgd), run_time=2)
             self.play(LaggedStart(*[Create(e) for e in eedges], lag_ratio=0.02), run_time=1.5)
@@ -256,8 +266,9 @@ class Graphs(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), Create(diag), FadeIn(how))
             vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromCenter(d_) for d_ in dots], lag_ratio=0.15), run_time=4)
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromCenter(d_) for d_ in dots], lag_ratio=0.08))
+            self.play(Indicate(dots, color=WHITE, scale_factor=1.1))
             vo.wait_until("c")
             self.play(FadeIn(res))
         self.wait(0.3)
@@ -271,15 +282,15 @@ class Graphs(VoiceoverScene):
                                  fill_color=col, fill_opacity=0.1)
             return VGroup(r, tx.move_to(r))
 
-        a = nb(r"Dallas", GREY_A).move_to([-5.0, 0.6, 0])
-        b = nb(r"capital", GREY_A).move_to([-5.0, -0.8, 0])
-        t = nb(r"Texas", FEAT).move_to([-2.4, 0.6, 0])
-        s = nb(r"say a capital", FEAT).move_to([-2.4, -0.8, 0])
-        o = nb(r"Austin", OUT).move_to([0.4, -0.1, 0])
+        a = nb(r"Dallas", GREY_A).move_to([-5.7, 0.6, 0])
+        b = nb(r"capital", GREY_A).move_to([-5.7, -0.8, 0])
+        t = nb(r"Texas", FEAT).move_to([-3.3, 0.6, 0])
+        s = nb(r"say a capital", FEAT).move_to([-3.3, -0.8, 0])
+        o = nb(r"Austin", OUT).move_to([-1.0, -0.1, 0])
         ar = VGroup(Arrow(a.get_right(), t.get_left(), buff=0.08, color=GREY_B), Arrow(b.get_right(), s.get_left(), buff=0.08, color=GREY_B),
                     Arrow(t.get_right(), o.get_left(), buff=0.08, color=GREY_B), Arrow(s.get_right(), o.get_left(), buff=0.08, color=GREY_B))
-        q = label(r"``the capital of the state containing Dallas is''", font_size=20, color=GREY_A).move_to([-2.4, 1.7, 0])
-        sch = note(r"schematic, \ after Lindsey et al.\ (2025)").move_to([-2.4, -1.6, 0])
+        q = label(r"``the capital of the state containing Dallas is''", font_size=20, color=GREY_A).move_to([-3.3, 1.7, 0])
+        sch = note(r"schematic, \ after Lindsey et al.\ (2025)").move_to([-3.3, -1.6, 0])
         found = VGroup(
             label(r"two steps of reasoning, \ inside: \ Dallas $\rightarrow$ Texas $\rightarrow$ Austin", font_size=20),
             label(r"planning: \ a rhyme chosen before the line that ends on it", font_size=20),
@@ -288,9 +299,9 @@ class Graphs(VoiceoverScene):
             label(r"a ``known entity'' circuit that suppresses ``can't answer'': \ hallucinations when it misfires",
                   font_size=20),
             label(r"insight on about a quarter of the prompts tried", font_size=20, color=CAUSE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.9, 0.1, 0])
-        if found.width > 6.0:
-            found.scale_to_fit_width(6.0)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.8, 0.1, 0])
+        if found.width > 5.8:
+            found.scale_to_fit_width(5.8)
         head = label(r"On the Biology of a Large Language Model \ (Claude 3.5 Haiku, \ March 2025)", font_size=26)
         head.to_edge(UP, buff=0.3)
         with self.voiceover(

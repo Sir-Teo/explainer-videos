@@ -214,7 +214,8 @@ def compute_quad():
     paths = {}
     for key, eta, beta, nest in (("gd", 1 / 30, 0.0, False), ("gd_big", 2.06 / 30, 0.0, False),
                                  ("hb", 4 / (1 + math.sqrt(30)) ** 2, ((math.sqrt(30) - 1) / (math.sqrt(30) + 1)) ** 2, False),
-                                 ("nesterov", 1 / 30, (math.sqrt(30) - 1) / (math.sqrt(30) + 1), True)):
+                                 ("nesterov", 1 / 30, (math.sqrt(30) - 1) / (math.sqrt(30) + 1), True),
+                                 ("hb_mild", 1 / 30, 0.8, False)):
         x, xp, P = start.copy(), start.copy(), [start.copy()]
         for _ in range(60):
             if nest:

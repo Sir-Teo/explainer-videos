@@ -33,12 +33,12 @@ class Hook(VoiceoverScene, ThreeDScene):
         runners = {}
         for n in names:
             P = np.asarray(r[f"path_{n}"])
-            col = OPT_COLORS[n]
+            col = WHITE if n == "gd" else OPT_COLORS[n]  # grey would vanish on the surface
             trail = surface_path(axes, height, P, color=col, lift=0.06, stroke_width=4)
             track = surface_path(axes, height, P, color=col, lift=0.1)
             ball = surface_ball(axes, height, *P[0], color=col, radius=0.11)
             runners[n] = (trail, ball, track)
-        key = VGroup(*[label(OPT_NAMES[n], font_size=26, color=OPT_COLORS[n]) for n in names]).arrange(RIGHT, buff=0.7)
+        key = VGroup(*[label(OPT_NAMES[n], font_size=26, color=WHITE if n == "gd" else OPT_COLORS[n]) for n in names]).arrange(RIGHT, buff=0.7)
         key.to_edge(UP, buff=0.4)
         tally = VGroup(*[label(rf"${reach[n]}$ steps" if reach[n] >= 0 else r"not yet", font_size=22,
                                color=OPT_COLORS[n]).next_to(key[i], DOWN, buff=0.12) for i, n in enumerate(names)])
@@ -74,7 +74,7 @@ class Hook(VoiceoverScene, ThreeDScene):
                       *[MoveAlongPath(rn[1], rn[2]) for rn in runners.values()], run_time=6.0, rate_func=linear)
             self.stop_ambient_camera_rotation()
             vo.wait_until("c")
-            self.move_camera(phi=0, theta=-90 * DEGREES, zoom=0.95, run_time=2.0)
+            self.move_camera(phi=0, theta=-90 * DEGREES, zoom=0.66, frame_center=axes.c2p(0, 1, 0), run_time=2.0)
             self.play(FadeIn(tally), FadeIn(tl))
         self.wait(0.3)
         self.clear_scene()

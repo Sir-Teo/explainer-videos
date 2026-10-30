@@ -117,9 +117,9 @@ class Steering(VoiceoverScene):
         bg = VGroup(*[Rectangle(width=w * 0.85, height=max(v / (top * 1.1) * 2.6, 0.005), stroke_width=0, fill_color=PUSH,
                                 fill_opacity=0.55).move_to(g.ax.c2p((a + b) / 2, 0), aligned_edge=DOWN) for v, a, b in zip(hg_, e, e[1:])])
         lg = legend([(C.TRUE_P, rf"cheerful sentences \ (${int(m['n_sent'])}$)"), (PUSH, r"gloomy sentences")], font_size=18)
-        lg.next_to(g, LEFT, buff=0.4).shift(UP * 0.3)
+        lg.move_to([-4.5, -0.9, 0])
         res = label(rf"held-out words: \ AUROC ${float(m['auroc_words']):.2f}$ \\ real sentences of the novels: \ AUROC "
-                    rf"${float(m['auroc_sent']):.2f}$", font_size=20, color=WHITE).next_to(lg, DOWN, buff=0.35).align_to(lg, LEFT)
+                    rf"${float(m['auroc_sent']):.2f}$", font_size=20, color=WHITE).move_to([-4.5, -2.4, 0])
         aw, as_ = float(m["auroc_words"]), float(m["auroc_sent"])
         with self.voiceover(
             "Steering does not need a dictionary. A direction can come straight from a contrast. "
@@ -184,12 +184,22 @@ class Steering(VoiceoverScene):
         d_dn = mv[0][0] - mv[i0][0]
         se = max(mv[-1][1], mv[i0][1])
         works = d_up > 2 * se and d_dn < -2 * max(mv[0][1], mv[i0][1])
-        verdict = (f"Pushing along the mood vector moves the mood: {mv[i0][0]:+.1f} cheerful-minus-gloomy words per "
-                   f"hundred unsteered, {mv[-1][0]:+.1f} at the strongest push, {mv[0][0]:+.1f} pulling the other way, "
-                   "while the random direction does nothing comparable." if works else
-                   f"The mood barely follows: {mv[i0][0]:+.1f} words per hundred unsteered, {mv[-1][0]:+.1f} at the "
-                   f"strongest push and {mv[0][0]:+.1f} the other way, within the noise. A direction that reads a mood "
-                   "well need not write it, at least not in a model this small.")
+        r_dev = max(abs(mr[0][0] - mv[i0][0]), abs(mr[-1][0] - mv[i0][0]))
+        r_quiet = r_dev < 2 * max(mr[0][1], mr[-1][1], mv[i0][1])
+        if works and r_quiet:
+            verdict = (f"Pushing along the mood vector moves the mood: {mv[i0][0]:+.1f} cheerful-minus-gloomy words per "
+                       f"hundred unsteered, {mv[-1][0]:+.1f} at the strongest push, {mv[0][0]:+.1f} pulling the other "
+                       "way, while the random direction does nothing comparable.")
+        elif works:
+            verdict = (f"The mood rises steadily with the push: {mv[0][0]:+.1f} cheerful-minus-gloomy words per hundred "
+                       f"pulling one way, {mv[i0][0]:+.1f} unsteered, {mv[-1][0]:+.1f} pushing the other. But a random "
+                       f"direction, pushed as hard, reached {mr[-1][0]:+.1f} at the strongest setting too: a hard push "
+                       "disturbs the text whatever its direction, and at this sample size the vector's own effect is "
+                       "real but modest.")
+        else:
+            verdict = (f"The mood barely follows: {mv[i0][0]:+.1f} words per hundred unsteered, {mv[-1][0]:+.1f} at the "
+                       f"strongest push and {mv[0][0]:+.1f} the other way, within the noise. A direction that reads a "
+                       "mood well need not write it, at least not in a model this small.")
         with self.voiceover(
             "Now write with it: add alpha times the direction at every position while the model continues 'The sea', "
             "'The night' and ten more openings. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> Either way "
@@ -210,18 +220,19 @@ class Steering(VoiceoverScene):
     def persona(self):
         cards = VGroup(
             history_card(2023, r"A.~Turner et al.: \ activation addition", r"``Love'' minus ``Hate'', \ added to GPT-2's "
-                         r"stream, \ makes it write lovingly", width=4.2, color=PUSH, font_size=18),
+                         r"stream, \ makes it write lovingly", width=4.3, color=PUSH, font_size=20),
             history_card(2024, r"A.~Arditi et al.", r"refusal in $13$ chat models is one direction: \ remove it and "
-                         r"they stop refusing, \ add it and they refuse harmless requests", width=4.2, color=PUSH, font_size=18),
+                         r"they stop refusing, \ add it and they refuse harmless requests", width=4.3, color=PUSH, font_size=20),
             history_card(2025, r"R.~Chen, \ A.~Arditi, \ H.~Sleight, \ O.~Evans \& J.~Lindsey", r"persona vectors for evil, "
-                         r"\ sycophancy and hallucination, \ in Qwen2.5 and Llama 3.1", width=4.2, color=PUSH, font_size=18),
+                         r"\ sycophancy and hallucination, \ in Qwen2.5 and Llama 3.1", width=4.3, color=PUSH, font_size=20),
         ).arrange(RIGHT, buff=0.25).to_edge(UP, buff=0.4)
-        uses = VGroup(label(r"monitor: \ watch the projection drift during a conversation or a fine-tune", font_size=21),
-                      label(r"flag: \ score training data by how far it would push the model along a trait", font_size=21),
+        uses = VGroup(label(r"monitor: \ watch the projection drift during a conversation or a fine-tune", font_size=25),
+                      label(r"flag: \ score training data by how far it would push the model along a trait", font_size=25),
                       label(r"prevent: \ steer \textit{toward} the trait while fine-tuning, \ so the weights need not move "
-                            r"there", font_size=21),
-                      label(r"Part 27 met them as a diagnosis of emergent misalignment", font_size=19, color=GREY_B))
-        uses.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(cards, DOWN, buff=0.5)
+                            r"there", font_size=25),
+                      label(r"Part 27 met them as a diagnosis of emergent misalignment", font_size=22, color=GREY_B))
+        uses.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(cards, DOWN, buff=0.6)
+        uses.set_opacity(0.25)
         with self.voiceover(
             "This recipe has a short history. <bookmark mark='a'/> In 2023 Alex Turner and colleagues added the "
             "difference between 'Love' and 'Hate' to GPT-2's stream and it wrote lovingly. <bookmark mark='b'/> In "
@@ -233,10 +244,11 @@ class Steering(VoiceoverScene):
             "oddly, to prevent a trait by steering toward it during fine-tuning, so the weights need not go there "
             "themselves."
         ) as vo:
+            self.play(FadeIn(uses))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(u) for u in uses], lag_ratio=0.5), run_time=4)
+            self.play(LaggedStart(*[u.animate.set_opacity(1) for u in uses], lag_ratio=0.5), run_time=4)
         self.wait(0.3)
         self.clear_scene()

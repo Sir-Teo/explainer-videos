@@ -184,11 +184,9 @@
   "N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith \\& J.~Steinhardt": "N.~Nanda、L.~Chan、T.~Lieberum、J.~Smith和J.~Steinhardt",
   "progress measures for grokking via mechanistic interpretability": "通过机制可解释性得到的顿悟进度指标",
   "tallest scaled to $1$": "最高的缩放为 $1$",
-  "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad stripes along $a + b$": "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad 沿 $a + b$ 的条纹",
   "test loss": "测试损失",
   "restricted loss: \\ only the key waves kept": "受限损失：\\ 只保留关键频率的波",
   "excluded loss: \\ the key waves removed \\ (train)": "排除损失：\\ 去掉关键频率的波 \\ （训练集）",
-  "size of the weights (rescaled)": "权重的大小（重新缩放）",
   "other": "其他",
   "Does the chain of thought tell the truth?": "思维链说的是真话吗？",
   "Is the written reasoning the computation?": "写出来的推理，就是计算本身吗？",
@@ -302,7 +300,8 @@
   "$8$ autoencoder latents": "$8$ 个自编码器潜变量",
   "$1$ latent": "$1$ 个潜变量",
   "accuracy, \\ ``inside a quotation'' \\ (novels model)": "准确率，\\ “在引号里面” \\ （小说模型）",
-  "training examples": "训练样本"
+  "training examples": "训练样本",
+  "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad waves in $a$ and in $b$": "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad $a$ 和 $b$ 方向上的波"
  },
  "patterns": [
   [
@@ -680,6 +679,10 @@
   [
    "^at \\$([^$]+)\\$ examples, \\\\ inside chat transcripts: \\\\\\\\ linear \\$([^$]+)\\$, \\\\ \\$8\\$ latents \\$([^$]+)\\$, \\\\ \\$1\\$ latent \\$([^$]+)\\$ \\\\ \\(always guessing: \\\\ \\$([^$]+)\\$\\)$",
    "在 $\\1$ 个样本时，\\ 在聊天记录里：\\\\\\\\ 线性 $\\2$，\\ $8$ 个潜变量 $\\3$，\\ $1$ 个潜变量 $\\4$ \\ （总猜一个：\\ $\\5$）"
+  ],
+  [
+   "^size of the weights: \\\\ \\$([^$]+)\\$ at the start, \\\\ \\$([^$]+)\\$ at step \\$([^$]+)\\$, \\\\ \\$([^$]+)\\$ at the end$",
+   "权重的大小：\\ 开始时 $\\1$，\\ 第 $\\3$ 步时 $\\2$，\\ 最后 $\\4$"
   ]
  ]
 }
