@@ -153,7 +153,9 @@ def cjk_font() -> str:
 def install(base_template) -> None:
     zh_tex = base_template.copy()
     zh_tex.tex_compiler, zh_tex.output_format = "xelatex", ".xdv"
-    zh_tex.add_to_preamble(r"\usepackage{xeCJK}\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]")
+    # Greek outside math (α-β剪枝, δ规则) is set by the CJK font: Latin Modern has no Greek, and xelatex drops it silently
+    zh_tex.add_to_preamble(r"\usepackage{xeCJK}\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]"
+                           r'\xeCJKDeclareCharClass{CJK}{"0391 -> "03A9, "03B1 -> "03C9}')
 
     def record(s, kind, math_mode):
         for fr in inspect.stack()[2:8]:  # wrapped_label measures partial lines: keep only its whole text
