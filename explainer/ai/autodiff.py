@@ -81,7 +81,15 @@ class Tensor:
 
     def __matmul__(self, other):
         o = self._wrap(other)
-        return self._make(self.data @ o.data, [(self, lambda g: g @ o.data.T), (o, lambda g: self.data.T @ g)], "@")
+        a, b = self.data, o.data
+        if a.ndim == 2 and b.ndim == 2:
+            return self._make(a @ b, [(self, lambda g: g @ b.T), (o, lambda g: a.T @ g)], "@")
+        # a vector on either side: lift it to a column (right) or row (left), so W @ z gives dW = g zᵀ
+        A = a if a.ndim == 2 else a[None, :]
+        B = b if b.ndim == 2 else b[:, None]
+        lift = lambda g: np.reshape(g, (A.shape[0], B.shape[1]))
+        return self._make(a @ b, [(self, lambda g: np.reshape(lift(g) @ B.T, a.shape)),
+                                  (o, lambda g: np.reshape(A.T @ lift(g), b.shape))], "@")
 
     def __getitem__(self, idx):
         def back(g):
