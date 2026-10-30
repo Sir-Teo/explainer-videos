@@ -248,10 +248,11 @@ class Trees(VoiceoverScene):
             kids.arrange(RIGHT, buff=0.4).next_to(top, DOWN, buff=0.22)
             edges = VGroup(*[Line(top.get_bottom(), kd.get_top(), color=GREY_C, stroke_width=1.2) for kd in kids])
             icons.add(VGroup(top, tt, edges, kids))
-        icons.arrange_in_grid(rows=4, cols=5, buff=(0.3, 0.3)).move_to([-2.1, -0.3, 0])
+        icons.arrange_in_grid(rows=4, cols=5, buff=(0.3, 0.3))
+        icons.scale_to_fit_width(8.8).move_to([-2.2, -0.4, 0])
         counts = VGroup(*[label(rf"\texttt{{{w}}} \ first: \ ${sum(r[0] == w for r in roots)}$ of ${len(roots)}$",
                                 font_size=24, color=col[w]) for w in words])
-        counts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.2, 0])
+        counts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([5.0, 1.2, 0])
         accl = label(rf"held-out pages: \ ${100 * acc.min():.0f}\%$ to ${100 * acc.max():.0f}\%$", font_size=24,
                      color=WHITE).next_to(counts, DOWN, buff=0.4).align_to(counts, LEFT)
         head = label(rf"The same recipe on ${len(roots)}$ resamples of the training pages \ (all $70$ rates, \ depth $3$)",
