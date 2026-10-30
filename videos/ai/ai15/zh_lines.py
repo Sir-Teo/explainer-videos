@@ -537,16 +537,16 @@ ZH = {
         "每个位置的损失。{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}",
 
     'f"Past 256, the transformer\'s loss climbs':
-        "过了256，Transformer的损失往上爬，从{near_t:.1f}奈特到{far_t:.1f}奈特：这些旋转位置它从没训练过。",
+        "过了256，Transformer的损失往上爬，从{near_t:.2f}奈特到{far_t:.2f}奈特：这些旋转位置它从没训练过。",
 
     'f"Past 256, the transformer\'s loss barely moves':
-        "过了256，Transformer的损失几乎不动，从{near_t:.1f}到{far_t:.1f}。",
+        "过了256，Transformer的损失几乎不动，从{near_t:.2f}到{far_t:.2f}。",
 
     'f"The hybrid\'s stays near where it was':
-        "混合模型的损失基本停在原处，从{near_h:.1f}到{far_h:.1f}：它的注意力没有可以用完的位置。",
+        "混合模型的损失基本停在原处，从{near_h:.2f}到{far_h:.2f}：它的注意力没有可以用完的位置。",
 
     'f"The hybrid\'s climbs too':
-        "混合模型的损失也往上爬，从{near_h:.1f}到{far_h:.1f}。",
+        "混合模型的损失也往上爬，从{near_h:.2f}到{far_h:.2f}。",
 
     'But neither can find a needle':
         "可是两个模型都找不到针：给它们24个随机词元，接着一段小说，再来同样的24个词元，即使只隔16个词元，两个都预测不出重复的部分。"
