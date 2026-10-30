@@ -47,15 +47,13 @@ class FokkerPlanck(VoiceoverScene):
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-1.6, buff=0.4, edge=6.8)
         cite_ = cite(r"A.~Fokker (1914); \ M.~Planck (1917); \ A.~Kolmogorov (1931)", corner=DR)
         with self.voiceover(
-            "Chapter fourteen followed a cloud's density for pure noise and found the heat equation. With a push "
-            "added, here is the general law, derived from Ito's lemma. <bookmark mark='a'/> Take any smooth test "
-            "function phi of the process, with drift f and noise g. <bookmark mark='b'/> Average: the random term has mean zero, so only the "
-            "drift part changes the average. <bookmark mark='c'/> Write the averages as integrals against the "
-            "density p. <bookmark mark='d'/> Move the derivatives off f and onto p by integrating by parts. "
-            "<bookmark mark='e'/> Since this holds for every f, the integrands agree: the Fokker-Planck equation. "
-            "The particles' randomness is gone; what is left is a deterministic law for their density. The "
-            "physicists Adriaan Fokker and Max Planck wrote it for molecules, and Kolmogorov derived it in general "
-            "in 1931."
+            "Chapter fourteen found the heat equation for a cloud of pure noise. With a push added, here is the "
+            "general law, from Ito's lemma. <bookmark mark='a'/> Take any smooth test function phi of a process with "
+            "drift f and noise g. <bookmark mark='b'/> Average: the random term has mean zero. <bookmark mark='c'/> "
+            "Write the averages as integrals against the density p. <bookmark mark='d'/> Integrate by parts to move "
+            "the derivatives from phi onto p. <bookmark mark='e'/> Since this holds for every phi, the integrands "
+            "agree: the Fokker-Planck equation, a deterministic law for the density. Adriaan Fokker and Max Planck "
+            "wrote it for molecules; Kolmogorov derived it in general in 1931."
         ) as vo:
             vo.wait_until("a")
             step(0)
@@ -126,11 +124,11 @@ class FokkerPlanck(VoiceoverScene):
         end = label(r"all that's left: \ a standard bell", font_size=28, color=WHITE).next_to(ax, DOWN, buff=0.3)
         with self.voiceover(
             "Check it on the Ornstein-Uhlenbeck process. <bookmark mark='a'/> Start with data that has two peaks, and "
-            "let every point drift toward zero and jiggle. <bookmark mark='b'/> Twenty thousand random particles, "
-            "and the equation solved on a grid, move together: the histograms never stray from the solution by more "
-            f"than {max(d['hist_err']):.3f}, and the grid solution never strays from the exact answer by more than "
-            f"{max(d['fp_err']):.4f}. <bookmark mark='c'/> Wait long enough, and every trace of the data is gone: "
-            "what's left is a plain standard bell. That's exactly what a diffusion model does to its training images."
+            "let every point drift toward zero and jiggle. <bookmark mark='b'/> Twenty thousand particles and the "
+            f"equation solved on a grid move together: the histograms stay within {max(d['hist_err']):.3f} of the "
+            f"solution, and the solution within {max(d['fp_err']):.4f} of the exact answer. <bookmark mark='c'/> Wait "
+            "long enough, and every trace of the data is gone: a plain standard bell. That's what a diffusion model "
+            "does to its training images."
         ) as vo:
             self.play(Write(fpe), FadeIn(fpn))
             vo.wait_until("a")
@@ -170,11 +168,10 @@ class FokkerPlanck(VoiceoverScene):
         al = label(r"the score points uphill: \ toward where data is likelier", font_size=26, color=SCORE)
         al.next_to(ax, DOWN, buff=0.6)
         with self.voiceover(
-            "Can the film run backwards, from the bell back to the data? In 1982, Brian Anderson showed that "
-            "reversed in time, it's another stochastic differential equation, with one extra term: "
-            "<bookmark mark='a'/> the score. Here the word means something new: at each point, an arrow saying which "
-            "way the data gets more likely, and how strongly. Exactly, it's the slope of the log of the density at "
-            "that moment. <bookmark mark='b'/> The score points uphill, toward where the data is more likely."
+            "Can the film run backwards, from the bell to the data? In 1982 Brian Anderson showed that, reversed in "
+            "time, it is another stochastic differential equation, with one extra term: <bookmark mark='a'/> the "
+            "score, the slope of the log of the density at that moment, an arrow saying which way the data gets "
+            "likelier. <bookmark mark='b'/> It points uphill, toward the data."
         ) as vo:
             self.play(Write(rev), FadeIn(rn))
             vo.wait_until("a")

@@ -87,11 +87,10 @@ class Decoding(VoiceoverScene):
         rest = VGroup(label(rf"the other ${n_vocab - 10:,}$:".replace(",", "{,}"), font_size=26, color=GREY_A), rv)
         rest.arrange(RIGHT, buff=0.15).next_to(hrd, DOWN, buff=0.3)
         with self.voiceover(
-            "A language model ends every step with a distribution over its whole vocabulary, and decoding is how "
-            "we pick from it. <bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in "
-            f"the armchair, and. Its favourite gets only {100 * p1[0]:.0f} percent; the other fifty thousand words "
-            "share the rest. <bookmark mark='b'/> The first dial is the temperature: divide the scores by T before "
-            "the softmax, which is the Gibbs distribution of chapter six."
+            "A language model ends every step with a distribution over its vocabulary, and decoding picks from it. "
+            "<bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, "
+            f"and. Its favourite gets only {100 * p1[0]:.0f} percent. <bookmark mark='b'/> The first dial is "
+            "temperature: divide the scores by T before the softmax, the Gibbs distribution of chapter six."
         ) as vo:
             self.play(FadeIn(prompt), FadeIn(sub))
             vo.wait_until("a")
@@ -198,15 +197,14 @@ class Decoding(VoiceoverScene):
         k09 = (kept(s0, "topp", 0.9), kept(s1, "topp", 0.9))
         m01 = (kept(s0, "minp", 0.1), kept(s1, "minp", 0.1))
         with self.voiceover(
-            "Temperature reshapes the whole distribution, and at any setting the long tail of unlikely words is "
-            "still there. The other dials cut it off. <bookmark mark='a'/> Here are two real moments for GPT-2: an "
-            f"open one, where the favourite has {100 * s0[0]:.0f} percent, and a nearly certain one, where it has "
-            f"{100 * s1[0]:.0f}. <bookmark mark='b'/> Top-k keeps a fixed number of words, which is too many in the "
-            "second case and too few in the first. <bookmark mark='c'/> Top-p, or nucleus sampling, keeps the "
-            "fewest words whose probabilities add up to p. Slide p up: the cut adapts. At nine tenths it keeps "
-            f"{k09[0]:,} words in the open case and {k09[1]} in the certain one. <bookmark mark='d'/> Min-p keeps "
-            "every word at least some fraction as likely as the favourite: at a tenth, "
-            f"{m01[0]} and {m01[1]}."
+            "Temperature reshapes the distribution, but the long tail of unlikely words is always there. The other "
+            "dials cut it off. <bookmark mark='a'/> Two real moments for GPT-2: an open one, where the favourite has "
+            f"{100 * s0[0]:.0f} percent, and a nearly certain one, where it has {100 * s1[0]:.0f}. <bookmark "
+            "mark='b'/> Top-k keeps a fixed number of words: too many in the second case, too few in the first. "
+            "<bookmark mark='c'/> Top-p, nucleus sampling, keeps the fewest words whose probabilities add up to p, so "
+            f"the cut adapts: at nine tenths it keeps {k09[0]:,} words in the open case and {k09[1]} in the certain "
+            "one. <bookmark mark='d'/> Min-p keeps every word at least a fraction as likely as the favourite: at a "
+            f"tenth, {m01[0]} and {m01[1]}."
         ) as vo:
             self.play(FadeIn(panels[0][:3]), FadeIn(panels[0][3:]), FadeIn(panels[1]))
             vo.wait_until("a")
@@ -277,18 +275,19 @@ class Decoding(VoiceoverScene):
                   "nats per character.")
         tp = [(v, float(d[s]["nll"])) for s, k, v in zip(d["settings"], kinds, vals) if k == "temp"]
         Th = float(np.interp(hn, [b for _, b in tp], [a for a, _ in tp])) if tp[0][1] <= hn <= tp[-1][1] else None
+        mono = all(np.corrcoef([a for a, _, _ in P], [b for _, b, _ in P])[0, 1] > 0.5 for P in pts.values() if len(P) > 2)
+        v0 = ("Every rule trades the same way: settings that write text the judge finds likelier also make the "
+              "continuations of a passage more alike." if mono else
+              "The rules do not all trade predictability against diversity in the same way.")
         v2 = (f"Human prose sits between: as surprising to the judge as our model's text at a temperature of about "
               f"{Th:.1f}." if Th else "")
         with self.voiceover(
-            "Which rule writes best? We tested them on the series' own small language model, trained on the thirty "
-            "novels: twelve passages it never saw, eight continuations each, under seventeen settings. A larger "
-            "model that never saw how they were made, GPT-2, judges each continuation by how surprising it finds "
-            "it. <bookmark mark='a'/> Lower temperatures write text the judge finds likelier, and the continuations "
-            "of a passage grow alike: every rule trades diversity for predictability. <bookmark mark='b'/> "
-            f"{v1} <bookmark mark='c'/> Greedy decoding is the judge's favourite by this measure, and yet "
-            f"{100 * rep_g:.0f} percent of its four-word runs repeat, against at most {100 * rep_s:.1f} percent "
-            f"for any sampled setting: likelihood alone rewards loops. {v2} That gap is Holtzman's point: good "
-            "text isn't the likeliest text."
+            "Which rule writes best? We tested them on the series' own small model, trained on the thirty novels: "
+            "twelve passages it never saw, eight continuations each, seventeen settings. A larger model, GPT-2, "
+            f"judges each continuation by how surprising it finds it. <bookmark mark='a'/> {v0} <bookmark mark='b'/> "
+            f"{v1} <bookmark mark='c'/> Greedy decoding is the judge's favourite, and yet {100 * rep_g:.0f} percent of "
+            f"its four-word runs repeat, against at most {100 * rep_s:.1f} percent for any sampled setting: likelihood "
+            f"rewards loops. {v2} That is Holtzman's point: good text isn't the likeliest text."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), Create(hline), FadeIn(hl))
             vo.wait_until("a")
@@ -332,11 +331,10 @@ class Decoding(VoiceoverScene):
         g_line = ("Greedy decoding circles back on itself, again and again." if loops else
                   "Greedy decoding plays it safe, and stays flat.")
         with self.voiceover(
-            "Here is one of the passages, continued four ways. <bookmark mark='a'/> " + g_line + " "
-            "<bookmark mark='b'/> Pure sampling wanders off. <bookmark mark='c'/> The truncation rules stay in "
-            "between. Min-p was proposed in 2024 to allow higher temperatures safely; a 2025 re-analysis found its "
-            "advantage over top-p smaller than first reported. Part nineteen adds the other half of decoding: "
-            "constraining what may be written at all."
+            "Here is one passage, continued four ways. <bookmark mark='a'/> " + g_line + " <bookmark mark='b'/> Pure "
+            "sampling wanders off. <bookmark mark='c'/> The truncation rules stay in between. Min-p, proposed in 2024 "
+            "to allow higher temperatures, was challenged by a 2025 re-analysis that found its evidence weaker than "
+            "reported. Part nineteen adds the other half of decoding: constraining what may be written at all."
         ) as vo:
             self.play(FadeIn(ph), FadeIn(tag), FadeIn(rows[0]))
             vo.wait_until("a")

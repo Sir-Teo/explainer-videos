@@ -110,15 +110,14 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
         tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The mathematics is older than computers. It began in 1654, with letters between Pascal and Fermat "
-            "about how to split the stakes of an unfinished game. <bookmark mark='a'/> Bernoulli proved that "
-            "averages settle down; <bookmark mark='b'/> de Moivre found the bell curve; <bookmark mark='c'/> Bayes "
-            "and Laplace turned probability around, from causes to effects and back; <bookmark mark='d'/> Gauss "
-            "used it to fit orbits. <bookmark mark='e'/> Einstein explained the jiggling of pollen, "
-            "<bookmark mark='f'/> Fisher made likelihood the way to fit models, <bookmark mark='g'/> and Ito gave "
-            "random motion its own calculus. <bookmark mark='h'/> At Los Alamos, the first computers were set to "
-            "sampling, <bookmark mark='i'/> and today the same ideas choose every word a chatbot writes and turn "
-            "noise into pictures."
+            "The mathematics is older than computers. It began in 1654, in letters between Pascal and Fermat about "
+            "splitting the stakes of an unfinished game. <bookmark mark='a'/> Bernoulli proved that averages settle; "
+            "<bookmark mark='b'/> de Moivre found the bell curve; <bookmark mark='c'/> Bayes and Laplace reasoned "
+            "from effects back to causes; <bookmark mark='d'/> Gauss fitted orbits. <bookmark mark='e'/> Einstein "
+            "explained the jiggling of pollen, <bookmark mark='f'/> Fisher made likelihood the way to fit models, "
+            "<bookmark mark='g'/> and Ito gave random motion its own calculus. <bookmark mark='h'/> At Los Alamos the "
+            "first computers were set to sampling, <bookmark mark='i'/> and today the same ideas choose a chatbot's "
+            "every word and turn noise into pictures."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
             self.play(FadeIn(marks[0], shift=UP * 0.2))
@@ -142,11 +141,10 @@ class Hook(VoiceoverScene):
             r"random motion: \ Brownian paths, \ It\^o's lemma, \ SDEs, \ and the Fokker--Planck equation",
         ], font_size=24).move_to(DOWN * 0.35)
         with self.voiceover(
-            "This is Part 5 of AI, Built, the last part of the foundations. <bookmark mark='a'/> In it: why sums "
-            "come out bell-shaped, in one dimension and many; how to fit a model, how precise a fit can be, and how "
-            "to hold a belief; how far averages can stray; how to draw samples, and how a language model picks its "
-            "next word; Markov chains and Monte Carlo; and random motion, with a calculus of its own. Every result "
-            "is computed here, on a laptop."
+            "This is Part 5 of AI, Built, the last of the foundations. <bookmark mark='a'/> In it: why sums are "
+            "bell-shaped, in one dimension and many; fitting, precision and belief; how far averages stray; drawing "
+            "samples, and how a language model picks a word; Markov chains and Monte Carlo; and random motion, with a "
+            "calculus of its own. Every result is computed here, on a laptop."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

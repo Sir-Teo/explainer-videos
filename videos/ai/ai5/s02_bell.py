@@ -56,12 +56,10 @@ class Bell(VoiceoverScene):
                           r"numbers, \ his ``golden theorem''", width=4.6).to_corner(UR, buff=0.35)
         lo, hi = float(d["final"].min()), float(d["final"].max())
         with self.voiceover(
-            "Flip a fair coin and keep track of the share of heads. Early on it lurches about. "
-            "<bookmark mark='a'/> Six runs of five thousand flips: every one settles toward a half, here between "
-            f"{lo:.3f} and {hi:.3f}. Jacob Bernoulli proved that this always happens, in a book published in 1713: "
-            "the law of large numbers. <bookmark mark='b'/> But how far off is it after n flips? The runs stay "
-            "inside a band that narrows like one over the square root of n, and the shape of the scatter inside it "
-            "is the subject of this chapter."
+            "Flip a fair coin and track the share of heads. <bookmark mark='a'/> Six runs of five thousand flips all "
+            f"settle toward a half, here between {lo:.3f} and {hi:.3f}: Jacob Bernoulli's law of large numbers, "
+            "published in 1713. <bookmark mark='b'/> How far off is a run after n flips? About one over the square "
+            "root of n, and the shape of that scatter is this chapter's subject."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             self.play(Create(runs[0]), run_time=2.0, rate_func=linear)
@@ -127,9 +125,9 @@ class Bell(VoiceoverScene):
         f2n = label(r"centre $\mu = 6$, \ width $\sigma = \sqrt{3}$", font_size=28, color=GREY_A).next_to(f2, DOWN, buff=0.3)
         cite_ = cite(r"F.~Galton, \textit{Natural Inheritance} (1889); \ A.~de Moivre (1733)", corner=DR)
         with self.voiceover(
-            "Here is the scatter made visible. Drop a ball through twelve rows of pegs; at every peg it bounces left "
-            "or right, fifty-fifty. <bookmark mark='a'/> Where it lands just counts its right bounces. "
-            "<bookmark mark='b'/> One ball tells you nothing. Eighty start to show a shape."
+            "Here is the scatter made visible: balls dropped through twelve rows of pegs, bouncing left or right, "
+            "fifty-fifty. <bookmark mark='a'/> Where one lands counts its right bounces. <bookmark mark='b'/> Eighty "
+            "start to show a shape."
         ) as vo:
             self.play(FadeIn(pegs), Create(walls), Create(base), FadeIn(head))
             vo.wait_until("a")
@@ -140,10 +138,9 @@ class Bell(VoiceoverScene):
                                     for k in range(3, len(balls))], lag_ratio=0.06), run_time=7.0)
         with self.voiceover(
             "A thousand make it unmistakable. <bookmark mark='a'/> Counting paths gives the exact chances: twelve "
-            "choose k, the number of paths with k right bounces, out of two to the twelve paths in all. "
-            "<bookmark mark='b'/> And the smooth curve hugging them is the bell: the normal distribution, with a "
-            "centre mu and a width sigma, here six and the square root of three. Galton built this board in the "
-            "1870s, but de Moivre had found the curve in 1733, as the limit of exactly these counts."
+            "choose k, out of two to the twelve. <bookmark mark='b'/> The smooth curve hugging them is the bell, the "
+            "normal distribution, with a centre mu and a width sigma, here six and the square root of three. De "
+            "Moivre found it in 1733, as the limit of exactly these counts."
         ) as vo:
             self.play(FadeOut(balls), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05), FadeIn(nl),
                       run_time=1.6)
@@ -185,11 +182,11 @@ class Bell(VoiceoverScene):
         thm_n.next_to(thm, DOWN, buff=0.2).align_to(thm, LEFT)
         width = label(r"the spread of a sum grows like $\sqrt{k}$", font_size=28, color=C.BITS).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "But why a bell, and why so often? Take one die: six flat bars. <bookmark mark='a'/> Add two dice, and "
-            "you get a triangle. Three, and it's already rounding off. <bookmark mark='b'/> Six. Twelve. The bell "
-            "again. <bookmark mark='c'/> That's the central limit theorem. Add up many independent random pieces, and "
-            "whatever shape the pieces have, the sum takes the shape of the bell, <bookmark mark='d'/> with a spread "
-            "that grows like the square root of how many you add. Laplace proved it in 1810."
+            "Why a bell, and why so often? One die: six flat bars. <bookmark mark='a'/> Two dice: a triangle. Three: "
+            "already rounding off. <bookmark mark='b'/> Six, twelve: the bell. <bookmark mark='c'/> That's the "
+            "central limit theorem: add many independent pieces, whatever their shape, and the sum is bell-shaped, "
+            "<bookmark mark='d'/> with a spread that grows like the square root of their number. Laplace proved it in "
+            "1810."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(kl), FadeIn(shapes[0]))
             vo.wait_until("a")
@@ -252,12 +249,11 @@ class Bell(VoiceoverScene):
         bl = label(r"its area, \ for each $s$: \ $(f * f)(s) = s\,e^{-s}$", font_size=22, color=C.BITS)
         bl.next_to(bx, UP, buff=0.12)
         with self.voiceover(
-            "Why does the bell appear? Start with two dice. The chance that they add up to s collects every way of "
-            "splitting s: x on the first die, s minus x on the second. <bookmark mark='a'/> For densities the sum "
-            "becomes an integral, called a convolution. <bookmark mark='b'/> Picture it: take the density of one "
-            "piece, here a lopsided one, the exponential. Flip a copy, slide it to s, multiply, and the area of the "
-            "overlap is the density of the sum at s. <bookmark mark='c'/> Slide s along, and the area traces out the "
-            "density of the sum of two pieces. <bookmark mark='d'/> The sum of n pieces is n minus one convolutions."
+            "Why? Two dice add up to s in every way of splitting s: x on one die, s minus x on the other. <bookmark "
+            "mark='a'/> For densities the sum becomes an integral, a convolution. <bookmark mark='b'/> Picture it "
+            "with a lopsided piece, the exponential. Flip a copy, slide it to s, multiply: the area of the overlap is "
+            "the density of the sum at s. <bookmark mark='c'/> Slide s along, and the area traces out the density of "
+            "two pieces. <bookmark mark='d'/> n pieces take n minus one convolutions."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -73,11 +73,11 @@ class Sampling(VoiceoverScene):
         rule = label(r"a uniform random number $u$; \ the letter whose stretch contains it", font_size=28, color=C.BITS)
         rule.to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "A model never hands us a letter or a word. It hands us a distribution, and to write anything we have to "
-            "roll loaded dice. <bookmark mark='a'/> Here's how a computer does it. Lay the probabilities end to end, "
-            "from zero to one, so each letter owns a stretch as long as its probability. <bookmark mark='b'/> Pick a "
-            "uniform random point and take the letter it lands in: the inverse of the cumulative distribution. "
-            "<bookmark mark='c'/> These are drawn from part one's letter frequencies."
+            "A model never hands us a word, only a distribution, and to write anything we must roll loaded dice. "
+            "<bookmark mark='a'/> Lay the probabilities end to end from zero to one, so each letter owns a stretch as "
+            "long as its probability. <bookmark mark='b'/> Pick a uniform random point and take the letter it lands "
+            "in: the inverse of the cumulative distribution. <bookmark mark='c'/> These are drawn from part one's "
+            "letter frequencies."
         ) as vo:
             self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in stand], lag_ratio=0.03), FadeIn(stand_l),
                       FadeIn(dist_l), run_time=1.5)
@@ -147,14 +147,13 @@ class Sampling(VoiceoverScene):
         rl.next_to(bx, DOWN, buff=0.15)
         cite_ = cite(r"J.~von Neumann, \textit{Various techniques used in connection with random digits} (1951)", corner=DR)
         with self.voiceover(
-            "The same trick works for continuous distributions: feed a uniform number through the inverse of the "
-            "cumulative distribution. <bookmark mark='a'/> For the exponential, x is minus the log of one minus u. "
-            f"Twenty thousand draws match the density; their largest gap from the true CDF is {float(d['ks_exp']):.3f}. "
-            "<bookmark mark='b'/> When the inverse is hard to compute, John von Neumann's rejection method from "
-            "1951 works with the density alone. Scatter points uniformly in a box over the curve, and keep the ones "
-            "that fall under it. <bookmark mark='c'/> The kept points' positions follow the density. The price is "
-            f"the wasted points: {100 * rate:.1f} percent are kept, one over the box's height, as predicted. In many "
-            "dimensions that share collapses."
+            "The same trick works for continuous distributions. <bookmark mark='a'/> For the exponential, x is minus "
+            "the log of one minus u: twenty thousand draws match the density, with a largest CDF gap of "
+            f"{float(d['ks_exp']):.3f}. <bookmark mark='b'/> When the inverse is hard to compute, John von Neumann's "
+            "rejection method of 1951 needs only the density: scatter points uniformly in a box over the curve, and "
+            "keep the ones under it. <bookmark mark='c'/> The kept points follow the density. The price is waste: "
+            f"{100 * rate:.1f} percent are kept, one over the box's height, as predicted, and in many dimensions that "
+            "share collapses."
         ) as vo:
             self.play(Create(ax), Create(F), FadeIn(Fl))
             vo.wait_until("a")
@@ -248,13 +247,11 @@ class Sampling(VoiceoverScene):
         cite_ = cite(r"E.~J.~Gumbel (1954); \ R.~D.~Luce (1959); \ J.~I.~Yellott (1977); \ C.~Maddison et al.\ (2014)",
                      corner=DL)
         with self.voiceover(
-            "One more trick, and modern machine learning uses it constantly. To pick option i with probability "
-            "given by a softmax of scores, add independent Gumbel noise to each score, minus the log of minus the "
-            "log of a uniform number, <bookmark mark='a'/> and take the largest. <bookmark mark='b'/> The winner "
-            "is distributed exactly by the softmax: the Gumbel distribution is the shape of maxima, and it turns "
-            f"the largest into the softmax. <bookmark mark='c'/> Two hundred thousand picks against the softmax: "
-            f"{verdict} The trick needs only the scores, never the normalizer, and it turns sampling into a "
-            "maximization."
+            "One more trick, used constantly in machine learning. To pick option i with the softmax of its score, add "
+            "independent Gumbel noise to each score, minus the log of minus the log of a uniform number, <bookmark "
+            "mark='a'/> and take the largest. <bookmark mark='b'/> The winner follows the softmax exactly: the Gumbel "
+            f"is the shape of maxima. <bookmark mark='c'/> Two hundred thousand picks against the softmax: {verdict} "
+            "It needs only the scores, never the normalizer, and turns sampling into maximization."
         ) as vo:
             self.play(FadeIn(lb), FadeIn(lt))
             for k in range(3):

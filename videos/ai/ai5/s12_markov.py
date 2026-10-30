@@ -78,12 +78,12 @@ class Markov(VoiceoverScene):
         pct = VGroup(*[MathTex(rf"{100 * pi3[i]:.0f}\%", font_size=26, color=WHITE)
                        .next_to(ghost[i], UP, buff=0.08) for i in range(3)])
         cite_ = cite(r"A.~A.~Markov (1906; \ vowels and consonants in \textit{Eugene Onegin}, 1913)", corner=DR)
+        vc = float(P3[1, 2])
         with self.voiceover(
             "A Markov chain is randomness with a short memory: what comes next depends only on where you are now. "
-            "<bookmark mark='a'/> Here's one built from part one's letters, with just three states: a space, a "
-            "vowel, or a consonant. The arrows carry the chances of what comes next. After a vowel, a consonant, "
-            "seven times in ten. <bookmark mark='b'/> Follow one walker as it hops, and count the time it spends in "
-            "each state."
+            "<bookmark mark='a'/> Here's one built from part one's letters, with three states: a space, a vowel, or a "
+            f"consonant. The arrows carry the chances of what comes next: after a vowel, a consonant {100 * vc:.0f} "
+            "percent of the time. <bookmark mark='b'/> Follow one walker, and count the time it spends in each state."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -99,9 +99,9 @@ class Markov(VoiceoverScene):
                 self.play(*anim, *bars.to(counts / j), ChangeDecimalToValue(nv, j), run_time=0.45)
                 here = w
         with self.voiceover(
-            "Keep going, and the shares settle: about nineteen percent spaces, thirty-one percent vowels, and fifty "
-            "percent consonants, the same shares as in the books. <bookmark mark='a'/> Markov did exactly this by "
-            "hand in 1913, with the vowels and consonants of twenty thousand letters of Pushkin."
+            f"Keep going, and the shares settle: {100 * pi3[0]:.0f} percent spaces, {100 * pi3[1]:.0f} percent vowels, "
+            f"{100 * pi3[2]:.0f} percent consonants, as in the books. <bookmark mark='a'/> Markov did exactly this by "
+            "hand in 1913, with twenty thousand letters of Pushkin."
         ) as vo:
             for j in range(13, len(walk), 8):
                 for w in walk[j:j + 8]:
@@ -154,6 +154,7 @@ class Markov(VoiceoverScene):
         D, tv, freq = np.asarray(d["dists"]), np.asarray(d["tv"]), np.asarray(d["freq"])
         lam2 = float(d["lam2"])
         assert tv[5] < 0.01 and 0.25 < lam2 < 0.35
+        k_forget = int(np.argmax(tv < 0.01))
         labs = [Text("␣" if c == " " else c, font=MONO, font_size=18, color=GREY_A) for c in ALPHA27]
         bars = LiveBars(np.minimum(D[0], CAP), max_value=CAP, height=3.2, bar_width=0.3, gap=0.08, colors=DATA,
                         label_mobs=labs)
@@ -186,12 +187,11 @@ class Markov(VoiceoverScene):
         lam_l = label(rf"each step: \ $\times\,{lam2:.2f}$ or so \ (the second eigenvalue)", font_size=22,
                       color=C.SURPRISE).next_to(ax, DOWN, buff=0.25)
         with self.voiceover(
-            "Now all twenty-seven letters, with part one's full table. Start from certainty: the letter q. "
-            "<bookmark mark='a'/> One step later, it's almost surely a u. <bookmark mark='b'/> Then the "
-            "possibilities spread out, <bookmark mark='c'/> and within about five steps the chain has forgotten "
-            "where it started: what's left is just the letter frequencies. <bookmark mark='d'/> How fast it forgets "
-            "is set by the matrix's second-largest eigenvalue, about 0.3 here: each step shrinks the distance that's "
-            "left by roughly that factor."
+            "Now all twenty-seven letters, with part one's full table. Start from certainty: the letter q. <bookmark "
+            "mark='a'/> One step later, it's almost surely a u. <bookmark mark='b'/> Then the possibilities spread "
+            f"out, <bookmark mark='c'/> and within {k_forget} steps the chain has forgotten where it started: what's "
+            "left is the letter frequencies. <bookmark mark='d'/> How fast it forgets is set by the matrix's "
+            f"second-largest eigenvalue, {lam2:.2f} here: each step shrinks the distance left by roughly that factor."
         ) as vo:
             self.play(FadeIn(sl), FadeIn(head), FadeIn(bars), FadeIn(tags[0]), Create(ghost), FadeIn(gl))
             self.play(Create(ax), FadeIn(yl), FadeIn(al), FadeIn(dots[0]))
@@ -241,14 +241,18 @@ class Markov(VoiceoverScene):
         bt = label(r"English is not reversible: \ of all letter pairs in Part 1's books", font_size=24, color=GREY_A)
         bt.next_to(bars, UP, buff=0.25).align_to(bars, LEFT)
         big = max(fij, fji) / min(fij, fji)
+        spoken = {" ": "space"}
+        x_, y_ = (b, a) if fji > fij else (a, b)  # the commoner order first
+        sx, sy = spoken.get(x_, x_), spoken.get(y_, y_)
+        why_ = ("Words end in e far more often than they start with it." if {a, b} == {" ", "e"} else
+                "Its flows run more one way than the other.")
         with self.voiceover(
-            "There is an easy way to know a distribution is stationary without solving for an eigenvector. "
-            "<bookmark mark='a'/> Suppose that, in it, as much probability flows from i to j in one step as from j "
-            "to i. That's called detailed balance. <bookmark mark='b'/> Sum over i, <bookmark mark='c'/> and pi "
-            "times P is pi: balanced flows mean nothing changes. <bookmark mark='d'/> It's enough, not necessary. "
-            f"English isn't balanced: the pair e then space is {big:.0f} times as common as space then e, because "
-            "words end in e far more often than they start with it. But when we build chains to sample from a "
-            "distribution, in chapter thirteen, detailed balance is how we make sure they land on it."
+            "There is an easy way to know a distribution is stationary. <bookmark mark='a'/> Suppose that, in it, as "
+            "much probability flows from i to j in one step as from j to i: detailed balance. <bookmark mark='b'/> "
+            "Sum over i, <bookmark mark='c'/> and pi times P is pi: balanced flows mean nothing changes. <bookmark "
+            f"mark='d'/> It's enough, not necessary. English isn't balanced: {sx} then {sy} is {big:.0f} times as "
+            f"common as {sy} then {sx}. <bookmark mark='e'/> {why_} But when we build chains to sample, in chapter thirteen, detailed balance "
+            "is how we make them land where we want."
         ) as vo:
             vo.wait_until("a")
             step(0)
@@ -296,15 +300,13 @@ class Markov(VoiceoverScene):
                    font_size=20, color=GREY_B).next_to(ax, DOWN, buff=0.65)
         k = list(betas).index(2.0)
         with self.voiceover(
-            "How fast a chain forgets is set by its second eigenvalue; one minus it is the spectral gap. A chain "
-            "with a bottleneck has a tiny gap. <bookmark mark='a'/> Here is a walk on forty-one sites, aiming at a "
-            "distribution with two wells and a barrier between them. Start at the left end. <bookmark mark='b'/> "
-            "The left well fills within a few hundred steps, <bookmark mark='c'/> but crossing the barrier takes "
-            f"hundreds of thousands: after {ts[-1]:,} steps the right well is still filling. <bookmark mark='d'/> "
-            "Raise the barrier and the gap shrinks. Plotted against one over the gap, the steps it takes to mix "
+            "One minus the second eigenvalue is the spectral gap, and a chain with a bottleneck has a tiny one. "
+            "<bookmark mark='a'/> Here is a walk on forty-one sites, aimed at a distribution with two wells and a "
+            "barrier between them, starting at the left end. <bookmark mark='b'/> The left well fills within a few "
+            f"hundred steps, <bookmark mark='c'/> but after {ts[-1]:,} steps the right well is still filling. "
+            "<bookmark mark='d'/> Raise the barrier and the gap shrinks. Against one over the gap, the steps to mix "
             f"rise along a line of slope {float(d['slope']):.2f}, from {int(tmix[0]):,} to {int(tmix[-1]):,}, between "
-            "the two bounds the theory gives. That is why samplers stuck between the modes of a distribution are "
-            "the central difficulty of chapter thirteen."
+            "the theory's two bounds. Stuck chains are the central difficulty of chapter thirteen."
         ) as vo:
             self.play(FadeIn(tl), FadeIn(head), FadeIn(bars), Create(ghost), FadeIn(gl), Create(Uc), FadeIn(Ul))
             vo.wait_until("a")
