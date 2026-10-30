@@ -34,9 +34,9 @@ class Disagree(VoiceoverScene):
         hc2 = note(r"also Kantamneni et al.\ (2025): \ $113$ datasets, \ no consistent win").next_to(hc, DOWN, buff=0.1).align_to(hc, LEFT)
         lo = float(min(raw.min(), s1.min(), s8.min()))
         g = axes([xs[0] - 0.3, xs[-1] + 0.3], [max(0.4, lo - 0.05), 1.0], x_length=6.0, y_length=3.4,
-                 xlabel=r"training examples", ylabel=r"accuracy, \ ``inside a quotation''", xticks=list(xs),
+                 xlabel=r"training examples", ylabel=r"accuracy, \ ``inside a quotation'' \ (novels model)", xticks=list(xs),
                  xfmt=lambda v: f"{int(round(2 ** v))}", yticks=ticks(max(0.4, lo - 0.05), 1.0, 3), center=[3.0, 0.3, 0])
-        cols = [(raw, PROBE, r"linear probe, \ all $128$ numbers"), (s8, SAEC, r"$8$ autoencoder latents"),
+        cols = [(raw, PROBE, r"linear probe, \ all $256$ numbers"), (s8, SAEC, r"$8$ autoencoder latents"),
                 (s1, FEAT, r"$1$ latent")]
         plots = VGroup()
         for arr, col, _ in cols:
@@ -47,8 +47,9 @@ class Disagree(VoiceoverScene):
         maj = float(d["probe_majority"])
         ood = [float(a[-1, :, 1].mean()) for a, _, _ in cols]
         ind = [float(a[-1, :, 0].mean()) for a, _, _ in cols]
-        res = label(rf"at ${ns[-1]:,}$ examples, \ the passage (a held-out novel): \\ linear ${100 * ood[0]:.0f}\%$, \ "
-                    rf"$8$ latents ${100 * ood[1]:.0f}\%$, \ $1$ latent ${100 * ood[2]:.0f}\%$".replace(",", "{,}"),
+        res = label(rf"at ${ns[-1]:,}$ examples, \ inside chat transcripts: \\ linear ${100 * ood[0]:.0f}\%$, \ "
+                    rf"$8$ latents ${100 * ood[1]:.0f}\%$, \ $1$ latent ${100 * ood[2]:.0f}\%$ \ (always guessing: \ "
+                    rf"${100 * float(d['probe_majority_ood']):.0f}\%$)".replace(",", "{,}"),
                     font_size=19, color=WHITE).to_corner(DL, buff=0.35)
         small = [float(a[0, :, 0].mean()) for a, _, _ in cols]
         verdict = (f"With few examples the latents help: at {ns[0]} examples, one latent scores "
@@ -57,7 +58,8 @@ class Disagree(VoiceoverScene):
                    f"Even with few examples the latents do not help: at {ns[0]}, {100 * small[2]:.0f} percent against "
                    f"{100 * small[0]:.0f}. ")
         verdict2 = (f"With plenty, the plain probe wins, {100 * ind[0]:.0f} percent against {100 * ind[1]:.0f} for "
-                    f"eight latents, and {100 * ood[0]:.0f} against {100 * ood[1]:.0f} on a novel it never saw."
+                    f"eight latents, and {100 * ood[0]:.0f} against {100 * ood[1]:.0f} inside chat transcripts, a "
+                    "kind of text neither was trained on."
                     if ind[0] >= ind[1] else
                     f"With plenty, eight latents match the probe, {100 * ind[1]:.0f} percent against {100 * ind[0]:.0f}.")
         with self.voiceover(
@@ -65,8 +67,9 @@ class Disagree(VoiceoverScene):
             "interpretability team reported that probes built on autoencoder latents lost to plain linear probes at "
             "detecting harmful intent, especially on new kinds of prompts, and deprioritized the research; a study "
             "of 113 datasets found no consistent win either. <bookmark mark='b'/> Try it on ours: detect 'inside a "
-            "quotation' from Part 13's vectors, with a linear probe on all 128 numbers, or with the eight or the one "
-            f"autoencoder latents that differ most, from {ns[0]} to {ns[-1]:,} examples, five draws each. "
+            f"quotation' in the novels model after block {int(d['probe_layer'])}, with a linear probe on all 256 numbers, "
+            "or with the eight or the one latents of an autoencoder trained here that differ most, from "
+            f"{ns[0]} to {ns[-1]:,} examples, five draws each. "
             f"<bookmark mark='c'/> {verdict}<bookmark mark='d'/>{verdict2}"
         ) as vo:
             self.play(FadeIn(hc), FadeIn(hc2))

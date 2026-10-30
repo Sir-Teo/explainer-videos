@@ -122,59 +122,70 @@ def ng_run(opt: str, lr: float, steps: int = 300, seed: int = 0, damping: float 
                 snap[str(t)] = torch.softmax(forward(grid)[0], -1)[:, 1].numpy().astype(np.float32).tolist()
         if t == steps or not math.isfinite(loss.item()):
             break
-        grads = torch.autograd.grad(loss, params, retain_graph=opt in ("ng", "kfac"))
-        with torch.no_grad():
-            if opt == "gd":
-                upd = list(grads)
-            elif opt == "adam":
-                upd = []
-                for i, g in enumerate(grads):
-                    adam_m[i].mul_(0.9).add_(g, alpha=0.1)
-                    adam_v[i].mul_(0.999).addcmul_(g, g, value=0.001)
-                    upd.append((adam_m[i] / (1 - 0.9 ** (t + 1))) / ((adam_v[i] / (1 - 0.999 ** (t + 1))).sqrt() + 1e-8))
-            elif opt == "ng":
-                pass
-        if opt == "ng":
-            # F = (1/n) sum_i J_i^T (diag p_i - p_i p_i^T) J_i; for two classes = (1/n) sum_i p0 p1 d_i d_i^T, d = J0 - J1
-            p_ = torch.softmax(logits, -1).detach()
-            diff = logits[:, 0] - logits[:, 1]
-            # row i: the gradient of example i's logit gap. diff_i depends on example i alone, so one backward
-            # pass gives each layer's d diff_i / d s_i, and the weight gradient is its outer product with the input
-            dpre = torch.autograd.grad(diff.sum(), pre, retain_graph=True)
-            cols = []
-            for a, dp in zip(acts, dpre):
-                cols += [(dp[:, :, None] * a.detach()[:, None, :]).reshape(n, -1), dp]
-            D = torch.cat(cols, 1) * (p_[:, 0] * p_[:, 1]).sqrt()[:, None]
-            gvec = torch.cat([g.reshape(-1) for g in grads])
-            K_ = D @ D.T / n  # F = D^T D / n has the same nonzero eigenvalues as this n x n matrix
-            lam = damping * float(torch.linalg.eigvalsh(K_).max())
-            # (D^T D / n + lam I)^-1 g, by Woodbury: (g - D^T (n lam I + D D^T)^-1 D g) / lam
-            nat = (gvec - D.T @ torch.linalg.solve(n * lam * torch.eye(n, dtype=D.dtype) + D @ D.T, D @ gvec)) / lam
-            upd, k = [], 0
-            for p in params:
-                upd.append(nat[k:k + p.numel()].reshape(p.shape))
-                k += p.numel()
-        elif opt == "kfac":
-            # gradients for labels drawn from the model: the true Fisher's factors
-            ys = torch.multinomial(torch.softmax(logits.detach(), -1), 1, generator=gen)[:, 0]
-            sl = torch.nn.functional.cross_entropy(logits, ys, reduction="sum")
-            gpre = torch.autograd.grad(sl, pre)
-            upd = []
-            with torch.no_grad():
-                for L, a, gp, (gw, gb) in zip(layers, acts, gpre, zip(grads[0::2], grads[1::2])):
-                    a1 = torch.cat([a, torch.ones(n, 1, dtype=a.dtype)], 1)
-                    A = a1.T @ a1 / n
-                    G = gp.T @ gp / n
-                    dA = math.sqrt(damping * float(torch.linalg.eigvalsh(A).max()))
-                    dG = math.sqrt(damping * float(torch.linalg.eigvalsh(G).max()))
-                    Wg = torch.cat([gw, gb[:, None]], 1)
-                    U = torch.linalg.solve(G + dG * torch.eye(len(G), dtype=G.dtype), Wg)
-                    U = torch.linalg.solve(A + dA * torch.eye(len(A), dtype=A.dtype), U.T).T
-                    upd += [U[:, :-1], U[:, -1]]
+        try:
+            upd = _ng_update(opt, loss, logits, acts, pre, params, layers, t, adam_m, adam_v, gen, n, damping)
+        except RuntimeError:  # a singular factor: the run has blown up
+            curve.append((t + 1, float("nan"), 0.0))
+            break
         with torch.no_grad():
             for p, u in zip(params, upd):
                 p -= lr * u
     return dict(curve=curve, snaps=snap, P=P)
+
+
+def _ng_update(opt, loss, logits, acts, pre, params, layers, t, adam_m, adam_v, gen, n, damping):
+    import torch
+
+    grads = torch.autograd.grad(loss, params, retain_graph=opt in ("ng", "kfac"))
+    with torch.no_grad():
+        if opt == "gd":
+            upd = list(grads)
+        elif opt == "adam":
+            upd = []
+            for i, g in enumerate(grads):
+                adam_m[i].mul_(0.9).add_(g, alpha=0.1)
+                adam_v[i].mul_(0.999).addcmul_(g, g, value=0.001)
+                upd.append((adam_m[i] / (1 - 0.9 ** (t + 1))) / ((adam_v[i] / (1 - 0.999 ** (t + 1))).sqrt() + 1e-8))
+    if opt == "ng":
+        # F = (1/n) sum_i J_i^T (diag p_i - p_i p_i^T) J_i; for two classes = (1/n) sum_i p0 p1 d_i d_i^T, d = J0 - J1
+        p_ = torch.softmax(logits, -1).detach()
+        diff = logits[:, 0] - logits[:, 1]
+        # row i: the gradient of example i's logit gap. diff_i depends on example i alone, so one backward
+        # pass gives each layer's d diff_i / d s_i, and the weight gradient is its outer product with the input
+        dpre = torch.autograd.grad(diff.sum(), pre, retain_graph=True)
+        cols = []
+        for a, dp in zip(acts, dpre):
+            cols += [(dp[:, :, None] * a.detach()[:, None, :]).reshape(n, -1), dp]
+        D = torch.cat(cols, 1) * (p_[:, 0] * p_[:, 1]).sqrt()[:, None]
+        gvec = torch.cat([g.reshape(-1) for g in grads])
+        K_ = D @ D.T / n  # F = D^T D / n has the same nonzero eigenvalues as this n x n matrix
+        lam = damping * float(torch.linalg.eigvalsh(K_).max())
+        # (D^T D / n + lam I)^-1 g, by Woodbury: (g - D^T (n lam I + D D^T)^-1 D g) / lam
+        nat = (gvec - D.T @ torch.linalg.solve(n * lam * torch.eye(n, dtype=D.dtype) + D @ D.T, D @ gvec)) / lam
+        upd, k = [], 0
+        for p in params:
+            upd.append(nat[k:k + p.numel()].reshape(p.shape))
+            k += p.numel()
+    elif opt == "kfac":
+        # gradients for labels drawn from the model: the true Fisher's factors
+        ys = torch.multinomial(torch.softmax(logits.detach(), -1), 1, generator=gen)[:, 0]
+        sl = torch.nn.functional.cross_entropy(logits, ys, reduction="sum")
+        gpre = torch.autograd.grad(sl, pre)
+        upd = []
+        with torch.no_grad():
+            for L, a, gp, (gw, gb) in zip(layers, acts, gpre, zip(grads[0::2], grads[1::2])):
+                a1 = torch.cat([a, torch.ones(n, 1, dtype=a.dtype)], 1)
+                A = a1.T @ a1 / n
+                G = gp.T @ gp / n
+                dA = math.sqrt(damping * float(torch.linalg.eigvalsh(A).max()))
+                dG = math.sqrt(damping * float(torch.linalg.eigvalsh(G).max()))
+                Wg = torch.cat([gw, gb[:, None]], 1)
+                U = torch.linalg.solve(G + dG * torch.eye(len(G), dtype=G.dtype), Wg)
+                U = torch.linalg.solve(A + dA * torch.eye(len(A), dtype=A.dtype), U.T).T
+                upd += [U[:, :-1], U[:, -1]]
+    if not all(bool(torch.isfinite(u).all()) for u in upd):
+        raise RuntimeError("non-finite update")
+    return upd
 
 
 # ---------------------------------------------------------------------------

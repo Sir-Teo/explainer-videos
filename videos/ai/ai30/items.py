@@ -1399,23 +1399,54 @@ def compute_disagree():
     out["seed_share"] = [float(np.mean(b_ >= 0.7)) for b_ in best]
     Wl = [C.load_dict(C.dict_dir() / f"l1_2_{s}.pt")[0].Wd.numpy() for s in (0, 1)]
     out["seed_share_l1"] = float(np.mean(dicts.match(Wl[0], Wl[1]) >= 0.7))
-    # (2) sparse probing: "inside a quotation", per character
-    lab_va = tf_quote_labels(data["valid"], chars)
-    pos = np.array([int(v["starts"][w]) + 64 + o for w in range(len(v["starts"])) for o in range(v["T64"])])
-    y = torch.tensor(lab_va[pos]).float()
-    ps = data["passage"]
-    lab_ps = tf_quote_labels(ps, chars)
-    starts_ps = np.arange(0, len(ps) - c13.CTX - 1, 192)[:200]
-    Wps = torch.stack([ps[s:s + c13.CTX] for s in starts_ps])
-    Aps = acts.tf_collect(model, c13, Wps, layers=(C.LAYER,))[("post", C.LAYER)]
-    Xps = (Aps - v["mu"]) / v["sig"]
-    yps = torch.tensor(np.array([lab_ps[s + 64 + o] for s in starts_ps for o in range(c13.CTX - 64)])).float()
-    sae, _ = C.load_dict(C.dict_dir() / "topk_16_0.pt")
-    g = torch.Generator().manual_seed(3)
-    perm = torch.randperm(len(X), generator=g)
-    pool, test = perm[: len(X) // 2], perm[len(X) // 2:][:40000]
+    # (2) sparse probing on the novels model (where "inside a quotation" is decodable, chapter 2): a TopK
+    # autoencoder on its residual stream after block 5, trained here; then a linear probe on all 256 numbers
+    # against probes on the 1 or 8 latents that differ most between the classes, from 16 to 4,096 examples; tested
+    # on held-out novel text and, out of distribution, inside Part 27's chat transcripts
+    from explainer.ai import novels as N
+    from videos.ai.ai27 import compute as c27
+    from videos.ai.ai27 import post as P27
+
+    nov = N.load_base()
+    train_ids, valid_ids = N.token_arrays()
+    lay = 5
+    strs = acts.token_strings(range(N.tokenizer().get_vocab_size()))
+
+    def quote_labels(ids):
+        lab, inside = np.zeros(len(ids), bool), False
+        for i, t in enumerate(ids):
+            for ch in strs[int(t)]:
+                if ch == "\n":
+                    inside = False
+                elif ch == '"':
+                    inside = not inside
+            if strs[int(t)].startswith("<|"):
+                inside = False
+            lab[i] = inside
+        return lab
+
+    def resid_of(Wt):
+        hs, _ = acts.nov_resid(nov, Wt)
+        return hs[lay][:, 8:].reshape(-1, nov.cfg.d)
+
+    sc_ = min(1.0, C.SCALE * 4)
+    st_tr, W_tr = acts.nov_windows(train_ids, max(30, int(400 * sc_)), 128, 4001)
+    st_va, W_va = acts.nov_windows(valid_ids, max(20, int(160 * sc_)), 128, 4002)
+    H_tr, H_va = resid_of(W_tr), resid_of(W_va)
+    lab_tr = np.concatenate([quote_labels(train_ids[s:s + 128])[8:] for s in st_tr])
+    lab_va = np.concatenate([quote_labels(valid_ids[s:s + 128])[8:] for s in st_va])
+    dd = c27.load("data")
+    chats = [P27.chat(c27.which_q(s_), t_) for s_, t_ in dd["which_test"] if '"' in s_][:300]
+    H_ch = torch.cat([acts.nov_resid(nov, torch.tensor([ids]))[0][lay][0] for ids in chats])
+    lab_ch = np.concatenate([quote_labels(ids) for ids in chats])
+    mu_n = H_tr.mean(0)
+    sg_n = float(((H_tr - mu_n) ** 2).sum(1).mean().sqrt()) / math.sqrt(H_tr.shape[1])
+    Ztr, Zva, Zch = ((h - mu_n) / sg_n for h in (H_tr, H_va, H_ch))
+    nsae, _ = dicts.train(Ztr, "topk", 32, F=1024, steps=C.steps(2000), batch=1024, seed=0)
+    out["nov_sae_fvu"] = dicts.evaluate(nsae, Zva)["fvu"]
+    y_tr, y_va, y_ch = (torch.tensor(l_).float() for l_ in (lab_tr, lab_va, lab_ch))
     with torch.no_grad():
-        Ft, Fps = dicts.encode(sae, X[test]), dicts.encode(sae, Xps)
+        Fva, Fch = dicts.encode(nsae, Zva), dicts.encode(nsae, Zch)
 
     def fit(Z, yy, Zt_list, steps=300, l2=1e-3):
         mu, sd = Z.mean(0), Z.std(0) + 1e-6
@@ -1438,24 +1469,26 @@ def compute_disagree():
     for si, n in enumerate(DIS["sizes"]):
         for dr in range(DIS["draws"]):
             gg = np.random.Generator(np.random.PCG64(1000 * si + dr))
-            idx = pool[torch.tensor(gg.choice(len(pool), n, replace=False))]
-            yy = y[idx]
+            idx = torch.tensor(gg.choice(len(Ztr), min(n, len(Ztr)), replace=False))
+            yy = y_tr[idx]
             if yy.min() == yy.max():
                 yy = yy.clone()
                 yy[0] = 1 - yy[0]
-            res["raw"][si, dr] = fit(X[idx], yy, [(X[test], y[test]), (Xps, yps)])
-            # the latents whose mean activation differs most between the classes, on the training examples
+            res["raw"][si, dr] = fit(Ztr[idx], yy, [(Zva, y_va), (Zch, y_ch)])
             with torch.no_grad():
-                Fi = dicts.encode(sae, X[idx])
+                Fi = dicts.encode(nsae, Ztr[idx])
             diff = (Fi[yy > 0.5].mean(0) - Fi[yy < 0.5].mean(0)).abs()
             for kk in DIS["k_latents"]:
                 j = torch.topk(diff, kk).indices
-                res[f"sae{kk}"][si, dr] = fit(Fi[:, j], yy, [(Ft[:, j], y[test]), (Fps[:, j], yps)])
+                res[f"sae{kk}"][si, dr] = fit(Fi[:, j], yy, [(Fva[:, j], y_va), (Fch[:, j], y_ch)])
     for k_, val in res.items():
         out[f"probe_{k_}"] = val
     out["probe_sizes"] = list(DIS["sizes"])
-    out["probe_majority"] = float(max(y[test].mean(), 1 - y[test].mean()))
-    out["probe_majority_ood"] = float(max(yps.mean(), 1 - yps.mean()))
+    out["probe_layer"] = lay
+    out["probe_majority"] = float(max(y_va.mean(), 1 - y_va.mean()))
+    out["probe_majority_ood"] = float(max(y_ch.mean(), 1 - y_ch.mean()))
+    out["n_probe_pool"], out["n_probe_test"], out["n_probe_ood"] = int(len(Ztr)), int(len(Zva)), int(len(Zch))
+    sae, _ = C.load_dict(C.dict_dir() / "topk_16_0.pt")
     # (3) a random transformer
     torch.manual_seed(1)
     rnd = c13.build_tf(len(chars)).eval()

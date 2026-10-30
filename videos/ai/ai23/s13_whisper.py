@@ -37,6 +37,20 @@ class Whisper(VoiceoverScene):
                              r"nearly a hundred languages", font_size=20, color=SND_C))
         right.arrange(DOWN, aligned_edge=LEFT, buff=0.26).scale(1.2).move_to([3.4, 0.2, 0])
         div = Line([0, 2.6, 0], [0, -2.4, 0], color=GREY_D)
+        # schematics under each column: masked frames to fill in; audio paired with its web transcript
+        cells = VGroup(*[Square(0.34, stroke_color=C.CONTEXT, stroke_width=1.5, fill_color=C.CONTEXT,
+                                fill_opacity=0.08 if k in (3, 4, 7) else 0.45) for k in range(10)]).arrange(RIGHT, buff=0.05)
+        qs = VGroup(*[label(r"?", font_size=20, color=C.CONTEXT).move_to(cells[k]) for k in (3, 4, 7)])
+        lsch = VGroup(cells, qs, label(r"masked frames: \ which candidate was hidden here?", font_size=18,
+                                       color=GREY_B).next_to(cells, DOWN, buff=0.12))
+        lsch.move_to([-3.4, -2.0, 0])
+        wav = VMobject(stroke_color=GREY_A, stroke_width=2).set_points_smoothly(
+            [[-1.0 + 2.0 * i / 59, 0.22 * np.sin(i * 0.9) * np.sin(np.pi * i / 59), 0] for i in range(60)])
+        tr_ = data_text("“the cat sat …”", font="DejaVu Sans", font_size=20, color=SND_C)
+        pair = VGroup(wav, MathTex(r"+", font_size=30, color=GREY_B), tr_).arrange(RIGHT, buff=0.25)
+        rsch = VGroup(pair, label(r"audio and a transcript someone posted", font_size=18,
+                                  color=GREY_B).next_to(pair, DOWN, buff=0.12)).move_to([3.4, -2.0, 0])
+        tagl = note(r"schematic", font_size=16).next_to(lsch, LEFT, buff=0.2)
         cite_ = cite(r"A.~Baevski et al.\ (2020); \ A.~Radford et al., \textit{Robust Speech Recognition via Large-Scale "
                      r"Weak Supervision} (2022)", corner=DR)
         with self.voiceover(
@@ -49,11 +63,13 @@ class Whisper(VoiceoverScene):
             "audio paired with transcripts found on the web, imperfect ones and all, one model that transcribes, "
             "translates, names the language and times the words, in nearly a hundred languages."
         ) as vo:
-            self.play(Create(div), FadeIn(cite_))
+            self.play(Create(div), FadeIn(cite_), FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in left], lag_ratio=0.4), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in left[1:]], lag_ratio=0.4), run_time=3.0)
+            self.play(FadeIn(lsch), FadeIn(tagl))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in right], lag_ratio=0.4), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in right[1:]], lag_ratio=0.4), run_time=3.0)
+            self.play(FadeIn(rsch))
         self.wait(0.3)
         self.clear_scene()
 

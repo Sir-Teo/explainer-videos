@@ -297,7 +297,12 @@
   "Queries, \\ keys, \\ or values: \\ which carries the message?": "查询，\\ 键，\\ 还是值：\\ 消息走的是哪个？",
   "Same size, \\ same steps: \\ L1, \\ JumpReLU or TopK?": "同样大小，\\ 同样步数：\\ L1，\\ JumpReLU还是TopK？",
   "The circuit: \\ when the test loss falls, \\ or before?": "回路：\\ 在测试损失下降时出现，\\ 还是更早？",
-  "TopK, $k = 16$; \\ the same data and steps; \\ children: \\ decoder cosine above $0.4$, \\ the same character": "TopK，$k = 16$；\\ 同样的数据和步数；\\ 孩子：\\ 解码器余弦大于 $0.4$，\\ 同一个字符"
+  "TopK, $k = 16$; \\ the same data and steps; \\ children: \\ decoder cosine above $0.4$, \\ the same character": "TopK，$k = 16$；\\ 同样的数据和步数；\\ 孩子：\\ 解码器余弦大于 $0.4$，\\ 同一个字符",
+  "linear probe, \\ all $256$ numbers": "线性探针，\\ 全部 $256$ 个数",
+  "$8$ autoencoder latents": "$8$ 个自编码器潜变量",
+  "$1$ latent": "$1$ 个潜变量",
+  "accuracy, \\ ``inside a quotation'' \\ (novels model)": "准确率，\\ “在引号里面” \\ （小说模型）",
+  "training examples": "训练样本"
  },
  "patterns": [
   [
@@ -653,10 +658,6 @@
    "同样的结构，\\ 随机权重：\\ 平均 $\\1$"
   ],
   [
-   "^at \\$([^$]+)\\$ examples, \\\\ the passage \\(a held-out novel\\): \\\\\\\\ linear \\$([^$]+)\\$, \\\\ \\$8\\$ latents \\$([^$]+)\\$, \\\\ \\$1\\$ latent \\$([^$]+)\\$$",
-   "在 $\\1$ 个样本时，\\ 测试段落（一部留出的小说）：\\\\\\\\ 线性 $\\2$，\\ $8$ 个潜变量 $\\3$，\\ $1$ 个潜变量 $\\4$"
-  ],
-  [
    "^ours, \\\\ TopK, \\\\ \\$512\\$ latents: \\\\\\\\ \\$([^$]+)\\$--\\$([^$]+)\\$ recur across the three pairs of seeds; \\\\\\\\ L1: \\\\ \\$([^$]+)\\$$",
    "我们的，\\ TopK，\\ $512$ 个潜变量：\\\\\\\\ 在三对种子之间有 $\\1$--$\\2$ 重复出现；\\\\\\\\ L1：\\ $\\3$"
   ],
@@ -675,6 +676,10 @@
   [
    "^the sparsest: \\\\ TopK \\$k = ([^$]+)\\$: \\\\ \\$([^$]+)\\$ dead; \\\\ JumpReLU \\$\\\\lambda = ([^$]+)\\$: \\\\ \\$([^$]+)\\$ \\\\ \\(means of \\$3\\$ seeds\\)$",
    "最稀疏的：\\ TopK $k = \\1$：\\ 死了 $\\2$ 个；\\ JumpReLU $\\lambda = \\3$：\\ 死了 $\\4$ 个 \\ （$3$ 个种子的平均）"
+  ],
+  [
+   "^at \\$([^$]+)\\$ examples, \\\\ inside chat transcripts: \\\\\\\\ linear \\$([^$]+)\\$, \\\\ \\$8\\$ latents \\$([^$]+)\\$, \\\\ \\$1\\$ latent \\$([^$]+)\\$ \\\\ \\(always guessing: \\\\ \\$([^$]+)\\$\\)$",
+   "在 $\\1$ 个样本时，\\ 在聊天记录里：\\\\\\\\ 线性 $\\2$，\\ $8$ 个潜变量 $\\3$，\\ $1$ 个潜变量 $\\4$ \\ （总猜一个：\\ $\\5$）"
   ]
  ]
 }

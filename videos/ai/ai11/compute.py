@@ -352,6 +352,18 @@ def compute_noise():
         out[f"path{B}"] = np.array(path)
         out[f"cloud{B}"] = np.array(cloud)
         out[f"spread{B}"] = float(np.sqrt(((np.array(cloud) - w_star) ** 2).sum(1).mean()))
+    # Robbins and Monro: one page per step, a constant step against steps that shrink like 1/k
+    K = 20_000
+    for kind in ("constant", "decay"):
+        dist = np.zeros(K)
+        for sd in range(5):
+            g = rng(77 + sd)
+            w = np.array([-1.0, 0.2])
+            for k in range(K):
+                eta = lr if kind == "constant" else lr / (1 + k / 100)
+                w = w - eta * grad(w, g.integers(0, n, 1))
+                dist[k] += float(((w - w_star) ** 2).sum()) / 5
+        out[f"rm_{kind}"] = dist
     return out
 
 
@@ -524,7 +536,7 @@ def compute_decay():
 # ---------------------------------------------------------------------------
 # 8. The natural gradient
 # ---------------------------------------------------------------------------
-NG_LRS = {"gd": [0.3, 1.0, 3.0, 10.0, 30.0], "adam": [1e-3, 3e-3, 1e-2, 3e-2, 1e-1],
+NG_LRS = {"gd": [0.3, 1.0, 3.0, 10.0, 30.0], "adam": [3e-3, 1e-2, 3e-2, 1e-1, 3e-1],
           "kfac": [0.03, 0.1, 0.3, 1.0, 3.0], "ng": [0.03, 0.1, 0.3, 1.0, 3.0]}
 NG_SEEDS = (0, 1, 2)
 
