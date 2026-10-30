@@ -107,7 +107,7 @@ class DoubleDescent(VoiceoverScene):
         else:
             size = "Past the peak, the smallest fit's weights shrink as features are added. "
         with self.voiceover(
-            f"{opening}Belkin and colleagues named it double descent in 2019, and Nakkiran and colleagues found it in deep "
+            f"In short: {opening}Belkin and colleagues named it double descent in 2019, and Nakkiran and colleagues found it in deep "
             "networks the same year. <bookmark mark='a'/> The training error is zero all along the second descent, so "
             "it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is "
             "the simplest. <bookmark mark='n'/> " + size

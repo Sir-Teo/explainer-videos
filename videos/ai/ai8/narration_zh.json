@@ -2,11 +2,25 @@
  "title": "人工智能，从零搭建 · 第8部分：拟合与泛化",
  "chapters": {
   "Hook": "差距",
-  "BiasVariance": "1. 偏差与方差",
+  "BiasVariance": "2. 偏差与方差，推导",
   "Capacity": "2. 模型能拟合多少？",
-  "RandomLabels": "3. 记住毫无意义的东西",
-  "DoubleDescent": "4. 双下降",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "RandomLabels": "9. 记住毫无意义的东西",
+  "DoubleDescent": "12. 双下降",
+  "Outro": "回顾、习题，以及接下来",
+  "Risk": "1. 风险，以及最好的规则",
+  "Hoeffding": "3. 一条规则，然后是很多条",
+  "VC": "4. 打散与VC界",
+  "Rademacher": "5. 拉德马赫复杂度",
+  "Margins": "6. 间隔",
+  "PACBayes": "7. PAC-贝叶斯：一个有意义的界",
+  "Stability": "8. 压缩与稳定性",
+  "MinNorm": "10. 隐式偏好：最小的拟合",
+  "MaxMargin": "11. 隐式偏好：最宽的间隔",
+  "MoreDescents": "13. 样本数与训练轮数上的双下降",
+  "Benign": "14. 良性过拟合",
+  "Sharpness": "15. 平坦极小值与尖锐度之争",
+  "Shift": "16. 分布偏移",
+  "Memorization": "17. 语言模型里的记忆"
  },
  "lines": {
   "669045436b7e": {
@@ -14,104 +28,417 @@
    "en": "In part six, a model that asked only its single nearest neighbour got 93 percent of its own training pages right, and only 68 percent of new ones. <bookmark mark='a'/> Let more neighbours vote, and the two error rates meet. <bookmark mark='b'/> That gap is the central question of machine learning. A model is fitted to examples. Why should it work on anything else?",
    "zh": "在第6部分，有一个模型只问离它最近的1个邻居，它对自己的训练页能判对93%，对新的书页却只有68%。<bookmark mark='a'/>让更多的邻居来投票，两个错误率就会汇到一起。<bookmark mark='b'/>这道差距，正是机器学习的核心问题。模型是根据样本拟合出来的。凭什么它在别的东西上也管用？"
   },
-  "c655545fba1d": {
+  "e6d1424c94d7": {
    "scene": "Hook",
-   "en": "This part follows that question through the classical answers, bias and variance, and the capacity of a model, <bookmark mark='a'/> and then to two experiments that broke them: networks that memorize nonsense, and a curve that comes back down.",
-   "zh": "这一部分，就顺着这个问题走下去：先看经典的回答，偏差与方差，还有模型的容量，<bookmark mark='a'/>再看推翻了它们的两个实验：能把毫无意义的东西背下来的网络，还有一条又降回来的曲线。"
+   "en": "The question is old, and so are the first answers. In 1963 Wassily Hoeffding showed how tightly an average of many independent draws gathers around its mean. <bookmark mark='a'/> In 1971 Vladimir Vapnik and Alexey Chervonenkis turned that into a theory of learning: what a model can learn depends on how much it could fit. <bookmark mark='b'/> In 1984 Leslie Valiant defined learning itself, probably approximately correct. <bookmark mark='c'/> In 1992 Geman, Bienenstock and Doursat named the dilemma of bias against variance; <bookmark mark='d'/> in 1999 David McAllester gave bounds for averages of models, <bookmark mark='e'/> and in 2002 Bartlett and Mendelson measured capacity by fitting noise. <bookmark mark='f'/> Then deep learning broke the picture: in 2017 Zhang and colleagues showed networks memorizing random labels, <bookmark mark='g'/> in 2019 Belkin and colleagues found test error falling again past the point of fitting everything, <bookmark mark='h'/> and in 2020 Bartlett and colleagues proved when fitting noise is harmless. <bookmark mark='i'/> From 2021, Carlini and colleagues pulled training text out of language models, <bookmark mark='j'/> and by 2025 there were bounds that say something real about large language models, and courts ruling on what they memorize.",
+   "zh": "这个问题很老，最早的回答也一样老。1963年，瓦西里·霍夫丁证明了，许多次独立抽样的平均值，会多么紧地聚集在它的均值周围。<bookmark mark='a'/>1971年，弗拉基米尔·瓦普尼克和阿列克谢·切尔沃年基斯把它变成了一套学习理论：一个模型能学会什么，取决于它能拟合多少东西。<bookmark mark='b'/>1984年，莱斯利·瓦利安特给“学习”本身下了定义：概率近似正确。<bookmark mark='c'/>1992年，杰曼、比嫩斯托克和杜尔萨给偏差与方差之间的两难起了名字；<bookmark mark='d'/>1999年，戴维·麦卡莱斯特给模型的平均给出了界，<bookmark mark='e'/>2002年，巴特利特和门德尔松用拟合噪声的能力来衡量容量。<bookmark mark='f'/>然后，深度学习打破了这幅图景：2017年，张驰原和同事们发现网络能把随机标签全部记住，<bookmark mark='g'/>2019年，贝尔金和同事们发现，越过了能把一切都拟合的那一点之后，测试误差又降了下来，<bookmark mark='h'/>2020年，巴特利特和同事们证明了拟合噪声在什么时候是无害的。<bookmark mark='i'/>从2021年起，卡里尼和同事们从语言模型里挖出了训练文本，<bookmark mark='j'/>到了2025年，已经有了对大语言模型真正说明问题的界，也有了法院就它们记住的东西作出的判决。"
   },
-  "7fb9a5fdcff9": {
+  "7e875198d164": {
+   "scene": "Hook",
+   "en": "This is Part 8 of AI, Built: fitting and generalizing, or why models work on data they've never seen. <bookmark mark='a'/> In it: risk, the quantity we really care about, and the best any model could do; bias and variance, derived; <bookmark mark='b'/> how one rule's score on test data can be trusted, and what changes when we choose among many; <bookmark mark='c'/> capacity, measured three ways, each with the guarantee it buys; <bookmark mark='d'/> bounds that still say something for neural networks; <bookmark mark='e'/> the experiments that broke the classical story, and the explanations since; <bookmark mark='f'/> and finally what happens when the test data comes from somewhere else, and what a language model remembers word for word.",
+   "zh": "这是《人工智能，从零搭建》的第8部分：拟合与泛化，也就是模型为什么能在从没见过的数据上管用。<bookmark mark='a'/>本部分讲：风险，我们真正在乎的量，以及任何模型最好能做到什么程度；推导偏差与方差；<bookmark mark='b'/>一条规则在测试数据上的分数什么时候可信，在很多条规则里挑选时又有什么不同；<bookmark mark='c'/>用三种方法衡量容量，以及每种方法换来的保证；<bookmark mark='d'/>对神经网络依然有意义的界；<bookmark mark='e'/>推翻了经典图景的那些实验，以及此后的解释；<bookmark mark='f'/>最后讲测试数据来自别处时会发生什么，以及语言模型会一字不差地记住什么。"
+  },
+  "9a410d9a0318": {
+   "scene": "Risk",
+   "en": "Chapter one. Risk, and the best possible rule.",
+   "zh": "第1章。风险，以及最好的规则。"
+  },
+  "b3144ccb4e1f": {
+   "scene": "Risk",
+   "en": "To say what generalizing means, we need two numbers. Here's a problem small enough to know completely: two classes, equally likely, each with its own spread of a single measurement x. <bookmark mark='a'/> A sample is forty points drawn from it. <bookmark mark='b'/> A rule h guesses the class from x, and the loss is one when it's wrong. Its risk is the expected loss over everything the world could send, the error rate on data it has never seen. <bookmark mark='c'/> Its empirical risk is the average loss on the sample we have: the training error. Generalizing means the second is a good guide to the first, even for a rule we chose by looking at the sample.",
+   "zh": "要说清楚什么叫泛化，我们需要两个数。这里有一个小到可以完全了解的问题：两个类别，出现的可能性相同，每个类别的单个测量值x各有自己的分布。<bookmark mark='a'/>一个样本，就是从中抽出的40个点。<bookmark mark='b'/>一条规则h根据x猜类别，猜错时损失为1。它的风险，是世界可能送来的一切数据上的期望损失，也就是它在从没见过的数据上的错误率。<bookmark mark='c'/>它的经验风险，是在我们手头这个样本上的平均损失：训练误差。所谓泛化，就是后者能很好地指示前者，哪怕这条规则正是我们看着这个样本挑出来的。"
+  },
+  "11af286cf86d": {
+   "scene": "Risk",
+   "en": "What's the best any rule could do? Average over x the chance that the guess at x is wrong. <bookmark mark='a'/> At each x the true class is one with some probability, eta of x; the best guess picks the likelier class, and is wrong with the smaller of eta and one minus eta. <bookmark mark='b'/> So no rule beats the average of that minimum: the Bayes risk, here the area where the two curves overlap, 0.217. The rule that achieves it says one wherever class one is the likelier: here, on an interval. <bookmark mark='c'/> It needs the true distribution, which we never have; it's the floor to measure learners against. Cover and Hart showed in 1967 that a single nearest neighbour, with endless data, errs at most twice as often.",
+   "zh": "任何规则最好能做到什么程度？对x求平均：在x处猜错的概率。<bookmark mark='a'/>在每个x处，真实类别是1的概率为η(x)；最好的猜法是选更可能的那个类别，它猜错的概率是η和1减η中较小的那个。<bookmark mark='b'/>所以没有哪条规则能低于这个最小值的平均：贝叶斯风险，在这里就是两条曲线重叠部分的面积，0.217。达到它的规则，在类别1更可能的地方都说1：在这里，是一个区间。<bookmark mark='c'/>它需要知道真实的分布，而我们永远不知道；它是衡量学习器的底线。1967年，科弗和哈特证明了，只看最近的1个邻居，在数据无穷多时，错误率至多是它的两倍。"
+  },
+  "f8f4884dc24d": {
+   "scene": "Risk",
+   "en": "Now a learner. Suppose it may only use thresholds: say one if x is above t. It picks the threshold with the fewest training errors. <bookmark mark='a'/> From forty points, thirty times, the chosen threshold jumps around the best one. <bookmark mark='b'/> Average over 400 samples at each size. With 10 examples, the training error is 15 percent, but the true risk of the chosen rule is 27: the training error is optimistic, because the rule was picked to look good on exactly those points. <bookmark mark='c'/> With 2,560, both settle near 23.0 percent, the best threshold's risk, and stay above the Bayes risk, 21.7. <bookmark mark='d'/> That splits the excess risk in two: approximation, because no threshold can draw an interval, and estimation, because the sample is finite. More data shrinks only the second; a richer family shrinks the first, and the rest of this part is about what it costs the second.",
+   "zh": "现在来一个学习器。假设它只能用阈值：x大于t就说1。它挑训练错误最少的那个阈值。<bookmark mark='a'/>每次用40个点，做30次，挑出来的阈值在最好的那个周围跳来跳去。<bookmark mark='b'/>在每个样本量下，对400个样本求平均。只有10个样本时，训练误差是15%，可挑出来的规则真实风险是27%：训练误差太乐观了，因为这条规则正是挑来在这些点上显得好看的。<bookmark mark='c'/>有2560个样本时，两者都稳定在23.0%附近，也就是最好的阈值的风险，并且一直高于贝叶斯风险21.7%。<bookmark mark='d'/>这样，超出的风险就分成了两部分：近似误差，因为任何阈值都画不出一个区间；估计误差，因为样本是有限的。更多数据只能缩小后者；更丰富的模型族能缩小前者，而本部分接下来讲的，就是这会让后者付出什么代价。"
+  },
+  "9d6b85914146": {
    "scene": "BiasVariance",
-   "en": "Chapter one. Bias and variance.",
-   "zh": "第1章。偏差与方差。"
+   "en": "Chapter two. Bias and variance.",
+   "zh": "第2章。偏差与方差。"
   },
-  "b33c7b6e3bc6": {
+  "4df119166f0d": {
    "scene": "BiasVariance",
-   "en": "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit again, and again: it misses the curve's shape in the same way every time. That systematic miss is bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree 5, the fits hug the truth.",
-   "zh": "先来看经典的回答，放在一个小到能看清一切的场景里：一条光滑的曲线，还有从它上面抽取的16个带噪声的点。<bookmark mark='a'/>拟合一条直线。再抽16个新的点，重新拟合，一次又一次：它每次都以同样的方式，抓不住曲线的形状。这种系统性的偏离，就是偏差。<bookmark mark='b'/>拟合一个12次多项式：也就是x的各次幂之和，一直加到x的12次方。次数，也就是最高的幂，大致就是这条曲线能拐几个弯。它把这些点一个个串了起来，但每抽一批新的点，得到的曲线都大不相同。这就是方差。<bookmark mark='c'/>介于两者之间，在5次时，拟合出的曲线紧贴着真实曲线。"
+   "en": "The classical answer starts with a setting small enough to see everything: a smooth curve, and sixteen noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit again, and again: it misses the curve's shape in the same way every time. That systematic miss is bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree 5, the fits hug the truth.",
+   "zh": "经典的回答，从一个小到能看清一切的场景讲起：一条光滑的曲线，还有从它上面抽取的16个带噪声的点。<bookmark mark='a'/>拟合一条直线。再抽16个新的点，重新拟合，一次又一次：它每次都以同样的方式，抓不住曲线的形状。这种系统性的偏离，就是偏差。<bookmark mark='b'/>拟合一个12次多项式：也就是x的各次幂之和，一直到x的12次方。次数，也就是最高的幂次，大致决定了曲线能拐几道弯。它从每个点穿过，可每次重新抽样，都得到一条截然不同的曲线。这就是方差。<bookmark mark='c'/>在两者之间，5次的拟合紧贴着真相。"
   },
-  "83bff41bc08f": {
+  "3c0a99b18dce": {
    "scene": "BiasVariance",
-   "en": "Averaged over many draws, the error on new data splits exactly into three parts. <bookmark mark='a'/> Bias squared: how far the average fit is from the truth. It falls as the model gets more flexible. <bookmark mark='b'/> Variance: how much the fit jumps from draw to draw. It rises. <bookmark mark='c'/> And the noise, which no model can remove. Their sum is a U, and the best model sits at its bottom: flexible enough, but no more. For thirty years, that was the textbook picture.",
-   "zh": "对许多次抽样取平均，模型在新数据上的误差，恰好能拆成三部分。<bookmark mark='a'/>偏差的平方：平均的拟合结果离真相有多远。模型越灵活，它就越小。<bookmark mark='b'/>方差：拟合结果在一次次抽样之间跳动得有多厉害。它会变大。<bookmark mark='c'/>还有噪声，任何模型都消除不了。三者之和是一个U形，最好的模型就待在U形的底部：足够灵活，但不过头。30年来，这就是教科书里的图景。"
+   "en": "Why does the error split that way? Fix a point x. The answer y is the true curve f plus noise of variance sigma squared, and the fit f hat depends on the random training set. <bookmark mark='a'/> The noise is independent of the fit and averages to zero, so the cross term vanishes: the noise variance comes off on its own. <bookmark mark='b'/> In what's left, add and subtract the average fit, f bar. <bookmark mark='c'/> The fit's deviation from its own average also averages to zero, so again no cross term. <bookmark mark='d'/> Three pieces remain: the average fit's distance from the truth, squared, the bias; how much the fit varies from sample to sample, the variance; and the noise. Geman, Bienenstock and Doursat named the dilemma in 1992, for neural networks.",
+   "zh": "误差为什么会这样分解？固定一个点x。答案y是真实曲线f加上方差为σ²的噪声，而拟合f帽取决于随机的训练集。<bookmark mark='a'/>噪声与拟合无关，平均为0，所以交叉项消失了：噪声的方差单独分了出来。<bookmark mark='b'/>在剩下的部分里，加上再减去平均拟合f拔。<bookmark mark='c'/>拟合偏离它自身平均的部分，平均起来也是0，所以又没有交叉项。<bookmark mark='d'/>剩下三块：平均拟合离真相的距离的平方，叫偏差；拟合在不同样本之间变化多少，叫方差；还有噪声。1992年，杰曼、比嫩斯托克和杜尔萨为神经网络给这个两难起了名字。"
   },
-  "b56078039d61": {
-   "scene": "Capacity",
-   "en": "Chapter two. Measuring how much a model can fit.",
-   "zh": "第2章。衡量一个模型能拟合多少。"
+  "9d51f2342188": {
+   "scene": "BiasVariance",
+   "en": "Now measure all three, over 200 training sets at every degree. <bookmark mark='a'/> Bias squared falls as the model gets more flexible. <bookmark mark='b'/> Variance rises. <bookmark mark='c'/> The noise is a floor no model can go below. Their sum is a U, with the best model at its bottom: flexible enough, and no more. <bookmark mark='d'/> And the circles are the error measured directly, on fresh noisy points: they sit on the sum, within 1 percent at every degree. For thirty years this U was the textbook picture: control the flexibility, and you control the error. Keep it in mind; chapter twelve finds a second descent beyond its right edge.",
+   "zh": "现在把三者都量出来，每个次数都用200个训练集。<bookmark mark='a'/>偏差的平方随着模型越来越灵活而下降。<bookmark mark='b'/>方差上升。<bookmark mark='c'/>噪声是一道任何模型都低不下去的底线。三者之和是一个U形，最好的模型在U的底部：足够灵活，但不过分。<bookmark mark='d'/>这些圆圈是直接在新的带噪声的点上测出的误差：它们落在这个和上，每个次数都相差不到1%。三十年来，这个U形一直是教科书上的图景：控制住灵活程度，就控制住了误差。请记住它；第12章会在它的右边以外，发现第二次下降。"
   },
-  "731c6434ea15": {
-   "scene": "Capacity",
-   "en": "Here's the classical way to measure what a family of models can fit. Take straight lines in the plane, and three points. <bookmark mark='a'/> Colour the points any of the eight possible ways, and some line separates the colours every time. <bookmark mark='b'/> With four points, it fails: these two labellings can't be split by any line. <bookmark mark='c'/> The largest number of points a family can split in every way is its VC dimension, after Vapnik and Chervonenkis: three, for lines in the plane. <bookmark mark='d'/> And it buys a guarantee: with n examples, the error on new data exceeds the training error by at most about the square root of d over n. In plain words: the gap between training and new error shrinks as the examples outnumber the capacity.",
-   "zh": "衡量一族模型能拟合什么，经典的办法是这样的。取平面上的直线，再取3个点。<bookmark mark='a'/>给这些点涂色，8种可能的涂法，无论哪一种，每次都有某条直线能把两种颜色分开。<bookmark mark='b'/>换成4个点，就不行了：这两种标注方式，哪条直线都分不开。<bookmark mark='c'/>一族模型能按所有方式分开的最大点数，就是它的VC维，以瓦普尼克与切尔沃嫩基斯命名：平面上的直线，VC维是3。<bookmark mark='d'/>它还换来了一个保证：有n个样本时，在新数据上的误差，至多比训练误差高出大约n分之d的平方根。说得直白些：样本数比容量多得越多，训练误差和新数据误差之间的差距就越小。"
+  "9478d9706d7b": {
+   "scene": "Hoeffding",
+   "en": "Chapter three. One rule, then many.",
+   "zh": "第3章。一条规则，然后是很多条。"
   },
-  "3861f9462219": {
-   "scene": "Capacity",
-   "en": "There's a more direct test. Give each of the training pages a random label, a coin flip, and ask a linear model to fit them. <bookmark mark='a'/> Using one word rate, it gets barely more than half. Using all seventy, it fits 68 percent of the coin flips: pure noise. <bookmark mark='b'/> The better a family can fit noise, the less a good training score proves. That's Rademacher complexity, and like the VC dimension, it grows with the number of things a model can adjust.",
-   "zh": "还有一个更直接的检验。给每一个训练页一个随机标签，也就是抛硬币，再让一个线性模型去拟合它们。<bookmark mark='a'/>只用1个词频，它只能拟合对一半多一点点。用上全部70个，它能拟合68%的抛硬币结果：而那是纯粹的噪声。<bookmark mark='b'/>一族模型越能拟合噪声，好的训练成绩就越说明不了什么。这就是拉德马赫复杂度，它和VC维一样，随着模型能调节的东西的数量而增长。"
+  "588a8a96a5fc": {
+   "scene": "Hoeffding",
+   "en": "Start with one rule, fixed in advance, and a test set. Each test case is a coin flip: the rule errs or it doesn't, and the measured error rate is the average of those flips. Part five proved Hoeffding's inequality: an average of n independent numbers between zero and one strays from its mean by epsilon with probability at most two e to the minus two n epsilon squared. <bookmark mark='a'/> Watch it happen. A rule whose true error is 30 percent, measured on ten test cases, a hundred thousand times: only 27 percent of the measurements land within five points. <bookmark mark='b'/> On forty, 39 percent. <bookmark mark='c'/> On 160, 80. <bookmark mark='d'/> On 640, 99 percent: the histogram narrows like one over the square root of n.",
+   "zh": "先从一条事先固定好的规则和一个测试集开始。每个测试样本都是一次抛硬币：规则要么错，要么对，测出的错误率就是这些硬币的平均。第5部分证明了霍夫丁不等式：n个介于0和1之间的独立数的平均，偏离它的均值ε的概率，至多是2乘以e的负2nε²次方。<bookmark mark='a'/>来看它实际发生。一条真实错误率为30%的规则，在10个测试样本上测，测十万次：只有27%的测量结果落在正负5个百分点以内。<bookmark mark='b'/>40个样本时，39%。<bookmark mark='c'/>160个时，80%。<bookmark mark='d'/>640个时，99%：直方图按根号n分之1的速度收窄。"
   },
-  "92b83c1fe1b9": {
+  "eab525375e1e": {
+   "scene": "Hoeffding",
+   "en": "On a log scale, the measured tail at a hundred and sixty test cases falls off like a parabola, and so does Hoeffding's bound, always above it. <bookmark mark='a'/> Chebyshev's bound, which uses only the variance, falls far more slowly. <bookmark mark='b'/> So how many test cases do you need to be within five points of the truth, ninety-five percent of the time? Knowing the true error, exactly 315. Hoeffding asks for 738, about 2.3 times as many, but it needs to know nothing about the rule. Chebyshev asks for 1,680. That's why a held-out test set of a few thousand examples is a trustworthy score.",
+   "zh": "在对数坐标上，160个测试样本时实测的尾部概率像抛物线一样下降，霍夫丁的界也一样，而且始终在它上方。<bookmark mark='a'/>只用到方差的切比雪夫界，下降得要慢得多。<bookmark mark='b'/>那么，要有95%的把握离真相不超过5个百分点，需要多少个测试样本？如果知道真实错误率，恰好需要315个。霍夫丁要求738个，大约是2.3倍，但它对规则一无所知也能用。切比雪夫要求1680个。这就是为什么几千个样本的留出测试集，给出的分数是可信的。"
+  },
+  "c9ed497fab8b": {
+   "scene": "Hoeffding",
+   "en": "But a learner doesn't test one rule; it picks the best of many, on the same data. Here are 1,000 rules that know nothing at all, scored on 100 examples whose labels are coin flips. <bookmark mark='a'/> Each one's training error scatters around fifty percent, and the best of them scores 34. <bookmark mark='b'/> On ten thousand fresh cases, that winner's error is 50.4 percent. Choosing among many rules is what made the score lie. <bookmark mark='c'/> The fix is the union bound: the chance that any rule strays is at most the sum of the chances. <bookmark mark='d'/> Each is a Hoeffding tail. <bookmark mark='e'/> Set the total to delta and solve: with probability one minus delta, every rule in a finite family is within the square root of log of the family's size over n. The price of choosing grows only with the logarithm.",
+   "zh": "可学习器并不只测一条规则；它在同一份数据上，从许多条里挑最好的。这里有1000条什么都不懂的规则，在100个标签是抛硬币的样本上打分。<bookmark mark='a'/>每条规则的训练误差都散布在50%附近，其中最好的那条得到34%。<bookmark mark='b'/>在一万个新样本上，这个赢家的错误率是50.4%。正是在许多规则里挑选，让分数说了谎。<bookmark mark='c'/>补救办法是联合界：任何一条规则偏离的概率，至多是各自概率之和。<bookmark mark='d'/>每一项都是一个霍夫丁尾部。<bookmark mark='e'/>令总和等于δ，解出来：以1减δ的概率，有限模型族里的每一条规则，误差都不超过“模型族大小的对数除以n”的平方根。挑选的代价，只随对数增长。"
+  },
+  "0eac5d9c2b63": {
+   "scene": "Hoeffding",
+   "en": "As the family grows from one rule to a million, scored on a hundred examples, the best training error drops from 51 to 27 percent, on labels that are pure noise. <bookmark mark='a'/> The largest gap between training and true error, ninety-five percent of the time, grows from 10 to 27 points, <bookmark mark='b'/> and the union bound, from 14 to 30, stays above it: for independent rules it's nearly tight. <bookmark mark='c'/> Leslie Valiant made this the definition of learning in 1984: probably approximately correct. A family can be learned if enough examples make every rule's score trustworthy, with high probability, to within epsilon. For a finite family, the log of its size divided by epsilon squared is enough. But a line has infinitely many positions. The next chapter counts them properly.",
+   "zh": "模型族从1条规则增长到一百万条，在100个样本上打分，最好的训练误差从51%降到27%，而标签纯粹是噪声。<bookmark mark='a'/>训练误差与真实误差之间的最大差距，在95%的情况下，从10个百分点增长到27个，<bookmark mark='b'/>而联合界从14增长到30，始终在它上方：对彼此独立的规则来说，它几乎是紧的。<bookmark mark='c'/>1984年，莱斯利·瓦利安特把这一点变成了学习的定义：概率近似正确。如果足够多的样本能让每条规则的分数，以很高的概率，可信到ε以内，这个模型族就是可学习的。对有限的模型族，样本数取模型族大小的对数除以ε²就够了。可是一条直线有无穷多个位置。下一章会好好地数一数。"
+  },
+  "acf55a9729fa": {
+   "scene": "VC",
+   "en": "Chapter four. Shattering, and the VC bound.",
+   "zh": "第4章。打散，以及VC界。"
+  },
+  "95f7446288b5": {
+   "scene": "VC",
+   "en": "A family of rules with infinitely many members can still be weak. Take lines in the plane, and three points. <bookmark mark='a'/> Colour the points any of the eight possible ways, and some line separates the colours every time. <bookmark mark='b'/> With four points, it fails: no line splits these two labellings, the crossing pattern of XOR. <bookmark mark='c'/> A family shatters a set of points if it can produce every labelling of them, and the largest set it can shatter is its VC dimension, after Vapnik and Chervonenkis: three for lines in the plane, and in general one more than the number of inputs a linear rule reads.",
+   "zh": "一个有无穷多成员的规则族，照样可以很弱。拿平面上的直线和三个点来说。<bookmark mark='a'/>把这些点按八种可能方式中的任意一种涂色，总有一条直线能把两种颜色分开。<bookmark mark='b'/>四个点就不行了：没有哪条直线能分开这两种标注，也就是异或那种交叉的模式。<bookmark mark='c'/>如果一个规则族能产生一组点的每一种标注，就说它打散了这组点；它能打散的最大点集的大小，叫它的VC维，以瓦普尼克和切尔沃年基斯命名：平面上的直线是3，一般来说，线性规则的VC维比它读入的数的个数多1。"
+  },
+  "3ee0fa2f1a09": {
+   "scene": "VC",
+   "en": "What matters is not how many rules a family has, but how many different labellings it can produce on the points in front of it: the growth function. <bookmark mark='a'/> For five points, half-planes produce 22 of the thirty-two. <bookmark mark='b'/> Count it for every n by sweeping a line around: half-planes realize exactly n squared minus n plus two labellings, 242 on 16 points, out of 65,536. <bookmark mark='c'/> The Sauer–Shelah lemma says this always happens: once a family fails to shatter some size d plus one, its growth function is a polynomial of degree d, never again two to the n. <bookmark mark='d'/> Intervals on a line, VC dimension two, meet their bound exactly. Polynomial instead of exponential is what lets an infinite family be learned.",
+   "zh": "要紧的不是一个规则族有多少条规则，而是在眼前这些点上，它能产生多少种不同的标注：这叫增长函数。<bookmark mark='a'/>对五个点，半平面能产生32种里的22种。<bookmark mark='b'/>让一条直线转一圈，就能对每个n数出来：半平面恰好能实现n²减n加2种标注，16个点时是242种，而全部有65536种。<bookmark mark='c'/>绍尔–谢拉引理说，这种事总会发生：一旦一个规则族打散不了某个大小d加1的点集，它的增长函数就是一个d次多项式，再也不会是2的n次方。<bookmark mark='d'/>直线上的区间，VC维是2，恰好达到它的上界。是多项式而不是指数，让一个无穷的规则族也能被学会。"
+  },
+  "d4bce07f5209": {
+   "scene": "VC",
+   "en": "That count buys a bound. The proof in four steps. <bookmark mark='a'/> First, compare the training sample with a second, imaginary one of the same size, a ghost sample: if training and true error are far apart, the two samples' errors probably are too. <bookmark mark='b'/> On the two samples together, the family acts as at most the growth function of two n rules, a finite number, so the union bound and Hoeffding apply. <bookmark mark='c'/> Sauer–Shelah makes that number a polynomial. <bookmark mark='d'/> Solve for epsilon: the gap shrinks like the square root of d log n over n. <bookmark mark='e'/> For lines in the plane on 448 pages, the gap is at most 0.23. For a linear rule on all seventy word rates, 0.76: hardly a guarantee; it would take about 60,400 pages to get it down to a tenth. And for the network of chapter nine, with three hundred thousand weights for 448 pages, it says nothing at all. That network generalizes anyway.",
+   "zh": "这个计数换来了一个界。证明分四步。<bookmark mark='a'/>第一步，把训练样本和另一个同样大小的、想象中的样本比较，叫作影子样本：如果训练误差和真实误差相差很远，那两个样本上的误差多半也相差很远。<bookmark mark='b'/>在两个样本合起来的点上，这个规则族至多相当于“2n处的增长函数”那么多条规则，这是一个有限的数，于是联合界和霍夫丁不等式都用得上。<bookmark mark='c'/>绍尔–谢拉引理把这个数变成一个多项式。<bookmark mark='d'/>解出ε：差距按d乘log n除以n的平方根缩小。<bookmark mark='e'/>平面上的直线，在448页上，差距至多是0.23。用全部70个词频的线性规则，是0.76：几乎算不上保证；要把它降到0.1，大约需要60400页。而第9章的网络，448页对三十万个权重，这个界就什么也说不出了。可那个网络照样泛化得很好。"
+  },
+  "4c3216ed8e5b": {
+   "scene": "Rademacher",
+   "en": "Chapter five. Rademacher complexity.",
+   "zh": "第5章。拉德马赫复杂度。"
+  },
+  "79270355463f": {
+   "scene": "Rademacher",
+   "en": "Counting labellings needs a family's worst case. There's a more direct test of capacity, done on the data you actually have. Give each training page a random label, a coin flip, plus or minus one, and ask the family to fit them. <bookmark mark='a'/> A linear rule on one word rate gets barely more than half. On all seventy, it fits 68 percent of the coin flips: pure noise. <bookmark mark='b'/> Averaged over the coin flips, the best correlation the family can reach with random signs is its empirical Rademacher complexity, named for the random plus-or-minus-one variables of Hans Rademacher. A family that can fit noise well can make any training score look good.",
+   "zh": "数标注，要看一个规则族最坏的情形。还有一种更直接的容量测试，就在你实际拥有的数据上做。给每个训练页一个随机标签，抛一次硬币，正1或负1，让规则族去拟合它们。<bookmark mark='a'/>只用一个词频的线性规则，只比一半多一点点。用全部70个，它能拟合68%的硬币：纯粹的噪声。<bookmark mark='b'/>对硬币求平均，规则族与随机符号能达到的最好相关性，就是它的经验拉德马赫复杂度，以汉斯·拉德马赫的随机正负1变量命名。一个能把噪声拟合得很好的规则族，可以让任何训练分数都显得漂亮。"
+  },
+  "2491b328f907": {
+   "scene": "Rademacher",
+   "en": "And it bounds the gap. With probability one minus delta, every rule's true risk is at most its training risk, plus twice the Rademacher complexity of the losses, plus a term that shrinks like one over root n. <bookmark mark='a'/> The proof starts like VC's, with a ghost sample. <bookmark mark='b'/> Swapping a real example with its ghost twin is a random sign, so the gap becomes a correlation with random signs, with no counting at all. <bookmark mark='c'/> And because one example can move the supremum by at most one over n, McDiarmid's inequality, a cousin of Hoeffding's, makes the measured complexity concentrate. Koltchinskii, and Bartlett and Mendelson, gave it this form around 2002.",
+   "zh": "而它能界住差距。以1减δ的概率，每条规则的真实风险至多是它的训练风险，加上损失的拉德马赫复杂度的两倍，再加上一个按根号n分之1缩小的项。<bookmark mark='a'/>证明的开头和VC的一样，用一个影子样本。<bookmark mark='b'/>把一个真实样本和它的影子孪生交换，就是一个随机符号，于是差距变成了与随机符号的相关性，完全不需要计数。<bookmark mark='c'/>又因为一个样本至多能让上确界变化n分之1，麦克迪尔米德不等式，霍夫丁不等式的一个近亲，让测出的复杂度集中起来。科尔钦斯基，以及巴特利特和门德尔松，在2002年前后给出了这个形式。"
+  },
+  "2137fb0de32a": {
+   "scene": "Rademacher",
+   "en": "For linear rules with weights of length at most B, the complexity can be computed exactly. <bookmark mark='a'/> The best weight vector for given signs points along the signed sum of the inputs, by Cauchy–Schwarz, so the supremum is B over n times the length of that sum. <bookmark mark='b'/> Jensen moves the expectation inside the square root, <bookmark mark='c'/> and since independent signs are uncorrelated, the cross terms vanish: B over n times the root of the sum of squared lengths, at most B times the largest length R, over root n. <bookmark mark='d'/> On the pages: the measured complexity sits within 1 percent of the bound at every size, falling like one over root n. Twenty thousand random directions reach only 0.21; the formula's direction reaches 0.45. And notice what's missing: the dimension. Only the length of the weights counts, which is what the next chapter exploits.",
+   "zh": "对权重长度至多为B的线性规则，复杂度可以精确算出来。<bookmark mark='a'/>对给定的符号，最好的权重向量指向输入的带符号和的方向，这是柯西–施瓦茨不等式，所以上确界等于n分之B乘以这个和的长度。<bookmark mark='b'/>詹森不等式把期望移到平方根里面，<bookmark mark='c'/>又因为独立的符号互不相关，交叉项消失了：得到n分之B乘以长度平方和的平方根，至多是B乘以最大长度R，再除以根号n。<bookmark mark='d'/>在书页上：测出的复杂度在每个样本量下都离这个界不到1%，按根号n分之1下降。两万个随机方向只能达到0.21；公式给出的方向能达到0.45。再注意少了什么：维数。只有权重的长度算数，下一章正是利用这一点。"
+  },
+  "bba251e25b8a": {
+   "scene": "Margins",
+   "en": "Chapter six. Margins.",
+   "zh": "第6章。间隔。"
+  },
+  "34c95805687a": {
+   "scene": "Margins",
+   "en": "The Rademacher bound for linear rules depends on the weights' length, not on how many there are. To use that, measure how confidently a rule separates the data: its margin, the distance from each example to the boundary, on the right side of it. <bookmark mark='a'/> The support vector machine from part six chooses the line with the widest margin. <bookmark mark='b'/> On the pages it separates all 448 training pages, and here is the distribution of their margins: the closest page sits at 0.066 of the largest input's length. <bookmark mark='c'/> The margin loss at gamma counts the pages closer than gamma to the boundary: the share a rule gets right, but not confidently.",
+   "zh": "线性规则的拉德马赫界取决于权重的长度，而不是权重有多少个。要用上这一点，就得量一量一条规则把数据分得多有把握：它的间隔，也就是每个样本在边界正确一侧离边界的距离。<bookmark mark='a'/>第6部分的支持向量机，挑的正是间隔最宽的那条线。<bookmark mark='b'/>在书页上，它把全部448个训练页都分开了，这是它们间隔的分布：最近的一页，离边界是最大输入长度的0.066。<bookmark mark='c'/>γ处的间隔损失，数的是离边界比γ还近的书页：规则判对了，但判得不够有把握的那一部分。"
+  },
+  "546352eba08a": {
+   "scene": "Margins",
+   "en": "The bound comes in three steps. <bookmark mark='a'/> Replace the error, one when the margin is negative, with a ramp that's one below zero and zero above gamma; it lies between the error and the margin loss. <bookmark mark='b'/> Apply the Rademacher bound to the ramp. <bookmark mark='c'/> The ramp has slope one over gamma, and a contraction lemma says a Lipschitz function scales the complexity by its slope: the gap is two B R over gamma root n. The number of inputs never appears. Peter Bartlett made this the point in 1998: the size of the weights matters more than the number of them. <bookmark mark='d'/> Now compute it on the pages. Small gamma: no margin loss, but a huge complexity term. Large gamma: the reverse. The best trade-off gives 1.41, more than a coin's error rate: vacuous, while the actual test error is 1.0 percent. With the same margins it would take about 6,048 pages. Our 448 aren't enough for the margin, either.",
+   "zh": "这个界分三步。<bookmark mark='a'/>把错误，也就是间隔为负时的1，换成一个斜坡：在0以下是1，在γ以上是0；它夹在错误和间隔损失之间。<bookmark mark='b'/>对这个斜坡用拉德马赫界。<bookmark mark='c'/>斜坡的斜率是γ分之1，而一个压缩引理说，利普希茨函数会按它的斜率放大复杂度：差距是2BR除以γ根号n。输入的个数从没出现。1998年，彼得·巴特利特把这一点讲得很透：权重的大小，比权重的个数更重要。<bookmark mark='d'/>现在在书页上算一算。γ小：没有间隔损失，复杂度项却很大。γ大：反过来。最好的折中给出1.41，比抛硬币的错误率还高：这个界是空的，而实际的测试误差是1.0%。间隔不变的话，大约需要6048页。我们的448页，对间隔界也不够。"
+  },
+  "b8abaa939b4e": {
+   "scene": "Margins",
+   "en": "Margins first explained a puzzle twenty years before deep learning's. Boosting builds a classifier from many weak ones, here single cuts on one word rate each, reweighting the examples it gets wrong. <bookmark mark='a'/> On the pages, its training error reaches zero at round 19. <bookmark mark='b'/> By the classical story, it should stop improving there, or start to overfit. Instead the error on new pages keeps falling, from 3.7 percent at round 19 to 0.5 at round 45, and ends at 1.6 after 400. <bookmark mark='c'/> The explanation, by Schapire, Freund, Bartlett and Lee in 1998: with the training points all correct, later rounds keep pushing their margins outward, and the margin bound only cares about margins. The same shape, more training past zero training error and better on new data, is about to come back for neural networks.",
+   "zh": "比深度学习的谜题早二十年，间隔就解释过一个谜题。提升法把许多弱分类器组合成一个分类器，这里每个弱分类器只是在一个词频上切一刀，并加大它分错的样本的权重。<bookmark mark='a'/>在书页上，它的训练误差在第19轮降到0。<bookmark mark='b'/>按经典的说法，它应该到此为止，甚至开始过拟合。可实际上，新书页上的误差还在下降，从第19轮的3.7%，降到第45轮的0.5%，最后在400轮时是1.6%。<bookmark mark='c'/>沙皮尔、弗罗因德、巴特利特和李在1998年给出了解释：训练点全都判对之后，后面的轮次还在不断把它们的间隔往外推，而间隔界只在乎间隔。同样的形状，训练误差为零之后继续训练，在新数据上反而更好，马上就要在神经网络上重现。"
+  },
+  "62d266ecd63a": {
+   "scene": "PACBayes",
+   "en": "Chapter seven. PAC-Bayes: a bound that says something about a network.",
+   "zh": "第7章。PAC-贝叶斯：一个对网络有意义的界。"
+  },
+  "0871f03c06ac": {
+   "scene": "PACBayes",
+   "en": "Counting doesn't work for networks, so change what is bounded. Instead of one network, take a distribution over networks, a cloud of weights, and bound the average error of a network drawn from it. <bookmark mark='a'/> Before seeing any data, choose a prior P over weights. After training, the posterior Q is wherever the data moved you. <bookmark mark='b'/> David McAllester's PAC-Bayes theorem, from 1999: with high probability, the posterior's true error is close to its training error, and how close depends on just one number, the KL divergence of Q from P, part one's measure of how many nats the data had to tell you. <bookmark mark='c'/> A posterior that's broad, close to the prior, costs few nats, whatever the number of weights.",
+   "zh": "计数对网络不管用，那就换一个被界住的东西。不看单个网络，而看网络的一个分布，一团权重的云，去界住从中抽出的网络的平均误差。<bookmark mark='a'/>在看到任何数据之前，选一个关于权重的先验P。训练之后，后验Q就是数据把你推到的地方。<bookmark mark='b'/>戴维·麦卡莱斯特1999年的PAC-贝叶斯定理：以很高的概率，后验的真实误差接近它的训练误差，而接近到什么程度，只取决于一个数：Q相对于P的KL散度，也就是第1部分里，数据必须告诉你多少奈特信息的那个量。<bookmark mark='c'/>一个宽的、接近先验的后验，花不了几奈特，不管权重有多少个。"
+  },
+  "6cfcb46c1055": {
+   "scene": "PACBayes",
+   "en": "The proof is short. <bookmark mark='a'/> Start from a change of measure: an average under Q is at most the KL divergence from P plus the log of an exponential average under P. It's Gibbs' inequality from part one in disguise. <bookmark mark='b'/> For one fixed network, the chance that its training error is far from its true error is a binomial tail, so the exponential of n times their divergence averages to at most two root n. The prior was chosen without the data, so that holds averaged over P too. <bookmark mark='c'/> Markov's inequality turns the average into a statement that holds with probability one minus delta. <bookmark mark='d'/> Choose f to be n times the divergence, and use convexity: the bound. Nothing in it counts weights.",
+   "zh": "证明很短。<bookmark mark='a'/>从一个测度变换开始：Q下的平均，至多是相对于P的KL散度，加上P下一个指数平均的对数。这其实是第1部分的吉布斯不等式换了个样子。<bookmark mark='b'/>对一个固定的网络，训练误差远离真实误差的概率是一个二项分布的尾部，所以n乘以两者散度的指数，平均起来至多是2根号n。先验是不看数据选的，所以对P求平均，这仍然成立。<bookmark mark='c'/>马尔可夫不等式把这个平均，变成一个以1减δ的概率成立的结论。<bookmark mark='d'/>取f为n乘以这个散度，再用凸性：就得到这个界。里面没有任何东西在数权重。"
+  },
+  "40d9f2769336": {
+   "scene": "PACBayes",
+   "en": "Now our own. A network with 9,217 weights, trained on 448 pages: twenty times more weights than examples. Following Dziugaite and Roy's recipe from 2017, the prior is a Gaussian centred on the network's random starting weights, chosen before seeing any page. <bookmark mark='a'/> Train briefly, then make the weights a cloud: a Gaussian around them, and optimize the bound itself, for 10,000 steps. Watch the KL: from 145 nats it settles near 136, while the cloud widens wherever the weights don't matter. <bookmark mark='b'/> The final account. Two thousand networks drawn from the cloud err on 1.6 percent of the training pages, at most 2.7 with confidence. The KL is 136 nats. <bookmark mark='c'/> So the bound: the cloud's true error is at most 36 percent. Loose next to the 2.8 percent it actually gets on the test pages, but a real guarantee for a network with far more weights than data, where the VC bound is meaningless. <bookmark mark='d'/> The same idea, with networks compressed hard, gave the first non-vacuous bounds for language models in 2024, Lotfi and colleagues; counting tokens instead of documents later that year, for models as large as Llama 2 70B.",
+   "zh": "现在来我们自己的。一个有9217个权重的网络，在448页上训练：权重是样本的二十倍。按照朱盖特和罗伊2017年的方法，先验是一个高斯分布，中心在网络随机的初始权重上，在看到任何一页之前就选好了。<bookmark mark='a'/>先短暂地训练，再把权重变成一团云：围绕它们的一个高斯分布，然后直接优化这个界本身，优化10000步。看KL散度：它从145奈特开始，最后稳定在136附近，同时在权重无关紧要的地方，这团云张开了。<bookmark mark='b'/>最后的账目。从这团云里抽出的两千个网络，在训练页上错1.6%，有把握地说至多2.7%。KL散度是136奈特。<bookmark mark='c'/>所以，这个界说：这团云的真实误差至多是36%。和它在测试页上实际的2.8%相比是松的，但这是一个真正的保证，针对的是一个权重远多于数据的网络，而VC界在这里毫无意义。<bookmark mark='d'/>同样的想法，加上把网络狠狠压缩，2024年给出了语言模型的第一批非空的界，是洛特菲和同事们的工作；同年晚些时候，改为数词元而不是数文档，界又推广到了像Llama 2 70B这么大的模型。"
+  },
+  "051a12863e65": {
+   "scene": "Stability",
+   "en": "Chapter eight. Compression, and stability.",
+   "zh": "第8章。压缩，以及稳定性。"
+  },
+  "f1e5b55a4c40": {
+   "scene": "Stability",
+   "en": "A third way to say a rule is simple: it can be described by a few of its own examples. Here are 200 points, and the widest-margin line through the origin that separates them. <bookmark mark='a'/> Only 2 points touch the margin: the support vectors. Throw away the rest, train again on those alone, and you get the same line, to the last digit. <bookmark mark='b'/> Littlestone and Warmuth showed in 1986 that such a learner generalizes like one with k parameters: its error is at most about k log n over n. <bookmark mark='c'/> Here that's 6.9 percent, much tighter than the VC bound for lines. On the pages the machine needs 47 support vectors, and the bound is 0.72: a rule is only as simple as the examples it needs. Compression is also how the network bounds of the last chapter got tight: Arora and colleagues in 2018, and the language-model bounds, compress the network first.",
+   "zh": "说一条规则简单的第三种方式：它能用自己的少数几个样本描述出来。这里有200个点，以及把它们分开的、穿过原点的间隔最宽的那条线。<bookmark mark='a'/>只有2个点贴在间隔上：它们是支持向量。把其余的点都扔掉，只用它们重新训练，得到的是同一条线，一位不差。<bookmark mark='b'/>利特尔斯通和沃穆特在1986年证明，这样的学习器泛化起来就像只有k个参数的学习器：它的误差至多大约是k乘log n除以n。<bookmark mark='c'/>在这里是6.9%，比直线的VC界紧得多。在书页上，这个机器需要47个支持向量，界是0.72：一条规则简单与否，取决于它需要多少样本。压缩也是上一章网络的界变紧的办法：2018年阿罗拉和同事们的工作，以及语言模型的那些界，都先把网络压缩。"
+  },
+  "1b0ab5fd3866": {
+   "scene": "Stability",
+   "en": "A fourth: a rule is safe if it doesn't depend much on any single example. <bookmark mark='a'/> Call a learner beta-stable if swapping one training example for another changes its loss anywhere by at most beta. Then, on average, its true error exceeds its training error by at most beta, because swapping a training example for a fresh one is exactly how a training point turns into a test point. <bookmark mark='b'/> Bousquet and Elisseeff showed in 2002 that regularized learners are stable, with beta like one over lambda n. <bookmark mark='c'/> Measure it for ridge regression on the pages: swap one training page for a held-out one, and see how far any prediction moves. Stronger regularization, smaller change. <bookmark mark='d'/> And against n, the slope is -0.90, close to the predicted minus one.",
+   "zh": "第四种：如果一条规则不太依赖任何单个样本，它就是可靠的。<bookmark mark='a'/>如果把一个训练样本换成另一个，学习器在任何地方的损失至多变化β，就说它是β稳定的。那么平均来说，它的真实误差至多比训练误差高β，因为把一个训练样本换成一个新样本，恰好就是一个训练点变成测试点的过程。<bookmark mark='b'/>布斯凯和埃利塞夫在2002年证明，带正则化的学习器是稳定的，β大约是λn分之1。<bookmark mark='c'/>在书页上对岭回归量一量：把一个训练页换成一个留出的页，看任何一个预测会移动多远。正则化越强，变化越小。<bookmark mark='d'/>而对n来说，斜率是-0.90，接近预测的负1。"
+  },
+  "368dbe832e54": {
+   "scene": "Stability",
+   "en": "Stability also applies to training itself. Run stochastic gradient descent twice, visiting the examples in the same order, on two training sets that differ in one page. <bookmark mark='a'/> The runs drift apart only when they meet the differing page: after 30 passes, by 0.066 on average, over twenty such pairs. <bookmark mark='b'/> Hardt, Recht and Singer proved in 2016 that, for convex losses, the drift grows at most in proportion to the step size times the number of steps, over n: train faster, generalize better. Here the bound is about 126 times the measured drift; true, and loose. For networks, which aren't convex, nothing this clean holds, and that's where the puzzles start.",
+   "zh": "稳定性也适用于训练本身。把随机梯度下降跑两次，按同样的顺序访问样本，用在只差一页的两个训练集上。<bookmark mark='a'/>只有碰到那一页不同的样本时，两次运行才会分开：30遍之后，平均相差0.066，共二十对。<bookmark mark='b'/>哈德特、雷希特和辛格在2016年证明，对凸的损失，这种漂移至多与步长乘以步数、再除以n成正比：训练得快，泛化得好。这里的界大约是实测漂移的126倍；成立，但很松。对网络来说，损失不是凸的，没有这么干净的结论，谜题也就从这里开始。"
+  },
+  "74798ef9bc01": {
    "scene": "RandomLabels",
-   "en": "Chapter three. Memorizing nonsense.",
-   "zh": "第3章。记住毫无意义的东西。"
+   "en": "Chapter nine. Memorizing nonsense.",
+   "zh": "第9章。记住毫无意义的东西。"
   },
-  "dcfed100faaf": {
+  "f527d6ea2724": {
    "scene": "RandomLabels",
-   "en": "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve units, and two outputs, one per author. That's about 300 thousand weights. Train it on the 448 training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets 99.5 percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so every label is random. Same network, same training.",
-   "zh": "2016年，张驰原和同事们做了一个实验，打破了经典的图景。拿一个网络：一层层简单的单元，这里输入的是70个词频，接着是两层、每层512个单元，最后是2个输出，每位作者一个。总共大约30万个权重。用448个训练页和它们真实的作者来训练它。<bookmark mark='a'/>它把这些全都拟合了，在新的书页上判对99.5%。<bookmark mark='b'/>现在，把作者打乱，让每个标签都是随机的。同一个网络，同样的训练。"
+   "en": "Every bound so far charges for capacity. In 2016, Chiyuan Zhang and colleagues ran an experiment that showed why that can't be the whole story for networks. Take a network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve units, and two outputs, one per author. That's about 300 thousand weights. Train it on the 448 training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets 99.5 percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so every label is random. Same network, same training.",
+   "zh": "到目前为止，每个界都按容量收费。2016年，张驰原和同事们做了一个实验，说明了为什么对网络来说，这不可能是全部。拿一个网络来：一层层简单的单元，这里输入是70个词频，有两层，每层512个单元，还有两个输出，每位作者一个。这大约是300千个权重。用真实作者，在448个训练页上训练它。<bookmark mark='a'/>它把它们全都拟合了，在新书页上判对99.5%。<bookmark mark='b'/>现在把作者打乱，让每个标签都是随机的。同样的网络，同样的训练。"
   },
-  "f74f0d6de138": {
+  "a3d89f217d42": {
    "scene": "RandomLabels",
-   "en": "It fits these too, every one of them, only a little more slowly. It has memorized nonsense. <bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same network can memorize anything at all. Then counting what a model could fit can't explain why, given real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers simple answers. Why, exactly, is still being worked out.",
-   "zh": "这些它也拟合了，一个不落，只是稍微慢了一点。它记住的，是毫无意义的东西。<bookmark mark='a'/>而在新的书页上，它和瞎猜一样，这也是必然的。<bookmark mark='b'/>所以，同一个网络，什么都记得住。那么，数一数模型能拟合什么，就解释不了：为什么给它真实的标签时，它找到的却是一条在新的书页上也管用的规律，而不是死记硬背。它的训练方式里，有某种东西偏爱简单的答案。确切的原因，至今仍在研究之中。"
+   "en": "It fits these too, every one of them, only a little more slowly. It has memorized nonsense. <bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same network can memorize anything at all. Then counting what a model could fit can't explain why, given real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers simple answers. The next two chapters prove it, in the simplest cases.",
+   "zh": "它把这些也拟合了，每一个都不落，只是稍慢一点。它记住了毫无意义的东西。<bookmark mark='a'/>而在新书页上，它的表现就是瞎猜，这也是必然的。<bookmark mark='b'/>所以，同一个网络能记住任何东西。那么，数一数模型能拟合什么，就解释不了为什么在真实标签下，它找到的是一条在新书页上管用的规则。它的训练方式里，一定有什么东西偏爱简单的答案。接下来的两章，会在最简单的情形下证明这一点。"
   },
   "49dc3f4f0de4": {
    "scene": "RandomLabels",
    "en": "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its shuffled label right. <bookmark mark='b'/> In the first few steps, the pages whose label happens to be true pull ahead: by step 3, 76 percent of them are right, against 57 percent of the others. The network starts by learning the real difference between the authors. Then it memorizes the rest, and by step 30 every page, true or not, is fit. With 300,034 weights for 448 pages, memorizing is quick.",
-   "zh": "它是按什么顺序记住的？把打乱后的页面分成两半：碰巧有大约一半拿回了自己真正的作者，其余的拿到的是错的。<bookmark mark='a'/>网络答对一页的打乱标签时，这一页就亮起来。<bookmark mark='b'/>最初几步，标签碰巧正确的那些页领先：到第3步，它们有76%答对了，其余的只有57%。网络先学到的，是两位作者之间真实的区别。然后它再把剩下的记住，到第30步，每一页，不管标签真假，都拟合上了。448页、300034个权重，记住它们很快。"
+   "zh": "它按什么顺序记住？把打乱后的书页分成两半：碰巧大约一半拿回了自己真实的作者，其余的拿到的是错的。<bookmark mark='a'/>网络判对一页打乱后的标签，这一页就亮起来。<bookmark mark='b'/>最初几步里，标签碰巧是真的那些书页领先：到第3步，它们有76%判对了，其余的只有57%。网络先学到的，是两位作者真正的区别。然后它把剩下的记住，到第30步，每一页，不管标签真假，都拟合了。有300034个权重来记448页，记住是很快的事。"
   },
-  "826660b4e42d": {
+  "3871d52f9e11": {
+   "scene": "RandomLabels",
+   "en": "Zhang and colleagues also turned the dial gradually, replacing a growing share of the labels with coin flips. Here that is on the pages, three seeds at each setting. <bookmark mark='a'/> Accuracy on new pages falls from 99 percent with clean labels to 52 with all of them random, steadily, as the share of wrong labels grows. <bookmark mark='b'/> And the network fits every training label at every setting, taking longer the more labels are noise: about 17 steps when they're clean, 27 when they're all random. The same network, the same training, the same zero training error, and anything from excellent to useless on new data. What it learns depends on the labels; any measure that looks only at the network and not at the data can't tell these apart.",
+   "zh": "张驰原和同事们还把旋钮一点点拧大，把越来越多的标签换成抛硬币。这是在书页上做的结果，每种设置三个随机种子。<bookmark mark='a'/>新书页上的准确率，从标签干净时的99%，降到全部随机时的52%，随着错误标签的比例增加而稳步下降。<bookmark mark='b'/>而在每种设置下，网络都拟合了每一个训练标签，噪声标签越多，花的时间越长：标签干净时大约17步，全部随机时27步。同样的网络，同样的训练，同样为零的训练误差，在新数据上却可以从极好一直到毫无用处。它学到什么取决于标签；任何只看网络、不看数据的度量，都分不清这些情形。"
+  },
+  "336343c51e1b": {
+   "scene": "MinNorm",
+   "en": "Chapter ten. Implicit bias: the smallest fit.",
+   "zh": "第10章。隐式偏好：最小的拟合。"
+  },
+  "cf5b66694912": {
+   "scene": "MinNorm",
+   "en": "When a model has more weights than training examples, it can usually fit them all exactly, in infinitely many ways. Three weights and two equations: <bookmark mark='a'/> every point on this line fits both exactly. Which one does training pick? <bookmark mark='b'/> Run gradient descent on the squared error, starting from zero. Every step moves along a combination of the inputs, so the path never leaves the plane they span. <bookmark mark='c'/> It meets the line of exact fits at one point: the one nearest the origin, the fit with the smallest weights.",
+   "zh": "当模型的权重比训练样本还多时，它通常能把样本全部精确拟合，而且有无穷多种拟合法。三个权重，两个方程：<bookmark mark='a'/>这条线上的每一点，都同时精确满足两个方程。训练会挑哪一个？<bookmark mark='b'/>在平方误差上做梯度下降，从0出发。每一步都沿着输入的某个组合移动，所以路径永远离不开输入张成的那个平面。<bookmark mark='c'/>它和精确拟合的那条线交于一点：离原点最近的那一点，也就是权重最小的拟合。"
+  },
+  "c138104df857": {
+   "scene": "MinNorm",
+   "en": "The proof is five lines. <bookmark mark='a'/> A gradient step subtracts X transpose times the residual. <bookmark mark='b'/> Start at zero, and every iterate is a combination of the training inputs: it lives in the row space of X. <bookmark mark='c'/> With a small enough step, the loss is convex and goes to zero, so the limit fits every example. <bookmark mark='d'/> Only one exact fit lies in the row space: X transpose times X X transpose inverse times y, the pseudoinverse solution. <bookmark mark='e'/> And any other exact fit differs from it by a vector perpendicular to the row space, so by Pythagoras it's longer. Gradient descent, untold, chose the minimum-norm fit. That's an implicit bias: a preference the algorithm brings that no loss function asked for.",
+   "zh": "证明只有五行。<bookmark mark='a'/>一步梯度下降，减去的是X转置乘以残差。<bookmark mark='b'/>从0出发，每个迭代点都是训练输入的组合：它待在X的行空间里。<bookmark mark='c'/>步长足够小时，损失是凸的，会降到0，所以极限拟合了每一个样本。<bookmark mark='d'/>行空间里只有一个精确拟合：X转置乘以X乘X转置的逆、再乘以y，也就是伪逆解。<bookmark mark='e'/>任何别的精确拟合，都和它相差一个垂直于行空间的向量，所以由勾股定理，它更长。没人告诉梯度下降，它却选中了最小范数的拟合。这就是隐式偏好：算法自带的一种偏爱，没有哪个损失函数提出过这种要求。"
+  },
+  "d971e817d936": {
+   "scene": "MinNorm",
+   "en": "Check it with 20 equations in 60 unknowns. <bookmark mark='a'/> From zero, the distance to the pseudoinverse solution falls until it hits the limits of double precision, and the part of the weights outside the row space stays at rounding error the whole way. <bookmark mark='b'/> Start somewhere else, and descent still fits every equation, but stops 5.97 away from the minimum-norm fit, exactly the part of the starting point that lay outside the row space, which no step ever touches. So the answer depends on the start too: networks start near zero, with small random weights, and part nine of this series is about choosing that scale.",
+   "zh": "用20个方程、60个未知数来检验。<bookmark mark='a'/>从0出发，到伪逆解的距离一路下降，直到碰到双精度的极限，而权重在行空间之外的部分，自始至终都停在舍入误差的水平。<bookmark mark='b'/>换一个起点，梯度下降仍然满足每个方程，却停在离最小范数拟合5.97远的地方，恰好是起点落在行空间之外的那一部分，任何一步都碰不到它。所以答案也取决于起点：网络从0附近、用很小的随机权重开始，而本系列的第9部分，讲的正是怎样选这个尺度。"
+  },
+  "67a43fb81bb4": {
+   "scene": "MaxMargin",
+   "en": "Chapter eleven. Implicit bias: the widest margin.",
+   "zh": "第11章。隐式偏好：最宽的间隔。"
+  },
+  "287b7321fe5f": {
+   "scene": "MaxMargin",
+   "en": "Classification has its own version. When the classes can be separated, the logistic loss can be made as small as you like, just by scaling the weights up, so there's no minimum at all, and infinitely many separating lines. <bookmark mark='a'/> Which direction does gradient descent head in? Here it is, step by step on a log scale. After one step the boundary is 30 degrees from the widest-margin line. <bookmark mark='b'/> After a hundred steps, 17.3; after ten thousand, 6.5; after a million, 2.9. It turns toward the support vector machine's line, slowly, while the weights keep growing and the loss keeps shrinking.",
+   "zh": "分类也有它自己的版本。当两类可以分开时，只要把权重放大，逻辑斯蒂损失就能要多小有多小，所以根本没有最小值，能分开它们的直线也有无穷多条。<bookmark mark='a'/>梯度下降朝哪个方向走？这里一步步地看，步数取对数刻度。走了一步之后，边界离间隔最宽的那条线有30度。<bookmark mark='b'/>走了一百步，17.3度；一万步，6.5度；一百万步，2.9度。它慢慢转向支持向量机的那条线，而权重一直在变大，损失一直在变小。"
+  },
+  "32ec3b4e1b34": {
+   "scene": "MaxMargin",
+   "en": "Why that line? <bookmark mark='a'/> The negative gradient is a weighted sum of the examples, each weighted by how badly it's classified. <bookmark mark='b'/> Once every point is right and the weights are large, those weights are exponentials of minus the margins. <bookmark mark='c'/> Exponentials decay so fast that the points with the smallest margins outweigh everything else: only the support vectors steer. <bookmark mark='d'/> The direction converges to a combination of support vectors with positive weights, which is exactly the form of the max-margin solution from part four's KKT conditions. Soudry and colleagues proved it in 2018, with the rate: the weights grow like log t, and the direction error shrinks like one over log t. Lyu and Li extended it to homogeneous neural networks in 2020.",
+   "zh": "为什么是那条线？<bookmark mark='a'/>负梯度是样本的一个加权和，每个样本的权重，取决于它被分得有多差。<bookmark mark='b'/>一旦每个点都判对了、权重又很大，这些权重就是负间隔的指数。<bookmark mark='c'/>指数衰减得太快，间隔最小的那些点压倒了其他一切：只有支持向量在掌舵。<bookmark mark='d'/>方向收敛到支持向量的一个正系数组合，这正是第4部分KKT条件下最大间隔解的形式。苏德里和同事们在2018年证明了这一点，还给出了速度：权重像log t那样增长，方向的误差像log t分之1那样缩小。2020年，吕凯风和李建把它推广到了齐次神经网络。"
+  },
+  "f79d87a08532": {
+   "scene": "MaxMargin",
+   "en": "Measure it. <bookmark mark='a'/> On a log axis of steps, the norm of the weights is a straight line: it grows by about 1.88 for every factor of ten in steps, logarithmic growth. <bookmark mark='b'/> The angle falls, slowly. Angle times log t falls from 73 to 41 between a thousand and a million steps, so here it's still converging faster than the theorem's worst case, one over log t. After a million steps the margin is 1.088, against the best possible 1.116. That slowness has a practical side: training long after the training error reaches zero keeps changing the model, toward larger margins, which is the boosting story again, now as a theorem about gradient descent.",
+   "zh": "量一量。<bookmark mark='a'/>在步数的对数轴上，权重的范数是一条直线：步数每增加十倍，它大约增长1.88，这是对数增长。<bookmark mark='b'/>角度在下降，很慢。在一千步到一百万步之间，角度乘以log t从73降到41，所以这里它收敛得仍比定理的最坏情形，也就是log t分之1，要快。一百万步之后，间隔是1.088，而最好可能是1.116。这种慢有实际的一面：训练误差到0之后很久，继续训练仍在改变模型，朝着更大的间隔，这又是提升法的故事，只不过现在成了关于梯度下降的定理。"
+  },
+  "134f1c26f5d0": {
    "scene": "DoubleDescent",
-   "en": "Chapter four. Double descent.",
-   "zh": "第4章。双下降。"
+   "en": "Chapter twelve. Double descent.",
+   "zh": "第12章。双下降。"
   },
   "e2f9373c0ff4": {
    "scene": "DoubleDescent",
    "en": "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random mix of the seventy word rates, passed through a bend that zeroes anything negative. Only the weights on the features are learned, by least squares. <bookmark mark='m'/> When there are more features than pages, many fits match every training page exactly, so take the one with the smallest weights: of all the curves through the points, the calmest. <bookmark mark='a'/> With few features, the error on new pages falls, then rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly 448 features, as many as there are pages, the fit is forced through every point, and the error explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of the U.",
-   "zh": "这就是那条又降回来的曲线。把每一页变成p个随机特征：每个特征都是那70个词频的一种固定的随机组合，再经过一道弯折，把所有负值都变成零。只有这些特征上的权重是学出来的，用最小二乘法。<bookmark mark='m'/>当特征比书页还多时，有许多种拟合都能恰好对上每一个训练页，那就取权重最小的那一个：在所有穿过这些点的曲线里，最平稳的那一条。<bookmark mark='a'/>特征很少时，在新的书页上的误差先是下降，然后随着p接近书页的数量，又升了上去：这就是经典的U形。<bookmark mark='b'/>恰好在448个特征时，特征和书页一样多，拟合被迫穿过每一个点，误差一下子爆炸了。<bookmark mark='c'/>然后，过了这一点，误差又降了回来，比U形的底部还要低。"
+   "zh": "这就是那条又降回来的曲线。把每一页变成p个随机特征：每个特征是70个词频的一个固定的随机组合，再经过一个把负数归零的弯折。只有特征上的权重是学出来的，用最小二乘法。<bookmark mark='m'/>特征比书页多时，有许多种拟合都能精确对上每个训练页，那就取权重最小的那个：在所有穿过这些点的曲线里，最平静的那条。<bookmark mark='a'/>特征少时，新书页上的误差先下降，然后随着p接近书页数又上升：这是经典的U形。<bookmark mark='b'/>恰好有448个特征，和书页一样多时，拟合被迫穿过每一个点，误差爆炸了。<bookmark mark='c'/>然后，越过这一点，误差又降了下来，比U形的底部还低。"
   },
-  "4953ed230b0c": {
+  "df5edefab94a": {
    "scene": "DoubleDescent",
-   "en": "More parameters than data, and better on new data. Belkin and colleagues named it double descent in 2019, and it turns up in deep networks too. <bookmark mark='a'/> The training error is zero all along the second descent, so it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is the simplest. <bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is forced, then shrink as features are added, ending smaller than at the bottom of the U. Gradient descent, as part eleven shows, quietly prefers fits like that.",
-   "zh": "参数比数据还多，在新数据上却更好。2019年，贝尔金和同事把它命名为双下降，它在深度网络里也会出现。<bookmark mark='a'/>在整个第二次下降的过程中，训练误差一直是零，所以起决定作用的不可能是它。起决定作用的，是你得到的是众多恰好拟合中的哪一个，而最小的那一个，也是最简单的。<bookmark mark='n'/>它的大小说明了一切：权重在峰值处暴涨，那里的拟合是被迫的；然后随着特征增加而缩小，最后比U形底部时还要小。而梯度下降，正如第11部分会讲到的，会悄悄偏爱这样的拟合。"
+   "en": "In short: More parameters than data, and better on new data. Belkin and colleagues named it double descent in 2019, and Nakkiran and colleagues found it in deep networks the same year. <bookmark mark='a'/> The training error is zero all along the second descent, so it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is the simplest. <bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is forced, then shrink as features are added, ending smaller than at the bottom of the U. And from chapter ten: gradient descent from zero finds exactly that smallest fit.",
+   "zh": "总之：参数比数据多，在新数据上反而更好。2019年，贝尔金和同事们把它命名为双下降，同一年，纳基兰和同事们在深度网络里也发现了它。<bookmark mark='a'/>在整个第二次下降中，训练误差都是0，所以决定结果的不可能是它。决定结果的是你拿到的是众多精确拟合中的哪一个，而最小的那个最简单。<bookmark mark='n'/>它的大小说明了一切：在峰值处，拟合是被迫的，权重爆炸了，然后随着特征增加而缩小，最后比在U形底部时还小。再联系第10章：从0出发的梯度下降，找到的恰好就是那个最小的拟合。"
   },
-  "1d5c758e47a8": {
-   "scene": "Outro",
-   "en": "Let's take stock. A model's error on new data is what matters, and it can be far from its error on the data it learned from. The classical story splits that error into bias, variance and noise, and bounds it by capacity: how many points a model can split every way, how well it can fit coin flips. Then networks memorized pure nonsense, and still generalized on real labels; and test error, past the point of fitting everything exactly, came back down.",
-   "zh": "我们来盘点一下。要紧的，是模型在新数据上的误差，而它可能和模型在自己学过的数据上的误差相差很远。经典的说法，把这个误差拆成偏差、方差和噪声，再用容量给它定一个上界：一个模型能按所有方式分开多少个点，它能把抛硬币拟合得多好。后来，网络连毫无意义的东西都能统统背下来，在真实的标签上却依然能泛化；而测试误差，过了把一切都恰好拟合的那个点之后，又降了回来。"
+  "92bf05eed273": {
+   "scene": "DoubleDescent",
+   "en": "Why the peak, exactly at p equals n? Write the minimum-norm fit with the singular value decomposition of the feature matrix. <bookmark mark='a'/> It's a sum over directions, each label component divided by its singular value sigma i. <bookmark mark='b'/> Part of the labels is noise no feature explains. <bookmark mark='c'/> That part gets amplified by one over sigma, and its expected size is the noise variance times the sum of one over sigma squared. So everything hangs on the smallest singular value. <bookmark mark='d'/> Here are the feature matrix's singular values as p grows. With few features they stay well away from zero. <bookmark mark='e'/> As p approaches n, the smallest slides toward zero, and at p equals n it's only 0.0003: a square random matrix is nearly singular. <bookmark mark='f'/> Past it, with more features than pages, the smallest singular value climbs back up, and the noise is spread over directions that barely affect new pages.",
+   "zh": "为什么峰值恰好在p等于n处？用特征矩阵的奇异值分解，写出最小范数拟合。<bookmark mark='a'/>它是对各个方向求和，每个标签分量都除以它的奇异值σᵢ。<bookmark mark='b'/>标签里有一部分是任何特征都解释不了的噪声。<bookmark mark='c'/>这一部分被σ分之1放大，它的期望大小是噪声方差乘以σ²分之1的和。所以一切都系于最小的奇异值。<bookmark mark='d'/>这是p增大时特征矩阵的奇异值。特征少时，它们都离0很远。<bookmark mark='e'/>随着p接近n，最小的那个滑向0，在p等于n时只有0.0003：一个随机的方阵几乎是奇异的。<bookmark mark='f'/>越过这一点，特征比书页多时，最小奇异值又升了回来，噪声被分摊到几乎不影响新书页的那些方向上。"
   },
-  "2dd2e4f75511": {
-   "scene": "Outro",
-   "en": "Held-out data stays the honest score, from scaling laws in part twelve to evaluating reasoning models in part twenty-eight. Which of the many fits training finds is the subject of part eleven. Models far bigger than their data are the subject of part twelve. And memorization, of facts and of text, comes back when we look inside models.",
-   "zh": "留出的数据，始终是诚实的评分，从第12部分的规模定律，到第28部分对推理模型的评估。训练会在众多拟合中找到哪一个，是第11部分的主题。比数据大得多的模型，是第12部分的主题。而记忆，对事实的记忆和对文本的记忆，会在我们打开模型往里看时再次出现。"
+  "93ed182a14d2": {
+   "scene": "DoubleDescent",
+   "en": "The cure follows: don't divide by tiny numbers. Ridge regression adds lambda to each sigma squared, so the smallest directions are damped instead of amplified. <bookmark mark='a'/> With lambda 1 times p, the peak at 448 features is gone: the error there is 0.16, against 83.3 without it. <bookmark mark='b'/> Too little ridge leaves a bump; too much, and the fit is too timid everywhere. Nakkiran and colleagues showed in 2020 that well-tuned regularization removes the peak in such models. The peak was never a law of nature: it's an artifact of fitting noise exactly with barely enough features to do it.",
+   "zh": "治法随之而来：别除以很小的数。岭回归给每个σ²都加上λ，于是最小的那些方向被压低，而不是被放大。<bookmark mark='a'/>λ取p的1倍时，在448个特征处的峰值消失了：那里的误差是0.16，不加岭回归时是83.3。<bookmark mark='b'/>岭太小，留下一个鼓包；太大，拟合处处都太保守。纳基兰和同事们在2020年证明，调好的正则化能消除这类模型里的峰值。这个峰值从来不是什么自然规律：它是在特征刚刚够用时，精确拟合噪声造成的假象。"
   },
-  "b12ab9fff0fb": {
-   "scene": "Outro",
-   "en": "Next time: networks themselves. Why a stack of simple layers can approximate any function, how depth cuts space into pieces, how to start and keep signals alive through many layers. <bookmark mark='a'/> And the first neural language model joins the scoreboard.",
-   "zh": "下一次：网络本身。为什么把简单的层叠起来，就能逼近任何函数；深度怎样把空间切成一块一块；怎样初始化，又怎样让信号穿过许多层还不消失。<bookmark mark='a'/>而第一个神经语言模型，也会登上记分牌。"
+  "c52a51ed65ea": {
+   "scene": "MoreDescents",
+   "en": "Chapter thirteen. Double descent in samples, and in epochs.",
+   "zh": "第13章。样本数上的双下降，以及训练轮数上的双下降。"
   },
-  "46e5c6f3eeeb": {
+  "ae5c46b9f6a3": {
+   "scene": "MoreDescents",
+   "en": "If the peak sits where the number of parameters equals the number of examples, then it can be reached from the other side too. Fix 200 random features, and give the model more and more pages. <bookmark mark='a'/> From 45 pages to 200, the error on new pages rises, from 0.30 to 19.8: more data made the model worse, because more pages push it toward the point where it can only just fit them. <bookmark mark='b'/> Beyond that, more data helps again. <bookmark mark='c'/> With a little ridge, the curve simply falls. Nakkiran and colleagues found this sample-wise version in deep networks in 2019: for a fixed model, there's a range where more data hurts.",
+   "zh": "如果峰值出现在参数个数等于样本个数的地方，那么从另一边也能走到它。固定200个随机特征，给模型越来越多的书页。<bookmark mark='a'/>从45页到200页，新书页上的误差上升了，从0.30升到19.8：更多的数据让模型变差了，因为更多的书页把它推向刚刚能拟合它们的那一点。<bookmark mark='b'/>越过那一点，更多的数据又有帮助了。<bookmark mark='c'/>加一点岭回归，曲线就只是下降。2019年，纳基兰和同事们在深度网络里发现了这种按样本数的版本：对一个固定的模型，存在一个范围，在那里更多的数据反而有害。"
+  },
+  "9d012ac9bfe1": {
+   "scene": "MoreDescents",
+   "en": "Nakkiran and colleagues also saw it in time: train a network longer and longer, and its test error can fall, rise, and fall again. The simplest model that does this is linear, with inputs on two very different scales. <bookmark mark='a'/> Gradient descent learns the large-scale directions first. The test error falls, to its first low at step 10, <bookmark mark='b'/> then rises, to a peak around step 467, as those fast directions finish fitting their share of the noise, and of signal they can't represent. <bookmark mark='c'/> Only then do the slow directions, which hold the rest of the signal, get learned, and the error falls again, to 0.41, far below the first low. <bookmark mark='d'/> Split by direction, it's two bias-variance curves, one fast, one slow, added together: Heckel and Yilmaz's explanation, from 2021. Training error falls the whole time. When to stop training is not a question with one answer, which part twelve's grokking takes to an extreme.",
+   "zh": "纳基兰和同事们还在时间上看到了它：把一个网络训练得越来越久，它的测试误差可以先降、再升、又降。能做到这一点的最简单模型是线性的，输入有两种差别很大的尺度。<bookmark mark='a'/>梯度下降先学会大尺度的方向。测试误差下降，在第10步到达第一个低点，<bookmark mark='b'/>然后上升，在大约第467步达到峰值，因为那些快的方向，正在把属于它们的那份噪声，以及它们表示不了的信号，拟合完。<bookmark mark='c'/>直到这时，那些慢的方向，也就是装着其余信号的方向，才被学会，误差再次下降，降到0.41，远低于第一个低点。<bookmark mark='d'/>按方向拆开，就是两条偏差–方差曲线，一快一慢，叠加在一起：这是黑克尔和耶尔马兹2021年的解释。训练误差自始至终都在下降。什么时候停止训练，不是一个只有一个答案的问题，第12部分的顿悟把这一点推到了极端。"
+  },
+  "ff21bbcd7df5": {
+   "scene": "Benign",
+   "en": "Chapter fourteen. Benign overfitting.",
+   "zh": "第14章。良性过拟合。"
+  },
+  "f036467e3d16": {
+   "scene": "Benign",
+   "en": "Double descent showed fits that pass through every noisy label and still do well. How can fitting noise exactly be harmless? <bookmark mark='a'/> One way to interpolate is to bend the whole curve to reach every point; that spoils predictions everywhere. <bookmark mark='b'/> Another is to follow the smooth truth almost everywhere, and reach each noisy label with a thin spike that touches almost no other input. That fit has zero training error, and on new data it's nearly as good as the truth. In high dimensions, the spikes come for free.",
+   "zh": "双下降展示了穿过每个带噪声标签、却依然表现很好的拟合。精确拟合噪声，怎么会是无害的？<bookmark mark='a'/>一种插值的方法，是把整条曲线弯过去，去够每一个点；这会把各处的预测都弄坏。<bookmark mark='b'/>另一种，是几乎处处都沿着光滑的真相走，再用一根细细的尖刺，去够每个带噪声的标签，而这根尖刺几乎碰不到任何别的输入。这样的拟合训练误差为0，在新数据上却几乎和真相一样好。在高维空间里，这些尖刺是免费的。"
+  },
+  "eb57acf5fc5f": {
+   "scene": "Benign",
+   "en": "Bartlett, Long, Lugosi and Tsigler made this exact in 2020, for linear regression. Take a hundred noisy examples whose signal lives in five strong directions, and fit them exactly with the minimum-norm solution. <bookmark mark='a'/> Add D weak directions that together have a small total variance: as D grows, the excess error falls, to 0.023 with 40,000 of them, 9 percent of the noise level, though the fit reproduces every noisy label. Benign. <bookmark mark='b'/> Add instead D directions as strong as the signal's, and the excess error climbs to 5.0: the fit spreads its weight over directions that matter, and loses the signal. Harmful.",
+   "zh": "巴特利特、朗、卢戈西和齐格勒在2020年针对线性回归，把这一点讲得精确了。拿一百个带噪声的样本，信号只在五个强的方向上，用最小范数解把它们精确拟合。<bookmark mark='a'/>加上D个弱的方向，它们的总方差加起来很小：随着D增大，超额误差下降，有40000个时降到0.023，是噪声水平的9%，尽管拟合复现了每一个带噪声的标签。这是良性的。<bookmark mark='b'/>换成加上D个和信号一样强的方向，超额误差就攀升到5.0：拟合把权重摊到了要紧的方向上，丢掉了信号。这是有害的。"
+  },
+  "4342d38bf41a": {
+   "scene": "Benign",
+   "en": "Their theorem splits the excess error into a bias, and a variance that's the noise times two terms. <bookmark mark='a'/> The first counts the strong directions against the examples. <bookmark mark='b'/> The second compares n with the effective rank of the tail: how many directions share the weak variance. Many small directions can each absorb a little of the noise without moving predictions much: those are the spikes. <bookmark mark='c'/> And the tail as a whole acts like a ridge penalty on the strong directions, costing a little bias. <bookmark mark='d'/> So interpolation is benign when the signal is low-dimensional and the rest is a long tail of tiny directions, the kind of spectrum real data and wide networks tend to have. For real networks the picture is more often in between: Mallinar and colleagues in 2022 called it tempered.",
+   "zh": "他们的定理把超额误差拆成一个偏差，以及一个方差，方差是噪声乘以两项。<bookmark mark='a'/>第一项拿强方向的个数和样本数比。<bookmark mark='b'/>第二项拿n和尾部的有效秩比：有多少个方向分担那点弱的方差。许多个小方向，每个都能吸收一点噪声，而不怎么移动预测：这些就是尖刺。<bookmark mark='c'/>而尾部作为整体，就像对强方向施加了一个岭惩罚，代价是一点偏差。<bookmark mark='d'/>所以，当信号是低维的、其余是一长串很小的方向时，插值就是良性的，真实数据和宽网络往往正有这样的谱。对真实的网络，情形多半介于两者之间：马利纳尔和同事们在2022年称之为温和过拟合。"
+  },
+  "55558c505e12": {
+   "scene": "Sharpness",
+   "en": "Chapter fifteen. Flat minima, and the sharpness debate.",
+   "zh": "第15章。平坦极小值，以及尖锐度之争。"
+  },
+  "2908a3cbc8c1": {
+   "scene": "Sharpness",
+   "en": "An older idea about why networks generalize: the shape of the valley training ends in. <bookmark mark='a'/> Suppose the test loss is the training loss shifted a little, because the test data differs a little. At the bottom of a flat valley, the shift costs almost nothing; at the bottom of a sharp one, it costs a lot. <bookmark mark='b'/> Hochreiter and Schmidhuber argued in 1997 that flat minima are simpler: their weights can be written down with fewer bits. In 2017 Keskar and colleagues reported that training with large batches finds sharper minima, and generalizes worse.",
+   "zh": "关于网络为什么能泛化，有一个更早的想法：训练最后落进的那个山谷的形状。<bookmark mark='a'/>假设测试损失就是训练损失挪动了一点，因为测试数据和训练数据有一点不同。在平坦山谷的谷底，这点挪动几乎不花代价；在尖锐山谷的谷底，代价就大了。<bookmark mark='b'/>霍赫赖特和施密德胡伯在1997年认为，平坦的极小值更简单：它们的权重可以用更少的比特写下来。2017年，凯斯卡尔和同事们报告说，用大批量训练会找到更尖锐的极小值，泛化得也更差。"
+  },
+  "b32abcb6a309": {
+   "scene": "Sharpness",
+   "en": "Test it, small. 24 networks learn from 300 points labelled by a teacher network, with four batch sizes, two step sizes and three seeds, each trained until its training loss falls below 0.01; the 21 that got there within four thousand epochs are compared. Sharpness is the largest eigenvalue of the training loss's Hessian, measured with part four's Hessian-vector products. <bookmark mark='a'/> Large batches do end sharper: on average 0.9 against 0.70 for batches of four. <bookmark mark='b'/> But the sharper networks are not the worse ones: the rank correlation between sharpness and test error is -0.41, with test errors from 19.4 to 20.5 percent. If anything, the sharper ones generalize better here. Large studies agree on that much: across many settings, sharpness predicts generalization inconsistently, as Andriushchenko and colleagues found in 2023.",
+   "zh": "在小规模上检验一下。24个网络从300个由一个教师网络标注的点学习，用四种批量大小、两种步长和三个随机种子，每个都训练到训练损失低于0.01为止；比较的是在四千轮之内达到这一点的21个。尖锐度是训练损失的黑塞矩阵的最大特征值，用第4部分的黑塞-向量积来量。<bookmark mark='a'/>大批量确实停在更尖锐的地方：平均0.9，而批量为4时是0.70。<bookmark mark='b'/>但更尖锐的网络并不是更差的那些：尖锐度和测试误差的秩相关系数是-0.41，测试误差在19.4%到20.5%之间。要说有什么区别，这里更尖锐的反而泛化得更好。大规模的研究至少在这一点上一致：在许多设置下，尖锐度对泛化的预测并不稳定，安德留先科和同事们在2023年就是这样发现的。"
+  },
+  "bd70aad5ca69": {
+   "scene": "Sharpness",
+   "en": "There's a deeper problem, pointed out by Dinh, Pascanu and the Bengios in 2017. <bookmark mark='a'/> A ReLU passes a positive scale straight through. <bookmark mark='b'/> So multiply the first layer by a, divide the second by a, and the network computes exactly the same function, to rounding error on every output. Same predictions, same test error. <bookmark mark='c'/> But its sharpness changes by a factor of 9 across these rescalings. Sharpness, as measured, depends on how the weights are written down, not only on what the network does, so it can't be the whole explanation. Scale-invariant versions, and training that seeks flat regions on purpose, like sharpness-aware minimization, came next; what sharpness has to do with the step size is part eleven's edge of stability.",
+   "zh": "还有一个更深的问题，是丁、帕斯卡努和两位本吉奥在2017年指出的。<bookmark mark='a'/>ReLU会把一个正的缩放原样传过去。<bookmark mark='b'/>所以把第一层乘以a，第二层除以a，网络计算的就是完全相同的函数，每个输出都只差舍入误差。同样的预测，同样的测试误差。<bookmark mark='c'/>但在这些缩放之间，它的尖锐度变了9倍。量出来的尖锐度，取决于权重是怎么写下来的，而不只取决于网络在做什么，所以它不可能是全部的解释。后来有了不随缩放改变的版本，也有了专门去找平坦区域的训练方法，比如锐度感知最小化；尖锐度和步长有什么关系，是第11部分的稳定性边缘要讲的。"
+  },
+  "eebb2c2833b7": {
+   "scene": "Shift",
+   "en": "Chapter sixteen. Distribution shift.",
+   "zh": "第16章。分布偏移。"
+  },
+  "a601110eb150": {
+   "scene": "Shift",
+   "en": "Everything so far assumed the test data comes from the same distribution as the training data. Often it doesn't. Here the true relationship is a cubic, <bookmark mark='a'/> the training inputs cluster around a half, <bookmark mark='b'/> and the inputs we'll be tested on cluster around zero. The rule from x to y hasn't changed, only where the inputs fall: covariate shift. <bookmark mark='c'/> Fit a straight line by least squares, and it serves the training region, where most of the points are. <bookmark mark='d'/> Weight each training point by how much more likely its x is under the test distribution, and the line turns to serve where the test inputs will be.",
+   "zh": "到目前为止，一切都假设测试数据和训练数据来自同一个分布。往往并非如此。这里真实的关系是一个三次函数，<bookmark mark='a'/>训练输入聚集在0.5附近，<bookmark mark='b'/>而我们将要被测试的输入聚集在0附近。从x到y的规则没有变，变的只是输入落在哪里：这叫协变量偏移。<bookmark mark='c'/>用最小二乘法拟合一条直线，它照顾的是训练区域，也就是大多数点所在的地方。<bookmark mark='d'/>按每个训练点的x在测试分布下可能性大多少来加权，这条直线就转过来，去照顾测试输入将要出现的地方。"
+  },
+  "5b6e2a71322c": {
+   "scene": "Shift",
+   "en": "Why weights? <bookmark mark='a'/> The risk we care about averages the loss over the test distribution q. <bookmark mark='b'/> Multiply and divide by the training distribution p. <bookmark mark='c'/> Now it's an average over training inputs, of the loss times the ratio q over p. <bookmark mark='d'/> So the weighted training error is an unbiased estimate of the test error. Hidetoshi Shimodaira proposed it in 2000. <bookmark mark='e'/> The price is the one part five met in importance sampling: a few points with huge weights dominate, and the effective sample size shrinks.",
+   "zh": "为什么要加权？<bookmark mark='a'/>我们关心的风险，是对测试分布q求损失的平均。<bookmark mark='b'/>乘以再除以训练分布p。<bookmark mark='c'/>现在它变成了对训练输入求平均，求的是损失乘以比值q比p。<bookmark mark='d'/>所以加权后的训练误差，是测试误差的无偏估计。下平英寿在2000年提出了它。<bookmark mark='e'/>代价就是第5部分在重要性采样里遇到的那个：少数权重很大的点占了主导，有效样本量缩小了。"
+  },
+  "5031ec484ea1": {
+   "scene": "Shift",
+   "en": "Over a thousand runs of 100 training points: plain least squares has a test error of 0.316. <bookmark mark='a'/> Weighting by the exact ratio brings it to 0.098, close to the best any straight line could do for the test inputs, 0.094. <bookmark mark='b'/> Flattening the weights, the square root of the ratio, trades a little bias for less variance; here it doesn't quite pay: 0.101. <bookmark mark='c'/> In practice nobody knows q over p. But a classifier trained to tell training inputs from unlabelled test inputs estimates it, from the odds it assigns: 0.099. <bookmark mark='d'/> The exact weights leave an effective sample of only 42 points out of 100. And covariate shift is the easy case: when the label frequencies change, or the rule itself drifts, the fixes are different, and sometimes there are none. Part thirty-one returns to this, as the problem of evaluating models on data like the world's.",
+   "zh": "跑一千次，每次100个训练点：普通的最小二乘法，测试误差是0.316。<bookmark mark='a'/>按精确的比值加权，误差降到0.098，接近任何直线对测试输入所能做到的最好结果0.094。<bookmark mark='b'/>把权重压平，取比值的平方根，是用一点偏差换更小的方差；在这里不太划算：0.101。<bookmark mark='c'/>实际中没人知道q比p。但一个训练来区分训练输入和无标签测试输入的分类器，能从它给出的几率估计出这个比值：0.099。<bookmark mark='d'/>精确的权重只留下42个有效样本，总共100个。而协变量偏移还是容易的情形：当标签的频率变了，或者规则本身在漂移，补救办法就不一样了，有时甚至根本没有。第31部分会回到这个问题，把它当作在像真实世界那样的数据上评估模型的问题。"
+  },
+  "5a01bb6aa897": {
+   "scene": "Memorization",
+   "en": "Chapter seventeen. Memorization in language models.",
+   "zh": "第17章。语言模型里的记忆。"
+  },
+  "b974ea57f0c3": {
+   "scene": "Memorization",
+   "en": "The last chapter is about what a model remembers exactly. Generalizing is not copying, but large models do both. <bookmark mark='a'/> In 2019 Nicholas Carlini and colleagues planted random secrets in training data and measured how readily models gave them back. <bookmark mark='b'/> In 2021 they pulled training text out of GPT-2 by sampling and filtering: over six hundred of eighteen hundred candidates were verbatim copies of training documents, some with names and contact details. <bookmark mark='c'/> In 2023 they measured it at scale: memorization grows log-linearly with model size, with how often a passage is repeated, and with the length of the prompt; the six-billion-parameter GPT-J had memorized at least one percent of its training data. <bookmark mark='d'/> Their test: give the model a prefix from the training data, and see whether greedy decoding continues it exactly.",
+   "zh": "最后一章讲模型会一字不差地记住什么。泛化不是照抄，但大模型两样都做。<bookmark mark='a'/>2019年，尼古拉斯·卡里尼和同事们把随机的秘密埋进训练数据，测量模型有多容易把它们吐出来。<bookmark mark='b'/>2021年，他们通过采样和筛选，从GPT-2里挖出了训练文本：一千八百个候选里，有六百多个是训练文档的逐字副本，其中一些带着姓名和联系方式。<bookmark mark='c'/>2023年，他们在大规模上做了测量：记忆随着模型大小、一段文字重复的次数，以及提示的长度，呈对数线性增长；有六十亿参数的GPT-J，至少记住了它训练数据的1%。<bookmark mark='d'/>他们的测试是：给模型一段来自训练数据的前缀，看贪心解码能不能一字不差地接下去。"
+  },
+  "e594560ae987": {
+   "scene": "Memorization",
+   "en": "Run that test on our own novels model. Its training text has 6.6 million tokens, and long passages rarely repeat: no 64-token passage occurs more than 10 times. <bookmark mark='a'/> Prompted with the first 32 tokens of a training passage, it reproduces the next 32 exactly in 0 cases out of 436 tried. <bookmark mark='b'/> But it gets further before its first mistake on passages it has seen more often: 0.5 tokens on average for passages seen once, 2.6 for those seen 9 to 16 times, against 0.5 on text it never saw. <bookmark mark='c'/> A small model that saw its text a few times stores the style, not the words. What makes words stick is repetition.",
+   "zh": "在我们自己的小说模型上做这个测试。它的训练文本有6.6百万个词元，长段落很少重复：没有哪个64词元的段落出现超过10次。<bookmark mark='a'/>用一段训练文本的前32个词元作提示，在试过的436个里，它一字不差地接出后32个的有0个。<bookmark mark='b'/>但对见得更多的段落，它在第一次出错前走得更远：只见过一次的段落，平均0.5个词元；见过9 to 16次的，2.6个；而从没见过的文本是0.5个。<bookmark mark='c'/>一个只把文本看过几遍的小模型，记住的是风格，而不是字句。让字句记牢的，是重复。"
+  },
+  "1d63c73ab7d4": {
+   "scene": "Memorization",
+   "en": "To see repetition at work, plant it. Continue training our model on its own text, into which 16 passages it has never seen are planted once each, 16 more twice each, and so on up to 64 times, with 16 more never planted, as a control. <bookmark mark='a'/> Through 279 steps of training, the passages planted most often become extractable first. <bookmark mark='b'/> By the end: 0 percent of passages seen once, 81 percent of those planted eight times, and 100 percent of those planted 64 times come back word for word; the control, 0 percent. Half or more are extractable from 8 repetitions on. <bookmark mark='c'/> Extraction climbs with repetition, as Carlini and colleagues and Kandpal and colleagues found at scale; it's why deduplicating training data became standard.",
+   "zh": "要看重复怎样起作用，就把它种进去。在模型自己的文本上继续训练它，文本里种进它从没见过的段落：16段各种一次，另16段各种两次，以此类推，一直到64次，还有16段从不种进去，作对照。<bookmark mark='a'/>在279步训练中，种得最多的段落最先变得可提取。<bookmark mark='b'/>最后：只见过一次的段落有0%、种了8次的有81%、种了64次的有100%能一字不差地复现；对照组是0%。从重复8次起，一半以上都可以提取。<bookmark mark='c'/>可提取的比例随重复次数攀升，这和卡里尼及同事们、坎德帕尔及同事们在大规模上的发现一致；这也是对训练数据去重成为标准做法的原因。"
+  },
+  "53fb2f7f13e9": {
+   "scene": "Memorization",
+   "en": "Since then, memorization has become a practical and legal question. <bookmark mark='a'/> Deduplicating training data reduces it. <bookmark mark='b'/> In 2023 Nasr and colleagues found that asking a chat model to repeat one word forever made it drift into reciting training data. <bookmark mark='c'/> In 2025 Cooper and colleagues showed that some open-weight models have memorized large parts of popular books. <bookmark mark='d'/> Courts disagree on what that means. In November 2025 a Munich court held that song lyrics memorized in a model are a copy, a ruling not yet final, <bookmark mark='e'/> while London's High Court held that an image model's weights were not one. American judges that June had found training itself to be fair use. <bookmark mark='f'/> And in early 2026 researchers reported extracting near-complete books from production chat models. Whether a model has learned or copied is no longer only a question for learning theory.",
+   "zh": "从那以后，记忆成了一个实际的问题，也成了一个法律问题。<bookmark mark='a'/>对训练数据去重能减少记忆。<bookmark mark='b'/>2023年，纳斯尔和同事们发现，让一个聊天模型把一个词永远重复下去，它会渐渐跑偏，开始背诵训练数据。<bookmark mark='c'/>2025年，库珀和同事们证明，一些开放权重的模型记住了流行书籍的大段内容。<bookmark mark='d'/>法院对这意味着什么看法不一。2025年11月，慕尼黑的一家法院认定，模型记住的歌词就是一份复制品，这一判决尚未生效；<bookmark mark='e'/>而伦敦的高等法院认定，一个图像模型的权重不是复制品。那年6月，美国的法官认定训练本身属于合理使用。<bookmark mark='f'/>2026年初，研究者报告从一些商用聊天模型里提取出了几乎完整的书。一个模型是学会了还是抄下了，已经不只是学习理论的问题了。"
+  },
+  "c56e1203c6b8": {
    "scene": "Outro",
-   "en": "Shalev-Shwartz and Ben-David's Understanding Machine Learning is the clearest book on the theory. Thanks for watching, and see you in part nine.",
-   "zh": "沙莱夫-施瓦茨与本-大卫的《深入理解机器学习》，是讲这套理论最清楚的一本书。感谢观看，第9部分见。"
+   "en": "Let's take stock. Risk is the error on everything the world could send; training error flatters it, and the gap splits into approximation and estimation. Error splits into bias, variance and noise. One rule's test score is trustworthy by Hoeffding; choosing among many costs the log of how many, and an infinite family costs its growth function, a polynomial by Sauer and Shelah. Rademacher complexity and margins measure capacity by the size of the weights; PAC-Bayes, compression and stability gave bounds that can say something even for a network, as ours did. Then the puzzles: networks memorize noise, gradient descent chooses the smallest fit and the widest margin, error descends twice, overfitting can be benign, and flatness is not the whole story. And when the data moves, or repeats, generalization gives way to weighting, and to memory.",
+   "zh": "我们来盘点一下。风险是世界可能送来的一切数据上的误差；训练误差会高估模型，而差距可以分成近似和估计两部分。误差可以分解为偏差、方差和噪声。由霍夫丁不等式，一条规则的测试分数是可信的；在许多条里挑选，代价是它们个数的对数；一个无穷的规则族，代价是它的增长函数，由绍尔和谢拉，这是一个多项式。拉德马赫复杂度和间隔用权重的大小来衡量容量；PAC-贝叶斯、压缩和稳定性给出的界，即使对网络也能说明些什么，我们的就是这样。然后是那些谜题：网络能记住噪声，梯度下降选中最小的拟合和最宽的间隔，误差会两次下降，过拟合可以是良性的，而平坦并不是全部的解释。当数据移动或重复时，泛化就让位给加权，也让位给记忆。"
+  },
+  "8f9166bc3ab4": {
+   "scene": "Outro",
+   "en": "Margins return in part nine, in the perceptron's convergence proof. Which minimum training finds, and how sharp it is, is part eleven's subject. Models far bigger than their data, grokking and scaling laws are part twelve's. And held-out scores, contaminated test sets, memorization and privacy come back when we look inside models and ask whether to trust them, in parts thirty and thirty-one.",
+   "zh": "间隔会在第9部分的感知机收敛证明里重现。训练会找到哪个极小值、它有多尖锐，是第11部分的主题。远大于数据的模型、顿悟和规模定律，是第12部分的主题。而留出分数、被污染的测试集、记忆与隐私，会在我们深入模型内部、追问能否信任它们的时候，在第30和第31部分回来。"
+  },
+  "6971ffa1a535": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from sizing a test set to the variance of importance weights. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题可以试一试，从确定测试集要多大，到重要性权重的方差。在这里暂停，自己做一做；完整的解答在本部分的笔记里。"
+  },
+  "bfc929ac88d3": {
+   "scene": "Outro",
+   "en": "Next time: networks themselves. From the perceptron and its winters to backpropagation; why a stack of simple layers can approximate any function, how depth cuts space into pieces, and how to start and keep signals alive through many layers. <bookmark mark='a'/> And the first neural language model joins the scoreboard.",
+   "zh": "下一次：网络本身。从感知机和它经历的寒冬，讲到反向传播；为什么一叠简单的层能逼近任何函数，深度怎样把空间切成一块块，以及怎样初始化、怎样让信号穿过很多层还保持活力。<bookmark mark='a'/>还有，第一个神经语言模型会登上记分牌。"
+  },
+  "2a1d05acaf37": {
+   "scene": "Outro",
+   "en": "Shalev-Shwartz and Ben-David's Understanding Machine Learning is the clearest book on the theory, and Francis Bach's Learning Theory from First Principles the most up to date. Thanks for watching, and see you in part nine.",
+   "zh": "沙莱夫-施瓦茨和本-戴维的《理解机器学习》，是讲这套理论最清楚的书，弗朗西斯·巴赫的《从第一性原理出发的学习理论》是最新的。感谢收看，第9部分再见。"
   }
  },
  "title_en": "AI, Built: Part 8, Fitting and Generalizing",
  "chapters_en": {
   "Hook": "The gap",
-  "BiasVariance": "1. Bias and variance",
-  "Capacity": "2. How much can a model fit?",
-  "RandomLabels": "3. Memorizing nonsense",
-  "DoubleDescent": "4. Double descent",
-  "Outro": "Recap, and where this comes back"
+  "Risk": "1. Risk, and the best possible rule",
+  "BiasVariance": "2. Bias and variance, derived",
+  "Hoeffding": "3. One rule, then many",
+  "VC": "4. Shattering and the VC bound",
+  "Rademacher": "5. Rademacher complexity",
+  "Margins": "6. Margins",
+  "PACBayes": "7. PAC-Bayes: a bound that says something",
+  "Stability": "8. Compression and stability",
+  "RandomLabels": "9. Memorizing nonsense",
+  "MinNorm": "10. Implicit bias: the smallest fit",
+  "MaxMargin": "11. Implicit bias: the widest margin",
+  "DoubleDescent": "12. Double descent",
+  "MoreDescents": "13. Double descent in samples and in epochs",
+  "Benign": "14. Benign overfitting",
+  "Sharpness": "15. Flat minima and the sharpness debate",
+  "Shift": "16. Distribution shift",
+  "Memorization": "17. Memorization in language models",
+  "Outro": "Recap, problems, and what comes next"
  }
 }
