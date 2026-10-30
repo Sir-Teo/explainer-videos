@@ -419,7 +419,7 @@
   "n = 1, 2, 4, 8: \\ 400, 800, 1600, 3200 \\text{ bits/s}": "n = 1, 2, 4, 8: \\ 400, 800, 1600, 3200 \\text{ 比特/秒}",
   "one strided convolution": "一层带步长的卷积",
   "$n$ stages of $256$ codes": "$n$级，每级$256$个码",
-  "one model, \\ quantizer dropout": "一个模型，\\ 量化器随机丢弃",
+  "one model, \\ quantizer dropout": "一个模型，\\ 量化器丢弃",
   "log-mel picture": "对数梅尔图",
   "vocoder: \\ not built here": "声码器：\\ 这里没有搭",
   "$400$ bits/s": "$400$ 比特/秒",
