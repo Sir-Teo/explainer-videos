@@ -123,14 +123,18 @@ class Hook(VoiceoverScene):
         ], font_size=23).move_to(DOWN * 0.45)
         with self.voiceover(
             "This is Part 4 of AI, Built: change, the calculus of learning. <bookmark mark='a'/> In it: derivatives "
-            "as the best straight-line approximations, and the derivatives of real layers; the two ways to run the "
-            "chain rule, counted; backpropagation by hand, then our own library, and a model trained with it; what "
-            "goes wrong with numbers in a computer; memory; curvature, from Newton's method to the shape of a "
-            "trained network's landscape; and optimizing under constraints, which ends with differentiating "
+            "as the best straight-line approximations, and the derivatives of real layers; <bookmark mark='b'/> the "
+            "two ways to run the chain rule, counted; backpropagation by hand, then our own library, and a model "
+            "trained with it; <bookmark mark='c'/> what goes wrong with numbers in a computer; <bookmark mark='d'/> "
+            "memory; <bookmark mark='e'/> curvature, from Newton's method to the shape of a trained network's "
+            "landscape; <bookmark mark='f'/> and optimizing under constraints, which ends with differentiating "
             "through an equation's solution."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeOut(sub), FadeIn(obj))
+            self.play(FadeOut(smap), FadeOut(sub), FadeIn(obj.head), FadeIn(obj.rows[0], shift=UP * 0.1))
+            for k, mk in enumerate("bcdef"):
+                vo.wait_until(mk)
+                self.play(FadeIn(obj.rows[k + 1], shift=UP * 0.1))
         self.wait(0.5)
         self.clear_scene()

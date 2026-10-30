@@ -153,16 +153,16 @@ class Newton(VoiceoverScene, ThreeDScene):
                   color=NEWC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(UP, buff=0.3)
         tag = note(r"computed").next_to(g2, DOWN, buff=0.1).align_to(g2, RIGHT)
-        dg = ", then ".join(str(k) for k in digits)
-        doubling = all(b >= 1.6 * a for a, b in zip(digits[1:], digits[2:])) if len(digits) > 2 else False
+        d1, d2, d3 = (int(math.floor(-math.log10(max(e, 1e-17)))) for e in ne[1:4])
+        doubling = d2 >= 1.6 * d1 and d3 >= 1.6 * d2
         verdict = ("roughly doubling each step: quadratic convergence" if doubling else
                    "growing faster every step")
         with self.voiceover(
-            "A test: logistic regression, Part 6's classifier, with two features so correlated that the curvature "
+            "A test: logistic regression, a classifier Part 6 builds, with two features so correlated that the curvature "
             f"differs {d['kappa']:.0f}-fold between directions. <bookmark mark='a'/> Gradient descent, with the largest "
             f"step that is always safe, zigzags down the valley and needs {steps:,} steps to get within ten to the "
             f"minus ten of the minimum. <bookmark mark='b'/> Newton needs {nsteps}. <bookmark mark='c'/> Count its "
-            f"correct digits: {dg}, {verdict}. <bookmark mark='d'/> The catch is the Hessian itself: each step solves "
+            f"correct digits after each step: {d1}, then {d2}, then {d3}, {verdict}. <bookmark mark='d'/> The catch is the Hessian itself: each step solves "
             "a linear system with it, and for a billion parameters it would have a billion squared entries. The next "
             "chapter uses curvature without ever building it."
         ) as vo:

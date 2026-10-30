@@ -162,11 +162,14 @@ class KVCache(VoiceoverScene):
             "matrix can be folded into the query, part three's linear algebra, so attention reads the latent directly. "
             f"<bookmark mark='d'/> Against full attention of the same shape, that's {ratio:.0f} times less memory."
         ) as vo:
-            self.play(FadeIn(h), FadeIn(hl), FadeIn(cite_), FadeIn(mhead))
+            ghost_a = VGroup(a1, l1, c, cl).copy().fade(0.85)  # the whole picture, faint, until each part is reached
+            ghost_b = VGroup(a2, a3, l2, l3, kk, vv, kl, vl).copy().fade(0.85)
+            self.play(FadeIn(h), FadeIn(hl), FadeIn(cite_), FadeIn(mhead), FadeIn(ghost_a), FadeIn(ghost_b))
             vo.wait_until("a")
-            self.play(GrowArrow(a1), FadeIn(l1), FadeIn(c), FadeIn(cl))
+            self.play(FadeOut(ghost_a), GrowArrow(a1), FadeIn(l1), FadeIn(c), FadeIn(cl))
             vo.wait_until("b")
-            self.play(GrowArrow(a2), GrowArrow(a3), FadeIn(l2), FadeIn(l3), FadeIn(kk), FadeIn(vv), FadeIn(kl), FadeIn(vl))
+            self.play(FadeOut(ghost_b), GrowArrow(a2), GrowArrow(a3), FadeIn(l2), FadeIn(l3), FadeIn(kk), FadeIn(vv),
+                      FadeIn(kl), FadeIn(vl))
             vo.wait_until("c")
             self.play(FadeOut(mhead), Write(f), FadeIn(fl))
             vo.wait_until("d")

@@ -113,14 +113,16 @@ class Modes(VoiceoverScene):
         total = k * k - k
         timed = label(rf"timed: \ the cheaper mode by count was faster in ${agree}$ of ${total}$ networks", font_size=24,
                       color=WHITE).to_edge(DOWN, buff=0.4)
-        verdict = ("in every one" if agree == total else f"in {agree} of them")
+        tail = (f"across the {total} networks where the counts differ, the cheaper mode by count was also the "
+                "faster in every one." if agree == total else
+                f"across the {total} networks where the counts differ, the cheaper mode by count was also the "
+                f"faster in {agree} of them.")
         with self.voiceover(
             "Let's count. These are networks with two hidden layers of sixty-four, with n inputs and m outputs, "
             "from one to two hundred and fifty-six. For each, the multiply-adds that each mode spends on the whole "
             "Jacobian, in units of one forward pass. <bookmark mark='a'/> Forward mode costs n passes, whatever m "
             "is. <bookmark mark='b'/> Reverse mode costs m, whatever n is. Few inputs and many outputs: go forwards. "
-            f"Many inputs and few outputs: go backwards. <bookmark mark='c'/> And timed on this computer, across the "
-            f"{total} networks where the counts differ, the cheaper mode by count was also the faster, {verdict}."
+            "Many inputs and few outputs: go backwards. <bookmark mark='c'/> And timed on this computer, " + tail
         ) as vo:
             self.play(FadeIn(ax_lab))
             vo.wait_until("a")
@@ -163,8 +165,8 @@ class Modes(VoiceoverScene):
                   font_size=26, color=GRAD),
             label(rf"GPT-2: \ ${p['gpt2']:,}$ passes against one".replace(",", "{,}"), font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        timing = ("Timed, it is {:.0f} times slower: less than the count, because a computer's overheads weigh most on "
-                  "small matrices.".format(tr_) if tr_ < cr / 2 else "Timed, it is {:.0f} times slower.".format(tr_))
+        timing = (f"Timed, it is {tr_:.0f} times slower: less than the count, because a computer's overheads weigh "
+                  "most on small matrices." if tr_ < cr / 2 else f"Timed, it is {tr_:.0f} times slower, much as the count says.")
         with self.voiceover(
             "Training is the extreme case: every parameter is an input, and the loss is a single output. "
             "<bookmark mark='a'/> Forwards, you carry a matrix with a column for every parameter. <bookmark mark='b'/> "

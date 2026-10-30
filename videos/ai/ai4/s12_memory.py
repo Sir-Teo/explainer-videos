@@ -148,7 +148,7 @@ class Memory(VoiceoverScene):
         ratio = d["t_ck"] / d["t_all"]
         inside = lo <= rt <= hi
         verdict = (f"and the square root of {n}, {rt}, is among them" if inside else
-                   f"near the square root of {n}, {rt}")
+                   f"which is near the square root of {n}, {rt}, if not on it")
         all_root = all(abs(b - math.sqrt(a)) <= 0.15 * math.sqrt(a) + 1 for a, b in zip(ns, bk))
         scaling = ("On longer chains the best interval keeps tracking the square root." if all_root else
                    "On longer chains the best interval stays close to the square root.")

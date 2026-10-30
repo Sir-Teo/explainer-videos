@@ -130,9 +130,9 @@ class TTT(VoiceoverScene):
 
         sp, st = smooth(sp), smooth(st)
         top_s = float(max(sp.max(), st.max())) * 1.1
-        g1 = axes([0, n], [0, top_s], x_length=5.6, y_length=2.1, ylabel=r"surprise: \ $\|\nabla \ell\|$",
+        g1 = axes([0, n], [0, top_s], x_length=6.2, y_length=2.3, ylabel=r"surprise: \ $\|\nabla \ell\|$",
                   center=[-3.4, 1.55, 0])
-        g2 = axes([0, n], [0, 1.2], x_length=5.6, y_length=2.1, xlabel=r"pairs read",
+        g2 = axes([0, n], [0, 1.2], x_length=6.2, y_length=2.3, xlabel=r"pairs read",
                   ylabel=r"error on the current rule", yticks=[0, 1], center=[-3.4, -1.75, 0])
         for gg, yt in ((g1, top_s), (g2, 1.2)):
             gg.add(DashedLine(gg.ax.c2p(sw, 0), gg.ax.c2p(sw, yt), dash_length=0.06, color=GREY_B, stroke_width=1.5))
@@ -142,19 +142,19 @@ class TTT(VoiceoverScene):
         sl = label(r"the rule changes", font_size=16, color=GREY_B).next_to(g1.ax.c2p(sw, top_s), UP, buff=0.05)
         colors = {r"S_t": SSM_C, r"S_{t-1}": SSM_C, r"M_t": STATE, r"M_{t-1}": STATE, r"\eta": DELTA, r"\theta": DELTA,
                   r"\alpha": DECAY}
-        f1 = cmath(r"S_t", "=", r"\eta\, S_{t-1}", "-", r"\theta\, \nabla \ell(M_{t-1}; x_t)", colors=colors, font_size=30)
-        f2 = cmath(r"M_t", "=", r"(1 - \alpha)\, M_{t-1}", "+", r"S_t", colors=colors, font_size=30)
+        f1 = cmath(r"S_t", "=", r"\eta\, S_{t-1}", "-", r"\theta\, \nabla \ell(M_{t-1}; x_t)", colors=colors, font_size=34)
+        f2 = cmath(r"M_t", "=", r"(1 - \alpha)\, M_{t-1}", "+", r"S_t", colors=colors, font_size=34)
         fs = VGroup(f1, f2).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.5, 2.1, 0])
-        l1 = label(r"surprise, with momentum: \ past surprise carries on", font_size=17, color=SSM_C).next_to(f1, DOWN, buff=0.08)
+        l1 = label(r"surprise, with momentum: \ past surprise carries on", font_size=19, color=SSM_C).next_to(f1, DOWN, buff=0.08)
         l1.align_to(f1, LEFT)
-        l2 = label(r"a forgetting gate $\alpha$: \ weight decay on the memory", font_size=17, color=DECAY).next_to(f2, DOWN, buff=0.08)
+        l2 = label(r"a forgetting gate $\alpha$: \ weight decay on the memory", font_size=19, color=DECAY).next_to(f2, DOWN, buff=0.08)
         l2.align_to(f2, LEFT)
         leg = legend([(GREY_B, r"one gradient step per pair"), (SSM_C, r"with momentum and forgetting \ (Titans)")],
                      font_size=17).move_to([3.4, -0.25, 0])
         after = slice(sw + 8, min(sw + 40, n))
         ap, at_ = float(np.mean(ep[after])), float(np.mean(et[after]))
         hc = history_card(2025, r"Titans", r"Behrouz, Zhong \& Mirrokni: \ a deep neural memory beside attention; \ reported "
-                          r"beyond $2$ million tokens", color=SSM_C, width=4.4, font_size=17).move_to([3.4, -2.1, 0])
+                          r"beyond $2$ million tokens", color=SSM_C, width=4.6, font_size=19).move_to([3.6, -2.25, 0])
         verdict = (f"In the thirty-two pairs after the change, momentum and forgetting adapt faster: an error of "
                    f"{at_:.2f} on average, against {ap:.2f}." if at_ < ap - 0.03 else
                    f"In the thirty-two pairs after the change, the two adapt at about the same rate: {at_:.2f} against "
@@ -169,17 +169,18 @@ class TTT(VoiceoverScene):
             "surprise jumps when the rule changes. <bookmark mark='d'/> " + verdict + " <bookmark mark='e'/> The "
             "paper reports needle tests passed beyond two million tokens; we can't check that here."
         ) as vo:
-            self.play(Write(f1), FadeIn(l1), FadeIn(g1), FadeIn(g2))
+            self.play(FadeIn(hc, shift=UP * 0.1), FadeIn(g1), FadeIn(g2))
             vo.wait_until("a")
-            self.play(Create(c_s[0]), Create(c_s[1]), FadeIn(sl), run_time=2.0)
+            self.play(Write(f1), FadeIn(l1))
             vo.wait_until("b")
             self.play(Write(f2), FadeIn(l2))
             vo.wait_until("c")
+            self.play(Create(c_s[0]), Create(c_s[1]), FadeIn(sl), run_time=2.0)
             self.play(FadeIn(leg), Create(c_e[0]), Create(c_e[1]), run_time=2.0)
             vo.wait_until("d")
             self.play(Indicate(c_e[1], color=WHITE, scale_factor=1.0))
             vo.wait_until("e")
-            self.play(FadeIn(hc))
+            self.play(Indicate(hc, color=SSM_C, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
