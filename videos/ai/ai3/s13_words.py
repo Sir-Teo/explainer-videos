@@ -226,9 +226,10 @@ class Words(VoiceoverScene):
         near = an["france:paris::england"][:5]
         res = VGroup(label(r"the words nearest to where you land:", font_size=24, color=GREY_A),
                      *[data_text(f"{k + 1}. {wd}", font=MONO, font_size=24, color=C.BITS if k == 0 else WHITE)
-                       for k, wd in enumerate(near)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UR, buff=0.5).shift(DOWN * 0.7)
+                       for k, wd in enumerate(near)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.3)
         k2 = label(rf"\texttt{{man}} : \texttt{{king}} :: \texttt{{woman}} : \ \texttt{{{mk[0]}}}, \ "
-                   rf"\texttt{{{mk[1]}}}, \ \ldots", font_size=28, color=GREY_A).to_corner(UL, buff=0.5).shift(DOWN * 0.7)
+                   rf"\texttt{{{mk[1]}}}, \ \ldots", font_size=28, color=GREY_A)
+        k2.move_to([-6.6, 0.4, 0], aligned_edge=LEFT)
         score = label(rf"on ${at['all']['n']}$ such questions from the books: \ ${100 * at['all']['acc']:.0f}\%$ right",
                       font_size=26, color=C.BITS).next_to(k2, DOWN, buff=0.2).align_to(k2, LEFT)
         tag = label(r"drawn on the plane of the two steps", font_size=22, color=GREY_B).to_corner(UR, buff=0.45)
