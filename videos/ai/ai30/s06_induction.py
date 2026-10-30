@@ -50,7 +50,7 @@ class Induction(VoiceoverScene):
         pn = d["path_noise"]
         dg = self.diagram()
         ins = dg[-1]
-        vals = [float(pn["q"]), float(pn["k"]), float(pn["v"])]
+        vals = [max(float(pn["q"]), 0.0), max(float(pn["k"]), 0.0), max(float(pn["v"]), 0.0)]  # -0.00 is no effect
         g = axes([0, 3], [0, 1.1], x_length=4.2, y_length=3.0, ylabel=r"copying lost", yticks=[0, 0.5, 1.0],
                  center=[3.9, -0.6, 0])
         bars_ = VGroup()

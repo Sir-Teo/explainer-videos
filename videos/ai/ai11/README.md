@@ -140,7 +140,16 @@ Numbers from the run that made the video (Linux, one thread, a shared machine):
 * **Equilibrium.** A LayerNorm after the second hidden matrix, AdamW η = 0.003 constant, 4,000 steps: ‖W‖ = 26.9,
   12.7, 6.6 at λ = 0.1, 0.4, 1.6 against 29.5, 15.0, 7.2 predicted (within 15%; 6.8, 3.4, 1.6 without the momentum
   factor); fitted power −0.51 against −0.5; the update's cosine with W −0.05 … −0.18.
-RACE_RESULTS
+* **Newton–Schulz.** The second hidden matrix's gradient at step 300 of AdamW (132 singular values above 1% of the
+  largest): after Jordan's 5 rounds they lie in 0.76 … 1.20; the classical cubic leaves its worst 0.35 from one after 12
+  rounds; DeepSeek-V4's hybrid (8 + 2) ends within 0.0018 of one. The trained weight matrix (241 above 1%): 0.69 …
+  1.20, 0.67, 0.0005. The scalar polynomial on the singular values matches the matrix iteration to 2 × 10⁻⁶.
+* **The race.** 3,000 steps, warmup and cosine, each optimizer's best rate (the grid extended to 7 rates for Lion),
+  3 seeds, held-out bits on all 100,000 characters (mean, min–max): SOAP 2.334 (2.331–2.336, η = 0.008), Muon 2.341
+  (2.339–2.344, 0.008), Shampoo 2.351 (2.349–2.354, 0.008), SGD with momentum 2.407 (2.399–2.416, 0.2), AdamW 2.453
+  (2.434–2.474, 0.008), Lion 2.604 (2.578–2.624, 0.0032). Time per step relative to AdamW on this CPU: SGD 0.8×,
+  Lion 1.4×, Shampoo 1.8×, SOAP 2.1×, Muon 2.1×.
+SCHEDULE_RESULTS
 
 ## Fact-check notes
 

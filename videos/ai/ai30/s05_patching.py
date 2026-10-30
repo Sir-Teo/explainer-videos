@@ -51,6 +51,16 @@ class Patching(VoiceoverScene):
         verdict = ("Neither of our models copies. Olsson and colleagues saw the heads that copy form in their models "
                    "between about 2.5 and 5 billion tokens of training; ours stopped at about "
                    f"{int(round(rows[0][3] / 1e6))} million. " if none else "Some copying, but little. ")
+        ex = np.asarray(load("induction")["ex"])
+        strip = VGroup()
+        for i, t_ in enumerate(ex):
+            col = interpolate_color(ManimColor(GREY_D), ManimColor(GREY_B), (int(t_) % 8) / 8)
+            if 10 <= i < 30 or 60 <= i < 80:
+                col = interpolate_color(ManimColor(CAUSE), ManimColor(C.BITS), (i % 20) / 20)
+            strip.add(Square(0.12, stroke_width=0, fill_color=col, fill_opacity=0.95))
+        strip.arrange(RIGHT, buff=0.015).move_to([0, -2.6, 0])
+        sl = label(r"its task: \ $96$ random tokens, \ one stretch repeated \ (lit); \ predict the next token",
+                   font_size=20, color=GREY_A).next_to(strip, UP, buff=0.15)
         with self.voiceover(
             "To find what causes a behaviour, you need a behaviour with a known answer. The classic is copying: "
             "show a model a passage twice, and the second time it should be easy, since the model can look back. "
@@ -60,15 +70,16 @@ class Patching(VoiceoverScene):
               "attention-only model, trained on random tokens with one stretch repeated, where copying is the only "
               "thing worth learning."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(g[0][6:]), FadeIn(g[1][6:]))
             vo.wait_until("a")
-            self.play(FadeIn(g[0][6:]), GrowFromEdge(g[0][0], DOWN), FadeIn(g[0][2]), FadeIn(g[0][4]))
+            self.play(GrowFromEdge(g[0][0], DOWN), FadeIn(g[0][2]), FadeIn(g[0][4]))
             self.play(GrowFromEdge(g[0][1], DOWN), FadeIn(g[0][3]), FadeIn(g[0][5]))
             vo.wait_until("b")
-            self.play(FadeIn(g[1][6:]), GrowFromEdge(g[1][0], DOWN), FadeIn(g[1][2]), FadeIn(g[1][4]))
+            self.play(GrowFromEdge(g[1][0], DOWN), FadeIn(g[1][2]), FadeIn(g[1][4]))
             self.play(GrowFromEdge(g[1][1], DOWN), FadeIn(g[1][3]), FadeIn(g[1][5]))
             vo.wait_until("c")
-            self.play(g.animate.set_opacity(0.3))
+            self.play(g.animate.set_opacity(0.25).shift(UP * 0.5))
+            self.play(LaggedStart(*[FadeIn(q) for q in strip], lag_ratio=0.01), FadeIn(sl), run_time=2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -121,7 +132,7 @@ class Patching(VoiceoverScene):
         tgt = int(d["target"])
         lo, hi_ = 0, tgt + 4
         Hs = np.clip(H[:, lo:hi_], 0, 1)
-        W, Hh = 10.6, 1.9
+        W, Hh = 10.6, 2.4
         img = heat_image(Hs[::-1], W, Hh, color=CAUSE, gamma=0.7).move_to([0.9, -1.2, 0])
         n = hi_ - lo
         cw = W / n
@@ -129,8 +140,8 @@ class Patching(VoiceoverScene):
         rl = VGroup(*[label(t, font_size=18, color=GREY_A).next_to([img.get_left()[0], img.get_top()[1] - Hh / 3 * (k + 0.5), 0], LEFT, buff=0.1)
                       for k, t in enumerate([r"output", r"between layers", r"input"])])
         marks = VGroup()
-        for j, t in ((20, r"$20$"), (21, r"$21$"), (tgt, rf"${tgt}$")):
-            marks.add(MathTex(t.strip("$"), font_size=20, color=WHITE).move_to([xs(j), img.get_bottom()[1] - 0.22, 0]))
+        for j, t, dx in ((20, "20", -0.15), (21, "21", 0.15), (tgt, str(tgt), 0.0)):
+            marks.add(MathTex(t, font_size=20, color=WHITE).move_to([xs(j) + dx, img.get_bottom()[1] - 0.22, 0]))
         xl = label(r"the position whose vector is swapped for the corrupted one", font_size=18, color=GREY_B).next_to(marks, DOWN, buff=0.1)
         dc = definition_card(r"activation patching", r"run the model on a clean input and on a corrupted one; copy one "
                              r"activation from one run into the other, \ and measure how much of the behaviour moves "

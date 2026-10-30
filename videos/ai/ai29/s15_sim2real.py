@@ -30,7 +30,7 @@ class SimToReal(VoiceoverScene):
 
     def card(self):
         card = chapter_card(14, r"From simulation to reality", r"Can a robot learn in a world that isn't real?",
-                            lit=(2017,), part=PART)
+                            lit=(), part=PART)
         with self.voiceover("Chapter fourteen. From simulation to reality."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

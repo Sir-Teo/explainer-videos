@@ -127,13 +127,14 @@ class Lens(VoiceoverScene):
             f"<bookmark mark='c'/> Going up, the right continuations firm up; {verdict} Predictions are built "
             "gradually, refined block by block."
         ) as vo:
-            self.play(FadeIn(pre), FadeIn(heads), FadeIn(inl), FadeIn(rows))
+            self.play(FadeIn(pre), FadeIn(heads), FadeIn(inl), FadeIn(rows),
+                      LaggedStart(*[FadeIn(c) for c in g], lag_ratio=0.005), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(cap), LaggedStart(*[FadeIn(c) for c in g[:n]], lag_ratio=0.05))
+            self.play(FadeIn(cap))
             vo.wait_until("b")
             self.play(Indicate(g[:n], color=PROBE, scale_factor=1.02))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(c) for c in g[n:]], lag_ratio=0.01), run_time=2.5)
+            self.play(Indicate(g[n:], color=PROBE, scale_factor=1.01), run_time=1.5)
             self.play(Indicate(VGroup(*[g[l_ * n + n - 1] for l_ in range(len(last))]), color=WHITE, scale_factor=1.04))
         self.wait(0.3)
         self.clear_scene()
@@ -170,11 +171,11 @@ class Lens(VoiceoverScene):
             f"<bookmark mark='c'/> and over {int(S)} steps the gap to the final prediction falls at every layer, most "
             "at the bottom, where the logit lens is furthest off."
         ) as vo:
-            self.play(Write(f), FadeIn(w))
+            self.play(Write(f), FadeIn(w), FadeIn(g))
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(VGroup(*[Dot(g.ax.c2p(0, cur[l_, 0, 1]), radius=0.05, color=cols[l_]) for l_ in range(L)])))
+            self.play(FadeIn(VGroup(*[Dot(g.ax.c2p(0, cur[l_, 0, 1]), radius=0.05, color=cols[l_]) for l_ in range(L)])))
             vo.wait_until("c")
             self.play(*[Create(c) for c in cs], run_time=3)
             self.play(FadeIn(lbl))
