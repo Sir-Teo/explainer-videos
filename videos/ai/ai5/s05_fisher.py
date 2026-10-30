@@ -199,7 +199,7 @@ class Fisher(VoiceoverScene):
             "<bookmark mark='a'/> In 1998 Shun-ichi Amari proposed measuring steps of gradient descent by it, so "
             "that a step is judged by how much the model's predictions change, not its weights: the natural "
             "gradient. <bookmark mark='b'/> In 2017, elastic weight consolidation used it to protect what a network "
-            "had learned. <bookmark mark='c'/> And today's curvature-aware optimizers approximate it block by block. "
+            "had learned. <bookmark mark='c'/> And today's curvature-aware optimizers approximate it, or a close cousin, layer by layer. "
             "Part eleven picks them up."
         ) as vo:
             self.play(FadeIn(head), Write(f), FadeIn(fn))

@@ -41,7 +41,8 @@ class Bayes(VoiceoverScene):
         ns = [int(n) for n in d["ns"]]
         ks = [int(d[f"k{n}"]) for n in ns]
         head = d["head"]
-        assert ks[1] == head[:10].count("e") == 3
+        assert ks[1] == head[:10].count("e")
+        pk = (ks[-1] + 1) / (ns[-1] + 2)
         us = [math.log10(n + 1) for n in ns]
         u = ValueTracker(0.0)
 
@@ -143,11 +144,12 @@ class Bayes(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(prop))
         with self.voiceover(
-            "Read the first ten letters: three e's. <bookmark mark='a'/> The belief leans toward a third, but it's "
-            "still wide. <bookmark mark='b'/> After a hundred letters, it's narrower. <bookmark mark='c'/> After a "
-            "thousand, narrower still. <bookmark mark='d'/> After ten thousand, it's a sharp peak near 0.127: "
-            "ninety-five percent of the belief lies between 0.120 and 0.134. <bookmark mark='e'/> The whole "
-            "passage, all sixteen thousand letters, gives 0.122, inside that range."
+            f"Read the first ten letters: {ks[1]} e's. <bookmark mark='a'/> The belief leans toward "
+            f"{ks[1] / ns[1]:.1f}, but it's still wide. <bookmark mark='b'/> After a hundred letters, it's narrower. "
+            "<bookmark mark='c'/> After a thousand, narrower still. <bookmark mark='d'/> After ten thousand, it's a "
+            f"sharp peak near {pk:.3f}: ninety-five percent of the belief lies between {ci[0]:.3f} and {ci[1]:.3f}. "
+            f"<bookmark mark='e'/> The whole passage, all {int(d['n_all']):,} letters, gives {e_all:.3f}, "
+            f"{'inside' if ci[0] < e_all < ci[1] else 'outside'} that range."
         ) as vo:
             self.play(FadeOut(flat), LaggedStart(*[Indicate(c, color=C.BITS, scale_factor=1.15) for c in cells[:10]],
                                                  lag_ratio=0.1), run_time=1.5)
@@ -282,11 +284,12 @@ class Bayes(VoiceoverScene):
         bl = label(r"test error \ (median of $200$ training sets) \ against $\lambda$", font_size=18, color=GREY_A)
         bl.next_to(bx, UP, buff=0.1)
         better = d["best_err"] < d["mle_med"]
+        lam_e = -int(math.floor(math.log10(float(d["best_lam"]))))
+        lam_m = float(d["best_lam"]) * 10 ** lam_e
         verdict = (f"Over two hundred training sets, maximum likelihood's median test error is {d['mle_med']:.2f}; "
-                   f"the best lambda, about {d['best_lam']:.0e}, brings it to {d['best_err']:.3f}." if better else
+                   f"the best lambda, about {lam_m:.0f} times ten to the minus {lam_e}, brings it to {d['best_err']:.3f}." if better else
                    f"Over two hundred training sets, the prior did not help: {d['best_err']:.3f} against "
                    f"{d['mle_med']:.3f}.")
-        verdict = verdict.replace("e-0", " times ten to the minus ")
         with self.voiceover(
             "A belief can also be used to pick a single answer: the peak of the posterior, called MAP, maximum a "
             "posteriori. <bookmark mark='a'/> Put a Gaussian prior on a model's weights, saying small weights are "

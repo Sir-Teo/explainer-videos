@@ -148,7 +148,7 @@ class Tails(VoiceoverScene):
         ratio = vals["hoeff"] / ex[j]
         order_ok = vals["markov"] > vals["cheb"] > vals["hoeff"] >= vals["chern"] > ex[j]
         verdict = ("Each bound is tighter than the one before, and all of them are loose." if order_ok else
-                   "Each bound holds, all of them loosely.")
+                   "Each bound holds here, but all of them loosely.")
         with self.voiceover(
             "Now put them against the truth, on a log scale. The exact tail, and a million simulated runs on top of "
             f"it. <bookmark mark='a'/> Markov's bound hardly falls at all; at epsilon of {eps[j]:g} it allows "

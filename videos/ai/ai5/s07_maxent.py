@@ -151,7 +151,7 @@ class MaxEnt(VoiceoverScene):
         sl = label(rf"maximum entropy: \ ${H:.4f}$", font_size=22, color=ENT).next_to(hx.c2p(H, 1.05), UP, buff=0.1).shift(LEFT * 0.6)
         hl = label(rf"${int(d['n_others']):,}$ other dice with average $4.5$: \ entropies".replace(",", "{,}"),
                    font_size=22, color=GREY_A).next_to(hx, DOWN, buff=0.15)
-        verdict = (f"the highest of them reaches {Hmax:.4f}, just under" if Hmax < H else f"one of them reaches {Hmax:.4f}")
+        verdict = (f"the highest of them reaches {Hmax:.4f}, just under" if Hmax < H else f"one of them reaches {Hmax:.4f}, at the maximum's level")
         with self.voiceover(
             "Solving that one equation is a tiny training run. Start from the fair die, with lambda zero, and nudge "
             "lambda by how far the average is from four and a half. <bookmark mark='a'/> The die tilts toward its "

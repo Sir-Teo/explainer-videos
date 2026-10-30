@@ -158,13 +158,13 @@ class Backprop(VoiceoverScene):
         name = label(r"$\delta = \partial \mathcal L / \partial z$: \ the error signal at a layer", font_size=24, color=GRAD)
         name.to_edge(DOWN, buff=0.35)
         # a small picture of the network: 4 inputs, 5 hidden units, 3 outputs
-        cols_ = [VGroup(*[Dot(radius=0.07, color=c) for _ in range(k)]).arrange(DOWN, buff=0.16)
+        cols_ = [VGroup(*[Dot(radius=0.11, color=c) for _ in range(k)]).arrange(DOWN, buff=0.3)
                  for k, c in ((4, VALUE), (5, C.MLP), (3, C.PROB))]
         for j, c_ in enumerate(cols_):
-            c_.move_to([4.6 + 1.0 * j, -2.55, 0])
-        w1 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1, color=GREY_D) for a in cols_[0] for b in cols_[1]])
-        w2 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1, color=GREY_D) for a in cols_[1] for b in cols_[2]])
-        nl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(c_, DOWN, buff=0.12)
+            c_.move_to([3.6 + 1.5 * j, -2.3, 0])
+        w1 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1.5, color=GREY_D) for a in cols_[0] for b in cols_[1]])
+        w2 = VGroup(*[Line(a.get_center(), b.get_center(), stroke_width=1.5, color=GREY_D) for a in cols_[1] for b in cols_[2]])
+        nl = VGroup(*[MathTex(t, font_size=26, color=GREY_B).next_to(c_, DOWN, buff=0.12)
                       for t, c_ in zip((r"x", r"a_1", r"q"), cols_)])
         netpic = VGroup(w1, w2, *cols_, nl)
         with self.voiceover(

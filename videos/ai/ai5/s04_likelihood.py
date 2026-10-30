@@ -156,8 +156,8 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Score every possible bell, every centre and every width, and the scores form a landscape. "
             "<bookmark mark='a'/> From part four, we know how to find its top: follow the gradient uphill. "
-            "<bookmark mark='b'/> At the summit, the centre is the balls' average, 5.96, and the width is their "
-            "spread, 1.71, close to the square root of three that the pegs predict. For a bell, maximum likelihood "
+            f"<bookmark mark='b'/> At the summit, the centre is the balls' average, {m:.2f}, and the width is their "
+            f"spread, {s_hat:.2f}, close to the square root of three that the pegs predict. For a bell, maximum likelihood "
             "comes out as the two most natural summaries of the data."
         ) as vo:
             self.play(Create(axes), FadeIn(surf), FadeIn(head), FadeIn(legend), run_time=1.6)
