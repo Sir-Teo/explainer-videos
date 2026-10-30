@@ -39,13 +39,11 @@ class SGNS(VoiceoverScene):
         sent = data_text("the old dog barked at the moon", font=MONO, font_size=30, color=GREY_A).next_to(head, DOWN,
                                                                                                          buff=0.35)
         with self.voiceover(
-            "In 2013, Tomas Mikolov and his colleagues at Google trained word vectors another way: with a guessing "
-            "game. <bookmark mark='a'/> Each word gets two vectors, one for when it is the word and one for when it "
-            "is a neighbour. From each word, guess whether another word is a real neighbour or a random one. "
-            "<bookmark mark='b'/> The loss raises the dot product of a word with its real neighbours, through the "
-            f"logistic function, and lowers it with {K} random words drawn from the vocabulary. <bookmark mark='c'/> "
-            "That is skip-gram with negative sampling, the heart of word2vec. Cheap enough to train on billions of "
-            "words in hours, it made word vectors a standard part of every language system."
+            "In 2013 Tomas Mikolov and colleagues at Google learned word vectors with a guessing game. "
+            "<bookmark mark='a'/> Each word gets two vectors, one as the word and one as a neighbour. "
+            "<bookmark mark='b'/> The loss raises a word's dot product with its real neighbours, through the logistic "
+            f"function, and lowers it with {K} random words. <bookmark mark='c'/> That is skip-gram with negative "
+            "sampling, the heart of word2vec: cheap enough for billions of words in hours."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sent))
             vo.wait_until("a")
@@ -90,14 +88,13 @@ class SGNS(VoiceoverScene):
         proper = lambda w_: w_.capitalize() if w_ in days.split() else w_  # noqa: E731
         mid = min(4, len(steps) - 1)
         with self.voiceover(
-            "We trained it on the thirty novels, with the same ten thousand words and the same window as the "
-            "counting. Watch it learn: four words and their five nearest neighbours, with the loss below. "
-            "<bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
-            f"<bookmark mark='b'/> After {steps[1]} steps, the neighbours are mostly the commonest words: every "
-            f"batch pushes the frequent words, so they move first. <bookmark mark='c'/> By step {steps[mid]:,}, "
-            f"meaning appears: three sits with {', '.join(snaps[mid]['three'][:3])}. <bookmark mark='d'/> By the "
-            f"end, Monday sits with {proper(snaps[-1]['monday'][0])}, and father with {snaps[-1]['father'][0]} and "
-            f"{snaps[-1]['father'][1]}. Nothing told it what a day or a relative is; only which words keep company."
+            "We trained it on the novels, with the same words and window as the counting. Four words and their "
+            "nearest neighbours, with the loss below. <bookmark mark='a'/> At the start, random. <bookmark mark='b'/> "
+            f"After {steps[1]} steps, the neighbours are the commonest words: they get pushed first. "
+            f"<bookmark mark='c'/> By step {steps[mid]:,}, meaning appears: three sits with "
+            f"{', '.join(snaps[mid]['three'][:3])}. <bookmark mark='d'/> By the end, Monday sits with "
+            f"{proper(snaps[-1]['monday'][0])}, and father with {snaps[-1]['father'][0]}. Nothing told it what a day or a "
+            "relative is."
         ) as vo:
             self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub), FadeIn(g), Create(lc))
             self.add(cnt, cursor)
@@ -139,13 +136,13 @@ class SGNS(VoiceoverScene):
                            r"$\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$: \ word2vec factorizes the "
                            r"shifted PMI table.", width=8.0).to_edge(UP, buff=0.2)
         with self.voiceover(
-            "Why do guessing and counting give similar vectors? In 2014 Omer Levy and Yoav Goldberg answered it. "
-            "<bookmark mark='a'/> Collect the whole loss for one word and one context. The pair shows up as a real "
-            "neighbour some number of times, and as a random negative about k times the word's count times the "
-            "context's sampling probability. <bookmark mark='b'/> Treat their dot product x as free, and set the "
-            "derivative to zero. <bookmark mark='c'/> The ratio of the two logistic terms is e to the x. "
-            "<bookmark mark='d'/> Take logs: the best dot product is the pointwise mutual information, shifted down "
-            "by log k. Word2vec is factorizing the same table we built by counting, shifted by a constant."
+            "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. "
+            "<bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour "
+            "some number of times, and as a negative about k times the word's count times the context's sampling "
+            "probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. "
+            "<bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: "
+            "the best dot product is the pointwise mutual information, minus log k. Word2vec factorizes the counting "
+            "table, shifted."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             for k, mk in enumerate("abcd"):
@@ -181,13 +178,11 @@ class SGNS(VoiceoverScene):
                      font_size=30).to_edge(UP, buff=0.35)
         r0, r1, r2 = (ex["runs"][str(d)] for d in dims)
         with self.voiceover(
-            f"Let's check it. Take the {V} commonest words, so the loss can be minimized completely. "
-            f"<bookmark mark='a'/> With {dims[0]} numbers per vector, every dot product is free, as the theorem "
-            f"assumes: the trained dot products land on the shifted PMI, with a median error of "
-            f"{r0['median_err']:.3f}. <bookmark mark='b'/> With {dims[1]} numbers, the vectors can't fit every "
-            f"cell, and the points spread: a median error of {r1['median_err']:.2f}. <bookmark mark='c'/> With "
-            f"{dims[2]}, {r2['median_err']:.2f}. That is the second half of the story: a short vector can only hold "
-            "a low-rank version of the table, and which version depends on how the loss weighs each cell."
+            f"Let's check it on the {V} commonest words, where the loss can be minimized completely. "
+            f"<bookmark mark='a'/> With {dims[0]} numbers per vector, every dot product is free: they land on the "
+            f"shifted PMI, a median error of {r0['median_err']:.3f}. <bookmark mark='b'/> With {dims[1]}, the points "
+            f"spread: {r1['median_err']:.2f}. <bookmark mark='c'/> With {dims[2]}, {r2['median_err']:.2f}. A short "
+            "vector holds only a low-rank version of the table."
         ) as vo:
             self.play(FadeIn(head), FadeIn(xl), FadeIn(yl), *[FadeIn(VGroup(p[0], p[1], p[3])) for p in panels])
             for k, mk in enumerate("abc"):
@@ -224,11 +219,10 @@ class SGNS(VoiceoverScene):
                    if strong else "They agree only loosely: a hundred numbers can't hold the whole table, and the "
                    "training stopped early.")
         with self.voiceover(
-            "And the full model, trained on ten thousand words with a hundred numbers each? It can't fit every "
-            "cell, and it saw each pair only a few times. <bookmark mark='a'/> For the "
-            f"{int(lg['n']):,} word pairs it saw at least {lg['min_count']} times, here is each trained dot product "
-            "against the shifted PMI counted from its own training pairs. <bookmark mark='b'/> The correlation is "
-            f"{lg['r']:.2f}, and the slope {lg['slope']:.2f}. {verdict}"
+            "And the real run, ten thousand words with a hundred numbers each? <bookmark mark='a'/> For the "
+            f"{int(lg['n']):,} pairs it saw at least {lg['min_count']} times: trained dot product against the shifted "
+            f"PMI of its own training pairs. <bookmark mark='b'/> Correlation {lg['r']:.2f}, slope {lg['slope']:.2f}. "
+            f"{verdict}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), Create(diag))
             vo.wait_until("a")
@@ -277,14 +271,12 @@ class SGNS(VoiceoverScene):
         else:
             verdict = "On analogies the counting method does better."
         with self.voiceover(
-            "So which is better? <bookmark mark='a'/> On our own analogy questions, the counted vectors get "
-            f"{100 * a1['all']['acc']:.0f} percent and word2vec gets {100 * a2['all']['acc']:.0f} percent. {verdict} "
-            f"On category neighbours, {100 * p1['purity']:.0f} against {100 * p2['purity']:.0f} percent. Levy, "
-            "Goldberg and Ido Dagan found the same in 2015: tuned with the same care, the two families are close. "
-            "<bookmark mark='b'/> A year after word2vec, Jeffrey Pennington, Richard Socher and Christopher Manning's "
-            "GloVe made the counting explicit, fitting the logarithm of the counts directly. <bookmark mark='c'/> "
-            "All of these give one vector per word, whatever the sentence. Bank by a river and bank with money "
-            "share one. The transformer, in Parts 13 and 14, makes each vector depend on its context."
+            "Which is better? <bookmark mark='a'/> On our analogy questions, counting gets "
+            f"{100 * a1['all']['acc']:.0f} percent and word2vec {100 * a2['all']['acc']:.0f}. {verdict} On category "
+            f"neighbours, {100 * p1['purity']:.0f} against {100 * p2['purity']:.0f}. Levy, Goldberg and Dagan found in "
+            "2015 that, tuned with equal care, the two families are close. <bookmark mark='b'/> GloVe, in 2014, fitted "
+            "the log counts directly. <bookmark mark='c'/> All of these give one vector per word: bank by a river and "
+            "bank with money share one. Parts 13 and 14 make vectors depend on context."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr))
             vo.wait_until("a")

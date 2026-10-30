@@ -42,14 +42,13 @@ class Norms(VoiceoverScene):
                 why(r"how many directions carry the size")]
         step = ladder(self, rows, whys, keep=4, top=1.2, x=-1.4, buff=0.4, edge=6.9)
         with self.voiceover(
-            "A matrix has two natural sizes. <bookmark mark='a'/> The Frobenius norm treats it as a long list of "
-            "numbers: the square root of the sum of their squares. The spectral norm treats it as a map: the most "
-            "it stretches any vector, the top singular value. <bookmark mark='b'/> They are related. The squared "
-            "Frobenius norm is the trace of A transpose A, <bookmark mark='c'/> and the trace is the sum of the "
-            "eigenvalues: the sum of the squared singular values. That was the missing step in chapter eight. "
-            "<bookmark mark='d'/> So the spectral norm is at most the Frobenius norm, which is at most root r "
-            "times it. <bookmark mark='e'/> Their squared ratio, the stable rank, counts how many directions carry "
-            "a matrix's size: one, if a single direction dominates; r, if all are equal."
+            "A matrix has two natural sizes. <bookmark mark='a'/> The Frobenius norm treats it as a list of numbers: "
+            "the root of the sum of squares. The spectral norm treats it as a map: the most it stretches any vector, "
+            "the top singular value. <bookmark mark='b'/> The squared Frobenius norm is the trace of A transpose A, "
+            "<bookmark mark='c'/> and the trace is the sum of the eigenvalues, the squared singular values: chapter "
+            "eight's missing step. <bookmark mark='d'/> So the spectral norm is at most the Frobenius norm, which is at "
+            "most root r times it. <bookmark mark='e'/> Their squared ratio, the stable rank, counts how many directions "
+            "carry the size."
         ) as vo:
             self.play(FadeIn(defs[0], shift=DOWN * 0.2), FadeIn(defs[1], shift=DOWN * 0.2))
             vo.wait_until("a")
@@ -89,11 +88,10 @@ class Norms(VoiceoverScene):
         verdict = ("every one of them far below a random matrix of the same shape" if hi < 0.5 * rnd["stable"]
                    else "some of them close to a random matrix")
         with self.voiceover(
-            f"Here are the stable ranks of all 48 matrices in GPT-2's blocks. Each could have up to {full}. "
-            f"<bookmark mark='a'/> A random matrix of the MLP's shape has a stable rank of {rnd['stable']:.0f}; "
-            f"theory predicts {rnd['stable_pred']:.0f}. <bookmark mark='b'/> The trained ones run from {lo:.0f} to "
-            f"{hi:.0f}: {verdict}. Training concentrates a matrix's size in a few directions. Chapter ten looks "
-            "at those directions."
+            f"Here are the stable ranks of GPT-2's 48 block matrices; each could reach {full}. <bookmark mark='a'/> A "
+            f"random matrix of the MLP's shape has {rnd['stable']:.0f}; theory predicts {rnd['stable_pred']:.0f}. "
+            f"<bookmark mark='b'/> The trained ones run from {lo:.0f} to {hi:.0f}: {verdict}. Training concentrates a "
+            "matrix's size in a few directions."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap))
             vo.wait_until("a")
@@ -132,11 +130,10 @@ class Norms(VoiceoverScene):
         head = label(rf"A vector through ${L}$ layers of random matrices", font_size=34).to_edge(UP, buff=0.35)
         big, small = lens[gains[2]][-1], lens[gains[0]][-1]
         with self.voiceover(
-            "Norms multiply through a network. <bookmark mark='a'/> Stretching by A and then by B stretches by at "
-            f"most the product of the two. A deep network applies one matrix after another: push a vector through "
-            f"{L} random layers. <bookmark mark='b'/> If each layer stretches a typical vector by {gains[2]:g}, the "
-            f"length after {L} layers has grown {big:,.0f} times. <bookmark mark='c'/> At {gains[0]:g}, it shrinks to "
-            f"{small:.5f}. Only near one does the signal survive. That knife edge is Part 9's subject."
+            "Norms multiply through a network. <bookmark mark='a'/> Stretching by A then B stretches by at most the "
+            f"product. Push a vector through {L} random layers. <bookmark mark='b'/> At a stretch of {gains[2]:g} per "
+            f"layer, its length grows {big:,.0f} times. <bookmark mark='c'/> At {gains[0]:g}, it shrinks to "
+            f"{small:.5f}. Only near one does the signal survive: Part 9's subject."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             vo.wait_until("a")
@@ -186,15 +183,13 @@ class Norms(VoiceoverScene):
         lost = (f" From a condition number of ten to the {ex(dead32)}, the 32-bit answer is no answer at all."
                 if dead32 else "")
         with self.voiceover(
-            "The ratio of the largest and smallest stretch is the condition number, and it says how much a matrix "
-            "can amplify errors. <bookmark mark='a'/> Solve A x equals b with a small error in b. "
-            "<bookmark mark='b'/> The error in x is at most the error in b over the smallest singular value, "
-            "<bookmark mark='c'/> and b is at most the largest singular value times x. <bookmark mark='d'/> "
-            "Divide: relative errors grow by at most kappa. <bookmark mark='e'/> Computers round every number, so "
-            "the rounding unit plays the part of the error in b. At a condition number of a million, 64-bit "
-            f"arithmetic loses about ten to the minus {-ex(s6['e64'])} of the answer; 32-bit loses ten to the "
-            f"minus {-ex(s6['e32'])}.{lost} GPT-2's worst-conditioned matrix has kappa about ten to the "
-            f"{ex(kmax)}: low precision is something to design around, as Part 18 does."
+            "The largest stretch over the smallest is the condition number: how much a matrix can amplify errors. "
+            "<bookmark mark='a'/> Solve A x equals b with a small error in b. <bookmark mark='b'/> The error in x is at "
+            "most that error over the smallest singular value, <bookmark mark='c'/> and b is at most the largest times "
+            "x. <bookmark mark='d'/> Divide: relative errors grow by at most kappa. <bookmark mark='e'/> A computer's "
+            "rounding plays the error in b. At a condition number of a million, 64-bit arithmetic loses about ten to "
+            f"the minus {-ex(s6['e64'])} of the answer; 32-bit, ten to the minus {-ex(s6['e32'])}.{lost} GPT-2's "
+            f"worst-conditioned matrix reaches about ten to the {ex(kmax)}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap), FadeIn(leg))
             for k, mk in enumerate("abcd"):
@@ -240,15 +235,13 @@ class Norms(VoiceoverScene):
         near = float(np.mean((fin > 0.6) & (fin < 1.3)))
         one = DashedLine(ax.c2p(0, 1), ax.c2p(n, 1), color=C.MUON, stroke_width=1.5)
         with self.voiceover(
-            "The spectral norm has become an optimizer. <bookmark mark='a'/> Ask which step of spectral size one "
-            "changes the loss the most, along a gradient G. Write G with its SVD. <bookmark mark='b'/> Each "
-            "diagonal entry is at most one, so the best is the sum of the singular values, reached by U V "
-            "transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is Muon's update. "
-            "Instead of an SVD it runs five Newton-Schulz iterations, a few matrix products that push every "
-            f"singular value towards one. On a real gradient, {100 * tiny:.0f} percent of them start below a "
-            f"hundredth of the largest. <bookmark mark='d'/> After five steps, {100 * near:.0f} percent lie between "
-            "0.6 and 1.3; the very smallest would need more steps. Part 11 builds the optimizer, and tunes the "
-            "iteration."
+            "The spectral norm has become an optimizer. <bookmark mark='a'/> Which step of spectral size one changes "
+            "the loss most along a gradient G? Write G with its SVD. <bookmark mark='b'/> Each diagonal entry is at most "
+            "one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is "
+            "Muon's update, computed with five Newton-Schulz iterations, matrix products that push singular values "
+            f"towards one. On a real gradient, {100 * tiny:.0f} percent start below a hundredth of the largest. "
+            f"<bookmark mark='d'/> After five steps, {100 * near:.0f} percent lie between 0.6 and 1.3. Part 11 builds "
+            "the optimizer."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2))
             step(0)

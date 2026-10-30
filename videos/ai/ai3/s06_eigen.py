@@ -41,10 +41,10 @@ class Eigen(VoiceoverScene):
                                                                                                aligned_edge=LEFT)
         char.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.1)
         with self.voiceover(
-            "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> But some aren't: they stay on "
-            "their own line, and are only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and "
-            "the stretch factor is the eigenvalue. A minus lambda times the identity must then squash a direction "
-            "to zero, so its determinant vanishes: a polynomial equation for lambda."
+            "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> Some aren't: they stay on their "
+            "line, only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and the stretch is the "
+            "eigenvalue. A minus lambda I must then squash a direction to zero, so its determinant vanishes: a "
+            "polynomial equation for lambda."
         ) as vo:
             self.play(Create(pl, lag_ratio=0.05), LaggedStart(*[GrowArrow(a) for a in fan], lag_ratio=0.05), run_time=2)
             vo.wait_until("a")
@@ -83,12 +83,11 @@ class Eigen(VoiceoverScene):
         Lm = np.diag(lam[::-1])  # 3 on the first axis, 1 on the second
         Qr = rot(-PI / 4)  # turns (1, 1) onto the x axis
         with self.voiceover(
-            "Symmetric matrices, the ones that equal their own mirror image across the diagonal, behave best of "
-            "all. <bookmark mark='a'/> Their eigenvalues are real numbers, and their eigenvectors are perpendicular. "
-            "<bookmark mark='b'/> So the map is: turn, so the eigenvectors line up with the axes; stretch along each "
-            "axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. The "
-            "transpose flips a matrix across its diagonal, and for a turn like Q, that's the same turn, undone. "
-            "That's the spectral theorem."
+            "Symmetric matrices, equal to their mirror image across the diagonal, behave best. <bookmark mark='a'/> "
+            "Their eigenvalues are real, and their eigenvectors perpendicular. <bookmark mark='b'/> So the map is: turn "
+            "the eigenvectors onto the axes, stretch each axis by its eigenvalue, and turn back. <bookmark mark='c'/> A "
+            "equals Q, Lambda, Q transpose; for a turn like Q, the transpose is the same turn, undone. That's the "
+            "spectral theorem."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(sb), FadeIn(sym), Create(circ))
             vo.wait_until("a")
@@ -126,15 +125,13 @@ class Eigen(VoiceoverScene):
                     r"(induction)")]
         step = ladder(self, rows, whys, keep=3, top=0.9, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Why does this always work for symmetric matrices? Here is the proof, in three steps. "
-            "<bookmark mark='a'/> First, the eigenvalues are real. Allow complex numbers for a moment, and sandwich "
-            "A between an eigenvector and its conjugate. Because A is real and symmetric, the middle number equals "
-            "its own conjugate, so lambda equals lambda bar. <bookmark mark='b'/> Second, eigenvectors with different "
-            "eigenvalues are perpendicular: move A from one side of the dot product to the other, and the two "
-            "eigenvalues must agree unless the dot product is zero. <bookmark mark='c'/> Third, A maps the space "
-            "perpendicular to one eigenvector into itself. Find an eigenvector there, and repeat: by induction, a "
-            "full set of perpendicular eigenvectors. Cauchy proved the first part in 1829; Hilbert carried it to "
-            "infinitely many dimensions, and named the eigenvalues."
+            "Why does it always work? The proof has three steps. <bookmark mark='a'/> First, the eigenvalues are real: "
+            "sandwich A between an eigenvector and its complex conjugate. Since A is real and symmetric, the middle "
+            "number equals its own conjugate, so lambda equals lambda bar. <bookmark mark='b'/> Second, eigenvectors "
+            "with different eigenvalues are perpendicular: move A across the dot product, and the eigenvalues must agree "
+            "unless the dot product is zero. <bookmark mark='c'/> Third, A maps the space perpendicular to an "
+            "eigenvector into itself, so repeat inside it: by induction, a full set. Cauchy proved the first part in "
+            "1829; Hilbert took it to infinite dimensions."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             vo.wait_until("a")
@@ -186,13 +183,11 @@ class Eigen(VoiceoverScene):
         box = label(r"$\lambda_{\min} \le R(\mathbf{x}) \le \lambda_{\max}$, \ the maximum at the top eigenvector",
                     font_size=28, color=C.BITS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "One number connects eigenvalues to everything that follows: the Rayleigh quotient, x transpose A x "
-            "over x transpose x. <bookmark mark='a'/> Write x in the eigenvector basis, and it becomes a weighted "
-            "average of the eigenvalues, weighted by how much of x points along each eigenvector. "
-            "<bookmark mark='b'/> So, as x turns, it can never rise above the largest eigenvalue or fall below "
-            "the smallest, and it reaches them exactly along the eigenvectors. <bookmark mark='c'/> The top "
-            "eigenvector is the answer to a question: which direction does A favour most? That question returns as "
-            "the principal component, as power iteration, and as the singular value decomposition."
+            "One number connects eigenvalues to what follows: the Rayleigh quotient, x transpose A x over x transpose "
+            "x. <bookmark mark='a'/> In the eigenvector basis it is a weighted average of the eigenvalues. "
+            "<bookmark mark='b'/> So as x turns, it stays between the smallest and the largest eigenvalue, reaching "
+            "them along the eigenvectors. <bookmark mark='c'/> The top eigenvector answers a question: which direction "
+            "does A favour most? It returns as principal components, power iteration and the SVD."
         ) as vo:
             self.play(Create(circ), Create(q1), Create(q2), FadeIn(g))
             self.add(xa)
@@ -236,12 +231,11 @@ class Eigen(VoiceoverScene):
             DOWN, buff=0.15), corner=UL, width=4.6, color=C.BITS)
         cov_card.shift(DOWN * 0.7)
         with self.voiceover(
-            "Covariance matrices describe how data spreads out: <bookmark mark='c'/> a table of how much each "
-            "coordinate varies, on the diagonal, and how much each pair rises and falls together, off it. The spread "
-            "of the data along a unit direction is exactly the covariance's Rayleigh quotient, so the direction of "
-            "greatest spread is the top eigenvector. <bookmark mark='a'/> These are the principal components, Karl "
-            "Pearson's in 1901 and Harold Hotelling's in 1933. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's "
-            "768-dimensional words in three dimensions at the start of this part."
+            "Covariance matrices describe how data spreads: <bookmark mark='c'/> how much each coordinate varies, on "
+            "the diagonal, and how much pairs vary together, off it. The spread along a unit direction is the "
+            "covariance's Rayleigh quotient, so the direction of greatest spread is the top eigenvector. "
+            "<bookmark mark='a'/> These are the principal components, Pearson's in 1901 and Hotelling's in 1933. "
+            "<bookmark mark='b'/> Keeping the top few is how we drew GPT-2's words in three dimensions."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.004), FadeIn(tag),
                       run_time=1.5)

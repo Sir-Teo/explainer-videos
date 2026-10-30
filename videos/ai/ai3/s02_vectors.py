@@ -45,9 +45,8 @@ class Vectors(VoiceoverScene):
         with self.voiceover(
             "A vector is an arrow from the origin, <bookmark mark='a'/> or, just as well, a list of numbers: how far "
             "to go along each axis. <bookmark mark='b'/> Two numbers in the plane, three in space, and 768 for a word "
-            "in GPT-2. <bookmark mark='c'/> Grassmann saw in 1844 that nothing about the algebra cares how many "
-            "numbers there are. Almost nobody read him; forty years later Gibbs and Heaviside turned his ideas into "
-            "the vector calculus physicists still use."
+            "in GPT-2. <bookmark mark='c'/> Grassmann saw in 1844 that the algebra doesn't care how many numbers there "
+            "are. Almost nobody read him for forty years."
         ) as vo:
             self.play(Create(pl, lag_ratio=0.05), run_time=1.5)
             self.play(GrowArrow(a))
@@ -84,10 +83,10 @@ class Vectors(VoiceoverScene):
                       font_size=30).to_edge(DOWN, buff=0.4).add_background_rectangle(color=BACKGROUND, opacity=0.85,
                                                                                     buff=0.1)
         with self.voiceover(
-            "Two moves make all of linear algebra. <bookmark mark='a'/> Add two vectors: walk along one, then along "
-            "the other. <bookmark mark='b'/> And scale them: stretch, shrink or flip. Mix the two moves, a times u "
-            "plus b times v, <bookmark mark='c'/> and as a and b vary the tip sweeps out the whole plane. Then u and v "
-            "are a basis: every vector has exactly one pair of coordinates in it."
+            "Two moves make all of linear algebra. <bookmark mark='a'/> Add two vectors: walk along one, then the "
+            "other. <bookmark mark='b'/> And scale them: stretch, shrink or flip. Mix the two, a times u plus b times "
+            "v, <bookmark mark='c'/> and the tip sweeps out the whole plane: u and v are a basis, and every vector has "
+            "exactly one pair of coordinates in it."
         ) as vo:
             self.play(GrowArrow(au), GrowArrow(aw), FadeIn(lu), FadeIn(lw))
             vo.wait_until("a")
@@ -139,12 +138,11 @@ class Vectors(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=0.9, x=1.3, buff=0.32, edge=6.9)
         with self.voiceover(
             "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate and add: the dot "
-            "product, also called the inner product. It is symmetric, it is linear in each slot, and a vector dotted "
-            "with itself is its length squared. <bookmark mark='b'/> Now draw the triangle with sides a, b and a minus "
-            "b. Its third side squared is a dot product. <bookmark mark='c'/> Expand it. <bookmark mark='d'/> The law "
-            "of cosines, from Euclid, says the same side squared is this. <bookmark mark='e'/> Compare: the dot "
-            "product is the two lengths times the cosine of the angle between them. Lists of numbers carry "
-            "geometry."
+            "product, or inner product. It is symmetric, linear in each slot, and a vector dotted with itself is its "
+            "length squared. <bookmark mark='b'/> Draw the triangle with sides a, b and a minus b. Its third side "
+            "squared is a dot product. <bookmark mark='c'/> Expand it. <bookmark mark='d'/> Euclid's law of cosines "
+            "gives the same side another way. <bookmark mark='e'/> Compare: the dot product is the two lengths times "
+            "the cosine of the angle between them."
         ) as vo:
             self.play(FadeIn(dfn, shift=DOWN * 0.2))
             self.play(FadeIn(props))
@@ -204,14 +202,12 @@ class Vectors(VoiceoverScene):
                            .next_to(o, RIGHT, buff=2.2).shift(UP * 0.3))
         hist = note(r"Cauchy (1821, \ sums); \ Bunyakovsky (1859) and Schwarz (1888, \ integrals)").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Is the cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz "
-            "inequality, and its proof is short. <bookmark mark='a'/> For any number t, the length of a minus t b, "
-            "squared, can't be negative. <bookmark mark='b'/> Expand it: a parabola in t. <bookmark mark='c'/> A "
-            "parabola that never dips below zero touches zero at most once, so its discriminant can't be positive. "
-            "<bookmark mark='d'/> Rearranged: the dot product is at most the product of the lengths. "
-            "<bookmark mark='e'/> Turn b, and watch the parabola: its lowest point reaches zero only when b lines up "
-            "with a. So the cosine is honest in any number of dimensions, and an angle between two words makes "
-            "sense."
+            "Is that cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz "
+            "inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. "
+            "<bookmark mark='b'/> Expand it: a parabola in t. <bookmark mark='c'/> A parabola that never dips below "
+            "zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot "
+            "product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches "
+            "zero only when b lines up with a. So an angle between two words makes sense."
         ) as vo:
             self.play(Create(ax), FadeIn(tl), FadeIn(fl), FadeIn(va))
             self.add(par, vb, cs)
@@ -315,14 +311,13 @@ class Vectors(VoiceoverScene):
                     color=C.TRUE_P).next_to(fh, DOWN, buff=0.12)
         soft = label(r"softmax: \ the probabilities", font_size=26, color=C.PROB).next_to(fh, DOWN, buff=0.12)
         floor = Line([-5.4, -1.6, 0], [5.4, -1.6, 0], color=GREY_D, stroke_width=1.5)
-        order = ", then ".join(toks[:3])
         with self.voiceover(
             "Here is why this matters. In Part 1, a network ended with a score for every possible next token, and the "
-            "softmax turned the scores into probabilities. <bookmark mark='a'/> In GPT-2, every one of those scores "
-            "is a dot product: the model's final state, dotted with each token's vector, the very same vectors the "
-            "tokens started out as. <bookmark mark='b'/> After the Eiffel Tower is located in the city of, the "
-            f"biggest dot products belong to {order}. <bookmark mark='c'/> Only the differences matter: the softmax "
-            f"gives {toks[0]} {100 * prob[0]:.1f} percent."
+            "softmax turned scores into probabilities. <bookmark mark='a'/> In GPT-2, each score is a dot product: the "
+            "model's final state with each token's vector, the very vectors the tokens started out as. "
+            "<bookmark mark='b'/> After the Eiffel Tower is located in the city of, the biggest dot products belong to "
+            f"{toks[0]}, {toks[1]}, {toks[2]}. <bookmark mark='c'/> The softmax gives {toks[0]} "
+            f"{100 * prob[0]:.1f} percent."
         ) as vo:
             self.play(FadeIn(prompt))
             self.play(Write(soft_f), FadeIn(recall))

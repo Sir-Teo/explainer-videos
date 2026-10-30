@@ -63,11 +63,10 @@ class LowRank(VoiceoverScene):
                         r"\textit{low rank}: \ a few do", picture=rk, width=4.6)
         rk_card.move_to([3.7, 0.4, 0])
         with self.voiceover(
-            "There's more. Written out, the decomposition says that any matrix is a sum of simple pieces, "
-            "<bookmark mark='a'/> each one a column times a row, weighted by a singular value. How many pieces a "
-            "table needs is its rank, and a low-rank table is one that a few pieces build. <bookmark mark='b'/> "
-            "Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k "
-            "pieces. No other choice comes closer. That's the Eckart-Young theorem, from 1936."
+            "Written out, the decomposition makes any matrix a sum of simple pieces, <bookmark mark='a'/> each a "
+            "column times a row, weighted by a singular value. The number of pieces is the rank; a low-rank table is "
+            "one a few pieces build. <bookmark mark='b'/> Keep the k biggest and you get the closest matrix of rank k. "
+            "Nothing else comes closer: the Eckart-Young theorem, from 1936."
         ) as vo:
             self.play(Write(f), run_time=2.0)
             vo.wait_until("a")
@@ -97,13 +96,11 @@ class LowRank(VoiceoverScene):
                 why(r"squared entries add up \\ to squared singular values"), why(r"the tail: \ equality at $B = A_k$")]
         step = ladder(self, rows, whys, keep=4, top=0.9, x=-1.0, buff=0.42, edge=6.9)
         with self.voiceover(
-            "Why can't anything beat the biggest pieces? Here is a proof in four lines. <bookmark mark='a'/> "
-            "Hermann Weyl's inequality from 1912: the singular values of A, shifted by k, are at most those of A "
-            "minus B, plus the k plus first of B. <bookmark mark='b'/> If B has rank k, its k plus first singular "
-            "value is zero. <bookmark mark='c'/> The squared size of a matrix, entry by entry, equals the sum of "
-            "its squared singular values; we'll see why in chapter nine. So the error of B is at least the sum of "
-            "A's singular values from k plus one on. <bookmark mark='d'/> And keeping the top k pieces achieves "
-            "exactly that: the error is the tail of the singular values, no more."
+            "Why can't anything beat them? <bookmark mark='a'/> Weyl's inequality, from 1912: A's singular values, "
+            "shifted by k, are at most those of A minus B plus the k plus first of B. <bookmark mark='b'/> If B has rank "
+            "k, that last term is zero. <bookmark mark='c'/> A matrix's squared size equals the sum of its squared "
+            "singular values, as chapter nine shows, so B's error is at least the tail of A's. "
+            "<bookmark mark='d'/> Keeping the top k achieves exactly that tail."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             for k_, mk in enumerate("abcd"):
@@ -137,13 +134,12 @@ class LowRank(VoiceoverScene):
                     rf"${tail[3]:.4f}$", font_size=26, color=C.BITS).to_edge(DOWN, buff=0.55)
         k8 = ranks.index(8) if 8 in ranks else 3
         with self.voiceover(
-            f"A picture is a matrix too: this one is {h} rows of {w} grey levels. <bookmark mark='a'/> Its best copy "
-            "of rank one is a single column times a single row: stripes, the sky's brightness and the horizon. "
-            f"<bookmark mark='b'/> Rank two, four, eight: the mountains appear. Rank {ranks[k8]} keeps "
-            f"{100 * energy[k8]:.1f} percent of the picture's squared size with {100 * store[k8] / pix:.0f} percent "
-            f"of the numbers. <bookmark mark='c'/> Then the trees, and by rank {ranks[-1]} it is hard to tell from "
-            "the original. <bookmark mark='d'/> And the error at each rank is exactly what the theorem says: the "
-            "size of the singular values left out."
+            f"A picture is a matrix too: {h} rows of {w} grey levels. <bookmark mark='a'/> Its best rank-one copy is a "
+            "column times a row: stripes, the sky and the horizon. <bookmark mark='b'/> Rank two, four, eight: the "
+            f"mountains appear. Rank {ranks[k8]} keeps {100 * energy[k8]:.1f} percent of the squared size with "
+            f"{100 * store[k8] / pix:.0f} percent of the numbers. <bookmark mark='c'/> Then the trees; by rank "
+            f"{ranks[-1]} it is hard to tell from the original. <bookmark mark='d'/> And each error is exactly the "
+            "singular values left out."
         ) as vo:
             self.play(FadeIn(tiles[-1]), FadeIn(tag))
             vo.wait_until("a")
@@ -184,10 +180,9 @@ class LowRank(VoiceoverScene):
             return [b.animate.set_fill(opacity=0.9 if i < k else 0.18) for i, b in enumerate(bars)]
 
         with self.voiceover(
-            "Here's a real matrix: part one's table of letter pairs, twenty-six letters by twenty-six. "
-            "<bookmark mark='a'/> The first piece alone already has the broad shape: it's the table you'd get if the "
-            "next letter didn't care what came before. <bookmark mark='b'/> Add the second piece, the third, the "
-            "fifth, the tenth, <bookmark mark='c'/> and the error falls by exactly the singular values left out: "
+            "Part 1's table of letter pairs, 26 by 26. <bookmark mark='a'/> The first piece alone is the table you'd "
+            "get if the next letter ignored the one before. <bookmark mark='b'/> Add the second, third, fifth, tenth, "
+            "<bookmark mark='c'/> and the error falls by exactly the singular values left out: "
             f"{err[0]:.2f} of the whole after one piece, {err[1]:.2f} after two."
         ) as vo:
             self.play(FadeIn(left), FadeIn(lt), FadeIn(rows_l), FadeIn(note_))
@@ -242,10 +237,9 @@ class LowRank(VoiceoverScene):
                     r"ignored each other: \ only the surprise is kept", width=6.0)
         dep.move_to(UP * 1.75)
         with self.voiceover(
-            "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence: "
-            "compare each count with what you'd expect if letters ignored their neighbours, and keep only the "
-            "surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: "
-            f"{', '.join(left5[:-1])}, {left5[-1]}. {found_say}"
+            "The pieces mean something. <bookmark mark='a'/> Take the table's departure from independence: each count "
+            "against what you'd expect if letters ignored their neighbours. Spread the letters along its strongest "
+            f"direction. <bookmark mark='b'/> At one end: {', '.join(left5[:-1])}, {left5[-1]}. {found_say}"
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -263,22 +257,22 @@ class LowRank(VoiceoverScene):
         cards = VGroup(
             history_card(1990, r"Deerwester, Dumais et al., \ latent semantic analysis",
                          r"a truncated SVD of a word-by-document table: \ search by meaning (chapter twelve)",
-                         color=HIST, width=4.3, font_size=27),
+                         color=HIST, width=4.3, font_size=30),
             history_card(2021, r"E.~Hu et al., \ LoRA",
                          r"fine-tune a model by adding a rank-$r$ matrix $BA$ to each weight; \ for GPT-3, $10{,}000$ "
-                         r"times fewer trained numbers (Part 27)", color=HIST, width=4.3, font_size=27),
+                         r"times fewer trained numbers (Part 27)", color=HIST, width=4.3, font_size=30),
             history_card(2024, r"DeepSeek-V2, \ latent attention",
                          r"keys and values squeezed through a low-rank latent, \ to shrink the memory a long "
-                         r"context needs (Part 15)", color=HIST, width=4.3, font_size=27),
+                         r"context needs (Part 15)", color=HIST, width=4.3, font_size=30),
         ).arrange(RIGHT, buff=0.25, aligned_edge=UP)
         cards.move_to(DOWN * 0.1)
         head = label(r"Low rank, \ at work", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "This is why low rank is everywhere in machine learning. <bookmark mark='a'/> In 1990, latent semantic "
-            "analysis searched documents by meaning with a truncated SVD. <bookmark mark='b'/> In 2021, LoRA "
-            "fine-tuned huge models by learning only a low-rank change to each weight matrix: for GPT-3, ten "
-            "thousand times fewer numbers to train. <bookmark mark='c'/> And in 2024, DeepSeek squeezed attention's "
-            "keys and values through a low-rank bottleneck to save memory. Parts 15 and 27 build these."
+            "Low rank is everywhere in machine learning. <bookmark mark='a'/> In 1990, latent semantic analysis "
+            "searched documents by meaning with a truncated SVD. <bookmark mark='b'/> In 2021, LoRA fine-tuned huge "
+            "models by learning a low-rank change to each weight: for GPT-3, ten thousand times fewer numbers to train. "
+            "<bookmark mark='c'/> In 2024, DeepSeek squeezed attention's keys and values through a low-rank bottleneck. "
+            "Parts 15 and 27 build these."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

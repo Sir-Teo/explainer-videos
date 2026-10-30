@@ -170,18 +170,15 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
         tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The mathematics is much older than the machines. In 1844 Hermann Grassmann, a schoolteacher in Stettin, "
-            "described quantities that add and stretch, in any number of dimensions: vectors. <bookmark mark='a'/> In "
-            "1858 Arthur Cayley wrote down the algebra of matrices. <bookmark mark='b'/> In 1873 and 1874 Eugenio "
-            "Beltrami and Camille Jordan found the singular value decomposition, <bookmark mark='c'/> and in 1904 "
-            "David Hilbert named eigenvalues. <bookmark mark='d'/> In 1936 Carl Eckart and Gale Young proved how to "
-            "keep only what matters. <bookmark mark='e'/> Then meaning. In 1957 the linguist John Firth wrote that you "
-            "shall know a word by the company it keeps. <bookmark mark='f'/> In 1984 William Johnson and Joram "
-            "Lindenstrauss showed that dimensions can be squeezed. <bookmark mark='g'/> In 1990 latent semantic "
-            "analysis put words and documents in one space, <bookmark mark='h'/> and in 2006 Netflix offered a "
-            "million dollars for a better guess at a mostly empty matrix. <bookmark mark='i'/> In 2013 came word2vec. "
-            "<bookmark mark='j'/> And in 2021 and 2024, LoRA, GaLore and Muon brought the same linear algebra into "
-            "the training of today's largest models."
+            "The mathematics is older than the machines. In 1844 Hermann Grassmann described quantities that add "
+            "and stretch, in any number of dimensions. <bookmark mark='a'/> In 1858 Arthur Cayley wrote down the "
+            "algebra of matrices. <bookmark mark='b'/> Beltrami and Jordan found the singular value decomposition, "
+            "<bookmark mark='c'/> and Hilbert named eigenvalues. <bookmark mark='d'/> Eckart and Young proved how to "
+            "keep only what matters. <bookmark mark='e'/> Then meaning: John Firth's 'you shall know a word by the "
+            "company it keeps'. <bookmark mark='f'/> Johnson and Lindenstrauss squeezed dimensions. "
+            "<bookmark mark='g'/> Latent semantic analysis put words in a space, <bookmark mark='h'/> and Netflix "
+            "offered a million dollars for filling in a mostly empty matrix. <bookmark mark='i'/> Then word2vec, "
+            "<bookmark mark='j'/> and LoRA, GaLore and Muon, the same linear algebra inside today's training."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
             self.play(FadeIn(marks[0], shift=UP * 0.2))
@@ -206,12 +203,10 @@ class Hook(VoiceoverScene):
             r"low rank in the wild: \ the Netflix Prize, \ two-tower retrieval",
         ], font_size=24).move_to(DOWN * 0.35)
         with self.voiceover(
-            "This is Part 3 of AI, Built. <bookmark mark='a'/> In it: vectors and the dot product, and the notation "
-            "attention is written in; matrices as maps, with projections, eigenvectors and the singular value "
-            "decomposition, each derived; low rank, norms, random matrices, and what training writes into a "
-            "network's weights; word vectors from counting; the strange geometry of high dimensions; and low rank "
-            "at work, from the Netflix Prize to the retrieval behind today's search. We'll compute every one of "
-            "these, small enough to run on a laptop."
+            "This is Part 3 of AI, Built. <bookmark mark='a'/> In it: vectors, the dot product and einsum; "
+            "projections, eigenvectors and the singular value decomposition, each derived; norms, random matrices "
+            "and what training writes into weights; word vectors; the geometry of high dimensions; and low rank at "
+            "work. Every number computed, small enough for a laptop."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

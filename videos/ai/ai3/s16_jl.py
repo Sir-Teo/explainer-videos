@@ -63,11 +63,11 @@ class JL(VoiceoverScene):
         head = label(rf"${fmt_int(n)}$ of GPT-2's vectors, \ times one random $768 \times k$ matrix", font_size=32)
         head.to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here's a consequence of that geometry which sounds impossible. <bookmark mark='a'/> Take a thousand of "
-            "GPT-2's vectors, and multiply them all by the same random matrix, crushing 768 numbers down to a few. "
-            f"<bookmark mark='b'/> Down to {ks[0]}, distances are scrambled. {ks[1]}, {ks[2]}: better. "
-            f"<bookmark mark='c'/> At {ks[3]}, {100 * j[f'within10_{ks[3]}']:.0f} percent of the distances move by "
-            f"less than ten percent, and at {ks[4]}, {100 * j[f'within10_{ks[4]}']:.1f} percent."
+            "A consequence that sounds impossible. <bookmark mark='a'/> Multiply a thousand of GPT-2's vectors by one "
+            f"random matrix, crushing 768 numbers to a few. <bookmark mark='b'/> Down to {ks[0]}, distances are "
+            f"scrambled; {ks[1]}, {ks[2]}: better. <bookmark mark='c'/> At {ks[3]}, "
+            f"{100 * j[f'within10_{ks[3]}']:.0f} percent of the distances move by less than ten percent; at {ks[4]}, "
+            f"{100 * j[f'within10_{ks[4]}']:.1f} percent."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(diag), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -99,12 +99,10 @@ class JL(VoiceoverScene):
         note_ = label(r"whatever the starting dimension: \ $768$, or a million", font_size=28, color=GREY_A)
         note_.next_to(num, DOWN, buff=0.25)
         with self.voiceover(
-            "This is the Johnson-Lindenstrauss lemma, from 1984, in the form Sanjoy Dasgupta and Anupam Gupta "
-            "proved in 2003. <bookmark mark='a'/> To keep every squared distance among n points within one plus or "
-            "minus epsilon, a random projection to about four log n over epsilon squared dimensions is enough. "
-            "<bookmark mark='b'/> For our thousand points and ten percent, it asks for "
-            f"{int(j['jl_k']):,} dimensions. Notice what is missing: the starting dimension. It does not appear at "
-            "all. Let's prove it."
+            "The Johnson-Lindenstrauss lemma, from 1984, in Dasgupta and Gupta's form of 2003. <bookmark mark='a'/> To "
+            "keep every squared distance among n points within one plus or minus epsilon, a random projection to about "
+            "four log n over epsilon squared dimensions suffices. <bookmark mark='b'/> For our thousand points at ten "
+            f"percent: {int(j['jl_k']):,}. The starting dimension doesn't appear at all. Let's prove it."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             vo.wait_until("a")
@@ -135,24 +133,24 @@ class JL(VoiceoverScene):
                     r"\frac{\varepsilon^2}{2} + \frac{\varepsilon^3}{3}$", font_size=22),
                 why(r"union bound: \ $\binom{n}{2}$ pairs, two tails; \\ true once $k \ge 4\ln n / "
                     r"(\varepsilon^2/2 - \varepsilon^3/3)$", font_size=22)]
-        step = ladder(self, rows, whys, keep=5, top=3.3, x=-2.6, buff=0.42, edge=6.9)
+        step = ladder(self, rows, whys, keep=5, top=3.3, x=-2.6, buff=0.42, edge=6.6)
         tag = note(r"a pair $\mathbf{u}, \mathbf{v}$ is the vector $\mathbf{x} = (\mathbf{u} - \mathbf{v})/|\mathbf{u} - "
                    r"\mathbf{v}|$; \ the lower tail is the same").to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Fix one pair of points, and let x be their difference, scaled to length one. <bookmark mark='a'/> Each "
-            "coordinate of R x is a sum of independent normal numbers, so it is normal, with variance one. "
-            "<bookmark mark='b'/> The squared length of R x is a sum of k independent squares: a chi-squared "
-            "variable with mean k. The projection keeps the length right on average; the question is how far it "
-            "strays. <bookmark mark='c'/> The Chernoff trick: apply Markov's inequality to e to the t times the "
-            "squared length, whose average we know exactly. <bookmark mark='d'/> Choose the best t and bound the "
-            "logarithm: the chance of stretching by more than epsilon falls exponentially in k. The chance of "
-            "shrinking is bounded the same way. <bookmark mark='e'/> Finally the union bound: there are fewer than "
-            "n squared over two pairs, each with two tails, and once k reaches four log n over that small "
-            "quantity, the total chance of any failure is below one. So a good projection exists, and a random one "
-            "works with probability at least one over n."
+            "Fix one pair, and let x be their difference, of length one. <bookmark mark='a'/> Each coordinate of R x "
+            "is a sum of independent normals: normal, with variance one. <bookmark mark='b'/> The squared length is a "
+            "sum of k such squares: chi-squared, mean k. <bookmark mark='c'/> The Chernoff trick: Markov's inequality "
+            "on e to the t times it, whose average we know. <bookmark mark='d'/> The best t, and a bound on the "
+            "logarithm: the chance of stretching past epsilon falls exponentially in k, and shrinking likewise. "
+            "<bookmark mark='e'/> The union bound over all pairs: once k reaches four log n over that small quantity, "
+            "the chance of any failure is below one. A good projection exists, and a random one works with probability "
+            "at least one over n."
         ) as vo:
             self.play(FadeIn(tag))
-            for k, mk in enumerate("abcde"):
+            step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][2], color=C.BITS))
+            for k, mk in enumerate("bcde", start=1):
                 vo.wait_until(mk)
                 step(k)
         self.wait(0.3)
@@ -183,12 +181,10 @@ class JL(VoiceoverScene):
         k768 = fine[-1]
         worst_gap = max(abs(a - b) for a, b in zip(meas, ex))
         with self.voiceover(
-            "Now check each step against the data. <bookmark mark='a'/> For one pair, the chance of moving by more "
-            f"than {100 * eps:.0f} percent is exactly a chi-squared tail, the yellow curve. <bookmark mark='b'/> "
-            f"The measured share of all 499,500 pairs, averaged over five random matrices, sits on it: the largest "
-            f"gap is {worst_gap:.4f}. <bookmark mark='c'/> The Chernoff bound, dashed, is above, as a bound must "
-            f"be. It is loose for small k, where it can't say anything, and at {int(k768['k'])} it is "
-            f"{k768['chernoff']:.2f} against an exact {k768['exact_fail']:.3f}."
+            f"Now the data. <bookmark mark='a'/> For one pair, the chance of moving more than {100 * eps:.0f} percent is "
+            "exactly a chi-squared tail, in yellow. <bookmark mark='b'/> The measured share of all 499,500 pairs sits on "
+            f"it: the largest gap is {worst_gap:.4f}. <bookmark mark='c'/> The Chernoff bound, dashed, lies above, as it "
+            f"must: at {int(k768['k'])}, {k768['chernoff']:.2f} against an exact {k768['exact_fail']:.3f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg[1]))
             vo.wait_until("a")
@@ -229,13 +225,11 @@ class JL(VoiceoverScene):
                             r"proved that no map at all, \ random or not, \ can do much better: \ $k$ must grow like "
                             r"$\log n / \varepsilon^2$", color=HIST, width=5.0).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The lemma promises more than an average: every pair at once. <bookmark mark='a'/> Here is the worst "
-            f"pair out of all of them, for five random matrices at each k. <bookmark mark='b'/> And here is what "
-            f"the union bound guarantees, which only says something from k equals {int(first_b['k'])}. At "
-            f"{int(last['k'])} dimensions, it promises {last['bound_eps']:.2f}, and the worst pair measured "
-            f"{np.mean(last['worst']):.2f}. The proof is not far from the truth. <bookmark mark='c'/> And it cannot "
-            "be much improved: in 2017 Kasper Green Larsen and Jelani Nelson proved that no map whatsoever can beat "
-            "log n over epsilon squared by more than a constant. Random projections are as good as it gets."
+            "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices "
+            f"per k. <bookmark mark='b'/> The union bound's guarantee, from k of {int(first_b['k'])}: at "
+            f"{int(last['k'])} it promises {last['bound_eps']:.2f}, and the worst pair measured "
+            f"{np.mean(last['worst']):.2f}. <bookmark mark='c'/> And no map can do much better: in 2017 Kasper Green "
+            "Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

@@ -30,12 +30,11 @@ class Words(VoiceoverScene):
         ).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(DOWN * 0.3)
         head = label(r"Meaning from company", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Part 1's counting model treated every word as its own island. The fix starts from an old idea in "
-            "linguistics. <bookmark mark='a'/> In 1954 Zellig Harris argued that words occurring in the same "
-            "contexts tend to mean similar things. <bookmark mark='b'/> In 1957 John Firth put it memorably: you "
-            "shall know a word by the company it keeps. <bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais "
-            "and colleagues at Bellcore turned it into an algorithm: count words in documents, take the singular "
-            "value decomposition, and search by meaning rather than by spelling."
+            "Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. "
+            "<bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar "
+            "things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. "
+            "<bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count "
+            "words in documents, take the SVD, and search by meaning rather than spelling."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -73,13 +72,13 @@ class Words(VoiceoverScene):
         ex_rows.next_to(keep, DOWN, buff=0.35)
         counts.to_edge(UP, buff=0.45)
         with self.voiceover(
-            "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand most common words, and "
-            "count how often each pair turns up within four words of each other: a table with a hundred million "
-            f"cells, from {w['n_words'] / 1e6:.2f} million words of text. <bookmark mark='b'/> Then turn the counts into "
-            "surprise, Part 1's way: how many times more often do two words meet than they would by chance? The "
-            "log of that is the pointwise mutual information. Keep its positive part. <bookmark mark='c'/> Monday "
-            f"and morning: {w['show_pairs'][0][3]:.2f}. The and of meet {int(w['show_pairs'][-1][2]):,} times, but "
-            f"they meet everything: {w['show_pairs'][-1][3]:.2f}."
+            "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand commonest words and count "
+            "how often each pair turns up within four words: a hundred million cells, from "
+            f"{w['n_words'] / 1e6:.2f} million words of text. <bookmark mark='b'/> Then turn counts into surprise, "
+            "Part 1's way: the log of how many times more often two words meet than by chance, the pointwise mutual "
+            "information. Keep its positive part. <bookmark mark='c'/> Monday and morning: "
+            f"{w['show_pairs'][0][3]:.2f}. The and of meet {int(w['show_pairs'][-1][2]):,} times, but they meet "
+            f"everything: {w['show_pairs'][-1][3]:.2f}."
         ) as vo:
             self.play(FadeIn(counts))
             vo.wait_until("a")
@@ -128,11 +127,10 @@ class Words(VoiceoverScene):
                       + (r"; \ the Pequod: \ Ahab's ship" if pq_in else ""), font_size=26, color=GREY_A)
         perez.to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Then keep the table's hundred strongest directions, with the singular value decomposition. "
-            "<bookmark mark='a'/> Every word gets a hundred numbers. <bookmark mark='b'/> And words that keep the "
-            f"same company end up close together. Monday: {', '.join(say['monday'])}. Three: "
-            f"{', '.join(say['three'])}. Dog: {', '.join(say['dog'])}. Ship: {', '.join(say['ship'])}.{extra} "
-            "Nobody gave it a dictionary."
+            "Keep the table's hundred strongest directions, with the SVD. <bookmark mark='a'/> Every word gets a hundred "
+            "numbers. <bookmark mark='b'/> Words that keep the same company end up close. Monday: "
+            f"{', '.join(say['monday'])}. Three: {', '.join(say['three'])}. Dog: {', '.join(say['dog'])}. Ship: "
+            f"{', '.join(say['ship'])}.{extra} Nobody gave it a dictionary."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -184,14 +182,11 @@ class Words(VoiceoverScene):
             sub.scale_to_fit_width(13.0)
         order = sorted(words, key=lambda x: settle[x])
         with self.voiceover(
-            "How many directions does meaning need? Keep only the first few of the hundred, the strongest, and "
-            f"look at the neighbours again. <bookmark mark='a'/> With {ks[0]}, only {hits0} of these twenty "
-            f"neighbours are among the final ones. <bookmark mark='b'/> With {ks[1]}, <bookmark mark='c'/> "
-            f"{ks[2]}, <bookmark mark='d'/> {ks[3]}, <bookmark mark='e'/> and all {ks[-1]}. Counting a word as "
-            "settled when three of its five neighbours are final: "
-            f"{order[0]} settles with {settle[order[0]]} directions, {order[1]} with {settle[order[1]]}, "
-            f"{order[2]} with {settle[order[2]]}, and {order[3]} with {settle[order[3]]}. The strongest directions "
-            "carry the broadest patterns; finer meanings live further down."
+            "How many directions does meaning need? Keep only the strongest few. <bookmark mark='a'/> With "
+            f"{ks[0]}, only {hits0} of these twenty neighbours are final ones. <bookmark mark='b'/> With {ks[1]}, "
+            f"<bookmark mark='c'/> {ks[2]}, <bookmark mark='d'/> {ks[3]}, <bookmark mark='e'/> and all {ks[-1]}. "
+            f"{order[0]} settles first, with {settle[order[0]]} directions; {order[3]} needs {settle[order[3]]}. The "
+            "strongest directions carry the broad patterns; finer meanings live further down."
         ) as vo:
             self.add(cnt)
             self.play(FadeIn(heads), FadeIn(sub))
@@ -238,13 +233,12 @@ class Words(VoiceoverScene):
                       font_size=26, color=C.BITS).next_to(k2, DOWN, buff=0.2).align_to(k2, LEFT)
         tag = label(r"drawn on the plane of the two steps", font_size=22, color=GREY_B).to_corner(UR, buff=0.45)
         with self.voiceover(
-            "Directions mean something too. <bookmark mark='a'/> Start at France, and step to Paris. Then take the "
-            f"same step, starting from England. <bookmark mark='b'/> {land_say} Man is to king as woman is to: "
-            f"{mk[0]}, then {mk[1]}. <bookmark mark='c'/> We built {at['all']['n']} such questions from pairs in the "
-            "books, man and woman, dog and dogs, walk and walked, and the nearest word is the right answer "
-            f"{100 * at['all']['acc']:.0f} percent of the time, out of ten thousand candidates. And of each word's five "
-            "nearest neighbours among a hundred words in seven categories, animals, colours, numbers and so on, "
-            f"{100 * pu['purity']:.0f} percent share its category, against {100 * pu['chance']:.0f} percent by "
+            "Directions mean something too. <bookmark mark='a'/> Step from France to Paris, then take the same step "
+            f"from England. <bookmark mark='b'/> {land_say} Man is to king as woman is to: {mk[0]}, then {mk[1]}. "
+            f"<bookmark mark='c'/> On {at['all']['n']} such questions built from the books, man and woman, dog and dogs, "
+            f"walk and walked, the nearest word is right {100 * at['all']['acc']:.0f} percent of the time, out of ten "
+            "thousand candidates. And of each category word's five nearest neighbours, animals, colours, numbers and so "
+            f"on, {100 * pu['purity']:.0f} percent share its category, against {100 * pu['chance']:.0f} percent by "
             "chance."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(dots[0]), FadeIn(labs[0]), FadeIn(dots[2]), FadeIn(labs[2]))
