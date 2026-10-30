@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, chapter, curve, load
+from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, card_body, chapter, curve, load
 
 PRIOR, POST = GREY_B, C.KL
 
@@ -30,10 +30,12 @@ class PACBayes(VoiceoverScene):
         lq = label(r"posterior $Q$: \ after", font_size=22, color=POST).next_to(ax.c2p(1.5, 0.75), UR, buff=0.05)
         sch = note(r"weights of the network, \ one direction \ (schematic)").next_to(ax, DOWN, buff=0.15)
         thm = theorem_card(r"PAC-Bayes",
-                           r"for any prior $P$ fixed in advance, \ with probability $1 - \delta$, \ for every "
-                           r"posterior $Q$ at once: \\[3pt] $\mathrm{kl}\big(\hat R(Q)\,\|\,R(Q)\big) \le "
-                           r"\dfrac{\mathrm{KL}(Q\,\|\,P) + \ln(2\sqrt n/\delta)}{n}$ \\[3pt] and so \ $R(Q) \le \hat "
-                           r"R(Q) + \sqrt{\dfrac{\mathrm{KL}(Q\,\|\,P) + \ln(2\sqrt n/\delta)}{2n}}$",
+                           card_body(r"for any prior $P$ fixed in advance, \ with probability $1 - \delta$, \ for "
+                                     r"every posterior $Q$ at once:",
+                                     r"\mathrm{kl}\big(\hat R(Q)\,\|\,R(Q)\big) \le \dfrac{\mathrm{KL}(Q\,\|\,P) + "
+                                     r"\ln(2\sqrt n/\delta)}{n}",
+                                     r"R(Q) \le \hat R(Q) + \sqrt{\dfrac{\mathrm{KL}(Q\,\|\,P) + \ln(2\sqrt n/\delta)}{2n}}",
+                                     width=5.6, font_size=21),
                            who=r"D.~McAllester (1999); \ M.~Seeger (2002); \ A.~Maurer (2004)", width=6.4, font_size=21)
         thm.to_corner(UR, buff=0.3)
         defs = label(r"$R(Q)$: \ the error of a network drawn from $Q$; \\ kl: \ KL between two coins, \ "

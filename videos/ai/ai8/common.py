@@ -93,3 +93,15 @@ def heat_strip(values, colors, cell=0.12, cols=56, buff=0.02, opacity=0.9) -> VG
     """A grid of small squares, one per item, coloured by its value's key in ``colors``."""
     g = VGroup(*[Square(cell, stroke_width=0, fill_color=colors[v], fill_opacity=opacity) for v in values])
     return g.arrange_in_grid(cols=cols, buff=buff)
+
+
+def card_body(text: str, *tex: str, width: float = 5.6, font_size=22, color=WHITE) -> VGroup:
+    """A card body: a wrapped sentence, then display formulas on lines of their own (wrapped_label shrinks a paragraph
+    with explicit line breaks to its widest line, so formulas go here instead)."""
+    g = VGroup(wrapped_label(text, width, font_size, color)) if text else VGroup()
+    for t in tex:
+        m = MathTex(t, font_size=font_size + 4, color=color)
+        if m.width > width:
+            m.width = width
+        g.add(m)
+    return g.arrange(DOWN, aligned_edge=LEFT, buff=0.16)

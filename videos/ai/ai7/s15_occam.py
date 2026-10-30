@@ -135,8 +135,10 @@ class Occam(VoiceoverScene):
             "to explain it, not so flexible that it bets on everything."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(tag), FadeIn(h))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(c_) for c_ in curves], lag_ratio=0.4), FadeIn(names), run_time=2.5)
+            vo.wait_until("a")
+            self.play(Indicate(curves[0], color=WHITE), Indicate(names[0]))
+            self.play(Indicate(curves[2], color=COMP), Indicate(names[2]))
             vo.wait_until("b")
             self.play(Create(d0), FadeIn(dl))
             self.play(Indicate(curves[1], color=EVID))

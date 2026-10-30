@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, chapter, curve, load, log_axes
+from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, card_body, chapter, curve, load, log_axes
 
 
 class Stability(VoiceoverScene):
@@ -34,8 +34,9 @@ class Stability(VoiceoverScene):
         rings = VGroup(*[Circle(radius=0.14, color=C.BITS, stroke_width=3).move_to(dots[i]) for i in sv])
         others = VGroup(*[dt for i, dt in enumerate(dots) if i not in sv])
         thm = theorem_card(r"sample compression",
-                           r"if a learner's rule can be rebuilt from $k$ of its $n$ examples, \ and it fits all $n$, "
-                           r"\ then with probability $1 - \delta$: \\[3pt] $R \le \dfrac{k \ln n + \ln(1/\delta)}{n - k}$",
+                           card_body(r"if a learner's rule can be rebuilt from $k$ of its $n$ examples, \ and it "
+                                     r"fits all $n$, \ then with probability $1 - \delta$:",
+                                     r"R \le \dfrac{k \ln n + \ln(1/\delta)}{n - k}", width=5.6, font_size=21),
                            who=r"N.~Littlestone \& M.~Warmuth (1986)", width=6.4, font_size=21).to_corner(UR, buff=0.3)
         res = VGroup(
             label(rf"${c['n']}$ points, \ ${c['k']}$ support vectors: \ $R \le {c['bound']:.3f}$", font_size=24, color=BOUND),

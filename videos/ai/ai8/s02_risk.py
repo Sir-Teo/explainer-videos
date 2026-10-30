@@ -37,8 +37,8 @@ class Risk(VoiceoverScene):
         k0 = label(r"class $0$", font_size=24, color=NEG).next_to(ax.c2p(-2.6, float(np.interp(-2.6, xg, p0))), UP, buff=0.15)
         dfn = definition_card(r"risk and empirical risk",
                               r"a rule $h$ predicts $y$ from $x$; \ the loss $\ell(h(x), y)$ is $1$ when it is wrong. "
-                              r"\\ Risk: \ $R(h) = \mathbb{E}_{(x,y) \sim \mathcal{D}}\,\ell(h(x), y)$, \ the error on "
-                              r"all the data there could be. \\ Empirical risk: \ $\hat R_S(h) = \frac1n \sum_{i=1}^n "
+                              r"Risk: \ $R(h) = \mathbb{E}_{(x,y) \sim \mathcal{D}}\,\ell(h(x), y)$, \ the error on "
+                              r"all the data there could be. \ Empirical risk: \ $\hat R_S(h) = \frac1n \sum_{i=1}^n "
                               r"\ell(h(x_i), y_i)$, \ on the sample $S$ we have.",
                               width=6.6, font_size=21).to_corner(UR, buff=0.3)
         head = label(r"Two classes, \ equally likely \ (illustrative)", font_size=28).to_corner(UL, buff=0.35)

@@ -13,7 +13,7 @@ BCOL = {4: "#58A6FF", 16: "#5BD17A", 64: "#F7D154", 300: "#FF6B8B"}
 class Sharpness(VoiceoverScene):
     def construct(self):
         chapter(self, 15, r"Flat minima and the sharpness debate", r"Do flat valleys generalize better?",
-                "Chapter fifteen. Flat minima, and the sharpness debate.", lit=(1997,))
+                "Chapter fifteen. Flat minima, and the sharpness debate.")
         self.idea()
         self.measure()
         self.rescale()

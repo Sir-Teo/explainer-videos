@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, chapter, curve, load
+from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, card_body, chapter, curve, load
 
 
 class Rademacher(VoiceoverScene):
@@ -20,8 +20,8 @@ class Rademacher(VoiceoverScene):
     def coins(self):
         r = load("rademacher")
         ds, acc = np.asarray(r["ds"]), np.asarray(r["acc"])
-        ax = Axes(x_range=[0, 70, 10], y_range=[0.5, 0.8, 0.1], x_length=7.4, y_length=3.8, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.4, -1.0, 0])
+        ax = Axes(x_range=[0, 70, 10], y_range=[0.5, 0.8, 0.1], x_length=6.4, y_length=3.8, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-3.0, -1.0, 0])
         yl = VGroup(*[MathTex(rf"{int(round(100 * v))}\%", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in (0.5, 0.6, 0.7, 0.8)])
         xl = label(r"how many of the $70$ word rates the line may use", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.25)
@@ -44,7 +44,7 @@ class Rademacher(VoiceoverScene):
         dfn = definition_card(r"empirical Rademacher complexity",
                               MathTex(r"\hat{\mathfrak R}_S(\mathcal H) = \mathbb{E}_\sigma \sup_{h \in \mathcal H}"
                                       r"\frac1n \sum_{i=1}^n \sigma_i\, h(x_i)", font_size=32),
-                              width=5.6).move_to([4.0, -0.6, 0])
+                              width=5.4).move_to([3.9, -0.6, 0])
         dsub = label(r"how well the family's best member \\ correlates with random signs", font_size=21,
                      color=GREY_A).next_to(dfn, DOWN, buff=0.2)
         with self.voiceover(
@@ -70,18 +70,19 @@ class Rademacher(VoiceoverScene):
     # ------------------------------------------------------------------
     def theorem(self):
         thm = theorem_card(r"the Rademacher bound",
-                           r"for losses in $[0, 1]$, \ with probability at least $1 - \delta$, \ for every $h \in "
-                           r"\mathcal H$ at once: \\[3pt] $R(h) \le \hat R(h) + 2\,\hat{\mathfrak R}_S(\ell \circ "
-                           r"\mathcal H) + 3\sqrt{\dfrac{\ln(2/\delta)}{2n}}$",
-                           who=r"V.~Koltchinskii (2001); \ P.~Bartlett \& S.~Mendelson (2002)", width=8.6, font_size=24)
-        thm.move_to(UP * 1.2)
+                           card_body(r"for losses in $[0, 1]$, \ with probability at least $1 - \delta$, \ for "
+                                     r"every $h \in \mathcal H$ at once:",
+                                     r"R(h) \le \hat R(h) + 2\,\hat{\mathfrak R}_S(\ell \circ \mathcal H) + "
+                                     r"3\sqrt{\dfrac{\ln(2/\delta)}{2n}}", width=9.6, font_size=28),
+                           who=r"V.~Koltchinskii (2001); \ P.~Bartlett \& S.~Mendelson (2002)", width=10.6, font_size=28)
+        thm.move_to(UP * 1.5)
         why_ = VGroup(
-            label(r"$\bullet$ \ symmetrize with a ghost sample, \ as for VC", font_size=24, color=GREY_A),
-            label(r"$\bullet$ \ the ghost's signs become random $\sigma_i$: \ no counting needed", font_size=24,
+            label(r"$\bullet$ \ symmetrize with a ghost sample, \ as for VC", font_size=28, color=GREY_A),
+            label(r"$\bullet$ \ the ghost's signs become random $\sigma_i$: \ no counting needed", font_size=28,
                   color=GREY_A),
-            label(r"$\bullet$ \ McDiarmid's inequality: \ one example moves the supremum by at most $1/n$", font_size=24,
+            label(r"$\bullet$ \ McDiarmid's inequality: \ one example moves the supremum by at most $1/n$", font_size=28,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm, DOWN, buff=0.45)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(thm, DOWN, buff=0.45).align_to(thm, LEFT)
         hist = history_card(2002, r"P.~Bartlett \& S.~Mendelson", r"\textit{Rademacher and Gaussian Complexities: "
                             r"Risk Bounds and Structural Results}", width=5.4, font_size=18, color=HIST)
         hist.to_corner(DR, buff=0.25)
@@ -123,7 +124,7 @@ class Rademacher(VoiceoverScene):
         ax = G.ax
         cm = VGroup(curve(ax, np.log10(ns), np.log10(meas), MEAS, 4),
                     *[Dot(ax.c2p(math.log10(a), math.log10(b)), radius=0.05, color=MEAS) for a, b in zip(ns, meas)])
-        cb = curve(ax, np.log10(ns), np.log10(bound), BOUND, 3)
+        cb = curve(ax, np.log10(ns), np.log10(bound), BOUND, 10).set_stroke(opacity=0.45)
         cr = curve(ax, np.log10(ns), np.log10(rb), GREY_B, 2.5)
         key = legend([(MEAS, r"measured: \ $4{,}000$ sign draws"), (BOUND, r"$\frac{B}{n}\sqrt{\sum |x_i|^2}$"),
                       (GREY_B, r"$BR/\sqrt n$")], font_size=19).next_to(G, RIGHT, buff=0.3).align_to(G, UP)

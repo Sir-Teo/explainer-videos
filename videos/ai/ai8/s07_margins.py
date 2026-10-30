@@ -43,7 +43,9 @@ class Margins(VoiceoverScene):
         rm = DashedLine(a_.c2p(-0.55, -2), a_.c2p(-0.55, 2), color=GREY_B, stroke_width=1.5)
         br = BraceBetweenPoints(a_.c2p(0, 1.75), a_.c2p(0.55, 1.75), UP, color=GREY_A)
         gl = MathTex(r"\gamma", font_size=28, color=GREY_A).next_to(br, UP, buff=0.05)
-        P = VGroup(a_, pic, lm, rm, line, br, gl).move_to([4.1, 1.4, 0])
+        P = VGroup(a_, pic, lm, rm, line, br, gl).scale(1.5).move_to([0, -0.2, 0])
+        pcap = label(r"a separating line, \ and its margin $\gamma$ \ (schematic)", font_size=26, color=GREY_A)
+        pcap.next_to(P, UP, buff=0.3)
         dfn = definition_card(r"margin",
                               r"$\gamma_i = y_i\, w \cdot x_i \,/\, (|w|\, R)$: \ how far example $i$ sits on the "
                               r"right side of the boundary. \ Margin loss $\hat R_\gamma(h)$: \ the share with "
@@ -58,10 +60,11 @@ class Margins(VoiceoverScene):
             "counts the pages closer than gamma to the boundary: the share a rule gets right, but not "
             "confidently."
         ) as vo:
-            self.play(FadeIn(a_), FadeIn(pic), Create(line))
+            self.play(FadeIn(a_), FadeIn(pic), Create(line), FadeIn(pcap))
             vo.wait_until("a")
             self.play(Create(lm), Create(rm), FadeIn(br), FadeIn(gl))
             vo.wait_until("b")
+            self.play(FadeOut(pcap), P.animate.scale(1 / 1.5).move_to([4.1, 1.4, 0]))
             self.play(FadeIn(G), Create(c), run_time=1.6)
             vo.wait_until("c")
             self.play(FadeIn(dfn, shift=UP * 0.2))
@@ -109,7 +112,7 @@ class Margins(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
         vac = m["best_bound"] >= 0.5
         hist = history_card(1998, r"P.~Bartlett", r"\textit{The size of the weights is more important than the size "
-                            r"of the network}", width=5.2, font_size=18, color=HIST).to_corner(UR, buff=0.25)
+                            r"of the network}", width=5.2, font_size=18, color=HIST).to_corner(DR, buff=0.3)
         verdict = (f"The best trade-off gives {m['best_bound']:.2f}, more than a coin's error rate: vacuous, while the "
                    f"actual test error is {100 * (1 - m['test_acc']):.1f} percent. With the same margins it would "
                    f"take about {int(m['n_half']):,} pages. Our 448 aren't enough for the margin, either."
@@ -173,7 +176,7 @@ class Margins(VoiceoverScene):
         head = label(r"AdaBoost on the pages: \ $70$ word rates, \ one-cut ``stumps''", font_size=28).to_edge(UP, buff=0.35)
         hist = history_card(1998, r"R.~Schapire, Y.~Freund, P.~Bartlett \& W.~S.~Lee", r"\textit{Boosting the Margin}: "
                             r"test error keeps falling after training error reaches zero, \ because margins grow",
-                            width=6.2, font_size=18, color=HIST).to_corner(DR, buff=0.2)
+                            width=7.6, font_size=18, color=HIST).to_edge(UP, buff=0.25)
         if zero is not None:
             after = te[zero - 1:]
             kmin = zero - 1 + int(np.argmin(after))
@@ -199,14 +202,13 @@ class Margins(VoiceoverScene):
             "about margins. The same shape, more training past zero training error and better on new data, is "
             "about to come back for neural networks."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(G), FadeIn(key))
+            self.play(FadeIn(head), FadeIn(G), FadeIn(key), FadeIn(H), FadeIn(hkey))
             vo.wait_until("a")
             self.play(Create(ctr), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(cte), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(H), FadeIn(hkey))
             self.play(LaggedStart(*[Create(c_) for c_ in cdfs], lag_ratio=0.6), run_time=3.0)
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(FadeOut(head), FadeIn(hist, shift=DOWN * 0.2))
         self.wait(0.3)
         self.clear_scene()

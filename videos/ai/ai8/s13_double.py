@@ -11,7 +11,7 @@ from videos.ai.ai8.common import BOUND, HIST, MEAS, TEST, TRAIN, chapter, curve,
 class DoubleDescent(VoiceoverScene):
     def construct(self):
         chapter(self, 12, r"Double descent", r"What happens past the point of fitting everything?",
-                "Chapter twelve. Double descent.", lit=(2019,))
+                "Chapter twelve. Double descent.")
         self.curve()
         self.spectrum()
         self.ridge()

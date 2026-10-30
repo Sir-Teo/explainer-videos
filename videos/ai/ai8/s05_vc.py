@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, chapter, curve, load
+from videos.ai.ai8.common import BOUND, HIST, MEAS, NEG, POS, TEST, card_body, chapter, curve, load
 
 
 def find_line(P, s):
@@ -121,8 +121,9 @@ class VC(VoiceoverScene):
                       (MEAS, r"half-planes, \ counted"), (TEST, r"intervals on a line, \ counted")], font_size=19)
         key.next_to(ax.c2p(0, 16), DR, buff=0.15)
         thm = theorem_card(r"the Sauer--Shelah lemma",
-                           r"if the VC dimension is $d$, \ then on $n$ points \\ $\Pi_{\mathcal H}(n) \le "
-                           r"\sum_{i=0}^{d} \binom{n}{i} \le \big(\tfrac{en}{d}\big)^d$", who=r"N.~Sauer; \ S.~Shelah "
+                           card_body(r"if the VC dimension is $d$, \ then on $n$ points:",
+                                     r"\Pi_{\mathcal H}(n) \le \sum_{i=0}^{d} \binom{n}{i} \le \big(\tfrac{en}{d}\big)^d",
+                                     width=5.4, font_size=21), who=r"N.~Sauer; \ S.~Shelah "
                            r"(1972); \ Vapnik \& Chervonenkis (1971)", width=6.2, font_size=21)
         thm.to_corner(DL, buff=0.3)
         nN = int(ns[-1])
@@ -137,8 +138,9 @@ class VC(VoiceoverScene):
             "exactly. Polynomial instead of exponential is what lets an infinite family be learned."
         ) as vo:
             self.play(FadeIn(G), Create(c2), FadeIn(key[0]))
+            self.play(LaggedStart(*[FadeIn(p) for p in pans], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p) for p in pans], lag_ratio=0.05), FadeIn(pcap), run_time=2.0)
+            self.play(FadeIn(pcap), Indicate(pans, color=C.BITS, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Create(ch), FadeIn(key[2]), run_time=2.0)
             vo.wait_until("c")

@@ -9,6 +9,13 @@ from videos.ai.ai5.common import DATA, MODEL, MONO, PART, WALK, curve, load
 
 ALPHA27 = " abcdefghijklmnopqrstuvwxyz"
 STATE_COLORS = [GREY_B, C.BITS, DATA]  # space, vowel, consonant
+
+
+def _fit(m, width):
+    """Shrink ``m`` to fit inside ``width`` (a node label must stay inside its circle)."""
+    return m.scale_to_fit_width(width) if m.width > width else m
+
+
 CAP = 0.36  # the letter bars are cut off at 36%
 
 
@@ -38,7 +45,7 @@ class Markov(VoiceoverScene):
         R = 0.62
         nodes = VGroup(*[VGroup(Circle(radius=R, color=STATE_COLORS[i], stroke_width=4, fill_color=BACKGROUND,
                                        fill_opacity=1).move_to(pos[i]),
-                                label(names[i], font_size=26, color=STATE_COLORS[i]).move_to(pos[i]))
+                                _fit(label(names[i], font_size=26, color=STATE_COLORS[i]), 2 * R - 0.18).move_to(pos[i]))
                          for i in range(3)])
         arrows, plabs = VGroup(), VGroup()
         for a in range(3):
