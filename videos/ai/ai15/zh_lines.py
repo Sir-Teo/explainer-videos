@@ -363,8 +363,11 @@ ZH = {
     "f'The linear memory levels off at":
         "线性记忆停在{el:.2f}：对一条弯曲的规则，一个矩阵最多只能做到这样。两层的记忆还在继续学，降到了{em:.2f}：更丰富的记忆，用了{pm // pl}倍的数。",
 
-    "f'Here the two end close together":
-        "在这里，两者最后很接近：矩阵是{el:.2f}，两层的记忆是{em:.2f}：在这个玩具问题里，{pm // pl}倍的数没换来多少。",
+    "f'The two-layer memory ends a little lower":
+        "两层的记忆最后低一点：{em:.2f}，矩阵是{el:.2f}：更丰富的记忆有帮助，在这里不多，用了{pm // pl}倍的数。",
+
+    "f'The two-layer memory does no better here":
+        "两层的记忆在这里并没有更好：{em:.2f}，矩阵是{el:.2f}，而它用了{pm // pl}倍的数。",
 
     '"Ali Behrouz, Peilin Zhong and Vahab Mirrokni':
         "谷歌的阿里·贝鲁兹、钟沛林和瓦哈卜·米罗克尼，在2025年之交把这个想法做成了Titans。他们的记忆是一个小的深层网络，放在一个普通注意力"
@@ -439,13 +442,14 @@ ZH = {
     'f"Why? Count what each memory holds':
         "为什么？数一数每种记忆读完这张列表以后存了多少东西。<bookmark mark='a'/>键有{dks[0]}个数的固定记忆，每层存{state[0]:,}个数，"
         "不管文本有多长都一样。注意力的缓存，存着它见过的每一个键和值，这里是{cache[0]:,}个，文本长一千倍就是{cache[0] * 1000:,}个。"
-        "<bookmark mark='b'/>精确的回忆，是注意力用不断变大的缓存换来的；固定的记忆要么足够大，要么知道该覆盖什么。{v}这就是混合架构的理由。",
+        "<bookmark mark='b'/>精确的回忆，是注意力用不断变大的缓存换来的；固定的记忆要么足够大，要么知道该覆盖什么。{v}",
 
     "f'With the smallest keys, adding one attention layer":
-        "键最小的时候，在一层门控δ上面加一层注意力，就把回忆率从{100 * gd:.0f}%提到了{100 * hy:.0f}%。",
+        "键最小的时候，在一层门控δ上面加一层注意力，就把回忆率从{100 * gd:.0f}%提到了{100 * hy:.0f}%。这就是混合架构的理由。",
 
-    "f'With the smallest keys, the hybrid gets":
-        "键最小的时候，混合模型得到{100 * hy:.0f}%，而两层门控δ是{100 * gd:.0f}%。",
+    "f'Here, though, one attention layer above a gated delta layer":
+        "不过在这里，键最小的时候，在一层门控δ上面加一层注意力并没有帮上忙：{100 * hy:.0f}%，而两层门控δ是{100 * gd:.0f}%。它的注意力，"
+        "键也一样小；两层注意力得到了{100 * sm:.0f}%。混合架构的理由在于代价：只在少数几层里做精确的查找，也只在这几层里付缓存的代价。",
 
     # ------------------------------------------------------------------ Hybrid
     'Chapter twelve. Hybrids.':

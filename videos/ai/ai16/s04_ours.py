@@ -109,7 +109,7 @@ class Ours(VoiceoverScene):
         ahead = [i for i in range(1, len(b_)) if all(b_[j, 1] < a_[j, 1] for j in range(i, len(b_)))]
         when = int(b_[ahead[0], 0]) if ahead else None
         wins = int(m["wins_active"])
-        if mv[0] < av[0] and wins == 3:
+        if mv[0] < av[0] and wins == 3 and when is not None:
             v1 = (f"The mixture pulls ahead of the dense model with the same arithmetic by step {when:,} and stays "
                   f"ahead, in every seed: {mv[0]:.3f} bits a character at the end, against {av[0]:.3f}. ")
         elif mv[0] < av[0]:

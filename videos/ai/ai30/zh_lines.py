@@ -470,7 +470,13 @@ ZH = {
         "样本多的时候，8个潜变量追平了探针，{100 * ind[1]:.0f}%对{100 * ind[0]:.0f}%。",
 
     'f"A second argument: are the features real, or artefacts of one training run?':
-        "第二个争论：这些特征是真的，还是某一次训练的产物？<bookmark mark='a'/>贡萨洛·保罗和诺拉·贝尔罗斯在Llama 3上，用不同的种子把同一个自编码器训练了两次，发现只有大约30%的潜变量是共有的。<bookmark mark='b'/>我们的结果，来自第9章的那些运行：对每个潜变量，找它在另一个种子的字典里最好的匹配。把余弦大于0.7算作同一个特征，有{100 * min(sh):.0f}%到{100 * max(sh):.0f}%会重复出现。特征少的小模型比大模型友好，但一个字典只是一种答案，不是唯一的答案。",
+        "第二个争论：这些特征是真的，还是某一次训练的产物？<bookmark mark='a'/>贡萨洛·保罗和诺拉·贝尔罗斯在Llama 3上，用不同的种子把同一个自编码器训练了两次，发现只有大约30%的潜变量是共有的。<bookmark mark='b'/>我们的结果，来自第9章的那些运行：对每个潜变量，找它在另一个种子的字典里最好的匹配。把余弦大于0.7算作同一个特征，{share_said}，对比他们的30%。我们的L1字典一致得多，有{l1_:.0f}%：特征稳不稳定，既取决于模型，也取决于训练配方。一个字典只是一种答案，不是唯一的答案。",
+
+    "f'{lo_} percent of our TopK latents recur'":
+        "我们的TopK潜变量有{lo_}%会重复出现",
+
+    "f'{lo_} to {hi_} percent of our TopK latents recur'":
+        "我们的TopK潜变量有{lo_}%到{hi_}%会重复出现",
 
     'f"A third: a baseline that should embarrass us.':
         "第三个：一个应该让我们难堪的基线。<bookmark mark='a'/>托马斯·希普和同事在随机权重的Transformer上训练自编码器，发现在常用的可解释性指标上，它们的得分差不多一样好。<bookmark mark='b'/>我们也试了：同样的自编码器，用在一个从没训练过的第13部分Transformer副本上。第8章的纯度分数，也就是一个潜变量最强的八个时刻里有几个落在同一个字符上：训练过的模型平均是{8 * tp.mean():.1f}，随机的是{8 * rp.mean():.1f}。{verdict}",

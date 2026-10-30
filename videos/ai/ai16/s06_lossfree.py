@@ -205,11 +205,12 @@ class LossFree(VoiceoverScene):
                  "bias. ")
         else:
             v = "Surprisingly, the unbalanced router has the smallest imbalance here. "
+        best_name = MODE_NAME_SPOKEN[best_bits]
         if best_bits == "moe":
             w = (f"In held-out bits the bias model is best as well: {vb['moe']:.3f}, against {vb['aux']:.3f} with the "
                  f"loss and {vb['none']:.3f} without. ")
         else:
-            w = (f"In held-out bits, though, the best is {MODE_NAME_SPOKEN[best_bits]}: {vb[best_bits]:.3f}, against "
+            w = (f"In held-out bits, though, the best is {best_name}: {vb[best_bits]:.3f}, against "
                  f"{vb['moe']:.3f} with the bias. ")
         ta = take_away(r"balance by steering the choice, \ not by changing the loss", color=BALC, font_size=26)
         with self.voiceover(

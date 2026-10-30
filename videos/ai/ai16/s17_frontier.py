@@ -95,11 +95,12 @@ class Frontier(VoiceoverScene):
                      label(r"(log scale)", font_size=18, color=GREY_C)).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.25)
         fr = {r["key"]: r["frac"] for r in rows}
         lowest = min(rows, key=lambda r: r["frac"])
+        sparsest = SHORT_SPOKEN.get(lowest["key"], lowest["name"])
         with self.voiceover(
             "And by the share of the model each token uses. <bookmark mark='a'/> Mixtral used "
             f"{100 * fr['mixtral']:.0f} percent of its weights per token; DeepSeek-V3, {100 * fr['dsv3']:.1f}. "
             f"<bookmark mark='b'/> The newest use three to five percent: DeepSeek-V4-Pro {100 * fr['dsv4']:.1f}, "
-            f"Kimi K3 {100 * fr['kimik3']:.1f}, and the sparsest here, {SHORT_SPOKEN.get(lowest['key'], lowest['name'])}, "
+            f"Kimi K3 {100 * fr['kimik3']:.1f}, and the sparsest here, {sparsest}, "
             f"{100 * lowest['frac']:.1f}. A trillion-parameter model that costs per token what a thirty- to fifty-billion "
             "dense model costs. <bookmark mark='c'/> Mixtures are also in the closed models: Google's Gemini 1.5 and "
             "2.5 reports describe sparse mixtures of experts, and OpenAI's open gpt-oss is one, though most labs "

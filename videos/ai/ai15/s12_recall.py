@@ -28,12 +28,12 @@ class Recall(VoiceoverScene):
         pairs = [("A", "4"), ("Q", "7"), ("M", "2"), ("D", "9"), ("X", "1")]
         boxes = VGroup()
         for kk, vv in pairs:
-            boxes.add(VGroup(data_text(kk, font=MONO, font_size=30, color=K), data_text(vv, font=MONO, font_size=30, color=V))
-                      .arrange(RIGHT, buff=0.12))
-        boxes.arrange(RIGHT, buff=0.45).move_to(UP * 2.0 + LEFT * 1.5)
-        qs = VGroup(*[data_text(c_, font=MONO, font_size=30, color=K) for c_ in ("M", "A", "X")]).arrange(RIGHT, buff=0.45)
+            boxes.add(VGroup(data_text(kk, font=MONO, font_size=42, color=K), data_text(vv, font=MONO, font_size=42, color=V))
+                      .arrange(RIGHT, buff=0.15))
+        boxes.arrange(RIGHT, buff=0.55).move_to(UP * 1.7 + LEFT * 1.8)
+        qs = VGroup(*[data_text(c_, font=MONO, font_size=42, color=K) for c_ in ("M", "A", "X")]).arrange(RIGHT, buff=0.55)
         qs.next_to(boxes, RIGHT, buff=0.9)
-        ans = VGroup(*[data_text(c_, font=MONO, font_size=30, color=C.BITS) for c_ in ("2", "4", "1")])
+        ans = VGroup(*[data_text(c_, font=MONO, font_size=42, color=C.BITS) for c_ in ("2", "4", "1")])
         for a_, q_ in zip(ans, qs):
             a_.next_to(q_, DOWN, buff=0.35)
         bl = label(r"pairs: \ a key, then its value", font_size=24, color=GREY_A).next_to(boxes, DOWN, buff=0.5)
@@ -42,8 +42,8 @@ class Recall(VoiceoverScene):
         N, steps = int(m["N"]), int(m["steps"])
         dks = [int(x) for x in m["dks"]]
         p = [int(m[f"params_{k}"]) for k in mix]
-        setup = VGroup(*[label(MIX_NAME[k].replace(r"\\", r"\ "), font_size=20, color=MIX_C[k]) for k in mix])
-        setup.arrange_in_grid(rows=2, cols=3, buff=(0.5, 0.18)).move_to(DOWN * 1.1)
+        setup = VGroup(*[label(MIX_NAME[k].replace(r"\\", r"\ "), font_size=26, color=MIX_C[k]) for k in mix])
+        setup.arrange_in_grid(rows=2, cols=3, buff=(0.6, 0.3)).move_to(DOWN * 1.1)
         rule = label(rf"two layers each, \ ${fmt_int(min(p))}$--${fmt_int(max(p))}$ weights, \ ${fmt_int(steps)}$ steps; \ ${N}$ pairs; \ "
                      rf"keys of ${dks[0]}$ to ${dks[-1]}$ numbers; \ {len(m['seeds'])} seeds",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.45)
@@ -82,19 +82,19 @@ class Recall(VoiceoverScene):
         di = [int(x) for x in m["dks"]].index(dk)
         curves = {k: np.asarray(m[f"curves_{k}"])[di, 0] for k in mix}
         n_ev, N = picks[mix[0]].shape
-        cell = 0.26
+        cell = 0.24
         grids, names = VGroup(), VGroup()
         for r, k in enumerate(mix):
-            y = 2.3 - r * 0.62
+            y = 1.9 - r * 0.62
             g = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=GREY_D, fill_opacity=0.3)
-                         .move_to([-5.0 + 2.3 + q * (cell + 0.04), y, 0]) for q in range(N)])
+                         .move_to([-4.9 + q * (cell + 0.04), y, 0]) for q in range(N)])
             grids.add(g)
             names.add(label(MIX_SHORT[k], font_size=20, color=MIX_C[k]).next_to(g, LEFT, buff=0.25))
         gl = label(rf"one fixed list of ${N}$ pairs: \ each square an answer, \ lit when right \ (key size ${dk}$, seed $0$)",
                    font_size=18, color=GREY_A).next_to(grids, UP, buff=0.2).align_to(names, LEFT)
-        g2 = axes([0, steps[-1]], [0, 1], x_length=5.0, y_length=3.4, xlabel=r"training steps",
+        g2 = axes([0, steps[-1]], [0, 1], x_length=4.6, y_length=3.4, xlabel=r"training steps",
                   ylabel=r"answers right, \ fixed batch", xticks=[0, steps[-1] / 2, steps[-1]], yticks=[0, 0.5, 1],
-                  center=[3.9, -1.0, 0], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yfmt=lambda v: rf"{int(100 * v)}\%")
+                  center=[3.9, -0.6, 0], xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yfmt=lambda v: rf"{int(100 * v)}\%")
         ax = g2.ax
         tk = ValueTracker(0)
 
@@ -186,10 +186,11 @@ class Recall(VoiceoverScene):
             + v_seed
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(cap))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.005), run_time=2.0)
-            vo.wait_until("b")
+            vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=2.0)
+            vo.wait_until("b")
+            self.play(Indicate(lines, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(Indicate(dots, color=WHITE, scale_factor=1.0))
         self.wait(0.3)
@@ -208,33 +209,33 @@ class Recall(VoiceoverScene):
         head = label(r"what each memory holds, \ after reading the list", font_size=30).to_edge(UP, buff=0.4)
         rows = VGroup()
         for i, dk in enumerate(dks):
-            rows.add(VGroup(MathTex(rf"{dk}", font_size=26, color=GREY_A),
-                            MathTex(rf"{state[i]:,}".replace(",", "{,}"), font_size=26, color=MIX_C["gdn"]),
-                            MathTex(rf"{cache[i]:,}".replace(",", "{,}"), font_size=26, color=MIX_C["softmax"])))
-        hdr = VGroup(label(r"key size", font_size=20, color=GREY_B), label(r"a fixed memory", font_size=20, color=MIX_C["gdn"]),
-                     label(rf"attention's cache, \ ${T}$ tokens", font_size=20, color=MIX_C["softmax"]))
+            rows.add(VGroup(MathTex(rf"{dk}", font_size=36, color=GREY_A),
+                            MathTex(rf"{state[i]:,}".replace(",", "{,}"), font_size=36, color=MIX_C["gdn"]),
+                            MathTex(rf"{cache[i]:,}".replace(",", "{,}"), font_size=36, color=MIX_C["softmax"])))
+        hdr = VGroup(label(r"key size", font_size=26, color=GREY_B), label(r"a fixed memory", font_size=26, color=MIX_C["gdn"]),
+                     label(rf"attention's cache, \ ${T}$ tokens", font_size=26, color=MIX_C["softmax"]))
         xs = [-3.6, 0.0, 3.6]
         for h_, x in zip(hdr, xs):
             h_.move_to([x, 1.9, 0])
         for i, r_ in enumerate(rows):
             for c_, x in zip(r_, xs):
-                c_.move_to([x, 1.2 - i * 0.6, 0])
+                c_.move_to([x, 1.15 - i * 0.75, 0])
         tw = label(r"attention pays for exact recall with a cache that grows with the text; \\ a fixed memory must be "
-                   r"big enough, \ or know what to overwrite; \\ one attention layer on top of a fast one gets most of both",
+                   r"big enough, \ or know what to overwrite",
                    font_size=24, color=WHITE).to_edge(DOWN, buff=0.6)
-        hy = acc["hybrid"][0]
-        gd = acc["gdn"][0]
+        hy, gd, sm = acc["hybrid"][0], acc["gdn"][0], acc["softmax"][0]
         v = (f"With the smallest keys, adding one attention layer above a gated delta layer lifts recall from "
-             f"{100 * gd:.0f} to {100 * hy:.0f} percent." if hy > gd + 0.1 else
-             f"With the smallest keys, the hybrid gets {100 * hy:.0f} percent, against {100 * gd:.0f} for two gated "
-             "delta layers.")
+             f"{100 * gd:.0f} to {100 * hy:.0f} percent. That is the case for hybrids." if hy > gd + 0.1 else
+             f"Here, though, one attention layer above a gated delta layer did not help with the smallest keys: "
+             f"{100 * hy:.0f} percent against {100 * gd:.0f}. Its attention has keys just as small; two attention "
+             f"layers got {100 * sm:.0f}. The case for hybrids is cost: exact lookup in a few layers, and a cache in "
+             "only those.")
         with self.voiceover(
             "Why? Count what each memory holds after reading the list. <bookmark mark='a'/> A fixed memory with "
             f"keys of {dks[0]} numbers holds {state[0]:,} numbers a layer, whatever the length. Attention's cache "
             f"holds every key and value it has seen, {cache[0]:,} here, and {cache[0] * 1000:,} for a text a "
             "thousand times longer. <bookmark mark='b'/> Exact recall is what attention buys with that growing "
-            "cache; a fixed memory has to be big enough, or know what to overwrite. " + v + " That is the case for "
-            "hybrids."
+            "cache; a fixed memory has to be big enough, or know what to overwrite. " + v
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr))
             vo.wait_until("a")

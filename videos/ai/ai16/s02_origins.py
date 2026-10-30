@@ -162,9 +162,9 @@ class Origins(VoiceoverScene):
                    if sharper else
                    f"Here the two end up about equally decided: {100 * sa[0]:.0f} percent of the trust to one expert "
                    f"competing, {100 * sb[0]:.0f} cooperating. ")
+        fit_word = 'about as well' if abs(ea[0] - eb[0]) < 0.3 * eb[0] else ('better' if ea[0] < eb[0] else 'worse')
         own = (f"With competition, {min(oa)} to {max(oa)} experts each own a stretch of the line, one per regime, and "
-               f"the blend fits {'about as well' if abs(ea[0] - eb[0]) < 0.3 * eb[0] else ('better' if ea[0] < eb[0] else 'worse')}"
-               ": each expert does one simple thing.")
+               f"the blend fits {fit_word}: each expert does one simple thing.")
         with self.voiceover(
             "Here's that difference, trained on this computer. A curve with three regimes, a rise, a plateau and a "
             "fall, and four experts that can each draw only a straight line, with a gate that looks at x. "
