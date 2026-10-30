@@ -51,7 +51,7 @@ class SimToReal(VoiceoverScene):
         cons.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, -0.4, 0])
         hist = history_card(r"2021--22", r"Isaac Gym \ (NVIDIA); \ Rudin et al.", r"thousands of simulated legged robots "
                             r"on one GPU: \ a walking policy in minutes", width=8.0, color=HIST,
-                            font_size=19).to_edge(DOWN, buff=0.3)
+                            font_size=21).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Robots learn slowly in the real world: one robot, one attempt at a time, wearing out and falling over. "
             "So most robot learning starts in simulation. <bookmark mark='a'/> A simulator can run thousands of "
@@ -86,11 +86,11 @@ class SimToReal(VoiceoverScene):
         poles.arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.35)).move_to([4.2, 1.4, 0])
         cards = VGroup(
             history_card(2017, r"Tobin et al.", r"random textures, \ lights and cameras: \ an object detector trained "
-                         r"only on simulated images works on real ones", width=4.2, color=HIST, font_size=18),
+                         r"only on simulated images works on real ones", width=4.2, color=HIST, font_size=21),
             history_card(2018, r"Peng et al.", r"random masses, \ friction and delays: \ a robot arm pushes a puck "
-                         r"without real training", width=4.2, color=HIST, font_size=18),
+                         r"without real training", width=4.2, color=HIST, font_size=21),
             history_card(2019, r"OpenAI, \ Rubik's cube", r"randomization that widens itself as the hand masters "
-                         r"each range: \ a real hand solves the cube", width=4.2, color=HIST, font_size=18),
+                         r"each range: \ a real hand solves the cube", width=4.2, color=HIST, font_size=21),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The fix is counterintuitive: make the simulator worse on purpose. <bookmark mark='a'/> Don't train in "
@@ -225,12 +225,12 @@ class SimToReal(VoiceoverScene):
         cards = VGroup(
             history_card(r"today", r"legged robots and humanoids", r"walking and running trained with reinforcement "
                          r"learning in randomized simulation, \ then run on the real robot unchanged", width=6.2,
-                         color=HIST, font_size=19),
+                         color=HIST, font_size=21),
             history_card(r"Oct 2026", r"Gemini 4 Argon for Robotics \ (Google; \ a company claim)", r"from one photo of a "
                          r"real table, \ a simulated twin and $4{,}500$ simulated episodes: \ real success from $56\%$ "
-                         r"to $75\%$", width=6.2, color=CLAIM, font_size=19),
+                         r"to $75\%$", width=6.2, color=CLAIM, font_size=21),
             history_card(r"Oct 2026", r"Genie 4 (chapter 13)", r"learned world models offered as training grounds for "
-                         r"robots: \ simulators no one wrote by hand", width=6.2, color=CLAIM, font_size=19),
+                         r"robots: \ simulators no one wrote by hand", width=6.2, color=CLAIM, font_size=21),
         ).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(LEFT, buff=0.4)
         d = load("randomize")
         tr_n, tr_r = np.asarray(d["nominal_trace"]), np.asarray(d["randomized_trace"])

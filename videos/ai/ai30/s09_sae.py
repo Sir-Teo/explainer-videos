@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import FEAT, FEATURE_COLORS, MONO, NEURON, RESID, context_line, load, show, vec_bars
+from videos.ai.ai30.common import FEAT, FEATURE_COLORS, MONO, NEURON, PART, RESID, context_line, load, show, ticks, vec_bars
 
 
 def pick_features(feats, n=4, min_purity=0.75):
@@ -24,13 +24,13 @@ class SAE(VoiceoverScene):
     def construct(self):
         self.card()
         self.idea()
+        self.replay()
         self.gallery()
         self.neurons()
-        self.frontier()
 
     def card(self):
-        card = chapter_card(2, r"Pulling the features apart", r"Can we find the directions the model uses?", part=30)
-        with self.voiceover("Chapter two. Pulling the features apart."):
+        card = chapter_card(8, r"Pulling the features apart", r"Can we find the directions the model uses?", part=PART)
+        with self.voiceover("Chapter eight. Pulling the features apart."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -65,6 +65,9 @@ class SAE(VoiceoverScene):
                     color=GREY_A).next_to(eqs, DOWN, buff=0.3).align_to(eqs, LEFT)
         res = VGroup(label(rf"on average ${float(s['l0']):.0f}$ of $512$ on per character", font_size=24, color=FEAT),
                      label(rf"rebuilds ${100 * (1 - float(s['fvu'])):.0f}\%$ of the variance", font_size=24, color=RESID),
+                     label(rf"spliced in: \ ${float(s['bits_spliced']):.2f}$ bits per character \ (the model: \ "
+                           rf"${float(s['bits_clean']):.2f}$; \ the average vector: \ ${float(s['bits_mean']):.2f}$)",
+                           font_size=20, color=GREY_A),
                      label(rf"trained on ${int(s['n_vectors']):,}$ vectors".replace(",", "{,}"), font_size=20, color=GREY_B))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(why, DOWN, buff=0.45).align_to(eqs, LEFT)
         cite_ = cite(r"T.~Bricken et al., \textit{Towards Monosemanticity} (2023); \ H.~Cunningham et al.\ (2023)", corner=DR)
@@ -77,7 +80,7 @@ class SAE(VoiceoverScene):
         # the L1 penalty in action: the same autoencoder trained at four strengths (chapter's end), features on per character
         fo = load("frontier")
         lams = [float(v) for v in fo["l1s"]]
-        l0s = [float(fo[f"l1_{v:g}_l0"]) for v in lams]
+        l0s = [float(fo[f"l1_{v:g}_0_l0"]) for v in lams]
         lb = VGroup()
         for i, (lm, v) in enumerate(zip(lams, l0s)):
             h = max(0.9 * v / max(l0s), 0.02)
@@ -100,7 +103,10 @@ class SAE(VoiceoverScene):
             f"<bookmark mark='e'/> Trained on {int(s['n_vectors']) // 1000} thousand vectors from our transformer, "
             f"it uses about {float(s['l0']):.0f} features per character and rebuilds "
             f"{100 * (1 - float(s['fvu'])):.0f} percent of the variance: of all the ways these vectors differ from "
-            f"their average, the rebuild captures {100 * (1 - float(s['fvu'])):.0f} percent."
+            f"their average, the rebuild captures {100 * (1 - float(s['fvu'])):.0f} percent. Put the rebuild back into "
+            f"the model in place of the real vectors, and it writes at {float(s['bits_spliced']):.2f} bits per "
+            f"character, against {float(s['bits_clean']):.2f} as it is, and {float(s['bits_mean']):.2f} with the "
+            "vectors replaced by their average."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(rdl), LaggedStart(*[FadeIn(m_) for m_ in rd], lag_ratio=0.02), run_time=1.6)
             vo.wait_until("a")
@@ -118,6 +124,63 @@ class SAE(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeOut(l1c), run_time=0.4)
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in res], lag_ratio=0.3))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def replay(self):
+        """The autoencoder's training: features on per character and variance left, with one character's code at each
+        checkpoint."""
+        s = load("sae")
+        st, l0, fv = (np.asarray(s[k], float) for k in ("rec_step", "rec_l0", "rec_fvu"))
+        codes = np.asarray(s["snap_codes"])  # (checkpoints, 64 positions, 512)
+        sst = np.asarray(s["snap_steps"], float)
+        text = str(s["demo_text"])
+        k = int(np.argmax([c.isalpha() for c in text[20:]])) + 20
+        S = float(st[-1])
+        g1 = axes([0, S], [0, float(l0.max()) * 1.05], x_length=5.4, y_length=2.2, ylabel=r"features on per character",
+                  yticks=ticks(0, float(l0.max()), 2), center=[-3.4, 1.3, 0])
+        g2 = axes([0, S], [0, min(1.0, float(fv.max()) * 1.05)], x_length=5.4, y_length=2.2, xlabel=r"training steps",
+                  ylabel=r"variance left unexplained", xticks=[0, S], yticks=ticks(0, min(1.0, float(fv.max())), 2),
+                  center=[-3.4, -1.9, 0])
+        t = ValueTracker(0)
+
+        def upto(ax, ys, col):
+            return always_redraw(lambda: curve(ax.ax, st[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))],
+                                               ys[: max(2, int(np.searchsorted(st, t.get_value(), side="right")))], col, 3))
+
+        c1, c2 = upto(g1, l0, FEAT), upto(g2, fv, RESID)
+
+        def code():
+            i = max(0, int(np.searchsorted(sst, t.get_value(), side="right")) - 1)
+            f = codes[i, k]
+            b = vec_bars(f, 5.6, 2.6, FEAT, signed=False).move_to([3.6, -0.3, 0])
+            b.shift(UP * (-1.6 - b.get_bottom()[1]))
+            n = int((f > 0).sum())
+            return VGroup(b, label(rf"step ${int(sst[i]):,}$: \ ${n}$ of $512$ on".replace(",", "{,}"), font_size=22,
+                                   color=FEAT).move_to([3.6, 2.2, 0]))
+
+        cd = always_redraw(code)
+        ch = data_text(f"“{show(text[k])}”", font=MONO, font_size=30, color=WHITE).move_to([3.6, 1.2, 0])
+        n0 = int((codes[0, k] > 0).sum())
+        n1 = int((codes[-1, k] > 0).sum())
+        with self.voiceover(
+            "Watch it learn. <bookmark mark='a'/> At the start, with random directions, the penalty has not bitten "
+            f"yet: the character on the right switches on {n0} features. <bookmark mark='b'/> As training goes, the "
+            "penalty prunes, and the rebuild improves at the same time, because the directions turn to face the "
+            f"data. <bookmark mark='c'/> By the end, {n1} features describe that character, and the variance left "
+            f"is {100 * float(fv[-1]):.0f} percent."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(g2), FadeIn(ch))
+            self.add(c1, c2, cd)
+            vo.wait_until("a")
+            self.play(t.animate.set_value(S * 0.15), run_time=2.5, rate_func=linear)
+            vo.wait_until("b")
+            self.play(t.animate.set_value(S * 0.6), run_time=3, rate_func=linear)
+            vo.wait_until("c")
+            self.play(t.animate.set_value(S), run_time=2, rate_func=linear)
+        for m_ in (c1, c2, cd):
+            m_.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -207,116 +270,5 @@ class SAE(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt), FadeIn(xn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bn], lag_ratio=0.08), FadeIn(kn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bf], lag_ratio=0.08), FadeIn(kf))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def frontier(self):
-        import math
-
-        o = load("frontier")
-        l1s, ks = [float(v) for v in o["l1s"]], [int(v) for v in o["ks"]]
-        L1C, TKC = C.SURPRISE, FEAT
-        alive = [p for p in l1s if float(o[f"l1_{p:g}_l0"]) >= 1]  # the strongest penalties can switch every feature off
-        dead = len(l1s) - len(alive)
-        pl = [(float(o[f"l1_{p:g}_l0"]), float(o[f"l1_{p:g}_fvu"])) for p in alive]
-        pt = [(float(o[f"topk_{k:g}_l0"]), float(o[f"topk_{k:g}_fvu"])) for k in ks]
-        sl = [float(o[f"l1_{p:g}_shrink"]) for p in alive]
-        st = [float(o[f"topk_{k:g}_shrink"]) for k in ks]
-        lo = min(v[0] for v in pl + pt)
-        hi = max(v[0] for v in pl + pt)
-        x0, x1 = math.floor(math.log2(max(lo, 1))), math.ceil(math.log2(hi))
-        ytop = math.ceil(max(v[1] for v in pl + pt) * 10) / 10
-        ax = CornerAxes(x_range=[x0, x1, 1], y_range=[0, ytop, 0.1], x_length=5.4, y_length=3.8, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.3, -0.5, 0])
-        xt = VGroup(*[MathTex(str(2 ** e), font_size=20, color=GREY_B).next_to(ax.c2p(e, 0), DOWN, buff=0.08) for e in range(x0, x1 + 1)])
-        yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(x0, v), LEFT, buff=0.08)
-                      for v in np.arange(0, ytop + 1e-9, 0.1)])
-        xn = label(r"features active per vector \ (log scale)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yn = label(r"variance left unexplained", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-
-        def path(pts, col):
-            q = [ax.c2p(math.log2(a), b) for a, b in sorted(pts)]
-            return VGroup(VMobject(color=col, stroke_width=3.5).set_points_as_corners(q), *[Dot(p, radius=0.06, color=col) for p in q])
-
-        cl, ct = path(pl, L1C), path(pt, TKC)
-        kl = VGroup(label(r"L1 penalty", font_size=22, color=L1C), label(r"TopK", font_size=22, color=TKC)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        kl.next_to(ax.c2p(x1, ytop), DL, buff=0.2)
-        colors = {r"\operatorname{TopK}_k": TKC, r"\theta": C.BITS, r"\lambda": L1C}
-        eqs = VGroup(
-            cmath(r"f = \operatorname{ReLU}(W_e x + b_e), \quad \text{loss} + ", r"\lambda", r"\|f\|_1", colors=colors, font_size=28),
-            cmath(r"f = ", r"\operatorname{TopK}_k", r"\big(W_e x + b_e\big)", colors=colors, font_size=28),
-            cmath(r"f_i = z_i \cdot \mathbf{1}[z_i >", r"\theta", r"_i], \quad \text{loss} + ", r"\lambda", r"\|f\|_0", colors=colors, font_size=28),
-        ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to([-3.6, 1.2, 0])
-        names = VGroup(label(r"chapter two's: \ the penalty also shrinks every activation", font_size=18, color=L1C),
-                       label(r"TopK \ (OpenAI, 2024): \ exactly $k$ features, \ no penalty", font_size=18, color=TKC),
-                       label(r"JumpReLU \ (Gemma Scope, 2024): \ a learned threshold per feature", font_size=18, color=C.BITS))
-        for n_, e_ in zip(names, eqs):
-            n_.next_to(e_, DOWN, buff=0.08).align_to(e_, LEFT)
-        shr = label(rf"rebuilds too small by: \ L1 ${100 * (np.mean(sl) - 1):.0f}\%$ \ on average, \ TopK ${100 * (np.mean(st) - 1):.0f}\%$",
-                    font_size=20, color=GREY_A).move_to([-3.6, -1.6, 0])
-        more = label(r"newer still: \ transcoders predict a layer's output from its input; \\ crosscoders share one dictionary "
-                     r"across layers, \ or across a model before and after fine-tuning", font_size=17, color=GREY_A).move_to([-3.7, -2.75, 0])
-        keep_in_frame(more)
-        cite_ = cite(r"L.~Gao et al., \textit{Scaling and Evaluating Sparse Autoencoders} (2024); \ S.~Rajamanoharan et al., "
-                     r"\textit{JumpReLU SAEs} (2024)", corner=UR)
-        # one vector's pre-activations, cut two ways: keep the top k, or a threshold per feature (schematic)
-        zv = [0.3, 1.4, 0.2, 0.9, 0.1, 1.8, 0.5, 0.7, 0.15, 1.1, 0.4, 0.25]
-        th = [0.5, 1.0, 0.1, 1.2, 0.3, 0.6, 0.4, 0.9, 0.4, 0.6, 0.6, 0.2]
-        base_y, hs = -1.4, 1.2
-        zb = VGroup(*[Rectangle(width=0.3, height=v * hs, stroke_width=0, fill_color=GREY_B, fill_opacity=0.85)
-                      .move_to([0.55 + 0.46 * i, base_y + v * hs / 2, 0]) for i, v in enumerate(zv)])
-        zbase = Line([0.25, base_y, 0], [0.55 + 0.46 * 11 + 0.3, base_y, 0], color=GREY_C, stroke_width=1.5)
-        zl = label(r"one vector's $12$ candidate features \ (schematic)", font_size=20, color=GREY_A).next_to(zbase, DOWN, buff=0.15)
-        top3 = set(np.argsort(zv)[-3:].tolist())
-        tkl = label(r"TopK, \ $k = 3$: \ keep the $3$ biggest", font_size=22, color=TKC).move_to([3.1, 1.5, 0])
-        thl = VGroup(*[Line([b_.get_x() - 0.2, base_y + t_ * hs, 0], [b_.get_x() + 0.2, base_y + t_ * hs, 0], color=C.BITS, stroke_width=3)
-                       for b_, t_ in zip(zb, th)])
-        jrl = label(r"JumpReLU: \ a threshold line per feature", font_size=22, color=C.BITS).move_to([3.1, 1.5, 0])
-        mid = [k for k in ks if 6 <= k <= 20]
-        kk = mid[0] if mid else ks[1]
-        l0k, fk = float(o[f"topk_{kk:g}_l0"]), float(o[f"topk_{kk:g}_fvu"])
-        near = min(pl, key=lambda v: abs(math.log2(v[0]) - math.log2(l0k)))
-        with self.voiceover(
-            "Sparse autoencoders have moved on since the first ones, and ours used the first recipe. "
-            "<bookmark mark='a'/> An L1 penalty buys sparsity, but it also pulls every active feature toward zero, so "
-            "the rebuilt vector comes out too short. <bookmark mark='b'/> OpenAI's TopK autoencoders simply keep the k "
-            "strongest features and zero the rest: sparsity is set directly, and nothing is shrunk. "
-            "<bookmark mark='c'/> DeepMind's JumpReLU gives each feature its own threshold, learned, with the count of "
-            "active features as the penalty. <bookmark mark='d'/> We trained both of the first two kinds on the same "
-            "vectors, at several sparsities. "
-            + (f"At the strongest {'two L1 penalties' if dead == 2 else 'L1 penalty' if dead == 1 else f'{dead} L1 penalties'} "
-               "we tried, every feature switched off for good. " if dead else "")
-            + (f"At similar sparsity TopK does better: with {l0k:.0f} features per vector it leaves "
-               f"{100 * fk:.0f} percent of the variance unexplained, where the L1 model at about {near[0]:.0f} leaves "
-               f"{100 * near[1]:.0f}. " if fk < near[1] else
-               f"On vectors this small the two are close: about {100 * fk:.0f} against {100 * near[1]:.0f} percent "
-               "unexplained at similar sparsity. ")
-            + f"<bookmark mark='e'/> And the L1 rebuilds come out {100 * (np.mean(sl) - 1):.0f} percent too short on "
-            "average. <bookmark mark='f'/> The newest tools go further: transcoders, which replace a whole MLP with "
-            "sparse features, are what Anthropic's circuit tracing uses, and crosscoders compare two models feature "
-            "by feature."
-        ) as vo:
-            self.play(FadeIn(cite_))
-            for k, mk in enumerate("abc"):
-                vo.wait_until(mk)
-                self.play(Write(eqs[k]), FadeIn(names[k]))
-                if mk == "b":
-                    self.play(Create(zbase), FadeIn(zb), FadeIn(zl), FadeIn(tkl))
-                    self.play(*[b_.animate.set_fill(TKC if i in top3 else GREY_D, opacity=0.9 if i in top3 else 0.3)
-                                for i, b_ in enumerate(zb)])
-                if mk == "c":
-                    self.play(*[b_.animate.set_fill(GREY_B, opacity=0.85) for b_ in zb], FadeOut(tkl), FadeIn(jrl), Create(thl))
-                    self.play(*[b_.animate.set_fill(C.BITS if v > t_ else GREY_D, opacity=0.9 if v > t_ else 0.3)
-                                for b_, v, t_ in zip(zb, zv, th)])
-            vo.wait_until("d")
-            self.play(FadeOut(VGroup(zb, zbase, zl, jrl, thl)), run_time=0.5)
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
-            self.play(Create(cl[0]), FadeIn(cl[1:]), FadeIn(kl[0]), run_time=1.5)
-            self.play(Create(ct[0]), FadeIn(ct[1:]), FadeIn(kl[1]), run_time=1.5)
-            vo.wait_until("e")
-            self.play(FadeIn(shr))
-            vo.wait_until("f")
-            self.play(FadeIn(more))
         self.wait(0.3)
         self.clear_scene()

@@ -214,15 +214,15 @@ class VLA(VoiceoverScene):
         cards = VGroup(
             history_card(r"Dec 2022", r"RT-1 \ (Google)", r"a transformer from camera images and an instruction to arm "
                          r"actions: \ $130{,}000$ demonstrations, \ $700$ tasks, \ $13$ robots, \ $17$ months", width=6.2,
-                         color=HIST, font_size=18),
+                         color=HIST, font_size=21),
             history_card(r"Jul 2023", r"RT-2 \ (Google DeepMind)", r"a web-trained vision-language model fine-tuned to "
                          r"write actions as tokens: \ on unseen objects and scenes, \ $62\%$ success against RT-1's $32\%$",
-                         width=6.2, color=HIST, font_size=18),
+                         width=6.2, color=HIST, font_size=21),
             history_card(r"Oct 2023", r"Open X-Embodiment \ ($21$ institutions)", r"over a million robot trajectories, \ "
-                         r"$22$ kinds of robot, \ pooled", width=6.2, color=HIST, font_size=18),
+                         r"$22$ kinds of robot, \ pooled", width=6.2, color=HIST, font_size=21),
             history_card(r"Jun 2024", r"OpenVLA \ (Kim, Pertsch et al.)", r"open weights, \ $7$ billion parameters, \ "
                          r"$970{,}000$ trajectories: \ $16.5$ points more success than the $55$-billion RT-2-X, \ "
-                         r"across $29$ tasks", width=6.2, color=HIST, font_size=18),
+                         r"across $29$ tasks", width=6.2, color=HIST, font_size=21),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3))
         if cards.width > 13.2:
             cards.width = 13.2

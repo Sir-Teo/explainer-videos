@@ -737,12 +737,21 @@ def mood_words(text):
     return pos, neg, len(w)
 
 
+POS_ADJ = ("happy joyful glad cheerful bright beautiful lovely warm kind gentle sweet pleasant merry charming wonderful "
+           "peaceful calm friendly sunny glorious splendid tender lively hopeful delighted").split()
+NEG_ADJ = ("sad sorrowful dark dead afraid terrible horrible dreadful painful cruel miserable unhappy wretched angry "
+           "gloomy lonely evil sick wicked ugly bitter ashamed guilty pale grim").split()
+FRAMES = ("She felt {}.", "It was a {} day.", "He looked {}.", "The room was {}.", "Their faces were {}.",
+          "The news was {}.", "I am so {}.", "What a {} evening it was.")
+
+
 def compute_mood():
-    """A contrast vector in the novels model, in the manner of persona vectors (Chen et al. 2025): the mean residual
-    stream after block 3 on cheerful sentences minus that on gloomy ones (by Part 27's word lists), half the sentences
-    to find it, half to test it as a monitor; then added while the model writes, at five strengths, against a random
-    direction of the same length; the mood of the text (cheerful minus gloomy words per hundred) and its fluency (bits
-    per token under the unsteered model)."""
+    """A contrast vector in the novels model, in the manner of contrastive activation addition (Rimsky et al. 2024)
+    and persona vectors (Chen et al. 2025): the residual stream after block 3 at a cheerful word minus that at a
+    gloomy one, in the same short frames (half the words to find it, half held out); tested as a monitor on held-out
+    words and on real sentences of the novels; then added while the model writes, at five strengths, against a random
+    direction of the same length: the mood of the text (cheerful minus gloomy words per hundred, by Part 27's lists)
+    and its fluency (bits per token under the unsteered model)."""
     import torch
     import torch.nn.functional as F
 
@@ -752,36 +761,53 @@ def compute_mood():
 
     C.threads()
     model = N.load_base()
-    d = c27.load("data")
-    sents = [s for s, _ in d["which_train"]] + [s for s, _ in d["which_test"]]
-    cheer, gloom = [], []
-    for s in sents:
-        p, n, w = mood_words(s)
-        if w >= 6 and p >= 1 and n == 0:
-            cheer.append(s)
-        elif w >= 6 and n >= 1 and p == 0:
-            gloom.append(s)
-    g = C.rng(2025)
-    g.shuffle(cheer)
-    g.shuffle(gloom)
-    n = min(len(cheer), len(gloom), max(60, int(400 * min(1.0, C.SCALE * 4))))
-    cheer, gloom = cheer[:n], gloom[:n]
     lay = MOOD["layer"]
+    g = C.rng(2025)
+    pos, neg = list(POS_ADJ), list(NEG_ADJ)
+    g.shuffle(pos)
+    g.shuffle(neg)
+    h_ = len(pos) // 2
 
-    def mean_act(s):
-        ids = torch.tensor([N.encode(s)])
-        hs, _ = acts.nov_resid(model, ids)
-        return hs[lay][0].mean(0)
+    def at_word(frame, w):
+        """The residual stream at the word's last token."""
+        pre = frame.split("{}")[0]
+        ids = N.encode(pre + w)
+        hs, _ = acts.nov_resid(model, torch.tensor([ids]))
+        return hs[lay][0, -1]
 
-    Ac = torch.stack([mean_act(s) for s in cheer])
-    Ag = torch.stack([mean_act(s) for s in gloom])
-    h = n // 2
-    v = Ac[:h].mean(0) - Ag[:h].mean(0)
+    Ap = torch.stack([torch.stack([at_word(f, w) for f in FRAMES]).mean(0) for w in pos])
+    An = torch.stack([torch.stack([at_word(f, w) for f in FRAMES]).mean(0) for w in neg])
+    v = Ap[:h_].mean(0) - An[:h_].mean(0)
     u = v / v.norm()
-    # the monitor: project held-out sentences on the direction
-    pc, pg = (Ac[h:] @ u).numpy(), (Ag[h:] @ u).numpy()
-    auroc = float(np.mean(pc[:, None] > pg[None, :]) + 0.5 * np.mean(pc[:, None] == pg[None, :]))
-    # a typical length of the residual stream at that layer, on novel text
+
+    def auroc(a, b):
+        a, b = np.asarray(a), np.asarray(b)
+        return float(np.mean(a[:, None] > b[None, :]) + 0.5 * np.mean(a[:, None] == b[None, :]))
+
+    au_words = auroc((Ap[h_:] @ u).numpy(), (An[h_:] @ u).numpy())
+    # real sentences of the novels: cheerful (a word from the held-out half of the cheerful list, none gloomy) against
+    # gloomy; the sentence's score is its largest projection over its tokens
+    d = c27.load("data")
+    sents = [s for s, _ in d["which_test"]] + [s for s, _ in d["which_train"]]
+    hp, hn = set(pos[h_:]), set(neg[h_:])
+    cs, gs = [], []
+    for s in sents:
+        w = set(c27.WORD.findall(s.lower()))
+        if w & hp and not w & c27.NEGATIVE:
+            cs.append(s)
+        elif w & hn and not w & c27.POSITIVE:
+            gs.append(s)
+    n = min(len(cs), len(gs), max(40, int(300 * min(1.0, C.SCALE * 4))))
+    g.shuffle(cs)
+    g.shuffle(gs)
+    cs, gs = cs[:n], gs[:n]
+
+    def sent_score(s):
+        hs, _ = acts.nov_resid(model, torch.tensor([N.encode(s)]))
+        return float((hs[lay][0] @ u).max())
+
+    pc, pg = np.array([sent_score(s) for s in cs]), np.array([sent_score(s) for s in gs])
+    au_sent = auroc(pc, pg)
     _, valid = N.token_arrays()
     _, Wn = acts.nov_windows(valid, 16, 128, 5)
     hs, _ = acts.nov_resid(model, Wn)
@@ -797,27 +823,29 @@ def compute_mood():
         with torch.no_grad():
             for _ in range(MOOD["n_new"]):
                 x = torch.tensor([ids[-model.cfg.seq:]])
-                h_ = model.emb(x)
+                h2 = model.emb(x)
                 for li, b in enumerate(model.blocks):
-                    h_ = b(h_)
+                    h2 = b(h2)
                     if li == lay - 1:
-                        h_ = h_ + alpha * norm * vec
-                z = model.head(model.norm(h_))[0, -1] / 0.8
+                        h2 = h2 + alpha * norm * vec
+                z = model.head(model.norm(h2))[0, -1] / 0.8
                 ids.append(int(torch.multinomial(torch.softmax(z, -1), 1, generator=gen)))
         return ids[start:], N.decode(ids[start:])
 
     def fluency(prompt, new):
-        ids = N.encode(prompt) + list(new)
-        x = torch.tensor([ids[:-1]])
+        p_ = N.encode(prompt)
+        ids = p_ + list(new)
         with torch.no_grad():
-            z = model(x)[0, len(N.encode(prompt)) - 1:]
-        return float(F.cross_entropy(z, torch.tensor(ids[len(N.encode(prompt)):]))) / math.log(2)
+            z = model(torch.tensor([ids[:-1]]))[0, len(p_) - 1:]
+        return float(F.cross_entropy(z, torch.tensor(ids[len(p_):]))) / math.log(2)
 
     topics = c27.TOPICS[: MOOD["topics"]]
     prompts = [f"The {t}" for t in topics]
-    out = dict(layer=lay, n_sent=n, auroc=auroc, proj_cheer=pc, proj_gloom=pg, norm=norm, vnorm=float(v.norm()),
+    out = dict(layer=lay, words_fit=pos[:h_] + neg[:h_], pos_test=pos[h_:], neg_test=neg[h_:], frames=list(FRAMES),
+               auroc_words=au_words, auroc_sent=au_sent, proj_cheer=pc, proj_gloom=pg, n_sent=n,
+               proj_pos=(Ap[h_:] @ u).numpy(), proj_neg=(An[h_:] @ u).numpy(), norm=norm, vnorm=float(v.norm()),
                alphas=list(MOOD["alphas"]), seeds=list(MOOD["seeds"]), topics=topics, n_new=MOOD["n_new"],
-               cheer_example=cheer[h], gloom_example=gloom[h])
+               cheer_example=cs[0], gloom_example=gs[0])
     for nm, vec in (("v", u), ("r", rnd)):
         for a in MOOD["alphas"]:
             if nm == "r" and a == 0.0:
@@ -836,7 +864,8 @@ def compute_mood():
             out[f"{nm}_{a:g}_samples"] = samples
             print(f"    {nm} alpha {a:g}: mood {np.mean(moods):+.1f} per 100 words, fluency {np.mean(flu):.2f} bits/token",
                   flush=True)
-    print(f"    mood vector: {n} sentences each; monitor AUROC {auroc:.3f}", flush=True)
+    print(f"    mood vector: monitor AUROC {au_words:.3f} on held-out words, {au_sent:.3f} on {n} + {n} sentences",
+          flush=True)
     return out
 
 
@@ -987,7 +1016,8 @@ class CLTModel:
         """The reconstruction of layer l_'s MLP output from the features of layers 0 ... l_."""
         y = self.bdec[l_]
         for s in range(l_ + 1):
-            y = y + feats[s] @ self.dec[(s, l_)]
+            if (s, l_) in self.dec:
+                y = y + feats[s] @ self.dec[(s, l_)]
         return y
 
 
@@ -1018,8 +1048,7 @@ def train_clt(R, sc, cross=True, log=print):
         errs = []
         for t in range(L):
             y = R[("mlp_out", t)][i].float() / sc[("mlp_out", t)]
-            errs.append(((model.output(t, feats if cross else [f if j == t else torch.zeros_like(f)
-                                                               for j, f in enumerate(feats)]) - y) ** 2).sum(1).mean())
+            errs.append(((model.output(t, feats) - y) ** 2).sum(1).mean())
         loss = sum(e / v for e, v in zip(errs, var))
         if s % 50 == 0:
             cur.append([s] + [float(e) / v for e, v in zip(errs, var)])
@@ -1290,7 +1319,7 @@ def compute_graph():
     err_logit = A_[-1, nf_ + T:nf_ + 5 * T].reshape(4, T)
     tot_in = A_[-1].sum()
     out = dict(prompt=GRAPH_PROMPT, target=chars[tgt], p_target=float(prob[tgt]), logit=float(z0[0, -1, tgt]),
-               exact=exact, n_features=nf_, nodes=nodes, edges=edges, emb_edges=emb_edges, err_logit=err_logit,
+               exact=exact, n_features=nf_, nodes=nodes, node_ids=top, logit_index=n_nodes - 1, n_pos=T, edges=edges, emb_edges=emb_edges, err_logit=err_logit,
                feat_logit=float(A_[-1, :nf_].sum()), emb_logit=float(A_[-1, nf_:nf_ + T].sum()),
                err_total=float(err_logit.sum()), sum_edges=float(tot_in), measured=meas, predicted=pred_ablate[top],
                predicted_direct=pred_direct[top], corr=corr, infl_share=float(infl[top[:12]].sum() / infl[:nf_].sum()),

@@ -137,7 +137,7 @@ class BPE(VoiceoverScene):
                   yticks=[0, 1, 2], center=[-3.4, -0.4, 0])
         cv = curve(ax.ax, ks, L / 1e6, TEXT_C, 4)
         end = Dot(ax.ax.c2p(ks[-1], L[-1] / 1e6), color=TEXT_C)
-        endl = label(rf"${100 * L[-1] / L0:.0f}\%$ of the characters", font_size=22, color=TEXT_C).next_to(end, UP, buff=0.5)
+        endl = label(rf"${100 * L[-1] / L0:.0f}\%$ of the characters", font_size=22, color=TEXT_C).next_to(end, UP, buff=0.35).align_to(end, RIGHT)
         colors = {r"n_k": C.BITS, r"n_i": C.BITS, r"L_k": TEXT_C, r"L_{k-1}": TEXT_C, r"L_0": TEXT_C}
         rows = [cmath(r"L_k", r"=", r"L_{k-1}", r"-", r"n_k", colors=colors, font_size=38),
                 cmath(r"L_k", r"=", r"L_0", r"-", r"\textstyle\sum_{i \le k}", r"n_i", colors=colors, font_size=38),
@@ -159,10 +159,10 @@ class BPE(VoiceoverScene):
             step(0)
             vo.wait_until("b")
             step(1)
+            self.play(Create(cv), run_time=2.5)
             vo.wait_until("c")
             step(2, transform=False)
             vo.wait_until("d")
-            self.play(Create(cv), run_time=2.5)
             self.play(FadeIn(end), FadeIn(endl))
         self.wait(0.3)
         self.clear_scene()

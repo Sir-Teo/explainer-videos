@@ -90,12 +90,12 @@ class Memory(VoiceoverScene):
         cards = VGroup(
             history_card(r"Apr 2023", r"Generative Agents \ (Park et al.)", r"$25$ characters in a simulated town: \ "
                          r"a stream of memories, \ retrieved by recency, \ importance and relevance; \ reflections "
-                         r"written on top", width=4.6, color=HIST, font_size=19),
+                         r"written on top", width=4.6, color=HIST, font_size=21),
             history_card(r"Mar 2023", r"Reflexion \ (Shinn et al.)", r"after a failure, \ write a lesson in words \ "
-                         r"and read it before the next try", width=4.6, color=HIST, font_size=19),
+                         r"and read it before the next try", width=4.6, color=HIST, font_size=21),
             history_card(r"May 2023", r"Voyager \ (Wang et al.)", r"in Minecraft, \ a growing library of skills as code: "
                          r"\ $3.3\times$ more unique items, \ tech-tree milestones up to $15.3\times$ faster", width=4.6,
-                         color=HIST, font_size=19),
+                         color=HIST, font_size=21),
         ).arrange(DOWN, buff=0.2).to_edge(RIGHT, buff=0.25)
         if cards.height > 7.0:
             cards.height = 7.0

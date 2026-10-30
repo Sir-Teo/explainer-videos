@@ -5,6 +5,7 @@
     training     full batch on 30% of the p^2 pairs, AdamW (lr 1e-3, weight decay 1, betas 0.9 / 0.98), as in Nanda,
                  Chan, Lieberum, Smith & Steinhardt, "Progress measures for grokking via mechanistic interpretability"
                  (ICLR 2023)
+    the size     p = 59 (Nanda et al. used 113), to fit a laptop: about 20 minutes on one thread
     measured     every ``SNAP`` steps: train and test loss and accuracy; the embedding's Fourier spectrum (how much of
                  W_E lies along cos(wk a) and sin(wk a) for each frequency k); the key frequencies; the restricted loss
                  (the logits with everything but the key frequencies' cos(w(a + b - c)) terms removed) and the excluded
@@ -20,9 +21,9 @@ import os
 
 import numpy as np
 
-P, D, H, DMLP = 113, 128, 4, 512
+P, D, H, DMLP = 59, 128, 4, 512
 FRAC, LR, WD = 0.3, 1e-3, 1.0
-STEPS, SNAP, CKPT = 16000, 100, 1000
+STEPS, SNAP, CKPT = 15000, 100, 1000
 SEED = 2023  # Nanda et al. (2023)
 
 

@@ -169,7 +169,7 @@ class Unigram(VoiceoverScene):
             k = int(np.argmin(np.abs(rep[:, 0] - V)))
             marks.add(VGroup(Dot(ax.ax.c2p(x[k], y[k]), radius=0.1, color=WHITE),
                              label(rf"${V:,}$: \ ${y[k]:.2f}$".replace(",", "{,}"), font_size=22, color=WHITE)
-                             .next_to(ax.ax.c2p(x[k], y[k]), DR, buff=0.12)))
+                             .next_to(ax.ax.c2p(x[k], y[k]), UR, buff=0.15)))
         steps = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in (
             (r"1.\ \ start: \ the most frequent substrings", GREY_A),
             (r"2.\ \ E: \ expected uses of every piece", UNI_C),
@@ -188,9 +188,9 @@ class Unigram(VoiceoverScene):
             f"round down to {sizes[-1]:,} pieces."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(steps[0]))
+            self.play(LaggedStart(*[FadeIn(p_, scale=1.5) for p_ in pts], lag_ratio=0.15), Create(line), run_time=4.0)
             vo.wait_until("a")
             self.play(FadeIn(steps[1]), FadeIn(steps[2]))
-            self.play(LaggedStart(*[FadeIn(p_, scale=1.5) for p_ in pts], lag_ratio=0.15), Create(line), run_time=4.0)
             vo.wait_until("b")
             self.play(FadeIn(steps[3]), FadeIn(steps[4]))
             vo.wait_until("c")

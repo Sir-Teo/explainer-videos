@@ -53,7 +53,7 @@ Items:
     mood           a contrast vector ("persona vector") in the novels model: cheerful minus gloomy sentences; its
                    projection as a monitor (AUROC on held-out sentences); steering with it at several strengths, mood and
                    fluency of the text, against a random direction
-    grok           Nanda et al.'s grokking run on (a + b) mod 113, with the progress measures (grok.py)
+    grok           Nanda et al.'s grokking run, smaller: (a + b) mod 59, with their progress measures (grok.py)
     disagree       where the field argues, measured small: TopK dictionaries from three seeds (how many latents
                    recur), sparse probing on autoencoder latents against a linear probe on the raw vectors (few
                    examples, many), and an autoencoder trained on a randomly initialized copy of the transformer

@@ -29,30 +29,39 @@ class Coding(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def swebench(self):
-        tree = VGroup(*[mono(t, GREY_B, 17) for t in ("astropy/", "  io/", "    fits/", "      header.py",
-                                                       "  modeling/", "    separable.py", "  tests/", "    test_separable.py")])
-        tree.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        tl = label(r"a real repository", font_size=22, color=WORLD)
+        names = ("astropy/", "  io/", "    fits/", "      header.py", "  modeling/", "    separable.py", "  tests/",
+                 "    test_separable.py")
+        tree = VGroup(*[mono(t.strip(), GREY_B, 20) for t in names])
+        tree.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        for t_, raw in zip(tree, names):
+            t_.shift(RIGHT * 0.15 * (len(raw) - len(raw.lstrip())))
+        tl = label(r"a real repository", font_size=26, color=WORLD)
         repo = VGroup(tl, tree).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-5.0, 0.6, 0])
-        issue = VGroup(label(r"a real issue", font_size=22, color=C.PENALTY),
-                       mono("separability_matrix gives the wrong\nanswer for nested CompoundModels", GREY_A, 17))
+        issue = VGroup(label(r"a real issue", font_size=26, color=C.PENALTY),
+                       mono("separability_matrix gives the wrong\nanswer for nested CompoundModels", GREY_A, 20))
         issue.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-0.9, 2.3, 0])
-        diff = VGroup(mono("-    cright[-right.shape[0]:, ...] = 1", FAIL, 16),
-                      mono("+    cright[-right.shape[0]:, ...] = right", GOOD, 16))
+        diff = VGroup(mono("-    cright[-right.shape[0]:, ...] = 1", FAIL, 19),
+                      mono("+    cright[-right.shape[0]:, ...] = right", GOOD, 19))
         diff.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        dl = label(r"the agent's patch", font_size=22, color=AGENT)
+        dl = label(r"the agent's patch", font_size=26, color=AGENT)
         patch = VGroup(dl, diff).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-0.9, 0.2, 0])
-        tests = VGroup(VGroup(mono("test_nested_compound", GREY_A, 17), label(r"fail $\to$ pass", font_size=20, color=GOOD))
+        tests = VGroup(VGroup(mono("test_nested_compound", GREY_A, 20), label(r"fail $\to$ pass", font_size=24, color=GOOD))
                        .arrange(RIGHT, buff=0.3),
-                       VGroup(mono("the other tests", GREY_A, 17), label(r"still pass", font_size=20, color=GOOD))
+                       VGroup(mono("the other tests", GREY_A, 20), label(r"still pass", font_size=24, color=GOOD))
                        .arrange(RIGHT, buff=0.3)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        tel = label(r"graded by the project's own tests", font_size=22, color=REWARD)
+        tel = label(r"graded by the project's own tests", font_size=26, color=REWARD)
         tst = VGroup(tel, tests).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-0.9, -1.9, 0])
         hist = history_card(r"Oct 2023", r"SWE-bench \ (Jimenez, Yang, Wettig, Yao, Pei, Press \& Narasimhan)",
                             r"$2{,}294$ GitHub issues from $12$ popular Python projects, \ each with the tests its real "
-                            r"fix made pass; \ the best model then, \ Claude 2, \ solved $1.96\%$", width=4.8,
-                            color=HIST, font_size=18).to_corner(DR, buff=0.3).shift(UP * 0.4)
+                            r"fix made pass; \ the best model then, \ Claude 2, \ solved $1.96\%$", width=4.6,
+                            color=HIST, font_size=22).to_corner(UR, buff=0.3)
+        head = label(r"SWE-bench: \ real bugs, \ real code", font_size=34).to_corner(UL, buff=0.4)
         tag = note(r"after an issue in SWE-bench (astropy), \ simplified").to_corner(DL, buff=0.25)
+        repo.move_to([-5.0, -0.4, 0])
+        issue.move_to([-0.6, 1.6, 0])
+        patch.move_to([-0.6, -0.2, 0])
+        tst.move_to([-0.6, -1.9, 0])
+        hist.to_corner(DR, buff=0.3)
         with self.voiceover(
             "How do you test a coding agent? In 2023 Carlos Jimenez, John Yang and colleagues at Princeton built "
             "SWE-bench from the history of open-source software. <bookmark mark='a'/> Each problem is a real issue "
@@ -62,7 +71,7 @@ class Coding(VoiceoverScene):
             "<bookmark mark='e'/> There were 2,294 problems from twelve Python projects. The best model of the day, "
             "Claude 2, solved under two percent of them."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(hist, shift=UP * 0.15))
             vo.wait_until("a")
             self.play(FadeIn(issue, shift=DOWN * 0.1))
             vo.wait_until("b")
@@ -72,7 +81,7 @@ class Coding(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(tst))
             vo.wait_until("e")
-            self.play(FadeIn(hist, shift=UP * 0.15))
+            self.play(Indicate(hist, color=HIST, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -90,13 +99,13 @@ class Coding(VoiceoverScene):
         right = VGroup(fl, feed).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, 1.2, 0])
         cards = VGroup(
             history_card(r"May 2024", r"SWE-agent \ (Yang, Jimenez et al.)", r"an agent--computer interface: \ with the "
-                         r"same model (GPT-4 Turbo), \ $12.5\%$ of SWE-bench, \ from under $4\%$ without one", width=4.4,
-                         color=HIST, font_size=18),
+                         r"same model (GPT-4 Turbo), \ $12.5\%$ of SWE-bench, \ from under $4\%$ without one", width=4.3,
+                         color=HIST, font_size=21),
             history_card(r"Aug 2024", r"SWE-bench Verified \ (OpenAI)", r"$500$ problems that professional developers "
-                         r"checked were well posed and fairly tested; \ GPT-4o solved $33.2\%$", width=4.4, color=HIST,
-                         font_size=18),
+                         r"checked were well posed and fairly tested; \ GPT-4o solved $33.2\%$", width=4.3, color=HIST,
+                         font_size=21),
             history_card(r"2025", r"agents in the terminal", r"Claude Code, \ OpenAI's Codex, \ Gemini CLI: \ the loop of "
-                         r"chapter three, \ run on a developer's own machine", width=4.4, color=HIST, font_size=18),
+                         r"chapter three, \ run on a developer's own machine", width=4.3, color=HIST, font_size=21),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The first big gains came from the interface, not the model. <bookmark mark='a'/> In 2024 the same "
@@ -127,16 +136,16 @@ class Coding(VoiceoverScene):
         audit = history_card(r"Feb 2026", r"OpenAI stops reporting SWE-bench Verified", r"of $138$ problems its model "
                              r"kept failing, \ it judged $59.4\%$ to have flawed tests; \ given only a task's ID, \ "
                              r"three frontier models reproduced the real fix, \ comments and all: \ they had seen it in "
-                             r"training", width=6.2, color=CLAIM, font_size=19).move_to([-3.4, 1.1, 0])
+                             r"training", width=6.4, color=CLAIM, font_size=23).move_to([-3.4, 1.1, 0])
         pro = history_card(r"Sep 2025", r"SWE-Bench Pro \ (Scale AI)", r"$1{,}865$ problems from $41$ actively "
                            r"maintained repositories, \ some kept private, \ some from companies' own code: \ longer "
-                           r"changes, \ harder to have memorized", width=6.2, color=HIST, font_size=19).move_to([3.4, 1.1, 0])
+                           r"changes, \ harder to have memorized", width=6.4, color=HIST, font_size=23).move_to([3.4, 1.1, 0])
         W = 5.2
         board = VGroup()
         for name, v, ci in PRO_BOARD:
-            n = label(name, font_size=19, color=GREY_A)
+            n = label(name, font_size=23, color=GREY_A)
             bar = score_bar(v, 100, W, AGENT, 0.3)
-            val = MathTex(rf"{v:.1f}\% \pm {ci:.1f}", font_size=22, color=AGENT)
+            val = MathTex(rf"{v:.1f}\% \pm {ci:.1f}", font_size=26, color=AGENT)
             board.add(VGroup(n, bar, val))
         for r in board:
             r[0].set_x(-2.3 - r[0].width / 2)
@@ -189,11 +198,11 @@ class Coding(VoiceoverScene):
         cards = VGroup(
             history_card(r"2025", r"Terminal-Bench \ (Stanford and the Laude Institute)", r"hard tasks in a real "
                          r"terminal: \ compile, \ configure a server, \ train a model; \ version 2.0: \ $89$ "
-                         r"tasks, \ frontier agents under $65\%$", width=5.6, color=HIST, font_size=18),
+                         r"tasks, \ frontier agents under $65\%$", width=5.6, color=HIST, font_size=21),
             history_card(r"2026", r"version 4.0", r"saturated tasks retired, \ others fixed; \ each task gets up to "
-                         r"$8$ hours", width=5.6, color=HIST, font_size=18),
+                         r"$8$ hours", width=5.6, color=HIST, font_size=21),
             history_card(r"Sep 2026", r"Anthropic, \ Claude Opus 5.5 \ (a company claim)", r"$66.4\%$ on Terminal-Bench "
-                         r"4.0, \ in Anthropic's own runs", width=5.6, color=CLAIM, font_size=18),
+                         r"4.0, \ in Anthropic's own runs", width=5.6, color=CLAIM, font_size=21),
         ).arrange(DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
         if cards.height > 7.0:
             cards.height = 7.0

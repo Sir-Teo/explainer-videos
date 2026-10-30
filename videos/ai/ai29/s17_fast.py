@@ -162,7 +162,7 @@ class Fast(VoiceoverScene):
                             color=FASTC)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.4)
         claim = history_card(r"Jan 2025", r"$\pi_0$-FAST \ (Physical Intelligence)", r"an autoregressive policy on FAST "
                              r"tokens: \ as good as the flow-matching $\pi_0$ on many tasks, \ trained about $5\times$ "
-                             r"faster (the company's report)", width=5.4, color=CLAIM, font_size=18)
+                             r"faster (the company's report)", width=5.4, color=CLAIM, font_size=21)
         claim.next_to(stat, DOWN, buff=0.4).align_to(stat, LEFT)
         tag = note(rf"computed: \ {int(f['params']['n_test'])} held-out one-second chunks; \ byte-pair encoding with "
                    rf"{int(f['params']['merges'])} merges, \ learned on {int(f['params']['n_train'])} others", font_size=17)
@@ -240,18 +240,18 @@ class Fast(VoiceoverScene):
         head = label(r"Robot foundation models, \ 2025--26", font_size=34).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(r"Mar 2025", r"Gemini Robotics; \ GR00T N1", r"Google DeepMind's VLA built on Gemini 2.0; \ "
-                         r"NVIDIA's open model for humanoids", width=4.2, color=HIST, font_size=17),
+                         r"NVIDIA's open model for humanoids", width=4.2, color=HIST, font_size=21),
             history_card(r"Nov 2025", r"$\pi^*_{0.6}$ and Recap", r"learning from its own experience and from "
                          r"corrections, \ with a value function: \ espresso from 5:30 am to 11:30 pm; \ throughput "
-                         r"more than doubled on the hardest tasks", width=4.2, color=CLAIM, font_size=17),
+                         r"more than doubled on the hardest tasks", width=4.2, color=CLAIM, font_size=21),
             history_card(r"Mar 2026", r"memory for VLAs", r"Physical Intelligence: \ long- and short-term memory for "
-                         r"tasks over ten minutes", width=4.2, color=CLAIM, font_size=17),
+                         r"tasks over ten minutes", width=4.2, color=CLAIM, font_size=21),
             history_card(r"Apr 2026", r"$\pi_{0.7}$", r"prompted with more than words: \ speed, \ quality, \ subgoal "
-                         r"images; \ folds laundry on a robot never shown laundry", width=4.2, color=CLAIM, font_size=17),
+                         r"images; \ folds laundry on a robot never shown laundry", width=4.2, color=CLAIM, font_size=21),
             history_card(r"Oct 2026", r"Gemini 4 Argon for Robotics", r"Google's general physical-reasoning model: \ it "
-                         r"plans, \ writes code, \ builds simulations", width=4.2, color=CLAIM, font_size=17),
+                         r"plans, \ writes code, \ builds simulations", width=4.2, color=CLAIM, font_size=21),
             history_card(r"Oct 2026", r"the Pi API", r"Physical Intelligence opens fine-tuning and inference of its "
-                         r"models to other robot makers", width=4.2, color=CLAIM, font_size=17),
+                         r"models to other robot makers", width=4.2, color=CLAIM, font_size=21),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3)).next_to(head, DOWN, buff=0.35)
         if cards.width > 13.4:
             cards.width = 13.4

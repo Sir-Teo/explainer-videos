@@ -28,15 +28,15 @@ class Imitation(VoiceoverScene):
     def define(self):
         hist = history_card(1989, r"ALVINN \ (Dean Pomerleau, Carnegie Mellon)", r"a network with one hidden layer "
                             r"watches the road through a $30 \times 32$ camera image and copies the steering of a "
-                            r"human driver", width=6.0, color=HIST, font_size=20).move_to([-3.4, 1.5, 0])
+                            r"human driver", width=6.2, color=HIST, font_size=25).move_to([-3.4, 1.6, 0])
         card = definition_card(r"Behaviour cloning", r"collect the expert's observations and actions; \ fit a policy to "
                                r"them by supervised learning: \ $\hat\pi = \arg\min_\pi \ \mathbb E_{s \sim d_{\pi^*}}"
-                               r"\big[\ell(\pi(s), \pi^*(s))\big]$", width=6.4, color=BC).move_to([3.4, 1.5, 0])
-        note_ = label(r"$d_{\pi^*}$: \ the states the expert visits", font_size=24, color=EXPERT).move_to([3.4, -0.4, 0])
+                               r"\big[\ell(\pi(s), \pi^*(s))\big]$", width=6.4, color=BC, font_size=27).move_to([3.4, 1.6, 0])
+        note_ = label(r"$d_{\pi^*}$: \ the states the expert visits", font_size=28, color=EXPERT).move_to([3.4, -0.5, 0])
         use = label(r"how every robot policy of chapter 15 starts: \ demonstrations, \ then supervised learning",
-                    font_size=24, color=GREY_A).to_edge(DOWN, buff=0.9)
-        catch = label(r"the catch: \ the learner is tested on the states \emph{it} visits", font_size=26,
-                      color=FAIL).next_to(use, UP, buff=0.4)
+                    font_size=28, color=GREY_A).to_edge(DOWN, buff=0.7)
+        catch = label(r"the catch: \ the learner is tested on the states \emph{it} visits", font_size=32,
+                      color=FAIL).next_to(use, UP, buff=0.45)
         with self.voiceover(
             "The simplest way to teach an agent is to show it. <bookmark mark='a'/> In 1989 Dean Pomerleau's ALVINN "
             "watched the road through a small camera and learned to steer a van by copying a human driver. "
@@ -64,23 +64,23 @@ class Imitation(VoiceoverScene):
         P = L["params"]
         D = int(P["D"])
         ex = np.asarray(L["drives_expert"])
-        view = LaneView(D, ex.shape[1] - 1, cell=0.3, height=5.2, center=[-2.6, 0.2, 0])
+        view = LaneView(D, ex.shape[1] - 1, cell=0.3, height=5.2, center=[-3.3, 0.2, 0])
         wind = view.wind()
         wl = label(r"wind", font_size=20, color=GREY_B).next_to(wind, UP, buff=0.1)
         drives = VGroup(*[view.drive(d, EXPERT, 2) for d in ex])
         tl = label(r"time $\to$", font_size=20, color=GREY_A).rotate(PI / 2).next_to(view, LEFT, buff=1.2)
         rules = VGroup(
-            label(rf"each step: \ steer left, \ straight, \ or right; \ the wind pushes right ${100 * P['wind']:.0f}\%$ "
-                  r"of the time", font_size=21),
-            label(r"cost: \ $1$ for every step off the lane", font_size=21, color=FAIL),
-            label(r"the expert knows where the car is, \ and steers back", font_size=21, color=EXPERT),
-            label(rf"the learner sees a camera reading, \ one cell off ${100 * P['noise']:.0f}\%$ of the time", font_size=21,
+            label(rf"each step: \ steer left, \ straight, \ or right; \\ the wind pushes right ${100 * P['wind']:.0f}\%$ "
+                  r"of the time", font_size=26),
+            label(r"cost: \ $1$ for every step off the lane", font_size=26, color=FAIL),
+            label(r"the expert knows where the car is, \\ and steers back", font_size=26, color=EXPERT),
+            label(rf"the learner sees a camera reading, \\ one cell off ${100 * P['noise']:.0f}\%$ of the time", font_size=26,
                   color=OBS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 1.0, 0])
+        )
         for r_ in rules:
-            if r_.width > 6.0:
-                r_.width = 6.0
-        rules.align_to(rules[0], LEFT)
+            if r_.width > 6.2:
+                r_.width = 6.2
+        rules.arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([3.5, 0.6, 0])
         Je = float(np.asarray(L["J_expert"])[-1])
         stays = "never leaves the lane" if Je < 1e-9 else f"leaves it only {Je:.1f} steps in {int(L['T'])}"
         tag = note(r"a lane of $21$ cells; \ the three in the middle are the road", font_size=18).to_corner(DR, buff=0.3)
@@ -115,18 +115,18 @@ class Imitation(VoiceoverScene):
         S = 2 * D + 1
         tab, seen = hist[-1][:S], hist[-1][S:]
         strip = table_strip(view, tab, seen, color=BC)
-        sl = label(r"the cloned policy, \ reading by reading \ (grey: \ never shown)", font_size=20, color=BC)
+        sl = label(r"the cloned policy, \ reading by reading \\ (grey: \ never shown)", font_size=24, color=BC)
         sl.next_to(strip, DOWN, buff=0.15)
         drives = VGroup(*[view.drive(d, BC, 2) for d in bc])
         lost = [k for k, d in enumerate(bc) if abs(d[-1]) >= 2]
         n_seen = int(seen.sum())
         right = label(rf"$\ {int(L['N'])}$ expert labels, \ {int(L['N']) // int(L['params']['demo_len'])} drives; "
-                      rf"\ readings seen: \ ${n_seen}$ of ${S}$", font_size=22, color=GREY_A).move_to([3.6, 2.4, 0])
-        why_ = VGroup(label(r"the expert never leaves the lane, \ so its drives never show \\ what to do off it",
-                            font_size=22, color=EXPERT),
-                      label(r"off the lane, \ the learner's actions are arbitrary: \\ it drifts, \ or sits at the "
-                            r"verge", font_size=22, color=FAIL)).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        why_.move_to([3.6, 0.4, 0])
+                      rf"\\ readings seen: \ ${n_seen}$ of ${S}$", font_size=27, color=GREY_A).move_to([3.4, 2.3, 0])
+        why_ = VGroup(label(r"the expert never leaves the lane, \\ so its drives never show \\ what to do off it",
+                            font_size=27, color=EXPERT),
+                      label(r"off the lane, \ the learner's \\ actions are arbitrary: \\ it drifts, \ or sits at the "
+                            r"verge", font_size=27, color=FAIL)).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+        why_.move_to([3.4, 0.0, 0])
         eps = float(np.mean(L["bc_eps"]))
         with self.voiceover(
             "Behaviour cloning: give the learner the expert's drives, and for each camera reading it copies the "
@@ -213,9 +213,9 @@ class Imitation(VoiceoverScene):
                   center=[4.3, 1.4, 0])
         perl = spread_band(g2.ax, ts, per, BC)
         s1, s2 = float(L["bc_slope_early"]), float(L["bc_slope_late"])
-        stats = VGroup(label(rf"measured $\varepsilon = {eps:.3f}$", font_size=22, color=BC),
-                       label(rf"log-log slope: \ ${s1:.2f}$ (steps $10$--$60$), \ ${s2:.2f}$ (200--400)", font_size=20,
-                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.3, -1.3, 0])
+        stats = VGroup(label(rf"measured $\varepsilon = {eps:.3f}$", font_size=27, color=BC),
+                       label(rf"log-log slope: \\ ${s1:.2f}$ (steps $10$--$60$), \\ ${s2:.2f}$ (steps $200$--$400$)", font_size=24,
+                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.3, -1.5, 0])
         tag = note(rf"exact expectations, \ 8 seeds: \ band min--max, \ line the mean; \ the expert: \ $0$",
                    font_size=18).to_corner(DR, buff=0.25)
         grows = per.mean(0)[-1] > 2 * per.mean(0)[20]

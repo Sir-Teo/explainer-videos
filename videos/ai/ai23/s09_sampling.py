@@ -77,9 +77,9 @@ class Sampling(VoiceoverScene):
         q = load("nyquist")
         fs = int(q["fs"])
         true, seen = np.asarray(q["true"]), np.asarray(q["seen"])
-        ax = axes([0, 16, 4], [0, 4.4, 1], x_length=6.4, y_length=3.6, xlabel=r"the tone's frequency, \ kHz",
+        ax = axes([0, 16, 4], [0, 4.4, 1], x_length=10.0, y_length=4.2, xlabel=r"the tone's frequency, \ kHz",
                   ylabel=r"the frequency the samples show, \ kHz", xticks=[0, 4, 8, 12, 16], yticks=[0, 2, 4],
-                  center=[-2.6, -0.4, 0])
+                  center=[-0.4, -0.6, 0])
         zig = curve(ax.ax, true / 1000, seen / 1000, SND_C, 4)
         tones = {int(k): float(v) for k, v in q["tones"].items()}
         pts = VGroup()
@@ -185,6 +185,26 @@ class Sampling(VoiceoverScene):
         f1 = MathTex(r"\log_{10} \textstyle\sum_k W_{mk}\, |X_k|^2, \quad \text{clipped to 8 decades}", font_size=28,
                      color=SND_C).to_edge(DOWN, buff=0.25)
         exp = int(np.floor(np.log10(max(diff, 1e-12))))
+        # one window's spectrum, following the window across the picture
+        sax = Axes(x_range=[0, 8000, 1000], y_range=[0, 1.05, 1], x_length=5.4, y_length=1.6, tips=False,
+                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.5, 1.5, 0])
+        sxl = label(r"$0$ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ $8$ kHz",
+                    font_size=18, color=GREY_B).next_to(sax, DOWN, buff=0.05)
+        sll = label(r"one window's spectrum: \ energy at each of the $201$ frequencies, \ dB", font_size=20,
+                    color=GREY_A).next_to(sax, UP, buff=0.1)
+        fz = np.linspace(0, 8000, P.shape[0])
+        win_x = ValueTracker(0.0)
+
+        def column_curve():
+            j = int(np.clip(round(win_x.get_value() * (n - 1)), 0, n - 1))
+            v = np.clip((P[:, j] - lo) / (P.max() - lo), 0, 1)
+            return curve(sax, fz, v, SND_C, 2.0)
+
+        live = always_redraw(column_curve)
+        stft = MathTex(r"X_k(t) = \sum_{n=0}^{399} w_n\, x_{160t + n}\, e^{-2\pi i\, k n / 400}", font_size=34,
+                       color=WHITE).move_to([0, -1.3, 0])
+        stw = label(r"$400$ samples $= 25$ ms; \ hop $160 = 10$ ms; \ $w$: \ the Hann taper; \ "
+                    r"$k = 0 \dots 200$", font_size=20, color=GREY_A).next_to(stft, DOWN, buff=0.2)
         with self.voiceover(
             "A wave is hard to read, so speech models look at its spectrum, slice by slice. <bookmark mark='a'/> Cut "
             "the signal into windows of 25 milliseconds, one every 10, taper each with a Hann window and take its "
@@ -199,13 +219,20 @@ class Sampling(VoiceoverScene):
             vo.wait_until("a")
             win = Rectangle(width=spec.width * 2.5 / max(n, 1) + 0.04, height=spec.height + 0.1, stroke_color=WHITE,
                             stroke_width=2).move_to(spec.get_left() + RIGHT * 0.05)
-            self.play(Create(win), run_time=0.5)
-            self.play(win.animate.move_to(spec.get_right() + LEFT * 0.05), run_time=4.0, rate_func=linear)
-            self.play(FadeOut(win), run_time=0.4)
+            x0_, x1_ = spec.get_left()[0] + 0.05, spec.get_right()[0] - 0.05
+            win.add_updater(lambda m_: m_.set_x(x0_ + win_x.get_value() * (x1_ - x0_)))
+            self.play(Create(win), FadeIn(sax), FadeIn(sxl), FadeIn(sll), FadeIn(live), FadeIn(stft), FadeIn(stw),
+                      run_time=0.8)
+            self.play(win_x.animate.set_value(0.45), run_time=5.0, rate_func=linear)
+            self.play(win_x.animate.set_value(1.0), run_time=5.0, rate_func=linear)
+            win.clear_updaters()
+            live.clear_updaters()
             vo.wait_until("b")
+            self.play(FadeOut(win), FadeOut(live), FadeOut(sax), FadeOut(sxl), FadeOut(sll), run_time=0.5)
             self.play(FadeIn(fax), FadeIn(fl), FadeIn(fx), LaggedStart(*[Create(t_) for t_ in tri], lag_ratio=0.05),
                       run_time=2.0)
             vo.wait_until("c")
+            self.play(FadeOut(stft), FadeOut(stw), run_time=0.5)
             self.play(FadeIn(mel), FadeIn(ml), FadeIn(f1))
         self.wait(0.3)
         self.clear_scene()
