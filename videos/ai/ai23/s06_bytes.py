@@ -90,50 +90,54 @@ class Bytes(VoiceoverScene):
     # ------------------------------------------------------------------
     def free(self):
         p = load("patches")
-        ex = str(p["example"])[:40]
+        ex = str(p["example"])
+        ex = ex[:ex.index(" white") + 6] if " white" in ex else ex[:37]
         bs = ex.encode("utf-8")
         H = np.asarray(p["example_H"], float)[:len(bs)]
         th = float(p["threshold"])
-        cell = 0.3
-        rows = VGroup()
-        # bytes
-        r0 = VGroup(*[Square(cell, stroke_color=GREY_B, stroke_width=1, fill_color=GREY_B, fill_opacity=0.15) for _ in bs])
-        r0.arrange(RIGHT, buff=0.02)
-        letters = VGroup(*[data_text(chr(c) if c != 32 else "·", font=MONO, font_size=16, color=WHITE).move_to(sq)
-                           for c, sq in zip(bs, r0)])
+        cell, buff, gap = 0.28, 0.02, 0.14
 
-        def grouped(starts, color):
-            g = VGroup()
-            i = 0
-            while i < len(bs):
-                j = i + 1
-                while j < len(bs) and not starts[j]:
-                    j += 1
-                w = (j - i) * (cell + 0.02) - 0.02
-                g.add(RoundedRectangle(width=w, height=cell + 0.08, corner_radius=0.06, stroke_color=color, stroke_width=2,
-                                       fill_color=color, fill_opacity=0.15).move_to(
-                    r0[i].get_left() + RIGHT * w / 2))
-                i = j
-            return g
+        def row(starts, color):
+            """The bytes as cells, a gap before each patch start, and a box around each patch."""
+            cells = VGroup()
+            x = 0.0
+            for k, c in enumerate(bs):
+                if k and starts[k]:
+                    x += gap
+                sq = Square(cell, stroke_color=GREY_B, stroke_width=1, fill_color=GREY_B, fill_opacity=0.15)
+                sq.move_to([x + cell / 2, 0, 0])
+                cells.add(VGroup(sq, data_text(chr(c) if c != 32 else "·", font=MONO, font_size=15,
+                                               color=WHITE).move_to(sq)))
+                x += cell + buff
+            boxes = VGroup()
+            if color is not None:
+                k = 0
+                while k < len(bs):
+                    m = k + 1
+                    while m < len(bs) and not starts[m]:
+                        m += 1
+                    seg = VGroup(*cells[k:m])
+                    boxes.add(SurroundingRectangle(seg, buff=0.04, corner_radius=0.06, stroke_color=color,
+                                                   stroke_width=2.5, fill_color=color, fill_opacity=0.18))
+                    k = m
+            return VGroup(boxes, cells)
 
         fixed = [k % 4 == 0 for k in range(len(bs))]
         ent = [k == 0 or H[k] > th for k in range(len(bs))]
-        lab = [label(t, font_size=22, color=c_) for t, c_ in ((r"bytes: \ ByT5 (2021)", GREY_B),
-                                                              (r"fixed patches: \ MegaByte (2023)", C.MODEL_Q),
-                                                              (r"entropy patches: \ BLT (2024)", PATCH_C))]
-        y = [1.6, 0.0, -1.6]
-        groups = []
-        for k, (yy, l_) in enumerate(zip(y, lab)):
-            base = VGroup(r0.copy(), letters.copy()).move_to([0.6, yy, 0])
-            l_.next_to(base, UP, buff=0.18).align_to(base, LEFT)
-            if k == 0:
-                groups.append(VGroup(base, l_))
-            else:
-                box = grouped(fixed if k == 1 else ent, C.MODEL_Q if k == 1 else PATCH_C)
-                box.move_to(base[0]).align_to(base[0], LEFT)
-                groups.append(VGroup(base, box, l_))
         n_fix = sum(fixed)
         n_ent = sum(ent)
+        lab = [label(t, font_size=22, color=c_) for t, c_ in (
+            (rf"bytes: \ ByT5 (2021), \ ${len(bs)}$ positions", GREY_B),
+            (rf"fixed patches: \ MegaByte (2023), \ ${n_fix}$ patches of $4$ bytes", C.MODEL_Q),
+            (rf"entropy patches: \ BLT (2024), \ ${n_ent}$ patches, \ a new one where the next byte is uncertain", PATCH_C))]
+        y = [1.9, 0.2, -1.5]
+        groups = []
+        for k, (yy, l_) in enumerate(zip(y, lab)):
+            base = row([False] * len(bs) if k == 0 else (fixed if k == 1 else ent),
+                       None if k == 0 else (C.MODEL_Q if k == 1 else PATCH_C))
+            base.move_to([0, yy, 0])
+            l_.next_to(base, UP, buff=0.18).align_to(base, LEFT)
+            groups.append(VGroup(base, l_))
         cite_ = cite(r"Xue et al.\ (2021); \ Yu et al.\ (2023); \ Pagnoni et al.\ (2024)", corner=DR)
         with self.voiceover(
             "Could a model skip the tokenizer and read bytes? <bookmark mark='a'/> Google's ByT5, in 2021, did exactly "
@@ -215,7 +219,7 @@ class Bytes(VoiceoverScene):
         keep = L <= xm
         ax = axes([1, xm, 1], [0, 1, 0.2], x_length=6.4, y_length=4.2, xlabel=r"average patch length, \ bytes",
                   ylabel=r"share of the surprise on a patch's first byte", xticks=list(range(1, int(xm) + 1)),
-                  yticks=[0, 0.5, 1], yfmt=lambda v: f"{int(round(100 * v))}\\%", center=[-2.6, -0.3, 0])
+                  yticks=[0, 0.5, 1], yfmt=lambda v: f"{int(round(100 * v))}\\%", center=[-3.0, -0.3, 0])
         cv = curve(ax.ax, L[keep][::-1], Y[keep][::-1], PATCH_C, 4)
         md = Dot(ax.ax.c2p(L[j], Y[j]), radius=0.09, color=PATCH_C)
         bd = Dot(ax.ax.c2p(bl, bs_), radius=0.09, color=TEXT_C)
@@ -224,6 +228,31 @@ class Bytes(VoiceoverScene):
         res = label(r"BLT (Meta, 2024): \ in a FLOP-controlled study up to $8$ billion parameters \\ and $4$ trillion "
                     r"bytes, \ byte patches matched a tokenizer-based model", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
         start = float(sw[j]["start_share"])
+        # right panel: share of bytes that start a unit vs share of the surprise those bytes carry
+        bw, bh = 0.55, 3.0
+        x0, y0 = 2.6, -1.9
+
+        def bar(x, v, color, fill):
+            r = Rectangle(width=bw, height=max(bh * v, 0.02), stroke_color=color, stroke_width=1.5,
+                          fill_color=color, fill_opacity=fill)
+            r.move_to([x, y0, 0], aligned_edge=DOWN)
+            t = label(rf"${100 * v:.0f}\%$", font_size=20, color=color).next_to(r, UP, buff=0.08)
+            return VGroup(r, t)
+
+        base = Line([x0 - 0.3, y0, 0], [x0 + 3.9, y0, 0], stroke_color=GREY_B, stroke_width=1.5)
+        pe = VGroup(bar(x0 + 0.4, start, PATCH_C, 0.25), bar(x0 + 1.0, Y[j], PATCH_C, 0.8))
+        pb = VGroup(bar(x0 + 2.4, 1.0 / bl, TEXT_C, 0.25), bar(x0 + 3.0, bs_, TEXT_C, 0.8))
+        gl = VGroup(label(r"entropy \\ patches", font_size=20, color=PATCH_C).next_to(pe, DOWN, buff=0.15),
+                    label(r"BPE \\ tokens", font_size=20, color=TEXT_C).next_to(pb, DOWN, buff=0.15))
+        gl[1].align_to(gl[0], UP)
+        key = VGroup(
+            VGroup(Square(0.22, stroke_color=GREY_A, stroke_width=1.5, fill_color=GREY_A, fill_opacity=0.25),
+                   label(r"share of bytes that start one", font_size=20, color=GREY_A)).arrange(RIGHT, buff=0.15),
+            VGroup(Square(0.22, stroke_color=GREY_A, stroke_width=1.5, fill_color=GREY_A, fill_opacity=0.8),
+                   label(r"share of the surprise they carry", font_size=20, color=GREY_A)).arrange(RIGHT, buff=0.15),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([x0 + 1.8, 2.5, 0])
+        sweep = label(r"high threshold: \ long patches \\[2pt] low threshold: \ short patches", font_size=22,
+                      color=GREY_A).move_to([x0 + 1.8, 0.2, 0])
         with self.voiceover(
             "How well do the patches follow the surprise? Sweep the threshold, and for each, measure the average "
             "patch length and the share of the model's total surprise that falls on the first byte of a patch. "
@@ -234,11 +263,11 @@ class Bytes(VoiceoverScene):
             "is. Meta's study found byte patches matching a tokenized model of the same compute, up to 8 billion "
             "parameters."
         ) as vo:
-            self.play(FadeIn(ax), Create(cv), run_time=2.0)
+            self.play(FadeIn(ax), Create(cv), FadeIn(sweep), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(md), FadeIn(ml))
+            self.play(FadeOut(sweep), FadeIn(md), FadeIn(ml), FadeIn(base), FadeIn(key), FadeIn(pe), FadeIn(gl[0]))
             vo.wait_until("b")
-            self.play(FadeIn(bd), FadeIn(bll))
+            self.play(FadeIn(bd), FadeIn(bll), FadeIn(pb), FadeIn(gl[1]))
             vo.wait_until("c")
             self.play(FadeIn(res))
         self.wait(0.3)
