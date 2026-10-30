@@ -266,11 +266,14 @@ ZH = {
     'f"Does a narrow window cost anything?':
         "窄窗口有代价吗？我们用Adam，以及秩32和秩8的GaLore训练这个模型，每种都在三个学习率里取最好的，各跑三个随机种子。<bookmark mark='a'/>训练曲线，取平均。<bookmark mark='b'/>留出数据上的损失：Adam {mean['adam']:.3f}，秩32 {mean['galore32']:.3f}，秩8 {mean['galore8']:.3f}。<bookmark mark='c'/>{verdict}",
 
-    'Both GaLore runs beat plain Adam. But GaLore also shrinks':
-        "两种GaLore都胜过了普通的Adam。但GaLore同时缩小了矩阵的步长，而嵌入层用的是完整的学习率；给Adam同样的划分，它也一样好，所以造成差距的是这种划分，而不是低秩。低秩说明的是：一个秩8的窗口几乎没有损失。",
+    'f"GaLore wins, but most of the gap':
+        "GaLore胜出，但差距的大部分，也就是{100 * split_share:.0f}%，来自GaLore给矩阵更小的步长，好让其余部分以完整的学习率训练：给Adam同样的步长，它达到{mean['adamsplit']:.3f}。剩下的差距来自低秩窗口，而且没有代价。",
 
-    'Both GaLore runs beat plain Adam, and Adam with GaLore':
-        "两种GaLore都胜过了普通的Adam，而采用GaLore步长的Adam也追不上：在这里，低秩窗口本身起了作用。",
+    'f"The gap comes from GaLore\'s smaller steps':
+        "差距来自GaLore给矩阵更小的步长：给Adam同样的步长，它也一样好，{mean['adamsplit']:.3f}。低秩窗口本身没有代价。",
+
+    "Adam given GaLore's step sizes does not close the gap":
+        "给Adam同样的步长，也追不上：在这里，低秩窗口本身起了作用。",
 
     'GaLore matches Adam within the spread of the seeds':
         "在随机种子的波动范围内，GaLore和Adam一样好，内存却只用了一小部分。",

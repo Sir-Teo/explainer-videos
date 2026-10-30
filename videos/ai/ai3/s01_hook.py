@@ -17,7 +17,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def islands(self):
         def island(text, x):
-            t = Text(text, font=MONO, font_size=34, color=WHITE)
+            t = data_text(text, font=MONO, font_size=34, color=WHITE)
             box = RoundedRectangle(width=t.width + 0.8, height=1.3, corner_radius=0.3, stroke_color=C.COUNTING,
                                    stroke_width=2.5, fill_color="#14201A", fill_opacity=1)
             return VGroup(box, t).move_to([x, 0.3, 0])
@@ -45,7 +45,7 @@ class Hook(VoiceoverScene):
         words, cats, xyz = list(g["map_words"]), list(g["map_cats"]), np.asarray(g["map_xyz"])
         show = {"dog", "lion", "red", "blue", "three", "hundred", "London", "Tokyo", "mother", "brother", "hand",
                 "heart", "run", "sing"}
-        labels = {k: Text(w, font=MONO, font_size=22, color=CAT_COLORS[c]) for k, (w, c) in enumerate(zip(words, cats))
+        labels = {k: data_text(w, font=MONO, font_size=22, color=CAT_COLORS[c]) for k, (w, c) in enumerate(zip(words, cats))
                   if w in show or c == "animals"}
         cl = Cloud3D(xyz, [CAT_COLORS[c] for c in cats], scale=3.5, radius=0.085, tilt=0.3, center=DOWN * 0.2,
                      labels=labels)
@@ -123,7 +123,7 @@ class Hook(VoiceoverScene):
         rows = VGroup()
         for k in range(3):
             bc = barcode(V[k], width=11.0, height=1.2, vmax=vmax)
-            name = Text(names[k], font=MONO, font_size=30, color=WHITE)
+            name = data_text(names[k], font=MONO, font_size=30, color=WHITE)
             rows.add(VGroup(name, bc).arrange(RIGHT, buff=0.35))
         rows.arrange(DOWN, buff=0.55, aligned_edge=RIGHT).move_to(DOWN * 0.1)
         head = label(r"$768$ numbers per word", font_size=36).to_edge(UP, buff=0.4)

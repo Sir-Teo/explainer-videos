@@ -17235,7 +17235,71 @@
     "our RULER: \\ trained at $128$ tokens, \\ tested up to $1{,}024$ \\ (\\% right, \\ chance $3\\%$)": "我们的RULER：\\ 在$128$个词元上训练，\\ 测试到$1{,}024$ \\ （答对的\\%，\\ 随机猜$3\\%$）",
     "copied right: \\ transformer $0\\%$, \\ hybrid $0\\%$ \\ (copies 16 tokens apart)": "抄对的比例：\\ Transformer $0\\%$，\\ 混合模型$0\\%$ \\ （两份相隔16个词元）",
     "linear memory, \\ $64$ numbers \\ (TTT-Linear)": "线性记忆，\\ $64$个数 \\ （TTT-Linear）",
-    "two-layer memory, \\ $1024$ numbers \\ (TTT-MLP)": "两层记忆，\\ $1024$个数 \\ （TTT-MLP）"
+    "two-layer memory, \\ $1024$ numbers \\ (TTT-MLP)": "两层记忆，\\ $1024$个数 \\ （TTT-MLP）",
+    "the copy test: \\\\ $24$ random tokens, \\ a stretch of a novel, \\\\ the same $24$ again": "复制测试：\\\\ $24$个随机词元，\\ 一段小说，\\\\ 再来同样的$24$个",
+    "sinks and windows": "汇聚点与窗口",
+    "the parallel scan": "并行扫描",
+    "HiPPO memorizes": "HiPPO的记忆",
+    "recall, measured": "测出来的回忆能力",
+    "a memory of the novels": "小说的记忆",
+    "choosing which tokens to read: \\ sparse attention, \\ DeepSeek's indexer": "挑选要读哪些词元：\\ 稀疏注意力，\\ DeepSeek的索引器",
+    "serving the cache: \\ paging, \\ sharing, \\ fewer bits": "缓存的服务：\\ 分页，\\ 共享，\\ 更少的比特",
+    "state tracking and parity: \\ what depth can and can't do": "状态追踪与奇偶性：\\ 深度能做什么、不能做什么",
+    "memory for agents: \\ notes, \\ compaction, \\ retrieval": "智能体的记忆：\\ 笔记，\\ 压缩上下文，\\ 检索",
+    "where a trained model keeps its facts": "训练好的模型把事实存在哪里",
+    "A model has $L$ layers and $H$ key-value heads of $d_h$ numbers, \\ in bf16. \\ How many bytes does its cache take per token? \\ Evaluate for Llama 3.1 70B ($L = 80$, $H = 8$, $d_h = 128$) at $128{,}000$ tokens, \\ and with one key-value head.": "一个模型有$L$层、$H$个键值头，每个头$d_h$个数，\\ 用bf16存。\\ 它的缓存每个词元占多少字节？\\ 对Llama 3.1 70B（$L = 80$，$H = 8$，$d_h = 128$）在$128{,}000$个词元时算一算，\\ 再算只有一个键值头时。",
+    "For $N$ random unit keys in $d$ dimensions, \\ show $\\mathbb E[(k_i \\cdot k_j)^2] = 1/d$ for $i \\ne j$, \\ and that adding $N$ pairs gives a relative read error of about $(N-1)/d$.": "$d$维空间里有$N$个随机单位键，\\ 证明$i \\ne j$时$\\mathbb E[(k_i \\cdot k_j)^2] = 1/d$，\\ 并说明加入$N$对之后，读出的相对误差约为$(N-1)/d$。",
+    "With $\\|k\\| = 1$, \\ show the delta rule gives $S_t k = (1 - \\beta) S_{t-1} k + \\beta v$ \\ and leaves $S_t u = S_{t-1} u$ for $u \\perp k$. \\ Find the eigenvalues of $I - \\beta k k^{\\top}$; \\ for which $\\beta$ is it a projection, \\ a reflection?": "设$\\|k\\| = 1$，\\ 证明delta规则给出$S_t k = (1 - \\beta) S_{t-1} k + \\beta v$，\\ 而对$u \\perp k$保持$S_t u = S_{t-1} u$。\\ 求$I - \\beta k k^{\\top}$的特征值；\\ $\\beta$取何值时它是投影，\\ 何时是反射？",
+    "Show that $(a_1, b_1) \\bullet (a_2, b_2) = (a_1 a_2, \\ a_2 b_1 + b_2)$ is associative, \\ find its identity, \\ and count the rounds of a scan over $10^6$ tokens.": "证明$(a_1, b_1) \\bullet (a_2, b_2) = (a_1 a_2, \\ a_2 b_1 + b_2)$满足结合律，\\ 求它的单位元，\\ 并数一数对$10^6$个词元做扫描需要几轮。",
+    "For $h' = -\\lambda h + x$, \\ derive the zero-order hold $\\bar A = e^{-\\lambda\\Delta}$, \\ $\\bar B = (1 - e^{-\\lambda\\Delta})/\\lambda$. \\ When is Euler's $\\bar A = 1 - \\lambda\\Delta$ unstable? \\ For eigenvalues $-0.3 \\pm 2i$, \\ find the largest stable step.": "对$h' = -\\lambda h + x$，\\ 推导零阶保持$\\bar A = e^{-\\lambda\\Delta}$，\\ $\\bar B = (1 - e^{-\\lambda\\Delta})/\\lambda$。\\ 欧拉法的$\\bar A = 1 - \\lambda\\Delta$何时不稳定？\\ 对特征值$-0.3 \\pm 2i$，\\ 求最大的稳定步长。",
+    "A kNN-LM mixes $p = \\lambda p_{\\mathrm{kNN}} + (1 - \\lambda) p_{\\mathrm{LM}}$. \\ Show it never costs more than $\\log_2 \\tfrac{1}{1-\\lambda}$ bits on a token, \\ and find when it saves bits.": "kNN-LM把两者混合：$p = \\lambda p_{\\mathrm{kNN}} + (1 - \\lambda) p_{\\mathrm{LM}}$。\\ 证明它在一个词元上的代价从不超过$\\log_2 \\tfrac{1}{1-\\lambda}$比特，\\ 并求出它何时能省下比特。",
+    "each token visits only a few experts, \\ and reads only some of the past": "每个词元只经过少数几个专家，\\ 也只读一部分过去",
+    "S.~J.~D.~Prince, \\textit{Understanding Deep Learning} (2023), \\ ch.~12": "S.~J.~D.~Prince，\\textit{Understanding Deep Learning}（2023），\\ 第12章",
+    "S.~Yang, \\textit{DeltaNet Explained} (blog, 2024) \\ and the \\textit{flash-linear-attention} library": "S.~Yang，\\textit{DeltaNet Explained}（博客，2024）\\ 以及\\textit{flash-linear-attention}库",
+    "A.~Gu, \\textit{Modeling Sequences with Structured State Spaces} (PhD thesis, Stanford, 2023)": "A.~Gu，\\textit{Modeling Sequences with Structured State Spaces}（斯坦福大学博士论文，2023）",
+    "Retrieval as memory": "作为记忆的检索",
+    "Can a memory live outside the model?": "记忆能放在模型外面吗？",
+    "passages, \\ each an embedding": "段落，\\ 每段一个嵌入",
+    "schematic: \\ in two of the hundreds of dimensions": "示意图：\\ 几百个维度中的两个",
+    "retrieval-augmented generation": "检索增强生成",
+    "embed the question; \\ find the nearest passages in a large store \\ (a dot product, \\ over millions); \\ put them in the context, \\ and generate": "把问题嵌入；\\ 在一个大库里找出最近的段落 \\ （一次点积，\\ 对上百万个）；\\ 把它们放进上下文，\\ 再生成",
+    "2020: \\ DPR \\ (Karpukhin et al.): \\ two encoders, \\\\ trained so questions land near their answers": "2020：\\ DPR \\ （Karpukhin等）：\\ 两个编码器，\\\\ 训练得让问题落在答案附近",
+    "2020: \\ REALM \\ (Guu et al.): \\ the retriever trained with the language model": "2020：\\ REALM \\ （Guu等）：\\ 检索器和语言模型一起训练",
+    "2020: \\ RAG \\ (Lewis et al.): \\ retrieve, \\ then generate": "2020：\\ RAG \\ （Lewis等）：\\ 先检索，\\ 再生成",
+    "p(w \\mid \\text{context})": "p(w \\mid \\text{上下文})",
+    "\\sum_{\\text{neighbours with next token } w}": "\\sum_{\\text{下一个词元是 } w \\text{ 的近邻}}",
+    "from the passage: \\ the context so far": "来自测试段落：\\ 到目前为止的上下文",
+    "the next tokens of its \\\\ 8 nearest stored states": "它的$8$个最近的已存状态 \\\\ 各自的下一个词元",
+    "the true next token:": "真正的下一个词元：",
+    "$\\lambda$, \\ the memory's share": "$\\lambda$，\\ 记忆所占的份额",
+    "bits per character, \\ the passage": "每字符比特数，\\ 测试段落",
+    "stored states": "已存的状态数",
+    "the model alone": "只用模型",
+    "where the memories help": "记忆在哪里起作用",
+    "the novels: \\ tokens of the passage it helps most \\ (bits saved)": "小说：\\ 测试段落中受益最多的词元 \\ （省下的比特）",
+    "a continuous cache \\ (Grave, Joulin \\& Usunier)": "连续缓存 \\ （Grave、Joulin \\& Usunier）",
+    "the same vote, \\ over the text read so far": "同样的投票，\\ 对象换成已经读过的文字",
+    "Part 13's transformer (characters)": "第13部分的Transformer（按字符）",
+    "Part 15: transformer": "第15部分：Transformer",
+    "Part 15: gated-delta hybrid": "第15部分：门控delta混合模型",
+    "the series' model + kNN memory of the novels": "本系列的模型 + 小说的kNN记忆",
+    "the series' model + memory of the passage so far": "本系列的模型 + 测试段落已读部分的记忆",
+    "The scoreboard: \\ \\textit{The Maltese Falcon}, \\ chapter 2": "记分牌：\\ 《马耳他之鹰》，\\ 第2章",
+    "RETRO \\ (Borgeaud et al., DeepMind)": "RETRO \\ （Borgeaud等，DeepMind）",
+    "retrieval from $2$ trillion tokens; \\ about GPT-3's quality \\ with $25\\times$ fewer parameters": "从$2$万亿个词元中检索；\\ 质量约等于GPT-3，\\ 参数少$25\\times$",
+    "Hopfield (1982); \\ Kohonen (1972); \\ Anderson (1972); \\ Schmidhuber (1992); \\ Ba et al.\\ (2016); \\ Graves et al., NTM (2014); \\ Weston et al.\\ (2014); \\ Sukhbaatar et al.\\ (2015)": "Hopfield (1982); \\ Kohonen (1972); \\ Anderson (1972); \\ Schmidhuber (1992); \\ Ba et al.\\ (2016); \\ Graves et al., NTM (2014); \\ Weston et al.\\ (2014); \\ Sukhbaatar et al.\\ (2015)",
+    "Shazeer, MQA (2019); \\ Ainslie et al., GQA (2023); \\ DeepSeek-AI, V2 (2024), V3 (2024); \\ Child et al.\\ (2019); \\ Dai et al., Transformer-XL (2019); \\ Beltagy et al., Longformer (2020); \\ Zaheer et al., BigBird (2020)": "Shazeer, MQA (2019); \\ Ainslie et al., GQA (2023); \\ DeepSeek-AI, V2 (2024), V3 (2024); \\ Child et al.\\ (2019); \\ Dai et al., Transformer-XL (2019); \\ Beltagy et al., Longformer (2020); \\ Zaheer et al., BigBird (2020)",
+    "Xiao et al., StreamingLLM (2023); \\ Zhang et al., H$_2$O (2023); \\ Katharopoulos et al.\\ (2020); \\ Schlag, Irie \\& Schmidhuber (2021); \\ Widrow \\& Hoff (1960)": "Xiao et al., StreamingLLM (2023); \\ Zhang et al., H$_2$O (2023); \\ Katharopoulos et al.\\ (2020); \\ Schlag, Irie \\& Schmidhuber (2021); \\ Widrow \\& Hoff (1960)",
+    "Yang et al., DeltaNet (2024); \\ Yang, Kautz \\& Hatamizadeh, Gated DeltaNet (2025); \\ Kimi Team, Kimi Linear (2025); \\ Beck et al., xLSTM (2024); \\ Peng et al., RWKV-7 (2025); \\ Grazzi et al.\\ (2025)": "Yang et al., DeltaNet (2024); \\ Yang, Kautz \\& Hatamizadeh, Gated DeltaNet (2025); \\ Kimi Team, Kimi Linear (2025); \\ Beck et al., xLSTM (2024); \\ Peng et al., RWKV-7 (2025); \\ Grazzi et al.\\ (2025)",
+    "Blelloch (1990); \\ Martin \\& Cundy (2018); \\ Gu et al., HiPPO (2020); \\ Gu, Goel \\& R\\'e, S4 (2022); \\ Gu \\& Dao, Mamba (2023); \\ Dao \\& Gu, Mamba-2 (2024); \\ Lahoti et al., Mamba-3 (2026)": "Blelloch (1990); \\ Martin \\& Cundy (2018); \\ Gu et al., HiPPO (2020); \\ Gu, Goel \\& R\\'e, S4 (2022); \\ Gu \\& Dao, Mamba (2023); \\ Dao \\& Gu, Mamba-2 (2024); \\ Lahoti et al., Mamba-3 (2026)",
+    "Sun et al., TTT (2024); \\ Behrouz, Zhong \\& Mirrokni, Titans (2025); \\ Wang, Shi \\& Fox, Test-time regression (2025); \\ Arora et al., Zoology (2023)": "Sun et al., TTT (2024); \\ Behrouz, Zhong \\& Mirrokni, Titans (2025); \\ Wang, Shi \\& Fox, Test-time regression (2025); \\ Arora et al., Zoology (2023)",
+    "Lieber et al., Jamba (2024); \\ MiniMax (2025); \\ NVIDIA, Nemotron-H (2025), Nemotron 3 (2025); \\ Qwen Team, Qwen3-Next (2025), Qwen3.5 (2026); \\ Moonshot, Kimi K3 (2026); \\ DeepSeek-AI, V4 (2026)": "Lieber et al., Jamba (2024); \\ MiniMax (2025); \\ NVIDIA, Nemotron-H (2025), Nemotron 3 (2025); \\ Qwen Team, Qwen3-Next (2025), Qwen3.5 (2026); \\ Moonshot, Kimi K3 (2026); \\ DeepSeek-AI, V4 (2026)",
+    "Kamradt (2023); \\ Liu et al., Lost in the Middle (2023); \\ Hsieh et al., RULER (2024); \\ Modarressi et al., NoLiMa (2025); \\ Hong et al., Context Rot (2025)": "Kamradt (2023); \\ Liu et al., Lost in the Middle (2023); \\ Hsieh et al., RULER (2024); \\ Modarressi et al., NoLiMa (2025); \\ Hong et al., Context Rot (2025)",
+    "Karpukhin et al., DPR (2020); \\ Guu et al., REALM (2020); \\ Lewis et al., RAG (2020); \\ Khandelwal et al., kNN-LM (2020); \\ Grave et al.\\ (2017); \\ Borgeaud et al., RETRO (2021)": "Karpukhin et al., DPR (2020); \\ Guu et al., REALM (2020); \\ Lewis et al., RAG (2020); \\ Khandelwal et al., kNN-LM (2020); \\ Grave et al.\\ (2017); \\ Borgeaud et al., RETRO (2021)",
+    "\\, p_{\\text{kNN}}(w)": "\\, p_{\\text{kNN}}(w)",
+    "\\, p_{\\text{LM}}(w)": "\\, p_{\\text{LM}}(w)",
+    "p_{\\text{kNN}}(w)": "p_{\\text{kNN}}(w)",
+    "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)": "U.~Khandelwal, O.~Levy, D.~Jurafsky, L.~Zettlemoyer \\& M.~Lewis, \\textit{Generalization through Memorization: Nearest Neighbor Language Models} (2020)"
   },
   "phrases": {
     "width": "宽度",
@@ -18772,6 +18836,26 @@
     [
       "^copied right: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\ \\(copies (\\d+) tokens apart\\)$",
       "抄对的比例：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型$\\2\\\\%$ \\\\ （两份相隔\\3个词元）"
+    ],
+    [
+      "^copied right: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\\\\\ \\(copies (\\d+) tokens apart\\)$",
+      "复制正确：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型 $\\2\\\\%$ \\\\\\\\ （相隔\\3个词元的复制）"
+    ],
+    [
+      "^the model alone: \\\\ \\$([\\d.]+)\\\\%\\$$",
+      "只用模型：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^the neighbours' vote: \\\\ \\$([\\d.]+)\\\\%\\$$",
+      "近邻的投票：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^\\$\\\\lambda = ([\\d.]+)\\$: \\\\\\\\ chosen on \\\\\\\\ held-out novels$",
+      "$\\\\lambda = \\1$：\\\\\\\\ 在留出的 \\\\\\\\ 小说上选定"
+    ],
+    [
+      "^the passage's own past, \\\\ beyond the \\$(\\d+)\\$-token window: \\\\\\\\ \\$([\\d.]+)\\$ \\$\\\\rightarrow\\$ \\$([\\d.]+)\\$ bits per character \\\\ \\(\\$\\\\lambda = ([\\d.]+)\\$\\)$",
+      "测试段落自己的过去，\\\\ $\\1$词元窗口之外的部分：\\\\\\\\ $\\2$ $\\\\rightarrow$ $\\3$ 每字符比特 \\\\ （$\\\\lambda = \\4$）"
     ]
   ]
 }

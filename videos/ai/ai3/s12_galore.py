@@ -199,17 +199,19 @@ class GaLore(VoiceoverScene):
                    r"$10^{-2}$ tried for each; \ each method at its best, three seeds").to_edge(DOWN, buff=0.2)
         mean = {m: float(np.mean(vals[m])) for m in methods}
         spread = max(max(vals[m]) - min(vals[m]) for m in methods)
-        g_beats = mean["galore8"] < mean["adam"] - spread
-        ctl_explains = abs(mean["adamsplit"] - mean["galore32"]) < max(spread, 0.05) or mean["adamsplit"] < mean["galore32"]
-        if g_beats and ctl_explains:
-            verdict = ("Both GaLore runs beat plain Adam. But GaLore also shrinks the matrices' steps while the "
-                       "embedding trains at the full rate, and Adam given the same split does as well, so the split, "
-                       "not the low rank, explains the gap. What the low rank does show is that a rank-8 window loses "
-                       "almost nothing.")
-        elif g_beats:
-            verdict = ("Both GaLore runs beat plain Adam, and Adam with GaLore's step sizes does not close the gap: "
-                       "here, the low-rank window itself helped.")
-        elif abs(mean["galore8"] - mean["adam"]) <= spread:
+        gap = mean["adam"] - mean["galore32"]
+        split_share = (mean["adam"] - mean["adamsplit"]) / gap if gap > 0 else 0.0
+        if gap > spread and split_share > 0.5 and mean["adamsplit"] > mean["galore32"] + spread / 2:
+            verdict = (f"GaLore wins, but most of the gap, {100 * split_share:.0f} percent, comes from GaLore's smaller steps for the "
+                       "matrices, which let the rest train at the full rate: Adam given the same step sizes reaches "
+                       f"{mean['adamsplit']:.3f}. The low-rank window adds the rest here, at no cost.")
+        elif gap > spread and split_share > 0.5:
+            verdict = ("The gap comes from GaLore's smaller steps for the matrices: Adam given the same step sizes "
+                       f"does as well, {mean['adamsplit']:.3f}. The low-rank window itself costs nothing.")
+        elif gap > spread:
+            verdict = ("Adam given GaLore's step sizes does not close the gap: here, the low-rank window itself "
+                       "helped.")
+        elif abs(gap) <= spread:
             verdict = "GaLore matches Adam within the spread of the seeds, with a fraction of the memory."
         else:
             verdict = "GaLore falls short of Adam here, the price of its smaller memory at this scale."
