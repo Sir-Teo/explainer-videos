@@ -170,7 +170,7 @@ class Batch(VoiceoverScene):
             col.move_to([-5.4 + 2.55 * j, 0.6, 0])
         hd = label(r"two ways to the same number", font_size=30).to_edge(UP, buff=0.4)
         how = label(r"noise scale: \ $\operatorname{tr}\Sigma / |G|^2$ \ from gradients at batches $64$ and $4{,}096$ "
-                    r"\ "
+                    r"\\ "
                     r"(McCandlish et al., Appendix A)", font_size=20, color=GREY_B)
         how.next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
         if how.width > 6.6:

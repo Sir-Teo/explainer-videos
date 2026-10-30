@@ -1045,3 +1045,57 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | sycophancy, jailbreak, adversarial suffix, many-shot jailbreaking, over-refusal | 谄媚，越狱，对抗后缀，多样本越狱，过度拒绝 |
 | emergent misalignment, alignment faking, persona vector | 涌现式失准，对齐伪装，人格向量 |
 | cold start, strong-to-weak distillation | 冷启动，强到弱蒸馏 |
+
+### Inference (Part 19)
+
+| English | 中文 |
+|---|---|
+| inference, serving | 推断，服务（部署） |
+| prefill, decode | 预填充，解码 |
+| key-value cache (KV cache) | 键值缓存（KV缓存） |
+| multi-head, multi-query, grouped-query attention (MHA, MQA, GQA) | 多头注意力，多查询注意力，分组查询注意力 |
+| multi-head latent attention (MLA) | 多头潜在注意力（MLA） |
+| batch, batch size | 批，批大小 |
+| throughput, latency | 吞吐量，延迟 |
+| time to first token (TTFT), time between tokens | 首个词元的等待时间，词元之间的间隔 |
+| static batching, continuous batching | 静态批处理，连续批处理 |
+| iteration-level scheduling | 迭代级调度 |
+| chunked prefill | 分块预填充 |
+| disaggregated serving (prefill and decode on separate workers) | 预填充与解码分离部署 |
+| paged attention, page, block table | 分页注意力，页，块表 |
+| fragmentation (internal, external) | 碎片（内部，外部） |
+| preemption | 抢占 |
+| prefix caching, radix tree | 前缀缓存，基数树 |
+| speculative decoding, speculative sampling | 推测解码，推测采样 |
+| draft model, drafter, target model | 草稿模型，起草器，目标模型 |
+| acceptance rate | 接受率 |
+| EAGLE head, Medusa heads | EAGLE头，Medusa头 |
+| total variation distance | 总变差距离 |
+| quantization, round to nearest | 量化，就近舍入 |
+| scale (per tensor, per row, per group) | 缩放因子（每张量，每行，每组） |
+| step size Δ | 步长Δ |
+| calibration data | 校准数据 |
+| activation outliers, outlier channels | 激活离群值，离群通道 |
+| W8A8 (8-bit weights and activations) | W8A8（8比特权重和激活） |
+| SmoothQuant, migration strength α | SmoothQuant，迁移强度α |
+| Optimal Brain Damage, Optimal Brain Surgeon | 最优脑损伤，最优脑外科 |
+| GPTQ, AWQ (activation-aware weight quantization) | GPTQ，AWQ（激活感知的权重量化） |
+| salient weights | 显著权重 |
+| Hadamard matrix, rotation | 哈达玛矩阵，旋转 |
+| computational invariance | 计算不变性 |
+| Cayley map, skew-symmetric matrix | 凯莱映射，反对称矩阵 |
+| crest factor (peak over typical) | 峰值因子（峰值与典型值之比） |
+| E2M1, E4M3, E8M0 | E2M1，E4M3，E8M0 |
+| MXFP4, NVFP4, shared exponent, clamping | MXFP4，NVFP4，共享指数，截断 |
+| KV-cache quantization; per-channel, per-token | KV缓存量化；按通道，按词元 |
+| online softmax, running max, running sum | 在线softmax，当前最大值，累计和 |
+| IO complexity | IO复杂度 |
+| Flash-Decoding, split-KV, log-sum-exp | Flash-Decoding，KV切分，对数求和指数 |
+| occupancy | 占用率 |
+| sliding-window attention, sparse attention, indexer | 滑动窗口注意力，稀疏注意力，索引器 |
+| constrained decoding, structured output | 约束解码，结构化输出 |
+| finite automaton, regular expression, token mask | 有限自动机，正则表达式，词元掩码 |
+| grammar-aligned decoding | 语法对齐解码 |
+| test-time compute, thinking budget | 测试时计算，思考预算 |
+| price per million tokens | 每百万词元的价格 |
+| on-device inference | 端侧推断 |

@@ -49,6 +49,9 @@ class Bytes(VoiceoverScene):
         for p_ in probs:
             p_.scale(1.15)
         probs.to_edge(UP, buff=0.4)
+        probs_top = probs.copy()
+        probs.scale(1.25).arrange(DOWN, aligned_edge=LEFT, buff=0.55).move_to(RIGHT * 0.3)
+        marks = VGroup(*[Dot(radius=0.07, color=C.SURPRISE).next_to(p_, LEFT, buff=0.25) for p_ in probs])
         txt = []
         if "novels_cut" in b:
             cut = [str(x) for x in b["novels_cut"]]
@@ -71,10 +74,11 @@ class Bytes(VoiceoverScene):
             "with only 256 possible values, so with the bytes as the starting alphabet nothing is ever unknown."
             f"<bookmark mark='c'/>{own}"
         ) as vo:
-            self.play(FadeIn(probs[0]))
+            self.play(FadeIn(probs[0]), FadeIn(marks[0]))
             vo.wait_until("a")
-            self.play(FadeIn(probs[1:]))
+            self.play(LaggedStart(*[FadeIn(VGroup(p_, m_)) for p_, m_ in zip(probs[1:], marks[1:])], lag_ratio=0.5))
             vo.wait_until("b")
+            self.play(Transform(probs, probs_top), FadeOut(marks))
             self.play(FadeIn(rl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.3), FadeIn(cite_),
                       run_time=2.0)
             vo.wait_until("c")

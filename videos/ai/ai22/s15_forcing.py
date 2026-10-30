@@ -102,7 +102,7 @@ class Forcing(VoiceoverScene):
             self.play(FadeIn(hd))
             self.play(FadeIn(rows[0]), FadeIn(names[0]))
             vo.wait_until("a")
-            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            self.play(Circumscribe(rows[0], color=GREY_A, buff=0.08))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(n_)) for r_, n_ in zip(rows[1:], names[1:])],
                                   lag_ratio=0.4), run_time=2.5)
