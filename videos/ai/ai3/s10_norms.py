@@ -176,7 +176,7 @@ class Norms(VoiceoverScene):
         p32 = DashedLine(ax.c2p(0, math.log10(e32)), ax.c2p(-math.log10(e32) + 2, 2), color=F32, stroke_width=1.5)
         leg = legend([(F64, r"64-bit"), (F32, r"32-bit"), (GREY_B, r"dashed: \ $\kappa \times$ rounding unit")],
                      font_size=20).move_to([-1.6, -2.7, 0])
-        cap = note(r"computed: \ $60 \times 60$ systems, \ median of $5$").to_corner(DR, buff=0.2)
+        cap = note(r"computed: \ $60 \times 60$ systems, \ median of $5$").to_corner(UR, buff=0.3)
         s6 = next(s for s in sol if abs(math.log10(s["kappa"]) - 6) < 0.01)
         dead32 = next((s["kappa"] for s in sol if s["e32"] > 0.5), None)
         kmax = max(r["kappa"] for r in d["rows"])

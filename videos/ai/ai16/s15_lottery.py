@@ -47,7 +47,6 @@ class Lottery(VoiceoverScene):
             "conjecture: a big random network contains a small subnetwork, a winning lottery ticket, that could have "
             "been trained alone to the same accuracy. The big network is how you buy enough tickets."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
@@ -76,10 +75,12 @@ class Lottery(VoiceoverScene):
         pl = label(r"a corner of the second layer's weights: \ lit if kept", font_size=18, color=GREY_A).next_to(pic, UP, buff=0.12)
         rem = [float(x) for x in d["remain_s0"]]
         cnt = label(r"round $0$: \ $100\%$ of weights", font_size=22, color=TICKETC).next_to(pic, DOWN, buff=0.2)
-        net = label(rf"a ReLU network: \ $3$ characters in, \ two layers of $128$, \ the next character out \ "
+        net = label(rf"a ReLU network: \ $3$ characters in, \ two layers of $128$, \\ the next character out \ "
                     rf"(${int(d['params_s0']):,}$ weights)".replace(",", "{,}"), font_size=20, color=GREY_A).move_to([-2.8, -1.4, 0])
-        ag = label(rf"against: \ the same masks with fresh random weights, \ and random masks of the same size", font_size=20,
+        ag = label(rf"against: \ the same masks with fresh random weights, \\ and random masks of the same size", font_size=20,
                    color=REINITC).next_to(net, DOWN, buff=0.3).align_to(net, LEFT)
+        keep_in_frame(net)
+        keep_in_frame(ag)
         with self.voiceover(
             "How do you find a ticket? Train, prune, rewind, repeat. <bookmark mark='a'/> Train the network; remove "
             f"the {int(100 * d['rate'][0])} percent of weights smallest in size; rewind the survivors to the values they had early in "
@@ -116,7 +117,7 @@ class Lottery(VoiceoverScene):
         allv = np.concatenate([v.ravel() for v in data.values()])
         y0 = math.floor((allv.min() - 0.02) * 20) / 20
         y1 = min(math.ceil((allv.max() + 0.02) * 20) / 20, y0 + 1.0)
-        ax = Axes(x_range=[float(lx.min()) - 0.05, 0.05, 0.25], y_range=[y0, y1, 0.1], x_length=7.6, y_length=4.4, tips=False,
+        ax = CornerAxes(x_range=[float(lx.min()) - 0.05, 0.05, 0.25], y_range=[y0, y1, 0.1], x_length=7.6, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-1.8, -0.3, 0])
         ticks = [1.0, 0.5, 0.2, 0.1]
         xt = VGroup(*[MathTex(rf"{int(100 * t)}\%", font_size=20, color=GREY_B).next_to(ax.c2p(math.log10(t), y0), DOWN, buff=0.1)

@@ -157,9 +157,11 @@ class Retrieval(VoiceoverScene):
               f"{float(full['bits']):.3f}: {gain:.3f} bits less, {100 * rel:.1f} percent. " if gain > 0.002 else
               f"On the passage, the model alone scores {base:.3f} bits per character, and with the memory "
               f"{float(full['bits']):.3f}: no real gain. ")
+        lam0 = float(kn[f"snap_{snaps[0]}"]["lam"])
         grows = bits[-1] < bits[0] - 0.002
-        v2 = (f"And the bigger the memory, the better: from {keys[0] / 1e6:.2f} million stored states to "
-              f"{keys[-1] / 1e6:.1f} million, the score falls from {bits[0]:.3f} to {bits[-1]:.3f}." if grows else
+        v2 = (f"And it takes a big memory: with {keys[0] / 1e6:.2f} million stored states, the best share for the vote "
+              f"is {lam0:g}, and the score {bits[0]:.3f}; only with all {keys[-1] / 1e6:.1f} million does it reach "
+              f"{bits[-1]:.3f}." if grows else
               f"A bigger memory hardly helps here: {bits[0]:.3f} with {keys[0] / 1e6:.2f} million stored states, "
               f"{bits[-1]:.3f} with {keys[-1] / 1e6:.1f} million.")
         with self.voiceover(
@@ -196,7 +198,8 @@ class Retrieval(VoiceoverScene):
         right = VGroup(hc, res).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, -0.3, 0])
         names = [w.strip() for w, _ in best if w.strip()[:1].isupper()]
         v = (f"Many are names and capitals, like {names[0]}: the memory has seen how novels use them. " if names else
-             "They are mostly the ends of common phrases, which the memory has seen many times. ")
+             "Mostly they finish a word that has already begun, like the example's: completions the novels have seen "
+             "many times. ")
         v2 = (f"Edouard Grave and colleagues had done the same in 2017 with the text read so far, a continuous cache. "
               f"For our passage, which runs far past the model's 256-token window, a memory of its own earlier hidden "
               f"states takes the score from {base:.3f} to {float(sc['bits']):.3f}: names that appeared a page "

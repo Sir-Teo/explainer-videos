@@ -51,7 +51,9 @@ class Capacity(VoiceoverScene):
             label(r"$kN/E$: \ an expert's share of the batch, \ if all were equal", font_size=20, color=GREY_A),
             label(r"$c$: \ the capacity factor \ (Switch: \ $1$ to $1.25$ in training)", font_size=20, color=C.BITS),
             label(r"past capacity: \ dropped \ (the token skips the layer, \ through the residual)", font_size=20, color=DROPC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 1.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        rows.scale_to_fit_width(min(rows.width, 6.6)).move_to([3.3, 1.0, 0])
+        keep_in_frame(rows)
         tag = note(r"illustrative", font_size=18).to_corner(DR, buff=0.25)
         hist = history_card(2020, r"GShard; \ Switch (2021)", r"a fixed buffer per expert, \ so every chip's work has a "
                             r"fixed size", width=4.4, color=HISTC).move_to([3.6, -1.9, 0])

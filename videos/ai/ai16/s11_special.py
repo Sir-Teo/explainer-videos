@@ -127,8 +127,9 @@ class Special(VoiceoverScene):
         fseeds = [int(x) for x in range(2)]
         fcur = ms([float(s[f"fine_s{sd}_l{last}"]["cur"]) for sd in fseeds])[0]
         fH = float(s[f"fine_s0_l{last}"]["H"])
-        fl_ = label(rf"$32$ fine experts: \ ${fcur:.2f}$ bits about the character just read, \ of at most ${fH:.0f}$",
+        fl_ = label(rf"$32$ fine experts: \\ ${fcur:.2f}$ bits about the character just read, \\ of at most ${fH:.0f}$",
                     font_size=20, color=C.BITS).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        keep_in_frame(fl_)
         v3 = (f"With thirty-two smaller experts there's more room to sort: the choice says {fcur:.2f} bits about the "
               f"current character, against {cur:.2f} with eight. " if fcur > cur + 0.05 else
               f"With thirty-two smaller experts, the choice says {fcur:.2f} bits about the current character, much as "

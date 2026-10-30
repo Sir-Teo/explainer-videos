@@ -317,16 +317,16 @@ class Designs(VoiceoverScene):
     def v4(self):
         a = F.DSV4_ATT
         rows = VGroup(
-            label(r"DeepSeek-V4 \ (April 2026): \ two kinds of attention layer, \ interleaved", font_size=28),
-            label(rf"compressed sparse attention: \ every ${a['m']}$ keys and values squeezed into one entry; \ a "
+            label(r"DeepSeek-V4 \ (April 2026): \ two kinds of attention layer, \ interleaved", font_size=34),
+            label(rf"compressed sparse attention: \ every ${a['m']}$ keys and values squeezed into one entry; \\ a "
                   rf"lightning indexer picks the top ${a['topk'][0]:,}$; \ plus a window of the last ${a['window']}$"
-                  .replace(",", "{,}"), font_size=22, color=INDEXC),
-            label(rf"heavily compressed attention: \ every ${a['m2']}$ squeezed into one, \ read in full", font_size=22,
+                  .replace(",", "{,}"), font_size=26, color=INDEXC),
+            label(rf"heavily compressed attention: \ every ${a['m2']}$ squeezed into one, \ read in full", font_size=26,
                   color=BLOCKC),
-            label(rf"the indexer: \ ${a['idx_heads']}$ heads of ${a['idx_dim']}$, \ in ${a['idx_bits']}$-bit numbers", font_size=22,
+            label(rf"the indexer: \ ${a['idx_heads']}$ heads of ${a['idx_dim']}$, \ in ${a['idx_bits']}$-bit numbers", font_size=26,
                   color=GREY_A),
             label(rf"at a million tokens: \ ${100 * a['flops']:.0f}\%$ of V3.2's computation per token, \ "
-                  rf"${100 * a['kv']:.0f}\%$ of its cache \ (its makers' figures)", font_size=22, color=C.BITS),
+                  rf"${100 * a['kv']:.0f}\%$ of its cache \ (its makers' figures)", font_size=26, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, 0.5, 0])
         if rows.width > 13.0:
             rows.width = 13.0
