@@ -48,12 +48,16 @@ class Audrey(VoiceoverScene):
         stag = note(r"schematic", font_size=18).next_to(sax, UP, buff=0.1)
         disp = VGroup(sax, regions, trail, sxl, syl, stag)
         A, B = np.asarray(a["example_b"]), np.asarray(a["example_a"])
-        ta = spectro(A.T, 2.4, 1.2, lo=A.min(), hi=A.max()).move_to([3.0, 2.3, 0])
-        tl = label(r"a template: \ ``seven'', \ one voice, \ one take", font_size=20, color=GREY_A).next_to(ta, UP, buff=0.08)
+        ta = spectro(A.T, 3.0, 1.6, lo=A.min(), hi=A.max()).move_to([-4.4, -1.6, 0])
+        tl = label(r"a template: \ ``seven'', \\ one voice, \ one take", font_size=20, color=GREY_A).next_to(ta, UP, buff=0.08)
+        tb = spectro(B.T, 3.0, 1.6, lo=B.min(), hi=B.max()).move_to([-0.9, -1.6, 0])
+        tbl = label(r"a new word, \\ stretched to the same length", font_size=20, color=GREY_A).next_to(tb, UP, buff=0.08)
+        vs = MathTex(r"\leftrightarrow", font_size=40, color=GREY_B).move_to([-2.65, -1.6, 0])
+        dist = label(r"distance: \ frame by frame", font_size=18, color=GREY_B).next_to(vs, DOWN, buff=0.9)
         res = VGroup(
             label(rf"the same voice, \ another take: \ ${100 * float(a['same_lin']):.0f}\%$ right", font_size=24, color=SND_C),
             label(rf"eleven other voices: \ ${100 * float(a['other_lin']):.0f}\%$ right", font_size=24, color=C.SURPRISE))
-        res.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.0, 0.2, 0])
+        res.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 0.6, 0])
         how = label(r"our replica: \ $10$ templates from one Kokoro voice, \\ each word stretched to the same length, \ "
                     r"nearest template wins", font_size=20, color=GREY_A).next_to(res, DOWN, buff=0.4)
         same, other = float(a["same_lin"]), float(a["other_lin"])
@@ -75,6 +79,7 @@ class Audrey(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeOut(disp))
             self.play(FadeIn(ta), FadeIn(tl), FadeIn(how))
+            self.play(FadeIn(tb), FadeIn(tbl), FadeIn(vs), FadeIn(dist))
             vo.wait_until("c")
             self.play(FadeIn(res[0]))
             self.play(FadeIn(res[1]))
@@ -102,8 +107,20 @@ class Audrey(VoiceoverScene):
             label(rf"with time warping: \ same voice ${100 * float(a['same_dtw']):.0f}\%$, \ other voices "
                   rf"${100 * float(a['other_dtw']):.0f}\%$", font_size=22, color=SND_C),
             label(rf"templates from ten voices, \ two new voices: \ ${100 * float(a['multi_dtw']):.0f}\%$", font_size=22,
-                  color=C.INTERVAL)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, -0.4, 0])
+                  color=C.INTERVAL)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.3, -1.9, 0])
         cite_ = cite(r"T.~Vintsyuk (1968); \ H.~Sakoe \& S.~Chiba (1978)", corner=DR)
+        q = 0.95
+        cells = VGroup(*[Square(q, stroke_color=GREY_C, stroke_width=1.5).move_to([c_ * q, -r_ * q, 0])
+                         for r_ in range(2) for c_ in range(2)])
+        cells[3].set_fill(SND_C, 0.35).set_stroke(SND_C, 2.5)
+        names = [r"D(i{-}1, j{-}1)", r"D(i{-}1, j)", r"D(i, j{-}1)", r"D(i, j)"]
+        cl = VGroup(*[MathTex(t, font_size=18, color=WHITE).move_to(cells[k]) for k, t in enumerate(names)])
+        for t in cl:
+            t.scale_to_fit_width(min(t.width, q - 0.08))
+        arrs = VGroup(*[Arrow(cells[k].get_center(), cells[3].get_center(), buff=0.3, stroke_width=3,
+                              max_tip_length_to_length_ratio=0.25, color=SND_C) for k in (0, 1, 2)])
+        mini = VGroup(cells, cl, arrs).move_to([3.4, 0.4, 0])
+        mtag = note(r"schematic", font_size=18).next_to(mini, UP, buff=0.1)
         od, sd, md = float(a["other_dtw"]), float(a["same_dtw"]), float(a["multi_dtw"])
         better = "helps" if od > float(a["other_lin"]) + 0.02 else "barely helps"
         with self.voiceover(
@@ -119,6 +136,8 @@ class Audrey(VoiceoverScene):
             self.play(FadeIn(img), FadeIn(xl), FadeIn(yl), FadeIn(cite_))
             vo.wait_until("a")
             step(0)
+            self.play(FadeIn(cells), FadeIn(cl), FadeIn(mtag))
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in arrs], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(pl), run_time=2.0)
             vo.wait_until("c")

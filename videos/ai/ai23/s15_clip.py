@@ -109,21 +109,21 @@ class Clip(VoiceoverScene):
         est = [np.asarray(c[f"mi_clip_{Bs[-1]}"], float)[:, k[B]] for B in Bs]  # one model, N candidates
         at_big = [float(np.mean(np.asarray(c[f"mi_clip_{B}"], float)[:, -1])) for B in Bs]  # trained at B, N = 256
         H = float(c["H_caption"])
-        x0, w = 2.6, 0.9
+        x0, w, gap = 1.3, 0.9, 1.9
         sy = 0.3
         base_y = -3.45
         bars = VGroup()
         for i, (B, e) in enumerate(zip(Bs, est)):
-            x = x0 + i * 1.5
+            x = x0 + i * gap
             ceil_ = Rectangle(width=w, height=math.log(B) * sy, stroke_color=WHITE, stroke_width=1.5).move_to(
                 [x, base_y + math.log(B) * sy / 2, 0])
             fill = Rectangle(width=w, height=max(e.mean(), 0.01) * sy, stroke_width=0, fill_color=CLIP_C, fill_opacity=0.7).move_to(
                 [x, base_y + e.mean() * sy / 2, 0])
             dots = VGroup(*[Dot([x + 0.3 * (j - 1), base_y + v * sy, 0], radius=0.04, color=WHITE) for j, v in enumerate(e)])
             bars.add(VGroup(ceil_, fill, dots, label(rf"$N = {B}$", font_size=18, color=GREY_A).next_to(ceil_, DOWN, buff=0.08),
-                            MathTex(f"{e.mean():.2f}", font_size=20, color=CLIP_C).next_to(fill, UP, buff=0.05)
-                            if e.mean() < math.log(B) - 0.4 else MathTex(f"{e.mean():.2f}", font_size=20, color=CLIP_C).move_to(fill)))
-        hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * 1.5 + 0.6, base_y + H * sy, 0], color=TEXT_C)
+                            MathTex(f"{e.mean():.2f}", font_size=22, color=CLIP_C).next_to(
+                                [x + w / 2, base_y + e.mean() * sy, 0], RIGHT, buff=0.1)))
+        hl = DashedLine([x0 - 0.6, base_y + H * sy, 0], [x0 + 2 * gap + 0.6, base_y + H * sy, 0], color=TEXT_C)
         hll = label(rf"$H(\text{{caption}}) = \log {int(round(math.exp(H)))} = {H:.2f}$", font_size=18, color=TEXT_C).next_to(hl, LEFT, buff=0.1)
         bl = label(rf"our CLIP (trained with batches of ${Bs[-1]}$): \ $\log N - \mathcal L$, \ nats \ (outline: $\log N$)",
                    font_size=18, color=GREY_A)

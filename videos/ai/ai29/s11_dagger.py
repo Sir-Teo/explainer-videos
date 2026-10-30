@@ -209,11 +209,11 @@ class DAgger(VoiceoverScene):
     def practice(self):
         cards = VGroup(
             history_card(r"the catch", r"an expert on call", r"someone must label the learner's mistakes: \ hard for "
-                         r"a human driver at speed, \ easy for a program", width=4.2, color=HIST, font_size=19),
+                         r"a human driver at speed, \ easy for a program", width=4.2, color=HIST, font_size=21),
             history_card(r"2019", r"HG-DAgger \ (Kelly et al.)", r"the human takes over only when the learner drifts, "
-                         r"\ and those corrections become the data", width=4.2, color=HIST, font_size=19),
+                         r"\ and those corrections become the data", width=4.2, color=HIST, font_size=21),
             history_card(r"Part 27", r"on-policy distillation", r"a student writes, \ the teacher scores the student's "
-                         r"own tokens: \ DAgger for language models", width=4.2, color=HIST, font_size=19),
+                         r"own tokens: \ DAgger for language models", width=4.2, color=HIST, font_size=21),
         ).arrange(RIGHT, buff=0.25).move_to([0, 0.9, 0])
         tail = label(r"learn from where you actually end up, \ not only from where the expert goes", font_size=28,
                      color=DAG).to_edge(DOWN, buff=0.9)

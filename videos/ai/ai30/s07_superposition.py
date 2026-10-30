@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai30.common import FEATURE_COLORS, arrow2d, load
+from videos.ai.ai30.common import FEATURE_COLORS, PART, arrow2d, load
 
 COLS = FEATURE_COLORS[:5]
 
@@ -14,11 +14,10 @@ class Superposition(VoiceoverScene):
         self.toy()
         self.learning()
         self.interference()
-        self.highdim()
 
     def card(self):
-        card = chapter_card(1, r"More ideas than dimensions", r"Why is every number busy?", part=30)
-        with self.voiceover("Chapter one. More ideas than dimensions."):
+        card = chapter_card(6, r"More ideas than dimensions", r"Why is every number busy?", part=PART)
+        with self.voiceover("Chapter six. More ideas than dimensions."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -135,10 +134,13 @@ class Superposition(VoiceoverScene):
         lab = label(r"feature $1$ on, \ the rest off", font_size=24, color=COLS[0]).next_to(pl, UP, buff=0.15)
         res = label(rf"what leaks through: \ ${ar[1:].max():.2f}$ at most, \ against ${ar[0]:.2f}$", font_size=22,
                     color=GREY_A).move_to([x0 + 2.0, -3.1, 0])
+        ang = np.degrees(np.arccos(np.clip([W[:, 0] @ W[:, i] / np.linalg.norm(W[:, 0]) / np.linalg.norm(W[:, i])
+                                            for i in range(1, 5)], -1, 1)))
+        near, far = np.sort(ang)[:2].mean(), np.sort(ang)[2:].mean()
         with self.voiceover(
             "But packing has a price. Turn on feature one alone. <bookmark mark='a'/> Reading it back out, every "
-            "other feature sees its shadow along their direction. <bookmark mark='b'/> The neighbours, at seventy-two "
-            "degrees, get a little; the far ones, at a hundred and forty-four, get a negative amount. "
+            f"other feature sees its shadow along their direction. <bookmark mark='b'/> The neighbours, at about "
+            f"{near:.0f} degrees, get a little; the far ones, at about {far:.0f}, get a negative amount. "
             "<bookmark mark='c'/> The bias pushes everything down a little, <bookmark mark='d'/> and the ReLU throws "
             "away whatever is negative. What's left over is small: a little noise, the cost of sharing space. It's "
             "worth paying only because the features are rarely on together."
@@ -155,59 +157,6 @@ class Superposition(VoiceoverScene):
             vo.wait_until("d")
             self.play(Transform(b_ro, b_ar), TransformMatchingTex(steps[1], steps[2]), run_time=1.2)
             self.play(FadeIn(res))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def highdim(self):
-        s = load("superposition")
-        dims = [int(d) for d in s["dims"]]
-        e = np.asarray(s["cos_edges"])
-        top = max(float(np.max(s[f"cos_hist{d}"])) for d in dims)
-        ax = Axes(x_range=[-1, 1, 0.5], y_range=[0, top * 1.05, top], x_length=8.0, y_length=3.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.4, -0.5, 0])
-        xt = VGroup(*[MathTex(t, font_size=24, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.12)
-                      for t, v in ((r"-1", -1), (r"0", 0), (r"1", 1))])
-        xn = label(r"the cosine between two random directions \ ($0$: perpendicular)", font_size=22, color=GREY_A)
-        xn.next_to(xt, DOWN, buff=0.12)
-        w = (e[1] - e[0]) * ax.x_length / 2
-
-        def hist(d):
-            h = np.asarray(s[f"cos_hist{d}"])
-            return VGroup(*[Rectangle(width=w * 0.9, height=max(v / top * ax.y_length / 1.05, 0.005), stroke_width=0, fill_color=C.TRUE_P,
-                                      fill_opacity=0.85).move_to(ax.c2p((e[i] + e[i + 1]) / 2, 0), aligned_edge=DOWN)
-                            for i, v in enumerate(h)])
-
-        def dl(d):
-            return label(rf"in ${d}$ dimensions: \ spread $\approx {float(s[f'cos_std{d}']):.3f}$", font_size=28,
-                         color=C.TRUE_P).move_to([4.3, 1.4, 0])
-
-        f = cmath(r"\text{spread} \approx \frac{1}{\sqrt{d}}", font_size=40).move_to([4.3, -0.2, 0])
-        note_ = label(r"room for exponentially many \\ almost-perpendicular directions: \\ Part 3's random projections",
-                      font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.4)
-        cite_ = cite(r"W.~B.~Johnson \& J.~Lindenstrauss (1984)", corner=DR)
-        h = hist(dims[0])
-        lab = dl(dims[0])
-        with self.voiceover(
-            "In two dimensions, five is a crowd. But real models have hundreds or thousands of dimensions, and there, "
-            "space is roomier than intuition says. <bookmark mark='a'/> Pick two random directions and measure the "
-            "angle between them. In two dimensions, anything goes. <bookmark mark='b'/> In sixteen, they're "
-            "usually close to perpendicular; in a hundred and twenty-eight, very close; <bookmark mark='c'/> in a "
-            "thousand and twenty-four, the cosine is within a few hundredths of zero. The spread shrinks like one "
-            "over root d, so the number of almost-perpendicular directions grows exponentially with the dimension. "
-            "That's part three's random projections again, and it's why models can store far more features than they "
-            "have numbers, as long as each feature is rare."
-        ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(r_, DOWN) for r_ in h], lag_ratio=0.01), FadeIn(lab), run_time=1.5)
-            vo.wait_until("b")
-            for d in dims[1:3]:
-                self.play(Transform(h, hist(d)), Transform(lab, dl(d)), run_time=1.5)
-                self.wait(0.4)
-            vo.wait_until("c")
-            self.play(Transform(h, hist(dims[3])), Transform(lab, dl(dims[3])), run_time=1.5)
-            self.play(Write(f), FadeIn(note_), FadeIn(cite_))
         self.wait(0.3)
         self.clear_scene()
 

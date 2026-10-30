@@ -57,7 +57,7 @@ class Genie(VoiceoverScene):
         a4 = Arrow(dyn.get_right(), play_.get_left(), buff=0.1, color=GREY_B)
         hist = history_card(r"Feb 2024", r"Genie \ (Bruce, Dennis, Edwards et al., Google DeepMind)", r"$11$ billion "
                             r"parameters, \ trained on Internet videos of 2D platform games \ without a single action "
-                            r"label", width=6.0, color=HIST, font_size=18).to_corner(DL, buff=0.3)
+                            r"label", width=6.0, color=HIST, font_size=21).to_corner(DL, buff=0.3)
         tag = note(r"schematic").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Our world models learned from frames paired with the actions that caused them. The Internet is full of "
@@ -84,15 +84,15 @@ class Genie(VoiceoverScene):
     def worlds(self):
         cards = VGroup(
             history_card(r"Dec 2024", r"Genie 2", r"3D worlds from a single image, \ steered with keyboard and mouse", width=6.2,
-                         color=HIST, font_size=19),
+                         color=HIST, font_size=21),
             history_card(r"Aug 2025", r"Genie 3", r"$720$p at $24$ frames a second, \ in real time; \ consistent for a few "
                          r"minutes, \ remembering what it drew up to a minute ago; \ text prompts change the world "
-                         r"as you go; \ used to train DeepMind's SIMA agent", width=6.2, color=HIST, font_size=19),
+                         r"as you go; \ used to train DeepMind's SIMA agent", width=6.2, color=HIST, font_size=21),
             history_card(r"Jan 2026", r"Project Genie", r"a prototype on Genie 3 for some subscribers in the US: \ "
-                         r"$60$-second worlds", width=6.2, color=HIST, font_size=19),
+                         r"$60$-second worlds", width=6.2, color=HIST, font_size=21),
             history_card(r"27 Oct 2026", r"Genie 4 \ (Google DeepMind's description)", r"sound generated with the "
                          r"pictures; \ Gemini plans events in the world; \ pitched for training robots; \ a research "
-                         r"preview, \ and objects can still drift", width=6.2, color=CLAIM, font_size=19),
+                         r"preview, \ and objects can still drift", width=6.2, color=CLAIM, font_size=21),
         ).arrange(DOWN, buff=0.18, aligned_edge=LEFT)
         if cards.height > 7.0:
             cards.height = 7.0
@@ -182,7 +182,7 @@ class Genie(VoiceoverScene):
         hist = history_card(r"Jun 2025", r"V-JEPA 2-AC \ (Meta)", r"after a million hours of video, \ $62$ hours of robot "
                             r"video teach it how actions change what it sees; \ it picks and places objects in labs it "
                             r"never saw, \ by searching for actions whose predicted embedding nears the goal's",
-                            width=5.6, color=HIST, font_size=18).to_corner(DR, buff=0.3)
+                            width=5.6, color=HIST, font_size=21).to_corner(DR, buff=0.3)
         tag = note(r"schematic").to_corner(DL, buff=0.3)
         with self.voiceover(
             "All of these predict pixels: every leaf and every ripple, most of which an agent doesn't need. "
