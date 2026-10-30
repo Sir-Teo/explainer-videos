@@ -14656,7 +14656,8 @@
     "too different? \\\\ take it again": "差太多？\\\\ 重说一遍",
     "a forced aligner \\\\ times every word": "强制对齐器 \\\\ 给每个词标时间",
     "how this series is narrated \\ (tools/tts\\_server.py)": "这个系列是怎样配音的 \\ （tools/tts\\_server.py）",
-    "Qwen Team, \\textit{Qwen3-ASR Technical Report} (2026)": "Qwen团队，\\textit{Qwen3-ASR技术报告}（2026）"
+    "Qwen Team, \\textit{Qwen3-ASR Technical Report} (2026)": "Qwen团队，\\textit{Qwen3-ASR技术报告}（2026）",
+    "noise scale: \\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ from gradients at batches $64$ and $4{,}096$ \\\\ (McCandlish et al., Appendix A)": "噪声尺度：\\ $\\operatorname{tr}\\Sigma / |G|^2$ \\ 由批量$64$和$4{,}096$处的梯度算出 \\\\ （McCandlish等，附录A）"
   },
   "phrases": {
     "width": "宽度",

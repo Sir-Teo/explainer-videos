@@ -714,7 +714,7 @@ def compute_symlog(seeds=3, steps=3000):
 # ---------------------------------------------------------------------------
 # Regression against flow matching, on demonstrations with two ways round
 # ---------------------------------------------------------------------------
-DETOUR = dict(demos=400, chunk=8, steps=4000, seeds=5, snaps=(0, 300, 1000, 4000), flow_steps=10)
+DETOUR = dict(demos=400, chunk=20, steps=6000, seeds=5, snaps=(0, 300, 1500, 6000), flow_steps=10)
 
 
 def detour_rollout(policy, starts, chunk, max_steps=60):
@@ -743,6 +743,12 @@ def detour_rollout(policy, starts, chunk, max_steps=60):
     return paths, np.array(hit), np.array(reached)
 
 
+def offsets_to_moves(off):
+    """A chunk of positions relative to the current one, (2H,), as the H moves that reach them, (2H,)."""
+    o = off.reshape(-1, 2)
+    return np.diff(np.concatenate([np.zeros((1, 2)), o]), axis=0).reshape(-1)
+
+
 def compute_detour():
     torch = _torch()
     from .envs import detour_demo
@@ -753,11 +759,11 @@ def compute_detour():
     demos = [detour_demo(g) for _ in range(P["demos"])]
     X, Y = [], []
     for d in demos:
-        mv = np.diff(d, axis=0)
-        mv = np.concatenate([mv, np.repeat(mv[-1:], H, 0)])
+        # the chunk: the next H positions relative to the current one (so sampling noise does not accumulate)
+        dd = np.concatenate([d, np.repeat(d[-1:], H, 0)])
         for t in range(len(d) - 1):
             X.append(d[t])
-            Y.append(mv[t:t + H].reshape(-1))
+            Y.append((dd[t + 1:t + H + 1] - d[t]).reshape(-1))
     X, Y = torch.tensor(np.array(X), dtype=torch.float32), torch.tensor(np.array(Y), dtype=torch.float32)
     sc = float(Y.abs().max())
     Yn = Y / sc
@@ -767,8 +773,8 @@ def compute_detour():
     show = np.linspace(-0.22, 0.22, 12)
 
     def net(i, o):
-        return torch.nn.Sequential(torch.nn.Linear(i, 128), torch.nn.SiLU(), torch.nn.Linear(128, 128), torch.nn.SiLU(),
-                                   torch.nn.Linear(128, o))
+        return torch.nn.Sequential(torch.nn.Linear(i, 256), torch.nn.SiLU(), torch.nn.Linear(256, 256), torch.nn.SiLU(),
+                                   torch.nn.Linear(256, o))
 
     for method in ("regress", "flow"):
         res = []
@@ -784,13 +790,13 @@ def compute_detour():
                 with torch.no_grad():
                     o = torch.tensor(pos, dtype=torch.float32)[None]
                     if method == "regress":
-                        return (f(o)[0] * sc).numpy()
+                        return offsets_to_moves((f(o)[0] * sc).numpy())
                     a = torch.randn(1, 2 * H, generator=gs)  # noise at tau = 0, the chunk at tau = 1
                     n = P["flow_steps"]
                     for k in range(n):
                         tau = torch.full((1, 1), k / n)
                         a = a + f(torch.cat([o, a, tau], -1)) / n  # Euler steps along the learned velocity
-                    return (a[0] * sc).numpy()
+                    return offsets_to_moves((a[0] * sc).numpy())
 
             for it in range(P["steps"] + 1):
                 if it in P["snaps"]:
@@ -811,8 +817,9 @@ def compute_detour():
                 loss.backward()
                 opt.step()
             paths, hit, reached = detour_rollout(policy, starts, H)
-            above = np.array([float(np.max(p_[:, 1]) > 0.1) for p_ in paths])
-            below = np.array([float(np.min(p_[:, 1]) < -0.1) for p_ in paths])
+            # which way round: the side of the obstacle where the path crosses its centre line
+            side = np.array([p_[np.argmin(np.abs(p_[:, 0] - 0.0)), 1] for p_ in paths])
+            above, below = (side > 0).astype(float), (side <= 0).astype(float)
             res.append(dict(hit=float(hit.mean()), reached=float(reached.mean()), above=float(above.mean()),
                             below=float(below.mean()), snaps=snaps))
         out[f"{method}_hit"] = np.array([r["hit"] for r in res])
