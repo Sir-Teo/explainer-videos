@@ -121,11 +121,11 @@ TEMPS = [0.5, 1.0, 2.0]
 
 def compute_temperature():
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    from videos.ai.ai5.decoding import gpt2
 
     torch.set_grad_enabled(False)
-    tok = AutoTokenizer.from_pretrained("openai-community/gpt2")
-    model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2", dtype=torch.float32)
+    tok, model = gpt2()
     ids = tok(PROMPT, return_tensors="pt")["input_ids"]
     z = model(ids).logits[0, -1].numpy().astype(float)
     top = np.argsort(-z)[:10]
@@ -540,20 +540,17 @@ def _cauchy_mle(x):
     def ll(t):
         return -np.log1p((x - t[:, None]) ** 2).sum(1)
 
-    def climb(t):  # Newton's method with backtracking: a step is halved until the likelihood rises
-        for _ in range(80):
+    def climb(t):
+        for _ in range(40):
             u = x - t[:, None]
             s = (2 * u / (1 + u * u)).sum(1)
             h = (2 * (u * u - 1) / (1 + u * u) ** 2).sum(1)
-            step = np.clip(np.where(h > 1e-9, s / np.maximum(h, 1e-9), s), -0.5, 0.5)
-            cur = ll(t)
-            for _ in range(30):
-                up = ll(t + step) >= cur
-                if up.all():
-                    break
-                step = np.where(up, step, step / 2)
-            t = t + step
+            t = t + np.clip(np.where(h > 1e-9, s / np.maximum(h, 1e-9), s), -0.3, 0.3)
         return t
+
+    def score(t):
+        u = x - t[:, None]
+        return (2 * u / (1 + u * u)).sum(1)
 
     starts = [x[:, j] for j in range(n)] + [med] if n <= 20 else [med + o for o in np.linspace(-3, 3, 25)]
     best, best_ll = None, None
@@ -565,8 +562,20 @@ def _cauchy_mle(x):
         else:
             better = v > best_ll
             best, best_ll = np.where(better, t, best), np.where(better, v, best_ll)
+    # polish: bisection on the score, which falls through zero at the peak
+    lo, hi = best - 0.05, best + 0.05
+    for _ in range(12):
+        bad = (score(lo) < 0) | (score(hi) > 0)
+        if not bad.any():
+            break
+        lo, hi = np.where(bad, best - 2 * (best - lo), lo), np.where(bad, best + 2 * (hi - best), hi)
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        pos = score(mid) > 0
+        lo, hi = np.where(pos, mid, lo), np.where(pos, hi, mid)
+    best = (lo + hi) / 2
     u = x - best[:, None]
-    print("resid", x.shape, np.abs((2 * u / (1 + u * u)).sum(1)).max(), flush=True)
+    assert np.abs((2 * u / (1 + u * u)).sum(1)).max() < 1e-6
     return best, med
 
 
@@ -615,7 +624,7 @@ def compute_map():
     errs, mle_err = [], []
     keep = {}
     for s in range(200):
-        x = np.sort(g.uniform(0, 1, n))
+        x = np.linspace(0, 1, n)
         y = np.sin(2 * np.pi * x) + sig * g.normal(size=n)
         P = np.vander(x, deg + 1, increasing=True)
         w_mle = np.linalg.lstsq(P, y, rcond=None)[0]
@@ -847,14 +856,14 @@ def compute_mixing():
         tm, gap = _mixing_time(P, pi)
         trel = 1 / gap
         rows.append((b, gap, tm, (trel - 1) * math.log(2), trel * math.log(4 / pi.min())))
-        if b == 2.5:
+        if b == 2.0:
             keepP, keep_pi = P, pi
     rows = np.array(rows)
     assert np.all(rows[:, 3] <= rows[:, 2] + 1) and np.all(rows[:, 2] <= rows[:, 4])
-    # from the left end, the distribution at a few times (beta = 2.5): first one well fills, then slowly the other
+    # from the left end, the distribution at a few times (beta = 2): first one well fills, then slowly the other
     d = np.zeros(K)
     d[0] = 1
-    ts, snaps = [0, 10, 40, 150, 600, 2500, 10000], []
+    ts, snaps = [0, 30, 300, 3000, 30000, 100000, 300000], []
     t = 0
     for T in ts:
         while t < T:
@@ -927,33 +936,50 @@ def compute_scorefn():
     var_star = float(((f - b_star) * s).var())
     var_rep = float((2 * x).var())  # d/dmu (mu + eps)^2 = 2 (mu + eps)
     assert abs(mean_sf - 2) < 0.03 and var_star < var_b[np.argmin(np.abs(bs))]
-    # evolution strategies on f(x, y) = (1 - x)^2 + 5 (y - x^2)^2, from (-1.2, 1.4)
-    sig, pop, lr, steps = 0.15, 16, 0.002, 400
-    runs = {}
+    # evolution strategies on f(x, y) = (1 - x)^2 + 5 (y - x^2)^2, from (-1.2, 1.4): the estimate's error at the
+    # start (2,000 draws of a population of 16), plain, with the population's mean as baseline, and mirrored
+    sig, pop, lr, steps = 0.1, 16, 0.02, 1000
+    th0 = np.array([-1.2, 1.4])
+    gtrue = np.array([-2 * (1 - th0[0]) - 20 * th0[0] * (th0[1] - th0[0] ** 2), 10 * (th0[1] - th0[0] ** 2)])
+    gerr = {}
+    for kind in ("plain", "base", "mirror"):
+        gg = rng(1973)  # Rechenberg, 1973
+        e_ = []
+        for _ in range(2000):
+            e = gg.normal(size=(pop, 2))
+            if kind == "mirror":
+                e = np.concatenate([e[: pop // 2], -e[: pop // 2]])
+            F = _rosen(th0 + sig * e)
+            if kind != "plain":
+                F = F - F.mean()
+            e_.append(float((((F[:, None] * e).mean(0) / sig - gtrue) ** 2).sum()))
+        gerr[kind] = float(np.mean(e_))
+    runs = {"plain": [], "base": []}
     finals = {"plain": [], "base": []}
     for kind in ("plain", "base"):
         for seed in range(8):
             gg = rng(2017 + seed)  # Salimans et al., 2017
-            th = np.array([-1.2, 1.4])
+            th = th0.copy()
             path = [th.copy()]
             for _ in range(steps):
                 e = gg.normal(size=(pop, 2))
                 F = _rosen(th + sig * e)
                 if kind == "base":
                     F = F - F.mean()
-                grad = (F[:, None] * e).mean(0) / sig
-                grad = np.clip(grad, -50, 50)
-                th = th - lr * grad
+                th = th - lr * (F[:, None] * e).mean(0) / sig
                 path.append(th.copy())
-            finals[kind].append(float(_rosen(th)))
-            if seed == 0:
-                runs[kind] = np.array(path)
-            if seed == 0:
-                runs[kind + "_clouds"] = np.array([path[k] + sig * gg.normal(size=(pop, 2)) for k in (0, 100, 200, 400)])
+                if not np.isfinite(th).all() or np.abs(th).max() > 10:  # diverged
+                    break
+            path = np.array(path)
+            finals[kind].append(float(_rosen(th)) if np.abs(th).max() <= 10 else float("inf"))
+            runs[kind].append(np.pad(path, ((0, steps + 1 - len(path)), (0, 0)), mode="edge")[::5])
+    fp, fb = np.array(finals["plain"]), np.array(finals["base"])
     return dict(mu=mu, N=N, bs=bs, var_b=var_b, mean_sf=mean_sf, b_star=b_star, var_star=var_star, var_rep=var_rep,
-                var_0=float((f * s).var()), sig=sig, pop=pop, lr=lr, steps=steps, path_plain=runs["plain"],
-                path_base=runs["base"], final_plain=np.array(finals["plain"]), final_base=np.array(finals["base"]),
-                clouds=runs["base_clouds"])
+                var_0=float((f * s).var()), sig=sig, pop=pop, lr=lr, steps=steps, gerr_plain=gerr["plain"],
+                gerr_base=gerr["base"], gerr_mirror=gerr["mirror"], gnorm2=float((gtrue ** 2).sum()),
+                paths_plain=np.clip(np.array(runs["plain"]), -10, 10), paths_base=np.clip(np.array(runs["base"]), -10, 10),
+                final_plain=np.where(np.isfinite(fp), fp, -1.0), final_base=np.where(np.isfinite(fb), fb, -1.0),
+                div_plain=int((~np.isfinite(fp)).sum()), div_base=int((~np.isfinite(fb)).sum()))
 
 
 # ---------------------------------------------------------------------------
@@ -1171,6 +1197,18 @@ def compute_em():
                 n_show=n_show, **paths)
 
 
+# ---------------------------------------------------------------------------
+# Chapter 9: decoding the novels model, judged by GPT-2 (videos/ai/ai5/decoding.py; about 40 minutes, resumable)
+# ---------------------------------------------------------------------------
+def compute_decoding():
+    import torch
+
+    from videos.ai.ai5 import decoding
+
+    torch.set_num_threads(2)
+    return decoding.compute(CACHE)
+
+
 ITEMS = {
     "galton": compute_galton,
     "clt": compute_clt,
@@ -1199,6 +1237,7 @@ ITEMS = {
     "qv": compute_qv,
     "ito": compute_ito,
     "em": compute_em,
+    "decoding": compute_decoding,
 }
 CACHE.items = ITEMS
 

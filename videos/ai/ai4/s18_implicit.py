@@ -44,7 +44,7 @@ class Implicit(VoiceoverScene):
         box = VGroup(RoundedRectangle(width=1.9, height=0.9, corner_radius=0.12, color=GRAD, stroke_width=3),
                      MathTex(r"f(\,\cdot\,, \theta)", font_size=30))
         box[1].move_to(box[0])
-        box.move_to([0.6, -2.7, 0])
+        box.move_to([-1.6, -2.7, 0])
         zin = MathTex(r"z_k", font_size=32).next_to(box, LEFT, buff=1.2)
         zout = MathTex(r"z_{k+1}", font_size=32).next_to(box, RIGHT, buff=1.2)
         a1 = Arrow(zin.get_right(), box.get_left(), buff=0.1, color=GREY_B, stroke_width=3)
