@@ -116,13 +116,15 @@ class Lens(VoiceoverScene):
         last = [str(r[-1]) for r in d["table_logit"]]
         final = show_tok(last[-1]).strip("·")
         first_right = next((l_ for l_, t in enumerate(last) if t == last[-1]), len(last) - 1)
+        verdict = (f"at the last position, the final guess, '{final}', is already the top guess at layer {first_right}."
+                   if first_right < len(last) - 1 else
+                   f"at the last position, the final guess, '{final}', comes out on top only at the last layer.")
         with self.voiceover(
             "Here is the logit lens on the novels model, reading 'it was the best of times, it was the worst of "
             "times, it was the age of'. <bookmark mark='a'/> Each row is a layer, each column a position, and each "
             "cell the lens's best guess for the next token. <bookmark mark='b'/> At the bottom, the embedding alone "
             "mostly guesses tokens that often follow the current one, and the guesses are poor. "
-            f"<bookmark mark='c'/> Going up, the right continuations firm up; at the last position, the final "
-            f"guess, '{final}', is already the top guess at layer {first_right}. Predictions are built "
+            f"<bookmark mark='c'/> Going up, the right continuations firm up; {verdict} Predictions are built "
             "gradually, refined block by block."
         ) as vo:
             self.play(FadeIn(pre), FadeIn(heads), FadeIn(inl), FadeIn(rows))

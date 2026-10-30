@@ -194,7 +194,8 @@ class Graphs(VoiceoverScene):
         tot = float(d["logit"])
         dec = label(rf"the logit ${tot:.2f}$ \ = \ features ${fe:+.2f}$ \ + \ inputs ${ee:+.2f}$ \ + \ errors ${er:+.2f}$ \ + \ biases",
                     font_size=20, color=GREY_A).to_edge(UP, buff=0.25).shift(LEFT * 1.2)
-        tag = note(rf"computed: \ the local replacement model reproduces the logits to ${float(d['exact']):.0e}$; \ "
+        ex_ = int(np.ceil(np.log10(max(float(d["exact"]), 1e-12))))
+        tag = note(rf"computed: \ the local replacement model reproduces the logits to within $10^{{{ex_}}}$; \ "
                    rf"${int(d['n_features'])}$ active features, \ the $12$ most influential shown").to_corner(DR, buff=0.15)
         lgd = label(r"lines: \ green raises, \ red lowers", font_size=16, color=GREY_B).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
         with self.voiceover(

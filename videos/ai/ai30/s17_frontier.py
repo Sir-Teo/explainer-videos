@@ -15,7 +15,7 @@ class Frontier(VoiceoverScene):
 
     def card(self):
         card = chapter_card(16, r"The frontier, 2025--2026", r"What can interpretability do for a frontier model today?",
-                            lit=(2025, 2026), part=PART)
+                            part=PART)
         with self.voiceover("Chapter sixteen. The frontier, 2025 to 2026."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

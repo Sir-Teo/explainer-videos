@@ -27,7 +27,7 @@ Sound (audio.py)
     nyquist    tones sampled at 8 kHz and their aliases; speech decimated with and without a filter
     mel        the STFT, the mel filters, and Whisper's log-mel front end (checked against transformers)
     audrey     1952-style templates from one voice, then dynamic time warping: the speaker problem measured
-    codec      a small neural codec with residual VQ and quantizer dropout, two seeds: quality and Whisper's word error
+    codec      a small codec of the log-mel picture, residual VQ and quantizer dropout, two seeds: Whisper's word error
                rate at 0.4 to 3.2 kbps
     ctc        a CTC recognizer for digit strings, three seeds: its training replayed and its forward lattice
     whisper    Whisper base.en on the held-out voices: input, tokens, transcripts, errors

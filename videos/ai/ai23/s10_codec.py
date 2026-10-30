@@ -228,6 +228,7 @@ class Codec(VoiceoverScene):
         stl = VGroup(label(r"stage $1$", font_size=16, color=GREY_B).next_to(grid, LEFT, buff=0.1).align_to(grid, UP),
                      label(r"stage $8$", font_size=16, color=GREY_B).next_to(grid, LEFT, buff=0.1).align_to(grid, DOWN))
         ppl = [float(x) for x in d["perplexity"]]
+        spread = "fairly evenly" if min(ppl) > 0.5 * max(ppl) else "unevenly"
         pb = VGroup(*[Rectangle(width=0.4, height=1.6 * p / 256, stroke_width=0, fill_color=C.INTERVAL, fill_opacity=0.7)
                       for p in ppl]).arrange(RIGHT, buff=0.1, aligned_edge=DOWN).move_to([-3.2, -1.3, 0])
         pbl = label(r"perplexity of each stage's codes, \ of $256$", font_size=18, color=GREY_A).next_to(pb, UP, buff=0.15)
@@ -245,7 +246,7 @@ class Codec(VoiceoverScene):
         with self.voiceover(
             "Speech tokens come in two kinds. <bookmark mark='a'/> A codec's acoustic tokens carry how the speech "
             "sounds: the voice, the room, the detail. Our codec uses its stages "
-            f"{'fairly evenly' if min(ppl) > 0.5 * max(ppl) else 'unevenly'}: perplexities from "
+            f"{spread}: perplexities from "
             f"{min(ppl):.0f} to {max(ppl):.0f} of 256. <bookmark mark='b'/> Semantic tokens carry what is said, and "
             "they come from a self-supervised speech model, the kind Part 24 builds, clustered into codes. In 2022 "
             "Google's AudioLM generated speech by writing semantic tokens first and acoustic tokens after them. "

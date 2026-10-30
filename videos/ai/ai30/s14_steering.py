@@ -212,7 +212,7 @@ class Steering(VoiceoverScene):
             history_card(2023, r"A.~Turner et al.: \ activation addition", r"``Love'' minus ``Hate'', \ added to GPT-2's "
                          r"stream, \ makes it write lovingly", width=4.2, color=PUSH, font_size=18),
             history_card(2024, r"A.~Arditi et al.", r"refusal in $13$ chat models is one direction: \ remove it and "
-                         r"they comply, \ add it and they refuse", width=4.2, color=PUSH, font_size=18),
+                         r"they stop refusing, \ add it and they refuse harmless requests", width=4.2, color=PUSH, font_size=18),
             history_card(2025, r"R.~Chen, \ A.~Arditi, \ H.~Sleight, \ O.~Evans \& J.~Lindsey", r"persona vectors for evil, "
                          r"\ sycophancy and hallucination, \ in Qwen2.5 and Llama 3.1", width=4.2, color=PUSH, font_size=18),
         ).arrange(RIGHT, buff=0.25).to_edge(UP, buff=0.4)
@@ -226,7 +226,7 @@ class Steering(VoiceoverScene):
             "This recipe has a short history. <bookmark mark='a'/> In 2023 Alex Turner and colleagues added the "
             "difference between 'Love' and 'Hate' to GPT-2's stream and it wrote lovingly. <bookmark mark='b'/> In "
             "2024 Andy Arditi and colleagues found that refusal in thirteen chat models is a single direction: remove "
-            "it and they comply with anything, add it and they refuse. <bookmark mark='c'/> In 2025 Runjin Chen, "
+            "it and they stop refusing harmful requests, add it and they refuse harmless ones. <bookmark mark='c'/> In 2025 Runjin Chen, "
             "Arditi and colleagues extracted persona vectors, for traits like evil, sycophancy and making things up, "
             "in Qwen 2.5 and Llama 3.1. <bookmark mark='d'/> They used them three ways: to monitor a model's "
             "personality as a conversation or a fine-tune shifts it; to flag training data before it is used; and, "

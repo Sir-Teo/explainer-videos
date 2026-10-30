@@ -241,7 +241,8 @@ class Grok(VoiceoverScene):
                    f"Here the restricted loss and the test loss fall together, around steps {rt:,} and {tt:,}.")
         with self.voiceover(
             "Nanda and colleagues' real point was a timeline, measured with progress measures that look inside. "
-            "<bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> The excluded loss removes exactly those waves "
+            "Pause and predict: does the circuit appear when the test loss falls, or before? <bookmark mark='a'/> "
+            + verdict + " <bookmark mark='b'/> The excluded loss removes exactly those waves "
             "from the logits and scores the training pairs: it climbs as the network comes to rely on them. "
             f"<bookmark mark='c'/> And the weights shrink throughout, weight decay pruning the memorized lookup table. "
             "Three phases: memorization, a circuit forming underneath, and a clean-up that removes the memory. The "
@@ -249,8 +250,11 @@ class Grok(VoiceoverScene):
             "percent of the logits' variance."
         ) as vo:
             self.play(FadeIn(g), Create(cv), FadeIn(lg[0]))
+            pz = pause_card(r"The circuit: \ when the test loss falls, \ or before?", width=4.0, font_size=22)
+            pz.move_to([4.9, -1.2, 0])
+            self.play(FadeIn(pz))
             vo.wait_until("a")
-            self.play(Create(cr), FadeIn(lg[1]), run_time=2)
+            self.play(FadeOut(pz), Create(cr), FadeIn(lg[1]), run_time=2)
             vo.wait_until("b")
             self.play(Create(ce), FadeIn(lg[2]), run_time=2)
             vo.wait_until("c")

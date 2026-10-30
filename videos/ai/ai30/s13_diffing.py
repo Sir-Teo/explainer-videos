@@ -94,17 +94,25 @@ class Diffing(VoiceoverScene):
                    rf"${int(d['n_chat']):,}$ chat tokens".replace(",", "{,}")).to_corner(DR, buff=0.2)
         warn = label(r"an L1 crosscoder invents chat-only latents: \\ Minder et al.\ (2025) found shrinkage and decoupling, "
                      r"\\ and recommend BatchTopK, \ as here", font_size=18, color=GREY_A).move_to([4.6, -1.7, 0])
+        cv = np.asarray(d["curve"])
+        ftop = float(min(cv[:, 2].max(), 1.0))
+        g0 = axes([0, float(cv[-1, 0])], [0, ftop * 1.05], x_length=7.4, y_length=3.6, xlabel=r"training steps",
+                  ylabel=r"variance left unexplained, \ both models", xticks=[0, float(cv[-1, 0])],
+                  yticks=ticks(0, ftop, 3), center=[-1.8, -0.3, 0])
+        c0 = curve(g0.ax, cv[:, 0], np.clip(cv[:, 2], 0, ftop * 1.05), FEAT, 3)
         with self.voiceover(
             f"We trained one on {int(d['n_novel']):,} tokens of novel and {int(d['n_chat']):,} of chat transcripts, "
-            f"with {int(d['F']):,} latents. <bookmark mark='a'/> Most latents sit in the middle: {ns} are shared, "
+            f"with {int(d['F']):,} latents; here is its training. <bookmark mark='a'/> Most latents sit in the middle: {ns} are shared, "
             f"features both models use. <bookmark mark='b'/> {nc} belong to the fine-tune alone, and {nb} to the base "
             "model alone. <bookmark mark='c'/> A warning from 2025: Julian Minder, Clément Dumas and colleagues "
             "showed that crosscoders trained with an L1 penalty manufacture chat-only latents that the base model "
             "actually has too; they recommend BatchTopK, which is what we used."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_], lag_ratio=0.03), run_time=2)
+            self.play(FadeIn(g0), FadeIn(tag))
+            self.play(Create(c0), run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(g0, c0)), FadeIn(g))
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_], lag_ratio=0.03), run_time=2)
             self.play(FadeIn(tab[0]), FadeIn(tab[3]))
             vo.wait_until("b")
             self.play(FadeIn(tab[1]), FadeIn(tab[2]))
