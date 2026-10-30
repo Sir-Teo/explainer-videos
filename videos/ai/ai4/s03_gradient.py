@@ -200,8 +200,8 @@ class Gradient(VoiceoverScene, ThreeDScene):
 
     # ------------------------------------------------------------------
     def cauchy(self):
-        ax = Axes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=7.2, y_length=5.4, tips=False,
-                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([2.9, -0.4, 0])
+        ax = Axes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=6.6, y_length=4.95, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.4, -0.6, 0])
         cont = contour_lines(ax, bowl, (-4, 4), (-3, 3), np.linspace(0.4, 3.6, 13))
         p = np.array([-3.2, 2.2])
         pts = [p.copy()]
@@ -213,7 +213,7 @@ class Gradient(VoiceoverScene, ThreeDScene):
         hist = history_card(1847, r"Augustin-Louis Cauchy, \textit{M\'ethode g\'en\'erale pour la r\'esolution des "
                                   r"syst\`emes d'\'equations simultan\'ees}",
                             r"three pages in the \textit{Comptes rendus}: \ to solve the equations of an orbit, "
-                            r"step against the gradient of a sum of squares", width=5.6, font_size=20, color=HIST)
+                            r"step against the gradient of a sum of squares", width=6.4, font_size=23, color=HIST)
         hist.to_corner(UL, buff=0.35)
         rule = cmath(r"x_{t+1}", r"=", r"x_t", r"-", r"\eta", r"\,\nabla f(x_t)", font_size=44,
                      colors={r"\,\nabla f(x_t)": GRAD, r"\eta": C.LR})

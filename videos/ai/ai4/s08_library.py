@@ -125,11 +125,11 @@ class Library(VoiceoverScene):
         tp = t["tape"]
         assert [e["op"] for e in tp] == ["input", "*", "input", "+", "sigmoid", "+", "*"]
         names = [r"w", r"u", r"b", r"z", r"a", r"e", r"\mathcal L"]
-        pos = [(-6.0, 1.3), (-4.6, 1.3), (-4.6, -0.7), (-3.2, 0.3), (-1.8, 0.3), (-0.4, 0.3), (1.0, 0.3)]
+        pos = [(-6.0, 1.4), (-4.3, 1.4), (-4.3, -1.0), (-2.6, 0.2), (-0.9, 0.2), (0.8, 0.2), (2.5, 0.2)]
         cols = {"w": C.BITS, "b": C.BITS, "6": C.LOSS}
         nodes = {str(i): (names[i], (x, y, 0)) for i, (x, y) in enumerate(pos)}
         edges = [(str(a), str(e["i"])) for e in tp for a in sorted(set(e["args"]))]
-        cg = ComputeGraph(nodes, edges, radius=0.36, font_size=30, colors={"0": C.BITS, "2": C.BITS, "6": C.LOSS})
+        cg = ComputeGraph(nodes, edges, radius=0.42, font_size=34, colors={"0": C.BITS, "2": C.BITS, "6": C.LOSS})
         nums = VGroup(*[MathTex(str(i), font_size=22, color=GREY_B).next_to(cg.node[str(i)], UP, buff=0.08)
                         for i in range(len(tp))])
         what = {"*": r"\times", "+": r"+"}
@@ -181,7 +181,7 @@ class Library(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def tools(self):
-        kw = dict(width=4.15, font_size=19, color=HIST)
+        kw = dict(width=4.15, font_size=21, color=HIST)
         events = VGroup(
             history_card(1980, r"Bert Speelpenning, \ PhD thesis", r"reverse mode compiled from an ordinary program", **kw),
             history_card(2010, r"Theano \ (Montr\'eal)", r"declare a graph, \ then compile it and its gradients", **kw),
@@ -203,9 +203,9 @@ class Library(VoiceoverScene):
         ]
         code = VGroup()
         for name, ls in snippets:
-            cb = code_block(ls, font_size=19, font=MONO)
+            cb = code_block(ls, font_size=21, font=MONO)
             code.add(VGroup(label(name, font_size=24, color=GRAD), cb).arrange(DOWN, aligned_edge=LEFT, buff=0.14))
-        code.arrange(RIGHT, buff=0.6, aligned_edge=UP).to_edge(DOWN, buff=0.45)
+        code.arrange(RIGHT, buff=0.6, aligned_edge=UP).next_to(events, DOWN, buff=0.6)
         if code.width > 13.2:
             code.scale_to_fit_width(13.2)
         with self.voiceover(
