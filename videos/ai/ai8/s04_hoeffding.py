@@ -197,13 +197,14 @@ class Hoeffding(VoiceoverScene):
                             r"learning as a computation with a guarantee; \ Turing Award (2010)", width=6.0,
                             font_size=19, color=HIST).next_to(dfn, DOWN, buff=0.25)
         i6 = len(Ks) - 1
+        tight = ": for independent rules it's nearly tight. " if g100[i6] > 0.8 * bd100[i6] else ". "
         with self.voiceover(
             f"As the family grows from one rule to a million, scored on a hundred examples, the best training "
             f"error drops from {100 * b100[0]:.0f} to {100 * b100[i6]:.0f} percent, on labels that are pure noise. "
             f"<bookmark mark='a'/> The largest gap between training and true error, ninety-five percent of the time, "
             f"grows from {100 * g100[0]:.0f} to {100 * g100[i6]:.0f} points, <bookmark mark='b'/> and the union bound, "
             f"from {100 * bd100[0]:.0f} to {100 * bd100[i6]:.0f}, stays above it"
-            + (": for independent rules it's nearly tight. " if g100[i6] > 0.8 * bd100[i6] else ". ")
+            + tight
             + "<bookmark mark='c'/> Leslie Valiant made this the definition of learning in 1984: "
             "probably approximately correct. A family can be learned if enough examples make every rule's score "
             "trustworthy, with high probability, to within epsilon. For a finite family, the log of its size divided "

@@ -40,15 +40,18 @@ class MoreDescents(VoiceoverScene):
         k = int(np.argmax(med))
         j = int(np.argmin(med[:k])) if k > 0 else 0
         worse = bool(s["worse"]) and med[k] > med[j]
+        if worse:
+            rise = (f"From {int(ns[j])} pages to {int(ns[k])}, the error on new pages rises, from {med[j]:.2f} to "
+                    f"{med[k]:.1f}: more data made the model worse, because more pages push it toward the point "
+                    "where it can only just fit them. ")
+            after = "Beyond that, more data helps again. "
+        else:
+            rise = "The error doesn't rise here; more data helps throughout. "
+            after = ""
         with self.voiceover(
             "If the peak sits where the number of parameters equals the number of examples, then it can be reached "
             f"from the other side too. Fix {p} random features, and give the model more and more pages. "
-            "<bookmark mark='a'/> "
-            + (f"From {int(ns[j])} pages to {int(ns[k])}, the error on new pages rises, from {med[j]:.2f} to "
-               f"{med[k]:.1f}: more data made the model worse, because more pages push it toward the point where it "
-               "can only just fit them. <bookmark mark='b'/> Beyond that, more data helps again. "
-               if worse else
-               "The error doesn't rise here; more data helps throughout. <bookmark mark='b'/> ")
+            "<bookmark mark='a'/> " + rise + "<bookmark mark='b'/> " + after
             + "<bookmark mark='c'/> With a little ridge, the curve simply falls. Nakkiran and colleagues found this "
             "sample-wise version in deep networks in 2019: for a fixed model, there's a range where more data hurts."
         ) as vo:
@@ -93,17 +96,19 @@ class MoreDescents(VoiceoverScene):
         hist = history_card(2021, r"R.~Heckel \& F.~F.~Yilmaz", r"epoch-wise double descent as two bias--variance "
                             r"curves on different time scales", width=4.6, font_size=17, color=HIST)
         hist.next_to(key, DOWN, buff=0.25).align_to(key, RIGHT)
+        if dbl:
+            s1 = f"The test error falls, to its first low at step {int(ts[i1])}, "
+            s2 = (f"then rises, to a peak around step {int(ts[i2]):,}, as those fast directions finish fitting their "
+                  "share of the noise, and of signal they can't represent. ")
+            s3 = (f"Only then do the slow directions, which hold the rest of the signal, get learned, and the error "
+                  f"falls again, to {med[-1]:.2f}, far below the first low. ")
+        else:
+            s1, s2, s3 = "", "Here the error falls without a second rise. ", ""
         with self.voiceover(
             "Nakkiran and colleagues also saw it in time: train a network longer and longer, and its test error can "
             "fall, rise, and fall again. The simplest model that does this is linear, with inputs on two very "
             "different scales. <bookmark mark='a'/> Gradient descent learns the large-scale directions first. "
-            + (f"The test error falls, to its first low at step {int(ts[i1])}, <bookmark mark='b'/> then rises, to "
-               f"a peak around step {int(ts[i2]):,}, as those fast directions finish fitting their share of the "
-               "noise, and of signal they can't represent. <bookmark mark='c'/> Only then do the slow directions, "
-               f"which hold the rest of the signal, get learned, and the error falls again, to {med[-1]:.2f}, far below "
-               "the first low. "
-               if dbl else
-               "<bookmark mark='b'/> Here the error falls without a second rise. <bookmark mark='c'/> ")
+            + s1 + "<bookmark mark='b'/> " + s2 + "<bookmark mark='c'/> " + s3
             + "<bookmark mark='d'/> Split by direction, it's two bias-variance curves, one fast, one slow, added "
             "together: Heckel and Yilmaz's explanation, from 2021. Training error falls the whole time. When to "
             "stop training is not a question with one answer, which part twelve's grokking takes to an extreme."

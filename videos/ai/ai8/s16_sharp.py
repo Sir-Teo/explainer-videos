@@ -84,21 +84,25 @@ class Sharpness(VoiceoverScene):
         big, small = lam[B == max(BCOL)].mean(), lam[B == min(BCOL)].mean()
         ebig, esmall = err[B == max(BCOL)].mean(), err[B == min(BCOL)].mean()
         flat_better = rho > 0.3
+        reached = bool(np.all(np.asarray(s["tr_loss"]) < float(s["target"])))
+        fit = ("each trained until its training loss is equally small" if reached else
+               "each trained until its training loss is small, or for at most four thousand epochs")
+        batches = (f"Large batches do end sharper: on average {big:.1f} against {small:.2f} for batches of four. "
+                   if big > small else
+                   f"Here large batches end flatter, not sharper: {big:.2f} against {small:.2f} for batches of four. ")
+        if flat_better:
+            corr = (f"And the sharper networks do worse on new points: a rank correlation of {rho:+.2f}. The "
+                    "flat-minima story holds here. ")
+        else:
+            lean = ("If anything, the sharper ones generalize better here. " if rho < -0.3 else
+                    "Sharpness tells us almost nothing here. ")
+            corr = ("But the sharper networks are not the worse ones: the rank correlation between sharpness and "
+                    f"test error is {rho:+.2f}. {lean}")
         with self.voiceover(
-            f"Test it, small. Twenty-four networks learn from {s['n']} points labelled by a teacher network, with "
-            "four batch sizes, two step sizes and three seeds, each trained until its training loss is equally "
-            "small. Sharpness is the largest eigenvalue of the training loss's Hessian, measured with part four's "
-            "Hessian-vector products. <bookmark mark='a'/> "
-            + (f"Large batches do end sharper: on average {big:.1f} against {small:.2f} for batches of four. "
-               if big > small else
-               f"Here large batches end flatter, not sharper: {big:.2f} against {small:.2f} for batches of four. ")
-            + "<bookmark mark='b'/> "
-            + (f"And the sharper networks do worse on new points: a rank correlation of {rho:+.2f}. The flat-minima "
-               "story holds here. "
-               if flat_better else
-               (f"But the sharper networks are not the worse ones: the rank correlation between sharpness and test "
-                f"error is {rho:+.2f}. " + ("If anything, the sharper ones generalize better here. " if rho < -0.3 else
-                                             "Sharpness tells us almost nothing here. ")))
+            f"Test it, small. {len(lam)} networks learn from {s['n']} points labelled by a teacher network, with "
+            f"four batch sizes, two step sizes and three seeds, {fit}. Sharpness is the largest eigenvalue of the "
+            "training loss's Hessian, measured with part four's Hessian-vector products. <bookmark mark='a'/> "
+            + batches + "<bookmark mark='b'/> " + corr
             + "Large studies agree on that much: across many settings, sharpness predicts generalization "
             "inconsistently, as Andriushchenko and colleagues found in 2023."
         ) as vo:
@@ -137,11 +141,13 @@ class Sharpness(VoiceoverScene):
                          r"(sharpness-aware)", width=5.6, font_size=17, color=HIST),
         ).arrange(DOWN, buff=0.15).to_corner(DL, buff=0.25)
         rng_ = rs.max() / rs.min()
+        exactly = ("to rounding error on every output" if s["same"] < 1e-4 else
+                   f"to within {s['same']:.3f} on every output")
         with self.voiceover(
             "There's a deeper problem, pointed out by Dinh, Pascanu and the Bengios in 2017. <bookmark mark='a'/> A "
             "ReLU passes a positive scale straight through. <bookmark mark='b'/> So multiply the first layer by a, "
-            "divide the second by a, and the network computes exactly the same function, here to within "
-            f"{max(s['same'], 1e-16):.0e} on every output. Same predictions, same test error. "
+            f"divide the second by a, and the network computes exactly the same function, {exactly}. Same "
+            "predictions, same test error. "
             f"<bookmark mark='c'/> But its sharpness changes by a factor of {rng_:.0f} across these rescalings. "
             "Sharpness, as measured, depends on how the weights are written down, not only on what the network "
             "does, so it can't be the whole explanation. Scale-invariant versions, and training that seeks flat "

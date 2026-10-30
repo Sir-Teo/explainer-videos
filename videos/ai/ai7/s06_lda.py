@@ -55,14 +55,13 @@ class Topics(VoiceoverScene):
             "steps: pick a topic from the section's mix, then a word from that topic. <bookmark mark='d'/> Only the "
             "words are observed. The topics, the mixes and every word's topic are hidden, and we infer them all."
         ) as vo:
-            self.play(FadeIn(h, shift=UP * 0.2), FadeIn(not6))
+            self.play(FadeIn(h, shift=UP * 0.2), FadeIn(not6), FadeIn(graph))
             vo.wait_until("a")
-            self.play(FadeIn(b), FadeIn(pk), FadeIn(tags[2]), FadeIn(story[0]))
+            self.play(Indicate(b, color=HIDDEN, scale_factor=1.2), FadeIn(story[0]))
             vo.wait_until("b")
-            self.play(FadeIn(a), FadeIn(th), GrowArrow(arrows[0]), FadeIn(pd), FadeIn(tags[1]), FadeIn(story[1]))
+            self.play(Indicate(th, color=HIDDEN, scale_factor=1.2), FadeIn(story[1]))
             vo.wait_until("c")
-            self.play(FadeIn(z), FadeIn(w), GrowArrow(arrows[1]), GrowArrow(arrows[2]), GrowArrow(arrows[3]),
-                      FadeIn(pn), FadeIn(tags[0]), FadeIn(story[2]))
+            self.play(Indicate(VGroup(z, w), color=SEEN, scale_factor=1.1), FadeIn(story[2]))
             vo.wait_until("d")
             self.play(Indicate(w, color=SEEN, scale_factor=1.2), *[Indicate(m, color=HIDDEN) for m in (th, z, b)])
         self.wait(0.3)
@@ -79,7 +78,10 @@ class Topics(VoiceoverScene):
         cols = VGroup()
         for j, k in enumerate(show):
             cols.add(word_col(snaps[keys[0]][k][:6], TOPIC_COLORS[k], font_size=22))
-        cols.arrange(RIGHT, buff=0.45).move_to([-2.4, 0.5, 0])
+        cols.arrange(RIGHT, buff=0.35)
+        if cols.width > 8.6:
+            cols.width = 8.6
+        cols.move_to([0, 0.5, 0]).to_edge(LEFT, buff=0.4)
         heads = VGroup(*[label(rf"topic {j + 1}", font_size=22, color=TOPIC_COLORS[k]).next_to(c, UP, buff=0.2)
                          for j, (k, c) in enumerate(zip(show, cols))])
         g = axes([0, len(bounds), 10], [float(bounds.min()) - 0.05, float(bounds.max()) + 0.05, 0.2], x_length=3.6,
@@ -101,15 +103,17 @@ class Topics(VoiceoverScene):
             "section's mix, and an M step that rebuilds each topic from the words assigned to it. "
             f"<bookmark mark='b'/> Watch six of the topics take shape. The bound on the likelihood climbs, {rise}."
         ) as vo:
-            self.play(FadeIn(info), FadeIn(g), FadeIn(rl))
+            self.play(FadeIn(info), FadeIn(g), FadeIn(rl), FadeIn(cols), FadeIn(heads))
             vo.wait_until("a")
-            self.play(FadeIn(cols), FadeIn(heads))
+            self.play(Indicate(cols, color=GREY_B, scale_factor=1.02))
             vo.wait_until("b")
             self.add(bc)
             for key in keys[1:]:
                 new = VGroup()
                 for c, k in zip(cols, show):
-                    new.add(word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22).move_to(c))
+                    nc = word_col(snaps[key][k][:6], TOPIC_COLORS[k], font_size=22)
+                    nc.scale(c[0].height / nc[0].height).move_to(c)
+                    new.add(nc)
                 self.play(*[Transform(c, n_) for c, n_ in zip(cols, new)], it.animate.set_value(max(int(key), 1)),
                           ChangeDecimalToValue(rv, int(key)), run_time=1.4)
         bc.clear_updaters()

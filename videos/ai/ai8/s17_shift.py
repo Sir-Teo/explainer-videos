@@ -136,14 +136,16 @@ class Shift(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_corner(UR, buff=0.4).shift(DOWN * 0.6)
         r_ols, r_iw, r_est = s["ols_mean"], s["iw_mean"], s["est_mean"]
         helps = r_iw < r_ols - 2 * (s["iw_se"] + s["ols_se"])
+        exact = (f"Weighting by the exact ratio brings it to {r_iw:.3f}, close to the best any straight line could "
+                 f"do for the test inputs, {s['best_risk']:.3f}. " if helps else
+                 f"Weighting by the exact ratio gives {r_iw:.3f}: no clear gain here. ")
+        flat_pays = s["flat_mean"] < r_iw
+        flat = ("here that pays" if flat_pays else "here it doesn't quite pay")
         with self.voiceover(
             f"Over a thousand runs of {n} training points: plain least squares has a test error of {r_ols:.3f}. "
-            + (f"<bookmark mark='a'/> Weighting by the exact ratio brings it to {r_iw:.3f}, close to the best any "
-               f"straight line could do for the test inputs, {s['best_risk']:.3f}. "
-               if helps else
-               f"<bookmark mark='a'/> Weighting by the exact ratio gives {r_iw:.3f}: no clear gain here. ")
+            "<bookmark mark='a'/> " + exact
             + f"<bookmark mark='b'/> Flattening the weights, the square root of the ratio, trades a little bias for "
-            f"less variance: {s['flat_mean']:.3f}. <bookmark mark='c'/> In practice nobody knows q over p. But a "
+            f"less variance; {flat}: {s['flat_mean']:.3f}. <bookmark mark='c'/> In practice nobody knows q over p. But a "
             "classifier trained to tell training inputs from unlabelled test inputs estimates it, from the odds it "
             f"assigns: {r_est:.3f}. <bookmark mark='d'/> The exact weights leave an effective sample of only "
             f"{s['ess_mean']:.0f} points out of {n}. And covariate shift is the easy case: when the label "

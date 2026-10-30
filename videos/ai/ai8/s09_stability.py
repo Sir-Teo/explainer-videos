@@ -44,12 +44,13 @@ class Stability(VoiceoverScene):
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(thm, DOWN, buff=0.35).align_to(thm, LEFT)
         same = c["same"] < 1e-6
+        again = ("Throw away the rest, train again on those alone, and you get the same line, to the last digit. "
+                 if same else "Train again on those alone and you get nearly the same line. ")
         with self.voiceover(
             f"A third way to say a rule is simple: it can be described by a few of its own examples. Here are "
             f"{c['n']} points, and the widest-margin line through the origin that separates them. "
             f"<bookmark mark='a'/> Only {c['k']} points touch the margin: the support vectors. "
-            + ("Throw away the rest, train again on those alone, and you get the same line, to the last digit. "
-               if same else "Train again on those alone and you get nearly the same line. ")
+            + again
             + "<bookmark mark='b'/> Littlestone and Warmuth showed in 1986 that such a learner generalizes like one "
             "with k parameters: its error is at most about k log n over n. <bookmark mark='c'/> Here that's "
             f"{100 * c['bound']:.1f} percent, much tighter than the VC bound for lines. On the pages the machine "
@@ -99,6 +100,7 @@ class Stability(VoiceoverScene):
         rl = label(r"slope $-1$", font_size=18, color=GREY_B).next_to(ref.get_end(), UR, buff=0.05)
         slope_n = float(s["slope_n"])
         ok_n = abs(slope_n + 1) < 0.2
+        close = ", close to the predicted minus one." if ok_n else ", shallower than the predicted minus one."
         with self.voiceover(
             "A fourth: a rule is safe if it doesn't depend much on any single example. <bookmark mark='a'/> Call a "
             "learner beta-stable if swapping one training example for another changes its loss anywhere by at most "
@@ -108,7 +110,7 @@ class Stability(VoiceoverScene):
             "beta like one over lambda n. <bookmark mark='c'/> Measure it for ridge regression on the pages: swap one "
             "training page for a held-out one, and see how far any prediction moves. Stronger regularization, "
             f"smaller change. <bookmark mark='d'/> And against n, the slope is {slope_n:.2f}"
-            + (", close to the predicted minus one." if ok_n else ", shallower than the predicted minus one.")
+            + close
         ) as vo:
             self.play(FadeIn(G))
             vo.wait_until("a")
