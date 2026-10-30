@@ -460,7 +460,23 @@
   "\\texttt{be}": "\\texttt{be}",
   "\\texttt{she} $\\le 4.5$": "\\texttt{she} $\\le 4.5$",
   "\\texttt{mr}": "\\texttt{mr}",
-  "8\\ \\textit{Fitting and Generalizing},\\ 13\\ \\textit{Attention as Geometry}": "8\\ \\textit{拟合与泛化}，\\ 13\\ \\textit{注意力的几何}"
+  "8\\ \\textit{Fitting and Generalizing},\\ 13\\ \\textit{Attention as Geometry}": "8\\ \\textit{拟合与泛化}，\\ 13\\ \\textit{注意力的几何}",
+  "p(\\mathbf{x} \\mid \\text{author})": "p(\\mathbf{x} \\mid \\text{作者})",
+  "\\mathcal{N}(\\boldsymbol\\mu_{\\text{author}},\\ \\Sigma)": "\\mathcal{N}(\\boldsymbol\\mu_{\\text{作者}},\\ \\Sigma)",
+  "each author a bell, \\\\ the same shape $\\Sigma$": "每位作者一个钟形，\\\\ 形状$\\Sigma$相同",
+  "Bayes' rule, \\ take logs": "贝叶斯法则，\\ 取对数",
+  "$\\mathbf{x}^{\\top}\\Sigma^{-1}\\mathbf{x}$ cancels: \\\\ a straight line": "$\\mathbf{x}^{\\top}\\Sigma^{-1}\\mathbf{x}$抵消：\\\\ 一条直线",
+  "logistic regression's form, \\\\ Fisher's direction": "逻辑回归的形式，\\\\ 费希尔的方向",
+  "Why Fisher's cut is the best one, \\ when the bells match": "为什么钟形相同时，\\ 费希尔的切法最好",
+  "generative, \\ like naive Bayes: \\ estimate the bells, \\ then divide": "生成式，\\ 和朴素贝叶斯一样：\\ 先估计钟形，\\ 再相除",
+  "$S_B$: \\ rank $1$": "$S_B$：\\ 秩为$1$",
+  "$S_W$: \\ full rank": "$S_W$：\\ 满秩",
+  "the two $70 \\times 70$ scatter matrices \\ (size of each entry)": "两个$70 \\times 70$的散度矩阵 \\ （每个元素的大小）",
+  "$\\lambda$, \\ weaker $\\longrightarrow$": "$\\lambda$，\\ 越来越弱 $\\longrightarrow$",
+  "the $70$ weights": "$70$个权重",
+  "every weight shrinks smoothly": "每个权重都平滑地收缩",
+  "weights exactly zero, \\ at any $\\lambda$: \\ $0$": "在任何$\\lambda$下恰好为零的权重：\\ $0$",
+  "Bayes: \\ ridge is the most probable \\\\ weights under a bell-shaped prior \\\\ (Part 5); \\ in networks, \\ weight decay": "贝叶斯：\\ 岭回归是钟形先验下 \\\\ 最可能的权重 \\\\ （第5部分）；\\ 在网络中，\\ 叫权重衰减"
  },
  "patterns": [
   [

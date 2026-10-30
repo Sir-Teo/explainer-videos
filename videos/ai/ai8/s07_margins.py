@@ -182,14 +182,16 @@ class Margins(VoiceoverScene):
         with self.voiceover(
             "Margins first explained a puzzle twenty years before deep learning's. Boosting builds a classifier from "
             "many weak ones, here single cuts on one word rate each, reweighting the examples it gets wrong. "
-            + (f"<bookmark mark='a'/> On the pages, its training error reaches zero at round {zero}. "
-               if zero is not None else "<bookmark mark='a'/> On the pages, its training error falls quickly. ")
-            + ("<bookmark mark='b'/> By the classical story, it should stop improving there, or start to overfit. "
+            "<bookmark mark='a'/> "
+            + (f"On the pages, its training error reaches zero at round {zero}. " if zero is not None else
+               "On the pages, its training error falls quickly. ")
+            + "<bookmark mark='b'/> "
+            + ("By the classical story, it should stop improving there, or start to overfit. "
                f"Instead the error on new pages keeps falling, from {100 * te[zero - 1]:.1f} percent at round {zero} "
-               f"to {100 * te[kmin]:.1f} at round {kmin + 1}"
-               + (f", ending at {100 * te[-1]:.1f} after {T}. " if abs(te[-1] - te[kmin]) > 1e-9 else ". ")
+               f"to {100 * te[kmin]:.1f} at round {kmin + 1}, "
+               + (f"and ends at {100 * te[-1]:.1f} after {T}. " if abs(te[-1] - te[kmin]) > 1e-9 else "and stays there. ")
                if fell else
-               "<bookmark mark='b'/> After that, the error on new pages stays about where it was. ")
+               "After that, the error on new pages stays about where it was. ")
             + "<bookmark mark='c'/> The explanation, by Schapire, Freund, Bartlett and Lee in 1998: with the training "
             "points all correct, later rounds keep pushing their margins outward, and the margin bound only cares "
             "about margins. The same shape, more training past zero training error and better on new data, is "
