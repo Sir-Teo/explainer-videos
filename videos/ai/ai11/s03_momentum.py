@@ -47,12 +47,14 @@ class Momentum(VoiceoverScene):
                      label(r"heavy ball, \ $\eta = 1/L$, \ $\beta = 0.8$", font_size=22, color=HB)).arrange(RIGHT, buff=0.8)
         lab.next_to(ax, DOWN, buff=0.05)
         tag = note(r"the valley of Chapter 1, \ curvatures $1$ and $30$; \ $60$ steps each; \ computed").next_to(lab, DOWN, buff=0.1)
+        ratio = float(np.linalg.norm(np.asarray(q["path_gd"])[-1]) / np.linalg.norm(np.asarray(q["path_hb_mild"])[-1]))
         with self.voiceover(
             "In 1964 Boris Polyak, in Moscow, asked how to speed gradient descent up, and answered with physics: "
             "give the walker mass. <bookmark mark='a'/> Each step adds a fraction beta of the previous step. "
             "<bookmark mark='b'/> On the steep axis, successive steps point in opposite directions, so the memory "
             "cancels them out; on the long, gentle axis they all point the same way, so the memory adds them up. "
-            "<bookmark mark='c'/> A heavy ball rolls along the valley instead of rattling across it."
+            f"<bookmark mark='c'/> The heavy ball sways across the valley a little, but it travels down it much faster: "
+            f"after sixty steps it is {ratio:.0f} times closer to the bottom than gradient descent."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rule))
             vo.wait_until("a")

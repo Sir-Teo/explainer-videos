@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import A, K, Q, STATE, V, curve, grid_matrix, load, vec_column
+from videos.ai.ai15.common import A, K, PART, Q, STATE, V, curve, grid_matrix, load, vec_column
 
 
 def block(w, h, color, tex, font_size=34):
@@ -76,8 +76,8 @@ class Linear(VoiceoverScene, ThreeDScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(2, r"Attention without the softmax", r"Can attention run in constant memory?", part=15)
-        with self.voiceover("Chapter two. Attention without the softmax."):
+        card = chapter_card(3, r"Attention without the softmax", r"Can attention run in constant memory?", part=PART)
+        with self.voiceover("Chapter three. Attention without the softmax."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

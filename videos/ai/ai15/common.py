@@ -195,3 +195,34 @@ def ttt_step(pic: VGroup, k: int) -> tuple[VGroup, VGroup]:
     for i, t_ in enumerate(t2):
         t_.set_fill(C.BITS if i < k else C.TOKEN, opacity=0.85 if i == k - 1 else 0.5 if i < k else 0.25)
     return w, t2
+
+
+def signed_grid(M, size, top=None, pos=C.TRUE_P, neg=C.SURPRISE) -> VGroup:
+    """A small signed matrix as squares: blue for positive, red for negative, brightness by size, on a common
+    scale ``top`` (so the steps of an animation compare)."""
+    M = np.asarray(M, float)
+    n, m = M.shape
+    top = top or max(float(np.abs(M).max()), 1e-9)
+    cell = size / max(n, m)
+    g = VGroup()
+    for i in range(n):
+        for j in range(m):
+            x = float(np.clip(M[i, j] / top, -1, 1))
+            g.add(Square(cell, stroke_width=0.5, stroke_color=GREY_D, fill_color=pos if x >= 0 else neg,
+                         fill_opacity=0.06 + 0.88 * abs(x) ** 0.7).move_to([j * cell, -i * cell, 0]))
+    return g.center()
+
+
+def signed_column(v, cell=0.24, top=None, pos=C.TRUE_P, neg=C.SURPRISE) -> VGroup:
+    return signed_grid(np.asarray(v, float)[:, None], cell * len(v), top, pos, neg)
+
+
+def bits_grid(x, side=10, size=2.4, on=WHITE, off="#1B2230") -> VGroup:
+    """A +1/-1 pattern as a side x side picture of squares."""
+    cell = size / side
+    g = VGroup()
+    for i in range(side):
+        for j in range(side):
+            g.add(Square(cell * 0.94, stroke_width=0, fill_color=on if x[i * side + j] > 0 else off, fill_opacity=1)
+                  .move_to([j * cell, -i * cell, 0]))
+    return g.center()

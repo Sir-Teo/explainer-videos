@@ -49,6 +49,17 @@ class Dicts(VoiceoverScene):
                              color=L1C) for l, v in zip(lams, sh)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         tab.to_edge(DOWN, buff=0.45).shift(LEFT * 2.0)
         tag = note(r"computed: \ our L1 autoencoders, \ $3$ seeds each").to_corner(DR, buff=0.2)
+        sax = Axes(x_range=[0, 3, 1], y_range=[0, 3, 1], x_length=2.6, y_length=2.0, tips=False,
+                   axis_config={"color": GREY_C, "stroke_width": 2, "include_ticks": False}).move_to([4.4, -1.55, 0])
+        ident = DashedLine(sax.c2p(0, 0), sax.c2p(3, 3), color=GREY_B, dash_length=0.06)
+        soft = VGroup(Line(sax.c2p(0, 0), sax.c2p(0.5, 0), color=L1C, stroke_width=4),
+                      Line(sax.c2p(0.5, 0), sax.c2p(3, 2.5), color=L1C, stroke_width=4))
+        gap = DoubleArrow(sax.c2p(2.4, 1.9), sax.c2p(2.4, 2.4), buff=0, color=WHITE, stroke_width=2.5,
+                          tip_length=0.12, max_tip_length_to_length_ratio=0.5)
+        sl1 = label(r"true size $a$", font_size=17, color=GREY_B).next_to(sax.x_axis, DOWN, buff=0.1)
+        sl2 = label(r"$f^*$ \ ($\lambda = 1$)", font_size=17, color=L1C).next_to(sax.y_axis, LEFT, buff=0.1)
+        sl3 = label(r"$\lambda/2$", font_size=17, color=WHITE).next_to(gap, RIGHT, buff=0.08)
+        spic = VGroup(sax, ident, soft, gap, sl1, sl2, sl3)
         with self.voiceover(
             "Chapter eight's autoencoder paid for sparsity with an L1 penalty, and the penalty has a side effect you "
             "can derive in three lines. <bookmark mark='a'/> Take a single feature whose true size is a, and its "
@@ -64,6 +75,9 @@ class Dicts(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(Create(sax), FadeIn(sl1), FadeIn(sl2), Create(ident))
+            self.play(Create(soft), run_time=1.5)
+            self.play(GrowFromCenter(gap), FadeIn(sl3))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(t) for t in tab], lag_ratio=0.3), FadeIn(tag))
         self.wait(0.3)

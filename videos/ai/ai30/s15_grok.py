@@ -38,6 +38,7 @@ class Grok(VoiceoverScene):
         g = axes([0, st[-1]], [lo, hi], x_length=x_len, y_length=y_len, xlabel=r"training steps (full batch)",
                  ylabel=ylabel, xticks=[0, st[-1]], yticks=list(np.arange(lo, hi + 1, every)),
                  yfmt=lambda v: rf"10^{{{int(v)}}}", center=center)
+        g.lo, g.hi = float(lo), float(hi)  # CornerAxes re-bases ax.y_range at 0, so keep the true range here
         return g, st
 
     def curves(self):
@@ -52,8 +53,8 @@ class Grok(VoiceoverScene):
         task = label(rf"$(a + b) \bmod {P}$: \ one layer, \ four heads, \ $512$ ReLU units; \ ${100 * float(d['frac']):.0f}\%$ "
                      rf"of the table; \ weight decay ${float(d['wd']):g}$", font_size=22, color=GREY_A).to_edge(UP, buff=0.3)
         tm, tg = int(d["t_memorized"]), int(d["t_grokked"])
-        vm = DashedLine(g.ax.c2p(max(tm, 0), g.ax.y_range[0]), g.ax.c2p(max(tm, 0), g.ax.y_range[1]), color=TRN, dash_length=0.06)
-        vg = DashedLine(g.ax.c2p(max(tg, 0), g.ax.y_range[0]), g.ax.c2p(max(tg, 0), g.ax.y_range[1]), color=TST, dash_length=0.06)
+        vm = DashedLine(g.ax.c2p(max(tm, 0), g.lo), g.ax.c2p(max(tm, 0), g.hi), color=TRN, dash_length=0.06)
+        vg = DashedLine(g.ax.c2p(max(tg, 0), g.lo), g.ax.c2p(max(tg, 0), g.hi), color=TST, dash_length=0.06)
         hc = history_card(2023, r"N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith \& J.~Steinhardt",
                           r"progress measures for grokking via mechanistic interpretability", width=4.4, color=FEAT,
                           font_size=17).move_to([4.3, -1.5, 0])
@@ -223,7 +224,7 @@ class Grok(VoiceoverScene):
         g, st = self.logaxes(d, [-2.0, -0.5, 0], r"loss (log scale)", x_len=7.0, y_len=3.8,
                              keys=("test_loss", "restricted_loss", "excluded_loss"), every=1)
         lt = lambda k: np.log10(np.clip(np.asarray(d[k], float), 1e-8, None))  # noqa: E731
-        ylo, yhi = g.ax.y_range[0], g.ax.y_range[1]
+        ylo, yhi = g.lo, g.hi
         cl = lambda y: np.clip(y, ylo, yhi)  # noqa: E731
         cv = curve(g.ax, st, cl(lt("test_loss")), TST, 3)
         cr = curve(g.ax, st, cl(lt("restricted_loss")), RES, 3)

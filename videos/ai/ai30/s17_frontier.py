@@ -125,7 +125,7 @@ class Frontier(VoiceoverScene):
             tl_ = label(rf"team ${i + 1}$", font_size=20, color=col).move_to(bx)
             mk_ = MathTex(r"\checkmark" if ok_ else r"\times", font_size=40, color=col).next_to(bx, DOWN, buff=0.15)
             teams.add(VGroup(bx, tl_, mk_))
-        teams.arrange(RIGHT, buff=0.25).next_to(g1, DOWN, buff=0.6).align_to(g1, LEFT).shift(RIGHT * 0.2)
+        teams.arrange(RIGHT, buff=0.25, aligned_edge=UP).next_to(g1, DOWN, buff=0.6).align_to(g1, LEFT).shift(RIGHT * 0.2)
         nd = label(r"no training data", font_size=17, color=GREY_B).next_to(teams[3][2], DOWN, buff=0.08)
         foot = label(r"model diffing, \ probes on live traffic, \ monitors: \ Part 31", font_size=22, color=CHAT).to_edge(DOWN, buff=0.35)
         with self.voiceover(

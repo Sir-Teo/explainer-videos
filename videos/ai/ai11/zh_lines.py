@@ -98,11 +98,11 @@ ZH = {
 
     # ------------------------------------------------------------------ Momentum
     'Chapter two. The heavy ball, and Nesterov.': '第2章。重球法，与涅斯捷罗夫方法。',
-    'In 1964 Boris Polyak, in Moscow':
+    'f"In 1964 Boris Polyak, in Moscow':
         "1964年，在莫斯科的鲍里斯·波利亚克问：怎样让梯度下降快起来？他用物理来回答：给下山的人加上质量。"
         "<bookmark mark='a'/>每一步都加上上一步的β倍。<bookmark mark='b'/>在陡的方向上，相邻的两步方向相反，记忆把"
-        "它们抵消了；在又长又缓的方向上，每一步都朝同一个方向，记忆把它们累加起来。<bookmark mark='c'/>一个重球沿着"
-        "山谷滚下去，而不是在两壁之间来回撞。",
+        "它们抵消了；在又长又缓的方向上，每一步都朝同一个方向，记忆把它们累加起来。<bookmark mark='c'/>重球会在山谷里"
+        "稍稍左右摆动，但它沿山谷走得快得多：六十步之后，它离谷底比梯度下降近了{ratio:.0f}倍。",
     'Why does it work, and how fast? On a quadratic':
         "它为什么有效，又有多快？在二次函数上，山谷的每个方向是独立的。<bookmark mark='a'/>沿着曲率为λ的方向，更新"
         "是关于最近两个位置的递推。<bookmark mark='b'/>试试z的幂，z就必须满足一个二次方程。<bookmark mark='c'/>当它的"
