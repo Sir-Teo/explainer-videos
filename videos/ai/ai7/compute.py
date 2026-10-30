@@ -881,7 +881,10 @@ def compute_infini():
     a, v, ps = enc(train), enc(valid), enc(passage)
     M = int(load("kn")["best"])
     t0 = time.time()
-    model = kn_model(ngram_tables(a, K, M), K, M)
+    tables = ngram_tables(a, K, M)
+    types = [int(len(t["types"])) for t in tables]  # distinct strings of 1 .. M+1 characters in the novels
+    model = kn_model(tables, K, M)
+    del tables
     discounts = [float(m["D"]) for m in model]
     print(f"    Kneser-Ney tables in {time.time() - t0:.0f}s", flush=True)
     t0 = time.time()
@@ -950,7 +953,7 @@ def compute_infini():
     # a small suffix array, in full, for the picture
     demo = "a rose is a rose"
     dsa = sorted(range(len(demo)), key=lambda k: demo[k:])
-    return dict(K=K, n=len(a), M=M, discounts=discounts, edges=list(INF_EDGES[:-1]), lam=lam, mix_bits=mix_bits,
+    return dict(K=K, n=len(a), M=M, types=types, discounts=discounts, edges=list(INF_EDGES[:-1]), lam=lam, mix_bits=mix_bits,
                 kn_bits=kn_bits_, L=pL, hist=hist, mean_L=float(pL.mean()), median_L=float(np.median(pL)),
                 max_L=int(pL.max()), acc=float(ptop.mean()), zero=float((pp == 0).mean()),
                 sparse=float((pn == 1).mean()), acc_long=float(ptop[pL >= 10].mean()),

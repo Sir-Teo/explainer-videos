@@ -32,8 +32,10 @@ class Infini(VoiceoverScene):
         for r in rows:
             r[0].set_x(-0.4)
             r[1].next_to(r[0], RIGHT, buff=0.3)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([-3.6, -0.3, 0])
-        ys = [r.get_y() for r in rows]
+        ys = [2.4 - 0.37 * k for k in range(n)]
+        for r, y_ in zip(rows, ys):
+            r.set_y(y_)
+        rows.set_x(-3.6)
         title = VGroup(label(r"every suffix of the text \ (start position, \ the rest)", font_size=22, color=GREY_A))
         title.next_to(rows, UP, buff=0.2)
         title2 = label(r"sorted: \ the suffix array", font_size=22, color=INF).move_to(title)
@@ -46,10 +48,19 @@ class Infini(VoiceoverScene):
                            color=GREY_A),
                      label(r"no table of $n$-grams, \ no limit on $n$", font_size=26, color=INF))
         big.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.6, 0])
+        types = np.asarray(d["types"])
+        gt = axes([0.5, len(types) + 0.5, 1], [0, 7, 1], x_length=6.0, y_length=3.6, xlabel=r"length of the string",
+                  ylabel=r"different strings in the novels", xticks=list(range(1, len(types) + 1)),
+                  yticks=[0, 2, 4, 6], yfmt=lambda v: f"10^{{{int(v)}}}", center=[0, -0.2, 0])
+        tb = VGroup(*[Rectangle(width=0.45, height=max(gt.ax.c2p(0, np.log10(v))[1] - gt.ax.c2p(0, 0)[1], 0.02),
+                                stroke_width=0, fill_color=KN, fill_opacity=0.85).move_to(gt.ax.c2p(k + 1, np.log10(v) / 2))
+                      for k, v in enumerate(types)])
+        tv = VGroup(*[MathTex(fmt_int(int(v)), font_size=18, color=KN).next_to(b, UP, buff=0.05) for v, b in zip(types, tb)])
         cites = cite(r"U.~Manber \& G.~Myers, suffix arrays (1990); \ J.~Liu et al., \textit{Infini-gram} (2024)", corner=DR)
         with self.voiceover(
-            "Kneser–Ney stops at seven characters because its tables of counts explode: every longer context is "
-            "another row. But a count is just a search through the text, and searching can be fast. "
+            "Kneser–Ney stops at seven characters because its tables of counts explode. The novels hold "
+            f"{int(types[1]):,} different pairs of characters, and {int(types[-1]):,} different strings of "
+            f"{len(types)}. But a count is just a search through the text, and searching can be fast. "
             "<bookmark mark='a'/> Take every suffix of the text: the text from each position to the end. Here's a "
             "tiny one. <bookmark mark='b'/> Sort them alphabetically. That's a suffix array, from Udi Manber and Gene "
             "Myers in 1990. <bookmark mark='c'/> Every occurrence of any string, of any length, is now one "
@@ -58,8 +69,10 @@ class Infini(VoiceoverScene):
             "positions, sorted in about a minute on this machine. In 2024 Jiacheng Liu and colleagues built one over "
             "five trillion tokens of web text, and called the model it gives an infinity-gram."
         ) as vo:
-            self.play(FadeIn(cites))
+            self.play(FadeIn(cites), FadeIn(gt))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in tb], lag_ratio=0.15), FadeIn(tv), run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(gt, tb, tv)))
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("b")
             self.play(*[rows[i].animate.set_y(ys[k]) for k, i in enumerate(sa)], ReplacementTransform(title, title2),
@@ -128,21 +141,21 @@ class Infini(VoiceoverScene):
         d = load("infini")
         sb = load("scoreboard")
         acc, zero, mix, kn = d["acc"], d["zero"], d["mix_bits"], d["kn_bits"]
-        a = VGroup(label(r"the $\infty$-gram alone:", font_size=26, color=INF),
-                   label(rf"next character right: \ ${100 * acc:.0f}\%$ of the time", font_size=24),
-                   label(rf"probability $0$ for the true character: \ ${100 * zero:.0f}\%$ of the time", font_size=24),
-                   label(r"$\Rightarrow$ \ infinitely many bits", font_size=24, color=C.SURPRISE))
-        a.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([-3.6, 2.0, 0])
+        a = VGroup(label(r"the $\infty$-gram alone:", font_size=32, color=INF),
+                   label(rf"next character right: \ ${100 * acc:.0f}\%$ of the time", font_size=28),
+                   label(rf"probability $0$ for the true character: \ ${100 * zero:.0f}\%$ of the time", font_size=28),
+                   label(r"$\Rightarrow$ \ infinitely many bits", font_size=28, color=C.SURPRISE))
+        a.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-3.2, 1.9, 0])
         colors = {r"\lambda_L": INF, r"P_\infty": INF, r"P_{\mathrm{KN}}": KN}
         eq = cmath(r"P", r"=", r"\lambda_L", r"\,", r"P_\infty", r"+", r"(1 - \lambda_L)", r"\,", r"P_{\mathrm{KN}}",
-                   colors=colors, font_size=40).move_to([3.4, 2.4, 0])
+                   colors=colors, font_size=42).move_to([3.6, 2.4, 0])
         en_ = label(r"one weight per length of match, \\ chosen on held-out text from the novels", font_size=22,
                     color=GREY_A).next_to(eq, DOWN, buff=0.2)
         rows = [dict(r) for r in sb["rows"]]
         i, j = int(sb["new"][0]), int(sb["new"][1])
         keep = [r for k, r in enumerate(rows) if k in (i - 1, i, j) or r.get("key") in ("bzip2",)]
-        board = scoreboard(keep, highlight=(len(keep) - 1,), max_bits=3.5, bar_width=5.0, row_h=0.55, font_size=24)
-        board.scale_to_fit_width(min(board.width, 9.0)).move_to([0.2, -1.6, 0])
+        board = scoreboard(keep, highlight=(len(keep) - 1,), max_bits=3.5, bar_width=5.0, row_h=0.6, font_size=26)
+        board.scale_to_fit_width(min(board.width, 11.0)).move_to([0.2, -1.75, 0])
         gain = d["gain"]
         if gain > 0.005:
             verdict = (f"Mixed with Kneser–Ney, trusting it more when the match is long, it gives {mix:.3f} bits per "

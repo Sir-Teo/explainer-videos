@@ -88,7 +88,7 @@ class Contest(VoiceoverScene):
         events = [(2006, r"Netflix Prize: \\ \$1M for $10\%$"), (2009, r"won by a blend \\ of hundreds of models"),
                   (2010, r"Kaggle"), (2015, r"XGBoost: \ $17$ of $29$ \\ Kaggle winners")]
         axis, skel, marks = era_strip(events, y0=-2.1, width=4.6, font_size=20)
-        cite_ = note(r"Chen \& Guestrin (2016): \ solutions on Kaggle's blog in 2015").to_corner(DR, buff=0.15)
+        cite_ = note(r"Chen \& Guestrin (2016): \ solutions on Kaggle's blog in 2015")
         with self.voiceover(
             "In 2001 Leo Breiman, who had left statistics for consulting and come back, described two cultures. "
             "Most statisticians assumed a model of how the data was made, and estimated it. A few, mostly outside "
@@ -99,6 +99,7 @@ class Contest(VoiceoverScene):
             "profession, <bookmark mark='d'/> and in 2015, seventeen of the twenty-nine winning solutions on Kaggle's "
             "blog used XGBoost."
         ) as vo:
+            cite_.next_to(card, DOWN, buff=0.2)
             self.play(FadeIn(card, shift=DOWN * 0.2), Create(axis), FadeIn(skel))
             vo.wait_until("a")
             self.play(FadeIn(marks[0]))
@@ -209,12 +210,12 @@ class Contest(VoiceoverScene):
         head = label(r"How the classics live on", font_size=38).to_edge(UP, buff=0.3)
         lines = VGroup()
         for a, b, c_ in rows:
-            la = label(a, font_size=24, color=HL)
-            lb = label(b, font_size=22, color=WHITE)
-            lc = label(c_, font_size=20, color=GREY_B)
+            la = label(a, font_size=27, color=HL)
+            lb = label(b, font_size=25, color=WHITE)
+            lc = label(c_, font_size=22, color=GREY_B)
             lines.add(VGroup(la, lb, lc))
         for k, ln in enumerate(lines):
-            y = 2.3 - 0.62 * k
+            y = 2.45 - 0.73 * k
             ln[0].move_to([-3.4, y, 0], aligned_edge=RIGHT)
             ln[1].move_to([-3.1, y, 0], aligned_edge=LEFT)
             ln[2].move_to([6.7, y, 0], aligned_edge=RIGHT)
