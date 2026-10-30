@@ -382,8 +382,8 @@ ZH = {
         "最平静的那条。<bookmark mark='a'/>特征少时，新书页上的误差先下降，然后随着p接近书页数又上升：这是经典的U形。<bookmark mark='b'/>恰好有{n}个特征，"
         "和书页一样多时，拟合被迫穿过每一个点，误差爆炸了。<bookmark mark='c'/>然后，越过这一点，误差又降了下来{how_low}",
 
-    'f"{opening}Belkin and colleagues named it double descent':
-        "{opening}2019年，贝尔金和同事们把它命名为双下降，同一年，纳基兰和同事们在深度网络里也发现了它。<bookmark mark='a'/>在整个第二次下降中，"
+    'f"In short: {opening}Belkin and colleagues named it double descent':
+        "总之：{opening}2019年，贝尔金和同事们把它命名为双下降，同一年，纳基兰和同事们在深度网络里也发现了它。<bookmark mark='a'/>在整个第二次下降中，"
         "训练误差都是0，所以决定结果的不可能是它。决定结果的是你拿到的是众多精确拟合中的哪一个，而最小的那个最简单。<bookmark mark='n'/>{size}"
         "再联系第10章：从0出发的梯度下降，找到的恰好就是那个最小的拟合。",
 
@@ -609,8 +609,8 @@ ZH = {
         "怎样让信号穿过很多层还保持活力。<bookmark mark='a'/>还有，第一个神经语言模型会登上记分牌。",
 
     "Shalev-Shwartz and Ben-David":
-        "沙莱夫-施瓦茨和本-戴维的《理解机器学习》（Understanding Machine Learning），是讲这套理论最清楚的书，弗朗西斯·巴赫的《从第一性原理出发的学习理论》"
-        "（Learning Theory from First Principles）是最新的。感谢收看，第9部分再见。",
+        "沙莱夫-施瓦茨和本-戴维的《理解机器学习》，是讲这套理论最清楚的书，弗朗西斯·巴赫的《从第一性原理出发的学习理论》"
+        "是最新的。感谢收看，第9部分再见。",
 
     # short spliced clauses (also in PHRASES, for exact matches)
     ": for independent rules it's nearly tight.": "：对彼此独立的规则来说，它几乎是紧的。",
