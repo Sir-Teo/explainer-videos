@@ -3,38 +3,26 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, WALK, load
+from videos.ai.ai5.common import (DATA, PART, SCORE, WALK, ParticleFlow, curve, heat_image, load,
+                                   surface_from_grid)
 from videos.ai.ai5.compute import density2, rng
 
 ACCEPT, REJECT = "#5BD17A", C.SURPRISE
 
 
-def heat_image(f, x_range, y_range, w=400, h=300) -> ImageMobject:
-    xs = np.linspace(*x_range, w)
-    ys = np.linspace(*y_range, h)[::-1]
-    X, Y = np.meshgrid(xs, ys)
-    Z = f(X, Y)
-    Z = (Z / Z.max()) ** 0.8
-    stops = [np.array(ManimColor(c).to_rgb()) for c in ("#0B0F17", "#1B2A6B", "#2E6FB0", "#3FB8AF", "#F2D16B")]
-    k = np.clip(Z * (len(stops) - 1), 0, len(stops) - 1 - 1e-9)
-    i = k.astype(int)
-    a = (k - i)[..., None]
-    rgb = (1 - a) * np.array(stops)[i] + a * np.array(stops)[np.minimum(i + 1, len(stops) - 1)]
-    img = ImageMobject((np.concatenate([rgb, np.ones_like(a)], -1) * 255).astype(np.uint8))
-    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
-    return img
-
-
-class MCMC(VoiceoverScene):
+class MCMC(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
         self.walk()
+        self.derive()
+        self.langevin()
+        self.mixing()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(7, r"Sampling the unsampleable", r"How do you draw from a shape you can only evaluate?",
-                            part=5, lit=(1953,))
-        with self.voiceover("Chapter seven. Markov chain Monte Carlo."):
+        card = chapter_card(13, r"Sampling the unsampleable", r"How do you draw from a shape you can only evaluate?",
+                            part=PART, lit=(1953,))
+        with self.voiceover("Chapter thirteen. Markov chain Monte Carlo."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -75,11 +63,11 @@ class MCMC(VoiceoverScene):
         tag.align_to(img, LEFT)  # flush left under the picture, clear of the citation in the corner
         cite_ = cite(r"N.~Metropolis, A.~Rosenbluth, M.~Rosenbluth, A.~Teller \& E.~Teller (1953)", corner=DR)
         with self.voiceover(
-            "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how "
-            "likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the "
-            "rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, bright where points crowd together, with two bumps. In "
-            "1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a "
-            "random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. "
+            "Often there's no direct way to draw samples. All we can do is evaluate how likely each point is, and "
+            "only up to an unknown constant: Bayes's rule, where the rescaling is the hard part. "
+            "<bookmark mark='a'/> Here's a density in the plane with two bumps. In 1953, at Los Alamos, Nicholas "
+            "Metropolis, Arianna and Marshall Rosenbluth, and Augusta and Edward Teller, computing on the MANIAC, "
+            "found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. "
             "<bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio "
             "of the heights. Otherwise, stay where you are."
         ) as vo:
@@ -122,7 +110,7 @@ class MCMC(VoiceoverScene):
             "places the walker visits pile up exactly like the density: it's a Markov chain whose stationary "
             "distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the "
             f"probability, and the walker spends {100 * left:.0f} percent of its time there. Markov chain Monte "
-            "Carlo made Bayesian statistics practical, and it's still how physicists sample molecules."
+            "Carlo made Bayesian statistics practical in the 1990s, and it's still how physicists sample molecules."
         ) as vo:
             self.play(FadeIn(cancel))
             vo.wait_until("a")
@@ -135,5 +123,174 @@ class MCMC(VoiceoverScene):
             run_v.clear_updaters()
             vo.wait_until("b")
             self.play(FadeTransform(running, share))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def derive(self):
+        colors = {r"\pi(x)": DATA, r"\pi(y)": ACCEPT, r"a": C.BITS}
+        rows = [
+            cmath(r"\pi(x)\, q(y \mid x)\, a(x \to y)", "=", r"\pi(y)\, q(x \mid y)\, a(y \to x)", font_size=34),
+            cmath(r"\frac{a(x \to y)}{a(y \to x)}", "=", r"\frac{\pi(y)\, q(x \mid y)}{\pi(x)\, q(y \mid x)}", font_size=34),
+            cmath(r"a(x \to y)", "=", r"\min\!\Big(1,\; \frac{\pi(y)\, q(x \mid y)}{\pi(x)\, q(y \mid x)}\Big)", font_size=34),
+            cmath(r"a(x \to y)", "=", r"\min\!\Big(1,\; \frac{\pi(y)}{\pi(x)}\Big)", font_size=34),
+        ]
+        whys = [why(r"detailed balance \ (Chapter 10): \ propose, then accept"),
+                why(r"rearrange"),
+                why(r"the largest acceptance that keeps it: \ Hastings (1970)"),
+                why(r"symmetric proposals: \ Metropolis (1953)")]
+        step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.0, buff=0.6, edge=6.8)
+        with self.voiceover(
+            "Why does the walk land on the right distribution? Chapter ten's detailed balance. A step from x to y "
+            "is proposed with probability q, then accepted with probability a. <bookmark mark='a'/> Balance asks "
+            "that the flows match, <bookmark mark='b'/> which fixes only the ratio of the acceptances. "
+            "<bookmark mark='c'/> Make the larger of the two one: that's the rule W. K. Hastings published in 1970, "
+            "for any proposal. <bookmark mark='d'/> With a symmetric proposal, the q's cancel and it is Metropolis's "
+            "rule."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def langevin(self):
+        d = load("langevin")
+        frames, grids = np.asarray(d["frames"]), np.asarray(d["grids"])
+        gx, gy, target = np.asarray(d["gx"]), np.asarray(d["gy"]), np.asarray(d["target"])
+        gt, l1 = np.asarray(d["grid_t"]), np.asarray(d["l1"])
+        steps_at = [int(v) for v in d["grid_steps"]]
+        left = float(d["flow_left"])
+        h = float(d["flow_h"])
+        axes = ThreeDAxes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], z_range=[0, 0.32, 0.1], x_length=8.0, y_length=6.0,
+                          z_length=2.6, axis_config={"stroke_color": GREY_D, "include_ticks": False, "include_tip": False})
+        axes.shift(DOWN * 0.3)
+        zmax = 0.3
+        surfs = [surface_from_grid(axes, gx, gy, np.minimum(G, 0.32), zmax, opacity=0.62) for G in grids]
+        wire = surface_from_grid(axes, gx, gy, target, zmax, opacity=0.0)
+        wire.set_stroke(color=GREY_A, width=0.6, opacity=0.35)
+        floor = Rectangle(width=8.0, height=6.0, stroke_color=GREY_D, stroke_width=1.5, fill_color="#0B0F17",
+                          fill_opacity=0.6).move_to(axes.c2p(0, 0, 0))
+        flow = ParticleFlow(axes, frames, colors=[WALK] * frames.shape[1], radius=0.028)
+        eq = cmath(r"dx", "=", r"\nabla \log p(x)\,dt", "+", r"\sqrt{2}\,dW_t", font_size=36,
+                   colors={r"\nabla \log p(x)\,dt": SCORE}).to_corner(UL, buff=0.35)
+        ula = cmath(r"x \leftarrow x + h\, \nabla \log p(x) + \sqrt{2h}\,\xi", font_size=28).next_to(eq, DOWN, buff=0.2).align_to(eq, LEFT)
+        lab = label(r"the push: \ the score, \ uphill toward likelier places; \ the kicks: \ Brownian", font_size=20,
+                    color=GREY_A).to_edge(DOWN, buff=0.25)
+        tv = DecimalNumber(0, num_decimal_places=1, font_size=30, color=C.BITS)
+        tl = VGroup(MathTex(r"t =", font_size=30), tv).arrange(RIGHT, buff=0.12).to_corner(UR, buff=0.4)
+        lv = DecimalNumber(l1[0], num_decimal_places=2, font_size=26, color=C.BITS)
+        ll = VGroup(label(r"distance from $p$ \ ($L^1$):", font_size=22, color=GREY_A), lv).arrange(RIGHT, buff=0.12)
+        ll.next_to(tl, DOWN, buff=0.15).align_to(tl, RIGHT)
+        key = label(r"surface: \ the particles' density; \ mesh: \ the target $p$", font_size=20, color=GREY_A)
+        key.next_to(ll, DOWN, buff=0.12).align_to(tl, RIGHT)
+        hc = cite(r"P.~Langevin (1908); \ G.~Roberts \& R.~Tweedie (1996); \ M.~Welling \& Y.~W.~Teh (2011)", corner=DL)
+        fixed = [eq, ula, lab, tl, ll, key, hc]
+        for m in fixed:
+            self.add_fixed_in_frame_mobjects(m)
+            self.remove(m)
+        self.set_camera_orientation(phi=62 * DEGREES, theta=-62 * DEGREES, zoom=0.78)
+        n_frames = len(frames) - 1
+        frame_of = [s / 5 for s in steps_at]  # frames are saved every 5 steps
+        good = left > 0.6
+        verdict = (f"{100 * left:.0f} percent of the particles are in the left bump, close to its two thirds."
+                   if good else f"{100 * left:.0f} percent are in the left bump, short of its two thirds: some particles "
+                   "are still on the wrong side of the valley.")
+        with self.voiceover(
+            "There is another way to explore, borrowed from physics. In 1908 Paul Langevin wrote the motion of a "
+            "particle in a fluid as a push plus random kicks. <bookmark mark='a'/> Make the push the score, the "
+            "slope of log p, which points uphill toward likelier places, and make the kicks Brownian. In small "
+            "steps, that is one line of code. <bookmark mark='b'/> Fifteen hundred particles start as noise. "
+            "Above them, their density. <bookmark mark='c'/> It flows onto the two bumps, and its distance from "
+            f"the target falls from {l1[0]:.2f} to {l1[-1]:.2f}, about as low as smoothing the particles allows. "
+            f"{verdict} <bookmark mark='d'/> Its long-run distribution is p itself; chapter seventeen proves it. With "
+            "the score estimated on mini-batches it became a way to sample neural networks' weights, in 2011, "
+            "and with a learned score, the sampler of the first score-based image models."
+        ) as vo:
+            self.play(FadeIn(eq), FadeIn(hc), Create(axes), FadeIn(floor), run_time=1.2)
+            vo.wait_until("a")
+            self.play(FadeIn(ula), FadeIn(lab))
+            vo.wait_until("b")
+            self.play(FadeIn(flow), FadeIn(surfs[0]), FadeIn(tl), FadeIn(ll), FadeIn(key), Create(wire))
+            self.begin_ambient_camera_rotation(rate=0.05)
+            flow.start()
+            vo.wait_until("c")
+            cur = surfs[0]
+            for k in range(1, len(surfs)):
+                self.play(flow.t.animate.set_value(frame_of[k]), Transform(cur, surfs[k]), ChangeDecimalToValue(tv, gt[k]),
+                          ChangeDecimalToValue(lv, l1[k]), run_time=1.6, rate_func=linear)
+            vo.wait_until("d")
+        flow.stop()
+        self.stop_ambient_camera_rotation()
+        self.wait(0.3)
+        self.clear_scene()
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
+
+    # ------------------------------------------------------------------
+    def mixing(self):
+        d = load("langevin")
+        cfg = [str(c) for c in d["configs"]]
+        names = {"rwm0.7": r"random-walk Metropolis", "ula0.05": r"Langevin, \ small step", "ula0.3": r"Langevin, \ big step",
+                 "mala0.3": r"Langevin $+$ Metropolis \ (MALA)"}
+        cols = {"rwm0.7": ACCEPT, "ula0.05": WALK, "ula0.3": REJECT, "mala0.3": C.BITS}
+        traces = VGroup()
+        for i, c in enumerate(cfg):
+            ch = np.asarray(d[f"{c}_chain"])
+            ax = Axes(x_range=[0, len(ch), 250], y_range=[-3.5, 3.5, 3.5], x_length=5.4, y_length=1.15, tips=False,
+                      axis_config={"stroke_color": GREY_D, "include_ticks": False})
+            ln = curve(ax, np.arange(len(ch)), np.clip(ch[:, 0], -3.5, 3.5), color=cols[c], stroke_width=1.6)
+            zero = DashedLine(ax.c2p(0, 0), ax.c2p(len(ch), 0), color=GREY_D, stroke_width=1)
+            nm = label(names[c], font_size=20, color=cols[c]).next_to(ax, LEFT, buff=0.15)
+            traces.add(VGroup(ax, zero, ln, nm))
+        traces.arrange(DOWN, buff=0.22, aligned_edge=RIGHT).move_to([-1.6, -0.3, 0])
+        tt = label(r"$x$-coordinate over the first $4{,}000$ steps \ (left bump below the dashes)", font_size=20,
+                   color=GREY_A).next_to(traces, UP, buff=0.15)
+
+        def stat(c, k):
+            v = np.asarray(d[f"{c}_{k}"], float)
+            return float(v.mean())
+
+        rows = VGroup(label(r"hops", font_size=20, color=GREY_A), label(r"spread", font_size=20, color=GREY_A))
+        rows.arrange(RIGHT, buff=0.55)
+        tbl = VGroup()
+        for c in cfg:
+            tbl.add(VGroup(MathTex(f"{stat(c, 'hops'):.0f}", font_size=26, color=cols[c]),
+                           MathTex(f"{stat(c, 'spread'):.2f}", font_size=26, color=cols[c])).arrange(RIGHT, buff=0.6))
+        for r, tr in zip(tbl, traces):
+            r.move_to([4.6, tr.get_y(), 0])
+        rows.next_to(tbl, UP, buff=0.25).set_x(4.6)
+        truth = label(r"true spread: \ $0.35$", font_size=20, color=WHITE).next_to(tbl, DOWN, buff=0.2).set_x(4.6)
+        tag = note(r"hops between the bumps in $19{,}000$ steps, \ and the spread within the left bump: \ means of five "
+                   r"seeds").to_edge(DOWN, buff=0.2)
+        h = {c: stat(c, "hops") for c in cfg}
+        sp = {c: stat(c, "spread") for c in cfg}
+        best_hops = max(cfg, key=lambda c: h[c])
+        biased = abs(sp["ula0.3"] - 0.35) > 0.08
+        v1 = (f"The big-step Langevin hops between the bumps most, {h['ula0.3']:.0f} times, but its spread is "
+              f"{sp['ula0.3']:.2f} where the truth is 0.35: without a correction, a big step blurs the target." if biased
+              else f"The big-step Langevin hops {h['ula0.3']:.0f} times and keeps the spread at {sp['ula0.3']:.2f}.")
+        v2 = (f"Adding the Metropolis correction removes the bias, {sp['mala0.3']:.2f}, but its proposals across the "
+              f"valley are mostly refused: {h['mala0.3']:.0f} hops." if h["mala0.3"] < h["rwm0.7"] else
+              f"Adding the Metropolis correction removes the bias, {sp['mala0.3']:.2f}, and hops {h['mala0.3']:.0f} times.")
+        with self.voiceover(
+            "How well do they mix? Run four samplers for twenty thousand steps each, five times, and follow one "
+            f"coordinate. <bookmark mark='a'/> Plain Metropolis crosses between the bumps about {h['rwm0.7']:.0f} "
+            f"times, with the right spread. Langevin with small steps crosses only {h['ula0.05']:.0f} times. "
+            f"<bookmark mark='b'/> {v1} <bookmark mark='c'/> {v2} Every sampler trades exactness for speed, and "
+            "two bumps far apart defeat them all; part twenty-one's way out is to sample a blurred version first."
+        ) as vo:
+            self.play(FadeIn(tt), LaggedStart(*[FadeIn(t) for t in traces], lag_ratio=0.2), FadeIn(rows), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(tbl[0]), FadeIn(tbl[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(tbl[2]), FadeIn(truth))
+            vo.wait_until("c")
+            self.play(FadeIn(tbl[3]))
         self.wait(0.3)
         self.clear_scene()
