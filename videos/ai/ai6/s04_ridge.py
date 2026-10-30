@@ -18,6 +18,7 @@ class Ridge(VoiceoverScene):
                 "Chapter three. Ridge regression.")
         self.derive()
         self.shrink()
+        self.paths()
         self.validate()
 
     # ------------------------------------------------------------------
@@ -117,6 +118,55 @@ class Ridge(VoiceoverScene):
             self.play(loglam.animate.set_value(3.0), run_time=3.0)
         fac.clear_updaters()
         lam_r.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def paths(self):
+        r = load("ridge")
+        p = load("pages")
+        vocab = p["vocab"]
+        lams = np.asarray(r["lams"])
+        coef = np.asarray(r["coef"])
+        lx = np.log10(lams)
+        top = float(np.abs(coef).max()) * 1.05
+        g = plot([-lx[-1], -lx[0], 1], [-top, top, 0.05], x_length=8.0, y_length=4.6, xticks=[-5, -3, -1, 1],
+                 xfmt=lambda v: f"10^{{{int(round(-v))}}}", center=[-1.8, -0.4, 0],
+                 xlabel=r"$\lambda$, \ weaker $\longrightarrow$", ylabel=r"the $70$ weights")
+        ax2 = g.ax
+        big = np.argsort(-np.abs(coef[0]))[:4]
+        lines = VGroup()
+        for j in range(coef.shape[1]):
+            hot = j in big
+            lines.add(VMobject(color=RIDGE if hot else GREY_D, stroke_width=3 if hot else 1.2).set_points_as_corners(
+                [ax2.c2p(-a, b) for a, b in zip(lx, coef[:, j])]))
+        names = VGroup(*[data_text(vocab[j], font="DejaVu Sans Mono", font_size=20, color=RIDGE)
+                         .next_to(ax2.c2p(-lx[0], coef[0, j]), RIGHT, buff=0.08) for j in big])
+        zeros = int((np.abs(coef) < 1e-12).sum())
+        best = int(r["best"])
+        mk = DashedLine(ax2.c2p(-lx[best], -top), ax2.c2p(-lx[best], top), color=HL, stroke_width=2)
+        notes = VGroup(label(r"every weight shrinks smoothly", font_size=26, color=RIDGE),
+                       label(rf"weights exactly zero, \ at any $\lambda$: \ ${zeros}$", font_size=24, color=GREY_A),
+                       label(r"Bayes: \ ridge is the most probable \\ weights under a bell-shaped prior \\ (Part 5); "
+                             r"\ in networks, \ weight decay", font_size=22, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        notes.move_to([4.6, 0.4, 0])
+        keep_in_frame(notes)
+        say_zero = ("Not one weight ever reaches exactly zero." if zeros == 0 else
+                    f"Only {zeros} weights ever reach exactly zero.")
+        with self.voiceover(
+            "Here is what ridge does to the seventy weights, from a strong penalty to almost none. "
+            f"<bookmark mark='a'/> Every weight grows smoothly out of zero as lambda falls. {say_zero} "
+            "<bookmark mark='b'/> Ridge has a second reading: it's the most probable set of weights if, before seeing "
+            "any pages, you believed they were small, with a bell-shaped prior, as in Part 5. In neural networks the "
+            "same penalty is called weight decay."
+        ) as vo:
+            self.play(FadeIn(g))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.01), run_time=2.5)
+            self.play(FadeIn(names))
+            vo.wait_until("a")
+            self.play(FadeIn(notes[0]), FadeIn(notes[1]), Create(mk))
+            vo.wait_until("b")
+            self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
 

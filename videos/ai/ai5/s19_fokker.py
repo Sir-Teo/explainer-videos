@@ -46,6 +46,13 @@ class FokkerPlanck(VoiceoverScene):
                 why(r"true for every $\varphi$")]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-1.6, buff=0.4, edge=6.8)
         cite_ = cite(r"A.~Fokker (1914); \ M.~Planck (1917); \ A.~Kolmogorov (1931)", corner=DR)
+        hx = Axes(x_range=[-4, 4, 1], y_range=[0, 0.8, 0.2], x_length=7.0, y_length=2.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-1.5, -2.4, 0])
+        xx = np.linspace(-4, 4, 200)
+        heat = VGroup(hx, *[curve(hx, xx, normal_pdf(xx, 0, s_), color=interpolate_color(ManimColor(WALK), ManimColor(MODEL), k / 3),
+                                  stroke_width=3) for k, s_ in enumerate((0.5, 0.8, 1.2, 1.7))],
+                      label(r"Chapter 14: \ pure noise spreads by the heat equation, \ $\partial_t p = \tfrac12 \partial_x^2 p$",
+                            font_size=22, color=GREY_A).next_to(hx, UP, buff=0.1))
         with self.voiceover(
             "Chapter fourteen found the heat equation for a cloud of pure noise. With a push added, here is the "
             "general law, from Ito's lemma. <bookmark mark='a'/> Take any smooth test function phi of a process with "
@@ -55,11 +62,13 @@ class FokkerPlanck(VoiceoverScene):
             "agree: the Fokker-Planck equation, a deterministic law for the density. Adriaan Fokker and Max Planck "
             "wrote it for molecules; Kolmogorov derived it in general in 1931."
         ) as vo:
+            self.play(FadeIn(heat))
             step(0)
             vo.wait_until("a")
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
+            self.play(FadeOut(heat))
             step(2)
             vo.wait_until("d")
             step(3)
