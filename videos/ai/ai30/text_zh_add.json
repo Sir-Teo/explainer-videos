@@ -222,13 +222,9 @@
   "What can interpretability do for a frontier model today?": "今天，可解释性能为一个前沿模型做什么？",
   "The tools went public": "工具公开了",
   "inject a concept's vector \\\\ (``all caps'', \\ ``bread'' $\\ldots$)": "注入一个概念的向量 \\\\ （“全大写”，\\ “面包” $\\ldots$）",
-  "``Do you notice an injected thought? \\ What is it about?''": "“你察觉到一个被注入的念头了吗？\\ 它是关于什么的？”",
   "Anthropic: \\ emotion concepts in Claude Sonnet 4.5": "Anthropic：\\ Claude Sonnet 4.5里的情绪概念",
   "vectors for $171$ emotion words shape its choices; \\ more ``calm'', \\ less hacky code. \\ Functional, \\ the authors say: \\ not evidence of feelings": "$171$ 个情绪词的向量影响它的选择；\\ “平静”多一些，\\ 投机取巧的代码就少一些。\\ 作者说这是功能性的，\\ 不是有感受的证据",
   "model diffing, \\ probes on live traffic, \\ monitors: \\ Part 31": "模型差分，\\ 线上流量的探针，\\ 监控器：\\ 第31部分",
-  "a model trained in secret to please reward models' $52$ known quirks": "一个被秘密训练、去讨好奖励模型 $52$ 个已知怪癖的模型",
-  "four blind teams; \\ three found the hidden objective": "四个不知情的团队；\\ 三个找到了隐藏目标",
-  "the one denied training data did not; \\ the fastest, \\ with autoencoders, \\ took $90$ minutes": "不让看训练数据的那个团队没找到；\\ 最快的一个，\\ 用自编码器，\\ 花了 $90$ 分钟",
   "Mar 2025": "2025年3月",
   "S.~Marks et al.\\ (Anthropic): \\ auditing for hidden objectives": "S.~Marks等（Anthropic）：\\ 审计隐藏目标",
   "Oct 2025": "2025年10月",
@@ -301,7 +297,12 @@
   "$1$ latent": "$1$ 个潜变量",
   "accuracy, \\ ``inside a quotation'' \\ (novels model)": "准确率，\\ “在引号里面” \\ （小说模型）",
   "training examples": "训练样本",
-  "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad waves in $a$ and in $b$": "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad $a$ 和 $b$ 方向上的波"
+  "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad waves in $a$ and in $b$": "$a \\rightarrow$ \\quad $b \\downarrow$ \\quad $a$ 和 $b$ 方向上的波",
+  "``Do you notice an injected thought? \\\\ What is it about?''": "“你察觉到一个被注入的念头了吗？\\\\ 它是关于什么的？”",
+  "a model trained in secret to please \\\\ reward models' $52$ known quirks": "一个被秘密训练、\\\\ 去讨好奖励模型 $52$ 个已知怪癖的模型",
+  "four blind teams; \\\\ three found the hidden objective": "四个不知情的团队；\\\\ 三个找到了隐藏目标",
+  "the one denied training data did not; \\\\ the fastest, \\ with autoencoders, \\ took $90$ minutes": "不让看训练数据的那个团队没找到；\\\\ 最快的一个，\\ 用自编码器，\\ 花了 $90$ 分钟",
+  "solid: \\ held-out novel text; \\ dashed: \\ chat transcripts": "实线：\\ 留出的小说文本；\\ 虚线：\\ 聊天记录"
  },
  "patterns": [
   [

@@ -565,7 +565,7 @@ def compute_natgrad():
         s = 1 / (1 + np.exp(-(Z @ w)))
         return (Z * (s * (1 - s))[:, None]).T @ Z / n
 
-    for scale in (1.0, 4.0):
+    for scale in (1.0, 0.25):  # w = (a, s b): s = 1/4 writes the second weight four times as large
         J = np.diag([1.0, scale])  # dw/dtheta
         for kind in ("gd", "ng"):
             th = np.linalg.solve(J, start)

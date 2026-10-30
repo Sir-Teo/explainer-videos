@@ -31,9 +31,9 @@ class Natural(VoiceoverScene):
         d = load("noise")
         ax, cont, star = loss_axes(d, center=(-3.3, 0.0), width=5.8)
         p1 = VMobject(color=GDC, stroke_width=3).set_points_as_corners([ax.c2p(*p) for p in np.asarray(n["path_gd_1"])])
-        p4 = VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners([ax.c2p(*p) for p in np.asarray(n["path_gd_4"])])
+        p4 = VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners([ax.c2p(*p) for p in np.asarray(n["path_gd_0.25"])])
         lg = VGroup(label(r"gradient descent on $(w_1, w_2)$", font_size=20, color=GDC),
-                    label(r"gradient descent on $(w_1, w_2/4)$: \ the same loss", font_size=20, color=C.SURPRISE))
+                    label(r"gradient descent on $(w_1, 4w_2)$: \ the same loss", font_size=20, color=C.SURPRISE))
         lg.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.15)
         rows = [
             cmath(r"\Delta^*", "=", r"\arg\min_{\|\Delta\|_M \le \epsilon}\; g^\top \Delta", font_size=34),
@@ -47,7 +47,7 @@ class Natural(VoiceoverScene):
         keep_in_frame(mi)
         with self.voiceover(
             "Gradient descent has a hidden assumption. <bookmark mark='a'/> Take Chapter three's two-weight loss, and "
-            "write the second weight a quarter as large: the same model, the same loss, a new label on one axis. "
+            "write the second weight four times as large: the same model, the same loss, a new label on one axis. "
             "Gradient descent now takes a different path, because the steepest direction depends on how you measure "
             "a step. <bookmark mark='b'/> In general, the steepest step under a ruler M is minus M inverse times "
             "the gradient. <bookmark mark='c'/> Gradient descent is the choice M equals the identity: every weight "
@@ -87,8 +87,8 @@ class Natural(VoiceoverScene):
         ax, cont, star = loss_axes(d, center=(3.6, 1.0), width=4.4)
         q1 = VMobject(color=NGC, stroke_width=5).set_points_as_corners([ax.c2p(*p) for p in np.asarray(n["path_ng_1"])])
         q4 = DashedVMobject(VMobject(color=WHITE, stroke_width=2.5).set_points_as_corners(
-            [ax.c2p(*p) for p in np.asarray(n["path_ng_4"])]), num_dashes=30)
-        same = float(np.abs(np.asarray(n["path_ng_1"]) - np.asarray(n["path_ng_4"])).max())
+            [ax.c2p(*p) for p in np.asarray(n["path_ng_0.25"])]), num_dashes=30)
+        same = float(np.abs(np.asarray(n["path_ng_1"]) - np.asarray(n["path_ng_0.25"])).max())
         lg = VGroup(label(r"natural gradient, \ both ways of writing the weights", font_size=18, color=NGC),
                     label(r"largest gap between the two paths: \ $" + (sci(same, 0) if same > 0 else "0") + "$",
                           font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
@@ -103,12 +103,11 @@ class Natural(VoiceoverScene):
             "inverse g. <bookmark mark='d'/> On our two-weight loss, written both ways, its two paths are one path. "
             "It sees the model, not the coordinates."
         ) as vo:
-            self.play(FadeIn(hist, shift=RIGHT * 0.2))
+            self.play(FadeIn(hist, shift=RIGHT * 0.2), Create(cont), FadeIn(star))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(Write(rows[k]), FadeIn(notes[k]))
             vo.wait_until("d")
-            self.play(Create(cont), FadeIn(star))
             self.play(Create(q1), Create(q4), FadeIn(lg), run_time=2)
         self.wait(0.3)
         self.clear_scene()
@@ -146,9 +145,10 @@ class Natural(VoiceoverScene):
             "That is K-FAC: Kronecker-factored approximate curvature."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cost), FadeIn(cite_))
-            for k, mk in enumerate("abcd"):
+            step(0)
+            for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
-                step(k)
+                step(k + 1)
             self.play(FadeIn(kf))
         self.wait(0.3)
         self.clear_scene()
@@ -177,7 +177,7 @@ class Natural(VoiceoverScene):
             bands.add(band(ax, ts, L.min(0), L.max(0), OPT_COLORS[o], 0.15))
             live.append(growing(ax, ts, med, t, OPT_COLORS[o], 3))
         lab = VGroup(*[label(rf"{OPT_NAMES[o]}: \ $\eta = {n[f'best_{o}']:g}$", font_size=20, color=OPT_COLORS[o]) for o in opts])
-        lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax.c2p(T, 1.0), DL, buff=0.1)
+        lab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.45, -1.7, 0])
         # decision maps: gradient descent against the natural gradient, through training
         snaps = list(n["snap_steps"])
         X, y = np.asarray(n["X"]), np.asarray(n["y"])
@@ -196,7 +196,7 @@ class Natural(VoiceoverScene):
         mh = VGroup(label(OPT_NAMES["gd"], font_size=20, color=GDC).next_to(maps["gd"][0], UP, buff=0.08),
                     label(OPT_NAMES["ng"], font_size=20, color=NGC).next_to(maps["ng"][0], UP, buff=0.08))
         stp = Integer(0, font_size=24, color=WHITE)
-        sl = VGroup(label(r"step", font_size=22, color=GREY_A), stp).arrange(RIGHT, buff=0.12).move_to([3.45, -0.25, 0])
+        sl = VGroup(label(r"step", font_size=22, color=GREY_A), stp).arrange(RIGHT, buff=0.12).move_to([3.45, -0.3, 0])
         med = {o: float(np.median(curves[o][:, -1, 1])) for o in opts}
         k100 = 100
         at100 = {o: float(np.median(curves[o][:, k100, 1])) for o in opts}

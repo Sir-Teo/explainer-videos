@@ -202,7 +202,8 @@ class Adam(VoiceoverScene):
             one = DashedLine(ax.c2p(1, 0), ax.c2p(1, 1.05), color=WHITE, stroke_width=1.5)
             xt = VGroup(*[MathTex(s_, font_size=18, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
                           for s_, v in (("0", 0), (r"\eta", 1), (r"2\eta", 2))])
-            cap = label(rf"step ${int(k_):,}$: \ median ${a[f'median{k_}']:.2f}\,\eta$".replace(",", "{,}"), font_size=20,
+            kk = f"{int(k_):,}".replace(",", "{,}")
+            cap = label(rf"step ${kk}$: \ median ${a[f'median{k_}']:.2f}\,\eta$", font_size=20,
                         color=GREY_A).next_to(xt, DOWN, buff=0.1)
             panels.add(VGroup(ax, bars, one, xt, cap))
         panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.9)
