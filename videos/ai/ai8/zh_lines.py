@@ -487,8 +487,8 @@ ZH = {
     "each trained until its training loss is equally small":
         "每个都训练到训练损失同样小为止",
 
-    "each trained until its training loss is small, or for at most":
-        "每个都训练到训练损失很小为止，或者至多训练四千轮",
+    "f\"each trained until its training loss falls below":
+        "每个都训练到训练损失低于{s['target']:g}为止；比较的是在四千轮之内达到这一点的{n_ok}个",
 
     "f'Large batches do end sharper":
         "大批量确实停在更尖锐的地方：平均{big:.1f}，而批量为4时是{small:.2f}。",
@@ -497,10 +497,10 @@ ZH = {
         "这里大批量反而停在更平坦的地方，而不是更尖锐：{big:.2f}，而批量为4时是{small:.2f}。",
 
     "f'And the sharper networks do worse":
-        "而更尖锐的网络在新的点上确实更差：秩相关系数是{rho:+.2f}。平坦极小值的说法在这里成立。",
+        "而更尖锐的网络在新的点上确实更差：秩相关系数是{rho:+.2f}。平坦极小值的说法在这里成立，不过测试误差只在{elo:.1f}%到{ehi:.1f}%之间。",
 
     "f'But the sharper networks are not the worse ones":
-        "但更尖锐的网络并不是更差的那些：尖锐度和测试误差的秩相关系数是{rho:+.2f}。{lean}",
+        "但更尖锐的网络并不是更差的那些：尖锐度和测试误差的秩相关系数是{rho:+.2f}，测试误差在{elo:.1f}%到{ehi:.1f}%之间。{lean}",
 
     "If anything, the sharper ones generalize better here.":
         "要说有什么区别，这里更尖锐的反而泛化得更好。",

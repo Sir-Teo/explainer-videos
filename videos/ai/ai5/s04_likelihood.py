@@ -147,7 +147,7 @@ class Likelihood(VoiceoverScene, ThreeDScene):
                      cmath(r"\hat\sigma^2", "=", r"\frac{1}{n}\sum_i (x_i - \hat\mu)^2", "=", rf"{s_hat:.2f}^2",
                            colors=colors, font_size=36))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UL, buff=0.45).shift(DOWN * 0.5)
-        resn = label(r"the average, \ and the average squared spread", font_size=24, color=GREY_A)
+        resn = label(r"the average, \ and the average \\ squared spread", font_size=24, color=GREY_A)
         resn.next_to(res, DOWN, buff=0.2).align_to(res, LEFT)
         for mob in (head, res, resn, legend, bx, bh, bell, bl):
             self.add_fixed_in_frame_mobjects(mob)

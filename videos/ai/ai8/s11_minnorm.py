@@ -47,7 +47,7 @@ class MinNorm(VoiceoverScene, ThreeDScene):
         for mob in (t1, t2, t3, tag):
             self.add_fixed_in_frame_mobjects(mob)
             self.remove(mob)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-30 * DEGREES, zoom=0.8)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-30 * DEGREES, zoom=1.1)
         with self.voiceover(
             "When a model has more weights than training examples, it can usually fit them all exactly, in "
             "infinitely many ways. Three weights and two equations: <bookmark mark='a'/> every point on this line "

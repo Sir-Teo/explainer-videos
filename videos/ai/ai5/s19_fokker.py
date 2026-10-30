@@ -189,7 +189,7 @@ class FokkerPlanck(VoiceoverScene):
                 arrows.add(Arrow(base, base + RIGHT * L, buff=0, color=SCORE, stroke_width=3,
                                  max_tip_length_to_length_ratio=0.4))
         al = label(r"the score points uphill: \ toward where data is likelier", font_size=26, color=SCORE)
-        al.next_to(ax, DOWN, buff=0.6)
+        al.next_to(ax, DOWN, buff=0.85)
         with self.voiceover(
             "Can the film run backwards, from the bell to the data? In 1982 Brian Anderson showed that, reversed in "
             "time, it is another stochastic differential equation, with one extra term: <bookmark mark='a'/> the "

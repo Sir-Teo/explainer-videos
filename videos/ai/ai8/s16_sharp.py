@@ -63,7 +63,12 @@ class Sharpness(VoiceoverScene):
         s = load("sharp")
         lam, err, B = np.asarray(s["lam"]), np.asarray(s["err"]), np.asarray(s["B"])
         lr = np.asarray(s["lr"])
-        rho = float(s["rho"])
+        ok = np.asarray(s["tr_loss"]) < float(s["target"])  # the runs that reached the common training loss
+        n_ok = int(ok.sum())
+        from scipy.stats import spearmanr
+
+        rho = float(spearmanr(lam[ok], err[ok]).statistic)
+        elo, ehi = 100 * float(err[ok].min()), 100 * float(err[ok].max())
         lo, hi = math.floor(math.log10(lam.min()) * 2) / 2, math.ceil(math.log10(lam.max()) * 2) / 2
         e0, e1 = math.floor(err.min() * 100) / 100 - 0.01, math.ceil(err.max() * 100) / 100 + 0.01
         G = axes([lo, hi], [e0, e1], x_length=6.4, y_length=4.4, xticks=[v for v in np.arange(lo, hi + 1e-9, 0.5)],
@@ -72,32 +77,35 @@ class Sharpness(VoiceoverScene):
                  ylabel=r"error on new points", center=(-2.6, -0.5, 0))
         ax = G.ax
         dots = VGroup(*[Dot(ax.c2p(math.log10(a), b), radius=0.09 if l_ > 0.05 else 0.055, color=BCOL[int(bb)])
-                        for a, b, bb, l_ in zip(lam, err, B, lr)])
+                        if k else Circle(radius=0.08, color=BCOL[int(bb)], stroke_width=2).move_to(ax.c2p(math.log10(a), b))
+                        for a, b, bb, l_, k in zip(lam, err, B, lr, ok)])
         key = VGroup(*[VGroup(Dot(color=c_), label(rf"batch ${b_}$", font_size=20, color=c_)).arrange(RIGHT, buff=0.12)
                        for b_, c_ in BCOL.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         key.add(label(r"large: \ step $0.1$; \ small: \ $0.02$", font_size=18, color=GREY_B))
+        if n_ok < len(ok):
+            key.add(label(r"hollow: \ did not reach the target", font_size=18, color=GREY_B))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(G, RIGHT, buff=0.35).align_to(G, UP)
         setup = label(rf"$10 \to 256 \to 2$ networks, \ ${s['n']}$ points labelled by a teacher network; \ each "
                       rf"trained until its training loss is below ${s['target']:g}$", font_size=21, color=GREY_A)
         setup.to_edge(UP, buff=0.3)
-        res = label(rf"rank correlation: \ ${rho:+.2f}$", font_size=28, color=WHITE).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
-        big, small = lam[B == max(BCOL)].mean(), lam[B == min(BCOL)].mean()
-        ebig, esmall = err[B == max(BCOL)].mean(), err[B == min(BCOL)].mean()
+        res = label(rf"rank correlation: \ ${rho:+.2f}$ \ (${n_ok}$ runs)", font_size=26, color=WHITE).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        big, small = lam[(B == max(BCOL)) & ok].mean(), lam[(B == min(BCOL)) & ok].mean()
         flat_better = rho > 0.3
         reached = bool(np.all(np.asarray(s["tr_loss"]) < float(s["target"])))
         fit = ("each trained until its training loss is equally small" if reached else
-               "each trained until its training loss is small, or for at most four thousand epochs")
+               f"each trained until its training loss falls below {s['target']:g}; the {n_ok} that got there within "
+               "four thousand epochs are compared")
         batches = (f"Large batches do end sharper: on average {big:.1f} against {small:.2f} for batches of four. "
                    if big > small else
                    f"Here large batches end flatter, not sharper: {big:.2f} against {small:.2f} for batches of four. ")
         if flat_better:
             corr = (f"And the sharper networks do worse on new points: a rank correlation of {rho:+.2f}. The "
-                    "flat-minima story holds here. ")
+                    f"flat-minima story holds here, though the test errors span only {elo:.1f} to {ehi:.1f} percent. ")
         else:
             lean = ("If anything, the sharper ones generalize better here. " if rho < -0.3 else
                     "Sharpness tells us almost nothing here. ")
             corr = ("But the sharper networks are not the worse ones: the rank correlation between sharpness and "
-                    f"test error is {rho:+.2f}. {lean}")
+                    f"test error is {rho:+.2f}, with test errors from {elo:.1f} to {ehi:.1f} percent. {lean}")
         with self.voiceover(
             f"Test it, small. {len(lam)} networks learn from {s['n']} points labelled by a teacher network, with "
             f"four batch sizes, two step sizes and three seeds, {fit}. Sharpness is the largest eigenvalue of the "

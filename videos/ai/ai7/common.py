@@ -156,7 +156,7 @@ def era_strip(events, y0=1900, y1=2026, width=12.6, y=0.0, font_size=19) -> VGro
     for yr, text, row in events:
         d = Dot([X(yr), y, 0], radius=0.06, color=C.HUMAN)
         t = label(rf"{yr}\\ {text}", font_size=font_size, color=WHITE)
-        stem = Line([X(yr), y, 0], [X(yr), y + row * (0.45 + 1.0 * (abs(row) - 1)), 0], color=GREY_D, stroke_width=1.5)
+        stem = Line([X(yr), y, 0], [X(yr), y + np.sign(row) * (0.45 + 1.0 * (abs(row) - 1)), 0], color=GREY_D, stroke_width=1.5)
         t.next_to(stem.get_end(), UP if row > 0 else DOWN, buff=0.06)
         items.append(VGroup(d, stem, t))
     return base, items

@@ -62,6 +62,7 @@ class BaumWelch(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
+            self.play(FadeOut(em))
             step(3)
         self.wait(0.3)
         self.clear_scene()
