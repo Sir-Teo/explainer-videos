@@ -150,6 +150,8 @@ class KVCache(VoiceoverScene):
         res = label(rf"${gib(pt['mla_full'])}$ $\to$ ${gib(pt['mla'])}$ a token: \ ${ratio:.0f}\times$ less", font_size=28,
                     color=C.BITS).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.5)
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-V2} (2024): \ multi-head latent attention", corner=DL)
+        mhead = label(r"multi-head latent attention: \ cache a short summary, \ not the keys and values", font_size=28)
+        mhead.to_edge(UP, buff=0.35).to_edge(LEFT, buff=0.5)
 
         with self.voiceover(
             "DeepSeek's trick is multi-head latent attention. A latent is a short hidden summary from which the "
@@ -160,13 +162,13 @@ class KVCache(VoiceoverScene):
             "matrix can be folded into the query, part three's linear algebra, so attention reads the latent directly. "
             f"<bookmark mark='d'/> Against full attention of the same shape, that's {ratio:.0f} times less memory."
         ) as vo:
-            self.play(FadeIn(h), FadeIn(hl), FadeIn(cite_))
+            self.play(FadeIn(h), FadeIn(hl), FadeIn(cite_), FadeIn(mhead))
             vo.wait_until("a")
             self.play(GrowArrow(a1), FadeIn(l1), FadeIn(c), FadeIn(cl))
             vo.wait_until("b")
             self.play(GrowArrow(a2), GrowArrow(a3), FadeIn(l2), FadeIn(l3), FadeIn(kk), FadeIn(vv), FadeIn(kl), FadeIn(vl))
             vo.wait_until("c")
-            self.play(Write(f), FadeIn(fl))
+            self.play(FadeOut(mhead), Write(f), FadeIn(fl))
             vo.wait_until("d")
             self.play(FadeIn(res))
         self.wait(0.3)

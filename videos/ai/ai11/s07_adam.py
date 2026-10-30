@@ -250,6 +250,26 @@ class Adam(VoiceoverScene):
                        label(r"every weight moves by $\pm\eta$: \ a smaller $\eta$, \ a larger decay $\lambda$", font_size=22,
                              color=LI)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -2.2, 0])
         keep_in_frame(notes)
+        a = load("adamview")
+        h = np.asarray(a["hist1000"], float)
+        h = h / h.max()
+        ax = CornerAxes(x_range=[0, 2, 0.5], y_range=[0, 1.05, 0.5], x_length=4.2, y_length=2.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        w = ax.c2p(0.05, 0)[0] - ax.c2p(0, 0)[0]
+        bars = VGroup(*[Rectangle(width=w * 0.9, height=max(1e-3, ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]), stroke_width=0,
+                                  fill_color=AD, fill_opacity=0.55).move_to(ax.c2p(0.025 + 0.05 * i, v / 2))
+                        for i, v in enumerate(h)])
+        spike = Rectangle(width=w * 0.9, height=ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=LI,
+                          fill_opacity=0.95).move_to(ax.c2p(1, 0.5))
+        xt = VGroup(*[MathTex(s_, font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for s_, v in (("0", 0), (r"\eta", 1), (r"2\eta", 2))])
+        ttl = label(r"how far each weight moves, \ $|\Delta\theta|$", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.2)
+        lg = VGroup(label(r"Adam at step $1{,}000$ \ (computed above)", font_size=19, color=AD),
+                    label(r"Lion: \ every weight $\pm\eta$, \ by construction", font_size=19, color=LI)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, DOWN, buff=0.45)
+        view = VGroup(ax, bars, spike, xt, ttl, lg).move_to([3.5, 0.9, 0])
+        notes.next_to(view, DOWN, buff=0.4).set_x(3.4)
+        keep_in_frame(notes)
         with self.voiceover(
             "That limit became an optimizer. <bookmark mark='a'/> In 2023 a team at Google let a computer search "
             "over programs for update rules, and the winner, after simplification, was Lion: move every weight by "
@@ -261,6 +281,8 @@ class Adam(VoiceoverScene):
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rows[0]))
             vo.wait_until("a")
             self.play(Write(rows[1]))
+            self.play(Create(ax), FadeIn(ttl), FadeIn(xt), FadeIn(bars), FadeIn(lg[0]))
+            self.play(GrowFromEdge(spike, DOWN), FadeIn(lg[1]))
             vo.wait_until("b")
             self.play(Write(rows[2]))
             vo.wait_until("c")

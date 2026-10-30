@@ -244,10 +244,9 @@ class Race(VoiceoverScene):
             f"{steps[3]:,}, most of it is word-shaped, <bookmark mark='d'/> and by the end, at {b1[-1]:.2f} bits for "
             + said1
         ) as vo:
-            self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()])
+            self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()], *[FadeIn(cur[n][0]) for n in names])
             self.add(*bits.values(), cnt)
             vo.wait_until("a")
-            self.play(*[FadeIn(cur[n][0]) for n in names])
             self.play(*[AddTextLetterByLetter(line_) for n in names for line_ in cur[n][1:]], run_time=1.5)
             for k, mk in zip(range(1, len(steps)), ("b", None, "c", "d")):
                 if mk:
@@ -267,12 +266,12 @@ class Race(VoiceoverScene):
         ms = {o: float(r[f"ms_{o}"]) for o in opts}
         base = ms["adamw"]
         top = max(ms.values()) * 1.15
-        ax = CornerAxes(x_range=[0, len(opts), 1], y_range=[0, top, top / 4], x_length=7.0, y_length=3.8, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.4, -0.3, 0])
+        ax = CornerAxes(x_range=[0, len(opts), 1], y_range=[0, top, top / 4], x_length=9.5, y_length=4.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -0.1, 0])
         bars, labs = VGroup(), VGroup()
         for i, o in enumerate(opts):
             h = ax.c2p(0, ms[o])[1] - ax.c2p(0, 0)[1]
-            b = Rectangle(width=0.7, height=max(h, 0.01), stroke_width=0, fill_color=OPT_COLORS[o], fill_opacity=0.9)
+            b = Rectangle(width=0.95, height=max(h, 0.01), stroke_width=0, fill_color=OPT_COLORS[o], fill_opacity=0.9)
             b.move_to(ax.c2p(i + 0.5, ms[o] / 2))
             bars.add(b)
             nm = r"SGD $+$ \\ momentum" if o == "sgdm" else OPT_NAMES[o]
