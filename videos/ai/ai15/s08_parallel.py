@@ -196,7 +196,7 @@ class Parallel(VoiceoverScene):
             "big matrix products instead of sixty-four waits in a row. With them, a chunk's outputs and its final memory are just matrix products, and the "
             "decay of the gated version folds into the same form. <bookmark mark='d'/> We checked it on our "
             f"computer: for {T} random tokens, step by step and chunk by chunk agree to rounding error, with "
-            f"{nC} sequential steps instead of {T}. " + speed + " That's how Qwen3-Next and Kimi Linear were trained."
+            f"{nC} sequential steps instead of {T}. {speed} That's how Qwen3-Next and Kimi Linear were trained."
         ) as vo:
             for m_ in (f1, l1, f2, l2):  # the two formulas this block arrives at, faint until then
                 m_.set_opacity(0.15)

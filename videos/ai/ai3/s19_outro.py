@@ -20,7 +20,7 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def tiles(self):
         """The part in twelve pictures, each drawn from its own computed result."""
-        TW, TH = 1.95, 1.3
+        TW, TH = 2.05, 1.75
         mk = lambda xr, yr: Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,  # noqa: E731
                                  axis_config={"stroke_color": GREY_D, "include_ticks": False})
         out = []

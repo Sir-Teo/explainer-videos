@@ -86,7 +86,10 @@ class Retrieval(VoiceoverScene):
                    colors=colors, font_size=30).next_to(f1, DOWN, buff=0.3)
         ctx = said(ex["context"] + " ...", chars=48, font_size=19, max_lines=2, box_color=Q)
         cl = label(r"from the passage: \ the context so far", font_size=18, color=Q)
-        cg = VGroup(cl, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-4.1, -0.9, 0])
+        cg = VGroup(cl, ctx).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        if cg.width > 4.3:
+            cg.width = 4.3
+        cg.move_to([-4.65, -0.9, 0])
         gg = np.random.default_rng(7)
         store = VGroup()
         for i_, w in enumerate(ex["neighbours"]):
