@@ -27,9 +27,9 @@ class DAgger(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def algorithm(self):
-        steps = VGroup(node_box(r"the learner drives", DAG, 24), node_box(r"the expert labels \\ every state it "
-                                                                         r"visited", EXPERT, 24),
-                       node_box(r"add them to \\ all the data so far", GREY_B, 24), node_box(r"retrain", DAG, 24))
+        steps = VGroup(node_box(r"the learner drives", DAG, 28), node_box(r"the expert labels \\ every state it "
+                                                                         r"visited", EXPERT, 28),
+                       node_box(r"add them to \\ all the data so far", GREY_B, 28), node_box(r"retrain", DAG, 28))
         steps.arrange(RIGHT, buff=0.6).move_to([0, 1.2, 0])
         if steps.width > 13.0:
             steps.width = 13.0
@@ -40,8 +40,8 @@ class DAgger(VoiceoverScene):
         thm = theorem_card(r"DAgger", r"for $i = 1, \ldots, N$: \ drive with $\pi_i$ \ (mixed with the expert at first), \ "
                            r"collect the states, \ label them with $\pi^*$, \ $\mathcal D \leftarrow \mathcal D \cup "
                            r"\{(s, \pi^*(s))\}$, \ $\pi_{i+1} \leftarrow$ supervised learning on $\mathcal D$",
-                           who=r"Ross, Gordon \& Bagnell (2011): \ dataset aggregation", width=10.6, color=DAG,
-                           kind=r"Algorithm").move_to([0, -1.9, 0])
+                           who=r"Ross, Gordon \& Bagnell (2011): \ dataset aggregation", width=11.6, color=DAG,
+                           kind=r"Algorithm", font_size=27).move_to([0, -1.6, 0])
         with self.voiceover(
             "The cure, from Stéphane Ross, Geoff Gordon and Drew Bagnell in 2011, is to ask the expert about the "
             "learner's own mistakes. <bookmark mark='a'/> Let the learner drive. <bookmark mark='b'/> Afterwards, "
@@ -50,9 +50,9 @@ class DAgger(VoiceoverScene):
             "drive again. They called it DAgger, for dataset aggregation. Each round, the data moves towards the "
             "states the learner actually reaches, including the ones off the road."
         ) as vo:
-            self.play(FadeIn(thm, shift=UP * 0.15))
+            self.play(FadeIn(thm, shift=UP * 0.15), FadeIn(steps[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
+            self.play(Indicate(steps[0], color=DAG))
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
                 self.play(GrowArrow(arr[k]), FadeIn(steps[k + 1]))
@@ -99,7 +99,7 @@ class DAgger(VoiceoverScene):
             vo.wait_until("b")
             cur = None
             for k in range(len(drives)):
-                dr = view.drive(drives[k], DAG, 2.5)
+                dr = view.drive(drives[k], WHITE, 3.5)
                 new = table_strip(view, hist[k + 1][:S], hist[k + 1][S:], color=DAG)
                 anims = [Create(dr), rl[1].animate.set_value(k + 2)]
                 if cur is not None:
@@ -209,13 +209,13 @@ class DAgger(VoiceoverScene):
     def practice(self):
         cards = VGroup(
             history_card(r"the catch", r"an expert on call", r"someone must label the learner's mistakes: \ hard for "
-                         r"a human driver at speed, \ easy for a program", width=4.2, color=HIST, font_size=21),
+                         r"a human driver at speed, \ easy for a program", width=4.3, color=HIST, font_size=25),
             history_card(r"2019", r"HG-DAgger \ (Kelly et al.)", r"the human takes over only when the learner drifts, "
-                         r"\ and those corrections become the data", width=4.2, color=HIST, font_size=21),
+                         r"\ and those corrections become the data", width=4.3, color=HIST, font_size=25),
             history_card(r"Part 27", r"on-policy distillation", r"a student writes, \ the teacher scores the student's "
-                         r"own tokens: \ DAgger for language models", width=4.2, color=HIST, font_size=21),
-        ).arrange(RIGHT, buff=0.25).move_to([0, 0.9, 0])
-        tail = label(r"learn from where you actually end up, \ not only from where the expert goes", font_size=28,
+                         r"own tokens: \ DAgger for language models", width=4.3, color=HIST, font_size=25),
+        ).arrange(RIGHT, buff=0.25).move_to([0, 0.7, 0])
+        tail = label(r"learn from where you actually end up, \ not only from where the expert goes", font_size=32,
                      color=DAG).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "DAgger has a price: an expert on call to label the learner's states. <bookmark mark='a'/> A person "

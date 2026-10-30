@@ -334,40 +334,39 @@ def compute_audrey(cache):
 
 
 # ---------------------------------------------------------------------------
-# A small neural codec: convolutions, residual vector quantization, quantizer dropout
+# A small neural codec of Whisper's log-mel picture: convolutions, residual vector quantization, quantizer dropout.
+# (A waveform codec of this size, trained for an hour on this CPU, learned only the average spectrum: Whisper could
+# not understand a word of it. Coding the mel picture keeps the encoder, the RVQ and the quantizer dropout of
+# SoundStream and EnCodec and leaves out the vocoder, the part that needs the most compute; Whisper reads the picture
+# directly, so we can still ask whether the codes keep what was said.)
 # ---------------------------------------------------------------------------
 CODEC_STAGES = 8
 CODEC_K = 256
 CODEC_D = 64
-CODEC_STEPS = 3000
+CODEC_STEPS = 4000
 CODEC_SEEDS = [0, 1]
-CODEC_CROP = 8000
-CODEC_HZ = SR // 320  # 50 frames a second
+CODEC_CROP = 200  # mel frames: 2 s
+CODEC_BATCH = 16
+CODEC_HZ = 50  # code frames a second: the 100 mel frames a second, halved
+MEL_FLOAT_BPS = 80 * 100 * 32  # the picture itself, as 32-bit floats
 
 
-def codec_nets(C=8, D=CODEC_D):
+def codec_nets(C=192, D=CODEC_D):
     import torch.nn as nn
 
     class Res(nn.Module):
         def __init__(s, c, dil):
             super().__init__()
-            s.b = nn.Sequential(nn.ELU(), nn.Conv1d(c, c, 7, padding=3 * dil, dilation=dil), nn.ELU(), nn.Conv1d(c, c, 1))
+            s.b = nn.Sequential(nn.GELU(), nn.Conv1d(c, c, 3, padding=dil, dilation=dil), nn.GELU(), nn.Conv1d(c, c, 1))
 
         def forward(s, x):
             return x + s.b(x)
 
-    enc, c = [nn.Conv1d(1, C, 7, padding=3)], C
-    for st in (2, 4, 5, 8):
-        enc += [Res(c, 1), Res(c, 3), nn.ELU(), nn.Conv1d(c, 2 * c, 2 * st, stride=st, padding=st // 2 + st % 2)]
-        c *= 2
-    enc += [nn.ELU(), nn.Conv1d(c, D, 3, padding=1)]
-    dec = [nn.Conv1d(D, c, 7, padding=3)]
-    for st in (8, 5, 4, 2):
-        dec += [nn.ELU(), nn.ConvTranspose1d(c, c // 2, 2 * st, stride=st, padding=st // 2 + st % 2,
-                                             output_padding=st % 2), Res(c // 2, 1), Res(c // 2, 3)]
-        c //= 2
-    dec += [nn.ELU(), nn.Conv1d(c, 1, 7, padding=3), nn.Tanh()]
-    return nn.Sequential(*enc), nn.Sequential(*dec)
+    enc = nn.Sequential(nn.Conv1d(80, C, 3, padding=1), Res(C, 1), nn.GELU(), nn.Conv1d(C, C, 4, stride=2, padding=1),
+                        Res(C, 1), Res(C, 2), nn.GELU(), nn.Conv1d(C, D, 1))
+    dec = nn.Sequential(nn.Conv1d(D, C, 3, padding=1), Res(C, 1), Res(C, 2), nn.GELU(),
+                        nn.ConvTranspose1d(C, C, 4, stride=2, padding=1), Res(C, 1), nn.GELU(), nn.Conv1d(C, 80, 3, padding=1))
+    return enc, dec
 
 
 class RVQ:
@@ -383,6 +382,7 @@ class RVQ:
         self.sum_ = [c.clone() for c in self.C]
         self.idle = [torch.zeros(K) for _ in range(n)]
         self.K = K
+        self.started = [False] * n
 
     def __call__(self, z, n_q, train=True):
         """z: (N, D).  Returns the quantized sum (straight-through), the codes (N, n_q) and the commitment loss."""
@@ -391,6 +391,12 @@ class RVQ:
 
         res, total, codes, commit = z, torch.zeros_like(z), [], 0.0
         for s in range(n_q):
+            if train and not self.started[s]:  # start each codebook from residuals, as k-means would
+                with torch.no_grad():
+                    pick = torch.randint(0, len(res), (self.K,), generator=self.g)
+                    self.C[s] = res.detach()[pick].clone()
+                    self.sum_[s] = self.C[s].clone()
+                    self.started[s] = True
             C = self.C[s]
             d = (res * res).sum(1, keepdim=True) - 2 * res @ C.T + (C * C).sum(1)[None]
             k = d.argmin(1)
@@ -417,42 +423,35 @@ class RVQ:
         return z + (total - z).detach(), torch.stack(codes, 1), commit
 
     def state(self):
-        return dict(C=self.C, n=self.n_, sum=self.sum_, idle=self.idle, g=self.g.get_state())
+        return dict(C=self.C, n=self.n_, sum=self.sum_, idle=self.idle, g=self.g.get_state(), started=self.started)
 
     def load(self, st):
         self.C, self.n_, self.sum_, self.idle = st["C"], st["n"], st["sum"], st["idle"]
+        self.started = st["started"]
         self.g.set_state(st["g"])
 
 
-def spec_loss(x, y):
-    import torch
-
-    tot = 0.0
-    for n in (128, 256, 512, 1024):
-        w = torch.hann_window(n)
-        X = torch.stft(x, n, n // 4, window=w, return_complex=True).abs()
-        Y = torch.stft(y, n, n // 4, window=w, return_complex=True).abs()
-        tot = tot + (torch.log(X + 1e-5) - torch.log(Y + 1e-5)).abs().mean() + \
-            torch.linalg.norm(X - Y) / (torch.linalg.norm(X) + 1e-7)
-    return tot / 4
-
-
 def codec_data(cache):
-    tr = [a for v in VOICES_TRAIN for k, t, s, a in clips(cache, v) if k in ("sentence", "string")]
-    te = [(t, a) for v in VOICES_TEST for k, t, s, a in clips(cache, v, "sentence")]
+    """Log-mel pictures (Whisper's own scaling) of the ten training voices' sentences and digit strings, and the
+    held-out voices' sentences."""
+    tr = [whisper_logmel(a, pad_to=0).astype(np.float32) for v in VOICES_TRAIN for k, t, s, a in clips(cache, v)
+          if k in ("sentence", "string")]
+    te = [(t, whisper_logmel(a, pad_to=0).astype(np.float32)) for v in VOICES_TEST for k, t, s, a in clips(cache, v, "sentence")]
     return tr, te
 
 
-def encode_decode(enc, dec, rvq, a, n_q):
+def encode_decode(enc, dec, rvq, M, n_q):
+    """A mel picture (80, T) through the codec with n_q stages: (the rebuilt picture, the codes (T/2, n_q))."""
     import torch
 
     with torch.no_grad():
-        n = int(math.ceil(len(a) / 320) * 320)
-        x = torch.tensor(np.pad(a, (0, n - len(a))), dtype=torch.float32)[None, None]
+        T = M.shape[1]
+        n = T + T % 2
+        x = torch.tensor(np.pad(M, ((0, 0), (0, n - T)), mode="edge"))[None]
         z = enc(x)
         zf = z.permute(0, 2, 1).reshape(-1, CODEC_D)
         q, codes, _ = rvq(zf, n_q, train=False)
-        y = dec(q.reshape(1, -1, CODEC_D).permute(0, 2, 1))[0, 0, :len(a)].numpy()
+        y = dec(q.reshape(1, -1, CODEC_D).permute(0, 2, 1))[0, :, :T].numpy()
     return y, codes.numpy()
 
 
@@ -464,17 +463,18 @@ def train_codec(cache, seed, log=print):
     torch.manual_seed(seed)
     enc, dec = codec_nets()
     rvq = RVQ(seed)
-    opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=1e-3)
+    params = [*enc.parameters(), *dec.parameters()]
+    opt = torch.optim.Adam(params, lr=1e-3)
     g = rng(500 + seed)
     steps = max(30, int(CODEC_STEPS * SCALE))
-    checks = sorted({min(c, steps) for c in (0, 100, 300, 800, 1600, 3000)})
+    checks = sorted({min(c, steps) for c in (0, 100, 300, 1000, 2000, 4000)})
     ex_text, ex = te[0]
     ckpt = cache.dir / "models" / f"codec_s{seed}.ckpt"
     ckpt.parent.mkdir(parents=True, exist_ok=True)
     start, curve, snaps = 0, [], []
     if ckpt.exists():
         ck = torch.load(ckpt, weights_only=False)
-        if ck["steps"] == steps:
+        if ck.get("steps") == steps and ck.get("kind") == "mel":
             enc.load_state_dict(ck["enc"])
             dec.load_state_dict(ck["dec"])
             opt.load_state_dict(ck["opt"])
@@ -485,45 +485,47 @@ def train_codec(cache, seed, log=print):
             log(f"    codec seed {seed}: resuming at step {start}")
     t0 = time.time()
     for step in range(start, steps + 1):
-        if step % 250 == 0 and step > start:
+        if step % 500 == 0 and step > start:
             tmp = ckpt.with_suffix(".tmp")
-            torch.save(dict(enc=enc.state_dict(), dec=dec.state_dict(), opt=opt.state_dict(), rvq=rvq.state(),
+            torch.save(dict(kind="mel", enc=enc.state_dict(), dec=dec.state_dict(), opt=opt.state_dict(), rvq=rvq.state(),
                             g=g.bit_generator.state, torch=torch.get_rng_state(), step=step, curve=curve, snaps=snaps,
                             steps=steps), tmp)
             tmp.replace(ckpt)
         if step in checks and not any(s_[0] == step for s_ in snaps):
-            y, _ = encode_decode(enc, dec, rvq, ex, CODEC_STAGES)
-            snaps.append((step, whisper_logmel(y, pad_to=0)[:, :400].astype(np.float32)))
+            y, _ = encode_decode(enc, dec, rvq, ex, CODEC_STAGES) if step else (np.full_like(ex, float(ex.mean())), None)
+            snaps.append((step, y[:, :400].astype(np.float32)))
         if step == steps:
             break
         xs = []
-        for _ in range(8):
-            a = tr[int(g.integers(len(tr)))]
-            if len(a) <= CODEC_CROP:
-                a = np.pad(a, (0, CODEC_CROP + 1 - len(a)))
-            s0 = int(g.integers(0, len(a) - CODEC_CROP))
-            xs.append(a[s0:s0 + CODEC_CROP] * g.uniform(0.6, 1.0))
-        x = torch.tensor(np.stack(xs), dtype=torch.float32)[:, None]
+        for _ in range(CODEC_BATCH):
+            M = tr[int(g.integers(len(tr)))]
+            if M.shape[1] <= CODEC_CROP:
+                M = np.pad(M, ((0, 0), (0, CODEC_CROP + 1 - M.shape[1])), mode="edge")
+            s0 = int(g.integers(0, M.shape[1] - CODEC_CROP))
+            xs.append(M[:, s0:s0 + CODEC_CROP])
+        x = torch.tensor(np.stack(xs))
         n_q = int(g.integers(1, CODEC_STAGES + 1))  # quantizer dropout: one model for every bitrate
         z = enc(x)
         zf = z.permute(0, 2, 1).reshape(-1, CODEC_D)
         q, _, commit = rvq(zf, n_q)
-        y = dec(q.reshape(len(x), -1, CODEC_D).permute(0, 2, 1))[..., :CODEC_CROP]
-        sl = spec_loss(x[:, 0], y[:, 0])
-        loss = sl + 0.1 * (x - y).abs().mean() + 0.25 * commit
+        y = dec(q.reshape(len(x), -1, CODEC_D).permute(0, 2, 1))
+        rec = (x - y).abs().mean()
+        loss = rec + 0.25 * commit
+        for gr in opt.param_groups:  # warm up, then a cosine down to a tenth
+            gr["lr"] = 1e-3 * min(1.0, (step + 1) / 200) * (0.55 + 0.45 * math.cos(math.pi * step / steps))
         opt.zero_grad()
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(params, 1.0)
         opt.step()
         if step % 25 == 0:
-            curve.append([step, float(sl), n_q])
+            curve.append([step, float(rec), n_q])
         if step % 500 == 0:
-            log(f"    codec seed {seed}: step {step}/{steps}, spectral loss {float(sl):.3f}, "
+            log(f"    codec seed {seed}: step {step}/{steps}, mel error {float(rec):.3f} ({n_q} stages), "
                 f"{(time.time() - t0) / max(1, step - start + 1):.2f} s/step")
     return enc, dec, rvq, curve, snaps, (ckpt, steps)
 
 
-def mel_distance(a, b):
-    A, B = whisper_logmel(a, pad_to=0), whisper_logmel(b, pad_to=0)
+def mel_distance(A, B):
     m = min(A.shape[1], B.shape[1])
     return float(np.abs(A[:, :m] - B[:, :m]).mean())
 
@@ -531,31 +533,29 @@ def mel_distance(a, b):
 def compute_codec(cache):
     tr, te = codec_data(cache)
     stages = [1, 2, 4, 8]
-    part = cache.partial("codec", dict(steps=int(CODEC_STEPS * SCALE), seeds=CODEC_SEEDS, stages=stages, v=2))
+    part = cache.partial("codec", dict(kind="mel", steps=int(CODEC_STEPS * SCALE), seeds=CODEC_SEEDS, stages=stages, v=3))
     n_wer = min(len(te), max(2, int(12 * min(1, SCALE * 4))))
     refs = [t for t, _ in te[:n_wer]]
     for seed in CODEC_SEEDS:
         key = f"s{seed}"
         if key in part:
             continue
+        t0 = time.time()
         enc, dec, rvq, curve, snaps, (ckpt, steps) = train_codec(cache, seed)
+        secs = time.time() - t0
         rows = {}
         for nq in stages:
-            outs = [encode_decode(enc, dec, rvq, a, nq) for _, a in te]
-            rows[str(nq)] = dict(mel=float(np.mean([mel_distance(a, y) for (_, a), (y, _) in zip(te, outs)])),
-                                 hyps=transcribe([y for y, _ in outs[:n_wer]]))
-        piece = dict(curve=curve, rows=rows, snaps=[[s_, m.tolist()] for s_, m in snaps])
+            outs = [encode_decode(enc, dec, rvq, M, nq) for _, M in te]
+            rows[str(nq)] = dict(mel=float(np.mean([mel_distance(M, y) for (_, M), (y, _) in zip(te, outs)])),
+                                 hyps=transcribe_mel([y for y, _ in outs[:n_wer]]))
+        piece = dict(curve=curve, rows=rows, snaps=[[s_, m.tolist()] for s_, m in snaps], seconds=secs)
         if seed == CODEC_SEEDS[0]:
             ex_t, ex = te[0]
-            piece["example"] = dict(text=ex_t, orig=whisper_logmel(ex, pad_to=0)[:, :400].tolist(),
-                                    rec={str(nq): whisper_logmel(encode_decode(enc, dec, rvq, ex, nq)[0], pad_to=0)[:, :400].tolist()
-                                         for nq in stages},
+            piece["example"] = dict(text=ex_t, orig=ex[:, :400].tolist(),
+                                    rec={str(nq): encode_decode(enc, dec, rvq, ex, nq)[0][:, :400].tolist() for nq in stages},
                                     codes=encode_decode(enc, dec, rvq, ex, CODEC_STAGES)[1].tolist())
+            allc = np.concatenate([encode_decode(enc, dec, rvq, M, CODEC_STAGES)[1] for _, M in te])
             usage = []
-            import torch
-
-            with torch.no_grad():
-                allc = np.concatenate([encode_decode(enc, dec, rvq, a, CODEC_STAGES)[1] for _, a in te])
             for s in range(CODEC_STAGES):
                 cnt = np.bincount(allc[:, s], minlength=CODEC_K)
                 p = cnt / cnt.sum()
@@ -564,13 +564,15 @@ def compute_codec(cache):
             piece["params"] = int(sum(p.numel() for p in enc.parameters()) + sum(p.numel() for p in dec.parameters()))
         part[key] = piece
         ckpt.unlink(missing_ok=True)
-    orig_hyps = transcribe([a for _, a in te[:n_wer]])
+    orig_hyps = transcribe_mel([M for _, M in te[:n_wer]])
     out = dict(stages=stages, hz=CODEC_HZ, bits=int(math.log2(CODEC_K)), seeds=CODEC_SEEDS, refs=refs,
                orig_hyps=orig_hyps, orig_wer=wer_many(refs, orig_hyps), n_test=len(te), n_wer=n_wer,
-               train_seconds=float(sum(len(a) for a in tr) / SR), pcm_bps=16 * SR, steps=int(CODEC_STEPS * SCALE))
+               train_seconds=float(sum(M.shape[1] for M in tr) / 100), pcm_bps=16 * SR, mel_bps=MEL_FLOAT_BPS,
+               steps=int(CODEC_STEPS * SCALE), batch=CODEC_BATCH, crop_s=CODEC_CROP / 100, kind="mel")
     for seed in CODEC_SEEDS:
         p = part[f"s{seed}"]
         out[f"curve_s{seed}"] = np.array(p["curve"])
+        out[f"seconds_s{seed}"] = p["seconds"]
         for nq in stages:
             r = p["rows"][str(nq)]
             out[f"mel_s{seed}_{nq}"] = r["mel"]
@@ -621,6 +623,24 @@ def transcribe(audios, batch=4, ids=False):
         out += [s.strip() for s in proc.batch_decode(seq, skip_special_tokens=True)]
         tok += [s.tolist() for s in seq]
     return (out, tok) if ids else out
+
+
+def transcribe_mel(mels, batch=4):
+    """Whisper on log-mel pictures (80, T) in its own scaling, padded to 30 s with the value silence takes."""
+    import torch
+
+    proc, model = whisper_model()
+    out = []
+    for i in range(0, len(mels), batch):
+        feats = []
+        for M in mels[i:i + batch]:
+            M = np.asarray(M, np.float32)[:, :3000]
+            pad = float(M.max()) - 2.0  # silence: the floor eight decades below the loudest band, scaled
+            feats.append(np.pad(M, ((0, 0), (0, 3000 - M.shape[1])), constant_values=pad))
+        with torch.no_grad():
+            seq = model.generate(torch.tensor(np.stack(feats)), max_new_tokens=96)
+        out += [s.strip() for s in proc.batch_decode(seq, skip_special_tokens=True)]
+    return out
 
 
 NUMWORDS = {str(i): w for i, w in enumerate(DIGITS)}

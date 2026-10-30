@@ -31,20 +31,22 @@ class World(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def history(self):
-        V = node_box(r"V: \ a VAE squeezes \ each frame", C.TRUE_P, 22, height=1.0)
-        M = node_box(r"M: \ a recurrent network \ predicts what comes next", MODEL, 22, height=1.0)
-        Cc = node_box(r"C: \ a tiny linear \ controller", AGENT, 22, height=1.0)
-        row = VGroup(V, M, Cc).arrange(RIGHT, buff=0.7).move_to([0, 1.7, 0])
+        V = node_box(r"V: \ a VAE squeezes \\ each frame", C.TRUE_P, 26, height=1.1)
+        M = node_box(r"M: \ a recurrent network \\ predicts what comes next", MODEL, 26, height=1.1)
+        Cc = node_box(r"C: \ a tiny linear \\ controller", AGENT, 26, height=1.1)
+        row = VGroup(V, M, Cc).arrange(RIGHT, buff=0.7).move_to([0, 2.2, 0])
+        if row.width > 13.0:
+            row.width = 13.0
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B) for a, b in zip(row, row[1:])])
         cards = VGroup(
             history_card(1990, r"Dyna \ (Sutton); \ Schmidhuber's recurrent world models", r"learn a model of the "
-                         r"world, \ and practise in it between real steps", width=4.2, color=HIST, font_size=21),
+                         r"world, \ and practise in it between real steps", width=4.3, color=HIST, font_size=25),
             history_card(2018, r"World Models \ (Ha \& Schmidhuber)", r"car racing from pixels, \ score $906$: \ the first "
-                         r"to pass $900$; \ and a VizDoom agent trained entirely inside its own dream", width=4.2,
-                         color=HIST, font_size=21),
+                         r"to pass $900$; \ and a VizDoom agent trained entirely inside its own dream", width=4.3,
+                         color=HIST, font_size=25),
             history_card(2019, r"MuZero \ (Part 26)", r"a model of only what planning needs: \ value, \ policy, \ "
-                         r"reward, \ never the pixels", width=4.2, color=HIST, font_size=21),
-        ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.35)
+                         r"reward, \ never the pixels", width=4.3, color=HIST, font_size=25),
+        ).arrange(RIGHT, buff=0.25).move_to([0, -1.1, 0])
         with self.voiceover(
             "An agent that can predict the results of its actions can try things out in its head before doing "
             "them. <bookmark mark='a'/> The idea is old. Around 1990 Richard Sutton's Dyna learned a model of the "

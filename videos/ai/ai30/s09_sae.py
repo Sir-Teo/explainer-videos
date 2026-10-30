@@ -244,6 +244,8 @@ class SAE(VoiceoverScene):
         nh = label(rf"neuron {int(s['neuron'])}, \ a typical one: \\ its strongest moments", font_size=22, color=NEURON)
         nh.next_to(nl, UP, buff=0.2)
         better = fpur.mean() > npur.mean()
+        verdict = ("The autoencoder has pulled the tangle apart." if better else
+                   "In a model this small, the gap is narrow.")
         # a neuron: one number in an MLP's hidden layer
         lay = VGroup(*[Circle(radius=0.13, stroke_color=NEURON, stroke_width=2, fill_color=NEURON if i == 3 else "#0B0F17", fill_opacity=1)
                        for i in range(7)]).arrange(RIGHT, buff=0.16)
@@ -259,8 +261,7 @@ class SAE(VoiceoverScene):
             "block, at its strongest moments: a mix of unrelated things. Neurons are polysemantic, because features are "
             "packed in superposition across them. <bookmark mark='b'/> Count it up: of each unit's eight strongest "
             f"moments, how many share one character? For neurons, {8 * npur.mean():.1f} on average; for the features, "
-            f"{8 * fpur.mean():.1f}." + (" The autoencoder has pulled the tangle apart." if better else
-                                         " In a model this small, the gap is narrow.")
+            f"{8 * fpur.mean():.1f}. {verdict}"
         ) as vo:
             self.play(FadeIn(nh), LaggedStart(*[FadeIn(l_) for l_ in nl], lag_ratio=0.15), FadeIn(ncard))
             vo.wait_until("a")

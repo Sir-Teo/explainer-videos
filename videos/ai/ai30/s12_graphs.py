@@ -239,10 +239,13 @@ class Graphs(VoiceoverScene):
                     rf"correlation $r = {r:.2f}$", font_size=22, color=WHITE).move_to([3.6, 0.8, 0])
         how = label(r"switched off: \ its decoder's contribution removed \\ from the real MLPs' outputs; \ attention "
                     r"and \\ everything after it recomputed", font_size=18, color=GREY_A).next_to(res, DOWN, buff=0.4)
-        verdict = ("The graph predicts the real model's response well." if r > 0.8 else
-                   "The graph gets the direction right more often than the size." if r > 0.4 else
-                   "Here the graph is a poor guide to the real model: the frozen attention and the error terms hide too "
-                   "much.")
+        if r > 0.8:
+            verdict = "The graph predicts the real model's response well."
+        elif r > 0.4:
+            verdict = "The graph gets the direction right more often than the size."
+        else:
+            verdict = ("Here the graph is a poor guide to the real model: the frozen attention and the error terms hide "
+                       "too much.")
         with self.voiceover(
             "A graph is a hypothesis about the model, so test it. <bookmark mark='a'/> Take the sixteen most "
             "influential features, and switch each one off in the real model: remove its contribution from the MLP "
