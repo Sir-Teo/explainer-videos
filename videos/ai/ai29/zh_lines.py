@@ -572,6 +572,164 @@ ZH = {
         "上预训练之后，62小时的机器人视频教会了它：机械臂的动作会怎样改变它看到的东西。<bookmark mark='c'/>要行动时，它在嵌入空间里"
         "想象许多动作序列，<bookmark mark='d'/>执行预测出的嵌入最接近目标图片的那一个。靠这个办法，它在从没见过的实验室里拿起并放下了物体。"
         "这是用学到的模型做规划，和MuZero一样，只不过这个模型是从视频里学来的。",
+
+    # ---------------------------------------------------------------- SimToReal
+    'Chapter fourteen. From simulation to reality.':
+        '第14章。从仿真到现实。',
+
+    'Robots learn slowly in the real world':
+        "机器人在真实世界里学得很慢：一台机器人，一次一次地尝试，会磨损，会摔倒。所以大多数机器人学习都从仿真开始。"
+        "<bookmark mark='a'/>仿真器可以同时运行几千台机器人，比真实时间还快，没有东西会坏，真实状态也永远知道。<bookmark mark='b'/>"
+        "2021年和2022年，英伟达的Isaac Gym在一块显卡上并行运行了几千台腿足机器人，几分钟就教会了它们走路。<bookmark mark='c'/>"
+        "问题在于现实差距。仿真器的物理是人写的，在很多小地方都不对：摩擦，质量，电机的力量，从感知到行动的延迟，每个传感器的噪声。"
+        "一个利用了仿真器怪癖的策略，到了真实的机器上就会失败。",
+
+    'The fix is counterintuitive':
+        "解决办法有违直觉：故意把仿真器弄得更糟。<bookmark mark='a'/>不要只在一个仿真器里训练。要在很多个里训练，每个都有自己的设置，"
+        "每个回合重新抽取：不同的质量，不同的摩擦，更慢的电机，一点延迟。<bookmark mark='b'/>一个在所有这些仿真器里都管用的策略，"
+        "就没法依赖任何一个仿真器的怪癖；如果真实世界看起来只是又一次抽样，它在那里也能管用。<bookmark mark='c'/>2017年，"
+        "乔希·托宾和同事们对图像这样做，随机化纹理和光照；2018年，彭学斌和同事们对物理这样做；2019年，OpenAI的机械手解开了魔方，"
+        "用的随机化会随着机械手的进步自己扩大范围。",
+
+    'f"Let\'s try it on Part 26\'s cart-pole.':
+        "我们在第26部分的倒立摆上试一试。<bookmark mark='a'/>我们的“真实”倒立摆是另一台机器：杆更长、更重，电机更弱，"
+        "动作晚一步，传感器有噪声，这些都在我们随机化的范围之内。<bookmark mark='b'/>我们用交叉熵方法训练简单的线性策略，"
+        "每种方法8个随机种子，训练回合数相同，每一轮都在真实的机器上测试。<bookmark mark='c'/>{a}<bookmark mark='d'/>{b}",
+
+    "f'In the simulator they were trained in, both reach":
+        "在它们各自受训的仿真器里，两者分别达到500步中的{nn_.mean():.0f}步和{rn.mean():.0f}步。",
+
+    "In Part 26's simulator, both kinds learn to balance":
+        "在第26部分的仿真器里，两种策略都学会了平衡满500步。",
+
+    "f'On the real one, the policies trained in a single simulator":
+        "到了真实的倒立摆上，只在一个仿真器里训练的策略，平均坚持{nr.mean():.0f}步；在随机化的仿真器里训练的，坚持{rr.mean():.0f}步。",
+
+    "f'On the real one, the single-simulator policies last":
+        "到了真实的倒立摆上，单一仿真器的策略坚持{nr.mean():.0f}步，随机化的坚持{rr.mean():.0f}步：在这里，随机化帮助不大。",
+
+    'f"Here is the whole picture':
+        "这是全貌：两种策略在不同的杆长和电机力量下能平衡多久，每一处都带着真实机器人的延迟和噪声。<bookmark mark='a'/>"
+        "只在一个仿真器里训练的策略，只在这张图的{100 * frac(mN):.0f}%里平衡得好。<bookmark mark='b'/>在随机化仿真器里训练的，"
+        "是{100 * frac(mR):.0f}%，真实的机器人也包括在内。<bookmark mark='c'/>代价是，策略对任何一台机器都没那么精调；"
+        "好处是，它不需要知道自己在哪台机器上。",
+
+    'f"Domain randomization is now routine.':
+        "域随机化如今已是常规做法。<bookmark mark='a'/>腿足机器人和人形机器人的走和跑，大多就是这样训练的：在随机化的仿真里训练，"
+        "再原封不动地搬到真实的机器上。<bookmark mark='b'/>{ep}<bookmark mark='c'/>最新的一步，和前面几章连成了一个圈："
+        "2026年10月，谷歌报告说，只用一张照片就为一张真实的桌子建起了仿真的孪生体，而DeepMind把Genie 4定位为机器人的训练场。"
+        "仿真器不再由人手写，而是学出来的。",
+
+    "f'In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, while":
+        "在真实倒立摆上的这一回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，而随机化的策略到{fell_r}步还在平衡。",
+
+    "f'In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} steps, and":
+        "在真实倒立摆上的这一回合里，单一仿真器的策略在{fell_n}步后让杆倒下了，随机化的策略则在{fell_r}步后倒下。",
+
+    # ---------------------------------------------------------------- VLA
+    'Chapter fifteen. Vision-language-action models.':
+        '第15章。视觉–语言–动作模型。',
+
+    'Here is what is inside a vision-language-action model.':
+        "这是视觉–语言–动作模型的内部。它的起点，是一个已经能读懂图像和文字的模型，在网络数据上训练出来的。<bookmark mark='a'/>"
+        "给它摄像头拍到的画面和一条指令，再给它加上一种输出动作的办法。<bookmark mark='r'/>2023年的RT-2，把动作写成词元，就像写词一样。"
+        "<bookmark mark='b'/>2024年的π0，加上了一个动作专家：这是挂在视觉–语言模型旁边的一个额外的小网络，它唯一的任务，"
+        "就是输出平滑的机械臂动作。它可不是第16部分混合专家模型里的那种专家。它用流匹配来生成这些动作；这正是第21部分的那套机制，"
+        "只不过现在画出来的不是图像，而是运动轨迹。",
+
+    "And it doesn't act one tiny step at a time.":
+        "而且，它并不是一小步一小步地行动。它一次规划一段动作，大约1秒，然后再看一眼世界，规划下一段：<bookmark mark='a'/>"
+        "前面几章的信念和世界模型，都合进了同一个网络，它能看、能想、能动。",
+
+    "Here is pi zero's action expert, exactly.":
+        "这是π0动作专家的确切形式。<bookmark mark='a'/>一个动作块，是接下来的50个动作，也就是1秒钟的运动。训练时，"
+        "从纯噪声到真实的动作块画一条直线，<bookmark mark='b'/>让网络在看到机器人眼前画面的条件下，学习沿着这条直线的速度："
+        "这就是第21部分的流匹配。<bookmark mark='c'/>行动时，它从噪声出发，沿着学到的速度走10小步，噪声就变成了一段动作。",
+
+    "In chapter one we left robot learning at Google's RT-1":
+        "在第1章里，我们讲到谷歌的RT-1就停下了，那是一个在13万次示范上训练的Transformer。<bookmark mark='a'/>下一步，是借一个头脑来用。"
+        "2023年的RT-2，拿来一个在网络上训练好的视觉–语言模型，把它微调成像写字一样写出机器人的动作。在从没见过的物体和场景上，"
+        "它有62%的时候成功，而RT-1只有32%：来自网络的知识，变成了动作。<bookmark mark='b'/>接着，21个实验室汇集了来自22种机器人的"
+        "一百多万条轨迹，这就是Open X-Embodiment数据集。<bookmark mark='c'/>在它上面训练的OpenVLA，权重开放，有70亿参数，"
+        "在29项任务上，比550亿参数的RT-2-X高出16.5个百分点。",
+
+    '"Why go to the trouble of a generative model for actions?':
+        "为什么要费劲给动作用一个生成模型？因为人做示范的方式不止一种。<bookmark mark='a'/>在这里，示范从障碍物的上方或下方绕过，"
+        "各占一半。<bookmark mark='b'/>{v}真实的示范里，到处都是这样的选择：用哪只手，怎么抓，从哪边绕。",
+
+    'f"Trained to minimize squared error, the policy learns the average':
+        "以最小化平方误差为目标训练，策略学到的是两条路的平均，而平均正好穿过障碍物：它有{100 * hr.mean():.0f}%的时候撞上障碍。"
+        "<bookmark mark='c'/>流匹配策略则会采样其中一条路，{100 * above:.0f}%的时候从上方绕，{100 * below:.0f}%的时候从下方绕，"
+        "撞上障碍的比例是{100 * hf.mean():.0f}%。",
+
+    'f"Here the regression policy hits the obstacle':
+        "在这里，回归策略有{100 * hr.mean():.0f}%的时候撞上障碍，流匹配策略是{100 * hf.mean():.0f}%：<bookmark mark='c'/>"
+        "差别比理论所说的小。",
+
+    # ---------------------------------------------------------------- Fast
+    'Chapter sixteen. Action tokens, and robot foundation models.':
+        '第16章。动作词元，以及机器人基础模型。',
+
+    'f"RT-2 and OpenVLA wrote actions as tokens the simplest way.':
+        "RT-2和OpenVLA用最简单的办法把动作写成词元。<bookmark mark='a'/>取每个关节在每个时间步的位置，把它取整到256个区间中的一个。"
+        "<bookmark mark='b'/>对一个7关节、每秒50步的机械臂来说，一秒钟的动作就是{n_tok}个词元。<bookmark mark='c'/>而它们几乎都一样："
+        "在我们平滑的测试动作上，{100 * rep:.0f}%的词元和前一个相同，{100 * near:.0f}%和前一个相差不超过一个区间。<bookmark mark='d'/>"
+        "一个被训练去预测下一个词元的模型，学到的主要是照抄，而它需要的信息，被稀稀拉拉地摊在几百个词元上。",
+
+    'f"In January 2025 Karl Pertsch and colleagues':
+        "2025年1月，Physical Intelligence的卡尔·佩尔奇和同事们先做压缩。<bookmark mark='a'/>任何平滑的动作，都是一些余弦波的叠加，"
+        "慢的波排在前面；离散余弦变换，也就是JPEG里用的那一种，列出每个波各需要多少。<bookmark mark='b'/>平滑的动作，就住在最慢的那几个波里："
+        "在我们的动作上，前三个波承载了{100 * k3:.1f}%的能量。<bookmark mark='c'/>FAST把系数放大、取整成整数，于是在这一块动作上，"
+        "{H}个数里只有{nz}个不是零；再让第23部分的字节对编码，把常见的模式合并成词元。",
+
+    'f"How much does it save?':
+        "它能省多少？这是FAST在留出的动作上的表现，对一系列缩放系数γ：横轴是每秒的词元数，纵轴是用它们重建出的动作的误差。"
+        "<bookmark mark='a'/>γ越大，保留的细节越多，花的词元也越多。<bookmark mark='b'/>逐步分箱的做法远在右边：{bt:.0f}个词元。"
+        "<bookmark mark='c'/>在差不多的误差下，FAST只需要{toks[k]:.0f}个，少了{ratio:.0f}倍，而且每一个都带着真正的信息。"
+        "<bookmark mark='d'/>Physical Intelligence报告说，一个写FAST词元的策略，在许多任务上和他们用流匹配的π0一样好，训练却快了大约5倍。",
+
+    "Physical Intelligence's pi zero point five":
+        "Physical Intelligence在2025年4月推出的π0.5，问的是：要在一个机器人从没见过的家里干活，需要什么？<bookmark mark='a'/>"
+        "模型先用文字写下一个子任务，比如捡起枕头，<bookmark mark='b'/>再用流匹配专家写出相应的动作。<bookmark mark='c'/>"
+        "它同时在所有东西上训练：网络数据，许多种机器人，许多不同的家。在这家公司自己的消融实验里，在没见过的家中，完整的模型有94%的时候成功；"
+        "去掉网络数据，74%；去掉其他机器人的数据，49%；去掉家庭的多样性，31%。<bookmark mark='d'/>对机器人和对语言一样，"
+        "数据的广度才是泛化的来源。",
+
+    'Since then the field has moved fast':
+        "从那以后，这个领域进展飞快，主要是通过各家公司的报告。<bookmark mark='a'/>2025年3月，谷歌DeepMind在Gemini模型上建起了"
+        "Gemini Robotics，英伟达发布了一个面向人形机器人的开放模型。<bookmark mark='b'/>同年11月，Physical Intelligence加入了从经验中学习："
+        "一个价值函数给每个时刻的进展打分，策略被告知要像那些好的时刻一样行动。它从早上五点半到晚上十一点半一直在做浓缩咖啡。"
+        "<bookmark mark='c'/>2026年，出现了能做十分钟以上任务的记忆，<bookmark mark='d'/>还有π0.7，可以用想要的速度和质量来提示它，"
+        "或者给它一张下一个子目标的图片。<bookmark mark='e'/>今年10月，谷歌发布了一个能做规划、能搭建仿真的物理推理模型，"
+        "<bookmark mark='f'/>Physical Intelligence也把它的模型开放给了别的机器人厂商。这些都是公司自己的结果；面向机器人的独立基准，还很年轻。",
+
+    # ---------------------------------------------------------------- Outro
+    '"Let\'s take stock.':
+        "我们来盘点一下。一个看不全的智能体，依据信念行动，信念由贝叶斯法则不断预测和修正。语言模型智能体运行着一个由想法、动作和观测组成的"
+        "循环，周围是工具和记忆。在长任务里，小错误会层层累积，所以每一步的可靠性，决定了它能走多远；按METR的测量，这个距离每隔几个月"
+        "就翻一番。照搬专家，失败的程度随时程的平方增长；DAgger通过在学习者真正会去的地方学习来修复它。{dream}"
+        "而机器人在随机化的仿真器里、从示范中学习，用的是生成式的动作专家和压缩过的动作词元。",
+
+    'A world model lets an agent practise in its imagination, as our Dreamer did.':
+        "世界模型让智能体在想象中练习，我们的Dreamer就是这样做的。",
+
+    'A world model lets an agent practise in its imagination, which':
+        "世界模型让智能体在想象中练习，而我们的小Dreamer才刚刚开始做到这一点。",
+
+    'All of this comes back.':
+        "这一切都会再回来。智能体写下的推理，是不是它真正做决定的方式；网络内部是否带着它所在世界的模型：这些是第30部分的问题。"
+        "而怎样评估智能体，怎样防止它们钻奖励的空子，怎样控制它们能碰什么，是最后一部分的主题。",
+
+    'Here are seven problems to try':
+        "这里有七道题可以试试，从信念更新，到FAST取整带来的误差。请在这里暂停，动手做一做；完整的解答在这一部分的笔记里。",
+
+    'Next time: inside the model.':
+        "下一次：模型的内部。一个网络怎样存下比它的维数还多的概念，<bookmark mark='a'/>稀疏自编码器怎样把它们分开，"
+        "以及怎样追踪一个想法穿过它的各层。",
+
+    'The best place to go deeper on the first half of this part':
+        "想深入这一部分的前半，最好的去处是思伦、比尔加德和福克斯的《概率机器人》；想深入学习如何行动，是萨顿和巴托。"
+        "感谢观看，第30部分见。",
 }
 
 PHRASES = {

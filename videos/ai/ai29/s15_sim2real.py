@@ -251,8 +251,9 @@ class SimToReal(VoiceoverScene):
         tag = note(r"one episode each \ on the ``real'' cart-pole", font_size=18).next_to(cnt, UP, buff=0.15)
         fell_n, fell_r = len(tr_n) - 1, len(tr_r) - 1
         ep = (f"In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
-              "steps" + (f", while the randomized one is still balancing at {fell_r}." if fell_r >= 500 else
-                         f", and the randomized one after {fell_r}."))
+              f"steps, while the randomized one is still balancing at {fell_r}." if fell_r >= 500 else
+              f"In this episode on the real cart-pole, the single-simulator policy drops the pole after {fell_n} "
+              f"steps, and the randomized one after {fell_r}.")
         with self.voiceover(
             "Domain randomization is now routine. <bookmark mark='a'/> Walking and running for legged robots and "
             "humanoids are mostly trained this way, in randomized simulation, and moved to the real machine "
