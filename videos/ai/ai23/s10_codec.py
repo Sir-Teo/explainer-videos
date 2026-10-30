@@ -148,7 +148,7 @@ class Codec(VoiceoverScene):
             f"residual stages of 256 codes, eight bits each, so a stage costs {hz * bits} bits a second. "
             "<bookmark mark='c'/> Stages are dropped at random in training, so the same model runs at "
             f"{', '.join(str(hz * bits * n) for n in stages[:-1])} or {hz * bits * stages[-1]:,} bits a second. "
-            f"<bookmark mark='d'/> It has {params / 1e3:.0f} thousand parameters and trained for {S:,} steps on "
+            f"<bookmark mark='d'/> It has {params / 1e6:.1f} million parameters and trained for {S:,} steps on "
             f"{tr_min:.0f} minutes of Kokoro speech in ten voices, with a plain loss: the average error in the "
             "rebuilt picture. Here it learns "
             "to rebuild a sentence from a voice it never heard."
@@ -258,6 +258,7 @@ class Codec(VoiceoverScene):
                       for p in ppl]).arrange(RIGHT, buff=0.1, aligned_edge=DOWN).move_to([-3.2, -1.3, 0])
         pbl = label(r"perplexity of each stage's codes, \ of $256$", font_size=18, color=GREY_A).next_to(pb, UP, buff=0.15)
         pbn = VGroup(*[MathTex(f"{p:.0f}", font_size=16, color=GREY_A).next_to(b_, UP, buff=0.05) for p, b_ in zip(ppl, pb)])
+        pbl.next_to(VGroup(pb, pbn), UP, buff=0.12)
         two = VGroup(
             node_box(r"semantic tokens: \ what is said \\ (from a self-supervised speech model)", SEM_C, font_size=20),
             node_box(r"acoustic tokens: \ how it sounds \\ (from a codec)", ACOU_C, font_size=20)).arrange(DOWN, buff=0.25)

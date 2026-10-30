@@ -26,13 +26,26 @@ class Omni(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cascade(self):
-        boxes = VGroup(node_box(r"speech recognizer", SND_C, font_size=22), node_box(r"language model", TEXT_C, font_size=22),
-                       node_box(r"speech synthesizer", C.MODEL_Q, font_size=22)).arrange(RIGHT, buff=0.9).move_to(UP * 1.6)
+        boxes = VGroup(node_box(r"speech recognizer", SND_C, font_size=24), node_box(r"language model", TEXT_C, font_size=24),
+                       node_box(r"speech synthesizer", C.MODEL_Q, font_size=24)).arrange(RIGHT, buff=1.1).move_to(UP * 1.7)
+
+        def wave(color, w=1.3, h=0.3, n=60, k=5):
+            return VMobject(stroke_color=color, stroke_width=2.5).set_points_smoothly(
+                [[-w / 2 + w * i / (n - 1), h * math.sin(2 * math.pi * k * i / (n - 1)) * math.sin(math.pi * i / (n - 1)), 0]
+                 for i in range(n)])
+
+        w_in = wave(GREY_A).next_to(boxes, LEFT, buff=0.5)
+        w_out = wave(C.MODEL_Q).next_to(boxes, RIGHT, buff=0.5)
+        if VGroup(w_in, boxes, w_out).width > 13.4:
+            VGroup(w_in, boxes, w_out).scale_to_fit_width(13.4)
         arr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B) for a, b in zip(boxes, boxes[1:])])
+        arr.add(Arrow(w_in.get_right(), boxes[0].get_left(), buff=0.08, color=GREY_B),
+                Arrow(boxes[2].get_right(), w_out.get_left(), buff=0.08, color=GREY_B))
+        txt = VGroup(*[label(r"text", font_size=20, color=TEXT_C).next_to(a_, UP, buff=0.08) for a_ in arr[:2]])
         cl = label(r"a cascade: \ each waits for the one before, \ and tone of voice is lost in the text between",
                    font_size=22, color=GREY_A).next_to(boxes, DOWN, buff=0.35)
-        one = node_box(r"one network: \ sound, \ pictures and text in; \ sound and text out", WHITE, font_size=24)
-        one.move_to(DOWN * 1.2)
+        one = node_box(r"one network: \ sound, \ pictures and text in; \ sound and text out", WHITE, font_size=26)
+        one.move_to(DOWN * 1.1)
         ol = label(r"GPT-4o (OpenAI, May 2024): \ answers speech in as little as $232$ ms, \ $320$ ms on average",
                    font_size=22, color=GREY_A).next_to(one, DOWN, buff=0.3)
         with self.voiceover(
@@ -44,8 +57,10 @@ class Omni(VoiceoverScene):
             "people take turns."
         ) as vo:
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.4), LaggedStart(*[GrowArrow(a_) for a_ in arr],
-                                                                                        lag_ratio=0.4), run_time=2.0)
+            self.play(Create(w_in), GrowArrow(arr[2]), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.4), LaggedStart(*[GrowArrow(a_) for a_ in arr[:2]],
+                                                                                        lag_ratio=0.4), FadeIn(txt), run_time=2.0)
+            self.play(GrowArrow(arr[3]), Create(w_out), run_time=0.8)
             self.play(FadeIn(cl))
             vo.wait_until("b")
             self.play(FadeIn(one), FadeIn(ol))

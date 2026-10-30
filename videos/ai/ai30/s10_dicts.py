@@ -274,6 +274,9 @@ class Dicts(VoiceoverScene):
         fa = [float(o[f"topk_aux_16_{s}_fvu"]) for s in o["seeds"]]
         f16 = [float(o[f"topk_16_{s}_fvu"]) for s in o["seeds"]]
         d2048 = int(sp["2048_dead"])
+        k0, jl = min(o["ks"]), max(o["jumps"])
+        dk = float(np.mean([o[f"topk_{k0:g}_{s}_dead"] for s in o["seeds"]]))
+        dj = float(np.mean([o[f"jumprelu_{jl:g}_{s}_dead"] for s in o["seeds"]]))
         dc = definition_card(r"dead latent", r"a feature that never switches on: \ its gradient is zero, \ so it can "
                              r"never recover. \ Without fixes, \ Gao et al.\ found up to $90\%$ dead; \ with them, "
                              r"$7\%$ of $16$ million.", color=CTRL, width=6.4, font_size=21).to_corner(UL, buff=0.35)
@@ -282,7 +285,9 @@ class Dicts(VoiceoverScene):
                               font_size=21).next_to(dc, DOWN, buff=0.3).align_to(dc, LEFT)
         rows = VGroup(label(rf"TopK, $k = 16$, $512$ latents: \ ${', '.join(map(str, d16))}$ dead \ (3 seeds)", font_size=22, color=TKC),
                       label(rf"the same with AuxK: \ ${', '.join(map(str, da))}$ dead", font_size=22, color=TKC),
-                      label(rf"TopK, $k = 16$, $2{{,}}048$ latents: \ ${d2048}$ dead", font_size=22, color=TKC))
+                      label(rf"TopK, $k = 16$, $2{{,}}048$ latents: \ ${d2048}$ dead", font_size=22, color=TKC),
+                      label(rf"the sparsest: \ TopK $k = {k0:g}$: \ ${dk:.0f}$ dead; \ JumpReLU $\lambda = {jl:g}$: \ ${dj:.0f}$ "
+                            r"\ (means of $3$ seeds)", font_size=20, color=GREY_A))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, -1.0, 0])
         few = max(d16 + [d2048]) <= 5
         verdict = ("At our size almost nothing dies, so the fix has little to do here; at millions of latents it "
@@ -294,13 +299,16 @@ class Dicts(VoiceoverScene):
             "latents dead, and with them only 7 percent of their sixteen million. <bookmark mark='b'/> Their fix, AuxK, asks the dead latents to rebuild what the "
             f"live ones miss. <bookmark mark='c'/> Ours: with 512 latents and k of sixteen, {d16[0]}, {d16[1]} and "
             f"{d16[2]} dead across three seeds; with AuxK, {da[0]}, {da[1]} and {da[2]}; with 2,048 latents, "
-            f"{d2048}. {verdict}"
+            f"{d2048}. {verdict} <bookmark mark='d'/> Where they do die here is at the sparsest settings: {dk:.0f} "
+            f"for TopK with k of {k0:g}, {dj:.0f} for the strongest JumpReLU penalty."
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
             vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(aux, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.3))
+            vo.wait_until("d")
+            self.play(FadeIn(rows[3]))
         self.wait(0.3)
         self.clear_scene()
