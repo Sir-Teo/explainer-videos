@@ -6,11 +6,22 @@
   "Gradient": "2. 多个输入：梯度",
   "Jacobian": "3. 会弯曲的映射：雅可比矩阵",
   "Reverse": "4. 向前，还是向后？",
-  "Backprop": "5. 手算反向传播",
-  "Library": "6. 几页代码里的微积分",
-  "Train": "7. 一路下山来训练",
+  "Backprop": "6. 手算反向传播",
+  "Library": "7. 几页代码里的微积分",
+  "Train": "8. 用我们的库来训练",
   "Curvature": "8. 曲率",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Outro": "回顾、习题，以及接下来",
+  "Layers": "4. 真实网络层的雅可比矩阵",
+  "Modes": "5. 向前，还是向后？",
+  "Floats": "9. 计算机里的数",
+  "GradCheck": "10. 抵消，以及梯度检验",
+  "Memory": "11. 内存：存下来，还是重算",
+  "Newton": "12. 曲率与牛顿法",
+  "HVP": "13. 黑塞-向量积",
+  "Quadratic": "14. 二次函数上的下降；鞍点",
+  "Lagrange": "15. 约束：拉格朗日乘子",
+  "KKT": "16. 不等式、KKT条件与对偶",
+  "Implicit": "17. 穿过不动点求导"
  },
  "lines": {
   "37d8f822b29f": {
@@ -18,10 +29,15 @@
    "en": "In part one we worked out a single derivative by hand: the gradient of the surprise with respect to the scores, the model's guess minus the truth. <bookmark mark='a'/> GPT-2 has a hundred and twenty-four million numbers. Qwen3-4B has four billion. <bookmark mark='b'/> Every step of training needs the derivative of the loss with respect to every single one of them, and nobody works those out by hand.",
    "zh": "在第1部分，我们亲手算出了一个导数：意外度对各个分数的梯度，也就是模型的猜测，减去真相。<bookmark mark='a'/>GPT-2有1.24亿个数。Qwen3-4B有40亿个。<bookmark mark='b'/>训练的每一步，都需要损失对其中每一个数的导数，而这些导数，谁也不会去手算。"
   },
-  "e9fbac03e13e": {
+  "6aa77f6cd041": {
    "scene": "Hook",
-   "en": "This part builds the machine that does it. It's a single idea, the chain rule run backwards, and it fits in a few pages of code. <bookmark mark='a'/> We'll build it, check it, and train a model with it on part one's books.",
-   "zh": "这一部分，就来搭建做这件事的机器。它只有一个想法：倒过来运行的链式法则，写成代码，几页就装得下。<bookmark mark='a'/>我们会把它搭起来，检验它，再用它在第1部分的那些书上训练一个模型。"
+   "en": "The mathematics is three centuries older than the computers that run it. Leibniz printed the calculus in 1684, while Newton had his own, his fluxions. <bookmark mark='a'/> In 1788 Lagrange showed how to optimize under constraints, <bookmark mark='b'/> and in 1847 Cauchy proposed walking downhill. <bookmark mark='c'/> Karush, and then Kuhn and Tucker, added inequalities. <bookmark mark='d'/> Then came programs: in 1964 Wengert had one carry derivatives along with its values, <bookmark mark='e'/> and in 1970 Linnainmaa ran the chain rule backwards. <bookmark mark='f'/> In 1985 a standard fixed how computers round, <bookmark mark='g'/> and in 1986 backpropagation made neural networks trainable. <bookmark mark='h'/> From 2010, libraries did all of it automatically, <bookmark mark='i'/> and some of today's largest models train with numbers only eight bits long.",
+   "zh": "这些数学，比运行它的计算机早了整整三个世纪。1684年，莱布尼茨发表了微积分，而牛顿也有他自己的一套，叫作流数。<bookmark mark='a'/>1788年，拉格朗日说明了怎样在约束之下求最优，<bookmark mark='b'/>1847年，柯西提出了一路走下坡的方法。<bookmark mark='c'/>卡鲁什，后来还有库恩和塔克，又加上了不等式。<bookmark mark='d'/>然后有了程序：1964年，文格特让程序在计算数值的同时，带着导数一起算，<bookmark mark='e'/>1970年，林纳因马把链式法则倒过来运行。<bookmark mark='f'/>1985年，一项标准规定了计算机怎样舍入，<bookmark mark='g'/>1986年，反向传播让神经网络变得可以训练。<bookmark mark='h'/>从2010年起，软件库把这一切都自动做了，<bookmark mark='i'/>而今天一些最大的模型，训练时用的数只有8位长。"
+  },
+  "ff8f600e50d8": {
+   "scene": "Hook",
+   "en": "This is Part 4 of AI, Built: change, the calculus of learning. <bookmark mark='a'/> In it: derivatives as the best straight-line approximations, and the derivatives of real layers; <bookmark mark='b'/> the two ways to run the chain rule, counted; backpropagation by hand, then our own library, and a model trained with it; <bookmark mark='c'/> what goes wrong with numbers in a computer; <bookmark mark='d'/> memory; <bookmark mark='e'/> curvature, from Newton's method to the shape of a trained network's landscape; <bookmark mark='f'/> and optimizing under constraints, which ends with differentiating through an equation's solution.",
+   "zh": "这是《人工智能，从零搭建》的第4部分：变化，也就是学习的微积分。<bookmark mark='a'/>本部分讲：导数是最好的直线近似，还有真实网络层的导数；<bookmark mark='b'/>运行链式法则的两种方式，并把代价数清楚；手算反向传播，再搭出我们自己的库，用它训练一个模型；<bookmark mark='c'/>计算机里的数会出什么问题；<bookmark mark='d'/>内存；<bookmark mark='e'/>曲率，从牛顿法讲到一个训练好的网络的地形；<bookmark mark='f'/>最后是带约束的优化，结尾讲怎样穿过一个方程的解来求导。"
   },
   "e9333a748fe2": {
    "scene": "Derivative",
@@ -36,27 +52,47 @@
   "081a3a7ab454": {
    "scene": "Derivative",
    "en": "Written down: f at x plus a small step h, is about f of x, plus the derivative times h. <bookmark mark='a'/> The smaller the step, the better the guess. A derivative is the best straight-line description of a function, near one point.",
-   "zh": "写成式子：f在x加上一小步h处的值，大约等于f(x)，加上导数乘以h。<bookmark mark='a'/>步子越小，这个估计就越准。导数，就是一个函数在某一点附近最好的直线描述。"
+   "zh": "写成式子：f在x加上一小步h处的值，大约等于f在x处的值，加上导数乘以h。<bookmark mark='a'/>步子越小，这个估计就越准。导数，就是一个函数在某一点附近最好的直线描述。"
+  },
+  "539aec188a98": {
+   "scene": "Derivative",
+   "en": "The idea is Leibniz's, in print in 1684, and Newton's, who had worked it out in the 1660s and called it fluxions. <bookmark mark='a'/> Here is the precise version. A function is differentiable at x if one number, the derivative, makes the straight-line guess so good that its error shrinks faster than the step itself. <bookmark mark='b'/> Measure it, for Part 1's surprise curve. On these logarithmic axes, the error with the true slope falls with a slope of 2.00: like h squared. <bookmark mark='c'/> Use a slope just ten percent off, and the error falls only like h, a slope of 1.01. Exactly one line wins as the step shrinks. That is what best means.",
+   "zh": "这个想法属于莱布尼茨，他在1684年发表；也属于牛顿，他在17世纪60年代就已经想出来，叫它流数。<bookmark mark='a'/>下面是精确的说法。一个函数在x处可导，是说有一个数，也就是导数，能让直线近似好到这个地步：它的误差比步长本身缩得更快。<bookmark mark='b'/>拿第1部分的意外度曲线来量一量。在这张对数坐标图上，用真实斜率时，误差下降的斜率是2.00：像h的平方那样。<bookmark mark='c'/>换一个只偏了百分之十的斜率，误差就只像h那样下降，斜率是1.01。步长越来越小时，只有一条直线胜出。所谓最好，就是这个意思。"
+  },
+  "b7dfbb597198": {
+   "scene": "Derivative",
+   "en": "Let's use the definition once, on the surprise, log base two of one over p. <bookmark mark='a'/> The change over a step h is a difference of logarithms, <bookmark mark='b'/> which is the logarithm of a ratio. <bookmark mark='c'/> Near one, the logarithm is its own tangent: log of one plus u is u, plus an error smaller than u. <bookmark mark='d'/> So the number in front of h is minus one over p log two. <bookmark mark='e'/> At a quarter, that's -5.77 bits per unit of p: the slope the lens showed.",
+   "zh": "我们用这个定义算一次，就算意外度：以2为底、p分之1的对数。<bookmark mark='a'/>走一步h带来的变化，是两个对数之差，<bookmark mark='b'/>也就是一个比值的对数。<bookmark mark='c'/>在1附近，对数就是它自己的切线：1加u的对数等于u，再加上一个比u更小的误差。<bookmark mark='d'/>所以h前面的那个数，是负的p乘以ln 2分之1。<bookmark mark='e'/>在四分之一处，它等于-5.77比特每单位p：正是放大镜里看到的斜率。"
   },
   "439dac813427": {
    "scene": "Derivative",
    "en": "A few derivatives come up over and over. <bookmark mark='a'/> The exponential is its own derivative. <bookmark mark='b'/> The logarithm's derivative is one over x. That's why the surprise climbs so steeply as p shrinks. <bookmark mark='c'/> And the chain rule, for a composition: f of g of x means do g first, then f. Writing f prime for the slope of f, the derivative of f of g of x is f prime at g of x, times g prime at x. Change flows through a composition, multiplying as it goes.",
-   "zh": "有几个导数会一再出现。<bookmark mark='a'/>指数函数的导数就是它自己。<bookmark mark='b'/>对数的导数是x分之1。正因为这样，p变小时，意外度才会升得那么陡。<bookmark mark='c'/>还有链式法则，用于复合函数：f(g(x))的意思是，先做g，再做f。把f的斜率记作f撇，那么f(g(x))的导数，就等于f撇在g(x)处的值，乘以g撇在x处的值。变化穿过一层层复合，一路相乘。"
+   "zh": "有几个导数会一再出现。<bookmark mark='a'/>指数函数的导数就是它自己。<bookmark mark='b'/>对数的导数是x分之1。正因为这样，p变小时，意外度才会升得那么陡。<bookmark mark='c'/>还有链式法则，用于复合函数：f(g(x))的意思是，先做g，再做f。把f的斜率记作f的导数，那么f(g(x))的导数，就等于f的导数在g(x)处的值，乘以g的导数在x处的值。变化穿过一层层复合，一路相乘。"
   },
   "3b1fb3e434d0": {
    "scene": "Gradient",
    "en": "Chapter two. Many inputs.",
    "zh": "第2章。多个输入。"
   },
-  "fe3c280fd9a0": {
+  "49d5638c0668": {
    "scene": "Gradient",
-   "en": "A loss depends on many numbers at once. With two, it's a surface over a plane. <bookmark mark='a'/> Nudge one number while holding the other still, and you get a partial derivative: the slope along that axis. <bookmark mark='b'/> Collect them all into one vector, and you have the gradient. It points straight uphill, the steepest way there is. <bookmark mark='c'/> So step the other way, again and again, and you slide down into a valley. That's gradient descent, and it trains every model in this series.",
-   "zh": "损失同时取决于很多个数。如果只有两个，它就是平面上方的一张曲面。<bookmark mark='a'/>轻轻推动其中一个数，另一个保持不动，就得到一个偏导数：沿那条坐标轴的斜率。<bookmark mark='b'/>把所有偏导数收进一个向量，就得到了梯度。它指向正上坡，是最陡的那个方向。<bookmark mark='c'/>所以，朝相反的方向一步又一步地走，你就会滑进山谷。这就是梯度下降，本系列的每一个模型，都靠它来训练。"
+   "en": "A loss depends on many numbers at once. With two, it's a surface over a plane. <bookmark mark='a'/> Nudge one number while holding the other still, and you get a partial derivative: the slope along that axis. <bookmark mark='b'/> The best flat approximation to a surface near a point is a plane, the tangent plane, tilted by those two slopes; its error falls like the square of the distance, just as the line's did: measured, a slope of 2.00. <bookmark mark='c'/> Collect the slopes into one vector, and you have the gradient. It points uphill, and, as we'll prove, the steepest way there is. <bookmark mark='d'/> So step the other way, again and again, and you slide down into a valley.",
+   "zh": "损失同时取决于很多个数。如果只有两个，它就是平面上方的一张曲面。<bookmark mark='a'/>轻轻推动其中一个数，另一个保持不动，就得到一个偏导数：沿那条坐标轴的斜率。<bookmark mark='b'/>在一点附近，对曲面最好的平面近似，是一个平面，也就是切平面，它按这两个斜率倾斜；它的误差像距离的平方那样下降，和直线时一样：实测斜率是2.00。<bookmark mark='c'/>把这些斜率收进一个向量，就得到了梯度。它指向上坡，而且，我们马上会证明，是最陡的那个方向。<bookmark mark='d'/>所以，朝相反的方向一步又一步地走，你就会滑进山谷。"
   },
-  "6c69dbc73f36": {
+  "0261f767a84e": {
    "scene": "Gradient",
-   "en": "Seen from above, the surface becomes a map of contour lines, each at one height. <bookmark mark='a'/> The slope in any direction you choose is the dot product of the gradient with that direction, from part three. <bookmark mark='b'/> So it's largest straight along the gradient, <bookmark mark='c'/> zero along the contour line, where the height doesn't change, <bookmark mark='d'/> and most negative pointing against the gradient: downhill.",
-   "zh": "从正上方看，这张曲面就变成一张等高线图，每条线都在同一个高度上。<bookmark mark='a'/>沿你任选的一个方向，斜率都等于梯度与这个方向的点积，就是第3部分讲过的点积。<bookmark mark='b'/>所以，正对着梯度的方向，斜率最大；<bookmark mark='c'/>沿着等高线，高度不变，斜率是0；<bookmark mark='d'/>背对着梯度，斜率最负：那就是下坡。"
+   "en": "Why steepest? Pick any direction, a unit vector u, and ask for the slope that way. <bookmark mark='a'/> The tangent plane answers it: the slope along u is the gradient dotted with u. <bookmark mark='b'/> By the Cauchy–Schwarz inequality from Part 3, a dot product is at most the product of the lengths, and u has length one: no direction climbs faster than the length of the gradient. <bookmark mark='c'/> Equality holds only when the two vectors are parallel. <bookmark mark='d'/> So the gradient's own direction is the steepest way up, its opposite the steepest way down, and the directions at right angles keep the height level.",
+   "zh": "为什么是最陡？任选一个方向，一个单位向量u，问问沿这个方向的斜率是多少。<bookmark mark='a'/>切平面给出了答案：沿u的斜率，等于梯度与u的点积。<bookmark mark='b'/>按第3部分的柯西–施瓦茨不等式，点积至多等于两个长度的乘积，而u的长度是1：没有哪个方向，上升得比梯度的长度更快。<bookmark mark='c'/>只有两个向量平行时，等号才成立。<bookmark mark='d'/>所以，梯度自己的方向是最陡的上坡，它的反方向是最陡的下坡，而与它垂直的方向，高度保持不变。"
+  },
+  "d1c95e377b69": {
+   "scene": "Gradient",
+   "en": "Seen from above, the surface becomes a map of contour lines, each at one height. <bookmark mark='a'/> Swing a direction around the point and read the slope. <bookmark mark='b'/> It's largest straight along the gradient, <bookmark mark='c'/> zero along the contour line, <bookmark mark='d'/> and most negative pointing against it. <bookmark mark='e'/> Measured by finite differences in seven hundred and twenty directions, the steepest slope is 0.8126, the gradient's length is 0.8126, and the two directions are 0.21 degrees apart: exactly as the inequality says.",
+   "zh": "从正上方看，这张曲面就变成一张等高线图，每条线都在同一个高度上。<bookmark mark='a'/>让一个方向绕着这一点转一圈，读出沿它的斜率。<bookmark mark='b'/>正对着梯度时，斜率最大；<bookmark mark='c'/>沿着等高线，斜率是0；<bookmark mark='d'/>背对着梯度，斜率最负。<bookmark mark='e'/>用有限差分在720个方向上实测，最陡的斜率是0.8126，梯度的长度是0.8126，两个方向相差0.21度：正如不等式所说。"
+  },
+  "33ce0164d4e4": {
+   "scene": "Gradient",
+   "en": "Walking downhill this way is the oldest method in this series. <bookmark mark='a'/> In 1847 Augustin-Louis Cauchy, wanting to solve the equations of an orbit, wrote them as a sum of squares and proposed stepping against its gradient. <bookmark mark='b'/> Written today: the next point is the current one, minus a step size eta times the gradient there. <bookmark mark='c'/> How large a step, and how fast it arrives, depends on the curvature, which comes in chapter fourteen and again in Part 11.",
+   "zh": "这样一路走下坡，是本系列里最古老的方法。<bookmark mark='a'/>1847年，奥古斯丁–路易·柯西想解出一条轨道的方程组，就把它们写成一个平方和，并提出逆着它的梯度一步步走。<bookmark mark='b'/>用今天的写法：下一个点，等于当前的点，减去步长η乘以那里的梯度。<bookmark mark='c'/>步子该多大，多快能走到，取决于曲率，这要到第14章，再到第11部分去讲。"
   },
   "c77bb3f63d93": {
    "scene": "Jacobian",
@@ -68,30 +104,65 @@
    "en": "Now let a function take a whole vector to another vector, the way a layer of a network does. <bookmark mark='a'/> Here's one that bends the plane: the grid lines curve. <bookmark mark='b'/> But zoom in close to any point, and the curves straighten out. Up close, every smooth map looks like a matrix: its Jacobian, the table of all its partial derivatives.",
    "zh": "现在，让一个函数把一整个向量变成另一个向量，就像网络的一层所做的那样。<bookmark mark='a'/>这个映射会把平面弄弯：网格线都弯曲了。<bookmark mark='b'/>但凑近任何一点放大，弯曲的线就变直了。凑近看，每个光滑的映射都像一个矩阵：它的雅可比矩阵，也就是它所有偏导数排成的表。"
   },
-  "41d8c0eac612": {
+  "90e7ea0292c5": {
    "scene": "Jacobian",
-   "en": "The Jacobian's determinant, from part three, says how much the map stretches area near that point. <bookmark mark='a'/> And the chain rule for maps is matrix multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken where its input lands.",
-   "zh": "雅可比矩阵的行列式，第3部分讲过，它说明这个映射在那一点附近，把面积拉伸了多少。<bookmark mark='a'/>而映射的链式法则，就是矩阵乘法：一个映射接着另一个映射，它的雅可比矩阵，就是两者雅可比矩阵的乘积，每一个都在它的输入所落到的那一点上求出。"
+   "en": "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a single output. <bookmark mark='a'/> The Jacobian's determinant, from part three, says how much the map stretches area near the point. <bookmark mark='b'/> And the chain rule for maps is matrix multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken where its input lands. That product is the whole of backpropagation, as chapter five will show.",
+   "zh": "一般来说，一个把n个数映成m个数的映射，有一个m乘n的雅可比矩阵：每个输出一行，每个输入一列，正是让直线近似最好的那一个矩阵。梯度只是只有一个输出时的特例。<bookmark mark='a'/>雅可比矩阵的行列式，第3部分讲过，它说明这个映射在那一点附近，把面积拉伸了多少。<bookmark mark='b'/>而映射的链式法则，就是矩阵乘法：一个映射接着另一个映射，它的雅可比矩阵，就是两者雅可比矩阵的乘积，每一个都在它的输入所落到的那一点上求出。这个乘积，就是反向传播的全部，第5章会讲清楚。"
   },
-  "50cd1fb2d544": {
-   "scene": "Reverse",
-   "en": "Chapter four. Forwards, or backwards?",
-   "zh": "第4章。向前，还是向后？"
+  "3e8717c64b95": {
+   "scene": "Jacobian",
+   "en": "Chain many maps and their Jacobians multiply, so their sizes multiply too. Here is a deep stack of tanh layers, 60 of them, with random weights scaled by a gain, and the size of the product of their Jacobians: how much a gradient grows or shrinks on its way back through them. <bookmark mark='a'/> With a gain of 0.5 it shrinks by 17 powers of ten. <bookmark mark='b'/> With a gain of 2 it grows by 5. <bookmark mark='c'/> Only near a gain of one does it hold steady. These are vanishing and exploding gradients, and Parts 9 and 10 choose the initial scale of the weights to stay on that edge.",
+   "zh": "把很多映射串起来，它们的雅可比矩阵就相乘，大小也跟着相乘。这里是一叠很深的tanh层，一共60层，随机权重按一个增益缩放，画的是它们雅可比矩阵乘积的大小：也就是梯度往回穿过它们时，会被放大或缩小多少。<bookmark mark='a'/>增益为0.5时，它缩小了17个数量级。<bookmark mark='b'/>增益为2时，它放大了5个数量级。<bookmark mark='c'/>只有增益接近1时，它才保持稳定。这就是梯度消失和梯度爆炸，第9和第10部分会选好权重的初始尺度，让它恰好待在这条边上。"
   },
-  "98229a1daebc": {
-   "scene": "Reverse",
-   "en": "A network is a long chain of maps, from its parameters, theta, all its adjustable numbers, to a single number at the end: the loss, script L. <bookmark mark='a'/> By the chain rule, the gradient is a product of Jacobians, one for each link. <bookmark mark='b'/> The product is the same whichever end you start multiplying from. The cost is not.",
-   "zh": "一个网络就是一长串映射，从它的参数θ，也就是它所有可调的数，一直到末端的一个数：损失，花体的L。<bookmark mark='a'/>按照链式法则，梯度就是一串雅可比矩阵的乘积，每一环一个。<bookmark mark='b'/>不管从哪一头开始乘，乘积都一样。花的力气却不一样。"
+  "b8c7e1a935cf": {
+   "scene": "Layers",
+   "en": "Chapter four. The Jacobians of real layers.",
+   "zh": "第4章。真实网络层的雅可比矩阵。"
   },
-  "70d1bb76542b": {
-   "scene": "Reverse",
-   "en": "Start from the parameters, and you carry a whole matrix along, with a column for every parameter: in effect, you redo the chain once for every knob. <bookmark mark='a'/> Start from the loss, and you carry a single row: one number for each value in the layer you've reached, and one pass backwards tells every knob its effect at once. <bookmark mark='b'/> With one loss and a hundred million parameters, going backwards is a hundred million times less work. That's reverse-mode differentiation. Applied to neural networks, it's called backpropagation: described by Seppo Linnainmaa in 1970, and made famous by Rumelhart, Hinton and Williams in 1986.",
-   "zh": "从参数那头开始，你得一路带着一整个矩阵，每个参数占一列：实际上，每有一个旋钮，你就得把整条链重走一遍。<bookmark mark='a'/>从损失那头开始，你只需带着一行：你走到的那一层里，每个值对应一个数；倒着走一遍，就能同时告诉每个旋钮它的影响。<bookmark mark='b'/>只有一个损失，却有1亿个参数时，倒着算的工作量，只有正着算的1亿分之一。这就是反向模式求导。用在神经网络上，它叫作反向传播：1970年，塞波·林纳因马描述了它；1986年，鲁梅尔哈特、辛顿和威廉姆斯让它广为人知。"
+  "29aa6ae0a189": {
+   "scene": "Layers",
+   "en": "Real layers first. The most common one is a matrix product: inputs X, one row per token, times weights W. <bookmark mark='a'/> A weight in row j and column k touches only column k of the output, so its gradient collects the gradient arriving from above, G, times the inputs it multiplied. <bookmark mark='b'/> That sum is itself a matrix product: X transposed times G. <bookmark mark='c'/> And the gradient for the inputs, which flows on to the layer below, is G times W transposed. <bookmark mark='d'/> Notice what we never wrote down: the Jacobian itself. For one of GPT-2's matrices over 1,024 tokens it would hold 7.4 trillion numbers. Backpropagation needs only its product with G, which costs about as much as the layer did on the way forward.",
+   "zh": "先看真实的网络层。最常见的一种是矩阵乘法：输入X，每个词元一行，乘以权重W。<bookmark mark='a'/>第j行第k列的一个权重，只碰到输出的第k列，所以它的梯度，把从上面传来的梯度G，乘以它乘过的那些输入，收集起来。<bookmark mark='b'/>这个求和本身就是一次矩阵乘法：X的转置乘以G。<bookmark mark='c'/>而输入的梯度，也就是继续流向下一层的那个，是G乘以W的转置。<bookmark mark='d'/>注意我们从来没有写下的东西：雅可比矩阵本身。对GPT-2的一个矩阵，在1024个词元上，它会有7.4万亿个数。反向传播只需要它与G的乘积，代价和这一层向前算时差不多。"
   },
-  "9652f6c2ccc1": {
+  "3f72d8c6a987": {
+   "scene": "Layers",
+   "en": "Next, the softmax, which turns scores into probabilities. <bookmark mark='a'/> Differentiate with the quotient rule. <bookmark mark='b'/> Split the fraction, and every entry is p i times delta i j, minus p i times p j. <bookmark mark='c'/> As a matrix: the probabilities on the diagonal, minus the outer product of p with itself. <bookmark mark='d'/> Here it is for five scores, computed, and matching our library. Its rows add to zero, because adding the same number to every score changes nothing; and it is symmetric with no negative eigenvalues, one of them zero. <bookmark mark='e'/> Again we never need the matrix: its product with a vector takes n steps instead of n squared, which matters with GPT-2's fifty thousand tokens in the vocabulary. Joined with the cross-entropy, it collapses to Part 1's q minus p.",
+   "zh": "接下来是softmax，它把分数变成概率。<bookmark mark='a'/>用商的求导法则来求导。<bookmark mark='b'/>把分式拆开，每一项都是p i乘以δ i j，减去p i乘以p j。<bookmark mark='c'/>写成矩阵：对角线上是这些概率，再减去p与它自己的外积。<bookmark mark='d'/>这是5个分数的情形，算出来的结果，和我们的库完全一致。它的每一行加起来都是0，因为给每个分数都加上同一个数，什么也不会变；它是对称的，没有负的特征值，其中一个是0。<bookmark mark='e'/>同样，我们从来不需要这个矩阵本身：它与一个向量的乘积，只要n步，而不是n的平方步；GPT-2的词表有5万个词元，这一点就很要紧。再接上交叉熵，它就化成第1部分的q减去p。"
+  },
+  "17684969b2d0": {
+   "scene": "Layers",
+   "en": "Last, layer norm: subtract the mean of the vector, divide by its spread. <bookmark mark='a'/> The mean and the spread move when x moves, so the Jacobian has two corrections: a projection that removes the direction of all ones, and another that removes y itself, all divided by sigma. <bookmark mark='b'/> Computed for six numbers, 2 of its eigenvalues are zero, up to the tiny epsilon, and the rest equal: a gradient flowing back through layer norm loses whatever would have changed the mean or the overall size of the vector. Those are exactly the things the layer throws away.",
+   "zh": "最后是层归一化：减去向量的平均值，再除以它的散布。<bookmark mark='a'/>x一动，平均值和散布也跟着动，所以雅可比矩阵有两处修正：一个投影，去掉全是1的那个方向，另一个去掉y本身的方向，再整体除以σ。<bookmark mark='b'/>对6个数算出来，它有2个特征值是0，只差一个极小的ε，其余的都相等：梯度穿过层归一化往回流时，会丢掉任何本来会改变向量平均值或整体大小的部分。而这些，正是这一层扔掉的东西。"
+  },
+  "48a90cd7a798": {
+   "scene": "Modes",
+   "en": "Chapter five. Forwards, or backwards?",
+   "zh": "第5章。向前，还是向后？"
+  },
+  "a643357da261": {
+   "scene": "Modes",
+   "en": "There are two ways to use a Jacobian without ever writing it down. Push a direction forward: if the inputs move by v, the outputs move by J v, a Jacobian-vector product. Or pull a sensitivity back: if the outputs matter with weights u, the inputs matter by u transposed J, a vector-Jacobian product. <bookmark mark='a'/> A network is a chain of maps, from its parameters, theta, to the loss, and its Jacobian is a product of the links' Jacobians. <bookmark mark='b'/> A JVP multiplies that product from the right, in the order the network runs: forward mode. <bookmark mark='c'/> A VJP multiplies from the left, starting at the loss: reverse mode. Either one is about one pass through the network. For the whole Jacobian you need a JVP per input, or a VJP per output.",
+   "zh": "有两种办法，可以用上雅可比矩阵而不必把它写出来。把一个方向往前推：如果输入移动v，输出就移动J乘以v，这叫雅可比-向量积。或者把一份敏感度往回拉：如果输出按权重u计较，输入的影响就是u的转置乘以J，这叫向量-雅可比积。<bookmark mark='a'/>一个网络是一串映射，从它的参数θ，一直到损失，它的雅可比矩阵，是各环雅可比矩阵的乘积。<bookmark mark='b'/>雅可比-向量积从右边乘这个乘积，按网络运行的顺序：这是前向模式。<bookmark mark='c'/>向量-雅可比积从左边乘，从损失开始：这是反向模式。无论哪一种，都差不多是把网络走一遍。要得到整个雅可比矩阵，就得每个输入做一次雅可比-向量积，或者每个输出做一次向量-雅可比积。"
+  },
+  "da095db0f208": {
+   "scene": "Modes",
+   "en": "Let's count. These are networks with two hidden layers of sixty-four, with n inputs and m outputs, from one to two hundred and fifty-six. For each, the multiply-adds that each mode spends on the whole Jacobian, in units of one forward pass. <bookmark mark='a'/> Forward mode costs n passes, whatever m is. <bookmark mark='b'/> Reverse mode costs m, whatever n is. Few inputs and many outputs: go forwards. Many inputs and few outputs: go backwards. <bookmark mark='c'/> And timed on this computer, across the 20 networks where the counts differ, the cheaper mode by count was also the faster in every one.",
+   "zh": "我们来数一数。这些网络有两个64宽的隐藏层，有n个输入、m个输出，从1到256。对每一个，数出两种模式为整个雅可比矩阵花掉的乘加次数，以向前走一遍为单位。<bookmark mark='a'/>前向模式要走n遍，不管m是多少。<bookmark mark='b'/>反向模式要走m遍，不管n是多少。输入少、输出多：向前走。输入多、输出少：向后走。<bookmark mark='c'/>再在这台计算机上计时，在计数不同的20个网络里，按计数更便宜的那种模式，每一次也都更快。"
+  },
+  "6a36872c2d04": {
+   "scene": "Modes",
+   "en": "Training is the extreme case: every parameter is an input, and the loss is a single output. <bookmark mark='a'/> Forwards, you carry a matrix with a column for every parameter. <bookmark mark='b'/> Backwards, a single row, the size of the layer you've reached. <bookmark mark='c'/> Our small classifier has 874 parameters. Forward mode pushes 874 directions through it: counted, 615 times the multiply-adds of one backward pass. Timed, it is 82 times slower: less than the count, because a computer's overheads weigh most on small matrices. The two gradients agree. <bookmark mark='d'/> For GPT-2 it would be a hundred and twenty-four million passes against one. That is why every network is trained in reverse mode, which, for neural networks, is called backpropagation.",
+   "zh": "训练是最极端的情形：每个参数都是一个输入，而损失只是一个输出。<bookmark mark='a'/>向前走，你得带着一个矩阵，每个参数一列。<bookmark mark='b'/>向后走，只要带一行，大小就是你走到的那一层。<bookmark mark='c'/>我们的小分类器有874个参数。前向模式要把874个方向推过它：数一数，是一次反向传播乘加次数的615倍。计时的话，它慢82倍：比计数少，因为计算机的额外开销，在小矩阵上占的比重最大。两种梯度完全一致。<bookmark mark='d'/>换成GPT-2，就是1.24亿遍对一遍。所以每个网络都用反向模式训练，而用在神经网络上，它叫作反向传播。"
+  },
+  "51f78b4027f2": {
+   "scene": "Modes",
+   "en": "Reverse mode was found more than once. Seppo Linnainmaa described it in his 1970 master's thesis in Helsinki, to work out how rounding errors accumulate through a program. <bookmark mark='a'/> Paul Werbos proposed it for training networks in his 1974 thesis, <bookmark mark='b'/> and in 1986 David Rumelhart, Geoffrey Hinton and Ronald Williams showed, in Nature, what it could do: networks that learn their own internal representations. <bookmark mark='c'/> Control engineers had already used the same backward recursion around 1960, to steer rockets along the best flight paths.",
+   "zh": "反向模式不止被发现过一次。1970年，塞波·林纳因马在赫尔辛基的硕士论文里描述了它，用来算清舍入误差怎样在一个程序里层层累积。<bookmark mark='a'/>1974年，保罗·韦伯斯在他的博士论文里提出用它来训练网络，<bookmark mark='b'/>1986年，大卫·鲁梅尔哈特、杰弗里·辛顿和罗纳德·威廉姆斯在《自然》上展示了它的威力：网络能学会它们自己的内部表示。<bookmark mark='c'/>在那之前，控制工程师在1960年前后就用过同样的反向递推，为火箭规划最好的飞行路线。"
+  },
+  "bd00dbfcac0a": {
    "scene": "Backprop",
-   "en": "Chapter five. Backpropagation, by hand.",
-   "zh": "第5章。手算反向传播。"
+   "en": "Chapter six. Backpropagation, by hand.",
+   "zh": "第6章。手算反向传播。"
   },
   "a62fea8e393f": {
    "scene": "Backprop",
@@ -108,25 +179,50 @@
    "en": "One more rule. When a value feeds into two places, <bookmark mark='a'/> the gradients coming back from both are added together. <bookmark mark='b'/> That's the whole algorithm: visit the nodes in reverse order, and let each one pass its gradient back to its inputs.",
    "zh": "还有一条规则。当一个值同时流向两个地方，<bookmark mark='a'/>从这两处传回来的梯度，要加在一起。<bookmark mark='b'/>整个算法就是这些：按相反的顺序访问各个节点，让每个节点把它的梯度，传回给它的输入。"
   },
-  "8a89fb34e36b": {
-   "scene": "Library",
-   "en": "Chapter six. The machine, in code.",
-   "zh": "第6章。用代码写出这台机器。"
+  "c181daf2ca1f": {
+   "scene": "Backprop",
+   "en": "Now a real network, in matrices: an input x, a layer with weights W one and a tanh, a second layer, a softmax and the cross-entropy. Call the gradient with respect to a layer's pre-activation z its delta, the error signal there. <bookmark mark='a'/> At the top, delta two is Part 1's answer: the predicted probabilities minus the one-hot truth. <bookmark mark='b'/> Each weight in W two multiplies one input into one output, so its gradient is that output's delta times that input: an outer product, delta two times a one transposed. <bookmark mark='c'/> To go down a layer, pull delta back through W two, which for a matrix means multiplying by its transpose, and then through the tanh, multiplying by its slope. <bookmark mark='d'/> And the same rule again: the gradient of W one is delta one times x transposed. Those four lines are backpropagation, for any depth.",
+   "zh": "现在换一个真正的网络，用矩阵来写：一个输入x，一层权重W1加上tanh，第二层，一个softmax，再接交叉熵。把对一层的激活前的量z的梯度，叫作这一层的δ，也就是那里的误差信号。<bookmark mark='a'/>在最上面，δ2就是第1部分的答案：预测的概率，减去独热编码的真相。<bookmark mark='b'/>W2里的每个权重，都把一个输入乘进一个输出，所以它的梯度，就是那个输出的δ乘以那个输入：一个外积，δ2乘以a1的转置。<bookmark mark='c'/>要往下走一层，就把δ拉回穿过W2，对矩阵来说，就是乘以它的转置，再穿过tanh，乘以它的斜率。<bookmark mark='d'/>然后同样的规则再用一次：W1的梯度，是δ1乘以x的转置。这四行，就是反向传播，不管网络有多深。"
   },
-  "67ea31515972": {
-   "scene": "Library",
-   "en": "Here it is in code: the series' own automatic differentiation, about a hundred and fifty lines in all. <bookmark mark='a'/> Every operation remembers its inputs, along with a small function that sends a gradient back to each one. Here's multiplication: the gradient for one input is the incoming gradient, times the other input. <bookmark mark='b'/> And backward visits the graph in reverse order, adds up what arrives at each node, and passes it on.",
-   "zh": "这就是它的代码：本系列自己的自动微分，一共大约150行。<bookmark mark='a'/>每个运算都记住它的输入，还附带一个小函数，负责把梯度传回给每个输入。这是乘法：一个输入得到的梯度，等于传进来的梯度，乘以另一个输入。<bookmark mark='b'/>而backward函数按相反的顺序遍历这张图，把到达每个节点的梯度加起来，再继续往回传。"
+  "e2496be25367": {
+   "scene": "Backprop",
+   "en": "Here is that outer product for one example, computed: the error signal at the hidden layer, a column, times the input, a row. <bookmark mark='a'/> Every row of the result is a multiple of the same input, so the matrix has rank 1: one singular value, then nothing but rounding. <bookmark mark='b'/> A batch adds 8 of them, and here reaches rank 4, the most a 5 by 4 matrix can have. That low-rank structure comes back when models are fine-tuned with low-rank adapters in Part 27. <bookmark mark='c'/> And these hand-derived gradients match our library and PyTorch to the last digits a computer keeps.",
+   "zh": "这是一个样本的那个外积，算出来的结果：隐藏层的误差信号是一列，乘以输入这一行。<bookmark mark='a'/>结果的每一行，都是同一个输入的倍数，所以这个矩阵的秩是1：一个奇异值，后面全是舍入误差。<bookmark mark='b'/>一个批次把8个这样的矩阵加起来，这里的秩达到4，这是一个5乘4的矩阵所能有的最大秩。这种低秩结构，到第27部分用低秩适配器微调模型时还会出现。<bookmark mark='c'/>而这些手推出来的梯度，和我们的库、和PyTorch都一致，一直到计算机保留的最后几位。"
   },
-  "fbee478aa97c": {
+  "35dea4cffc3b": {
    "scene": "Library",
-   "en": "Does it work? <bookmark mark='a'/> Nudge each number by a millionth, measure how much the loss changes, and compare: the gradients agree to ten decimal places. <bookmark mark='b'/> Against PyTorch, the library most of today's models are trained with, they agree to sixteen, the limit of the computer's own arithmetic.",
-   "zh": "它管用吗？<bookmark mark='a'/>把每个数推动百万分之一，测一测损失变了多少，再拿来比较：两种梯度直到小数点后10位都一致。<bookmark mark='b'/>再和PyTorch比，当今大多数模型都是用这个库训练的：两者一致到16位，这已经是计算机自身算术精度的极限。"
+   "en": "Chapter seven. The machine, in code.",
+   "zh": "第7章。用代码写出这台机器。"
   },
-  "ac7da7ef6407": {
+  "6a25885eee34": {
+   "scene": "Library",
+   "en": "Here it is in code: the series' own automatic differentiation, about 180 lines in all. <bookmark mark='a'/> Every operation remembers its inputs, along with a small function that sends a gradient back to each one. Here's multiplication: the gradient for one input is the incoming gradient, times the other input. <bookmark mark='b'/> And backward visits the graph in reverse order, adds up what arrives at each node, and passes it on.",
+   "zh": "这就是它的代码：本系列自己的自动微分，一共大约180行。<bookmark mark='a'/>每个运算都记住它的输入，还附带一个小函数，负责把梯度传回给每个输入。这是乘法：一个输入得到的梯度，等于传进来的梯度，乘以另一个输入。<bookmark mark='b'/>而backward函数按相反的顺序遍历这张图，把到达每个节点的梯度加起来，再继续往回传。"
+  },
+  "d95a4abfb64e": {
+   "scene": "Library",
+   "en": "Backward needs an order: a node may pass its gradient on only after every use of it has reported. A depth-first search through the graph gives exactly that, a topological order, each node after its inputs. Here is chapter six's example, numbered by our library in that order. <bookmark mark='a'/> Written out, the graph is a list, each line one elementary operation on earlier lines. In 1964 R. E. Wengert had programs keep such lists to carry derivatives along with their values; tools today call the record a tape. <bookmark mark='b'/> Forwards, the values run down the list. <bookmark mark='c'/> Backwards, the list runs from the bottom up, each line sending its gradient to the lines it used.",
+   "zh": "反向计算需要一个顺序：一个节点，只有在它的每一个用处都报告回来之后，才能把梯度传下去。在图里做一次深度优先搜索，正好给出这样的顺序，叫作拓扑顺序，每个节点都排在它的输入之后。这是第6章的例子，由我们的库按这个顺序编了号。<bookmark mark='a'/>写出来，这张图就是一张列表，每一行是对前面几行做的一个基本运算。1964年，文格特就让程序保存这样的列表，让导数跟着数值一起算；今天的工具，把这份记录叫作磁带。<bookmark mark='b'/>向前时，数值沿着列表往下走。<bookmark mark='c'/>向后时，列表从底下往上走，每一行都把梯度送回给它用过的那几行。"
+  },
+  "a30eb53a9ebf": {
+   "scene": "Library",
+   "en": "Does it work? <bookmark mark='a'/> Nudge each number by a millionth, measure how much the loss changes, and compare: the gradients agree to 9 decimal places, which, as chapter ten shows, is all a nudge can tell. <bookmark mark='b'/> Against PyTorch, the library most of today's models are trained with, they agree to 16 decimal places, the limit of the computer's own arithmetic.",
+   "zh": "它管用吗？<bookmark mark='a'/>把每个数推动百万分之一，测一测损失变了多少，再拿来比较：两种梯度直到小数点后9位都一致，第10章会说明，推一下最多也只能告诉你这么多。<bookmark mark='b'/>再和PyTorch比，当今大多数模型都是用这个库训练的：两者一致到小数点后16位，这已经是计算机自身算术精度的极限。"
+  },
+  "916204462334": {
+   "scene": "Library",
+   "en": "Ours is the smallest member of a long family. <bookmark mark='a'/> In 1980 Bert Speelpenning compiled reverse mode from ordinary programs. <bookmark mark='b'/> In 2010 Theano, from Montreal, had you declare a graph first and then compiled it, gradients included. <bookmark mark='c'/> In 2015 Chainer recorded the graph as the code ran, define by run, while TensorFlow kept a static graph. <bookmark mark='d'/> PyTorch, in 2017, ran define by run on GPUs, as ours does on the CPU, <bookmark mark='e'/> and in 2018 JAX traced whole functions and transformed them: gradients, both kinds of product, compilation, batching. <bookmark mark='f'/> The line you write is almost the same in all three.",
+   "zh": "我们的库，是一个大家族里最小的成员。<bookmark mark='a'/>1980年，伯特·斯皮尔彭宁从普通程序里编译出了反向模式。<bookmark mark='b'/>2010年，来自蒙特利尔的Theano，要你先声明一张图，再把它连同梯度一起编译。<bookmark mark='c'/>2015年，Chainer在代码运行时记录这张图，叫作边运行边定义，而TensorFlow保留了一张静态图。<bookmark mark='d'/>2017年，PyTorch在GPU上做边运行边定义，就像我们的库在CPU上那样，<bookmark mark='e'/>2018年，JAX追踪整个函数，再对它做变换：求梯度、两种乘积、编译、批处理。<bookmark mark='f'/>三者里，你要写的那一行几乎一样。"
+  },
+  "876b1897365f": {
    "scene": "Train",
-   "en": "Chapter seven. Training.",
-   "zh": "第7章。训练。"
+   "en": "Chapter eight. Training with our library.",
+   "zh": "第8章。用我们的库来训练。"
+  },
+  "d7755090803e": {
+   "scene": "Train",
+   "en": "Before we train, look at the first gradient. Differentiate the average surprise with respect to one score, z i j: every pair of letters that starts with i adds its guess minus its truth. <bookmark mark='a'/> Collected, that's the share of pairs starting with i, times Part 1's q minus p hat: the model's probabilities minus the counted ones. <bookmark mark='b'/> At the start every guess is one twenty-seventh. <bookmark mark='c'/> Computed on the books, the library's gradient matches the formula, and the biggest pushes, in red, go to the commonest pairs. Gradient descent is counting, done a little at a time.",
+   "zh": "训练之前，先看第一个梯度。把平均意外度对一个分数z i j求导：每一对以i开头的字母，都贡献它的猜测减去它的真相。<bookmark mark='a'/>收集起来，就是以i开头的字母对所占的比例，乘以第1部分的q减去p帽：模型的概率，减去数出来的概率。<bookmark mark='b'/>一开始，每个猜测都是27分之1。<bookmark mark='c'/>在这些书上算出来，库给出的梯度和这个公式完全一致，而推得最用力的，红色的那些，是最常见的字母对。梯度下降就是计数，只不过一点一点地数。"
   },
   "110b846fd78c": {
    "scene": "Train",
@@ -138,40 +234,235 @@
    "en": "The loss falls fast, then settles: at 3.33 bits, the counting answer. <bookmark mark='a'/> And the scores themselves have become the logarithms of the counts. That's maximum likelihood again, reached by walking downhill instead of by counting. <bookmark mark='b'/> The same loop, with more numbers and better models, trains everything else in this series.",
    "zh": "损失先是快速下降，然后稳定下来：停在3.33比特，正是计数得到的答案。<bookmark mark='a'/>而这些分数本身，也变成了计数的对数。这又是最大似然，只不过这次是一路下山走到的，而不是数出来的。<bookmark mark='b'/>同样的这个循环，换上更多的数、更好的模型，就能训练本系列里其余的一切。"
   },
-  "b28bfcc69d95": {
-   "scene": "Curvature",
-   "en": "Chapter eight. Curvature.",
-   "zh": "第8章。曲率。"
+  "bad2adf67c1f": {
+   "scene": "Train",
+   "en": "How large a step can plain gradient descent take here? Chapter fourteen will give the rule: less than two over the largest curvature. <bookmark mark='a'/> At the start, every score zero, the Hessian's largest eigenvalue is 0.0071, which would allow steps up to 283. <bookmark mark='b'/> But the curvature grows as the model learns, to 0.026 at the counting answer, and that allows only 77. <bookmark mark='c'/> With a step of 57, under that limit, the loss settles at 3.332 bits. With 85, over it, it never settles: the curvature climbs to two over the step and hovers there, the edge of stability that Part 11 takes up.",
+   "zh": "在这里，单纯的梯度下降，步子能迈多大？第14章会给出规则：要小于2除以最大的曲率。<bookmark mark='a'/>一开始，所有分数都是0，黑塞矩阵的最大特征值是0.0071，照这样算，步长可以大到283。<bookmark mark='b'/>可是随着模型学习，曲率在增大，到计数的答案那里，它是0.026，只容许步长到77。<bookmark mark='c'/>步长取57，在这个界限之下，损失稳定在3.332比特。步长取85，超过了它，损失就永远稳定不下来：曲率一路爬升到2除以步长，然后在那里徘徊，这就是第11部分要讲的稳定性边缘。"
   },
-  "875e3be9ec2b": {
-   "scene": "Curvature",
-   "en": "The gradient says which way is downhill. It doesn't say how the slope itself is changing. <bookmark mark='a'/> That's the second derivative: curvature. With many inputs, it's a matrix of second derivatives, the Hessian. <bookmark mark='b'/> It's symmetric, so, from part three, it has perpendicular eigenvectors: the directions of pure curvature. Its eigenvalues say how sharply the surface bends along each. <bookmark mark='c'/> Both positive: a bowl. One negative: a saddle, downhill one way and uphill the other. In many dimensions, most of the flat spots a model passes are saddles, not valleys.",
-   "zh": "梯度告诉你哪边是下坡，却没告诉你，斜率本身在怎样变化。<bookmark mark='a'/>那是二阶导数：曲率。有多个输入时，它是一个由二阶导数组成的矩阵，叫作黑塞矩阵。<bookmark mark='b'/>它是对称的，所以按第3部分讲的，它有互相垂直的特征向量：也就是纯粹弯曲的方向。它的特征值，说明曲面沿每个方向弯得有多厉害。<bookmark mark='c'/>两个都为正：是一个碗。一个为负：是一个鞍点，一个方向下坡，另一个方向上坡。在很多维的空间里，模型经过的平坦之处，大多是鞍点，而不是山谷。"
+  "543ff59091d3": {
+   "scene": "Floats",
+   "en": "Chapter nine. Numbers in a computer.",
+   "zh": "第9章。计算机里的数。"
   },
-  "a278b4004b98": {
-   "scene": "Curvature",
-   "en": "Curvature explains why plain gradient descent can be slow. <bookmark mark='a'/> In a long, narrow valley, bent twenty-five times more sharply across than along, the steepest way down points mostly at the opposite wall. So the steps zigzag from wall to wall, and crawl along the floor. <bookmark mark='b'/> Momentum, carrying some speed from step to step, does better. <bookmark mark='c'/> Newton's method uses the curvature itself to rescale the step: multiplying by H inverse undoes the curvature's stretching, so every direction is equally steep, and in a bowl like this it lands at the bottom in one jump. <bookmark mark='d'/> For a model with billions of numbers the full Hessian is far too big to use, but the problem it reveals shapes every modern optimizer, the rule that turns gradients into steps, in part eleven.",
-   "zh": "曲率解释了，为什么单纯的梯度下降可能很慢。<bookmark mark='a'/>在一条又长又窄的山谷里，横向的弯曲程度是纵向的25倍，最陡的下坡方向，大多指向对面的谷壁。于是每一步都在两边谷壁之间来回折返，沿着谷底慢慢往前爬。<bookmark mark='b'/>动量，也就是把一部分速度从这一步带到下一步，效果更好。<bookmark mark='c'/>牛顿法直接用曲率本身来重新缩放每一步：乘以H的逆矩阵，就抵消了曲率造成的拉伸，于是每个方向都一样陡，在这样一个碗里，一步就跳到谷底。<bookmark mark='d'/>对一个有几十亿个数的模型来说，完整的黑塞矩阵太大了，根本用不上；但它揭示的问题，塑造了每一个现代优化器，也就是把梯度变成步子的那条规则，这些到第11部分再讲。"
+  "36668984b632": {
+   "scene": "Floats",
+   "en": "Every number in this series so far has been a float. In 1985 one standard, IEEE 754, designed largely by William Kahan, fixed how computers store and round them, so that every machine would give the same answer. <bookmark mark='a'/> A float is a sign, an exponent and a mantissa: one point the mantissa, times two to the exponent. Exponent bits buy range; mantissa bits buy precision. <bookmark mark='b'/> Float32 has eight and twenty-three. Bfloat16 keeps float32's eight exponent bits and only seven for the mantissa; float16 has five and ten; and the eight-bit formats of 2022 have four and three, or five and two.",
+   "zh": "到目前为止，本系列里的每一个数都是浮点数。1985年，一项标准，IEEE 754，主要由威廉·卡亨设计，规定了计算机怎样存储和舍入它们，好让每台机器都给出同样的答案。<bookmark mark='a'/>一个浮点数由符号位、指数和尾数组成：1点几的尾数，乘以2的指数次方。指数位换来范围，尾数位换来精度。<bookmark mark='b'/>FP32有8位指数、23位尾数。BF16保留了FP32的8位指数，尾数只有7位；FP16是5位和10位；而2022年的8位格式，是4位和3位，或者5位和2位。"
   },
-  "677ddfc14125": {
+  "ff7a6c5d209a": {
+   "scene": "Floats",
+   "en": "The gap between neighbouring floats, the unit in the last place, grows with the number itself: a staircase, one step per power of two. So the relative precision is the same everywhere: about 7.2 decimal digits in float32, 2.4 in bfloat16. <bookmark mark='a'/> And each format ends somewhere. Float16 stops at 65,504, the four-bit-exponent FP8 at 448, while bfloat16 reaches as far as float32. That is why bfloat16, Google's format for its TPUs, trains without the loss scaling float16 needs. Part 17 covers the hardware, and Part 19 how models are squeezed into fewer bits still.",
+   "zh": "相邻两个浮点数之间的间隔，叫作最后一位单位，它随着数本身一起增大：一级级台阶，每个2的幂一级。所以相对精度处处都一样：FP32大约有7.2位十进制有效数字，BF16只有2.4位。<bookmark mark='a'/>每种格式都有尽头。FP16到65504为止，4位指数的FP8到448为止，而BF16能和FP32走得一样远。正因为如此，BF16，谷歌为它的TPU设计的格式，训练时不需要FP16所需的损失缩放。硬件在第17部分讲，而把模型压进更少的位数，在第19部分讲。"
+  },
+  "858a07b75251": {
+   "scene": "Floats",
+   "en": "Rounding has consequences. In bfloat16, one plus one two-hundred-and-fifty-sixth is one, and 257 is 256. Even 0.1 is not 0.1 in float32. <bookmark mark='a'/> Add 0.01 ten thousand times; the answer should be 100. <bookmark mark='b'/> Float32 gets 100.003. <bookmark mark='c'/> Float16 stalls at 32, and bfloat16 at 4: once the sum is big enough, the gap between floats is more than twice 0.01, and every addition rounds back to where it was. <bookmark mark='d'/> Keep the numbers in bfloat16 but the sum in float32, as the matrix units of GPUs do, and you get 100.10, because 0.01 itself was rounded to 0.010010.",
+   "zh": "舍入是有后果的。在BF16里，1加上256分之1还是1，257变成了256。就连0.1，在FP32里也不是0.1。<bookmark mark='a'/>把0.01加一万次；答案应该是100。<bookmark mark='b'/>FP32得到100.003。<bookmark mark='c'/>FP16卡在32，BF16卡在4：一旦和变得足够大，相邻浮点数的间隔就超过0.01的两倍，每加一次，都会被舍入回原处。<bookmark mark='d'/>如果数用BF16，而和用FP32来累加，就像GPU的矩阵单元那样，你会得到100.10，因为0.01本身被舍入成了0.010010。"
+  },
+  "7f41f2355f20": {
+   "scene": "Floats",
+   "en": "Range has consequences too. The softmax exponentiates its scores, and e to the power 89 is already too big for float32; in float16, e to the 11.1 is. <bookmark mark='a'/> So scores of a thousand, nine hundred and ninety-nine and nine hundred and ninety-eight become infinities, and the probabilities become not a number. <bookmark mark='b'/> The fix is to subtract the largest score first. The log of a sum of exponentials is the maximum, <bookmark mark='c'/> plus the log of a sum in which every exponent is at most zero. <bookmark mark='d'/> Nothing overflows, and the largest term is exactly one, so the sum can't vanish either. <bookmark mark='e'/> The same three scores now give clean probabilities, and our library's log-softmax does exactly this, in its first line.",
+   "zh": "范围也是有后果的。softmax要对分数取指数，而e的89次方，对FP32来说就已经太大了；在FP16里，e的11.1次方就已经溢出。<bookmark mark='a'/>于是，1000、999和998这三个分数，都变成了无穷大，概率则变成了非数，NaN。<bookmark mark='b'/>办法是先减去最大的那个分数。指数之和的对数，等于最大值，<bookmark mark='c'/>加上另一个和的对数，而那个和里，每个指数都不超过0。<bookmark mark='d'/>什么都不会溢出，而最大的那一项恰好是1，所以和也不会变成0。<bookmark mark='e'/>同样这三个分数，现在给出了干净的概率，而我们库里的log-softmax，在第一行做的正是这件事。"
+  },
+  "34efb3bfa626": {
+   "scene": "GradCheck",
+   "en": "Chapter ten. Cancellation, and the gradient check.",
+   "zh": "第10章。抵消，以及梯度检验。"
+  },
+  "ee9e77181566": {
+   "scene": "GradCheck",
+   "en": "One more way numbers go wrong, and it explains how to check a gradient. Take one minus cos x, over x squared: for small x it is very nearly one half. <bookmark mark='a'/> Computed as written, in float32, the error explodes as x shrinks, <bookmark mark='b'/> and at x of ten to the minus four, cos x rounds to exactly one, and the answer is zero. <bookmark mark='c'/> This is cancellation: subtracting two nearly equal numbers keeps their rounding errors but loses their size, so the relative error grows like one over x squared, just as predicted. Float64 only delays it. <bookmark mark='d'/> Rewritten without the subtraction, the same formula is accurate everywhere.",
+   "zh": "数还有一种出错的方式，而它恰好说明了该怎样检验梯度。看1减cos x，再除以x的平方：x很小时，它非常接近二分之一。<bookmark mark='a'/>照原样在FP32里计算，x越小，误差就越是爆炸，<bookmark mark='b'/>到了x等于10的负4次方，cos x被舍入成恰好是1，答案成了0。<bookmark mark='c'/>这就是抵消：两个几乎相等的数相减，保留了它们的舍入误差，却丢掉了它们的大小，所以相对误差像x的平方分之1那样增长，正如预测的那样。FP64只是把它推迟了。<bookmark mark='d'/>换一种不做减法的写法，同一个式子在哪里都很准。"
+  },
+  "94d3abf5be8f": {
+   "scene": "GradCheck",
+   "en": "A gradient check is a cancellation on purpose. Expand f a step either side of x, by Taylor's theorem. <bookmark mark='a'/> Subtract and divide by two h: the even terms cancel, leaving the derivative plus a truncation error that shrinks like h squared. <bookmark mark='b'/> But each value of f was rounded, by about u times f, u the unit roundoff, and the subtraction keeps those errors while dividing by a tiny 2 h: a rounding error that grows like one over h. <bookmark mark='c'/> Add the two, <bookmark mark='d'/> and set the derivative to zero: the best step is the cube root of three u f over the third derivative. Too large a step and Taylor's error wins; too small and rounding does.",
+   "zh": "梯度检验，就是故意制造的一次抵消。用泰勒定理，把f在x两边各展开一步。<bookmark mark='a'/>相减再除以2h：偶数次的项抵消了，剩下导数，加上一个截断误差，它像h的平方那样缩小。<bookmark mark='b'/>可是f的每个值都被舍入过，误差大约是u乘以f，u是单位舍入误差，而这次相减保留了这些误差，又除以一个很小的2h：于是舍入误差像h分之1那样增长。<bookmark mark='c'/>把两者加起来，<bookmark mark='d'/>令导数为0：最好的步长，是3乘以u乘以f、再除以三阶导数的立方根。步子太大，泰勒的误差占上风；太小，舍入误差占上风。"
+  },
+  "e0223bc85be2": {
+   "scene": "GradCheck",
+   "en": "Here it is measured, on chapter seven's network, along eight random directions, in both precisions. <bookmark mark='a'/> In float64 the error falls like h squared from the right, with a slope of 2.00, until rounding takes over and it climbs again like one over h. A V. <bookmark mark='b'/> In float32 the same V sits far higher and further right. <bookmark mark='c'/> The bottoms are where the formula said: both within a factor of three of the prediction. <bookmark mark='d'/> At its best, float64's check is good to 6 times ten to the minus 13; float32's only to 5 times ten to the minus 7. So check gradients in float64, with a step near the cube root of the unit roundoff. Chapter seven's nudge of a millionth was close: its error there is about 6 times ten to the minus 11.",
+   "zh": "这是实测的结果，用的是第7章的网络，沿8个随机方向，两种精度都有。<bookmark mark='a'/>在FP64里，误差从右边像h的平方那样下降，斜率是2.00，直到舍入误差接手，它又像h分之1那样回升。一个V字。<bookmark mark='b'/>在FP32里，同样的V字高得多，也更靠右。<bookmark mark='c'/>两个底，都落在公式说的地方：两者都在预测值的3倍之内。<bookmark mark='d'/>在最好的时候，FP64的检验能准到6乘以10的负13次方；FP32只能准到5乘以10的负7次方。所以要用FP64来检验梯度，步长取在单位舍入误差的立方根附近。第7章推动百万分之一，已经很接近了：那里的误差大约是6乘以10的负11次方。"
+  },
+  "7182ba81a018": {
+   "scene": "Memory",
+   "en": "Chapter eleven. Memory.",
+   "zh": "第11章。内存。"
+  },
+  "8070c6593291": {
+   "scene": "Memory",
+   "en": "Reverse mode has a price, and it is memory. <bookmark mark='a'/> On the way forward, every layer's output must be kept, <bookmark mark='b'/> because on the way back each step needs it: a layer's Jacobian depends on its input. <bookmark mark='c'/> Only as the backward pass reaches a layer can its activations be freed. So the memory grows with the depth, and with the batch and the width too; training large models, it is the activations, not the weights, that fill the GPU, which is Part 18's problem.",
+   "zh": "反向模式是有代价的，代价就是内存。<bookmark mark='a'/>向前走时，每一层的输出都必须留着，<bookmark mark='b'/>因为往回走时，每一步都要用到它：一层的雅可比矩阵取决于它的输入。<bookmark mark='c'/>只有等反向计算走到某一层，它的激活才能释放。所以内存随深度增长，也随批量和宽度增长；训练大模型时，把GPU塞满的，是激活，而不是权重，这是第18部分的问题。"
+  },
+  "d09aa034688d": {
+   "scene": "Memory",
+   "en": "The way out is to trade memory for time. <bookmark mark='a'/> Keep only every k-th output, a checkpoint; when the backward pass reaches a segment, run that segment forward again from its checkpoint, and keep its k outputs just while they're needed. <bookmark mark='b'/> The memory is n over k checkpoints plus one segment of k. <bookmark mark='c'/> It's smallest where its slope is zero, <bookmark mark='d'/> at k equal to the square root of n, where it is two root n instead of n. <bookmark mark='e'/> The cost: every segment is recomputed once, about one extra forward pass. Tianqi Chen and colleagues brought this to deep networks in 2016; Andreas Griewank had shown in 1992 that recursive checkpoints bring both costs down to a logarithm. Today it is one line in PyTorch, and FlashAttention uses the same trade, recomputing attention's weights in the backward pass instead of storing them, as Part 19 shows.",
+   "zh": "出路是用时间换内存。<bookmark mark='a'/>每隔k层只留一个输出，叫作检查点；反向计算走到某一段时，就从那一段的检查点出发，把这一段重新向前算一遍，只在需要的时候留着它的k个输出。<bookmark mark='b'/>内存等于n除以k个检查点，再加上一段的k个。<bookmark mark='c'/>它在斜率为0的地方最小，<bookmark mark='d'/>也就是k等于n的平方根时，这时内存是2倍的根号n，而不是n。<bookmark mark='e'/>代价是：每一段都要重算一次，大约多出一次向前计算。陈天奇和同事们在2016年把它用到了深度网络上；而安德烈亚斯·格里万克在1992年就已证明，递归地设置检查点，能把两种代价都降到对数级。今天，在PyTorch里这只需要一行代码；FlashAttention也做同样的交换：在反向传播时重新算出注意力权重，而不是把它们存下来，第19部分会讲到。"
+  },
+  "ddaa7bedcb84": {
+   "scene": "Memory",
+   "en": "Measured, on a chain of 256 layers. <bookmark mark='a'/> The most activations held at once follows n over k plus k: 257 if you keep everything, and 32 at the bottom, which is flat from k of 13 to 20, and the square root of 256, 16, is among them. <bookmark mark='b'/> The price is in evaluations: 256 layers run forward if everything is kept, 496 with checkpoints, and 33,152 if nothing is kept and every input is recomputed from the start. <bookmark mark='c'/> On longer chains the best interval keeps tracking the square root. Timed on a deeper, wider chain, checkpoints cost 1.27 times the time, and the gradient is the same in every case, to the last bit.",
+   "zh": "在一条256层的链上实测。<bookmark mark='a'/>同时保留的激活最多有多少，跟着n除以k再加k走：全部保留时是257个，最低点是32个，底部从k等于13到20都是平的，而256的平方根16，就在其中。<bookmark mark='b'/>代价体现在计算次数上：全部保留时，向前算256层，用检查点时496层，而什么都不留、每个输入都从头重算时，要33152层。<bookmark mark='c'/>在更长的链上，最好的间隔一直跟着平方根走。在一条更深更宽的链上计时，检查点花的时间是原来的1.27倍，而每种做法得到的梯度，一位不差。"
+  },
+  "58420d910687": {
+   "scene": "Newton",
+   "en": "Chapter twelve. Curvature.",
+   "zh": "第12章。曲率。"
+  },
+  "7f943bfad8f0": {
+   "scene": "Newton",
+   "en": "The gradient says which way is downhill. It doesn't say how the slope itself is changing. <bookmark mark='a'/> That's the second derivative, curvature. With many inputs it's a matrix of second derivatives, the Hessian. <bookmark mark='b'/> It's symmetric, so, from part three, it has perpendicular eigenvectors, the directions of pure curvature, and its eigenvalues say how sharply the surface bends along each. <bookmark mark='c'/> Both positive: a bowl. One negative: a saddle, downhill one way and uphill the other, which chapter fourteen takes up.",
+   "zh": "梯度告诉你哪边是下坡，却没告诉你，斜率本身在怎样变化。<bookmark mark='a'/>那是二阶导数，曲率。有多个输入时，它是一个由二阶导数组成的矩阵，叫作黑塞矩阵。<bookmark mark='b'/>它是对称的，所以按第3部分讲的，它有互相垂直的特征向量，也就是纯粹弯曲的方向，而它的特征值，说明曲面沿每个方向弯得有多厉害。<bookmark mark='c'/>两个都为正：是一个碗。一个为负：是一个鞍点，一个方向下坡，另一个方向上坡，第14章会专门讲它。"
+  },
+  "07caf5c529e9": {
+   "scene": "Newton",
+   "en": "The Hessian gives a better step. The first derivative made the best straight line; with the second, the best quadratic. <bookmark mark='a'/> Jump straight to that quadratic's minimum, where its gradient is zero: <bookmark mark='b'/> the step is minus H inverse times the gradient. That's Newton's method. <bookmark mark='c'/> Newton used the idea in 1669 for roots of equations, Raphson simplified it in 1690, and Thomas Simpson extended it in 1740 to several variables and to finding minima.",
+   "zh": "黑塞矩阵能给出更好的一步。一阶导数给出了最好的直线；加上二阶导数，就是最好的二次曲面。<bookmark mark='a'/>直接跳到这个二次曲面的最低点，也就是它的梯度为0的地方：<bookmark mark='b'/>这一步，等于负的H的逆乘以梯度。这就是牛顿法。<bookmark mark='c'/>1669年，牛顿用这个想法求方程的根，1690年，拉夫森把它简化，1740年，托马斯·辛普森把它推广到多个变量，并用来求最小值。"
+  },
+  "9e748481d7e2": {
+   "scene": "Newton",
+   "en": "A test: logistic regression, a classifier Part 6 builds, with two features so correlated that the curvature differs 187-fold between directions. <bookmark mark='a'/> Gradient descent, with the largest step that is always safe, zigzags down the valley and needs 2,362 steps to get within ten to the minus ten of the minimum. <bookmark mark='b'/> Newton needs 3. <bookmark mark='c'/> Count its correct digits after each step: 2, then 5, then 11, roughly doubling each step: quadratic convergence. <bookmark mark='d'/> The catch is the Hessian itself: each step solves a linear system with it, and for a billion parameters it would have a billion squared entries. The next chapter uses curvature without ever building it.",
+   "zh": "做个测试：逻辑回归，第6部分会搭建的一种分类器，它有两个高度相关的特征，以至于曲率在两个方向上相差187倍。<bookmark mark='a'/>梯度下降用的是永远安全的最大步长，它沿着山谷来回折返，要走2362步，才能离最小值不到10的负10次方。<bookmark mark='b'/>牛顿法只要3步。<bookmark mark='c'/>数一数每一步之后它正确的位数：2，然后5，然后11，每一步大约翻一倍：这是二次收敛。<bookmark mark='d'/>麻烦在于黑塞矩阵本身：每一步都要用它解一个线性方程组，而对十亿个参数来说，它会有十亿的平方个元素。下一章会讲，怎样用上曲率，却从来不把它造出来。"
+  },
+  "507005ac5067": {
+   "scene": "HVP",
+   "en": "Chapter thirteen. Curvature without the Hessian.",
+   "zh": "第13章。不用黑塞矩阵的曲率。"
+  },
+  "949605ae2a7b": {
+   "scene": "HVP",
+   "en": "A Hessian with a billion rows is out of reach, but its product with one vector is not. <bookmark mark='a'/> H times v is how the gradient changes as you move along v. <bookmark mark='b'/> Since v is fixed, that's the gradient of a single number, the gradient dotted with v. <bookmark mark='c'/> And a gradient of one number is what reverse mode does cheaply: run it once more, through the computation of the gradient itself, and you get H v exactly, for a small multiple of the cost of a gradient. Barak Pearlmutter published the trick in 1994.",
+   "zh": "一个有十亿行的黑塞矩阵，是够不着的，但它与一个向量的乘积，却不是。<bookmark mark='a'/>H乘以v，就是沿着v移动时，梯度怎样变化。<bookmark mark='b'/>既然v是固定的，这就是一个数的梯度，也就是梯度与v的点积的梯度。<bookmark mark='c'/>而一个数的梯度，正是反向模式最擅长、最便宜的事：再运行它一次，穿过计算梯度本身的那些步骤，就能精确地得到H乘以v，代价只是一次梯度的几倍。巴拉克·珀尔马特在1994年发表了这个技巧。"
+  },
+  "ec4df4e4db0f": {
+   "scene": "HVP",
+   "en": "Check it on a small network we'll meet in a moment. <bookmark mark='a'/> Against the full Hessian, built the slow way, Pearlmutter's product agrees to rounding error, and it costs 1.9 gradients. <bookmark mark='b'/> Finite differences of gradients make another V, as in chapter ten, and at their best are off by 2 times ten to the minus 9. <bookmark mark='c'/> And products are all you need to learn about curvature: multiply a vector by H, again and again, renormalizing, and it turns toward the steepest direction. The estimate of the largest eigenvalue converges to the true one.",
+   "zh": "在一个小网络上检验一下，我们马上就会见到它。<bookmark mark='a'/>与按笨办法造出来的完整黑塞矩阵相比，珀尔马特的乘积一致到舍入误差，而代价相当于1.9次梯度。<bookmark mark='b'/>对梯度做有限差分，又会画出一个V字，就像第10章那样，最好的时候误差是2乘以10的负9次方。<bookmark mark='c'/>而要了解曲率，有乘积就够了：拿一个向量反复乘以H，每次都重新归一化，它就会转向最陡的方向。对最大特征值的估计，收敛到了真实值。"
+  },
+  "b0cd33946b45": {
+   "scene": "HVP",
+   "en": "Now watch a landscape change as a network learns. Three interleaved spirals, a network with 371 parameters, and its full Hessian, computed at 6 moments during training. <bookmark mark='a'/> At the start, the eigenvalues spread both ways: the initial point is a saddle in many directions. <bookmark mark='b'/> As the network fits the spirals, the negative curvature drains away, from 72 clearly negative eigenvalues at the start to 0. <bookmark mark='c'/> At the end, 4 eigenvalues stand out above a tenth of the largest, and 95 percent lie within a hundredth of zero: a bulk of nearly flat directions, plus a few steep ones, the shape Levent Sagun and colleagues reported for real networks in 2016. And as the loss goes to zero, the whole spectrum shrinks with it.",
+   "zh": "现在来看，一个网络学习时，地形怎样变化。三条交错的螺旋，一个有371个参数的网络，以及它完整的黑塞矩阵，在训练中的6个时刻算出来。<bookmark mark='a'/>一开始，特征值向两边散开：起点在很多个方向上都是鞍点。<bookmark mark='b'/>随着网络拟合这些螺旋，负的曲率慢慢消失，从开始时72个明显为负的特征值，降到0个。<bookmark mark='c'/>到最后，有4个特征值，超过最大值的十分之一，显得很突出，而有百分之95的特征值在最大值的百分之一以内：一大团几乎平坦的方向，加上少数几个陡峭的方向，这正是莱文特·萨贡和同事们在2016年对真实网络报告的形状。而随着损失趋于0，整个谱也跟着缩小。"
+  },
+  "083a103fd3f5": {
+   "scene": "Quadratic",
+   "en": "Chapter fourteen. How fast is downhill?",
+   "zh": "第14章。下山能有多快？"
+  },
+  "c29e1a8b49aa": {
+   "scene": "Quadratic",
+   "en": "Near a minimum every smooth loss looks like a quadratic bowl, and on a bowl gradient descent can be solved exactly. <bookmark mark='a'/> Each step multiplies the position by I minus eta H. <bookmark mark='b'/> In the Hessian's eigenvectors that matrix is diagonal, so each coordinate shrinks on its own, by one minus eta times its eigenvalue. <bookmark mark='c'/> Every factor must be less than one in size, so the step must be smaller than two over the largest curvature. <bookmark mark='d'/> And the slowest coordinate sets the pace. The best step balances the two extremes, and the rate is kappa minus one over kappa plus one, where kappa, the condition number, is the largest curvature over the smallest.",
+   "zh": "在最小值附近，每个光滑的损失看起来都像一个二次的碗，而在碗上，梯度下降可以精确地解出来。<bookmark mark='a'/>每一步都把位置乘以I减去η乘以H。<bookmark mark='b'/>在黑塞矩阵的特征向量下，这个矩阵是对角的，所以每个坐标各自缩小，缩小的倍数是1减去η乘以它的特征值。<bookmark mark='c'/>每个倍数的绝对值都必须小于1，所以步长必须小于2除以最大的曲率。<bookmark mark='d'/>而最慢的那个坐标决定了速度。最好的步长让两个极端互相平衡，速率是κ减1除以κ加1，其中κ，也就是条件数，是最大曲率与最小曲率之比。"
+  },
+  "be14ef908e1d": {
+   "scene": "Quadratic",
+   "en": "Here is a valley with kappa of twenty-five: it bends twenty-five times more sharply across than along. <bookmark mark='a'/> The steepest way down points mostly at the opposite wall, so the steps zigzag from wall to wall and crawl along the floor: 26 steps to get within one percent. <bookmark mark='b'/> Momentum, carrying speed from step to step, does better, and Part 11 derives why. <bookmark mark='c'/> Newton's step undoes the curvature and lands at the bottom at once.",
+   "zh": "这是一个κ等于25的山谷：横向的弯曲程度是纵向的25倍。<bookmark mark='a'/>最陡的下坡方向，大多指向对面的谷壁，于是每一步都在两边谷壁之间来回折返，沿着谷底慢慢往前爬：要26步，才能进到百分之一以内。<bookmark mark='b'/>动量把速度从一步带到下一步，效果更好，第11部分会推导原因。<bookmark mark='c'/>牛顿法的一步抵消了曲率，一下子就落到谷底。"
+  },
+  "678c3d7e1683": {
+   "scene": "Quadratic",
+   "en": "Measured on bowls from kappa of one to a thousand: the rates, in orange, match the formula to rounding error. <bookmark mark='a'/> And the number of steps grows in proportion to kappa: shrinking the error a millionfold takes 6,908 steps at kappa of 1,000. <bookmark mark='b'/> Push the step past two over the largest curvature, and the valley's steps grow instead of shrinking, here from eta of 0.082. Real losses are not quadratics, but this is the calculus behind every learning-rate rule, and Part 11 builds the faster methods on it.",
+   "zh": "在κ从1到1000的碗上实测：橙色的速率，和公式一致到舍入误差。<bookmark mark='a'/>而所需的步数与κ成正比：在κ等于1000时，把误差缩小一百万倍，要走6908步。<bookmark mark='b'/>步长一旦超过2除以最大曲率，山谷里的步子就会越走越大，而不是越走越小，这里是从η等于0.082开始。真实的损失并不是二次函数，但这正是每一条学习率规则背后的微积分，第11部分会在它的基础上搭建更快的方法。"
+  },
+  "4f2227329d00": {
+   "scene": "Quadratic",
+   "en": "Saddles are where descent stalls. Here's a surface with a saddle at the centre and a minimum above and below it. <bookmark mark='a'/> Start almost on the line through the saddle, a tiny distance y nought off it. The walk slides in towards the saddle, where the gradient nearly vanishes, and waits, until the tiny offset has grown enough to fall off. <bookmark mark='b'/> Near the saddle the offset grows by one plus eta each step, so the wait grows with the logarithm of one over y nought: measured, 24.1 steps for every factor of ten, just as predicted. <bookmark mark='c'/> Start exactly on the line and it never leaves: the gradient falls to 3 times ten to the minus 14, at a point that is not a minimum. Only the Hessian, with its negative eigenvalue, tells them apart. In practice the noise of stochastic gradients kicks a network off; Yann Dauphin and colleagues argued in 2014 that in many dimensions saddles, more than bad minima, are what slow training.",
+   "zh": "鞍点，是下降停滞的地方。这张曲面的中央有一个鞍点，上下各有一个最小值。<bookmark mark='a'/>从几乎正好在穿过鞍点的那条线上出发，只偏开一个很小的距离y0。这一路先滑向鞍点，那里的梯度几乎为0，于是就在那里等着，直到那一点点偏移长到足够大，才掉下去。<bookmark mark='b'/>在鞍点附近，偏移每一步都乘以1加η，所以等待的时间随着y0分之1的对数增长：实测，每差10倍，要多走24.1步，正如预测。<bookmark mark='c'/>如果正好从那条线上出发，它就永远走不开：梯度降到3乘以10的负14次方，而那一点并不是最小值。只有黑塞矩阵，凭它那个负的特征值，才分得出两者。实际训练中，随机梯度的噪声会把网络踢开；扬·多芬和同事们在2014年指出，在高维空间里，拖慢训练的主要是鞍点，而不是糟糕的极小值。"
+  },
+  "b0dd5fbb7de6": {
+   "scene": "Lagrange",
+   "en": "Chapter fifteen. Optimizing under constraints.",
+   "zh": "第15章。在约束之下求最优。"
+  },
+  "a0d262245a0d": {
+   "scene": "Lagrange",
+   "en": "Often the numbers aren't free: probabilities must add to one, a budget must be kept. Here, minimize f, whose contours are these ellipses, but only on the circle. <bookmark mark='a'/> Walk along the circle and watch two arrows: the gradient of f, and the gradient of the constraint, which points straight out of the circle. <bookmark mark='b'/> Wherever the gradient of f has a part along the circle, you can slide that way and go lower. <bookmark mark='c'/> So at the constrained minimum that part is zero: the two gradients are parallel. <bookmark mark='d'/> Joseph-Louis Lagrange turned that picture into a method in 1788, in his Mécanique analytique.",
+   "zh": "很多时候，这些数并不是自由的：概率加起来必须是1，预算不能超支。这里，要把f最小化，它的等高线是这些椭圆，但只能在这个圆上取值。<bookmark mark='a'/>沿着圆走，看两个箭头：f的梯度，和约束的梯度，后者笔直地指向圆外。<bookmark mark='b'/>只要f的梯度沿着圆有一个分量，你就能往那边滑，走得更低。<bookmark mark='c'/>所以在带约束的最小值处，那个分量是0：两个梯度互相平行。<bookmark mark='d'/>1788年，约瑟夫–路易·拉格朗日在他的《分析力学》里，把这幅图变成了一种方法。"
+  },
+  "78ce1c20c507": {
+   "scene": "Lagrange",
+   "en": "Write it down: at the constrained minimum, the gradient of f is a multiple of the constraint's gradient, minus lambda times it. <bookmark mark='a'/> Lagrange's device folds the constraint into a single function, the Lagrangian, f plus lambda times g, <bookmark mark='b'/> whose ordinary stationary points, in x and lambda together, are exactly the constrained ones: the derivative in lambda just gives back the constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at 0.626. It is a price: how fast the best value would fall if the constraint were loosened a little.",
+   "zh": "写下来：在带约束的最小值处，f的梯度是约束梯度的一个倍数，等于负λ乘以它。<bookmark mark='a'/>拉格朗日的办法，是把约束并进一个函数，叫作拉格朗日函数，f加上λ乘以g，<bookmark mark='b'/>它在x和λ一起看时的普通驻点，恰好就是带约束的那些点：对λ求导，正好给回约束本身。<bookmark mark='c'/>对这个圆，乘子算出来是0.626。它是一个价格：约束稍微放松一点，最优值会下降得多快。"
+  },
+  "386d8fd79cce": {
+   "scene": "Lagrange",
+   "en": "A famous constrained problem: a die whose average roll is 4.5, not 3.5. Which probabilities assume the least beyond that? The ones with the most entropy. <bookmark mark='a'/> Set the Lagrangian's derivative to zero, with one multiplier for each constraint, <bookmark mark='b'/> and the answer is a softmax: each face's probability is e to the beta times the face, normalized. <bookmark mark='c'/> Computed, beta is 0.371, and a general-purpose solver lands on the same six numbers. Edwin Jaynes made this a principle of inference in 1957. It's where the softmax comes from: it is the maximum-entropy distribution with a fixed average score, and its temperature is a Lagrange multiplier.",
+   "zh": "一个著名的带约束问题：一个骰子，平均点数是4.5，而不是3.5。哪组概率，在这之外假设得最少？熵最大的那一组。<bookmark mark='a'/>让拉格朗日函数的导数为0，每个约束一个乘子，<bookmark mark='b'/>答案就是一个softmax：每一面的概率，是e的β乘以点数次方，再归一化。<bookmark mark='c'/>算出来，β等于0.371，而一个通用的求解器，落在同样的六个数上。埃德温·杰恩斯在1957年把它变成了一条推断原则。softmax就是从这里来的：它是平均分数固定时熵最大的分布，而它的温度，就是一个拉格朗日乘子。"
+  },
+  "44793fa40c08": {
+   "scene": "Lagrange",
+   "en": "The same algebra gives reinforcement learning one of its closed forms. Maximize the expected reward, minus beta times the KL divergence from a reference policy. <bookmark mark='a'/> With the constraint that the probabilities add to one, the best policy is the reference, reweighted by e to the reward over beta. <bookmark mark='b'/> Here for six actions, computed and checked against a solver. Part 27's direct preference optimization starts from this formula.",
+   "zh": "同样的代数，给了强化学习一个闭式解。把期望奖励，减去β乘以与参考策略之间的KL散度，最大化。<bookmark mark='a'/>再加上概率之和为1的约束，最好的策略，就是参考策略，按e的奖励除以β次方重新加权。<bookmark mark='b'/>这里是6个动作的情形，算出来，又用求解器核对过。第27部分的直接偏好优化，就是从这个公式出发的。"
+  },
+  "796ae24003ad": {
+   "scene": "KKT",
+   "en": "Chapter sixteen. Inequalities, and duality.",
+   "zh": "第16章。不等式，以及对偶。"
+  },
+  "bfecde11a3d2": {
+   "scene": "KKT",
+   "en": "Most constraints are inequalities: a probability can't be negative, a margin must be at least one. William Karush worked out the conditions in his 1939 master's thesis; Harold Kuhn and Albert Tucker found them again in 1951. <bookmark mark='a'/> At a minimum there are multipliers mu, one per constraint, with the gradient of the Lagrangian zero, every constraint met, every multiplier non-negative, <bookmark mark='b'/> and each multiplier times its constraint equal to zero: complementary slackness. <bookmark mark='c'/> Either the minimum is inside and the wall is idle, its multiplier zero, <bookmark mark='d'/> or the minimum is on the wall, and the multiplier measures how hard the wall pushes.",
+   "zh": "大多数约束都是不等式：概率不能为负，间隔至少要有1。威廉·卡鲁什在他1939年的硕士论文里推出了这些条件；1951年，哈罗德·库恩和阿尔伯特·塔克又重新找到了它们。<bookmark mark='a'/>在最小值处，存在一组乘子μ，每个约束一个，使拉格朗日函数的梯度为0，每个约束都满足，每个乘子都不为负，<bookmark mark='b'/>而且每个乘子与它的约束的乘积都等于0：这叫互补松弛。<bookmark mark='c'/>要么最小值在里面，墙闲着，它的乘子是0，<bookmark mark='d'/>要么最小值在墙上，而乘子衡量墙推回来有多用力。"
+  },
+  "299a69273a2e": {
+   "scene": "KKT",
+   "en": "The multipliers lead to a second problem. Fix them, and minimize the Lagrangian over x freely: that's the dual function, q of mu. <bookmark mark='a'/> For any feasible x the added terms are at most zero, so the dual function is a lower bound on f, everywhere it can be met. <bookmark mark='b'/> The best lower bound, d star, is at most the true minimum, p star: weak duality, true for every problem. <bookmark mark='c'/> For convex problems with a strictly feasible point, the two are equal: strong duality. You can solve either one.",
+   "zh": "这些乘子引出了第二个问题。把它们固定住，对x自由地把拉格朗日函数最小化：这就是对偶函数，q(μ)。<bookmark mark='a'/>对任何可行的x，加上去的那些项都不超过0，所以对偶函数是f的一个下界，在所有能取到的地方都成立。<bookmark mark='b'/>最好的下界d星，至多等于真正的最小值p星：这叫弱对偶，对每个问题都成立。<bookmark mark='c'/>对有严格可行点的凸问题，两者相等：这叫强对偶。你可以解其中任何一个。"
+  },
+  "4cecbd04551e": {
+   "scene": "KKT",
+   "en": "Two small examples. Minimize x squared, keeping x at least one. Its dual function is a hump that rises to touch the true minimum, one, exactly: no gap. <bookmark mark='a'/> Now a double well, the same kind of constraint, and no convexity. The dual's best is -1.75, below the true minimum of -1.07: a duality gap of 0.68. The lower bound still holds; it just isn't tight.",
+   "zh": "两个小例子。把x的平方最小化，同时要求x至少为1。它的对偶函数是一个鼓包，升上去，正好碰到真正的最小值1：没有间隙。<bookmark mark='a'/>再看一个双势阱，同样的约束，但不是凸的。对偶的最好值是-1.75，低于真正的最小值-1.07：对偶间隙是0.68。下界依然成立，只是不再紧了。"
+  },
+  "b2c8a0b71c39": {
+   "scene": "KKT",
+   "en": "Duality's most famous use: the support vector machine of Part 6. Find the widest street between two classes: the smallest w that puts every point at least one unit of margin from the line. <bookmark mark='a'/> Its dual has one multiplier per point, and depends on the points only through their dot products, which is what lets kernels in. <bookmark mark='b'/> We solved both, separately, on twenty points: the two optimal values agree to every digit shown. <bookmark mark='c'/> And complementary slackness picks out the support vectors: only 3 multipliers are non-zero, exactly for the 3 points on the edges of the street. Bernhard Boser, Isabelle Guyon and Vladimir Vapnik built the method on this dual in 1992.",
+   "zh": "对偶最著名的用处，是第6部分的支持向量机。在两个类别之间找出最宽的街道：最小的w，让每个点离这条线都至少有一个单位的间隔。<bookmark mark='a'/>它的对偶问题，每个点一个乘子，而且只通过点与点之间的点积依赖于这些点，核方法正是由此进来的。<bookmark mark='b'/>我们在20个点上把两个问题分别解了一遍：两个最优值显示出来的每一位都一致。<bookmark mark='c'/>而互补松弛挑出了支持向量：只有3个乘子不为0，恰好对应街道边缘上的3个点。1992年，伯恩哈德·博泽、伊莎贝尔·居永和弗拉基米尔·瓦普尼克，正是在这个对偶问题上建立了这种方法。"
+  },
+  "db4440aa0724": {
+   "scene": "Implicit",
+   "en": "Chapter seventeen. Differentiating through an equation.",
+   "zh": "第17章。穿过一个方程求导。"
+  },
+  "b503574b6ed8": {
+   "scene": "Implicit",
+   "en": "Some layers aren't a fixed list of steps. A deep equilibrium layer feeds its output back into itself until nothing changes: its output is the fixed point z star, which satisfies z star equals f of z star and theta. How do you backpropagate through that? <bookmark mark='a'/> Differentiate both sides of the equation. <bookmark mark='b'/> Collect the terms: the derivative of the solution is the inverse of I minus J, times the direct derivative, as long as that inverse exists, which is the implicit function theorem. <bookmark mark='c'/> For a loss, run it as a vector-Jacobian product: one linear solve at the fixed point, however many iterations it took to get there, and nothing stored along the way.",
+   "zh": "有些层，并不是一串固定的步骤。深度平衡层把它的输出反复送回自己，直到不再变化：它的输出是不动点z星，满足z星等于f(z星, θ)。怎样穿过它做反向传播？<bookmark mark='a'/>对方程两边求导。<bookmark mark='b'/>把各项归拢：解的导数，等于I减J的逆，乘以直接的导数，只要这个逆存在，这就是隐函数定理。<bookmark mark='c'/>对一个损失，把它当作向量-雅可比积来算：在不动点上解一个线性方程组，不管走到那里用了多少次迭代，一路上什么都不用存。"
+  },
+  "fcfad3043ee0": {
+   "scene": "Implicit",
+   "en": "Check it on a tiny equilibrium layer with eight numbers. <bookmark mark='a'/> The usual alternative is to unroll: run K iterations and backpropagate through all of them with our library. As K grows, that gradient closes in on the implicit one geometrically, <bookmark mark='b'/> shrinking by 0.446 each step, close to the spectral radius of J, as the theory says it should be, until it reaches 3 times ten to the minus 13, the accuracy of the fixed point itself. <bookmark mark='c'/> Unrolling stores every iteration; the implicit gradient needs only the answer.",
+   "zh": "在一个只有8个数的小平衡层上检验一下。<bookmark mark='a'/>通常的另一种做法是展开：迭代K次，再用我们的库，穿过所有这些迭代做反向传播。随着K增大，这个梯度以几何速度逼近隐式的梯度，<bookmark mark='b'/>每一步缩小到0.446倍，和J的谱半径很接近，正如理论所说，直到降到3乘以10的负13次方，也就是不动点本身的精度。<bookmark mark='c'/>展开要存下每一次迭代；隐式的梯度只需要答案。"
+  },
+  "f3e0940fe4f7": {
+   "scene": "Implicit",
+   "en": "And it trains. A deep equilibrium model with 12 numbers learns to fit this curve, with every gradient computed implicitly and its feedback matrix kept a contraction. <bookmark mark='a'/> The fit sharpens as the loss falls from 0.106 to about 2 times ten to the minus 6, and the equilibrium takes longer to reach as it learns, 11 iterations at first and 29 at the end. <bookmark mark='b'/> Shaojie Bai, Zico Kolter and Vladlen Koltun proposed such models in 2019. The same trick differentiates through an inner optimization, in meta-learning, or through a solver used as a layer: wherever the answer is defined by an equation rather than a recipe.",
+   "zh": "而且它能训练。一个有12个数的深度平衡模型，学着拟合这条曲线，每个梯度都是隐式算出来的，它的反馈矩阵始终保持为压缩映射。<bookmark mark='a'/>拟合越来越准，损失从0.106降到大约2乘以10的负6次方，而且它学得越多，达到平衡要花的时间就越长，一开始要11次迭代，最后要29次。<bookmark mark='b'/>白少杰、济科·科尔特和弗拉德连·科尔顿在2019年提出了这类模型。同样的技巧，也能穿过一个内层优化求导，比如元学习，或者穿过一个被当作网络层的求解器：凡是答案由一个方程而不是一份步骤定义的地方，都用得上。"
+  },
+  "d9bf6522efdb": {
    "scene": "Outro",
-   "en": "Let's take stock. Zoom in on a smooth function and it becomes a straight line, whose slope is the derivative. With many inputs, the slopes form the gradient, which points uphill. Up close, a map between spaces is a matrix, its Jacobian, and the chain rule multiplies those matrices. Multiplying them from the loss backwards is cheap, and that's backpropagation. We built it in a few lines, checked it, and trained a model with it. And curvature told us why going downhill can still be slow.",
-   "zh": "我们来盘点一下。把一个光滑的函数放大，它就变成一条直线，直线的斜率就是导数。有多个输入时，各个斜率组成梯度，它指向上坡。凑近看，空间之间的映射就是一个矩阵，也就是它的雅可比矩阵，而链式法则把这些矩阵相乘。从损失那头倒着乘，代价很小，这就是反向传播。我们用寥寥几行代码把它搭了出来，检验了它，还用它训练了一个模型。最后，曲率告诉我们，为什么下山仍然可能很慢。"
+   "en": "Let's take stock. A derivative is the best straight line, the one whose error shrinks faster than the step; a gradient, the steepest direction, by Cauchy–Schwarz; a Jacobian, the best matrix, and real layers' Jacobians are never formed, only multiplied. Forward mode pays per input and reverse mode per output, so training runs backwards: backpropagation, whose weight gradients are outer products of an error signal and an input. We built it, checked it and trained with it. Floats round and cancel, so softmaxes subtract their maximum and gradient checks pick their step. Checkpoints trade memory for time at the square root. Curvature sets the pace of descent, Hessian-vector products reach it cheaply, and a trained network's Hessian is mostly flat. Constraints bring multipliers, KKT and a dual problem, and an equation's solution can be differentiated without unrolling it.",
+   "zh": "我们来盘点一下。导数是最好的直线，它的误差比步长缩得更快；梯度是最陡的方向，这由柯西–施瓦茨不等式保证；雅可比矩阵是最好的矩阵，而真实网络层的雅可比矩阵从来不造出来，只拿来做乘法。前向模式按输入付代价，反向模式按输出付代价，所以训练是倒着走的：反向传播，它给出的权重梯度，是误差信号与输入的外积。我们搭出了它，检验了它，还用它训练了模型。浮点数会舍入、会抵消，所以softmax要先减去最大值，梯度检验要挑好步长。检查点在平方根处用时间换内存。曲率决定了下降的速度，黑塞-向量积能便宜地触及它，而一个训练好的网络，黑塞矩阵大多是平的。约束带来了乘子、KKT条件和一个对偶问题，而一个方程的解，不必展开就能求导。"
   },
-  "d63409bf06bb": {
+  "ff80e40a703b": {
    "scene": "Outro",
-   "en": "This is the engine of everything that follows. Our library trains the first neural network of the series in part nine, and the chain of Jacobians through a deep network decides whether it can learn at all. Curvature, valleys and saddles come back when we build better optimizers, in part eleven.",
-   "zh": "这是后面一切的引擎。在第9部分，我们的库会训练本系列的第一个神经网络，而贯穿一个深度网络的那一串雅可比矩阵，决定了它到底能不能学得起来。曲率、山谷和鞍点，会在第11部分我们搭建更好的优化器时再次出现。"
+   "en": "This is the engine of everything that follows. Our library trains the series' first neural networks in Part 9; Jacobians multiplied through depth decide whether deep networks can learn, in Parts 9 and 10; curvature, saddles and better optimizers fill Part 11; duality builds the support vector machine in Part 6, and the closed form of chapter fifteen becomes direct preference optimization in Part 27; and number formats and memory come back in Parts 17 to 19.",
+   "zh": "这是后面一切的引擎。在第9部分，我们的库会训练本系列最早的那些神经网络；贯穿深度的一串雅可比矩阵，决定深度网络能不能学得起来，这在第9和第10部分；曲率、鞍点和更好的优化器，是第11部分的内容；对偶在第6部分搭起支持向量机，而第15章的闭式解，在第27部分变成直接偏好优化；数的格式和内存，会在第17到第19部分再次出现。"
   },
-  "7b55e042ca1f": {
+  "124ad71d0cad": {
    "scene": "Outro",
-   "en": "Next time: randomness. Probability distributions that move, random walks that become Brownian motion, and the noise that diffusion models learn to undo. <bookmark mark='a'/> It's the last piece of mathematics we need before the models themselves.",
-   "zh": "下一次：随机性。会动的概率分布，变成布朗运动的随机游走，还有扩散模型学着去消除的噪声。<bookmark mark='a'/>在进入模型本身之前，这是我们需要的最后一块数学。"
+   "en": "Here are six problems to try, from the softmax's Jacobian to reinforcement learning's closed form. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题，从softmax的雅可比矩阵，到强化学习的闭式解。在这里暂停，把它们做一遍；完整的解答在本部分的讲义里。"
   },
-  "67e1f0679bb2": {
+  "bf482ddd90d1": {
    "scene": "Outro",
-   "en": "Griewank and Walther's Evaluating Derivatives is the book on automatic differentiation, and Baydin's survey is a good place to start. Thanks for watching, and see you in part five.",
-   "zh": "格里万克和瓦尔特的《计算导数》，是自动微分方面的权威著作，而拜丁的综述，是很好的入门。感谢观看，第5部分见。"
+   "en": "Next time: randomness. Probability distributions that move, random walks that become Brownian motion, gradients that are only estimates, and the noise that diffusion models learn to undo. <bookmark mark='a'/> It's the last piece of mathematics we need before the models themselves.",
+   "zh": "下一次：随机性。会动的概率分布，变成布朗运动的随机游走，只是估计值的梯度，还有扩散模型学着去消除的噪声。<bookmark mark='a'/>在进入模型本身之前，这是我们需要的最后一块数学。"
+  },
+  "86fdaf886888": {
+   "scene": "Outro",
+   "en": "Griewank and Walther's Evaluating Derivatives is the book on automatic differentiation, and Blondel and Roulet's Elements of Differentiable Programming is the modern one. Thanks for watching, and see you in Part 5.",
+   "zh": "格里万克和瓦尔特的《计算导数》，是自动微分方面的权威著作，而布隆代尔和鲁莱的《可微编程原理》，是一本现代的书。感谢观看，第5部分见。"
   }
  },
  "title_en": "AI, Built: Part 4, Change",
@@ -180,11 +471,20 @@
   "Derivative": "1. The derivative",
   "Gradient": "2. Many inputs: the gradient",
   "Jacobian": "3. Maps that bend: the Jacobian",
-  "Reverse": "4. Forwards or backwards?",
-  "Backprop": "5. Backpropagation, by hand",
-  "Library": "6. Calculus in a few pages of code",
-  "Train": "7. Training by going downhill",
-  "Curvature": "8. Curvature",
-  "Outro": "Recap, and where this comes back"
+  "Layers": "4. The Jacobians of real layers",
+  "Modes": "5. Forwards or backwards?",
+  "Backprop": "6. Backpropagation, by hand",
+  "Library": "7. Calculus in a few pages of code",
+  "Train": "8. Training with our library",
+  "Floats": "9. Numbers in a computer",
+  "GradCheck": "10. Cancellation, and the gradient check",
+  "Memory": "11. Memory: storing or recomputing",
+  "Newton": "12. Curvature, and Newton's method",
+  "HVP": "13. Hessian-vector products",
+  "Quadratic": "14. Descent on a quadratic; saddles",
+  "Lagrange": "15. Constraints: Lagrange multipliers",
+  "KKT": "16. Inequalities, KKT and duality",
+  "Implicit": "17. Differentiating through a fixed point",
+  "Outro": "Recap, problems, and what comes next"
  }
 }

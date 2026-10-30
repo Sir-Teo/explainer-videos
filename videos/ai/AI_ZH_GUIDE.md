@@ -1441,3 +1441,41 @@ AlphaProof, Gemini Deep Think, Aristotle, Gauss, FunSearch, AlphaEvolve, AlphaTe
 | two-tower model, in-batch softmax, recall@k | 双塔模型，批内softmax，前k召回率 |
 | maximum inner product search, approximate nearest neighbour | 最大内积搜索，近似最近邻 |
 | dense retrieval | 稠密检索 |
+
+### Sparsity (Part 16)
+
+| English | 中文 |
+|---|---|
+| mixture of experts (MoE), expert | 混合专家（MoE），专家 |
+| gate, gating network | 门控，门控网络 |
+| router, router score | 路由器，路由分数 |
+| top-k gating, KeepTopK | top-k门控，KeepTopK |
+| noisy top-k gating | 带噪声的top-k门控 |
+| competitive / cooperative loss | 竞争式 / 合作式损失 |
+| responsibility (posterior) | 责任（后验概率） |
+| active parameters, total parameters | 激活参数，总参数 |
+| load balancing, routing collapse | 负载均衡，路由坍缩 |
+| importance loss, coefficient of variation (CV) | 重要性损失，变异系数（CV） |
+| auxiliary loss (Switch), z-loss | 辅助损失（Switch），z损失 |
+| auxiliary-loss-free balancing, balancing bias | 无辅助损失的负载均衡，均衡偏置 |
+| sigmoid gate | sigmoid门控 |
+| MaxVio (maximal violation) | 最大违背度（MaxVio） |
+| fine-grained expert, shared expert | 细粒度专家，共享专家 |
+| capacity, capacity factor, dropped token | 容量，容量因子，被丢弃的词元 |
+| expert-choice routing | 专家选择路由 |
+| expert parallelism, all-to-all | 专家并行，全对全通信 |
+| node-limited routing | 节点受限路由 |
+| sparse upcycling | 稀疏升级（upcycling） |
+| mixture-of-depths | 深度混合（MoD） |
+| sliding-window attention, block selection | 滑动窗口注意力，块选择 |
+| native sparse attention (NSA), MoBA | 原生稀疏注意力（NSA），MoBA |
+| DeepSeek sparse attention (DSA), lightning indexer | DeepSeek稀疏注意力（DSA），闪电索引器 |
+| compressed sparse attention (CSA), heavily compressed attention (HCA) | 压缩稀疏注意力（CSA），重度压缩注意力（HCA） |
+| associative recall | 联想回忆 |
+| pruning, magnitude pruning | 剪枝，按幅度剪枝 |
+| lottery ticket hypothesis, winning ticket | 彩票假设，中奖彩票 |
+| iterative magnitude pruning, rewinding | 迭代幅度剪枝，回卷 |
+| unstructured / structured sparsity, 2:4 sparsity | 非结构化 / 结构化稀疏，2:4稀疏 |
+| sparse tensor cores | 稀疏张量核心 |
+| Wanda, SparseGPT | Wanda，SparseGPT |
+| activation sparsity, lazy neuron phenomenon | 激活稀疏，懒惰神经元现象 |

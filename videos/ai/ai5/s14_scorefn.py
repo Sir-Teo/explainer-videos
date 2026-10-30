@@ -41,8 +41,9 @@ class ScoreFn(VoiceoverScene):
         bell = always_redraw(lambda: curve(ax, xs, 2.2 * normal_pdf(xs, mu.get_value()), color=DATA, stroke_width=4))
         step = np.where((xs > 1.0) & (xs < 2.2), 1.0, 0.15)
         fc = curve(ax, xs, step, color=C.BITS, stroke_width=3)
-        fl = label(r"$f(x)$: \ a reward, \ a judge's yes or no: \ no slope to follow", font_size=24, color=C.BITS)
+        fl = label(r"$f(x)$: \ a reward, \ a yes or no: \ no slope", font_size=24, color=C.BITS)
         fl.next_to(ax.c2p(2.2, 1.0), UR, buff=0.1)
+        keep_in_frame(fl)
         ml = label(r"$p_\theta(x)$: \ what the model samples", font_size=24, color=DATA).next_to(ax.c2p(-1.0, 0.9), UL, buff=0.05)
         f = cmath(r"\nabla_\theta\, \mathbb{E}_{x \sim p_\theta}", r"\big[f(x)\big]", "=", r"\;?", font_size=44).to_edge(UP, buff=0.5)
         with self.voiceover(
@@ -80,6 +81,13 @@ class ScoreFn(VoiceoverScene):
                 why(r"$\mathbb{E}[\nabla \log p] = 0$ \ (Chapter 4): \ any baseline $b$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.0, buff=0.55, edge=6.8)
         cite_ = cite(r"P.~W.~Glynn (1990); \ R.~J.~Williams, REINFORCE (1992)", corner=DR)
+        pa_ = Axes(x_range=[-3, 3, 1], y_range=[-2.5, 2.5, 1], x_length=4.4, y_length=2.0, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.5)
+        xx = np.linspace(-3, 3, 150)
+        pic = VGroup(pa_, curve(pa_, xx, 4 * normal_pdf(xx), color=DATA, stroke_width=3),
+                     curve(pa_, xx, np.clip(xx, -2.5, 2.5), color=SF, stroke_width=3),
+                     label(r"for a bell $\mathcal{N}(\mu, 1)$: \ the score is $x - \mu$", font_size=20, color=SF)
+                     .next_to(pa_, UP, buff=0.1).align_to(pa_, LEFT))
         with self.voiceover(
             "Move the gradient inside the integral: only the density depends on theta. <bookmark mark='a'/> Then "
             "the log-derivative trick: the gradient of p is p times the gradient of log p, <bookmark mark='b'/> and "
@@ -94,6 +102,7 @@ class ScoreFn(VoiceoverScene):
             step(1)
             vo.wait_until("b")
             step(2)
+            self.play(FadeIn(pic))
             vo.wait_until("c")
             step(3)
             self.play(FadeIn(cite_))
@@ -108,13 +117,13 @@ class ScoreFn(VoiceoverScene):
         mean_sf = float(d["mean_sf"])
         head = label(r"$\nabla_\mu\, \mathbb{E}[x^2]$, \ $x \sim \mathcal{N}(\mu, 1)$, \ at $\mu = 1$: \ truly $2$",
                      font_size=30).to_edge(UP, buff=0.4)
-        ax = Axes(x_range=[-2, 6, 1], y_range=[0, 40, 10], x_length=7.4, y_length=4.4, tips=False,
+        ax = Axes(x_range=[-2, 6, 1], y_range=[0, 70, 10], x_length=7.4, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.0, -0.7, 0])
         xt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1) for v in (-2, 0, 2, 4, 6)])
-        yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(-2, v), LEFT, buff=0.1) for v in (0, 20, 40)])
+        yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(-2, v), LEFT, buff=0.1) for v in (0, 20, 40, 60)])
         xl = label(r"baseline $b$", font_size=24, color=BASE).next_to(xt, DOWN, buff=0.1)
         yl = label(r"variance of one sample's estimate", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        cv = curve(ax, bs, np.minimum(vb, 40), color=SF, stroke_width=4)
+        cv = curve(ax, bs, np.minimum(vb, 70), color=SF, stroke_width=4)
         d0 = Dot(ax.c2p(0, v0), radius=0.08, color=PLAIN)
         l0 = label(rf"no baseline: \ ${v0:.1f}$", font_size=22, color=PLAIN).next_to(d0, LEFT, buff=0.15).shift(UP * 0.25)
         ds = Dot(ax.c2p(bstar, vstar), radius=0.08, color=BASE)
@@ -183,6 +192,10 @@ class ScoreFn(VoiceoverScene):
         head.to_edge(UP, buff=0.3)
         hn = label(rf"evolution strategies: \ ${pop}$ random probes a step, \ $8$ runs each, \ same step size", font_size=22,
                    color=GREY_A).next_to(head, DOWN, buff=0.12)
+        dv = VGroup(label(rf"diverged: \ ${dp}$ of $8$", font_size=22, color=PLAIN),
+                    label(rf"diverged: \ ${db}$ of $8$", font_size=22, color=BASE))
+        for lab_, fr_ in zip(dv, (g1[0], g2_[0])):
+            lab_.next_to(fr_.get_corner(DL), UR, buff=0.12)
         res = VGroup(label(rf"error of one gradient estimate: \ ${gp:.0f}$ \ (the gradient's own size: ${g2:.0f}$)",
                            font_size=22, color=PLAIN),
                      label(rf"with the baseline: \ ${gb:.0f}$; \ mirrored probes: \ ${gm:.0f}$", font_size=22, color=BASE))
@@ -202,15 +215,15 @@ class ScoreFn(VoiceoverScene):
             f"when the gradient itself is only {g2:.0f} in size. <bookmark mark='c'/> {verdict} Reinforcement "
             "learning's policy gradients are this estimator, with baselines, in part twenty-six."
         ) as vo:
-            self.play(Write(head), FadeIn(hn))
+            self.play(Write(head), FadeIn(hn), FadeIn(g1), FadeIn(g2_))
             vo.wait_until("a")
-            self.play(FadeIn(g1), FadeIn(g2_))
             self.add(pa, pb)
             self.play(tr.animate.set_value(len(PP[0]) // 3), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(res))
             vo.wait_until("c")
             self.play(tr.animate.set_value(len(PP[0]) - 1), run_time=4.0, rate_func=linear)
+            self.play(FadeIn(dv))
         pa.clear_updaters()
         pb.clear_updaters()
         self.wait(0.3)
