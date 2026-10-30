@@ -38,7 +38,7 @@ class GatedDelta(VoiceoverScene):
         self.family()
 
     def card(self):
-        card = chapter_card(6, r"The delta rule as geometry", r"How do Qwen3-Next and Kimi Linear write to memory?",
+        card = chapter_card(6, r"The delta rule, as geometry", r"How do Qwen3-Next and Kimi Linear write to memory?",
                             lit=(1960,), part=PART)
         with self.voiceover("Chapter six. The delta rule as geometry."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))

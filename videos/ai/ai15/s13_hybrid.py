@@ -109,7 +109,7 @@ class Hybrid(VoiceoverScene):
         d, Lr = int(r["d"]), int(r["layers"])
         arch = VGroup(label(rf"transformer: \ {Lr} attention layers, \ rotary positions \ (${fmt_int(pt)}$ weights)",
                             font_size=19, color=TF_C),
-                      label(rf"hybrid: \ 3 gated-delta layers, \ then attention, \ no positions \ (${fmt_int(ph)}$)",
+                      label(rf"hybrid: \ three gated-delta layers, \ then attention, \ no positions \ (${fmt_int(ph)}$)",
                             font_size=19, color=HY_C)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.8, 2.3, 0])
         bt, bh = np.asarray(r["transformer_bits"]), np.asarray(r["hybrid_bits"])
         rows = VGroup(*[label(rf"{n}: \ ${b.mean():.3f}$ \ (seeds ${b.min():.3f}$--${b.max():.3f}$)", font_size=20, color=c_)

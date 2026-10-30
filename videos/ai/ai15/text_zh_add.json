@@ -103,7 +103,6 @@
   "how big must a fixed memory be, \\ and how should it grow with the model?": "固定的记忆要多大，\\ 又该怎样随模型增长？",
   "can a memory learn what to keep \\ as well as attention learns where to look?": "记忆能不能学会留下什么，\\ 就像注意力学会看哪里那样？",
   "how do we measure what a model can do with a million tokens?": "我们怎样衡量一个模型拿一百万个词元做了什么？",
-  "The delta rule as geometry": "从几何看δ规则",
   "Kimi Delta Attention": "Kimi Delta Attention",
   "mLSTM \\ (xLSTM)": "mLSTM \\ （xLSTM）",
   "Part 10's LSTM, \\ a matrix for a cell": "第10部分的LSTM，\\ 用矩阵当记忆单元",
@@ -128,7 +127,6 @@
   "Qwen3.5, \\ Kimi K3: \\ three layers in four linear; \\ million-token windows": "Qwen3.5，\\ Kimi K3：\\ 4层里3层是线性的；\\ 百万词元的窗口",
   "attention's memory: \\ the cache, \\ how it is shrunk, \\ what can be thrown away": "注意力的记忆：\\ 缓存，\\ 怎样缩小它，\\ 哪些可以扔掉",
   "a matrix as a memory: \\ from Hopfield and fast weights to linear attention": "把矩阵当作记忆：\\ 从霍普菲尔德和快权重到线性注意力",
-  "how to write to it: \\ adding, \\ decaying, \\ the delta rule, \\ and how to train it in parallel": "怎样往里写：\\ 累加，\\ 衰减，\\ δ规则，\\ 以及怎样并行地训练",
   "state-space models: \\ HiPPO, \\ S4, \\ Mamba; \\ and memories that learn while they read": "状态空间模型：\\ HiPPO，\\ S4，\\ Mamba；\\ 以及边读边学的记忆",
   "recall, measured: \\ which memory can look things up, \\ and hybrids that mix them": "测一测回忆：\\ 哪种记忆能查找东西，\\ 以及把它们混在一起的混合架构",
   "long contexts, \\ how well they really work, \\ and retrieval: \\ a memory outside the model": "长上下文，\\ 实际上管用到什么程度，\\ 以及检索：\\ 模型之外的记忆",
@@ -156,13 +154,8 @@
   "round 3": "第3轮",
   "each box: \\ the combined steps it covers; \\ gold: \\ a finished $h_t$": "每个方块：\\ 它涵盖的组合步；\\ 金色：\\ 已经算好的$h_t$",
   "Mamba-2-style SSM": "Mamba-2式的SSM",
-  "delta rule": "δ规则",
-  "gated delta rule": "门控δ规则",
-  "hybrid: \\ gated delta $+$ attention": "混合：\\ 门控δ $+$ 注意力",
   "linear": "线性",
   "Mamba-2": "Mamba-2",
-  "delta": "δ",
-  "gated delta": "门控δ",
   "hybrid": "混合",
   "answers right, \\ fixed batch": "答对的比例，\\ 固定的一批",
   "key size: \\ the fixed memories hold key size $\\times\\ 64$ numbers a layer": "键的长度：\\ 固定的记忆每层存 键长 $\\times\\ 64$ 个数",
@@ -176,7 +169,6 @@
   "2. \\ the error: \\ $v_t - S_{t-1} k_t$": "2. \\ 误差：\\ $v_t - S_{t-1} k_t$",
   "3. \\ write the error along the key, \\ a share $\\beta_t$ of it": "3. \\ 把误差沿着键写进去，\\ 写入其中的$\\beta_t$",
   "adding \\ (linear attention)": "累加 \\ （线性注意力）",
-  "the delta rule, \\ $\\beta = 1$": "δ规则，\\ $\\beta = 1$",
   "error reading the latest values": "读出最新值的误差",
   "how wrong the memory is \\\\ about this pair": "记忆在这一对上 \\\\ 错得有多远",
   "the gap, \\ times the key": "差距，\\ 乘以键",
@@ -202,7 +194,6 @@
   "What if the memory were a whole network?": "如果记忆是一整个网络呢？",
   "a self-supervised loss on the token being read: \\ rebuild one view of it from another": "在正在读的词元上的自监督损失：\\ 从它的一个视角重建另一个",
   "the hidden state is a model's weights; \\\\ reading a token is one step of training on it": "隐状态是一个模型的权重；\\\\ 读一个词元，就是在它上面训练一步",
-  "$f_W(k) = W k$: \\ TTT-Linear \\ (the delta rule)": "$f_W(k) = W k$：\\ TTT-Linear \\ （δ规则）",
   "$f_W$ a two-layer network: \\ TTT-MLP": "$f_W$是一个两层网络：\\ TTT-MLP",
   "reported: \\ Mamba stops improving past $16$k tokens of context; \\\\ the TTT layers keep going \\ ($125$M--$1.3$B parameters)": "报告：\\ 上下文超过$1.6$万个词元以后，Mamba不再进步；\\\\ TTT层还在继续 \\ （$1.25$亿--$13$亿参数）",
   "Y.~Sun, X.~Li, K.~Dalal et al., \\textit{Learning to (Learn at Test Time): RNNs with Expressive Hidden States} (2024)": "Y.~Sun、X.~Li、K.~Dalal等，\\textit{Learning to (Learn at Test Time): RNNs with Expressive Hidden States}（2024）",
@@ -222,8 +213,6 @@
   "how it learns": "怎样学习",
   "one gradient step": "走一步梯度",
   "a step, \\ and weight decay": "走一步，\\ 再加权重衰减",
-  "delta rule \\ (DeltaNet, \\ TTT-Linear)": "δ规则 \\ （DeltaNet，\\ TTT-Linear）",
-  "gated delta \\ (Qwen3-Next, \\ Kimi)": "门控δ \\ （Qwen3-Next，\\ Kimi）",
   "momentum, \\ weight decay; \\ a deep $M$": "动量，\\ 权重衰减；\\ 深层的$M$",
   "no training: \\ a kernel regression \\ over every pair kept": "不训练：\\ 对保存的每一对 \\ 做核回归",
   "after S.~Yang's notes on linear attention, \\ and K.~A.~Wang, J.~Shi \\& E.~B.~Fox, \\textit{Test-time regression} (2025)": "参考杨松琳关于线性注意力的笔记，\\ 以及K.~A.~Wang、J.~Shi与E.~B.~Fox，\\textit{Test-time regression}（2025）",
@@ -354,7 +343,17 @@
   "(reported by Anthropic, \\ February 2026)": "（Anthropic公布，\\ 2026年2月）",
   "a million tokens; \\ keys and values compressed $4\\times$ and $128\\times$": "一百万个词元；\\ 键和值压缩$4\\times$和$128\\times$",
   "(compressed sparse attention: \\ see Part 16)": "（压缩稀疏注意力：\\ 见第16部分）",
-  "the memory: \\ one (hidden state, \\ next token) \\\\ pair for every token of the novels": "记忆：\\ 小说里每个词元存一对 \\\\ （隐藏状态，\\ 下一个词元）"
+  "the memory: \\ one (hidden state, \\ next token) \\\\ pair for every token of the novels": "记忆：\\ 小说里每个词元存一对 \\\\ （隐藏状态，\\ 下一个词元）",
+  "The delta rule, as geometry": "从几何看$\\delta$规则",
+  "how to write to it: \\ adding, \\ decaying, \\ correcting with the delta rule; \\ and how to train it in parallel": "怎样往里写：\\ 累加，\\ 衰减，\\ 用$\\delta$规则修正；\\ 以及怎样并行地训练",
+  "delta rule (DeltaNet)": "$\\delta$规则（DeltaNet）",
+  "gated delta rule (Gated DeltaNet)": "门控$\\delta$规则（Gated DeltaNet）",
+  "hybrid: \\ gated delta rule $+$ attention": "混合：\\ 门控$\\delta$规则 $+$ 注意力",
+  "delta rule, \\ $\\beta = 1$": "$\\delta$规则，\\ $\\beta = 1$",
+  "$f_W(k) = W k$: \\ TTT-Linear \\ (a delta-rule memory)": "$f_W(k) = W k$：\\ TTT-Linear \\ （一个$\\delta$规则记忆）",
+  "the delta rule \\ (DeltaNet, \\ TTT-Linear)": "$\\delta$规则 \\ （DeltaNet，\\ TTT-Linear）",
+  "gated delta rule \\ (Qwen3-Next, \\ Kimi)": "门控$\\delta$规则 \\ （Qwen3-Next，\\ Kimi）",
+  "chapter 5: \\ the delta rule is one step of gradient descent on the memory": "第5章：\\ $\\delta$规则就是在记忆上走一步梯度下降"
  },
  "patterns": [
   [
@@ -490,10 +489,6 @@
    "Transformer：\\\\ 4层注意力，\\\\ 旋转位置 \\\\ （$\\1$个权重）"
   ],
   [
-   "^hybrid: \\\\ 3 gated-delta layers, \\\\ then attention, \\\\ no positions \\\\ \\(\\$([\\d{},]+)\\$\\)$",
-   "混合模型：\\\\ 3层门控δ，\\\\ 再接注意力，\\\\ 不带位置 \\\\ （$\\1$）"
-  ],
-  [
    "^transformer: \\\\ \\$([\\d.]+)\\$ \\\\ \\(seeds \\$([\\d.]+)\\$--\\$([\\d.]+)\\$\\)$",
    "Transformer：\\\\ $\\1$ \\\\ （各种子$\\2$--$\\3$）"
   ],
@@ -548,6 +543,10 @@
   [
    "^copied correctly: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\\\\\ \\(copies (\\d+) tokens apart\\)$",
    "复制正确：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型 $\\2\\\\%$ \\\\\\\\ （相隔\\3个词元的复制）"
+  ],
+  [
+   "^hybrid: \\\\ three gated-delta layers, \\\\ then attention, \\\\ no positions \\\\ \\(\\$([\\d{},]+)\\$\\)$",
+   "混合模型：\\\\ 3层门控$\\\\delta$，\\\\ 再接注意力，\\\\ 不带位置 \\\\ （$\\1$）"
   ]
  ]
 }

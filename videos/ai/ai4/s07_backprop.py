@@ -169,8 +169,9 @@ class Backprop(VoiceoverScene):
             "Those four lines are backpropagation, for any depth."
         ) as vo:
             self.play(FadeIn(net), FadeIn(name))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=GRAD, scale_factor=1.05))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -200,12 +201,13 @@ class Backprop(VoiceoverScene):
         rank_b = int((svB > 1e-10 * svB[0]).sum())
         res = VGroup(
             label(rf"one example: \ singular values ${sv1[0]:.3f}$, \ then ${sci(max(sv1[1], 1e-20), 0)}$ and below",
-                  font_size=22, color=GREY_A),
-            label(rf"rank ${n_nonzero}$: \ every row is a multiple of $x^\top$", font_size=22, color=GRAD),
-            label(rf"a batch of ${B}$: \ the sum of ${B}$ such matrices, \ rank ${rank_b}$", font_size=22, color=GREY_A),
-            label(rf"by hand \ vs \ our library: \ ${sci(max(m['d_lib'], 1e-17), 0)}$", font_size=22, color=GRAD),
-            label(rf"by hand \ vs \ PyTorch: \ ${sci(max(m['d_torch'], 1e-17), 0)}$", font_size=22, color=GRAD),
+                  font_size=24, color=GREY_A),
+            label(rf"rank ${n_nonzero}$: \ every row is a multiple of $x^\top$", font_size=24, color=GRAD),
+            label(rf"a batch of ${B}$: \ the sum of ${B}$ such matrices, \ rank ${rank_b}$", font_size=24, color=GREY_A),
+            label(rf"by hand \ vs \ our library: \ ${sci(max(m['d_lib'], 1e-17), 0)}$", font_size=24, color=GRAD),
+            label(rf"by hand \ vs \ PyTorch: \ ${sci(max(m['d_torch'], 1e-17), 0)}$", font_size=24, color=GRAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.9, -0.2, 0])
+        keep_in_frame(res, margin=0.25)
         tag = note(rf"computed: \ a ${din}$--${dh}$--${k}$ network, \ ${B}$ examples").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Here is that outer product for one example, computed: the error signal at the hidden layer, a column, "

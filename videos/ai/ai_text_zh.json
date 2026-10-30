@@ -18204,7 +18204,17 @@
     "(reported by Anthropic, \\ February 2026)": "（Anthropic公布，\\ 2026年2月）",
     "a million tokens; \\ keys and values compressed $4\\times$ and $128\\times$": "一百万个词元；\\ 键和值压缩$4\\times$和$128\\times$",
     "(compressed sparse attention: \\ see Part 16)": "（压缩稀疏注意力：\\ 见第16部分）",
-    "the memory: \\ one (hidden state, \\ next token) \\\\ pair for every token of the novels": "记忆：\\ 小说里每个词元存一对 \\\\ （隐藏状态，\\ 下一个词元）"
+    "the memory: \\ one (hidden state, \\ next token) \\\\ pair for every token of the novels": "记忆：\\ 小说里每个词元存一对 \\\\ （隐藏状态，\\ 下一个词元）",
+    "The delta rule, as geometry": "从几何看$\\delta$规则",
+    "how to write to it: \\ adding, \\ decaying, \\ correcting with the delta rule; \\ and how to train it in parallel": "怎样往里写：\\ 累加，\\ 衰减，\\ 用$\\delta$规则修正；\\ 以及怎样并行地训练",
+    "delta rule (DeltaNet)": "$\\delta$规则（DeltaNet）",
+    "gated delta rule (Gated DeltaNet)": "门控$\\delta$规则（Gated DeltaNet）",
+    "hybrid: \\ gated delta rule $+$ attention": "混合：\\ 门控$\\delta$规则 $+$ 注意力",
+    "delta rule, \\ $\\beta = 1$": "$\\delta$规则，\\ $\\beta = 1$",
+    "$f_W(k) = W k$: \\ TTT-Linear \\ (a delta-rule memory)": "$f_W(k) = W k$：\\ TTT-Linear \\ （一个$\\delta$规则记忆）",
+    "the delta rule \\ (DeltaNet, \\ TTT-Linear)": "$\\delta$规则 \\ （DeltaNet，\\ TTT-Linear）",
+    "gated delta rule \\ (Qwen3-Next, \\ Kimi)": "门控$\\delta$规则 \\ （Qwen3-Next，\\ Kimi）",
+    "chapter 5: \\ the delta rule is one step of gradient descent on the memory": "第5章：\\ $\\delta$规则就是在记忆上走一步梯度下降"
   },
   "phrases": {
     "width": "宽度",
@@ -20005,6 +20015,10 @@
     [
       "^copied correctly: \\\\ transformer \\$(\\d+)\\\\%\\$, \\\\ hybrid \\$(\\d+)\\\\%\\$ \\\\\\\\ \\(copies (\\d+) tokens apart\\)$",
       "复制正确：\\\\ Transformer $\\1\\\\%$，\\\\ 混合模型 $\\2\\\\%$ \\\\\\\\ （相隔\\3个词元的复制）"
+    ],
+    [
+      "^hybrid: \\\\ three gated-delta layers, \\\\ then attention, \\\\ no positions \\\\ \\(\\$([\\d{},]+)\\$\\)$",
+      "混合模型：\\\\ 3层门控$\\\\delta$，\\\\ 再接注意力，\\\\ 不带位置 \\\\ （$\\1$）"
     ]
   ]
 }

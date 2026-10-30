@@ -133,10 +133,10 @@ class Derivative(VoiceoverScene):
             r"the derivative",
             r"$f$ is differentiable at $x$ if there is one number $f'(x)$ with "
             r"$f(x + h) = f(x) + f'(x)\,h + r(h)$, where the error $r(h)$ shrinks faster than $h$: "
-            r"$r(h)/h \to 0$ as $h \to 0$.", width=6.2, font_size=22).to_corner(UL, buff=0.35)
+            r"$r(h)/h \to 0$ as $h \to 0$.", width=6.2, font_size=25).to_corner(UL, buff=0.35)
         hist = history_card(r"1684", r"Gottfried Leibniz, \textit{Nova Methodus}",
                             r"the first calculus in print, with $dx$ and $dy$; \ Isaac Newton's fluxions date from "
-                            r"the 1660s", width=6.2, font_size=20).to_corner(DL, buff=0.35)
+                            r"the 1660s", width=6.2, font_size=22).to_corner(DL, buff=0.35)
         g = log_axes((-4, -0.8), (-8, 0), x_length=5.4, y_length=4.4, xlabel=r"the step $h$",
                      ylabel=r"error of the straight-line guess, \ $|f(x+h) - f(x) - s\,h|$", center=[3.6, -0.2, 0],
                      xticks=[-4, -3, -2, -1], yticks=[-8, -6, -4, -2, 0])
@@ -146,25 +146,25 @@ class Derivative(VoiceoverScene):
         l_best = label(rf"$s = f'(x)$: \ slope ${d['slope']:.2f}$", font_size=22, color=GRAD)
         l_best.next_to(ax.c2p(-3.2, np.log10(err[8])), DR, buff=0.1)
         l_bad = label(rf"$s$ off by $10\%$: \ slope ${d['slope_bad']:.2f}$", font_size=22, color=C.SURPRISE)
-        l_bad.next_to(ax.c2p(-3.4, np.log10(bad[4])), UP, buff=0.15)
+        l_bad.next_to(ax.c2p(-2.9, float(np.interp(-2.9, np.log10(hs), np.log10(bad)))), UL, buff=0.2)
         tag = note(r"computed: \ Part 1's surprise at $p = \tfrac14$").next_to(g, DOWN, buff=0.1).align_to(g, RIGHT)
         with self.voiceover(
-            "Here is the precise version. A function is differentiable at x if one number, the derivative, makes the "
-            "straight-line guess so good that its error shrinks faster than the step itself. "
-            "<bookmark mark='a'/> Measure it, for Part 1's surprise curve. On these logarithmic axes, the error "
-            f"with the true slope falls with a slope of {d['slope']:.2f}: like h squared. <bookmark mark='b'/> Use "
-            f"a slope just ten percent off, and the error falls only like h, a slope of {d['slope_bad']:.2f}. "
-            "Exactly one line wins as the step shrinks. That is what best means. <bookmark mark='c'/> The idea is "
-            "Leibniz's, in print in 1684, and Newton's, who had worked it out in the 1660s and called it fluxions."
+            "The idea is Leibniz's, in print in 1684, and Newton's, who had worked it out in the 1660s and called it "
+            "fluxions. <bookmark mark='a'/> Here is the precise version. A function is differentiable at x if one "
+            "number, the derivative, makes the straight-line guess so good that its error shrinks faster than the "
+            "step itself. <bookmark mark='b'/> Measure it, for Part 1's surprise curve. On these logarithmic axes, the "
+            f"error with the true slope falls with a slope of {d['slope']:.2f}: like h squared. <bookmark mark='c'/> "
+            f"Use a slope just ten percent off, and the error falls only like h, a slope of {d['slope_bad']:.2f}. "
+            "Exactly one line wins as the step shrinks. That is what best means."
         ) as vo:
-            self.play(FadeIn(card, shift=UP * 0.2))
+            self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("b")
             self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(c_best), FadeIn(l_best), run_time=1.5)
-            vo.wait_until("b")
-            self.play(Create(c_bad), FadeIn(l_bad), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(Create(c_bad), FadeIn(l_bad), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 

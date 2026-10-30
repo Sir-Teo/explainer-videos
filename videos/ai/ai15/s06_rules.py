@@ -127,7 +127,7 @@ class Rules(VoiceoverScene):
         kk, vv = seq[4]
         head = label(rf"the same four pairs, \ then key $k_{{{kk + 1}}}$ gets a new value", font_size=26).to_edge(UP, buff=0.3)
         panels = VGroup()
-        for rule, name, col in (("add", r"adding \ (linear attention)", ADD), ("delta", r"the delta rule, \ $\beta = 1$", DELTA)):
+        for rule, name, col in (("add", r"adding \ (linear attention)", ADD), ("delta", r"delta rule, \ $\beta = 1$", DELTA)):
             S3 = signed_grid(np.asarray(m[f"S_{rule}"])[3], d * cell, top)
             t = label(name, font_size=22, color=col).next_to(S3, UP, buff=0.15)
             panels.add(VGroup(t, S3))
