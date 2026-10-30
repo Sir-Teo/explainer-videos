@@ -353,7 +353,9 @@
   "$f_W(k) = W k$: \\ TTT-Linear \\ (a delta-rule memory)": "$f_W(k) = W k$：\\ TTT-Linear \\ （一个$\\delta$规则记忆）",
   "the delta rule \\ (DeltaNet, \\ TTT-Linear)": "$\\delta$规则 \\ （DeltaNet，\\ TTT-Linear）",
   "gated delta rule \\ (Qwen3-Next, \\ Kimi)": "门控$\\delta$规则 \\ （Qwen3-Next，\\ Kimi）",
-  "chapter 5: \\ the delta rule is one step of gradient descent on the memory": "第5章：\\ $\\delta$规则就是在记忆上走一步梯度下降"
+  "chapter 5: \\ the delta rule is one step of gradient descent on the memory": "第5章：\\ $\\delta$规则就是在记忆上走一步梯度下降",
+  "DeltaNet": "DeltaNet",
+  "Gated DeltaNet": "Gated DeltaNet"
  },
  "patterns": [
   [
