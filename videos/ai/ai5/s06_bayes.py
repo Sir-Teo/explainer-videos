@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import DATA, MODEL, MONO, load
+from videos.ai.ai5.common import DATA, MODEL, MONO, PART, curve, load
 
 X0, X1 = -5.6, 5.6  # the plot's horizontal extent on screen
 YB, YH = -3.0, 3.3  # its baseline and height
@@ -25,11 +25,13 @@ class Bayes(VoiceoverScene):
     def construct(self):
         self.card()
         self.update()
+        self.conjugacy()
+        self.map_()
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(3, r"Belief as a distribution", r"How sure can a few letters make you?", part=5)
-        with self.voiceover("Chapter three. Belief as a distribution."):
+        card = chapter_card(5, r"Belief as a distribution", r"How sure can a few letters make you?", part=PART)
+        with self.voiceover("Chapter five. Belief as a distribution."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -125,19 +127,19 @@ class Bayes(VoiceoverScene):
         final.move_to([3.6, 0.2, 0])
         whole = label(rf"all ${int(d['n_all']):,}$ letters: \ ${e_all:.3f}$".replace(",", "{,}"), font_size=26,
                       color=WHITE).next_to(final, DOWN, buff=0.2)
-        lap = label(r"Laplace (1774): \ best guess $\dfrac{k + 1}{n + 2}$", font_size=30, color=GREY_A)
-        lap.next_to(whole, DOWN, buff=0.35)
+        cite_ = cite(r"T.~Bayes (1763, \ published by R.~Price); \ P.-S.~Laplace (1774)", corner=DR)
         with self.voiceover(
             "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one "
             "seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every "
-            "possibility. <bookmark mark='a'/> Bayes's rule says how to update a belief when evidence arrives. "
+            "possibility. <bookmark mark='a'/> Bayes's rule, from Thomas Bayes's essay of 1763 and found again by "
+            "Laplace in 1774, says how to update a belief when evidence arrives. "
             "Multiply what you believed by how well each possibility explains the evidence, then rescale, so the "
             "total is one again. <bookmark mark='b'/> That's what the sign, proportional to, means: equal, up to that "
             "rescaling."
         ) as vo:
             self.play(FadeIn(pic), FadeIn(xl), FadeIn(flat), FadeIn(cells), FadeIn(cnt))
             vo.wait_until("a")
-            self.play(Write(rule), FadeIn(names))
+            self.play(Write(rule), FadeIn(names), FadeIn(cite_))
             vo.wait_until("b")
             self.play(FadeIn(prop))
         with self.voiceover(
@@ -160,15 +162,151 @@ class Bayes(VoiceoverScene):
             self.play(FadeIn(final))
             vo.wait_until("e")
             self.play(FadeIn(whole))
-        with self.voiceover(
-            "So the answer isn't one number. It's a distribution: a best guess with its uncertainty attached, "
-            "narrowing like one over the square root of the evidence. <bookmark mark='a'/> Laplace worked this out "
-            "in 1774. His best guess after k e's in n letters is k plus one, over n plus two. Before any evidence, "
-            "that's one half."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(lap))
         pic.clear_updaters()
         cnt.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def conjugacy(self):
+        d = load("bayes")
+        ns = [int(n) for n in d["ns"]]
+        ks = [int(d[f"k{n}"]) for n in ns]
+        colors = {r"\theta^{k}(1-\theta)^{n-k}": MODEL, r"\theta^{a-1}(1-\theta)^{b-1}": DATA}
+        rows = [
+            cmath(r"p(\theta \mid D)", r"\propto", r"\theta^{k}(1-\theta)^{n-k}", r"\cdot", r"p(\theta)", colors=colors,
+                  font_size=36),
+            cmath(r"p(\theta \mid D)", r"\propto", r"\theta^{k}(1-\theta)^{n-k}", r"\cdot", r"\theta^{a-1}(1-\theta)^{b-1}",
+                  colors=colors, font_size=36),
+            cmath(r"p(\theta \mid D)", r"=", r"\operatorname{Beta}(a + k,\; b + n - k)", font_size=36,
+                  colors={r"\operatorname{Beta}(a + k,\; b + n - k)": POST}),
+            cmath(r"\mathbb{E}[\theta \mid D]", r"=", r"\frac{k + a}{n + a + b}", font_size=36),
+        ]
+        whys = [why(r"$k$ e's in $n$ letters: \ the binomial likelihood"),
+                why(r"a Beta prior: \ the same shape"),
+                why(r"the exponents add: \ a Beta again"),
+                why(r"$a, b$: \ imagined e's and other letters")]
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.6, buff=0.45, edge=6.8)
+        # three priors updated by the same letters, live
+        X0_, X1_, YB_ = -5.8, 1.2, -3.4
+        ax = Axes(x_range=[0, 0.5, 0.1], y_range=[0, 1.05, 0.5], x_length=X1_ - X0_, y_length=2.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04})
+        ax.move_to([(X0_ + X1_) / 2, YB_ + 1.1, 0])
+        xt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for v in (0, 0.1, 0.2, 0.3, 0.4, 0.5)])
+        priors = [((1, 1), WHITE, r"flat: \ $a = b = 1$"), ((50, 50), C.SURPRISE, r"sure it is near $\tfrac12$: \ "
+                                                                                    r"$a = b = 50$"),
+                  ((6, 44), C.INTERVAL, r"a good guess: \ $a = 6, \ b = 44$")]
+        u = ValueTracker(0.0)
+        us = [math.log10(n + 1) for n in ns]
+        ps = np.linspace(0.001, 0.5, 300)
+
+        def dens(a, b):
+            v = u.get_value()
+            n = 10 ** v - 1
+            k = float(np.interp(v, us, [k_ / max(n_, 1) for k_, n_ in zip(ks, ns)])) * n if v > 0 else 0.0
+            lp = (a + k - 1) * np.log(ps) + (b + n - k - 1) * np.log1p(-ps)
+            return np.exp(lp - lp.max())
+
+        curves = VGroup(*[always_redraw(lambda a=a, b=b, col=col: curve(ax, ps, dens(a, b), color=col, stroke_width=3))
+                          for (a, b), col, _ in priors])
+        leg = VGroup(*[label(t, font_size=20, color=col) for _, col, t in priors]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        leg.next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
+        nv = Integer(0, font_size=28)
+        nl = VGroup(label(r"letters read:", font_size=22, color=GREY_A), nv).arrange(RIGHT, buff=0.12)
+        nl.next_to(leg, DOWN, buff=0.25).align_to(leg, LEFT)
+        nv.add_updater(lambda m: m.set_value(round(10 ** u.get_value() - 1)))
+        tag = note(r"each curve scaled to the same height").next_to(nl, DOWN, buff=0.15).align_to(nl, LEFT)
+        m_flat = (ks[1] + 1) / (ns[1] + 2)
+        with self.voiceover(
+            "Why did the belief keep this shape? <bookmark mark='a'/> Each letter multiplies in theta or one minus "
+            "theta, so after k e's in n letters the likelihood is theta to the k, times one minus theta to the n "
+            "minus k. <bookmark mark='b'/> Start from a prior of the same shape, a Beta distribution, <bookmark mark='c'/> "
+            "and the exponents simply add: the belief stays a Beta, and updating is counting. <bookmark mark='d'/> "
+            "Its mean is k plus a over n plus a plus b: the prior acts like a imagined e's and b other letters. "
+            "With a flat prior that is Laplace's rule of succession from 1774: k plus one over n plus two, "
+            f"{m_flat:.2f} after the first ten letters. <bookmark mark='e'/> Different priors start apart, and the "
+            "same letters pull them together: by ten thousand letters, they agree."
+        ) as vo:
+            vo.wait_until("a")
+            step(0)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            step(3)
+            vo.wait_until("e")
+            self.play(Create(ax), FadeIn(xt), FadeIn(leg), FadeIn(nl), FadeIn(tag), *[Create(c) for c in curves])
+            self.play(u.animate.set_value(us[-1]), run_time=6.0, rate_func=linear)
+        for m in list(curves) + [nv]:
+            m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def map_(self):
+        d = load("map")
+        rows = [
+            cmath(r"\hat w_{\text{MAP}}", "=", r"\arg\max_w \; \log p(D \mid w) + \log p(w)", font_size=32),
+            cmath(r"\log p(w)", "=", r"-\frac{\|w\|^2}{2\tau^2} + c", font_size=32),
+            cmath(r"\log p(D \mid w)", "=", r"-\frac{1}{2\sigma^2}\textstyle\sum_i (y_i - f_w(x_i))^2 + c'", font_size=32),
+            cmath(r"\hat w_{\text{MAP}}", "=", r"\arg\min_w \textstyle\sum_i (y_i - f_w(x_i))^2 + \lambda \|w\|^2",
+                  font_size=32, colors={r"\arg\min_w \textstyle\sum_i (y_i - f_w(x_i))^2 + \lambda \|w\|^2": C.BITS}),
+        ]
+        whys = [why(r"the peak of the posterior", font_size=22), why(r"a Gaussian prior on the weights", font_size=22),
+                why(r"Gaussian noise of spread $\sigma$", font_size=22),
+                why(r"$\lambda = \sigma^2/\tau^2$: \ weight decay", font_size=22)]
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.6, buff=0.28, edge=6.8)
+        x, y, xt_, = np.asarray(d["x"]), np.asarray(d["y"]), np.asarray(d["xt"])
+        ax = Axes(x_range=[0, 1, 0.5], y_range=[-1.6, 1.6, 1], x_length=5.4, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.3, 0])
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=DATA) for a, b in zip(x, y)])
+        truth = curve(ax, xt_, np.sin(2 * np.pi * xt_), color=GREY_B, stroke_width=2).set_stroke(opacity=0.6)
+        fm = curve(ax, xt_, np.clip(np.asarray(d["fit_mle"]), -1.6, 1.6), color=C.SURPRISE, stroke_width=3)
+        fb = curve(ax, xt_, np.clip(np.asarray(d["fit_best"]), -1.6, 1.6), color=C.BITS, stroke_width=3.5)
+        leg = VGroup(label(r"maximum likelihood", font_size=20, color=C.SURPRISE),
+                     label(r"MAP, \ best $\lambda$", font_size=20, color=C.BITS),
+                     label(r"the truth, \ $\sin 2\pi x$", font_size=20, color=GREY_B)).arrange(RIGHT, buff=0.25)
+        leg.next_to(ax, UP, buff=0.1)
+        lams, med, q25, q75 = (np.asarray(d[k]) for k in ("lams", "med_err", "q25", "q75"))
+        bx = Axes(x_range=[-10, 1, 3], y_range=[-2, 1, 1], x_length=5.0, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([3.5, -2.3, 0])
+        ll = np.log10(lams)
+        bb = band(bx, ll, np.log10(q25), np.minimum(np.log10(q75), 1), C.BITS, 0.15)
+        bc = curve(bx, ll, np.minimum(np.log10(med), 1), color=C.BITS, stroke_width=3)
+        xt = VGroup(*[MathTex(f"10^{{{v}}}", font_size=18, color=GREY_B).next_to(bx.c2p(v, -2), DOWN, buff=0.08)
+                      for v in (-10, -7, -4, -1)])
+        yt = VGroup(*[MathTex(t, font_size=18, color=GREY_B).next_to(bx.c2p(-10, v), LEFT, buff=0.08)
+                      for t, v in (("0.01", -2), ("0.1", -1), ("1", 0))])
+        bl = label(r"test error \ (median of $200$ training sets) \ against $\lambda$", font_size=18, color=GREY_A)
+        bl.next_to(bx, UP, buff=0.1)
+        better = d["best_err"] < d["mle_med"]
+        verdict = (f"Over two hundred training sets, maximum likelihood's median test error is {d['mle_med']:.2f}; "
+                   f"the best lambda, about {d['best_lam']:.0e}, brings it to {d['best_err']:.3f}." if better else
+                   f"Over two hundred training sets, the prior did not help: {d['best_err']:.3f} against "
+                   f"{d['mle_med']:.3f}.")
+        verdict = verdict.replace("e-0", " times ten to the minus ")
+        with self.voiceover(
+            "A belief can also be used to pick a single answer: the peak of the posterior, called MAP, maximum a "
+            "posteriori. <bookmark mark='a'/> Put a Gaussian prior on a model's weights, saying small weights are "
+            "likelier, <bookmark mark='b'/> and Gaussian noise on its outputs. <bookmark mark='c'/> The MAP answer "
+            "minimizes squared error plus lambda times the squared size of the weights: the weight decay used to "
+            "train nearly every network, with lambda the noise over the prior's spread, squared. "
+            "<bookmark mark='d'/> Ten points from a sine wave, and a polynomial of degree nine. Maximum likelihood "
+            f"threads every point and swings wildly between them. The prior tames it. {verdict}"
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            self.play(Create(ax), Create(truth), FadeIn(dots), FadeIn(leg))
+            self.play(Create(fm), run_time=1.2)
+            self.play(Create(fb), run_time=1.2)
+            self.play(Create(bx), FadeIn(xt), FadeIn(yt), FadeIn(bl), FadeIn(bb), Create(bc))
         self.wait(0.3)
         self.clear_scene()

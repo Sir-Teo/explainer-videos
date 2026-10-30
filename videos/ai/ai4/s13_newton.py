@@ -97,12 +97,13 @@ class Newton(VoiceoverScene, ThreeDScene):
             "and Thomas Simpson extended it in 1740 to several variables and to finding minima."
         ) as vo:
             step(0)
+            self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
-            self.play(FadeIn(hist, shift=UP * 0.2))
+            self.play(Indicate(hist, color=HIST, scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 

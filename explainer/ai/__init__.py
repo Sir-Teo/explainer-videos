@@ -112,6 +112,7 @@ def series_map(current: int | None = None, done: int = 0, font_size=20, width=13
 # ---------------------------------------------------------------------------
 TIMELINE = [
     (1943, r"McCulloch--Pitts neurons"),
+    (1944, r"It\^o's stochastic integral"),
     (1948, r"Shannon: information theory"),
     (1949, r"Hebb's rule"),
     (1950, r"Turing's test; Shannon's chess"),
@@ -125,6 +126,7 @@ TIMELINE = [
     (1960, r"ADALINE"),
     (1961, r"redundancy reduction"),
     (1962, r"DPLL"),
+    (1963, r"Hoeffding's inequality"),
     (1964, r"kernel smoothers"),
     (1965, r"Moore's law"),
     (1966, r"ELIZA"),
