@@ -49,7 +49,10 @@ is computed by `compute.py`, small and on the CPU (about a minute in all).
 * **8. Training with our library.** The first gradient of Part 1's letter-pair model derived, (nᵢ/N)(1/27 − p̂_{j|i}),
   matched by the library on 300,000 pairs (1.9 × 10⁻¹⁴), its largest pushes on the commonest pairs; 729 scores trained
   (Adam, 1,500 steps): from log₂27 = 4.75 bits to 3.33, the counting answer, the scores becoming the log counts
-  (correlation 0.995), with the text they write at each checkpoint.
+  (correlation 0.995), with the text they write at each checkpoint; full-batch gradient descent at five step sizes,
+  with the Hessian's top eigenvalue tracked: 0.0071 at the start (allowing η < 283) but 0.026 at the counting answer
+  (η < 77); η = 57 settles at 3.332 bits, η = 85 never settles, its curvature hovering at 2/η (the edge of stability,
+  Part 11).
 * **9. Numbers in a computer.** IEEE 754 (1985, Kahan); bit layouts of float32, bfloat16, float16, FP8 E5M2 and E4M3
   (largest 3.4 × 10³⁸, 3.4 × 10³⁸, 65,504, 57,344, 448; 7.2, 2.4, 3.3, 0.9 and 1.2 digits); the ulp staircase across
   10⁻⁸ … 10⁶, enumerated from every bit pattern; rounding (1 + 1/256 = 1 and 257 = 256 in bf16); adding 0.01 ten
@@ -130,6 +133,7 @@ as a 1 × d row.
 | library check | finite differences 2.2e-10, PyTorch 2.8e-17 |
 | letter model | 3.335 bits (train), 3.336 (held out), counting 3.331; correlation with log counts 0.995 |
 | first gradient | formula vs library 1.9e-14 on 300,000 pairs |
+| step sizes (letter model) | λmax 0.0071 → 0.026; η = 2.8 still descending (3.350 at 3,000 steps); η = 28, 57 settle (3.332); η = 85, 141 bounce (3.355, 3.584) |
 | accumulation of 0.01 × 10⁴ | float32 100.003, float16 32, bf16 4, bf16 + float32 sum 100.098 |
 | V-curve | best h: float64 3.2e-5 (pred. 5.1e-5), float32 3.2e-2 (pred. 4.5e-2); best error 6.5e-13 / 5.4e-7 |
 | checkpointing (n = 256) | peak 257 → 32 (k = 13…20), evaluations 256 → 496; keep-nothing 33,152; time 1.27× |

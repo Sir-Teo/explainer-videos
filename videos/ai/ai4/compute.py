@@ -17,6 +17,7 @@ Items (all small, on the CPU; the whole part computes in a few minutes):
     check      the library's gradients against finite differences and against PyTorch, on a small network
     train      Part 1's letter-pair model, 729 scores trained by gradient descent with the library on the books
     grad0      that model's first gradient, by the formula q - p (Part 1) and by the library
+    gdlr       full-batch gradient descent on that model at five step sizes; the Hessian's top eigenvalue tracked
     floats     number formats: their ranges, the gap between neighbours (ulp) across the range, rounding, overflow
     cancel     catastrophic cancellation, (1 - cos x) / x^2 in float32 and float64
     vcurve     gradient checking: the error of finite differences against the step, in float32 and float64
@@ -1387,6 +1388,54 @@ def compute_deq():
                 final_loss=float(curve[-1][1]), first_loss=float(curve[0][1]))
 
 
+# ---------------------------------------------------------------------------
+# Chapter 8: how large a step plain gradient descent can take on the letter model
+# ---------------------------------------------------------------------------
+def compute_gdlr():
+    """Full-batch gradient descent on Part 1's 729 scores (the gradient from the pair counts, exactly), at five step
+    sizes, with the Hessian's largest eigenvalue tracked: it starts at max_i w_i / 27 and grows as the model learns."""
+    from videos.ai.ai1 import compute as c1
+
+    tr = c1.codes27(c1.text("train27"))
+    N = np.zeros((27, 27))
+    np.add.at(N, (tr[:-1], tr[1:]), 1)
+    n = N.sum(1)
+    Ntot = N.sum()
+    w = n / Ntot
+    ph = N / np.maximum(n, 1)[:, None]
+    H_cond = float(-(N * np.log2(np.maximum(ph, 1e-300))).sum() / Ntot)
+
+    def top(q):
+        return float(max(w[i] * np.linalg.eigvalsh(np.diag(q[i]) - np.outer(q[i], q[i]))[-1] for i in range(27)))
+
+    lam0 = float(w.max() / 27)
+    lam_star = top(ph)
+    fracs = [0.01, 0.1, 0.2, 0.3, 0.5]
+    steps = 3000
+    out = dict(lam0=lam0, eta0=2 / lam0, lam_star=lam_star, eta_star=2 / lam_star, H_cond=H_cond, steps=steps)
+    etas, last_mean, last_spread, monotone = [], [], [], []
+    for k, f in enumerate(fracs):
+        eta = f * 2 / lam0
+        z = np.zeros((27, 27))
+        bits, lam = [], []
+        for t in range(steps + 1):
+            q = np.exp(z - z.max(1, keepdims=True))
+            q /= q.sum(1, keepdims=True)
+            bits.append(float(-(N * np.log(np.maximum(q, 1e-300))).sum() / Ntot / math.log(2)))
+            if t % 25 == 0:
+                lam.append(top(q))
+            z -= eta * w[:, None] * (q - ph)
+        bits = np.array(bits)
+        out[f"bitcurve{k}"] = bits[::10]
+        out[f"lamcurve{k}"] = np.array(lam)
+        etas.append(eta)
+        last_mean.append(float(bits[-500:].mean()))
+        last_spread.append(float(bits[-500:].max() - bits[-500:].min()))
+        monotone.append(bool((np.diff(bits[-500:]) <= 1e-12).all()))
+    out.update(etas=etas, last_mean=last_mean, last_spread=last_spread, monotone=monotone)
+    return out
+
+
 ITEMS = {
     "params": compute_params,
     "linapprox": compute_linapprox,
@@ -1398,6 +1447,7 @@ ITEMS = {
     "check": compute_check,
     "train": compute_train,
     "grad0": compute_grad0,
+    "gdlr": compute_gdlr,
     "floats": compute_floats,
     "cancel": compute_cancel,
     "vcurve": compute_vcurve,
