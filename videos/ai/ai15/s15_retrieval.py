@@ -44,11 +44,14 @@ class Retrieval(VoiceoverScene):
                                  r"a large store \ (a dot product, \ over millions); \ put them in the context, \ and "
                                  r"generate", color=RET, width=6.0, font_size=21).move_to([3.6, 1.2, 0])
         hist = VGroup(
-            label(r"2020: \ DPR \ (Karpukhin et al.): \ two encoders, \ trained so questions land near their answers",
+            label(r"2020: \ DPR \ (Karpukhin et al.): \ two encoders, \\ trained so questions land near their answers",
                   font_size=18, color=HIST),
             label(r"2020: \ REALM \ (Guu et al.): \ the retriever trained with the language model", font_size=18, color=HIST),
             label(r"2020: \ RAG \ (Lewis et al.): \ retrieve, \ then generate", font_size=18, color=HIST),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, -1.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        if hist.width > 6.4:
+            hist.width = 6.4
+        hist.move_to([3.4, -1.7, 0])
         with self.voiceover(
             "Every memory so far lives inside the model. The other way is to keep memory outside it, as a library. "
             "<bookmark mark='a'/> Turn every passage of a large collection into a vector, an embedding, and the "
@@ -108,13 +111,13 @@ class Retrieval(VoiceoverScene):
             f"token {100 * float(ex['p_lm']):.1f} percent; <bookmark mark='d'/> the nearest stored states, from "
             f"places in the novels that looked the same, vote {100 * float(ex['p_knn']):.0f} percent for it."
         ) as vo:
-            self.play(Write(f1), FadeIn(cite_))
+            self.play(Write(f1), FadeIn(cite_), FadeIn(cg), FadeIn(tg[0]), FadeIn(tg[1]))
             vo.wait_until("a")
             self.play(Write(f2))
             vo.wait_until("b")
-            self.play(FadeIn(cg))
+            self.play(Indicate(cg, color=Q, scale_factor=1.03))
             vo.wait_until("c")
-            self.play(FadeIn(tg[0]), FadeIn(tg[1]), FadeIn(tg[2]))
+            self.play(FadeIn(tg[2]))
             vo.wait_until("d")
             self.play(FadeIn(nl), LaggedStart(*[FadeIn(n_, shift=LEFT * 0.1) for n_ in neigh], lag_ratio=0.15), FadeIn(tg[3]))
         self.wait(0.3)
@@ -137,7 +140,7 @@ class Retrieval(VoiceoverScene):
         c1 = curve(ax1, lams, curve_full, KNN_C, 3.5)
         lam = float(full["lam"])
         mark = DashedLine(ax1.c2p(lam, lo), ax1.c2p(lam, hi), dash_length=0.06, color=WHITE, stroke_width=1.5)
-        ml = label(rf"$\lambda = {lam:g}$, \ chosen on held-out novels", font_size=16, color=WHITE).next_to(mark, UP, buff=0.05)
+        ml = label(rf"$\lambda = {lam:g}$: \\ chosen on \\ held-out novels", font_size=16, color=WHITE).next_to(ax1.c2p(lam, (lo + hi) / 2), RIGHT, buff=0.12)
         keys = np.array([kn[f"snap_{s_}"]["keys"] for s_ in snaps], float)
         bits = np.array([kn[f"snap_{s_}"]["bits"] for s_ in snaps])
         lk = np.log10(keys)
@@ -210,9 +213,9 @@ class Retrieval(VoiceoverScene):
             "Where does the memory of the novels help? <bookmark mark='a'/> Here are the tokens of the passage "
             "where it saves the most bits. " + v + "<bookmark mark='b'/> " + v2
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tl), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.1))
             vo.wait_until("a")
-            self.play(FadeIn(tl), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.1))
+            self.play(Indicate(toks, color=KNN_C, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=UP * 0.1))
             self.play(FadeIn(res))
@@ -226,11 +229,14 @@ class Retrieval(VoiceoverScene):
         mine = [i for i, r in enumerate(rows) if r.get("part") == 15]
         board = scoreboard(rows, highlight=tuple(mine), max_bits=4.0, row_h=0.44, font_size=19, bar_width=5.6,
                            label_width=5.0)
-        board.scale_to_fit_height(min(board.height, 5.6)).move_to([-0.4, -0.55, 0])
+        board.scale_to_fit_height(min(board.height, 5.6))
+        if board.width > 9.4:
+            board.scale_to_fit_width(9.4)
+        board.move_to([-1.9, -0.5, 0])
         head = label(r"The scoreboard: \ \textit{The Maltese Falcon}, \ chapter 2", font_size=30).to_edge(UP, buff=0.3)
         hc = history_card(2021, r"RETRO \ (Borgeaud et al., DeepMind)", r"retrieval from $2$ trillion tokens; \ about "
-                          r"GPT-3's quality \ with $25\times$ fewer parameters", color=HIST, width=4.0, font_size=16)
-        hc.to_corner(UR, buff=0.25).shift(DOWN * 0.7)
+                          r"GPT-3's quality \ with $25\times$ fewer parameters", color=HIST, width=3.5, font_size=16)
+        hc.move_to([5.2, 0.6, 0])
         by = {r.get("key"): r for r in rows}
         tf, hy, kn, sc = by["tf15"], by["hybrid15"], by["knn"], by["selfcache"]
         base = next(r for r in rows if r["label"] == "the series' model")
@@ -245,9 +251,8 @@ class Retrieval(VoiceoverScene):
             "came close to GPT-3 on the Pile with a twenty-fifth of the parameters. <bookmark mark='a'/> And here is the scoreboard. "
             + v
         ) as vo:
-            self.play(FadeIn(head), FadeIn(hc))
+            self.play(FadeIn(head), FadeIn(hc), FadeIn(board))
             vo.wait_until("a")
-            self.play(FadeIn(board))
             for i in mine:
                 self.play(Indicate(board.rows[i], color=C.BITS, scale_factor=1.02), run_time=0.6)
         self.wait(0.3)

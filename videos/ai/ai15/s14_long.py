@@ -29,13 +29,13 @@ class LongContext(VoiceoverScene):
     # ------------------------------------------------------------------
     def needle(self):
         g = np.random.default_rng(3)
-        img_good = heat_image(np.ones((10, 10)), 3.6, 3.0, color=C.INTERVAL, gamma=1.0).move_to([-3.4, -0.6, 0])
+        img_good = heat_image(np.ones((10, 10)), 4.4, 3.6, color=C.INTERVAL, gamma=1.0).move_to([-2.4, -0.6, 0])
         bad = np.ones((10, 10))
         for i in range(10):
             for j in range(10):
                 if j > 5 and 2 <= i <= 7:
                     bad[i, j] = 0.35 + 0.4 * g.random()
-        img_bad = heat_image(bad, 3.6, 3.0, color=C.INTERVAL, gamma=1.0).move_to([2.6, -0.6, 0])
+        img_bad = heat_image(bad, 4.4, 3.6, color=C.INTERVAL, gamma=1.0).move_to([3.3, -0.6, 0])
         yl = label(r"depth of the needle \\ (top: \ the start)", font_size=18, color=GREY_B).next_to(img_good, LEFT, buff=0.2)
         xl = label(r"length of the haystack $\rightarrow$", font_size=18, color=GREY_B).next_to(img_good, DOWN, buff=0.15)
         xl2 = xl.copy().next_to(img_bad, DOWN, buff=0.15)
@@ -55,9 +55,9 @@ class LongContext(VoiceoverScene):
             "<bookmark mark='c'/> But the needle is an easy test: its question repeats its words, so a single "
             "attention head that matches words can find it."
         ) as vo:
-            self.play(FadeIn(hay), FadeIn(cite_), FadeIn(tag))
+            self.play(FadeIn(hay), FadeIn(cite_), FadeIn(tag), FadeIn(img_good), FadeIn(yl), FadeIn(xl))
             vo.wait_until("a")
-            self.play(FadeIn(img_good), FadeIn(yl), FadeIn(xl), FadeIn(t1))
+            self.play(FadeIn(t1), Indicate(img_good, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(img_bad), FadeIn(xl2), FadeIn(t2))
             vo.wait_until("c")
@@ -68,7 +68,7 @@ class LongContext(VoiceoverScene):
     # ------------------------------------------------------------------
     def ruler_published(self):
         head = label(r"Harder than a needle", font_size=36).to_edge(UP, buff=0.35)
-        w, fs = 4.2, 19
+        w, fs = 4.3, 24
         cards = VGroup(
             history_card(2024, r"RULER \ (Hsieh et al., NVIDIA)", r"13 tasks: \ many needles, \ tracing variables, \ "
                          r"counting words, \ questions; \ of 17 models claiming at least $32$k tokens, \ only half held "
@@ -81,9 +81,9 @@ class LongContext(VoiceoverScene):
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP)
         if cards.width > 13.4:
             cards.width = 13.4
-        cards.next_to(head, DOWN, buff=0.4)
-        tw = label(r"the length a model accepts \ $\ne$ \ the length it can use", font_size=30, color=C.BITS)
-        tw.next_to(cards, DOWN, buff=0.6)
+        cards.next_to(head, DOWN, buff=0.5)
+        tw = label(r"the length a model accepts \ $\ne$ \ the length it can use", font_size=34, color=C.BITS)
+        tw.next_to(cards, DOWN, buff=0.7)
         with self.voiceover(
             "So the tests got harder. <bookmark mark='a'/> In 2024 Cheng-Ping Hsieh and colleagues at NVIDIA built "
             "RULER: many needles at once, values passed along chains of variables, counting the commonest words, and "
@@ -94,10 +94,12 @@ class LongContext(VoiceoverScene):
             "found all eighteen models it tried growing less reliable as the input grew, even on simple tasks. "
             "<bookmark mark='d'/> The length a model accepts is not the length it can use."
         ) as vo:
-            self.play(FadeIn(head))
+            veils = VGroup(*[Rectangle(width=c_.width + 0.08, height=c_.height + 0.08, stroke_width=0,
+                                       fill_color=BACKGROUND, fill_opacity=0.82).move_to(c_) for c_ in cards])
+            self.play(FadeIn(head), FadeIn(cards), FadeIn(veils))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.1))
+                self.play(FadeOut(veils[k]))
             vo.wait_until("d")
             self.play(FadeIn(tw))
         self.wait(0.3)
@@ -156,10 +158,10 @@ class LongContext(VoiceoverScene):
             f"them on longer streams, up to {Ls[-1]:,} tokens. <bookmark mark='b'/> " + v1 + "<bookmark mark='c'/> "
             + v2 + "<bookmark mark='d'/> " + v3
         ) as vo:
-            self.play(FadeIn(head), FadeIn(foot))
+            self.play(FadeIn(head), FadeIn(foot), FadeIn(rl), FadeIn(rl2), FadeIn(cl), FadeIn(cl2),
+                      *[FadeIn(t_[0]) for t_ in tables], *[FadeIn(t_[1]) for t_ in tables], *[FadeIn(t_[3]) for t_ in tables])
             vo.wait_until("a")
-            self.play(FadeIn(rl), FadeIn(rl2), FadeIn(cl), FadeIn(cl2), *[FadeIn(t_[0]) for t_ in tables],
-                      *[FadeIn(t_[1]) for t_ in tables], *[FadeIn(t_[3]) for t_ in tables])
+            self.play(Indicate(VGroup(cl, cl2), color=WHITE, scale_factor=1.1))
             vo.wait_until("b")
             self.play(*[FadeIn(t_[2]) for t_ in tables])
             vo.wait_until("c")
@@ -181,9 +183,9 @@ class LongContext(VoiceoverScene):
         xs = np.arange(len(mt)) + 16
         lo = math.floor(min(mt.min(), mh.min()) * 2) / 2
         hi = min(math.ceil(max(mt.max(), mh.max()) * 2) / 2, lo + 4)
-        g1 = axes([0, L], [lo, hi], x_length=8.4, y_length=4.2, xlabel=r"position, \ read in one go",
+        g1 = axes([0, L], [lo, hi], x_length=7.8, y_length=4.2, xlabel=r"position, \ read in one go",
                   ylabel=r"loss on the next token \ (nats, \ average of $12$ held-out windows, \ $3$ seeds)",
-                  xticks=[0, 256, 512, 768, 1024], yticks=[lo, (lo + hi) / 2, hi], center=[-1.6, -0.4, 0])
+                  xticks=[0, 256, 512, 768, 1024], yticks=[lo, (lo + hi) / 2, hi], center=[-2.2, -0.4, 0])
         ax = g1.ax
         b1 = VGroup(band(ax, xs, np.clip(lt_.min(0), lo, hi), np.clip(lt_.max(0), lo, hi), TF_C, 0.2),
                     band(ax, xs, np.clip(ht_.min(0), lo, hi), np.clip(ht_.max(0), lo, hi), HY_C, 0.2))
@@ -194,13 +196,14 @@ class LongContext(VoiceoverScene):
                      font_size=20).move_to([4.6, 1.8, 0])
         ct, chy = np.asarray(r["transformer_copy"]), np.asarray(r["hybrid_copy"])
         none = max(float(ct.max()), float(chy.max())) < 0.05
-        cl = label(r"the copy test: \ $24$ random tokens, \ a stretch of a novel, \ the same $24$ again", font_size=19,
+        cl = label(r"the copy test: \\ $24$ random tokens, \ a stretch of a novel, \\ the same $24$ again", font_size=21,
                    color=GREY_A)
-        cv = label(rf"copied right: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \ "
-                   rf"(copies {r['gaps'][0]} tokens apart)", font_size=19, color=WHITE)
-        cg = VGroup(cl, cv).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -1.2, 0])
-        if cg.width > 4.4:
-            cg.width = 4.4
+        cv = label(rf"copied right: \ transformer ${100 * ct.mean(0)[0]:.0f}\%$, \ hybrid ${100 * chy.mean(0)[0]:.0f}\%$ \\ "
+                   rf"(copies {r['gaps'][0]} tokens apart)", font_size=21, color=WHITE)
+        cg = VGroup(cl, cv).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        if cg.width > 4.6:
+            cg.width = 4.6
+        cg.move_to([4.55, -0.9, 0])
         far_t, far_h = float(mt[-200:].mean()), float(mh[-200:].mean())
         near_t, near_h = float(mt[100:240].mean()), float(mh[100:240].mean())
         v1 = (f"Past 256, the transformer's loss climbs, from {near_t:.2f} to {far_t:.2f} nats: rotary positions it "
@@ -245,8 +248,8 @@ class LongContext(VoiceoverScene):
         ]
         tbl = VGroup()
         for i, (a, b, c_) in enumerate(rows):
-            tbl.add(VGroup(label(a, font_size=21, color=c_), label(b, font_size=19, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08))
-        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.4)
+            tbl.add(VGroup(label(a, font_size=27, color=c_), label(b, font_size=23, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12))
+        tbl.arrange(DOWN, aligned_edge=LEFT, buff=0.5).next_to(head, DOWN, buff=0.5)
         if tbl.width > 13.2:
             tbl.width = 13.2
         src = note(r"each figure from its maker's report", font_size=16).to_corner(DR, buff=0.25)
@@ -261,9 +264,11 @@ class LongContext(VoiceoverScene):
             "compressing its keys and values, four and a hundred and twenty-eight to one, and choosing among them: "
             "Part 16's subject. These are each maker's own measurements."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
+            veils = VGroup(*[Rectangle(width=r_.width + 0.1, height=r_.height + 0.08, stroke_width=0,
+                                       fill_color=BACKGROUND, fill_opacity=0.82).move_to(r_) for r_ in tbl])
+            self.play(FadeIn(head), FadeIn(src), FadeIn(tbl), FadeIn(veils))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(tbl[k], shift=RIGHT * 0.1))
+                self.play(FadeOut(veils[k]))
         self.wait(0.3)
         self.clear_scene()

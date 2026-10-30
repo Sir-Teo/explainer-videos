@@ -679,7 +679,7 @@ def compute_actsparse():
     for s in SEEDS3:
         m = saved(f"dense_active_s{s}")
         acts = P.gelu_acts(m, xc)
-        out[f"hist_s{s}"] = [np.histogram(a.reshape(-1), edges)[0] for a in acts]
+        out[f"hist_s{s}"] = np.array([np.histogram(a.reshape(-1), edges)[0] for a in acts])
         out[f"small_s{s}"] = [[float((np.abs(a) < c).mean()) for c in out["cuts"]] for a in acts]
         out[f"neg_s{s}"] = [float((a < 0).mean()) for a in acts]
         bits = []
