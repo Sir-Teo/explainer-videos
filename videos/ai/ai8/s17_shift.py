@@ -31,7 +31,7 @@ class Shift(VoiceoverScene):
         from scipy.stats import norm
 
         f = lambda x: -x + x ** 3  # noqa: E731
-        truth = ax.plot(f, x_range=[-1.15, 1.75], color=WHITE, stroke_width=2.5)
+        truth = ax.plot(f, x_range=[-1.15, 1.55], color=WHITE, stroke_width=2.5)
         dtr = ax.plot(lambda x: -1.2 + 0.55 * norm.pdf(x, s["mu_tr"], s["sd_tr"]), x_range=[-1.2, 2.0], color=PTR,
                       stroke_width=3)
         dte = ax.plot(lambda x: -1.2 + 0.55 * norm.pdf(x, s["mu_te"], s["sd_te"]) * 0.6, x_range=[-1.2, 2.0], color=PTE,
@@ -40,14 +40,14 @@ class Shift(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, np.clip(b, -1.15, 2.15)), radius=0.045, color=PTR) for a, b in zip(x0, y0)
                         if -1.2 < a < 2.0])
         co, ci = np.asarray(s["ols_coef"]), np.asarray(s["iw_coef"])
-        lo = ax.plot(lambda x: co[0] + co[1] * x, x_range=[-1.2, 2.0], color=OLS, stroke_width=4)
-        li = ax.plot(lambda x: ci[0] + ci[1] * x, x_range=[-1.2, 2.0], color=IW, stroke_width=4)
+        lo = ax.plot(lambda x: co[0] + co[1] * x, x_range=[-1.0, 1.6], color=OLS, stroke_width=4)
+        li = ax.plot(lambda x: ci[0] + ci[1] * x, x_range=[-0.8, 1.4], color=IW, stroke_width=4)
         key = legend([(WHITE, r"truth: \ $y = -x + x^3$ \ (+ noise)"), (PTR, r"training inputs: \ $x \sim p$"),
                       (PTE, r"test inputs: \ $x \sim q$"), (OLS, r"least squares"),
                       (IW, r"least squares weighted by $q/p$")], font_size=20).to_corner(UR, buff=0.35)
         dfn = definition_card(r"covariate shift", r"the inputs' distribution changes, \ $p(x) \to q(x)$, \ while the "
                               r"rule from $x$ to $y$, \ $p(y \mid x)$, \ stays the same.", width=5.0, font_size=20)
-        dfn.next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
+        dfn.next_to(key, DOWN, buff=0.35).to_edge(RIGHT, buff=0.3)
         tag = note(r"after Shimodaira (2000); \ illustrative").to_corner(DL, buff=0.25)
         with self.voiceover(
             "Everything so far assumed the test data comes from the same distribution as the training data. Often "
@@ -83,7 +83,7 @@ class Shift(VoiceoverScene):
                 why(r"multiply and divide by $p$"),
                 why(r"an average over the training distribution"),
                 why(r"unbiased, \ from the training sample: \ importance weighting")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-2.6, buff=0.5, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.6, buff=0.38, edge=6.9)
         hist = history_card(2000, r"H.~Shimodaira", r"\textit{Improving predictive inference under covariate shift by "
                             r"weighting the log-likelihood function}", width=6.0, font_size=17, color=HIST)
         hist.to_corner(DL, buff=0.25)
@@ -109,11 +109,11 @@ class Shift(VoiceoverScene):
     # ------------------------------------------------------------------
     def results(self):
         s = load("shift")
-        names = [("ols", r"least squares", OLS), ("iw", r"weighted, \ exact $q/p$", IW),
-                 ("flat", r"weighted, \ $(q/p)^{1/2}$", C.TRUE_P), ("est", r"weighted, \ $q/p$ estimated", C.BITS)]
+        names = [("ols", r"least \\ squares", OLS), ("iw", r"weighted: \\ exact $q/p$", IW),
+                 ("flat", r"weighted: \\ $(q/p)^{1/2}$", C.TRUE_P), ("est", r"weighted: \\ $q/p$ estimated", C.BITS)]
         top = max(s["ols_mean"], s["best_risk"]) * 1.15
-        G = axes([-0.5, 4.5], [0, top], x_length=7.4, y_length=4.4, xticks=[], yticks=[0, round(top / 2, 2), round(top, 2)],
-                 ylabel=r"squared error on test inputs \ (mean of $1{,}000$ runs, $\pm 2$ s.e.)", center=(-2.0, -0.6, 0))
+        G = axes([-0.5, 4.5], [0, top], x_length=8.4, y_length=4.2, xticks=[], yticks=[0, round(top / 2, 2), round(top, 2)],
+                 ylabel=r"squared error on test inputs \ (mean of $1{,}000$ runs, $\pm 2$ s.e.)", center=(-1.7, -0.3, 0))
         ax = G.ax
         bs, labs, errs = VGroup(), VGroup(), VGroup()
         for i, (k, nm, col) in enumerate(names):

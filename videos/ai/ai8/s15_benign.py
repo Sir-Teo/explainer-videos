@@ -34,7 +34,8 @@ class Benign(VoiceoverScene):
 
         sp = VMobject(color=C.BITS, stroke_width=2.5).set_points_as_corners([ax.c2p(x, spiky(x)) for x in grid])
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=WHITE) for a, b in zip(xs, ys)])
-        wild = ax.plot(lambda x: np.polyval(np.polyfit(xs, ys, 11), x), x_range=[-2.7, 2.7], color=C.SURPRISE,
+        cw = np.polyfit(xs, ys, 11)
+        wild = ax.plot(lambda x: float(np.clip(np.polyval(cw, x), -1.75, 1.75)), x_range=[-2.7, 2.7], color=C.SURPRISE,
                        stroke_width=2.5)
         cap = VGroup(label(r"harmful: \ the fit bends everywhere to reach the noise", font_size=24, color=C.SURPRISE),
                      label(r"benign: \ smooth almost everywhere, \ a thin spike at each training point", font_size=24,
@@ -123,9 +124,9 @@ class Benign(VoiceoverScene):
                   color=SPIKE),
             label(rf"here: \ $k/n = {b['s'] / b['n']:.2f}$, \ $n/R_k = {b['n'] / b['Ds'][-1]:.4f}$, \ "
                   rf"$\lambda_{{\mathrm{{eff}}}} = {b['tail'] / b['n']:.2f}$", font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.9)
+        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=1.75)
         hist = history_card(2020, r"P.~Bartlett, P.~Long, G.~Lugosi \& A.~Tsigler", r"\textit{Benign Overfitting in "
-                            r"Linear Regression}", width=6.6, font_size=17, color=HIST).to_corner(DR, buff=0.15)
+                            r"Linear Regression}", width=6.6, font_size=17, color=HIST).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Their theorem splits the excess error into a bias, and a variance that's the noise times two terms. "
             "<bookmark mark='a'/> The first counts the strong directions against the examples. "

@@ -134,22 +134,22 @@ class Tails(VoiceoverScene):
         d = load("tails")
         eps = np.asarray(d["eps"])
         ex, sim = np.asarray(d["exact"]), np.asarray(d["sim"])
-        ax = CornerAxes(x_range=[0, 0.3, 0.05], y_range=[-8, 0, 2], x_length=8.0, y_length=4.8, tips=False,
+        ax = CornerAxes(x_range=[0, 0.3, 0.05], y_range=[-10, 0, 2], x_length=8.0, y_length=4.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.8, -0.4, 0])
-        xt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(v, -8), DOWN, buff=0.12)
+        xt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(v, -10), DOWN, buff=0.12)
                       for v in (0.1, 0.2, 0.3)])
         yt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
-                      for t, v in (("1", 0), ("10^{-4}", -4), ("10^{-8}", -8))])
+                      for t, v in (("1", 0), ("10^{-5}", -5), ("10^{-10}", -10))])
         xl = label(r"$\varepsilon$", font_size=28, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"$P(\bar X - \tfrac12 \ge \varepsilon)$, \ $n = 100$", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         m = ex > 0
-        truth = curve(ax, eps[m], np.maximum(np.log10(ex[m]), -8), color=WHITE, stroke_width=4)
+        truth = curve(ax, eps[m], np.maximum(np.log10(ex[m]), -10), color=WHITE, stroke_width=4)
         sm = sim > 0
         sdots = VGroup(*[Dot(ax.c2p(a, math.log10(b)), radius=0.05, color=TAIL) for a, b in zip(eps[sm], sim[sm])])
         lines, labs = {}, VGroup()
         for k in ("markov", "cheb", "chern", "hoeff"):
             v = np.log10(np.minimum(np.asarray(d[k]), 1.0))
-            lines[k] = curve(ax, eps, np.maximum(v, -8), color=BOUNDS[k], stroke_width=3)
+            lines[k] = curve(ax, eps, np.maximum(v, -10), color=BOUNDS[k], stroke_width=3)
         leg = VGroup(label(r"exact", font_size=22, color=WHITE), label(r"simulated, $10^6$ runs", font_size=22, color=TAIL),
                      *[label(NAMES[k], font_size=22, color=BOUNDS[k]) for k in ("markov", "cheb", "chern", "hoeff")])
         leg.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
