@@ -23,9 +23,9 @@ class Memory(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def context(self):
-        W, H0 = 11.0, 0.7
-        frame = Rectangle(width=W, height=H0, stroke_color=GREY_B, stroke_width=2).move_to([0, 1.6, 0])
-        fl = label(r"the context window: \ a fixed number of tokens", font_size=24, color=GREY_A).next_to(frame, UP, buff=0.15)
+        W, H0 = 12.0, 1.1
+        frame = Rectangle(width=W, height=H0, stroke_color=GREY_B, stroke_width=2).move_to([0, 1.2, 0])
+        fl = label(r"the context window: \ a fixed number of tokens", font_size=30, color=GREY_A).next_to(frame, UP, buff=0.2)
         g = np.random.default_rng(3)
         kinds = [(WORLD, 0.5)] + [((GREY_A, AGENT, TOOL)[k % 3], w) for k, w in enumerate(g.uniform(0.25, 0.8, 30))]
         blocks, x = VGroup(), frame.get_left()[0]
@@ -35,18 +35,19 @@ class Memory(VoiceoverScene):
             blocks.add(Rectangle(width=w - 0.03, height=H0 - 0.12, stroke_width=0, fill_color=col, fill_opacity=0.6)
                        .move_to([x + w / 2, frame.get_y(), 0]))
             x += w
-        full = label(r"full: \ the oldest steps must go", font_size=22, color=C.PENALTY).next_to(frame, DOWN, buff=0.2)
+        full = label(r"full: \ the oldest steps must go", font_size=28, color=C.PENALTY).next_to(frame, DOWN, buff=0.25)
         summ = Rectangle(width=1.6, height=H0 - 0.12, stroke_width=0, fill_color=MEM, fill_opacity=0.8)
         summ.move_to(frame.get_left() + RIGHT * 0.83)
-        sl = label(r"a summary", font_size=20, color=MEM).next_to(summ, DOWN, buff=0.2)
+        sl = label(r"a summary of everything so far: \ what was done, \ what matters next", font_size=26, color=MEM)
+        sl.next_to(summ, DOWN, buff=0.25).align_to(summ, LEFT)
         cards = VGroup(
             history_card(r"Oct 2023", r"MemGPT \ (Packer et al.)", r"memory managed like an operating system's: \ the "
-                         r"model pages facts in and out of its context", width=4.2, color=HIST, font_size=18),
+                         r"model pages facts in and out of its context", width=4.3, color=HIST, font_size=21),
             history_card(r"2025", r"compaction \ (coding agents)", r"when the window fills, \ the agent summarizes "
-                         r"its own work and carries on from the summary", width=4.2, color=HIST, font_size=18),
+                         r"its own work and carries on from the summary", width=4.3, color=HIST, font_size=21),
             history_card(r"2023", r"lost in the middle \ (Liu et al.)", r"even in long windows \ (Part 15), \ models "
-                         r"use the middle of a long context less well than its ends", width=4.2, color=HIST,
-                         font_size=18),
+                         r"use the middle of a long context less well than its ends", width=4.3, color=HIST,
+                         font_size=21),
         ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "An agent's working memory is its context window, and it fills up. <bookmark mark='a'/> Every thought, "
@@ -74,27 +75,27 @@ class Memory(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def stores(self):
-        agent = node_box(r"agent", AGENT, 28, height=0.9).move_to([-4.6, 0.6, 0])
-        store = VGroup(*[RoundedRectangle(width=2.6, height=0.36, corner_radius=0.06, stroke_color=MEM, stroke_width=1.5,
-                                          fill_color=MEM, fill_opacity=0.12) for _ in range(6)]).arrange(DOWN, buff=0.08)
-        store.move_to([0.2, 0.6, 0])
+        agent = node_box(r"agent", AGENT, 30, height=0.9).move_to([-5.3, 0.4, 0])
+        store = VGroup(*[RoundedRectangle(width=3.6, height=0.5, corner_radius=0.06, stroke_color=MEM, stroke_width=1.5,
+                                          fill_color=MEM, fill_opacity=0.12) for _ in range(6)]).arrange(DOWN, buff=0.1)
+        store.move_to([-1.3, 0.2, 0])
         texts = [r"saw a locked door, room 3", r"the user prefers tabs", r"test suite takes 4 min",
                  r"skill: craft a pickaxe", r"lesson: check units first", r"the API key is in .env"]
         for b_, t_ in zip(store, texts):
-            b_.add(label(t_, font_size=16, color=GREY_A).move_to(b_))
-        sl = label(r"memories, \ stored as embeddings \ (Part 24)", font_size=22, color=MEM).next_to(store, UP, buff=0.15)
-        q = label(r"query: \ ``how do I run the tests?''", font_size=20, color=AGENT).next_to(agent, DOWN, buff=0.3)
+            b_.add(label(t_, font_size=22, color=GREY_A).move_to(b_))
+        sl = label(r"memories, \ stored as embeddings \\ (Part 24)", font_size=24, color=MEM).next_to(store, UP, buff=0.2)
+        q = label(r"query: \\ ``how do I \\ run the tests?''", font_size=22, color=AGENT).next_to(agent, DOWN, buff=0.3)
         a1 = Arrow(agent.get_right(), store.get_left() + UP * 0.6, buff=0.1, color=AGENT, stroke_width=2.5)
         a2 = Arrow(store[2].get_left(), agent.get_right() + DOWN * 0.2, buff=0.1, color=MEM, stroke_width=2.5)
         cards = VGroup(
             history_card(r"Apr 2023", r"Generative Agents \ (Park et al.)", r"$25$ characters in a simulated town: \ "
                          r"a stream of memories, \ retrieved by recency, \ importance and relevance; \ reflections "
-                         r"written on top", width=5.0, color=HIST, font_size=18),
+                         r"written on top", width=4.6, color=HIST, font_size=19),
             history_card(r"Mar 2023", r"Reflexion \ (Shinn et al.)", r"after a failure, \ write a lesson in words \ "
-                         r"and read it before the next try", width=5.0, color=HIST, font_size=18),
+                         r"and read it before the next try", width=4.6, color=HIST, font_size=19),
             history_card(r"May 2023", r"Voyager \ (Wang et al.)", r"in Minecraft, \ a growing library of skills as code: "
-                         r"\ $3.3\times$ more unique items, \ tech-tree milestones up to $15.3\times$ faster", width=5.0,
-                         color=HIST, font_size=18),
+                         r"\ $3.3\times$ more unique items, \ tech-tree milestones up to $15.3\times$ faster", width=4.6,
+                         color=HIST, font_size=19),
         ).arrange(DOWN, buff=0.2).to_edge(RIGHT, buff=0.25)
         if cards.height > 7.0:
             cards.height = 7.0
@@ -124,27 +125,28 @@ class Memory(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def many(self):
-        lead = node_box(r"lead agent: \ plans, \ splits the task", AGENT, 24, height=0.8).move_to([-3.2, 2.2, 0])
-        subs = VGroup(*[node_box(rf"subagent {k}: \ its own context", MODEL, 20, height=0.6) for k in (1, 2, 3)])
-        subs.arrange(RIGHT, buff=0.3).move_to([-3.2, 0.3, 0])
+        lead = node_box(r"lead agent: \ plans, \ splits the task", AGENT, 26, height=0.8).move_to([-3.4, 2.3, 0])
+        subs = VGroup(*[node_box(rf"subagent {k}", MODEL, 24, height=0.7) for k in (1, 2, 3)])
+        subs.arrange(RIGHT, buff=0.45).move_to([-3.4, 0.4, 0])
         down = VGroup(*[Arrow(lead.get_bottom(), s_.get_top(), buff=0.08, color=GREY_B, stroke_width=2) for s_ in subs])
         up = VGroup(*[Arrow(s_.get_top() + RIGHT * 0.25, lead.get_bottom() + RIGHT * 0.25, buff=0.08, color=MEM,
                             stroke_width=2) for s_ in subs])
-        ul = label(r"each returns a short summary", font_size=20, color=MEM).next_to(subs, DOWN, buff=0.25)
+        ul = label(r"each with a fresh context of its own; \\ each returns a short summary", font_size=24, color=MEM)
+        ul.next_to(subs, DOWN, buff=0.25)
         claim = history_card(r"Jun 2025", r"Anthropic's research system \ (a company report)",
                              r"a lead model with subagents beat a single agent by $90.2\%$ on an internal research "
                              r"evaluation, \ using about $15\times$ the tokens of a chat; \ on BrowseComp, \ token "
-                             r"usage alone explained $80\%$ of the variance in performance", width=6.0, color=CLAIM,
-                             font_size=18).to_edge(RIGHT, buff=0.3).shift(UP * 0.9)
-        good = VGroup(label(r"parallel, \ broad tasks: \ research, \ search", font_size=22, color=REWARD),
-                      label(r"tightly coupled tasks: \ one codebase, \ one design", font_size=22, color=C.PENALTY))
-        good.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-3.2, -2.2, 0])
-        gl = VGroup(label(r"helps:", font_size=22, color=GREY_A).next_to(good[0], LEFT, buff=0.2),
-                    label(r"helps less:", font_size=22, color=GREY_A).next_to(good[1], LEFT, buff=0.2))
-        tail = label(r"more agents, \ more tokens: \ much of the gain is more thinking, \ spread out", font_size=22,
+                             r"usage alone explained $80\%$ of the variance in performance", width=5.4, color=CLAIM,
+                             font_size=21).to_edge(RIGHT, buff=0.3).shift(UP * 1.0)
+        good = VGroup(label(r"parallel, \ broad tasks: \ research, \ search", font_size=26, color=REWARD),
+                      label(r"tightly coupled tasks: \ one codebase", font_size=26, color=C.PENALTY))
+        good.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-2.6, -2.3, 0])
+        gl = VGroup(label(r"helps:", font_size=26, color=GREY_A).next_to(good[0], LEFT, buff=0.2),
+                    label(r"helps less:", font_size=26, color=GREY_A).next_to(good[1], LEFT, buff=0.2))
+        tail = label(r"more agents, \ more tokens: \\ much of the gain is more thinking, \ spread out", font_size=24,
                      color=GREY_A).next_to(claim, DOWN, buff=0.4)
-        if tail.width > 6.0:
-            tail.width = 6.0
+        if tail.width > 5.6:
+            tail.width = 5.6
         with self.voiceover(
             "When one context is not enough, use several. <bookmark mark='a'/> A lead agent plans and hands pieces "
             "of the task to subagents, each with a fresh context of its own, <bookmark mark='b'/> and each returns "

@@ -49,7 +49,7 @@ class Doubling(VoiceoverScene):
         fit = curve(ax, xx, 1 / (1 + np.exp(2.2 * (xx - h))), AGENT, 3.5)
         half = DashedLine(ax.c2p(-1, 0.5), ax.c2p(h, 0.5), color=GREY_B)
         vline = DashedLine(ax.c2p(h, 0), ax.c2p(h, 0.5), color=FRONT)
-        hl = label(r"the $50\%$ time horizon", font_size=22, color=FRONT).next_to(ax.c2p(h, 0), DOWN, buff=0.55)
+        hl = label(r"the $50\%$ \\ time horizon", font_size=24, color=FRONT).next_to(ax.c2p(h, 0.25), RIGHT, buff=0.15)
         tag = note(r"schematic: \ one model, \ made-up tasks").to_corner(DL, buff=0.3)
         hist = history_card(2025, r"METR \ (Kwa, West, Becker et al.)", r"software and research tasks from seconds to "
                             r"many hours, \ each timed by skilled people; \ for each model, \ success against the "
@@ -74,10 +74,10 @@ class Doubling(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def plot(self):
+    def plot(self, y_lo=-5):
         m = load("metr")
         rows = m["rows"]
-        y_lo, y_hi = -5, 11  # log2 minutes: 2 s to 34 h
+        y_hi = 11  # log2 minutes, up to 34 h
         g = axes([0, 7.6, 1], [y_lo, y_hi, 1], x_length=8.6, y_length=5.0, xticks=[0, 2, 4, 6],
                  xfmt=lambda v: f"{2019 + int(v)}", yticks=[-4, 0, 4, 8], ylabel=r"$50\%$ time horizon \ (log scale)",
                  yfmt=lambda v: {-4: r"4\,\text{s}", 0: r"1\,\text{min}", 4: r"16\,\text{min}", 8: r"4.3\,\text{h}"}[int(v)],
@@ -148,7 +148,7 @@ class Doubling(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def eighty(self):
-        m, rows, g, ax = self.plot()
+        m, rows, g, ax = self.plot(y_lo=-7)
         p50 = VGroup(*[Dot(ax.c2p(r["t"], math.log2(r["p50"])), radius=0.055, color=FRONT if r["sota"] else OTHER)
                        for r in rows])
         p80 = VGroup(*[Dot(ax.c2p(r["t"], math.log2(r["p80"])), radius=0.055, color=P80) for r in rows])
@@ -156,13 +156,18 @@ class Doubling(VoiceoverScene):
         ratio, ch = float(m["ratio_median"]), float(m["ratio_hazard"])
         rows_ = [cmath(r"P(\text{done} \mid t)", r"=", r"e^{-\lambda t}", font_size=32),
                  cmath(r"\frac{t_{50}}{t_{80}}", r"=", r"\frac{\ln 2}{\ln 1.25}", r"=", rf"{ch:.1f}", font_size=32)]
-        box = VGroup(label(r"if every minute of work \\ failed with the same chance $\lambda$:", font_size=20, color=GREY_A),
-                     *rows_).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.35)
-        meas = label(rf"measured: \ median $t_{{50}}/t_{{80}} = {ratio:.1f}$", font_size=24, color=P80)
-        meas.next_to(box, DOWN, buff=0.35).align_to(box, LEFT)
+        box = VGroup(label(r"if every minute of work \\ failed with the same chance $\lambda$:", font_size=22, color=GREY_A),
+                     *rows_).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        meas = label(rf"measured: \\ median $t_{{50}}/t_{{80}} = {ratio:.1f}$", font_size=26, color=P80)
         d80 = float(m["doubling_80"])
-        k80 = label(rf"$80\%$ horizons: \ doubling every ${d80:.0f}$ days", font_size=22, color=P80)
-        k80.next_to(meas, DOWN, buff=0.3).align_to(box, LEFT)
+        k80 = label(rf"$80\%$ horizons: \\ doubling every ${d80:.0f}$ days", font_size=24, color=P80)
+        side = VGroup(box, meas, k80).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+        if side.width > 4.4:
+            side.width = 4.4
+        side.to_corner(UR, buff=0.35)
+        p80key = VGroup(Dot(color=P80, radius=0.06), label(r"$80\%$ horizon", font_size=20, color=P80)).arrange(RIGHT, buff=0.1)
+        p50key = VGroup(Dot(color=FRONT, radius=0.06), label(r"$50\%$ horizon", font_size=20, color=FRONT)).arrange(RIGHT, buff=0.1)
+        keys = VGroup(p50key, p80key).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(g.ax, UP, buff=0.1).align_to(g.ax, RIGHT)
         if ratio > ch * 1.15:
             verdict = (f"METR's measurements give a median of {ratio:.1f}: an agent's success falls off with length more "
                        "gently than a constant risk per minute would make it. Long tasks are not simply many short "
@@ -182,10 +187,10 @@ class Doubling(VoiceoverScene):
             "compounding of chapter five, the ratio of the two horizons would be fixed: log 2 over log one point two "
             f"five, {ch:.1f}. <bookmark mark='c'/> {verdict} <bookmark mark='d'/> {tail}"
         ) as vo:
-            self.play(FadeIn(g), FadeIn(p50))
+            self.play(FadeIn(g), FadeIn(p50), FadeIn(keys[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromPoint(l_, l_.get_start()) for l_ in links], lag_ratio=0.03),
-                      LaggedStart(*[FadeIn(d_) for d_ in p80], lag_ratio=0.03), run_time=2.0)
+                      LaggedStart(*[FadeIn(d_) for d_ in p80], lag_ratio=0.03), FadeIn(keys[1]), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(box[0]), Write(box[1]))
             self.play(Write(box[2]))
@@ -202,25 +207,30 @@ class Doubling(VoiceoverScene):
         rows = m["rows"]
         last = max(rows, key=lambda r: r["t"])
         lim = float(m["reliable_min"])
-        ruler = NumberLine(x_range=[-2, 12, 1], length=12.0, include_numbers=False, color=GREY_C).move_to([0, 0.4, 0])
+        ruler = NumberLine(x_range=[-2, 12, 1], length=12.0, include_numbers=False, color=GREY_C).move_to([0, 0.2, 0])
         ticks = VGroup()
         for v, t_ in ((-2, r"15\,\text{s}"), (0, r"1\,\text{min}"), (4, r"16\,\text{min}"), (6, r"1\,\text{h}"),
                       (8, r"4\,\text{h}"), (10, r"17\,\text{h}"), (12, r"68\,\text{h}")):
-            ticks.add(MathTex(t_, font_size=22, color=GREY_B).next_to(ruler.n2p(v), DOWN, buff=0.15))
+            ticks.add(MathTex(t_, font_size=28, color=GREY_B).next_to(ruler.n2p(v), DOWN, buff=0.15))
         lim_x = math.log2(lim)
         zone = Rectangle(width=ruler.n2p(12)[0] - ruler.n2p(lim_x)[0], height=0.5, stroke_width=0, fill_color=FAIL,
                          fill_opacity=0.2).move_to((ruler.n2p(lim_x) + ruler.n2p(12)) / 2)
-        zl = label(r"above $16$ h: \ METR's tasks \\ no longer measure reliably", font_size=20, color=FAIL)
-        zl.next_to(zone, UP, buff=0.2)
+        zl = label(r"above $16$ h: \ METR's tasks \\ no longer measure reliably", font_size=24, color=FAIL)
+        zl.next_to(zone, DOWN, buff=0.7).align_to(zone, RIGHT)
         marks = VGroup()
-        for r in rows:
-            if r["sota"] and r["t"] > 6.0:
-                x = ruler.n2p(math.log2(r["p50"]))
-                marks.add(VGroup(Triangle(color=FRONT, fill_opacity=1).scale(0.09).rotate(PI).move_to(x + UP * 0.25),
-                                 label(r["name"], font_size=16, color=FRONT)))
-        place = [UP * 0.62, UP * 1.05, UP * 1.48, UP * 0.62, UP * 1.05]
-        for k, mk in enumerate(marks):
-            mk[1].next_to(mk[0], UP, buff=0.08).shift(place[k % len(place)] - UP * 0.62)
+        sel = [r for r in rows if r["sota"] and r["t"] > 6.0]
+        for k, r in enumerate(sel):
+            x = ruler.n2p(math.log2(r["p50"]))
+            tri = Triangle(color=FRONT, fill_opacity=1).scale(0.1).rotate(PI).move_to(x + UP * 0.25)
+            named = k % 2 == 1 or k == len(sel) - 1  # every other name, and the last, so they do not collide
+            nm = label(r["name"] if named else "", font_size=22, color=FRONT) if named else VectorizedPoint()
+            lead = Line(x + UP * 0.38, x + UP * (0.7 + 0.75 * ((k // 2) % 3)), color=GREY_D, stroke_width=1.2)
+            if not named:
+                lead.set_opacity(0)
+            nm.next_to(lead.get_end(), UP, buff=0.05)
+            if nm.get_right()[0] > 6.9:
+                nm.shift(LEFT * (nm.get_right()[0] - 6.9))
+            marks.add(VGroup(tri, lead, nm))
         cards = VGroup(
             history_card(r"Apr 2026", rf"{last['name']}", rf"$50\%$ horizon about ${last['p50'] / 60:.0f}$ hours: \ "
                          r"past what the suite can measure", width=4.2, color=FRONT, font_size=18),

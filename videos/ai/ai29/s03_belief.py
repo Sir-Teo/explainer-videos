@@ -105,8 +105,8 @@ class Belief(VoiceoverScene):
                                r"states $s$, \ actions $a$, \ transitions $P(s' \mid s, a)$, \ rewards $r(s, a)$, "
                                r"\ as in Part 26's MDP; \ plus observations $o$ with probabilities $P(o \mid s')$. \ "
                                r"The agent never sees $s$, \ only $o$.", width=7.4, color=BELIEF).move_to([-2.7, 0.7, 0])
-        world = node_box(r"world: \ state $s$ \ (hidden)", WORLD, 24, height=0.9).move_to([4.3, 1.7, 0])
-        agent = node_box(r"agent: \ belief $b(s)$", AGENT, 24, height=0.9).move_to([4.3, -1.3, 0])
+        world = node_box(r"world: \ state $s$ \ (hidden)", WORLD, 30, height=1.0).move_to([4.0, 1.7, 0])
+        agent = node_box(r"agent: \ belief $b(s)$", AGENT, 30, height=1.0).move_to([4.0, -1.3, 0])
         a1 = CurvedArrow(agent.get_right() + RIGHT * 0.05, world.get_right() + RIGHT * 0.05, angle=1.3, color=GREY_B)
         a2 = CurvedArrow(world.get_left() + LEFT * 0.05, agent.get_left() + LEFT * 0.05, angle=1.3, color=OBS)
         l1 = label(r"action $a$", font_size=22, color=GREY_B).next_to(a1, RIGHT, buff=0.08)
@@ -149,9 +149,9 @@ class Belief(VoiceoverScene):
         whys = [why(r"the belief after acting and seeing"), why(r"Bayes' rule"), why(r"total probability: \ predict"),
                 why(r"$\eta$: \ divide by the total, \ so it sums to $1$"),
                 why(r"Part 7's forward algorithm, \ $A$ the transitions")]
-        step = ladder(self, rows, whys, keep=5, top=2.9, x=-2.2, buff=0.45, edge=6.9)
+        step = ladder(self, rows, whys, keep=5, top=3.3, x=-2.2, buff=0.36, edge=6.9)
         tail = label(r"predict with the model of motion, \ correct with the model of the sensor", font_size=26,
-                     color=BELIEF).to_edge(DOWN, buff=0.4)
+                     color=BELIEF).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "Where did that update come from? The new belief is the probability of each state after the agent's "
             "action and the observation it got. <bookmark mark='a'/> Bayes' rule turns it around: how likely the "
@@ -192,9 +192,9 @@ class Belief(VoiceoverScene):
         thm = theorem_card(r"the belief is enough", r"the belief $b_t$ sums up the whole history $o_1, a_1, \ldots, o_t$: "
                            r"\ a POMDP is an MDP whose states are beliefs, \ so Part 26's Bellman equation applies, "
                            r"\ over a continuum of states", who=r"\AA str\"om (1965); \ Kaelbling, Littman \& Cassandra (1998)",
-                           width=9.6, color=BELIEF).move_to([0, -0.9, 0])
+                           width=11.0, color=BELIEF, font_size=28).move_to([0, -0.9, 0])
         llm = label(r"a language-model agent's belief: \ its context window, \ everything it has seen so far",
-                    font_size=24, color=AGENT).to_edge(DOWN, buff=0.35)
+                    font_size=28, color=AGENT).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "The belief is more than bookkeeping. <bookmark mark='a'/> It sums up everything the agent has seen and "
             "done: nothing else in the history says more about the present. So a POMDP is an ordinary MDP whose "

@@ -86,6 +86,19 @@ def fourier_basis():
     return np.array(rows), names
 
 
+def restricted(L, key):
+    """The part of a logit table L (a, b, c) along cos and sin of w_k (a + b), for each c and each key frequency k."""
+    a = np.arange(P)
+    sab = (a[:, None] + a[None, :]) % P
+    keep = np.zeros_like(L)
+    for k in key:
+        for f in (np.cos, np.sin):
+            w = f(2 * np.pi * k * sab / P)
+            coef = np.einsum("ab,abc->c", w, L) / (w ** 2).sum()
+            keep += w[:, :, None] * coef[None, None, :]
+    return keep
+
+
 def measure(model, x, y, tr, te, n_key=5):
     """Losses, accuracies, the embedding's spectrum, key frequencies, restricted and excluded losses."""
     import torch
@@ -106,16 +119,11 @@ def measure(model, x, y, tr, te, n_key=5):
         out["spectrum"] = spec / spec.sum()
         key = np.argsort(-spec)[:n_key] + 1  # the key frequencies (1-based)
         out["key"] = [int(k) for k in key]
-        # the logits as a p x p x p table, (a, b) -> c; its part along cos(w_k (a + b - c)) for the key frequencies
+        # the logits as a p x p x p table, (a, b) -> c; for each answer c, its part along the waves cos(w_k (a + b))
+        # and sin(w_k (a + b)) of the key frequencies (Nanda et al.'s restricted logits)
         L = z.double().numpy().reshape(P, P, P)
         L = L - L.mean(-1, keepdims=True)
-        a = np.arange(P)
-        s = (a[:, None, None] + a[None, :, None] - a[None, None, :]) % P
-        keep = np.zeros_like(L)
-        for k in key:
-            for f in (np.cos, np.sin):
-                basis = f(2 * np.pi * k * s / P)
-                keep += (L * basis).sum() / (basis ** 2).sum() * basis
+        keep = restricted(L, key)
         y_np = y.numpy()
 
         def ce(logits, idx):

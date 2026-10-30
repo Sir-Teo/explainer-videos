@@ -29,15 +29,15 @@ class Loop(VoiceoverScene):
         rows.arrange(DOWN, buff=0.1, aligned_edge=LEFT).move_to(ctx).align_to(ctx, UP).shift(DOWN * 0.2)
         for r_ in rows:
             r_.align_to(ctx, LEFT).shift(RIGHT * 0.3)
-        model = node_box(r"language model", AGENT, 26, height=0.9).move_to([2.6, 1.4, 0])
-        env = node_box(r"tools: \ search, \ code, \ files", TOOL, 26, height=0.9).move_to([2.6, -1.6, 0])
+        model = node_box(r"language model", AGENT, 28, height=0.9).move_to([2.4, 2.3, 0])
+        env = node_box(r"tools: \ search, \ code, \ files", TOOL, 28, height=0.9).move_to([2.4, -0.2, 0])
         a1 = Arrow(model.get_bottom(), env.get_top(), buff=0.1, color=AGENT)
         a2 = CurvedArrow(env.get_left() + LEFT * 0.05, rows[3].get_right() + RIGHT * 0.1, angle=-0.5, color=TOOL)
         a3 = CurvedArrow(ctx.get_right() + UP * 1.6, model.get_left() + LEFT * 0.05, angle=-0.4, color=GREY_B)
         hist = history_card(2022, r"ReAct \ (Yao, Zhao, Yu, Du, Shafran, Narasimhan \& Cao)", r"interleave reasoning "
-                            r"and acting: \ on two text games, \ $34$ and $10$ points more success than imitation "
-                            r"and reinforcement learning, \ from one or two examples in the prompt", width=6.4,
-                            color=HIST, font_size=19).to_corner(DR, buff=0.25)
+                            r"and acting: \ on ALFWorld and WebShop, \ $34$ and $10$ points more success than imitation "
+                            r"and reinforcement learning, \ from one or two examples in the prompt", width=5.8,
+                            color=HIST, font_size=21).to_corner(DR, buff=0.25)
         with self.voiceover(
             "A language model only writes text. To make it an agent, put it in a loop. <bookmark mark='a'/> The "
             "context starts with a task. The model writes a thought, <bookmark mark='b'/> then an action, in a form a "
@@ -71,14 +71,21 @@ class Loop(VoiceoverScene):
         task = data_text(f'Task: what do one {items[0]}, one {items[1]} and one {items[2]} cost in all?', font=MONO,
                          font_size=20, color=WORLD)
         box = trace_box(tr["lines"], chars=46, font_size=19)
-        col = Group(task, box).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to([-2.3, -0.1, 0])
-        if col.height > 6.9:
-            col.height = 6.9
-            col.move_to([-2.3, -0.1, 0])
+        if task.width > 7.6:
+            task.width = 7.6
+        if box.width > 7.6:
+            box.width = 7.6
+        col = Group(task, box).arrange(DOWN, buff=0.2, aligned_edge=LEFT)
+        if col.height > 6.6:
+            col.height = 6.6
+        col.to_edge(LEFT, buff=0.4).shift(DOWN * 0.2)
         tools = code_block([r'shelf(k)    -> the items on shelf k', r'price(item) -> its price, or an error',
                             r'add(a, b)   -> a + b'], font_size=18)
         tools_t = label(r"the tools", font_size=24, color=TOOL)
-        tbox = VGroup(tools_t, tools).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_corner(UR, buff=0.4)
+        tbox = VGroup(tools_t, tools).arrange(DOWN, buff=0.15, aligned_edge=LEFT)
+        if tbox.width > 5.0:
+            tbox.width = 5.0
+        tbox.to_corner(UR, buff=0.4).shift(DOWN * 0.8)
         errs = [k for k, ln in enumerate(box.rows) if "error" in ln.text]
         tag = note(r"a simulated agent: \ the tools are real code, \ the ``model'' is a script with error rates we "
                    r"set, \ no language model", font_size=18).to_corner(DR, buff=0.25)
@@ -160,14 +167,15 @@ class Loop(VoiceoverScene):
     # ------------------------------------------------------------------
     def mcp(self):
         hosts = VGroup(*[node_box(t, AGENT, 22, height=0.6) for t in (r"a chat app", r"a coding agent", r"an IDE")])
-        hosts.arrange(DOWN, buff=0.4).move_to([-4.6, 0.0, 0])
+        hosts.arrange(DOWN, buff=0.4).move_to([-4.6, 0.6, 0])
         servers = VGroup(*[node_box(t, TOOL, 22, height=0.6) for t in (r"files", r"a database", r"a browser",
                                                                          r"the issue tracker")])
-        servers.arrange(DOWN, buff=0.3).move_to([4.6, 0.0, 0])
+        servers.arrange(DOWN, buff=0.3).move_to([4.6, 0.6, 0])
         hub = VGroup(Circle(radius=0.75, stroke_color=WHITE, stroke_width=2.5, fill_color=WHITE, fill_opacity=0.05),
                      label(r"MCP", font_size=30))
         hub[1].move_to(hub[0])
-        hl = label(r"one protocol: \ JSON-RPC messages; \ a server offers tools, \ resources, \ prompts", font_size=20,
+        hub.move_to([0, 0.6, 0])
+        hl = label(r"one protocol: \ JSON-RPC messages; \\ a server offers tools, \ resources, \ prompts", font_size=22,
                    color=GREY_A).next_to(hub, DOWN, buff=0.3)
         mess = VGroup(*[Line(h.get_right(), s_.get_left(), color=GREY_D, stroke_width=1.5) for h in hosts for s_ in servers])
         clean = VGroup(*[Line(h.get_right(), hub.get_left(), color=AGENT, stroke_width=2) for h in hosts],
