@@ -160,8 +160,6 @@ ZH = {
 
     'both match the prediction to two decimal places': '两者都和预测吻合到小数点后两位',
 
-    'close to the prediction': '和预测很接近',
-
     'The method is from 1929':
         "这个方法出自1929年，作者是理查德·冯·米泽斯和希尔达·波拉切克-盖林格。<bookmark mark='a'/>1998年，它给整个网络排了名：PageRank就是链接矩阵最大特征值的特征向量。<bookmark mark='b'/>2018年，谱归一化每个训练步只做一步幂迭代，防止各层拉伸过度。<bookmark mark='c'/>今天程序库里的例程，是它的改进版：克雷洛夫方法，源于科尼利厄斯·兰乔斯1950年的工作。",
 
@@ -253,10 +251,6 @@ ZH = {
     'f"The same in this series\' small novels model.':
         "这个系列在小说上训练的小模型，也是一样。<bookmark mark='a'/>初始化时，它的{n}个矩阵是随机的：总共{sum(a_in)}个特征值越界。<bookmark mark='b'/>训练之后，{every}{min(a_tr)}到{max(a_tr)}个落在边界之外。训练在一片噪声的海洋里，写下了一点结构。",
 
-    'every matrix has': '每个矩阵都有',
-
-    'the matrices have': '各矩阵有',
-
     # ---------------------------------------------------------------- GaLore
     'Chapter eleven.': '第11章。梯度是低秩的。',
 
@@ -267,7 +261,7 @@ ZH = {
         "这是一个真实的梯度，来自一个在小说上训练的小Transformer：一个{shape[0]}乘{shape[1]}的矩阵。<bookmark mark='a'/>它的奇异值，从大到小，对数坐标。第一步时，它们下降得很慢。<bookmark mark='b'/>几步之后就塌了下去：到第{pk['step']}步，前八个方向承载了梯度的{100 * pk['top8']:.1f}%。<bookmark mark='c'/>后来谱又慢慢填回来：到第{last['step']}步，前八个方向仍然承载着{100 * last['top8']:.0f}%，而方向一共有{n}个。",
 
     'f"That is GaLore\'s idea':
-        "这就是GaLore的想法，来自赵嘉玮、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{fmt_int(mems['adam'])}个数，秩32时{fmt_int(mems['galore32'])}个，秩8时{fmt_int(mems['galore8'])}个。在大规模上，论文报告优化器内存最多减少65%，而且配合8位状态，在一张24GB的显卡上预训练了一个70亿参数的模型。",
+        "这就是GaLore的想法，来自Jiawei Zhao、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{fmt_int(mems['adam'])}个数，秩32时{fmt_int(mems['galore32'])}个，秩8时{fmt_int(mems['galore8'])}个。在大规模上，论文报告优化器内存最多减少65%，而且配合8位状态，在一张24GB的显卡上预训练了一个70亿参数的模型。",
 
     'f"Does a narrow window cost anything?':
         "窄窗口有代价吗？我们用Adam，以及秩32和秩8的GaLore训练这个模型，每种都在三个学习率里取最好的，各跑三个随机种子。<bookmark mark='a'/>训练曲线，取平均。<bookmark mark='b'/>留出数据上的损失：Adam {mean['adam']:.3f}，秩32 {mean['galore32']:.3f}，秩8 {mean['galore8']:.3f}。<bookmark mark='c'/>{verdict}",
@@ -398,13 +392,13 @@ ZH = {
         "768维里的随机方向几乎垂直，余弦是0，上下浮动{1 / np.sqrt(768):.3f}。可训练出的向量不是随机的。<bookmark mark='a'/>GPT-2两个词元向量之间，平均余弦是{g['cos_random_mean']:.2f}：它们都往同一边歪，这个空间是各向异性的。每个向量和全体的均值之间，平均余弦是{g['mean_vec_cos']:.2f}。<bookmark mark='b'/>减去均值，平均余弦降到{g['cos_centred_mean']:.3f}。",
 
     'f"Even centred, the spread is uneven.':
-        "即使中心化了，散布也不均匀。<bookmark mark='a'/>第一主方向承载了{100 * share[0]:.1f}%的散布，均匀分配只有{100 * iso:.2f}%。<bookmark mark='b'/>按每个词元在GPT-2词表里的编号着色，编号大致从常见排到罕见：第一个方向跟着它走，秩相关系数{rho:.2f}。<bookmark mark='c'/>高军和同事在2019年解释了这一点：训练主要把罕见词元的向量推离各种上下文，于是罕见的词元漂到了一起。连第一个方向也去掉，也就是穆和维斯瓦纳特2018年的“去掉顶部方向”，平均余弦从{abtt[0]:.3f}降到{abtt[1]:.4f}。",
+        "即使中心化了，散布也不均匀。<bookmark mark='a'/>第一主方向承载了{100 * share[0]:.1f}%的散布，均匀分配只有{100 * iso:.2f}%。<bookmark mark='b'/>按每个词元在GPT-2词表里的编号着色，编号大致从常见排到罕见：第一个方向跟着它走，秩相关系数{rho:.2f}。<bookmark mark='c'/>Jun Gao和同事在2019年解释了这一点：训练主要把罕见词元的向量推离各种上下文，于是罕见的词元漂到了一起。连第一个方向也去掉，也就是Mu和Viswanath 2018年的“去掉顶部方向”，平均余弦从{abtt[0]:.3f}降到{abtt[1]:.4f}。",
 
     'f"Inside the network it is stronger.':
         "在网络内部，这个现象更强。<bookmark mark='a'/>让GPT-2读记分牌的测试段落，一层一层看：不同位置之间的平均余弦，在输入处是{L[0]['cos']:.2f}，中间大约{mid['cos']:.2f}，顶层是{hi['cos']:.2f}，这就是卡温·埃塔亚拉赫2019年测到的窄锥。<bookmark mark='b'/>在第{mid['layer']}层，768维里只有三个维度，就承载了它的{100 * mid['top3_share']:.0f}%：蒂姆基和范施尼德尔称之为离群维度。<bookmark mark='c'/>每层中心化之后，余弦降到0附近。原始的余弦，量到的这种共同的倾斜，和意义一样多。",
 
     'f"Lopsided or not, directions carry meaning':
-        "歪不歪斜，方向都承载着意义：我们计数得到的向量，把england送到了{an[0]}。<bookmark mark='a'/>2013年，米科洛夫、易文涛和茨威格在神经网络的词向量里，发现了同样的规律。<bookmark mark='b'/>2022年，纳尔逊·埃尔哈格和同事展示了小网络把比维数更多的特征，存成近似垂直的方向。<bookmark mark='c'/>2024年，朴基镐、崔요중和维奇把它说清楚了：概念就是方向，但要用对的内积，不一定是普通的点积。<bookmark mark='d'/>沿着这些方向读取和操控模型，是第30部分的主题。",
+        "歪不歪斜，方向都承载着意义：我们计数得到的向量，把england送到了{an[0]}。<bookmark mark='a'/>2013年，米科洛夫、Yih和Zweig在神经网络的词向量里，发现了同样的规律。<bookmark mark='b'/>2022年，纳尔逊·埃尔哈格和同事展示了小网络把比维数更多的特征，存成近似垂直的方向。<bookmark mark='c'/>2024年，Kiho Park、Yo Joong Choe和Victor Veitch把它说清楚了：概念就是方向，但要用对的内积，不一定是普通的点积。<bookmark mark='d'/>沿着这些方向读取和操控模型，是第30部分的主题。",
 
     # ---------------------------------------------------------------- Netflix
     'Chapter seventeen.': '第17章。现实中的低秩：推荐与检索。',
@@ -460,6 +454,9 @@ ZH = {
 }
 
 PHRASES = {
+    'every matrix has': '每个矩阵都有',
+    'the matrices have': '各矩阵有',
+    'close to the prediction': '和预测很接近',
     'B and C': 'B和C',
     'A and B': 'A和B',
     'A and C': 'A和C',

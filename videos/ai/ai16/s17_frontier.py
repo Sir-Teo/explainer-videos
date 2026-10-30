@@ -32,8 +32,8 @@ class Frontier(VoiceoverScene):
         c = load("configs")
         rows = [r for r in c["rows"] if r["year"] >= 2023]
         x0, x1 = 2023.4, 2026.95
-        ax = Axes(x_range=[x0, x1, 1], y_range=[0.7, 3.1, 1], x_length=9.2, y_length=4.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-0.9, -0.3, 0])
+        ax = Axes(x_range=[x0, x1, 1], y_range=[0.7, 3.1, 1], x_length=11.4, y_length=5.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.2, -0.4, 0])
         yt = VGroup(*[MathTex(str(v), font_size=20, color=GREY_B).next_to(ax.c2p(x0, math.log10(v)), LEFT, buff=0.1)
                       for v in (8, 32, 128, 512)])
         xt = VGroup(*[MathTex(str(y), font_size=20, color=GREY_B).next_to(ax.c2p(y + 0.5, 0.7), DOWN, buff=0.1)
@@ -43,14 +43,14 @@ class Frontier(VoiceoverScene):
         dots, labs = VGroup(), VGroup()
         for r in rows:
             rad = 0.05 + 0.05 * (math.log10(r["total"]) - 10)
-            dots.add(Dot(ax.c2p(r["year"], math.log10(r["experts"])), radius=max(rad, 0.05), color=EXPERTC if not r["shared"] else SHAREDC))
-            labs.add(label(SHORT[r["key"]] + rf" \ ${r['k']}$" + (rf"$+{r['shared']}$" if r["shared"] else ""), font_size=16,
+            dots.add(Dot(ax.c2p(r["year"], math.log10(r["experts"])), radius=max(rad, 0.05), color=C.TRUE_P if not r["shared"] else SHAREDC))
+            labs.add(label(SHORT[r["key"]] + rf" \ ${r['k']}$" + (rf"$+{r['shared']}$" if r["shared"] else ""), font_size=18,
                            color=GREY_A))
-        place_labels(list(dots), list(labs), bounds=(-6.8, 6.8, -3.0, 2.6))
-        key = VGroup(label(r"purple: \ routed only", font_size=18, color=EXPERTC),
+        place_labels(list(dots), list(labs), bounds=(-6.8, 6.8, -3.0, 2.9))
+        key = VGroup(label(r"blue: \ routed only", font_size=18, color=C.TRUE_P),
                      label(r"lilac: \ $+$ shared experts", font_size=18, color=SHAREDC),
                      label(r"label: \ chosen per token", font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        key.to_corner(DR, buff=0.3)
+        key.move_to([-3.4, 1.5, 0])
         src = note(r"each maker's report or model card \ (checked October 2026)", font_size=16).to_corner(DL, buff=0.2)
         k3 = next(r for r in rows if r["key"] == "kimik3")
         mx = next(r for r in rows if r["key"] == "mixtral")
@@ -130,8 +130,8 @@ class Frontier(VoiceoverScene):
         ]
         tbl = VGroup()
         for d_, nm, what, col in rows:
-            tbl.add(VGroup(label(d_, font_size=20, color=GREY_B), label(nm, font_size=22, color=col),
-                           label(what, font_size=19, color=GREY_A)))
+            tbl.add(VGroup(label(d_, font_size=22, color=GREY_B), label(nm, font_size=25, color=col),
+                           label(what, font_size=22, color=GREY_A)))
         w0, w1 = max(r[0].width for r in tbl), max(r[1].width for r in tbl)
         for i, r in enumerate(tbl):
             y = 2.4 - i * 0.62

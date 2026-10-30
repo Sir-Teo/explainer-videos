@@ -161,9 +161,9 @@ class Depth(VoiceoverScene):
     # ------------------------------------------------------------------
     def causal(self):
         d = load("mod")
-        text = str(d["mod12_example"])
-        K = np.asarray(d["mod12_example_keep"], float)  # routed blocks, positions
-        row = VGroup(*[VGroup(Square(0.3, stroke_width=0.6, stroke_color=GREY_D), data_text(show(ch), font=MONO, font_size=16,
+        text = str(d["mod12_example"])[-32:]
+        K = np.asarray(d["mod12_example_keep"], float)[:, -32:]  # routed blocks, positions (the last 32)
+        row = VGroup(*[VGroup(Square(0.38, stroke_width=0.8, stroke_color=GREY_D), data_text(show(ch), font=MONO, font_size=24,
                                                                                                color=GREY_A)) for ch in text])
         for b_ in row:
             b_[1].move_to(b_[0])
@@ -177,10 +177,10 @@ class Depth(VoiceoverScene):
                 if K[bi, j] > 0.5:
                     sq[0].set_fill(MODC, opacity=0.7)
                     sq[1].set_color(WHITE)
-            rows.add(VGroup(r, label(rf"block {2 * bi + 2}", font_size=18, color=ROUTER).next_to(r, UP, buff=0.08).align_to(r, LEFT)))
-        rows.arrange(DOWN, buff=0.35).move_to([0, 1.3, 0])
+            rows.add(VGroup(r, label(rf"block {2 * bi + 2}", font_size=22, color=ROUTER).next_to(r, UP, buff=0.08).align_to(r, LEFT)))
+        rows.arrange(DOWN, buff=0.45).move_to([0, 1.5, 0])
         cs = d["mod12_class_share"]
-        share = VGroup(*[label(rf"{nm}: \ ${100 * float(cs[nm]):.0f}\%$", font_size=20, color=GREY_A) for nm in cs])
+        share = VGroup(*[label(rf"{nm}: \ ${100 * float(cs[nm]):.0f}\%$", font_size=26, color=GREY_A) for nm in cs])
         share.arrange(RIGHT, buff=0.45).next_to(rows, DOWN, buff=0.3)
         sh_h = label(r"the share of each kind of character the routed blocks take", font_size=18, color=GREY_B).next_to(share, DOWN, buff=0.1)
         cb, cf = ms(d["mod12_valid"]), ms(d["mod12_causal"])

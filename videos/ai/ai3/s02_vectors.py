@@ -319,14 +319,13 @@ class Vectors(VoiceoverScene):
             f"{toks[0]}, {toks[1]}, {toks[2]}. <bookmark mark='c'/> The softmax gives {toks[0]} "
             f"{100 * prob[0]:.1f} percent."
         ) as vo:
-            self.play(FadeIn(prompt))
+            self.play(FadeIn(prompt), Create(floor), FadeIn(labs))
             self.play(Write(soft_f), FadeIn(recall))
             vo.wait_until("a")
             self.play(ReplacementTransform(soft_f, f), FadeOut(recall), FadeIn(fh))
             self.play(FadeIn(tie))
             vo.wait_until("b")
-            self.play(Create(floor), FadeIn(labs), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_s], lag_ratio=0.15),
-                      FadeIn(sv), run_time=1.6)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_s], lag_ratio=0.15), FadeIn(sv), run_time=1.6)
             vo.wait_until("c")
             self.play(ReplacementTransform(bars_s, bars_p), ReplacementTransform(sv, pv), ReplacementTransform(tie, soft),
                       run_time=1.6)
