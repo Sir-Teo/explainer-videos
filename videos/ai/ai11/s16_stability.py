@@ -266,8 +266,9 @@ class Stability(VoiceoverScene):
             "minus a half derived."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
+            self.play(*[Create(g_[0]) for g_ in groups], run_time=3.5)
             vo.wait_until("a")
-            self.play(*[Create(g_[0]) for g_ in groups], run_time=2.5)
+            self.play(*[Indicate(g_[0], color=WHITE, scale_factor=1.0) for g_ in groups])
             vo.wait_until("b")
             self.play(*[Create(g_[1]) for g_ in groups], lag([FadeIn(r_) for r_ in rows], lag_ratio=0.3), FadeIn(dl))
             vo.wait_until("c")

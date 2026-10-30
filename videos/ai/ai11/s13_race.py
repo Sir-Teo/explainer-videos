@@ -43,7 +43,7 @@ class Race(VoiceoverScene):
         rules = VGroup(
             label(r"the same model, \ the same data in the same order, \ the same $3{,}000$ steps", font_size=24),
             label(r"the same schedule: \ $60$ steps of warmup, \ then a cosine to zero", font_size=24),
-            label(rf"each optimizer at ${n_lr}$ learning rates or more, \ a factor of $2$ apart, \ extended until the best "
+            label(rf"each optimizer at ${n_lr}$ learning rates or more, \ a factor of $2$ apart, \\ extended until the best "
                   r"is inside; \ the best kept", font_size=24),
             label(r"the best one run again from $2$ more seeds: \ the spread is shown", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
