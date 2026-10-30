@@ -8,7 +8,7 @@ training writes into weights, word vectors from counting and from guessing, the 
 rank at work in recommendation and retrieval. Every derivation is on screen step by step; every number is computed
 here (`compute.py`) on a CPU, small enough for a laptop.
 
-A hook, seventeen chapters and an outro (about 55 minutes; `python tools/lecture_length.py ai3`).
+A hook, seventeen chapters and an outro (about 50 minutes; `python tools/lecture_length.py ai3`).
 
 ## Outline
 

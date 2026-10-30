@@ -63,7 +63,7 @@ ZH = {
         "除以两个长度，就得到余弦相似度，它在负1到1之间。<bookmark mark='a'/>拿GPT-2的词来说：dog和puppy，{c[1]:.2f}。dog和cat，{c[3]:.2f}。dog和tobacco，{c[2]:.2f}。<bookmark mark='b'/>在768维里画不出夹角，但可以算出来：把两串数逐个相乘，再加起来。",
 
     'f"Here is why this matters.':
-        "这为什么重要？在第1部分，网络最后给每个可能的下一个词元打一个分，softmax再把分数变成概率。<bookmark mark='a'/>在GPT-2里，每个分数都是一个点积：模型最后的状态，和每个词元的向量相点乘，用的正是词元一开始的那些向量。<bookmark mark='b'/>在“The Eiffel Tower is located in the city of”之后，点积最大的是{toks[0]}、{toks[1]}、{toks[2]}。<bookmark mark='c'/>softmax给{toks[0]}的概率是{100 * prob[0]:.1f}%。",
+        "这为什么重要？在第1部分，网络最后给每个可能的下一个词元打一个分，softmax再把分数变成概率。<bookmark mark='a'/>在GPT-2里，每个分数都是一个点积：模型最后的状态，和每个词元的向量相点乘，用的正是词元一开始的那些向量。<bookmark mark='b'/>在“埃菲尔铁塔位于哪座城市”这句话之后，点积最大的是{toks[0]}、{toks[1]}、{toks[2]}。<bookmark mark='c'/>softmax给{toks[0]}的概率是{100 * prob[0]:.1f}%。",
 
     # ---------------------------------------------------------------- Einsum
     'Chapter two.': '第2章。张量，以及注意力所用的记法。',
@@ -299,7 +299,7 @@ ZH = {
         "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自{w['n_words'] / 1000000.0:.2f}百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：{w['show_pairs'][0][3]:.2f}。the和of一起出现了{int(w['show_pairs'][-1][2]):,}次，可它们和什么词都相遇：{w['show_pairs'][-1][3]:.2f}。",
 
     'f"Keep the table\'s hundred strongest directions':
-        "用奇异值分解，留下这张表最强的一百个方向。<bookmark mark='a'/>每个词得到一百个数。<bookmark mark='b'/>与相同的词为伴的词，最后靠得很近。monday：{', '.join(say['monday'])}。three：{', '.join(say['three'])}。dog：{', '.join(say['dog'])}。ship：{', '.join(say['ship'])}。{extra}没有人给它一本词典。",
+        "用奇异值分解，留下这张表最强的一百个方向。<bookmark mark='a'/>每个词得到一百个数。<bookmark mark='b'/>与相同的词为伴的词，最后靠得很近。星期一的近邻是：{', '.join(say['monday'])}。数字三的近邻是：{', '.join(say['three'])}。狗和船也各自找到了同伴。{extra}没有人给它一本词典。",
 
     ' Perezvon is a dog in The Brothers Karamazov, and the Pequod':
         "Perezvon是《卡拉马佐夫兄弟》里的一条狗，Pequod是亚哈船长的船。",
@@ -313,9 +313,9 @@ ZH = {
         "意义需要多少个方向？只留下最强的几个。<bookmark mark='a'/>只留{ks[0]}个时，这二十个近邻里，只有{hits0}个是最终的近邻。<bookmark mark='b'/>留{ks[1]}个，<bookmark mark='c'/>{ks[2]}个，<bookmark mark='d'/>{ks[3]}个，<bookmark mark='e'/>以及全部{ks[-1]}个。{order[0]}最先定下来，用了{settle[order[0]]}个方向；{order[3]}要{settle[order[3]]}个。最强的方向承载大的格局；细致的意义在更后面。",
 
     'f"Directions mean something too.':
-        "方向也有意义。<bookmark mark='a'/>从france走到paris，再从england出发，走同样的一步。<bookmark mark='b'/>{land_say}man之于king，正如woman之于：{mk[0]}，然后是{mk[1]}。<bookmark mark='c'/>我们从书里的词对，比如man和woman、dog和dogs、walk和walked，造了{at['all']['n']}道这样的题，最近的词有{100 * at['all']['acc']:.0f}%是对的，候选词有一万个。而每个类别词的五个最近邻里，动物、颜色、数字等等，有{100 * pu['purity']:.0f}%属于同一类别，碰运气只有{100 * pu['chance']:.0f}%。",
+        "方向也有意义。<bookmark mark='a'/>从法国走到巴黎，再从英国出发，走同样的一步。<bookmark mark='b'/>{land_say}男人之于国王，正如女人之于：{mk[0]}，然后是{mk[1]}。<bookmark mark='c'/>我们从书里的词对，比如男和女、单数和复数、现在时和过去时，造了{at['all']['n']}道这样的题，最近的词有{100 * at['all']['acc']:.0f}%是对的，候选词有一万个。而每个类别词的五个最近邻里，动物、颜色、数字等等，有{100 * pu['purity']:.0f}%属于同一类别，碰运气只有{100 * pu['chance']:.0f}%。",
 
-    'The nearest word to where you land is London.': "落点最近的词，正是london。",
+    'The nearest word to where you land is London.': "落点最近的词，正是伦敦。",
 
     "f'The nearest word to where you land is {first}.'": "落点最近的词是{first}。",
 

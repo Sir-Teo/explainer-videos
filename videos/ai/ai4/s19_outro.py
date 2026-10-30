@@ -112,7 +112,7 @@ class Outro(VoiceoverScene):
         card = payoff_card([
             (r"our library: \ backpropagation, \ XOR", [9]),
             (r"Jacobians through depth: \ vanishing and exploding", [9, 10]),
-            (r"the condition number, \ saddles, \ momentum, \ Adam", [11, 12]),
+            (r"the condition number, \ saddles, \ momentum, \ Adam", [11]),
             (r"duality and support vectors", [6]),
             (r"the KL-regularized closed form", [27]),
             (r"number formats, \ checkpointing, \ quantization", [17, 18, 19]),

@@ -38,9 +38,10 @@ class Gradient(VoiceoverScene, ThreeDScene):
                                 color=C.BITS, stroke_width=4)
         g = bowl_grad(*p0)
         f0 = bowl(*p0)
-        plane = Surface(lambda u, v: axes.c2p(p0[0] + u, p0[1] + v, f0 + g[0] * u + g[1] * v) + np.array([0, 0, 0.02]),
-                        u_range=[-1.3, 1.3], v_range=[-1.1, 1.1], resolution=(6, 6), fill_color=GRAD, fill_opacity=0.55,
-                        stroke_color=GRAD, stroke_width=0.8, checkerboard_colors=False)
+        plane = Surface(lambda u, v: axes.c2p(p0[0] + u, p0[1] + v, f0 + g[0] * u + g[1] * v) + np.array([0, 0, 0.06]),
+                        u_range=[-1.4, 1.4], v_range=[-1.3, 1.3], resolution=(8, 8), fill_color=WHITE, fill_opacity=0.75,
+                        stroke_color=GRAD, stroke_width=1.5, checkerboard_colors=False)
+        plane.set_fill(WHITE, opacity=0.75)
         base = axes.c2p(p0[0], p0[1], 0)
         garrow = Arrow3D(base, axes.c2p(p0[0] + 1.2 * g[0], p0[1] + 1.2 * g[1], 0), color=GRAD, thickness=0.03, resolution=8)
         colors = {r"\frac{\partial f}{\partial x}": C.TRUE_P, r"\frac{\partial f}{\partial y}": C.BITS, r"\nabla f": GRAD}

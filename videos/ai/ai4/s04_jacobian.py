@@ -103,7 +103,7 @@ class Jacobian(VoiceoverScene):
             r"the Jacobian",
             r"For $f: \mathbb{R}^n \to \mathbb{R}^m$, the $m \times n$ matrix of partial derivatives, $J_{ij} = "
             r"\partial f_i / \partial x_j$: the one matrix with $f(x + h) = f(x) + J\,h + o(\|h\|)$. \ A gradient is the "
-            r"Jacobian of a function with one output, stood up as a column.", width=12.6, font_size=22)
+            r"Jacobian of a function with one output, stood up as a column.", width=12.6, font_size=26)
         dc.to_edge(UP, buff=0.3)
         sq = Square(side_length=1.4, stroke_width=0, fill_color=VALUE, fill_opacity=0.5).move_to([-5.0, -1.4, 0])
         par = Polygon(*[np.array([*(J @ v), 0]) * 1.4 + np.array([-1.9, -1.4, 0]) for v in
@@ -126,8 +126,8 @@ class Jacobian(VoiceoverScene):
             "where its input lands. That product is the whole of backpropagation, as chapter five will show."
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
-            vo.wait_until("a")
             self.play(FadeIn(sq), GrowArrow(arrow_))
+            vo.wait_until("a")
             self.play(TransformFromCopy(sq, par), FadeIn(dl))
             vo.wait_until("b")
             self.play(Write(chain))
