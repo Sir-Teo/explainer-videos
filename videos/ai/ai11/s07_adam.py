@@ -213,18 +213,19 @@ class Adam(VoiceoverScene):
         tag = note(r"computed: \ Adam, $\eta = 0.002$, \ $\beta = (0.9, 0.999)$").to_corner(DR, buff=0.2)
         m1, m100, m1000 = (float(a[f"median{k}"]) for k in ("1", "100", "1000"))
         f1 = float(a["frac1"])
+        said1 = (f"<bookmark mark='b'/> Later, the typical move is far smaller: {m100:.2f} eta at step 100, "
+            f"{m1000:.2f} at step 1,000. The gradients are noisy, their average m is small next to their root "
+            "mean square, and Adam's step becomes the sign of the gradient, scaled by its signal-to-noise ratio."
+            if max(m100, m1000) < 0.6 else
+            f"<bookmark mark='b'/> Later the typical move stays large, {m100:.2f} eta at step 100: the gradients "
+            "keep their signs from step to step.")
         with self.voiceover(
             "Look at Adam's limit. Turn both memories off and let epsilon go to zero: the gradient divided by its "
             "own size is just its sign. Every weight moves by exactly eta, up or down. Adam is a smoothed form of "
             "sign descent. <bookmark mark='a'/> Here is how far each weight of our model's hidden matrix moves, in "
             f"units of eta. At the first step, the corrections make Adam exactly sign descent: {f1:.0%} of the "
             "weights move by eta. "
-            + (f"<bookmark mark='b'/> Later, the typical move is far smaller: {m100:.2f} eta at step 100, "
-               f"{m1000:.2f} at step 1,000. The gradients are noisy, their average m is small next to their root "
-               "mean square, and Adam's step becomes the sign of the gradient, scaled by its signal-to-noise ratio."
-               if max(m100, m1000) < 0.6 else
-               f"<bookmark mark='b'/> Later the typical move stays large, {m100:.2f} eta at step 100: the gradients "
-               "keep their signs from step to step.")
+            + said1
         ) as vo:
             self.play(Write(head), FadeIn(hl))
             vo.wait_until("a")

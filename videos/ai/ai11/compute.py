@@ -493,7 +493,7 @@ def compute_adamview():
 # ---------------------------------------------------------------------------
 # 7. Weight decay is not L2
 # ---------------------------------------------------------------------------
-DEC_LRS = [1e-3, 2e-3, 4e-3, 8e-3]
+DEC_LRS = [1e-3, 2e-3, 4e-3, 8e-3, 1.6e-2]
 DEC_WD = [0.0, 0.03, 0.1, 0.3, 1.0, 3.0]
 DEC_L2 = [0.0, 1e-4, 3e-4, 1e-3, 3e-3, 1e-2]
 DEC_KW = dict(hid=128, subset=50_000, steps=2000, eval_every=200, sched="cosine")
@@ -610,8 +610,8 @@ def compute_natgrad():
 # 12. The race, run fairly
 # ---------------------------------------------------------------------------
 RACE_OPTS = ["sgdm", "adamw", "lion", "shampoo", "soap", "muon"]
-_A = [2.5e-4, 5e-4, 1e-3, 2e-3, 4e-3, 8e-3]
-RACE_LRS = {"sgdm": [0.0125, 0.025, 0.05, 0.1, 0.2, 0.4], "adamw": _A, "lion": [x / 10 for x in _A], "shampoo": _A,
+_A = [5e-4, 1e-3, 2e-3, 4e-3, 8e-3, 1.6e-2]
+RACE_LRS = {"sgdm": [0.0125, 0.025, 0.05, 0.1, 0.2, 0.4], "adamw": _A, "lion": [x / 5 for x in _A], "shampoo": _A,
             "soap": _A, "muon": _A}
 RACE_STEPS_N = 3000
 RACE_WRITE = (0, 100, 300, 1000, 3000)
@@ -626,12 +626,21 @@ def _race_job(opt, lr, seed):
 
 
 def compute_race():
-    part = CACHE.partial("race", dict(lrs=RACE_LRS, steps=RACE_STEPS_N, v=1))
+    part = CACHE.partial("race", dict(steps=RACE_STEPS_N, write=RACE_WRITE, v=1))  # each piece is keyed by its rate
     jobs = {f"{o}_{lr}_0": (o, lr, 0) for o in RACE_OPTS for lr in RACE_LRS[o]}
     _run_pieces(part, jobs, _race_job)
     out = dict(opts=RACE_OPTS, steps=RACE_STEPS_N, write_at=list(RACE_WRITE), seeds=list(RACE_SEEDS))
     for o in RACE_OPTS:
-        lrs = RACE_LRS[o]
+        lrs = list(RACE_LRS[o])
+        # a best rate at the end of the grid is not a tuned rate: extend the grid by factors of 2 (up to 3 more)
+        for _ in range(3):
+            F = np.array([part[f"{o}_{lr}_0"]["final"] for lr in lrs], float)
+            i = int(np.nanargmin(F))
+            if 0 < i < len(lrs) - 1:
+                break
+            new = lrs[-1] * 2 if i == len(lrs) - 1 else lrs[0] / 2
+            _run_pieces(part, {f"{o}_{new}_0": (o, new, 0)}, _race_job)
+            lrs = sorted(lrs + [new])
         F = np.array([part[f"{o}_{lr}_0"]["final"] for lr in lrs], float)
         i = int(np.nanargmin(F))
         more = {f"{o}_{lrs[i]}_{s}": (o, lrs[i], s) for s in RACE_SEEDS[1:]}

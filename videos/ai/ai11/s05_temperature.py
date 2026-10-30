@@ -142,18 +142,20 @@ class Temperature(VoiceoverScene):
         keep_in_frame(res)
         tag = note(r"each point: $30{,}000$ steps from the bottom, \ $3$ seeds (bar: \ min to max); \ computed").to_corner(DL, buff=0.2)
         good = 0.8 < slope < 1.2 and rlo > 0.7 and rhi < 1.4
+        said1 = (f"they fall on one line, of slope {slope:.2f}: double the learning rate and double the batch, and "
+            "the cloud is the same. "
+            if 0.8 < slope < 1.2 else
+            f"they rise with slope {slope:.2f}. ")
+        said2 = (f"Measured over predicted, every point is between {rlo:.2f} and {rhi:.2f}."
+            if good else
+            f"Measured over predicted runs from {rlo:.2f} to {rhi:.2f}: the linear picture is only approximate "
+            "here.")
         with self.voiceover(
             "Measure it. Four learning rates, six batch sizes, three seeds each: twenty-four clouds. "
             "<bookmark mark='a'/> Plotted against the temperature, eta over B, "
-            + (f"they fall on one line, of slope {slope:.2f}: double the learning rate and double the batch, and "
-               "the cloud is the same. "
-               if 0.8 < slope < 1.2 else
-               f"they rise with slope {slope:.2f}. ")
+            + said1
             + "<bookmark mark='b'/> The dashed line is the predicted stationary size. "
-            + (f"Measured over predicted, every point is between {rlo:.2f} and {rhi:.2f}."
-               if good else
-               f"Measured over predicted runs from {rlo:.2f} to {rhi:.2f}: the linear picture is only approximate "
-               "here.")
+            + said2
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
             self.play(lag([FadeIn(p, scale=0.6) for p in pts], lag_ratio=0.04), FadeIn(key[:4]), FadeIn(key[4]), run_time=2.5)

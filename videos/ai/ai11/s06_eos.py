@@ -133,18 +133,20 @@ class EdgeOfStability(VoiceoverScene):
         e0, e1 = etas
         at_edge = all(abs(med[eta] - 2 / eta) < 0.15 * 2 / eta for eta in etas)
         fe = int(e[f"first_edge{e0}"])
+        said1 = (f"and climbs, until it reaches two over eta, around step {fe:,}, and then it stays there, hovering at "
+            "the edge, while the loss keeps going down, unevenly. "
+            if at_edge and fe > 0 else
+            "and climbs, towards two over eta, while the loss keeps going down. ")
+        said2 = (f"the network settles at half the sharpness: a median of {med[e1]:.1f}, against two over eta of "
+            f"{2 / e1:.0f}. "
+            if at_edge else
+            f"its sharpness settles near {med[e1]:.1f}, with two over eta at {2 / e1:.0f}. ")
         with self.voiceover(
             "Here is the answer, measured: the spirals from part nine, trained with the full gradient at two step "
             "sizes, the sharpness measured every forty steps by power iteration. <bookmark mark='a'/> It climbs, "
-            + (f"and climbs, until it reaches two over eta, around step {fe:,}, and then it stays there, hovering at "
-               "the edge, while the loss keeps going down, unevenly. "
-               if at_edge and fe > 0 else
-               "and climbs, towards two over eta, while the loss keeps going down. ")
+            + said1
             + "<bookmark mark='b'/> Double the step size, and "
-            + (f"the network settles at half the sharpness: a median of {med[e1]:.1f}, against two over eta of "
-               f"{2 / e1:.0f}. "
-               if at_edge else
-               f"its sharpness settles near {med[e1]:.1f}, with two over eta at {2 / e1:.0f}. ")
+            + said2
             + "Training doesn't stay away from the edge of stability: it goes there and lives on it. Jeremy Cohen and "
             "colleagues found this in 2021, and nobody had expected it."
         ) as vo:

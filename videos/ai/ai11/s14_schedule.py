@@ -142,15 +142,16 @@ class Schedule(VoiceoverScene):
         pred = label(rf"constant: \ hill loss ${hc:.3f}$; \ predicted $\frac{{\eta\sigma^2}}{{4}} \big/ (1 - \frac{{\eta A}}{{2}}) = {hp:.3f}$",
                      font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.35).align_to(bars, LEFT)
         keep_in_frame(pred)
+        said1 = (f"warmup–stable–decay has the lowest total loss: it has come as far down the river as the constant "
+            "rate, and its hill part has collapsed. "
+            if best == "wsd" else
+            f"the lowest total belongs to the {SAYK[best]} schedule. ")
         with self.voiceover(
             "Split the loss into its two parts. <bookmark mark='a'/> At a constant rate, the hill part settles at a "
             f"level set by the step: {hc:.3f}, against {hp:.3f} predicted from Chapter four's stationary cloud. "
             "<bookmark mark='b'/> The river part is where the real progress is, and only a large step makes it fast. "
             "<bookmark mark='c'/> At the end, "
-            + (f"warmup–stable–decay has the lowest total loss: it has come as far down the river as the constant "
-               "rate, and its hill part has collapsed. "
-               if best == "wsd" else
-               f"the lowest total belongs to the {SAYK[best]} schedule. ")
+            + said1
             + "The decay doesn't find a better place; it removes the noise that hid how good the place already was."
         ) as vo:
             self.play(FadeIn(g1), *[Create(l_) for l_ in lines.values()], run_time=2)

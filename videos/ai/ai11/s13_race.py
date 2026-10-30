@@ -38,11 +38,12 @@ class Race(VoiceoverScene):
     def rules(self):
         r = load("race")
         opts = list(r["opts"])
-        n_lr = len(r[f"lrs_{opts[0]}"])
+        n_lr = min(len(r[f"lrs_{o}"]) for o in opts)
         rules = VGroup(
             label(r"the same model, \ the same data in the same order, \ the same $3{,}000$ steps", font_size=24),
             label(r"the same schedule: \ $60$ steps of warmup, \ then a cosine to zero", font_size=24),
-            label(rf"each optimizer at ${n_lr}$ learning rates, \ a factor of $2$ apart; \ the best kept", font_size=24),
+            label(rf"each optimizer at ${n_lr}$ learning rates or more, \ a factor of $2$ apart, \ extended until the best "
+                  r"is inside; \ the best kept", font_size=24),
             label(r"the best one run again from $2$ more seeds: \ the spread is shown", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UL, buff=0.5)
         head = label(r"the rules", font_size=30, color=C.BITS).next_to(rules, UP, buff=0.25).align_to(rules, LEFT)
@@ -57,8 +58,8 @@ class Race(VoiceoverScene):
             "Now a race between the optimizers of this part, on our character model, under rules that make it fair. "
             "<bookmark mark='a'/> The same model, the same batches in the same order, the same three thousand steps "
             "and the same schedule, a short warmup and a cosine. <bookmark mark='b'/> Each optimizer gets "
-            f"{n_lr} learning rates, a factor of two apart, and keeps its best: a method can look bad just "
-            "because it was run at the wrong rate. <bookmark mark='c'/> Then the best setting is run again from two "
+            f"{n_lr} learning rates, a factor of two apart, more if its best is at the end of the range, and keeps "
+            "its best: a method can look bad just because it was run at the wrong rate. <bookmark mark='c'/> Then the best setting is run again from two "
             "more seeds, so we can see how much of any difference is luck. <bookmark mark='d'/> The contestants: SGD "
             "with momentum, AdamW, Lion, Shampoo, SOAP and Muon."
         ) as vo:
@@ -83,7 +84,7 @@ class Race(VoiceoverScene):
         ok = allf[np.isfinite(allf)]
         lo = float(ok.min()) - 0.05
         hi = float(min(ok.max(), ok.min() + 1.6)) + 0.05
-        n_lr = len(r[f"lrs_{opts[0]}"])
+        n_lr = max(len(r[f"lrs_{o}"]) for o in opts)
         g = bits_axes([0, n_lr - 1], [lo, hi], x_length=6.6, y_length=4.4, center=[-2.8, -0.4, 0], x_step=1,
                       xlabel=r"learning rate, \ in steps of $\times 2$ from each grid's smallest",
                       ylabel=r"held-out bits after $3{,}000$ steps, \ seed $0$", y_step=round((hi - lo) / 4, 2),
@@ -108,7 +109,7 @@ class Race(VoiceoverScene):
                 (f" One caution: {len(edges)} of them have their best rate at the end of the grid." if edges else
                  " Every best rate is inside its grid, so the grids were wide enough."))
         with self.voiceover(
-            "First the learning-rate sweeps. <bookmark mark='a'/> Each optimizer's held-out loss against its six "
+            "First the learning-rate sweeps. <bookmark mark='a'/> Each optimizer's held-out loss against its "
             "learning rates: too small and it crawls, too large and it overshoots, and in between a valley. "
             "<bookmark mark='b'/> Its lowest point is the rate it races at." + etxt
         ) as vo:
@@ -227,15 +228,16 @@ class Race(VoiceoverScene):
         cur = {n: place(n, 0) for n in names}
         b0, b1 = bits_at[names[0]], bits_at[names[1]]
         ahead = all(b < a for a, b in zip(b0[1:], b1[1:]))
+        said1 = (f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences. It is ahead at every checkpoint."
+            if ahead else
+            f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences.")
         with self.voiceover(
             f"What do these numbers read like? Here SGD with momentum and the winner, {SAY[names[1]]}, continue the "
             "same three words with the same random draws, at checkpoints of their runs. <bookmark mark='a'/> Before "
             f"training, every character is equally likely, {b0[0]:.1f} bits each: noise from the whole alphabet. "
             f"<bookmark mark='b'/> After {steps[1]} steps, spaces and short words. <bookmark mark='c'/> By step "
             f"{steps[3]:,}, most of it is word-shaped, <bookmark mark='d'/> and by the end, at {b1[-1]:.2f} bits for "
-            + (f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences. It is ahead at every checkpoint."
-               if ahead else
-               f"{SAY[names[1]]}, there is punctuation and the rhythm of sentences.")
+            + said1
         ) as vo:
             self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()])
             self.add(*bits.values(), cnt)

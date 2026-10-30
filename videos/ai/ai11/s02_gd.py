@@ -147,15 +147,16 @@ class GradientDescent(VoiceoverScene):
         lg.next_to(thm, DOWN, buff=0.5).align_to(thm, LEFT)
         tag = note(r"a quadratic with curvatures $1, \tfrac14, \tfrac19, \dots, 10^{-6}$; \ $\eta = 1/L$; \ computed").to_corner(DR, buff=0.25)
         held = bool((gd <= bg * (1 + 1e-9)).all())
+        said1 = ("<bookmark mark='b'/> The measured gap stays under the bound at every step, as the theorem says it "
+            "must, and its slope on these log axes is the slope of a power law, not of a geometric decay."
+            if held else
+            "<bookmark mark='b'/> The measured gap should stay under the bound; here it does not everywhere, which "
+            "points to rounding at the smallest values.")
         with self.voiceover(
             "If the loss is convex but not strongly convex, the bowl beneath it can be flat, and the guarantee "
             "weakens: the gap falls like one over k, the number of steps. <bookmark mark='a'/> Here is gradient "
             "descent on a quadratic whose curvatures run from one down to a millionth, with the bound drawn dashed. "
-            + ("<bookmark mark='b'/> The measured gap stays under the bound at every step, as the theorem says it "
-               "must, and its slope on these log axes is the slope of a power law, not of a geometric decay."
-               if held else
-               "<bookmark mark='b'/> The measured gap should stay under the bound; here it does not everywhere, which "
-               "points to rounding at the smallest values.")
+            + said1
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn),
                       FadeIn(tag))
@@ -206,19 +207,21 @@ class GradientDescent(VoiceoverScene):
         tag = note(r"50 dimensions, \ curvatures spread evenly on a log scale from $\mu$ to $L$; \ computed").to_corner(DL, buff=0.25)
         i1000 = list(q["kappas"]).index(1000)
         close = all(abs(rate[i] - rpred[i]) < 2e-3 for i in range(1, len(rate)))
+        said2 = ("close to one, in proportion to kappa, as derived. " if 0.8 < slope < 1.2 else
+            "not the slope of one the worst case predicts. ")
+        said3 = ("error shrinks per step by exactly the derived factor, one minus one over kappa, to three decimals: "
+            f"at kappa a thousand, {rate[i1000]:.4f}."
+            if close else
+            f"error shrinks per step by {rate[i1000]:.4f} at kappa a thousand, against the derived "
+            f"{rpred[i1000]:.4f}.")
         with self.voiceover(
             "Check it. Quadratic valleys in fifty dimensions, with condition numbers from one to a thousand, and "
             "gradient descent with step one over L. <bookmark mark='a'/> The steps it needs, on log axes, rise along "
             f"a line of slope {slope:.2f}: "
-            + ("close to one, in proportion to kappa, as derived. " if 0.8 < slope < 1.2 else
-               "not the slope of one the worst case predicts. ")
+            + said2
             + "The dashed line is the worst case; these valleys do a little better, because only one direction is "
             "the slowest. <bookmark mark='b'/> Late in the run that slowest direction is all that is left, and the "
-            + ("error shrinks per step by exactly the derived factor, one minus one over kappa, to three decimals: "
-               f"at kappa a thousand, {rate[i1000]:.4f}."
-               if close else
-               f"error shrinks per step by {rate[i1000]:.4f} at kappa a thousand, against the derived "
-               f"{rpred[i1000]:.4f}.")
+            + said3
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(tag))
             self.play(Create(line))

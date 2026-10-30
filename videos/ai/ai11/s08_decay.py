@@ -152,18 +152,20 @@ class Decay(VoiceoverScene):
         steady = len(set(cols_a)) <= 2
         lr_edge = max(ba[0], bl[0]) >= max(lrs)
         etxt = (" Both bests are at our largest learning rate, so a still larger one might help both." if lr_edge else "")
+        said1 = (" Both beat no decay at all, so here it really is regularizing." if helps else
+            " Neither beats no decay by much: even here, it barely regularizes.")
+        said2 = (" And in AdamW's grid the best decay strength barely moves as the learning rate "
+            "changes, which is what decoupling promised: two knobs that can be set separately."
+            if steady else
+            " In AdamW's grid the best decay strength still moves with the learning rate: "
+            "the product of the two is what matters.")
         with self.voiceover(
             "Does it matter? A test where regularization should matter: a smaller character model that sees only "
             "fifty thousand characters of training text, over and over. <bookmark mark='a'/> On the left, AdamW at four learning "
             "rates and six decay strengths; on the right, Adam with an L2 penalty, on the same grid of rates. "
             "Brighter is better. <bookmark mark='b'/> The best of each, rerun from three seeds: " + verdict + " <bookmark mark='v'/>"
-            + (" Both beat no decay at all, so here it really is regularizing." if helps else
-               " Neither beats no decay by much: even here, it barely regularizes.") + " <bookmark mark='e'/>" + etxt
-            + (" <bookmark mark='c'/> And in AdamW's grid the best decay strength barely moves as the learning rate "
-               "changes, which is what decoupling promised: two knobs that can be set separately."
-               if steady else
-               " <bookmark mark='c'/> In AdamW's grid the best decay strength still moves with the learning rate: "
-               "the product of the two is what matters.")
+            + said1 + " <bookmark mark='e'/>" + etxt + " <bookmark mark='c'/>"
+            + said2
         ) as vo:
             self.play(FadeIn(ha), FadeIn(fa[:-1]), FadeIn(tag), FadeIn(yl))
             self.play(FadeIn(hl), FadeIn(fl[:-1]))
@@ -196,15 +198,17 @@ class Decay(VoiceoverScene):
         ctag = note(r"seed $0$; \ scored during training on the first $20{,}000$ held-out characters").to_corner(DL, buff=0.2)
         lnk = label(r"what decay does to normalized weights: \ Chapter 15", font_size=22, color=GREY_A).next_to(lg, DOWN, buff=0.6)
         lnk.align_to(lg, LEFT)
+        said3 = (f"<bookmark mark='a'/> Without decay, the model starts to memorize its fifty thousand characters, and "
+            f"the held-out loss climbs back up by {rise0:.2f} bits from its best. "
+            if rise0 > 0.02 else
+            "<bookmark mark='a'/> Even without decay, the held-out loss keeps falling to the end. ")
+        said4 = ("With decay, it ends lower. " if ca[-1, 1] < c0[-1, 1] else
+            "With decay, it ends no lower on this stretch of text. ")
         with self.voiceover(
             "Watch the held-out loss during training, seed zero. "
-            + (f"<bookmark mark='a'/> Without decay, the model starts to memorize its fifty thousand characters, and "
-               f"the held-out loss climbs back up by {rise0:.2f} bits from its best. "
-               if rise0 > 0.02 else
-               "<bookmark mark='a'/> Even without decay, the held-out loss keeps falling to the end. ")
+            + said3
             + "<bookmark mark='b'/> "
-            + ("With decay, it ends lower. " if ca[-1, 1] < c0[-1, 1] else
-               "With decay, it ends no lower on this stretch of text. ")
+            + said4
             + "In large language models trained on fresh data, it does something else, which Chapter fifteen "
             "measures."
         ) as vo:

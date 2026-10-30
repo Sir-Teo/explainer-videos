@@ -59,6 +59,9 @@ class Stability(VoiceoverScene):
         hs, hf = (float(np.mean(s[f"held_{k}"])) for k in ("muon_slow", "muon_fast"))
         res = label(rf"held-out bits: \ ${hs:.2f}$ \ against \ ${hf:.2f}$", font_size=22, color=WHITE).next_to(model, DOWN, buff=0.4)
         cite_ = cite(r"Part 18: \ loss spikes and logit growth at scale", corner=DR)
+        said1 = (f"<bookmark mark='c'/> The faster run ends worse, {hf:.2f} bits against {hs:.2f}."
+            if hf > hs else
+            f"<bookmark mark='c'/> Here the faster run still ends at {hf:.2f} bits, against {hs:.2f}.")
         with self.voiceover(
             "Large runs sometimes blow up: the loss jumps, and training must be rolled back. Part eighteen "
             "tells that story at scale. Here is one mechanism, provoked on purpose, in a one-layer transformer on "
@@ -66,9 +69,7 @@ class Stability(VoiceoverScene):
             "query times a key. With Muon at a moderate rate it grows "
             f"to about {mx_s:,.0f}. <bookmark mark='b'/> At four times the rate it runs away, to about {mx_f:,.0f}: "
             "the softmax becomes a hard choice, its gradients vanish, and the heads stop learning. "
-            + (f"<bookmark mark='c'/> The faster run ends worse, {hf:.2f} bits against {hs:.2f}."
-               if hf > hs else
-               f"<bookmark mark='c'/> Here the faster run still ends at {hf:.2f} bits, against {hs:.2f}.")
+            + said1
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(model), FadeIn(cite_))
             vo.wait_until("a")
@@ -152,22 +153,24 @@ class Stability(VoiceoverScene):
         g_both = all(a < b for a, b in zip(hg, ha))
         g_one = sum(a < b - 0.05 for a, b in zip(hg, ha)) == 1
         mxq = max(s["maxlogit_muon_fast_qkclip"])
+        said2 = (f"and it ends at {hq[0]:.2f} and {hq[1]:.2f} bits for the two seeds, against {hf[0]:.2f} and "
+            f"{hf[1]:.2f} without it. "
+            if q_ok else
+            f"but its loss is not better on both seeds: {hq[0]:.2f} and {hq[1]:.2f} against {hf[0]:.2f} and {hf[1]:.2f}. ")
+        said3 = (f"<bookmark mark='b'/> It rescues both seeds here, {hg[0]:.2f} and {hg[1]:.2f} bits against "
+            f"{ha[0]:.2f} and {ha[1]:.2f}. "
+            if g_both else
+            (f"<bookmark mark='b'/> It rescues one seed, at {min(hg):.2f} bits, but not the other, at {max(hg):.2f}: "
+            "clipping limits each step, not the slow drift that sends the scores up. "
+            if g_one else
+            f"<bookmark mark='b'/> Here it doesn't save the run: {hg[0]:.2f} and {hg[1]:.2f} bits. "))
         with self.voiceover(
             f"On our small transformer, QK-clip at tau a hundred holds the fast Muon run's scores near the threshold, "
             f"never above about {mxq:.0f}, "
-            + (f"and it ends at {hq[0]:.2f} and {hq[1]:.2f} bits for the two seeds, against {hf[0]:.2f} and "
-               f"{hf[1]:.2f} without it. "
-               if q_ok else
-               f"but its loss is not better on both seeds: {hq[0]:.2f} and {hq[1]:.2f} against {hf[0]:.2f} and {hf[1]:.2f}. ")
+            + said2
             + "<bookmark mark='a'/> AdamW, run far too fast, blows its scores up even further. The oldest remedy is "
             "gradient clipping, from 2013: whenever the gradient is longer than some c, shrink it to length c. "
-            + (f"<bookmark mark='b'/> It rescues both seeds here, {hg[0]:.2f} and {hg[1]:.2f} bits against "
-               f"{ha[0]:.2f} and {ha[1]:.2f}. "
-               if g_both else
-               (f"<bookmark mark='b'/> It rescues one seed, at {min(hg):.2f} bits, but not the other, at {max(hg):.2f}: "
-                "clipping limits each step, not the slow drift that sends the scores up. "
-                if g_one else
-                f"<bookmark mark='b'/> Here it doesn't save the run: {hg[0]:.2f} and {hg[1]:.2f} bits. "))
+            + said3
             + f"QK-clip, which targets the cause, gives {haq[0]:.2f} and {haq[1]:.2f}."
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(yn), FadeIn(xn), FadeIn(tab[0]), FadeIn(tab[1:4]))
@@ -249,14 +252,15 @@ class Stability(VoiceoverScene):
         errs = [abs(e[f"norm_{w}"] / e[f"pred_{w}"] - 1) for w in wds]
         worst = max(errs)
         nomom = float(e[f"pred_nomom_{wds[0]}"])
+        said4 = (f"<bookmark mark='b'/> The dashed lines are the predicted equilibria, and every measured norm is "
+            f"within {worst:.0%} of its prediction. "
+            if worst < 0.25 else
+            f"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst is off by {worst:.0%}. ")
         with self.voiceover(
             "Measure it on our character model, with a normalization added after its second hidden matrix, and "
             "three decay strengths, each four times the last. <bookmark mark='a'/> Each norm rises or falls to a "
             "level, and stays there, faster for stronger decay. "
-            + (f"<bookmark mark='b'/> The dashed lines are the predicted equilibria, and every measured norm is "
-               f"within {worst:.0%} of its prediction. "
-               if worst < 0.25 else
-               f"<bookmark mark='b'/> The dashed lines are the predicted equilibria; the worst is off by {worst:.0%}. ")
+            + said4
             + f"Without the momentum factor the prediction would be {nomom:.1f} for the first, far too small. "
             f"<bookmark mark='c'/> And four times the decay halves the norm: the fitted power is {sl:.2f}, against "
             "minus a half derived."

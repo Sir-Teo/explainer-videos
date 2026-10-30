@@ -95,13 +95,14 @@ class ScheduleFree(VoiceoverScene):
         tag = note(r"the same runs as Chapter 13, \ seed $0$; \ held-out bits on $20{,}000$ characters").to_corner(DL, buff=0.2)
         gain = c_end - e_end
         share = gain / max(1e-9, c_end - w_end)
+        said1 = (f"The averaged weights are better than the raw ones by {gain:.3f} bits at the end: "
+            f"{share:.0%} of what the cool-down gained, without touching the learning rate. "
+            if gain > 0 else
+            f"Here the average is no better than the raw weights, {e_end:.3f} against {c_end:.3f}. ")
         with self.voiceover(
             "Apply it to Chapter thirteen's constant-rate run: keep an average of the weights with a memory of about "
             "five hundred steps, and score the average instead. <bookmark mark='a'/> "
-            + (f"The averaged weights are better than the raw ones by {gain:.3f} bits at the end: "
-               f"{share:.0%} of what the cool-down gained, without touching the learning rate. "
-               if gain > 0 else
-               f"Here the average is no better than the raw weights, {e_end:.3f} against {c_end:.3f}. ")
+            + said1
             + "Averaging and decaying are two ways of removing the same noise."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Create(lines[0]), FadeIn(lg[0]), Create(lines[2]), FadeIn(lg[2]),
