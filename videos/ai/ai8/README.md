@@ -149,7 +149,7 @@ which `make.py` runs first if it is missing).
   Liang, *Extracting books from production language models* (arXiv:2601.02671, January 2026): near-complete extraction
   of a book from some production models (one with a jailbreak).
 * GEMA v. OpenAI, Munich Regional Court I, 11 November 2025 (42 O 14139/24): memorized lyrics are reproductions; not
-  final. Getty Images v. Stability AI, [2025] EWHC 2863 (Ch), 4 November 2025: the model weights are not an infringing
+  final (OpenAI said it would appeal). Getty Images v. Stability AI, [2025] EWHC 2863 (Ch), 4 November 2025: the model weights are not an infringing
   copy. Bartz v. Anthropic (23 June 2025) and Kadrey v. Meta (25 June 2025), N.D. Cal.: training held fair use (Bartz:
   not for pirated library copies). Later 2026 rulings (e.g. GEMA v. Suno, reported July 2026) are not on screen: only
   law-firm summaries were found.
