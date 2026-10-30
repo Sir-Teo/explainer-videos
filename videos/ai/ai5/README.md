@@ -58,9 +58,10 @@ here, small and on a CPU, or cited.
 * **9. How a language model chooses.** GPT-2's next-word distribution under a temperature dial (entropy 4.7, 9.0,
   13.5 bits at T = ½, 1, 2) and its samples; top-k (Fan et al. 2018), top-p (Holtzman et al. 2020) and min-p (Nguyen
   et al. 2024; re-analysed by Schaeffer et al. 2025), the top-p cut sliding over two real GPT-2 distributions (an open
-  one and a nearly certain one). The experiment: the series' novels model writes 8 continuations of 12 held-out
-  passages under 17 settings; GPT-2 judges each by its surprise; diversity (distinct pairs across the 8) against
-  predictability, and repetition (see *Computed results*).
+  one and a nearly certain one: at p = 0.9, 1,210 words against 1; min-p 0.1, 40 against 1). The experiment: the series' novels
+  model writes 8 continuations of 12 held-out passages under 17 settings; GPT-2 judges each by its surprise; at equal
+  diversity min-p's text is the judge's likeliest (0.900 against 0.966 nats per character for temperature alone);
+  greedy repeats 14% of its 4-grams (see *Computed results*).
 * **10. Chains with short memories.** A three-state chain from Part 1's letters; its stationary distribution as the
   eigenvector of eigenvalue 1 (Markov 1906, 1913); all 27 letters from "q", forgotten within five steps at the rate of
   the second eigenvalue, 0.30. Detailed balance derived; English is not reversible ("e" then space is 10 times as common
@@ -106,9 +107,26 @@ here, small and on a CPU, or cited.
 
 `python -m videos.ai.ai5.compute` writes every item to `.cache/ai5/`. The numbers quoted above, plus:
 
-* **Decoding** (`decoding`, about 40 minutes on two threads, resumable setting by setting): GPT-2's surprise at the
-  continuations, in nats per character, and the diversity and repetition of each setting are in
-  `.cache/ai5/decoding.json`; the chapter's sentences follow them. See the table at the end of this section after a run.
+* **Decoding** (`decoding`, about an hour on two threads under load, resumable setting by setting). The series'
+  novels model continues 12 held-out passages (32 tokens) by 40 tokens, 8 times each; GPT-2 small judges each
+  continuation by its negative log-likelihood given the passage, in nats per character (lower: likelier to the judge);
+  diversity is the share of distinct token pairs across a passage's 8 continuations; repetition the share of repeated
+  4-grams within one.
+
+  | setting | GPT-2's surprise | diversity | repeated 4-grams | tokens kept (mean) |
+  |---|---|---|---|---|
+  | greedy | 0.627 | — | 14.0% | 1 |
+  | temperature 0.5 / 0.7 / 1.0 / 1.3 | 0.802 / 0.963 / 1.237 / 1.578 | 0.737 / 0.849 / 0.947 / 0.983 | 0.7 / 0.3 / 0 / 0% | all |
+  | top-k 5 / 20 / 100 | 0.810 / 0.955 / 1.121 | 0.747 / 0.884 / 0.921 | 0.5 / 0.1 / 0.1% | 5 / 20 / 100 |
+  | top-p 0.5 / 0.8 / 0.9 / 0.95 | 0.866 / 1.031 / 1.093 / 1.164 | 0.799 / 0.907 / 0.929 / 0.934 | 0.3 / 0.1 / 0.1 / 0.1% | 12 / 66 / 152 / 264 |
+  | min-p 0.02 / 0.05 / 0.1 / 0.2 | 1.017 / 0.933 / 0.891 / 0.800 | 0.893 / 0.885 / 0.840 / 0.750 | 0.0 / 0.1 / 0.2 / 0.7% | 49 / 23 / 12 / 6 |
+  | the novels' own text | 0.889 | | 0.0% | |
+
+  Interpolated at diversity 0.85: temperature 0.966, top-k 0.919, top-p 0.943, min-p 0.900 nats per character. Paired
+  passage by passage at the closest settings (min-p 0.1 against temperature 0.7), min-p is likelier to the judge on 11
+  of 12 passages (mean difference 0.074 ± 0.021). One run; a setting's surprise varies by about ± 0.03 (standard error)
+  across the passages. Human text is as surprising to the judge as the model's at a temperature of about 0.6; greedy
+  decoding is the judge's favourite and the most repetitive.
 
 ## Run
 
