@@ -107,8 +107,9 @@ class TTT(VoiceoverScene):
             "rule. It isn't looking anything up: it has to have learned the rule. <bookmark mark='b'/> " + verdict
         ) as vo:
             self.play(FadeIn(task), FadeIn(g), FadeIn(bl))
-            vo.wait_until("a")
             self.play(FadeIn(leg[0]), FadeIn(bands[0]), Create(lines[0]), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Indicate(lines[0], color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(FadeIn(leg[1]), FadeIn(bands[1]), Create(lines[1]), run_time=2.0)
         self.wait(0.3)
@@ -129,10 +130,10 @@ class TTT(VoiceoverScene):
 
         sp, st = smooth(sp), smooth(st)
         top_s = float(max(sp.max(), st.max())) * 1.1
-        g1 = axes([0, n], [0, top_s], x_length=5.6, y_length=2.4, xlabel=r"pairs read",
-                  ylabel=r"surprise: \ $\|\nabla \ell\|$", center=[-3.4, 0.6, 0])
-        g2 = axes([0, n], [0, 1.2], x_length=5.6, y_length=2.4, xlabel=r"pairs read",
-                  ylabel=r"error on the current rule", yticks=[0, 1], center=[-3.4, -2.35, 0])
+        g1 = axes([0, n], [0, top_s], x_length=5.6, y_length=2.1, ylabel=r"surprise: \ $\|\nabla \ell\|$",
+                  center=[-3.4, 1.55, 0])
+        g2 = axes([0, n], [0, 1.2], x_length=5.6, y_length=2.1, xlabel=r"pairs read",
+                  ylabel=r"error on the current rule", yticks=[0, 1], center=[-3.4, -1.75, 0])
         for gg, yt in ((g1, top_s), (g2, 1.2)):
             gg.add(DashedLine(gg.ax.c2p(sw, 0), gg.ax.c2p(sw, yt), dash_length=0.06, color=GREY_B, stroke_width=1.5))
         xs = np.arange(n)
@@ -168,13 +169,13 @@ class TTT(VoiceoverScene):
             "surprise jumps when the rule changes. <bookmark mark='d'/> " + verdict + " <bookmark mark='e'/> The "
             "paper reports needle tests passed beyond two million tokens; we can't check that here."
         ) as vo:
-            self.play(Write(f1), FadeIn(l1), FadeIn(g1))
+            self.play(Write(f1), FadeIn(l1), FadeIn(g1), FadeIn(g2))
             vo.wait_until("a")
             self.play(Create(c_s[0]), Create(c_s[1]), FadeIn(sl), run_time=2.0)
             vo.wait_until("b")
             self.play(Write(f2), FadeIn(l2))
             vo.wait_until("c")
-            self.play(FadeIn(g2), FadeIn(leg), Create(c_e[0]), Create(c_e[1]), run_time=2.0)
+            self.play(FadeIn(leg), Create(c_e[0]), Create(c_e[1]), run_time=2.0)
             vo.wait_until("d")
             self.play(Indicate(c_e[1], color=WHITE, scale_factor=1.0))
             vo.wait_until("e")
