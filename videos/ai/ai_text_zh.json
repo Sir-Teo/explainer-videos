@@ -20510,7 +20510,8 @@
     "$0$ unresolved; $36$ not run / unknown": "$0$未解决；$36$未运行 / 未知",
     "A*: $48/48$": "A星：$48/48$",
     "greedy: $84/84$": "贪心：$84/84$",
-    "$0$ unresolved; $0$ not run / unknown": "$0$未解决；$0$未运行 / 未知"
+    "$0$ unresolved; $0$ not run / unknown": "$0$未解决；$0$未运行 / 未知",
+    "here the remaining variable is renamed $z \\to x$ throughout the clause; \\\\ meaning is unchanged": "此处在整个子句中将剩余变量$z$重命名为$x$；\\\\ 含义保持不变"
   },
   "phrases": {
     "width": "宽度",
