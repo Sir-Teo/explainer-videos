@@ -133,3 +133,11 @@ hosting application is untested. Local decoded videos verify file integrity, not
 No merge, deployment, paid service, new credential, or desktop execution was used.
 
 Checkpoint generated: 2026-10-31T12:07:01.764323+00:00.
+
+## Part 2 test-only preparation
+
+While Part 1 rendering/audio runs, independent tiny fixtures reproduced the supplied TSP budget/replay, A*
+boundary-tie wording, resolution factoring/empty-clause, and SAT censoring findings. The [report](ai2-preparation/REPORT.md)
+retains exact APIs, source hashes, observed outcomes and scope limits. JIT was disabled and a process audit enforced
+zero repository writes. These are focused bug reproductions; Part 2 implementation repairs, production JIT runs,
+full computations, visual renders and audio remain pending. No Part 2 source was changed.

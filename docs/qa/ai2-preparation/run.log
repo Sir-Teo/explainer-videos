@@ -1,0 +1,297 @@
+{
+  "local_search": {
+    "two_opt_budget_1": {
+      "api": "local.two_opt_climb(t,D,budget)",
+      "requested_budget": 1,
+      "reported_delta_evaluations": 9,
+      "instrumented_delta_evaluations": 9,
+      "full_tour_len_calls": 1,
+      "returned_length": 71,
+      "returned_tour": [
+        0,
+        2,
+        4,
+        1,
+        3,
+        5
+      ],
+      "best_candidate_in_evaluated_sweep": {
+        "i": 1,
+        "j": 4,
+        "length": 58,
+        "tour": [
+          0,
+          2,
+          3,
+          1,
+          4,
+          5
+        ]
+      },
+      "overruns_budget": true,
+      "budget_exhaustion_skips_best_sweep_move": true,
+      "counter_source_line": 142
+    },
+    "annealing": {
+      "api": "local.anneal(t,D,T0,alpha,moves_per_T,n_temps,seed,snap_every,snaps,trace)",
+      "seed": 17,
+      "nominal_proposals": 20,
+      "instrumented_proposals": 20,
+      "valid_delta_evaluations": 7,
+      "rejected_no_op_draws_before_evaluation": 13,
+      "full_tour_len_calls": 1,
+      "returned_best_length": 43,
+      "returned_best_tour": [
+        0,
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "final_trace_best_length": 43,
+      "trace": [
+        [
+          30.0,
+          58.0,
+          58.0,
+          0.2
+        ],
+        [
+          27.0,
+          53.0,
+          53.0,
+          0.2
+        ],
+        [
+          24.3,
+          66.0,
+          53.0,
+          0.2
+        ],
+        [
+          21.87,
+          43.0,
+          43.0,
+          0.4
+        ]
+      ],
+      "counter_source_lines": {
+        "proposal": 167,
+        "delta": 174
+      }
+    },
+    "annealing_budget_below_temperature_count": {
+      "requested_budget": 199,
+      "n_temps": 200,
+      "moves_per_T": 0,
+      "observed_error": "ZeroDivisionError: division by zero"
+    },
+    "genetic": {
+      "api": "local.genetic(D,pop_size,gens,p_mut,seed,best_per_gen,snaps,snap_gens)",
+      "requested_budget_in_compute_caller": 8,
+      "pop_size": 4,
+      "gens_from_budget_floor": 2,
+      "seed": 1,
+      "instrumented_full_tour_len_calls": 12,
+      "generation_trace": [
+        62,
+        61
+      ],
+      "returned_final_best_length": 50,
+      "best_evaluated_tour": {
+        "tour": [
+          2,
+          1,
+          5,
+          0,
+          4,
+          3
+        ],
+        "length": 50
+      },
+      "final_generation_improvement_absent_from_trace": true,
+      "full_evaluations": [
+        {
+          "tour": [
+            2,
+            1,
+            4,
+            0,
+            3,
+            5
+          ],
+          "length": 74
+        },
+        {
+          "tour": [
+            4,
+            2,
+            0,
+            5,
+            3,
+            1
+          ],
+          "length": 71
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            3,
+            4,
+            1
+          ],
+          "length": 62
+        },
+        {
+          "tour": [
+            3,
+            5,
+            4,
+            0,
+            2,
+            1
+          ],
+          "length": 64
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            3,
+            4,
+            1
+          ],
+          "length": 62
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            3,
+            4,
+            1
+          ],
+          "length": 62
+        },
+        {
+          "tour": [
+            3,
+            5,
+            4,
+            0,
+            2,
+            1
+          ],
+          "length": 64
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            1,
+            4,
+            3
+          ],
+          "length": 61
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            1,
+            4,
+            3
+          ],
+          "length": 61
+        },
+        {
+          "tour": [
+            2,
+            0,
+            5,
+            4,
+            1,
+            3
+          ],
+          "length": 58
+        },
+        {
+          "tour": [
+            5,
+            0,
+            2,
+            1,
+            4,
+            3
+          ],
+          "length": 62
+        },
+        {
+          "tour": [
+            2,
+            1,
+            5,
+            0,
+            4,
+            3
+          ],
+          "length": 50
+        }
+      ],
+      "evaluations_over_nominal_budget": 4
+    }
+  },
+  "astar": {
+    "epsilon": 1e-07,
+    "h1": {
+      "pop_order_including_goal": [
+        "S",
+        "A",
+        "G"
+      ],
+      "pops_including_goal": 3,
+      "expansions_excluding_goal": 2,
+      "optimal_cost": 10
+    },
+    "h2": {
+      "pop_order_including_goal": [
+        "S",
+        "B",
+        "A",
+        "G"
+      ],
+      "pops_including_goal": 4,
+      "expansions_excluding_goal": 3,
+      "optimal_cost": 10
+    }
+  },
+  "factoring_found": false,
+  "initial_empty_found": false,
+  "sat_direct": {
+    "sat": [
+      1,
+      1
+    ],
+    "unsat": [
+      0,
+      3
+    ],
+    "unknown": [
+      -1,
+      0
+    ]
+  },
+  "sat_psat": [
+    0.6666666666666666,
+    0.3333333333333333,
+    0.0
+  ],
+  "repository_writes": []
+}
