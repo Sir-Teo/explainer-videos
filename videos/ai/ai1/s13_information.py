@@ -172,6 +172,11 @@ class Information(VoiceoverScene):
         shuffled = np.asarray(d["shuffled_mi"], float)
         corpus = load("corpus")
         far, last, control = int(ds[-1]), float(mi[-1]), float(shuffled[-1])
+        # Scientific e-notation is compact on screen but can lose the exponent's
+        # sign in speech. Read the same measurements as signed millionths.
+        last_sign = "minus " if last < 0 else ""
+        control_sign = "minus " if control < 0 else ""
+        last_millionths, control_millionths = abs(last) * 1_000_000, abs(control) * 1_000_000
         fit_ds = np.asarray(d["fit_d"], float)
         has_fit = d["slope"] is not None and len(fit_ds) >= 2
         head = label(r"How far back does the past tell you about the future?", font_size=32).to_edge(UP, buff=0.3)
@@ -252,8 +257,9 @@ class Information(VoiceoverScene):
             "How far back does that reach? Measure pairs of letters at distance d across our books. These are "
             "finite-sample estimates, with an approximate bias correction. <bookmark mark='a'/> The neighbouring "
             f"letter estimate is {mi[0]:.2f} bits. <bookmark mark='b'/> At our largest measured distance, "
-            f"{far} letters, the corrected estimate is {last:.2g} bits; one shuffled version of the same letters "
-            f"gives {control:.2g}. The shuffled control is a reference realization, not an uncertainty interval. "
+            f"{far} letters, the corrected estimate is about {last_sign}{last_millionths:.2f} millionths of a bit; "
+            f"one shuffled version of the same letters gives about {control_sign}{control_millionths:.2f} "
+            "millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval. "
             "Both axes are logarithmic. Nonpositive estimates cannot appear on them; their signed values are "
             "retained, including the control shown at the right."
         ) as vo:
