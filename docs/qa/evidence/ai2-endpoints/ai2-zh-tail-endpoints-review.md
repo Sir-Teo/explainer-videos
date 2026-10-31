@@ -1,6 +1,6 @@
 # Part2 Chinese tail endpoint review
 
-Status: in-progress. Updated 2026-10-31T16:12:35.137178+00:00.
+Status: all-eight-scene-endpoint-content-reviewed. Updated 2026-10-31T16:19:01.635437+00:00.
 
 Endpoint stills only. Continuous playback/listening remains unverified.
 
@@ -12,10 +12,12 @@ Endpoint stills only. Continuous playback/listening remains unverified.
 | Knowledge | 21 | 6 | needs-review |
 | Eliza | 13 | 4 | passed |
 | Winters | 22 | 6 | needs-review |
+| Survives | 26 | 7 | needs-review |
+| Outro | 5 | 2 | passed |
 
-Logic crossing-edge defect repaired in shared source; two English repaired proof endpoints visually clear. Chinese repaired proof endpoints also visually clear; motion review is separate. Baseline Plans panel is undersized; parent enlarged-panel rerender pending. SAT baseline failed after14recorded endpoints; reviewed coverage is partial.
+Logic crossing-edge defect repaired in shared source; two English repaired proof endpoints visually clear. Chinese repaired proof endpoints also visually clear; motion review is separate. Baseline records are preserved separately from repaired captures: Plans enlarged-panel endpoints and SAT complete repaired scene are covered in the upgrades section.
 
-Pending scenes: Survives, Outro.
+Pending scenes: none.
 
 All frame/page hashes,times,observations and source warnings are preserved in companion JSON.
 
@@ -69,9 +71,38 @@ All frame/page hashes,times,observations and source warnings are preserved in co
 - Page 005, endpoints 16–19, 140.954805–184.754243s: Moravec attribution and cumulative-vocabulary chart endpoints fit; log axis/callouts remain separate. SHA256 `5de5f093c0f395b88fdb0c8651e12875f441f3e7825b6fb1a087648eacfac6c7`.
 - Page 006, endpoints 20–21, 191.020846–195.184254s: Vocabulary percentage callouts,rare-word totals and red unseen-word examples fit in right column without clipping. SHA256 `f7654ed22440a650aa7c62f9ee16a58eb90d497e888880b8cb38bb10f676d895`.
 
+## Survives
+
+- Page 001, endpoints 0–3, 1.000000–13.291470s: Chinese title and DeepBlue→AlphaZero comparison have clear columns/arrow and contained captions. SHA256 `545b09b2e544ba8b6f5402fa59aedab764bf3374accdbd5c03de34d58ec3c8b8`.
+- Page 002, endpoints 4–7, 28.741654–56.077881s: Adder-equivalence diagram/history card and computed result annotations fit; SAT-versus-UNSAT caption separated. SHA256 `db06ac9c3767b1d1bba49d015323c078d57a308b79ac26c998d5743195553c40`.
+- Page 003, endpoints 8–11, 66.899974–102.415638s: Fault counterexample math,SMT cards and conflict-growth chart fit without overlap; log-axis label remains separate. SHA256 `bef8f3967dc1afa4a6f30e5490b6b394a598df1edd1c2459636b3c91419db292`.
+- Page 004, endpoints 12–15, 122.390667–156.982578s: Lean example box,verification caption and three modern-history cards fit; network→checker diagram separate. SHA256 `e5cf93b8d729d6c87ed25d3f18a6651f9a932e79e4e67aba0d4180b2ca53bf9a`.
+- Page 005, endpoints 16–19, 164.915782–185.660586s: Modern proof cards and PlanBench bars/percentages fit; modified-task caveat sits above citation. SHA256 `89caefcc80b29d8ab3458362c9270314a5fdb3d534fce59758e60c379d8c5e52`.
+- Page 006, endpoints 20–23, 198.808483–232.609347s: PlanBench caption/caveat and LLM→PDDL→planner pipeline fit; two-column neural/symbolic labels remain distinct. SHA256 `37c554e3420798838e80e02bd5355f77a25eb065c4292026735be71bf16ebd4e`.
+- Page 007, endpoints 24–25, 240.395523–251.882086s: Closing propose/check arrows,example systems and part-reference footer fit without overlap. SHA256 `2f232151dc01852772a138a1695cffca38790ed374613673ef8dd2424fd30d38`.
+
+## Outro
+
+- Page 001, endpoints 0–3, 45.975542–121.847542s: Eight-thumbnail recap,cross-part mapping,exercises and symbol→vector teaser fit; mathematical exercise lines remain inside frame. SHA256 `ed319026f230c9d08fd9f9edb401c346f4f48bdfd6980a188c4eda665a040b37`.
+- Page 002, endpoints 4–4, 126.297542–126.297542s: Bibliography and speech-model credit fit within frame; dense secondary reference text is small at preview resolution. SHA256 `cda000df7d010005e2ed27117f13f6fc930cccbbda4b825d0ad07f2fe17da242`.
+
 ## Limits
 
 - Endpoint stills only: transitions,animation,pacing,continuous playback,listening and narration alignment remain unverified.
 - Each listed frame visually reviewed on native854x480 tiles; five priority frames separately viewed at native resolution.
 - Source-change/stale warnings preserved; historical pixels do not establish current-source sign-off.
 - Partial failed SAT render covers only14recorded endpoints; later scene content remains unreviewed until repaired rerender.
+
+## Repaired endpoint upgrades
+
+All eight scenes are now covered at their supplied endpoints: **158 primary endpoint cases**. Baseline146images remain preserved;21changed upgrade captures were additionally viewed.
+
+| Scene | Current endpoint cases | New actual views | Exact-PNG inherited views | Runtime |
+|---|---:|---:|---:|---|
+| Logic | 21 | 4 | 17 | passed |
+| Plans | 24 | 5 | 19 | passed |
+| SAT | 26 | 12 | 14 | passed |
+
+Logic proof-edge crossing is fixed in inspected English/Chinese endpoints. Plans completion panel is substantially clearer and unclipped in the final230.488675sChinese endpoint. SAT complete repaired26endpointscene is covered, including CDCL implication graph and finalcomparison native checks. No new open endpoint layout defect.
+
+Exact per-time direct-versus-inherited mappings and source/record/frame/page hashes are in JSON. Endpoint coverage does not establish motion,continuous playback,listening or narration alignment.

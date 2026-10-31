@@ -1,0 +1,50 @@
+{
+  "observed_utc": "2026-10-31T16:25:38.637036+00:00",
+  "scope": "90 endpoint thumbnails plus4native followups actually viewed; this is not full playback. Local endpoint record predates its separate brighter-caption motion regression.",
+  "cases": [
+    {
+      "scene": "AStar",
+      "endpoint_thumbnails_viewed": 22,
+      "sheet_sha256": "ad9d712202f8dba3b5d777431de1da65bc3dca5f6173586e295145377803ec0c",
+      "native_followup": "007_00049.7s.png",
+      "native_sha256": "2e8ec739c8546221b094dbf2db0e82e013ac161f41f5b283d258750a8b151ef4",
+      "recorded_status": "passed",
+      "warnings": [],
+      "observations": "Corrected Chinese captions fit; no observed clipping or collision. Samuel full sheet includes all24 captures after original5-frame failure. Local budget footer has a narrow intentional bottom/right inset; this is not a production-resolution legibility approval."
+    },
+    {
+      "scene": "Heuristics",
+      "endpoint_thumbnails_viewed": 19,
+      "sheet_sha256": "20fabba9d4bbe85774ee16d626e0b8065a5384b99a588cdd86d59b25b914e5ff",
+      "native_followup": "014_00195.5s.png",
+      "native_sha256": "b35078eeaf6ae29ac423500a1278a7a117e4646c98f9b8ac3946f6f42942efbb",
+      "recorded_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "observations": "Corrected Chinese captions fit; no observed clipping or collision. Samuel full sheet includes all24 captures after original5-frame failure. Local budget footer has a narrow intentional bottom/right inset; this is not a production-resolution legibility approval."
+    },
+    {
+      "scene": "Local",
+      "endpoint_thumbnails_viewed": 25,
+      "sheet_sha256": "fea78c4b6d3044d2f01d66e6c6fe5397fdd4287028fb5c31d9ad9fc778afd6b2",
+      "native_followup": "020_00219.1s.png",
+      "native_sha256": "fb8c8edd8df6ca3ce76ab25fd1c9080220064751374ff516aada9a3bbf2ba061",
+      "recorded_status": "passed",
+      "warnings": [],
+      "observations": "Corrected Chinese captions fit; no observed clipping or collision. Samuel full sheet includes all24 captures after original5-frame failure. Local budget footer has a narrow intentional bottom/right inset; this is not a production-resolution legibility approval."
+    },
+    {
+      "scene": "Samuel",
+      "endpoint_thumbnails_viewed": 24,
+      "sheet_sha256": "41cd24f886e6477bf958469fdf91cc95191ffb721e191ca31f28f21c7bd49883",
+      "native_followup": "009_00088.5s.png",
+      "native_sha256": "26deef911d78853c543458c1e78e5d50e6fe3b31457e6003076d38b717abe6f5",
+      "recorded_status": "passed",
+      "warnings": [],
+      "observations": "Corrected Chinese captions fit; no observed clipping or collision. Samuel full sheet includes all24 captures after original5-frame failure. Local budget footer has a narrow intentional bottom/right inset; this is not a production-resolution legibility approval."
+    }
+  ]
+}
