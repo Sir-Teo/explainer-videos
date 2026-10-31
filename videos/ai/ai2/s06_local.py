@@ -150,7 +150,8 @@ class Local(VoiceoverScene):
                 why(r"divide"), why(r"Boltzmann's distribution")]
         rows[3][2].set_color(HOT)
         step = ladder(self, rows, whys, keep=4, top=1.7, x=1.2)
-        concl = label(r"equilibrium as $T \to 0$: \ probability concentrates on minimum cost", font_size=24, color=COLD)
+        concl = label(r"equilibrium as $T \to 0$: \ probability concentrates on minimum cost", font_size=24,
+                      color=interpolate_color(ManimColor(COLD), ManimColor(WHITE), 0.30))
         concl.to_corner(DR, buff=0.3)
         with self.voiceover(
             "Simulated annealing escapes local optima by sometimes going the wrong way. <bookmark mark='a'/> Propose a random "

@@ -1,0 +1,15 @@
+{
+  "source": "videos/ai/ai2/s06_local.py",
+  "source_sha256": "823bd2f77067a56960b78e4950cc932a31f6508a24aeab78f77647bd73cdef0a",
+  "evidence": "renders/qa/temporal/ai2-en-Local-dense-final/frames/0001896_000126.398s.png",
+  "evidence_sha256": "6e3e4841704d5d5953427d119fb4938dec1abcf1620bee7891d90440c87261b8",
+  "after_source_sha256": "4228c250e63d62cd8daf00a40c17d434dbf953619028c07766937c4749c58206",
+  "old_caption_color": "#3D5A98",
+  "new_caption_color": "#778BB6",
+  "white_interpolation": 0.3,
+  "background": "#0E1117",
+  "old_source_contrast": 2.8025713444666507,
+  "new_source_contrast": 5.572450091678201,
+  "validation": "Python AST parse passed; source color contrast exceeds4.5:1; caption-only diff inspected. Full EN/ZH rerender and visual regression pending root.",
+  "diff": "--- before\n+++ after\n@@ -150,7 +150,8 @@\n                 why(r\"divide\"), why(r\"Boltzmann's distribution\")]\n         rows[3][2].set_color(HOT)\n         step = ladder(self, rows, whys, keep=4, top=1.7, x=1.2)\n-        concl = label(r\"equilibrium as $T \\to 0$: \\ probability concentrates on minimum cost\", font_size=24, color=COLD)\n+        concl = label(r\"equilibrium as $T \\to 0$: \\ probability concentrates on minimum cost\", font_size=24,\n+                      color=interpolate_color(ManimColor(COLD), ManimColor(WHITE), 0.30))\n         concl.to_corner(DR, buff=0.3)\n         with self.voiceover(\n             \"Simulated annealing escapes local optima by sometimes going the wrong way. <bookmark mark='a'/> Propose a random \"\n"
+}

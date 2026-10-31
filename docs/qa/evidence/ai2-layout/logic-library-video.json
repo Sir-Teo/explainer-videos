@@ -1,0 +1,40 @@
+{
+  "library_file_id": "libfile_1121caffe49c8191a07bd046bfadbe10",
+  "file_id": "file_00000000367481f6b902da59ff53d996",
+  "current_version_number": 0,
+  "file_name": "AI-Built-Part2-Logic-EN-Silent-480p.mp4",
+  "file_size_bytes": 1618541,
+  "movie_sha256": "640a1dc3ce61079b7efd3b0a383728ef4ff08b8120933adf495479f1e2d01e7a",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 854,
+        "height": 480,
+        "avg_frame_rate": "15/1"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "avg_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "222.600000",
+      "size": "1618541"
+    }
+  },
+  "source_module_sha256": "48513df86ab8e297ce78ce6d2d81e7d09fff50bab55e06ca6220c79de02ca7a6",
+  "resolution_data_sha256": "add3b5ec347fa408118c0a55616c7f77027c8f6bec856a78a101d1e575d9d6fa",
+  "coverage": "456 selected frames,57chronological sheets,11native followups; not continuous perceptual playback or audio listening",
+  "audio_signal_check": {
+    "mean_dBFS": -91.0,
+    "max_dBFS": -91.0,
+    "meaning": "Silent AAC track; this file has no synthesized narration",
+    "decoded_signal_log_sha256": "bbe85ded4de61bee5aa291df3cb4d0ac2e852cd22175badd859547580872c454",
+    "listening": "unverified"
+  }
+}

@@ -1,0 +1,4110 @@
+{
+  "case": "zh/Local",
+  "audit": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/result.json",
+  "audit_sha256": "c639f16326f1f815ba615d419b936c923aadf8252b8fe948afc2ba3932c663d8",
+  "movie": "/workspace/explainer-videos/renders/qa/series/ai2/zh/Local_motion/media/videos/480p15/Local.mp4",
+  "movie_sha256": "c73aaa26f63fa9653fb2368173c32bb4653df1464ac60d031060e5630aab76fd",
+  "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "render_record": "/workspace/explainer-videos/renders/qa/series/ai2/zh/Local_motion/result.json",
+  "render_record_sha256": "54116e785f9b0d8579531dbedcd67f063ecd738d02671363ab0aff4c2b50e055",
+  "render_fingerprint": "23fc31fd5d25d88254dd5baea1ca7528e3e2f9772cea5af51b1864c7e147fee4",
+  "render_status": "passed",
+  "render_warnings": [],
+  "render_inputs": {
+    ".cache/ai2/queens.json": [
+      1259,
+      1793454510261025438
+    ],
+    ".cache/ai2/queens.npz": null,
+    ".cache/ai2/tsp.json": [
+      4555,
+      1793453883178039375
+    ],
+    ".cache/ai2/tsp.npz": [
+      7007,
+      1793453883176461489
+    ]
+  },
+  "provenance": {
+    "record": "/workspace/explainer-videos/renders/qa/series/ai2/zh/Local_motion/result.json",
+    "sha256": "54116e785f9b0d8579531dbedcd67f063ecd738d02671363ab0aff4c2b50e055",
+    "fingerprint": "23fc31fd5d25d88254dd5baea1ca7528e3e2f9772cea5af51b1864c7e147fee4",
+    "status": "passed",
+    "current_source_and_inputs": false
+  },
+  "decoded_frames": 4166,
+  "selected_frames": 553,
+  "selected_gap": 1.0,
+  "unique_pngs": 408,
+  "unique_pages": 26,
+  "unique_index": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/index.json",
+  "unique_index_sha256": "1df649ca89f76057c8d589d35453b3751ad7617e0787239cb90585cef71f44c6",
+  "first_time": 0.0,
+  "last_time": 277.664388,
+  "review_status": "complete selected-frame review",
+  "reviewed_pages": [
+    {
+      "case": "zh/Local",
+      "page": 1,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-001.png",
+      "sha256": "d405f6ea9997714449bedfbb7af2d38557572d73fbbfb5b20c7be85804479fe3",
+      "first_time": 0.0,
+      "last_time": 3.4,
+      "frames": [
+        {
+          "source_frame": 0,
+          "time": 0.0,
+          "reasons": [
+            "file-start"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000000_000000.000s.png",
+          "sha256": "be60980329e27b0aa315c509f0e0ba52834d19ea8c1dc72ceb0e674849747ca7"
+        },
+        {
+          "source_frame": 2,
+          "time": 0.133333,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000002_000000.133s.png",
+          "sha256": "9fbe52e7a25995b0ca4f9d4a311bdc1de487d6aa572513f5d3f9c1bb64544277"
+        },
+        {
+          "source_frame": 3,
+          "time": 0.2,
+          "reasons": [
+            "motion-000:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000003_000000.200s.png",
+          "sha256": "70fde91ac48bd6fac018370a2c35ecd5104e8da8eedc5589008de517d5e18c6f"
+        },
+        {
+          "source_frame": 4,
+          "time": 0.266667,
+          "reasons": [
+            "motion-000:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000004_000000.267s.png",
+          "sha256": "d975c82019c70719e45857f2f23903639ff173e01ffafa3d876b3fcd4267678c"
+        },
+        {
+          "source_frame": 9,
+          "time": 0.6,
+          "reasons": [
+            "motion-000:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000009_000000.600s.png",
+          "sha256": "96e8dfb1690c30258ed20366897109a72ba5fc61a9548fcfcb4d31b6dfb43fe3"
+        },
+        {
+          "source_frame": 15,
+          "time": 1.0,
+          "reasons": [
+            "motion-000:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000015_000001.000s.png",
+          "sha256": "1f2b0282e526e252bed8fe380ee51a3f01eb6e54bce349c4e8a4427bf7f352e0"
+        },
+        {
+          "source_frame": 16,
+          "time": 1.066667,
+          "reasons": [
+            "motion-000:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000016_000001.067s.png",
+          "sha256": "7acb6dedd3d64b3d1fe903b6efb1a143592f8e12dcb1506fdc749aa6ca7c1ea1"
+        },
+        {
+          "source_frame": 28,
+          "time": 1.866667,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000028_000001.867s.png",
+          "sha256": "d3f2b4dfa8c1680307c1d1295d13738c3720223c0a5904b988e573430d3a7c2f"
+        },
+        {
+          "source_frame": 41,
+          "time": 2.733333,
+          "reasons": [
+            "motion-001:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000041_000002.733s.png",
+          "sha256": "e398ebfbd02de21f7c5a3b2b03c4217b7d199119b5c3ca69b38d72e73a190ce1"
+        },
+        {
+          "source_frame": 42,
+          "time": 2.8,
+          "reasons": [
+            "motion-001:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000042_000002.800s.png",
+          "sha256": "10107cb2118ae9e36c7a2e0c172bce349eb4596906ea7541afcf5060a3652dc7"
+        },
+        {
+          "source_frame": 43,
+          "time": 2.866667,
+          "reasons": [
+            "motion-001:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000043_000002.867s.png",
+          "sha256": "52135171270a44b447ebf1ff5ff67bc6cc937cdddfd6c10e2bd2b91d75cc4e25"
+        },
+        {
+          "source_frame": 44,
+          "time": 2.933333,
+          "reasons": [
+            "motion-001:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000044_000002.933s.png",
+          "sha256": "db050f72b6db6084790215d5aaf33c5324a960ae94e5bf4d41f6e13830f85c1a"
+        },
+        {
+          "source_frame": 46,
+          "time": 3.066667,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000046_000003.067s.png",
+          "sha256": "a62ba10584be1308f37f235bd1cd76e394ee183903cf5ccf49e4f51a6a46b963"
+        },
+        {
+          "source_frame": 47,
+          "time": 3.133333,
+          "reasons": [
+            "motion-002:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000047_000003.133s.png",
+          "sha256": "7a7f896432adc9c24e25336898375969f1b21f8c50b3a45eb00987bbabfbe152"
+        },
+        {
+          "source_frame": 48,
+          "time": 3.2,
+          "reasons": [
+            "motion-002:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000048_000003.200s.png",
+          "sha256": "6d14741ed72a15a1e0711df80492dbc9cbbaece0ddeefd549397772dc8121989"
+        },
+        {
+          "source_frame": 51,
+          "time": 3.4,
+          "reasons": [
+            "motion-002:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000051_000003.400s.png",
+          "sha256": "1f66bb33ae109659d08562976cdfa087c6a25890bf1ff6b6d7b2eadf41da5383"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:42.812439+00:00",
+      "observation": "Title/timeline, hillclimbing landscape and moving yellow ball to localmaximum; Chinese labels remain separate and inside scene."
+    },
+    {
+      "case": "zh/Local",
+      "page": 2,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-002.png",
+      "sha256": "ae5269931c410b33e70635bd364fc7ee87f26dcb442774729ee26a658dbea4f4",
+      "first_time": 3.666667,
+      "last_time": 21.066667,
+      "frames": [
+        {
+          "source_frame": 55,
+          "time": 3.666667,
+          "reasons": [
+            "motion-002:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000055_000003.667s.png",
+          "sha256": "f67c1bab61191756f49341ef7afcfdb1738341615f9ad281ec397c5b441c1b7c"
+        },
+        {
+          "source_frame": 56,
+          "time": 3.733333,
+          "reasons": [
+            "motion-002:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000056_000003.733s.png",
+          "sha256": "55ab09874fb50599d75f14f179e00ee4e4f4752dc4abbbb14902f6650babc586"
+        },
+        {
+          "source_frame": 60,
+          "time": 4.0,
+          "reasons": [
+            "motion-003:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000060_000004.000s.png",
+          "sha256": "6f29bdecaf4b4f1d8d05fa13d44b9be9a872fb629842eac37e18b158de626fa2"
+        },
+        {
+          "source_frame": 61,
+          "time": 4.066667,
+          "reasons": [
+            "motion-003:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000061_000004.067s.png",
+          "sha256": "db8a314d5e251bd77e3de0b73925bcfc9e733abbcf4ebebd2168c318dbb6c5e1"
+        },
+        {
+          "source_frame": 67,
+          "time": 4.466667,
+          "reasons": [
+            "motion-003:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000067_000004.467s.png",
+          "sha256": "5989ffd38d41e0eae5283ed157523a14aa8d1024d5e09a0ca48edf76fa59335b"
+        },
+        {
+          "source_frame": 73,
+          "time": 4.866667,
+          "reasons": [
+            "motion-003:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000073_000004.867s.png",
+          "sha256": "f69de1e97d984d7172470e8264c3b1406ee9efd70535d4e1a85c0af2af5563cd"
+        },
+        {
+          "source_frame": 74,
+          "time": 4.933333,
+          "reasons": [
+            "motion-003:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000074_000004.933s.png",
+          "sha256": "869f31f361154d0e5d0de9e523a3357ae13e1db4c1a641f6371d78992b90eb44"
+        },
+        {
+          "source_frame": 89,
+          "time": 5.933333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000089_000005.933s.png",
+          "sha256": "c2311800abe9d17d817b3cd15d4ac3b5bbaaee942fa1fb0d5e4df50919e5ee96"
+        },
+        {
+          "source_frame": 104,
+          "time": 6.933333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000104_000006.933s.png",
+          "sha256": "7d4970bbaa51b3db948896c0674416b28ab9435ef4c8ce7aa75c8822cfc78594"
+        },
+        {
+          "source_frame": 149,
+          "time": 9.933333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000149_000009.933s.png",
+          "sha256": "b9c9c2644884eb4469ced3e48f2b5c52ed128a2fc93a98d748e4cfb777fadc25"
+        },
+        {
+          "source_frame": 240,
+          "time": 16.0,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000240_000016.000s.png",
+          "sha256": "9fc63579aa845c58ed22e83de9aae23f05a03f844131938527d96bd63636ef35"
+        },
+        {
+          "source_frame": 256,
+          "time": 17.066667,
+          "reasons": [
+            "motion-004:last-change",
+            "motion-004:midpoint",
+            "motion-004:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000256_000017.067s.png",
+          "sha256": "03d29913f4219b1e425723c6ac68aaa42a6c8a3cf8dd97dde0a233fa14504afc"
+        },
+        {
+          "source_frame": 257,
+          "time": 17.133333,
+          "reasons": [
+            "motion-004:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000257_000017.133s.png",
+          "sha256": "4bfebcd756b58f81fa833be9bdc85327988c63b0d46ed732e6ade8c82b27ec56"
+        },
+        {
+          "source_frame": 272,
+          "time": 18.133333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000272_000018.133s.png",
+          "sha256": "1d7d9bb7e21ac82ec16e456f7d43c94b180f84ad1873cc85b0967b64ec906b8b"
+        },
+        {
+          "source_frame": 287,
+          "time": 19.133333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000287_000019.133s.png",
+          "sha256": "92c2fe719dd36a6d89ea7495314fbceff7d281cca200621a4b423689ea132802"
+        },
+        {
+          "source_frame": 316,
+          "time": 21.066667,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000316_000021.067s.png",
+          "sha256": "bf320727b92a3a3dacc7d11e7ac27ca95d02b24041348429ae42f866afb09f9a"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:42.812623+00:00",
+      "observation": "Title/timeline, hillclimbing landscape and moving yellow ball to localmaximum; Chinese labels remain separate and inside scene."
+    },
+    {
+      "case": "zh/Local",
+      "page": 3,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-003.png",
+      "sha256": "0eb0f582c5bb41bf94ea65989d110fd7df38ae28665bc40dcb95e7a27b82112d",
+      "first_time": 23.066667,
+      "last_time": 28.933333,
+      "frames": [
+        {
+          "source_frame": 346,
+          "time": 23.066667,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000346_000023.067s.png",
+          "sha256": "bc943f3bd21673f3ce0e3fba65a64cbc56272f7122ac89dd725b94ccfdae843a"
+        },
+        {
+          "source_frame": 375,
+          "time": 25.0,
+          "reasons": [
+            "motion-005:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000375_000025.000s.png",
+          "sha256": "07d30db393a1de8cab9b20f8026b879a463ae122d2d5233e4339b8e373943cd4"
+        },
+        {
+          "source_frame": 376,
+          "time": 25.066667,
+          "reasons": [
+            "motion-005:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000376_000025.067s.png",
+          "sha256": "d7ce7c400b61980b734ec77e0cb7a1a298aa2b9d349302aca19632f6d3decd9a"
+        },
+        {
+          "source_frame": 390,
+          "time": 26.0,
+          "reasons": [
+            "motion-005:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000390_000026.000s.png",
+          "sha256": "d5a248261c0e4ae2e1a405314acc9fccd0ab39edf401b3db8fc87d75d9251efb"
+        },
+        {
+          "source_frame": 398,
+          "time": 26.533333,
+          "reasons": [
+            "motion-005:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000398_000026.533s.png",
+          "sha256": "b6929f91c84829886d472b28b7b924f86e721de565d6c8fd286fc5f3231b69a8"
+        },
+        {
+          "source_frame": 405,
+          "time": 27.0,
+          "reasons": [
+            "motion-005:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000405_000027.000s.png",
+          "sha256": "f05912ee1df25aa776455254f0a0a58f368f2902e0338a18070072fc60dc7fb4"
+        },
+        {
+          "source_frame": 420,
+          "time": 28.0,
+          "reasons": [
+            "motion-005:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000420_000028.000s.png",
+          "sha256": "b130efe59d52566780ec36fb4e70b8edcfea7e6cd4824324af62837e32c4c72f"
+        },
+        {
+          "source_frame": 421,
+          "time": 28.066667,
+          "reasons": [
+            "motion-005:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000421_000028.067s.png",
+          "sha256": "8c8b475749f64b7eabe9849dfe10a0a0527d5ece9551212c4ddae991fb3e0089"
+        },
+        {
+          "source_frame": 423,
+          "time": 28.2,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000423_000028.200s.png",
+          "sha256": "348391b240f663a7e458d7a1470c2738ded436534207d77ab930be54d0f2d829"
+        },
+        {
+          "source_frame": 425,
+          "time": 28.333333,
+          "reasons": [
+            "motion-006:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000425_000028.333s.png",
+          "sha256": "0f65ba3b629eccc3528497216a3591c176c5d79231bd4fcb39360b51dc28821d"
+        },
+        {
+          "source_frame": 426,
+          "time": 28.4,
+          "reasons": [
+            "motion-006:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000426_000028.400s.png",
+          "sha256": "9dcc61d613147e2a8e646a87692a53ff3d0d539010336e444548b3f3bb73ce89"
+        },
+        {
+          "source_frame": 428,
+          "time": 28.533333,
+          "reasons": [
+            "motion-006:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000428_000028.533s.png",
+          "sha256": "ae496104a7a0916187b0b3f3b949e7792f15fdde6525a360e57ec554131b1e43"
+        },
+        {
+          "source_frame": 431,
+          "time": 28.733333,
+          "reasons": [
+            "motion-006:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000431_000028.733s.png",
+          "sha256": "5159abb6970002827d3f6bca68ec86277b1130d7d80b244242e6a114d5ec94de"
+        },
+        {
+          "source_frame": 432,
+          "time": 28.8,
+          "reasons": [
+            "motion-006:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000432_000028.800s.png",
+          "sha256": "bfbfa39b2ed3bb7d5ac71e569911f627aa8ec7372cd84c3816d8cc24ab37e242"
+        },
+        {
+          "source_frame": 433,
+          "time": 28.866667,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000433_000028.867s.png",
+          "sha256": "f30373c76d9cb770d7af051c450f880a0a819454739f1b25af5897bf56d00385"
+        },
+        {
+          "source_frame": 434,
+          "time": 28.933333,
+          "reasons": [
+            "motion-007:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000434_000028.933s.png",
+          "sha256": "68a90b4cd39bf434d78fd2fdfa44e911041c99f1768ee3e2f32aed31c6633c6c"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:42.812788+00:00",
+      "observation": "Title/timeline, hillclimbing landscape and moving yellow ball to localmaximum; Chinese labels remain separate and inside scene."
+    },
+    {
+      "case": "zh/Local",
+      "page": 4,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-004.png",
+      "sha256": "c831083b7cd7a5d117f941002ab96c93d8482648b7d113d9c9d1e3adc156107d",
+      "first_time": 29.0,
+      "last_time": 37.133333,
+      "frames": [
+        {
+          "source_frame": 435,
+          "time": 29.0,
+          "reasons": [
+            "motion-007:last-change",
+            "motion-007:midpoint",
+            "motion-007:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000435_000029.000s.png",
+          "sha256": "78e167ed1ec13bed4c3bbac054001d8665f546184103112c0d0f6a6a983e1d58"
+        },
+        {
+          "source_frame": 436,
+          "time": 29.066667,
+          "reasons": [
+            "motion-007:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000436_000029.067s.png",
+          "sha256": "2a00eac2f1c2b31a39754324c3f904d772cb3c76caf097443ecacc741778461d"
+        },
+        {
+          "source_frame": 451,
+          "time": 30.066667,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000451_000030.067s.png",
+          "sha256": "94a7feeb9c9019cbc44f6ff8147486f3d3533047490bf15403f8b62dceaf9b73"
+        },
+        {
+          "source_frame": 487,
+          "time": 32.466667,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000487_000032.467s.png",
+          "sha256": "65d1c7bddf662feb3a61c78c20fe50d8da1dfa076d2ac9359faf24c7087ed91c"
+        },
+        {
+          "source_frame": 538,
+          "time": 35.866667,
+          "reasons": [
+            "motion-008:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000538_000035.867s.png",
+          "sha256": "0bac66c5b29691f6a3bbe65074a4d672507b23806831754b0ee6e48800874ac0"
+        },
+        {
+          "source_frame": 539,
+          "time": 35.933333,
+          "reasons": [
+            "motion-008:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000539_000035.933s.png",
+          "sha256": "e0ec118f4e1be321e8bb652ed0a4cb6ce96354309e60c2557f75ba8de1b55fa9"
+        },
+        {
+          "source_frame": 540,
+          "time": 36.0,
+          "reasons": [
+            "motion-008:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000540_000036.000s.png",
+          "sha256": "333bc473c8494701b774e09b04032f60e572b797d51a03222515f4e07a714307"
+        },
+        {
+          "source_frame": 541,
+          "time": 36.066667,
+          "reasons": [
+            "motion-008:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000541_000036.067s.png",
+          "sha256": "f0780ae7b42c1f466c28e76ae590a6e8fef164282943da82656eb05fd415c3ed"
+        },
+        {
+          "source_frame": 543,
+          "time": 36.2,
+          "reasons": [
+            "motion-009:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000543_000036.200s.png",
+          "sha256": "12980c9bca32900a8e91ce3851ae4b29f663be7e045342b3b7a887e076258f73"
+        },
+        {
+          "source_frame": 544,
+          "time": 36.266667,
+          "reasons": [
+            "motion-009:last-change",
+            "motion-009:midpoint",
+            "motion-009:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000544_000036.267s.png",
+          "sha256": "ab12be35eac32756295452b7836484c39318d37c461e23fe1624254e1872a707"
+        },
+        {
+          "source_frame": 545,
+          "time": 36.333333,
+          "reasons": [
+            "motion-009:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000545_000036.333s.png",
+          "sha256": "48c5b0cb5efe95ca0a2a8deaeeedf0f5a761970a944747e474618cb22d32b8d9"
+        },
+        {
+          "source_frame": 547,
+          "time": 36.466667,
+          "reasons": [
+            "motion-010:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000547_000036.467s.png",
+          "sha256": "27eb30b1ccf083fd802cbc9bec28675e7ed400bf15b78e638bdba5f796c4e8ac"
+        },
+        {
+          "source_frame": 548,
+          "time": 36.533333,
+          "reasons": [
+            "motion-010:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000548_000036.533s.png",
+          "sha256": "33678ab8209a0e7121e45ef32c4a859cd52e1052905af9b00fbb8b1a7b883bb6"
+        },
+        {
+          "source_frame": 552,
+          "time": 36.8,
+          "reasons": [
+            "motion-010:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000552_000036.800s.png",
+          "sha256": "5a315d739c17a51cda9beb9784372558b72171d7c4a4843a1f67582d161244f6"
+        },
+        {
+          "source_frame": 556,
+          "time": 37.066667,
+          "reasons": [
+            "motion-010:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000556_000037.067s.png",
+          "sha256": "c53fb2d85acb5ca5cc3a2d61e11e877d9d66b8c93a0c89ecae3ecc92f5288eda"
+        },
+        {
+          "source_frame": 557,
+          "time": 37.133333,
+          "reasons": [
+            "motion-010:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000557_000037.133s.png",
+          "sha256": "026ce02eab984eb2cea5016aa8f62cb05005fe66c9e9d347edf3c1be07dcabf3"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:52.124455+00:00",
+      "observation": "Hillclimb stuck annotation/fade and queenboards moves/attack-lines h10to1 and h7to0 selected sequences reviewed; text and board margins safe."
+    },
+    {
+      "case": "zh/Local",
+      "page": 5,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-005.png",
+      "sha256": "fa6a30fb3eed329d98ffb70a4251209ac45d3f7c297080b896053f64a80a2051",
+      "first_time": 37.333333,
+      "last_time": 54.999349,
+      "frames": [
+        {
+          "source_frame": 560,
+          "time": 37.333333,
+          "reasons": [
+            "motion-011:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000560_000037.333s.png",
+          "sha256": "6c8c22d05e02ac2bc18685a4a8ab17c44fabc097a5c42f6b1bc9d9c5d4bd671a"
+        },
+        {
+          "source_frame": 561,
+          "time": 37.4,
+          "reasons": [
+            "motion-011:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000561_000037.400s.png",
+          "sha256": "217b2111cddd1fdf4ea88aae6ec2b129adf3bfa2078a21142577830a50394a6c"
+        },
+        {
+          "source_frame": 567,
+          "time": 37.8,
+          "reasons": [
+            "motion-011:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000567_000037.800s.png",
+          "sha256": "fba08edc41b73e4bde2939fe10b67e0d33f90d564f68ef8aa7e9f8a6c8d9f50e"
+        },
+        {
+          "source_frame": 574,
+          "time": 38.266667,
+          "reasons": [
+            "motion-011:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000574_000038.267s.png",
+          "sha256": "03b82c7da09217f0f78a4ab9723ee7146a44afd517d48b49ea64598e6925baac"
+        },
+        {
+          "source_frame": 575,
+          "time": 38.333333,
+          "reasons": [
+            "motion-011:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000575_000038.333s.png",
+          "sha256": "b05969e43d078a8d0d87b29faa1f2d454e082d1958ae1c2e535267d2f9567bcf"
+        },
+        {
+          "source_frame": 590,
+          "time": 39.333333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000590_000039.333s.png",
+          "sha256": "b1ffffc70c23970f71769622ea0bcf12b7ec48bdffa4e2903f65e6fe4a08eb7b"
+        },
+        {
+          "source_frame": 605,
+          "time": 40.333333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000605_000040.333s.png",
+          "sha256": "7cf3d73ca4476590aaba7799ec254db2d5145861098b9b4ca51e11dcabb6587c"
+        },
+        {
+          "source_frame": 650,
+          "time": 43.333333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000650_000043.333s.png",
+          "sha256": "13a1eca6692e4df2e251bc3fea5847e7bf6bd9d5d75c1baf433c1e3e7cf36116"
+        },
+        {
+          "source_frame": 752,
+          "time": 50.133333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000752_000050.133s.png",
+          "sha256": "dfab07e2f466a22558768f0d59dc5a13de96b78fbe4fa6b78485cc4f921f436c"
+        },
+        {
+          "source_frame": 767,
+          "time": 51.133333,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000767_000051.133s.png",
+          "sha256": "92af5062c89850e711fb9a8309695fc809e3734cf1d1ab75dd3f57819d202021"
+        },
+        {
+          "source_frame": 779,
+          "time": 51.933333,
+          "reasons": [
+            "motion-012:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000779_000051.933s.png",
+          "sha256": "cf18b621b2c1daf45c0918ab3fd7638326ff8918c94f3b17a1b571fea1922db4"
+        },
+        {
+          "source_frame": 780,
+          "time": 52.0,
+          "reasons": [
+            "motion-012:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000780_000052.000s.png",
+          "sha256": "2587cfd78f8d94a3e08454a76b227b295d2df2f138660124e9c93bfd7e836d7b"
+        },
+        {
+          "source_frame": 794,
+          "time": 52.933333,
+          "reasons": [
+            "motion-012:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000794_000052.933s.png",
+          "sha256": "70a40baabf20f9bdb9673dd09e2e1ced92ca519bfbd7d20df35bd4802fcfddaa"
+        },
+        {
+          "source_frame": 806,
+          "time": 53.733008,
+          "reasons": [
+            "motion-012:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000806_000053.733s.png",
+          "sha256": "166c17b96d491069bce1f232b76bb613e73af0c1a23248c0c0a5c1ebb3374cca"
+        },
+        {
+          "source_frame": 810,
+          "time": 53.999674,
+          "reasons": [
+            "motion-012:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000810_000054.000s.png",
+          "sha256": "390c7960d28d11a687132b6702a7e12997d152581b0839b62c34c63952da03c9"
+        },
+        {
+          "source_frame": 825,
+          "time": 54.999349,
+          "reasons": [
+            "motion-012:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000825_000054.999s.png",
+          "sha256": "801158ac4d9279f88003bc7d763a5a645f7f7168b6373f4dcf1674ae0f9f2293"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:52.124775+00:00",
+      "observation": "Hillclimb stuck annotation/fade and queenboards moves/attack-lines h10to1 and h7to0 selected sequences reviewed; text and board margins safe."
+    },
+    {
+      "case": "zh/Local",
+      "page": 6,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-006.png",
+      "sha256": "f50d39553623bd4aff444d1a094cb89f50dcd9168118b91d781ab2ef8b481599",
+      "first_time": 55.46569,
+      "last_time": 63.265039,
+      "frames": [
+        {
+          "source_frame": 832,
+          "time": 55.46569,
+          "reasons": [
+            "motion-012:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000832_000055.466s.png",
+          "sha256": "fbe2c159a0e35b973b461a6976bafbe5f6ac181a4bb1aea8a834e6ffcc138714"
+        },
+        {
+          "source_frame": 833,
+          "time": 55.532357,
+          "reasons": [
+            "motion-012:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000833_000055.532s.png",
+          "sha256": "ac6222a89e0c36cba11b392b41f9640013bbac7b0586cc6d1fda56bef8cc5a58"
+        },
+        {
+          "source_frame": 848,
+          "time": 56.532357,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000848_000056.532s.png",
+          "sha256": "7aa6cf07894bd08a6fcb60d8b55f06f93e27c3d21d02d696dcbbd89cd9969595"
+        },
+        {
+          "source_frame": 862,
+          "time": 57.46569,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000862_000057.466s.png",
+          "sha256": "ca117fe3f78323335925a800b0f33dee49eadcfe4111ba555dc84556f662814b"
+        },
+        {
+          "source_frame": 877,
+          "time": 58.46569,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000877_000058.466s.png",
+          "sha256": "4e3e11bc2152b928e950a284f20bb3dae97e5a45a339c1cbdb1913988647fd77"
+        },
+        {
+          "source_frame": 891,
+          "time": 59.399023,
+          "reasons": [
+            "motion-013:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000891_000059.399s.png",
+          "sha256": "8506c36294bc9a78484de1562f8407d58c1a0b96eacd6365b58685208fbc9b48"
+        },
+        {
+          "source_frame": 892,
+          "time": 59.46569,
+          "reasons": [
+            "motion-013:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000892_000059.466s.png",
+          "sha256": "dc7db851f11d30ca2adcfebae27511dd7e0c4580193a699ec5a1cd8345ae5b94"
+        },
+        {
+          "source_frame": 906,
+          "time": 60.399023,
+          "reasons": [
+            "motion-013:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000906_000060.399s.png",
+          "sha256": "4b7be8018d78076b495c1554ef855276d1b961840bfddebe174673ceabc0fa35"
+        },
+        {
+          "source_frame": 918,
+          "time": 61.199023,
+          "reasons": [
+            "motion-013:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000918_000061.199s.png",
+          "sha256": "2fbc446413077ec002c082419aab44418f1507218f287c4ffc74122a046fc5d5"
+        },
+        {
+          "source_frame": 921,
+          "time": 61.399023,
+          "reasons": [
+            "motion-013:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000921_000061.399s.png",
+          "sha256": "f126241dc1c60ee4536dabdf31b7477feb3d6a3c7095249afcf15688a71b1dc8"
+        },
+        {
+          "source_frame": 936,
+          "time": 62.398698,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000936_000062.399s.png",
+          "sha256": "94dafc9c090860a00f027220b1a22544547a2b40df9df7e61fcba5359d63dfeb"
+        },
+        {
+          "source_frame": 937,
+          "time": 62.465365,
+          "reasons": [
+            "motion-013:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000937_000062.465s.png",
+          "sha256": "2375205360890d7d55b234acee1d8d60e3d0b3e9861036ed709d5f500e2cd565"
+        },
+        {
+          "source_frame": 944,
+          "time": 62.931706,
+          "reasons": [
+            "motion-013:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000944_000062.932s.png",
+          "sha256": "f6d83601a0cefd5d87e466cc17e7996001b451dac3be97669ba2a7252fcb0ea5"
+        },
+        {
+          "source_frame": 945,
+          "time": 62.998372,
+          "reasons": [
+            "motion-013:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000945_000062.998s.png",
+          "sha256": "1e44c57502a91cd4f50d8b07e469695306beeea97eb857a0cb2e8128d71cb8c7"
+        },
+        {
+          "source_frame": 947,
+          "time": 63.131706,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000947_000063.132s.png",
+          "sha256": "e056a0afa8c82a3fb633095680d924cf8ee8f6c94888cf60fee3f4ac51d060c7"
+        },
+        {
+          "source_frame": 949,
+          "time": 63.265039,
+          "reasons": [
+            "motion-014:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000949_000063.265s.png",
+          "sha256": "86047b870bc0317a4d613025cf095a7cc8daa52525569ad99c1c1eee59d70e6a"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:20:52.125000+00:00",
+      "observation": "Hillclimb stuck annotation/fade and queenboards moves/attack-lines h10to1 and h7to0 selected sequences reviewed; text and board margins safe."
+    },
+    {
+      "case": "zh/Local",
+      "page": 7,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-007.png",
+      "sha256": "2302223e0272d34ddfd75123c21acad8f6a71d35341d43832324f01f66b11f35",
+      "first_time": 63.331706,
+      "last_time": 69.931706,
+      "frames": [
+        {
+          "source_frame": 950,
+          "time": 63.331706,
+          "reasons": [
+            "motion-014:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000950_000063.332s.png",
+          "sha256": "f86c0c239dc44ffdd9de4e2b55e1f539fac691b47427c4c58dadcc3f5e98e21f"
+        },
+        {
+          "source_frame": 953,
+          "time": 63.531706,
+          "reasons": [
+            "motion-014:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000953_000063.532s.png",
+          "sha256": "8f6c9bf647f5ee21d9d1358dfa9b929840d9246b973d86306668f2818581e2ac"
+        },
+        {
+          "source_frame": 955,
+          "time": 63.665039,
+          "reasons": [
+            "motion-014:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000955_000063.665s.png",
+          "sha256": "c6c70915f6f8a03edc6ef7a045ecc54008a9bfd747dbc1759c4f10e1cf72e5df"
+        },
+        {
+          "source_frame": 956,
+          "time": 63.731706,
+          "reasons": [
+            "motion-014:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000956_000063.732s.png",
+          "sha256": "9b14841c2f88105da14c359fd7c3ef0fc5d9d8ca2a63ab1f4080f1916e1d9fdc"
+        },
+        {
+          "source_frame": 958,
+          "time": 63.865039,
+          "reasons": [
+            "motion-015:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000958_000063.865s.png",
+          "sha256": "cdb4be36bf2df6499b638beb499f0b0295fb6ccfd4ba548a8102e4f2f5de045a"
+        },
+        {
+          "source_frame": 959,
+          "time": 63.931706,
+          "reasons": [
+            "motion-015:last-change",
+            "motion-015:midpoint",
+            "motion-015:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000959_000063.932s.png",
+          "sha256": "94120ef7f7bd89eaa8ce5d5c47d3b63560f08718490cc7c9f03f9c493269b7e7"
+        },
+        {
+          "source_frame": 960,
+          "time": 63.998372,
+          "reasons": [
+            "motion-015:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000960_000063.998s.png",
+          "sha256": "3934c29fe6c569f07db03d3eca50288f0bcbda3900bdb2013dc25f8a55dea218"
+        },
+        {
+          "source_frame": 975,
+          "time": 64.998372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000975_000064.998s.png",
+          "sha256": "1297aa219c77903c1de859ed052640a4efd31e3f51c3234225d7fc3d46ba99e3"
+        },
+        {
+          "source_frame": 990,
+          "time": 65.998372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0000990_000065.998s.png",
+          "sha256": "aa80171bc6dd6131cd729cbab9ba523903c8851eacbb41de01e1dc6c37e65089"
+        },
+        {
+          "source_frame": 1017,
+          "time": 67.798372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001017_000067.798s.png",
+          "sha256": "d21a5bff2a5c218b65ff57baf443a491535af0efd1dc622320566a15f68141ca"
+        },
+        {
+          "source_frame": 1032,
+          "time": 68.798372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001032_000068.798s.png",
+          "sha256": "69ddb2a924fbbbf9f9f4bcdae5e152096f97c492dd0f69459c7b8d018748008d"
+        },
+        {
+          "source_frame": 1043,
+          "time": 69.531706,
+          "reasons": [
+            "motion-016:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001043_000069.532s.png",
+          "sha256": "55b1628e8fa112c618e087cfaffa9c406d4b5570c6c42b7787a2b503720b1267"
+        },
+        {
+          "source_frame": 1044,
+          "time": 69.598372,
+          "reasons": [
+            "motion-016:last-change",
+            "motion-016:midpoint",
+            "motion-016:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001044_000069.598s.png",
+          "sha256": "342d10de75ece84661f2251c66b2ddefbdc3e589d07f9099eb026f156eda91f6"
+        },
+        {
+          "source_frame": 1045,
+          "time": 69.665039,
+          "reasons": [
+            "motion-016:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001045_000069.665s.png",
+          "sha256": "67ec1ca1c02b9787dc7990f3438c40a02e8245d001ffb06f3dcf7ad26595d60a"
+        },
+        {
+          "source_frame": 1048,
+          "time": 69.865039,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001048_000069.865s.png",
+          "sha256": "e0c19b3e372e04d271c81e53e34d802595666f53af8d8bb681f5b5d4bae05cb2"
+        },
+        {
+          "source_frame": 1049,
+          "time": 69.931706,
+          "reasons": [
+            "motion-017:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001049_000069.932s.png",
+          "sha256": "edd6731fb0e116826f37bc868d1f3591be69495f1a1a2b52d4496d9207a468c7"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:02.454523+00:00",
+      "observation": "Completed queens and10kstart summary14percent,sideways95percent,restarts23; Chinese multicolor readouts fit below boards; annealinghistorycard transition clean."
+    },
+    {
+      "case": "zh/Local",
+      "page": 8,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-008.png",
+      "sha256": "bb9a44769e2f73b5fc9f3bbedd15d9c8d9e5ff50be361e6e64f8d2e91a7920d1",
+      "first_time": 69.998372,
+      "last_time": 79.998372,
+      "frames": [
+        {
+          "source_frame": 1050,
+          "time": 69.998372,
+          "reasons": [
+            "motion-017:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001050_000069.998s.png",
+          "sha256": "539623e316a1c5a2cebccba08049e32f8e39ffaed4897aa6d09e0f76511a7d5a"
+        },
+        {
+          "source_frame": 1052,
+          "time": 70.131706,
+          "reasons": [
+            "motion-017:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001052_000070.132s.png",
+          "sha256": "109f1f093c2cc18fda7b5bea168a1848a9336381f9f167965a627e9083c85c8b"
+        },
+        {
+          "source_frame": 1054,
+          "time": 70.265039,
+          "reasons": [
+            "motion-017:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001054_000070.265s.png",
+          "sha256": "7ee4288fc59be3c4fd72d6a466cf29fadef25ce22418ba8e65792a5f3eee6fc3"
+        },
+        {
+          "source_frame": 1055,
+          "time": 70.331706,
+          "reasons": [
+            "motion-017:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001055_000070.332s.png",
+          "sha256": "207c95ec3acf14be02bc79373e9f4c5fee7688cf08e2b18aa748557de6f0caaf"
+        },
+        {
+          "source_frame": 1057,
+          "time": 70.465039,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001057_000070.465s.png",
+          "sha256": "b1f0ec2842237ee9badf6fdd6ce171507ac5e399cabb019285a50d307489d8a7"
+        },
+        {
+          "source_frame": 1058,
+          "time": 70.531706,
+          "reasons": [
+            "motion-018:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001058_000070.532s.png",
+          "sha256": "ccf48afe2553739a69eae6152c5449267ccdf6accde44b0c69281d66998e4723"
+        },
+        {
+          "source_frame": 1059,
+          "time": 70.598372,
+          "reasons": [
+            "motion-018:last-change",
+            "motion-018:midpoint",
+            "motion-018:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001059_000070.598s.png",
+          "sha256": "43cf1481df905a5a42c5ee590999f8c685231839764b3069b2a1cee3844fefac"
+        },
+        {
+          "source_frame": 1060,
+          "time": 70.665039,
+          "reasons": [
+            "motion-018:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001060_000070.665s.png",
+          "sha256": "8b9934d114044b22ce73dec01b4a35dbb4e97e789a172076a437f2bc57454f73"
+        },
+        {
+          "source_frame": 1075,
+          "time": 71.665039,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001075_000071.665s.png",
+          "sha256": "5c37b1ddfd0beb2f3f748f34fadf34a79551e84504f2e5f0912a895a77300d4b"
+        },
+        {
+          "source_frame": 1090,
+          "time": 72.665039,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001090_000072.665s.png",
+          "sha256": "94a21e30a402ba0acbdbfb6529ae059463310c38369cffa2fc790ad2de9d03bc"
+        },
+        {
+          "source_frame": 1159,
+          "time": 77.265039,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001159_000077.265s.png",
+          "sha256": "61870533a84f718dd5880204645a1b1089314853cdc511835366f269ebf0c079"
+        },
+        {
+          "source_frame": 1174,
+          "time": 78.265039,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001174_000078.265s.png",
+          "sha256": "7edfe2618adaa9e5c0fc218f5490d8c81fef8e50ab0c54135d2e9fead687fff2"
+        },
+        {
+          "source_frame": 1197,
+          "time": 79.798372,
+          "reasons": [
+            "motion-019:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001197_000079.798s.png",
+          "sha256": "a375448a11b0e29fc665e8ae5c7be7e873f3d38c6ec9f6c0fa1e7a13ef5a6d6c"
+        },
+        {
+          "source_frame": 1198,
+          "time": 79.865039,
+          "reasons": [
+            "motion-019:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001198_000079.865s.png",
+          "sha256": "72868b8fee8f193f103d2fb023d85c1460391aa7050ab4d865b96c4957127f8e"
+        },
+        {
+          "source_frame": 1199,
+          "time": 79.931706,
+          "reasons": [
+            "motion-019:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001199_000079.932s.png",
+          "sha256": "a278d14d9e725332807c8dc1f6a4b1ea4aa90703be0908b47e7aa3ac6c2af5d4"
+        },
+        {
+          "source_frame": 1200,
+          "time": 79.998372,
+          "reasons": [
+            "motion-019:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001200_000079.998s.png",
+          "sha256": "570bec76982361b0770fd7e67cff2ef3cbfb564202987af2b13aeb9beda55d1a"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:02.454840+00:00",
+      "observation": "Completed queens and10kstart summary14percent,sideways95percent,restarts23; Chinese multicolor readouts fit below boards; annealinghistorycard transition clean."
+    },
+    {
+      "case": "zh/Local",
+      "page": 9,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-009.png",
+      "sha256": "3f1f347a3051da5923399a7d0e1fd47cc3e12b99269a36e6d5f6425ca301dc63",
+      "first_time": 80.065039,
+      "last_time": 86.865039,
+      "frames": [
+        {
+          "source_frame": 1201,
+          "time": 80.065039,
+          "reasons": [
+            "motion-019:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001201_000080.065s.png",
+          "sha256": "46bd4ad03a290c308d575d77aeb5f32d308a65c78087a75108c9dd3a9fe3c2d3"
+        },
+        {
+          "source_frame": 1202,
+          "time": 80.131706,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001202_000080.132s.png",
+          "sha256": "5503df8c4082ff3c5766209b2f799f71b0ff96f95e75c00ae8a8ef76bec34857"
+        },
+        {
+          "source_frame": 1203,
+          "time": 80.198372,
+          "reasons": [
+            "motion-020:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001203_000080.198s.png",
+          "sha256": "85b6116c629d47dc7ac3ebbaee551753338929789a25b5720081a7b93063b65c"
+        },
+        {
+          "source_frame": 1204,
+          "time": 80.265039,
+          "reasons": [
+            "motion-020:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001204_000080.265s.png",
+          "sha256": "4310ef96bc18788a8ad3685239a2f8d4662fd5e54e8152f3503dd2f4cd730f11"
+        },
+        {
+          "source_frame": 1210,
+          "time": 80.665039,
+          "reasons": [
+            "motion-020:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001210_000080.665s.png",
+          "sha256": "314b483df785c33cecd997dc4bfea607ee3bd1bbb029724349d263870c7f1e03"
+        },
+        {
+          "source_frame": 1216,
+          "time": 81.065039,
+          "reasons": [
+            "motion-020:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001216_000081.065s.png",
+          "sha256": "4c616eee84966f9c9cb7660606a527f2192959e827e7dcfda071c2260b628082"
+        },
+        {
+          "source_frame": 1217,
+          "time": 81.131706,
+          "reasons": [
+            "motion-020:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001217_000081.132s.png",
+          "sha256": "73e99df39332a320d2fa223b7bb4ea763d3627c662f6ec2e4ae1d1d51eb12175"
+        },
+        {
+          "source_frame": 1220,
+          "time": 81.331706,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001220_000081.332s.png",
+          "sha256": "c416b78bbd29e0a3424884c4922f1cac389d31478e52c32a369b6011bc3a59a5"
+        },
+        {
+          "source_frame": 1223,
+          "time": 81.531706,
+          "reasons": [
+            "motion-021:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001223_000081.532s.png",
+          "sha256": "a4cef658f826f5e0b2bcff7c390c2388f9831c499443c0bf772d2b9023d30e6e"
+        },
+        {
+          "source_frame": 1224,
+          "time": 81.598372,
+          "reasons": [
+            "motion-021:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001224_000081.598s.png",
+          "sha256": "93f0064db955a017910ffb72d98e7aa3aa46e39a960145bf7de735b1b3625055"
+        },
+        {
+          "source_frame": 1229,
+          "time": 81.931706,
+          "reasons": [
+            "motion-021:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001229_000081.932s.png",
+          "sha256": "c33e7f3daf9109a3e01b369eb012054ad698cc2d01011befb17d31461b7b8749"
+        },
+        {
+          "source_frame": 1234,
+          "time": 82.265039,
+          "reasons": [
+            "motion-021:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001234_000082.265s.png",
+          "sha256": "c7bedfe2f5cd211b881427877fd488da623d7b0054d138173bea58e139b92063"
+        },
+        {
+          "source_frame": 1235,
+          "time": 82.331706,
+          "reasons": [
+            "motion-021:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001235_000082.332s.png",
+          "sha256": "ce77c0b2b451414421163093f18a9326b61338c9483c3dcbd7b05d379126cd53"
+        },
+        {
+          "source_frame": 1250,
+          "time": 83.331706,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001250_000083.332s.png",
+          "sha256": "55a2c0ec192959bb8a7922e03f59b3c5decaa4c0745178403cb1300019da0082"
+        },
+        {
+          "source_frame": 1302,
+          "time": 86.798372,
+          "reasons": [
+            "motion-022:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001302_000086.798s.png",
+          "sha256": "354ad246b94cade0ee9344c0a03f8824132ae77944974107d8e6fd9893477fed"
+        },
+        {
+          "source_frame": 1303,
+          "time": 86.865039,
+          "reasons": [
+            "motion-022:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001303_000086.865s.png",
+          "sha256": "9ee69d3711e64f8765ae7ebd95991a2d3caaca4f25a0dd49f592e50e2e0f9b7a"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:02.455069+00:00",
+      "observation": "Completed queens and10kstart summary14percent,sideways95percent,restarts23; Chinese multicolor readouts fit below boards; annealinghistorycard transition clean."
+    },
+    {
+      "case": "zh/Local",
+      "page": 10,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-010.png",
+      "sha256": "0c5d14a666fc78436b158cd8c4711ba739eb7cc9f887d2d2b954db478e333ecf",
+      "first_time": 87.798372,
+      "last_time": 110.13138,
+      "frames": [
+        {
+          "source_frame": 1317,
+          "time": 87.798372,
+          "reasons": [
+            "motion-022:dense",
+            "motion-022:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001317_000087.798s.png",
+          "sha256": "06908cb4db479582f86e82231665b18229cb0379fd46b79ffc3b74409c35ed4e"
+        },
+        {
+          "source_frame": 1331,
+          "time": 88.731706,
+          "reasons": [
+            "motion-022:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001331_000088.732s.png",
+          "sha256": "ba04e963954a4de5966a17a6696cf765da98ea4c44e50924efa4215deb495c1d"
+        },
+        {
+          "source_frame": 1332,
+          "time": 88.798372,
+          "reasons": [
+            "motion-022:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001332_000088.798s.png",
+          "sha256": "bd0f17af5807f2f7a4d74c94d402447de435c605698ddb7363d121a82a635019"
+        },
+        {
+          "source_frame": 1347,
+          "time": 89.798372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001347_000089.798s.png",
+          "sha256": "c6aafd0e3ac350ca7b3ec20e9f5481319d1f59cce7ca0da6328ed1c4ca2a39c2"
+        },
+        {
+          "source_frame": 1362,
+          "time": 90.798372,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001362_000090.798s.png",
+          "sha256": "4c858f4b8f99754cc6234308c1532a4b8168a1aaa0b7b0098975b7447df934c3"
+        },
+        {
+          "source_frame": 1497,
+          "time": 99.798372,
+          "reasons": [
+            "motion-023:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001497_000099.798s.png",
+          "sha256": "2c123b5b670eee68187f1275fed1a9b013f52530f5f5a295f9d185a887a8458b"
+        },
+        {
+          "source_frame": 1498,
+          "time": 99.865039,
+          "reasons": [
+            "motion-023:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001498_000099.865s.png",
+          "sha256": "fa633f6aeca503b5e94cfef6dd2dc0c9e261f12a2070d27f3222389a16f6eb6c"
+        },
+        {
+          "source_frame": 1510,
+          "time": 100.665039,
+          "reasons": [
+            "motion-023:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001510_000100.665s.png",
+          "sha256": "edc92766ccb9bfe421862808d1a469802cdbd8cb2ebd1fb610190f6010d1508c"
+        },
+        {
+          "source_frame": 1512,
+          "time": 100.798372,
+          "reasons": [
+            "motion-023:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001512_000100.798s.png",
+          "sha256": "f470b415f783ec8885c667719b16cc00e01b8bee92212d2567e7179dd5a20e7c"
+        },
+        {
+          "source_frame": 1522,
+          "time": 101.464714,
+          "reasons": [
+            "motion-023:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001522_000101.465s.png",
+          "sha256": "a6eb366b4563bf820c0420ca9b26d36f54f21709486ad05a2b680dc78f1acaf1"
+        },
+        {
+          "source_frame": 1523,
+          "time": 101.53138,
+          "reasons": [
+            "motion-023:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001523_000101.531s.png",
+          "sha256": "082e7fb440b2b9ef96c419eeb10da06f3c04581721f98a7f31f01595828ec583"
+        },
+        {
+          "source_frame": 1538,
+          "time": 102.53138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001538_000102.531s.png",
+          "sha256": "85666bb161472ee8fc3e44118ee1daf5e06f9a73cde1d2282ea29010cf4910b6"
+        },
+        {
+          "source_frame": 1553,
+          "time": 103.53138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001553_000103.531s.png",
+          "sha256": "e3b7aebeef0d33c2ab69d59a9cfa29e49223590877a873ba1ad865d50dc74f20"
+        },
+        {
+          "source_frame": 1622,
+          "time": 108.13138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001622_000108.131s.png",
+          "sha256": "8327af3e0416b3bedd8f0e020add2d4fc58558eaae1003a383a3e5a7a0d4359d"
+        },
+        {
+          "source_frame": 1637,
+          "time": 109.13138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001637_000109.131s.png",
+          "sha256": "d1e95e3ae2951f07aa4f1d1da86954e933ea81811df907e282c138842c50d39a"
+        },
+        {
+          "source_frame": 1652,
+          "time": 110.13138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001652_000110.131s.png",
+          "sha256": "65dd06b9de9fa0691294a99ae5fdc06c3b416e897e1aca47415bf4ed86fb53e2"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:14.573127+00:00",
+      "observation": "Chinese acceptance formula, detailed-balance ladder and successive copy transforms inspected; transient travelling copies settle into separate rows, no endpoint collisions."
+    },
+    {
+      "case": "zh/Local",
+      "page": 11,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-011.png",
+      "sha256": "71c8a0bf38196925b7bb9b57ecc031246503bd9f5f69fac31b7a4e9377464ff3",
+      "first_time": 110.664714,
+      "last_time": 117.53138,
+      "frames": [
+        {
+          "source_frame": 1660,
+          "time": 110.664714,
+          "reasons": [
+            "motion-024:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001660_000110.665s.png",
+          "sha256": "f95e00f26014c51e7fd1e352108a1a2ef5a6b805be25b5b7934bdcc51ef0c088"
+        },
+        {
+          "source_frame": 1661,
+          "time": 110.73138,
+          "reasons": [
+            "motion-024:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001661_000110.731s.png",
+          "sha256": "6c71d7ae4e746525055a15e94667283cb187ff8964e61a24e6e136d69922dcad"
+        },
+        {
+          "source_frame": 1668,
+          "time": 111.198047,
+          "reasons": [
+            "motion-024:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001668_000111.198s.png",
+          "sha256": "d1e5e080609df6b6a97121882fde6d44f4fcc6d6070b62dc041447a64f15eb8f"
+        },
+        {
+          "source_frame": 1675,
+          "time": 111.664714,
+          "reasons": [
+            "motion-024:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001675_000111.665s.png",
+          "sha256": "833499e8a646ce0b4b19f25016ca446c2e3e0f176030881b21ddbdd4e6a10e39"
+        },
+        {
+          "source_frame": 1676,
+          "time": 111.73138,
+          "reasons": [
+            "motion-024:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001676_000111.731s.png",
+          "sha256": "585a3c6cc2149b17ebb7eb0f46c5e689658cf9fcca4e7c4a4577b7116c4c196e"
+        },
+        {
+          "source_frame": 1677,
+          "time": 111.798047,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001677_000111.798s.png",
+          "sha256": "5db9e895f246cf3e7427df462be1b66df38b1dd47b6c82183954df9a3e1b5b7d"
+        },
+        {
+          "source_frame": 1678,
+          "time": 111.864714,
+          "reasons": [
+            "motion-025:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001678_000111.865s.png",
+          "sha256": "eb6f7b619134f8f0e5d4696e488b970746badcedc25af4693c900c1d1dae10d6"
+        },
+        {
+          "source_frame": 1679,
+          "time": 111.93138,
+          "reasons": [
+            "motion-025:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001679_000111.931s.png",
+          "sha256": "de436bdac0bf6e11fbf697901e57be3fa7f71ba91b2efc3b92fe90f1e08b8763"
+        },
+        {
+          "source_frame": 1685,
+          "time": 112.33138,
+          "reasons": [
+            "motion-025:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001685_000112.331s.png",
+          "sha256": "a61a29fbff6db71c324369397b2ca141a59607dfd0973c1d0620aa11d4a2f952"
+        },
+        {
+          "source_frame": 1691,
+          "time": 112.73138,
+          "reasons": [
+            "motion-025:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001691_000112.731s.png",
+          "sha256": "824026d80a3d6df124c4d887c7f46685dafa5e6a9a01e8a92ad47d50fa5336cb"
+        },
+        {
+          "source_frame": 1692,
+          "time": 112.798047,
+          "reasons": [
+            "motion-025:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001692_000112.798s.png",
+          "sha256": "3a82879e64bedb72f6439ad95a12dcd8742c2eec9a080f86e220afa759107d07"
+        },
+        {
+          "source_frame": 1707,
+          "time": 113.798047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001707_000113.798s.png",
+          "sha256": "9d5b7f34674a91ee1fce98698728adbfc06de37bf984b457ea3df4a425031e1b"
+        },
+        {
+          "source_frame": 1722,
+          "time": 114.798047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001722_000114.798s.png",
+          "sha256": "d59aeaf184fba36f79e32c08296bf1e7c30e8bca818003295e023096a365ed24"
+        },
+        {
+          "source_frame": 1753,
+          "time": 116.864714,
+          "reasons": [
+            "motion-026:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001753_000116.865s.png",
+          "sha256": "2cbbf3f26604c29a131a711eccaf49a52ff5572f62d7d405ec8aa3201ebfe9b4"
+        },
+        {
+          "source_frame": 1754,
+          "time": 116.93138,
+          "reasons": [
+            "motion-026:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001754_000116.931s.png",
+          "sha256": "f3d8f03e6895cf237802e6a3e3147a98abf391ae06ffac7ee82a9dfabb1d1be6"
+        },
+        {
+          "source_frame": 1763,
+          "time": 117.53138,
+          "reasons": [
+            "motion-026:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001763_000117.531s.png",
+          "sha256": "18d2fe8bbea71a7d6a89bbbe1fc66e37e7507a7aa5495ed8b23ccbbfa5ab39b2"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:14.573449+00:00",
+      "observation": "Chinese acceptance formula, detailed-balance ladder and successive copy transforms inspected; transient travelling copies settle into separate rows, no endpoint collisions."
+    },
+    {
+      "case": "zh/Local",
+      "page": 12,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-012.png",
+      "sha256": "34e90d7f0aa4b3948b0756a7b65fd386e3a93f5dd5aea34f4f3549fb387a91e1",
+      "first_time": 117.864714,
+      "last_time": 120.664714,
+      "frames": [
+        {
+          "source_frame": 1768,
+          "time": 117.864714,
+          "reasons": [
+            "motion-026:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001768_000117.865s.png",
+          "sha256": "df26bd2ecc201a33df482c143c8c873051a053f24fccef6687934b584320cff2"
+        },
+        {
+          "source_frame": 1772,
+          "time": 118.13138,
+          "reasons": [
+            "motion-026:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001772_000118.131s.png",
+          "sha256": "efbd838e515a21e24c6eb4da7cbbb0ec0b9d9d2d065a21a32c3db81825a57076"
+        },
+        {
+          "source_frame": 1773,
+          "time": 118.198047,
+          "reasons": [
+            "motion-026:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001773_000118.198s.png",
+          "sha256": "e1fc6e0f05aefc61528f963a55937de4dccefc298e0444c92cc309afce0a5a85"
+        },
+        {
+          "source_frame": 1774,
+          "time": 118.264714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001774_000118.265s.png",
+          "sha256": "22bb22392f2321b67ff8780c7c9a70876a9149dce32570a3339f4663fb68fa63"
+        },
+        {
+          "source_frame": 1775,
+          "time": 118.33138,
+          "reasons": [
+            "motion-027:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001775_000118.331s.png",
+          "sha256": "9856c186d944c6f03c57f317d3c1009f79fe1f0b0733cec298916dea64aafb86"
+        },
+        {
+          "source_frame": 1776,
+          "time": 118.398047,
+          "reasons": [
+            "motion-027:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001776_000118.398s.png",
+          "sha256": "5dae29da602253541aeb40a91c038ed926f6174ecf7eaacc870e5934bc10946e"
+        },
+        {
+          "source_frame": 1780,
+          "time": 118.664714,
+          "reasons": [
+            "motion-027:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001780_000118.665s.png",
+          "sha256": "35a241e95b873f53708efe624595c56b3cdb5c1164d90ed5d91f65d20d74b2ca"
+        },
+        {
+          "source_frame": 1784,
+          "time": 118.93138,
+          "reasons": [
+            "motion-027:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001784_000118.931s.png",
+          "sha256": "8e1e3d7a8c4ba8c8b52394b8c6d1a2e9c66c548f63eb9843a5f4edb99e121cd2"
+        },
+        {
+          "source_frame": 1785,
+          "time": 118.998047,
+          "reasons": [
+            "motion-027:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001785_000118.998s.png",
+          "sha256": "61559ee6cf9a3f6a3756ec9005a7acb387d72c435f153352591f1ac37af73d15"
+        },
+        {
+          "source_frame": 1789,
+          "time": 119.264714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001789_000119.265s.png",
+          "sha256": "5cc39e05cd9a3a1258fcbb734f90edf3be97519202ae34fb0735887f7b116e2a"
+        },
+        {
+          "source_frame": 1792,
+          "time": 119.464714,
+          "reasons": [
+            "motion-028:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001792_000119.465s.png",
+          "sha256": "76ea8476724133e74b1242371db4ecfb958fcddfcf7a8985fe599ccc816e569e"
+        },
+        {
+          "source_frame": 1793,
+          "time": 119.53138,
+          "reasons": [
+            "motion-028:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001793_000119.531s.png",
+          "sha256": "199516c8ddd3891057d1d46de904094f3227b648f9f9384d3e3a940ec6451de0"
+        },
+        {
+          "source_frame": 1800,
+          "time": 119.998047,
+          "reasons": [
+            "motion-028:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001800_000119.998s.png",
+          "sha256": "250446b3d2a188f0cb483cb532abbed8933a5c98e29c77542f60517b556c695e"
+        },
+        {
+          "source_frame": 1807,
+          "time": 120.464714,
+          "reasons": [
+            "motion-028:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001807_000120.465s.png",
+          "sha256": "075dd3adbc1193015518c95de7e41b8194fd6449021064be01445b0d2beb1679"
+        },
+        {
+          "source_frame": 1808,
+          "time": 120.53138,
+          "reasons": [
+            "motion-028:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001808_000120.531s.png",
+          "sha256": "b0b6dfdfec3f7ebae28f6bacf438e94bd4dd8c5b0092a734fdb8e0f4ab9aad18"
+        },
+        {
+          "source_frame": 1810,
+          "time": 120.664714,
+          "reasons": [
+            "motion-029:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001810_000120.665s.png",
+          "sha256": "ae5658da86210a702bbe341a0521799a4905eb179a646548d929b2e53b9b0e39"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:14.573775+00:00",
+      "observation": "Chinese acceptance formula, detailed-balance ladder and successive copy transforms inspected; transient travelling copies settle into separate rows, no endpoint collisions."
+    },
+    {
+      "case": "zh/Local",
+      "page": 13,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-013.png",
+      "sha256": "18f122f04c53a6fcf52d03c6cf95b2b6a97feee213d804c8717a84929becfb74",
+      "first_time": 120.73138,
+      "last_time": 126.53138,
+      "frames": [
+        {
+          "source_frame": 1811,
+          "time": 120.73138,
+          "reasons": [
+            "motion-029:last-change",
+            "motion-029:midpoint",
+            "motion-029:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001811_000120.731s.png",
+          "sha256": "ee3e98a26dacabd98fb6354cb2347600ff2531cefc3dc5b030d19f5b5042f7e7"
+        },
+        {
+          "source_frame": 1812,
+          "time": 120.798047,
+          "reasons": [
+            "motion-029:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001812_000120.798s.png",
+          "sha256": "82989c513eec3073723d1abf6dbbc551658910c680e1ee2ef78fe5ae0e04d386"
+        },
+        {
+          "source_frame": 1813,
+          "time": 120.864714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001813_000120.865s.png",
+          "sha256": "aab6e694a5789b5603f95eaae7fe202b49fbe43c4b18e70c874a383066f074be"
+        },
+        {
+          "source_frame": 1814,
+          "time": 120.93138,
+          "reasons": [
+            "motion-030:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001814_000120.931s.png",
+          "sha256": "8f923959a98140eac4c21156c87858ed6ae6c7d28d41c2ed4db52dc7896f07e0"
+        },
+        {
+          "source_frame": 1815,
+          "time": 120.998047,
+          "reasons": [
+            "motion-030:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001815_000120.998s.png",
+          "sha256": "5c2622fa8e5209ef67286b0ebe12e20c36a96929ca2e853bf4939606a99a2041"
+        },
+        {
+          "source_frame": 1819,
+          "time": 121.264714,
+          "reasons": [
+            "motion-030:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001819_000121.265s.png",
+          "sha256": "b3ace0e41b6415349a200f022402f94edb10def8f11e4ff7e680113be986fcf2"
+        },
+        {
+          "source_frame": 1823,
+          "time": 121.53138,
+          "reasons": [
+            "motion-030:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001823_000121.531s.png",
+          "sha256": "67d23608985d5f4080f6ba6e70b4f4df8df5434d8068abfe55e5cedb030098a3"
+        },
+        {
+          "source_frame": 1824,
+          "time": 121.598047,
+          "reasons": [
+            "motion-030:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001824_000121.598s.png",
+          "sha256": "b430f5216af2eee5f9476dbdb2fa3d2f31e0bc8a081dcda672c7eb27df3002ea"
+        },
+        {
+          "source_frame": 1839,
+          "time": 122.598047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001839_000122.598s.png",
+          "sha256": "b8969857dc3be9ce3f20c10a887a1a65b04529a388087add1c8e95a8d5f62153"
+        },
+        {
+          "source_frame": 1854,
+          "time": 123.598047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001854_000123.598s.png",
+          "sha256": "e4a8850e9fc2cf9fdec8795b901efd1decb8ecf8ab18f884710c89f120d1b513"
+        },
+        {
+          "source_frame": 1875,
+          "time": 124.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001875_000124.998s.png",
+          "sha256": "00e9c5361ec88cf88a22176483206c562f0a38818f2684cf6da7828a18e438b5"
+        },
+        {
+          "source_frame": 1890,
+          "time": 125.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001890_000125.998s.png",
+          "sha256": "087fdb7cfb4b39f368edae4824d1a3765172c6c58527aa77079db5b28e4a429a"
+        },
+        {
+          "source_frame": 1895,
+          "time": 126.33138,
+          "reasons": [
+            "motion-031:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001895_000126.331s.png",
+          "sha256": "4059621ba2aeabbec8c70676b851d7d529e6c36a5a51a20be3ea6ff075c2c13e"
+        },
+        {
+          "source_frame": 1896,
+          "time": 126.398047,
+          "reasons": [
+            "motion-031:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001896_000126.398s.png",
+          "sha256": "45ed315971936edecb5afab9ea62d2260d1177a311195b12c04c64aa8b261f67"
+        },
+        {
+          "source_frame": 1897,
+          "time": 126.464714,
+          "reasons": [
+            "motion-031:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001897_000126.465s.png",
+          "sha256": "ce0b993b219086f37bc81bbf16772b946df81f3e57e69ba6169d3a35b8d27027"
+        },
+        {
+          "source_frame": 1898,
+          "time": 126.53138,
+          "reasons": [
+            "motion-031:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001898_000126.531s.png",
+          "sha256": "69376c0ec489db2061d25266c1e3ff1b7741a8fecf7e2e7dd150a39cdbea85a3"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:24.548206+00:00",
+      "observation": "Boltzmann row and repaired equilibrium caption reveal/hold/fade fit; transitioning TSPpoints and cost/temperature graph remain separate."
+    },
+    {
+      "case": "zh/Local",
+      "page": 14,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-014.png",
+      "sha256": "c9b80581e6b716e40d67083a8d37c3e44d1819699d1a53ccbbd896da4921b581",
+      "first_time": 126.598047,
+      "last_time": 138.998047,
+      "frames": [
+        {
+          "source_frame": 1899,
+          "time": 126.598047,
+          "reasons": [
+            "motion-031:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001899_000126.598s.png",
+          "sha256": "cdb2824087d53cb2d49890b21240c289249e90c6ff7c349c81c108bbd155635a"
+        },
+        {
+          "source_frame": 1902,
+          "time": 126.798047,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001902_000126.798s.png",
+          "sha256": "bc1a7b8639815762357a2fd260a55620d17b13a5f2421f3861bf577649d1cd8c"
+        },
+        {
+          "source_frame": 1903,
+          "time": 126.864714,
+          "reasons": [
+            "motion-032:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001903_000126.865s.png",
+          "sha256": "cd635d8b426d87cf46d5ea8ca9d2783fd1fd5f0a24bfaef00a563942bbc9470e"
+        },
+        {
+          "source_frame": 1904,
+          "time": 126.93138,
+          "reasons": [
+            "motion-032:last-change",
+            "motion-032:midpoint",
+            "motion-032:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001904_000126.931s.png",
+          "sha256": "d67b384ee671716a4155a26fc5b12fd544d75e67d624e8862fca5b5567ef418a"
+        },
+        {
+          "source_frame": 1905,
+          "time": 126.998047,
+          "reasons": [
+            "motion-032:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001905_000126.998s.png",
+          "sha256": "9a2d16f3ebd4f4f8e4fb0537096ded0b84d7241a50fade9971f3fd739285e7be"
+        },
+        {
+          "source_frame": 1920,
+          "time": 127.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001920_000127.998s.png",
+          "sha256": "a93bcc7404c4064578f90099ee5bf5b18fc975fd52b24ef93594476466f643a1"
+        },
+        {
+          "source_frame": 1934,
+          "time": 128.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001934_000128.931s.png",
+          "sha256": "ff094e85d9d753ea41d6910ec7e10cb81810697ef9ebac5d788df550f342a04c"
+        },
+        {
+          "source_frame": 1949,
+          "time": 129.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001949_000129.931s.png",
+          "sha256": "748071dc7572e12c45b6e5ce3debd6dfb743de7485d692b4cd306752a066fb12"
+        },
+        {
+          "source_frame": 1964,
+          "time": 130.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001964_000130.931s.png",
+          "sha256": "fb39d0c2b01d0d05e60e213d10d281f55bae79e265b31359782b9179cb79a02f"
+        },
+        {
+          "source_frame": 1979,
+          "time": 131.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001979_000131.931s.png",
+          "sha256": "1f050b45080d9a849bef34f379d49013c144dd2e0f4a37a0d2850302712cee40"
+        },
+        {
+          "source_frame": 1994,
+          "time": 132.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001994_000132.931s.png",
+          "sha256": "9eb03c05c1ab6faf19ab833327ac8aedb9cd1f5ad710fd042f350d29a7c8d9cd"
+        },
+        {
+          "source_frame": 2040,
+          "time": 135.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002040_000135.998s.png",
+          "sha256": "d82104fa101ceaac3376111d6a4609d161211844a1fe0e8ccabd4d6a97bafc6b"
+        },
+        {
+          "source_frame": 2055,
+          "time": 136.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002055_000136.998s.png",
+          "sha256": "201e81aa5caa64558a90b1885a4ce8de93d1dfa078ec674536b991f73dee70ed"
+        },
+        {
+          "source_frame": 2070,
+          "time": 137.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002070_000137.998s.png",
+          "sha256": "530d3483c2f8b1d249e311f2739b219f93df3d6f20552d434e7ee7852ab944df"
+        },
+        {
+          "source_frame": 2084,
+          "time": 138.93138,
+          "reasons": [
+            "motion-033:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002084_000138.931s.png",
+          "sha256": "3d6ed8efd1ea4409bcec0ae7959570912607c0ed3fa8494c8738e6bf95baf775"
+        },
+        {
+          "source_frame": 2085,
+          "time": 138.998047,
+          "reasons": [
+            "motion-033:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002085_000138.998s.png",
+          "sha256": "a38c41ac559e0e5b70f060c12194ee7a922fc248ce75932b37f6fa0cbf0671f1"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:24.548573+00:00",
+      "observation": "Boltzmann row and repaired equilibrium caption reveal/hold/fade fit; transitioning TSPpoints and cost/temperature graph remain separate."
+    },
+    {
+      "case": "zh/Local",
+      "page": 15,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-015.png",
+      "sha256": "84546b03ae43c120265a5aa945c010f8b3ba525ca05e90f60819acb5f55f6084",
+      "first_time": 139.198047,
+      "last_time": 154.798047,
+      "frames": [
+        {
+          "source_frame": 2088,
+          "time": 139.198047,
+          "reasons": [
+            "motion-033:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002088_000139.198s.png",
+          "sha256": "99bce2ed00fb3fc2ad99ab29bffb5bf103654b01532dd1395168fc26cc6c9347"
+        },
+        {
+          "source_frame": 2091,
+          "time": 139.398047,
+          "reasons": [
+            "motion-033:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002091_000139.398s.png",
+          "sha256": "66faa8075a79069f533aa9b291d31bc7b401e051b4a397f27d77de8fc54d32b1"
+        },
+        {
+          "source_frame": 2092,
+          "time": 139.464714,
+          "reasons": [
+            "motion-033:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002092_000139.465s.png",
+          "sha256": "9ea9894dd7f5c2bcbbca600da3ff1d392153c15581f96e75c139365e9a3e20f8"
+        },
+        {
+          "source_frame": 2094,
+          "time": 139.598047,
+          "reasons": [
+            "motion-034:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002094_000139.598s.png",
+          "sha256": "161e8cb2b2a12807b9bfe6a7f7dbf92f18f1370ba81052000f8841fd115bbd01"
+        },
+        {
+          "source_frame": 2095,
+          "time": 139.664714,
+          "reasons": [
+            "motion-034:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002095_000139.665s.png",
+          "sha256": "a6aa93fda1cf4a94b11f3de9b5560d1716884f8ca638d4e9e074bd06e4e1744c"
+        },
+        {
+          "source_frame": 2108,
+          "time": 140.53138,
+          "reasons": [
+            "motion-034:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002108_000140.531s.png",
+          "sha256": "6e5c7fb2d973e1ae4e3a2c394ed797a0996ea810bb4dde3f0966653f8b6d9c3a"
+        },
+        {
+          "source_frame": 2109,
+          "time": 140.598047,
+          "reasons": [
+            "motion-034:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002109_000140.598s.png",
+          "sha256": "97f3e71337fe6a0c53e7d7505de9bc04d168659bcafc1b1397f2d8ed135020a5"
+        },
+        {
+          "source_frame": 2121,
+          "time": 141.398047,
+          "reasons": [
+            "motion-034:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002121_000141.398s.png",
+          "sha256": "e616c977a3bea3a8918bf897b17b546301003dc65abf03484e310e3fa1a9d665"
+        },
+        {
+          "source_frame": 2122,
+          "time": 141.464714,
+          "reasons": [
+            "motion-034:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002122_000141.465s.png",
+          "sha256": "472bdaed35d8a98ee82d1e3073836d4f507f1d72fc228b5688e4891710836b1b"
+        },
+        {
+          "source_frame": 2137,
+          "time": 142.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002137_000142.465s.png",
+          "sha256": "b85e2e6aff7f44ff0aeedc2cd0a8cf11bd92c38c3f37b4ef9a258b7fe7c78f8b"
+        },
+        {
+          "source_frame": 2152,
+          "time": 143.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002152_000143.465s.png",
+          "sha256": "7abc3bcf11c19dd235abfe3e158b57f624bad76a837cfa3c162d1c71ec3cdd43"
+        },
+        {
+          "source_frame": 2197,
+          "time": 146.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002197_000146.465s.png",
+          "sha256": "9cbb1c36861e68ce8bc2746bb4bf0e7a2a2e5dad45ad71d46c76080af044ced1"
+        },
+        {
+          "source_frame": 2294,
+          "time": 152.93138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002294_000152.931s.png",
+          "sha256": "39b0ad382dc343e96855d0e84741d416f8f3d319e991cb3fa146c87a474f41ab"
+        },
+        {
+          "source_frame": 2316,
+          "time": 154.398047,
+          "reasons": [
+            "motion-035:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002316_000154.398s.png",
+          "sha256": "f08b971c92098f1df6968b4fc16c93f22382fed9a4f549fbce3d2ccb69f49b98"
+        },
+        {
+          "source_frame": 2319,
+          "time": 154.598047,
+          "reasons": [
+            "motion-035:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002319_000154.598s.png",
+          "sha256": "dc6134f9e00c3d27d2ae2ecd8c6b41965f14ce8b29e04164d5f7d0f11b57cc02"
+        },
+        {
+          "source_frame": 2322,
+          "time": 154.798047,
+          "reasons": [
+            "motion-035:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002322_000154.798s.png",
+          "sha256": "2cc6792506e2aab698dd049c9e8b4fb9114c13735a1d4133b6af8221a5ff5817"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:24.548971+00:00",
+      "observation": "Boltzmann row and repaired equilibrium caption reveal/hold/fade fit; transitioning TSPpoints and cost/temperature graph remain separate."
+    },
+    {
+      "case": "zh/Local",
+      "page": 16,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-016.png",
+      "sha256": "d31dba34301cab2986407e597db3c1c2793073723b18dc8596f287795aa807e6",
+      "first_time": 154.864714,
+      "last_time": 161.53138,
+      "frames": [
+        {
+          "source_frame": 2323,
+          "time": 154.864714,
+          "reasons": [
+            "motion-035:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002323_000154.865s.png",
+          "sha256": "75de9cd2a9c3e32f61cb675e5fae864225cd8909cde46d4ebaa4e375c01356a5"
+        },
+        {
+          "source_frame": 2325,
+          "time": 154.998047,
+          "reasons": [
+            "motion-036:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002325_000154.998s.png",
+          "sha256": "cab8c6a9f6eb86503532c4ebf3c246bec854ecf618542e2121873e4f539b1799"
+        },
+        {
+          "source_frame": 2326,
+          "time": 155.064714,
+          "reasons": [
+            "motion-036:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002326_000155.065s.png",
+          "sha256": "7779d0ee9a7eb02a163ccbdb3711097b247468cc981339500b7fd5ec130c43fb"
+        },
+        {
+          "source_frame": 2328,
+          "time": 155.198047,
+          "reasons": [
+            "motion-036:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002328_000155.198s.png",
+          "sha256": "bbc5cc207f795b2b354130bce0e0c568bcc9c17b05ecebf1a4fc097e8ea239e9"
+        },
+        {
+          "source_frame": 2331,
+          "time": 155.398047,
+          "reasons": [
+            "motion-036:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002331_000155.398s.png",
+          "sha256": "188431d5d82305810a9df3b4538252aa376215dbb5aae596fb4a9b31e9fdf5da"
+        },
+        {
+          "source_frame": 2332,
+          "time": 155.464714,
+          "reasons": [
+            "motion-036:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002332_000155.465s.png",
+          "sha256": "bf86c2d0e142756803acc76bc8f3401e6f07053adab4f415c058632c71071ec2"
+        },
+        {
+          "source_frame": 2334,
+          "time": 155.598047,
+          "reasons": [
+            "motion-037:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002334_000155.598s.png",
+          "sha256": "1f25f1178489ce8ac04f2d071d84c5ac8b8bc6e5a04a5e21fa6c6dd0a12c632a"
+        },
+        {
+          "source_frame": 2335,
+          "time": 155.664714,
+          "reasons": [
+            "motion-037:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002335_000155.665s.png",
+          "sha256": "c610cd5d15cdc4f21dbf971fca90d6461efbea8ff732e45f376f22064b18ec7c"
+        },
+        {
+          "source_frame": 2348,
+          "time": 156.53138,
+          "reasons": [
+            "motion-037:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002348_000156.531s.png",
+          "sha256": "5e193a29469e9ca9a3e24ba8af91bfb351b7e5578998742cfae2b07090199e0f"
+        },
+        {
+          "source_frame": 2349,
+          "time": 156.598047,
+          "reasons": [
+            "motion-037:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002349_000156.598s.png",
+          "sha256": "145dcbdb09f537419095c4d4fe632c424688256107f3ee8c14b3e1499092e147"
+        },
+        {
+          "source_frame": 2361,
+          "time": 157.398047,
+          "reasons": [
+            "motion-037:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002361_000157.398s.png",
+          "sha256": "ba0c934509e71679db77e538ac4341d0a7bc33b122547cf1c29dac96e92b7477"
+        },
+        {
+          "source_frame": 2362,
+          "time": 157.464714,
+          "reasons": [
+            "motion-037:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002362_000157.465s.png",
+          "sha256": "a058cb7ed03cafe81354890008d3cb8f1e5f252a58a14fa7b3dac58efa1a9834"
+        },
+        {
+          "source_frame": 2377,
+          "time": 158.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002377_000158.465s.png",
+          "sha256": "679dee8ee68e7af0f5d18533aad1d81ce25ac0fdbc0eef9f2cba09e385f52f37"
+        },
+        {
+          "source_frame": 2400,
+          "time": 159.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002400_000159.998s.png",
+          "sha256": "748a927b0adb12f1cb877293f7fa17d4f0b98fbb6e5c490f8aefdbfae4cec476"
+        },
+        {
+          "source_frame": 2409,
+          "time": 160.598047,
+          "reasons": [
+            "motion-038:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002409_000160.598s.png",
+          "sha256": "9734dd3948153d9b2625969fe93af6db0c54d32abd95552e8a62c1da01b9d349"
+        },
+        {
+          "source_frame": 2423,
+          "time": 161.53138,
+          "reasons": [
+            "motion-038:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002423_000161.531s.png",
+          "sha256": "e3a38ffc2d0812bb3ee80cd165ef7877c310623f17be4f167651e049b3532f52"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:35.114576+00:00",
+      "observation": "TSPcooling tour geometry, costtrace yellowmarker and temperaturecolor/readouts progress consistently through selected swaps to7542; endpoints remain within frame."
+    },
+    {
+      "case": "zh/Local",
+      "page": 17,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-017.png",
+      "sha256": "6b1d88c4f027a982b9136f4e2062afe4752b698b6f62960754dda682d5861f8b",
+      "first_time": 161.73138,
+      "last_time": 166.598047,
+      "frames": [
+        {
+          "source_frame": 2426,
+          "time": 161.73138,
+          "reasons": [
+            "motion-038:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002426_000161.731s.png",
+          "sha256": "9b153eb23672d4fe2da41f4be9d8b2a3dcc3b25d74e315cc06cef467d1840723"
+        },
+        {
+          "source_frame": 2438,
+          "time": 162.53138,
+          "reasons": [
+            "motion-038:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002438_000162.531s.png",
+          "sha256": "7efef976d790a52141ae54d5738abbd00e4ba2ea6a859bd8352fc8fff9b85ce2"
+        },
+        {
+          "source_frame": 2444,
+          "time": 162.93138,
+          "reasons": [
+            "motion-038:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002444_000162.931s.png",
+          "sha256": "4125b596e6beac55792622276997573614d4dc34a1879ed93b8b67b0ce63f73e"
+        },
+        {
+          "source_frame": 2445,
+          "time": 162.998047,
+          "reasons": [
+            "motion-038:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002445_000162.998s.png",
+          "sha256": "679ebeaca3f13f89b2d03c9580467aacd501f6d6fd2d0fbceb614b8ff7fccd8e"
+        },
+        {
+          "source_frame": 2446,
+          "time": 163.064714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002446_000163.065s.png",
+          "sha256": "9bfd175621ca6f3edc37230db729d98e3addb4ee538d59cff9c2182b71a750be"
+        },
+        {
+          "source_frame": 2447,
+          "time": 163.13138,
+          "reasons": [
+            "motion-039:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002447_000163.131s.png",
+          "sha256": "7909e5885854ae2ea9bce1d1fadcf5cfb3e534b71e3e6980d4a59a05ff93b9e3"
+        },
+        {
+          "source_frame": 2448,
+          "time": 163.198047,
+          "reasons": [
+            "motion-039:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002448_000163.198s.png",
+          "sha256": "81790657853f38daddd81a4a776817fd3a7158de178d6142486fea2944467941"
+        },
+        {
+          "source_frame": 2462,
+          "time": 164.13138,
+          "reasons": [
+            "motion-039:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002462_000164.131s.png",
+          "sha256": "2a30e0af131c2f05ba67e143874a49ba915f30c80601f9c64532539d581892fc"
+        },
+        {
+          "source_frame": 2471,
+          "time": 164.73138,
+          "reasons": [
+            "motion-039:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002471_000164.731s.png",
+          "sha256": "d9616374b205f43523abdb479b47f14ff345c2495b1722735de87fbda71e0179"
+        },
+        {
+          "source_frame": 2477,
+          "time": 165.13138,
+          "reasons": [
+            "motion-039:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002477_000165.131s.png",
+          "sha256": "451c826434fc04777220406f7780b02135b5049a55ba6342d7529df11dcf04d6"
+        },
+        {
+          "source_frame": 2492,
+          "time": 166.13138,
+          "reasons": [
+            "motion-039:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002492_000166.131s.png",
+          "sha256": "5bab24d3ad4a11536a72a9872d857407f64219c76e82c0a84ed7f27e8af1f5eb"
+        },
+        {
+          "source_frame": 2495,
+          "time": 166.33138,
+          "reasons": [
+            "motion-039:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002495_000166.331s.png",
+          "sha256": "5cc31ca06b19bb68c8e5619f0dd07bae23c4c10f856a6d6c4e30622b7809c81b"
+        },
+        {
+          "source_frame": 2496,
+          "time": 166.398047,
+          "reasons": [
+            "motion-039:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002496_000166.398s.png",
+          "sha256": "6f5def7ecb685711f92bf15c5c0a71fff9137a59a72c7e22b9644e1d021494fc"
+        },
+        {
+          "source_frame": 2497,
+          "time": 166.464714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002497_000166.465s.png",
+          "sha256": "d2873f90cc0cf79370a5734b9a27a3e29915326fd3f33ff76f3e5f71fc8423ce"
+        },
+        {
+          "source_frame": 2498,
+          "time": 166.53138,
+          "reasons": [
+            "motion-040:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002498_000166.531s.png",
+          "sha256": "75cde09bf3bad33fd7a89f4034aa4f58498e463629bf6d927c371f8ebbf6fa6b"
+        },
+        {
+          "source_frame": 2499,
+          "time": 166.598047,
+          "reasons": [
+            "motion-040:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002499_000166.598s.png",
+          "sha256": "928c20ec86e83b56e7fd2d0a1ca4b44d06f5cce57a9eb344333e9a7f97ebc2a7"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:35.115055+00:00",
+      "observation": "TSPcooling tour geometry, costtrace yellowmarker and temperaturecolor/readouts progress consistently through selected swaps to7542; endpoints remain within frame."
+    },
+    {
+      "case": "zh/Local",
+      "page": 18,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-018.png",
+      "sha256": "0da46a59639f32256ac4cde473e739bf6ea624d425d210bef1a0e0b89b3aca86",
+      "first_time": 167.064714,
+      "last_time": 172.33138,
+      "frames": [
+        {
+          "source_frame": 2506,
+          "time": 167.064714,
+          "reasons": [
+            "motion-040:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002506_000167.065s.png",
+          "sha256": "6202f23d578fc9800282cb1b466b03707c2cc9d7a168e68bf804306864e799c7"
+        },
+        {
+          "source_frame": 2513,
+          "time": 167.53138,
+          "reasons": [
+            "motion-040:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002513_000167.531s.png",
+          "sha256": "e1a191c31073d248c958400c7f63301135c022a75793650662fac4a2d38ca119"
+        },
+        {
+          "source_frame": 2514,
+          "time": 167.598047,
+          "reasons": [
+            "motion-040:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002514_000167.598s.png",
+          "sha256": "daa3a68c06488d832c921d82106bdb1799386f4d1c3f8a8cbf560a8ab62c4fc3"
+        },
+        {
+          "source_frame": 2515,
+          "time": 167.664714,
+          "reasons": [
+            "motion-040:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002515_000167.665s.png",
+          "sha256": "9c19a223dbfc569d643c8d4f39cc53a2da4b59158b0ad846206d1b72d104ce0c"
+        },
+        {
+          "source_frame": 2530,
+          "time": 168.664714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002530_000168.665s.png",
+          "sha256": "8199af158c3478a7310abe38adc255282ffc57ceb2c354d5731abc3a77bdf2e8"
+        },
+        {
+          "source_frame": 2553,
+          "time": 170.198047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002553_000170.198s.png",
+          "sha256": "30a8c6dbd7261573eb542cdf2d3219e48bd32b8153c894fdae186d97f8312c25"
+        },
+        {
+          "source_frame": 2560,
+          "time": 170.664714,
+          "reasons": [
+            "motion-041:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002560_000170.665s.png",
+          "sha256": "5bafbd05f1048e46ddb630ab0e770669bf8ac3c5a36513ecac6fc498817f8fdf"
+        },
+        {
+          "source_frame": 2561,
+          "time": 170.73138,
+          "reasons": [
+            "motion-041:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002561_000170.731s.png",
+          "sha256": "6aa3d7b4d10e0cb4252401d8c24651d849e7af55beddb0b61a02a9129c3d653a"
+        },
+        {
+          "source_frame": 2569,
+          "time": 171.264714,
+          "reasons": [
+            "motion-041:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002569_000171.265s.png",
+          "sha256": "d44341f67bb6cf42fd1c957050d688ccc7318a97a90414c7db298cb58e290b54"
+        },
+        {
+          "source_frame": 2575,
+          "time": 171.664714,
+          "reasons": [
+            "motion-041:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002575_000171.665s.png",
+          "sha256": "9e8a8e7685ffc88e724e47b93b6c18ec62f8b33f4b0f231dc7203218ebcc89a8"
+        },
+        {
+          "source_frame": 2577,
+          "time": 171.798047,
+          "reasons": [
+            "motion-041:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002577_000171.798s.png",
+          "sha256": "352b042dcf6b9dee77d075c2e9ac63b6418271daadbbcfa36f01ad50d58f65ae"
+        },
+        {
+          "source_frame": 2578,
+          "time": 171.864714,
+          "reasons": [
+            "motion-041:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002578_000171.865s.png",
+          "sha256": "5af0161fada3b11a7280f9f5d26ec7379c8ec586a548929f45fb69d01f7c6d8c"
+        },
+        {
+          "source_frame": 2580,
+          "time": 171.998047,
+          "reasons": [
+            "motion-042:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002580_000171.998s.png",
+          "sha256": "85b3ac161e4dbab4117f184d72019e1f2f0a14e4221d9983882dfc45a23f86a8"
+        },
+        {
+          "source_frame": 2581,
+          "time": 172.064714,
+          "reasons": [
+            "motion-042:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002581_000172.065s.png",
+          "sha256": "05451b331a04e35bf1316173c5a6f9286ff2fd79739d2745aab9014626a07770"
+        },
+        {
+          "source_frame": 2583,
+          "time": 172.198047,
+          "reasons": [
+            "motion-042:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002583_000172.198s.png",
+          "sha256": "8bb9022f4bf0a524d1b4f8ab7679a394a980325fb854ca97dfd34029e3489808"
+        },
+        {
+          "source_frame": 2585,
+          "time": 172.33138,
+          "reasons": [
+            "motion-042:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002585_000172.331s.png",
+          "sha256": "6ea7b06b3c8a91e0d03d3ed1584895d574aa000668d7a5101f7475daae84f74c"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:35.115292+00:00",
+      "observation": "TSPcooling tour geometry, costtrace yellowmarker and temperaturecolor/readouts progress consistently through selected swaps to7542; endpoints remain within frame."
+    },
+    {
+      "case": "zh/Local",
+      "page": 19,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-019.png",
+      "sha256": "d68d39a4474047a5c1b6dce8886226b56a07c586fa6b004f2d45725a4a1b6c43",
+      "first_time": 172.398047,
+      "last_time": 176.464714,
+      "frames": [
+        {
+          "source_frame": 2586,
+          "time": 172.398047,
+          "reasons": [
+            "motion-042:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002586_000172.398s.png",
+          "sha256": "b5f187898a18bb68045f6cf1787e927129e8e56ccc82751850983c8401199806"
+        },
+        {
+          "source_frame": 2587,
+          "time": 172.464714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002587_000172.465s.png",
+          "sha256": "8b4e68a2762a231c3380931477bfbb392655ede0bc710e7f395255d0120d9cbf"
+        },
+        {
+          "source_frame": 2588,
+          "time": 172.53138,
+          "reasons": [
+            "motion-043:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002588_000172.531s.png",
+          "sha256": "adc2ebb0bf3cb7552532d1ce91e624905662428857754312d972ffa277e0fe96"
+        },
+        {
+          "source_frame": 2589,
+          "time": 172.598047,
+          "reasons": [
+            "motion-043:last-change",
+            "motion-043:midpoint",
+            "motion-043:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002589_000172.598s.png",
+          "sha256": "95999416763ef84ff7bd458490705d2fb91548850d400702415cd18f7b035ae8"
+        },
+        {
+          "source_frame": 2590,
+          "time": 172.664714,
+          "reasons": [
+            "motion-043:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002590_000172.665s.png",
+          "sha256": "997afcf5b2ae904986e560d627627253dbd0ab914aa3b7423a82e935a4af9a64"
+        },
+        {
+          "source_frame": 2593,
+          "time": 172.864714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002593_000172.865s.png",
+          "sha256": "c2828e7343bc6d61dbaadd11dc322952bf80e69494711e8f972a83a977e539b5"
+        },
+        {
+          "source_frame": 2596,
+          "time": 173.064714,
+          "reasons": [
+            "motion-044:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002596_000173.065s.png",
+          "sha256": "8a5255afa527ab6d96b471207fdf2e4a643d98813ff356e5d916547fc60011d8"
+        },
+        {
+          "source_frame": 2597,
+          "time": 173.13138,
+          "reasons": [
+            "motion-044:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002597_000173.131s.png",
+          "sha256": "6dd78f5809caebdba66feff4d89a07bc7fd8605cf901875f3c935dc05f49659d"
+        },
+        {
+          "source_frame": 2601,
+          "time": 173.398047,
+          "reasons": [
+            "motion-044:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002601_000173.398s.png",
+          "sha256": "cb3a9fda747180bc682280a78ce6d49122ab6c70f1b505ad9e3f15e1912413e8"
+        },
+        {
+          "source_frame": 2602,
+          "time": 173.464714,
+          "reasons": [
+            "motion-044:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002602_000173.465s.png",
+          "sha256": "3c5e46646c548f8941da3fe7f2e349bbac7837177ac7319c64761a015a545005"
+        },
+        {
+          "source_frame": 2609,
+          "time": 173.93138,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002609_000173.931s.png",
+          "sha256": "cc3c49a7324368d903d3d83e59510d419426b09ecc3f6fa12bf63701ed7a95ba"
+        },
+        {
+          "source_frame": 2615,
+          "time": 174.33138,
+          "reasons": [
+            "motion-045:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002615_000174.331s.png",
+          "sha256": "74c74692494eca5c0374f521318f77addcc889c1c9f5ff098df8cd5a94bae73d"
+        },
+        {
+          "source_frame": 2616,
+          "time": 174.398047,
+          "reasons": [
+            "motion-045:last-change",
+            "motion-045:midpoint",
+            "motion-045:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002616_000174.398s.png",
+          "sha256": "588f6b23187045968e396eb154099bf7a393b88f16f330a314e7402840fc5394"
+        },
+        {
+          "source_frame": 2617,
+          "time": 174.464714,
+          "reasons": [
+            "motion-045:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002617_000174.465s.png",
+          "sha256": "9f819b20666b81ffc5384be9d2bf229159b9b895e39dd152cffcac4a26e38c2e"
+        },
+        {
+          "source_frame": 2632,
+          "time": 175.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002632_000175.465s.png",
+          "sha256": "7c299598d3bdde22e5e952ce4daecaea38384c36ee8455aabb84d7a07b648479"
+        },
+        {
+          "source_frame": 2647,
+          "time": 176.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002647_000176.465s.png",
+          "sha256": "d072af5ce052bb2c73974b6835973671b856fc17f4128496451734319a1fa6b5"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:45.245111+00:00",
+      "observation": "Cooling laststeps/hold/fade and candidate-costbudgetbar construction fit; translated commonbudget/range footer is inside bottom safearea."
+    },
+    {
+      "case": "zh/Local",
+      "page": 20,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-020.png",
+      "sha256": "eb2f0859a2fecd5be326a383f28ad81d63839eed0363dab30731dc5198ba82b9",
+      "first_time": 181.598047,
+      "last_time": 184.998047,
+      "frames": [
+        {
+          "source_frame": 2724,
+          "time": 181.598047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002724_000181.598s.png",
+          "sha256": "a11da85401b7b2d859ab9f52a3c608aeaf7460240f586ba21fa8bb77d0c502ef"
+        },
+        {
+          "source_frame": 2740,
+          "time": 182.664714,
+          "reasons": [
+            "motion-046:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002740_000182.665s.png",
+          "sha256": "48f9360901f8b0196a6fb2c022b3f7dfe463a309363da8e2d15cd9ebb4494f69"
+        },
+        {
+          "source_frame": 2741,
+          "time": 182.73138,
+          "reasons": [
+            "motion-046:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002741_000182.731s.png",
+          "sha256": "fbecf2f45a0a24af1bb9d891de4f9a02c66cfd19e1f177abf7b7f84d8359cf96"
+        },
+        {
+          "source_frame": 2742,
+          "time": 182.798047,
+          "reasons": [
+            "motion-046:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002742_000182.798s.png",
+          "sha256": "f190bab155c5604bdbc17e250f71676465da2b56a06eff0d879275884a0057f8"
+        },
+        {
+          "source_frame": 2743,
+          "time": 182.864714,
+          "reasons": [
+            "motion-046:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002743_000182.865s.png",
+          "sha256": "dee2a70bb670a1598e453db9858f4054a8ab03ed00763864e61f8031781ef756"
+        },
+        {
+          "source_frame": 2745,
+          "time": 182.998047,
+          "reasons": [
+            "motion-047:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002745_000182.998s.png",
+          "sha256": "5f07fd1e904cccf830fd2a3d0fbff059aa97877da93b3c83c95c0c32aeccd1f1"
+        },
+        {
+          "source_frame": 2746,
+          "time": 183.064714,
+          "reasons": [
+            "motion-047:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002746_000183.065s.png",
+          "sha256": "7a83030950258bed05458e28d3d260a8ddcfc24d11968c35c248e33a7644694a"
+        },
+        {
+          "source_frame": 2753,
+          "time": 183.53138,
+          "reasons": [
+            "motion-047:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002753_000183.531s.png",
+          "sha256": "63cf9510ee514ce8fbeedffa0e7e472393ad0170bd6377545e538c8c9f12fb28"
+        },
+        {
+          "source_frame": 2760,
+          "time": 183.998047,
+          "reasons": [
+            "motion-047:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002760_000183.998s.png",
+          "sha256": "61402777546af982f3d0f74ec4e81a99dcf39d7fd06b71662f3a550c5be9c237"
+        },
+        {
+          "source_frame": 2764,
+          "time": 184.264714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002764_000184.265s.png",
+          "sha256": "6c80764f8725fd9c91f98d4cee06b829c73d3a331895be6dcad89972a30bfd27"
+        },
+        {
+          "source_frame": 2766,
+          "time": 184.398047,
+          "reasons": [
+            "motion-048:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002766_000184.398s.png",
+          "sha256": "8ac3fd32890d7f579bb556d82c8a816bfa73f2d1c9b4f2a998f54a8001a73312"
+        },
+        {
+          "source_frame": 2767,
+          "time": 184.464714,
+          "reasons": [
+            "motion-048:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002767_000184.465s.png",
+          "sha256": "6712137d798ed4646e089c384a432a1a3333f9ed1d44ca6e8729e6c1efc366e3"
+        },
+        {
+          "source_frame": 2769,
+          "time": 184.598047,
+          "reasons": [
+            "motion-048:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002769_000184.598s.png",
+          "sha256": "bbe1d5da635d6e68670eb849b1d61d011fff87c3fe8a6b29650ccf8bb87550ee"
+        },
+        {
+          "source_frame": 2772,
+          "time": 184.798047,
+          "reasons": [
+            "motion-048:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002772_000184.798s.png",
+          "sha256": "66f8a3c8eeda447c8851e589184bfc8745493f17d06a84637ecfc603084124d5"
+        },
+        {
+          "source_frame": 2773,
+          "time": 184.864714,
+          "reasons": [
+            "motion-048:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002773_000184.865s.png",
+          "sha256": "c59e4e0dbe95f3224022c3174d69fda8bf733b0a9f1e806ce74ecdb1c4c42913"
+        },
+        {
+          "source_frame": 2775,
+          "time": 184.998047,
+          "reasons": [
+            "motion-049:before",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002775_000184.998s.png",
+          "sha256": "b263eeffff75e220d5726f5ad4970219fff75ef7b05d13952d09e130ae664a0a"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:45.245349+00:00",
+      "observation": "Cooling laststeps/hold/fade and candidate-costbudgetbar construction fit; translated commonbudget/range footer is inside bottom safearea."
+    },
+    {
+      "case": "zh/Local",
+      "page": 21,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-021.png",
+      "sha256": "15de7e4a8ed99444a9be6bc54915a7e1a5bfca7640f8901e9d24c9cff740991b",
+      "first_time": 185.064714,
+      "last_time": 216.464714,
+      "frames": [
+        {
+          "source_frame": 2776,
+          "time": 185.064714,
+          "reasons": [
+            "motion-049:last-change",
+            "motion-049:midpoint",
+            "motion-049:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002776_000185.065s.png",
+          "sha256": "5306b0908f46aaa46540d8c0e722c047d836d2b7ecba990e92a8149dca487935"
+        },
+        {
+          "source_frame": 2777,
+          "time": 185.13138,
+          "reasons": [
+            "motion-049:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002777_000185.131s.png",
+          "sha256": "23e40a75a5b69fe06997795de85af96d22859e7c2e9861afb6286ba730384490"
+        },
+        {
+          "source_frame": 2792,
+          "time": 186.13138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0002792_000186.131s.png",
+          "sha256": "bbc6b07a180cbf0e69673e3e6c983b9159ae608cf3e360fdc83160598d105c65"
+        },
+        {
+          "source_frame": 3015,
+          "time": 200.998047,
+          "reasons": [
+            "motion-050:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003015_000200.998s.png",
+          "sha256": "b8ed9e5aadb6ad77951a01774d9de6fb3eef94b773ce8eb3014d7799e221a6d4"
+        },
+        {
+          "source_frame": 3016,
+          "time": 201.064714,
+          "reasons": [
+            "motion-050:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003016_000201.065s.png",
+          "sha256": "646e6245663145a65ca329e6f5685050281ce4e0da304b83f67a356d8f3ddab6"
+        },
+        {
+          "source_frame": 3018,
+          "time": 201.198047,
+          "reasons": [
+            "motion-050:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003018_000201.198s.png",
+          "sha256": "83508dab6fdbf48981a5b8a878f51fdad43a755d90efd52949fd2ed3903f53b4"
+        },
+        {
+          "source_frame": 3021,
+          "time": 201.398047,
+          "reasons": [
+            "motion-050:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003021_000201.398s.png",
+          "sha256": "41bf142c159d785518cea162d95c763055fa9b74fcfccc2b47419513836e01a5"
+        },
+        {
+          "source_frame": 3022,
+          "time": 201.464714,
+          "reasons": [
+            "motion-050:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003022_000201.465s.png",
+          "sha256": "84104ef535f7a362b66140b2efefb83ea2a5c83486d524429b4fac5f1b3715e6"
+        },
+        {
+          "source_frame": 3025,
+          "time": 201.664714,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003025_000201.665s.png",
+          "sha256": "bfff3e8fd208e6f7447c73cc051146dd5ab816e3033b0fd98d24df67157fdf5f"
+        },
+        {
+          "source_frame": 3027,
+          "time": 201.798047,
+          "reasons": [
+            "motion-051:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003027_000201.798s.png",
+          "sha256": "84b1325d493f267b6bbe29b37bc1a4e57765c6677dbb83442b3bef288fe821f6"
+        },
+        {
+          "source_frame": 3028,
+          "time": 201.864714,
+          "reasons": [
+            "motion-051:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003028_000201.865s.png",
+          "sha256": "db19b676638db9437dd04e7b8c79c198f7f15587242a2ad2e674a8de66dd456e"
+        },
+        {
+          "source_frame": 3032,
+          "time": 202.13138,
+          "reasons": [
+            "motion-051:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003032_000202.131s.png",
+          "sha256": "ccbe86109e0cdbc057603fa6516284465effaca55bd94aeaaea913af973382c5"
+        },
+        {
+          "source_frame": 3036,
+          "time": 202.398047,
+          "reasons": [
+            "motion-051:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003036_000202.398s.png",
+          "sha256": "580dcd9d2f115f2ce221d2f7b4a7e5589074ca85704e852db00df7b6ecd8bf57"
+        },
+        {
+          "source_frame": 3037,
+          "time": 202.464714,
+          "reasons": [
+            "motion-051:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003037_000202.465s.png",
+          "sha256": "d0856beea7af687687ae7ec66b4cbb7c1cb873b7c086ed06897e5b029c9276a8"
+        },
+        {
+          "source_frame": 3052,
+          "time": 203.464714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003052_000203.465s.png",
+          "sha256": "96c9e549a9c68d42b16b23fd12918a71388cef4fa735d74a31d934eca16f45fd"
+        },
+        {
+          "source_frame": 3247,
+          "time": 216.464714,
+          "reasons": [
+            "motion-052:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003247_000216.465s.png",
+          "sha256": "747c999e9b55b00ece44e0fdcc896e39ed7a8fdbc5225d6d7f848973dfcf684c"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:45.245462+00:00",
+      "observation": "Cooling laststeps/hold/fade and candidate-costbudgetbar construction fit; translated commonbudget/range footer is inside bottom safearea."
+    },
+    {
+      "case": "zh/Local",
+      "page": 22,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-022.png",
+      "sha256": "8cc8d7aef70526f0471a818185b8d499db5790d22b70c1cbb5243e81ebb25395",
+      "first_time": 216.53138,
+      "last_time": 226.798047,
+      "frames": [
+        {
+          "source_frame": 3248,
+          "time": 216.53138,
+          "reasons": [
+            "motion-052:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003248_000216.531s.png",
+          "sha256": "ea32d53ce14e8357a31bbbd6066ddc8e04595d7acfceb8a8e82030d97f478a98"
+        },
+        {
+          "source_frame": 3258,
+          "time": 217.198047,
+          "reasons": [
+            "motion-052:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003258_000217.198s.png",
+          "sha256": "d0cfd1b1ee22eda4a6c458a1dd703ed627ae846888b9300cdde68befd763c941"
+        },
+        {
+          "source_frame": 3262,
+          "time": 217.464714,
+          "reasons": [
+            "motion-052:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003262_000217.465s.png",
+          "sha256": "fceeda27b7987438417d298691e498791fe41101a7b4399144eb87849197bb7a"
+        },
+        {
+          "source_frame": 3268,
+          "time": 217.864714,
+          "reasons": [
+            "motion-052:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003268_000217.865s.png",
+          "sha256": "c121f4ad822542109e6f31839e17b0010e8f0220786e5132dfd0b8d98c45d82f"
+        },
+        {
+          "source_frame": 3269,
+          "time": 217.93138,
+          "reasons": [
+            "motion-052:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003269_000217.931s.png",
+          "sha256": "808f3dce2eb5b67f17b0bd6f93652eafaad2ab9a9c758daab29ed506c037ff87"
+        },
+        {
+          "source_frame": 3270,
+          "time": 217.998047,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003270_000217.998s.png",
+          "sha256": "da84e7376685a14103d8d00348ffaa14e94f42741b7240e10baf34fba379024a"
+        },
+        {
+          "source_frame": 3271,
+          "time": 218.064714,
+          "reasons": [
+            "motion-053:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003271_000218.065s.png",
+          "sha256": "59ad356f6e0e5e145314d4601162a1f48f03f556b29c10a2e1911c9fe9402608"
+        },
+        {
+          "source_frame": 3272,
+          "time": 218.13138,
+          "reasons": [
+            "motion-053:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003272_000218.131s.png",
+          "sha256": "72a357bf5db5b920d9abee238a891a5cab9ff7d5a38e2ab4ede824cb27acbd3c"
+        },
+        {
+          "source_frame": 3276,
+          "time": 218.398047,
+          "reasons": [
+            "motion-053:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003276_000218.398s.png",
+          "sha256": "e27b602bcbcd01cfe8c41442c24bb71e5d087b66cdd016a4a9371a2bfc32944c"
+        },
+        {
+          "source_frame": 3280,
+          "time": 218.664714,
+          "reasons": [
+            "motion-053:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003280_000218.665s.png",
+          "sha256": "43d27e8231786b4d69d445e25a5d34d88ae8e89f1634b891e6edf175030b7f55"
+        },
+        {
+          "source_frame": 3281,
+          "time": 218.73138,
+          "reasons": [
+            "motion-053:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003281_000218.731s.png",
+          "sha256": "26096d42973d2cb068c52da2cc5b3dbf090162d968f6b174fb5f140938256e4a"
+        },
+        {
+          "source_frame": 3296,
+          "time": 219.73138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003296_000219.731s.png",
+          "sha256": "6229db07e090a91101a831de0b476888313c9441284c4ec85a7462e61f240ba6"
+        },
+        {
+          "source_frame": 3368,
+          "time": 224.53138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003368_000224.531s.png",
+          "sha256": "130e2e1d8743344af2470bad7ad31fe374b0ef8cecede5e6bbf1b1f716d2c5bc"
+        },
+        {
+          "source_frame": 3395,
+          "time": 226.33138,
+          "reasons": [
+            "motion-054:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003395_000226.331s.png",
+          "sha256": "5c67b1acd9053ae4f0e9fb2e79aee2aadd601db9aa78dea7940fc707a6a472b4"
+        },
+        {
+          "source_frame": 3396,
+          "time": 226.398047,
+          "reasons": [
+            "motion-054:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003396_000226.398s.png",
+          "sha256": "6aefac2ce566357bcb2bc410a3ced6d9e42d6108d6cfa65fdafb65efff2335ae"
+        },
+        {
+          "source_frame": 3402,
+          "time": 226.798047,
+          "reasons": [
+            "motion-054:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003402_000226.798s.png",
+          "sha256": "42e105d6a9bbd2c70ec35be352cec5ea46938514b8f3317286dedc88ba697642"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:56.636751+00:00",
+      "observation": "Allfive commonbudgetbars/readouts/rangewhiskers and orderedcrossover ABCD examples inspected; geneticcurve/reveal fits beneath parentstrip."
+    },
+    {
+      "case": "zh/Local",
+      "page": 23,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-023.png",
+      "sha256": "597f9bacbd9cd02859b967ab07ed565ac5cee07fdf931de2ba945b9ca88cd99a",
+      "first_time": 231.264714,
+      "last_time": 236.264714,
+      "frames": [
+        {
+          "source_frame": 3469,
+          "time": 231.264714,
+          "reasons": [
+            "motion-055:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003469_000231.265s.png",
+          "sha256": "0622f24cd835390c9b5c484a2345df8227d0dfb78daa464fc8d93a7e6a2bbcb5"
+        },
+        {
+          "source_frame": 3470,
+          "time": 231.33138,
+          "reasons": [
+            "motion-055:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003470_000231.331s.png",
+          "sha256": "54f4481e522249c255454335642cd71353b4ff5f3d66d5c8445a47a65cbbc066"
+        },
+        {
+          "source_frame": 3471,
+          "time": 231.398047,
+          "reasons": [
+            "motion-055:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003471_000231.398s.png",
+          "sha256": "5ad1a83f90357abcff33912d5d746a0f049cb8ccfc0dffc4d0e9d74f1cca09fe"
+        },
+        {
+          "source_frame": 3472,
+          "time": 231.464714,
+          "reasons": [
+            "motion-055:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003472_000231.465s.png",
+          "sha256": "eef2ac5d29105415810c223d04c56337fd8e69a49f03b22c33305f535c40e4bf"
+        },
+        {
+          "source_frame": 3475,
+          "time": 231.664714,
+          "reasons": [
+            "motion-056:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003475_000231.665s.png",
+          "sha256": "47a848d8252c748cdf985bb3593eaacf6f605c5580b0dbe60ff24c2f7c0ec4d8"
+        },
+        {
+          "source_frame": 3481,
+          "time": 232.064714,
+          "reasons": [
+            "motion-056:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003481_000232.065s.png",
+          "sha256": "ca284c7c9b468d8cd26bf6f69670b385929c98c901da70bd8abac66778c1f2d5"
+        },
+        {
+          "source_frame": 3487,
+          "time": 232.464714,
+          "reasons": [
+            "motion-056:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003487_000232.465s.png",
+          "sha256": "708607042afcb821f65e2d40f6b35085e3712f4aab1a9270c65076056d33ddec"
+        },
+        {
+          "source_frame": 3488,
+          "time": 232.53138,
+          "reasons": [
+            "motion-056:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003488_000232.531s.png",
+          "sha256": "d12a3572c18aaa37da877bba2d0910445de89864ce1ff6dc982370d6c522456e"
+        },
+        {
+          "source_frame": 3491,
+          "time": 232.73138,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003491_000232.731s.png",
+          "sha256": "99481e173f97ecaba59a655da2c62d34cb1eb8ff59a206c53ec5aa959ab885c7"
+        },
+        {
+          "source_frame": 3493,
+          "time": 232.864714,
+          "reasons": [
+            "motion-057:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003493_000232.865s.png",
+          "sha256": "ef7ccbac1b0db6aaeb7ec5e12998e77b493f7706f54630b2af04fb8cff8e19c1"
+        },
+        {
+          "source_frame": 3494,
+          "time": 232.93138,
+          "reasons": [
+            "motion-057:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003494_000232.931s.png",
+          "sha256": "0f457537cf2f4458ccf9de64d998fdf0247378a75040ffb49c4432ec31328f87"
+        },
+        {
+          "source_frame": 3499,
+          "time": 233.264714,
+          "reasons": [
+            "motion-057:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003499_000233.265s.png",
+          "sha256": "d096e646e55207454abfc479839881b615845f9074c8184dca36c631345803f3"
+        },
+        {
+          "source_frame": 3505,
+          "time": 233.664714,
+          "reasons": [
+            "motion-057:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003505_000233.665s.png",
+          "sha256": "b6a9f03c4cf4e44c8fc5f688f8cf98251e6933cbea648da2bef7fc64b32aee19"
+        },
+        {
+          "source_frame": 3506,
+          "time": 233.73138,
+          "reasons": [
+            "motion-057:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003506_000233.731s.png",
+          "sha256": "b5cb3228366fb085bfb30e2ca239226fcc5b9c40eb0028feb1632286302a210b"
+        },
+        {
+          "source_frame": 3521,
+          "time": 234.73138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003521_000234.731s.png",
+          "sha256": "a16d46a8a51bce6a302b49896b5f3134c2f422fe25799ec181854027f4585b4b"
+        },
+        {
+          "source_frame": 3544,
+          "time": 236.264714,
+          "reasons": [
+            "motion-058:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003544_000236.265s.png",
+          "sha256": "8c1bd320a14fded9319672b15277270a6006e812f1f675b8d48250d67558d739"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:56.636951+00:00",
+      "observation": "Allfive commonbudgetbars/readouts/rangewhiskers and orderedcrossover ABCD examples inspected; geneticcurve/reveal fits beneath parentstrip."
+    },
+    {
+      "case": "zh/Local",
+      "page": 24,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-024.png",
+      "sha256": "b90f58b2813c2accaa94225ea92ad4cdefeafd3dc4d8647b19ff74ef84b4cfac",
+      "first_time": 236.798047,
+      "last_time": 248.264714,
+      "frames": [
+        {
+          "source_frame": 3552,
+          "time": 236.798047,
+          "reasons": [
+            "motion-058:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003552_000236.798s.png",
+          "sha256": "b17e46961fa6aa0519347951843a750735d191eb39eb42de8e52378c619a9321"
+        },
+        {
+          "source_frame": 3558,
+          "time": 237.198047,
+          "reasons": [
+            "motion-058:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003558_000237.198s.png",
+          "sha256": "913300b30ed48a51ed3b7a94f4fba737eee730327e9d7b88199499d3c583def1"
+        },
+        {
+          "source_frame": 3559,
+          "time": 237.264714,
+          "reasons": [
+            "motion-058:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003559_000237.265s.png",
+          "sha256": "91a54e63afc43d0a5c401cbd2142547ac7cf874e3c4087ec914f1f58770df518"
+        },
+        {
+          "source_frame": 3560,
+          "time": 237.33138,
+          "reasons": [
+            "motion-058:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003560_000237.331s.png",
+          "sha256": "20a84210a385ac4ac58804880897f27620eaf96f480b0020b429942f87275c11"
+        },
+        {
+          "source_frame": 3575,
+          "time": 238.33138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003575_000238.331s.png",
+          "sha256": "1755dc7ca57cf6beeea647baf8cb4bd854264b03c4c69a1f56c0426a07dd940e"
+        },
+        {
+          "source_frame": 3590,
+          "time": 239.33138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003590_000239.331s.png",
+          "sha256": "4a580657e1808ab8bd5c0c5282faea266ca84694759c090ae0b97c3999f7c7e7"
+        },
+        {
+          "source_frame": 3677,
+          "time": 245.13138,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003677_000245.131s.png",
+          "sha256": "53d441c229b0265d785c0cd0ce524b67c447a4a3c8d33ce85457be2643e19a5b"
+        },
+        {
+          "source_frame": 3704,
+          "time": 246.93138,
+          "reasons": [
+            "motion-059:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003704_000246.931s.png",
+          "sha256": "c70ee494c33e427aeb29553cb754de04a337c6956fb3440c9f4b36f7e4592934"
+        },
+        {
+          "source_frame": 3705,
+          "time": 246.998047,
+          "reasons": [
+            "motion-059:last-change",
+            "motion-059:midpoint",
+            "motion-059:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003705_000246.998s.png",
+          "sha256": "d64d5a8fa219c54d93cc5a88e3e7ad38517b6da7cc3905d3b845e4cc36fde0ca"
+        },
+        {
+          "source_frame": 3706,
+          "time": 247.064714,
+          "reasons": [
+            "motion-059:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003706_000247.065s.png",
+          "sha256": "8ef38cddfd8d7b768d509b6a485329b5774d52ee3c01e0bc134e9609c16abf05"
+        },
+        {
+          "source_frame": 3711,
+          "time": 247.398047,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003711_000247.398s.png",
+          "sha256": "ce411d90f798e609cddd0a25da71204907d85e5471d4052bde33547c949a7de9"
+        },
+        {
+          "source_frame": 3715,
+          "time": 247.664714,
+          "reasons": [
+            "motion-060:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003715_000247.665s.png",
+          "sha256": "8b733b15605d40833e5b0e3b17683f734d7d5c7c78fd35a92d298e464b11609d"
+        },
+        {
+          "source_frame": 3716,
+          "time": 247.73138,
+          "reasons": [
+            "motion-060:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003716_000247.731s.png",
+          "sha256": "a37985e50c25cd3c0803a3938e7f5dae0dda94f798964194bd14af158daa7519"
+        },
+        {
+          "source_frame": 3720,
+          "time": 247.998047,
+          "reasons": [
+            "motion-060:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003720_000247.998s.png",
+          "sha256": "5504d4dca58ba165dff1e5c27169bba7d41af771ce268e3b7df44dc42aa09fda"
+        },
+        {
+          "source_frame": 3723,
+          "time": 248.198047,
+          "reasons": [
+            "motion-060:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003723_000248.198s.png",
+          "sha256": "c48e862c39860a38c654f09e3202a8cc2297a4d07e1ccd6f0009398db6e913c4"
+        },
+        {
+          "source_frame": 3724,
+          "time": 248.264714,
+          "reasons": [
+            "motion-060:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003724_000248.265s.png",
+          "sha256": "d087473951295102901baea9cb4b9904e2f888d8a4b2b2e72aa9e120a9148b8c"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:21:56.637143+00:00",
+      "observation": "Allfive commonbudgetbars/readouts/rangewhiskers and orderedcrossover ABCD examples inspected; geneticcurve/reveal fits beneath parentstrip."
+    },
+    {
+      "case": "zh/Local",
+      "page": 25,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-025.png",
+      "sha256": "8ebaf52cbf3daae9d3243f30f617ea58f5f76f77b1ace9eaf61f3632d3fcefed",
+      "first_time": 248.598047,
+      "last_time": 259.931055,
+      "frames": [
+        {
+          "source_frame": 3729,
+          "time": 248.598047,
+          "reasons": [
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003729_000248.598s.png",
+          "sha256": "e28babddd2836d983acf80a15ff38e0da023c76de69be809952bd78366280a3e"
+        },
+        {
+          "source_frame": 3733,
+          "time": 248.864714,
+          "reasons": [
+            "motion-061:before"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003733_000248.865s.png",
+          "sha256": "5128cb86356343f2bc5598637f5a863a515d02675ad65c6cb7551bde18d0fb17"
+        },
+        {
+          "source_frame": 3734,
+          "time": 248.93138,
+          "reasons": [
+            "motion-061:last-change",
+            "motion-061:midpoint",
+            "motion-061:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003734_000248.931s.png",
+          "sha256": "3792bfc633887b8ea6e506733683da8f0472532822d59bd1c15164f52df7d224"
+        },
+        {
+          "source_frame": 3735,
+          "time": 248.998047,
+          "reasons": [
+            "motion-061:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003735_000248.998s.png",
+          "sha256": "4cdf1cfcd4cd2f8014efdf8ef4beef0568c33164e98ced6bede941220c1f9062"
+        },
+        {
+          "source_frame": 3750,
+          "time": 249.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003750_000249.998s.png",
+          "sha256": "4db3c6c227c7e6a6cb29f4d171ab3478a755e56b3c8ba9cec646773be35c500e"
+        },
+        {
+          "source_frame": 3765,
+          "time": 250.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003765_000250.998s.png",
+          "sha256": "ddd632c31ecdcd78fdffbc59fe5aeb53f6b475a85231ef65324a035780ed3b7d"
+        },
+        {
+          "source_frame": 3780,
+          "time": 251.998047,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003780_000251.998s.png",
+          "sha256": "a11e2fe92c2df1f1a4529b6ce122be800653fc3e96a4221f02ace97cab3fae74"
+        },
+        {
+          "source_frame": 3820,
+          "time": 254.664714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003820_000254.665s.png",
+          "sha256": "7e6c91de733805c6dc28f8d105dd37c6d443bc600892515abe4b7e39cefe447d"
+        },
+        {
+          "source_frame": 3835,
+          "time": 255.664714,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003835_000255.665s.png",
+          "sha256": "09af77ada522ad891495cf678e88b02101eb3cddebc4f3623de239d0b51269f3"
+        },
+        {
+          "source_frame": 3845,
+          "time": 256.33138,
+          "reasons": [
+            "motion-062:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003845_000256.331s.png",
+          "sha256": "46ee86c2fb5b8a1158117adb6dcae72dd360df529d4515b7850a37fe6e28a612"
+        },
+        {
+          "source_frame": 3856,
+          "time": 257.064714,
+          "reasons": [
+            "motion-062:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003856_000257.065s.png",
+          "sha256": "ebbf102aa92d0873668de5ddfda29c9eaf7aca472dc768aead9820a488086a4a"
+        },
+        {
+          "source_frame": 3859,
+          "time": 257.264714,
+          "reasons": [
+            "motion-062:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003859_000257.265s.png",
+          "sha256": "3c0be4c9a9f6a2cc2791bb79be9d5184eb669d22a48fccdadc37cf53268c70b1"
+        },
+        {
+          "source_frame": 3868,
+          "time": 257.864388,
+          "reasons": [
+            "motion-062:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003868_000257.864s.png",
+          "sha256": "2cf9aa67792ed2fab25665b1473463cafb84619d3fa219f8548d7d8cac2de495"
+        },
+        {
+          "source_frame": 3869,
+          "time": 257.931055,
+          "reasons": [
+            "motion-062:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003869_000257.931s.png",
+          "sha256": "c5494cf53e7b5f2a47d338d07c12d6ae96e63b5e11f24139e7fae82fbca16e12"
+        },
+        {
+          "source_frame": 3884,
+          "time": 258.931055,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003884_000258.931s.png",
+          "sha256": "717b4bb6fd23e7fe7fdac3e0790e78469df9097fbd2504eb1b84030964ed2e94"
+        },
+        {
+          "source_frame": 3899,
+          "time": 259.931055,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003899_000259.931s.png",
+          "sha256": "023b6218af5d4b74f1c17b37cd107c145484fc93a8620c114b6592ac0e4999ba"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:05.545120+00:00",
+      "observation": "Final geneticcurve and2023/2025cards retained margins with lastfade; no clipping/collisions observed."
+    },
+    {
+      "case": "zh/Local",
+      "page": 26,
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/unique-review/sheet-026.png",
+      "sha256": "0c63acd60352d4e69d646a20eb6e977936109e5f087bf8a7bcc66f4437fd0034",
+      "first_time": 262.931055,
+      "last_time": 277.664388,
+      "frames": [
+        {
+          "source_frame": 3944,
+          "time": 262.931055,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003944_000262.931s.png",
+          "sha256": "885435a4e7512a2cf51df2a129e5cb3983c662db11a4277afd928ddff6bbc2fb"
+        },
+        {
+          "source_frame": 4127,
+          "time": 275.131055,
+          "reasons": [
+            "maximum-gap-fill"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004127_000275.131s.png",
+          "sha256": "85bd473eb891ed95b4447a433cc1043cc5b128854918286a8b7208d52ddbcada"
+        },
+        {
+          "source_frame": 4145,
+          "time": 276.331055,
+          "reasons": [
+            "motion-063:onset"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004145_000276.331s.png",
+          "sha256": "6695977a9f49ecc132c3e2c4f24bf3335ac550b3ccf0e7fe9f266eef8fd13c61"
+        },
+        {
+          "source_frame": 4154,
+          "time": 276.931055,
+          "reasons": [
+            "motion-063:midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004154_000276.931s.png",
+          "sha256": "75789ad5ba3f0f8ffb2d93e90188c8737ea5fc2c08f4fc361b5738d0d8a08693"
+        },
+        {
+          "source_frame": 4159,
+          "time": 277.264388,
+          "reasons": [
+            "motion-063:dense"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004159_000277.264s.png",
+          "sha256": "81934faca846c4946c24c00046e8e70796648091b9338bc1303bc1aa0189bad0"
+        },
+        {
+          "source_frame": 4163,
+          "time": 277.531055,
+          "reasons": [
+            "motion-063:last-change"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004163_000277.531s.png",
+          "sha256": "dc2b36ed3c08a77dc44c3a60363cefca92fe41e8fbc3005fa79b35b3c8eecdd5"
+        },
+        {
+          "source_frame": 4164,
+          "time": 277.597721,
+          "reasons": [
+            "motion-063:after"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004164_000277.598s.png",
+          "sha256": "792f4e7fea64311981d6f2067b40820eadff159b49c6aef238cc25fb3e3ab778"
+        },
+        {
+          "source_frame": 4165,
+          "time": 277.664388,
+          "reasons": [
+            "file-last-frame",
+            "static-midpoint"
+          ],
+          "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0004165_000277.664s.png",
+          "sha256": "a60e198a1848763ab75e1a9ad87b772009a39dabf87a381555dbd434e8dcedf9"
+        }
+      ],
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:05.545323+00:00",
+      "observation": "Final geneticcurve and2023/2025cards retained margins with lastfade; no clipping/collisions observed."
+    }
+  ],
+  "selected_times_covered": 553,
+  "all_selected_times_covered": true,
+  "viewed_unique_pngs": 408,
+  "native_views": [
+    {
+      "case": "zh/Local",
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001174_000078.265s.png",
+      "sha256": "7edfe2618adaa9e5c0fc218f5490d8c81fef8e50ab0c54135d2e9fead687fff2",
+      "source_frame": 1174,
+      "time": 78.265039,
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:24.267580+00:00",
+      "observation": "Native translated queen summary, repaired equilibriumcaption, commonbudgetchartfooter and finalgenetic/historycard layout inspected; readable separated labels and no clipping. Caption clearly visible; no oldZH movie exists forbeforecomparison."
+    },
+    {
+      "case": "zh/Local",
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0001949_000129.931s.png",
+      "sha256": "748071dc7572e12c45b6e5ce3debd6dfb743de7485d692b4cd306752a066fb12",
+      "source_frame": 1949,
+      "time": 129.93138,
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:24.267746+00:00",
+      "observation": "Native translated queen summary, repaired equilibriumcaption, commonbudgetchartfooter and finalgenetic/historycard layout inspected; readable separated labels and no clipping. Caption clearly visible; no oldZH movie exists forbeforecomparison."
+    },
+    {
+      "case": "zh/Local",
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003368_000224.531s.png",
+      "sha256": "130e2e1d8743344af2470bad7ad31fe374b0ef8cecede5e6bbf1b1f716d2c5bc",
+      "source_frame": 3368,
+      "time": 224.53138,
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:24.267890+00:00",
+      "observation": "Native translated queen summary, repaired equilibriumcaption, commonbudgetchartfooter and finalgenetic/historycard layout inspected; readable separated labels and no clipping. Caption clearly visible; no oldZH movie exists forbeforecomparison."
+    },
+    {
+      "case": "zh/Local",
+      "file": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Local-dense-final/frames/0003944_000262.931s.png",
+      "sha256": "885435a4e7512a2cf51df2a129e5cb3983c662db11a4277afd928ddff6bbc2fb",
+      "source_frame": 3944,
+      "time": 262.931055,
+      "recorded_after_actual_view_utc": "2026-10-31T16:22:24.268001+00:00",
+      "observation": "Native translated queen summary, repaired equilibriumcaption, commonbudgetchartfooter and finalgenetic/historycard layout inspected; readable separated labels and no clipping. Caption clearly visible; no oldZH movie exists forbeforecomparison."
+    }
+  ]
+}

@@ -26,3 +26,25 @@ Hashes, original paths, exact reviewed times, geometry checks and source-scoped 
 Shared-table edits conservatively stale aggregate fingerprints. The separate caption-dependency comparison verifies
 actual collected translation outputs; it does not silently promote old records to current automated passes.
 Narration listening, continuous perceptual playback and production-resolution review remain pending.
+
+The opening timeline's 1997 Deep Blue label disappeared after a conflicting simultaneous reveal/highlight.
+Those animations now run sequentially inside the original one-second window. Both final movies were checked:
+272 English and 282 Chinese selected appearances, including all changed groups and eight native follow-ups.
+The roadmap is locally 12.5% larger, with separated columns and clear title margins; semantic colors are preserved.
+
+| Additional scene | Before | After |
+|---|---|---|
+| Opening timeline EN | ![Missing Deep Blue label](hook-en-before.png) | ![Restored Deep Blue label](hook-en-after.png) |
+| Equilibrium caption EN | ![Dim equilibrium caption](local-en-before.png) | ![Brighter equilibrium caption](local-en-after.png) |
+
+The equilibrium caption's cool-blue source contrast rose from 2.80:1 to 5.57:1 by brightening that text alone.
+Temperature curves, wording and timing are unchanged. The English repaired movie has 527/527 selected times
+covered (499 exact-frame inheritances; 23 newly viewed unique frames). Chinese received its first complete review
+across 553 selected times, with no new observed defect. A Chinese before movie is not claimed.
+
+![Larger English roadmap](hook-roadmap-en-after.png)
+![Chinese restored label](hook-zh-after.png)
+![Chinese brighter caption](local-zh-after.png)
+
+All 150 repository tests pass after the producer and visual repairs. Complete decoded playback is automatic;
+selected-frame review and native endpoint inspection remain distinct from continuous perceptual playback/listening.
