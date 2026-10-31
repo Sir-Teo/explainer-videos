@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai2.common import (FAIL, FCOL, GCOST, HEUR, HIST, LEARN, PART, PATH, load, tile_board)
+from videos.ai.ai2.search import puzzle15_summary
 
 
 def manhattan_parts(p):
@@ -145,29 +146,33 @@ class Heuristics(VoiceoverScene):
         rows = d["rows"]
         names = (("misplaced", FCOL, r"misplaced tiles"), ("manhattan", HEUR, r"Manhattan distance"),
                  ("pdb", PATH, r"pattern database, \ $5$-$5$-$5$"))
-        L = np.array([r["pdb_len"] for r in rows])
-        lo, hi = int(L.min()) - 2, int(L.max()) + 2
-        top = 8.5
-        g = axes([lo, hi], [1, top], x_length=6.0, y_length=4.0, xlabel=r"length of the optimal solution",
+        summary = puzzle15_summary(rows)
+        known = [x for x in summary["optimal_lengths"] if x is not None]
+        lo, hi = (max(0, min(known) - 2), max(known) + 2) if known else (0, 1)
+        xtext = r"length of the optimal solution" if known else r"no optimal lengths established"
+        solved_work = [r[k] for r in rows for k, _, _ in names if r[k + "_len"] >= 0]
+        top = max(8.5, np.log10(max(1, max(solved_work, default=1))) + 0.25)
+        g = axes([lo, hi], [0, top], x_length=6.0, y_length=4.0, xlabel=xtext,
                  ylabel=r"positions IDA* generates \ (log scale)", xticks=list(range((lo // 10 + 1) * 10, hi, 10)),
-                 yticks=[2, 4, 6, 8], yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-3.0, -0.6, 0])
+                 yticks=list(range(0, int(top) + 1, 2)), yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-3.0, -0.6, 0])
         pts = VGroup()
         capped = VGroup()
         for k, col, _ in names:
             grp = VGroup()
-            for r in rows:
+            for r, length in zip(rows, summary["optimal_lengths"]):
+                if length is None:
+                    continue  # No completed solver established an x coordinate.
                 n = r[k]
                 if r[k + "_len"] < 0:
                     m = Triangle(color=col, fill_opacity=0.9, stroke_width=0).scale(0.07).rotate(PI)
-                    m.move_to(g.ax.c2p(r["pdb_len"], min(np.log10(n), top - 0.1)))
+                    m.move_to(g.ax.c2p(length, min(np.log10(max(n, 1)), top - 0.1)))
                     capped.add(m)
                     grp.add(m)
                 else:
-                    grp.add(Dot(g.ax.c2p(r["pdb_len"], np.log10(max(n, 1))), radius=0.055, color=col))
+                    grp.add(Dot(g.ax.c2p(length, np.log10(max(n, 1))), radius=0.055, color=col))
             pts.add(grp)
         lg = legend([(c, t) for _, c, t in names], font_size=20).move_to([3.6, 2.6, 0])
-        n_cap = {k: sum(1 for r in rows if r[k + "_len"] < 0) for k, _, _ in names}
-        tot = {k: sum(r[k] for r in rows) for k, _, _ in names}
+        n_cap = summary["capped"]
         hm = d["h_mean"]
         pdb_board = VGroup(*[tile_board(list(range(1, 16)) + [0], size=4, cell=0.34, font_size=14,
                                         color=GREY_D, highlight=tuple(range(a, a + 5))) for a in (1, 6, 11)])
@@ -183,21 +188,30 @@ class Heuristics(VoiceoverScene):
                                   font_size=18)).arrange(RIGHT, buff=0.2).to_edge(DOWN, buff=0.15).set_x(3.6)
         if hcs.get_right()[0] > 6.95:
             hcs.shift(LEFT * (hcs.get_right()[0] - 6.95))
-        tag = note(rf"computed: \ ${len(rows)}$ scrambled positions; \ $\blacktriangledown$ = gave up at the cap")
+        tag = note(rf"computed: \ ${len(rows)}$ positions; \ $\blacktriangledown$ = capped \\ "
+                   rf"${summary['unknown_lengths']}$ unknown optimal lengths omitted")
         tag.to_corner(UL, buff=0.2)
-        ratio = tot["manhattan"] / max(tot["pdb"], 1)
+        ratio = summary["completed_work_ratio"]
+        paired = summary["paired_completed"]
+        if ratio is not None:
+            comparison = (f"On the {paired} positions both methods solved, the Manhattan-to-pattern-database "
+                          f"ratio of total generated positions is {ratio:.2f}. Capped runs are excluded from this ratio.")
+        else:
+            comparison = "No matched completion-work ratio is available; it requires both methods to finish and positive recorded work."
         with self.voiceover(
             "The fifteen-puzzle has about ten trillion states, too many to map. In 1985 Richard Korf solved random instances "
             "optimally with IDA star: A star's ordering, run as depth-first searches with a rising bound on f, in almost no "
-            "memory. <bookmark mark='a'/> Here it is on scrambled positions. Counting misplaced tiles, it soon hits our cap of "
-            f"{d['caps']['misplaced']:,} positions and gives up, {n_cap['misplaced']} times out of {len(rows)}. "
-            "<bookmark mark='b'/> The Manhattan distance does far better. <bookmark mark='c'/> Better still, solve a smaller "
-            "relaxed puzzle exactly and remember the answers: track five tiles, ignore the rest, and breadth-first search gives "
+            "memory. <bookmark mark='a'/> Here it is on scrambled positions. Using misplaced tiles, "
+            f"{n_cap['misplaced']} runs out of {len(rows)} reach our cap of {d['caps']['misplaced']:,} generated positions. "
+            f"The graph omits {summary['unknown_lengths']} positions whose optimal length no run established. "
+            f"<bookmark mark='b'/> With Manhattan distance, {n_cap['manhattan']} runs hit their cap. "
+            "<bookmark mark='c'/> A more informed heuristic can come from solving a smaller "
+            "relaxed puzzle exactly and remembering the answers: track five tiles, ignore the rest, and breadth-first search gives "
             "the exact cost of homing them from every placement. That is a pattern database, Joseph Culberson and Jonathan "
             "Schaeffer's idea. Each table counts only moves of its own five tiles; moves of other tiles are free. "
             "The groups are disjoint, so each real move is charged to just one table, and the three costs can be added. "
-            "<bookmark mark='d'/> It generates about "
-            f"{ratio:,.0f} times fewer positions than the Manhattan distance, because it knows more: on a random position it "
+            f"<bookmark mark='d'/> The pattern database hits its cap {n_cap['pdb']} times. {comparison} "
+            "It knows more about the relaxed problem: on a random position it "
             f"guesses {hm['pdb']:.0f} moves on average, against {hm['manhattan']:.0f} and {hm['misplaced']:.0f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(hcs[0]))

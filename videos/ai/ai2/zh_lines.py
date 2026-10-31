@@ -100,7 +100,13 @@ ZH = {
         "更好的猜测能换来多少？在八数码上运行A星，每种解长最多取100个局面。<bookmark mark='a'/>不用启发式时，在解长{dd}处，它平均扩展{last['astar_h0']:,.0f}个状态。<bookmark mark='b'/>数放错的方块：{last['astar_h1']:,.0f}个。<bookmark mark='c'/>曼哈顿距离：{last['astar_h2']:,.0f}个。<bookmark mark='d'/>有效分支因子，也就是同样大小、同样深度的均匀树的分支数，从{ebf['astar_h0']:.2f}降到{ebf['astar_h1']:.2f}，再降到{ebf['astar_h2']:.2f}：每向1靠近一步，都是指数级的节省。<bookmark mark='e'/>曼哈顿距离从不小于放错的方块数。对一致的启发式，占优关系不会增加A星必须扩展的、f小于最优代价的状态。在边界上，相同的f值及其平局处理方式会改变总扩展数。",
 
     'f"The fifteen-puzzle has about ten trillion states':
-        "十五数码大约有10万亿个状态，多到画不出地图。1985年，理查德·科尔夫用IDA星最优地解出了随机局面：保持A星的排序，但以一系列深度优先搜索来运行，f的上限逐次提高，几乎不需要内存。<bookmark mark='a'/>这是它在打乱的局面上的表现。数放错的方块时，它很快撞上我们设的{d['caps']['misplaced']:,}个局面的上限而放弃，{len(rows)}次里有{n_cap['misplaced']}次。<bookmark mark='b'/>曼哈顿距离好得多。<bookmark mark='c'/>还能更好：精确地解一个更小的放松谜题，把答案记下来。只跟踪五块方块，忽略其余的，广度优先搜索就能给出从每一种摆放把它们送回家的精确代价。这就是模式数据库，约瑟夫·卡尔伯森和乔纳森·谢弗的想法。每张表只计算自己那五块方块的移动，其他方块的移动免费。三组方块互不重叠，每个真实动作只由一张表收费，所以三份代价可以相加。<bookmark mark='d'/>它生成的局面比曼哈顿距离少大约{ratio:,.0f}倍，因为它知道得更多：对一个随机局面，它平均猜{hm['pdb']:.0f}步，另外两个分别是{hm['manhattan']:.0f}和{hm['misplaced']:.0f}。",
+        "十五数码大约有10万亿个状态，多到画不出地图。1985年，理查德·科尔夫用IDA星最优地解出了随机局面：保持A星的排序，但以一系列深度优先搜索来运行，f的上限逐次提高，几乎不需要内存。<bookmark mark='a'/>这是它在打乱的局面上的表现。使用放错方块数时，{len(rows)}次运行里有{n_cap['misplaced']}次达到生成{d['caps']['misplaced']:,}个局面的上限。有{summary['unknown_lengths']}个局面没有任何一次运行确定最优解长，图里省略了它们。<bookmark mark='b'/>使用曼哈顿距离时，有{n_cap['manhattan']}次运行达到上限。<bookmark mark='c'/>更有信息的启发式可以来自精确求解一个更小的放松谜题，并记住答案。只跟踪五块方块，忽略其余的，广度优先搜索就能给出从每一种摆放把它们送回家的精确代价。这就是模式数据库，约瑟夫·卡尔伯森和乔纳森·谢弗的想法。每张表只计算自己那五块方块的移动，其他方块的移动免费。三组方块互不重叠，每个真实动作只由一张表收费，所以三份代价可以相加。<bookmark mark='d'/>模式数据库有{n_cap['pdb']}次运行达到上限。{comparison}它对放松问题知道得更多：对一个随机局面，它平均猜{hm['pdb']:.0f}步，另外两个分别是{hm['manhattan']:.0f}和{hm['misplaced']:.0f}。",
+
+    'f"On the {paired} positions both methods solved':
+        "在两种方法都解出的{paired}个局面上，曼哈顿距离与模式数据库生成的局面总数之比是{ratio:.2f}。达到上限的运行不计入这个比值。",
+
+    'No matched completion-work ratio is available':
+        "无法报告配对完成搜索的工作量比值；这要求两种方法都完成搜索，而且记录的工作量为正。",
 
     'The same idea scaled up.':
         "同样的想法被放大了。<bookmark mark='a'/>1997年，科尔夫用模式数据库找到了魔方的最优解。<bookmark mark='b'/>2019年，尔湾的一个团队改让神经网络来学习启发式，再把它用在加权A星里：它解开了每一个测试魔方，60.3%的时候找到的是最短解。<bookmark mark='c'/>对剩余代价的学习估计，就是强化学习所说的价值函数；由它引导的搜索，就是AlphaZero下棋的方式，见第26部分。",
@@ -268,7 +274,30 @@ ZH = {
         '先把B放到C上，在这里碰巧行得通。',
 
     'f"And the search space explodes.':
-        "而且搜索空间会爆炸。<bookmark mark='a'/>{len(towers)}块积木，可以叠成{towers[-1]:,}种不同的摆法。<bookmark mark='b'/>在随机的{n_bfs}块积木问题上，盲目的广度优先搜索平均扩展{bfs_n:,.0f}个状态。<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略删除表，再廉价地近似估计剩余代价；寻找最短的放松计划，仍然是NP难的。可采纳的h max启发式，把搜索减到{hm_n:,.0f}个，仍能保证最优。<bookmark mark='d'/>受霍夫曼和内贝尔2001年的FF规划器启发，我们的FF式启发式从一个放松计划中数出不重复的动作。贪心搜索扩展{ff_n:,.0f}个状态，平均计划长度为{L_ff:.1f}步，而最优计划平均为{L_opt:.1f}步。这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。",
+        "而且搜索空间会爆炸。<bookmark mark='a'/>{len(towers)}块积木，可以叠成{towers[-1]:,}种不同的摆法。<bookmark mark='b'/>{bfs_report}<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略删除表，再廉价地近似估计剩余代价；寻找最短的放松计划，仍然是NP难的。使用可采纳的h max时，A星如果解出了这个每步代价相同的问题，返回的计划就是最优的。{hm_report}<bookmark mark='d'/>受霍夫曼和内贝尔2001年的FF规划器启发，我们的FF式启发式从一个放松计划中数出不重复的动作。{ff_report}配对比较如下：{length_report}还要看完成情况：{coverage_report}这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。",
+
+    'f"On random {n_bfs}-block problems, breadth-first search records ':
+        '在随机的{n_bfs}块积木问题上，广度优先搜索记录的平均扩展数为{bfs_n:,.0f}个状态。',
+    'No breadth-first expansion work was recorded at this size.':
+        '这个规模没有记录广度优先搜索的扩展工作量。',
+    'f"With h max, the observed mean is ':
+        '使用h max时，观察到的平均扩展数为{hm_n:,.0f}个状态。',
+    'No h max expansion work was recorded at this size.':
+        '这个规模没有记录h max搜索的扩展工作量。',
+    'f"Greedy search records ':
+        '贪心搜索记录的平均扩展数为{ff_n:,.0f}个状态。',
+    'No greedy expansion work was recorded at this size.':
+        '这个规模没有记录贪心搜索的扩展工作量。',
+    'f"On the {paired} matched problems both breadth-first and greedy solved at ':
+        '在{n_bfs}块积木时，两种方法都解出的{paired}个相同问题上，贪心计划平均长{L_ff:.1f}步，最优计划平均长{L_opt:.1f}步。',
+    'There are no matched solved problems here, so no comparative plan-length mean is available.':
+        '这里没有两种方法都解出的相同问题，因此无法给出可比较的平均计划长度。',
+    'No algorithm attempts are established by these records; no successes are inferred.':
+        '这些记录不能确认任何算法尝试，不把它们推断为成功。',
+    'Every recorded attempt here solved its task; the panel also shows unrun or unknown cases.':
+        '这里每一次有记录的尝试都解出了任务；面板还列出了未运行或情况未知的项。',
+    'Some recorded attempts ended capped or unresolved.':
+        '有些有记录的尝试达到了上限，或结束时仍未解决问题。观察到的平均扩展数也包含这些未完成尝试；面板把它们与已解决、未运行或情况未知的项分开。',
 
     # ------------------------------------------------------------------ Knowledge
     'Chapter eleven. Knowledge is power.':

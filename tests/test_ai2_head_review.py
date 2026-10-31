@@ -134,6 +134,8 @@ class HeadNarrationTests(unittest.TestCase):
         tree = ast.parse((ROOT/'videos/ai/ai2/s08_samuel.py').read_text())
         expr = next(n.value for n in ast.walk(tree) if isinstance(n, ast.Assign) and
                     any(isinstance(t, ast.Name) and t.id == 'npos' for t in n.targets))
+        # Trusted repository expression: NumPy may lazily import during sum(),
+        # so use normal builtins rather than depending on earlier test imports.
         actual = eval(compile(ast.Expression(expr), 'actual-positive-count', 'eval'),
-                      {'__builtins__': {}, 'int':int}, {'fin':np.array([-.1,.001,0,.1,.5])})
+                      {'int':int}, {'fin':np.array([-.1,.001,0,.1,.5])})
         self.assertEqual(actual, 3)

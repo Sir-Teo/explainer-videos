@@ -13,6 +13,8 @@
 
 from __future__ import annotations
 
+import heapq
+
 import numpy as np
 from numba import njit
 
@@ -88,18 +90,16 @@ def grid_search(free, sr, sc, gr, gc, wg, wh, moves):
     parent = np.full(N, -1, np.int64)
     closed = np.zeros(N, np.bool_)
     order = np.full((H, W), -1, np.int64)
-    cap = N * moves.shape[0] + 16
-    hk = np.empty(cap)
-    hv = np.empty(cap, np.int64)
-    n = 0
     s = sr * W + sc
     goal = gr * W + gc
     g[s] = 0.0
     h0 = np.hypot(sr - gr, sc - gc)
-    n = _heap_push(hk, hv, n, wh * h0, s)
+    # Exact lexicographic priority: subtracting epsilon*g can reverse unequal f,
+    # especially when positive weights rescale f below epsilon.
+    frontier = [(wh * h0, 0.0, s)]
     step = 0
-    while n > 0:
-        key, u, n = _heap_pop(hk, hv, n)
+    while frontier:
+        _, _, u = heapq.heappop(frontier)
         if closed[u]:
             continue
         closed[u] = True
@@ -121,7 +121,7 @@ def grid_search(free, sr, sc, gr, gc, wg, wh, moves):
                 parent[v] = u
                 h = np.hypot(r + dr - gr, c + dc - gc)
                 f = wg * ng + wh * h
-                n = _heap_push(hk, hv, n, f - 1e-7 * ng, v)
+                heapq.heappush(frontier, (f, -ng, v))
     return step, np.inf, order, parent, g
 
 
@@ -307,6 +307,28 @@ def effective_branching(N: float, d: int) -> float:
 # ---------------------------------------------------------------------------
 # The 15-puzzle: IDA* with three heuristics
 # ---------------------------------------------------------------------------
+def puzzle15_summary(rows):
+    """Known optimal lengths and comparable completed work; -1 is censored.
+
+    Any completed admissible IDA* run establishes the length. A cap on another
+    heuristic says nothing about its solution length or total completion work.
+    """
+    names = ("misplaced", "manhattan", "pdb")
+    lengths = []
+    for row in rows:
+        solved = {int(row[k + "_len"]) for k in names if row[k + "_len"] >= 0}
+        if len(solved) > 1:
+            raise ValueError("Completed 15-puzzle solvers disagree on optimal length")
+        lengths.append(next(iter(solved)) if solved else None)
+    paired = [r for r in rows if r["manhattan_len"] >= 0 and r["pdb_len"] >= 0]
+    mh_work = sum(r["manhattan"] for r in paired)
+    pdb_work = sum(r["pdb"] for r in paired)
+    return {"optimal_lengths": lengths, "unknown_lengths": sum(x is None for x in lengths),
+            "capped": {k: sum(r[k + "_len"] < 0 for r in rows) for k in names},
+            "paired_completed": len(paired),
+            "completed_work_ratio": mh_work / pdb_work if paired and pdb_work > 0 else None}
+
+
 GROUPS = np.array([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15]], np.int64)  # 5-5-5 partition
 
 

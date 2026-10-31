@@ -1,9 +1,48 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MONO, PART, PATH, SYMBOL, load
+
+
+def planner_summary(rows):
+    """Separate recorded search work from completion and paired plan lengths.
+
+    Legacy caches use -1 for an unresolved length and omit algorithms not run.
+    A work count without a valid length establishes an attempt, not a solution.
+    The cache does not distinguish exhausted from capped legacy failures.
+    """
+    def number(value):
+        return (isinstance(value, (int, float)) and not isinstance(value, bool)
+                and math.isfinite(value) and value >= 0)
+
+    def attempted(row, key):
+        return number(row.get(key)) and row.get(key + "_status") not in ("not-run", "not_run")
+
+    def solved(row, key):
+        length = row.get(key + "_len")
+        return (attempted(row, key) and number(length) and int(length) == length
+                and row.get(key + "_status") not in ("capped", "unresolved", "unknown", "failed"))
+
+    def stats(group, key):
+        runs = [r for r in group if attempted(r, key)]
+        complete = [r for r in runs if solved(r, key)]
+        return {"attempted": len(runs), "solved": len(complete),
+                "unresolved": len(runs) - len(complete), "not_run_or_unknown": len(group) - len(runs),
+                "mean_expanded": sum(r[key] for r in runs) / len(runs) if runs else None}
+
+    keys = ("bfs", "hmax", "ff")
+    ns = sorted({r["n"] for r in rows})
+    by_n = {n: {key: stats([r for r in rows if r["n"] == n], key) for key in keys} for n in ns}
+    n_bfs = max((n for n in ns if by_n[n]["bfs"]["attempted"]), default=ns[-1] if ns else None)
+    paired = [r for r in rows if r["n"] == n_bfs and solved(r, "bfs") and solved(r, "ff")]
+    return {"ns": ns, "by_n": by_n, "all": {key: stats(rows, key) for key in keys}, "n_bfs": n_bfs,
+            "paired_solved": len(paired),
+            "paired_bfs_length": sum(r["bfs_len"] for r in paired) / len(paired) if paired else None,
+            "paired_ff_length": sum(r["ff_len"] for r in paired) / len(paired) if paired else None}
 
 
 def sudoku_mob(puzzle, D=None, cell=0.5, center=ORIGIN, clue_color=WHITE):
@@ -253,52 +292,89 @@ class Plans(VoiceoverScene):
         d = load("blocks")
         towers = d["towers"]
         rows = d["rows"]
-        ns = sorted({r["n"] for r in rows})
+        summary = planner_summary(rows)
+        ns = summary["ns"] or [4, 10]
 
         def mean(key, n):
-            v = [r[key] for r in rows if r["n"] == n and key in r]
-            return float(np.mean(v)) if v else None
+            return summary["by_n"].get(n, {}).get(key, {}).get("mean_expanded")
 
         tab = VGroup(*[VGroup(MathTex(str(n), font_size=26), MathTex(f"{t:,}".replace(",", "{,}"), font_size=26, color=GCOST))
                        .arrange(RIGHT, buff=0.6) for n, t in zip(range(1, len(towers) + 1), towers)])
         tab.arrange(DOWN, buff=0.12, aligned_edge=RIGHT).move_to([-5.3, -0.4, 0])
         th = label(r"blocks \ \ arrangements", font_size=20, color=GREY_A).next_to(tab, UP, buff=0.2)
-        n_bfs = max(n for n in ns if mean("bfs", n) is not None)
-        g = axes([ns[0] - 0.5, ns[-1] + 0.5], [0, 5], x_length=5.6, y_length=3.8, xlabel=r"blocks",
-                 ylabel=r"states expanded \ (mean, log scale)", xticks=ns, yticks=[0, 1, 2, 3, 4, 5],
+        n_bfs = summary["n_bfs"]
+        largest = max((s["mean_expanded"] for group in summary["by_n"].values() for s in group.values()
+                       if s["mean_expanded"] is not None), default=1)
+        ymax = max(5, math.ceil(math.log10(max(largest, 1))))
+        g = axes([ns[0] - 0.5, ns[-1] + 0.5], [0, ymax], x_length=5.6, y_length=3.8, xlabel=r"blocks",
+                 ylabel=r"observed expansions \ (mean, log scale)", xticks=ns, yticks=list(range(ymax + 1)),
                  yfmt=lambda v: rf"10^{{{int(v)}}}", center=[0.6, -0.3, 0])
-        series = (("bfs", GREY_B, r"breadth-first"), ("hmax", GCOST, r"A*, \ $h_{\max}$ \ (optimal)"),
+        series = (("bfs", GREY_B, r"breadth-first"), ("hmax", GCOST, r"A*, \ $h_{\max}$"),
                   ("ff", PATH, r"greedy, \ FF-style relaxed plans"))
         lines = VGroup()
         for k, col, _ in series:
             xs = [n for n in ns if mean(k, n) is not None]
             ys = [np.log10(max(mean(k, n), 1)) for n in xs]
-            lines.add(VGroup(curve(g.ax, xs, ys, col, 4), *[Dot(g.ax.c2p(x, y), radius=0.05, color=col)
-                                                          for x, y in zip(xs, ys)]))
+            lines.add(VGroup(*([curve(g.ax, xs, ys, col, 4)] if len(xs) > 1 else []),
+                             *[Dot(g.ax.c2p(x, y), radius=0.05, color=col) for x, y in zip(xs, ys)]))
         lg = legend([(c, t) for _, c, t in series], font_size=19).move_to([5.0, 2.3, 0])
-        L_opt, L_ff = mean("bfs_len", n_bfs), mean("ff_len", n_bfs)
+        paired = summary["paired_solved"]
+        L_opt, L_ff = summary["paired_bfs_length"], summary["paired_ff_length"]
         relax = label(r"relaxed heuristics: \ ignore delete lists, \\ estimate remaining cost cheaply",
                       font_size=20, color=PATH).move_to([5.0, 0.8, 0])
-        cost = label(rf"at ${n_bfs}$ blocks: \ optimal plans ${L_opt:.1f}$ steps, \\ greedy's ${L_ff:.1f}$",
-                     font_size=20, color=GREY_A).move_to([5.0, -0.4, 0])
+        cost = label((rf"${paired}$ matched solved problems, ${n_bfs}$ blocks: \\ optimal ${L_opt:.1f}$ steps; "
+                      rf"greedy ${L_ff:.1f}$" if paired else r"no matched solved problems: \\ plan lengths unavailable"),
+                     font_size=18, color=GREY_A).move_to([5.0, -0.4, 0])
+        if cost.width > 3.8:
+            cost.scale_to_fit_width(3.8)
+        counts = summary["all"]
+        coverage = label(
+            r"solved / attempted; capped or unresolved; not run or unknown \\ "
+            rf"BFS ${counts['bfs']['solved']}/{counts['bfs']['attempted']}$; "
+            rf"${counts['bfs']['unresolved']}$; ${counts['bfs']['not_run_or_unknown']}$ \\ "
+            rf"A* ${counts['hmax']['solved']}/{counts['hmax']['attempted']}$; "
+            rf"${counts['hmax']['unresolved']}$; ${counts['hmax']['not_run_or_unknown']}$ \\ "
+            rf"greedy ${counts['ff']['solved']}/{counts['ff']['attempted']}$; "
+            rf"${counts['ff']['unresolved']}$; ${counts['ff']['not_run_or_unknown']}$",
+            font_size=15, color=GREY_A).move_to([0.6, -3.15, 0])
+        if coverage.width > 5.8:
+            coverage.scale_to_fit_width(5.8)
         hcs = VGroup(history_card(1995, r"Blum \& Furst: \ Graphplan", r"", width=3.2, color=HIST, font_size=17),
                      history_card(2001, r"Hoffmann \& Nebel: \ FF", r"", width=3.2, color=HIST, font_size=17))
         hcs.arrange(DOWN, buff=0.12).move_to([5.0, -2.2, 0])
-        tag = note(rf"computed: \ ${len([r for r in rows if r['n'] == ns[0]])}$ random problems per size")
+        tag = note(rf"computed: \ ${len(rows)}$ random problems")
         tag.to_corner(DL, buff=0.2)
         bfs_n, hm_n, ff_n = mean("bfs", n_bfs), mean("hmax", n_bfs), mean("ff", n_bfs)
+        bfs_report = (f"On random {n_bfs}-block problems, breadth-first search records {bfs_n:,.0f} expanded states "
+                      "on average." if bfs_n is not None else "No breadth-first expansion work was recorded at this size.")
+        hm_report = (f"With h max, the observed mean is {hm_n:,.0f} expanded states." if hm_n is not None else
+                     "No h max expansion work was recorded at this size.")
+        ff_report = (f"Greedy search records {ff_n:,.0f} expanded states on average." if ff_n is not None else
+                     "No greedy expansion work was recorded at this size.")
+        length_report = (f"On the {paired} matched problems both breadth-first and greedy solved at {n_bfs} blocks, "
+                         f"greedy's mean plan length is {L_ff:.1f} steps against the optimum's {L_opt:.1f}." if paired else
+                         "There are no matched solved problems here, so no comparative plan-length mean is available.")
+        if not any(c["attempted"] for c in counts.values()):
+            coverage_report = "No algorithm attempts are established by these records; no successes are inferred."
+        elif not any(c["unresolved"] for c in counts.values()):
+            coverage_report = "Every recorded attempt here solved its task; the panel also shows unrun or unknown cases."
+        else:
+            coverage_report = ("Some recorded attempts ended capped or unresolved. Observed expansion means include those "
+                               "unfinished attempts; the panel separates them from solved and unrun or unknown cases.")
         with self.voiceover(
             f"And the search space explodes. <bookmark mark='a'/> {len(towers)} blocks can be stacked {towers[-1]:,} different "
-            f"ways. <bookmark mark='b'/> Blind breadth-first search on random {n_bfs}-block problems expands {bfs_n:,.0f} "
-            "states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, "
+            "ways. <bookmark mark='b'/> " + bfs_report + " <bookmark mark='c'/> The cure is chapter four's idea: "
+            "relax the problem. Ignore delete lists, "
             "then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. "
-            f"The admissible h max heuristic cuts the search to {hm_n:,.0f}, still optimal. <bookmark mark='d'/> Inspired by "
+            "With admissible h max, A* returns an optimal plan when it solves this unit-cost task. " + hm_report +
+            " <bookmark mark='d'/> Inspired by "
             "Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed "
-            f"plan. Greedy search expands {ff_n:,.0f} states, with mean plan length {L_ff:.1f} steps against the optimum's "
-            f"{L_opt:.1f}. Such heuristics, Graphplan, and planning as satisfiability made general "
+            "plan. " + ff_report + " The matched comparison is this: " + length_report +
+            " Check completion as well: " + coverage_report +
+            " Such heuristics, Graphplan, and planning as satisfiability made general "
             "planners practical."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(coverage))
             vo.wait_until("a")
             self.play(FadeIn(th), LaggedStart(*[FadeIn(t) for t in tab], lag_ratio=0.15))
             vo.wait_until("b")

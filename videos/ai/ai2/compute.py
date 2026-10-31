@@ -53,7 +53,7 @@ import numpy as np
 from explainer.ai.cache import Cache
 from explainer.cache_lock import cache_lock, locked_item
 
-CACHE_SCHEMAS = {"tsp": 2, "resolution": 3, "sat3": 2}
+CACHE_SCHEMAS = {"tsp": 2, "resolution": 3, "sat3": 2, "puzzle15": 1, "grid": 1}
 
 
 class SchemaCache(Cache):
@@ -76,6 +76,11 @@ class SchemaCache(Cache):
                 return (all("status" in data.get(k, {}) for k in ("prop", "fol"))
                         and all("status" in data.get(k, {}) and "clause_cap" in data[k]
                                 for k in ("explode_saturate", "explode_support")))
+            if name == "puzzle15":
+                return all("optimal_len" in r and all(r.get(k + "_status") in ("solved", "capped")
+                           for k in ("misplaced", "manhattan", "pdb")) for r in data["rows"])
+            if name == "grid":
+                return p.with_suffix(".npz").is_file() and data.get("priority_order") == "f,-g,node"
             return all(f"unknown_{n}" in data and f"psat_upper_{n}" in data for n in data["ns"])
         except (OSError, ValueError, KeyError, TypeError):
             return False
@@ -240,7 +245,9 @@ def compute_puzzle15(n_inst=30, seed=15):
             row[name] = int(n)
             row[name + "_len"] = int(L)
             row[name + "_secs"] = time.time() - t
-        assert row["manhattan_len"] in (-1, row["pdb_len"]) and row["misplaced_len"] in (-1, row["pdb_len"])
+        row["optimal_len"] = S.puzzle15_summary([row])["optimal_lengths"][0]
+        for name in caps:
+            row[name + "_status"] = "solved" if row[name + "_len"] >= 0 else "capped"
         rows.append(row)
     # the heuristics at the goal's neighbourhood and on average over random positions: how much each one knows
     h_mean = {}
@@ -253,7 +260,8 @@ def compute_puzzle15(n_inst=30, seed=15):
                 pos[p[i]] = i
             vals.append(S._h15(pos, kind, gpos, pdbs, S.GROUPS))
         h_mean[name] = float(np.mean(vals))
-    return {"rows": rows, "caps": caps, "pdb_secs": pdb_secs, "pdb_entries": int(16 ** 5), "h_mean": h_mean,
+    return {"schema_version": CACHE_SCHEMAS["puzzle15"], "rows": rows, "caps": caps,
+            "pdb_secs": pdb_secs, "pdb_entries": int(16 ** 5), "h_mean": h_mean,
             "pdb_max": [int(p[p < 255].max()) for p in pdbs]}
 
 
@@ -276,7 +284,8 @@ def compute_grid(n_maps=200):
 
     free, (sr, sc), (gr, gc) = showcase_grid()
     H, W = free.shape
-    out = {"free": free.astype(np.int8), "start": [sr, sc], "goal": [gr, gc]}
+    out = {"schema_version": CACHE_SCHEMAS["grid"], "priority_order": "f,-g,node",
+           "free": free.astype(np.int8), "start": [sr, sc], "goal": [gr, gc]}
     methods = {"dijkstra": (1.0, 0.0), "astar": (1.0, 1.0), "wastar": (1.0, 2.0), "greedy": (0.0, 1.0)}
     for name, (wg, wh) in methods.items():
         n, cost, order, parent, gval = S.grid_search(free, sr, sc, gr, gc, wg, wh, S.MOVES)
