@@ -1,0 +1,21 @@
+{
+  "artifact_sha256": "640a1dc3ce61079b7efd3b0a383728ef4ff08b8120933adf495479f1e2d01e7a",
+  "library_file_id": "libfile_1121caffe49c8191a07bd046bfadbe10",
+  "library_version": 0,
+  "source_module_sha256": "48513df86ab8e297ce78ce6d2d81e7d09fff50bab55e06ca6220c79de02ca7a6",
+  "native_cloud_playback": "Kdenlive original played from start to03:42:16 terminal stop; seeking/replay worked; near-black closing fade",
+  "timed_screenshot_coverage": [
+    "opening",
+    "truth table",
+    "historical cards",
+    "propositional proof01:31\u201301:56",
+    "first-order proof02:26\u201302:40",
+    "comparison/closing03:05\u201303:33"
+  ],
+  "observations": "Repaired connectors avoid labels; no blocking layout/clipping observed. Footer about18px from edge in1364px preview; existing inset retained pending production-resolution consistency check.",
+  "signal_mean_max_dBFS": [
+    -91,
+    -91
+  ],
+  "limits": "Uninterrupted UI playback with timed screenshot inspection; not continuous perceptual viewing, narrated audio or listening approval. This receipt applies only to exact v0 bytes; new alpha-renaming caption has separate selected-frame review."
+}

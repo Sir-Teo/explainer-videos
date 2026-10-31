@@ -277,6 +277,8 @@ class Logic(VoiceoverScene):
         start = [i for i in proof if info[i]["parents"] is None]
         head = label(r"first order: \ unification finds the substitution that makes two literals match",
                      font_size=26, color=FCOL).to_edge(UP, buff=0.3)
+        rename = label(r"here the remaining variable is renamed $z \to x$ throughout the clause; \\ "
+                       r"meaning is unchanged", font_size=20, color=GREY_A).next_to(head, DOWN, buff=0.16)
         prolog = history_card(1972, r"Alain Colmerauer \& Philippe Roussel: \ Prolog", r"resolution on Horn clauses, "
                               r"as a programming language \ (with Robert Kowalski)", width=5.4, color=HIST,
                               font_size=19).to_corner(DR, buff=0.25)
@@ -291,7 +293,8 @@ class Logic(VoiceoverScene):
             self.play(FadeIn(head), LaggedStart(*[FadeIn(boxes[i]) for i in start], lag_ratio=0.2))
             vo.wait_until("a")
             i0 = derived[0]
-            self.play(Create(lines[i0]), FadeIn(boxes[i0], shift=DOWN * 0.1), *([FadeIn(subs[i0])] if i0 in subs else []))
+            self.play(Create(lines[i0]), FadeIn(boxes[i0], shift=DOWN * 0.1), FadeIn(rename),
+                      *([FadeIn(subs[i0])] if i0 in subs else []))
             vo.wait_until("b")
             for i in derived[1:]:
                 self.play(Create(lines[i]), FadeIn(boxes[i], shift=DOWN * 0.1), *([FadeIn(subs[i])] if i in subs else []),

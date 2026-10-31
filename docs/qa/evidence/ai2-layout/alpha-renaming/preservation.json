@@ -1,0 +1,44 @@
+{
+  "receipts": {
+    "ai2-logic-motion-review.json": {
+      "path": "/workspace/runtime/ai2-alpha-rename-regression/historical/ai2-logic-motion-review.json",
+      "sha256": "b0b2a0eaaca9e6f425cf454900d539059e58a6e0ff52ee900317f84e4ae1da5e"
+    },
+    "ai2-logic-motion-review.md": {
+      "path": "/workspace/runtime/ai2-alpha-rename-regression/historical/ai2-logic-motion-review.md",
+      "sha256": "647b26b0df7ef2bffcfc61312cc829a89114e68a67d26796aff71689089fd280"
+    },
+    "ai2-logic-native-followups.json": {
+      "path": "/workspace/runtime/ai2-alpha-rename-regression/historical/ai2-logic-native-followups.json",
+      "sha256": "ef7930683bcee9aa928a5ebcc1450bb67c0c108b6b4500208e1aee432623314f"
+    },
+    "ai2-logic-motion-review-checkpoint.json": {
+      "path": "/workspace/runtime/ai2-alpha-rename-regression/historical/ai2-logic-motion-review-checkpoint.json",
+      "sha256": "8ab08bdbd42a107e09581a1534014fe44643e1460799e3d3d2c6e1083bdbfb6b"
+    }
+  },
+  "movies": {
+    "en": {
+      "expected_old_sha256": "640a1dc3ce61079b7efd3b0a383728ef4ff08b8120933adf495479f1e2d01e7a",
+      "canonical_observed_sha256": "8114c5411092b53a105bfdc69ff80a639a51a7553fa74ed3aa382fb66bbe004d",
+      "old_audit_preserved": "/workspace/runtime/ai2-alpha-rename-regression/historical/en-old-audit.json",
+      "old_frames_retained_in": "/workspace/explainer-videos/renders/qa/temporal/ai2-en-Logic-dense-final/frames",
+      "old_movie_preservation": "Recovered exact historical MP4 from known current-review copy after canonical overwrite",
+      "canonical_record_at_snapshot": "/workspace/runtime/ai2-alpha-rename-regression/historical/en-canonical-result-at-snapshot.json",
+      "record_sha256": "054313abc9e1b0df4d362a83dc9fc308afb69c0af9ef481a88979fe388331757",
+      "preserved_movie": "/workspace/runtime/ai2-alpha-rename-regression/historical/en-Logic-before.mp4",
+      "preserved_sha256": "640a1dc3ce61079b7efd3b0a383728ef4ff08b8120933adf495479f1e2d01e7a",
+      "copy_matches_old": true,
+      "preserved_from": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part2-Logic-EN-Silent-480p.mp4"
+    },
+    "zh": {
+      "expected_old_sha256": "8cd7c0e088445a21ec1fd8d94ba4b1c539fd4d7cdf3c9b24604fdd0a6a0fd47b",
+      "canonical_observed_sha256": "e62f9a5187008b52af2ed895e70c9e1e8e69255247c65bd4daf2f50c99db7d4c",
+      "old_audit_preserved": "/workspace/runtime/ai2-alpha-rename-regression/historical/zh-old-audit.json",
+      "old_frames_retained_in": "/workspace/explainer-videos/renders/qa/temporal/ai2-zh-Logic-dense-final/frames",
+      "old_movie_preservation": "canonical already differs from historical movie; no old-movie copy claimed",
+      "canonical_record_at_snapshot": "/workspace/runtime/ai2-alpha-rename-regression/historical/zh-canonical-result-at-snapshot.json",
+      "record_sha256": "2fdcf817c7cfc821c5fb7dbfc3294cdbbf40617ff0220e88919e9cc36bbc6665"
+    }
+  }
+}

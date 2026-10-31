@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import textwrap
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -92,9 +94,12 @@ class Eliza(VoiceoverScene):
             o.move_to(ORIGIN, aligned_edge=LEFT).shift(RIGHT * 0.25)
             mark.next_to(o, RIGHT, buff=0.25)
             if not c["same"]:
-                t = data_text(c["1966"], font=MONO, font_size=17, color=GREY_B)
-                if t.width > 6.2:
-                    t.width = 6.2
+                # Keep the quoted data verbatim, adding only visual line breaks.
+                # Shrinking a full reply to one line made the comparison unreadable.
+                original = "\n".join(textwrap.wrap(c["1966"], width=40, expand_tabs=False, replace_whitespace=False,
+                                                drop_whitespace=False, break_long_words=False,
+                                                break_on_hyphens=False))
+                t = data_text(original, font=MONO, font_size=17, color=GREY_B, line_spacing=0.8)
                 t.next_to(o, DOWN, buff=0.08, aligned_edge=LEFT)
                 g.add(t)
             return g

@@ -1,0 +1,7 @@
+{
+  "captured_sha256": "86e799a5ca3dd625b2040199e03dd1b37d2a6eb2600d341161cfea33064e494d",
+  "source_path": "renders/qa/series/ai2/en/Winters_motion/media/videos/480p15/Winters.mp4",
+  "validation": "Captured byte hash exactly matches original before-review ledger; original MP4 retained without reconstruction",
+  "original_before_ledger_sha256": "86e799a5ca3dd625b2040199e03dd1b37d2a6eb2600d341161cfea33064e494d",
+  "original_identity_verified": true
+}

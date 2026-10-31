@@ -224,6 +224,6 @@ class Winters(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(pas), FadeIn(exm))
             vo.wait_until("e")
-            self.play(Indicate(cl, color=PATH))
+            self.play(Indicate(cl, color=PATH, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()

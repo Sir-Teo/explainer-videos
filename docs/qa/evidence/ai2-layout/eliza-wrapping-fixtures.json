@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "scope": "actual production AST wrapping expression, completed raw JSON, five whitespace/raw-token/long-word fixtures; no rendered layout claim",
+  "source_sha256": "c0c85e300f04d25e65cc1cfdabec5853d10c34455f68370b07249d0c7f5e03bd",
+  "data_sha256": "0b9befa93722ccd8d946d4c0efa2752413fca8fb1dbebc7e265f2380fd89943a",
+  "actual_differences_checked": 1,
+  "examples": [
+    {
+      "original": "DOES THAT HAVE ANYTHING TO DO WITH THE FACT THAT YOUR BOYFRIEND MADE YOU COME HERE",
+      "wrapped": "DOES THAT HAVE ANYTHING TO DO WITH THE \nFACT THAT YOUR BOYFRIEND MADE YOU COME \nHERE",
+      "line_lengths": [
+        39,
+        39,
+        4
+      ]
+    }
+  ],
+  "font_size": 17,
+  "whole_page_height_cap": 6.1,
+  "cache_modified": false
+}

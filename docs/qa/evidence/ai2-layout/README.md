@@ -48,3 +48,19 @@ across 553 selected times, with no new observed defect. A Chinese before movie i
 
 All 150 repository tests pass after the producer and visual repairs. Complete decoded playback is automatic;
 selected-frame review and native endpoint inspection remain distinct from continuous perceptual playback/listening.
+
+The ELIZA comparison now wraps the complete original reply into three lines at its intended font size.
+Both full pages fit, verified in389English and449Chinese selected times; all original characters are preserved.
+The English before image is from the original render. The original full before MP4 was overwritten before a
+full-movie backup was made; its native frames, sheets, source and original hash are retained. It is not relabeled
+as a preserved or reconstructed original movie.
+
+Winters' measured cumulative curve now receives color-only emphasis. The old scaling briefly moved the curve
+above100% and belowzero, away from the threshold markers.417English and452Chinese selected times were covered;
+19consecutive Chinese emphasis frames also keep the geometry aligned. The original English before MP4 was
+preserved and its SHA matches the original review ledger.
+
+| Final repairs | Before | After |
+|---|---|---|
+| ELIZA reply | ![Tiny historical reply](eliza-en-before.png) | ![Wrapped historical reply](eliza-en-after.png) |
+| Cumulative curve | ![Scaled curve](winters-en-before.png) | ![Geometry preserved](winters-en-after.png) |
