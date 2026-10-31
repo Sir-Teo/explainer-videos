@@ -26,7 +26,7 @@ recorded clauses. Schema3 and all six bilingual outcome branches preserve that d
 [Actual values and source/data hashes](evidence/ai2-correctness/default-tsp-resolution.json) are retained.
 Global caption handoffs have now been merged by root. Full Part2 benchmark/render/audio QA remains pending.
 
-The complete17-chapter source review and a second bilingual correction batch are now applied.
+The complete16-chapter source review and a second bilingual correction batch are now applied.
 [Head and tail records](evidence/ai2-source-review/) preserve coverage, primary references, fixed findings and
 limits. Corrections include exact versus cutoff alpha-beta values; equal optimal cost versus identical paths;
 sampling/baseline units; relaxed-planning complexity; MYCIN rating units; ELIZA historical provenance; multiplier
@@ -39,3 +39,11 @@ diff checks and119/119 Part2 narration-source coverage. One pre-existing adjacen
 remains documented. Full Part2 endpoint, motion, audio, pacing and production-resolution checks remain pending
 while Part1's complete dense transition review finishes. Future capped PDB-optimum handling remains a documented
 conditional defect to repair before broader parameter variations; current30 default PDB cases all completed.
+
+## Search and planning capped-result follow-up
+
+Conditional capped-result defects are now repaired. Puzzle optimal lengths come from any completed admissible solver; unknown lengths are omitted and counted. Work comparisons use matched completed runs. Planning separates solved, capped/unresolved and not-run cases; failed -1 sentinels never enter solution-length averages. Current default PDB cases all completed, and all attempted default block problems solved; these were conditional reporting bugs, not evidence that those default runs failed.
+
+Grid priority is now exact lexicographic (f, -g, node). The former epsilon subtraction returned a suboptimal path for a valid tiny positive cost scale; real Numba regression tests cover that reproduction. Grid and puzzle caches have versioned schemas and were regenerated (3 and 40 seconds respectively). Current file hashes and the original handoff limits are preserved in the source-review evidence directory.
+
+All 143 repository tests passed after these repairs. Compilation and diff checks passed; 132/132 narration source lines are covered, with the previously documented adjacent-value template warning. Bilingual endpoint renders are now running and have already exposed three comma-materialized untranslated captions and one malformed Chinese TeX separator, corrected in the shared table. Current layout, motion, pacing, audio and full playback review remain in progress. No CI/CD was created.

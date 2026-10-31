@@ -1,0 +1,58 @@
+{
+  "scope": "Part2 H13 censoring and grid exact priority only",
+  "frozen_at_utc": "2026-10-31T14:55:04.208307+00:00",
+  "files_sha256": {
+    "videos/ai/ai2/search.py": "6c1e3bbf8e5b38d2a4bb69ddd0176a2e4b746562ec02e61e8df00cc323eb4623",
+    "videos/ai/ai2/compute.py": "4776b91e83080c81e0d8273c63944baec21c69d83431de3ee1ab44d3b14da2cf",
+    "videos/ai/ai2/s05_heuristics.py": "a09c2cd07ec02f6f2bb1b82e70a2afa4539bdf34d5bb671765e9883399b04bdd",
+    "videos/ai/ai2/zh_lines.py": "f903bf5fd409337615950226695386c1be96a1f93bcd500b4cd6b19de8337862",
+    "tests/test_ai2_search_censoring.py": "95ddd08f39674dcf11f7a8453d1cc8353f92794ed5e3b341d16575c6e93406f4"
+  },
+  "grid_reproduction": {
+    "api": "grid_search(np.ones((3,3),bool),0,0,2,2,1e-8,0.,MOVES)",
+    "before_cost": 3.23606797749979,
+    "optimal_and_after_cost": 2.8284271247461903,
+    "domain": "Public documented Dijkstra wh=0 with positive wg scaling; no default-production failure claimed",
+    "repair": "Lexicographic heapq priority (f,-g,node); scalar _heap_push/_heap_pop and astar8 unchanged",
+    "regression": "Actual Numba nopython signatures asserted; positive scaling tests for Dijkstra and A* and exact-f larger-g tie test"
+  },
+  "puzzle15": {
+    "repair": [
+      "Known optimal length from any completed admissible IDA* method; only completed disagreements reject.",
+      "No x coordinate for cases with no completed solver; explicitly counted/omitted. No -1 depths plotted.",
+      "Count caps separately for every heuristic. Completion-work ratio includes only both-solved MH/PDB pairs; no ratio when unavailable, no times-fewer overclaim for ratio below1.",
+      "Explicit solved/capped row status and optimal_len metadata; truthful EN/ZH narration and preserved a/b/c/d bookmarks.",
+      "Plot y range includes1 generated position and can grow for completed large-work cases."
+    ],
+    "old_raw_default_cache_observation": {
+      "instances": 30,
+      "misplaced_caps": 26,
+      "manhattan_caps": 0,
+      "pdb_caps": 0,
+      "unknown_lengths": 0,
+      "paired_completed": 30,
+      "completed_work_ratio": 28.259736221332986
+    },
+    "conditional_defect_status": "Reproduced by small production-orchestration/plot fixtures; absent from inspected old default raw cache."
+  },
+  "schemas_to_recompute": {
+    "grid": 1,
+    "puzzle15": 1
+  },
+  "puzzle8_recompute_required": false,
+  "tests": {
+    "part2_specific": "51 passed in12.749s; /workspace/runtime/ai2-search-repair-tests.log",
+    "final_targeted": "12 passed; /workspace/runtime/ai2-search-targeted-tests.log",
+    "zh_lines": "121/121 covered; pre-existing SAT adjacent-value warning only",
+    "diff_check": "passed"
+  },
+  "caption_handoff": "/workspace/runtime/ai2-search-censoring-caption-add.json",
+  "untested": [
+    "No production grid or puzzle15 computation performed after repair.",
+    "No scene render/playback/audio/layout QA after source changes.",
+    "No shared caption table merged by this agent; root owns merge.",
+    "No commit/push by this agent."
+  ],
+  "production_cache_writes": false,
+  "blockers": []
+}

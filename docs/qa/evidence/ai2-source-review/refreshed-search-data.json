@@ -1,0 +1,20 @@
+[
+  {
+    "item": "grid",
+    "schema_version": 1,
+    "sha256": "dfbc4e3ea4fda6cc00422bdbbb60d73d13d007911fc7ca3931a1a5e9f5197fea",
+    "bytes": 2334
+  },
+  {
+    "item": "puzzle15",
+    "schema_version": 1,
+    "sha256": "9092f951fd57fe1499317f56534d522b04ac4713cb57b520c63744c45479179d",
+    "bytes": 16146
+  },
+  {
+    "item": "blocks",
+    "schema_version": null,
+    "sha256": "b4dad9d1da37f2fff2eb24896b396e96e0a62afe455f5078eae6c65ef4849e5b",
+    "bytes": 7966
+  }
+]

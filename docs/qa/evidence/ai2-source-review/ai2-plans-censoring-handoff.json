@@ -1,0 +1,263 @@
+{
+  "scope": "Part2 Plans sentinel/censoring display repair only; no production compute/render/cache writes",
+  "source_files": {
+    "/workspace/explainer-videos/videos/ai/ai2/s11_plans.py": "614e760d34b9fa553e4dd3125abb92cdf24cd15e21d83d1851861e90a0be4c5b",
+    "/workspace/explainer-videos/videos/ai/ai2/zh_lines.py": "cd145bbdb6d7695b7476bec93f2e14bee2c4165176943c1e0f0785b58f37a893",
+    "/workspace/explainer-videos/tests/test_ai2_planning_censoring.py": "67dfc4cc53b2a49ebe0554239ef507666ff1bf7109946eb84108bb71e84dcf16"
+  },
+  "cache_raw_file": "/workspace/explainer-videos/.cache/ai2/blocks.json",
+  "cache_sha256": "b4dad9d1da37f2fff2eb24896b396e96e0a62afe455f5078eae6c65ef4849e5b",
+  "actual_cached_summary": {
+    "ns": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "by_n": {
+      "4": {
+        "bfs": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 62.0
+        },
+        "hmax": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 27.916666666666668
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 11.083333333333334
+        }
+      },
+      "5": {
+        "bfs": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 144.66666666666666
+        },
+        "hmax": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 46.583333333333336
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 8.5
+        }
+      },
+      "6": {
+        "bfs": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 915.1666666666666
+        },
+        "hmax": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 336.9166666666667
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 14.75
+        }
+      },
+      "7": {
+        "bfs": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 19741.75
+        },
+        "hmax": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 5415.166666666667
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 31.25
+        }
+      },
+      "8": {
+        "bfs": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "hmax": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 38.5
+        }
+      },
+      "9": {
+        "bfs": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "hmax": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 128.91666666666666
+        }
+      },
+      "10": {
+        "bfs": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "hmax": {
+          "attempted": 0,
+          "solved": 0,
+          "unresolved": 0,
+          "not_run_or_unknown": 12,
+          "mean_expanded": null
+        },
+        "ff": {
+          "attempted": 12,
+          "solved": 12,
+          "unresolved": 0,
+          "not_run_or_unknown": 0,
+          "mean_expanded": 89.0
+        }
+      }
+    },
+    "all": {
+      "bfs": {
+        "attempted": 48,
+        "solved": 48,
+        "unresolved": 0,
+        "not_run_or_unknown": 36,
+        "mean_expanded": 5215.895833333333
+      },
+      "hmax": {
+        "attempted": 48,
+        "solved": 48,
+        "unresolved": 0,
+        "not_run_or_unknown": 36,
+        "mean_expanded": 1456.6458333333333
+      },
+      "ff": {
+        "attempted": 84,
+        "solved": 84,
+        "unresolved": 0,
+        "not_run_or_unknown": 0,
+        "mean_expanded": 46.0
+      }
+    },
+    "n_bfs": 7,
+    "paired_solved": 12,
+    "paired_bfs_length": 11.333333333333334,
+    "paired_ff_length": 15.333333333333334
+  },
+  "actual_cache_has_unresolved_attempts": false,
+  "finding": "Legacy -1 length sentinels could enter unfiltered means. Current84-problem cache has no such failures; this is a real latent bug verified with bounded fixtures. Missing work/unknown length is never inferred successful.",
+  "implementation": [
+    "Observed expansion means keep finite nonnegative attempted work, including unresolved attempts; completion coverage separate.",
+    "BFS/FF length comparison uses identical solved instances at largest BFS-attempted size; no paired solutions yields unavailable text.",
+    "Explicit attempted/solved/capped-or-unresolved/unrun-or-unknown counts shown, including missing BFS/hmax sizes.",
+    "A* guarantee qualified by successful completion; unknown records have an explicit no-success narration branch.",
+    "Single-point/empty plot groups supported; y limit expands to contain observed truncated work.",
+    "Local Plans ZH branches preserve all four bookmarks; global captions handed off only."
+  ],
+  "main_voiceover_ast": "f\"And the search space explodes. <bookmark mark='a'/> {len(towers)} blocks can be stacked {towers[-1]:,} different ways. <bookmark mark='b'/> \" + bfs_report + \" <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. With admissible h max, A* returns an optimal plan when it solves this unit-cost task. \" + hm_report + \" <bookmark mark='d'/> Inspired by Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed plan. \" + ff_report + ' The matched comparison is this: ' + length_report + ' Check completion as well: ' + coverage_report + ' Such heuristics, Graphplan, and planning as satisfiability made general planners practical.'",
+  "actual_cache_EN_narration": "And the search space explodes. <bookmark mark='a'/> 7 blocks can be stacked 37,633 different ways. <bookmark mark='b'/> On random 7-block problems, breadth-first search records 19,742 expanded states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. With admissible h max, A* returns an optimal plan when it solves this unit-cost task. With h max, the observed mean is 5,415 expanded states. <bookmark mark='d'/> Inspired by Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed plan. Greedy search records 31 expanded states on average. The matched comparison is this: On the 12 matched problems both breadth-first and greedy solved at 7 blocks, greedy's mean plan length is 15.3 steps against the optimum's 11.3. Check completion as well: Every recorded attempt here solved its task; the panel also shows unrun or unknown cases. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.",
+  "actual_cache_ZH_narration": "而且搜索空间会爆炸。<bookmark mark='a'/>7块积木，可以叠成37633种不同的摆法。<bookmark mark='b'/>在随机的7块积木问题上，广度优先搜索记录的平均扩展数为19742个状态。<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略删除表，再廉价地近似估计剩余代价；寻找最短的放松计划，仍然是NP难的。使用可采纳的h max时，A星如果解出了这个每步代价相同的问题，返回的计划就是最优的。使用h max时，观察到的平均扩展数为5415个状态。<bookmark mark='d'/>受霍夫曼和内贝尔2001年的FF规划器启发，我们的FF式启发式从一个放松计划中数出不重复的动作。贪心搜索记录的平均扩展数为31个状态。配对比较如下：在7块积木时，两种方法都解出的12个相同问题上，贪心计划平均长15.3步，最优计划平均长11.3步。还要看完成情况：这里每一次有记录的尝试都解出了任务；面板还列出了未运行或情况未知的项。这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。",
+  "actual_caption_strings": {
+    "cost": "$12$ matched solved problems, $7$ blocks: \\\\ optimal $11.3$ steps; greedy $15.3$",
+    "coverage": "solved / attempted; capped or unresolved; not run or unknown \\\\ BFS $48/48$; $0$; $36$ \\\\ A* $48/48$; $0$; $36$ \\\\ greedy $84/84$; $0$; $0$",
+    "tag": "computed: \\ $84$ random problems"
+  },
+  "caption_handoff": "/workspace/runtime/ai2-plans-censoring-caption-add.json",
+  "global_caption_merge": "pending root; no shared table edited by this agent",
+  "tests": {
+    "command": "source /workspace/runtime/activate.sh && python -m unittest discover -s tests -p test_ai2_planning_censoring.py -v",
+    "passed": 5,
+    "actual_scene_branch_fixtures": 8,
+    "fixture_categories": [
+      "empty",
+      "unrun/unknown",
+      "all solved",
+      "sentinel/unresolved",
+      "greedy only",
+      "already solved zero-length",
+      "missing length",
+      "large capped work"
+    ],
+    "method": "AST executes actual scene setup/narration with geometry stand-ins; no Manim render/LaTeX/cache load. EN/ZH/bookmarks checked."
+  },
+  "limits": [
+    "Rendered layout, coverage-panel spacing and full playback pending root validation.",
+    "No production failed-run frequency claimed. Legacy cache cannot distinguish exhausted from capped failures; they remain capped-or-unresolved.",
+    "No source edits outside s11_plans.py, local tail keys in ai2/zh_lines.py, and new focused test file."
+  ],
+  "additional_checks": {
+    "ast_parse": "passed for modified scene/ZH/test",
+    "git_diff_check": "passed",
+    "zh_lines_todo": "132/132 source lines covered; only existing unrelated true/false name-template ambiguity",
+    "existing_head_review_tests": {
+      "passed": 6,
+      "errored": 1,
+      "error": "test_positive_feature_count_includes_small_positive_weights: tests/test_ai2_head_review.py:137 restricted eval raises KeyError(__import__)",
+      "scope": "Reported to root; unrelated head test/source unchanged."
+    }
+  }
+}

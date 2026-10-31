@@ -20482,7 +20482,7 @@
     "each table: \\ exact cost in moves of its five tiles, \\\\ found by breadth-first search, $1{,}048{,}576$ entries": "每张表：\\ 只按自身五块方块的移动计费的精确代价，\\\\ 广度优先求得，$1{,}048{,}576$个表项",
     "independent restarts: \\ almost-sure success; \\ expected steps $23$": "独立重启：\\ 几乎必然最终成功；\\ 总步数期望$23$",
     "equilibrium as $T \\to 0$: \\ probability concentrates on minimum cost": "平衡分布在$T\\to0$时：\\ 概率集中到最低代价",
-    "modern semi-gradient analogue: \\ temporal-difference learning \\ (Part 26)": "现代半梯度对应形式：\\ 时序差分学习\\（第26部分）",
+    "modern semi-gradient analogue: \\ temporal-difference learning \\ (Part 26)": "现代半梯度对应形式：\\ 时序差分学习\\ （第26部分）",
     "greedy, \\ FF-style relaxed plans": "贪心搜索，\\ FF式放松计划",
     "relaxed heuristics: \\ ignore delete lists, \\\\ estimate remaining cost cheaply": "放松启发式：\\ 忽略删除表，\\\\ 廉价估计剩余代价",
     "expert acceptability rating: $65\\%$; \\ Stanford's specialists: $42.5$--$62.5\\%$": "专家的可接受评价比例：$65\\%$；\\ 斯坦福专科医生：$42.5$--$62.5\\%$",
@@ -20491,7 +20491,18 @@
     "dense bit interactions: \\\\ our solver struggles to find useful clauses": "各位之间相互交织：\\\\ 我们的求解器难以找到有用的子句",
     "a plan valid \\\\ in that PDDL model": "在那个PDDL模型内\\\\ 有效的计划",
     "swapped \\texttt{e}, \\texttt{z}: \\ $4.84 \\approx 4.08 + 0.75$": "弄反\\texttt{e}和\\texttt{z}：\\ $4.84 \\approx 4.08 + 0.75$",
-    "letters guessed uniformly: \\ $4.75 \\approx 4.07 + 0.69$ \\ (the Falcon passage)": "把字母当成均匀分布：\\ $4.75 \\approx 4.07 + 0.69$ \\ （《马耳他之鹰》段落）"
+    "letters guessed uniformly: \\ $4.75 \\approx 4.07 + 0.69$ \\ (the Falcon passage)": "把字母当成均匀分布：\\ $4.75 \\approx 4.07 + 0.69$ \\ （《马耳他之鹰》段落）",
+    "no optimal lengths established": "尚未确定任何最优解长",
+    "computed: \\ $30$ positions; \\ $\\blacktriangledown$ = capped \\\\ $0$ unknown optimal lengths omitted": "计算结果：\\ $30$个局面；\\ $\\blacktriangledown$表示达到上限 \\\\ 省略$0$个最优解长未知的局面",
+    "observed expansions \\ (mean, log scale)": "观察到的扩展数 \\ （均值，对数刻度）",
+    "A*, \\ $h_{\\max}$": "A星，\\ $h_{\\max}$",
+    "$12$ matched solved problems, $7$ blocks: \\\\ optimal $11.3$ steps; greedy $15.3$": "$12$个双方都解出的相同问题，$7$块积木： \\\\ 最优$11.3$步；贪心$15.3$步",
+    "no matched solved problems: \\\\ plan lengths unavailable": "没有双方都解出的相同问题： \\\\ 无法比较计划长度",
+    "computed: \\ $84$ random problems": "计算所得：\\ $84$个随机问题",
+    "solved / attempted; capped or unresolved; not run or unknown \\\\ BFS $48/48$; $0$; $36$ \\\\ A* $48/48$; $0$; $36$ \\\\ greedy $84/84$; $0$; $0$": "已解决 / 已尝试；达到上限或未解决；未运行或未知 \\\\ 广度优先 $48/48$；$0$；$36$ \\\\ A星 $48/48$；$0$；$36$ \\\\ 贪心 $84/84$；$0$；$0$",
+    "$247$ cells{,} \\ the same optimal cost": "$247$个单元格，\\ 最优代价相同",
+    "each table: \\ exact cost in moves of its five tiles{,} \\\\ found by breadth-first search{,} $1{,}048{,}576$ entries": "每张表：\\ 仅计算其五个方块移动的精确代价，\\\\ 通过广度优先搜索得到，共$1{,}048{,}576$项",
+    "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations{,} \\ $5$ seeds; \\ bar = mean{,} \\ line = range": "计算结果：\\ 后三种方法的候选代价评估预算均为$2{,}000{,}000$次，\\ $5$个种子；\\ 条形=平均值，\\ 线段=范围"
   },
   "phrases": {
     "width": "宽度",
@@ -22760,6 +22771,10 @@
     [
       "normal equations and QR agree to within \\$(.*?)\\$",
       "正规方程与QR的差小于 $\\1$"
+    ],
+    [
+      "^computed:\\ \\\\\\ \\$([0-9]+)\\$\\ positions;\\ \\\\\\ \\$\\\\blacktriangledown\\$\\ =\\ capped\\ \\\\\\\\\\ \\$([0-9]+)\\$\\ unknown\\ optimal\\ lengths\\ omitted$",
+      "计算结果：\\\\ $\\g<1>$个局面；\\\\ $\\\\blacktriangledown$表示达到上限 \\\\\\\\ 省略$\\g<2>$个最优解长未知的局面"
     ]
   ]
 }
