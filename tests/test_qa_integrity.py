@@ -15,6 +15,27 @@ from tools import qa_audio, qa_report, qa_series
 
 
 class PreflightVerdictTests(unittest.TestCase):
+    def test_schema_guard_rejects_stale_part_cache_before_loader_upgrade(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "tsp.json"
+            path.write_text('{"legacy":true}')
+            before = path.read_bytes()
+            compute = types.SimpleNamespace(cache_current=lambda name: False)
+            with self.assertRaisesRegex(qa_series.StaleDataError, "ai2/tsp"):
+                qa_series.require_current_cache(compute, "ai2", path, "tsp")
+            self.assertEqual(path.read_bytes(), before)
+            compute.cache_current = lambda name: True
+            qa_series.require_current_cache(compute, "ai2", path, "tsp")
+            path.unlink()
+            with self.assertRaisesRegex(FileNotFoundError, "ai2/tsp"):
+                qa_series.require_current_cache(compute, "ai2", path, "tsp")
+
+    def test_parts_without_schema_hook_keep_existing_read_only_cache_behavior(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "data.json"
+            path.write_text("{}")
+            qa_series.require_current_cache(types.SimpleNamespace(), "ai3", path, "data")
+
     def test_changed_measurement_keeps_approved_latin_data_in_chinese_caption(self):
         from explainer import lang, zh_text
 

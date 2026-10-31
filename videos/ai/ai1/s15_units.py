@@ -159,8 +159,8 @@ class Units(VoiceoverScene):
     def frontier(self):
         head = label(r"Compression, and what models can do", font_size=34).to_edge(UP, buff=0.4)
         rows = VGroup(
-            label(r"$30$ public language models, \ $12$ benchmarks", font_size=28),
-            label(r"each model's bits per character on freshly collected text, \ against its average benchmark score",
+            label(r"$31$ public language models across $12$ benchmarks", font_size=28),
+            label(r"bits per character on fresh, domain-matched text, \ against relevant benchmark scores",
                   font_size=26,
                   color=GREY_A),
             label(r"almost a straight line: \ Pearson correlation $-0.93$", font_size=30, color=C.BITS),
@@ -181,11 +181,12 @@ class Units(VoiceoverScene):
                    r"(COLM 2024)")
         with self.voiceover(
             "The field measures it this way too. In 2024, researchers at the Hong Kong University of Science and "
-            "Technology and Tencent took thirty public language models, <bookmark mark='a'/> measured how well "
-            "each compresses freshly collected web pages, code and papers, in bits per character, since bits per "
-            "token aren't comparable, <bookmark mark='b'/> and set that against their average score on twelve "
-            "benchmarks of knowledge, coding and mathematics. <bookmark mark='c'/> The points fall almost on a "
-            "line, with a correlation of minus 0.93. The better a model compresses, the more it can do."
+            "Technology and Tencent studied thirty-one public language models across twelve benchmarks. "
+            "<bookmark mark='a'/> They measured compression on fresh web pages, code and papers in bits per "
+            "character, since token sizes differ. <bookmark mark='b'/> General-purpose models were tested across "
+            "the benchmarks; specialized code and math models only in their domains. Compression corpora were "
+            "matched to those domains. <bookmark mark='c'/> The overall comparison reported a correlation of "
+            "minus 0.93: an observed association in this study, not a guarantee for every model or task."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(rows[0]), Create(ax), FadeIn(axl), FadeIn(sch))
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.5)

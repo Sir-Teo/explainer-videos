@@ -59,16 +59,18 @@ class Outro(VoiceoverScene):
         out.append((g, rf"typical: \ ${100 * r100['P']:.0f}\%$ of the probability", C.BITS))
         # 4. forward and reverse KL on two peaks
         x, pp = np.asarray(kl["x"]), np.asarray(kl["p"])
-        ax = axes_box([float(x[0]), float(x[-1]), 1], [0, float(pp.max()) * 1.15, 1])
         fw, rv = np.asarray(kl["fwd"])[-1], np.asarray(kl["rev_a"])[-1]
+        # Keep both complete Gaussian peaks on one common density scale.
+        ymax = 1.15 * max(float(pp.max()), *(1 / (fit[1] * np.sqrt(2 * np.pi)) for fit in (fw, rv)))
+        ax = axes_box([float(x[0]), float(x[-1]), 1], [0, ymax, 1])
 
         def gauss(m, s):
             return np.exp(-0.5 * ((x - m) / s) ** 2) / (s * np.sqrt(2 * np.pi))
 
         g = VGroup(ax, ax.plot_line_graph(x, pp, add_vertex_dots=False, line_color=C.TRUE_P, stroke_width=3),
-                   ax.plot_line_graph(x, np.minimum(gauss(fw[0], fw[1]), pp.max() * 1.15), add_vertex_dots=False,
+                   ax.plot_line_graph(x, gauss(fw[0], fw[1]), add_vertex_dots=False,
                                       line_color=C.MODEL_Q, stroke_width=3),
-                   ax.plot_line_graph(x, np.minimum(gauss(rv[0], rv[1]), pp.max() * 1.15), add_vertex_dots=False,
+                   ax.plot_line_graph(x, gauss(rv[0], rv[1]), add_vertex_dots=False,
                                       line_color=C.KL, stroke_width=3))
         out.append((g, r"forward and reverse $D_{\mathrm{KL}}$", C.KL))
         # 5. arithmetic coding: GPT-2 as a compressor
@@ -121,13 +123,15 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         z = load("lmzip")
-        back = "and decoded it back, letter for letter" if z["ok"] else "to a fraction of what xz needs"
+        back = ("and decoded it back, letter for letter" if z["ok"] else
+                "but its independent decoding failed, so that run is not a verified round trip")
         with self.voiceover(
             "Let's take stock. Guesses are probability distributions; the chain rule scores a whole text. Surprise "
             "had to be a logarithm, and entropy is the only consistent measure of uncertainty. Kraft's budget bounds "
-            "every code, Huffman's is the best, and long typical sequences reach the entropy, no further. A wrong "
+            "uniquely decodable codes; Huffman is optimal for symbol codes, and long blocks can approach the entropy "
+            "on average. A wrong "
             "model costs the cross-entropy. Arithmetic coding made predicting and compressing one thing, and GPT-2 "
-            f"compressed our passage {back}. Counting taught generalization by failing at it, and mutual "
+            f"compressed a known-length prefix of our passage {back}. Counting taught generalization by failing at it, and mutual "
             "information showed how far back text remembers."
         ) as vo:
             self.play(FadeIn(head))
@@ -146,7 +150,7 @@ class Outro(VoiceoverScene):
             (r"prediction $=$ compression", [12, 31]),
             (r"memorizing vs.\ generalizing", [7, 8]),
             (r"mutual information, \ long memory", [13, 15]),
-            (r"softmax, \ and its gradient $q - \hat p$", [4, 11]),
+            (r"softmax, \ and its logit derivative $q_k - [k = y]$", [4, 11]),
         ], font_size=24)
         with self.voiceover(
             "Almost everything here comes back. The chain rule is how language models generate text, and how "

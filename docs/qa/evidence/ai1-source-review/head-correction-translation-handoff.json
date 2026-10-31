@@ -1,0 +1,25 @@
+{
+  "narration": [
+    {
+      "file": "videos/ai/ai1/s04_entropy.py",
+      "zh_lines_prefix_key_unchanged": "In general, with K outcomes",
+      "old_english": "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely. The gap below it is what Shannon called redundancy: structure a guesser can exploit.",
+      "new_english": "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+      "suggested_complete_chinese": "一般来说，有K种结果时，熵至多是以2为底K的对数。<bookmark mark='a'/>证明只需要一个不等式。对数函数向下弯，所以对数的平均值，至多等于平均值的对数：詹森不等式。<bookmark mark='b'/>熵是对数的平均值。<bookmark mark='c'/>换成平均值的对数，<bookmark mark='d'/>而p分之1的平均值，正好就是结果的个数。<bookmark mark='e'/>所以H至多是log K，当且仅当每种结果同样可能时取等号。这段差距，衡量了猜测者可以利用的结构。香农定义的冗余，是这个差距占最大熵的比例，也就是除以log K。"
+    },
+    {
+      "file": "videos/ai/ai1/s08_cross_entropy.py",
+      "zh_lines_prefix_key_unchanged": "Here is why this matters for AI.",
+      "old_english": "Here is why this matters for AI. <bookmark mark='a'/> The loss every large language model is trained to minimize is exactly this: the average of log one over q, for each token of real text, given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below.",
+      "new_english": "Here is why this matters for AI. <bookmark mark='a'/> Autoregressive language models are pretrained with this next-token loss: the average of log one over q, for each token of real text, given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below.",
+      "suggested_complete_chinese": "这就是它对AI的意义所在。<bookmark mark='a'/>自回归语言模型预训练时，用的就是这个下一个词元预测损失：对真实文本的每一个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。<bookmark mark='n'/>通常用自然对数ln，所以单位是奈特：1奈特大约是1.44比特。<bookmark mark='b'/>它就是世界上的文本和模型之间的交叉熵。<bookmark mark='c'/>训练只能缩小散度；<bookmark mark='d'/>语言本身的熵，是任何模型都无法低于的下限。"
+    }
+  ],
+  "caption": {
+    "file": "videos/ai/ai1/s08_cross_entropy.py",
+    "old_english": "Cross-entropy is how every language model is trained",
+    "new_english": "Autoregressive pretraining: next-token cross-entropy",
+    "suggested_chinese": "自回归预训练：下一个词元的交叉熵"
+  },
+  "shared_tables_edited": false
+}

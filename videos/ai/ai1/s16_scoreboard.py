@@ -34,8 +34,8 @@ class Scoreboard(VoiceoverScene):
         b = {r["key"]: r.get("bits") for r in rows}
         hum = next(r for r in rows if r["key"] == "human")
         head = label(r"Bits per character on the Falcon passage, as printed", font_size=32).to_edge(UP, buff=0.25)
-        sub = note(rf"${sb['chars']:,}$ characters: \ capitals, punctuation and line breaks included".replace(",", "{,}"),
-                   font_size=22).next_to(head, DOWN, buff=0.12)
+        sub = note((rf"${sb['chars']:,}$ characters: capitals, punctuation and line breaks included"
+                    r"\\ counting order selected on this scored passage").replace(",", "{,}"), font_size=19).next_to(head, DOWN, buff=0.12)
 
         def board(shown):
             return scoreboard(rows, shown=shown, row_h=0.405, font_size=21).move_to(DOWN * 0.3)
@@ -82,9 +82,10 @@ class Scoreboard(VoiceoverScene):
             reveal("order1")
         with self.voiceover(
             f"Next, the compressors on your computer. <bookmark mark='a'/> {comp_said}. They know nothing about "
-            "English in advance, and learn only from the passage, as they go. <bookmark mark='b'/> Our best counting "
-            f"model, which read the thirty books first and looks at the previous {k} characters, gets "
-            f"{b['best']:.2f}."
+            "English in advance, and learn only from the passage, as they go. <bookmark mark='b'/> Among the counting "
+            f"orders we tested, the lowest loss on this passage uses the previous {k} characters and gets "
+            f"{b['best']:.2f}. Alpha was selected on validation text, but this context length was selected after "
+            "scoring the passage; it is an exploratory best, not a blind held-out winner."
         ) as vo:
             vo.wait_until("a")
             reveal("bzip2", run_time=1.5)
@@ -160,17 +161,19 @@ class Scoreboard(VoiceoverScene):
             r.move_to([-2.2 + w / 2, y, 0])
             t = MathTex(f"{v:,}".replace(",", "{,}") + r"\ \text{bytes}", font_size=24, color=col).next_to(r, RIGHT, buff=0.15)
             bars.add(VGroup(nm, r, t))
-        cap = note(rf"the first ${z['chars']:,}$ characters of the passage (${z['tokens']:,}$ tokens: one full GPT-2 "
-                   r"window); \ computed".replace(",", "{,}")).to_edge(DOWN, buff=0.25)
-        ok_said = ("and decoded it back, with a second run of the model, letter for letter." if z["ok"] else
-                   "but decoding it back with a second run of the model did not reproduce it exactly: the two runs "
-                   "disagreed somewhere in the last digits of a probability.")
+        cap = note((rf"first ${z['chars']:,}$ characters (${z['tokens']:,}$ tokens); known output length"
+                    r"\\ packed payload only; model and framing excluded; computed").replace(",", "{,}"),
+                   font_size=20).to_edge(DOWN, buff=0.25)
+        ok_said = ("A second run of the model decoded it back, letter for letter." if z["ok"] else
+                   "Decoding with a second run did not reproduce the text exactly; this run is not a verified "
+                   "round trip.")
         ratio = comp["xz"] / nb
         with self.voiceover(
             "Arithmetic coding turns any predictor into a compressor, so we built one. <bookmark mark='a'/> GPT-2 "
             "small reads the start of the Falcon passage a token at a time, feeding chapter eight's 32-bit coder. "
-            f"Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
-            f"GPT-2's own surprise, <bookmark mark='b'/> {ok_said} <bookmark mark='c'/> On the same "
+            f"The known-length payload packs into {nb} bytes, including padding: {8 * nb - z['ideal']:.1f} bits more "
+            f"than GPT-2's own surprise. This excludes the model and file framing. <bookmark mark='b'/> {ok_said} "
+            f"<bookmark mark='c'/> On the same "
             f"{z['chars']:,} characters, xz needs {comp['xz']:,} bytes: {ratio:.1f} times as many."
         ) as vo:
             self.play(FadeIn(head), FadeIn(stages[0]), LaggedStart(*[FadeIn(b_) for b_ in bars[:4]], lag_ratio=0.25),
@@ -197,7 +200,7 @@ class Scoreboard(VoiceoverScene):
         mb = c["model_bytes"]["GPT-2 small"] / 1e6
         head = label(r"The catch: \ the decompressor needs the model", font_size=34).to_edge(UP, buff=0.3)
         ours = VGroup(
-            label(rf"the whole passage with GPT-2 small: \ ${size_g2 / 1000:.1f}$ KB", font_size=26, color=C.NEURAL),
+            label(rf"whole-passage size estimated from log loss: \ ${size_g2 / 1000:.1f}$ KB", font_size=26, color=C.NEURAL),
             label(rf"plus GPT-2 small itself, \ $2$ bytes a parameter: \ ${mb:,.0f}$ MB".replace(",", "{,}"), font_size=26,
                   color=GREY_A),
             label(rf"together: \ ${adj['GPT-2 small']:,.0f}$ times the passage".replace(",", "{,}"), font_size=26,
@@ -218,9 +221,9 @@ class Scoreboard(VoiceoverScene):
             r[0].set_x(-3.4 + r[0].width / 2)
             r[1].set_x(4.2 - r[1].width / 2)
         blk = VGroup(tab_h, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0.4, -1.1, 0])
-        src = cite(r"G.~Del\'etang et al., \textit{Language Modeling Is Compression} (ICLR 2024), Table 1; \ "
-                   r"hutter1.net (record of 24 July 2026)")
-        lg = [(r"the passage, as plain text", plain, GREY_B), (r"GPT-2 small $+$ our coder", size_g2, C.NEURAL),
+        src = cite(r"G.~Del\'etang et al., \textit{Language Modeling Is Compression} (ICLR 2024), Table 1;\\"
+                   r"Hutter Prize official records: 24 July 2026 entry, checked 31 October 2026")
+        lg = [(r"the passage, as plain text", plain, GREY_B), (r"GPT-2 small: estimated code size", size_g2, C.NEURAL),
               (r"GPT-2 small's weights", mb * 1e6, C.SURPRISE)]
         X0, XW = -2.2, 7.4  # x of 10^3 bytes, and the width of six decades
 
@@ -238,18 +241,21 @@ class Scoreboard(VoiceoverScene):
                                  label(t, font_size=20, color=GREY_B).next_to([lx(10 ** e), -2.42, 0], DOWN, buff=0.08))
                           for e, t in ((3, r"$1$ KB"), (6, r"$1$ MB"), (9, r"$1$ GB"))])
         sizes_g = VGroup(sizes, sax, sticks, note(r"log scale").next_to(sax, RIGHT, buff=0.15))
-        hut = label(r"Hutter Prize record, \ September 2024: \ enwik9 in $110.8$ MB, \ decompressor included: \ "
-                    r"$0.89$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
+        hut = label(r"Hutter Prize, 24 July 2026: enwik9, total $100{,}424{,}672$ bytes\\"
+                    r"compressor and self-extracting archive; $0.80$ bits per input byte", font_size=21,
+                    color=C.BITS).to_edge(DOWN, buff=0.95)
         with self.voiceover(
             "There's a catch: the decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 "
-            f"small squeezes the whole passage into {size_g2 / 1000:.1f} kilobytes, but its weights take "
-            f"{mb:,.0f} megabytes: count them, and the file is {adj['GPT-2 small']:,.0f} times the passage. "
+            f"small's whole-passage size is estimated from log loss at {size_g2 / 1000:.1f} kilobytes, not a full-passage "
+            f"round trip. Its weights, at two bytes per parameter, add {mb:,.0f} megabytes: together the estimated "
+            f"two-part size is {adj['GPT-2 small']:,.0f} times the passage. "
             "<bookmark mark='b'/> In 2024, a DeepMind paper titled Language Modeling Is Compression put a "
             "70-billion-parameter model on a gigabyte of Wikipedia: 8.3 percent of the original size, against 32 "
             "for gzip and 23 for xz; fourteen thousand percent, counting its weights. Trained on text, it also beat "
-            "PNG and FLAC on images and audio. <bookmark mark='c'/> The Hutter Prize, started in 2006, counts "
-            "everything: the record, set in September 2024, packs that gigabyte, decompressor included, into 110.8 "
-            "megabytes, 0.89 bits per character, mixing many predictors. <bookmark mark='d'/> Prediction is "
+            "PNG and FLAC on its tested image patches and audio samples. <bookmark mark='c'/> The Hutter Prize, "
+            "started in 2006, counts both the compressor and the self-extracting archive. Its official table, checked "
+            "on October thirty-first, 2026, lists Vladimir Ivanov's July twenty-fourth, 2026 entry at 100.4 megabytes "
+            "total, or about 0.80 bits per input byte. <bookmark mark='d'/> Prediction is "
             "compression, and the predictor's size is part of the bill."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sizes_g))

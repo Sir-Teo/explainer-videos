@@ -1,0 +1,189 @@
+{
+  "samples": [
+    {
+      "file": "s09_arithmetic.py",
+      "function": "equivalence",
+      "en": "This is the hinge of the whole part. <bookmark mark='a'/> Give arithmetic coding any model that predicts, and you get a compressor spending about log of one over q bits per symbol: the text's length times the model's cross-entropy. <bookmark mark='b'/> A complete prefix code over a fixed set of messages gives normalized probabilities: two to the minus each code length. Other uniquely decodable codes give weights with total at most one; normalization and consistency between prefixes are needed to turn them into next-symbol probabilities. <bookmark mark='c'/> This is the connection between prediction and compression. In chapter fifteen, a language model becomes a compressor.",
+      "zh": "这是这一部分的枢纽。<bookmark mark='a'/>把能预测的模型交给算术编码，就能得到压缩器，每个符号大约花log的1除以q比特：文本长度乘以模型的交叉熵。<bookmark mark='b'/>在固定消息集合上的完备前缀码，给出归一化的概率：2的负码长次方。其他唯一可解码的码，给出的权重总和至多为1；要把它们变成下一个符号的概率，还需要归一化，以及不同前缀之间的一致性。<bookmark mark='c'/>这就是预测与压缩的联系。第15章里，我们把语言模型做成压缩器。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s10_counting.py",
+      "function": "curves",
+      "en": "But on new text, the Falcon passage, <bookmark mark='a'/> the story is different. More context helps at first: <bookmark mark='b'/> among the orders we tried, the lowest loss on this passage is at 5 letters of context, 2.02 bits per letter. This order is selected after scoring the passage, not on validation text. Beyond that, it gets worse: with 14 letters of context it's worse than knowing nothing but letter frequencies.",
+      "zh": "但在新文本，《马耳他之鹰》的段落上，<bookmark mark='a'/>故事就不同了。更多上下文起初有帮助：<bookmark mark='b'/>在试过的阶数里，这个段落上最低的损失出现在5个字母的上下文，每字母2.02比特。这个阶数是在给该段落打分之后选出的，不是用验证文本选出的。再往后，就变差了：用14个字母的上下文时，甚至比只知道字母频率还差。",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s10_counting.py",
+      "function": "laplace",
+      "en": "How much does alpha matter? <bookmark mark='a'/> Here is every alpha from a ten-thousandth to ten, at four context lengths, on the Falcon passage. <bookmark mark='b'/> For one letter of context, Laplace's rule is as good as anything: common one-letter contexts have abundant examples. <bookmark mark='c'/> With 8 letters of context, 23 percent of the passage's letters follow a context where the books never showed that letter, and most contexts were seen only a few times. Adding one to every count drowns the evidence: Laplace's rule costs 0.35 bits per letter more than the alpha chosen on held-out text, 0.04. Good smoothing is about what you haven't seen; Part 7 answers it properly.",
+      "zh": "alpha到底有多重要？<bookmark mark='a'/>这里把alpha从万分之一到10都试一遍，在4种上下文长度上，看《马耳他之鹰》段落的损失。<bookmark mark='b'/>对一个字母的上下文，拉普拉斯法则不比任何别的差：常见的单字母上下文有充足的例子。<bookmark mark='c'/>但到了8个字母的上下文，段落中23%的字母，都跟在书里从没出现过这种后续字母的上下文后面，而且大多数上下文只见过几次。给每项都加1，反而淹没了证据：拉普拉斯法则，比用留出文本选出的alpha，也就是0.04，每字母多花0.35比特。好的平滑，要处理的是没见过的东西；第7部分会认真回答它。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s12_likelihood.py",
+      "function": "gradient",
+      "en": "In words: the model's guess, minus the truth. <bookmark mark='a'/> For our shared-logit toy model, averaging gives q minus p hat. With varying contexts, average each example's q minus its one-hot answer. To update network parameters, backpropagate these logit derivatives through the network. <bookmark mark='b'/> Following it downhill, one small step at a time, is gradient descent, and it returns in Parts 4, 9 and 11.",
+      "zh": "用一句话说：模型的猜测，减去真实答案。<bookmark mark='a'/>对于这个共享同一组logit的玩具模型，取平均就得到q减去p帽。上下文不同时，要对每个样本的q减去它的独热答案，再取平均。要更新网络参数，还要把这些对logit的导数，沿网络反向传播。<bookmark mark='b'/>顺着它一步步走下坡，就是梯度下降；它会在第4、9和11部分再次出现。",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s14_knowledge.py",
+      "function": "ladder_of_knowledge",
+      "en": "So here's the ladder. <bookmark mark='a'/> Letter frequencies get you 4.1 bits. Spelling, a few letters of context, gets you 2.0. <bookmark mark='b'/> Better prediction can benefit from words and grammar, facts, and what has happened so far in the story. These are interpretations of the measured gains, not capabilities proved by a compression score alone. <bookmark mark='c'/> Shannon's people give us a historical comparison near one bit per letter. <bookmark mark='d'/> Training rewards whatever reduces the bits paid for each guess, including useful structure and context.",
+      "zh": "这就是阶梯。<bookmark mark='a'/>字母频率，得到4.1比特；拼写，也就是几个字母的上下文，得到2.0。<bookmark mark='b'/>更好的预测，可以得益于词语、语法、事实，以及故事之前发生过什么。这些是对测得改进的解释，并不是只靠压缩分数就证明了那些能力。<bookmark mark='c'/>香农的受试者，给我们提供了每字母接近1比特的历史比较。<bookmark mark='d'/>训练会奖励一切能减少猜测比特数的办法，包括有用的结构和上下文。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "file": "s14_knowledge.py",
+      "function": "landscape",
+      "en": "Let's look at what a strong model knows that a weaker one doesn't. Here is a paragraph of the Falcon passage, in tokens, <bookmark mark='a'/> each colored by how surprised GPT-2, from 2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under Qwen3, from 2025. The paragraph is less surprising overall: 350 bits instead of 446.",
+      "zh": "我们来看，一个较强的模型知道什么，是较弱的模型不知道的。这是《马耳他之鹰》段落里的一段，切成词元，<bookmark mark='a'/>每个都按2019年的GPT-2对它有多意外来着色：意料之中是暗的，出乎意料是亮的。<bookmark mark='b'/>再看同一段在2025年的Qwen3下的样子。这段话总体意外度更低：350比特，而不是446。",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s14_knowledge.py",
+      "function": "landscape",
+      "en": "Look where they differ. <bookmark mark='a'/> After Bull, GPT-2 doesn't expect Durham, 7.4 bits, or tobacco, 9.4. Qwen3 does, 2.8 and 2.3: Bull Durham was a real brand of tobacco. This is consistent with a learned association, not proof of how it was learned. <bookmark mark='b'/> And the telephone: GPT-2 pays 11.0 bits for it, Qwen3 3.5, with the earlier paragraphs present, including the telephone bell. <bookmark mark='c'/> On this paragraph alone, Qwen3 pays 13.0 bits; with the preceding paragraphs, 3.5. This comparison shows that context helps this prediction. It does not isolate which earlier sentence matters.",
+      "zh": "看看它们在哪里不同。<bookmark mark='a'/>在Bull后面，GPT-2并不期待Durham，要7.4比特，也不期待tobacco，要9.4。Qwen3则分别只要2.8和2.3。Bull Durham确实是一个烟草品牌。这与学到了关联相符，但不能证明它是怎样学到的。<bookmark mark='b'/>再看telephone：GPT-2为它付出11.0比特，Qwen3付出3.5，这时给了前面的段落，其中包括先前的电话铃声。<bookmark mark='c'/>只给这一段，Qwen3要付出13.0比特；给前面的段落，则是3.5。这个对照表明，上下文有助于这一次预测，但它并没有单独确定，是前面哪一句话起了作用。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s15_units.py",
+      "function": "frontier",
+      "en": "The field measures it this way too. In 2024, researchers at the Hong Kong University of Science and Technology and Tencent studied thirty-one public language models across twelve benchmarks. <bookmark mark='a'/> They measured compression on fresh web pages, code and papers in bits per character, since token sizes differ. <bookmark mark='b'/> General-purpose models were tested across the benchmarks; specialized code and math models only in their domains. Compression corpora were matched to those domains. <bookmark mark='c'/> The overall comparison reported a correlation of minus 0.93: an observed association in this study, not a guarantee for every model or task.",
+      "zh": "这个领域也是这样衡量的。2024年，香港科技大学和腾讯的研究者，在12个基准测试中研究了31个公开语言模型。<bookmark mark='a'/>他们测量模型压缩新收集的网页、代码和论文的本事，用每字符比特数，因为各模型的词元大小不同。<bookmark mark='b'/>通用模型接受跨基准测试的评估；专门的代码和数学模型，只在各自的领域里评估。压缩语料也和那些领域相匹配。<bookmark mark='c'/>整体比较报告的相关系数是负0.93。这是该研究里观察到的关联，不是对每个模型或任务的保证。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s16_scoreboard.py",
+      "function": "fill",
+      "en": "Next, the compressors on your computer. <bookmark mark='a'/> gzip, 3.31, xz, 3.20, bzip2, 2.92. They know nothing about English in advance, and learn only from the passage, as they go. <bookmark mark='b'/> Among the counting orders we tested, the lowest loss on this passage uses the previous 4 characters and gets 2.32. Alpha was selected on validation text, but this context length was selected after scoring the passage; it is an exploratory best, not a blind held-out winner.",
+      "zh": "接下来，是电脑上的压缩器。<bookmark mark='a'/>gzip, 3.31, xz, 3.20, bzip2, 2.92。它们事先对英语一无所知，只从这个段落本身边读边学。<bookmark mark='b'/>在试过的计数阶数中，这个段落上最低的损失，使用前面4个字符，得到2.32。alpha是用验证文本选的，但上下文长度，是在给该段落打分后选出的。这是探索中找到的最低值，不是盲测留出集上的胜者。",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s16_scoreboard.py",
+      "function": "lmzip",
+      "en": "Arithmetic coding turns any predictor into a compressor, so we built one. <bookmark mark='a'/> GPT-2 small reads the start of the Falcon passage a token at a time, feeding chapter eight's 32-bit coder. The known-length payload packs into 688 bytes, including padding: 4.7 bits more than GPT-2's own surprise. This excludes the model and file framing. <bookmark mark='b'/> A second run of the model decoded it back, letter for letter. <bookmark mark='c'/> On the same 4,331 characters, xz needs 2,180 bytes: 3.2 times as many.",
+      "zh": "算术编码能把预测器变成压缩器，所以我们真的造了一个。<bookmark mark='a'/>GPT-2 small逐个词元读入《马耳他之鹰》的开头，驱动第8章的32位编码器。输出长度已知的载荷，连同补齐位，装进688字节，比GPT-2本身的意外度多4.7比特。这不包含模型，也不包含文件封装。<bookmark mark='b'/>第二次独立运行模型，逐字解码还原了原文。<bookmark mark='c'/>同样的4331个字符，xz需要2180字节，是它的3.2倍。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s16_scoreboard.py",
+      "function": "model_size",
+      "en": "There's a catch: the decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 small's whole-passage size is estimated from log loss at 3.1 kilobytes, not a full-passage round trip. Its weights, at two bytes per parameter, add 248 megabytes: together the estimated two-part size is 11,572 times the passage. <bookmark mark='b'/> In 2024, a DeepMind paper titled Language Modeling Is Compression put a 70-billion-parameter model on a gigabyte of Wikipedia: 8.3 percent of the original size, against 32 for gzip and 23 for xz; fourteen thousand percent, counting its weights. Trained on text, it also beat PNG and FLAC on its tested image patches and audio samples. <bookmark mark='c'/> The Hutter Prize, started in 2006, counts both the compressor and the self-extracting archive. Its official table, checked on October thirty-first, 2026, lists Vladimir Ivanov's July twenty-fourth, 2026 entry at 100.4 megabytes total, or about 0.80 bits per input byte. <bookmark mark='d'/> Prediction is compression, and the predictor's size is part of the bill.",
+      "zh": "但这里有个问题：解压器需要模型，而模型很大。<bookmark mark='a'/>从对数损失估计，GPT-2 small给整段文字的编码大小为3.1KB，并不是整段文字都做了往返验证。每个参数按2字节算，权重还要加上248MB：合起来，估计的两部分编码大小，是段落的11572倍。<bookmark mark='b'/>2024年，DeepMind一篇题为《语言建模就是压缩》的论文，用一个700亿参数的模型压缩1GB的维基百科：压到原来大小的8.3%，而gzip约32%，xz约23%；把权重算进去，就是14000%。虽然在文本上训练，在论文测试的图像小块和音频样本上，它也胜过PNG和FLAC。<bookmark mark='c'/>赫特奖设立于2006年，它把压缩器和自解压档案都算进去。我们在2026年10月31日查看的官方表格，列出弗拉基米尔·伊万诺夫2026年7月24日提交的作品：总共100.4MB，约为每个输入字节0.80比特。<bookmark mark='d'/>预测就是压缩，预测器本身的大小，也是账单的一部分。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "file": "s17_outro.py",
+      "function": "recap",
+      "en": "Let's take stock. Guesses are probability distributions; the chain rule scores a whole text. Surprise had to be a logarithm, and entropy is the only consistent measure of uncertainty. Kraft's budget bounds uniquely decodable codes; Huffman is optimal for symbol codes, and long blocks can approach the entropy on average. A wrong model costs the cross-entropy. Arithmetic coding made predicting and compressing one thing, and GPT-2 compressed a known-length prefix of our passage and decoded it back, letter for letter. Counting taught generalization by failing at it, and mutual information showed how far back text remembers.",
+      "zh": "我们来回顾一下。猜测就是概率分布；链式法则给整段文本打分。意外度必须是对数，熵是唯一一致的不确定性度量。克拉夫特的预算限制唯一可解码的码；霍夫曼在符号编码中最优，而长分块的平均码长可以接近熵。用错模型，代价就是交叉熵。算术编码把预测和压缩连在一起；GPT-2把段落里一个已知长度的开头压缩下来，并且逐字解码还原了原文。计数模型用失败教会我们泛化，互信息则展示了文本在多远的距离上还存在依赖。",
+      "bookmarks": []
+    },
+    {
+      "assignment": "shade",
+      "branch": "true",
+      "en": "less surprising overall",
+      "zh": "总体意外度更低"
+    },
+    {
+      "assignment": "shade",
+      "branch": "false",
+      "en": "no less surprising overall",
+      "zh": "总体意外度并不更低"
+    },
+    {
+      "assignment": "brand",
+      "branch": "true",
+      "en": "After Bull, GPT-2 doesn't expect Durham, 7.4 bits, or tobacco, 9.4. Qwen3 does, 2.8 and 2.3: Bull Durham was a real brand of tobacco. This is consistent with a learned association, not proof of how it was learned.",
+      "zh": "在Bull后面，GPT-2并不期待Durham，要7.4比特，也不期待tobacco，要9.4。Qwen3则分别只要2.8和2.3。Bull Durham确实是一个烟草品牌。这与学到了关联相符，但不能证明它是怎样学到的。"
+    },
+    {
+      "assignment": "brand",
+      "branch": "false",
+      "en": "After Bull, Durham costs GPT-2 7.4 bits and Qwen3 2.8; tobacco, 9.4 and 2.3. Bull Durham was a real brand of tobacco.",
+      "zh": "在Bull之后，Durham花了GPT-2 7.4比特，Qwen3 2.8比特；“烟草”这个词，分别是9.4和2.3。Bull Durham是一个真实的烟草品牌。"
+    },
+    {
+      "assignment": "ok_said",
+      "branch": "true",
+      "en": "A second run of the model decoded it back, letter for letter.",
+      "zh": "第二次独立运行模型，逐字解码还原了原文。"
+    },
+    {
+      "assignment": "ok_said",
+      "branch": "false",
+      "en": "Decoding with a second run did not reproduce the text exactly; this run is not a verified round trip.",
+      "zh": "第二次运行模型解码时，没有精确还原原文；这次运行并没有通过往返验证。"
+    },
+    {
+      "assignment": "back",
+      "branch": "true",
+      "en": "and decoded it back, letter for letter",
+      "zh": "并且逐字解码还原了原文"
+    },
+    {
+      "assignment": "back",
+      "branch": "false",
+      "en": "but its independent decoding failed, so that run is not a verified round trip",
+      "zh": "但独立解码失败，所以这次运行并没有通过往返验证"
+    }
+  ],
+  "checks": [
+    "12 changed voiceovers format and translate with cached values",
+    "8 spliced branches translate",
+    "bookmarks preserved",
+    "17 new captions translate",
+    "Information.memory unchanged",
+    "Information.definition voiceovers unchanged",
+    "minus phrase preserved",
+    "both Huffman answers unchanged",
+    "all scene ASTs valid"
+  ]
+}

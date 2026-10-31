@@ -130,7 +130,7 @@ class Counting(VoiceoverScene):
         l_test = label(r"on the Falcon passage: \ new text", font_size=24, color=C.SURPRISE)
         l_test.move_to(ax.c2p(7.0, 3.7))
         best_d = Dot(ax.c2p(best, test[best]), radius=0.09, color=WHITE)
-        best_l = label(rf"best: \ $k = {best}$, \ ${test[best]:.2f}$ bits", font_size=24).next_to(best_d, UP, buff=0.25)
+        best_l = label(rf"best on this passage: \ $k = {best}$, \ ${test[best]:.2f}$ bits", font_size=22).next_to(best_d, UP, buff=0.25)
         sh = sh27[:3]
         sh_d = VGroup(*[Cross(scale_factor=0.08, stroke_color=C.HUMAN, stroke_width=3).move_to(ax.c2p(k - 1, v))
                         for k, v in zip(range(0, 3), sh) if k >= 1])
@@ -157,8 +157,9 @@ class Counting(VoiceoverScene):
                   if test[-1] > test[0] else f"it climbs to {test[-1]:.2f} bits with {ks[-1]} letters of context.")
         with self.voiceover(
             "But on new text, the Falcon passage, <bookmark mark='a'/> the story is different. More context helps at "
-            f"first: <bookmark mark='b'/> the best is {best} letters of context, at {test[best]:.2f} bits per letter. "
-            f"Beyond that, it gets worse: {beyond}"
+            f"first: <bookmark mark='b'/> among the orders we tried, the lowest loss on this passage is at {best} letters "
+            f"of context, {test[best]:.2f} bits per letter. This order is selected after scoring the passage, not on "
+            f"validation text. Beyond that, it gets worse: {beyond}"
         ) as vo:
             vo.wait_until("a")
             self.play(Create(c_test), FadeIn(d_test), run_time=2.0)
@@ -353,8 +354,8 @@ class Counting(VoiceoverScene):
                       f"For one letter of context, Laplace's rule costs {T[short][lap] - T[short][best[short]]:.3f} bits")
         with self.voiceover(
             "How much does alpha matter? <bookmark mark='a'/> Here is every alpha from a ten-thousandth to ten, at "
-            f"four context lengths, on the Falcon passage. <bookmark mark='b'/> {short_said}: its contexts are seen "
-            f"millions of times. <bookmark mark='c'/> With {ol} letters of context, {100 * un:.0f} percent of the "
+            f"four context lengths, on the Falcon passage. <bookmark mark='b'/> {short_said}: common one-letter contexts "
+            f"have abundant examples. <bookmark mark='c'/> With {ol} letters of context, {100 * un:.0f} percent of the "
             "passage's letters follow a context where the books never showed that letter, and most contexts were "
             "seen only a few times. Adding one to every count drowns the evidence: Laplace's rule costs "
             f"{cost:.2f} bits per letter more than the alpha chosen on held-out text, {A[best[ol]]:.2f}. Good "

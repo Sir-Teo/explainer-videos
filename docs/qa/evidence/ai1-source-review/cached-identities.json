@@ -1,0 +1,140 @@
+{
+  "checks": "existing-cache arithmetic and tiny exact Huffman tie witnesses only; no repo experiment functions called",
+  "cache_sha256": {
+    ".cache/ai1/letters.json": "95efb91729f1199eb11664ec66a922984e54fe2029baf1ee6aaa536a9a589ee6",
+    ".cache/ai1/letters.npz": "29bcce8478794f2a6d82225ac720281de0e3b77124d81a1948eec4f44342e996",
+    ".cache/ai1/bigram.json": "55d2361d618b0ac5cb22ecf2486ffbd90a991347f75fa74681a83f70b95eb762",
+    ".cache/ai1/bigram.npz": "c5cbc4bdbc5358a2ce4a37a6947d51db4d631c731d538f9d38c7562e070d23d5",
+    ".cache/ai1/chain.json": "9b5656c8fca23efd11fb4b2da0e3beba1a35f7ea915e35b6d73e0636e0a6e710",
+    ".cache/ai1/chain.npz": "372fd9cf699dd46b4be215d907b4c8c03cc20f3bb22bf1c9f5921d0bf4f19147",
+    ".cache/ai1/game.json": "495b8d846d3bf0745d5132d182b848d4886dbba30da78dacf90593d5fc02bbf4",
+    ".cache/ai1/game.npz": "2fd199365c94e999f42dacc1d74cdf0dd83973114179f7e43107cf76ed2725d4",
+    ".cache/ai1/huffman.json": "57addbf26913d6a0d44f437614ee3bd88feea20009809262692d9f3e3c21b759",
+    ".cache/ai1/huffman.npz": "f331f791d6a0feec8a5f4b420584243bf3a4c6bcf39f893e3a85e443b9ae7190",
+    ".cache/ai1/groups.json": "3cd69f65b94dac7637d8f41aa748ff627df662bf85e6114139145d2251f95c25",
+    ".cache/ai1/groups.npz": "95ea136335929c1a4775b66e7812fea6c153202cce3458fd5ca596ed9554ef61",
+    ".cache/ai1/kraft.json": "9ef5476ebd7e04303b88812ce317c85ec8dda9073a089062033aee606b8347c7",
+    ".cache/ai1/kraft.npz": "9296fe3382a12cb1bea5c18857eb9f432556f68b8a31ba3ca80beee0fbdf0cc1",
+    ".cache/ai1/huffopt.json": "fe5eb24d9f49dac5fcbcd56d1094863b4a1b94f26821a67cf78f1c7d3f626c7b",
+    ".cache/ai1/huffopt.npz": "f4f00ba9f8dc24493dd3f30734b4aa8fbd43b1d9cac32edf6450ca6a836ab174",
+    ".cache/ai1/typical.json": "f452c8f8251a6591176f6382ab506aa755e55932b19964d399cb090577ea8810",
+    ".cache/ai1/typical.npz": "ded009759fe5545b0d4921c671f2b10a226cdc92d8d6e320bc2ba76481165976",
+    ".cache/ai1/kl.json": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    ".cache/ai1/kl.npz": "dfc4032a422a2cf0f388e582ebd29fa7fc4ff98d8e9bc077df66871e67d1e9ef",
+    ".cache/ai1/arith.json": "3e54a151d65ff0f4a06430bfc55c956449968096e0052c5edeefd4ced1592bb0",
+    ".cache/ai1/corpus.json": "c1cc5d8d66bb4ac1e5a93a2bb9b3adc588fa4e6bd0e5e7271103fde4c74d4f8a",
+    ".cache/ai1/lms.json": "3f761520a10e73df75dac6eef38ad9e7555d0228e88ccdb0d1476ddd3018be94",
+    ".cache/ai1/probes.json": "03069b7c4c3d6fd350951bc3c4892224b1b7d4d5a664c15217a2d4293645c0f9"
+  },
+  "H_letters": 4.084202069574597,
+  "H_cond": 3.3308921524185666,
+  "q_u": 0.9985402249134948,
+  "P_the": 0.01391294937860197,
+  "game_sentence_symbols": 101,
+  "game_sentence_bits": 182.22018791588192,
+  "huffman_L": 4.1268665319381626,
+  "shannon_L": 4.6216011189372885,
+  "huffman_word_bits": 43,
+  "huffman_fixed_bits": 50,
+  "grouping_H": 4.084202069574596,
+  "kraft_shannon_sum": 0.7021484375,
+  "bad_code_first_cross": 16,
+  "optimal_checks": 400,
+  "typical_last_row": {
+    "n": 1000,
+    "k_lo": 120,
+    "k_hi": 263,
+    "P": 0.9999999884835905,
+    "log2_size": 826.7476186165617,
+    "log2_frac": -173.25238138343832,
+    "shannon_rate": 0.704129645285331,
+    "p_top": 8.437349039188377e-93
+  },
+  "kl_density_mass_on_grid": 0.9999999223580889,
+  "kl_forward_endpoint": [
+    -0.3963697979067262,
+    2.1521513044498572,
+    0.6960834695660466
+  ],
+  "kl_reverse_endpoint": [
+    -1.9931700005031852,
+    0.6603659475725682,
+    0.6853494141919497
+  ],
+  "crossentropy_swapped_letters": 4.837736588982099,
+  "KL_swapped_letters": 0.753534519407502,
+  "exercise3_flat_witness": {
+    "merges": [
+      [
+        "d",
+        "e",
+        "de"
+      ],
+      [
+        "de",
+        "b",
+        "deb"
+      ],
+      [
+        "c",
+        "a",
+        "ca"
+      ],
+      [
+        "deb",
+        "ca",
+        "root"
+      ]
+    ],
+    "lengths": [
+      2,
+      2,
+      2,
+      3,
+      3
+    ]
+  },
+  "exercise3_chain_witness": {
+    "merges": [
+      [
+        "d",
+        "e",
+        "de"
+      ],
+      [
+        "de",
+        "c",
+        "dec"
+      ],
+      [
+        "b",
+        "dec",
+        "bdec"
+      ],
+      [
+        "a",
+        "bdec",
+        "root"
+      ]
+    ],
+    "lengths": [
+      1,
+      2,
+      3,
+      4,
+      4
+    ]
+  },
+  "cache_files_changed_during_check": [],
+  "source_sha256_at_review_end": {
+    "videos/ai/ai1/s01_hook.py": "743b8caa337e89eba901d1a0fb802e7d784bf9f9446e53ac3bafcab964a398f9",
+    "videos/ai/ai1/s02_probability.py": "704cc8900b3bdf5de552268ed6d5b930c9109aaf5ca47a0d7f1acb10fc4d97fe",
+    "videos/ai/ai1/s03_surprise.py": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+    "videos/ai/ai1/s04_entropy.py": "e992962ee9af9180402fd494a1a95ff556b3d130369f6a652c76badd3caee2c9",
+    "videos/ai/ai1/s05_prefix.py": "7096d84d2c5c004e07e57d5a024d0ae7d4b6ed8599c2a9b809405b7bec7236c0",
+    "videos/ai/ai1/s06_huffman.py": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+    "videos/ai/ai1/s07_typical.py": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+    "videos/ai/ai1/s08_cross_entropy.py": "cf2fd9a715e88339ae83c1a60472c7d25d6b977f3de33fc9b2086730755d65f5",
+    "videos/ai/ai1/README.md": "4d410542bc64b2cebf07ced5bbed57b76a3e3d0144d971b6ef1a7c3237a16529"
+  }
+}

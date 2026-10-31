@@ -352,8 +352,8 @@ class Entropy(VoiceoverScene, ThreeDScene):
             "inequality. <bookmark mark='b'/> Entropy is an "
             "average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the "
             "average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with "
-            "equality only when every outcome is equally likely. The gap below it is what Shannon called "
-            "redundancy: structure a guesser can exploit."
+            "equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. "
+            "Shannon's redundancy is that gap divided by log two of K."
         ) as vo:
             self.play(FadeIn(head), Create(tri), FadeIn(corners), FadeIn(dome), run_time=1.2)
             self.move_camera(phi=62 * DEGREES, theta=-62 * DEGREES, added_anims=[FadeOut(corners)], run_time=2.2)

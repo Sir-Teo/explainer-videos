@@ -1,0 +1,93 @@
+{
+  "checks": "existing-cache arithmetic and tiny exact Huffman tie witnesses only; no repo experiment functions called",
+  "H_letters": 4.084202069574597,
+  "H_cond": 3.3308921524185666,
+  "q_u": 0.9985402249134948,
+  "P_the": 0.01391294937860197,
+  "game_sentence_symbols": 101,
+  "game_sentence_bits": 182.22018791588192,
+  "huffman_L": 4.1268665319381626,
+  "shannon_L": 4.6216011189372885,
+  "huffman_word_bits": 43,
+  "huffman_fixed_bits": 50,
+  "grouping_H": 4.084202069574596,
+  "kraft_shannon_sum": 0.7021484375,
+  "bad_code_first_cross": 16,
+  "optimal_checks": 400,
+  "kl_density_mass_on_grid": 0.9999999223580889,
+  "kl_forward_endpoint": [
+    -0.3963697979067262,
+    2.1521513044498572,
+    0.6960834695660466
+  ],
+  "kl_reverse_endpoint": [
+    -1.9931700005031852,
+    0.6603659475725682,
+    0.6853494141919497
+  ],
+  "crossentropy_swapped_letters": 4.837736588982099,
+  "KL_swapped_letters": 0.753534519407502,
+  "exercise3_flat_witness": {
+    "merges": [
+      [
+        "d",
+        "e",
+        "de"
+      ],
+      [
+        "de",
+        "b",
+        "deb"
+      ],
+      [
+        "c",
+        "a",
+        "ca"
+      ],
+      [
+        "deb",
+        "ca",
+        "root"
+      ]
+    ],
+    "lengths": [
+      2,
+      2,
+      2,
+      3,
+      3
+    ]
+  },
+  "exercise3_chain_witness": {
+    "merges": [
+      [
+        "d",
+        "e",
+        "de"
+      ],
+      [
+        "de",
+        "c",
+        "dec"
+      ],
+      [
+        "b",
+        "dec",
+        "bdec"
+      ],
+      [
+        "a",
+        "bdec",
+        "root"
+      ]
+    ],
+    "lengths": [
+      1,
+      2,
+      3,
+      4,
+      4
+    ]
+  },
+  "cache_files_changed_during_check": []
+}

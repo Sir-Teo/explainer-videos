@@ -244,7 +244,7 @@ class CrossEntropy(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def loss(self):
-        head = label(r"Cross-entropy is how every language model is trained", font_size=36).to_edge(UP, buff=0.45)
+        head = label(r"Autoregressive pretraining: next-token cross-entropy", font_size=36).to_edge(UP, buff=0.45)
         f = mtex(r"\mathcal{L}(\theta) = \frac{1}{N} \sum_{t=1}^{N} \log \frac{1}{q_\theta(x_t \mid x_{<t})}",
                  font_size=46).next_to(head, DOWN, buff=0.6)
         f[0][0:4].set_color(C.LOSS)
@@ -261,8 +261,8 @@ class CrossEntropy(VoiceoverScene):
                         color=C.KL)
         ln_card.next_to(f, DOWN, buff=0.7).set_x(0)
         with self.voiceover(
-            "Here is why this matters for AI. <bookmark mark='a'/> The loss every large language model is trained "
-            "to minimize is exactly this: the average of log one over q, for each token of real text, given the "
+            "Here is why this matters for AI. <bookmark mark='a'/> Autoregressive language models are pretrained "
+            "with this next-token loss: the average of log one over q, for each token of real text, given the "
             "tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one "
             "nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the "
             "model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy "

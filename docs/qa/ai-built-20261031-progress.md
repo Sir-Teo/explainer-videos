@@ -168,3 +168,43 @@ language, retry temperature and maximum CPU batch size. All 76 tests pass. This 
 The local server has been restarted with the bounded CPU path and two threads. A real repeat of current-source
 synthesis is still pending; the memory fix is not a claim that the full narrated chapter or series passed. Earlier
 throughput measurements used one speech thread alongside renders, so they are not a dedicated-machine benchmark.
+
+## Frozen Part 1 factual correction batch (13:26 UTC)
+
+This checkpoint supersedes the incomplete-data snapshot above: all Part 1 model measurements and numerical items
+are now complete, including the real independent arithmetic-coding round trip. Every one of the 17 chapters has
+been source-reviewed; [head review](evidence/ai1-source-review/head-review.md) and
+[tail review](evidence/ai1-source-review/tail-review.md) preserve exact coverage and source-verification limits.
+The identified corrections are implemented in English and Chinese; 161/161 narration sources and all 17 changed
+on-screen captions are covered. Review notes describe pre-fix source; the translation handoffs record the applied batch.
+
+| Chapters | Actual source findings and changes | Rendered follow-up |
+|---|---|---|
+| Hook, Probability, Surprise | Cached probabilities/chain rule/utterances cross-checked; no new numerical failure | Final bilingual refresh and visual review running |
+| Entropy | Distinguish absolute entropy gap from Shannon relative redundancy | Updated bilingual capture pending |
+| Prefix, Huffman | Bounds and cached optimality checked; correct both Huffman exercise merge histories | Final captures pending |
+| Typical | Disclose finite-length AEP exercise as leading-exponential approximation | Final captures pending |
+| CrossEntropy | Scope next-token loss to autoregressive pretraining; retain enhanced normalized KL diagrams | Final captures pending |
+| Arithmetic | State Kraft normalization and prefix-consistency conditions | Inspect added note and timing |
+| Counting | Disclose context order selected on scored passage; avoid all-context frequency overclaim | Inspect changed caption |
+| Shannon1951 | Identify smoothed counting comparator separately from rank guesser | Inspect comparison label |
+| Likelihood | Identify shared-logit toy gradient and backpropagation qualification | Inspect logit label |
+| Information | Previous two letters jointly; signed millionths spoken clearly | Audio 4/6 blocks completed, zero detected signal/timing issues |
+| Knowledge | Keep measured associations distinct from causal interpretation | Inspect captions and pacing |
+| Units | Correct study inventory to 31 models and matched benchmark coverage | Inspect study caption |
+| Scoreboard | Byte padding overhead, real subset versus estimated full-passage code, measured selection, current Hutter date/units | Inspect new multi-line captions |
+| Outro | Plot complete reverse-KL peak; qualify code optimum, derivative and known-length prefix | Inspect recap and final pacing |
+
+All 34 bilingual cases have earlier endpoint captures and full silent motion renders. The factual batch and a
+necessary cached-only schema guard invalidate prior fingerprints; final passes are regenerating current evidence.
+The guard rejects stale Part 2 caches before an upgrade loader can compute, preserving cached-only behavior.
+76 full-suite tests passed after the factual source batch; 21 focused QA/cache tests then passed after the generic
+guard regression. No full continuous playback/listening or production-resolution approval is claimed.
+
+Bounded CPU narration has completed the previously OOM-triggering 35.6-second paragraph and two later blocks,
+without another OOM. The unchanged ASR threshold is 0.93; the signed-unit stress probe scored 0.958 on its first take.
+Full chapter audio/sync remains incomplete. CPU throughput varies substantially with retries and chunk length, so
+no reliable completion ETA is available.
+
+Part 2 repairs are being prepared in an isolated file scope while Part 1 renders/narration continue. No Part 2
+production computations or rendered sign-off are claimed. Remaining Parts 3–31 remain untested.

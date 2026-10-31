@@ -49,7 +49,7 @@ class Information(VoiceoverScene):
             label(rf"$H(X) = {Hx:.2f}$, \ $H(X \mid Y) = {Hc:.2f}$", font_size=26),
             label(rf"$I(X; Y) = {I:.2f}$ bits", font_size=30, color=C.BITS),
         ).arrange(DOWN, buff=0.14).move_to([4.05, -2.3, 0])
-        two = label(rf"two letters back: \ ${I2:.2f}$ bits; \ the second one alone: \ ${Isk:.2f}$", font_size=24,
+        two = label(rf"previous two letters jointly: \ ${I2:.2f}$ bits; \ lag two alone: \ ${Isk:.2f}$", font_size=23,
                     color=GREY_A).to_corner(DL, buff=0.45)
         tag = computed_tag()
         with self.voiceover(
