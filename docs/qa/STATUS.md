@@ -38,8 +38,10 @@ The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent
 manifest order. English Einsum covers 390 selected times and separately had native cloud playback through terminal
 stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
 matrix heading protection, projection legend margins, PCA viewport and roundoff annotation. Motion review found
-additional Hook label-blink/footer collisions, a Vectors transition clip, a Power emphasis collision and a rounded
-negative-zero determinant display. Repairs require fresh scoped regression; unfinished fixes are not approved.
+additional Hook label-blink/footer collisions, a Vectors transition clip, a Power emphasis collision and a grid/header
+collision. Source inspection also confirmed that linear interpolation wrongly shrinks supposed rotations in Matrices,
+Eigen and SVD. Repairs require fresh scoped regression; unfinished fixes are not approved. An initial negative-zero
+review note was retracted after native inspection confirmed the displayed value is +0.00; it is not a proven defect.
 
 Part 4 has read-only preparation findings; no production computation, rendering or implementation is claimed.
 Parts 5–31 remain queued. The all-31 inventory remains the task scope. Parts 1 and 2 retain explicit narration,
