@@ -60,8 +60,13 @@ class Outro(VoiceoverScene):
         A = np.asarray(s3["alphas"], float)
         ax4 = Axes(x_range=[A[0], A[-1], 1], y_range=[0, 1, 0.5], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                    axis_config={"stroke_color": GREY_D, "include_ticks": False})
-        out.append((VGroup(ax4, *[curve(ax4, A, s3[f"psat_{n}"], c, 3) for n, c in
-                                  zip(s3["ns"], [GREY_B, HEUR, FCOL, PATH])]), r"SAT's phase transition", SYMBOL))
+        sat_tile = VGroup(ax4, *[curve(ax4, A, s3[f"psat_{n}"], c, 3) for n, c in
+                                zip(s3["ns"], [GREY_B, HEUR, FCOL, PATH])])
+        censored = any(s3[f"censored_{n}"] for n in s3["ns"])
+        if censored:
+            sat_tile.add(*[DashedVMobject(curve(ax4, A, s3[f"psat_upper_{n}"], c, 2))
+                           for n, c in zip(s3["ns"], [GREY_B, HEUR, FCOL, PATH])])
+        out.append((sat_tile, r"SAT fraction bounds" if censored else r"SAT's phase transition", SYMBOL))
         cd = load("cdcl")
         ax5 = Axes(x_range=[2, 12, 2], y_range=[0, 8, 2], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                    axis_config={"stroke_color": GREY_D, "include_ticks": False})

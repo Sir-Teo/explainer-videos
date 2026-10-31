@@ -213,7 +213,7 @@ class Local(VoiceoverScene):
         lnum.add_updater(lambda m: m.set_value(tr[int(np.clip(k.get_value(), 0, n_snaps - 1)) * every, 1]))
         llab = VGroup(label(r"length", font_size=24, color=GREY_A), lnum).arrange(RIGHT, buff=0.2).move_to([5.3, -1.6, 0])
         lnum.add_updater(lambda m: m.next_to(llab[0], RIGHT, buff=0.2))
-        acc = label(rf"$2$-opt moves: \ reverse a stretch of the tour; \\ ${d['sa_per_temp']:,}$ tries per temperature"
+        acc = label(rf"$2$-opt moves: \ reverse a stretch of the tour; \\ ${d['sa_per_temp']:,}$ evaluated moves per temperature"
                     .replace(",", "{,}"), font_size=20, color=GREY_A).move_to([3.9, -2.5, 0])
         acc.set_x(min(acc.get_x(), 6.9 - acc.width / 2))
         tag = note(r"computed: \ berlin52 (TSPLIB), \ $52$ places in Berlin").to_corner(DL, buff=0.2)
@@ -276,19 +276,21 @@ class Local(VoiceoverScene):
             bars.add(VGroup(bar, rng_, val))
             names.add(label(nm, font_size=20, color=col).next_to(g.ax.c2p(lo, y), LEFT, buff=0.2))
         optl = DashedLine(g.ax.c2p(opt, 0), g.ax.c2p(opt, len(items)), color=PATH, dash_length=0.08)
-        tag = note(rf"computed: \ the last three on an equal budget of ${d['budget']:,}$ tours looked at, \ "
+        tag = note(rf"computed: \ the last three on an equal budget of ${d['budget']:,}$ candidate-cost evaluations, \ "
                    rf"${len(d['eq_anneal'])}$ seeds; \ bar = mean, \ line = range".replace(",", "{,}")).to_corner(DR,
                                                                                                                 buff=0.2)
         sa, rs, ga = (float(np.mean(d[k])) for k in ("eq_anneal", "eq_restarts", "eq_ga"))
         n_opt = sum(1 for v in d["eq_anneal"] if v == opt)
         order = sorted([("annealing", sa), ("restarted hill climbing", rs), ("the genetic algorithm", ga)],
                        key=lambda t: t[1])
-        verdict = (f"On the same budget of {d['budget']:,} tours looked at, {order[0][0]} does best, averaging "
+        verdict = (f"On the same budget of {d['budget']:,} candidate-cost evaluations, {order[0][0]} does best, averaging "
                    f"{order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]}, {order[2][1]:,.0f}.")
         hits = (f"Annealing found the optimum itself in {n_opt} of {len(d['eq_anneal'])} runs." if n_opt else
                 "Annealing never found the optimum itself.")
         with self.voiceover(
-            "Is the cooling worth it? Compare on equal terms: the same number of tours looked at. <bookmark mark='a'/> The "
+            "Is the cooling worth it? Limit all three methods to the same number of candidate-cost evaluations, including "
+            "initialization. A two-opt delta counts once, like scoring one genetic child; this is not equal CPU time. "
+            "<bookmark mark='a'/> The "
             "greedy tour, always to the nearest unvisited place, is "
             f"{100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing "
             f"polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + hits
@@ -340,12 +342,12 @@ class Local(VoiceoverScene):
                           r"a population; \ the fitter reproduce; \ children mix their parents and mutate",
                           width=5.6, color=HIST, font_size=20).move_to([3.6, 1.6, 0])
         bp = np.asarray(d["ga_best_per_gen"])
-        G = len(bp)
+        G = max(1, len(bp) - 1)
         ga_gap = 100 * (bp[-1] / d["opt"] - 1)
         gg = axes([0, G], [6000, bp[0] * 1.05], x_length=5.2, y_length=2.4, xlabel=r"generations",
                   ylabel=r"best tour in the population", xticks=[0, G], yticks=[10000, 20000],
                   yfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), center=[3.6, -1.6, 0])
-        gc = curve(gg.ax, np.arange(G), bp, LEARN, 3)
+        gc = curve(gg.ax, np.arange(len(bp)), bp, LEARN, 3)
         optl = DashedLine(gg.ax.c2p(0, d["opt"]), gg.ax.c2p(G, d["opt"]), color=PATH, dash_length=0.08)
         new = VGroup(history_card(2023, r"FunSearch", r"a language model proposes the mutations: \ new results in "
                                   r"combinatorics", width=4.4, color=LEARN, font_size=18),

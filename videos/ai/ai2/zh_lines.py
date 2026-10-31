@@ -96,8 +96,8 @@ ZH = {
     'f"A star is only as good as its heuristic.':
         "A星的好坏取决于它的启发式。好的启发式从哪里来？<bookmark mark='a'/>写下八数码的规则：如果方格A挨着方格B，并且B是空的，方块就可以从A移到B。<bookmark mark='b'/>现在作个弊。去掉“B是空的”，每块方块都能穿过别的方块走回家：这个更容易的谜题的代价，是各方块行距与列距之和，也就是曼哈顿距离。这里是{h2}。<bookmark mark='c'/>两个条件都去掉，每块放错的方块一步就跳回家：代价就是放错的方块数，这里是{h1}。<bookmark mark='d'/>真正的答案，从我们广度优先的地图上查：{len(d['path']) - 1}步。<bookmark mark='e'/>这是通用的配方，由朱迪亚·珀尔在八十年代初明确提出：把问题放松到容易为止，然后精确求解。去掉规则只会让解变短：白送的可采纳性。",
 
-    'f"How much does the better guess buy?':
-        "更好的猜测能换来多少？在八数码上运行A星，每种解长取100个局面。<bookmark mark='a'/>不用启发式时，在解长{dd}处，它平均扩展{last['astar_h0']:,.0f}个状态。<bookmark mark='b'/>数放错的方块：{last['astar_h1']:,.0f}个。<bookmark mark='c'/>曼哈顿距离：{last['astar_h2']:,.0f}个。<bookmark mark='d'/>有效分支因子，也就是同样大小、同样深度的均匀树的分支数，从{ebf['astar_h0']:.2f}降到{ebf['astar_h1']:.2f}，再降到{ebf['astar_h2']:.2f}：每向1靠近一步，都是指数级的节省。<bookmark mark='e'/>曼哈顿距离从不小于放错的方块数；当一个可采纳的启发式占优于另一个时，用它的A星扩展的状态绝不会更多。",
+    'f"How much does the better guess buy? A star on the eight-puzzle, a hundred positions per solution length. <bookmark mark=\'a\'/> With no heuristic, at length {dd}, it expands {last[\'astar_h0\']:,.0f} states on average. <bookmark mark=\'b\'/> Counting misplaced tiles: {last[\'astar_h1\']:,.0f}. <bookmark mark=\'c\'/> The Manhattan distance: {last[\'astar_h2\']:,.0f}. <bookmark mark=\'d\'/> The effective branching factor, the branching of a uniform tree of the same size and depth, falls from {ebf[\'astar_h0\']:.2f} to {ebf[\'astar_h1\']:.2f} to {ebf[\'astar_h2\']:.2f}: each step toward one is an exponential saving. <bookmark mark=\'e\'/> The Manhattan distance is never below the misplaced count. For consistent heuristics, dominance cannot increase the states with f below the optimal cost that A star must expand. At the boundary, equal f values and tie breaking can change the total."':
+        "更好的猜测能换来多少？在八数码上运行A星，每种解长取100个局面。<bookmark mark='a'/>不用启发式时，在解长{dd}处，它平均扩展{last['astar_h0']:,.0f}个状态。<bookmark mark='b'/>数放错的方块：{last['astar_h1']:,.0f}个。<bookmark mark='c'/>曼哈顿距离：{last['astar_h2']:,.0f}个。<bookmark mark='d'/>有效分支因子，也就是同样大小、同样深度的均匀树的分支数，从{ebf['astar_h0']:.2f}降到{ebf['astar_h1']:.2f}，再降到{ebf['astar_h2']:.2f}：每向1靠近一步，都是指数级的节省。<bookmark mark='e'/>曼哈顿距离从不小于放错的方块数。对一致的启发式，占优关系不会增加A星必须扩展的、f小于最优代价的状态。在边界上，相同的f值及其平局处理方式会改变总扩展数。",
 
     'f"The fifteen-puzzle has about ten trillion states':
         "十五数码大约有10万亿个状态，多到画不出地图。1985年，理查德·科尔夫用IDA星最优地解出了随机局面：保持A星的排序，但以一系列深度优先搜索来运行，f的上限逐次提高，几乎不需要内存。<bookmark mark='a'/>这是它在打乱的局面上的表现。数放错的方块时，它很快撞上我们设的{d['caps']['misplaced']:,}个局面的上限而放弃，{len(rows)}次里有{n_cap['misplaced']}次。<bookmark mark='b'/>曼哈顿距离好得多。<bookmark mark='c'/>还能更好：精确地解一个更小的放松谜题，把答案记下来。只跟踪五块方块，忽略其余的，广度优先搜索就能给出从每一种摆放把它们送回家的精确代价。这就是模式数据库，约瑟夫·卡尔伯森和乔纳森·谢弗的想法；三张这样的表，对应三组方块，可以相加。<bookmark mark='d'/>它生成的局面比曼哈顿距离少大约{ratio:,.0f}倍，因为它知道得更多：对一个随机局面，它平均猜{hm['pdb']:.0f}步，另外两个分别是{hm['manhattan']:.0f}和{hm['misplaced']:.0f}。",
@@ -127,8 +127,8 @@ ZH = {
     "f'It ends at {best:,}, against the proven optimum":
         '它最后停在{best:,}，而已被证明的最优值是{int(d[\'opt\']):,}。',
 
-    'f"Is the cooling worth it?':
-        "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了{100 * (min(d['nn_lengths']) / opt - 1):.0f}%；2-opt爬山法把它打磨到{min(d['nn2opt_lengths']):,}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{hits}",
+    'f"Is the cooling worth it? Limit all three methods to the same number of candidate-cost evaluations, including initialization. A two-opt delta counts once, like scoring one genetic child; this is not equal CPU time. <bookmark mark=\'a\'/> The greedy tour, always to the nearest unvisited place, is {100 * (min(d[\'nn_lengths\']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing polishes it to {min(d[\'nn2opt_lengths\']):,}. <bookmark mark=\'b\'/> " + verdict + " <bookmark mark=\'c\'/> " + hits':
+        "降温值得吗？让三种方法的实际候选代价评估次数相同，初始化也计入。计算一次2-opt代价差计一次，给一个遗传算法子代打分也计一次；这不代表相同CPU时间。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了{100 * (min(d['nn_lengths']) / opt - 1):.0f}%；2-opt爬山法把它打磨到{min(d['nn2opt_lengths']):,}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{hits}",
 
     "f'Annealing found the optimum itself in":
         '退火在{len(d[\'eq_anneal\'])}次运行中有{n_opt}次找到了最优解本身。',
@@ -136,8 +136,8 @@ ZH = {
     'Annealing never found the optimum itself.':
         '退火一次也没有找到最优解本身。',
 
-    "f'On the same budget of {d['budget']:,} tours looked at":
-        '在同样看{d[\'budget\']:,}条回路的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}；{order[2][0]}平均{order[2][1]:,.0f}。',
+    'f"On the same budget of {d[\'budget\']:,} candidate-cost evaluations, {order[0][0]} does best, averaging {order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]}, {order[2][1]:,.0f}."':
+        "在同样{d['budget']:,}次候选代价评估的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}；{order[2][0]}平均{order[2][1]:,.0f}。",
 
     'f"A third idea keeps a whole population.':
         "第三种思路是保留一整个种群。<bookmark mark='a'/>约翰·霍兰德1975年提出的遗传算法，让更好的状态繁殖：一个孩子取两个父母的片段，再加一点随机变异。<bookmark mark='b'/>在我们的预算下，一个朴素版本最后比最优解高{ga_gap:.0f}%：两条好回路生出的孩子，大多比父母都差。<bookmark mark='c'/>种群搜索迎来了第二春。2023年，DeepMind的FunSearch让一个语言模型来提出变异；2025年，AlphaEvolve用同样的方式演化程序，找到了一种只用48次乘法计算4乘4复数矩阵乘法的方法，比施特拉森1969年的方法少一次。",
@@ -208,14 +208,14 @@ ZH = {
     'Real knowledge needs more. First-order logic':
         "真正的知识需要更多。一阶逻辑，来自1879年的戈特洛布·弗雷格，加入了对象、关系，以及“所有”和“存在”：对所有的x、y和z，如果x是y的父母，y是z的父母，那么x是z的祖父母。<bookmark mark='a'/>库尔特·哥德尔在1930年证明：每个有效的一阶句子都有证明，所以一台在证明中搜索的机器一定能找到它。<bookmark mark='b'/>但没有程序能在一般情况下判定有效性：如果答案是否，搜索可能永远不会结束。",
 
-    'In 1965 Alan Robinson gave machines a single rule of inference':
-        "1965年，艾伦·鲁滨逊给了机器一条就足够的推理规则。<bookmark mark='a'/>把每条事实写成一个子句，也就是若干文字的“或”。如果一个子句含有x，另一个含有非x，就把它们归结：剩下的部分至少有一个必须成立。<bookmark mark='b'/>要证明一个目标，就加入它的否定，这里是：草地不湿，<bookmark mark='c'/>然后不断归结，直到推出空子句，也就是一个矛盾。<bookmark mark='d'/>不湿和下雨那条规则，得到不下雨；不湿和洒水器那条规则，得到洒水器没开；下雨或洒水器，加上洒水器没开，得到下雨；下雨对上不下雨，什么都不剩。<bookmark mark='e'/>鲁滨逊证明这个方法是可靠的，而且是反驳完备的：只要事实蕴涵目标，归结就能推出空子句。",
+    "In 1965 Alan Robinson gave machines a resolution rule for automated deduction. <bookmark mark='a'/> Write every fact as a clause, an or of literals. If one clause contains x and another not x, resolve them: at least one of the rest must hold. <bookmark mark='b'/> To prove a goal, add its negation, here: the grass is not wet, <bookmark mark='c'/> and resolve until you derive the empty clause, a contradiction. <bookmark mark='d'/> Not wet and the rain rule give no rain; not wet and the sprinkler rule give no sprinkler; rain or sprinkler, with no sprinkler, gives rain; rain against no rain leaves nothing. <bookmark mark='e'/> Robinson proved the method sound and refutation-complete. First-order clauses also need factoring: unify same-sign literals within one clause. Without a resource cap, resolution and factoring can derive the empty clause whenever the clauses are inconsistent. Our bounded run can stop without an answer.":
+        "1965年，艾伦·鲁滨逊给了机器一条用于自动演绎的归结规则。<bookmark mark='a'/>把每条事实写成一个子句，也就是若干文字的“或”。如果一个子句含有x，另一个含有非x，就把它们归结：剩下的部分至少有一个必须成立。<bookmark mark='b'/>要证明一个目标，就加入它的否定，这里是：草地不湿，<bookmark mark='c'/>然后不断归结，直到推出空子句，也就是一个矛盾。<bookmark mark='d'/>不湿和下雨那条规则，得到不下雨；不湿和洒水器那条规则，得到洒水器没开；下雨或洒水器，加上洒水器没开，得到下雨；下雨对上不下雨，什么都不剩。<bookmark mark='e'/>鲁滨逊证明这个方法是可靠的，而且是反驳完备的。一阶子句还需要因子化：合一同一子句内同号的文字。不加资源上限时，只要子句集不一致，归结与因子化就能推出空子句。我们有资源上限的运行，也可能没有得到答案就停止。",
 
     'With variables, resolution needs one more step.':
         "有了变量，归结还需要多一步。<bookmark mark='a'/>否定后的目标，只有在规则里的变量被匹配成安妮和艾达之后，才能和规则归结。找出最一般的这种代换，就是合一，鲁滨逊那篇论文的另一半。<bookmark mark='b'/>再走两步，就得到空子句。<bookmark mark='c'/>把子句限制成最多只有一个正文字，归结就变成了一种编程语言：Prolog，由阿兰·科尔默劳尔和菲利普·鲁塞尔于1972年在马赛创造，背后是罗伯特·科瓦尔斯基的理论。",
 
-    'f"Completeness is not efficiency.':
-        "完备不等于高效。<bookmark mark='a'/>给证明器八条家庭事实和三条规则，问安妮是不是弗洛拉的祖先，相隔四代。<bookmark mark='b'/>把每一对子句一层一层地归结，它在找到那个{sos['proof_len']}个子句的证明之前，生成了{sat['made']:,}个子句。<bookmark mark='c'/>支持集策略，来自拉里·沃斯和同事1965年的工作，只归结涉及否定目标或其后代的子句对：{sos['made']:,}个。<bookmark mark='d'/>定理证明器的成败，就取决于这样的策略。归结的后代，像Vampire和E，每年还在比赛，证明助手也会调用它们来补全常规步骤。",
+    '"Completeness is not efficiency. <bookmark mark=\'a\'/> Give the prover eight family facts and three rules, and ask whether Anne is an ancestor of Flora, four generations away. <bookmark mark=\'b\'/> " + sat_verdict + " <bookmark mark=\'c\'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs involving the negated goal or its descendants. " + sos_verdict + " <bookmark mark=\'d\'/> Provers live or die by such strategies. Resolution\'s descendants, like Vampire and E, still compete every year, and proof assistants call on them to fill in routine steps."':
+        "完备不等于高效。<bookmark mark='a'/>给证明器八条家庭事实和三条规则，问安妮是不是弗洛拉的祖先，相隔四代。<bookmark mark='b'/>{sat_verdict}<bookmark mark='c'/>支持集策略，来自拉里·沃斯和同事1965年的工作，只归结涉及否定目标或其后代的子句对。{sos_verdict}<bookmark mark='d'/>定理证明器的成败，就取决于这样的策略。归结的后代，像Vampire和E，每年还在比赛，证明助手也会调用它们来补全常规步骤。",
 
     # ------------------------------------------------------------------ SAT
     'Chapter nine. Satisfiability.':
@@ -236,8 +236,8 @@ ZH = {
     "f'Here the step is about as wide":
         '在这里，{n1}个变量的台阶和{n0}个变量的差不多宽。',
 
-    'f"The transition is also where the problems are hard.':
-        "相变的地方，也正是问题难的地方。<bookmark mark='a'/>数一数DPLL的决策次数：远低于阈值时，几乎马上就找到一个解；远高于阈值时，几乎马上就找到矛盾。<bookmark mark='b'/>对{n1}个变量，中位数在比值{pk:.1f}处达到峰值，为{med.max():,.0f}次决策，而左边缘是{lo_side:,.0f}次，右边缘是{hi_side:,.0f}次。易、难、易。",
+    '"The transition is also where the problems are hard. <bookmark mark=\'a\'/> Count DPLL\'s decisions: far below the threshold a solution is found almost at once, far above, a contradiction. <bookmark mark=\'b\'/> " + result':
+        "相变的地方，也正是问题难的地方。<bookmark mark='a'/>数一数DPLL的决策次数：远低于阈值时，几乎马上就找到一个解；远高于阈值时，几乎马上就找到矛盾。<bookmark mark='b'/>{result}",
 
     'f"Modern solvers add one idea: learn from every mistake.':
         "现代求解器加了一个想法：从每一次错误中学习。<bookmark mark='a'/>这里一个求解器做了四个决策，每层一个，传播又推出了一连串赋值，每个箭头都从迫使它的那些文字指过来。<bookmark mark='b'/>这一连串以冲突告终。DPLL只会撤销最后一个决策。<bookmark mark='c'/>冲突驱动的子句学习会问：为什么？它把冲突往回追，找到每条路径都必经的第一个点：这里是x{uip}。<bookmark mark='d'/>这些原因变成一个新子句，它被原公式蕴涵，从此永远排除这个组合。<bookmark mark='e'/>然后求解器往回跳，越过无关的决策，回到第{bj}层。再加上聪明的分支和廉价的簿记，来自1996年的GRASP和2001年的Chaff，每个有竞争力的求解器都这样工作。",
@@ -364,6 +364,45 @@ ZH = {
 
     "Russell and Norvig's textbook is the place to go deeper":
         '想深入学习，最好去读拉塞尔和诺维格的教科书：本部分的一切都在里面。至于历史，可以读尼尔斯·尼尔森的《人工智能的探索》。感谢观看，第3部分见。',
+
+    # Corrected censored outcomes and their uncensored result branch.
+    'Some runs reached the decision cap without an answer. The solid and dashed lines bound the SAT fraction; unknown is not unsatisfiable, and a censored crossing or width is unresolved.':
+        '有些运行达到决策次数上限，仍未得出答案。实线与虚线给出可满足比例的下界和上界；未知不等于不可满足，受到截断影响的交点或宽度仍未确定。',
+
+    'The sampled ratios do not bracket both window endpoints, so a width is unresolved.':
+        '采样的比值范围没有覆盖窗口的两个端点，所以宽度仍未确定。',
+
+    'Some runs are truncated at the decision cap. These medians describe observed work, including truncated runs; they do not locate the peak of completion work.':
+        '有些运行在决策次数上限处被截断。这些中位数描述的是已经观察到的工作量，包括被截断的运行；它们不能定位完成求解所需工作量的峰值。',
+
+    "f'For {n1} variables, the median peaks at a ratio of {pk:.1f}, at {med.max():,.0f} decisions, against {lo_side:,.0f} at the left edge and {hi_side:,.0f} at the right. Easy, hard, easy.'":
+        '对{n1}个变量，中位数在比值{pk:.1f}处达到峰值，为{med.max():,.0f}次决策，而左边缘是{lo_side:,.0f}次，右边缘是{hi_side:,.0f}次。易、难、易。',
+
+
+    # Actual stopping outcomes for capped and uncapped resolution runs.
+
+
+
+
+    # Explicit outcome branches: no proof claim for capped runs.
+    'f"The level-by-level search found a refutation after {sat[\'made\']:,} recorded clauses; the proof uses {sat[\'proof_len\']} clauses."':
+        "逐层归结搜索记录了{sat['made']:,}个子句后找到反驳证明；证明用到{sat['proof_len']}个子句。",
+
+    'f"The level-by-level search reached its cap of {sat[\'clause_cap\']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run."':
+        "逐层归结搜索达到记录{sat['clause_cap']:,}个子句的上限，仍未找到反驳证明。这次运行没有确定目标。",
+
+    'f"The level-by-level search stopped with no new clauses after {sat[\'made\']:,} recorded clauses, without finding a refutation."':
+        "逐层归结搜索记录了{sat['made']:,}个子句后，因没有新子句而停止，未找到反驳证明。",
+
+    'f"The set-of-support search found a refutation after {sos[\'made\']:,} recorded clauses; the proof uses {sos[\'proof_len\']} clauses."':
+        "支持集搜索记录了{sos['made']:,}个子句后找到反驳证明；证明用到{sos['proof_len']}个子句。",
+
+    'f"The set-of-support search reached its cap of {sos[\'clause_cap\']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run."':
+        "支持集搜索达到记录{sos['clause_cap']:,}个子句的上限，仍未找到反驳证明。这次运行没有确定目标。",
+
+    'f"The set-of-support search stopped with no new clauses after {sos[\'made\']:,} recorded clauses, without finding a refutation."':
+        "支持集搜索记录了{sos['made']:,}个子句后，因没有新子句而停止，未找到反驳证明。",
+
 }
 
 PHRASES = {

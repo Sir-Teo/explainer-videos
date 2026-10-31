@@ -114,7 +114,7 @@ class Heuristics(VoiceoverScene):
         eb = cmath(r"N + 1", r"=", r"1 + b^* + (b^*)^2 + \dots + (b^*)^d", font_size=30).move_to([3.9, -1.5, 0])
         el = label(r"effective branching factor $b^*$: \\ the uniform tree with $N$ nodes at depth $d$", font_size=20,
                    color=GREY_A).next_to(eb, DOWN, buff=0.15)
-        dom = label(r"$h_2 \ge h_1$ everywhere: \ $h_2$ dominates, \ and A* with it never needs more states",
+        dom = label(r"consistent $h_2 \ge h_1$: \ no more mandatory $f<C^*$ states; \\ boundary work depends on ties",
                     font_size=22, color=HEUR).to_edge(DOWN, buff=0.2)
         tag = note(rf"computed: \ ${d['per_depth']}$ positions per length").to_corner(UL, buff=0.2)
         dd = int(D[-1])
@@ -125,8 +125,8 @@ class Heuristics(VoiceoverScene):
             f"distance: {last['astar_h2']:,.0f}. <bookmark mark='d'/> The effective branching factor, the branching of a uniform "
             f"tree of the same size and depth, falls from {ebf['astar_h0']:.2f} to {ebf['astar_h1']:.2f} to "
             f"{ebf['astar_h2']:.2f}: each step toward one is an exponential saving. <bookmark mark='e'/> The Manhattan distance "
-            "is never below the misplaced count; when one admissible heuristic dominates another, A star with it never expands "
-            "more."
+            "is never below the misplaced count. For consistent heuristics, dominance cannot increase the states with f below "
+            "the optimal cost that A star must expand. At the boundary, equal f values and tie breaking can change the total."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             for i, mk in enumerate("abc"):

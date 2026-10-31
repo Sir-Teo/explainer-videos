@@ -127,52 +127,106 @@ def resolvents(c1, c2, k: int):
     return out
 
 
+def factors(clause):
+    """Single-step factors: unify two same-sign literals within one clause.
+
+    Binary resolution needs this rule for first-order refutation completeness.
+    Repeated factoring is obtained by processing each newly added factor too.
+    """
+    key = lambda l: (l[1], not l[0], str(l[2]))
+    out = []
+    for a, b in itertools.combinations(sorted(clause, key=key), 2):
+        if a[:2] != b[:2] or len(a[2]) != len(b[2]):
+            continue
+        sub = unify(list(a[2]), list(b[2]), {})
+        if sub is None:
+            continue
+        new = frozenset((sg, p, tuple(substitute(t, sub) for t in args))
+                        for sg, p, args in clause if (sg, p, args) != b)
+        if not any((not sg, p, args) in new for sg, p, args in new):
+            out.append((_clean(new), {v: show_term(substitute(t, sub)) for v, t in sub.items()}))
+    return out
+
+
 def refute(kb, negated_goal, strategy="saturate", max_clauses=20000):
-    """Resolution refutation. ``strategy``: 'saturate' resolves every pair, level by level; 'support' (Wos,
-    Robinson & Carson 1965, the set of support) only resolves pairs with at least one clause descended from the
-    negated goal. Returns a record of every clause made (text, parents, level, unifier) and whether □ was found."""
+    """Level-by-level binary resolution plus factoring, with recorded proofs.
+
+    Set-of-support restricts resolution to pairs with a goal descendant; its
+    completeness presumes satisfiable background clauses. A finite resource cap
+    is reported as ``limit``, never as a satisfiability decision. Factor records
+    have one parent, while binary resolvents have two.
+    """
+    if strategy not in ("saturate", "support"):
+        raise ValueError("unknown resolution strategy")
     clauses = [_clean(c) for c in kb] + [_clean(c) for c in negated_goal]
     info = [{"text": show_clause(c), "parents": None, "level": 0, "goal": i >= len(kb), "sub": {}}
             for i, c in enumerate(clauses)]
     index = {c: i for i, c in enumerate(clauses)}
     support = {i for i in range(len(clauses)) if info[i]["goal"]}
-    level, new_from = 0, 0
-    tried = set()
+    for i, c in enumerate(clauses):
+        if not c:
+            return {"clauses": info, "found": True, "levels": 0, "made": len(clauses),
+                    "proof": proof_of(info, i), "status": "refuted"}
+    level = 0
+    tried, factored = set(), set()
     while len(clauses) < max_clauses:
         level += 1
         added = []
+        support_changed = False
         n = len(clauses)
-        for i, j in itertools.combinations(range(n), 2):
+
+        def offer(r, parents, sub, rule):
+            nonlocal support_changed
+            goal = any(i in support for i in parents)
+            if r in index:
+                k = index[r]
+                if goal and k < len(clauses) and k not in support:
+                    support.add(k)
+                    info[k]["goal"] = True
+                    factored.discard(k)  # its factors must inherit the new support
+                    support_changed = True
+                elif goal and k >= len(clauses):
+                    pos = k - len(clauses)
+                    old = added[pos]
+                    added[pos] = (*old[:4], True)
+                return
+            if len(clauses) + len(added) >= max_clauses:
+                return
+            index[r] = len(clauses) + len(added)
+            added.append((r, parents, sub, rule, goal))
+
+        for i in range(n):
+            if i not in factored:
+                factored.add(i)
+                for r, sub in factors(clauses[i]):
+                    offer(r, [i], sub, "factor")
+        for i, j in itertools.combinations_with_replacement(range(n), 2):
             if (i, j) in tried:
                 continue
-            if max(i, j) < new_from:
-                continue
-            tried.add((i, j))
             if strategy == "support" and i not in support and j not in support:
                 continue
+            tried.add((i, j))
             for r, sub in resolvents(clauses[i], clauses[j], len(tried)):
-                if r in index:
-                    continue
-                index[r] = len(clauses) + len(added)
-                added.append((r, i, j, sub))
+                offer(r, [i, j], sub, "resolve")
                 if not r:
                     break
             if added and not added[-1][0]:
                 break
         if not added:
-            return {"clauses": info, "found": False, "levels": level}
-        new_from = n
-        for r, i, j, sub in added:
+            if support_changed:
+                continue  # earlier skipped pairs become eligible on the next level
+            return {"clauses": info, "found": False, "levels": level, "status": "saturated"}
+        for r, parents, sub, rule, goal in added:
             k = len(clauses)
             clauses.append(r)
-            info.append({"text": show_clause(r), "parents": [i, j], "level": level,
-                         "goal": i in support or j in support, "sub": sub})
-            if i in support or j in support:
+            info.append({"text": show_clause(r), "parents": parents, "level": level,
+                         "goal": goal, "sub": sub, "rule": rule})
+            if goal:
                 support.add(k)
             if not r:
                 return {"clauses": info, "found": True, "levels": level, "made": len(clauses),
-                        "proof": proof_of(info, k)}
-    return {"clauses": info, "found": False, "levels": level}
+                        "proof": proof_of(info, k), "status": "refuted"}
+    return {"clauses": info, "found": False, "levels": level, "status": "limit"}
 
 
 def proof_of(info, k) -> list[int]:

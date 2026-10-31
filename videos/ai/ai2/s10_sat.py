@@ -222,9 +222,16 @@ class SAT(VoiceoverScene):
         lg = legend([(c, rf"$n = {n}$ variables") for n, c in zip(ns, cols)], font_size=20).move_to([4.6, 2.2, 0])
         thr = DashedLine(g.ax.c2p(4.267, 0), g.ax.c2p(4.267, 1), color=GREY_A, dash_length=0.08)
         tl = label(r"$4.267$", font_size=20, color=GREY_A).next_to(g.ax.c2p(4.267, 0.93), RIGHT, buff=0.08)
-        cross = VGroup(*[label(rf"$n = {n}$: \ half at ${d[f'cross_{n}']:.2f}$, \ $90\%\to10\%$ over ${d[f'width_{n}']:.2f}$",
-                               font_size=19, color=c) for n, c in zip(ns, cols)]).arrange(DOWN, buff=0.12,
-                                                                                         aligned_edge=LEFT)
+        censored = any(d[f"censored_{n}"] for n in ns)
+        upper = VGroup(*[DashedVMobject(curve(g.ax, A, d[f"psat_upper_{n}"], c, 2))
+                         for n, c in zip(ns, cols)]) if censored else VGroup()
+        summaries = []
+        for n, c in zip(ns, cols):
+            half, width = d[f"cross_{n}"], d[f"width_{n}"]
+            wording = (rf"$n={n}$: \ crossing unresolved" if half is None or width is None else
+                       rf"$n={n}$: \ half at ${half:.2f}$, \ $90\%\to10\%$ over ${width:.2f}$")
+            summaries.append(label(wording, font_size=19, color=c))
+        cross = VGroup(*summaries).arrange(DOWN, buff=0.12, aligned_edge=LEFT)
         cross.move_to([4.6, 0.0, 0])
         if cross.width > 4.6:
             cross.width = 4.6
@@ -234,12 +241,23 @@ class SAT(VoiceoverScene):
         cite_.set_x(min(cite_.get_x(), 6.9 - cite_.width / 2))
         tag = note(rf"computed: \ DPLL on ${sum(d['per']) * len(A):,}$ random formulas".replace(",", "{,}"))
         tag.to_corner(DR, buff=0.2)
+        if censored:
+            total_unknown = sum(sum(d[f"unknown_{n}"]) for n in ns)
+            tag = note(rf"computed: \ ${total_unknown}$ unknown outcomes; \\ solid = SAT lower bound; \ dashed = upper bound",
+                       font_size=18).to_corner(DR, buff=0.2)
         n0, n1 = ns[0], ns[-1]
         w0, w1 = d[f"width_{n0}"], d[f"width_{n1}"]
-        sharper = w1 < w0
-        verdict = (f"The bigger the formulas, the sharper the step: for {n0} variables the chance falls from ninety "
-                   f"to ten percent over a span of {w0:.2f} in the ratio; for {n1}, over {w1:.2f}." if sharper else
-                   f"Here the step is about as wide for {n1} variables as for {n0}.")
+        sharper = w0 is not None and w1 is not None and w1 < w0
+        if censored:
+            verdict = ("Some runs reached the decision cap without an answer. The solid and dashed lines bound the SAT "
+                       "fraction; unknown is not unsatisfiable, and a censored crossing or width is unresolved.")
+        elif w0 is None or w1 is None:
+            verdict = "The sampled ratios do not bracket both window endpoints, so a width is unresolved."
+        elif sharper:
+            verdict = (f"The bigger the formulas, the sharper the step: for {n0} variables the chance falls from ninety "
+                       f"to ten percent over a span of {w0:.2f} in the ratio; for {n1}, over {w1:.2f}.")
+        else:
+            verdict = f"Here the step is about as wide for {n1} variables as for {n0}."
         with self.voiceover(
             "In 1992 David Mitchell, Bart Selman and Hector Levesque asked what random formulas look like: n variables, m "
             "clauses of three random literals. <bookmark mark='a'/> With few clauses per variable, almost every formula is "
@@ -251,9 +269,13 @@ class SAT(VoiceoverScene):
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(lines[0]), FadeIn(lg[0]), run_time=1.5)
+            if censored:
+                self.play(Create(upper[0]), run_time=0.5)
             vo.wait_until("b")
             for i in range(1, len(ns)):
                 self.play(Create(lines[i]), FadeIn(lg[i]), run_time=1.2)
+                if censored:
+                    self.play(Create(upper[i]), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(c) for c in cross], lag_ratio=0.2))
             vo.wait_until("c")
             self.play(Create(thr), FadeIn(tl), FadeIn(cite_))
@@ -266,15 +288,17 @@ class SAT(VoiceoverScene):
         A = np.asarray(d["alphas"], float)
         ns = d["ns"]
         cols = [GREY_B, HEUR, FCOL, PATH][: len(ns)]
-        top = np.ceil(np.log10(max(max(d[f"median_{n}"]) for n in ns))) + 0.3
+        censored = any(d[f"censored_{n}"] for n in ns)
+        metric = "observed_median" if censored else "median"
+        top = max(1.0, np.ceil(np.log10(max(1, max(max(d[f"{metric}_{n}"]) for n in ns)))) + 0.3)
         g = axes([A[0], A[-1]], [0, top], x_length=7.0, y_length=4.2, xlabel=r"clauses per variable, \ $m / n$",
-                 ylabel=r"DPLL's decisions \ (median, log scale)", xticks=[3, 4, 5],
+                 ylabel=r"observed DPLL decisions \ (median, log scale)", xticks=[3, 4, 5],
                  yticks=list(range(0, int(top) + 1)), yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-2.0, -0.4, 0])
-        lines = VGroup(*[curve(g.ax, A, np.log10(np.maximum(d[f"median_{n}"], 1)), c, 4) for n, c in zip(ns, cols)])
+        lines = VGroup(*[curve(g.ax, A, np.log10(np.maximum(d[f"{metric}_{n}"], 1)), c, 4) for n, c in zip(ns, cols)])
         lg = legend([(c, rf"$n = {n}$") for n, c in zip(ns, cols)], font_size=20).move_to([4.6, 2.2, 0])
         n1 = ns[-1]
         pk = d[f"peak_{n1}"]
-        med = np.asarray(d[f"median_{n1}"])
+        med = np.asarray(d[f"{metric}_{n1}"])
         lo_side, hi_side = med[0], med[-1]
         txt = VGroup(label(r"easy: \ satisfiable, \ solutions everywhere", font_size=20, color=PATH),
                      label(r"hard: \ near the threshold", font_size=20, color=FAIL),
@@ -283,11 +307,16 @@ class SAT(VoiceoverScene):
         if txt.width > 4.6:
             txt.width = 4.6
             txt.set_x(4.6)
+        if censored:
+            txt = label(r"decision cap reached: \\ observed work includes truncated runs; \\ completion-time peak unresolved",
+                        font_size=20, color=FAIL).move_to([4.6, 0, 0])
+        result = ("Some runs are truncated at the decision cap. These medians describe observed work, including "
+                  "truncated runs; they do not locate the peak of completion work." if censored else
+                  f"For {n1} variables, the median peaks at a ratio of {pk:.1f}, at {med.max():,.0f} decisions, "
+                  f"against {lo_side:,.0f} at the left edge and {hi_side:,.0f} at the right. Easy, hard, easy.")
         with self.voiceover(
             "The transition is also where the problems are hard. <bookmark mark='a'/> Count DPLL's decisions: far below the "
-            "threshold a solution is found almost at once, far above, a contradiction. <bookmark mark='b'/> For "
-            f"{n1} variables, the median peaks at a ratio of {pk:.1f}, at {med.max():,.0f} decisions, against {lo_side:,.0f} at "
-            f"the left edge and {hi_side:,.0f} at the right. Easy, hard, easy."
+            "threshold a solution is found almost at once, far above, a contradiction. <bookmark mark='b'/> " + result
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

@@ -26,9 +26,9 @@ def proof_layout(info, proof, x0=-5.6, width=11.2, y_top=2.0, dy=1.35, font_size
     for i in proof:
         if i in pos:
             continue
-        a, b = info[i]["parents"]
-        row[i] = max(row[a], row[b]) + 1
-        x = (pos[a][0] + pos[b][0]) / 2
+        parents = info[i]["parents"]
+        row[i] = max(row[p] for p in parents) + 1
+        x = sum(pos[p][0] for p in parents) / len(parents)
         pos[i] = np.array([x, y_top - dy * row[i], 0])
     for i in proof:
         col = FAIL if info[i]["text"] == "□" else (HEUR if info[i]["goal"] and info[i]["parents"] is None else SYMBOL)
@@ -44,6 +44,12 @@ def proof_layout(info, proof, x0=-5.6, width=11.2, y_top=2.0, dy=1.35, font_size
             if gap < 0.25:
                 boxes[b].shift(RIGHT * (0.25 - gap))
     return boxes, row
+
+
+def resolution_outcome_label(record, name):
+    state = ("proof found" if record["found"] else "cap reached; no proof" if record["status"] == "limit"
+             else "no new clauses; no proof")
+    return name + r": \ " + state
 
 
 class Logic(VoiceoverScene):
@@ -161,24 +167,26 @@ class Logic(VoiceoverScene):
         derived = [i for i in proof if info[i]["parents"] is not None]
         lines = {}
         for i in derived:
-            a, b = info[i]["parents"]
-            lines[i] = VGroup(Line(boxes[a].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2),
-                              Line(boxes[b].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2))
+            parents = info[i]["parents"]
+            lines[i] = VGroup(*[Line(boxes[p].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2)
+                                for p in parents])
         start = [i for i in proof if info[i]["parents"] is None]
         neg = [i for i in start if info[i]["goal"]]
         note1 = label(r"add the negated goal; \\ derive the empty clause $\square$: \\ a contradiction", font_size=22,
                       color=HEUR).move_to([4.8, 0.4, 0])
-        sound = label(r"sound, \ and refutation-complete: \\ if the facts entail the goal, \\ $\square$ can be derived",
+        sound = label(r"resolution plus factoring: \\ refutation-complete without a resource cap",
                       font_size=22, color=PATH).move_to([4.8, -1.6, 0])
         tag = note(r"computed: \ our resolution prover").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "In 1965 Alan Robinson gave machines a single rule of inference that is enough. <bookmark mark='a'/> Write every "
+            "In 1965 Alan Robinson gave machines a resolution rule for automated deduction. <bookmark mark='a'/> Write every "
             "fact as a clause, an or of literals. If one clause contains x and another not x, resolve them: at least one of the "
             "rest must hold. <bookmark mark='b'/> To prove a goal, add its negation, here: the grass is not wet, "
             "<bookmark mark='c'/> and resolve until you derive the empty clause, a contradiction. <bookmark mark='d'/> Not wet "
             "and the rain rule give no rain; not wet and the sprinkler rule give no sprinkler; rain or sprinkler, with no "
             "sprinkler, gives rain; rain against no rain leaves nothing. <bookmark mark='e'/> Robinson proved the method sound "
-            "and refutation-complete: whenever the facts entail the goal, resolution can derive the empty clause."
+            "and refutation-complete. First-order clauses also need factoring: unify same-sign literals within one clause. "
+            "Without a resource cap, resolution and factoring can derive the empty clause whenever the clauses are inconsistent. "
+            "Our bounded run can stop without an answer."
         ) as vo:
             self.play(Write(rule), FadeIn(rl), FadeIn(tag))
             vo.wait_until("a")
@@ -209,9 +217,9 @@ class Logic(VoiceoverScene):
         derived = [i for i in proof if info[i]["parents"] is not None]
         lines, subs = {}, {}
         for i in derived:
-            a, b = info[i]["parents"]
-            lines[i] = VGroup(Line(boxes[a].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2),
-                              Line(boxes[b].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2))
+            parents = info[i]["parents"]
+            lines[i] = VGroup(*[Line(boxes[p].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2)
+                                for p in parents])
             sub = info[i]["sub"]
             if sub:
                 pairs = sorted({(k.split("_")[0], v) for k, v in sub.items() if v[:1].isupper()})
@@ -257,21 +265,38 @@ class Logic(VoiceoverScene):
         rules.arrange(DOWN, buff=0.08, aligned_edge=LEFT).next_to(g, DOWN, buff=0.3).align_to(g, LEFT)
         goal = label(r"goal: \ Anne is an ancestor of Flora", font_size=22, color=HEUR).next_to(g, UP, buff=0.3)
         goal.align_to(g, LEFT)
-        bars = bar_like([(r"resolve every pair, \ level by level", sat["made"], FAIL),
-                         (r"set of support: \ only pairs that involve the goal", sos["made"], PATH)])
+        bars = bar_like([(resolution_outcome_label(sat, "all pairs"), sat["made"], FAIL),
+                         (resolution_outcome_label(sos, "set of support"), sos["made"], PATH)])
         bars.move_to([2.6, 0.6, 0])
-        cap = label(rf"clauses generated before the proof was found \ (the proof itself uses ${sos['proof_len']}$)",
+        cap = label(r"clauses recorded at stopping \\ (including input clauses)",
                     font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.3)
         tag = note(r"computed: \ our prover; \ illustrative facts").to_corner(DR, buff=0.2)
         lesson = label(r"complete is not the same as fast: \ the strategy is everything", font_size=26, color=FCOL)
         lesson.next_to(cap, DOWN, buff=0.6)
         lesson.set_x(min(lesson.get_x(), 6.9 - lesson.width / 2))
+        if sat["found"]:
+            sat_verdict = (f"The level-by-level search found a refutation after {sat['made']:,} recorded clauses; "
+                             f"the proof uses {sat['proof_len']} clauses.")
+        elif sat["status"] == "limit":
+            sat_verdict = (f"The level-by-level search reached its cap of {sat['clause_cap']:,} recorded clauses without finding a refutation. "
+                             "That leaves the goal unresolved by this run.")
+        else:
+            sat_verdict = (f"The level-by-level search stopped with no new clauses after {sat['made']:,} recorded clauses, "
+                             "without finding a refutation.")
+        if sos["found"]:
+            sos_verdict = (f"The set-of-support search found a refutation after {sos['made']:,} recorded clauses; "
+                             f"the proof uses {sos['proof_len']} clauses.")
+        elif sos["status"] == "limit":
+            sos_verdict = (f"The set-of-support search reached its cap of {sos['clause_cap']:,} recorded clauses without finding a refutation. "
+                             "That leaves the goal unresolved by this run.")
+        else:
+            sos_verdict = (f"The set-of-support search stopped with no new clauses after {sos['made']:,} recorded clauses, "
+                             "without finding a refutation.")
         with self.voiceover(
             "Completeness is not efficiency. <bookmark mark='a'/> Give the prover eight family facts and three rules, and ask "
-            "whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> Resolving every pair of clauses, "
-            f"level by level, it generated {sat['made']:,} clauses before finding the {sos['proof_len']}-clause proof. "
-            "<bookmark mark='c'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs "
-            f"involving the negated goal or its descendants: {sos['made']:,}. <bookmark mark='d'/> Provers live or die by such "
+            "whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> " + sat_verdict +
+            " <bookmark mark='c'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs "
+            "involving the negated goal or its descendants. " + sos_verdict + " <bookmark mark='d'/> Provers live or die by such "
             "strategies. Resolution's descendants, like Vampire and E, still compete every year, and proof assistants call on "
             "them to fill in routine steps."
         ) as vo:
