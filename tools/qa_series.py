@@ -49,6 +49,17 @@ def require_part1_cache(compute, name):
         raise StaleDataError(f"QA found stale computed data: ai1/{name}; rebuild this item before rendering")
 
 
+def approved_numeric_caption(translated, approved_targets):
+    """Keep Latin data/model terms explicitly retained by an approved caption.
+
+    A changed measurement may select a numeric template rather than an exact
+    source key; compare its translated wording with the approved targets too.
+    """
+    from explainer import zh_text
+
+    return bool(zh_text.CJK.search(translated) and zh_text._NUM.sub("\0", translated) in approved_targets)
+
+
 def visible_text_bounds(m, camera=None):
     """Measure visible glyphs in screen space, including 3D camera projection."""
     visible = []
@@ -352,6 +363,8 @@ def worker(args):
                         continue
                     seen.add(text)
                     translated = zh_text.translate(text)
+                    if approved_numeric_caption(translated, translated_targets):
+                        continue
                     if translated != text and zh_text.CJK.search(translated):
                         translated = names_pattern.sub("", translated)
                     if zh_text.needs_translation(translated, entry["kind"] == "MathTex"):
