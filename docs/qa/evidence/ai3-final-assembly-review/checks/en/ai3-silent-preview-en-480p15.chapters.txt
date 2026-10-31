@@ -1,0 +1,19 @@
+0:00 Where words live
+2:30 1. Vectors and the inner product
+5:49 2. Tensors and einsum
+8:29 3. Matrices move space
+10:41 4. Projection and least squares
+14:03 5. Directions that stay put
+16:44 6. Power iteration, run live
+19:05 7. Every matrix: turn, stretch, turn
+20:44 8. The best low-rank copy
+23:43 9. How big is a matrix?
+26:57 10. Random matrices and trained weights
+29:31 11. Gradients are low rank
+33:01 12. Word vectors from counting
+36:09 13. word2vec is counting in disguise
+39:44 14. Life in 768 dimensions
+42:07 15. Johnson-Lindenstrauss, proved
+45:10 16. GPT-2's lopsided space
+47:52 17. Low rank in the wild
+52:17 Recap, problems, and what comes next

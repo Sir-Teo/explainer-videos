@@ -1,0 +1,137 @@
+{
+  "scope": "Receipt only for existing full bundle and three compact packages; no upload, attachment send, repackaging or Library mutation by this task",
+  "captured_utc": "2026-10-31T22:39:02.274135+00:00",
+  "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "authoritative_case_map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+  "packages": [
+    {
+      "file_name": "AI-Built-Part3-Silent-Review-480p15-EN-ZH-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Silent-Review-480p15-EN-ZH-20261031.zip",
+      "zip_bytes": 193171964,
+      "zip_sha256": "c581b6185d588ad0756d5b5566c1604984ae70b99900d02297e563508ccc22b2",
+      "manifest_sha256": "734ecb634f74e281526827e82e4ae531c46a13c0b601b83f02624ad595e964b8",
+      "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+      "cases": 38,
+      "selected_times": 14729,
+      "zip_CRC_all_members_verified": true,
+      "zip_entries": 2644,
+      "library_save": {
+        "status": "succeeded per preserved Library identity response",
+        "library_file_id": "libfile_5c8f7f5389b08191844af5b1cd34aae5",
+        "file_id": "file_00000000bb1481f683bda1e77aaeff3f",
+        "version": 0,
+        "bytes": 193171964
+      },
+      "native_attachment": {
+        "status": "failed",
+        "evidence_source": "parent operational checkpoint, 2026-10-31; not independently re-sent by this agent",
+        "accepted_utc": null,
+        "accepted_send_id": null,
+        "failure": "Original full-bundle attachment rejected: A Library file exceeds the ChatGPT upload limit."
+      },
+      "browser_playback": "not exercised by packaging/receipt task"
+    },
+    {
+      "file_name": "AI-Built-Part3-Compact-Sampler-EN-ZH-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Compact-Sampler-EN-ZH-20261031.zip",
+      "zip_bytes": 13094595,
+      "zip_sha256": "ca27fac0363c4dd530eed6ee8e46a8eb8328c14461e1fc27870c1290b5bcc7b3",
+      "manifest_sha256": "865eb9352bbe73f950c8cf19a0aa356f35ee541113a27d7a04478db287d7064f",
+      "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+      "cases": 6,
+      "selected_times": 2322,
+      "zip_CRC_all_members_verified": true,
+      "zip_entries": 27,
+      "library_save": {
+        "status": "succeeded per preserved Library identity response",
+        "library_file_id": "libfile_a8548be4d6b08191b4a1dc9ef28cd6b7",
+        "file_id": "file_00000000609881f6aa441067b6642158",
+        "version": 0,
+        "bytes": 13094595
+      },
+      "native_attachment": {
+        "status": "accepted",
+        "evidence_source": "parent operational checkpoint, 2026-10-31; not independently re-sent by this agent",
+        "accepted_utc": "2026-10-31T22:36:32Z",
+        "accepted_send_id": "Sentinel_f2de5c0302788191be125249f415d280",
+        "failure": null
+      },
+      "browser_playback": "not exercised by packaging/receipt task"
+    },
+    {
+      "file_name": "AI-Built-Part3-English-Silent-480p15-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Silent-480p15-20261031.zip",
+      "zip_bytes": 37239428,
+      "zip_sha256": "ab6c6b643bd8a6a5a69f9b93ff8db8aef28d7cf9f1797472ccd984d33d9a3e11",
+      "manifest_sha256": "539a3050ab326143d22d10e5ed9a665eabfbae4e2f27593e183c8f2ff78593cb",
+      "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+      "cases": 19,
+      "selected_times": 7257,
+      "zip_CRC_all_members_verified": true,
+      "zip_entries": 66,
+      "library_save": {
+        "status": "succeeded per preserved Library identity response",
+        "library_file_id": "libfile_6f4011547c048191be1506dd6cad3e06",
+        "file_id": "file_00000000461c81f6aeecc3d570dcc6d2",
+        "version": 0,
+        "bytes": 37239428
+      },
+      "native_attachment": {
+        "status": "failed",
+        "evidence_source": "parent operational checkpoint, 2026-10-31; not independently re-sent by this agent",
+        "accepted_utc": null,
+        "accepted_send_id": null,
+        "failure": "Combined native send of three compact packages rejected because at least one exceeds the actual ChatGPT limit; this language package remains undelivered. No separate single-package success is recorded."
+      },
+      "browser_playback": "not exercised by packaging/receipt task"
+    },
+    {
+      "file_name": "AI-Built-Part3-Chinese-Silent-480p15-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Silent-480p15-20261031.zip",
+      "zip_bytes": 37418355,
+      "zip_sha256": "5830df08e39c4c6dd458a58b31bc3f57ea05b173abe067bd7ce57a8530b59275",
+      "manifest_sha256": "89b2a4ec420eda9f1694797e156fe77f5e79eb7bac50748b842966fd6750712e",
+      "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+      "cases": 19,
+      "selected_times": 7472,
+      "zip_CRC_all_members_verified": true,
+      "zip_entries": 66,
+      "library_save": {
+        "status": "succeeded per preserved Library identity response",
+        "library_file_id": "libfile_d34e100119c48191938df0311a961e57",
+        "file_id": "file_0000000040d481f6a25b5d3b49d28d4c",
+        "version": 0,
+        "bytes": 37418355
+      },
+      "native_attachment": {
+        "status": "failed",
+        "evidence_source": "parent operational checkpoint, 2026-10-31; not independently re-sent by this agent",
+        "accepted_utc": null,
+        "accepted_send_id": null,
+        "failure": "Combined native send of three compact packages rejected because at least one exceeds the actual ChatGPT limit; this language package remains undelivered. No separate single-package success is recorded."
+      },
+      "browser_playback": "not exercised by packaging/receipt task"
+    }
+  ],
+  "delivery_history": [
+    {
+      "action": "native attachment of original full bundle",
+      "outcome": "failed",
+      "reason": "A Library file exceeds the ChatGPT upload limit."
+    },
+    {
+      "action": "combined native send of three compact packages",
+      "outcome": "failed",
+      "reason": "At least one exceeds the actual ChatGPT upload limit; exact threshold not established."
+    },
+    {
+      "action": "native send of sampler alone",
+      "outcome": "accepted",
+      "bytes": 13094595,
+      "accepted_utc": "2026-10-31T22:36:32Z",
+      "send_id": "Sentinel_f2de5c0302788191be125249f415d280"
+    }
+  ],
+  "remaining_delivery": "English/Chinese ~37 MB packages and original193 MB bundle remain saved but undelivered as native attachments. Parent may later create smaller chapter-group packages; none are created by this task.",
+  "limits": "Silent 480p15 media and prior explicitly scoped review evidence only; no continuous perceptual playback, listening, actual narrated synchronization, full1080p motion or browser/player approval."
+}

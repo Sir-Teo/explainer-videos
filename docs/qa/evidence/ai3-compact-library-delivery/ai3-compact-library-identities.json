@@ -1,0 +1,64 @@
+{
+  "rows": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-Compact-Sampler-EN-ZH-20261031.zip",
+      "file_id": "file_00000000609881f6aa441067b6642158",
+      "library_file_id": "libfile_a8548be4d6b08191b4a1dc9ef28cd6b7",
+      "file_name": "AI-Built-Part3-Compact-Sampler-EN-ZH-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 13094595
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-English-Silent-480p15-20261031.zip",
+      "file_id": "file_00000000461c81f6aeecc3d570dcc6d2",
+      "library_file_id": "libfile_6f4011547c048191be1506dd6cad3e06",
+      "file_name": "AI-Built-Part3-English-Silent-480p15-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 37239428
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-Chinese-Silent-480p15-20261031.zip",
+      "file_id": "file_0000000040d481f6a25b5d3b49d28d4c",
+      "library_file_id": "libfile_d34e100119c48191938df0311a961e57",
+      "file_name": "AI-Built-Part3-Chinese-Silent-480p15-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 37418355
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+[
+  {
+    "file": "actual-result-verification.json.gz",
+    "original_file": "/workspace/runtime/ai4-actual-result-validation/result.json",
+    "uncompressed_sha256": "b6bebc5e87c4d03952ad8907a2e588b427148cbefbe22445f62f7c48cae801b6",
+    "uncompressed_bytes": 109505
+  },
+  {
+    "file": "verification-script.py.gz",
+    "original_file": "/workspace/runtime/ai4-actual-result-validation/verify.py",
+    "uncompressed_sha256": "acfd33f998410c3bd99a4dd499e29fd3bba32bd22f622cc40961acecd0a4a9b5",
+    "uncompressed_bytes": 17309
+  },
+  {
+    "file": "verification-output.log.gz",
+    "original_file": "/workspace/runtime/ai4-actual-result-validation/verification.log",
+    "uncompressed_sha256": "aa46e5b1d14a1b8f3119d83e966a1869e0f64957ce65c6561facd542c8382d8c",
+    "uncompressed_bytes": 714
+  },
+  {
+    "file": "production-progress.json.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/progress.json",
+    "uncompressed_sha256": "a7e835a60edea087d1e469aa381ad3f8fd90ebe595e56e53d2766c83d8c684bb",
+    "uncompressed_bytes": 18388
+  },
+  {
+    "file": "production-source-freeze.json.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/source-freeze.json",
+    "uncompressed_sha256": "b5aed3e81f3c4c82ba61e0210fed4e34600eb27c496b25f47c8d1f15a5c63af9",
+    "uncompressed_bytes": 4471
+  },
+  {
+    "file": "driver-source-at-review.py.gz",
+    "original_file": "/workspace/runtime/compute_ai4_bounded.py",
+    "uncompressed_sha256": "c394a8cb022f9a519f58f6adaaf3cb62ce594f9bacbae09d8d222ea94ae2f378",
+    "uncompressed_bytes": 3053
+  },
+  {
+    "file": "source/videos/ai/ai4/compute.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/compute.py",
+    "uncompressed_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "uncompressed_bytes": 72334
+  },
+  {
+    "file": "source/videos/ai/ai4/contracts.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/contracts.py",
+    "uncompressed_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "uncompressed_bytes": 8587
+  },
+  {
+    "file": "source/videos/ai/ai4/cache_contract.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/cache_contract.py",
+    "uncompressed_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "uncompressed_bytes": 8767
+  },
+  {
+    "file": "source/tests/test_ai4_producer_contracts.py.gz",
+    "original_file": "/workspace/explainer-videos/tests/test_ai4_producer_contracts.py",
+    "uncompressed_sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+    "uncompressed_bytes": 18362
+  },
+  {
+    "file": "source/explainer/ai/autodiff.py.gz",
+    "original_file": "/workspace/explainer-videos/explainer/ai/autodiff.py",
+    "uncompressed_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+    "uncompressed_bytes": 7798
+  },
+  {
+    "file": "source/tests/test_autodiff_zero_power.py.gz",
+    "original_file": "/workspace/explainer-videos/tests/test_autodiff_zero_power.py",
+    "uncompressed_sha256": "ef0bd0f2517a529cba4fa982040eb6ffb63c97e0a0630079a7acc7df1ee2355f",
+    "uncompressed_bytes": 3045
+  },
+  {
+    "file": "focused-tests.log.gz",
+    "original_file": "/workspace/runtime/ai4-producer-contract-implementation/focused-tests.log",
+    "uncompressed_sha256": "89cd1be64a6f323fc8f8bcc796cf70b148f3a2d8eb9c55487406c1aa2db08e8a",
+    "uncompressed_bytes": 6092
+  },
+  {
+    "file": "production-logs/params.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/params.log",
+    "uncompressed_sha256": "938a112f7cdc69592267d8c37893afd7bbda38401b59b3538c829b1d52849651",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/params.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/params.json",
+    "uncompressed_sha256": "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b",
+    "uncompressed_bytes": 2976
+  },
+  {
+    "file": "production-logs/linapprox.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/linapprox.log",
+    "uncompressed_sha256": "90fcd784e4db4a536b8e8dcd1cafeb6b70d74233d7ff39fde6e5417d3780e957",
+    "uncompressed_bytes": 52
+  },
+  {
+    "file": "cache-json/linapprox.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/linapprox.json",
+    "uncompressed_sha256": "54857b13b400b68e3f37a662bca7d1eb2ba0ede2a3be11bdb36124b4002290e0",
+    "uncompressed_bytes": 1260
+  },
+  {
+    "file": "production-logs/depth.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/depth.log",
+    "uncompressed_sha256": "983fddc7f9a5c0fd1f61eb2328f0bf99f47299f438ed2e942abb4524ca4c9f31",
+    "uncompressed_bytes": 44
+  },
+  {
+    "file": "cache-json/depth.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/depth.json",
+    "uncompressed_sha256": "1ffd989907645c43fc7da0d2b3529b727a3fb3baee307d33f0d93f310a069965",
+    "uncompressed_bytes": 1028
+  },
+  {
+    "file": "production-logs/jacobians.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/jacobians.log",
+    "uncompressed_sha256": "a47158779d067690cabbb6d8eeb5feb241188bcdda74228010af458459a7f303",
+    "uncompressed_bytes": 52
+  },
+  {
+    "file": "cache-json/jacobians.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/jacobians.json",
+    "uncompressed_sha256": "fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936",
+    "uncompressed_bytes": 1302
+  },
+  {
+    "file": "production-logs/modes.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/modes.log",
+    "uncompressed_sha256": "8a12cffcc475225a54824ce7cbb7e946eadd8ef8a8e74619179abacd280c8ee4",
+    "uncompressed_bytes": 44
+  },
+  {
+    "file": "cache-json/modes.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/modes.json",
+    "uncompressed_sha256": "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216",
+    "uncompressed_bytes": 11969
+  },
+  {
+    "file": "production-logs/tiny.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/tiny.log",
+    "uncompressed_sha256": "971fb0c98ce0d8394acfbc8a32d22b8bee9fb77c9525ebc0522365f2d460638b",
+    "uncompressed_bytes": 42
+  },
+  {
+    "file": "cache-json/tiny.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/tiny.json",
+    "uncompressed_sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+    "uncompressed_bytes": 1259
+  },
+  {
+    "file": "production-logs/mlp2.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/mlp2.log",
+    "uncompressed_sha256": "2ad879babb188cddda14c467dd940ab8874c23fd0d29f68e480530da6c9decf1",
+    "uncompressed_bytes": 42
+  },
+  {
+    "file": "cache-json/mlp2.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/mlp2.json",
+    "uncompressed_sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+    "uncompressed_bytes": 1106
+  },
+  {
+    "file": "production-logs/tape.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/tape.log",
+    "uncompressed_sha256": "f5dbe690b52aff8fbf0e3b31273141bdacb69d0324cdd0e6747bc09ad81042dd",
+    "uncompressed_bytes": 42
+  },
+  {
+    "file": "cache-json/tape.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/tape.json",
+    "uncompressed_sha256": "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099",
+    "uncompressed_bytes": 2975
+  },
+  {
+    "file": "production-logs/check.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/check.log",
+    "uncompressed_sha256": "86da4972165975612777da4d0e8a617444fa3650e526d314380c607a1395adea",
+    "uncompressed_bytes": 44
+  },
+  {
+    "file": "cache-json/check.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/check.json",
+    "uncompressed_sha256": "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828",
+    "uncompressed_bytes": 1344
+  },
+  {
+    "file": "production-logs/train.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/train.log",
+    "uncompressed_sha256": "474de607760bf613e27a86195db161b1aa2bc98677524483e152da0737cf5beb",
+    "uncompressed_bytes": 44
+  },
+  {
+    "file": "cache-json/train.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/train.json",
+    "uncompressed_sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+    "uncompressed_bytes": 1919
+  },
+  {
+    "file": "production-logs/grad0.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/grad0.log",
+    "uncompressed_sha256": "d361b99bafd1c0d91ec9db09c37454d852718c42562b218ecd5c8c754200a823",
+    "uncompressed_bytes": 44
+  },
+  {
+    "file": "cache-json/grad0.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/grad0.json",
+    "uncompressed_sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+    "uncompressed_bytes": 1258
+  },
+  {
+    "file": "production-logs/gdlr.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/gdlr.log",
+    "uncompressed_sha256": "290e08adcfad361637a1dc2f0436567294ad6ec33d6b70d6ae80a77bae596dbb",
+    "uncompressed_bytes": 42
+  },
+  {
+    "file": "cache-json/gdlr.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/gdlr.json",
+    "uncompressed_sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+    "uncompressed_bytes": 1925
+  },
+  {
+    "file": "production-logs/floats.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/floats.log",
+    "uncompressed_sha256": "7a0084e33dd22331afe1e89792e74c0b1cad9b605b0e233d73391d3bc089cc28",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/floats.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/floats.json",
+    "uncompressed_sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+    "uncompressed_bytes": 2908
+  },
+  {
+    "file": "production-logs/cancel.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/cancel.log",
+    "uncompressed_sha256": "6641a00876f616e9bd7f0b54677128e06f733fd2ab5766e226adab9212bc7795",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/cancel.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/cancel.json",
+    "uncompressed_sha256": "54ff8197234c963ec3a9f77179b7b56081bf423062f2a471b302753c0027c8bd",
+    "uncompressed_bytes": 1058
+  },
+  {
+    "file": "production-logs/vcurve.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/vcurve.log",
+    "uncompressed_sha256": "428b94c86623e23639d0c2abf9e3521d8a8e777c76800286978f938a550fe229",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/vcurve.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/vcurve.json",
+    "uncompressed_sha256": "9ace458a11f411e45e819fd0ae36c4da72929197553b4fc693627d5cf69ed748",
+    "uncompressed_bytes": 2007
+  },
+  {
+    "file": "production-logs/checkpoint.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/checkpoint.log",
+    "uncompressed_sha256": "caab92938147f81fe7007f405775632f9a95159a1e80c0fe53a29b7a2a3f040b",
+    "uncompressed_bytes": 54
+  },
+  {
+    "file": "cache-json/checkpoint.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/checkpoint.json",
+    "uncompressed_sha256": "0391abde8b3713b8f20be2802287b2b8692324c01e5de4ab98fc0febae33c63e",
+    "uncompressed_bytes": 2304
+  },
+  {
+    "file": "production-logs/newton.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/newton.log",
+    "uncompressed_sha256": "a61ff94359604513e0419e28bed89c5a7edba41c2c5d224b4a48cbab5980594a",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/newton.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/newton.json",
+    "uncompressed_sha256": "31e2ae53cedb1a006fc44a5530233547e6869ac926c33ad7a138de052273a769",
+    "uncompressed_bytes": 1763
+  },
+  {
+    "file": "production-logs/hessian.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/hessian.log",
+    "uncompressed_sha256": "f2e7babfc54185b5acb6a9580b044ada23e2676ac269b1e5e486cb030724b222",
+    "uncompressed_bytes": 390
+  },
+  {
+    "file": "cache-json/hessian.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/hessian.json",
+    "uncompressed_sha256": "7af7632ad2585faa1483355f40ac47a5de16564fcdd7bd6daba01d48eb3d6edf",
+    "uncompressed_bytes": 14800
+  },
+  {
+    "file": "production-logs/valley.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/valley.log",
+    "uncompressed_sha256": "4c7f476f304b71448665b5a350738afcda436416f502c8b7eb1c5128f7b85ec6",
+    "uncompressed_bytes": 46
+  },
+  {
+    "file": "cache-json/valley.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/valley.json",
+    "uncompressed_sha256": "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed",
+    "uncompressed_bytes": 1195
+  },
+  {
+    "file": "production-logs/quad.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/quad.log",
+    "uncompressed_sha256": "a1fd07027aaa642b884c3b535ce9ded2b6505002656bfc6683e11db7872bc726",
+    "uncompressed_bytes": 42
+  },
+  {
+    "file": "cache-json/quad.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/quad.json",
+    "uncompressed_sha256": "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54",
+    "uncompressed_bytes": 8319
+  },
+  {
+    "file": "production-logs/lagrange.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/lagrange.log",
+    "uncompressed_sha256": "0564c14863785ab4533d1a8c7a93a325ffb7e182b705fce6b2f2986904cf2641",
+    "uncompressed_bytes": 50
+  },
+  {
+    "file": "cache-json/lagrange.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/lagrange.json",
+    "uncompressed_sha256": "997f01d384d1584922d7d6819ac9fadd59c482f7f17a37a82e0aad1869851c1a",
+    "uncompressed_bytes": 2142
+  },
+  {
+    "file": "production-logs/kkt.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/kkt.log",
+    "uncompressed_sha256": "44ac6a645f2f8580e4241d7f392b64be3b93834d78a2690d760bafb5a40a209e",
+    "uncompressed_bytes": 40
+  },
+  {
+    "file": "cache-json/kkt.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/kkt.json",
+    "uncompressed_sha256": "12d5b57c09b35ba2c3ed9babfabe102f7b4cc3626f40fce7cb8708115d0a87be",
+    "uncompressed_bytes": 2496
+  },
+  {
+    "file": "production-logs/deq.log.gz",
+    "original_file": "/workspace/runtime/ai4-production-compute/deq.log",
+    "uncompressed_sha256": "eb045551af1e82b8e949026e576e348d499b2ee4872b038bfda0efed3b0f197f",
+    "uncompressed_bytes": 40
+  },
+  {
+    "file": "cache-json/deq.json.gz",
+    "original_file": "/workspace/explainer-videos/.cache/ai4/deq.json",
+    "uncompressed_sha256": "61bb4b3f16c415311ac922342f8a56f8fa489698e34699ea519bc2b96619fa9d",
+    "uncompressed_bytes": 2163
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2283,
+      "sha256": "afdb72f1bd41d212c53022f0219470ffba0d47f9f4bbd343f0e0f4d491534513"
+    },
+    {
+      "path": "ai3-compact-library-identities.json",
+      "bytes": 2191,
+      "sha256": "ed40cc5e2f33134141418ea9db43dce3ffb45d06e93024fb7556e44aaef88a74"
+    },
+    {
+      "path": "ai3-review-bundle-library-identity.json",
+      "bytes": 799,
+      "sha256": "da8b0721b5b0fbf2ef9b95b8d03f05dd57dc8323f0b20186bf70f502f511912c"
+    },
+    {
+      "path": "compact-build.log.gz",
+      "bytes": 705,
+      "sha256": "2d15a75db6fbad775b675dfe8cf1028158f134fb7386e3ed765f520e5433403e"
+    },
+    {
+      "path": "delivery-receipt.json",
+      "bytes": 6913,
+      "sha256": "cbc5bad31180b54bfe43276edc4073a13a894f26da8deea82e1ddae8dad3dd36"
+    },
+    {
+      "path": "historical-compact-handoff.json.gz",
+      "bytes": 1282,
+      "sha256": "c93912d7f590f16d4f9b21425285ed31c65d6918d7bec57218702b01aec735a0"
+    },
+    {
+      "path": "historical-compact-package-receipts.json.gz",
+      "bytes": 732,
+      "sha256": "a2540664680a065785ecda2c933be809a2a9206daf7ef6141130b49a81a54b6d"
+    },
+    {
+      "path": "historical-full-bundle-handoff.json.gz",
+      "bytes": 847,
+      "sha256": "bad9317c39685edbfb79e220aa5519a55ff82492208429676ac379f6d203e307"
+    },
+    {
+      "path": "package-verification.json",
+      "bytes": 630,
+      "sha256": "73ea360be45246fbba3e41699d2db873f6805b8aa35e974af628248ba8206733"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "actual_generation": {
+    "items": 23,
+    "subprocess_successes": 23,
+    "current_after": 23,
+    "sum_root_item_wall_seconds": 63.72059266601718,
+    "wall_scope": "Per-item parent wall duration includes subprocess startup and validation/hash overhead; not a universal runtime forecast.",
+    "progress_sha256": "a7e835a60edea087d1e469aa381ad3f8fd90ebe595e56e53d2766c83d8c684bb",
+    "source_freeze_sha256": "b5aed3e81f3c4c82ba61e0210fed4e34600eb27c496b25f47c8d1f15a5c63af9"
+  },
+  "guarded_actual_loads": {
+    "items": 23,
+    "producer_calls": 0,
+    "artifacts": 42,
+    "unchanged_bytes_sizes_mtimes": true,
+    "checks": 278,
+    "failed_checks": 0
+  },
+  "source_files": [
+    {
+      "path": "videos/ai/ai4/compute.py",
+      "sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "bytes": 72334
+    },
+    {
+      "path": "videos/ai/ai4/contracts.py",
+      "sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "bytes": 8587
+    },
+    {
+      "path": "videos/ai/ai4/cache_contract.py",
+      "sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "bytes": 8767
+    },
+    {
+      "path": "explainer/ai/autodiff.py",
+      "sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "bytes": 7798
+    }
+  ],
+  "tests": {
+    "command": "python -m unittest tests.test_ai4_producer_contracts tests.test_autodiff_zero_power -v",
+    "count": 34,
+    "exit_code": 0,
+    "log_sha256": "89cd1be64a6f323fc8f8bcc796cf70b148f3a2d8eb9c55487406c1aa2db08e8a",
+    "scope": "34bounded producer/cache/network/consumer-coordinate and shared-autodiff-zero tests; not production-success or rendered evidence."
+  },
+  "nonfinite_inventory": [
+    {
+      "path": "floats/ulp_fp16",
+      "shape": [
+        561
+      ],
+      "nonfinite_count": 80,
+      "nan_count": 80,
+      "inf_count": 0
+    },
+    {
+      "path": "floats/ulp_e5m2",
+      "shape": [
+        561
+      ],
+      "nonfinite_count": 178,
+      "nan_count": 178,
+      "inf_count": 0
+    },
+    {
+      "path": "floats/ulp_e4m3",
+      "shape": [
+        561
+      ],
+      "nonfinite_count": 346,
+      "nan_count": 346,
+      "inf_count": 0
+    },
+    {
+      "path": "vcurve/slope_right_fp32",
+      "value": "nan"
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "No training/model/solver/kernel rerun, new parameter/network request, render or audio.",
+    "Direct cached-array algebra validates listed invariants only; stored producer difference metrics also rely on exact frozen producer/assertion code and successful original logs.",
+    "NaN spacing markers outside representable formats and insufficient-window slope fits are not silently classified as corrupt numerical results.",
+    "No visual/continuous/narration/listening/production export approval."
+  ],
+  "packaged_npz": "Not copied; originalNPZcontent hashes/sizes/mtime and array shapes/dtypes preserved in production and validation receipts. No raw corpus/modelweights bundled.",
+  "driver_source_scope": "Driver file copied at review; root attests executed path, but driver bytes are not independently bound by the original progress receipt. Producer/helper/sharedAD bytes are bound by exact root freeze and per-item recipe."
+}

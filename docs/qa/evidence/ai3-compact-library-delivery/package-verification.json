@@ -1,0 +1,11 @@
+{
+  "verified_utc": "2026-10-31T22:39:38.734058+00:00",
+  "existing_local_ZIPs_rehashed_and_all_member_CRCs_checked": 4,
+  "package_manifest_hashes_checked": 4,
+  "library_identity_file_sizes_match_existing_package_bytes": true,
+  "identity_responses_retained_verbatim": 2,
+  "all_retained_file_checksums_verified": true,
+  "library_operations_or_native_sends_performed_by_this_task": 0,
+  "native_outcomes_source": "Parent operational checkpoints: full and combined compact native attempts failed; sampler alone accepted2026-10-31T22:36:32Z.",
+  "scope": "Identity/byte packaging check, not browser/player/listening approval."
+}

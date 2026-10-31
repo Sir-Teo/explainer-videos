@@ -1,0 +1,20 @@
+# Part 3 final silent assembly review
+
+Source release: `927fba668656a682b3e29a288de64130ddc680dd`. Authoritative case-map SHA256: `7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6`. Caption-table SHA256: `8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a`.
+
+Both final 19-chapter reels were assembled once from frozen existing chapter movies through the existing `tools/build.py --stitch-only` workflow. The runtime adapter isolates paths, forbids chapter rendering, uses one numeric/FFmpeg thread, and marks the container title as a silent QA preview. No model/data computation, source change or chapter rerender occurred. Exact commands, input hashes, source hashes and logs are retained under `checks/` and `tools/`; the original runtime handoff is compressed under `receipts/`.
+
+| Reel | Duration | Video frames | Subtitle cues | Final MP4 SHA256 |
+|---|---:|---:|---:|---|
+| English | 3281.809979 s | 49,227 | 990 | `bf14c51ccea011245e9af1e5bcdfc33c4a46abadf390f69e003790638d58a169` |
+| Chinese | 3469.088542 s | 52,036 | 1,039 | `ba44de77ae0934e247c4702ab2f2d2a886d9f088de7fe8fcde293f4c438e1c26` |
+
+Each H.264 reel is 854×480 at 15 fps, with AAC 48 kHz stereo, correctly tagged soft subtitles and 19 localized chapter markers. All 101,263 video frames and both complete AAC streams decoded without errors. Decoded video PTS strictly increase; packet DTS are nondecreasing per stream. Chapter frame counts match the frozen inputs, and final counts match their sums. Subtitle extraction exactly matches the generated SRT text and millisecond timing; all cues lie within the video and do not overlap. The first video PTS is 0.021029 s in both files, and every chapter marker is within one video frame of its incoming decoded frame; no zero-offset claim is made.
+
+All 36 joins were visually reviewed through 82 chronological contact sheets: 684 selected timestamps, 650 unique PNGs and 34 exact PNG duplicates mapped to their actually viewed image. All native 854×480 before/after context frames were also viewed (72 views). Per cut, every frame at offsets -6 through +6 is selected, plus -15/-12/-9/+9/+12/+15; maximum selected-time gap inside each ±1 s window is approximately 0.2 s. All actual sheets and native context PNGs are retained under `images/`. Compressed `join-review.json` files contain precise timestamps, image/page hashes, actual view receipts and per-join observations. The immutable extraction plan still contains its original pending fields; the separate actual-view ledger is authoritative for completed review.
+
+No assembly defect was observed in these selected windows. Outgoing content fades to the shared background; the incoming chapter card or recap fades in in manifest order. No unexpected carryover, missing chapter, duplicate opening or hard flash was observed. Raw `needs-review` / `source-changed-during-render` warnings remain for EN Einsum, LowRank and GaLore, and ZH Projection and LowRank. This assembly review does not promote those runtime statuses; root's exact-source scoped reviews are associated through the frozen authoritative map.
+
+**Limits:** these are silent previews with estimated narration/subtitle timing. Actual speech, pronunciation, listening, production loudness, speech/animation synchronization and uninterrupted full-reel perceptual playback remain untested. Frames outside the selected join windows were decoded but not visually inspected in this assembly pass. This is not full 1080p motion approval. Subtitle extraction does not validate visual player overlays, responsive layout or browser playback. Chapter-specific native endpoint/selected-motion evidence remains separate.
+
+Full movies and duplicate chapter evidence are deliberately excluded. Runtime originals remain under `/workspace/runtime/ai3-silent-preview-assembly/continuity-qualified/`; their identities are recorded here. The older English interim reel remains historical mechanism evidence only. `evidence-manifest.json` maps every retained payload to its original SHA256; gzip payloads were round-trip verified.

@@ -1,0 +1,13 @@
+{
+  "verified_utc": "2026-10-31T22:39:38.734058+00:00",
+  "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "authoritative_map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+  "unique_live_direct_scene_sources_sha256_checked": 19,
+  "case_source_bindings_checked": 38,
+  "retained_payload_original_hashes_and_gzip_roundtrips_checked": 190,
+  "actual_review_sheets_retained": 82,
+  "actual_native_context_PNGs_retained": 72,
+  "no_movie_payloads_retained": true,
+  "all_retained_file_checksums_verified": true,
+  "scope": "Packaging integrity only; actual visual coverage is preserved in original immutable review ledgers. No additional playback or listening claim."
+}

@@ -77,6 +77,10 @@ class Tensor:
         return self * self._wrap(other) ** -1
 
     def __pow__(self, k: float):
+        # A scalar exponent of zero is the constant polynomial, including at
+        # zero. Evaluating k*x**(k-1) there would incorrectly form 0*infinity.
+        if np.ndim(k) == 0 and k == 0:
+            return self._make(self.data ** k, [(self, lambda g: np.zeros_like(self.data))], f"**{k}")
         return self._make(self.data ** k, [(self, lambda g: g * k * self.data ** (k - 1))], f"**{k}")
 
     def __matmul__(self, other):
