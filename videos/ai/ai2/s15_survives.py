@@ -137,18 +137,19 @@ class Survives(VoiceoverScene):
                  yfmt=lambda v: rf"10^{{{int(v)}}}", center=[-2.4, -0.4, 0])
         la = curve(g.ax, A, np.log10(Ac), PATH, 4)
         lm = curve(g.ax, W, np.log10(M), FAIL, 4)
-        lg = legend([(PATH, r"adders: \ $a + b$, \ two designs"), (FAIL, r"multipliers: \ $a \times b = b \times a$?")],
+        lg = legend([(PATH, r"adders: \ $a + b$, \ two designs"),
+                     (FAIL, r"multipliers: \ low product bits equal?")],
                     font_size=20).move_to([4.0, 2.0, 0])
         growth = float(np.exp(np.mean(np.diff(np.log(M[2:])))))
         txt = label(rf"about $\times {growth:.0f}$ per extra bit", font_size=24, color=FAIL).move_to([4.0, 0.6, 0])
-        why_ = label(r"multiplication mixes every bit with every other: \\ there is no short proof to learn",
+        why_ = label(r"dense bit interactions: \\ our solver struggles to find useful clauses",
                      font_size=20, color=GREY_A).move_to([4.0, -0.6, 0])
         tag = note(r"computed: \ our CDCL solver").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "There are limits. <bookmark mark='a'/> Ask the same solver whether a multiplier gives the same answer for a times "
-            f"b as for b times a. <bookmark mark='b'/> The conflicts grow about {growth:.0f}-fold with every extra bit: "
-            f"{M[-1]:,.0f} at {int(W[-1])} bits. Multipliers are a famous hard case; industry handles arithmetic with algebraic "
-            "methods instead."
+            "There are limits. <bookmark mark='a'/> Ask the same solver whether the low product bits agree for a times b "
+            f"and b times a. <bookmark mark='b'/> In these runs the conflicts grow about {growth:.0f}-fold with every extra "
+            f"input bit: {M[-1]:,.0f} at {int(W[-1])} bits. This is a search difficulty, not proof that short proofs do not "
+            "exist. Multipliers are a famous hard case for SAT solvers; specialized algebraic methods can help."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), Create(la), FadeIn(lg[0]))
             vo.wait_until("a")
@@ -224,7 +225,7 @@ class Survives(VoiceoverScene):
         cite_ = note(r"Valmeekam, Stechly \& Kambhampati (2024), PlanBench").to_corner(DL, buff=0.2)
         pattern = VGroup(node_box(r"a language model", LEARN, font_size=22), node_box(r"PDDL", SYMBOL, font_size=22),
                          node_box(r"a classical planner", PATH, font_size=22),
-                         node_box(r"a plan, guaranteed", FCOL, font_size=22)).arrange(DOWN, buff=0.45)
+                         node_box(r"a plan valid \\ in that PDDL model", FCOL, font_size=22)).arrange(DOWN, buff=0.45)
         pattern.move_to([4.2, 0.2, 0])
         arr = VGroup(*[Arrow(a.get_bottom(), b.get_top(), buff=0.06, color=GREY_B, stroke_width=2.5)
                        for a, b in zip(pattern, pattern[1:])])
@@ -234,8 +235,9 @@ class Survives(VoiceoverScene):
             "the best ordinary language model tested in 2024 solved sixty-three percent of problems, and OpenAI's reasoning "
             "model o1-preview ninety-eight. <bookmark mark='b'/> Rename the blocks and actions to nonsense words, logic "
             "unchanged, and o1-preview fell to fifty-three percent; a classical planner solves every instance, whatever the "
-            "names. <bookmark mark='c'/> One practical answer combines them: the language model writes the problem in the "
-            "planning language PDDL, and a classical planner finds a plan guaranteed to work."
+            "names. <bookmark mark='c'/> One practical answer combines them: given a domain model, the language model writes "
+            "the problem in the planning language PDDL, and a classical planner finds a plan valid in that formal model. "
+            "The guarantee applies to the model; its assumptions and the language model's translation still need checking."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cite_))
             vo.wait_until("a")

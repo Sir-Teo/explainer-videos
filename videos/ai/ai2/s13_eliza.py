@@ -187,16 +187,17 @@ class Eliza(VoiceoverScene):
         then = VGroup(
             history_card(2021, r"the original code found", r"in Weizenbaum's papers at MIT; \ run again on an "
                          r"emulated IBM 7094 in 2024", width=5.6, color=HIST, font_size=18),
-            history_card(2025, r"Jones \& Bergen", r"in five-minute Turing tests, \ ELIZA judged human $23\%$ of the "
-                         r"time", width=5.6, color=SYMBOL, font_size=18),
+            history_card(2025, r"Jones \& Bergen", r"a Python DOCTOR implementation: \ judged human $23\%$ of the "
+                         r"time in five-minute Turing tests", width=5.6, color=SYMBOL, font_size=18),
         ).arrange(DOWN, buff=0.25).move_to([3.5, -0.55, 0])
         with self.voiceover(
             "What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human "
             "Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could "
             "talk to it in private, and wrote that he had not imagined so short an exposure to so simple a program could produce "
             "such powerful delusions in normal people. <bookmark mark='b'/> Reading understanding into fluent output became "
-            "known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024, "
-            "and in the 2025 Turing tests, people took it for human in almost a quarter of conversations. Does fluency mean "
+            "known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024. "
+            "A separate Python implementation of the DOCTOR script was used in the 2025 Turing tests, and people took it for "
+            "human in twenty-three percent of conversations. Does fluency mean "
             "understanding? Every chatbot raises the question again."
         ) as vo:
             self.play(FadeIn(book, shift=UP * 0.2))

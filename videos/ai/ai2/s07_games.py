@@ -22,15 +22,20 @@ def toy_tree(b=3, depth=3):
 
 
 def trace_alphabeta(tr: "SearchTree"):
-    """Alpha-beta on the drawn tree, recording events: ('visit', i, alpha, beta), ('value', i, v), ('cut', i)."""
+    """Trace visits, cutoffs, and ('value', node, score, bound) events.
+
+    A fail-soft internal score outside its incoming window is a bound, not
+    necessarily that node's exact minimax value. Terminal scores are exact.
+    """
     ev = []
 
     def go(i, depth, a, b):
+        incoming_a, incoming_b = a, b
         ev.append(("visit", i, a, b))
         kids = tr.kids[i]
         if not kids:
             v = tr.node_data[i]["v"]
-            ev.append(("value", i, v))
+            ev.append(("value", i, v, "exact"))
             return v
         if depth % 2 == 0:
             v = -math.inf
@@ -50,7 +55,8 @@ def trace_alphabeta(tr: "SearchTree"):
                     for k2 in kids[j + 1:]:
                         ev.append(("cut", k2))
                     break
-        ev.append(("value", i, v))
+        bound = "upper" if v <= incoming_a else "lower" if v >= incoming_b else "exact"
+        ev.append(("value", i, v, bound))
         return v
 
     go(0, 0, -math.inf, math.inf)
@@ -59,6 +65,10 @@ def trace_alphabeta(tr: "SearchTree"):
 
 def fmt_inf(x):
     return r"-\infty" if x == -math.inf else (r"+\infty" if x == math.inf else str(int(x)))
+
+
+def trace_score_tex(value, bound):
+    return {"exact": "", "upper": r"\le ", "lower": r"\ge "}[bound] + str(int(value))
 
 
 class Games(VoiceoverScene):
@@ -155,13 +165,14 @@ class Games(VoiceoverScene):
         visited = {e[1] for e in ev if e[0] == "visit"}
         pruned_all = [i for i in range(n) if i not in visited]
         with self.voiceover(
-            "Most of a game tree never needs to be looked at. Here is a small one: you move, they reply, you move, and the "
+            "Much of a game tree can be skipped. Here is a small one: you move, they reply, you move, and the "
             "bottom positions are scored. <bookmark mark='a'/> Search it depth-first, carrying two numbers: alpha, the best "
             "you are already sure of, and beta, the best your opponent is sure of. <bookmark mark='b'/> As soon as a reply "
             "shows a move is worse than one you already have, that move's other replies cannot matter, and are skipped. "
             f"The greyed branches are never examined: {len(pruned_all)} of the {n} positions, and the answer at the top is "
             "still exactly minimax's. This is alpha-beta pruning, suggested by John McCarthy in the mid-nineteen-fifties and "
-            "used by every chess program since."
+            "used by generations of alpha-beta chess engines. Scores at cutoffs can be bounds rather than exact values; "
+            "we mark those with an inequality. The root answer is exact."
         ) as vo:
             self.play(Create(tree.edge_group), FadeIn(tree.nodes), FadeIn(side), FadeIn(tag), run_time=1.5)
             vo.wait_until("a")
@@ -173,9 +184,9 @@ class Games(VoiceoverScene):
                     new = MathTex(rf"[{fmt_inf(a)}, {fmt_inf(b)}]", font_size=30, color=FCOL).move_to(window[2], LEFT)
                     self.play(marker.animate.move_to(tree.pos[i]), Transform(window[2], new), run_time=0.22)
                 elif e[0] == "value":
-                    _, i, v = e
+                    _, i, v, bound = e
                     col = MAXC if lvl[i] % 2 == 0 else MINC
-                    m = MathTex(str(int(v)), font_size=24, color=col if tree.kids[i] else WHITE)
+                    m = MathTex(trace_score_tex(v, bound), font_size=24, color=col if tree.kids[i] else WHITE)
                     m.next_to(tree.nodes[i], DOWN if not tree.kids[i] else LEFT, buff=0.08)
                     vals[i] = m
                     self.play(FadeIn(m), run_time=0.18)

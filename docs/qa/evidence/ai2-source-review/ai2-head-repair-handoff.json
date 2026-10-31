@@ -1,0 +1,81 @@
+{
+  "observed_at": "2026-10-31T14:08:25.889938+00:00",
+  "source_review_record": "ai2-head-source-review.json",
+  "source_frozen": true,
+  "global_captions_merged": false,
+  "caption_handoff": "ai2-head-caption-add.json",
+  "narration_updates": "ai2-head-narration-updates.json",
+  "fixed_findings": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "H09",
+    "H10",
+    "H11",
+    "H12",
+    "H14"
+  ],
+  "additional_fixes": [
+    "AStarbatch separate medians and median paired work ratios, not a fictional median map.",
+    "PDBdisjoint tile-move cost partition now explicit in EN/ZH."
+  ],
+  "remaining_conditional": [
+    "H13: UnknownPDBoptimal-length axis and cappedcomparison robustness remain if futureparameters capPDBorManhattan. Defaultcompleteddata doesnottrigger this; no compute assertions or algorithm changed by headbatch."
+  ],
+  "validation": {
+    "focused_tests": 39,
+    "passed": true,
+    "seconds": 5.884,
+    "source_narration_coverage": "119/119",
+    "pre_existing_authoring_warning": "displayed try {NAMES[v]} {true/false} template adjacent computed values",
+    "compileall": "passed",
+    "git_diff_check": "passed",
+    "renders_or_playback": "not performed by this review agent"
+  },
+  "source_hashes": {
+    "videos/ai/ai2/s01_hook.py": "031675e79981c61d9878eed4e30f1ea00e150d7b7e94531dc093ce0081cb412e",
+    "videos/ai/ai2/s02_turing.py": "c7a6a63a4153badde7cb7ace994b989499b2b9dd735ddee52e5b42d983ee026f",
+    "videos/ai/ai2/s03_search.py": "07ca34329fe691ebc10a84fdd3d5d904fa1698c885bed18479d991a5ed5b78da",
+    "videos/ai/ai2/s04_astar.py": "ac2886b808f59ac3237be0f88de00f3f5c5dba954b67bbe3fbdfcd0e0a8aa5dc",
+    "videos/ai/ai2/s05_heuristics.py": "639e0b376a9d302f8a703e98a141a920cd8bfd93cfcdccee7fb704db38e3af34",
+    "videos/ai/ai2/s06_local.py": "823bd2f77067a56960b78e4950cc932a31f6508a24aeab78f77647bd73cdef0a",
+    "videos/ai/ai2/s07_games.py": "07c08b6a3ba3065f803d9a2903126b4be2fcd8c1005f4a33e775cca380899f2d",
+    "videos/ai/ai2/s08_samuel.py": "47c2698ac41dbe1b104c11c860b31c297f1c6af0831710b32edd1374fc7d8f92"
+  },
+  "completed_JSON_followup": {
+    "puzzle15": {
+      "sha256": "38da89890aaacab8e89cb60e46566af1d34bb88c6d6655348794213e2ad41812",
+      "bytes": 12684,
+      "read_raw_JSON_only": true,
+      "n": 30,
+      "capped": {
+        "pdb": 0,
+        "manhattan": 0,
+        "misplaced": 26
+      },
+      "observed_generated": {
+        "pdb": 5942937,
+        "manhattan": 167945832,
+        "misplaced": 264854843
+      }
+    },
+    "samuel": {
+      "sha256": "fc905e39bae5ae353bb15e37672e1e77bb45e9136a300e31a18ad480695868ea",
+      "bytes": 132948,
+      "read_raw_JSON_only": true,
+      "run1_final_positive": 4,
+      "run1_final_above_point02": 4
+    },
+    "testset": {
+      "sha256": "43b0d45b095c713e6e4068e000577e9a774495a8ab184a27f02dd151905b6d27",
+      "bytes": 37074,
+      "read_raw_JSON_only": true,
+      "positions": 300
+    }
+  }
+}

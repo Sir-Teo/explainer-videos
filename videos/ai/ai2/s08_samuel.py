@@ -89,7 +89,7 @@ class Samuel(VoiceoverScene):
         rows[1][0].set_color(LEARN)
         whys = [why(r"Samuel's delta: \ how wrong the old score was"), why(r"nudge the weights toward what search found")]
         step = ladder(self, rows, whys, keep=2, top=-1.3, x=-2.2)
-        td = label(r"today: \ temporal-difference learning \ (Sutton 1988; \ Part 26)", font_size=22, color=PATH)
+        td = label(r"modern semi-gradient analogue: \ temporal-difference learning \ (Part 26)", font_size=22, color=PATH)
         td.to_edge(DOWN, buff=0.25)
         ab = label(r"Alpha learns; \ Beta keeps its weights; \ when Alpha wins, \ Beta copies Alpha", font_size=22,
                    color=GREY_A).to_edge(UP, buff=0.35)
@@ -99,7 +99,8 @@ class Samuel(VoiceoverScene):
         vs = DoubleArrow(pair[0].get_right(), pair[1].get_left(), buff=0.2, color=GREY_B)
         pair.add(vs, label(r"self-play", font_size=22, color=GREY_B).next_to(vs, UP, buff=0.1))
         with self.voiceover(
-            "Samuel's learning rule is the seed of modern reinforcement learning. <bookmark mark='a'/> Keep the static score "
+            "Samuel's delta idea is a seed of modern reinforcement learning. We write a modern semi-gradient analogue here; "
+            "his original program adjusted sign correlations and quantized coefficients instead. <bookmark mark='a'/> Keep the static score "
             "your evaluation gave your previous position. <bookmark mark='b'/> Two moves later, search from the new position "
             "and back up a score: a better-informed opinion of the same game. <bookmark mark='c'/> The difference, Samuel's "
             "delta, says how wrong the old score was. <bookmark mark='d'/> Nudge the weights to shrink it. "
@@ -172,7 +173,7 @@ class Samuel(VoiceoverScene):
                     font_size=18).next_to(g, UP, buff=0.1)
         fin = W[-1]
         top = FEATURE_WORDS[int(np.argmax(fin))]
-        npos = int((fin > 0.02).sum())
+        npos = int((fin > 0).sum())
         signs = f"The largest weight ends up on {top}, and {npos} of the five features count in its favour."
         tag = note(rf"computed: \ Connect Four, \ ${d['depth']}$-move search, \ run 1 of ${len(runs)}$; \ "
                    rf"${d['n_eval_games']}$ games per point").to_corner(DR, buff=0.15)

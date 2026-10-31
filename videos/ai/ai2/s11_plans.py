@@ -268,7 +268,7 @@ class Plans(VoiceoverScene):
                  ylabel=r"states expanded \ (mean, log scale)", xticks=ns, yticks=[0, 1, 2, 3, 4, 5],
                  yfmt=lambda v: rf"10^{{{int(v)}}}", center=[0.6, -0.3, 0])
         series = (("bfs", GREY_B, r"breadth-first"), ("hmax", GCOST, r"A*, \ $h_{\max}$ \ (optimal)"),
-                  ("ff", PATH, r"greedy, \ $h_{FF}$ \ (relaxed plans)"))
+                  ("ff", PATH, r"greedy, \ FF-style relaxed plans"))
         lines = VGroup()
         for k, col, _ in series:
             xs = [n for n in ns if mean(k, n) is not None]
@@ -277,7 +277,7 @@ class Plans(VoiceoverScene):
                                                           for x, y in zip(xs, ys)]))
         lg = legend([(c, t) for _, c, t in series], font_size=19).move_to([5.0, 2.3, 0])
         L_opt, L_ff = mean("bfs_len", n_bfs), mean("ff_len", n_bfs)
-        relax = label(r"relaxed: \ ignore every delete list, \\ solve that easier problem, \ count its steps",
+        relax = label(r"relaxed heuristics: \ ignore delete lists, \\ estimate remaining cost cheaply",
                       font_size=20, color=PATH).move_to([5.0, 0.8, 0])
         cost = label(rf"at ${n_bfs}$ blocks: \ optimal plans ${L_opt:.1f}$ steps, \\ greedy's ${L_ff:.1f}$",
                      font_size=20, color=GREY_A).move_to([5.0, -0.4, 0])
@@ -290,11 +290,12 @@ class Plans(VoiceoverScene):
         with self.voiceover(
             f"And the search space explodes. <bookmark mark='a'/> {len(towers)} blocks can be stacked {towers[-1]:,} different "
             f"ways. <bookmark mark='b'/> Blind breadth-first search on random {n_bfs}-block problems expands {bfs_n:,.0f} "
-            "states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore every delete "
-            "list, and the easier problem can be solved fast; its cost is a heuristic. The admissible version, h max, cuts the "
-            f"search to {hm_n:,.0f}, still optimal. <bookmark mark='d'/> Counting the steps of a relaxed plan, as Jörg "
-            f"Hoffmann's FF planner did in 2001, and searching greedily: {ff_n:,.0f} states, though the plans are longer, "
-            f"{L_ff:.1f} steps against {L_opt:.1f}. Such heuristics, Graphplan, and planning as satisfiability made general "
+            "states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, "
+            "then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. "
+            f"The admissible h max heuristic cuts the search to {hm_n:,.0f}, still optimal. <bookmark mark='d'/> Inspired by "
+            "Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed "
+            f"plan. Greedy search expands {ff_n:,.0f} states, with mean plan length {L_ff:.1f} steps against the optimum's "
+            f"{L_opt:.1f}. Such heuristics, Graphplan, and planning as satisfiability made general "
             "planners practical."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))

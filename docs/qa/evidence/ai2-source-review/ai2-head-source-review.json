@@ -1,0 +1,589 @@
+{
+  "observed_at": "2026-10-31T13:57:31.532934+00:00",
+  "scope": "manifest indices0through7,readonlysource/factualreview",
+  "source_edits": false,
+  "computations_or_Cache_load_calls": false,
+  "render_or_playback": false,
+  "coverage": [
+    {
+      "index": 0,
+      "scene": "Hook",
+      "file": "videos/ai/ai2/s01_hook.py",
+      "source_sha256": "031675e79981c61d9878eed4e30f1ea00e150d7b7e94531dc093ce0081cb412e",
+      "source_lines": 171,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "prediction",
+        "era",
+        "question",
+        "plan"
+      ],
+      "checked": [
+        "Simon/Newell forecast; publication date vs speech date",
+        "1950–1997 timeline; winters explicitly approximate",
+        "Objectives and bridges to Parts26/modern systems"
+      ],
+      "raw_data": [],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": []
+    },
+    {
+      "index": 1,
+      "scene": "Turing",
+      "file": "videos/ai/ai2/s02_turing.py",
+      "source_sha256": "d9a04802e6fb00d457d077bea2f91a1dc1ee53903f206c18d19e0d982a171bf3",
+      "source_lines": 291,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "machine",
+        "halting",
+        "beaver",
+        "imitation",
+        "dartmouth"
+      ],
+      "checked": [
+        "Incrementer state/head/rule replay and universal-machine explanation",
+        "Halting diagonal argument and Church comparison",
+        "Binary busy-beaver scope and run counts",
+        "Turing1950 standard-test simplification; Jones/Bergen persona-dependent results",
+        "Dartmouth quotation, LogicTheorist and physical-symbol hypothesis"
+      ],
+      "raw_data": [
+        "tm: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H02"
+      ]
+    },
+    {
+      "index": 2,
+      "scene": "Search",
+      "file": "videos/ai/ai2/s03_search.py",
+      "source_sha256": "542142ab782c8eb3f4098b79e9e5c79994700957a5416f66b89232615b971b0b",
+      "source_lines": 220,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "state_space",
+        "layers",
+        "orders",
+        "dijkstra"
+      ],
+      "checked": [
+        "Puzzle transitions and9!/2 reachable-state count",
+        "BFS layer plot and shortest-depth reasoning",
+        "BFS/DFS/iterative-deepening ordering, memory and historical attribution",
+        "Dijkstra cost units,16moves, obstacles and goal count"
+      ],
+      "raw_data": [
+        "puzzle8: completed rawJSONinspected;arraysinNPZnotloaded",
+        "grid: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H07",
+        "H08"
+      ]
+    },
+    {
+      "index": 3,
+      "scene": "AStar",
+      "file": "videos/ai/ai2/s04_astar.py",
+      "source_sha256": "88da69f8ec050ad950ca532cb92c553f8d79d68c09cc52cfc104a70f31761d4c",
+      "source_lines": 333,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "idea",
+        "race",
+        "optimal",
+        "consistent",
+        "batch"
+      ],
+      "checked": [
+        "f=g+h and Euclidean heuristic",
+        "Separate path identity vs optimal cost",
+        "Circle/ellipse boundary inequalities and units",
+        "Admissibility/reopening proof; consistency and nondecreasing f",
+        "Batch medians,paired ratios,weighted/greedy guarantees"
+      ],
+      "raw_data": [
+        "grid: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H03",
+        "H04"
+      ]
+    },
+    {
+      "index": 4,
+      "scene": "Heuristics",
+      "file": "videos/ai/ai2/s05_heuristics.py",
+      "source_sha256": "eed8a9006c24d8e6616bc4c17b975b68ebe65bb1e8e195df93c86d52b7dcafdc",
+      "source_lines": 245,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "relax",
+        "dominance",
+        "fifteen",
+        "learned"
+      ],
+      "checked": [
+        "Relaxed-puzzle Manhattan/misplaced derivations",
+        "Dominance repair; mandatory interior vs tie boundary",
+        "Effective branching factor N+1 convention",
+        "15-puzzle state count,IDA thresholds,disjoint pattern-database cost accounting",
+        "Censoring/sample-count scope; DeepCubeA60.3% and bridge to AlphaZero"
+      ],
+      "raw_data": [
+        "puzzle8: completed rawJSONinspected;arraysinNPZnotloaded",
+        "puzzle15: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H05",
+        "H13"
+      ]
+    },
+    {
+      "index": 5,
+      "scene": "Local",
+      "file": "videos/ai/ai2/s06_local.py",
+      "source_sha256": "485daf976ac8161960097ee17eb7a10561a342ddef2b3de5486a23bff801ab8f",
+      "source_lines": 374,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "hills",
+        "queens",
+        "metropolis",
+        "cooling",
+        "budgets",
+        "genetic"
+      ],
+      "checked": [
+        "Landscape hill climbing and queen attacking-pair descent",
+        "Restart expectation and finite-vs-almost-sure language",
+        "Metropolis rule,detailed balance,stationary vs cooling claim",
+        "Actual TSPevaluation currency and seed spread",
+        "Nearest-neighbour baselines and OX/GAtrace; FunSearch/AlphaEvolve"
+      ],
+      "raw_data": [
+        "queens: completed rawJSONinspected;arraysinNPZnotloaded",
+        "tsp: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H06",
+        "H09",
+        "H10",
+        "H14"
+      ]
+    },
+    {
+      "index": 6,
+      "scene": "Games",
+      "file": "videos/ai/ai2/s07_games.py",
+      "source_sha256": "959fac634b05ee76b05bbc042b01f1c708060b7252d7c5ccb2fe1ed608943e26",
+      "source_lines": 283,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "minimax",
+        "pruning",
+        "best_case",
+        "counts"
+      ],
+      "checked": [
+        "Minimax recurrences and complete-game vs unique-position counting",
+        "Full toyLEAVES and fail-soft alpha-beta trace values",
+        "Window semantics,cutoffbound display and root preservation",
+        "Perfect-order exact leaf formula; odd/even approximation",
+        "ConnectFour counted search/oracle setup and reported means"
+      ],
+      "raw_data": [
+        "ttt: completed rawJSONinspected;arraysinNPZnotloaded",
+        "uniform: completed rawJSONinspected;arraysinNPZnotloaded",
+        "alphabeta: completed rawJSONinspected;arraysinNPZnotloaded"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H01"
+      ]
+    },
+    {
+      "index": 7,
+      "scene": "Samuel",
+      "file": "videos/ai/ai2/s08_samuel.py",
+      "source_sha256": "a0428141a77d9951773591d7376c9c7c00995b10863fd94fc0008e4b9f244292",
+      "source_lines": 336,
+      "source_review": "all methods read",
+      "methods": [
+        "construct",
+        "card",
+        "samuel",
+        "rule",
+        "replay",
+        "verdict",
+        "deep_blue",
+        "solved"
+      ],
+      "checked": [
+        "HistoricalSamuel features/AlphaBeta/delta vs moderngradient analogue",
+        "tanh evaluation/gradient update and two-ply temporal alignment",
+        "Replay weight units,sign thresholds and data-dependent verdicts",
+        "Fixed-opponent scores,last-three checkpoints,selected solved-position grading",
+        "DeepBlue/Chinook historical scope and Go/Part26 bridge"
+      ],
+      "raw_data": [
+        "samuel: missing completionJSON;unverified",
+        "testset: missing completionJSON;unverified"
+      ],
+      "bilingual": "matching localzh_lines first8 sections read; known EN defects generallymirrorZH; nospokenaudio verification",
+      "rendered_output": "not reviewed in this task",
+      "full_playback": "not performed",
+      "audio_sync": "not checked",
+      "findings": [
+        "H11",
+        "H12"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "H01",
+      "severity": "P1",
+      "chapter": "Games",
+      "title": "Cutoff bound is displayed as an exact internal minimax value",
+      "references": [
+        "videos/ai/ai2/s07_games.py:30",
+        "videos/ai/ai2/s07_games.py:51",
+        "videos/ai/ai2/s07_games.py:175"
+      ],
+      "evidence": "For the actual27LEAVES, the third root-child MIN has exact value min(max(6,5,3),max(8,1,9),max(4,2,5))=5. With inheritedalpha6, it cuts after its firstMAXchild6 and returns fail-soft6. The renderer writes bare6 at that node. The root exactvalue remains6. This is an analytic trace review, not executed playback.",
+      "proposed_fix": "Record bound type atcutoffs and label MINupperbounds≤v/MAXlowerbounds≥v (or hide incomplete values); retain exactroot. Add actualtoy regression.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H02",
+      "severity": "P2",
+      "chapter": "Turing",
+      "title": "Busy-beaver definition omits fixed binary alphabet",
+      "references": [
+        "videos/ai/ai2/s02_turing.py:166",
+        "videos/ai/ai2/s02_turing.py:177"
+      ],
+      "evidence": "The displayed definition quantifies all n-state machines, but quoted BB(5)=47,176,870 applies to the standard2-symbol model. No spoken/on-screen2-symbol qualification occurs in the block; implementation is binary. Officialbbchallenge explicitly fixes5states/2symbols.",
+      "proposed_fix": "State n nonhalting states and2 tape symbols (plus a separate halt state), blank/all-zero tape, in caption/narration.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H03",
+      "severity": "P2",
+      "chapter": "AStar",
+      "title": "Two different optimal routes are called the same path",
+      "references": [
+        "videos/ai/ai2/s04_astar.py:115",
+        "videos/ai/ai2/s04_astar.py:144",
+        "videos/ai/ai2/zh_lines.py:81"
+      ],
+      "evidence": "CompletedgridJSON: Dijkstra cost30.386970613475885, A*cost30.38697061347589; both routes18moves but differ at route index1 ([33,32] versus[31,33]). The EN/ZH label and narration assert identical path.",
+      "proposed_fix": "Say sameoptimalcost; show both legitimate routes without equating identities.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H04",
+      "severity": "P2",
+      "chapter": "AStar",
+      "title": "Strict interior wording excludes boundary expansions and the counted goal",
+      "references": [
+        "videos/ai/ai2/s04_astar.py:146",
+        "videos/ai/ai2/search.py:110"
+      ],
+      "evidence": "grid_search records/closes/increments the goal beforereturning; itsg+h=C*. Other tie-boundary nodes may alsoexpand. Caption correctlyuses≤ while EN/ZHVO saysbelow/closerthan.",
+      "proposed_fix": "Use atmostC* (and g not Euclidean distance when provingDijkstra); retain mandatoryf<C* vs optionalboundary distinction.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H05",
+      "severity": "P2",
+      "chapter": "Heuristics",
+      "title": "A hundred samples per depth overstates low-depth sample counts",
+      "references": [
+        "videos/ai/ai2/s05_heuristics.py:119",
+        "videos/ai/ai2/s05_heuristics.py:122",
+        "videos/ai/ai2/compute.py:188"
+      ],
+      "evidence": "Sampling usesmin(per_depth,len(layer)). At depth2 only4states exist from the corner-blank goal, so100cannotbe sampled; existingcacheper_depth=100isrequestedcap, not actualperdepthcount.",
+      "proposed_fix": "Say up to100; if showing actualcounts deriveexistinglayers/readactualsample metadata, no newproductioncomputationneeded.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H06",
+      "severity": "P2",
+      "chapter": "Local",
+      "title": "Best nearest-neighbour tour and best polished tour come from different starts",
+      "references": [
+        "videos/ai/ai2/s06_local.py:295",
+        "videos/ai/ai2/compute.py:386"
+      ],
+      "evidence": "CompletedTSPJSON: bestNNstart39 length8181; polishing that same tour gives7711. The reportedminnn2opt7657comesstart44. Narration says2-optpolishesit to7657.",
+      "proposed_fix": "Explain these are separately selected best-over-starts baselines, or report7711for the same tour.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H07",
+      "severity": "P2",
+      "chapter": "Search",
+      "title": "DFS memory bound uses solution depth instead of maximum explored depth",
+      "references": [
+        "videos/ai/ai2/s03_search.py:140",
+        "videos/ai/ai2/s03_search.py:146"
+      ],
+      "evidence": "A solution atdepthd doesnotbound ordinaryDFS depth; it canexplore an arbitrarilydeepwrongbranch while shallow solutionexists. O(bm)usesmaxexploreddepthm; O(bd)applies depth-limitedDFS/iterativedeepening to boundd. EN/ZHbothconflate.",
+      "proposed_fix": "Usem for ordinaryDFSmaxdepth anddforfirstsolution/iterativedeepeningbound; qualify equalcost shortest-first.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H08",
+      "severity": "P2",
+      "chapter": "Search",
+      "title": "Iterative-deepening history conflates prior technique with Korf1985 analysis/IDA*",
+      "references": [
+        "videos/ai/ai2/s03_search.py:141",
+        "videos/ai/ai2/s03_search.py:148"
+      ],
+      "evidence": "Korf ownIJCAI1985introduction states iterativedeepening was repeatedlyrediscovered and credits earliestdocumenteduse toSlate/AtkinChess4.5(1977); his1985paperproposes/analyzesIDA*. CurrentVOcalls generaliterativedeepening fromKorf1985.",
+      "proposed_fix": "Say analyzedbyKorf1985; preserve prioruse or use1977citation for nonheuristic technique; keep1985IDA*credit.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H09",
+      "severity": "P2",
+      "chapter": "Local",
+      "title": "Detailed balance is presented as a consequence of equilibrium in general",
+      "references": [
+        "videos/ai/ai2/s06_local.py:144",
+        "videos/ai/ai2/s06_local.py:158"
+      ],
+      "evidence": "Stationarity doesnotimply pairwiseflowequality: a3-state deterministicclockwisecycle hasuniformstationarydistribution butonlyone-wayflows. Symmetric-proposalMetropolisdoes satisfy detailedbalance, so itsBoltzmannalgebra iscorrect afterthatconditionisexplicit. The lowTstatementalso concerns stationaryequilibriumfamily, not arbitraryfinitecoolingschedule.",
+      "proposed_fix": "Say impose/checkdetailedbalance for thissymmetricproposalchain; qualify lowTequilibrium and mixing/slowcooling. No needchangealgorithm.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H10",
+      "severity": "P2",
+      "chapter": "Local",
+      "title": "GA child-quality majority is unmeasured and does not follow from final gap",
+      "references": [
+        "videos/ai/ai2/s06_local.py:360",
+        "videos/ai/ai2/local.py:274"
+      ],
+      "evidence": "NeitherdefaultTSPJSONnorcompute measures fraction ofchildren worse thanbothparents. Finalbestgap doesnotestablish mostchildrenworse; exactcrossover/mutationoutcomesdependparents.",
+      "proposed_fix": "Remove unsupportedmajority/causalclaim or instrument it in future; keep measuredGAresult and limitations.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H11",
+      "severity": "P2",
+      "chapter": "Samuel",
+      "title": "Modern gradient rule is not identified as a modern Samuel-inspired analogue",
+      "references": [
+        "videos/ai/ai2/s08_samuel.py:84",
+        "videos/ai/ai2/s08_samuel.py:101",
+        "videos/ai/ai2/play.py:381"
+      ],
+      "evidence": "Samuel1959original(IBMpaper scannedatMIT), pp.542–543inreprint, uses correlations betweenfeaturecontribution signsanddelta, quantizedpower-of-two coefficient assignment andtermreplacement; heexplicitlysayschanges are notmade directly. Scene underSamuellearningrule displaysw+=eta*delta*gradient, whichis the modernTDstyleanalogueimplementedhere.",
+      "proposed_fix": "Label modernsemi-gradientanalogue/inspiredbySamual; separate historicaldeltainsight fromcurrentConnectFourupdate. No assertion that modernnotationwasliteral1959algorithm.",
+      "status": "confirmed-source-or-completed-JSON"
+    },
+    {
+      "id": "H12",
+      "severity": "P2",
+      "chapter": "Samuel",
+      "title": "Positive-feature count silently discards small positive weights",
+      "references": [
+        "videos/ai/ai2/s08_samuel.py:175"
+      ],
+      "evidence": "nposcountsfin>0.02,butVOsaysnumberof featurescountinfavour, whose naturalcriterion is positiveweight. Aweight0.01stilladdspositivevalueforpositivefeature. DefaultsamuelJSONnotyetpresent; occurrenceunverified.",
+      "proposed_fix": "Count>0 or explicitthresholdwording; keepactualdata-dependentnumber.",
+      "status": "confirmed-code-condition; default-data-untested"
+    },
+    {
+      "id": "H13",
+      "severity": "P2",
+      "chapter": "Heuristics",
+      "title": "15-puzzle capped-data branches can imply unknown optimal lengths and unqualified work ratios",
+      "references": [
+        "videos/ai/ai2/s05_heuristics.py:148",
+        "videos/ai/ai2/s05_heuristics.py:162",
+        "videos/ai/ai2/s05_heuristics.py:188",
+        "videos/ai/ai2/compute.py:242"
+      ],
+      "evidence": "Source usespdb_len as trueoptimalx evenif-1, andworkratio sums completedPDBwork vs possiblytruncatedManhattanwork. compute equalityassert assumesPDBmustsolvewheneverothermethoddoes. puzzle15JSONnotavailableatreadcheckpoint; no defaultcapfailureclaimed.",
+      "proposed_fix": "Explicitunknownlength/censoredworkpaths; report matchedcompletedcases for completionwork or labelobservedtruncatedwork; preserve true invariantonlywhenbothsolved. Explain disjointtilecostpartition beforeaddingtables.",
+      "status": "conditional-source-risk; default-data-untested"
+    },
+    {
+      "id": "H14",
+      "severity": "P3",
+      "chapter": "Local",
+      "title": "Finite restart certainty is overstated",
+      "references": [
+        "videos/ai/ai2/s06_local.py:103"
+      ],
+      "evidence": "With estimatedsuccessprobabilityp=.1362, repeatedindependentrestarts succeedalmostsurelyintheunboundedlimit; nofinitebudgetguaranteessuccess. Caption sayssolvedforcertain beside expectedsteps.",
+      "proposed_fix": "Labelalmostsure/eventualsuccess andexpectedsteps, not deterministicfinitecertainty.",
+      "status": "confirmed-source-or-completed-JSON"
+    }
+  ],
+  "primary_reference_checks": [
+    {
+      "url": "https://bbchallenge.org/story",
+      "checked": "Binarymodel,47,176,870run,completionJuly2,2024; machine code agrees."
+    },
+    {
+      "url": "https://arxiv.org/abs/2503.23674",
+      "checked": "2025preprint:5minute3party,personaGPT4.5=73%,ELIZA23%; not anunqualifiedallpromptclaim."
+    },
+    {
+      "url": "https://www.pnas.org/doi/10.1073/pnas.2524472123",
+      "checked": "2026publishedversion supports samecore5minresults, adds15minstudy;2025preprintdate remains legitimate."
+    },
+    {
+      "url": "https://academic.oup.com/mind/article/LIX/236/433/986238",
+      "checked": "Original1950paperopened;text-only3playergameanduniversalcomputersread;70%forecastnotindependentlylocatedbeforefollowupfetchfailed."
+    },
+    {
+      "url": "https://pubsonline.informs.org/doi/abs/10.1287/opre.6.1.1",
+      "checked": "1958paper publicationand1957speechdated;fullquotehiddenbehindabstract, not fullyverifiedhere."
+    },
+    {
+      "url": "https://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf",
+      "checked": "IndexedprimaryproposalconfirmsAugust31,1955dateandconjecture;fullfetchtimeout."
+    },
+    {
+      "url": "https://arxiv.org/html/2603.13514v1",
+      "checked": "March2026report16/23forStefferud1963IPL-Vpedagogicalrecoding; sourceinternallydiffersabout1956workingprogramvs1957machineproofs, donotresolvehistoricalpriorityfromthisalone."
+    },
+    {
+      "url": "https://ijcai.org/proceedings/1985/208",
+      "checked": "Korfprimary1985introductionexplicitlydocumentspriorSlate/Atkin1977iterativedeepeningandIDA*extension."
+    },
+    {
+      "url": "https://www.nature.com/articles/s42256-019-0070-z",
+      "checked": "DeepCubeA2019paperabstract100%testsolves,60.3%shortest. Scopeisitsownbenchmark."
+    },
+    {
+      "url": "https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/",
+      "checked": "Developerprimary2025:4x4complexmatrices48scalarmultiplicationsvsStrassen49."
+    },
+    {
+      "url": "https://webdocs.cs.ualberta.ca/~chinook/project/legacy.html",
+      "checked": "ChinookteamaccountNealeyrematchand1966fourgamesperopponentall8lost; not primarySamuel1959forlaterhistory."
+    },
+    {
+      "url": "https://people.csail.mit.edu/brooks/idocs/Samuel.pdf",
+      "checked": "OriginalSamuelpaperdownloadednormallyfromindexedpublicMITcopy;localpdftotextpp.542–543correlation/coefficientprocedureandAlphaBetacopyrulechecked."
+    },
+    {
+      "url": "https://research.ibm.com/publications/deep-blue",
+      "checked": "Author/publisherabstractconfirms1997matchandhardware/search/evaluationthemes; full2002paperfetch403,so30processors/480chips/126million/8000/manualtuningdetailsnotfullyreverified."
+    }
+  ],
+  "raw_completed_cache_snapshots": {
+    "tm": {
+      "path": ".cache/ai2/tm.json",
+      "sha256": "0fe25fdb5ad9c22769eaa293bbcae21ab4a26c06a43706f7518ae8a453db66a9",
+      "bytes": 1127,
+      "parsed_raw_JSON": true
+    },
+    "puzzle8": {
+      "path": ".cache/ai2/puzzle8.json",
+      "sha256": "8c07bdba34b9ce545da66f60f1831f4213938d4d34f68698235156232b3930b5",
+      "bytes": 2832,
+      "parsed_raw_JSON": true
+    },
+    "grid": {
+      "path": ".cache/ai2/grid.json",
+      "sha256": "717de4bfdb4a308f477c6dec290e8964301ead94b7f2798fd6e3830bd37e0956",
+      "bytes": 2280,
+      "parsed_raw_JSON": true
+    },
+    "puzzle15": {
+      "path": ".cache/ai2/puzzle15.json",
+      "sha256": "38da89890aaacab8e89cb60e46566af1d34bb88c6d6655348794213e2ad41812",
+      "bytes": 12684,
+      "parsed_raw_JSON": true
+    },
+    "queens": {
+      "path": ".cache/ai2/queens.json",
+      "sha256": "98ded552c363dcff820974a5a298837ca6256ac444f380a47e6161379cbc2206",
+      "bytes": 1259,
+      "parsed_raw_JSON": true
+    },
+    "tsp": {
+      "path": ".cache/ai2/tsp.json",
+      "sha256": "dc0cde7d3c2506d00236d94e52586b5cc11383382621cb3adaaf55397171b1fc",
+      "bytes": 4555,
+      "parsed_raw_JSON": true
+    },
+    "ttt": {
+      "path": ".cache/ai2/ttt.json",
+      "sha256": "95f8f37829d3e2b66484f558d2383a6993f1baa0df397d20dbe8c008f6316fb3",
+      "bytes": 138,
+      "parsed_raw_JSON": true
+    },
+    "uniform": {
+      "path": ".cache/ai2/uniform.json",
+      "sha256": "06973d2ae2efbbf1cc01274070f25940002769464fd27d11b50454de96c5d212",
+      "bytes": 2570,
+      "parsed_raw_JSON": true
+    },
+    "alphabeta": {
+      "path": ".cache/ai2/alphabeta.json",
+      "sha256": "54c0fe7cced63e54546aacaa8f27e1f1f50d06a18c8851698879b325dce6b6a7",
+      "bytes": 686,
+      "parsed_raw_JSON": true
+    }
+  },
+  "limits": [
+    "NoPart2renderedlayout/clipping/colorcontrast/motion/pacing/listening/sync/playerQAperformed.",
+    "Noalgorithmsorbenchmarksraninthistask; toycutoffcounterexamplederivedanalytically.",
+    "puzzle15,samuel,testsetcompletionJSONmissingattheendofreview; no measuredclaimsfor them.",
+    "Primaryfulltextnotaccessibleforallhistoricalnumerics; explicitlimitedchecksabove.",
+    "Runtimebudget/datarepairsalreadyreviewedare not fullPart2signoff."
+  ]
+}

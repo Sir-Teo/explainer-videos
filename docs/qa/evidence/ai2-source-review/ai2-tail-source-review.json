@@ -1,0 +1,816 @@
+{
+  "generated_utc": "2026-10-31T13:56:04.297831+00:00",
+  "head_at_report": "a70adf01089d532c08c830f0118ee5ce5395e0a8",
+  "scope": "Part2 manifest entries8–16inclusive:SamuelthroughOutro, source/factual preparation only.",
+  "source_edits": false,
+  "compute_or_render": false,
+  "static_translation_check": {
+    "command": "python tools/zh_lines.py ai2 --todo Samuel Logic SAT Plans Knowledge Eliza Winters Survives Outro",
+    "whole_part_source_lines_covered": 119,
+    "whole_part_source_lines_total": 119,
+    "warning": "computedtryvariable+true/false template adjacency; actualsourceonly, no renderedcaptureverification"
+  },
+  "chapters": [
+    {
+      "module": "s08_samuel",
+      "scene": "Samuel",
+      "coverage": [
+        "historical scoring equation,delta/modernupdate,alphaBeta selfplay",
+        "feature/replay/evaluation source and verdictbranches",
+        "DeepBlue/Chinook/Go narrative",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T11",
+        "T12"
+      ],
+      "completed_json_dependencies": {
+        "samuel": false,
+        "testset": false
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s09_logic",
+      "scene": "Logic",
+      "coverage": [
+        "truth-table entailment",
+        "FOL/completeness/undecidability",
+        "binaryresolution+factoring+unification/source",
+        "actualprop/FOLcachedprooftexts",
+        "set-of-support capstatus and familyfacts",
+        "EN/ZHstatictext"
+      ],
+      "findings": [],
+      "completed_json_dependencies": {
+        "resolution": true
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s10_sat",
+      "scene": "SAT",
+      "coverage": [
+        "smallDPLLformula and trace source",
+        "random3SATgenerator/firstmoment link",
+        "censoring/outcome/widthreporting source",
+        "firstUIP/watchers/circuits and addercomparisons",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T10"
+      ],
+      "completed_json_dependencies": {
+        "sat3": false,
+        "cdcl": false
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s11_plans",
+      "scene": "Plans",
+      "coverage": [
+        "SudokuAC3,backtracksource/cache",
+        "STRIPS pre/add/delete lists",
+        "Sussmanstartgoal/interleaving/source",
+        "Lahcountformula/greedy/A* hmax/FFstyle source",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T07"
+      ],
+      "completed_json_dependencies": {
+        "sudoku": true,
+        "blocks": false
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s12_knowledge",
+      "scene": "Knowledge",
+      "coverage": [
+        "semanticnet/defaultframes narrative",
+        "forwardchain R1R5R6 trace/cache",
+        "positivecertaintyfactor arithmetic/cache",
+        "MYCINprimaryevaluation",
+        "XCON/Cyc/KnowledgeGraphhistorysource",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T03"
+      ],
+      "completed_json_dependencies": {
+        "rules": true
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s13_eliza",
+      "scene": "Eliza",
+      "coverage": [
+        "keyword/decomposition/reassembly algorithm and rotation",
+        "all15cachedtranscriptrows/newqueries",
+        "recoveredcode vs testedimplementation",
+        "ELIZAeffect narrative",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T04"
+      ],
+      "completed_json_dependencies": {
+        "eliza": true
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s14_winters",
+      "scene": "Winters",
+      "coverage": [
+        "ALPACprimaryreportcomparison",
+        "funding/Perceptrons/Lighthill/FGCSchronology source",
+        "AAAI84primarypanelrecord",
+        "Moravecinterpretation",
+        "wordtypes/tokenlongtail/cache vs knowledgegeneralization",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T09"
+      ],
+      "completed_json_dependencies": {
+        "tail": true
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s15_survives",
+      "scene": "Survives",
+      "coverage": [
+        "AlphaZero/Stockfish primarypositionrate",
+        "SATmiter/adders/lowproductbits source",
+        "proofcomplexity primarycounterevidence",
+        "AWSprimarybillionSMTclaim",
+        "AlphaGeometry/AlphaProof/Gemini2025primaryresults",
+        "PlanBenchprimarytable andLLM+Pformalizationassumptions",
+        "Leanofficialtrustconditions",
+        "EN/ZHstatictext"
+      ],
+      "findings": [
+        "T01",
+        "T02",
+        "T08"
+      ],
+      "completed_json_dependencies": {
+        "cdcl": false
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    },
+    {
+      "module": "s16_outro",
+      "scene": "Outro",
+      "coverage": [
+        "recaptiles and conditionalSATbounds source",
+        "search/alphaBetaguaranteequalifiers",
+        "Parts3/9/26/28/29/31continuity",
+        "sixEN/ZHexerciseanswers/refutation/recurrences/firstmoment",
+        "bibliography/sourceattribution"
+      ],
+      "findings": [
+        "T05",
+        "T06"
+      ],
+      "completed_json_dependencies": {
+        "sat3": false,
+        "cdcl": false,
+        "tail": true
+      },
+      "limits": [
+        "No scene execution, render, compute/load helper, continuous playback, audio or animation/layout validation.",
+        "Absent completed JSON and external NPZ arrays not evaluated; numerical conclusions remain untested where listed."
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "T01",
+      "severity": "high",
+      "kind": "factual_error",
+      "scene": "Survives",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s15_survives.py",
+          "line": 144
+        },
+        {
+          "file": "videos/ai/ai2/sat.py",
+          "line": 464
+        }
+      ],
+      "claim": "Multiplier panel says there is no short proof to learn.",
+      "evidence": "This experiment is a solver run, not a proof-size lower bound. Beame and Liew construct polynomial regular-resolution proofs for degree2 identities on array multipliers; commutativity is one of their explicit cases. The local circuit is a shift-and-add array multiplier returning only low n product bits.",
+      "recommendation": "Replace with an empirical solver-search statement: dense bit interactions make short useful clauses difficult for this solver to find. Label low n product bits/modulo2^n, and preserve completed widths and measured conflict counts.",
+      "sources": [
+        "https://arxiv.org/html/1705.04302v3"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "T02",
+      "severity": "high",
+      "kind": "missing_guarantee_condition",
+      "scene": "Survives",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s15_survives.py",
+          "line": 227
+        },
+        {
+          "file": "videos/ai/ai2/s15_survives.py",
+          "line": 237
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 347
+        }
+      ],
+      "claim": "LLM-to-PDDL-to-planner pipeline promises a plan guaranteed to work.",
+      "evidence": "LLM+P §3 assumes a provided domain PDDL file and translates the problem/initial state/goal. The paper gives a generated PDDL example with invented predicate and omitted initial fact. Planner soundness is relative to encoded domain/problem; it does not certify natural-language translation or physical model fidelity.",
+      "recommendation": "Say a plan valid in the supplied formal model, conditional on faithful translation; show that the translation/model must be checked. Preserve historical PlanBench percentages.",
+      "sources": [
+        "https://arxiv.org/html/2304.11477v2"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "T03",
+      "severity": "medium",
+      "kind": "metric_denominator",
+      "scene": "Knowledge",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s12_knowledge.py",
+          "line": 150
+        },
+        {
+          "file": "videos/ai/ai2/s12_knowledge.py",
+          "line": 163
+        }
+      ],
+      "claim": "MYCIN65% is labeled as percent of cases.",
+      "evidence": "Yu et al. evaluated10test cases using8independent expert evaluators. The reported65% is acceptability rating, while the five faculty specialist ratings were42.5–62.5%. It is not65% of10cases. Main comparative conclusion is supported.",
+      "recommendation": "Use acceptability rating65%, with10cases/8evaluators as context; do not present it as clinical efficacy or case success rate.",
+      "sources": [
+        "https://jamanetwork.com/journals/jama/article-abstract/366606"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "T04",
+      "severity": "medium",
+      "kind": "historical_identity_ambiguity",
+      "scene": "Eliza",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s13_eliza.py",
+          "line": 188
+        },
+        {
+          "file": "videos/ai/ai2/s13_eliza.py",
+          "line": 198
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 312
+        }
+      ],
+      "claim": "Recovered original code is immediately described as the ELIZA judged human23% in2025.",
+      "evidence": "Jones/Bergen §4.1 specifies a Python implementation of DOCTOR citing Brainerd2023. The recovered original program is a separate historical object. The23% result and5minute simultaneous three-party setup are verified.",
+      "recommendation": "Separate the claims explicitly: original reanimated in2024; a Python DOCTOR implementation was judged human23% in2025. Do not imply the recovered original was the tested implementation.",
+      "sources": [
+        "https://arxiv.org/html/2503.23674v1"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "T05",
+      "severity": "medium",
+      "kind": "lost_theorem_qualification",
+      "scene": "Outro",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s16_outro.py",
+          "line": 98
+        },
+        {
+          "file": "videos/ai/ai2/s16_outro.py",
+          "line": 100
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 354
+        }
+      ],
+      "claim": "Recap says admissible A* examines a fraction of the space and alpha-beta searches twice as deep for the same work, unconditionally.",
+      "evidence": "An admissible h may be identically0, yielding uniform-cost search. Alpha-beta can approach minimax work under poor move ordering; the b^(d/2) benefit is the best case discussed correctly in the problem set.",
+      "recommendation": "Use A* can reduce search, and alpha-beta can reach roughly twice the depth with excellent move ordering. Keep the earlier exact best-case theorem.",
+      "sources": [],
+      "status": "verified"
+    },
+    {
+      "id": "T06",
+      "severity": "medium",
+      "kind": "mathematical_explanation",
+      "scene": "Outro",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/README.md",
+          "line": 165
+        },
+        {
+          "file": "videos/ai/ai2/README.md",
+          "line": 167
+        },
+        {
+          "file": "videos/ai/ai2/README.md",
+          "line": 211
+        }
+      ],
+      "claim": "Exercise6 parenthetical says correlated clusters inflate the expected number of satisfying assignments.",
+      "evidence": "The solution correctly derives E[X]=2^n(7/8)^m by linearity. Dependence between assignment indicators does not change that expectation. Correlations/uneven solution counts make the first-moment bound loose; they do not add an extra inflation to the derived mean. Main bound5.19 and refutation examples are correct.",
+      "recommendation": "Replace parenthetical with: the first moment is only an upper bound; a large expectation need not mean a formula is likely satisfiable, since solutions can be concentrated in a small fraction of formulas. Label4.267 as physics prediction rather than proved exact3SATthreshold.",
+      "sources": [],
+      "status": "verified"
+    },
+    {
+      "id": "T07",
+      "severity": "medium",
+      "kind": "teaching_precision",
+      "scene": "Plans",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s11_plans.py",
+          "line": 280
+        },
+        {
+          "file": "videos/ai/ai2/s11_plans.py",
+          "line": 293
+        },
+        {
+          "file": "videos/ai/ai2/plan.py",
+          "line": 85
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 271
+        }
+      ],
+      "claim": "Delete relaxation, a fast solution cost, h_max and FF-style extraction are presented as one easy-cost construction.",
+      "evidence": "An arbitrary relaxed plan can be found in polynomial time, but minimum relaxed-plan length h+ is NP-hard. h_max is a cheaper admissible fact-cost approximation. The local ff implementation chooses h_add-cost achievers and counts their union; original FF extracts from a relaxed planning graph. Existing wording can be interpreted charitably as finding any relaxed plan, so this is precision repair rather than demonstrated solver failure.",
+      "recommendation": "State that cheap approximations to delete relaxation guide search: h_max is admissible, while an FF-style extracted relaxed-plan length need not be. Label local heuristic FF-style unless exactly reproducing originalFF.",
+      "sources": [
+        "https://aiinternational.org/Library/JAIR/Vol24/jair24-018.php",
+        "https://fai.cs.uni-saarland.de/hoffmann/ff.html"
+      ],
+      "status": "verified_distinction_wording_ambiguous"
+    },
+    {
+      "id": "T08",
+      "severity": "medium",
+      "kind": "missing_trust_condition",
+      "scene": "Survives",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s15_survives.py",
+          "line": 187
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 344
+        }
+      ],
+      "claim": "A Lean proof that compiles is called correct without assumptions.",
+      "evidence": "Lean accepts proofs relative to their statement, definitions and axioms. Compiling can succeed with sorry/custom axioms or unintended statement meaning; the official validation guide requires examining axioms and meaning. The actual1+1=2 toy statement itself is fine.",
+      "recommendation": "Say kernel-checked proof of the formal statement under its declared assumptions, with no unproved placeholders; relate semantic/formalization checking to the PDDL qualification.",
+      "sources": [
+        "https://lean-lang.org/doc/reference/latest/ValidatingProofs/"
+      ],
+      "status": "verified"
+    },
+    {
+      "id": "T09",
+      "severity": "low",
+      "kind": "historical_attribution_gap",
+      "scene": "Winters",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s14_winters.py",
+          "line": 90
+        },
+        {
+          "file": "videos/ai/ai2/s14_winters.py",
+          "line": 106
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 322
+        }
+      ],
+      "claim": "Schank and Minsky are described as naming AI winter atAAAI1984.",
+      "evidence": "The actualAAAI84panel transcript lists DrewMcDermott, Waldrop, Schank, Chandrasekaran, JohnMcDermott, and DARPARonOhlander. DrewMcDermott introducesAIwinter as an already-used phrase. Minsky is mentioned as a participant in a different Asimov seminar. This does not prove no other1984warning byMinsky existed, but the directly available panel does not establish that attribution/coinage.",
+      "recommendation": "Safest source-backed wording: a1984AAAIpanel discussed a possibleAIwinter, with Schank warning about exaggerated expectations. Cite the1985published panel rather than assert coinage.",
+      "sources": [
+        "https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/494",
+        "https://www.researchgate.net/publication/220604602_The_dark_ages_of_AI_A_panel_discussion_at_AAAI-84"
+      ],
+      "status": "source_record_verified_broader_attribution_unresolved"
+    },
+    {
+      "id": "T10",
+      "severity": "low",
+      "kind": "algorithm_definition_precision",
+      "scene": "SAT",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s10_sat.py",
+          "line": 385
+        },
+        {
+          "file": "videos/ai/ai2/s10_sat.py",
+          "line": 388
+        },
+        {
+          "file": "videos/ai/ai2/zh_lines.py",
+          "line": 243
+        }
+      ],
+      "claim": "FirstUIP is a point every path passes through; every competitive solver is said to useCDCL.",
+      "evidence": "UIP quantifies paths from the most recent decision literal to the conflict; graph has other decision roots. The implementation docstring278–280 correctly describes current-level resolution. Competitive incomplete SAT solvers/portfolios need not all be pureCDCL.",
+      "recommendation": "Specify latest-decision-to-conflict paths and say leading complete general-purpose solvers commonly useCDCL. Current textbook implication graph hardcoded decisions appear internally consistent; completedcdclJSONabsent.",
+      "sources": [],
+      "status": "verified"
+    },
+    {
+      "id": "T11",
+      "severity": "low",
+      "kind": "historical_modernization_label",
+      "scene": "Samuel",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s08_samuel.py",
+          "line": 85
+        },
+        {
+          "file": "videos/ai/ai2/s08_samuel.py",
+          "line": 90
+        },
+        {
+          "file": "videos/ai/ai2/play.py",
+          "line": 320
+        }
+      ],
+      "claim": "Modern gradient update is displayed inside a block labeled Samuel learning rule.",
+      "evidence": "Local implementation uses tanh(w·features), a differentiable semi-gradient update and bootstrapped search target. This is a Samuel-inspired modernTDanalogue, not a literal reconstruction of1959feature-correlation and replacement machinery. Publisher abstract verifies general learning claim but full1959primarytext was unavailable from attempted public academicPDF; exact historical-rule comparison remains reference-limited.",
+      "recommendation": "Label displayed gradient a modernTD-style analogue inspired bySamuel; preserve originaldelta/search idea and separate currentConnectFour experiment. Avoid treating this as a demonstrated learning bug.",
+      "sources": [
+        "https://ieeexplore.ieee.org/abstract/document/5392560/authors"
+      ],
+      "status": "modernization_explicit_in_local_code_historical_detail_partial"
+    },
+    {
+      "id": "T12",
+      "severity": "low",
+      "kind": "future_branch_fragility",
+      "scene": "Samuel",
+      "locations": [
+        {
+          "file": "videos/ai/ai2/s08_samuel.py",
+          "line": 238
+        },
+        {
+          "file": "videos/ai/ai2/s08_samuel.py",
+          "line": 242
+        }
+      ],
+      "claim": "Crossing0.5byanyruns selects roughly-even/some-ahead-some-behind narration.",
+      "evidence": "Predicate max(vp)>=0.5 and not min(vp)>0.5 also permits allruns exactly0.5 or an arbitrarily large spread. Thus that predicate alone does not establish its prose. CurrentSamuleJSONabsent, so no actualbadverdict observed.",
+      "recommendation": "Use neutral numerically statedrange or explicit tolerances/strictsignchecks if this branch occurs. No training change needed.",
+      "sources": [],
+      "status": "source_fragility_current_result_untested"
+    }
+  ],
+  "cache_inventory": {
+    "samuel": {
+      "path": "/workspace/explainer-videos/.cache/ai2/samuel.json",
+      "completed_json_available": false
+    },
+    "testset": {
+      "path": "/workspace/explainer-videos/.cache/ai2/testset.json",
+      "completed_json_available": false
+    },
+    "resolution": {
+      "path": "/workspace/explainer-videos/.cache/ai2/resolution.json",
+      "completed_json_available": true,
+      "sha256": "add3b5ec347fa408118c0a55616c7f77027c8f6bec856a78a101d1e575d9d6fa",
+      "bytes": 3816
+    },
+    "sat3": {
+      "path": "/workspace/explainer-videos/.cache/ai2/sat3.json",
+      "completed_json_available": false
+    },
+    "cdcl": {
+      "path": "/workspace/explainer-videos/.cache/ai2/cdcl.json",
+      "completed_json_available": false
+    },
+    "sudoku": {
+      "path": "/workspace/explainer-videos/.cache/ai2/sudoku.json",
+      "completed_json_available": true,
+      "sha256": "6dc98b6425bf6ebdd403f9bbaf00c7a755e48d94784e043295a79c09ba667168",
+      "bytes": 7953
+    },
+    "blocks": {
+      "path": "/workspace/explainer-videos/.cache/ai2/blocks.json",
+      "completed_json_available": false
+    },
+    "rules": {
+      "path": "/workspace/explainer-videos/.cache/ai2/rules.json",
+      "completed_json_available": true,
+      "sha256": "80c9ee031d3d4602a4ef590207037d42d03d97144995b93b49043575ba688751",
+      "bytes": 914
+    },
+    "eliza": {
+      "path": "/workspace/explainer-videos/.cache/ai2/eliza.json",
+      "completed_json_available": true,
+      "sha256": "0b9befa93722ccd8d946d4c0efa2752413fca8fb1dbebc7e265f2380fd89943a",
+      "bytes": 3268
+    },
+    "tail": {
+      "path": "/workspace/explainer-videos/.cache/ai2/tail.json",
+      "completed_json_available": true,
+      "sha256": "66241de887f25426c4b8f748507fe8b0bc3f457d45485f4b1f1b2d72022e6f07",
+      "bytes": 2120
+    }
+  },
+  "measured_cache_evidence": {
+    "resolution": {
+      "schema_version": 3,
+      "explode_saturate": {
+        "found": false,
+        "status": "limit",
+        "clause_cap": 4000,
+        "made": 4000,
+        "levels": 3,
+        "proof_len": 0
+      },
+      "explode_support": {
+        "found": true,
+        "status": "refuted",
+        "clause_cap": 4000,
+        "made": 2823,
+        "levels": 8,
+        "proof_len": 15
+      },
+      "proof_texts": {
+        "prop": [
+          "¬Rain ∨ Wet",
+          "¬Sprinkler ∨ Wet",
+          "Rain ∨ Sprinkler",
+          "¬Wet",
+          "¬Rain",
+          "¬Sprinkler",
+          "Rain",
+          "□"
+        ],
+        "fol": [
+          "Grandparent(x, y) ∨ ¬Parent(x, z) ∨ ¬Parent(z, y)",
+          "Parent(Anne, Byron)",
+          "Parent(Byron, Ada)",
+          "¬Grandparent(Anne, Ada)",
+          "¬Parent(Anne, x) ∨ ¬Parent(x, Ada)",
+          "¬Parent(Anne, Byron)",
+          "□"
+        ]
+      }
+    },
+    "sudoku": {
+      "clues": 26,
+      "ac3_solved": 3,
+      "nodes_plain": 3642,
+      "nodes_fc": 1669,
+      "nodes_mrv": 182,
+      "nodes_mac": 93,
+      "deletions": 313,
+      "initial_empty": 55,
+      "candidates_left": 182
+    },
+    "rules": {
+      "fired": [
+        "R1",
+        "R5",
+        "R6"
+      ],
+      "derived": [
+        "mammal",
+        "carnivore",
+        "cheetah"
+      ],
+      "cf": [
+        0.6,
+        0.5,
+        0.4
+      ],
+      "cf_combined": [
+        0.6,
+        0.8,
+        0.88
+      ]
+    },
+    "eliza": {
+      "matches": 14,
+      "total": 15,
+      "differences": [
+        {
+          "user": "Bullies.",
+          "ours": "LETS DISCUSS FURTHER WHY YOUR BOYFRIEND MADE YOU COME HERE",
+          "1966": "DOES THAT HAVE ANYTHING TO DO WITH THE FACT THAT YOUR BOYFRIEND MADE YOU COME HERE",
+          "same": false
+        }
+      ],
+      "new": [
+        [
+          "I feel that nobody understands me.",
+          "REALLY, NOBODY"
+        ],
+        [
+          "What is the capital of France?",
+          "WHY DO YOU ASK"
+        ],
+        [
+          "Can you prove that every even number is the sum of two primes?",
+          "YOU BELIEVE I CAN PROVE THAT EVERY EVEN NUMBER IS THE SUM OF TWO PRIMES DON'T YOU"
+        ],
+        [
+          "I am a computer program.",
+          "DO COMPUTERS WORRY YOU"
+        ],
+        [
+          "Why can't I sleep?",
+          "DO YOU THINK YOU SHOULD BE ABLE TO SLEEP"
+        ],
+        [
+          "My dog died last week.",
+          "YOUR DOG DIED LAST WEEK"
+        ]
+      ]
+    },
+    "tail": {
+      "n_tokens": 4326411,
+      "n_types": 59639,
+      "need": {
+        "0.5": 76,
+        "0.9": 4177,
+        "0.95": 9144,
+        "0.99": 28193,
+        "0.999": 55313
+      },
+      "once": 21797,
+      "passage_tokens": 3909,
+      "unseen_passage_final": 0.027884369403939627
+    }
+  },
+  "source_sha256": [
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s08_samuel.py",
+      "sha256": "a0428141a77d9951773591d7376c9c7c00995b10863fd94fc0008e4b9f244292"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s09_logic.py",
+      "sha256": "ac89effefcf5a19fe228d75496686ee41d03681c1626cdd29d12353519067303"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s10_sat.py",
+      "sha256": "1bf9e0cdb8de95f4d0cc1d7b23ae9b225918baec8e73de21527511d51a7ff19c"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s11_plans.py",
+      "sha256": "53ade0815863d9bc7aed5a89cb7d10140c1743dc55ee4789af46da1807cc661c"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s12_knowledge.py",
+      "sha256": "8d4b15fbb1a63caa2fd0b491bb8194d4786d6a02ef6acbd09c31d1ba6fe2fc5d"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s13_eliza.py",
+      "sha256": "7940be8dce3c8ecb584340b2cd832b9db85c74d612646d337b6ee9232cb1c2ac"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s14_winters.py",
+      "sha256": "254a2e0dca0fb4aea0dfa31299ae7f27f574c1d0116aa2802ab3ea1ef6f5690d"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s15_survives.py",
+      "sha256": "d84fbeedd731f343e9b01593708a36b983e6e3557eb1b42e4ad71824f95040af"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/s16_outro.py",
+      "sha256": "f21d06392e4582d160672b52e858fb7712e1efd6330b93ce3dc0e05d1afd7401"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/compute.py",
+      "sha256": "7f34897b94a1dcd0fdc7aab152bfd48a8e92e1e38ca36d2ef186aaf4312994bb"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/play.py",
+      "sha256": "cf8ef1ab455483668b647b524c1dbbebdcf6ef46ce48580a8034cd50bd70582f"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/logic.py",
+      "sha256": "f04ef328b499e9453b0e0f63d49f90791e700f756fdebc585d7bc9b6f5c60eb1"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/sat.py",
+      "sha256": "340699601e393ee9e04cd18d6ea1524d0ceb21889840d8940f4208e75a32a5d5"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/plan.py",
+      "sha256": "59fce734711c1541dc51066919fcb0dc3720d6b2a8e9b75cd94c8a729e4d2f0e"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/csp.py",
+      "sha256": "55aa58479c3204295794bef50fa1a7d7fdf4977ae1c1fde515629a1b6fd0b014"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/eliza.py",
+      "sha256": "e314a6d3e108f6a96575c95821fc231ec18792b47ee39bb861404c495740aee9"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/zh_lines.py",
+      "sha256": "e220c425ff926e506f71ec8c0bbc593d44f5f2e5414ac8205c676298d1d3c1ad"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/README.md",
+      "sha256": "b652ccbf90fe132d4350f4e7c489db034b7999c4dbf2958b4ca8a5f6d0378539"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/ai2/manifest.py",
+      "sha256": "5f0b4862b501cc34a911affeefb20c498886e1809a9b2b7e33d444778ace0cf0"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/LECTURE_GUIDE.md",
+      "sha256": "b85025d5f5b0d30b3d8c3459af9d3e9d1059eda5ed1284979ff4db34191f6424"
+    },
+    {
+      "path": "/workspace/explainer-videos/videos/ai/SYLLABUS.md",
+      "sha256": "96b7316423aad41f23c64143fec43e67316e060d614ab556bd0e7ebf804c38c5"
+    }
+  ],
+  "remaining_untested": [
+    "samuel/testset/sat3/cdcl/blocks completedJSONabsent atlast inventory; no training/solverexecution permitted in this review.",
+    "NoNPZarrayreads, so array-backedplotgeometry/curves/countdata not verified independently.",
+    "No full primary re-reading for every historicaldetail: DeepBlue30processor/480chips/126M/8000details and literal1959Samuelweightalgorithm remain citation-backed but independently unverified; currentIBMsummary says32processors ratherthan30, do not blindlyoverwrite authors2002specs.",
+    "No renderedlayout/playback/audioquality/AVsync tested.",
+    "OriginalAAAIofficialPDFdownload returned503; author-uploadedprimarytranscript and officialarticlemetadata were available. OtherunavailablepublicPDFs recorded as partialreferencecoverage, no bypassorpaidaccess."
+  ],
+  "followup_implementation": {
+    "timestamp_utc": "2026-10-31T14:01:52.257664+00:00",
+    "applied_in_tail_scene_and_local_zh_sources": [
+      "T01",
+      "T02",
+      "T03",
+      "T04",
+      "T05",
+      "T07"
+    ],
+    "not_applied_by_this_agent": [
+      "T06 (README replacement handed to root)",
+      "T08,T09,T10 (precision findings remain for parent decision)",
+      "T11 (head agent independently modernized Samuel wording)",
+      "T12 (no current completed Samuel cache; fragility only)"
+    ],
+    "handoff": "/workspace/runtime/ai2-tail-correction-handoff.json",
+    "caption_add_file": "/workspace/runtime/ai2-tail-caption-add.json",
+    "validation": "7 source-expression formatting/translation/bookmark samples; AST parse; git diff --check. No rendering or computation."
+  }
+}

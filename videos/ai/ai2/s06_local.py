@@ -100,7 +100,7 @@ class Local(VoiceoverScene):
             label(rf"steepest ascent solves ${100 * p['success']:.0f}\%$, \ in ${p['steps_ok']:.1f}$ steps; \ "
                   rf"stuck after ${p['steps_fail']:.1f}$", font_size=22, color=FCOL),
             label(rf"allowing $100$ sideways moves: \ ${100 * s['success']:.0f}\%$", font_size=22, color=HEUR),
-            label(rf"random restarts: \ solved for certain, \ about ${p['restart_steps']:.0f}$ steps in all",
+            label(rf"independent restarts: \ almost-sure success; \ expected steps ${p['restart_steps']:.0f}$",
                   font_size=22, color=PATH),
         ).arrange(DOWN, buff=0.12, aligned_edge=LEFT).to_edge(DOWN, buff=0.2)
         intro = label(r"eight queens, \ one per column: \ move one queen within its column", font_size=24,
@@ -150,16 +150,17 @@ class Local(VoiceoverScene):
                 why(r"divide"), why(r"Boltzmann's distribution")]
         rows[3][2].set_color(HOT)
         step = ladder(self, rows, whys, keep=4, top=1.7, x=1.2)
-        concl = label(r"$T \to 0$: \ all the probability piles onto the lowest states", font_size=24, color=COLD)
+        concl = label(r"equilibrium as $T \to 0$: \ probability concentrates on minimum cost", font_size=24, color=COLD)
         concl.to_corner(DR, buff=0.3)
         with self.voiceover(
             "Simulated annealing escapes local optima by sometimes going the wrong way. <bookmark mark='a'/> Propose a random "
             "change. If it lowers the cost, take it; if it raises the cost by delta E, take it anyway with probability e to "
-            "the minus delta E over T, where T is a temperature. <bookmark mark='b'/> Why that rule? At a fixed temperature, in "
-            "equilibrium, the flow from s to s prime equals the flow back. <bookmark mark='c'/> Uphill moves are accepted with "
+            "the minus delta E over T, where T is a temperature. <bookmark mark='b'/> Why that rule? At a fixed temperature, "
+            "choose detailed balance: equal probability flow between each pair of states. <bookmark mark='c'/> Uphill moves are accepted with "
             "that probability, downhill always, and proposals are symmetric. <bookmark mark='d'/> Divide, "
-            "<bookmark mark='e'/> and the time spent in each state follows Boltzmann's distribution. <bookmark mark='f'/> As T "
-            "falls toward zero, it concentrates on the lowest-cost states."
+            "<bookmark mark='e'/> and Boltzmann's distribution is stationary. With enough mixing, visits follow that "
+            "distribution. <bookmark mark='f'/> Its equilibrium mass concentrates on minimum cost as T falls toward zero. "
+            "A finite cooling run need not stay in equilibrium or reach the optimum."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -292,8 +293,9 @@ class Local(VoiceoverScene):
             "initialization. A two-opt delta counts once, like scoring one genetic child; this is not equal CPU time. "
             "<bookmark mark='a'/> The "
             "greedy tour, always to the nearest unvisited place, is "
-            f"{100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing "
-            f"polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + hits
+            f"{100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start. After polishing every "
+            f"start's tour with 2-opt, the best result is {min(d['nn2opt_lengths']):,}, potentially from a different "
+            "start. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + hits
         ) as vo:
             self.play(FadeIn(g), Create(optl), FadeIn(tag))
             vo.wait_until("a")
@@ -357,8 +359,9 @@ class Local(VoiceoverScene):
         with self.voiceover(
             "A third idea keeps a whole population. <bookmark mark='a'/> John Holland's genetic algorithms, from 1975, let the "
             "fitter states reproduce: a child takes pieces of two parents, plus a random mutation. <bookmark mark='b'/> On our "
-            f"budget, a plain version ends {ga_gap:.0f} percent above the optimum: most children of two good tours are worse "
-            "than either. <bookmark mark='c'/> Population search has a second "
+            f"budget, a plain version ends {ga_gap:.0f} percent above the optimum. Crossover and mutation can disrupt good "
+            "tour segments. "
+            "<bookmark mark='c'/> Population search has a second "
             "life. DeepMind's FunSearch, in 2023, let a language model propose the mutations; in 2025 AlphaEvolve evolved "
             "programs that way, and found how to multiply four-by-four complex matrices with forty-eight multiplications, one "
             "fewer than Strassen's 1969 method."

@@ -1,0 +1,223 @@
+{
+  "scope": "Six tail scene voiceovers and seven on-screen captions; no conditional branch edits.",
+  "records": [
+    {
+      "file": "s11_plans.py",
+      "function": "planners",
+      "kind": "voiceover",
+      "old_expression": "f\"And the search space explodes. <bookmark mark='a'/> {len(towers)} blocks can be stacked {towers[-1]:,} different ways. <bookmark mark='b'/> Blind breadth-first search on random {n_bfs}-block problems expands {bfs_n:,.0f} states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore every delete list, and the easier problem can be solved fast; its cost is a heuristic. The admissible version, h max, cuts the search to {hm_n:,.0f}, still optimal. <bookmark mark='d'/> Counting the steps of a relaxed plan, as Jörg Hoffmann's FF planner did in 2001, and searching greedily: {ff_n:,.0f} states, though the plans are longer, {L_ff:.1f} steps against {L_opt:.1f}. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.\"",
+      "new_expression": "f\"And the search space explodes. <bookmark mark='a'/> {len(towers)} blocks can be stacked {towers[-1]:,} different ways. <bookmark mark='b'/> Blind breadth-first search on random {n_bfs}-block problems expands {bfs_n:,.0f} states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. The admissible h max heuristic cuts the search to {hm_n:,.0f}, still optimal. <bookmark mark='d'/> Inspired by Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed plan. Greedy search expands {ff_n:,.0f} states, with mean plan length {L_ff:.1f} steps against the optimum's {L_opt:.1f}. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.\"",
+      "new_line": 291,
+      "samples": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "s12_knowledge.py",
+      "function": "certainty",
+      "kind": "voiceover",
+      "old_expression": "f\"Medicine was the showcase. MYCIN, built at Stanford by Edward Shortliffe in the mid-seventies, recommended antibiotics for blood infections and meningitis from a few hundred rules like this one. <bookmark mark='a'/> Each rule carried a certainty factor; when rules agreed, new evidence closed part of the remaining gap. <bookmark mark='b'/> Point six and point five make {comb[1]:.2f}; another rule at point four, {comb[2]:.2f}. <bookmark mark='c'/> In a blinded test published in 1979, experts judged MYCIN's choices for meningitis acceptable sixty-five percent of the time, a rate none of the Stanford specialists it was compared with beat. It was never used on patients. <bookmark mark='d'/> The commercial breakthrough was R1, later XCON, written by John McDermott for Digital Equipment in 1980 to configure computer orders. By the mid-eighties, expert systems were an industry.\"",
+      "new_expression": "f\"Medicine was the showcase. MYCIN, built at Stanford by Edward Shortliffe in the mid-seventies, recommended antibiotics for blood infections and meningitis from a few hundred rules like this one. <bookmark mark='a'/> Each rule carried a certainty factor; when rules agreed, new evidence closed part of the remaining gap. <bookmark mark='b'/> Point six and point five make {comb[1]:.2f}; another rule at point four, {comb[2]:.2f}. <bookmark mark='c'/> In a blinded test published in 1979, eight experts rated antibiotic choices for ten meningitis cases. MYCIN received an acceptability rating of sixty-five percent, a rate none of the Stanford specialists it was compared with beat. It was never used on patients. <bookmark mark='d'/> The commercial breakthrough was R1, later XCON, written by John McDermott for Digital Equipment in 1980 to configure computer orders. By the mid-eighties, expert systems were an industry.\"",
+      "new_line": 159,
+      "samples": [
+        2
+      ]
+    },
+    {
+      "file": "s13_eliza.py",
+      "function": "effect",
+      "kind": "voiceover",
+      "old_expression": "\"What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could talk to it in private, and wrote that he had not imagined so short an exposure to so simple a program could produce such powerful delusions in normal people. <bookmark mark='b'/> Reading understanding into fluent output became known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024, and in the 2025 Turing tests, people took it for human in almost a quarter of conversations. Does fluency mean understanding? Every chatbot raises the question again.\"",
+      "new_expression": "\"What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could talk to it in private, and wrote that he had not imagined so short an exposure to so simple a program could produce such powerful delusions in normal people. <bookmark mark='b'/> Reading understanding into fluent output became known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024. A separate Python implementation of the DOCTOR script was used in the 2025 Turing tests, and people took it for human in twenty-three percent of conversations. Does fluency mean understanding? Every chatbot raises the question again.\"",
+      "new_line": 194,
+      "samples": [
+        3
+      ]
+    },
+    {
+      "file": "s15_survives.py",
+      "function": "multipliers",
+      "kind": "voiceover",
+      "old_expression": "f\"There are limits. <bookmark mark='a'/> Ask the same solver whether a multiplier gives the same answer for a times b as for b times a. <bookmark mark='b'/> The conflicts grow about {growth:.0f}-fold with every extra bit: {M[-1]:,.0f} at {int(W[-1])} bits. Multipliers are a famous hard case; industry handles arithmetic with algebraic methods instead.\"",
+      "new_expression": "f\"There are limits. <bookmark mark='a'/> Ask the same solver whether the low product bits agree for a times b and b times a. <bookmark mark='b'/> In these runs the conflicts grow about {growth:.0f}-fold with every extra input bit: {M[-1]:,.0f} at {int(W[-1])} bits. This is a search difficulty, not proof that short proofs do not exist. Multipliers are a famous hard case for SAT solvers; specialized algebraic methods can help.\"",
+      "new_line": 149,
+      "samples": [
+        4
+      ]
+    },
+    {
+      "file": "s15_survives.py",
+      "function": "planning",
+      "kind": "voiceover",
+      "old_expression": "\"Planning is back, inside language-model agents. <bookmark mark='a'/> On PlanBench, built from the blocks world, the best ordinary language model tested in 2024 solved sixty-three percent of problems, and OpenAI's reasoning model o1-preview ninety-eight. <bookmark mark='b'/> Rename the blocks and actions to nonsense words, logic unchanged, and o1-preview fell to fifty-three percent; a classical planner solves every instance, whatever the names. <bookmark mark='c'/> One practical answer combines them: the language model writes the problem in the planning language PDDL, and a classical planner finds a plan guaranteed to work.\"",
+      "new_expression": "\"Planning is back, inside language-model agents. <bookmark mark='a'/> On PlanBench, built from the blocks world, the best ordinary language model tested in 2024 solved sixty-three percent of problems, and OpenAI's reasoning model o1-preview ninety-eight. <bookmark mark='b'/> Rename the blocks and actions to nonsense words, logic unchanged, and o1-preview fell to fifty-three percent; a classical planner solves every instance, whatever the names. <bookmark mark='c'/> One practical answer combines them: given a domain model, the language model writes the problem in the planning language PDDL, and a classical planner finds a plan valid in that formal model. The guarantee applies to the model; its assumptions and the language model's translation still need checking.\"",
+      "new_line": 234,
+      "samples": [
+        5
+      ]
+    },
+    {
+      "file": "s16_outro.py",
+      "function": "recap",
+      "kind": "voiceover",
+      "old_expression": "\"Let's take stock. Turing defined what machines can compute, and what they cannot. Search finds solutions by trying things; A star, with an admissible heuristic, finds the cheapest while looking at a fraction of the space, and the best heuristics come from relaxed problems. Annealing's controlled randomness escapes local optima. Alpha-beta searches twice as deep for the same work. Logic reduces to resolution and satisfiability, whose hard problems live at a phase transition, and clause learning makes solvers fast. And knowledge written by hand runs into the long tail, which is why the field turned to learning.\"",
+      "new_expression": "\"Let's take stock. Turing defined what machines can compute, and what they cannot. Search finds solutions by trying things; A star, with an admissible heuristic, finds the cheapest and can greatly reduce the search, and effective heuristics often come from relaxed problems. Annealing's controlled randomness escapes local optima. With excellent move ordering, alpha-beta can search roughly twice as deep for the same work. Logic reduces to resolution and satisfiability, whose hard problems live at a phase transition, and clause learning makes solvers fast. And knowledge written by hand runs into the long tail, which is why the field turned to learning.\"",
+      "new_line": 97,
+      "samples": [
+        6
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "file": "s11_plans.py",
+      "function": "planners",
+      "input_mode": "synthetic_formatting_equal_lengths",
+      "en": "And the search space explodes. <bookmark mark='a'/> 7 blocks can be stacked 37,633 different ways. <bookmark mark='b'/> Blind breadth-first search on random 7-block problems expands 12,345 states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. The admissible h max heuristic cuts the search to 678, still optimal. <bookmark mark='d'/> Inspired by Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed plan. Greedy search expands 42 states, with mean plan length 20.0 steps against the optimum's 20.0. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.",
+      "zh": "而且搜索空间会爆炸。<bookmark mark='a'/>7块积木，可以叠成37633种不同的摆法。<bookmark mark='b'/>在随机的7块积木问题上，盲目的广度优先搜索平均扩展12345个状态。<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略删除表，再廉价地近似估计剩余代价；寻找最短的放松计划，仍然是NP难的。可采纳的h max启发式，把搜索减到678个，仍能保证最优。<bookmark mark='d'/>受霍夫曼和内贝尔2001年的FF规划器启发，我们的FF式启发式从一个放松计划中数出不重复的动作。贪心搜索扩展42个状态，平均计划长度为20.0步，而最优计划平均为20.0步。这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "file": "s11_plans.py",
+      "function": "planners",
+      "input_mode": "synthetic_formatting_different_lengths",
+      "en": "And the search space explodes. <bookmark mark='a'/> 7 blocks can be stacked 37,633 different ways. <bookmark mark='b'/> Blind breadth-first search on random 7-block problems expands 1,234,567 states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore delete lists, then compute cheap approximations to the remaining cost; finding the shortest relaxed plan is still NP-hard. The admissible h max heuristic cuts the search to 9,876, still optimal. <bookmark mark='d'/> Inspired by Hoffmann and Nebel's FF planner of 2001, our FF-style heuristic counts distinct actions in an extracted relaxed plan. Greedy search expands 314 states, with mean plan length 31.2 steps against the optimum's 21.4. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.",
+      "zh": "而且搜索空间会爆炸。<bookmark mark='a'/>7块积木，可以叠成37633种不同的摆法。<bookmark mark='b'/>在随机的7块积木问题上，盲目的广度优先搜索平均扩展1234567个状态。<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略删除表，再廉价地近似估计剩余代价；寻找最短的放松计划，仍然是NP难的。可采纳的h max启发式，把搜索减到9876个，仍能保证最优。<bookmark mark='d'/>受霍夫曼和内贝尔2001年的FF规划器启发，我们的FF式启发式从一个放松计划中数出不重复的动作。贪心搜索扩展314个状态，平均计划长度为31.2步，而最优计划平均为21.4步。这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "file": "s12_knowledge.py",
+      "function": "certainty",
+      "input_mode": "completed_rules_cache",
+      "en": "Medicine was the showcase. MYCIN, built at Stanford by Edward Shortliffe in the mid-seventies, recommended antibiotics for blood infections and meningitis from a few hundred rules like this one. <bookmark mark='a'/> Each rule carried a certainty factor; when rules agreed, new evidence closed part of the remaining gap. <bookmark mark='b'/> Point six and point five make 0.80; another rule at point four, 0.88. <bookmark mark='c'/> In a blinded test published in 1979, eight experts rated antibiotic choices for ten meningitis cases. MYCIN received an acceptability rating of sixty-five percent, a rate none of the Stanford specialists it was compared with beat. It was never used on patients. <bookmark mark='d'/> The commercial breakthrough was R1, later XCON, written by John McDermott for Digital Equipment in 1980 to configure computer orders. By the mid-eighties, expert systems were an industry.",
+      "zh": "医学是展示橱窗。MYCIN由爱德华·肖特利夫在七十年代中期于斯坦福研制，它用几百条像这样的规则，为血液感染和脑膜炎推荐抗生素。<bookmark mark='a'/>每条规则带一个确定性因子；几条规则意见一致时，新的证据填补剩余差距的一部分。<bookmark mark='b'/>0.6和0.5合起来是0.80；再加一条0.4的规则，就到了0.88。<bookmark mark='c'/>在1979年发表的一次盲测中，8位专家为10例脑膜炎的抗生素选择评分。MYCIN获得了65%的可接受评价比例，和它比较的斯坦福专科医生都没超过这个比例。它从未被用于病人。<bookmark mark='d'/>商业上的突破是R1，后来叫XCON，由约翰·麦克德莫特在1980年为数字设备公司编写，用来配置计算机订单。到八十年代中期，专家系统已经成了一个产业。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ]
+    },
+    {
+      "file": "s13_eliza.py",
+      "function": "effect",
+      "input_mode": "literal_source",
+      "en": "What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could talk to it in private, and wrote that he had not imagined so short an exposure to so simple a program could produce such powerful delusions in normal people. <bookmark mark='b'/> Reading understanding into fluent output became known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024. A separate Python implementation of the DOCTOR script was used in the 2025 Turing tests, and people took it for human in twenty-three percent of conversations. Does fluency mean understanding? Every chatbot raises the question again.",
+      "zh": "让魏岑鲍姆不安的，是人们的反应。<bookmark mark='a'/>在他1976年的书《计算机的力量与人类的理性》里，他回忆说，他的秘书看着他写出这个程序，却请他离开房间，好让她和它私下谈谈；他写道，自己没想到，与这样一个简单程序的短暂接触，竟能在正常人身上引出如此强烈的错觉。<bookmark mark='b'/>把理解读进流畅的输出里，后来被称为伊丽莎效应。<bookmark mark='c'/>他的原始代码2021年在麻省理工学院被找到，2024年重新运行。2025年的图灵测试，用的是另一份以Python实现的DOCTOR脚本；在23%的对话里，人们把它当成了人。流畅就意味着理解吗？每个聊天机器人都会重新提出这个问题。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s15_survives.py",
+      "function": "multipliers",
+      "input_mode": "synthetic_formatting_case",
+      "en": "There are limits. <bookmark mark='a'/> Ask the same solver whether the low product bits agree for a times b and b times a. <bookmark mark='b'/> In these runs the conflicts grow about 4-fold with every extra input bit: 123,456 at 8 bits. This is a search difficulty, not proof that short proofs do not exist. Multipliers are a famous hard case for SAT solvers; specialized algebraic methods can help.",
+      "zh": "也有极限。<bookmark mark='a'/>让同一个求解器判断：a乘b和b乘a的乘积低位是否相等。<bookmark mark='b'/>在这些运行中，输入每多一位，冲突次数就增长大约4倍：8位时是123456次。这是搜索上的困难，并不能证明不存在短证明。乘法器是SAT求解器出了名的难题；专门的代数方法能够提供帮助。",
+      "bookmarks": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "file": "s15_survives.py",
+      "function": "planning",
+      "input_mode": "literal_source",
+      "en": "Planning is back, inside language-model agents. <bookmark mark='a'/> On PlanBench, built from the blocks world, the best ordinary language model tested in 2024 solved sixty-three percent of problems, and OpenAI's reasoning model o1-preview ninety-eight. <bookmark mark='b'/> Rename the blocks and actions to nonsense words, logic unchanged, and o1-preview fell to fifty-three percent; a classical planner solves every instance, whatever the names. <bookmark mark='c'/> One practical answer combines them: given a domain model, the language model writes the problem in the planning language PDDL, and a classical planner finds a plan valid in that formal model. The guarantee applies to the model; its assumptions and the language model's translation still need checking.",
+      "zh": "规划回来了，就在语言模型智能体里。<bookmark mark='a'/>在用积木世界搭建的PlanBench上，2024年测试的最好的普通语言模型解出了63%的题，OpenAI的推理模型o1-preview解出了98%。<bookmark mark='b'/>把积木和动作的名字换成无意义的词，逻辑不变，o1-preview就跌到了53%；而经典规划器不管名字是什么，都能解出每一道题。<bookmark mark='c'/>一个实用的答案是把两者结合起来：先给定领域模型，语言模型用规划语言PDDL写出问题，经典规划器找出在那个形式模型内有效的计划。保证针对的是模型；模型的假设和语言模型的翻译，仍然需要检查。",
+      "bookmarks": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "file": "s16_outro.py",
+      "function": "recap",
+      "input_mode": "literal_source",
+      "en": "Let's take stock. Turing defined what machines can compute, and what they cannot. Search finds solutions by trying things; A star, with an admissible heuristic, finds the cheapest and can greatly reduce the search, and effective heuristics often come from relaxed problems. Annealing's controlled randomness escapes local optima. With excellent move ordering, alpha-beta can search roughly twice as deep for the same work. Logic reduces to resolution and satisfiability, whose hard problems live at a phase transition, and clause learning makes solvers fast. And knowledge written by hand runs into the long tail, which is why the field turned to learning.",
+      "zh": "我们来总结一下。图灵定义了机器能计算什么，以及不能计算什么。搜索靠尝试来找到解；带着可采纳启发式的A星，能找到代价最小的解，也能大幅减少搜索，而有效的启发式经常来自放松问题。退火用受控的随机性逃出局部最优。在走法排序很好的情况下，α-β剪枝能用同样的工作量，搜到大约两倍的深度。逻辑归结为归结法和可满足性，难题住在它的相变处，而子句学习让求解器变快。手写的知识撞上了长尾，这就是这个领域转向学习的原因。",
+      "bookmarks": []
+    }
+  ],
+  "changed_captions": [
+    {
+      "old": "greedy, \\ $h_{FF}$ \\ (relaxed plans)",
+      "en": "greedy, \\ FF-style relaxed plans",
+      "zh": "贪心搜索，\\ FF式放松计划"
+    },
+    {
+      "old": "relaxed: \\ ignore every delete list, \\\\ solve that easier problem, \\ count its steps",
+      "en": "relaxed heuristics: \\ ignore delete lists, \\\\ estimate remaining cost cheaply",
+      "zh": "放松启发式：\\ 忽略删除表，\\\\ 廉价估计剩余代价"
+    },
+    {
+      "old": "its antibiotic choices for meningitis judged acceptable in $65\\%$ of cases, \\ Stanford's specialists in $42.5$--$62.5\\%$",
+      "en": "expert acceptability rating: $65\\%$; \\ Stanford's specialists: $42.5$--$62.5\\%$",
+      "zh": "专家的可接受评价比例：$65\\%$；\\ 斯坦福专科医生：$42.5$--$62.5\\%$"
+    },
+    {
+      "old": "in five-minute Turing tests, \\ ELIZA judged human $23\\%$ of the time",
+      "en": "a Python DOCTOR implementation: \\ judged human $23\\%$ of the time in five-minute Turing tests",
+      "zh": "以Python实现的DOCTOR：\\ 在5分钟图灵测试中，$23\\%$的时候被当成人类"
+    },
+    {
+      "old": "multipliers: \\ $a \\times b = b \\times a$?",
+      "en": "multipliers: \\ low product bits equal?",
+      "zh": "乘法器：\\ 乘积低位是否相等？"
+    },
+    {
+      "old": "multiplication mixes every bit with every other: \\\\ there is no short proof to learn",
+      "en": "dense bit interactions: \\\\ our solver struggles to find useful clauses",
+      "zh": "各位之间相互交织：\\\\ 我们的求解器难以找到有用的子句"
+    },
+    {
+      "old": "a plan, guaranteed",
+      "en": "a plan valid \\\\ in that PDDL model",
+      "zh": "在那个PDDL模型内\\\\ 有效的计划"
+    }
+  ],
+  "shared_caption_table_applied": false,
+  "conditional_branch_changes": [],
+  "readme_replacements": [
+    {
+      "old_en": "(The true\nthreshold, near 4.27, is lower because satisfying assignments come in huge correlated clusters, which inflate the\nmean.)",
+      "new_en": "(This first-moment argument gives only an upper bound. A large expected number of solutions need not imply a\nlarge probability of satisfiability: many assignments may be concentrated in a small fraction of formulas. The\nvalue near 4.267 is a statistical-physics prediction.)",
+      "old_zh": "（真正的阈值在4.27附近，更低，因为满足赋值成群出现、彼此高度\n相关，把均值抬高了。）",
+      "new_zh": "（这个一阶矩论证只给出上界。解的期望个数很大，并不代表公式可满足的概率很大：大量满足赋值可能集中在一小部分公式里。\n4.267附近的值，是统计物理给出的预言。）",
+      "applied": false,
+      "owner": "root",
+      "reason": "Linearity of expectation does not depend on correlations among assignment indicators."
+    }
+  ],
+  "readme_applied": false,
+  "tail_scene_sources_frozen": true,
+  "whole_part_shared_sources_frozen": false,
+  "validation": [
+    "Six changed voiceover expressions format and translate, with exact bookmark agreement",
+    "Seven formatted samples: three literals, one completed-rules-cache sample, and synthetic Plans/multiplier formatting cases as labeled; no models/solvers run",
+    "All seven changed captions verified as actual source string literals; Chinese caption table additions handed to root, not applied",
+    "All changed Python files parse; no compute or algorithm file writes"
+  ],
+  "source_sha256": {
+    "s11_plans.py": "5b26ad4d8602fdbdf1d3f2aa8c233b7db4fccc34c1f3133101e1d037f72008e7",
+    "s12_knowledge.py": "520bebce0a5b2b1e157498a68c2a613fd8b3b8507409c4b5275de418e7b1c3e7",
+    "s13_eliza.py": "e7eb69e55bc7bcdbbceadf55ceb07c049ab875dc8b8ff568cca6db282d167bde",
+    "s15_survives.py": "b8c5fea1bcc465f5ced379d079fece5422134ea3a7fc95088c553bb508b89ac5",
+    "s16_outro.py": "260ec66f3d88559fe779fdae72272f34ddc1f1034fc2175fa0cbc267e590e1c3",
+    "zh_lines.py": "dc25658354b29134c7509eb117b5130d20f03c4d538c5dbd55705b2d91d260cb"
+  }
+}

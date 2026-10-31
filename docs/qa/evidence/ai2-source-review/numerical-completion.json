@@ -1,0 +1,138 @@
+{
+  "generated_utc": "2026-10-31T14:21:26.284069+00:00",
+  "scope": "All19defaultPart2 numerical items completed; no rendered or production approval",
+  "items": [
+    {
+      "name": "alphabeta",
+      "json_sha256": "54c0fe7cced63e54546aacaa8f27e1f1f50d06a18c8851698879b325dce6b6a7",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "blocks",
+      "json_sha256": "b4dad9d1da37f2fff2eb24896b396e96e0a62afe455f5078eae6c65ef4849e5b",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "cdcl",
+      "json_sha256": "cdfebd515d1944397880f41a3ee83d29ada20fa2c3a72332a7a19162f07c6f38",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "eliza",
+      "json_sha256": "0b9befa93722ccd8d946d4c0efa2752413fca8fb1dbebc7e265f2380fd89943a",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "grid",
+      "json_sha256": "717de4bfdb4a308f477c6dec290e8964301ead94b7f2798fd6e3830bd37e0956",
+      "npz_sha256": "2b8ea966e4d67bda92492f6f6e6bc7b7986b060f9943028e689a786d3fedc403",
+      "schema_version": null
+    },
+    {
+      "name": "puzzle15",
+      "json_sha256": "38da89890aaacab8e89cb60e46566af1d34bb88c6d6655348794213e2ad41812",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "puzzle8",
+      "json_sha256": "8c07bdba34b9ce545da66f60f1831f4213938d4d34f68698235156232b3930b5",
+      "npz_sha256": "9b423547e4e7f47ff35106c0f3e27be087ebce314c44a419e983c6dcbb07b1ad",
+      "schema_version": null
+    },
+    {
+      "name": "queens",
+      "json_sha256": "98ded552c363dcff820974a5a298837ca6256ac444f380a47e6161379cbc2206",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "resolution",
+      "json_sha256": "add3b5ec347fa408118c0a55616c7f77027c8f6bec856a78a101d1e575d9d6fa",
+      "npz_sha256": null,
+      "schema_version": 3
+    },
+    {
+      "name": "rules",
+      "json_sha256": "80c9ee031d3d4602a4ef590207037d42d03d97144995b93b49043575ba688751",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "samuel",
+      "json_sha256": "fc905e39bae5ae353bb15e37672e1e77bb45e9136a300e31a18ad480695868ea",
+      "npz_sha256": "858d78f12936c4e359e73aff91a73c45ee9cf40dcb689f9c74b1f344fb0af83e",
+      "schema_version": null
+    },
+    {
+      "name": "sat3",
+      "json_sha256": "2b739682f83e469c301a693e9aa18f413adba958894a4a2ce3367947728b8836",
+      "npz_sha256": null,
+      "schema_version": 2
+    },
+    {
+      "name": "sudoku",
+      "json_sha256": "6dc98b6425bf6ebdd403f9bbaf00c7a755e48d94784e043295a79c09ba667168",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "tail",
+      "json_sha256": "66241de887f25426c4b8f748507fe8b0bc3f457d45485f4b1f1b2d72022e6f07",
+      "npz_sha256": "3ad8ac3ad41c2775a41b2a5f943886ba482dcc0945173b51f08dadccf8d3a555",
+      "schema_version": null
+    },
+    {
+      "name": "testset",
+      "json_sha256": "43b0d45b095c713e6e4068e000577e9a774495a8ab184a27f02dd151905b6d27",
+      "npz_sha256": "26812717b7ec7f27d99c8dad17d7f118e40c0ca60a31a716de578f1449c95cfa",
+      "schema_version": null
+    },
+    {
+      "name": "tm",
+      "json_sha256": "0fe25fdb5ad9c22769eaa293bbcae21ab4a26c06a43706f7518ae8a453db66a9",
+      "npz_sha256": "85f28fc3a6b09ac23300f52dffac11dc4d542e31a294dd6794d1b97ad89dad76",
+      "schema_version": null
+    },
+    {
+      "name": "tsp",
+      "json_sha256": "dc0cde7d3c2506d00236d94e52586b5cc11383382621cb3adaaf55397171b1fc",
+      "npz_sha256": "f7312a49883e623bf1d9a954075dbd7e7d97724073b87825860e903cc11e8c39",
+      "schema_version": 2
+    },
+    {
+      "name": "ttt",
+      "json_sha256": "95f8f37829d3e2b66484f558d2383a6993f1baa0df397d20dbe8c008f6316fb3",
+      "npz_sha256": null,
+      "schema_version": null
+    },
+    {
+      "name": "uniform",
+      "json_sha256": "06973d2ae2efbbf1cc01274070f25940002769464fd27d11b50454de96c5d212",
+      "npz_sha256": null,
+      "schema_version": null
+    }
+  ],
+  "sat_unknown_counts": {
+    "25": 0,
+    "50": 0,
+    "100": 0,
+    "200": 0
+  },
+  "source_compute_sha256": "7f34897b94a1dcd0fdc7aab152bfd48a8e92e1e38ca36d2ef186aaf4312994bb",
+  "root_full_suite": {
+    "tests": 126,
+    "result": "passed"
+  },
+  "logs": [
+    "renders/qa/ai2-repaired-data.log",
+    "renders/qa/ai2-resolution-reporting-data.log",
+    "renders/qa/ai2-foundation-data.log",
+    "renders/qa/ai2-constraints-data.log",
+    "renders/qa/ai2-remaining-data.log"
+  ]
+}
