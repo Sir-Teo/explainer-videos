@@ -224,7 +224,7 @@ layout coverage, not continuous animation/playback approval. Focused layout/QA t
 All34 Part1 bilingual endpoint sheets were inspected:707 primary endpoint thumbnails,46 priority native views,
 plus focused repairs/reconciliation. Detailed [head/tail visual records](evidence/ai1-endpoint-review/) preserve
 actual hashes and earlier/current distinctions. New captures are only marked reviewed when their sheet hash
-collides exactly with an inspected asset; fresh content requires a new review.
+matches exactly with an inspected asset; fresh content requires a new review.
 
 `tools/qa_motion.py` decodes every source frame and detects RGB changes at reduced resolution, extracting
 transition boundaries/midpoints, at most one-second spacing within detected motion, and static midpoints into
