@@ -15,6 +15,19 @@ from tools import qa_audio, qa_report, qa_series
 
 
 class PreflightVerdictTests(unittest.TestCase):
+    def test_changed_measurement_keeps_approved_latin_data_in_chinese_caption(self):
+        from explainer import lang, zh_text
+
+        table = json.loads((qa_series.ROOT / "videos/ai/ai_text_zh.json").read_text())
+        with patch.object(lang, "LANG", "zh"), patch.object(zh_text, "_TABLE", table), \
+                patch.object(zh_text, "_BY_NUMBERS", None):
+            targets = {zh_text._NUM.sub("\0", zh_text.translate(s)) for s in table["strings"]}
+            caption = r"Qwen3-4B on this paragraph alone: \ \texttt{telephone} costs $13.0$ bits"
+            translated = zh_text.translate(caption)
+            self.assertTrue(qa_series.approved_numeric_caption(translated, targets))
+            self.assertFalse(qa_series.approved_numeric_caption(caption, targets))
+            self.assertFalse(qa_series.approved_numeric_caption(translated + " untranslated extra words", targets))
+
     def test_warning_bearing_legacy_pass_is_review_required(self):
         result = {"status": "passed", "warnings": [{"kind": "text-outside-frame"}]}
         self.assertFalse(qa_series.preflight_passed(result))

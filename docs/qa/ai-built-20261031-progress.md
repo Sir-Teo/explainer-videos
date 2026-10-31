@@ -41,6 +41,9 @@ source estimate exceeds the stated 60-minute target and requires measured pacing
   data; cached-only QA reports `stale-data` without computing or changing it. Five legacy-cache regressions pass,
   including a CLI that previously skipped the old completion marker. An isolated actual-worker integration check
   also confirmed the persisted `stale-data` result and byte-identical legacy cache. All 72 current unit tests pass.
+- A subsequent Knowledge check exposed a QA false positive: approved Latin data inside a correctly translated
+  Chinese caption was flagged when a measurement changed. The checker now verifies the complete translated
+  numeric template against approved wording. An added regression rejects extra untranslated words; 73 tests pass.
 
 ## Before/after visual evidence
 
