@@ -303,3 +303,22 @@ Part2's complete 32-case frozen selected pass accounts for14,068times/105,217dec
 Part3 methodology/cache source repairs are pushed, and the missing actual bilingual retrieval-branch test is published with its ten-test rerun receipt. First nine data-ready scenes have342EN/ZH endpoint images reviewed. Motion review is finding transition-only defects beyond those endpoints, and targeted repaired regressions are underway. English Einsum has390selected-time review and a separate exact-hash native cloud playback receipt. Eight numerical items are complete; novels training reached1,971/2,929steps with durable checkpoints. No unfinished input is rendered.
 
 Shared Chinese caption regression found zero output changes over2,265unique captured strings across Parts1/2. This does not erase stale broad source fingerprints. A prepared two-file Library refresh failed at tools/listHTTP401 before preparation; existing versions remain unchanged, no operation is pending and no unchanged retry is attempted. Source/evidence publication continues through ordinary authorized branch pushes.
+
+## 21:03 cache-integrity upgrade and current rendered queue
+
+The eight formerly existence-only Part3 items now have explicit structural/arithmetic, payload-hash, recipe and
+current-dependency validation. Legacy sidecars were staged under locks before activating the guard; all26numerical
+payload bytes, sizes and modification times are unchanged. All17actual cache loads succeeded with every producer
+replaced by a fail-on-call mock (zero calls). The new records are explicitly post-production attestations: original
+consumed dependency hashes were never recorded and are not reconstructed. Historical QA ledgers omit these new
+sidecars. The original nine-versus-eight scope correction remains intact.
+
+Forty focused cache/numerical tests and the235-test full repository suite pass. The suite precedes the subsequent
+GaLore rank-qualification prose, which has a separate10-test narration pass. No test result constitutes rendered
+approval. [Cache upgrade evidence](evidence/ai3-cache-integrity-upgrade/README.md).
+
+All38Part3 bilingual endpoint and silent-motion runtime cases exist at observed versions. Fresh visual regressions
+continue for Words/Geometry/JL, Norms/GaLore, SGNS and Netflix; Outro's two Chinese captions are repaired and both
+fresh endpoint/motion cases have zero warnings. Actual final selected-image review is still pending for those cases.
+Part3's completed numerical workloads are not running or being regenerated. Storage remains about4.3GiB free;
+only the documented inactive public ASR download cache was reclaimed, preserving unique evidence and pending uploads.

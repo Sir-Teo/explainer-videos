@@ -1,11 +1,12 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31 20:30 UTC. Progress, **not full-series production approval**.
+Observed: 2026-10-31 21:03 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
-`11f5c35` (rigid-transform and transition source repairs). All216repository tests pass after this batch,
-including three portable rotation invariants; actual41-phase Manim path fixtures also pass. Each receipt
-describes its actual scope, and repaired movie appearance remains separately tracked.
+`8105056979c422963a696e2510e9b8d4b2531504` (verified against the remote branch on 31 October).
+The current cache-integrity/scene batch passed all235repository tests in26.689seconds; subsequent GaLore
+wording has its own10passing narration tests and fresh renders pending. Actual41-phase Manim rotation
+fixtures also pass. Test results and selected-image review have separate scopes.
 
 Part 1: all 17 scenes, both languages, have endpoint captures and complete silent renders. The baseline temporal
 review covered 15,194 selected times from 109,941 automatically decoded source frames, with exact frame-hash
@@ -29,15 +30,29 @@ The original English Logic preview also had native cloud playback with timed scr
 replacement failed before preparation, so the existing Library video remains the original version.
 
 Part 3: all 19 scene sources have been reviewed. Original recall, two-tower inference, JL-confidence and SGNS
-lineage defects are repaired and tested, alongside additional technical/narration findings. All17numerical items completed successfully. The original17True current-cache result had nine schema/recipe/arraychecks and eight existence-onlychecks, not uniform provenance. A bounded explicit-integrity/attestation repair is in progress, preserving numericalpayloads and disclosing original-consumption limits. The shared novels model finished all2,929steps without divergence; final validation loss3.5711395 and training8,595.83seconds. Spectral task8611seconds, MF51fits396seconds, two-tower987seconds, SGNS233seconds. Exactmodel/cache/producer hashes and completion receipts are saved. GaLore16runs completed in1028seconds and its five-run matchedcontrol in302seconds; all numericaljobs exited0. Disjoint per-item locks avoided duplicate training.
+lineage defects are repaired and tested, alongside additional technical/narration findings. All17numerical items
+completed successfully. The original17True current-cache result had nine schema/recipe/arraychecks and eight
+existence-onlychecks, not uniform provenance. The bounded integrity upgrade now validates the eight remaining
+payload structures, hashes, recipes and observed dependencies. Explicit later attestations preserve all26payload
+bytes, sizes and modification times. All17actual loads succeeded with every producer replaced by a fail-on-call
+mock: zero producer calls. Historical consumed-input provenance remains unknown; current observations cannot
+reconstruct it. Historical QA input ledgers did not record the new sidecars. See the
+[upgrade evidence](evidence/ai3-cache-integrity-upgrade/README.md).
+
+The shared novels model finished all2,929steps without divergence; final validation loss3.5711395 and
+training8,595.83seconds. Spectral task8611seconds, MF51fits396seconds, two-tower987seconds, SGNS233seconds.
+Exactmodel/cache/producer hashes and completion receipts are saved. GaLore16runs completed in1028seconds and
+its five-run matchedcontrol in302seconds; all numericaljobs exited0. Disjoint per-item locks avoided duplicate training.
 The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent motion review is underway in
 manifest order. English Einsum covers 390 selected times and separately had native cloud playback through terminal
 stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
 matrix heading protection, projection legend margins, PCA viewport and roundoff annotation. Motion review found
 additional Hook label-blink/footer collisions, a Vectors transition clip, a Power emphasis collision and a grid/header
 collision. Hook’s fresh EN356/ZH374 selected-time regression now confirms its two repairs;
-other affected-scene regressions are running. Source inspection also confirmed that linear interpolation wrongly shrinks supposed rotations in Matrices,
-Eigen and SVD. Repairs require fresh scoped regression; unfinished fixes are not approved. An initial negative-zero
+The repaired Matrices, Eigen and SVD rotations now have bilingual selected-frame regressions, with exact-image
+inheritance and new native checks recorded. Current Einsum rank-at-most-one and LowRank tail-norm wording also
+have bilingual scoped regressions. Later Words/Geometry/JL, Norms/GaLore, SGNS and Netflix repairs have fresh
+renders and explicit selected-image review queues; their runtime success alone is not visual approval. An initial negative-zero
 review note was retracted after native inspection confirmed the displayed value is +0.00; it is not a proven defect.
 
 Part 4 has read-only preparation findings; no production computation, rendering or implementation is claimed.
@@ -57,3 +72,11 @@ was created and it was not retried. [Inventory](ai-built-20261031-inventory.md),
 19:53 runtime snapshot:29of38chapter-languageendpoint cases and25of38fullsilentmovie cases have completed runtime records. These counts are runtime coverage, not all visually approved current-source cases. First-nine baseline motion reviews are complete at exact artifact versions; new rank/tail-norm/rounding/color refinements have separate scoped regression queues. Ready Word/HighDim/JL/Geometry and spectral/recommendation scenes are now rendering/reviewing.
 
 All38chapter-languagecases now have completed endpoint and fullsilent-motion runtime records at observed artifact versions. This does not certify current repaired-source visual coverage. Late repairs address SGNS narration/state timing, measured percentages, semantic colors, point-label occlusion, math grouping and important count-text readability. Actual per-case fresh visual regressions continue.
+
+The Chinese Outro's two missing caption translations are corrected; fresh EN/ZH endpoint and motion records
+have zero runtime warnings. Actual final selected-image inspection is pending. Earlier warning-bearing records
+remain historical evidence, not newly relabelled passes.
+
+Storage: about4.3GiB free after reclaiming only an inactive, reproducible public ASR model cache. All numerical
+payloads/checkpoints, original source, unique visual evidence and pending-upload files were preserved. The normal
+public redownload route and exact evicted revision are recorded in the capacity receipt; no access was bypassed.
