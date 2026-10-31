@@ -1,35 +1,56 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31 15:58 UTC. Progress, **not full-series production approval**.
+Observed: 2026-10-31 18:47 UTC. Progress, **not full-series production approval**.
 
-Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed implementation: `37c5526`.
-All 143 repository tests passed after the current search/planning repairs; compilation and diff checks passed.
+Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
+`6b3e5af` (actual bilingual retrieval-branch regression and executed ten-test receipt). The preceding
+Part 3 methodology/cache repair batch passed all 199 then-existing repository tests; subsequent targeted
+scene, narration and caption-helper checks passed. Each receipt describes its actual test scope.
 
-Part 1: all 17 scenes, both languages, have endpoint captures and complete silent renders. The temporal review
-covered 15,194 selected times from 109,941 decoded source frames; exact frame-hash inheritance is recorded.
-Four final scene repairs passed eight bilingual regression renders. Information's additional safe inset passed
-752 selected-time checks (49 new frame groups viewed). Full decoded-frame viewing is not claimed.
-The source/factual, visual and numerical findings and before/after images are committed under `evidence/`.
+Part 1: all 17 scenes, both languages, have endpoint captures and complete silent renders. The baseline temporal
+review covered 15,194 selected times from 109,941 automatically decoded source frames, with exact frame-hash
+inheritance recorded. Four final repairs passed eight bilingual regression renders; Information's additional
+safe inset passed 752 selected-time checks. Full decoded-frame viewing is not claimed. One English Information
+1080p narrated chapter has timing, signal, bookmark and independent ASR checks. The original file had native
+cloud playback with timed screenshots; that receipt applies only to its exact original hash. The current inset-
+corrected CFR file is Library version 1. Remaining narration, listening and broad production checks stay open.
 
-One Information English 1080p narrated render has signal, timing, bookmarks and two-recognizer checks. Its original
-file was played from start through terminal stop on dot's own cloud desktop with timed screenshot inspection;
-this is sampled native playback, not continuous perceptual approval or audio listening. The current margin-corrected
-version is saved as version 1 of the same Library video, with dense selected-frame review and exact 30fps cadence.
-Old playback receipt applies only to its original SHA. Audio listening, remaining narrated scenes, broad production
-resolution checks and subjective pacing remain unverified. No whole-part audio approval is claimed.
+Part 2: all 16 scenes × two languages have complete silent movies and selected-timeline reviews. The frozen
+32-case baseline accounts for 14,068 selected times and 105,217 automatically decoded frames. Subsequent
+Knowledge boundary-anchor/caption-clearance polish replaces its English 429-time pass with 423 times; Chinese
+remains 469. That current replacement totals 14,062 selected times. Its separate regression covers 892 selected
+times, 95 newly viewed unique images and all 41 bilingual native 1080p endpoints (35 exact-image inherited,
+six new native views). No full 1080p motion or listening approval follows from endpoint checks.
 
-Part 2: all 16 chapter sources and all 19 real numerical items are reviewed/computed. Budget, factoring, SAT censoring,
-alpha-beta bounds, search priority, capped-result handling and teaching qualifiers are repaired and tested. Bilingual
-endpoint and silent-motion pipelines are active, in manifest order. First completed English endpoint review covers
-Hook through Samuel (160 endpoint frames); native follow-ups and remaining chapters are being inspected. Three
-untranslated materialized captions and a Chinese Samuel TeX separator failure were corrected; fresh render checks
-are pending. Shared caption changes conservatively invalidate earlier aggregate fingerprints; original records and
-precise limitations remain intact. Rendering success alone is not visual approval.
+Part 2 fixes include consistent search budgets; A* tie qualifications and exact priorities; resolution factoring,
+empty clauses and capped outcomes; SAT unknowns; alpha-beta bound handling; planning/PDB cap coverage; readable
+ELIZA replies; proof routing and an alpha-renaming explanation; timeline, contrast and non-growing emphasis.
+The original English Logic preview also had native cloud playback with timed screenshot inspection. Its Library
+replacement failed before preparation, so the existing Library video remains the original version.
 
-Parts 3–31 remain unreviewed; Part 3 source leads are queued without execution or rendered claims. Continue sequentially.
-No CI/CD, merge or deployment was created. User authorized ordinary commits and pushes. Optional draft PR creation
-was denied by automatic approval review for lacking explicit PR authorization; no PR was created and it was not retried.
+Part 3: all 19 scene sources have been reviewed. Original recall, two-tower inference, JL-confidence and SGNS
+lineage defects are repaired and tested, alongside additional technical/narration findings. Eight of 17 numerical
+items are complete. The spectrum task is training the shared novels model; latest observed step is 1,971/2,929,
+validation loss 3.682, cumulative 2.704 seconds/step. Durable checkpoints continue; later numerical items remain.
+The running producer and consumed inputs are frozen. No scene renders against unfinished data.
 
-[Scope and chronological checklist](ai-built-20261031-progress.md), [inventory](ai-built-20261031-inventory.md),
-[Part 2 repairs](ai2-repairs.md), [Part 1 dense frame evidence](evidence/ai1-dense-review/),
-[Information inset and current version](evidence/ai1-information-inset/).
+The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent motion review is underway in
+manifest order. English Einsum covers 390 selected times and separately had native cloud playback through terminal
+stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
+matrix heading protection, projection legend margins, PCA viewport and roundoff annotation. Motion review found
+additional Hook label-blink/footer collisions, a Vectors transition clip, a Power emphasis collision and a rounded
+negative-zero determinant display. Repairs require fresh scoped regression; unfinished fixes are not approved.
+
+Part 4 has read-only preparation findings; no production computation, rendering or implementation is claimed.
+Parts 5–31 remain queued. The all-31 inventory remains the task scope. Parts 1 and 2 retain explicit narration,
+production-resolution, subjective pacing, listening and continuous perceptual gaps in the [open queue](remaining-production-qa.md).
+
+Shared-caption regression covers all 33 captured Part 1/2 text collections: 2,265 unique keys, zero changed outputs.
+This proves only captured translation effects; it does not refresh old scene/data fingerprints. Conservative warnings
+remain. The prepared two-file Library refresh failed at helper `tools/list` with HTTP 401 before preparation;
+no pending operation or successful replacement is claimed. Existing artifacts and ordinary Git pushes still work.
+
+Cloud only. No CI/CD, runners, merge or deployment was configured. User authorized ordinary commits and pushes.
+Optional draft PR creation was denied by automatic approval review for lacking explicit PR authorization; no PR
+was created and it was not retried. [Inventory](ai-built-20261031-inventory.md),
+[chronological checklist](ai-built-20261031-progress.md), [evidence](evidence/).

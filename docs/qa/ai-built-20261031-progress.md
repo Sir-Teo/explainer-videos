@@ -293,3 +293,11 @@ Part2 is next for rendered QA: its source/correctness work and all19 default com
 search fixes address a concrete scaled-priority grid defect and conditional capped-optimum handling; affected
 grid/puzzle15 data are being refreshed under schema locks before any Part2 render. NoCI/CD, runners, merge or
 deployment were configured. Verified increments continue on the dedicated branch.
+
+## 18:47 UTC sequential checkpoint
+
+Part2's complete 32-case frozen selected pass accounts for14,068times/105,217decodedframes. Knowledge's subsequent boundary-anchor/caption-clearance repair has892selected-time regression checks and41native1080p endpoints; replacement current total14,062selectedtimes. All production/narration/perception gaps remain in the explicit open queue.
+
+Part3 methodology/cache source repairs are pushed, and the missing actual bilingual retrieval-branch test is published with its ten-test rerun receipt. First nine data-ready scenes have342EN/ZH endpoint images reviewed. Motion review is finding transition-only defects beyond those endpoints, and targeted repaired regressions are underway. English Einsum has390selected-time review and a separate exact-hash native cloud playback receipt. Eight numerical items are complete; novels training reached1,971/2,929steps with durable checkpoints. No unfinished input is rendered.
+
+Shared Chinese caption regression found zero output changes over2,265unique captured strings across Parts1/2. This does not erase stale broad source fingerprints. A prepared two-file Library refresh failed at tools/listHTTP401 before preparation; existing versions remain unchanged, no operation is pending and no unchanged retry is attempted. Source/evidence publication continues through ordinary authorized branch pushes.

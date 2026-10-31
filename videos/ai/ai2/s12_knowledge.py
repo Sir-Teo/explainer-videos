@@ -6,6 +6,39 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MONO, PART, PATH, SYMBOL, load, node_box
 
 
+def _box_edge_point(box, towards):
+    """Intersect a center ray with an axis-aligned rounded node box."""
+    center = box.get_center()
+    direction = np.asarray(towards, float) - center
+    direction[2] = 0
+    length = np.linalg.norm(direction)
+    if not length:
+        raise ValueError("a connector needs distinct node centers")
+    direction /= length
+    half = np.array([box.width, box.height]) / 2
+    distance = min(half[i] / abs(direction[i]) for i in range(2) if direction[i])
+    point = distance * direction
+    radius = min(float(getattr(box, "corner_radius", 0)), *half)
+    if radius and np.all(np.abs(point[:2]) > half - radius):
+        corner = np.sign(direction[:2]) * (half - radius)
+        projection = float(direction[:2] @ corner)
+        distance = projection + np.sqrt(max(0, projection ** 2 - corner @ corner + radius ** 2))
+        point = distance * direction
+    return center + point
+
+
+def _relation_caption_position(edge, caption, clearance=0.12):
+    """Keep the whole caption above the shaft, or to its left when vertical."""
+    direction = edge.get_end() - edge.get_start()
+    normal = np.array([-direction[1], direction[0], 0.0])
+    normal /= np.linalg.norm(normal)
+    if normal[1] < 0 or (abs(normal[1]) < 1e-12 and normal[0] > 0):
+        normal = -normal
+    support = (abs(normal[0]) * caption.width + abs(normal[1]) * caption.height) / 2
+    midpoint = (edge.get_start() + edge.get_end()) / 2
+    return midpoint + (support + clearance) * normal
+
+
 class Knowledge(VoiceoverScene):
     def construct(self):
         self.card()
@@ -221,8 +254,14 @@ class Knowledge(VoiceoverScene):
                 ("Ada Lovelace", "Analytical Engine", "wrote about"), ("Charles Babbage", "Analytical Engine", "designed")]
         edges = VGroup()
         for a, b, r in rels:
-            e = Arrow(nodes[a].get_center(), nodes[b].get_center(), buff=0.55, color=GREY_B, stroke_width=2.5)
-            edges.add(VGroup(e, label(r, font_size=18, color=HEUR).move_to(e.get_center() + UP * 0.22)))
+            # Intersect the actual box edges along the center-to-center ray;
+            # one small gap works for diagonal and nearly vertical relations.
+            start = _box_edge_point(nodes[a][0], nodes[b].get_center())
+            end = _box_edge_point(nodes[b][0], nodes[a].get_center())
+            e = Arrow(start, end, buff=0.08, color=GREY_B, stroke_width=2.5)
+            caption = label(r, font_size=18, color=HEUR)
+            caption.move_to(_relation_caption_position(e, caption))
+            edges.add(VGroup(e, caption))
         hc = history_card(2012, r"Google: \ the Knowledge Graph", r"``things, not strings'': \ over $500$ million "
                           r"objects and $3.5$ billion facts at launch", width=5.6, color=HIST,
                           font_size=19).to_corner(DR, buff=0.3)
