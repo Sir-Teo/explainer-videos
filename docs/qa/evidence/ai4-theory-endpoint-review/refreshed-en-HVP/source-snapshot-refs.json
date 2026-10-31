@@ -1,0 +1,32 @@
+[
+  {
+    "path": "videos/ai/ai4/s14_hvp.py",
+    "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+    "meaning": "source at reconciliation snapshot, not independently proven historical imported version",
+    "source_object": "source-objects/af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb.txt.gz"
+  },
+  {
+    "path": "videos/ai/ai4/common.py",
+    "sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+    "meaning": "source at reconciliation snapshot, not independently proven historical imported version",
+    "source_object": "source-objects/cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041.txt.gz"
+  },
+  {
+    "path": "videos/ai/ai4/zh_lines.py",
+    "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "meaning": "source at reconciliation snapshot, not independently proven historical imported version",
+    "source_object": "source-objects/e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d.txt.gz"
+  },
+  {
+    "path": "videos/ai/ai_text_zh.json",
+    "sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+    "meaning": "source at reconciliation snapshot, not independently proven historical imported version",
+    "source_object": "source-objects/9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d.txt.gz"
+  },
+  {
+    "path": "tools/qa_series.py",
+    "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "meaning": "source at reconciliation snapshot, not independently proven historical imported version",
+    "source_object": "source-objects/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.txt.gz"
+  }
+]

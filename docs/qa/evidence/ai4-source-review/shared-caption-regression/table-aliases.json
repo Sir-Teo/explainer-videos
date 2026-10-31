@@ -1,0 +1,14 @@
+{
+  "baseline": {
+    "original": "/workspace/runtime/ai12-shared-caption-regression-part4/baseline-ai_text_zh.json",
+    "raw_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+    "package_table_bytes": "snapshots/baseline-f00be66/videos/ai/ai_text_zh.json.gz",
+    "note": "Alias preserves identical bytes without duplicate payload; regression baseline commit remains the one in original regression receipt, not inferred from this alias."
+  },
+  "current": {
+    "original": "/workspace/runtime/ai12-shared-caption-regression-part4/current-ai_text_zh.json",
+    "raw_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+    "package_table_bytes": "shared-caption-regression/current-ai_text_zh.json.gz",
+    "note": "Alias preserves identical bytes without duplicate payload; regression baseline commit remains the one in original regression receipt, not inferred from this alias."
+  }
+}

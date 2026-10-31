@@ -15,6 +15,17 @@ def gap_tex(x: float) -> str:
     return "0" if x == 0 else sci(x, 1)
 
 
+def eigenvalue_tex(x: float) -> str:
+    """Keep measured signs and tiny roundoff; do not replace them with zeros."""
+    return gap_tex(float(x)) if abs(x) < 1e-3 else f"{x:.3f}"
+
+
+def signed_heat_key():
+    return VGroup(label(r"negative", font_size=18, color=C.SURPRISE),
+                  label(r"zero", font_size=18, color=GREY_B),
+                  label(r"positive", font_size=18, color=C.TRUE_P)).arrange(RIGHT, buff=0.22)
+
+
 class Layers(VoiceoverScene):
     def construct(self):
         self.card()
@@ -93,12 +104,15 @@ class Layers(VoiceoverScene):
                 why(r"split the fraction", font_size=22), why(r"as a matrix", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-4.2, buff=0.42, edge=6.9)
         heat = matrix_heat(J, cell=0.6, numbers=True, fmt="{:.2f}", font_size=16).move_to([4.6, -1.75, 0])
+        key = signed_heat_key().next_to(heat, DOWN, buff=0.12)
         hl = label(rf"computed: \ $5$ scores; \ library: \ difference ${gap_tex(d['sm_diff'])}$", font_size=20,
                    color=GREY_B).next_to(heat, UP, buff=0.15)
+        keep_in_frame(hl, margin=0.2)
         props = VGroup(
             label(r"rows add to $0$: \ $J\,\mathbf 1 = 0$", font_size=25, color=GREY_A),
-            label(r"symmetric, \ eigenvalues $\ge 0$:", font_size=25, color=GREY_A),
-            MathTex(r",\ ".join(f"{max(v, 0):.3f}" for v in eig), font_size=28, color=GRAD),
+            label(r"theory: \ symmetric, \ eigenvalues $\ge 0$", font_size=25, color=GREY_A),
+            MathTex(r",\ ".join(eigenvalue_tex(v) for v in eig), font_size=26, color=GRAD),
+            label(r"computed eigenvalues, \ including roundoff", font_size=20, color=GREY_B),
             label(r"$J^\top g = p \odot (g - p\cdot g)$: \ $n$ steps, \ not $n^2$", font_size=25, color=GRAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([-3.6, -2.3, 0])
         with self.voiceover(
@@ -110,7 +124,7 @@ class Layers(VoiceoverScene):
             "symmetric with no negative eigenvalues, one of them zero. <bookmark mark='e'/> Again we never need the "
             "matrix: its product with a vector takes n steps instead of n squared, which matters with GPT-2's "
             "fifty thousand tokens in the vocabulary. Joined with the cross-entropy, it collapses to Part 1's q "
-            "minus p."
+            "minus p when the loss uses natural logarithms; a loss in bits adds a factor of one over ln two."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -120,10 +134,10 @@ class Layers(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            self.play(FadeIn(heat), FadeIn(hl))
-            self.play(FadeIn(props[0]), FadeIn(props[1]), FadeIn(props[2]))
+            self.play(FadeIn(heat), FadeIn(hl), FadeIn(key))
+            self.play(FadeIn(props[0]), FadeIn(props[1]), FadeIn(props[2]), FadeIn(props[3]))
             vo.wait_until("e")
-            self.play(FadeIn(props[3]))
+            self.play(FadeIn(props[4]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -143,11 +157,14 @@ class Layers(VoiceoverScene):
                 why(r"$\mu$ and $\sigma$ move with $x$ too: \\ two corrections", font_size=22)]
         step = ladder(self, rows, whys, keep=2, top=3.0, x=-3.0, buff=0.6, edge=6.9)
         heat = matrix_heat(J, cell=0.45, numbers=False).move_to([-3.6, -1.6, 0])
+        key = signed_heat_key().next_to(heat, DOWN, buff=0.15)
         hl = label(rf"computed: \ $6$ numbers; \ library: \ difference ${gap_tex(d['ln_diff'])}$", font_size=20,
                    color=GREY_B).next_to(heat, UP, buff=0.15)
         ev = VGroup(label(r"eigenvalues:", font_size=24, color=GREY_A),
-                    MathTex(r",\ ".join(sci(abs(v), 0) if abs(v) < 1e-3 else f"{v:.3f}" for v in eig), font_size=28,
+                    MathTex(r",\ ".join(eigenvalue_tex(v) for v in eig), font_size=26,
                             color=GRAD),
+                    label(r"computed, \ including roundoff; \ before learned scale and shift", font_size=20,
+                          color=GREY_B),
                     label(r"mean: \ eigenvalue $0$; \ scale: \ $\epsilon/\sigma^3$", font_size=24, color=GRAD),
                     label(r"mean is removed; \ scale sensitivity is suppressed", font_size=24, color=GREY_A))
         ev.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.8, -1.6, 0])
@@ -164,7 +181,7 @@ class Layers(VoiceoverScene):
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
-            self.play(FadeIn(heat), FadeIn(hl))
+            self.play(FadeIn(heat), FadeIn(hl), FadeIn(key))
             self.play(LaggedStart(*[FadeIn(e, shift=UP * 0.1) for e in ev], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

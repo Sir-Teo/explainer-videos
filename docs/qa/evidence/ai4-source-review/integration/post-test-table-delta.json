@@ -1,0 +1,92 @@
+{
+  "pre_delta_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+  "final_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+  "added": {
+    "\\text{finite differences: \\ max absolute error } 2.2 \\times 10^{-10}": "\\text{有限差分：\\ 最大绝对误差 } 2.2 \\times 10^{-10}",
+    "\\text{PyTorch: \\ max absolute error } 2.8 \\times 10^{-17}": "\\text{PyTorch：\\ 最大绝对误差 } 2.8 \\times 10^{-17}",
+    "the gap to the next float. \\\\ Round to nearest; normal finite range, \\\\ without overflow: \\\\ relative error $\\le 2^{-(m+1)}$ ($m$ mantissa bits). \\\\ Subnormals: fixed absolute spacing; \\\\ absolute rounding error $\\le \\tfrac12$ that spacing.": "到下一个浮点数的间隔。 \\\\ 舍入到最近值；限定正规有限范围， \\\\ 且不发生上溢： \\\\ 相对误差$\\le 2^{-(m+1)}$（$m$位尾数）。 \\\\ 次正规数：固定的绝对间隔； \\\\ 绝对舍入误差$\\le \\tfrac12$该间隔。",
+    "step $0$: loss $1.0566$; training accuracy $30\\%$": "步数 $0$：损失 $1.0566$；训练准确率 $30\\%$",
+    "$\\rho(H)=0.955$; high-positive $56$; negative $72$; near-zero $60\\%$": "$\\rho(H)=0.955$；高正值 $56$；负值 $72$；近零 $60\\%$",
+    "step $30$: loss $0.3859$; training accuracy $79\\%$": "步数 $30$：损失 $0.3859$；训练准确率 $79\\%$",
+    "$\\rho(H)=2.18$; high-positive $5$; negative $21$; near-zero $84\\%$": "$\\rho(H)=2.18$；高正值 $5$；负值 $21$；近零 $84\\%$",
+    "step $100$: loss $0.0853$; training accuracy $99\\%$": "步数 $100$：损失 $0.0853$；训练准确率 $99\\%$",
+    "$\\rho(H)=2$; high-positive $5$; negative $1$; near-zero $92\\%$": "$\\rho(H)=2$；高正值 $5$；负值 $1$；近零 $92\\%$",
+    "step $300$: loss $0.0036$; training accuracy $100\\%$": "步数 $300$：损失 $0.0036$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.348$; high-positive $5$; negative $0$; near-zero $94\\%$": "$\\rho(H)=0.348$；高正值 $5$；负值 $0$；近零 $94\\%$",
+    "step $1{,}000$: loss $0.0003$; training accuracy $100\\%$": "步数 $1{,}000$：损失 $0.0003$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.0505$; high-positive $4$; negative $0$; near-zero $94\\%$": "$\\rho(H)=0.0505$；高正值 $4$；负值 $0$；近零 $94\\%$",
+    "step $3{,}000$: loss $0.0000$; training accuracy $100\\%$": "步数 $3{,}000$：损失 $0.0000$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.00655$; high-positive $4$; negative $0$; near-zero $95\\%$": "$\\rho(H)=0.00655$；高正值 $4$；负值 $0$；近零 $95\\%$",
+    "norm-error factor per step": "每步范数误差因子",
+    "updates: \\ relative norm below $10^{-6}$": "更新次数：\\ 相对范数低于 $10^{-6}$",
+    "updates until $|y|>0.5$": "达到 $|y|>0.5$ 的更新次数"
+  },
+  "removed": {},
+  "changed": {
+    "the product $X^\\top G$: \\ $4.8 \\times 10^{9}$ multiplications and additions": {
+      "before": "乘积 $X^\\top G$：\\ $4.8 \\times 10^{9}$ 次乘加",
+      "after": "乘积 $X^\\top G$：\\ 共 $4.8 \\times 10^{9}$ 次标量乘、加运算"
+    },
+    "natural-log cross-entropy (nats): \\\\ each pair's guess minus its truth": {
+      "before": "自然对数交叉熵（纳特）：\\\\ 每个字母对的猜测减去真相",
+      "after": "自然对数交叉熵（纳特）：\\ 每个字母对的猜测减去真相"
+    },
+    "the gap to the next float. \\ Round to nearest in the normal finite range, without overflow: relative error at most $2^{-(m+1)}$ for $m$ mantissa bits. \\\\ Subnormals: fixed absolute spacing; at most half that spacing of absolute rounding error.": {
+      "before": "到下一个浮点数的间隔。\\ 在正规有限范围内，无上溢时舍入到最近值：$m$位尾数的相对误差至多$2^{-(m+1)}$。\\\\ 次正规数采用固定绝对间隔；绝对舍入误差至多为间隔的一半。",
+      "after": "到下一个浮点数的间隔。\\ 在正规有限范围内，无上溢时舍入到最近值：$m$位尾数的相对误差至多$2^{-(m+1)}$。\\ 次正规数采用固定绝对间隔；绝对舍入误差至多为间隔的一半。"
+    },
+    "dense forward directions: \\ $874\\times$ derivative work; \\ $64.81\\times$ observed call time": {
+      "before": "稠密前向方向：\\\\ 导数工作量$874\\\\times$；\\\\ 实测调用时间$64.81\\\\times$",
+      "after": "稠密前向方向：\\ 导数工作量$874\\times$；\\ 实测调用时间$64.81\\times$"
+    },
+    "one reverse pass: \\ parameter gradients only, no $dX$; \\ max gap $4 \\times 10^{-17}$": {
+      "before": "一次反向：\\\\ 只求参数梯度，不求$dX$；\\\\ 最大差$4 \\times 10^{-17}$",
+      "after": "一次反向：\\ 只求参数梯度，不求$dX$；\\ 最大差$4 \\times 10^{-17}$"
+    },
+    "timing means: \\ $1$ warm-up; \\ forward $1$, reverse $20$ repeats; \\ no uncertainty interval": {
+      "before": "计时均值：\\\\ 预热$1$次；\\\\ 前向$1$次，反向$20$次；\\\\ 无不确定性区间",
+      "after": "计时均值：\\ 预热$1$次；\\ 前向$1$次，反向$20$次；\\ 无不确定性区间"
+    },
+    "a batch of $8$: \\ rank $4 \\le \\min(8, 5, 4)$": {
+      "before": "$8$个样本：\\\\ 秩$4\\\\le\\\\min(8, 5, 4)$",
+      "after": "$8$个样本：\\ 秩$4\\le\\min(8, 5, 4)$"
+    },
+    "counting reference: \\ $3.331$": {
+      "before": "计数参考：\\\\ $3.331$",
+      "after": "计数参考：\\ $3.331$"
+    },
+    "full train: $3.335$; \\ new text: $3.336$ bits": {
+      "before": "完整训练语料：$3.335$；\\\\ 新文本：$3.336$比特",
+      "after": "完整训练语料：$3.335$；\\ 新文本：$3.336$比特"
+    },
+    "normalized logs: \\ Pearson $r = 0.996$ \\\\ $552$ pairs with $\\hat p(j\\mid i) > 10^{-4}$": {
+      "before": "归一化对数：\\\\ 皮尔逊$r=0.996$\\\\\\\\ $\\\\hat p(j\\\\mid i)>10^{-4}$的$552$对",
+      "after": "归一化对数：\\ 皮尔逊$r=0.996$\\\\ $\\hat p(j\\mid i)>10^{-4}$的$552$对"
+    },
+    "full-batch count objective; \\ clipped display samples: loss $0$, curvature $0$; \\ $1$ out-of-window threshold lines omitted": {
+      "before": "全批次计数目标；\\\\ 显示截断样本：损失$0$，曲率$0$；\\\\ 省略$1$条窗口外阈值线",
+      "after": "全批次计数目标；\\ 显示截断样本：损失$0$，曲率$0$；\\ 省略$1$条窗口外阈值线"
+    },
+    "$8$ exponent, $23$ mantissa bits \\\\ largest $3.4 \\times 10^{38}$; \\ $\\approx 7.2$ normal digits": {
+      "before": "$8$位指数、$23$位尾数\\\\\\\\ 最大$3.4 \\times 10^{38}$；\\\\ 正规数约$7.2$位精度",
+      "after": "$8$位指数、$23$位尾数\\\\ 最大$3.4 \\times 10^{38}$；\\ 正规数约$7.2$位精度"
+    },
+    "$8$ exponent, $7$ mantissa bits \\\\ largest $3.4 \\times 10^{38}$; \\ $\\approx 2.4$ normal digits": {
+      "before": "$8$位指数、$7$位尾数\\\\\\\\ 最大$3.4 \\times 10^{38}$；\\\\ 正规数约$2.4$位精度",
+      "after": "$8$位指数、$7$位尾数\\\\ 最大$3.4 \\times 10^{38}$；\\ 正规数约$2.4$位精度"
+    },
+    "$5$ exponent, $10$ mantissa bits \\\\ largest $65{,}504$; \\ $\\approx 3.3$ normal digits": {
+      "before": "$5$位指数、$10$位尾数\\\\\\\\ 最大$65{,}504$；\\\\ 正规数约$3.3$位精度",
+      "after": "$5$位指数、$10$位尾数\\\\ 最大$65{,}504$；\\ 正规数约$3.3$位精度"
+    },
+    "$5$ exponent, $2$ mantissa bits \\\\ largest $57{,}344$; \\ $\\approx 0.9$ normal digits": {
+      "before": "$5$位指数、$2$位尾数\\\\\\\\ 最大$57{,}344$；\\\\ 正规数约$0.9$位精度",
+      "after": "$5$位指数、$2$位尾数\\\\ 最大$57{,}344$；\\ 正规数约$0.9$位精度"
+    },
+    "$4$ exponent, $3$ mantissa bits \\\\ largest $448$; \\ $\\approx 1.2$ normal digits": {
+      "before": "$4$位指数、$3$位尾数\\\\\\\\ 最大$448$；\\\\ 正规数约$1.2$位精度",
+      "after": "$4$位指数、$3$位尾数\\\\ 最大$448$；\\ 正规数约$1.2$位精度"
+    }
+  },
+  "qualification": "Exact table delta since the parent-run352-test/captured-caption regression checkpoint; this delta is not a rerun of those gates."
+}

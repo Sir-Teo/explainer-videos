@@ -1,0 +1,161 @@
+{
+  "scope": "First five Part4 bilingual 854x480endpoint review only. No continuous/silent-motion/narrated/full1080approval.",
+  "fresh_EN_endpoint_cases": 5,
+  "fresh_EN_images": 79,
+  "EN_exact_prior_inherited": 79,
+  "fresh_ZH_endpoint_cases": 5,
+  "fresh_ZH_sheet_images_actually_viewed": 79,
+  "ZH_contact_sheets_viewed": 5,
+  "ZH_native_followups": 21,
+  "blocking_geometry_findings": 0,
+  "scientific_unit_caption_findings": 1,
+  "nonblocking_cosmetic_observations": 1,
+  "package_status": "First-five endpoint evidence closed with scoped English axis repair and Chinese operation-unit repair. Broad warning and cosmetic line-leading comma retained.",
+  "limits": [
+    "Endpoint captures only, not full-motion/continuous playback or real speech timing/listening/sync.",
+    "Contact-sheet cell427x240;21specified freshChinese images also viewed native854x480. English79times inherit exact PNG bytes from completed earlier reviews.",
+    "Current source/data signatures and root freeze record do not independently attest every historic in-memory worker import."
+  ],
+  "current_case_appearances": 158,
+  "unit_repair_additional_record_appearances": 14,
+  "unit_repair_exact_inherited": 13,
+  "unit_repair_changed_native_views": 1,
+  "all_fresh_record_appearances_with_unit_repair": 172,
+  "final_selected_case_runtime_statuses": {
+    "zh/Hook": "passed",
+    "zh/Derivative": "passed",
+    "en/Hook": "passed",
+    "en/Derivative": "passed",
+    "en/Gradient": "passed",
+    "en/Jacobian": "passed",
+    "en/Layers": "passed",
+    "zh/Gradient": "passed",
+    "zh/Jacobian": "passed",
+    "zh/Layers": "needs-review"
+  },
+  "final_selected_raw_warning_count": 1,
+  "confirmed_unit_caption_repairs": 1,
+  "confirmed_geometry_repairs_in_inherited_EN": 1,
+  "initial_integrated_runtime_statuses": {
+    "zh/Hook": "passed",
+    "zh/Derivative": "passed",
+    "en/Hook": "passed",
+    "en/Derivative": "passed",
+    "en/Gradient": "passed",
+    "en/Jacobian": "passed",
+    "en/Layers": "passed",
+    "zh/Gradient": "passed",
+    "zh/Jacobian": "passed",
+    "zh/Layers": "passed"
+  },
+  "initial_integrated_raw_runtime_warning_count": 0,
+  "current_scoped_source_findings_remaining": 0,
+  "current_case_map": {
+    "zh/Hook": {
+      "record": "records/final/zh/Hook.json.gz",
+      "images": 19,
+      "actual_coverage": "Chinese actual sheet/native review"
+    },
+    "zh/Derivative": {
+      "record": "records/final/zh/Derivative.json.gz",
+      "images": 17,
+      "actual_coverage": "Chinese actual sheet/native review"
+    },
+    "en/Hook": {
+      "record": "records/final/en/Hook.json.gz",
+      "images": 19,
+      "actual_coverage": "English exact byte inheritance from completed prior actual review"
+    },
+    "en/Derivative": {
+      "record": "records/final/en/Derivative.json.gz",
+      "images": 17,
+      "actual_coverage": "English exact byte inheritance from completed prior actual review"
+    },
+    "en/Gradient": {
+      "record": "records/final/en/Gradient.json.gz",
+      "images": 19,
+      "actual_coverage": "English exact byte inheritance from completed prior actual review"
+    },
+    "en/Jacobian": {
+      "record": "records/final/en/Jacobian.json.gz",
+      "images": 10,
+      "actual_coverage": "English exact byte inheritance from completed prior actual review"
+    },
+    "en/Layers": {
+      "record": "records/final/en/Layers.json.gz",
+      "images": 14,
+      "actual_coverage": "English exact byte inheritance from completed prior actual review"
+    },
+    "zh/Gradient": {
+      "record": "records/final/zh/Gradient.json.gz",
+      "images": 19,
+      "actual_coverage": "Chinese actual sheet/native review"
+    },
+    "zh/Jacobian": {
+      "record": "records/final/zh/Jacobian.json.gz",
+      "images": 10,
+      "actual_coverage": "Chinese actual sheet/native review"
+    },
+    "zh/Layers": {
+      "record": "records/final/zh/Layers.json.gz",
+      "images": 14,
+      "actual_coverage": "Chinese actual sheet/native review"
+    }
+  },
+  "observed_translation_freezes": {
+    "initial_integrated_global_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+    "initial_local_zh_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "corrective_launch_global_sha256": "3add35213ef23c6365ab37840eb0edfdf6a49f2352139b8b22be9d857b376f95",
+    "scope": "Capture-time identities/root-attested launch table; later packaging source observations are kept separate."
+  },
+  "source_snapshot_scope": "Source at packaging observation; capture-time/root-attested identities and known Floats overlap are retained separately in review/repair receipts.",
+  "final_layers_chinese": {
+    "runtime_record": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/Layers-unit-regression/after/result.json",
+    "runtime_record_sha256": "67361b532eb497c109d3a5b5171f7f83f6cdfda065d2cb7ee489adf9f6df7cab",
+    "status_raw": "needs-review",
+    "warnings_raw": [
+      {
+        "kind": "source-changed-during-render"
+      }
+    ],
+    "fingerprint": "086351f6d7e2ce6cedcff2bb473ff51f2ea2448e622b06e5650548a9237f1ad1",
+    "native_png": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/Layers-unit-regression/after/005_00042.4s.png",
+    "native_png_sha256": "4235dab5d1d7f097519de74835d304deb0913be3722cb843a051cdcda5c10832",
+    "rendered_caption": "乘积 $X^\\top G$：\\ 共 $4.8 \\times 10^{9}$ 次标量乘、加运算",
+    "caption_bounds_world": [
+      -3.4232895500000007,
+      1.765326268749999,
+      -3.232648410416666,
+      -2.9523869083333336
+    ],
+    "input_observations": [
+      {
+        "path": ".cache/ai4/jacobians.json",
+        "recorded_signature": [
+          1302,
+          1793485503367900583
+        ],
+        "observed_signature": [
+          1302,
+          1793485503367900583
+        ],
+        "matches": true,
+        "sha256_at_review": "fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936"
+      },
+      {
+        "path": ".cache/ai4/jacobians.npz",
+        "recorded_signature": [
+          4075,
+          1793485503363293357
+        ],
+        "observed_signature": [
+          4075,
+          1793485503363293357
+        ],
+        "matches": true,
+        "sha256_at_review": "42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405"
+      }
+    ]
+  },
+  "no_source_or_numeric_cache_edits": true
+}

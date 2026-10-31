@@ -1,0 +1,130 @@
+{
+  "scope": "Bounded source/math/geometry plus actual selected-image tangent-stage regression; broader originalZHreviewpending, continuous/listeningunverified.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2165,
+      "sha256": "11a0470ed44e348649284f9681dc0d927a198b4e6ec26f3a1a130fbbc1b1f07d"
+    },
+    {
+      "path": "after-en-fixed-tangent.png",
+      "bytes": 60762,
+      "sha256": "f20a00d606b36ff1a3f9a38d37a3ad6d9d5678e86094cd182c18e51ec5e02952"
+    },
+    {
+      "path": "after-zh-fixed-tangent.png",
+      "bytes": 63042,
+      "sha256": "fc9f0514c1af85fdec1859f196f468d8db928e82334d2431dce888bd00cd2db6"
+    },
+    {
+      "path": "before-en-finite-secant.png",
+      "bytes": 49187,
+      "sha256": "98063af062a5e44618c5fa96d66316f9311d20b697def37d5a415990be96ee23"
+    },
+    {
+      "path": "bilingual-handoff.json.gz",
+      "bytes": 220,
+      "sha256": "96ff5217cae477ac85dd1af6701ec13a166d469b1e6e27fa975199d99648e332"
+    },
+    {
+      "path": "en/automatic-full-audit.json.gz",
+      "bytes": 26080,
+      "sha256": "65086b80aca3cc3a48de8000155e017d9fc2343ee5e39e23e6b6197c7442517f"
+    },
+    {
+      "path": "en/dense-review.json.gz",
+      "bytes": 3172,
+      "sha256": "4d2d50557357fc84267b055813cf799a3aabb8340d2f08c081324497ce7721d7"
+    },
+    {
+      "path": "en/focused-review.json.gz",
+      "bytes": 25649,
+      "sha256": "8af97923604f20fa5cddda28c59b16893f74cdfbb3d4699b37236a809eba08d3"
+    },
+    {
+      "path": "en/frozen-plan.json.gz",
+      "bytes": 28909,
+      "sha256": "4aa0f83518d38a2166966888a81bb4a2fa0ef70326b6fb00f05778a1f2dce157"
+    },
+    {
+      "path": "en/render-record.json.gz",
+      "bytes": 11007,
+      "sha256": "b94a886c483be22184264d83eb9471169210ba86014b88a42aa2cfb238800a06"
+    },
+    {
+      "path": "focused-motion-receipt.json.gz",
+      "bytes": 1493,
+      "sha256": "c1fd3975077b4176f29190385398e07b3fc9ca55b8e43a5313e4e53e49fc1d62"
+    },
+    {
+      "path": "geometry-check.json.gz",
+      "bytes": 635,
+      "sha256": "e0fffec906ece8fd92a7b17a8692bec851dd937ce70f9c8bbbc3edba360af3e1"
+    },
+    {
+      "path": "layout-en.json.gz",
+      "bytes": 466,
+      "sha256": "e0792c1a56a64caadd472bfb65fb4a3ffc521bef26e04586c96ca5a2422f8fb4"
+    },
+    {
+      "path": "layout-zh.json.gz",
+      "bytes": 471,
+      "sha256": "6f54a6b88b129c6b609e825cb265553e999af3ae03da8357550b317235e8dd3c"
+    },
+    {
+      "path": "layout.py.gz",
+      "bytes": 1174,
+      "sha256": "f8d1a2635dff04d651f29af9403c7b770a28ba13826728f94973d014e5a8af0f"
+    },
+    {
+      "path": "receipt.json.gz",
+      "bytes": 579,
+      "sha256": "5dd296522ab50857ec1cdbc02af92a63a4437859181bc13846d2673286c5f28a"
+    },
+    {
+      "path": "source-after.py.gz",
+      "bytes": 5329,
+      "sha256": "753ba94b1094a5beb26d67077b5495a09b6a034b7f0468462608079edfbcc170"
+    },
+    {
+      "path": "source-before.py.gz",
+      "bytes": 5203,
+      "sha256": "792c2c0d1bb6dd0c741a32774da3b6890eea9554bfd0e80ab448b7efa8241c2f"
+    },
+    {
+      "path": "test_ai4_derivative_tangent.py.gz",
+      "bytes": 1306,
+      "sha256": "b7333572751d7f65ae9f9e1f9a5443012428ec556e26eb318c14e2aee00283c1"
+    },
+    {
+      "path": "validate.py.gz",
+      "bytes": 1230,
+      "sha256": "f9b8042896428164a7d1e34b069cbe71802277fe07196e4e885c172d5451fa22"
+    },
+    {
+      "path": "zh/automatic-full-audit.json.gz",
+      "bytes": 25147,
+      "sha256": "ff9bc7dfb67bb7105f485f298d71916159a3c2ce471f05bfa6a090d7a8f11e48"
+    },
+    {
+      "path": "zh/dense-review.json.gz",
+      "bytes": 3336,
+      "sha256": "d908ebf392537bb4fc56210a250a70005918e5dd64ef0c37d425c8c9da8af18f"
+    },
+    {
+      "path": "zh/focused-review.json.gz",
+      "bytes": 24599,
+      "sha256": "fdb45f54af9601010196d61956d9a75fe0b9401f157091ae5d92cbe3ddb82515"
+    },
+    {
+      "path": "zh/frozen-plan.json.gz",
+      "bytes": 27906,
+      "sha256": "427d9cfc397d83d62270e550871388753219c383c1d74eb00bc1f9758919d402"
+    },
+    {
+      "path": "zh/render-record.json.gz",
+      "bytes": 15794,
+      "sha256": "b732028ead8b5f8c3b7f356d3ed2bd24f068ebdd70d9f8c61de55bf5627a7fd9"
+    }
+  ]
+}

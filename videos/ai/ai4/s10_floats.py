@@ -12,7 +12,7 @@ from videos.ai.ai4.common import GRAD, HIST, MONO, PART, VALUE, bits_bar, load, 
 
 FMT_COL = {"fp32": WHITE, "bf16": C.TRUE_P, "fp16": C.BITS, "e5m2": C.SURPRISE, "e4m3": GRAD}
 FMT_NAME = {"fp64": r"float64", "fp32": r"float32", "bf16": r"bfloat16", "fp16": r"float16", "e5m2": r"FP8 E5M2",
-            "e4m3": r"FP8 E4M3"}
+            "e4m3": r"FP8 E4M3FN"}
 
 
 def big(x: float) -> str:
@@ -39,20 +39,21 @@ class Floats(VoiceoverScene):
         d = load("floats")
         info = d["info"]
         hist = history_card(1985, r"IEEE 754, \ designed largely by William Kahan",
-                            r"one standard for binary floating point, \ so every computer rounds alike", width=5.6,
+                            r"specified basic operations, formats and rounding modes; \ operation order still matters", width=5.6,
                             font_size=19, color=HIST).to_corner(UL, buff=0.3)
         form = MathTex(r"x = (-1)^{\,s} \times 1.m_1 m_2 \dots \times 2^{\,e - \text{bias}}", font_size=34)
         form.next_to(hist, RIGHT, buff=0.5).align_to(hist, UP).shift(DOWN * 0.2)
+        normal = label(r"normal, finite numbers", font_size=20, color=GREY_B).next_to(form, DOWN, buff=0.12)
         keys = VGroup(label(r"sign", font_size=20, color=C.SIGN_BIT), label(r"exponent: \ range", font_size=20, color=C.EXP_BIT),
                       label(r"mantissa: \ precision", font_size=20, color=C.MAN_BIT)).arrange(RIGHT, buff=0.4)
-        keys.next_to(form, DOWN, buff=0.3)
+        keys.next_to(normal, DOWN, buff=0.18)
         rows = VGroup()
         for k in ("fp32", "bf16", "fp16", "e5m2", "e4m3"):
             i = info[k]
             bar = bits_bar(1, i["exp"], i["man"], unit=0.17, height=0.36)
             nm = label(FMT_NAME[k], font_size=22, color=FMT_COL[k])
-            stats = label(rf"${i['exp']}$ and ${i['man']}$ bits \quad largest ${big(i['max'])}$ \quad "
-                          rf"$\approx {i['digits']:.1f}$ digits", font_size=20, color=GREY_A)
+            stats = label(rf"${i['exp']}$ exponent, ${i['man']}$ mantissa bits \\ largest ${big(i['max'])}$; \ "
+                          rf"$\approx {i['digits']:.1f}$ normal digits", font_size=19, color=GREY_A)
             rows.add(VGroup(nm, bar, stats))
         for r in rows:
             r[0].move_to([-5.4, 0, 0], aligned_edge=LEFT)
@@ -63,21 +64,25 @@ class Floats(VoiceoverScene):
             r[0].set_x(-6.6 + r[0].width / 2)
             r[1].set_x(-4.4 + r[1].width / 2)
             r[2].set_x(1.5 + r[2].width / 2)
-        rows.to_edge(DOWN, buff=0.4)
+        rows.to_edge(DOWN, buff=0.7)
+        special = label(r"E4M3FN: \ finite values and NaN, \ no infinities", font_size=18, color=GREY_B)
+        special.to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Every number in this series so far has been a float. In 1985 one standard, IEEE 754, designed largely by "
-            "William Kahan, fixed how computers store and round them, so that every machine would give the same "
-            "answer. <bookmark mark='a'/> A float is a sign, an exponent and a mantissa: one point the mantissa, "
+            "William Kahan, specified basic operations and rounding. The same format, operation and rounding "
+            "mode agree; changing the order or fusing operations can change a program's answer. "
+            "<bookmark mark='a'/> A normal finite float has a sign, an exponent and a mantissa: one point the mantissa, "
             "times two to the exponent. Exponent bits buy range; mantissa bits buy precision. <bookmark mark='b'/> "
             "Float32 has eight and twenty-three. Bfloat16 keeps float32's eight exponent bits and only seven for the "
             "mantissa; float16 has five and ten; and the eight-bit formats of 2022 have four and three, or five and "
-            "two."
+            "two. The E4M3 finite variant shown here reserves NaN but has no infinities."
         ) as vo:
             self.play(FadeIn(hist, shift=UP * 0.2), Write(form))
             vo.wait_until("a")
-            self.play(FadeIn(keys), Indicate(form, color=WHITE, scale_factor=1.04))
+            self.play(FadeIn(normal), FadeIn(keys), Indicate(form, color=WHITE, scale_factor=1.04))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in rows], lag_ratio=0.35), run_time=2.5)
+            self.play(FadeIn(special))
         self.wait(0.3)
         self.clear_scene()
 
@@ -86,32 +91,53 @@ class Floats(VoiceoverScene):
         d = load("floats")
         info = d["info"]
         xs = np.asarray(d["xs"])
-        g = log_axes((-8, 6), (-14, 4), x_length=7.4, y_length=5.0, xlabel=r"the number $x$",
+        format_keys = ("fp32", "bf16", "fp16", "e5m2", "e4m3")
+        finite_logs = np.concatenate([np.log10(np.asarray(d[f"ulp_{k}"])[
+            np.isfinite(d[f"ulp_{k}"]) & (np.asarray(d[f"ulp_{k}"]) > 0)]) for k in format_keys])
+        ylo = min(-14, math.floor(float(finite_logs.min())))
+        yhi = max(4, math.ceil(float(finite_logs.max())))
+        g = log_axes((-8, 6), (ylo, yhi), x_length=7.4, y_length=5.0, xlabel=r"the number $x$",
                      ylabel=r"the gap to the next float, \ $\mathrm{ulp}(x)$", center=[-2.4, -0.3, 0], xstep=2, ystep=3)
         ax = g.ax
         lines = VGroup()
         for k in ("fp32", "bf16", "fp16", "e5m2", "e4m3"):
             u = np.asarray(d[f"ulp_{k}"])
             ok = np.isfinite(u) & (u > 0)
-            yy = np.clip(np.log10(u[ok]), -14, 4)
+            yy = np.log10(u[ok])
             lines.add(curve(ax, np.log10(xs[ok]), yy, FMT_COL[k], 3))
         leg = legend([(FMT_COL[k], FMT_NAME[k]) for k in ("fp32", "bf16", "fp16", "e5m2", "e4m3")], font_size=20)
         leg.move_to([4.9, 1.6, 0])
         dc = definition_card(r"ulp: \ unit in the last place",
-                             r"the gap between a float and the next one up; \ rounding to nearest is off by at most "
-                             r"half an ulp, \ a relative error of at most $2^{-(m+1)}$ with $m$ mantissa bits",
-                             width=5.0, font_size=19).move_to([4.6, -1.5, 0])
+                             r"the gap to the next float. \\ "
+                             r"Round to nearest; normal finite range, \\ "
+                             r"without overflow: \\ "
+                             r"relative error $\le 2^{-(m+1)}$ ($m$ mantissa bits). \\ "
+                             r"Subnormals: fixed absolute spacing; \\ "
+                             r"absolute rounding error $\le \tfrac12$ that spacing.",
+                             width=5.0, font_size=20).move_to([4.25, -1.5, 0])
+        min_normal = float(info["fp16"]["min_normal"])
+        sub_gap = float(info["fp16"]["min_sub"])
+        boundary = DashedLine(ax.c2p(math.log10(min_normal), ylo),
+                              ax.c2p(math.log10(min_normal), math.log10(sub_gap) + 1), color=C.BITS, stroke_width=1.5)
+        sub = label(r"float16: \ subnormal gap $2^{-24}$; \ normal from $2^{-14}$", font_size=18, color=C.BITS)
+        sub.next_to(g, DOWN, buff=0.12).align_to(g, LEFT)
+        semantics = label(r"enumerated format spacing; \ device arithmetic may flush subnormals to zero; \ "
+                          r"undefined end-of-format gaps omitted", font_size=16, color=GREY_B).to_edge(DOWN, buff=0.1)
         with self.voiceover(
             "The gap between neighbouring floats, the unit in the last place, grows with the number itself: a "
-            "staircase, one step per power of two. So the relative precision is the same everywhere: about "
+            "staircase, one step per power of two in the normal range. Normal relative precision is about "
             f"{info['fp32']['digits']:.1f} decimal digits in float32, {info['bf16']['digits']:.1f} in bfloat16. "
-            f"<bookmark mark='a'/> And each format ends somewhere. Float16 stops at {info['fp16']['max']:,.0f}, the "
-            f"four-bit-exponent FP8 at {info['e4m3']['max']:,.0f}, while bfloat16 reaches as far as float32. That is why bfloat16, Google's format for its "
-            "TPUs, trains without the loss scaling float16 needs. Part 17 covers the hardware, and Part 19 how "
+            "Below the smallest normal number, subnormals instead have a fixed absolute gap: two to the minus "
+            "twenty-four for float16. Relative error can then grow to one on underflow. The plot enumerates format "
+            "values; some device arithmetic flushes subnormals to zero. "
+            f"<bookmark mark='a'/> Each format also ends somewhere. Float16 stops at {info['fp16']['max']:,.0f}, the "
+            f"four-bit-exponent FP8 at {info['e4m3']['max']:,.0f}, while bfloat16 keeps float32's exponent range. That is why bfloat16, Google's format for its "
+            "TPUs, usually avoids the loss scaling often needed with float16. Part 17 covers the hardware, and Part 19 how "
             "models are squeezed into fewer bits still."
         ) as vo:
             self.play(FadeIn(g))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(leg), run_time=3.0)
+            self.play(Create(boundary), FadeIn(sub), FadeIn(semantics))
             vo.wait_until("a")
             self.play(FadeIn(dc, shift=UP * 0.2))
         self.wait(0.3)
@@ -147,8 +173,9 @@ class Floats(VoiceoverScene):
             f"should be 100. <bookmark mark='b'/> Float32 gets {ends['fp32']:.3f}. <bookmark mark='c'/> Float16 "
             f"stalls at {ends['fp16']:g}, and bfloat16 at {ends['bf16']:g}: once the sum is big enough, the gap "
             "between floats is more than twice 0.01, and every addition rounds back to where it was. "
-            "<bookmark mark='d'/> Keep the numbers in bfloat16 but the sum in float32, as the matrix units of GPUs "
-            f"do, and you get {ends['bf16_fp32acc']:.2f}, because 0.01 itself was rounded to {tenth:.6f}."
+            "<bookmark mark='d'/> In this experiment, keep each input in bfloat16 and accumulate sequentially in "
+            f"float32: {ends['bf16_fp32acc']:.2f}, because 0.01 itself was rounded to {tenth:.6f}. "
+            "Mixed-precision matrix units use the same wider-accumulation idea; their reduction order can differ."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(e) for e in exs], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("a")
@@ -169,7 +196,7 @@ class Floats(VoiceoverScene):
             cmath(r"\log \textstyle\sum_i e^{z_i}", r"=", r"m + \log \textstyle\sum_i e^{z_i - m}", font_size=36),
             cmath(r"z_i - m \le 0", r"\;\Rightarrow\;", r"\text{no overflow; \ one term is } e^0 = 1", font_size=34),
         ]
-        whys = [why(r"$m = \max_i z_i$", font_size=22), why(r"the log of a product", font_size=22),
+        whys = [why(r"finite scores; \ $m = \max_i z_i$", font_size=22), why(r"the log of a product", font_size=22),
                 why(r"so the sum is at least $1$", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=1.2, x=-2.6, buff=0.45, edge=6.9)
         z = [int(v) for v in d["lse_z"]]
@@ -197,8 +224,9 @@ class Floats(VoiceoverScene):
             "and ninety-nine and nine hundred and ninety-eight become infinities, and the probabilities become not a "
             "number. <bookmark mark='b'/> The fix is to subtract the largest score first. The log of a sum of "
             "exponentials is the maximum, <bookmark mark='c'/> plus the log of a sum in which every exponent is at "
-            "most zero. <bookmark mark='d'/> Nothing overflows, and the largest term is exactly one, so the sum "
-            "can't vanish either. <bookmark mark='e'/> The same three scores now give clean probabilities, and our "
+            "most zero. <bookmark mark='d'/> For finite scores, no shifted exponential overflows, and the largest "
+            "term is exactly one, so the sum can't vanish either. Very small terms may underflow harmlessly to zero. "
+            "<bookmark mark='e'/> The same three scores now give clean probabilities, and our "
             "library's log-softmax does exactly this, in its first line."
         ) as vo:
             self.play(FadeIn(naive[0]))

@@ -91,20 +91,24 @@ class Derivative(VoiceoverScene):
     def tangent(self):
         ax, curve, lab = self.axes()
         p0 = 0.25
-        h = ValueTracker(0.45)
+        h = ValueTracker(0.30)
+        k = ds(p0)
+        # The derivative fixes one tangent. A secant through the exact new
+        # curve value would hide the very approximation error shown here.
+        crossings = [p0 + (y - s(p0)) / k for y in (0, 6)]
+        x0, x1 = max(0.05, min(crossings)), min(0.95, max(crossings))
+        tangent = Line(ax.c2p(x0, s(p0) + k * (x0 - p0)),
+                       ax.c2p(x1, s(p0) + k * (x1 - p0)), color=GRAD, stroke_width=3)
 
-        def secant():
-            a, b = p0, p0 + h.get_value()
-            k = (s(b) - s(a)) / (b - a)
-            x0, x1 = 0.05, 0.95
-            # Keep the secant inside the plotted y-range as it approaches the
-            # tangent; its negative extension used to cross the slide's edge.
-            crossings = [a + (y - s(a)) / k for y in (0, 6)]
-            x0, x1 = max(x0, min(crossings)), min(x1, max(crossings))
-            return VGroup(Line(ax.c2p(x0, s(a) + k * (x0 - a)), ax.c2p(x1, s(a) + k * (x1 - a)), color=GRAD, stroke_width=3),
-                          Dot(ax.c2p(b, s(b)), radius=0.06, color=GRAD))
+        def samples():
+            b = p0 + h.get_value()
+            actual = ax.c2p(b, s(b))
+            predicted = ax.c2p(b, s(p0) + k * h.get_value())
+            return VGroup(Line(predicted, actual, color=GREY_A, stroke_width=3),
+                          Dot(actual, radius=0.06, color=C.SURPRISE),
+                          Dot(predicted, radius=0.06, color=GRAD))
 
-        sec = always_redraw(secant)
+        points = always_redraw(samples)
         d0 = glow_dot(ax.c2p(p0, s(p0)), color=WHITE, radius=0.07, layers=3)
         hl = always_redraw(lambda: MathTex(rf"h = {h.get_value():.3f}", font_size=34, color=GRAD).move_to([3.4, -2.6, 0]))
         colors = {r"f(x + h)": VALUE, r"f(x)": VALUE, r"f'(x)": GRAD, "h": GRAD}
@@ -112,18 +116,22 @@ class Derivative(VoiceoverScene):
         f.move_to([3.4, 1.4, 0])
         what = label(r"the best straight-line description \\ of a function, near one point", font_size=28,
                      color=GREY_A).next_to(f, DOWN, buff=0.4)
+        legend = VGroup(label(r"curve value $f(x+h)$", font_size=24, color=C.SURPRISE),
+                        label(r"linear prediction $f(x)+f'(x)h$", font_size=24, color=GRAD),
+                        label(r"gap: approximation error", font_size=22, color=GREY_A))
+        legend.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -1.1, 0])
         with self.voiceover(
             "Written down: f at x plus a small step h, is about f of x, plus the derivative times h. "
             "<bookmark mark='a'/> The smaller the step, the better the guess. A derivative is the best straight-line "
             "description of a function, near one point."
         ) as vo:
             self.play(Create(ax), Create(curve), FadeIn(lab), FadeIn(d0))
-            self.add(sec, hl)
+            self.add(tangent, points, hl, legend)
             self.play(Write(f))
             vo.wait_until("a")
             self.play(h.animate.set_value(0.004), run_time=3.0, rate_func=smooth)
             self.play(FadeIn(what))
-        sec.clear_updaters()
+        points.clear_updaters()
         hl.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -150,7 +158,9 @@ class Derivative(VoiceoverScene):
         l_best = label(rf"$s = f'(x)$: \ slope ${d['slope']:.2f}$", font_size=22, color=GRAD)
         l_best.next_to(ax.c2p(-3.2, np.log10(err[8])), DR, buff=0.1)
         l_bad = label(rf"$s$ off by $10\%$: \ slope ${d['slope_bad']:.2f}$", font_size=22, color=C.SURPRISE)
-        l_bad.next_to(ax.c2p(-2.9, float(np.interp(-2.9, np.log10(hs), np.log10(bad)))), UL, buff=0.2)
+        # Keep the annotation inside the plot, clear of both the y-axis and
+        # the measured red curve instead of hanging it across the axis.
+        l_bad.move_to(ax.c2p(-3.8, -1.8), aligned_edge=UL)
         tag = note(r"computed: \ Part 1's surprise at $p = \tfrac14$").next_to(g, DOWN, buff=0.1).align_to(g, RIGHT)
         with self.voiceover(
             "The idea is Leibniz's, in print in 1684, and Newton's, who had worked it out in the 1660s and called it "
@@ -231,9 +241,14 @@ class Derivative(VoiceoverScene):
         ivs = []
         for k, (lo, hi) in enumerate([(x0, x0 + dx), (g(x0), g(x0 + dx)), (f(g(x0)) / 6, f(g(x0 + dx)) / 6)]):
             ivs.append(Line(lines[k].n2p(lo), lines[k].n2p(hi), color=[VALUE, C.BITS, GRAD][k], stroke_width=12))
-        stretch = VGroup(MathTex(r"\times g'(1) = 2", font_size=34, color=C.BITS).move_to([5.2, 0.15, 0]),
-                         MathTex(r"\times f'(1) = e", font_size=34, color=GRAD).move_to([5.2, -1.35, 0]))
-        scale_note = label(r"(the last line is drawn $6$ times smaller)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
+        stretch = VGroup(MathTex(r"g'(1) = 2", font_size=34, color=C.BITS).move_to([5.2, 0.15, 0]),
+                         MathTex(r"f'(1) = e", font_size=34, color=GRAD).move_to([5.2, -1.35, 0]))
+        # The pictured intervals are finite, so their secant stretches are not
+        # exactly the derivatives 2 and e. The displayed factors are limits.
+        local = label(r"local stretch factors as the step $\to 0$", font_size=22, color=GREY_A)
+        local.move_to([3.4, -2.85, 0])
+        scale_note = label(r"finite intervals shown; \ the last line is drawn $6$ times smaller", font_size=22,
+                           color=GREY_B).to_edge(DOWN, buff=0.3)
         notation = label(r"$f'$: \ the slope of $f$; \quad $f(g(x))$: \ do $g$ first, then $f$", font_size=28,
                          color=GREY_A).move_to([0.4, 1.7, 0])
         conn = VGroup(*[Line(ivs[k].get_center(), ivs[k + 1].get_center(), color=GREY_B, stroke_width=1.5,
@@ -253,7 +268,7 @@ class Derivative(VoiceoverScene):
                 vo.wait_until(mark)
                 self.play(FadeOut(q, scale=0.5), Write(VGroup(*r[2:])))
             self.play(FadeIn(notation))
-            self.play(Create(lines), FadeIn(names), FadeIn(scale_note))
+            self.play(Create(lines), FadeIn(names), FadeIn(scale_note), FadeIn(local))
             self.play(Create(ivs[0]))
             self.play(TransformFromCopy(ivs[0], ivs[1]), Create(conn[0]), FadeIn(stretch[0]))
             self.play(TransformFromCopy(ivs[1], ivs[2]), Create(conn[1]), FadeIn(stretch[1]))

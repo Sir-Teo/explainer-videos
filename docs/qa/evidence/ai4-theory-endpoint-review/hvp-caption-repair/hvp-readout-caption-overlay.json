@@ -1,0 +1,20 @@
+{
+  "strings": {
+    "step $0$: loss $1.0566$; training accuracy $30\\%$": "步数 $0$：损失 $1.0566$；训练准确率 $30\\%$",
+    "$\\rho(H)=0.955$; high-positive $56$; negative $72$; near-zero $60\\%$": "$\\rho(H)=0.955$；高正值 $56$；负值 $72$；近零 $60\\%$",
+    "step $30$: loss $0.3859$; training accuracy $79\\%$": "步数 $30$：损失 $0.3859$；训练准确率 $79\\%$",
+    "$\\rho(H)=2.18$; high-positive $5$; negative $21$; near-zero $84\\%$": "$\\rho(H)=2.18$；高正值 $5$；负值 $21$；近零 $84\\%$",
+    "step $100$: loss $0.0853$; training accuracy $99\\%$": "步数 $100$：损失 $0.0853$；训练准确率 $99\\%$",
+    "$\\rho(H)=2$; high-positive $5$; negative $1$; near-zero $92\\%$": "$\\rho(H)=2$；高正值 $5$；负值 $1$；近零 $92\\%$",
+    "step $300$: loss $0.0036$; training accuracy $100\\%$": "步数 $300$：损失 $0.0036$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.348$; high-positive $5$; negative $0$; near-zero $94\\%$": "$\\rho(H)=0.348$；高正值 $5$；负值 $0$；近零 $94\\%$",
+    "step $1{,}000$: loss $0.0003$; training accuracy $100\\%$": "步数 $1{,}000$：损失 $0.0003$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.0505$; high-positive $4$; negative $0$; near-zero $94\\%$": "$\\rho(H)=0.0505$；高正值 $4$；负值 $0$；近零 $94\\%$",
+    "step $3{,}000$: loss $0.0000$; training accuracy $100\\%$": "步数 $3{,}000$：损失 $0.0000$；训练准确率 $100\\%$",
+    "$\\rho(H)=0.00655$; high-positive $4$; negative $0$; near-zero $95\\%$": "$\\rho(H)=0.00655$；高正值 $4$；负值 $0$；近零 $95\\%$"
+  },
+  "scope": "Exact 12 missing HVP nested readout captions from actual EN endpoint warning keys; private proposal for root merge",
+  "source_render_result_sha256": "514b72d4195989229b0e78865dc854b9501784ae3e5757c927b70784664dd569",
+  "source_module_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+  "TeX_policy": "Original math substrings and command sequences preserved exactly; no double escaping introduced."
+}

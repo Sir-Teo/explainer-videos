@@ -1,0 +1,251 @@
+{
+  "scope": "Repository receipt only for six existing distinct Library-created chapter groups; no ZIP/movie copies, upload, attachment, replacement retry or commit by this receipt task",
+  "captured_utc": "2026-10-31T22:47:56.939364+00:00",
+  "source_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "authoritative_case_map_sha256": "7cca99a8ce8a27f460fdd85ad273ace41ac757f1cd99abbdd04e51ad190d59b6",
+  "library_identity_raw_sha256": "24b91c958e98fe205506aca6b72ee9ffff6a339f91f4a6f4f95e79bc5cdc1d19",
+  "groups": [
+    {
+      "lang": "en",
+      "group": 1,
+      "manifest_positions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cases": 5,
+      "file_name": "AI-Built-Part3-English-Group01-Positions01-05-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group01-Positions01-05-Silent-20261031.zip",
+      "zip_bytes": 11425083,
+      "zip_sha256": "74d92aaf8f3e46cd47864ebfce6ca8fe811458ca4aeef9b7c810958e9ac59c71",
+      "manifest_sha256": "baf430f0f1b95e5e643cc9a47051c734d674fb889643183eece469ab0caac45e",
+      "library_file_id": "libfile_fad5617c55588191a12e6dddbcd4a4d1",
+      "file_id": "file_00000000d74c81f68217fe8efef6e3e5",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    },
+    {
+      "lang": "en",
+      "group": 2,
+      "manifest_positions": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "cases": 7,
+      "file_name": "AI-Built-Part3-English-Group02-Positions06-12-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group02-Positions06-12-Silent-20261031.zip",
+      "zip_bytes": 12887254,
+      "zip_sha256": "3127c436b9821af4c0ac56e9dc081ac054a0c200880a5e66c95811b9367d34dc",
+      "manifest_sha256": "a9e46226df118a1e83470000cd2fb32bba0fd43a8b6edc63f620abefe2976b99",
+      "library_file_id": "libfile_21fb67e432c4819191e7f0194b7d0340",
+      "file_id": "file_00000000f25881f6a622f95d689950dd",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    },
+    {
+      "lang": "en",
+      "group": 3,
+      "manifest_positions": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "cases": 7,
+      "file_name": "AI-Built-Part3-English-Group03-Positions13-19-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group03-Positions13-19-Silent-20261031.zip",
+      "zip_bytes": 13017231,
+      "zip_sha256": "4b77fc76d87eb72ac9d3c7152ee0513d63ed771807c615445c3a36ea7143eb84",
+      "manifest_sha256": "bfdb0eaf63c8f3830a6344d15bb0cba0753d0ceaacc87ab2d67e9ebdc64c4947",
+      "library_file_id": "libfile_005c909e76908191a3eb95913de0f48f",
+      "file_id": "file_00000000e24081f6a9628dc19bf621dd",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    },
+    {
+      "lang": "zh",
+      "group": 1,
+      "manifest_positions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cases": 5,
+      "file_name": "AI-Built-Part3-Chinese-Group01-Positions01-05-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group01-Positions01-05-Silent-20261031.zip",
+      "zip_bytes": 11408339,
+      "zip_sha256": "e721cddfc9f6c5d7356b30001208f4cdf99f2d45b0f7ebb8e89644201711f4f5",
+      "manifest_sha256": "5f7b1da65ab40c637bbe6c1f2527570cf1e5483e034adc30bccbe83521bdb38f",
+      "library_file_id": "libfile_33593e9a82f08191b160c3b8495e26be",
+      "file_id": "file_00000000c68481f6a2e095b174b8da34",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    },
+    {
+      "lang": "zh",
+      "group": 2,
+      "manifest_positions": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "cases": 7,
+      "file_name": "AI-Built-Part3-Chinese-Group02-Positions06-12-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group02-Positions06-12-Silent-20261031.zip",
+      "zip_bytes": 13014502,
+      "zip_sha256": "3d6f84df68f01354e28d4c47315f9b7cff78ef53b197ef9a821419751c2c70ca",
+      "manifest_sha256": "bca1cf198d9a9114d930e7bfafe4a0432dd4f40bed7b1d8cfb6b5ce53f6480d5",
+      "library_file_id": "libfile_3f9fbe5076c48191bafc7a98b43ae441",
+      "file_id": "file_0000000047ec81f69d08dbe4b3d23c48",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    },
+    {
+      "lang": "zh",
+      "group": 3,
+      "manifest_positions": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "cases": 7,
+      "file_name": "AI-Built-Part3-Chinese-Group03-Positions13-19-Silent-20261031.zip",
+      "local_zip": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group03-Positions13-19-Silent-20261031.zip",
+      "zip_bytes": 13085654,
+      "zip_sha256": "59b29a169243beb377f3b55ee981160e4144081b681332ba414b68d1327808b5",
+      "manifest_sha256": "0fa206c890059eae60ae4eb9bf31a75d36a8fbfd1c335d161db319fabeb063b6",
+      "library_file_id": "libfile_cfff1436cf5c8191923202e3d90e5aa8",
+      "file_id": "file_000000005ac081f6a508e66bfb70a531",
+      "library_version": 0,
+      "library_create_status": "succeeded",
+      "local_library_version_xattr_readback": "0",
+      "native_attachment_status": "pending",
+      "upload_scope": "Parent already created distinct version0 Library files. This receipt task performs no upload or attachment."
+    }
+  ],
+  "all38cases_once_in_manifest_order": true,
+  "original_packages_preserved": true,
+  "all_group_sizes_and_SHA_reverified_after_xattrs": true,
+  "all_six_local_version0_xattrs_read_back": true,
+  "library_creation_source": "Preserved actual create_library_file response JSON, independently matched to exact local ZIP sizes/hashes.",
+  "native_delivery_source": "Parent latest checkpoint explicitly reports native attachment pending for all six. No delivery success inferred from Library save.",
+  "old_failed_replacement": "These are distinct new version0 create operations; the old401replacement was not retried.",
+  "retained_payloads": [
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/handoff.json",
+      "original_sha256": "1952a4487b1caf0d95a4e72bd6f46abf8d4eed43c46543a3723ab4ae02f2ee2b",
+      "retained": "handoff.json.gz",
+      "retained_sha256": "7a918e89eccdba4a864e90f1ea26c0b666a1a6313af2789efb67f3d777dc21a2"
+    },
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/independent-verification.json",
+      "original_sha256": "1558b13e387ad6a68d9e67a2c20385c1f67fff5167acf97401c5cfd96d86d2a3",
+      "retained": "independent-verification.json.gz",
+      "retained_sha256": "77f7b803961fb3c2010f79ec56e8df79fb06226326e6663e667cd837a9c0de00"
+    },
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/receipts.json",
+      "original_sha256": "e2135be8002365ef896b8d510e69d44416e4ad62b5700f401f7445677feb2e73",
+      "retained": "receipts.json.gz",
+      "retained_sha256": "41fdb26466ba26a5dab953d1425d614fcf6890a2386d2cb55c8ec11e825d118a"
+    },
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/plan.json",
+      "original_sha256": "c7d6a5e804d348c8e774c00099d3e3b2454ed82fa354a211f2e5a8aaad9b3e51",
+      "retained": "plan.json.gz",
+      "retained_sha256": "ce2aebb6bdcbaa29fed7b00daa68607f277a575f68733902e8778836ef042455"
+    },
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/build.log",
+      "original_sha256": "821714069b0fe7d36fd66de12ef44d352c7dc842cc3f3759037f4f4aab8ea8a5",
+      "retained": "build.log.gz",
+      "retained_sha256": "2329c16e0d5fcacfa0c7ce5be5d59138a04f0b0fcf8e28f645374e27e6b20f91"
+    },
+    {
+      "original": "/workspace/runtime/ai3-chapter-group-packaging/build_groups.py",
+      "original_sha256": "3202afd115b9658e5cc4e9d714e6dff825a176aaa545bebccc2bac188496c2aa",
+      "retained": "build_groups.py.gz",
+      "retained_sha256": "dbefa871a87ffc6a0cf31d27f9ea514b73fa50ad2ca0867ac56b393eea58fdd5"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group01-Positions01-05-Silent-20261031/manifest.json",
+      "original_sha256": "baf430f0f1b95e5e643cc9a47051c734d674fb889643183eece469ab0caac45e",
+      "retained": "manifests/en-group01.json.gz",
+      "retained_sha256": "e17aac0ade7d8aaec9a1eb6fdcf42370606f64af0695023ce11fe2ea61a9eecc"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group02-Positions06-12-Silent-20261031/manifest.json",
+      "original_sha256": "a9e46226df118a1e83470000cd2fb32bba0fd43a8b6edc63f620abefe2976b99",
+      "retained": "manifests/en-group02.json.gz",
+      "retained_sha256": "ecf4e142b9c8f01c876a67a52ab1c7fa8ec9fdb5225ab2d6eb38ef60e630cb9b"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-English-Group03-Positions13-19-Silent-20261031/manifest.json",
+      "original_sha256": "bfdb0eaf63c8f3830a6344d15bb0cba0753d0ceaacc87ab2d67e9ebdc64c4947",
+      "retained": "manifests/en-group03.json.gz",
+      "retained_sha256": "a7b64e78f53c0968c7306ffd745aae523fe2eb8e9838e0856da191fab2a796ff"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group01-Positions01-05-Silent-20261031/manifest.json",
+      "original_sha256": "5f7b1da65ab40c637bbe6c1f2527570cf1e5483e034adc30bccbe83521bdb38f",
+      "retained": "manifests/zh-group01.json.gz",
+      "retained_sha256": "eacd6328f8e81aa4e42c7a86f85b3a2c94bba3ad6601fbf764690198f39ec644"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group02-Positions06-12-Silent-20261031/manifest.json",
+      "original_sha256": "bca1cf198d9a9114d930e7bfafe4a0432dd4f40bed7b1d8cfb6b5ce53f6480d5",
+      "retained": "manifests/zh-group02.json.gz",
+      "retained_sha256": "807f663461a80827979085ba74c8230e976431a8f414d0b829780feb43ae4013"
+    },
+    {
+      "original": "/workspace/explainer-videos/renders/qa/current-review/AI-Built-Part3-Chinese-Group03-Positions13-19-Silent-20261031/manifest.json",
+      "original_sha256": "0fa206c890059eae60ae4eb9bf31a75d36a8fbfd1c335d161db319fabeb063b6",
+      "retained": "manifests/zh-group03.json.gz",
+      "retained_sha256": "2784ab4c59a4aaa345e42f1b2e1fb7136fc2aa056ca427811b46f691c6be45f1"
+    }
+  ],
+  "limits": [
+    "Silent 854×480 chapter previews at nominal15fps; existing original MP4 bytes are copied exactly, without transcode or data computation. Audio tracks are silent timing placeholders, not synthesized narration.",
+    "Included chapters are a contiguous manifest-order subset. Other groups contain the remaining chapters. Group boundaries use 1-based manifest positions (Hook is position1); numbered scene titles keep their original numbering.",
+    "Individual chapter selected-time/native-endpoint reviews are separate from raw runtime statuses. Brief defects can occur between selected times; no uninterrupted perceptual playback, listening or full1080p motion approval is claimed.",
+    "Final full-part silent concatenation and all36 selected join windows were checked separately; these packages contain individual chapter clips, not a new assembly or a narrated production export.",
+    "Original source-change warnings and provenance limits remain unchanged. Packaging hashes verify retained bytes, not historical renderer imports or original data consumption beyond the preserved evidence.",
+    "This chapter-group edition omits most endpoint PNGs, contact sheets and complete review ledgers. Original full bundle,37MB language packages,sampler and repository evidence remain preserved.",
+    "Every playback asset is local within this archive. Static index/authority assets are included once per group. Local link/hash/ZIP checks do not establish browser/player compatibility or responsive layout. No upload is performed by this builder."
+  ]
+}

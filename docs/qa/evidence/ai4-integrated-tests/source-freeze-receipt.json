@@ -1,0 +1,9 @@
+{
+  "tests": 352,
+  "seconds": 43.542,
+  "exit_code": 0,
+  "source_freeze_sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059",
+  "global_caption_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+  "log_sha256": "02ac92583398b8f6e9f54b736709d27f9d6cd4dabf6c6632bfd132845972eef9",
+  "scope": "Complete repository suite after endpoint-derived card/unit/caption fixes, before the subsequently found Derivative tangent-versus-secant motion repair. That later change requires separate regression."
+}

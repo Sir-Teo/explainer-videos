@@ -183,13 +183,13 @@ class Backprop(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(rows[0], color=GRAD, scale_factor=1.05), cols_[2].animate.set_color(GRAD))
             vo.wait_until("b")
-            step(1)
+            step(1, transform=False)
             self.play(w2.animate.set_color(GRAD), run_time=0.6)
             vo.wait_until("c")
-            step(2)
+            step(2, transform=False)
             self.play(cols_[1].animate.set_color(GRAD), run_time=0.6)
             vo.wait_until("d")
-            step(3)
+            step(3, transform=False)
             self.play(w1.animate.set_color(GRAD), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
@@ -213,23 +213,28 @@ class Backprop(VoiceoverScene):
         n_nonzero = int((sv1 > 1e-10 * sv1[0]).sum())
         rank_b = int((svB > 1e-10 * svB[0]).sum())
         res = VGroup(
-            label(rf"one example: \ singular values ${sv1[0]:.3f}$, \ then ${sci(max(sv1[1], 1e-20), 0)}$ and below",
+            label(rf"one example: \ singular values ${sv1[0]:.3f}$, \ then ${sci(sv1[1], 0)}$ and below",
                   font_size=24, color=GREY_A),
             label(rf"rank ${n_nonzero}$: \ every row is a multiple of $x^\top$", font_size=24, color=GRAD),
-            label(rf"a batch of ${B}$: \ the sum of ${B}$ such matrices, \ rank ${rank_b}$", font_size=24, color=GREY_A),
-            label(rf"by hand \ vs \ our library: \ ${sci(max(m['d_lib'], 1e-17), 0)}$", font_size=24, color=GRAD),
-            label(rf"by hand \ vs \ PyTorch: \ ${sci(max(m['d_torch'], 1e-17), 0)}$", font_size=24, color=GRAD),
+            label(rf"a batch of ${B}$: \ rank ${rank_b} \le \min({B}, {dh}, {din})$", font_size=24, color=GREY_A),
+            label(rf"by hand \ vs \ our library: \ ${sci(m['d_lib'], 0)}$", font_size=24, color=GRAD),
+            label(rf"by hand \ vs \ PyTorch: \ ${sci(m['d_torch'], 0)}$", font_size=24, color=GRAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.9, -0.2, 0])
         keep_in_frame(res, margin=0.25)
         tag = note(rf"computed: \ a ${din}$--${dh}$--${k}$ network, \ ${B}$ examples").to_corner(DR, buff=0.3)
+        one_rank = ("one nonzero singular direction, up to rounding" if n_nonzero == 1 else
+                    "the zero outer product in this example" if n_nonzero == 0 else
+                    "a numerical rank that depends on the displayed tolerance")
+        batch_rank = ("the maximum for this shape" if rank_b == min(dh, din) else
+                      "below the maximum for this shape")
         with self.voiceover(
             "Here is that outer product for one example, computed: the error signal at the hidden layer, a column, "
             "times the input, a row. <bookmark mark='a'/> Every row of the result is a multiple of the same input, "
-            f"so the matrix has rank {n_nonzero}: one singular value, then nothing but rounding. "
-            f"<bookmark mark='b'/> A batch adds {B} of them, and here reaches rank {rank_b}, the most a "
-            f"{dh} by {din} matrix can have. That low-rank structure comes back when models are fine-tuned with "
+            f"so the matrix has rank at most one. Here its measured rank is {n_nonzero}: {one_rank}. "
+            f"<bookmark mark='b'/> A batch adds {B} such matrices, so its rank is at most the batch size and "
+            f"the matrix dimensions. Here it reaches rank {rank_b}, {batch_rank}. That structure comes back when models are fine-tuned with "
             "low-rank adapters in Part 27. <bookmark mark='c'/> And these hand-derived gradients match our library and "
-            "PyTorch to the last digits a computer keeps."
+            "PyTorch with the recorded maximum absolute differences shown here, including zero if they coincide."
         ) as vo:
             self.play(FadeIn(col), FadeIn(lc), FadeIn(row), FadeIn(lr), FadeIn(times), FadeIn(tag))
             self.play(LaggedStart(*[FadeIn(c) for c in out], lag_ratio=0.03), FadeIn(lo), run_time=1.6)

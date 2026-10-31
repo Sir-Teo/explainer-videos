@@ -1,0 +1,458 @@
+[
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/result.json",
+    "package": "en/Quadratic/result.json.gz",
+    "raw_sha256": "1b2ca332d7cf19df2a3a0bf38c95fe68776b7bed5c23b6b55f94335c1753eedd",
+    "raw_bytes": 73704,
+    "compressed_sha256": "d4ab6aa839204951c20e43693025ef742ad1a57e5ed44ca38c8d9bb39a99ce76",
+    "compressed_bytes": 13777
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/text.jsonl",
+    "package": "en/Quadratic/text.jsonl.gz",
+    "raw_sha256": "ea704377cb6cde164e73966afd400f37774a51adb426567d9fef3f42919740b9",
+    "raw_bytes": 6712,
+    "compressed_sha256": "53b2eb69c57308a387ebc898a73dba559e269b5246247937dd374370d0ee2cbd",
+    "compressed_bytes": 1185
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/render.log",
+    "package": "en/Quadratic/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/snapshot.json",
+    "package": "en/Quadratic/snapshot.json.gz",
+    "raw_sha256": "a8c3b789322ae23165713859150a8df82ddd7504b6ed380115f0b0d75b2f7f88",
+    "raw_bytes": 3430,
+    "compressed_sha256": "f947c906b8ccfe13d7f969249745625886fec77df3368e8d3dee4a973f1c47f4",
+    "compressed_bytes": 1371
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Quadratic/current-source.py",
+    "package": "en/Quadratic/current-source.py.gz",
+    "raw_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+    "raw_bytes": 18044,
+    "compressed_sha256": "629555abf88dabbf7ae47dfaac2780eeea13179c932514a6bf717401b9c881b2",
+    "compressed_bytes": 5948
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Lagrange/result.json",
+    "package": "en/Lagrange/result.json.gz",
+    "raw_sha256": "882071ab157882aff524c94dacfdc8856001eb535736597ac520f028a7aac688",
+    "raw_bytes": 73307,
+    "compressed_sha256": "b067abf951d5dc6b0f728a313c2a733ae0c6b0454a79e43cc5b32e29a74c5224",
+    "compressed_bytes": 13605
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Lagrange/text.jsonl",
+    "package": "en/Lagrange/text.jsonl.gz",
+    "raw_sha256": "dae2a7fa208146ff8bc6002efd651da1a4038576782b793360ce41f300b7ce71",
+    "raw_bytes": 8281,
+    "compressed_sha256": "8ef55e5bc2845624857259c4ebcb7a4105a7454f33cd2c00066de0730e81ae74",
+    "compressed_bytes": 1357
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Lagrange/render.log",
+    "package": "en/Lagrange/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Lagrange/snapshot.json",
+    "package": "en/Lagrange/snapshot.json.gz",
+    "raw_sha256": "d6fec0b3a78b678d7fa8548100783449a40a9678980f39a5fb1b3ab6ecfef3d8",
+    "raw_bytes": 3577,
+    "compressed_sha256": "f607eec25821557839e1bcdd1033d0c02d3cc0d96e29e8a9432c27b6149be024",
+    "compressed_bytes": 1413
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Lagrange/current-source.py",
+    "package": "en/Lagrange/current-source.py.gz",
+    "raw_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+    "raw_bytes": 14707,
+    "compressed_sha256": "d865b83bb72cd92b856f91a38438260cc77ebca9cac982cb3da0e578a5e45f06",
+    "compressed_bytes": 4852
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/KKT/result.json",
+    "package": "en/KKT/result.json.gz",
+    "raw_sha256": "3fb661ada9e3c7287d41be8abe87076cb8f7a811393ed5054247d6ed5a273912",
+    "raw_bytes": 64896,
+    "compressed_sha256": "dadd86fdb48acfdf1f1e8ebd2c6fbaa90290e54ccc4b343b905b341071d8967b",
+    "compressed_bytes": 13741
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/KKT/text.jsonl",
+    "package": "en/KKT/text.jsonl.gz",
+    "raw_sha256": "e99283afc91785900d0568f17b054c7f3e6ce0e7471d68c44d7711f25532b200",
+    "raw_bytes": 6850,
+    "compressed_sha256": "1d85910ee0da3ef1d2aa1c069071a0c1f2ae3658a412a8c467a8cfa86f848f1f",
+    "compressed_bytes": 1581
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/KKT/render.log",
+    "package": "en/KKT/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/KKT/snapshot.json",
+    "package": "en/KKT/snapshot.json.gz",
+    "raw_sha256": "33ac6ef99647dd32a9ecd9449a5e3634a2904daea65ab1a823073c738e21dbff",
+    "raw_bytes": 2964,
+    "compressed_sha256": "e1da218f9b496c8f7b300476cb1a20124163e5b8b2ea41799c5b46aaa3c981aa",
+    "compressed_bytes": 1205
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/KKT/current-source.py",
+    "package": "en/KKT/current-source.py.gz",
+    "raw_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+    "raw_bytes": 18234,
+    "compressed_sha256": "7cb14377f073fc4ee3496ba6e80e3563f47f0131b5079419a7b8d5db972745d3",
+    "compressed_bytes": 6040
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Implicit/result.json",
+    "package": "en/Implicit/result.json.gz",
+    "raw_sha256": "f4c404640bfa446a7fbb7982393ad61a1d86af0992eb221d73fe1e21787e7f14",
+    "raw_bytes": 68433,
+    "compressed_sha256": "904aa405cfa3a9cc1631bdf82a0cc755e5958e4ccecbe8a4ee68d68162cd4749",
+    "compressed_bytes": 11824
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Implicit/text.jsonl",
+    "package": "en/Implicit/text.jsonl.gz",
+    "raw_sha256": "5591801304025155d21d2406251180133c033d0f54d5584619b538c0130d1a2c",
+    "raw_bytes": 7055,
+    "compressed_sha256": "b83ebdd1300667395ce142b3b361e91dac013f9e46dcd0f1e7404bd4d1c3bef5",
+    "compressed_bytes": 1296
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Implicit/render.log",
+    "package": "en/Implicit/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Implicit/snapshot.json",
+    "package": "en/Implicit/snapshot.json.gz",
+    "raw_sha256": "ea9ad9a8d00e5778de3845eba2055fb03de46103e65788cadaaada21fba122a7",
+    "raw_bytes": 2665,
+    "compressed_sha256": "d77f3352d56d6d4d78fc2558dc4cf1c73f67df9266d8f3e6e549e0db111c1caa",
+    "compressed_bytes": 1104
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Implicit/current-source.py",
+    "package": "en/Implicit/current-source.py.gz",
+    "raw_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+    "raw_bytes": 16898,
+    "compressed_sha256": "8105c3b21224562343dbbcaab807f6cb7e7c9249f702131e2046501219aae9c1",
+    "compressed_bytes": 5425
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Outro/result.json",
+    "package": "en/Outro/result.json.gz",
+    "raw_sha256": "ae135fcdd01467e642b02dd8491e759d373e0694f0b1196b241c1aee82569359",
+    "raw_bytes": 47241,
+    "compressed_sha256": "06c0f9550b3296c40ad04ad3d2018ec23c2b0f1bf39d71f64f8e3fc61f82348e",
+    "compressed_bytes": 11776
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Outro/text.jsonl",
+    "package": "en/Outro/text.jsonl.gz",
+    "raw_sha256": "de36e36eda2e3f6cef0449eb15b7310752bce08ab9d0e49f582a886aac405ff7",
+    "raw_bytes": 8012,
+    "compressed_sha256": "1b05fc46ecbd5147eaae333359e50ca165b32b06e52b207ff918d8d8b6834f1c",
+    "compressed_bytes": 2461
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Outro/render.log",
+    "package": "en/Outro/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Outro/snapshot.json",
+    "package": "en/Outro/snapshot.json.gz",
+    "raw_sha256": "2d5a1caf7cffa2c5c0513d014802731a843d59d3817acd7d06e499bcb4eb987f",
+    "raw_bytes": 1752,
+    "compressed_sha256": "08353e9184a9814f0df5d1deb81e6bc4f864f1df413795dc076164be4d745e66",
+    "compressed_bytes": 786
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/en/Outro/current-source.py",
+    "package": "en/Outro/current-source.py.gz",
+    "raw_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+    "raw_bytes": 16025,
+    "compressed_sha256": "487deeef6ab62008be74aab6b9b74bbd09a36ee213c9deb7c378f67d11894a14",
+    "compressed_bytes": 6162
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Quadratic/result.json",
+    "package": "zh/Quadratic/result.json.gz",
+    "raw_sha256": "3c9db5130f07da7be3a74c0f3011789d7a2e48704da5f4d8a7bb4c95354435ab",
+    "raw_bytes": 91773,
+    "compressed_sha256": "951d9888c8342ada17b654d43a1dc2cfdf05bf276bd3da239f6cd89ee62f9021",
+    "compressed_bytes": 20929
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Quadratic/text.jsonl",
+    "package": "zh/Quadratic/text.jsonl.gz",
+    "raw_sha256": "57baca381f98c0733cd9fd575b618b59b4f797b716f2d087f8b25ec48fb3f603",
+    "raw_bytes": 6704,
+    "compressed_sha256": "bad50b3ad4b2afb40645f967800fe4037e6804449e2f041333049d5bfb0cd935",
+    "compressed_bytes": 1311
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Quadratic/render.log",
+    "package": "zh/Quadratic/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Quadratic/snapshot.json",
+    "package": "zh/Quadratic/snapshot.json.gz",
+    "raw_sha256": "4e06a1a32cc021e5b6c8888bdfc4c0ef420cd2dccf2e3d3e064ef58eb91af10e",
+    "raw_bytes": 3430,
+    "compressed_sha256": "b69a0dc3ea12177a2fa810ce66539d2f18959a049fa69337cbf0a7751cf38bc2",
+    "compressed_bytes": 1370
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Quadratic/current-source.py",
+    "package": "zh/Quadratic/current-source.py.gz",
+    "raw_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+    "raw_bytes": 18044,
+    "compressed_sha256": "629555abf88dabbf7ae47dfaac2780eeea13179c932514a6bf717401b9c881b2",
+    "compressed_bytes": 5948
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Lagrange/result.json",
+    "package": "zh/Lagrange/result.json.gz",
+    "raw_sha256": "2bd6b22c3878b6eb107325535781e2c184cf0bb1303ca94ba20b079e8f18ab18",
+    "raw_bytes": 93073,
+    "compressed_sha256": "5495f645a5a0b8540ef4d61c0f599e3210c4473814933f4b906224d6abf97da5",
+    "compressed_bytes": 20051
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Lagrange/text.jsonl",
+    "package": "zh/Lagrange/text.jsonl.gz",
+    "raw_sha256": "6a559af4195d0e6bc29232ae30761edd7859cb3bb3c290dec0dd5e527ee998c8",
+    "raw_bytes": 8207,
+    "compressed_sha256": "1d7d792cb617b0d9a97a68c9c392519e8cfe4abaddaab39693faad1d0c7ee893",
+    "compressed_bytes": 1480
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Lagrange/render.log",
+    "package": "zh/Lagrange/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Lagrange/snapshot.json",
+    "package": "zh/Lagrange/snapshot.json.gz",
+    "raw_sha256": "b0b0d3ebdb241de24815b69467bd581770b2c10b02100fede7d0f2c24970ef35",
+    "raw_bytes": 3577,
+    "compressed_sha256": "2c85e840c09e4815812139d4e8bc5dd03e0ed7a1b67ec3f851fea09d8c26286f",
+    "compressed_bytes": 1420
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Lagrange/current-source.py",
+    "package": "zh/Lagrange/current-source.py.gz",
+    "raw_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+    "raw_bytes": 14707,
+    "compressed_sha256": "d865b83bb72cd92b856f91a38438260cc77ebca9cac982cb3da0e578a5e45f06",
+    "compressed_bytes": 4852
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/KKT/result.json",
+    "package": "zh/KKT/result.json.gz",
+    "raw_sha256": "da78f96acf342f8dc437067cb2a2ea2ab98190b6344783f88fc304bb5100a302",
+    "raw_bytes": 86251,
+    "compressed_sha256": "7ce409f373972a10348d67fd274b63be36613ec4a03da603e780d942cd7260cd",
+    "compressed_bytes": 20685
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/KKT/text.jsonl",
+    "package": "zh/KKT/text.jsonl.gz",
+    "raw_sha256": "a2849bc4a967f7e5f980783be01e77b3b775a49a4eeb7e1952f3a89741ad8134",
+    "raw_bytes": 6851,
+    "compressed_sha256": "ffe2c0efe4e2e1dcc4d7109f79f5ce19fa45646de0fb976f7a5fc7198909ce4a",
+    "compressed_bytes": 1793
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/KKT/render.log",
+    "package": "zh/KKT/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/KKT/snapshot.json",
+    "package": "zh/KKT/snapshot.json.gz",
+    "raw_sha256": "bacef44943bc8c9e6d08c150f996fffabc2ea9850543944eb83d417b28e73078",
+    "raw_bytes": 2964,
+    "compressed_sha256": "bec2ac8ea4a9fffd43363c5f83dac86221cb36cdbe5e8cd2854c29e2624fea39",
+    "compressed_bytes": 1209
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/KKT/current-source.py",
+    "package": "zh/KKT/current-source.py.gz",
+    "raw_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+    "raw_bytes": 18234,
+    "compressed_sha256": "7cb14377f073fc4ee3496ba6e80e3563f47f0131b5079419a7b8d5db972745d3",
+    "compressed_bytes": 6040
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Implicit/result.json",
+    "package": "zh/Implicit/result.json.gz",
+    "raw_sha256": "cbbc331cc077135deb3e5eb6327d280dbab74611bc4a22b0685f810ce7a4b490",
+    "raw_bytes": 86093,
+    "compressed_sha256": "793db50c2c0074890a6e2ca9c378ab1b1740b8d934e59f970a75614b75764fb5",
+    "compressed_bytes": 18468
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Implicit/text.jsonl",
+    "package": "zh/Implicit/text.jsonl.gz",
+    "raw_sha256": "3ab6cf83ba4e4e1cf45b0ce771fc81b42a4514ca474aecccbf1708ca97692e47",
+    "raw_bytes": 6932,
+    "compressed_sha256": "bc290bdb597aaabdf7c9341fb5568abdb970be51fa0f62db2ec03e28577836bd",
+    "compressed_bytes": 1501
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Implicit/render.log",
+    "package": "zh/Implicit/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Implicit/snapshot.json",
+    "package": "zh/Implicit/snapshot.json.gz",
+    "raw_sha256": "398253c13a58225f0485b6a3160929f0a9e94ed27549518eb30b3a9eac34846d",
+    "raw_bytes": 2665,
+    "compressed_sha256": "b176b0b9877273dd56fe71c50bd2b7c91dff9f9274948bd4b246578549ccfac8",
+    "compressed_bytes": 1100
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Implicit/current-source.py",
+    "package": "zh/Implicit/current-source.py.gz",
+    "raw_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+    "raw_bytes": 16898,
+    "compressed_sha256": "8105c3b21224562343dbbcaab807f6cb7e7c9249f702131e2046501219aae9c1",
+    "compressed_bytes": 5425
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Outro/result.json",
+    "package": "zh/Outro/result.json.gz",
+    "raw_sha256": "13cb707a28e19112d27738d73a875be02873b0242b94257e06394282da2a52dc",
+    "raw_bytes": 65306,
+    "compressed_sha256": "44a17f214aa344b7109c7702a6212e91a94c49901a2b20c46ce0b1224ecbdb29",
+    "compressed_bytes": 18644
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Outro/text.jsonl",
+    "package": "zh/Outro/text.jsonl.gz",
+    "raw_sha256": "6377eb2cec65a0beb75c536b4bd7ae686c636893797c8d0e88be9be008b4abbe",
+    "raw_bytes": 8988,
+    "compressed_sha256": "d10986e9a09a5379afbd818029146a09b172c7bbd0cbfcb310f9b2a554f2ffd2",
+    "compressed_bytes": 2918
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Outro/render.log",
+    "package": "zh/Outro/render.log.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Outro/snapshot.json",
+    "package": "zh/Outro/snapshot.json.gz",
+    "raw_sha256": "3102a2cca645a3899b74e3bca484cb2ba07851c6d6046cb52feffeea240017f3",
+    "raw_bytes": 1752,
+    "compressed_sha256": "b83e182afc5c1064a125165917af99aec1b70df2cd422aee5a0a80581df169f2",
+    "compressed_bytes": 792
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/zh/Outro/current-source.py",
+    "package": "zh/Outro/current-source.py.gz",
+    "raw_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+    "raw_bytes": 16025,
+    "compressed_sha256": "487deeef6ab62008be74aab6b9b74bbd09a36ee213c9deb7c378f67d11894a14",
+    "compressed_bytes": 6162
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/quadratic-caption-add.json",
+    "package": "caption-fix-and-procedure/quadratic-caption-add.json.gz",
+    "raw_sha256": "19cac2c3228c2d89ec1aefaab0fa22aa21e387239df4719abeffef4f77ad4cb5",
+    "raw_bytes": 250,
+    "compressed_sha256": "e8fce19f2d3adf6b18c581705eb49e7b9de90654d9d25d7108238c5bc449d78b",
+    "compressed_bytes": 214
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/quadratic-caption-compile.json",
+    "package": "caption-fix-and-procedure/quadratic-caption-compile.json.gz",
+    "raw_sha256": "0e5b3ff989db02a20f7202c29b96a8094233cd0fb265693823db09e8302b2507",
+    "raw_bytes": 929,
+    "compressed_sha256": "bc60a0ae888ac73fa4c090a71af8f83c6997e237178048bc075c0a654a0c51e3",
+    "compressed_bytes": 498
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/compile_quadratic_captions.py",
+    "package": "caption-fix-and-procedure/compile_quadratic_captions.py.gz",
+    "raw_sha256": "cee93d4cf6d4f58088997f9b76f4e7ca9377d8f9c7380f7216fe39964e5e4d41",
+    "raw_bytes": 1314,
+    "compressed_sha256": "39995b5e287b1924ff918ff701d7b2a10abbb29fb78e2d2cf82292716cbbb5e9",
+    "compressed_bytes": 812
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/update_review.py",
+    "package": "caption-fix-and-procedure/update_review.py.gz",
+    "raw_sha256": "ba85febff58fe24330c2cb9ac2a3f86a276f5cb1245a3a5aee32a30af3346dac",
+    "raw_bytes": 4978,
+    "compressed_sha256": "eb5e87149bdc6efa2fc476156d30e744fee467dea55967731217c32922cc0a40",
+    "compressed_bytes": 2191
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/endpoint-review-checkpoint-10cases.json",
+    "package": "full-review.json.gz",
+    "raw_sha256": "3155d59f4bb923707489a55c8c547a06cc52d971b1aefd0a757eea66becd8c8d",
+    "raw_bytes": 86860,
+    "compressed_sha256": "fdf45eefec58bf082e0212c3185f98f2ec792bb2533b14e8cfbb41a57407f3f8",
+    "compressed_bytes": 16841
+  },
+  {
+    "origin": "/workspace/runtime/ai4-source-review-final-freeze.json",
+    "package": "source-checkpoint.json.gz",
+    "raw_sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059",
+    "raw_bytes": 4726,
+    "compressed_sha256": "27fd60843f94de244d16ea85844cdb27dbbfbce3eee4aceaa949ac400b15374d",
+    "compressed_bytes": 1726
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/package_review.py",
+    "package": "package-builder.py.gz",
+    "raw_sha256": "e9211b13a631154faec50ef8902c1982659c5ddfd971b72e51feb0ff37c09b57",
+    "raw_bytes": 9055,
+    "compressed_sha256": "3d05b3d44844a8793b83839bc3419c6fb10bf71bd9dd0ab816f881f6e5da4ebc",
+    "compressed_bytes": 3934
+  }
+]

@@ -1,0 +1,126 @@
+{
+  "results": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-English-Group01-Positions01-05-Silent-20261031.zip",
+      "file_id": "file_00000000d74c81f68217fe8efef6e3e5",
+      "library_file_id": "libfile_fad5617c55588191a12e6dddbcd4a4d1",
+      "file_name": "AI-Built-Part3-English-Group01-Positions01-05-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 11425083
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-English-Group02-Positions06-12-Silent-20261031.zip",
+      "file_id": "file_00000000f25881f6a622f95d689950dd",
+      "library_file_id": "libfile_21fb67e432c4819191e7f0194b7d0340",
+      "file_name": "AI-Built-Part3-English-Group02-Positions06-12-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 12887254
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-English-Group03-Positions13-19-Silent-20261031.zip",
+      "file_id": "file_00000000e24081f6a9628dc19bf621dd",
+      "library_file_id": "libfile_005c909e76908191a3eb95913de0f48f",
+      "file_name": "AI-Built-Part3-English-Group03-Positions13-19-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 13017231
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-Chinese-Group01-Positions01-05-Silent-20261031.zip",
+      "file_id": "file_00000000c68481f6a2e095b174b8da34",
+      "library_file_id": "libfile_33593e9a82f08191b160c3b8495e26be",
+      "file_name": "AI-Built-Part3-Chinese-Group01-Positions01-05-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 11408339
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-Chinese-Group02-Positions06-12-Silent-20261031.zip",
+      "file_id": "file_0000000047ec81f69d08dbe4b3d23c48",
+      "library_file_id": "libfile_3f9fbe5076c48191bafc7a98b43ae441",
+      "file_name": "AI-Built-Part3-Chinese-Group02-Positions06-12-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 13014502
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-Chinese-Group03-Positions13-19-Silent-20261031.zip",
+      "file_id": "file_000000005ac081f6a508e66bfb70a531",
+      "library_file_id": "libfile_cfff1436cf5c8191923202e3d90e5aa8",
+      "file_name": "AI-Built-Part3-Chinese-Group03-Positions13-19-Silent-20261031.zip",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "application/zip",
+      "library_artifact_type": "other",
+      "file_size_bytes": 13085654
+    }
+  ],
+  "warnings": [],
+  "external_connectors_accessed": false
+}

@@ -1,0 +1,245 @@
+{
+  "snapshot_utc": "2026-10-31T23:03:16.544380+00:00",
+  "result_sha256": "a2625c616edc5129851e1b50865b127de9d8396258a9f7d4f78facbc6682a2a9",
+  "capture_status": "passed",
+  "warnings": [],
+  "fingerprint": "1d1f22e0081d04212d097d0f10ac3f6355f6e36c19ac2b2609716426a6aa1a54",
+  "input_receipts": [
+    {
+      "path": ".cache/ai4/hessian.json",
+      "render_signature": [
+        14800,
+        1793485543701476357
+      ],
+      "snapshot_signature": [
+        14800,
+        1793485543701476357
+      ],
+      "signature_matches": true,
+      "sha256": "7af7632ad2585faa1483355f40ac47a5de16564fcdd7bd6daba01d48eb3d6edf"
+    },
+    {
+      "path": ".cache/ai4/hessian.npz",
+      "render_signature": [
+        451866,
+        1793485543692125503
+      ],
+      "snapshot_signature": [
+        451866,
+        1793485543692125503
+      ],
+      "signature_matches": true,
+      "sha256": "62e973a235a30103b1c5422d5aa26ab7cec99c8c2de731731e2e162edc143b0f"
+    }
+  ],
+  "review_inheritance": [
+    {
+      "file": "000_00001.0s.png",
+      "time": 1.0,
+      "sha256": "a8aac2394ce32ee9c4537fbb2cf44904bc5e7e1aab2482862e8f63724dec1cd8",
+      "RGB_pixels_sha256": "dad6989c3c5d45c62a970b72471ffdc1fc610acb256718bcac37c9c9faa95c8b",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "001_00006.0s.png",
+      "time": 5.972208333333334,
+      "sha256": "fe74d7c39ab4524085429569b37df704a0a9bb37fae952cabfac9c6af55ba7e5",
+      "RGB_pixels_sha256": "abf45f560f5225315996524d9d7853a1c43e55122d0950e9db43d615d93f9bef",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "002_00019.7s.png",
+      "time": 19.653689814814822,
+      "sha256": "7ae523b79895c18e7d22167ac25f0d0bb50ac682cd90b6542eeed259e9be4d78",
+      "RGB_pixels_sha256": "b2e277f74f210c7ad00d9e31e3223134fc550f6a16772173e6e961b09f443a43",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "003_00027.1s.png",
+      "time": 27.095744772998806,
+      "sha256": "e6323c104656e22eb248980b83fa99df571cf73726e628fa5e133a621df16b88",
+      "RGB_pixels_sha256": "5b6e6dd206a192df96eac85643e000bfe095500e2de9608b76568cef3ea97199",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": true
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "004_00044.6s.png",
+      "time": 44.566624999999995,
+      "sha256": "a2ca3c69993c251e018e053768ea15d64942aac08a43a68be039dd36dbd9af5b",
+      "RGB_pixels_sha256": "651a0c099f93b9b0195c810693fa68595407cb2c250c3b13d9f26fad1bdd1e25",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "005_00049.4s.png",
+      "time": 49.425993191721126,
+      "sha256": "b98be25ea418a624000c609f817f278bdbf85cfccf1205699847726195e275ea",
+      "RGB_pixels_sha256": "bcf75feebade24f651e5f77397bdcad748d4b86517a5f9307de3f402fd4c3256",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "006_00058.7s.png",
+      "time": 58.73024155773421,
+      "sha256": "911bca8e59f5646c72fc6f44a3b385e88d4db153f7ec2011ce450cfbe6d7bc31",
+      "RGB_pixels_sha256": "f1acabcec2a5c9d3cc208b1ce8159268dadd345caafb5a3ce73f7549bf87dba2",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": false
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "007_00062.4s.png",
+      "time": 62.44614569716776,
+      "sha256": "f82558c73c920fd2785f27ba5b3cf6cb4120ab232093ccb6eb048bd1fd5e1366",
+      "RGB_pixels_sha256": "dc91eb4078375203f9cd6a192712a36b20cdfee6a5f2f129675f75ffd214e3d7",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-001.png",
+        "page_sha256": "8a42476d1e8b572b29245246984b47d269d1565678afa5bca40beee63cf2d503",
+        "native_followup": true
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "008_00089.7s.png",
+      "time": 89.694375,
+      "sha256": "a543301631479af73d875b0661c001955b665d663bc665ac6a848d00c3a7a394",
+      "RGB_pixels_sha256": "d6513460e612f4d20789ed4bd89c7a26cc203acaa4812680427064af7d023f16",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-002.png",
+        "page_sha256": "97b55598db02088987585e2a46fdd79f3ceb0d9cdc0a8213cc9df6c701142b60",
+        "native_followup": true
+      },
+      "new_direct_view": false
+    },
+    {
+      "file": "009_00114.0s.png",
+      "time": 113.95601521164019,
+      "sha256": "e38ba6ee69e2f6b49f30c5de9d91881fcc6b7bb976fcd355729e76543de0f32a",
+      "RGB_pixels_sha256": "00434fd1791597906f89f333c9f292feeb14ea594d53dd4fb451def2c50efd03",
+      "native_size": [
+        854,
+        480
+      ],
+      "png_byte_identical": true,
+      "pixel_identical": true,
+      "inherited_actual_view": {
+        "case": "en-HVP",
+        "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+        "page": "page-002.png",
+        "page_sha256": "97b55598db02088987585e2a46fdd79f3ceb0d9cdc0a8213cc9df6c701142b60",
+        "native_followup": true
+      },
+      "new_direct_view": false
+    }
+  ],
+  "coverage": {
+    "endpoint_frames_inherited_by_exact_PNG_hash": 10,
+    "endpoint_frames_newly_viewed": 0,
+    "original_pages_actually_viewed": 2,
+    "original_native_followups_actually_viewed": 4
+  },
+  "scope": "This refreshed zero-warning record inherits endpoint visual review through ten exact timestamp/PNG-byte/pixel matches. It adds no motion/audio/continuous/1080coverage. Original13warnings remain preserved separately.",
+  "source_caution": "Exact scoped snapshots are preserved, but snapshots alone do not authenticate worker import timing."
+}

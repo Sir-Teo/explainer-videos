@@ -1,0 +1,1712 @@
+[
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s01_hook.py",
+    "package": "snapshots/current/videos/ai/ai4/s01_hook.py.gz",
+    "raw_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+    "raw_bytes": 10327,
+    "compressed_sha256": "00c5fb92a7b7beba9e2290bbd1a65fa8be8843b9b463ff225a8652cae8c23f12",
+    "compressed_bytes": 3708,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s01_hook.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s01_hook.py.gz",
+    "raw_sha256": "3080a4b39619d0b845d945720d3900702dfb5504fe28da1ac02f184b66f10239",
+    "raw_bytes": 8697,
+    "compressed_sha256": "0e553373ca65ec5252efcd1bdb8ef8e1242a841717151a8c4868a54d87ff2d1f",
+    "compressed_bytes": 3206,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s02_derivative.py",
+    "package": "snapshots/current/videos/ai/ai4/s02_derivative.py.gz",
+    "raw_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+    "raw_bytes": 15747,
+    "compressed_sha256": "792c2c0d1bb6dd0c741a32774da3b6890eea9554bfd0e80ab448b7efa8241c2f",
+    "compressed_bytes": 5203,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s02_derivative.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s02_derivative.py.gz",
+    "raw_sha256": "e644a4f1b973499e65a81b887e12305ac2ccb61a353850ef53d7b74b44b75b75",
+    "raw_bytes": 15300,
+    "compressed_sha256": "b1c72d5f8d6a1808efffc2025cea55b7c3cd5f7d2c13db95b755c017dae641a4",
+    "compressed_bytes": 5046,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s03_gradient.py",
+    "package": "snapshots/current/videos/ai/ai4/s03_gradient.py.gz",
+    "raw_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+    "raw_bytes": 15915,
+    "compressed_sha256": "33f949db9a4fcf6f34c7dc8e5e714c8980dc8679ffa6cacdb54d00b037ae72cf",
+    "compressed_bytes": 5096,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s03_gradient.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s03_gradient.py.gz",
+    "raw_sha256": "f8d55c62e32283fe161e67a4bccb03eaa4f3478f55ad2cace491440fc8a05c5a",
+    "raw_bytes": 15663,
+    "compressed_sha256": "36413ff4043ec4392d0b0d4acb7344976bfd51bb268bd51eccff1d13c6fdcb13",
+    "compressed_bytes": 4998,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s04_jacobian.py",
+    "package": "snapshots/current/videos/ai/ai4/s04_jacobian.py.gz",
+    "raw_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+    "raw_bytes": 13760,
+    "compressed_sha256": "e5804a9b933926638a4386b3b8a4c5334fee9fb7ae1a6984f5f7eb2f86616ef0",
+    "compressed_bytes": 4914,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s04_jacobian.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s04_jacobian.py.gz",
+    "raw_sha256": "5fae34de157492d904412c6fc1cdc3d9808bc4a890bf2cff09b62faf230433d8",
+    "raw_bytes": 10747,
+    "compressed_sha256": "f3812cd22575acb68994567c9d8d9f3b93d0655326f58375915106a65732a146",
+    "compressed_bytes": 3818,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s05_layers.py",
+    "package": "snapshots/current/videos/ai/ai4/s05_layers.py.gz",
+    "raw_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+    "raw_bytes": 11141,
+    "compressed_sha256": "1fd470e5cc2105dd843bb33573d8bcafe55a4d0dff18d71a097ead308c5ea77d",
+    "compressed_bytes": 3570,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s05_layers.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s05_layers.py.gz",
+    "raw_sha256": "8bec89643302d10228a2b773bee5810d9b7c6228121ae12519d6a7f31e81aaa1",
+    "raw_bytes": 10191,
+    "compressed_sha256": "918a62f71e58502e701e40eb54aed538948a187a0ccf8f75f3803904d1b211bc",
+    "compressed_bytes": 3326,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s06_modes.py",
+    "package": "snapshots/current/videos/ai/ai4/s06_modes.py.gz",
+    "raw_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+    "raw_bytes": 15882,
+    "compressed_sha256": "186fda9bfb87de1ebb835c448e97d44075083b50e6aaf86017dca87aa9bcd83b",
+    "compressed_bytes": 4994,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s06_modes.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s06_modes.py.gz",
+    "raw_sha256": "58e69a8526e7d1cb8b3658064b51401c579cde3306610ec1bc6407d750a1855e",
+    "raw_bytes": 14552,
+    "compressed_sha256": "2d37ee40c724c7fc6eb672a9aea3c8d840bd3c4eba6125e1885a71e3784d7381",
+    "compressed_bytes": 4557,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s07_backprop.py",
+    "package": "snapshots/current/videos/ai/ai4/s07_backprop.py.gz",
+    "raw_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+    "raw_bytes": 16721,
+    "compressed_sha256": "9f6a4bfc2714c6782b164133598bb8a9a83edfd5613c11a57e6f98d09e9ca0ca",
+    "compressed_bytes": 5417,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s07_backprop.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s07_backprop.py.gz",
+    "raw_sha256": "084bbaf4b9e5cbd899e7bc47bd85fa677a538620204d95d536a21dd13a96f029",
+    "raw_bytes": 16276,
+    "compressed_sha256": "7e1e6fea5780c0e32f3aa204bd8f5a4160b15eed26d572cd4794989c45eb4efd",
+    "compressed_bytes": 5243,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s08_library.py",
+    "package": "snapshots/current/videos/ai/ai4/s08_library.py.gz",
+    "raw_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+    "raw_bytes": 13790,
+    "compressed_sha256": "85ce8ebce8a5e62632ce68dc35514979b76b19393e6cacb7b0fe21aa3bd02022",
+    "compressed_bytes": 4564,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s08_library.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s08_library.py.gz",
+    "raw_sha256": "6fd17d1979f87b79733cbae9e05a2ac8638c26726579f5f74413613f3d147351",
+    "raw_bytes": 13410,
+    "compressed_sha256": "601e8b4b052c3f6267d6e43f072fed854bff69a5448000e226635019cc267082",
+    "compressed_bytes": 4437,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s09_train.py",
+    "package": "snapshots/current/videos/ai/ai4/s09_train.py.gz",
+    "raw_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+    "raw_bytes": 20897,
+    "compressed_sha256": "5554728da1bf14411127c89521f520f14e6573fe8422fac715da8ff128e9604b",
+    "compressed_bytes": 6916,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s09_train.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s09_train.py.gz",
+    "raw_sha256": "3c683f6fdbd4f13bd16cd413b6e82538015650495cde2e575d9312bf104a5af2",
+    "raw_bytes": 14378,
+    "compressed_sha256": "e0b8fe99fce2a4c8238383c00c103058ff481d0ba445602bf6c365017b287cbf",
+    "compressed_bytes": 5039,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s10_floats.py",
+    "package": "snapshots/current/videos/ai/ai4/s10_floats.py.gz",
+    "raw_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+    "raw_bytes": 15476,
+    "compressed_sha256": "0407f62548958f48a7a5e00ea14e3eecf9556fb0fdcae743bf2556c92118707e",
+    "compressed_bytes": 5283,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s10_floats.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s10_floats.py.gz",
+    "raw_sha256": "5a6df9d53a0cd7ae367536db1da055510dd4bfb3d85d537f1d6d47c74a98684b",
+    "raw_bytes": 13105,
+    "compressed_sha256": "c8ffb9756d5983bae7a922dc73e624b58f30ffc775ca965c36a199baaf69eb13",
+    "compressed_bytes": 4561,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s11_vcurve.py",
+    "package": "snapshots/current/videos/ai/ai4/s11_vcurve.py.gz",
+    "raw_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+    "raw_bytes": 14041,
+    "compressed_sha256": "9a27b15c47db086210c37ac4aaddc1e4f3b51361106b958461ae119a13a59c8c",
+    "compressed_bytes": 4761,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s11_vcurve.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s11_vcurve.py.gz",
+    "raw_sha256": "f20d4837e84c84cbb65f82ca0a5ff0549669f31004e71e36793a260d0186a17b",
+    "raw_bytes": 10475,
+    "compressed_sha256": "4d4520ab1030e72d5307bdf6cfa431189a36be0cfb4b85ef49b447809a2eb286",
+    "compressed_bytes": 3427,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s12_memory.py",
+    "package": "snapshots/current/videos/ai/ai4/s12_memory.py.gz",
+    "raw_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+    "raw_bytes": 12530,
+    "compressed_sha256": "1cd047d97bc4b5bd2831d783c843d1dd70743b6213d8963732acf34d52bf6e56",
+    "compressed_bytes": 4376,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s12_memory.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s12_memory.py.gz",
+    "raw_sha256": "b77dd1c1509e4ded0867252dad99833d3bfb742d47f632be238835081132a207",
+    "raw_bytes": 10972,
+    "compressed_sha256": "6eb8f97b32ce2093ddf407e51d94e01ad9f25d0c416737aca8503cb623c6d5af",
+    "compressed_bytes": 3756,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s13_newton.py",
+    "package": "snapshots/current/videos/ai/ai4/s13_newton.py.gz",
+    "raw_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+    "raw_bytes": 14032,
+    "compressed_sha256": "7f16a3731cef475b39247d51eb80ff4a91bed18ed1c020b2505cda47b393000b",
+    "compressed_bytes": 4930,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s13_newton.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s13_newton.py.gz",
+    "raw_sha256": "0f0dc547dfef3ab633356025772bfcab7c857eb15bab3c96033f22f1adae23e2",
+    "raw_bytes": 10947,
+    "compressed_sha256": "d1df91f5f2eed612b8aa6248d06c3a29359a85d5b690503db140005737de7a4e",
+    "compressed_bytes": 3876,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s14_hvp.py",
+    "package": "snapshots/current/videos/ai/ai4/s14_hvp.py.gz",
+    "raw_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+    "raw_bytes": 20004,
+    "compressed_sha256": "89acf6b0bcf15ef2ee3bec91d3186cdcd7ab0b55b52e43476db5ac0129039094",
+    "compressed_bytes": 6548,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s14_hvp.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s14_hvp.py.gz",
+    "raw_sha256": "1b038ed7db5e163c88f1350c8cb05ea5a7566e1524786ffcc42347ddc120b464",
+    "raw_bytes": 12784,
+    "compressed_sha256": "313309a4e3dc650293cc8cb4fc1c32485887540951bd3fb6e9b56950f22c1db0",
+    "compressed_bytes": 4641,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s15_quadratic.py",
+    "package": "snapshots/current/videos/ai/ai4/s15_quadratic.py.gz",
+    "raw_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+    "raw_bytes": 18044,
+    "compressed_sha256": "629555abf88dabbf7ae47dfaac2780eeea13179c932514a6bf717401b9c881b2",
+    "compressed_bytes": 5948,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s15_quadratic.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s15_quadratic.py.gz",
+    "raw_sha256": "d842691c398f4978b04d3e10c99423e72d96d338887953eedeb4ce15bdd9a7db",
+    "raw_bytes": 14101,
+    "compressed_sha256": "a3cae669f4e5343dcb0ff49ccdab9d91ec4ec9fd9cf61c0a5d2625417359a0ce",
+    "compressed_bytes": 4775,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s16_lagrange.py",
+    "package": "snapshots/current/videos/ai/ai4/s16_lagrange.py.gz",
+    "raw_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+    "raw_bytes": 14707,
+    "compressed_sha256": "d865b83bb72cd92b856f91a38438260cc77ebca9cac982cb3da0e578a5e45f06",
+    "compressed_bytes": 4852,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s16_lagrange.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s16_lagrange.py.gz",
+    "raw_sha256": "f8ee308e30e6efb1eec1096321cfa58e23088bb15e6f2abbaccfdd90822accbf",
+    "raw_bytes": 12582,
+    "compressed_sha256": "213e2223d46b17001902ab72a5ddbacee95c0a2fc13f5c204b73f4aabdf82ac1",
+    "compressed_bytes": 4317,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s17_kkt.py",
+    "package": "snapshots/current/videos/ai/ai4/s17_kkt.py.gz",
+    "raw_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+    "raw_bytes": 18234,
+    "compressed_sha256": "7cb14377f073fc4ee3496ba6e80e3563f47f0131b5079419a7b8d5db972745d3",
+    "compressed_bytes": 6040,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s17_kkt.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s17_kkt.py.gz",
+    "raw_sha256": "b734af59ef65bc8cf5d859099aab3da381b665eea611502940be11cab2558a26",
+    "raw_bytes": 13227,
+    "compressed_sha256": "a5e20cedd01bc1ad8f82dcc59840e3d8340d80e0d2b4744ed8e707ee89d3b063",
+    "compressed_bytes": 4528,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s18_implicit.py",
+    "package": "snapshots/current/videos/ai/ai4/s18_implicit.py.gz",
+    "raw_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+    "raw_bytes": 16898,
+    "compressed_sha256": "8105c3b21224562343dbbcaab807f6cb7e7c9249f702131e2046501219aae9c1",
+    "compressed_bytes": 5425,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s18_implicit.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s18_implicit.py.gz",
+    "raw_sha256": "527b7e7997f4b761afd8063f122274c5730b737ad515a1d10191b8c12d098ae5",
+    "raw_bytes": 10784,
+    "compressed_sha256": "9293661840ca383e299937c00ec00f5b04b52b66af982c78be80233ffac4deef",
+    "compressed_bytes": 3747,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/s19_outro.py",
+    "package": "snapshots/current/videos/ai/ai4/s19_outro.py.gz",
+    "raw_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+    "raw_bytes": 16025,
+    "compressed_sha256": "487deeef6ab62008be74aab6b9b74bbd09a36ee213c9deb7c378f67d11894a14",
+    "compressed_bytes": 6162,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/s19_outro.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/s19_outro.py.gz",
+    "raw_sha256": "5f3c10c4e5fee83f76d1a52dadafa9b3adad32e7c42bd1e44330bf3177fc3e97",
+    "raw_bytes": 13510,
+    "compressed_sha256": "1d07aef663e7d89772a5ab80481aa7c1385917ce613b21de13c3e6be02d55530",
+    "compressed_bytes": 5297,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/__init__.py",
+    "package": "snapshots/current/videos/ai/ai4/__init__.py.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/__init__.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/__init__.py.gz",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "compressed_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "compressed_bytes": 20,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/cache_contract.py",
+    "package": "snapshots/current/videos/ai/ai4/cache_contract.py.gz",
+    "raw_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "raw_bytes": 8767,
+    "compressed_sha256": "2c6b946269057ed14f6cd201611302db407ad4d7bc65407466b004eb7fdba5dd",
+    "compressed_bytes": 3124,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/cache_contract.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/cache_contract.py.gz",
+    "raw_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+    "raw_bytes": 8767,
+    "compressed_sha256": "2c6b946269057ed14f6cd201611302db407ad4d7bc65407466b004eb7fdba5dd",
+    "compressed_bytes": 3124,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/common.py",
+    "package": "snapshots/current/videos/ai/ai4/common.py.gz",
+    "raw_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+    "raw_bytes": 4944,
+    "compressed_sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9",
+    "compressed_bytes": 2210,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/common.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/common.py.gz",
+    "raw_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+    "raw_bytes": 4944,
+    "compressed_sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9",
+    "compressed_bytes": 2210,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/compute.py",
+    "package": "snapshots/current/videos/ai/ai4/compute.py.gz",
+    "raw_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "raw_bytes": 72334,
+    "compressed_sha256": "c8140e6ffa2e3c14021bac9ae2019554ddfdfb00c9c8ce09b05b1d6fa96a7927",
+    "compressed_bytes": 22831,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/compute.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/compute.py.gz",
+    "raw_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+    "raw_bytes": 72334,
+    "compressed_sha256": "c8140e6ffa2e3c14021bac9ae2019554ddfdfb00c9c8ce09b05b1d6fa96a7927",
+    "compressed_bytes": 22831,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/contracts.py",
+    "package": "snapshots/current/videos/ai/ai4/contracts.py.gz",
+    "raw_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "raw_bytes": 8587,
+    "compressed_sha256": "9c21c6967252ddd535d1f6a934e28e5e0fc444dd46f4071a0b0c5ebd36d6901b",
+    "compressed_bytes": 3149,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/contracts.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/contracts.py.gz",
+    "raw_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+    "raw_bytes": 8587,
+    "compressed_sha256": "9c21c6967252ddd535d1f6a934e28e5e0fc444dd46f4071a0b0c5ebd36d6901b",
+    "compressed_bytes": 3149,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/manifest.py",
+    "package": "snapshots/current/videos/ai/ai4/manifest.py.gz",
+    "raw_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+    "raw_bytes": 1375,
+    "compressed_sha256": "e90cf2533c05781b93a0cac14f3bfbbfc9eca8205eacfb9468611dfea28e0c19",
+    "compressed_bytes": 703,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/manifest.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/manifest.py.gz",
+    "raw_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+    "raw_bytes": 1375,
+    "compressed_sha256": "e90cf2533c05781b93a0cac14f3bfbbfc9eca8205eacfb9468611dfea28e0c19",
+    "compressed_bytes": 703,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/zh_lines.py",
+    "package": "snapshots/current/videos/ai/ai4/zh_lines.py.gz",
+    "raw_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "raw_bytes": 108379,
+    "compressed_sha256": "e006af58d907e2fa89f6a5331321ef4c965d7ae4f88f79bc85d7beaf76af3b4b",
+    "compressed_bytes": 41090,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/zh_lines.py",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/zh_lines.py.gz",
+    "raw_sha256": "2b191a1e4286ea640cc2f81d632a6381b8e4724213a68374f0100802af753767",
+    "raw_bytes": 54024,
+    "compressed_sha256": "09f1de614b13c6aff8446cd5a1795056064744630b63c427a423ab23e7c93feb",
+    "compressed_bytes": 21423,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+    "package": "snapshots/current/videos/ai/ai_text_zh.json.gz",
+    "raw_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+    "raw_bytes": 2428719,
+    "compressed_sha256": "84503288080964d7c42f20a4434502c6ba86f4ca78350b64ff3878e3fb25b7d2",
+    "compressed_bytes": 881332,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai_text_zh.json",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai_text_zh.json.gz",
+    "raw_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+    "raw_bytes": 2396458,
+    "compressed_sha256": "9b5f949a1eef102f26f5267d29f81f9990990e8dee1ff0a7921bc1a82f4f4ee2",
+    "compressed_bytes": 871161,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/videos/ai/ai4/README.md",
+    "package": "snapshots/current/videos/ai/ai4/README.md.gz",
+    "raw_sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+    "raw_bytes": 28578,
+    "compressed_sha256": "68467073bebceed7e1332947cf7e3ab8c2f9fafcdf46e806c1434c746b92e02f",
+    "compressed_bytes": 13476,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:videos/ai/ai4/README.md",
+    "package": "snapshots/baseline-f00be66/videos/ai/ai4/README.md.gz",
+    "raw_sha256": "87517cc4383cbdf2942b45ed563015fec2e1f7ea862ee500900699796e8bac3a",
+    "raw_bytes": 24847,
+    "compressed_sha256": "4694d5c4a5990e7ef95d2b8a5dab31096baaedd4c7c30a7046d0f615024b8285",
+    "compressed_bytes": 11419,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/explainer/ai/autodiff.py",
+    "package": "snapshots/current/explainer/ai/autodiff.py.gz",
+    "raw_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+    "raw_bytes": 7798,
+    "compressed_sha256": "dd045ceae97f867429e27f8db42c65e886b13a6f66fe3dde4e7cb101d18d0ab7",
+    "compressed_bytes": 2749,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:explainer/ai/autodiff.py",
+    "package": "snapshots/baseline-f00be66/explainer/ai/autodiff.py.gz",
+    "raw_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+    "raw_bytes": 7798,
+    "compressed_sha256": "dd045ceae97f867429e27f8db42c65e886b13a6f66fe3dde4e7cb101d18d0ab7",
+    "compressed_bytes": 2749,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_first_five_math.py",
+    "package": "snapshots/current/tests/test_ai4_first_five_math.py.gz",
+    "raw_sha256": "72a0e3b7d2c39e780ad9341a63d01c5e44c94d7dd914a052c147ef3039c2494b",
+    "raw_bytes": 9141,
+    "compressed_sha256": "43adbd7c60880d3d43db75e5b93689000c3777d03a09771f96eff3fc558ecf73",
+    "compressed_bytes": 3312,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_mid_head_math.py",
+    "package": "snapshots/current/tests/test_ai4_mid_head_math.py.gz",
+    "raw_sha256": "5facbe498a7ec2a549bd3cc48d2bf01bc8dd2c15f9f1bbf74337023ad628e06e",
+    "raw_bytes": 7708,
+    "compressed_sha256": "0d751d64d6d48a8b17a3e2f6d0d1d66a659f2320ba0b67bbccd3e1fd57f96e25",
+    "compressed_bytes": 2676,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_narration_review.py",
+    "package": "snapshots/current/tests/test_ai4_narration_review.py.gz",
+    "raw_sha256": "7a9024a9d56bceabc6f21b47a6f7e20c8e79cfa5d2ba29ac903e293b4cfc38c1",
+    "raw_bytes": 20571,
+    "compressed_sha256": "a5593b3f89d8cf27daed84fe0748882d3e03c50b81891bcc0675818b3424ed42",
+    "compressed_bytes": 7387,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_producer_contracts.py",
+    "package": "snapshots/current/tests/test_ai4_producer_contracts.py.gz",
+    "raw_sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+    "raw_bytes": 18362,
+    "compressed_sha256": "1338916715c97c2fecc7ce96de9960899c20e47a3817d50ee91b9fcfe08d43e5",
+    "compressed_bytes": 5545,
+    "compressed": true
+  },
+  {
+    "origin": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b:tests/test_ai4_producer_contracts.py",
+    "package": "snapshots/baseline-f00be66/tests/test_ai4_producer_contracts.py.gz",
+    "raw_sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+    "raw_bytes": 18362,
+    "compressed_sha256": "1338916715c97c2fecc7ce96de9960899c20e47a3817d50ee91b9fcfe08d43e5",
+    "compressed_bytes": 5545,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_scene_semantics.py",
+    "package": "snapshots/current/tests/test_ai4_scene_semantics.py.gz",
+    "raw_sha256": "a1a716c1f1c0ebe7d26ec874397ee65fe5f0d1dd56f5bd83f8588a80a689143e",
+    "raw_bytes": 10179,
+    "compressed_sha256": "eb0e28a93e1773e635d5a6ff515b2c2e005fff99d2fc78af14c0ce30423123a2",
+    "compressed_bytes": 3228,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/explainer-videos/tests/test_ai4_tail_review.py",
+    "package": "snapshots/current/tests/test_ai4_tail_review.py.gz",
+    "raw_sha256": "fbece8495845bf3b33d6d84a30cd4c3a7a6a306c8f921639d40a670b86df5430",
+    "raw_bytes": 8442,
+    "compressed_sha256": "531d47d20cb058e36c75b9a8f446dc40e7164b621c142ab188ae462eaa6b67bd",
+    "compressed_bytes": 2783,
+    "compressed": true
+  },
+  {
+    "origin": "Exact package snapshots compared; baseline f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+    "package": "source-and-table-diff.patch.gz",
+    "raw_sha256": "aac94fd6e705194d7f9001c468fc94d9b91a32322d11ab91c5f72dec4ca48b54",
+    "raw_bytes": 471943,
+    "compressed_sha256": "e232f03e040d25a9e3d3de2e54d96fdb4fa83cf1ca66273c9c5ec3b4d616e4bf",
+    "compressed_bytes": 151055,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/before.json",
+    "package": "batches/first-five/before.json.gz",
+    "raw_sha256": "631084db212c107be34c0529664cfb75d6b1786ff0547b981513daaad80ab3f8",
+    "raw_bytes": 1207,
+    "compressed_sha256": "ce9280905a5f0e0f33922dcad614bd69d86ca08ce80306145a61e2dafa2b248d",
+    "compressed_bytes": 495,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/bilingual-handoff.json",
+    "package": "batches/first-five/bilingual-handoff.json.gz",
+    "raw_sha256": "2966f84e6d05361832b486f6126ce9f369a590ee48fca7a91744c14024d094a0",
+    "raw_bytes": 27082,
+    "compressed_sha256": "d7d64085244c5232dc75e8b48560364b787f28cdbdaa1fe22302a9a92393f23d",
+    "compressed_bytes": 7490,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/implementation-report.json",
+    "package": "batches/first-five/implementation-report.json.gz",
+    "raw_sha256": "fba60dc29d9c8b7328ed1d114081ab88e5d483bc3af0b34cb5b0e16b78789584",
+    "raw_bytes": 6907,
+    "compressed_sha256": "d1bef49c06d61e738708f956c846b533eced8a3249e319e4ae1ed812237bbdc7",
+    "compressed_bytes": 2796,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/implementation-report.md",
+    "package": "batches/first-five/implementation-report.md.gz",
+    "raw_sha256": "35999183c0658f0e885fcfb291007819c9a4017346a5d3dd4ff4e7754a8c5b4b",
+    "raw_bytes": 2817,
+    "compressed_sha256": "a7f18a450cf88052f503aa086b354b7f2f6e1f77ba7423edf681a667a6335f20",
+    "compressed_bytes": 1483,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/math-tests.log",
+    "package": "batches/first-five/math-tests.log.gz",
+    "raw_sha256": "1ec334d2796cf906f6c9cc0b32ca21094b01b6854ca06f614196e85e4c03b78d",
+    "raw_bytes": 2953,
+    "compressed_sha256": "fc8b1a8a0dfc24b26234bbc5a96fd45afc2410a47b2381ce25fc7f128be67eef",
+    "compressed_bytes": 722,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/geometry-en.json",
+    "package": "batches/first-five/geometry-en.json.gz",
+    "raw_sha256": "91089b6c9b600d54c8f6bdc22f4178790bfb09b33b160b0c68806dd995949273",
+    "raw_bytes": 9881,
+    "compressed_sha256": "541f1dcee6c82f3e53b29cd35bbfa04d301ca85fa5dbaa0d5ef1761d7a4e354e",
+    "compressed_bytes": 2283,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/geometry-zh.json",
+    "package": "batches/first-five/geometry-zh.json.gz",
+    "raw_sha256": "cb1e0d5d3d6ec173bb9d54e20b58552119c8562029e701facddcdd4e54b0dd18",
+    "raw_bytes": 9827,
+    "compressed_sha256": "78bf5375ba7b17b137303e00a9b5ea35a5766d8473aab735e1091cd4a6076172",
+    "compressed_bytes": 2250,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/lens-manim.json",
+    "package": "batches/first-five/lens-manim.json.gz",
+    "raw_sha256": "70ec3b8d18bd1e85b8611cfd8eb30a8a95f1cfe1e8350ce52ad3041077c3e5ad",
+    "raw_bytes": 3764,
+    "compressed_sha256": "2be4b4671b32f61b2e793b5bca82f64fd3937bbe858656e4a181359fabf3e946",
+    "compressed_bytes": 414,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/translation-check.json",
+    "package": "batches/first-five/translation-check.json.gz",
+    "raw_sha256": "4ab69fbbdc05e4f55e27177000dda3373dfc070c730ac5e7bd216f7f52c40af7",
+    "raw_bytes": 13817,
+    "compressed_sha256": "f1b0e2dd8fe60f976c2aa8a1992ef63519aa0bf4a31a2d32d3fa241416b66e61",
+    "compressed_bytes": 5391,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/geometry.py",
+    "package": "batches/first-five/geometry.py.gz",
+    "raw_sha256": "ddbbd6f95c03f478ba16d1e84ccb2d7645e6d0f48bef64216052eff708829dde",
+    "raw_bytes": 4128,
+    "compressed_sha256": "33e7ae8111001059695965158e15c33ba837dd668e7860984173decc125df9c3",
+    "compressed_bytes": 1964,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/lens-manim.py",
+    "package": "batches/first-five/lens-manim.py.gz",
+    "raw_sha256": "4fee3ac146df2229731a5d0062aae6688a717a4e9c3ee90357f8952f3facbae7",
+    "raw_bytes": 1426,
+    "compressed_sha256": "1153d0cf6f4c7d90b976b2069ee0ebceae381bc6699ce1b0ad4db0c264acc149",
+    "compressed_bytes": 872,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-first-five-implementation/translation-check.py",
+    "package": "batches/first-five/translation-check.py.gz",
+    "raw_sha256": "9efdc3d94283ae8d6e505a4ea649a102658d336880080f0f4d921f734ecb01ae",
+    "raw_bytes": 1676,
+    "compressed_sha256": "d07cfc283f08fc03bb5fea93216c13de7ba83587cc155d7a378c0ed11f2aae6f",
+    "compressed_bytes": 1008,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/before-sources.json",
+    "package": "batches/middle-five/before-sources.json.gz",
+    "raw_sha256": "6cc4b460c04639a7393bf2658ca30536939d9121e1cad787dddba9c94ddc63a3",
+    "raw_bytes": 1049,
+    "compressed_sha256": "d996a21c0ad72c100251cecaab4a6615026b484c4d758e83c26b94d8939371b0",
+    "compressed_bytes": 477,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/bilingual-handoff.before-curvature.json",
+    "package": "batches/middle-five/bilingual-handoff.before-curvature.json.gz",
+    "raw_sha256": "20f52fa7814796663742ba82ca651375ccde8e12a6a2aa2fcfbda347488f1313",
+    "raw_bytes": 51100,
+    "compressed_sha256": "d45ce50eb5465ce77232b1c2b8b7b07b175015c2af0f9cddca2e6c3bb0257dd5",
+    "compressed_bytes": 15277,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/bilingual-handoff.json",
+    "package": "batches/middle-five/bilingual-handoff.json.gz",
+    "raw_sha256": "bb99d2dd1e58f82ad08c7e29a627ce97051486c3b0fda483aacfd587f96ed138",
+    "raw_bytes": 62459,
+    "compressed_sha256": "656936da43d1ebb8eeff645d76931ad9d8a7d6c3475208d39537be793a177d57",
+    "compressed_bytes": 15859,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/normalized-bilingual-overlay.json",
+    "package": "batches/middle-five/normalized-bilingual-overlay.json.gz",
+    "raw_sha256": "0158eda3730d8ea6280c3ab52ee7e226c4dd79c614fa2a9282fdc8f8de7fabf3",
+    "raw_bytes": 26407,
+    "compressed_sha256": "36edbfd76e595bd34e0ebfb2a2e5ff3342e98779ec552f5614f74b8911931bc4",
+    "compressed_bytes": 11026,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/normalized-bilingual-overlay-receipt.json",
+    "package": "batches/middle-five/normalized-bilingual-overlay-receipt.json.gz",
+    "raw_sha256": "9c2b4359cc19c51da69b181b97ef1e4b733eea155786cf76b98b52345a4b8e4d",
+    "raw_bytes": 6883,
+    "compressed_sha256": "dd820f724ae318da230992286596423ab108a1a2e6f7e70ef50271a51876b37d",
+    "compressed_bytes": 2069,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/report.json",
+    "package": "batches/middle-five/report.json.gz",
+    "raw_sha256": "124bccdff55643fad8c8eab17b214ad21834b80de0ade3da26982540eb95f4e3",
+    "raw_bytes": 56248,
+    "compressed_sha256": "81b41f73047a82a54cb20091e70168cad474209690c2dded4365cc598fff2954",
+    "compressed_bytes": 15411,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/report.md",
+    "package": "batches/middle-five/report.md.gz",
+    "raw_sha256": "51b837dab82bb3abbfb7a35ea2e416dc2d27d2b83758b459d427676105dcff3e",
+    "raw_bytes": 5729,
+    "compressed_sha256": "7b9d63d2f92c3485ec9143ca25df998a3486362bed8545d6204d7ee5de60cab7",
+    "compressed_bytes": 2731,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/actual-data-contract-check.json",
+    "package": "batches/middle-five/actual-data-contract-check.json.gz",
+    "raw_sha256": "b8f2bd578c57059afa1f9fc32bc9cfae3a06dcc5cdda94a8895d31259581e0fe",
+    "raw_bytes": 25430,
+    "compressed_sha256": "ee7c175cea247f12d174f79b5f7bf7c5de0d0d3854f213345ce932d9d68a3e90",
+    "compressed_bytes": 7116,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/final-freeze-receipt.json",
+    "package": "batches/middle-five/final-freeze-receipt.json.gz",
+    "raw_sha256": "a30581647c07ac1897b0b9d009a9aadc4e4519ba1a272b749262cb916ea56e8e",
+    "raw_bytes": 2768,
+    "compressed_sha256": "36e009ebd4bd1d599e0d3b04edb9b25f854d150b3b3a134a3939698849f43ada",
+    "compressed_bytes": 1479,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/curvature-caption-final.json",
+    "package": "batches/middle-five/curvature-caption-final.json.gz",
+    "raw_sha256": "1c2874e9d8ba3348ce82eb86f5c044833a877ac8f2d613ff75e9cabfbcc602cf",
+    "raw_bytes": 1098,
+    "compressed_sha256": "03eec006b953ce8681c79ea5be32c566cc8430186753871581c656c761f9ecd3",
+    "compressed_bytes": 677,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/curvature-caption-geometry.json",
+    "package": "batches/middle-five/curvature-caption-geometry.json.gz",
+    "raw_sha256": "0ae2cc80fdefc75897a5fa55c70e29df5e9cf646a8b0495d30863c9199701bba",
+    "raw_bytes": 1714,
+    "compressed_sha256": "c0afab6a6efd50956df0d27f1bf240ecb8e21846490e82faa3001ce2c4f696e0",
+    "compressed_bytes": 676,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/curvature-caption-geometry.log",
+    "package": "batches/middle-five/curvature-caption-geometry.log.gz",
+    "raw_sha256": "d1ff5e9173f8ccd52f91dc5901f0a3e1a093bb7a346166b79ac84526272f9ed9",
+    "raw_bytes": 3687,
+    "compressed_sha256": "62f6c7a7716f7f1361297a31a15847401987c11c262ec7e210aab9093f83cca2",
+    "compressed_bytes": 951,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/scene-contract-tests.log",
+    "package": "batches/middle-five/scene-contract-tests.log.gz",
+    "raw_sha256": "7c6dc54137a2a31581bc6789eba4824e40d9e00f81f409a4db26d8b5880c11f1",
+    "raw_bytes": 2336,
+    "compressed_sha256": "daa7cdc3797d7971c0317eb98457a8b64c850926c45aea97fb8c6d59d1660971",
+    "compressed_bytes": 624,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/autodiff-zero-power-tests.log",
+    "package": "batches/middle-five/autodiff-zero-power-tests.log.gz",
+    "raw_sha256": "f272f8b00f5b7a62f465543396ee620d4433c03e645cd77542ece62629eb06ac",
+    "raw_bytes": 1207,
+    "compressed_sha256": "68d59c09a1169ef88d8e92f0b13c8f65ef08396c15ffbb7e23e151bf3f933d19",
+    "compressed_bytes": 314,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/producer-autodiff-related-tests.log",
+    "package": "batches/middle-five/producer-autodiff-related-tests.log.gz",
+    "raw_sha256": "903a5eb0ce765dc73f66407a81a54150fd015805f084cce1f7209b0a2f090928",
+    "raw_bytes": 3309,
+    "compressed_sha256": "bbed659b730306aa508a0d288ca956e1d37b05ca3e43771ef34c58d0e20c4c67",
+    "compressed_bytes": 846,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/narration-regression-initial.log",
+    "package": "batches/middle-five/narration-regression-initial.log.gz",
+    "raw_sha256": "9c0f903aa9a0b9524af81d148b9ce8b109280525743d5e95fab8d05e19308580",
+    "raw_bytes": 90520,
+    "compressed_sha256": "3d8835761a1d09c7f49008b2268ae221c8a9d0181bd3ec0bc7a3a43cc46e43fb",
+    "compressed_bytes": 14280,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/narration-regression-proposed.log",
+    "package": "batches/middle-five/narration-regression-proposed.log.gz",
+    "raw_sha256": "d73edd08f028757e208b4d7ebe5371dfa59beadf174412f0d598cd407ce86fdd",
+    "raw_bytes": 3386,
+    "compressed_sha256": "1d728956a2ec1bd71e3bf74e3dc9c844575dbf28bcef49b9b77387e3aebb6d45",
+    "compressed_bytes": 766,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/narration-test-handoff.json",
+    "package": "batches/middle-five/narration-test-handoff.json.gz",
+    "raw_sha256": "7249b209dd5769eee60f85a87de18c2b816b4f5af9c36f75b9f38ea9f4542f88",
+    "raw_bytes": 804,
+    "compressed_sha256": "2f9f36565eb6af08ffcf6718907d1184de2e4e986c99b3089f0899f366e085a1",
+    "compressed_bytes": 517,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/autodiff-freeze.json",
+    "package": "batches/middle-five/autodiff-freeze.json.gz",
+    "raw_sha256": "cd45867b6c16df4290a1afd4fdf53d4747b6a75200e69596015014f9c25917e8",
+    "raw_bytes": 762,
+    "compressed_sha256": "59c0a603d2fbe72e3b864a4e2300fbae1653e9dfb66e2fe9a19a2f1fe7eaa60a",
+    "compressed_bytes": 514,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/autodiff-power0-probe.json",
+    "package": "batches/middle-five/autodiff-power0-probe.json.gz",
+    "raw_sha256": "2e52fb1c6e6e78c6ea878cab4cec7643cf431a4075fb7640ce9703e23ae2644d",
+    "raw_bytes": 416,
+    "compressed_sha256": "ab5c07290ad3770cc1c94f874b1d0267134371606e56300fa53c4991e54f55e5",
+    "compressed_bytes": 270,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/source.patch",
+    "package": "batches/middle-five/source.patch.gz",
+    "raw_sha256": "e0ea8a2840790e806f6da38a96da5982a0235c5d19f9f8e58820dbddb4a8de92",
+    "raw_bytes": 54859,
+    "compressed_sha256": "c2d3f4c95b74135f53374f6690150213538175d81ce6fc7eb81c572855231aeb",
+    "compressed_bytes": 16232,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/check_actual_data.py",
+    "package": "batches/middle-five/check_actual_data.py.gz",
+    "raw_sha256": "55e9bd1c16f9432af90ce3033838295ec0f43316ec96224c60463cb73c29c00f",
+    "raw_bytes": 7820,
+    "compressed_sha256": "b0e60986c16f32ba349ee951f61d707fde524bd06045a2476f0b334cd17f9b3d",
+    "compressed_bytes": 3287,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/test_narration_proposed_overlay.py",
+    "package": "batches/middle-five/test_narration_proposed_overlay.py.gz",
+    "raw_sha256": "b5cee7fb07047d1e9c691b352e7a8a199b070691f3b827498a58196326d9bf49",
+    "raw_bytes": 1357,
+    "compressed_sha256": "58885eb7bfcf62b74c121e0389d8b80946f17827dbaadfce352ca8f1ed1d1d37",
+    "compressed_bytes": 681,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-implementation/normalize_overlay.py",
+    "package": "batches/middle-five/normalize_overlay.py.gz",
+    "raw_sha256": "367705266b2bdef2e1adaf1488c370b7f48f428566b72ce503c75f1a5f582f5b",
+    "raw_bytes": 5677,
+    "compressed_sha256": "f039b95fc03f44fcd25aada4ad475a797af1bc3f5ed936545b87cb785aa4f4a4",
+    "compressed_bytes": 2320,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/before-provenance.json",
+    "package": "batches/numerics-memory-curvature/before-provenance.json.gz",
+    "raw_sha256": "7c01ffc70a87f7724a9e52ee5aa306ec7123d9fd3e6e54c40e6e27d893747d1f",
+    "raw_bytes": 625,
+    "compressed_sha256": "b256d0ff529599a4f2ae928ccc5e8316877bebeb44663104835f54bd7e539847",
+    "compressed_bytes": 328,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/bilingual-handoff.json",
+    "package": "batches/numerics-memory-curvature/bilingual-handoff.json.gz",
+    "raw_sha256": "9500a00fd9cb2c2b5d2de7ac5ce18eb417e8298780a88839af0eb2746586029f",
+    "raw_bytes": 96998,
+    "compressed_sha256": "cb1183bc9b40e21611505080407132ed1d45f6ab1533d689a8db8944b8cae2c2",
+    "compressed_bytes": 12127,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/proposed-zh-overlay.json",
+    "package": "batches/numerics-memory-curvature/proposed-zh-overlay.json.gz",
+    "raw_sha256": "8475c20a8ec0496b51ba8460b95eba7b849cfc908c2b43db95ae4f45f2ea49a9",
+    "raw_bytes": 51265,
+    "compressed_sha256": "94c402ddf7375d8aa8cf9a805b3b4f0e912198635bba77905add69067a9f1e11",
+    "compressed_bytes": 17282,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/tests-initial.log",
+    "package": "batches/numerics-memory-curvature/tests-initial.log.gz",
+    "raw_sha256": "6661be05dad3a7f3493c5520a6b1f0418ff4253c0a3ae470793cd22f7f1f0bc0",
+    "raw_bytes": 2626,
+    "compressed_sha256": "b9527cf41602bf348e4095c071ab8b7602592d65b49f42feaf953fbd94594803",
+    "compressed_bytes": 679,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/tests-final.log",
+    "package": "batches/numerics-memory-curvature/tests-final.log.gz",
+    "raw_sha256": "5458bce0b86962ab877b79bed1267662d56e7fa948c12549ee5774f4a9980590",
+    "raw_bytes": 3126,
+    "compressed_sha256": "7dd6747369a73cdb183891447e896ff8a722decde57843e3192d907499ef47b0",
+    "compressed_bytes": 773,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/geometry-result.json",
+    "package": "batches/numerics-memory-curvature/geometry-result.json.gz",
+    "raw_sha256": "d8b8d5c2a4dffe000fd413f83e3401da359d2cbbdbdf2085f6de962ee73d7d4b",
+    "raw_bytes": 33985,
+    "compressed_sha256": "50f4e27196cd0098714fa8b4f8e74c2202d73d1d7a3e2a92506848a289a2aff7",
+    "compressed_bytes": 3440,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/geometry-checkpoint.json",
+    "package": "batches/numerics-memory-curvature/geometry-checkpoint.json.gz",
+    "raw_sha256": "afcb9dda84fda7e19a97faed47d379b0aae496af550f6022eed971c37183cf0e",
+    "raw_bytes": 30878,
+    "compressed_sha256": "ed524d9ad2eea1bae8de83c47d2635a49386a007a6de0e0e2ff31de6b6168d16",
+    "compressed_bytes": 3287,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/geometry-zh-frozen-overlay.log",
+    "package": "batches/numerics-memory-curvature/geometry-zh-frozen-overlay.log.gz",
+    "raw_sha256": "7dfeea8f2360e70d1885a3f10d2ab92df754ab330e5e0fb142b7322ffcb83881",
+    "raw_bytes": 146361,
+    "compressed_sha256": "86e445e3ff1fce994003ed0e99ffb743c0cffe46594abfe8944dbe4ed81f9fa2",
+    "compressed_bytes": 9933,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/zh-layout-frozen-overlay/geometry-result.json",
+    "package": "batches/numerics-memory-curvature/zh-layout-frozen-overlay/geometry-result.json.gz",
+    "raw_sha256": "71636ce7c0968799f0eac1dfd210b8214efed445fef1652e28cd84e917bc1c65",
+    "raw_bytes": 34698,
+    "compressed_sha256": "25678ab08dfd05e616ace420d63c34a7ee0e666b5e47911a57cd85146fa31053",
+    "compressed_bytes": 3529,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/zh-layout-frozen-overlay/geometry-checkpoint.json",
+    "package": "batches/numerics-memory-curvature/zh-layout-frozen-overlay/geometry-checkpoint.json.gz",
+    "raw_sha256": "362edbba7f50bce6b9b2492b1ab49c116d5145e12856295ae8428e18109aacca",
+    "raw_bytes": 31519,
+    "compressed_sha256": "c3729449cfc2c5fe4e0619bb58fbfa649da6540878e5ad3904aa09a64fbca403",
+    "compressed_bytes": 3362,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/zh-layout-frozen-overlay/captured-english-strings.json",
+    "package": "batches/numerics-memory-curvature/zh-layout-frozen-overlay/captured-english-strings.json.gz",
+    "raw_sha256": "078d1a72f271ebc21c100e6e45d342d39d797d497e0cc0d8a877ceea5f1ae18a",
+    "raw_bytes": 5970,
+    "compressed_sha256": "5b3591c02de1139b5c45a652682df27b531aa3e89aa3d78b532c625848541b75",
+    "compressed_bytes": 2272,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/zh-overlay-validation.json",
+    "package": "batches/numerics-memory-curvature/zh-overlay-validation.json.gz",
+    "raw_sha256": "b525b031011ae1a072aa5683fb706573f764f81b352a2fc8f60d579ec9e8a9a9",
+    "raw_bytes": 50129,
+    "compressed_sha256": "c7ad52891cf06c40551a64a7789c631338ee435f26cc115cc812ebaa3513f1f1",
+    "compressed_bytes": 12467,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/zh-overlay-validation.log",
+    "package": "batches/numerics-memory-curvature/zh-overlay-validation.log.gz",
+    "raw_sha256": "6b95fbc2c1010dc91169a2f12ca3cab30b66faf59fd7cb591ad7ce7c6e643425",
+    "raw_bytes": 67,
+    "compressed_sha256": "31fa71c840184ddc9c1fe64c062df26b1a739f205bbfdc7b76089f8e7fde323c",
+    "compressed_bytes": 86,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/caption-overlay-validation.json",
+    "package": "batches/numerics-memory-curvature/caption-overlay-validation.json.gz",
+    "raw_sha256": "cd4a6abe16fef8656f5dc4dd8f3ad51f0858cf9451c9800ef0dcae670a343f11",
+    "raw_bytes": 24746,
+    "compressed_sha256": "544e4be3fc5d6277bf0c17dbf0142de471c01e3f99185dbecaa50e5cb8c3a117",
+    "compressed_bytes": 5502,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/caption-overlay-validation.log",
+    "package": "batches/numerics-memory-curvature/caption-overlay-validation.log.gz",
+    "raw_sha256": "d3c01346044c1b91ddd423c9052c1fb7fde3c47ccdf6dfa0bce2083d54cbe73e",
+    "raw_bytes": 84,
+    "compressed_sha256": "db55aabea65d139adf3cd3fe12b8c51fbbf3348b2e85acff995a6bbf8b964928",
+    "compressed_bytes": 97,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/caption-overlay-remaining.json",
+    "package": "batches/numerics-memory-curvature/caption-overlay-remaining.json.gz",
+    "raw_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "raw_bytes": 2,
+    "compressed_sha256": "d15254cd9d142b950433cb8d1c0efb328352fa04db90c0f4d6eb2a68dead445f",
+    "compressed_bytes": 22,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/actual-cache-validation.json",
+    "package": "batches/numerics-memory-curvature/actual-cache-validation.json.gz",
+    "raw_sha256": "cde206c925c5d899b9e8af3332e987f0701737984ac1a08e127eeeeaaf07e477",
+    "raw_bytes": 12315,
+    "compressed_sha256": "6275ac84d4e2c7d61d5290a2bae1dbde22c0ec5e752f7724819c29533562de51",
+    "compressed_bytes": 3229,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/actual-cache-validation.log",
+    "package": "batches/numerics-memory-curvature/actual-cache-validation.log.gz",
+    "raw_sha256": "259785c45f5fa9b204a06fda94c5dc888367bb482d8a67066ec9e75bc4d8d4b2",
+    "raw_bytes": 4769,
+    "compressed_sha256": "71affedeebffd3ca83bb942f4e704e5570e2311d024a080e587fe2270fecdc0a",
+    "compressed_bytes": 1764,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/test_zh_overlay.py",
+    "package": "batches/numerics-memory-curvature/test_zh_overlay.py.gz",
+    "raw_sha256": "8a2a0be2ddca16c88fc5c0fcd87f9c3be6eb72b17d278381f3d479720e90c62e",
+    "raw_bytes": 7721,
+    "compressed_sha256": "3e0d05e509b09fccdee9b85e13ffb80b7efd8edfcdfd9f245db238f1b67fe356",
+    "compressed_bytes": 3008,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/test_caption_overlay.py",
+    "package": "batches/numerics-memory-curvature/test_caption_overlay.py.gz",
+    "raw_sha256": "ceb0351d35866adcc26830967c6745504785ece672fc7aeaf8a39bcfe6e4f1eb",
+    "raw_bytes": 1714,
+    "compressed_sha256": "d546e9180a7d588e4bc387bc91e1296c0be892a4ead49a260a2a5eab93615fc6",
+    "compressed_bytes": 939,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/finalize_caption_overlay.py",
+    "package": "batches/numerics-memory-curvature/finalize_caption_overlay.py.gz",
+    "raw_sha256": "e971da3b684f56eed0cac4219b8a5e534eebe7ecbc579073d5cfb213a8bcd769",
+    "raw_bytes": 1858,
+    "compressed_sha256": "265eea7c28907c8438367a20e53c952a8187d5610203267e21dbe872cec95342",
+    "compressed_bytes": 988,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/validate_actual_cache.py",
+    "package": "batches/numerics-memory-curvature/validate_actual_cache.py.gz",
+    "raw_sha256": "f2c1e9a41963255203de23e9999edb3668b01f2274e76097323f3476cba3e91b",
+    "raw_bytes": 6692,
+    "compressed_sha256": "fdcd515d4eed35256d7614fdef93b9549293fcc0d72691a2f511d69fd00552a1",
+    "compressed_bytes": 2899,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/geometry.py",
+    "package": "batches/numerics-memory-curvature/geometry.py.gz",
+    "raw_sha256": "8216ea8a3a3a1953981e5410087df00844bf70d7ec7c80e3d6d50395de8a0ad9",
+    "raw_bytes": 9253,
+    "compressed_sha256": "77f17e20da9375610adb47e372e151ad68a00126a5347d15f56630c9c1e29564",
+    "compressed_bytes": 3633,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-vcurve-hvp-implementation/geometry_zh_frozen_overlay.py",
+    "package": "batches/numerics-memory-curvature/geometry_zh_frozen_overlay.py.gz",
+    "raw_sha256": "9fe4440919f0191a3a79e52057a3147b5070d9406b54313401143bff0b5c3e15",
+    "raw_bytes": 10931,
+    "compressed_sha256": "5832651017837ea8ef9f2762a192e38f610eda6968a51e7e24ce8b548ca05c0f",
+    "compressed_bytes": 4267,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/README.md",
+    "package": "batches/tail-five/README.md.gz",
+    "raw_sha256": "9a14567e7ce800a1d25ea66f7a3b690c00b9c036957708cacbd55b2c8939d568",
+    "raw_bytes": 2632,
+    "compressed_sha256": "165ad0b69cdd94c2d9a2e45ec0ba797bbb2e45e737c7651da97b9049b97fed5e",
+    "compressed_bytes": 1415,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/before.json",
+    "package": "batches/tail-five/before.json.gz",
+    "raw_sha256": "3e6f80751de4dad199e4b4fec187b25c211392fd34716ca4da18b26b4316957c",
+    "raw_bytes": 671,
+    "compressed_sha256": "24215e2636495d8eb25b608ce900867b6bc69b58b10bc196f767b7f4d1312250",
+    "compressed_bytes": 335,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/source-freeze.json",
+    "package": "batches/tail-five/source-freeze.json.gz",
+    "raw_sha256": "83bdebf217eb2b4b266d4bb14359e8782e38756a585ab55785c8e326500a6adc",
+    "raw_bytes": 966,
+    "compressed_sha256": "f91cce43e145b134b20596e853ae914248641484d93bda8078ecefa890844aea",
+    "compressed_bytes": 382,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/bilingual-handoff.json",
+    "package": "batches/tail-five/bilingual-handoff.json.gz",
+    "raw_sha256": "b0781a5538310a494c5aa276c22e5b082c5d0850d61d5e1bb74aa7e0dbb80083",
+    "raw_bytes": 90336,
+    "compressed_sha256": "2d8b1d15967505830890ec166b57252957d83203ac1e17c5d6da7e530c2de1c9",
+    "compressed_bytes": 21189,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/normalized-ch-overlay.json",
+    "package": "batches/tail-five/normalized-ch-overlay.json.gz",
+    "raw_sha256": "d2c81964e8ade9f44a1ea8ad8edd8aa0f868787c60fb19a62bd4cd33f44a45a3",
+    "raw_bytes": 67616,
+    "compressed_sha256": "d531cfe21a73faf95224432fffcf5f672be494d1295e0b9269965050a94e77f2",
+    "compressed_bytes": 18216,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/caption-add.json",
+    "package": "batches/tail-five/caption-add.json.gz",
+    "raw_sha256": "a179627f2c9b42abbc7da1ba4f06d49f08b341c704a0efe595f1128c321e1cae",
+    "raw_bytes": 12630,
+    "compressed_sha256": "b53ca22a65c0e2ed7585afe66ec18a28efef1da83116094f4d2c2d7f74e2b96b",
+    "compressed_bytes": 4857,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/caption-resolution.json",
+    "package": "batches/tail-five/caption-resolution.json.gz",
+    "raw_sha256": "a10261e2f471b314c788ed6265ba7658cab5301660d0e3409f82971d13abb18a",
+    "raw_bytes": 26001,
+    "compressed_sha256": "b63297167070eb4999f867faa126aa23cd904345526a5ac8200b3530150cb23a",
+    "compressed_bytes": 6129,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/narration-additions.json",
+    "package": "batches/tail-five/narration-additions.json.gz",
+    "raw_sha256": "ca03894fe05df73ed7d1251b658df52b1559ede88fc753cd8ee3e905f45f487f",
+    "raw_bytes": 26606,
+    "compressed_sha256": "758d6031b9932e1dd7d0de637143235ffd22685082d4ebca685d9f2b330484f4",
+    "compressed_bytes": 11309,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/implementation-report.json",
+    "package": "batches/tail-five/implementation-report.json.gz",
+    "raw_sha256": "2b8e9bee2c8331faf07e220f064172cf114744499c46f200661d89ac68fa3f1e",
+    "raw_bytes": 2927,
+    "compressed_sha256": "dc009a7b4ae9f4b0ce739ac67dcc2d760a10508d6974d09083c63733a18ef2b3",
+    "compressed_bytes": 1387,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/actual-cache-review.json",
+    "package": "batches/tail-five/actual-cache-review.json.gz",
+    "raw_sha256": "c3c4694377e39cab5f03ecdcc6149be98d735a1ff352ed77cdb6a55f05d09d00",
+    "raw_bytes": 4691,
+    "compressed_sha256": "b2d8ee06cd677dfea72416642dfe277cf11cc91c18b4247a9509bb2e9530953c",
+    "compressed_bytes": 1935,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/geometry-en.json",
+    "package": "batches/tail-five/geometry-en.json.gz",
+    "raw_sha256": "5d8522ec959cc5503b2a1583652d2a14e8f3410f3004b3646be551de648dc589",
+    "raw_bytes": 10386,
+    "compressed_sha256": "0fedef06450e8ae3c19e2fe8fe607c9453bebb663852ba46a2d41bddd249e941",
+    "compressed_bytes": 2581,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/geometry_fixture.py",
+    "package": "batches/tail-five/geometry_fixture.py.gz",
+    "raw_sha256": "ec58acbe992034874a62b4469a1a61d9bad211e32b88a6163c0c2bea51599857",
+    "raw_bytes": 5675,
+    "compressed_sha256": "2469f9ad7aec4d913018cc6ee0916fad6fab80dcfb5087c0971e7ebf0d4d8e85",
+    "compressed_bytes": 2613,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/tests-final.log",
+    "package": "batches/tail-five/tests-final.log.gz",
+    "raw_sha256": "89fada1c24f1abd6eb05ebea7d404c925bb11ad0bfc73baa7dd19205e1a845bd",
+    "raw_bytes": 2051,
+    "compressed_sha256": "8ffaa0e106477723e6b8ae4aeb495f9199ae0f95eb7cd88bb374089c60bc481c",
+    "compressed_bytes": 549,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/private-overlay-fixtures.json",
+    "package": "batches/tail-five/private-overlay-fixtures.json.gz",
+    "raw_sha256": "6c9f62758f71aa72e730f38f95c16bfd4ce50512164b4c20efedebb891d7596b",
+    "raw_bytes": 48047,
+    "compressed_sha256": "93e4d0d429f50ccd49695a221a9280af799c38c354ee4793df5fe1fc613c8d6d",
+    "compressed_bytes": 12216,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/private-overlay-test.log",
+    "package": "batches/tail-five/private-overlay-test.log.gz",
+    "raw_sha256": "161504f84f07589dd60421a452bf55733a429e21573e47c78e5a8a99d494a7fb",
+    "raw_bytes": 150,
+    "compressed_sha256": "c67a932bdf42c1ad00923f91666bcd16643f14d229d8dcca2261d39d3c295bea",
+    "compressed_bytes": 136,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/check_private_overlay.py",
+    "package": "batches/tail-five/check_private_overlay.py.gz",
+    "raw_sha256": "4bb9c4885a1ab1033a644ca4469c9ed3ba1585730aaff954f50e9e10eedd347a",
+    "raw_bytes": 1325,
+    "compressed_sha256": "7e0397d2aeb74311b4a2d3ed1a95935c982b305597633458ce3ace5550f7d4ff",
+    "compressed_bytes": 775,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/normalize_overlay.py",
+    "package": "batches/tail-five/normalize_overlay.py.gz",
+    "raw_sha256": "4d3c00d28b8f8b5134c6b7a76dcc67c2c1ccd52c08fec230b11b0004147cd7ee",
+    "raw_bytes": 11741,
+    "compressed_sha256": "118b3673ddc581df63542dde48c0d0282196985aa77afcbaa8f682c05f6cff1c",
+    "compressed_bytes": 4504,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/export_handoff.py",
+    "package": "batches/tail-five/export_handoff.py.gz",
+    "raw_sha256": "225039e96297c43f4f8957144824604c40db5f5c76c4fddbda350ac0bf9bbc0f",
+    "raw_bytes": 8958,
+    "compressed_sha256": "5a4c8873e475226d8b9519158838fc8c72fc35a380aa1592ecf561bf9a24f4b9",
+    "compressed_bytes": 3482,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-implementation/zh_proposals.py",
+    "package": "batches/tail-five/zh_proposals.py.gz",
+    "raw_sha256": "b5ee8a5f18e3b00f986e241e1ee482d5e88bf99ff523ac6cd68151886492a2e5",
+    "raw_bytes": 21715,
+    "compressed_sha256": "6c5c5748d485c45954a698de1271fcf5b3b4d84fdabfcb66430acbb7aa36ee4c",
+    "compressed_bytes": 9552,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-bilingual-integration/merge-receipt.json",
+    "package": "integration/merge-receipt.json.gz",
+    "raw_sha256": "c818cfb8db7c56ca2a76c79203f5e14a6e89e522aa0a174f3b036883779acbd8",
+    "raw_bytes": 102664,
+    "compressed_sha256": "56fb63451d91ea67b441f7bbe89e932cfb0c201502a762602e52c5417fa46fb9",
+    "compressed_bytes": 27932,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-bilingual-integration/todo.log",
+    "package": "integration/todo.log.gz",
+    "raw_sha256": "849f26a9eb2884b39fa93a78108b875b5644e7e80c54a304a5e661ebb173aca4",
+    "raw_bytes": 4526,
+    "compressed_sha256": "e7e03edac347f11cb786795d104f163e3698d5e5ef4c1e69f4e110db309cecca",
+    "compressed_bytes": 1683,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-integrated-full-tests.log",
+    "package": "integration/full352-tests.log.gz",
+    "raw_sha256": "7a9a44b95cfd94c02ac33abc83d6dbc6a0735bd03568fc50518e2dd2577f8c9a",
+    "raw_bytes": 60489,
+    "compressed_sha256": "cc1eb197e1874cd3abc681ae34b254b104a438b85209408847c04c8c85d0d9d4",
+    "compressed_bytes": 11495,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai12-shared-caption-regression-part4.json",
+    "package": "shared-caption-regression/report.json.gz",
+    "raw_sha256": "ee502f9813112107ed7d36666988d878b0fc0dce4459661587abac252a56848c",
+    "raw_bytes": 27753,
+    "compressed_sha256": "a3ff13917f17be2849a4d1b80de413fdef44113e1f70790545d2acaabf083059",
+    "compressed_bytes": 8318,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai12-shared-caption-regression-part4.md",
+    "package": "shared-caption-regression/report.md.gz",
+    "raw_sha256": "a04f3a0951135d5402ce58eec214ee20915ec646224c869278b68c17be7f470d",
+    "raw_bytes": 1881,
+    "compressed_sha256": "56f6e62668d43af5ed7d341bbfeea64cbfdb84028192a750d7bfa5081414e1c9",
+    "compressed_bytes": 976,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai12-shared-caption-regression-part4.log",
+    "package": "shared-caption-regression/execution.log.gz",
+    "raw_sha256": "deaac9840049242b023c31faa0269fffcad246d5ea6cc3ca70df419fdbec5135",
+    "raw_bytes": 221,
+    "compressed_sha256": "262489f691119d243e0a95e6963beea72619c6b744b5013c2fb7d629b9634283",
+    "compressed_bytes": 170,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai12-shared-caption-regression-part4/used-caption-results.json",
+    "package": "shared-caption-regression/used-caption-results.json.gz",
+    "raw_sha256": "aa137cbd8fe8ef78d8cadc7dfefcfbb319d416fb9a1de1cc17f8bf44620fb9d8",
+    "raw_bytes": 2016716,
+    "compressed_sha256": "55e9900154084f0cf083d89acf956b2ab3d0eb158717c2124379764703de2e1d",
+    "compressed_bytes": 135950,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/regress_ai12_shared_caption_tables_part4.py",
+    "package": "shared-caption-regression/regression-script.py.gz",
+    "raw_sha256": "e40905f6e62b5baf841124082a023a465f8778ca641370c22f69dc4c3a1f78c9",
+    "raw_bytes": 9069,
+    "compressed_sha256": "eb24e161e7d8abff2f4adb8aaef3230d0e738626bd698c35c6dcc766ebc5c894",
+    "compressed_bytes": 3484,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai12-shared-caption-regression-part4/current-ai_text_zh.json",
+    "package": "shared-caption-regression/current-ai_text_zh.json.gz",
+    "raw_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+    "raw_bytes": 2426144,
+    "compressed_sha256": "1500f844d90f35b98f6e489b612eac445cb4cfbdbd99946c9437d00d8563a0b7",
+    "compressed_bytes": 880753,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-derivative-axis-regression/source-before.py",
+    "package": "derivative-layout-transition/source-before.py.gz",
+    "raw_sha256": "8958372838269201b5430a8eb4b24bc7298cc2e0a3b8b34a03aad2ce7d248d10",
+    "raw_bytes": 15643,
+    "compressed_sha256": "5cd966ea0d2413b6aef6b25e450ec151a5ed1a375deedbc029abd1133028bcf8",
+    "compressed_bytes": 5158,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-derivative-axis-regression/source-after.py",
+    "package": "derivative-layout-transition/source-after.py.gz",
+    "raw_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+    "raw_bytes": 15747,
+    "compressed_sha256": "792c2c0d1bb6dd0c741a32774da3b6890eea9554bfd0e80ab448b7efa8241c2f",
+    "compressed_bytes": 5203,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-derivative-axis-regression/before-result.json",
+    "package": "derivative-layout-transition/before-result.json.gz",
+    "raw_sha256": "e66bb76297d90c9965e6b7fa99a5bd9b3fea9d3f8f079fe7e1f5953c642d9468",
+    "raw_bytes": 56156,
+    "compressed_sha256": "04fbefaf334d591ccbbcc25b5fb6ff59114103c167cbfe96f8ba342d8bb92d57",
+    "compressed_bytes": 10950,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-derivative-axis-regression/rerender-en.log",
+    "package": "derivative-layout-transition/rerender-en.log.gz",
+    "raw_sha256": "31350f512c8fb185b338d66a973b438dfc5615fee5f26a5107fe84dba680ed34",
+    "raw_bytes": 67,
+    "compressed_sha256": "2817f65d72e22a371cc29ea6c744bf4d5efa8dab02ae1bf7b9f851834511b790",
+    "compressed_bytes": 75,
+    "compressed": true
+  },
+  {
+    "origin": null,
+    "package": "derivative-layout-transition/root-label-position.patch.gz",
+    "raw_sha256": "2897bec34bf4833ed351742c93276dbd738e7a8d9191a239961ad3f861ac7e5e",
+    "raw_bytes": 933,
+    "compressed_sha256": "2067c803d1c8b23eeebdd80e9fa4f4d2f2dbd09f306eb808745020b0e52c8a29",
+    "compressed_bytes": 558,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-library-caption-regression/source-before.py",
+    "package": "library-layout-caption-transition/source-before.py.gz",
+    "raw_sha256": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+    "raw_bytes": 13788,
+    "compressed_sha256": "bd24fbe98b44ed5ab364d751a9bc3880f865252350e1fd1eccd1f3bcdb4aa17e",
+    "compressed_bytes": 4563,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-library-caption-regression/table-update.json",
+    "package": "library-layout-caption-transition/table-update.json.gz",
+    "raw_sha256": "8ffc116a916599c78268a21365847173c1e44c597c39e58bcf3b3b20e9e6a799",
+    "raw_bytes": 560,
+    "compressed_sha256": "55f02be9cf8652e88426875968b99eb3248124bb2dd6cb9be3fbf219b2722a50",
+    "compressed_bytes": 373,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-library-caption-regression/before-result.json",
+    "package": "library-layout-caption-transition/before-result.json.gz",
+    "raw_sha256": "6b482c4feca6f6cc7791d12ac69fdad66cda53a265f3ed17ae54ac92463f7549",
+    "raw_bytes": 71850,
+    "compressed_sha256": "bcc117799a760cbacca53136ff4d930f8bb43a55adcc4d93e2b71219835657a3",
+    "compressed_bytes": 11922,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-mid-head-endpoint-review/library-gap-caption-overlay.json",
+    "package": "library-layout-caption-transition/owner-caption-overlay.json.gz",
+    "raw_sha256": "29d893d774b382b49b28b133bdcc9564b66fd726333c8941d0cf4d5113dc2407",
+    "raw_bytes": 421,
+    "compressed_sha256": "0123b453e6930f0330368d7058458f91210e8475bf51b3e37b54b4d64fac01dc",
+    "compressed_bytes": 276,
+    "compressed": true
+  },
+  {
+    "origin": "Final package current Library snapshot",
+    "package": "library-layout-caption-transition/source-after.py.gz",
+    "raw_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+    "raw_bytes": 13790,
+    "compressed_sha256": "85ce8ebce8a5e62632ce68dc35514979b76b19393e6cacb7b0fe21aa3bd02022",
+    "compressed_bytes": 4564,
+    "compressed": true
+  },
+  {
+    "origin": null,
+    "package": "library-layout-caption-transition/root-result-inset.patch.gz",
+    "raw_sha256": "311327bd2edce49de029f251203f357573f6431c517daec47c4afa3f9d7114df",
+    "raw_bytes": 840,
+    "compressed_sha256": "ad3c1c140e42f97a253aa8bb362eb45221dbf02ddccfaa5c52ab3284464c04d9",
+    "compressed_bytes": 478,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-source-review-final-freeze.json",
+    "package": "integration/parent-final-freeze.json.gz",
+    "raw_sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059",
+    "raw_bytes": 4726,
+    "compressed_sha256": "27fd60843f94de244d16ea85844cdb27dbbfbce3eee4aceaa949ac400b15374d",
+    "compressed_bytes": 1726,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-layers-unit-regression/table-update.json",
+    "package": "post-checkpoint-deltas/layers-unit/table-update.json.gz",
+    "raw_sha256": "6656942b1d2e9ca5959c1554f122501d96b059b2761318c4f4f71169befb72e6",
+    "raw_bytes": 545,
+    "compressed_sha256": "31682735551733cd446bd6cf78b5de5778295ab08708c1ec7c9bd10812f3d848",
+    "compressed_bytes": 366,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-layers-unit-regression/before-result.json",
+    "package": "post-checkpoint-deltas/layers-unit/before-result.json.gz",
+    "raw_sha256": "0b1e4eb39ab6f3047bab717b692fceb802d4819181543963195fbc34efce8d17",
+    "raw_bytes": 81679,
+    "compressed_sha256": "9e07d521f65b1feebb9ad64a504647c8b4504ed201be50ce78b7a323f1036cda",
+    "compressed_bytes": 17328,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/s10_floats.before.py",
+    "package": "post-checkpoint-deltas/floats/s10_floats.before.py.gz",
+    "raw_sha256": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+    "raw_bytes": 15379,
+    "compressed_sha256": "0a893e75e9b4e86926537760b637816475e2e05c3892b10f23f99c1210072c3f",
+    "compressed_bytes": 5270,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/s10_floats.after.py",
+    "package": "post-checkpoint-deltas/floats/s10_floats.after.py.gz",
+    "raw_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+    "raw_bytes": 15476,
+    "compressed_sha256": "0407f62548958f48a7a5e00ea14e3eecf9556fb0fdcae743bf2556c92118707e",
+    "compressed_bytes": 5283,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/freeze.json",
+    "package": "post-checkpoint-deltas/floats/owner-freeze.json.gz",
+    "raw_sha256": "27ab5674b51ede87ec856f8bacedf3ffa1f79e80dacd9ab0192e538469ca737c",
+    "raw_bytes": 747,
+    "compressed_sha256": "ae13d91c7b6b764749b67c12bd78f740edcd527e6b9d9df3e5102332c35cb662",
+    "compressed_bytes": 505,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/before-result.json",
+    "package": "post-checkpoint-deltas/floats/before-result.json.gz",
+    "raw_sha256": "30cdab97de0d86d6c761f22e6437dc5eac56b953209bad33126d6fbb61faca5d",
+    "raw_bytes": 79620,
+    "compressed_sha256": "ad638cad3de7f97e88c21188fa48ca45252a1b395841a0581ef0c00ffcb4abfa",
+    "compressed_bytes": 15487,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/before-snapshot.json",
+    "package": "post-checkpoint-deltas/floats/before-snapshot.json.gz",
+    "raw_sha256": "da4a6dbf1f6dc36fef06c4829ad87d69496184f8e5fb4a165fcc5f38a34c3cc9",
+    "raw_bytes": 10233,
+    "compressed_sha256": "3d29ec9302a04660611f581e6977ee04fa3739ff739c23723b20ce6d22c4c28e",
+    "compressed_bytes": 3340,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/caption-corrections-overlay.json",
+    "package": "post-checkpoint-deltas/floats/caption-corrections-overlay.json.gz",
+    "raw_sha256": "f34ae25d153802ea579928385464ddd5b25eb169c60edfd9b346ac45472b536e",
+    "raw_bytes": 6689,
+    "compressed_sha256": "3f9fec3ca78eacdd5be3129e707e27f969d382ce7fdb5058490155bdd4cbffd0",
+    "compressed_bytes": 3039,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/geometry-and-caption-compile.json",
+    "package": "post-checkpoint-deltas/floats/geometry-and-caption-compile.json.gz",
+    "raw_sha256": "67cb204e0aa951718f81c3b0f5a4e72a1728c555eaaa5b9e947f46688fcddfde",
+    "raw_bytes": 52405,
+    "compressed_sha256": "d0514963cb600a7dc2676b4c454694ca0a9b7fea9917c9d4a9a6a7ce18dcd669",
+    "compressed_bytes": 7166,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/geometry-and-caption-compile.log",
+    "package": "post-checkpoint-deltas/floats/geometry-and-caption-compile.log.gz",
+    "raw_sha256": "b0e933154eda72b48187fb809c9ae4eb1ba2d2c9f95c4b8018487d12dcfe16c4",
+    "raw_bytes": 76541,
+    "compressed_sha256": "23fa8bf69b172e375aeea9f46ecc35df761f04993468e8cf6644b23c5cd0e869",
+    "compressed_bytes": 7053,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/check_geometry_and_captions.py",
+    "package": "post-checkpoint-deltas/floats/check_geometry_and_captions.py.gz",
+    "raw_sha256": "326ce571862f86e2d4900c4f4424b7a0d7351bc8f52ff6a43c344d54df064478",
+    "raw_bytes": 4743,
+    "compressed_sha256": "43d9db7a9297384741f0854f042d10d9d038046c7a898f803c167e3529e7ac34",
+    "compressed_bytes": 2201,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/root-integration/table-update.json",
+    "package": "post-checkpoint-deltas/floats/root-table-update.json.gz",
+    "raw_sha256": "760408fd3bfb35d5b1c3d3faff67718c8f4c389affd6538d698f0cdb7065cd85",
+    "raw_bytes": 6012,
+    "compressed_sha256": "b2d78268244a9af1af04078baff5955c2a1e7aceb4fe6336891fb148c847ea71",
+    "compressed_bytes": 2032,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-nested-caption-regression/table-update.json",
+    "package": "post-checkpoint-deltas/nested-readouts/table-update.json.gz",
+    "raw_sha256": "80fc08834f55f4e04c7931f076ff3502f348bd8722ab026f126f1404fa9199c3",
+    "raw_bytes": 2105,
+    "compressed_sha256": "24ec96676082c47c0314391b6f00454552ce38e62ec06c97e39f1cbd979e7dfd",
+    "compressed_bytes": 768,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-theory-endpoint-review/hvp-readout-caption-overlay.json",
+    "package": "post-checkpoint-deltas/nested-readouts/hvp-caption-overlay.json.gz",
+    "raw_sha256": "5d9b5dde32582ca4d00c862ed4702452290f72a7b580cb5485253196e31cca8a",
+    "raw_bytes": 2051,
+    "compressed_sha256": "858608b2d920111993431f2ac80854653c4d5e517f48ae11f6fd0e92da5f282c",
+    "compressed_bytes": 742,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-theory-endpoint-review/hvp-readout-caption-compile.json",
+    "package": "post-checkpoint-deltas/nested-readouts/hvp-caption-compile.json.gz",
+    "raw_sha256": "3f361ad7cce3ce63b8c74fdf2aa473f68fa832c18d46ca203301aacfb312df23",
+    "raw_bytes": 4900,
+    "compressed_sha256": "c88484f2e23e2abccbcae36fadd37696911ce1225b4e8ef7c0329807be33c1ff",
+    "compressed_bytes": 1115,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-theory-endpoint-review/hvp-readout-caption-compile.log",
+    "package": "post-checkpoint-deltas/nested-readouts/hvp-caption-compile.log.gz",
+    "raw_sha256": "3422015b3736c37004f1345d6990ec924379aff5bd31dac1b490991c8b761e37",
+    "raw_bytes": 9924,
+    "compressed_sha256": "a7fcfa77295943ad4f22691db2d98ee9d697d27c60f8e338dd231980d8da2393",
+    "compressed_bytes": 770,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/quadratic-caption-add.json",
+    "package": "post-checkpoint-deltas/nested-readouts/quadratic-caption-overlay.json.gz",
+    "raw_sha256": "19cac2c3228c2d89ec1aefaab0fa22aa21e387239df4719abeffef4f77ad4cb5",
+    "raw_bytes": 250,
+    "compressed_sha256": "e8fce19f2d3adf6b18c581705eb49e7b9de90654d9d25d7108238c5bc449d78b",
+    "compressed_bytes": 214,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/quadratic-caption-compile.json",
+    "package": "post-checkpoint-deltas/nested-readouts/quadratic-caption-compile.json.gz",
+    "raw_sha256": "0e5b3ff989db02a20f7202c29b96a8094233cd0fb265693823db09e8302b2507",
+    "raw_bytes": 929,
+    "compressed_sha256": "bc60a0ae888ac73fa4c090a71af8f83c6997e237178048bc075c0a654a0c51e3",
+    "compressed_bytes": 498,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-tail-endpoint-review/compile_quadratic_captions.py",
+    "package": "post-checkpoint-deltas/nested-readouts/compile_quadratic_captions.py.gz",
+    "raw_sha256": "cee93d4cf6d4f58088997f9b76f4e7ca9377d8f9c7380f7216fe39964e5e4d41",
+    "raw_bytes": 1314,
+    "compressed_sha256": "39995b5e287b1924ff918ff701d7b2a10abbb29fb78e2d2cf82292716cbbb5e9",
+    "compressed_bytes": 812,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-layers-unit-regression/ai_text_zh-before.json",
+    "package": "post-checkpoint-deltas/intermediate-tables/1bd8a8257150806b91d9a40aa97a3e9ee1bee94ec30adbcf917ce2fbce4d8757.json.gz",
+    "raw_sha256": "1bd8a8257150806b91d9a40aa97a3e9ee1bee94ec30adbcf917ce2fbce4d8757",
+    "raw_bytes": 2426426,
+    "compressed_sha256": "ec618e36c6affa1b1f0ed33e4d3c9604b76bcdadee312c19fd2bed5980ec55b0",
+    "compressed_bytes": 880800,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-floats-ulp-card-repair/root-integration/global-before.json",
+    "package": "post-checkpoint-deltas/intermediate-tables/3add35213ef23c6365ab37840eb0edfdf6a49f2352139b8b22be9d857b376f95.json.gz",
+    "raw_sha256": "3add35213ef23c6365ab37840eb0edfdf6a49f2352139b8b22be9d857b376f95",
+    "raw_bytes": 2426445,
+    "compressed_sha256": "24a9b6d23df559e4c975bc36b283e963b62a80b7f066121533460810379c183b",
+    "compressed_bytes": 880815,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-nested-caption-regression/ai_text_zh-before.json",
+    "package": "post-checkpoint-deltas/intermediate-tables/e4bde73529bfa28faa831f365224edaa7c8b8286726b214d71967e9c633f5d0f.json.gz",
+    "raw_sha256": "e4bde73529bfa28faa831f365224edaa7c8b8286726b214d71967e9c633f5d0f",
+    "raw_bytes": 2426901,
+    "compressed_sha256": "17b27efb60b74d97d93173d25846aee1a5d06166690191388201fab4eb252f61",
+    "compressed_bytes": 880927,
+    "compressed": true
+  },
+  {
+    "origin": null,
+    "package": "post-checkpoint-deltas/floats/readable-card.patch.gz",
+    "raw_sha256": "e993f8e86109f6679e18802f4d1be7f88d606ac76710f3f1077f8f54e5d9a3c7",
+    "raw_bytes": 1414,
+    "compressed_sha256": "5ff33f159751a67cf7dc0aa472c2a13c17c70ea5c51408fb7ab50f1b0ac29c6c",
+    "compressed_bytes": 568,
+    "compressed": true
+  },
+  {
+    "origin": "/workspace/runtime/ai4-source-review-package/package.py",
+    "package": "integration/package-builder.py.gz",
+    "raw_sha256": "09cb099ba3e860a0534a476fbf00f8632f124c16a5de05b3ee747a834ca91e14",
+    "raw_bytes": 30699,
+    "compressed_sha256": "783a801857851ed44779e723e433dbfefe0044bb44be445ad7c1f621f423ce95",
+    "compressed_bytes": 9445,
+    "compressed": true
+  }
+]

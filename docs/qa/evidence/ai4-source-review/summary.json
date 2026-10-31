@@ -1,0 +1,641 @@
+{
+  "packaged_utc": "2026-10-31T22:59:08.047527+00:00",
+  "scope": "Reviewable source/translation/test checkpoint for all19 Part4 scenes in EN/ZH; not rendered or listening approval.",
+  "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+  "local_HEAD_at_packaging": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+  "snapshots": [
+    {
+      "path": "videos/ai/ai4/s01_hook.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "3080a4b39619d0b845d945720d3900702dfb5504fe28da1ac02f184b66f10239",
+      "baseline_bytes": 8697,
+      "current_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "current_bytes": 10327,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s02_derivative.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "e644a4f1b973499e65a81b887e12305ac2ccb61a353850ef53d7b74b44b75b75",
+      "baseline_bytes": 15300,
+      "current_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+      "current_bytes": 15747,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s03_gradient.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "f8d55c62e32283fe161e67a4bccb03eaa4f3478f55ad2cace491440fc8a05c5a",
+      "baseline_bytes": 15663,
+      "current_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "current_bytes": 15915,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s04_jacobian.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "5fae34de157492d904412c6fc1cdc3d9808bc4a890bf2cff09b62faf230433d8",
+      "baseline_bytes": 10747,
+      "current_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "current_bytes": 13760,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s05_layers.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "8bec89643302d10228a2b773bee5810d9b7c6228121ae12519d6a7f31e81aaa1",
+      "baseline_bytes": 10191,
+      "current_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "current_bytes": 11141,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s06_modes.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "58e69a8526e7d1cb8b3658064b51401c579cde3306610ec1bc6407d750a1855e",
+      "baseline_bytes": 14552,
+      "current_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "current_bytes": 15882,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s07_backprop.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "084bbaf4b9e5cbd899e7bc47bd85fa677a538620204d95d536a21dd13a96f029",
+      "baseline_bytes": 16276,
+      "current_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "current_bytes": 16721,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s08_library.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "6fd17d1979f87b79733cbae9e05a2ac8638c26726579f5f74413613f3d147351",
+      "baseline_bytes": 13410,
+      "current_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+      "current_bytes": 13790,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s09_train.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "3c683f6fdbd4f13bd16cd413b6e82538015650495cde2e575d9312bf104a5af2",
+      "baseline_bytes": 14378,
+      "current_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+      "current_bytes": 20897,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s10_floats.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "5a6df9d53a0cd7ae367536db1da055510dd4bfb3d85d537f1d6d47c74a98684b",
+      "baseline_bytes": 13105,
+      "current_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+      "current_bytes": 15476,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "f20d4837e84c84cbb65f82ca0a5ff0549669f31004e71e36793a260d0186a17b",
+      "baseline_bytes": 10475,
+      "current_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "current_bytes": 14041,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s12_memory.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "b77dd1c1509e4ded0867252dad99833d3bfb742d47f632be238835081132a207",
+      "baseline_bytes": 10972,
+      "current_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "current_bytes": 12530,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s13_newton.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "0f0dc547dfef3ab633356025772bfcab7c857eb15bab3c96033f22f1adae23e2",
+      "baseline_bytes": 10947,
+      "current_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "current_bytes": 14032,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "1b038ed7db5e163c88f1350c8cb05ea5a7566e1524786ffcc42347ddc120b464",
+      "baseline_bytes": 12784,
+      "current_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "current_bytes": 20004,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s15_quadratic.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "d842691c398f4978b04d3e10c99423e72d96d338887953eedeb4ce15bdd9a7db",
+      "baseline_bytes": 14101,
+      "current_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "current_bytes": 18044,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s16_lagrange.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "f8ee308e30e6efb1eec1096321cfa58e23088bb15e6f2abbaccfdd90822accbf",
+      "baseline_bytes": 12582,
+      "current_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "current_bytes": 14707,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s17_kkt.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "b734af59ef65bc8cf5d859099aab3da381b665eea611502940be11cab2558a26",
+      "baseline_bytes": 13227,
+      "current_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "current_bytes": 18234,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s18_implicit.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "527b7e7997f4b761afd8063f122274c5730b737ad515a1d10191b8c12d098ae5",
+      "baseline_bytes": 10784,
+      "current_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "current_bytes": 16898,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/s19_outro.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "5f3c10c4e5fee83f76d1a52dadafa9b3adad32e7c42bd1e44330bf3177fc3e97",
+      "baseline_bytes": 13510,
+      "current_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "current_bytes": 16025,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/__init__.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "baseline_bytes": 0,
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_bytes": 0,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/cache_contract.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "baseline_bytes": 8767,
+      "current_sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "current_bytes": 8767,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/common.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "baseline_bytes": 4944,
+      "current_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "current_bytes": 4944,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/compute.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "baseline_bytes": 72334,
+      "current_sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "current_bytes": 72334,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/contracts.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "baseline_bytes": 8587,
+      "current_sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "current_bytes": 8587,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/manifest.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "baseline_bytes": 1375,
+      "current_sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "current_bytes": 1375,
+      "changed": false
+    },
+    {
+      "path": "videos/ai/ai4/zh_lines.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "2b191a1e4286ea640cc2f81d632a6381b8e4724213a68374f0100802af753767",
+      "baseline_bytes": 54024,
+      "current_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "current_bytes": 108379,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "8e4ed21282fc336bebc5f6e7d1aea7e3c975d09da486c873913c84c98bf3cb0a",
+      "baseline_bytes": 2396458,
+      "current_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+      "current_bytes": 2428719,
+      "changed": true
+    },
+    {
+      "path": "videos/ai/ai4/README.md",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "87517cc4383cbdf2942b45ed563015fec2e1f7ea862ee500900699796e8bac3a",
+      "baseline_bytes": 24847,
+      "current_sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+      "current_bytes": 28578,
+      "changed": true
+    },
+    {
+      "path": "explainer/ai/autodiff.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "baseline_bytes": 7798,
+      "current_sha256": "2d2a0661b518ddfd2b16b31f9efdcbfdc573d5d1fdf06c2c1dc17c0975c8f1a0",
+      "current_bytes": 7798,
+      "changed": false
+    },
+    {
+      "path": "tests/test_ai4_first_five_math.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": null,
+      "baseline_bytes": null,
+      "current_sha256": "72a0e3b7d2c39e780ad9341a63d01c5e44c94d7dd914a052c147ef3039c2494b",
+      "current_bytes": 9141,
+      "changed": true
+    },
+    {
+      "path": "tests/test_ai4_mid_head_math.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": null,
+      "baseline_bytes": null,
+      "current_sha256": "5facbe498a7ec2a549bd3cc48d2bf01bc8dd2c15f9f1bbf74337023ad628e06e",
+      "current_bytes": 7708,
+      "changed": true
+    },
+    {
+      "path": "tests/test_ai4_narration_review.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": null,
+      "baseline_bytes": null,
+      "current_sha256": "7a9024a9d56bceabc6f21b47a6f7e20c8e79cfa5d2ba29ac903e293b4cfc38c1",
+      "current_bytes": 20571,
+      "changed": true
+    },
+    {
+      "path": "tests/test_ai4_producer_contracts.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+      "baseline_bytes": 18362,
+      "current_sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+      "current_bytes": 18362,
+      "changed": false
+    },
+    {
+      "path": "tests/test_ai4_scene_semantics.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": null,
+      "baseline_bytes": null,
+      "current_sha256": "a1a716c1f1c0ebe7d26ec874397ee65fe5f0d1dd56f5bd83f8588a80a689143e",
+      "current_bytes": 10179,
+      "changed": true
+    },
+    {
+      "path": "tests/test_ai4_tail_review.py",
+      "baseline_commit": "f00be66a0b47954bbdfe00a03dba7ebfe6c6fc4b",
+      "baseline_sha256": null,
+      "baseline_bytes": null,
+      "current_sha256": "fbece8495845bf3b33d6d84a30cd4c3a7a6a306c8f921639d40a670b86df5430",
+      "current_bytes": 8442,
+      "changed": true
+    }
+  ],
+  "scene_coverage": [
+    {
+      "manifest_position": 1,
+      "scene": "Hook",
+      "title_en": "Four billion derivatives",
+      "title_zh": "40亿个导数",
+      "module": "videos/ai/ai4/s01_hook.py",
+      "source_owner_batch": "first-five",
+      "owner_freeze_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "current_source_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 2,
+      "scene": "Derivative",
+      "title_en": "1. The derivative",
+      "title_zh": "1. 导数",
+      "module": "videos/ai/ai4/s02_derivative.py",
+      "source_owner_batch": "first-five",
+      "owner_freeze_sha256": "8958372838269201b5430a8eb4b24bc7298cc2e0a3b8b34a03aad2ce7d248d10",
+      "current_source_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+      "owner_freeze_matches_current": false,
+      "qualification": "Root moved the red Derivative axis label inside the plot after the owner freeze; unchanged voiceover ASTs, exact transition preserved."
+    },
+    {
+      "manifest_position": 3,
+      "scene": "Gradient",
+      "title_en": "2. Many inputs: the gradient",
+      "title_zh": "2. 多个输入：梯度",
+      "module": "videos/ai/ai4/s03_gradient.py",
+      "source_owner_batch": "first-five",
+      "owner_freeze_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "current_source_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 4,
+      "scene": "Jacobian",
+      "title_en": "3. Maps that bend: the Jacobian",
+      "title_zh": "3. 会弯曲的映射：雅可比矩阵",
+      "module": "videos/ai/ai4/s04_jacobian.py",
+      "source_owner_batch": "first-five",
+      "owner_freeze_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "current_source_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 5,
+      "scene": "Layers",
+      "title_en": "4. The Jacobians of real layers",
+      "title_zh": "4. 真实网络层的雅可比矩阵",
+      "module": "videos/ai/ai4/s05_layers.py",
+      "source_owner_batch": "first-five",
+      "owner_freeze_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "current_source_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 6,
+      "scene": "Modes",
+      "title_en": "5. Forwards or backwards?",
+      "title_zh": "5. 向前，还是向后？",
+      "module": "videos/ai/ai4/s06_modes.py",
+      "source_owner_batch": "middle-five",
+      "owner_freeze_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "current_source_sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 7,
+      "scene": "Backprop",
+      "title_en": "6. Backpropagation, by hand",
+      "title_zh": "6. 手算反向传播",
+      "module": "videos/ai/ai4/s07_backprop.py",
+      "source_owner_batch": "middle-five",
+      "owner_freeze_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "current_source_sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 8,
+      "scene": "Library",
+      "title_en": "7. Calculus in a few pages of code",
+      "title_zh": "7. 几页代码里的微积分",
+      "module": "videos/ai/ai4/s08_library.py",
+      "source_owner_batch": "middle-five",
+      "owner_freeze_sha256": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+      "current_source_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+      "owner_freeze_matches_current": false,
+      "qualification": "Root inset Library results clamp6.9 to6.65 after actual endpoint inspection, no voiceover/data changes; exact transition and original warning receipt preserved."
+    },
+    {
+      "manifest_position": 9,
+      "scene": "Train",
+      "title_en": "8. Training with our library",
+      "title_zh": "8. 用我们的库来训练",
+      "module": "videos/ai/ai4/s09_train.py",
+      "source_owner_batch": "middle-five",
+      "owner_freeze_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+      "current_source_sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 10,
+      "scene": "Floats",
+      "title_en": "9. Numbers in a computer",
+      "title_zh": "9. 计算机里的数",
+      "module": "videos/ai/ai4/s10_floats.py",
+      "source_owner_batch": "middle-five",
+      "owner_freeze_sha256": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+      "current_source_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+      "owner_freeze_matches_current": false,
+      "qualification": "Foundation repaired the actual collapsed Floats ULP definition into six explicit lines after the owner freeze; exact before/after and isolated bilingual compile/geometry receipt preserved."
+    },
+    {
+      "manifest_position": 11,
+      "scene": "GradCheck",
+      "title_en": "10. Cancellation, and the gradient check",
+      "title_zh": "10. 抵消，以及梯度检验",
+      "module": "videos/ai/ai4/s11_vcurve.py",
+      "source_owner_batch": "numerics-memory-curvature",
+      "owner_freeze_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "current_source_sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 12,
+      "scene": "Memory",
+      "title_en": "11. Memory: storing or recomputing",
+      "title_zh": "11. 内存：存下来，还是重算",
+      "module": "videos/ai/ai4/s12_memory.py",
+      "source_owner_batch": "numerics-memory-curvature",
+      "owner_freeze_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "current_source_sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 13,
+      "scene": "Newton",
+      "title_en": "12. Curvature, and Newton's method",
+      "title_zh": "12. 曲率与牛顿法",
+      "module": "videos/ai/ai4/s13_newton.py",
+      "source_owner_batch": "numerics-memory-curvature",
+      "owner_freeze_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "current_source_sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 14,
+      "scene": "HVP",
+      "title_en": "13. Hessian-vector products",
+      "title_zh": "13. 黑塞-向量积",
+      "module": "videos/ai/ai4/s14_hvp.py",
+      "source_owner_batch": "numerics-memory-curvature",
+      "owner_freeze_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "current_source_sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 15,
+      "scene": "Quadratic",
+      "title_en": "14. Descent on a quadratic; saddles",
+      "title_zh": "14. 二次函数上的下降；鞍点",
+      "module": "videos/ai/ai4/s15_quadratic.py",
+      "source_owner_batch": "tail-five",
+      "owner_freeze_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "current_source_sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 16,
+      "scene": "Lagrange",
+      "title_en": "15. Constraints: Lagrange multipliers",
+      "title_zh": "15. 约束：拉格朗日乘子",
+      "module": "videos/ai/ai4/s16_lagrange.py",
+      "source_owner_batch": "tail-five",
+      "owner_freeze_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "current_source_sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 17,
+      "scene": "KKT",
+      "title_en": "16. Inequalities, KKT and duality",
+      "title_zh": "16. 不等式、KKT条件与对偶",
+      "module": "videos/ai/ai4/s17_kkt.py",
+      "source_owner_batch": "tail-five",
+      "owner_freeze_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "current_source_sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 18,
+      "scene": "Implicit",
+      "title_en": "17. Differentiating through a fixed point",
+      "title_zh": "17. 穿过不动点求导",
+      "module": "videos/ai/ai4/s18_implicit.py",
+      "source_owner_batch": "tail-five",
+      "owner_freeze_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "current_source_sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    },
+    {
+      "manifest_position": 19,
+      "scene": "Outro",
+      "title_en": "Recap, problems, and what comes next",
+      "title_zh": "回顾、习题，以及接下来",
+      "module": "videos/ai/ai4/s19_outro.py",
+      "source_owner_batch": "tail-five",
+      "owner_freeze_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "current_source_sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "owner_freeze_matches_current": true,
+      "qualification": "Owner source bytes match current snapshot; its original coverage limits still apply."
+    }
+  ],
+  "derivative_transition": {
+    "before_sha256": "8958372838269201b5430a8eb4b24bc7298cc2e0a3b8b34a03aad2ce7d248d10",
+    "after_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+    "before_is_first_five_owner_freeze": true,
+    "after_is_current_packaged_source": true,
+    "voiceover_call_ASTs_unchanged": true,
+    "scope": "Root moved Derivative red axis label inside plot after the first-five freeze; source transition and historical record only. No images copied or rendered/visually approved by this packager.",
+    "historical_record": "before-result.json.gz",
+    "new_process_log": "rerender-en.log.gz"
+  },
+  "library_transition": {
+    "before_sha256": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+    "after_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+    "voiceover_call_ASTs_unchanged": true,
+    "caption_append_receipt": "table-update.json.gz",
+    "scope": "Root moved only Library result-group clamp6.9 to6.65 and appended2 measured-default MathTex caption translations. Original missing-caption warning record is retained; this source package grants no refreshed render approval. Later final table changes are recorded separately."
+  },
+  "final_freeze": {
+    "capture_authorized": true,
+    "parent_receipt": "/workspace/runtime/ai4-source-review-final-freeze.json",
+    "parent_receipt_sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059",
+    "global_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+    "source_sha256": {
+      "videos/ai/ai4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "videos/ai/ai4/cache_contract.py": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "videos/ai/ai4/compute.py": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "videos/ai/ai4/contracts.py": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "videos/ai/ai4/manifest.py": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "videos/ai/ai4/s01_hook.py": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "videos/ai/ai4/s02_derivative.py": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+      "videos/ai/ai4/s03_gradient.py": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "videos/ai/ai4/s04_jacobian.py": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "videos/ai/ai4/s05_layers.py": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+      "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+      "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+      "videos/ai/ai4/s11_vcurve.py": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "videos/ai/ai4/s12_memory.py": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "videos/ai/ai4/s13_newton.py": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "videos/ai/ai4/s14_hvp.py": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "videos/ai/ai4/s15_quadratic.py": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "videos/ai/ai4/s16_lagrange.py": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "videos/ai/ai4/s17_kkt.py": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "videos/ai/ai4/s18_implicit.py": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "videos/ai/ai4/s19_outro.py": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+      "videos/ai/ai4/README.md": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42"
+    },
+    "owner_freeze_exceptions": {
+      "s02_derivative.py": "Root moved the red Derivative axis label inside the plot after the owner freeze; unchanged voiceover ASTs, exact transition preserved.",
+      "s08_library.py": "Root inset Library results clamp6.9 to6.65 after actual endpoint inspection, no voiceover/data changes; exact transition and original warning receipt preserved.",
+      "s10_floats.py": "Foundation repaired the actual collapsed Floats ULP definition into six explicit lines after the owner freeze; exact before/after and isolated bilingual compile/geometry receipt preserved."
+    },
+    "scope": "Source batch freeze after actual endpoint-derived repairs. Remaining rendered regressions remain open; no full production/listening approval."
+  },
+  "integration": {
+    "local_zh_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "global_zh_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+    "README_sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+    "full_suite": {
+      "tests": 352,
+      "seconds": 54.535,
+      "log_success_trailer_verified": true,
+      "historical_checkpoint_global_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+      "final_table_changed_after_gate": true,
+      "execution": "Parent-run suite; this packager verified and preserved the complete log, did not rerun it."
+    },
+    "merge_receipt": "integration/merge-receipt.json.gz"
+  },
+  "shared_caption_regression": {
+    "original_report": "shared-caption-regression/report.json.gz",
+    "tested_global_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+    "historical_before_final_render_corrections": true,
+    "scope": "The actual translator at the historical integrated checkpoint on4,550 collected rows/2,265 unique captured English keys,17Part1+16Part2collections plus Logic alpha-renaming supplement; zero changed outputs per preserved root receipt. Later table changes are separately itemized and are not represented as a rerun.",
+    "limits": "Table-effect comparison only. No scene/data/narration equality, geometry, fresh source fingerprints, continuous playback or audio approval."
+  },
+  "preserved_source_owner_limit_disclosures": [
+    "All source owner reports and older freezes remain unchanged as historical receipts.",
+    "Some caption anchors are explicitly synthetic numeric templates; later actual-data resolvers are separately preserved.",
+    "Producer compute/raw-result evidence and README numerical validation are in sibling packages, not copied as raw caches here.",
+    "Derivative/Library owner geometry predates the corresponding root label/inset corrections; exact transitions are preserved without inventing refreshed visual approval."
+  ],
+  "rendered_evidence_scope": "No unique images or movies copied. Source/geometry fixtures do not constitute endpoint, motion, continuous-playback, player or audio approval. Separate actual-render reports may exist or arrive later.",
+  "provenance_file": "compressed-origins.json"
+}

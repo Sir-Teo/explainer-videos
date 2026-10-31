@@ -1,0 +1,235 @@
+{
+  "scope": "Part4 GradCheck/Memory/Newton/HVP EN+ZH original eight endpoint cases plus separately reconciled current English HVP record",
+  "original_case_count": 8,
+  "original_endpoint_PNG_count": 97,
+  "actual_viewed_pages": 16,
+  "actual_native_followups": 26,
+  "image_native_size": [
+    854,
+    480
+  ],
+  "page_cell_size": [
+    427,
+    240
+  ],
+  "thumbnail_scale": [
+    0.5,
+    0.5
+  ],
+  "cases": [
+    {
+      "case": "en-GradCheck",
+      "path": "original-eight-cases/en-GradCheck",
+      "original_review_sha256": "3f58f0fb1975f35c370224e59e385672f6c3d3a95e62728ec50675f73bfdbcd3",
+      "result_sha256": "77db64752b2f3044e643338bd52527f4c38aaa061d136039b7634e796ba74f0f",
+      "capture_status": "passed",
+      "warning_count": 0,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "005_00046.1s.png",
+        "009_00094.5s.png",
+        "013_00147.9s.png"
+      ]
+    },
+    {
+      "case": "en-HVP",
+      "path": "original-eight-cases/en-HVP",
+      "original_review_sha256": "353e2f98070493eeca655b42d67063537c68faf8983b58e6c94e169a9b020974",
+      "result_sha256": "514b72d4195989229b0e78865dc854b9501784ae3e5757c927b70784664dd569",
+      "capture_status": "needs-review",
+      "warning_count": 13,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 2,
+        "native_followups_viewed": 4,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "003_00027.1s.png",
+        "007_00062.4s.png",
+        "008_00089.7s.png",
+        "009_00114.0s.png"
+      ]
+    },
+    {
+      "case": "en-Memory",
+      "path": "original-eight-cases/en-Memory",
+      "original_review_sha256": "d0fa265e59be88c16c285042699119033fde1ea40bec4bd8cb6d8ea7a3cfd98f",
+      "result_sha256": "587faf1924a49436782fdcc33d448e93a4da52beb29beff14137d479f9754d50",
+      "capture_status": "passed",
+      "warning_count": 0,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "004_00021.3s.png",
+        "009_00074.6s.png",
+        "013_00142.8s.png"
+      ]
+    },
+    {
+      "case": "en-Newton",
+      "path": "original-eight-cases/en-Newton",
+      "original_review_sha256": "78e65495c022428823e24bb9bce42af1f39700ef3516d5a3d6b2e49dab12f048",
+      "result_sha256": "bf127013cd3dabd475b1d22a4be34d77bb24177f77159b607cd9757cf81ce56e",
+      "capture_status": "passed",
+      "warning_count": 0,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "004_00033.1s.png",
+        "006_00063.3s.png",
+        "009_00101.8s.png"
+      ]
+    },
+    {
+      "case": "zh-GradCheck",
+      "path": "original-eight-cases/zh-GradCheck",
+      "original_review_sha256": "69b3c086439928bf77f30ba873a57b4001ac8d2eb0c3c0c1b1cd6797b6ecc7c7",
+      "result_sha256": "61a0b9f2e2223e0bc8b8d10cd34601b3e5929c099e00fad067de0fc31dbf8a9c",
+      "capture_status": "passed",
+      "warning_count": 0,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "005_00048.2s.png",
+        "009_00101.5s.png",
+        "013_00161.5s.png"
+      ]
+    },
+    {
+      "case": "zh-HVP",
+      "path": "original-eight-cases/zh-HVP",
+      "original_review_sha256": "1bcd82c67924e4209a1abc3984685c7c86761058aefe297a93786fcdcfe70955",
+      "result_sha256": "e2420ae896f8530b8261fe45292eed6334d582b4cc565e2a62a141ae78144dd0",
+      "capture_status": "passed",
+      "warning_count": 0,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 10,
+        "pages_viewed": 2,
+        "native_followups_viewed": 4,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "003_00028.6s.png",
+        "007_00068.5s.png",
+        "008_00100.9s.png",
+        "009_00130.1s.png"
+      ]
+    },
+    {
+      "case": "zh-Memory",
+      "path": "original-eight-cases/zh-Memory",
+      "original_review_sha256": "4e75d16fb4cd77a0f09c05bb76a12f4bc2196cafe6569a3c7222d8fa26125a01",
+      "result_sha256": "ed7887c21fb1bb82f46ad6455d9e2808bed42a3334550ea83f9ee8e1ff3b35db",
+      "capture_status": "needs-review",
+      "warning_count": 1,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 14,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "004_00022.5s.png",
+        "009_00077.6s.png",
+        "013_00153.5s.png"
+      ]
+    },
+    {
+      "case": "zh-Newton",
+      "path": "original-eight-cases/zh-Newton",
+      "original_review_sha256": "e39bba42c5e28103ad1c7e40e66415e0dc722d90a5d40d15302fa32edc3787e0",
+      "result_sha256": "f9877f1bdd1204730262effdfc33413b1f18f423a993ef75f91f43b6d762994f",
+      "capture_status": "needs-review",
+      "warning_count": 1,
+      "actual_coverage": {
+        "endpoint_frames_viewed": 11,
+        "pages_viewed": 2,
+        "native_followups_viewed": 3,
+        "thumbnail_pixel_size": [
+          427,
+          240
+        ]
+      },
+      "copied_visual_evidence": [
+        "page-001.png",
+        "page-002.png",
+        "004_00039.1s.png",
+        "007_00075.1s.png",
+        "010_00117.0s.png"
+      ]
+    }
+  ],
+  "refreshed_en_HVP_result_sha256": "a2625c616edc5129851e1b50865b127de9d8396258a9f7d4f78facbc6682a2a9",
+  "refreshed_en_HVP_exact_PNG_inheritance": 10,
+  "visual_result": "No additional concrete image layout/math/axis/legend defect found among captured endpoints.",
+  "historical_warning_counts": {
+    "en-GradCheck": 0,
+    "en-HVP": 13,
+    "en-Memory": 0,
+    "en-Newton": 0,
+    "zh-GradCheck": 0,
+    "zh-HVP": 0,
+    "zh-Memory": 1,
+    "zh-Newton": 1
+  },
+  "limits": [
+    "Only actual captured endpoints, not continuous perceptual review or motion transitions.",
+    "HVP only initial and final replay spectra, not intermediate checkpoint appearance.",
+    "No narrated/audio listening/alignment, player/responsive behavior or production1080typography approval.",
+    "Original source-changed-during-render warnings persist; snapshots do not retroactively prove imported source versions."
+  ],
+  "caption_repair": "Twelve exact missing nested HVP captions compiled through real CJK label path. Parent merges shared table; this reviewer made no source/global edits."
+}

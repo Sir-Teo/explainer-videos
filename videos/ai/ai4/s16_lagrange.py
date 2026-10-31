@@ -8,6 +8,22 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai4.common import CONS, GRAD, HIST, PART, VALUE, lag_f, load
 
 
+def solver_agreement(success, difference, tolerance):
+    if not success:
+        return "The comparison solver did not report success; agreement is not established."
+    if not math.isfinite(difference):
+        return "The comparison solver reports success, but a finite probability comparison is unavailable."
+    if difference <= tolerance:
+        return "The comparison solver reports success and agrees within the stated probability tolerance."
+    return f"The comparison solver reports success, but its largest probability difference is {difference:.6f}, outside the stated tolerance."
+
+
+def circle_solver_verdict(success, residual, feasibility):
+    if success and math.isfinite(residual) and math.isfinite(feasibility) and max(residual, feasibility) <= 1e-6:
+        return "The optimizer reports success; constraint and stationarity residuals are at most one millionth."
+    return "The numerical candidate has not passed all stated solver, feasibility and stationarity checks."
+
+
 def bars(values, colors, width=4.4, height=2.0, labels=None, fmt="{:.3f}", font_size=18, vmax=None):
     n = len(values)
     vmax = vmax or max(values)
@@ -110,7 +126,9 @@ class Lagrange(VoiceoverScene):
     # ------------------------------------------------------------------
     def derive(self):
         d = load("lagrange")
-        assert d["resid"] < 1e-6
+        report = d["solvers"]["circle"]
+        circle_verdict = circle_solver_verdict(report["success"], float(d["resid"]),
+                                               float(report["residuals"]["feasibility"]))
         col = {r"\lambda": CONS, r"\nabla f": GRAD}
         rows = [
             cmath(r"\nabla f(x^*)", r"=", r"-\lambda\, \nabla g(x^*)", font_size=40, colors=col),
@@ -122,18 +140,20 @@ class Lagrange(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.4, buff=0.6, edge=6.9)
         x = np.asarray(d["x_star"])
         res = VGroup(
-            label(rf"computed: \ $x^* = ({x[0]:.3f}, {x[1]:.3f})$, \ $\lambda = {d['lam']:.3f}$, \ "
+            label(rf"numerical candidate: \ $x = ({x[0]:.3f}, {x[1]:.3f})$, \ $\lambda = {d['lam']:.3f}$, \ "
                   rf"$\|\nabla f + \lambda \nabla g\| = {sci(d['resid'], 0)}$", font_size=24, color=WHITE),
             label(r"$\lambda$ is a price: \ $d f^* / dc = -\lambda$ \ when the constraint is $\|x\|^2 = c$", font_size=24,
                   color=CONS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
+            wrapped_label(circle_verdict, 12.5, font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Write it down: at the constrained minimum, the gradient of f is a multiple of the constraint's gradient, "
             "minus lambda times it. <bookmark mark='a'/> Lagrange's device folds the constraint into a single "
             "function, the Lagrangian, f plus lambda times g. <bookmark mark='b'/> Stationarity in x and lambda gives "
             "necessary conditions for a regular constrained optimum, not a guarantee of a minimum. The derivative "
-            f"in lambda gives back the constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at {d['lam']:.3f}. It is a "
-            "price: how fast the best value would fall if the constraint were loosened a little."
+            f"in lambda gives back the constraint. <bookmark mark='c'/> At the numerical circle candidate, the "
+            f"multiplier is {d['lam']:.3f}. {circle_verdict} At a regular optimum it is a "
+            "signed price: how the optimal value changes as the circle's squared radius changes."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -142,7 +162,7 @@ class Lagrange(VoiceoverScene):
             step(2)
             vo.wait_until("c")
             self.play(FadeIn(res[0]))
-            self.play(FadeIn(res[1]))
+            self.play(FadeIn(res[1]), FadeIn(res[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -150,7 +170,8 @@ class Lagrange(VoiceoverScene):
     def maxent(self):
         d = load("lagrange")
         p = np.asarray(d["p_dice"])
-        assert d["dice_diff"] < 1e-4
+        agreement = solver_agreement(d["solvers"]["dice"]["success"], float(d["dice_diff"]),
+                                     float(d["comparisons"]["tolerance"]))
         rows = [
             cmath(r"\max_p\; -\textstyle\sum_i p_i \log p_i", r"\;\text{s.t.}\;",
                   r"\textstyle\sum_i p_i = 1, \;\; \sum_i i\, p_i = 4.5", font_size=32),
@@ -159,11 +180,12 @@ class Lagrange(VoiceoverScene):
         ]
         whys = [why(r"the least committal die whose average is $4.5$", font_size=22),
                 why(r"$\partial \mathcal L / \partial p_i = 0$, \ multipliers $\alpha$ and $\beta$", font_size=22),
-                why(r"a softmax: \ the Boltzmann distribution", font_size=22)]
+                why(r"a softmax; \ here $\beta = 1/T$ \ (natural logs)", font_size=22)]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.6, buff=0.5, edge=6.9)
         b = bars(list(p), C.PROB, width=4.6, height=1.7, labels=[str(i) for i in range(1, 7)]).move_to([-3.6, -2.0, 0])
-        bl = label(rf"computed: \ $\beta = {d['beta']:.3f}$; \ a general solver agrees to ${sci(max(d['dice_diff'], 1e-12), 0)}$",
-                   font_size=22, color=GREY_A).move_to([3.2, -1.4, 0])
+        bl = wrapped_label(rf"$\beta = {d['beta']:.3f}$; \ max probability difference ${sci(d['dice_diff'], 0)}$; "
+                           rf"tolerance ${sci(d['comparisons']['tolerance'], 0)}$. \ {agreement}",
+                           5.8, font_size=20, color=GREY_A).move_to([3.2, -1.25, 0])
         jl = label(r"E.~T.~Jaynes (1957): \ maximum entropy \\ as a principle of inference", font_size=22,
                    color=GREY_B).move_to([3.2, -2.4, 0])
         with self.voiceover(
@@ -171,9 +193,10 @@ class Lagrange(VoiceoverScene):
             "least beyond that? The ones with the most entropy. <bookmark mark='a'/> Set the Lagrangian's derivative "
             "to zero, with one multiplier for each constraint, <bookmark mark='b'/> and the answer is a softmax: each "
             "face's probability is e to the beta times the face, normalized. <bookmark mark='c'/> Computed, beta is "
-            f"{d['beta']:.3f}, and a general-purpose solver lands on the same six numbers. Edwin Jaynes made this a "
+            f"{d['beta']:.3f}. {agreement} Edwin Jaynes made this a "
             "principle of inference in 1957. It's where the softmax comes from: it is the maximum-entropy "
-            "distribution with a fixed average score, and its temperature is a Lagrange multiplier."
+            "distribution with a fixed average score. In this convention beta is inverse temperature, one over T, "
+            "and it is the score-constraint multiplier."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -189,22 +212,29 @@ class Lagrange(VoiceoverScene):
     # ------------------------------------------------------------------
     def rl(self):
         d = load("lagrange")
-        assert d["rl_diff"] < 1e-4
+        agreement = solver_agreement(d["solvers"]["rl"]["success"], float(d["rl_diff"]),
+                                     float(d["comparisons"]["tolerance"]))
         pref, ps, rew = np.asarray(d["pref"]), np.asarray(d["pi_star"]), np.asarray(d["rew"])
-        eq = cmath(r"\max_\pi\; \mathbb E_\pi[r] - \beta\, \mathrm{KL}(\pi \,\|\, \pi_{\text{ref}})", r"\;\Rightarrow\;",
-                   r"\pi^*(a) = \frac{\pi_{\text{ref}}(a)\, e^{r(a)/\beta}}{Z}", font_size=38).to_edge(UP, buff=0.5)
-        sub = label(r"the same Lagrangian, \ with $\textstyle\sum_a \pi(a) = 1$", font_size=24, color=GREY_A).next_to(eq, DOWN, buff=0.25)
+        eq = VGroup(
+            cmath(r"\max_\pi\; \mathbb E_\pi[r] - \beta\, \mathrm{KL}(\pi \,\|\, \pi_{\text{ref}})", font_size=34),
+            cmath(r"\Rightarrow", r"\pi^*(a) = \frac{\pi_{\text{ref}}(a)\, e^{r(a)/\beta}}{Z}", font_size=34),
+        ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.3)
+        sub = wrapped_label(r"$\beta > 0$, \ $\pi_{\mathrm{ref}}(a) > 0$, \ $\sum_a\pi(a)=1$; \ here $\beta$ is the KL penalty, \ not inverse temperature",
+                            12.5, font_size=21, color=GREY_A).next_to(eq, DOWN, buff=0.18)
         vmax = max(pref.max(), ps.max())
-        b1 = bars(list(pref), GREY_B, width=5.0, height=2.6, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([-3.4, -1.3, 0])
-        b2 = bars(list(ps), C.REWARD, width=5.0, height=2.6, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([3.4, -1.3, 0])
+        b1 = bars(list(pref), GREY_B, width=5.0, height=2.4, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([-3.4, -1.6, 0])
+        b2 = bars(list(ps), C.REWARD, width=5.0, height=2.4, labels=[f"a_{i + 1}" for i in range(6)], vmax=vmax).move_to([3.4, -1.6, 0])
         l1 = label(r"$\pi_{\text{ref}}$", font_size=26, color=GREY_B).next_to(b1, UP, buff=0.3)
-        l2 = label(rf"$\pi^*$, \ $\beta = {d['kl_beta']:g}$ \ (computed; \ solver agrees to ${sci(max(d['rl_diff'], 1e-12), 0)}$)",
-                   font_size=22, color=C.REWARD).next_to(b2, UP, buff=0.3)
+        l2 = wrapped_label(rf"$\pi^*$, \ $\beta = {d['kl_beta']:g}$; \ max difference ${sci(d['rl_diff'], 0)}$; "
+                           rf"tolerance ${sci(d['comparisons']['tolerance'], 0)}$", 5.4,
+                           font_size=21, color=C.REWARD).next_to(b2, UP, buff=0.2)
         with self.voiceover(
             "The same algebra gives reinforcement learning one of its closed forms. Maximize the expected reward, "
-            "minus beta times the KL divergence from a reference policy. <bookmark mark='a'/> With the constraint that "
+            "minus a positive beta times the KL divergence from a positive reference policy. Here beta names the KL "
+            "penalty, so it plays the temperature role, unlike the inverse-temperature beta for the die. "
+            "<bookmark mark='a'/> With the constraint that "
             "the probabilities add to one, the best policy is the reference, reweighted by e to the reward over beta. "
-            "<bookmark mark='b'/> Here for six actions, computed and checked against a solver. Part 27's direct "
+            f"<bookmark mark='b'/> Here for six actions. {agreement} Part 27's direct "
             "preference optimization starts from this formula."
         ) as vo:
             self.play(Write(eq), FadeIn(b1), FadeIn(l1))

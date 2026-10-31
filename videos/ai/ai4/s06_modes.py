@@ -6,6 +6,14 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai4.common import GRAD, HIST, PART, VALUE, load
 
 
+def cheaper_mode_agreement(forward_work, reverse_work, forward_time, reverse_time):
+    """A timing tie is not evidence that the cheaper mode was faster."""
+    fw, rw, ft, rt = map(np.asarray, (forward_work, reverse_work, forward_time, reverse_time))
+    different = fw != rw
+    faster = ((fw < rw) & (ft < rt)) | ((rw < fw) & (rt < ft))
+    return int((different & faster).sum()), int(different.sum())
+
+
 def block(rows, cols, unit=0.32, color=VALUE, opacity=0.55, label_tex=None):
     """A matrix drawn as a rectangle of its shape (rows x cols cells)."""
     r = Rectangle(width=cols * unit, height=rows * unit, stroke_color=color, stroke_width=2.5, fill_color=color,
@@ -107,10 +115,11 @@ class Modes(VoiceoverScene):
         gf = grid(fwd / prim, VALUE, -5.4, r"forward mode")
         gr = grid(rev / prim, GRAD, 1.6, r"reverse mode")
         ax_lab = VGroup(label(r"rows: \ $n$ inputs \qquad columns: \ $m$ outputs", font_size=22, color=GREY_A),
-                        label(r"the whole Jacobian, \ in forward passes' worth of multiply-adds \ (counted)",
-                              font_size=22, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=1.0)
-        agree = sum(1 for i in range(k) for j in range(k) if i != j and ((tf[i, j] < tr[i, j]) == (sizes[i] < sizes[j])))
-        total = k * k - k
+                        label(r"whole Jacobian: \ derivative matrix-product and tanh work / reference primal work",
+                              font_size=20, color=GREY_A),
+                        label(r"timings also include primal computation and implementation overhead", font_size=18,
+                              color=GREY_B)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=1.0)
+        agree, total = cheaper_mode_agreement(fwd, rev, tf, tr)
         timed = label(rf"timed: \ the cheaper mode by count was faster in ${agree}$ of ${total}$ networks", font_size=24,
                       color=WHITE).to_edge(DOWN, buff=0.4)
         tail = (f"across the {total} networks where the counts differ, the cheaper mode by count was also the "
@@ -119,10 +128,12 @@ class Modes(VoiceoverScene):
                 f"faster in {agree} of them.")
         with self.voiceover(
             "Let's count. These are networks with two hidden layers of sixty-four, with n inputs and m outputs, "
-            "from one to two hundred and fifty-six. For each, the multiply-adds that each mode spends on the whole "
-            "Jacobian, in units of one forward pass. <bookmark mark='a'/> Forward mode costs n passes, whatever m "
-            "is. <bookmark mark='b'/> Reverse mode costs m, whatever n is. Few inputs and many outputs: go forwards. "
-            "Many inputs and few outputs: go backwards. <bookmark mark='c'/> And timed on this computer, " + tail
+            "from one to two hundred and fifty-six. We count dense derivative matrix products and tanh "
+            "multiplications, relative to a reference primal pass; this is not every scalar operation. "
+            "<bookmark mark='a'/> The full Jacobian takes n forward directions. <bookmark mark='b'/> Or m reverse "
+            "directions. Few inputs and many outputs favor forward mode; many inputs and few outputs favor reverse "
+            "mode. <bookmark mark='c'/> Timings include primal computation and implementation overhead, separately "
+            "from the derivative count. In this recorded benchmark, " + tail
         ) as vo:
             self.play(FadeIn(ax_lab), FadeIn(gf[1:]), FadeIn(gr[1:]))
             self.play(LaggedStart(*[FadeIn(c) for c in gf[0]], lag_ratio=0.03), run_time=1.6)
@@ -142,6 +153,7 @@ class Modes(VoiceoverScene):
         P = int(d["P"])
         cr = d["madds_fwd"] / d["madds_rev"]
         tr_ = d["t_param_fwd"] / d["t_param_rev"]
+        bench = d["benchmark"]
         assert d["grad_diff"] < 1e-12
         fw = label(r"forwards: \ from $\theta$", font_size=30, color=VALUE).move_to([-3.6, 3.0, 0])
         bw = label(r"backwards: \ from $\mathcal{L}$", font_size=30, color=GRAD).move_to([3.6, 3.0, 0])
@@ -161,22 +173,29 @@ class Modes(VoiceoverScene):
         res = VGroup(
             label(rf"a classifier, ${net[0]} \to {net[1]} \to {net[2]}$: \ ${P}$ parameters in, \ one loss out",
                   font_size=26, color=WHITE),
-            label(rf"forward mode, \ ${P}$ passes: \ ${cr:.0f}\times$ the multiply-adds \ (${tr_:.0f}\times$ the time)",
-                  font_size=26, color=VALUE),
-            label(rf"reverse mode, \ one pass back: \ the same gradient, \ to ${sci(max(d['grad_diff'], 1e-17), 0)}$",
-                  font_size=26, color=GRAD),
+            label(rf"dense forward directions: \ ${cr:.0f}\times$ derivative work; \ ${tr_:.2f}\times$ observed call time",
+                  font_size=24, color=VALUE),
+            label(rf"one reverse pass: \ parameter gradients only, no $dX$; \ max gap ${sci(d['grad_diff'], 0)}$",
+                  font_size=24, color=GRAD),
             label(rf"GPT-2: \ ${p['gpt2']:,}$ passes against one".replace(",", "{,}"), font_size=26, color=GREY_A),
+            label(rf"timing means: \ ${bench['warmups']}$ warm-up; \ forward ${bench['parameter_forward_repeats']}$, "
+                  rf"reverse ${bench['parameter_reverse_repeats']}$ repeats; \ no uncertainty interval",
+                  font_size=17, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        timing = (f"Timed, it is {tr_:.0f} times slower: less than the count, because a computer's overheads weigh "
-                  "most on small matrices." if tr_ < cr / 2 else f"Timed, it is {tr_:.0f} times slower, much as the count says.")
+        timing = (f"The observed forward-to-reverse call-time ratio is {tr_:.2f}. These means include different "
+                  "implementation and graph-building costs, with no confidence interval; the work count is not a "
+                  "universal lower bound for optimized forward differentiation.")
         with self.voiceover(
             "Training is the extreme case: every parameter is an input, and the loss is a single output. "
             "<bookmark mark='a'/> Forwards, you carry a matrix with a column for every parameter. <bookmark mark='b'/> "
             "Backwards, a single row, the size of the layer you've reached. <bookmark mark='c'/> Our small classifier "
             f"has {P} parameters. Forward mode pushes {P} directions through it: counted, {cr:.0f} times the "
-            f"multiply-adds of one backward pass. {timing} The two gradients agree. <bookmark mark='d'/> For GPT-2 it "
-            "would be a hundred and twenty-four million passes against one. That is why every network is trained in "
-            "reverse mode, which, for neural networks, is called backpropagation."
+            f"dense derivative work of one backward pass, counting matrix products and tanh multiplications. "
+            f"Only parameter gradients are requested, not an input gradient. {timing} The measured gradient "
+            f"difference is shown. <bookmark mark='d'/> For GPT-2 the same column-by-column strategy would require "
+            f"{p['gpt2']:,} directions against one reverse pass. That is why standard large-parameter gradient "
+            "training usually uses reverse mode, called backpropagation for neural networks. Forward and hybrid "
+            "methods still have other uses."
         ) as vo:
             self.play(FadeIn(fw), FadeIn(bw), Create(divider))
             vo.wait_until("a")
@@ -186,7 +205,7 @@ class Modes(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r) for r in res[:3]], lag_ratio=0.5), run_time=2.0)
             vo.wait_until("d")
-            self.play(FadeIn(res[3]))
+            self.play(FadeIn(res[3]), FadeIn(res[4]))
         self.wait(0.3)
         self.clear_scene()
 

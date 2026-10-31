@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2777,
+      "sha256": "69c89ef520582cd67b4c991f1c41110a01dc13a2d161a7aa332f5574e8ceb1ae"
+    },
+    {
+      "path": "ai3-chapter-group-library-identities.json",
+      "bytes": 4617,
+      "sha256": "24b91c958e98fe205506aca6b72ee9ffff6a339f91f4a6f4f95e79bc5cdc1d19"
+    },
+    {
+      "path": "build.log.gz",
+      "bytes": 1549,
+      "sha256": "2329c16e0d5fcacfa0c7ce5be5d59138a04f0b0fcf8e28f645374e27e6b20f91"
+    },
+    {
+      "path": "build_groups.py.gz",
+      "bytes": 4326,
+      "sha256": "dbefa871a87ffc6a0cf31d27f9ea514b73fa50ad2ca0867ac56b393eea58fdd5"
+    },
+    {
+      "path": "delivery-receipt.json",
+      "bytes": 13345,
+      "sha256": "3106e96d1ded20237c86f9ed4d247d8f644519197074b406459c63c20480b4a1"
+    },
+    {
+      "path": "handoff.json.gz",
+      "bytes": 2968,
+      "sha256": "7a918e89eccdba4a864e90f1ea26c0b666a1a6313af2789efb67f3d777dc21a2"
+    },
+    {
+      "path": "independent-verification.json.gz",
+      "bytes": 849,
+      "sha256": "77f7b803961fb3c2010f79ec56e8df79fb06226326e6663e667cd837a9c0de00"
+    },
+    {
+      "path": "manifests/en-group01.json.gz",
+      "bytes": 5096,
+      "sha256": "e17aac0ade7d8aaec9a1eb6fdcf42370606f64af0695023ce11fe2ea61a9eecc"
+    },
+    {
+      "path": "manifests/en-group02.json.gz",
+      "bytes": 6098,
+      "sha256": "ecf4e142b9c8f01c876a67a52ab1c7fa8ec9fdb5225ab2d6eb38ef60e630cb9b"
+    },
+    {
+      "path": "manifests/en-group03.json.gz",
+      "bytes": 6025,
+      "sha256": "a7b64e78f53c0968c7306ffd745aae523fe2eb8e9838e0856da191fab2a796ff"
+    },
+    {
+      "path": "manifests/zh-group01.json.gz",
+      "bytes": 5073,
+      "sha256": "eacd6328f8e81aa4e42c7a86f85b3a2c94bba3ad6601fbf764690198f39ec644"
+    },
+    {
+      "path": "manifests/zh-group02.json.gz",
+      "bytes": 6101,
+      "sha256": "807f663461a80827979085ba74c8230e976431a8f414d0b829780feb43ae4013"
+    },
+    {
+      "path": "manifests/zh-group03.json.gz",
+      "bytes": 6020,
+      "sha256": "2784ab4c59a4aaa345e42f1b2e1fb7136fc2aa056ca427811b46f691c6be45f1"
+    },
+    {
+      "path": "plan.json.gz",
+      "bytes": 961,
+      "sha256": "ce2aebb6bdcbaa29fed7b00daa68607f277a575f68733902e8778836ef042455"
+    },
+    {
+      "path": "receipts.json.gz",
+      "bytes": 1667,
+      "sha256": "41fdb26466ba26a5dab953d1425d614fcf6890a2386d2cb55c8ec11e825d118a"
+    }
+  ]
+}

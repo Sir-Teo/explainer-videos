@@ -28,11 +28,25 @@ class Outro(VoiceoverScene):
         out = []
         # 1. the best straight line: error against step
         la = load("linapprox")
-        a1 = plane([-4, -0.8, 1], [-8, 0, 2])
-        hs = np.log10(np.asarray(la["hs"]))
-        out.append((VGroup(a1, curve(a1, hs, np.log10(np.asarray(la["err"])), GRAD, 3),
-                           curve(a1, hs, np.log10(np.asarray(la["err_bad"])), C.SURPRISE, 2)),
-                    rf"best line: \ error $\sim h^{{{la['slope']:.2f}}}$", GRAD))
+        raw_h = np.asarray(la["hs"])
+        errors = [np.asarray(la[k]) for k in ("err", "err_bad")]
+        positive = np.concatenate([a[np.isfinite(a) & (a > 0)] for a in errors])
+        low = min(-8, math.floor(float(np.log10(positive).min()))) if len(positive) else -8
+        high = max(0, math.ceil(float(np.log10(positive).max()))) if len(positive) else 0
+        good_h = np.isfinite(raw_h) & (raw_h > 0)
+        hs = np.log10(raw_h[good_h])
+        a1 = plane([math.floor(float(hs.min())), math.ceil(float(hs.max())), 1], [low, high, 2])
+        lines, omitted = VGroup(a1), 0
+        for values, color in zip(errors, (GRAD, C.SURPRISE)):
+            valid = good_h & np.isfinite(values) & (values > 0)
+            omitted += int(np.count_nonzero(~valid))
+            ids = np.flatnonzero(valid)
+            for run in np.split(ids, np.flatnonzero(np.diff(ids) > 1) + 1):
+                if len(run) > 1:
+                    lines.add(curve(a1, np.log10(raw_h[run]), np.log10(values[run]), color, 3))
+        line_fit = (rf"slope ${la['slope']:.2f}$; \ ${omitted}$ omitted" if math.isfinite(la["slope"]) else
+                    rf"fit unavailable; \ ${omitted}$ omitted")
+        out.append((lines, (r"best line: fitted error", line_fit), GRAD))
         # 2. the softmax Jacobian
         jc = load("jacobians")
         out.append((matrix_heat(np.asarray(jc["J_sm"]), cell=0.34), r"$\operatorname{diag}(p) - pp^\top$", GRAD))
@@ -48,41 +62,54 @@ class Outro(VoiceoverScene):
         a5 = plane([-13, 0, 2], [-14, 0, 2])
         hv = np.log10(np.asarray(vc["hs"]))
         g5 = VGroup(a5)
+        v_limited = v_omitted = 0
         for k, col in (("fp64", C.TRUE_P), ("fp32", GRAD)):
             yv = np.asarray(vc[f"central_{k}"])
-            ok = yv > 0
-            g5.add(curve(a5, hv[ok], np.clip(np.log10(yv[ok]), -14, 0), col, 2.5))
-        out.append((g5, r"the gradient check's V", C.TRUE_P))
+            ok = np.isfinite(yv) & (yv >= 0)
+            v_omitted += int((~ok).sum())
+            v_limited += int(((yv[ok] < 1e-14) | (yv[ok] > 1)).sum())
+            for run in np.split(np.flatnonzero(ok), np.flatnonzero(np.diff(np.flatnonzero(ok)) > 1) + 1):
+                if len(run) > 1:
+                    g5.add(curve(a5, hv[run], np.log10(np.clip(yv[run], 1e-14, 1)), col, 2.5))
+        out.append((g5, (r"the gradient check's V", rf"${v_limited}$ limited, \ ${v_omitted}$ omitted"), C.TRUE_P))
         # 6. checkpoints
         ck = load("checkpoint")
         ks = np.asarray(ck["ks"])
         a6 = plane([0, math.log2(ck["n"]), 1], [0, ck["n"] + 10, 64])
         out.append((VGroup(a6, curve(a6, np.log2(ks), np.asarray(ck["peak"]), CONS, 3)),
-                    rf"memory: \ $2\sqrt n$ at $k = \sqrt n$", CONS))
+                    (r"activation checkpoints", r"logical peak: \ $O(\sqrt n)$"), CONS))
         # 7. the Hessian spectrum, trained
         he = load("hessian")
         nk = len(he["keep"]) - 1
         ev = np.sort(np.asarray(he[f"eig{nk}"]))
-        sl = np.sign(ev) * np.log10(1 + np.abs(ev / ev.max()) / 1e-3) / 3.0
+        rho = float(np.max(np.abs(ev)))
+        sl = np.sign(ev) * np.log10(1 + np.abs(ev) / max(rho, 1e-300) / 1e-3) / math.log10(1001)
         a7 = plane([0, len(ev), 100], [-1, 1, 1])
-        out.append((VGroup(a7, *[Dot(a7.c2p(i, float(v)), radius=0.015, color=HESS if v > 0.66 else GREY_B)
+        high_positive = int(np.count_nonzero(ev > 0.1 * rho))
+        out.append((VGroup(a7, *[Dot(a7.c2p(i, float(v)), radius=0.015, color=HESS if ev[i] > 0.1 * rho else GREY_B)
                                  for i, v in enumerate(sl)]),
-                    rf"a flat bulk, \ ${he[f'nout{nk}']}$ steep directions", HESS))
+                    (r"Hessian: signed log", rf"${high_positive}$ directions: \ $\lambda > 0.1\rho(H)$"), HESS))
         # 8. the support vector machine and its multipliers
         kk = load("kkt")
         X, y = np.asarray(kk["X"]), np.asarray(kk["y"])
         a8 = plane([-2.0, 2.5, 1], [-2.6, 2.8, 1])
         g8 = VGroup(*[Dot(a8.c2p(*p), radius=0.035, color=C.TRUE_P if c > 0 else GRAD) for p, c in zip(X, y)])
         g8.add(*[Circle(radius=0.09, color=CONS, stroke_width=2).move_to(a8.c2p(*X[i])) for i in kk["sv"]])
-        out.append((g8, rf"KKT: \ ${len(kk['sv'])}$ support vectors", CONS))
+        out.append((g8, (r"KKT: multiplier rings", rf"$\alpha > {sci(kk['tolerances']['alpha'], 0)}$: \ ${len(kk['sv'])}$ points"), CONS))
         tiles = Group()
         for pic, cap, col in out:
-            box, c_ = tile_frame(cap, col, TW, TH)
-            pic.move_to(box.get_center() + UP * 0.22)
+            title = cap[0] if isinstance(cap, tuple) else cap
+            box, c_ = tile_frame(title, col, TW, TH)
+            if isinstance(cap, tuple):
+                c_ = VGroup(c_, label(cap[1], font_size=21, color=col)).arrange(DOWN, buff=0.04)
+                c_.move_to(box.get_bottom() + UP * 0.28)
+            if c_.width > TW - 0.12:
+                c_.width = TW - 0.12
+            pic.move_to(box.get_center() + UP * 0.28)
             if pic.width > TW:
                 pic.width = TW
-            if pic.height > TH:
-                pic.height = TH
+            if pic.height > TH - 0.7:
+                pic.height = TH - 0.7
             tiles.add(Group(box, pic, c_))
         tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
         return tiles
@@ -90,18 +117,23 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        qualifiers = wrapped_label(r"V-curve: \ display range $[10^{-14},1]$, zero errors at the floor. \ "
+                                   r"Hessian: \ signed-log $\lambda/\rho(H)$, \ chosen cutoffs; \ logical activation memory.",
+                                   13.0, font_size=19, color=GREY_B).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "Let's take stock. A derivative is the best straight line, the one whose error shrinks faster than the "
             "step; a gradient, the steepest direction, by Cauchy–Schwarz; a Jacobian, the best matrix, and real "
-            "layers' Jacobians are never formed, only multiplied. Forward mode pays per input and reverse mode per "
+            "layers' Jacobians need not be formed, only multiplied. For the full Jacobian, forward mode pays per input and reverse mode per "
             "output, so training runs backwards: backpropagation, whose weight gradients are outer products of an "
             "error signal and an input. We built it, checked it and trained with it. Floats round and cancel, so "
             "softmaxes subtract their maximum and gradient checks pick their step. Checkpoints trade memory for "
-            "time at the square root. Curvature sets the pace of descent, Hessian-vector products reach it "
-            "cheaply, and a trained network's Hessian is mostly flat. Constraints bring multipliers, KKT and a dual "
-            "problem, and an equation's solution can be differentiated without unrolling it."
+            "recomputation work in an ideal activation-memory model. Curvature sets the pace of descent, and "
+            "Hessian-vector products reach it cheaply. Our measured spectrum distinguishes directions using "
+            "stated relative cutoffs. Constraints bring multipliers, KKT and a dual problem: positive multipliers "
+            "imply active constraints, and a free SVM intercept adds a label-weighted zero-sum constraint. An "
+            "equation's solution can be differentiated when its local implicit-function conditions hold."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(qualifiers))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
                       run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
@@ -145,7 +177,7 @@ class Outro(VoiceoverScene):
             r"$\eta = 2/(\lambda_{\min} + \lambda_{\max})$: \ show the error shrinks by at most "
             r"$(\kappa - 1)/(\kappa + 1)$ per step, \ and for large $\kappa$, \ about "
             r"$\tfrac{\kappa}{2}\ln\tfrac1\epsilon$ steps reduce it by a factor $\epsilon$.",
-            r"Maximize $\mathbb E_\pi[r] - \beta\,\mathrm{KL}(\pi \,\|\, \pi_{\mathrm{ref}})$ over distributions $\pi$ "
+            r"For $\beta > 0$ and $\pi_{\mathrm{ref}}(a)>0$, maximize $\mathbb E_\pi[r] - \beta\,\mathrm{KL}(\pi \,\|\, \pi_{\mathrm{ref}})$ over distributions $\pi$ "
             r"with a Lagrange multiplier, \ and show $\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$, \ with value "
             r"$\beta \log \textstyle\sum_a \pi_{\mathrm{ref}}(a)\, e^{r(a)/\beta}$.",
         ], font_size=21)

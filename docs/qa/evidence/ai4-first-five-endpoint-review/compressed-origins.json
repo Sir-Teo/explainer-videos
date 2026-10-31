@@ -1,0 +1,218 @@
+[
+  {
+    "file": "integrated-review.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/review.json",
+    "raw_bytes": 364589,
+    "raw_sha256": "6c439974476d8b2633b0df34645e8ca1b31db68fc106c19aeed7badda3115e7f"
+  },
+  {
+    "file": "prior-en-actual-review.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/coverage.json",
+    "raw_bytes": 317643,
+    "raw_sha256": "895b6e6a425b9f3f53ebf06f8d4af9a35da4dece4da7d4870b27a9696e917fde"
+  },
+  {
+    "file": "chinese-unit-repair.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/Layers-unit-regression/receipt.json",
+    "raw_bytes": 51048,
+    "raw_sha256": "08ce84eec273b488475dab65991967cfa0b9d05d508fd33f5a4f58c30c02d920"
+  },
+  {
+    "file": "packaging-script.py.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/packaging/package.py",
+    "raw_bytes": 4328,
+    "raw_sha256": "d9a28b610e238c22c69f6cc9365828023755e968729ff90ee94f14c4951cee41"
+  },
+  {
+    "file": "records/final/zh/Hook.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/zh/Hook/result.json",
+    "raw_bytes": 102587,
+    "raw_sha256": "52acae9f10337f8f23a057d1a13cc3080f7ded3d18023076388c5da93c7dad52"
+  },
+  {
+    "file": "records/final/zh/Derivative.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/zh/Derivative/result.json",
+    "raw_bytes": 70927,
+    "raw_sha256": "cfc61a1f02d6a5c1b57265faaca6a2b91fd1cf2c95ebf1ed944a6bba0daffbbe"
+  },
+  {
+    "file": "records/final/en/Hook.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Hook/result.json",
+    "raw_bytes": 85928,
+    "raw_sha256": "1a61d15042d04b6b0c9b41af10b65172f88fe99917225dcb0644a5a921770093"
+  },
+  {
+    "file": "english-exact-inheritance/Hook.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Hook/exact-prior-map.json",
+    "raw_bytes": 6121,
+    "raw_sha256": "1e6936ff5b182031b0d1cb672df13f8a7999b9c5030eca2239ceb88c3bd0d7b1"
+  },
+  {
+    "file": "records/historical-pretranslation/en/Hook.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Hook/result-at-review.json",
+    "raw_bytes": 86642,
+    "raw_sha256": "22f41c795503b239464e2902a24c0510393ff150fcd4203a32605773906dffe7"
+  },
+  {
+    "file": "records/final/en/Derivative.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Derivative/result.json",
+    "raw_bytes": 55920,
+    "raw_sha256": "5299a1fbdbd87604a2be1a38c1c148ae248fb87b8bf05899a0814a4b8147f9d0"
+  },
+  {
+    "file": "english-exact-inheritance/Derivative.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Derivative/exact-prior-map.json",
+    "raw_bytes": 5681,
+    "raw_sha256": "44f58c7ede6b5551f7239133a9d5e95a0176cc9ec55fbb0cf61f850cad502134"
+  },
+  {
+    "file": "records/historical-pretranslation/en/Derivative.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Derivative/result-at-review.json",
+    "raw_bytes": 56156,
+    "raw_sha256": "e66bb76297d90c9965e6b7fa99a5bd9b3fea9d3f8f079fe7e1f5953c642d9468"
+  },
+  {
+    "file": "records/final/en/Gradient.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Gradient/result.json",
+    "raw_bytes": 58718,
+    "raw_sha256": "f020499a72dc5c00b307c10dc0cb45a0d7d727e616d225d4dc1d4fd870449133"
+  },
+  {
+    "file": "english-exact-inheritance/Gradient.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Gradient/exact-prior-map.json",
+    "raw_bytes": 6197,
+    "raw_sha256": "6620e9bf5ffe8cc8a0e232730f152318f47ca6d953ac44aec4eeca355d848268"
+  },
+  {
+    "file": "records/historical-pretranslation/en/Gradient.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Gradient/result-at-review.json",
+    "raw_bytes": 60033,
+    "raw_sha256": "2ecbf86d73f0b0c3434093c3d49094801177e8c3c48256278e425763dfc0b5a9"
+  },
+  {
+    "file": "records/final/en/Jacobian.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Jacobian/result.json",
+    "raw_bytes": 46563,
+    "raw_sha256": "585d7aabd56eb409d81c82c4a5be3cd9d29e26c1fcc553709c9d60a2918f6641"
+  },
+  {
+    "file": "english-exact-inheritance/Jacobian.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Jacobian/exact-prior-map.json",
+    "raw_bytes": 3263,
+    "raw_sha256": "cd46bb689327b353cb0d5b64227c82cc2f440dd5395631d214252ceedf407289"
+  },
+  {
+    "file": "records/historical-pretranslation/en/Jacobian.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Jacobian/result-at-review.json",
+    "raw_bytes": 48497,
+    "raw_sha256": "fdb4d1046e1387e02683638664ab7d731d5d8e0ca1809f723b6f69003cc09fc6"
+  },
+  {
+    "file": "records/final/en/Layers.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Layers/result.json",
+    "raw_bytes": 64530,
+    "raw_sha256": "2d375ce289c348246dfa284c8c677c386946402df6b76b75d076cec0d015d822"
+  },
+  {
+    "file": "english-exact-inheritance/Layers.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/en/Layers/exact-prior-map.json",
+    "raw_bytes": 4539,
+    "raw_sha256": "917171c7b68773b89680a9301a9ce4f3d3e8c7b70b3106f460c0f71328c4e6f3"
+  },
+  {
+    "file": "records/historical-pretranslation/en/Layers.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Layers/result-at-review.json",
+    "raw_bytes": 64935,
+    "raw_sha256": "f07e5f9a9c2bf4e8e2bffa7cd1d31b7e8afc2906ef5e6d22b70f7fdcaa0df071"
+  },
+  {
+    "file": "records/final/zh/Gradient.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/zh/Gradient/result.json",
+    "raw_bytes": 74624,
+    "raw_sha256": "8a302c2729ae495a443897801f1d8cfb26c3e33b897d82ed0a78174f260e4da3"
+  },
+  {
+    "file": "records/final/zh/Jacobian.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/zh/Jacobian/result.json",
+    "raw_bytes": 64414,
+    "raw_sha256": "5b3c90e62c850c9203eda73ec637203dd0244bd6dcc8ad4e1c10b736945179c7"
+  },
+  {
+    "file": "records/final/zh/Layers.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/Layers-unit-regression/after/result.json",
+    "raw_bytes": 81741,
+    "raw_sha256": "67361b532eb497c109d3a5b5171f7f83f6cdfda065d2cb7ee489adf9f6df7cab"
+  },
+  {
+    "file": "records/historical-before-unit/zh/Layers.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-integrated-endpoint-review/zh/Layers/result.json",
+    "raw_bytes": 81679,
+    "raw_sha256": "0b1e4eb39ab6f3047bab717b692fceb802d4819181543963195fbc34efce8d17"
+  },
+  {
+    "file": "records/historical-axis-repair/en/Derivative.json.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Derivative-after/result.json",
+    "raw_bytes": 56155,
+    "raw_sha256": "f2dedb6a91777fa50e42d5381d1a104f46dd47d112e3718a0fd1517b150ad074"
+  },
+  {
+    "file": "source-at-packaging/ai4/s01_hook.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/s01_hook.py",
+    "raw_bytes": 10327,
+    "raw_sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955"
+  },
+  {
+    "file": "source-at-packaging/ai4/s02_derivative.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/s02_derivative.py",
+    "raw_bytes": 15747,
+    "raw_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501"
+  },
+  {
+    "file": "source-at-packaging/ai4/s03_gradient.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/s03_gradient.py",
+    "raw_bytes": 15915,
+    "raw_sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830"
+  },
+  {
+    "file": "source-at-packaging/ai4/s04_jacobian.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/s04_jacobian.py",
+    "raw_bytes": 13760,
+    "raw_sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783"
+  },
+  {
+    "file": "source-at-packaging/ai4/s05_layers.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/s05_layers.py",
+    "raw_bytes": 11141,
+    "raw_sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc"
+  },
+  {
+    "file": "source-at-packaging/ai4/common.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/common.py",
+    "raw_bytes": 4944,
+    "raw_sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041"
+  },
+  {
+    "file": "source-at-packaging/ai4/zh_lines.py.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/zh_lines.py",
+    "raw_bytes": 108379,
+    "raw_sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d"
+  },
+  {
+    "file": "source-at-packaging/ai4/narration_zh.json.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai4/narration_zh.json",
+    "raw_bytes": 92145,
+    "raw_sha256": "fdbb9cecfb54ee7172bfc932bcb4aaefdb590f5e51ebd0d78b1d50662bcecd8e"
+  },
+  {
+    "file": "source-at-packaging/ai_text_zh.json.gz",
+    "original_file": "/workspace/explainer-videos/videos/ai/ai_text_zh.json",
+    "raw_bytes": 2426901,
+    "raw_sha256": "e4bde73529bfa28faa831f365224edaa7c8b8286726b214d71967e9c633f5d0f"
+  },
+  {
+    "file": "source-at-packaging/Derivative-before-axis-repair.py.gz",
+    "original_file": "/workspace/runtime/ai4-first-five-endpoint-review-en/Derivative/scene-source-before.py",
+    "raw_bytes": 15643,
+    "raw_sha256": "8958372838269201b5430a8eb4b24bc7298cc2e0a3b8b34a03aad2ce7d248d10"
+  }
+]

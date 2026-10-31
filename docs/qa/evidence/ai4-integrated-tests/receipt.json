@@ -1,0 +1,190 @@
+{
+  "scope": "Full repository unittest run after bilingual integration; no render/listening approval",
+  "tests": 352,
+  "seconds": 54.535,
+  "exit_code": 0,
+  "log_sha256": "7a9a44b95cfd94c02ac33abc83d6dbc6a0735bd03568fc50518e2dd2577f8c9a",
+  "source_at_receipt": [
+    {
+      "path": "videos/ai/ai4/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "videos/ai/ai4/cache_contract.py",
+      "sha256": "259a3fe3d320480dc9bd09958b164e6958cd533e8282b4b5a1dbacf25c4b6c30",
+      "bytes": 8767
+    },
+    {
+      "path": "videos/ai/ai4/common.py",
+      "sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+      "bytes": 4944
+    },
+    {
+      "path": "videos/ai/ai4/compute.py",
+      "sha256": "d596f3d0e90e4fbe6bd9846121a67b327048e03d331985533bfd891498f44352",
+      "bytes": 72334
+    },
+    {
+      "path": "videos/ai/ai4/contracts.py",
+      "sha256": "4e0b841d49e6113309d838f567a103837ae28244cb4d13cba01bb26dab81e3ac",
+      "bytes": 8587
+    },
+    {
+      "path": "videos/ai/ai4/manifest.py",
+      "sha256": "1564b36caec5eebc0648fa3ad5b59bb194e8c44866c1cf8ac85083bb413852ad",
+      "bytes": 1375
+    },
+    {
+      "path": "videos/ai/ai4/s01_hook.py",
+      "sha256": "db32982ec32cc5e021c5f8cea65adbc9d1aef4a6a44a221a8adf0f5150ed9955",
+      "bytes": 10327
+    },
+    {
+      "path": "videos/ai/ai4/s02_derivative.py",
+      "sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+      "bytes": 15747
+    },
+    {
+      "path": "videos/ai/ai4/s03_gradient.py",
+      "sha256": "e2f61529e5a2b6e4f5d5aa7e0256ed0e08c48ddda7dcf13e085c90f1f5a44830",
+      "bytes": 15915
+    },
+    {
+      "path": "videos/ai/ai4/s04_jacobian.py",
+      "sha256": "4c832fd112087eb637da46c7fc4d41a7f5a8b49c3767f73600eb8398dab56783",
+      "bytes": 13760
+    },
+    {
+      "path": "videos/ai/ai4/s05_layers.py",
+      "sha256": "33fa551df06f79aeb6c6cfb883d9b1b97fcc1b3139c541ed525c90c25b4fd3cc",
+      "bytes": 11141
+    },
+    {
+      "path": "videos/ai/ai4/s06_modes.py",
+      "sha256": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+      "bytes": 15882
+    },
+    {
+      "path": "videos/ai/ai4/s07_backprop.py",
+      "sha256": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+      "bytes": 16721
+    },
+    {
+      "path": "videos/ai/ai4/s08_library.py",
+      "sha256": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+      "bytes": 13788
+    },
+    {
+      "path": "videos/ai/ai4/s09_train.py",
+      "sha256": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+      "bytes": 20897
+    },
+    {
+      "path": "videos/ai/ai4/s10_floats.py",
+      "sha256": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+      "bytes": 15379
+    },
+    {
+      "path": "videos/ai/ai4/s11_vcurve.py",
+      "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+      "bytes": 14041
+    },
+    {
+      "path": "videos/ai/ai4/s12_memory.py",
+      "sha256": "325c5bf5848fbe90f7e626a195fa90459312e88876e4623244b4f5017c1c2ff4",
+      "bytes": 12530
+    },
+    {
+      "path": "videos/ai/ai4/s13_newton.py",
+      "sha256": "e450c0a7edf88dfc58b1c4616bde26e723cac31889c8d61e2d1980c71e829c19",
+      "bytes": 14032
+    },
+    {
+      "path": "videos/ai/ai4/s14_hvp.py",
+      "sha256": "af7738282ac695de8e910c0ca8155b6051e217348d78db25fe081e5da5a075bb",
+      "bytes": 20004
+    },
+    {
+      "path": "videos/ai/ai4/s15_quadratic.py",
+      "sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "bytes": 18044
+    },
+    {
+      "path": "videos/ai/ai4/s16_lagrange.py",
+      "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "bytes": 14707
+    },
+    {
+      "path": "videos/ai/ai4/s17_kkt.py",
+      "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "bytes": 18234
+    },
+    {
+      "path": "videos/ai/ai4/s18_implicit.py",
+      "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "bytes": 16898
+    },
+    {
+      "path": "videos/ai/ai4/s19_outro.py",
+      "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "bytes": 16025
+    },
+    {
+      "path": "videos/ai/ai4/zh_lines.py",
+      "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+      "bytes": 108379
+    },
+    {
+      "path": "tests/test_ai4_first_five_math.py",
+      "sha256": "72a0e3b7d2c39e780ad9341a63d01c5e44c94d7dd914a052c147ef3039c2494b",
+      "bytes": 9141
+    },
+    {
+      "path": "tests/test_ai4_mid_head_math.py",
+      "sha256": "5facbe498a7ec2a549bd3cc48d2bf01bc8dd2c15f9f1bbf74337023ad628e06e",
+      "bytes": 7708
+    },
+    {
+      "path": "tests/test_ai4_narration_review.py",
+      "sha256": "7a9024a9d56bceabc6f21b47a6f7e20c8e79cfa5d2ba29ac903e293b4cfc38c1",
+      "bytes": 20571
+    },
+    {
+      "path": "tests/test_ai4_producer_contracts.py",
+      "sha256": "1bc21f5ec80e3ea02b6927057a917c3234bcb85a6a57b0d7e9249b2dac0c3c1e",
+      "bytes": 18362
+    },
+    {
+      "path": "tests/test_ai4_scene_semantics.py",
+      "sha256": "a1a716c1f1c0ebe7d26ec874397ee65fe5f0d1dd56f5bd83f8588a80a689143e",
+      "bytes": 10179
+    },
+    {
+      "path": "tests/test_ai4_tail_review.py",
+      "sha256": "fbece8495845bf3b33d6d84a30cd4c3a7a6a306c8f921639d40a670b86df5430",
+      "bytes": 8442
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+      "bytes": 2426144
+    },
+    {
+      "path": "videos/ai/ai4/README.md",
+      "sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42",
+      "bytes": 28578
+    }
+  ],
+  "shared_caption_regression": {
+    "captured_cases": 33,
+    "rows": 4550,
+    "unique_strings": 2265,
+    "changed_outputs": 0,
+    "seconds": 59.05061397
+  },
+  "limits": [
+    "Actual endpoint and full silent-motion QA is progressing separately.",
+    "New runtime-discovered caption gaps require their own scoped fixes and rendering regressions."
+  ]
+}

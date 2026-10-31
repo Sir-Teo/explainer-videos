@@ -1,0 +1,363 @@
+{
+  "observed_utc": "2026-10-31T22:58:37.784071+00:00",
+  "action": "Normal Hugging Face cache-manager eviction of one inactive public pretrained TTS download revision",
+  "repo_id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "revision": "fd4b254389122332181a7c3db7f27e918eec64e3",
+  "verified_public_metadata": {
+    "private": false,
+    "sha": "fd4b254389122332181a7c3db7f27e918eec64e3"
+  },
+  "cache_manager_expected_bytes": 4544170364,
+  "free_before": 854007808,
+  "free_after": 5398265856,
+  "known_active_tts_processes": [],
+  "unreadable_or_vanished_process_ids": [],
+  "protected_unchanged": {
+    ".cache/ai3/image.npz": [
+      216127,
+      1793466896820491622,
+      "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7"
+    ],
+    ".cache/ai3/jl.npz": [
+      90809,
+      1793474031985285473,
+      "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009"
+    ],
+    ".cache/ai3/letters.json": [
+      126,
+      1793466892117013407,
+      "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5"
+    ],
+    ".cache/ai3/galorectl.json": [
+      20954,
+      1793476848818077709,
+      "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274"
+    ],
+    ".cache/ai3/twotower.json": [
+      2819,
+      1793475572800644711,
+      "3f71945680eb5dd6803fbddfa8a753bd4c1082aa9b7aa3070430f115d4d5fd6d"
+    ],
+    ".cache/ai3/project.json": [
+      3040,
+      1793466892107548414,
+      "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f"
+    ],
+    ".cache/ai3/jl.json": [
+      5524,
+      1793474031988199490,
+      "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f"
+    ],
+    ".cache/ai3/gpt2.npz": [
+      72806,
+      1793466616033326706,
+      "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4"
+    ],
+    ".cache/ai3/words.npz": [
+      3890355,
+      1793474003125314781,
+      "209c3269dd21c5f53072ed6a80611af6c0b9f2a8b4c245e6cf716b89c50cfca1"
+    ],
+    ".cache/ai3/mf.json": [
+      97019,
+      1793474585712410332,
+      "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828"
+    ],
+    ".cache/ai3/power.json": [
+      9905,
+      1793466896792618821,
+      "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c"
+    ],
+    ".cache/ai3/sgns.npz": [
+      446,
+      1793475974337932868,
+      "6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754"
+    ],
+    ".cache/ai3/depth.npz": [
+      1601,
+      1793466908151513030,
+      "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9"
+    ],
+    ".cache/ai3/sgns.json": [
+      690222,
+      1793475974356752241,
+      "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e"
+    ],
+    ".cache/ai3/highdim.npz": [
+      2629,
+      1793474015725300016,
+      "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70"
+    ],
+    ".cache/ai3/mf.npz": [
+      130216,
+      1793474585699728124,
+      "0ed655289ac8b221f405e820496624c70fbec4935cc594692abe9423ebfa1a34"
+    ],
+    ".cache/ai3/norms.json": [
+      12554,
+      1793466907452463243,
+      "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8"
+    ],
+    ".cache/ai3/gpt2.json": [
+      11064,
+      1793466616038797011,
+      "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528"
+    ],
+    ".cache/ai3/words.json": [
+      138322,
+      1793474003156165286,
+      "715397b0df63babbb51c323dc5653fc51ae3c908da505d12011a4db0427d1103"
+    ],
+    ".cache/ai3/depth.json": [
+      259,
+      1793466908151875313,
+      "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2"
+    ],
+    ".cache/ai3/highdim.json": [
+      1198,
+      1793474015728107470,
+      "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14"
+    ],
+    ".cache/ai3/einsum.json": [
+      264,
+      1793466892101069710,
+      "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6"
+    ],
+    ".cache/ai3/letters.npz": [
+      150280,
+      1793466892112509379,
+      "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a"
+    ],
+    ".cache/ai3/image.json": [
+      705,
+      1793466896824895090,
+      "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7"
+    ],
+    ".cache/ai3/galore.json": [
+      129205,
+      1793476547185288008,
+      "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e"
+    ],
+    ".cache/ai3/mp.json": [
+      82808,
+      1793475519468348620,
+      "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033"
+    ],
+    ".cache/ai4/cancel.json": [
+      1058,
+      1793485531783804074,
+      "54ff8197234c963ec3a9f77179b7b56081bf423062f2a471b302753c0027c8bd"
+    ],
+    ".cache/ai4/lagrange.npz": [
+      31259,
+      1793485547267386301,
+      "8b4647394b4649def0abee2255517195c959f51ce7460251b236cc0c0118e3c2"
+    ],
+    ".cache/ai4/modes.json": [
+      11969,
+      1793485505716573205,
+      "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216"
+    ],
+    ".cache/ai4/newton.npz": [
+      60968,
+      1793485537377184737,
+      "cd585eec6c75ee16d000bd2d4fdb8caabb15b5e7dc010186b6da46d8e2ecf7ae"
+    ],
+    ".cache/ai4/checkpoint.json": [
+      2304,
+      1793485536036558615,
+      "0391abde8b3713b8f20be2802287b2b8692324c01e5de4ab98fc0febae33c63e"
+    ],
+    ".cache/ai4/vcurve.json": [
+      2007,
+      1793485532692758913,
+      "9ace458a11f411e45e819fd0ae36c4da72929197553b4fc693627d5cf69ed748"
+    ],
+    ".cache/ai4/gdlr.npz": [
+      16144,
+      1793485528525572771,
+      "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770"
+    ],
+    ".cache/ai4/train.npz": [
+      49378,
+      1793485520884249435,
+      "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6"
+    ],
+    ".cache/ai4/hessian.json": [
+      14800,
+      1793485543701476357,
+      "7af7632ad2585faa1483355f40ac47a5de16564fcdd7bd6daba01d48eb3d6edf"
+    ],
+    ".cache/ai4/cancel.npz": [
+      13398,
+      1793485531779701964,
+      "5a5b8b4a9dd0e98622c752a08e41ae0e6a0cc603c711834d55b79f00c95d12c5"
+    ],
+    ".cache/ai4/quad.json": [
+      8319,
+      1793485546392702964,
+      "c3e92425573a15609d909de84fd1f77f20f2b9915cefd80b883acc8f25d47a54"
+    ],
+    ".cache/ai4/jacobians.npz": [
+      4075,
+      1793485503363293357,
+      "42131a5f8fdb3b9b8c98315ed288315e11605377fa99fa5d676673d32b889405"
+    ],
+    ".cache/ai4/jacobians.json": [
+      1302,
+      1793485503367900583,
+      "fe9010b7e51e5f03af564f47aaa5622947bb5fea5b62aa70dc040effe8680936"
+    ],
+    ".cache/ai4/depth.npz": [
+      10344,
+      1793485502533420789,
+      "99c400d91780e257c42230bf17f629fde21e43b8f2991ed0862e3c9e7d6ed4a4"
+    ],
+    ".cache/ai4/valley.json": [
+      1195,
+      1793485545476174082,
+      "f7f4bed471579263dcd844d5480617a5a31600fd453d648fdf8941f1f03337ed"
+    ],
+    ".cache/ai4/vcurve.npz": [
+      24452,
+      1793485532687241067,
+      "1cf395be1f6990d194f54cdea2191b0cce6d688ebea8f4d180a67fc8f7be5a36"
+    ],
+    ".cache/ai4/hessian.npz": [
+      451866,
+      1793485543692125503,
+      "62e973a235a30103b1c5422d5aa26ab7cec99c8c2de731731e2e162edc143b0f"
+    ],
+    ".cache/ai4/params.json": [
+      2976,
+      1793485500246547643,
+      "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b"
+    ],
+    ".cache/ai4/mlp2.npz": [
+      2532,
+      1793485509104534415,
+      "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d"
+    ],
+    ".cache/ai4/check.json": [
+      1344,
+      1793485512327055822,
+      "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828"
+    ],
+    ".cache/ai4/grad0.json": [
+      1258,
+      1793485524085653580,
+      "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d"
+    ],
+    ".cache/ai4/tiny.json": [
+      1259,
+      1793485507092588435,
+      "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218"
+    ],
+    ".cache/ai4/deq.json": [
+      2163,
+      1793485556755506662,
+      "61bb4b3f16c415311ac922342f8a56f8fa489698e34699ea519bc2b96619fa9d"
+    ],
+    ".cache/ai4/lagrange.json": [
+      2142,
+      1793485547271908844,
+      "997f01d384d1584922d7d6819ac9fadd59c482f7f17a37a82e0aad1869851c1a"
+    ],
+    ".cache/ai4/floats.npz": [
+      8682,
+      1793485530568456683,
+      "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af"
+    ],
+    ".cache/ai4/valley.npz": [
+      3615,
+      1793485545472088327,
+      "3aeaf22153629a49f964737b278baf892b45263832af16cd80085fc866977fdb"
+    ],
+    ".cache/ai4/depth.json": [
+      1028,
+      1793485502538881986,
+      "1ffd989907645c43fc7da0d2b3529b727a3fb3baee307d33f0d93f310a069965"
+    ],
+    ".cache/ai4/linapprox.json": [
+      1260,
+      1793485501071779790,
+      "54857b13b400b68e3f37a662bca7d1eb2ba0ede2a3be11bdb36124b4002290e0"
+    ],
+    ".cache/ai4/newton.json": [
+      1763,
+      1793485537386520306,
+      "31e2ae53cedb1a006fc44a5530233547e6869ac926c33ad7a138de052273a769"
+    ],
+    ".cache/ai4/floats.json": [
+      2908,
+      1793485530573099124,
+      "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291"
+    ],
+    ".cache/ai4/kkt.npz": [
+      8976,
+      1793485548397832387,
+      "3a5801822133e7b6fd058c0cdd2010aeccb949181dce475d01b8e260d090f9eb"
+    ],
+    ".cache/ai4/gdlr.json": [
+      1925,
+      1793485528530780235,
+      "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d"
+    ],
+    ".cache/ai4/tape.json": [
+      2975,
+      1793485510363191905,
+      "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099"
+    ],
+    ".cache/ai4/quad.npz": [
+      13335,
+      1793485546387706720,
+      "607e72f60e66b381cf3e589e1390fe9e08433da3d4f05a3f4f96c937a2fa6ddf"
+    ],
+    ".cache/ai4/checkpoint.npz": [
+      1579,
+      1793485536032836075,
+      "8135a9935603452cb6ce25ec9d1574da203fe5cab573584b2397a77f4f424469"
+    ],
+    ".cache/ai4/train.json": [
+      1919,
+      1793485520890721666,
+      "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd"
+    ],
+    ".cache/ai4/linapprox.npz": [
+      9402,
+      1793485501066178673,
+      "780209e6338b0d3c433085d65db609c5f4e4ac67b63dbfee883209f0eeb8e852"
+    ],
+    ".cache/ai4/modes.npz": [
+      1491,
+      1793485505712094881,
+      "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe"
+    ],
+    ".cache/ai4/mlp2.json": [
+      1106,
+      1793485509109867484,
+      "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034"
+    ],
+    ".cache/ai4/deq.npz": [
+      9766,
+      1793485556750392520,
+      "58a4432638927ca493eb96a00f2c2da06d3b76eb57c975007dc85eebec1f4aca"
+    ],
+    ".cache/ai4/kkt.json": [
+      2496,
+      1793485548402818979,
+      "12d5b57c09b35ba2c3ed9babfabe102f7b4cc3626f40fce7cb8708115d0a87be"
+    ],
+    ".cache/ai4/grad0.npz": [
+      4161,
+      1793485524081312196,
+      "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf"
+    ]
+  },
+  "scope": [
+    "The root-owned TTS service was stopped earlier; all current render workers use silent narration.",
+    "Process visibility is incomplete; this is not a claim of full system liveness observation.",
+    "Only the single standard pretrained-download repository was evicted. Numerical/trained checkpoints, generated voices/speech, source files and unique QA evidence are outside the exact deletion plan.",
+    "A future TTS run requires downloading this exact public revision again through normal authorized access. No new credentials or bypass."
+  ]
+}

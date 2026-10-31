@@ -17,14 +17,54 @@ def jac(x, y):
     return np.array([[1.0, 0.495 * math.cos(1.1 * y)], [0.495 * math.cos(1.1 * x), 1.0]])
 
 
-def grid_lines(lo, hi, n, f, steps=30, color=BLUE_C, width=2.0):
+def clip_segment_to_disk(a, b, center, radius):
+    """Clip a sampled map segment to the lens, without moving its endpoints."""
+    a, b, center = np.asarray(a, float), np.asarray(b, float), np.asarray(center, float)
+    delta, offset = b - a, a - center
+    aa = float(delta @ delta)
+    if aa == 0:
+        return (a, b) if float(offset @ offset) <= radius ** 2 else None
+    bb = 2 * float(offset @ delta)
+    cc = float(offset @ offset) - radius ** 2
+    discriminant = bb ** 2 - 4 * aa * cc
+    if discriminant < 0:
+        return None
+    root = math.sqrt(max(0.0, discriminant))
+    first = max(0.0, (-bb - root) / (2 * aa))
+    last = min(1.0, (-bb + root) / (2 * aa))
+    return None if first > last else (a + first * delta, a + last * delta)
+
+
+def grid_lines(lo, hi, n, f, steps=30, color=BLUE_C, width=2.0, clip_disk=None):
     """The lines x = const and y = const of a square [lo, hi]^2, n of each, mapped by f."""
     g = VGroup()
     for t in np.linspace(lo, hi, n):
         for horiz in (True, False):
             pts = [f(np.array([s, t]) if horiz else np.array([t, s])) for s in np.linspace(lo, hi, steps)]
-            g.add(VMobject(color=color, stroke_width=width).set_points_smoothly(pts))
+            if clip_disk is None:
+                g.add(VMobject(color=color, stroke_width=width).set_points_smoothly(pts))
+            else:
+                # Polyline pieces stay in the convex disk. Smoothing clipped
+                # endpoints can overshoot the lens and imply a larger region.
+                line = VMobject(color=color, stroke_width=width)
+                for a, b in zip(pts, pts[1:]):
+                    clipped = clip_segment_to_disk(a, b, *clip_disk)
+                    if clipped is not None:
+                        segment = VMobject().set_points_as_corners(clipped)
+                        line.add_subpath(segment.points)
+                g.add(line)
     return g
+
+
+def depth_plot_range(data):
+    """Show all measured log norms and seed extrema, without endpoint clamping."""
+    values = np.concatenate([np.asarray(data[f"{name}{k}"], float).ravel()
+                             for k in range(len(data["gains"])) for name in ("mean", "lo", "hi")])
+    if not np.isfinite(values).all():
+        raise ValueError("Depth plot requires finite recorded log norms")
+    low = 6 * math.floor(min(float(values.min()) - 0.5, -0.5) / 6)
+    high = 6 * math.ceil(max(float(values.max()) + 0.5, 0.5) / 6)
+    return low, high
 
 
 class Jacobian(VoiceoverScene):
@@ -65,8 +105,9 @@ class Jacobian(VoiceoverScene):
             def straight(q):
                 return c + k * np.array([*(J @ q), 0])
 
-            return VGroup(grid_lines(-rr, rr, 7, curved, color=BLUE_C, width=3),
-                          grid_lines(-rr, rr, 7, straight, color=GRAD, width=2).set_opacity(0.8))
+            return VGroup(grid_lines(-rr, rr, 7, curved, color=BLUE_C, width=3, clip_disk=(c, R * 0.98)),
+                          grid_lines(-rr, rr, 7, straight, color=GRAD, width=2,
+                                     clip_disk=(c, R * 0.98)).set_opacity(0.8))
 
         ins = always_redraw(inset)
         spot = always_redraw(lambda: Circle(radius=r.get_value() * 1.25, color=WHITE, stroke_width=2).move_to(P))
@@ -102,7 +143,7 @@ class Jacobian(VoiceoverScene):
         det = float(np.linalg.det(J))
         dc = definition_card(
             r"the Jacobian",
-            r"For $f: \mathbb{R}^n \to \mathbb{R}^m$, the $m \times n$ matrix of partial derivatives, $J_{ij} = "
+            r"For differentiable $f: \mathbb{R}^n \to \mathbb{R}^m$, the $m \times n$ matrix of partial derivatives, $J_{ij} = "
             r"\partial f_i / \partial x_j$: the one matrix with $f(x + h) = f(x) + J\,h + o(\|h\|)$. \ A gradient is the "
             r"Jacobian of a function with one output, stood up as a column.", width=12.6, font_size=26)
         dc.to_edge(UP, buff=0.3)
@@ -133,7 +174,7 @@ class Jacobian(VoiceoverScene):
             "single output. <bookmark mark='a'/> For this two-dimensional map, the absolute value of the Jacobian's "
             "determinant, from part three, gives the local area factor. <bookmark mark='b'/> And the chain rule for maps is matrix "
             "multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken "
-            "where its input lands. That product is the whole of backpropagation, as chapter five will show."
+            "where its input lands. Applying this chain rule backwards is the basis of backpropagation, as chapter five will show."
         ) as vo:
             self.play(FadeIn(dc, shift=UP * 0.2))
             self.play(FadeIn(shape_pic), FadeIn(sq), GrowArrow(arrow_))
@@ -151,39 +192,52 @@ class Jacobian(VoiceoverScene):
         gains = [float(g) for g in d["gains"]]
         L = int(d["L"])
         cols = [C.SURPRISE, GRAD, WHITE, C.TRUE_P, C.BITS]
-        g = axes([0, L, 10], [-18, 6, 6], x_length=7.2, y_length=4.8, xlabel=r"depth: \ how many layers the gradient crosses",
-                 ylabel=r"size of $J_L \cdots J_1$ \ (largest singular value, $\log_{10}$)", xticks=[0, 20, 40, 60],
-                 yticks=[-18, -12, -6, 0, 6], center=[-2.0, -0.4, 0])
+        ymin, ymax = depth_plot_range(d)
+        g = axes([0, L, 10], [ymin, ymax, 6], x_length=7.2, y_length=4.8,
+                 xlabel=r"depth: \ how many layers the gradient crosses",
+                 ylabel=r"maximum stretch of $J_L \cdots J_1$: \ mean $\log_{10}\|\cdot\|_2$",
+                 xticks=[0, 20, 40, 60], yticks=list(range(ymin, ymax + 1, 6)), center=[-2.0, -0.4, 0])
         ax = g.ax
         xs = np.arange(1, L + 1)
         curves, labs = VGroup(), VGroup()
         for k, gn in enumerate(gains):
             m = np.asarray(d[f"mean{k}"])
-            curves.add(VGroup(band(ax, xs, np.clip(d[f"lo{k}"], -18, 6), np.clip(d[f"hi{k}"], -18, 6), cols[k], 0.15),
-                              curve(ax, xs, np.clip(m, -18, 6), cols[k], 3)))
-            labs.add(label(rf"gain ${gn:g}$", font_size=22, color=cols[k]).next_to(ax.c2p(L, float(np.clip(m[-1], -18, 6))),
+            curves.add(VGroup(band(ax, xs, d[f"lo{k}"], d[f"hi{k}"], cols[k], 0.15), curve(ax, xs, m, cols[k], 3)))
+            labs.add(label(rf"gain ${gn:g}$", font_size=22, color=cols[k]).next_to(ax.c2p(L, float(m[-1])),
                                                                                 RIGHT, buff=0.15))
         head = label(rf"${L}$ tanh layers, \ weights scaled by a gain \ (computed, ${int(d['seeds'])}$ seeds)", font_size=24,
                      color=GREY_A).to_edge(UP, buff=0.3)
         m0, m4, m2 = (float(np.asarray(d[f"mean{k}"])[-1]) for k in (0, 4, 2))
         steady = abs(m2) < 1
-        verdict = ("Only near a gain of one does it hold steady." if steady else
-                   "Even near a gain of one it drifts.")
+        verdict = ("At gain one, its mean log size stays within one power of ten of zero." if steady else
+                   "Even at gain one, its mean log size ends more than one power of ten from zero.")
+        bound = MathTex(r"\|J_L\cdots J_1\|_2 \le \prod_{\ell=1}^{L}\|J_\ell\|_2", font_size=28)
+        if bound.width > 3.7:
+            bound.scale_to_fit_width(3.7)
+        bound.move_to([4.5, 1.45, 0])
+        meaning = label(r"an upper bound, \ not equality \\ maximum stretch, \ not every direction", font_size=22,
+                        color=GREY_A).next_to(bound, DOWN, buff=0.3)
+        spread = label(r"curve: \ mean log norm \\ band: \ minimum--maximum over seeds", font_size=22,
+                       color=GREY_B).move_to([4.5, -2.3, 0])
         with self.voiceover(
-            "Chain many maps and their Jacobians multiply, so their sizes multiply too. Here is a deep stack of "
-            f"tanh layers, {L} of them, with random weights scaled by a gain, and the size of the product of their "
-            "Jacobians: how much a gradient grows or shrinks on its way back through them. <bookmark mark='a'/> With "
-            f"a gain of {gains[0]:g} it shrinks by {abs(m0):.0f} powers of ten. <bookmark mark='b'/> With a gain of "
-            f"{gains[4]:g} it grows by {m4:.0f}. <bookmark mark='c'/> {verdict} These are vanishing and exploding "
-            "gradients, and Parts 9 and 10 choose the initial scale of the weights to stay on that edge."
+            "Chain many maps and their Jacobians multiply. The product's norm is at most the product of the "
+            "individual norms; it need not equal it. Here is a deep stack of "
+            f"tanh layers, {L} of them, with random weights scaled by a gain. We plot the mean log of the product's "
+            "largest singular value, with the range across seeds. This is the maximum possible amplification, "
+            "also for the transposed product in backpropagation, not what happens in every direction. "
+            "A norm below one shrinks every direction; a norm above one allows growth in some direction. "
+            f"<bookmark mark='a'/> At gain {gains[0]:g}, the mean log size ends at {m0:.1f}. "
+            f"<bookmark mark='b'/> At gain {gains[4]:g}, it ends at {m4:.1f}. "
+            f"<bookmark mark='c'/> {verdict} Such products help explain vanishing and exploding gradients. "
+            "Parts 9 and 10 return to how initialization affects their scale."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
+            self.play(FadeIn(head), FadeIn(g), FadeIn(bound), FadeIn(meaning), FadeIn(spread))
             self.play(Create(curves[2][1]), FadeIn(labs[2]), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(curves[0]), FadeIn(curves[1]), FadeIn(labs[0]), FadeIn(labs[1]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(curves[3]), FadeIn(curves[4]), FadeIn(labs[3]), FadeIn(labs[4]), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(curves[2][0]), Indicate(labs[2], color=WHITE))
+            self.play(FadeIn(curves[2][0]), Indicate(labs[2], color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()

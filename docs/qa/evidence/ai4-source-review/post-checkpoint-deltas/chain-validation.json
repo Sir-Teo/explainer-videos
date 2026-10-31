@@ -1,0 +1,12 @@
+{
+  "approved_table_chain_verified": true,
+  "pre_delta_global_sha256": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+  "final_global_sha256": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+  "added_keys": 18,
+  "changed_keys": 16,
+  "removed_keys": 0,
+  "floats_voiceover_ASTs_unchanged": true,
+  "floats_current_sha256": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+  "historical_gates_not_rerun": true,
+  "scope": "Exact final table mapping is derived solely by applying the four approved delta receipts to the tested historical table. Unchanged phrases/patterns and all untargeted entries verified. Original compile/geometry receipts remain limited to their declared fixtures."
+}

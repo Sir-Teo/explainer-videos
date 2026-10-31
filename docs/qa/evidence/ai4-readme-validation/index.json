@@ -1,0 +1,151 @@
+{
+  "payloads": [
+    {
+      "file": "README-before.md.gz",
+      "bytes": 11419,
+      "sha256": "4694d5c4a5990e7ef95d2b8a5dab31096baaedd4c7c30a7046d0f615024b8285"
+    },
+    {
+      "file": "README.md",
+      "bytes": 1751,
+      "sha256": "bfbc02115d1e95f130185a900977fafe0ec9038f61b9110c3ef6d0f9724025cb"
+    },
+    {
+      "file": "actual-first-five-field-check.json.gz",
+      "bytes": 510,
+      "sha256": "831d0c524f614b7772be75df185785429e18b7ac0cd94d1303b2b5211099ff03"
+    },
+    {
+      "file": "compute-driver-receipt.json.gz",
+      "bytes": 4799,
+      "sha256": "d838970bcebc44a89d10017c0e3e17cdb554eda614023b517daa39dc18b7e7a2"
+    },
+    {
+      "file": "raw-json/cancel.json.gz",
+      "bytes": 609,
+      "sha256": "cdd98e25f0f3949fca0f74bbc7df6c8dc5304a6cb517dd40efec14d99bbae58a"
+    },
+    {
+      "file": "raw-json/check.json.gz",
+      "bytes": 722,
+      "sha256": "2489c48ed7e2f39341529c0ea9ecfa5dde75e4f0389efb6eff67470468a29534"
+    },
+    {
+      "file": "raw-json/checkpoint.json.gz",
+      "bytes": 1164,
+      "sha256": "48539b02c162e54aef6054fb0f8e13ee83e055b5e9b14ce1212fdf0d122dba63"
+    },
+    {
+      "file": "raw-json/depth.json.gz",
+      "bytes": 603,
+      "sha256": "6cd64014a88dd6f8952758ff9f44210601182508c8b018ca5a8463c3f646f864"
+    },
+    {
+      "file": "raw-json/deq.json.gz",
+      "bytes": 1030,
+      "sha256": "99a63f9f5568afd161462563c86ea68905984fa8309a4456826406d5787ae80b"
+    },
+    {
+      "file": "raw-json/floats.json.gz",
+      "bytes": 1252,
+      "sha256": "689863c1a076331998ebd1d3f50075e6e7c99b86586af36ee3e3ee8a04c0ad2b"
+    },
+    {
+      "file": "raw-json/gdlr.json.gz",
+      "bytes": 1055,
+      "sha256": "caf23bb74bb53f908275e3a71e6289e77b70920be82e9d6acc3f9fd2cdad1348"
+    },
+    {
+      "file": "raw-json/grad0.json.gz",
+      "bytes": 711,
+      "sha256": "4760f2cc547acdc8a5d627e1bdfde56ccd55d9a1dbf12cf82b6d714723e7300f"
+    },
+    {
+      "file": "raw-json/hessian.json.gz",
+      "bytes": 5613,
+      "sha256": "8f5acc193d0e128278ede21d59c5bb00d1be593c2f9dd975d2b07d4e5cc8dc36"
+    },
+    {
+      "file": "raw-json/jacobians.json.gz",
+      "bytes": 732,
+      "sha256": "25aeadfc456166493bae3f248ad97ad33d9be07202e2585ce25d980eaa10b564"
+    },
+    {
+      "file": "raw-json/kkt.json.gz",
+      "bytes": 1133,
+      "sha256": "9a24ae040d75eee36cc0a4882fc13b12ecb0538aeb934a6ca58e358175199fdc"
+    },
+    {
+      "file": "raw-json/lagrange.json.gz",
+      "bytes": 1029,
+      "sha256": "2ddc19a74a39aa345a02be514a061ec899e7c791ef7b9dfdcf131e9c85595c4f"
+    },
+    {
+      "file": "raw-json/linapprox.json.gz",
+      "bytes": 727,
+      "sha256": "f0e308e139e93dddfddb2788cf38c44be9bafa8067652b2b8cd0d657736a3a36"
+    },
+    {
+      "file": "raw-json/mlp2.json.gz",
+      "bytes": 652,
+      "sha256": "b70f55c491c190711b68fd8e5fdd6121a2337ca57a397084e354ff082d00f17d"
+    },
+    {
+      "file": "raw-json/modes.json.gz",
+      "bytes": 3833,
+      "sha256": "436b61cd11af28f2d3dd1c3141d0613835fa7219ed6fe976f85c6e733b19a9fa"
+    },
+    {
+      "file": "raw-json/newton.json.gz",
+      "bytes": 900,
+      "sha256": "fc054ecc5cc56a2bd661a72eb0d2882a3784b95cc8323aba70b2b36386667d75"
+    },
+    {
+      "file": "raw-json/params.json.gz",
+      "bytes": 1284,
+      "sha256": "ae5a2f5e2f4e881a885ad8274dad1bb5b85cd76750a651c949041f5d88da5268"
+    },
+    {
+      "file": "raw-json/quad.json.gz",
+      "bytes": 1671,
+      "sha256": "270f2b0d482750a5f467cba3c7094b9ca5cc7d83a28c36436db82ed2abe07808"
+    },
+    {
+      "file": "raw-json/tape.json.gz",
+      "bytes": 806,
+      "sha256": "37a637d424f131e28c9b8028b661e00bfb5ae6542edea3e80dd6a9ebd45199d2"
+    },
+    {
+      "file": "raw-json/tiny.json.gz",
+      "bytes": 676,
+      "sha256": "a1cd65b58a462bc47164eeef912431c2f09f136c5b99309d87cc2a7358339825"
+    },
+    {
+      "file": "raw-json/train.json.gz",
+      "bytes": 1039,
+      "sha256": "54e064d1481e03b1883e1fa9d67a11531d9b6ec09dbe486c1a5a964373362f1c"
+    },
+    {
+      "file": "raw-json/valley.json.gz",
+      "bytes": 677,
+      "sha256": "757092c9185c15101f29641f7039dd1bfe7e24e78ff1a90a922ba5d010f754a7"
+    },
+    {
+      "file": "raw-json/vcurve.json.gz",
+      "bytes": 978,
+      "sha256": "c433e17f9b1ec81c9fb2faf40e4c892a7d3594efb6a0d080b646e1f2e86b5643"
+    },
+    {
+      "file": "selected-array-evidence.json.gz",
+      "bytes": 70125,
+      "sha256": "2d07f5f75d894b4cd7d3652aea64e06428cc140cda2e656235c483c0da81a85f"
+    },
+    {
+      "file": "validation.json.gz",
+      "bytes": 7035,
+      "sha256": "8092c50a6aa8bbdecabb08d6dd62b3a57844f5684ad5d6837446986c58794036"
+    }
+  ],
+  "bytes": 124535,
+  "final_readme_sha256": "1095c935e47faee3b9ace0b1d798ed02b3a1ab7f5d5cf2a402e088d03e1b6b42"
+}

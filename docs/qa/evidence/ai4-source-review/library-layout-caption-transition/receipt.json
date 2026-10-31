@@ -1,0 +1,7 @@
+{
+  "before_sha256": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+  "after_sha256": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+  "voiceover_call_ASTs_unchanged": true,
+  "caption_append_receipt": "table-update.json.gz",
+  "scope": "Root moved only Library result-group clamp6.9 to6.65 and appended2 measured-default MathTex caption translations. Original missing-caption warning record is retained; this source package grants no refreshed render approval. Later final table changes are recorded separately."
+}

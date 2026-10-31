@@ -1,0 +1,32 @@
+[
+  {
+    "original_path": "videos/ai/ai4/s11_vcurve.py",
+    "sha256": "52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8",
+    "meaning": "source at snapshot; imported-source linkage relies on root freeze and record warnings, not copy alone",
+    "source_object": "source-objects/52410fcae26b524704109489cc50cc2b7f7c3e01225b72fc1dcf00bf11cff8b8.txt.gz"
+  },
+  {
+    "original_path": "videos/ai/ai4/common.py",
+    "sha256": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+    "meaning": "source at snapshot; imported-source linkage relies on root freeze and record warnings, not copy alone",
+    "source_object": "source-objects/cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041.txt.gz"
+  },
+  {
+    "original_path": "videos/ai/ai4/zh_lines.py",
+    "sha256": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "meaning": "source at snapshot; imported-source linkage relies on root freeze and record warnings, not copy alone",
+    "source_object": "source-objects/e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d.txt.gz"
+  },
+  {
+    "original_path": "videos/ai/ai_text_zh.json",
+    "sha256": "e4bde73529bfa28faa831f365224edaa7c8b8286726b214d71967e9c633f5d0f",
+    "meaning": "source at snapshot; imported-source linkage relies on root freeze and record warnings, not copy alone",
+    "source_object": "source-objects/e4bde73529bfa28faa831f365224edaa7c8b8286726b214d71967e9c633f5d0f.txt.gz"
+  },
+  {
+    "original_path": "tools/qa_series.py",
+    "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+    "meaning": "source at snapshot; imported-source linkage relies on root freeze and record warnings, not copy alone",
+    "source_object": "source-objects/d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3.txt.gz"
+  }
+]

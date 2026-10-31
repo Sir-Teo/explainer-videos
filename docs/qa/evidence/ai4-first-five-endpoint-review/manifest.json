@@ -1,0 +1,475 @@
+{
+  "scope": "Every evidence payload except this manifest; gzip-byte SHA with raw identities in compressed-origins.json",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 7247,
+      "sha256": "47c5fe490ad8ac519dd25adc56ade73d0b5798f4dfb660f31655219980486559"
+    },
+    {
+      "file": "chinese-unit-repair.json.gz",
+      "bytes": 6944,
+      "sha256": "5a61a4065b13f87e88c5a4529a0be6f4644d270e582a58689af9e99b569dab7d"
+    },
+    {
+      "file": "compressed-origins.json",
+      "bytes": 9920,
+      "sha256": "de86c408546794e6206bfb66b9c236111b9c72b8c0a57eb3eab88d200d4919a8"
+    },
+    {
+      "file": "english-exact-inheritance/Derivative.json.gz",
+      "bytes": 1136,
+      "sha256": "30ce34e7620153a5ffeafd7cad575e8ef61ff7bfe67317c8b3374fdabc16db40"
+    },
+    {
+      "file": "english-exact-inheritance/Gradient.json.gz",
+      "bytes": 1240,
+      "sha256": "85ceb2dd4cf1e4e5a3eb4dbed82a8f1ef45b9b66333f6068c3c46134132024aa"
+    },
+    {
+      "file": "english-exact-inheritance/Hook.json.gz",
+      "bytes": 1236,
+      "sha256": "b4fbdd29d167d7c30b1d0d38b6445dec6b9a0a50d5ffc06b9cf02421579400b6"
+    },
+    {
+      "file": "english-exact-inheritance/Jacobian.json.gz",
+      "bytes": 726,
+      "sha256": "1d518183e1605016c8a8dd2ca96be4e6950fb8243733cd247f8b860c05e1d3d6"
+    },
+    {
+      "file": "english-exact-inheritance/Layers.json.gz",
+      "bytes": 955,
+      "sha256": "3b2900d074355311d8a3877273c86eef950543bd14cb185afb46add4e29390ec"
+    },
+    {
+      "file": "images/native/en/Derivative/004_00033.6s.png",
+      "bytes": 39906,
+      "sha256": "86552c02e15efb78dc98f2f373f01eeaf59e7d99e3d5bc76d92115ce34c5f525"
+    },
+    {
+      "file": "images/native/en/Derivative/008_00074.6s.png",
+      "bytes": 69449,
+      "sha256": "ffe50d8825d9cb53277048cbf0c222f0cbfe9fe73a07ec9dbf24ef557ffe068a"
+    },
+    {
+      "file": "images/native/en/Derivative/010_00095.8s.png",
+      "bytes": 20802,
+      "sha256": "97f6bdd64802b7f0fbed23cffe855bae71d17f0e988a8bc15ae88eab721cbd74"
+    },
+    {
+      "file": "images/native/en/Derivative/013_00118.5s.png",
+      "bytes": 57288,
+      "sha256": "eecc6a7d3d72129fcd18f1cefb9d084b86f2f2a02f1abbb6ee8b5d05946e2ca2"
+    },
+    {
+      "file": "images/native/en/Derivative/016_00142.6s.png",
+      "bytes": 46927,
+      "sha256": "a942094ad487ff7961451224fc93e52408911b200c4348558e18cc0feef7b6f3"
+    },
+    {
+      "file": "images/native/en/Gradient/003_00019.6s.png",
+      "bytes": 107707,
+      "sha256": "849dbd9e28bb3121e600e5a8d1d243bf0a9ae6fbf8fd0cdcdcc51f887600d445"
+    },
+    {
+      "file": "images/native/en/Gradient/004_00036.4s.png",
+      "bytes": 115675,
+      "sha256": "7bc267d5d90b6c637b857ce512e12f4cc71e2d1587e531db11205458712223b9"
+    },
+    {
+      "file": "images/native/en/Gradient/010_00088.0s.png",
+      "bytes": 70859,
+      "sha256": "9b57fcb54ea54b5ffa89e05d306db23a765509c872a306d3e3733897dddfab51"
+    },
+    {
+      "file": "images/native/en/Gradient/014_00124.9s.png",
+      "bytes": 138412,
+      "sha256": "3ffc441e0e28c84a5305d5abddc4c9cca3156b2f320317920d148b13f561c8b8"
+    },
+    {
+      "file": "images/native/en/Gradient/018_00161.0s.png",
+      "bytes": 135557,
+      "sha256": "666dd046804b84baa0a69a4ee86d1fed3d202a7a1a504388dcf7644ef8a8fc30"
+    },
+    {
+      "file": "images/native/en/Hook/001_00021.2s.png",
+      "bytes": 113463,
+      "sha256": "50de4225f6b758c89a84b33083004f62c4353b5b7b20173bbf86c8bf84a79f3f"
+    },
+    {
+      "file": "images/native/en/Hook/002_00028.5s.png",
+      "bytes": 118599,
+      "sha256": "bd350a0125250493ce10b8ea35905a867bbbec7a9c86d5930415c00b377f5c03"
+    },
+    {
+      "file": "images/native/en/Hook/012_00079.9s.png",
+      "bytes": 56733,
+      "sha256": "0f4382fdc64cf74b930a6beec9db1d95446befcaec880a88ef720a2fc9e54e39"
+    },
+    {
+      "file": "images/native/en/Hook/018_00116.5s.png",
+      "bytes": 76295,
+      "sha256": "ebd57b2e10db673e446656210cf0430b1cf0fa165b712043710069a3f33279d6"
+    },
+    {
+      "file": "images/native/en/Jacobian/003_00023.2s.png",
+      "bytes": 162520,
+      "sha256": "64ac77591f91b9443e686178733455d8e192fe70a05af5be5a5a25895067588f"
+    },
+    {
+      "file": "images/native/en/Jacobian/006_00058.6s.png",
+      "bytes": 65337,
+      "sha256": "1413be0bddc6a8b9919d0274b5efd577de4e487bfdcbd20c1416c42004e56b24"
+    },
+    {
+      "file": "images/native/en/Jacobian/009_00121.2s.png",
+      "bytes": 66452,
+      "sha256": "0fb7a15aacd9a331890c65ff813a1a3048bf963e2cd13fcb33b661408b64425d"
+    },
+    {
+      "file": "images/native/en/Layers/005_00040.1s.png",
+      "bytes": 68906,
+      "sha256": "4fdcd38f5ea001ece447272b3eecd4d94830eb64e7a06e9bb42e5b3fb85e4949"
+    },
+    {
+      "file": "images/native/en/Layers/010_00093.5s.png",
+      "bytes": 67417,
+      "sha256": "97214d0e354088a29beb181ab53e1dec1456ca0983ec8a13759e39a775febe93"
+    },
+    {
+      "file": "images/native/en/Layers/013_00143.6s.png",
+      "bytes": 55389,
+      "sha256": "10438dd395278013c4eb45bac3cec6524f96e6e91601e3a24709efc9b7501713"
+    },
+    {
+      "file": "images/native/zh/Derivative/004_00032.3s.png",
+      "bytes": 39788,
+      "sha256": "c9c4dba7ff48030df633b459df6b67aff5da5cbea55d4c5d8e17e6292981b2fb"
+    },
+    {
+      "file": "images/native/zh/Derivative/006_00049.9s.png",
+      "bytes": 43001,
+      "sha256": "9403705fb748ecafc3e64c87bc3cafe1482d377e316a93afa99a902ec79e2a65"
+    },
+    {
+      "file": "images/native/zh/Derivative/008_00076.4s.png",
+      "bytes": 72295,
+      "sha256": "204501ab3a3b8b35982a796ce5c5ef6bf95c2f7ea16c705efcd885c3389ea0a3"
+    },
+    {
+      "file": "images/native/zh/Derivative/013_00121.1s.png",
+      "bytes": 56586,
+      "sha256": "2d4cafb2f17c13f371d1dbed5cc674fb6ce259b94d6a928b36ce6d13b0264ce8"
+    },
+    {
+      "file": "images/native/zh/Derivative/016_00147.0s.png",
+      "bytes": 48019,
+      "sha256": "89869631f84fbab4beac696bedc0e5c8dfc8725647a729033c28caedc90f1c10"
+    },
+    {
+      "file": "images/native/zh/Gradient/003_00021.4s.png",
+      "bytes": 109229,
+      "sha256": "09447debb048d75fe483419f8708a355cec13b77bd72c73306a92077942c1894"
+    },
+    {
+      "file": "images/native/zh/Gradient/004_00037.6s.png",
+      "bytes": 117138,
+      "sha256": "44bd909d4b1f6d537aee60e7229817c6851c97202d547994e7102650f2da646e"
+    },
+    {
+      "file": "images/native/zh/Gradient/010_00090.5s.png",
+      "bytes": 66107,
+      "sha256": "c1f91f0baa7e7e1e96c3c44371f95d2541744b3ff57ee45b161c49764072f201"
+    },
+    {
+      "file": "images/native/zh/Gradient/014_00130.0s.png",
+      "bytes": 138576,
+      "sha256": "2d1059acf8368e47d0c628f52a0c9e6a62e6abcfc34e18d268a5de917b958c32"
+    },
+    {
+      "file": "images/native/zh/Gradient/018_00165.5s.png",
+      "bytes": 134849,
+      "sha256": "f23600eae857bf6e6fad311a72befe3c2d8120a08760e7eb73c7eda0355f39b2"
+    },
+    {
+      "file": "images/native/zh/Hook/000_00001.0s.png",
+      "bytes": 25297,
+      "sha256": "71421e28c0951ca9f2a83a0497ff07562ec34dd1dfd2325c9f6488cdf736a5b6"
+    },
+    {
+      "file": "images/native/zh/Hook/001_00022.0s.png",
+      "bytes": 111772,
+      "sha256": "ff26c6ba06cbca16e8e10d253ba89cee5a07d57a3fbb658d1218e79a9f855bb9"
+    },
+    {
+      "file": "images/native/zh/Hook/002_00028.3s.png",
+      "bytes": 119271,
+      "sha256": "2eabf9e509a64d79df3f347426d5de397b626a29c1a38ba422fc03c85992f235"
+    },
+    {
+      "file": "images/native/zh/Hook/012_00093.0s.png",
+      "bytes": 62337,
+      "sha256": "a81ef2ec5959a4244cfe66ef0054cd38358238bf2333cdd43a5f46dbac55af70"
+    },
+    {
+      "file": "images/native/zh/Hook/018_00133.0s.png",
+      "bytes": 80111,
+      "sha256": "136893c36193acec7d72828e27b6fe5e4ba40478c90a0dc1266050d95fe14a92"
+    },
+    {
+      "file": "images/native/zh/Jacobian/003_00024.2s.png",
+      "bytes": 163394,
+      "sha256": "6dcb347d8f10d3c66b3a575dac376caad4a17cd88ddebe461a8d46e7b9261b27"
+    },
+    {
+      "file": "images/native/zh/Jacobian/006_00063.4s.png",
+      "bytes": 70875,
+      "sha256": "570547039dacf78eeaf5c4f1b46eed00833d0bfbec537376867027679153643f"
+    },
+    {
+      "file": "images/native/zh/Jacobian/009_00134.3s.png",
+      "bytes": 71447,
+      "sha256": "16484ea8e71137688e3ab3ea42fdffce474ba80519c5c741a933db85982da0b9"
+    },
+    {
+      "file": "images/native/zh/Layers/005_00042.4s.png",
+      "bytes": 66547,
+      "sha256": "3fec084f72cf798fed3344978623cdc7d5f589eed283ad3eff920b5c8ebb88d7"
+    },
+    {
+      "file": "images/native/zh/Layers/010_00098.4s.png",
+      "bytes": 68929,
+      "sha256": "50d06b6516c5d42f7e17a8a6ab3c7b6e1d71c40d134811ac251c5af29cd57593"
+    },
+    {
+      "file": "images/native/zh/Layers/013_00151.9s.png",
+      "bytes": 55371,
+      "sha256": "918dec9a48a3e1fde9fa9a16d3b49c804825169c25adf95d40fa0b47d951d514"
+    },
+    {
+      "file": "images/repairs/Derivative-English-after.png",
+      "bytes": 69456,
+      "sha256": "feca8881e24d0e62de37f9947aebe52fd0d635120ccf72ea464f31ae3388dabc"
+    },
+    {
+      "file": "images/repairs/Derivative-English-before.png",
+      "bytes": 69449,
+      "sha256": "ffe50d8825d9cb53277048cbf0c222f0cbfe9fe73a07ec9dbf24ef557ffe068a"
+    },
+    {
+      "file": "images/repairs/Layers-Chinese-after.png",
+      "bytes": 68957,
+      "sha256": "4235dab5d1d7f097519de74835d304deb0913be3722cb843a051cdcda5c10832"
+    },
+    {
+      "file": "images/repairs/Layers-Chinese-before.png",
+      "bytes": 66547,
+      "sha256": "3fec084f72cf798fed3344978623cdc7d5f589eed283ad3eff920b5c8ebb88d7"
+    },
+    {
+      "file": "images/sheets/en/Derivative-original-reviewed.png",
+      "bytes": 244445,
+      "sha256": "d4be63cd12f8dd7da6b7465948f63ef777018245f515d86c2f268fbc048625b1"
+    },
+    {
+      "file": "images/sheets/en/Gradient-original-reviewed.png",
+      "bytes": 450742,
+      "sha256": "b1bebdd28b5de888bf8a2c8a1a73e2a6471ad4adac29e67d25145c9a2fbbc578"
+    },
+    {
+      "file": "images/sheets/en/Hook-original-reviewed.png",
+      "bytes": 420023,
+      "sha256": "e930f2d9ff964f8b1896c0d6b91701780d90c440aebcbe7cb40a012223af23b7"
+    },
+    {
+      "file": "images/sheets/en/Jacobian-original-reviewed.png",
+      "bytes": 216813,
+      "sha256": "07f8a857a3734e37a5751ff52855441770a77f794507c5826486bf58a8ed053d"
+    },
+    {
+      "file": "images/sheets/en/Layers-original-reviewed.png",
+      "bytes": 160402,
+      "sha256": "20c6a305a0b57755e2c1b3ed4efbc19afa2593903ee3e1c0c363d2adcb7d0bc5"
+    },
+    {
+      "file": "images/sheets/zh/Derivative.png",
+      "bytes": 238392,
+      "sha256": "1883371d60695d4bbf673a646f305e972722d223367e022bd2fdec7f9f613b3d"
+    },
+    {
+      "file": "images/sheets/zh/Gradient.png",
+      "bytes": 444773,
+      "sha256": "654d89a101ab09ba996223f57fcf9e234a21d0b966d5f630a3bbf2c01ed420e3"
+    },
+    {
+      "file": "images/sheets/zh/Hook.png",
+      "bytes": 422416,
+      "sha256": "7a964f8112fcc909544f874ce616602a59806d382386ca599a3e27b1ab778187"
+    },
+    {
+      "file": "images/sheets/zh/Jacobian.png",
+      "bytes": 221248,
+      "sha256": "85136987438c3acc5cd4f3b4e9376b2a6a18d2ed22ef950b158b087c7b295549"
+    },
+    {
+      "file": "images/sheets/zh/Layers-before-unit.png",
+      "bytes": 158672,
+      "sha256": "f40abdce682255e914ae77cb0a670e1b61be16af3217759b7ce20417ad75dd7d"
+    },
+    {
+      "file": "integrated-review.json.gz",
+      "bytes": 43241,
+      "sha256": "9c7cae83e77a2bcaf22ac40a6feb9380aca57efd06fd3f00c7bc93aac95e2ae3"
+    },
+    {
+      "file": "packaging-script.py.gz",
+      "bytes": 1772,
+      "sha256": "f75b3dfcef1b6fd59f5b41f4542d4c19b102adca96ac00f6ffd3327a0b553441"
+    },
+    {
+      "file": "prior-en-actual-review.json.gz",
+      "bytes": 36653,
+      "sha256": "b590a67f0f889e5c7e85d36bba16e789ed5dc529089f7867e3ff9f72712c356e"
+    },
+    {
+      "file": "records/final/en/Derivative.json.gz",
+      "bytes": 10907,
+      "sha256": "e4e0527acc7c1c69b1438e21a8abc27c68b3dfa90163006b726b5e5720710c9f"
+    },
+    {
+      "file": "records/final/en/Gradient.json.gz",
+      "bytes": 11807,
+      "sha256": "e339a1cf1bee43567aca8ab29f747ca3891cd3c618db06ff1cce4d4e8c8a3562"
+    },
+    {
+      "file": "records/final/en/Hook.json.gz",
+      "bytes": 10943,
+      "sha256": "c9c49ad1496b09fa516d3a50cfe6c337d23242ee5ca51f2d643c4a0a32f34e14"
+    },
+    {
+      "file": "records/final/en/Jacobian.json.gz",
+      "bytes": 8640,
+      "sha256": "bc2aa45b523240b9b496cad04c77b8f1dde0a5801d4b0af23fc33af820d03fa3"
+    },
+    {
+      "file": "records/final/en/Layers.json.gz",
+      "bytes": 11237,
+      "sha256": "1ec3b8a091a3f251ea7176511e8cad19ce41ead8ed6f157966b0dc8bbfe1913a"
+    },
+    {
+      "file": "records/final/zh/Derivative.json.gz",
+      "bytes": 15847,
+      "sha256": "607f82784a7512975cf454366f473ea464f45795cf69e2cbb60d4c918d02ec18"
+    },
+    {
+      "file": "records/final/zh/Gradient.json.gz",
+      "bytes": 16986,
+      "sha256": "ea932a5b8b8a3254a2b606f3b8bc2c8b022937e8c38b0a3059a6d04069e4524f"
+    },
+    {
+      "file": "records/final/zh/Hook.json.gz",
+      "bytes": 16985,
+      "sha256": "eb8291b4c8fa659c8c9e5c17dad9febb14307e4311100d5d92d5b5afb550e4b5"
+    },
+    {
+      "file": "records/final/zh/Jacobian.json.gz",
+      "bytes": 14737,
+      "sha256": "4e06b3e5845d914fd4cee2716d48995a121ee4fbba89f1d8cf59088c7d25e2ef"
+    },
+    {
+      "file": "records/final/zh/Layers.json.gz",
+      "bytes": 17386,
+      "sha256": "c3b3fbffc085fc2f3e904453aeaaef50dd8cedfd1ff13883c329f2a6ac681464"
+    },
+    {
+      "file": "records/historical-axis-repair/en/Derivative.json.gz",
+      "bytes": 10947,
+      "sha256": "528ae1ed1bad76a99a8ae1e02b2027f930f25ce29e0ae84f30826203bb134cde"
+    },
+    {
+      "file": "records/historical-before-unit/zh/Layers.json.gz",
+      "bytes": 17328,
+      "sha256": "9e07d521f65b1feebb9ad64a504647c8b4504ed201be50ce78b7a323f1036cda"
+    },
+    {
+      "file": "records/historical-pretranslation/en/Derivative.json.gz",
+      "bytes": 10950,
+      "sha256": "04fbefaf334d591ccbbcc25b5fb6ff59114103c167cbfe96f8ba342d8bb92d57"
+    },
+    {
+      "file": "records/historical-pretranslation/en/Gradient.json.gz",
+      "bytes": 11952,
+      "sha256": "d04442df91fb131cb416beeb39a7557014d654ed81f08c11a47b21daf1ad6acc"
+    },
+    {
+      "file": "records/historical-pretranslation/en/Hook.json.gz",
+      "bytes": 11138,
+      "sha256": "034cfe9c591f2451470859baac9a2d378d31a9831ab796d8d5015aaaeb1530d6"
+    },
+    {
+      "file": "records/historical-pretranslation/en/Jacobian.json.gz",
+      "bytes": 8828,
+      "sha256": "e7bace0245aa5fc544fef459ebb34320e0f33ad3920fb7b9cb2fc183852469f8"
+    },
+    {
+      "file": "records/historical-pretranslation/en/Layers.json.gz",
+      "bytes": 11305,
+      "sha256": "7850420ac7cd6e27b6bd5b3f929a99ea0e1b40dc62e90ba49e1f0db037748f70"
+    },
+    {
+      "file": "source-at-packaging/Derivative-before-axis-repair.py.gz",
+      "bytes": 5158,
+      "sha256": "5cd966ea0d2413b6aef6b25e450ec151a5ed1a375deedbc029abd1133028bcf8"
+    },
+    {
+      "file": "source-at-packaging/ai4/common.py.gz",
+      "bytes": 2210,
+      "sha256": "87ef4a5b96e96f8b791a9b75d455d8f2f0743ee5ae430eca5f4cb94efc4934d9"
+    },
+    {
+      "file": "source-at-packaging/ai4/narration_zh.json.gz",
+      "bytes": 36203,
+      "sha256": "0793b80f4ed440020b4f685c66f7714dfaf88e33cf71d00f32b5267410dfc86f"
+    },
+    {
+      "file": "source-at-packaging/ai4/s01_hook.py.gz",
+      "bytes": 3708,
+      "sha256": "00c5fb92a7b7beba9e2290bbd1a65fa8be8843b9b463ff225a8652cae8c23f12"
+    },
+    {
+      "file": "source-at-packaging/ai4/s02_derivative.py.gz",
+      "bytes": 5203,
+      "sha256": "792c2c0d1bb6dd0c741a32774da3b6890eea9554bfd0e80ab448b7efa8241c2f"
+    },
+    {
+      "file": "source-at-packaging/ai4/s03_gradient.py.gz",
+      "bytes": 5096,
+      "sha256": "33f949db9a4fcf6f34c7dc8e5e714c8980dc8679ffa6cacdb54d00b037ae72cf"
+    },
+    {
+      "file": "source-at-packaging/ai4/s04_jacobian.py.gz",
+      "bytes": 4914,
+      "sha256": "e5804a9b933926638a4386b3b8a4c5334fee9fb7ae1a6984f5f7eb2f86616ef0"
+    },
+    {
+      "file": "source-at-packaging/ai4/s05_layers.py.gz",
+      "bytes": 3570,
+      "sha256": "1fd470e5cc2105dd843bb33573d8bcafe55a4d0dff18d71a097ead308c5ea77d"
+    },
+    {
+      "file": "source-at-packaging/ai4/zh_lines.py.gz",
+      "bytes": 41090,
+      "sha256": "e006af58d907e2fa89f6a5331321ef4c965d7ae4f88f79bc85d7beaf76af3b4b"
+    },
+    {
+      "file": "source-at-packaging/ai_text_zh.json.gz",
+      "bytes": 880927,
+      "sha256": "17b27efb60b74d97d93173d25846aee1a5d06166690191388201fab4eb252f61"
+    },
+    {
+      "file": "summary.json",
+      "bytes": 6373,
+      "sha256": "a998f6702fa90d48c991347b9a04f3feec6136fd47f8a4d8d2cb02c7e68c6c1b"
+    }
+  ]
+}

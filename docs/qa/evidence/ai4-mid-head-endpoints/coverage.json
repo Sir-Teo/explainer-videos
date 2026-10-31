@@ -1,0 +1,665 @@
+{
+  "assembled_utc": "2026-10-31T23:03:39.903573+00:00",
+  "cases": [
+    {
+      "language": "en",
+      "scene": "Modes",
+      "result_sha256": "bde92a137d6c04c0ffa54f5961849b3b07dff78241a1b58af32c8135dfabf66c",
+      "selected_endpoint_positions": 17,
+      "positions_viewed_on_pages": 17,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "8420e00289e0dc9d43ed43f5f9ae84b590b6df7b769002167169d3b43c8a0935",
+      "inputs": {
+        ".cache/ai4/modes.json": {
+          "recorded_stat": [
+            11969,
+            1793485505716573205
+          ],
+          "sha256": "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216",
+          "bytes": 11969
+        },
+        ".cache/ai4/modes.npz": {
+          "recorded_stat": [
+            1491,
+            1793485505712094881
+          ],
+          "sha256": "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe",
+          "bytes": 1491
+        },
+        ".cache/ai4/params.json": {
+          "recorded_stat": [
+            2976,
+            1793485500246547643
+          ],
+          "sha256": "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b",
+          "bytes": 2976
+        },
+        ".cache/ai4/params.npz": null
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/en-Modes.png",
+        "frame": "012_00155.1s.png",
+        "time": 155.097336880712,
+        "sha256": "bc07afc96262ae1edec04167ea7268bfe3a71556f23150dc37667bf57d01f38f"
+      },
+      "ledger": "ledgers/en-Modes.json.gz",
+      "record": "render-records/en-Modes.json.gz"
+    },
+    {
+      "language": "en",
+      "scene": "Backprop",
+      "result_sha256": "396d3c7a09b44ec41fca2d5d23542b3253f1356fcc6fdd9809cdbb0f8a65eadc",
+      "selected_endpoint_positions": 17,
+      "positions_viewed_on_pages": 17,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "8420e00289e0dc9d43ed43f5f9ae84b590b6df7b769002167169d3b43c8a0935",
+      "inputs": {
+        ".cache/ai4/tiny.json": {
+          "recorded_stat": [
+            1259,
+            1793485507092588435
+          ],
+          "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+          "bytes": 1259
+        },
+        ".cache/ai4/tiny.npz": null,
+        ".cache/ai4/mlp2.json": {
+          "recorded_stat": [
+            1106,
+            1793485509109867484
+          ],
+          "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+          "bytes": 1106
+        },
+        ".cache/ai4/mlp2.npz": {
+          "recorded_stat": [
+            2532,
+            1793485509104534415
+          ],
+          "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+          "bytes": 2532
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/en-Backprop.png",
+        "frame": "016_00189.3s.png",
+        "time": 189.25210984848493,
+        "sha256": "439865b9fb4c1b69e6cf873ca7bf4f43eab889e2cfc0f82ca81af989232c1012"
+      },
+      "ledger": "ledgers/en-Backprop.json.gz",
+      "record": "render-records/en-Backprop.json.gz"
+    },
+    {
+      "language": "en",
+      "scene": "Library",
+      "result_sha256": "28ecc19598a030464aa5ae3f3c516fc79585e36d0bbf3fb75113d1c1a5eb1ba4",
+      "selected_endpoint_positions": 16,
+      "positions_viewed_on_pages": 0,
+      "exact_png_inheritance": 14,
+      "new_native_positions": 2,
+      "native_followups": 2,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "c6dac197b1de575f3179a35d04b75d1f10b9a05e700b21b905c54292f6b970d3",
+      "inputs": {
+        ".cache/ai4/tape.json": {
+          "recorded_stat": [
+            2975,
+            1793485510363191905
+          ],
+          "sha256": "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099",
+          "bytes": 2975
+        },
+        ".cache/ai4/tape.npz": null,
+        ".cache/ai4/check.json": {
+          "recorded_stat": [
+            1344,
+            1793485512327055822
+          ],
+          "sha256": "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828",
+          "bytes": 1344
+        },
+        ".cache/ai4/check.npz": null
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "3add35213ef23c6365ab37840eb0edfdf6a49f2352139b8b22be9d857b376f95",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/en-Library.png",
+        "frame": "008_00099.2s.png",
+        "time": 99.23581598949696,
+        "sha256": "f659d8c607535c7768ba8981159c151b706400cd338b35511ff96619f2923fa9"
+      },
+      "ledger": "ledgers/en-Library.json.gz",
+      "record": "render-records/en-Library.json.gz"
+    },
+    {
+      "language": "en",
+      "scene": "Train",
+      "result_sha256": "dae6f6977d4e22bb8d2e54e53be4b22a3de899d05693742ae432ec5a381d80de",
+      "selected_endpoint_positions": 13,
+      "positions_viewed_on_pages": 13,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "8420e00289e0dc9d43ed43f5f9ae84b590b6df7b769002167169d3b43c8a0935",
+      "inputs": {
+        ".cache/ai4/grad0.json": {
+          "recorded_stat": [
+            1258,
+            1793485524085653580
+          ],
+          "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+          "bytes": 1258
+        },
+        ".cache/ai4/grad0.npz": {
+          "recorded_stat": [
+            4161,
+            1793485524081312196
+          ],
+          "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+          "bytes": 4161
+        },
+        ".cache/ai4/train.json": {
+          "recorded_stat": [
+            1919,
+            1793485520890721666
+          ],
+          "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+          "bytes": 1919
+        },
+        ".cache/ai4/train.npz": {
+          "recorded_stat": [
+            49378,
+            1793485520884249435
+          ],
+          "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+          "bytes": 49378
+        },
+        ".cache/ai4/gdlr.json": {
+          "recorded_stat": [
+            1925,
+            1793485528530780235
+          ],
+          "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+          "bytes": 1925
+        },
+        ".cache/ai4/gdlr.npz": {
+          "recorded_stat": [
+            16144,
+            1793485528525572771
+          ],
+          "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+          "bytes": 16144
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "c5c6318143c677e08743d974a9789a23ed62bb7ac9c80550029c322064731790",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "5dd456d8165fcd3ed3aa58fa8c7fb0d333ba132141133277e7c61dcd88d242ca",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "4e9d628a6708420f5e12edcd366b76ccc9491cc6af80f371f5c0c4acb5899759",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/en-Train.png",
+        "frame": "008_00105.3s.png",
+        "time": 105.29370622895622,
+        "sha256": "4f63adabf882e0fa4960a69de6efc7b15d1c3a052de62fd81041b72edb09e65e"
+      },
+      "ledger": "ledgers/en-Train.json.gz",
+      "record": "render-records/en-Train.json.gz"
+    },
+    {
+      "language": "en",
+      "scene": "Floats",
+      "result_sha256": "42dc1179ead28e4bb1a12d3abef9182683502644a693ca892a943ade99385f4b",
+      "selected_endpoint_positions": 16,
+      "positions_viewed_on_pages": 0,
+      "exact_png_inheritance": 15,
+      "new_native_positions": 1,
+      "native_followups": 1,
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "review_status": "appearance-repair-confirmed-identifier-warning-retained",
+      "render_fingerprint": "bbba3257f87191e9f8355b0328dd57bb56db819776ad94d51aeb99a7ad781a07",
+      "inputs": {
+        ".cache/ai4/floats.json": {
+          "recorded_stat": [
+            2908,
+            1793485530573099124
+          ],
+          "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+          "bytes": 2908
+        },
+        ".cache/ai4/floats.npz": {
+          "recorded_stat": [
+            8682,
+            1793485530568456683
+          ],
+          "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+          "bytes": 8682
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/en-Floats.png",
+        "frame": "005_00095.7s.png",
+        "time": 95.66576039304616,
+        "sha256": "b260b2ec71bd289b97b0894c7dff06b25146b2a8c748da192547c90ffa50cf0c"
+      },
+      "ledger": "ledgers/en-Floats.json.gz",
+      "record": "render-records/en-Floats.json.gz"
+    },
+    {
+      "language": "zh",
+      "scene": "Modes",
+      "result_sha256": "eeaa6163ac49d1349f6b6d62e01dd773175a167e8ca1e7a193e4d61368a8d0ed",
+      "selected_endpoint_positions": 17,
+      "positions_viewed_on_pages": 17,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "review_status": "appearance-reviewed-source-warning-retained",
+      "render_fingerprint": "bbba3257f87191e9f8355b0328dd57bb56db819776ad94d51aeb99a7ad781a07",
+      "inputs": {
+        ".cache/ai4/modes.json": {
+          "recorded_stat": [
+            11969,
+            1793485505716573205
+          ],
+          "sha256": "50461982b3a240ab55985bca9d9faf8a340a059cc46401da0c7f1f6df7ff1216",
+          "bytes": 11969
+        },
+        ".cache/ai4/modes.npz": {
+          "recorded_stat": [
+            1491,
+            1793485505712094881
+          ],
+          "sha256": "8195705ae313dbdb6285752bb58628e6a8db6d43bed323cbc520b5e551907bfe",
+          "bytes": 1491
+        },
+        ".cache/ai4/params.json": {
+          "recorded_stat": [
+            2976,
+            1793485500246547643
+          ],
+          "sha256": "dd82dbfb1106c320a094ad9c926d619708e4f362e1d11753bd434a54f8e7d46b",
+          "bytes": 2976
+        },
+        ".cache/ai4/params.npz": null
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/zh-Modes.png",
+        "frame": "012_00175.0s.png",
+        "time": 174.95928929723294,
+        "sha256": "371fead605365bc129df92813f9e6a3a1eb448b9168c302d4de28a40fb4c64ea"
+      },
+      "ledger": "ledgers/zh-Modes.json.gz",
+      "record": "render-records/zh-Modes.json.gz"
+    },
+    {
+      "language": "zh",
+      "scene": "Backprop",
+      "result_sha256": "223f086a44e5886d19d036d2dadae85a269b7840a05f7121fc290894bbecb855",
+      "selected_endpoint_positions": 17,
+      "positions_viewed_on_pages": 17,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "1d1f22e0081d04212d097d0f10ac3f6355f6e36c19ac2b2609716426a6aa1a54",
+      "inputs": {
+        ".cache/ai4/tiny.json": {
+          "recorded_stat": [
+            1259,
+            1793485507092588435
+          ],
+          "sha256": "728762faf36ad118f62c006c328727bfa6414cd241c7e9cb3ca0e25bae022218",
+          "bytes": 1259
+        },
+        ".cache/ai4/tiny.npz": null,
+        ".cache/ai4/mlp2.json": {
+          "recorded_stat": [
+            1106,
+            1793485509109867484
+          ],
+          "sha256": "a7e173ae6d4ebfeaee8de9bf63b3f4c86896fb83abfed2538b4ec5827d3d5034",
+          "bytes": 1106
+        },
+        ".cache/ai4/mlp2.npz": {
+          "recorded_stat": [
+            2532,
+            1793485509104534415
+          ],
+          "sha256": "b092b913fbd33236f8874bdca5894d9d99dafec47fca553f01e748986e66132d",
+          "bytes": 2532
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/zh-Backprop.png",
+        "frame": "016_00196.3s.png",
+        "time": 196.31169046354233,
+        "sha256": "42cb970114e871e97c473bdee74cbc978f007099a49b0cabc4ad489cd6723337"
+      },
+      "ledger": "ledgers/zh-Backprop.json.gz",
+      "record": "render-records/zh-Backprop.json.gz"
+    },
+    {
+      "language": "zh",
+      "scene": "Library",
+      "result_sha256": "94cc07e20a16dd44dca8c2aa8d803e22ff5c64c09ea3c9f530f7ae7c8e4d293a",
+      "selected_endpoint_positions": 16,
+      "positions_viewed_on_pages": 16,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 2,
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "review_status": "appearance-reviewed-source-warning-retained",
+      "render_fingerprint": "086351f6d7e2ce6cedcff2bb473ff51f2ea2448e622b06e5650548a9237f1ad1",
+      "inputs": {
+        ".cache/ai4/tape.json": {
+          "recorded_stat": [
+            2975,
+            1793485510363191905
+          ],
+          "sha256": "f9a4acf8cac97f337e7df105dd208e02a5bdea42579abd08453bb50d15f26099",
+          "bytes": 2975
+        },
+        ".cache/ai4/tape.npz": null,
+        ".cache/ai4/check.json": {
+          "recorded_stat": [
+            1344,
+            1793485512327055822
+          ],
+          "sha256": "591e5d04e43d7346dc9beab8aa062cc22baf1ab131f47a9b97e4144019454828",
+          "bytes": 1344
+        },
+        ".cache/ai4/check.npz": null
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "3add35213ef23c6365ab37840eb0edfdf6a49f2352139b8b22be9d857b376f95",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/zh-Library.png",
+        "frame": "008_00110.1s.png",
+        "time": 110.09255978596421,
+        "sha256": "e1684d08c79bcd0dffa4aee074baa8cf016005c032dd477704f2bbb15b671fe0"
+      },
+      "ledger": "ledgers/zh-Library.json.gz",
+      "record": "render-records/zh-Library.json.gz"
+    },
+    {
+      "language": "zh",
+      "scene": "Train",
+      "result_sha256": "15a4bc260407d20d5e1d6602be6beb722f1c7ed34b924d577c4187644e97f419",
+      "selected_endpoint_positions": 13,
+      "positions_viewed_on_pages": 13,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 3,
+      "runtime_status": "passed",
+      "warnings": [],
+      "review_status": "reviewed-no-concrete-defect",
+      "render_fingerprint": "1d1f22e0081d04212d097d0f10ac3f6355f6e36c19ac2b2609716426a6aa1a54",
+      "inputs": {
+        ".cache/ai4/grad0.json": {
+          "recorded_stat": [
+            1258,
+            1793485524085653580
+          ],
+          "sha256": "12cc56f059f86971446e791fc87dc56b521f2c4bc5123ac732dc6d02ce58c65d",
+          "bytes": 1258
+        },
+        ".cache/ai4/grad0.npz": {
+          "recorded_stat": [
+            4161,
+            1793485524081312196
+          ],
+          "sha256": "be3d89467f228d8ca6cfb9f7b9f7a72ccea60fd080e354161a89e3c0efdbeecf",
+          "bytes": 4161
+        },
+        ".cache/ai4/train.json": {
+          "recorded_stat": [
+            1919,
+            1793485520890721666
+          ],
+          "sha256": "1e35f9a33b705dd4c43e2d5f979ffc26bf8267d08fa5a2233984431064a94afd",
+          "bytes": 1919
+        },
+        ".cache/ai4/train.npz": {
+          "recorded_stat": [
+            49378,
+            1793485520884249435
+          ],
+          "sha256": "757c45778392d99d1328538b0d41ca39f008ba249a14ce54e58568146a451af6",
+          "bytes": 49378
+        },
+        ".cache/ai4/gdlr.json": {
+          "recorded_stat": [
+            1925,
+            1793485528530780235
+          ],
+          "sha256": "6667d1bd1788f83dd95b8ede9de39dd37ff6872a1892c8e8c8841c986d3f5b2d",
+          "bytes": 1925
+        },
+        ".cache/ai4/gdlr.npz": {
+          "recorded_stat": [
+            16144,
+            1793485528525572771
+          ],
+          "sha256": "7ccdf7cfece4de1af1b75d4f53da6705782e386db93e1cc1444c279633099770",
+          "bytes": 16144
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/zh-Train.png",
+        "frame": "008_00115.9s.png",
+        "time": 115.87716828165374,
+        "sha256": "24796f6f21fa39e34398e61620fa599df6f82a36004443c3f7c8110a77cc8dbe"
+      },
+      "ledger": "ledgers/zh-Train.json.gz",
+      "record": "render-records/zh-Train.json.gz"
+    },
+    {
+      "language": "zh",
+      "scene": "Floats",
+      "result_sha256": "9ad96a4fe983c2b8658f9346c30fd03642e63fca1908b6d2d5f47b9a61a05c5a",
+      "selected_endpoint_positions": 16,
+      "positions_viewed_on_pages": 16,
+      "exact_png_inheritance": 0,
+      "new_native_positions": 0,
+      "native_followups": 4,
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "untranslated-on-screen",
+          "text": "FP8 E4M3FN"
+        }
+      ],
+      "review_status": "appearance-repair-confirmed-identifier-warning-retained",
+      "render_fingerprint": "1d1f22e0081d04212d097d0f10ac3f6355f6e36c19ac2b2609716426a6aa1a54",
+      "inputs": {
+        ".cache/ai4/floats.json": {
+          "recorded_stat": [
+            2908,
+            1793485530573099124
+          ],
+          "sha256": "db1af630fa2d041b284bdeabffca15155b7804392002716f9c664dbcbb60e291",
+          "bytes": 2908
+        },
+        ".cache/ai4/floats.npz": {
+          "recorded_stat": [
+            8682,
+            1793485530568456683
+          ],
+          "sha256": "11349a2a0137c34b4ac7103ec5b8d7b2ba14fffa081e898c541c2093930ff7af",
+          "bytes": 8682
+        }
+      },
+      "source_at_snapshot": {
+        "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+        "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+        "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+        "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+        "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+        "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+        "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+        "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+        "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+        "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+      },
+      "native_example": {
+        "file": "native/zh-Floats.png",
+        "frame": "005_00096.1s.png",
+        "time": 96.07686270228271,
+        "sha256": "1387dd40a198a199bf9669df8489b08d2738a2ee0e703530dcd076d47d186692"
+      },
+      "ledger": "ledgers/zh-Floats.json.gz",
+      "record": "render-records/zh-Floats.json.gz"
+    }
+  ],
+  "final_selected_endpoint_positions": 158,
+  "exact_png_inherited_positions": 29,
+  "native_followups": 27,
+  "sources_at_package": {
+    "videos/ai/ai4/s06_modes.py": "ea7eb85d32af6c9ec3eb11d7423491bbd83f16f69b9929807caca9a1be6266d0",
+    "videos/ai/ai4/s07_backprop.py": "5956874885a775c8f2a5df3d2375c972bfa8f510e418ff68e8840d4491b7cc3d",
+    "videos/ai/ai4/s08_library.py": "59688faae69a1d0a6007dbfbdd1c739f370f2e00153ac6b2d14bafdef6876aa9",
+    "videos/ai/ai4/s09_train.py": "811cc8ebd6406366fdd92ad192b2ea5c41960cca10ecaddd5d1c9816b8942021",
+    "videos/ai/ai4/s10_floats.py": "929bceeff107c100cc0da66d9ee8d7540cb8aa74db4f0758e1831ca31f95c6d4",
+    "videos/ai/ai4/zh_lines.py": "e853cee94a8ebdbca2565ae8ce3cf58238197b7d30b2c8fca0baf3dfc178126d",
+    "videos/ai/ai4/common.py": "cb55dca2929e8013c7f036bae92d47924055fb021d4285eba6f2c8a1c4950041",
+    "videos/ai/ai_text_zh.json": "9154c3fb63a4a257a334d0c5c7388486bb6ee5b67eeb4a5798478378ef3a8f8d",
+    "tools/qa_scene.py": "b490fff9f4c32d3e7e8678e24f83a19defb54315bc98523599ec134ee57f2073",
+    "tools/qa_series.py": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3"
+  },
+  "coverage_limit": "Actual854x480 endpoint PNG review. No temporal/continuous playback/audio/listening/1080production validation.",
+  "provenance_limit": "All render fingerprints and raw warnings retained. Later unrelated whole-part source/table edits can stale aggregate fingerprints; snapshot bytes/source-scoped review do not relabel a warning or assert whole-part currentness.",
+  "failure_note": "Initial four Chinese mid-head cases failed TeX compilation due to doubled escapes in this owners caption handoff. Failed records retained. Corrected46caption targets compiled92times EN/ZH before root rerenders; all ten selected final cases subsequently completed and were visually reviewed."
+}

@@ -1,0 +1,10 @@
+{
+  "before_sha256": "8958372838269201b5430a8eb4b24bc7298cc2e0a3b8b34a03aad2ce7d248d10",
+  "after_sha256": "c0701489848f0db90e67632b37c4cf0186b0ed79f8ad1c92b594e869ebb64501",
+  "before_is_first_five_owner_freeze": true,
+  "after_is_current_packaged_source": true,
+  "voiceover_call_ASTs_unchanged": true,
+  "scope": "Root moved Derivative red axis label inside plot after the first-five freeze; source transition and historical record only. No images copied or rendered/visually approved by this packager.",
+  "historical_record": "before-result.json.gz",
+  "new_process_log": "rerender-en.log.gz"
+}

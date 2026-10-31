@@ -1,0 +1,105 @@
+{
+  "scope": "Actual sampled endpoint review. Every declared image in each listed case maps to a viewed contact-sheet tile; listed priority images additionally viewed native854x480. Does not inspect intervening animation or audio. No continuous playback, narrated listening/synchronization, responsive-player or unrendered branch approval. Broad source-changed warnings remain distinct from direct disk source snapshots; later source hash alone does not prove loaded-module identity.",
+  "completed_utc": "2026-10-31T23:10:33.246640+00:00",
+  "reviewed_cases": 10,
+  "endpoint_images_actually_viewed_on_sheets": 124,
+  "native854x480_followups": 35,
+  "contact_sheet_tile_scale": "427x240 pixels; no perceptual/identical-image inheritance claimed",
+  "direct_source_checks": [
+    {
+      "scene": "Quadratic",
+      "lang": "en",
+      "source": "videos/ai/ai4/s15_quadratic.py",
+      "sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Lagrange",
+      "lang": "en",
+      "source": "videos/ai/ai4/s16_lagrange.py",
+      "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "KKT",
+      "lang": "en",
+      "source": "videos/ai/ai4/s17_kkt.py",
+      "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Implicit",
+      "lang": "en",
+      "source": "videos/ai/ai4/s18_implicit.py",
+      "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Outro",
+      "lang": "en",
+      "source": "videos/ai/ai4/s19_outro.py",
+      "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Quadratic",
+      "lang": "zh",
+      "source": "videos/ai/ai4/s15_quadratic.py",
+      "sha256": "f5b039b420a6b6de8a431009facf801de59f78c27c99deaf9eda9e7cf4d6241b",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Lagrange",
+      "lang": "zh",
+      "source": "videos/ai/ai4/s16_lagrange.py",
+      "sha256": "b61c0e2aeb8b3c66fb0e7f71ce52f92ae08fdc5a6646601eaf8a83499d088aee",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "KKT",
+      "lang": "zh",
+      "source": "videos/ai/ai4/s17_kkt.py",
+      "sha256": "e8d8a0b0f941c4d90ac3c505a9800462ee70c95838db9a0f68e7743f3c296a26",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Implicit",
+      "lang": "zh",
+      "source": "videos/ai/ai4/s18_implicit.py",
+      "sha256": "3eff92ac024e5f9bb64a913a4e6b0519d7bdb94036aceb7aa6af6725dafa1181",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    },
+    {
+      "scene": "Outro",
+      "lang": "zh",
+      "source": "videos/ai/ai4/s19_outro.py",
+      "sha256": "9d8ee122b57e726b4451f0c5c4294c9b7eaeaf794e88c6bc0968b58aa1392765",
+      "disk_bytes_still_match_checkpoint": true,
+      "input_size_mtime_matches_record": true
+    }
+  ],
+  "review_status": "Sampled endpoint review completed; runtime statuses/warnings preserved unchanged. No full-playback or audio approval.",
+  "new_issue_found": "Minor Chinese KKT comma begins wrapped second line; correct readable meaning, no clipping. Parent notified; frozen source/table unchanged.",
+  "resolved_warning": "Initial ENQuadratic3missing captions exact-proposed and actually TeX-compiled; final ZHcomparison/escape native images verify all3 captions visible. Original ENwarning record preserved.",
+  "full_report": "full-review.json.gz",
+  "source_checkpoint_sha256": "78ae73eecb1353e844474140bbb4ed7ae58148e0a9dd57c96b7a50320e8f3059",
+  "source_proof_limit": "Same direct scene disk bytes at snapshot and final check; not loaded-module proof inferred from later hash. Original broad source-changed warnings remain.",
+  "images": "All124 declared endpoint PNGs and10 actual contact sheets preserved exactly; no silent/full/narrated movie copied.",
+  "limitations": [
+    "No intervening animation, continuous playback, narrated listening, pronunciation, AV synchronization or player/responsive review.",
+    "No native1080p tail output reviewed; actual native priority images here are854x480.",
+    "English/Chinese wording branches beyond rendered default outcomes are not visually reviewed.",
+    "Technical footers are small at480p; higher-resolution verification is separate.",
+    "Outros first endpoint occurs67.51sEN/73.46sZH, so the lead-in animation is not visually covered by this endpoint review."
+  ],
+  "source_package_immutable": "../ai4-source-review remains the distinct200-file78ae73checkpoint; this package neither mutates it nor reclassifies its old test receipts."
+}
