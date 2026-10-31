@@ -1,0 +1,101 @@
+{
+  "repo_id": "Qwen/Qwen3-ASR-0.6B",
+  "repo_path": "/workspace/runtime/huggingface/hub/models--Qwen--Qwen3-ASR-0.6B",
+  "size_on_disk": 1880560703,
+  "revisions": [
+    "5eb144179a02acc5e5ba31e748d22b0cf3e303b0"
+  ],
+  "expected_freed_size": 1880560703,
+  "planned_blobs": [],
+  "planned_repos": [
+    "/workspace/runtime/huggingface/hub/models--Qwen--Qwen3-ASR-0.6B"
+  ],
+  "planned_snapshots": [],
+  "planned_refs": [],
+  "executed": true,
+  "observed_utc": "2026-10-31T20:25:47.841578+00:00",
+  "inactive_python_services": [],
+  "files": [
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/tokenizer_config.json",
+      "blob": "blobs/b93109843922a40c6654c5449d3bf95372267c66",
+      "bytes": 12487
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/merges.txt",
+      "blob": "blobs/31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+      "bytes": 1671853
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/generation_config.json",
+      "blob": "blobs/7382a4d347c0a865b76bb1b8277f66a5ac312854",
+      "bytes": 142
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/chat_template.json",
+      "blob": "blobs/c44736493efd71ec96218cc626904698cdb13235",
+      "bytes": 1161
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/model.safetensors",
+      "blob": "blobs/79d6cbd4c98c7bbffe9db2edac07f56cd6637d0d5944b27f6c2b8353840323ea",
+      "bytes": 1876091704
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/config.json",
+      "blob": "blobs/8113d596dec2d1a2ef4552edfe005ee84d16d9ec",
+      "bytes": 6193
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/vocab.json",
+      "blob": "blobs/4783fe10ac3adce15ac8f358ef5462739852c569",
+      "bytes": 2776833
+    },
+    {
+      "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+      "refs": [
+        "main"
+      ],
+      "file": "snapshots/5eb144179a02acc5e5ba31e748d22b0cf3e303b0/preprocessor_config.json",
+      "blob": "blobs/8f7f07346466d5d494ec0d4969d1c3d0190eed72",
+      "bytes": 330
+    }
+  ],
+  "free_bytes_before": 3045621760,
+  "restore": {
+    "repo_id": "Qwen/Qwen3-ASR-0.6B",
+    "revision": "5eb144179a02acc5e5ba31e748d22b0cf3e303b0",
+    "method": "normal authorized huggingface_hub.snapshot_download into the same cache; no new credentials or paid service"
+  },
+  "scope": "Only inactive public ASR model download cache. Generated narration, ASR results, code, numerical data and QA evidence are outside the deletion strategy.",
+  "target_exists_after": false,
+  "free_bytes_after": 4926251008
+}

@@ -1,0 +1,59 @@
+{
+  "observed_utc": "2026-10-31T20:07:17.332331+00:00",
+  "completed_count": 17,
+  "total_items": 17,
+  "cache_current_results": {
+    "gpt2": true,
+    "einsum": true,
+    "project": true,
+    "letters": true,
+    "power": true,
+    "image": true,
+    "norms": true,
+    "depth": true,
+    "mp": true,
+    "galore": true,
+    "galorectl": true,
+    "words": true,
+    "sgns": true,
+    "highdim": true,
+    "jl": true,
+    "mf": true,
+    "twotower": true
+  },
+  "producer_sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+  "cache_json_sha256": {
+    "gpt2": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+    "einsum": "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6",
+    "project": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+    "letters": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+    "power": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+    "image": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+    "norms": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+    "depth": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+    "mp": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+    "galore": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+    "galorectl": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+    "words": "715397b0df63babbb51c323dc5653fc51ae3c908da505d12011a4db0427d1103",
+    "sgns": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e",
+    "highdim": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+    "jl": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+    "mf": "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828",
+    "twotower": "3f71945680eb5dd6803fbddfa8a753bd4c1082aa9b7aa3070430f115d4d5fd6d"
+  },
+  "main_and_independent_process_exit_statuses": {
+    "main_mp_galore_control": 0,
+    "words_highdim_jl": 0,
+    "mf_twotower": 0,
+    "sgns": 0
+  },
+  "measured_seconds": {
+    "galore_16_runs": 1028,
+    "galore_control_5_runs": 302,
+    "sgns": 233,
+    "mf_51_fits": 396,
+    "twotower": 987,
+    "mp_including_shared_base": 8611
+  },
+  "scope": "All registered numerical items exist and pass the producer current-cache validator. This does not certify rendered, narrated, listening or continuous perceptual coverage."
+}

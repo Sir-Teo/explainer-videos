@@ -1,0 +1,733 @@
+{
+  "observed_utc": "2026-10-31T20:32:58.932563+00:00",
+  "counts": {
+    "endpoints": 38,
+    "motion": 38
+  },
+  "chapter_language_cases": 38,
+  "cases": [
+    {
+      "case": "en/Hook",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 18,
+        "record_sha256": "000b71bb9d0728d813a70f76cd71b75fa0024180c4e6e664c3498663b4834165",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "8e367d7cfa00f504333569bff3346007f0ccbb3e3ef74975aa4eaf81613b01b3"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 18,
+        "record_sha256": "895c07e78c69c8b82143198c0fbf9239a080ba6ec3bbda41e6f565171944c2eb",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "257976476e86ed8a3e925a09c9e50c911f01fd7f0267630a329b826d8c7b5188"
+      }
+    },
+    {
+      "case": "en/Vectors",
+      "endpoints": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "ccb7dfdc9e19c4382b15bf55d18b76622c9d3f7bfc174f978369a58dee2c6074",
+        "warnings": [],
+        "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "en/Einsum",
+      "endpoints": {
+        "status": "passed",
+        "frames": 23,
+        "record_sha256": "3a0189cb9a6bd22b101bfc98bb059e246abaa9ef3908b15add320cf5f69829c3",
+        "warnings": [],
+        "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 23,
+        "record_sha256": "aadabc0bedef6e34b8839fa280238c0866e73b156ea01264438c10c488a25578",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80"
+      }
+    },
+    {
+      "case": "en/Matrices",
+      "endpoints": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "c6550e8cf1fa71a395f8f6301a6f292d9f8ad5e9f6e1cf3cea5aa50b72d444cc",
+        "warnings": [],
+        "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "en/Projection",
+      "endpoints": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "19126a23125bfd3862ef20706130dbb42fa09acae420827762f3bb44a8622f73",
+        "warnings": [],
+        "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "d8423657fc24dbdea1e4bc937bf3930967923ada6e921811d41408b68c4bd0ff",
+        "warnings": [],
+        "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76"
+      }
+    },
+    {
+      "case": "en/Eigen",
+      "endpoints": {
+        "status": "passed",
+        "frames": 17,
+        "record_sha256": "aa58d516d3a1e46f646def8b06ca888094c47704dc7415cb7a83f9f3c8022365",
+        "warnings": [],
+        "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 17,
+        "record_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "en/Power",
+      "endpoints": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "31010edcd4d8ea805257f30fec58fd3daec60adb42d74e22bcdd95b56d7617b3",
+        "warnings": [],
+        "fingerprint": "a8ef30a67b1971408ced25b6889423cb987ce32756d9d30a9cdc519b9b0e026c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "ff22008739ce9acc20f68220f144a16eae7aae8550b62b6dac63a8da272d1066",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "en/SVD",
+      "endpoints": {
+        "status": "passed",
+        "frames": 13,
+        "record_sha256": "f9cbb54178aab3c65e19266b0adf9ad052051e95ff7f3f2ea7cb1ad2b69cfbc8",
+        "warnings": [],
+        "fingerprint": "4d660cd10b555641162f66a262561ca74b08b35685aa167d29516fb6f5f2c1f9"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 13,
+        "record_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "en/LowRank",
+      "endpoints": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "5c6c904a65fcce392dcce2f2c023be70798cfc9747dc4aa2dc8558a264a70e5f",
+        "warnings": [],
+        "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 22,
+        "record_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad"
+      }
+    },
+    {
+      "case": "en/Norms",
+      "endpoints": {
+        "status": "passed",
+        "frames": 20,
+        "record_sha256": "38b2f801062611b3bdc4f14b934af29b69b6e37fa892aa6f3a74ea8822700f87",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 20,
+        "record_sha256": "83d849338212e4be1bf221c967a2ef48af91d64993f1e5bac189b4282208a78b",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "e75dba597f6fe2857e7b01043625eeeaca66248175802337528a18e05bc5af62"
+      }
+    },
+    {
+      "case": "en/Spectra",
+      "endpoints": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "61b18c6fc3a9f16a6374711d57e77de8e2abbfe22892ea5b1a2629c04f03b539",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "02d51ee90ba2ac4ebf939bc95da80ca1bcf1ee3c693704d7025ac989b56fbb34",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "en/GaLore",
+      "endpoints": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "7f681b2e0db27e6d4236047db22cf3ee07cce6a92878b0cb44017f5dd2d491c8",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "3d5b8a357f27bc77f1eb49cbddf17f980f9bb19fe2dab04b930970c3d49ec271",
+        "warnings": [],
+        "fingerprint": "ea7cac75ecd73364933e75c5868ff4c8d36e3b25ffb6a6e6adbca560e1117950"
+      }
+    },
+    {
+      "case": "en/Words",
+      "endpoints": {
+        "status": "passed",
+        "frames": 18,
+        "record_sha256": "5d42c147b7556fb2c8fedb6446faaa48cab178319e8b5e37a9819746ddd1db7b",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 18,
+        "record_sha256": "a85800472c420122cc1298807bb52ef4830f2515d10116178714d2896244de1c",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "en/SGNS",
+      "endpoints": {
+        "status": "passed",
+        "frames": 23,
+        "record_sha256": "e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 23,
+        "record_sha256": "c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "ea7cac75ecd73364933e75c5868ff4c8d36e3b25ffb6a6e6adbca560e1117950"
+      }
+    },
+    {
+      "case": "en/HighDim",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 16,
+        "record_sha256": "bb2b16f8d52572bf71e730bbae7db2c9af8cfcf78ce9e8aed4f51458dceec696",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "4382502c95ce4f56dc9a93df98e8b223497818c55a1d752d81093828cbeb4041"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "en/JL",
+      "endpoints": {
+        "status": "passed",
+        "frames": 17,
+        "record_sha256": "34cea4a033eb463ca5770f01e583d7dfb9abced6d0260f6f2300cbfede8e7561",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 17,
+        "record_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "en/Geometry",
+      "endpoints": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "ed848bb92de98feaf72de907cf6cf5f15a2964f5269c5cbe0e62eaacda365330",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "b9c379581b117ecc3d5530334b045525f23595f464e01e4d41c6fbeca4a402b2",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "en/Netflix",
+      "endpoints": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "7e7b248a7246ce98b96d5f014e886590ca04e865372137c41b9c5bee3d4f6c2d",
+        "warnings": [],
+        "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "d9e0497de8c3c8daed705fedb774d28f1935e879d40df6c856acb165cf7f256a",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "en/Outro",
+      "endpoints": {
+        "status": "passed",
+        "frames": 6,
+        "record_sha256": "47763823f423e23edba8268935b712a3b59b513563c34305fea2dc365bef3990",
+        "warnings": [],
+        "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 6,
+        "record_sha256": "de15d515cb7645f92e76c6fda99210f733ed890ced2fecaa69d3ca9f0ecea1ea",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "4362f0c5633081993b879a008e04e07b85a5fa1aa43d42aa78272d972f3a5e1f"
+      }
+    },
+    {
+      "case": "zh/Hook",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 20,
+        "record_sha256": "22d4d315e54c96d0d31973bf56d0be5847d1e0206e66b63075c5eed71d04780c",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "a8ef30a67b1971408ced25b6889423cb987ce32756d9d30a9cdc519b9b0e026c"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 20,
+        "record_sha256": "58ed85bef19893010f6e515a5749ff397813149387215faf18dc33ec659b1e3b",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "e6c0e095180122d5effa4692138983ec93e548f64f058ba1a459fcee46959e42"
+      }
+    },
+    {
+      "case": "zh/Vectors",
+      "endpoints": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "ad379c92d469dabca2594939a1a7dfb8ce430bebac39854e102da9655bda20dc",
+        "warnings": [],
+        "fingerprint": "e8a8cc7ab5bf2983f747fa05cfdaf62eab4d83b20dd821afd11ae69c70bca0d8"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "zh/Einsum",
+      "endpoints": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "d08eda7c4f4e51094a86ec0dc271d05d7681b629dca5284557e0eb20cff11b4f",
+        "warnings": [],
+        "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 24,
+        "record_sha256": "326b6916bdf4134c00a1801a5e8d70db0082cd7f146a90cdbedff81cdcaeb3e1",
+        "warnings": [],
+        "fingerprint": "4382502c95ce4f56dc9a93df98e8b223497818c55a1d752d81093828cbeb4041"
+      }
+    },
+    {
+      "case": "zh/Matrices",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 15,
+        "record_sha256": "9cd4f4e5dc33ad8da550319d8a4d81785947d00a713d1e795c1d921a7af86a71",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "e8a8cc7ab5bf2983f747fa05cfdaf62eab4d83b20dd821afd11ae69c70bca0d8"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "zh/Projection",
+      "endpoints": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "4d7fbdf7f248cf71c9bb095a9a20e86ef367ad66a83971866ef6481149217bba",
+        "warnings": [],
+        "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 22,
+        "record_sha256": "b1a45f11fe34da80935290c3ac4c3201becd7370aad6a067699f400669bc0786",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "a19275e5208e72af9e98ebf4dc23d4facc21b96dc771ad8a757b3fa5fe8567de"
+      }
+    },
+    {
+      "case": "zh/Eigen",
+      "endpoints": {
+        "status": "passed",
+        "frames": 20,
+        "record_sha256": "1f32d679f1840bbfc24a4392a9c0306a7e4c476a3ac992facd30768edcdc6ac5",
+        "warnings": [],
+        "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 20,
+        "record_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "zh/Power",
+      "endpoints": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "5a6a24a5a0148312eddca9838821e5b31722923967a1f06a09a36a02119cf818",
+        "warnings": [],
+        "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 15,
+        "record_sha256": "5b48320f28221e7b6e2b7fd9d379570fe806ebc0390c6ef4122fdd59620e30da",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "zh/SVD",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 13,
+        "record_sha256": "4a3dda18c9681c197d599bcf184dbdf8690464bf37ec14760d51f7b0932b6ba0",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 13,
+        "record_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+        "warnings": [],
+        "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e"
+      }
+    },
+    {
+      "case": "zh/LowRank",
+      "endpoints": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "69c196b378a57b0beba5c730ccc11313facabf93b57a27893fd6400810b3b3db",
+        "warnings": [],
+        "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad"
+      },
+      "motion": {
+        "status": "needs-review",
+        "frames": 21,
+        "record_sha256": "981fc8b3b82fbe570f35297a3848b372464feb3fa08eae43a53b4027fac6f030",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685"
+      }
+    },
+    {
+      "case": "zh/Norms",
+      "endpoints": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "4dbe182b7dfe63f291d1e126fcecaae93822c10d4f7d79210b445af00b21ecff",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 21,
+        "record_sha256": "1b339b4a9c50a51bd31f90fe865d9f31e4fbacd195eaf0d8a446f79f35fe20d6",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/Spectra",
+      "endpoints": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "d093bcd19000248ab318c19e65dcbb031ea8e38aee779c4eb1c7027de5ef7f6c",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "f16e390bd392f21f6b5b749e1938a09f17d6b03e689437169c8e0f3e0322f8e8",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "zh/GaLore",
+      "endpoints": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "83a7a7b1ec364440c906457e50ca87275e062a27963ac5d2224625a4adb7ca96",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "d8f676a6721096f00e936303541536f629b08bf16165904b4e16229a6429a5e2",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/Words",
+      "endpoints": {
+        "status": "passed",
+        "frames": 18,
+        "record_sha256": "d71764a155be5adabf68cf33dfd1be74572d7f17f2a92395ee3aeef0dd47fcb3",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 18,
+        "record_sha256": "0516fb144bb6901f056aa73936dd3eb45320a50e670e4667a258b74697f79470",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/SGNS",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 22,
+        "record_sha256": "227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 22,
+        "record_sha256": "2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/HighDim",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 16,
+        "record_sha256": "d3f3f3a7121cca58cf7c89de640c01ec2e2451e8dc525da40f76ede7cddd0c0e",
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "zh/JL",
+      "endpoints": {
+        "status": "passed",
+        "frames": 19,
+        "record_sha256": "ca8557bccd6cb879f5e76b85763b25a20424f04d62f03b839030887c405589e1",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 19,
+        "record_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/Geometry",
+      "endpoints": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "144b3ea8e7fffa8597792cf5c954afb383eaf89a1f914b11edd396ccd8602629",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 16,
+        "record_sha256": "6cf17312c23d4b4d013f40dc94624efed3818c086d6016e4101e7a6dea8041c6",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    },
+    {
+      "case": "zh/Netflix",
+      "endpoints": {
+        "status": "passed",
+        "frames": 23,
+        "record_sha256": "13e8abe3d6b03ea3c6b50dbef5566fd8831a5b2cac6dcbd456a0fe9b4ea341ab",
+        "warnings": [],
+        "fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 23,
+        "record_sha256": "e402bc2ed2ca8bb3377cdea78d56db60e03463bdfc4844a5016c300c8a3be85b",
+        "warnings": [],
+        "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000"
+      }
+    },
+    {
+      "case": "zh/Outro",
+      "endpoints": {
+        "status": "needs-review",
+        "frames": 6,
+        "record_sha256": "da3fe220ba04c076933ecab58cf226ec8721ac0cb85e7a8a6cf903ff8861dc43",
+        "warnings": [
+          {
+            "kind": "untranslated-on-screen",
+            "text": "spectra: \\ separately peak-normalized"
+          },
+          {
+            "kind": "untranslated-on-screen",
+            "text": "SGNS: generalized shifted PMI"
+          },
+          {
+            "kind": "source-changed-during-render"
+          }
+        ],
+        "fingerprint": "e75dba597f6fe2857e7b01043625eeeaca66248175802337528a18e05bc5af62"
+      },
+      "motion": {
+        "status": "passed",
+        "frames": 6,
+        "record_sha256": "6cc76a846d5b642c624312e42621d7220bd2270328b38371676ba0cce9c79768",
+        "warnings": [],
+        "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0"
+      }
+    }
+  ],
+  "scope": "Runtime-record coverage at this time. Ongoing repair renders can supersede earlier records; not all inspected versions are latest source, and this is not visual/narrated/perceptual approval."
+}

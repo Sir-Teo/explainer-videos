@@ -1,0 +1,24 @@
+    galore32_0.01_0
+    galore8_0.001_0
+    galore8_0.003_0
+    galore8_0.01_0
+    adam_0.003_1
+    adam_0.003_2
+    galore32_0.01_1
+    galore32_0.01_2
+    galore8_0.01_1
+    galore8_0.01_2
+  done    galore in 1028s
+  compute galorectl ...
+    adamsplit_0.001_0
+    adamsplit_0.003_0
+    adamsplit_0.01_0
+    adamsplit_0.01_1
+    adamsplit_0.01_2
+  done    galorectl in 302s
+  cached  words
+  cached  sgns
+  cached  highdim
+  cached  jl
+  cached  mf
+  cached  twotower

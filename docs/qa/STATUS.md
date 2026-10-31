@@ -1,6 +1,6 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31 19:53 UTC. Progress, **not full-series production approval**.
+Observed: 2026-10-31 20:30 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
 `11f5c35` (rigid-transform and transition source repairs). All216repository tests pass after this batch,
@@ -29,7 +29,7 @@ The original English Logic preview also had native cloud playback with timed scr
 replacement failed before preparation, so the existing Library video remains the original version.
 
 Part 3: all 19 scene sources have been reviewed. Original recall, two-tower inference, JL-confidence and SGNS
-lineage defects are repaired and tested, alongside additional technical/narration findings. Fifteen of17numerical items are complete. The shared novels model finished all2,929steps without divergence; final validation loss3.5711395 and training8,595.83seconds. Spectral task8611seconds, MF51fits396seconds, two-tower987seconds, SGNS233seconds. Exactmodel/cache/producer hashes and completion receipts are saved. Only GaLore/control remain; disjoint per-item locks avoid duplicate training.
+lineage defects are repaired and tested, alongside additional technical/narration findings. All17numerical items are complete and pass the actual producer current-cache validator. The shared novels model finished all2,929steps without divergence; final validation loss3.5711395 and training8,595.83seconds. Spectral task8611seconds, MF51fits396seconds, two-tower987seconds, SGNS233seconds. Exactmodel/cache/producer hashes and completion receipts are saved. GaLore16runs completed in1028seconds and its five-run matchedcontrol in302seconds; all numericaljobs exited0. Disjoint per-item locks avoided duplicate training.
 The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent motion review is underway in
 manifest order. English Einsum covers 390 selected times and separately had native cloud playback through terminal
 stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
@@ -55,3 +55,5 @@ was created and it was not retried. [Inventory](ai-built-20261031-inventory.md),
 [chronological checklist](ai-built-20261031-progress.md), [evidence](evidence/).
 
 19:53 runtime snapshot:29of38chapter-languageendpoint cases and25of38fullsilentmovie cases have completed runtime records. These counts are runtime coverage, not all visually approved current-source cases. First-nine baseline motion reviews are complete at exact artifact versions; new rank/tail-norm/rounding/color refinements have separate scoped regression queues. Ready Word/HighDim/JL/Geometry and spectral/recommendation scenes are now rendering/reviewing.
+
+All38chapter-languagecases now have completed endpoint and fullsilent-motion runtime records at observed artifact versions. This does not certify current repaired-source visual coverage. Late repairs address SGNS narration/state timing, measured percentages, semantic colors, point-label occlusion, math grouping and important count-text readability. Actual per-case fresh visual regressions continue.
