@@ -1,0 +1,208 @@
+{
+  "observed_utc": "2026-10-31T21:09:15.009912+00:00",
+  "items": {
+    "gpt2": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "einsum": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "project": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "letters": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "power": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "image": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "norms": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "depth": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "mp": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "galore": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "galorectl": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "words": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "sgns": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "highdim": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "jl": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "mf": {
+      "current": true,
+      "actual_load_succeeded": true
+    },
+    "twotower": {
+      "current": true,
+      "actual_load_succeeded": true
+    }
+  },
+  "producer_calls": 0,
+  "all26_payloads_unchanged": true,
+  "preserved_payloads": {
+    ".cache/ai3/depth.json": {
+      "sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "mtime_ns": 1793466908151875313,
+      "size": 259
+    },
+    ".cache/ai3/depth.npz": {
+      "sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "mtime_ns": 1793466908151513030,
+      "size": 1601
+    },
+    ".cache/ai3/einsum.json": {
+      "sha256": "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6",
+      "mtime_ns": 1793466892101069710,
+      "size": 264
+    },
+    ".cache/ai3/galore.json": {
+      "sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "mtime_ns": 1793476547185288008,
+      "size": 129205
+    },
+    ".cache/ai3/galorectl.json": {
+      "sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "mtime_ns": 1793476848818077709,
+      "size": 20954
+    },
+    ".cache/ai3/gpt2.json": {
+      "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+      "mtime_ns": 1793466616038797011,
+      "size": 11064
+    },
+    ".cache/ai3/gpt2.npz": {
+      "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+      "mtime_ns": 1793466616033326706,
+      "size": 72806
+    },
+    ".cache/ai3/highdim.json": {
+      "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+      "mtime_ns": 1793474015728107470,
+      "size": 1198
+    },
+    ".cache/ai3/highdim.npz": {
+      "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70",
+      "mtime_ns": 1793474015725300016,
+      "size": 2629
+    },
+    ".cache/ai3/image.json": {
+      "sha256": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+      "mtime_ns": 1793466896824895090,
+      "size": 705
+    },
+    ".cache/ai3/image.npz": {
+      "sha256": "2c874e5daf872c3c4505e689bfe0350248e5271b3df77e5422a38f1684417de7",
+      "mtime_ns": 1793466896820491622,
+      "size": 216127
+    },
+    ".cache/ai3/jl.json": {
+      "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+      "mtime_ns": 1793474031988199490,
+      "size": 5524
+    },
+    ".cache/ai3/jl.npz": {
+      "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009",
+      "mtime_ns": 1793474031985285473,
+      "size": 90809
+    },
+    ".cache/ai3/letters.json": {
+      "sha256": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+      "mtime_ns": 1793466892117013407,
+      "size": 126
+    },
+    ".cache/ai3/letters.npz": {
+      "sha256": "eec30557b0c16285e938b327e55461c0a95b7d3788b790a8682bfb85e2e3be0a",
+      "mtime_ns": 1793466892112509379,
+      "size": 150280
+    },
+    ".cache/ai3/mf.json": {
+      "sha256": "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828",
+      "mtime_ns": 1793474585712410332,
+      "size": 97019
+    },
+    ".cache/ai3/mf.npz": {
+      "sha256": "0ed655289ac8b221f405e820496624c70fbec4935cc594692abe9423ebfa1a34",
+      "mtime_ns": 1793474585699728124,
+      "size": 130216
+    },
+    ".cache/ai3/mp.json": {
+      "sha256": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+      "mtime_ns": 1793475519468348620,
+      "size": 82808
+    },
+    ".cache/ai3/norms.json": {
+      "sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "mtime_ns": 1793466907452463243,
+      "size": 12554
+    },
+    ".cache/ai3/power.json": {
+      "sha256": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+      "mtime_ns": 1793466896792618821,
+      "size": 9905
+    },
+    ".cache/ai3/project.json": {
+      "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+      "mtime_ns": 1793466892107548414,
+      "size": 3040
+    },
+    ".cache/ai3/sgns.json": {
+      "sha256": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e",
+      "mtime_ns": 1793475974356752241,
+      "size": 690222
+    },
+    ".cache/ai3/sgns.npz": {
+      "sha256": "6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754",
+      "mtime_ns": 1793475974337932868,
+      "size": 446
+    },
+    ".cache/ai3/twotower.json": {
+      "sha256": "3f71945680eb5dd6803fbddfa8a753bd4c1082aa9b7aa3070430f115d4d5fd6d",
+      "mtime_ns": 1793475572800644711,
+      "size": 2819
+    },
+    ".cache/ai3/words.json": {
+      "sha256": "715397b0df63babbb51c323dc5653fc51ae3c908da505d12011a4db0427d1103",
+      "mtime_ns": 1793474003156165286,
+      "size": 138322
+    },
+    ".cache/ai3/words.npz": {
+      "sha256": "209c3269dd21c5f53072ed6a80611af6c0b9f2a8b4c245e6cf716b89c50cfca1",
+      "mtime_ns": 1793474003125314781,
+      "size": 3890355
+    }
+  },
+  "scope": "Actual read-only loads after sidecar type and transitive Power-to-Letters fixes. No original consumed-input provenance is reconstructed."
+}

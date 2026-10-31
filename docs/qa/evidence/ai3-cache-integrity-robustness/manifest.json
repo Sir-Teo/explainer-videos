@@ -1,0 +1,26 @@
+{
+  "focused-tests.log.gz": {
+    "bytes": 868,
+    "sha256": "4bf90f559993089040d9a66c87c9ea7a9613a53a9fcbc3d417c434f08ada3a16",
+    "uncompressed_sha256": "7cf77cce57dd3a17b95f3b3121314f1a25063df7f79406f70459577181545e3e"
+  },
+  "full-unittest.log.gz": {
+    "bytes": 8171,
+    "sha256": "05601dcb9833a78c504bcfb168f7093cb5801faf6a5725d5bfc53e1aaf70d421",
+    "uncompressed_sha256": "b7caa19cebb39b54fbfc0d6c08cee5403916abbb2ca07ba5ccf149133512526a"
+  },
+  "cache_integrity.py.gz": {
+    "bytes": 6446,
+    "sha256": "934e8761899e5f58043b1a8b1cc00affa3be181a194192245903de629b0d1363",
+    "uncompressed_sha256": "3137306b2a26dea04a62cf6c13b8f6d339c2f7140f0f72201431b40ff275a7ce"
+  },
+  "test_ai3_cache_integrity.py.gz": {
+    "bytes": 4921,
+    "sha256": "7350005c7c0126aa01ff3ad7233df7b2d46e2facfc7b9cd046d28a571252d234",
+    "uncompressed_sha256": "d807f6537b71d5db883467c8e9f8af9661c5b5bd1a5e4f1fa9560f95bf8f42c3"
+  },
+  "actual-cache-validation.json": {
+    "bytes": 6383,
+    "sha256": "55de442c0278ea8310f2c76c0462270d430fb99e8c304e9f68f42772c7415c35"
+  }
+}
