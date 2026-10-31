@@ -367,8 +367,10 @@ class Prefix(VoiceoverScene):
             "bound breaks, so it can't be decodable. <bookmark mark='b'/> So prefix codes lose nothing: any lengths "
             "a decodable code can have, a prefix code can have too."
         ) as vo:
-            self.play(FadeOut(VGroup(rows[0], rows[1], whys[0], whys[1])),
-                      VGroup(rows[2], whys[2]).animate.move_to([-2.3, 0.25, 0]))
+            final_step = VGroup(rows[2], whys[2])
+            final_step.generate_target()
+            final_step.target.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-2.8, 0.25, 0])
+            self.play(FadeOut(VGroup(rows[0], rows[1], whys[0], whys[1])), MoveToTarget(final_step))
             self.play(FadeIn(ax_g), FadeIn(tag), Create(lin), Create(good), FadeIn(leg))
             vo.wait_until("a")
             self.play(Create(grow), run_time=1.6)

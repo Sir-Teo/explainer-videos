@@ -144,6 +144,7 @@ class Probability(VoiceoverScene):
             out[j].set_fill(C.BITS, opacity=1)
         labs = VGroup(*[letter(ALPHA27[j], font_size=24, color=C.BITS if j in lit else WHITE)
                         .next_to(out[j], RIGHT, buff=0.12) for j in range(27) if self.MH * cond[i, j] > min_label])
+        labs.add(label(r"width magnified", font_size=20, color=GREY_A).next_to(out, UP, buff=0.16))
         frame = SurroundingRectangle(col, buff=0.0, color=C.CONTEXT, stroke_width=2.5)
         rays = VGroup(*[Line(frame.get_corner(a), out.get_corner(b), color=C.CONTEXT, stroke_width=1.2,
                              stroke_opacity=0.6) for a, b in ((UR, UL), (DR, DL))])

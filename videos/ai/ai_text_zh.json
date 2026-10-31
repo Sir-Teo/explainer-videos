@@ -20455,7 +20455,8 @@
     "Hutter Prize, 24 July 2026: enwik9, total $100{,}424{,}672$ bytes\\\\compressor and self-extracting archive; $0.80$ bits per input byte": "赫特奖，2026年7月24日：enwik9，总共$100{,}424{,}672$字节\\\\ 压缩器和自解压档案；每输入字节$0.80$比特",
     "G.~Del\\'etang et al., \\textit{Language Modeling Is Compression} (ICLR 2024), Table 1;\\\\Hutter Prize official records: 24 July 2026 entry, checked 31 October 2026": "G.~Del\\'etang等，《语言建模就是压缩》（ICLR 2024），表1；\\\\ 赫特奖官方记录：2026年7月24日作品，2026年10月31日核对",
     "GPT-2 small: estimated code size": "GPT-2 small：估计的编码大小",
-    "softmax, \\ and its logit derivative $q_k - [k = y]$": "softmax，\\ 以及它对logit的导数$q_k - [k = y]$"
+    "softmax, \\ and its logit derivative $q_k - [k = y]$": "softmax，\\ 以及它对logit的导数$q_k - [k = y]$",
+    "width magnified": "宽度已放大"
   },
   "phrases": {
     "width": "宽度",

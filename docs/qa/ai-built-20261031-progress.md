@@ -208,3 +208,13 @@ no reliable completion ETA is available.
 
 Part 2 repairs are being prepared in an isolated file scope while Part 1 renders/narration continue. No Part 2
 production computations or rendered sign-off are claimed. Remaining Parts 3–31 remain untested.
+
+## Rendered layout repairs
+
+Native rendered frames exposed two defects beyond automated frame-bound checks: the expanded probability
+column lacked a width-magnification cue, and the Chinese McMillan proof explanation collided with the plot's
+log-scale label/tick. The probability pull-out now explicitly labels the magnification in both languages. The final
+McMillan equation and its explanation stack vertically on the left, clear of the chart. All four focused bilingual
+endpoint rechecks passed without warnings; their native frames were visually inspected.
+[Before/after images and capture fingerprints](evidence/ai1-layout/) retain the actual evidence. This is endpoint
+layout coverage, not continuous animation/playback approval. Focused layout/QA tests also passed (21 tests).
