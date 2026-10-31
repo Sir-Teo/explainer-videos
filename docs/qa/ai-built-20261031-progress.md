@@ -53,7 +53,21 @@ and endpoint comparisons were inspected; full visual playback and narrated liste
 
 The local interactive review is `renders/qa/ai1-kl-comparison/index.html`; it links the four silent MP4s,
 contact sheets and source/input provenance. Generated movies/caches remain ignored, consistent with repository policy.
-Additional MI evidence and final chapter cases are being rendered; see the live local index below.
+The MI memory section also has real silent previews: reconstructed baseline English 58.73 seconds,
+updated English 77.27 seconds, and updated Chinese 88.20 seconds. All three fully decode and have zero detected
+blank/sparse runs ≥1.5 seconds. The baseline scene was reconstructed using the same regenerated measured cache;
+the original baseline computation had failed, so this is not a legacy approved render. Two updated contact sheets
+(24 sampled frames each) and endpoint frames were inspected. Source/data hashes include JSON, NPZ and corpus.
+Full visual playback and narration remain pending; tiny values in scientific notation also need pronunciation review.
+
+| MI memory section | Frame |
+|---|---|
+| Reconstructed English baseline | ![MI baseline](evidence/ai1-mi/en-before.png) |
+| Updated English | ![MI English](evidence/ai1-mi/en-after.png) |
+| Updated Chinese | ![MI Chinese](evidence/ai1-mi/zh-after.png) |
+
+[MI provenance](evidence/ai1-mi/provenance.json); local video review: `renders/qa/ai1-mi-comparison/index.html`.
+Final chapter cases are still being rendered; see the live local index below.
 
 ## Part 1 chapter coverage at this checkpoint
 
@@ -69,12 +83,12 @@ computation began; its incomplete records are not a sign-off. Final passes cover
 | Entropy | passed | not attempted |
 | Prefix | passed | not attempted |
 | Huffman | passed | not attempted |
-| Typical | needs-review (earlier source/data) | not attempted |
-| CrossEntropy | passed (earlier source/data) | not attempted |
-| Arithmetic | needs-review (earlier source/data) | not attempted |
-| Counting | missing-data (earlier source/data) | not attempted |
-| Shannon1951 | missing-data (earlier source/data) | not attempted |
-| Likelihood | missing-data (earlier source/data) | not attempted |
+| Typical | passed | not attempted |
+| CrossEntropy | passed | not attempted |
+| Arithmetic | passed | not attempted |
+| Counting | passed | not attempted |
+| Shannon1951 | passed | not attempted |
+| Likelihood | passed | not attempted |
 | Information | missing-data (earlier source/data) | not attempted |
 | Knowledge | missing-data (earlier source/data) | not attempted |
 | Units | missing-data (earlier source/data) | not attempted |
@@ -98,7 +112,7 @@ computation began; its incomplete records are not a sign-off. Final passes cover
   contact sheet, source fingerprint and input signatures. Review records are bound to the inspected sheet hash.
 - Model computation log: `renders/qa/ai1-model-compute.log`; the benchmark stores completed model rows in
   `.cache/ai1/lms.partial.json`. It is running on CPU with two threads. No synthetic substitutes are used.
-- First completed pretrained row: GPT-2 small, 1.166 bits/character on the real passage; full scoreboard is pending.
+- Completed pretrained rows so far: GPT-2 small 1.166, GPT-2 XL 1.012, Qwen3-0.6B 1.024 bits/character on the real passage; full scoreboard is pending.
 - Counting logs: `renders/qa/ai1-compute.log`, `ai1-counting-compute.log`, `ai1-raw-compute.log`.
   A hoped-result MI assertion failed during the second batch; it was diagnosed and replaced with measured checks.
 - Runtime activation: `source /workspace/runtime/activate.sh`. Manim/dvisvgm/Chinese TeX dependencies were installed
@@ -111,4 +125,4 @@ No web player application was found in this video-source repository. Responsive/
 hosting application is untested. Local decoded videos verify file integrity, not every browser/player.
 No merge, deployment, paid service, new credential, or desktop execution was used.
 
-Checkpoint generated: 2026-10-31T12:03:22.481475+00:00.
+Checkpoint generated: 2026-10-31T12:07:01.764323+00:00.
