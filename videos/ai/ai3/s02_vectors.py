@@ -8,6 +8,17 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai3.common import (HIST, I_COLOR, J_COLOR, MONO, VA, VB, arrow, barcode, chapter, load, plane)
 
 
+def score_bar_geometry(logits, max_height=1.6):
+    """Raw scores above one disclosed shared floor; no score is clipped."""
+    scores = np.asarray(logits, dtype=float)
+    if scores.ndim != 1 or not len(scores) or not np.isfinite(scores).all():
+        raise ValueError("logits must be a nonempty finite vector")
+    span = max(float(scores.max() - scores.min()), 0.1)
+    floor = float(scores.min()) - 0.15 * span
+    heights = max_height * (scores - floor) / (float(scores.max()) - floor)
+    return floor, heights
+
+
 class Vectors(VoiceoverScene):
     def construct(self):
         chapter(self, 1, r"Vectors and the inner product", r"How alike are two vectors?",
@@ -31,6 +42,8 @@ class Vectors(VoiceoverScene):
         col.get_entries()[1].set_color(J_COLOR)
         bg = BackgroundRectangle(col, color=BACKGROUND, fill_opacity=0.85, buff=0.1)
         three = Matrix([["3"], ["2"], ["1"]], bracket_h_buff=0.12).scale(0.9).move_to(col)
+        if three.get_top()[1] > 3.7:
+            three.shift(DOWN * (three.get_top()[1] - 3.7))
         g = load("gpt2")
         bar = np.asarray(g["barcodes"])[0][:12]
         many = MathTex(r"\begin{bmatrix}" + r" \\ ".join(f"{x:+.2f}" for x in bar[:5]) + r" \\ \vdots \\ "
@@ -295,12 +308,12 @@ class Vectors(VoiceoverScene):
         prompt = data_text(g["prompt"] + " …", font=MONO, font_size=28).to_edge(UP, buff=0.5)
         n = len(toks)
         xs = np.linspace(-4.6, 4.6, n)
-        rel = logit - logit[0]
+        score_floor, score_heights = score_bar_geometry(logit)
         bars_s, bars_p, labs = VGroup(), VGroup(), VGroup()
         for k in range(n):
-            hs = 1.6 * (rel[k] + 1.5) / 1.5  # the score drawn as a height above a floor 1.5 below the best
-            bars_s.add(Rectangle(width=0.9, height=max(hs, 0.02), stroke_width=0, fill_color=C.MODEL_Q,
-                                 fill_opacity=0.9).move_to([xs[k], -1.6 + max(hs, 0.02) / 2, 0]))
+            hs = float(score_heights[k])
+            bars_s.add(Rectangle(width=0.9, height=hs, stroke_width=0, fill_color=C.MODEL_Q,
+                                 fill_opacity=0.9).move_to([xs[k], -1.6 + hs / 2, 0]))
             hp = 1.8 * prob[k] / prob[0]
             bars_p.add(Rectangle(width=0.9, height=hp, stroke_width=0, fill_color=C.PROB, fill_opacity=0.9)
                        .move_to([xs[k], -1.6 + hp / 2, 0]))
@@ -320,6 +333,12 @@ class Vectors(VoiceoverScene):
                     color=C.TRUE_P).next_to(fh, DOWN, buff=0.12)
         soft = label(r"softmax: \ the probabilities", font_size=26, color=C.PROB).next_to(fh, DOWN, buff=0.12)
         floor = Line([-5.4, -1.6, 0], [5.4, -1.6, 0], color=GREY_D, stroke_width=1.5)
+        score_scale = VGroup(label(r"bar baseline:", font_size=22, color=GREY_A),
+                             MathTex(rf"z \approx {score_floor:.2f}", font_size=22, color=C.MODEL_Q),
+                             label(r"labels show raw logits", font_size=22, color=GREY_A))
+        score_scale.arrange(RIGHT, buff=0.18).move_to([0, -2.75, 0])
+        probability_scale = label(r"bar baseline: $q=0$; \ labels show probabilities", font_size=22,
+                                  color=GREY_A).move_to(score_scale)
         with self.voiceover(
             "Here is why this matters. In Part 1, a network ended with a score for every possible next token, and the "
             "softmax turned scores into probabilities. <bookmark mark='a'/> In GPT-2, each score is a dot product: the "
@@ -334,10 +353,11 @@ class Vectors(VoiceoverScene):
             self.play(ReplacementTransform(soft_f, f), FadeOut(recall), FadeIn(fh))
             self.play(FadeIn(tie))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_s], lag_ratio=0.15), FadeIn(sv), run_time=1.6)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars_s], lag_ratio=0.15), FadeIn(sv),
+                      FadeIn(score_scale), run_time=1.6)
             vo.wait_until("c")
             self.play(ReplacementTransform(bars_s, bars_p), ReplacementTransform(sv, pv), ReplacementTransform(tie, soft),
-                      run_time=1.6)
+                      ReplacementTransform(score_scale, probability_scale), run_time=1.6)
             self.play(Indicate(pv[0], color=WHITE, scale_factor=1.4))
         self.wait(0.5)
         self.clear_scene()

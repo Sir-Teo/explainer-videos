@@ -20572,7 +20572,8 @@
     "known users: history unavailable \\\\ no finite training-history samples": "已知用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本",
     "new users: recall unavailable \\\\ no eligible held-out targets": "新用户：召回率不可用 \\\\ 没有合格的留出目标",
     "new users: comparison unavailable \\\\ a recall measurement is non-finite": "新用户：无法比较 \\\\ 一项召回测量不是有限数值",
-    "new users: history unavailable \\\\ no finite training-history samples": "新用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本"
+    "new users: history unavailable \\\\ no finite training-history samples": "新用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本",
+    "colours name indices; output indices stay; input-only indices are summed": "颜色标识索引；输出中出现的索引保留；仅在输入中出现的索引求和"
   },
   "phrases": {
     "width": "宽度",

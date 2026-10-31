@@ -109,8 +109,12 @@ class Matrices(VoiceoverScene):
                 for g, t, first, second in panels:
                     M = first if step == 2 else second
                     c = g[0].get_center()
-                    anims.append(ApplyMatrix(M, g[1:], about_point=c))
-                    anims.append(ApplyMatrix(M, g[0], about_point=c))
+                    if M is R:  # preserve lengths throughout the quarter turn
+                        anims.append(Rotate(g[1:], angle=PI / 2, about_point=c))
+                        anims.append(Rotate(g[0], angle=PI / 2, about_point=c))
+                    else:
+                        anims.append(ApplyMatrix(M, g[1:], about_point=c))
+                        anims.append(ApplyMatrix(M, g[0], about_point=c))
                 self.play(*anims, run_time=1.8)
             self.play(Write(prod))
             vo.wait_until("b")
@@ -190,7 +194,7 @@ class Matrices(VoiceoverScene):
             label(r"rank $+$ null-space dimension $=$ number of columns", font_size=30),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(DR, buff=0.4)
         for c_ in cards:
-            c_.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.08)
+            c_.add_background_rectangle(color=BACKGROUND, opacity=0.96, buff=0.08).set_z_index(20)
         with self.voiceover(
             "That squashing has a name, and it will matter for the rest of this part. <bookmark mark='a'/> This "
             "matrix sends the whole plane onto one line: its columns point the same way. <bookmark mark='b'/> The "

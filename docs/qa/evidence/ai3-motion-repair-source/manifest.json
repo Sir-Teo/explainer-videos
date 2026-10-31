@@ -1,0 +1,86 @@
+{
+  "ai3-hook-transition-repair-review.json.gz": {
+    "bytes": 1193,
+    "sha256": "4b86c24b773c1efcc4ede43bfad4e4cb6bbaab4540c6e7ba8799503087cb4fff"
+  },
+  "ai3-head-motion-repair-review.md": {
+    "bytes": 1403,
+    "sha256": "3a916cd0d903717ece67c670a8ceaa7be877f90460e2bf72318dff806656c766"
+  },
+  "source-freeze.json": {
+    "bytes": 1268,
+    "sha256": "461067ce922d0e2c6e98099867efafd3bfb21c361addb4d54be79ba12f48d101"
+  },
+  "ai3-hook-transition-repair-review.md": {
+    "bytes": 926,
+    "sha256": "8287abfe444f7caed1246559992569000ae8d8c8d6bb267735b6b4c1df369374"
+  },
+  "ai3-einsum-index-legend-handoff.json.gz": {
+    "bytes": 1643,
+    "sha256": "5c38718790a1b8e9933f2d51f8bd75e500a9285b1e25ff8a41beb7a1e6f97472"
+  },
+  "README.md": {
+    "bytes": 2528,
+    "sha256": "29b3d5c0d9799783b1c42d705da757afcc12852679bfeb3ba4f98ce11368b057"
+  },
+  "ai3-head-motion-invariants.json.gz": {
+    "bytes": 948,
+    "sha256": "61b86f8c1116c4d4c79a59154b711ca40383538a2a6c2d9b2ae1953c99d4ede0"
+  },
+  "ai3-head-motion-invariants.py": {
+    "bytes": 6922,
+    "sha256": "e8aa72cad0fec86a70fe03c76d79021968a2381478c03f19c793b746a19bdddb"
+  },
+  "full-unittest-receipt.json": {
+    "bytes": 744,
+    "sha256": "198db9fd88d4bd37b3388e6c43b0f41448d8b7ceba45e207d25d6a256cfc8800"
+  },
+  "ai3-head-motion-repair-review.json.gz": {
+    "bytes": 4142,
+    "sha256": "855e774d8705dde231175fa344ad77a2d673982630b0ee332631cbeacbb43765"
+  },
+  "full-unittest.log": {
+    "bytes": 37342,
+    "sha256": "6db264fff000114419be6c564bcd04757fb823e87e40e3d530e487047573b5a5"
+  },
+  "images/svd-native_shrunk.png": {
+    "bytes": 69897,
+    "sha256": "79d6671f5c933735739c162f18a7a9c4229fab8dd59ec0dc3a9ec08cdc7f1c5a"
+  },
+  "images/vectors-native.png": {
+    "bytes": 55046,
+    "sha256": "6388368bc089e06042dedb339c912e05868329d2b483e8ccf27463778021a6ed"
+  },
+  "images/svd-native_first_turn.png": {
+    "bytes": 167325,
+    "sha256": "91b54547d23a1297683718865571d0fbf7cc75f5531eb701a1e41f79327b84e3"
+  },
+  "images/svd-native_final.png": {
+    "bytes": 172846,
+    "sha256": "f12ee9f49e6c6de9a2cf49a1b8177da119a722d88760b2f1d93ba2a14945427d"
+  },
+  "images/power-native.png": {
+    "bytes": 87727,
+    "sha256": "c1b2c861e9a9d8edb8d2c5720d54f03587368b137d16113ae4ba1d05d98c62fd"
+  },
+  "images/hook-blink_disappeared.png": {
+    "bytes": 37175,
+    "sha256": "3de0d1aa82f3142f53f751264507838f9e3aec00e77957acbf66cd06838f6827"
+  },
+  "images/hook-footer_sweep.png": {
+    "bytes": 97489,
+    "sha256": "6c86bce31751556a6022b5ec981917c0b3b7cde95bdc406c2cd54eaa8d553a99"
+  },
+  "images/eigen-native_header_crossing.png": {
+    "bytes": 183341,
+    "sha256": "8c5ce31f207fa5774496b83975618d0308d40db1b6a62a95500d3fbb4bea3305"
+  },
+  "images/hook-blink_before.png": {
+    "bytes": 60756,
+    "sha256": "f8541f8d0d978d375313f1661170a7b2c629efe2433b2ec9b4b9faa119e965d5"
+  },
+  "images/eigen-native_header_crossing_settled.png": {
+    "bytes": 166585,
+    "sha256": "6d64db4edfd0d1de198dd4cff10ab416f82fd19b2d9195654c52412f851f8049"
+  }
+}

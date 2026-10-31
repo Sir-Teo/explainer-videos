@@ -70,7 +70,8 @@ class Eigen(VoiceoverScene):
         f = cmath("A", "=", "Q", r"\Lambda", r"Q^{\top}", colors=colors, font_size=56).to_corner(UL, buff=0.5)
         fb = BackgroundRectangle(f, color=BACKGROUND, fill_opacity=0.85, buff=0.12)
         sym = MathTex(r"A = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} = A^{\top}", font_size=40).to_corner(UR, buff=0.5)
-        sb = BackgroundRectangle(sym, color=BACKGROUND, fill_opacity=0.85, buff=0.12)
+        sym.set_z_index(20)
+        sb = BackgroundRectangle(sym, color=BACKGROUND, fill_opacity=0.96, buff=0.12).set_z_index(19)
         steps = [label(r"$Q^{\top}$: \ turn the eigenvectors onto the axes", font_size=30, color=C.TRUE_P),
                  label(r"$\Lambda$: \ stretch along each axis, by $3$ and by $1$", font_size=30, color=C.BITS),
                  label(r"$Q$: \ turn back", font_size=30, color=C.TRUE_P)]
@@ -95,7 +96,9 @@ class Eigen(VoiceoverScene):
             vo.wait_until("b")
             for k, M in enumerate([Qr, Lm, Qr.T]):
                 self.play(FadeIn(steps[k]), run_time=0.4)
-                self.play(ApplyMatrix(M, g), run_time=1.6)
+                move = (ApplyMatrix(M, g) if k == 1 else
+                        Rotate(g, angle=math.atan2(M[1, 0], M[0, 0]), about_point=ORIGIN))
+                self.play(move, run_time=1.6)
                 self.play(FadeOut(steps[k]), run_time=0.3)
             vo.wait_until("c")
             self.play(FadeIn(fb), Write(f))

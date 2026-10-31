@@ -62,7 +62,12 @@ class SVD(VoiceoverScene):
             vo.wait_until("a")
             for k, M in enumerate([Vt, np.diag(s), U]):
                 self.play(FadeIn(steps[k]), run_time=0.4)
-                self.play(ApplyMatrix(M, g), run_time=1.6)
+                # These orthogonal factors have det +1: use a true rotation
+                # throughout, rather than a straight matrix interpolation
+                # that shrinks the circle/ellipse midway through a turn.
+                move = (ApplyMatrix(M, g) if k == 1 else
+                        Rotate(g, angle=math.atan2(M[1, 0], M[0, 0]), about_point=ORIGIN))
+                self.play(move, run_time=1.6)
                 self.play(FadeOut(steps[k]), run_time=0.3)
             self.play(Create(ghost), FadeIn(once))
             vo.wait_until("b")

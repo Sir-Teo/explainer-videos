@@ -1,0 +1,10 @@
+{
+  "observed_utc": "2026-10-31T19:00:56.929246+00:00",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 nice -n 10 python -m unittest discover -s tests -v",
+  "tests": 216,
+  "elapsed_seconds": 97.056,
+  "outcome": "passed",
+  "log_sha256": "6db264fff000114419be6c564bcd04757fb823e87e40e3d530e487047573b5a5",
+  "source_binding": "All eight affected source/table hashes in source-freeze.json match after the test run; producer hash remains the frozen training version. These are tested source changes; separate movie appearance checks remain scoped/pending.",
+  "rotation_tests": "Three portable source-expression tests plus separately executed actual-Manim 41-phase fixtures; actual renderer review is not inferred."
+}

@@ -1,0 +1,79 @@
+{
+  "date_utc": "2026-10-31T18:57:05.495063+00:00",
+  "previous_receipt": "../report.json.gz",
+  "previous_evidence_files_preserved": {
+    "README.md": "a0b6a7d9ef312804f87a993024e0d3479d09618de92ae2cb3b91b9db63aad50c",
+    "baseline-ai_text_zh.json.gz": "c015fd3568e75ddc3f3ea10fb029382f2ec1f444ce66f88e463e3fc6ac4a5f4c",
+    "comparison.py": "414ae4e2133fbd053e77a973d8370f5189a8ee494dc4efae9d7790a2deb76737",
+    "current-ai_text_zh.json.gz": "f9fed51db9d26a235820de3c125798fe26f04fc5a304d9b33c8b18598dff9744",
+    "manifest.json": "17ba89bbd6cb2cc05d9ad51c75defe5cd9534e1a12d0bbbbca25effba3420257",
+    "report.json.gz": "2c4ce6a38870ba2cc3683b3d7e29f38c5598e4c2cb8698ee90b9ee609c501628",
+    "used-caption-results.json.gz": "55e9900154084f0cf083d89acf956b2ab3d0eb158717c2124379764703de2e1d"
+  },
+  "delta_from_previous_table": {
+    "added": {
+      "colours name indices; output indices stay; input-only indices are summed": "颜色标识索引；输出中出现的索引保留；仅在输入中出现的索引求和"
+    },
+    "removed": [],
+    "changed": [],
+    "prior_table_sha256": "d805eb1858f976969c64014adda5f1b60f0e33830865d11238e28df114a0fa73",
+    "current_table_sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3"
+  },
+  "baseline_commit": "b35206038c127933bc1fc6f74d35b647a01c7389",
+  "baseline_table_sha256": "65772b576d93e271db85cec6b63d555ff090d0e885491e7e6a9a10db6629f730",
+  "current_table_sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+  "case_counts": {
+    "ai1": 17,
+    "ai2": 16
+  },
+  "collected_rows": 4550,
+  "unique_compared_strings_including_logic_supplement": 2265,
+  "changed_outputs": 0,
+  "output_map_sha256": "c5c51d809b47e418f38d74405a0297f2c0a191d24fe28c2fd552a617145ab6a0",
+  "captured_collection_content_matches_previous_run": true,
+  "original_record_warnings_preserved": true,
+  "execution": {
+    "pid": 516126,
+    "nice": 10,
+    "processes_used": 1,
+    "thread_env": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "elapsed_s": 127.92230348199882,
+    "translator": "actual current explainer.zh_text.translate, lang zh, _TABLE and _BY_NUMBERS reset once per table pass",
+    "production_scene_or_compute_modules_imported": []
+  },
+  "limits": [
+    "This compares shared-table effects on these captured English strings using the current translation implementation for both passes.",
+    "This does not establish scene/data/narration equivalence, fresh production fingerprints, rendered geometry, continuous playback or audio.",
+    "Dynamic values or branches absent from the33endpoint text collections and the one static supplement are not exercised.",
+    "No production scene/data/model imports or loads; no table edit, compute or render. Source hashes are bytes at comparison time, not proof of code imported by historical render workers."
+  ],
+  "artifacts": {
+    "report.json.gz": {
+      "sha256": "1e0430970debc2db49594c23de026eb2a5ae23fa6b40389afe977a496a869daf",
+      "uncompressed_sha256": "36628c4cc44add4d6132e02cf8a2a2fb7bcc62c37f8ab7c1c54ef60f3b49920a",
+      "bytes": 8541,
+      "uncompressed_bytes": 28358
+    },
+    "used-caption-results.json.gz": {
+      "sha256": "55e9900154084f0cf083d89acf956b2ab3d0eb158717c2124379764703de2e1d",
+      "uncompressed_sha256": "aa137cbd8fe8ef78d8cadc7dfefcfbb319d416fb9a1de1cc17f8bf44620fb9d8",
+      "bytes": 135950,
+      "uncompressed_bytes": 2016716
+    },
+    "current-ai_text_zh.json.gz": {
+      "sha256": "01af4d1bb7e0b27f473a9a1efa20d912d6bba4a577e2247352c3372a71dbb5fe",
+      "uncompressed_sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+      "bytes": 870648,
+      "uncompressed_bytes": 2395168
+    },
+    "comparison.py": {
+      "sha256": "5f20725af079f03e12ea71eb674251517a4ac3c22b3769a01b38cccaa77e6422",
+      "bytes": 9093
+    }
+  }
+}

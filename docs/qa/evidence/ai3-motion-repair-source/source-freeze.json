@@ -1,0 +1,16 @@
+{
+  "observed_utc": "2026-10-31T18:58:54.358070+00:00",
+  "source_sha256": {
+    "videos/ai/ai3/s01_hook.py": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+    "videos/ai/ai3/s02_vectors.py": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+    "videos/ai/ai3/s03_einsum.py": "def7543b913375b30397871433a8a38ea6b618a8f8e844bf692294aede6ea9ff",
+    "videos/ai/ai3/s04_matrices.py": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+    "videos/ai/ai3/s06_eigen.py": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+    "videos/ai/ai3/s07_power.py": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+    "videos/ai/ai3/s08_svd.py": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+    "videos/ai/ai_text_zh.json": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3"
+  },
+  "producer_sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+  "render_status": "fresh bilingual affected-scene movies rendering; final appearance regression pending",
+  "coverage": "source/actual geometric-path fixtures and before native images only, except separately recorded Hook EN scoped review; no blanket repaired-motion approval"
+}
