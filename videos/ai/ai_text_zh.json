@@ -20489,7 +20489,9 @@
     "a Python DOCTOR implementation: \\ judged human $23\\%$ of the time in five-minute Turing tests": "以Python实现的DOCTOR：\\ 在5分钟图灵测试中，$23\\%$的时候被当成人类",
     "multipliers: \\ low product bits equal?": "乘法器：\\ 乘积低位是否相等？",
     "dense bit interactions: \\\\ our solver struggles to find useful clauses": "各位之间相互交织：\\\\ 我们的求解器难以找到有用的子句",
-    "a plan valid \\\\ in that PDDL model": "在那个PDDL模型内\\\\ 有效的计划"
+    "a plan valid \\\\ in that PDDL model": "在那个PDDL模型内\\\\ 有效的计划",
+    "swapped \\texttt{e}, \\texttt{z}: \\ $4.84 \\approx 4.08 + 0.75$": "弄反\\texttt{e}和\\texttt{z}：\\ $4.84 \\approx 4.08 + 0.75$",
+    "letters guessed uniformly: \\ $4.75 \\approx 4.07 + 0.69$ \\ (the Falcon passage)": "把字母当成均匀分布：\\ $4.75 \\approx 4.07 + 0.69$ \\ （《马耳他之鹰》段落）"
   },
   "phrases": {
     "width": "宽度",

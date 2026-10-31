@@ -1,0 +1,401 @@
+{
+  "generated_utc": "2026-10-31T14:30:09.922701+00:00",
+  "scope": "Read-only dependency equivalence; does not rewrite QA verdicts or replace frame review",
+  "baseline": "1ac425c",
+  "collected_caption_strings_compared": 1298,
+  "changed_chinese_outputs": [],
+  "all_compared_outputs_identical": true,
+  "records": [
+    {
+      "language": "en",
+      "scene": "Hook",
+      "module_source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+      "module_unchanged_since_layout_baseline": false,
+      "movie_capture_fingerprint": "2368fb26e7af9078ed56cfb19f5c39a6dbca011eeb0f6a992e2c0e6b9af56493",
+      "global_fingerprint_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Hook",
+      "module_source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+      "module_unchanged_since_layout_baseline": false,
+      "movie_capture_fingerprint": "2368fb26e7af9078ed56cfb19f5c39a6dbca011eeb0f6a992e2c0e6b9af56493",
+      "global_fingerprint_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Probability",
+      "module_source_sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Probability",
+      "module_source_sha256": "f7da930ffe84df3d9588e7ad1f668d65296ee6c70f0a2ca9dd016db398f31620",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Surprise",
+      "module_source_sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Surprise",
+      "module_source_sha256": "5adfb85e1094e56f8d81484fc2b04af0e8efbc3c3aab88d4fe8bb3a6c0eea3e8",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Entropy",
+      "module_source_sha256": "d94b1c36f6d17aa4d6b9fce81baef36b6f7c07365ad402764a31b2be1264a25d",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Entropy",
+      "module_source_sha256": "d94b1c36f6d17aa4d6b9fce81baef36b6f7c07365ad402764a31b2be1264a25d",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Prefix",
+      "module_source_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Prefix",
+      "module_source_sha256": "f04891be193facd72a452da6883c8903d9b74b922925c18c6db2d5fc7035049d",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Huffman",
+      "module_source_sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Huffman",
+      "module_source_sha256": "a6ce935795f793e88ab20e5c58d882fbf9cef09e4ab45cdab14d7ae5b63d558a",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ]
+    },
+    {
+      "language": "en",
+      "scene": "Typical",
+      "module_source_sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Typical",
+      "module_source_sha256": "1b286589e06f7017cf6a73649cea9adbee87eab0a23552bab243702bd3dbbbb4",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "CrossEntropy",
+      "module_source_sha256": "723e2f7524715fb14a4e80bf57e3bac19484c7f3783849b305bf8908c175c1cd",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "CrossEntropy",
+      "module_source_sha256": "723e2f7524715fb14a4e80bf57e3bac19484c7f3783849b305bf8908c175c1cd",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Arithmetic",
+      "module_source_sha256": "ccfa93f40793afa1dd94101dd3a0cc39d805a4a641b1b81d7f5721aa4e7d0808",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ]
+    },
+    {
+      "language": "zh",
+      "scene": "Arithmetic",
+      "module_source_sha256": "ccfa93f40793afa1dd94101dd3a0cc39d805a4a641b1b81d7f5721aa4e7d0808",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Counting",
+      "module_source_sha256": "49e5b4c3ff0d7798de0e79cfc30015ed64076ebfb3e01efb6c2b54dd7291a629",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Counting",
+      "module_source_sha256": "49e5b4c3ff0d7798de0e79cfc30015ed64076ebfb3e01efb6c2b54dd7291a629",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Shannon1951",
+      "module_source_sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Shannon1951",
+      "module_source_sha256": "8205f3f49ec4ed1c110190fd7ed0aa5e927d06338cf71c79a162cc1f73dd8901",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Likelihood",
+      "module_source_sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Likelihood",
+      "module_source_sha256": "d585fd9b30c4a820c2efe00dd806894d2d80ca2d2522211021fc880e2c4a9b8f",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Information",
+      "module_source_sha256": "25cee016e1730c189581b2e5b3cc881327d1773f6212f26ac5db2abc8132d013",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Information",
+      "module_source_sha256": "25cee016e1730c189581b2e5b3cc881327d1773f6212f26ac5db2abc8132d013",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Knowledge",
+      "module_source_sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Knowledge",
+      "module_source_sha256": "7e9ef6397081d6b8d995244d8f657c321a68c7e304f3b208d51034ea5e2e1c5f",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Units",
+      "module_source_sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Units",
+      "module_source_sha256": "92278e7d7fed5ebda30b79e13900c142d05c91b27280a2fcd1dd23de537f3c46",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "en",
+      "scene": "Scoreboard",
+      "module_source_sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Scoreboard",
+      "module_source_sha256": "210d1fe24556b03d4f2a644d144922a39da9003f522978f11fcc2ad55ddcc449",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "85926ba513a624bac1a38eb8a9455b82c5978b8e1ef01f3f87f667ba21f18caf",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ]
+    },
+    {
+      "language": "en",
+      "scene": "Outro",
+      "module_source_sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    },
+    {
+      "language": "zh",
+      "scene": "Outro",
+      "module_source_sha256": "8b2c34d65239e80ef7b1a4ee2ade03ab4cdfd1dbd496888ffa008b6d163faf01",
+      "module_unchanged_since_layout_baseline": true,
+      "movie_capture_fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+      "global_fingerprint_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "warnings": []
+    }
+  ],
+  "limitations": [
+    "Only actually collected caption strings are compared; unexecuted branches remain unverified.",
+    "Whole-part fingerprints remain conservative and are not rewritten.",
+    "Hook changed after baseline; its complete repaired renders and focused pulse evidence are reviewed separately."
+  ]
+}

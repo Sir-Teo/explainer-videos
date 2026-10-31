@@ -142,8 +142,8 @@ class CrossEntropy(VoiceoverScene):
         t2.next_to(b2, DOWN)
         t1.shift(LEFT * max(0.0, t1.get_right()[0] - t2.get_left()[0] + 0.4))
         nums = VGroup(
-            label(rf"swapped \texttt{{e}}, \texttt{{z}}: \ ${CE:.2f} = {H:.2f} + {KL:.2f}$", font_size=26),
-            label(rf"letters guessed uniformly: \ ${math.log2(27):.2f} = {lt['H_passage']:.2f} + {lt['KL_uniform']:.2f}$"
+            label(rf"swapped \texttt{{e}}, \texttt{{z}}: \ ${CE:.2f} \approx {H:.2f} + {KL:.2f}$", font_size=26),
+            label(rf"letters guessed uniformly: \ ${math.log2(27):.2f} \approx {lt['H_passage']:.2f} + {lt['KL_uniform']:.2f}$"
                   r" \ (the Falcon passage)", font_size=26),
             label(rf"letter frequencies of the $30$ books, used on the passage: \ $D_{{\mathrm{{KL}}}} = "
                   rf"{lt['KL_books']:.3f}$", font_size=26),
