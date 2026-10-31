@@ -96,5 +96,12 @@
     "compressed_bytes": 4040,
     "uncompressed_sha256": "3a2354e814488fe3b03a7c5f834eb50d8b1de4e7b4131aaf3ffe2b94e93f5c04",
     "uncompressed_bytes": 26031
+  },
+  {
+    "file": "summary-before-hook-mask.json.gz",
+    "compressed_sha256": "4c863855148784aaa5bb37262467b50eeb3890733c4da105dfb0f4b252fce3bc",
+    "uncompressed_sha256": "900a7f288055504094afff4b8d4ee6e9be9d8db565e622324fe5379d40254f83",
+    "compressed_bytes": 4948,
+    "uncompressed_bytes": 30028
   }
 ]

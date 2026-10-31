@@ -250,9 +250,17 @@
     },
     {
       "file": "README.md",
-      "bytes": 4356,
-      "sha256": "17b64e0e2e7bd61c22776ed4461081d5eb8771ec5d738974756a0e523cdf3a4b",
-      "encoding": "utf-8"
+      "bytes": 4718,
+      "sha256": "d16a68d5a671f4b6952bbb05c0dc6d107e891f7271dfc1f3c122b030cde9833d",
+      "encoding": "utf-8",
+      "publisher_amendment": "Library identity appended after original visual-review packaging; raw evidence unchanged."
+    },
+    {
+      "file": "library-identity.json",
+      "bytes": 764,
+      "sha256": "7fb000820b74a63e95fe5e213129f2f71f75d48de0a229e8bfe6939e8fa719f6",
+      "content_type": "application/json",
+      "publisher_amendment": "Verified completed Library create and local version attribute."
     }
   ]
 }
