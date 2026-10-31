@@ -1,11 +1,11 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31 18:47 UTC. Progress, **not full-series production approval**.
+Observed: 2026-10-31 19:03 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
-`6b3e5af` (actual bilingual retrieval-branch regression and executed ten-test receipt). The preceding
-Part 3 methodology/cache repair batch passed all 199 then-existing repository tests; subsequent targeted
-scene, narration and caption-helper checks passed. Each receipt describes its actual test scope.
+`11f5c35` (rigid-transform and transition source repairs). All216repository tests pass after this batch,
+including three portable rotation invariants; actual41-phase Manim path fixtures also pass. Each receipt
+describes its actual scope, and repaired movie appearance remains separately tracked.
 
 Part 1: all 17 scenes, both languages, have endpoint captures and complete silent renders. The baseline temporal
 review covered 15,194 selected times from 109,941 automatically decoded source frames, with exact frame-hash
@@ -30,8 +30,8 @@ replacement failed before preparation, so the existing Library video remains the
 
 Part 3: all 19 scene sources have been reviewed. Original recall, two-tower inference, JL-confidence and SGNS
 lineage defects are repaired and tested, alongside additional technical/narration findings. Eight of 17 numerical
-items are complete. The spectrum task is training the shared novels model; latest observed step is 1,971/2,929,
-validation loss 3.682, cumulative 2.704 seconds/step. Durable checkpoints continue; later numerical items remain.
+items are complete. The spectrum task is training the shared novels model; latest observed step is 2,263/2,929,
+validation loss 3.632, cumulative 2.787 seconds/step. Durable checkpoints continue; later numerical items remain.
 The running producer and consumed inputs are frozen. No scene renders against unfinished data.
 
 The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent motion review is underway in
@@ -39,7 +39,8 @@ manifest order. English Einsum covers 390 selected times and separately had nati
 stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
 matrix heading protection, projection legend margins, PCA viewport and roundoff annotation. Motion review found
 additional Hook label-blink/footer collisions, a Vectors transition clip, a Power emphasis collision and a grid/header
-collision. Source inspection also confirmed that linear interpolation wrongly shrinks supposed rotations in Matrices,
+collision. Hook’s fresh EN356/ZH374 selected-time regression now confirms its two repairs;
+other affected-scene regressions are running. Source inspection also confirmed that linear interpolation wrongly shrinks supposed rotations in Matrices,
 Eigen and SVD. Repairs require fresh scoped regression; unfinished fixes are not approved. An initial negative-zero
 review note was retracted after native inspection confirmed the displayed value is +0.00; it is not a proven defect.
 
