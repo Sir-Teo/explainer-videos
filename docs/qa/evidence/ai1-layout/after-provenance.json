@@ -1,0 +1,38 @@
+[
+  {
+    "image": "zh-prefix-after.png",
+    "source_frame": "renders/qa/series/ai1/zh/Prefix/023_00236.8s.png",
+    "sha256": "f4556d4d555228041841502ab02ace7b2b59f5feba9a2dd640a6c14f061fb13c",
+    "capture_fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+    "status": "passed",
+    "warnings": [],
+    "scope": "native endpoint visually inspected; no full playback claim"
+  },
+  {
+    "image": "en-prefix-after.png",
+    "source_frame": "renders/qa/series/ai1/en/Prefix/022_00223.0s.png",
+    "sha256": "8ad7ee7f5da41cb709456fd52d8eadb9cd4e70fe7d228f07123e0e91f553c6a7",
+    "capture_fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+    "status": "passed",
+    "warnings": [],
+    "scope": "native endpoint visually inspected; no full playback claim"
+  },
+  {
+    "image": "en-probability-after.png",
+    "source_frame": "renders/qa/series/ai1/en/Probability/008_00086.7s.png",
+    "sha256": "f1ace905d4b6157f6018304eb15bc2a1ca8d6b881ae9f71d327ef842dd500391",
+    "capture_fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+    "status": "passed",
+    "warnings": [],
+    "scope": "native endpoint visually inspected; no full playback claim"
+  },
+  {
+    "image": "zh-probability-after.png",
+    "source_frame": "renders/qa/series/ai1/zh/Probability/008_00092.3s.png",
+    "sha256": "b502cfed28da9d63c570ace9abba5e4032ab52cf71bf0076cddabc79182bc26a",
+    "capture_fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+    "status": "passed",
+    "warnings": [],
+    "scope": "native endpoint visually inspected; no full playback claim"
+  }
+]

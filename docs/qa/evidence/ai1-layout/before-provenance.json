@@ -1,0 +1,18 @@
+[
+  {
+    "image": "zh-prefix-before.png",
+    "source_frame": "renders/qa/series/ai1/zh/Prefix/023_00236.8s.png",
+    "sha256": "7ca153e1b72994405e399969e6484b7d3693948605c681a627d2c352a7a5fed4",
+    "capture_fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+    "status": "passed",
+    "scope": "one captured endpoint; not continuous playback"
+  },
+  {
+    "image": "en-probability-before.png",
+    "source_frame": "renders/qa/series/ai1/en/Probability/008_00086.7s.png",
+    "sha256": "4a2eae37013e6227d70cba30e11fde8779d1c5b81732e7e29d2f59ff2994ede5",
+    "capture_fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+    "status": "passed",
+    "scope": "one captured endpoint; not continuous playback"
+  }
+]
