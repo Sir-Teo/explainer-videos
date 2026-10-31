@@ -252,7 +252,7 @@ class Likelihood(VoiceoverScene):
             w.scale(1.15).move_to(DOWN * 0.35)
         res = VGroup(
             label(r"the model's guess, minus the truth", font_size=32, color=C.BITS),
-            mtex(r"\text{averaged over the data:} \quad \nabla_z \mathcal{L} = q - \hat p", font_size=34, color=GREY_A),
+            mtex(r"\text{shared-logit toy model:} \quad \nabla_z \mathcal{L} = q - \hat p", font_size=32, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.55)
         # a derivative, pictured: nudge one score up a little, and the loss moves by (slope) x (nudge)
         zb = Rectangle(width=0.5, height=0.9, stroke_width=0, fill_color=Q, fill_opacity=0.9).move_to([-0.8, 0.45, 0])
@@ -293,9 +293,9 @@ class Likelihood(VoiceoverScene):
                 morph(self, eqs[k], eqs[k + 1], run_time=1.2)
             self.play(FadeOut(deriv))
         with self.voiceover(
-            "In words: the model's guess, minus the truth. <bookmark mark='a'/> Averaged over a dataset, the "
-            "gradient is q minus p hat. Push up the scores of what happened more often than the model expected; "
-            "push down the rest. Every language model, however large, ends in exactly this step. "
+            "In words: the model's guess, minus the truth. <bookmark mark='a'/> For our shared-logit toy model, "
+            "averaging gives q minus p hat. With varying contexts, average each example's q minus its one-hot answer. "
+            "To update network parameters, backpropagate these logit derivatives through the network. "
             "<bookmark mark='b'/> Following it downhill, one small step at a time, is gradient descent, and it "
             "returns in Parts 4, 9 and 11."
         ) as vo:

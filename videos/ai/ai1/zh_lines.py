@@ -166,7 +166,7 @@ ZH = {
         "除了单位的选择，熵是唯一自洽的不确定性度量。这就是为什么这个系列的每一部分，都用这种方式来衡量信息。",
 
     "In general, with K outcomes":
-        "一般来说，有K种结果时，熵至多是以2为底K的对数。<bookmark mark='a'/>证明只需要一个不等式。对数函数向下弯，所以对数的平均值，至多等于平均值的对数：詹森不等式。<bookmark mark='b'/>熵是对数的平均值。<bookmark mark='c'/>换成平均值的对数，<bookmark mark='d'/>而p分之1的平均值，正好就是结果的个数。<bookmark mark='e'/>所以H至多是log K，当且仅当每种结果同样可能时取等号。低于它的那段差距，就是香农所说的冗余：猜测者可以利用的结构。",
+        "一般来说，有K种结果时，熵至多是以2为底K的对数。<bookmark mark='a'/>证明只需要一个不等式。对数函数向下弯，所以对数的平均值，至多等于平均值的对数：詹森不等式。<bookmark mark='b'/>熵是对数的平均值。<bookmark mark='c'/>换成平均值的对数，<bookmark mark='d'/>而p分之1的平均值，正好就是结果的个数。<bookmark mark='e'/>所以H至多是log K，当且仅当每种结果同样可能时取等号。这段差距，衡量了猜测者可以利用的结构。香农定义的冗余，是这个差距占最大熵的比例，也就是除以log K。",
 
     'f"Entropy also works when we know something.':
         "当我们知道一些东西时，熵同样适用。每一个前一个字母，都让下一个字母有自己的分布和熵。<bookmark mark='a'/>为每个前一个字母画一根柱子，宽度是这个字母有多常见，高度是它后面那个字母的熵。<bookmark mark='b'/>在q之后，几乎为零：{hq:.2f}比特。<bookmark mark='c'/>在空格之后，一个新词开始了：{hs:.2f}比特。",
@@ -278,7 +278,7 @@ ZH = {
         "所以散度永远不会是负的，只有当q等于p时才为零，这时詹森不等式取等号。<bookmark mark='a'/>真相就是最好的编码。这个不等式以约西亚·威拉德·吉布斯命名，他在统计力学里用过它。<bookmark mark='b'/>它还还上了第3章欠下的债：知道X之后熵的下降，也是一个散度，所以不可能是负的。平均来说，知道得更多永远没有坏处。<bookmark mark='c'/>这个下降，也就是互信息，会有自己的一章。",
 
     "Here is why this matters for AI.":
-        "这就是它对AI的意义所在。<bookmark mark='a'/>每一个大语言模型训练时要最小化的损失，正是这个：对真实文本的每一个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。<bookmark mark='n'/>通常用自然对数ln，所以单位是奈特：1奈特大约是1.44比特。<bookmark mark='b'/>它就是世界上的文本和模型之间的交叉熵。<bookmark mark='c'/>训练只能缩小散度；<bookmark mark='d'/>语言本身的熵，是任何模型都无法低于的下限。",
+        "这就是它对AI的意义所在。<bookmark mark='a'/>自回归语言模型预训练时，用的就是这个下一个词元预测损失：对真实文本的每一个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。<bookmark mark='n'/>通常用自然对数ln，所以单位是奈特：1奈特大约是1.44比特。<bookmark mark='b'/>它就是世界上的文本和模型之间的交叉熵。<bookmark mark='c'/>训练只能缩小散度；<bookmark mark='d'/>语言本身的熵，是任何模型都无法低于的下限。",
 
     '"One more property, which will matter a lot later':
         "还有一个性质，后面会非常重要：散度不是对称的。假设真实的p有两个峰，而我们的模型q只能是一条钟形曲线：一个平滑的鼓包，由它的中心和宽度决定。哪条钟形曲线最好？这取决于我们按哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚见过的训练损失，<bookmark mark='b'/>{fit}",
@@ -326,7 +326,7 @@ ZH = {
     'f"against the exact coder\'s {ne}"': '而精确编码器是{ne}比特',
 
     'This is the hinge of the whole part.':
-        "这是整个这一部分的枢纽。<bookmark mark='a'/>把任何一个能预测的模型交给算术编码，就得到一个压缩器，每个符号大约花q分之1的对数那么多比特：文本的长度乘以模型的交叉熵。<bookmark mark='b'/>反过来，任何压缩器都定义了一个模型：一段要花l比特的文本，就被赋予了2的负l次方的概率。<bookmark mark='c'/>预测得好和压缩得好，是同一种本事。在第15章，一个语言模型会变成压缩器。",
+        "这是这一部分的枢纽。<bookmark mark='a'/>把能预测的模型交给算术编码，就能得到压缩器，每个符号大约花log的1除以q比特：文本长度乘以模型的交叉熵。<bookmark mark='b'/>在固定消息集合上的完备前缀码，给出归一化的概率：2的负码长次方。其他唯一可解码的码，给出的权重总和至多为1；要把它们变成下一个符号的概率，还需要归一化，以及不同前缀之间的一致性。<bookmark mark='c'/>这就是预测与压缩的联系。第15章里，我们把语言模型做成压缩器。",
 
     # ------------------------------------------------------------------ Counting
     'Chapter nine. So far, our models have only counted.':
@@ -342,7 +342,7 @@ ZH = {
         "我们来给它们打分。对每一种上下文长度，从0个字母到14个，量一量每个字母的比特数。<bookmark mark='a'/>先在它数过的那些书上。上下文越多，比特越少，在{ks[-1]}个字母时，降到每个字母{plug[-1]:.2f}比特。我们在没有上下文和一个字母上下文时的数字，{plug[0]:.2f}和{plug[1]:.2f}，<bookmark mark='b'/>和香农1951年根据印刷的统计表做的估计{sh27[1]:.2f}和{sh27[2]:.2f}很接近。",
 
     'f"But on new text, the Falcon passage':
-        "但在新的文本，也就是《马耳他之鹰》的段落上，<bookmark mark='a'/>情况就不同了。上下文一开始有帮助：<bookmark mark='b'/>最好的是{best}个字母的上下文，每个字母{test[best]:.2f}比特。再往后就变差了：{beyond}",
+        "但在新文本，《马耳他之鹰》的段落上，<bookmark mark='a'/>故事就不同了。更多上下文起初有帮助：<bookmark mark='b'/>在试过的阶数里，这个段落上最低的损失出现在{best}个字母的上下文，每字母{test[best]:.2f}比特。这个阶数是在给该段落打分之后选出的，不是用验证文本选出的。再往后，就变差了：{beyond}",
 
     'f"with {ks[-1]} letters of context it\'s worse':
         '用{ks[-1]}个字母的上下文时，甚至比只知道字母频率还差。',
@@ -357,7 +357,7 @@ ZH = {
         "这个补救办法比计算机还要古老。1814年，皮埃尔–西蒙·拉普拉斯问：如果一件事在n次尝试中发生了s次，下一次它发生的可能性有多大？<bookmark mark='a'/>假设在观察之前，0到1之间的每一个机会都同样可信。按每个机会对你所见的解释程度给它加权，<bookmark mark='b'/>答案就是s加1，除以n加2。<bookmark mark='c'/>他的例子是日出：五千年，1826213天，得出明天太阳升起的赔率是1826214比1。<bookmark mark='d'/>对我们的27个符号：给每个计数加1，就没有哪个会得到零概率。<bookmark mark='e'/>把加1换成加α，α在留出的文本上选定，就是让我们的曲线保持有限的那种平滑。",
 
     'f"How much does alpha matter?':
-        "α有多重要？<bookmark mark='a'/>这是从万分之一到10的每一个α，在四种上下文长度下，在《马耳他之鹰》段落上的得分。<bookmark mark='b'/>{short_said}：它的上下文都见过几百万次。<bookmark mark='c'/>用{ol}个字母的上下文时，段落里{100 * un:.0f}%的字母，跟在一个书里从没在它后面出现过这个字母的上下文之后，而大多数上下文只见过寥寥几次。给每个计数加1，就淹没了证据：拉普拉斯法则每个字母比在留出文本上选出的α，也就是{A[best[ol]]:.2f}，多花{cost:.2f}比特。好的平滑，关乎你没见过的东西；第7部分会好好地回答它。",
+        "alpha到底有多重要？<bookmark mark='a'/>这里把alpha从万分之一到10都试一遍，在4种上下文长度上，看《马耳他之鹰》段落的损失。<bookmark mark='b'/>{short_said}：常见的单字母上下文有充足的例子。<bookmark mark='c'/>但到了{ol}个字母的上下文，段落中{100 * un:.0f}%的字母，都跟在书里从没出现过这种后续字母的上下文后面，而且大多数上下文只见过几次。给每项都加1，反而淹没了证据：拉普拉斯法则，比用留出文本选出的alpha，也就是{A[best[ol]]:.2f}，每字母多花{cost:.2f}比特。好的平滑，要处理的是没见过的东西；第7部分会认真回答它。",
 
     "For one letter of context, Laplace's rule is as good as anything":
         '对一个字母的上下文，拉普拉斯法则不比任何别的差',
@@ -410,7 +410,7 @@ ZH = {
         "要学习，网络需要知道每个分数该往哪边推。<bookmark mark='n'/>这正是导数衡量的东西：把一个输入推一点点，其他输入保持不动，输出会变化多少。<bookmark mark='a'/>用这些分数写出正确答案y的意外度。<bookmark mark='b'/>对分数z k求导。第一项在k等于y时给出负1。第二项就是softmax本身。<bookmark mark='c'/>所以导数是：对正确答案，q k减1；对每个错误答案，就是q k。",
 
     "In words: the model's guess, minus the truth.":
-        "用一句话说：模型的猜测，减去真相。<bookmark mark='a'/>在整个数据集上平均，梯度就是q减去p帽。比模型预期出现得更多的，把它的分数往上推；其余的往下推。每一个语言模型，不管多大，最后一步都正是这样。<bookmark mark='b'/>沿着它一小步一小步地往下坡走，就是梯度下降，它会在第4、9和11部分再次出现。",
+        "用一句话说：模型的猜测，减去真实答案。<bookmark mark='a'/>对于这个共享同一组logit的玩具模型，取平均就得到q减去p帽。上下文不同时，要对每个样本的q减去它的独热答案，再取平均。要更新网络参数，还要把这些对logit的导数，沿网络反向传播。<bookmark mark='b'/>顺着它一步步走下坡，就是梯度下降；它会在第4、9和11部分再次出现。",
 
     # ------------------------------------------------------------------ Information
     'Chapter twelve. What the past tells you about the future.':
@@ -442,14 +442,14 @@ ZH = {
         '第13章。要猜得好，模型需要知道什么？',
 
     'f"Let\'s look at what a strong model knows that a weaker one doesn\'t.':
-        "我们来看看，一个强的模型知道什么，而弱的模型不知道。这是《马耳他之鹰》段落里的一段，切成了词元，<bookmark mark='a'/>每个都按2019年的GPT-2对它有多意外来着色：意料之中是暗的，出乎意料是亮的。<bookmark mark='b'/>再看同一段在2025年的Qwen3下的样子。它的方块{shade}：{tb:.0f}比特，而不是{ta:.0f}比特。",
+        "我们来看，一个较强的模型知道什么，是较弱的模型不知道的。这是《马耳他之鹰》段落里的一段，切成词元，<bookmark mark='a'/>每个都按2019年的GPT-2对它有多意外来着色：意料之中是暗的，出乎意料是亮的。<bookmark mark='b'/>再看同一段在2025年的Qwen3下的样子。这段话{shade}：{tb:.0f}比特，而不是{ta:.0f}。",
 
 
     '"Look where they differ. <bookmark mark=\'a\'/> " + brand':
-        "看看它们在哪里不同。<bookmark mark='a'/>{brand}<bookmark mark='b'/>再看“电话”这个词：GPT-2为它付出{bd['telephone'][0]:.1f}比特，Qwen3只要{bd['telephone'][1]:.1f}比特，因为两段之前，一个电话铃响了。<bookmark mark='c'/>只给Qwen3看这一段，“电话”这个词就要花它{alone:.1f}比特。它记得：上一章的长尾巴，在这里派上了用场。",
+        "看看它们在哪里不同。<bookmark mark='a'/>{brand}<bookmark mark='b'/>再看telephone：GPT-2为它付出{bd['telephone'][0]:.1f}比特，Qwen3付出{bd['telephone'][1]:.1f}，这时给了前面的段落，其中包括先前的电话铃声。<bookmark mark='c'/>只给这一段，Qwen3要付出{alone:.1f}比特；给前面的段落，则是{with_:.1f}。这个对照表明，上下文有助于这一次预测，但它并没有单独确定，是前面哪一句话起了作用。",
 
     'f"After Bull, GPT-2 doesn\'t expect Durham':
-        "在Bull之后，GPT-2没料到Durham，{bd['Durham'][0]:.1f}比特，也没料到“烟草”这个词，{bd['tobacco'][0]:.1f}比特。Qwen3都料到了，{bd['Durham'][1]:.1f}和{bd['tobacco'][1]:.1f}：Bull Durham是一个真实的烟草品牌，它在训练中的某处学到了这一点。",
+        "在Bull后面，GPT-2并不期待Durham，要{bd['Durham'][0]:.1f}比特，也不期待tobacco，要{bd['tobacco'][0]:.1f}。Qwen3则分别只要{bd['Durham'][1]:.1f}和{bd['tobacco'][1]:.1f}。Bull Durham确实是一个烟草品牌。这与学到了关联相符，但不能证明它是怎样学到的。",
 
     "f'After Bull, Durham costs GPT-2":
         "在Bull之后，Durham花了GPT-2 {bd['Durham'][0]:.1f}比特，Qwen3 {bd['Durham'][1]:.1f}比特；“烟草”这个词，分别是{bd['tobacco'][0]:.1f}和{bd['tobacco'][1]:.1f}。Bull Durham是一个真实的烟草品牌。",
@@ -461,7 +461,7 @@ ZH = {
         "2025年的模型给“four”的是{100 * p4:.0f}%，给“five”的却有{100 * p5:.0f}%。",
 
     'f"So here\'s the ladder.':
-        "所以，这就是阶梯。<bookmark mark='a'/>字母频率让你降到{H0:.1f}比特。拼写，也就是几个字母的上下文，降到{Hk:.1f}。<bookmark mark='b'/>再往下，模型就得学会词和语法，关于世界的事实，以及故事到目前为止发生了什么，<bookmark mark='c'/>一直降向人所需要的大约1比特。<bookmark mark='d'/>没有人告诉模型去学这些。把它推到那里的，只是一个数：它为每次猜测付出的比特。要预测文本，它就得为写出这些文本的世界建模。",
+        "这就是阶梯。<bookmark mark='a'/>字母频率，得到{H0:.1f}比特；拼写，也就是几个字母的上下文，得到{Hk:.1f}。<bookmark mark='b'/>更好的预测，可以得益于词语、语法、事实，以及故事之前发生过什么。这些是对测得改进的解释，并不是只靠压缩分数就证明了那些能力。<bookmark mark='c'/>香农的受试者，给我们提供了每字母接近1比特的历史比较。<bookmark mark='d'/>训练会奖励一切能减少猜测比特数的办法，包括有用的结构和上下文。",
 
     # ------------------------------------------------------------------ Units
     'Chapter fourteen. Before the final scores, a word about units.':
@@ -480,7 +480,7 @@ ZH = {
         "按词元算，计数模型是{cnt['bits_per_token']:.2f}比特，GPT-2是{g2['bits_per_token']:.2f}；按字符算，是{cnt['bpc']:.2f}和{g2['bpc']:.2f}。",
 
     "The field measures it this way too.":
-        "这个领域也是这样衡量的。2024年，香港科技大学和腾讯的研究者拿来30个公开的语言模型，<bookmark mark='a'/>测量每个模型压缩新收集的网页、代码和论文的本事，单位是每字符比特数，因为每词元比特数没法相互比较；<bookmark mark='b'/>再把它和这些模型在12个关于知识、编程和数学的基准测试上的平均分放在一起。<bookmark mark='c'/>这些点几乎落在一条直线上，相关系数是负0.93。一个模型压缩得越好，它能做的就越多。",
+        "这个领域也是这样衡量的。2024年，香港科技大学和腾讯的研究者，在12个基准测试中研究了31个公开语言模型。<bookmark mark='a'/>他们测量模型压缩新收集的网页、代码和论文的本事，用每字符比特数，因为各模型的词元大小不同。<bookmark mark='b'/>通用模型接受跨基准测试的评估；专门的代码和数学模型，只在各自的领域里评估。压缩语料也和那些领域相匹配。<bookmark mark='c'/>整体比较报告的相关系数是负0.93。这是该研究里观察到的关联，不是对每个模型或任务的保证。",
 
     # ------------------------------------------------------------------ Scoreboard
     'Chapter fifteen. Time to keep score.':
@@ -490,7 +490,7 @@ ZH = {
         "这是记分牌，针对印刷原样的《马耳他之鹰》段落：大写、标点，什么都在。<bookmark mark='a'/>纯文本每个字符大约花8比特。<bookmark mark='b'/>这段文字只用了{raw['passage_symbols']}种不同的符号，所以在它们之间盲猜，要花{b['uniform']:.2f}比特。<bookmark mark='c'/>在我们30本书里数出的字母频率，把它降到{b['order0']:.2f}，<bookmark mark='d'/>一个字符的上下文，降到{b['order1']:.2f}。",
 
     'f"Next, the compressors on your computer.':
-        "接下来，是你电脑上的压缩器，每字符比特数依次是：<bookmark mark='a'/>{comp_said}。它们事先对英语一无所知，只从这段文字本身边读边学。<bookmark mark='b'/>我们最好的计数模型，先读了30本书，看前面{k}个字符，得到{b['best']:.2f}。",
+        "接下来，是电脑上的压缩器。<bookmark mark='a'/>{comp_said}。它们事先对英语一无所知，只从这个段落本身边读边学。<bookmark mark='b'/>在试过的计数阶数中，这个段落上最低的损失，使用前面{k}个字符，得到{b['best']:.2f}。alpha是用验证文本选的，但上下文长度，是在给该段落打分后选出的。这是探索中找到的最低值，不是盲测留出集上的胜者。",
 
     'f"And then, the neural language models.':
         "然后，是神经语言模型。<bookmark mark='a'/>2019年的GPT-2，最小的版本：{b['GPT-2 small']:.2f}比特。它最大的版本，{gxl:.2f}。<bookmark mark='b'/>2025年的Qwen3：6亿参数的模型{q06_said}，<bookmark mark='c'/>40亿参数把它降到每个字符{b['Qwen3-4B']:.2f}比特。<bookmark mark='d'/>作为对比，香农对人的估计，只算字母，是{hum['lo']:.1f}到{hum['hi']:.1f}。",
@@ -502,23 +502,23 @@ ZH = {
 
 
     'f"Arithmetic coding turns any predictor into a compressor':
-        "算术编码能把任何一个预测者变成压缩器，所以我们造了一个。<bookmark mark='a'/>GPT-2 small一次一个词元地读《马耳他之鹰》段落的开头，把概率交给第8章那个32位编码器。出来的是{nb}字节，只比GPT-2自己的意外度多{z['bits'] - z['ideal']:.1f}比特，<bookmark mark='b'/>{ok_said}<bookmark mark='c'/>同样这{z['chars']:,}个字符，xz需要{comp['xz']:,}字节：是它的{ratio:.1f}倍。",
+        "算术编码能把预测器变成压缩器，所以我们真的造了一个。<bookmark mark='a'/>GPT-2 small逐个词元读入《马耳他之鹰》的开头，驱动第8章的32位编码器。输出长度已知的载荷，连同补齐位，装进{nb}字节，比GPT-2本身的意外度多{8 * nb - z['ideal']:.1f}比特。这不包含模型，也不包含文件封装。<bookmark mark='b'/>{ok_said}<bookmark mark='c'/>同样的{z['chars']:,}个字符，xz需要{comp['xz']:,}字节，是它的{ratio:.1f}倍。",
 
-    'and decoded it back, with a second run of the model, letter for letter.':
-        '再让模型重新跑一遍，把它一个字母不差地解码回来。',
+    'A second run of the model decoded it back, letter for letter.':
+        '第二次独立运行模型，逐字解码还原了原文。',
 
-    'but decoding it back with a second run of the model did not reproduce it exactly':
-        '可是让模型重新跑一遍来解码，没能把它原样还原：两次运行在某个概率的最后几位上有了分歧。',
+    'Decoding with a second run did not reproduce the text exactly; this run is not a verified round trip.':
+        '第二次运行模型解码时，没有精确还原原文；这次运行并没有通过往返验证。',
 
     'f"There\'s a catch:':
-        "这里有个问题：解压器需要模型，而模型很大。<bookmark mark='a'/>GPT-2 small把整段文字压到{size_g2 / 1000:.1f}KB，可它的权重要占{mb:,.0f}MB：把权重算进去，文件是这段文字的{adj['GPT-2 small']:,.0f}倍。<bookmark mark='b'/>2024年，DeepMind一篇题为《语言建模就是压缩》的论文，用一个700亿参数的模型压缩1GB的维基百科：压到原来大小的8.3%，而gzip是32%，xz是23%；把它的权重算进去，就是14000%。尽管是在文本上训练的，它压缩图像和音频也胜过PNG和FLAC。<bookmark mark='c'/>赫特奖设立于2006年，它把一切都算进去：2024年9月创下的纪录，把那1GB连同解压器一起，装进110.8MB，每个字符0.89比特，靠的是把许多预测者混合起来。<bookmark mark='d'/>预测就是压缩，而预测者本身的大小，也是账单的一部分。",
+        "但这里有个问题：解压器需要模型，而模型很大。<bookmark mark='a'/>从对数损失估计，GPT-2 small给整段文字的编码大小为{size_g2 / 1000:.1f}KB，并不是整段文字都做了往返验证。每个参数按2字节算，权重还要加上{mb:,.0f}MB：合起来，估计的两部分编码大小，是段落的{adj['GPT-2 small']:,.0f}倍。<bookmark mark='b'/>2024年，DeepMind一篇题为《语言建模就是压缩》的论文，用一个700亿参数的模型压缩1GB的维基百科：压到原来大小的8.3%，而gzip约32%，xz约23%；把权重算进去，就是14000%。虽然在文本上训练，在论文测试的图像小块和音频样本上，它也胜过PNG和FLAC。<bookmark mark='c'/>赫特奖设立于2006年，它把压缩器和自解压档案都算进去。我们在2026年10月31日查看的官方表格，列出弗拉基米尔·伊万诺夫2026年7月24日提交的作品：总共100.4MB，约为每个输入字节0.80比特。<bookmark mark='d'/>预测就是压缩，预测器本身的大小，也是账单的一部分。",
 
     "And the board isn't finished:":
         "记分牌还没写完：<bookmark mark='a'/>第7部分有更好的计数，<bookmark mark='b'/>第9部分有一个神经网络，<bookmark mark='c'/>第10部分有一个带记忆的网络，<bookmark mark='d'/>第13部分有我们自己的小Transformer，都在这些书上训练，在这一页上打分。",
 
     # ------------------------------------------------------------------ Outro
     'f"Let\'s take stock.':
-        "我们来盘点一下。猜测就是概率分布；链式法则给一整段文本打分。意外度必须是对数，而熵是唯一自洽的不确定性度量。克拉夫特的预算约束着每一个编码，霍夫曼编码是其中最好的，而长的典型序列能达到熵，却不能更低。错误的模型要付出交叉熵的代价。算术编码让预测和压缩成了同一回事，GPT-2压缩了我们的段落{back}。计数用失败教会了我们泛化，互信息则告诉我们，文本能记住多远的过去。",
+        '我们来回顾一下。猜测就是概率分布；链式法则给整段文本打分。意外度必须是对数，熵是唯一一致的不确定性度量。克拉夫特的预算限制唯一可解码的码；霍夫曼在符号编码中最优，而长分块的平均码长可以接近熵。用错模型，代价就是交叉熵。算术编码把预测和压缩连在一起；GPT-2把段落里一个已知长度的开头压缩下来，{back}。计数模型用失败教会我们泛化，互信息则展示了文本在多远的距离上还存在依赖。',
 
 
     'Almost everything here comes back.':
@@ -532,6 +532,7 @@ ZH = {
 
     'This part followed the first chapters of Cover and Thomas':
         '这一部分沿着科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推理与学习算法》的前几章展开，两本书都走得远得多。这些论文都值得一读，先从香农的那两篇开始。感谢观看，第2部分见。',
+    'but its independent decoding failed, so that run is not a verified round trip': '但独立解码失败，所以这次运行并没有通过往返验证',
 }
 
 PHRASES = {
@@ -552,6 +553,9 @@ PHRASES = {
     'already matches the largest GPT-2': '已经和最大的GPT-2持平',
     'already beats the largest GPT-2': '已经超过了最大的GPT-2',
     'under one': '1以下',
-    'and decoded it back, letter for letter': '，又一个字母不差地把它解码了回来',
+    'and decoded it back, letter for letter': '并且逐字解码还原了原文',
     'to a fraction of what xz needs': '，只用了xz所需的一小部分',
+    'less surprising overall': '总体意外度更低',
+    'no less surprising overall': '总体意外度并不更低',
+    'but its independent decoding failed, so that run is not a verified round trip': '但独立解码失败，所以这次运行并没有通过往返验证',
 }

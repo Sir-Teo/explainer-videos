@@ -108,7 +108,9 @@ class Shannon1951(VoiceoverScene):
                  color=C.CONTEXT),
             label(r"the lower bound requires ideal probability ordering", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.6, 0])
-        own = label(rf"(its own probabilities, coded directly: ${load('orders')['best_bits']:.2f}$)", font_size=22,
+        baseline = load("orders")
+        baseline_k = int(baseline["best"])
+        own = label(rf"comparison: smoothed order-${baseline_k}$ model, ${baseline['best_bits']:.2f}$ bits", font_size=21,
                     color=GREY_B).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
         lsrc = note(r"lower bound: \ Shannon (1951), for an ideal guesser").next_to(own, DOWN, buff=0.2).align_to(rows, LEFT)
         tag = computed_tag()

@@ -21,7 +21,7 @@ text we have. A hook, fifteen chapters and an outro:
   p and height log₂ 1/p): 4.08 bits for letters; the coin; Shannon's three requirements (1948) and the grouping rule, checked on his
   example and on the letters (space / vowel / consonant: 1.48 + 0.307 × 2.20 + 0.502 × 3.85 = 4.08); his Theorem 2,
   sketched (A(sᵐ) = m A(s), A(n) = K log n, blocks of equal outcomes); H ≤ log₂ K by Jensen on the entropy dome
-  (log₂ 27 = 4.75; the gap is redundancy);
+  (log₂ 27 = 4.75; the gap is absolute redundancy, and dividing it by log₂ 27 gives Shannon's redundancy);
   conditional entropy as a mosaic: 3.33 bits given the previous letter.
 * **4. Prefix codes and the Kraft–McMillan inequality.** Fixed-length codes; prefix-free codes as trees, decoding;
   Kraft's inequality proved on the full binary tree (codewords claim 16 + 8 + 4 + 2 + 1 + 1 of 32 leaves); the converse
@@ -43,7 +43,7 @@ text we have. A hook, fifteen chapters and an outro:
   (0.882 → 0.7041 bits against 0.7036); real text as a vanishing corner of all strings.
 * **7. Cross-entropy and KL.** A code as a set of bets (Huffman's lengths against the true p); coding with the wrong
   model as an area; H(p, q) = H(p) + D_KL(p‖q); Gibbs' inequality
-  by Jensen (and H(Y | X) ≤ H(Y)); cross-entropy as the training loss of every language model, nats; forward against
+  by Jensen (and H(Y | X) ≤ H(Y)); next-token cross-entropy for autoregressive pretraining, nats; forward against
   reverse KL, fitted by gradient descent to a two-peaked density, with the fits sliding (the wide fit scores 1.30 bits
   the other way, the narrow one 10.1).
 * **8. Arithmetic coding.** Huffman's whole bits (and the 27¹⁰⁰-entry table blocks would need); the chain-rule slivers continued for *the falcon*, the binary
@@ -54,7 +54,8 @@ text we have. A hook, fifteen chapters and an outro:
   24-bit counts, 1,192 extra bits with 8-bit counts; the numbers are in the cache, not in the film.)
 * **9. Learning by counting, and Laplace's rule.** Shannon's 1948 approximations, regenerated from the books; the
   counting rule; bits per letter against context length on the books (down to 0.27 at 14 letters) and on the Falcon
-  passage (best 2.02 at 5 letters, worse than letter frequencies at 14); unseen contexts; Laplace's rule of succession
+  passage (lowest observed test loss 2.02 at 5 letters, selected on this same passage; worse than letter frequencies
+  at 14); unseen contexts; Laplace's rule of succession
   (1814, the sunrise) derived from Euler's beta integral, add-one and add-α smoothing, swept over α at four context
   lengths (Laplace is best for one letter of context, and 0.35 bits worse at eight); generalization.
 * **10. Shannon's 1951 experiment.** The identical-twin argument (guess counts are a code); our counting guesser's
@@ -76,15 +77,19 @@ text we have. A hook, fifteen chapters and an outro:
   3.92 characters each; Qwen3: 5,217); total bits = tokens × bits per token = characters × bits per character; per
   token, the counting model looks better than GPT-2 (2.32 bits, perplexity 5.0, against 4.57 and 23.8), per character
   it is twice as bad; perplexity; bits per byte; Huang et al. (2024): bits per character on fresh text against the
-  average of twelve benchmarks across 31 models, Pearson −0.93.
+  relevant benchmark scores in a study of 31 models across twelve benchmarks (specialized models evaluated only
+  in their domains); the overall comparison reports Pearson −0.93.
 * **15. The scoreboard: language modeling is compression.** Bits per character on the passage as printed: plain text 8,
   uniform over its 61 symbols 5.93, letter frequencies 4.55, one character of context 3.58, gzip 3.31, xz 3.20,
   bzip2 2.92, the best counting model 2.32, GPT-2 small 1.17, GPT-2 XL 1.01, Qwen3-0.6B 1.02, Qwen3-4B 0.87; people
   0.6–1.3 (letters only); the gap from counting to under one bit is the series. GPT-2 small as a real compressor, round trip: the first 4,331 characters in 688 bytes
-  (xz: 2,180), decoded back exactly by a second run of the model. The catch, the model's size (248 MB for GPT-2 small:
+  (xz: 2,180), decoded back exactly by a second run of the model with known output length. This is a packed payload,
+  excluding model/framing; its padding-inclusive overhead is 4.7 bits over the model's surprise. Whole-passage coded
+  sizes are estimates from log loss, not additional completed round trips. The catch, the model's size (248 MB for GPT-2 small:
   11,572 times the passage); Delétang et al. (ICLR 2024) on enwik9 (Chinchilla 70B 8.3% against gzip 32.3% and LZMA2
   23.0%, 14,008% counting its weights); the Hutter Prize (2006; record of 24 July 2026: 100,424,672 bytes for enwik9,
-  decompressor included, 0.80 bits per character). The rows later parts fill.
+  compressor and self-extracting archive included, about 0.80 bits per input byte; official table checked
+  31 October 2026). The rows later parts fill.
 * **Recap** in eight computed pictures, where each idea comes back, six problems, Part 2's teaser, references.
 
 Every number the narration states is computed in [`compute.py`](compute.py) (or cited), and the narration is written
@@ -150,8 +155,9 @@ extends the verdict to every uniquely decodable code: with these lengths, some m
 **3. Two optimal codes.** Build a Huffman code for (0.4, 0.2, 0.2, 0.1, 0.1). Find two optimal codes with different
 lengths, and compare their average with H.
 
-*Solution.* Merge 0.1 + 0.1 = 0.2. Four weights of 0.4, 0.2, 0.2, 0.2 remain, and the tie decides the shape: merging
-the new 0.2 with an old one gives lengths (2, 2, 2, 3, 3); merging the two old 0.2's gives (1, 2, 3, 4, 4). Both
+*Solution.* Label the symbols a, b, c, d, e in the given probability order. Merge d + e into de of weight 0.2,
+then de + c into dec of weight 0.4. The remaining weights are a: 0.4, b: 0.2, dec: 0.4. Merging b with a gives
+lengths (2, 2, 2, 3, 3); merging b with dec instead gives (1, 2, 3, 4, 4). Finish by joining the last two nodes. Both
 average 2.2 bits (0.8 + 0.8 + 0.6, and 0.4 + 0.4 + 0.6 + 0.8), both are optimal, and H = 0.4 × 1.322 + 0.4 × 2.322 +
 0.2 × 3.322 = 2.122 bits: within 0.08 bits of the bound. The first code has the smaller spread of lengths, which
 matters for buffering, not for the average.
@@ -159,11 +165,13 @@ matters for buffering, not for the average.
 **4. Typical, but not likely.** A coin lands heads with probability 0.1; toss it 100 times. About how many typical
 sequences are there, how likely is each, and how does that compare with the likeliest single sequence?
 
-*Solution.* H = h(0.1) = 0.469 bits, so there are about 2^46.9 ≈ 1.3 × 10¹⁴ typical sequences, each with probability
-about 2^(−46.9) ≈ 7.7 × 10⁻¹⁵: together they hold nearly all the probability, though they are only a 2^(−53) sliver
-of the 2¹⁰⁰ sequences. The likeliest sequence, all tails, has probability 0.9¹⁰⁰ ≈ 2.7 × 10⁻⁵, about 3.5 billion
-times more than any typical one; but its surprise per toss is −log₂ 0.9 = 0.152 bits, far from 0.469. It is not
-typical, and you will essentially never see it: there are just too many sequences with about ten heads.
+*Solution.* H = h(0.1) = 0.469 bits. The leading-exponential AEP estimates are 2^(nH) = 2^46.9 ≈ 1.3 × 10¹⁴
+sequences and 2^(−nH) ≈ 7.7 × 10⁻¹⁵ probability per sequence, a roughly 2^(−53) share of all 2¹⁰⁰ strings at this
+exponential scale. These are not exact counts or probabilities at n = 100: a finite-n typical set requires a
+specified tolerance ε, and its total probability must then be calculated. For comparison, a sequence with exactly
+ten heads has probability 0.1¹⁰ × 0.9⁹⁰, while the single likeliest sequence, all tails, has probability
+0.9¹⁰⁰ ≈ 2.7 × 10⁻⁵. Its surprise per toss is −log₂ 0.9 = 0.152 bits; it lies outside the weak typical set whenever
+ε < 0.469 − 0.152 ≈ 0.317. A large relative probability for one sequence does not make its absolute probability large.
 
 **5. KL is not symmetric.** For p = (½, ½) and q = (¼, ¾), compute D_KL(p‖q) and D_KL(q‖p).
 
@@ -191,17 +199,19 @@ proportional to θˢ(1 − θ)ⁿ⁻ˢ, and the chance of a success next is the 
 
 **3. 两个最优码。** 为 (0.4, 0.2, 0.2, 0.1, 0.1) 构造霍夫曼编码。找出两个码长不同的最优码，并把它们的平均码长与H比较。
 
-*解答。* 先合并 0.1 + 0.1 = 0.2。剩下 0.4, 0.2, 0.2, 0.2 四个权重，平局决定了树的形状：把新的0.2和一个旧的合并，得到码长
-(2, 2, 2, 3, 3)；把两个旧的0.2合并，得到 (1, 2, 3, 4, 4)。两者的平均码长都是2.2比特（0.8 + 0.8 + 0.6，以及
+*解答。* 按题目中的概率顺序，把符号记作a、b、c、d、e。先把d和e合并成权重为0.2的de，再把de和c合并成权重为0.4的dec。
+剩下的权重是a：0.4，b：0.2，dec：0.4。把b和a合并，得到码长 (2, 2, 2, 3, 3)；改为把b和dec合并，就得到 (1, 2, 3, 4, 4)。
+最后把剩下的两个节点合并。两者的平均码长都是2.2比特（0.8 + 0.8 + 0.6，以及
 0.4 + 0.4 + 0.6 + 0.8），都是最优的；而 H = 0.4 × 1.322 + 0.4 × 2.322 + 0.2 × 3.322 = 2.122 比特，相差不到0.08比特。
 第一个码的码长更整齐，这影响缓冲，不影响平均码长。
 
 **4. 典型，却不是最可能的。** 一枚硬币正面朝上的概率是0.1，抛100次。典型序列大约有多少个？每个的概率是多少？和最可能的那一个序列相比如何？
 
-*解答。* H = h(0.1) = 0.469比特，所以典型序列大约有 2^46.9 ≈ 1.3 × 10¹⁴ 个，每个的概率大约是 2^(−46.9) ≈ 7.7 × 10⁻¹⁵：
-它们合起来几乎占据了全部概率，却只是 2¹⁰⁰ 个序列中 2^(−53) 的一小片。最可能的序列是全部反面，概率 0.9¹⁰⁰ ≈ 2.7 × 10⁻⁵，
-是任何一个典型序列的大约35亿倍；但它每次抛掷的意外度是 −log₂ 0.9 = 0.152比特，离0.469很远。它不是典型的，你几乎永远不会见到它：
-大约十次正面的序列实在太多了。
+*解答。* H = h(0.1) = 0.469比特。AEP给出的主导指数近似，是 2^(nH) = 2^46.9 ≈ 1.3 × 10¹⁴ 个序列，
+每个序列的概率约为 2^(−nH) ≈ 7.7 × 10⁻¹⁵；在这一指数尺度上，约占全部 2¹⁰⁰ 个字符串的 2^(−53)。
+这不是 n = 100 时的精确计数或概率：有限长度的典型集需要指定容差 ε，再计算其总概率。作为比较，恰有10次正面的一个序列，
+概率为 0.1¹⁰ × 0.9⁹⁰；单个最可能的序列是全部反面，概率 0.9¹⁰⁰ ≈ 2.7 × 10⁻⁵。它每次抛掷的意外度为
+−log₂ 0.9 = 0.152比特；只要 ε < 0.469 − 0.152 ≈ 0.317，它就不在弱典型集内。一个序列的相对概率很大，并不意味着绝对概率也大。
 
 **5. KL散度不对称。** 对 p = (½, ½) 和 q = (¼, ¾)，计算 D_KL(p‖q) 和 D_KL(q‖p)。
 

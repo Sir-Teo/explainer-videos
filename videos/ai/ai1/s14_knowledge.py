@@ -63,12 +63,12 @@ class Knowledge(VoiceoverScene):
         head = label(r"Each token's surprise, under two models", font_size=32).to_edge(UP, buff=0.25)
         leg = surprise_legend(width=3.2).to_corner(DR, buff=0.3)
         tag = note(r"computed: \ the Falcon passage, chapter 2, third paragraph").to_corner(DL, buff=0.3)
-        shade = "darker almost everywhere" if tb < ta else "no darker"
+        shade = "less surprising overall" if tb < ta else "no less surprising overall"
         with self.voiceover(
             "Let's look at what a strong model knows that a weaker one doesn't. Here is a paragraph of the Falcon "
             "passage, in tokens, <bookmark mark='a'/> each colored by how surprised GPT-2, from 2019, was by it: "
             "dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under "
-            f"Qwen3, from 2025. Its tiles are {shade}: {tb:.0f} bits "
+            f"Qwen3, from 2025. The paragraph is {shade}: {tb:.0f} bits "
             f"instead of {ta:.0f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(tag))
@@ -87,20 +87,22 @@ class Knowledge(VoiceoverScene):
         knows = bd["Durham"][1] < bd["Durham"][0] - 2 and bd["tobacco"][1] < bd["tobacco"][0] - 2
         brand = (f"After Bull, GPT-2 doesn't expect Durham, {bd['Durham'][0]:.1f} bits, or tobacco, "
                  f"{bd['tobacco'][0]:.1f}. Qwen3 does, {bd['Durham'][1]:.1f} and {bd['tobacco'][1]:.1f}: Bull Durham "
-                 "was a real brand of tobacco, and somewhere in its training it learned that." if knows else
+                 "was a real brand of tobacco. This is consistent with a learned association, not proof of how it was learned." if knows else
                  f"After Bull, Durham costs GPT-2 {bd['Durham'][0]:.1f} bits and Qwen3 {bd['Durham'][1]:.1f}; tobacco, "
                  f"{bd['tobacco'][0]:.1f} and {bd['tobacco'][1]:.1f}. Bull Durham was a real brand of tobacco.")
         tel = VGroup(*[SurroundingRectangle(find(g, "telephone"), color=C.BITS, buff=0.05, stroke_width=2.5)
                        for g in (pa, pb)])
         cx = load("context")
         alone, with_ = cx["Qwen3-4B"]["alone"], cx["Qwen3-4B"]["with context"]
-        mem = label(rf"Qwen3-4B on this paragraph alone: \ \texttt{{telephone}} costs ${alone:.1f}$ bits", font_size=22,
+        mem = label(rf"Qwen3-4B, \ \texttt{{telephone}}: alone ${alone:.1f}$ bits; with preceding paragraphs ${with_:.1f}$",
+                    font_size=22,
                     color=C.BITS).to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "Look where they differ. <bookmark mark='a'/> " + brand + " <bookmark mark='b'/> And the telephone: "
-            f"GPT-2 pays {bd['telephone'][0]:.1f} bits for it, Qwen3 only {bd['telephone'][1]:.1f}, because two "
-            "paragraphs earlier, a telephone bell rang. <bookmark mark='c'/> Show Qwen3 this paragraph on its own, and "
-            f"the telephone costs it {alone:.1f} bits. It remembers: the long tail of the last chapter, put to use."
+            f"GPT-2 pays {bd['telephone'][0]:.1f} bits for it, Qwen3 {bd['telephone'][1]:.1f}, with the earlier paragraphs "
+            "present, including the telephone bell. <bookmark mark='c'/> On this paragraph alone, Qwen3 pays "
+            f"{alone:.1f} bits; with the preceding paragraphs, {with_:.1f}. This comparison shows that context helps "
+            "this prediction. It does not isolate which earlier sentence matters."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(boxes))
@@ -183,7 +185,7 @@ class Knowledge(VoiceoverScene):
             (r"the story so far: \ long memory", r"", GREY_A),
             (r"people (Shannon, 1951)", rf"${lo_h:.1f}$--${hi_h:.1f}$", C.HUMAN),
         ]
-        head = label(r"To drive the bits down, a model must learn\ldots", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"Lower surprise can reflect learned structure\ldots", font_size=34).to_edge(UP, buff=0.4)
         rows = VGroup()
         for k, (t, v, col) in enumerate(steps):
             r = VGroup(label(t, font_size=28, color=col), label(v + (r" \ bits per letter" if v else ""), font_size=24,
@@ -207,15 +209,15 @@ class Knowledge(VoiceoverScene):
         ticks = VGroup(*[Line([x0 - 0.25, yb(v), 0], [x0 + 0.25, yb(v), 0], color=C.COUNTING, stroke_width=4)
                          for v in (H0, Hk)])
         fall = DashedLine([x0, yb(Hk), 0], [x0, yb(1.0), 0], color=GREY_A, stroke_width=3, dash_length=0.08)
-        thesis = label(r"predicting the text means modeling the world that wrote it", font_size=30, color=C.BITS)
+        thesis = label(r"prediction rewards learning structure and using context", font_size=30, color=C.BITS)
         thesis.to_edge(DOWN, buff=0.5)
         with self.voiceover(
             f"So here's the ladder. <bookmark mark='a'/> Letter frequencies get you {H0:.1f} bits. Spelling, a few "
-            f"letters of context, gets you {Hk:.1f}. <bookmark mark='b'/> Below that, a model has to learn words and "
-            "grammar, facts about the world, and what has happened so far in the story, <bookmark mark='c'/> down "
-            "toward the one bit or so that people need. <bookmark mark='d'/> Nobody tells the model to learn this. "
-            "One number pushes it there: the bits it pays for each guess. To predict the text, it has to model the "
-            "world that wrote it."
+            f"letters of context, gets you {Hk:.1f}. <bookmark mark='b'/> Better prediction can benefit from words and "
+            "grammar, facts, and what has happened so far in the story. These are interpretations of the measured "
+            "gains, not capabilities proved by a compression score alone. <bookmark mark='c'/> Shannon's people "
+            "give us a historical comparison near one bit per letter. <bookmark mark='d'/> Training rewards whatever "
+            "reduces the bits paid for each guess, including useful structure and context."
         ) as vo:
             self.play(FadeIn(head), Create(scale), FadeIn(nums), FadeIn(unit), FadeIn(ball, scale=0.5))
             vo.wait_until("a")

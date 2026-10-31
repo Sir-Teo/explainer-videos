@@ -43,10 +43,16 @@ class StaleDataError(RuntimeError):
 
 def require_part1_cache(compute, name):
     """Cached-only QA must never invoke a schema upgrade's computation."""
-    if not compute.path(name).exists():
-        raise FileNotFoundError(f"QA needs computed data: ai1/{name}")
-    if not compute.cache_current(name):
-        raise StaleDataError(f"QA found stale computed data: ai1/{name}; rebuild this item before rendering")
+    require_current_cache(compute, "ai1", compute.path(name), name)
+
+
+def require_current_cache(compute, part, path, name):
+    """Validate before entering any loader that may upgrade old data."""
+    if not path.exists():
+        raise FileNotFoundError(f"QA needs computed data: {part}/{name}")
+    current = getattr(compute, "cache_current", None)
+    if current is not None and not current(name):
+        raise StaleDataError(f"QA found stale computed data: {part}/{name}; rebuild this item before rendering")
 
 
 def approved_numeric_caption(translated, approved_targets):
@@ -288,6 +294,21 @@ def worker(args):
         return value
 
     Cache.load, c1.load = load, load1
+    # A part may override Cache.load to upgrade a schema before calling the
+    # shared loader. Guard its instance entry point, before that upgrade runs.
+    compute = importlib.import_module(f"{video_package(args.video)}.compute")
+    local_cache = getattr(compute, "CACHE", None)
+    if args.cached_only and local_cache is not None and hasattr(compute, "cache_current"):
+        original_local_load = local_cache.load
+
+        def load_local(name):
+            with cache_lock(local_cache.path(name)):
+                require_current_cache(compute, local_cache.part, local_cache.path(name), name)
+                value = original_local_load(name)
+                record_data(local_cache.path(name))
+                return value
+
+        local_cache.load = load_local
 
     start = time.monotonic()
     try:

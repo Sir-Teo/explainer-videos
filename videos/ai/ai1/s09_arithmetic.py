@@ -361,6 +361,8 @@ class Arithmetic(VoiceoverScene):
         a2 = Arrow(right.get_left() + DOWN * 0.3, left.get_right() + DOWN * 0.3, color=WHITE, buff=0.15)
         l1 = label(r"arithmetic coding", font_size=22, color=GREY_A).next_to(a1, UP, buff=0.1)
         l2 = label(r"$q = 2^{-\ell}$", font_size=24, color=GREY_A).next_to(a2, DOWN, buff=0.1)
+        code_weights = note(r"complete prefix code: $\sum_x 2^{-\ell(x)} = 1$; \ otherwise these are code weights",
+                            font_size=22).move_to(UP * 0.15)
         eq = mtex(r"\text{compressed size} \approx \sum_t \log_2 \frac{1}{q(x_t \mid x_{<t})} = "
                   r"N \times \text{cross-entropy}", font_size=36).move_to(DOWN * 0.6)
         tag = label(r"to compress well, predict well; \ to predict well, compress well", font_size=32, color=C.BITS)
@@ -370,16 +372,18 @@ class Arithmetic(VoiceoverScene):
         with self.voiceover(
             "This is the hinge of the whole part. <bookmark mark='a'/> Give arithmetic coding any model that "
             "predicts, and you get a compressor spending about log of one over q bits per symbol: the text's length "
-            "times the model's cross-entropy. <bookmark mark='b'/> And any compressor defines a model: a text that "
-            "takes l bits gets probability two to the minus l. <bookmark mark='c'/> Predicting well and "
-            "compressing well are the same skill. In chapter fifteen, a language model becomes a compressor."
+            "times the model's cross-entropy. <bookmark mark='b'/> A complete prefix code over a fixed set of messages "
+            "gives normalized probabilities: two to the minus each code length. Other uniquely decodable codes give "
+            "weights with total at most one; normalization and consistency between prefixes are needed to turn "
+            "them into next-symbol probabilities. <bookmark mark='c'/> This is the connection between prediction "
+            "and compression. In chapter fifteen, a language model becomes a compressor."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right))
             vo.wait_until("a")
             self.play(GrowArrow(a1), FadeIn(l1))
             self.play(Write(eq))
             vo.wait_until("b")
-            self.play(GrowArrow(a2), FadeIn(l2))
+            self.play(GrowArrow(a2), FadeIn(l2), FadeIn(code_weights))
             vo.wait_until("c")
             self.play(FadeIn(tag, shift=UP * 0.1))
             self.play(FadeIn(fwd))
