@@ -56,12 +56,12 @@ class Spectra(VoiceoverScene):
                            r"modelled the energy levels of heavy nuclei by a random matrix's eigenvalues: \ "
                            r"the semicircle law", color=HIST, width=6.4).to_corner(DL, buff=0.25)
         above = int(d["above"])
-        esc = "Not one eigenvalue escapes it." if above == 0 else f"Only {above} lie beyond it."
+        esc = f"{above} eigenvalues lie strictly beyond the plotted limiting edge; finite samples can cross it."
         with self.voiceover(
             "What does pure noise look like, through its eigenvalues? <bookmark mark='a'/> In 1955 Eugene Wigner "
             "modelled heavy nuclei's energy levels with a random matrix's eigenvalues, and found a law. "
             "<bookmark mark='b'/> In 1967 Marchenko and Pastur found it for rectangular matrices: the eigenvalues of W W "
-            "transpose over M fill a fixed interval, in a fixed shape, set by the aspect ratio alone. We'll check it "
+            "transpose over M approach a fixed interval and shape, set by the aspect ratio in the large-matrix limit. We'll check it "
             "rather than prove it. <bookmark mark='c'/> A random 768 by 3,072 matrix, GPT-2's MLP shape: "
             f"{len(ev)} eigenvalues, <bookmark mark='d'/> and the law on top. {esc}"
         ) as vo:
@@ -93,7 +93,8 @@ class Spectra(VoiceoverScene):
         w = edges[1] - edges[0]
 
         def bars(e, col, op):
-            c, _ = np.histogram(np.log10(np.maximum(e, 10 ** L0)), bins=edges)
+            positive = e[np.isfinite(e) & (e > 0)]
+            c, _ = np.histogram(np.log10(positive), bins=edges)
             return hist_bars(ax, edges, c / (len(e) * w), col, op)
 
         btr, bsh = bars(ev, TRAINED, 0.75), bars(es, RANDOM, 0.6)
@@ -101,10 +102,10 @@ class Spectra(VoiceoverScene):
         mp = curve(ax, xs, mp_density(10 ** xs, q) * 10 ** xs * math.log(10), MPC, 4)
         edge = DashedLine(ax.c2p(math.log10(hi), 0), ax.c2p(math.log10(hi), 2.2), color=MPC, stroke_width=2)
         el = MathTex(r"\lambda_+", font_size=26, color=MPC).next_to(ax.c2p(math.log10(hi), 2.2), UP, buff=0.05)
-        above = int(sum(e > hi * 1.02 for e in ev))
+        above = int(sum(e > hi for e in ev))
         top = float(ev.max() / hi)
         brace = BraceBetweenPoints(ax.c2p(math.log10(hi), 0.35), ax.c2p(math.log10(ev.max()), 0.35), UP, color=TRAINED)
-        bl = label(rf"${above}$ eigenvalues beyond the edge; \\ the largest ${top:.1f}\times$ it", font_size=24,
+        bl = label(rf"${above}$ strictly above $\lambda_+$; \\ largest / edge $= {top:.1f}$", font_size=24,
                    color=TRAINED).move_to(ax.c2p(math.log10(hi) + 1.05, 1.55))
         bl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.05)
         head = label(rf"GPT-2, \ layer ${int(s['layer'])}$, \ the MLP's first matrix ($768 \times 3072$)", font_size=32)
@@ -112,16 +113,20 @@ class Spectra(VoiceoverScene):
         leg = legend([(TRAINED, r"trained"), (RANDOM, r"the same numbers, shuffled"), (MPC, r"Marchenko--Pastur")],
                      font_size=22).move_to([4.9, 2.0, 0])
         sh_above = int(sh["above"])
-        shuf = ("The escapees vanish: the spectrum falls back onto the law." if sh_above == 0 else
-                f"Only {sh_above} remain beyond the edge.")
+        shuf = f"After shuffling, {sh_above} eigenvalues lie strictly beyond the same limiting edge."
+        omitted = [int(np.count_nonzero((e < 10 ** L0) | (e > 10 ** L1))) for e in (ev, es)]
+        cap = note(rf"strict edge counts, no $2\%$ margin; \ finite-sample comparison \\ "
+                   rf"outside log window omitted: trained ${omitted[0]}$, shuffled ${omitted[1]}$",
+                   font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             f"Now a trained matrix: GPT-2's layer {int(s['layer'])}, the first matrix of its MLP, scaled the same way. "
             "<bookmark mark='a'/> Most eigenvalues sit in a bulk much like the law. <bookmark mark='b'/> But "
-            f"{above} have escaped beyond the edge, the largest {top:.1f} times past it. <bookmark mark='c'/> Just "
+            f"{above} lie strictly beyond the plotted edge, with no two-percent margin; the largest is {top:.1f} "
+            "times the edge. This is a finite-sample comparison, not a hard support guarantee. <bookmark mark='c'/> Just "
             f"unusual values? Shuffle the same numbers into random places. {shuf} The information is in the "
             "arrangement: a few strong directions, learned."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(g), FadeIn(leg))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(g), FadeIn(leg))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in btr], lag_ratio=0.01), Create(mp), run_time=2.0)
             self.play(Create(edge), FadeIn(el))
@@ -144,27 +149,40 @@ class Spectra(VoiceoverScene):
         ax = g.ax
         band = Polygon(ax.c2p(-0.5, 1.5), ax.c2p(11.5, 1.5), ax.c2p(11.5, 5), ax.c2p(-0.5, 5), stroke_width=0,
                        fill_color=MPC, fill_opacity=0.12)
-        bl = label(r"Martin \& Mahoney's range for \\ well-trained layers: \ $1.5$ to $5$", font_size=20, color=MPC)
-        bl.next_to(ax.c2p(11.5, 5), UR, buff=0.1).shift(LEFT * 0.2)
+        bl = label(r"comparison band: $1.5 \le \alpha \le 5$ \\ descriptive, not an accuracy test",
+                   font_size=19, color=MPC).move_to([4.9, 2.0, 0])
         dots = VGroup()
         off = {"attn": -0.24, "attn_out": -0.08, "mlp_in": 0.08, "mlp_out": 0.24}
         for r in rows:
-            dots.add(Dot(ax.c2p(r["layer"] + off[r["kind"]], min(r["alpha"], 7.9)), radius=0.06, color=KC[r["kind"]]))
+            if not math.isfinite(float(r["alpha"])):
+                continue
+            point = ax.c2p(r["layer"] + off[r["kind"]], min(r["alpha"], 7.9))
+            mark = (Triangle(color=KC[r["kind"]], fill_opacity=1, stroke_width=0).scale(0.07).move_to(point)
+                    if r["alpha"] >= 7.9 else Dot(point, radius=0.06, color=KC[r["kind"]]))
+            dots.add(mark)
         leg = legend([(KC[k], KN[k]) for k in KC], font_size=20).move_to([4.8, -1.2, 0])
         n_in = sum(1.5 <= r["alpha"] <= 5 for r in rows)
         rule = MathTex(r"\rho(\lambda) \propto \lambda^{-\alpha}, \quad \lambda > \lambda_{\min}", font_size=30)
         rule.to_edge(UP, buff=0.35)
         fit = label(r"fitted by maximum likelihood; \ $\lambda_{\min}$ chosen by the best Kolmogorov--Smirnov "
                     r"distance", font_size=20, color=GREY_A).next_to(rule, DOWN, buff=0.12)
+        missing = sum(not math.isfinite(float(r["alpha"])) for r in rows)
+        cap = note(rf"triangles: $\alpha\ge 7.9$; \ ${missing}$ unavailable fits omitted \\ "
+                   r"tail fit is descriptive; \ no goodness-of-fit or model-comparison test",
+                   font_size=17).to_edge(DOWN, buff=0.15)
+        fit_summary = (f"Our displayed layer has alpha {s['alpha']:.2f}, from {s['n_tail']} tail eigenvalues, "
+                       f"with two-sided KS distance {s['ks']:.3f}." if math.isfinite(float(s["alpha"])) else
+                       "Our displayed layer has no available power-law tail fit under this selection rule.")
         with self.voiceover(
-            "The escapees thin out slowly, like a power law: density falling as lambda to the minus alpha. "
-            "<bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of "
-            "trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with "
-            f"better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: {n_in} fall in that "
-            f"range; our layer has alpha {s['alpha']:.2f}. The independent Gaussian reference has a compact limiting "
+            "We can summarize a spectral tail with a fitted power-law density, falling as lambda to the minus alpha. "
+            "<bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney used random matrix theory to study "
+            "heavy-tailed structure in trained networks. Here the shaded band from 1.5 to 5 is only a descriptive "
+            f"comparison, not a universal accuracy criterion. <bookmark mark='b'/> Of GPT-2's 48 matrices, {n_in} "
+            f"fits fall in that band. {fit_summary} A fitted exponent alone does not establish a power-law model. "
+            "The independent Gaussian reference has a compact limiting "
             "bulk, rather than a power-law tail."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(rule), FadeIn(fit))
+            self.play(FadeIn(g), FadeIn(rule), FadeIn(fit), FadeIn(cap))
             vo.wait_until("a")
             self.play(FadeIn(band), FadeIn(bl))
             vo.wait_until("b")
@@ -177,23 +195,29 @@ class Spectra(VoiceoverScene):
         m = load("mp")
         rows = m["novels"]
         n = len(rows)
-        g = axes([-0.5, n - 0.5, 5], [-0.1, 1.1, 0.5], x_length=8.6, y_length=3.8, yticks=[0, 0.5, 1.0],
+        init_y = [math.log10(r["init_max_over_edge"]) for r in rows]
+        trained_y = [math.log10(r["max_over_edge"]) for r in rows]
+        low = min(-0.1, min(init_y + trained_y) - 0.05)
+        high = max(1.1, max(init_y + trained_y) + 0.05)
+        g = axes([-0.5, n - 0.5, 5], [low, high, 0.5], x_length=8.6, y_length=3.8, yticks=[0, 0.5, 1.0],
                  yfmt=lambda v: {0: "1", 0.5: r"3.2", 1.0: "10"}[v],
                  xlabel=rf"the ${n}$ weight matrices of our novels model, \ in order", ylabel=r"largest eigenvalue "
                  r"$/\ \lambda_+$ \ (log scale)", center=[-1.0, -0.5, 0])
         ax = g.ax
         one = DashedLine(ax.c2p(-0.5, 0), ax.c2p(n - 0.5, 0), color=MPC, stroke_width=2)
-        init = dots_on(ax, range(n), [math.log10(max(r["init_max_over_edge"], 0.8)) for r in rows], RANDOM, 0.07)
-        tr = dots_on(ax, range(n), [math.log10(r["max_over_edge"]) for r in rows], TRAINED, 0.07)
+        init = dots_on(ax, range(n), init_y, RANDOM, 0.07)
+        tr = dots_on(ax, range(n), trained_y, TRAINED, 0.07)
         leg = legend([(RANDOM, r"at initialization"), (TRAINED, r"after training")], font_size=22).move_to([5.0, 1.5, 0])
         a_tr = [r["above"] for r in rows]
         a_in = [r["init_above"] for r in rows]
-        cap = note(r"computed: \ every matrix in the blocks, \ scaled to variance one").to_corner(DR, buff=0.25)
+        cap = note(r"block matrices scaled to variance one; \ counts strictly above $\lambda_+$ \\ "
+                   r"no $2\%$ margin; \ this is a finite-sample comparison", font_size=18).to_corner(DR, buff=0.25)
         every = "every matrix has" if min(a_tr) > 0 else "the matrices have"
         with self.voiceover(
             "The same in this series' small novels model. <bookmark mark='a'/> At initialization its "
-            f"{n} matrices are random: {sum(a_in)} escapees in all. <bookmark mark='b'/> After training, {every} "
-            f"between {min(a_tr)} and {max(a_tr)} beyond the edge. Training writes a little structure into a sea of "
+            f"{n} matrices are random: {sum(a_in)} eigenvalues strictly above their limiting edges in all. "
+            f"<bookmark mark='b'/> After training, {every} between {min(a_tr)} and {max(a_tr)} strictly beyond the edge, "
+            "using the same threshold with no two-percent margin. Training writes a little structure into a sea of "
             "noise."
         ) as vo:
             self.play(FadeIn(g), Create(one), FadeIn(cap))

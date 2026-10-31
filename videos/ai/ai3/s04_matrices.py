@@ -154,7 +154,7 @@ class Matrices(VoiceoverScene):
             n_.to_corner(DL, buff=0.6).add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.1)
         with self.voiceover(
             "One number says how much a map stretches area: the determinant. <bookmark mark='a'/> The unit square "
-            "becomes a parallelogram, and the determinant is its area. <bookmark mark='b'/> When the determinant "
+            "becomes a parallelogram: its area is the absolute determinant, and the sign records orientation. <bookmark mark='b'/> When the determinant "
             "reaches zero, the whole plane is squashed onto a line, and information is lost for good. "
             "<bookmark mark='c'/> Below zero, the plane has been flipped over, like a page turned face down."
         ) as vo:

@@ -11,6 +11,20 @@ TRC, TEC = C.TRUE_P, C.MODEL_Q
 TT, POP = C.REWARD, GREY_B
 
 
+def penalty_verdict(history, no_vector_penalty, tolerance=0.01):
+    """Separate within-run rebound from the endpoint comparison; RMSE is in stars."""
+    last = float(history[-1, 2])
+    other = float(no_vector_penalty[-1, 2])
+    best = float(np.min(no_vector_penalty[:, 2]))
+    rebound = (f" With no vector penalty, held-out error rises from its minimum of {best:.3f} to {other:.3f}."
+               if other > best + tolerance else
+               f" With no vector penalty, held-out error finishes at {other:.3f}, without a clear late rebound.")
+    gap = other - last
+    comparison = ("higher than" if gap > tolerance else "lower than" if gap < -tolerance else "within 0.01 stars of")
+    return (f"{rebound} Its final error is {comparison} the vector-penalized run's {last:.3f}. "
+            "Both runs retain the same bias penalty.")
+
+
 class Netflix(VoiceoverScene):
     def construct(self):
         chapter(self, 17, r"Low rank in the wild", r"Can a mostly empty table be filled in?",
@@ -77,10 +91,10 @@ class Netflix(VoiceoverScene):
         rows = [
             cmath(r"\hat r_{ui}", "=", r"\mu + b_u + b_i +", r"\mathbf{p}_u^{\top}\mathbf{q}_i", font_size=38, colors=colors),
             cmath(r"\min", r"\textstyle\sum_{(u,i)\ \text{rated}}", r"(r_{ui} - \hat r_{ui})^2 + \lambda\big(|\mathbf{p}_u|^2 + "
-                  r"|\mathbf{q}_i|^2\big)", font_size=36),
+                  r"|\mathbf{q}_i|^2\big) + 0.01(b_u^2+b_i^2)", font_size=32),
         ]
         whys = [why(r"an average, \ how generous the user is, \ how good the film is, \\ and a rank-$k$ taste match"),
-                why(r"only the cells we have; \ $\lambda$ keeps the vectors small")]
+                why(r"only the cells we have; \ $\lambda$ penalizes vectors; \ biases retain a $0.01$ penalty")]
         step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.5, buff=0.6, edge=6.9)
         pts = VGroup(
             label(r"the best rank-$k$ copy of a \textit{full} table: \ the SVD (chapter eight)", font_size=28,
@@ -93,7 +107,7 @@ class Netflix(VoiceoverScene):
         with self.voiceover(
             "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, "
             "plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping "
-            "the vectors small. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is "
+            "the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is "
             "no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: "
             f"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method "
             "never sees."
@@ -117,18 +131,15 @@ class Netflix(VoiceoverScene):
         rp = m["replay"]
         h, h0 = np.asarray(rp["hist"]), np.asarray(rp["hist_noreg"])
         E = int(h[-1, 0])
-        lo = float(min(h[:, 1].min(), h0[:, 1].min())) - 0.03
-        hi = float(min(1.3, max(h[:, 2].max(), h0[:, 2].max()))) + 0.03
+        lo = float(min(h[:, 1:].min(), h0[:, 1:].min())) - 0.03
+        hi = float(max(h[:, 1:].max(), h0[:, 1:].max())) + 0.03
         ga = axes([0, E, 10], [lo, hi, 0.1], x_length=5.6, y_length=3.6, xticks=[0, 10, 20, 30, 40],
                   yticks=[round(v, 1) for v in np.arange(np.ceil(lo * 10) / 10, hi, 0.1)],
                   xlabel=r"pass over the ratings", ylabel=r"error (root mean square, stars)", center=[-3.5, -0.6, 0])
         ax = ga.ax
         ep = h[:, 0]
-        tr, te = curve(ax, ep, np.clip(h[:, 1], lo, hi), TRC, 3), curve(ax, ep, np.clip(h[:, 2], lo, hi), TEC, 3)
-        tr0 = DashedVMobject(curve(ax, ep, np.clip(h0[:, 1], lo, hi), TRC, 2), num_dashes=40)
-        te0 = DashedVMobject(curve(ax, ep, np.clip(h0[:, 2], lo, hi), TEC, 2), num_dashes=40)
         leg = legend([(TRC, r"ratings it trained on"), (TEC, r"held-out ratings"),
-                      (GREY_B, rf"dashed: \ no penalty, \ $\lambda = 0$")], font_size=20).next_to(ga, UP, buff=0.1)
+                      (GREY_B, r"dashed: \ no vector penalty; \ bias penalty unchanged")], font_size=18).next_to(ga, UP, buff=0.1)
         Q = np.asarray(m["q_snaps"])
         gen = np.asarray(m["genre"])
         eps_ = [int(e) for e in m["q_snap_epochs"]]
@@ -137,6 +148,24 @@ class Netflix(VoiceoverScene):
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.6, -0.4, 0])
         sub = np.arange(0, Q.shape[1], 2)
         t = ValueTracker(0)
+
+        def epoch():
+            return float(np.interp(t.get_value(), np.arange(len(eps_)), eps_))
+
+        def trace(values, color, dashed=False):
+            end = epoch()
+            xs = np.append(ep[ep < end], end)
+            ys = np.interp(xs, ep, values)
+            # At pass zero use a dot, then reveal the actual epoch coordinates.
+            line = curve(ax, xs, ys, color, 2.5) if len(xs) > 1 else Dot(ax.c2p(xs[0], ys[0]), radius=0.03, color=color)
+            return DashedVMobject(line, num_dashes=40) if dashed and len(xs) > 1 else line
+
+        traces = VGroup(*[always_redraw(lambda values=values, color=color, dashed=dashed:
+                                       trace(values, color, dashed))
+                          for values, color, dashed in ((h[:, 1], TRC, False), (h[:, 2], TEC, False),
+                                                        (h0[:, 1], TRC, True), (h0[:, 2], TEC, True))])
+        cursor = always_redraw(lambda: Line(ax.c2p(epoch(), lo), ax.c2p(epoch(), hi), color=WHITE,
+                                           stroke_width=1.5, stroke_opacity=0.6))
 
         def film_dots():
             v = t.get_value()
@@ -160,32 +189,32 @@ class Netflix(VoiceoverScene):
 
         fd = always_redraw(film_dots)
         cent = always_redraw(centroids)
-        ep_read = always_redraw(lambda: label(rf"film vectors after {eps_[int(round(t.get_value()))]} passes" if
-                                              eps_[int(round(t.get_value()))] > 0 else r"film vectors at the start",
+        ep_read = always_redraw(lambda: label(rf"film vectors after {epoch():.0f} passes" if
+                                              epoch() > 0 else r"film vectors at the start",
                                               font_size=22, color=GREY_A).next_to(gb, UP, buff=0.12))
         gl = VGroup(*[label(nm, font_size=18, color=c_) for nm, c_ in zip(m["genres"], GEN_COLORS)])
         gl.arrange_in_grid(rows=2, cols=3, buff=(0.2, 0.08)).next_to(gb, DOWN, buff=0.12)
-        cn = note(r"large dots: \ each genre's average, \ $\times 2.5$").next_to(gl, DOWN, buff=0.08)
-        best, worst0 = float(h[:, 2].min()), float(h0[:, 2].min())
-        last0 = float(h0[-1, 2])
-        overfit = last0 > worst0 + 0.01
-        tail = (f" Without the penalty the held-out error bottoms out at {worst0:.3f} and climbs back to {last0:.3f}: "
-                "the vectors memorize the training ratings." if overfit else
-                " Without the penalty it ends a little worse.")
+        cn = note(r"2D PCA view; \ saved passes interpolated; \ outer points clipped \\ "
+                  r"large dots: genre averages $\times 2.5$; \ RMSE clips predictions to $[1,5]$",
+                  font_size=17).next_to(gl, DOWN, buff=0.08)
+        tail = penalty_verdict(h, h0)
+        genre_verdict = ("The final genre-neighbour agreement exceeds the without-self chance baseline."
+                         if m["genre_nn"] > m["genre_chance"] else
+                         "The final genre-neighbour agreement does not exceed the without-self chance baseline.")
         with self.voiceover(
             f"Training replayed, at rank {int(rp['rank'])}. <bookmark mark='a'/> The error falls on the ratings it "
             f"trains on, and on held-out ones: from {h[0, 2]:.2f} stars to {h[-1, 2]:.3f}.{tail} "
             "<bookmark mark='b'/> On the right, each film's vector, on its two strongest directions, coloured by the "
-            "hidden genre, with each genre's average. <bookmark mark='c'/> The genres drift apart. Of each film's ten "
+            "hidden genre, with each genre's average. <bookmark mark='c'/> Of each film's ten "
             "nearest films, "
             f"{100 * m['genre_nn']:.0f} percent share its genre, against {100 * m['genre_chance']:.0f} percent by "
-            "chance."
+            f"chance. {genre_verdict}"
         ) as vo:
             self.play(FadeIn(ga), FadeIn(leg), Create(gb), FadeIn(gl), FadeIn(cn))
             self.add(fd, cent, ep_read)
             vo.wait_until("a")
-            self.play(Create(tr), Create(te), run_time=2.0)
-            self.play(Create(tr0), Create(te0), run_time=1.5)
+            self.add(traces, cursor)
+            self.play(t.animate.set_value(1), run_time=2.0)
             vo.wait_until("b")
             self.play(t.animate.set_value(2), run_time=2.0)
             vo.wait_until("c")
@@ -193,6 +222,8 @@ class Netflix(VoiceoverScene):
         fd.clear_updaters()
         cent.clear_updaters()
         ep_read.clear_updaters()
+        traces.clear_updaters(recursive=True)
+        cursor.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -201,8 +232,8 @@ class Netflix(VoiceoverScene):
         m = load("mf")
         ks = sorted(int(k) for k in m["test_rmse"])
         vals = {k: np.asarray(m["test_rmse"][str(k)]) for k in ks}
-        lo = float(min(v.min() for v in vals.values())) - 0.03
-        hi = float(m["rmse_mean"]) + 0.03
+        lo = float(min(m["rmse_mean"], m["rmse_bias"], min(v.min() for v in vals.values()))) - 0.03
+        hi = float(max(m["rmse_mean"], m["rmse_bias"], max(v.max() for v in vals.values()))) + 0.03
         lk = np.log2(ks)
         g = axes([-0.3, float(lk[-1]) + 0.3, 1], [lo, hi, 0.05], x_length=7.0, y_length=4.0, xticks=list(lk),
                  xfmt=lambda v: f"{2 ** v:.0f}", yticks=[round(v, 2) for v in np.arange(np.ceil(lo * 20) / 20, hi, 0.05)],
@@ -220,10 +251,12 @@ class Netflix(VoiceoverScene):
         mids = dots_on(ax, lk, [vals[k].mean() for k in ks], C.BITS, 0.07)
         cv = curve(ax, lk, [vals[k].mean() for k in ks], C.BITS, 3)
         best = min(ks, key=lambda k: vals[k].mean())
-        cap = note(r"three seeds per rank; \ $\lambda$ chosen on separate validation ratings").to_corner(DR, buff=0.25)
-        why_best = (", near the six genres we hid; beyond that, extra directions fit noise." if best in (4, 8) else ".")
+        cap = note(r"matched train+validation refit; \ common test ratings \\ three seeds per rank; \ $\lambda$ selected before refitting",
+                   font_size=18).to_corner(DR, buff=0.25)
+        why_best = (", near the six hidden genres in this synthetic world." if best in (4, 8) else ".")
         with self.voiceover(
-            f"How much taste does it take? The average rating misses by {m['rmse_mean']:.3f} stars. "
+            f"How much taste does it take? All methods are refitted on the same training plus validation ratings, "
+            f"then measured on the same untouched test ratings. The average rating misses by {m['rmse_mean']:.3f} stars. "
             f"<bookmark mark='a'/> Adding generosity and quality: {m['rmse_bias']:.3f}. <bookmark mark='b'/> Then the "
             "taste vectors, rank one to thirty-two, three seeds each. The error is lowest at rank "
             f"{best}, {vals[best].mean():.3f}{why_best}"
@@ -257,18 +290,28 @@ class Netflix(VoiceoverScene):
         it = tower(r"film tower", [r"film id", r"genre, \ year"], C.MODEL_Q, -1.8)
         both = VGroup(ut, it).move_to([-3.2, 0.2, 0])
         dot = MathTex(r"\text{score} = \mathbf{u}\cdot\mathbf{v}", font_size=32).next_to(both, UP, buff=0.3)
-        tag = note(r"schematic").next_to(both, DOWN, buff=0.2)
-        g = axes([0, float(steps[-1]), 1000], [0, 0.3, 0.1], x_length=5.4, y_length=3.4, xticks=[0, 1000, 2000, 3000],
-                 yticks=[0, 0.1, 0.2, 0.3], xlabel=r"training step", ylabel=r"recall at $10$ \ (held-out films)",
+        tag = note(r"schematic; \ inference ranks by raw $s = \mathbf{u}\cdot\mathbf{v}/\tau$ \\ training candidate logits: $s-\log q(i)$",
+                   font_size=18).next_to(both, DOWN, buff=0.2)
+        ymax = min(1.0, max(0.1, float(curve_[:, 2:4].max()), t["pop_warm"], t["pop_cold"]) * 1.15)
+        g = axes([0, float(steps[-1]), 1000], [0, ymax, ymax / 4], x_length=5.4, y_length=3.4,
+                 xticks=list(np.linspace(0, steps[-1], 4)), yticks=list(np.linspace(0, ymax, 5)),
+                 yfmt=lambda v: f"{v:.2f}", xlabel=r"training step", ylabel=r"macro recall at $10$ \ (held-out films)",
                  center=[3.4, -0.5, 0])
         ax = g.ax
-        cw = curve(ax, steps, curve_[:, 4], TT, 3)
-        cc = curve(ax, steps, curve_[:, 5], C.BITS, 3)
+        cw = curve(ax, steps, curve_[:, 2], TT, 3)
+        cc = curve(ax, steps, curve_[:, 3], C.BITS, 3)
         pw = DashedLine(ax.c2p(0, t["pop_warm"]), ax.c2p(steps[-1], t["pop_warm"]), color=POP)
-        pc = DashedLine(ax.c2p(0, t["pop_cold"]), ax.c2p(steps[-1], t["pop_cold"]), color=POP)
+        pc = DashedLine(ax.c2p(0, t["pop_cold"]), ax.c2p(steps[-1], t["pop_cold"]), color=GREY_A, dashed_ratio=0.3)
         leg = legend([(TT, r"two towers: \ users it trained on"), (C.BITS, r"two towers: \ new users, \ $5$ films each"),
-                      (POP, r"dashed: \ most popular films")], font_size=18).move_to([-3.2, -2.9, 0])
-        rw, rc = t["recall_warm_prior"], t["recall_cold_prior"]
+                      (POP, r"popular films: \ known users, dashed"),
+                      (GREY_A, r"popular films: \ new users, short dashes")], font_size=17).move_to([-3.2, -2.9, 0])
+        ew, ec = t["evaluation"]["warm"], t["evaluation"]["cold"]
+        metric = note(r"recall: hits / all eligible targets, averaged over users \\ "
+                      rf"known: ${ew['evaluated_users']}$ users, ${fmt_int(ew['eligible_targets'])}$ targets; \ "
+                      rf"new: ${ec['evaluated_users']}$ users, ${fmt_int(ec['eligible_targets'])}$ targets \\ "
+                      r"empty-target users excluded; \ watched films filtered",
+                      font_size=15).next_to(g, DOWN, buff=0.08)
+        rw, rc = t["recall_warm"], t["recall_cold"]
         bw = rw > t["pop_warm"]
         bc = rc > t["pop_cold"]
         if bw and bc:
@@ -283,12 +326,15 @@ class Netflix(VoiceoverScene):
             "Factorization has a weakness: a new user has no vector. Today's recommenders use two towers. "
             "<bookmark mark='a'/> One network turns a user's history into a vector, another a film's details; the score "
             "is their dot product. <bookmark mark='b'/> Trained so each user's real films outscore the batch, corrected "
-            "for popularity, the score learns a pointwise mutual information, chapter twelve's quantity; popularity is "
-            "added back to recommend. <bookmark mark='c'/> The share of held-out favourites in the top ten reaches "
+            "for the negative sampling distribution. In the ideal candidate-classification calculation, the corrected "
+            "logit carries a density ratio, while the raw score models the conditional log probability, up to a user "
+            "constant. We rank by the raw score; adding a popularity prior again is a separate ablation, not a recovery "
+            "step. Finite training need not reach that ideal. <bookmark mark='c'/> Macro recall averages each user's "
+            "fraction of all eligible held-out favourites recovered in the top ten. It reaches "
             f"{rw:.2f} for known users and {rc:.2f} for new ones, from five films each; popularity alone gets "
             f"{t['pop_warm']:.2f} and {t['pop_cold']:.2f}. {verdict}"
         ) as vo:
-            self.play(FadeIn(both), FadeIn(tag), FadeIn(g))
+            self.play(FadeIn(both), FadeIn(tag), FadeIn(g), FadeIn(metric))
             vo.wait_until("a")
             self.play(FadeIn(dot))
             vo.wait_until("b")

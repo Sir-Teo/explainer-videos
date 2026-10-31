@@ -68,8 +68,9 @@ class GaLore(VoiceoverScene):
         shape = tr[0]["shape"]
         n = len(tr[0]["s"])
         steps = [e["step"] for e in tr]
-        show = [e for e in tr if e["step"] in (1, 20, 100, 600)]
-        cols = [GREY_B, C.BITS, C.REWARD, GRAD]
+        pk = max(tr, key=lambda e: e["top8"])
+        show = [tr[0], pk, tr[-1]]
+        cols = [GREY_B, C.BITS, GRAD]
         ga = axes([0, n, 32], [-3.5, 0, 1], x_length=5.6, y_length=3.6, xticks=[0, 32, 64, 96, 128],
                   yticks=[-3, -2, -1, 0], yfmt=lambda v: f"10^{{{int(v)}}}" if v else "1",
                   xlabel=r"singular value, \ largest first", ylabel=r"$\sigma_i / \sigma_1$", center=[-3.4, -0.5, 0])
@@ -89,27 +90,35 @@ class GaLore(VoiceoverScene):
         ls = np.log10(steps)
         t8 = [e["top8"] for e in tr]
         share = VGroup(curve(bx, ls, t8, GRAD, 3), dots_on(bx, ls, t8, GRAD, 0.05))
+        replay_step = ValueTracker(float(steps[0]))
+        cursor = always_redraw(lambda: Dot(bx.c2p(math.log10(replay_step.get_value()),
+                                                 float(np.interp(math.log10(replay_step.get_value()), ls, t8))),
+                                           radius=0.085, color=WHITE, stroke_color=BACKGROUND, stroke_width=1))
+        cap = note(r"spectra: first, peak top-$8$ share, final step; \ cursor follows the same step \\ "
+                   r"right: full measured trajectory; \ spectral ratios below $10^{-3.5}$ shown at the floor",
+                   font_size=17).to_edge(DOWN, buff=0.15)
         head = label(rf"A real gradient: \ one ${shape[0]} \times {shape[1]}$ matrix of a small transformer, \ "
                      r"trained on the novels", font_size=28).to_edge(UP, buff=0.3)
         lo = min(t8)
-        pk = max(tr, key=lambda e: e["top8"])
         last = tr[-1]
         with self.voiceover(
             "Here is a real gradient, from a small transformer trained on the novels: one "
             f"{shape[0]} by {shape[1]} matrix. <bookmark mark='a'/> Its singular values, largest first, on a log scale. "
-            "At the first step they fall slowly. <bookmark mark='b'/> A few steps in, they collapse: at step "
-            f"{pk['step']}, the top eight directions carry {100 * pk['top8']:.1f} percent of the gradient. "
-            f"<bookmark mark='c'/> Later the spectrum fills in, slowly: at step {last['step']}, the top eight still "
-            f"carry {100 * last['top8']:.0f} percent, of {n} directions."
+            f"At step {tr[0]['step']}, the top eight carry {100 * tr[0]['top8']:.1f} percent of squared gradient "
+            f"energy. <bookmark mark='b'/> The largest measured top-eight share is at step {pk['step']}: "
+            f"{100 * pk['top8']:.1f} percent. <bookmark mark='c'/> At the final step, {last['step']}, it is "
+            f"{100 * last['top8']:.1f} percent, of {n} possible directions. The cursor aligns each spectrum with "
+            "its position on the full energy-share trajectory."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ga), FadeIn(gb))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(ga), FadeIn(gb))
             vo.wait_until("a")
-            self.play(Create(spec[0]), FadeIn(leg[0]))
+            self.play(Create(spec[0]), FadeIn(leg[0]), Create(share))
+            self.add(cursor)
             vo.wait_until("b")
-            self.play(Create(spec[1]), FadeIn(leg[1]), Create(share), run_time=2.0)
+            self.play(Create(spec[1]), FadeIn(leg[1]), replay_step.animate.set_value(pk["step"]), run_time=2.0)
             vo.wait_until("c")
-            self.play(Create(spec[2]), FadeIn(leg[2]))
-            self.play(Create(spec[3]), FadeIn(leg[3]))
+            self.play(Create(spec[2]), FadeIn(leg[2]), replay_step.animate.set_value(last["step"]), run_time=2.0)
+        cursor.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -123,7 +132,8 @@ class GaLore(VoiceoverScene):
             cmath(r"R", "=", r"P^{\top} G", font_size=36, colors={"R": C.REWARD, "G": GRAD}),
             cmath(r"\Delta W", "=", r"-\eta\, P\ \mathrm{Adam}(R)", font_size=36, colors={"R": C.REWARD}),
         ]
-        whys = [why(r"$P$: the top $r$ singular vectors of $G$, \ refreshed every $T$ steps"),
+        whys = [why(r"left projection shown; \ implementation projects the shorter side \\ $P$: top $r$ singular vectors, refreshed every $T$ steps",
+                    font_size=21),
                 why(r"Adam's two running averages live on $R$, \ not on $G$")]
         step = ladder(self, rows, whys, keep=2, top=3.0, x=-2.0, buff=0.45, edge=6.9)
         hist = history_card(2024, r"J.~Zhao, \ Y.~Tian, \ A.~Anandkumar et al., \ GaLore",
@@ -176,17 +186,24 @@ class GaLore(VoiceoverScene):
         steps = int(g["steps"])
         methods = ("adam", "adamsplit", "galore32", "galore8")
         res = {m: runs_of(g, ctl, m) for m in methods}
-        ga = axes([0, steps, 100], [3, 9, 1], x_length=6.0, y_length=3.8, xticks=[0, 200, 400, 600], yticks=[4, 6, 8],
+        smoothing = 8
+        smoothed = {m: np.array([np.convolve(np.asarray(r["curve"]), np.ones(smoothing) / smoothing, mode="valid")
+                                 for r in res[m][0]]) for m in methods}
+        low = min(v.min() for v in smoothed.values()) - 0.1
+        high = max(v.max() for v in smoothed.values()) + 0.1
+        ga = axes([0, steps, 100], [low, high, (high - low) / 4], x_length=6.0, y_length=3.8,
+                  xticks=[0, 200, 400, 600], yticks=list(np.linspace(low, high, 5)), yfmt=lambda v: f"{v:.1f}",
                   xlabel=r"step", ylabel=r"training loss \ (nats per token)", center=[-3.3, -0.4, 0])
         ax = ga.ax
         curves = {}
+        bands = {}
         for m in methods:
-            rs, _ = res[m]
-            c = np.mean([np.asarray(r["curve"]) for r in rs], 0)
-            xs = np.arange(len(c)) * 5 + 1
-            k = 8
-            sm = np.convolve(c, np.ones(k) / k, mode="valid")
-            curves[m] = curve(ax, xs[k - 1:], np.clip(sm, 3, 9), MC[m], 3)
+            values = smoothed[m]
+            xs = (np.arange(values.shape[1]) + smoothing - 1) * 5 + 1
+            curves[m] = curve(ax, xs, values.mean(axis=0), MC[m], 3)
+            points = [ax.c2p(x, y) for x, y in zip(xs, values.min(axis=0))]
+            points += [ax.c2p(x, y) for x, y in zip(xs[::-1], values.max(axis=0)[::-1])]
+            bands[m] = Polygon(*points, stroke_width=0, fill_color=MC[m], fill_opacity=0.12)
         rows = VGroup()
         vals = {m: [r["val"] for r in res[m][0]] for m in methods}
         for m in methods:
@@ -205,8 +222,9 @@ class GaLore(VoiceoverScene):
         if tab.width > 6.4:
             tab.scale_to_fit_width(6.4)
         tab.move_to([3.4, 0.2, 0])
-        cap = note(r"computed: \ $600$ steps of $16 \times 64$ tokens; \ learning rates $10^{-3}$, $3 \times 10^{-3}$, "
-                   r"$10^{-2}$ tried for each; \ each method at its best, three seeds").to_edge(DOWN, buff=0.2)
+        cap = note(r"$600$ steps of $16\times64$ tokens; \ three learning rates selected on seed $0$ validation \\ "
+                   r"selected rate run on seeds $0,1,2$; \ mean with min--max band; \ $8$-sample moving average",
+                   font_size=17).to_edge(DOWN, buff=0.15)
         mean = {m: float(np.mean(vals[m])) for m in methods}
         spread = max(max(vals[m]) - min(vals[m]) for m in methods)
         gap = mean["adam"] - mean["galore32"]
@@ -214,10 +232,10 @@ class GaLore(VoiceoverScene):
         if gap > spread and split_share > 0.5 and mean["adamsplit"] > mean["galore32"] + spread / 2:
             verdict = (f"GaLore wins, but most of the gap, {100 * split_share:.0f} percent, comes from GaLore's smaller steps for the "
                        "matrices, which let the rest train at the full rate: Adam given the same step sizes reaches "
-                       f"{mean['adamsplit']:.3f}. The low-rank window adds the rest here, at no cost.")
+                       f"{mean['adamsplit']:.3f}. The low-rank window adds the remaining improvement in this experiment.")
         elif gap > spread and split_share > 0.5:
             verdict = ("The gap comes from GaLore's smaller steps for the matrices: Adam given the same step sizes "
-                       f"does as well, {mean['adamsplit']:.3f}. The low-rank window itself costs nothing.")
+                       f"does as well within the measured spread, {mean['adamsplit']:.3f}.")
         elif gap > spread:
             verdict = ("Adam given GaLore's step sizes does not close the gap: here, the low-rank window itself "
                        "helped.")
@@ -227,18 +245,21 @@ class GaLore(VoiceoverScene):
             verdict = "GaLore falls short of Adam here, the price of its smaller memory at this scale."
         with self.voiceover(
             "Does a narrow window cost anything? We trained the model with Adam and with GaLore at ranks 32 and 8, "
-            "each at its best of three learning rates, three seeds each. <bookmark mark='a'/> The training curves, "
-            "averaged. <bookmark mark='b'/> The held-out loss: Adam "
+            "each at its best of three learning rates chosen using seed zero's validation result. We then run "
+            "that rate on seeds zero, one and two; the reported three include the tuning seed. "
+            "<bookmark mark='a'/> Training curves show the mean and minimum-to-maximum band after an eight-sample "
+            "moving average, with no hard loss clipping. <bookmark mark='b'/> The held-out loss: Adam "
             f"{mean['adam']:.3f}, rank 32 {mean['galore32']:.3f}, rank 8 {mean['galore8']:.3f}. <bookmark mark='c'/> "
             f"{verdict}"
         ) as vo:
             self.play(FadeIn(ga), FadeIn(cap))
             vo.wait_until("a")
-            self.play(*[Create(curves[m]) for m in ("adam", "galore32", "galore8")], run_time=2.5)
+            self.play(*[FadeIn(bands[m]) for m in ("adam", "galore32", "galore8")],
+                      *[Create(curves[m]) for m in ("adam", "galore32", "galore8")], run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(hdr), *[FadeIn(rows[i]) for i in (0, 2, 3)])
             vo.wait_until("c")
-            self.play(Create(curves["adamsplit"]), FadeIn(rows[1]), run_time=1.5)
+            self.play(FadeIn(bands["adamsplit"]), Create(curves["adamsplit"]), FadeIn(rows[1]), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 

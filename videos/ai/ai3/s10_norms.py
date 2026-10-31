@@ -85,13 +85,17 @@ class Norms(VoiceoverScene):
         lo, hi = min(allst), max(allst)
         full = 768
         cap = note(r"computed: \ all $48$ weight matrices in GPT-2 small's blocks").to_corner(DR, buff=0.25)
-        verdict = ("every one of them far below a random matrix of the same shape" if hi < 0.5 * rnd["stable"]
-                   else "some of them close to a random matrix")
+        if hi < 0.5 * rnd["stable"]:
+            verdict = "every one is below half of this MLP-shaped random reference"
+        elif hi < rnd["stable"]:
+            verdict = "every one is below this MLP-shaped random reference"
+        else:
+            verdict = "at least one reaches or exceeds this MLP-shaped random reference"
         with self.voiceover(
             f"Here are the stable ranks of GPT-2's 48 block matrices; each could reach {full}. <bookmark mark='a'/> A "
             f"random matrix of the MLP's shape has {rnd['stable']:.0f}; theory predicts {rnd['stable_pred']:.0f}. "
-            f"<bookmark mark='b'/> The trained ones run from {lo:.0f} to {hi:.0f}: {verdict}. Training concentrates a "
-            "matrix's size in a few directions."
+            f"<bookmark mark='b'/> The trained ones run from {lo:.0f} to {hi:.0f}: {verdict}. A smaller stable rank means "
+            "the matrix's size is concentrated in fewer directions."
         ) as vo:
             self.play(FadeIn(g), FadeIn(cap))
             vo.wait_until("a")
@@ -158,7 +162,7 @@ class Norms(VoiceoverScene):
             cmath(r"\frac{|\delta\mathbf{x}|}{|\mathbf{x}|}", r"\le", r"\kappa\,\frac{|\delta\mathbf{b}|}{|\mathbf{b}|}, "
                   r"\quad \kappa = \frac{\sigma_1}{\sigma_n}", font_size=32, colors={r"\kappa": SIG}),
         ]
-        whys = [why(r"a small error in $\mathbf{b}$", font_size=22), why(r"$A^{-1}$ stretches by at most $1/\sigma_n$", font_size=22),
+        whys = [why(r"$A$ invertible, $\mathbf{b}\ne0$: \\ a small error in $\mathbf{b}$", font_size=22), why(r"$A^{-1}$ stretches by at most $1/\sigma_n$", font_size=22),
                 why(r"$A$ stretches by at most $\sigma_1$", font_size=22), why(r"divide", font_size=22)]
         for r_, w_ in zip(rows, whys):
             r_.scale(0.95)
@@ -212,17 +216,18 @@ class Norms(VoiceoverScene):
             cmath(r"\max_{\|\Delta\|_2 \le 1} \operatorname{tr}(G^{\top}\Delta)", r"\le", r"\textstyle\sum_i \sigma_i",
                   r"\quad \text{at } \Delta = UV^{\top}", font_size=32),
         ]
-        whys = [why(r"$G = U\Sigma V^{\top}$", font_size=22),
+        whys = [why(r"$G = U\Sigma V^{\top}$: \ the thin SVD", font_size=22),
                 why(r"$|(U^{\top}\Delta V)_{ii}| \le \|\Delta\|_2 \le 1$", font_size=22)]
         step = ladder(self, rows, whys, keep=2, top=3.2, x=-0.6, buff=0.4, edge=6.9)
         n = len(ns[0])
-        g = axes([0, n, max(1, n // 4)], [0, 1.25, 0.5], x_length=5.6, y_length=3.0, yticks=[0, 0.5, 1.0],
-                 xlabel=r"singular values, \ largest first", ylabel=r"$\sigma_i$, \ relative", center=[-3.0, -1.6, 0])
+        y_top = max(1.35, 1.05 * max(float(sv.max()) for sv in ns))
+        g = axes([0, n, max(1, n // 4)], [0, y_top, 0.5], x_length=5.6, y_length=3.0, yticks=[0, 0.5, 1.0],
+                 xlabel=r"singular values, \ largest first", ylabel=r"$\sigma_i$, \ Newton--Schulz iterate", center=[-3.0, -1.6, 0])
         ax = g.ax
         xs = np.arange(n) + 0.5
         tr = ValueTracker(0)
-        first = curve(ax, xs, g0, GREY_B, 3)
-        lab = label(r"a real gradient \ (chapter eleven's run)", font_size=22, color=GREY_B).next_to(ax.c2p(n * 0.5, 0.5),
+        first = curve(ax, xs, ns[0], GREY_B, 3)
+        lab = label(r"the gradient, divided by its Frobenius norm", font_size=22, color=GREY_B).next_to(ax.c2p(n * 0.5, 0.5),
                                                                                                    UP, buff=0.3)
         rd = always_redraw(lambda: label(rf"Newton--Schulz step ${int(round(tr.get_value()))}$ of ${len(ns) - 1}$",
                                          font_size=26, color=C.MUON).next_to(ax, UP, buff=0.5).align_to(ax, LEFT))
@@ -240,7 +245,8 @@ class Norms(VoiceoverScene):
             "one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is "
             "Muon's normalized direction; take its negative for descent. It is computed with five Newton-Schulz "
             "iterations, matrix products that push singular values "
-            f"towards one. On a real gradient, {100 * tiny:.0f} percent start below a hundredth of the largest. "
+            f"towards one. On a real gradient, {100 * tiny:.0f} percent of the singular values are below a hundredth "
+            "of its largest. We first divide the gradient by its Frobenius norm. "
             f"<bookmark mark='d'/> After five steps, {100 * near:.0f} percent lie between 0.6 and 1.3. Part 11 builds "
             "the optimizer."
         ) as vo:

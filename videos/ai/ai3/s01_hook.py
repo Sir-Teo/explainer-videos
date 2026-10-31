@@ -129,6 +129,9 @@ class Hook(VoiceoverScene):
             rows.add(VGroup(name, bc).arrange(RIGHT, buff=0.35))
         rows.arrange(DOWN, buff=0.55, aligned_edge=RIGHT).move_to(DOWN * 0.1)
         head = label(r"$768$ numbers per word", font_size=36).to_edge(UP, buff=0.4)
+        sign_key = VGroup(label(r"$+$ positive", font_size=22, color="#F2A541"),
+                          label(r"$-$ negative", font_size=22, color="#58A6FF"))
+        sign_key.arrange(RIGHT, buff=0.45).next_to(head, DOWN, buff=0.16)
         cosl = VGroup(
             label(rf"dog and puppy: \\ cosine ${cos[0, 1]:.2f}$", font_size=28, color=C.TRUE_P),
             label(rf"dog and tobacco: \\ cosine ${cos[0, 2]:.2f}$", font_size=28, color=GREY_A),
@@ -138,7 +141,7 @@ class Hook(VoiceoverScene):
             "tobacco. <bookmark mark='c'/> Two of these belong together, and in chapter one we'll learn to measure "
             "how much."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows[0][0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in rows[0][1]],
+            self.play(FadeIn(head), FadeIn(sign_key), FadeIn(rows[0][0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in rows[0][1]],
                                                                      lag_ratio=0.002), run_time=1.6)
             vo.wait_until("a")
             self.play(FadeIn(rows[1][0]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in rows[1][1]], lag_ratio=0.002),
@@ -194,7 +197,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def plan(self):
         title = label(rf"Part {PART}: \ Vectors That Mean Things", font_size=48).to_edge(UP, buff=0.45)
-        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.5)
+        smap = series_map(current=PART, done=PART - 1).scale(0.9).move_to(DOWN * 0.5)
         obj = objectives_card([
             r"vectors, \ the dot product and Cauchy--Schwarz; \ einsum, the notation of attention",
             r"matrices as maps: \ projection, \ eigenvectors, \ the SVD, \ each derived",

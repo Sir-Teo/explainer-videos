@@ -10,6 +10,22 @@ from videos.ai.ai3.common import HIST, MPC, chapter, dots_on, load
 MEAS, EXACT, BOUND = C.TRUE_P, C.BITS, MPC
 
 
+def worst_plot_data(fine, x_range=(1.9, 3.0), ymax=1.0):
+    """Keep only finite observations inside both plotted axes; never invent a bound."""
+    bounds, measured = [], []
+    for f in fine:
+        x = math.log10(f["k"])
+        if not x_range[0] <= x <= x_range[1]:
+            continue
+        epsilon = float(f["bound_eps"])
+        if math.isfinite(epsilon) and 0 < epsilon < min(1.0, ymax):
+            bounds.append((x, epsilon, int(f["k"])))
+        values = np.asarray(f["worst"], float)
+        if len(values) and np.isfinite(values).all() and 0 <= values.min() and values.max() <= ymax:
+            measured.append((x, float(values.min()), float(values.max()), float(values.mean())))
+    return bounds, measured, len(fine) - len(measured)
+
+
 class JL(VoiceoverScene):
     def construct(self):
         chapter(self, 15, r"Johnson--Lindenstrauss, proved", r"How few numbers can keep the distances?",
@@ -34,6 +50,7 @@ class JL(VoiceoverScene):
         band_up = DashedLine(ax.c2p(lo, lo * 1.1), ax.c2p(hi, hi * 1.1), color=GREY_B, stroke_width=1.5)
         band_dn = DashedLine(ax.c2p(lo, lo * 0.9), ax.c2p(hi, hi * 0.9), color=GREY_B, stroke_width=1.5)
         sel = np.arange(0, len(d0), 4)
+        sel = sel[(d0[sel] >= lo) & (d0[sel] <= hi)]
         kt = ValueTracker(0)
 
         def ys():
@@ -63,13 +80,17 @@ class JL(VoiceoverScene):
         w_a, w_b = 100 * j[f"within10_{ks[3]}"], 100 * j[f"within10_{ks[4]}"]
         head = label(rf"${fmt_int(n)}$ of GPT-2's vectors, \ times one random $768 \times k$ matrix", font_size=32)
         head.to_edge(UP, buff=0.35)
+        cap = note(rf"ordinary distances; \ ${len(d0):,}$ sampled pairs; \ one map per $k$ \\ "
+                   r"every fourth pair drawn in the central range; \ vertical extremes clipped",
+                   font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "A consequence that sounds impossible. <bookmark mark='a'/> Multiply a thousand of GPT-2's vectors by one "
-            f"random matrix, crushing 768 numbers to a few. <bookmark mark='b'/> Down to {ks[0]}, distances are "
+            f"random matrix, crushing 768 numbers to a few. These are {len(d0):,} sampled ordinary-distance pairs, "
+            f"with one map per target dimension. <bookmark mark='b'/> Down to {ks[0]}, distances are "
             f"scrambled; {ks[1]}, {ks[2]}: better. <bookmark mark='c'/> At {ks[3]}, "
             f"{w_a:.0f} percent of the distances move by less than ten percent; at {ks[4]}, {w_b:.1f} percent."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), Create(diag), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), FadeIn(cap), Create(ax), Create(diag), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
             self.add(pts)
             self.play(FadeIn(kread), FadeIn(wread), Create(band_up), Create(band_dn))
@@ -136,7 +157,7 @@ class JL(VoiceoverScene):
                     r"(\varepsilon^2/2 - \varepsilon^3/3)$", font_size=22)]
         step = ladder(self, rows, whys, keep=5, top=3.3, x=-2.6, buff=0.42, edge=6.6)
         tag = note(r"a pair $\mathbf{u}, \mathbf{v}$ is the vector $\mathbf{x} = (\mathbf{u} - \mathbf{v})/|\mathbf{u} - "
-                   r"\mathbf{v}|$; \ the lower tail is the same").to_edge(DOWN, buff=0.3)
+                   r"\mathbf{v}|$; \ the lower tail obeys the same weaker exponent").to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Fix one pair, and let x be their difference, of length one. <bookmark mark='a'/> Each coordinate of R x "
             "is a sum of independent normals: normal, with variance one. <bookmark mark='b'/> The squared length is a "
@@ -177,21 +198,28 @@ class JL(VoiceoverScene):
         c_ex = curve(ax, lk, cl(ex), EXACT, 3)
         c_ch = DashedVMobject(curve(ax, lk, cl(ch), BOUND, 3), num_dashes=40)
         d_me = dots_on(ax, lk, cl(meas), MEAS, 0.07)
-        leg = legend([(MEAS, r"measured, \ all $499{,}500$ pairs"), (EXACT, r"exact: \ the $\chi^2_k$ tail"),
+        ranges = VGroup(*[Line(ax.c2p(x, float(cl(min(f["fail"])))), ax.c2p(x, float(cl(max(f["fail"])))),
+                              color=MEAS, stroke_width=3) for x, f in zip(lk, fine)])
+        cap = note(r"squared-distance error; \ dots: mean of five maps; \ bars: min--max \\ "
+                   r"all pairs share a map; \ probabilities below $10^{-2.5}$ shown at the floor",
+                   font_size=17).to_edge(DOWN, buff=0.15)
+        leg = legend([(MEAS, r"measured: \ five maps, all pairs"), (EXACT, r"exact: \ one pair's $\chi^2_k$ tail"),
                       (BOUND, r"the Chernoff bound")], font_size=22).move_to([4.7, 1.0, 0])
         k768 = fine[-1]
         worst_gap = max(abs(a - b) for a, b in zip(meas, ex))
         with self.voiceover(
             f"Now the data. <bookmark mark='a'/> For one pair, the chance of moving more than {100 * eps:.0f} percent is "
-            "exactly a chi-squared tail, in yellow. <bookmark mark='b'/> The measured share of all 499,500 pairs sits on "
-            f"it: the largest gap is {worst_gap:.4f}. <bookmark mark='c'/> The Chernoff bound, dashed, lies above, as it "
-            f"must: at {int(k768['k'])}, {k768['chernoff']:.2f} against an exact {k768['exact_fail']:.3f}."
+            "exactly a chi-squared tail, in yellow. These are squared-distance errors. <bookmark mark='b'/> "
+            f"The mean measured fraction over five maps differs from that probability by at most {worst_gap:.4f}; "
+            "the bars show the range. Pairs sharing a map are dependent. <bookmark mark='c'/> The dashed Chernoff "
+            f"bound lies above the exact probability: at {int(k768['k'])}, {k768['chernoff']:.2f} "
+            f"against {k768['exact_fail']:.3f}."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(leg[1]))
+            self.play(FadeIn(g), FadeIn(cap), FadeIn(leg[1]))
             vo.wait_until("a")
             self.play(Create(c_ex), run_time=1.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in d_me], lag_ratio=0.1), FadeIn(leg[0]))
+            self.play(FadeIn(ranges), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in d_me], lag_ratio=0.1), FadeIn(leg[0]))
             vo.wait_until("c")
             self.play(Create(c_ch), FadeIn(leg[2]), run_time=1.5)
         self.wait(0.3)
@@ -211,32 +239,52 @@ class JL(VoiceoverScene):
                  xlabel=r"target dimension $k$", ylabel=r"the worst distortion over all pairs, \ "
                  r"$\max |\,\text{ratio of squared distances} - 1\,|$", center=[-1.6, -0.5, 0])
         ax = g.ax
-        good = [(np.log10(f["k"]), f["bound_eps"]) for f in fine if f["bound_eps"] == f["bound_eps"]]
-        c_b = curve(ax, [a for a, _ in good], [b for _, b in good], BOUND, 3)
-        lo = [min(f["worst"]) for f in fine]
-        hi = [max(f["worst"]) for f in fine]
-        keep = [i for i, f in enumerate(fine) if max(f["worst"]) <= 1.0]
-        bars = VGroup(*[Line(ax.c2p(lk[i], lo[i]), ax.c2p(lk[i], hi[i]), color=MEAS, stroke_width=6) for i in keep])
-        mids = dots_on(ax, [lk[i] for i in keep], [float(np.mean(fine[i]["worst"])) for i in keep], MEAS, 0.06)
-        leg = legend([(MEAS, r"measured: \ five random matrices"), (BOUND, r"proved: \ the union bound's $\varepsilon$")],
-                     font_size=22).move_to([4.7, 1.2, 0])
+        good, measured, omitted = worst_plot_data(fine)
+        c_b = (curve(ax, [a for a, _, _ in good], [b for _, b, _ in good], BOUND, 3)
+               if len(good) >= 2 else Dot(ax.c2p(*good[0][:2]), radius=0.07, color=BOUND)
+               if good else VGroup())
+        bars = VGroup(*[Line(ax.c2p(x, lo), ax.c2p(x, hi), color=MEAS, stroke_width=6)
+                        for x, lo, hi, mean in measured])
+        mids = dots_on(ax, [x for x, _, _, _ in measured], [mean for _, _, _, mean in measured], MEAS, 0.06)
+        confidence = 100 * float(j["confidence"])
+        delta = float(j["delta"])
+        leg = legend([(MEAS, r"measured: \ mean and range of five maps"),
+                      (BOUND, rf"union bound: \ ${confidence:g}\%$ confidence")],
+                     font_size=20).move_to([4.6, 1.5, 0])
+        cap = note(rf"$\delta={delta:g}$: \ probability over the random map \\ "
+                   rf"${omitted}$ measured dimensions outside the plotted window omitted; \ no fabricated bounds",
+                   font_size=17).to_edge(DOWN, buff=0.12)
+        unavailable = label(r"no nontrivial $\varepsilon<1$ bound here", font_size=22, color=BOUND)
+        unavailable.move_to([3.8, 0.1, 0])
         last = fine[-1]
-        first_b = next(f for f in fine if f["bound_eps"] == f["bound_eps"])
+        last_bound = float(last["bound_eps"])
+        if good and math.isfinite(last_bound) and 0 < last_bound < 1:
+            bound_verdict = (f"At {confidence:g} percent confidence over the random map, the first plotted "
+                             f"nontrivial bound is at k of {good[0][2]}. At {int(last['k'])}, it certifies "
+                             f"squared-distance distortion at most {last_bound:.2f}; the measured worst-pair "
+                             f"mean is {np.mean(last['worst']):.2f}.")
+        elif good:
+            bound_verdict = (f"At {confidence:g} percent confidence, a nontrivial bound is available only at "
+                             "the plotted certified dimensions; it is unavailable at the final sampled dimension.")
+        else:
+            bound_verdict = (f"At {confidence:g} percent confidence, none of these dimensions gives a "
+                             "nontrivial epsilon below one from this union bound. That means the bound is "
+                             "uninformative here, not that the measured maps failed.")
         hist = history_card(2017, r"K.~Larsen \& J.~Nelson",
                             r"worst-case point sets require \ $k$ to grow like "
                             r"$\log n / \varepsilon^2$", color=HIST, width=5.0).to_corner(DR, buff=0.25)
         with self.voiceover(
             "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices "
-            f"per k. <bookmark mark='b'/> The union bound's guarantee, from k of {int(first_b['k'])}: at "
-            f"{int(last['k'])} it promises {last['bound_eps']:.2f}, and the worst pair measured "
-            f"{np.mean(last['worst']):.2f}. <bookmark mark='c'/> In the worst case no map can do much better: in 2017 Kasper Green "
+            f"per k. Bars show the minimum to maximum, with a mean dot. <bookmark mark='b'/> {bound_verdict} "
+            "This confidence comparison is separate from the classic existence statement we proved. "
+            "<bookmark mark='c'/> In the worst case no map can do much better: in 2017 Kasper Green "
             "Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(cap))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(b_) for b_ in bars], lag_ratio=0.1), FadeIn(mids), FadeIn(leg[0]))
             vo.wait_until("b")
-            self.play(Create(c_b), FadeIn(leg[1]), run_time=1.5)
+            self.play(FadeIn(c_b) if good else FadeIn(unavailable), FadeIn(leg[1]), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(hist, shift=UP * 0.2))
         self.wait(0.3)

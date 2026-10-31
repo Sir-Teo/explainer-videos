@@ -50,9 +50,10 @@ class Power(VoiceoverScene):
                             r"no formula, \ built from roots, \ solves every polynomial of degree five or more",
                             color=HIST, width=4.6).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Eigenvalues are roots of a polynomial, of degree 768 for a 768 by 768 matrix, and since Abel there is no "
-            "formula beyond degree four. So computers iterate. <bookmark mark='a'/> Start anywhere, multiply by A, "
-            "rescale to length one, repeat. <bookmark mark='b'/> Each multiplication favours the direction A stretches "
+            "Eigenvalues are roots of a polynomial, of degree 768 for a 768 by 768 matrix. Abel proved there is no "
+            "general formula using radicals beyond degree four, so computers use numerical methods. <bookmark mark='a'/> "
+            "For this symmetric matrix, start with a nonzero component along its dominant eigenvector, multiply by A, "
+            "rescale to length one, repeat. <bookmark mark='b'/> Here, each multiplication favours the direction A stretches "
             "most, and the arrow swings onto the top eigenvector."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(mat), Create(eline), FadeIn(el))
@@ -144,9 +145,9 @@ class Power(VoiceoverScene):
         floor = note(r"round-off: $\approx 10^{-16}$").next_to(ax.c2p(60, -15.5), UP, buff=0.05).align_to(ax.c2p(60, 0), RIGHT)
         dg, dl = p["gpt2"], p["letters"]
         s0 = dg["sin"][0]
-        verdict = ("both match the prediction to two decimal places"
-                   if abs(dg["rate_measured"] - dg["ratio"]) < 0.01 and abs(dl["rate_measured"] - dl["ratio"]) < 0.01
-                   else "close to the prediction")
+        rate_gap = max(abs(dg["rate_measured"] - dg["ratio"]), abs(dl["rate_measured"] - dl["ratio"]))
+        verdict = ("both measured rates are within 0.01 of their predicted ratios"
+                   if rate_gap < 0.01 else f"the largest absolute gap from the predicted ratios is {rate_gap:.3f}")
         with self.voiceover(
             "Now real matrices. <bookmark mark='a'/> The covariance of GPT-2's 50,257 token vectors, 768 by 768: its "
             f"top two eigenvalues have a ratio of {dg['ratio']:.3f}, and the error falls by {dg['rate_measured']:.3f} "

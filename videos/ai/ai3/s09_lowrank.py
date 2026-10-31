@@ -180,8 +180,9 @@ class LowRank(VoiceoverScene):
             return [b.animate.set_fill(opacity=0.9 if i < k else 0.18) for i, b in enumerate(bars)]
 
         with self.voiceover(
-            "Part 1's table of letter pairs, 26 by 26. <bookmark mark='a'/> The first piece alone is the table you'd "
-            "get if the next letter ignored the one before. <bookmark mark='b'/> Add the second, third, fifth, tenth, "
+            "Part 1's table of letter pairs, 26 by 26, with square-root probabilities. <bookmark mark='a'/> Its first "
+            "piece is a separable approximation: after squaring and normalizing, the two letters are independent. "
+            "<bookmark mark='b'/> Add the second, third, fifth, tenth, "
             "<bookmark mark='c'/> and the error falls by exactly the singular values left out: "
             f"{err[0]:.2f} of the whole after one piece, {err[1]:.2f} after two."
         ) as vo:

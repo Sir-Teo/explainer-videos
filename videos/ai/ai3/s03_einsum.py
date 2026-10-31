@@ -171,7 +171,7 @@ class Einsum(VoiceoverScene):
             ("btd,dhe->bhte", r"$Q$, $K$, $V$: \ each token's vector, split into heads"),
             ("bhqe,bhke->bhqk", r"scores: \ every query against every key"),
             ("bhqk,bhke->bhqe", r"weights times values (after a softmax over $k$)"),
-            ("bhqe,hed->btd", r"heads merged back into one vector"),
+            ("bhqe,hed->bqd", r"heads merged back into one vector"),
         ]
         head = label(r"Attention, \ in four contractions", font_size=40).to_edge(UP, buff=0.4)
         rows = VGroup()
@@ -184,7 +184,7 @@ class Einsum(VoiceoverScene):
         ms, mv, mp = float(e["macs_scores"]), float(e["macs_values"]), float(e["macs_proj"])
         top = max(ms, mv, mp)
         items = [(r"scores \ $h\,q\,k\,e$", ms, C.ATTN), (r"weighted values", mv, C.VALUE),
-                 (r"projections \ ($4 \times 1024 \times 768^2$)", mp, C.EMBED)]
+                 (r"$Q,K,V$ and output \ ($4 \times 1024 \times 768^2$)", mp, C.EMBED)]
         bars = VGroup()
         for k, (t, v, col) in enumerate(items):
             w = 6.0 * v / top
