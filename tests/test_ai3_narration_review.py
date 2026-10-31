@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from explainer.zh_templates import Translator, _parts, numeric, sources, table
+from explainer.zh_templates import Translator, _parts, ambiguous, numeric, sources, table
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,6 +170,42 @@ class Part3NarrationTests(unittest.TestCase):
                         if isinstance(n, ast.Constant) and isinstance(n.value, str)]
             english = next(x for x in literals if x.startswith(prefix))
             self.translated(english)
+
+    def test_retrieval_availability_helpers_translate_without_nan_verdicts(self):
+        tree = ast.parse((PART / "s18_netflix.py").read_text())
+        helper = next(n for n in tree.body if isinstance(n, ast.FunctionDef)
+                      and n.name == "retrieval_cohort_summary")
+        env = {}
+        exec(compile(ast.Module([helper], type_ignores=[]), "actual-retrieval-summary", "exec"), env)
+        self.assertEqual(ambiguous("ai3"), [])
+        cases = [(False, False, False, float("nan"), float("nan")),
+                 (True, False, False, float("nan"), float("nan")),
+                 (True, False, True, float("nan"), .15),
+                 (True, True, False, .2, float("nan")),
+                 (True, True, True, .2, .1), (True, True, True, .1, .2),
+                 (True, True, True, .1, .1)]
+        for eligible, model, baseline, recall, popularity in cases:
+            cohort = dict(eligible=eligible, users=2 if eligible else 0, targets=4 if eligible else 0,
+                          model_available=model, baseline_available=baseline,
+                          recall=recall, popularity=popularity)
+            warm = env["retrieval_cohort_summary"](cohort, "known users")
+            cold = env["retrieval_cohort_summary"](cohort, "new users")
+            english = self.spoken("Factorization has a weakness", warm_summary=warm, cold_summary=cold)
+            chinese = self.translated(english)
+            # Both helper summaries must be recovered completely and in order;
+            # merely seeing both cohort names would miss a bad regex split.
+            self.assertIn(self.translated(warm) + "另外，" + self.translated(cold), chinese)
+            self.assertIn("已知用户", chinese)
+            self.assertIn("新用户", chinese)
+            self.assertNotIn("For known", chinese)
+            self.assertNotIn("nan", chinese.lower())
+            if not (eligible and model and baseline):
+                self.assertIn("不可用", chinese)
+                self.assertNotIn("没有胜过", chinese)
+            elif recall <= popularity:
+                self.assertIn("没有胜过热门推荐", chinese)
+            else:
+                self.assertIn("双塔胜过热门推荐", chinese)
 
     def test_all_narrated_templates_resolve_fields_and_preserve_bookmarks(self):
         # Strings stand in for fields; no model values or scene helpers are read.
