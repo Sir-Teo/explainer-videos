@@ -1,0 +1,18 @@
+{
+  "library-identities.json": {
+    "sha256": "f37848db400290c78b1e47219079d6a80a755bacdc83f8b9d7d310b63abdce2e",
+    "bytes": 1481
+  },
+  "README.md": {
+    "sha256": "f0924625dd68fe44cbcf1294e7c66aadaee52f3360a1900bd13323fa3aea8ed2",
+    "bytes": 1334
+  },
+  "comparison-provenance.json": {
+    "sha256": "103f6728c812f4b5e1eee9f5d5146674459af7cceada9710eb30180108566c46",
+    "bytes": 2134
+  },
+  "comparison-poster.png": {
+    "sha256": "a034b15ac608b5dfbb01adbd04002bd9b1fc654963a98cad6504f50d57324507",
+    "bytes": 201449
+  }
+}

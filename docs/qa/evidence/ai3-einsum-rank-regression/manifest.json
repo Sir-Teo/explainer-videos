@@ -1,0 +1,329 @@
+{
+  "scope": "Rank-qualified EN/ZH selected-time motion, endpoint and silent narration-record regression; not continuous/audio approval",
+  "packaged_utc": "2026-10-31T19:47:27.310557+00:00",
+  "source_sha256": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+  "files": [
+    {
+      "file": "ledgers/preservation.json.gz",
+      "kind": "unmodified scoped provenance ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/preservation.json",
+      "original_sha256": "f01bd671e475cb507b1afa5fda160eee885086d1ba9c6651ae9337a2f0862239",
+      "packaged_sha256": "54ccbdef9af4ce4dd0830eff5d063bf0a42ab6a002d4850ef59e36d330c80f6d",
+      "original_bytes": 20668,
+      "packaged_bytes": 4027
+    },
+    {
+      "file": "ledgers/completion-provenance.json.gz",
+      "kind": "unmodified scoped provenance ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/completion-provenance.json",
+      "original_sha256": "59755ee73ecb1b6735671e63b69e3f62349d5ea54da8c352f708da4dc36e2399",
+      "packaged_sha256": "d1a5f4b08dc06dc45d83829bb05bba5c0ffe4756f4b7a786896c2948255a1547",
+      "original_bytes": 3808,
+      "packaged_bytes": 1235
+    },
+    {
+      "file": "ledgers/narration-timing-review.json.gz",
+      "kind": "unmodified scoped provenance ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/narration-timing-review.json",
+      "original_sha256": "a2cf89af6bdadf244d1b6eeaba1bcdfc62348dceafc74fe79fa83f242f981c27",
+      "packaged_sha256": "c3d671c0cab46498cbfa23ff286e884ff2bd7cc8bd34c38a266a27beb781283d",
+      "original_bytes": 40845,
+      "packaged_bytes": 6142
+    },
+    {
+      "file": "ledgers/en-motion-review.json.gz",
+      "kind": "unmodified actual view/inheritance/gap ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion-review.json",
+      "original_sha256": "5a5dda01195ba54aadbdf9d7702ca6193cc799490a54946f5211c59e38963cc3",
+      "packaged_sha256": "bb50225e239b4ce34ba7d0648eb8d69da2c9469e375b97b7de660e13cc24ac5d",
+      "original_bytes": 454298,
+      "packaged_bytes": 42412
+    },
+    {
+      "file": "ledgers/en-endpoint-review.json.gz",
+      "kind": "unmodified actual view/inheritance/gap ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-endpoint-review.json",
+      "original_sha256": "b8cb7cdcabcf5f832adc556e97a598942e4d075efe332d97124f04987f841a55",
+      "packaged_sha256": "bc3cd39623f23b36327c9876fbafb99933aae323f4c6b6eddf1fc64927c9b080",
+      "original_bytes": 163763,
+      "packaged_bytes": 10396
+    },
+    {
+      "file": "ledgers/en-motion-audit.json.gz",
+      "kind": "unmodified all-frame automated audit",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/audit/result.json",
+      "original_sha256": "88ec2b4bb3f8db585eac6d161b8d6f9efafa4aec4fca4acb5e6ec0cb80ba80d0",
+      "packaged_sha256": "9275793df047092b57bf47c975d40e90b9163a395959708bfdc2b263d9e24102",
+      "original_bytes": 156064,
+      "packaged_bytes": 29301
+    },
+    {
+      "file": "ledgers/en-motion-render-result.json.gz",
+      "kind": "unmodified render record",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/render-result.json",
+      "original_sha256": "aadabc0bedef6e34b8839fa280238c0866e73b156ea01264438c10c488a25578",
+      "packaged_sha256": "b6c5ee1c8d918b6db33c72cafaa09e6c2089a98b5dbad011022d1fcc4a6c90f6",
+      "original_bytes": 80224,
+      "packaged_bytes": 11764
+    },
+    {
+      "file": "ledgers/en-endpoints-render-result.json.gz",
+      "kind": "unmodified render record",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-endpoints/render-result.json",
+      "original_sha256": "3a0189cb9a6bd22b101bfc98bb059e246abaa9ef3908b15add320cf5f69829c3",
+      "packaged_sha256": "bc1a5b3a4103e545cc286aa200ab1e4689df89a54a3d33c4f8a0bdae9dfb0320",
+      "original_bytes": 79925,
+      "packaged_bytes": 11892
+    },
+    {
+      "file": "ledgers/en-prior-def754-motion-review.json.gz",
+      "kind": "prior exact-PNG review proof",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion-review.json",
+      "original_sha256": "ca5fb6ac70f177dc5a62bda24cd9bf42f153e1ad665878b87a3b73fae645b494",
+      "packaged_sha256": "fdac013980565a4a6e3e6f67b2946eb30985906fd6449ff9837a14c4067acdd0",
+      "original_bytes": 325947,
+      "packaged_bytes": 35654
+    },
+    {
+      "file": "ledgers/en-prior-def754-endpoint-review.json.gz",
+      "kind": "prior endpoint exact-PNG review proof",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoint-comparison.json",
+      "original_sha256": "506cebd3d335d3ee8d7c62f86442f93c441f2ae82b9d290b490576bdfe736cb4",
+      "packaged_sha256": "2a58db5b8385bf9071962fdb2201472a90a77278715e803e07185a1751681cb0",
+      "original_bytes": 112320,
+      "packaged_bytes": 8247
+    },
+    {
+      "file": "images/en-motion-outer-reveal.png",
+      "kind": "actual new movie native followup",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/audit/frames/0001140_000075.999s.png",
+      "original_sha256": "faff626ebbdf92396dcd6fa501af29678a8576731b38ac9c47de17a3460d14db",
+      "packaged_sha256": "faff626ebbdf92396dcd6fa501af29678a8576731b38ac9c47de17a3460d14db",
+      "original_bytes": 53385,
+      "packaged_bytes": 53385,
+      "time": 75.999023,
+      "source_frame": 1140
+    },
+    {
+      "file": "images/en-motion-all-six.png",
+      "kind": "actual new movie native followup",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/audit/frames/0001301_000086.731s.png",
+      "original_sha256": "4e1348683d8cac1ed9e1d7d62f5f837a15c920a01689f8edf05bdc7076df4457",
+      "packaged_sha256": "4e1348683d8cac1ed9e1d7d62f5f837a15c920a01689f8edf05bdc7076df4457",
+      "original_bytes": 65982,
+      "packaged_bytes": 65982,
+      "time": 86.731055,
+      "source_frame": 1301
+    },
+    {
+      "file": "images/en-changed-sheet-003.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/changed-only/sheet-003.png",
+      "original_sha256": "3d60a5cc16c034858a552afd1a93557997ddc641d1bdc428b0bd39c2a5e89045",
+      "packaged_sha256": "3d60a5cc16c034858a552afd1a93557997ddc641d1bdc428b0bd39c2a5e89045",
+      "original_bytes": 398624,
+      "packaged_bytes": 398624,
+      "selected_indices": [
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        204
+      ]
+    },
+    {
+      "file": "images/en-changed-sheet-007.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-motion/changed-only/sheet-007.png",
+      "original_sha256": "be081f1378629229b36043c1fa690e5d4bb7d7f963fd8495b8262fd8ea9096f2",
+      "packaged_sha256": "be081f1378629229b36043c1fa690e5d4bb7d7f963fd8495b8262fd8ea9096f2",
+      "original_bytes": 481327,
+      "packaged_bytes": 481327,
+      "selected_indices": [
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239
+      ]
+    },
+    {
+      "file": "images/en-endpoint-after.png",
+      "kind": "actual changed native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/en-endpoints/012_00084.9s.png",
+      "original_sha256": "c67accb36d6b81656c59dc49656fc97d70785a9e061ea89080cf797efa81c818",
+      "packaged_sha256": "c67accb36d6b81656c59dc49656fc97d70785a9e061ea89080cf797efa81c818",
+      "original_bytes": 51730,
+      "packaged_bytes": 51730,
+      "time": 84.86162238325281,
+      "index": 12
+    },
+    {
+      "file": "images/en-endpoint-before.png",
+      "kind": "prior native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoints-final/012_00084.1s.png",
+      "original_sha256": "b1076bb10f004fdff62b6e3f06941b4681313d5f2b1cf6c0833800935b900e72",
+      "packaged_sha256": "b1076bb10f004fdff62b6e3f06941b4681313d5f2b1cf6c0833800935b900e72",
+      "original_bytes": 51971,
+      "packaged_bytes": 51971,
+      "time": 84.08555555555556,
+      "index": 12
+    },
+    {
+      "file": "ledgers/zh-motion-review.json.gz",
+      "kind": "unmodified actual view/inheritance/gap ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion-review.json",
+      "original_sha256": "ba814d4abf38779f7fe7498589729f61689207e7c779d9ebcdcc385ae0cd7078",
+      "packaged_sha256": "611522e4a325b387df0818d5d48e1aa4c3ae6862b712502707fd4568d9d73e2f",
+      "original_bytes": 437328,
+      "packaged_bytes": 39326
+    },
+    {
+      "file": "ledgers/zh-endpoint-review.json.gz",
+      "kind": "unmodified actual view/inheritance/gap ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-endpoint-review.json",
+      "original_sha256": "dfab0cf5f9decb6f0585bc28c7a5c9e6831ab0a8d160752302a46c3233e882d0",
+      "packaged_sha256": "cda88dadd4f40ba2778f71ba46f575ea264572017b8f26c40e201a2c0b5d8fae",
+      "original_bytes": 171790,
+      "packaged_bytes": 10718
+    },
+    {
+      "file": "ledgers/zh-motion-audit.json.gz",
+      "kind": "unmodified all-frame automated audit",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/audit/result.json",
+      "original_sha256": "b1fd6d5b71137d56d7508cd6bc0e5facc224eb9db83e4f7596b3eb024e1a29fa",
+      "packaged_sha256": "721f725a4fce50a38522508c30cb43cc3b2bdfac8fad13671ce473297dc86053",
+      "original_bytes": 158078,
+      "packaged_bytes": 29839
+    },
+    {
+      "file": "ledgers/zh-motion-render-result.json.gz",
+      "kind": "unmodified render record",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/render-result.json",
+      "original_sha256": "326b6916bdf4134c00a1801a5e8d70db0082cd7f146a90cdbedff81cdcaeb3e1",
+      "packaged_sha256": "076b215498b4852aaac2673ee5fb0b4f4f1f09774f372605f8b68238e3cdee65",
+      "original_bytes": 97571,
+      "packaged_bytes": 16452
+    },
+    {
+      "file": "ledgers/zh-endpoints-render-result.json.gz",
+      "kind": "unmodified render record",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-endpoints/render-result.json",
+      "original_sha256": "d08eda7c4f4e51094a86ec0dc271d05d7681b629dca5284557e0eb20cff11b4f",
+      "packaged_sha256": "00ea3320046996d027b91972fea85b40de1682b2503db8526847459189e94f86",
+      "original_bytes": 97243,
+      "packaged_bytes": 16574
+    },
+    {
+      "file": "ledgers/zh-prior-def754-motion-review.json.gz",
+      "kind": "prior exact-PNG review proof",
+      "original_path": "/workspace/runtime/ai3-motion-coverage/zh-Einsum/71d49d5d0333ee33f8ae719f0b647667550fc85c05eadd5a94c8d6425dd6822c/review.json",
+      "original_sha256": "6a650e8379fe31b7bf4ccf95984404cab2cb12d4276b8d067890af99c6787c32",
+      "packaged_sha256": "f0b93faed722162f351a9eb9ab4501a23f2e2d4af1a9a69ffcc172fbced0e309",
+      "original_bytes": 387616,
+      "packaged_bytes": 43694
+    },
+    {
+      "file": "ledgers/zh-prior-def754-endpoint-review.json.gz",
+      "kind": "prior endpoint exact-PNG review proof",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoint-comparison.json",
+      "original_sha256": "6f36defb9dc28a8c7082cfc27270840f2f9918706b104f5ab949d0d94f58952a",
+      "packaged_sha256": "fc3766f2d40157156cdb18d4207091e9bb94fb80e47ea3b8567e26939257ea66",
+      "original_bytes": 115592,
+      "packaged_bytes": 8443
+    },
+    {
+      "file": "images/zh-motion-outer-reveal.png",
+      "kind": "actual new movie native followup",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/audit/frames/0001226_000081.732s.png",
+      "original_sha256": "c10b98beec3f1331680502c6df540d19f961be7645741a81e3715af2fef4603d",
+      "packaged_sha256": "c10b98beec3f1331680502c6df540d19f961be7645741a81e3715af2fef4603d",
+      "original_bytes": 51881,
+      "packaged_bytes": 51881,
+      "time": 81.732357,
+      "source_frame": 1226
+    },
+    {
+      "file": "images/zh-motion-all-six.png",
+      "kind": "actual new movie native followup",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/audit/frames/0001376_000091.731s.png",
+      "original_sha256": "b5be833430fd74a447b5d9a6fefc150e978fc89942349bca445890478bb03986",
+      "packaged_sha256": "b5be833430fd74a447b5d9a6fefc150e978fc89942349bca445890478bb03986",
+      "original_bytes": 63535,
+      "packaged_bytes": 63535,
+      "time": 91.731055,
+      "source_frame": 1376
+    },
+    {
+      "file": "images/zh-changed-sheet-003.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/changed-only/sheet-003.png",
+      "original_sha256": "81f95bf3536c9406508181c734205e5afc94959637b1fb7a1c308eb1d67c8b48",
+      "packaged_sha256": "81f95bf3536c9406508181c734205e5afc94959637b1fb7a1c308eb1d67c8b48",
+      "original_bytes": 332829,
+      "packaged_bytes": 332829,
+      "selected_indices": [
+        203,
+        204,
+        205,
+        206,
+        207,
+        209,
+        211,
+        212
+      ]
+    },
+    {
+      "file": "images/zh-changed-sheet-007.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-motion/changed-only/sheet-007.png",
+      "original_sha256": "792037bea1ed3066e440c94f441d44ea542908ba9bd747647655c802f23b62dc",
+      "packaged_sha256": "792037bea1ed3066e440c94f441d44ea542908ba9bd747647655c802f23b62dc",
+      "original_bytes": 388620,
+      "packaged_bytes": 388620,
+      "selected_indices": [
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246
+      ]
+    },
+    {
+      "file": "images/zh-endpoint-after.png",
+      "kind": "actual changed native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-rank-regression/zh-endpoints/012_00090.9s.png",
+      "original_sha256": "5bb31f266a20c02460f2ece39514f5bced2ae35871aff87b8aca6e177563c09f",
+      "packaged_sha256": "5bb31f266a20c02460f2ece39514f5bced2ae35871aff87b8aca6e177563c09f",
+      "original_bytes": 47833,
+      "packaged_bytes": 47833,
+      "time": 90.87552325581395,
+      "index": 12
+    },
+    {
+      "file": "images/zh-endpoint-before.png",
+      "kind": "prior native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoints/012_00090.4s.png",
+      "original_sha256": "e654df0bc6e1e90eb16820e097222636cc323cb482990d32d4bd9baafee11f13",
+      "packaged_sha256": "e654df0bc6e1e90eb16820e097222636cc323cb482990d32d4bd9baafee11f13",
+      "original_bytes": 48852,
+      "packaged_bytes": 48852,
+      "time": 90.3839363885089,
+      "index": 12
+    }
+  ],
+  "limits": [
+    "Bounded package includes representative PNGs; full selected-time/page/duplicate/gap ledger is preserved under gzip.",
+    "Exact old/new movies preserved in runtime and authenticated by SHA256, not copied into the repository.",
+    "ENmotion warning retained; stale aggregate source fingerprints do not become current by visual review."
+  ]
+}

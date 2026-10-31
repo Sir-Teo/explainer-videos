@@ -1,0 +1,208 @@
+{
+  "created_utc": "2026-10-31T19:37:24.481494+00:00",
+  "notes": "Source/manual/integration/geometry evidence only. Fresh bilingual VO, scene appearance and motion regression pending. Before EN/ZHLowRank pairs matched completed frozen owner review; concurrent Einsum entries in raw18inventory explicitly uncertain and excluded as baseline. No other source/global/STATUS/commit changed by packaging.",
+  "payloads": [
+    {
+      "file": "report.json.gz",
+      "sha256": "95abfa4fb8a6de6a45f7dba07806e4659adf16c847b52276307b5786d0c12425",
+      "size": 1826,
+      "uncompressed_sha256": "64f259c5e3359dccbe24b3fb20f60ab92b01c4255aba26d47d65acd3bb90d1eb",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/report.json"
+    },
+    {
+      "file": "checks.json.gz",
+      "sha256": "793635186d68df526b4cfa13922d6652b6909e77446f15840f98a4cda77d54a0",
+      "size": 1306,
+      "uncompressed_sha256": "6a86227c4845badb15d183ae93957aa791a5d36c1e9c57c9a7a5d0cbffa0ed21",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/checks.json"
+    },
+    {
+      "file": "source.patch.gz",
+      "sha256": "289dd5d2dbd6a45c921e2c08e8e2bbaba43f219c0f98eae6cdecb6f4c11c5e45",
+      "size": 1145,
+      "uncompressed_sha256": "a658ab4b857d9be71695dd719735ac5b2965b2f714bab8b68fd48701dccd19e4",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/source.patch"
+    },
+    {
+      "file": "check.py.gz",
+      "sha256": "58fd961bd9ed435c3c39ef7baf662dca058573122b29809e3a0a8af388c79fac",
+      "size": 1425,
+      "uncompressed_sha256": "712b3e932d4c24531371774f3d2dace975f78b003887a5402b6553a7756b6b45",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/check.py"
+    },
+    {
+      "file": "close.py.gz",
+      "sha256": "015859a0791eb93978009b03d06d50820266627bac61c9d79b08b4ef1453be2d",
+      "size": 2080,
+      "uncompressed_sha256": "0d85bbcfb863cf15175cff85fb2085c4c250c21e275e56cad0de8870b7a2a770",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/close.py"
+    },
+    {
+      "file": "geometry.log.gz",
+      "sha256": "7bec6b774cd666754970a62f0557e930a3ffb235906d42478d726b59f045c59b",
+      "size": 374,
+      "uncompressed_sha256": "d074bf1e5d3305a663be45b030946253103be5af7ff7ecdc31000ea8793e4ed4",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/geometry.log"
+    },
+    {
+      "file": "narration-tests.log.gz",
+      "sha256": "d30d20f77babbf53408de676919535e8619495fa4879c643efd5911e702b4502",
+      "size": 461,
+      "uncompressed_sha256": "8cc087887c656a1a652815d6744d0cffc35083b3edd454fc4ec3edb1a87e8e7e",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/narration-tests.log"
+    },
+    {
+      "file": "captions-handoff.json.gz",
+      "sha256": "964be358a13e8028f941098c4b0ce8dcb91e02e2410d6273070ef37393cff4fe",
+      "size": 131,
+      "uncompressed_sha256": "59d3187e6431724d9be002f203cb9937de59db1a858b2bcbf07935a742afcc92",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/captions-handoff.json"
+    },
+    {
+      "file": "before-s09_lowrank.py.gz",
+      "sha256": "fa9bd54414c0bd88a4a8d1ec6da55b0ba65cd2f1283fbddf5605b13bde327d63",
+      "size": 5658,
+      "uncompressed_sha256": "c05f177c5c04048e43709147e0970a419bc9666291fa5a9a786df8ad4507aa10",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/before18/s09_lowrank.py"
+    },
+    {
+      "file": "before-zh_lines.py.gz",
+      "sha256": "897a5d8861be95a6c1a1b3bb92d6c48f24588b6e4a1f2415e4acca30a992cbfc",
+      "size": 25548,
+      "uncompressed_sha256": "a487167b7052952ca30ff29028efb76cf204b9ea172d3c2c19f17f866fbdc38e",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/before18/zh_lines.py"
+    },
+    {
+      "file": "before-ai_text_zh.json.gz",
+      "sha256": "6a0668488adfefc88efc4acfaddb5155682a0fd3e581b5111777e485dd490e90",
+      "size": 870676,
+      "uncompressed_sha256": "a2374c25745d9024d0d648e29bb93693c2cb1b02f046bca98a9e7e8b6e3c3d7c",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/before18/ai_text_zh.json"
+    },
+    {
+      "file": "after-s09_lowrank.py.gz",
+      "sha256": "c9d466cf251ebbb8e0a6d67b1a0f07afde2fdec833fefc3cc2d95c9250847d17",
+      "size": 5698,
+      "uncompressed_sha256": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/after/s09_lowrank.py"
+    },
+    {
+      "file": "after-zh_lines.py.gz",
+      "sha256": "f5eb9404583ec61bfaa0339be29a6f4d6e9a6ee9f04fe020a75dc89e08828366",
+      "size": 25559,
+      "uncompressed_sha256": "16504c1c99cf99a73ecf17af50500cf2cce29c4187b674b0c7b6e23375b8ab70",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/after/zh_lines.py"
+    },
+    {
+      "file": "concurrent-raw18-inventory.json.gz",
+      "sha256": "63617ae6950e956cb0b8940bc9c11ff675789c14ab23018a90d6f1b7ce2a631f",
+      "size": 3155,
+      "uncompressed_sha256": "3b97942dafbfb9d21f05df937f5acd75d7a7edcc48be74eabde99e53abddfa8c",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-repair/before18/inventory.json"
+    },
+    {
+      "file": "en-LowRank-before-complete-review.json.gz",
+      "sha256": "5c1b1c65db3b4eb5b03df5d55c5a7d03600c3cf58a7350771bf0d78dd5fb72c1",
+      "size": 56179,
+      "uncompressed_sha256": "adce2b77cece10a46bf4337f7e12a65615db0e01c7f2eb4dceb5884b61ff13d8"
+    },
+    {
+      "file": "en-LowRank-before-render.json.gz",
+      "sha256": "83fb49dabb4d3a89402d0e7bfa9644045fb377c1aff30b90c608e5a665ad3747",
+      "size": 13994,
+      "uncompressed_sha256": "97efac4d39dd5319000912e3efb5fa7cc4f84299d3d5ad665418b6dabc7e6c98",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/LowRank/capture-result.json"
+    },
+    {
+      "file": "en-LowRank-before-audit.json.gz",
+      "sha256": "0acd1bfe045c3ec008e759def2cf96340badb536f3aae4f889ddeaf9dd75331b",
+      "size": 30930,
+      "uncompressed_sha256": "7ce0d21f39e709ce05a03e74fe8ecd2243e69c7fd5b14d38d344ce619395e5be",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/LowRank/temporal-audit-result.json"
+    },
+    {
+      "file": "en-LowRank-before-native-01.png",
+      "sha256": "e756766e498acff6d4d9888055a59c63623486b718d42184be79c2203e57aa46",
+      "size": 79637,
+      "uncompressed_sha256": "e756766e498acff6d4d9888055a59c63623486b718d42184be79c2203e57aa46",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0000944_000062.933s.png"
+    },
+    {
+      "file": "en-LowRank-before-native-02.png",
+      "sha256": "49620d65d470843af338ca65fd92d169baed736a46cb45396b3a96f8c3c31bf6",
+      "size": 183950,
+      "uncompressed_sha256": "49620d65d470843af338ca65fd92d169baed736a46cb45396b3a96f8c3c31bf6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0001435_000095.666s.png"
+    },
+    {
+      "file": "en-LowRank-before-native-03.png",
+      "sha256": "ce35ad97411ac0fa470c29111b8fbbdeeb4127c134c20cd5a687cebbb1b4220f",
+      "size": 139828,
+      "uncompressed_sha256": "ce35ad97411ac0fa470c29111b8fbbdeeb4127c134c20cd5a687cebbb1b4220f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-LowRank-dense-final/frames/0001701_000113.399s.png"
+    },
+    {
+      "file": "en-LowRank-before-freeze.json",
+      "sha256": "90bf161306d1f44b8ba899c822fd7314c965bc675842daab79e02217b409d97b",
+      "size": 624
+    },
+    {
+      "file": "zh-LowRank-before-complete-review.json.gz",
+      "sha256": "049a29119e21cd6f7d099f570ecc19eb2bc5724a4bb67bff892fe4adaf67d012",
+      "size": 54867,
+      "uncompressed_sha256": "02c3dd2727b206af2b47bf7c7f8f38b291a0f9662f06c87d9f34614ed79b4484"
+    },
+    {
+      "file": "zh-LowRank-before-render.json.gz",
+      "sha256": "109b341720777de0ff82bff6a05cb6979913c71e82f99bcd3796351fcef00487",
+      "size": 19684,
+      "uncompressed_sha256": "f3b0d3f20dd27499bedea9b1b491a6482306eb4964787d27694a30c78fcb980f",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/LowRank/capture-result.json"
+    },
+    {
+      "file": "zh-LowRank-before-audit.json.gz",
+      "sha256": "5543a23f29bf899b9031c19af8583566274f97c193296e1b6bd6d3a3194828b1",
+      "size": 30455,
+      "uncompressed_sha256": "d64f370a12ca04852c6917cd101f71da12e6276564bf254abc67124bd906692d",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/LowRank/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-LowRank-before-native-01.png",
+      "sha256": "6319b1ff810ee4cf8fad40e095846dfe27a807512d3beb93a789d7647f8ed5ca",
+      "size": 76630,
+      "uncompressed_sha256": "6319b1ff810ee4cf8fad40e095846dfe27a807512d3beb93a789d7647f8ed5ca",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0000945_000063.000s.png"
+    },
+    {
+      "file": "zh-LowRank-before-native-02.png",
+      "sha256": "9a56c2c0c1d0866269f38e13b245e19df96fbde8aaaa970cadae5052514d8c87",
+      "size": 176092,
+      "uncompressed_sha256": "9a56c2c0c1d0866269f38e13b245e19df96fbde8aaaa970cadae5052514d8c87",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0001324_000088.266s.png"
+    },
+    {
+      "file": "zh-LowRank-before-native-03.png",
+      "sha256": "ade5ae236aa79620862f53f3d383cc536dc6926745982473a7c7892a43a10bec",
+      "size": 131695,
+      "uncompressed_sha256": "ade5ae236aa79620862f53f3d383cc536dc6926745982473a7c7892a43a10bec",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-LowRank-dense-final/frames/0001701_000113.399s.png"
+    },
+    {
+      "file": "zh-LowRank-before-freeze.json",
+      "sha256": "e011a4f63d88903e6943d3d3d5761ca9d6a28f9278cf70648ec16d7a6790a416",
+      "size": 624
+    },
+    {
+      "file": "original-wording-proposal.json.gz",
+      "sha256": "788a32e74bea1b9d48a1728b5f70e9cc6f45b1b3ac336c29a5599e6b1f391cb1",
+      "size": 1110,
+      "uncompressed_sha256": "c7b3ef724e415ec4006970ee791b1e6a41c5f6d232867188df23e463ef3d36c3",
+      "source": "/workspace/runtime/ai3-lowrank-tail-norm-wording-proposal.json"
+    },
+    {
+      "file": "README.md",
+      "sha256": "ab891375db9fad3b31ee76ce18310559699cacf61ee72c606e7530916acc0832",
+      "size": 3895
+    }
+  ]
+}

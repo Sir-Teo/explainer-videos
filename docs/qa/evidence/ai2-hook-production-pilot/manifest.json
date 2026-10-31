@@ -1,0 +1,310 @@
+{
+  "scope": "Original pre-mask source-specific pilot. No movies packaged; manifest excludes itself. Hashes describe actual repository bytes after compression/copy.",
+  "files": [
+    {
+      "file": "pilot-review.json.gz",
+      "bytes": 6203,
+      "sha256": "c9a1c85d8f0bab293db093010f8fe512941af00b0cc24701b127aece808698f6",
+      "encoding": "gzip",
+      "decoded_bytes": 18534,
+      "decoded_sha256": "d3b941f8d688f2507e2102d45e777fb2d0ea37448a44b001c50d2745522a1062",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-pilot-review.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "selected-review-map.json.gz",
+      "bytes": 26477,
+      "sha256": "21bfc4bd785f1bb8cc381a1ca289fd87834f36a2d94a849f636ec72b7d7ba3d1",
+      "encoding": "gzip",
+      "decoded_bytes": 172460,
+      "decoded_sha256": "36140bdbd251ad8320797e91d61f727eed1dd9e8b46cbfb8c458720fe6456cd4",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/review/review-map.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "temporal-audit.json.gz",
+      "bytes": 17885,
+      "sha256": "dcadade7a3dbdf34f292e40ec0abc3e2c32051ed234dfa1539b4580a0b499c74",
+      "encoding": "gzip",
+      "decoded_bytes": 101541,
+      "decoded_sha256": "8acda39c1d56bf16a82ec6935b93eb2d56c2b79f7990dd041e77b4c7a5fc87e6",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "native-raw-captures-review.json.gz",
+      "bytes": 7315,
+      "sha256": "58f91b6a5a1bcbb98fb32b08b5146698db3674ebff212580a80b3775a0b42a9c",
+      "encoding": "gzip",
+      "decoded_bytes": 52142,
+      "decoded_sha256": "5b8fe57a7acef9a4e3c0fd1e9f7173a8fb3fd0c3b9fffb041910d88a5c011884",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/native-endpoint-review.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "timeline-stem-finding.json.gz",
+      "bytes": 1349,
+      "sha256": "e7eaa1472e0716802f75f481e5429aa4425c1f5ca6b55fe61d28ada302bfd76a",
+      "encoding": "gzip",
+      "decoded_bytes": 3203,
+      "decoded_sha256": "251083ce2d180f2df4dda9065f0cd174cf6f469524f73951d9dfbcf7cd1942a0",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/timeline-stem-finding.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "worker-result-original.json.gz",
+      "bytes": 10813,
+      "sha256": "1b4a0c4e30ed1cb2d88e25d632a28cf0076cd6800589aed23216ae5ac4f4104d",
+      "encoding": "gzip",
+      "decoded_bytes": 61120,
+      "decoded_sha256": "525ba5ebbd35b85b98fe849fc053312111ebb664d479c6d1b213c23dd7ee3504",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/worker-result.before-reconciliation.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "result-reconciled.json.gz",
+      "bytes": 11881,
+      "sha256": "b8dfcd8eac2aa70d06f29dea8ce7ef398927c7e5efbc9cd73f6ba32adda64524",
+      "encoding": "gzip",
+      "decoded_bytes": 78364,
+      "decoded_sha256": "238f33458359779907ef9fefc6130a89cec86c6256cea3e4cdf0c4b0a4eac8b7",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "ffprobe-original.json.gz",
+      "bytes": 1095,
+      "sha256": "a9c1ebf013f7ea004412ab971bb963acd40b8a710408f07ef08e9c487166f01c",
+      "encoding": "gzip",
+      "decoded_bytes": 3551,
+      "decoded_sha256": "d9856c8c678a63f85fd849ee33279edac034237f9bf721570800eeb2b33f7d38",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/ffprobe.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "full-video-decode.json.gz",
+      "bytes": 479,
+      "sha256": "60c0508e3346cc7f9eb36e396802f702c3d4136425d378675aa909bd06215c66",
+      "encoding": "gzip",
+      "decoded_bytes": 948,
+      "decoded_sha256": "0cdc53453a58ddd866e659c5e92748f22640d74c79ac4c9082d7216929574014",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/full-video-decode.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "pts-cadence.json.gz",
+      "bytes": 433,
+      "sha256": "cb78a934fb88d7680a06b0577d85c08a5b249805bf6bce6271460dc1823c8520",
+      "encoding": "gzip",
+      "decoded_bytes": 868,
+      "decoded_sha256": "123471869cec0bf051e85448546b78d75cd988eb7c16d91913f2c0f605202ef1",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/pts-cadence.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "render-resource.jsonl.gz",
+      "bytes": 7905,
+      "sha256": "599876432d1d8d3c3ca62912aab9b5a181d12fe6a4d58654389626b0df98a11d",
+      "encoding": "gzip",
+      "decoded_bytes": 64313,
+      "decoded_sha256": "bad84c07ad92eb01f270b85ee889ff57ccf5819899507cd0c141679042bc23b5",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-resource.jsonl",
+      "content_type": "application/jsonl"
+    },
+    {
+      "file": "audit-resource.jsonl.gz",
+      "bytes": 1856,
+      "sha256": "4260a88847883c0f451e21e3c007d7d8d4d16262150a177fe12c4709c71070fb",
+      "encoding": "gzip",
+      "decoded_bytes": 13482,
+      "decoded_sha256": "e0c509f8a3b5b3160677ecc30bcff77b569baa7039aa848d743875144d1a1e27",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-audit-resource.jsonl",
+      "content_type": "application/jsonl"
+    },
+    {
+      "file": "render-guard-result.json.gz",
+      "bytes": 209,
+      "sha256": "139e25de1ccbd2b27747ba6aa2ea1490a8519b82ae0d6bf51bbbd0f74dbc56d7",
+      "encoding": "gzip",
+      "decoded_bytes": 298,
+      "decoded_sha256": "4f65e8b3d1d3d82caf4cbed1a9856352c99f013a5c7237a534a30db547730f40",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-guard-result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "audit-guard-result.json.gz",
+      "bytes": 207,
+      "sha256": "513bfd2bd2a42deb360dd457b000beb68874b1995d8f6b40016762a22e1f803c",
+      "encoding": "gzip",
+      "decoded_bytes": 298,
+      "decoded_sha256": "0dfe60ae5b5e786e40bd7cbd2d8377edced3c2789509ad08f426dbd7105ad927",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-audit-guard-result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "source-provenance-before.json.gz",
+      "bytes": 615,
+      "sha256": "f0b27a6c1ff0be865f98bfc2f8f93856116d596286531408fe865909227be9bb",
+      "encoding": "gzip",
+      "decoded_bytes": 1339,
+      "decoded_sha256": "e12e7b1af9a89e11fad07ab5487967b0e7f568c082d4476c8168d48d09ba75a8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-provenance-before.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "source-provenance-post-render.json.gz",
+      "bytes": 455,
+      "sha256": "a7c1673b4096f83ede03f86d5b7e48bc234163e65cb3dac6f59418c7849edf6a",
+      "encoding": "gzip",
+      "decoded_bytes": 1359,
+      "decoded_sha256": "7beac8ad2b43263069289835403a47a329dc368c9538ec5b2c5fadeb70e6f420",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-provenance-after.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "process-observation.json.gz",
+      "bytes": 331,
+      "sha256": "3505e221e3b148d8229862c4489d7b0b2a6d4763d0434a33de845bd940e77318",
+      "encoding": "gzip",
+      "decoded_bytes": 470,
+      "decoded_sha256": "922bf693535b791fc53acdbcc58ef5285f6ea082fef854042cf944d3f5ad70e9",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-process-observation.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "wrapper-revision-receipt.json.gz",
+      "bytes": 328,
+      "sha256": "e7e989681ad34a491c1941f7f6553cc3052515540d77296be3746f3133c276f0",
+      "encoding": "gzip",
+      "decoded_bytes": 472,
+      "decoded_sha256": "0903b6a41c996a71bab218bc283df27d48b2ee894b06b1f186255faef847c736",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/wrapper-revision-receipt.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "archive-preservation.json.gz",
+      "bytes": 342,
+      "sha256": "88e4f5849ef212be1fdcab9a69d351d5a59b7b52a4a4729864b4cfae8882edbe",
+      "encoding": "gzip",
+      "decoded_bytes": 714,
+      "decoded_sha256": "abd1797617ba837439eae7442c544b3807a6a2376c3211db3d53291291711095",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/archive-initial/preservation.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "s01_hook.source-at-render.py.gz",
+      "bytes": 3679,
+      "sha256": "e45199d4b5787a1582ced9282a6b44a748c538ab4dec911b768cc73d1aec5803",
+      "encoding": "gzip",
+      "decoded_bytes": 10438,
+      "decoded_sha256": "eba5f33461813b36c7044ef7aa99d9f98860c9db66173594197e409e8449d3cd",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/s01_hook.source-at-render.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "wrapper-executed.py.gz",
+      "bytes": 1731,
+      "sha256": "901746ba1437708a6fff793e5642ca860db3c2e621b5ed799233e61680c1df6c",
+      "encoding": "gzip",
+      "decoded_bytes": 3793,
+      "decoded_sha256": "59b630093d3d02b2b110cc685a4f0f17281510f625585dc7e2a189d25992bb34",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/qa_production_motion-executed.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "wrapper-corrected-not-executed.py.gz",
+      "bytes": 1791,
+      "sha256": "923b845bbaf76773ac4683b7634bfd61955808c8104d054d6cf3012cef4a6119",
+      "encoding": "gzip",
+      "decoded_bytes": 3918,
+      "decoded_sha256": "27bd7cd2d1fbc41db5cd22975cae631e1192b54689d2f5cbef9cace4bb4d82bc",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/qa_production_motion-corrected-not-executed.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "render-guard-executed.py.gz",
+      "bytes": 1186,
+      "sha256": "5beea415f7e023d53dbf084d688bb2a23c2aa348855991adf09168a6c63183ac",
+      "encoding": "gzip",
+      "decoded_bytes": 2499,
+      "decoded_sha256": "a88348111d885244cc8a7d24fc2fd99e696ec24b38e20a70ad90dfbf900a5b5f",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/run_hook_production_guard-executed.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "decoded-frame-timestamps.json.gz",
+      "bytes": 51672,
+      "sha256": "b9de126fd36d07af6b073dfc9a6c34ab66e22f4bb19ab77e4ecc3a203c7b7348",
+      "encoding": "gzip",
+      "decoded_bytes": 984249,
+      "decoded_sha256": "bbb4b8ddd4fc71d27975a3423190f9a4cad7b266db700a610c0ced9e3749aaac",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/decoded-frame-timestamps.json.gz",
+      "content_type": "application/json",
+      "note": "Original ffprobe decoded timestamp JSON bytes preserved; not a regenerated/transcoded stream."
+    },
+    {
+      "file": "timeline-1970-stem-encoded-1080.png",
+      "bytes": 125118,
+      "sha256": "0079be310866f8824c7660d945b514193507701ec13371e917c1c3bec2330bc8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/frames/0001187_000039.566s.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "note": "Exact decoded-movie PNG bytes; no cropping,resizing or compositing."
+    },
+    {
+      "file": "timeline-complete-encoded-1080.png",
+      "bytes": 219928,
+      "sha256": "49a1845ec6714d610b4507ec82850e92f74010a18bf9a396ade117ee94f291b5",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/frames/0001671_000055.700s.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "note": "Exact decoded-movie PNG bytes; no cropping,resizing or compositing."
+    },
+    {
+      "file": "opening-score-encoded-1080.png",
+      "bytes": 206700,
+      "sha256": "003eaa7e5c9647ae998dbd99cd74ccb73603f2b282fb16e7eb2030cba061d837",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/frames/0000447_000014.900s.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "note": "Exact decoded-movie PNG bytes; no cropping,resizing or compositing."
+    },
+    {
+      "file": "objectives-encoded-1080.png",
+      "bytes": 276942,
+      "sha256": "1517b68b4d83bc2d9c32a91c8ef9fd53d7ea97816c542d10c3f24d2399ebbd0a",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/ai2/en/Hook_motion/temporal/frames/0003771_000125.699s.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "note": "Exact decoded-movie PNG bytes; no cropping,resizing or compositing."
+    },
+    {
+      "file": "render.log",
+      "bytes": 1475,
+      "sha256": "21f1365ef40f1cda3aa9ddf29e5ab96268d64f28c127a70e419c0dc2261c7aaa",
+      "encoding": "utf-8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-render.log"
+    },
+    {
+      "file": "audit.log",
+      "bytes": 96,
+      "sha256": "0a863f1b124d40d3f5cb55be4b1aae0930d9d42c101d49ddf95c1565bc549608",
+      "encoding": "utf-8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080/hook-en-audit.log"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4614,
+      "sha256": "5e47709179b264feb0ccf30aaa5fbe6e146cfe8270eb030ccb7c1559700faba7",
+      "encoding": "utf-8"
+    }
+  ]
+}

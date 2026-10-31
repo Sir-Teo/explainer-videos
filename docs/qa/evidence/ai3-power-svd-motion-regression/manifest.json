@@ -1,0 +1,433 @@
+{
+  "created_utc": "2026-10-31T19:37:23.880707+00:00",
+  "notes": "Complete ledgers retained; absolute runtime paths are historical provenance. All4final selected appearances covered. ENoldSVD and ZHfirstPower retain source-change warnings; exact image identity is independent of uncertain imported-source linkage. No fullmovies/pages copied; movie/page hashes and allview/checkpoint/time maps preserved.",
+  "payloads": [
+    {
+      "file": "ai3-power-svd-lowrank-motion-review-en-completed.json.gz",
+      "sha256": "e527e5f38037c4aa580bb73daa53f77ba834255cc9d9917249e87ab04ce6f23a",
+      "size": 129860,
+      "uncompressed_sha256": "af620718861ce55b660883c619b4fca4f30ae82282189235fecdb8c765db91d6",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-review-en-completed.json"
+    },
+    {
+      "file": "ai3-power-svd-lowrank-motion-review.json.gz",
+      "sha256": "5d81534ab2f2ee4beb9533cd52064394bd78b1d1280d7b5c35bd4505a8bcc71b",
+      "size": 261318,
+      "uncompressed_sha256": "e8907dde37f084e549c77f1284c845ad937f6548fe0c888204ef347b322d16b9",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-review.json"
+    },
+    {
+      "file": "ai3-power-svd-repair-motion-review.json.gz",
+      "sha256": "72bcb4117549f47dad64035966369d0aca4a1a044c7bc42c678ecc6f0a19849b",
+      "size": 43328,
+      "uncompressed_sha256": "a468f4acb87fbc91657bd61262c1835f72a989eb614029b8495c0b7def4c9549",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-review.json"
+    },
+    {
+      "file": "en-Power-baseline-render-result.json.gz",
+      "sha256": "a350b670e88e828ba08336a0693cf770be909198550a569f59aa99c3d26326c3",
+      "size": 10023,
+      "uncompressed_sha256": "95e43103016c53cd5d6a419e31d5314966dce9e8405b79c06acb7a93184e950b",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/Power/capture-result.json"
+    },
+    {
+      "file": "en-Power-baseline-audit-result.json.gz",
+      "sha256": "5726bc9b61e00d7f4eb265d84c64b05558fc0041f5c367f2d428849f163b5626",
+      "size": 22342,
+      "uncompressed_sha256": "8eae25d9d8f747ebfddec4771dfab5a750ca453aa3195ccbe1b25e3a60dcbf0e",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/Power/temporal-audit-result.json"
+    },
+    {
+      "file": "en-Power-baseline-source-at-review.py.gz",
+      "sha256": "5b13addf7a3803904ee2c6f5b720363b1609bbe7701d94b7cfd18b4abb0cae1d",
+      "size": 4150,
+      "uncompressed_sha256": "e3c06632670150b522cf3722a56edfca19a34c4460d61df05c1186bbf019391a",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/Power/s07_power.py"
+    },
+    {
+      "file": "en-Power-baseline-review.json.gz",
+      "sha256": "8728cb82f1e4a81338f31032f1599b9a3b54bee8cd1c1ef03220b9013a731c3b",
+      "size": 39852,
+      "uncompressed_sha256": "69214e7974a30a36878a00f4062dbeaa0f4312aeb52e78614ac43b35717f4874"
+    },
+    {
+      "file": "en-Power-baseline-native-01.png",
+      "sha256": "9a1f072f2078191914fe725832fbcf17d2efa52b7805b6b5dee76ab5d58d4bef",
+      "size": 77926,
+      "uncompressed_sha256": "9a1f072f2078191914fe725832fbcf17d2efa52b7805b6b5dee76ab5d58d4bef",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Power-dense-final/frames/0001578_000105.200s.png"
+    },
+    {
+      "file": "en-Power-baseline-native-02.png",
+      "sha256": "c1b2c861e9a9d8edb8d2c5720d54f03587368b137d16113ae4ba1d05d98c62fd",
+      "size": 87727,
+      "uncompressed_sha256": "c1b2c861e9a9d8edb8d2c5720d54f03587368b137d16113ae4ba1d05d98c62fd",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Power-dense-final/frames/0001619_000107.933s.png"
+    },
+    {
+      "file": "en-Power-baseline-native-03.png",
+      "sha256": "1a7cf597513fed0d1e41bd0fb5e0f52b5e0922f7f165ca8257a9db78ee2647b8",
+      "size": 97767,
+      "uncompressed_sha256": "1a7cf597513fed0d1e41bd0fb5e0f52b5e0922f7f165ca8257a9db78ee2647b8",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Power-dense-final/frames/0002019_000134.600s.png"
+    },
+    {
+      "file": "en-Power-baseline-input-power.json.gz",
+      "sha256": "c8fcdfb40e2ca2fb0a13a812ba07c2538ce551c6d9d4d7434f9d3329e8673b40",
+      "size": 3397,
+      "uncompressed_sha256": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/Power/inputs/.cache/ai3/power.json"
+    },
+    {
+      "file": "en-Power-final-render-result.json.gz",
+      "sha256": "3407fd9be5b7ba24fb1ecee618a4c1f58b8c9c60737b37ed4af376ab67ba8e2b",
+      "size": 10025,
+      "uncompressed_sha256": "ff22008739ce9acc20f68220f144a16eae7aae8550b62b6dac63a8da272d1066",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/Power/capture-result.json"
+    },
+    {
+      "file": "en-Power-final-audit-result.json.gz",
+      "sha256": "9b7f54a80a3e712113c9c39c63cfa38ff8dfdf2b078e96ca8d892b8501018239",
+      "size": 22678,
+      "uncompressed_sha256": "b4fc3bce8e73b52361954c68c9be435b85a6fc2c2db60786444831695b491d17",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/Power/temporal-audit-result.json"
+    },
+    {
+      "file": "en-Power-final-source.py.gz",
+      "sha256": "0cfda329ea7911607b995c634bc35ed48b7cc56b788e0ccbdabcd2f644720e34",
+      "size": 4220,
+      "uncompressed_sha256": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/Power/s07_power.py"
+    },
+    {
+      "file": "en-Power-final-review.json.gz",
+      "sha256": "eea3f10929395dda9459381ca28a3856b536188436f303f23fea2834ed028871",
+      "size": 24064,
+      "uncompressed_sha256": "8579d0709d201d9bb719bdfd67ea3ff4faa8df95cd2e423ef4566135ba076b69"
+    },
+    {
+      "file": "en-Power-final-native-01.png",
+      "sha256": "f5a7b95eccd7cda0b7d115ac22a4f403fc354b81f9182f33a67cbbc81eee3129",
+      "size": 84132,
+      "uncompressed_sha256": "f5a7b95eccd7cda0b7d115ac22a4f403fc354b81f9182f33a67cbbc81eee3129",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Power-repaired-final/frames/0001618_000107.866s.png"
+    },
+    {
+      "file": "en-SVD-baseline-render-result.json.gz",
+      "sha256": "bd7c076e1f2e5417d8f7b2c13899d31970a39d63fba13bc160b880d63a188061",
+      "size": 6736,
+      "uncompressed_sha256": "b82db906d08ac2acdeec9eb61a4a8fc1f1e82fdf22d77949cdda73148777d62a",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/SVD/capture-result.json"
+    },
+    {
+      "file": "en-SVD-baseline-audit-result.json.gz",
+      "sha256": "b77296f0a0ef48ece252ba4383a852b438d5f0c1431784472ee46cdf00335014",
+      "size": 17805,
+      "uncompressed_sha256": "a983f007a7adfa99eca8a31b557e967d27d76f77f4f137c367bbbd838b7d8cdc",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/SVD/temporal-audit-result.json"
+    },
+    {
+      "file": "en-SVD-baseline-source-at-review.py.gz",
+      "sha256": "85385fb4bf08125934cb7e34b95fa634e0ed83ea64a703f969a264cadf6916a9",
+      "size": 3778,
+      "uncompressed_sha256": "8666cbb2c07ea615c55401cbf3e2d75cf8351abb1750f3034fdb9ca352775c1a",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/SVD/s08_svd.py"
+    },
+    {
+      "file": "en-SVD-baseline-review.json.gz",
+      "sha256": "6ed86f8a12c73d0c855ab1925c959fa15838cbc85e20f5c39b59cb6c958f4f52",
+      "size": 32106,
+      "uncompressed_sha256": "de9b15700b9c04cbea54650fa3bc675aba6ada12c781e2e5e278e3c6a3cca620"
+    },
+    {
+      "file": "en-SVD-baseline-native-01.png",
+      "sha256": "91b54547d23a1297683718865571d0fbf7cc75f5531eb701a1e41f79327b84e3",
+      "size": 167325,
+      "uncompressed_sha256": "91b54547d23a1297683718865571d0fbf7cc75f5531eb701a1e41f79327b84e3",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-dense-final/frames/0000139_000009.267s.png"
+    },
+    {
+      "file": "en-SVD-baseline-native-02.png",
+      "sha256": "79d6671f5c933735739c162f18a7a9c4229fab8dd59ec0dc3a9ec08cdc7f1c5a",
+      "size": 69897,
+      "uncompressed_sha256": "79d6671f5c933735739c162f18a7a9c4229fab8dd59ec0dc3a9ec08cdc7f1c5a",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-dense-final/frames/0000214_000014.267s.png"
+    },
+    {
+      "file": "en-SVD-baseline-native-03.png",
+      "sha256": "f12ee9f49e6c6de9a2cf49a1b8177da119a722d88760b2f1d93ba2a14945427d",
+      "size": 172846,
+      "uncompressed_sha256": "f12ee9f49e6c6de9a2cf49a1b8177da119a722d88760b2f1d93ba2a14945427d",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-dense-final/frames/0000229_000015.267s.png"
+    },
+    {
+      "file": "en-SVD-baseline-native-04.png",
+      "sha256": "db6a04646030068c1383e6b1105cc8abfa4e44693204306dc5fca9338729f6db",
+      "size": 170886,
+      "uncompressed_sha256": "db6a04646030068c1383e6b1105cc8abfa4e44693204306dc5fca9338729f6db",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-dense-final/frames/0000375_000025.000s.png"
+    },
+    {
+      "file": "en-SVD-baseline-native-05.png",
+      "sha256": "4893bc2ce9893e45980d2e2a5ee3bab043c6d20ad0e06596a25ddd3ea3cd1031",
+      "size": 68371,
+      "uncompressed_sha256": "4893bc2ce9893e45980d2e2a5ee3bab043c6d20ad0e06596a25ddd3ea3cd1031",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-dense-final/frames/0001325_000088.333s.png"
+    },
+    {
+      "file": "en-SVD-final-render-result.json.gz",
+      "sha256": "9d68c548d8d10cd2b0ed767b5ed8aa243fe5d819e72745c7f477f7af8b885857",
+      "size": 6711,
+      "uncompressed_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/SVD/capture-result.json"
+    },
+    {
+      "file": "en-SVD-final-audit-result.json.gz",
+      "sha256": "7ff4e9608ccf61a07736dbeee102e213ed3dfa3bca3ab469dfde2780756c61b4",
+      "size": 17800,
+      "uncompressed_sha256": "7e15d76cc248868d42e7a36d8307593af00c9228d33c7a1ac1c4dad1758297be",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/SVD/temporal-audit-result.json"
+    },
+    {
+      "file": "en-SVD-final-source.py.gz",
+      "sha256": "fd580ef6aefb64265d668c5231b42ae0736ae0765a35b69fc4b4b14dcb14e7c3",
+      "size": 3926,
+      "uncompressed_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "source": "/workspace/runtime/ai3-power-svd-repair-motion-evidence/en/SVD/s08_svd.py"
+    },
+    {
+      "file": "en-SVD-final-review.json.gz",
+      "sha256": "7c4f74cc2d15f542821ab871cd8e2561a376c7298c760e50ad06bb41e84279fb",
+      "size": 18753,
+      "uncompressed_sha256": "318020a70cd82c7acf9fab285bbbcba96cba3041cefcc0327115744891d55bc1"
+    },
+    {
+      "file": "en-SVD-final-native-01.png",
+      "sha256": "7f09d9946c6e2b6af1662439573f7cff1f677d378631a2768f1987d0ba912b92",
+      "size": 196271,
+      "uncompressed_sha256": "7f09d9946c6e2b6af1662439573f7cff1f677d378631a2768f1987d0ba912b92",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-repaired-final/frames/0000139_000009.267s.png"
+    },
+    {
+      "file": "en-SVD-final-native-02.png",
+      "sha256": "93e534e426f27a42b94e3d4eb8b184e06f6a3a98fe4c10d7d571e2ead9e4cca6",
+      "size": 173308,
+      "uncompressed_sha256": "93e534e426f27a42b94e3d4eb8b184e06f6a3a98fe4c10d7d571e2ead9e4cca6",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-SVD-repaired-final/frames/0000214_000014.267s.png"
+    },
+    {
+      "file": "zh-Power-baseline-render-result.json.gz",
+      "sha256": "e1c29ae43cefcdd7358225a68787976dd0a011edde2a158966790edbd15bebd1",
+      "size": 15385,
+      "uncompressed_sha256": "5d96ce9cd73c728be8ca43bc0729ebf8195c621579c83dc5ed6ccb0f8139cf29",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/Power/capture-result.json"
+    },
+    {
+      "file": "zh-Power-baseline-audit-result.json.gz",
+      "sha256": "152b6252ade7bde6bde466829057c13af8c20896da70ba387ebc963df7040368",
+      "size": 22795,
+      "uncompressed_sha256": "4e952259a3704a2d6b220eb8e11e0d9d0dd2fa9c315b1d89728841fea9e2c577",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/Power/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-Power-baseline-source-at-review.py.gz",
+      "sha256": "0cfda329ea7911607b995c634bc35ed48b7cc56b788e0ccbdabcd2f644720e34",
+      "size": 4220,
+      "uncompressed_sha256": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/Power/s07_power.py"
+    },
+    {
+      "file": "zh-Power-baseline-review.json.gz",
+      "sha256": "8ffb484972d8707bf1c85febc4942fb22969ffdcdc7387cdd5c8f0833414a7f8",
+      "size": 41434,
+      "uncompressed_sha256": "b87ba5d1d9a25f76601049bd23e15ad18067f4a2f6e238bd03cc691e2fca9518"
+    },
+    {
+      "file": "zh-Power-baseline-native-01.png",
+      "sha256": "84ef43ec87c3da4c8ab73f08d7e6f7a13f822a7f5b6a5fd7e56135c1d05b8d15",
+      "size": 74150,
+      "uncompressed_sha256": "84ef43ec87c3da4c8ab73f08d7e6f7a13f822a7f5b6a5fd7e56135c1d05b8d15",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Power-dense-final/frames/0000154_000010.267s.png"
+    },
+    {
+      "file": "zh-Power-baseline-native-02.png",
+      "sha256": "258fe0a601fffc70a20b36358cb9db0888f166f6f965803c3d61739eddb90f55",
+      "size": 56746,
+      "uncompressed_sha256": "258fe0a601fffc70a20b36358cb9db0888f166f6f965803c3d61739eddb90f55",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Power-dense-final/frames/0001178_000078.533s.png"
+    },
+    {
+      "file": "zh-Power-baseline-native-03.png",
+      "sha256": "3712462c19cfff45238fbf1d07d2004ba4f9478e8696614fd0ff0081fb19822f",
+      "size": 82884,
+      "uncompressed_sha256": "3712462c19cfff45238fbf1d07d2004ba4f9478e8696614fd0ff0081fb19822f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Power-dense-final/frames/0001589_000105.933s.png"
+    },
+    {
+      "file": "zh-Power-baseline-native-04.png",
+      "sha256": "dac1377556a05c54941c69bf8af492d03d78b29d6150f94c9a498c82a4834168",
+      "size": 86596,
+      "uncompressed_sha256": "dac1377556a05c54941c69bf8af492d03d78b29d6150f94c9a498c82a4834168",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Power-dense-final/frames/0001615_000107.666s.png"
+    },
+    {
+      "file": "zh-Power-baseline-native-05.png",
+      "sha256": "a320b4b27aef4fef1e0d32073a00077c2f1d13d1aa2da07343120de0b120c9ca",
+      "size": 96454,
+      "uncompressed_sha256": "a320b4b27aef4fef1e0d32073a00077c2f1d13d1aa2da07343120de0b120c9ca",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Power-dense-final/frames/0002192_000146.133s.png"
+    },
+    {
+      "file": "zh-Power-baseline-input-power.json.gz",
+      "sha256": "c8fcdfb40e2ca2fb0a13a812ba07c2538ce551c6d9d4d7434f9d3329e8673b40",
+      "size": 3397,
+      "uncompressed_sha256": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/Power/inputs/.cache/ai3/power.json"
+    },
+    {
+      "file": "zh-Power-final-render-result.json.gz",
+      "sha256": "c8d92c53bdb88b84ba204747853391be17ca876e191087d1cbf8116a023e27ec",
+      "size": 15353,
+      "uncompressed_sha256": "5b48320f28221e7b6e2b7fd9d379570fe806ebc0390c6ef4122fdd59620e30da",
+      "source": "/workspace/runtime/ai3-final-motion-global-snapshot/zh-Power-result.json"
+    },
+    {
+      "file": "zh-Power-final-exact-movie-receipt.json",
+      "sha256": "030e8cb4b5a3ec715f1749b2e538ae373125a26585f3ee7bd309c51d6ab20459",
+      "size": 638
+    },
+    {
+      "file": "zh-SVD-baseline-render-result.json.gz",
+      "sha256": "face3501d59c7a068b95b69234a0bf3f0e90d18569857d6182b6ed7e29aa5769",
+      "size": 10919,
+      "uncompressed_sha256": "2c50e8bc6e9cb62eb39d4a96d41a622c758062e69f9e83312a60c22cdd5271c4",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/SVD/capture-result.json"
+    },
+    {
+      "file": "zh-SVD-baseline-audit-result.json.gz",
+      "sha256": "f33fb7a1f744fb19f79800103678ca8b0ef140078c5eb8adcb47a1d7ee1a1fbe",
+      "size": 19450,
+      "uncompressed_sha256": "eca004f5e98a2b924990e7542768e3ad4c1b280c3eebbc119175d71a809fb0f8",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/SVD/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-SVD-baseline-source-at-review.py.gz",
+      "sha256": "fd580ef6aefb64265d668c5231b42ae0736ae0765a35b69fc4b4b14dcb14e7c3",
+      "size": 3926,
+      "uncompressed_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "source": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/zh/SVD/s08_svd.py"
+    },
+    {
+      "file": "zh-SVD-baseline-review.json.gz",
+      "sha256": "a4321fb5504f541126f87b882ae905665e6c5b849a3409ac06127ae520cc5190",
+      "size": 34965,
+      "uncompressed_sha256": "087ff9c7086e5be39763c19a6e0987e4d130f0905478c21650e635f268ec993a"
+    },
+    {
+      "file": "zh-SVD-baseline-native-01.png",
+      "sha256": "4ef1f883230ecc3148db2e081bf41968ac90cdb7f0f55f7a8b69ae1e3d213fcb",
+      "size": 174648,
+      "uncompressed_sha256": "4ef1f883230ecc3148db2e081bf41968ac90cdb7f0f55f7a8b69ae1e3d213fcb",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-SVD-dense-final/frames/0000218_000014.533s.png"
+    },
+    {
+      "file": "zh-SVD-baseline-native-02.png",
+      "sha256": "3fbe7a3ed175176433e2a43e81e2102919ac478fe3caedcaf31b14a20aba18d4",
+      "size": 62710,
+      "uncompressed_sha256": "3fbe7a3ed175176433e2a43e81e2102919ac478fe3caedcaf31b14a20aba18d4",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-SVD-dense-final/frames/0001004_000066.933s.png"
+    },
+    {
+      "file": "zh-SVD-baseline-native-03.png",
+      "sha256": "eaaead648e67e3c752b5a9fb0228ef49b93cfa0f76c9267e2c89bd9047cd06a8",
+      "size": 71800,
+      "uncompressed_sha256": "eaaead648e67e3c752b5a9fb0228ef49b93cfa0f76c9267e2c89bd9047cd06a8",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-SVD-dense-final/frames/0001454_000096.933s.png"
+    },
+    {
+      "file": "zh-SVD-final-render-result.json.gz",
+      "sha256": "281f3910b1115bb3c514bafda4f8f837c21bad72e519d7c901b65dac31c9c092",
+      "size": 10919,
+      "uncompressed_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+      "source": "/workspace/runtime/ai3-final-motion-global-snapshot/zh-SVD-result.json"
+    },
+    {
+      "file": "zh-SVD-final-exact-movie-receipt.json",
+      "sha256": "0ff8e6978a3aee98dbbfcdaded882cf6cc5db4a7bcc01bd431f981ea587d2551",
+      "size": 636
+    },
+    {
+      "file": "table-snapshot-at-final-review.json.gz",
+      "sha256": "01af4d1bb7e0b27f473a9a1efa20d912d6bba4a577e2247352c3372a71dbb5fe",
+      "size": 870648,
+      "uncompressed_sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+      "source": "/workspace/runtime/ai3-final-motion-global-snapshot/ai_text_zh.json"
+    },
+    {
+      "file": "frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/explainer-videos/tools/qa_motion.py"
+    },
+    {
+      "file": "ai3_power_svd_lowrank_prepare.py.gz",
+      "sha256": "f257bc7098695a84df1b2edeae57e7552ccf077b5f6601cf9a06391528b2d7e8",
+      "size": 1980,
+      "uncompressed_sha256": "1ea8ed38b8392d581c2e9bbb7f343dd025fd73af2dc476132ea1fe2c76536475",
+      "source": "/workspace/runtime/ai3_power_svd_lowrank_prepare.py"
+    },
+    {
+      "file": "ai3_power_svd_lowrank_record.py.gz",
+      "sha256": "062740b34f26d66bde073dd9bb28e86e9eb68ebfafc630bdc32169a044c65f67",
+      "size": 1192,
+      "uncompressed_sha256": "efeacd3fc1aae4a0a57921557c625e87de4997fa81a57d72567ee8396e49f821",
+      "source": "/workspace/runtime/ai3_power_svd_lowrank_record.py"
+    },
+    {
+      "file": "ai3_power_svd_repair_prepare.py.gz",
+      "sha256": "9b98f3189dae8a423e7cae60721488aec8a7230afef68454a4708efcd65a3b8b",
+      "size": 2310,
+      "uncompressed_sha256": "e6fdc00fb1ad66976a9269383f5c8a18584dea23d3eb375917502b0de47242f8",
+      "source": "/workspace/runtime/ai3_power_svd_repair_prepare.py"
+    },
+    {
+      "file": "ai3_power_svd_repair_record.py.gz",
+      "sha256": "0a3a96413569ade0dc73c06627cd5ec854ae9101672cdf1e677e71de3208fbc8",
+      "size": 1211,
+      "uncompressed_sha256": "b00e35673517db831ac9bb94dc3e766f41910f5bbac8c90185519b10cf9a4fa6",
+      "source": "/workspace/runtime/ai3_power_svd_repair_record.py"
+    },
+    {
+      "file": "rotation-invariants.py.gz",
+      "sha256": "7b9366158f7a6148d721d57e95382d1f910027c4f77e09ab439955e80e6566a5",
+      "size": 2532,
+      "uncompressed_sha256": "e8aa72cad0fec86a70fe03c76d79021968a2381478c03f19c793b746a19bdddb",
+      "source": "/workspace/runtime/ai3-head-motion-invariants.py"
+    },
+    {
+      "file": "rotation-invariants.json.gz",
+      "sha256": "61b86f8c1116c4d4c79a59154b711ca40383538a2a6c2d9b2ae1953c99d4ede0",
+      "size": 948,
+      "uncompressed_sha256": "5550d8f82f726501374c668cf873aa13f221fb473105783fc607d7ce703699c9",
+      "source": "/workspace/runtime/ai3-head-motion-invariants.json"
+    },
+    {
+      "file": "rotation-tests.log.gz",
+      "sha256": "86192b6eb0587b53edb2dc5a0202875163536087bf1ac73fc564bbb6829d3792",
+      "size": 213,
+      "uncompressed_sha256": "ad3f86353ada5f4f87737e54d7d3d174aff1bd14055ac101beacc6bcbd11b1aa",
+      "source": "/workspace/runtime/ai3-head-rotation-tests.log"
+    },
+    {
+      "file": "final-freeze-record.json",
+      "sha256": "018e527b5b47089164dd8cf11daff3d0e56bfa31e4d8bc0cd03219dab9a55a6c",
+      "size": 706
+    },
+    {
+      "file": "README.md",
+      "sha256": "54160427284814aa06655369dd593f273bdb24604608c77f598a78a6fd55eb99",
+      "size": 5715
+    }
+  ]
+}

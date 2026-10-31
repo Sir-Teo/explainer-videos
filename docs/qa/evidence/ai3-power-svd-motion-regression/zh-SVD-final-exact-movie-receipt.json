@@ -1,0 +1,10 @@
+{
+  "capture_file": "/workspace/runtime/ai3-final-motion-global-snapshot/zh-SVD-result.json",
+  "capture_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+  "status": "passed",
+  "warnings": [],
+  "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+  "movie_sha256": "e43b06c38430defdd5b918d0bdf91ca57512d802e0414d09d913b63432898f6e",
+  "scene_source_sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+  "inheritance": "Entire movie exactSHA matches already fully selected-frame reviewed movie; original capture status/warnings retained separately."
+}

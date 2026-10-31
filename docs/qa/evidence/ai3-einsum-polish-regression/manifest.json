@@ -1,0 +1,329 @@
+{
+  "scope": "EN selected-time motion and both-language endpoint regression; no ZH motion/continuous/audio approval by this reviewer",
+  "packaged_utc": "2026-10-31T19:09:35.683044+00:00",
+  "source_sha256": "def7543b913375b30397871433a8a38ea6b618a8f8e844bf692294aede6ea9ff",
+  "source_batch_commit": "11f5c35",
+  "files": [
+    {
+      "file": "ledgers/en-motion-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion-review.json",
+      "original_sha256": "ca5fb6ac70f177dc5a62bda24cd9bf42f153e1ad665878b87a3b73fae645b494",
+      "original_bytes": 325947,
+      "packaged_sha256": "fdac013980565a4a6e3e6f67b2946eb30985906fd6449ff9837a14c4067acdd0",
+      "packaged_bytes": 35654
+    },
+    {
+      "file": "ledgers/en-motion-automated-audit.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/audit/result.json",
+      "original_sha256": "64cb02a67682c07e3e346a3def394062fdd3eab2a56384fe1d292a37bfafeb69",
+      "original_bytes": 154020,
+      "packaged_sha256": "9233be572fcee91ea5c2a0a872876f4ac2c7f8c23436069aea549ed6f9034a5a",
+      "packaged_bytes": 28778
+    },
+    {
+      "file": "ledgers/en-endpoint-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoint-comparison.json",
+      "original_sha256": "506cebd3d335d3ee8d7c62f86442f93c441f2ae82b9d290b490576bdfe736cb4",
+      "original_bytes": 112320,
+      "packaged_sha256": "2a58db5b8385bf9071962fdb2201472a90a77278715e803e07185a1751681cb0",
+      "packaged_bytes": 8247
+    },
+    {
+      "file": "ledgers/zh-endpoint-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoint-comparison.json",
+      "original_sha256": "6f36defb9dc28a8c7082cfc27270840f2f9918706b104f5ab949d0d94f58952a",
+      "original_bytes": 115592,
+      "packaged_sha256": "fc3766f2d40157156cdb18d4207091e9bb94fb80e47ea3b8567e26939257ea66",
+      "packaged_bytes": 8443
+    },
+    {
+      "file": "ledgers/initial-preservation.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/preservation.json",
+      "original_sha256": "2975ac9de7574ed191a71e4f2de355cc540c9f78e4a0bc663c807bf6dd946ee9",
+      "original_bytes": 19853,
+      "packaged_sha256": "9b86cfe83b3eecfdbc0fb80dbbefbffecf5ed39a0af5805c1bf17a495901faf5",
+      "packaged_bytes": 3978
+    },
+    {
+      "file": "ledgers/completion-provenance.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/completion-provenance.json",
+      "original_sha256": "97d4d6f80c0c865729b8e12800eab263796e940d9533843fd9e875c8af8bab20",
+      "original_bytes": 2159,
+      "packaged_sha256": "d58268b788b7f32caa84e53cc72580e0e1fcaecf797115ebd8c66d54110ad625",
+      "packaged_bytes": 664
+    },
+    {
+      "file": "ledgers/en-motion-render-result.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/render-result.json",
+      "original_sha256": "8ee2b4a18a2ba9b72136198b3a8fd11bacb5b8beaad79ecff0b98417557fa90a",
+      "original_bytes": 80034,
+      "packaged_sha256": "7d543135b6738b79fc0d57375ccaf0dbe018f6ff7a7b96a15a8477d5ac2e0b7a",
+      "packaged_bytes": 11673
+    },
+    {
+      "file": "ledgers/en-final-endpoint-render-result.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoints-final/result.json",
+      "original_sha256": "a6a24abd88b1ded8d947dffd9fa2ecf53533c6564cd031b8e7e19ff5de2fa3ed",
+      "original_bytes": 79754,
+      "packaged_sha256": "103d42051c16a636e769c22dbe77618c8c5af956550ea6802541350b9e9ff56a",
+      "packaged_bytes": 11765
+    },
+    {
+      "file": "ledgers/zh-endpoint-render-result.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoints/result.json",
+      "original_sha256": "c87f36a2e4cbc7a22b4d1a1f25679161151d65b972d2809d07deffc4ce14187b",
+      "original_bytes": 97145,
+      "packaged_sha256": "eda24cc9bc4430c919d840204eb7020f741ad06bbda133308655467be2654460",
+      "packaged_bytes": 16770
+    },
+    {
+      "file": "ledgers/en-earlier-warning-endpoint-result.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoints/result.json",
+      "original_sha256": "a7705e0b6d9a06fdbf064d78a90066f6c6bf6719079f6f809d035569a3aa41f0",
+      "original_bytes": 79812,
+      "packaged_sha256": "cfcaca19bcc01eb8ed74e7fff13103d054ef10a38c2a2178b80842e1d223b217",
+      "packaged_bytes": 11797
+    },
+    {
+      "file": "ledgers/en-prior-motion-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-en-Einsum-motion-review.json",
+      "original_sha256": "b98a98cb18573e09616bf2bf955d34fa80336728b6e767698ee418e56a8d94de",
+      "original_bytes": 198857,
+      "packaged_sha256": "a498b022d4c8ecee4f1330992e338fef27fd37c429b71ae9ec4c2169479a409a",
+      "packaged_bytes": 31586
+    },
+    {
+      "file": "ledgers/en-prior-movie-preservation.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-en-Einsum-original/preservation.json",
+      "original_sha256": "9a2ea769e57956bb59f9ad61dcb784b2852e42d2a097fbb0d10e1510b607936c",
+      "original_bytes": 1737,
+      "packaged_sha256": "24f87b04ac399afba42fdbf317f14b6dae32a5ac73645ce2ac10bc713707cbc6",
+      "packaged_bytes": 702
+    },
+    {
+      "file": "ledgers/en-prior-endpoint-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/review.json",
+      "original_sha256": "c22d9f89277959bb3164864c6ccfb65ee8559b8e8826679ef0dfaf73ee4f6004",
+      "original_bytes": 312945,
+      "packaged_sha256": "5a57ae896d7877e03f677c398c3386649f4416992e54191b15e56e374f37f124",
+      "packaged_bytes": 33972
+    },
+    {
+      "file": "ledgers/zh-prior-endpoint-review.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-zh-first-nine-endpoint-review.json",
+      "original_sha256": "8eb539f901a0d45d7cffa5d679f96e91120db622d112f446b51fa7a612643fa4",
+      "original_bytes": 543666,
+      "packaged_sha256": "7bf462ddace1f2bc0d40abc8e1952f3ea2b5ea88aaafa5927cb513366fcb5ff0",
+      "packaged_bytes": 60973
+    },
+    {
+      "file": "ledgers/source-repair-geometry-handoff.json.gz",
+      "kind": "unmodified JSON evidence ledger",
+      "original_path": "/workspace/runtime/ai3-einsum-index-legend-handoff.json",
+      "original_sha256": "249763f80adec63c38ec5cd4ef1a1b39ad5417de9e97b54d11f335b52504fc08",
+      "original_bytes": 4936,
+      "packaged_sha256": "5c38718790a1b8e9933f2d51f8bd75e500a9285b1e25ff8a41beb7a1e6f97472",
+      "packaged_bytes": 1643
+    },
+    {
+      "file": "images/en-citation-after.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoints-final/007_00056.4s.png",
+      "original_sha256": "d89f6b970ba6edfb0fcc27bb411cb166fb8e78bc2942be61974fcfd8a670c216",
+      "original_bytes": 53017,
+      "packaged_sha256": "d89f6b970ba6edfb0fcc27bb411cb166fb8e78bc2942be61974fcfd8a670c216",
+      "packaged_bytes": 53017,
+      "time": 56.376853174603184,
+      "stage": "after",
+      "lang": "en",
+      "index": 7
+    },
+    {
+      "file": "images/en-citation-before.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Einsum/3f4815e67c67394d5b4457ccedfde8b395cbabbb2ff748de62007400fd017539/frames/007_00056.4s.png",
+      "original_sha256": "c79eea55ba29101b9cf9bdc929343f8945328f2930098c48a009384d9e77ce83",
+      "original_bytes": 53003,
+      "packaged_sha256": "c79eea55ba29101b9cf9bdc929343f8945328f2930098c48a009384d9e77ce83",
+      "packaged_bytes": 53003,
+      "time": 56.376853174603184,
+      "stage": "before",
+      "lang": "en",
+      "index": 7
+    },
+    {
+      "file": "images/en-examples-after.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-endpoints-final/012_00084.1s.png",
+      "original_sha256": "b1076bb10f004fdff62b6e3f06941b4681313d5f2b1cf6c0833800935b900e72",
+      "original_bytes": 51971,
+      "packaged_sha256": "b1076bb10f004fdff62b6e3f06941b4681313d5f2b1cf6c0833800935b900e72",
+      "packaged_bytes": 51971,
+      "time": 84.08555555555556,
+      "stage": "after",
+      "lang": "en",
+      "index": 12
+    },
+    {
+      "file": "images/en-examples-before.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-first4-en-endpoints/Einsum/3f4815e67c67394d5b4457ccedfde8b395cbabbb2ff748de62007400fd017539/frames/012_00084.1s.png",
+      "original_sha256": "1a0afcbd8dc9f8911d89e91708414cb5ccb448ffe88001cc9b832732188ebdcc",
+      "original_bytes": 44796,
+      "packaged_sha256": "1a0afcbd8dc9f8911d89e91708414cb5ccb448ffe88001cc9b832732188ebdcc",
+      "packaged_bytes": 44796,
+      "time": 84.08555555555556,
+      "stage": "before",
+      "lang": "en",
+      "index": 12
+    },
+    {
+      "file": "images/zh-citation-after.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoints/007_00061.0s.png",
+      "original_sha256": "5bdd3e02e0f440dfb246c176a06384e95b7cc3ad90ddcf82c35dd3b9bb8e6633",
+      "original_bytes": 58148,
+      "packaged_sha256": "5bdd3e02e0f440dfb246c176a06384e95b7cc3ad90ddcf82c35dd3b9bb8e6633",
+      "packaged_bytes": 58148,
+      "time": 61.021858964741156,
+      "stage": "after",
+      "lang": "zh",
+      "index": 7
+    },
+    {
+      "file": "images/zh-citation-before.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-zh-first-nine-endpoint-snapshot/Einsum/007_00061.0s.png",
+      "original_sha256": "cd4b4e82c5cdf0153889cc08fa4e8f14545e71045c28092c4eab27a91a200283",
+      "original_bytes": 58195,
+      "packaged_sha256": "cd4b4e82c5cdf0153889cc08fa4e8f14545e71045c28092c4eab27a91a200283",
+      "packaged_bytes": 58195,
+      "time": 61.021858964741156,
+      "stage": "before",
+      "lang": "zh",
+      "index": 7
+    },
+    {
+      "file": "images/zh-examples-after.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/zh-endpoints/012_00090.4s.png",
+      "original_sha256": "e654df0bc6e1e90eb16820e097222636cc323cb482990d32d4bd9baafee11f13",
+      "original_bytes": 48852,
+      "packaged_sha256": "e654df0bc6e1e90eb16820e097222636cc323cb482990d32d4bd9baafee11f13",
+      "packaged_bytes": 48852,
+      "time": 90.3839363885089,
+      "stage": "after",
+      "lang": "zh",
+      "index": 12
+    },
+    {
+      "file": "images/zh-examples-before.png",
+      "kind": "actual native endpoint",
+      "original_path": "/workspace/runtime/ai3-zh-first-nine-endpoint-snapshot/Einsum/012_00090.4s.png",
+      "original_sha256": "1d5c4ae0b7759048e9b0f73acbfd2028d007306e1a5839ebbc6b71f9cfa72ea4",
+      "original_bytes": 39100,
+      "packaged_sha256": "1d5c4ae0b7759048e9b0f73acbfd2028d007306e1a5839ebbc6b71f9cfa72ea4",
+      "packaged_bytes": 39100,
+      "time": 90.3839363885089,
+      "stage": "before",
+      "lang": "zh",
+      "index": 12
+    },
+    {
+      "file": "images/en-motion-citation-after.png",
+      "kind": "actual native movie frame",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/audit/frames/0000923_000061.533s.png",
+      "original_sha256": "24253676dbefe159ef28a5a8fb700aec62e6d0689870bc6b689ce54adcfb4525",
+      "original_bytes": 74453,
+      "packaged_sha256": "24253676dbefe159ef28a5a8fb700aec62e6d0689870bc6b689ce54adcfb4525",
+      "packaged_bytes": 74453,
+      "source_frame": 923,
+      "time": 61.533008
+    },
+    {
+      "file": "images/en-motion-examples-after.png",
+      "kind": "actual native movie frame",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/audit/frames/0001291_000086.064s.png",
+      "original_sha256": "5e5d3826391c2aff573f225a141c15963dcc519218b1aa04a6f4e3923d2ebac5",
+      "original_bytes": 66167,
+      "packaged_sha256": "5e5d3826391c2aff573f225a141c15963dcc519218b1aa04a6f4e3923d2ebac5",
+      "packaged_bytes": 66167,
+      "source_frame": 1291,
+      "time": 86.064388
+    },
+    {
+      "file": "images/en-changed-sheet-001.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/changed-only/sheet-001.png",
+      "original_sha256": "ad7f2d5b8aa93e413d5f4f09bfead5c0fc02847974d8aa1eaf29cb66b85048a7",
+      "original_bytes": 352916,
+      "packaged_sha256": "ad7f2d5b8aa93e413d5f4f09bfead5c0fc02847974d8aa1eaf29cb66b85048a7",
+      "packaged_bytes": 352916,
+      "actual_selected_indices": [
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        135
+      ]
+    },
+    {
+      "file": "images/en-changed-sheet-006.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/changed-only/sheet-006.png",
+      "original_sha256": "a85ac760396d1a68f721efeb0beabba2ed619f27a2c26f10bc7cc30f589f656a",
+      "original_bytes": 248591,
+      "packaged_sha256": "a85ac760396d1a68f721efeb0beabba2ed619f27a2c26f10bc7cc30f589f656a",
+      "packaged_bytes": 248591,
+      "actual_selected_indices": [
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185
+      ]
+    },
+    {
+      "file": "images/en-changed-sheet-012.png",
+      "kind": "actually viewed chronological sheet",
+      "original_path": "/workspace/runtime/ai3-einsum-polish-regression/en-motion/changed-only/sheet-012.png",
+      "original_sha256": "93aceacf31630270d59540dda69944cab8e58f51cf3b7f897d901f554ff5e3d1",
+      "original_bytes": 314140,
+      "packaged_sha256": "93aceacf31630270d59540dda69944cab8e58f51cf3b7f897d901f554ff5e3d1",
+      "packaged_bytes": 314140,
+      "actual_selected_indices": [
+        232,
+        233,
+        234,
+        235,
+        236,
+        237
+      ]
+    }
+  ],
+  "limits": [
+    "No MP4 files included; actual preserved movie is authenticated by SHA256.",
+    "Representative contact sheets and native images are included, not every extracted PNG. Complete per-time maps, page hashes and exact unviewed source-frame gaps remain in ledgers.",
+    "Original absolute runtime paths are historical provenance; portable examples are linked by this manifest."
+  ]
+}

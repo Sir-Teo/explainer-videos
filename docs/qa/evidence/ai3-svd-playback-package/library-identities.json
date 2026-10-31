@@ -1,0 +1,46 @@
+{
+  "results": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-SVD-EN-Silent-480p.mp4",
+      "file_id": "file_0000000017f481f698cdbaa6299ce05e",
+      "library_file_id": "libfile_4114eee4298c8191835a2fad409fa259",
+      "file_name": "AI-Built-Part3-SVD-EN-Silent-480p.mp4",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "video/mp4",
+      "library_artifact_type": "other",
+      "file_size_bytes": 1921843
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part3-SVD-Rotation-Before-After.mp4",
+      "file_id": "file_00000000714881f6837836a0d9fd8ca7",
+      "library_file_id": "libfile_3daf557515708191bd0146eb0451066e",
+      "file_name": "AI-Built-Part3-SVD-Rotation-Before-After.mp4",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "video/mp4",
+      "library_artifact_type": "other",
+      "file_size_bytes": 2160888
+    }
+  ],
+  "warnings": [],
+  "external_connectors_accessed": false
+}

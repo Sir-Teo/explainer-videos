@@ -1,6 +1,6 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31 19:03 UTC. Progress, **not full-series production approval**.
+Observed: 2026-10-31 19:53 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
 `11f5c35` (rigid-transform and transition source repairs). All216repository tests pass after this batch,
@@ -18,7 +18,7 @@ corrected CFR file is Library version 1. Remaining narration, listening and broa
 Part 2: all 16 scenes × two languages have complete silent movies and selected-timeline reviews. The frozen
 32-case baseline accounts for 14,068 selected times and 105,217 automatically decoded frames. Subsequent
 Knowledge boundary-anchor/caption-clearance polish replaces its English 429-time pass with 423 times; Chinese
-remains 469. That current replacement totals 14,062 selected times. Its separate regression covers 892 selected
+remains 469. That dated replacement totaled 14,062 selected times. A further Hook year-label mask regression covers EN272/ZH287, making the current32-case total14,067. English Hook additionally has246selectedtimes/eight native checks in a complete1080p30 silent movie; its shared-caption source-change warning is retained. Its separate regression covers 892 selected
 times, 95 newly viewed unique images and all 41 bilingual native 1080p endpoints (35 exact-image inherited,
 six new native views). No full 1080p motion or listening approval follows from endpoint checks.
 
@@ -29,11 +29,7 @@ The original English Logic preview also had native cloud playback with timed scr
 replacement failed before preparation, so the existing Library video remains the original version.
 
 Part 3: all 19 scene sources have been reviewed. Original recall, two-tower inference, JL-confidence and SGNS
-lineage defects are repaired and tested, alongside additional technical/narration findings. Eight of 17 numerical
-items are complete. The spectrum task is training the shared novels model; latest observed step is 2,263/2,929,
-validation loss 3.632, cumulative 2.787 seconds/step. Durable checkpoints continue; later numerical items remain.
-The running producer and consumed inputs are frozen. No scene renders against unfinished data.
-
+lineage defects are repaired and tested, alongside additional technical/narration findings. Fifteen of17numerical items are complete. The shared novels model finished all2,929steps without divergence; final validation loss3.5711395 and training8,595.83seconds. Spectral task8611seconds, MF51fits396seconds, two-tower987seconds, SGNS233seconds. Exactmodel/cache/producer hashes and completion receipts are saved. Only GaLore/control remain; disjoint per-item locks avoid duplicate training.
 The first nine scenes have 342 bilingual endpoint images reviewed. Actual silent motion review is underway in
 manifest order. English Einsum covers 390 selected times and separately had native cloud playback through terminal
 stop with 17 timed states inspected. Meaningful endpoint polish improves projected labels, raw-logit bar baselines,
@@ -57,3 +53,5 @@ Cloud only. No CI/CD, runners, merge or deployment was configured. User authoriz
 Optional draft PR creation was denied by automatic approval review for lacking explicit PR authorization; no PR
 was created and it was not retried. [Inventory](ai-built-20261031-inventory.md),
 [chronological checklist](ai-built-20261031-progress.md), [evidence](evidence/).
+
+19:53 runtime snapshot:29of38chapter-languageendpoint cases and25of38fullsilentmovie cases have completed runtime records. These counts are runtime coverage, not all visually approved current-source cases. First-nine baseline motion reviews are complete at exact artifact versions; new rank/tail-norm/rounding/color refinements have separate scoped regression queues. Ready Word/HighDim/JL/Geometry and spectral/recommendation scenes are now rendering/reviewing.

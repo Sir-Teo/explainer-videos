@@ -1,0 +1,8 @@
+{
+  "movie_sha256": "f71dd0491ced9cd3d6c56c223cc954181d1a48d7df16f2d500260371dcf78e54",
+  "movie_snapshot": "/workspace/runtime/ai3-power-svd-lowrank-motion-evidence/en/LowRank/reviewed-movie.mp4",
+  "capture_sha256": "97efac4d39dd5319000912e3efb5fa7cc4f84299d3d5ad665418b6dabc7e6c98",
+  "source_sha256": "c05f177c5c04048e43709147e0970a419bc9666291fa5a9a786df8ad4507aa10",
+  "caption_issue": "A scalar sqrt(sum omitted sigma squared) was loosely named omitted singular values.",
+  "review_scope": "Before-repair actual selected-frame visual review complete; new source has not yet undergone fresh EN/ZH motion/VO review."
+}

@@ -74,9 +74,12 @@ class JL(VoiceoverScene):
             yl.rotate(-PI / 2)
         kv = Integer(ks[0], font_size=46, color=C.BITS)
         kread = VGroup(MathTex(r"k =", font_size=46), kv).arrange(RIGHT, buff=0.2).move_to([3.6, 2.2, 0])
-        w10 = DecimalNumber(100 * j[f"within10_{ks[0]}"], num_decimal_places=0, font_size=40, color=C.BITS, unit=r"\%")
-        wread = VGroup(w10, label(r"of distances within $10\%$", font_size=28, color=GREY_A)).arrange(RIGHT, buff=0.2)
+        w10 = DecimalNumber(100 * j[f"within10_{ks[0]}"], num_decimal_places=1, font_size=40, color=C.BITS, unit=r"\%")
+        wcaption = label(r"of distances within $10\%$", font_size=28, color=GREY_A)
+        wread = VGroup(w10, wcaption).arrange(RIGHT, buff=0.2)
         wread.move_to([3.8, 1.2, 0])
+        # Keep the descriptor clear as the measured percentage changes width.
+        wcaption.add_updater(lambda m: m.next_to(w10, RIGHT, buff=0.2))
         w_a, w_b = 100 * j[f"within10_{ks[3]}"], 100 * j[f"within10_{ks[4]}"]
         head = label(rf"${fmt_int(n)}$ of GPT-2's vectors, \ times one random $768 \times k$ matrix", font_size=32)
         head.to_edge(UP, buff=0.35)
@@ -103,6 +106,7 @@ class JL(VoiceoverScene):
                 self.play(kt.animate.set_value(i), ChangeDecimalToValue(kv, k),
                           ChangeDecimalToValue(w10, 100 * j[f"within10_{k}"]), run_time=1.3)
         pts.clear_updaters()
+        wcaption.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 

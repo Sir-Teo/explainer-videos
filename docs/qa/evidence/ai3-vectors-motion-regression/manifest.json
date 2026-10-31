@@ -1,0 +1,650 @@
+{
+  "scope": "Silent854x48015fps selected-frame visual review; no continuous perceptual playback, listening, production-resolution or player sign-off.",
+  "files": {
+    "en-before-plan.json.gz": {
+      "sha256": "db31374925ac189cce0d3de4f0cbe1bdcd89cbbc0cd73f105d3f3b6efd2e0168",
+      "uncompressed_sha256": "1f0872fd98a5deec02b309a56c4e5378b5754105c44c67fc9f4469578f101ed4",
+      "uncompressed_bytes": 283036,
+      "bytes": 41109,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/plan.json"
+    },
+    "en-before-audit.json.gz": {
+      "sha256": "1e3aa113e2f45db1a35a60e3f620591e081ff1b40855581cc5f653367a46f4cf",
+      "uncompressed_sha256": "36665eda30b3c3c230c202ad97678e0bb7c399ac0962ba45fa9ff3dba17eb0c4",
+      "uncompressed_bytes": 197547,
+      "bytes": 37890,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/audit.json"
+    },
+    "en-before-render-record.json.gz": {
+      "sha256": "61d4acbddf59dfd7e7a9e4cdf5ca6f2124192844e8d1a26148424257c1a69bc4",
+      "uncompressed_sha256": "1f2841164c0bdf10159d6f789423d53a6b31a3d8fefabded5582c7b2e00ea582",
+      "uncompressed_bytes": 79414,
+      "bytes": 14412,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/render-record.json"
+    },
+    "en-before-review.json.gz": {
+      "sha256": "2d9593ab08c7a451cf04a518c48587c585847cdeac3b6ad346004a37b7eaf1f4",
+      "uncompressed_sha256": "9d7f9fa73f794a54f48044527c92c1e8ab8a1663f185ad0976deec701fe9ee71",
+      "uncompressed_bytes": 486091,
+      "bytes": 56168,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/review.json"
+    },
+    "en-after-plan.json.gz": {
+      "sha256": "4fae6a53f64cd926dc3468c7cbeb5d41cddde983a31d09957cc8339b3a52b9a4",
+      "uncompressed_sha256": "e0119107f3b7976982157f9bcf6ad4b31e986690e3b1f9f57b1e5a72f6b43383",
+      "uncompressed_bytes": 288386,
+      "bytes": 41315,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/plan.json"
+    },
+    "en-after-audit.json.gz": {
+      "sha256": "7005a8201fb249235a60798f0f3b203c34ba61712e50b12f61fbae0378701ee3",
+      "uncompressed_sha256": "004d38494585af20ea2e99fa00acc5569ee144883a433b11251a358587e2d04b",
+      "uncompressed_bytes": 198001,
+      "bytes": 37995,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/audit.json"
+    },
+    "en-after-render-record.json.gz": {
+      "sha256": "74f4a3a8a3c928e797dd3e3b119c0eebfedaec51350583e25da93e0926d08668",
+      "uncompressed_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+      "uncompressed_bytes": 79414,
+      "bytes": 14413,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/render-record.json"
+    },
+    "en-after-regression-plan.json.gz": {
+      "sha256": "cd83a532454a0b7d2c2b59d2ac180cd5ceea8516e9f9723d8bd86e2035872f56",
+      "uncompressed_sha256": "4675e3f5ba25e524e3428763542633a751e665d5ac7bc33ae0a296dd291b1535",
+      "uncompressed_bytes": 702643,
+      "bytes": 41775,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/regression-plan.json"
+    },
+    "en-after-regression-review.json.gz": {
+      "sha256": "5da1272b6eb6e8106b1f2e490058b836c8b01b8b34adf1b0321b625430f6a694",
+      "uncompressed_sha256": "213350558a69355360115e3abb981bf46458729c1a36d6afa112003ef447b79b",
+      "uncompressed_bytes": 1040146,
+      "bytes": 84817,
+      "source": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/regression-review.json"
+    },
+    "zh-after-plan.json.gz": {
+      "sha256": "258cb343a8d29a3623c0cd48474dd6fe32c30dcac8ea5023acade447bbb89dd4",
+      "uncompressed_sha256": "a176f0a98db8688b0ed0acbef557efe3cf6777f8c6ef36ba29e21d294f618c50",
+      "uncompressed_bytes": 279090,
+      "bytes": 40104,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/plan.json"
+    },
+    "zh-after-audit.json.gz": {
+      "sha256": "0dd7fe3fe2b3188bb6c4a43295bef015b719356f1fb204be5acbd42ef6e9408a",
+      "uncompressed_sha256": "a40bdd0a5a96a4472140c8fb2bf6bf736e60ec3504a93fc97c75be6164563e6b",
+      "uncompressed_bytes": 192242,
+      "bytes": 36808,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/audit.json"
+    },
+    "zh-after-render-record.json.gz": {
+      "sha256": "875cbbb984973220ce6edded670a127466fd4415bab43fbc3ed1041c47efcc94",
+      "uncompressed_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+      "uncompressed_bytes": 97541,
+      "bytes": 20715,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/render-record.json"
+    },
+    "zh-after-regression-plan.json.gz": {
+      "sha256": "6d52dcfe31e3d924af306e02d1029c613bf132764814161c54650baeba9352c5",
+      "uncompressed_sha256": "d0df7f83a62070dab262d2caefd8431403eae4aad341746a0b4222fbd0da1684",
+      "uncompressed_bytes": 355099,
+      "bytes": 37626,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/regression-plan.json"
+    },
+    "zh-after-review.json.gz": {
+      "sha256": "48d9eb9e83838217a076af474e1a5739b92a21225e89be91f40858b0b600c979",
+      "uncompressed_sha256": "23b5cd97b801b6cb5d89ee8d1b0db6cc9759143796c7756e919c6fc733fb6252",
+      "uncompressed_bytes": 802145,
+      "bytes": 85947,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/review.json"
+    },
+    "actual-PNG-inheritance-catalog.json.gz": {
+      "sha256": "17538c96428733c3c379f96615d217e18f71bfa899fad7b1071c80b09d1bb9e6",
+      "uncompressed_sha256": "754525a5f8e173e66f5aca45c4e60c590780fecbe49bb5617cf9bbe7ac847ebf",
+      "uncompressed_bytes": 730378,
+      "bytes": 41641,
+      "source": "/workspace/runtime/ai3-motion-coverage/vectors-actual-PNG-inheritance-catalog.json"
+    },
+    "en-before-frame-250.png": {
+      "sha256": "6388368bc089e06042dedb339c912e05868329d2b483e8ccf27463778021a6ed",
+      "bytes": 55046,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-motion-final/frames/0000250_000016.667s.png",
+      "source_frame": 250,
+      "time": 16.666667,
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c"
+    },
+    "en-before-frame-1944.png": {
+      "sha256": "0301fd7812473216cd83233be38e7eb0ed9fedde43c9144256bc71f0e20cb88e",
+      "bytes": 59529,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-motion-final/frames/0001944_000129.598s.png",
+      "source_frame": 1944,
+      "time": 129.598372,
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c"
+    },
+    "en-before-frame-1983.png": {
+      "sha256": "0df39cb4bcd7ee859d8e89e0fb6bc66f1e22c2bc4f0ffd5ad7236bb6b555c4ee",
+      "bytes": 60578,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-motion-final/frames/0001983_000132.198s.png",
+      "source_frame": 1983,
+      "time": 132.198372,
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c"
+    },
+    "en-before-frame-2825.png": {
+      "sha256": "6b7ebff36bb086c18f94e99d75ac4b192e102651d12a8c213c8c2dd9ee9d6761",
+      "bytes": 66162,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-motion-final/frames/0002825_000188.330s.png",
+      "source_frame": 2825,
+      "time": 188.330404,
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c"
+    },
+    "en-before-frame-2944.png": {
+      "sha256": "33ac9697bf16ad0579c69338beec655317544b02e95f9bfac58e730f1a07aeb0",
+      "bytes": 60048,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-motion-final/frames/0002944_000196.264s.png",
+      "source_frame": 2944,
+      "time": 196.263737,
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c"
+    },
+    "en-after-frame-251.png": {
+      "sha256": "90fd3d2d607193a86c4abda201c5a22416d54669b066aa723b47ee56194bfdcf",
+      "bytes": 55821,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Vectors-repaired-motion-final/frames/0000251_000016.733s.png",
+      "source_frame": 251,
+      "time": 16.733333,
+      "movie_sha256": "7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2"
+    },
+    "zh-after-frame-219.png": {
+      "sha256": "ab603bf2c8f032071c2fc123a7874893a7f1a39123556f02a0f7c45a663ac4cc",
+      "bytes": 55853,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Vectors-repaired-motion-final/frames/0000219_000014.600s.png",
+      "source_frame": 219,
+      "time": 14.6,
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10"
+    },
+    "zh-after-frame-1998.png": {
+      "sha256": "ab9e9f0d62fd6d4e5aa1ab79f3fa885408ce98a5122605638ee932cc99139125",
+      "bytes": 62171,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Vectors-repaired-motion-final/frames/0001998_000133.198s.png",
+      "source_frame": 1998,
+      "time": 133.198372,
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10"
+    },
+    "zh-after-frame-2838.png": {
+      "sha256": "6c4bf86214cf3a15b257f4f91c1aaba99326c55b851a20f2e0118a1ecad606d5",
+      "bytes": 72621,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Vectors-repaired-motion-final/frames/0002838_000189.197s.png",
+      "source_frame": 2838,
+      "time": 189.19707,
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10"
+    },
+    "zh-after-frame-2951.png": {
+      "sha256": "5bc090def87df7db25857d27a199b51d35f3fee60044c6f716ac0246363f0af4",
+      "bytes": 60532,
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Vectors-repaired-motion-final/frames/0002951_000196.730s.png",
+      "source_frame": 2951,
+      "time": 196.730404,
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10"
+    },
+    "zh-after-antiparallel-136.000s.png": {
+      "sha256": "a897039fa397c4bb57abbdb024394e9f9d9f69bf6829c3ee3a9502f39721423b",
+      "bytes": 63123,
+      "source": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/native-priority/antiparallel-136.000s.png",
+      "requested_seek_time": 136.0,
+      "timestamp_limit": "FFmpeg time seek quantized to source15fps; no exact frame-index assertion.",
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10"
+    }
+  },
+  "artifacts": {
+    "en-before": {
+      "movie_sha256": "50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c",
+      "duration": 198.79707,
+      "decoded_frames": 2982,
+      "selected_time_count": 509,
+      "unique_frame_count": 446,
+      "duplicate_frame_count": 63,
+      "largest_selected_time_gap": 1.0,
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "algorithm": "rgb-max-channel-v2-bounded-gap",
+      "color_space": "RGB24",
+      "render_record_sha256": "1f2841164c0bdf10159d6f789423d53a6b31a3d8fefabded5582c7b2e00ea582",
+      "audit_sha256": "36665eda30b3c3c230c202ad97678e0bb7c399ac0962ba45fa9ff3dba17eb0c4",
+      "source_files": {
+        "videos/ai/ai3/s11_spectra.py": {
+          "sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s11_spectra.py"
+        },
+        "videos/ai/ai3/s03_einsum.py": {
+          "sha256": "0ee08694317f73f1a5a9ab486f387bfbac30d038c44a2a63f16bcf82c0e65ff1",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s03_einsum.py"
+        },
+        "videos/ai/ai3/s10_norms.py": {
+          "sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s10_norms.py"
+        },
+        "videos/ai/ai3/s13_words.py": {
+          "sha256": "b79c2495521d3987ef39dedf716bb40d24c2dfdf1cd6a97df7102d29d5b6e157",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s13_words.py"
+        },
+        "videos/ai/ai3/s14_sgns.py": {
+          "sha256": "dc56ada3cfd37d8cbfabcdda082245389ab72a025ae3d86e329fc821c31953e6",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s14_sgns.py"
+        },
+        "videos/ai/ai3/s12_galore.py": {
+          "sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s12_galore.py"
+        },
+        "videos/ai/ai3/manifest.py": {
+          "sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/manifest.py"
+        },
+        "videos/ai/ai3/s16_jl.py": {
+          "sha256": "eea3cdc5abd47a8a631d0f130ca13830f444537441a5df35461e131f9d8805b2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s16_jl.py"
+        },
+        "videos/ai/ai3/compute.py": {
+          "sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/compute.py"
+        },
+        "videos/ai/ai3/s18_netflix.py": {
+          "sha256": "f252152488e2b58e0e256315b2c5bd11db85370d9d529411ff1f6e26313b16e4",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s18_netflix.py"
+        },
+        "videos/ai/ai3/s15_highdim.py": {
+          "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s15_highdim.py"
+        },
+        "videos/ai/ai3/s17_geometry.py": {
+          "sha256": "09b0e94a2d38252f09d31496525504c008c3b82de0c15b8e25f3ed92490b9427",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s17_geometry.py"
+        },
+        "videos/ai/ai3/s04_matrices.py": {
+          "sha256": "3c4fe0555001625bb4a1fbd056ad5182645957605eda816963b08a812a60bc07",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s04_matrices.py"
+        },
+        "videos/ai/ai3/s09_lowrank.py": {
+          "sha256": "c05f177c5c04048e43709147e0970a419bc9666291fa5a9a786df8ad4507aa10",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s09_lowrank.py"
+        },
+        "videos/ai/ai3/s02_vectors.py": {
+          "sha256": "12a3d60bd8741c5b68b5690d66413ee980bb7b995b183d2d07b6846ba23d992a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s02_vectors.py"
+        },
+        "videos/ai/ai3/__init__.py": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/__init__.py"
+        },
+        "videos/ai/ai3/s01_hook.py": {
+          "sha256": "2cc150ba66e921c64279c1d8a5965836c5971f947d55defb83a69a9a7aa7eae1",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s01_hook.py"
+        },
+        "videos/ai/ai3/s05_projection.py": {
+          "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s05_projection.py"
+        },
+        "videos/ai/ai3/s06_eigen.py": {
+          "sha256": "09b46dec72d69ac2f8b99b2ebfcaa67292cdd749b30d3cad199911ae445c7329",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s06_eigen.py"
+        },
+        "videos/ai/ai3/s08_svd.py": {
+          "sha256": "8666cbb2c07ea615c55401cbf3e2d75cf8351abb1750f3034fdb9ca352775c1a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s08_svd.py"
+        },
+        "videos/ai/ai3/common.py": {
+          "sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/common.py"
+        },
+        "videos/ai/ai3/s19_outro.py": {
+          "sha256": "22163cd98ceb1928347079996807c11d97aab44622b65a520a00b028d3e3c116",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s19_outro.py"
+        },
+        "videos/ai/ai3/zh_lines.py": {
+          "sha256": "c17f1716562f3bc61e868d4e8a5845dcc941d99db1e5063430a7ec70861ef732",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/zh_lines.py"
+        },
+        "videos/ai/ai3/s07_power.py": {
+          "sha256": "e3c06632670150b522cf3722a56edfca19a34c4460d61df05c1186bbf019391a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai3/s07_power.py"
+        },
+        "videos/ai/ai_text_zh.json": {
+          "sha256": "d805eb1858f976969c64014adda5f1b60f0e33830865d11238e28df114a0fa73",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/videos/ai/ai_text_zh.json"
+        },
+        "explainer/ai/viz.py": {
+          "sha256": "68c7ea8f062a7c8d0e54ee94e819c09f1b8c882931babddd3a0b4c8cee61f5aa",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/explainer/ai/viz.py"
+        },
+        "tools/qa_motion.py": {
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/50e865cca677571f4309874cc953a0504839c0af26b427133773dfcf7610bf5c/sources/tools/qa_motion.py"
+        }
+      },
+      "consumed_inputs": {
+        ".cache/ai3/gpt2.json": {
+          "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+          "recorded_signature": [
+            11064,
+            1793466616038797011
+          ],
+          "signature_at_freeze": [
+            11064,
+            1793466616038797011
+          ]
+        },
+        ".cache/ai3/gpt2.npz": {
+          "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+          "recorded_signature": [
+            72806,
+            1793466616033326706
+          ],
+          "signature_at_freeze": [
+            72806,
+            1793466616033326706
+          ]
+        }
+      },
+      "aggregate_source_current_at_freeze": true,
+      "recorded_inputs_current_at_freeze": true
+    },
+    "en-after": {
+      "movie_sha256": "7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2",
+      "duration": 198.79707,
+      "decoded_frames": 2982,
+      "selected_time_count": 511,
+      "unique_frame_count": 448,
+      "duplicate_frame_count": 63,
+      "largest_selected_time_gap": 1.0,
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "algorithm": "rgb-max-channel-v2-bounded-gap",
+      "color_space": "RGB24",
+      "render_record_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+      "audit_sha256": "004d38494585af20ea2e99fa00acc5569ee144883a433b11251a358587e2d04b",
+      "source_files": {
+        "videos/ai/ai3/s11_spectra.py": {
+          "sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s11_spectra.py"
+        },
+        "videos/ai/ai3/s03_einsum.py": {
+          "sha256": "def7543b913375b30397871433a8a38ea6b618a8f8e844bf692294aede6ea9ff",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s03_einsum.py"
+        },
+        "videos/ai/ai3/s10_norms.py": {
+          "sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s10_norms.py"
+        },
+        "videos/ai/ai3/s13_words.py": {
+          "sha256": "b79c2495521d3987ef39dedf716bb40d24c2dfdf1cd6a97df7102d29d5b6e157",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s13_words.py"
+        },
+        "videos/ai/ai3/s14_sgns.py": {
+          "sha256": "dc56ada3cfd37d8cbfabcdda082245389ab72a025ae3d86e329fc821c31953e6",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s14_sgns.py"
+        },
+        "videos/ai/ai3/s12_galore.py": {
+          "sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s12_galore.py"
+        },
+        "videos/ai/ai3/manifest.py": {
+          "sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/manifest.py"
+        },
+        "videos/ai/ai3/s16_jl.py": {
+          "sha256": "eea3cdc5abd47a8a631d0f130ca13830f444537441a5df35461e131f9d8805b2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s16_jl.py"
+        },
+        "videos/ai/ai3/compute.py": {
+          "sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/compute.py"
+        },
+        "videos/ai/ai3/s18_netflix.py": {
+          "sha256": "f252152488e2b58e0e256315b2c5bd11db85370d9d529411ff1f6e26313b16e4",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s18_netflix.py"
+        },
+        "videos/ai/ai3/s15_highdim.py": {
+          "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s15_highdim.py"
+        },
+        "videos/ai/ai3/s17_geometry.py": {
+          "sha256": "09b0e94a2d38252f09d31496525504c008c3b82de0c15b8e25f3ed92490b9427",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s17_geometry.py"
+        },
+        "videos/ai/ai3/s04_matrices.py": {
+          "sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s04_matrices.py"
+        },
+        "videos/ai/ai3/s09_lowrank.py": {
+          "sha256": "c05f177c5c04048e43709147e0970a419bc9666291fa5a9a786df8ad4507aa10",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s09_lowrank.py"
+        },
+        "videos/ai/ai3/s02_vectors.py": {
+          "sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s02_vectors.py"
+        },
+        "videos/ai/ai3/__init__.py": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/__init__.py"
+        },
+        "videos/ai/ai3/s01_hook.py": {
+          "sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s01_hook.py"
+        },
+        "videos/ai/ai3/s05_projection.py": {
+          "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s05_projection.py"
+        },
+        "videos/ai/ai3/s06_eigen.py": {
+          "sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s06_eigen.py"
+        },
+        "videos/ai/ai3/s08_svd.py": {
+          "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s08_svd.py"
+        },
+        "videos/ai/ai3/common.py": {
+          "sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/common.py"
+        },
+        "videos/ai/ai3/s19_outro.py": {
+          "sha256": "22163cd98ceb1928347079996807c11d97aab44622b65a520a00b028d3e3c116",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s19_outro.py"
+        },
+        "videos/ai/ai3/zh_lines.py": {
+          "sha256": "c17f1716562f3bc61e868d4e8a5845dcc941d99db1e5063430a7ec70861ef732",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/zh_lines.py"
+        },
+        "videos/ai/ai3/s07_power.py": {
+          "sha256": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai3/s07_power.py"
+        },
+        "videos/ai/ai_text_zh.json": {
+          "sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/videos/ai/ai_text_zh.json"
+        },
+        "explainer/ai/viz.py": {
+          "sha256": "68c7ea8f062a7c8d0e54ee94e819c09f1b8c882931babddd3a0b4c8cee61f5aa",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/explainer/ai/viz.py"
+        },
+        "tools/qa_motion.py": {
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/en-Vectors/7eaa69faf100fa3f3fae19e07542ae74f338de1e5b9ef18e5ae02253146fedc2/sources/tools/qa_motion.py"
+        }
+      },
+      "consumed_inputs": {
+        ".cache/ai3/gpt2.json": {
+          "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+          "recorded_signature": [
+            11064,
+            1793466616038797011
+          ],
+          "signature_at_freeze": [
+            11064,
+            1793466616038797011
+          ]
+        },
+        ".cache/ai3/gpt2.npz": {
+          "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+          "recorded_signature": [
+            72806,
+            1793466616033326706
+          ],
+          "signature_at_freeze": [
+            72806,
+            1793466616033326706
+          ]
+        }
+      },
+      "aggregate_source_current_at_freeze": true,
+      "recorded_inputs_current_at_freeze": true
+    },
+    "zh-after": {
+      "movie_sha256": "87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10",
+      "duration": 198.99707,
+      "decoded_frames": 2985,
+      "selected_time_count": 489,
+      "unique_frame_count": 431,
+      "duplicate_frame_count": 58,
+      "largest_selected_time_gap": 1.000000000000007,
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "algorithm": "rgb-max-channel-v2-bounded-gap",
+      "color_space": "RGB24",
+      "render_record_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+      "audit_sha256": "a40bdd0a5a96a4472140c8fb2bf6bf736e60ec3504a93fc97c75be6164563e6b",
+      "source_files": {
+        "videos/ai/ai3/s11_spectra.py": {
+          "sha256": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s11_spectra.py"
+        },
+        "videos/ai/ai3/s03_einsum.py": {
+          "sha256": "def7543b913375b30397871433a8a38ea6b618a8f8e844bf692294aede6ea9ff",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s03_einsum.py"
+        },
+        "videos/ai/ai3/s10_norms.py": {
+          "sha256": "03b33a3f314f27e58e5e95e9c91e8d6ad665e7ca21bf38c44d03f23bb00488f1",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s10_norms.py"
+        },
+        "videos/ai/ai3/s13_words.py": {
+          "sha256": "b79c2495521d3987ef39dedf716bb40d24c2dfdf1cd6a97df7102d29d5b6e157",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s13_words.py"
+        },
+        "videos/ai/ai3/s14_sgns.py": {
+          "sha256": "dc56ada3cfd37d8cbfabcdda082245389ab72a025ae3d86e329fc821c31953e6",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s14_sgns.py"
+        },
+        "videos/ai/ai3/s12_galore.py": {
+          "sha256": "67da4d46d62ce49289da18828ac294a08e42eb4a1c88ca4fe9f2b99849b96d1d",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s12_galore.py"
+        },
+        "videos/ai/ai3/manifest.py": {
+          "sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/manifest.py"
+        },
+        "videos/ai/ai3/s16_jl.py": {
+          "sha256": "eea3cdc5abd47a8a631d0f130ca13830f444537441a5df35461e131f9d8805b2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s16_jl.py"
+        },
+        "videos/ai/ai3/compute.py": {
+          "sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/compute.py"
+        },
+        "videos/ai/ai3/s18_netflix.py": {
+          "sha256": "f252152488e2b58e0e256315b2c5bd11db85370d9d529411ff1f6e26313b16e4",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s18_netflix.py"
+        },
+        "videos/ai/ai3/s15_highdim.py": {
+          "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s15_highdim.py"
+        },
+        "videos/ai/ai3/s17_geometry.py": {
+          "sha256": "09b0e94a2d38252f09d31496525504c008c3b82de0c15b8e25f3ed92490b9427",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s17_geometry.py"
+        },
+        "videos/ai/ai3/s04_matrices.py": {
+          "sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s04_matrices.py"
+        },
+        "videos/ai/ai3/s09_lowrank.py": {
+          "sha256": "c05f177c5c04048e43709147e0970a419bc9666291fa5a9a786df8ad4507aa10",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s09_lowrank.py"
+        },
+        "videos/ai/ai3/s02_vectors.py": {
+          "sha256": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s02_vectors.py"
+        },
+        "videos/ai/ai3/__init__.py": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/__init__.py"
+        },
+        "videos/ai/ai3/s01_hook.py": {
+          "sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s01_hook.py"
+        },
+        "videos/ai/ai3/s05_projection.py": {
+          "sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s05_projection.py"
+        },
+        "videos/ai/ai3/s06_eigen.py": {
+          "sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s06_eigen.py"
+        },
+        "videos/ai/ai3/s08_svd.py": {
+          "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s08_svd.py"
+        },
+        "videos/ai/ai3/common.py": {
+          "sha256": "43bc01600482b1780d46ce9fe2b7c9318b1209d0e9d7ac0b490cf25279226ab9",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/common.py"
+        },
+        "videos/ai/ai3/s19_outro.py": {
+          "sha256": "22163cd98ceb1928347079996807c11d97aab44622b65a520a00b028d3e3c116",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s19_outro.py"
+        },
+        "videos/ai/ai3/zh_lines.py": {
+          "sha256": "c17f1716562f3bc61e868d4e8a5845dcc941d99db1e5063430a7ec70861ef732",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/zh_lines.py"
+        },
+        "videos/ai/ai3/s07_power.py": {
+          "sha256": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai3/s07_power.py"
+        },
+        "videos/ai/ai_text_zh.json": {
+          "sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/videos/ai/ai_text_zh.json"
+        },
+        "explainer/ai/viz.py": {
+          "sha256": "68c7ea8f062a7c8d0e54ee94e819c09f1b8c882931babddd3a0b4c8cee61f5aa",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/explainer/ai/viz.py"
+        },
+        "tools/qa_motion.py": {
+          "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+          "snapshot": "/workspace/runtime/ai3-motion-coverage/zh-Vectors/87567350c94d4de8b392fd878c5e5118840a2cab139a0a1fd76054377369ba10/sources/tools/qa_motion.py"
+        }
+      },
+      "consumed_inputs": {
+        ".cache/ai3/gpt2.json": {
+          "sha256": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+          "recorded_signature": [
+            11064,
+            1793466616038797011
+          ],
+          "signature_at_freeze": [
+            11064,
+            1793466616038797011
+          ]
+        },
+        ".cache/ai3/gpt2.npz": {
+          "sha256": "e4f13b7a5f0ab76b12dd7c1b43d5d4fb12ca6cbda7e1e99f6b69b34743675ec4",
+          "recorded_signature": [
+            72806,
+            1793466616033326706
+          ],
+          "signature_at_freeze": [
+            72806,
+            1793466616033326706
+          ]
+        }
+      },
+      "aggregate_source_current_at_freeze": true,
+      "recorded_inputs_current_at_freeze": true
+    }
+  }
+}

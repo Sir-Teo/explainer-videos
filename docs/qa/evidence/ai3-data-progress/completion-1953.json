@@ -1,0 +1,70 @@
+{
+  "observed_utc": "2026-10-31T19:55:31.536502+00:00",
+  "part": "ai3",
+  "completed_items": [
+    "gpt2",
+    "einsum",
+    "project",
+    "letters",
+    "power",
+    "image",
+    "norms",
+    "depth",
+    "mp",
+    "words",
+    "highdim",
+    "jl",
+    "mf",
+    "twotower",
+    "sgns"
+  ],
+  "completed_count": 15,
+  "total_items": 17,
+  "pending_items": [
+    "galore",
+    "galorectl"
+  ],
+  "base_training": {
+    "steps": 2929,
+    "tokens_per_step": 8192,
+    "requested_tokens": 24000000,
+    "seconds": 8595.826620101929,
+    "final_validation_loss": 3.5711395144462585,
+    "diverged": false,
+    "weights_sha256": "90eca681bbdbff27bb716f71f16184ec224cd249013debd68d84e84314ff7b2e",
+    "metadata_sha256": "a331122a02408f73856cd0e89cd4a5bca897cd293f86313f38de2d8b2605efe2",
+    "source_sha256": "d97a6610a8fbaaad9d3a9fada44d282bd97157e9639bb9a0ed094b2e11576032",
+    "tokenizer_sha256": "9b01163b4bfa0ebeb680e14578c7267cf94ce6304df1d9dca95c70a070fceed7",
+    "training_state": "complete; no restart performed",
+    "actual_training_tokens": 23994368
+  },
+  "producer_sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+  "completed_cache_json_sha256": {
+    "gpt2": "ce3c2bf421a1080583ee8a4953d4303d0daf7c3924abc2e1799bd42a24bd4528",
+    "einsum": "3f1a995da95da380b0460736d7ebab5d9670c548e6b7d5b202c25d0af6c30af6",
+    "project": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f",
+    "letters": "8856792172f9cc63d38eac0dda663aa0303c42bdb4515d8e7723b481153031c5",
+    "power": "2c66ad9e832d463ddb142e26b64a100c1ea6f683bfe99053151059e16ae36b9c",
+    "image": "c0ee874791ca66a6715b9381bd3f03b33b06ddb3e775475c9b41d498a364c6b7",
+    "norms": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+    "depth": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+    "mp": "ccf0cc95a19a419644e7440d1e6bf31058f38bbbfa2fb2a172591781afdcc033",
+    "words": "715397b0df63babbb51c323dc5653fc51ae3c908da505d12011a4db0427d1103",
+    "highdim": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14",
+    "jl": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f",
+    "mf": "54fe3aa992b5d0be1cba279804bdb72b5fe180fdf0bd5de16d01bdb6f57a0828",
+    "twotower": "3f71945680eb5dd6803fbddfa8a753bd4c1082aa9b7aa3070430f115d4d5fd6d",
+    "sgns": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e"
+  },
+  "measured_wall_seconds": {
+    "mp_including_base": 8611,
+    "words": 13,
+    "highdim": 13,
+    "jl": 16,
+    "mf_51_fits": 396,
+    "twotower": 987,
+    "sgns": 233
+  },
+  "ownership": "Root coordinates all numerical processes with disjoint item locks; shared base, words/highdim/JL, recommendation and SGNS jobs completed without duplicate training. Main GaLore/control continues; queued completed items are reused.",
+  "coverage_limit": "Completion markers and hashes plus explicit successful production logs. Rendered/narrated/perceptual coverage is separate, not inferred."
+}

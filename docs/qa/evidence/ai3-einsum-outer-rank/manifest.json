@@ -1,0 +1,89 @@
+{
+  "scope": "Word qualification and manual QA evidence; newly rendered regression pending",
+  "files": [
+    {
+      "file": "applied-handoff.json.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-handoff.json",
+      "original_sha256": "a0af4ec9aba459e214a368d4c011872a2cfbea4238f71f572b3cfaa900308903",
+      "packaged_sha256": "1858503c854709c462dea88257bfce4c938fd244c8242ad192cef0b5ed020259",
+      "bytes": 2081
+    },
+    {
+      "file": "preservation.json.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/preservation.json",
+      "original_sha256": "876ef707a45f535883c4d204b69b5a453e3719c62bcd3be7e56807c889a0a5d2",
+      "packaged_sha256": "72ab837d5512c5f10c8efbd148f2749f9ad0af76ef543379e3af0cd7a377cc1e",
+      "bytes": 884
+    },
+    {
+      "file": "applied-tests.log.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-tests.log",
+      "original_sha256": "c6ce997acfacc13723e6de165e04371f4381cb7ff46f12c2bd1a2507dca1c8e6",
+      "packaged_sha256": "dd272e2505203e59cd025a736dc74cd26c2fdbaf730b85704586ec5dd75c3bb8",
+      "bytes": 200
+    },
+    {
+      "file": "baseline-tests.log.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/baseline-tests.log",
+      "original_sha256": "52ee965763024458170466a79f2bccb9354f29b633b3c34107813adf6a1e5343",
+      "packaged_sha256": "8ed6a4e9de0f9c6cca94a2cd0cbdb659eb4ac474fe2d3b15d38c79847f8c2cc3",
+      "bytes": 403
+    },
+    {
+      "file": "proposed-tests.log.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/proposed-tests.log",
+      "original_sha256": "95ac7854da68a6dc36f221909a1ed5c8d1ceae8f78230d748f2649c5965fe4b9",
+      "packaged_sha256": "6b3402ae9891bd1c7fa8b42578017590bf39056c19156b69995d7669a2e98bb1",
+      "bytes": 200
+    },
+    {
+      "file": "test_ai3_einsum_rank.proposed.py.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/test_ai3_einsum_rank.proposed.py",
+      "original_sha256": "b28f7d971af63b3ded1f1a922bd90e3015c63813a12aebe7ad85b714bf1efde4",
+      "packaged_sha256": "9a63339e70e035060efb54b9ffb245eeeddb5dcf5ccb29a76888c122ae74b93f",
+      "bytes": 1250
+    },
+    {
+      "file": "applied-narration-check.json.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-narration-check.json",
+      "original_sha256": "d0be3ecfb6c3f3dccfbf5d549a031d0fb8c16dd65ce9a7eaf6a4d88345e34709",
+      "packaged_sha256": "10ef9ce95b27d1a646468418f414fcb5f063903200bc0203c99218c7e18ba916",
+      "bytes": 843
+    },
+    {
+      "file": "applied-geometry-en.json.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-geometry-en.json",
+      "original_sha256": "f328836e7ddc182f9fde5ba0a05905cfaf0f141d5e91a487ffee699e98f2fe25",
+      "packaged_sha256": "871343d97e09ddd65fd35be795778a0109f0cbf4a5f9389d3bbbf8008b3f273b",
+      "bytes": 421
+    },
+    {
+      "file": "applied-geometry-zh.json.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-geometry-zh.json",
+      "original_sha256": "194a9ea039b5761ae3df21458fd742db691660d7d5cdc314f72d6d737287b18e",
+      "packaged_sha256": "2f40536506dfe0a05c87d4ca42ef079c73deb5e5668073f3bb45232b52408ce5",
+      "bytes": 435
+    },
+    {
+      "file": "applied-zh-todo.log.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-zh-todo.log",
+      "original_sha256": "4760a58f40a8860e8706aaa03ec5b73788b65775b15f6697aa6e33d627977631",
+      "packaged_sha256": "014e6792f0f436c68fe920a362a997e043050abd2fee5897972c242d93f8fb16",
+      "bytes": 404
+    },
+    {
+      "file": "applied-source.patch.gz",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/applied-source.patch",
+      "original_sha256": "8045ae4c92469fe4f3f80608442922b16aff53949c55ccc6611ad4384ff7357c",
+      "packaged_sha256": "6c5000a706268ffb0586262d55f036798a931164bc068a38094034c920b7ce71",
+      "bytes": 1479
+    },
+    {
+      "file": "captions.json",
+      "original_path": "/workspace/runtime/ai3-einsum-outer-rank-preparation/captions.json",
+      "original_sha256": "0dbb0183bb5278e4cd0bf063ea2265444d620f60e22433b1d5f7aa335899e431",
+      "packaged_sha256": "0dbb0183bb5278e4cd0bf063ea2265444d620f60e22433b1d5f7aa335899e431",
+      "bytes": 93
+    }
+  ]
+}

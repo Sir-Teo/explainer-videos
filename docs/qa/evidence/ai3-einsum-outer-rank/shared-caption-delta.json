@@ -1,0 +1,12 @@
+{
+  "observed_utc": "2026-10-31T19:31:37.886304+00:00",
+  "before_reference": "4509046:videos/ai/ai_text_zh.json",
+  "before_table_sha256": "993b8c417fccfbf4b9968400189bdc5e677f10b203e7497ebe1afa30b249d1d3",
+  "after_table_sha256": "a2374c25745d9024d0d648e29bb93693c2cb1b02f046bca98a9e7e8b6e3c3d7c",
+  "added": {
+    "outer product: \\ rank at most one": "外积：\\ 秩至多为1"
+  },
+  "changed_existing": {},
+  "removed": [],
+  "scope": "Exact table delta only. One added Part3 rank-qualification caption; prior entries unchanged. This does not refresh any aggregate scene fingerprint or certify geometry/playback."
+}

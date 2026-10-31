@@ -1,0 +1,742 @@
+{
+  "packaged_utc": "2026-10-31T19:29:08.519321+00:00",
+  "scope": "Final four bilingual Matrices/Eigen selected-time motion regressions; baseline artifacts are scoped to these four cases only.",
+  "payloads": [
+    {
+      "file": "report.json.gz",
+      "sha256": "202bf0a2816fc4a2cf416dacba605016a614227e219c8f7ea96764ef5e5f003b",
+      "bytes": 2244,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/report.json",
+      "uncompressed_sha256": "5a66b8f9ece9f3f320972a7ac47d38107c245b272ce35692cdc1697d7b462c90",
+      "uncompressed_bytes": 9110
+    },
+    {
+      "file": "report.md.gz",
+      "sha256": "561e608404b9db631de8b8a5980b63be1e9cdd7751e08a3b77f4996d4d87fa29",
+      "bytes": 1317,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/report.md",
+      "uncompressed_sha256": "e08fd0f33d0d7170815ec0b98be5e2a87f489a7a9fc1dda7147857d40fc719b3",
+      "uncompressed_bytes": 2482
+    },
+    {
+      "file": "en-Matrices-final-review.json.gz",
+      "sha256": "b90c7fa0c622464d847624f0df807b18b6b404d13de4876a3d5951aab82ce79e",
+      "bytes": 55717,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/review.json",
+      "uncompressed_sha256": "d69cb809b7eb64ba9901b4131ee16492f33284e1ed504d4c4b34998b97d9c709",
+      "uncompressed_bytes": 349017
+    },
+    {
+      "file": "en-Matrices-final-audit-result.json.gz",
+      "sha256": "0dbf970cdf1cb8f0299163aeed1a7cffd32cdc9dd199ca621a1454a9e1e7127d",
+      "bytes": 23623,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/audit-result.json",
+      "uncompressed_sha256": "aab2b5829487858c1f467509281242a2a64e5aa3a20dedfd24417e4156136b0f",
+      "uncompressed_bytes": 118286
+    },
+    {
+      "file": "en-Matrices-final-render-result.json.gz",
+      "sha256": "51288b255e47df831947a3781c85a0070bab8822fbea118e1431b6202cab23d4",
+      "bytes": 8478,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/render-result.json",
+      "uncompressed_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+      "uncompressed_bytes": 44492
+    },
+    {
+      "file": "en-Matrices-final-confirmed-render-result.json.gz",
+      "sha256": "51288b255e47df831947a3781c85a0070bab8822fbea118e1431b6202cab23d4",
+      "bytes": 8478,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/confirmed-render-result.json",
+      "uncompressed_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+      "uncompressed_bytes": 44492
+    },
+    {
+      "file": "en-Matrices-final-root-confirmed-provenance.json.gz",
+      "sha256": "ce98fa1d0bf108e6bd8c2f381410dc61949f3b1d044ddfb7e80ab4ac20a1a644",
+      "bytes": 265,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/root-confirmed-provenance.json",
+      "uncompressed_sha256": "779c0d352e670fb7b16a89d07008fd0933fac0f4c1f54b5645f7bcfbc03a9163",
+      "uncompressed_bytes": 358
+    },
+    {
+      "file": "en-Matrices-baseline-review.json.gz",
+      "sha256": "d346c0e27d7dab9e846e3c52c8ca6f71c8b9fd35af0872092fd14500f260e731",
+      "bytes": 47191,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Matrices/review.json",
+      "uncompressed_sha256": "c3e4f792650a6877491545f9d7c343efe244669e73aaae4333ba80a327c67677",
+      "uncompressed_bytes": 279792
+    },
+    {
+      "file": "en-Matrices-baseline-audit-result.json.gz",
+      "sha256": "c4a764a84ca4356b53ed164860155da738cab9064a877ac428cab13a32cc4f1e",
+      "bytes": 23612,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Matrices/audit-result.json",
+      "uncompressed_sha256": "7be4a4306092b63e94059ff82158f5c81355ed947569771de67b32fcaa0b9b0e",
+      "uncompressed_bytes": 118286
+    },
+    {
+      "file": "en-Matrices-baseline-render-result.json.gz",
+      "sha256": "3981ce99288d9a6e0faeef238c4dd96196b53a75c8af905574eb470a978ccd1f",
+      "bytes": 8470,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Matrices/render-result.json",
+      "uncompressed_sha256": "15399f158583d06110b50082881a64ca4742f155b3eaddeb9b38deaf0508e2f0",
+      "uncompressed_bytes": 44489
+    },
+    {
+      "file": "en-Matrices-final-s04_matrices.py.gz",
+      "sha256": "19d71f689c5357700b95cb955feb7c780054e997b170e0e37d38620fd04cd3e7",
+      "bytes": 3722,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/s04_matrices.py",
+      "uncompressed_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "uncompressed_bytes": 12521
+    },
+    {
+      "file": "en-Matrices-baseline-source-at-review-s04_matrices.py.gz",
+      "sha256": "01c8f689f670c0097caf471b0f77bd54008e75e3c221287c91a8d9017208864e",
+      "bytes": 3653,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Matrices/s04_matrices.py",
+      "uncompressed_sha256": "3c4fe0555001625bb4a1fbd056ad5182645957605eda816963b08a812a60bc07",
+      "uncompressed_bytes": 12231
+    },
+    {
+      "file": "en-Matrices-final-native-01.png",
+      "sha256": "18a41ea747792d49bbb12600fd08bfce9eb95c09f0e0d674b6f566859d5bf397",
+      "bytes": 103853,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/native-0000764_000050.933s.png",
+      "source_sha256": "18a41ea747792d49bbb12600fd08bfce9eb95c09f0e0d674b6f566859d5bf397"
+    },
+    {
+      "file": "en-Matrices-final-native-02.png",
+      "sha256": "096c1a127c368016a34a2426e8949d8fb03abb8705d73b7a96c84e5909289cae",
+      "bytes": 113327,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/native-0000794_000052.933s.png",
+      "source_sha256": "096c1a127c368016a34a2426e8949d8fb03abb8705d73b7a96c84e5909289cae"
+    },
+    {
+      "file": "en-Matrices-final-native-03.png",
+      "sha256": "f5509c04d41b8b8b91e0a49a5ac5c7fc2058845be5fff5e8702390175ba258a5",
+      "bytes": 102664,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/native-0001717_000114.466s.png",
+      "source_sha256": "f5509c04d41b8b8b91e0a49a5ac5c7fc2058845be5fff5e8702390175ba258a5"
+    },
+    {
+      "file": "en-Matrices-final-native-04.png",
+      "sha256": "5a1a05ae9de6bdc558bda72b78e2972d28a0c89bc6897dfb65a1695f94a95914",
+      "bytes": 92978,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Matrices/native-0001788_000119.199s.png",
+      "source_sha256": "5a1a05ae9de6bdc558bda72b78e2972d28a0c89bc6897dfb65a1695f94a95914"
+    },
+    {
+      "file": "en-Eigen-final-review.json.gz",
+      "sha256": "fdd871529acb355bb8500e35e4f0704ca5d3f7aee0db9fc3fa09ed112a88c78c",
+      "bytes": 57138,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/review.json",
+      "uncompressed_sha256": "d9224aad0dc710bcbec7c68b2edcf8ea4632f660b1940c93b9824387b3a04efb",
+      "uncompressed_bytes": 369698
+    },
+    {
+      "file": "en-Eigen-final-audit-result.json.gz",
+      "sha256": "e2f90acca625422b1e0e3087e1abbbeacdf361aeb728181cc4165027bee79c2f",
+      "bytes": 24925,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/audit-result.json",
+      "uncompressed_sha256": "60baca47b3704d06c4963b5ec95793ea11bf0dfc8941aaa47549731d1ea3bc73",
+      "uncompressed_bytes": 134737
+    },
+    {
+      "file": "en-Eigen-final-render-result.json.gz",
+      "sha256": "0d75588816f00e8ba1f73d0747b489bba111f42e5625038a11c95033fab90e3a",
+      "bytes": 10353,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/render-result.json",
+      "uncompressed_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+      "uncompressed_bytes": 53676
+    },
+    {
+      "file": "en-Eigen-final-confirmed-render-result.json.gz",
+      "sha256": "0d75588816f00e8ba1f73d0747b489bba111f42e5625038a11c95033fab90e3a",
+      "bytes": 10353,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/confirmed-render-result.json",
+      "uncompressed_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+      "uncompressed_bytes": 53676
+    },
+    {
+      "file": "en-Eigen-final-root-confirmed-provenance.json.gz",
+      "sha256": "903688e694d3bcb85703545c647d5455815688aa770a297799ba1bb8392d427f",
+      "bytes": 254,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/root-confirmed-provenance.json",
+      "uncompressed_sha256": "8ad2c1864e1568ac18a266156940c7dcc43453b60931fc6dac99b3966d8a6ae5",
+      "uncompressed_bytes": 338
+    },
+    {
+      "file": "en-Eigen-baseline-review.json.gz",
+      "sha256": "727e538e8a5b4a99797b3110a9ce76939bae3ab5841c241f66a3a372fc8126b5",
+      "bytes": 47940,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Eigen/review.json",
+      "uncompressed_sha256": "a88a1897b38995b744c86991c9bca32b5d67da9ded0b076b21835cc8d84f705b",
+      "uncompressed_bytes": 295725
+    },
+    {
+      "file": "en-Eigen-baseline-audit-result.json.gz",
+      "sha256": "dacdb4ca98829dc51bc7d926a7b279df9db25dceba3afa0a8443131bbc5ed047",
+      "bytes": 24972,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Eigen/audit-result.json",
+      "uncompressed_sha256": "1986d8392a5f6f2e097236d976d42da36b4b6d9af867449937da505c73b8335f",
+      "uncompressed_bytes": 134599
+    },
+    {
+      "file": "en-Eigen-baseline-render-result.json.gz",
+      "sha256": "85e21e83e61bcb5ac22280dd92037df277064c99a118be7ad62c2de715af8e65",
+      "bytes": 10358,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Eigen/render-result.json",
+      "uncompressed_sha256": "1533ad821d57908847cdfd07133ee707c5e0b1cb6368cf5826380f60fc6520e9",
+      "uncompressed_bytes": 53676
+    },
+    {
+      "file": "en-Eigen-final-s06_eigen.py.gz",
+      "sha256": "755ed4b24e2f0ed3c0d4d94e1b9403e7fad8acd5e9adf1998031525e909a52fb",
+      "bytes": 5125,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/s06_eigen.py",
+      "uncompressed_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "uncompressed_bytes": 16259
+    },
+    {
+      "file": "en-Eigen-baseline-source-at-review-s06_eigen.py.gz",
+      "sha256": "3964522dba101913ba81c9aebf2a5b5b6b241330d753d55d6ed9bc15d62fb026",
+      "bytes": 5053,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Eigen/s06_eigen.py",
+      "uncompressed_sha256": "09b46dec72d69ac2f8b99b2ebfcaa67292cdd749b30d3cad199911ae445c7329",
+      "uncompressed_bytes": 16080
+    },
+    {
+      "file": "en-Eigen-final-native-01.png",
+      "sha256": "a4b7a4c1f1239c506542680d33aaa314461499bb11300bc474da3371acdc315b",
+      "bytes": 176770,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/native-0000599_000039.933s.png",
+      "source_sha256": "a4b7a4c1f1239c506542680d33aaa314461499bb11300bc474da3371acdc315b"
+    },
+    {
+      "file": "en-Eigen-final-native-02.png",
+      "sha256": "3c98fe7f99fa7d1b0a9d651ccfa1d4f7d441b865434f5c4ffcfa31955ab92d7e",
+      "bytes": 194391,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/native-0000614_000040.933s.png",
+      "source_sha256": "3c98fe7f99fa7d1b0a9d651ccfa1d4f7d441b865434f5c4ffcfa31955ab92d7e"
+    },
+    {
+      "file": "en-Eigen-final-native-03.png",
+      "sha256": "6466b4433b1629d5b45a89502b56b4de11423b03e12ad6b99dd6305ea287866c",
+      "bytes": 180041,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/native-0000637_000042.467s.png",
+      "source_sha256": "6466b4433b1629d5b45a89502b56b4de11423b03e12ad6b99dd6305ea287866c"
+    },
+    {
+      "file": "en-Eigen-final-native-04.png",
+      "sha256": "ddf15fdf074b880de8749ba567151bdf167253a92920a29c1e648b297058e641",
+      "bytes": 170733,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/native-0000674_000044.933s.png",
+      "source_sha256": "ddf15fdf074b880de8749ba567151bdf167253a92920a29c1e648b297058e641"
+    },
+    {
+      "file": "en-Eigen-final-native-05.png",
+      "sha256": "21c726869e30b73720846021a15361975c846c47566fa8524d94f3dc244f8b48",
+      "bytes": 163137,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-Eigen/native-0000691_000046.067s.png",
+      "source_sha256": "21c726869e30b73720846021a15361975c846c47566fa8524d94f3dc244f8b48"
+    },
+    {
+      "file": "zh-Matrices-final-review.json.gz",
+      "sha256": "f29f338117eede2b3e213458a73452f758f5c0c13471c3e84f297b3a4c06b604",
+      "bytes": 53922,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/review.json",
+      "uncompressed_sha256": "629db67a33f7c4e5285a2eac19d5f926c950e47615e3399ba3e77ebd84fe5a3c",
+      "uncompressed_bytes": 338635
+    },
+    {
+      "file": "zh-Matrices-final-audit-result.json.gz",
+      "sha256": "ebd7b722c1c7390c3215269b5e0916045d2806574be5de5737fb6f8c2c06c7f3",
+      "bytes": 22988,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/audit-result.json",
+      "uncompressed_sha256": "6279007480fbf5cd254ce649f1965876df34780d1fae75889e8d7f8562a0af7d",
+      "uncompressed_bytes": 116227
+    },
+    {
+      "file": "zh-Matrices-final-render-result.json.gz",
+      "sha256": "cf7e3d2ab1106bed27ad28575a92f4f7a1c222588ae65d7fda754e52188d55f1",
+      "bytes": 12544,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/render-result.json",
+      "uncompressed_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+      "uncompressed_bytes": 56428
+    },
+    {
+      "file": "zh-Matrices-final-confirmed-render-result.json.gz",
+      "sha256": "cf7e3d2ab1106bed27ad28575a92f4f7a1c222588ae65d7fda754e52188d55f1",
+      "bytes": 12544,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/confirmed-render-result.json",
+      "uncompressed_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+      "uncompressed_bytes": 56428
+    },
+    {
+      "file": "zh-Matrices-final-root-confirmed-provenance.json.gz",
+      "sha256": "08efc806c208682a360d6b31f284a05388a542ca9d1e1f8c10261cef2cc56a2d",
+      "bytes": 255,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/root-confirmed-provenance.json",
+      "uncompressed_sha256": "1f2b83401729b81cea782af166428d1673b554a71c05e3cd6e3ae19523d24ffd",
+      "uncompressed_bytes": 338
+    },
+    {
+      "file": "zh-Matrices-baseline-review.json.gz",
+      "sha256": "e82a03feb8ecf2373719695709b7d42b476648e7b6aef9e97f08b92cc2026ada",
+      "bytes": 46132,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Matrices/review.json",
+      "uncompressed_sha256": "68ed4ef1c09b3585460a4cb4f26153f1517a493df595ff03e3f58bc10079cfc9",
+      "uncompressed_bytes": 272330
+    },
+    {
+      "file": "zh-Matrices-baseline-audit-result.json.gz",
+      "sha256": "b3cdda730bb434f2894d59f4431a3fc9b55b22c966598d539a06d95ccbeec626",
+      "bytes": 23407,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Matrices/audit-result.json",
+      "uncompressed_sha256": "49ba7054dc5fc58f40508c410d552088c82d0c620c2b5563a54b3ab76f2c6203",
+      "uncompressed_bytes": 118250
+    },
+    {
+      "file": "zh-Matrices-baseline-render-result.json.gz",
+      "sha256": "d678212bffc40b4bdee249abf9d186fb68f421fcfee2b499c7ae27ad05d09b3d",
+      "bytes": 12545,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Matrices/render-result.json",
+      "uncompressed_sha256": "184b6ea033aeda9bef9a10fade58ffca8590d54e003aa11bd5b5315f853a0b39",
+      "uncompressed_bytes": 56429
+    },
+    {
+      "file": "zh-Matrices-final-s04_matrices.py.gz",
+      "sha256": "19d71f689c5357700b95cb955feb7c780054e997b170e0e37d38620fd04cd3e7",
+      "bytes": 3722,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/s04_matrices.py",
+      "uncompressed_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "uncompressed_bytes": 12521
+    },
+    {
+      "file": "zh-Matrices-baseline-source-at-review-s04_matrices.py.gz",
+      "sha256": "2ab47cffa72a1a6bd717ba488a0d2283384a9e4cc0307887fb7f395c9245fed5",
+      "bytes": 3657,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Matrices/s04_matrices.py",
+      "uncompressed_sha256": "210fd4274f1d48a0c71dc0445da18981d63b2b53508b158b47274bfc5df08890",
+      "uncompressed_bytes": 12232
+    },
+    {
+      "file": "zh-Matrices-final-native-01.png",
+      "sha256": "3e32e329bdc21310607928be7147b3fb0c065719330160a9bbb58ae62f2412e5",
+      "bytes": 106071,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/native-0000752_000050.133s.png",
+      "source_sha256": "3e32e329bdc21310607928be7147b3fb0c065719330160a9bbb58ae62f2412e5"
+    },
+    {
+      "file": "zh-Matrices-final-native-02.png",
+      "sha256": "3cc872e9f1b456c03990c780ff8515b04db32aaf124c5a0ab9a2c28306fcbddd",
+      "bytes": 115777,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/native-0000782_000052.133s.png",
+      "source_sha256": "3cc872e9f1b456c03990c780ff8515b04db32aaf124c5a0ab9a2c28306fcbddd"
+    },
+    {
+      "file": "zh-Matrices-final-native-03.png",
+      "sha256": "54c88eb370e068a4b48397638b9d18a66ba90421ca231c44b106c37bd54a618c",
+      "bytes": 105786,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/native-0001718_000114.533s.png",
+      "source_sha256": "54c88eb370e068a4b48397638b9d18a66ba90421ca231c44b106c37bd54a618c"
+    },
+    {
+      "file": "zh-Matrices-final-native-04.png",
+      "sha256": "5d0eb46c5f270cbcd0bb1714ba65e59cf1c952aa30fa77665fa24645ff87ef8f",
+      "bytes": 99429,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/native-0001793_000119.533s.png",
+      "source_sha256": "5d0eb46c5f270cbcd0bb1714ba65e59cf1c952aa30fa77665fa24645ff87ef8f"
+    },
+    {
+      "file": "zh-Eigen-final-review.json.gz",
+      "sha256": "19bfe30d10ce7f1f881a05c2c5585b97b56b96432c995f053e6e4d2418229244",
+      "bytes": 61224,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/review.json",
+      "uncompressed_sha256": "809684784cb80f60d930853064aacbb78b7c3d036ea30ac736c00cceca0d1850",
+      "uncompressed_bytes": 401990
+    },
+    {
+      "file": "zh-Eigen-final-audit-result.json.gz",
+      "sha256": "d6a5f77e52feb421e03e17d7b258eb716a0acd0cba3b22da064a6599fa5055db",
+      "bytes": 26103,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/audit-result.json",
+      "uncompressed_sha256": "783f7455196d2b26496b38ca29c80f93cb98f1565b12581b3481b131135be515",
+      "uncompressed_bytes": 144383
+    },
+    {
+      "file": "zh-Eigen-final-render-result.json.gz",
+      "sha256": "2b0af336c15ff12677527ce339c49e202ed814156283571660e719ba4fb59c8e",
+      "bytes": 16688,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/render-result.json",
+      "uncompressed_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+      "uncompressed_bytes": 78156
+    },
+    {
+      "file": "zh-Eigen-final-confirmed-render-result.json.gz",
+      "sha256": "2b0af336c15ff12677527ce339c49e202ed814156283571660e719ba4fb59c8e",
+      "bytes": 16688,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/confirmed-render-result.json",
+      "uncompressed_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+      "uncompressed_bytes": 78156
+    },
+    {
+      "file": "zh-Eigen-final-root-confirmed-provenance.json.gz",
+      "sha256": "e46a8a7061b689c1dedd60071e05b732e77f25e572c7fdf2f6c7a86101708ab0",
+      "bytes": 255,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/root-confirmed-provenance.json",
+      "uncompressed_sha256": "6383ae9d2a51ce50e96cd1d9b574c8a6c58b50dc45a4803977d20b39c3d1f40f",
+      "uncompressed_bytes": 338
+    },
+    {
+      "file": "zh-Eigen-baseline-review.json.gz",
+      "sha256": "4a45ebf8e060186e2c42bbb6f42b4861462468aef5179ea9504f1a9162e3f6bb",
+      "bytes": 49858,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Eigen/review.json",
+      "uncompressed_sha256": "5d63bb6579687f333d73c0da71cba00ff0b6801a6029accb28562a7455c9679d",
+      "uncompressed_bytes": 308893
+    },
+    {
+      "file": "zh-Eigen-baseline-audit-result.json.gz",
+      "sha256": "87e528f7f182ad2f2123df37af82584ab1e814f698b9ecc7125e0d4c8cdf023b",
+      "bytes": 26107,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Eigen/audit-result.json",
+      "uncompressed_sha256": "eeb0f3a85191cde4db052684411073166faca1921730f8705c68224514f2332e",
+      "uncompressed_bytes": 144389
+    },
+    {
+      "file": "zh-Eigen-baseline-render-result.json.gz",
+      "sha256": "3fa25169977387a0fc1fdfca549524a7e9dad91775ed9d978cfeb45da76e8742",
+      "bytes": 16720,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Eigen/render-result.json",
+      "uncompressed_sha256": "43204f8e1aa847e6ac66aae3393f0c309f2e05d3e38fe4d02e8e0fc69fecc74a",
+      "uncompressed_bytes": 78214
+    },
+    {
+      "file": "zh-Eigen-final-s06_eigen.py.gz",
+      "sha256": "755ed4b24e2f0ed3c0d4d94e1b9403e7fad8acd5e9adf1998031525e909a52fb",
+      "bytes": 5125,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/s06_eigen.py",
+      "uncompressed_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "uncompressed_bytes": 16259
+    },
+    {
+      "file": "zh-Eigen-baseline-source-at-review-s06_eigen.py.gz",
+      "sha256": "755ed4b24e2f0ed3c0d4d94e1b9403e7fad8acd5e9adf1998031525e909a52fb",
+      "bytes": 5125,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Eigen/s06_eigen.py",
+      "uncompressed_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "uncompressed_bytes": 16259
+    },
+    {
+      "file": "zh-Eigen-final-native-01.png",
+      "sha256": "7cf13ce339f102fbe1fdfffbb9c2201c4ff87d3c6fa2045a1677b58ce9678d03",
+      "bytes": 194641,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/native-0000719_000047.933s.png",
+      "source_sha256": "7cf13ce339f102fbe1fdfffbb9c2201c4ff87d3c6fa2045a1677b58ce9678d03"
+    },
+    {
+      "file": "zh-Eigen-final-native-02.png",
+      "sha256": "5b4e4970149307775cb0ba09f8e2817ffd5a244c22d5e98975e88135d284e3fb",
+      "bytes": 182496,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/native-0000742_000049.467s.png",
+      "source_sha256": "5b4e4970149307775cb0ba09f8e2817ffd5a244c22d5e98975e88135d284e3fb"
+    },
+    {
+      "file": "zh-Eigen-final-native-03.png",
+      "sha256": "07f1688cbb85d9b29563022404e1d467c7af6a178258b39d00db894063f0994d",
+      "bytes": 162720,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/native-0000796_000053.067s.png",
+      "source_sha256": "07f1688cbb85d9b29563022404e1d467c7af6a178258b39d00db894063f0994d"
+    },
+    {
+      "file": "zh-Eigen-final-native-04.png",
+      "sha256": "4f513d922ba0bb57f7728b11140d50eba29e19849f42c1597edeccb9b52c6a1d",
+      "bytes": 169592,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/native-0000821_000054.733s.png",
+      "source_sha256": "4f513d922ba0bb57f7728b11140d50eba29e19849f42c1597edeccb9b52c6a1d"
+    },
+    {
+      "file": "zh-Eigen-final-native-05.png",
+      "sha256": "8820e601a1623bac6492bf8d1593fdd1fbd47f42b3c12c5910b210d0b40c2c2b",
+      "bytes": 169915,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Eigen/native-0000850_000056.667s.png",
+      "source_sha256": "8820e601a1623bac6492bf8d1593fdd1fbd47f42b3c12c5910b210d0b40c2c2b"
+    },
+    {
+      "file": "en-eigen-before-after.png",
+      "sha256": "ecabcc4b998243eebb5e740d1e78dec2496fa230f5691afe93f388df3ff5a4ee",
+      "bytes": 686830,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-eigen-before-after.png",
+      "source_sha256": "ecabcc4b998243eebb5e740d1e78dec2496fa230f5691afe93f388df3ff5a4ee"
+    },
+    {
+      "file": "en-matrices-before-after.png",
+      "sha256": "4c9b0b047250d648f0943c6aeb68b77f222ec2317b54db8a40590e870f076d13",
+      "bytes": 337220,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/en-matrices-before-after.png",
+      "source_sha256": "4c9b0b047250d648f0943c6aeb68b77f222ec2317b54db8a40590e870f076d13"
+    },
+    {
+      "file": "zh-matrices-heading-native-crop-no-defect.png",
+      "sha256": "8810b64bcca9601fab6b09cb9bc0eac3232c96a6b2300fb544ed6ae742157be4",
+      "bytes": 90534,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/composition-heading-crop-52.133s.png",
+      "source_sha256": "8810b64bcca9601fab6b09cb9bc0eac3232c96a6b2300fb544ed6ae742157be4"
+    },
+    {
+      "file": "en-matrices-zero-sign-retraction-native.png",
+      "sha256": "3552fb1d55eb105ce07c6a175e2f1ac3c3b20d7376971dd80d472488a66d1c51",
+      "bytes": 39266,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Matrices/negative-zero-before-native.png",
+      "source_sha256": "3552fb1d55eb105ce07c6a175e2f1ac3c3b20d7376971dd80d472488a66d1c51"
+    },
+    {
+      "file": "zh-matrices-caption-before-after.png",
+      "sha256": "8a76f22137a4b51e6cfce52dfbf70d71ef4e1a20c1b0e9027f579def42a6d837",
+      "bytes": 149892,
+      "inputs": [
+        {
+          "file": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Matrices/native-0001718_000114.533s.png",
+          "sha256": "8991b72d2eaaae229239b2753b5ed1b0ee827e14a2913592a375100adfdf6188"
+        },
+        {
+          "file": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/zh-Matrices/native-0001718_000114.533s.png",
+          "sha256": "54c88eb370e068a4b48397638b9d18a66ba90421ca231c44b106c37bd54a618c"
+        }
+      ],
+      "transformation": "Side-by-side unscaled854x480 native PNGs with36px labels; no image-content modification."
+    },
+    {
+      "file": "review-prepare_review.py.gz",
+      "sha256": "7581a5ee9faec1e960574b8ffd2cf3c17762f7f3d8e864fd18d5b98c2c0970d9",
+      "bytes": 2522,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/prepare_review.py",
+      "uncompressed_sha256": "cbb331d4054937f67158c28bd78b537f550da67583efa45a688b4a4e801e5d07",
+      "uncompressed_bytes": 6174
+    },
+    {
+      "file": "review-checkpoint.py.gz",
+      "sha256": "d3a608670f2d67554c66670fad8aab4775abf16b36a5c635dfaf95ce607e528f",
+      "bytes": 931,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/checkpoint.py",
+      "uncompressed_sha256": "1ad5fd50e6ad84cf019e2130ab0a4d1f2d9a0abca1011d1d790a78401f5dbd8d",
+      "uncompressed_bytes": 2085
+    },
+    {
+      "file": "review-finish_case.py.gz",
+      "sha256": "69b77dceae84a70cad491a0159b9d4bb1b6949a22825ac1d459d8a6b650dca4e",
+      "bytes": 567,
+      "source": "/workspace/runtime/ai3-matrices-eigen-motion-repair-review/finish_case.py",
+      "uncompressed_sha256": "126c302a38652d08de16be9526edd8be9d75374ab5c5fc0fc7223dee571b8a2b",
+      "uncompressed_bytes": 1008
+    },
+    {
+      "file": "frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "bytes": 6507,
+      "source": "/workspace/explainer-videos/tools/qa_motion.py",
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "uncompressed_bytes": 19437
+    }
+  ],
+  "cases": [
+    {
+      "case": "en-Matrices",
+      "confirmed_source": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "confirmed_movie": "a4f4c8d78a61ede8f94fd45ba7a135f686562ad746dcc5d0232876791aa195d6",
+      "live_source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "live_source_matches": true,
+      "live_movie_sha256": "a4f4c8d78a61ede8f94fd45ba7a135f686562ad746dcc5d0232876791aa195d6",
+      "live_movie_matches": true,
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "final_render_warnings": [],
+      "render_inputs": {},
+      "input_scope": "The render record lists no external cached input files. These scene modules construct their numerical examples locally. No unrecorded production data/model hash is asserted.",
+      "baseline_source_linkage": null,
+      "selected_coverage": {
+        "viewed_pages": 8,
+        "total_pages": 8,
+        "viewed_unique_representatives": 60,
+        "inherited_exact_png_representatives": 221,
+        "covered_unique_representatives": 281,
+        "total_unique_representatives": 281,
+        "selected_times_covered_including_exact_repeats": 299,
+        "total_selected_times": 299,
+        "viewed_representative_time_range": [
+          0.0,
+          131.666016
+        ],
+        "all_selected_frames_covered": true
+      },
+      "decoded_frames": 1976,
+      "native_followups": 4,
+      "maximum_selected_gap_seconds": 1.0,
+      "last_selected_seconds": 131.666016
+    },
+    {
+      "case": "en-Eigen",
+      "confirmed_source": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "confirmed_movie": "a30c8c6c91b04b6cd3c3a3a73463caae54ff6371930cdc21d8ad3cca519bb37d",
+      "live_source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "live_source_matches": true,
+      "live_movie_sha256": "a30c8c6c91b04b6cd3c3a3a73463caae54ff6371930cdc21d8ad3cca519bb37d",
+      "live_movie_matches": true,
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "final_render_warnings": [],
+      "render_inputs": {},
+      "input_scope": "The render record lists no external cached input files. These scene modules construct their numerical examples locally. No unrecorded production data/model hash is asserted.",
+      "baseline_source_linkage": null,
+      "selected_coverage": {
+        "viewed_pages": 7,
+        "total_pages": 7,
+        "viewed_unique_representatives": 54,
+        "inherited_exact_png_representatives": 226,
+        "covered_unique_representatives": 280,
+        "total_unique_representatives": 280,
+        "selected_times_covered_including_exact_repeats": 340,
+        "total_selected_times": 340,
+        "viewed_representative_time_range": [
+          0.0,
+          161.332682
+        ],
+        "all_selected_frames_covered": true
+      },
+      "decoded_frames": 2421,
+      "native_followups": 5,
+      "maximum_selected_gap_seconds": 1.0,
+      "last_selected_seconds": 161.332682
+    },
+    {
+      "case": "zh-Matrices",
+      "confirmed_source": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "confirmed_movie": "0a91c45415b27ba454521fa90fd83ffb6e2268ec7f51782258ca34ec7d00230a",
+      "live_source_sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "live_source_matches": true,
+      "live_movie_sha256": "0a91c45415b27ba454521fa90fd83ffb6e2268ec7f51782258ca34ec7d00230a",
+      "live_movie_matches": true,
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "final_render_warnings": [],
+      "render_inputs": {},
+      "input_scope": "The render record lists no external cached input files. These scene modules construct their numerical examples locally. No unrecorded production data/model hash is asserted.",
+      "baseline_source_linkage": null,
+      "selected_coverage": {
+        "viewed_pages": 8,
+        "total_pages": 8,
+        "viewed_unique_representatives": 63,
+        "inherited_exact_png_representatives": 209,
+        "covered_unique_representatives": 272,
+        "total_unique_representatives": 272,
+        "selected_times_covered_including_exact_repeats": 293,
+        "total_selected_times": 293,
+        "viewed_representative_time_range": [
+          0.0,
+          132.532682
+        ],
+        "all_selected_frames_covered": true
+      },
+      "decoded_frames": 1989,
+      "native_followups": 4,
+      "maximum_selected_gap_seconds": 1.0,
+      "last_selected_seconds": 132.532682
+    },
+    {
+      "case": "zh-Eigen",
+      "confirmed_source": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "confirmed_movie": "851a46486dc8278affaa21b3bb8842f5cc93535683b5a3f67af53b86af105cbf",
+      "live_source_sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "live_source_matches": true,
+      "live_movie_sha256": "851a46486dc8278affaa21b3bb8842f5cc93535683b5a3f67af53b86af105cbf",
+      "live_movie_matches": true,
+      "render_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+      "final_render_warnings": [],
+      "render_inputs": {},
+      "input_scope": "The render record lists no external cached input files. These scene modules construct their numerical examples locally. No unrecorded production data/model hash is asserted.",
+      "baseline_source_linkage": {
+        "source_sha256_meaning": "Current source read at extraction/review preparation; not authenticated imported-source hash of rendered movie.",
+        "actual_imported_source": "uncertain due source-changed-during-render warning",
+        "candidate_pre_repair_source_sha256": "09b46dec72d69ac2f8b99b2ebfcaa67292cdd749b30d3cad199911ae445c7329",
+        "candidate_is_proof": false
+      },
+      "selected_coverage": {
+        "viewed_pages": 2,
+        "total_pages": 2,
+        "viewed_unique_representatives": 10,
+        "inherited_exact_png_representatives": 277,
+        "covered_unique_representatives": 287,
+        "total_unique_representatives": 287,
+        "selected_times_covered_including_exact_repeats": 361,
+        "total_selected_times": 361,
+        "viewed_representative_time_range": [
+          0.0,
+          183.932682
+        ],
+        "all_selected_frames_covered": true
+      },
+      "decoded_frames": 2760,
+      "native_followups": 5,
+      "maximum_selected_gap_seconds": 1.0,
+      "last_selected_seconds": 183.932682
+    }
+  ],
+  "current_file_hashes_at_packaging": [
+    {
+      "path": "videos/ai/ai3/s04_matrices.py",
+      "sha256": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "bytes": 12521
+    },
+    {
+      "path": "videos/ai/ai3/s06_eigen.py",
+      "sha256": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "bytes": 16259
+    },
+    {
+      "path": "videos/ai/ai3/zh_lines.py",
+      "sha256": "16504c1c99cf99a73ecf17af50500cf2cce29c4187b674b0c7b6e23375b8ab70",
+      "bytes": 64007
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "sha256": "a2374c25745d9024d0d648e29bb93693c2cb1b02f046bca98a9e7e8b6e3c3d7c",
+      "bytes": 2395239
+    },
+    {
+      "path": "videos/ai/ai3/manifest.py",
+      "sha256": "f9d32cb62542791e063c5a3186745a0d2ba89d8044da463a9d75f3111b6f5d5a",
+      "bytes": 1321
+    },
+    {
+      "path": "tools/qa_motion.py",
+      "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "bytes": 19437
+    },
+    {
+      "path": "tools/qa_series.py",
+      "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "bytes": 25379
+    }
+  ],
+  "current_file_hash_scope": "Current disk hashes at packaging only; shared table or helper hashes are not authenticated historical imported-source records. Final direct scene modules and movies have separate parent-confirmed linkage.",
+  "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "review_counts": {
+    "full_file_decoded_frames": 9146,
+    "selected_times_covered": 1293,
+    "new_unique_representatives_actually_viewed": 187,
+    "exact_png_inherited_unique_representatives": 933,
+    "changed_pages_actually_viewed": 25,
+    "native_followups_actually_viewed": 18
+  },
+  "limitations": [
+    "Silent854x48015fps previews; selected-time visual review only.",
+    "Continuous perceptual playback, listening/narration alignment, production-resolution layout and player/responsive behavior unverified.",
+    "Unselected source-frame gaps and all timestamps are in complete compressed ledgers. Short/subthreshold events may fall between selected frames.",
+    "Exact inheritance requires identical full PNG bytes and an actually viewed baseline representative. Baseline ZH Eigen imported source is uncertain due a source-changed-during-render warning; current source-at-review is not proof of its imported source.",
+    "Final four render records have zero warnings; later unrelated edits can stale the whole-part fingerprint without changing these authenticated movies."
+  ],
+  "review_corrections": [
+    "Initial negative-zero claim was a reviewer sign misread. The preserved native shows+0.00; the claim was retracted. No determinant formatting repair is claimed.",
+    "ZH composition-heading grid approaches existing mask edge at52.133s, but a magnified native check found no glyph occlusion; no further source repair requested."
+  ],
+  "packaging_mutations": "Only this new evidence directory; no STATUS, production source/data/model, compute, render, commit or push."
+}

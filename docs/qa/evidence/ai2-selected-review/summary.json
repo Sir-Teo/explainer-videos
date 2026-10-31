@@ -5,7 +5,7 @@
       "case": "en/Hook",
       "title": "Forty years to checkmate",
       "selected_times_covered": 272,
-      "movie_sha256": "03bd71d56d6a63b4110d3a2296c50518b180d5d88ce9178aa21f5f879d421d76",
+      "movie_sha256": "774ceb4e45eb4f9621678a3266a0a567af3d029eaa5177a2f7280722e458cb13",
       "video": {
         "width": 854,
         "height": 480,
@@ -13,19 +13,36 @@
         "duration": "127.333333",
         "nb_frames": "1910"
       },
-      "proof": "ai2-hook-repair-review.json.gz",
+      "proof": "../ai2-hook-tick-regression/review.json.gz",
       "runtime_status": "passed",
       "runtime_warnings": [],
       "visual_review": "all selected times covered; no unresolved observed defect",
       "continuous_perceptual_playback": "unverified",
       "narration_listening": "unverified",
-      "scene_source_sha256_at_freeze": "eba5f33461813b36c7044ef7aa99d9f98860c9db66173594197e409e8449d3cd"
+      "scene_source_sha256_at_freeze": "06587b3781f0cd7dc71d1e75fcacd771975b7c251f87a35032df8fe8096c7a29",
+      "replacement_render": {
+        "status": "passed at capture",
+        "warnings": [],
+        "scope": "fresh480p year-mask source; later shared-caption edits conservatively stale aggregate fingerprint",
+        "proof": "../ai2-hook-tick-regression/review.json.gz"
+      },
+      "production_preview": {
+        "width": 1920,
+        "height": 1080,
+        "fps_nominal": 30,
+        "selected_times": 246,
+        "source_sha256": "06587b3781f0cd7dc71d1e75fcacd771975b7c251f87a35032df8fe8096c7a29",
+        "movie_sha256": "c966e2f624258bd1dffe3c3e85fa701276ecf2d70ecd28c0926eaf434cab39d9",
+        "proof": "../ai2-hook-production-after-mask/review.json.gz",
+        "continuous_perceptual_and_listening": "unverified",
+        "status": "scoped selected review complete; broad source-change warning retained"
+      }
     },
     {
       "case": "zh/Hook",
       "title": "Forty years to checkmate",
-      "selected_times_covered": 282,
-      "movie_sha256": "97a72de0bdf0ec7860872e9d5c4a7411d811e8a7bad1d9f7f9703745fcd5a006",
+      "selected_times_covered": 287,
+      "movie_sha256": "cd425529a6470d6be22e74a6c5dc9f0a2e12a3534cd5b97dd3381320d4c8bef4",
       "video": {
         "width": 854,
         "height": 480,
@@ -33,13 +50,19 @@
         "duration": "144.600000",
         "nb_frames": "2169"
       },
-      "proof": "ai2-hook-repair-review.json.gz",
+      "proof": "../ai2-hook-tick-regression/review.json.gz",
       "runtime_status": "passed",
       "runtime_warnings": [],
       "visual_review": "all selected times covered; no unresolved observed defect",
       "continuous_perceptual_playback": "unverified",
       "narration_listening": "unverified",
-      "scene_source_sha256_at_freeze": "eba5f33461813b36c7044ef7aa99d9f98860c9db66173594197e409e8449d3cd"
+      "scene_source_sha256_at_freeze": "06587b3781f0cd7dc71d1e75fcacd771975b7c251f87a35032df8fe8096c7a29",
+      "replacement_render": {
+        "status": "passed at capture",
+        "warnings": [],
+        "scope": "fresh480p year-mask source; later shared-caption edits conservatively stale aggregate fingerprint",
+        "proof": "../ai2-hook-tick-regression/review.json.gz"
+      }
     },
     {
       "case": "en/Turing",
@@ -733,7 +756,7 @@
     }
   ],
   "total_cases": 32,
-  "selected_times_covered": 14062,
+  "selected_times_covered": 14067,
   "automated_video_frames": 105217,
   "coverage": "Full files decoded automatically; every selected time covered by actual views or exact PNG equality. Unselected frames and listening are not certified.",
   "aggregate_fingerprint": "Original broad source-change warnings retained; direct source/data evidence lives in detailed frozen ledgers.",
@@ -747,5 +770,6 @@
     "automated_video_frames": 105217,
     "interpretation": "Exact original summary bytes; historical current_scene_source_sha256 keys denote the original freeze, not current freshness."
   },
-  "knowledge_replacement_note": "EN429\u2192423; ZH469\u2192469. Current index totals14,062 selected times; original freeze14,068 preserved separately. Source hashes describe recorded freezes. Full playback/listening remain unverified."
+  "knowledge_replacement_note": "EN429\u2192423; ZH469\u2192469. Current index totals14,062 selected times; original freeze14,068 preserved separately. Source hashes describe recorded freezes. Full playback/listening remain unverified.",
+  "latest_replacement_note": "Hook year-mask EN272/ZH287 replaces priorEN272/ZH282; current total14,067. Previous14,062summary frozen separately; original14,068baseline remains."
 }

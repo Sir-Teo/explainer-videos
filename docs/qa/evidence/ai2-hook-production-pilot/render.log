@@ -1,0 +1,10 @@
+[10/31/26 19:03:38] WARNING  Some options were not      scene_file_writer.py:944
+                             used: {'shortest': '1',                            
+                             'metadata':                                        
+                             'comment=Rendered with                             
+                             Manim Community v0.22.0'}                          
+Traceback (most recent call last):
+  File "/workspace/runtime/qa_production_motion.py", line 27, in <module>
+    movie=ROOT/record['movie'];probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(movie)]));(folder/'ffprobe.json').write_text(json.dumps(probe,indent=2)+'\n');video=[s for s in probe['streams'] if s['codec_type']=='video'];assert len(video)==1;assert (video[0]['width'],video[0]['height'])==(1920,1080);assert video[0]['r_frame_rate']=='30/1';assert not any(s['codec_type']=='audio' for s in probe['streams'])
+                                                                                                                                                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

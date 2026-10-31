@@ -1,0 +1,14 @@
+step 2628/2929 loss 3.553 val 3.592 lr 3.81e-04 2.867s/step (cumulative)
+step 2701/2929 loss 3.433 val 3.584 lr 3.47e-04 2.885s/step (cumulative)
+step 2774/2929 loss 3.544 val 3.578 lr 3.22e-04 2.906s/step (cumulative)
+step 2847/2929 loss 3.387 val 3.575 lr 3.06e-04 2.921s/step (cumulative)
+step 2920/2929 loss 3.380 val 3.572 lr 3.00e-04 2.931s/step (cumulative)
+step 2929/2929 loss 3.404 val 3.571 lr 3.00e-04 2.935s/step (cumulative)
+  done    mp in 8611s
+  compute galore ...
+/workspace/explainer-videos/videos/ai/ai3/compute.py:881: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  curve.append(float(loss))
+    adam_0.001_0
+    adam_0.003_0
+    adam_0.01_0

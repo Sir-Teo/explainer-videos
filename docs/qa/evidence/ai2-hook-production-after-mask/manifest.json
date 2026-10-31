@@ -1,0 +1,258 @@
+{
+  "scope": "One after-mask native1080p30 silent movie. Full selected-image coverage only; conservative source-change warning retained. No movies packaged. Manifest excludes itself.",
+  "files": [
+    {
+      "file": "review.json.gz",
+      "bytes": 5085,
+      "sha256": "a28f370aacf54aaf445a174c90f5d03ba11f7db13d8cf30bc1a3650cf536803a",
+      "encoding": "gzip",
+      "decoded_bytes": 14965,
+      "decoded_sha256": "05d7f0135b16789f753caa4914f5353b13561f42ef553eb59146c62f321513aa",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-after-mask-review.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "selected-comparison-map.json.gz",
+      "bytes": 19486,
+      "sha256": "3d9b5fc5437dd0d02024b63d866aa5909a7b507a2ef9ad8d2430863f8992fd71",
+      "encoding": "gzip",
+      "decoded_bytes": 172771,
+      "decoded_sha256": "d4b08f404c0b646a35b4b80e57970822ee8be9b386cecd1bdf38c980af0108c9",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/temporal/review/comparison-review-map.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "temporal-audit.json.gz",
+      "bytes": 17764,
+      "sha256": "df6d139ff3ff0b88c0fab3fcb8a600741080d982ac7d1cb2dc6e110ee7a14cec",
+      "encoding": "gzip",
+      "decoded_bytes": 101579,
+      "decoded_sha256": "03debb744584ef37cd6dc80350d401cc513852b8b5e39ac1ae0db1ab1bded352",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/temporal/result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "result.json.gz",
+      "bytes": 11969,
+      "sha256": "c8f77a1cf17bd5db6bb52a6bb91eed8bb827436938fdbc97682e143c590f14f5",
+      "encoding": "gzip",
+      "decoded_bytes": 78935,
+      "decoded_sha256": "efd3f2eabf0e1287e5bafd9a74edeec630fae1e92b3d8b3d73ae436ec783f9bf",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "ffprobe-original.json.gz",
+      "bytes": 1107,
+      "sha256": "0d7ffa94bd169d687b3887eb1d53b8c3ceba6204f04c407a2b9fcdc85b45c3cb",
+      "encoding": "gzip",
+      "decoded_bytes": 3567,
+      "decoded_sha256": "381ade37ce7cfb36e29a96b4b45e845a7427768ffb4ac1fd77b051eea18264e0",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/ffprobe.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "full-video-decode.json.gz",
+      "bytes": 489,
+      "sha256": "539ee6a12d5af76a959c44eb7356d5b57e88ede67772951bed410af5fbc7967e",
+      "encoding": "gzip",
+      "decoded_bytes": 964,
+      "decoded_sha256": "6ae37fcd6552e7957fd5020bb8490d6caf18096239d9c6662f830e1a1a8bc73b",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/full-video-decode.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "pts-cadence.json.gz",
+      "bytes": 358,
+      "sha256": "5138c4919d4100f20d35245abd6e0e4c0afa9b4d38e63480857678b9ac7c6a73",
+      "encoding": "gzip",
+      "decoded_bytes": 690,
+      "decoded_sha256": "ea6390d48960241f52e5a8fb2f43154e65d169058f0d5e4b907fce3baf4eefdd",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/pts-cadence.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "render-resource.jsonl.gz",
+      "bytes": 6566,
+      "sha256": "c3ed6ef4563417ae3dd30787e15f5bd66312faf171546286d953cb0399b0f82c",
+      "encoding": "gzip",
+      "decoded_bytes": 56686,
+      "decoded_sha256": "6f065ca85ce1529c1c0f139767fc23b17008c62ff3e9a7bfffb6662b867ea229",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-resource.jsonl",
+      "content_type": "application/jsonl"
+    },
+    {
+      "file": "audit-resource.jsonl.gz",
+      "bytes": 3213,
+      "sha256": "4d74c3c07ceff480dcd20e497001bf189d5d4e4567e9e372137b5a930cb2ddf2",
+      "encoding": "gzip",
+      "decoded_bytes": 24639,
+      "decoded_sha256": "4967bb61dbed470be657fe2fb80e81e218d4a59d375b8b24eaff2a5065e1102e",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-audit-resource.jsonl",
+      "content_type": "application/jsonl"
+    },
+    {
+      "file": "render-guard-result.json.gz",
+      "bytes": 204,
+      "sha256": "3ce600c26375df2cf6f04040e7cca62235a19da454c35be74e826fab6901fa49",
+      "encoding": "gzip",
+      "decoded_bytes": 298,
+      "decoded_sha256": "478b29c2e75275fb6677299929390991c043b841060399df26cfea73c41429d3",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-guard-result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "audit-guard-result.json.gz",
+      "bytes": 209,
+      "sha256": "44e5f03032071e6b8226674bfd99185bac61dfe50b20dfb9f3a8f4e2acffb225",
+      "encoding": "gzip",
+      "decoded_bytes": 299,
+      "decoded_sha256": "97ecd2c747d696f2b24acfe9474fab9085ff58ea367ff7886dce12274dd3306b",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-audit-guard-result.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "source-provenance-before.json.gz",
+      "bytes": 532,
+      "sha256": "e4caa743fffea7c1810df3c089b28feffbea47acfcfdb8f26edbc97c31568338",
+      "encoding": "gzip",
+      "decoded_bytes": 1154,
+      "decoded_sha256": "2560e32e4ee7cd6363c1e87d05d772b6ffccac7209168660a058ce28602d488a",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/source-provenance-before.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "source-provenance-post-render.json.gz",
+      "bytes": 613,
+      "sha256": "64284e16a243f5273cd1c783ca1b94431e587590cb83846cdac3e37eed55d355",
+      "encoding": "gzip",
+      "decoded_bytes": 1689,
+      "decoded_sha256": "28ade79b5cd5541994f946dbf1e887b48ab184a733985fce93a57cb10d1bb9d1",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/source-provenance-after.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "known-unrelated-caption-change.json.gz",
+      "bytes": 1014,
+      "sha256": "c0195c4f4cbb3156299f377f58d3126a5b99ce21c679493589b48a31ea412fe6",
+      "encoding": "gzip",
+      "decoded_bytes": 1890,
+      "decoded_sha256": "3ebd0edd87d908dead3dd2d77c67b6e5cf5ec840704800aa2441c64cd2be9a48",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/known-unrelated-caption-change.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "shared-caption-delta-during-render.json.gz",
+      "bytes": 467,
+      "sha256": "a7465a26a61f12a3b91f09124c036cac60232cf4cd83b4db41eaf89fac1b112f",
+      "encoding": "gzip",
+      "decoded_bytes": 623,
+      "decoded_sha256": "f92ea0701631fdcda6c4bdd9622e4d518130e24d84a438bcb0e3d7633ea21ba9",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/shared-caption-delta-during-render.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "archive-preservation.json.gz",
+      "bytes": 345,
+      "sha256": "1dfe8341a001e52ea5a3a475d22cd9e71df130414b4588655758906ccc021438",
+      "encoding": "gzip",
+      "decoded_bytes": 773,
+      "decoded_sha256": "ceea78212133bb2e25c1ef1b2dae52fbdfdce306b4f073a7fe532932b58ff911",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/archive-after-mask/preservation.json",
+      "content_type": "application/json"
+    },
+    {
+      "file": "s01_hook.source-at-render.py.gz",
+      "bytes": 3781,
+      "sha256": "3b66fdb325d58bedbe9bdb508a52ead583806b8e6067ee2e0c3b59af3f7044b5",
+      "encoding": "gzip",
+      "decoded_bytes": 10698,
+      "decoded_sha256": "06587b3781f0cd7dc71d1e75fcacd771975b7c251f87a35032df8fe8096c7a29",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/s01_hook.source-at-render.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "wrapper-executed.py.gz",
+      "bytes": 1941,
+      "sha256": "9ca51687855475d69981946eac7698fd43ed3fb64493a783afb373288c2aa78a",
+      "encoding": "gzip",
+      "decoded_bytes": 4221,
+      "decoded_sha256": "fbaa80e08bd57ef3c4f4a717ca8291e6a23ad0d7af165d03ff68b42a03faef8c",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/qa_production_motion_after_year_mask-executed.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "render-guard-executed.py.gz",
+      "bytes": 1206,
+      "sha256": "808e555eddf6bb4c97f1fa0dcd520985e8c66c2efbfb12f67bdcbf48cec0489a",
+      "encoding": "gzip",
+      "decoded_bytes": 2531,
+      "decoded_sha256": "6c6eb48d7a32c41cf5146b74f137eca8005d6180366f8aa6d9b610de0ed619bd",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/run_hook_production_after_mask_guard-executed.py",
+      "content_type": "text/x-python"
+    },
+    {
+      "file": "decoded-frame-timestamps.json.gz",
+      "bytes": 51672,
+      "sha256": "b9de126fd36d07af6b073dfc9a6c34ab66e22f4bb19ab77e4ecc3a203c7b7348",
+      "encoding": "gzip",
+      "decoded_bytes": 984249,
+      "decoded_sha256": "bbb4b8ddd4fc71d27975a3423190f9a4cad7b266db700a610c0ced9e3749aaac",
+      "content_type": "application/json",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/decoded-frame-timestamps.json.gz"
+    },
+    {
+      "file": "timeline-1970-clear-encoded-1080.png",
+      "bytes": 124934,
+      "sha256": "278ef00eed5f6ca0dfbf57446d288e362f56aa3c19d9f35b53aa1997e79ff941",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/temporal/frames/0001187_000039.566s.png",
+      "note": "Exact decoded movie PNG; no crop,resize or composite."
+    },
+    {
+      "file": "timeline-complete-clear-encoded-1080.png",
+      "bytes": 217469,
+      "sha256": "9273634e77162f60441500fb85e7893191c23115de6c206f8a2cb59dfe50d6ea",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/temporal/frames/0001671_000055.700s.png",
+      "note": "Exact decoded movie PNG; no crop,resize or composite."
+    },
+    {
+      "file": "axis-create-encoded-1080.png",
+      "bytes": 54979,
+      "sha256": "20678dca330eda26b8a86f10aaf921d9eb1f5f4fc78c7981ef5df59aea8a38d5",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/ai2/en/Hook_motion/temporal/frames/0000762_000025.400s.png",
+      "note": "Exact decoded movie PNG; no crop,resize or composite."
+    },
+    {
+      "file": "render.log",
+      "bytes": 797,
+      "sha256": "f92d1b68ad91c54cdfbf5013eda2792dabd92e87f4a7587592a8232eaa144fa7",
+      "encoding": "utf-8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-render.log"
+    },
+    {
+      "file": "audit.log",
+      "bytes": 96,
+      "sha256": "0a863f1b124d40d3f5cb55be4b1aae0930d9d42c101d49ddf95c1565bc549608",
+      "encoding": "utf-8",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/production-motion-1080-after-year-mask/hook-en-audit.log"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4356,
+      "sha256": "17b64e0e2e7bd61c22776ed4461081d5eb8771ec5d738974756a0e523cdf3a4b",
+      "encoding": "utf-8"
+    }
+  ]
+}

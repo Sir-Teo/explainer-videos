@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/AI-Built-Part2-Hook-EN-Silent-1080p.mp4",
+      "file_id": "file_00000000a88481f6b462b3fed5531f86",
+      "library_file_id": "libfile_c99fc4a4ffc0819184863822fd859ec4",
+      "file_name": "AI-Built-Part2-Hook-EN-Silent-1080p.mp4",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_6db3a3e6ad5481919313a2dc71fa8441",
+      "mime_type": "video/mp4",
+      "library_artifact_type": "other",
+      "file_size_bytes": 2912593,
+      "external_connectors_accessed": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "before_file": "/workspace/runtime/ai2-hook-tick-readability-proposal/pilot-1080-reference/008_00055.7s.png",
+  "after_file": "/workspace/runtime/ai2-hook-tick-regression/en/endpoints-1080/008_00055.8s.png",
+  "scope": "Thresholded event-colour pixels within unchanged year-glyph bounding boxes, native1080raw captures at equivalent final timeline beat; not exact time-aligned frames.",
+  "results": {
+    "1970": {
+      "crop_pixel_bounds_xyxy": [
+        791,
+        614,
+        872,
+        640
+      ],
+      "event_colour_pixels": {
+        "before": 78,
+        "after": 0
+      },
+      "interpretation": "1971 stem crossing the 1970 zero removed"
+    },
+    "1980": {
+      "crop_pixel_bounds_xyxy": [
+        1113,
+        614,
+        1194,
+        640
+      ],
+      "event_colour_pixels": {
+        "before": 52,
+        "after": 0
+      },
+      "interpretation": "1980 stem bounding-box intrusion removed; prior glyph-ink occlusion not proven"
+    }
+  },
+  "threshold_definitions": {
+    "1970": "RGB integer channels: G-R>8 and G-B>8",
+    "1980": "RGB integer channels: R-G>15 and G-B>15"
+  },
+  "source_raw_frame_dimensions": [
+    1920,
+    1080
+  ]
+}

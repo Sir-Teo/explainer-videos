@@ -1,0 +1,9 @@
+{
+  "final_fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+  "source": {
+    "Power": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+    "SVD": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10"
+  },
+  "parent_confirmation": "Root explicitly confirmed completed final EN and ZH movies, frozen scene module hashes, passed runtime and zero warnings. Fresh records and exact movie equality preserved independently.",
+  "table_caution": "Table captured at review freeze; current hashes alone do not prove historical worker import. Complete render fingerprints/warnings retained. Later unrelated changes can stale aggregate fingerprint."
+}
