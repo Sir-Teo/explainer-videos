@@ -1132,18 +1132,15 @@
       "latest_frozen_source_sha256": "4e1d29200637256128acf72ecffd0f02caaf6733a4222808dd0b32bf82981ed7"
     }
   ],
-  "selected_review_updated_utc": "2026-10-31T21:20:31.050627+00:00",
-  "completed_bilingual_selected_chapters": 17,
-  "remaining_bilingual_selected_chapters": [
-    "Netflix",
-    "Outro"
-  ],
-  "late_source_qualification_updated_utc": "2026-10-31T21:52:52.418064+00:00",
-  "late_qualification_pending_chapters": [
-    "Hook",
-    "Words",
-    "Netflix"
-  ],
+  "selected_review_updated_utc": "2026-10-31T22:39:00+00:00",
+  "completed_bilingual_selected_chapters": 19,
+  "remaining_bilingual_selected_chapters": [],
+  "late_source_qualification_updated_utc": "2026-10-31T22:39:00+00:00",
+  "late_qualification_pending_chapters": [],
   "native_1080_original_capture_cases": 38,
-  "native_1080_original_images_reviewed": 695
+  "native_1080_original_images_reviewed": 695,
+  "final_selected_appearances": 14729,
+  "final_automatically_decoded_frames": 101263,
+  "final_individually_unviewed_frames": 86534,
+  "final_case_map": "ai3-final-source-case-map.json"
 }

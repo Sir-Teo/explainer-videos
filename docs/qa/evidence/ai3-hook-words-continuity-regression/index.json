@@ -1,0 +1,376 @@
+{
+  "scope": "Bounded native-image regression evidence; no movie copies",
+  "payloads": [
+    {
+      "file": "README.md",
+      "sha256": "c5ba00d24bc6c2fab05602cff1a065fcc86aa54870d33e8d0df21ae3307e5e4f",
+      "bytes": 2783
+    },
+    {
+      "file": "actual-view-notes.json.gz",
+      "sha256": "13730386184ed6002514dc1782c7a1d14b2ee6f5e39034881ca96e4d2b8787c2",
+      "bytes": 3893
+    },
+    {
+      "file": "en-Hook/before-motion-render-record.json.gz",
+      "sha256": "4e36364d8332f2fa173e1bb1309afae998c3fc3b1f8d2c46265f63f3a6abf186",
+      "bytes": 14828
+    },
+    {
+      "file": "en-Hook/endpoint-render-record.json.gz",
+      "sha256": "d2c589363d76000c8d77f4445cca2896f32db94af6b2fbbae524b83766255082",
+      "bytes": 14539
+    },
+    {
+      "file": "en-Hook/endpoint-review.json.gz",
+      "sha256": "40beaf2c1f160f2a6f7a6af335e7c05808236d9b32f310e84b9e7bc5b9138f33",
+      "bytes": 1820
+    },
+    {
+      "file": "en-Hook/motion-freeze-plan.json.gz",
+      "sha256": "486b08684a36139e777a0fccbc124aedb02cfddf121c52c6d687c06945686cb5",
+      "bytes": 29048
+    },
+    {
+      "file": "en-Hook/motion-render-record.json.gz",
+      "sha256": "7d4c98daf8c5f103b54c3bd74ecceafd46451a3b36ed2430c5996f6f962e02bf",
+      "bytes": 14832
+    },
+    {
+      "file": "en-Hook/motion-review.json.gz",
+      "sha256": "436dea6736d977f4b8f1830a62677ab790a816650a8c65049eef0facf81fed0e",
+      "bytes": 38029
+    },
+    {
+      "file": "en-Hook/native1080-example.png",
+      "sha256": "c39cf5400ec41a87eb346cadd3c9ec2ca7b055d42d9827e3cf2a0889dfe220ef",
+      "bytes": 71520
+    },
+    {
+      "file": "en-Hook/native1080-render-record.json.gz",
+      "sha256": "ef9e040b0e8a290af00f06435c4e1f1731992203570fd253bd554468a9cb3760",
+      "bytes": 14783
+    },
+    {
+      "file": "en-Hook/native1080-review.json.gz",
+      "sha256": "fe3c10145fa814ab5702c4fa721c7ebef8524720484137074159e9a94e1fe5e0",
+      "bytes": 9997
+    },
+    {
+      "file": "en-Hook/new-selected-time-example.png",
+      "sha256": "c4f4832fd61186921c85c6ba877059a9eb5fcfc0a28fe08356e7b2b4cb95d7c0",
+      "bytes": 26323
+    },
+    {
+      "file": "en-Hook/prior-completed-mapping.json.gz",
+      "sha256": "1a24590a9af86fe7484a8c13dfafd404f9f8dd5cbcddbf7ee128b038fdd4b2d5",
+      "bytes": 28366
+    },
+    {
+      "file": "en-Hook/prior-native1080-review.json.gz",
+      "sha256": "a672f2866d194160e54429b4d2e7a0901f956d2966e2adc3ef927d38af66271b",
+      "bytes": 10267
+    },
+    {
+      "file": "en-Hook/provenance.json.gz",
+      "sha256": "43f291904eb5d6fb0be0f065f2d2ee68e66ff93f567df5ee0a8f2f7718285f72",
+      "bytes": 2074
+    },
+    {
+      "file": "en-Hook/scene-after.py",
+      "sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "bytes": 13903
+    },
+    {
+      "file": "en-Hook/scene-before.py",
+      "sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "bytes": 13840
+    },
+    {
+      "file": "en-Hook/temporal-audit.json.gz",
+      "sha256": "52aebf9e725269ece1e3c8bfd8124b2fd3bbe7814b31e33ce031d426bd65cbee",
+      "bytes": 26057
+    },
+    {
+      "file": "en-Hook/timing-comparison.json.gz",
+      "sha256": "70982e5631fbbe572ed375bf350886f0674b21755bd69e0a2a3406326c801de0",
+      "bytes": 7547
+    },
+    {
+      "file": "en-Words/before-motion-render-record.json.gz",
+      "sha256": "dcc34ffad73eb64ce702abd2fd2eb57d1dab007bf104d0aa4e7a526e62fd8071",
+      "bytes": 14315
+    },
+    {
+      "file": "en-Words/endpoint-render-record.json.gz",
+      "sha256": "168ce3700a7de433eb19a9ab99669fc5439f45ef2504108643acdfd7cef557d4",
+      "bytes": 14468
+    },
+    {
+      "file": "en-Words/endpoint-review.json.gz",
+      "sha256": "9459e2e014ad711305b650cf6251926013442404e05e22e3bff6983b64d8b255",
+      "bytes": 1909
+    },
+    {
+      "file": "en-Words/motion-freeze-plan.json.gz",
+      "sha256": "7c624196bce08c27f2db294314bbac1d915ab1314b67ca5acf74079b425a856b",
+      "bytes": 30509
+    },
+    {
+      "file": "en-Words/motion-render-record.json.gz",
+      "sha256": "4ac45f9be7332e3e8c87b6d543097cf699b841c6e47d8cbbefafb7d2d1c82be1",
+      "bytes": 14384
+    },
+    {
+      "file": "en-Words/motion-review.json.gz",
+      "sha256": "e7e227173f54a978c4d98b040c7c8a1df6bd309f9fc8704c5e0df53f2cf786d0",
+      "bytes": 38775
+    },
+    {
+      "file": "en-Words/native1080-example.png",
+      "sha256": "a598418ac6c59f584e2cd699fe3b30a14fbd0ad9a46d744b75093889b1b0c9c8",
+      "bytes": 85172
+    },
+    {
+      "file": "en-Words/native1080-render-record.json.gz",
+      "sha256": "6010e2f526d93d3b5cd006f6417b03400e57c9dc74272c61b4cf724ce60a1395",
+      "bytes": 14715
+    },
+    {
+      "file": "en-Words/native1080-review.json.gz",
+      "sha256": "2cb002b9cf662121c6b56fcd6d162416d9b737fcd1f57b860675e1e77609a64d",
+      "bytes": 7956
+    },
+    {
+      "file": "en-Words/new-selected-time-example.png",
+      "sha256": "d50b630d7016f0c3491b4905f36a9200f1ab924b109b4125c62f89a62959b89a",
+      "bytes": 51798
+    },
+    {
+      "file": "en-Words/prior-completed-mapping.json.gz",
+      "sha256": "cf36994eb55fd8ec72fad8efbbd4d59318553936a133f541410c94eff4fea2d6",
+      "bytes": 28506
+    },
+    {
+      "file": "en-Words/prior-native1080-review.json.gz",
+      "sha256": "481c8317b89aae749cf1d0ca6f7ce4c57cd1554b92291ba8880ca5cc00248302",
+      "bytes": 8751
+    },
+    {
+      "file": "en-Words/provenance.json.gz",
+      "sha256": "64a37d8cadbca50e31d71a1d9795c23516013710473cf205861641f72cf1758e",
+      "bytes": 2069
+    },
+    {
+      "file": "en-Words/scene-after.py",
+      "sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "bytes": 17109
+    },
+    {
+      "file": "en-Words/scene-before.py",
+      "sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "bytes": 17048
+    },
+    {
+      "file": "en-Words/temporal-audit.json.gz",
+      "sha256": "cd8e8757a3664df76f2cd5b9165670ad392290c37eb2ffeeae415face6603671",
+      "bytes": 27711
+    },
+    {
+      "file": "en-Words/timing-comparison.json.gz",
+      "sha256": "189f9cbf1277636ee8a78e0c250299b1894539a701f51c6ed6e4a4f8625f643a",
+      "bytes": 10391
+    },
+    {
+      "file": "execution-en.json.gz",
+      "sha256": "2e6bda11e47ccc399abfc9eca486e4a9e58388aeb8e2d7b4d473e858938ebb98",
+      "bytes": 855
+    },
+    {
+      "file": "execution-zh.json.gz",
+      "sha256": "29bb22cfb03513242d3e5d42e2aedf831f11fa35428a310f3d8933e131fd3047",
+      "bytes": 860
+    },
+    {
+      "file": "narration-handoff.json.gz",
+      "sha256": "07fa3cb3b45eb92e33b9abd88bf43f66f5a0b38120a29e7ab792ae66b8305063",
+      "bytes": 3084
+    },
+    {
+      "file": "summary.json.gz",
+      "sha256": "81af70a61a60e4b3b78889251f89ff9ffc15116b8d5ee978854d7d952b2ca130",
+      "bytes": 1141
+    },
+    {
+      "file": "zh-Hook/before-motion-render-record.json.gz",
+      "sha256": "ca7162395ddababf9edefb765a3d93ef52d39ef051300fa71fec6a3a29780a97",
+      "bytes": 21948
+    },
+    {
+      "file": "zh-Hook/endpoint-render-record.json.gz",
+      "sha256": "042292e1ee57c5ee7edc15edadcd88b96fb38c849b25047e4168c4b95900ed96",
+      "bytes": 22421
+    },
+    {
+      "file": "zh-Hook/endpoint-review.json.gz",
+      "sha256": "502ec1f9cc2a226bd66ad31a89bbff762fb61c9f8e4204da3b35fd65891a0b0d",
+      "bytes": 1990
+    },
+    {
+      "file": "zh-Hook/motion-freeze-plan.json.gz",
+      "sha256": "4061620f45e24cbfb50336469a9cd839bbfc5f264b939ac4ac56486ef2dcc81e",
+      "bytes": 30047
+    },
+    {
+      "file": "zh-Hook/motion-render-record.json.gz",
+      "sha256": "42d2a307431538da4e0797ed014a3a24069472f3201c7bc1f87c8f44e3a1241a",
+      "bytes": 22249
+    },
+    {
+      "file": "zh-Hook/motion-review.json.gz",
+      "sha256": "c919aca33a24f018a647570bc7ea604a8fc804f0a259723c7ed48925cb862555",
+      "bytes": 32171
+    },
+    {
+      "file": "zh-Hook/native1080-example.png",
+      "sha256": "11ca93ee759d61eb71f48225e8f2c251503499e2ab3a3271bbb8ce5a6bd7175c",
+      "bytes": 76197
+    },
+    {
+      "file": "zh-Hook/native1080-render-record.json.gz",
+      "sha256": "9dd37117404bbe24c624b9dc0985faf984013c8d5a7f5c393e35224d0c7efe56",
+      "bytes": 22679
+    },
+    {
+      "file": "zh-Hook/native1080-review.json.gz",
+      "sha256": "87bebe812c8a8d34d38748f643802dc112ff60e46e76ef6d59d81e6e5340dd4a",
+      "bytes": 10740
+    },
+    {
+      "file": "zh-Hook/new-selected-time-example.png",
+      "sha256": "aa02c73e94917a7da5dce295999d31b1e0a91dd7d51a04786ed7a3a58a3d7f84",
+      "bytes": 117400
+    },
+    {
+      "file": "zh-Hook/prior-completed-mapping.json.gz",
+      "sha256": "c9a14edce4f4654f18a117b49a167be422cfc4e423eb3299b6687dfbcafa3252",
+      "bytes": 22530
+    },
+    {
+      "file": "zh-Hook/prior-native1080-review.json.gz",
+      "sha256": "24407e40b4d6584f9ed30ba40806203405786cf47627aa8a7cd3001d60de050a",
+      "bytes": 10964
+    },
+    {
+      "file": "zh-Hook/provenance.json.gz",
+      "sha256": "6afd0b63a0e43c1b3413b17c3e99ddfa40900b13c31712ec79cd7d8be15a3b10",
+      "bytes": 2073
+    },
+    {
+      "file": "zh-Hook/scene-after.py",
+      "sha256": "48e3272727c774b0e89f85aaa22450c477ea3f435cd0260c63f69481c6d36e86",
+      "bytes": 13903
+    },
+    {
+      "file": "zh-Hook/scene-before.py",
+      "sha256": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "bytes": 13840
+    },
+    {
+      "file": "zh-Hook/temporal-audit.json.gz",
+      "sha256": "73a80e44f21c9722219dd3bd0a1e2e77bcf7c9280183a7f89af9cfa5baa09713",
+      "bytes": 27039
+    },
+    {
+      "file": "zh-Hook/timing-comparison.json.gz",
+      "sha256": "e0971451a5b60914705725d8ac92b391510ce14d347c263242952142abbb8f42",
+      "bytes": 15141
+    },
+    {
+      "file": "zh-Words/before-motion-render-record.json.gz",
+      "sha256": "5b4003c94addae206259f0a12792496997966405065ec3eb394159ec75c5f28e",
+      "bytes": 21491
+    },
+    {
+      "file": "zh-Words/endpoint-render-record.json.gz",
+      "sha256": "875454013f512f1e7454626e7560734a9cfd8cb7094cd2810765dbac1c3f199d",
+      "bytes": 21493
+    },
+    {
+      "file": "zh-Words/endpoint-review.json.gz",
+      "sha256": "24fe69e13d20a73c072d43005bd43931214e2d8279663417db5865254ed79153",
+      "bytes": 1930
+    },
+    {
+      "file": "zh-Words/motion-freeze-plan.json.gz",
+      "sha256": "5b5b14dbc87a872587c24d7041abb6df2d4f7b2fe6c5456c1443d6f1cf2412ac",
+      "bytes": 30821
+    },
+    {
+      "file": "zh-Words/motion-render-record.json.gz",
+      "sha256": "04c6946658a235a89821465a4d5f8097e6a304052d9deeb8607692a14ee20701",
+      "bytes": 21309
+    },
+    {
+      "file": "zh-Words/motion-review.json.gz",
+      "sha256": "ba2826ca0fddc869877542f52eea3a4aabfd934445ddab89f30a0806fc08a25e",
+      "bytes": 39534
+    },
+    {
+      "file": "zh-Words/native1080-example.png",
+      "sha256": "ba2d91b8842cec52c26e8756a985c71cafc8cea8fe795b51b0cec84972254f51",
+      "bytes": 68605
+    },
+    {
+      "file": "zh-Words/native1080-render-record.json.gz",
+      "sha256": "d2bdf49c806c030091dba9fa1998dff786f409a426fc982d798b7e2c11e894f6",
+      "bytes": 21772
+    },
+    {
+      "file": "zh-Words/native1080-review.json.gz",
+      "sha256": "0f4a2775eaa1b0448ad1f179b4ae7a3df1a364f6cafb9eeb7d2c3be610be1d60",
+      "bytes": 8376
+    },
+    {
+      "file": "zh-Words/new-selected-time-example.png",
+      "sha256": "3aeb69f6b2b97874fc94760cd10753a782711b43d75deb9a0e66331ad4efc7c6",
+      "bytes": 47109
+    },
+    {
+      "file": "zh-Words/prior-completed-mapping.json.gz",
+      "sha256": "a85e6d1a50c6bb8170c7f7cd2d228e6cc46aece22ea7c2fa3a0471a228df39d3",
+      "bytes": 29136
+    },
+    {
+      "file": "zh-Words/prior-native1080-review.json.gz",
+      "sha256": "3d9aa275094fc51046b6f95eb4495f243fc9e7bcbb23eee79e9cbfd945574fb9",
+      "bytes": 9535
+    },
+    {
+      "file": "zh-Words/provenance.json.gz",
+      "sha256": "cf4df211a08702c10303cb975c380dc9489799357c1c49b0b25231a73de83a64",
+      "bytes": 2070
+    },
+    {
+      "file": "zh-Words/scene-after.py",
+      "sha256": "25cce23a2ae01900bb34c1d2a281b921284921a2630af8e4c6c53d7e1a29c28d",
+      "bytes": 17109
+    },
+    {
+      "file": "zh-Words/scene-before.py",
+      "sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "bytes": 17048
+    },
+    {
+      "file": "zh-Words/temporal-audit.json.gz",
+      "sha256": "84ca12b22cc625d374c9cd3f45ec8f9fd757795d808c7daea67220f2e199cded",
+      "bytes": 28103
+    },
+    {
+      "file": "zh-Words/timing-comparison.json.gz",
+      "sha256": "817771f84ba4ef37ed81c9d6f9cc5c68dc43edb3a11844e1ca4330b6c437501a",
+      "bytes": 19240
+    }
+  ],
+  "total_bytes": 1603988
+}
