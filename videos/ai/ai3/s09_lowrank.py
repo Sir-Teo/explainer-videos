@@ -130,16 +130,17 @@ class LowRank(VoiceoverScene):
         tiles.add(Group(im, cap.next_to(im, DOWN, buff=0.08)))
         tiles.arrange_in_grid(rows=2, cols=4, buff=(0.25, 0.3)).move_to(UP * 0.55)
         tag = note(r"a landscape drawn by code (\texttt{compute.py}), \ grey levels as a matrix").to_corner(DL, buff=0.2)
-        chk = label(rf"error after rank ${ranks[3]}$: \ ${err[3]:.4f}$; \ the singular values left out: \ "
-                    rf"${tail[3]:.4f}$", font_size=26, color=C.BITS).to_edge(DOWN, buff=0.55)
+        chk = label(rf"rank ${ranks[3]}$: \ $\|A-A_{{{ranks[3]}}}\|_F={err[3]:.4f}$; \ "
+                    rf"$\sqrt{{\sum_{{i>{ranks[3]}}}\sigma_i^2}}={tail[3]:.4f}$",
+                    font_size=26, color=C.BITS).to_edge(DOWN, buff=0.55)
         k8 = ranks.index(8) if 8 in ranks else 3
         with self.voiceover(
             f"A picture is a matrix too: {h} rows of {w} grey levels. <bookmark mark='a'/> Its best rank-one copy is a "
             "column times a row: stripes, the sky and the horizon. <bookmark mark='b'/> Rank two, four, eight: the "
             f"mountains appear. Rank {ranks[k8]} keeps {100 * energy[k8]:.1f} percent of the squared size with "
             f"{100 * store[k8] / pix:.0f} percent of the numbers. <bookmark mark='c'/> Then the trees; by rank "
-            f"{ranks[-1]} it is hard to tell from the original. <bookmark mark='d'/> And each error is exactly the "
-            "singular values left out."
+            f"{ranks[-1]} it is hard to tell from the original. <bookmark mark='d'/> And each Frobenius error is exactly the "
+            "Euclidean norm of the singular values left out."
         ) as vo:
             self.play(FadeIn(tiles[-1]), FadeIn(tag))
             vo.wait_until("a")
@@ -183,7 +184,7 @@ class LowRank(VoiceoverScene):
             "Part 1's table of letter pairs, 26 by 26, with square-root probabilities. <bookmark mark='a'/> Its first "
             "piece is a separable approximation: after squaring and normalizing, the two letters are independent. "
             "<bookmark mark='b'/> Add the second, third, fifth, tenth, "
-            "<bookmark mark='c'/> and the error falls by exactly the singular values left out: "
+            "<bookmark mark='c'/> and the Frobenius error equals the Euclidean norm of the singular values left out: "
             f"{err[0]:.2f} of the whole after one piece, {err[1]:.2f} after two."
         ) as vo:
             self.play(FadeIn(left), FadeIn(lt), FadeIn(rows_l), FadeIn(note_))

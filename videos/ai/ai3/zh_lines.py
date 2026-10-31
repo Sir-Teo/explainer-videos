@@ -75,7 +75,7 @@ ZH = {
         "两个矩阵相乘：结果的第i行第k列，是A的第i行和B的第k列逐项相乘，再对j求和。<bookmark mark='a'/>1916年，爱因斯坦在写广义相对论时，写烦了求和号，干脆把它省掉：一个指标出现两次，就表示对它求和。<bookmark mark='b'/>程序把这个想法做成了einsum，每根轴用一个字母表示。<bookmark mark='c'/>出现在输出里的字母保留；只出现在输入里的字母被求和消掉。计算量也一目了然：所有字母的每一种组合，做一次乘加，这里是i乘j乘k。",
 
     'One function does all of these.':
-        "一个函数，就能做这些事。<bookmark mark='a'/>点积：相乘，全部加起来。<bookmark mark='b'/>外积：什么都不求和，得到一个秩为1的矩阵。<bookmark mark='c'/>矩阵乘向量。<bookmark mark='d'/>转置，只是换个顺序。<bookmark mark='e'/>迹。<bookmark mark='f'/>还有一整批矩阵乘法，字母b一路带着走。",
+        "一个函数，就能做这些事。<bookmark mark='a'/>点积：相乘，全部加起来。<bookmark mark='b'/>外积：什么都不求和，得到一个秩至多为1的矩阵。<bookmark mark='c'/>矩阵乘向量。<bookmark mark='d'/>转置，只是换个顺序。<bookmark mark='e'/>迹。<bookmark mark='f'/>还有一整批矩阵乘法，字母b一路带着走。",
 
     'f"Here is attention, Part 13\'s subject, in this notation.':
         "用这种记法写注意力，也就是第13部分的主题。<bookmark mark='a'/>每个词元的向量，投影成查询、键和值，再分给各个头。<bookmark mark='b'/>每个查询和每个键做点积：e被求和消掉。<bookmark mark='c'/>softmax把分数变成权重，权重再对值求平均。<bookmark mark='d'/>最后把各个头合并回去。<bookmark mark='e'/>从字母里直接读出计算量。对{n:,}个词元，打分每层大约要{ms / 1000000.0:,.0f}百万次乘加，投影要{mp / 1000000.0:,.0f}百万次。打分随长度的平方增长：这就是长上下文昂贵的原因。",
@@ -188,10 +188,10 @@ ZH = {
         "为什么没有更好的？<bookmark mark='a'/>外尔1912年的不等式：A的奇异值往后挪k位，至多等于A减B的奇异值，加上B的第k加1个奇异值。<bookmark mark='b'/>如果B的秩是k，最后那一项就是0。<bookmark mark='c'/>一个矩阵大小的平方，等于它奇异值平方的和，第9章会说明，所以B的误差，至少是A的奇异值尾巴。<bookmark mark='d'/>留下前k块，正好达到这条尾巴。",
 
     'f"A picture is a matrix too':
-        "一张图片也是一个矩阵：{h}行，每行{w}个灰度值。<bookmark mark='a'/>它最好的秩1副本是一列乘一行：条纹、天空和地平线。<bookmark mark='b'/>秩2、4、8：山出现了。秩{ranks[k8]}用{100 * store[k8] / pix:.0f}%的数，留住了{100 * energy[k8]:.1f}%的平方大小。<bookmark mark='c'/>然后是树；到了秩{ranks[-1]}，就很难和原图区分了。<bookmark mark='d'/>每一处的误差，都正好是略去的奇异值。",
+        "一张图片也是一个矩阵：{h}行，每行{w}个灰度值。<bookmark mark='a'/>它最好的秩1副本是一列乘一行：条纹、天空和地平线。<bookmark mark='b'/>秩2、4、8：山出现了。秩{ranks[k8]}用{100 * store[k8] / pix:.0f}%的数，留住了{100 * energy[k8]:.1f}%的平方大小。<bookmark mark='c'/>然后是树；到了秩{ranks[-1]}，就很难和原图区分了。<bookmark mark='d'/>每一处的弗罗贝尼乌斯误差，都正好等于略去奇异值的欧几里得范数，也就是平方和的平方根。",
 
     'f"Part 1\'s table of letter pairs':
-        "第1部分的字母对表，26乘26，表里是概率的平方根。<bookmark mark='a'/>第一块是一个可分离的近似：逐项平方，再归一化，就得到两个字母互相独立的分布。<bookmark mark='b'/>加上第二块、第三块、第五块、第十块，<bookmark mark='c'/>误差正好按略去的奇异值减小：一块之后是全体的{err[0]:.2f}，两块之后是{err[1]:.2f}。",
+        "第1部分的字母对表，26乘26，表里是概率的平方根。<bookmark mark='a'/>第一块是一个可分离的近似：逐项平方，再归一化，就得到两个字母互相独立的分布。<bookmark mark='b'/>加上第二块、第三块、第五块、第十块，<bookmark mark='c'/>弗罗贝尼乌斯误差，等于略去奇异值的欧几里得范数：一块之后是全体的{err[0]:.2f}，两块之后是{err[1]:.2f}。",
 
     'f"The pieces mean something.':
         "这些块是有意义的。<bookmark mark='a'/>看这张表偏离独立的程度：每个计数，对比字母互不相干时应有的计数。把字母沿它最强的方向排开。<bookmark mark='b'/>一端是：{', '.join(left5[:-1])}，{left5[-1]}。{found_say}",

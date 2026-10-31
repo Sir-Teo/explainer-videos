@@ -20573,7 +20573,9 @@
     "new users: recall unavailable \\\\ no eligible held-out targets": "新用户：召回率不可用 \\\\ 没有合格的留出目标",
     "new users: comparison unavailable \\\\ a recall measurement is non-finite": "新用户：无法比较 \\\\ 一项召回测量不是有限数值",
     "new users: history unavailable \\\\ no finite training-history samples": "新用户：历史轨迹不可用 \\\\ 没有有限的训练历史样本",
-    "colours name indices; output indices stay; input-only indices are summed": "颜色标识索引；输出中出现的索引保留；仅在输入中出现的索引求和"
+    "colours name indices; output indices stay; input-only indices are summed": "颜色标识索引；输出中出现的索引保留；仅在输入中出现的索引求和",
+    "outer product: \\ rank at most one": "外积：\\ 秩至多为1",
+    "rank $8$: \\ $\\|A-A_{8}\\|_F=7.8646$; \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$": "秩$8$： \\ $\\|A-A_{8}\\|_F=7.8646$； \\ $\\sqrt{\\sum_{i>8}\\sigma_i^2}=7.8646$"
   },
   "phrases": {
     "width": "宽度",

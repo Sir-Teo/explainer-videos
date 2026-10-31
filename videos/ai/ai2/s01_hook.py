@@ -16,7 +16,12 @@ def era_axis(y0=1948, y1=2000, width=12.4, y=0.0):
     g = VGroup(Line([X(y0), y, 0], [X(y1), y, 0], color=GREY_C, stroke_width=2))
     for yr in range(1950, y1 + 1, 10):
         g.add(Line([X(yr), y - 0.07, 0], [X(yr), y + 0.07, 0], color=GREY_C, stroke_width=2))
-        g.add(Text(str(yr), font_size=18, color=GREY_B).next_to([X(yr), y, 0], DOWN, buff=0.15))
+        year = Text(str(yr), font_size=18, color=GREY_B).next_to([X(yr), y, 0], DOWN, buff=0.15)
+        # Event stems pass behind the tick labels without moving dates or events.
+        year.add_background_rectangle(color=BACKGROUND, opacity=1.0, buff=0.035)
+        year.set_z_index(2)
+        year.background_rectangle.set_z_index(1)
+        g.add(year)
     return g, X
 
 

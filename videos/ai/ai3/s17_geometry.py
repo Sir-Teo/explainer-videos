@@ -55,7 +55,14 @@ class Geometry(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(bars), FadeIn(m1))
             vo.wait_until("b")
-            self.play(*bars.to(cen / cen.sum()), FadeOut(m1), FadeIn(m2), run_time=1.6)
+            color_mix = ValueTracker(0.0)
+            # LiveBars redraws each bar from its color list; update that list
+            # before the child redraws while separate trackers morph the heights.
+            bars.add_updater(lambda group: setattr(group, "colors", [
+                interpolate_color(ManimColor(RAWC), ManimColor(CENC), color_mix.get_value())
+            ] * group.n))
+            self.play(*bars.to(cen / cen.sum()), color_mix.animate.set_value(1.0),
+                      FadeOut(m1), FadeIn(m2), run_time=1.6)
         bars.freeze()
         self.wait(0.3)
         self.clear_scene()

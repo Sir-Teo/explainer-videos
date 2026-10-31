@@ -136,7 +136,7 @@ class Einsum(VoiceoverScene):
     def examples(self):
         table = [
             ("i,i->", r"dot product: \ $\sum_i a_i b_i$"),
-            ("i,j->ij", r"outer product: \ a rank-one matrix"),
+            ("i,j->ij", r"outer product: \ rank at most one"),
             ("ij,j->i", r"matrix times vector"),
             ("ij->ji", r"transpose"),
             ("ii->", r"trace: \ the diagonal, summed"),
@@ -155,7 +155,7 @@ class Einsum(VoiceoverScene):
             r.shift(UP * (2.0 - 0.78 * k))
         with self.voiceover(
             "One function does all of these. <bookmark mark='a'/> The dot product: multiply, and sum everything. "
-            "<bookmark mark='b'/> The outer product: nothing summed, a matrix of rank one. <bookmark mark='c'/> Matrix "
+            "<bookmark mark='b'/> The outer product: nothing summed, a matrix of rank at most one. <bookmark mark='c'/> Matrix "
             "times vector. <bookmark mark='d'/> The transpose, which only reorders. <bookmark mark='e'/> The trace. "
             "<bookmark mark='f'/> And a batch of matrix products, the letter b carried along."
         ) as vo:
