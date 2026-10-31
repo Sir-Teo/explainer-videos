@@ -6,7 +6,8 @@
 Results are cached in ``.cache/ai4/<name>.json`` (+ ``.npz``).  The autodiff library the part builds is
 ``explainer/ai/autodiff.py``; this file checks it and trains with it.
 
-Items (all small, on the CPU; the whole part computes in a few minutes):
+Items use the CPU. Runtime is measured per item; interrupted unfinished items restart internally.
+Completed items are schema/recipe/dependency checked before reuse:
     params     how many numbers GPT-2 small and Qwen3-4B have (read from their weight files' headers)
     linapprox  the derivative as the best linear approximation: its error against the step; tangent planes;
                directional derivatives around a circle (Cauchy-Schwarz)
@@ -34,17 +35,25 @@ Items (all small, on the CPU; the whole part computes in a few minutes):
 
 from __future__ import annotations
 
-import json
 import math
-import struct
 
 import numpy as np
 
 from explainer.ai.autodiff import Tensor, cross_entropy, sigmoid, tape
-from explainer.ai.cache import Cache
+from videos.ai.ai4.cache_contract import SchemaCache
+from videos.ai.ai4.contracts import (stopping, solver_record, fixed_point, solve_summary, benchmark_context,
+                                    parameter_counts, parameter_headers, MODEL_HEADERS)
 
-CACHE = Cache("ai4")
-load = CACHE.load
+CACHE = SchemaCache("ai4")
+
+
+def cache_current(name):
+    return CACHE.current(name)
+
+
+def load(name):
+    # Instance indirection lets cached-only QA refuse upgrades before any producer.
+    return CACHE.load(name)
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -53,43 +62,23 @@ def rng(seed: int) -> np.random.Generator:
 
 # ---------------------------------------------------------------------------
 def count_safetensors(repo: str) -> int:
-    """Parameters in a Hugging Face model, from the safetensors headers alone (no weights loaded)."""
-    import urllib.request
-
-    from huggingface_hub import hf_hub_url, list_repo_files
-
-    def read(url: str, a: int, b: int) -> bytes:  # bytes a..b-1 of the file: the weights themselves are never downloaded
-        req = urllib.request.Request(url, headers={"Range": f"bytes={a}-{b - 1}"})
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return r.read()
-
-    total = 0
-    for f in [f for f in list_repo_files(repo) if f.endswith(".safetensors")]:
-        url = hf_hub_url(repo, f)
-        n = struct.unpack("<Q", read(url, 0, 8))[0]
-        head = json.loads(read(url, 8, 8 + n))
-        for k, v in head.items():
-            if k != "__metadata__":
-                total += int(np.prod(v["shape"]))
-    return total
+    """Known canonical pinned repositories only; bounded header reads, never full model weights."""
+    name = next(key for key, spec in MODEL_HEADERS.items() if spec['repo'] == repo)
+    return parameter_headers(name)[0]
 
 
-PARAMS_READ = dict(gpt2=124_439_808, qwen3_4b=4_022_468_096)  # as read from the weight files on 23 October 2026
+PARAMS_READ = {key: spec['historical'] for key, spec in MODEL_HEADERS.items()}
 
 
 def compute_params():
-    try:
-        import torch
-        from transformers import AutoModelForCausalLM
+    return parameter_counts()
 
-        gpt2 = AutoModelForCausalLM.from_pretrained("openai-community/gpt2", dtype=torch.float32)
-        n_gpt2 = sum(p.numel() for p in gpt2.parameters())  # the tied input/output matrix counted once
-        n_qwen = count_safetensors("Qwen/Qwen3-4B-Base")
-    except Exception as e:  # offline: the counts as read from the same files when this part was made
-        print(f"  params: weight files unreachable ({type(e).__name__}); using the counts read on 23 October 2026")
-        n_gpt2, n_qwen = PARAMS_READ["gpt2"], PARAMS_READ["qwen3_4b"]
-    assert n_gpt2 == 124_439_808 and 4.0e9 < n_qwen < 4.1e9
-    return dict(gpt2=int(n_gpt2), qwen3_4b=int(n_qwen))
+
+def corpus_codes(kind):
+    """Consume current raw corpus bytes, without Part1's process-memoized text or implicit computation."""
+    from videos.ai.ai1 import compute as c1
+    raw = (CACHE.dir.parent / 'ai1' / f'{kind}.txt').read_bytes()
+    return c1.codes27(c1.to27(raw.decode('utf-8')))
 
 
 # ---------------------------------------------------------------------------
@@ -155,20 +144,20 @@ def compute_check():
 
 
 # ---------------------------------------------------------------------------
-def compute_train():
+def compute_train(*, steps=1500, batch=4096, snapshot_steps=(1, 50, 200, 1500)):
     """729 scores z[prev, next]; q(next | prev) = softmax(z[prev]); minimize the cross-entropy on the books."""
-    from videos.ai.ai1 import compute as c1
-
-    tr = c1.codes27(c1.text("train27"))
-    va = c1.codes27(c1.text("valid27"))
-    if not c1.path("bigram").exists():
-        c1._save("bigram", c1.ITEMS["bigram"]())
-    H_cond = float(c1.load("bigram")["H_cond"])
+    tr = corpus_codes("train")
+    va = corpus_codes("valid")
+    counts = np.zeros((27, 27))
+    np.add.at(counts, (tr[:-1], tr[1:]), 1)
+    cond = counts / np.maximum(counts.sum(1, keepdims=True), 1)
+    H_cond = float(-(counts * np.log2(np.maximum(cond, 1e-300))).sum() / counts.sum())
     g = rng(3)
     z = Tensor(np.zeros((27, 27)), requires_grad=True)
     m, v = np.zeros((27, 27)), np.zeros((27, 27))  # Adam's running averages (Part 11)
-    lr, b1, b2, B = 0.05, 0.9, 0.999, 4096
-    steps, curve, snaps = 1500, [], {}
+    lr, b1, b2, B = 0.05, 0.9, 0.999, batch
+    snap_steps = sorted(set([k for k in snapshot_steps if 1 <= k <= steps]+[steps]))
+    curve, snaps = [], {"0": z.data.copy()}
     for t in range(1, steps + 1):
         i = g.integers(0, len(tr) - 1, B)
         loss = cross_entropy(z[tr[i]], tr[i + 1])
@@ -179,21 +168,28 @@ def compute_train():
         z.data -= lr * (m / (1 - b1 ** t)) / (np.sqrt(v / (1 - b2 ** t)) + 1e-8)
         if t % 25 == 0 or t == 1:
             curve.append((t, float(loss.data) / math.log(2)))
-        if t in (1, 50, 200, 1500):
+        if t in snap_steps:
             snaps[str(t)] = z.data.copy()
     # held-out bits per letter, and the scores against the log of the counts
-    lp = z.data - np.log(np.exp(z.data).sum(1, keepdims=True))
+    shifted = z.data - z.data.max(1, keepdims=True)
+    lp = shifted - np.log(np.exp(shifted).sum(1, keepdims=True))
     bits_valid = float(-lp[va[:-1], va[1:]].mean() / math.log(2))
     bits_train = float(-lp[tr[:-1], tr[1:]].mean() / math.log(2))
-    cond = np.asarray(c1.load("bigram")["cond"])
     logc = np.log(np.maximum(cond, 1e-9))
     mask = cond > 1e-4
     corr = float(np.corrcoef(lp[mask], logc[mask])[0, 1])
-    assert abs(bits_train - H_cond) < 0.02, (bits_train, H_cond)
-    assert corr > 0.97
+    metrics = dict(loss_unit="bits per transition", curve_cohort="sampled training minibatch",
+                   curve_parameter_step="t-1", snapshot_parameter_step="t",
+                   evaluation_cohort=dict(train_pairs=len(tr)-1, valid_pairs=len(va)-1),
+                   correlation=dict(mask="cond > 1e-4", threshold=1e-4, count=int(mask.sum())),
+                   performance=dict(entropy_gap_bits=bits_train-H_cond, entropy_gap_within_0_02=abs(bits_train-H_cond)<.02,
+                                    corr_above_0_97=bool(corr>.97)))
+    snap_array = np.stack([snaps[str(k)] for k in snap_steps])
+    shifted_snaps = snap_array - snap_array.max(2, keepdims=True)
+    snaps_logp = shifted_snaps - np.log(np.exp(shifted_snaps).sum(2, keepdims=True))
     return dict(curve=np.array(curve), bits_train=bits_train, bits_valid=bits_valid, H_cond=H_cond, corr=corr,
-                z_final=z.data, logp=lp, logcond=logc, snaps=np.stack([snaps[k] for k in ("1", "50", "200", "1500")]),
-                steps=steps, batch=B, lr=lr)
+                z_final=z.data, logp=lp, logcond=logc, snaps=snap_array,
+                steps=steps, batch=B, lr=lr, metrics=metrics, snaps_logp=snaps_logp, snap_steps=snap_steps)
 
 
 # ---------------------------------------------------------------------------
@@ -219,7 +215,9 @@ def compute_valley():
     assert np.allclose(out["newton"][-1], 0)
     f = [0.5 * q @ H @ q for q in out["gd"]]
     out["gd_f"] = np.array(f)
-    out["gd_steps_to_1pct"] = int(np.argmax(np.array(f) < 0.01 * f[0]))
+    status = stopping(f, .01*f[0], 60, criterion="objective < threshold")
+    out["gd_steps_to_1pct"] = status["first_hit_step"]
+    out["convergence"] = dict(gd=status)
     return out
 
 
@@ -374,17 +372,24 @@ def _vjp_inputs(params, x, U):
     return G, madds
 
 
+_TIMINGS = []
+
+
 def _timeit(fn, reps):
     import time
 
     fn()
-    t = time.perf_counter()
+    samples = []
     for _ in range(reps):
+        t = time.perf_counter()
         fn()
-    return (time.perf_counter() - t) / reps
+        samples.append(time.perf_counter() - t)
+    _TIMINGS.append(dict(repeats=reps, seconds=samples, mean_seconds=float(np.mean(samples))))
+    return float(np.mean(samples))
 
 
 def compute_modes():
+    timing_start = len(_TIMINGS)
     sizes = [1, 4, 16, 64, 256]
     H = 64
     fwd, rev, t_fwd, t_rev, primal = (np.zeros((len(sizes), len(sizes))) for _ in range(5))
@@ -452,12 +457,12 @@ def compute_modes():
             dhid = (1 - h * h) * dz1
             dz2 = dhid @ W2 + h @ dW2 + db2
             out[idx] = float(((q - Y) * dz2).sum() / B)
-            madds += B * din * dh + B * dh + 2 * B * dh * k + B * k  # dense products: forward mode cannot skip zeros
+            madds += B * din * dh + B * dh + 2 * B * dh * k  # counted dense products plus tanh, same scope as reverse
         return out, madds
 
     g_rev = reverse()
     g_fwd, madds_fwd = forward_mode()
-    madds_rev = 2 * (B * din * dh + B * dh * k) + B * dh  # the backward pass: two products per matrix, one tanh'
+    madds_rev = B * din * dh + 2 * B * dh * k + B * dh  # dW1, dH, dW2, tanh'; X has no requested gradient
     madds_primal = B * din * dh + B * dh * k
     t_r = _timeit(reverse, 20)
     t_f = _timeit(forward_mode, 1)
@@ -466,7 +471,14 @@ def compute_modes():
     return dict(sizes=sizes, H=H, fwd=fwd, rev=rev, primal=primal, t_fwd=t_fwd, t_rev=t_rev, agree=agree,
                 lib_diff=lib_diff, P=int(P), B=B, madds_fwd=float(madds_fwd), madds_rev=float(madds_rev),
                 madds_primal=float(madds_primal), t_param_fwd=t_f, t_param_rev=t_r, grad_diff=grad_diff,
-                net=[din, dh, k])
+                net=[din, dh, k],
+                work_count=dict(requested_gradients="W1,b1,W2,b2; no dX",
+                                scope="dense derivative matrix products plus tanh; not all scalar operations",
+                                forward_scope="this dense tangent implementation, not a lower bound for optimized forward AD"),
+                benchmark=dict(context=benchmark_context(), warmups=1, input_mode_repeats=3,
+                               parameter_reverse_repeats=20, parameter_forward_repeats=1,
+                               spread_scope="means of fixed-order repeats; no confidence interval",
+                               runs=_TIMINGS[timing_start:]))
 
 
 # ---------------------------------------------------------------------------
@@ -557,9 +569,7 @@ def compute_tape():
 # Chapter 9: the letter model's first gradient
 # ---------------------------------------------------------------------------
 def compute_grad0():
-    from videos.ai.ai1 import compute as c1
-
-    tr = c1.codes27(c1.text("train27"))[:300_001]
+    tr = corpus_codes("train")[:300_001]
     N = np.zeros((27, 27))
     np.add.at(N, (tr[:-1], tr[1:]), 1)
     n_i = N.sum(1)
@@ -735,14 +745,15 @@ def compute_vcurve():
     f32, _, _ = _check_net(np.float32)
     gr = grad(theta)
     ndir = 8
-    out = dict(hs=hs, ndir=ndir)
+    directions = g.normal(size=(ndir, theta.size))
+    directions /= np.linalg.norm(directions, axis=1, keepdims=True)
+    out = dict(hs=hs, ndir=ndir, directions=directions, precision_comparison="paired identical normalized directions")
     pred, meas = {}, {}
     for name, f, u in (("fp64", f64, 2.0 ** -53), ("fp32", f32, 2.0 ** -24)):
         C, F = [], []
         ph_c, ph_f, mh_c, mh_f = [], [], [], []
         for k in range(ndir):
-            v = g.normal(size=theta.size)
-            v /= np.linalg.norm(v)
+            v = directions[k]
             exact = float(gr @ v)
             ce = np.array([abs((f(theta + h * v) - f(theta - h * v)) / (2 * h) - exact) for h in hs])
             fe = np.array([abs((f(theta + h * v) - f(theta)) / h - exact) for h in hs])
@@ -762,7 +773,10 @@ def compute_vcurve():
         out[f"forward_{name}"] = np.median(np.array(F), 0)
         out[f"central_{name}_all"] = np.array(C)
         pred[name] = dict(central=float(np.median(ph_c)), forward=float(np.median(ph_f)))
-        meas[name] = dict(central=float(np.median(mh_c)), forward=float(np.median(mh_f)),
+        meas[name] = dict(central=float(hs[np.argmin(out[f"central_{name}"])]),
+                          forward=float(hs[np.argmin(out[f"forward_{name}"])]),
+                          per_direction_central_median=float(np.median(mh_c)),
+                          per_direction_forward_median=float(np.median(mh_f)),
                           central_err=float(out[f"central_{name}"].min()), forward_err=float(out[f"forward_{name}"].min()))
         # slopes on the two sides of the V (central): +2 on the right (truncation), -1 on the left (roundoff)
         c = out[f"central_{name}"]
@@ -857,6 +871,7 @@ class _Chain:
 
 
 def compute_checkpoint():
+    timing_start = len(_TIMINGS)
     import time
 
     n = 256
@@ -898,13 +913,15 @@ def compute_checkpoint():
     assert worst < 1e-12
     return dict(n=n, ks=np.array(ks), peak=peak, evals=evals, kbest=kbest, klo=int(min(kset)), khi=int(max(kset)), worst=worst, ns=ns, best_k=best_k,
                 best_peak=best_peak, t_all=t_all, t_ck=t_ck, store_all_peak=int(peak[0]), store_all_evals=int(evals[0]),
-                none_peak=int(none_peak), none_evals=int(none_evals))
+                none_peak=int(none_peak), none_evals=int(none_evals),
+                memory_scope="logical retained activations, excluding weights, gradients, temporaries and allocator/process memory",
+                benchmark=dict(context=benchmark_context(), runs=_TIMINGS[timing_start:]))
 
 
 # ---------------------------------------------------------------------------
 # Chapter 13: Newton against gradient descent
 # ---------------------------------------------------------------------------
-def compute_newton():
+def compute_newton(*, gd_cap=200_000, newton_cap=12, threshold=1e-10):
     g = rng(31)
     N = 400
     u = g.normal(size=N)
@@ -926,7 +943,7 @@ def compute_newton():
 
     w = np.zeros(2)
     newton = [w.copy()]
-    for _ in range(12):
+    for _ in range(newton_cap):
         w = w - np.linalg.solve(hess(w), grad(w))
         newton.append(w.copy())
     w_star = w
@@ -937,22 +954,40 @@ def compute_newton():
     eta = 1 / L
     w = np.zeros(2)
     gd = [w.copy()]
+    gd_path_steps = [0]
     gd_err = [f(w) - f_star]
-    for t in range(200_000):
+    for t in range(gd_cap):
         w = w - eta * grad(w)
         if t < 3000 or t % 50 == 0:
             gd.append(w.copy())
+            gd_path_steps.append(t + 1)
         gd_err.append(f(w) - f_star)
-        if gd_err[-1] < 1e-10:
+        if gd_err[-1] < threshold:
             break
     gd_steps = len(gd_err) - 1
     newton_err = [max(f(q) - f_star, 1e-17) for q in newton]
-    newton_steps = int(next(i for i, e in enumerate(newton_err) if e < 1e-10))
+    gd_status = stopping(gd_err, threshold, gd_cap, criterion="objective gap to final Newton reference < threshold")
+    newton_status = stopping([np.linalg.norm(grad(q)) for q in newton], threshold, newton_cap, criterion="gradient norm < threshold")
+    # The final reference is numerical, not a certificate of optimality; expose its stationarity separately.
+    reference_residual = float(np.linalg.norm(grad(w_star)))
+    if reference_residual >= threshold:
+        gd_status.update(status="reference-unconverged", first_hit_step=None, criterion="objective-gap comparison unavailable: numerical reference not stationary")
+    newton_steps = newton_status["first_hit_step"]
+    if gd_path_steps[-1] != gd_steps:
+        gd.append(w.copy())
+        gd_path_steps.append(gd_steps)
     gnorm = [float(np.linalg.norm(grad(q))) for q in newton]
+    gd_err_stride = max(1, len(gd_err) // 2000)
+    gd_err_steps = list(range(0, len(gd_err), gd_err_stride))
+    if gd_err_steps[-1] != gd_steps:
+        gd_err_steps.append(gd_steps)
     return dict(X=X, y=y, lam=lam, w_star=w_star, f_star=f_star, eig=ev, kappa=float(ev[1] / ev[0]), eta=eta,
                 newton=np.array(newton), newton_err=np.array(newton_err), newton_steps=newton_steps,
-                newton_gnorm=np.array(gnorm), gd=np.array(gd), gd_err=np.array(gd_err[::max(1, len(gd_err) // 2000)]),
-                gd_err_stride=max(1, len(gd_err) // 2000), gd_steps=gd_steps,
+                newton_gnorm=np.array(gnorm), gd=np.array(gd), L=float(L), gd_path_steps=np.array(gd_path_steps),
+                newton_path_steps=np.arange(len(newton)), convergence=dict(gd=gd_status, newton=newton_status),
+                reference=dict(scope="final Newton numerical iterate, not certified exact minimum", gradient_norm=reference_residual,
+                               stationary=bool(reference_residual < threshold)), gd_err=np.array(gd_err)[gd_err_steps],
+                gd_err_steps=np.array(gd_err_steps), gd_err_stride=gd_err_stride, gd_steps=gd_steps,
                 gd_err_full_first=np.array(gd_err[:200]))
 
 
@@ -1061,21 +1096,18 @@ def compute_hessian():
         fd_err.append(float((fd - Hv).norm() / Hv.norm()))
     fd_err = np.array(fd_err)
     reps = 200
-    t0 = time.perf_counter()
-    for _ in range(reps):
-        gradient(thf)
-    t_grad = (time.perf_counter() - t0) / reps
-    t0 = time.perf_counter()
-    for _ in range(reps):
-        hvp(v)
-    t_hvp = (time.perf_counter() - t0) / reps
-    # the largest eigenvalue from Hessian-vector products alone (power iteration), against the full spectrum
+    timing_start = len(_TIMINGS)
+    t_grad = _timeit(lambda: gradient(thf), reps)
+    t_hvp = _timeit(lambda: hvp(v), reps)
+    # the eigenvalue of largest magnitude from Hessian-vector products alone (power iteration), against the full spectrum
     q = torch.tensor(rng(44).normal(size=P))
     q = q / q.norm()
     lam_est = []
     for _ in range(300):
         w = hvp(q)
         lam_est.append(float(q @ w))
+        if float(w.norm()) == 0:
+            break
         q = w / w.norm()
     ev_last = snaps[-1]["eig"]
     top = float(np.abs(ev_last).max())
@@ -1083,7 +1115,14 @@ def compute_hessian():
     out = dict(P=int(P), sizes=sizes, steps=steps, keep=keep, curve=np.array(curve), X=X, y=y, grid_xs=xs,
                hv_full_diff=hv_full_diff, hs=hs, fd_err=fd_err, fd_best_h=float(hs[int(np.argmin(fd_err))]),
                fd_best=float(fd_err.min()), t_grad=t_grad, t_hvp=t_hvp, lam_est=np.array(lam_est),
-               lam_top=float(ev_last.max()), lam_power=float(lam_est[-1]))
+               lam_top=float(ev_last.max()), lam_power=float(lam_est[-1]),
+               lam_dominant=float(ev_last[np.argmax(np.abs(ev_last))]),
+               spectrum_thresholds=dict(negative_relative=.01, flat_relative=.01, outlier_relative=.1, scale="spectral_radius"),
+               metrics=dict(accuracy_cohort="training", training_examples=len(y), snapshot_parameter_step="t",
+                            loss_unit="nats per example", power_target="signed eigenvalue with largest absolute value; requires unique dominant magnitude"),
+               benchmark=dict(context=benchmark_context(), gradient_repeats=reps, hvp_repeats=reps,
+                              order="gradient then HVP; one warmup each; observed mean, no confidence interval",
+                              runs=_TIMINGS[timing_start:]))
     for k, s in enumerate(snaps):
         for key in ("loss", "acc"):
             out[f"{key}{k}"] = s[key]
@@ -1091,37 +1130,41 @@ def compute_hessian():
         out[f"region{k}"] = s["region"]
         e_ = s["eig"]
         out[f"top{k}"] = float(e_.max())
-        out[f"nout{k}"] = int((e_ > 0.1 * e_.max()).sum())
-        out[f"flat{k}"] = float((np.abs(e_) < 0.01 * e_.max()).mean())
-        out[f"nneg{k}"] = int((e_ < -0.01 * e_.max()).sum())
+        radius = float(np.abs(e_).max())
+        out[f"nout{k}"] = int((e_ > 0.1 * radius).sum())
+        out[f"flat{k}"] = float((np.abs(e_) <= 0.01 * radius).mean())
+        out[f"nneg{k}"] = int((e_ < -0.01 * radius).sum())
     # summary of the trained spectrum
     lam = ev_last
-    out["n_outliers"] = int((lam > 0.1 * lam.max()).sum())
-    out["frac_flat"] = float((np.abs(lam) < 1e-3 * lam.max()).mean())
-    out["n_neg"] = int((lam < -1e-4 * lam.max()).sum())
+    out["n_outliers"] = int((lam > 0.1 * top).sum())
+    out["frac_flat"] = float((np.abs(lam) <= 0.01 * top).mean())
+    out["n_neg"] = int((lam < -0.01 * top).sum())
     out["lam_min"] = float(lam.min())
-    out["n_outliers0"] = int((snaps[0]["eig"] > 0.1 * snaps[0]["eig"].max()).sum())
+    out["n_outliers0"] = int((snaps[0]["eig"] > 0.1 * np.abs(snaps[0]["eig"]).max()).sum())
     return out
 
 
 # ---------------------------------------------------------------------------
 # Chapter 15: gradient descent on quadratics; saddles
 # ---------------------------------------------------------------------------
-def compute_quad():
+def compute_quad(*, descent_cap=20000, escape_cap=4999):
     kappas = [1, 2, 4, 10, 25, 100, 400, 1000]
     rate_opt, rate_opt_pred, rate_L, rate_L_pred, steps_opt, steps_L = [], [], [], [], [], []
+    outcomes = dict(opt=[], L=[], escape=[])
     for k in kappas:
         lam = np.array([1.0, float(k)])
         for eta, rr, pr, st in ((2 / (1 + k), rate_opt, rate_opt_pred, steps_opt), (1 / k, rate_L, rate_L_pred, steps_L)):
             x = np.array([1.0, 1.0])
             errs = [np.linalg.norm(x)]
-            for _ in range(20000):
+            for _ in range(descent_cap):
                 x = x - eta * lam * x
                 errs.append(np.linalg.norm(x))
                 if errs[-1] < 1e-6 * errs[0] or errs[-1] == 0:
                     break
             errs = np.array(errs)
             st.append(len(errs) - 1)
+            outcomes["opt" if st is steps_opt else "L"].append(stopping(
+                errs / errs[0], 1e-6, descent_cap, criterion="relative iterate norm < threshold"))
             tail = errs[errs > 1e-300]
             rr.append(float((tail[-1] / tail[len(tail) // 2]) ** (1 / max(1, len(tail) - 1 - len(tail) // 2)))
                       if len(tail) > 4 else 0.0)
@@ -1150,12 +1193,14 @@ def compute_quad():
     for y0 in y0s:
         p = np.array([1.5, y0])
         path = [p.copy()]
-        for t in range(1, 5000):
+        for t in range(1, escape_cap + 1):
             p = p - eta * sgrad(p)
             path.append(p.copy())
             if abs(p[1]) > 0.5:
                 break
-        esc.append(t)
+        outcome = stopping(np.abs(np.array(path)[:, 1]), .5, escape_cap, criterion="absolute saddle y > threshold", greater=True)
+        outcomes["escape"].append(outcome)
+        esc.append(outcome["first_hit_step"])
         pred.append(math.log(0.5 / y0) / math.log(1 + eta))
         if y0 in (1e-2, 1e-6, 1e-10):
             paths[f"{y0:.0e}"] = np.array(path)
@@ -1174,6 +1219,7 @@ def compute_quad():
     return dict(kappas=kappas, rate_opt=rate_opt, rate_opt_pred=rate_opt_pred, rate_L=rate_L, rate_L_pred=rate_L_pred,
                 steps_opt=steps_opt, steps_L=steps_L, etas=etas, final=np.array(final), y0s=y0s, esc=esc, esc_pred=pred,
                 stuck=np.array(on), stuck_grad=stuck_grad, stuck_point=on[-1], loss_plateau=np.array(loss_plateau),
+                convergence=outcomes,
                 **{f"path_{k}": v for k, v in paths.items()})
 
 
@@ -1187,12 +1233,12 @@ def lag_f(x, y):
     return LAG_A[0] * (x - LAG_C[0]) ** 2 + LAG_A[1] * (y - LAG_C[1]) ** 2
 
 
-def compute_lagrange():
+def compute_lagrange(*, solver_cap=500):
     from scipy.optimize import brentq, minimize, minimize_scalar
 
     th = np.linspace(-np.pi, np.pi, 1441)
     fv = lag_f(np.cos(th), np.sin(th))
-    r = minimize_scalar(lambda t: lag_f(math.cos(t), math.sin(t)), bracket=(th[np.argmin(fv)] - 0.01, th[np.argmin(fv)] + 0.01))
+    r = minimize_scalar(lambda t: lag_f(math.cos(t), math.sin(t)), bracket=(th[np.argmin(fv)] - 0.01, th[np.argmin(fv)] + 0.01), options=dict(maxiter=solver_cap))
     t_star = float(r.x)
     xs = np.array([math.cos(t_star), math.sin(t_star)])
     gf = 2 * LAG_A * (xs - LAG_C)
@@ -1213,7 +1259,7 @@ def compute_lagrange():
     p_star = boltz(beta)
     cons = [dict(type="eq", fun=lambda p: p.sum() - 1), dict(type="eq", fun=lambda p: p @ faces - 4.5)]
     res = minimize(lambda p: float(np.sum(p * np.log(np.maximum(p, 1e-300)))), np.full(6, 1 / 6), constraints=cons,
-                   bounds=[(1e-12, 1)] * 6, method="SLSQP", options=dict(ftol=1e-14, maxiter=500))
+                   bounds=[(1e-12, 1)] * 6, method="SLSQP", options=dict(ftol=1e-14, maxiter=solver_cap))
     dice_diff = float(np.abs(res.x - p_star).max())
     H = float(-(p_star * np.log2(p_star)).sum())
     # reinforcement learning's closed form: maximize E[r] - beta KL(pi || pi_ref)
@@ -1225,18 +1271,22 @@ def compute_lagrange():
     pi_star /= pi_star.sum()
     res2 = minimize(lambda p: -float(p @ rew - kb * np.sum(p * np.log(np.maximum(p, 1e-300) / pref))), np.full(6, 1 / 6),
                     constraints=[dict(type="eq", fun=lambda p: p.sum() - 1)], bounds=[(1e-12, 1)] * 6, method="SLSQP",
-                    options=dict(ftol=1e-14, maxiter=500))
+                    options=dict(ftol=1e-14, maxiter=solver_cap))
     rl_diff = float(np.abs(res2.x - pi_star).max())
-    assert resid < 1e-6 and dice_diff < 1e-4 and rl_diff < 1e-4
+    solvers = dict(circle=solver_record(r, dict(feasibility=abs(float(xs@xs)-1), stationarity=resid)),
+                   dice=solver_record(res, dict(normalization=abs(float(res.x.sum())-1),
+                                               mean=abs(float(res.x@faces)-4.5), min_probability=float(res.x.min()))),
+                   rl=solver_record(res2, dict(normalization=abs(float(res2.x.sum())-1), min_probability=float(res2.x.min()))))
+    comparisons = dict(tolerance=1e-4, dice_agrees=bool(dice_diff<1e-4), rl_agrees=bool(rl_diff<1e-4))
     return dict(th=th, fv=fv, tang=tang, t_star=t_star, x_star=xs, grad_f=gf, grad_g=gg, lam=lam, resid=resid,
                 f_star=float(lag_f(*xs)), A=LAG_A, C=LAG_C, beta=float(beta), p_dice=p_star, dice_diff=dice_diff, H_dice=H,
-                pref=pref, rew=rew, kl_beta=kb, pi_star=pi_star, rl_diff=rl_diff)
+                pref=pref, rew=rew, kl_beta=kb, pi_star=pi_star, rl_diff=rl_diff, solvers=solvers, comparisons=comparisons, solver_cap=solver_cap)
 
 
 # ---------------------------------------------------------------------------
 # Chapter 17: KKT and duality
 # ---------------------------------------------------------------------------
-def compute_kkt():
+def compute_kkt(*, solver_cap=1000, grid_x_count=440_001, grid_lambda_count=601):
     from scipy.optimize import minimize
 
     g = rng(61)
@@ -1248,14 +1298,14 @@ def compute_kkt():
     # the primal: smallest w with every point at least 1 / |w| from the line
     cons = [dict(type="ineq", fun=lambda v, i=i: y[i] * (X[i] @ v[:2] + v[2]) - 1) for i in range(2 * n)]
     pr = minimize(lambda v: 0.5 * v[:2] @ v[:2], np.array([1.0, 1.0, 0.0]), constraints=cons, method="SLSQP",
-                  options=dict(ftol=1e-15, maxiter=1000))
+                  options=dict(ftol=1e-15, maxiter=solver_cap))
     w, b = pr.x[:2], pr.x[2]
     p_star = float(0.5 * w @ w)
     # the dual: one multiplier per point
     K = (X @ X.T) * np.outer(y, y)
     du = minimize(lambda a: -(a.sum() - 0.5 * a @ K @ a), np.full(2 * n, 0.1), jac=lambda a: -(1 - K @ a),
                   constraints=[dict(type="eq", fun=lambda a: a @ y)], bounds=[(0, None)] * (2 * n), method="SLSQP",
-                  options=dict(ftol=1e-15, maxiter=1000))
+                  options=dict(ftol=1e-15, maxiter=solver_cap))
     alpha = du.x
     d_star = float(alpha.sum() - 0.5 * alpha @ K @ alpha)
     w_dual = (alpha * y) @ X
@@ -1266,32 +1316,40 @@ def compute_kkt():
     lams = np.linspace(0, 4, 81)
     toy_dual = lams - lams ** 2 / 4
     # a non-convex one: x^4 - 3x^2 + x subject to x >= 0.5
-    xs = np.linspace(-2.2, 2.2, 440_001)
+    xs = np.linspace(-2.2, 2.2, grid_x_count)
     F = xs ** 4 - 3 * xs ** 2 + xs
     G = 0.5 - xs
     nc_p = float(F[G <= 0].min())
     nc_x = float(xs[G <= 0][np.argmin(F[G <= 0])])
-    nl = np.linspace(0, 6, 601)
+    nl = np.linspace(0, 6, grid_lambda_count)
     nc_dual = np.array([float((F + l * G).min()) for l in nl])
     nc_d = float(nc_dual.max())
-    assert abs(p_star - d_star) < 1e-6 and np.abs(w - w_dual).max() < 1e-4 and nc_p - nc_d > 0.1
+    residuals = dict(primal_feasibility=float(max(0, (1-margins).max())),
+                     dual_nonnegative=float(max(0, -alpha.min())), dual_equality=abs(float(alpha@y)),
+                     stationarity_w=float(np.abs(w-w_dual).max()), stationarity_b=abs(float(alpha@y)),
+                     complementarity=slack, duality_gap=abs(p_star-d_star))
+    tolerances = dict(feasibility=1e-6, stationarity=1e-4, complementarity=1e-6,
+                      alpha=float(1e-6*max(0, alpha.max())), margin=1e-6)
+    solvers = dict(primal=solver_record(pr, dict(feasibility=residuals["primal_feasibility"])),
+                   dual=solver_record(du, dict(nonnegative=residuals["dual_nonnegative"], equality=residuals["dual_equality"])))
+    grid = dict(x_min=-2.2, x_max=2.2, x_count=grid_x_count, x_spacing=float(xs[1]-xs[0]),
+                lambda_min=0, lambda_max=6, lambda_count=grid_lambda_count, lambda_spacing=float(nl[1]-nl[0]),
+                scope="finite grid estimates, not certified continuous dual bounds")
     return dict(X=X, y=y, w=w, b=float(b), p_star=p_star, d_star=d_star, gap=float(p_star - d_star), alpha=alpha,
                 sv=sv.tolist(), margins=margins, slack=slack, w_dual=w_dual, width=float(2 / np.linalg.norm(w)),
                 lams=lams, toy_dual=toy_dual, nc_p=nc_p, nc_x=nc_x, nc_d=nc_d, nc_lam=float(nl[np.argmax(nc_dual)]),
-                nc_l=nl, nc_dual=nc_dual, nc_gap=float(nc_p - nc_d))
+                nc_l=nl, nc_dual=nc_dual, nc_gap=float(nc_p - nc_d),
+                solvers=solvers, residuals=residuals, tolerances=tolerances, grid=grid, solver_cap=solver_cap,
+                tight_margin_indices=np.flatnonzero(np.abs(margins-1)<=tolerances["margin"]).tolist())
 
 
 # ---------------------------------------------------------------------------
 # Chapter 18: implicit differentiation of a fixed point
 # ---------------------------------------------------------------------------
 def _deq_solve(W, u, tol=1e-12, max_iter=2000):
-    z = np.zeros(len(u))
-    for k in range(max_iter):
-        z2 = np.tanh(W @ z + u)
-        if np.abs(z2 - z).max() < tol:
-            return z2, k + 1
-        z = z2
-    return z, max_iter
+    # Compatibility wrapper; callers needing success must use the explicit result contract.
+    z, result = fixed_point(W, u, tol, max_iter)
+    return z, result['iterations']
 
 
 def _spectral_clip(W, c=0.9):
@@ -1310,14 +1368,15 @@ def _unrolled_grad(W, u, v, K):
     return WT.grad.T
 
 
-def compute_deq():
+def compute_deq(*, training_steps=800, solve_cap=2000):
     g = rng(71)
     d = 8
     W = _spectral_clip(g.normal(size=(d, d)) / math.sqrt(d), 0.8)
     U, b, v = g.normal(size=d), g.normal(size=d) * 0.3, g.normal(size=d)
     x = 0.7
     u = U * x + b
-    z, iters = _deq_solve(W, u)
+    z, initial_solve = fixed_point(W, u, max_iter=solve_cap)
+    iters = initial_solve["iterations"]
     # implicit: dL/dW for L = v . z*, from (I - J)^T a = v, J = diag(1 - z^2) W
     D = 1 - z * z
     J = D[:, None] * W
@@ -1341,8 +1400,9 @@ def compute_deq():
              v=g.normal(size=d) * 0.3, c=np.zeros(1))
     m = {k: np.zeros_like(val) for k, val in p.items()}
     s2 = {k: np.zeros_like(val) for k, val in p.items()}
-    lr, steps = 0.03, 800
-    keep = [0, 25, 75, 200, 400, 800]
+    lr, steps = 0.03, training_steps
+    keep = sorted(set([k for k in (0, 25, 75, 200, 400, 800) if k<=steps]+[steps]))
+    training_solves, fit_solves = [], []
     fits, curve, iters_curve = {}, [], []
     gx = np.linspace(-2.2, 2.2, 90)
     for t in range(steps + 1):
@@ -1350,8 +1410,9 @@ def compute_deq():
         L, its = 0.0, 0
         for xi, yi in zip(xs, ys):
             uu = p["U"] * xi + p["b"]
-            zs, k_ = _deq_solve(p["W"], uu, tol=1e-10)
-            its += k_
+            zs, status = fixed_point(p["W"], uu, tol=1e-10, max_iter=solve_cap)
+            training_solves.append(status)
+            its += status["iterations"]
             out = p["v"] @ zs + p["c"][0]
             e = out - yi
             L += e * e / len(xs)
@@ -1368,7 +1429,12 @@ def compute_deq():
             curve.append((t, L))
             iters_curve.append((t, its / len(xs)))
         if t in keep:
-            fits[t] = np.array([p["v"] @ _deq_solve(p["W"], p["U"] * xx + p["b"], tol=1e-10)[0] + p["c"][0] for xx in gx])
+            fit = []
+            for xx in gx:
+                zz, status = fixed_point(p["W"], p["U"]*xx+p["b"], tol=1e-10, max_iter=solve_cap)
+                fit_solves.append(status)
+                fit.append(p["v"]@zz+p["c"][0])
+            fits[t] = np.array(fit)
         if t == steps:
             break
         for k in p:  # Adam (Part 11)
@@ -1378,7 +1444,7 @@ def compute_deq():
         p["W"] = _spectral_clip(p["W"], 0.9)
     # at the end, the implicit gradient against 60 unrolled steps for one input
     uu = p["U"] * 0.5 + p["b"]
-    zs, _ = _deq_solve(p["W"], uu)
+    zs, final_solve = fixed_point(p["W"], uu, max_iter=solve_cap)
     Dz = 1 - zs * zs
     aa = np.linalg.solve((np.eye(d) - Dz[:, None] * p["W"]).T, p["v"])
     g_imp = np.outer(aa * Dz, zs)
@@ -1386,7 +1452,11 @@ def compute_deq():
     return dict(iters=iters, rho=rho, Ks=np.array(Ks), errs=errs, slope=slope, rate=float(math.exp(slope)),
                 xs=xs, ys=ys, gx=gx, keep=keep, fits=np.stack([fits[k] for k in keep]), curve=np.array(curve),
                 iters_curve=np.array(iters_curve), lr=lr, steps=steps, end_diff=end_diff, d=d,
-                final_loss=float(curve[-1][1]), first_loss=float(curve[0][1]))
+                final_loss=float(curve[-1][1]), first_loss=float(curve[0][1]),
+                solves=dict(initial=initial_solve, final=final_solve, training=solve_summary(training_solves), fit=solve_summary(fit_solves)),
+                parameter_count=int(sum(v.size for v in p.values())), initial_state_dimension=8, training_state_dimension=12,
+                contraction_caps=dict(initial=.8, training=.9),
+                gradient_scope="implicit derivatives are exact only for converged fixed points; capped iterates are approximate")
 
 
 # ---------------------------------------------------------------------------
@@ -1395,9 +1465,7 @@ def compute_deq():
 def compute_gdlr():
     """Full-batch gradient descent on Part 1's 729 scores (the gradient from the pair counts, exactly), at five step
     sizes, with the Hessian's largest eigenvalue tracked: it starts at max_i w_i / 27 and grows as the model learns."""
-    from videos.ai.ai1 import compute as c1
-
-    tr = c1.codes27(c1.text("train27"))
+    tr = corpus_codes("train")
     N = np.zeros((27, 27))
     np.add.at(N, (tr[:-1], tr[1:]), 1)
     n = N.sum(1)
@@ -1413,7 +1481,9 @@ def compute_gdlr():
     lam_star = top(ph)
     fracs = [0.01, 0.1, 0.2, 0.3, 0.5]
     steps = 3000
-    out = dict(lam0=lam0, eta0=2 / lam0, lam_star=lam_star, eta_star=2 / lam_star, H_cond=H_cond, steps=steps)
+    out = dict(lam0=lam0, eta0=2 / lam0, lam_star=lam_star, eta_star=2 / lam_star, H_cond=H_cond, steps=steps,
+               metrics=dict(loss_unit="bits per transition", cohort="full training corpus", pairs=int(Ntot),
+                            curve_parameter_step="t", final_tail_states=500))
     etas, last_mean, last_spread, monotone = [], [], [], []
     for k, f in enumerate(fracs):
         eta = f * 2 / lam0
@@ -1425,7 +1495,8 @@ def compute_gdlr():
             bits.append(float(-(N * np.log(np.maximum(q, 1e-300))).sum() / Ntot / math.log(2)))
             if t % 25 == 0:
                 lam.append(top(q))
-            z -= eta * w[:, None] * (q - ph)
+            if t < steps:
+                z -= eta * w[:, None] * (q - ph)
         bits = np.array(bits)
         out[f"bitcurve{k}"] = bits[::10]
         out[f"lamcurve{k}"] = np.array(lam)
