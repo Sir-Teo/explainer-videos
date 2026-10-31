@@ -488,7 +488,19 @@
   "Ten-fold cross-validation over $C$ and the kernel width $\\gamma$: \\ accuracy, \\%": "对$C$和核宽度$\\gamma$做10折交叉验证：\\ 准确率，\\%",
   "best: \\ $83.9\\%$": "最好：\\ $83.9\\%$",
   "$12$ of $25$ settings within a point of it": "$25$种设置中有$12$种与它相差不到一个百分点",
-  "worst: \\ $54.9\\%$ \\ (tiny $C$)": "最差：\\ $54.9\\%$ \\ （$C$极小）"
+  "worst: \\ $54.9\\%$ \\ (tiny $C$)": "最差：\\ $54.9\\%$ \\ （$C$极小）",
+  "gradient $= 0$; \\ invertible for $\\lambda > 0$": "梯度 $= 0$；\\ 当 $\\lambda > 0$ 时可逆",
+  "convex: \\ local minima are global": "凸：\\ 局部最小值都是全局最小值",
+  "every local minimum is global;\\\\ a unique bottom needs more": "每个局部最小值都是全局最小值；\\\\ 唯一谷底还需要额外条件",
+  "For $\\mathbf y = A\\boldsymbol\\beta + \\boldsymbol\\epsilon$ with $A$ full column rank, if the noise has mean $0$, the same variance $\\sigma^2$ everywhere, and no correlation, then among all \\emph{linear unbiased} estimates of $\\boldsymbol\\beta$, least squares has the smallest variance.": "对 $\\mathbf y = A\\boldsymbol\\beta + \\boldsymbol\\epsilon$，设 $A$ 满列秩；若噪声均值为 $0$、各处方差同为 $\\sigma^2$ 且互不相关，那么在所有 $\\boldsymbol\\beta$ 的\\emph{线性无偏}估计中，最小二乘的方差最小。",
+  "$S_W$: \\ pooled within-author scatter": "$S_W$：\\ 合并的作者内部散布",
+  "positive semidefinite kernels": "半正定核",
+  "Aronszajn (1950)": "阿龙沙因（1950）",
+  "any loss, \\ a positive penalty $\\lambda > 0$": "任意损失，\\ 正惩罚系数 $\\lambda > 0$",
+  "For real symmetric $K$, \\ a feature map with $K(\\mathbf{x}, \\mathbf{z}) = \\varphi(\\mathbf{x})\\cdot\\varphi(\\mathbf{z})$ exists exactly when every Gram matrix $[K(\\mathbf{x}_i, \\mathbf{x}_j)]$ has no negative eigenvalues.": "对实值对称的 $K$，\\ 存在满足 $K(\\mathbf{x}, \\mathbf{z}) = \\varphi(\\mathbf{x})\\cdot\\varphi(\\mathbf{z})$ 的特征映射，当且仅当每个格拉姆矩阵 $[K(\\mathbf{x}_i, \\mathbf{x}_j)]$ 都没有负的特征值。",
+  "any minimizer for $\\lambda > 0$ is $f = \\sum_i \\alpha_i K(\\mathbf{x}_i, \\cdot\\,)$: one number per training point": "当 $\\lambda > 0$ 时，任意最小化解都有形式 $f = \\sum_i \\alpha_i K(\\mathbf{x}_i, \\cdot\\,)$：每个训练点对应一个数。",
+  "make pooled within-author scatter round,\\\\ then point from one centre to the other": "把合并的作者内部散布变圆，\\\\ 再从一个中心指向另一个中心",
+  "PSD Gram matrices": "半正定格拉姆矩阵"
  },
  "patterns": [
   [
@@ -686,6 +698,10 @@
   [
    "^k = (\\d+)$",
    "k = \\1"
+  ],
+  [
+   "normal equations and QR agree to within \\$(.*?)\\$",
+   "正规方程与QR的差小于 $\\1$"
   ]
  ]
 }

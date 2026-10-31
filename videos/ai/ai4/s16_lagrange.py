@@ -72,6 +72,7 @@ class Lagrange(VoiceoverScene):
         tang = np.asarray(d["tang"])
         rd = DecimalNumber(0, num_decimal_places=3, include_sign=True, font_size=34, color=GRAD)
         rd.add_updater(lambda m: m.set_value(float(np.interp(th.get_value(), th_, tang))))
+        rd.update()
         read = VGroup(label(r"$\nabla f$ along the circle:", font_size=26, color=GREY_A), rd).arrange(RIGHT, buff=0.2)
         read.move_to([3.9, 2.4, 0])
         key = VGroup(label(r"$\nabla f$", font_size=24, color=GRAD), label(r"$\nabla g$", font_size=24, color=WHITE),
@@ -86,7 +87,7 @@ class Lagrange(VoiceoverScene):
             "whose contours are these ellipses, but only on the circle. <bookmark mark='a'/> Walk along the circle "
             "and watch two arrows: the gradient of f, and the gradient of the constraint, which points straight out "
             "of the circle. <bookmark mark='b'/> Wherever the gradient of f has a part along the circle, you can slide "
-            "that way and go lower. <bookmark mark='c'/> So at the constrained minimum that part is zero: the two "
+            "against that part and go lower. <bookmark mark='c'/> So at the constrained minimum that part is zero: the two "
             "gradients are parallel. <bookmark mark='d'/> Joseph-Louis Lagrange turned that picture into a method in "
             "1788, in his Mécanique analytique."
         ) as vo:
@@ -116,8 +117,8 @@ class Lagrange(VoiceoverScene):
             cmath(r"\mathcal{L}(x, \lambda)", r"=", r"f(x) + \lambda\, g(x)", font_size=40, colors=col),
             cmath(r"\nabla_x \mathcal{L} = 0", r",", r"\;\; \partial_\lambda \mathcal{L} = g(x) = 0", font_size=40),
         ]
-        whys = [why(r"no downhill direction along the constraint"), why(r"the Lagrangian; \ $\lambda$: the multiplier"),
-                why(r"an ordinary stationary point, \\ in $x$ and $\lambda$ together")]
+        whys = [why(r"regular constraint: \ $\nabla g \ne 0$"), why(r"the Lagrangian; \ $\lambda$: the multiplier"),
+                why(r"necessary stationarity, \\ not sufficient for a minimum")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.4, buff=0.6, edge=6.9)
         x = np.asarray(d["x_star"])
         res = VGroup(
@@ -129,9 +130,9 @@ class Lagrange(VoiceoverScene):
         with self.voiceover(
             "Write it down: at the constrained minimum, the gradient of f is a multiple of the constraint's gradient, "
             "minus lambda times it. <bookmark mark='a'/> Lagrange's device folds the constraint into a single "
-            "function, the Lagrangian, f plus lambda times g, <bookmark mark='b'/> whose ordinary stationary points, in "
-            "x and lambda together, are exactly the constrained ones: the derivative in lambda just gives back the "
-            f"constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at {d['lam']:.3f}. It is a "
+            "function, the Lagrangian, f plus lambda times g. <bookmark mark='b'/> Stationarity in x and lambda gives "
+            "necessary conditions for a regular constrained optimum, not a guarantee of a minimum. The derivative "
+            f"in lambda gives back the constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at {d['lam']:.3f}. It is a "
             "price: how fast the best value would fall if the constraint were loosened a little."
         ) as vo:
             step(0)

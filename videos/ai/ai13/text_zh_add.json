@@ -408,6 +408,9 @@
   "weight on the best key, \\ margin set for $0.8$ at $n = L$": "最好那个键的权重，\\ 差距取为在$n = L$时得到$0.8$",
   "fixed $\\Delta$": "固定的$\\Delta$",
   "scaled by \\ $\\log_L n$": "乘以\\ $\\log_L n$",
-  "QK-norm: \\ ViT-22B (2023), \\ Qwen3, \\\\ GLM-4.5, \\ Gemma 3 \\ (2025)": "QK归一化：ViT-22B（2023）、Qwen3、\\\\ GLM-4.5、Gemma 3（2025）"
+  "QK-norm: \\ ViT-22B (2023), \\ Qwen3, \\\\ GLM-4.5, \\ Gemma 3 \\ (2025)": "QK归一化：ViT-22B（2023）、Qwen3、\\\\ GLM-4.5、Gemma 3（2025）",
+  "one unit at a time, \\ $W_{ii}=0$: \\\\ each flip cannot raise $E$": "每次一个单元，\\ $W_{ii}=0$：\\\\ 每次翻转都不使$E$增加",
+  "well-separated patterns, \\ a nearby cue: \\ one update retrieves with error exponentially small in the separation. \\ Random patterns on a suitably scaled sphere can have exponential capacity in the dimension.": "模式充分分离，\\ 线索接近目标：\\ 一步更新的检索误差随分离程度指数减小。\\ 适当缩放的球面上的随机模式，可以有随维度指数增长的容量。",
+  "crossover: \\ causal half, \\ vocabulary cost neglected; \\\\ total context work grows as $T^2$": "交叉点：\\ 因果半边，\\ 忽略词表成本；\\\\ 总上下文计算量随$T^2$增长"
  }
 }

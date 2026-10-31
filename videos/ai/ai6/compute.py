@@ -673,6 +673,13 @@ def gen_eig(SB, SW):
     return vals[::-1], w / np.linalg.norm(w)
 
 
+def fisher_score(A, D, u):
+    """Fisher quotient with the same pooled scatter used by its analytic direction."""
+    pa, pd = A @ u, D @ u
+    within = ((pa - pa.mean()) ** 2).sum() + ((pd - pd.mean()) ** 2).sum()
+    return float((pd.mean() - pa.mean()) ** 2 / within)
+
+
 def compute_lda():
     X, y, test, X2 = split()
     A, D = X2[~test][y[~test] == 0], X2[~test][y[~test] == 1]
@@ -682,8 +689,7 @@ def compute_lda():
     angles = np.linspace(0, math.pi, 181)
 
     def J(u):
-        pa, pd = A @ u, D @ u
-        return (pd.mean() - pa.mean()) ** 2 / (pa.var() + pd.var())
+        return fisher_score(A, D, u)
 
     sep = np.array([J(np.array([math.cos(a), math.sin(a)])) for a in angles])
     best = float(math.atan2(w[1], w[0]) % math.pi)

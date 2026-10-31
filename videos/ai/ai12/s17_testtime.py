@@ -69,7 +69,7 @@ class TestTime(VoiceoverScene):
         scap = note(r"schematic, \ after OpenAI's o1 figures \ (2024)").next_to(sch, DOWN, buff=0.35)
         sch.add(scap)
         with self.voiceover(
-            "Until 2024, scaling meant bigger models and more data. Then OpenAI's o1 showed a second axis: accuracy "
+            "Scaling is often described as bigger models and more data. In 2024, OpenAI's o1 highlighted another axis: accuracy "
             "rose smoothly with the logarithm of how long the model thought before answering. Part twenty-eight "
             "builds reasoning models. Here, the mathematics of the simplest version: many tries, and a checker. "
             "<bookmark mark='a'/> On our checkable task, give each model k tries at writing the next "
@@ -108,7 +108,7 @@ class TestTime(VoiceoverScene):
                   font_size=32, colors=colors),
         ]
         whys = [why(r"one problem: \ every try fails, \ independently"), why(r"averaged over problems of every difficulty"),
-                why(r"$\int_0^\infty e^{-kp} p^{\,b-1} dp = \Gamma(b)\, k^{-b}$: \ the hardest problems")]
+                why(r"$b>0$, \ $f(p)\sim cp^{b-1}$ near $0$; \ large-$k$ tail integral")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.4, buff=0.35, edge=6.9)
         lk = np.log10(ks)
         y = -np.log(cov[i])
@@ -142,7 +142,7 @@ class TestTime(VoiceoverScene):
         said1 = (
             f"and the share of problems with tiny p rises with slope {tb[i]:.2f}: the same exponent, from two "
             "different measurements." if agree else
-            f"and the tail of tiny p's has slope {tb[i]:.2f}: close, but our two thousand problems sample the "
+            f"and the tail of tiny p's has slope {tb[i]:.2f}: the estimates differ, and our two thousand problems sample the "
             "tail thinly."
         )
         with self.voiceover(

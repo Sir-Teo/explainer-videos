@@ -131,7 +131,7 @@ class ImageNet(VoiceoverScene):
             f"Geoffrey Hinton, reached {ILSVRC[2][2]} percent, and {ALEXNET_EXTRA} with extra training images. "
             "Almost ten points better than the next entry, in a contest where a year's progress had been a point or "
             "two. <bookmark mark='c'/> The network "
-            "became known as AlexNet. Part 17 told how it was trained, on two gaming graphics cards; here, what "
+            "became known as AlexNet. Part 17 will explain how it was trained, on two gaming graphics cards; here, what "
             "was inside."
         ) as vo:
             self.play(Create(base), FadeIn(bt), FadeIn(bars[0], shift=UP * 0.1), FadeIn(bars[1], shift=UP * 0.1),

@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from explainer.paths import video_dir  # noqa: E402
-from explainer.zh_templates import IS_TPL, Translator, ambiguous, sources, table  # noqa: E402,F401
+from explainer.zh_templates import IS_TPL, Translator, ambiguous, source_startswith, sources, table  # noqa: E402,F401
 
 def todo(video: str, scenes: list[str]) -> int:
     zh = table(video)["ZH"]
@@ -42,7 +42,7 @@ def todo(video: str, scenes: list[str]) -> int:
     used, left = set(), []
     for x in src:
         s = x.get("en") or x["tpl"]
-        hits = [k for k in zh if s.startswith(k)]
+        hits = [k for k in zh if source_startswith(s, k)]
         if len(hits) > 1 and not all(h in hits[0] or hits[0] in h for h in hits):
             print("AMBIGUOUS:", [h[:50] for h in hits])
         used.update(hits)

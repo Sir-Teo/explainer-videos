@@ -65,7 +65,7 @@
   "f79b77830702": {
    "scene": "Smoother",
    "en": "Here is the definition for the rest of this part. <bookmark mark='a'/> Attention scores each key against the query with a dot product divided by the square root of d, turns the scores into weights with a softmax, and returns the weighted average of the values. <bookmark mark='b'/> It entered neural networks in 2014, when Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a translation network look back at its source sentence, as in Part 10; in 2017 it became the whole network. <bookmark mark='c'/> A question: if every key is the same, what does attention return? <bookmark mark='d'/> Every weight is one over n: the plain average of the values. Attention can only weigh and blend what it is given.",
-   "zh": "下面是本部分接下来一直要用的定义。<bookmark mark='a'/>注意力用点积给每个键和查询打分，再除以根号d，用softmax把分数变成权重，最后返回这些值的加权平均。<bookmark mark='b'/>它在2014年进入神经网络：德米特里·巴赫达瑙、赵京焕和约书亚·本吉奥让一个翻译网络回头去看它的源句子，就像第10部分那样；到了2017年，它成了整个网络。<bookmark mark='c'/>问一个问题：如果每个键都一样，注意力会返回什么？<bookmark mark='d'/>每个权重都是n分之1：结果就是这些值的普通平均。注意力只能对它拿到的东西加权、混合。"
+   "zh": "下面是本部分接下来一直要用的定义。<bookmark mark='a'/>注意力用点积给每个键和查询打分，再除以根号d，用softmax把分数变成权重，最后返回这些值的加权平均。<bookmark mark='b'/>2014年，德米特里·巴赫达瑙、赵京焕和约书亚·本吉奥让一个神经翻译网络回头去看它的源句子，就像第10部分那样；到了2017年，它成了整个网络。<bookmark mark='c'/>问一个问题：如果每个键都一样，注意力会返回什么？<bookmark mark='d'/>每个权重都是n分之1：结果就是这些值的普通平均。注意力只能对它拿到的东西加权、混合。"
   },
   "83c91a4949d1": {
    "scene": "Smoother",
@@ -85,7 +85,7 @@
   "16fb993f2a64": {
    "scene": "Hopfield",
    "en": "How much can it hold? Store more and more random patterns in a hundred units, and test each with a cue in which fifteen percent of the units are flipped. <bookmark mark='a'/> The classical network falls below half its patterns at 16 stored patterns, and by 25 it recalls none at all. Physicists computed its limit in 1985: about zero point one three eight patterns per unit. Every stored pattern adds a little noise to every other's vote, and the noise adds up. <bookmark mark='b'/> In 2016 Dmitry Krotov and John Hopfield sharpened the energy so that the closest pattern wins by far more, and in 2017 a team showed that an exponential energy stores exponentially many patterns. <bookmark mark='c'/> Store 320 patterns, 3.2 times the number of units, and one softmax step still recalls every one.",
-   "zh": "它能存多少？在100个单元里存入越来越多的随机模式，每个都用一个翻转了15%单元的线索来测试。<bookmark mark='a'/>经典网络存到16个模式时，能回想起来的就不到一半了，到25个时，就一个也回想不起来了。物理学家在1985年算出了它的极限：每个单元大约0.138个模式。每存入一个模式，都会给其他每个模式的投票添一点噪声，噪声越积越多。<bookmark mark='b'/>2016年，德米特里·克罗托夫和约翰·霍普菲尔德把能量变得更陡，让最近的那个模式以大得多的优势胜出；2017年，又有一个团队证明，指数形式的能量能存下指数多个模式。<bookmark mark='c'/>存入320个模式，是单元数的3.2倍，一步softmax仍然能把每一个都回想起来。"
+   "zh": "它能存多少？在100个单元里存入越来越多的随机模式，每个都用一个翻转了15%单元的线索来测试。<bookmark mark='a'/>经典网络存到16个模式时，能回想起来的就不到一半了，到25个时，就一个也回想不起来了。物理学家在1985年算出了它的极限：每个单元大约0.138个模式。每存入一个模式，都会给其他每个模式的投票添一点噪声，噪声越积越多。<bookmark mark='b'/>2016年，德米特里·克罗托夫和约翰·霍普菲尔德把能量变得更陡，让最近的那个模式以大得多的优势胜出；2017年，又有一个团队证明，指数形式的能量能存下指数多个模式。<bookmark mark='c'/>Store 320 patterns, 3.2 times the number of units, and one softmax step still recalls every one."
   },
   "8496553cbe17": {
    "scene": "Hopfield",
@@ -149,8 +149,8 @@
   },
   "60565e805513": {
    "scene": "Masks",
-   "en": "The mask is the only difference between the three ways the transformer has been cut. <bookmark mark='a'/> An encoder lets every position see every other: it reads, but cannot write left to right. <bookmark mark='b'/> A decoder uses the causal triangle: it writes, one token at a time. <bookmark mark='c'/> The 2017 paper's translator had both. Its decoder looks at its own past, and through cross-attention at the whole source sentence: the queries come from the translation, the keys and values from the encoder's reading of the original. <bookmark mark='d'/> A prefix language model reads its prompt both ways and writes the rest left to right. Which of these won, and why, is the story of Part 14.",
-   "zh": "Transformer被切分成的三种方式，唯一的区别就是掩码。<bookmark mark='a'/>编码器让每个位置都能看到其他所有位置：它会读，但不能从左到右地写。<bookmark mark='b'/>解码器用的是因果三角：它写，一次一个词元。<bookmark mark='c'/>2017年那篇论文的翻译模型两样都有。它的解码器看自己的过去，还通过交叉注意力看整个源句：查询来自译文，键和值来自编码器对原文的阅读。<bookmark mark='d'/>前缀语言模型双向读它的提示，再从左到右写出其余部分。这几种谁胜出了、为什么，是第14部分的故事。"
+   "en": "Different masks reveal the main information flows in these transformer families. <bookmark mark='a'/> An encoder lets every position see every other: it reads, but cannot write left to right. <bookmark mark='b'/> A decoder uses the causal triangle: it writes, one token at a time. <bookmark mark='c'/> The 2017 paper's translator had both. Its decoder looks at its own past, and through cross-attention at the whole source sentence: the queries come from the translation, the keys and values from the encoder's reading of the original. <bookmark mark='d'/> A prefix language model reads its prompt both ways and writes the rest left to right. Which of these won, and why, is the story of Part 14.",
+   "zh": "不同的掩码揭示了这些Transformer家族中的主要信息流。<bookmark mark='a'/>编码器让每个位置都能看到其他所有位置：它会读，但不能从左到右地写。<bookmark mark='b'/>解码器用的是因果三角：它写，一次一个词元。<bookmark mark='c'/>2017年那篇论文的翻译模型两样都有。它的解码器看自己的过去，还通过交叉注意力看整个源句：查询来自译文，键和值来自编码器对原文的阅读。<bookmark mark='d'/>前缀语言模型双向读它的提示，再从左到右写出其余部分。这几种谁胜出了、为什么，是第14部分的故事。"
   },
   "28ee8f32d392": {
    "scene": "Masks",

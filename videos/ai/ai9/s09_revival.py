@@ -36,7 +36,7 @@ class Revival(VoiceoverScene):
               MathTex(str(L), font_size=20, color=GREY_B).next_to(g.ax.c2p(L, lo), DOWN, buff=0.12))
         layers = np.arange(1, L + 1)
         line = curve(g.ax, layers, lg, BWD, 4)
-        per = 10 ** (-(lg[-1] - lg[0]) / (L - 1))
+        per = 10 ** ((lg[-1] - lg[0]) / (L - 1))
         e = int(round(-lg[0]))
         hc = history_card(1991, r"Sepp Hochreiter, \ TU Munich, \ diploma thesis",
                           r"gradients through many layers, \ or many time steps, \ vanish or explode", width=5.0,

@@ -300,9 +300,9 @@ class Contamination(VoiceoverScene):
             history_card(2024, r"GSM1k \ (Zhang et al., Scale AI)", r"a thousand new problems in the style of GSM8k: "
                          r"\ accuracy drops of up to $8\%$ for some model families; \ little sign of overfitting at the "
                          r"frontier", width=6.3, color=C.KL, font_size=20),
-            history_card(2026, r"our passage", r"\textit{The Maltese Falcon} entered the US public domain, \ and "
-                         r"Project Gutenberg, \ on 1 January 2026, \ after Part 1's pretrained models were trained; "
-                         r"\ the models we built never read it", width=6.3, color=C.BITS, font_size=20),
+            history_card(2026, r"our passage", r"a $1930$ novel, \ a $2026$ Gutenberg edition: \ held out of our "
+                         r"models' training; \ exposure in pretrained models is unknown", width=6.3, color=C.BITS,
+                         font_size=20),
         ).arrange_in_grid(rows=2, cols=2, buff=0.3).move_to(DOWN * 0.3)
         head = label(r"The other defense: \ time", font_size=36).to_edge(UP, buff=0.4)
         cite_ = cite(r"Jain et al.\ (2024); \ White et al.\ (2024); \ Zhang et al.\ (2024)")
@@ -312,9 +312,9 @@ class Contamination(VoiceoverScene):
             "problems released after their training cutoff. <bookmark mark='b'/> LiveBench writes new questions every "
             "month. <bookmark mark='c'/> Scale AI wrote a thousand fresh grade-school math problems in the style of a "
             "popular benchmark; some model families dropped by up to eight percent, the frontier models hardly at all. "
-            "<bookmark mark='d'/> And our passage entered the public domain, and Project Gutenberg, on the first of "
-            "January 2026, after the pretrained models of Part 1 were trained; the models we built ourselves never "
-            "read it."
+            "<bookmark mark='d'/> Our passage needs a different guarantee. Gutenberg posted this edition in January "
+            "2026, but the novel dates to 1930. That does not establish that pretrained models never saw it. We held "
+            "it out of training for the models we built ourselves."
         ) as vo:
             full = cards.copy()
             for c_ in cards[1:]:

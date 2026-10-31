@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import HIST, MUP, PANEL_FILL, PART, SP, WIDTH_COLORS, band, load, predict_card, takeaway_card
+from videos.ai.ai12.common import (HIST, MUP, PANEL_FILL, PART, SP, WIDTH_COLORS, best_rate_index, load,
+                                  mean_seed_loss, predict_card, sweep_plot, takeaway_card)
 
 
 class Transfer(VoiceoverScene):
@@ -40,12 +41,13 @@ class Transfer(VoiceoverScene):
             lines, bests, bands = VGroup(), VGroup(), VGroup()
             for w, wc in zip(widths, WIDTH_COLORS):
                 v = np.asarray(m[mode + str(w)])  # seeds x rates
-                v = np.where(np.isfinite(v), np.minimum(v, hi), hi)
-                mean = v.mean(0)
-                bands.add(band(ax, lrs, v.min(0), v.max(0), wc, 0.18))
-                lines.add(curve(ax, lrs, mean, wc, 3))
-                i = int(np.argmin(mean))
-                bests.add(Dot(ax.c2p(lrs[i], mean[i]), radius=0.09, color=wc))
+                mean = mean_seed_loss(v)
+                plot = sweep_plot(ax, lrs, v, wc, lo, hi)
+                bands.add(plot[0], plot[2])
+                lines.add(plot[1])
+                i = best_rate_index(v)
+                if lo <= mean[i] <= hi:
+                    bests.add(Dot(ax.c2p(lrs[i], mean[i]), radius=0.09, color=wc))
             xt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.08)
                           for v in range(math.ceil(lrs[0]), math.floor(lrs[-1]) + 1)])
             xl = label(r"learning rate", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.1)
@@ -53,7 +55,7 @@ class Transfer(VoiceoverScene):
             yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(lrs[0], v), LEFT, buff=0.08)
                           for v in np.arange(lo, hi + 1e-9, 0.2)])
             # where the best rate sits at the smallest and the largest width
-            xb = [lrs[int(np.argmin(np.asarray(m[mode + str(w)]).mean(0)))] for w in (widths[0], widths[-1])]
+            xb = [lrs[best_rate_index(m[mode + str(w)])] for w in (widths[0], widths[-1])]
             ym = hi - 0.25
             mk = VGroup(*[DashedLine(ax.c2p(x, lo + 0.02), ax.c2p(x, ym), color=c, stroke_width=1.6, dash_length=0.06)
                           for x, c in zip(xb, (WIDTH_COLORS[0], WIDTH_COLORS[len(widths) - 1]))])
@@ -65,7 +67,7 @@ class Transfer(VoiceoverScene):
             panels.add(VGroup(ax, xt, xl, t, yt, bands, lines, bests, mk))
         key = VGroup(*[label(rf"width ${w:,}$".replace(",", "{,}"), font_size=24, color=c) for w, c in zip(widths, WIDTH_COLORS)])
         key.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.3)
-        yn = label(rf"held-out bits after ${int(m['steps'])}$ steps \ (lower is better; \ two seeds, \ bands: \ both)",
+        yn = label(rf"held-out bits after ${int(m['steps'])}$ steps \ (two seeds; \ triangles: \ off-scale or unstable)",
                    font_size=22, color=GREY_A).next_to(key, DOWN, buff=0.15)
         drift, bl = m["drift"], m["best_loss"]
         bsp = [10 ** v for v in m["bests"]["sp"]]
@@ -86,7 +88,7 @@ class Transfer(VoiceoverScene):
             if drift["mup"] <= 0.25 else f"the best rate moves by {drift['mup']:.1f}. "
         )
         said3 = (
-            f"And wider is better at every rate: {bl['mup'][0]:.2f} bits at the smallest width, "
+            f"At each width's best rate, the wider model does better: {bl['mup'][0]:.2f} bits at the smallest width, "
             f"{bl['mup'][-1]:.2f} at the largest." if wider else ""
         )
         with self.voiceover(

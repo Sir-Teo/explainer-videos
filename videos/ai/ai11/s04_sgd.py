@@ -56,7 +56,7 @@ class SGD(VoiceoverScene):
         ).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to([-2.6, 0.4, 0])
         notes = VGroup(label(r"the true gradient: \ every example, \ every step", font_size=22, color=GREY_A),
                        label(r"a random batch of $B$ examples: \ $n/B$ times cheaper", font_size=22, color=C.BITS),
-                       label(r"right on average; \ noisy, \ less so for bigger batches", font_size=22, color=GREY_A))
+                       label(r"$\Sigma/B$: \ IID draws; \ without replacement add $(n-B)/(n-1)$", font_size=22, color=GREY_A))
         for n_, e_ in zip(notes, eqs):
             n_.next_to(e_, RIGHT, buff=0.4)
         VGroup(eqs, notes).move_to([0, 0.5, 0])
@@ -76,8 +76,8 @@ class SGD(VoiceoverScene):
             "The loss of a model is an average over its training examples, and so is its gradient. Computing it "
             "exactly means going through all the data for every single step; real models train on trillions of "
             "words. <bookmark mark='a'/> Instead, average over a small random batch. <bookmark mark='b'/> On average "
-            "that estimate is exactly right, and its noise shrinks as the batch grows: the covariance falls like one "
-            "over B. <bookmark mark='c'/> Herbert Robbins and Sutton Monro, statisticians at North Carolina, asked "
+            "that estimate is exactly right. For independent draws the covariance falls like one "
+            "over B; sampling without replacement adds a finite-population correction. <bookmark mark='c'/> Herbert Robbins and Sutton Monro, statisticians at North Carolina, asked "
             "in 1951 when steps along such noisy estimates still reach the answer."
         ) as vo:
             self.play(Write(eqs[0]), FadeIn(notes[0]), FadeIn(strip), FadeIn(sl))

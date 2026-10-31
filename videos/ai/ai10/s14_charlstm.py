@@ -20,7 +20,7 @@ def board_rows():
     except FileNotFoundError:
         raw = c1.load("raw")
         rows = [
-            dict(key="ascii", label="plain text file", bits=8.0, part=1, kind="baseline"),
+            dict(key="ascii", label="plain text file", bits=8 * raw["n_bytes"] / raw["n_chars"], part=1, kind="baseline"),
             dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"],
                  part=1, kind="count"),
             dict(key="order0", label="letter frequencies", bits=raw["rows"][0]["test"], part=1, kind="count"),

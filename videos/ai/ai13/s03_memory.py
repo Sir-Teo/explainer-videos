@@ -43,7 +43,7 @@ class Hopfield(VoiceoverScene):
         ]
         whys = [why(r"store: \ strengthen every pair \\ that fires together (Hebb)", font_size=20),
                 why(r"recall: \ each unit follows \\ the vote of the others", font_size=20),
-                why(r"each flip can only lower $E$: \\ recall rolls downhill", font_size=20)]
+                why(r"one unit at a time, \ $W_{ii}=0$: \\ each flip cannot raise $E$", font_size=20)]
         eqs = VGroup(*rows).arrange(DOWN, buff=0.42, aligned_edge=LEFT).move_to([2.6, 1.55, 0])
         for r_, w_ in zip(rows, whys):
             w_.next_to(r_, RIGHT, buff=0.35)
@@ -69,7 +69,7 @@ class Hopfield(VoiceoverScene):
             "In 1982 the physicist John Hopfield described a network that remembers. <bookmark mark='a'/> Store "
             "some patterns of plus and minus ones by strengthening every pair of units that are on together: "
             "Hebb's rule, from Part 9. <bookmark mark='b'/> To recall, start from a cue and let each unit take the "
-            "sign of the weighted vote of the others. <bookmark mark='c'/> Each flip can only lower an energy, so "
+            "sign of the weighted vote of the others, updating one unit at a time and setting self-weights to zero. <bookmark mark='c'/> Each flip cannot raise an energy, so "
             "recall rolls downhill, into the nearest stored pattern, if all goes well. <bookmark mark='d'/> Here we "
             f"store {n} letters, a hundred units each. <bookmark mark='e'/> Give it a letter with a quarter of its "
             f"pixels flipped, and let it settle. {verdict}"
@@ -117,7 +117,7 @@ class Hopfield(VoiceoverScene):
         dead = next((m for m, v in zip(Ms, cl) if v == 0), None)
         allm = bool(np.all(md >= 0.999))
         tail = (f"Store {int(Ms[-1])} patterns, {Ms[-1] / N:.1f} times the number of units, and one softmax step "
-                "still recalls every one." if allm else
+                "still recalls every tested cue." if allm else
                 f"It holds on far longer: at {int(Ms[-1])} patterns it still recalls {md[-1]:.0%}.")
         note_ = note(rf"$N = {N}$ units; \ random patterns; \ ${int(h['trials'])}$ trials each").to_corner(DR, buff=0.3)
         cite_ = cite(r"Amit, Gutfreund \& Sompolinsky (1985); \ Krotov \& Hopfield (2016); \ Demircigil et al.\ (2017)",
@@ -179,9 +179,10 @@ class Hopfield(VoiceoverScene):
         ol = label(r"recalled", font_size=20, color=MODERN).next_to(out, UP, buff=0.12)
         kl = label(r"stored letters: \ keys and values", font_size=20, color=K).next_to(keys, UP, buff=0.12)
         ok_m = int(h["letters_ok_modern"])
-        th = theorem_card(r"modern Hopfield networks", r"one update retrieves a stored pattern, with exponentially "
-                          r"small error, and the number of patterns that can be stored grows exponentially with "
-                          r"the dimension", who=r"H.~Ramsauer, S.~Hochreiter et al.\ (2020)", width=6.4, font_size=20)
+        th = theorem_card(r"modern Hopfield networks", r"well-separated patterns, \ a nearby cue: \ one update "
+                          r"retrieves with error exponentially small in the separation. \ Random patterns on a "
+                          r"suitably scaled sphere can have exponential capacity in the dimension.",
+                          who=r"H.~Ramsauer, S.~Hochreiter et al.\ (2020)", width=6.4, font_size=20)
         th.move_to([0, -1.9, 0])
         with self.voiceover(
             "In 2020 Hubert Ramsauer, Sepp Hochreiter and colleagues made the states continuous. "
@@ -191,7 +192,7 @@ class Hopfield(VoiceoverScene):
             "them up. <bookmark mark='c'/> Look at that formula. It is attention. The cue is the query, the stored "
             "patterns are both the keys and the values, and beta plays the part of one over the square root of d. "
             f"<bookmark mark='d'/> On our letters, one step recalls {ok_m} of {n}. <bookmark mark='e'/> And they "
-            "proved that one step is usually enough. The paper's title: Hopfield Networks is All You Need."
+            "proved that one step suffices for a nearby cue when the patterns are sufficiently separated. The paper's title: Hopfield Networks is All You Need."
         ) as vo:
             step(0)
             self.play(FadeIn(keys), FadeIn(kl))

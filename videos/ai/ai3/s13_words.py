@@ -70,6 +70,8 @@ class Words(VoiceoverScene):
         ex_rows = VGroup(*[MathTex(rf"\mathrm{{PMI}}(\texttt{{{a}}}, \texttt{{{b}}}) = {v:.2f}", font_size=28, color=P)
                            for a, b, n_, v in w["show_pairs"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         ex_rows.next_to(keep, DOWN, buff=0.35)
+        smooth = label(r"SVD table: \ $P(c) \to P(c)^{3/4}/Z$", font_size=24, color=GREY_A)
+        smooth.next_to(ex_rows, DOWN, buff=0.25)
         counts.to_edge(UP, buff=0.45)
         with self.voiceover(
             "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand commonest words and count "
@@ -78,7 +80,8 @@ class Words(VoiceoverScene):
             "Part 1's way: the log of how many times more often two words meet than by chance, the pointwise mutual "
             "information. Keep its positive part. <bookmark mark='c'/> Monday and morning: "
             f"{w['show_pairs'][0][3]:.2f}. The and of meet {int(w['show_pairs'][-1][2]):,} times, but they meet "
-            f"everything: {w['show_pairs'][-1][3]:.2f}."
+            f"everything: {w['show_pairs'][-1][3]:.2f}. <bookmark mark='d'/> For the SVD table, we smooth the context "
+            "distribution with the three-quarters power, then keep positive values."
         ) as vo:
             self.play(FadeIn(counts))
             vo.wait_until("a")
@@ -89,6 +92,8 @@ class Words(VoiceoverScene):
             self.play(FadeIn(keep))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in ex_rows], lag_ratio=0.3))
+            vo.wait_until("d")
+            self.play(FadeIn(smooth))
         self.wait(0.3)
         self.clear_scene()
 

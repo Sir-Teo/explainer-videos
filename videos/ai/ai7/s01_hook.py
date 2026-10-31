@@ -23,7 +23,11 @@ class Hook(VoiceoverScene):
         r = np.asarray(g["r"])[-1]
         flip = ((r > 0.5) == y).mean() < 0.5  # which mixture component is Dickens's?
         r = 1 - r if flip else r
-        cloud = Cloud3D(xyz, [GREY_B] * len(y), scale=1.7, radius=0.045, tilt=0.4, center=[-0.6, -0.2, 0])
+        # A rotation preserves this radius: every page stays clear of the heading
+        # and bottom caption throughout the shot, including outlying pages.
+        cloud_scale = 2.65 / max(float(np.linalg.norm(xyz, axis=1).max()), 1e-9)
+        cloud = Cloud3D(xyz, [GREY_B] * len(y), scale=cloud_scale, radius=0.045, tilt=0.4,
+                        center=[-0.6, -0.1, 0])
         head = label(r"$639$ pages, \ $70$ numbers each \ (Part 6) \ --- \ no authors given", font_size=30)
         head.to_edge(UP, buff=0.4)
         found = label(rf"two hidden groups, found from the data alone: \ ${100 * g['agree']:.0f}\%$ match the authors",

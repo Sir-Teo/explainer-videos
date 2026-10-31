@@ -625,11 +625,11 @@ ZH.update({
     "f'Its samples sit less tightly":
         '不过，它的样本落得没那么紧：{qw:.0f}%落在某个峰的三倍标准差以内，而非饱和GAN是{qn:.0f}%。',
 
-    "f'Over five seeds, WGAN-GP covers":
+    "f'Over five seeds, WGAN-GP covers {mw:.1f} of the eight modes on average, all eight in {full_w} runs, against {mn:.1f} for the non-saturating GAN and {mm:.1f} for the minimax one: a distance keeps pulling toward every missing mode.'":
         '五个种子里，WGAN-GP平均覆盖八个峰中的{mw:.1f}个，有{full_w}次覆盖了全部八个，'
         '而非饱和GAN是{mn:.1f}个，极小极大GAN是{mm:.1f}个：一个距离会一直把生成器拉向每一个缺失的峰。',
 
-    'f"Over five seeds, WGAN-GP covers':
+    'f"Over five seeds, WGAN-GP covers {mw:.1f} of the eight modes on average, against {mn:.1f} for the non-saturating GAN and {mm:.1f} for the minimax one: here the distance doesn\'t buy coverage."':
         '五个种子里，WGAN-GP平均覆盖八个峰中的{mw:.1f}个，而非饱和GAN是{mn:.1f}个，'
         '极小极大GAN是{mm:.1f}个：在这里，距离并没有换来覆盖。',
 
@@ -666,11 +666,11 @@ ZH.update({
         "<bookmark mark='a'/>在我们的GAN上，用第14章的精确率和召回率来看："
         "<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{fid_s}",
 
-    "f'at t of {tt:g}, precision {p0:.2f} and recall {r0:.2f}; untruncated, {p1:.2f} and {r1:.2f}. Fidelity":
+    "f'at t of {tt:g}, precision {p0:.2f} and recall {r0:.2f}; untruncated, {p1:.2f} and {r1:.2f}. Fidelity bought with variety.'":
         't等于{tt:g}时，精确率{p0:.2f}，召回率{r0:.2f}；不截断时，是{p1:.2f}和{r1:.2f}'
         '。用多样性换来了逼真度。',
 
-    'f"at t of {tt:g}, precision':
+    'f"at t of {tt:g}, precision {p0:.2f} and recall {r0:.2f}; untruncated, {p1:.2f} and {r1:.2f}: a weaker trade than BigGAN\'s."':
         't等于{tt:g}时，精确率{p0:.2f}，召回率{r0:.2f}；不截断时，是{p1:.2f}和{r1:.2f}'
         '：这笔交换不如BigGAN的划算。',
 

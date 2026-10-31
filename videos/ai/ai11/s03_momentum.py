@@ -84,22 +84,23 @@ class Momentum(VoiceoverScene):
             cmath(r"k", r"\approx", r"\tfrac{\sqrt{\kappa}}{2}\,\ln(1/\varepsilon)", font_size=36),
         ]
         whys = [why(r"$\nabla f = \lambda x$ along it"), why(r"try $x_k = z^k$"),
-                why(r"complex roots: \ a spiral, \ shrinking by $\sqrt{\beta}$"),
+                why(r"complex modes have modulus $\sqrt{\beta}$; \ positions can oscillate"),
                 why(r"make every $\lambda$ in $[\mu, L]$ spiral"),
-                why(r"solve the two"), why(r"$\sqrt{\beta} \approx 1 - 2/\sqrt{\kappa}$")]
+                why(r"solve the two"), why(r"large $\kappa$: \ dominant-mode estimate, \ not a per-step bound")]
         step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.8, buff=0.5, edge=6.9)
-        thm = theorem_card(r"The heavy ball on a quadratic", r"Tuned to $[\mu, L]$, \ every direction shrinks by "
-                           r"$\frac{\sqrt\kappa - 1}{\sqrt\kappa + 1}$ per step: \ $\sqrt{\kappa}$ in place of $\kappa$.",
+        thm = theorem_card(r"The heavy ball on a quadratic", r"Tuned to $[\mu, L]$, the dominant root modulus is "
+                           r"$\rho = \frac{\sqrt\kappa - 1}{\sqrt\kappa + 1}$. \ This is an asymptotic rate; "
+                           r"repeated endpoint roots can give $k\rho^k$, and positions may oscillate.",
                            who=r"B.~Polyak (1964)", width=7.4, font_size=24).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Why does it work, and how fast? On a quadratic, every direction of the valley is separate. "
             "<bookmark mark='a'/> Along a direction of curvature lambda, the update is a recurrence in the last "
             "two positions. <bookmark mark='b'/> Try powers of a number z, and z must solve a quadratic equation. "
-            "<bookmark mark='c'/> When its roots are complex, the position spirals inward, and shrinks by exactly the "
-            "square root of beta every step, whatever lambda is. <bookmark mark='d'/> So choose eta and beta to "
+            "<bookmark mark='c'/> When its roots are complex, their modulus is the "
+            "square root of beta, whatever lambda is. This sets the oscillation envelope, not the change in position at every step. <bookmark mark='d'/> So choose eta and beta to "
             "put every curvature between mu and L into that spiralling regime: the two ends of the range just on "
             "its edge. <bookmark mark='e'/> Solving, the square root of beta is root kappa minus one over root kappa "
-            "plus one. <bookmark mark='f'/> That is about one minus two over root kappa: the steps now grow with the "
+            "plus one. The endpoints have repeated roots, which can add a factor of k to the decay. <bookmark mark='f'/> For large kappa, the root modulus is about one minus two over root kappa: the steps now grow with the "
             "square root of the condition number. A thousand becomes about thirty."
         ) as vo:
             self.play(FadeIn(head))

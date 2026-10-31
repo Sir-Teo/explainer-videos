@@ -81,11 +81,6 @@
    "en": "PCA finds directions, but it isn't a model of the data: it can't say how likely a new page is. In 1999 Michael Tipping and Christopher Bishop, and independently Sam Roweis, turned it into one. <bookmark mark='a'/> Imagine each page begins as a few hidden numbers, z, drawn from a standard bell curve. <bookmark mark='b'/> A matrix W maps them up into the seventy word rates, onto a flat sheet through the data. <bookmark mark='c'/> Then noise of the same size in every direction blurs the sheet. <bookmark mark='d'/> Add it up, and a page is Gaussian, with covariance W W transpose plus sigma squared times the identity: a few big directions, and a fog around them.",
    "zh": "PCA能找到方向，但它不是数据的模型：它说不出一页新书出现的可能性有多大。1999年，迈克尔·蒂平和克里斯托弗·毕晓普，以及独立工作的萨姆·罗维斯，把它变成了一个模型。<bookmark mark='a'/>设想每一页都起源于几个隐藏的数z，它们从标准的钟形曲线里抽出来。<bookmark mark='b'/>一个矩阵W把它们映射到70个词频上，落在穿过数据的一张平面上。<bookmark mark='c'/>然后，在每个方向上大小都一样的噪声，把这张平面弄模糊。<bookmark mark='d'/>合起来，一页书就服从高斯分布，协方差是W乘W转置，再加上σ平方乘单位矩阵：几个大的方向，外加一层雾。"
   },
-  "949110dc7183": {
-   "scene": "PPCA",
-   "en": "The best W and sigma, by maximum likelihood, come out in closed form. <bookmark mark='a'/> W's columns point along the top k eigenvectors of chapter one, each stretched by its eigenvalue minus the noise. <bookmark mark='b'/> And the noise is the average variance of all the directions left out. <bookmark mark='c'/> Shrink the noise to zero and you get plain PCA back. So PCA was always the limit of a probability model, and now it has a likelihood.",
-   "zh": "按最大似然，最好的W和σ有闭式解。<bookmark mark='a'/>W的各列指向第1章里排在最前面的k个特征向量，每一列按它的特征值减去噪声来拉伸。<bookmark mark='b'/>而噪声，就是所有被舍掉的方向的平均方差。<bookmark mark='c'/>把噪声缩到零，就又回到了普通的PCA。所以PCA一直都是一个概率模型的极限，而现在它有了似然。"
-  },
   "734be1edfa02": {
    "scene": "PPCA",
    "en": "A likelihood lets us choose how many hidden directions to keep, on pages the model never saw. Fit on part six's 448 training pages, score the 191 held-out ones. <bookmark mark='a'/> On the training pages, every extra direction helps. <bookmark mark='b'/> Held-out pages are most likely with 17 hidden directions, at -92.8 nats per page, better than a full covariance, at -93.1: the other directions are mostly noise.",
@@ -126,10 +121,10 @@
    "en": "PCA finds directions. A mixture model goes further: it supposes that each point was made by one of several hidden sources, each a bell curve of its own, and tries to recover them. Here are the pages along the first two directions, with no colours: we don't know who wrote what. <bookmark mark='a'/> Start with two guessed bells, badly placed. The expectation-maximization algorithm, EM, alternates two steps. <bookmark mark='b'/> E: for each page, how likely is each bell to have made it? That gives every page a soft colour. <bookmark mark='c'/> M: refit each bell to the pages, weighted by those colours.",
    "zh": "主成分分析找的是方向。混合模型更进一步：它假设每个点都出自几个隐藏来源中的一个，每个来源都是自己的一条钟形曲线，然后设法把这些来源找回来。这是沿前两个方向排开的书页，没有颜色：我们不知道哪一页是谁写的。<bookmark mark='a'/>先猜两条钟形曲线，位置放得很差。期望最大化算法，简称EM算法，在两个步骤之间交替进行。<bookmark mark='b'/>E步：对每一页，每条钟形曲线生成它的可能性有多大？这就给每一页涂上了一种介于两色之间的颜色。<bookmark mark='c'/>M步：按这些颜色加权，把每条钟形曲线重新拟合到书页上。"
   },
-  "08624bbdc5bb": {
+  "4f45b7124317": {
    "scene": "EM",
-   "en": "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells creep toward a fit. <bookmark mark='b'/> After forty rounds they've settled, and the pages each one claims match the true authors 97 percent of the time. Nobody told it there were authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too.",
-   "zh": "然后再来：E、M、E、M。<bookmark mark='a'/>每一轮，似然都只升不降，所以这两条钟形曲线一点一点地向拟合靠拢。<bookmark mark='b'/>40轮之后，它们稳定了下来，每条曲线认领的书页，有97%与真实的作者一致。根本没有人告诉过它，这些书页还有作者之分。EM算法能拟合任何带有隐藏部分的模型，它也是下一章的引擎。"
+   "en": "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells creep toward a fit. <bookmark mark='b'/> By the last round they've settled, and the pages each one claims match the true authors 97 percent of the time. Nobody told it there were authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too.",
+   "zh": "然后再来：E、M、E、M。<bookmark mark='a'/>每一轮，似然都只升不降，所以这两条钟形曲线一点一点地向拟合靠拢。<bookmark mark='b'/>到最后一轮，它们稳定了下来，每条曲线认领的书页，有97%与真实的作者一致。根本没有人告诉过它，这些书页还有作者之分。EM算法能拟合任何带有隐藏部分的模型，它也是下一章的引擎。"
   },
   "716aa04686a1": {
    "scene": "EM",
@@ -336,20 +331,20 @@
    "en": "Chapter thirteen. Gaussian processes.",
    "zh": "第13章。高斯过程。"
   },
-  "613f144ee9dc": {
+  "d3502022e6e1": {
    "scene": "GP",
-   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth functions. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
-   "zh": "有时候，隐藏的东西是一整个函数。这是《远大前程》每一页用“her”的频率，从小说开头一直到结尾。随着故事在人物之间切换，它时起时落。<bookmark mark='a'/>高斯过程，是光滑函数上的一个概率分布。高斯的意思是钟形：在每一页，取值都是不确定的，最可能落在一条钟形曲线的中间附近。<bookmark mark='k'/>核函数k，说的是两页的取值有多么同步变化：两页离得近，就变化得很同步；离得远，就几乎互不相干。在看到任何数据之前，这是从中抽出的5个函数：它们弯弯曲曲，每道弯都有一个典型的宽度，叫作长度尺度。<bookmark mark='b'/>现在，以这些书页为条件。只有从数据近旁经过的函数，才能留下来。"
+   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
+   "zh": "有时候，隐藏的东西是一整个函数。这是《远大前程》每一页用“her”的频率，从小说开头一直到结尾。随着故事在人物之间切换，它时起时落。<bookmark mark='a'/>高斯过程，是函数上的一个概率分布；这里的核函数让这些函数光滑。高斯的意思是钟形：在每一页，取值都是不确定的，最可能落在一条钟形曲线的中间附近。<bookmark mark='k'/>核函数k，说的是两页的取值有多么同步变化：两页离得近，就变化得很同步；离得远，就几乎互不相干。在看到任何数据之前，这是从中抽出的5个函数：它们弯弯曲曲，每道弯都有一个典型的宽度，叫作长度尺度。<bookmark mark='b'/>现在，以这些书页为条件。只有从数据近旁经过的函数，才能留下来。"
   },
-  "4cdf1a34b838": {
+  "dc35816941e1": {
    "scene": "GP",
-   "en": "Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about 2 pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and beyond them the band opens wide again. A Gaussian process knows what it doesn't know, which is exactly what you want when deciding where to look next.",
-   "zh": "它们的平均就是最佳猜测，周围的那条带子表示不确定性。<bookmark mark='a'/>长度尺度大约是2页，它不是手工设定的：在这个长度尺度下，数据出现的概率最大。<bookmark mark='b'/>只给模型看前20页，过了这20页，带子又大大地张开了。高斯过程知道自己不知道什么，而当你要决定下一步该看哪里时，要的正是这一点。"
+   "en": "Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about 2 pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and with the kernel settings held fixed, the band opens wide beyond them. This is uncertainty under our model, useful when deciding where to look next.",
+   "zh": "它们的平均就是最佳猜测，周围的那条带子表示不确定性。<bookmark mark='a'/>长度尺度大约是2页，它不是手工设定的：在这个长度尺度下，数据出现的概率最大。<bookmark mark='b'/>只给模型看前20页，固定核函数的设置，带子在这些书页之外又张开了。这是模型假设之下的不确定性，可以帮助决定下一步该看哪里。"
   },
-  "66638403005b": {
+  "5b584ae61f30": {
    "scene": "GP",
-   "en": "Why is conditioning so easy? Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most. <bookmark mark='c'/> The variance is the prior's, minus what the data explains. Notice it never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.",
-   "zh": "为什么取条件这么容易？在高斯过程下，我们见过的那些书页，和任何一页新书上的取值，是联合高斯的，协方差由核函数给出。<bookmark mark='a'/>而一个高斯分布，以它的一部分坐标为条件，仍然是高斯分布。配方就能求出它的均值和方差。<bookmark mark='b'/>均值是观测值的加权和：离得近的书页，权重最大。<bookmark mark='c'/>方差是先验的方差，减去数据能解释的那部分。注意，它根本不看取值本身，只看书页在哪里。拉斯穆森和威廉斯2006年的那本书，就把整个学科建立在这两行公式上。"
+   "en": "Why is conditioning so easy? First subtract the mean. Under a Gaussian process, the pages we've seen and the value at any new page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh the most in this example. <bookmark mark='c'/> With kernel settings fixed, the variance is the prior's, minus what the data explains. It never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of 2006 builds the whole subject on these two lines.",
+   "zh": "为什么取条件这么容易？先减去均值。在高斯过程下，我们见过的那些书页，和任何一页新书上的取值，是联合高斯的，协方差由核函数给出。<bookmark mark='a'/>而一个高斯分布，以它的一部分坐标为条件，仍然是高斯分布。配方就能求出它的均值和方差。<bookmark mark='b'/>均值是观测值的加权和：在这个例子里，离得近的书页权重最大。<bookmark mark='c'/>固定核函数的设置，方差是先验方差减去数据能解释的部分。它根本不看取值本身，只看书页在哪里。拉斯穆森和威廉斯2006年的那本书，就把整个学科建立在这两行公式上。"
   },
   "23f0b780188f": {
    "scene": "GP",
@@ -411,10 +406,10 @@
    "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part twenty, are trained exactly this way.",
    "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第20部分的变分自编码器，正是这样训练的。"
   },
-  "09ca18877658": {
+  "44614b57ae38": {
    "scene": "VI",
-   "en": "Where does that identity come from? Three lines. The log probability of the data doesn't depend on z, so averaging it over q changes nothing. <bookmark mark='a'/> By Bayes' rule, p of x is the joint over the posterior. <bookmark mark='b'/> Multiply and divide by q, and split the log in two. <bookmark mark='c'/> The first part is the ELBO, the evidence lower bound; the second is the KL divergence from q to the true posterior. <bookmark mark='d'/> It's chapter four's EM bound again. EM can make the KL zero, because there the posterior is computable. Variational inference can't, so it settles for the best q in a family it can handle, and the gap is what it gives up.",
-   "zh": "这个恒等式是从哪里来的？三行就够了。数据的对数概率与z无关，所以在q下对它求平均，什么也不会改变。<bookmark mark='a'/>按贝叶斯法则，p(x)等于联合分布除以后验。<bookmark mark='b'/>乘上再除以q，把对数拆成两部分。<bookmark mark='c'/>第一部分是ELBO，也就是证据下界；第二部分是从q到真实后验的KL散度。<bookmark mark='d'/>这又是第4章EM的那个下界。EM能让KL变成零，因为那里的后验算得出来。变分推断做不到，所以它退而求其次，在一个它能处理的家族里找最好的q，而那个差距，就是它放弃掉的部分。"
+   "en": "Where does that identity come from? Three lines. The log probability of the data doesn't depend on z, so averaging it over q changes nothing. <bookmark mark='a'/> By Bayes' rule, p of x is the joint over the posterior. <bookmark mark='b'/> Multiply and divide by q, and split the log in two. <bookmark mark='c'/> The first part is the ELBO, the evidence lower bound; the second is the KL divergence from q to the true posterior. <bookmark mark='d'/> It's chapter four's EM bound again. EM can make the KL zero, because there the posterior is computable. With a restricted family, variational inference may leave a positive gap, even at the best q it can represent.",
+   "zh": "这个恒等式是从哪里来的？三行就够了。数据的对数概率与z无关，所以在q下对它求平均，什么也不会改变。<bookmark mark='a'/>按贝叶斯法则，p(x)等于联合分布除以后验。<bookmark mark='b'/>乘上再除以q，把对数拆成两部分。<bookmark mark='c'/>第一部分是ELBO，也就是证据下界；第二部分是从q到真实后验的KL散度。<bookmark mark='d'/>这又是第4章EM的那个下界。EM能让KL变成零，因为那里的后验算得出来。若限制了可用的分布家族，变分推断即使找到它能表示的最佳q，也可能留下正的差距。"
   },
   "8476ed3d0364": {
    "scene": "VI",
@@ -455,6 +450,11 @@
    "scene": "Outro",
    "en": "Bishop's Pattern Recognition and Machine Learning covers most of this part; Rasmussen and Williams the Gaussian processes, and Pearl's Causality the causes. Thanks for watching, and see you in part eight.",
    "zh": "毕晓普的《模式识别与机器学习》涵盖了这一部分的大部分内容；拉斯穆森和威廉斯的书讲高斯过程，珀尔的《因果论》讲因果。感谢观看，第8部分见。"
+  },
+  "b3b81a1c9464": {
+   "scene": "PPCA",
+   "en": "The best W and sigma, by maximum likelihood, come out in closed form. <bookmark mark='a'/> W's columns can point along the top k eigenvectors of chapter one, each stretched by the square root of its eigenvalue minus the noise variance. Rotating the hidden axes gives an equally good fit. <bookmark mark='b'/> And the noise is the average variance of all the directions left out. <bookmark mark='c'/> Shrink the noise to zero and you get plain PCA back. So PCA was always the limit of a probability model, and now it has a likelihood.",
+   "zh": "按最大似然，最好的W和σ有闭式解。<bookmark mark='a'/>W的各列可以指向第1章里排在最前面的k个特征向量，每一列按特征值减去噪声方差后的平方根来拉伸。旋转隐藏坐标轴，也能得到同样好的拟合。<bookmark mark='b'/>而噪声，就是所有被舍掉的方向的平均方差。<bookmark mark='c'/>把噪声缩到零，就又回到了普通的PCA。所以PCA一直都是一个概率模型的极限，而现在它有了似然。"
   }
  },
  "title_en": "AI, Built: Part 7, Statistical ML",

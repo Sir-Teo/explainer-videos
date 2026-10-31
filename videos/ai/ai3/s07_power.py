@@ -90,18 +90,20 @@ class Power(VoiceoverScene):
             cmath(r"|R(\mathbf{x}_k) - \lambda_1|", r"\lesssim", r"\big|\tfrac{\lambda_2}{\lambda_1}\big|^{2k}", font_size=36,
                   colors=colors),
         ]
-        whys = [why(r"any start, \ in the eigenvector basis"), why(r"each eigenvector just stretches"),
+        whys = [why(r"symmetric $A$, \ $c_1 \ne 0$: \ an orthonormal eigenvector basis"),
+                why(r"each eigenvector just stretches"),
                 why(r"factor out the largest, \ $|\lambda_1| > |\lambda_2| \ge \dots$"),
                 why(r"the rest shrinks geometrically"),
                 why(r"symmetric $A$: \ an error of angle $\theta$ \\ moves $R$ only by about $\theta^2$")]
         step = ladder(self, rows, whys, keep=5, top=3.2, x=-1.0, buff=0.42, edge=6.9)
         with self.voiceover(
-            "Why it works takes four lines. <bookmark mark='a'/> Write the start in the eigenvector basis. "
+            "Why it works takes four lines. <bookmark mark='a'/> Take a symmetric matrix and a start with a nonzero "
+            "component along its dominant eigenvector. Write the start in the orthonormal eigenvector basis. "
             "<bookmark mark='b'/> k multiplications stretch each part by its eigenvalue to the k. <bookmark mark='c'/> "
             "Pull out the largest: every other part is multiplied by a ratio below one, to the k. <bookmark mark='d'/> "
             "So the angle shrinks like lambda two over lambda one, to the k: a straight line on a log scale. "
             "<bookmark mark='e'/> The eigenvalue estimate does twice as well, because the Rayleigh quotient sits at a "
-            "maximum, where small errors in direction barely move it."
+            "stationary point, where small errors in direction barely move it."
         ) as vo:
             step(0)
             vo.wait_until("a")

@@ -451,7 +451,21 @@
   "\\textit{A Christmas Carol}": "《圣诞颂歌》",
   "this section's mix: \\ \\textit{A Christmas Carol}": "这一段的配比：\\ 《圣诞颂歌》",
   "this section's mix: \\ \\textit{Ulysses}": "这一段的配比：\\ 《尤利西斯》",
-  "$p(\\text{this French word made this English word})$": "$p(\\text{这个法文词生成了这个英文词})$"
+  "$p(\\text{this French word made this English word})$": "$p(\\text{这个法文词生成了这个英文词})$",
+  "One maximum-likelihood fit for probabilistic PCA": "概率主成分分析的一个最大似然拟合",
+  "times the context appears in the novels": "上下文在小说中出现的次数",
+  "count:": "次数：",
+  "longest match, characters": "最长匹配的字符数",
+  "positions in the passage": "段落中的位置数",
+  "median $10$, \\ longest $37$": "中位数 $10$，\\ 最长 $37$",
+  "the $\\infty$-gram alone:": "单独使用 $\\infty$ 元模型：",
+  "next character right: \\ $56\\%$ of the time": "下一字符正确：\\ $56\\%$",
+  "probability $0$ for the true character: \\ $32\\%$ of the time": "真实字符的概率为 $0$：\\ $32\\%$",
+  "$\\Rightarrow$ \\ infinitely many bits": "$\\Rightarrow$ \\ 无穷多比特",
+  "one weight per length of match, \\\\ chosen on held-out text from the novels": "每种匹配长度一个权重，\\\\ 用小说中留出的文本选择",
+  "fixed kernel: \\ conditioning is linear algebra; \\ $\\sigma_*^2$ does not depend on $\\mathbf{y}$": "固定核函数：\\ 条件化就是线性代数；\\ $\\sigma_*^2$ 与 $\\mathbf{y}$ 无关",
+  "raise the bound, \\ and the gap narrows \\ (VAEs, Part 20)": "抬高下界，\\ 差距就缩小 \\ （变分自编码器，第20部分）",
+  "variational inference: \\ restricted $q$ family, \\ KL $\\ge 0$": "变分推断：\\ 限制 $q$ 的分布家族，\\ KL $\\ge 0$"
  },
  "patterns": []
 }

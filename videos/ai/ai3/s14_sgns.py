@@ -41,7 +41,7 @@ class SGNS(VoiceoverScene):
         with self.voiceover(
             "In 2013 Tomas Mikolov and colleagues at Google learned word vectors with a guessing game. "
             "<bookmark mark='a'/> Each word gets two vectors, one as the word and one as a neighbour. "
-            "<bookmark mark='b'/> The loss raises a word's dot product with its real neighbours, through the logistic "
+            "<bookmark mark='b'/> Training raises a word's dot product with its real neighbours, through the logistic "
             f"function, and lowers it with {K} random words. <bookmark mark='c'/> That is skip-gram with negative "
             "sampling, the heart of word2vec: cheap enough for billions of words in hours."
         ) as vo:
@@ -70,6 +70,8 @@ class SGNS(VoiceoverScene):
         ax = g.ax
         lc = curve(ax, lx, loss, C.LOSS, 2.5)
         t = ValueTracker(0)
+        live_loss = always_redraw(lambda: lc.copy().pointwise_become_partial(
+            lc, 0, float(np.clip(t.get_value() / max(lx[-1], 1), 0, 1))))
         cursor = always_redraw(lambda: Line(ax.c2p(t.get_value(), float(loss.min()) - 0.2),
                                             ax.c2p(t.get_value(), float(loss.max()) + 0.2), color=WHITE, stroke_width=2))
 
@@ -80,8 +82,15 @@ class SGNS(VoiceoverScene):
         heads = VGroup(*[data_text(w_, font=MONO, font_size=26, color=C.BITS) for w_ in words]).arrange(RIGHT, buff=1.6)
         heads.move_to([0.6, 2.4, 0])
         cols = VGroup(*[column(0, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
-        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}\ \text{{of}}\ {total:,}".replace(",", "{,}"),
-                                            font_size=30, color=C.BITS).to_edge(UP, buff=0.3))
+        # Reuse digit glyphs rather than compiling a new TeX file every frame.
+        slot = Integer(total, font_size=30, color=C.BITS).set_opacity(0)
+        cnt = VGroup(MathTex(r"\text{step}", font_size=30, color=C.BITS), slot,
+                     MathTex(rf"\text{{of}}\ {total:,}".replace(",", "{,}"), font_size=30, color=C.BITS))
+        cnt.arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.3)
+        count_value = Integer(0, font_size=30, color=C.BITS)
+        count_value.add_updater(lambda m: m.set_value(int(t.get_value())).align_to(slot, RIGHT).set_y(slot.get_y()))
+        cnt.add(count_value)
+        count_value.update()
         sub = label(rf"trained here: \ the novels, \ ${sg['pairs'] / 1e6:.0f}$ million (word, neighbour) pairs, \ "
                     rf"three passes", font_size=22, color=GREY_A).to_corner(DR, buff=0.3)
         days = "monday tuesday wednesday thursday friday saturday sunday"
@@ -96,10 +105,10 @@ class SGNS(VoiceoverScene):
             f"{proper(snaps[-1]['monday'][0])}, and father with {snaps[-1]['father'][0]}. Nothing told it what a day or a "
             "relative is."
         ) as vo:
-            self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub), FadeIn(g), Create(lc))
-            self.add(cnt, cursor)
+            self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub), FadeIn(g))
+            self.add(cnt, cursor, live_loss)
             vo.wait_until("a")
-            marks = {1: "b", 2: "c", len(steps) - 1: "d"}
+            marks = {1: "b", mid: "c", len(steps) - 1: "d"}
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
@@ -110,6 +119,7 @@ class SGNS(VoiceoverScene):
                 cols = new
         cnt.clear_updaters()
         cursor.clear_updaters()
+        live_loss.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -122,27 +132,28 @@ class SGNS(VoiceoverScene):
             cmath(r"\ell'(x)", "=", r"\#(w,c)", r"\,\sigma(-x) - ", r"k\,\#(w)\,P_n(c)", r"\,\sigma(x) = 0", font_size=32,
                   colors=colors),
             cmath(r"e^{x}", "=", r"\frac{\#(w,c)}{k\,\#(w)\,P_n(c)}", font_size=34),
-            cmath(r"\mathbf{w}\cdot\mathbf{c}", "=", r"\log\frac{\#(w,c)}{\#(w)\,P_n(c)} - \log k \;=\; "
-                  r"\mathrm{PMI}(w, c) - \log k", font_size=34, colors={r"\mathbf{w}\cdot\mathbf{c}": WC}),
+            cmath(r"\mathbf{w}\cdot\mathbf{c}", "=", r"\log\frac{\#(w,c)}{\#(w)\,P_n(c)} - \log k",
+                  font_size=34, colors={r"\mathbf{w}\cdot\mathbf{c}": WC}),
         ]
         whys = [why(r"the loss, cell by cell: \ the pair seen $\#(w,c)$ times, \\ drawn as a negative "
                     r"$k\,\#(w)\,P_n(c)$ times on average", font_size=22),
                 why(r"$\sigma' = \sigma(1 - \sigma)$, \ $1 - \sigma(x) = \sigma(-x)$", font_size=22),
                 why(r"$\sigma(x) / \sigma(-x) = e^x$", font_size=22),
-                why(r"take logs: \ the \textit{shifted} PMI", font_size=22)]
+                why(r"if $P_n(c)=P(c)$: \ $\mathrm{PMI}(w,c)-\log k$", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=1.3, x=-2.0, buff=0.45, edge=6.9)
         thm = theorem_card(r"Levy \& Goldberg (2014)",
-                           r"If every dot product is free to move, \ the skip-gram objective is minimized exactly when "
-                           r"$\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$: \ word2vec factorizes the "
-                           r"shifted PMI table.", width=8.0).to_edge(UP, buff=0.2)
+                           r"For observed pairs with free dot products, \ the log objective is maximized at "
+                           r"$x=\log\frac{\#(w,c)}{k\,\#(w)P_n(c)}$. \ If $P_n(c)=P(c)$, \ this is "
+                           r"$\mathrm{PMI}(w,c)-\log k$.", width=8.0).to_edge(UP, buff=0.2)
         with self.voiceover(
             "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. "
             "<bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour "
             "some number of times, and as a negative about k times the word's count times the context's sampling "
             "probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. "
             "<bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: "
-            "the best dot product is the pointwise mutual information, minus log k. Word2vec factorizes the counting "
-            "table, shifted."
+            "this maximizes the log objective. If negatives follow the empirical context distribution, the best dot "
+            "product is PMI minus log k. With smoothed negatives, as in our run, use their sampling probability "
+            "in the same log-count ratio: a generalized shifted PMI."
         ) as vo:
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             for k, mk in enumerate("abcd"):
@@ -174,7 +185,7 @@ class SGNS(VoiceoverScene):
         panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.15)
         if panels.width > 12.8:
             panels.scale_to_fit_width(12.8)
-        xl = label(r"across: \ shifted PMI, \ counted; \quad up: \ $\mathbf{w}\cdot\mathbf{c}$, \ trained", font_size=22,
+        xl = label(r"across: \ generalized shifted PMI; \quad up: \ $\mathbf{w}\cdot\mathbf{c}$, \ trained", font_size=22,
                    color=GREY_A).next_to(panels, DOWN, buff=0.2)
         yl = VectorizedPoint()
         head = label(rf"Checked: \ the ${V}$ commonest words, \ the whole loss minimized, \ ${ex['cells']:,}$ pairs".replace(",", "{,}"),
@@ -202,7 +213,7 @@ class SGNS(VoiceoverScene):
         x, y = np.asarray(lg["x"]), np.asarray(lg["y"])
         lo, hi = float(min(np.percentile(x, 0.5), np.percentile(y, 0.5))), float(max(np.percentile(x, 99.5),
                                                                                        np.percentile(y, 99.5)))
-        g = axes([lo, hi, 2], [lo, hi, 2], x_length=4.8, y_length=4.8, xlabel=r"shifted PMI, \ counted from the "
+        g = axes([lo, hi, 2], [lo, hi, 2], x_length=4.8, y_length=4.8, xlabel=r"generalized shifted PMI, \ counted from the "
                  r"pairs it saw", ylabel=r"$\mathbf{w}\cdot\mathbf{c}$ \ after training", center=[-3.0, -0.4, 0])
         ax = g.ax
         diag = Line(ax.c2p(lo, lo), ax.c2p(hi, hi), color=WHITE, stroke_width=1.5)

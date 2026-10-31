@@ -73,11 +73,6 @@
    "en": "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate and add: the dot product, or inner product. It is symmetric, linear in each slot, and a vector dotted with itself is its length squared. <bookmark mark='b'/> Draw the triangle with sides a, b and a minus b. Its third side squared is a dot product. <bookmark mark='c'/> Expand it. <bookmark mark='d'/> Euclid's law of cosines gives the same side another way. <bookmark mark='e'/> Compare: the dot product is the two lengths times the cosine of the angle between them.",
    "zh": "两个向量有多像？<bookmark mark='a'/>把它们逐个坐标相乘，再加起来：这就是点积，也叫内积。它是对称的，对每个位置都是线性的，一个向量和自己的点积，就是它长度的平方。<bookmark mark='b'/>画一个三角形，三条边是a、b和a减b。第三条边的平方，是一个点积。<bookmark mark='c'/>把它展开。<bookmark mark='d'/>欧几里得的余弦定理，从另一条路算出同一条边。<bookmark mark='e'/>两相比较：点积等于两个长度，乘以它们夹角的余弦。"
   },
-  "26d507a3d6ba": {
-   "scene": "Vectors",
-   "en": "Is that cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. <bookmark mark='b'/> Expand it: a parabola in t. <bookmark mark='c'/> A parabola that never dips below zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches zero only when b lines up with a. So an angle between two words makes sense.",
-   "zh": "这个余弦总在负1和1之间吗？哪怕在768维里？这就是柯西–施瓦茨不等式。<bookmark mark='a'/>对任何数t，a减t乘b的长度的平方，都不可能是负的。<bookmark mark='b'/>把它展开：一条关于t的抛物线。<bookmark mark='c'/>一条从不跌到0以下的抛物线，最多只有一个根，所以它的判别式不可能是正的。<bookmark mark='d'/>整理一下：点积至多是两个长度的乘积。<bookmark mark='e'/>转动b，看着：只有当b和a对齐时，抛物线才碰到0。所以两个词之间的夹角，是有意义的。"
-  },
   "e1d25c8abe56": {
    "scene": "Vectors",
    "en": "Divide by the two lengths and you get the cosine similarity, which runs from minus one to one. <bookmark mark='a'/> For GPT-2's words: dog and puppy, 0.62. Dog and cat, 0.55. Dog and tobacco, 0.23. <bookmark mark='b'/> In 768 dimensions you can't draw the angle, but you can compute it: multiply the two lists number by number, and add.",
@@ -218,11 +213,6 @@
    "en": "Eigenvalues are roots of a polynomial, of degree 768 for a 768 by 768 matrix, and since Abel there is no formula beyond degree four. So computers iterate. <bookmark mark='a'/> Start anywhere, multiply by A, rescale to length one, repeat. <bookmark mark='b'/> Each multiplication favours the direction A stretches most, and the arrow swings onto the top eigenvector.",
    "zh": "特征值是一个多项式的根，768乘768的矩阵，多项式就是768次的；而从阿贝尔起，我们知道四次以上没有求根公式。所以计算机只能迭代。<bookmark mark='a'/>从任意一点出发，乘A，缩放到长度1，重复。<bookmark mark='b'/>每乘一次，都偏向A拉伸得最多的方向，箭头就转到了最大特征值的特征向量上。"
   },
-  "5424965abb52": {
-   "scene": "Power",
-   "en": "Why it works takes four lines. <bookmark mark='a'/> Write the start in the eigenvector basis. <bookmark mark='b'/> k multiplications stretch each part by its eigenvalue to the k. <bookmark mark='c'/> Pull out the largest: every other part is multiplied by a ratio below one, to the k. <bookmark mark='d'/> So the angle shrinks like lambda two over lambda one, to the k: a straight line on a log scale. <bookmark mark='e'/> The eigenvalue estimate does twice as well, because the Rayleigh quotient sits at a maximum, where small errors in direction barely move it.",
-   "zh": "为什么有效，四行就够了。<bookmark mark='a'/>把起点写在特征向量基下。<bookmark mark='b'/>乘k次，每一部分都被它的特征值的k次方拉伸。<bookmark mark='c'/>把最大的提出来：其他每一部分，都乘上一个小于1的比值的k次方。<bookmark mark='d'/>所以夹角按λ2比λ1的k次方缩小：在对数坐标上是一条直线。<bookmark mark='e'/>特征值的估计还要快一倍，因为瑞利商在极大值处，方向上的小误差几乎不改变它。"
-  },
   "7ba208af3741": {
    "scene": "Power",
    "en": "Now real matrices. <bookmark mark='a'/> The covariance of GPT-2's 50,257 token vectors, 768 by 768: its top two eigenvalues have a ratio of 0.455, and the error falls by 0.451 per step, down to the machine's rounding. The random start was almost perpendicular to the answer, a sine of 0.9996; chapter fourteen explains why. <bookmark mark='b'/> Part 1's letter table: a ratio of 0.218, and measured, 0.219. <bookmark mark='c'/> Dashed, the prediction: both match the prediction to two decimal places.",
@@ -237,16 +227,6 @@
    "scene": "SVD",
    "en": "Chapter seven. The singular value decomposition.",
    "zh": "第7章。奇异值分解。"
-  },
-  "bad90ada8f0d": {
-   "scene": "SVD",
-   "en": "Not every matrix is symmetric. Many aren't even square. <bookmark mark='a'/> But every matrix, without exception, does three things: a turn, then a stretch along the axes, then another turn. <bookmark mark='b'/> That's the singular value decomposition: A equals U, Sigma, V transpose.",
-   "zh": "不是每个矩阵都对称。很多甚至不是方阵。<bookmark mark='a'/>但每一个矩阵，无一例外，都只做三件事：转一下，沿坐标轴拉伸，再转一下。<bookmark mark='b'/>这就是奇异值分解：A等于U乘Σ乘V转置。"
-  },
-  "f4bb3b164ce8": {
-   "scene": "SVD",
-   "en": "Where do the turns and stretches come from? <bookmark mark='a'/> A transpose A is symmetric, and never negative: x transpose A transpose A x is a length squared. <bookmark mark='b'/> So the spectral theorem gives it perpendicular eigenvectors v, with eigenvalues sigma squared. <bookmark mark='c'/> Send each v through A and divide by sigma. <bookmark mark='d'/> These u's are perpendicular too, and of length one. <bookmark mark='e'/> So A sends perpendicular v's to perpendicular u's, stretched by the sigmas: the decomposition. <bookmark mark='f'/> Beltrami and Jordan found it in 1873 and 1874; Gene Golub and William Kahan's algorithm of 1965 is what computers still use.",
-   "zh": "这些旋转和拉伸是从哪里来的？<bookmark mark='a'/>A转置A是对称的，而且从不为负：x转置A转置A x是一个长度的平方。<bookmark mark='b'/>所以谱定理给了它一组互相垂直的特征向量v，特征值是σ的平方。<bookmark mark='c'/>把每个v送进A，再除以σ。<bookmark mark='d'/>这些u也互相垂直，长度为1。<bookmark mark='e'/>所以A把互相垂直的v送到互相垂直的u，按σ拉伸：这就是分解。<bookmark mark='f'/>贝尔特拉米和若尔当在1873和1874年发现了它；吉恩·戈卢布和威廉·卡汉1965年的算法，计算机至今还在用。"
   },
   "d233554528e2": {
    "scene": "SVD",
@@ -313,11 +293,6 @@
    "en": "The largest stretch over the smallest is the condition number: how much a matrix can amplify errors. <bookmark mark='a'/> Solve A x equals b with a small error in b. <bookmark mark='b'/> The error in x is at most that error over the smallest singular value, <bookmark mark='c'/> and b is at most the largest times x. <bookmark mark='d'/> Divide: relative errors grow by at most kappa. <bookmark mark='e'/> A computer's rounding plays the error in b. At a condition number of a million, 64-bit arithmetic loses about ten to the minus 11 of the answer; 32-bit, ten to the minus 3. From a condition number of ten to the 9, the 32-bit answer is no answer at all. GPT-2's worst-conditioned matrix reaches about ten to the 5.",
    "zh": "最大拉伸除以最小拉伸，就是条件数：一个矩阵能把误差放大多少。<bookmark mark='a'/>解A x等于b，b里有一个小误差。<bookmark mark='b'/>x的误差，至多是这个误差除以最小奇异值，<bookmark mark='c'/>而b至多是最大奇异值乘x。<bookmark mark='d'/>相除：相对误差至多放大κ倍。<bookmark mark='e'/>计算机的舍入，就扮演b里的误差。条件数为一百万时，64位运算大约丢掉答案的10的负11次方；32位丢掉10的负3次方。条件数到了10的9次方，32位的答案就根本不算答案了。GPT-2条件最差的矩阵，大约达到10的5次方。"
   },
-  "ca89ec981860": {
-   "scene": "Norms",
-   "en": "The spectral norm has become an optimizer. <bookmark mark='a'/> Which step of spectral size one changes the loss most along a gradient G? Write G with its SVD. <bookmark mark='b'/> Each diagonal entry is at most one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is Muon's update, computed with five Newton-Schulz iterations, matrix products that push singular values towards one. On a real gradient, 59 percent start below a hundredth of the largest. <bookmark mark='d'/> After five steps, 73 percent lie between 0.6 and 1.3. Part 11 builds the optimizer.",
-   "zh": "谱范数变成了一个优化器。<bookmark mark='a'/>沿着梯度G，谱大小为1的哪一步让损失变化最大？用奇异值分解写出G。<bookmark mark='b'/>每个对角元至多是1，所以最好的一步是U乘V转置：把梯度的每个拉伸都设成1。<bookmark mark='c'/>这就是Muon的更新，用五次牛顿–舒尔茨迭代算出来，这些矩阵乘法把奇异值推向1。在一个真实的梯度上，开始时有59%的奇异值不到最大值的百分之一。<bookmark mark='d'/>五步之后，73%落在0.6到1.3之间。第11部分会搭建这个优化器。"
-  },
   "2fb2c8883c76": {
    "scene": "Spectra",
    "en": "Chapter ten. Random matrices, and what training writes into a network's weights.",
@@ -333,11 +308,6 @@
    "en": "Now a trained matrix: GPT-2's layer 6, the first matrix of its MLP, scaled the same way. <bookmark mark='a'/> Most eigenvalues sit in a bulk much like the law. <bookmark mark='b'/> But 59 have escaped beyond the edge, the largest 8.7 times past it. <bookmark mark='c'/> Just unusual values? Shuffle the same numbers into random places. The escapees vanish: the spectrum falls back onto the law. The information is in the arrangement: a few strong directions, learned.",
    "zh": "再看一个训练过的矩阵：GPT-2第6层，它MLP的第一个矩阵，按同样的方式缩放。<bookmark mark='a'/>大多数特征值落在一个主体里，形状很像这条定律。<bookmark mark='b'/>但有59个跑出了边界，最大的超出边界8.7倍。<bookmark mark='c'/>只是因为数值特别吗？把同样这些数打乱，放到随机的位置。跑出去的特征值消失了：谱又落回了这条定律。信息在排列里：学到的几个强方向。"
   },
-  "964d15520014": {
-   "scene": "Spectra",
-   "en": "The escapees thin out slowly, like a power law: density falling as lambda to the minus alpha. <bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: 44 fall in that range; our layer has alpha 3.53. Random matrices have no tail at all.",
-   "zh": "跑出去的特征值慢慢变稀，像幂律一样：密度按λ的负α次方下降。<bookmark mark='a'/>2019年，查尔斯·马丁和迈克尔·马奥尼在几百个训练过的网络上拟合了这样的尾巴：指数几乎总在1.5到5之间，而在同一族模型里，尾巴越重，测试准确率越好。<bookmark mark='b'/>拟合GPT-2全部48个矩阵：有44个落在这个范围里；我们看的那一层，α是3.53。随机矩阵根本没有尾巴。"
-  },
   "2c2a6dc1535d": {
    "scene": "Spectra",
    "en": "The same in this series' small novels model. <bookmark mark='a'/> At initialization its 30 matrices are random: 1 escapees in all. <bookmark mark='b'/> After training, every matrix has between 13 and 31 beyond the edge. Training writes a little structure into a sea of noise.",
@@ -347,11 +317,6 @@
    "scene": "GaLore",
    "en": "Chapter eleven. Gradients are low rank.",
    "zh": "第11章。梯度是低秩的。"
-  },
-  "1986a2b444ad": {
-   "scene": "GaLore",
-   "en": "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens, and in practice far lower: errors and inputs share a few directions.",
-   "zh": "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩1的块。<bookmark mark='d'/>它的秩至多是词元的个数，实际上还低得多：误差和输入集中在几个共同的方向上。"
   },
   "4215506ed838": {
    "scene": "GaLore",
@@ -383,11 +348,6 @@
    "en": "Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. <bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. <bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count words in documents, take the SVD, and search by meaning rather than spelling.",
    "zh": "第1部分的计数模型，把每个词都当成一座孤岛。办法来自语言学里的一个老想法。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。"
   },
-  "69408ad91ab7": {
-   "scene": "Words",
-   "en": "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand commonest words and count how often each pair turns up within four words: a hundred million cells, from 4.35 million words of text. <bookmark mark='b'/> Then turn counts into surprise, Part 1's way: the log of how many times more often two words meet than by chance, the pointwise mutual information. Keep its positive part. <bookmark mark='c'/> Monday and morning: 4.16. The and of meet 85,086 times, but they meet everything: 0.69.",
-   "zh": "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自4.35百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：4.16。the和of一起出现了85086次，可它们和什么词都相遇：0.69。"
-  },
   "07d05d528821": {
    "scene": "Words",
    "en": "Keep the table's hundred strongest directions, with the SVD. <bookmark mark='a'/> Every word gets a hundred numbers. <bookmark mark='b'/> Words that keep the same company end up close. Monday: saturday, tuesday, sunday. Three: four, two, five. Dog: devil, dogs, sheep. Ship: pequod, boat, sail. Perezvon is a dog in The Brothers Karamazov, and the Pequod is Ahab's ship. Nobody gave it a dictionary.",
@@ -408,20 +368,10 @@
    "en": "Chapter thirteen. Word2vec, which turns out to be counting in disguise.",
    "zh": "第13章。word2vec，原来是换了个样子的计数。"
   },
-  "e6fb76f93d70": {
-   "scene": "SGNS",
-   "en": "In 2013 Tomas Mikolov and colleagues at Google learned word vectors with a guessing game. <bookmark mark='a'/> Each word gets two vectors, one as the word and one as a neighbour. <bookmark mark='b'/> The loss raises a word's dot product with its real neighbours, through the logistic function, and lowers it with 5 random words. <bookmark mark='c'/> That is skip-gram with negative sampling, the heart of word2vec: cheap enough for billions of words in hours.",
-   "zh": "2013年，谷歌的托马斯·米科洛夫和同事用一个猜谜游戏学习词向量。<bookmark mark='a'/>每个词有两个向量，一个在它作为中心词时用，一个在它作为邻居时用。<bookmark mark='b'/>损失函数通过逻辑函数，提高一个词和它真实邻居的点积，并降低它和5个随机词的点积。<bookmark mark='c'/>这就是带负采样的跳字模型，word2vec的核心：便宜到几小时就能学完几十亿个词。"
-  },
   "3b61216e8005": {
    "scene": "SGNS",
    "en": "We trained it on the novels, with the same words and window as the counting. Four words and their nearest neighbours, with the loss below. <bookmark mark='a'/> At the start, random. <bookmark mark='b'/> After 36 steps, the neighbours are the commonest words: they get pushed first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four. <bookmark mark='d'/> By the end, Monday sits with Tuesday, and father with son. Nothing told it what a day or a relative is.",
    "zh": "我们在小说上训练它，用和计数时一样的词和窗口。四个词和它们的最近邻，下面是损失。<bookmark mark='a'/>开始时是随机的。<bookmark mark='b'/>36步之后，近邻都是最常见的词：它们最先被推动。<bookmark mark='c'/>到第1089步，意义出现了：three和thirty, fifty, four在一起。<bookmark mark='d'/>到最后，monday和Tuesday在一起，father和son在一起。没有任何东西告诉它，什么是一天，什么是亲戚。"
-  },
-  "cbba8e7693f6": {
-   "scene": "SGNS",
-   "en": "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. <bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour some number of times, and as a negative about k times the word's count times the context's sampling probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. <bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: the best dot product is the pointwise mutual information, minus log k. Word2vec factorizes the counting table, shifted.",
-   "zh": "为什么猜测和计数会一致？2014年，奥默·列维和约阿夫·戈德堡说明了原因。<bookmark mark='a'/>把一个词和一个上下文的损失收集起来：这一对作为真实邻居出现若干次，作为负样本出现的次数，大约是k乘这个词的计数，再乘这个上下文的采样概率。<bookmark mark='b'/>把它们的点积x当作自由的；令导数为0。<bookmark mark='c'/>两个逻辑函数项之比是e的x次方。<bookmark mark='d'/>取对数：最好的点积，就是点互信息减去log k。word2vec分解的，正是计数的那张表，只是平移了一下。"
   },
   "dff098a8208c": {
    "scene": "SGNS",
@@ -443,11 +393,6 @@
    "en": "Chapter fourteen. Life in seven hundred and sixty-eight dimensions.",
    "zh": "第14章。生活在768维。"
   },
-  "31ad609e8494": {
-   "scene": "HighDim",
-   "en": "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most common. <bookmark mark='c'/> In a hundred, the angle strays from ninety degrees by 5.8 degrees on average, <bookmark mark='d'/> and in 768, by 2.1.",
-   "zh": "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>两个随机方向：在二维，什么角度都有。<bookmark mark='b'/>在三维，直角附近已经最常见。<bookmark mark='c'/>在一百维，夹角平均只偏离90度5.8度，<bookmark mark='d'/>在768维，只偏离2.1度。"
-  },
   "59a1ab8681bf": {
    "scene": "HighDim",
    "en": "Why? <bookmark mark='a'/> The cosine is the dot product over the lengths, each close to root d, as we'll see. <bookmark mark='b'/> The dot product is a sum of d independent products of mean zero and variance one: variance d. <bookmark mark='c'/> Divide by d squared: the cosine's variance is one over d. <bookmark mark='d'/> Measured from d of 2 to 4096, the points sit on the line; at 768, 0.00128 against 0.00130.",
@@ -457,11 +402,6 @@
    "scene": "HighDim",
    "en": "So high-dimensional space is roomy. <bookmark mark='a'/> Ten thousand random directions in 768 dimensions: every pair between 79 and 101 degrees apart. <bookmark mark='b'/> A model stores an idea, a feature, as a direction, and can keep far more features than dimensions if they need only be nearly perpendicular: superposition, how Part 30 reads a model.",
    "zh": "所以高维空间很宽敞。<bookmark mark='a'/>768维里一万个随机方向：每一对的夹角都在79到101度之间。<bookmark mark='b'/>模型把一个概念，也就是一个特征，存成一个方向；只要这些方向近似垂直就行，特征就可以远多于维数：这叫叠加，第30部分就靠它读懂模型。"
-  },
-  "91308a0cbdf9": {
-   "scene": "HighDim",
-   "en": "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. <bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. <bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is about one over root two, whatever d: the length grows, the spread doesn't. Measured at 768, 0.702.",
-   "zh": "再看长度。<bookmark mark='a'/>d越大，一个随机向量的长度越集中在根号d附近。<bookmark mark='b'/>它的平方是d个平方之和，<bookmark mark='c'/>均值是d，方差是2d。<bookmark mark='d'/>平方根在d附近，每变化1只变化2倍根号d分之1，所以长度的散布大约是根号2分之1，不管d是多少：长度在长，散布不长。在768维实测，0.702。"
   },
   "6da228bb9f10": {
    "scene": "HighDim",
@@ -478,11 +418,6 @@
    "en": "A consequence that sounds impossible. <bookmark mark='a'/> Multiply a thousand of GPT-2's vectors by one random matrix, crushing 768 numbers to a few. <bookmark mark='b'/> Down to 2, distances are scrambled; 5, 20: better. <bookmark mark='c'/> At 100, 84 percent of the distances move by less than ten percent; at 400, 99.6 percent.",
    "zh": "一个听起来不可能的推论。<bookmark mark='a'/>把GPT-2的一千个向量乘上同一个随机矩阵，把768个数压成几个。<bookmark mark='b'/>压到2个，距离全乱了；5个、20个：好一些。<bookmark mark='c'/>到100个，有84%的距离变化不到10%；到400个，99.6%。"
   },
-  "450f2854053a": {
-   "scene": "JL",
-   "en": "The Johnson-Lindenstrauss lemma, from 1984, in Dasgupta and Gupta's form of 2003. <bookmark mark='a'/> To keep every squared distance among n points within one plus or minus epsilon, a random projection to about four log n over epsilon squared dimensions suffices. <bookmark mark='b'/> For our thousand points at ten percent: 5,921. The starting dimension doesn't appear at all. Let's prove it.",
-   "zh": "约翰逊–林登斯特劳斯引理，1984年，这里用的是达斯古普塔和古普塔2003年的形式。<bookmark mark='a'/>要让n个点之间的每个距离平方都保持在1加减ε倍以内，随机投影到大约4 log n除以ε平方维就够了。<bookmark mark='b'/>对我们的一千个点、10%的误差：5921维。起始的维数根本没有出现。我们来证明它。"
-  },
   "2e921fcb25b8": {
    "scene": "JL",
    "en": "Fix one pair, and let x be their difference, of length one. <bookmark mark='a'/> Each coordinate of R x is a sum of independent normals: normal, with variance one. <bookmark mark='b'/> The squared length is a sum of k such squares: chi-squared, mean k. <bookmark mark='c'/> The Chernoff trick: Markov's inequality on e to the t times it, whose average we know. <bookmark mark='d'/> The best t, and a bound on the logarithm: the chance of stretching past epsilon falls exponentially in k, and shrinking likewise. <bookmark mark='e'/> The union bound over all pairs: once k reaches four log n over that small quantity, the chance of any failure is below one. A good projection exists, and a random one works with probability at least one over n.",
@@ -492,11 +427,6 @@
    "scene": "JL",
    "en": "Now the data. <bookmark mark='a'/> For one pair, the chance of moving more than 10 percent is exactly a chi-squared tail, in yellow. <bookmark mark='b'/> The measured share of all 499,500 pairs sits on it: the largest gap is 0.0020. <bookmark mark='c'/> The Chernoff bound, dashed, lies above, as it must: at 768, 0.33 against an exact 0.050.",
    "zh": "现在看数据。<bookmark mark='a'/>对一对点，变化超过10%的概率，正好是一个卡方尾巴，黄色那条。<bookmark mark='b'/>全部499500对点的实测比例就落在它上面：最大的差距是0.0020。<bookmark mark='c'/>虚线的切尔诺夫界在上方，它本该如此：在768维，是0.33，而精确值是0.050。"
-  },
-  "af5a6b463af3": {
-   "scene": "JL",
-   "en": "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices per k. <bookmark mark='b'/> The union bound's guarantee, from k of 200: at 768 it promises 0.30, and the worst pair measured 0.25. <bookmark mark='c'/> And no map can do much better: in 2017 Kasper Green Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant.",
-   "zh": "引理保证的是所有点对同时成立。<bookmark mark='a'/>所有点对里最差的那一对，每个k取五个随机矩阵。<bookmark mark='b'/>联合界给出的保证，从k等于200开始：在768维，它保证0.30，而最差的一对实测是0.25。<bookmark mark='c'/>而且没有任何映射能好太多：2017年，卡斯珀·格林·拉森和杰拉尼·纳尔逊证明了，log n除以ε平方在常数倍以内是最优的。"
   },
   "765e67f6b6aa": {
    "scene": "Geometry",
@@ -582,6 +512,76 @@
    "scene": "Outro",
    "en": "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, Trefethen and Bau explain why the order of arithmetic matters, and Roman Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. Thanks for watching, and see you in Part 4.",
    "zh": "想深入的话，吉尔伯特·斯特朗的《线性代数与数据学习》是很友好的伙伴，特雷费森和鲍的书讲清了运算顺序为什么重要，罗曼·韦尔希宁的《高维概率》解释了大空间为什么这样表现。谢谢观看，第4部分见。"
+  },
+  "d2aee9f50450": {
+   "scene": "Vectors",
+   "en": "Is that cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. <bookmark mark='b'/> If b is zero, the inequality is immediate. Otherwise, expand it: a parabola in t. <bookmark mark='c'/> A parabola that never dips below zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches zero only when b lines up with a. So an angle between two words makes sense.",
+   "zh": "这个余弦总在负1和1之间吗？哪怕在768维里？这就是柯西–施瓦茨不等式。<bookmark mark='a'/>对任何数t，a减t乘b的长度的平方，都不可能是负的。<bookmark mark='b'/> 如果b是零向量，不等式显然成立。否则，把它展开：一条关于t的抛物线。<bookmark mark='c'/>一条从不跌到0以下的抛物线，最多只有一个根，所以它的判别式不可能是正的。<bookmark mark='d'/>整理一下：点积至多是两个长度的乘积。<bookmark mark='e'/>转动b，看着：只有当b和a对齐时，抛物线才碰到0。所以两个词之间的夹角，是有意义的。"
+  },
+  "54c305f17244": {
+   "scene": "SVD",
+   "en": "Not every matrix is symmetric. Many aren't even square. <bookmark mark='a'/> But every matrix, without exception, has three factors: an orthogonal change of coordinates, a stretch or projection along the axes, and another orthogonal change. Those coordinate changes may rotate or reflect. Our example uses two rotations. <bookmark mark='b'/> That's the singular value decomposition: A equals U, Sigma, V transpose.",
+   "zh": "不是每个矩阵都对称。很多甚至不是方阵。<bookmark mark='a'/>但每一个矩阵，无一例外，都能分成三个因子：一次正交坐标变换，沿坐标轴拉伸或投影，再一次正交变换。这些坐标变换可以是旋转，也可以是反射。我们的例子用的是两次旋转。<bookmark mark='b'/>这就是奇异值分解：A等于U乘Σ乘V转置。"
+  },
+  "fb14cea3f46e": {
+   "scene": "SVD",
+   "en": "Where do the turns and stretches come from? <bookmark mark='a'/> A transpose A is symmetric, and never negative: x transpose A transpose A x is a length squared. <bookmark mark='b'/> So the spectral theorem gives it perpendicular eigenvectors v, with eigenvalues sigma squared. <bookmark mark='c'/> Send each v through A and divide by sigma, for nonzero sigma. Complete the orthonormal bases for any zero singular values. <bookmark mark='d'/> These u's are perpendicular too, and of length one. <bookmark mark='e'/> So A sends perpendicular v's to perpendicular u's, stretched by the sigmas: the decomposition. <bookmark mark='f'/> Beltrami and Jordan found it in 1873 and 1874; Gene Golub and William Kahan's algorithm of 1965 is what computers still use.",
+   "zh": "这些旋转和拉伸是从哪里来的？<bookmark mark='a'/>A转置A是对称的，而且从不为负：x转置A转置A x是一个长度的平方。<bookmark mark='b'/>所以谱定理给了它一组互相垂直的特征向量v，特征值是σ的平方。<bookmark mark='c'/>对非零σ，把每个v送进A，再除以σ。若有零奇异值，就把两边补成完整的标准正交基。<bookmark mark='d'/>这些u也互相垂直，长度为1。<bookmark mark='e'/>所以A把互相垂直的v送到互相垂直的u，按σ拉伸：这就是分解。<bookmark mark='f'/>贝尔特拉米和若尔当在1873和1874年发现了它；吉恩·戈卢布和威廉·卡汉1965年的算法，计算机至今还在用。"
+  },
+  "e0333d054ddb": {
+   "scene": "Power",
+   "en": "Why it works takes four lines. <bookmark mark='a'/> Take a symmetric matrix and a start with a nonzero component along its dominant eigenvector. Write the start in the orthonormal eigenvector basis. <bookmark mark='b'/> k multiplications stretch each part by its eigenvalue to the k. <bookmark mark='c'/> Pull out the largest: every other part is multiplied by a ratio below one, to the k. <bookmark mark='d'/> So the angle shrinks like lambda two over lambda one, to the k: a straight line on a log scale. <bookmark mark='e'/> The eigenvalue estimate does twice as well, because the Rayleigh quotient sits at a stationary point, where small errors in direction barely move it.",
+   "zh": "为什么有效，四行就够了。<bookmark mark='a'/>取一个对称矩阵，起点沿主特征向量的分量必须非零。把起点写在标准正交的特征向量基下。<bookmark mark='b'/>乘k次，每一部分都被它的特征值的k次方拉伸。<bookmark mark='c'/>把最大的提出来：其他每一部分，都乘上一个小于1的比值的k次方。<bookmark mark='d'/>所以夹角按λ2比λ1的k次方缩小：在对数坐标上是一条直线。<bookmark mark='e'/>特征值的估计还要快一倍，因为瑞利商在驻点处，方向上的小误差几乎不改变它。"
+  },
+  "163508c305ea": {
+   "scene": "Words",
+   "en": "We'll do it with the thirty novels. <bookmark mark='a'/> Take the ten thousand commonest words and count how often each pair turns up within four words: a hundred million cells, from 4.35 million words of text. <bookmark mark='b'/> Then turn counts into surprise, Part 1's way: the log of how many times more often two words meet than by chance, the pointwise mutual information. Keep its positive part. <bookmark mark='c'/> Monday and morning: 4.16. The and of meet 85,086 times, but they meet everything: 0.69. <bookmark mark='d'/> For the SVD table, we smooth the context distribution with the three-quarters power, then keep positive values.",
+   "zh": "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自4.35百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：4.16。the和of一起出现了85086次，可它们和什么词都相遇：0.69。<bookmark mark='d'/>做SVD用的表，还会先把上下文分布取四分之三次方并归一化，再只保留正值。"
+  },
+  "8f32e7afdcc2": {
+   "scene": "SGNS",
+   "en": "In 2013 Tomas Mikolov and colleagues at Google learned word vectors with a guessing game. <bookmark mark='a'/> Each word gets two vectors, one as the word and one as a neighbour. <bookmark mark='b'/> Training raises a word's dot product with its real neighbours, through the logistic function, and lowers it with 5 random words. <bookmark mark='c'/> That is skip-gram with negative sampling, the heart of word2vec: cheap enough for billions of words in hours.",
+   "zh": "2013年，谷歌的托马斯·米科洛夫和同事用一个猜谜游戏学习词向量。<bookmark mark='a'/>每个词有两个向量，一个在它作为中心词时用，一个在它作为邻居时用。<bookmark mark='b'/>训练会通过逻辑函数，提高一个词和它真实邻居的点积，并降低它和5个随机词的点积。<bookmark mark='c'/>这就是带负采样的跳字模型，word2vec的核心：便宜到几小时就能学完几十亿个词。"
+  },
+  "817584545d4d": {
+   "scene": "SGNS",
+   "en": "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. <bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour some number of times, and as a negative about k times the word's count times the context's sampling probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. <bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: this maximizes the log objective. If negatives follow the empirical context distribution, the best dot product is PMI minus log k. With smoothed negatives, as in our run, use their sampling probability in the same log-count ratio: a generalized shifted PMI.",
+   "zh": "为什么猜测和计数会一致？2014年，奥默·列维和约阿夫·戈德堡说明了原因。<bookmark mark='a'/>把一个词和一个上下文的损失收集起来：这一对作为真实邻居出现若干次，作为负样本出现的次数，大约是k乘这个词的计数，再乘这个上下文的采样概率。<bookmark mark='b'/>把它们的点积x当作自由的；令导数为0。<bookmark mark='c'/>两个逻辑函数项之比是e的x次方。<bookmark mark='d'/>取对数：这使对数目标达到最大。如果负样本服从经验上下文分布，最好的点积就是点互信息减去log k。若像我们的训练一样，用平滑后的负采样分布，就把它的采样概率代入同一个对数计数比：这是广义的平移点互信息。"
+  },
+  "a4b8e70c7f76": {
+   "scene": "HighDim",
+   "en": "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most common. <bookmark mark='c'/> In a hundred, the angle's standard deviation around ninety degrees is 5.8 degrees, <bookmark mark='d'/> and in 768, 2.1.",
+   "zh": "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>两个随机方向：在二维，什么角度都有。<bookmark mark='b'/>在三维，直角附近已经最常见。<bookmark mark='c'/>在一百维，夹角围绕90度的标准差是5.8度，<bookmark mark='d'/>在768维，标准差是2.1度。"
+  },
+  "3c81cf3aad6d": {
+   "scene": "HighDim",
+   "en": "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. <bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. <bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is about one over root two for large d: the length grows, the spread approaches a constant. Measured at 768, 0.702.",
+   "zh": "再看长度。<bookmark mark='a'/>d越大，一个随机向量的长度越集中在根号d附近。<bookmark mark='b'/>它的平方是d个平方之和，<bookmark mark='c'/>均值是d，方差是2d。<bookmark mark='d'/>平方根在d附近，每变化1只变化2倍根号d分之1，所以长度的散布在d很大时，大约是根号2分之1：长度不断增长，散布则趋近一个常数。在768维实测，0.702。"
+  },
+  "842d02761a24": {
+   "scene": "JL",
+   "en": "The Johnson-Lindenstrauss lemma, from 1984, in Dasgupta and Gupta's form of 2003. <bookmark mark='a'/> To keep every squared distance among n points within one plus or minus epsilon, a random projection to about log n over epsilon squared dimensions, up to a constant, suffices. <bookmark mark='b'/> For our thousand points at ten percent: 5,921. The starting dimension doesn't appear at all. Let's prove it.",
+   "zh": "约翰逊–林登斯特劳斯引理，1984年，这里用的是达斯古普塔和古普塔2003年的形式。<bookmark mark='a'/>要让n个点之间的每个距离平方都保持在1加减ε倍以内，随机投影到与log n除以ε平方成比例的维数就够了。<bookmark mark='b'/>对我们的一千个点、10%的误差：5921维。起始的维数根本没有出现。我们来证明它。"
+  },
+  "abe8384c9779": {
+   "scene": "JL",
+   "en": "The lemma promises every pair at once. <bookmark mark='a'/> The worst pair of all, five random matrices per k. <bookmark mark='b'/> The union bound's guarantee, from k of 200: at 768 it promises 0.30, and the worst pair measured 0.25. <bookmark mark='c'/> In the worst case no map can do much better: in 2017 Kasper Green Larsen and Jelani Nelson proved log n over epsilon squared optimal, up to a constant.",
+   "zh": "引理保证的是所有点对同时成立。<bookmark mark='a'/>所有点对里最差的那一对，每个k取五个随机矩阵。<bookmark mark='b'/>联合界给出的保证，从k等于200开始：在768维，它保证0.30，而最差的一对实测是0.25。<bookmark mark='c'/>而且在最坏的情况下，没有任何映射能好太多：2017年，卡斯珀·格林·拉森和杰拉尼·纳尔逊证明了，log n除以ε平方在常数倍以内是最优的。"
+  },
+  "27ba949737de": {
+   "scene": "Spectra",
+   "en": "The escapees thin out slowly, like a power law: density falling as lambda to the minus alpha. <bookmark mark='a'/> In 2019 Charles Martin and Michael Mahoney fitted such tails across hundreds of trained networks: exponents nearly always between 1.5 and 5, and within a family, heavier tails went with better test accuracy. <bookmark mark='b'/> Fitted to all 48 of GPT-2's matrices: 44 fall in that range; our layer has alpha 3.53. The independent Gaussian reference has a compact limiting bulk, rather than a power-law tail.",
+   "zh": "跑出去的特征值慢慢变稀，像幂律一样：密度按λ的负α次方下降。<bookmark mark='a'/>2019年，查尔斯·马丁和迈克尔·马奥尼在几百个训练过的网络上拟合了这样的尾巴：指数几乎总在1.5到5之间，而在同一族模型里，尾巴越重，测试准确率越好。<bookmark mark='b'/>拟合GPT-2全部48个矩阵：有44个落在这个范围里；我们看的那一层，α是3.53。独立高斯参考矩阵的极限主体有紧支撑，而不是幂律尾部。"
+  },
+  "ccd5046628ea": {
+   "scene": "GaLore",
+   "en": "A gradient is a matrix too, with its own singular values. <bookmark mark='a'/> A layer turns each token's vector x into W x. <bookmark mark='b'/> By the chain rule, Part 4's subject, the gradient for one weight sums, over tokens, the error at that output times the input. <bookmark mark='c'/> So the gradient is a sum of outer products, rank one per token. <bookmark mark='d'/> Its rank is at most the number of tokens. In practice it is often approximately low rank: errors and inputs concentrate in a few directions.",
+   "zh": "梯度也是一个矩阵，有它自己的奇异值。<bookmark mark='a'/>一层把每个词元的向量x变成W x。<bookmark mark='b'/>根据链式法则，也就是第4部分的主题，一个权重的梯度，是对各个词元，把那个输出处的误差乘上输入，再加起来。<bookmark mark='c'/>所以梯度是一些外积之和，每个词元贡献一个秩1的块。<bookmark mark='d'/>它的秩至多是词元的个数。实际中，它往往是近似低秩的：误差和输入集中在几个共同的方向上。"
+  },
+  "4fdddd60dfe9": {
+   "scene": "Norms",
+   "en": "The spectral norm has become an optimizer. <bookmark mark='a'/> Which step of spectral size one changes the loss most along a gradient G? Write G with its SVD. <bookmark mark='b'/> Each diagonal entry is at most one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is Muon's normalized direction; take its negative for descent. It is computed with five Newton-Schulz iterations, matrix products that push singular values towards one. On a real gradient, 59 percent start below a hundredth of the largest. <bookmark mark='d'/> After five steps, 73 percent lie between 0.6 and 1.3. Part 11 builds the optimizer.",
+   "zh": "谱范数变成了一个优化器。<bookmark mark='a'/>沿着梯度G，谱大小为1的哪一步让损失变化最大？用奇异值分解写出G。<bookmark mark='b'/>每个对角元至多是1，所以最好的一步是U乘V转置：把梯度的每个拉伸都设成1。<bookmark mark='c'/>这就是Muon的归一化方向；下降时取它的负方向。用五次牛顿–舒尔茨迭代算出来，这些矩阵乘法把奇异值推向1。在一个真实的梯度上，开始时有59%的奇异值不到最大值的百分之一。<bookmark mark='d'/>五步之后，73%落在0.6到1.3之间。第11部分会搭建这个优化器。"
   }
  },
  "title_en": "AI, Built: Part 3, Vectors That Mean Things",

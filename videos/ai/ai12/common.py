@@ -8,7 +8,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 
-from .compute import load  # noqa: F401
+from .compute import best_rate_index, load, mean_seed_loss  # noqa: F401
 
 PART = 12
 
@@ -101,6 +101,25 @@ def panel(width, height, center=ORIGIN, color=GREY_D) -> RoundedRectangle:
 
 def dots(ax, xs, ys, color, radius=0.06) -> VGroup:
     return VGroup(*[Dot(ax.c2p(x, y), radius=radius, color=color) for x, y in zip(xs, ys) if np.isfinite(y)])
+
+
+def visible_values(values, lo, hi):
+    """Omit off-scale values without fabricating a plateau at the axis limit."""
+    values = np.asarray(values, float)
+    return np.where(np.isfinite(values) & (values >= lo) & (values <= hi), values, np.nan)
+
+
+def sweep_plot(ax, xs, values, color, lo, hi):
+    """Plot raw seed means; ceiling triangles mark off-scale or unstable rates."""
+    values = np.asarray(values, float)
+    mean = mean_seed_loss(values)
+    visible = visible_values(mean, lo, hi)
+    spread = np.clip(np.where(np.isfinite(values), values, hi), lo, hi)
+    shade = band(ax, xs, spread.min(0), spread.max(0), color, 0.18)
+    line = curve(ax, xs, visible, color, 3)
+    overflow = VGroup(*[Triangle(color=color, fill_opacity=1, stroke_width=0).scale(0.045)
+                        .move_to(ax.c2p(x, hi)) for x, y in zip(xs, mean) if not np.isfinite(y) or y > hi])
+    return VGroup(shade, line, overflow)
 
 
 def era_strip(scene, events, head_text=r"How we got here", tag_text=r"milestones evenly spaced, \ not to scale",

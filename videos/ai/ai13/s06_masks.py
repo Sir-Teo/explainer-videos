@@ -134,7 +134,7 @@ class Masks(VoiceoverScene):
                        label(r"cross-attention: \ the translation looks back at the sentence it translates",
                              font_size=22, color=GREY_A)).arrange(DOWN, buff=0.15).move_to([0, -2.4, 0])
         with self.voiceover(
-            "The mask is the only difference between the three ways the transformer has been cut. "
+            "Different masks reveal the main information flows in these transformer families. "
             "<bookmark mark='a'/> An encoder lets every position see every other: it reads, but cannot write left "
             "to right. <bookmark mark='b'/> A decoder uses the causal triangle: it writes, one token at a time. "
             "<bookmark mark='c'/> The 2017 paper's translator had both. Its decoder looks at its own past, and "

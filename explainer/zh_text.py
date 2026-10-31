@@ -17,7 +17,7 @@ import re
 import sys
 from pathlib import Path
 
-from manim import MathTex, Scene, Text
+from manim import Code, MathTex, Scene, Text
 
 from explainer import lang
 from explainer.paths import ANALYSIS_DATA, VIDEOS, video_dir
@@ -70,11 +70,12 @@ _VERBATIM = [False]  # set by verbatim(): text that is data (words a model read 
 
 @contextlib.contextmanager
 def verbatim():
+    previous = _VERBATIM[0]
     _VERBATIM[0] = True
     try:
         yield
     finally:
-        _VERBATIM[0] = False
+        _VERBATIM[0] = previous
 
 
 # xeCJK drops a space that follows a Chinese character, so "\text{ 时 } d" would set as "时d": make it a control space
@@ -179,6 +180,13 @@ def install(base_template) -> None:
         mathtex_init(self, *tex_strings, **kw)
 
     text_init = Text.__init__
+    code_init = Code.__init__
+
+    def patched_code(self, *a, **kw):
+        # Source code is evidence too: identifiers and strings must survive
+        # translation, and must not be reported as missing Chinese captions.
+        with verbatim():
+            code_init(self, *a, **kw)
 
     def patched_text(self, text, *a, **kw):
         if COLLECT and not _VERBATIM[0]:
@@ -189,4 +197,4 @@ def install(base_template) -> None:
                 kw["font"] = cjk_font()
         text_init(self, text, *a, **kw)
 
-    MathTex.__init__, Text.__init__ = patched_mathtex, patched_text
+    MathTex.__init__, Text.__init__, Code.__init__ = patched_mathtex, patched_text, patched_code

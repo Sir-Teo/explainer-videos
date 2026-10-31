@@ -141,10 +141,15 @@ def hbars(values, labels, colors, width=6.0, height=0.38, font_size=22, vmax=Non
     return rows
 
 
-def seed_band(ax, xs, runs, color, opacity=0.18, stroke_width=3.5):
-    """Mean curve over seeds with the min-max band around it."""
+def seed_band(ax, xs, runs, color, opacity=0.18, stroke_width=3.5, ylim=None):
+    """Mean and min-max band; omit off-scale mean points in a zoomed view."""
     R = np.asarray(runs, float)
-    return VGroup(band(ax, xs, R.min(0), R.max(0), color, opacity), curve(ax, xs, R.mean(0), color, stroke_width))
+    lo, hi, mean = R.min(0), R.max(0), R.mean(0)
+    if ylim is not None:
+        bottom, top = ylim
+        lo, hi = np.clip(lo, bottom, top), np.clip(hi, bottom, top)
+        mean = np.where((mean >= bottom) & (mean <= top), mean, np.nan)
+    return VGroup(band(ax, xs, lo, hi, color, opacity), curve(ax, xs, mean, color, stroke_width))
 
 
 def tile(m: Mobject, caption: str, color, TW=3.0, TH=2.0) -> Group:

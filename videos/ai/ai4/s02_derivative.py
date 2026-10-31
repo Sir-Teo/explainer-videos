@@ -97,6 +97,10 @@ class Derivative(VoiceoverScene):
             a, b = p0, p0 + h.get_value()
             k = (s(b) - s(a)) / (b - a)
             x0, x1 = 0.05, 0.95
+            # Keep the secant inside the plotted y-range as it approaches the
+            # tangent; its negative extension used to cross the slide's edge.
+            crossings = [a + (y - s(a)) / k for y in (0, 6)]
+            x0, x1 = max(x0, min(crossings)), min(x1, max(crossings))
             return VGroup(Line(ax.c2p(x0, s(a) + k * (x0 - a)), ax.c2p(x1, s(a) + k * (x1 - a)), color=GRAD, stroke_width=3),
                           Dot(ax.c2p(b, s(b)), radius=0.06, color=GRAD))
 

@@ -103,21 +103,23 @@ class Gradient(VoiceoverScene, ThreeDScene):
         whys = [why(r"the slope along a unit direction $\mathbf u$"),
                 why(r"the tangent plane: \ $f(x + t\mathbf u) = f(x) + t\,\nabla f \cdot \mathbf u + o(t)$"),
                 why(r"Cauchy--Schwarz (Part 3), \ $\|\mathbf u\| = 1$"),
-                why(r"equality only for parallel vectors")]
+                why(r"$\nabla f \ne 0$: \ equality in its positive direction")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.6, buff=0.55, edge=6.9)
         head = label(r"why the gradient is the steepest direction", font_size=30, color=GREY_A).to_edge(UP, buff=0.3)
         thm = theorem_card(r"steepest ascent",
-                           r"Of all unit directions, $\nabla f / \|\nabla f\|$ climbs fastest, at the rate $\|\nabla f\|$; "
-                           r"$-\nabla f$ descends fastest; \ directions at right angles to $\nabla f$ keep $f$ level.",
+                           r"If $\nabla f \ne 0$, \ of all unit directions, $\nabla f / \|\nabla f\|$ climbs fastest, "
+                           r"at rate $\|\nabla f\|$; \ its opposite descends fastest. \ Perpendicular directions have "
+                           r"zero first-order change.",
                            width=9.6, font_size=22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Why steepest? Pick any direction, a unit vector u, and ask for the slope that way. "
             "<bookmark mark='a'/> The tangent plane answers it: the slope along u is the gradient dotted with u. "
             "<bookmark mark='b'/> By the Cauchy–Schwarz inequality from Part 3, a dot product is at most the product "
             "of the lengths, and u has length one: no direction climbs faster than the length of the gradient. "
-            "<bookmark mark='c'/> Equality holds only when the two vectors are parallel. <bookmark mark='d'/> So the "
+            "<bookmark mark='c'/> If the gradient is nonzero, the maximum occurs in its positive direction. "
+            "<bookmark mark='d'/> So the "
             "gradient's own direction is the steepest way up, its opposite the steepest way down, and the directions "
-            "at right angles keep the height level."
+            "at right angles give zero first-order change. If the gradient is zero, every directional derivative is zero."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

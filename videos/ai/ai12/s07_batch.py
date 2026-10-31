@@ -33,14 +33,15 @@ class Batch(VoiceoverScene):
             cmath(r"\mathbb{E}\,\Delta L", r"\approx", r"-\epsilon\, |G|^2 + \tfrac{\epsilon^2}{2}\Big(G^\top H G + "
                   r"\tfrac{\operatorname{tr}(H\Sigma)}{B}\Big)", font_size=32, colors=colors),
             cmath(r"\epsilon^*", r"=", r"\frac{|G|^2}{G^\top H G + \operatorname{tr}(H\Sigma)/B}", font_size=32, colors=colors),
-            cmath(r"\mathbb{E}\,\Delta L^*", r"=", r"\frac{\Delta L_{\max}}{1 + B_{\text{noise}}/B}", r",\quad",
+            cmath(r"\mathbb{E}\,\Delta L^*", r"=", r"-\frac{\Delta L_{\max}}{1 + B_{\text{noise}}/B}", r",\quad",
                   r"B_{\text{noise}}", r"= \frac{\operatorname{tr}(H\Sigma)}{G^\top H G} \approx \frac{\operatorname{tr}\Sigma}{|G|^2}",
                   font_size=32, colors=colors),
             cmath(r"S = S_{\min}\big(1 + \tfrac{B_{\text{noise}}}{B}\big)", r",\quad",
                   r"E = BS = E_{\min}\big(1 + \tfrac{B}{B_{\text{noise}}}\big)", font_size=32, colors=colors),
             cmath(r"\Big(\frac{S}{S_{\min}} - 1\Big)\Big(\frac{E}{E_{\min}} - 1\Big)", r"=", r"1", font_size=34),
         ]
-        whys = [why(r"Taylor to second order; \ the batch's noise $\Sigma/B$"), why(r"the best step: \ minimize in $\epsilon$"),
+        whys = [why(r"local quadratic model; \ IID batch noise $\Sigma/B$"),
+                why(r"minimize in $\epsilon$; \ assume $G^\top H G > 0$"),
                 why(r"substitute; \ $H \propto I$ for the last step"), why(r"steps and examples to a target, \ per step's gain"),
                 why(r"eliminate $B$")]
         step = ladder(self, rows, whys, keep=4, top=2.45, x=-2.4, buff=0.42, edge=6.9)
@@ -62,10 +63,11 @@ class Batch(VoiceoverScene):
         with self.voiceover(
             "Part eleven showed that a small batch gives a noisy gradient. How big should the batch be? In 2018, Sam "
             "McCandlish and colleagues at OpenAI answered with one step of algebra. <bookmark mark='a'/> Expand the "
-            "loss after one step to second order: the gradient helps, the curvature and the batch's noise hurt. "
-            "<bookmark mark='b'/> Choose the best step size. <bookmark mark='c'/> The best gain is the noise-free "
+            "loss after one step to second order, assuming independent examples and positive curvature along the gradient. "
+            "The gradient helps; curvature and noise limit the step. "
+            "<bookmark mark='b'/> Choose the best step size in this local model. <bookmark mark='c'/> The best gain is the noise-free "
             "gain divided by one plus a ratio, the noise scale over the batch: how many examples it takes for the "
-            "gradient's signal to beat its noise. <bookmark mark='d'/> So the number of steps to reach a loss "
+            "gradient's signal to beat its noise. <bookmark mark='d'/> The resulting empirical model predicts that the number of steps to reach a loss "
             "falls as the batch grows, and the number of examples rises. <bookmark mark='e'/> Eliminate the batch, "
             "and steps and examples trade off along a hyperbola. Far below the noise scale, doubling the batch "
             "halves the steps for free; far above it, it only wastes examples."

@@ -826,7 +826,7 @@ ZH.update({
     'Two senses, trained apart, drifting toward one picture of the same digits':
         '两种感官，分开训练，却朝着关于同一批数字的同一幅图景靠拢：这是那个假说的缩影。',
 
-    "f\"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in the two runs. But":
+    'f"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in the two runs. But that only reaches the {px:.2f} at which the two halves\' raw pixels already agree, far below the {cs:.2f} of two encoders that see the same half."':
         '随着各自学习，它们越来越一致：从开始时的{a0[0]:.2f}，到两次训练中的{a0[-1]:.2f}和{a1[-1]:.2f}。但这只达到了两个半边的原始像素'
         '本来就有的一致度{px:.2f}，远低于两个看同一半的编码器之间的{cs:.2f}。',
 
@@ -836,7 +836,7 @@ ZH.update({
     'At our scale, two senses trained apart do not come to one picture.':
         '在我们的规模上，分开训练的两种感官并没有走到同一幅图景。',
 
-    "f'As each learns, they agree more":
+    "f'As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in the two runs, well above the {px:.2f} of the raw pixels, though below the {cs:.2f} of two encoders that see the same half.'":
         '随着各自学习，它们越来越一致：从开始时的{a0[0]:.2f}，到两次训练中的{a0[-1]:.2f}和{a1[-1]:.2f}，远高于原始像素的{px:.2f}，'
         '但低于两个看同一半的编码器之间的{cs:.2f}。',
 

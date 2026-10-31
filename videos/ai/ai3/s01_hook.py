@@ -46,7 +46,7 @@ class Hook(VoiceoverScene):
         show = {"dog", "lion", "red", "blue", "three", "hundred", "London", "Tokyo", "mother", "brother", "hand",
                 "heart", "run", "sing"}
         labels = {k: data_text(w, font=MONO, font_size=22, color=CAT_COLORS[c]) for k, (w, c) in enumerate(zip(words, cats))
-                  if w in show or c == "animals"}
+                  if w in show or w in {"cat", "horse", "cow", "wolf"}}
         cl = Cloud3D(xyz, [CAT_COLORS[c] for c in cats], scale=3.5, radius=0.085, tilt=0.3, center=DOWN * 0.2,
                      labels=labels)
         overview = VGroup(*[m for k, m in cl.label_of.items() if words[k] in show])
@@ -91,7 +91,9 @@ class Hook(VoiceoverScene):
             targets = [cl.dots[k].copy().clear_updaters() for k in range(len(words))]
             self.play(LaggedStart(*[Transform(word_of[k], targets[k]) for k in range(len(words))], lag_ratio=0.01),
                       run_time=2.0)
-            self.remove(vocab)
+            # Transforming the per-word groups puts them on the scene separately
+            # from their original Text rows. Remove those temporary dots too.
+            self.remove(vocab, *word_of.values())
             self.add(cl)
             vo.wait_until("b")
             self.play(FadeIn(overview), FadeIn(legend), FadeIn(src))

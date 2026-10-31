@@ -79,7 +79,7 @@ class Return(VoiceoverScene):
         ]
         whys = [why(r"a linear recurrence: \ $a_t$, $b_t$ depend on the input only"),
                 why(r"two steps make one step of the same form"),
-                why(r"and $\circ$ is associative: \ the order of combining doesn't matter")]
+                why(r"associative: \ regroup steps, \ preserving their time order")]
         step = ladder(self, rows, whys, keep=3, top=3.0, x=-2.2, align_index=1, edge=6.8)
         # Hillis-Steele for T = 8
         T = 8
@@ -112,7 +112,7 @@ class Return(VoiceoverScene):
             "It can, if the recurrence is linear. <bookmark mark='a'/> Suppose the new state is the old one, "
             "multiplied elementwise by a, plus b, where a and b depend only on the current input. "
             "<bookmark mark='b'/> Then two steps together are again one step of the same form, with a times a "
-            "prime and a prime b plus b prime. <bookmark mark='c'/> That combining rule is associative, and any "
+            "prime and a prime b plus b prime. <bookmark mark='c'/> That combining rule is associative: regroup the steps, preserving their time order. Any "
             "associative operation over a sequence can be computed by a parallel prefix scan, the algorithm Guy "
             "Blelloch made famous in 1990. <bookmark mark='d'/> Combine neighbours, then pairs two apart, then "
             "four apart: after log two of T rounds, every position has its state. A thousand steps become ten "
@@ -169,12 +169,19 @@ class Return(VoiceoverScene):
         tag = note(r"computed: \ this computer, \ numpy").to_corner(DR, buff=0.2)
         w8 = big8["seq"] / big8["par"]
         w256 = big256["seq"] / big256["par"]
-        v8 = (f"With a narrow state, eight numbers, the scan is {w8:.1f} times faster at {big8['T']:,} steps."
-              if w8 > 1.2 else
-              f"With a narrow state the scan is about as fast as the loop, {w8:.1f} times.")
-        v256 = (f"With a wide state, 256 numbers, it is {1 / w256:.1f} times slower: the scan does log T times the "
-                "work, and this computer has only a few cores to spread it over." if w256 < 0.8 else
-                f"With a wide state, 256 numbers, the two are close: {w256:.1f} times.")
+        if w8 > 1.2:
+            v8 = f"With a narrow state, eight numbers, the scan is {w8:.1f} times faster at {big8['T']:,} steps."
+        elif w8 < 0.8:
+            v8 = f"With a narrow state the scan is {1 / w8:.1f} times slower than the loop."
+        else:
+            v8 = f"With a narrow state the scan is about as fast as the loop, {w8:.1f} times."
+        if w256 < 0.8:
+            v256 = (f"With a wide state, 256 numbers, it is {1 / w256:.1f} times slower: the scan does log T times the "
+                    "work, and this computer has only a few cores to spread it over.")
+        elif w256 > 1.2:
+            v256 = f"With a wide state the scan is {w256:.1f} times faster than the loop."
+        else:
+            v256 = f"With a wide state, 256 numbers, the two are close: {w256:.1f} times."
         with self.voiceover(
             "We tried it on the computer making this video. <bookmark mark='a'/> The scan and the step-by-step "
             "loop give the same states, to rounding error. <bookmark mark='b'/> " + v8 + " <bookmark mark='c'/> "

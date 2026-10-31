@@ -186,15 +186,15 @@
    "en": "Chapter six. Escaping the curse of dimensionality.",
    "zh": "第6章。摆脱维数灾难。"
   },
-  "0db0fcfa3ceb": {
+  "18613d4bbfa7": {
    "scene": "Barron",
-   "en": "One layer can draw anything; how many units does it take? A table does the same job with one entry per point of a grid, and joining the dots in one dimension is exactly a layer of hinges. <bookmark mark='a'/> But a grid with m points along each axis has m to the d points in d dimensions. <bookmark mark='b'/> Turn it around: with n points to spend, the spacing is n to the minus one over d, <bookmark mark='c'/> and the miss shrinks like n to the minus two over d. <bookmark mark='d'/> In a hundred dimensions, halving the miss takes two to the fiftieth times as many points. That's the curse of dimensionality, Richard Bellman's phrase.",
-   "zh": "一层能画出任何东西；那要多少个单元？一张表格也能做同样的事，网格上的每个点存一个值，而在一维里，连点正好就是一层铰链。<bookmark mark='a'/>可是每个轴上放m个点的网格，在d维里就有m的d次方个点。<bookmark mark='b'/>反过来说：有n个点可以用，间距就是n的负d分之1次方，<bookmark mark='c'/>误差按n的负d分之2次方缩小。<bookmark mark='d'/>在100维里，要把误差减半，点数就得乘上2的50次方。这就是维数灾难，这个说法来自理查德·贝尔曼。"
+   "en": "One layer can draw anything; how many units does it take? A table does the same job with one entry per point of a grid, and joining the dots in one dimension is exactly a layer of hinges. <bookmark mark='a'/> But a grid with m points along each axis has m to the d points in d dimensions. <bookmark mark='b'/> Turn it around: with n points to spend, the spacing scales as n to the minus one over d for large grids, <bookmark mark='c'/> and the miss shrinks like n to the minus two over d. <bookmark mark='d'/> In a hundred dimensions, halving the miss takes two to the fiftieth times as many points. That's the curse of dimensionality, Richard Bellman's phrase.",
+   "zh": "一层能画出任何东西；那要多少个单元？一张表格也能做同样的事，网格上的每个点存一个值，而在一维里，连点正好就是一层铰链。<bookmark mark='a'/>可是每个轴上放m个点的网格，在d维里就有m的d次方个点。<bookmark mark='b'/>反过来说：有n个点可以用，网格足够细时，间距按n的负d分之1次方缩放，<bookmark mark='c'/>误差按n的负d分之2次方缩小。<bookmark mark='d'/>在100维里，要把误差减半，点数就得乘上2的50次方。这就是维数灾难，这个说法来自理查德·贝尔曼。"
   },
-  "7071cceba37f": {
+  "ebdf46356a04": {
    "scene": "Barron",
-   "en": "In 1993 Andrew Barron showed that networks escape this, for a large class of functions, and the reason fits on one screen. Take a smooth bump, a Gaussian, in d dimensions. <bookmark mark='a'/> It is exactly an average of cosine waves, one for each direction omega, weighted by its Fourier transform. <bookmark mark='b'/> Draw n directions at random and average just those n waves: a network with n units, each a wave in one direction. <bookmark mark='c'/> At any point, that's an average of n independent draws, so its squared error is the variance of one draw, divided by n. <bookmark mark='d'/> And a cosine lies between minus one and one, so the error is at most one over n, with no d anywhere. <bookmark mark='e'/> If random units do that well on average, some particular choice of n units does at least as well, in any dimension. The argument is Bernard Maurey's, from probability.",
-   "zh": "1993年，安德鲁·巴伦证明，对一大类函数来说，网络能摆脱这个灾难，而原因一屏就写得下。取一个光滑的鼓包，一个d维的高斯函数。<bookmark mark='a'/>它恰好是一堆余弦波的平均，每个方向ω一个，按它的傅里叶变换加权。<bookmark mark='b'/>随机抽出n个方向，只对这n个波取平均：这就是一个有n个单元的网络，每个单元是一个方向上的波。<bookmark mark='c'/>在任何一点上，这都是n次独立抽样的平均，所以它的平方误差，等于一次抽样的方差除以n。<bookmark mark='d'/>余弦值在负1和1之间，所以误差最多是n分之1，哪里都没有d。<bookmark mark='e'/>既然随机的单元平均来说能做到这么好，就一定有某一组具体的n个单元做得至少一样好，在任何维度里都是。这个论证来自概率论，属于伯纳德·莫雷。"
+   "en": "In 1993 Andrew Barron showed that networks escape this, for a large class of functions, and the reason fits on one screen. Take a smooth bump, a Gaussian, in d dimensions. <bookmark mark='a'/> It is exactly an average of cosine waves, one for each direction omega, weighted by its Fourier transform. <bookmark mark='b'/> Draw n directions at random and average just those n waves: a network with n units, each a wave in one direction. <bookmark mark='c'/> At any point, that's an average of n independent draws, so its squared error is the variance of one draw, divided by n. <bookmark mark='d'/> And a cosine lies between minus one and one, so the expected squared error is at most one over n. Average over inputs under any fixed probability distribution, and the same bound holds, with no d anywhere. <bookmark mark='e'/> If random units do that well on average, some particular choice of n units does at least as well in mean squared error under that input distribution, in any dimension. The argument is Bernard Maurey's, from probability.",
+   "zh": "1993年，安德鲁·巴伦证明，对一大类函数来说，网络能摆脱这个灾难，而原因一屏就写得下。取一个光滑的鼓包，一个d维的高斯函数。<bookmark mark='a'/>它恰好是一堆余弦波的平均，每个方向ω一个，按它的傅里叶变换加权。<bookmark mark='b'/>随机抽出n个方向，只对这n个波取平均：这就是一个有n个单元的网络，每个单元是一个方向上的波。<bookmark mark='c'/>在任何一点上，这都是n次独立抽样的平均，所以它的平方误差，等于一次抽样的方差除以n。<bookmark mark='d'/>余弦值在负1和1之间，所以期望平方误差至多是n分之1。再按任意固定的输入概率分布取平均，同样的界仍然成立，而且与d无关。<bookmark mark='e'/>既然随机的单元平均来说能做到这么好，就一定有某一组具体的n个单元，在该输入分布下的均方误差至少一样好，在任何维度里都是。这个论证来自概率论，属于伯纳德·莫雷。"
   },
   "0f46d3b56216": {
    "scene": "Barron",
@@ -314,12 +314,12 @@
   "8f7485681e62": {
    "scene": "Residual",
    "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In December 2015, Kaiming He and colleagues published a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
-   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年12月，何恺明和同事们发表了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分。<bookmark mark='w'/>跳跃连接这条路，把梯度原封不动地传回去，就像一根普通的导线，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
+   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年12月，何恺明和同事们发表了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射加上残差分支的导数。<bookmark mark='w'/>跳跃连接把自己这条路径的梯度贡献原封不动地传回去，就像一根普通的导线，有助于梯度到达第一层。其他分支仍可能放大或抵消这份贡献，所以跳跃连接提供帮助，但不作保证。本系列的每一个Transformer，都是这样搭起来的。"
   },
   "cfa9e0787c24": {
    "scene": "Residual",
    "en": "Here it is on the spirals, with forty layers of thirty-two units. <bookmark mark='a'/> The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='b'/> The same forty layers with residual connections learn the spirals completely, within 80 steps. Same width, same optimizer, same number of steps.",
-   "zh": "在那两条螺旋上试一试，网络有40层，每层32个单元。<bookmark mark='a'/>普通的层叠什么也学不会：一直停在抛硬币的水平。<bookmark mark='b'/>同样的40层，加上残差连接，在80步之内，就把螺旋完全学会了。同样的宽度，同样的优化器，同样的步数。"
+   "zh": "在那两条螺旋上试一试，网络有40层，每层32个单元。<bookmark mark='a'/>普通的层叠什么也学不会：一直停在抛硬币的水平。<bookmark mark='b'/>同样的40层，加上残差连接，learn the spirals completely, within 80 steps。同样的宽度，同样的优化器，同样的步数。"
   },
   "25da207cbb5f": {
    "scene": "Residual",
@@ -344,7 +344,7 @@
   "8672089172e1": {
    "scene": "Norm",
    "en": "Here is what layer normalization does to one vector. <bookmark mark='a'/> Shift its numbers so they average zero, <bookmark mark='b'/> then squash them so their spread is one. <bookmark mark='c'/> In 2019 Biao Zhang and Rico Sennrich asked whether the shift is needed at all. Their RMSNorm only divides by the root mean square, the typical size of the numbers. Geometrically, it sends every vector, long or short, onto the same sphere, keeping only its direction. <bookmark mark='d'/> It's cheaper, works as well, and is what Llama, Qwen and DeepSeek use.",
-   "zh": "这是层归一化对一个向量做的事。<bookmark mark='a'/>把它的数平移，让平均值变成0，<bookmark mark='b'/>再把它们压缩，让分散程度变成1。<bookmark mark='c'/>2019年，张彪和里科·森里奇问：平移真的需要吗？他们的RMSNorm只除以均方根，也就是这些数的典型大小。从几何上看，它把每一个向量，不管长短，都送到同一个球面上，只保留它的方向。<bookmark mark='d'/>它更便宜，效果一样好，Llama、Qwen和DeepSeek用的都是它。"
+   "zh": "这是层归一化对一个向量做的事。<bookmark mark='a'/>把它的数平移，让平均值变成0，<bookmark mark='b'/>再把它们压缩，让分散程度变成1。<bookmark mark='c'/>2019年，张彪和里科·森里奇问：平移真的需要吗？他们的RMSNorm只除以均方根，也就是这些数的典型大小。在施加可学习增益之前，并忽略实际实现中的小量epsilon，它把每个非零向量，不管长短，都送到同一个球面上，只保留它的方向。<bookmark mark='d'/>它更便宜，效果一样好，Llama、Qwen和DeepSeek用的都是它。"
   },
   "49cdaf19c26c": {
    "scene": "Norm",

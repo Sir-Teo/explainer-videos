@@ -141,7 +141,7 @@ class Outro(VoiceoverScene):
             r"$X^+ y + (I - X^+ X)\, w_0$.",
             r"For $Q = \mathcal N(\mu, s^2 I)$ and $P = \mathcal N(\mu_0, \lambda I)$ in $d$ dimensions, \ derive "
             r"$\mathrm{KL}(Q\|P) = \tfrac12\big(d s^2/\lambda + |\mu - \mu_0|^2/\lambda - d - d\ln(s^2/\lambda)\big)$.",
-            r"Show the importance-weighted training error is unbiased for the test error, \ and that with $p = "
+            r"For a fixed predictor and exact weights, show the importance-weighted error is unbiased for the test error, \ and that with $p = "
             r"\mathcal N(0, 1)$, \ $q = \mathcal N(0, 4)$ \ the weights have infinite variance.",
         ], font_size=21)
         with self.voiceover(

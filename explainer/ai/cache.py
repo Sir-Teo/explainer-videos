@@ -27,6 +27,7 @@ from pathlib import Path
 import numpy as np
 
 from explainer.tts import REPO_ROOT
+from explainer.cache_lock import cache_lock, cache_signature, locked_item
 
 
 class Partial:
@@ -64,14 +65,16 @@ class Cache:
         self.part = part
         self.dir = REPO_ROOT / ".cache" / part
         self._loaded: dict = {}
+        self._loaded_signatures: dict = {}
         self.items: dict = {}
 
     def path(self, name: str) -> Path:
         return self.dir / f"{name}.json"
 
+    @locked_item(lambda self, name: self.path(name))
     def load(self, name: str) -> dict:
-        if name not in self._loaded:
-            p = self.path(name)
+        p = self.path(name)
+        if name not in self._loaded or self._loaded_signatures.get(name) != cache_signature(p):
             if not p.exists():  # compute on first use (a scene rendered before compute was run)
                 if not self.items:
                     import importlib
@@ -88,15 +91,21 @@ class Cache:
             if npz.exists():
                 with np.load(npz) as z:
                     self._loaded[name].update({k: z[k] for k in z.files})
+            self._loaded_signatures[name] = cache_signature(p)
         return self._loaded[name]
 
     def partial(self, name: str, params) -> Partial:
         return Partial(self.dir / f"{name}.partial.json", params, f"{self.part}/{name}")
 
+    @locked_item(lambda self, name, out: self.path(name))
     def save(self, name: str, out: dict) -> None:
         self.dir.mkdir(parents=True, exist_ok=True)
         arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
         rest = {k: v for k, v in out.items() if k not in arrays}
+        # A forced replacement must also be whole or absent. Otherwise a crash
+        # after replacing the arrays leaves old JSON describing new arrays.
+        self.path(name).unlink(missing_ok=True)
+        self._loaded.pop(name, None)
         # arrays first, the .json last: an item is cached exactly when its .json exists, so a run killed halfway
         # leaves it missing (and recomputed), never half-written
         npz = self.path(name).with_suffix(".npz")
@@ -109,7 +118,6 @@ class Cache:
         tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
         tmp.replace(self.path(name))
         (self.dir / f"{name}.partial.json").unlink(missing_ok=True)  # the item is whole: its pieces can go
-        self._loaded.pop(name, None)
 
     def main(self, items: dict, doc: str | None = None) -> None:
         self.items = items
@@ -120,10 +128,11 @@ class Cache:
         self.dir.mkdir(parents=True, exist_ok=True)
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "true")
         for name in args.names:
-            if self.path(name).exists() and not args.force:
-                print(f"  cached  {name}")
-                continue
-            t = time.time()
-            print(f"  compute {name} ...", flush=True)
-            self.save(name, items[name]())
-            print(f"  done    {name} in {time.time() - t:.0f}s", flush=True)
+            with cache_lock(self.path(name)):
+                if self.path(name).exists() and not args.force:
+                    print(f"  cached  {name}")
+                    continue
+                t = time.time()
+                print(f"  compute {name} ...", flush=True)
+                self.save(name, items[name]())
+                print(f"  done    {name} in {time.time() - t:.0f}s", flush=True)

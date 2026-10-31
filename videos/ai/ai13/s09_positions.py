@@ -118,7 +118,7 @@ class Positions(VoiceoverScene):
             cmath(r"p_{tj}", r"=", r"\tfrac{1}{t} \quad (j = 1 \dots t)", font_size=34, colors={r"p_{tj}": A}),
             cmath(r"\operatorname{out}_t", r"=", r"\tfrac{1}{t}\textstyle\sum_{j \le t} v_j", font_size=34,
                   colors={r"\operatorname{out}_t": V}),
-            cmath(r"v_1 = e,\ \ v_{j>1} \perp e", r"\;\Rightarrow\;", r"\operatorname{out}_t \cdot e = \tfrac{1}{t}",
+            cmath(r"v_1 = e,\ \ \|e\|=1,\ \ v_{j>1} \perp e", r"\;\Rightarrow\;", r"\operatorname{out}_t \cdot e = \tfrac{1}{t}",
                   font_size=34),
         ]
         whys = [why(r"a head that attends evenly \\ to everything it may see"), why(r"the average of the past"),

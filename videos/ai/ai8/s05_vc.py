@@ -83,7 +83,7 @@ class VC(VoiceoverScene):
             "labellings, the crossing pattern of XOR. <bookmark mark='c'/> A family shatters a set of points if it "
             "can produce every labelling of them, and the largest set it can shatter is its VC dimension, after "
             "Vapnik and Chervonenkis: three for lines in the plane, and in general one more than the number of "
-            "inputs a linear rule reads."
+            "inputs a linear rule with a bias reads."
         ) as vo:
             self.play(FadeIn(t3))
             vo.wait_until("a")
@@ -121,7 +121,7 @@ class VC(VoiceoverScene):
                       (MEAS, r"half-planes, \ counted"), (TEST, r"intervals on a line, \ counted")], font_size=19)
         key.next_to(ax.c2p(0, 16), DR, buff=0.15)
         thm = theorem_card(r"the Sauer--Shelah lemma",
-                           card_body(r"if the VC dimension is $d$, \ then on $n$ points:",
+                           card_body(r"VC dimension $d$, \ $n \ge d \ge 1$:",
                                      r"\Pi_{\mathcal H}(n) \le \sum_{i=0}^{d} \binom{n}{i} \le \big(\tfrac{en}{d}\big)^d",
                                      width=5.4, font_size=21), who=r"N.~Sauer; \ S.~Shelah "
                            r"(1972); \ Vapnik \& Chervonenkis (1971)", width=6.2, font_size=21)
@@ -131,10 +131,10 @@ class VC(VoiceoverScene):
             "What matters is not how many rules a family has, but how many different labellings it can produce on "
             "the points in front of it: the growth function. <bookmark mark='a'/> For five points, half-planes "
             f"produce {n5} of the thirty-two. <bookmark mark='b'/> Count it for every n by sweeping a line around: "
-            f"half-planes realize exactly n squared minus n plus two labellings, {int(half[-1])} on {nN} points, out "
+            f"for points in general position, half-planes realize n squared minus n plus two labellings, {int(half[-1])} on {nN} points, out "
             f"of {int(p2[-1]):,}. <bookmark mark='c'/> The Sauer–Shelah lemma says this always happens: once a "
-            "family fails to shatter some size d plus one, its growth function is a polynomial of degree d, never "
-            "again two to the n. <bookmark mark='d'/> Intervals on a line, VC dimension two, meet their bound "
+            "family cannot shatter any set of size d plus one, its growth is bounded by a polynomial of degree d, rather than "
+            "continuing as two to the n. <bookmark mark='d'/> Intervals on a line, VC dimension two, meet their bound "
             "exactly. Polynomial instead of exponential is what lets an infinite family be learned."
         ) as vo:
             self.play(FadeIn(G), Create(c2), FadeIn(key[0]))
@@ -161,13 +161,13 @@ class VC(VoiceoverScene):
                   r"2\,\Pi_{\mathcal H}(2n) \cdot 2 e^{-n\varepsilon^2/8}", colors=col, font_size=30),
             cmath(r"P\big(\sup_h |R - \hat R| > \varepsilon\big)", r"\le", r"4\,(2en/d)^d\, e^{-n\varepsilon^2/8}",
                   font_size=30),
-            cmath(r"R(h)", r"\le", r"\hat R(h) + \sqrt{\dfrac{d\,(\ln(2n/d) + 1) + \ln(4/\delta)}{n}}", font_size=32,
-                  colors={r"\hat R(h) + \sqrt{\dfrac{d\,(\ln(2n/d) + 1) + \ln(4/\delta)}{n}}": BOUND}),
+            cmath(r"R(h)", r"\le", r"\hat R(h) + \sqrt{\dfrac{8\,[d\,(\ln(2n/d) + 1) + \ln(4/\delta)]}{n}}", font_size=32,
+                  colors={r"\hat R(h) + \sqrt{\dfrac{8\,[d\,(\ln(2n/d) + 1) + \ln(4/\delta)]}{n}}": BOUND}),
         ]
-        whys = [why(r"a ghost sample $S'$: \ symmetrization"),
+        whys = [why(r"a ghost sample $S'$: \ symmetrization, \ $n\varepsilon^2 \ge 2$"),
                 why(r"on $2n$ points, \ only $\Pi(2n)$ labellings: \ union bound, \ Hoeffding"),
-                why(r"Sauer--Shelah"),
-                why(r"solve for $\varepsilon$, \ with Vapnik's sharper constants")]
+                why(r"Sauer--Shelah, \ $1 \le d \le n$"),
+                why(r"solve for $\varepsilon$, \ uniformly with probability $1-\delta$")]
         step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.8, buff=0.42, edge=6.9)
         nums = VGroup(
             label(rf"lines in the plane, \ $n = 448$: \ gap $\le {g['lines_plane']:.2f}$", font_size=24, color=MEAS),
@@ -181,7 +181,7 @@ class VC(VoiceoverScene):
                             r"probabilities (announced 1968); \ Vapnik's support vector machines followed in 1995",
                             width=5.0, font_size=18, color=HIST).to_corner(DR, buff=0.3)
         with self.voiceover(
-            "That count buys a bound. The proof in four steps. <bookmark mark='a'/> First, compare the training "
+            "That count buys a bound for IID binary classification, with 95 percent confidence here. The proof in four steps. <bookmark mark='a'/> First, compare the training "
             "sample with a second, imaginary one of the same size, a ghost sample: if training and true error are "
             "far apart, the two samples' errors probably are too. <bookmark mark='b'/> On the two samples together, "
             "the family acts as at most the growth function of two n rules, a finite number, so the union bound "

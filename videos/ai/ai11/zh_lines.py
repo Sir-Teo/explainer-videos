@@ -104,9 +104,9 @@ ZH = {
     'Why does it work, and how fast? On a quadratic':
         "它为什么有效，又有多快？在二次函数上，山谷的每个方向是独立的。<bookmark mark='a'/>沿着曲率为λ的方向，更新"
         "是关于最近两个位置的递推。<bookmark mark='b'/>试试z的幂，z就必须满足一个二次方程。<bookmark mark='c'/>当它的"
-        "根是复数时，位置会螺旋式地向内收缩，而且不管λ是多少，每一步都恰好缩小为β的平方根倍。<bookmark mark='d'/>"
+        "根是复数时，不管λ是多少，根的模都是β的平方根。这决定振荡的包络，而不是每一步位置的缩小比例。<bookmark mark='d'/>"
         "所以选择η和β，让μ到L之间的每一个曲率都落进这个螺旋区：让区间的两端正好在它的边上。<bookmark mark='e'/>解出来，"
-        "β的平方根等于根号κ减1，除以根号κ加1。<bookmark mark='f'/>这大约是1减根号κ分之2：步数现在随条件数的平方根增长。"
+        "β的平方根等于根号κ减1，除以根号κ加1。端点处的重根还可能给衰减乘上k因子。<bookmark mark='f'/>κ较大时，根的模约为1减根号κ分之2：步数现在随条件数的平方根增长。"
         "一千变成了大约三十。",
     '"In 1983 Yurii Nesterov, also in Moscow':
         "1983年，同样在莫斯科的尤里·涅斯捷罗夫只改了一件事：不在你现在的位置求梯度，而在动量即将把你带到的位置求。"
@@ -134,7 +134,7 @@ ZH = {
     'The loss of a model is an average over its training examples':
         "一个模型的损失是对所有训练样本的平均，它的梯度也是。要精确地算出来，每走一步都得把全部数据过一遍；真实的"
         "模型要在几万亿个词上训练。<bookmark mark='a'/>换个办法：只在一小批随机样本上取平均。<bookmark mark='b'/>"
-        "平均来说，这个估计完全正确，它的噪声随批量变大而缩小：协方差像B分之1那样下降。<bookmark mark='c'/>1951年，"
+        "平均来说，这个估计完全正确。独立抽样时，协方差像B分之1那样下降；不放回抽样还要乘上有限总体修正因子。<bookmark mark='c'/>1951年，"
         "北卡罗来纳的两位统计学家赫伯特·罗宾斯和萨顿·门罗问：沿着这种带噪声的估计走，什么时候仍然能到达答案？",
     'f"Here\'s a real loss with two weights':
         "这是一个只有两个权重的真实损失：第6部分的逻辑回归，用两个词频来分辨奥斯丁和狄更斯。<bookmark mark='a'/>"
@@ -161,14 +161,14 @@ ZH = {
     'Chapter four. Noise as temperature.': '第4章。噪声即温度。',
     'How big is the cloud? Part five':
         "这团云有多大？第5部分的随机微分方程能回答。<bookmark mark='a'/>随机梯度下降的一步，就是真梯度的一步，加上"
-        "这一批的噪声，协方差是Σ除以B。<bookmark mark='b'/>把步长η看成一小段时间dt。噪声项于是等于dt的平方根，乘以"
-        "一个高斯变量，再乘以η除以B的平方根。<bookmark mark='c'/>这恰好是一个随机微分方程的一步欧拉格式：向下坡的推力，"
-        "加上强度为η除以B的随机踢动。学习率和批量大小只通过它们的比值起作用。物理学家会把它叫作温度。",
-    'f"Near the bottom the gradient is the Hessian times the distance':
-        "在谷底附近，梯度等于黑塞矩阵乘以距离，这团云也不再变化：每走一步，它的协方差S进去是什么样，出来还是什么样。"
+        "这一批的噪声，协方差是Σ除以B。<bookmark mark='b'/>把步长η看成一小段时间dt。在高斯近似下，噪声项约为dt的平方根，乘以"
+        "一个高斯变量，再乘以η除以B的平方根。<bookmark mark='c'/>这个高斯替代模型对应一个随机微分方程的一步欧拉格式：向下坡的推力，"
+        "加上强度为η除以B的随机踢动。在这个近似下，学习率和批量通过它们的比值影响噪声，类似温度；一般的SGD噪声未必各向同性，也未必是热噪声。",
+    'f"Near a strict minimum, assume stable small steps':
+        "在严格极小值附近，假设步长小且稳定，噪声协方差近似不变。将梯度线性化为黑塞矩阵乘以位移，云团趋近平稳协方差：每走一步，它的协方差S进去是什么样，出来还是什么样。"
         "<bookmark mark='a'/>这就是关于S的一个方程。<bookmark mark='b'/>步长小的时候，它化简为H S加S H等于η除以B乘以"
         "噪声的协方差C。<bookmark mark='c'/>取迹：云的均方大小等于2B分之η，乘以H的逆乘C的迹。<bookmark mark='d'/>"
-        "对我们这个两权重的损失，这个迹是{tr:.2f}，接近2，因为在对数损失的谷底，梯度的噪声和曲率几乎是同一个矩阵。",
+        "对我们这个两权重的损失，这个迹是{tr:.2f}，接近2。对正确设定的似然，在总体最优点，得分协方差与黑塞矩阵相等；我们的例子接近这个理想情况。",
     '"Measure it. Four learning rates, six batch sizes':
         "来测一测。四个学习率，六种批量大小，每种三个随机种子：二十四团云。<bookmark mark='a'/>把它们对着温度，"
         "也就是η除以B画出来，{said1}<bookmark mark='b'/>虚线是预测的平稳大小。{said2}",
@@ -183,7 +183,7 @@ ZH = {
     'This explains a rule found by experiment.':
         "这解释了凭实验找到的一条规则。<bookmark mark='a'/>把批量乘以k，学习率也乘以k：温度不变。2017年，Facebook的"
         "一个团队用它，再加上短暂的预热，用每批八千张图片，在一小时内训练出了一个ImageNet分类器。<bookmark mark='b'/>"
-        "对Adam来说，它要除以梯度的大小，分析说应该乘以k的平方根。<bookmark mark='c'/>而超过临界批量之后，噪声已经"
+        "对Adam来说，在SDE适用范围内，学习率乘以k的平方根，同时也要缩放动量时间尺度和epsilon。这不是适用于任意大批量的通用法则。<bookmark mark='c'/>而超过临界批量之后，噪声已经"
         "很小，更大的批量就不再能换来更少的步数；第12部分会测出在哪里。",
     'f"Is the noise only a cost?':
         "噪声只是代价吗？<bookmark mark='a'/>在那个真实的损失上，批量大十六倍，云就窄了{sp1 / sp16:.1f}倍，接近16的"
@@ -191,8 +191,8 @@ ZH = {
         "地方。<bookmark mark='c'/>2017年，尼蒂什·凯斯卡尔和同事发现，很大的批量会落在更尖锐、泛化更差的极小值里。"
         "<bookmark mark='d'/>同一年，洛朗·丁和同事发现了其中的漏洞：把一层放大、下一层缩小，同一个函数的锐度就变了。"
         "平坦是一个有用的图景，而不是定律。",
-    'So stochastic gradient descent runs at a temperature':
-        "所以随机梯度下降是在一个温度下运行的，这个温度就是η除以B，它决定训练最后停留的那团云有多大；保持这个比值"
+    'In this local, small-step approximation, SGD has an effective temperature':
+        "在这个局部小步长近似下，随机梯度下降有一个有效温度，这个温度就是η除以B，它决定训练最后停留的那团云有多大；保持这个比值"
         "不变，就是线性缩放规则。但步长本身最大能有多大？",
 
     # ------------------------------------------------------------------ EdgeOfStability
@@ -235,7 +235,7 @@ ZH = {
     'One learning rate for every weight is a strange choice':
         "所有权重共用一个学习率，是个奇怪的选择：有些权重的梯度很大，有些很小。<bookmark mark='a'/>2011年，约翰·杜奇、"
         "埃拉德·哈赞和约拉姆·辛格提出了AdaGrad：用每个权重梯度平方累计和的平方根，去除它的步长。<bookmark mark='b'/>"
-        "一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，每一步都像根号t分之1那样缩小，"
+        "一个罕见的词，一旦出现，就迈一大步。<bookmark mark='c'/>问题在于：这个和只增不减，对稳定的梯度，每一步都像根号t分之1那样缩小，"
         "长时间的训练会慢得像爬。",
     'The fix came from an online course.':
         "解决办法来自一门网课。<bookmark mark='a'/>2012年，杰弗里·辛顿Coursera课程的一张幻灯片提出了RMSProp：一个会遗忘"
@@ -248,7 +248,7 @@ ZH = {
         "为什么要校正？<bookmark mark='a'/>从零开始把m展开：它是到目前为止梯度的加权和。<bookmark mark='b'/>"
         "如果梯度的均值稳定，m的期望就是这个均值乘以一个几何级数，<bookmark mark='c'/>也就是1减β的t次方：一开始m偏向零，"
         "除以这个因子就消除了偏差。<bookmark mark='d'/>我们模型的一个权重，前六十步：未校正的m从零附近起步，校正后的立刻"
-        "跟上梯度。<bookmark mark='e'/>如果不校正，第一步会是η的{raw:.2f}倍；校正之后，恰好是η。",
+        "跟上梯度。<bookmark mark='e'/>如果不校正，第一步约为η的{raw:.2f}倍；校正之后，当梯度远大于epsilon时，约为η。",
     'f"Now Adam\'s limit.':
         "再看Adam的极限。把两个记忆都关掉，让ε趋于零：梯度除以它自己的大小，就是它的符号。每个权重都恰好移动η："
         "这就是符号下降。<bookmark mark='a'/>这是我们隐藏矩阵里每个权重移动的距离，以η为单位。第一步，有{f1:.0%}的权重"
@@ -279,7 +279,7 @@ ZH = {
         "Transformer时代的默认优化器。",
     '"Does it matter? A test where regularization should matter':
         "这重要吗？做一个正则化应该起作用的测试：一个较小的字符模型，只见过五万个字符的训练文本，一遍又一遍地看。"
-        "<bookmark mark='a'/>左边是AdamW，四个学习率乘六种衰减强度；右边是带L2惩罚的Adam，用同一组学习率。越亮越好。"
+        "<bookmark mark='a'/>左边是AdamW，五个学习率乘六种衰减强度；右边是带L2惩罚的Adam，用同一组学习率。越亮越好。"
         "<bookmark mark='b'/>两边各自最好的设置，再用三个随机种子重跑：{verdict}<bookmark mark='v'/>{said1}"
         "<bookmark mark='e'/>{etxt}<bookmark mark='c'/>{said2}",
     ' Both beat no decay at all': "两者都胜过完全不衰减，所以这里它确实在起正则化的作用。",
@@ -353,9 +353,9 @@ ZH = {
         "他们证明，那个大矩阵被这两者的克罗内克积所界住。<bookmark mark='d'/>所以从两侧给梯度矩阵做预条件，用L和R的"
         "负四分之一次方。他们把它叫作Shampoo：<bookmark mark='e'/>K-FAC的克罗内克技巧，两个因子都取自梯度本身。",
     'Here is a surprise hidden in Shampoo.':
-        "Shampoo里藏着一个惊喜。把它的记忆关掉，让两个因子只来自当前的梯度。<bookmark mark='a'/>用第3部分的奇异值"
-        "分解写出梯度。<bookmark mark='b'/>于是L的负四分之一次方和R的负四分之一次方，由同样的奇异向量构成，奇异值则"
-        "变成负二分之一次方。<bookmark mark='c'/>乘出来，所有奇异值都消掉了：剩下的是U乘V转置，也就是把所有奇异值都"
+        "Shampoo里藏着一个惊喜。把它的记忆关掉，让两个因子只来自当前的梯度。<bookmark mark='a'/>只保留非零奇异方向，用第3部分的紧致奇异值"
+        "分解写出梯度。<bookmark mark='b'/>于是L的负四分之一次方和R的负四分之一次方，在非零支撑上由同样的奇异向量构成，奇异值则"
+        "变成负二分之一次方。<bookmark mark='c'/>乘出来，所有非零奇异值都消掉了：剩下的是U乘V转置，也就是把所有非零奇异值都"
         "设成1的梯度。杰里米·伯恩斯坦和莱克·纽豪斯在2024年指出了这一点。<bookmark mark='d'/>记住这个矩阵：它就是"
         "Muon的一步。",
     'Shampoo was hard to use.':

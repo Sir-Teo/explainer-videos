@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 
 import numpy as np
 
@@ -49,7 +50,10 @@ def main():
             break
         img = np.frombuffer(buf, dtype=np.uint8).reshape(h, w, 3).astype(np.int16)
         fracs.append(float((np.abs(img - bg).max(axis=2) > 24).mean()))
-    proc.wait()
+    if proc.wait() != 0:
+        sys.exit(f"ffmpeg could not decode {args.video}; dead-air QA did not run")
+    if not fracs:
+        sys.exit(f"no video frames decoded from {args.video}; dead-air QA did not run")
     fracs = np.array(fracs)
     chs = chapters(args.video)
 

@@ -94,8 +94,8 @@ def kl_inv(p: float, c: float) -> float:
 
 
 def vc_bound(d: float, n: float, delta: float = 0.05) -> float:
-    """The VC bound's gap term as on screen: sqrt((d (ln(2n/d) + 1) + ln(4/delta)) / n)."""
-    return math.sqrt((d * (math.log(2 * n / d) + 1) + math.log(4 / delta)) / n)
+    """The VC bound's gap term as on screen: sqrt(8 (d (ln(2n/d) + 1) + ln(4/delta)) / n)."""
+    return math.sqrt(8 * (d * (math.log(2 * n / d) + 1) + math.log(4 / delta)) / n)
 
 
 # ---------------------------------------------------------------------------
@@ -690,10 +690,20 @@ def compute_stability():
                 epochs=epochs, n=n)
 
 
+def compression_bound(k: int, n: int, delta: float = 0.05) -> float:
+    """Consistent reconstruction, uniformly over a data-chosen compression size.
+
+    Allocate delta/(n+1) to each size and at most n**k index choices.
+    """
+    if k >= n:
+        return 1.0
+    return min(1.0, (k * math.log(n) + math.log((n + 1) / delta)) / (n - k))
+
+
 def compute_compress():
     """Littlestone & Warmuth (1986): a learner whose output is fixed by k of its n examples generalizes like a learner
     with k parameters.  The hard-margin support vector machine is one (k = its support vectors).  Bound, for a rule
-    that fits all n examples: error <= (k ln n + ln(1/delta)) / (n - k)."""
+    that fits all n examples: error <= (k ln n + ln((n+1)/delta)) / (n - k), uniformly over k."""
     out = {}
     delta = 0.05
     pts = maxmargin_data(200, seed=1986)
@@ -701,7 +711,7 @@ def compute_compress():
     w, a = svm_dual(X, t)
     sv = np.nonzero(a > 1e-6 * a.max())[0]
     k = len(sv)
-    out.update(X=X, t=t, w=w, sv=sv, k=k, n=len(t), bound=(k * math.log(len(t)) + math.log(1 / delta)) / (len(t) - k),
+    out.update(X=X, t=t, w=w, sv=sv, k=k, n=len(t), bound=compression_bound(k, len(t), delta),
                vc=vc_bound(2, len(t)), fit=bool(np.all(t * (X @ w) > 0)))
     # retrain on the support vectors alone: the same machine
     w2, _ = svm_dual(X[sv], t[sv])
@@ -710,7 +720,7 @@ def compute_compress():
     Ztr, ytr, _, _, _ = pages()
     kp, n = int(m["n_sv"]), len(ytr)
     out.update(k_pages=kp, n_pages=n, sep_pages=bool(m["sep"]),
-               bound_pages=min(1.0, (kp * math.log(n) + math.log(1 / delta)) / max(n - kp, 1)))
+               bound_pages=compression_bound(kp, n, delta))
     return out
 
 

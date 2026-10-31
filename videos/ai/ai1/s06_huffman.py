@@ -130,14 +130,16 @@ class Huffman(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tree.leaves.values())), FadeIn(src), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeOut(hc), FadeIn(side), FadeOut(src))
+            self.play(FadeOut(hc), FadeOut(src))
             groups = []
             for m in merges:
                 pre = prefix[int(m[2])]
                 groups.append(AnimationGroup(Create(tree.edges[pre + "0"]), Create(tree.edges[pre + "1"]),
                                              FadeIn(tree.nodes[pre])))
+            for i in range(min(3, len(groups))):
+                self.play(groups[i], FadeIn(side[i]), run_time=1.2)
             vo.wait_until("b")
-            self.play(LaggedStart(*groups, lag_ratio=0.5), run_time=max(3.0, vo.remaining() - 0.3))
+            self.play(LaggedStart(*groups[3:], lag_ratio=0.5), run_time=max(3.0, vo.remaining() - 0.3))
         L, H = float(hf["L"]), float(hf["H"])
         nb, nf = len(hf["word_bits"]), int(hf["fixed_bits"])
         tab = VGroup()

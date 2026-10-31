@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, lag, load, predict_card, takeaway_card
+from videos.ai.ai12.common import DCOL, FIT, HIST, PART, SP, lag, load, predict_card, takeaway_card, visible_values
 
 EPOCH_COLORS = ["#7FD3FF", C.INTERVAL, C.BITS, C.MODEL_Q, C.SURPRISE]
 
@@ -50,7 +50,7 @@ class Data(VoiceoverScene):
             c = np.asarray(r[f"curve{k}"])
             xs = np.log2(c[:, 0] * B)
             keep = xs >= 14
-            lines.add(curve(ax, xs[keep], np.minimum(c[keep, 1], hi), col, 3))
+            lines.add(curve(ax, xs[keep], visible_values(c[keep, 1], lo, hi), col, 3))
         lg = VGroup(*[label(rf"${u:,}$ distinct, \ ${e}$ epoch{'s' if e > 1 else ''}".replace(",", "{,}"), font_size=20, color=c)
                       for u, e, c in zip(U, ep, EPOCH_COLORS)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         lg.move_to([3.9, 1.6, 0])
@@ -179,13 +179,13 @@ class Data(VoiceoverScene):
         hd = label(r"how much text is there?", font_size=36).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(2024, r"Villalobos et al.\ (Epoch AI)",
-                         r"the public web holds about $4 \times 10^{14}$ tokens of usable text, \ allowing for quality "
-                         r"and repetition; \ at the trend of the day, training sets reach it between $2026$ and "
+                         r"projected usable public text at the $2028$ crossing: \ about $4 \times 10^{14}$ tokens, \ quality "
+                         r"and repetition adjusted; \ their $2024$ forecast: training sets reach it between $2026$ and "
                          r"$2032$, "
                          r"most likely $2028$", width=6.2, color=HIST),
             history_card(2023, r"Muennighoff et al.", r"up to about $4$ epochs: \ almost as good as new data; \ beyond "
                          r"$16$: \ little left", width=6.2, color=HIST),
-            history_card(2025, r"Alibaba, \ Qwen3", r"pretrained on about $36$ trillion tokens, \ in $119$ languages",
+            history_card(2025, r"Alibaba, \ Qwen3", r"about $36$ trillion training tokens, \ including synthetic data; \ $119$ languages and dialects",
                          width=6.2, color=HIST),
         ).arrange(DOWN, buff=0.22).move_to([-3.0, -0.4, 0])
         # a bar: the stock against one frontier run (log scale), schematic positions from the cited numbers
@@ -195,17 +195,17 @@ class Data(VoiceoverScene):
         l4 = Dot(ax.n2p(math.log10(36e12)), radius=0.1, color=C.TRUE_P)
         l4l = label(r"Qwen3: \ $3.6\times10^{13}$", font_size=20, color=C.TRUE_P).next_to(l4, UP, buff=0.15)
         st = Dot(ax.n2p(math.log10(4e14)), radius=0.1, color=SP)
-        stl = label(r"the stock: \ $4\times10^{14}$", font_size=20, color=SP).next_to(st, UP, buff=0.15)
+        stl = label(r"$2028$ projected stock: \ $4\times10^{14}$", font_size=20, color=SP).next_to(st, UP, buff=0.15)
         unit = label(r"tokens", font_size=20, color=GREY_A).next_to(ticks, DOWN, buff=0.1)
         ways = label(r"ways around it: \ repeating, \ rephrasing, \\ synthetic text, \ other kinds of data \ (Part 18)",
                      font_size=22, color=GREY_A).move_to([3.6, -1.8, 0])
         with self.voiceover(
-            "How close are we? In 2024, Pablo Villalobos and colleagues at Epoch AI estimated the stock of usable "
-            "public text at about four times ten to the fourteen tokens, after allowing for quality and repetition, "
+            "How close are we? In 2024, Pablo Villalobos and colleagues at Epoch AI projected usable "
+            "public text at the 2028 crossing at about four times ten to the fourteen tokens, after allowing for quality and repetition, "
             "and projected that training sets would reach it between 2026 and 2032, most likely in 2028. "
             "<bookmark mark='a'/> Repeating stretches it: Muennighoff's four epochs are nearly free. "
             "<bookmark mark='b'/> Alibaba's Qwen3, in 2025, was pretrained on about thirty-six trillion tokens: "
-            "nearly a tenth of the whole stock, in one model. <bookmark mark='c'/> So the field is looking for more: "
+            "including synthetic data. Training tokens are not a count of distinct human text. <bookmark mark='c'/> So the field is looking for more: "
             "rephrased text, synthetic text and other kinds of data, the subject of part eighteen."
         ) as vo:
             self.play(FadeIn(hd), FadeIn(cards[0], shift=RIGHT * 0.1), Create(ax), FadeIn(ticks), FadeIn(unit))

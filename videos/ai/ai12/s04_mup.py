@@ -32,14 +32,14 @@ class MuP(VoiceoverScene):
             cmath(r"h_i", r"=", r"\textstyle\sum_{j=1}^{n} W_{ij}\, x_j", font_size=36),
             cmath(r"|h_i|", r"\approx", r"\sigma", r"\sqrt{n}", font_size=36, colors=colors),
             cmath(r"\Delta W", r"=", r"-\eta\; g\, x^{\top}", font_size=36, colors=colors),
-            cmath(r"\Delta h_i", r"=", r"-\eta\; g_i\, (x \cdot x)", r"\approx", r"\eta", r"\, n", font_size=36, colors=colors),
+            cmath(r"|\Delta h_i|", r"=", r"\eta\; |g_i|\, (x \cdot x)", r"\approx", r"\eta", r"\, n", font_size=36, colors=colors),
             cmath(r"\Delta h = \Theta(1)", r"\Rightarrow", r"\eta \propto 1/n", r",\quad", r"\sigma \propto 1/\sqrt{n}",
                   font_size=36, colors=colors),
         ]
         whys = [why(r"$n$ terms, \ added"), why(r"random signs cancel: \ central limit theorem"),
                 why(r"a layer's gradient is an outer product"),
-                why(r"$x \cdot x$: \ $n$ terms of one sign, \ law of large numbers"),
-                why(r"what we ask: \ every layer changes by about $1$")]
+                why(r"local calculation: \ $|g_i| = \Theta(1)$, \ $x \cdot x = \Theta(n)$"),
+                why(r"this layer's update stays order $1$")]
         step = ladder(self, rows, whys, keep=5, top=2.35, x=-2.2, buff=0.38, edge=6.9)
         moral = label(r"the update is \emph{aligned} with the input, \ the starting weights are not: \ they scale "
                       r"differently", font_size=24, color=MUP).to_edge(DOWN, buff=0.35)
@@ -52,13 +52,20 @@ class MuP(VoiceoverScene):
                 (np.arange(n_ + 1, dtype=float), MUP, r"one sign: \\ the sum grows \\ like $n$"))):
             pa = Axes(x_range=[0, n_, 100], y_range=[-n_ / 8, n_, n_ / 4], x_length=4.0, y_length=1.45, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.3 + 6.6 * k, -2.05, 0])
-            pl = VMobject(stroke_color=col, stroke_width=2.5).set_points_as_corners(
+            path = VMobject(stroke_color=col, stroke_width=3.5).set_points_as_corners(
                 [pa.c2p(i, v) for i, v in zip(range(0, n_ + 1, 2), ys[::2])])
+            end = Dot(pa.c2p(n_, ys[-1]), radius=0.055, color=col)
+            result = label(rf"sum $= {ys[-1]:.0f}$", font_size=24, color=col)
+            result.next_to(end, UP if k == 0 else DOWN, buff=0.12 if k == 0 else 0.45).align_to(end, RIGHT)
+            pl = VGroup(path, end, result)
             env = VGroup()
             if k == 0:
                 xs_ = np.arange(1, n_ + 1, 4)
                 env = VGroup(*[DashedVMobject(VMobject(stroke_color=GREY_B, stroke_width=1.5).set_points_smoothly(
                     [pa.c2p(i, sg * 2 * np.sqrt(i)) for i in xs_]), num_dashes=24) for sg in (1, -1)])
+                scale = label(r"random-sign scale: \ $\sqrt{400} = 20$", font_size=21, color=GREY_A)
+                scale.move_to(pa.c2p(240, 240))
+                env.add(scale)
             tl = label(txt, font_size=20, color=col).next_to(pa, LEFT, buff=0.12)
             xl = label(r"terms added", font_size=18, color=GREY_A).next_to(pa, DOWN, buff=0.06)
             pics.add(VGroup(pa, env, pl, tl, xl))
@@ -69,11 +76,12 @@ class MuP(VoiceoverScene):
             "cancel: by the central limit theorem, the sum grows like the square root of n. Divide the starting "
             "weights by the square root of n, and the output stays the same size at any width. "
             "<bookmark mark='b'/> Training is different. The gradient of a layer is an outer product: the error "
-            "signal times the input. <bookmark mark='c'/> So the step, applied to that input, gives a sum of n "
+            "signal times the input. Hold that local error signal at order one for this calculation. <bookmark mark='c'/> So the step, applied to that input, gives a sum of n "
             "terms that all have the same sign: it grows like n, not its square root. "
-            "<bookmark mark='d'/> If every layer should keep changing by about the same amount at any width, the "
-            "learning rate must shrink like one over n. Greg Yang and Edward Hu worked this out for every layer of "
-            "any network in 2021, and called it the maximal update parametrization: mu-P."
+            "<bookmark mark='d'/> For this layer's update to stay about the same size at any width, the "
+            "local learning rate must shrink like one over n. A full network must also account for how errors scale "
+            "through its other layers. Greg Yang and Edward Hu derived those rules for a broad class of networks in "
+            "2021, and called it the maximal update parametrization: mu-P."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -114,7 +122,7 @@ class MuP(VoiceoverScene):
                             color=C.BITS)).arrange(DOWN, buff=0.15).next_to(ours, DOWN, buff=0.35)
         cite_ = cite(r"G.~Yang \& E.~Hu (2021); \ G.~Yang et al., \textit{Tensor Programs V} (2022), Table 3", corner=DR)
         with self.voiceover(
-            "For Adam, the optimizer every language model uses, the recipe is a short table. "
+            "For Adam, a common language-model optimizer, the recipe is a short table. "
             "<bookmark mark='a'/> Inputs and biases learn at the base rate. Hidden matrices learn at the base rate "
             "divided by their width, because Adam moves every entry by about the learning rate, so the n aligned "
             "terms add up to n times it. The output layer starts much smaller, with variance one over the width "

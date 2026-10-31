@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import OPT_COLORS, PART, bits_axes, lr_tex, load, takeaway_card
+from videos.ai.ai11.common import OPT_COLORS, PART, bits_axes, lr_tex, load, panel, takeaway_card
 
 AW, L2, AD = OPT_COLORS["adamw"], OPT_COLORS["adam_l2"], OPT_COLORS["adam"]
 
@@ -21,7 +21,7 @@ def heat(A, center, cell=0.68, lo=None, hi=None):
             col = interpolate_color(ManimColor("#1B2A6B"), ManimColor(C.BITS), t ** 1.5)
             sq = Square(cell, stroke_width=1, stroke_color=BACKGROUND, fill_color=col, fill_opacity=1)
             sq.move_to(np.array(center) + np.array([(j - (A.shape[1] - 1) / 2) * cell, ((A.shape[0] - 1) / 2 - i) * cell, 0]))
-            txt = MathTex(f"{v:.2f}" if np.isfinite(v) else r"\times", font_size=16,
+            txt = MathTex(f"{v:.2f}" if np.isfinite(v) else r"\times", font_size=20,
                           color=BLACK if t > 0.6 else WHITE).move_to(sq)
             g.add(VGroup(sq, txt))
     return g
@@ -116,9 +116,9 @@ class Decay(VoiceoverScene):
         def frame(h, grid, strengths, title, col):
             g = VGroup()
             for i, lr in enumerate(lrs):
-                g.add(MathTex(lr_tex(lr), font_size=18, color=GREY_B).next_to(h[i * len(strengths)], LEFT, buff=0.12))
+                g.add(MathTex(lr_tex(lr), font_size=20, color=GREY_B).next_to(h[i * len(strengths)], LEFT, buff=0.12))
             for j, w in enumerate(strengths):
-                g.add(MathTex(f"{w:g}", font_size=16, color=GREY_B).next_to(h[(len(lrs) - 1) * len(strengths) + j], DOWN, buff=0.1))
+                g.add(MathTex(f"{w:g}", font_size=20, color=GREY_B).next_to(h[(len(lrs) - 1) * len(strengths) + j], DOWN, buff=0.1))
             g.add(label(title, font_size=24, color=col).next_to(h, UP, buff=0.2))
             i, j = np.unravel_index(np.nanargmin(grid), grid.shape)
             g.add(SurroundingRectangle(h[i * len(strengths) + j], color=WHITE, buff=0.0, stroke_width=3))
@@ -133,10 +133,20 @@ class Decay(VoiceoverScene):
         ba, bl = d["best_adamw"], d["best_adam_l2"]
         sep = sa.max() < sl.min()
         gap = float(sl.mean() - sa.mean())
-        res = label(rf"best, \ $3$ seeds: \ AdamW ${sa.mean():.3f}$ \ (${sa.min():.3f}$--${sa.max():.3f}$); \ Adam $+$ L2 "
-                    rf"${sl.mean():.3f}$ \ (${sl.min():.3f}$--${sl.max():.3f}$); \ no decay ${none:.3f}$", font_size=20,
-                    color=WHITE).to_edge(UP, buff=0.25)
-        keep_in_frame(res)
+        # Separate the results into readable cards instead of shrinking one long
+        # line across the full frame. Only the first two methods have seed ranges.
+        res = VGroup()
+        for x, name, mean, spread, col in (
+                (-4.45, r"AdamW", sa.mean(), (sa.min(), sa.max()), AW),
+                (0, r"Adam $+$ L2", sl.mean(), (sl.min(), sl.max()), L2),
+                (4.45, r"no decay", none, None, AD)):
+            box = panel(4.1, 1.25, center=[x, 2.85, 0], color=col)
+            title = label(name, font_size=24, color=col).move_to([x, 3.24, 0])
+            value = label(rf"${mean:.3f}$ bits", font_size=34).move_to([x, 2.85, 0])
+            detail = (label(rf"$3$ seeds: \ ${spread[0]:.3f}$--${spread[1]:.3f}$", font_size=20, color=GREY_A)
+                      if spread else label(r"baseline", font_size=20, color=GREY_A))
+            detail.move_to([x, 2.45, 0])
+            res.add(VGroup(box, title, value, detail))
         if sep and gap > 0:
             verdict = (f"AdamW's best is {gap:.3f} bits better than the best L2 penalty, and all three of its seeds beat "
                        "all three of L2's.")
@@ -163,7 +173,7 @@ class Decay(VoiceoverScene):
             "the product of the two is what matters.")
         with self.voiceover(
             "Does it matter? A test where regularization should matter: a smaller character model that sees only "
-            "fifty thousand characters of training text, over and over. <bookmark mark='a'/> On the left, AdamW at four learning "
+            "fifty thousand characters of training text, over and over. <bookmark mark='a'/> On the left, AdamW at five learning "
             "rates and six decay strengths; on the right, Adam with an L2 penalty, on the same grid of rates. "
             "Brighter is better. <bookmark mark='b'/> The best of each, rerun from three seeds: " + verdict + " <bookmark mark='v'/>"
             + said1 + " <bookmark mark='e'/>" + etxt + " <bookmark mark='c'/>"
@@ -174,7 +184,8 @@ class Decay(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(fa[-2]), Indicate(fl[-2]))
             vo.wait_until("b")
-            self.play(Create(fa[-1]), Create(fl[-1]), FadeIn(res))
+            self.play(Create(fa[-1]), Create(fl[-1]),
+                      LaggedStart(*[FadeIn(card, shift=UP * 0.1) for card in res], lag_ratio=0.15))
             vo.wait_until("c")
             self.play(Indicate(VGroup(*[ha[i * len(d['wd']) + c_] for i, c_ in enumerate(cols_a)]), color=WHITE))
         self.wait(0.3)

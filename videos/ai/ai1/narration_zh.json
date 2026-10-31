@@ -66,11 +66,6 @@
    "en": "Part one starts where Shannon did. <bookmark mark='a'/> What information is, and why it's measured in bits; the best codes, and Shannon's limit; the price of a wrong model; a code that turns any guesser into a compressor; how a model learns to guess; and how far guessing has come. Guessing well and compressing well, we'll see, are the same thing.",
    "zh": "第1部分从香农出发的地方开始。<bookmark mark='a'/>信息是什么，为什么用比特来衡量；最好的编码，以及香农的极限；错误模型的代价；一种能把任何猜测者变成压缩器的编码；模型怎样学会猜；以及猜测已经走了多远。我们会看到，猜得好和压缩得好，是同一件事。"
   },
-  "0719895503f6": {
-   "scene": "Hook",
-   "en": "And we'll keep score. Here is a page of The Maltese Falcon, from 1930. It entered the public domain on the first of January 2026, after every model in this part was trained, so none can have learned it by heart. <bookmark mark='a'/> As plain text, it takes eight bits per character. <bookmark mark='b'/> The series explains how the numbers on this board come down: from eight, to below one.",
-   "zh": "我们还要记分。这是1930年的《马耳他之鹰》里的一页。它在2026年1月1日进入公有领域，那时这一部分的每个模型都已经训练完了，所以没有一个可能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>这个系列要解释的，就是记分牌上的这些数字是怎么降下来的：从8，降到1以下。"
-  },
   "c226dcca3f97": {
    "scene": "Probability",
    "en": "Chapter one. Before we can score a guess, we need a way to write one down.",
@@ -496,16 +491,6 @@
    "en": "Let's play with the last chapter's counting model as the guesser, on 11,994 letters of the Falcon passage. <bookmark mark='a'/> It gets the letter first time 58 percent of the time, second time 13 percent, with a long tail.",
    "zh": "我们让上一章的计数模型当猜测者，在《马耳他之鹰》段落的11994个字母上玩这个游戏。<bookmark mark='a'/>它第一次就猜中的情况占58%，第二次猜中的占13%，后面还拖着一条长尾巴。"
   },
-  "06fdbd8e06a0": {
-   "scene": "Shannon1951",
-   "en": "From those frequencies, the upper bound is 2.37 bits per letter. <bookmark mark='a'/> Shannon also proved a lower bound from the same numbers: 1.36. For this guesser, the true figure lies in between.",
-   "zh": "根据这些频率，上界是每个字母2.37比特。<bookmark mark='a'/>香农还用同样的数字证明了一个下界：1.36。对这个猜测者来说，真正的数值就在两者之间。"
-  },
-  "651a85324651": {
-   "scene": "Shannon1951",
-   "en": "Shannon's own subjects did far better. <bookmark mark='a'/> With a hundred letters of context, he put printed English between 0.6 and 1.3 bits per letter, <bookmark mark='b'/> against 1.4 to 2.4 for our counting guesser with six. <bookmark mark='c'/> The difference is knowledge: of words and grammar, idioms, the story, and how the world works.",
-   "zh": "香农自己的受试者做得好得多。<bookmark mark='a'/>给他们100个字母的上下文，他估计印刷英语每个字母是0.6到1.3比特，<bookmark mark='b'/>而我们用6个字母上下文的计数猜测者是1.4到2.4。<bookmark mark='c'/>差别在于知识：关于词和语法、习语、故事，以及世界是怎么运转的知识。"
-  },
   "88378ac78ec8": {
    "scene": "Shannon1951",
    "en": "Later estimates, with people betting on the next letter, landed at about 1.3 bits. <bookmark mark='a'/> To guess like a person, a machine has to know what a person knows.",
@@ -626,11 +611,6 @@
    "en": "Chapter fifteen. Time to keep score.",
    "zh": "第15章。该记分了。"
   },
-  "24b782f99975": {
-   "scene": "Scoreboard",
-   "en": "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. <bookmark mark='a'/> Plain text spends eight bits per character. <bookmark mark='b'/> The passage uses only 61 different symbols, so a blind guess among them costs 5.93 bits. <bookmark mark='c'/> Letter frequencies, counted in our thirty books, bring it to 4.55, <bookmark mark='d'/> and one character of context, to 3.58.",
-   "zh": "这是记分牌，针对印刷原样的《马耳他之鹰》段落：大写、标点，什么都在。<bookmark mark='a'/>纯文本每个字符花8比特。<bookmark mark='b'/>这段文字只用了61种不同的符号，所以在它们之间盲猜，要花5.93比特。<bookmark mark='c'/>在我们30本书里数出的字母频率，把它降到4.55，<bookmark mark='d'/>一个字符的上下文，降到3.58。"
-  },
   "d096931c06eb": {
    "scene": "Scoreboard",
    "en": "Next, the compressors on your computer. <bookmark mark='a'/> gzip, 3.31, xz, 3.20, bzip2, 2.92. They know nothing about English in advance, and learn only from the passage, as they go. <bookmark mark='b'/> Our best counting model, which read the thirty books first and looks at the previous 4 characters, gets 2.32.",
@@ -685,6 +665,26 @@
    "scene": "Outro",
    "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in Part 2.",
    "zh": "这一部分沿着科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推理与学习算法》的前几章展开，两本书都走得远得多。这些论文都值得一读，先从香农的那两篇开始。感谢观看，第2部分见。"
+  },
+  "0763b3eb93d9": {
+   "scene": "Shannon1951",
+   "en": "From those frequencies, the rank entropy is 2.37 bits per letter: an estimate of the upper bound. <bookmark mark='a'/> Shannon's lower-bound expression gives 1.36, but its proof assumes an ideal guesser, ranking letters by their true conditional probabilities. Our counting program is not ideal, so that lower endpoint is illustrative, not a certified bound.",
+   "zh": "根据这些频率，猜测次数的熵是每个字母2.37比特，这是对上界的一个估计。<bookmark mark='a'/>香农的下界表达式算出1.36，但它的证明假设猜测者是理想的，按真正的条件概率给字母排序。我们的计数程序并不理想，所以这个下端点只是演示，不是有保证的下界。"
+  },
+  "f22f712379b5": {
+   "scene": "Shannon1951",
+   "en": "Shannon's own subjects did far better. <bookmark mark='a'/> With a hundred letters of context, he put printed English between 0.6 and 1.3 bits per letter, <bookmark mark='b'/> against a rank entropy of 2.4 for our counting guesser with six. Its lower endpoint is only illustrative, and Shannon also cautioned about sampling error and imperfect human guessing. <bookmark mark='c'/> The difference is knowledge: of words and grammar, idioms, the story, and how the world works.",
+   "zh": "香农自己的受试者做得好得多。<bookmark mark='a'/>给他们100个字母的上下文，他估计印刷英语每个字母是0.6到1.3比特，<bookmark mark='b'/>而我们用6个字母上下文的计数程序，猜测次数的熵是2.4。它的下端点只是演示；香农也提醒过，采样误差和人类猜测的不完美都会影响估计。<bookmark mark='c'/>差别在于知识：关于词和语法、习语、故事，以及世界是怎么运转的知识。"
+  },
+  "307ffe9422a2": {
+   "scene": "Scoreboard",
+   "en": "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. <bookmark mark='a'/> Plain text spends about eight bits per character. <bookmark mark='b'/> The passage uses only 61 different symbols, so a blind guess among them costs 5.93 bits. <bookmark mark='c'/> Letter frequencies, counted in our thirty books, bring it to 4.55, <bookmark mark='d'/> and one character of context, to 3.58.",
+   "zh": "这是记分牌，针对印刷原样的《马耳他之鹰》段落：大写、标点，什么都在。<bookmark mark='a'/>纯文本每个字符大约花8比特。<bookmark mark='b'/>这段文字只用了61种不同的符号，所以在它们之间盲猜，要花5.93比特。<bookmark mark='c'/>在我们30本书里数出的字母频率，把它降到4.55，<bookmark mark='d'/>一个字符的上下文，降到3.58。"
+  },
+  "7042a8de10bc": {
+   "scene": "Hook",
+   "en": "And we'll keep score. Here is a page of The Maltese Falcon, from 1930. Its Project Gutenberg edition appeared in January 2026. We hold it out of the models we train here. For pretrained models, earlier copies may have been in their training data. <bookmark mark='a'/> As plain text, it takes about eight bits per character. <bookmark mark='b'/> The series explains how the numbers on this board come down: from eight, to below one.",
+   "zh": "我们还要记分。这是1930年的《马耳他之鹰》里的一页。它的古登堡计划版本在2026年1月发布。我们自己训练的模型不读这段文字；但预训练模型的训练数据里，可能有过更早的版本。<bookmark mark='a'/>存成纯文本，每个字符大约要8比特。<bookmark mark='b'/>这个系列要解释的，就是记分牌上的这些数字是怎么降下来的：从8，降到1以下。"
   }
  },
  "title_en": "AI, Built: Part 1, The Guessing Game",

@@ -212,7 +212,7 @@ ZH = {
         "用Switch惯用的惩罚强度，最忙的专家从公平份额的{bn.mean():.1f}倍降到{ba.mean():.1f}倍，这是对种子和块的平均；"
         "挨饿的专家从{int(sn.sum())}个降到{int(sa.sum())}个。",
 
-    'f"With Switch\'s penalty at its usual strength, the busiest expert falls':
+    'f"With Switch\'s penalty at its usual strength, the busiest expert falls from {bn.mean():.1f} to {ba.mean():.1f} times a fair share, on average over seeds and blocks. "':
         "用Switch惯用的惩罚强度，最忙的专家从公平份额的{bn.mean():.1f}倍降到{ba.mean():.1f}倍，这是对种子和块的平均。",
 
     'f"With Switch\'s penalty at its usual strength, the loads barely change':
@@ -298,10 +298,10 @@ ZH = {
         "我们把三种都训练了，参数相同，每个字符的计算量也相同，各2个种子。<bookmark mark='a'/>{v1}<bookmark mark='v'/>{v2}"
         "<bookmark mark='b'/>在前沿，方向很清楚：DeepSeek-V3有256个细粒度专家，挑8个，外加1个共享；Kimi K3有896个，挑16个，共享2个。",
 
-    'f"Cutting the experts finer helps':
+    'f"Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture, and the seeds don\'t overlap. "':
         "把专家切细有帮助：{mf:.3f}比特，粗粒度的混合是{mc:.3f}，而且种子之间不重叠。",
 
-    "f'Cutting the experts finer helps":
+    "f'Cutting the experts finer helps: {mf:.3f} bits against {mc:.3f} for the coarse mixture, though the seeds overlap. '":
         "把专家切细有帮助：{mf:.3f}比特，粗粒度的混合是{mc:.3f}，不过种子之间有重叠。",
 
     'f"Cutting the experts finer doesn\'t help':
@@ -645,10 +645,10 @@ ZH = {
         "<bookmark mark='d'/>问题在于：找到最小的那张彩票，用了{int(d['rounds']) + 1}次完整的训练。彩票假设改变了人们对大网络"
         "为什么好训练的看法。要在实践中节省计算，稀疏必须能便宜地找到，还得适合硬件：这是下一章的内容。",
 
-    'f"The ticket stays as good as the dense network':
+    'f"The ticket stays as good as the dense network down to {100 * rem[best - 1]:.0f} percent of its weights, and at some sizes it\'s even a little better. "':
         "一直到只剩{100 * rem[best - 1]:.0f}%的权重，彩票都和稠密网络一样好，在某些大小上甚至还好一点。",
 
-    "f'The ticket stays as good as the dense network":
+    "f'The ticket stays as good as the dense network down to {100 * rem[best - 1]:.0f} percent of its weights. '":
         "一直到只剩{100 * rem[best - 1]:.0f}%的权重，彩票都和稠密网络一样好。",
 
     'Even the ticket loses ground from the first round of pruning.': '从第一轮剪枝开始，就连彩票也在退步。',

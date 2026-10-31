@@ -90,8 +90,9 @@ class MaxMargin(VoiceoverScene):
                 why(r"the SVM's form \ (KKT, \ Part 4)")]
         step = ladder(self, rows, whys, keep=3, top=3.1, x=-1.8, buff=0.42, edge=6.9)
         thm = theorem_card(r"implicit bias on separable data",
-                           r"gradient descent on the logistic loss: \ $|w(t)|$ grows like $\log t$, \ and its direction "
-                           r"tends to the hard-margin SVM's, \ the error in direction shrinking like $1/\log t$.",
+                           r"separable linear data, \ sufficiently small positive constant step: \ $|w(t)|$ grows like "
+                           r"$\log t$; \ direction tends to the hard-margin SVM's. \ Error: "
+                           r"$O(1/\log t)$ for almost all datasets; \ $O(\log\log t/\log t)$ in general.",
                            who=r"D.~Soudry, E.~Hoffer, M.~S.~Nacson, S.~Gunasekar \& N.~Srebro (2018)", width=8.0,
                            font_size=20).to_edge(DOWN, buff=0.25)
         with self.voiceover(
@@ -101,8 +102,8 @@ class MaxMargin(VoiceoverScene):
             "decay so fast that the points with the smallest margins outweigh everything else: only the support "
             "vectors steer. <bookmark mark='d'/> The direction converges to a combination of support vectors with "
             "positive weights, which is exactly the form of the max-margin solution from part four's KKT conditions. "
-            "Soudry and colleagues proved it in 2018, with the rate: the weights grow like log t, and the direction "
-            "error shrinks like one over log t. Lyu and Li extended it to homogeneous neural networks in 2020."
+            "Soudry and colleagues proved it in 2018 for a sufficiently small positive constant step. The weights grow like log t; for almost all datasets, direction "
+            "error is bounded by a constant over log t, with an extra log log t factor in degenerate cases. Lyu and Li connected homogeneous neural networks to margin maximization in 2020."
         ) as vo:
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
@@ -137,10 +138,10 @@ class MaxMargin(VoiceoverScene):
         info.to_edge(DOWN, buff=0.3)
         ratio = float(m["c_hi"] / m["c_lo"])
         settled = ratio < 1.3
-        pace = ("Angle times log t is nearly constant from a thousand steps on: the one over log t rate. "
+        pace = ("Angle times log t is nearly constant from a thousand steps on, consistent with the generic one over log t rate. "
                 if settled else
                 f"Angle times log t falls from {m['c_hi']:.0f} to {m['c_lo']:.0f} between a thousand and a million "
-                "steps, so here it's still converging faster than the theorem's worst case, one over log t. ")
+                "steps: over this range it falls faster than the one over log t reference. ")
         with self.voiceover(
             "Measure it. <bookmark mark='a'/> On a log axis of steps, the norm of the weights is a straight line: it "
             f"grows by about {slope * math.log(10):.2f} for every factor of ten in steps, logarithmic growth. "

@@ -39,7 +39,7 @@ class Norms(VoiceoverScene):
         whys = [why(r"the diagonal of $A^{\top}A$: \ each column's squared length"),
                 why(r"trace $=$ sum of eigenvalues \ (spectral theorem)"),
                 why(r"one term $\le$ the sum $\le r$ copies of the largest"),
-                why(r"how many directions carry the size")]
+                why(r"$A \ne 0$: \ how many directions carry the size")]
         step = ladder(self, rows, whys, keep=4, top=1.2, x=-1.4, buff=0.4, edge=6.9)
         with self.voiceover(
             "A matrix has two natural sizes. <bookmark mark='a'/> The Frobenius norm treats it as a list of numbers: "
@@ -126,7 +126,7 @@ class Norms(VoiceoverScene):
             tags.add(MathTex(rf"\text{{gain }} {gain:g}: \ " + txt.replace(",", "{,}"), font_size=28, color=cols[gain])
                      .next_to(ax.c2p(L, float(ys[-1])), RIGHT, buff=0.15))
         sub = MathTex(r"\|AB\| \le \|A\|\,\|B\|", font_size=36, color=SIG).to_corner(UR, buff=0.5)
-        sub_w = why(r"stretch by $A$, then by $B$").next_to(sub, DOWN, buff=0.1)
+        sub_w = why(r"stretch by $B$, then by $A$").next_to(sub, DOWN, buff=0.1)
         head = label(rf"A vector through ${L}$ layers of random matrices", font_size=34).to_edge(UP, buff=0.35)
         big, small = lens[gains[2]][-1], lens[gains[0]][-1]
         with self.voiceover(
@@ -238,7 +238,8 @@ class Norms(VoiceoverScene):
             "The spectral norm has become an optimizer. <bookmark mark='a'/> Which step of spectral size one changes "
             "the loss most along a gradient G? Write G with its SVD. <bookmark mark='b'/> Each diagonal entry is at most "
             "one, so the best is U V transpose: the gradient with every stretch set to one. <bookmark mark='c'/> That is "
-            "Muon's update, computed with five Newton-Schulz iterations, matrix products that push singular values "
+            "Muon's normalized direction; take its negative for descent. It is computed with five Newton-Schulz "
+            "iterations, matrix products that push singular values "
             f"towards one. On a real gradient, {100 * tiny:.0f} percent start below a hundredth of the largest. "
             f"<bookmark mark='d'/> After five steps, {100 * near:.0f} percent lie between 0.6 and 1.3. Part 11 builds "
             "the optimizer."

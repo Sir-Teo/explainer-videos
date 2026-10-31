@@ -81,10 +81,10 @@ ZH = {
         "这是两种搜索在同一张地图上。<bookmark mark='a'/>迪杰斯特拉向四面八方扩散；A星的边界朝目标倾斜，绕过墙，然后停下。<bookmark mark='b'/>两者找到的是同一条最短路径，长度{C:.1f}。迪杰斯特拉扩展了{nd:,}个格子；A星，{na:,}个。<bookmark mark='c'/>它们的形状不是偶然的。把最优代价记作C星。迪杰斯特拉只扩展离起点比C星近的格子，而没有路径比直线更短，所以这些格子落在半径为C星的圆里。A星只扩展g加h低于C星的格子，所以它们落在一个以起点和目标为焦点的椭圆里。<bookmark mark='d'/>我们检查了每一个被扩展的格子：{inside[0]:.0f}%在圆内，{inside[1]:.0f}%在椭圆内。",
 
     "Why is A star's path the shortest?":
-        "为什么A星的路径是最短的？<bookmark mark='a'/>如果h从不高估，就说它是可采纳的：h(n)至多是h星(n)，也就是到目标的真实代价。<bookmark mark='b'/>于是A星是最优的。假设边界上有一个更差的目标G2。最优路径上一定也有某个状态n在边界上。<bookmark mark='c'/>它的f是g加h，<bookmark mark='d'/>由于h可采纳，这至多是g加h星，<bookmark mark='e'/>而由于n在最优路径上，这恰好就是C星。<bookmark mark='f'/>G2的代价比C星大，而它的h是0。所以n总是先离开边界，最优目标也先于G2离开边界。",
+        "为什么A星的路径是最短的？<bookmark mark='a'/>如果h从不高估，就说它是可采纳的：h(n)至多是h星(n)，也就是到目标的真实代价，而且在目标处h是0。<bookmark mark='b'/>用树搜索，或者在找到更便宜的路径时重新打开状态的图搜索，A星就是最优的。假设边界上有一个更差的目标G2。最优路径上一定也有某个状态n在边界上。<bookmark mark='c'/>它的f是g加h，<bookmark mark='d'/>由于h可采纳，这至多是g加h星，<bookmark mark='e'/>而由于n在最优路径上，g加h星恰好就是C星。<bookmark mark='f'/>G2的代价比C星大，而它的h是0。所以n总是先离开边界，最优目标也先于G2离开边界。",
 
-    'On graphs A star wants a little more.':
-        "在图上，A星需要的条件更多一点。<bookmark mark='a'/>如果对每一步从n到n撇，h(n)至多是这一步的代价加上h(n撇)，就说h是一致的：这是一个三角不等式，直线距离满足它。<bookmark mark='b'/>于是沿着一条路径，f从不下降。f(n撇)等于g(n)，加上这一步，再加上h(n撇)；<bookmark mark='c'/>由一致性，这至少是g(n)加h(n)：<bookmark mark='d'/>也就是f(n)。<bookmark mark='e'/>所以状态按f的顺序离开边界，A星第一次扩展一个状态时，就已经有了到它的最佳路径。",
+    'To avoid reopening states on graphs, A star wants a little more.':
+        "要在图上避免重新打开状态，A星需要的条件更多一点。<bookmark mark='a'/>如果对每一步从n到n撇，h(n)至多是这一步的代价加上h(n撇)，就说h是一致的：这是一个三角不等式，直线距离满足它。<bookmark mark='b'/>于是沿着一条路径，f从不下降。f(n撇)等于g(n)，加上这一步，再加上h(n撇)；<bookmark mark='c'/>由一致性，这至少是g(n)加h(n)：<bookmark mark='d'/>也就是f(n)。<bookmark mark='e'/>所以状态按f的顺序离开边界，A星第一次扩展一个状态时，就已经有了到它的最佳路径。",
 
     'f"One map proves little, so we ran {n_maps} random ones.':
         "一张地图说明不了什么，所以我们跑了{n_maps}张随机地图。<bookmark mark='a'/>在中位数的地图上，迪杰斯特拉扩展{med[0]:,.0f}个格子，A星扩展{med[1]:,.0f}个：大约是{ratio:.0f}%的工作量，得到同样的最优路径。<bookmark mark='b'/>把h乘以2，加权A星扩展的中位数是{med[2]:,.0f}个，路径平均长{100 * excess[2]:.0f}%，但绝不会超过最优的两倍。<bookmark mark='c'/>贪心搜索完全不管g：{med[3]:,.0f}个格子，但路径长{100 * excess[3]:.0f}%，而且毫无保证。速度与最优性的权衡。",

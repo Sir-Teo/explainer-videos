@@ -623,7 +623,16 @@
   "one cell's value, \\ character by character: \\ cell $134$ of $512$": "一个细胞的值，\\ 逐个字符：\\ 第$134$号细胞（共$512$个）",
   "sampled: \\ $240$ bits": "采样：\\ $240$比特",
   "slope $\\approx -0.43$: \\ error $\\propto n^{-0.43}$": "斜率$\\approx -0.43$：\\ 错误率$\\propto n^{-0.43}$",
-  "trained: \\ $14$ of $48$ strongly tuned to an angle; \\ $15$ mostly colour": "训练后：\\ $14$个（共$48$个）强烈偏好某个角度；\\ $15$个主要对颜色有反应"
+  "trained: \\ $14$ of $48$ strongly tuned to an angle; \\ $15$ mostly colour": "训练后：\\ $14$个（共$48$个）强烈偏好某个角度；\\ $15$个主要对颜色有反应",
+  "\\left.\\frac{\\partial c_T}{\\partial c_k}\\right|_{\\text{direct cell path}}": "\\left.\\frac{\\partial c_T}{\\partial c_k}\\right|_{\\text{细胞直接路径}}",
+  "the direct cell-state path; \\\\ other gate paths contribute too": "细胞状态的直接路径；\\\\ 经过门的其他路径也有贡献",
+  "a fixed $0<f<1$: \\ half-life along the direct path": "固定$0<f<1$：\\ 直接路径上的半衰期",
+  "an identity path helps gradient flow: \\ Part 9": "恒等路径有助于梯度流动：\\ 第9部分",
+  "associative: \\ regroup steps, \\ preserving their time order": "满足结合律：\\ 可改变分组，\\ 但保持时间顺序",
+  "final-state loss $L(h_T)$: \\ the chain rule back through time": "末状态上的损失$L(h_T)$：\\ 链式法则沿时间回传",
+  "2019, \\ Recht et al.: \\ a fresh test set made the same way; \\\\ best model: \\ top-5 $96\\% \\to 90\\%$; top-1 $83\\% \\to 72\\%$": "2019年，\\ Recht等人：\\ 仔细重建测试集；\\\\ 最佳模型：\\ 前五准确率$96\\% \\to 90\\%$；\\ 首选准确率$83\\% \\to 72\\%$",
+  "later Jacobians on the left; \\ $a_t = W h_{t-1} + U x_t + b$": "较晚的雅可比在左；\\ $a_t = W h_{t-1} + U x_t + b$",
+  "each step, \\ each hidden unit switches off with probability $1/2$": "每一步，\\ 每个隐藏单元以 $1/2$ 的概率关闭"
  },
  "patterns": [
   [

@@ -61,7 +61,7 @@ ZH = {
         "第1部分从香农出发的地方开始。<bookmark mark='a'/>信息是什么，为什么用比特来衡量；最好的编码，以及香农的极限；错误模型的代价；一种能把任何猜测者变成压缩器的编码；模型怎样学会猜；以及猜测已经走了多远。我们会看到，猜得好和压缩得好，是同一件事。",
 
     'f"And we\'ll keep score.':
-        "我们还要记分。这是1930年的《马耳他之鹰》里的一页。它在2026年1月1日进入公有领域，那时这一部分的每个模型都已经训练完了，所以没有一个可能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>这个系列要解释的，就是记分牌上的这些数字是怎么降下来的：从8，{goal}。",
+        "我们还要记分。这是1930年的《马耳他之鹰》里的一页。它的古登堡计划版本在2026年1月发布。我们自己训练的模型不读这段文字；但预训练模型的训练数据里，可能有过更早的版本。<bookmark mark='a'/>存成纯文本，每个字符大约要8比特。<bookmark mark='b'/>这个系列要解释的，就是记分牌上的这些数字是怎么降下来的：从8，{goal}。",
 
     "f'to {low:.2f} bits per character, and beyond'":
         '降到每字符{low:.2f}比特，甚至更低',
@@ -381,11 +381,11 @@ ZH = {
     'f"Let\'s play with the last chapter\'s counting model':
         "我们让上一章的计数模型当猜测者，在《马耳他之鹰》段落的{n:,}个字母上玩这个游戏。<bookmark mark='a'/>它第一次就猜中的情况占{100 * q[0]:.0f}%，第二次猜中的占{100 * q[1]:.0f}%，后面还拖着一条长尾巴。",
 
-    'f"From those frequencies, the upper bound is':
-        "根据这些频率，上界是每个字母{up:.2f}比特。<bookmark mark='a'/>香农还用同样的数字证明了一个下界：{lo:.2f}。对这个猜测者来说，真正的数值就在两者之间。",
+    'f"From those frequencies, the rank entropy is':
+        "根据这些频率，猜测次数的熵是每个字母{up:.2f}比特，这是对上界的一个估计。<bookmark mark='a'/>香农的下界表达式算出{lo:.2f}，但它的证明假设猜测者是理想的，按真正的条件概率给字母排序。我们的计数程序并不理想，所以这个下端点只是演示，不是有保证的下界。",
 
     'f"Shannon\'s own subjects did far better.':
-        "香农自己的受试者做得好得多。<bookmark mark='a'/>给他们100个字母的上下文，他估计印刷英语每个字母是{lo_h:.1f}到{hi_h:.1f}比特，<bookmark mark='b'/>而我们用6个字母上下文的计数猜测者是{float(g['lower']):.1f}到{float(g['upper']):.1f}。<bookmark mark='c'/>差别在于知识：关于词和语法、习语、故事，以及世界是怎么运转的知识。",
+        "香农自己的受试者做得好得多。<bookmark mark='a'/>给他们100个字母的上下文，他估计印刷英语每个字母是{lo_h:.1f}到{hi_h:.1f}比特，<bookmark mark='b'/>而我们用6个字母上下文的计数程序，猜测次数的熵是{float(g['upper']):.1f}。它的下端点只是演示；香农也提醒过，采样误差和人类猜测的不完美都会影响估计。<bookmark mark='c'/>差别在于知识：关于词和语法、习语、故事，以及世界是怎么运转的知识。",
 
     "Later estimates, with people betting on the next letter":
         "后来的估计，让人对下一个字母下注，结果落在每个字母大约1.3比特。<bookmark mark='a'/>要像人一样猜，机器就得知道人所知道的东西。",
@@ -487,7 +487,7 @@ ZH = {
         '第15章。该记分了。',
 
     'f"Here\'s the board, for the Falcon passage as printed':
-        "这是记分牌，针对印刷原样的《马耳他之鹰》段落：大写、标点，什么都在。<bookmark mark='a'/>纯文本每个字符花8比特。<bookmark mark='b'/>这段文字只用了{raw['passage_symbols']}种不同的符号，所以在它们之间盲猜，要花{b['uniform']:.2f}比特。<bookmark mark='c'/>在我们30本书里数出的字母频率，把它降到{b['order0']:.2f}，<bookmark mark='d'/>一个字符的上下文，降到{b['order1']:.2f}。",
+        "这是记分牌，针对印刷原样的《马耳他之鹰》段落：大写、标点，什么都在。<bookmark mark='a'/>纯文本每个字符大约花8比特。<bookmark mark='b'/>这段文字只用了{raw['passage_symbols']}种不同的符号，所以在它们之间盲猜，要花{b['uniform']:.2f}比特。<bookmark mark='c'/>在我们30本书里数出的字母频率，把它降到{b['order0']:.2f}，<bookmark mark='d'/>一个字符的上下文，降到{b['order1']:.2f}。",
 
     'f"Next, the compressors on your computer.':
         "接下来，是你电脑上的压缩器，每字符比特数依次是：<bookmark mark='a'/>{comp_said}。它们事先对英语一无所知，只从这段文字本身边读边学。<bookmark mark='b'/>我们最好的计数模型，先读了30本书，看前面{k}个字符，得到{b['best']:.2f}。",

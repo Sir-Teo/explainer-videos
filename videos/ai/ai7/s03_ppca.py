@@ -83,7 +83,7 @@ class PPCA(VoiceoverScene):
         p = load("pca2")
         colors = {r"W_{\mathrm{ML}}": W_C, r"\sigma^2_{\mathrm{ML}}": NOISE, r"U_k": C.BITS}
         thm = theorem_card(
-            r"Maximum likelihood for probabilistic PCA",
+            r"One maximum-likelihood fit for probabilistic PCA",
             VGroup(cmath(r"W_{\mathrm{ML}}", r"=", r"U_k", r"\,(\Lambda_k - \sigma^2 I)^{1/2}", colors=colors, font_size=36),
                    cmath(r"\sigma^2_{\mathrm{ML}}", r"=", r"\frac{1}{d - k} \sum_{j > k} \lambda_j", colors=colors,
                          font_size=36)).arrange(DOWN, aligned_edge=LEFT, buff=0.3),
@@ -103,7 +103,8 @@ class PPCA(VoiceoverScene):
                    color=GREY_A).next_to(bars_, UP, buff=0.3)
         with self.voiceover(
             "The best W and sigma, by maximum likelihood, come out in closed form. <bookmark mark='a'/> W's columns "
-            "point along the top k eigenvectors of chapter one, each stretched by its eigenvalue minus the noise. "
+            "can point along the top k eigenvectors of chapter one, each stretched by the square root of its "
+            "eigenvalue minus the noise variance. Rotating the hidden axes gives an equally good fit. "
             "<bookmark mark='b'/> And the noise is the average variance of all the directions left out. "
             "<bookmark mark='c'/> Shrink the noise to zero and you get plain PCA back. So PCA was always the limit of "
             "a probability model, and now it has a likelihood."

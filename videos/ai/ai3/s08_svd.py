@@ -49,9 +49,13 @@ class SVD(VoiceoverScene):
         ghost = DashedVMobject(ghost, num_dashes=40)
         once = label(r"$A$ in one go: \ the same ellipse", font_size=30, color=GREY_A).to_edge(DOWN, buff=0.5)
         once.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.1)
+        general = note(r"orthogonal changes may reflect; \ rectangular $\Sigma$ may project")
+        general.to_edge(DOWN, buff=0.15).add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.08)
         with self.voiceover(
             "Not every matrix is symmetric. Many aren't even square. <bookmark mark='a'/> But every matrix, without "
-            "exception, does three things: a turn, then a stretch along the axes, then another turn. "
+            "exception, has three factors: an orthogonal change of coordinates, a stretch or projection along the "
+            "axes, and another orthogonal change. Those coordinate changes may rotate or reflect. Our example uses "
+            "two rotations. "
             "<bookmark mark='b'/> That's the singular value decomposition: A equals U, Sigma, V transpose."
         ) as vo:
             self.play(FadeIn(pl), Create(circ), GrowArrow(a1), GrowArrow(a2))
@@ -62,7 +66,7 @@ class SVD(VoiceoverScene):
                 self.play(FadeOut(steps[k]), run_time=0.3)
             self.play(Create(ghost), FadeIn(once))
             vo.wait_until("b")
-            self.play(FadeIn(fb), Write(f))
+            self.play(FadeIn(fb), Write(f), FadeIn(general))
         self.wait(0.3)
         self.clear_scene()
 
@@ -104,7 +108,8 @@ class SVD(VoiceoverScene):
             "Where do the turns and stretches come from? <bookmark mark='a'/> A transpose A is symmetric, and never "
             "negative: x transpose A transpose A x is a length squared. <bookmark mark='b'/> So the spectral theorem "
             "gives it perpendicular eigenvectors v, with eigenvalues sigma squared. <bookmark mark='c'/> Send each v "
-            "through A and divide by sigma. <bookmark mark='d'/> These u's are perpendicular too, and of length one. "
+            "through A and divide by sigma, for nonzero sigma. Complete the orthonormal bases for any zero "
+            "singular values. <bookmark mark='d'/> These u's are perpendicular too, and of length one. "
             "<bookmark mark='e'/> So A sends perpendicular v's to perpendicular u's, stretched by the sigmas: the "
             "decomposition. <bookmark mark='f'/> Beltrami and Jordan found it in 1873 and 1874; Gene Golub and William "
             "Kahan's algorithm of 1965 is what computers still use."

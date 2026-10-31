@@ -35,8 +35,8 @@ class HighDim(VoiceoverScene):
         with self.voiceover(
             "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random "
             "directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most "
-            f"common. <bookmark mark='c'/> In a hundred, the angle strays from ninety degrees by {sd[100]:.1f} degrees "
-            f"on average, <bookmark mark='d'/> and in 768, by {sd[768]:.1f}."
+            f"common. <bookmark mark='c'/> In a hundred, the angle's standard deviation around ninety degrees is "
+            f"{sd[100]:.1f} degrees, <bookmark mark='d'/> and in 768, {sd[768]:.1f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
@@ -68,14 +68,14 @@ class HighDim(VoiceoverScene):
         g = axes([0, 4, 1], [-4, 0, 1], x_length=5.8, y_length=3.2, xticks=[0, 1, 2, 3, 4], yticks=[-4, -3, -2, -1, 0],
                  xfmt=lambda v: f"10^{{{int(v)}}}" if v > 1 else ("1" if v == 0 else "10"),
                  yfmt=lambda v: f"10^{{{int(v)}}}" if v < -1 else ("1" if v == 0 else "0.1"),
-                 xlabel=r"dimension $d$", ylabel=r"variance of $\cos\theta$", center=[-1.5, -1.9, 0])
+                 xlabel=r"dimension $d$", ylabel=r"variance of $\cos\theta$", center=[-1.5, -1.5, 0])
         ax = g.ax
         lx = np.log10(ds)
         pred = Line(ax.c2p(0, 0), ax.c2p(4, -4), color=C.BITS, stroke_width=2)
         pl = MathTex(r"1/d", font_size=28, color=C.BITS).next_to(ax.c2p(3.6, -3.6), UR, buff=0.05)
         meas = dots_on(ax, lx, np.log10(var), C.TRUE_P, 0.07)
         k768 = int(np.argmin(np.abs(ds - 768)))
-        cap = note(r"computed: \ $20{,}000$ random pairs at each $d$").to_corner(DR, buff=0.25)
+        cap = note(r"computed: \ about $20{,}000$ random pairs at each $d$").to_corner(DR, buff=0.25)
         read = label(rf"$d = 768$: \ measured ${var[k768]:.5f}$, \ $1/d = {1 / 768:.5f}$", font_size=26,
                      color=C.TRUE_P).move_to([4.2, -0.8, 0])
         with self.voiceover(
@@ -98,8 +98,10 @@ class HighDim(VoiceoverScene):
     # ------------------------------------------------------------------
     def room(self):
         h = load("highdim")
+        angle_low = int(h["worst_angle"])
+        angle_high = 180 - angle_low
         head = label(r"$10{,}000$ random directions in $768$ dimensions", font_size=36).to_edge(UP, buff=0.5)
-        line1 = label(rf"every pair between ${h['worst_angle']:.0f}^\circ$ and ${180 - h['worst_angle']:.0f}^\circ$",
+        line1 = label(rf"every pair between ${angle_low}^\circ$ and ${angle_high}^\circ$",
                       font_size=38, color=C.BITS).move_to(UP * 1.2)
         # a fan of nearly perpendicular arrows, drawn as if seen from far away: many directions, all apart
         g = np.random.default_rng(9)
@@ -125,7 +127,7 @@ class HighDim(VoiceoverScene):
         feat.to_edge(LEFT, buff=0.3).set_y(-0.6)
         with self.voiceover(
             "So high-dimensional space is roomy. <bookmark mark='a'/> Ten thousand random directions in 768 "
-            f"dimensions: every pair between {h['worst_angle']:.0f} and {180 - h['worst_angle']:.0f} degrees apart. "
+            f"dimensions: every pair between {angle_low} and {angle_high} degrees apart. "
             "<bookmark mark='b'/> A model stores an idea, a feature, as a direction, and can keep far more features than "
             "dimensions if they need only be nearly perpendicular: superposition, how Part 30 reads a model."
         ) as vo:
@@ -146,9 +148,9 @@ class HighDim(VoiceoverScene):
         nsd = np.asarray(h["norm_sd"])
         hist = {d: np.asarray(h[f"norms{d}"], float) / 20000 for d in dims}
         top = max(hist[768].max(), 0.01)
-        bars = LiveBars(hist[2], max_value=top, height=3.4, bar_width=0.15, gap=0.03, colors=C.MODEL_Q)
+        bars = LiveBars(hist[2], max_value=top, height=3.4, bar_width=0.125, gap=0.03, colors=C.MODEL_Q)
         bars.place(-2.0, x=-3.6)
-        x0, w = bars.base.get_start()[0] + 0.15, 40 * 0.18
+        x0, w = bars.base.get_start()[0] + 0.15, bars.width_total
         ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([x0 + w * v / 2 - 0.02, -2.2, 0])
                          for t, v in (("0", 0), (r"\sqrt d", 1), (r"2\sqrt d", 2))])
         head = label(r"The length of a random vector, \ $\mathbf{x} \sim \mathcal{N}(0, I_d)$", font_size=34)
@@ -171,7 +173,7 @@ class HighDim(VoiceoverScene):
             "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. "
             "<bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. "
             "<bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is "
-            "about one over root two, whatever d: the length grows, the spread doesn't. Measured at 768, "
+            "about one over root two for large d: the length grows, the spread approaches a constant. Measured at 768, "
             f"{nsd[k768]:.3f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))

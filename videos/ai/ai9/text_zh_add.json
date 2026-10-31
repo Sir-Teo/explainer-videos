@@ -535,6 +535,12 @@
   "Poole et al.\\ (2016); \\ Schoenholz et al.\\ (2017); \\ Pennington et al.\\ (2017); \\ Xiao et al.\\ (2018)": "普尔等（2016）；\\ 舍恩霍尔茨等（2017）；\\ 彭宁顿等（2017）；\\ Xiao等（2018）",
   "He et al., ResNet (2015); \\ Srivastava et al.\\ (2015); \\ Veit et al.\\ (2016); \\ Ioffe \\& Szegedy (2015); \\ Ba et al.\\ (2016); \\ Zhang \\& Sennrich (2019); \\ Xiong et al.\\ (2020)": "何恺明等，ResNet（2015）；\\ 斯里瓦斯塔瓦等（2015）；\\ 维特等（2016）；\\ 约费 \\& 塞格迪（2015）；\\ 巴等（2016）；\\ Zhang \\& 森里希（2019）；\\ Xiong等（2020）",
   "Hendrycks \\& Gimpel (2016); \\ Dauphin et al.\\ (2017); \\ Shazeer (2020); \\ Kolmogorov (1957); \\ Arnold (1957); \\ Liu et al., KAN (2024); \\ Yu et al.\\ (2024)": "亨德里克斯 \\& 金佩尔（2016）；\\ 多芬等（2017）；\\ 沙泽尔（2020）；\\ 柯尔莫哥洛夫（1957）；\\ 阿诺德（1957）；\\ Liu等，KAN（2024）；\\ Yu等（2024）",
-  "Bengio, Ducharme, Vincent \\& Jauvin, \\textit{A Neural Probabilistic Language Model} (2003)": "本吉奥、迪沙尔姆、文森特 \\& 若万，\\textit{A Neural Probabilistic Language Model}（2003）"
+  "Bengio, Ducharme, Vincent \\& Jauvin, \\textit{A Neural Probabilistic Language Model} (2003)": "本吉奥、迪沙尔姆、文森特 \\& 若万，\\textit{A Neural Probabilistic Language Model}（2003）",
+  "$|\\cos| \\le 1$: \\ average over a fixed input distribution $\\mu$": "$|\\cos| \\le 1$：\\ 对固定输入分布 $\\mu$ 取平均",
+  "the average over random choices \\\\ is $\\le 1/n$, \\ so \\textit{some} choice \\\\ of $n$ units is within $1/\\sqrt{n}$ in $L^2(\\mu)$, \\\\ in any dimension": "对随机选择的均方误差取平均 \\\\ 不超过$1/n$，\\ 所以\\textit{某一种}选法 \\\\ 的$n$个单元在$L^2(\\mu)$中的误差不超过$1/\\sqrt{n}$，\\\\ 与维数无关",
+  "before gain, \\ $\\epsilon=0$: \\\\ nonzero vectors onto one sphere": "增益之前，\\ $\\epsilon=0$：\\\\ 非零向量落到同一个球面上",
+  "RMSNorm: \\ gain $1$, \\ $\\epsilon=0$, \\ $h\\ne0$": "RMSNorm：\\ 增益$1$，\\ $\\epsilon=0$，\\ $h\\ne0$",
+  "\\textit{A Neural Probabilistic Language Model}: \\ an influential neural language model, \\ for words": "\\textit{A Neural Probabilistic Language Model}：\\ 一个影响深远的神经语言模型，\\ 针对的是单词",
+  "the identity skip path helps \\\\ gradients reach early layers": "恒等跳跃路径 \\\\ 帮助梯度到达较早的层"
  }
 }

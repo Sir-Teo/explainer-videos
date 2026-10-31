@@ -23,7 +23,7 @@ class MinNorm(VoiceoverScene, ThreeDScene):
         m = load("minnorm")
         X3, wp, nv = np.asarray(m["X3"]), np.asarray(m["w3p"]), np.asarray(m["null3"])
         path = np.asarray(m["path3"])
-        S = 3.2
+        S = 2.4
         ax = ThreeDAxes(x_range=[-1.5, 1.5, 1], y_range=[-1.5, 1.5, 1], z_range=[-1.5, 1.5, 1], x_length=S * 2,
                         y_length=S * 2, z_length=S * 2, axis_config={"stroke_color": GREY_C, "include_ticks": False,
                                                                        "include_tip": False})
@@ -47,7 +47,7 @@ class MinNorm(VoiceoverScene, ThreeDScene):
         for mob in (t1, t2, t3, tag):
             self.add_fixed_in_frame_mobjects(mob)
             self.remove(mob)
-        self.set_camera_orientation(phi=68 * DEGREES, theta=-30 * DEGREES, zoom=1.1)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-30 * DEGREES, zoom=1.0)
         with self.voiceover(
             "When a model has more weights than training examples, it can usually fit them all exactly, in "
             "infinitely many ways. Three weights and two equations: <bookmark mark='a'/> every point on this line "
@@ -82,15 +82,15 @@ class MinNorm(VoiceoverScene, ThreeDScene):
         ]
         whys = [why(r"a gradient step on $\tfrac12 |Xw - y|^2$"),
                 why(r"$w_0 = 0$, \ and each step adds $X^\top(\cdot)$"),
-                why(r"convex, \ $\eta < 2/\lambda_{\max}$: \ the loss reaches $0$"),
+                why(r"full row rank, \ $0 < \eta < 2/\lambda_{\max}(X^\top X)$: \ loss $\to 0$"),
                 why(r"the only exact fit in the row space"),
                 why(r"any exact fit $w$: \ $w - w_\infty \perp \operatorname{row}(X)$, \ Pythagoras")]
         step = ladder(self, rows, whys, keep=5, top=2.9, x=-2.0, buff=0.42, edge=6.9)
-        head = label(r"The proof, \ for $n$ equations in $d > n$ unknowns", font_size=28, color=GREY_A).to_edge(UP, buff=0.25)
+        head = label(r"$X$ full row rank: \ $n$ equations, \ $d > n$ unknowns", font_size=28, color=GREY_A).to_edge(UP, buff=0.25)
         with self.voiceover(
             "The proof is five lines. <bookmark mark='a'/> A gradient step subtracts X transpose times the residual. "
             "<bookmark mark='b'/> Start at zero, and every iterate is a combination of the training inputs: it lives "
-            "in the row space of X. <bookmark mark='c'/> With a small enough step, the loss is convex and goes to "
+            "in the row space of X. <bookmark mark='c'/> For full-row-rank X and a sufficiently small positive step, the squared loss goes to "
             "zero, so the limit fits every example. <bookmark mark='d'/> Only one exact fit lies in the row space: "
             "X transpose times X X transpose inverse times y, the pseudoinverse solution. <bookmark mark='e'/> And "
             "any other exact fit differs from it by a vector perpendicular to the row space, so by Pythagoras it's "

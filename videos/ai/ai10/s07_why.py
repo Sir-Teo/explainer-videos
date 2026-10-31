@@ -141,36 +141,64 @@ class WhyItWon(VoiceoverScene):
         for p, col in (("0.0", MLPC), ("0.5", CNN)):
             R = [np.asarray(runs[f"{p}-{s}"]) for s in (0, 1, 2)]
             xs = R[0][:, 0]
-            tr = seed_band(A, xs, [np.minimum(r[:, 1], 0.08) for r in R], col, opacity=0.1, stroke_width=2.5)
+            tr = seed_band(A, xs, [r[:, 1] for r in R], col, opacity=0.1, stroke_width=2.5, ylim=(0, 0.08))
             tr[1].set_stroke(opacity=0.7)
-            te = seed_band(A, xs, [np.minimum(r[:, 2], 0.08) for r in R], col)
+            te = seed_band(A, xs, [r[:, 2] for r in R], col, ylim=(0, 0.08))
             out.add(VGroup(tr, te))
             vals[p] = (np.mean([r[-1, 1] for r in R]), np.mean([r[-1, 2] for r in R]))
         leg = legend([(MLPC, r"no dropout"), (CNN, r"dropout, \ $p = 0.5$")], font_size=22)
         leg.next_to(ax, UP, buff=0.2).align_to(ax, RIGHT)
         kl = label(r"solid: \ test digits; \ faint: \ the training digits", font_size=20, color=GREY_B)
         kl.next_to(leg, LEFT, buff=0.4)
-        # a schematic network with dropped units
+        # Re-sample the schematic mask between steps, then send light only
+        # through surviving connections. These are explanatory paths, not data.
         layers = [4, 6, 6, 3]
         dots = VGroup()
         g = np.random.default_rng(7)
-        dropped = []
+        masks = [{(li, k) for li in (1, 2) for k in range(layers[li]) if g.random() < 0.5}
+                 for _ in range(6)]
         for li, n in enumerate(layers):
-            col = VGroup(*[Circle(radius=0.13, stroke_color=GREY_B, stroke_width=2) for _ in range(n)])
+            col = VGroup(*[Circle(radius=0.13, stroke_color=CNN, stroke_width=2,
+                                 fill_color=CNN, fill_opacity=0.18) for _ in range(n)])
             col.arrange(DOWN, buff=0.22).move_to([-5.6 + 1.1 * li, 0.0, 0])
             dots.add(col)
-            if 0 < li < len(layers) - 1:
-                dropped += [(li, k) for k in range(n) if g.random() < 0.5]
-        wires = VGroup()
+        wires, edge_specs = VGroup(), []
         for li in range(len(layers) - 1):
             for a_ in range(layers[li]):
                 for b_ in range(layers[li + 1]):
-                    off = (li, a_) in dropped or (li + 1, b_) in dropped
-                    wires.add(Line(dots[li][a_].get_center(), dots[li + 1][b_].get_center(), stroke_width=0.8,
-                                   color=GREY_D if off else GREY_B, stroke_opacity=0.25 if off else 0.6))
+                    wires.add(Line(dots[li][a_].get_center(), dots[li + 1][b_].get_center(),
+                                   stroke_width=0.8, color=CNN, stroke_opacity=0.3))
+                    edge_specs.append((li, a_, b_))
         crosses = VGroup(*[Cross(dots[li][k], stroke_color=C.PENALTY, stroke_width=3, scale_factor=0.8)
-                           for li, k in dropped])
-        nl = label(r"each step, \ half the hidden units are switched off at random", font_size=20, color=GREY_A)
+                           .set_opacity(0) for li in (1, 2) for k in range(layers[li])])
+        hidden = [(li, k) for li in (1, 2) for k in range(layers[li])]
+
+        def show_mask(dropped):
+            changes = []
+            for wire, (li, a_, b_) in zip(wires, edge_specs):
+                off = (li, a_) in dropped or (li + 1, b_) in dropped
+                changes.append(wire.animate.set_stroke(color=GREY_D if off else CNN,
+                                                       opacity=0.12 if off else 0.55,
+                                                       width=0.7 if off else 1.3))
+            for li, col in enumerate(dots):
+                for k, dot in enumerate(col):
+                    off = (li, k) in dropped
+                    changes.append(dot.animate.set_stroke(GREY_D if off else CNN)
+                                   .set_fill(GREY_D if off else CNN, opacity=0.08 if off else 0.32))
+            changes.extend(cross.animate.set_opacity(1 if unit in dropped else 0)
+                           for cross, unit in zip(crosses, hidden))
+            self.play(*changes, run_time=0.65)
+            pulses = []
+            for layer in range(len(layers) - 1):
+                active = VGroup(*[wire.copy().set_stroke(KERNEL, width=3, opacity=1)
+                                 for wire, (li, a_, b_) in zip(wires, edge_specs)
+                                 if li == layer and (li, a_) not in dropped and (li + 1, b_) not in dropped])
+                if len(active):
+                    pulses.append(ShowPassingFlash(active, time_width=0.35, run_time=0.7))
+            if pulses:
+                self.play(LaggedStart(*pulses, lag_ratio=0.65))
+
+        nl = label(r"each step, \ each hidden unit switches off with probability $1/2$", font_size=20, color=GREY_A)
         nl.next_to(dots, DOWN, buff=0.35)
         if nl.width > 4.8:
             nl.width = 4.8
@@ -198,7 +226,14 @@ class WhyItWon(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dots), Create(wires), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(c) for c in crosses], lag_ratio=0.1), FadeIn(nl))
+            self.add(crosses)
+            self.play(FadeIn(nl))
+            slot = max(2.3, (vo.mark_time("b") - vo.elapsed() - 1.0) / len(masks))
+            for dropped in masks:
+                step_start = vo.elapsed()
+                show_mask(dropped)
+                if slot > vo.elapsed() - step_start:
+                    self.wait(slot - (vo.elapsed() - step_start))
             vo.wait_until("b")
             self.play(net.animate.scale(1 / 1.35).move_to(home))
             self.play(Create(ax), FadeIn(leg), FadeIn(kl), FadeIn(tag), FadeIn(out[0]))

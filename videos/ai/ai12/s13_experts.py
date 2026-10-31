@@ -94,7 +94,7 @@ class Experts(VoiceoverScene):
         )
         with self.voiceover(
             "In a dense model, every parameter works on every character, so compute and parameters grow together. "
-            "A mixture of experts, from part sixteen, breaks the link: many experts, and a router that sends each "
+            "A mixture of experts, which part sixteen will build, loosens the link: many experts, and a router that sends each "
             "character to one. <bookmark mark='a'/> Split our model's hidden layer into more and more experts, "
             "keeping the work per character the same. "
             + said1

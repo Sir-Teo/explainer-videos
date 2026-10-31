@@ -89,7 +89,7 @@ class Before(VoiceoverScene):
         card = definition_card(r"The image gradient",
                                MathTex(r"\nabla I = \Big(\tfrac{\partial I}{\partial x}, \tfrac{\partial I}"
                                        r"{\partial y}\Big),\quad \tfrac{\partial I}{\partial x} \approx "
-                                       r"I(x{+}1, y) - I(x{-}1, y)", font_size=30),
+                                       r"\tfrac{I(x{+}1, y) - I(x{-}1, y)}{2}", font_size=30),
                                width=6.8, color=HAND).to_edge(UP, buff=0.35)
         digit = img_gray(d, 3.3).move_to([-3.4, -1.1, 0])
         dframe = SurroundingRectangle(digit, buff=0, color=GREY_D, stroke_width=1.2)
@@ -116,7 +116,7 @@ class Before(VoiceoverScene):
         with self.voiceover(
             "Computer vision began the same way, with edges. An edge is where the brightness changes quickly, so "
             "take the derivative of the image. <bookmark mark='a'/> In practice, the difference between the "
-            "pixels on either side, across and down. <bookmark mark='b'/> On a handwritten digit, each arrow points "
+            "pixels on either side, divided by their spacing, across and down. <bookmark mark='b'/> On a handwritten digit, each arrow points "
             "uphill in brightness, across the stroke. <bookmark mark='c'/> On a photograph, the length of the "
             "gradient, in Irwin Sobel's 1968 version, draws the outline of the horse. For decades every vision "
             "system started here."

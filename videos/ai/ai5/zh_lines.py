@@ -46,11 +46,11 @@ ZH = {
     'A thousand make it unmistakable.':
         "1000个球，形状就毫无疑问了。<bookmark mark='a'/>数一数路径就得到精确的概率：12选k，除以2的12次方。<bookmark mark='b'/>贴着它们的那条光滑曲线，就是钟形曲线，也就是正态分布，它有中心μ和宽度σ，这里是6和根号3。棣莫弗在1733年找到了它，正是这些计数的极限。",
     'Why a bell, and why so often?':
-        "为什么是钟形，又为什么这么常见？一颗骰子：六根一样高的柱子。<bookmark mark='a'/>两颗：一个三角形。三颗：已经开始变圆。<bookmark mark='b'/>六颗、十二颗：钟形曲线。<bookmark mark='c'/>这就是中心极限定理：把许多独立的小块加起来，不管每一块是什么形状，和都是钟形的，<bookmark mark='d'/>而它的宽度，随块数的平方根增长。拉普拉斯在1810年证明了它。",
+        "为什么是钟形，又为什么这么常见？一颗骰子：六根一样高的柱子。<bookmark mark='a'/>两颗：一个三角形。三颗：已经开始变圆。<bookmark mark='b'/>六颗、十二颗：钟形曲线。<bookmark mark='c'/>这就是中心极限定理：把来自同一分布的独立抽样加起来，且方差为有限正数。减去均值、再缩放后，和的分布趋近钟形，<bookmark mark='d'/>而它的宽度，随块数的平方根增长。拉普拉斯在1810年证明了它。",
     'Why? Two dice add up to s':
         "为什么？两颗骰子加起来等于s，有多少种把s拆开的方法：一颗是x，另一颗是s减x。<bookmark mark='a'/>换成密度，求和就变成积分，也就是卷积。<bookmark mark='b'/>用一个歪向一边的分布来画：指数分布。把它翻过来，滑到s，再相乘：重叠部分的面积，就是和在s处的密度。<bookmark mark='c'/>让s一路滑过去，这个面积就描出两块之和的密度。<bookmark mark='d'/>n块，就要做n减1次卷积。",
     'So convolve again and again.':
-        "那就一次又一次地卷积。一个指数分布，全都挤在一边。<bookmark mark='a'/>两个、三个、五个：每次卷积都把它抹平、摊开。<bookmark mark='b'/>十个、三十个：歪斜消失了，剩下的就是钟形曲线。卷积是一种平均，而在平均之下，除了缩放，唯一不变的形状就是钟形曲线。",
+        "那就一次又一次地卷积。一个指数分布，全都挤在一边。<bookmark mark='a'/>两个、三个、五个：每次卷积都把它抹平、摊开。<bookmark mark='b'/>十个、三十个：歪斜消失了，剩下的就是钟形曲线。在方差有限的非退化分布中，只有钟形曲线能在独立副本相加、再减去均值并缩放后，保持原来的形状。",
     'f"How fast does the bell arrive?':
         "钟形曲线来得有多快？量一量和的累积分布与钟形曲线的累积分布之间最大的差距。<bookmark mark='a'/>对指数分布，它落在斜率为{es:.2f}的直线上：差距像n的平方根分之一那样缩小，64块之后是{ed[k64]:.3f}。<bookmark mark='b'/>这就是贝里-埃森定理：差距至多是一个常数，乘以三阶绝对矩除以宽度的立方，再除以n的平方根；测出来的差距就在它下面。<bookmark mark='c'/>{sym}",
     "f'The uniform pieces, symmetric, close the gap much faster":
@@ -85,7 +85,7 @@ ZH = {
         "最大似然平均来说准吗？对中心，准。对宽度，不准。<bookmark mark='a'/>围绕样本自己的平均值去量离散程度，会少掉一点：样本平均值离数据，比真正的中心离得更近。<bookmark mark='b'/>平均下来，正好少掉一个σ的平方，<bookmark mark='c'/>所以最大似然的方差偏小，是真实值的n分之n减1。<bookmark mark='d'/>{verdict}随着n增大，偏差逐渐消失。1922年给似然命名的费希尔，关心的与其说是偏差，不如说是效率：误差最小能有多小。这就是下一章。",
     'f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted {th[i5]:.2f}; dividing':
         "在{R:,}组、每组5个的样本上测量，平均是{mle[i5]:.3f}，预测是{th[i5]:.2f}；除以n减1，也就是贝塞尔校正，得到{bes[i5]:.3f}。",
-    "f'Measured on {R:,} samples of five":
+    'f"Measured on {R:,} samples of five, the average is {mle[i5]:.3f}, against the predicted {th[i5]:.2f}."':
         "在{R:,}组、每组5个的样本上测量，平均是{mle[i5]:.3f}，预测是{th[i5]:.2f}。",
 
     # ------------------------------------------------------------------ 4. Fisher
@@ -93,7 +93,7 @@ ZH = {
     'f"Here is a distribution with heavy tails, the Cauchy.':
         "这是一个尾巴很重的分布：柯西分布。它看起来像钟形曲线，但尾巴重到没有平均值：时不时就有一次抽样落到离谱的远处。<bookmark mark='a'/>试着用100次抽样估计它的中心。样本平均值毫无用处：它的离散程度永远不缩小；平均值的中间一半，在{ns[0]}次抽样时跨度{iqr[0]:.1f}，到{ns[-1]}次时仍是{iqr[-1]:.1f}。<bookmark mark='b'/>中位数好得多，<bookmark mark='c'/>最大似然更好。有没有一个最好的极限？",
     'f"There is, and Fisher found the key in 1925.':
-        "有，费希尔在1925年找到了关键。<bookmark mark='a'/>分数是对数似然对参数的斜率：每个观测把估计往哪边拉、拉多大。<bookmark mark='b'/>在真实值处，它的平均为零，因为密度的积分永远是1。<bookmark mark='c'/>它的方差就是费希尔信息：数据把θ钉得有多牢。柯西分布的费希尔信息是二分之一；在20万次抽样上，我们测得{sv:.3f}。<bookmark mark='d'/>一个无偏估计随θ一比一地移动，所以它和分数的协方差是1。<bookmark mark='e'/>柯西-施瓦茨不等式说，协方差的平方至多是两个方差的乘积。所以，任何无偏估计的方差，都不可能低于n乘以信息的倒数：这就是克拉默-拉奥下界，由拉奥在1945年、克拉默在1946年证明。",
+        "有，费希尔在1925年找到了关键。<bookmark mark='a'/>分数是对数似然对参数的斜率：每个观测把估计往哪边拉、拉多大。<bookmark mark='b'/>当求导可以移入积分号时，它在真实值处的平均为零，因为密度的积分永远是1。<bookmark mark='c'/>它的方差就是费希尔信息：数据把θ钉得有多牢。柯西分布的费希尔信息是二分之一；在20万次抽样上，我们测得{sv:.3f}。<bookmark mark='d'/>一个无偏估计随θ一比一地移动，所以它和分数的协方差是1。<bookmark mark='e'/>柯西-施瓦茨不等式说，协方差的平方至多是两个方差的乘积。所以，任何无偏估计的方差，都不可能低于n乘以信息的倒数：这就是克拉默-拉奥下界，由拉奥在1945年、克拉默在1946年证明。",
     'f"Now measure it. Multiply each estimate':
         "现在来测量。把每种估计的方差乘以n，这样一个理想的n分之一的估计就是一条水平线；下界是高度为2的那条线。<bookmark mark='a'/>中位数稳定在{med[-1]:.2f}，接近它的理论值π的平方除以4：比下界差了约四分之一，而且永远如此。<bookmark mark='b'/>最大似然起点很高，5次抽样时是{mle[0]:.1f}，但{verdict}<bookmark mark='c'/>这就是费希尔所说的有效性：在大样本下，没有什么能胜过最大似然。",
     "f'by {int(ns[-1])} draws it is {mle[-1]:.2f}, within a few percent":

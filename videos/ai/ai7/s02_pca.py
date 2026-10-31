@@ -296,8 +296,9 @@ class PCA(VoiceoverScene):
         p = load("pca")
         xyz = np.asarray(p["proj"])[:, :3] / 3.2
         y = np.asarray(p["y"])
-        cl = Cloud3D(xyz, [AUSTEN if v == 0 else DICKENS for v in y], scale=2.6, radius=0.05, tilt=0.35,
-                     center=[-1.2, -0.3, 0])
+        cloud_scale = 2.65 / max(float(np.linalg.norm(xyz, axis=1).max()), 1e-9)
+        cl = Cloud3D(xyz, [AUSTEN if v == 0 else DICKENS for v in y], scale=cloud_scale, radius=0.05, tilt=0.35,
+                     center=[0, -0.1, 0])
         axes_ = VGroup()
         for vec in (np.array([1.2, 0, 0]), np.array([0, 1.2, 0]), np.array([0, 0, 1.2])):
             arr = always_redraw(lambda vec=vec: Arrow(cl.project(np.zeros(3))[0], cl.project(vec)[0], buff=0,

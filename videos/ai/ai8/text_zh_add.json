@@ -396,7 +396,25 @@
   "a network with $300{,}034$ weights: \\ $d > n$, \\ the bound says nothing": "有 $300{,}034$ 个权重的网络：\\ $d > n$，\\ 这个界什么也说不出",
   "V.~Vapnik \\& A.~Chervonenkis": "V.~Vapnik、A.~Chervonenkis",
   "uniform convergence of frequencies to probabilities (announced 1968); \\ Vapnik's support vector machines followed in 1995": "频率一致收敛于概率（1968年公布）；\\ 1995年，瓦普尼克的支持向量机随之而来",
-  "angle to the widest-margin direction: \\ $30.0^\\circ$": "与最宽间隔方向的夹角：\\ $30.0^\\circ$"
+  "angle to the widest-margin direction: \\ $30.0^\\circ$": "与最宽间隔方向的夹角：\\ $30.0^\\circ$",
+  "VC dimension $d$, \\ $n \\ge d \\ge 1$:": "VC维为 $d$，\\ $n \\ge d \\ge 1$：",
+  "solve for $\\varepsilon$, \\ uniformly with probability $1-\\delta$": "解出 $\\varepsilon$，\\ 以概率 $1-\\delta$ 对所有规则同时成立",
+  "a ghost sample $S'$: \\ symmetrization, \\ $n\\varepsilon^2 \\ge 2$": "影子样本 $S'$：\\ 对称化，\\ $n\\varepsilon^2 \\ge 2$",
+  "Sauer--Shelah, \\ $1 \\le d \\le n$": "绍尔--谢拉，\\ $1 \\le d \\le n$",
+  "full row rank, \\ $0 < \\eta < 2/\\lambda_{\\max}(X^\\top X)$: \\ loss $\\to 0$": "满行秩，\\ $0 < \\eta < 2/\\lambda_{\\max}(X^\\top X)$：\\ 损失 $\\to 0$",
+  "$X$ full row rank: \\ $n$ equations, \\ $d > n$ unknowns": "$X$ 满行秩：\\ $n$ 个方程，\\ $d > n$ 个未知数",
+  "normalized margins; \\ confidence paid for $40$ choices of $\\gamma$": "归一化间隔；\\ 置信项已计入 $40$ 个 $\\gamma$ 候选值",
+  "statistical guarantees assume IID samples; \\ book pages illustrate the calculations": "统计保证假设样本独立同分布；\\ 书页数据用于演示计算",
+  "separable linear data, \\ sufficiently small positive constant step: \\ $|w(t)|$ grows like $\\log t$; \\ direction tends to the hard-margin SVM's. \\ Error: $O(1/\\log t)$ for almost all datasets; \\ $O(\\log\\log t/\\log t)$ in general.": "线性可分数据，\\ 足够小的正常数步长：\\ $|w(t)|$ 按 $\\log t$ 增长，方向趋于硬间隔SVM。\\ 方向误差：几乎所有数据集为 $O(1/\\log t)$；\\ 一般为 $O(\\log\\log t/\\log t)$。",
+  "a fixed reconstructor uses $k<n$ of $n$ IID examples and ": "固定的重建规则使用 $n$ 个独立同分布样本中的 $k<n$ 个，且",
+  "fits all $n$: \\ with probability $1-\\delta$, \\ simultaneously for every $k$:": "拟合全部 $n$ 个：\\ 以概率 $1-\\delta$，\\ 对所有 $k$ 同时成立：",
+  "a fixed reconstructor uses $k<n$ of $n$ IID examples and fits all $n$: \\ with probability $1-\\delta$, \\ simultaneously for every $k$:": "固定的重建规则使用 $n$ 个独立同分布样本中的 $k<n$ 个，并拟合全部 $n$ 个：\\ 以概率 $1-\\delta$，\\ 对所有 $k$ 同时成立：",
+  "June 2025: \\ Bartz and Kadrey found training fair use on their records; \\\\ Bartz rejected fair use for pirated library copies. \\ No blanket rule.": "2025年6月：\\ Bartz、Kadrey两案基于各案证据认定相关训练为合理使用；\\\\ Bartz案否定了盗版书库副本的合理使用抗辩。\\ 并非一概而论。",
+  "lyrics memorized in a model's weights are a reproduction; \\ appealable at the time": "模型权重中记住的歌词构成复制；\\ 当时仍可上诉",
+  "$p(x)>0$ wherever $q(x)>0$: \\\\ multiply and divide by $p$": "$q(x)>0$处须有$p(x)>0$：\\\\ 乘以再除以$p$",
+  "fixed $h$, \\ exact weights, \\ i.i.d. sample: \\\\ unbiased importance weighting": "固定$h$、精确权重、独立同分布样本：\\\\ 重要性加权给出无偏估计",
+  "other shifts: \\ labels' frequencies change \\\\ (label shift); \\ or the rule itself changes \\\\ (concept drift: \\ input weights alone are insufficient)": "其他偏移：\\ 标签的频率变了 \\\\ （标签偏移）；\\ 或者规则本身变了 \\\\ （概念漂移：\\ 仅对输入加权还不够）",
+  "For a fixed predictor and exact weights, show the importance-weighted error is unbiased for the test error, \\ and that with $p = \\mathcal N(0, 1)$, \\ $q = \\mathcal N(0, 4)$ \\ the weights have infinite variance.": "对固定预测器使用精确权重，证明重要性加权误差是测试误差的无偏估计，\\ 并说明当 $p = \\mathcal N(0, 1)$、\\ $q = \\mathcal N(0, 4)$ 时，\\ 权重的方差是无穷大。"
  },
  "patterns": []
 }

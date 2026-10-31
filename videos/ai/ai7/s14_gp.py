@@ -66,8 +66,8 @@ class GP(VoiceoverScene):
         with self.voiceover(
             "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says "
             "'her', from the start of the novel to the end. It rises and falls as the story moves between "
-            "characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth "
-            "functions. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the "
+            "characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over "
+            "functions; our kernel makes them smooth. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the "
             "middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move "
             "together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any "
             "data, here are five functions drawn from it: wiggly, with a typical width "
@@ -88,8 +88,8 @@ class GP(VoiceoverScene):
             "Their average is the best guess, and the band around it shows the uncertainty. "
             f"<bookmark mark='a'/> The length scale, about {g['ell']:g} pages, wasn't set by hand: it's the one under "
             "which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and "
-            "beyond them the band opens wide again. A Gaussian process knows what it doesn't know, which is exactly "
-            "what you want when deciding where to look next."
+            "with the kernel settings held fixed, the band opens wide beyond them. This is uncertainty under our model, "
+            "useful when deciding where to look next."
         ) as vo:
             self.play(FadeIn(mband), Create(mline), pri.animate.set_stroke(opacity=0.3))
             vo.wait_until("a")
@@ -120,14 +120,14 @@ class GP(VoiceoverScene):
                 why(r"the prior's variance, minus what \\ the data explains \ (a Schur complement)")]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.0, buff=0.55, edge=6.8)
         head = label(r"The posterior is one formula", font_size=32).to_edge(UP, buff=0.25)
-        nb = label(r"no training loop: \ conditioning is linear algebra; \ $\sigma_*^2$ never looks at $\mathbf{y}$",
+        nb = label(r"fixed kernel: \ conditioning is linear algebra; \ $\sigma_*^2$ does not depend on $\mathbf{y}$",
                    font_size=24, color=C.BITS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Why is conditioning so easy? Under a Gaussian process, the pages we've seen and the value at any new "
+            "Why is conditioning so easy? First subtract the mean. Under a Gaussian process, the pages we've seen and the value at any new "
             "page are jointly Gaussian, with covariances given by the kernel. <bookmark mark='a'/> And a Gaussian, "
             "conditioned on some of its coordinates, is still Gaussian. Completing the square gives its mean and "
             "variance. <bookmark mark='b'/> The mean is a weighted sum of the observed values: nearby pages weigh "
-            "the most. <bookmark mark='c'/> The variance is the prior's, minus what the data explains. Notice it "
+            "the most in this example. <bookmark mark='c'/> With kernel settings fixed, the variance is the prior's, minus what the data explains. It "
             "never looks at the values themselves, only at where the pages are. Rasmussen and Williams' book of "
             "2006 builds the whole subject on these two lines."
         ) as vo:

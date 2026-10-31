@@ -104,8 +104,9 @@ class Shannon1951(VoiceoverScene):
         xlab = label(r"guess number $i$", font_size=22, color=GREY_A).move_to([x0 + K * slot / 2, y0 - 0.65, 0])
         rows = VGroup(
             mtex(r"\text{upper:}\ \ \sum_i q_i \log_2 \frac{1}{q_i} = " + f"{up:.2f}", font_size=32, color=C.BITS),
-            mtex(r"\text{lower:}\ \ \sum_i i\,(q_i - q_{i+1}) \log_2 i = " + f"{lo:.2f}", font_size=32, color=C.CONTEXT),
-            label(r"bits per letter: \ the information is somewhere between", font_size=24, color=GREY_A),
+            mtex(r"\text{ideal lower:}\ \ \sum_i i\,(q_i - q_{i+1}) \log_2 i = " + f"{lo:.2f}", font_size=30,
+                 color=C.CONTEXT),
+            label(r"the lower bound requires ideal probability ordering", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 0.6, 0])
         own = label(rf"(its own probabilities, coded directly: ${load('orders')['best_bits']:.2f}$)", font_size=22,
                     color=GREY_B).next_to(rows, DOWN, buff=0.3).align_to(rows, LEFT)
@@ -121,9 +122,10 @@ class Shannon1951(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(vals))
         with self.voiceover(
-            f"From those frequencies, the upper bound is {up:.2f} bits per letter. <bookmark mark='a'/> Shannon also "
-            f"proved a lower bound from the same numbers: {lo:.2f}. For this guesser, the true figure lies in "
-            "between."
+            f"From those frequencies, the rank entropy is {up:.2f} bits per letter: an estimate of the upper bound. "
+            f"<bookmark mark='a'/> Shannon's lower-bound expression gives {lo:.2f}, but its proof assumes an ideal "
+            "guesser, ranking letters by their true conditional probabilities. Our counting program is not ideal, "
+            "so that lower endpoint is illustrative, not a certified bound."
         ) as vo:
             self.play(Write(rows[0]))
             vo.wait_until("a")
@@ -155,7 +157,7 @@ class Shannon1951(VoiceoverScene):
             return VGroup(r, t)
 
         ours = band(float(g["lower"]), float(g["upper"]), 0.9, C.GUESS,
-                    r"our counting guesser: \ $6$ letters of context")
+                    r"counting guesser (illustrative): \ $6$ letters of context")
         human = band(lo_h, hi_h, 2.0, C.HUMAN, r"Shannon's subjects: \ $100$ letters of context")
         uni = VGroup(DashedLine([X(math.log2(27)), -0.4, 0], [X(math.log2(27)), 2.5, 0], color=GREY_C),
                      label(r"$\log_2 27$", font_size=22, color=GREY_B).move_to([X(math.log2(27)), 2.75, 0]))
@@ -169,8 +171,9 @@ class Shannon1951(VoiceoverScene):
         src.next_to(head, DOWN, buff=0.1)
         with self.voiceover(
             "Shannon's own subjects did far better. <bookmark mark='a'/> With a hundred letters of context, he put "
-            f"printed English between {lo_h:.1f} and {hi_h:.1f} bits per letter, <bookmark mark='b'/> against "
-            f"{float(g['lower']):.1f} to {float(g['upper']):.1f} for our counting guesser with six. "
+            f"printed English between {lo_h:.1f} and {hi_h:.1f} bits per letter, <bookmark mark='b'/> against a "
+            f"rank entropy of {float(g['upper']):.1f} for our counting guesser with six. Its lower endpoint is only "
+            "illustrative, and Shannon also cautioned about sampling error and imperfect human guessing. "
             "<bookmark mark='c'/> The difference is knowledge: of words and grammar, idioms, the story, and how the "
             "world works."
         ) as vo:

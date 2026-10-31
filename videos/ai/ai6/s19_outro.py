@@ -79,7 +79,7 @@ class Outro(VoiceoverScene):
         ev, es = np.asarray(ke["ev2"]), np.asarray(ke["ev_sig"])
         ax = mk([0, len(ev), 1], [float(es.min()), float(ev.max()), 1])
         out.append((VGroup(ax, curve(ax, np.arange(len(ev)), ev, C.REWARD, 2.5), curve(ax, np.arange(len(es)), es, C.PENALTY, 2)),
-                    r"Mercer's test", C.REWARD))
+                    r"PSD Gram matrices", C.REWARD))
         sv = load("svm")
         reg = np.asarray(sv["region_C1"]) > 0
         im = (np.stack([np.where(reg, 0x58, 0xE8), np.where(reg, 0xA6, 0x6F), np.where(reg, 0xFF, 0x8A),

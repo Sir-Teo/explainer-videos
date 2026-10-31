@@ -96,7 +96,7 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.2, -0.2, 0])
         keep_in_frame(facts)
         with self.voiceover(
-            "Half a century later, here is a network trained on the computer making this video. "
+            "Decades later, here is a network trained on the computer making this video. "
             f"It looked at fifty thousand small photographs, {cf['epochs']} times over, for about {mins:.0f} "
             "minutes. <bookmark mark='a'/> These are the filters its first layer grew. "
             f"<bookmark mark='b'/> {o['n_oriented']} of the {o['n']} pick out an edge at one orientation, like "
@@ -143,7 +143,7 @@ class Hook(VoiceoverScene):
             "learned to read a whole sentence and write it in another language. <bookmark mark='b'/> And that year "
             "they learned to look back: at each word they wrote, to pick out the words of the input they needed. "
             "This is a small one, trained here to write strings backwards; the bright squares are where it looked. "
-            "It was the first attention."
+            "This was attention for neural translation."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")

@@ -44,7 +44,8 @@ class KKT(VoiceoverScene):
     def conditions(self):
         thm = theorem_card(
             r"KKT conditions",
-            r"For $\min f(x)$ subject to $g_i(x) \le 0$: \ at a minimum (under mild conditions) there are $\mu_i$ with "
+            r"For $\min f(x)$ subject to $g_i(x) \le 0$: \ at a minimum, under a constraint qualification "
+            r"(e.g. independent active constraint gradients), there are $\mu_i$ with "
             r"\\ $\nabla f + \sum_i \mu_i \nabla g_i = 0$ \ (stationarity), \quad $g_i(x) \le 0$ \ (feasible), \\ "
             r"$\mu_i \ge 0$ \ (dual feasible), \quad $\mu_i\, g_i(x) = 0$ \ (complementary slackness).",
             who=r"William Karush, master's thesis, Chicago (1939); \ Harold Kuhn and Albert Tucker (1951)",
@@ -55,7 +56,8 @@ class KKT(VoiceoverScene):
         with self.voiceover(
             "Most constraints are inequalities: a probability can't be negative, a margin must be at least one. "
             "William Karush worked out the conditions in his 1939 master's thesis; Harold Kuhn and Albert Tucker found "
-            "them again in 1951. <bookmark mark='a'/> At a minimum there are multipliers mu, one per constraint, with "
+            "them again in 1951. <bookmark mark='a'/> Under a constraint qualification, at a minimum there are "
+            "multipliers mu, one per constraint, with "
             "the gradient of the Lagrangian zero, every constraint met, every multiplier non-negative, "
             "<bookmark mark='b'/> and each multiplier times its constraint equal to zero: complementary slackness. "
             "<bookmark mark='c'/> Either the minimum is inside and the wall is idle, its multiplier zero, "
@@ -74,25 +76,25 @@ class KKT(VoiceoverScene):
     # ------------------------------------------------------------------
     def duality(self):
         rows = [
-            cmath(r"q(\mu)", r"=", r"\min_x\, \big(f(x) + \textstyle\sum_i \mu_i\, g_i(x)\big)", font_size=36,
+            cmath(r"q(\mu)", r"=", r"\inf_x\, \big(f(x) + \textstyle\sum_i \mu_i\, g_i(x)\big)", font_size=36,
                   colors={r"q(\mu)": DUAL}),
             cmath(r"q(\mu)", r"\le", r"f(x) \quad \text{for every feasible } x, \; \mu \ge 0", font_size=36,
                   colors={r"q(\mu)": DUAL}),
-            cmath(r"d^* = \max_{\mu \ge 0} q(\mu)", r"\le", r"p^* = \min_{\text{feasible}} f", font_size=36),
+            cmath(r"d^* = \sup_{\mu \ge 0} q(\mu)", r"\le", r"p^* = \inf_{\text{feasible}} f", font_size=36),
             cmath(r"d^*", r"=", r"p^* \quad \text{for convex problems (with a strictly feasible point)}", font_size=34),
         ]
-        whys = [why(r"the dual function: \ a minimum of lines in $\mu$, \ so concave, always", font_size=22),
+        whys = [why(r"the dual function: \ an infimum of lines in $\mu$, \ so concave, always", font_size=22),
                 why(r"there $g_i(x) \le 0$, \ so the extra terms are $\le 0$", font_size=22),
                 why(r"weak duality", font_size=22), why(r"strong duality \ (Slater)", font_size=22)]
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.6, buff=0.65, edge=6.9)
         head = label(r"every constrained problem has a twin", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "The multipliers lead to a second problem. Fix them, and minimize the Lagrangian over x freely: that's the "
-            "dual function, q of mu. <bookmark mark='a'/> For any feasible x the added terms are at most zero, so the "
+            "The multipliers lead to a second problem. Fix them, and ask how low the Lagrangian can go over x: that's "
+            "the dual function, q of mu. <bookmark mark='a'/> For any feasible x the added terms are at most zero, so the "
             "dual function is a lower bound on f, everywhere it can be met. <bookmark mark='b'/> The best lower bound, "
             "d star, is at most the true minimum, p star: weak duality, true for every problem. "
             "<bookmark mark='c'/> For convex problems with a strictly feasible point, the two are equal: strong "
-            "duality. You can solve either one."
+            "duality. Both give the same optimal value."
         ) as vo:
             self.play(FadeIn(head))
             step(0)

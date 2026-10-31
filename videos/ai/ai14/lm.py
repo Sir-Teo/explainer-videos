@@ -304,7 +304,10 @@ def train(name: str, kind: str, shape: dict, tokens: int, cache_dir, lr: float =
         tmp = ck.with_suffix(".tmp")
         torch.save(dict(model=model.state_dict(), opts=[o.state_dict() for o in opts], state=state), tmp)
         tmp.replace(ck)
-    torch.save(dict(shape=shape, kind=kind, model=model.state_dict()), cache_dir / f"{name}.pt")
+    weights = cache_dir / f"{name}.pt"
+    temp_weights = weights.with_suffix(".tmp.pt")
+    torch.save(dict(shape=shape, kind=kind, model=model.state_dict()), temp_weights)
+    temp_weights.replace(weights)
     p = n_params(model)
     return dict(name=name, kind=kind, shape=shape, steps=steps, tokens=steps * BATCH * SEQ, lr=lr, seed=seed,
                 params=p, flops=6.0 * p["compute"] * steps * BATCH * SEQ, seconds=state["seconds"],

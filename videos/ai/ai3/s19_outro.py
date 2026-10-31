@@ -170,8 +170,8 @@ class Outro(VoiceoverScene):
             r"eigenvalue converges twice as fast as the vector.",
             r"Prove $\|A\|_F^2 = \sum_i \sigma_i^2$ and $\|A\|_2 \le \|A\|_F \le \sqrt{r}\,\|A\|_2$, \ and find matrices "
             r"that attain each bound.",
-            r"Minimize $\ell(x) = a\log\sigma(x) + b\log\sigma(-x)$ over $x$ for $a, b > 0$ (maximize, if you prefer "
-            r"the likelihood), \ and recover Levy and Goldberg's $\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$.",
+            r"Maximize $\ell(x) = a\log\sigma(x) + b\log\sigma(-x)$ over $x$ for $a, b > 0$. \ For $P_n(c)=P(c)$, "
+            r"recover Levy and Goldberg's $\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$.",
             r"For $\mathbf{x}, \mathbf{y}$ independent and uniform on the unit sphere in $\mathbb{R}^d$, \ show "
             r"$\mathbb{E}[x_1^2] = 1/d$ and $\operatorname{Var}(\mathbf{x}\cdot\mathbf{y}) = 1/d$.",
             r"If $X \sim \chi^2_k$, \ show $\mathbb{E}\,e^{tX} = (1 - 2t)^{-k/2}$ for $t < 1/2$, \ and finish the "

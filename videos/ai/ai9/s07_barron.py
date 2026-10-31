@@ -35,7 +35,7 @@ class Barron(VoiceoverScene):
                     MathTex(rf"{m}^2 = {m ** 2}", font_size=30, color=DCOL[2]).next_to(sq, RIGHT, buff=0.4),
                     MathTex(rf"{m}^3 = {m ** 3}", font_size=30, color=DCOL[4]).next_to(cube, RIGHT, buff=0.3))
         rows = [cmath(r"n", r"=", r"m^d", font_size=42),
-                cmath(r"h", r"=", r"\tfrac{2}{m} \ = \ 2\, n^{-1/d}", font_size=42),
+                cmath(r"h", r"=", r"\tfrac{2}{m-1} \ \asymp\ n^{-1/d}", font_size=42),
                 cmath(r"\text{miss}", r"\propto", r"h^2 \ \propto\ n^{-2/d}", font_size=42)]
         whys = [why(r"$m$ points along each of $d$ axes"), why(r"the spacing of the grid"),
                 why(r"the chord bound of chapter 5, \\ in every direction")]
@@ -46,7 +46,7 @@ class Barron(VoiceoverScene):
             "One layer can draw anything; how many units does it take? A table does the same job with one entry per "
             "point of a grid, and joining the dots in one dimension is exactly a layer of hinges. "
             "<bookmark mark='a'/> But a grid with m points along each axis has m to the d points in d dimensions. "
-            "<bookmark mark='b'/> Turn it around: with n points to spend, the spacing is n to the minus one over d, "
+            "<bookmark mark='b'/> Turn it around: with n points to spend, the spacing scales as n to the minus one over d for large grids, "
             "<bookmark mark='c'/> and the miss shrinks like n to the minus two over d. <bookmark mark='d'/> In a "
             "hundred dimensions, halving the miss takes two to the fiftieth times as many points. That's the curse "
             "of dimensionality, Richard Bellman's phrase."
@@ -73,14 +73,14 @@ class Barron(VoiceoverScene):
                       font_size=36, colors=colors),
                 cmath(r"\mathbb{E}\,|f_n(x) - f(x)|^2", r"=", r"\tfrac{1}{n}\, \operatorname{Var}\cos(", r"\omega",
                       r"\cdot x)", font_size=36, colors=colors),
-                cmath(r"\mathbb{E}\,|f_n(x) - f(x)|^2", r"\le", r"\tfrac{1}{n}", font_size=36, colors=colors)]
+                cmath(r"\mathbb{E}_{\omega}\!\int |f_n(x) - f(x)|^2\,d\mu(x)", r"\le", r"\tfrac{1}{n}", font_size=34, colors=colors)]
         whys = [why(r"$f$ is an average of cosine units: \\ a Gaussian bump, \ its Fourier transform"),
                 why(r"$n$ units, \ directions $\omega_k$ drawn at random"),
                 why(r"an average of $n$ independent draws"),
-                why(r"$|\cos| \le 1$: \ no $d$ anywhere")]
+                why(r"$|\cos| \le 1$: \ average over a fixed input distribution $\mu$")]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-2.0, buff=0.45, edge=6.9)
         some = label(r"the average over random choices \\ is $\le 1/n$, \ so \textit{some} choice \\ of $n$ units is "
-                     r"within $1/\sqrt{n}$, \\ in any dimension", font_size=28, color=C.BITS).move_to([3.9, -2.2, 0])
+                     r"within $1/\sqrt{n}$ in $L^2(\mu)$, \\ in any dimension", font_size=28, color=C.BITS).move_to([3.9, -2.2, 0])
         # in one dimension: the Gaussian bump, and the average of n cosines with random frequencies (illustrative draw)
         ax = Axes(x_range=[-4, 4, 1], y_range=[-1.0, 1.1, 0.5], x_length=6.6, y_length=2.1, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.9, -2.4, 0])
@@ -107,9 +107,9 @@ class Barron(VoiceoverScene):
             "<bookmark mark='b'/> Draw n directions at random and average just those n waves: a network with n units, "
             "each a wave in one direction. <bookmark mark='c'/> At any point, that's an average of n independent "
             "draws, so its squared error is the variance of one draw, divided by n. <bookmark mark='d'/> And a "
-            "cosine lies between minus one and one, so the error is at most one over n, with no d anywhere. "
+            "cosine lies between minus one and one, so the expected squared error is at most one over n. Average over inputs under any fixed probability distribution, and the same bound holds, with no d anywhere. "
             "<bookmark mark='e'/> If random units do that well on average, some particular choice of n units does at "
-            "least as well, in any dimension. The argument is Bernard Maurey's, from probability."
+            "least as well in mean squared error under that input distribution, in any dimension. The argument is Bernard Maurey's, from probability."
         ) as vo:
             step(0)
             self.play(Create(ax), Create(bump), FadeIn(dl), FadeIn(itag))

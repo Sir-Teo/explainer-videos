@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai6.common import AUSTEN, BOUNDARY, DICKENS, HIST, HL, MONO, chapter, load, sci_tex
+from videos.ai.ai6.compute import fisher_score
 
 U = 0.95  # screen units per standard deviation
 
@@ -29,8 +30,7 @@ class LDA(VoiceoverScene):
 
         def J(th):
             u = np.array([math.cos(th), math.sin(th)])
-            pa, pd = A @ u, D @ u
-            return (pd.mean() - pa.mean()) ** 2 / (pa.var() + pd.var())
+            return fisher_score(A, D, u)
 
         Sw = np.cov(A.T) * (len(A) - 1) + np.cov(D.T) * (len(D) - 1)
         wbest = np.linalg.solve(Sw, D.mean(0) - A.mean(0))
@@ -95,13 +95,13 @@ class LDA(VoiceoverScene):
         jl = label(r"direction's angle", font_size=20, color=GREY_A).next_to(jax.x_axis, DOWN, buff=0.1)
         wf = cmath(r"\mathbf{w}", r"\propto", r"S_W^{-1}", r"(", r"\mu_D", "-", r"\mu_A", r")", colors=colors, font_size=40)
         wf.move_to([3.9, 1.6, 0])
-        wn = label(r"$S_W$: \ the spread within each author", font_size=22, color=GREY_A).next_to(wf, DOWN, buff=0.15)
+        wn = label(r"$S_W$: \ pooled within-author scatter", font_size=22, color=GREY_A).next_to(wf, DOWN, buff=0.15)
         res = label(rf"cut halfway: \ ${100 * acc:.1f}\%$ of test pages right", font_size=28, color=BOUNDARY)
         res.next_to(wn, DOWN, buff=0.4)
         cite_ = cite(r"R.~A.~Fisher, \textit{The Use of Multiple Measurements in Taxonomic Problems} (1936)", corner=UL)
         pl = always_redraw(piles)
         dl = always_redraw(direction)
-        # S_W^-1, pictured: stretch the space until each author's cloud is round, then point from centre to centre
+        # S_W^-1, pictured: whiten the pooled within-author scatter.
         frame_ = Rectangle(width=3.6, height=1.7, stroke_opacity=0)
 
         def two_clouds(round_):
@@ -118,7 +118,7 @@ class LDA(VoiceoverScene):
 
         before = two_clouds(False)
         before[4].set_opacity(0)
-        swc = gloss(r"$S_W^{-1}$", r"stretch the space until each author's cloud is round,\\ then point from one "
+        swc = gloss(r"$S_W^{-1}$", r"make pooled within-author scatter round,\\ then point from one "
                     r"centre to the other", picture=VGroup(frame_, before), width=4.6)
         swc.move_to([3.9, -1.3, 0])
         sp = swc[1][-1]  # the card's copy of (frame, clouds)
@@ -140,8 +140,9 @@ class LDA(VoiceoverScene):
         like_lr = (", the same as logistic regression." if abs(acc - load("logistic")["acc2"]) < 0.006 else ".")
         with self.voiceover(
             "The best direction has a formula: the difference between the two centres, corrected by the inverse of "
-            "the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each "
-            "author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. "
+            "the pooled spread within the authors. <bookmark mark='w'/> That correction means: stretch the space "
+            "until the pooled within-author scatter is round, then point from one centre to the other. "
+            "<bookmark mark='a'/> Here, it leans mostly on 'not'. "
             "<bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets "
             f"{100 * acc:.0f} percent of the test pages right{like_lr} <bookmark mark='c'/> When each group is a bell "
             "of the same shape, this cut, nudged for the authors' unequal numbers of pages, is the best one possible."

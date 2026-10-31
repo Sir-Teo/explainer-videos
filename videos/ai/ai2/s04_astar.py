@@ -166,19 +166,19 @@ class AStar(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def optimal(self):
-        dc = definition_card(r"admissible", r"$h$ never overestimates: \ $h(n) \le h^*(n)$, \ the true cost from $n$ "
+        dc = definition_card(r"admissible", r"$h$ never overestimates: \ $0 \le h(n) \le h^*(n)$, \ the true cost from $n$ "
                              r"to the nearest goal", width=6.0, font_size=23, color=HEUR).to_corner(UL, buff=0.35)
-        th = theorem_card(r"A* is optimal", r"with an admissible $h$, \ the first goal A* removes from the frontier "
-                          r"is a cheapest one", who=r"Hart, Nilsson \& Raphael (1968)", width=6.0, color=PATH,
+        th = theorem_card(r"A* is optimal", r"with admissible $h$, \ tree search or reopening improved states: "
+                          r"the first goal removed is cheapest", who=r"Hart, Nilsson \& Raphael (1968)", width=6.0, color=PATH,
                           font_size=23).to_corner(UR, buff=0.35)
         rows = [
             cmath(r"f(n)", r"=", r"g(n) + h(n)", font_size=40),
             cmath(r"f(n)", r"\le", r"g(n) + h^*(n)", font_size=40),
-            cmath(r"f(n)", r"=", r"C^*", font_size=40),
+            cmath(r"f(n)", r"\le", r"C^*", font_size=40),
             cmath(r"f(n)", r"<", r"g(G_2) = f(G_2)", font_size=40),
         ]
         whys = [why(r"$n$: a frontier state on an optimal path"), why(r"admissible"),
-                why(r"$n$ lies on an optimal path"), why(r"$G_2$ a worse goal, \ $h(G_2) = 0$")]
+                why(r"$g(n) + h^*(n) = C^*$"), why(r"$G_2$ a worse goal, \ $h(G_2) = 0$")]
         for r in rows:
             r[0].set_color(FCOL)
         step = ladder(self, rows, whys, keep=4, top=0.6, x=-1.6)
@@ -205,7 +205,8 @@ class AStar(VoiceoverScene):
         concl.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Why is A star's path the shortest? <bookmark mark='a'/> Call h admissible if it never overestimates: h of n is at "
-            "most h star of n, the true cost to a goal. <bookmark mark='b'/> Then A star is optimal. Suppose a worse goal, G "
+            "most h star of n, the true cost to a goal, and h is zero at goals. <bookmark mark='b'/> In tree search, or graph "
+            "search that reopens a state when a cheaper path is found, A star is optimal. Suppose a worse goal, G "
             "two, sits on the frontier. Some state n on an optimal path is on the frontier too. <bookmark mark='c'/> Its f is g "
             "plus h, <bookmark mark='d'/> at most g plus h star, because h is admissible, <bookmark mark='e'/> which is exactly C "
             "star, because n lies on an optimal path. <bookmark mark='f'/> G two costs more than C star, and its h is zero. So "
@@ -256,7 +257,7 @@ class AStar(VoiceoverScene):
                       r"already the best; \ it never has to be reopened", font_size=24, color=PATH)
         concl.to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "On graphs A star wants a little more. <bookmark mark='a'/> Call h consistent if, for every step from n to n prime, "
+            "To avoid reopening states on graphs, A star wants a little more. <bookmark mark='a'/> Call h consistent if, for every step from n to n prime, "
             "h of n is at most the step's cost plus h of n prime: a triangle inequality, which the straight-line distance obeys. "
             "<bookmark mark='b'/> Then f never decreases along a path. f of n prime is g of n, plus the step, plus h of n prime; "
             "<bookmark mark='c'/> by consistency, at least g of n plus h of n: <bookmark mark='d'/> f of n. "

@@ -108,11 +108,6 @@
    "en": "Chapter three. Ridge regression.",
    "zh": "第3章。岭回归。"
   },
-  "a60bebd52239": {
-   "scene": "Ridge",
-   "en": "Seventy weights can lean on accidents of the training pages. Ridge regression puts a price on their size: the squared error, plus lambda times the squared length of the weights. <bookmark mark='a'/> Set the gradient to zero. Adding lambda to the diagonal makes the matrix invertible, always: that's how Hoerl and Kennard rescued nearly repeating columns in 1970. <bookmark mark='b'/> Now use the singular value decomposition from Part 3. <bookmark mark='c'/> The fit is a sum over directions in the data: each direction's share of the target, times a factor, d squared over d squared plus lambda. <bookmark mark='d'/> Least squares keeps every direction whole. Ridge shrinks each one, and the weak directions, with small singular values, shrink the most.",
-   "zh": "70个权重，可能会去依赖训练页里的偶然巧合。岭回归给它们的大小定了个价：平方误差，加上λ乘以权重长度的平方。<bookmark mark='a'/>令梯度为零。在对角线上加上λ，这个矩阵就总是可逆的：1970年，霍尔和肯纳德就是这样挽救了几乎重复的列。<bookmark mark='b'/>现在用上第3部分的奇异值分解。<bookmark mark='c'/>拟合结果是数据中各个方向上的一个和：每个方向在目标里所占的份额，乘以一个因子，d平方除以d平方加λ。<bookmark mark='d'/>最小二乘把每个方向都完整保留。岭回归把每个方向都缩小，而奇异值小的那些弱方向，缩得最多。"
-  },
   "4734716f32a4": {
    "scene": "Ridge",
    "en": "Here are the seventy directions of the training pages, from the widest to the thinnest. <bookmark mark='a'/> Below, how much of the authorship lies along each: 91 percent of it along the first two. <bookmark mark='b'/> Now raise lambda. At one, nothing much shrinks. At thirty, the thinnest direction keeps 59 percent. <bookmark mark='c'/> At a thousand, the widest keeps 80 percent and the thinnest 4. The sum of the factors counts how many weights are effectively still free.",
@@ -177,11 +172,6 @@
    "scene": "Logistic",
    "en": "Is there a single best sheet? Write down the loss. <bookmark mark='a'/> The sigmoid's slope is the sigmoid times one minus itself, so <bookmark mark='b'/> the gradient is beautifully simple: the features times prediction minus truth, just as in least squares. <bookmark mark='c'/> Differentiate again: X transpose S X, with S holding each page's p times one minus p. <bookmark mark='d'/> In any direction v, that's a weighted sum of squares, never negative. The loss is convex: a single bowl. <bookmark mark='e'/> On the pages, the curvature at the answer is positive in every direction, so the bowl has one bottom.",
    "zh": "最好的曲面只有一张吗？把损失写下来。<bookmark mark='a'/>S形函数的斜率，是它自己乘以1减它自己，所以<bookmark mark='b'/>梯度简单得漂亮：特征乘以“预测减真值”，和最小二乘一模一样。<bookmark mark='c'/>再求一次导：X转置S X，S里放的是每一页的p乘以1减p。<bookmark mark='d'/>在任何方向v上，这都是平方的加权和，永远不会是负的。这个损失是凸的：只有一只碗。<bookmark mark='e'/>在这些书页上，答案处的曲率在每个方向上都是正的，所以这只碗只有一个谷底。"
-  },
-  "fc48a8a65799": {
-   "scene": "Logistic",
-   "en": "So follow the slope downhill: gradient descent, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. <bookmark mark='c'/> Because the bowl is convex, every downhill path ends at the same bottom, wherever it started.",
-   "zh": "那就顺着坡往下走：梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。<bookmark mark='c'/>因为这只碗是凸的，每一条下坡路，不管从哪里出发，都通向同一个谷底。"
   },
   "368316b17944": {
    "scene": "Logistic",
@@ -248,11 +238,6 @@
    "en": "In 1936, Ronald Fisher, separating species of iris by the sizes of their petals, asked a different question. Along which direction do the two groups look most different? <bookmark mark='a'/> Pick a direction, and squash every page onto it. Each author becomes a pile. <bookmark mark='b'/> Turn the direction, and the piles slide together, or apart. Fisher's score is the gap between the piles' centres, squared, divided by how spread out they are.",
    "zh": "1936年，罗纳德·费希尔在按花瓣的大小区分几种鸢尾花时，问了一个不同的问题：沿着哪个方向看，这两组的差别最大？<bookmark mark='a'/>选一个方向，把每一页都压到它上面。每位作者就变成了一堆。<bookmark mark='b'/>转动这个方向，两堆就会彼此靠拢，或者分开。费希尔的得分，是两堆中心之间的差距的平方，除以它们散开的程度。"
   },
-  "544aef886d35": {
-   "scene": "LDA",
-   "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. <bookmark mark='c'/> When each group is a bell of the same shape, this cut, nudged for the authors' unequal numbers of pages, is the best one possible.",
-   "zh": "最好的方向有一个公式：两个中心之差，再用每位作者内部散布的逆来校正。<bookmark mark='w'/>这个校正的意思是：把空间拉伸，直到每位作者的点云都变成圆的，再从一个中心指向另一个中心。<bookmark mark='a'/>在这里，它主要依靠“not”。<bookmark mark='b'/>在两堆的正中间切一刀，就得到一个分类器。它能判对82%的测试页，和逻辑回归一样。<bookmark mark='c'/>当每一组都是形状相同的钟形分布时，这一刀，再按两位作者书页数量的不同稍作挪动，就是可能的最好切法。"
-  },
   "55b41f50e0c0": {
    "scene": "LDA",
    "en": "Why is that cut the best possible one? Suppose each author's pages are a bell, both bells the same shape. <bookmark mark='a'/> Bayes' rule gives the log-odds of Dickens. <bookmark mark='b'/> Expand the two quadratic forms: the terms in x times x cancel, because the shapes match, and what's left is a straight line in x. <bookmark mark='c'/> The probability is a sigmoid of a line, exactly logistic regression's form, with Fisher's direction as its weights. LDA is generative, like naive Bayes: it estimates the two bells and divides, where logistic regression fits the line directly.",
@@ -307,16 +292,6 @@
    "scene": "Kernels",
    "en": "The lift can be expensive: with many numbers per point, the lifted features multiply. The kernel trick avoids it. <bookmark mark='a'/> Take these six features of a point in the plane. <bookmark mark='b'/> Their dot product, multiplied out, <bookmark mark='c'/> is just x dot z plus one, squared: computed from the two original numbers, never the six. Any method that only needs dot products, like the support vector machine, can run in the lifted space for free. <bookmark mark='d'/> The Gaussian kernel goes further. Expand it, and its features are every power of the coordinates: infinitely many. Kept to 20, they already match it to within a ten-millionth.",
    "zh": "抬升可能代价很大：每个点的数一多，抬升后的特征就成倍增长。核技巧避开了它。<bookmark mark='a'/>取平面上一个点的这6个特征。<bookmark mark='b'/>它们的点积，展开以后，<bookmark mark='c'/>就是x点乘z加1，再平方：只用原来的两个数就算出来了，从来不用那6个。任何只需要点积的方法，比如支持向量机，都能免费地在抬升后的空间里运行。<bookmark mark='d'/>高斯核走得更远。把它展开，它的特征是坐标的每一个幂：无穷多个。只保留20个，它们就已经和高斯核相差在千万分之一以内了。"
-  },
-  "70b535ff8246": {
-   "scene": "Kernels",
-   "en": "Which similarity scores are allowed? Mercer's theorem, from 1909: a kernel is a dot product of some features exactly when every matrix of its values on a set of points has no negative eigenvalues. <bookmark mark='a'/> On the 448 training pages, the Gaussian kernel's smallest eigenvalue is zero, up to rounding. <bookmark mark='b'/> A popular impostor, the hyperbolic tangent of a dot product, has 138 negative eigenvalues: no features could produce it, and an SVM built on it is no longer solving a convex problem.",
-   "zh": "哪些相似度是允许的？默瑟1909年的定理：一个核函数是某些特征的点积，当且仅当它在任意一组点上的取值组成的矩阵，都没有负的特征值。<bookmark mark='a'/>在448个训练页上，高斯核最小的特征值是零，只差舍入误差。<bookmark mark='b'/>一个流行的冒牌货，点积的双曲正切，有138个负特征值：没有任何特征能产生它，用它搭起来的支持向量机，解的也不再是一个凸问题。"
-  },
-  "60b61ec6e0c0": {
-   "scene": "Kernels",
-   "en": "One more guarantee makes kernels practical. <bookmark mark='a'/> Fit any function with any loss, plus a penalty on its size. <bookmark mark='b'/> Split the function into a part built from the kernel at the training points, and a part perpendicular to all of them. <bookmark mark='c'/> At the training points, the perpendicular part is invisible: it changes no prediction. <bookmark mark='d'/> It only adds to the size. So it must be zero, and the answer is a weighted sum of kernels at the training points: the representer theorem. <bookmark mark='e'/> Check it: solve ridge regression in 2,000 explicit random features of the pages, and the answer lies in the span of the pages' own features, to the last digit.",
-   "zh": "还有一个保证，让核方法变得实用。<bookmark mark='a'/>用任意的损失拟合任意一个函数，再加上对它大小的惩罚。<bookmark mark='b'/>把这个函数分成两部分：一部分由训练点上的核函数组成，另一部分和它们全都垂直。<bookmark mark='c'/>在训练点上，垂直的那部分是看不见的：它不改变任何预测。<bookmark mark='d'/>它只会增加大小。所以它必须是零，答案就是训练点上核函数的加权和：这就是表示定理。<bookmark mark='e'/>验证一下：在2000个显式的随机特征上，对书页做岭回归，答案恰好落在书页自身特征张成的空间里，精确到最后一位。"
   },
   "f6db50eced10": {
    "scene": "SVM",
@@ -517,6 +492,31 @@
    "scene": "Outro",
    "en": "For more, The Elements of Statistical Learning by Hastie, Tibshirani and Friedman covers every method here, by three of the people who built them; Bishop's Pattern Recognition and Machine Learning gives the probabilistic view; and Schölkopf and Smola's Learning with Kernels the kernels. Thanks for watching, and see you in Part 7.",
    "zh": "想了解更多：黑斯蒂、蒂布希拉尼和弗里德曼的《统计学习基础》涵盖了这里的每一种方法，三位作者本身就参与创造了它们；毕晓普的《模式识别与机器学习》给出概率的视角；舍尔科普夫和斯莫拉的《用核学习》讲核方法。感谢观看，第7部分见。"
+  },
+  "ca344a5a3468": {
+   "scene": "Ridge",
+   "en": "Seventy weights can lean on accidents of the training pages. Ridge regression puts a price on their size: the squared error, plus lambda times the squared length of the weights. <bookmark mark='a'/> Set the gradient to zero. Adding a positive lambda to the diagonal makes the matrix invertible: that's how Hoerl and Kennard rescued nearly repeating columns in 1970. <bookmark mark='b'/> Now use the singular value decomposition from Part 3. <bookmark mark='c'/> The fit is a sum over directions in the data: each direction's share of the target, times a factor, d squared over d squared plus lambda. <bookmark mark='d'/> Least squares keeps every direction whole. Ridge shrinks each one, and the weak directions, with small singular values, shrink the most.",
+   "zh": "70个权重，可能会去依赖训练页里的偶然巧合。岭回归给它们的大小定了个价：平方误差，加上λ乘以权重长度的平方。<bookmark mark='a'/>令梯度为零。在对角线上加上正的λ，这个矩阵就可逆了：1970年，霍尔和肯纳德就是这样挽救了几乎重复的列。<bookmark mark='b'/>现在用上第3部分的奇异值分解。<bookmark mark='c'/>拟合结果是数据中各个方向上的一个和：每个方向在目标里所占的份额，乘以一个因子，d平方除以d平方加λ。<bookmark mark='d'/>最小二乘把每个方向都完整保留。岭回归把每个方向都缩小，而奇异值小的那些弱方向，缩得最多。"
+  },
+  "7d94a4c64da4": {
+   "scene": "Logistic",
+   "en": "So follow the slope downhill: gradient descent, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. <bookmark mark='c'/> Convexity rules out a bad local minimum. Here the data gives a unique finite best fit, and with a stable step size gradient descent approaches it from any starting weights.",
+   "zh": "那就顺着坡往下走：梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。<bookmark mark='c'/>凸性排除了较差的局部最小值。这里的数据给出唯一的有限最佳拟合；步长选得稳定时，梯度下降从任意初始权重都会趋近它。"
+  },
+  "b33f82dda38f": {
+   "scene": "LDA",
+   "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the pooled spread within the authors. <bookmark mark='w'/> That correction means: stretch the space until the pooled within-author scatter is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. <bookmark mark='c'/> When each group is a bell of the same shape, this cut, nudged for the authors' unequal numbers of pages, is the best one possible.",
+   "zh": "最好的方向有一个公式：两个中心之差，再用两位作者内部合并散布的逆来校正。<bookmark mark='w'/>这个校正的意思是：把空间拉伸，直到合并的作者内部散布变成圆的，再从一个中心指向另一个中心。<bookmark mark='a'/>在这里，它主要依靠“not”。<bookmark mark='b'/>在两堆的正中间切一刀，就得到一个分类器。它能判对82%的测试页，和逻辑回归一样。<bookmark mark='c'/>当每一组都是形状相同的钟形分布时，这一刀，再按两位作者书页数量的不同稍作挪动，就是可能的最好切法。"
+  },
+  "25e716b0c08a": {
+   "scene": "Kernels",
+   "en": "Which similarity scores are allowed? For a real symmetric similarity function, a feature-space dot product exists exactly when every Gram matrix is positive semidefinite: it has no negative eigenvalues. <bookmark mark='a'/> On the 448 training pages, the Gaussian kernel's smallest eigenvalue is zero, up to rounding. <bookmark mark='b'/> A popular impostor, the hyperbolic tangent of a dot product, has 138 negative eigenvalues: no features could produce it, and an SVM built on it is no longer solving a convex problem.",
+   "zh": "哪些相似度是允许的？对于实值对称的相似度函数，存在特征空间中的点积表示，当且仅当每个格拉姆矩阵都是半正定的，也就是没有负的特征值。<bookmark mark='a'/>在448个训练页上，高斯核最小的特征值是零，只差舍入误差。<bookmark mark='b'/>一个流行的冒牌货，点积的双曲正切，有138个负特征值：没有任何特征能产生它，用它搭起来的支持向量机，解的也不再是一个凸问题。"
+  },
+  "f6a77b988e7f": {
+   "scene": "Kernels",
+   "en": "One more guarantee makes kernels practical. <bookmark mark='a'/> Fit any function with any loss, plus a positive penalty on its squared size. <bookmark mark='b'/> Split the function into a part built from the kernel at the training points, and a part perpendicular to all of them. <bookmark mark='c'/> At the training points, the perpendicular part is invisible: it changes no prediction. <bookmark mark='d'/> It only adds to the size. So it must be zero, and the answer is a weighted sum of kernels at the training points: the representer theorem. <bookmark mark='e'/> Check it: solve ridge regression in 2,000 explicit random features of the pages, and the answer lies in the span of the pages' own features, to the last digit.",
+   "zh": "还有一个保证，让核方法变得实用。<bookmark mark='a'/>用任意的损失拟合任意一个函数，再加上对它大小平方的正惩罚。<bookmark mark='b'/>把这个函数分成两部分：一部分由训练点上的核函数组成，另一部分和它们全都垂直。<bookmark mark='c'/>在训练点上，垂直的那部分是看不见的：它不改变任何预测。<bookmark mark='d'/>它只会增加大小。所以它必须是零，答案就是训练点上核函数的加权和：这就是表示定理。<bookmark mark='e'/>验证一下：在2000个显式的随机特征上，对书页做岭回归，答案恰好落在书页自身特征张成的空间里，精确到最后一位。"
   }
  },
  "title_en": "AI, Built: Part 6, Classical ML",

@@ -89,7 +89,7 @@ class EM(VoiceoverScene):
             self.play(it.animate.set_value(1), run_time=1.2)
         with self.voiceover(
             "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells "
-            "creep toward a fit. <bookmark mark='b'/> After forty rounds they've settled, and the pages each one "
+            "creep toward a fit. <bookmark mark='b'/> By the last round they've settled, and the pages each one "
             f"claims match the true authors {100 * g['agree']:.0f} percent of the time. Nobody told it there were "
             "authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too."
         ) as vo:

@@ -117,7 +117,8 @@ def board_rows() -> tuple[list[dict], dict]:
     if sb:
         rows = [dict(r) for r in sb["rows"]]
     else:
-        rows = [dict(key="ascii", label="plain text file", bits=8.0, part=1, kind="baseline")]
+        plain_bits = 8 * raw["n_bytes"] / raw["n_chars"] if raw else 8.0
+        rows = [dict(key="ascii", label="plain text file", bits=plain_bits, part=1, kind="baseline")]
         if raw:
             rows += [
                 dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"],

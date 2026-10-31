@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import lang
+from .cache_lock import locked_item
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CACHE_DIR = Path(os.environ.get("EXPLAINER_CACHE", REPO_ROOT / ".cache")) / "tts"
@@ -795,6 +796,7 @@ def cache_key(text: str) -> tuple[str, str, str]:
     return text, spoken, key
 
 
+@locked_item(lambda text: CACHE_DIR / f"{cache_key(text)[2]}.json")
 def synthesize(text: str) -> Utterance:
     """Return audio + word timings for ``text`` (display text, no markup)."""
     text, spoken, key = cache_key(text)

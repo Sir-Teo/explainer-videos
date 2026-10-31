@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import FIT, HIST, LAZY, PART, RICH, load, predict_card, takeaway_card
+from videos.ai.ai12.common import FIT, HIST, LAZY, PART, RICH, load, predict_card, takeaway_card, visible_values
 
 
 class Wide(VoiceoverScene):
@@ -59,7 +59,7 @@ class Wide(VoiceoverScene):
         xs, S = np.asarray(g["xs"]), np.asarray(g["samples"])
         sx = Axes(x_range=[-1, 1, 0.5], y_range=[-2.6, 2.6, 1.3], x_length=4.4, y_length=2.3, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.6, -1.75, 0])
-        samples = VGroup(*[curve(sx, xs, np.clip(y, -2.6, 2.6), c, 2.5, smooth=True)
+        samples = VGroup(*[curve(sx, xs, visible_values(y, -2.6, 2.6), c, 2.5, smooth=True)
                            for y, c in zip(S, ["#7FD3FF", C.BITS, C.MODEL_Q, C.INTERVAL, C.CONTEXT])])
         sl = label(r"five random networks, $n = 2{,}000$: \\ samples of a Gaussian process", font_size=20, color=GREY_A)
         sl.next_to(sx, UP, buff=0.1)
@@ -106,7 +106,7 @@ class Wide(VoiceoverScene):
                   font_size=34, colors=colors),
         ]
         whys = [why(r"gradient descent, \ squared error"), why(r"chain rule"), why(r"definition of $\Theta$"),
-                why(r"if $\Theta$ stays fixed: \ a linear equation, \ solved")]
+                why(r"fixed positive-definite $\Theta(X,X)$; \ gradient flow to convergence")]
         step = ladder(self, rows, whys, keep=4, top=1.65, x=-1.0, buff=0.42, edge=6.8)
         lin = label(r"$\Theta$ fixed $\Rightarrow$ \ training is kernel regression \ (Part 6), \ with this kernel",
                     font_size=24, color=LAZY).to_edge(DOWN, buff=0.35)
@@ -173,7 +173,7 @@ class Wide(VoiceoverScene):
             px = Axes(x_range=[-1, 1, 0.5], y_range=[-2.2, 2.2, 1.1], x_length=4.6, y_length=1.9, tips=False,
                       axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.5, 1.35 - 2.85 * k, 0])
             pts = VGroup(*[Dot(px.c2p(a, b), radius=0.05, color=WHITE) for a, b in zip(X, y)])
-            fl = DashedVMobject(curve(px, grid, np.clip(np.asarray(z[f"flin_{n}"]), -2.2, 2.2), LAZY, 3, smooth=True),
+            fl = DashedVMobject(curve(px, grid, visible_values(z[f"flin_{n}"], -2.2, 2.2), LAZY, 3, smooth=True),
                                 num_dashes=50)
             t = label(rf"$n = {n:,}$".replace(",", "{,}"), font_size=22, color=WHITE).next_to(px, UP, buff=0.05).align_to(px, LEFT)
             pans.add(VGroup(px, pts, fl, t))
@@ -215,12 +215,12 @@ class Wide(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(s_k[0]), FadeIn(s_k[1]), FadeIn(lg[1]), FadeIn(half))
             vo.wait_until("c")
-            nets = [curve(px, grid, np.clip(S[0], -2.2, 2.2), RICH, 3, smooth=True) for px, S, _ in lives]
+            nets = [curve(px, grid, visible_values(S[0], -2.2, 2.2), RICH, 3, smooth=True) for px, S, _ in lives]
             self.play(*[Create(c_) for c_ in nets])
             for t in range(1, len(steps)):
-                new = [curve(px, grid, np.clip(S[t], -2.2, 2.2), RICH, 3, smooth=True) for px, S, _ in lives]
+                new = [curve(px, grid, visible_values(S[t], -2.2, 2.2), RICH, 3, smooth=True) for px, S, _ in lives]
                 self.play(*[Transform(a_, b_) for a_, b_ in zip(nets, new)], run_time=0.7)
-            new = [curve(px, grid, np.clip(fT, -2.2, 2.2), RICH, 3, smooth=True) for px, _, fT in lives]
+            new = [curve(px, grid, visible_values(fT, -2.2, 2.2), RICH, 3, smooth=True) for px, _, fT in lives]
             self.play(*[Transform(a_, b_) for a_, b_ in zip(nets, new)], run_time=0.7)
         self.wait(0.3)
         self.clear_scene()

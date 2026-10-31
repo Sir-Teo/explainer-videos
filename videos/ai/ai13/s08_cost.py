@@ -171,19 +171,19 @@ class Cost(VoiceoverScene):
         lw = label(r"the weights", font_size=20, color=MLP_).next_to(ax.c2p(1.4, float(np.interp(1.4, lt, 1 - share))), DOWN, buff=0.12)
         xl = math.log10(Tx)
         vx = DashedLine(ax.c2p(xl, 0), ax.c2p(xl, 1), color=WHITE, stroke_width=1.5)
-        vxl = MathTex(r"T = 12\,d = " + f"{Tx:,}".replace(",", "{,}"), font_size=22).next_to(ax.c2p(xl, 0.05), RIGHT, buff=0.1)
+        vxl = MathTex(r"T \approx 12\,d = " + f"{Tx:,}".replace(",", "{,}"), font_size=22).next_to(ax.c2p(xl, 0.05), RIGHT, buff=0.1)
         eq = cmath(r"2\,L\,T\,d", r"=", r"24\,L\,d^2", r"\;\Leftrightarrow\;", r"T = 12\,d", font_size=32).move_to([3.9, 2.4, 0])
         gx = 12 * GPT3_D
         facts = VGroup(label(rf"ours, \ $d = {d}$: \ $T = {Tx:,}$".replace(",", "{,}"), font_size=22, color=OURS),
                        label(rf"GPT-3, \ $d = {GPT3_D:,}$: \ $T = {gx:,}$".replace(",", "{,}"), font_size=22, color=GREY_A),
                        note(r"GPT-3's width: \ Brown et al.\ (2020), Table 2.1", font_size=18))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.4, 1.0, 0])
-        quad = label(r"and in total, \ over $T$ characters: \\ $T \times T$ \ grows as the square", font_size=22,
+        quad = label(r"crossover: \ causal half, \ vocabulary cost neglected; \\ total context work grows as $T^2$", font_size=22,
                      color=A).move_to([4.4, -1.4, 0])
         with self.voiceover(
             "Which term wins? <bookmark mark='a'/> Per character, attention's share grows with the context, the "
-            "weights' does not. They are equal when two L T d equals twenty-four L d squared: when the context is "
-            f"twelve times the width. <bookmark mark='b'/> For our model that is {Tx:,} characters, longer than "
+            "weights' does not. Counting the causal half and neglecting the vocabulary projection, they are equal when two L T d equals twenty-four L d squared: when the context is "
+            f"roughly twelve times the width. <bookmark mark='b'/> For our model that is about {Tx:,} characters, longer than "
             f"anything it reads, so its cost is mostly weights. For GPT-3, {gx:,} tokens. <bookmark mark='c'/> But "
             "the attention term has a sting: summed over a whole text of T characters it grows as T squared, and "
             "every past key and value has to be kept to write the next character. That is why long contexts are "

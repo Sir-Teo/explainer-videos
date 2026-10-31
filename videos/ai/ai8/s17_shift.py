@@ -80,9 +80,9 @@ class Shift(VoiceoverScene):
                   colors={r"\frac1n \sum_i w(x_i)\, \ell(h, x_i)": IW}),
         ]
         whys = [why(r"the risk we care about: \ under the test distribution"),
-                why(r"multiply and divide by $p$"),
+                why(r"$p(x)>0$ wherever $q(x)>0$: \\ multiply and divide by $p$"),
                 why(r"an average over the training distribution"),
-                why(r"unbiased, \ from the training sample: \ importance weighting")]
+                why(r"fixed $h$, \ exact weights, \ i.i.d. sample: \\ unbiased importance weighting")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-2.6, buff=0.38, edge=6.9)
         hist = history_card(2000, r"H.~Shimodaira", r"\textit{Improving predictive inference under covariate shift by "
                             r"weighting the log-likelihood function}", width=6.0, font_size=17, color=HIST)
@@ -91,13 +91,15 @@ class Shift(VoiceoverScene):
                     font_size=24, color=GREY_A).to_corner(DR, buff=0.4)
         with self.voiceover(
             "Why weights? <bookmark mark='a'/> The risk we care about averages the loss over the test "
-            "distribution q. <bookmark mark='b'/> Multiply and divide by the training distribution p. "
+            "distribution q. <bookmark mark='b'/> Provided p is positive wherever q is positive, multiply and divide by the training distribution p. "
             "<bookmark mark='c'/> Now it's an average over training inputs, of the loss times the ratio q over p. "
-            "<bookmark mark='d'/> So the weighted training error is an unbiased estimate of the test error. "
+            "<bookmark mark='d'/> For a fixed predictor and independent draws from p, the error weighted by the exact ratio is an unbiased estimate of its test error. "
             "Hidetoshi Shimodaira proposed it in 2000. <bookmark mark='e'/> The price is the one part five met in "
             "importance sampling: a few points with huge weights dominate, and the effective sample size shrinks."
         ) as vo:
-            for k, mk in enumerate("abcd"):
+            step(0)
+            vo.wait_until("a")
+            for k, mk in enumerate("bcd", start=1):
                 vo.wait_until(mk)
                 step(k)
             self.play(FadeIn(hist, shift=UP * 0.2))
@@ -132,7 +134,7 @@ class Shift(VoiceoverScene):
             label(rf"effective sample size \\ of the exact weights: \\ ${s['ess_mean']:.0f}$ of ${n}$", font_size=24,
                   color=IW),
             label(r"other shifts: \ labels' frequencies change \\ (label shift); \ or the rule itself changes \\ "
-                  r"(concept drift: \ no weighting helps)", font_size=20, color=GREY_A),
+                  r"(concept drift: \ input weights alone are insufficient)", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_corner(UR, buff=0.4).shift(DOWN * 0.6)
         r_ols, r_iw, r_est = s["ols_mean"], s["iw_mean"], s["est_mean"]
         helps = r_iw < r_ols - 2 * (s["iw_se"] + s["ols_se"])

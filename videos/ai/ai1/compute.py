@@ -9,7 +9,8 @@ the narration quotes is computed here and asserted against the statement it illu
 
 The text: 30 public-domain novels from Project Gutenberg (BOOKS) are the "reading" every counting model learns from.
 The test passage is chapter 2 of Dashiell Hammett's *The Maltese Falcon* (1930), which entered the US public domain
-on 1 January 2026 and was posted to Gutenberg that day (eBook #77600), after every language model below was trained.
+on 1 January 2026 and was posted to Gutenberg that day (eBook #77600). It is held out of our own models' training;
+the posting date cannot rule out pretrained models having seen earlier editions of this 1930 novel.
 Two alphabets: Shannon's 27 symbols (a-z and space: case and punctuation dropped), and the text as printed.
 
 Items:
@@ -64,6 +65,7 @@ from pathlib import Path
 import numpy as np
 
 from explainer.tts import REPO_ROOT
+from explainer.cache_lock import cache_lock, cache_signature, locked_item
 
 DATA_DIR = REPO_ROOT / ".cache" / "ai1"
 BOOK_DIR = DATA_DIR / "books"
@@ -110,11 +112,13 @@ def path(name: str) -> Path:
 
 
 _loaded: dict = {}
+_loaded_signatures: dict = {}
 
 
+@locked_item(lambda name: path(name))
 def load(name: str) -> dict:
-    if name not in _loaded:
-        p = path(name)
+    p = path(name)
+    if name not in _loaded or _loaded_signatures.get(name) != cache_signature(p):
         if not p.exists():  # compute on first use, like every other part's cache (another part may need just this)
             if name not in ITEMS:
                 raise FileNotFoundError(f"{p} missing, and no compute item {name!r} for ai1")
@@ -126,18 +130,28 @@ def load(name: str) -> dict:
         if npz.exists():
             with np.load(npz) as z:
                 _loaded[name].update({k: z[k] for k in z.files})
+        _loaded_signatures[name] = cache_signature(p)
     return _loaded[name]
 
 
+@locked_item(lambda name, out: path(name))
 def _save(name: str, out: dict) -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
     rest = {k: v for k, v in out.items() if k not in arrays}
+    # The JSON is the completion marker, as in explainer.ai.cache.Cache. Never
+    # expose it before the arrays exist: later parts read Part 1 during builds.
+    path(name).unlink(missing_ok=True)
+    _loaded.pop(name, None)
+    npz = path(name).with_suffix(".npz")
+    if arrays:
+        np.savez_compressed(path(name).with_suffix(".tmp.npz"), **arrays)
+        path(name).with_suffix(".tmp.npz").replace(npz)
+    else:
+        npz.unlink(missing_ok=True)
     tmp = path(name).with_suffix(".tmp.json")
     tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
     tmp.replace(path(name))
-    if arrays:
-        np.savez_compressed(path(name).with_suffix(".tmp.npz"), **arrays)
-        path(name).with_suffix(".tmp.npz").replace(path(name).with_suffix(".npz"))
 
 
 def _download(url: str, dst: Path) -> Path:
@@ -618,6 +632,13 @@ def backoff_ranks(models: list[NGram], b: np.ndarray, start: int = 0, guesses: l
 
 
 def shannon_bounds(ranks: np.ndarray) -> tuple[float, float, np.ndarray]:
+    """Rank entropy and Shannon's ideal-predictor lower-bound expression.
+
+    Rank entropy bounds source entropy from above. The lower expression is a
+    bound only with ideal conditional-probability ordering, not for arbitrary
+    guessers. Plugging a trained program's empirical ranks into it illustrates
+    the formula but does not certify an entropy interval for English.
+    """
     q = np.bincount(ranks, minlength=29)[1:28] / len(ranks)
     upper = entropy(q)
     qq = np.append(q, 0.0)
@@ -647,8 +668,9 @@ def compute_game():
     r = backoff_ranks(models, te, start=6)
     upper, lower, q = shannon_bounds(r)
     best = load("orders")["best_bits"]
-    assert lower < upper and lower < best
-    print(f"    first-guess rate {q[0]:.3f}; bounds {lower:.2f} .. {upper:.2f}; model {best:.2f}")
+    assert 0 <= upper <= math.log2(27) + 1e-12 and np.isfinite(lower)
+    print(f"    first-guess rate {q[0]:.3f}; rank entropy {upper:.2f}; ideal lower expression {lower:.2f}; "
+          f"model {best:.2f}")
     return dict(sentence=sent, sentence_ranks=r_sent, sentence_guesses=guess_lists, passage_ranks_q=q, upper=upper,
                 lower=lower, first=q[0],
                 n=len(r), shannon_human=[0.6, 1.3], sentence_bits=sent_bits, sentence_order=k,
@@ -1504,7 +1526,8 @@ def compute_compress():
 def compute_scoreboard():
     raw, lms = load("raw"), load("lms")
     rows = [
-        dict(key="ascii", label="plain text file", bits=8.0, part=1, kind="baseline"),
+        dict(key="ascii", label="plain text file", bits=8 * raw["n_bytes"] / raw["n_chars"], part=1,
+             kind="baseline"),
         dict(key="uniform", label=f"uniform over its {raw['passage_symbols']} symbols", bits=raw["uniform"], part=1,
              kind="count"),
         dict(key="order0", label="letter frequencies", bits=raw["rows"][0]["test"], part=1, kind="count"),
@@ -1566,14 +1589,15 @@ def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "true")
     for name in args.names:
-        if path(name).exists() and not args.force:
-            print(f"  cached  {name}")
-            continue
-        t = time.time()
-        print(f"  compute {name} ...", flush=True)
-        _save(name, ITEMS[name]())
-        _loaded.pop(name, None)
-        print(f"  done    {name} in {time.time() - t:.0f}s", flush=True)
+        with cache_lock(path(name)):
+            if path(name).exists() and not args.force:
+                print(f"  cached  {name}")
+                continue
+            t = time.time()
+            print(f"  compute {name} ...", flush=True)
+            _save(name, ITEMS[name]())
+            _loaded.pop(name, None)
+            print(f"  done    {name} in {time.time() - t:.0f}s", flush=True)
 
 
 if __name__ == "__main__":

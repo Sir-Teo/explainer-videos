@@ -96,7 +96,9 @@ class Vectors(VoiceoverScene):
             self.play(FadeOut(VGroup(aw2, s, ls, para)))
             self.add(trail, comb, read)
             vo.wait_until("c")
-            for va, vb in ((2.0, -1.0), (-1.5, -1.5), (-2.0, 1.5), (1.5, 1.8)):
+            # Keep the arrow tip visible throughout the linear interpolation,
+            # including the last pose held beneath the basis explanation.
+            for va, vb in ((2.0, -1.0), (-1.0, -1.0), (-2.0, 1.5), (1.0, 0.8)):
                 self.play(a.animate.set_value(va), b.animate.set_value(vb), run_time=0.9)
             self.play(FadeIn(basis))
         for m in (comb, read):
@@ -120,7 +122,7 @@ class Vectors(VoiceoverScene):
         dfn = definition_card(r"the dot product (inner product)",
                               MathTex(r"\mathbf{a}\cdot\mathbf{b} = a_1 b_1 + a_2 b_2 + \dots + a_d b_d", font_size=34),
                               width=6.2).to_corner(UL, buff=0.3)
-        props = label(r"symmetric, \ linear in each slot, \ $\mathbf{a}\cdot\mathbf{a} = |\mathbf{a}|^2 > 0$",
+        props = label(r"symmetric, \ linear in each slot, \ $\mathbf{a}\cdot\mathbf{a} = |\mathbf{a}|^2 \ge 0$",
                       font_size=24, color=GREY_A).next_to(dfn, DOWN, buff=0.15).align_to(dfn, LEFT)
         colors = {r"\mathbf{a}": VA, r"\mathbf{b}": VB, r"|\mathbf{a}|^2": VA, r"|\mathbf{b}|^2": VB,
                   r"|\mathbf{a}|": VA, r"|\mathbf{b}|": VB}
@@ -175,7 +177,7 @@ class Vectors(VoiceoverScene):
         ]
         whys = [why(r"a length squared, \ for every number $t$"), why(r"expand"),
                 why(r"a parabola that never dips below $0$: \\ at most one root, \ discriminant $\le 0$"),
-                why(r"equality only when $\mathbf{a} = t\,\mathbf{b}$")]
+                why(r"equality iff $\mathbf{a},\mathbf{b}$ are linearly dependent")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.2, buff=0.3, edge=6.9)
         ax = Axes(x_range=[-0.5, 3.5, 1], y_range=[0, 9, 3], x_length=4.6, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.4, 0])
@@ -204,7 +206,8 @@ class Vectors(VoiceoverScene):
         with self.voiceover(
             "Is that cosine always between minus one and one, even in 768 dimensions? That's the Cauchy-Schwarz "
             "inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. "
-            "<bookmark mark='b'/> Expand it: a parabola in t. <bookmark mark='c'/> A parabola that never dips below "
+            "<bookmark mark='b'/> If b is zero, the inequality is immediate. Otherwise, expand it: a parabola in t. "
+            "<bookmark mark='c'/> A parabola that never dips below "
             "zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot "
             "product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches "
             "zero only when b lines up with a. So an angle between two words makes sense."

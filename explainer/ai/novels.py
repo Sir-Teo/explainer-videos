@@ -25,6 +25,7 @@ from functools import lru_cache
 import numpy as np
 
 from explainer.tts import REPO_ROOT
+from explainer.cache_lock import locked_item
 
 OUT = REPO_ROOT / ".cache" / "novels"
 VOCAB = 4096
@@ -44,6 +45,7 @@ def _texts() -> tuple[str, str]:
 
 
 @lru_cache(maxsize=None)
+@locked_item(lambda: OUT / "tokenizer.json")
 def tokenizer():
     from tokenizers import Tokenizer, decoders, models, pre_tokenizers, trainers
 
@@ -58,7 +60,9 @@ def tokenizer():
                                   initial_alphabet=pre_tokenizers.ByteLevel.alphabet())
     train, _ = _texts()
     tok.train_from_iterator(train.split("\n"), trainer)
-    tok.save(str(path))
+    tmp = path.with_suffix(".tmp.json")
+    tok.save(str(tmp))
+    tmp.replace(path)
     return tok
 
 
@@ -74,21 +78,27 @@ def special(name: str) -> int:
     return tokenizer().token_to_id(name)
 
 
+@locked_item(lambda: OUT / "train.npy")
 def token_arrays() -> tuple[np.ndarray, np.ndarray]:
     """The training and held-out text as token ids (uint16), books separated by <|endoftext|>."""
     tp, vp = OUT / "train.npy", OUT / "valid.npy"
-    if not tp.exists():
+    if not tp.exists() or not vp.exists():
         train, valid = _texts()
         eot = special("<|endoftext|>")
-        for text, p in ((train, tp), (valid, vp)):
+        for text, p in ((valid, vp), (train, tp)):
             ids = []
             for block in text.split("\n"):
                 ids.extend(encode(block + "\n"))
-            np.save(p, np.asarray(ids + [eot], np.uint16))
+            tmp = p.with_suffix(".tmp.npy")
+            np.save(tmp, np.asarray(ids + [eot], np.uint16))
+            tmp.replace(p)
     return np.load(tp), np.load(vp)
 
 
+@locked_item(lambda threads=4, verbose=True: OUT / "base.pt")
 def train_base(threads: int = 4, verbose: bool = True) -> dict:
+    if (OUT / "base.pt").exists() and (OUT / "base.json").exists():
+        return json.loads((OUT / "base.json").read_text())
     import torch
 
     from explainer.lm import pocket
@@ -100,21 +110,23 @@ def train_base(threads: int = 4, verbose: bool = True) -> dict:
     res = pocket.train(run, data, threads=threads, verbose=verbose, ckpt=OUT / "base.ckpt", ckpt_every=100)
     model = res.pop("_model")
     res.pop("_opts")
-    torch.save({"config": asdict(cfg), "model": model.state_dict()}, OUT / "base.pt.tmp")
-    (OUT / "base.pt.tmp").replace(OUT / "base.pt")  # whole or absent: other jobs wait for this file
-    (OUT / "base.ckpt").unlink(missing_ok=True)
     res["train_tokens"], res["valid_tokens"] = int(len(train)), int(len(valid))
-    (OUT / "base.json").write_text(json.dumps(res, indent=1, default=float))
+    (OUT / "base.json.tmp").write_text(json.dumps(res, indent=1, default=float))
+    torch.save({"config": asdict(cfg), "model": model.state_dict()}, OUT / "base.pt.tmp")
+    (OUT / "base.json.tmp").replace(OUT / "base.json")
+    (OUT / "base.pt.tmp").replace(OUT / "base.pt")  # completion marker: both weights and metadata are ready
+    (OUT / "base.ckpt").unlink(missing_ok=True)
     return res
 
 
+@locked_item(lambda: OUT / "base.pt")
 def load_base():
     """The trained base model, in eval mode (trains it first if it isn't cached)."""
     import torch
 
     from explainer.lm import pocket
 
-    if not (OUT / "base.pt").exists():
+    if not (OUT / "base.pt").exists() or not (OUT / "base.json").exists():
         train_base()
     ck = torch.load(OUT / "base.pt")
     model = pocket.PocketGPT(pocket.Config(**ck["config"]))

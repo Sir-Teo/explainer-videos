@@ -79,11 +79,6 @@
    "en": "A loss depends on many numbers at once. With two, it's a surface over a plane. <bookmark mark='a'/> Nudge one number while holding the other still, and you get a partial derivative: the slope along that axis. <bookmark mark='b'/> The best flat approximation to a surface near a point is a plane, the tangent plane, tilted by those two slopes; its error falls like the square of the distance, just as the line's did: measured, a slope of 2.00. <bookmark mark='c'/> Collect the slopes into one vector, and you have the gradient. It points uphill, and, as we'll prove, the steepest way there is. <bookmark mark='d'/> So step the other way, again and again, and you slide down into a valley.",
    "zh": "损失同时取决于很多个数。如果只有两个，它就是平面上方的一张曲面。<bookmark mark='a'/>轻轻推动其中一个数，另一个保持不动，就得到一个偏导数：沿那条坐标轴的斜率。<bookmark mark='b'/>在一点附近，对曲面最好的平面近似，是一个平面，也就是切平面，它按这两个斜率倾斜；它的误差像距离的平方那样下降，和直线时一样：实测斜率是2.00。<bookmark mark='c'/>把这些斜率收进一个向量，就得到了梯度。它指向上坡，而且，我们马上会证明，是最陡的那个方向。<bookmark mark='d'/>所以，朝相反的方向一步又一步地走，你就会滑进山谷。"
   },
-  "0261f767a84e": {
-   "scene": "Gradient",
-   "en": "Why steepest? Pick any direction, a unit vector u, and ask for the slope that way. <bookmark mark='a'/> The tangent plane answers it: the slope along u is the gradient dotted with u. <bookmark mark='b'/> By the Cauchy–Schwarz inequality from Part 3, a dot product is at most the product of the lengths, and u has length one: no direction climbs faster than the length of the gradient. <bookmark mark='c'/> Equality holds only when the two vectors are parallel. <bookmark mark='d'/> So the gradient's own direction is the steepest way up, its opposite the steepest way down, and the directions at right angles keep the height level.",
-   "zh": "为什么是最陡？任选一个方向，一个单位向量u，问问沿这个方向的斜率是多少。<bookmark mark='a'/>切平面给出了答案：沿u的斜率，等于梯度与u的点积。<bookmark mark='b'/>按第3部分的柯西–施瓦茨不等式，点积至多等于两个长度的乘积，而u的长度是1：没有哪个方向，上升得比梯度的长度更快。<bookmark mark='c'/>只有两个向量平行时，等号才成立。<bookmark mark='d'/>所以，梯度自己的方向是最陡的上坡，它的反方向是最陡的下坡，而与它垂直的方向，高度保持不变。"
-  },
   "d1c95e377b69": {
    "scene": "Gradient",
    "en": "Seen from above, the surface becomes a map of contour lines, each at one height. <bookmark mark='a'/> Swing a direction around the point and read the slope. <bookmark mark='b'/> It's largest straight along the gradient, <bookmark mark='c'/> zero along the contour line, <bookmark mark='d'/> and most negative pointing against it. <bookmark mark='e'/> Measured by finite differences in seven hundred and twenty directions, the steepest slope is 0.8126, the gradient's length is 0.8126, and the two directions are 0.21 degrees apart: exactly as the inequality says.",
@@ -104,11 +99,6 @@
    "en": "Now let a function take a whole vector to another vector, the way a layer of a network does. <bookmark mark='a'/> Here's one that bends the plane: the grid lines curve. <bookmark mark='b'/> But zoom in close to any point, and the curves straighten out. Up close, every smooth map looks like a matrix: its Jacobian, the table of all its partial derivatives.",
    "zh": "现在，让一个函数把一整个向量变成另一个向量，就像网络的一层所做的那样。<bookmark mark='a'/>这个映射会把平面弄弯：网格线都弯曲了。<bookmark mark='b'/>但凑近任何一点放大，弯曲的线就变直了。凑近看，每个光滑的映射都像一个矩阵：它的雅可比矩阵，也就是它所有偏导数排成的表。"
   },
-  "90e7ea0292c5": {
-   "scene": "Jacobian",
-   "en": "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a single output. <bookmark mark='a'/> The Jacobian's determinant, from part three, says how much the map stretches area near the point. <bookmark mark='b'/> And the chain rule for maps is matrix multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken where its input lands. That product is the whole of backpropagation, as chapter five will show.",
-   "zh": "一般来说，一个把n个数映成m个数的映射，有一个m乘n的雅可比矩阵：每个输出一行，每个输入一列，正是让直线近似最好的那一个矩阵。梯度只是只有一个输出时的特例。<bookmark mark='a'/>雅可比矩阵的行列式，第3部分讲过，它说明这个映射在那一点附近，把面积拉伸了多少。<bookmark mark='b'/>而映射的链式法则，就是矩阵乘法：一个映射接着另一个映射，它的雅可比矩阵，就是两者雅可比矩阵的乘积，每一个都在它的输入所落到的那一点上求出。这个乘积，就是反向传播的全部，第5章会讲清楚。"
-  },
   "3e8717c64b95": {
    "scene": "Jacobian",
    "en": "Chain many maps and their Jacobians multiply, so their sizes multiply too. Here is a deep stack of tanh layers, 60 of them, with random weights scaled by a gain, and the size of the product of their Jacobians: how much a gradient grows or shrinks on its way back through them. <bookmark mark='a'/> With a gain of 0.5 it shrinks by 17 powers of ten. <bookmark mark='b'/> With a gain of 2 it grows by 5. <bookmark mark='c'/> Only near a gain of one does it hold steady. These are vanishing and exploding gradients, and Parts 9 and 10 choose the initial scale of the weights to stay on that edge.",
@@ -128,11 +118,6 @@
    "scene": "Layers",
    "en": "Next, the softmax, which turns scores into probabilities. <bookmark mark='a'/> Differentiate with the quotient rule. <bookmark mark='b'/> Split the fraction, and every entry is p i times delta i j, minus p i times p j. <bookmark mark='c'/> As a matrix: the probabilities on the diagonal, minus the outer product of p with itself. <bookmark mark='d'/> Here it is for five scores, computed, and matching our library. Its rows add to zero, because adding the same number to every score changes nothing; and it is symmetric with no negative eigenvalues, one of them zero. <bookmark mark='e'/> Again we never need the matrix: its product with a vector takes n steps instead of n squared, which matters with GPT-2's fifty thousand tokens in the vocabulary. Joined with the cross-entropy, it collapses to Part 1's q minus p.",
    "zh": "接下来是softmax，它把分数变成概率。<bookmark mark='a'/>用商的求导法则来求导。<bookmark mark='b'/>把分式拆开，每一项都是p i乘以δ i j，减去p i乘以p j。<bookmark mark='c'/>写成矩阵：对角线上是这些概率，再减去p与它自己的外积。<bookmark mark='d'/>这是5个分数的情形，算出来的结果，和我们的库完全一致。它的每一行加起来都是0，因为给每个分数都加上同一个数，什么也不会变；它是对称的，没有负的特征值，其中一个是0。<bookmark mark='e'/>同样，我们从来不需要这个矩阵本身：它与一个向量的乘积，只要n步，而不是n的平方步；GPT-2的词表有5万个词元，这一点就很要紧。再接上交叉熵，它就化成第1部分的q减去p。"
-  },
-  "17684969b2d0": {
-   "scene": "Layers",
-   "en": "Last, layer norm: subtract the mean of the vector, divide by its spread. <bookmark mark='a'/> The mean and the spread move when x moves, so the Jacobian has two corrections: a projection that removes the direction of all ones, and another that removes y itself, all divided by sigma. <bookmark mark='b'/> Computed for six numbers, 2 of its eigenvalues are zero, up to the tiny epsilon, and the rest equal: a gradient flowing back through layer norm loses whatever would have changed the mean or the overall size of the vector. Those are exactly the things the layer throws away.",
-   "zh": "最后是层归一化：减去向量的平均值，再除以它的散布。<bookmark mark='a'/>x一动，平均值和散布也跟着动，所以雅可比矩阵有两处修正：一个投影，去掉全是1的那个方向，另一个去掉y本身的方向，再整体除以σ。<bookmark mark='b'/>对6个数算出来，它有2个特征值是0，只差一个极小的ε，其余的都相等：梯度穿过层归一化往回流时，会丢掉任何本来会改变向量平均值或整体大小的部分。而这些，正是这一层扔掉的东西。"
   },
   "48a90cd7a798": {
    "scene": "Modes",
@@ -349,11 +334,6 @@
    "en": "Chapter fourteen. How fast is downhill?",
    "zh": "第14章。下山能有多快？"
   },
-  "c29e1a8b49aa": {
-   "scene": "Quadratic",
-   "en": "Near a minimum every smooth loss looks like a quadratic bowl, and on a bowl gradient descent can be solved exactly. <bookmark mark='a'/> Each step multiplies the position by I minus eta H. <bookmark mark='b'/> In the Hessian's eigenvectors that matrix is diagonal, so each coordinate shrinks on its own, by one minus eta times its eigenvalue. <bookmark mark='c'/> Every factor must be less than one in size, so the step must be smaller than two over the largest curvature. <bookmark mark='d'/> And the slowest coordinate sets the pace. The best step balances the two extremes, and the rate is kappa minus one over kappa plus one, where kappa, the condition number, is the largest curvature over the smallest.",
-   "zh": "在最小值附近，每个光滑的损失看起来都像一个二次的碗，而在碗上，梯度下降可以精确地解出来。<bookmark mark='a'/>每一步都把位置乘以I减去η乘以H。<bookmark mark='b'/>在黑塞矩阵的特征向量下，这个矩阵是对角的，所以每个坐标各自缩小，缩小的倍数是1减去η乘以它的特征值。<bookmark mark='c'/>每个倍数的绝对值都必须小于1，所以步长必须小于2除以最大的曲率。<bookmark mark='d'/>而最慢的那个坐标决定了速度。最好的步长让两个极端互相平衡，速率是κ减1除以κ加1，其中κ，也就是条件数，是最大曲率与最小曲率之比。"
-  },
   "be14ef908e1d": {
    "scene": "Quadratic",
    "en": "Here is a valley with kappa of twenty-five: it bends twenty-five times more sharply across than along. <bookmark mark='a'/> The steepest way down points mostly at the opposite wall, so the steps zigzag from wall to wall and crawl along the floor: 26 steps to get within one percent. <bookmark mark='b'/> Momentum, carrying speed from step to step, does better, and Part 11 derives why. <bookmark mark='c'/> Newton's step undoes the curvature and lands at the bottom at once.",
@@ -374,16 +354,6 @@
    "en": "Chapter fifteen. Optimizing under constraints.",
    "zh": "第15章。在约束之下求最优。"
   },
-  "a0d262245a0d": {
-   "scene": "Lagrange",
-   "en": "Often the numbers aren't free: probabilities must add to one, a budget must be kept. Here, minimize f, whose contours are these ellipses, but only on the circle. <bookmark mark='a'/> Walk along the circle and watch two arrows: the gradient of f, and the gradient of the constraint, which points straight out of the circle. <bookmark mark='b'/> Wherever the gradient of f has a part along the circle, you can slide that way and go lower. <bookmark mark='c'/> So at the constrained minimum that part is zero: the two gradients are parallel. <bookmark mark='d'/> Joseph-Louis Lagrange turned that picture into a method in 1788, in his Mécanique analytique.",
-   "zh": "很多时候，这些数并不是自由的：概率加起来必须是1，预算不能超支。这里，要把f最小化，它的等高线是这些椭圆，但只能在这个圆上取值。<bookmark mark='a'/>沿着圆走，看两个箭头：f的梯度，和约束的梯度，后者笔直地指向圆外。<bookmark mark='b'/>只要f的梯度沿着圆有一个分量，你就能往那边滑，走得更低。<bookmark mark='c'/>所以在带约束的最小值处，那个分量是0：两个梯度互相平行。<bookmark mark='d'/>1788年，约瑟夫–路易·拉格朗日在他的《分析力学》里，把这幅图变成了一种方法。"
-  },
-  "78ce1c20c507": {
-   "scene": "Lagrange",
-   "en": "Write it down: at the constrained minimum, the gradient of f is a multiple of the constraint's gradient, minus lambda times it. <bookmark mark='a'/> Lagrange's device folds the constraint into a single function, the Lagrangian, f plus lambda times g, <bookmark mark='b'/> whose ordinary stationary points, in x and lambda together, are exactly the constrained ones: the derivative in lambda just gives back the constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at 0.626. It is a price: how fast the best value would fall if the constraint were loosened a little.",
-   "zh": "写下来：在带约束的最小值处，f的梯度是约束梯度的一个倍数，等于负λ乘以它。<bookmark mark='a'/>拉格朗日的办法，是把约束并进一个函数，叫作拉格朗日函数，f加上λ乘以g，<bookmark mark='b'/>它在x和λ一起看时的普通驻点，恰好就是带约束的那些点：对λ求导，正好给回约束本身。<bookmark mark='c'/>对这个圆，乘子算出来是0.626。它是一个价格：约束稍微放松一点，最优值会下降得多快。"
-  },
   "386d8fd79cce": {
    "scene": "Lagrange",
    "en": "A famous constrained problem: a die whose average roll is 4.5, not 3.5. Which probabilities assume the least beyond that? The ones with the most entropy. <bookmark mark='a'/> Set the Lagrangian's derivative to zero, with one multiplier for each constraint, <bookmark mark='b'/> and the answer is a softmax: each face's probability is e to the beta times the face, normalized. <bookmark mark='c'/> Computed, beta is 0.371, and a general-purpose solver lands on the same six numbers. Edwin Jaynes made this a principle of inference in 1957. It's where the softmax comes from: it is the maximum-entropy distribution with a fixed average score, and its temperature is a Lagrange multiplier.",
@@ -398,16 +368,6 @@
    "scene": "KKT",
    "en": "Chapter sixteen. Inequalities, and duality.",
    "zh": "第16章。不等式，以及对偶。"
-  },
-  "bfecde11a3d2": {
-   "scene": "KKT",
-   "en": "Most constraints are inequalities: a probability can't be negative, a margin must be at least one. William Karush worked out the conditions in his 1939 master's thesis; Harold Kuhn and Albert Tucker found them again in 1951. <bookmark mark='a'/> At a minimum there are multipliers mu, one per constraint, with the gradient of the Lagrangian zero, every constraint met, every multiplier non-negative, <bookmark mark='b'/> and each multiplier times its constraint equal to zero: complementary slackness. <bookmark mark='c'/> Either the minimum is inside and the wall is idle, its multiplier zero, <bookmark mark='d'/> or the minimum is on the wall, and the multiplier measures how hard the wall pushes.",
-   "zh": "大多数约束都是不等式：概率不能为负，间隔至少要有1。威廉·卡鲁什在他1939年的硕士论文里推出了这些条件；1951年，哈罗德·库恩和阿尔伯特·塔克又重新找到了它们。<bookmark mark='a'/>在最小值处，存在一组乘子μ，每个约束一个，使拉格朗日函数的梯度为0，每个约束都满足，每个乘子都不为负，<bookmark mark='b'/>而且每个乘子与它的约束的乘积都等于0：这叫互补松弛。<bookmark mark='c'/>要么最小值在里面，墙闲着，它的乘子是0，<bookmark mark='d'/>要么最小值在墙上，而乘子衡量墙推回来有多用力。"
-  },
-  "299a69273a2e": {
-   "scene": "KKT",
-   "en": "The multipliers lead to a second problem. Fix them, and minimize the Lagrangian over x freely: that's the dual function, q of mu. <bookmark mark='a'/> For any feasible x the added terms are at most zero, so the dual function is a lower bound on f, everywhere it can be met. <bookmark mark='b'/> The best lower bound, d star, is at most the true minimum, p star: weak duality, true for every problem. <bookmark mark='c'/> For convex problems with a strictly feasible point, the two are equal: strong duality. You can solve either one.",
-   "zh": "这些乘子引出了第二个问题。把它们固定住，对x自由地把拉格朗日函数最小化：这就是对偶函数，q(μ)。<bookmark mark='a'/>对任何可行的x，加上去的那些项都不超过0，所以对偶函数是f的一个下界，在所有能取到的地方都成立。<bookmark mark='b'/>最好的下界d星，至多等于真正的最小值p星：这叫弱对偶，对每个问题都成立。<bookmark mark='c'/>对有严格可行点的凸问题，两者相等：这叫强对偶。你可以解其中任何一个。"
   },
   "4cecbd04551e": {
    "scene": "KKT",
@@ -463,6 +423,46 @@
    "scene": "Outro",
    "en": "Griewank and Walther's Evaluating Derivatives is the book on automatic differentiation, and Blondel and Roulet's Elements of Differentiable Programming is the modern one. Thanks for watching, and see you in Part 5.",
    "zh": "格里万克和瓦尔特的《计算导数》，是自动微分方面的权威著作，而布隆代尔和鲁莱的《可微编程原理》，是一本现代的书。感谢观看，第5部分见。"
+  },
+  "db4381e96750": {
+   "scene": "Gradient",
+   "en": "Why steepest? Pick any direction, a unit vector u, and ask for the slope that way. <bookmark mark='a'/> The tangent plane answers it: the slope along u is the gradient dotted with u. <bookmark mark='b'/> By the Cauchy–Schwarz inequality from Part 3, a dot product is at most the product of the lengths, and u has length one: no direction climbs faster than the length of the gradient. <bookmark mark='c'/> If the gradient is nonzero, the maximum occurs in its positive direction. <bookmark mark='d'/> So the gradient's own direction is the steepest way up, its opposite the steepest way down, and the directions at right angles give zero first-order change. If the gradient is zero, every directional derivative is zero.",
+   "zh": "为什么是最陡？任选一个方向，一个单位向量u，问问沿这个方向的斜率是多少。<bookmark mark='a'/>切平面给出了答案：沿u的斜率，等于梯度与u的点积。<bookmark mark='b'/>按第3部分的柯西–施瓦茨不等式，点积至多等于两个长度的乘积，而u的长度是1：没有哪个方向，上升得比梯度的长度更快。<bookmark mark='c'/>梯度非零时，最大值在它的正方向取得。<bookmark mark='d'/>所以，梯度自己的方向是最陡的上坡，它的反方向是最陡的下坡，而与它垂直的方向，一阶变化为零。若梯度是零向量，所有方向导数都为零。"
+  },
+  "2135aada77a8": {
+   "scene": "Jacobian",
+   "en": "In general, a map from n numbers to m numbers has an m by n Jacobian: one row per output, one column per input, the one matrix that makes the straight-line guess best. A gradient is the special case of a single output. <bookmark mark='a'/> For this two-dimensional map, the absolute value of the Jacobian's determinant, from part three, gives the local area factor. <bookmark mark='b'/> And the chain rule for maps is matrix multiplication: the Jacobian of one map after another is the product of their Jacobians, each taken where its input lands. That product is the whole of backpropagation, as chapter five will show.",
+   "zh": "一般来说，一个把n个数映成m个数的映射，有一个m乘n的雅可比矩阵：每个输出一行，每个输入一列，正是让直线近似最好的那一个矩阵。梯度只是只有一个输出时的特例。<bookmark mark='a'/>对这个二维映射，雅可比矩阵行列式的绝对值，第3部分讲过，给出了局部的面积缩放比。<bookmark mark='b'/>而映射的链式法则，就是矩阵乘法：一个映射接着另一个映射，它的雅可比矩阵，就是两者雅可比矩阵的乘积，每一个都在它的输入所落到的那一点上求出。这个乘积，就是反向传播的全部，第5章会讲清楚。"
+  },
+  "5ce6a58cf8bf": {
+   "scene": "Quadratic",
+   "en": "On a quadratic bowl with a positive-definite Hessian, gradient descent can be solved exactly. <bookmark mark='a'/> Each step multiplies the position by I minus eta H. <bookmark mark='b'/> In the Hessian's eigenvectors that matrix is diagonal, so each coordinate shrinks on its own, by one minus eta times its eigenvalue. <bookmark mark='c'/> Every factor must be less than one in size, so the step must be positive and smaller than two over the largest curvature. <bookmark mark='d'/> And the slowest coordinate sets the pace. The best step balances the two extremes, and the rate is kappa minus one over kappa plus one, where kappa, the condition number, is the largest curvature over the smallest.",
+   "zh": "对于黑塞矩阵正定的二次碗面，梯度下降可以精确地解出来。<bookmark mark='a'/>每一步都把位置乘以I减去η乘以H。<bookmark mark='b'/>在黑塞矩阵的特征向量下，这个矩阵是对角的，所以每个坐标各自缩小，缩小的倍数是1减去η乘以它的特征值。<bookmark mark='c'/>每个倍数的绝对值都必须小于1，所以步长必须大于0，并且小于2除以最大的曲率。<bookmark mark='d'/>而最慢的那个坐标决定了速度。最好的步长让两个极端互相平衡，速率是κ减1除以κ加1，其中κ，也就是条件数，是最大曲率与最小曲率之比。"
+  },
+  "510a703aaf8f": {
+   "scene": "KKT",
+   "en": "Most constraints are inequalities: a probability can't be negative, a margin must be at least one. William Karush worked out the conditions in his 1939 master's thesis; Harold Kuhn and Albert Tucker found them again in 1951. <bookmark mark='a'/> Under a constraint qualification, at a minimum there are multipliers mu, one per constraint, with the gradient of the Lagrangian zero, every constraint met, every multiplier non-negative, <bookmark mark='b'/> and each multiplier times its constraint equal to zero: complementary slackness. <bookmark mark='c'/> Either the minimum is inside and the wall is idle, its multiplier zero, <bookmark mark='d'/> or the minimum is on the wall, and the multiplier measures how hard the wall pushes.",
+   "zh": "大多数约束都是不等式：概率不能为负，间隔至少要有1。威廉·卡鲁什在他1939年的硕士论文里推出了这些条件；1951年，哈罗德·库恩和阿尔伯特·塔克又重新找到了它们。<bookmark mark='a'/>在约束资格条件成立时，最小值处存在一组乘子μ，每个约束一个，使拉格朗日函数的梯度为0，每个约束都满足，每个乘子都不为负，<bookmark mark='b'/>而且每个乘子与它的约束的乘积都等于0：这叫互补松弛。<bookmark mark='c'/>要么最小值在里面，墙闲着，它的乘子是0，<bookmark mark='d'/>要么最小值在墙上，而乘子衡量墙推回来有多用力。"
+  },
+  "bf1253170aa8": {
+   "scene": "KKT",
+   "en": "The multipliers lead to a second problem. Fix them, and ask how low the Lagrangian can go over x: that's the dual function, q of mu. <bookmark mark='a'/> For any feasible x the added terms are at most zero, so the dual function is a lower bound on f, everywhere it can be met. <bookmark mark='b'/> The best lower bound, d star, is at most the true minimum, p star: weak duality, true for every problem. <bookmark mark='c'/> For convex problems with a strictly feasible point, the two are equal: strong duality. Both give the same optimal value.",
+   "zh": "这些乘子引出了第二个问题。把乘子固定住，问拉格朗日函数在任意x上能低到什么程度：这就是对偶函数，q(μ)。<bookmark mark='a'/>对任何可行的x，加上去的那些项都不超过0，所以对偶函数是f的一个下界，在所有能取到的地方都成立。<bookmark mark='b'/>最好的下界d星，至多等于真正的最小值p星：这叫弱对偶，对每个问题都成立。<bookmark mark='c'/>对有严格可行点的凸问题，两者相等：这叫强对偶。两者给出相同的最优值。"
+  },
+  "07e0eace63fb": {
+   "scene": "Lagrange",
+   "en": "Often the numbers aren't free: probabilities must add to one, a budget must be kept. Here, minimize f, whose contours are these ellipses, but only on the circle. <bookmark mark='a'/> Walk along the circle and watch two arrows: the gradient of f, and the gradient of the constraint, which points straight out of the circle. <bookmark mark='b'/> Wherever the gradient of f has a part along the circle, you can slide against that part and go lower. <bookmark mark='c'/> So at the constrained minimum that part is zero: the two gradients are parallel. <bookmark mark='d'/> Joseph-Louis Lagrange turned that picture into a method in 1788, in his Mécanique analytique.",
+   "zh": "很多时候，这些数并不是自由的：概率加起来必须是1，预算不能超支。这里，要把f最小化，它的等高线是这些椭圆，但只能在这个圆上取值。<bookmark mark='a'/>沿着圆走，看两个箭头：f的梯度，和约束的梯度，后者笔直地指向圆外。<bookmark mark='b'/>只要f的梯度沿着圆有一个分量，你就能沿那个分量的反方向滑动，走得更低。<bookmark mark='c'/>所以在带约束的最小值处，那个分量是0：两个梯度互相平行。<bookmark mark='d'/>1788年，约瑟夫–路易·拉格朗日在他的《分析力学》里，把这幅图变成了一种方法。"
+  },
+  "451edf9fd43d": {
+   "scene": "Lagrange",
+   "en": "Write it down: at the constrained minimum, the gradient of f is a multiple of the constraint's gradient, minus lambda times it. <bookmark mark='a'/> Lagrange's device folds the constraint into a single function, the Lagrangian, f plus lambda times g. <bookmark mark='b'/> Stationarity in x and lambda gives necessary conditions for a regular constrained optimum, not a guarantee of a minimum. The derivative in lambda gives back the constraint. <bookmark mark='c'/> For the circle, the multiplier comes out at 0.626. It is a price: how fast the best value would fall if the constraint were loosened a little.",
+   "zh": "写下来：在带约束的最小值处，f的梯度是约束梯度的一个倍数，等于负λ乘以它。<bookmark mark='a'/>拉格朗日的办法，是把约束并进一个函数，叫作拉格朗日函数，f加上λ乘以g。<bookmark mark='b'/>对x和λ的驻点条件，是正规约束最优点的必要条件，并不能保证是最小值。对λ求导，会给回约束本身。<bookmark mark='c'/>对这个圆，乘子算出来是0.626。它是一个价格：约束稍微放松一点，最优值会下降得多快。"
+  },
+  "b9198844fc34": {
+   "scene": "Layers",
+   "en": "Last, layer norm: subtract the mean of the vector, divide by its spread, before any learned scale and shift. <bookmark mark='a'/> The mean and the spread move when x moves, so the Jacobian has two corrections: a projection that removes the direction of all ones, and another that suppresses the radial direction, all divided by sigma. <bookmark mark='b'/> Computed for six numbers, 2 eigenvalues have magnitude below one thousandth, and the rest are equal. Mean shifts are removed exactly; scale changes are strongly suppressed, with a small remaining sensitivity from epsilon.",
+   "zh": "最后是层归一化：减去向量的平均值，再除以它的散布，这里先不加可学习的缩放和平移。<bookmark mark='a'/>x一动，平均值和散布也跟着动，所以雅可比矩阵有两处修正：一个投影，去掉全是1的那个方向，另一个压低径向的变化，再整体除以σ。<bookmark mark='b'/>对6个数算出来，2个特征值的绝对值小于千分之一，其余的都相等。均值的平移被完全去掉；尺度变化被大幅压低，但ε会留下少量敏感度。"
   }
  },
  "title_en": "AI, Built: Part 4, Change",

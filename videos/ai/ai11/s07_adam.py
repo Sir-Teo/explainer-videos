@@ -50,7 +50,7 @@ class Adam(VoiceoverScene):
             "ones. <bookmark mark='a'/> In 2011 John Duchi, Elad Hazan and Yoram Singer proposed AdaGrad: divide "
             "each weight's step by the root of its summed squared gradients. <bookmark mark='b'/> A rare word gets "
             "a big step when it does appear. <bookmark mark='c'/> The catch: the sum only grows, so every step "
-            "shrinks like one over root t, and a long run slows to a crawl."
+            "shrinks like one over root t for a steady gradient, and a long run slows to a crawl."
         ) as vo:
             self.play(FadeIn(hist, shift=RIGHT * 0.2), Write(rule), FadeIn(rn))
             vo.wait_until("a")
@@ -152,7 +152,7 @@ class Adam(VoiceoverScene):
         first = VGroup(label(r"the very first step, \ per weight:", font_size=22, color=GREY_A),
                        label(rf"without the corrections: \ $\frac{{1 - \beta_1}}{{\sqrt{{1 - \beta_2}}}}\,\eta = {raw:.2f}\,\eta$",
                              font_size=22, color=C.SURPRISE),
-                       label(r"with them: \ exactly $\eta$", font_size=22, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+                       label(r"with them: \ $\approx\eta$ when $|g_1|\gg\epsilon$", font_size=22, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         first.move_to([4.2, -2.6, 0])
         tag = note(r"computed: \ the character model's second hidden matrix").to_corner(DR, buff=0.15)
         with self.voiceover(
@@ -161,7 +161,7 @@ class Adam(VoiceoverScene):
             "<bookmark mark='c'/> one minus beta to the t: early on m is biased towards zero, and dividing removes "
             "it. <bookmark mark='d'/> One weight of our model, its first sixty steps: raw m starts near zero, the "
             "corrected one tracks the gradients at once. <bookmark mark='e'/> Without the corrections the first "
-            f"step would be {raw:.2f} times eta; with them, exactly eta."
+            f"step would be about {raw:.2f} times eta; with them, nearly eta when the gradient is large compared with epsilon."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abc"):
