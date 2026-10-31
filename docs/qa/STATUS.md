@@ -1,48 +1,44 @@
 # Current cloud QA checkpoint
 
-Observed: 2026-10-31T13:27:44.919282+00:00. This is progress, **not full-series production approval**.
+Observed: 2026-10-31T13:51:38.455886+00:00. Progress, **not full-series production approval**.
 
-Branch: `qa/ai-series-cloud-20261031`. Current source checkpoint: `f942775` (76 full-suite tests plus 21 focused QA/cache checks pass).
+Branch: `qa/ai-series-cloud-20261031`. Latest pushed checkpoint: `3a4fdc9eb71a871c6402865d0eb5fdc0292d6238`.
+All116 repository tests pass; compilation/diff checks pass. Remote head verified, no commit-status checks reported.
 
 | Language | Check mode | Cases with records | Current source/data | Current clean automated checks |
 |---|---|---:|---:|---:|
-| en | endpoints | 17 | 4 | 4 |
-| en | motion | 17 | 0 | 0 |
-| zh | endpoints | 17 | 4 | 4 |
-| zh | motion | 17 | 0 | 0 |
+| en | endpoints | 17 | 0 | 0 |
+| en | motion | 17 | 3 | 3 |
+| zh | endpoints | 17 | 2 | 2 |
+| zh | motion | 17 | 3 | 3 |
 
-All 34 Part 1 chapter/language cases have endpoint captures and full silent renders from these passes. Earlier
-fingerprints remain explicitly stale after the MI spoken-wording repair; final English/Chinese resume passes are
-refreshing endpoint checks, then motion renders. Silent renders are not narrated or full visual playback review.
+All34 Part1 bilingual cases have endpoint captures and full silent renders. All34 endpoint sheets were inspected,
+with707 primary thumbnails and46 priority native views plus focused rechecks. Two observed layout defects are
+fixed: probability magnification cue and Chinese McMillan explanation spacing. New Part2 caption additions make
+conservative whole-part fingerprints stale; final motion passes continue refreshing current evidence.
 
-All Part 1 numerical items are complete, including five real pretrained-model measurements and the successful
-arithmetic-coding round trip. The measured English silent chapter durations total 57.31 minutes before the small
-spoken-wording refresh. This is not the measured narrated production duration.
+Stronger temporal audit: Chinese Hook decoded3569frames and extracted368selected frames covering64detected RGB
+motion intervals on46chronological sheets. Page-by-page review is underway; it already found a motion-only rank
+highlight that crowds neighboring numbers. That repair is pending the complete transition review. Automated
+whole-file decoding and dense selected times do not certify continuous perceptual playback; this executor lacks
+video playback input. Listening and production-resolution checks remain unverified.
 
-Narration is advancing independently: Information has completed 4/6 blocks with zero detected signal/timing issues,
-including the paragraph that previously exhausted memory. The container OOM-kill count remains one. The corrected
-signed-millionths stress probe scored 0.958 on its first take against the unchanged 0.93 ASR threshold. Full chapter
-audio, listening and narrated synchronization remain pending; CPU retries prevent a reliable completion ETA.
+Information narration has completed5/6blocks with zero signal/timing issues and no additional OOM after bounded
+CPU batching. ASR review leads remain, including millionths/millions ambiguity; clean waveform is not pronunciation
+approval. An independent official Whisper recognizer is staged and will run after TTS stops to free memory. No
+thresholds were lowered. CPU retries prevent a reliable ETA.
 
-The source review covers all 17 chapters, and its factual correction batch is frozen in both languages. Current
-endpoint captures are refreshing before motion passes. Independent rendered-frame review found an ambiguous
-probability-width brace on a magnified column; a scoped follow-up repair is pending after the frame pass.
-The available tools expose image inspection and file decoding, not continuous video playback input. Full-file
-decode/dead-air checks and sampled-frame review do not establish full visual playback coverage.
+Part2 TSP/resolution repairs are pushed, including real default-data validation: all15comparison runs use exactly
+2,000,000evaluations; saturation reaches its4000clause cap without proof while support finds one with2823clauses.
+The scene now reports that honestly. Twelve of19Part2 numerical items are complete; Sudoku is computing, and
+full source review is identifying additional path/tie/guarantee/visual-bound wording issues for one correction batch.
+No Part2 render, audio or production approval is claimed; remaining Parts3–31 are untested.
 
-Active cloud operations:
+Active operations: Part1 EN/ZH motion refresh and Chinese endpoint tail; bounded Information narration;
+Chinese Hook temporal image review; Part2 read-only chapter reviews and single-owner numerical computation.
+[Persistent scope/checklists](ai-built-20261031-progress.md), [inventory](ai-built-20261031-inventory.md),
+[Part2 repairs](ai2-repairs.md), and committed before/after evidence remain reviewable.
 
-- `python tools/qa_series.py ai1 --lang en --cached-only --resume`, followed by `--motion --resume`.
-- The corresponding Chinese endpoint/motion pipeline, in separate evidence folders.
-- `python tools/qa_audio.py ai1 --only Information --lang en`, using the bounded local Qwen3 voice server.
-- Independent rendered-frame reviews; Part 2 correctness repairs are being prepared in a separate file scope from the [reproductions](ai2-preparation/REPORT.md).
-
-Source/data and movie provenance are retained in `renders/qa/series/`, with the offline index generated by
-`python tools/qa_report.py`. [Visual changes and remaining checks](ai-built-20261031-progress.md) and the
-[31-part inventory](ai-built-20261031-inventory.md) are persistent. Before/after frames and provenance are committed;
-the task chat also contains a private downloadable seven-clip review ZIP.
-
-Remaining: finish current Part 1 automatic refresh and source review, complete narrated audio/sync and full playback
-review, verify production-resolution cuts, then perform Part 2 repairs/rendered QA and continue Parts 3–31 sequentially.
-Part 2 repairs are in progress; no Part 2 production computation or rendered review is claimed. No merge/deployment occurred. Branch push is the
-review delivery; draft PR creation was denied by automatic review and was not retried.
+The partial seven-clip ZIP is saved in the user's Library (confirmed ID was supplied in the task chat). No merge or
+deployment. Optional draft PR creation was denied by automatic review for lacking explicit PR authorization;
+branch publication remains the delivery and the denied PR action was not retried.
