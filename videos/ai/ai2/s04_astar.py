@@ -112,7 +112,7 @@ class AStar(VoiceoverScene):
         hl = label(r"Dijkstra: \ smallest $g$", font_size=26, color=GCOST).next_to(A, UP, buff=0.2)
         hr = label(r"A*: \ smallest $g + h$", font_size=26, color=FCOL).next_to(B, UP, buff=0.2)
         cnt = VGroup(label(rf"${nd:,}$ cells".replace(",", "{,}"), font_size=24, color=GCOST).next_to(A, DOWN, buff=0.15),
-                     label(rf"${na:,}$ cells, \ the same path".replace(",", "{,}"), font_size=24, color=FCOL)
+                     label(rf"${na:,}$ cells, \ the same optimal cost".replace(",", "{,}"), font_size=24, color=FCOL)
                      .next_to(B, DOWN, buff=0.15))
         paths = VGroup(path_line(A, (H, W), d["dijkstra_path"]), path_line(B, (H, W), d["astar_path"]))
         # the circle and the ellipse every expanded cell must lie in
@@ -141,11 +141,12 @@ class AStar(VoiceoverScene):
         inside = (100 * d["dijkstra_inside"], 100 * d["astar_inside"])
         with self.voiceover(
             "Here are the two searches on the same map. <bookmark mark='a'/> Dijkstra spreads in every direction; A star's "
-            "frontier leans toward the goal, flows around the wall, and stops. <bookmark mark='b'/> Both find the same "
-            f"shortest path, of length {C:.1f}. Dijkstra expanded {nd:,} cells; A star, {na:,}. <bookmark mark='c'/> Their "
-            "shapes are no accident. Call the optimal cost C star. Dijkstra only expands cells closer than C star to the start, "
+            "frontier leans toward the goal, flows around the wall, and stops. <bookmark mark='b'/> Both reach the same "
+            f"optimal cost, {C:.1f}. Dijkstra expanded {nd:,} cells; A star, {na:,}. <bookmark mark='c'/> Their "
+            "shapes are no accident. Call the optimal cost C star. Dijkstra only expands cells with g at most C star, "
             "and no path beats a straight line, so they lie in a circle of radius C star. A star only expands cells whose g plus "
-            "h is below C star, so they lie in an ellipse with the start and the goal as its foci. <bookmark mark='d'/> We "
+            "h is at most C star, including possible boundary ties, so they lie in an ellipse with the start and the goal as "
+            "its foci. <bookmark mark='d'/> We "
             f"checked every expanded cell: {inside[0]:.0f} percent inside the circle, {inside[1]:.0f} percent inside the ellipse."
         ) as vo:
             self.add(A, B)
@@ -314,8 +315,9 @@ class AStar(VoiceoverScene):
         tag = note(rf"computed: \ ${n_maps}$ random maps, \ $48 \times 80$ cells").to_corner(DR, buff=0.2)
         ratio = 100 * d["batch_ratio_median"]
         with self.voiceover(
-            f"One map proves little, so we ran {n_maps} random ones. <bookmark mark='a'/> On the median map, Dijkstra expands "
-            f"{med[0]:,.0f} cells and A star {med[1]:,.0f}: about {ratio:.0f} percent of the work, for the same optimal paths. "
+            f"One map proves little, so we ran {n_maps} random ones. <bookmark mark='a'/> The median expansion counts are "
+            f"{med[0]:,.0f} for Dijkstra and {med[1]:,.0f} for A star. The median of their paired work ratios is "
+            f"{ratio:.0f} percent, for the same optimal costs. "
             "<bookmark mark='b'/> Weight h by two, and weighted A star expands a median of "
             f"{med[2]:,.0f}, with paths {100 * excess[2]:.0f} percent longer on average, never more than twice the optimum. "
             f"<bookmark mark='c'/> Greedy search ignores g altogether: {med[3]:,.0f} cells, but paths {100 * excess[3]:.0f} "

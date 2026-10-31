@@ -163,7 +163,7 @@ class Turing(VoiceoverScene):
         tl = label(r"time $\downarrow$", font_size=20, color=GREY_B).rotate(PI / 2).next_to(img4, LEFT, buff=0.15)
         xl = label(r"the tape $\rightarrow$", font_size=20, color=GREY_B).next_to(img5, DOWN, buff=0.12)
         side = VGroup(
-            definition_card(r"the busy beaver", r"of all machines with $n$ states that halt when started on a blank "
+            definition_card(r"the busy beaver", r"binary tape; $n$ working states plus halt: \\ among machines that halt from a blank "
                             r"tape, \ the one that runs longest", width=4.2, font_size=21, color=FCOL),
             label(rf"ours: \ halted after ${steps5.replace(',', '{,}')}$ steps, \\ with "
                   rf"${str(d['bb5_ones'])}$ ones on the tape", font_size=21, color=GREY_A),
@@ -174,7 +174,8 @@ class Turing(VoiceoverScene):
         tag = note(r"computed: \ both champions run to their halts here \ (Brady 1983; \ Marxen \& Buntrock 1990)")
         tag.to_corner(DL, buff=0.2)
         with self.voiceover(
-            "The limit appears even in tiny machines. Start one on a blank tape: how long can it run and still halt? The "
+            "The limit appears even in tiny machines. Fix two tape symbols and a number of working states, with a separate "
+            "halt state. Start on an all-zero tape: how long can such a machine run and still halt? The "
             "longest runner is called the busy beaver, Tibor Radó's name, from 1962. <bookmark mark='a'/> The four-state "
             f"champion, run here row by row, halts after {d['bb4_steps']} steps. <bookmark mark='b'/> The five-state champion "
             f"runs {d['bb5_steps']:,} steps; we replayed them in {d['bb5_seconds']:.1f} seconds. <bookmark mark='c'/> Proving "

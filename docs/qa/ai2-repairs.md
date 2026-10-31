@@ -25,3 +25,17 @@ of five seeds. Resolution recomputation confirmed the saturation cap at4,000 cla
 recorded clauses. Schema3 and all six bilingual outcome branches preserve that distinction.
 [Actual values and source/data hashes](evidence/ai2-correctness/default-tsp-resolution.json) are retained.
 Global caption handoffs have now been merged by root. Full Part2 benchmark/render/audio QA remains pending.
+
+The complete17-chapter source review and a second bilingual correction batch are now applied.
+[Head and tail records](evidence/ai2-source-review/) preserve coverage, primary references, fixed findings and
+limits. Corrections include exact versus cutoff alpha-beta values; equal optimal cost versus identical paths;
+sampling/baseline units; relaxed-planning complexity; MYCIN rating units; ELIZA historical provenance; multiplier
+proof/search distinctions; PDDL-model assumptions; and the first-moment exercise explanation.
+
+All19 default numerical items have now completed. SAT completed in453seconds with zero unknown outcomes in
+its default sweep; CDCL completed in131seconds and blocks in32seconds. Current corpus/testset/model calculations
+are genuine seeded runs. The source/translation batch passed all126 repository tests, whole-AI compilation,
+diff checks and119/119 Part2 narration-source coverage. One pre-existing adjacent-value display-template warning
+remains documented. Full Part2 endpoint, motion, audio, pacing and production-resolution checks remain pending
+while Part1's complete dense transition review finishes. Future capped PDB-optimum handling remains a documented
+conditional defect to repair before broader parameter variations; current30 default PDB cases all completed.

@@ -116,10 +116,10 @@ class Heuristics(VoiceoverScene):
                    color=GREY_A).next_to(eb, DOWN, buff=0.15)
         dom = label(r"consistent $h_2 \ge h_1$: \ no more mandatory $f<C^*$ states; \\ boundary work depends on ties",
                     font_size=22, color=HEUR).to_edge(DOWN, buff=0.2)
-        tag = note(rf"computed: \ ${d['per_depth']}$ positions per length").to_corner(UL, buff=0.2)
+        tag = note(rf"computed: \ up to ${d['per_depth']}$ positions per length").to_corner(UL, buff=0.2)
         dd = int(D[-1])
         with self.voiceover(
-            "How much does the better guess buy? A star on the eight-puzzle, a hundred positions per solution length. "
+            "How much does the better guess buy? A star on the eight-puzzle, up to a hundred positions per solution length. "
             f"<bookmark mark='a'/> With no heuristic, at length {dd}, it expands {last['astar_h0']:,.0f} states on average. "
             f"<bookmark mark='b'/> Counting misplaced tiles: {last['astar_h1']:,.0f}. <bookmark mark='c'/> The Manhattan "
             f"distance: {last['astar_h2']:,.0f}. <bookmark mark='d'/> The effective branching factor, the branching of a uniform "
@@ -172,7 +172,7 @@ class Heuristics(VoiceoverScene):
         pdb_board = VGroup(*[tile_board(list(range(1, 16)) + [0], size=4, cell=0.34, font_size=14,
                                         color=GREY_D, highlight=tuple(range(a, a + 5))) for a in (1, 6, 11)])
         pdb_board.arrange(RIGHT, buff=0.25).move_to([3.6, 0.6, 0])
-        pl = label(r"each table: \ the exact cost of homing five tiles, \\ found by breadth-first search, "
+        pl = label(r"each table: \ exact cost in moves of its five tiles, \\ found by breadth-first search, "
                    rf"${d['pdb_entries']:,}$ entries".replace(",", "{,}"), font_size=19, color=GREY_A)
         pl.next_to(pdb_board, DOWN, buff=0.2)
         means = label(rf"average guess on random positions: \ ${hm['misplaced']:.0f}$, \ ${hm['manhattan']:.0f}$, "
@@ -194,7 +194,9 @@ class Heuristics(VoiceoverScene):
             "<bookmark mark='b'/> The Manhattan distance does far better. <bookmark mark='c'/> Better still, solve a smaller "
             "relaxed puzzle exactly and remember the answers: track five tiles, ignore the rest, and breadth-first search gives "
             "the exact cost of homing them from every placement. That is a pattern database, Joseph Culberson and Jonathan "
-            "Schaeffer's idea; three of them, for three groups of tiles, can be added. <bookmark mark='d'/> It generates about "
+            "Schaeffer's idea. Each table counts only moves of its own five tiles; moves of other tiles are free. "
+            "The groups are disjoint, so each real move is charged to just one table, and the three costs can be added. "
+            "<bookmark mark='d'/> It generates about "
             f"{ratio:,.0f} times fewer positions than the Manhattan distance, because it knows more: on a random position it "
             f"guesses {hm['pdb']:.0f} moves on average, against {hm['manhattan']:.0f} and {hm['misplaced']:.0f}."
         ) as vo:

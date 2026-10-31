@@ -137,16 +137,17 @@ class Search(VoiceoverScene):
                           for k, i in enumerate(dfs)])
         cmp_ = VGroup(
             label(r"shortest solution first; \ memory $\sim b^d$", font_size=22, color=GCOST).next_to(left, DOWN, buff=0.4),
-            label(r"memory $\sim b\,d$; \ may dive forever", font_size=22, color=HEUR).next_to(right, DOWN, buff=0.4))
-        ids = label(r"iterative deepening (Korf 1985): \ depth-first to depth $1, 2, 3, \dots$ \ shortest first, "
+            label(r"memory $\sim b\,m$; \\ $m$ = deepest level explored", font_size=22, color=HEUR).next_to(right, DOWN, buff=0.4))
+        ids = label(r"iterative deepening (analyzed by Korf 1985): \\ depth-first to depth $1, 2, 3, \dots$ \ shortest first, "
                     r"memory $\sim b\,d$", font_size=22, color=PATH).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Search strategies differ only in which frontier state they expand next. <bookmark mark='a'/> Breadth-first takes "
             "the oldest. <bookmark mark='b'/> Depth-first takes the newest, diving down one branch before backing up: a stack "
             "instead of a queue. <bookmark mark='c'/> With b choices per state and a solution d moves deep, breadth-first may "
-            "store about b to the d states; depth-first only b times d, but it can dive forever. <bookmark mark='d'/> Iterative "
-            "deepening, from Richard Korf in 1985, gets both: depth-first to depth one, then two, then three. The repeated work "
-            "is small, because the last level dominates."
+            "store about b to the d states. Depth-first stores about b times m, where m is the deepest level it explores, "
+            "which need not be the shallowest solution depth: it can dive forever. <bookmark mark='d'/> Iterative "
+            "deepening, used earlier in chess and analysed by Richard Korf in 1985, gets both: depth-first to depth one, then "
+            "two, then three. On an exponentially branching tree the repeated work is small, because the last level dominates."
         ) as vo:
             self.play(Create(left.edge_group), FadeIn(left.nodes), Create(right.edge_group), FadeIn(right.nodes))
             vo.wait_until("a")

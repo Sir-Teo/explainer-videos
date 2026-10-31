@@ -95,9 +95,10 @@ class Outro(VoiceoverScene):
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. Turing defined what machines can compute, and what they cannot. Search finds solutions by "
-            "trying things; A star, with an admissible heuristic, finds the cheapest while looking at a fraction of the space, "
-            "and the best heuristics come from relaxed problems. Annealing's controlled randomness escapes local optima. "
-            "Alpha-beta searches twice as deep for the same work. Logic reduces to resolution and satisfiability, whose hard "
+            "trying things; A star, with an admissible heuristic, finds the cheapest and can greatly reduce the search, "
+            "and effective heuristics often come from relaxed problems. Annealing's controlled randomness escapes local optima. "
+            "With excellent move ordering, alpha-beta can search roughly twice as deep for the same work. Logic reduces to "
+            "resolution and satisfiability, whose hard "
             "problems live at a phase transition, and clause learning makes solvers fast. And knowledge written by hand runs "
             "into the long tail, which is why the field turned to learning."
         ) as vo:

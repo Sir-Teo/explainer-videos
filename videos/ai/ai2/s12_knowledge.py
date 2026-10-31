@@ -147,8 +147,8 @@ class Knowledge(VoiceoverScene):
                        MathTex(rf"\to\ {comb[1]:.2f} + {cf[2]}\,(1 - {comb[1]:.2f}) = {comb[2]:.2f}", font_size=34,
                                color=FCOL)).arrange(DOWN, buff=0.15, aligned_edge=LEFT).move_to([-3.4, -1.4, 0])
         res = VGroup(
-            history_card(1979, r"Yu et al., \textit{JAMA}: \ MYCIN, blinded", r"its antibiotic choices for meningitis "
-                         r"judged acceptable in $65\%$ of cases, \ Stanford's specialists in $42.5$--$62.5\%$",
+            history_card(1979, r"Yu et al., \textit{JAMA}: \ MYCIN, blinded", r"expert acceptability rating: "
+                         r"$65\%$; \ Stanford's specialists: $42.5$--$62.5\%$",
                          width=5.8, color=HIST, font_size=19),
             history_card(1980, r"McDermott: \ R1, \ later XCON, \ at Digital", r"configured customers' VAX computer "
                          r"orders; \ grew to thousands of rules, \ saving the company millions a year", width=5.8,
@@ -160,8 +160,9 @@ class Knowledge(VoiceoverScene):
             "antibiotics for blood infections and meningitis from a few hundred rules like this one. <bookmark mark='a'/> Each "
             "rule carried a certainty factor; when rules agreed, new evidence closed part of the remaining gap. "
             f"<bookmark mark='b'/> Point six and point five make {comb[1]:.2f}; another rule at point four, {comb[2]:.2f}. "
-            "<bookmark mark='c'/> In a blinded test published in 1979, experts judged MYCIN's choices for meningitis "
-            "acceptable sixty-five percent of the time, a rate none of the Stanford specialists it was compared with beat. It "
+            "<bookmark mark='c'/> In a blinded test published in 1979, eight experts rated antibiotic choices for ten "
+            "meningitis cases. MYCIN received an acceptability rating of sixty-five percent, a rate none of the Stanford "
+            "specialists it was compared with beat. It "
             "was never used on patients. <bookmark mark='d'/> The commercial breakthrough was R1, later XCON, written by John "
             "McDermott for Digital Equipment in 1980 to configure computer orders. By the mid-eighties, expert systems were an "
             "industry."

@@ -163,9 +163,9 @@ number of satisfying assignments is 2ⁿ (7/8)^{αn}, and deduce that the thresh
 *Solution.* A fixed assignment falsifies a random clause only if all three literals come out false: one sign
 pattern in eight. The clauses are drawn independently, so the assignment satisfies all of them with probability
 (7/8)^m; summing over the 2ⁿ assignments, E[X] = 2ⁿ (7/8)^{αn} = exp(n (ln 2 − α ln(8/7))). If α > ln 2 / ln(8/7) ≈
-5.19 this tends to 0, and by Markov's inequality P(X ≥ 1) ≤ E[X] → 0: almost every formula is unsatisfiable. (The true
-threshold, near 4.27, is lower because satisfying assignments come in huge correlated clusters, which inflate the
-mean.)
+5.19 this tends to 0, and by Markov's inequality P(X ≥ 1) ≤ E[X] → 0: almost every formula is unsatisfiable. (This first-moment argument gives only an upper bound. A large expected number of solutions need not imply a
+large probability of satisfiability: many assignments may be concentrated in a small fraction of formulas. The
+value near 4.267 is a statistical-physics prediction.)
 
 ## 习题与解答
 
@@ -208,8 +208,8 @@ ln 2 / ln(8/7) ≈ 5.19。
 
 *解答。* 一个固定的赋值只有在三个文字都为假时才违反一个随机子句：八种符号组合里只有一种。各子句独立抽取，所以这个赋值满足全部子句的
 概率是 (7/8)^m；对2ⁿ个赋值求和，E[X] = 2ⁿ (7/8)^{αn} = exp(n (ln 2 − α ln(8/7)))。若 α > ln 2 / ln(8/7) ≈ 5.19，它趋于0，
-由马尔可夫不等式，P(X ≥ 1) ≤ E[X] → 0：几乎所有公式都不可满足。（真正的阈值在4.27附近，更低，因为满足赋值成群出现、彼此高度
-相关，把均值抬高了。）
+由马尔可夫不等式，P(X ≥ 1) ≤ E[X] → 0：几乎所有公式都不可满足。（这个一阶矩论证只给出上界。解的期望个数很大，并不代表公式可满足的概率很大：大量满足赋值可能集中在一小部分公式里。
+4.267附近的值，是统计物理给出的预言。）
 
 ## Glossary (new terms, for AI_ZH_GUIDE.md)
 
