@@ -1,0 +1,286 @@
+{
+  "created_utc": "2026-10-31T21:14:48.671893+00:00",
+  "scope": "Part3 Words and Geometry EN/ZH silent480p endpoint and selected-time motion regression; four scoped visual repairs including earlier histogram semantic color change.",
+  "final_motion": {
+    "en-Words": {
+      "review": "/workspace/runtime/ai3-motion-coverage/en-Words/b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec/regression-review.json",
+      "sha256": "e3bd1132f40bfda85cee2e39e62270af29b1f48a35ad88bc62cc69dd88e95e47",
+      "movie_sha256": "b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec",
+      "decoded_frames": 2782,
+      "selected": 392,
+      "new_actual": 52,
+      "old_exact": 312,
+      "new_exact": 28,
+      "pages": 7,
+      "native_followups": 1,
+      "largest_selected_time_gap": 1.0,
+      "duration": 185.466667
+    },
+    "zh-Words": {
+      "review": "/workspace/runtime/ai3-motion-coverage/zh-Words/d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601/regression-review.json",
+      "sha256": "8feac89678ca77d4dfd2b762dba9424520146137d01070218ed87d81c7ba2425",
+      "movie_sha256": "d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601",
+      "decoded_frames": 2984,
+      "selected": 412,
+      "new_actual": 56,
+      "old_exact": 329,
+      "new_exact": 27,
+      "pages": 7,
+      "native_followups": 1,
+      "largest_selected_time_gap": 1.0000000000000036,
+      "duration": 198.933333
+    },
+    "en-Geometry": {
+      "review": "/workspace/runtime/ai3-motion-coverage/en-Geometry/361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4/regression-review.json",
+      "sha256": "90f6b0873f71b7b711f15a4b140f38dfcbc4a39ffce6f4f171654558302fc40a",
+      "movie_sha256": "361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4",
+      "decoded_frames": 2425,
+      "selected": 306,
+      "new_actual": 6,
+      "old_exact": 300,
+      "new_exact": 0,
+      "pages": 1,
+      "native_followups": 3,
+      "largest_selected_time_gap": 1.0,
+      "duration": 161.666341
+    },
+    "zh-Geometry": {
+      "review": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947/regression-review.json",
+      "sha256": "adff6c3731f38a7ad13f709bd0414e13abc354f5a66b09f768775637786436de",
+      "movie_sha256": "f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947",
+      "decoded_frames": 2579,
+      "selected": 326,
+      "new_actual": 11,
+      "old_exact": 315,
+      "new_exact": 0,
+      "pages": 2,
+      "native_followups": 3,
+      "largest_selected_time_gap": 1.0,
+      "duration": 171.933008
+    }
+  },
+  "final_endpoints": {
+    "en-Words": {
+      "review": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/en-Words/review.json",
+      "sha256": "3a197b0e716b2ea464a7df1137d66732f0ed7c637b5d8422d2aa5c9d144a25ee",
+      "frames": 18,
+      "actual_new": 3,
+      "inherited": 15
+    },
+    "zh-Words": {
+      "review": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/zh-Words/review.json",
+      "sha256": "f370a6421a6009df54cdee92766170cccefb30fa21c46043e0008a224930e5f4",
+      "frames": 18,
+      "actual_new": 3,
+      "inherited": 15
+    },
+    "en-Geometry": {
+      "review": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/en-Geometry/review.json",
+      "sha256": "dd396df1e5e3095b8749de715b1d965fcf4ff3afa22df845b5ec050eab1849dd",
+      "frames": 16,
+      "actual_new": 0,
+      "inherited": 16
+    },
+    "zh-Geometry": {
+      "review": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/zh-Geometry/review.json",
+      "sha256": "5ce33ecef4bc6ea2309166ba0e3b51e9947f21fe60e7ff2d3013c1886c76382e",
+      "frames": 16,
+      "actual_new": 0,
+      "inherited": 16
+    }
+  },
+  "historical_original_motion": {
+    "en-Words": {
+      "review_sha256": "9bc570aa294848773d68c0e7c877ddeceb124c03a63a4b2c1f08bcf3b7b72c0e",
+      "movie_sha256": "00ec85da06d3db1c005091be6a1cf9ca2918c8769a1d5e133df9e3265b6a3e26",
+      "decoded_frames": 2782,
+      "selected": 392,
+      "actual_unique": 303,
+      "exact_duplicates": 89,
+      "pages": 38
+    },
+    "zh-Words": {
+      "review_sha256": "e0c8077a485ae969c02b9c558042d8231bf0277bfc87101a3ab7fde7d838c052",
+      "movie_sha256": "5eccaee8110fac68208d1153a205dec5d0975a8d3da662f05bc000a1ab09c650",
+      "decoded_frames": 2984,
+      "selected": 411,
+      "actual_unique": 302,
+      "exact_duplicates": 109,
+      "pages": 38
+    },
+    "en-Geometry": {
+      "review_sha256": "644e87bdd45df879214126d0079693f088523a4cdfbbcc1f4da7661ddcc31f09",
+      "movie_sha256": "1beb9e9c778f3a4d1fde1dee4bfb09b21d56b1660c038f4d81d6928e8cc1d674",
+      "decoded_frames": 2425,
+      "selected": 306,
+      "actual_unique": 202,
+      "exact_duplicates": 104,
+      "pages": 26
+    },
+    "zh-Geometry": {
+      "review_sha256": "7c5079b5f7df17462ccdcd677d297b80c883c0b096f3252cc0161a8d7244aa0f",
+      "movie_sha256": "b299a41edc9645eff1830bce1dda7fd592c2398ad246a25d0c933debc47bac99",
+      "decoded_frames": 2579,
+      "selected": 326,
+      "actual_unique": 206,
+      "exact_duplicates": 120,
+      "pages": 26
+    }
+  },
+  "native_before_after": [
+    {
+      "case": "en-Words",
+      "repair": "analogy-label",
+      "description": "Copied arrow now passes behind intact france glyphs.",
+      "before": {
+        "file": "native/en-Words-analogy-label-before.png",
+        "sha256": "6547e1405e7a3212f54d7a2573622cbeac6e54ee7febb0e05e1d87bf04a55366",
+        "time": 145.8,
+        "source_frame": 2187
+      },
+      "after": {
+        "file": "native/en-Words-analogy-label-after.png",
+        "sha256": "8cc736634ed0c0fc9a38c41b669fb19cfecb75341821048af4901af87f2a67d3",
+        "time": 145.8,
+        "source_frame": 2187
+      }
+    },
+    {
+      "case": "zh-Words",
+      "repair": "analogy-label",
+      "description": "Chinese-timed copied arrow preserves the same intact label.",
+      "before": {
+        "file": "native/zh-Words-analogy-label-before.png",
+        "sha256": "9526c04b019211b78120d154c50c094fce9008644b5c48b93c871fa074a65c7d",
+        "time": 159.333333,
+        "source_frame": 2390
+      },
+      "after": {
+        "file": "native/zh-Words-analogy-label-after.png",
+        "sha256": "74ec17261ad098903b4b5085b63ee08346cc1d9b6077e406b30cc28e4b34f9ff",
+        "time": 159.333333,
+        "source_frame": 2390
+      }
+    },
+    {
+      "case": "en-Geometry",
+      "repair": "pc-pulse",
+      "description": "White emphasis keeps measured bar height/baseline and tick1 visible.",
+      "before": {
+        "file": "native/en-Geometry-pc-pulse-before.png",
+        "sha256": "2c559d66237dda0dd9dc91074a29b58f792f4a7a0126d14a37c7e437f39dd769",
+        "time": 62.2,
+        "source_frame": 933
+      },
+      "after": {
+        "file": "native/en-Geometry-pc-pulse-after.png",
+        "sha256": "9fffba2973644a6086f0b0fd2e6ff47170d63d97e08f771d1a305553e0ca2c6c",
+        "time": 62.2,
+        "source_frame": 933
+      }
+    },
+    {
+      "case": "zh-Geometry",
+      "repair": "pc-pulse",
+      "description": "Chinese-timed white emphasis keeps tick1 clear.",
+      "before": {
+        "file": "native/zh-Geometry-pc-pulse-before.png",
+        "sha256": "0a831b565cfed866efc6da8d94d076657021bf7dfc0e0be5209ab2586f09fd81",
+        "time": 59.933333,
+        "source_frame": 899
+      },
+      "after": {
+        "file": "native/zh-Geometry-pc-pulse-after.png",
+        "sha256": "8cbefbd58ce7ed62246cc5888a8d0e2c607a5b66de5bc43c0749778af430c4d2",
+        "time": 59.933333,
+        "source_frame": 899
+      }
+    },
+    {
+      "case": "en-Geometry",
+      "repair": "mean-transition",
+      "description": "Sequential old/new mean captions leave a clean transition midpoint.",
+      "before": {
+        "file": "native/en-Geometry-mean-transition-before.png",
+        "sha256": "ada86454dda25b65f72caa08db1e71c784a007573807313ca473af1ab37febad",
+        "time": 35.333333,
+        "source_frame": 530
+      },
+      "after": {
+        "file": "native/en-Geometry-mean-transition-after.png",
+        "sha256": "6b41eb3c6b6d1b9d4ff5f665d4b5b8ab93e204c7500dca2db39cae7746932830",
+        "time": 35.333333,
+        "source_frame": 530
+      }
+    },
+    {
+      "case": "zh-Geometry",
+      "repair": "mean-transition",
+      "description": "Chinese old/new mean captions no longer superimpose.",
+      "before": {
+        "file": "native/zh-Geometry-mean-transition-before.png",
+        "sha256": "800c828e3fc4bee5b44a0d8663f8770bc094ec810c1570a3e893d3cda1a03c70",
+        "time": 34.133333,
+        "source_frame": 512
+      },
+      "after": {
+        "file": "native/zh-Geometry-mean-transition-after.png",
+        "sha256": "dcd0feb0575fe24b9f6a66921e7f0acfa555a606c29688b37710c48e758c6ea9",
+        "time": 34.133333,
+        "source_frame": 512
+      }
+    },
+    {
+      "case": "en-Geometry",
+      "repair": "histogram-semantic-color",
+      "description": "Earlier centered histogram was blue despite yellow caption; final centered bars and caption both yellow.",
+      "before": {
+        "file": "native/en-Geometry-histogram-color-before.png",
+        "sha256": "f602719eb43616b7a60c96e327f022425369086844589626c85a62efc8ba95c0",
+        "time": 36.20020731707314,
+        "source_frame": null,
+        "endpoint_index": 3
+      },
+      "after": {
+        "file": "native/en-Geometry-histogram-color-after.png",
+        "sha256": "d78eda85f9cd020ed8d61cc13c3047fd1865a1ee8e4965dd44c749b1bf6aaabf",
+        "time": 36.133333,
+        "source_frame": 542,
+        "endpoint_index": null
+      }
+    }
+  ],
+  "sources": {
+    "videos/ai/ai3/s13_words.py": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+    "videos/ai/ai3/s17_geometry.py": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a"
+  },
+  "final_motion_totals": {
+    "decoded_frames": 10770,
+    "selected": 1436,
+    "new_actual": 125,
+    "old_exact": 1256,
+    "new_exact": 55,
+    "pages": 17,
+    "native_followups": 8
+  },
+  "final_endpoint_totals": {
+    "frames": 68,
+    "actual_new": 6,
+    "inherited": 62
+  },
+  "historical_original_motion_totals": {
+    "selected": 1435,
+    "actual_unique": 1013,
+    "exact_duplicates": 422,
+    "pages": 128
+  },
+  "retained_minor_typography": "Chinese Harris quotation wraps a comma onto the start of its second line. Optional caption-queue polish; text remains readable. No global/local-Chinese text was changed in this repair batch.",
+  "limits": [
+    "Automatic FFmpeg full-file decode/RGB detection is not perceptual playback.",
+    "All selected contents were actually inspected or inherited only through exact full PNG SHA; unselected source frames are explicitly listed in each audit and were not individually visually inspected.",
+    "Largest selected gap is 1s, with 15fps timestamp quantization/floating-point representation; subtle/subthreshold changes can evade detection.",
+    "Silent 854x480, 15fps previews do not establish narration/audio sync, full-resolution export readability or responsive/player behavior.",
+    "Final render records all passed with zero runtime warnings. Aggregate fingerprint was stale at extraction after later unrelated edits; scoped Words 97e14f and Geometry 7d9923 plus consumed data were independently hash-verified. No aggregate-current sign-off.",
+    "Absolute runtime evidence paths are provenance references. This bounded repository package contains exact compressed ledgers and representative native before/after images, not all preview movies or extracted PNGs."
+  ]
+}

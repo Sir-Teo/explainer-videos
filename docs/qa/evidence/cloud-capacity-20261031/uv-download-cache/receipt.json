@@ -1,0 +1,40 @@
+{
+  "observed_utc": "2026-10-31T21:17:52.824076+00:00",
+  "action": "Normal uv cache clean, no force; only task-local reproducible package/download cache",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv",
+    "cache",
+    "clean",
+    "--cache-dir",
+    "/workspace/runtime/cache/uv"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "Clearing cache at: /workspace/runtime/cache/uv\nRemoved 39429 files (132.1MiB)\n",
+  "seconds": 0.5540720600038185,
+  "free_bytes_before": 3428458496,
+  "free_bytes_after": 3585404928,
+  "observed_free_delta_bytes": 156946432,
+  "concurrent_render_outputs_may_affect_free_delta": true,
+  "inventory_files": 39291,
+  "inventory_logical_bytes": 2028359053,
+  "installed_module_entry_files_unchanged": {
+    "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/manim/__init__.py": {
+      "sha256": "4f42a0d494527ee0ae6b4349bbafdeee66a3aa1b3d70a3d824e17e2fff3b480c",
+      "size": 3986
+    },
+    "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/numpy/__init__.py": {
+      "sha256": "09295a80660f17925ae23765ce8cbd7ff7ceae968d5f2f89349f1cb74c0b9e11",
+      "size": 25220
+    },
+    "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/scipy/__init__.py": {
+      "sha256": "39ccae300a4739cc53719bd3b39ce3f8f66e736c6eb672006e338a4c5cc3dc76",
+      "size": 4193
+    },
+    "/workspace/explainer-videos/.venv/lib/python3.12/site-packages/torch/__init__.py": {
+      "sha256": "7ed81103f3d256de131b886e67be458b3205784e3b4af9c495041282391e19db",
+      "size": 133486
+    }
+  },
+  "preserved": "All venvs, sources, numerical caches/checkpoints, unique QA evidence and pending-upload files outside this cache. No install process was active; uv in-use protection was not bypassed."
+}

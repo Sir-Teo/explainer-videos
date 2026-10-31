@@ -322,3 +322,25 @@ continue for Words/Geometry/JL, Norms/GaLore, SGNS and Netflix; Outro's two Chin
 fresh endpoint/motion cases have zero warnings. Actual final selected-image review is still pending for those cases.
 Part3's completed numerical workloads are not running or being regenerated. Storage remains about4.3GiB free;
 only the documented inactive public ASR download cache was reclaimed, preserving unique evidence and pending uploads.
+
+## 21:20 current Part 3 selected-review milestone
+
+Seventeen of the 19 chapters now have completed bilingual selected-frame review after their current repairs.
+Netflix's final Chinese review and the final Outro caption-wrap regression remain active. New complete proof
+packages cover Norms/GaLore, SGNS, Words/Geometry, HighDim/JL and Projection; the chapter checklist maps each
+actual scope. No runtime status or historical warning was relabelled to imply visual approval.
+
+Part 3 native production-resolution endpoint checks now cover additional completed cases. Spectra's31 captures
+were inspected on eight960px-tile pages and eight native-pixel critical crops; no new layout defect was observed.
+The separate LowRank/Norms/GaLore six-case pass inspected127 captures on35pages plus16native originals, with
+source-change warnings retained. Other assigned chapter captures/reviews continue. These are endpoint checks,
+not full1080p motion or listening sign-off.
+
+Independent review's two cache robustness findings are repaired and pushed at90f700b. All238 repository tests
+pass, and actual loads of all17items still succeed with fail-on-call producers. All26numerical payloads retain
+their original hashes, sizes and modification times. No valid expensive experiment was regenerated.
+
+A normal, non-forced uv cache clean reclaimed reproducible task-local package/download entries; the tool reported
+132.1MiB removed and observed free space increased156,946,432bytes while other render writes continued. All
+installed module entry-file hashes checked remained unchanged. Sources, numerical/model results, original visual
+evidence and pending-upload files were outside the cleanup. The exact action/inventory receipt is preserved.

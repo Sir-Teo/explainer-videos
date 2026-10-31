@@ -1,0 +1,483 @@
+{
+  "created_utc": "2026-10-31T21:10:22.783222+00:00",
+  "payloads": [
+    {
+      "file": "ai3-norms-galore-repair-motion-review.json.gz",
+      "sha256": "b22a269d3a95ca30f7068d2e70aa7989c98c140cbbf4ef4e8078738b4afd6e4c",
+      "size": 140023,
+      "uncompressed_sha256": "3ab6e2bc8ba1f47193fa9306d0861e8f59aa62298fbe690bbb7f37fec27dbc8d",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-review.json"
+    },
+    {
+      "file": "ai3-norms-galore-before-repairs-completed.json.gz",
+      "sha256": "8720f4091745ba6664c7477387ad3ea6c772d6217f659193d6810270cca4afd5",
+      "size": 215010,
+      "uncompressed_sha256": "620c22200b497d2553b5ce5f9dbe16aae5775ea07dd8bc0f2ab6df4b120e32d0",
+      "source": "/workspace/runtime/ai3-norms-galore-before-repairs-completed.json"
+    },
+    {
+      "file": "ai3_norms_galore_repair_prepare.py.gz",
+      "sha256": "66363d30e395912343d03a3e25603a515c3699696a14f13034b79bfc80a03be3",
+      "size": 2353,
+      "uncompressed_sha256": "8d90ca1a12a156efb1ebf7147e8c4c3c383fc8ec2f932acd77c5aecdce470f8a",
+      "source": "/workspace/runtime/ai3_norms_galore_repair_prepare.py"
+    },
+    {
+      "file": "ai3_norms_galore_repair_record.py.gz",
+      "sha256": "8438458dc907e702cf8416167f765a71f3ff40646ffe4920d26cb6ce73f02dfb",
+      "size": 1213,
+      "uncompressed_sha256": "ebdf84fbc5c6dce9e3feae2496c06653fa51457820dce7f484364dc28e676c5c",
+      "source": "/workspace/runtime/ai3_norms_galore_repair_record.py"
+    },
+    {
+      "file": "ai3_norms_galore_endpoint_prepare.py.gz",
+      "sha256": "166f5caef829967ebe9dcb93cc419556b2117c76d84ffc9512e4538d87111ac5",
+      "size": 1270,
+      "uncompressed_sha256": "7a5b049a6b8b037419861b27a09cc6ddda94eae53e1ac20d840e21a120ff7694",
+      "source": "/workspace/runtime/ai3_norms_galore_endpoint_prepare.py"
+    },
+    {
+      "file": "ai3_norms_galore_endpoint_record.py.gz",
+      "sha256": "7a278ec05963f3859a3a8f399cd5e454f0bddd4c7ea797b90bf910fbfc687c69",
+      "size": 453,
+      "uncompressed_sha256": "826e2c34b7489abcb240884dc861e0cdf626ec1506062ef046076bd6c385e56b",
+      "source": "/workspace/runtime/ai3_norms_galore_endpoint_record.py"
+    },
+    {
+      "file": "fresh-endpoints-full-review.json",
+      "sha256": "339ff89c4a16317dd5c81850a5be784ee1a16b5dc982fe611f025e6df20a36fb",
+      "size": 347138
+    },
+    {
+      "file": "en-GaLore-final-capture.json.gz",
+      "sha256": "1aeb07aee47c7fa13f1b2ac6ce0ea5f73764f4bdc553fa313d078933ac5aaaee",
+      "size": 15358,
+      "uncompressed_sha256": "44d276ff44eff947397b4c0cb92ad4b960b84a054af0c7bffd5961820de7dd73",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/capture-result.json"
+    },
+    {
+      "file": "en-GaLore-final-audit.json.gz",
+      "sha256": "f1dd5159481cbabbc1db757047bd191afc4c8a12faeeef838a6d9bf8bc70d19e",
+      "size": 28461,
+      "uncompressed_sha256": "69b3034b618e5fbb73dfcc394aee161f2fc626e3203e7c123e472288be15f573",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/temporal-audit-result.json"
+    },
+    {
+      "file": "en-GaLore-final-source.py.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/s12_galore.py"
+    },
+    {
+      "file": "en-GaLore-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/qa_motion.snapshot.py"
+    },
+    {
+      "file": "en-GaLore-input-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/inputs/.cache/ai3/galorectl.json"
+    },
+    {
+      "file": "en-GaLore-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/GaLore/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "en-GaLore-after-native-01.png",
+      "sha256": "b539716a2f3035bb52f1a9a028209114163ed2c22c878b488dd55d2b59b3d3a8",
+      "size": 32302,
+      "uncompressed_sha256": "b539716a2f3035bb52f1a9a028209114163ed2c22c878b488dd55d2b59b3d3a8",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-repaired-final/frames/0000403_000026.866s.png"
+    },
+    {
+      "file": "en-GaLore-after-native-02.png",
+      "sha256": "1538fa3036019999117156d92676eafe5dd8823dd4f59ed8b6ddc3bfdab7992a",
+      "size": 59904,
+      "uncompressed_sha256": "1538fa3036019999117156d92676eafe5dd8823dd4f59ed8b6ddc3bfdab7992a",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-repaired-final/frames/0002747_000183.132s.png"
+    },
+    {
+      "file": "en-GaLore-before-native.png",
+      "sha256": "d359f4d9653885178fa578c367b82c948876927ca74f5826a6e82c2812d738e2",
+      "size": 59478,
+      "uncompressed_sha256": "d359f4d9653885178fa578c367b82c948876927ca74f5826a6e82c2812d738e2",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-GaLore-dense-final/frames/0002697_000179.799s.png"
+    },
+    {
+      "file": "en-GaLore-endpoint-capture.json.gz",
+      "sha256": "6850e603de68656360a5c9a848800e26be862f45cf7c4890bd21048b4ea405d6",
+      "size": 15570,
+      "uncompressed_sha256": "7cce1cc40e9eaeb25bb9893b45d3958f7bfa8fbe15ace92099f42064bd38d93b",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/GaLore/capture.json"
+    },
+    {
+      "file": "en-GaLore-endpoint-table-at-review.json.gz",
+      "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+      "size": 870990,
+      "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/GaLore/table-at-review.json"
+    },
+    {
+      "file": "en-GaLore-endpoint-page-001.png",
+      "sha256": "f7b8940722645cf508583b6c763007bcca64c02f7f1e55eadf63590a2afa9d76",
+      "size": 142589,
+      "uncompressed_sha256": "f7b8940722645cf508583b6c763007bcca64c02f7f1e55eadf63590a2afa9d76",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/GaLore/page-001.png"
+    },
+    {
+      "file": "en-GaLore-endpoint-page-002.png",
+      "sha256": "856d41abc9165ff18378ce5d4c2a0a871b640ee43d365ca76a0b53a0bbcff3b1",
+      "size": 205500,
+      "uncompressed_sha256": "856d41abc9165ff18378ce5d4c2a0a871b640ee43d365ca76a0b53a0bbcff3b1",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/GaLore/page-002.png"
+    },
+    {
+      "file": "en-GaLore-endpoint-page-003.png",
+      "sha256": "975a45fc7c7b9bec44ab7adbbebb686edd3dbce264e4b7b20c34920032890234",
+      "size": 129976,
+      "uncompressed_sha256": "975a45fc7c7b9bec44ab7adbbebb686edd3dbce264e4b7b20c34920032890234",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/GaLore/page-003.png"
+    },
+    {
+      "file": "en-GaLore-final-freeze.json",
+      "sha256": "467acf9d52c6eb87742f620324a6220cec1b9ba306a32944f5f0a1cf9197d04b",
+      "size": 876
+    },
+    {
+      "file": "zh-GaLore-final-capture.json.gz",
+      "sha256": "22edee8c40673acc4e32e377bd5c9a9af3e715bf61f8c541245e062cafeff46f",
+      "size": 22688,
+      "uncompressed_sha256": "a410576a722018579cc4b138226e18f674e43e04a04b5209862ca03636546393",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/capture-result.json"
+    },
+    {
+      "file": "zh-GaLore-final-audit.json.gz",
+      "sha256": "e8363fe48696a394fcd92fddd91972ae9315def57d27e2d4af5de2cc57966b44",
+      "size": 29704,
+      "uncompressed_sha256": "6df3fcf55bb002bbfd0fb2577c6a1ec379e9feabc019eb470bf3b6e068246b8b",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-GaLore-final-source.py.gz",
+      "sha256": "6e3b747941a7f56a6a34ff3f2b3596213ad880e37072ec13d7c15cf6f2d3872f",
+      "size": 6117,
+      "uncompressed_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/s12_galore.py"
+    },
+    {
+      "file": "zh-GaLore-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/qa_motion.snapshot.py"
+    },
+    {
+      "file": "zh-GaLore-input-galorectl.json.gz",
+      "sha256": "8fe93dc4cd65111fd7c4c40730b4ca62c76d9cc0cd3e427adb7136b3d74285cc",
+      "size": 7118,
+      "uncompressed_sha256": "79b65de05a229645bbac8497d8bf633aa02399a87a2d094497b4a984ed5af274",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/inputs/.cache/ai3/galorectl.json"
+    },
+    {
+      "file": "zh-GaLore-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/GaLore/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "zh-GaLore-after-native-01.png",
+      "sha256": "c987ccf0d484ecd781efdaf1299efef6066aab590135c30fa8b0b215650401b0",
+      "size": 31480,
+      "uncompressed_sha256": "c987ccf0d484ecd781efdaf1299efef6066aab590135c30fa8b0b215650401b0",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-repaired-final/frames/0000431_000028.733s.png"
+    },
+    {
+      "file": "zh-GaLore-after-native-02.png",
+      "sha256": "7157efc6ce2adc95bf3202b8be6f4ff2c4778176d94338fad186ac4b4b83269f",
+      "size": 56004,
+      "uncompressed_sha256": "7157efc6ce2adc95bf3202b8be6f4ff2c4778176d94338fad186ac4b4b83269f",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-repaired-final/frames/0002868_000191.199s.png"
+    },
+    {
+      "file": "zh-GaLore-before-native.png",
+      "sha256": "e5066de3c5767551d4bfa9259af2a0570ed7bf35a85f06af974ddbb5fd62b124",
+      "size": 51222,
+      "uncompressed_sha256": "e5066de3c5767551d4bfa9259af2a0570ed7bf35a85f06af974ddbb5fd62b124",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-GaLore-dense-final/frames/0002862_000190.799s.png"
+    },
+    {
+      "file": "zh-GaLore-endpoint-capture.json.gz",
+      "sha256": "e0ddcc24cb488e5194cb39c58966c316bcb9ea1e73dc8515480cddc949a711ed",
+      "size": 22848,
+      "uncompressed_sha256": "19d212be6346acb28c80a2bbfc23e32fa69fac3409397a17db7f8789873dc8f4",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/GaLore/capture.json"
+    },
+    {
+      "file": "zh-GaLore-endpoint-table-at-review.json.gz",
+      "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+      "size": 870990,
+      "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/GaLore/table-at-review.json"
+    },
+    {
+      "file": "zh-GaLore-endpoint-page-001.png",
+      "sha256": "941424acf42ec3159f321ad7b46879c509cb69f76427e43e4033895964f47859",
+      "size": 141958,
+      "uncompressed_sha256": "941424acf42ec3159f321ad7b46879c509cb69f76427e43e4033895964f47859",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/GaLore/page-001.png"
+    },
+    {
+      "file": "zh-GaLore-endpoint-page-002.png",
+      "sha256": "bd470a4fa032693bf12f9fb8849c86da6c57d03203a1e48166c547a7dd4890fa",
+      "size": 202890,
+      "uncompressed_sha256": "bd470a4fa032693bf12f9fb8849c86da6c57d03203a1e48166c547a7dd4890fa",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/GaLore/page-002.png"
+    },
+    {
+      "file": "zh-GaLore-endpoint-page-003.png",
+      "sha256": "037bd9208d35b1d06d8a21b6136d4b9787e96bf09f67f0a6574552703b5814bf",
+      "size": 122542,
+      "uncompressed_sha256": "037bd9208d35b1d06d8a21b6136d4b9787e96bf09f67f0a6574552703b5814bf",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/GaLore/page-003.png"
+    },
+    {
+      "file": "zh-GaLore-final-freeze.json",
+      "sha256": "c1d0aec800363c524693bbd4e5d41d208dd09db428e238759520e3912aa9245e",
+      "size": 876
+    },
+    {
+      "file": "en-Norms-final-capture.json.gz",
+      "sha256": "0502776a67168eec5edc1a122a391ba38a9bc4720fe91a892aad024d275b540c",
+      "size": 14586,
+      "uncompressed_sha256": "ebed7c9558a5f16cac253b6549e53150f379b58bcb990e4f9ccefd37688a0f3a",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/capture-result.json"
+    },
+    {
+      "file": "en-Norms-final-audit.json.gz",
+      "sha256": "841d82adf02c3a2fbfec0b16b66d5bf01321b1979108b8f03e473b588f9f4a4a",
+      "size": 31872,
+      "uncompressed_sha256": "f0c8a5185a8df0ea8d7c5802d0380b4432e93b36302b5f541ae1025e155780e7",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/temporal-audit-result.json"
+    },
+    {
+      "file": "en-Norms-final-source.py.gz",
+      "sha256": "c12eb19de4cb0d5b5aa780c964a268f56b7e7d32d47cb8c6331a2b6eb0266d30",
+      "size": 5583,
+      "uncompressed_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/s10_norms.py"
+    },
+    {
+      "file": "en-Norms-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/qa_motion.snapshot.py"
+    },
+    {
+      "file": "en-Norms-input-depth.npz.gz",
+      "sha256": "3f8674f8f9af068081bd4e5b153045d716d10348a5396a3d92c708bb2a57ad04",
+      "size": 1314,
+      "uncompressed_sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/inputs/.cache/ai3/depth.npz"
+    },
+    {
+      "file": "en-Norms-input-norms.json.gz",
+      "sha256": "94b87d3a4a5402a6044018814d85b1792dda361d1db188a7b00d91d9a69c9083",
+      "size": 3204,
+      "uncompressed_sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/inputs/.cache/ai3/norms.json"
+    },
+    {
+      "file": "en-Norms-input-depth.json.gz",
+      "sha256": "324f2ad07c5a6b4ead71b272c94d63f6a9b9a69da0e1244740b03b8fc3e1415b",
+      "size": 178,
+      "uncompressed_sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/inputs/.cache/ai3/depth.json"
+    },
+    {
+      "file": "en-Norms-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/en/Norms/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "en-Norms-after-native-01.png",
+      "sha256": "087fc12ee20623f462f101d7b424553ae8e533b5cd3bb78b6cca0a5d4ad98b91",
+      "size": 29108,
+      "uncompressed_sha256": "087fc12ee20623f462f101d7b424553ae8e533b5cd3bb78b6cca0a5d4ad98b91",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-repaired-final/frames/0000120_000008.000s.png"
+    },
+    {
+      "file": "en-Norms-before-native.png",
+      "sha256": "9d746c415428c509933e0bdbdbfb6e26ceaa1d88c3e97e8b7985cbe99e15c336",
+      "size": 25136,
+      "uncompressed_sha256": "9d746c415428c509933e0bdbdbfb6e26ceaa1d88c3e97e8b7985cbe99e15c336",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Norms-dense-final/frames/0000124_000008.267s.png"
+    },
+    {
+      "file": "en-Norms-endpoint-capture.json.gz",
+      "sha256": "e362722b1ff559a4f3c6948dc5beddce7b2e5f400dbcb0a8762b2760c527bbba",
+      "size": 14854,
+      "uncompressed_sha256": "fe58530680f0ea3ee7f07cfe65fe3fda4007e0694bec7177432169229caae57b",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/Norms/capture.json"
+    },
+    {
+      "file": "en-Norms-endpoint-table-at-review.json.gz",
+      "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+      "size": 870990,
+      "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/Norms/table-at-review.json"
+    },
+    {
+      "file": "en-Norms-endpoint-page-001.png",
+      "sha256": "7985286bbc4e4dd0e6086bd3faa44ac1a8e1b659e36147aa0e7604910cb36f7f",
+      "size": 172983,
+      "uncompressed_sha256": "7985286bbc4e4dd0e6086bd3faa44ac1a8e1b659e36147aa0e7604910cb36f7f",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/Norms/page-001.png"
+    },
+    {
+      "file": "en-Norms-endpoint-page-002.png",
+      "sha256": "687ea6beb481898ccdda57629202b35a9957f886a8b4b4e4198c446f9c9b9f40",
+      "size": 207686,
+      "uncompressed_sha256": "687ea6beb481898ccdda57629202b35a9957f886a8b4b4e4198c446f9c9b9f40",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/Norms/page-002.png"
+    },
+    {
+      "file": "en-Norms-endpoint-page-003.png",
+      "sha256": "1a9d244b8e122967ead141f3b0be9abd58d57d1f5163cdf7938226f5b82d6c02",
+      "size": 106183,
+      "uncompressed_sha256": "1a9d244b8e122967ead141f3b0be9abd58d57d1f5163cdf7938226f5b82d6c02",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/en/Norms/page-003.png"
+    },
+    {
+      "file": "en-Norms-final-freeze.json",
+      "sha256": "6b16152196d092f579ae1fe1acd6ead4158cc24d2c375f495a5faa042747f7d3",
+      "size": 859
+    },
+    {
+      "file": "zh-Norms-final-capture.json.gz",
+      "sha256": "fb01f415cf708631b20c786c9ebba5c7cee9b2ace96dd8cc4b463e383d08d479",
+      "size": 20202,
+      "uncompressed_sha256": "9844615b62e520345c24e5a7fdfcc2219ea58f6fc4173cd1965d59130878a5c9",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/capture-result.json"
+    },
+    {
+      "file": "zh-Norms-final-audit.json.gz",
+      "sha256": "dcca12369b2a0f00bdf16ca06ec8d6945583cf8497ed399582f0bb077cfe2952",
+      "size": 32650,
+      "uncompressed_sha256": "db0941e5a14edd2d4c290a36ba6326a12841c17162eb4923fa537c51513ce100",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/temporal-audit-result.json"
+    },
+    {
+      "file": "zh-Norms-final-source.py.gz",
+      "sha256": "c12eb19de4cb0d5b5aa780c964a268f56b7e7d32d47cb8c6331a2b6eb0266d30",
+      "size": 5583,
+      "uncompressed_sha256": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/s10_norms.py"
+    },
+    {
+      "file": "zh-Norms-frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "size": 6507,
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/qa_motion.snapshot.py"
+    },
+    {
+      "file": "zh-Norms-input-depth.npz.gz",
+      "sha256": "3f8674f8f9af068081bd4e5b153045d716d10348a5396a3d92c708bb2a57ad04",
+      "size": 1314,
+      "uncompressed_sha256": "ffb353954883c5cf44327fbe7ffa03712eda5cef4e72a2607756e9549e7b6ea9",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/inputs/.cache/ai3/depth.npz"
+    },
+    {
+      "file": "zh-Norms-input-norms.json.gz",
+      "sha256": "94b87d3a4a5402a6044018814d85b1792dda361d1db188a7b00d91d9a69c9083",
+      "size": 3204,
+      "uncompressed_sha256": "4d937570843cd6b0583055f85b245110cc77abdcd02df43206bdb51c41afbfd8",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/inputs/.cache/ai3/norms.json"
+    },
+    {
+      "file": "zh-Norms-input-depth.json.gz",
+      "sha256": "324f2ad07c5a6b4ead71b272c94d63f6a9b9a69da0e1244740b03b8fc3e1415b",
+      "size": 178,
+      "uncompressed_sha256": "723d6fa3c6d32075436707a64bf739872ce008bfc97a477ea73a87ef3efb6cc2",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/inputs/.cache/ai3/depth.json"
+    },
+    {
+      "file": "zh-Norms-input-galore.json.gz",
+      "sha256": "2aac5ab59200a8438d4885725b32698476ee410e8f2222cc1b6874f8c67c07d7",
+      "size": 45382,
+      "uncompressed_sha256": "b7e645c68c7a0b3a38d621b54a7d920601cb9ed6407ed50d677adda42160f41e",
+      "source": "/workspace/runtime/ai3-norms-galore-repair-motion-evidence/zh/Norms/inputs/.cache/ai3/galore.json"
+    },
+    {
+      "file": "zh-Norms-after-native-01.png",
+      "sha256": "8d15ba976e299fe5b8ff08a37ae6dc9ae47139b178ba795ace1d2e4d68e8313e",
+      "size": 30326,
+      "uncompressed_sha256": "8d15ba976e299fe5b8ff08a37ae6dc9ae47139b178ba795ace1d2e4d68e8313e",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Norms-repaired-final/frames/0000126_000008.400s.png"
+    },
+    {
+      "file": "zh-Norms-before-native.png",
+      "sha256": "c363110a330731796e79bddca585b37895679c9059075285d1158d5bb00c06b0",
+      "size": 25898,
+      "uncompressed_sha256": "c363110a330731796e79bddca585b37895679c9059075285d1158d5bb00c06b0",
+      "source": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Norms-dense-final/frames/0000129_000008.600s.png"
+    },
+    {
+      "file": "zh-Norms-endpoint-capture.json.gz",
+      "sha256": "97e6e0df84f9cd0f57c2d9a9405b59591b9e4b4a1d1c26fef9b7ab5ad81b00b4",
+      "size": 20688,
+      "uncompressed_sha256": "610148cb37573e1bbb90d487d34db332c4dc50789527390aa83e9b19551d913b",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/Norms/capture.json"
+    },
+    {
+      "file": "zh-Norms-endpoint-table-at-review.json.gz",
+      "sha256": "c5a02f5509ba3b2c947d5a33297272de4156c05d62d06c9ec0baa8aa464f21cc",
+      "size": 870990,
+      "uncompressed_sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/Norms/table-at-review.json"
+    },
+    {
+      "file": "zh-Norms-endpoint-page-001.png",
+      "sha256": "cf35c1139a713183b3287394035c519f6c81e1eca4574c35d1f673c51501e1d9",
+      "size": 168786,
+      "uncompressed_sha256": "cf35c1139a713183b3287394035c519f6c81e1eca4574c35d1f673c51501e1d9",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/Norms/page-001.png"
+    },
+    {
+      "file": "zh-Norms-endpoint-page-002.png",
+      "sha256": "54f189fe96e31cd2602e9d90ca985a5c72552a7bacd501fe4fcd44b7e896f6ce",
+      "size": 200730,
+      "uncompressed_sha256": "54f189fe96e31cd2602e9d90ca985a5c72552a7bacd501fe4fcd44b7e896f6ce",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/Norms/page-002.png"
+    },
+    {
+      "file": "zh-Norms-endpoint-page-003.png",
+      "sha256": "95472c85c26e96f5900aa73745fa5df3cbbf434a5cc17bbe34207d126d2f1625",
+      "size": 200671,
+      "uncompressed_sha256": "95472c85c26e96f5900aa73745fa5df3cbbf434a5cc17bbe34207d126d2f1625",
+      "source": "/workspace/runtime/ai3-norms-galore-final-endpoints/zh/Norms/page-003.png"
+    },
+    {
+      "file": "zh-Norms-final-freeze.json",
+      "sha256": "766b491399a2e740911c05f8326881ff88a32983934298a4719fb27f57057ff4",
+      "size": 859
+    },
+    {
+      "file": "README.md",
+      "sha256": "bfa11f43d448d924162d95bff7ca0f8333651b3d01b12876ccbb2f1904f64445",
+      "size": 2801
+    }
+  ]
+}

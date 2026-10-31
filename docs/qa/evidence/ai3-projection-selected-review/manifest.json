@@ -1,0 +1,308 @@
+{
+  "packaged_utc": "2026-10-31T21:15:37.400336+00:00",
+  "scope": "Previously completed bilingual Projection selected-time motion review only; no new viewing/rendering/computation or source changes.",
+  "payloads": [
+    {
+      "file": "en-Projection-review.json.gz",
+      "sha256": "846eda772cdd26091afd95896e4d537e33e6e9cd03be78b776f41055ad8f25a3",
+      "bytes": 71311,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/review.json",
+      "uncompressed_sha256": "2703899e215f20cc9acb20c5082cd937815d9dd766a31e8aa7eaa317e7418ba8",
+      "uncompressed_bytes": 450313
+    },
+    {
+      "file": "en-Projection-audit-result.json.gz",
+      "sha256": "afbab7917ac60b127f18e7edcc5b06a1dde0ae4e9b5ed81b6145f511ccbaeaa2",
+      "bytes": 37488,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/audit-result.json",
+      "uncompressed_sha256": "739b476494cfc70c516cdfbee5ac1cc1275af8adcc416dfe252ad05788f4a89e",
+      "uncompressed_bytes": 206016
+    },
+    {
+      "file": "en-Projection-render-result.json.gz",
+      "sha256": "4008b41e6beb6800b0e2d6d1e3d491b9f263bfae84eeac64aeeb2b438dddd2b9",
+      "bytes": 14365,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/render-result.json",
+      "uncompressed_sha256": "d8423657fc24dbdea1e4bc937bf3930967923ada6e921811d41408b68c4bd0ff",
+      "uncompressed_bytes": 92961
+    },
+    {
+      "file": "en-Projection-s05_projection.py.gz",
+      "sha256": "b7673af37487385784a7715ee60636e905392f69f14f7b2d837a68cb65915dab",
+      "bytes": 5565,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/s05_projection.py",
+      "uncompressed_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "uncompressed_bytes": 18467
+    },
+    {
+      "file": "en-Projection-native-01.png",
+      "sha256": "f56aca5cd7b78384714e6a382576913173943d3d29ae9c7d8fe26abe330c93a6",
+      "bytes": 95706,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/native-0001127_000075.133s.png",
+      "source_sha256": "f56aca5cd7b78384714e6a382576913173943d3d29ae9c7d8fe26abe330c93a6",
+      "time": 75.132682,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "en-Projection-native-02.png",
+      "sha256": "6e35466dc0988fc652eeb99fd9696c5681f65c29aad989c47077ecc671e89563",
+      "bytes": 47788,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/native-0001474_000098.266s.png",
+      "source_sha256": "6e35466dc0988fc652eeb99fd9696c5681f65c29aad989c47077ecc671e89563",
+      "time": 98.266016,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "en-Projection-native-03.png",
+      "sha256": "d57adbcc0634714736f7f7398e0cf285a0c856bbaa5e76bf2d436d1cfaf99e04",
+      "bytes": 55155,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/native-0002085_000138.999s.png",
+      "source_sha256": "d57adbcc0634714736f7f7398e0cf285a0c856bbaa5e76bf2d436d1cfaf99e04",
+      "time": 138.999349,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "en-Projection-native-04.png",
+      "sha256": "e8a17d93be83dcede5670b758876e62a0dc22ba36e231b98de5a7d06d1cd7aed",
+      "bytes": 98196,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/en-Projection/native-0002984_000198.933s.png",
+      "source_sha256": "e8a17d93be83dcede5670b758876e62a0dc22ba36e231b98de5a7d06d1cd7aed",
+      "time": 198.932682,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "zh-Projection-review.json.gz",
+      "sha256": "ea87cd87d193c48f0c616c9440242dd66c9c1baa7f8ab542299017dff8820ceb",
+      "bytes": 74422,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/review.json",
+      "uncompressed_sha256": "5051c501376cfd3bd6770f7200eddf36a46e6ded04b2b56532a9b83041b05d92",
+      "uncompressed_bytes": 469847
+    },
+    {
+      "file": "zh-Projection-audit-result.json.gz",
+      "sha256": "cf23ee928f86ffedd84bfae27ef39bea4dcf2d4d65b73788cd0837fc3272c87f",
+      "bytes": 39067,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/audit-result.json",
+      "uncompressed_sha256": "b19795647e47853a3eacc662dd478196cbd2e92fc92db5241912ebd4f61539df",
+      "uncompressed_bytes": 216913
+    },
+    {
+      "file": "zh-Projection-render-result.json.gz",
+      "sha256": "477211630b2a510996b76dd851a30cf56ec06c59dea6ff371ad3ed0e4bb74de5",
+      "bytes": 22073,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/render-result.json",
+      "uncompressed_sha256": "b1a45f11fe34da80935290c3ac4c3201becd7370aad6a067699f400669bc0786",
+      "uncompressed_bytes": 113709
+    },
+    {
+      "file": "zh-Projection-s05_projection.py.gz",
+      "sha256": "b7673af37487385784a7715ee60636e905392f69f14f7b2d837a68cb65915dab",
+      "bytes": 5565,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/s05_projection.py",
+      "uncompressed_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "uncompressed_bytes": 18467
+    },
+    {
+      "file": "zh-Projection-native-01.png",
+      "sha256": "99de56c75368127dacbe657277c8fcc32cf5cfb08431a751a3eb4ebf536eb248",
+      "bytes": 93076,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/native-0000966_000064.400s.png",
+      "source_sha256": "99de56c75368127dacbe657277c8fcc32cf5cfb08431a751a3eb4ebf536eb248",
+      "time": 64.399674,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "zh-Projection-native-02.png",
+      "sha256": "62a80cc7b319b09fe0fac2b7caac0bf7b283d894e212bf0d2037f0418da477fc",
+      "bytes": 51810,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/native-0001476_000098.400s.png",
+      "source_sha256": "62a80cc7b319b09fe0fac2b7caac0bf7b283d894e212bf0d2037f0418da477fc",
+      "time": 98.399674,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "zh-Projection-native-03.png",
+      "sha256": "6123047b111c0f39e45da25f8ba9835fba210ae05606442a9f2377dceafdd0dc",
+      "bytes": 55749,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/native-0002147_000143.133s.png",
+      "source_sha256": "6123047b111c0f39e45da25f8ba9835fba210ae05606442a9f2377dceafdd0dc",
+      "time": 143.133008,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "zh-Projection-native-04.png",
+      "sha256": "b13813ebe1d3b4a8767bf3f76a20d83247c2f0436ba6d1c06e4ead97af5993aa",
+      "bytes": 100378,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/zh-Projection/native-0003145_000209.666s.png",
+      "source_sha256": "b13813ebe1d3b4a8767bf3f76a20d83247c2f0436ba6d1c06e4ead97af5993aa",
+      "time": 209.666341,
+      "actually_viewed_previously": true
+    },
+    {
+      "file": "review-prepare_review.py.gz",
+      "sha256": "b641d6722597a4ac5009751ef1bdcad744c6de4f569b8b29c8471c579c8595e7",
+      "bytes": 2203,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/prepare_review.py",
+      "uncompressed_sha256": "d14ff7d8109e49a24e2a82744df2e5456606eeba0a14b9542f86ba71becd1729",
+      "uncompressed_bytes": 5121
+    },
+    {
+      "file": "review-checkpoint.py.gz",
+      "sha256": "a3466afb5b7b101daccbe51a051a9e379fac3d88fc1951ecf0106667f0189345",
+      "bytes": 871,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/checkpoint.py",
+      "uncompressed_sha256": "e05acf156386782e9891ad1b78b7f6d5ed8caf6236318fe7eba8a371c3a645dd",
+      "uncompressed_bytes": 1845
+    },
+    {
+      "file": "review-finish_case.py.gz",
+      "sha256": "69b77dceae84a70cad491a0159b9d4bb1b6949a22825ac1d459d8a6b650dca4e",
+      "bytes": 567,
+      "source": "/workspace/runtime/ai3-matrices-projection-eigen-motion-review/finish_case.py",
+      "uncompressed_sha256": "126c302a38652d08de16be9526edd8be9d75374ab5c5fc0fc7223dee571b8a2b",
+      "uncompressed_bytes": 1008
+    },
+    {
+      "file": "frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "bytes": 6507,
+      "source": "/workspace/explainer-videos/tools/qa_motion.py",
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "uncompressed_bytes": 19437
+    }
+  ],
+  "cases": [
+    {
+      "case": "en-Projection",
+      "decoded_frames": 3023,
+      "selected_times": 521,
+      "unique_representatives": 428,
+      "checkpoint": {
+        "viewed_pages": 54,
+        "total_pages": 54,
+        "viewed_unique_representatives": 428,
+        "total_unique_representatives": 428,
+        "selected_times_covered_including_exact_repeats": 521,
+        "total_selected_times": 521,
+        "viewed_representative_time_range": [
+          0.0,
+          201.466016
+        ],
+        "all_selected_frames_covered": true
+      },
+      "source_file": "videos/ai/ai3/s05_projection.py",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "source_linkage": null,
+      "movie_sha256": "297327a764ec8f387a1e80849439994f382cf12826d0dd8e25aa76a3e6828183",
+      "render_fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+      "current_fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+      "render_warnings": [],
+      "inputs": [
+        {
+          "file": ".cache/ai3/project.json",
+          "render_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "current_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "signature_matches": true,
+          "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f"
+        },
+        {
+          "file": ".cache/ai3/project.npz",
+          "render_signature": null,
+          "current_signature": null,
+          "signature_matches": true,
+          "sha256": null
+        }
+      ],
+      "coverage_start": 0.0,
+      "coverage_end": 201.466016,
+      "largest_selected_gap": 1.0,
+      "findings": [],
+      "visual_selected_frame_review": "complete; no additional concrete defect found in reviewed selections"
+    },
+    {
+      "case": "zh-Projection",
+      "decoded_frames": 3180,
+      "selected_times": 550,
+      "unique_representatives": 444,
+      "checkpoint": {
+        "viewed_pages": 56,
+        "total_pages": 56,
+        "viewed_unique_representatives": 444,
+        "total_unique_representatives": 444,
+        "selected_times_covered_including_exact_repeats": 550,
+        "total_selected_times": 550,
+        "viewed_representative_time_range": [
+          0.0,
+          211.933008
+        ],
+        "all_selected_frames_covered": true
+      },
+      "source_file": "videos/ai/ai3/s05_projection.py",
+      "source_sha256": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "source_linkage": {
+        "source_sha256_meaning": "Current source read at extraction/review preparation; not authenticated imported-source hash of rendered movie.",
+        "actual_imported_source": "uncertain due source-changed-during-render warning",
+        "candidate_pre_repair_source_sha256": null,
+        "candidate_is_proof": false
+      },
+      "movie_sha256": "dd96725ed5939801abc7ee4872acdaedc2bbe7d0d1bd9dd58e892511908213db",
+      "render_fingerprint": "a19275e5208e72af9e98ebf4dc23d4facc21b96dc771ad8a757b3fa5fe8567de",
+      "current_fingerprint": "393acbeb91892272efedd682fdae83c2d1697431afd57b815b7c04f19c6b2e04",
+      "render_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "inputs": [
+        {
+          "file": ".cache/ai3/project.json",
+          "render_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "current_signature": [
+            3040,
+            1793466892107548414
+          ],
+          "signature_matches": true,
+          "sha256": "df5963651d0f0d52cf199d47375c611d6925b507f0eae890c9eaf9fc28eee96f"
+        },
+        {
+          "file": ".cache/ai3/project.npz",
+          "render_signature": null,
+          "current_signature": null,
+          "signature_matches": true,
+          "sha256": null
+        }
+      ],
+      "coverage_start": 0.0,
+      "coverage_end": 211.933008,
+      "largest_selected_gap": 1.0,
+      "findings": [],
+      "visual_selected_frame_review": "complete; no additional concrete defect found in reviewed selections"
+    }
+  ],
+  "current_scene_sha256_at_packaging": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+  "current_scene_hash_meaning": "Current module read at packaging; does not authenticate original ZH worker import under preserved source-change warning.",
+  "coverage_totals": {
+    "decoded_frames": 6203,
+    "selected_times_covered": 1071,
+    "unique_images_actually_viewed": 872,
+    "pages_previously_viewed": 110,
+    "native_followups_previously_viewed": 8
+  },
+  "limits": [
+    "All selected times mapped with configured1smaximum gap; unselected source-frame gaps retained.",
+    "Fullfile RGB decoding and selected-time visual review do not establish continuous perception.",
+    "Silent854x48015fps preview only; audio/narration alignment,production-resolution readability and player/responsive behavior unverified.",
+    "Original ZH source-change warning and uncertain importedsource remain unchanged. Exact movie and native/page/frame hashes authenticate reviewed artifacts independently of source uncertainty.",
+    "Full movies/original contact pages remain runtime artifacts; complete receipts and eight actual nativeexamples are packaged."
+  ],
+  "mutations": "Only this new directory; original reviews,source,STATUS,compute/render,commits and Matrices/Eigen package unchanged."
+}

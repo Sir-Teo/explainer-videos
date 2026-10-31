@@ -1,0 +1,1332 @@
+{
+  "packaged_utc": "2026-10-31T21:13:55.351991+00:00",
+  "scope": "Complete scoped initial endpoint,original selected-motion and final localJLmargin-regression evidence for HighDim/JL EN/ZH. Original receipts preserved, not rewritten.",
+  "payloads": [
+    {
+      "file": "original-consolidated-report.json.gz",
+      "sha256": "a9f5457f4757065e5cd5b32e429caab9456821bc81b9f7de2d2be57f7c22201c",
+      "bytes": 5154,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/report.json",
+      "uncompressed_sha256": "15dee3f822293ca8dded5f14a5c8b4654433dff8af005a6a908940ce1488efed",
+      "uncompressed_bytes": 20927
+    },
+    {
+      "file": "original-consolidated-report.md.gz",
+      "sha256": "fcd1e5036f4a5768a94cfe53461aa16ae858f55583a681a28afab9fb638879d6",
+      "bytes": 2030,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/report.md",
+      "uncompressed_sha256": "a8ce5b45d59ab5311d3b015e9cb2530f737141a2fa5440d0593fa0d4f0049416",
+      "uncompressed_bytes": 4089
+    },
+    {
+      "file": "final-margin-report.json.gz",
+      "sha256": "b565625971c1c99d3f1b3080e7e1fb78bdf55422a2d1b900df92ed5d92c2c3c6",
+      "bytes": 1920,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/report.json",
+      "uncompressed_sha256": "18b6ad6f4626eb68cacaa43ee41752b1f7617ad399c4c65ce5e6eb53d5a9b11e",
+      "uncompressed_bytes": 6816
+    },
+    {
+      "file": "final-margin-report.md.gz",
+      "sha256": "69b0adcd4158f12472aeb76c257dfa3edb7b9ef87d97b60c9ae62a636f152c8f",
+      "bytes": 790,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/report.md",
+      "uncompressed_sha256": "98e3523f33a4ec6aa64e493954b6b9c70371647516997c1efdb317d3b8d89b18",
+      "uncompressed_bytes": 1407
+    },
+    {
+      "file": "en-HighDim-original-motion-review.json.gz",
+      "sha256": "08a4a1626f39526d96ea073e9b48a065710adcf2387d162e93425345bc3abe26",
+      "bytes": 53176,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/review.json",
+      "uncompressed_sha256": "9c2a4af54619d86dd90fe4e4b929a2534c5af0c855da65cfa8ba07cc552f0ff4",
+      "uncompressed_bytes": 320270
+    },
+    {
+      "file": "en-HighDim-original-motion-audit-result.json.gz",
+      "sha256": "c519aa994d784edab356faee98f997c2749ee04f7acfdb06386d448ffc0c0264",
+      "bytes": 27254,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/audit-result.json",
+      "uncompressed_sha256": "66457aefee2fed3a557cf9011d0e11897940be1fbfde2d696a0d4a43cd9748b5",
+      "uncompressed_bytes": 144918
+    },
+    {
+      "file": "en-HighDim-original-motion-render-result.json.gz",
+      "sha256": "9ba80f42c7b62c754df1b746a27c1c509a414b7bcad0622f04b36f74d2b4d1e7",
+      "bytes": 10298,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/render-result.json",
+      "uncompressed_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+      "uncompressed_bytes": 59321
+    },
+    {
+      "file": "en-HighDim-original-motion-pre-extraction-provenance.json.gz",
+      "sha256": "6aebb5898fd94175db53674896cc029bace324d0c4897247069fbb3f60f3475c",
+      "bytes": 374,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/pre-extraction-provenance.json",
+      "uncompressed_sha256": "c67d241b4453c2e03a5ae543967937e02ae76f89f5f60821af14cfb6159eed1c",
+      "uncompressed_bytes": 553
+    },
+    {
+      "file": "en-HighDim-original-motion-pre-extraction-render-result.json.gz",
+      "sha256": "9ba80f42c7b62c754df1b746a27c1c509a414b7bcad0622f04b36f74d2b4d1e7",
+      "bytes": 10298,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/pre-extraction-render-result.json",
+      "uncompressed_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+      "uncompressed_bytes": 59321
+    },
+    {
+      "file": "en-HighDim-original-source-at-review-s15_highdim.py.gz",
+      "sha256": "d34fbdb5c567315ff7c5f01c2acf7b33849f2b1b0ddc13006cf48579cba0b9c4",
+      "bytes": 4399,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/s15_highdim.py",
+      "uncompressed_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "uncompressed_bytes": 13956
+    },
+    {
+      "file": "en-HighDim-original-native-01.png",
+      "sha256": "8c8a540d6d8fe50320adab8da7cf7726b7764d724bdb904052e9810cd2b44f0e",
+      "bytes": 31127,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0000297_000019.800s.png",
+      "source_sha256": "8c8a540d6d8fe50320adab8da7cf7726b7764d724bdb904052e9810cd2b44f0e"
+    },
+    {
+      "file": "en-HighDim-original-native-02.png",
+      "sha256": "439741bcc53ffa2457392eb0d4650342e45df90c679a2a2d9fdc15d781833833",
+      "bytes": 27670,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0000431_000028.733s.png",
+      "source_sha256": "439741bcc53ffa2457392eb0d4650342e45df90c679a2a2d9fdc15d781833833"
+    },
+    {
+      "file": "en-HighDim-original-native-03.png",
+      "sha256": "66511e54b5f47546b6e36d793dbe3b8e56fec520a8ed414d6773768fcfd6243c",
+      "bytes": 71422,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0000793_000052.866s.png",
+      "source_sha256": "66511e54b5f47546b6e36d793dbe3b8e56fec520a8ed414d6773768fcfd6243c"
+    },
+    {
+      "file": "en-HighDim-original-native-04.png",
+      "sha256": "4c757b313fab8f4335601f28f05ef8e78b03dbc92d8d82cdeb8a9b54b7906acc",
+      "bytes": 114448,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0001045_000069.666s.png",
+      "source_sha256": "4c757b313fab8f4335601f28f05ef8e78b03dbc92d8d82cdeb8a9b54b7906acc"
+    },
+    {
+      "file": "en-HighDim-original-native-05.png",
+      "sha256": "1c32e0d79beacaf83ca54cfce6a17db1b52beec6a85efc567632bb602f5be2e1",
+      "bytes": 54477,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0001489_000099.266s.png",
+      "source_sha256": "1c32e0d79beacaf83ca54cfce6a17db1b52beec6a85efc567632bb602f5be2e1"
+    },
+    {
+      "file": "en-HighDim-original-native-06.png",
+      "sha256": "3f170e873d8d7092de1606634550136f26faf3d0d1b78707a36ebce993a02754",
+      "bytes": 83865,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-motion/native-0002074_000138.266s.png",
+      "source_sha256": "3f170e873d8d7092de1606634550136f26faf3d0d1b78707a36ebce993a02754"
+    },
+    {
+      "file": "en-HighDim-initial-endpoints-review.json.gz",
+      "sha256": "d1d944eec44f4e24a19ccae2e2d7e4b8e4a10e767ab6970cf6b8b6024595eac0",
+      "bytes": 2750,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-endpoints/review.json",
+      "uncompressed_sha256": "d737a6ea1d3390e0ddebcbee0caa85feacba39777c361c121200bfe6f5dfd686",
+      "uncompressed_bytes": 9582
+    },
+    {
+      "file": "en-HighDim-initial-endpoints-render.json.gz",
+      "sha256": "5d2139bcbaff4eb97cb60df6862eec5c2509aa5ce2aa64bdfae0fde1ffe2337f",
+      "bytes": 10445,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-HighDim-endpoints/render-result.json",
+      "uncompressed_sha256": "bb2b16f8d52572bf71e730bbae7db2c9af8cfcf78ce9e8aed4f51458dceec696",
+      "uncompressed_bytes": 59119
+    },
+    {
+      "file": "en-JL-original-motion-review.json.gz",
+      "sha256": "a13c3610dc441ef39338de63f4170659fdf6b1430f109802612bf03f20f9e967",
+      "bytes": 52318,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/review.json",
+      "uncompressed_sha256": "10c6c668af012bb94508bf2b1dde5c133f9aa8073292d29e1764c711d688af27",
+      "uncompressed_bytes": 325303
+    },
+    {
+      "file": "en-JL-original-motion-audit-result.json.gz",
+      "sha256": "036de4ccdfff218be1d72746d14e9b73ea6b7aa38ad50c46835a245e99111607",
+      "bytes": 27377,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/audit-result.json",
+      "uncompressed_sha256": "01a10aec80a925e0497835125a24ac25300133df78269f5e63d0c9b5f392d7ba",
+      "uncompressed_bytes": 155079
+    },
+    {
+      "file": "en-JL-original-motion-render-result.json.gz",
+      "sha256": "0b2ac09765bda7e9b184009392d3623cee3c1a4bfc613ac9ced4fa7af584fdd7",
+      "bytes": 13089,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/render-result.json",
+      "uncompressed_sha256": "92e80e1752421762e6b17cf9d9729b0d22ad7560f3c3255c54d52fb8035015df",
+      "uncompressed_bytes": 72373
+    },
+    {
+      "file": "en-JL-original-motion-pre-extraction-provenance.json.gz",
+      "sha256": "3d4463179e12aaa72d99f038d56547c5259a615e3dbf3a0c91fec860675481b6",
+      "bytes": 375,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/pre-extraction-provenance.json",
+      "uncompressed_sha256": "130ea2d10e310ea5ff138e5ec6dc5e2a81cc118dd9dc9813b1b07a5b85c9add2",
+      "uncompressed_bytes": 553
+    },
+    {
+      "file": "en-JL-original-motion-pre-extraction-render-result.json.gz",
+      "sha256": "0b2ac09765bda7e9b184009392d3623cee3c1a4bfc613ac9ced4fa7af584fdd7",
+      "bytes": 13089,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/pre-extraction-render-result.json",
+      "uncompressed_sha256": "92e80e1752421762e6b17cf9d9729b0d22ad7560f3c3255c54d52fb8035015df",
+      "uncompressed_bytes": 72373
+    },
+    {
+      "file": "en-JL-original-source-at-review-s16_jl.py.gz",
+      "sha256": "0ab0099c26df8a52ceabff62f1b2eaddddb7c6fbfe247015679fe7a15b406d72",
+      "bytes": 5905,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/s16_jl.py",
+      "uncompressed_sha256": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "uncompressed_bytes": 17934
+    },
+    {
+      "file": "en-JL-original-native-01.png",
+      "sha256": "d9e5f75ca660f38ed5795dd871d8e38bf55b16c931b0e6f23ed49ed8e6beccd1",
+      "bytes": 72651,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0000401_000026.733s.png",
+      "source_sha256": "d9e5f75ca660f38ed5795dd871d8e38bf55b16c931b0e6f23ed49ed8e6beccd1"
+    },
+    {
+      "file": "en-JL-original-native-02.png",
+      "sha256": "1e5e68d1f5ab83f59ad43a41440dcf5e17a76f75fb761fea8139fa5b668f5be3",
+      "bytes": 47061,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0000582_000038.799s.png",
+      "source_sha256": "1e5e68d1f5ab83f59ad43a41440dcf5e17a76f75fb761fea8139fa5b668f5be3"
+    },
+    {
+      "file": "en-JL-original-native-03.png",
+      "sha256": "105346e9a4f1a0625a43303eabcb179408bf952bc8c4f33098669d4bbf9c8a79",
+      "bytes": 67761,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0001428_000095.199s.png",
+      "source_sha256": "105346e9a4f1a0625a43303eabcb179408bf952bc8c4f33098669d4bbf9c8a79"
+    },
+    {
+      "file": "en-JL-original-native-04.png",
+      "sha256": "1d53a25ce6ac2d364129b146fdf9a7ee5b6819b10ee21270f12512e622220396",
+      "bytes": 54129,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0002013_000134.199s.png",
+      "source_sha256": "1d53a25ce6ac2d364129b146fdf9a7ee5b6819b10ee21270f12512e622220396"
+    },
+    {
+      "file": "en-JL-original-native-05.png",
+      "sha256": "3f2032547a6b65a3f50934f2cdf7a322e42296134db2548fc3c571265a0da5ef",
+      "bytes": 42701,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0002286_000152.398s.png",
+      "source_sha256": "3f2032547a6b65a3f50934f2cdf7a322e42296134db2548fc3c571265a0da5ef"
+    },
+    {
+      "file": "en-JL-original-native-06.png",
+      "sha256": "38a6449b27452d042a933a01acea4d888b514770f62f4cc0280801dd32adadd4",
+      "bytes": 54630,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-motion/native-0002563_000170.865s.png",
+      "source_sha256": "38a6449b27452d042a933a01acea4d888b514770f62f4cc0280801dd32adadd4"
+    },
+    {
+      "file": "en-JL-initial-endpoints-review.json.gz",
+      "sha256": "dc6da054930f2153cf29f14d04829bf3dcf5f2afa88837731930c1c77effb5eb",
+      "bytes": 2975,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-endpoints/review.json",
+      "uncompressed_sha256": "7c7b055762c3638d56f455f4cf8b04b608f07e7cf024f4cfaabee15dcf616565",
+      "uncompressed_bytes": 10539
+    },
+    {
+      "file": "en-JL-initial-endpoints-render.json.gz",
+      "sha256": "83e0e7d7da1f8c438b0a274642c66a7a831e4264150cc318b3d70f81b2baaebd",
+      "bytes": 13153,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-endpoints/render-result.json",
+      "uncompressed_sha256": "870c979b5ff025e1d8f100af1a829a4adf2cf0de510fea3943d54df74d4811bb",
+      "uncompressed_bytes": 71509
+    },
+    {
+      "file": "zh-HighDim-original-motion-review.json.gz",
+      "sha256": "4aa1f432eceb1e8d9b00985d81eb01ce43f416c13817e9c8e48cf0d800f415ba",
+      "bytes": 51578,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/review.json",
+      "uncompressed_sha256": "7f8e945098e869f20f70af62867dc0868611dcfdc03e14dec089576c5682b9f5",
+      "uncompressed_bytes": 310475
+    },
+    {
+      "file": "zh-HighDim-original-motion-audit-result.json.gz",
+      "sha256": "31e30521615b045dc2db717d41b6173ec9c69aafc45438c283968437f290a8f3",
+      "bytes": 26339,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/audit-result.json",
+      "uncompressed_sha256": "cf3b3d86b074c51b83a85baaf3f43bb73699e51799e6037e9aff67664911cd4c",
+      "uncompressed_bytes": 140504
+    },
+    {
+      "file": "zh-HighDim-original-motion-render-result.json.gz",
+      "sha256": "d9533b2a425b3cc36f8e2a1d82c93f65ca49d8aa9f7a94f1a0fe95fa92170b25",
+      "bytes": 14357,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/render-result.json",
+      "uncompressed_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+      "uncompressed_bytes": 68765
+    },
+    {
+      "file": "zh-HighDim-original-motion-pre-extraction-provenance.json.gz",
+      "sha256": "7d6e0d0a1536dbe7fee0b4cbc85d8ac5abc2ce3f59cf5b340825294c3c6a23fb",
+      "bytes": 374,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/pre-extraction-provenance.json",
+      "uncompressed_sha256": "7aed259d54606674a78f84ccb18dc3a6d96be04fae92c03b570dcb9cdcd594dd",
+      "uncompressed_bytes": 553
+    },
+    {
+      "file": "zh-HighDim-original-motion-pre-extraction-render-result.json.gz",
+      "sha256": "d9533b2a425b3cc36f8e2a1d82c93f65ca49d8aa9f7a94f1a0fe95fa92170b25",
+      "bytes": 14357,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/pre-extraction-render-result.json",
+      "uncompressed_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+      "uncompressed_bytes": 68765
+    },
+    {
+      "file": "zh-HighDim-original-source-at-review-s15_highdim.py.gz",
+      "sha256": "d34fbdb5c567315ff7c5f01c2acf7b33849f2b1b0ddc13006cf48579cba0b9c4",
+      "bytes": 4399,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/s15_highdim.py",
+      "uncompressed_sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "uncompressed_bytes": 13956
+    },
+    {
+      "file": "zh-HighDim-original-native-01.png",
+      "sha256": "42aabf1c4e8e8cfc5d430265cf1ea410ca73f2c8126e86a65fc4fc1358fe5b7d",
+      "bytes": 31843,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0000272_000018.133s.png",
+      "source_sha256": "42aabf1c4e8e8cfc5d430265cf1ea410ca73f2c8126e86a65fc4fc1358fe5b7d"
+    },
+    {
+      "file": "zh-HighDim-original-native-02.png",
+      "sha256": "fc5ee97fff593eccf70a92f4836544a64d896c32b8d65bbc8119adfc25d636a6",
+      "bytes": 26234,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0000375_000025.000s.png",
+      "source_sha256": "fc5ee97fff593eccf70a92f4836544a64d896c32b8d65bbc8119adfc25d636a6"
+    },
+    {
+      "file": "zh-HighDim-original-native-03.png",
+      "sha256": "11e7a04e635e92f58955d1065a54e1cfae71c19ccbad23b348a8960596c20293",
+      "bytes": 69115,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0000742_000049.466s.png",
+      "source_sha256": "11e7a04e635e92f58955d1065a54e1cfae71c19ccbad23b348a8960596c20293"
+    },
+    {
+      "file": "zh-HighDim-original-native-04.png",
+      "sha256": "dfc6c3727878bce790a92d895c5670ba4042b791fdc1ce0f8ca6a81643ad6126",
+      "bytes": 127409,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0000972_000064.800s.png",
+      "source_sha256": "dfc6c3727878bce790a92d895c5670ba4042b791fdc1ce0f8ca6a81643ad6126"
+    },
+    {
+      "file": "zh-HighDim-original-native-05.png",
+      "sha256": "979c4cb6efc2a565be16e1019664f23ead949e8f40909161b7c2c0237e593cc3",
+      "bytes": 54102,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0001441_000096.066s.png",
+      "source_sha256": "979c4cb6efc2a565be16e1019664f23ead949e8f40909161b7c2c0237e593cc3"
+    },
+    {
+      "file": "zh-HighDim-original-native-06.png",
+      "sha256": "c094d6d2f19581e2737296ad6a72064b88627d6c0a2ab97b1b30733b94c66961",
+      "bytes": 84348,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-motion/native-0001999_000133.266s.png",
+      "source_sha256": "c094d6d2f19581e2737296ad6a72064b88627d6c0a2ab97b1b30733b94c66961"
+    },
+    {
+      "file": "zh-HighDim-initial-endpoints-review.json.gz",
+      "sha256": "7f04a3ea59ab76f841411358e8d87f9e658c4f520c39038d6d1d1680d4a18ae5",
+      "bytes": 2837,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-endpoints/review.json",
+      "uncompressed_sha256": "1a41da99298e3ecb9bd1471aa56c07699b13b943d5f4f490f56d268f3c5f58af",
+      "uncompressed_bytes": 9785
+    },
+    {
+      "file": "zh-HighDim-initial-endpoints-render.json.gz",
+      "sha256": "c641a4e368af008eaa3b00caf3de6e4390f155112d63f4d675501869d36b8b29",
+      "bytes": 14582,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-HighDim-endpoints/render-result.json",
+      "uncompressed_sha256": "d3f3f3a7121cca58cf7c89de640c01ec2e2451e8dc525da40f76ede7cddd0c0e",
+      "uncompressed_bytes": 68594
+    },
+    {
+      "file": "zh-JL-original-motion-review.json.gz",
+      "sha256": "575f6217d345f6ad700de92084f6340d6a6ee469ab3db0c4fa3fe7298764842c",
+      "bytes": 53730,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/review.json",
+      "uncompressed_sha256": "50e7b473f662a3c3d6f65d6bdb64c1c7391f156d1b14d9335d931c3c3eb794f3",
+      "uncompressed_bytes": 334882
+    },
+    {
+      "file": "zh-JL-original-motion-audit-result.json.gz",
+      "sha256": "9c8a53ffb389e19eb0eb0c378072db5c76089d310c70bc843c90ebd3d195f201",
+      "bytes": 28250,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/audit-result.json",
+      "uncompressed_sha256": "63dbcc289f78fe6751aaf657ea24d3689494ea5d840d823d28bf16a444bf4a9f",
+      "uncompressed_bytes": 159896
+    },
+    {
+      "file": "zh-JL-original-motion-render-result.json.gz",
+      "sha256": "4de91e60f52401a33e4c96b2e53eff25d9689b1e2e05e9d7afa01deb26b5801c",
+      "bytes": 20428,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/render-result.json",
+      "uncompressed_sha256": "843d8e293359da09a5e94c903932a289f1721c54be306823c16dad8db5aa70b5",
+      "uncompressed_bytes": 97289
+    },
+    {
+      "file": "zh-JL-original-motion-pre-extraction-provenance.json.gz",
+      "sha256": "d8dc64fb079496f3095a7971fe594547eafc288c000eb43308047edab1a6956e",
+      "bytes": 375,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/pre-extraction-provenance.json",
+      "uncompressed_sha256": "463a4c8e54c5daf8b7dc8d3997794a64d99049e571beaab3c61dc0b6efa77abe",
+      "uncompressed_bytes": 553
+    },
+    {
+      "file": "zh-JL-original-motion-pre-extraction-render-result.json.gz",
+      "sha256": "4de91e60f52401a33e4c96b2e53eff25d9689b1e2e05e9d7afa01deb26b5801c",
+      "bytes": 20428,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/pre-extraction-render-result.json",
+      "uncompressed_sha256": "843d8e293359da09a5e94c903932a289f1721c54be306823c16dad8db5aa70b5",
+      "uncompressed_bytes": 97289
+    },
+    {
+      "file": "zh-JL-original-source-at-review-s16_jl.py.gz",
+      "sha256": "0ab0099c26df8a52ceabff62f1b2eaddddb7c6fbfe247015679fe7a15b406d72",
+      "bytes": 5905,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/s16_jl.py",
+      "uncompressed_sha256": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "uncompressed_bytes": 17934
+    },
+    {
+      "file": "zh-JL-original-native-01.png",
+      "sha256": "d2d99f8af5feab841ba2b53893a328946ed7707abe67d7f052b84dd458c67ad9",
+      "bytes": 75466,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0000460_000030.666s.png",
+      "source_sha256": "d2d99f8af5feab841ba2b53893a328946ed7707abe67d7f052b84dd458c67ad9"
+    },
+    {
+      "file": "zh-JL-original-native-02.png",
+      "sha256": "6861aff8e456be4b6d0731eaeba4010d084b3e2928ee0fd92178bed200b284ea",
+      "bytes": 47187,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0000647_000043.132s.png",
+      "source_sha256": "6861aff8e456be4b6d0731eaeba4010d084b3e2928ee0fd92178bed200b284ea"
+    },
+    {
+      "file": "zh-JL-original-native-03.png",
+      "sha256": "4afd1560b780150f54d50e80aa4eef29c2d4488af28427378a2302511adf996f",
+      "bytes": 70838,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0001513_000100.865s.png",
+      "source_sha256": "4afd1560b780150f54d50e80aa4eef29c2d4488af28427378a2302511adf996f"
+    },
+    {
+      "file": "zh-JL-original-native-04.png",
+      "sha256": "b6b6649efebd27d9240e772cf94f06d596fe021b03bd1b7386a26090374e0f29",
+      "bytes": 55909,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0002112_000140.798s.png",
+      "source_sha256": "b6b6649efebd27d9240e772cf94f06d596fe021b03bd1b7386a26090374e0f29"
+    },
+    {
+      "file": "zh-JL-original-native-05.png",
+      "sha256": "97ddf1e7330473d96947b3fa85e794dc630566dc374c32714a14b0718473fe60",
+      "bytes": 40105,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0002431_000162.065s.png",
+      "source_sha256": "97ddf1e7330473d96947b3fa85e794dc630566dc374c32714a14b0718473fe60"
+    },
+    {
+      "file": "zh-JL-original-native-06.png",
+      "sha256": "e65b76028c0ef6456cfc814a5f604d0085e6aaecb72e2d185075892bd91f4580",
+      "bytes": 52963,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-motion/native-0002745_000182.998s.png",
+      "source_sha256": "e65b76028c0ef6456cfc814a5f604d0085e6aaecb72e2d185075892bd91f4580"
+    },
+    {
+      "file": "zh-JL-initial-endpoints-review.json.gz",
+      "sha256": "890eb8d3c11581e2b76d10fe132f37f4ccf789b5c338b97794050480a40ef89a",
+      "bytes": 3354,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-endpoints/review.json",
+      "uncompressed_sha256": "94f132690b295f077b22e2db4c5e0b9a47bf8ede12cb0f70126971275fad3623",
+      "uncompressed_bytes": 11648
+    },
+    {
+      "file": "zh-JL-initial-endpoints-render.json.gz",
+      "sha256": "71f888c653a5d536a51680b3de947a8496f441fa860ba2af01151ff025dc823f",
+      "bytes": 20656,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/zh-JL-endpoints/render-result.json",
+      "uncompressed_sha256": "5019ac3e5b33320d70109296542bb782a3fa93f3a972a9b448f0bebb8abc3144",
+      "uncompressed_bytes": 96986
+    },
+    {
+      "file": "en-JL-final-margin-review.json.gz",
+      "sha256": "12651cbdbaeec355da8821addf4fd6799e4c8e71387e2bbf118e10e635eda7a8",
+      "bytes": 62599,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/review.json",
+      "uncompressed_sha256": "34284fa0a8501214335e7aa29a751dee5d86b908c82290078b926a4fd4c53693",
+      "uncompressed_bytes": 413218
+    },
+    {
+      "file": "en-JL-final-margin-audit-result.json.gz",
+      "sha256": "cbad52a74028fbd00b2f2efc79ea735eb23e917f8a6b77b11230b007dc1e6add",
+      "bytes": 27377,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/audit-result.json",
+      "uncompressed_sha256": "27a02edc6433329683a0ec931a8333c0e43ebe845c76a39f1883cbf24db9370c",
+      "uncompressed_bytes": 155080
+    },
+    {
+      "file": "en-JL-final-margin-render-result.json.gz",
+      "sha256": "f72c23cf993628f08aedd3cb0e1d1f218467007d4da67d89879739ef541ce59e",
+      "bytes": 13098,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/render-result.json",
+      "uncompressed_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+      "uncompressed_bytes": 72387
+    },
+    {
+      "file": "en-JL-final-margin-confirmed-render-result.json.gz",
+      "sha256": "f72c23cf993628f08aedd3cb0e1d1f218467007d4da67d89879739ef541ce59e",
+      "bytes": 13098,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/confirmed-render-result.json",
+      "uncompressed_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+      "uncompressed_bytes": 72387
+    },
+    {
+      "file": "en-JL-final-margin-root-confirmed-provenance.json.gz",
+      "sha256": "ffb973519d0a3a0440e1779617e86c3bf53f1c074c929519dd3db5d8e816820f",
+      "bytes": 294,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/root-confirmed-provenance.json",
+      "uncompressed_sha256": "9c1a102396cfe826d8bcce3a7c3d0845a9342a16a7ae9a8e9358901c18eb72d5",
+      "uncompressed_bytes": 400
+    },
+    {
+      "file": "en-JL-final-margin-s16_jl.py.gz",
+      "sha256": "f06cdbd1c4030d0c07c795bea0994c159ef7a94ec08ca999cd3ed4b43a6fbebe",
+      "bytes": 5946,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/s16_jl.py",
+      "uncompressed_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "uncompressed_bytes": 18020
+    },
+    {
+      "file": "en-JL-final-unique-page-001.png",
+      "sha256": "4ad33a6bf30ba191426b84c58196afcfcef958c43003f583f84b135f1861eed6",
+      "bytes": 278714,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/unique-page-001.png",
+      "source_sha256": "4ad33a6bf30ba191426b84c58196afcfcef958c43003f583f84b135f1861eed6"
+    },
+    {
+      "file": "en-JL-final-unique-page-002.png",
+      "sha256": "b1094e7fb4e6ed73bbacee7fd9566756fbc13c70fc8a94fd9c36cc3ada306ec0",
+      "bytes": 289789,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/unique-page-002.png",
+      "source_sha256": "b1094e7fb4e6ed73bbacee7fd9566756fbc13c70fc8a94fd9c36cc3ada306ec0"
+    },
+    {
+      "file": "en-JL-final-unique-page-003.png",
+      "sha256": "4879a84fd2581688d0920694840573b0c662ab50daacef5dc550d902498d4874",
+      "bytes": 16328,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/unique-page-003.png",
+      "source_sha256": "4879a84fd2581688d0920694840573b0c662ab50daacef5dc550d902498d4874"
+    },
+    {
+      "file": "en-JL-final-native-01.png",
+      "sha256": "1f55fe3cf947e56c72c3ccb68632d90504adef6cf34fb8c2901fbe8644c2af5b",
+      "bytes": 57912,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/native-0002556_000170.398s.png",
+      "source_sha256": "1f55fe3cf947e56c72c3ccb68632d90504adef6cf34fb8c2901fbe8644c2af5b"
+    },
+    {
+      "file": "en-JL-final-native-02.png",
+      "sha256": "76d85d9a3f8dfd09ab29f9795a0797de620d17656199fa496cf33d5876fbfb2d",
+      "bytes": 54019,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/native-0002563_000170.865s.png",
+      "source_sha256": "76d85d9a3f8dfd09ab29f9795a0797de620d17656199fa496cf33d5876fbfb2d"
+    },
+    {
+      "file": "en-JL-final-native-03.png",
+      "sha256": "e935c4e5875a9c686001b59f1faf072555560a404e7dfc34b53ba1029f402ceb",
+      "bytes": 59337,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-JL/native-0002732_000182.132s.png",
+      "source_sha256": "e935c4e5875a9c686001b59f1faf072555560a404e7dfc34b53ba1029f402ceb"
+    },
+    {
+      "file": "zh-JL-final-margin-review.json.gz",
+      "sha256": "3d631cbc7f60ea564061583ca984bb50ebecace953f32f7143bf0a3f8f0b587d",
+      "bytes": 64622,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/review.json",
+      "uncompressed_sha256": "909b77e8026e1cfb00e90d466aaa280355a0bf6271a248cc3c42d8f0988c676c",
+      "uncompressed_bytes": 426730
+    },
+    {
+      "file": "zh-JL-final-margin-audit-result.json.gz",
+      "sha256": "1a955fe3ab0ccaa4dc1f3b1e53fc9eeaae931aec3e66123427d3a5cb4f3aba08",
+      "bytes": 28208,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/audit-result.json",
+      "uncompressed_sha256": "866c9c3f5e1e0856baf1d2fb485e127f8176fe4b8dd83cf005cfa5709c7aa402",
+      "uncompressed_bytes": 159897
+    },
+    {
+      "file": "zh-JL-final-margin-render-result.json.gz",
+      "sha256": "c4e10fdad0a1f24630617f362b0a2f08de4435d5167ace9821f2831671815da6",
+      "bytes": 20433,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/render-result.json",
+      "uncompressed_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+      "uncompressed_bytes": 97302
+    },
+    {
+      "file": "zh-JL-final-margin-confirmed-render-result.json.gz",
+      "sha256": "c4e10fdad0a1f24630617f362b0a2f08de4435d5167ace9821f2831671815da6",
+      "bytes": 20433,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/confirmed-render-result.json",
+      "uncompressed_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+      "uncompressed_bytes": 97302
+    },
+    {
+      "file": "zh-JL-final-margin-root-confirmed-provenance.json.gz",
+      "sha256": "beb3079e30854f550e87bdc4687b69eca19574a9abed7c0c31857bf8840d7ab1",
+      "bytes": 419,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/root-confirmed-provenance.json",
+      "uncompressed_sha256": "8ea8da3b5c850f9f4496b50023585dce76ea4472d00eb230d7cb6e9406c5fe14",
+      "uncompressed_bytes": 679
+    },
+    {
+      "file": "zh-JL-final-margin-s16_jl.py.gz",
+      "sha256": "f06cdbd1c4030d0c07c795bea0994c159ef7a94ec08ca999cd3ed4b43a6fbebe",
+      "bytes": 5946,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/s16_jl.py",
+      "uncompressed_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "uncompressed_bytes": 18020
+    },
+    {
+      "file": "zh-JL-final-unique-page-001.png",
+      "sha256": "e848d15380860c047756fed7617a5d7cc99487dc148f02ce3b8a9dcf3ebf1c24",
+      "bytes": 230565,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/unique-page-001.png",
+      "source_sha256": "e848d15380860c047756fed7617a5d7cc99487dc148f02ce3b8a9dcf3ebf1c24"
+    },
+    {
+      "file": "zh-JL-final-unique-page-002.png",
+      "sha256": "12e4a60e5e5d5ba0dc06d0fe6767d88be3f60d205f748485253b37f496bce4a4",
+      "bytes": 304865,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/unique-page-002.png",
+      "source_sha256": "12e4a60e5e5d5ba0dc06d0fe6767d88be3f60d205f748485253b37f496bce4a4"
+    },
+    {
+      "file": "zh-JL-final-unique-page-003.png",
+      "sha256": "13d8c075eb606ac5b1035c939a8f760b4e4555821c6e03a0240939111e36019f",
+      "bytes": 38846,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/unique-page-003.png",
+      "source_sha256": "13d8c075eb606ac5b1035c939a8f760b4e4555821c6e03a0240939111e36019f"
+    },
+    {
+      "file": "zh-JL-final-native-01.png",
+      "sha256": "90b1c1dfa17e3f83bfbf997f0e49b31d10bf27dd9f0760dd6d653e64197f73ca",
+      "bytes": 56707,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/native-0002738_000182.532s.png",
+      "source_sha256": "90b1c1dfa17e3f83bfbf997f0e49b31d10bf27dd9f0760dd6d653e64197f73ca"
+    },
+    {
+      "file": "zh-JL-final-native-02.png",
+      "sha256": "9752866c43a05c252ebce0aa010d7cfb63683e65222dde010632d4ceb915466d",
+      "bytes": 52829,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/native-0002745_000182.998s.png",
+      "source_sha256": "9752866c43a05c252ebce0aa010d7cfb63683e65222dde010632d4ceb915466d"
+    },
+    {
+      "file": "zh-JL-final-native-03.png",
+      "sha256": "f9a9dbbc907ab9114d22b8c944e689b598edee2aef37adb452b911c89a9d7495",
+      "bytes": 56335,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-JL/native-0002946_000196.398s.png",
+      "source_sha256": "f9a9dbbc907ab9114d22b8c944e689b598edee2aef37adb452b911c89a9d7495"
+    },
+    {
+      "file": "en-JL-readout-endpoints-review.json.gz",
+      "sha256": "ea35474fca5255e04d0f4e2da24822111cca121520509c78e200ebd8adf245d3",
+      "bytes": 3078,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-endpoints-readout-repaired/review.json",
+      "uncompressed_sha256": "552624473b0bb6dac53aa7fd6cda75d13f23c886a3870e3c2ae11f4117cdae99",
+      "uncompressed_bytes": 10324
+    },
+    {
+      "file": "en-JL-readout-endpoints-render-result.json.gz",
+      "sha256": "93c609e3a4b05dcc970d3a0b1d0e75324e749a4eb33e20ec72d3598c518ee730",
+      "bytes": 13253,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-endpoints-readout-repaired/render-result.json",
+      "uncompressed_sha256": "e9eff8a4a022b2154a73f6fee620b641e65e0b91e95af0887891e419c0561c63",
+      "uncompressed_bytes": 71998
+    },
+    {
+      "file": "en-JL-readout-endpoints-authenticated-imported-s16_jl.py.gz",
+      "sha256": "0ab0099c26df8a52ceabff62f1b2eaddddb7c6fbfe247015679fe7a15b406d72",
+      "bytes": 5905,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/en-JL-endpoints-readout-repaired/authenticated-imported-s16_jl.py",
+      "uncompressed_sha256": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "uncompressed_bytes": 17934
+    },
+    {
+      "file": "en-JL-percent-before-native.png",
+      "sha256": "e55149a00847d8fa519cc078c4f1c9c52b52d656e1de0cfa24ae78dc902a0e50",
+      "bytes": 63060,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/before-100-percent-native.png",
+      "source_sha256": "e55149a00847d8fa519cc078c4f1c9c52b52d656e1de0cfa24ae78dc902a0e50"
+    },
+    {
+      "file": "en-JL-percent-before-after.png",
+      "sha256": "724978a8037b329117a650ed8627eeae4422df3f3c148e902a79369db0c2f732",
+      "bytes": 143737,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/en-readout-before-after.png",
+      "source_sha256": "724978a8037b329117a650ed8627eeae4422df3f3c148e902a79369db0c2f732"
+    },
+    {
+      "file": "en-JL-percent-before-after-provenance.json.gz",
+      "sha256": "8696c0b9d147b752df5e3f555416fd5cafe5512b128be5c31e547efbd2d2ecd9",
+      "bytes": 563,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/before-after-provenance.json",
+      "uncompressed_sha256": "e471c182a7bdd29141c1e4d750c7a3c64504be5691422c0f152d4d9ee1aad10f",
+      "uncompressed_bytes": 961
+    },
+    {
+      "file": "en-JL-history-before-border-crop.png",
+      "sha256": "91d679217d0d173df1c1f8b0e7dc0b1557063f08d7ed93742bfa33a5e3d84f29",
+      "bytes": 35574,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/before-en-border-caption-crop.png",
+      "source_sha256": "91d679217d0d173df1c1f8b0e7dc0b1557063f08d7ed93742bfa33a5e3d84f29"
+    },
+    {
+      "file": "en-JL-history-before-after.png",
+      "sha256": "542adcb5dc077f54e4c58781132023b822c287555889805803d8ca3e4145d02a",
+      "bytes": 88580,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/en-history-before-after.png",
+      "source_sha256": "542adcb5dc077f54e4c58781132023b822c287555889805803d8ca3e4145d02a"
+    },
+    {
+      "file": "zh-JL-history-before-after.png",
+      "sha256": "02d1081dbd1cf1c63257c7ab76f4ced5c479fa9ab5e379b6688bce65a2d8ecb6",
+      "bytes": 88730,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/zh-history-before-after.png",
+      "source_sha256": "02d1081dbd1cf1c63257c7ab76f4ced5c479fa9ab5e379b6688bce65a2d8ecb6"
+    },
+    {
+      "file": "history-comparisons-provenance.json.gz",
+      "sha256": "d73f185b7a8f37e288222b3cf4742cccd676c042e35621ad75c83664f274a5f2",
+      "bytes": 591,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/comparisons.json",
+      "uncompressed_sha256": "11cb22459bf7553c439a7a5a6fb067b287d0140c227ffcb0f009019aeb3cbf40",
+      "uncompressed_bytes": 1587
+    },
+    {
+      "file": "jl-readout-repair-before-manifest.json.gz",
+      "sha256": "c14b4781c6c421453b390d6960bbc1a35e1231b67cbd13e86014ee5c96699f69",
+      "bytes": 595,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/before-manifest.json",
+      "uncompressed_sha256": "008d68effbc8f495e8c86f87575688f94ce1cd7df61eb1a4f4aa02c117826341",
+      "uncompressed_bytes": 1427
+    },
+    {
+      "file": "jl-readout-repair-source-freeze.json.gz",
+      "sha256": "5f12b7ab8be18f83d9dcbaa27b2bde330117030a9c9cb782a664ce1debb1a331",
+      "bytes": 277,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/source-freeze.json",
+      "uncompressed_sha256": "3a0347b522179a499b00a9c3a86e85b28b75f6b6109b623e8368f024d6431778",
+      "uncompressed_bytes": 359
+    },
+    {
+      "file": "jl-readout-repair-handoff.json.gz",
+      "sha256": "59d4bcdaca5e8f92b027abd9b97f0de91984a0351481c948ca623c7780c1d769",
+      "bytes": 1104,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/handoff.json",
+      "uncompressed_sha256": "6cc497010d88c5995a8717fb67b315bab51d949e31163a9308f1c5dcf1e8abc7",
+      "uncompressed_bytes": 4799
+    },
+    {
+      "file": "jl-readout-repair-before-s16_jl.py.gz",
+      "sha256": "7422d92a67e76bc0dbdcce88a2e36b836077f1390258309affa52e2d2902b619",
+      "bytes": 5836,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/before-s16_jl.py",
+      "uncompressed_sha256": "eea3cdc5abd47a8a631d0f130ca13830f444537441a5df35461e131f9d8805b2",
+      "uncompressed_bytes": 17722
+    },
+    {
+      "file": "jl-readout-repair-after-s16_jl.py.gz",
+      "sha256": "0ab0099c26df8a52ceabff62f1b2eaddddb7c6fbfe247015679fe7a15b406d72",
+      "bytes": 5905,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/after-s16_jl.py",
+      "uncompressed_sha256": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "uncompressed_bytes": 17934
+    },
+    {
+      "file": "jl-readout-repair-geometry_fixture.py.gz",
+      "sha256": "c1fbdb30abb5828c6bf2e474ee2559568cf5021a9d63d75ade5cb68059dcb958",
+      "bytes": 1165,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/geometry_fixture.py",
+      "uncompressed_sha256": "779b07b8795b4c60e2e97cf6d8c111a70729c40bca2b73a6df30be56dfc0c6bc",
+      "uncompressed_bytes": 2303
+    },
+    {
+      "file": "jl-readout-repair-geometry-en.json.gz",
+      "sha256": "300fbdeed8db6b7ac493959ba1c8dcc573681892f6eed302331994b435bf5f7b",
+      "bytes": 538,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/geometry-en.json",
+      "uncompressed_sha256": "85a1eeaa8991d757c236f36d93611ea76aaf15f044dc446adfc5f58d36b9586a",
+      "uncompressed_bytes": 1563
+    },
+    {
+      "file": "jl-readout-repair-geometry-zh.json.gz",
+      "sha256": "a7072c2a845993c4f460b58115a5a19cccb332f21fbb30a7939b55cb83003527",
+      "bytes": 534,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-readout-repair/geometry-zh.json",
+      "uncompressed_sha256": "597ada8dadc3f494d1e36c929895b60d38fe59240121996ed20e9dbc80cda480",
+      "uncompressed_bytes": 1560
+    },
+    {
+      "file": "jl-history-margin-repair-before-manifest.json.gz",
+      "sha256": "5a79e5cd543858b8627ee2ed5e2d3d90475807ba8b92e0dd614b28ac8d7a1fa2",
+      "bytes": 577,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/before-manifest.json",
+      "uncompressed_sha256": "6ca4a0d026d0f158a25193bcbed66c62b3391825c4489ba49a592af5e96749dc",
+      "uncompressed_bytes": 1404
+    },
+    {
+      "file": "jl-history-margin-repair-source-freeze.json.gz",
+      "sha256": "b4e118f0a3a4e17858d087274b30f1584edfd4f1dae38ed15e2214d56e35cf52",
+      "bytes": 1059,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/source-freeze.json",
+      "uncompressed_sha256": "cc8eb294fd43720e281abd361b14ca8ea2f8d13587573cf74ae878fd79b57290",
+      "uncompressed_bytes": 3151
+    },
+    {
+      "file": "jl-history-margin-repair-before-s16_jl.py.gz",
+      "sha256": "0ab0099c26df8a52ceabff62f1b2eaddddb7c6fbfe247015679fe7a15b406d72",
+      "bytes": 5905,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/before-s16_jl.py",
+      "uncompressed_sha256": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "uncompressed_bytes": 17934
+    },
+    {
+      "file": "jl-history-margin-repair-after-s16_jl.py.gz",
+      "sha256": "f06cdbd1c4030d0c07c795bea0994c159ef7a94ec08ca999cd3ed4b43a6fbebe",
+      "bytes": 5946,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/after-s16_jl.py",
+      "uncompressed_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "uncompressed_bytes": 18020
+    },
+    {
+      "file": "jl-history-margin-repair-geometry_fixture.py.gz",
+      "sha256": "a0f16421922fff3bb54ada81427f85a0aa77aeecf33c120ffe34aad41e87f029",
+      "bytes": 1665,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/geometry_fixture.py",
+      "uncompressed_sha256": "78c4d44097d4fb04f28d1fb1cb05a7b35ca7eeda63a09d3982b06f03014c253b",
+      "uncompressed_bytes": 3608
+    },
+    {
+      "file": "jl-history-margin-repair-geometry-en.json.gz",
+      "sha256": "6f075d42a388b916d4150b1b95b8e0acd2546d68cff4d8e6e562959935817225",
+      "bytes": 601,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/geometry-en.json",
+      "uncompressed_sha256": "6d9b428c39bc680e9e5962dd78becf1fde2ff13485f9424eeafd2f8f7098d954",
+      "uncompressed_bytes": 1120
+    },
+    {
+      "file": "jl-history-margin-repair-geometry-zh.json.gz",
+      "sha256": "dfdb0deca73cd6ea89282315cb4cdcf9966b30cd7b609358132369316f380cb9",
+      "bytes": 599,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/geometry-zh.json",
+      "uncompressed_sha256": "d1ed16c9a8f4dc84ab76cde1e3267f4f0a96fdee6dbddbb02abb319f374a75d3",
+      "uncompressed_bytes": 1136
+    },
+    {
+      "file": "original-review-prepare_endpoint.py.gz",
+      "sha256": "d341b2d098cbf35618cb9ef0f3001a61181d28f33aba3a22ee46ca0207ce1830",
+      "bytes": 1583,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/prepare_endpoint.py",
+      "uncompressed_sha256": "6c08194be89537ea3c494c5723bd36b6413ba03fdf8de049f746606859f607ca",
+      "uncompressed_bytes": 3268
+    },
+    {
+      "file": "original-review-prepare_motion.py.gz",
+      "sha256": "d616c725b70e319a94e68017d2293d44683771cef0e0fc2b8527559f2321d9e5",
+      "bytes": 2322,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/prepare_motion.py",
+      "uncompressed_sha256": "a59094c998cb729cee5dd80092bb74e4e98103f1d2f868db8a4557bc84cdab26",
+      "uncompressed_bytes": 5302
+    },
+    {
+      "file": "original-review-checkpoint_motion.py.gz",
+      "sha256": "e4a9159f0691ae8de681dd126569cd27d82c62975354fce3612d51940f69617b",
+      "bytes": 919,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/checkpoint_motion.py",
+      "uncompressed_sha256": "6d1244c070eaa10d19a4c4ffa2104f63cdc323195b3f7cde1646beb3976d4c0f",
+      "uncompressed_bytes": 2067
+    },
+    {
+      "file": "original-review-finish_motion.py.gz",
+      "sha256": "c3b1bc71649aae5886b4c7791540dfcaa54d7caf03856a759936b1ae6873d65b",
+      "bytes": 581,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/finish_motion.py",
+      "uncompressed_sha256": "ea66ea21e5dd0112e6e8af9a51740db18fca1d0fff03837212546764b49c271e",
+      "uncompressed_bytes": 1015
+    },
+    {
+      "file": "original-review-watch_motion.py.gz",
+      "sha256": "b37884f60be6ef1966fd9a5cd659655fc8ffff302a82f58e409f671009533fb7",
+      "bytes": 1201,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/watch_motion.py",
+      "uncompressed_sha256": "351ce2d20070949523c7eb195479daefa52d350c809921a583e6378f741704b9",
+      "uncompressed_bytes": 2391
+    },
+    {
+      "file": "final-regression-prepare_review.py.gz",
+      "sha256": "0a3606acfdcb7c373844d8ceb7585b57913d69f3e51b426981edae67d89e24a5",
+      "bytes": 2509,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/prepare_review.py",
+      "uncompressed_sha256": "15f15ffa5055ea90a8a751268c94ea0b3fb790e658ae3e23dc5971d72b972654",
+      "uncompressed_bytes": 6110
+    },
+    {
+      "file": "final-regression-checkpoint.py.gz",
+      "sha256": "34f3153b59709f3279615009d5cb4220cd6706841c61f9e12fd129c82cb5e478",
+      "bytes": 935,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/checkpoint.py",
+      "uncompressed_sha256": "d8d74ba0ed5ca8da76379782044a82876ad18f0bff6d50d742811abfd3b91c97",
+      "uncompressed_bytes": 2092
+    },
+    {
+      "file": "final-regression-finish_case.py.gz",
+      "sha256": "69b77dceae84a70cad491a0159b9d4bb1b6949a22825ac1d459d8a6b650dca4e",
+      "bytes": 567,
+      "source": "/workspace/runtime/ai3-highdim-jl-review/jl-history-margin-repair/finish_case.py",
+      "uncompressed_sha256": "126c302a38652d08de16be9526edd8be9d75374ab5c5fc0fc7223dee571b8a2b",
+      "uncompressed_bytes": 1008
+    },
+    {
+      "file": "frozen-qa_motion.py.gz",
+      "sha256": "ee4da630d760c774e6639a319563adaf2f7457372b2bd6b28a2ded9c86959aa2",
+      "bytes": 6507,
+      "source": "/workspace/explainer-videos/tools/qa_motion.py",
+      "uncompressed_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "uncompressed_bytes": 19437
+    }
+  ],
+  "cases": [
+    {
+      "stage": "original-selected-motion",
+      "case": "en-HighDim",
+      "movie_sha256": "2a2fced91ba48283573ab976e136655a401043b9c2b3e976c1b2c312bc107349",
+      "source_sha256_at_review": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "warnings": [],
+      "decoded_frames": 2152,
+      "checkpoint": {
+        "viewed_pages": 39,
+        "total_pages": 39,
+        "viewed_unique_representatives": 308,
+        "inherited_exact_png_representatives": 0,
+        "covered_unique_representatives": 308,
+        "total_unique_representatives": 308,
+        "selected_times_covered_including_exact_repeats": 371,
+        "total_selected_times": 371,
+        "viewed_representative_time_range": [
+          0.0,
+          143.399349
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 6,
+      "inputs": [
+        {
+          "file": ".cache/ai3/highdim.json",
+          "render_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "current_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "signature_matches": true,
+          "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14"
+        },
+        {
+          "file": ".cache/ai3/highdim.npz",
+          "render_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "current_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "signature_matches": true,
+          "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70"
+        }
+      ],
+      "source_linkage": {
+        "meaning": "Direct source hash at audit preparation; pre-worker/fix-freeze snapshots are preserved separately. Render warnings remain explicit; no later current-copy substitution proves an earlier import."
+      }
+    },
+    {
+      "stage": "original-selected-motion",
+      "case": "en-JL",
+      "movie_sha256": "eb006f0b9a848ae0c4d8a739d300601cea12aa5348b040a5e73ca03542bb5fd0",
+      "source_sha256_at_review": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "warnings": [],
+      "decoded_frames": 2748,
+      "checkpoint": {
+        "viewed_pages": 37,
+        "total_pages": 37,
+        "viewed_unique_representatives": 292,
+        "inherited_exact_png_representatives": 0,
+        "covered_unique_representatives": 292,
+        "total_unique_representatives": 292,
+        "selected_times_covered_including_exact_repeats": 390,
+        "total_selected_times": 390,
+        "viewed_representative_time_range": [
+          0.0,
+          183.131706
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 6,
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "render_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "current_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "signature_matches": true,
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f"
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "render_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "current_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "signature_matches": true,
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009"
+        }
+      ],
+      "source_linkage": {
+        "meaning": "Direct source hash at audit preparation; pre-worker/fix-freeze snapshots are preserved separately. Render warnings remain explicit; no later current-copy substitution proves an earlier import."
+      }
+    },
+    {
+      "stage": "original-selected-motion",
+      "case": "zh-HighDim",
+      "movie_sha256": "99740cf77fbda540bb2b8685ffa2881e9e57740ae2bb82cb704c32b4fa075473",
+      "source_sha256_at_review": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "warnings": [],
+      "decoded_frames": 2067,
+      "checkpoint": {
+        "viewed_pages": 38,
+        "total_pages": 38,
+        "viewed_unique_representatives": 298,
+        "inherited_exact_png_representatives": 0,
+        "covered_unique_representatives": 298,
+        "total_unique_representatives": 298,
+        "selected_times_covered_including_exact_repeats": 360,
+        "total_selected_times": 360,
+        "viewed_representative_time_range": [
+          0.0,
+          137.732682
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 6,
+      "inputs": [
+        {
+          "file": ".cache/ai3/highdim.json",
+          "render_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "current_signature": [
+            1198,
+            1793474015728107470
+          ],
+          "signature_matches": true,
+          "sha256": "744e957772fb378a8f5248306754830f91a2c0539e61cc7f971b8ea61146ff14"
+        },
+        {
+          "file": ".cache/ai3/highdim.npz",
+          "render_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "current_signature": [
+            2629,
+            1793474015725300016
+          ],
+          "signature_matches": true,
+          "sha256": "0dba73a53829821ee589a44fb21025da827c2b0f96162b52027bd0d9b8b12c70"
+        }
+      ],
+      "source_linkage": {
+        "meaning": "Direct source hash at audit preparation; pre-worker/fix-freeze snapshots are preserved separately. Render warnings remain explicit; no later current-copy substitution proves an earlier import."
+      }
+    },
+    {
+      "stage": "original-selected-motion",
+      "case": "zh-JL",
+      "movie_sha256": "1eb4979f34433bf2ebb6024a83b2d3dbdb5b4b64158b663e2398353a616026d1",
+      "source_sha256_at_review": "6cb5b16754a225018b047c77c5f3913139920ebcc17019b90b873a32fe337447",
+      "render_fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+      "warnings": [],
+      "decoded_frames": 2964,
+      "checkpoint": {
+        "viewed_pages": 38,
+        "total_pages": 38,
+        "viewed_unique_representatives": 303,
+        "inherited_exact_png_representatives": 0,
+        "covered_unique_representatives": 303,
+        "total_unique_representatives": 303,
+        "selected_times_covered_including_exact_repeats": 402,
+        "total_selected_times": 402,
+        "viewed_representative_time_range": [
+          0.0,
+          197.531706
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 6,
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "render_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "current_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "signature_matches": true,
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f"
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "render_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "current_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "signature_matches": true,
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009"
+        }
+      ],
+      "source_linkage": {
+        "meaning": "Direct source hash at audit preparation; pre-worker/fix-freeze snapshots are preserved separately. Render warnings remain explicit; no later current-copy substitution proves an earlier import."
+      }
+    },
+    {
+      "stage": "final-margin-regression",
+      "case": "en-JL",
+      "movie_sha256": "8a426cb1f8c5828cca9b485b912c81c366270437e015ae1131b2bbb3503217fe",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "warnings": [],
+      "decoded_frames": 2748,
+      "checkpoint": {
+        "viewed_pages": 3,
+        "total_pages": 3,
+        "viewed_unique_representatives": 18,
+        "inherited_exact_png_representatives": 274,
+        "covered_unique_representatives": 292,
+        "total_unique_representatives": 292,
+        "selected_times_covered_including_exact_repeats": 390,
+        "total_selected_times": 390,
+        "viewed_representative_time_range": [
+          0.0,
+          183.131706
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 3,
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "render_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "current_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "signature_matches": true,
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f"
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "render_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "current_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "signature_matches": true,
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009"
+        }
+      ],
+      "source_linkage": {
+        "confirmation": {
+          "utc": "2026-10-31T21:08:42.708187+00:00",
+          "movie_sha256": "8a426cb1f8c5828cca9b485b912c81c366270437e015ae1131b2bbb3503217fe",
+          "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+          "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+          "confirmation": "Parent explicit frozen source/movie handoff; bytes independently matched"
+        },
+        "source_sha256_meaning": "Parent-confirmed frozen imported module/source,independently hash-matched; audit snapshot kept separately."
+      }
+    },
+    {
+      "stage": "final-margin-regression",
+      "case": "zh-JL",
+      "movie_sha256": "dad7819ed327049736bd1e3b44d8e197426bf6f1c9b1843bcc897450189ce0b3",
+      "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "warnings": [],
+      "decoded_frames": 2964,
+      "checkpoint": {
+        "viewed_pages": 3,
+        "total_pages": 3,
+        "viewed_unique_representatives": 19,
+        "inherited_exact_png_representatives": 283,
+        "covered_unique_representatives": 302,
+        "total_unique_representatives": 302,
+        "selected_times_covered_including_exact_repeats": 402,
+        "total_selected_times": 402,
+        "viewed_representative_time_range": [
+          0.0,
+          197.531706
+        ],
+        "all_selected_frames_covered": true
+      },
+      "native_followups": 3,
+      "inputs": [
+        {
+          "file": ".cache/ai3/jl.json",
+          "render_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "current_signature": [
+            5524,
+            1793474031988199490
+          ],
+          "signature_matches": true,
+          "sha256": "29ce5c07d530516612056656bc3751300ac9d383107c432902b711c23cdeb19f"
+        },
+        {
+          "file": ".cache/ai3/jl.npz",
+          "render_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "current_signature": [
+            90809,
+            1793474031985285473
+          ],
+          "signature_matches": true,
+          "sha256": "d4701dae8bcb658feb0afbb8411c3f5e900a598bc7b8df6164df1a5c7fc63009"
+        }
+      ],
+      "source_linkage": {
+        "confirmation": {
+          "utc": "2026-10-31T21:09:27.493628+00:00",
+          "movie_sha256": "dad7819ed327049736bd1e3b44d8e197426bf6f1c9b1843bcc897450189ce0b3",
+          "source_sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+          "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+          "confirmation": "Parent explicitly corrected ZH hash to independently verified64hex; frozen source/movie handoff matched",
+          "supplied_hash_with_transcription_error": "dad7819ed327049736bd1e3b44d8e197426bf6f1c9b1843bcc897450189ce0b31",
+          "correction": "Parent confirmed extra trailing1was transcription error from concatenated byte count; no denied operation or bypass"
+        },
+        "source_sha256_meaning": "Parent-confirmed frozen imported module/source,independently hash-matched; source-at-review kept distinct."
+      }
+    }
+  ],
+  "summary": {
+    "original_motion": {
+      "decoded_frames": 9931,
+      "selected_times_actually_covered": 1523,
+      "unique_representatives_actually_viewed": 1201,
+      "pages_actually_viewed": 152,
+      "native_followups_actually_viewed": 24,
+      "initial_endpoint_screenshots_actually_viewed": 68,
+      "endpoint_native_followups": 18,
+      "additional_endpoint_regression_frames_actually_viewed": 17,
+      "additional_endpoint_regression_native_followups": 2
+    },
+    "final_margin": {
+      "selected_times_covered": 792,
+      "new_unique_images_actually_viewed": 37,
+      "exact_png_inherited_unique_representatives": 557,
+      "changed_pages_actually_viewed": 6,
+      "native_followups_actually_viewed": 6
+    }
+  },
+  "current_file_hashes_at_packaging": [
+    {
+      "path": "videos/ai/ai3/s15_highdim.py",
+      "sha256": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "bytes": 13956,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    },
+    {
+      "path": "videos/ai/ai3/s16_jl.py",
+      "sha256": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "bytes": 18020,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    },
+    {
+      "path": "videos/ai/ai3/zh_lines.py",
+      "sha256": "5305426a579e3d0d3863b92917baeb18b3402b12d93fd8389c9161101f7c82fc",
+      "bytes": 64038,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    },
+    {
+      "path": "videos/ai/ai_text_zh.json",
+      "sha256": "0e1a24b26cd7c9730e9830a4dfb5f06e68638cdc70117aa28b68ce18317a6466",
+      "bytes": 2396002,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    },
+    {
+      "path": "tools/qa_motion.py",
+      "sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "bytes": 19437,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    },
+    {
+      "path": "tools/qa_series.py",
+      "sha256": "d2edb5b43a4d65993b070666bc7db83f995924eecb418b7968025ed53b3ed9c3",
+      "bytes": 25379,
+      "scope": "current disk at packaging; not a substitute for historical imported-source records"
+    }
+  ],
+  "repository_head_at_packaging": "90f700bdef24777758d56de25c1d8a6cc371bc23",
+  "final_outcome": "Percentage readout and local history-card margin repairs pass actual bilingual selected-motion regression; no remaining concrete defect found in reviewed selections.",
+  "historical_notes": "Original report pending-margin text is historical and superseded by separate final-margin report only. HighDim endpoint source-change warnings remain historical. EN readout endpoint source6cb authenticated by parent exactrecord handoff; laterb0 source-at-review copy is kept distinct. Corrected ZHfinalhash transcription recorded in final provenance.",
+  "limits": [
+    "Silent854x48015fps previews; selected-time visual coverage, not continuous perceptual playback.",
+    "Allselected times mapped;unselected source-frame gaps retained. Short/subthreshold events can fall between selections.",
+    "Exact inheritance requires identical full PNG bytes plus an actually viewed baseline receipt.",
+    "Audio listening/narration alignment,production resolution and player/responsive behavior unverified.",
+    "Full movies and original contact pages remain runtime artifacts; complete hashes,maps,pageview receipts and selectednative/changedpagePNGexamples are packaged."
+  ],
+  "mutations": "Only this new evidence directory during packaging; no original receipt,STATUS,production source,data,model,compute,render,commit orpush mutation."
+}

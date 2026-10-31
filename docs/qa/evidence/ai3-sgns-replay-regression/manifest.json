@@ -1,0 +1,608 @@
+{
+  "scope": "SGNS original baseline plus replay repair: native endpoint and dense selected-time motion evidence; continuous/audio/player/finalresolution unverified",
+  "created_utc": "2026-10-31T21:12:10.748819+00:00",
+  "direct_original_scene_sha256": "dc56ada3cfd37d8cbfabcdda082245389ab72a025ae3d86e329fc821c31953e6",
+  "direct_repaired_scene_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+  "cases": {
+    "original-en-endpoints": {
+      "directory": "/workspace/runtime/ai3-sgns-review/en-endpoints/e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116",
+      "record_sha256": "e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c",
+      "current_fingerprint_at_freeze": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "whole_fingerprint_current_at_freeze": false
+    },
+    "original-en-motion": {
+      "directory": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7",
+      "record_sha256": "c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "ea7cac75ecd73364933e75c5868ff4c8d36e3b25ffb6a6e6adbca560e1117950",
+      "current_fingerprint_at_freeze": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "whole_fingerprint_current_at_freeze": false,
+      "movie_sha256": "b80e68bea24bf0e7ab4c7ecafc3d71edd0b20ee1b70ce96570ea05ab70d4e907",
+      "decoded_frames": 3215,
+      "duration": 214.332357,
+      "selected_times": 437,
+      "unique_images": 317,
+      "duplicate_times": 120,
+      "accounted_for_selected_times": 437,
+      "unselected_source_frames": 2778,
+      "largest_selected_time_gap": 1.0000000000000004
+    },
+    "original-zh-endpoints": {
+      "directory": "/workspace/runtime/ai3-sgns-review/zh-endpoints/227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a",
+      "record_sha256": "227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "f2738123fb15a4be211d8842be6a5add7428a67d6d9adec4dfb8fd277d310e8c",
+      "current_fingerprint_at_freeze": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "whole_fingerprint_current_at_freeze": false
+    },
+    "original-zh-motion": {
+      "directory": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944",
+      "record_sha256": "2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "current_fingerprint_at_freeze": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+      "whole_fingerprint_current_at_freeze": true,
+      "movie_sha256": "f5be8f69de572f551c2d30e59b0f5c2537d615af0e2bb6e2d04c04ad960a5a04",
+      "decoded_frames": 3409,
+      "duration": 227.26569,
+      "selected_times": 445,
+      "unique_images": 304,
+      "duplicate_times": 141,
+      "accounted_for_selected_times": 445,
+      "unselected_source_frames": 2964,
+      "largest_selected_time_gap": 1.0000000000000018
+    },
+    "repaired-en-endpoints": {
+      "directory": "/workspace/runtime/ai3-sgns-regression/en-endpoints/5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b",
+      "record_sha256": "5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+      "current_fingerprint_at_freeze": "6103de461cf1c47bc44b815d621e1b3ee40cbf8732dceccc8de11e7f83332f98",
+      "whole_fingerprint_current_at_freeze": false
+    },
+    "repaired-en-motion": {
+      "directory": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+      "record_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "current_fingerprint_at_freeze": "6103de461cf1c47bc44b815d621e1b3ee40cbf8732dceccc8de11e7f83332f98",
+      "whole_fingerprint_current_at_freeze": false,
+      "movie_sha256": "9bcf4449c40f09728464d0952abb20daf0ab1926306febf55dfa83b195dfaf22",
+      "decoded_frames": 3215,
+      "duration": 214.332357,
+      "selected_times": 437,
+      "unique_images": 316,
+      "duplicate_times": 121,
+      "accounted_for_selected_times": 437,
+      "unselected_source_frames": 2778,
+      "largest_selected_time_gap": 1.0000000000000004,
+      "prior_exact_PNG_matches": 418,
+      "new_unique_images": 14
+    },
+    "repaired-zh-endpoints": {
+      "directory": "/workspace/runtime/ai3-sgns-regression/zh-endpoints/3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630",
+      "record_sha256": "3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "render_fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+      "current_fingerprint_at_freeze": "6103de461cf1c47bc44b815d621e1b3ee40cbf8732dceccc8de11e7f83332f98",
+      "whole_fingerprint_current_at_freeze": false
+    },
+    "repaired-zh-motion": {
+      "directory": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6",
+      "record_sha256": "c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6",
+      "runtime_status": "passed",
+      "warnings": [],
+      "render_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+      "current_fingerprint_at_freeze": "6103de461cf1c47bc44b815d621e1b3ee40cbf8732dceccc8de11e7f83332f98",
+      "whole_fingerprint_current_at_freeze": false,
+      "movie_sha256": "de4cd782c5be5884ca226b36dd714913ee0ddc20a2ccfe2df62a5ae92150090e",
+      "decoded_frames": 3423,
+      "duration": 228.198698,
+      "selected_times": 443,
+      "unique_images": 299,
+      "duplicate_times": 144,
+      "accounted_for_selected_times": 443,
+      "unselected_source_frames": 2980,
+      "largest_selected_time_gap": 1.000000000000007,
+      "prior_exact_PNG_matches": 416,
+      "new_unique_images": 21
+    }
+  },
+  "files": [
+    {
+      "file": "ledgers/original-en-endpoints-provenance.json.gz",
+      "sha256": "5960fad6e739e6e46970332fcf0f5ce43b28f6ad7e64159192ad9ce812c7365d",
+      "bytes": 12704,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-endpoints/e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116/provenance.json",
+      "original_bytes": 108842,
+      "uncompressed_sha256": "c2141d345bac409efffd39e19800a6cccfc5b3ce6ba1bfd915da2812a345b27c"
+    },
+    {
+      "file": "ledgers/original-en-endpoints-render-result.json.gz",
+      "sha256": "db5fb2e4ae2d6dd0e73323cc6779283cef9329592a662a3482871a9ba53fa078",
+      "bytes": 17986,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-endpoints/e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116/render-result.json",
+      "original_bytes": 102562,
+      "uncompressed_sha256": "e82f4e5b8c843d3aca607bd10718727e297bb0e881de89f0879e25b33b407116"
+    },
+    {
+      "file": "ledgers/original-en-motion-provenance.json.gz",
+      "sha256": "a7e768cb276f7a42ed90bd1873764f0269007d7084bc485288a52838bd119673",
+      "bytes": 11935,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/provenance.json",
+      "original_bytes": 98791,
+      "uncompressed_sha256": "4672c84523f7abaa8fa6bcd4e392b55fcc8982fccba6489fbb87b9e95acb3c7a"
+    },
+    {
+      "file": "ledgers/original-en-motion-render-result.json.gz",
+      "sha256": "5a368fe9eb5bf56922d55f50d216dfcaa49a3ad083b1178b898d28194969254b",
+      "bytes": 17690,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/render-result.json",
+      "original_bytes": 102832,
+      "uncompressed_sha256": "c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7"
+    },
+    {
+      "file": "ledgers/original-en-motion-motion-review.json.gz",
+      "sha256": "52e3adaa819a40ab6171f40cf330e57487fb5502d461884256ecd6a742dad8ca",
+      "bytes": 35403,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/motion-review.json",
+      "original_bytes": 358573,
+      "uncompressed_sha256": "bfcd178491dda5e89d3a307c0b24010dd874d0ead7f1b1679c865965807efcdf"
+    },
+    {
+      "file": "ledgers/original-en-motion-result.json.gz",
+      "sha256": "c39a27ce3c4ecd2745221883eef3d6442187de2b3585b4c9d79f2163da1e6e8f",
+      "bytes": 29943,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/audit/result.json",
+      "original_bytes": 173434,
+      "uncompressed_sha256": "9cd3a802390d5143ccd02fbff079193395b11085caa09abf3f624e11989940fa"
+    },
+    {
+      "file": "images/en-original-early.png",
+      "sha256": "574f2e7fd1f25c91a78ea085fe54078981387aa6a396199099404107e0cefc15",
+      "bytes": 61701,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/audit/frames/0000825_000055.000s.png",
+      "original_bytes": 61701,
+      "uncompressed_sha256": "574f2e7fd1f25c91a78ea085fe54078981387aa6a396199099404107e0cefc15"
+    },
+    {
+      "file": "images/en-original-middle.png",
+      "sha256": "281c177ce2ee1899e09ad65fec4f3c45c881a90da85918c0fa177ea41966cec0",
+      "bytes": 61027,
+      "original_path": "/workspace/runtime/ai3-sgns-review/en-motion/c9956d5030bf0ff58c4f00c0f8d7d9c75f6cc6dffab2b3a4ed7ea77141e07ec7/audit/frames/0000916_000061.066s.png",
+      "original_bytes": 61027,
+      "uncompressed_sha256": "281c177ce2ee1899e09ad65fec4f3c45c881a90da85918c0fa177ea41966cec0"
+    },
+    {
+      "file": "ledgers/original-zh-endpoints-provenance.json.gz",
+      "sha256": "40bcd6442e21813b71436205327cf6d5ec1c11de120afb79577693f354babe13",
+      "bytes": 13107,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-endpoints/227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a/provenance.json",
+      "original_bytes": 105369,
+      "uncompressed_sha256": "133b73530cd6ea5fc1d7c497a3231ff72f77d6e7128cc008da3c0dcb0f6d8faa"
+    },
+    {
+      "file": "ledgers/original-zh-endpoints-render-result.json.gz",
+      "sha256": "d2b2db2619c7544f3037ce66e05ce84a2b768bb7380dc7acb74db02751ad5393",
+      "bytes": 25649,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-endpoints/227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a/render-result.json",
+      "original_bytes": 124712,
+      "uncompressed_sha256": "227cce423e247777b1e1e01ea3cdcbece7a8c3283d72c015429a9a9d0a38bc1a"
+    },
+    {
+      "file": "ledgers/original-zh-motion-provenance.json.gz",
+      "sha256": "45a7a6a2520304869ad75b56310198c4271f118b724a879fc010e7df9f1d6805",
+      "bytes": 12288,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/provenance.json",
+      "original_bytes": 95537,
+      "uncompressed_sha256": "4f9f39045f51a7d893aa7c5247871699bdaeb6e28c089ba778d3d7d99e7a05b9"
+    },
+    {
+      "file": "ledgers/original-zh-motion-render-result.json.gz",
+      "sha256": "d44c552534d05f22443335c7dcc87e2fef64276f98f990905790f02be29f8ece",
+      "bytes": 25378,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/render-result.json",
+      "original_bytes": 124939,
+      "uncompressed_sha256": "2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944"
+    },
+    {
+      "file": "ledgers/original-zh-motion-motion-review.json.gz",
+      "sha256": "302665d7e6c452c9d3b7aea5f93f867218600a67cf288af61d159f1258cd7b5b",
+      "bytes": 35264,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/motion-review.json",
+      "original_bytes": 365617,
+      "uncompressed_sha256": "b3355d86d5df03d53ecf3e821a6e61cf7cc1952e66eb09200dd46d5d98c7f1a6"
+    },
+    {
+      "file": "ledgers/original-zh-motion-result.json.gz",
+      "sha256": "c698c851cce88a63495ce50be0d2359dcfff858e1d39d438f50d5472d978a1f1",
+      "bytes": 29542,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/audit/result.json",
+      "original_bytes": 177212,
+      "uncompressed_sha256": "26b7ab02c1325a0420a6d29e16555cde06a9eddcd4239983ae63cde870fa9a87"
+    },
+    {
+      "file": "images/zh-original-early.png",
+      "sha256": "e52add4b01fa888e122af448c41cdf6f51f412a7ce2bf8fe346434a8fc6d8bc5",
+      "bytes": 63045,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/audit/frames/0000891_000059.400s.png",
+      "original_bytes": 63045,
+      "uncompressed_sha256": "e52add4b01fa888e122af448c41cdf6f51f412a7ce2bf8fe346434a8fc6d8bc5"
+    },
+    {
+      "file": "images/zh-original-middle.png",
+      "sha256": "7ce6f003426a2e3629a5d0beaf369dc8e97097c0a15acc054e55bffecb666156",
+      "bytes": 62311,
+      "original_path": "/workspace/runtime/ai3-sgns-review/zh-motion/2b3576f31d371f1b968cb63e25fc88b8b2d05a377b3a92cfd6b69ac7dbd20944/audit/frames/0000972_000064.800s.png",
+      "original_bytes": 62311,
+      "uncompressed_sha256": "7ce6f003426a2e3629a5d0beaf369dc8e97097c0a15acc054e55bffecb666156"
+    },
+    {
+      "file": "ledgers/repaired-en-endpoints-provenance.json.gz",
+      "sha256": "f4e672a4523bb3794fb82c8127d75cf48977dc6765c813c7f9c9ec8859407c09",
+      "bytes": 13342,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-endpoints/5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b/provenance.json",
+      "original_bytes": 115208,
+      "uncompressed_sha256": "c4d4dc7cfad18da635e9acc01fefe8040cfa5b2875037bed240f89fa9f7928f4"
+    },
+    {
+      "file": "ledgers/repaired-en-endpoints-render-result.json.gz",
+      "sha256": "35085db0e22e0f73bd9db19df0be95adea79d3cb0434fc095e0c7d57d0c4f358",
+      "bytes": 18107,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-endpoints/5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b/render-result.json",
+      "original_bytes": 102399,
+      "uncompressed_sha256": "5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b"
+    },
+    {
+      "file": "ledgers/repaired-en-motion-provenance.json.gz",
+      "sha256": "981cd59443f29530a949cb2e000edef5242d2b7334f19f5b9c5b51f242a8f12f",
+      "bytes": 12006,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/provenance.json",
+      "original_bytes": 98721,
+      "uncompressed_sha256": "59c3f545a02a99fb8e343bfe312b309ae6e6a895cb526b8dd5cc97d60a3dfa98"
+    },
+    {
+      "file": "ledgers/repaired-en-motion-render-result.json.gz",
+      "sha256": "7432cfef1001b051527f7ffd51e5bb68bb7b3c77dc75237451e6b3895d1d361d",
+      "bytes": 17755,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/render-result.json",
+      "original_bytes": 102564,
+      "uncompressed_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b"
+    },
+    {
+      "file": "ledgers/repaired-en-motion-motion-review.json.gz",
+      "sha256": "94a9dedb7df964b7c0d39ed808ebfe07802a28aea2864fae472001fa8ef113ae",
+      "bytes": 34172,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/motion-review.json",
+      "original_bytes": 468568,
+      "uncompressed_sha256": "72500a92a5cf5ccf48bf840ddb9e8d0987ab97df3992c0f324dfa310de0df197"
+    },
+    {
+      "file": "ledgers/repaired-en-motion-result.json.gz",
+      "sha256": "bbf015e7879c08cd4c764edc62cf254d9f98dc9294cc8306621bac1658a0704e",
+      "bytes": 29869,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/audit/result.json",
+      "original_bytes": 173395,
+      "uncompressed_sha256": "250016c952c0d584a63e46624b700e500e86539ad242404bb76757245ed9b8b4"
+    },
+    {
+      "file": "images/en-changed-sheet-001.png",
+      "sha256": "550695f96314be44903b501db2cff62476378a16ad33fa7ed2dc9fc61b492a74",
+      "bytes": 262778,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/changed-review-pages/sheet-001.png",
+      "original_bytes": 262778,
+      "uncompressed_sha256": "550695f96314be44903b501db2cff62476378a16ad33fa7ed2dc9fc61b492a74"
+    },
+    {
+      "file": "images/en-changed-sheet-002.png",
+      "sha256": "067a3ec338c27cae1e50458e9c7ec30c89f61113965c1081e2ffc21b2a8d2afd",
+      "bytes": 178682,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/changed-review-pages/sheet-002.png",
+      "original_bytes": 178682,
+      "uncompressed_sha256": "067a3ec338c27cae1e50458e9c7ec30c89f61113965c1081e2ffc21b2a8d2afd"
+    },
+    {
+      "file": "images/en-repaired-early.png",
+      "sha256": "e922514bb7a6f8fa9c00de8742a4be57ef68bf209e68d04d309fa6140fc96944",
+      "bytes": 48929,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/audit/frames/0000827_000055.133s.png",
+      "original_bytes": 48929,
+      "uncompressed_sha256": "e922514bb7a6f8fa9c00de8742a4be57ef68bf209e68d04d309fa6140fc96944"
+    },
+    {
+      "file": "images/en-repaired-middle.png",
+      "sha256": "86f39b7c4107a7f347857e97b41d32ee8fa59e024a17cdd39e3d4d9797192d79",
+      "bytes": 57744,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/audit/frames/0000909_000060.599s.png",
+      "original_bytes": 57744,
+      "uncompressed_sha256": "86f39b7c4107a7f347857e97b41d32ee8fa59e024a17cdd39e3d4d9797192d79"
+    },
+    {
+      "file": "images/en-repaired-final.png",
+      "sha256": "d366e1c83c6cfee38aa8a3cdb200315b470157fb77356edde7806a16446d5d70",
+      "bytes": 60599,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/en-motion/30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b/audit/frames/0000967_000064.466s.png",
+      "original_bytes": 60599,
+      "uncompressed_sha256": "d366e1c83c6cfee38aa8a3cdb200315b470157fb77356edde7806a16446d5d70"
+    },
+    {
+      "file": "ledgers/repaired-zh-endpoints-provenance.json.gz",
+      "sha256": "981f18e01661ed2c1cfe83d3665afb4f22b03d717f00c099dfebdb861dba4af6",
+      "bytes": 13806,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-endpoints/3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630/provenance.json",
+      "original_bytes": 111361,
+      "uncompressed_sha256": "6989193820f795a8a2f07f736d0a1f3ec4a1c4c907e6d1e92ae0a412bb731264"
+    },
+    {
+      "file": "ledgers/repaired-zh-endpoints-render-result.json.gz",
+      "sha256": "1d7833d18fb18034f6aa95c683e53f78524cbe30dcc34ee5a63fd4de8895d76f",
+      "bytes": 25691,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-endpoints/3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630/render-result.json",
+      "original_bytes": 124830,
+      "uncompressed_sha256": "3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630"
+    },
+    {
+      "file": "ledgers/repaired-zh-motion-provenance.json.gz",
+      "sha256": "664f89ad8f612fb8e90b8e51078e4f847ec13456ae02cd67e43966d4fe9e073f",
+      "bytes": 12406,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/provenance.json",
+      "original_bytes": 95519,
+      "uncompressed_sha256": "4a4986a79ca5bc1b3a9edb1a41c6d0038641e85e9128054c3217b6e6ac767cd0"
+    },
+    {
+      "file": "ledgers/repaired-zh-motion-render-result.json.gz",
+      "sha256": "ad10c252c2c4cb85da3529c433c80c9c3562f76b8493a815b6bb1b1ef2508de2",
+      "bytes": 25373,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/render-result.json",
+      "original_bytes": 125028,
+      "uncompressed_sha256": "c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6"
+    },
+    {
+      "file": "ledgers/repaired-zh-motion-motion-review.json.gz",
+      "sha256": "1339e58240ad7a02d07e5231632af123ea464cbc67017484628e6dfdc0526dde",
+      "bytes": 34330,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/motion-review.json",
+      "original_bytes": 474465,
+      "uncompressed_sha256": "ece6c29a85faec1c3b5049923bd25101d52de6ec148e2b133a081ec52dc306b8"
+    },
+    {
+      "file": "ledgers/repaired-zh-motion-result.json.gz",
+      "sha256": "36becf92b568a25776cb0c8e4143360682453178785c529484cddad6ef33d1e9",
+      "bytes": 29261,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/audit/result.json",
+      "original_bytes": 175997,
+      "uncompressed_sha256": "db955f85e6b5b32d3f92e3d50c9c8f3d960fc0f409dfcca6ff734a73f656917f"
+    },
+    {
+      "file": "images/zh-changed-sheet-001.png",
+      "sha256": "39a519c4e962bc5e2238675a3431b14a81a66c4e14f9f183ae20effdc65a29f8",
+      "bytes": 280921,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/changed-review-pages/sheet-001.png",
+      "original_bytes": 280921,
+      "uncompressed_sha256": "39a519c4e962bc5e2238675a3431b14a81a66c4e14f9f183ae20effdc65a29f8"
+    },
+    {
+      "file": "images/zh-changed-sheet-002.png",
+      "sha256": "0c0611dc05cd690de176dc07c8e89b48620767200b53f22b2e80656e29f97fc7",
+      "bytes": 287038,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/changed-review-pages/sheet-002.png",
+      "original_bytes": 287038,
+      "uncompressed_sha256": "0c0611dc05cd690de176dc07c8e89b48620767200b53f22b2e80656e29f97fc7"
+    },
+    {
+      "file": "images/zh-changed-sheet-003.png",
+      "sha256": "a1977e0e9aade2ee97e2468ab09a5f2aa1cdd3e495f72ac34e1c31b7550f2e42",
+      "bytes": 233918,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/changed-review-pages/sheet-003.png",
+      "original_bytes": 233918,
+      "uncompressed_sha256": "a1977e0e9aade2ee97e2468ab09a5f2aa1cdd3e495f72ac34e1c31b7550f2e42"
+    },
+    {
+      "file": "images/zh-repaired-early.png",
+      "sha256": "60792e0f2833b5f81bf0d805dbeeb0812c54aaaac3f4317bd87f41ce440d755a",
+      "bytes": 50346,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/audit/frames/0000892_000059.467s.png",
+      "original_bytes": 50346,
+      "uncompressed_sha256": "60792e0f2833b5f81bf0d805dbeeb0812c54aaaac3f4317bd87f41ce440d755a"
+    },
+    {
+      "file": "images/zh-repaired-middle.png",
+      "sha256": "07a4bc1134456ae81da67e85cbb4d5118418a0d01edc2ef066ccabbb25ab4afe",
+      "bytes": 59437,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/audit/frames/0001000_000066.666s.png",
+      "original_bytes": 59437,
+      "uncompressed_sha256": "07a4bc1134456ae81da67e85cbb4d5118418a0d01edc2ef066ccabbb25ab4afe"
+    },
+    {
+      "file": "images/zh-repaired-final.png",
+      "sha256": "52dd8b6a5153b8c3e85a616115348ab3f3212ebad8d8a190a51f2d28071383dc",
+      "bytes": 62215,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/zh-motion/c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6/audit/frames/0001056_000070.400s.png",
+      "original_bytes": 62215,
+      "uncompressed_sha256": "52dd8b6a5153b8c3e85a616115348ab3f3212ebad8d8a190a51f2d28071383dc"
+    },
+    {
+      "file": "images/en-before-after.png",
+      "sha256": "973625c88140df2e489b77eb14ff6374cfaea65781dd657594d41a067f4f8266",
+      "bytes": 217660,
+      "composite_of": [
+        "images/en-original-early.png",
+        "images/en-repaired-early.png",
+        "images/en-original-middle.png",
+        "images/en-repaired-middle.png"
+      ]
+    },
+    {
+      "file": "images/zh-before-after.png",
+      "sha256": "1d83e1d695ca10175709689c9efd14bfa7c90eaa95c92d1e6b804732ab3ba60c",
+      "bytes": 239144,
+      "composite_of": [
+        "images/zh-original-early.png",
+        "images/zh-repaired-early.png",
+        "images/zh-original-middle.png",
+        "images/zh-repaired-middle.png"
+      ]
+    },
+    {
+      "file": "ledgers/original-review-summary.json.gz",
+      "sha256": "bb700060186e95f408bbe2eb363dba703528d00c5da28eeb146738d806ac578c",
+      "bytes": 1395,
+      "original_path": "/workspace/runtime/ai3-sgns-review/original-review-summary.json",
+      "original_bytes": 3237,
+      "uncompressed_sha256": "41d2df5016c9f1e0db392f01e3487b2f155d358646df2f238fae783f4febc0ef"
+    },
+    {
+      "file": "ledgers/original-review.md.gz",
+      "sha256": "9dcb3cf7e3e496fcaeafec5c487c58c154b31f2d5d7c1b46ad3ef54f8a362eb9",
+      "bytes": 1359,
+      "original_path": "/workspace/runtime/ai3-sgns-review/original-review.md",
+      "original_bytes": 2370,
+      "uncompressed_sha256": "22f9718233c86890326a6f0e4d471fa369fb4b18322df1cf3301e379ad371326"
+    },
+    {
+      "file": "ledgers/repair-handoff.json.gz",
+      "sha256": "cbe3a54c0d18e7c2da0949a2e8568f2dd8859ac07eb8c5a5e50a646815f05773",
+      "bytes": 941,
+      "original_path": "/workspace/runtime/ai3-sgns-review/repair-handoff.json",
+      "original_bytes": 1734,
+      "uncompressed_sha256": "68e42a9f861f8fd0e94a9d6fbe0c67397ef92d43accb5f3261170fab345e76a2"
+    },
+    {
+      "file": "ledgers/replay-repair-fixture.json.gz",
+      "sha256": "a61cd42b41d6722bd8fc42478ff18b4b91f89802f3de5a8bf4f537de22033978",
+      "bytes": 1699,
+      "original_path": "/workspace/runtime/ai3-sgns-review/replay-repair-fixture.json",
+      "original_bytes": 6520,
+      "uncompressed_sha256": "bb0b475eda2ca232ceb60a61e454a139774f942634d6de30c67788e38d6e71e5"
+    },
+    {
+      "file": "ledgers/replay-repair-fixture.log.gz",
+      "sha256": "1991eeb67a4f2c43c566fe29f8ec8da62533b43d1daa9493f813623d0c0d563d",
+      "bytes": 733,
+      "original_path": "/workspace/runtime/ai3-sgns-review/replay-repair-fixture.log",
+      "original_bytes": 3604,
+      "uncompressed_sha256": "b3a75bd45ea567c022330b1cd6fcfd59cd0eadf5c124bde8feefd78dede9999e"
+    },
+    {
+      "file": "ledgers/narration-tests.log.gz",
+      "sha256": "faf33f345b0afb43a2f6b9c7cfb1d651ca7c509464238bc1ab16addb7f04546d",
+      "bytes": 462,
+      "original_path": "/workspace/runtime/ai3-sgns-review/narration-tests.log",
+      "original_bytes": 1875,
+      "uncompressed_sha256": "17cacf91ecf0661361d68f1a4a4be3cd68122b7ea2068383aee587ee7293c399"
+    },
+    {
+      "file": "ledgers/narration-timing-review.json.gz",
+      "sha256": "cc4350150d3cce354168e3078196cab8e1915c1a20712335549e5359f8bfd439",
+      "bytes": 2058,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/narration-timing-review.json",
+      "original_bytes": 12778,
+      "uncompressed_sha256": "0c506e058d8c0f679d76f111f385f5636ed5d00067c307f971be1fd88d33facd"
+    },
+    {
+      "file": "ledgers/narration-timing-review.log.gz",
+      "sha256": "c86fe4d009fe333bed05450c28aaaf600977f543fe2222893468660881e5d263",
+      "bytes": 602,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/narration-timing-review.log",
+      "original_bytes": 2212,
+      "uncompressed_sha256": "5286df0e01a934d252e2bf0297b410c4ddf1568584232d27304926d531f175eb"
+    },
+    {
+      "file": "ledgers/completion-provenance.json.gz",
+      "sha256": "75d8d1c294e9516583048632b6ec53c3bce2bf8b5d0a8f0519667ad26e5e88e2",
+      "bytes": 1093,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/completion-provenance.json",
+      "original_bytes": 3798,
+      "uncompressed_sha256": "42869d257ebdbd4e35833ec6aefa27c9b361d90574686f11e9d98ee2e2cb30fa"
+    },
+    {
+      "file": "ledgers/original-s14_sgns.py.gz",
+      "sha256": "fcfdac845a2a82f54c115cfc4144053e35400ad7f2318f9d87e4c0d4cd0ef531",
+      "bytes": 6408,
+      "original_path": "/workspace/runtime/ai3-sgns-review/repair-before/s14_sgns.py",
+      "original_bytes": 20275,
+      "uncompressed_sha256": "dc56ada3cfd37d8cbfabcdda082245389ab72a025ae3d86e329fc821c31953e6"
+    },
+    {
+      "file": "ledgers/original-zh_lines.py.gz",
+      "sha256": "03501b05a639f93d657036b8e65ab6debb6dbf4677dccae42b6aabf2945f590f",
+      "bytes": 25559,
+      "original_path": "/workspace/runtime/ai3-sgns-review/repair-before/zh_lines.py",
+      "original_bytes": 64007,
+      "uncompressed_sha256": "c1f87a3ab8cd95540ed821e61ee2d4e423db343dd712f613ef8bdaa97ebcd0d3"
+    },
+    {
+      "file": "ledgers/repaired-s14_sgns.py.gz",
+      "sha256": "f9af5f657a31a5c2c261b273d8aba4bcb15fe17694189007c810be7e6cf67f0f",
+      "bytes": 6466,
+      "original_path": "/workspace/runtime/ai3-sgns-review/repair-after-source/s14_sgns.py",
+      "original_bytes": 20385,
+      "uncompressed_sha256": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673"
+    },
+    {
+      "file": "ledgers/repaired-zh_lines.py.gz",
+      "sha256": "a02fbe7197f181c677e22b791c172ccceddc4150adf09557882ecbe539ce743b",
+      "bytes": 25574,
+      "original_path": "/workspace/runtime/ai3-sgns-review/repair-after-source/zh_lines.py",
+      "original_bytes": 64019,
+      "uncompressed_sha256": "5dc5ce49bbac4393b6e809e0d639d5c543114ab48e3cd2983f2fdedbae697671"
+    },
+    {
+      "file": "ledgers/check_ai3_sgns_replay.py.gz",
+      "sha256": "01cb36b61cbcc0f8acf79dc496924531154bc35e0c255c6c42dae7025500834f",
+      "bytes": 2520,
+      "original_path": "/workspace/runtime/check_ai3_sgns_replay.py",
+      "original_bytes": 6168,
+      "uncompressed_sha256": "ddc49d92e6eed66e44b57ca1b8b9196338ae81db7b668014b62e20a9c0f78c98"
+    },
+    {
+      "file": "ledgers/check_ai3_sgns_fresh_timeline.py.gz",
+      "sha256": "f3c65aefac4d12ac40d3b0ab8a605364d115a668b4c34873ad034a53a1dea19d",
+      "bytes": 1785,
+      "original_path": "/workspace/runtime/check_ai3_sgns_fresh_timeline.py",
+      "original_bytes": 4033,
+      "uncompressed_sha256": "206ddadcad43cd7195ad95ad8dde601784ea56a668ab2837debb9b264f56429d"
+    },
+    {
+      "file": "ledgers/consumed-sgns.json.gz",
+      "sha256": "cce47d26a9378bd66ef7f1fc590b86efb64ce3a65426b6caf4022bf7c5b00a5e",
+      "bytes": 245779,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/inputs/f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e/sgns.json",
+      "original_bytes": 690222,
+      "uncompressed_sha256": "f24e09e0a99716fb1cfdd47ee35859e9f8044d80a9397b11d1bdb61d3d76398e"
+    },
+    {
+      "file": "ledgers/consumed-sgns.npz.gz",
+      "sha256": "671daeb3164caf527ad789e42c9a1c435e1d285804d39867f9d42c1a7d776bda",
+      "bytes": 427,
+      "original_path": "/workspace/runtime/ai3-sgns-regression/inputs/6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754/sgns.npz",
+      "original_bytes": 446,
+      "uncompressed_sha256": "6cdc02692c1c369359122ae696fe5606705dfd992f0939bdd60f6f97272b4754"
+    }
+  ]
+}

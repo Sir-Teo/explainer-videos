@@ -1,0 +1,619 @@
+{
+  "scope": "Part3 Words and Geometry EN/ZH silent480p endpoint and selected-time motion regression; four scoped visual repairs including earlier histogram semantic color change.",
+  "payloads": [
+    {
+      "file": "README.md",
+      "sha256": "d1ec288da13c79e161233f07ef4225ec31103d76c536f4e80d2fc20af0ad3cc9",
+      "bytes": 5502,
+      "encoding": "generated review guide"
+    },
+    {
+      "file": "index.json",
+      "sha256": "3426c2ff410bc38c313a5c3e890cc3ca115010326626d1547246f7c4ec9a54f8",
+      "bytes": 11608,
+      "encoding": "generated package index"
+    },
+    {
+      "file": "ledgers/en-Geometry-audit.json.gz",
+      "sha256": "68e8775e9c75a8b1aa46397238db947ab36e3ec02cf07d158f037f2ac8517463",
+      "bytes": 20586,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4/audit.json",
+      "original_sha256": "7be1e97b6e3dfea45312549872b48ed9b705bf1a2119367166d1657c501dd216",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-final-endpoint-record.json.gz",
+      "sha256": "db95abb6b521ee2827bf4c691a6b78cbf29fed5d4c1f833049175d0554d9346b",
+      "bytes": 11696,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Geometry/ed848bb92de98feaf72de907cf6cf5f15a2964f5269c5cbe0e62eaacda365330/result.json",
+      "original_sha256": "ed848bb92de98feaf72de907cf6cf5f15a2964f5269c5cbe0e62eaacda365330",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-final-endpoint-review.json.gz",
+      "sha256": "05a7c8e27d6237bdae8a1a1a7e1bbd708ea39407d6e0848422465645e0f564cf",
+      "bytes": 13995,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/en-Geometry/review.json",
+      "original_sha256": "dd396df1e5e3095b8749de715b1d965fcf4ff3afa22df845b5ec050eab1849dd",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-audit.json.gz",
+      "sha256": "4555313d5377b4b655d974355a80099b86a46e620d8198809a09f3106f0063c6",
+      "bytes": 20589,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/1beb9e9c778f3a4d1fde1dee4bfb09b21d56b1660c038f4d81d6928e8cc1d674/audit.json",
+      "original_sha256": "13d9b2f5122fc7baa90b3ace7d4af5567c4315088eae9b8b63830d2693acb6e1",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-color-endpoint-review.json.gz",
+      "sha256": "512503447a4b4836c024d14fbe27d12ca812af08945fd99a3bd8192d7fd9b323",
+      "bytes": 8200,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Geometry/98e44d95080d5b0de538d4b32bd8c9918a4ec5335725ff466917786d6dbdf346/review.json",
+      "original_sha256": "f0cfebeed6fc7e514d0ef3b95f143abd15dbf03875b2bc2ca9fb4ad751163b66",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-endpoint-review-1.json.gz",
+      "sha256": "a05c43de8cfaca6263eb85ffaf6abfeb3253fc32da1e0fc2cfff173ebc98a2d7",
+      "bytes": 8976,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Geometry/3d09be5dba3381cf45a932fa2efa7ca9e04791aa276aec4f4c047b38e9719475/regression-review.json",
+      "original_sha256": "0723d646ed5dfd429faa116933094df5537aaa8e56c125002db612b86e648512",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-endpoint-review-2.json.gz",
+      "sha256": "512503447a4b4836c024d14fbe27d12ca812af08945fd99a3bd8192d7fd9b323",
+      "bytes": 8200,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Geometry/98e44d95080d5b0de538d4b32bd8c9918a4ec5335725ff466917786d6dbdf346/review.json",
+      "original_sha256": "f0cfebeed6fc7e514d0ef3b95f143abd15dbf03875b2bc2ca9fb4ad751163b66",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-render-record.json.gz",
+      "sha256": "1748502c4ff52d02ec3728468b154c7e41864e2ae358f79f14a6bbea10ef1f80",
+      "bytes": 11455,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/1beb9e9c778f3a4d1fde1dee4bfb09b21d56b1660c038f4d81d6928e8cc1d674/render-record.json",
+      "original_sha256": "9df12939b984e5a75d610cf207bead6147d59af5f866bf6970ed01b4cf6b0ea7",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-original-review.json.gz",
+      "sha256": "c011e9730a8e4f689878f85e4a52f48d6d2a787d31312e8bcae69ad8b8dd51d2",
+      "bytes": 32492,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/1beb9e9c778f3a4d1fde1dee4bfb09b21d56b1660c038f4d81d6928e8cc1d674/review.json",
+      "original_sha256": "644e87bdd45df879214126d0079693f088523a4cdfbbcc1f4da7661ddcc31f09",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-render-record.json.gz",
+      "sha256": "3dad00957a531ce86683432be1b685cdbb952e4e7c87890a713d62d655559707",
+      "bytes": 11456,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4/render-record.json",
+      "original_sha256": "b9c379581b117ecc3d5530334b045525f23595f464e01e4d41c6fbeca4a402b2",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Geometry-review.json.gz",
+      "sha256": "6dc997ac01dd5b92dc8574a3f8adfe0a39bb73eea1b3c827f250b248c2745b1a",
+      "bytes": 30303,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4/regression-review.json",
+      "original_sha256": "90f6b0873f71b7b711f15a4b140f38dfcbc4a39ffce6f4f171654558302fc40a",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-audit.json.gz",
+      "sha256": "d2742bab5248e33300cf556b6777d218c7df1ddc6c3ab3d8071b55989e4aeae1",
+      "bytes": 27206,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec/audit.json",
+      "original_sha256": "3e81ac3da61fac940beb83c85582a7a3319ad70dda138d2af354bb1d32c488c0",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-final-endpoint-record.json.gz",
+      "sha256": "e13723bbbb61269c144c0bbce3766a706061e882c6acd0e154f71cb8a9e2b859",
+      "bytes": 14116,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Words/5d42c147b7556fb2c8fedb6446faaa48cab178319e8b5e37a9819746ddd1db7b/result.json",
+      "original_sha256": "5d42c147b7556fb2c8fedb6446faaa48cab178319e8b5e37a9819746ddd1db7b",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-final-endpoint-review.json.gz",
+      "sha256": "65469f4853b977f091a157f00144e0d72985e3e2ad6a54a1603774bbaad7d0a3",
+      "bytes": 18164,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/en-Words/review.json",
+      "original_sha256": "3a197b0e716b2ea464a7df1137d66732f0ed7c637b5d8422d2aa5c9d144a25ee",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-original-audit.json.gz",
+      "sha256": "b7938751e7c2604af8c1958e874d7547b5d2210d5b369ee3a518cb6e4fd5f39e",
+      "bytes": 27196,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/00ec85da06d3db1c005091be6a1cf9ca2918c8769a1d5e133df9e3265b6a3e26/audit.json",
+      "original_sha256": "3ec2b90da94811f5bba2c1cf065ed65816418968b1f5b9e296dc3b99fac4010c",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-original-endpoint-review-1.json.gz",
+      "sha256": "567abcd3c7a16429929e87e2770ba29ac5c6617917d1090d03dae5a0a1a39011",
+      "bytes": 9782,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Words/26d7a618bc5b3de9c2439d8fd4ccc0765a594ae03f271a8a8026ebdef127a7c2/review.json",
+      "original_sha256": "cbe3aaa556c41406a6b7f9e8ba6c5ac6d07f2e0aee26a0068f64831c34502257",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-original-render-record.json.gz",
+      "sha256": "5bcebf00b482dd830bdc10251d6d5299ee6c5305ec0333d398524d632ab1fdb7",
+      "bytes": 13877,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/00ec85da06d3db1c005091be6a1cf9ca2918c8769a1d5e133df9e3265b6a3e26/render-record.json",
+      "original_sha256": "0798163728a8221f831aa6d9121abc28290455f48e0ddd9c35eb764b2736449e",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-original-review.json.gz",
+      "sha256": "e6401e13a924ed6debc39e90cb1e36ab92cebf026f52029ccdc39c93b54a0355",
+      "bytes": 41292,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/00ec85da06d3db1c005091be6a1cf9ca2918c8769a1d5e133df9e3265b6a3e26/review.json",
+      "original_sha256": "9bc570aa294848773d68c0e7c877ddeceb124c03a63a4b2c1f08bcf3b7b72c0e",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-render-record.json.gz",
+      "sha256": "73534c1b6337c4e565fa677f154753f0e56cd6e168fb51dc5b7ae2230271399e",
+      "bytes": 13880,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec/render-record.json",
+      "original_sha256": "a85800472c420122cc1298807bb52ef4830f2515d10116178714d2896244de1c",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/en-Words-review.json.gz",
+      "sha256": "d12dfe74ba0edd6eff19e16f4b77a00757fc669e0b89508c6b8115b28c9fffe0",
+      "bytes": 38341,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec/regression-review.json",
+      "original_sha256": "e3bd1132f40bfda85cee2e39e62270af29b1f48a35ad88bc62cc69dd88e95e47",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-audit.json.gz",
+      "sha256": "a7c23036cbbe4351a6a1e39553e888a5ece4f893603becec33062a20f9986c34",
+      "bytes": 21239,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947/audit.json",
+      "original_sha256": "19e3680ec4d8eb668dfb81a87d919acf302085788f9ca033d07aefd114e8fbc4",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-final-endpoint-record.json.gz",
+      "sha256": "3b5677ab8de086eb45f1eb2d7ab8b5c380c799e6d60590fd4835e687b7b75d70",
+      "bytes": 17827,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/zh/Geometry/144b3ea8e7fffa8597792cf5c954afb383eaf89a1f914b11edd396ccd8602629/result.json",
+      "original_sha256": "144b3ea8e7fffa8597792cf5c954afb383eaf89a1f914b11edd396ccd8602629",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-final-endpoint-review.json.gz",
+      "sha256": "89ce88b6ea281bbfcb5ac7457e283a5c2f9487c7d09eaa6b7409a8fbb44768ac",
+      "bytes": 14303,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/zh-Geometry/review.json",
+      "original_sha256": "5ce33ecef4bc6ea2309166ba0e3b51e9947f21fe60e7ff2d3013c1886c76382e",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-original-audit.json.gz",
+      "sha256": "3d949186e1fa7a08d26b5d6407e5f36ec44e06237fd0e7b135dd1434714aca6a",
+      "bytes": 21246,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/b299a41edc9645eff1830bce1dda7fd592c2398ad246a25d0c933debc47bac99/audit.json",
+      "original_sha256": "c50c0d26c26781c018773071c2f2026b39bb812410a98f7286b411cef13ff78e",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-original-endpoint-review-1.json.gz",
+      "sha256": "4b5d475b70dbc7c4e737df59e36a1d5578883f8aff201b1c1634a0b249359237",
+      "bytes": 8350,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/zh/Geometry/03c6b85ecf8d6c0cae389aac4e0452c3630a571efce505c29559ee223f010e00/review.json",
+      "original_sha256": "8f77877a727b302a064a8bf471c0591d5a396e3b628170dfe2909e909f1feb91",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-original-render-record.json.gz",
+      "sha256": "6d8a4fb4acf2729b0737600bfd97a6ce93089ac18bc13871b85438581e22ef4f",
+      "bytes": 17822,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/b299a41edc9645eff1830bce1dda7fd592c2398ad246a25d0c933debc47bac99/render-record.json",
+      "original_sha256": "5fd1d3ac8c776c072e75c6c89f90a6d546d5bcbaa8325e6ddce0d6aecf2c4f56",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-original-review.json.gz",
+      "sha256": "05c39220da01352ea4887a3991526f5f05e62e7a801a6bc0571721714fa91a12",
+      "bytes": 33099,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/b299a41edc9645eff1830bce1dda7fd592c2398ad246a25d0c933debc47bac99/review.json",
+      "original_sha256": "7c5079b5f7df17462ccdcd677d297b80c883c0b096f3252cc0161a8d7244aa0f",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-render-record.json.gz",
+      "sha256": "6bca3ecef42fb7663cb124432d5362f33c686f4417e2eaba0dd20d604da947e9",
+      "bytes": 17822,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947/render-record.json",
+      "original_sha256": "6cf17312c23d4b4d013f40dc94624efed3818c086d6016e4101e7a6dea8041c6",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Geometry-review.json.gz",
+      "sha256": "51f8cf07b220c3a9b52078b8b55237379ed650bf5ae0bd13091a5f8e8aff4d76",
+      "bytes": 31267,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947/regression-review.json",
+      "original_sha256": "adff6c3731f38a7ad13f709bd0414e13abc354f5a66b09f768775637786436de",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-audit.json.gz",
+      "sha256": "e3f124c1db49e9c9509e749914e89d8a5fdb63c3a9ddae4facef07859cf67821",
+      "bytes": 27918,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601/audit.json",
+      "original_sha256": "296c977c880572aa8634df99ee500b46fe5ad85dcdae25093adea27cf309d9a4",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-final-endpoint-record.json.gz",
+      "sha256": "933b43c405fb3065fa6163dc8da2c3cd11d79989f8dae52a26d5037feca28e40",
+      "bytes": 21144,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/zh/Words/d71764a155be5adabf68cf33dfd1be74572d7f17f2a92395ee3aeef0dd47fcb3/result.json",
+      "original_sha256": "d71764a155be5adabf68cf33dfd1be74572d7f17f2a92395ee3aeef0dd47fcb3",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-final-endpoint-review.json.gz",
+      "sha256": "22cdc37f70f18a82c645f0ac64b164a1825b71cd0a4171b1d931bcd442b0fea4",
+      "bytes": 18894,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/final/endpoints/zh-Words/review.json",
+      "original_sha256": "f370a6421a6009df54cdee92766170cccefb30fa21c46043e0008a224930e5f4",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-original-audit.json.gz",
+      "sha256": "61e3e6f75836ebe93099caa0df75fdffb64e5a6773bae4f243eba3b450227763",
+      "bytes": 27864,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/5eccaee8110fac68208d1153a205dec5d0975a8d3da662f05bc000a1ab09c650/audit.json",
+      "original_sha256": "20ecc88b115c5102c1aac2a26422409a9980883276021c81fd39c6725f1ee418",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-original-endpoint-review-1.json.gz",
+      "sha256": "643f0c93ac35e73e7a069ea56333fc23c863d4eb2b31b3961cada71763caeff0",
+      "bytes": 10479,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/zh/Words/215d486a12bba47925fad653f929a19bd84e76e55506140c41e15cb3c1ac09be/review.json",
+      "original_sha256": "fabc2d51d5f99a4ec24741469a9b276aba639601b764fa6e76f3f9884f718834",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-original-render-record.json.gz",
+      "sha256": "ed92359196bffffd154db07e1404bc9e93aae6f5b36f3783e9168d67cdba15fe",
+      "bytes": 21055,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/5eccaee8110fac68208d1153a205dec5d0975a8d3da662f05bc000a1ab09c650/render-record.json",
+      "original_sha256": "593867b2624cf843b1986f52d93a06f5cd625694929ce4ae9b70162160cd4729",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-original-review.json.gz",
+      "sha256": "1bee00d7737ee3c25e61b1503a2cf860dd6d09c437761642023b2451a96152c2",
+      "bytes": 41912,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/5eccaee8110fac68208d1153a205dec5d0975a8d3da662f05bc000a1ab09c650/review.json",
+      "original_sha256": "e0c8077a485ae969c02b9c558042d8231bf0277bfc87101a3ab7fde7d838c052",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-render-record.json.gz",
+      "sha256": "fe2abf1d207b92855b31b82d87d225dd84cf1b0ef7b050ad975fa444410ecf85",
+      "bytes": 21065,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601/render-record.json",
+      "original_sha256": "0516fb144bb6901f056aa73936dd3eb45320a50e670e4667a258b74697f79470",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "ledgers/zh-Words-review.json.gz",
+      "sha256": "6ee9e74f744bd21121313d3a05ee7f9fbcbe971e27b3633d9adeda1374586737",
+      "bytes": 39223,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601/regression-review.json",
+      "original_sha256": "8feac89678ca77d4dfd2b762dba9424520146137d01070218ed87d81c7ba2425",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-histogram-color-after.png",
+      "sha256": "d78eda85f9cd020ed8d61cc13c3047fd1865a1ee8e4965dd44c749b1bf6aaabf",
+      "bytes": 49519,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Geometry-motion-regression/frames/0000542_000036.133s.png",
+      "original_sha256": "d78eda85f9cd020ed8d61cc13c3047fd1865a1ee8e4965dd44c749b1bf6aaabf",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-histogram-color-before.png",
+      "sha256": "f602719eb43616b7a60c96e327f022425369086844589626c85a62efc8ba95c0",
+      "bytes": 37145,
+      "original_file": "/workspace/runtime/ai3-words-geometry-review/endpoints/en/Geometry/98e44d95080d5b0de538d4b32bd8c9918a4ec5335725ff466917786d6dbdf346/frames/003_00036.2s.png",
+      "original_sha256": "f602719eb43616b7a60c96e327f022425369086844589626c85a62efc8ba95c0",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-mean-transition-after.png",
+      "sha256": "6b41eb3c6b6d1b9d4ff5f665d4b5b8ab93e204c7500dca2db39cae7746932830",
+      "bytes": 54132,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Geometry-motion-regression/frames/0000530_000035.333s.png",
+      "original_sha256": "6b41eb3c6b6d1b9d4ff5f665d4b5b8ab93e204c7500dca2db39cae7746932830",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-mean-transition-before.png",
+      "sha256": "ada86454dda25b65f72caa08db1e71c784a007573807313ca473af1ab37febad",
+      "bytes": 70577,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Geometry-motion-final/frames/0000530_000035.333s.png",
+      "original_sha256": "ada86454dda25b65f72caa08db1e71c784a007573807313ca473af1ab37febad",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-pc-pulse-after.png",
+      "sha256": "9fffba2973644a6086f0b0fd2e6ff47170d63d97e08f771d1a305553e0ca2c6c",
+      "bytes": 114833,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Geometry-motion-regression/frames/0000933_000062.200s.png",
+      "original_sha256": "9fffba2973644a6086f0b0fd2e6ff47170d63d97e08f771d1a305553e0ca2c6c",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Geometry-pc-pulse-before.png",
+      "sha256": "2c559d66237dda0dd9dc91074a29b58f792f4a7a0126d14a37c7e437f39dd769",
+      "bytes": 115138,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Geometry-motion-final/frames/0000933_000062.200s.png",
+      "original_sha256": "2c559d66237dda0dd9dc91074a29b58f792f4a7a0126d14a37c7e437f39dd769",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Words-analogy-label-after.png",
+      "sha256": "8cc736634ed0c0fc9a38c41b669fb19cfecb75341821048af4901af87f2a67d3",
+      "bytes": 35536,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Words-motion-regression/frames/0002187_000145.800s.png",
+      "original_sha256": "8cc736634ed0c0fc9a38c41b669fb19cfecb75341821048af4901af87f2a67d3",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/en-Words-analogy-label-before.png",
+      "sha256": "6547e1405e7a3212f54d7a2573622cbeac6e54ee7febb0e05e1d87bf04a55366",
+      "bytes": 35428,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-en-Words-motion-final/frames/0002187_000145.800s.png",
+      "original_sha256": "6547e1405e7a3212f54d7a2573622cbeac6e54ee7febb0e05e1d87bf04a55366",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Geometry-mean-transition-after.png",
+      "sha256": "dcd0feb0575fe24b9f6a66921e7f0acfa555a606c29688b37710c48e758c6ea9",
+      "bytes": 51747,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Geometry-motion-regression/frames/0000512_000034.133s.png",
+      "original_sha256": "dcd0feb0575fe24b9f6a66921e7f0acfa555a606c29688b37710c48e758c6ea9",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Geometry-mean-transition-before.png",
+      "sha256": "800c828e3fc4bee5b44a0d8663f8770bc094ec810c1570a3e893d3cda1a03c70",
+      "bytes": 68640,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Geometry-motion-final/frames/0000512_000034.133s.png",
+      "original_sha256": "800c828e3fc4bee5b44a0d8663f8770bc094ec810c1570a3e893d3cda1a03c70",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Geometry-pc-pulse-after.png",
+      "sha256": "8cbefbd58ce7ed62246cc5888a8d0e2c607a5b66de5bc43c0749778af430c4d2",
+      "bytes": 111533,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Geometry-motion-regression/frames/0000899_000059.933s.png",
+      "original_sha256": "8cbefbd58ce7ed62246cc5888a8d0e2c607a5b66de5bc43c0749778af430c4d2",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Geometry-pc-pulse-before.png",
+      "sha256": "0a831b565cfed866efc6da8d94d076657021bf7dfc0e0be5209ab2586f09fd81",
+      "bytes": 111723,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Geometry-motion-final/frames/0000899_000059.933s.png",
+      "original_sha256": "0a831b565cfed866efc6da8d94d076657021bf7dfc0e0be5209ab2586f09fd81",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Words-analogy-label-after.png",
+      "sha256": "74ec17261ad098903b4b5085b63ee08346cc1d9b6077e406b30cc28e4b34f9ff",
+      "bytes": 33801,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Words-motion-regression/frames/0002390_000159.333s.png",
+      "original_sha256": "74ec17261ad098903b4b5085b63ee08346cc1d9b6077e406b30cc28e4b34f9ff",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "native/zh-Words-analogy-label-before.png",
+      "sha256": "9526c04b019211b78120d154c50c094fce9008644b5c48b93c871fa074a65c7d",
+      "bytes": 33718,
+      "original_file": "/workspace/explainer-videos/renders/qa/temporal/ai3-zh-Words-motion-final/frames/0002390_000159.333s.png",
+      "original_sha256": "9526c04b019211b78120d154c50c094fce9008644b5c48b93c871fa074a65c7d",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/en-Geometry-final-review.md",
+      "sha256": "947a92ffc9e2eefdcbed39df36508aa82980d240f8f7db6d78d4f6c1d819b218",
+      "bytes": 1428,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/361402267d88e047eb8acb438ff2406e9b61fde905b89bfdec27defc893537c4/regression-review.md",
+      "original_sha256": "947a92ffc9e2eefdcbed39df36508aa82980d240f8f7db6d78d4f6c1d819b218",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/en-Geometry-original-review.md",
+      "sha256": "0bace3d2b942015ad508f18d02a9c81dfbd28d9f0ad9d810659076256f101dfc",
+      "bytes": 7446,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Geometry/1beb9e9c778f3a4d1fde1dee4bfb09b21d56b1660c038f4d81d6928e8cc1d674/review.md",
+      "original_sha256": "0bace3d2b942015ad508f18d02a9c81dfbd28d9f0ad9d810659076256f101dfc",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/en-Words-final-review.md",
+      "sha256": "c8b7fc464121f7970d84a13cf6404de8a655ca20a5219b6e86ed91ec7d275615",
+      "bytes": 2137,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/b340a75ef4a455829436c11a8652919c89e13ea585f3847adf6f06a98a4a95ec/regression-review.md",
+      "original_sha256": "c8b7fc464121f7970d84a13cf6404de8a655ca20a5219b6e86ed91ec7d275615",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/en-Words-original-review.md",
+      "sha256": "063f400cd4592a970b0972f897d2949d8407ad5f077f1251e54af1ea75ee6e29",
+      "bytes": 9894,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/en-Words/00ec85da06d3db1c005091be6a1cf9ca2918c8769a1d5e133df9e3265b6a3e26/review.md",
+      "original_sha256": "063f400cd4592a970b0972f897d2949d8407ad5f077f1251e54af1ea75ee6e29",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/zh-Geometry-final-review.md",
+      "sha256": "80437934ebf4caf4f1743e6f6bdf47c24685bc5c6ae48ee7a51d4fa2a5aa4157",
+      "bytes": 1540,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/f4c0d0e30ce07a5b8432bfee4e1d515ffb6eaa3268c9ebb8c9c1a5c476570947/regression-review.md",
+      "original_sha256": "80437934ebf4caf4f1743e6f6bdf47c24685bc5c6ae48ee7a51d4fa2a5aa4157",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/zh-Geometry-original-review.md",
+      "sha256": "c7bad084554264e1a129d2c576afcc8f66d7c7987a71381b5db64d1679fb827b",
+      "bytes": 7215,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Geometry/b299a41edc9645eff1830bce1dda7fd592c2398ad246a25d0c933debc47bac99/review.md",
+      "original_sha256": "c7bad084554264e1a129d2c576afcc8f66d7c7987a71381b5db64d1679fb827b",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/zh-Words-final-review.md",
+      "sha256": "bf8b77f89d7d8d4a291671d668353e7a4f5a3ae2922cd5ad296fd21f106f97be",
+      "bytes": 2130,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/d73ea734d603d4331611317c129dffe2b999afa001042b40b590491eafe5a601/regression-review.md",
+      "original_sha256": "bf8b77f89d7d8d4a291671d668353e7a4f5a3ae2922cd5ad296fd21f106f97be",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "notes/zh-Words-original-review.md",
+      "sha256": "8b42dedb6f41a2c9b6a1a52c7ebb6b922b7e9615edaaa2c7609a8d2421946adc",
+      "bytes": 9773,
+      "original_file": "/workspace/runtime/ai3-motion-coverage/zh-Words/5eccaee8110fac68208d1153a205dec5d0975a8d3da662f05bc000a1ab09c650/review.md",
+      "original_sha256": "8b42dedb6f41a2c9b6a1a52c7ebb6b922b7e9615edaaa2c7609a8d2421946adc",
+      "encoding": "exact original bytes"
+    },
+    {
+      "file": "provenance/after-s13_words.py.gz",
+      "sha256": "1b5b2ae64443964b9b5d22595f97e41e7855a14bfef8cf76d109cf6a3fe0b5e3",
+      "bytes": 5624,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/after-s13_words.py",
+      "original_sha256": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/after-s17_geometry.py.gz",
+      "sha256": "62cfc1d8d02136650affe0dc24b589c8da03e63690240ede800c8068746dc539",
+      "bytes": 4429,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/after-s17_geometry.py",
+      "original_sha256": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/before-manifest.json.gz",
+      "sha256": "90689f928d445dd90895dc976c9564c4b891f5fc23049602c0ab7e4acb82b0de",
+      "bytes": 3759,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/before-manifest.json",
+      "original_sha256": "157e5ac3bf58b9a108622ef020d8b4c4bf1da7f16ff838aff372a2859ba33063",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/before-s13_words.py.gz",
+      "sha256": "d2e9e2ced54b72b67c9be7128e0b12b8d4d16809bae3c803eeaf718817e63976",
+      "bytes": 5527,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/before-s13_words.py",
+      "original_sha256": "b79c2495521d3987ef39dedf716bb40d24c2dfdf1cd6a97df7102d29d5b6e157",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/before-s17_geometry.py.gz",
+      "sha256": "55813a94cc1ab811ac7643560b1fa6bfd6d1942e72a420a19ee1d2696f15cfe3",
+      "bytes": 4405,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/before-s17_geometry.py",
+      "original_sha256": "477646df1f20bf631eab3bd7e502c653f519707406cedb581a4b0a5fd6db6505",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/color-caption-fixture.log.gz",
+      "sha256": "8391bec63194c4b484f855a82a517c96c0153ba59e3eedb8dbc205d998691ce7",
+      "bytes": 173,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/color-caption-fixture.log",
+      "original_sha256": "2baa98238bf09817fc55e36c0e735202405b1cdf9798b935e806010db1e65131",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/color-caption-fixture.py.gz",
+      "sha256": "9905e2a9789b99f0c90406d66076d0bf494b4351fd577ab7458dc1b3629abfd0",
+      "bytes": 2061,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/color-caption-fixture.py",
+      "original_sha256": "94918502a0eeebf8ee8ab59413ae1a3c0f30b001eacf7743e26305e5d8f632bd",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/color-fixture-result.json.gz",
+      "sha256": "5ee10c6a1773d9213fcf9c898d4dd5e74c763d8608d3d43cf4edfe3526945220",
+      "bytes": 2144,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/color-fixture-result.json",
+      "original_sha256": "d154a3fb993d1678f09f8edd84443498bb4c701d5246e7b0b15e4a911f3f06ac",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/final-movie-snapshot.json.gz",
+      "sha256": "fa84108d08c6882e1023242827fb2f3bde2b4768ca34d64ee6fb9225893f3e7f",
+      "bytes": 688,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/final/snapshot.json",
+      "original_sha256": "fec2d66fc5272ff9a32bfde392a31b72bc6c6967a3f00decfada382b09f63f3c",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/geometry-fixture-result.json.gz",
+      "sha256": "16314321a3c6f4f1e44040beeb2c59837033e7142d1480101f1375865b46f6f4",
+      "bytes": 594,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/geometry-fixture-result.json",
+      "original_sha256": "db819768da1c6803977da2cd47d6ccd82c0ffcc08656ed8323e5099e3f5f0d84",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/geometry-fixture.log.gz",
+      "sha256": "16314321a3c6f4f1e44040beeb2c59837033e7142d1480101f1375865b46f6f4",
+      "bytes": 594,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/geometry-fixture.log",
+      "original_sha256": "db819768da1c6803977da2cd47d6ccd82c0ffcc08656ed8323e5099e3f5f0d84",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/geometry-fixture.py.gz",
+      "sha256": "ef96c29f88ec2d4a1af7aa222469df6dd089ae8f94708b6243395aa471ff5c4a",
+      "bytes": 1974,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/geometry-fixture.py",
+      "original_sha256": "28275b483d72f47cc7afc38b7aceb9bcf4a641e095138bab89478847b2f3a2f9",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/initial-histogram-color-fixture.json.gz",
+      "sha256": "c7a9c48db76647933dc721676448a69dbd23073b3ee3c43658828f8adb6d4ce1",
+      "bytes": 1778,
+      "original_file": "/workspace/runtime/ai3-geometry-color-repair/fixture-result.json",
+      "original_sha256": "d9e375f04d0191e8fe0eb3c1acd68594b0e85e1572b011d715ac01e62f735b8a",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/initial-histogram-color-repair.json.gz",
+      "sha256": "e6898977d2373eda99ed912b2dee0173d6c8b86044b501792cb6f9c7792222bc",
+      "bytes": 1011,
+      "original_file": "/workspace/runtime/ai3-geometry-color-repair/repair.json",
+      "original_sha256": "4c5e08d624853ec40dd9f3d5473fd08db408da7bec7fa039e17bc1beec104825",
+      "encoding": "gzip exact original bytes"
+    },
+    {
+      "file": "provenance/repair.json.gz",
+      "sha256": "61debd6d0f491b1be66d15c147b860ac990e04a8a16f950457dc3735dcb75608",
+      "bytes": 1025,
+      "original_file": "/workspace/runtime/ai3-words-geometry-motion-repair/repair.json",
+      "original_sha256": "9458dae1cd2562899a242d80628ab437b8a2de060b82d6ceec85b818f8a245a3",
+      "encoding": "gzip exact original bytes"
+    }
+  ],
+  "payload_count": 77,
+  "payload_bytes": 1812260
+}

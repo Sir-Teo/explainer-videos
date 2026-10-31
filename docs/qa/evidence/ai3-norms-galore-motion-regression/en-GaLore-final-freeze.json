@@ -1,0 +1,18 @@
+{
+  "movie_sha256": "f747f73362be719ed4b8a77b6fc591b372c2a7c10652e2d2a7aa0660f8109e39",
+  "source_sha256": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+  "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+  "capture_sha256": "44d276ff44eff947397b4c0cb92ad4b960b84a054af0c7bffd5961820de7dd73",
+  "capture_status": "passed",
+  "capture_warnings": [],
+  "capture_fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+  "duration": 204.732357,
+  "duration_delta": 3.2666670000000124,
+  "coverage_counts": {
+    "directly_inspected": 89,
+    "exact_png_duplicate_of_inspected": 34,
+    "exact_png_inherited_from_completed_baseline": 294,
+    "not_yet_reviewed": 0
+  },
+  "scope": "Actual silentselected-frame/endpointappearance, not continuousplayback/listening/productionquality/player review."
+}
