@@ -13,7 +13,27 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.make import all_videos  # noqa: E402
-from tools.qa_series import OUT, fingerprint, inputs_current  # noqa: E402
+from tools.qa_series import OUT, check_status, fingerprint, inputs_current, preflight_passed, runtime_completed  # noqa: E402
+
+
+def audio_evidence_current(audio, key):
+    """Check provenance now; a stored source_current flag alone is insufficient."""
+    source = ROOT / audio.get("input_record", "missing")
+    if not source.is_file() or not audio.get("source_current"):
+        return False
+    raw = source.read_bytes()
+    capture = json.loads(raw)
+    return (audio.get("input_sha256") == hashlib.sha256(raw).hexdigest()
+            and capture.get("fingerprint") == key and inputs_current(capture)
+            and runtime_completed(capture))
+
+
+def audio_checks_completed(audio):
+    """Legacy records may omit status, but incomplete or flagged lines never pass."""
+    lines = audio.get("lines", [])
+    return (audio.get("status", "completed") == "completed" and bool(lines)
+            and len(lines) == audio.get("expected_lines") and not audio.get("issues")
+            and not any(line.get("issues") or line.get("asr_review_leads") for line in lines))
 
 
 def main():
@@ -28,6 +48,7 @@ def main():
         image = OUT / video / lang / (scene + ("_motion" if motion else "")) / ("motion_sheet.png" if motion else "sheet.png")
         return image.exists() and proof.get("sheet_sha256") == hashlib.sha256(image.read_bytes()).hexdigest()
     blocks, checked, total, issues = [], 0, 0, 0
+    visual_checked, motion_checked, motion_clean, audio_checked, audio_clean = 0, 0, 0, 0, 0
     for video in all_videos("ai"):
         key = fingerprint(video)
         manifest = importlib.import_module(f"videos.ai.{video}.manifest")
@@ -38,14 +59,14 @@ def main():
                 folder = OUT / video / lang / scene
                 path = folder / "result.json"
                 result = json.loads(path.read_text()) if path.exists() else {}
-                status = result.get("status", "not checked")
+                status = check_status(result) or "not checked"
                 warnings = result.get("warnings", [])
                 current = result.get("fingerprint") == key and inputs_current(result)
                 if result:
                     checked += 1
-                if status != "passed" or warnings or not current:
+                if not preflight_passed(result) or not current:
                     issues += 1
-                color = "good" if status == "passed" and not warnings and current else "pending"
+                color = "good" if preflight_passed(result) and current else "pending"
                 badge = status + ("; earlier source/data" if result and not current else "")
                 rel = folder.relative_to(OUT)
                 links = []
@@ -67,19 +88,25 @@ def main():
                 if warnings:
                     detail += f" ({len(warnings)} warnings)"
                 review_key = video if lang == "en" else f"{video}_zh"
-                visual_review = ("contact sheet reviewed" if sheet_reviewed(video, lang, scene) else
+                visually_checked = current and sheet_reviewed(video, lang, scene)
+                visual_checked += int(visually_checked)
+                visual_review = ("sampled frames reviewed" if visually_checked else
                                  "earlier contact sheet reviewed" if scene in reviewed.get(review_key, []) else
                                  "pending visual review")
                 motion_folder = folder.with_name(scene + "_motion")
                 motion_path = motion_folder / "result.json"
                 motion = json.loads(motion_path.read_text()) if motion_path.exists() else {}
-                motion_detail = motion.get("status", "not rendered")
+                motion_detail = check_status(motion) or "not rendered"
                 if motion:
-                    if motion.get("fingerprint") != key or not inputs_current(motion):
+                    motion_checked += 1
+                    motion_current = motion.get("fingerprint") == key and inputs_current(motion)
+                    motion_clean += int(motion_current and preflight_passed(motion))
+                    if not motion_current:
                         motion_detail += "; earlier source/data"
                     if motion.get("warnings"):
                         motion_detail += f'; {len(motion["warnings"])} warnings'
                     motion_detail += "; motion sheet reviewed" if sheet_reviewed(video, lang, scene, True) else "; pending visual review"
+                    motion_detail += "; full playback review pending"
                     motion_rel = motion_folder.relative_to(OUT)
                     contact = "motion_sheet.png" if (motion_folder / "motion_sheet.png").exists() else "sheet.png"
                     links.append(f'<a href="{motion_rel}/{contact}">motion frames</a>')
@@ -90,18 +117,15 @@ def main():
                 audio_path = folder / "audio_result.json"
                 audio_detail = "not checked"
                 if audio_path.exists():
+                    audio_checked += 1
                     audio = json.loads(audio_path.read_text())
-                    audio_detail = f'{len(audio["lines"])}/{audio.get("expected_lines", "?")} lines; {len(audio["issues"])} signal/timing issues'
+                    audio_detail = (audio.get("status", "legacy record") + "; " +
+                                    f'{len(audio["lines"])}/{audio.get("expected_lines", "?")} lines; {len(audio["issues"])} signal/timing issues')
                     leads = sum(len(line.get("asr_review_leads", [])) for line in audio["lines"])
                     if leads:
                         audio_detail += f"; {leads} ASR review leads"
-                    audio_input = ROOT / audio.get("input_record", "missing")
-                    audio_current = False
-                    if audio_input.is_file():
-                        raw = audio_input.read_bytes()
-                        capture = json.loads(raw)
-                        audio_current = (audio.get("input_sha256") == hashlib.sha256(raw).hexdigest()
-                                         and capture.get("fingerprint") == key and inputs_current(capture))
+                    audio_current = audio_evidence_current(audio, key)
+                    audio_clean += int(audio_current and audio_checks_completed(audio))
                     if not audio_current:
                         audio_detail += "; earlier source capture"
                     audio_detail += "; listening/playback pending"
@@ -114,7 +138,7 @@ def main():
                             f'<td>{" · ".join(links)}</td></tr>')
         blocks.append(f'<details><summary>{html.escape(manifest.TITLE)} — {len(manifest.SCENES)} chapters</summary>'
                       f'<table><thead><tr><th>Language</th><th>Chapter</th><th>Preflight</th><th>Visual review</th>'
-                      f'<th>Silent playback</th><th>Narration</th><th>Evidence</th></tr>'
+                      f'<th>Silent motion render</th><th>Narration</th><th>Evidence</th></tr>'
                       f'</thead><tbody>{"".join(rows)}</tbody></table></details>')
     OUT.mkdir(parents=True, exist_ok=True)
     page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
@@ -125,8 +149,12 @@ summary{padding:18px;cursor:pointer;font-weight:650}table{border-collapse:collap
 td,th{text-align:left;padding:12px;border-top:1px solid #334155;vertical-align:top}small{display:block;color:#9baabc}
 a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
 </style><h1>AI series QA evidence</h1>'''
-    page += (f'<p>{checked} of {total} language/chapter records have been attempted. '
-             f'{issues} records are untested or need follow-up. Expand a part for its evidence.</p>'
+    page += (f'<p>Endpoint preflight: {checked} of {total} language/chapter cases attempted; '
+             f'{total - issues} current cases without automated warnings; {issues} untested or needing follow-up.</p>'
+             f'<p>Sampled-frame review: {visual_checked}/{total} current endpoint sheets. '
+             f'Silent motion renders: {motion_checked}/{total} attempted, {motion_clean} current without automated warnings. '
+             f'Audio checks: {audio_checked}/{total} attempted, {audio_clean} current and complete without automated issues or ASR leads. '
+             'Full playback review, listening, and production approval remain pending. Expand a part for its evidence.</p>'
              '<p>These are silent runtime and animation-endpoint layout checks. Contact sheets require visual review. '
              'Narrated playback and final-resolution masters require separate verification. '
              'Earlier-source records remain visible and are marked explicitly.</p>')

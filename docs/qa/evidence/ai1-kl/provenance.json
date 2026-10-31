@@ -1,0 +1,83 @@
+[
+  {
+    "subset": "CrossEntropy.asymmetry only",
+    "mode": "before",
+    "lang": "en",
+    "duration": 68.533333,
+    "movie": "renders/qa/ai1-kl-comparison/en/before/media/videos/480p15/KLComparison.mp4",
+    "source_commit": "af170318c179bfb56fa28aafe73477c56f5b80d8",
+    "source_sha256": "691c1cd559f7f175199740264eb364b8dc8a04136a08f9469174c4cd55136845",
+    "note": "Render succeeded; metadata serialization failed afterward, metadata reconstructed from ffprobe.",
+    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "images": "Extracted from the actual silent MP4 near each narration-block end",
+    "image_times": [
+      34.120333333333335,
+      67.03887499999998
+    ],
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 68 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 68 s\n",
+    "review_scope": "Partial chapter; rendered and fully decoded; sampled frames inspected. Narrated listening and full playback review pending.",
+    "committed_image": "en-before.png",
+    "image_sha256": "155be7375073d9e7f02bb7fe1d927b5b1040ace28467070a71b23b748b5bf4c7"
+  },
+  {
+    "subset": "CrossEntropy.asymmetry only",
+    "mode": "after",
+    "lang": "en",
+    "duration": 68.53333333333352,
+    "movie": "renders/qa/ai1-kl-comparison/en/after/media/videos/480p15/KLComparison.mp4",
+    "source_commit": null,
+    "source_sha256": "cf2fd9a715e88339ae83c1a60472c7d25d6b977f3de33fc9b2086730755d65f5",
+    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "images": "Extracted from the actual silent MP4 near each narration-block end",
+    "image_times": [
+      34.120333333333335,
+      67.03887499999998
+    ],
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 68 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 68 s\n",
+    "review_scope": "Partial chapter; rendered and fully decoded; sampled frames inspected. Narrated listening and full playback review pending.",
+    "committed_image": "en-after.png",
+    "image_sha256": "6a81e82e6ac9f6cfd2c3662a64d0094c981e03cbcc9d5eb2203591b6eb932efc"
+  },
+  {
+    "subset": "CrossEntropy.asymmetry only",
+    "mode": "before",
+    "lang": "zh",
+    "duration": 72.33333333333348,
+    "movie": "renders/qa/ai1-kl-comparison/zh/before/media/videos/480p15/KLComparison.mp4",
+    "source_commit": "af170318c179bfb56fa28aafe73477c56f5b80d8",
+    "source_sha256": "691c1cd559f7f175199740264eb364b8dc8a04136a08f9469174c4cd55136845",
+    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "images": "Extracted from the actual silent MP4 near each narration-block end",
+    "image_times": [
+      34.68020833333333,
+      70.79379166666665
+    ],
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 72 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 72 s\n",
+    "review_scope": "Partial chapter; rendered and fully decoded; sampled frames inspected. Narrated listening and full playback review pending.",
+    "committed_image": "zh-before.png",
+    "image_sha256": "c1578f7e8c6a9c7442cf1f753ac314b2f6e139c36a16c8736f6f9937334fea45"
+  },
+  {
+    "subset": "CrossEntropy.asymmetry only",
+    "mode": "after",
+    "lang": "zh",
+    "duration": 72.33333333333353,
+    "movie": "renders/qa/ai1-kl-comparison/zh/after/media/videos/480p15/KLComparison.mp4",
+    "source_commit": null,
+    "source_sha256": "cf2fd9a715e88339ae83c1a60472c7d25d6b977f3de33fc9b2086730755d65f5",
+    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "images": "Extracted from the actual silent MP4 near each narration-block end",
+    "image_times": [
+      34.68020833333333,
+      70.79379166666665
+    ],
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 72 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 72 s\n",
+    "review_scope": "Partial chapter; rendered and fully decoded; sampled frames inspected. Narrated listening and full playback review pending.",
+    "committed_image": "zh-after.png",
+    "image_sha256": "ed1cdcb0c4b84fda584a4148190dfb70e6c07df8bce3ea9747aef8b91c34e128"
+  }
+]

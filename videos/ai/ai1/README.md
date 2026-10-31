@@ -66,7 +66,9 @@ text we have. A hook, fifteen chapters and an outro:
 * **12. Mutual information.** I(X; Y) = H(X) − H(X | Y), symmetric, a divergence; neighbouring letters share 0.75
   bits, two letters back 1.36 (the second alone 0.27); the data-processing inequality from the chain rule, checked on
   the books (the kind of the previous letter keeps 0.35 bits; noise drains the rest); the mutual information between
-  letters d apart, a power law (slope −0.53) out to 1,000 letters, against a counting model's exponential decay.
+  letters d apart through 1,000 letters, with a matched shuffled control and finite-sample bias correction.
+  A descriptive log-log fit summarizes the positive tail estimates; it does not establish a power law or
+  extrapolate beyond the measured distances. Signed estimates and nonpositive control values remain in the data.
 * **13. What it takes to guess well.** One paragraph's per-token surprise under GPT-2 and Qwen3-4B (Bull Durham
   tobacco; the telephone, 12.8 bits without the earlier paragraphs and 3.5 with them); knowledge probes; the ladder
   of knowledge.

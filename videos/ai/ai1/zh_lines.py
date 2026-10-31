@@ -426,16 +426,16 @@ ZH = {
         "我们在书里看看它是怎么发生的。<bookmark mark='a'/>只保留前一个字母的类别：空格、元音还是辅音。{I:.2f}比特里，留下了{Ig:.2f}比特。<bookmark mark='b'/>或者把它弄乱：把一部分字母换成随机的字母。噪声越多，它告诉你的就越少，一直降到零。<bookmark mark='c'/>两样都做，损失更多：每一条曲线都待在前一条的下面。<bookmark mark='d'/>这对学习机器也是一条定律：一个网络无论从它的上下文里算出什么，对下一个词元的了解，都不会超过上下文本身。",
 
     'f"How far back does that reach?':
-        "这能回溯多远？量一量一个字母和d个位置之后那个字母之间的互信息，用上我们所有的书。<bookmark mark='a'/>相邻的字母共享{mi[0]:.2f}比特。在一个词里面，它下降得很快。<bookmark mark='b'/>但它并没有消失。{tail}在这些坐标轴上，每个刻度都是前一个的10倍，横轴纵轴都是，所以幂律显示为一条直线。",
+        "这能回溯多远？测量我们这些书里相隔d个位置的字母对。这些是有限样本的估计，做过近似的偏差校正。<bookmark mark='a'/>相邻字母的估计是{mi[0]:.2f}比特。<bookmark mark='b'/>在我们测到的最远距离，{far}个字母处，校正后的估计为{last:.2g}比特；把相同字母随机打乱一次，得到{control:.2g}。这个打乱对照只是一次参考实现，不是不确定性区间。两个坐标轴都是对数轴。非正估计无法画在上面；我们保留了它们的正负号，右边显示的对照就是如此。",
 
-    'It decays slowly, like a power of the distance':
-        '它衰减得很慢，像距离的幂次一样，一直到一千个字母以外。',
+    "'A fit is a summary, not a law.":
+        "拟合是在概括数据，不是在给出定律。{fit_said}<bookmark mark='a'/>偏差校正只是近似，尤其这里的字母对来自文本，彼此会重叠。校正后的估计可能波动到零以下，虽然真实的互信息不会是负的。<bookmark mark='b'/>我们的测量到这个距离就停止了。它不能说明更远处会怎样，也不能证明每个距离都能从记忆里获益。长上下文，仍然是要让模型来检验的问题：注意力，在第13部分。",
 
-    'It keeps decaying, slowly, as far as we measured.':
-        '在我们测量的范围里，它一直在缓慢地衰减。',
+    'The gold line is a descriptive least-squares fit':
+        '金色的线，是对距离20到1000个字母之间的正估计做的描述性最小二乘拟合。它不是证明幂律成立的检验。',
 
-    "A counting model can't produce that tail":
-        "计数模型产生不了这样的尾巴：超出它那几个字母的上下文，依赖关系就按指数消失，<bookmark mark='x'/>每多一个字母就缩小同样的倍数，直直地掉出这些坐标轴。<bookmark mark='a'/>真实的文本，在每一个距离上都奖励记忆。要猜得好，模型需要长的记忆，还需要一种办法，找出其中要紧的部分：注意力，在第13部分。",
+    'There are not enough positive estimates here for a log-log fit.':
+        '这里没有足够的正估计来做双对数拟合。',
 
     # ------------------------------------------------------------------ Knowledge
     'Chapter thirteen. What does a model have to know':

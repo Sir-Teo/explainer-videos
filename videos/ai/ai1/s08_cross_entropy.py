@@ -21,6 +21,19 @@ def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opac
     return VGroup(*[rects[i] for i in range(len(p))])
 
 
+def gaussian_density(x, mean, sigma):
+    """A normalized bell curve; never flatten a peak to fit a plotting window."""
+    x = np.asarray(x, float)
+    return np.exp(-0.5 * ((x - mean) / sigma) ** 2) / (sigma * math.sqrt(2 * math.pi))
+
+
+def density_ceiling(p, *paths):
+    """One vertical scale for both fits, including every intermediate Gaussian peak."""
+    peak = max(float(np.max(p)), *(float(1 / (np.min(path[:, 1]) * math.sqrt(2 * math.pi)))
+                                   for path in paths))
+    return math.ceil(1.12 * peak * 10) / 10
+
+
 class CrossEntropy(VoiceoverScene):
     def construct(self):
         self.card()
@@ -277,30 +290,73 @@ class CrossEntropy(VoiceoverScene):
         wide = abs(fwd[-1, 1] - d["sd"]) < 0.05 and abs(fwd[-1, 0] - d["mean"]) < 0.05  # moment matching
         one_peak = ra[-1, 1] < 0.5 * fwd[-1, 1]
         head = label(r"$D_{\mathrm{KL}}$ is not symmetric", font_size=38).to_edge(UP, buff=0.35)
-        axes, qs = [], []
+        axes, qs, readouts, indicators, objectives = [], [], [], [], []
         trackers = []
-        for k, (title, path, col) in enumerate([
-            (r"$\min_q D_{\mathrm{KL}}(p \,\|\, q)$: \ cover everything $p$ does", fwd, C.MODEL_Q),
-            (r"$\min_q D_{\mathrm{KL}}(q \,\|\, p)$: \ go only where $p$ goes", ra, C.MODEL_Q),
+        ymax = density_ceiling(p, fwd, ra)
+        for k, (title, path) in enumerate([
+            (r"$\min_q D_{\mathrm{KL}}(p \,\|\, q)$: \ cover everything $p$ does", fwd),
+            (r"$\min_q D_{\mathrm{KL}}(q \,\|\, p)$: \ go only where $p$ goes", ra),
         ]):
-            ax = plain_axes([-6, 6, 2], [0, 0.7, 0.1], 6.0, 3.0).move_to([-3.5 + 7.0 * k, -0.75, 0])
+            center = -3.5 + 7.0 * k
+            ax = CornerAxes([-6, 6, 2], [0, ymax, 0.2], x_length=6.0, y_length=3.0, tips=False,
+                            axis_config={"stroke_color": GREY_C, "include_ticks": True,
+                                         "tick_size": 0.05, "stroke_width": 2})
+            ax.move_to([center, -0.75, 0])
             t = label(title, font_size=24, color=GREY_A).next_to(ax, UP, buff=0.35)
+            if t.width > 6.3:
+                t.scale_to_fit_width(6.3)
+            objectives.append(t)
             pc = polyline(ax, x, p, color=C.TRUE_P, stroke_width=3.5)
-            fill = ax.get_area(pc, x_range=[-6, 6], color=C.TRUE_P, opacity=0.25) if False else VGroup()
-            m_t, s_t = ValueTracker(path[0, 0]), ValueTracker(path[0, 1])
-            trackers.append((m_t, s_t, path))
+            fill = Polygon(ax.c2p(x[0], 0), *[ax.c2p(float(a), float(b)) for a, b in zip(x, p)],
+                           ax.c2p(x[-1], 0), stroke_width=0, fill_color=C.TRUE_P, fill_opacity=0.16)
+            # Shared ticks make the heights directly comparable across the two panels.
+            tick_labels = VGroup(*[MathTex(f"{y:.2g}", font_size=17, color=GREY_B)
+                                   .next_to(ax.c2p(-6, y), LEFT, buff=0.08)
+                                   for y in (0, ymax / 2, ymax)])
+            m_t, s_t, loss_t = (ValueTracker(float(path[0, j])) for j in range(3))
+            trackers.append((m_t, s_t, loss_t, path))
 
             def qcurve(ax=ax, m_t=m_t, s_t=s_t):
-                m, s = m_t.get_value(), s_t.get_value()
-                y = np.exp(-0.5 * ((x - m) / s) ** 2) / (s * math.sqrt(2 * math.pi))
-                return polyline(ax, x, np.minimum(y, 0.7), color=C.MODEL_Q, stroke_width=3.5)
+                return polyline(ax, x, gaussian_density(x, m_t.get_value(), s_t.get_value()),
+                                color=C.MODEL_Q, stroke_width=3.5)
 
+            def spread(ax=ax, m_t=m_t, s_t=s_t):
+                m, s = m_t.get_value(), s_t.get_value()
+                y = 0.04 * ymax
+                ends = [ax.c2p(m - s, y), ax.c2p(m + s, y)]
+                return VGroup(Line(*ends, color=C.MODEL_Q, stroke_width=4, stroke_opacity=0.7),
+                              Dot(ax.c2p(m, y), radius=0.045, color=C.MODEL_Q))
+
+            row = VGroup()
+            for symbol, tracker, places, color in ((r"\mu =", m_t, 2, C.MODEL_Q),
+                                                   (r"\sigma =", s_t, 2, C.MODEL_Q),
+                                                   (r"D_{\mathrm{KL}} =", loss_t, 3, C.KL)):
+                number = DecimalNumber(tracker.get_value(), num_decimal_places=places,
+                                       font_size=22, color=color)
+                number.add_updater(lambda mob, tracker=tracker: mob.set_value(tracker.get_value()))
+                pair = VGroup(MathTex(symbol, font_size=22, color=color), number).arrange(RIGHT, buff=0.1)
+                row.add(pair)
+            row.arrange(RIGHT, buff=0.3).move_to([center, 1.85, 0])
+            # Fixed number anchors keep changing digit widths from moving the whole row.
+            readouts.append(row)
             qc = always_redraw(qcurve)
-            axes.append(VGroup(ax, t, pc, fill))
+            indicators.append(always_redraw(spread))
+            axes.append(VGroup(ax, t, fill, pc, tick_labels))
             qs.append(qc)
         lp = label(r"$p$: \ two peaks", font_size=26, color=C.TRUE_P)
         lq = label(r"$q$: \ one bell curve", font_size=26, color=C.MODEL_Q)
         VGroup(lp, lq).arrange(RIGHT, buff=1.0).next_to(head, DOWN, buff=0.3)
+        density_label = note(r"probability density", font_size=18).move_to([0, -2.5, 0])
+
+        def replay(k):
+            m_t, s_t, loss_t, path = trackers[k]
+            positions = np.linspace(0, 1, len(path))
+
+            def update(_mob, alpha):
+                for j, tracker in enumerate((m_t, s_t, loss_t)):
+                    tracker.set_value(float(np.interp(alpha, positions, path[:, j])))
+
+            return UpdateFromAlphaFunc(VGroup(), update)
         res = VGroup(
             label(rf"$\mu = {fwd[-1, 0]:.2f},\ \sigma = {fwd[-1, 1]:.2f}$: \ matches $p$'s mean and spread", font_size=22,
                   color=C.MODEL_Q).move_to([-3.5, -2.85, 0]),
@@ -322,15 +378,12 @@ class CrossEntropy(VoiceoverScene):
             "training loss we just met, <bookmark mark='b'/> " + fit
         ) as vo:
             self.play(FadeIn(head), FadeIn(axes[0]), FadeIn(axes[1]), FadeIn(lp), FadeIn(lq))
-            self.add(*qs)
+            self.add(*qs, *indicators, *readouts)
+            self.play(FadeIn(density_label))
             vo.wait_until("a")
-            self.wait(0.3)
-            m_t, s_t, path = trackers[0]
+            self.play(Indicate(objectives[0], color=C.MODEL_Q, scale_factor=1.02))
             vo.wait_until("b")
-            self.play(UpdateFromAlphaFunc(VGroup(), lambda mob, a: (
-                m_t.set_value(np.interp(a, np.linspace(0, 1, len(path)), path[:, 0])),
-                s_t.set_value(np.interp(a, np.linspace(0, 1, len(path)), path[:, 1])))), run_time=3.0,
-                rate_func=linear)
+            self.play(replay(0), run_time=3.0, rate_func=linear)
             self.play(FadeIn(res[0]), FadeIn(why_[0]))
         squeeze = "it squeezes into a single peak and ignores the other." if one_peak else "it narrows toward one peak."
         with self.voiceover(
@@ -340,14 +393,11 @@ class CrossEntropy(VoiceoverScene):
             "committing to one thing: that choice comes back in variational autoencoders, in Part 20, and in "
             "distillation and reinforcement learning from human feedback, in Part 27."
         ) as vo:
-            m_t, s_t, path = trackers[1]
             vo.wait_until("a")
-            self.play(UpdateFromAlphaFunc(VGroup(), lambda mob, a: (
-                m_t.set_value(np.interp(a, np.linspace(0, 1, len(path)), path[:, 0])),
-                s_t.set_value(np.interp(a, np.linspace(0, 1, len(path)), path[:, 1])))), run_time=3.0,
-                rate_func=linear)
+            self.play(Indicate(objectives[1], color=C.MODEL_Q, scale_factor=1.02))
+            self.play(replay(1), run_time=3.0, rate_func=linear)
             self.play(FadeIn(res[1]), FadeIn(why_[1]))
-        for q in qs:
-            q.clear_updaters()
+        for mob in [*qs, *indicators, *readouts]:
+            mob.clear_updaters(recursive=True)
         self.wait(0.3)
         self.clear_scene()
