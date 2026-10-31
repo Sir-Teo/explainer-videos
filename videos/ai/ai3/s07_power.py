@@ -142,7 +142,10 @@ class Power(VoiceoverScene):
         key = VGroup(DashedLine(LEFT * 0.3, RIGHT * 0.3, color=GREY_B), label(r"predicted $(\lambda_2/\lambda_1)^k$",
                                                                              font_size=22, color=GREY_B)).arrange(RIGHT)
         key.to_corner(UR, buff=0.5)
-        floor = note(r"round-off: $\approx 10^{-16}$").next_to(ax.c2p(60, -15.5), UP, buff=0.05).align_to(ax.c2p(60, 0), RIGHT)
+        floor = note(r"round-off plateau").move_to(ax.c2p(48, -10.5))
+        plateau_i = min(55, len(p["gpt2"]["sin"]) - 1)
+        plateau_y = math.log10(max(float(p["gpt2"]["sin"][plateau_i]), 1e-17))
+        floor_leader = Line(floor.get_bottom(), ax.c2p(plateau_i, plateau_y), color=GREY_B, stroke_width=1.4)
         dg, dl = p["gpt2"], p["letters"]
         s0 = dg["sin"][0]
         rate_gap = max(abs(dg["rate_measured"] - dg["ratio"]), abs(dl["rate_measured"] - dl["ratio"]))
@@ -156,13 +159,17 @@ class Power(VoiceoverScene):
             f"{dl['ratio']:.3f}, and measured, {dl['rate_measured']:.3f}. <bookmark mark='c'/> Dashed, the prediction: "
             f"{verdict}."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(key), FadeIn(floor))
+            self.play(FadeIn(g), FadeIn(key))
             vo.wait_until("a")
             self.play(Create(series[0][0]), Create(series[0][1]), FadeIn(leg[0]), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(series[1][0]), Create(series[1][1]), FadeIn(leg[1]), run_time=2.0)
+            self.play(FadeIn(floor), Create(floor_leader), run_time=0.5)
             vo.wait_until("c")
-            self.play(Indicate(series[0][1], color=WHITE), Indicate(series[1][1], color=WHITE))
+            # Emphasize predictions without moving their data endpoints into
+            # the axis captions at the peak of the highlight.
+            self.play(Indicate(series[0][1], color=WHITE, scale_factor=1.0),
+                      Indicate(series[1][1], color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 

@@ -109,7 +109,7 @@ class Einsum(VoiceoverScene):
                       label(r"an index only in the inputs: \ summed over", font_size=28, color=IDX["j"]),
                       label(r"cost: \ the product of all the index sizes", font_size=28, color=GREY_A))
         rule.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, -2.2, 0])
-        hist = note(r"A.~Einstein (1916); \ \texttt{numpy.einsum} (2011)").to_corner(DR, buff=0.25)
+        hist = note(r"A.~Einstein (1916); \ \texttt{numpy.einsum} (2011)").to_corner(DR, buff=0.4)
         with self.voiceover(
             "Multiplying two matrices: entry i k is row i of A against column k of B, summed over j. "
             "<bookmark mark='a'/> In 1916, writing general relativity, Einstein tired of summation signs and dropped "
@@ -143,6 +143,8 @@ class Einsum(VoiceoverScene):
             ("bij,bjk->bik", r"a batch of matrix products"),
         ]
         head = label(r"Six operations, \ one notation", font_size=40).to_edge(UP, buff=0.4)
+        subtitle = note("colours name indices; output indices stay; input-only indices are summed",
+                        font_size=22).next_to(head, DOWN, buff=0.25)
         rows = VGroup()
         for s, t in table:
             rows.add(VGroup(spec(s, 34), label(t, font_size=30, color=GREY_A)))
@@ -157,7 +159,7 @@ class Einsum(VoiceoverScene):
             "times vector. <bookmark mark='d'/> The transpose, which only reorders. <bookmark mark='e'/> The trace. "
             "<bookmark mark='f'/> And a batch of matrix products, the letter b carried along."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows.copy().set_opacity(0.2)))
+            self.play(FadeIn(head), FadeIn(subtitle), FadeIn(rows.copy().set_opacity(0.2)))
             for k, mk in enumerate("abcdef"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k]), run_time=0.7)

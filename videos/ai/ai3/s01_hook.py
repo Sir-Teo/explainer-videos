@@ -47,8 +47,14 @@ class Hook(VoiceoverScene):
                 "heart", "run", "sing"}
         labels = {k: data_text(w, font=MONO, font_size=22, color=CAT_COLORS[c]) for k, (w, c) in enumerate(zip(words, cats))
                   if w in show or w in {"cat", "horse", "cow", "wolf"}}
+        # Keep projected annotations legible over dense measured point clusters.
+        # A glyph halo leaves the label's fill opacity available to Cloud3D's
+        # visibility-aware layout, while its dynamic anchor/leader stays intact.
+        for lab in labels.values():
+            lab.set_stroke(BACKGROUND, width=5, opacity=1, background=True).set_z_index(20)
         cl = Cloud3D(xyz, [CAT_COLORS[c] for c in cats], scale=3.5, radius=0.085, tilt=0.3, center=DOWN * 0.2,
                      labels=labels)
+        cl.leaders.set_z_index(10)
         overview = VGroup(*[m for k, m in cl.label_of.items() if words[k] in show])
         animals = VGroup(*[m for k, m in cl.label_of.items() if cats[k] == "animals" and words[k] not in show])
         animals.set_opacity(0)
@@ -57,6 +63,9 @@ class Hook(VoiceoverScene):
                           for name, col in CAT_COLORS.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         legend.to_corner(UL, buff=0.5)
         src = note(r"GPT-2 (2019): \\ each word's vector, on the three directions these words vary most").to_edge(DOWN, buff=0.3)
+        # Fixed annotations stay readable while measured points pass behind them.
+        for fixed in (legend, src):
+            fixed.add_background_rectangle(color=BACKGROUND, opacity=0.94, buff=0.1).set_z_index(30)
         dog = words.index("dog")
         # the words themselves first, in a shuffled list: then each one flies to its place
         order = np.random.default_rng(2019).permutation(len(words))
@@ -96,7 +105,9 @@ class Hook(VoiceoverScene):
             self.remove(vocab, *word_of.values())
             self.add(cl)
             vo.wait_until("b")
-            self.play(FadeIn(overview), FadeIn(legend), FadeIn(src))
+            # The overview labels are already visible inside cl; re-fading them
+            # would reset their opacity and produce a one-frame disappearance.
+            self.play(FadeIn(legend), FadeIn(src))
             self.play(cl.angle.animate.set_value(2 * PI), run_time=max(4.0, vo.remaining() - 0.5), rate_func=linear)
         with self.voiceover(
             "The picture is a shadow. <bookmark mark='a'/> GPT-2 really gives each of its 50,257 tokens a list of "
@@ -106,8 +117,10 @@ class Hook(VoiceoverScene):
             self.play(cl.angle.animate.set_value(2 * PI + 0.6), run_time=2.0)
             vo.wait_until("b")
             others = VGroup(*[m for m in overview if m is not cl.label_of[dog]])
-            self.play(*cl.look_at(centre, 2.6), others.animate.set_opacity(0), animals.animate.set_opacity(1),
-                      run_time=2.5)
+            # Finish the outgoing callouts before moving their anchors. Keep
+            # the original 2.5-second focus transition, including this fade.
+            self.play(others.animate.set_opacity(0), run_time=0.4)
+            self.play(*cl.look_at(centre, 2.6), animals.animate.set_opacity(1), run_time=2.1)
             self.play(cl.angle.animate.set_value(2 * PI + 1.1), run_time=2.0)
         cl.dots.clear_updaters()
         cl.labels.clear_updaters()
