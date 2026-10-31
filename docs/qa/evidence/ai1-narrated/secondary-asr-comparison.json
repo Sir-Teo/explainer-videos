@@ -1,0 +1,112 @@
+{
+  "transcripts_file": "transcripts.json",
+  "transcripts_sha256": "e54abd99e9ce80005d7646b89a1338cf255c755e71bfe435f974bb21acda5f81",
+  "model_repository": "openai/whisper-base.en",
+  "revision": "911407f4214e0e1d82085af863093ec0b66f9cd6",
+  "checks": [
+    {
+      "input": "corrected_stress_probe",
+      "audio_sha256": "0bae80b96b25a3b2b9567dd654246da6338b715d091567cf2bd96301474ce8f6",
+      "expected_numeric_or_unit_phrases": [
+        "7.32",
+        "millionths",
+        "minus 0.69"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "7.32": true,
+        "millionths": true,
+        "minus 0.69": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    },
+    {
+      "input": "Information_block_1",
+      "audio_sha256": "8b7a56529b1cfe695d2400aec40f1eb14e01a1bab6dabe25e3d4ebd6aa9a41d6",
+      "expected_numeric_or_unit_phrases": [
+        "12"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "12": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    },
+    {
+      "input": "Information_block_2",
+      "audio_sha256": "637afb44d04ac237fcc10e6bb6bfbcdb58c8e687d67437e68407d69167ab9fdd",
+      "expected_numeric_or_unit_phrases": [
+        "4.08",
+        "3.33",
+        "0.75",
+        "1.36",
+        "0.27"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "4.08": true,
+        "3.33": true,
+        "0.75": true,
+        "1.36": true,
+        "0.27": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    },
+    {
+      "input": "Information_block_4",
+      "audio_sha256": "af2ae5d03d51f58855cf5752d851935b8bfb97d24bb5d8f03d97742c9a48fc83",
+      "expected_numeric_or_unit_phrases": [
+        "0.75",
+        "0.35"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "0.75": true,
+        "0.35": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    },
+    {
+      "input": "Information_block_5",
+      "audio_sha256": "a1c84134b80ec1acd76ba4f3c98f18a4b5ea5d44b1949d67d142a7bea09c9119",
+      "expected_numeric_or_unit_phrases": [
+        "1000",
+        "7.32",
+        "millionths",
+        "minus 0.69"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "1000": true,
+        "7.32": true,
+        "millionths": true,
+        "minus 0.69": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    },
+    {
+      "input": "Information_block_6",
+      "audio_sha256": "9bab2becfe06ad341d8d1fd466cdc46622280c18eafa78712fd6a730b64441eb",
+      "expected_numeric_or_unit_phrases": [
+        "20",
+        "1000",
+        "13"
+      ],
+      "phrases_present_in_automated_transcripts": {
+        "20": true,
+        "1000": true,
+        "13": true
+      },
+      "contains_millions_instead_of_millionths": false,
+      "evidence_scope": "ASR text comparison only; not manual hearing or pronunciation approval"
+    }
+  ],
+  "conclusion": "Secondary ASR agrees with the scripted numeric/unit/negative-sign wording in the tested inputs. It does not corroborate the existing server ASR millions lead. This does not establish how a human listener will hear it.",
+  "production_QA_status_changed": false,
+  "manual_hearing_performed": false,
+  "limitations": [
+    "Base.en recognition can make errors; agreement is supporting evidence, not proof of pronunciation.",
+    "Overlapping30s windows with10s overlap retain raw separate transcripts; no word-level alignment or audio/animation synchronization was checked.",
+    "Only English Information six clips and the exact corrected stress probe were decoded; other chapters, Chinese narration and full narrated playback were not assessed."
+  ]
+}

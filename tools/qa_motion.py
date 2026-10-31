@@ -7,6 +7,9 @@ Every source frame is decoded, without temporal subsampling. Changes are measure
 at a smaller RGB resolution; consecutive changes separated by <= --gap
 seconds form one motion interval. Each interval supplies its boundary, midpoint,
 and at least one sample per --dense seconds. Static intervals supply a midpoint.
+Additional samples bound every selected-time gap by --max-gap (default 1s),
+including slow/subthreshold changes that the motion detector misses. Source
+timestamp gaps larger than that bound are reported as unavoidable exceptions.
 The selected frames are extracted at native resolution into paginated sheets.
 
 This is an automated detection/extraction audit, NOT continuous perceptual
@@ -122,7 +125,7 @@ def detect(path, times, stream, *, width, pixel_delta, changed_fraction, mean_de
                        "peak_changed_fraction": peak_fraction, "peak_mean_delta": peak_mean}
 
 
-def select_frames(times, intervals, dense):
+def select_frames(times, intervals, dense, max_gap=1.0):
     selected = {}
 
     def add(index, reason):
@@ -149,6 +152,18 @@ def select_frames(times, intervals, dense):
         previous_end = min(end + 1, len(times) - 1)
     if previous_end < len(times) - 1:
         add(at((times[previous_end] + times[-1]) / 2), "static-midpoint")
+    # Small frame-to-frame changes can accumulate into a substantial slow fade.
+    # Preserve adaptive points, then fill every gap, even in detected-static
+    # spans. Round down to an existing timestamp so quantization cannot enlarge
+    # a requested bound unless the source itself has a longer timestamp gap.
+    ordered = sorted(selected)
+    for left, right in zip(ordered, ordered[1:]):
+        previous = left
+        while times[right] - times[previous] > max_gap:
+            index = bisect.bisect_right(times, times[previous] + max_gap) - 1
+            index = max(previous + 1, min(index, right))
+            add(index, "maximum-gap-fill")
+            previous = index
     return [{"source_frame": i, "time": times[i], "reasons": sorted(selected[i])} for i in sorted(selected)]
 
 
@@ -209,21 +224,33 @@ def provenance(path):
         candidate = folder / "result.json"
         if not candidate.is_file():
             continue
-        record = json.loads(candidate.read_text())
+        try:
+            record = json.loads(candidate.read_text())
+        except json.JSONDecodeError:
+            continue  # An unrelated/malformed sibling is not identified evidence.
+        if not isinstance(record, dict):
+            continue
         root = Path(__file__).resolve().parents[1]
-        if record.get("movie") and (root / record["movie"]).resolve() == path:
+        if isinstance(record.get("movie"), str) and (root / record["movie"]).resolve() == path:
+            evidence = {"record": str(candidate), "sha256": sha256(candidate),
+                        "fingerprint": record.get("fingerprint"), "status": record.get("status")}
+            video = record.get("video")
+            if (not isinstance(video, str) or not video.startswith("ai") or not video[2:].isdigit()
+                    or not (root / "videos" / "ai" / video / "manifest.py").is_file()
+                    or not isinstance(record.get("inputs"), dict)):
+                return dict(evidence, current_source_and_inputs=None,
+                            current_source_and_inputs_reason="nonstandard record; not evaluated")
             from tools.qa_series import fingerprint, inputs_current
 
-            return {"record": str(candidate), "sha256": sha256(candidate),
-                    "fingerprint": record.get("fingerprint"), "status": record.get("status"),
-                    "current_source_and_inputs": record.get("fingerprint") == fingerprint(record["video"])
-                                                 and inputs_current(record)}
+            return dict(evidence, current_source_and_inputs=record.get("fingerprint") == fingerprint(video)
+                        and inputs_current(record))
     return None
 
 
-def _audit(path, out, *, width=320, pixel_delta=8, changed_fraction=0.0005, mean_delta=0.0001, gap=0.2, dense=1.0):
+def _audit(path, out, *, width=320, pixel_delta=8, changed_fraction=0.0005, mean_delta=0.0001, gap=0.2,
+           dense=1.0, max_gap=1.0):
     path, out = Path(path).resolve(), Path(out).resolve()
-    if (width < 1 or dense <= 0 or gap < 0 or not (1 <= pixel_delta <= 255)
+    if (width < 1 or dense <= 0 or max_gap <= 0 or gap < 0 or not (1 <= pixel_delta <= 255)
             or not (0 < changed_fraction <= 1) or not (0 <= mean_delta <= 1)):
         raise ValueError("invalid temporal audit settings")
     original_hash = sha256(path)
@@ -231,7 +258,7 @@ def _audit(path, out, *, width=320, pixel_delta=8, changed_fraction=0.0005, mean
     stream, times = probe(path)
     intervals, analysis = detect(path, times, stream, width=width, pixel_delta=pixel_delta,
                                  changed_fraction=changed_fraction, mean_delta=mean_delta, gap=gap)
-    selected = select_frames(times, intervals, dense)
+    selected = select_frames(times, intervals, dense, max_gap)
     out.mkdir(parents=True, exist_ok=True)
     extract(path, out / "frames", selected)
     pages = sheets(out, selected)
@@ -241,12 +268,19 @@ def _audit(path, out, *, width=320, pixel_delta=8, changed_fraction=0.0005, mean
         raise ValueError("audit tool changed during the audit; rerun with a stable algorithm")
     duration = float(stream.get("duration", times[-1] + 1 / stream["fps"]))
     report = {"status": "automated-temporal-audit-completed", "source": str(path), "source_sha256": original_hash,
-              "tool_sha256": tool_hash, "algorithm": "rgb-max-channel-v1", "color_space": "RGB24",
+              "tool_sha256": tool_hash, "algorithm": "rgb-max-channel-v2-bounded-gap", "color_space": "RGB24",
               "source_width": stream["width"], "source_height": stream["height"], "average_fps": stream["fps"],
               "duration": duration, "first_decoded_time": times[0], "last_decoded_time": times[-1],
               "settings": {"pixel_delta": pixel_delta, "changed_fraction": changed_fraction,
                            "mean_delta": mean_delta, "mean_delta_definition": "spatial mean of max-channel absolute RGB delta / 255",
-                           "static_gap_seconds": gap, "dense_motion_seconds": dense},
+                           "static_gap_seconds": gap, "dense_motion_seconds": dense,
+                           "maximum_selected_gap_seconds": max_gap},
+              "timestamp_quantization": {
+                  "minimum_source_frame_interval": min((b - a for a, b in zip(times, times[1:])), default=None),
+                  "maximum_source_frame_interval": max((b - a for a, b in zip(times, times[1:])), default=None),
+                  "unavoidable_source_gaps": [{"after_frame": i, "before_frame": i + 1, "start": a, "end": b}
+                                              for i, (a, b) in enumerate(zip(times, times[1:])) if b - a > max_gap],
+                  "rule": "Gap-fill samples round down to source timestamps; the bound holds wherever source timestamps permit."},
               "analysis": analysis, "provenance": provenance(path),
               "motion_intervals": [{"first_frame": a, "last_frame": b, "start": times[a], "end": times[b]}
                                    for a, b in intervals],
@@ -262,6 +296,7 @@ def _audit(path, out, *, width=320, pixel_delta=8, changed_fraction=0.0005, mean
               "coverage_limits": ["Every source frame was decoded and analyzed, not visually inspected.",
                                   "Only listed native-resolution times were extracted; review of those images is pending.",
                                   "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+                                  "Maximum-gap samples cover slow/subthreshold changes only at the listed times, not continuously.",
                                   "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
                                   "Full perceptual playback and listening remain unverified."]}
     (out / "result.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -302,9 +337,11 @@ def main():
     parser.add_argument("--mean-delta", type=float, default=0.0001)
     parser.add_argument("--gap", type=float, default=0.2)
     parser.add_argument("--dense", type=float, default=1.0)
+    parser.add_argument("--max-gap", type=float, default=1.0, help="maximum selected-time gap, subject to source timestamps")
     args = parser.parse_args()
     report = audit(args.video, args.out, width=args.width, pixel_delta=args.pixel_delta,
-                   changed_fraction=args.changed_fraction, mean_delta=args.mean_delta, gap=args.gap, dense=args.dense)
+                   changed_fraction=args.changed_fraction, mean_delta=args.mean_delta, gap=args.gap, dense=args.dense,
+                   max_gap=args.max_gap)
     print(f'{report["analysis"]["decoded_frames"]} frames decoded; {len(report["motion_intervals"])} motion intervals; '
           f'{len(report["selected_frames"])} selected frames; {len(report["pages"])} sheets; visual review pending')
 

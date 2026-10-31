@@ -1,0 +1,30 @@
+[
+  {
+    "image": "zh-before.png",
+    "source": "renders/qa/temporal/ai1-zh-Hook/frames/0000440_000029.333s.png",
+    "sha256": "dd85c285817e7e396137743dfdf911b48b57dc4f543d6e5cebf708cbaabb3201",
+    "scope": "Actual mid-pulse frame from old full Hook render"
+  },
+  {
+    "image": "en-after.png",
+    "movie": "renders/qa/ai1-rank-pulse/en/media/videos/480p15/RankPulse.mp4",
+    "movie_sha256": "3fc70ffff21dfbfaab4fc8009971cbb168537fa419540b4ad90ba22313a014af",
+    "time": 29.333,
+    "sha256": "f6907b9d89a1bc919e6f62747836822dec12fc5a274301a5e362f42b67ce2ce9",
+    "fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+    "source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+    "scope": "Hook.shannon only; silent focused rank-pulse repair, not complete chapter playback",
+    "duration": 60.400000000000176
+  },
+  {
+    "image": "zh-after.png",
+    "movie": "renders/qa/ai1-rank-pulse/zh/media/videos/480p15/RankPulse.mp4",
+    "movie_sha256": "05ebfe5c24b26bf0a213b371741de62e7bdd40ff800bcd6cc502db2c2f346563",
+    "time": 29.333,
+    "sha256": "f9612c72b67986c3f34743b384d917e419f309339131698115b6b59968b33e23",
+    "fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+    "source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+    "scope": "Hook.shannon only; silent focused rank-pulse repair, not complete chapter playback",
+    "duration": 60.66666666666677
+  }
+]

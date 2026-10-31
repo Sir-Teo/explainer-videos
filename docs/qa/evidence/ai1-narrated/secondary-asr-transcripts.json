@@ -1,0 +1,408 @@
+{
+  "scope": "Secondary automated speech recognition evidence only; no manual hearing/pronunciation or production QA approval.",
+  "created_utc": "2026-10-31T13:58:11.225949+00:00",
+  "model_repository": "openai/whisper-base.en",
+  "model_revision": "911407f4214e0e1d82085af863093ec0b66f9cd6",
+  "model_files_manifest": "download-manifest.json",
+  "device": "cpu",
+  "dtype": "float32",
+  "torch_threads": 1,
+  "decoding": "greedy, num_beams1, no expected-text prompt",
+  "source_audio_record": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/audio_result.json",
+  "source_audio_record_sha256": "1bbf6fdb865fc1c85ab8aab6bfd02e5ea68cdba1b9e36771c9e8b94effaa1589",
+  "source_audio_record_status_at_read": "needs-review",
+  "script_sha256": "65a39349d9a20ea2d608b6ba90e69771550d7b17f8ca9b9d0cdf34cca9aa5a7e",
+  "all_information_clips_requested": true,
+  "memory_before_load": {
+    "current_bytes": 7120248832,
+    "limit_bytes": 17179869184,
+    "headroom_bytes": 10059620352
+  },
+  "load_seconds": 0.358,
+  "inputs": [
+    {
+      "name": "corrected_stress_probe",
+      "path": "/workspace/explainer-videos/.cache/tts/c39672c704c3129b.wav",
+      "expected": null,
+      "original_probe_metadata": {
+        "text": "At one thousand letters, the corrected estimate is about 7.32 millionths of a bit; one shuffled version gives about minus 0.69 millionths of a bit.",
+        "spoken": "At one thousand letters, the corrected estimate is about 7.32 millionths of a bit; one shuffled version gives about minus 0.69 millionths of a bit.",
+        "duration": 9.75,
+        "tokens": [
+          [
+            "At",
+            0.12,
+            0.28
+          ],
+          [
+            "one",
+            0.28,
+            0.6
+          ],
+          [
+            "thousand",
+            0.6,
+            1.0
+          ],
+          [
+            "letters",
+            1.0,
+            1.4
+          ],
+          [
+            "the",
+            1.6400000000000001,
+            1.7200000000000002
+          ],
+          [
+            "corrected",
+            1.7200000000000002,
+            2.12
+          ],
+          [
+            "estimate",
+            2.2,
+            2.6
+          ],
+          [
+            "is",
+            2.6,
+            2.68
+          ],
+          [
+            "about",
+            2.68,
+            2.92
+          ],
+          [
+            "732",
+            2.92,
+            3.64
+          ],
+          [
+            "millionths",
+            4.12,
+            4.6000000000000005
+          ],
+          [
+            "of",
+            4.68,
+            4.76
+          ],
+          [
+            "a",
+            4.76,
+            4.84
+          ],
+          [
+            "bit",
+            4.84,
+            5.16
+          ],
+          [
+            "one",
+            5.5600000000000005,
+            5.72
+          ],
+          [
+            "shuffled",
+            5.72,
+            6.2
+          ],
+          [
+            "version",
+            6.2,
+            6.6000000000000005
+          ],
+          [
+            "gives",
+            6.6000000000000005,
+            6.84
+          ],
+          [
+            "about",
+            6.84,
+            7.08
+          ],
+          [
+            "minus",
+            7.08,
+            7.4
+          ],
+          [
+            "069",
+            7.4,
+            7.96
+          ],
+          [
+            "millionths",
+            8.28,
+            8.92
+          ],
+          [
+            "of",
+            8.92,
+            9.0
+          ],
+          [
+            "a",
+            9.0,
+            9.08
+          ],
+          [
+            "bit",
+            9.08,
+            9.399999999999999
+          ]
+        ]
+      },
+      "sha256": "0bae80b96b25a3b2b9567dd654246da6338b715d091567cf2bd96301474ce8f6",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 234000,
+      "duration_seconds": 9.75,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 9.75,
+          "transcript": "At 1000 letters, the corrected estimate is about 7.32 millionths of a bit. One shuffled version gives about minus 0.69 millionths of a bit.",
+          "elapsed_seconds": 3.153
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/corrected_stress_probe_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": true,
+          "millions": false,
+          "minus_or_negative": true
+        }
+      ]
+    },
+    {
+      "name": "Information_block_1",
+      "path": "/workspace/explainer-videos/.cache/tts/99dd5ff1f1991a35.wav",
+      "expected": "Chapter twelve. What the past tells you about the future.",
+      "sha256": "8b7a56529b1cfe695d2400aec40f1eb14e01a1bab6dabe25e3d4ebd6aa9a41d6",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 85680,
+      "duration_seconds": 3.57,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 3.57,
+          "transcript": "Chapter 12 What the past tells you about the future.",
+          "elapsed_seconds": 1.692
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_1_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        }
+      ]
+    },
+    {
+      "name": "Information_block_2",
+      "path": "/workspace/explainer-videos/.cache/tts/b005bcef9a0bb7ff.wav",
+      "expected": "In chapter seven, knowing X lowered the entropy of Y, on average. That drop is the mutual information. It's the bits that knowing one thing saves you when you guess the other, and it's symmetric. It's also a divergence, of the joint distribution from independence, so it's never negative. In our books, the next letter carries 4.08 bits; knowing the letter before it, 3.33. So neighbouring letters share 0.75 bits. Two letters back share 1.36, though the second one on its own shares only 0.27: together, letters say more than apart.",
+      "sha256": "637afb44d04ac237fcc10e6bb6bfbcdb58c8e687d67437e68407d69167ab9fdd",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 855120,
+      "duration_seconds": 35.63,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 30.0,
+          "transcript": "In chapter 7, knowing X lowered the entropy of Y on average. That drop is the mutual information. It's the bits that knowing one thing saves you when you guess the other and it's symmetric. It's also a divergence of the joint distribution from independence, so it's never negative. In our books, the next letter carries 4.08 bits, knowing the letter before it, 3.33. So neighboring letters share 0.75 bits. Two letters back share 1.36.",
+          "elapsed_seconds": 6.392
+        },
+        {
+          "start_seconds": 20.0,
+          "end_seconds": 35.63,
+          "transcript": "bits, knowing the letter before it, 3.33. So neighboring letters share 0.75 bits, two letters back share 1.36. Though the second one on its own shares only 0.27 together, letters say more than apart.",
+          "elapsed_seconds": 4.328
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_2_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": true
+        },
+        {
+          "start_seconds": 20.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        }
+      ]
+    },
+    {
+      "name": "Information_block_3",
+      "path": "/workspace/explainer-videos/.cache/tts/c0abbb907b10dc78.wav",
+      "expected": "Now process what you know. Suppose Z is computed from Y, by any function at all, even a noisy one. The chain rule splits what Y and Z together say about X in two ways: first Y, then whatever Z adds, which is nothing. Or first Z, then whatever Y adds. Compare the two, and Z can never tell you more about X than Y did. No amount of processing creates information.",
+      "sha256": "be4f528ad6a08434c6c67365eb23d30b66a8b09deb84899ed26e1eb96c03a265",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 573120,
+      "duration_seconds": 23.88,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 23.88,
+          "transcript": "Now process what you know. Suppose Z is computed from Y by any function at all, even a noisy one. The chain rule splits what Y and Z together say about X in two ways. First Y, then whatever Z adds, which is nothing. Or first Z, then whatever Y adds. Compare the two, and Z can never tell you more about X than Y did. No amount of processing creates information.",
+          "elapsed_seconds": 5.925
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_3_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        }
+      ]
+    },
+    {
+      "name": "Information_block_4",
+      "path": "/workspace/explainer-videos/.cache/tts/5f30488deca3f5f0.wav",
+      "expected": "Let's watch it happen in our books. Keep only the kind of the previous letter: space, vowel or consonant. Of the 0.75 bits, 0.35 survive. Or garble it: replace a share of the letters with random ones. The more noise, the less it tells, down to nothing. Do both, and you lose more: each curve stays under the one before. A law for learning machines too: whatever a network computes from its context can't know more about the next token than the context itself.",
+      "sha256": "af2ae5d03d51f58855cf5752d851935b8bfb97d24bb5d8f03d97742c9a48fc83",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 700800,
+      "duration_seconds": 29.2,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 29.2,
+          "transcript": "Let's watch it happen in our books. Keep only the kind of the previous letter, space, vowel, or consonant. Of the 0.75 bits, 0.35 survive, or garble it, replace a share of the letters with random ones. The more noise the less it tells down to nothing. Do both, and you lose more. Each curve stays under the one before. A law for learning machines too. Whatever a network computes from its context can't know more about the next token than the context itself.",
+          "elapsed_seconds": 7.712
+        },
+        {
+          "start_seconds": 20.0,
+          "end_seconds": 29.2,
+          "transcript": "curve stays under the one before. A law for learning machines too. Whatever a network computes from its context can't know more about the next token than the context itself.",
+          "elapsed_seconds": 3.779
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_4_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        },
+        {
+          "start_seconds": 20.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        }
+      ]
+    },
+    {
+      "name": "Information_block_5",
+      "path": "/workspace/explainer-videos/.cache/tts/92a902a99d6e11a1.wav",
+      "expected": "How far back does that reach? Measure pairs of letters at distance d across our books. These are finite-sample estimates, with an approximate bias correction. The neighbouring letter estimate is 0.75 bits. At our largest measured distance, 1000 letters, the corrected estimate is about 7.32 millionths of a bit; one shuffled version of the same letters gives about minus 0.69 millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval. Both axes are logarithmic. Nonpositive estimates cannot appear on them; their signed values are retained, including the control shown at the right.",
+      "sha256": "a1c84134b80ec1acd76ba4f3c98f18a4b5ea5d44b1949d67d142a7bea09c9119",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 904320,
+      "duration_seconds": 37.68,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 30.0,
+          "transcript": "How far back does that reach? Measure pairs of letters at distance D across our books. These are finite sample estimates with an approximate bias correction. The neighboring letter estimate is 0.75 bits. At our largest measured distance, 1,000 letters, the corrected estimate is about 7.32 millionths of a bit. One shuffled version of the same letters gives about minus 0.69 millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval.",
+          "elapsed_seconds": 6.893
+        },
+        {
+          "start_seconds": 20.0,
+          "end_seconds": 37.68,
+          "transcript": "of the same letters gives about minus 0.69 millionths of a bit. The shuffled control is a reference realization, not an uncertainty interval. Both axes are logarithmic. Nonpositive estimates cannot appear on them. Their signed values are retained, including the control shown at the right.",
+          "elapsed_seconds": 4.775
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_5_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": true,
+          "millions": false,
+          "minus_or_negative": true
+        },
+        {
+          "start_seconds": 20.0,
+          "millionths": true,
+          "millions": false,
+          "minus_or_negative": true
+        }
+      ]
+    },
+    {
+      "name": "Information_block_6",
+      "path": "/workspace/explainer-videos/.cache/tts/2c88de9b59119cf5.wav",
+      "expected": "A fit is a summary, not a law. The gold line is a descriptive least-squares fit to the positive estimates from twenty to one thousand letters. It is not a test that proves a power law. Bias correction is approximate, especially for overlapping pairs from text. Corrected estimates can fluctuate below zero, even though true mutual information is nonnegative. Our measurement stops at this distance. It does not establish what happens beyond it, or prove that memory helps at every distance. Long context remains a question for models to test: attention, in Part 13.",
+      "sha256": "9bab2becfe06ad341d8d1fd466cdc46622280c18eafa78712fd6a730b64441eb",
+      "original_sample_rate": 24000,
+      "original_channels": 1,
+      "original_frames": 784320,
+      "duration_seconds": 32.68,
+      "segments": [
+        {
+          "start_seconds": 0.0,
+          "end_seconds": 30.0,
+          "transcript": "A fit is a summary, not a law. The gold line is a descriptive least squares fit to the positive estimates from 20 to 1,000 letters. It is not a test that proves a power law. Bias correction is approximate, especially for overlapping pairs from text. Corrected estimates can fluctuate below zero, even though true mutual information is non-negative. Our measurement stops at this distance. It does not establish what happens beyond it or prove that memory helps at every distance. Long context remains a question for",
+          "elapsed_seconds": 7.504
+        },
+        {
+          "start_seconds": 20.0,
+          "end_seconds": 32.68,
+          "transcript": "our measurement stops at this distance. It does not establish what happens beyond it or prove that memory helps at every distance. Long context remains a question for models to test, attention in part 13.",
+          "elapsed_seconds": 5.068
+        }
+      ],
+      "resampled_audio_path": "/workspace/runtime/asr-second/Information_block_6_16k.wav",
+      "input_unchanged_after_decode": true,
+      "term_flags": [
+        {
+          "start_seconds": 0.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": true
+        },
+        {
+          "start_seconds": 20.0,
+          "millionths": false,
+          "millions": false,
+          "minus_or_negative": false
+        }
+      ]
+    }
+  ],
+  "peak_process_rss_kib": 800668,
+  "memory_after_decode": {
+    "current_bytes": 7804174336,
+    "limit_bytes": 17179869184,
+    "headroom_bytes": 9375694848
+  },
+  "finished_utc": "2026-10-31T13:59:09.679664+00:00",
+  "total_elapsed_seconds": 58.811
+}

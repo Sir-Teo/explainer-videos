@@ -1,0 +1,1258 @@
+{
+  "status": "focused-repair-review-completed",
+  "scope": "Hook.shannon focused silent repair only; not whole Hook or continuous playback/listening",
+  "observed_utc": "2026-10-31T14:16:32.023336+00:00",
+  "languages": {
+    "en": {
+      "movie": "renders/qa/ai1-rank-pulse/en/media/videos/480p15/RankPulse.mp4",
+      "movie_sha256": "3fc70ffff21dfbfaab4fc8009971cbb168537fa419540b4ad90ba22313a014af",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "temporal_result_sha256": "ee82e0b7d4c809946c698664c2553dacc9980f5e9eec38c75dc0d7b4c895bb12",
+      "focused_result_sha256": "f7c3c8e38a2be4155f4e19043a589f401815f5aeabe90887c54c109a22fa0e68",
+      "hook_source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+      "rendered_hook_source_matches_current_file": true,
+      "duration": 60.399674,
+      "automated_decoded_frames": 906,
+      "selected_frames_total": 169,
+      "selected_frames_reviewed": 169,
+      "pages_total": 22,
+      "pages_reviewed": 22,
+      "largest_selected_gap": 1.0000000000000004,
+      "focused_provenance": {
+        "record": "/workspace/explainer-videos/renders/qa/ai1-rank-pulse/en/result.json",
+        "sha256": "f7c3c8e38a2be4155f4e19043a589f401815f5aeabe90887c54c109a22fa0e68",
+        "fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+        "status": null,
+        "current_source_and_inputs": null,
+        "current_source_and_inputs_reason": "nonstandard record; not evaluated"
+      },
+      "pages": [
+        {
+          "page": 1,
+          "observation": "Opening fade brings in Shannon header, citation and guessing blanks without clipping.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-001.png",
+          "sha256": "ff8656ea78b1c7fd7c87caa141ef086d1f991bed9aaa2a74b883a19abaffc1e9",
+          "time_range": [
+            0.0,
+            1.533008
+          ],
+          "source_frame_indices": [
+            0,
+            3,
+            5,
+            6,
+            11,
+            17,
+            18,
+            23
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 2,
+          "observation": "Cursor draws and guess-next-letter prompt enters; completed cursor clears the blank row and prompt.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-002.png",
+          "sha256": "70cab6ab1bfe0bee93623886db453dc73fee6c46ce9dedd0494168a16ddce3af",
+          "time_range": [
+            1.799674,
+            5.599674
+          ],
+          "source_frame_indices": [
+            27,
+            28,
+            40,
+            42,
+            53,
+            54,
+            69,
+            84
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 3,
+          "observation": "One-second hold samples retain stable cursor, blank rows and citation.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-003.png",
+          "sha256": "f04fd7f13a21048c114f0b99c73f2b11e6767d9e4a3e08ddae00180ddc040bbf",
+          "time_range": [
+            6.599674,
+            11.733008
+          ],
+          "source_frame_indices": [
+            99,
+            114,
+            115,
+            130,
+            145,
+            160,
+            175,
+            176
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 4,
+          "observation": "Cursor/prompt fade away and t/h/e reveal with rank-one markers correctly aligned beneath their letters.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-004.png",
+          "sha256": "7bd2c4f3c0e7e84288492f1a8f337b9a1eb11d61b0aa3523892d988f2fb3e995",
+          "time_range": [
+            11.799674,
+            12.666341
+          ],
+          "source_frame_indices": [
+            177,
+            180,
+            182,
+            183,
+            185,
+            187,
+            188,
+            190
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 5,
+          "observation": "Incorrect y fades before r appears; rank-one values and highlighted rank3 keep their character alignment.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-005.png",
+          "sha256": "f135697670a50d0beabaf72e81da516ed4c20680f4c76a1642a63e25a4821755",
+          "time_range": [
+            12.733008,
+            13.733008
+          ],
+          "source_frame_indices": [
+            191,
+            192,
+            197,
+            201,
+            202,
+            203,
+            204,
+            206
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 6,
+          "observation": "There/space resolves, incorrect w fades, then i appears with its count; no ghost wrong-letter remains.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-006.png",
+          "sha256": "d789be5d50f5a3df06de86edf08f0f807d3ef4fc977da16c1fa1c3511055687f",
+          "time_range": [
+            13.866341,
+            14.799674
+          ],
+          "source_frame_indices": [
+            208,
+            209,
+            210,
+            213,
+            216,
+            217,
+            219,
+            222
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 7,
+          "observation": "No/space correction completes before the long reveal; all small counts stay on one baseline.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-007.png",
+          "sha256": "a553dbf998de4c48a4f6e0b77f13995f9287b533b1a05989751393ba00d872c5",
+          "time_range": [
+            14.866341,
+            16.199674
+          ],
+          "source_frame_indices": [
+            223,
+            230,
+            237,
+            238,
+            239,
+            241,
+            242,
+            243
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 8,
+          "observation": "Sentence reveals across three lines with trailing spaces preserved. Long words and rank rows remain within bounds.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-008.png",
+          "sha256": "c5be012e3e37c35460768cb408112bc2cb8a82617dc9f48e91baa3aed4828d68",
+          "time_range": [
+            17.133008,
+            21.466341
+          ],
+          "source_frame_indices": [
+            257,
+            272,
+            282,
+            287,
+            302,
+            317,
+            321,
+            322
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 9,
+          "observation": "Counting-program disclosure fades in beneath the complete sentence; all count positions remain fixed.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-009.png",
+          "sha256": "cd9654a28fc6d3e9c9dc69aa3d6ecbc8e543e11d399b4d7e03cf6dd4cd4e15e1",
+          "time_range": [
+            21.666341,
+            22.333008
+          ],
+          "source_frame_indices": [
+            325,
+            327,
+            328,
+            329,
+            330,
+            331,
+            334,
+            335
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 10,
+          "observation": "First-guess deemphasis settles; rank-one values remain visible as small secondary marks without shifting.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-010.png",
+          "sha256": "ca2e7a314f8ab847be657a440e39f0ed4980b76774cfa1d5abf9f023e6c32b85",
+          "time_range": [
+            22.399674,
+            22.933008
+          ],
+          "source_frame_indices": [
+            336,
+            337,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 11,
+          "observation": "Motorcycle outline begins drawing above its rank row, without obscuring letters or counts.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-011.png",
+          "sha256": "1422c2ae66c3d49b8decaeeeae2f27e63df240aa1b93ef30c017fec726faa9e0",
+          "time_range": [
+            23.066341,
+            25.199674
+          ],
+          "source_frame_indices": [
+            346,
+            347,
+            348,
+            349,
+            362,
+            375,
+            376,
+            378
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 12,
+          "observation": "Motorcycle outline completes and holds with adequate separation from its counts.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-012.png",
+          "sha256": "045bb06c834421bcb360c2d5bcf33d0e4fb0d068ff836babbc3c5c31f8998c5b",
+          "time_range": [
+            25.333008,
+            27.799674
+          ],
+          "source_frame_indices": [
+            380,
+            381,
+            383,
+            385,
+            386,
+            387,
+            402,
+            417
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 13,
+          "observation": "Outline hold continues into the emphasis interval; count labels remain in their original character columns.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-013.png",
+          "sha256": "e98b2d1f6885ddb2c0993c2109edb3ac6e58328be6b236ca94295f51ccb5195a",
+          "time_range": [
+            28.799674,
+            32.333008
+          ],
+          "source_frame_indices": [
+            432,
+            447,
+            462,
+            476,
+            477,
+            478,
+            482,
+            485
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 14,
+          "observation": "Repaired emphasis changes rank color without enlarging digits. Multi-digit values remain separated from neighboring counts as the motorcycle outline fades out.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-014.png",
+          "sha256": "c7a6cb012961f4dab92e0b6221b828b56f7c559db34ee38c5e3cc6e48c0cdcb0",
+          "time_range": [
+            32.399674,
+            33.399674
+          ],
+          "source_frame_indices": [
+            486,
+            490,
+            493,
+            494,
+            497,
+            499,
+            500,
+            501
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 15,
+          "observation": "Post-emphasis hold retains separate rank columns and visible rank-one marks; no geometry drift.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-015.png",
+          "sha256": "4f0ece644f7c347a10ee4e1d4593635fa4cf325cc94d4927a55bd10f9173e151",
+          "time_range": [
+            34.399674,
+            40.599674
+          ],
+          "source_frame_indices": [
+            516,
+            531,
+            546,
+            555,
+            570,
+            585,
+            600,
+            609
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 16,
+          "observation": "Counting-program note yields to the human estimate; lower captions fade in cleanly below the sentence.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-016.png",
+          "sha256": "a3802c56261c5108b65ecf62a63cda5e08b107ec0891d36859b4919a1d931903",
+          "time_range": [
+            40.666341,
+            41.466341
+          ],
+          "source_frame_indices": [
+            610,
+            611,
+            612,
+            613,
+            615,
+            616,
+            617,
+            622
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 17,
+          "observation": "Human estimate holds clearly below sentence/ranks with no collision with its source citation.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-017.png",
+          "sha256": "252f4a30a466b4367c61e51aaa6718583e98aa38753b127926e8048003df5cbe",
+          "time_range": [
+            41.799674,
+            47.199674
+          ],
+          "source_frame_indices": [
+            627,
+            628,
+            643,
+            658,
+            673,
+            688,
+            703,
+            708
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 18,
+          "observation": "Long estimate hold remains stable; no post-pulse count or outline artifact appears.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-018.png",
+          "sha256": "edc500d9911b828ab7d785220fffd557940e3326972f0bf7e66f11eb283ceb9e",
+          "time_range": [
+            48.199674,
+            52.599674
+          ],
+          "source_frame_indices": [
+            723,
+            738,
+            753,
+            768,
+            783,
+            787,
+            788,
+            789
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 19,
+          "observation": "Blind-guess comparison fades in beneath estimate and stays clear of citation.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-019.png",
+          "sha256": "30e0e1ff6cfcd9ae489709766c3032aa55e12dd7dd8fa98df2258b032118a2b1",
+          "time_range": [
+            52.733008,
+            53.533008
+          ],
+          "source_frame_indices": [
+            791,
+            793,
+            794,
+            796,
+            799,
+            800,
+            802,
+            803
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 20,
+          "observation": "Final caption hold preserves distinct sentence, estimates and source bands.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-020.png",
+          "sha256": "24304924b99863a7abb28d181ad61634f288c7e3983cc4fa7abee4ba3dcb8242",
+          "time_range": [
+            53.599674,
+            58.999674
+          ],
+          "source_frame_indices": [
+            804,
+            819,
+            834,
+            844,
+            859,
+            874,
+            884,
+            885
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 21,
+          "observation": "Final English hold fades away as one composition, with no orphaned rank or caption.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-021.png",
+          "sha256": "7435816ad1fbee98a258bff0455dcd1d1febe8bc31840d18750a7941cad8da80",
+          "time_range": [
+            59.066341,
+            60.266341
+          ],
+          "source_frame_indices": [
+            886,
+            887,
+            888,
+            889,
+            890,
+            891,
+            898,
+            904
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 22,
+          "observation": "Last decoded English frame is blank; no truncated visible text remains.",
+          "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/sheet-022.png",
+          "sha256": "c9d9070ff55e35b03ca46b8fb1f12e90f0824e9ad980f09519f0b7364b1108e7",
+          "time_range": [
+            60.333008,
+            60.333008
+          ],
+          "source_frame_indices": [
+            905
+          ],
+          "selected_frames": 1
+        }
+      ],
+      "pulse_all_frames_review": {
+        "status": "completed",
+        "result_sha256": "4e466fe4ce1182b0b0c6d5f8c8d51c5b248bb13c7482d7826ebbe6b832ced1ae",
+        "expected_bookmark_b": 31.82316968130919,
+        "time_window": [
+          31.733008,
+          33.399674
+        ],
+        "decoded_source_frames_reviewed": 26,
+        "continuous_source_indices": [
+          476,
+          477,
+          478,
+          479,
+          480,
+          481,
+          482,
+          483,
+          484,
+          485,
+          486,
+          487,
+          488,
+          489,
+          490,
+          491,
+          492,
+          493,
+          494,
+          495,
+          496,
+          497,
+          498,
+          499,
+          500,
+          501
+        ],
+        "pages": [
+          {
+            "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/pulse-all-frames/sheet-001.png",
+            "first_selected_frame": 0,
+            "frames": 8,
+            "sha256": "5f3d9ce2ba8eb4a8e93a3990d158cb218fcb3f12b4202f72d725e098f2fc48c9",
+            "time_range": [
+              31.733008,
+              32.199674
+            ],
+            "source_frame_indices": [
+              476,
+              477,
+              478,
+              479,
+              480,
+              481,
+              482,
+              483
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/pulse-all-frames/sheet-002.png",
+            "first_selected_frame": 8,
+            "frames": 8,
+            "sha256": "a2aeed1f1fddb47f0914fd6bf88cb7e129b2d20ef3c9be095d0f8063ffe5b0db",
+            "time_range": [
+              32.266341,
+              32.733008
+            ],
+            "source_frame_indices": [
+              484,
+              485,
+              486,
+              487,
+              488,
+              489,
+              490,
+              491
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/pulse-all-frames/sheet-003.png",
+            "first_selected_frame": 16,
+            "frames": 8,
+            "sha256": "417b6657d19abf84488a69c7f6130d2ffc93aba45ab23ad057ca8104e9fc06ff",
+            "time_range": [
+              32.799674,
+              33.266341
+            ],
+            "source_frame_indices": [
+              492,
+              493,
+              494,
+              495,
+              496,
+              497,
+              498,
+              499
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/pulse-all-frames/sheet-004.png",
+            "first_selected_frame": 24,
+            "frames": 2,
+            "sha256": "973121d0f4c75a5eb5a6e96bd6e8778ac049f79296dbca4d19363909e765d169",
+            "time_range": [
+              33.333008,
+              33.399674
+            ],
+            "source_frame_indices": [
+              500,
+              501
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          }
+        ]
+      },
+      "native_priority_followup": {
+        "source_frame": 490,
+        "time": 32.666341,
+        "reasons": [
+          "all-pulse-window-frames"
+        ],
+        "file": "renders/qa/temporal/ai1-en-rank-pulse-after-v2/pulse-all-frames/frames/0000490_000032.666s.png",
+        "sha256": "651f177f6243edffc92c51c38afa75ff37debea039649a8c1aea48124bc164c5",
+        "observation": "Native emphasis frame inspected: multi-digit counts remain separated and the small first-guess ones are readable."
+      },
+      "distinct_postrepair_source_frames_visually_inspected": 182
+    },
+    "zh": {
+      "movie": "renders/qa/ai1-rank-pulse/zh/media/videos/480p15/RankPulse.mp4",
+      "movie_sha256": "05ebfe5c24b26bf0a213b371741de62e7bdd40ff800bcd6cc502db2c2f346563",
+      "tool_sha256": "1d0cee16ad098360ceb70f9cbc513bbce334ea107e90982ace3a7fd3df73595e",
+      "temporal_result_sha256": "c0871d5170d6ea0c9ceb934b3507c228b9cfdf769e9e0a4ffe661f9bb440a796",
+      "focused_result_sha256": "a75d231619854801fd422d31a081cfb75b20484cc06e6dd794f9fe5be668f7f4",
+      "hook_source_sha256": "419e40d8f3fbeb992212def6246db7fca8931de979aa1b93d46a9cd907559ca8",
+      "rendered_hook_source_matches_current_file": true,
+      "duration": 60.666341,
+      "automated_decoded_frames": 910,
+      "selected_frames_total": 176,
+      "selected_frames_reviewed": 176,
+      "pages_total": 22,
+      "pages_reviewed": 22,
+      "largest_selected_gap": 1.0000000000000004,
+      "focused_provenance": {
+        "record": "/workspace/explainer-videos/renders/qa/ai1-rank-pulse/zh/result.json",
+        "sha256": "a75d231619854801fd422d31a081cfb75b20484cc06e6dd794f9fe5be668f7f4",
+        "fingerprint": "b2f8631a0d4ec7f2fa128e612883c759bc07529be35e320cab62b648778ef733",
+        "status": null,
+        "current_source_and_inputs": null,
+        "current_source_and_inputs_reason": "nonstandard record; not evaluated"
+      },
+      "pages": [
+        {
+          "page": 1,
+          "observation": "Chinese header/citation and blank rows fade in coherently from black.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-001.png",
+          "sha256": "fb9a42d0775301ed3dc1774dfa63464eb12980f4b9c194d7f96bb4c30bd8db1d",
+          "time_range": [
+            0.0,
+            1.533008
+          ],
+          "source_frame_indices": [
+            0,
+            3,
+            5,
+            6,
+            11,
+            17,
+            18,
+            23
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 2,
+          "observation": "Chinese guess prompt and cursor draw/settle without collision.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-002.png",
+          "sha256": "19be0dcda06d0c40664f33c8d2b528959ff1a985d43992aff6d9f7784aeb51b5",
+          "time_range": [
+            1.799674,
+            2.533008
+          ],
+          "source_frame_indices": [
+            27,
+            28,
+            30,
+            33,
+            34,
+            36,
+            37,
+            38
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 3,
+          "observation": "Cursor pulse and one-second hold samples preserve blank-row/prompt spacing.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-003.png",
+          "sha256": "a914eeef67499a63bd1c36c8c619385e19b4edc001d4056545ec0de6cb1194dd",
+          "time_range": [
+            3.066341,
+            7.466341
+          ],
+          "source_frame_indices": [
+            46,
+            52,
+            53,
+            54,
+            69,
+            84,
+            99,
+            112
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 4,
+          "observation": "Cursor/prompt fade out cleanly before letters reveal.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-004.png",
+          "sha256": "e6ad42f85d597767ea2efac80f50ce4526d5906501349388f9191394ee9ad8ea",
+          "time_range": [
+            8.466341,
+            11.733008
+          ],
+          "source_frame_indices": [
+            127,
+            142,
+            157,
+            169,
+            170,
+            172,
+            175,
+            176
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 5,
+          "observation": "t/h/e and corresponding rank-one markers align; incorrect y begins its separate pink reveal.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-005.png",
+          "sha256": "d9782a56dbacbba3717b7e07e3c950a1fc862e080b75ea7935fa356639067c24",
+          "time_range": [
+            11.866341,
+            12.933008
+          ],
+          "source_frame_indices": [
+            178,
+            180,
+            181,
+            182,
+            184,
+            185,
+            190,
+            194
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 6,
+          "observation": "Wrong y disappears before r/e/space resolve; rank3 stays beneath its intended character.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-006.png",
+          "sha256": "115cf9715f7f42cd924491d076aed294ba841fdbcbd4317c3e877d9b234288da",
+          "time_range": [
+            12.999674,
+            13.733008
+          ],
+          "source_frame_indices": [
+            195,
+            196,
+            197,
+            199,
+            201,
+            202,
+            203,
+            206
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 7,
+          "observation": "Wrong w/t alternatives fade independently; corrected letters and rank baselines remain aligned.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-007.png",
+          "sha256": "5bb0216466582a141b470a5aa3508443768b3e9ba9128cdcaea9fa2e018c1138",
+          "time_range": [
+            13.933008,
+            15.399674
+          ],
+          "source_frame_indices": [
+            209,
+            210,
+            212,
+            215,
+            216,
+            223,
+            230,
+            231
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 8,
+          "observation": "Long three-line sentence reveal respects row wrapping and trailing-space alignment.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-008.png",
+          "sha256": "90a7165d3e4ba121f8c0ab343f02546d4d2a16f00c7112bae742c96b6f305b0a",
+          "time_range": [
+            15.466341,
+            18.666341
+          ],
+          "source_frame_indices": [
+            232,
+            234,
+            235,
+            236,
+            250,
+            262,
+            265,
+            280
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 9,
+          "observation": "Complete sentence holds while counting-program disclosure enters below.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-009.png",
+          "sha256": "d5bec0c2f6f799849d71404383f0dab773be6cbd90cfbee721fabfd24b02dfd2",
+          "time_range": [
+            19.266341,
+            19.933008
+          ],
+          "source_frame_indices": [
+            289,
+            290,
+            292,
+            294,
+            295,
+            296,
+            298,
+            299
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 10,
+          "observation": "First-guess opacity change leaves the small ones visible and fixed beneath the right letters.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-010.png",
+          "sha256": "2e4f77aa16472e66df695f3f8385911f0a55ea6f8ab0912713938586e3aa04ca",
+          "time_range": [
+            20.066341,
+            20.666341
+          ],
+          "source_frame_indices": [
+            301,
+            303,
+            304,
+            305,
+            307,
+            308,
+            309,
+            310
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 11,
+          "observation": "Chinese counting disclosure and rank-one deemphasis settle without changing count positions.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-011.png",
+          "sha256": "874a68a4104f3b2e95207354cc259fc482712aa40bc6842601aff33ce420af41",
+          "time_range": [
+            20.733008,
+            22.933008
+          ],
+          "source_frame_indices": [
+            311,
+            312,
+            314,
+            315,
+            316,
+            317,
+            331,
+            344
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 12,
+          "observation": "Motorcycle outline draws/holds with space above the count row.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-012.png",
+          "sha256": "fa6e59a93bc25205764aa1d195abcf30aa4459742e47d42356432ca48bd3fea4",
+          "time_range": [
+            22.999674,
+            23.733008
+          ],
+          "source_frame_indices": [
+            345,
+            347,
+            349,
+            350,
+            352,
+            354,
+            355,
+            356
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 13,
+          "observation": "Pre-pulse hold and pulse onset preserve each rank's original dimensions and alignment.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-013.png",
+          "sha256": "8059823ea26485e193bb2785c16867c956333b8fe3748019f596d08a977bc39c",
+          "time_range": [
+            24.733008,
+            28.666341
+          ],
+          "source_frame_indices": [
+            371,
+            386,
+            392,
+            407,
+            422,
+            428,
+            429,
+            430
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 14,
+          "observation": "Repaired color emphasis keeps multi-digit ranks separate while the outline fades; no enlargement or count collision at selected pulse times.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-014.png",
+          "sha256": "df45d6acebdecce905cf2431c12bfa1c29bc5b5ebfb2eaff6a010b6bc91a6ed8",
+          "time_range": [
+            28.933008,
+            30.066341
+          ],
+          "source_frame_indices": [
+            434,
+            437,
+            438,
+            442,
+            445,
+            446,
+            449,
+            451
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 15,
+          "observation": "Pulse ends with every count returned to its original color/position and no outline residue.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-015.png",
+          "sha256": "7831a32944cc05be3abe1b88ed8284227290ccffb898bbab8ebc3b4c83d279f7",
+          "time_range": [
+            30.133008,
+            35.533008
+          ],
+          "source_frame_indices": [
+            452,
+            453,
+            468,
+            483,
+            498,
+            503,
+            518,
+            533
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 16,
+          "observation": "Post-pulse hold retains legible small ones and separate rank columns; estimate begins fading in below.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-016.png",
+          "sha256": "6afa760c44ca46ec285021e2f32a6cc7b945e35d016eb87926921c5f981045a3",
+          "time_range": [
+            36.533008,
+            37.333008
+          ],
+          "source_frame_indices": [
+            548,
+            553,
+            554,
+            555,
+            556,
+            557,
+            559,
+            560
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 17,
+          "observation": "Chinese human estimate settles and holds clear of rank rows/citation.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-017.png",
+          "sha256": "4a188eddaf0b3c11c5af29922830edf724cb113693de04c5470c15e68c357584",
+          "time_range": [
+            37.399674,
+            42.133008
+          ],
+          "source_frame_indices": [
+            561,
+            566,
+            571,
+            572,
+            587,
+            602,
+            617,
+            632
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 18,
+          "observation": "Estimate hold is stable across one-second samples; no further artifact.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-018.png",
+          "sha256": "f57750c288746abd8039eb402ebd096f5d36aaeba23fa5c0607d0c18b0fcc431",
+          "time_range": [
+            43.133008,
+            49.266341
+          ],
+          "source_frame_indices": [
+            647,
+            662,
+            664,
+            679,
+            694,
+            709,
+            724,
+            739
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 19,
+          "observation": "Blind-guess caption enters below estimate without colliding with source citation.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-019.png",
+          "sha256": "3d7140874d623117d817101e06a280520d79adb61e635c48e58a132ee4266de4",
+          "time_range": [
+            50.266341,
+            50.999674
+          ],
+          "source_frame_indices": [
+            754,
+            756,
+            757,
+            758,
+            760,
+            762,
+            763,
+            765
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 20,
+          "observation": "Completed two-line estimate comparison holds with unchanged rank geometry.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-020.png",
+          "sha256": "b4eaeb8de616d2091b503658a0fe7eaa30474c7979b73c1ff2fcdaacd980a609",
+          "time_range": [
+            51.133008,
+            53.533008
+          ],
+          "source_frame_indices": [
+            767,
+            768,
+            770,
+            771,
+            772,
+            773,
+            788,
+            803
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 21,
+          "observation": "Late hold retains readable small counts and no pulse artifacts.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-021.png",
+          "sha256": "c1ae92afddee0bae2f456a2e8725d549a1f2e9be78f2cd8dc11b61dc163e5318",
+          "time_range": [
+            54.533008,
+            59.333008
+          ],
+          "source_frame_indices": [
+            818,
+            831,
+            846,
+            861,
+            876,
+            888,
+            889,
+            890
+          ],
+          "selected_frames": 8
+        },
+        {
+          "page": 22,
+          "observation": "Chinese composition fades nearly to black at the last frame without leaving an orphaned count or label.",
+          "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/sheet-022.png",
+          "sha256": "c0b95cd1bf8c50ed4de55bf1adb0cd192b81b7c11f41a6aaa65f5fb001151567",
+          "time_range": [
+            59.399674,
+            60.599674
+          ],
+          "source_frame_indices": [
+            891,
+            892,
+            893,
+            894,
+            895,
+            901,
+            908,
+            909
+          ],
+          "selected_frames": 8
+        }
+      ],
+      "pulse_all_frames_review": {
+        "status": "completed",
+        "result_sha256": "4e658d5b7924c75fd7b9abdc79614e7ac351a71e2f6c4536a93eab6fe601ae09",
+        "expected_bookmark_b": 28.620380654865187,
+        "time_window": [
+          28.533008,
+          30.199674
+        ],
+        "decoded_source_frames_reviewed": 26,
+        "continuous_source_indices": [
+          428,
+          429,
+          430,
+          431,
+          432,
+          433,
+          434,
+          435,
+          436,
+          437,
+          438,
+          439,
+          440,
+          441,
+          442,
+          443,
+          444,
+          445,
+          446,
+          447,
+          448,
+          449,
+          450,
+          451,
+          452,
+          453
+        ],
+        "pages": [
+          {
+            "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/pulse-all-frames/sheet-001.png",
+            "first_selected_frame": 0,
+            "frames": 8,
+            "sha256": "5fc2e96072ab01ac18e3c3876450d0f4ffd00ce91faa9cbcd5f64f6795892a56",
+            "time_range": [
+              28.533008,
+              28.999674
+            ],
+            "source_frame_indices": [
+              428,
+              429,
+              430,
+              431,
+              432,
+              433,
+              434,
+              435
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/pulse-all-frames/sheet-002.png",
+            "first_selected_frame": 8,
+            "frames": 8,
+            "sha256": "015562d9d818b8dd1629cd6da4f15f0fd4b69a702368bb41874e1dce3e7b2d9d",
+            "time_range": [
+              29.066341,
+              29.533008
+            ],
+            "source_frame_indices": [
+              436,
+              437,
+              438,
+              439,
+              440,
+              441,
+              442,
+              443
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/pulse-all-frames/sheet-003.png",
+            "first_selected_frame": 16,
+            "frames": 8,
+            "sha256": "665cc4fe7bc10e09e6c81f9017c8b626f62697bb2bd76f58704111033f6c1016",
+            "time_range": [
+              29.599674,
+              30.066341
+            ],
+            "source_frame_indices": [
+              444,
+              445,
+              446,
+              447,
+              448,
+              449,
+              450,
+              451
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          },
+          {
+            "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/pulse-all-frames/sheet-004.png",
+            "first_selected_frame": 24,
+            "frames": 2,
+            "sha256": "9bc429aaea6a9a3f176cb75b726a1a8db0a7421712b2de54ba9a1360125235ad",
+            "time_range": [
+              30.133008,
+              30.199674
+            ],
+            "source_frame_indices": [
+              452,
+              453
+            ],
+            "observation": "All native source frames on this page inspected in order: color changes preserve digit size/spacing; small rank-one marks stay visible; outline fades without obstructing counts."
+          }
+        ]
+      },
+      "native_priority_followup": {
+        "source_frame": 440,
+        "time": 29.333008,
+        "reasons": [
+          "all-pulse-window-frames"
+        ],
+        "file": "renders/qa/temporal/ai1-zh-rank-pulse-after-v2/pulse-all-frames/frames/0000440_000029.333s.png",
+        "sha256": "f9612c72b67986c3f34743b384d917e419f309339131698115b6b59968b33e23",
+        "observation": "Native emphasis frame inspected: multi-digit counts remain separated and the small first-guess ones are readable."
+      },
+      "distinct_postrepair_source_frames_visually_inspected": 189
+    }
+  },
+  "before_comparison": {
+    "source": "renders/qa/temporal/ai1-zh-Hook-v2/frames/0000440_000029.333s.png",
+    "sha256": "dd85c285817e7e396137743dfdf911b48b57dc4f543d6e5cebf708cbaabb3201",
+    "observation": "Original native Chinese frame viewed again; enlarged multi-digit ranks crowd adjacent columns."
+  },
+  "resolved_finding": {
+    "id": "hook-rank-pulse-crowding",
+    "verdict": "Corrected in both focused rendered previews: color-only emphasis preserves digit size and column separation throughout every decoded pulse-window frame.",
+    "rank_one_readability": "First-guess marks remain visible/readable as secondary counts at native854\u00d7480 preview resolution in both languages."
+  },
+  "open_confirmed_focused_layout_issues": [],
+  "limits": [
+    "Whole Hook after repair was not reviewed here.",
+    "Outside the padded pulse windows, only listed selected times were visually inspected.",
+    "Continuous perceptual playback, listening and narrated synchronization remain unverified.",
+    "Final-resolution and external-player/mobile behavior remain unverified."
+  ],
+  "totals": {
+    "complete_selected_frames_reviewed": 345,
+    "selected_pages_reviewed": 44,
+    "all_pulse_window_frames_reviewed": 52,
+    "pulse_window_pages_reviewed": 8,
+    "distinct_postrepair_source_frames_visually_inspected": 371
+  }
+}

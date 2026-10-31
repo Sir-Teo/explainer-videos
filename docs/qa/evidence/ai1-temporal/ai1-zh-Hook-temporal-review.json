@@ -1,0 +1,1564 @@
+{
+  "status": "selected-time-review-completed",
+  "observed_utc": "2026-10-31T13:57:02.202208+00:00",
+  "source_video_sha256": "8f2657f3772a9ddb5871639e02f5601aa5d544a043d016fb6f12f24cd7757e58",
+  "tool_sha256": "669cba38a122efb1fd62865990811b4d601610523859197390d58dbffa469b8c",
+  "source_fingerprint": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+  "source_current_at_extraction": true,
+  "source_current_at_review": false,
+  "temporal_result_sha256": "f2a4eb3a7ed2d80ca8829e7c04697cd75ec61a760dab9d1ada4476c7c73f081d",
+  "scope": "All requested sheets reviewed in temporal order at their selected times only; no continuous perceptual playback/listening or all-frame visual review.",
+  "total_sheets": 46,
+  "reviewed_sheets": 46,
+  "total_selected_frames": 368,
+  "reviewed_selected_frames": 368,
+  "automatically_decoded_frames": 3569,
+  "pages": [
+    {
+      "page": 1,
+      "observation": "Opening black frames lead into a dim-to-readable fade of the Shannon header, source citation and three-line guessing blanks. No geometric clipping at selected times; intentional fade frames are not treated as readability failures.",
+      "file": "sheet-001.png",
+      "sheet_sha256": "fb9a42d0775301ed3dc1774dfa63464eb12980f4b9c194d7f96bb4c30bd8db1d",
+      "time_range": [
+        0.0,
+        1.533008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        0,
+        3,
+        5,
+        6,
+        11,
+        17,
+        18,
+        23
+      ],
+      "frame_files": [
+        "frames/0000000_000000.000s.png",
+        "frames/0000003_000000.200s.png",
+        "frames/0000005_000000.333s.png",
+        "frames/0000006_000000.400s.png",
+        "frames/0000011_000000.733s.png",
+        "frames/0000017_000001.133s.png",
+        "frames/0000018_000001.200s.png",
+        "frames/0000023_000001.533s.png"
+      ]
+    },
+    {
+      "page": 2,
+      "observation": "Yellow cursor box draws around the first blank and the Chinese guess-next-letter prompt appears below. The box closes cleanly; rows, prompt and citation remain separate.",
+      "file": "sheet-002.png",
+      "sheet_sha256": "19be0dcda06d0c40664f33c8d2b528959ff1a985d43992aff6d9f7784aeb51b5",
+      "time_range": [
+        1.799674,
+        2.533008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        27,
+        28,
+        30,
+        33,
+        34,
+        36,
+        37,
+        38
+      ],
+      "frame_files": [
+        "frames/0000027_000001.800s.png",
+        "frames/0000028_000001.866s.png",
+        "frames/0000030_000002.000s.png",
+        "frames/0000033_000002.200s.png",
+        "frames/0000034_000002.266s.png",
+        "frames/0000036_000002.400s.png",
+        "frames/0000037_000002.466s.png",
+        "frames/0000038_000002.533s.png"
+      ]
+    },
+    {
+      "page": 3,
+      "observation": "Cursor outline enlarges/settles while the guessing prompt holds. Static interval samples retain the blank rows and source citation without visual leftovers; no clipping observed.",
+      "file": "sheet-003.png",
+      "sheet_sha256": "e65c89a85e81a2bd690099883dea409728ba68335b186c6f9f13b59de4d3f978",
+      "time_range": [
+        3.066341,
+        11.466341
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        46,
+        52,
+        53,
+        54,
+        112,
+        169,
+        170,
+        172
+      ],
+      "frame_files": [
+        "frames/0000046_000003.066s.png",
+        "frames/0000052_000003.466s.png",
+        "frames/0000053_000003.533s.png",
+        "frames/0000054_000003.600s.png",
+        "frames/0000112_000007.466s.png",
+        "frames/0000169_000011.266s.png",
+        "frames/0000170_000011.333s.png",
+        "frames/0000172_000011.466s.png"
+      ]
+    },
+    {
+      "page": 4,
+      "observation": "Cursor fades and raw English letters t, h, e reveal sequentially with individual rank-one numbers below. Letter and rank baselines remain aligned; raw data stays English appropriately in the Chinese chapter.",
+      "file": "sheet-004.png",
+      "sheet_sha256": "7d2f69dd3a6b24cb940638de26f54570ac618803f8b62cc42d43dc7383834525",
+      "time_range": [
+        11.666341,
+        12.333008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        175,
+        176,
+        178,
+        180,
+        181,
+        182,
+        184,
+        185
+      ],
+      "frame_files": [
+        "frames/0000175_000011.666s.png",
+        "frames/0000176_000011.733s.png",
+        "frames/0000178_000011.866s.png",
+        "frames/0000180_000012.000s.png",
+        "frames/0000181_000012.066s.png",
+        "frames/0000182_000012.133s.png",
+        "frames/0000184_000012.266s.png",
+        "frames/0000185_000012.333s.png"
+      ]
+    },
+    {
+      "page": 5,
+      "observation": "Incorrect y guess is pink, fades, and correct r/e letters resolve into there; rank 3 is highlighted under the relevant position. No collision between guessed letters and rank row at selected times.",
+      "file": "sheet-005.png",
+      "sheet_sha256": "d4de147d8c98416d25e1a1d3811a6e126dfc37ce125a10077d1404979a45ea36",
+      "time_range": [
+        12.666341,
+        13.466341
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        190,
+        194,
+        195,
+        196,
+        197,
+        199,
+        201,
+        202
+      ],
+      "frame_files": [
+        "frames/0000190_000012.666s.png",
+        "frames/0000194_000012.933s.png",
+        "frames/0000195_000013.000s.png",
+        "frames/0000196_000013.066s.png",
+        "frames/0000197_000013.133s.png",
+        "frames/0000199_000013.266s.png",
+        "frames/0000201_000013.400s.png",
+        "frames/0000202_000013.466s.png"
+      ]
+    },
+    {
+      "page": 6,
+      "observation": "Space marker is visible; incorrect w fades before the correct continuation there is n. Yellow rank emphasis stays under its corresponding character, and word/space positions remain coherent.",
+      "file": "sheet-006.png",
+      "sheet_sha256": "1c31fa2fedbdcd6c65e686a8222db04902f2a5949b59dcafed898333981dedd8",
+      "time_range": [
+        13.533008,
+        14.866341
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        203,
+        206,
+        209,
+        210,
+        212,
+        215,
+        216,
+        223
+      ],
+      "frame_files": [
+        "frames/0000203_000013.533s.png",
+        "frames/0000206_000013.733s.png",
+        "frames/0000209_000013.933s.png",
+        "frames/0000210_000014.000s.png",
+        "frames/0000212_000014.133s.png",
+        "frames/0000215_000014.333s.png",
+        "frames/0000216_000014.400s.png",
+        "frames/0000223_000014.866s.png"
+      ]
+    },
+    {
+      "page": 7,
+      "observation": "Incorrect t after no is removed, then the rest of the English sentence reveals across the first and second rows. Trailing-space markers and rank values stay attached to character positions; no row overflow observed.",
+      "file": "sheet-007.png",
+      "sheet_sha256": "dbc8d66c5754e0eb556554d25d7e83a211d0adc79816b75b878809d269180c62",
+      "time_range": [
+        15.333008,
+        17.466341
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        230,
+        231,
+        232,
+        234,
+        235,
+        236,
+        250,
+        262
+      ],
+      "frame_files": [
+        "frames/0000230_000015.333s.png",
+        "frames/0000231_000015.400s.png",
+        "frames/0000232_000015.466s.png",
+        "frames/0000234_000015.600s.png",
+        "frames/0000235_000015.666s.png",
+        "frames/0000236_000015.733s.png",
+        "frames/0000250_000016.666s.png",
+        "frames/0000262_000017.466s.png"
+      ]
+    },
+    {
+      "page": 8,
+      "observation": "All three sentence rows complete, including rather dramatically the other day. The rank colors distinguish harder guesses; the explanatory counting-program note begins fading in beneath the rows without covering them.",
+      "file": "sheet-008.png",
+      "sheet_sha256": "c2f8b7468d5dffbe3a1afba590fac0afb1742508a3671f07db64d2f021be5640",
+      "time_range": [
+        17.666341,
+        19.733008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        265,
+        280,
+        289,
+        290,
+        292,
+        294,
+        295,
+        296
+      ],
+      "frame_files": [
+        "frames/0000265_000017.666s.png",
+        "frames/0000280_000018.666s.png",
+        "frames/0000289_000019.266s.png",
+        "frames/0000290_000019.333s.png",
+        "frames/0000292_000019.466s.png",
+        "frames/0000294_000019.600s.png",
+        "frames/0000295_000019.666s.png",
+        "frames/0000296_000019.733s.png"
+      ]
+    },
+    {
+      "page": 9,
+      "observation": "Counting-program disclosure is fully readable below the completed sentence. Rank highlighting steps through the demonstration without moving or overwriting the associated letters.",
+      "file": "sheet-009.png",
+      "sheet_sha256": "70a4c4e7e17233bd1120260dca0ad36712c0f744284f81a55936ffc2cb6cac9d",
+      "time_range": [
+        19.866341,
+        20.599674
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        298,
+        299,
+        301,
+        303,
+        304,
+        305,
+        307,
+        309
+      ],
+      "frame_files": [
+        "frames/0000298_000019.866s.png",
+        "frames/0000299_000019.933s.png",
+        "frames/0000301_000020.066s.png",
+        "frames/0000303_000020.200s.png",
+        "frames/0000304_000020.266s.png",
+        "frames/0000305_000020.333s.png",
+        "frames/0000307_000020.466s.png",
+        "frames/0000309_000020.600s.png"
+      ]
+    },
+    {
+      "page": 10,
+      "observation": "Rank emphasis resolves cleanly; a yellow rectangle begins drawing around motorcycle. Its partial outline is an expected drawing intermediate, clear of the adjacent rank row.",
+      "file": "sheet-010.png",
+      "sheet_sha256": "609324e9e3e7113f882a2be6b4108183dc5773a6482e474973d02f4de5e4b8b7",
+      "time_range": [
+        20.666341,
+        23.133008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        310,
+        313,
+        316,
+        317,
+        331,
+        344,
+        345,
+        347
+      ],
+      "frame_files": [
+        "frames/0000310_000020.666s.png",
+        "frames/0000313_000020.866s.png",
+        "frames/0000316_000021.066s.png",
+        "frames/0000317_000021.133s.png",
+        "frames/0000331_000022.066s.png",
+        "frames/0000344_000022.933s.png",
+        "frames/0000345_000023.000s.png",
+        "frames/0000347_000023.133s.png"
+      ]
+    },
+    {
+      "page": 11,
+      "observation": "Motorcycle outline completes around the word and holds. The outline respects the word and leaves its rank values below unobscured.",
+      "file": "sheet-011.png",
+      "sheet_sha256": "90c33d5ba0231c2bacef368457df8cd13f72b1f1ef3341114e063a6a0ef6f55d",
+      "time_range": [
+        23.266341,
+        28.533008
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        349,
+        350,
+        352,
+        354,
+        355,
+        356,
+        392,
+        428
+      ],
+      "frame_files": [
+        "frames/0000349_000023.266s.png",
+        "frames/0000350_000023.333s.png",
+        "frames/0000352_000023.466s.png",
+        "frames/0000354_000023.600s.png",
+        "frames/0000355_000023.666s.png",
+        "frames/0000356_000023.733s.png",
+        "frames/0000392_000026.133s.png",
+        "frames/0000428_000028.533s.png"
+      ]
+    },
+    {
+      "page": 12,
+      "observation": "Difficult ranks pulse larger/pink together and settle back to their baseline. Some enlarged adjacent ranks look crowded during the pulse; native frame follow-up requested before classifying this as a defect.",
+      "file": "sheet-012.png",
+      "sheet_sha256": "c8820ebcbca99a9251b7f29efc730b76074717b78dedb3649a2775040ee9add1",
+      "time_range": [
+        28.599674,
+        36.932682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        429,
+        440,
+        443,
+        452,
+        453,
+        504,
+        553,
+        554
+      ],
+      "frame_files": [
+        "frames/0000429_000028.600s.png",
+        "frames/0000440_000029.333s.png",
+        "frames/0000443_000029.533s.png",
+        "frames/0000452_000030.133s.png",
+        "frames/0000453_000030.199s.png",
+        "frames/0000504_000033.599s.png",
+        "frames/0000553_000036.866s.png",
+        "frames/0000554_000036.933s.png"
+      ]
+    },
+    {
+      "page": 13,
+      "observation": "Rank pulse has returned to baseline. The yellow Shannon human estimate fades in below the sentence, separate from the counting-program disclosure and citation.",
+      "file": "sheet-013.png",
+      "sheet_sha256": "c32122e6778cc5018c80f32cff12955d5a6304d49a067055872e626067b00a19",
+      "time_range": [
+        36.999349,
+        37.799349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        555,
+        556,
+        557,
+        559,
+        560,
+        561,
+        564,
+        567
+      ],
+      "frame_files": [
+        "frames/0000555_000036.999s.png",
+        "frames/0000556_000037.066s.png",
+        "frames/0000557_000037.133s.png",
+        "frames/0000559_000037.266s.png",
+        "frames/0000560_000037.333s.png",
+        "frames/0000561_000037.399s.png",
+        "frames/0000564_000037.599s.png",
+        "frames/0000567_000037.799s.png"
+      ]
+    },
+    {
+      "page": 14,
+      "observation": "Human estimate holds at about one bit, range 0.6–1.3. Sentence, estimate and citation occupy distinct bands with no new overlap or clipping at selected times.",
+      "file": "sheet-014.png",
+      "sheet_sha256": "bc95d045f8e17d9c0bdc22950f886762d46af87a67157fb4a5fecd4e03c4bcd2",
+      "time_range": [
+        37.866016,
+        50.532682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        568,
+        570,
+        571,
+        572,
+        664,
+        756,
+        757,
+        758
+      ],
+      "frame_files": [
+        "frames/0000568_000037.866s.png",
+        "frames/0000570_000037.999s.png",
+        "frames/0000571_000038.066s.png",
+        "frames/0000572_000038.133s.png",
+        "frames/0000664_000044.266s.png",
+        "frames/0000756_000050.399s.png",
+        "frames/0000757_000050.466s.png",
+        "frames/0000758_000050.533s.png"
+      ]
+    },
+    {
+      "page": 15,
+      "observation": "Blind-guess comparison log₂27=4.75 bits fades in below the human estimate, above the citation. The two captions remain readable and separate at selected times.",
+      "file": "sheet-015.png",
+      "sheet_sha256": "9e52a6854c73bd93ac199329e5624e8044b317729077e8dabc0ad6c997606fbd",
+      "time_range": [
+        50.666016,
+        51.399349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        760,
+        762,
+        763,
+        765,
+        767,
+        768,
+        770,
+        771
+      ],
+      "frame_files": [
+        "frames/0000760_000050.666s.png",
+        "frames/0000762_000050.799s.png",
+        "frames/0000763_000050.866s.png",
+        "frames/0000765_000050.999s.png",
+        "frames/0000767_000051.133s.png",
+        "frames/0000768_000051.199s.png",
+        "frames/0000770_000051.333s.png",
+        "frames/0000771_000051.399s.png"
+      ]
+    },
+    {
+      "page": 16,
+      "observation": "Estimate/comparison hold, then the entire guessing composition fades away together. No orphaned outline, rank or caption remains during the sampled fade-out.",
+      "file": "sheet-016.png",
+      "sheet_sha256": "637c312fb93f0ddaf07e092f71558038e291dcf14ce07adf65f296c17914397e",
+      "time_range": [
+        51.466016,
+        60.532682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        772,
+        773,
+        831,
+        888,
+        889,
+        898,
+        903,
+        908
+      ],
+      "frame_files": [
+        "frames/0000772_000051.466s.png",
+        "frames/0000773_000051.533s.png",
+        "frames/0000831_000055.399s.png",
+        "frames/0000888_000059.199s.png",
+        "frames/0000889_000059.266s.png",
+        "frames/0000898_000059.866s.png",
+        "frames/0000903_000060.199s.png",
+        "frames/0000908_000060.533s.png"
+      ]
+    },
+    {
+      "page": 17,
+      "observation": "Opening fade into timeline is clean. Chinese title, evenly labeled year axis and the two colored course-span bands are distinct; brief black/dim frames are transition samples.",
+      "file": "sheet-017.png",
+      "sheet_sha256": "c8b9512b993311e7037fd66b952ca5af57002581ee6613ec57df96ba1bae63f8",
+      "time_range": [
+        60.599349,
+        62.799349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        909,
+        912,
+        913,
+        914,
+        919,
+        925,
+        926,
+        942
+      ],
+      "frame_files": [
+        "frames/0000909_000060.599s.png",
+        "frames/0000912_000060.799s.png",
+        "frames/0000913_000060.866s.png",
+        "frames/0000914_000060.933s.png",
+        "frames/0000919_000061.266s.png",
+        "frames/0000925_000061.666s.png",
+        "frames/0000926_000061.733s.png",
+        "frames/0000942_000062.799s.png"
+      ]
+    },
+    {
+      "page": 18,
+      "observation": "1844 Morse marker and e = one-dot label fade in above the timeline. The vertical stem, marker, year ticks and course-span labels remain visually separate.",
+      "file": "sheet-018.png",
+      "sheet_sha256": "045d47a74346183ce99ba6ea1c3d3a3d6693b543fa7069dbfa8ef419a377e06f",
+      "time_range": [
+        63.866016,
+        72.332682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        958,
+        959,
+        964,
+        969,
+        970,
+        1027,
+        1084,
+        1085
+      ],
+      "frame_files": [
+        "frames/0000958_000063.866s.png",
+        "frames/0000959_000063.933s.png",
+        "frames/0000964_000064.266s.png",
+        "frames/0000969_000064.599s.png",
+        "frames/0000970_000064.666s.png",
+        "frames/0001027_000068.466s.png",
+        "frames/0001084_000072.266s.png",
+        "frames/0001085_000072.333s.png"
+      ]
+    },
+    {
+      "page": 19,
+      "observation": "Hartley 1928 appears below the axis and Shannon 1948 above it. Staggering preserves separation from each other and existing Morse marker.",
+      "file": "sheet-019.png",
+      "sheet_sha256": "6da323ebe2d420d1cd14bb6f898cd262e7829c8e2200a5f0a19f2e541d494c42",
+      "time_range": [
+        72.666016,
+        80.666016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1090,
+        1095,
+        1096,
+        1149,
+        1200,
+        1201,
+        1206,
+        1210
+      ],
+      "frame_files": [
+        "frames/0001090_000072.666s.png",
+        "frames/0001095_000072.999s.png",
+        "frames/0001096_000073.066s.png",
+        "frames/0001149_000076.599s.png",
+        "frames/0001200_000079.999s.png",
+        "frames/0001201_000080.066s.png",
+        "frames/0001206_000080.399s.png",
+        "frames/0001210_000080.666s.png"
+      ]
+    },
+    {
+      "page": 20,
+      "observation": "1951 guessing game, 1952 Huffman and 1976 arithmetic coding enter the denser timeline region. Their above/below offsets prevent label collisions at the selected intermediate and settled times.",
+      "file": "sheet-020.png",
+      "sheet_sha256": "eb25058c1e899d3bf70a20b41762ef9b60961ff3791c43e976fba7f39e515f23",
+      "time_range": [
+        80.732682,
+        87.332682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1211,
+        1251,
+        1291,
+        1292,
+        1300,
+        1306,
+        1309,
+        1310
+      ],
+      "frame_files": [
+        "frames/0001211_000080.733s.png",
+        "frames/0001251_000083.399s.png",
+        "frames/0001291_000086.066s.png",
+        "frames/0001292_000086.133s.png",
+        "frames/0001300_000086.666s.png",
+        "frames/0001306_000087.066s.png",
+        "frames/0001309_000087.266s.png",
+        "frames/0001310_000087.333s.png"
+      ]
+    },
+    {
+      "page": 21,
+      "observation": "Completed classical timeline holds, then 2003 neural language model and 2019 GPT-2 begin entering at the right. New labels remain within frame and outside existing stems.",
+      "file": "sheet-021.png",
+      "sheet_sha256": "2dd1f3a8424a1b0ad8ddee8577bb99bf0ddc823cde9e4eb62ae3f833af728dd3",
+      "time_range": [
+        87.466016,
+        91.132682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1312,
+        1313,
+        1314,
+        1315,
+        1337,
+        1358,
+        1359,
+        1367
+      ],
+      "frame_files": [
+        "frames/0001312_000087.466s.png",
+        "frames/0001313_000087.533s.png",
+        "frames/0001314_000087.599s.png",
+        "frames/0001315_000087.666s.png",
+        "frames/0001337_000089.133s.png",
+        "frames/0001358_000090.533s.png",
+        "frames/0001359_000090.599s.png",
+        "frames/0001367_000091.133s.png"
+      ]
+    },
+    {
+      "page": 22,
+      "observation": "2025 Qwen3 completes the timeline. Dense 1948–1952 labels remain staggered and the 2019/2025 labels remain clear at the right edge; no observed collision during entry or hold.",
+      "file": "sheet-022.png",
+      "sheet_sha256": "ff7f08aea2944a27e9206f52f8ff17cb7ecbb085cfee59237cab28ca7aa5d7f8",
+      "time_range": [
+        91.532682,
+        97.466016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1373,
+        1376,
+        1377,
+        1379,
+        1380,
+        1381,
+        1382,
+        1462
+      ],
+      "frame_files": [
+        "frames/0001373_000091.533s.png",
+        "frames/0001376_000091.733s.png",
+        "frames/0001377_000091.799s.png",
+        "frames/0001379_000091.933s.png",
+        "frames/0001380_000091.999s.png",
+        "frames/0001381_000092.066s.png",
+        "frames/0001382_000092.133s.png",
+        "frames/0001462_000097.466s.png"
+      ]
+    },
+    {
+      "page": 23,
+      "observation": "Complete timeline holds through small marker emphasis changes; no marker leaves its year position or produces an orphaned label.",
+      "file": "sheet-023.png",
+      "sheet_sha256": "b521073e314ca5f782cd047e74831174319937c132bb404f06ee068d0f442776",
+      "time_range": [
+        102.732682,
+        103.199349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1541,
+        1542,
+        1543,
+        1544,
+        1545,
+        1546,
+        1547,
+        1548
+      ],
+      "frame_files": [
+        "frames/0001541_000102.733s.png",
+        "frames/0001542_000102.799s.png",
+        "frames/0001543_000102.866s.png",
+        "frames/0001544_000102.933s.png",
+        "frames/0001545_000102.999s.png",
+        "frames/0001546_000103.066s.png",
+        "frames/0001547_000103.133s.png",
+        "frames/0001548_000103.199s.png"
+      ]
+    },
+    {
+      "page": 24,
+      "observation": "Timeline fades out as one composition, then the English Eiffel Tower model-input sentence starts entering. No timeline remnants overlap the new content at the inspected transition times.",
+      "file": "sheet-024.png",
+      "sheet_sha256": "3aa78817bad01afc2d07be8e338e6a695f2d9c7ea2b7848d8d63e7f3df3f9b56",
+      "time_range": [
+        103.266016,
+        104.399349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1549,
+        1551,
+        1552,
+        1557,
+        1561,
+        1562,
+        1564,
+        1566
+      ],
+      "frame_files": [
+        "frames/0001549_000103.266s.png",
+        "frames/0001551_000103.399s.png",
+        "frames/0001552_000103.466s.png",
+        "frames/0001557_000103.799s.png",
+        "frames/0001561_000104.066s.png",
+        "frames/0001562_000104.133s.png",
+        "frames/0001564_000104.266s.png",
+        "frames/0001566_000104.399s.png"
+      ]
+    },
+    {
+      "page": 25,
+      "observation": "Eiffel Tower prompt and orange next-token box draw in cleanly; GPT-2 top-five token/probability rows begin revealing below. Verbatim model-input English is intentional; Chinese explanatory footer is separate.",
+      "file": "sheet-025.png",
+      "sheet_sha256": "41e690a8403a366c74a57cbcecb98768f61a67a3a3ac692d45cca14dbe6952f7",
+      "time_range": [
+        104.466016,
+        114.199349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1567,
+        1572,
+        1578,
+        1579,
+        1641,
+        1703,
+        1704,
+        1713
+      ],
+      "frame_files": [
+        "frames/0001567_000104.466s.png",
+        "frames/0001572_000104.799s.png",
+        "frames/0001578_000105.199s.png",
+        "frames/0001579_000105.266s.png",
+        "frames/0001641_000109.399s.png",
+        "frames/0001703_000113.533s.png",
+        "frames/0001704_000113.599s.png",
+        "frames/0001713_000114.199s.png"
+      ]
+    },
+    {
+      "page": 26,
+      "observation": "GPT-2 top-five rows finish revealing and its model/parameter/year heading appears above them. Green emphasis highlights probabilities/tokens without shifting rows or obscuring numbers.",
+      "file": "sheet-026.png",
+      "sheet_sha256": "968d986b303a43016c09ad565ba3fe282fb4eed9c704e3c3f6756e69c51743d5",
+      "time_range": [
+        114.532682,
+        119.199349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1718,
+        1723,
+        1724,
+        1749,
+        1774,
+        1775,
+        1782,
+        1788
+      ],
+      "frame_files": [
+        "frames/0001718_000114.533s.png",
+        "frames/0001723_000114.866s.png",
+        "frames/0001724_000114.933s.png",
+        "frames/0001749_000116.599s.png",
+        "frames/0001774_000118.266s.png",
+        "frames/0001775_000118.333s.png",
+        "frames/0001782_000118.799s.png",
+        "frames/0001788_000119.199s.png"
+      ]
+    },
+    {
+      "page": 27,
+      "observation": "Qwen3-4B heading and top-five rows enter on the right; whitespace/newline tokens remain verbatim model data. Shared row heights, labels and probabilities align without overlap.",
+      "file": "sheet-027.png",
+      "sheet_sha256": "4cf70c0e6691a29c93fba840bb7a985d44e68c52c8e045d3ce1a06b40d3bec41",
+      "time_range": [
+        119.266016,
+        127.932682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1789,
+        1844,
+        1898,
+        1899,
+        1908,
+        1913,
+        1918,
+        1919
+      ],
+      "frame_files": [
+        "frames/0001789_000119.266s.png",
+        "frames/0001844_000122.933s.png",
+        "frames/0001898_000126.533s.png",
+        "frames/0001899_000126.599s.png",
+        "frames/0001908_000127.199s.png",
+        "frames/0001913_000127.533s.png",
+        "frames/0001918_000127.866s.png",
+        "frames/0001919_000127.933s.png"
+      ]
+    },
+    {
+      "page": 28,
+      "observation": "Both Paris rows pulse green and enlarge briefly, then settle. Labels, bars and numeric values retain clear spacing, unlike the earlier dense rank-row pulse.",
+      "file": "sheet-028.png",
+      "sheet_sha256": "ca9c9f437f583554a5c1035c20a949f269cde3482b6b4e25d5d36e1501485ee7",
+      "time_range": [
+        129.599349,
+        134.999349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        1944,
+        1968,
+        1969,
+        1981,
+        1983,
+        1994,
+        1995,
+        2025
+      ],
+      "frame_files": [
+        "frames/0001944_000129.599s.png",
+        "frames/0001968_000131.199s.png",
+        "frames/0001969_000131.266s.png",
+        "frames/0001981_000132.066s.png",
+        "frames/0001983_000132.199s.png",
+        "frames/0001994_000132.933s.png",
+        "frames/0001995_000132.999s.png",
+        "frames/0002025_000134.999s.png"
+      ]
+    },
+    {
+      "page": 29,
+      "observation": "Probability tables crossfade out while the token-definition inset enters; the brief overlapping layers are transition frames and resolve completely. Token pieces, word/subword/punctuation labels and rounded inset remain inside the frame.",
+      "file": "sheet-029.png",
+      "sheet_sha256": "a9be305df411e1d105521df1928c174d26f5d8eac11931feb5f0b6f00d2cdc20",
+      "time_range": [
+        136.866016,
+        151.066016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2053,
+        2054,
+        2061,
+        2068,
+        2069,
+        2070,
+        2169,
+        2266
+      ],
+      "frame_files": [
+        "frames/0002053_000136.866s.png",
+        "frames/0002054_000136.933s.png",
+        "frames/0002061_000137.399s.png",
+        "frames/0002068_000137.866s.png",
+        "frames/0002069_000137.933s.png",
+        "frames/0002070_000137.999s.png",
+        "frames/0002169_000144.599s.png",
+        "frames/0002266_000151.066s.png"
+      ]
+    },
+    {
+      "page": 30,
+      "observation": "Token inset holds legibly beneath the raw prompt, then begins fading out. Colored token boxes preserve their labels and spacing; no residual probability bars remain in the settled inset.",
+      "file": "sheet-030.png",
+      "sheet_sha256": "c82aaaa65ee514315490388863da2514faed790916131a2298c51bab36fdda06",
+      "time_range": [
+        151.132682,
+        152.132682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2267,
+        2268,
+        2269,
+        2270,
+        2273,
+        2275,
+        2276,
+        2282
+      ],
+      "frame_files": [
+        "frames/0002267_000151.133s.png",
+        "frames/0002268_000151.199s.png",
+        "frames/0002269_000151.266s.png",
+        "frames/0002270_000151.333s.png",
+        "frames/0002273_000151.533s.png",
+        "frames/0002275_000151.666s.png",
+        "frames/0002276_000151.733s.png",
+        "frames/0002282_000152.133s.png"
+      ]
+    },
+    {
+      "page": 31,
+      "observation": "Token example fades out, then the larger Chinese knowledge question writes in above a smaller Eiffel Tower prompt. Partial Chinese strokes are expected Write-animation intermediates; settled text is clear and not clipped.",
+      "file": "sheet-031.png",
+      "sheet_sha256": "ab0d83b703b048d7e02cb51b0e083fbe80098d2189f40cdc374a7c254c9730b4",
+      "time_range": [
+        152.532682,
+        154.799349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2288,
+        2289,
+        2290,
+        2291,
+        2292,
+        2306,
+        2321,
+        2322
+      ],
+      "frame_files": [
+        "frames/0002288_000152.533s.png",
+        "frames/0002289_000152.599s.png",
+        "frames/0002290_000152.666s.png",
+        "frames/0002291_000152.733s.png",
+        "frames/0002292_000152.799s.png",
+        "frames/0002306_000153.733s.png",
+        "frames/0002321_000154.733s.png",
+        "frames/0002322_000154.799s.png"
+      ]
+    },
+    {
+      "page": 32,
+      "observation": "Question/prompt crossfade into the course map. Brief layered text during transition resolves; settled title and six map headings occupy separate bands.",
+      "file": "sheet-032.png",
+      "sheet_sha256": "4291137bb4b7ad51192282a52c0066e6610f2d1e52b9a3a9b88f5610fec3fed0",
+      "time_range": [
+        157.332682,
+        161.399349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2360,
+        2397,
+        2398,
+        2408,
+        2412,
+        2418,
+        2419,
+        2421
+      ],
+      "frame_files": [
+        "frames/0002360_000157.333s.png",
+        "frames/0002397_000159.799s.png",
+        "frames/0002398_000159.866s.png",
+        "frames/0002408_000160.533s.png",
+        "frames/0002412_000160.799s.png",
+        "frames/0002418_000161.199s.png",
+        "frames/0002419_000161.266s.png",
+        "frames/0002421_000161.399s.png"
+      ]
+    },
+    {
+      "page": 33,
+      "observation": "Course-map title/headings settle, then foundation entries 1–5 fade in. Current Part 1 is highlighted yellow; subordinate entries are intentionally small and subdued at preview resolution, without clipping.",
+      "file": "sheet-033.png",
+      "sheet_sha256": "0d8bafec1234c7c4a6a094c7d9bd11fc3103d87cfa376c731179eb2e2dcfd177",
+      "time_range": [
+        161.466016,
+        166.266016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2422,
+        2423,
+        2424,
+        2454,
+        2483,
+        2484,
+        2489,
+        2494
+      ],
+      "frame_files": [
+        "frames/0002422_000161.466s.png",
+        "frames/0002423_000161.533s.png",
+        "frames/0002424_000161.599s.png",
+        "frames/0002454_000163.599s.png",
+        "frames/0002483_000165.533s.png",
+        "frames/0002484_000165.599s.png",
+        "frames/0002489_000165.933s.png",
+        "frames/0002494_000166.266s.png"
+      ]
+    },
+    {
+      "page": 34,
+      "observation": "Learning entries 6–12 populate the second column. Column widths and line spacing stay consistent; secondary text is small at 480p, so final-resolution/mobile legibility is not certified by this preview.",
+      "file": "sheet-034.png",
+      "sheet_sha256": "39831e21a67d8b6215019ff7f8c2a19f079cb41595d1cbf223bb1d44861bee7c",
+      "time_range": [
+        166.332682,
+        167.732682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2495,
+        2497,
+        2499,
+        2500,
+        2506,
+        2513,
+        2514,
+        2516
+      ],
+      "frame_files": [
+        "frames/0002495_000166.333s.png",
+        "frames/0002497_000166.466s.png",
+        "frames/0002499_000166.599s.png",
+        "frames/0002500_000166.666s.png",
+        "frames/0002506_000167.066s.png",
+        "frames/0002513_000167.533s.png",
+        "frames/0002514_000167.599s.png",
+        "frames/0002516_000167.733s.png"
+      ]
+    },
+    {
+      "page": 35,
+      "observation": "Transformer entries 13–19 appear in the third column. Their final lines remain above the next map row; no overlap with generation/perception headings.",
+      "file": "sheet-035.png",
+      "sheet_sha256": "b99a29fd3733d5f372603e8e0eac207fd6d4f6ac28198e8602ead6a1133fb178",
+      "time_range": [
+        167.799349,
+        169.066016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2517,
+        2518,
+        2524,
+        2531,
+        2532,
+        2534,
+        2535,
+        2536
+      ],
+      "frame_files": [
+        "frames/0002517_000167.799s.png",
+        "frames/0002518_000167.866s.png",
+        "frames/0002524_000168.266s.png",
+        "frames/0002531_000168.733s.png",
+        "frames/0002532_000168.799s.png",
+        "frames/0002534_000168.933s.png",
+        "frames/0002535_000168.999s.png",
+        "frames/0002536_000169.066s.png"
+      ]
+    },
+    {
+      "page": 36,
+      "observation": "Generation/perception and agent entries populate the lower map row. Numbered lists stay in their assigned columns and clear the preview frame edge at selected times.",
+      "file": "sheet-036.png",
+      "sheet_sha256": "b7a8625a40fc9060251c7b5691b4d5f6ed067599fce8f613ef7c8a9b65daaf12",
+      "time_range": [
+        169.466016,
+        171.066016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2542,
+        2548,
+        2549,
+        2552,
+        2555,
+        2556,
+        2561,
+        2566
+      ],
+      "frame_files": [
+        "frames/0002542_000169.466s.png",
+        "frames/0002548_000169.866s.png",
+        "frames/0002549_000169.933s.png",
+        "frames/0002552_000170.133s.png",
+        "frames/0002555_000170.333s.png",
+        "frames/0002556_000170.399s.png",
+        "frames/0002561_000170.733s.png",
+        "frames/0002566_000171.066s.png"
+      ]
+    },
+    {
+      "page": 37,
+      "observation": "Finale entries 30–31 complete the course map; all six groups remain separated. No population/reveal animation leaves duplicate entries or stray text.",
+      "file": "sheet-037.png",
+      "sheet_sha256": "5135001191d84358cda80f612f1f389821ec0e3b1397a659320c491d82d35bea",
+      "time_range": [
+        171.132682,
+        172.532682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2567,
+        2572,
+        2577,
+        2578,
+        2580,
+        2582,
+        2583,
+        2588
+      ],
+      "frame_files": [
+        "frames/0002567_000171.133s.png",
+        "frames/0002572_000171.466s.png",
+        "frames/0002577_000171.799s.png",
+        "frames/0002578_000171.866s.png",
+        "frames/0002580_000171.999s.png",
+        "frames/0002582_000172.133s.png",
+        "frames/0002583_000172.199s.png",
+        "frames/0002588_000172.533s.png"
+      ]
+    },
+    {
+      "page": 38,
+      "observation": "Yellow rounded rectangle draws around Part 1 only. Its corners and stroke leave the title line and the following Part 2 line clear.",
+      "file": "sheet-038.png",
+      "sheet_sha256": "88ffe0e6fc504d1b27270d825b59ff7e629e51cd24c7ef3f2ea11bc945fe49f7",
+      "time_range": [
+        172.799349,
+        173.466016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2592,
+        2593,
+        2595,
+        2596,
+        2597,
+        2599,
+        2601,
+        2602
+      ],
+      "frame_files": [
+        "frames/0002592_000172.799s.png",
+        "frames/0002593_000172.866s.png",
+        "frames/0002595_000172.999s.png",
+        "frames/0002596_000173.066s.png",
+        "frames/0002597_000173.133s.png",
+        "frames/0002599_000173.266s.png",
+        "frames/0002601_000173.399s.png",
+        "frames/0002602_000173.466s.png"
+      ]
+    },
+    {
+      "page": 39,
+      "observation": "Course map holds with the current-part outline. Subordinate lists remain stable, with no new visual artifact during small emphasis changes.",
+      "file": "sheet-039.png",
+      "sheet_sha256": "2f18ed67062d63eb0e9d1eff0366c74164248afdc3dbd5abec1e739fd0ada014",
+      "time_range": [
+        173.532682,
+        176.332682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2603,
+        2620,
+        2637,
+        2638,
+        2639,
+        2640,
+        2641,
+        2645
+      ],
+      "frame_files": [
+        "frames/0002603_000173.533s.png",
+        "frames/0002620_000174.666s.png",
+        "frames/0002637_000175.799s.png",
+        "frames/0002638_000175.866s.png",
+        "frames/0002639_000175.933s.png",
+        "frames/0002640_000175.999s.png",
+        "frames/0002641_000176.066s.png",
+        "frames/0002645_000176.333s.png"
+      ]
+    },
+    {
+      "page": 40,
+      "observation": "Map fades out cleanly, followed by the Part 1 chapter-plan title beginning to fade in. No old map text remains readable over the new title at settled times.",
+      "file": "sheet-040.png",
+      "sheet_sha256": "4c8cd0f4d0838912b45b297fd83a5afe5f4b3cc9296ac1797cab5f9ad2cd5da3",
+      "time_range": [
+        176.532682,
+        177.599349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2648,
+        2649,
+        2652,
+        2656,
+        2657,
+        2660,
+        2663,
+        2664
+      ],
+      "frame_files": [
+        "frames/0002648_000176.533s.png",
+        "frames/0002649_000176.599s.png",
+        "frames/0002652_000176.799s.png",
+        "frames/0002656_000177.066s.png",
+        "frames/0002657_000177.133s.png",
+        "frames/0002660_000177.333s.png",
+        "frames/0002663_000177.533s.png",
+        "frames/0002664_000177.599s.png"
+      ]
+    },
+    {
+      "page": 41,
+      "observation": "Objectives list reveals progressively from title-only to seven items. Detector missed most slow 178–203s animation: its static-midpoint sample at 190.599s shows a partly revealed list. Additional native-time follow-up is required; this interval is not credited as densely covered by the original sheets.",
+      "file": "sheet-041.png",
+      "sheet_sha256": "8277d603ff3ea2a7a8f37a36d945d51294886df362a5a16b2d0ab68a3b2c1e7a",
+      "time_range": [
+        177.799349,
+        203.466016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        2667,
+        2670,
+        2671,
+        2859,
+        3047,
+        3048,
+        3049,
+        3052
+      ],
+      "frame_files": [
+        "frames/0002667_000177.799s.png",
+        "frames/0002670_000177.999s.png",
+        "frames/0002671_000178.066s.png",
+        "frames/0002859_000190.599s.png",
+        "frames/0003047_000203.133s.png",
+        "frames/0003048_000203.199s.png",
+        "frames/0003049_000203.266s.png",
+        "frames/0003052_000203.466s.png"
+      ]
+    },
+    {
+      "page": 42,
+      "observation": "Completed seven objectives hold without overlapping numbered circles or neighboring lines, then begin fading out. Long coding/language-model objective lines remain within the frame.",
+      "file": "sheet-042.png",
+      "sheet_sha256": "c728bb0078999e8786aa1c61f47c9ee5c560d3e2c8cbb074c27a2ddb69c5955e",
+      "time_range": [
+        203.599349,
+        204.399349
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        3054,
+        3055,
+        3058,
+        3061,
+        3062,
+        3064,
+        3065,
+        3066
+      ],
+      "frame_files": [
+        "frames/0003054_000203.599s.png",
+        "frames/0003055_000203.666s.png",
+        "frames/0003058_000203.866s.png",
+        "frames/0003061_000204.066s.png",
+        "frames/0003062_000204.133s.png",
+        "frames/0003064_000204.266s.png",
+        "frames/0003065_000204.333s.png",
+        "frames/0003066_000204.399s.png"
+      ]
+    },
+    {
+      "page": 43,
+      "observation": "Objectives fade out, then the scoreboard/quoted passage and plain-text baseline enter. Quote, source/data caveat and chart occupy distinct vertical bands with no settled overlap.",
+      "file": "sheet-043.png",
+      "sheet_sha256": "ac5e056690e1314b446b91a1cc52856382bd2e2874aab9864c3c4b2bec54cfce",
+      "time_range": [
+        204.666016,
+        206.066016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        3070,
+        3074,
+        3075,
+        3078,
+        3079,
+        3080,
+        3085,
+        3091
+      ],
+      "frame_files": [
+        "frames/0003070_000204.666s.png",
+        "frames/0003074_000204.933s.png",
+        "frames/0003075_000204.999s.png",
+        "frames/0003078_000205.199s.png",
+        "frames/0003079_000205.266s.png",
+        "frames/0003080_000205.333s.png",
+        "frames/0003085_000205.666s.png",
+        "frames/0003091_000206.066s.png"
+      ]
+    },
+    {
+      "page": 44,
+      "observation": "Only the plain-text 8.01 bits/character row is revealed; remaining chart rows are intentionally subdued placeholders. Its emphasis pulse stays clear of labels and value, and the chart remains within the frame.",
+      "file": "sheet-044.png",
+      "sheet_sha256": "9517139b0fe2d2d1a6203289db1f27ee9557aec3a103bbc4ba694b03f768ac1d",
+      "time_range": [
+        206.132682,
+        226.532682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        3092,
+        3226,
+        3359,
+        3360,
+        3366,
+        3373,
+        3374,
+        3398
+      ],
+      "frame_files": [
+        "frames/0003092_000206.133s.png",
+        "frames/0003226_000215.066s.png",
+        "frames/0003359_000223.933s.png",
+        "frames/0003360_000223.999s.png",
+        "frames/0003366_000224.399s.png",
+        "frames/0003373_000224.866s.png",
+        "frames/0003374_000224.933s.png",
+        "frames/0003398_000226.533s.png"
+      ]
+    },
+    {
+      "page": 45,
+      "observation": "Remaining scoreboard labels become more visible while scores stay hidden. The plain-text baseline, passage quote and data/contamination caveat hold without clipping.",
+      "file": "sheet-045.png",
+      "sheet_sha256": "8d37456d05976656ea8c4e339d0a04703697c233b641e467fc34f503c09f73d0",
+      "time_range": [
+        228.132682,
+        228.732682
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        3422,
+        3423,
+        3424,
+        3425,
+        3426,
+        3429,
+        3430,
+        3431
+      ],
+      "frame_files": [
+        "frames/0003422_000228.133s.png",
+        "frames/0003423_000228.199s.png",
+        "frames/0003424_000228.266s.png",
+        "frames/0003425_000228.333s.png",
+        "frames/0003426_000228.399s.png",
+        "frames/0003429_000228.599s.png",
+        "frames/0003430_000228.666s.png",
+        "frames/0003431_000228.733s.png"
+      ]
+    },
+    {
+      "page": 46,
+      "observation": "Scoreboard holds to the closing beat, then fades nearly to black by the last decoded frame. No orphaned chart label or earlier-scene object remains at the selected ending times.",
+      "file": "sheet-046.png",
+      "sheet_sha256": "d81f2a35e247b99740bfc66f9c2a87d727bfffe1b0e841a2a5a67057afa144b2",
+      "time_range": [
+        228.799349,
+        237.866016
+      ],
+      "selected_frames": 8,
+      "source_frame_indices": [
+        3432,
+        3495,
+        3558,
+        3559,
+        3562,
+        3566,
+        3567,
+        3568
+      ],
+      "frame_files": [
+        "frames/0003432_000228.799s.png",
+        "frames/0003495_000232.999s.png",
+        "frames/0003558_000237.199s.png",
+        "frames/0003559_000237.266s.png",
+        "frames/0003562_000237.466s.png",
+        "frames/0003566_000237.733s.png",
+        "frames/0003567_000237.799s.png",
+        "frames/0003568_000237.866s.png"
+      ]
+    }
+  ],
+  "native_frame_followups": [
+    {
+      "source_frame": 440,
+      "time": 29.333008,
+      "file": "frames/0000440_000029.333s.png",
+      "sha256": "dd85c285817e7e396137743dfdf911b48b57dc4f543d6e5cebf708cbaabb3201",
+      "observation": "Native frame confirms enlarged multi-digit ranks visually crowd neighboring rank columns during the simultaneous 1.8× pulse."
+    },
+    {
+      "requested_time": 181,
+      "actual_source_frame": 2716,
+      "actual_pts": 181.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/181s.png",
+      "sha256": "3447d6621e0703119ecd802317eab1e32d3c72dfca36a485a9067bfb4bde0404",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 184,
+      "actual_source_frame": 2761,
+      "actual_pts": 184.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/184s.png",
+      "sha256": "451d7fd2d5bec2b803a6bdddc99c6cc3a0b7e80ec546603a229880cd6466f1e5",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 187,
+      "actual_source_frame": 2806,
+      "actual_pts": 187.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/187s.png",
+      "sha256": "0860f4cd628e39b1bab363b8d6f22ada914f20e9e27e7ed2ac97baaf2997a291",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 190,
+      "actual_source_frame": 2851,
+      "actual_pts": 190.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/190s.png",
+      "sha256": "cfb896c15864a01aa704a4c734a97125b6a26964f5bf834d0219c731fc0fa6b3",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 193,
+      "actual_source_frame": 2896,
+      "actual_pts": 193.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/193s.png",
+      "sha256": "4dd82fe84e2ca8297b55ab1c327999a4942d9b08277b3ae5beff9a0708d461c8",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 196,
+      "actual_source_frame": 2941,
+      "actual_pts": 196.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/196s.png",
+      "sha256": "0e5b12a3309b8ef7157c98d638c78ce05bdae15dbe76ebea9200e5a3d946e70e",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 199,
+      "actual_source_frame": 2986,
+      "actual_pts": 199.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/199s.png",
+      "sha256": "c89ab97e7b919c9545d3e7487f8fc065847d7093d8b950ee16cae7b30f601006",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    },
+    {
+      "requested_time": 202,
+      "actual_source_frame": 3031,
+      "actual_pts": 202.066016,
+      "file": "/workspace/runtime/ai1-zh-Hook-temporal-followups/202s.png",
+      "sha256": "da87985dc6ba75d7eb6384ab040e1bacca4dfe2c1e509e7aac3a03b6c7c6e3c8",
+      "observation": "Slow objectives reveal inspected at native resolution; emerging text and numbered circles remain aligned, with no overlap or clipping. Partial opacity is the intended long fade."
+    }
+  ],
+  "confirmed_bugs": [
+    {
+      "id": "hook-rank-pulse-crowding",
+      "severity": "P2",
+      "source": "videos/ai/ai1/s01_hook.py:126",
+      "time": 29.333008,
+      "evidence": "frames/0000440_000029.333s.png",
+      "observation": "Simultaneous 1.8× rank pulses crowd adjacent numeric columns, reducing count-to-character readability during the 1.5-second emphasis animation.",
+      "suggestion": "Use color/opacity emphasis or constrain each pulse width to its character cell.",
+      "status": "reported-to-root; no edit by reviewer"
+    }
+  ],
+  "limits": [
+    "Every source frame was decoded and analyzed, not visually inspected.",
+    "Only listed native-resolution times were extracted; review of those images is pending.",
+    "Low-resolution RGB thresholds can miss small or subtle spatial/channel changes.",
+    "Static interval midpoints are samples, not proof that their full intervals are unchanged.",
+    "Full perceptual playback and listening remain unverified."
+  ],
+  "additional_distinct_native_frames_reviewed": 8,
+  "coverage_gaps": [
+    {
+      "kind": "slow-change-threshold-miss",
+      "interval": [
+        178.066016,
+        203.132682
+      ],
+      "original_selected_times": [
+        178.066016,
+        190.599349,
+        203.132682
+      ],
+      "confirmed_source": "videos/ai/ai1/s01_hook.py:341–345",
+      "explanation": "Long LaggedStart/FadeIn changes below adjacent-frame RGB thresholds were classified as static; original sheets do not supply dense temporal review here.",
+      "supplementary_native_requested_times": [
+        181,
+        184,
+        187,
+        190,
+        193,
+        196,
+        199,
+        202
+      ],
+      "remaining_gap": "Supplemental views are about three seconds apart; unlisted times and all-frame perceptual review remain unverified. Root requested bounded max-gap v2 extraction."
+    }
+  ]
+}

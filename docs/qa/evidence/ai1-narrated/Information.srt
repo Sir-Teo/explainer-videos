@@ -1,0 +1,239 @@
+1
+00:00:00,120 --> 00:00:01,260
+Chapter twelve.
+
+2
+00:00:01,260 --> 00:00:04,680
+What the past tells you about the future.
+
+3
+00:00:04,820 --> 00:00:09,100
+In chapter seven, knowing X lowered the entropy of Y, on average.
+
+4
+00:00:09,100 --> 00:00:11,470
+That drop is the mutual information.
+
+5
+00:00:11,470 --> 00:00:13,710
+It's the bits that knowing one thing saves you
+
+6
+00:00:13,710 --> 00:00:16,180
+when you guess the other, and it's symmetric.
+
+7
+00:00:16,180 --> 00:00:18,660
+It's also a divergence, of the joint distribution
+
+8
+00:00:18,660 --> 00:00:21,390
+from independence, so it's never negative.
+
+9
+00:00:21,390 --> 00:00:25,390
+In our books, the next letter carries 4.08 bits;
+
+10
+00:00:25,390 --> 00:00:28,580
+knowing the letter before it, 3.33.
+
+11
+00:00:28,580 --> 00:00:31,910
+So neighbouring letters share 0.75 bits.
+
+12
+00:00:31,910 --> 00:00:34,630
+Two letters back share 1.36,
+
+13
+00:00:34,630 --> 00:00:37,750
+though the second one on its own shares only 0.27:
+
+14
+00:00:37,750 --> 00:00:41,410
+together, letters say more than apart.
+
+15
+00:00:41,853 --> 00:00:43,563
+Now process what you know.
+
+16
+00:00:43,563 --> 00:00:48,313
+Suppose Z is computed from Y, by any function at all, even a noisy one.
+
+17
+00:00:48,313 --> 00:00:52,473
+The chain rule splits what Y and Z together say about X in two ways:
+
+18
+00:00:52,473 --> 00:00:55,793
+first Y, then whatever Z adds, which is nothing.
+
+19
+00:00:55,793 --> 00:00:58,533
+Or first Z, then whatever Y adds.
+
+20
+00:00:58,533 --> 00:01:02,843
+Compare the two, and Z can never tell you more about X than Y did.
+
+21
+00:01:02,843 --> 00:01:06,743
+No amount of processing creates information.
+
+22
+00:01:07,153 --> 00:01:09,203
+Let's watch it happen in our books.
+
+23
+00:01:09,203 --> 00:01:11,443
+Keep only the kind of the previous letter:
+
+24
+00:01:11,443 --> 00:01:13,843
+space, vowel or consonant.
+
+25
+00:01:13,843 --> 00:01:17,893
+Of the 0.75 bits, 0.35 survive.
+
+26
+00:01:17,893 --> 00:01:19,013
+Or garble it:
+
+27
+00:01:19,013 --> 00:01:21,763
+replace a share of the letters with random ones.
+
+28
+00:01:21,763 --> 00:01:24,663
+The more noise, the less it tells, down to nothing.
+
+29
+00:01:24,663 --> 00:01:26,823
+Do both, and you lose more:
+
+30
+00:01:26,823 --> 00:01:28,923
+each curve stays under the one before.
+
+31
+00:01:28,923 --> 00:01:30,843
+A law for learning machines too:
+
+32
+00:01:30,843 --> 00:01:33,403
+whatever a network computes from its context can't
+
+33
+00:01:33,403 --> 00:01:37,303
+know more about the next token than the context itself.
+
+34
+00:01:37,867 --> 00:01:39,707
+How far back does that reach?
+
+35
+00:01:39,707 --> 00:01:42,887
+Measure pairs of letters at distance d across our books.
+
+36
+00:01:42,887 --> 00:01:46,937
+These are finite-sample estimates, with an approximate bias correction.
+
+37
+00:01:46,937 --> 00:01:50,587
+The neighbouring letter estimate is 0.75 bits.
+
+38
+00:01:50,587 --> 00:01:53,467
+At our largest measured distance, 1000 letters,
+
+39
+00:01:53,467 --> 00:01:57,227
+the corrected estimate is about 7.32 millionths of a bit;
+
+40
+00:01:57,227 --> 00:01:58,987
+one shuffled version of the same letters
+
+41
+00:01:58,987 --> 00:02:02,347
+gives about minus 0.69 millionths of a bit.
+
+42
+00:02:02,347 --> 00:02:05,227
+The shuffled control is a reference realization,
+
+43
+00:02:05,227 --> 00:02:07,097
+not an uncertainty interval.
+
+44
+00:02:07,097 --> 00:02:08,987
+Both axes are logarithmic.
+
+45
+00:02:08,987 --> 00:02:11,467
+Nonpositive estimates cannot appear on them;
+
+46
+00:02:11,467 --> 00:02:13,387
+their signed values are retained,
+
+47
+00:02:13,387 --> 00:02:15,587
+including the control shown at the right.
+
+48
+00:02:15,587 --> 00:02:17,887
+A fit is a summary, not a law.
+
+49
+00:02:17,887 --> 00:02:20,287
+The gold line is a descriptive least-squares fit to the
+
+50
+00:02:20,287 --> 00:02:23,407
+positive estimates from twenty to one thousand letters.
+
+51
+00:02:23,407 --> 00:02:25,897
+It is not a test that proves a power law.
+
+52
+00:02:25,897 --> 00:02:27,657
+Bias correction is approximate,
+
+53
+00:02:27,657 --> 00:02:30,247
+especially for overlapping pairs from text.
+
+54
+00:02:30,247 --> 00:02:33,127
+Corrected estimates can fluctuate below zero,
+
+55
+00:02:33,127 --> 00:02:35,907
+even though true mutual information is nonnegative.
+
+56
+00:02:35,907 --> 00:02:38,307
+Our measurement stops at this distance.
+
+57
+00:02:38,307 --> 00:02:40,787
+It does not establish what happens beyond it,
+
+58
+00:02:40,787 --> 00:02:43,377
+or prove that memory helps at every distance.
+
+59
+00:02:43,377 --> 00:02:46,257
+Long context remains a question for models to test:
+
+60
+00:02:46,257 --> 00:02:47,697
+attention, in Part 13.

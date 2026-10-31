@@ -119,11 +119,13 @@ class Hook(VoiceoverScene):
             "mostly where a new word begins. That is where the information is."
         ) as vo:
             self.play(FadeIn(tag))
-            self.play(*[c.animate.set_opacity(0.35) for c in ones], run_time=0.8)
+            self.play(*[c.animate.set_opacity(0.55) for c in ones], run_time=0.8)
             vo.wait_until("a")
             self.play(Create(moto_box))
             vo.wait_until("b")
-            self.play(FadeOut(moto_box), *[Indicate(c, color=C.SURPRISE, scale_factor=1.8) for c in many],
+            # Adjacent two-digit ranks share narrow letter slots: emphasize by
+            # color without enlarging them into their neighbours.
+            self.play(FadeOut(moto_box), *[Indicate(c, color=C.SURPRISE, scale_factor=1.0) for c in many],
                       run_time=1.5)
         lo_h, hi_h = (float(x) for x in g["shannon_human"])
         blind = math.log2(27)
