@@ -53,6 +53,12 @@ class Entropy(VoiceoverScene, ThreeDScene):
         labs = VGroup()
         for i in tall:
             t = letter(ALPHA27[i], font_size=20, color=WHITE).next_to(sl[i], UP, buff=0.08)
+            # The adjacent rare slivers are narrower than their glyphs. Offset
+            # their callouts so q/z remain distinct without altering the areas.
+            if ALPHA27[i] in "qz":
+                t.shift((LEFT if ALPHA27[i] == "q" else RIGHT) * 0.28)
+                labs.add(Line(sl[i].get_top(), t.get_bottom(), buff=0.02,
+                              color=GREY_B, stroke_width=1.2))
             labs.add(t)
         hl = label(r"height: \ $\log_2 \frac{1}{p(x)}$", font_size=24, color=C.SURPRISE)
         hl.move_to([3.0, y0 + scale * 11.0, 0])

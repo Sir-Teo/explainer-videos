@@ -206,7 +206,8 @@ class Arithmetic(VoiceoverScene):
             vo.wait_until("b")
             row_c = next((g for g in shown if g[3] is not None and f"{hs['p']:.3f}" in g[3].tex_string), None)
             if row_c is not None:
-                self.play(Indicate(row_c[3], color=C.SURPRISE), Indicate(row_c[0], color=C.SURPRISE, scale_factor=1.02))
+                self.play(Indicate(row_c[3], color=C.SURPRISE, scale_factor=1.0),
+                          Indicate(row_c[0].cells[row_c[0].s], color=C.SURPRISE, scale_factor=1.0))
         tot_num.clear_updaters()
         tot_unit.clear_updaters()
         self.lines = lines
@@ -509,6 +510,6 @@ class Arithmetic(VoiceoverScene):
             "Whole numbers, and nothing longer than the registers, ever."
         ):
             self.play(Transform(sm, final), FadeOut(pm))
-            self.play(Indicate(sm, color=C.BITS))
+            self.play(Indicate(sm, color=C.BITS, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()

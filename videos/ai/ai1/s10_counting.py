@@ -130,7 +130,10 @@ class Counting(VoiceoverScene):
         l_test = label(r"on the Falcon passage: \ new text", font_size=24, color=C.SURPRISE)
         l_test.move_to(ax.c2p(7.0, 3.7))
         best_d = Dot(ax.c2p(best, test[best]), radius=0.09, color=WHITE)
-        best_l = label(rf"best on this passage: \ $k = {best}$, \ ${test[best]:.2f}$ bits", font_size=22).next_to(best_d, UP, buff=0.25)
+        best_l = label(rf"best on this passage: \ $k = {best}$, \ ${test[best]:.2f}$ bits", font_size=22)
+        best_l.move_to(ax.c2p(9.5, 1.55))
+        best_arrow = Arrow(best_l.get_left(), best_d.get_right(), buff=0.14,
+                           color=GREY_A, stroke_width=1.5, max_tip_length_to_length_ratio=0.12)
         sh = sh27[:3]
         sh_d = VGroup(*[Cross(scale_factor=0.08, stroke_color=C.HUMAN, stroke_width=3).move_to(ax.c2p(k - 1, v))
                         for k, v in zip(range(0, 3), sh) if k >= 1])
@@ -165,7 +168,7 @@ class Counting(VoiceoverScene):
             self.play(Create(c_test), FadeIn(d_test), run_time=2.0)
             self.play(FadeIn(l_test))
             vo.wait_until("b")
-            self.play(FadeIn(best_d, scale=1.5), FadeIn(best_l))
+            self.play(FadeIn(best_d, scale=1.5), FadeIn(best_l), GrowArrow(best_arrow))
         self.wait(0.3)
         self.clear_scene()
 

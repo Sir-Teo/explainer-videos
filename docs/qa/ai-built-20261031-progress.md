@@ -264,3 +264,30 @@ parser depth, failed refreshes and nonstandard sibling records. Old audits retai
 All34 Part1 language/chapter cases are now undergoing complete selected-frame-content review, with exact-SHA
 reuse distinguished from direct views. New lasting findings (Entropy rare-label spacing, Counting annotation/curve
 intersection and rounded numeric equality) are queued for one coherent repair batch after that pass.
+
+## Part1 complete selected-timeline pass and repaired regressions
+
+All34 bilingual baseline timelines completed dense selected-content review:109,941 frames decoded automatically,
+15,194 selected times covered directly or by exact-PNG proof. [Per-case summary](evidence/ai1-temporal/full-selected-coverage-summary.json)
+and [complete review ledgers](evidence/ai1-dense-review/) preserve direct views, byte-identical inheritance,
+page/native hashes and unviewed intervals. This is not a claim that every decoded frame was visually perceived.
+
+Four remaining confirmed issues are repaired and regressed in all eight affected language/scenes:
+Entropy q/z labels have separated leader callouts; Counting's clarified best-point label sits clear of curves
+with an arrow; numeric rounded CE examples use≈while the symbolic identity stays exact; Arithmetic's final bit
+pulse retains its size. Rare-symbol emphasis now targets only the chosen interval/readout, preserving partition
+contrast. All8 full silent regression renders pass with zero warnings. New selected-content inspection covers
+all changed pixels by explicit time/hash mappings;125 consecutive source frames also cover critical pulses.
+No new confirmed defect was found. All126 tests pass after these changes.
+
+Part1 numerical/source/EN+ZH rendered selected-frame coverage is complete at this scope. Full continuous
+perceptual playback and listening remain unverified. Only Information EN has a complete narrated1080p chapter,
+independentASR and15bookmark checks. Parent's independent cloud desktop played that original clip to its end
+with timed screenshot samples; it found a visible narrow-right-margin polish item. That separate inset repair
+and a timestamp compatibility check are in progress, without treating the editor VFR warning as playback failure.
+Remaining16chapters' full narration/audio QA, allChinese audio and full production cuts remain pending.
+
+Part2 is next for rendered QA: its source/correctness work and all19 default computations completed. Two later
+search fixes address a concrete scaled-priority grid defect and conditional capped-optimum handling; affected
+grid/puzzle15 data are being refreshed under schema locks before any Part2 render. NoCI/CD, runners, merge or
+deployment were configured. Verified increments continue on the dedicated branch.
