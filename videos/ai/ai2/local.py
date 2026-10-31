@@ -5,7 +5,7 @@
 * berlin52, a TSPLIB instance (52 places in Berlin, after Groetschel; optimum 7,542, TSPLIB's solutions list):
   nearest-neighbour tours, 2-opt hill climbing from random tours, simulated annealing with 2-opt moves and the
   Metropolis rule (Kirkpatrick, Gelatt & Vecchi 1983), and a genetic algorithm with order crossover (Holland 1975;
-  Davis 1985), all counted in the same currency: tours looked at.
+  Davis 1985), all limited by actual candidate-cost evaluations (not equal CPU time).
 """
 
 from __future__ import annotations
@@ -127,43 +127,65 @@ def nearest_neighbour(D, start):
 
 @njit(cache=True)
 def two_opt_climb(t, D, budget):
-    """Best-improvement 2-opt until no move helps (a local optimum) or ``budget`` tours have been looked at.
-    Returns (length, tours looked at)."""
+    """Best-improvement 2-opt, capped at ``budget`` actual cost evaluations.
+
+    The initial tour costs one evaluation; each valid neighbour delta costs one.
+    Apply the best evaluated improvement even if the budget ends mid-sweep.
+    Returns (length, evaluations), and mutates ``t`` to the best tour found.
+    """
+    if budget < 1:
+        raise ValueError("a tour budget must include at least one initial evaluation")
     n = t.shape[0]
-    looked = 0
+    looked = 1
     L = tour_len(t, D)
-    while True:
+    while looked < budget:
         best, bi, bj = 0, -1, -1
         for i in range(n - 1):
             a, b = t[i], t[i + 1]
             for j in range(i + 2, n if i > 0 else n - 1):
+                if looked >= budget:
+                    break
                 c, d = t[j], t[(j + 1) % n]
                 delta = D[a, c] + D[b, d] - D[a, b] - D[c, d]
                 looked += 1
                 if delta < best:
                     best, bi, bj = delta, i, j
-        if bi < 0 or looked >= budget:
-            return L, looked
+            if looked >= budget:
+                break
+        if bi < 0:
+            break
         t[bi + 1: bj + 1] = t[bi + 1: bj + 1][::-1].copy()
         L += best
+    return L, looked
 
 
 @njit(cache=True)
-def anneal(t, D, T0, alpha, moves_per_T, n_temps, seed, snap_every, snaps, trace):
-    """Simulated annealing with 2-opt moves: accept a change of length delta with probability min(1, e^(-delta/T)),
-    cooling T <- alpha T after every ``moves_per_T`` proposals. Records the tour every ``snap_every`` temperatures in
-    ``snaps`` and (T, current length, best length, acceptance rate) per temperature in ``trace``. Returns the best
-    tour's length and the best tour."""
+def anneal(t, D, T0, alpha, moves_per_T, n_temps, seed, snap_every, snaps, trace,
+           budget=-1, evaluations=None):
+    """Anneal with valid 2-opt cost evaluations, not no-op random draws.
+
+    Initialization counts once. ``budget`` optionally caps total evaluations;
+    the default permits ``moves_per_T * n_temps`` evaluated moves. Trace rows
+    after exhaustion repeat the final state. Optional ``evaluations[0]`` records
+    the actual count. This currency is not a wall-clock comparison with a GA.
+    """
+    if moves_per_T < 0 or n_temps < 0 or T0 <= 0:
+        raise ValueError("invalid annealing schedule")
+    if budget == -1:
+        budget = 1 + moves_per_T * n_temps
+    if budget < 1:
+        raise ValueError("a tour budget must include at least one initial evaluation")
     np.random.seed(seed)
     n = t.shape[0]
     L = tour_len(t, D)
+    looked = 1
     bestL = L
     best = t.copy()
     T = T0
     k = 0
     for it in range(n_temps):
-        acc = 0
-        for _ in range(moves_per_T):
+        acc, done = 0, 0
+        while done < moves_per_T and looked < budget and n >= 4:
             i = np.random.randint(n)
             j = np.random.randint(n)
             if i > j:
@@ -172,6 +194,8 @@ def anneal(t, D, T0, alpha, moves_per_T, n_temps, seed, snap_every, snaps, trace
                 continue
             a, b, c, d = t[i], t[i + 1], t[j], t[(j + 1) % n]
             delta = D[a, c] + D[b, d] - D[a, b] - D[c, d]
+            done += 1
+            looked += 1
             if delta <= 0 or np.random.random() < np.exp(-delta / T):
                 t[i + 1: j + 1] = t[i + 1: j + 1][::-1].copy()
                 L += delta
@@ -182,11 +206,13 @@ def anneal(t, D, T0, alpha, moves_per_T, n_temps, seed, snap_every, snaps, trace
         trace[it, 0] = T
         trace[it, 1] = L
         trace[it, 2] = bestL
-        trace[it, 3] = acc / moves_per_T
+        trace[it, 3] = acc / done if done else 0.0
         if snap_every > 0 and it % snap_every == 0 and k < snaps.shape[0]:
             snaps[k] = t
             k += 1
         T *= alpha
+    if evaluations is not None:
+        evaluations[0] = looked
     return bestL, best
 
 
@@ -210,9 +236,20 @@ def _ox(p1, p2, i, j):
 
 
 @njit(cache=True)
-def genetic(D, pop_size, gens, p_mut, seed, best_per_gen, snaps, snap_gens):
+def genetic(D, pop_size, gens, p_mut, seed, best_per_gen, snaps, snap_gens,
+            budget=-1, evaluations=None):
     """A plain genetic algorithm: tournament selection (size 3), order crossover, a 2-opt reversal as mutation,
-    and the best tour always kept (elitism). Returns the best length."""
+    and the best tour always kept (elitism). Initialization is charged; copied
+    elites reuse their stored score. A partial final generation keeps its best
+    evaluated child. ``best_per_gen[0]`` is initialization; later entries include
+    each generation's result, including the last one. Returns the best length."""
+    if pop_size < 1 or gens < 0:
+        raise ValueError("invalid population or generation count")
+    if budget == -1:
+        budget = pop_size + gens * max(pop_size - 1, 0)
+    if budget < 1:
+        raise ValueError("a tour budget must include initialization")
+    pop_size = min(pop_size, budget)
     np.random.seed(seed)
     n = D.shape[0]
     pop = np.empty((pop_size, n), np.int64)
@@ -220,16 +257,24 @@ def genetic(D, pop_size, gens, p_mut, seed, best_per_gen, snaps, snap_gens):
     for k in range(pop_size):
         pop[k] = np.random.permutation(n)
         fit[k] = tour_len(pop[k], D)
+    looked = pop_size
     si = 0
-    for g in range(gens):
+    for g in range(gens + 1):
         e = np.argmin(fit)
-        best_per_gen[g] = fit[e]
+        if g < best_per_gen.shape[0]:
+            best_per_gen[g] = fit[e]
         if si < snap_gens.shape[0] and g == snap_gens[si]:
             snaps[si] = pop[e]
             si += 1
-        new = np.empty_like(pop)
+        if g == gens:
+            break
+        new = pop.copy()
+        new_fit = fit.copy()
         new[0] = pop[e]
+        new_fit[0] = fit[e]
         for k in range(1, pop_size):
+            if looked >= budget:
+                break
             par = np.empty((2, n), np.int64)
             for m in range(2):
                 a = np.random.randint(pop_size)
@@ -250,7 +295,10 @@ def genetic(D, pop_size, gens, p_mut, seed, best_per_gen, snaps, snap_gens):
                     i, j = j, i
                 child[i:j + 1] = child[i:j + 1][::-1].copy()
             new[k] = child
+            new_fit[k] = tour_len(child, D)
+            looked += 1
         pop = new
-        for k in range(pop_size):
-            fit[k] = tour_len(pop[k], D)
+        fit = new_fit
+    if evaluations is not None:
+        evaluations[0] = looked
     return fit.min()

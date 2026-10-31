@@ -41,6 +41,7 @@ Items:
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import re
@@ -50,9 +51,68 @@ from collections import Counter
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import cache_lock, locked_item
 
-CACHE = Cache("ai2")
-load = CACHE.load
+CACHE_SCHEMAS = {"tsp": 2, "resolution": 3, "sat3": 2}
+
+
+class SchemaCache(Cache):
+    """Part-local data revisions: old completion files cannot skip repairs."""
+
+    def current(self, name):
+        p = self.path(name)
+        if not p.exists():
+            return False
+        version = CACHE_SCHEMAS.get(name)
+        if version is None:
+            return True
+        try:
+            data = json.loads(p.read_text())
+            if data.get("schema_version") != version:
+                return False
+            if name == "tsp":
+                return p.with_suffix(".npz").is_file() and "eq_evaluations" in data
+            if name == "resolution":
+                return (all("status" in data.get(k, {}) for k in ("prop", "fol"))
+                        and all("status" in data.get(k, {}) and "clause_cap" in data[k]
+                                for k in ("explode_saturate", "explode_support")))
+            return all(f"unknown_{n}" in data and f"psat_upper_{n}" in data for n in data["ns"])
+        except (OSError, ValueError, KeyError, TypeError):
+            return False
+
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not self.current(name):
+            self.save(name, self.items[name]())
+        return super().load(name)
+
+    def main(self, items, doc=None):
+        self.items = items
+        ap = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
+        ap.add_argument("names", nargs="*", default=list(items))
+        ap.add_argument("--force", action="store_true")
+        args = ap.parse_args()
+        for name in args.names:
+            with cache_lock(self.path(name)):
+                if self.current(name) and not args.force:
+                    print(f"  cached  {name}")
+                    continue
+                t = time.time()
+                print(f"  compute {name} ...", flush=True)
+                self.save(name, items[name]())
+                print(f"  done    {name} in {time.time() - t:.0f}s", flush=True)
+
+
+CACHE = SchemaCache("ai2")
+
+
+def cache_current(name):
+    return CACHE.current(name)
+
+
+def load(name):
+    # Keep indirection so cached-only QA can guard this instance before use.
+    return CACHE.load(name)
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -308,10 +368,13 @@ def compute_queens(n_starts=10_000):
 def compute_tsp(seeds=5, budget=2_000_000):
     from videos.ai.ai2 import local as L
 
+    if budget < 1 or seeds < 1:
+        raise ValueError("positive evaluation budget and seed count required")
     P = L.BERLIN52
     D = L.dist_matrix(P)
     n = len(P)
-    out = {"xy": P, "opt": L.BERLIN52_OPT, "budget": budget}
+    out = {"schema_version": CACHE_SCHEMAS["tsp"], "xy": P, "opt": L.BERLIN52_OPT, "budget": budget,
+           "budget_unit": "candidate_cost_evaluations_including_initialization"}
     nn = [L.tour_len(L.nearest_neighbour(D, s), D) for s in range(n)]
     out["nn_lengths"] = nn
     out["nn_best_tour"] = L.nearest_neighbour(D, int(np.argmin(nn))).tolist()
@@ -338,6 +401,7 @@ def compute_tsp(seeds=5, budget=2_000_000):
     out["climb_example"] = [first_tour, first_opt]
     # equal budgets: restarts of 2-opt, one annealing run, one GA run, per seed
     eq = {"restarts": [], "anneal": [], "ga": []}
+    counts = {k: [] for k in eq}
     for s in range(seeds):
         gs = rng(500 + s)
         used, best = 0, 1 << 60
@@ -347,20 +411,27 @@ def compute_tsp(seeds=5, budget=2_000_000):
             used += lk
             best = min(best, Lk)
         eq["restarts"].append(int(best))
-        n_temps = 200
+        counts["restarts"].append(used)
+        n_temps = min(200, max(1, budget - 1))
         snaps = np.zeros((1, n), np.int64)
         tr = np.zeros((n_temps, 4))
         t = gs.permutation(n).astype(np.int64)
-        bl, _ = L.anneal(t, D, 300.0, 0.955, budget // n_temps, n_temps, 600 + s, 0, snaps, tr)
+        count = np.zeros(1, np.int64)
+        per_temp = (budget - 1 + n_temps - 1) // n_temps
+        bl, _ = L.anneal(t, D, 300.0, 0.955, per_temp, n_temps, 600 + s, 0, snaps, tr, budget, count)
         eq["anneal"].append(int(bl))
-        pop = 100
-        gens = budget // pop
-        bp = np.zeros(gens, np.int64)
+        counts["anneal"].append(int(count[0]))
+        pop = min(100, budget)
+        gens = (budget - pop + pop - 2) // (pop - 1) if pop > 1 else 0
+        bp = np.zeros(gens + 1, np.int64)
         eq["ga"].append(int(L.genetic(D, pop, gens, 0.5, 700 + s, bp, np.zeros((1, n), np.int64),
-                                      np.array([-1], np.int64))))
+                                      np.array([-1], np.int64), budget, count)))
+        counts["ga"].append(int(count[0]))
+        assert used == count[0] == counts["anneal"][-1] == budget
         if s == 0:
             out["ga_best_per_gen"] = bp
     out.update({f"eq_{k}": v for k, v in eq.items()})
+    out["eq_evaluations"] = counts
     # the showcase annealing run: 60 snapshots as it cools
     n_temps, per = 240, 10_000
     snaps = np.zeros((60, n), np.int64)
@@ -591,23 +662,58 @@ def compute_resolution():
            {L(False, "Ancestor", "x", "y"), L(False, "Ancestor", "y", "x")}] + \
           [{L(True, *f)} for f in facts]
     goal3 = [frozenset({L(False, "Ancestor", "Anne", "Flora")})]
-    sat_ = refute([frozenset(c) for c in kb3], goal3, strategy="saturate", max_clauses=4000)
-    sos = refute([frozenset(c) for c in kb3], goal3, strategy="support", max_clauses=4000)
-    trim = lambda r: {"found": r["found"], "made": len(r["clauses"]), "levels": r["levels"],
-                      "proof_len": len(r.get("proof", []))}
-    return {"prop": prop, "fol": fol, "explode_saturate": trim(sat_), "explode_support": trim(sos),
+    clause_cap = 4000
+    sat_ = refute([frozenset(c) for c in kb3], goal3, strategy="saturate", max_clauses=clause_cap)
+    sos = refute([frozenset(c) for c in kb3], goal3, strategy="support", max_clauses=clause_cap)
+    trim = lambda r: {"found": r["found"], "status": r["status"], "clause_cap": clause_cap,
+                      "made": len(r["clauses"]), "levels": r["levels"], "proof_len": len(r.get("proof", []))}
+    return {"schema_version": CACHE_SCHEMAS["resolution"], "prop": prop, "fol": fol,
+            "explode_saturate": trim(sat_), "explode_support": trim(sos),
             "people": people, "facts": facts}
 
 
+def summarize_sat_runs(statuses, decisions):
+    """Keep bounded solver outcomes unknown; truncated work is not completion work."""
+    st, dec = np.asarray(statuses), np.asarray(decisions, float)
+    if not len(st) or len(st) != len(dec) or not np.isin(st, [-1, 0, 1]).all():
+        raise ValueError("invalid SAT outcome records")
+    unknown = int((st == -1).sum())
+    solved = dec[st != -1]
+    nsat, nunsat = int((st == 1).sum()), int((st == 0).sum())
+    return {"sat": nsat, "unsat": nunsat, "unknown": unknown,
+            "psat": nsat / len(st), "psat_upper": (nsat + unknown) / len(st),
+            "resolved_psat": nsat / len(solved) if len(solved) else None,
+            "median": float(np.median(solved)) if len(solved) else None,
+            "mean": float(solved.mean()) if len(solved) else None,
+            "q90": float(np.quantile(solved, .9)) if len(solved) else None,
+            "observed_median": float(np.median(dec)), "observed_mean": float(dec.mean()),
+            "observed_q90": float(np.quantile(dec, .9)),
+            "observed_decisions": dec.tolist(), "statuses": st.tolist()}
+
+
+def sat_crossing(alphas, probabilities, level):
+    """Interpolate an actually bracketed crossing; do not wrap a missing crossing."""
+    p = np.asarray(probabilities, float)
+    for j, value in enumerate(p):
+        if np.isfinite(value) and value == level:
+            return float(alphas[j])
+    for j in range(1, len(p)):
+        if np.isfinite(p[j - 1:j + 1]).all() and p[j - 1] >= level > p[j]:
+            return float(alphas[j - 1] + (p[j - 1] - level) / (p[j - 1] - p[j]) *
+                         (alphas[j] - alphas[j - 1]))
+    return None
+
+
 def compute_sat3(ns=(25, 50, 100, 200), alphas=tuple(np.round(np.arange(3.0, 5.61, 0.1), 2)),
-                 per=(400, 300, 200, 100)):
+                 per=(400, 300, 200, 100), max_decisions=10**9):
     from videos.ai.ai2.sat import random_3sat, solve_dpll
 
-    out = {"ns": list(ns), "alphas": list(alphas), "per": list(per)}
-    part = Partial("sat3", out)
+    out = {"schema_version": CACHE_SCHEMAS["sat3"], "ns": list(ns), "alphas": list(alphas),
+           "per": list(per), "max_decisions": max_decisions}
+    part = Partial("sat3", out)  # version also invalidates incompatible partial cells
     for n, k in zip(ns, per):
         g = rng(1000 + n)
-        psat, med, mean, q90 = [], [], [], []
+        rows = []
         for a in alphas:
             key = f"{n}/{a}"
             if key not in part:
@@ -615,34 +721,27 @@ def compute_sat3(ns=(25, 50, 100, 200), alphas=tuple(np.round(np.arange(3.0, 5.6
                 st, dec = [], []
                 for _ in range(k):
                     cl = random_3sat(g, n, m)
-                    s, d = solve_dpll(cl, n)
-                    st.append(s)
-                    dec.append(d)
-                st, dec = np.array(st), np.array(dec, float)
-                part[key] = {"psat": float((st == 1).mean()), "median": float(np.median(dec)),
-                             "mean": float(dec.mean()), "q90": float(np.quantile(dec, 0.9)),
-                             "rng": g.bit_generator.state}
+                    status, decisions = solve_dpll(cl, n, max_decisions=max_decisions)
+                    st.append(status)
+                    dec.append(decisions)
+                part[key] = {**summarize_sat_runs(st, dec), "rng": g.bit_generator.state}
             r = part[key]
             g.bit_generator.state = r["rng"]
-            psat.append(r["psat"])
-            med.append(r["median"])
-            mean.append(r["mean"])
-            q90.append(r["q90"])
-        out[f"psat_{n}"] = psat
-        out[f"median_{n}"] = med
-        out[f"mean_{n}"] = mean
-        out[f"q90_{n}"] = q90
-        # where the chance crosses one half (linear interpolation)
-        p = np.array(psat)
-        j = int(np.argmax(p < 0.5))
-        a0, a1 = alphas[j - 1], alphas[j]
-        out[f"cross_{n}"] = float(a0 + (p[j - 1] - 0.5) / (p[j - 1] - p[j]) * (a1 - a0))
-        # the width of the window: from 90% to 10% satisfiable
-        def at(level):
-            jj = int(np.argmax(p < level))
-            return float(alphas[jj - 1] + (p[jj - 1] - level) / (p[jj - 1] - p[jj]) * (alphas[jj] - alphas[jj - 1]))
-        out[f"width_{n}"] = at(0.1) - at(0.9)
-        out[f"peak_{n}"] = float(alphas[int(np.argmax(med))])
+            rows.append(r)
+        for key in ("psat", "psat_upper", "resolved_psat", "sat", "unsat", "unknown", "median", "mean", "q90",
+                    "observed_median", "observed_mean", "observed_q90"):
+            out[f"{key}_{n}"] = [r[key] for r in rows]
+        out[f"runs_{n}"] = [{key: r[key] for key in ("statuses", "observed_decisions")} for r in rows]
+        out[f"censored_{n}"] = any(r["unknown"] for r in rows)
+        # A lower bound is not a fitted SAT-probability curve when runs censor.
+        exact = not out[f"censored_{n}"]
+        p = out[f"psat_{n}"]
+        out[f"cross_{n}"] = sat_crossing(alphas, p, .5) if exact else None
+        lo = sat_crossing(alphas, p, .9) if exact else None
+        hi = sat_crossing(alphas, p, .1) if exact else None
+        out[f"width_{n}"] = hi - lo if lo is not None and hi is not None else None
+        # Even resolved-only medians are selection-biased under censoring.
+        out[f"peak_{n}"] = float(alphas[int(np.argmax(out[f"median_{n}"]))]) if exact else None
     part.finish()
     return out
 

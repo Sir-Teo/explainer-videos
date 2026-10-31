@@ -1,0 +1,93 @@
+{
+  "narration_updates": [
+    {
+      "scene": "Heuristics",
+      "sub": null,
+      "old_key": "f\"How much does the better guess buy?",
+      "key": "f\"How much does the better guess buy? A star on the eight-puzzle, a hundred positions per solution length. <bookmark mark='a'/> With no heuristic, at length {dd}, it expands {last['astar_h0']:,.0f} states on average. <bookmark mark='b'/> Counting misplaced tiles: {last['astar_h1']:,.0f}. <bookmark mark='c'/> The Manhattan distance: {last['astar_h2']:,.0f}. <bookmark mark='d'/> The effective branching factor, the branching of a uniform tree of the same size and depth, falls from {ebf['astar_h0']:.2f} to {ebf['astar_h1']:.2f} to {ebf['astar_h2']:.2f}: each step toward one is an exponential saving. <bookmark mark='e'/> The Manhattan distance is never below the misplaced count. For consistent heuristics, dominance cannot increase the states with f below the optimal cost that A star must expand. At the boundary, equal f values and tie breaking can change the total.\"",
+      "english_source": "f\"How much does the better guess buy? A star on the eight-puzzle, a hundred positions per solution length. <bookmark mark='a'/> With no heuristic, at length {dd}, it expands {last['astar_h0']:,.0f} states on average. <bookmark mark='b'/> Counting misplaced tiles: {last['astar_h1']:,.0f}. <bookmark mark='c'/> The Manhattan distance: {last['astar_h2']:,.0f}. <bookmark mark='d'/> The effective branching factor, the branching of a uniform tree of the same size and depth, falls from {ebf['astar_h0']:.2f} to {ebf['astar_h1']:.2f} to {ebf['astar_h2']:.2f}: each step toward one is an exponential saving. <bookmark mark='e'/> The Manhattan distance is never below the misplaced count. For consistent heuristics, dominance cannot increase the states with f below the optimal cost that A star must expand. At the boundary, equal f values and tie breaking can change the total.\"",
+      "zh": "更好的猜测能换来多少？在八数码上运行A星，每种解长取100个局面。<bookmark mark='a'/>不用启发式时，在解长{dd}处，它平均扩展{last['astar_h0']:,.0f}个状态。<bookmark mark='b'/>数放错的方块：{last['astar_h1']:,.0f}个。<bookmark mark='c'/>曼哈顿距离：{last['astar_h2']:,.0f}个。<bookmark mark='d'/>有效分支因子，也就是同样大小、同样深度的均匀树的分支数，从{ebf['astar_h0']:.2f}降到{ebf['astar_h1']:.2f}，再降到{ebf['astar_h2']:.2f}：每向1靠近一步，都是指数级的节省。<bookmark mark='e'/>曼哈顿距离从不小于放错的方块数。对一致的启发式，占优关系不会增加A星必须扩展的、f小于最优代价的状态。在边界上，相同的f值及其平局处理方式会改变总扩展数。"
+    },
+    {
+      "scene": "Local",
+      "sub": null,
+      "old_key": "f\"Is the cooling worth it?",
+      "key": "f\"Is the cooling worth it? Limit all three methods to the same number of candidate-cost evaluations, including initialization. A two-opt delta counts once, like scoring one genetic child; this is not equal CPU time. <bookmark mark='a'/> The greedy tour, always to the nearest unvisited place, is {100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> \" + verdict + \" <bookmark mark='c'/> \" + hits",
+      "english_source": "f\"Is the cooling worth it? Limit all three methods to the same number of candidate-cost evaluations, including initialization. A two-opt delta counts once, like scoring one genetic child; this is not equal CPU time. <bookmark mark='a'/> The greedy tour, always to the nearest unvisited place, is {100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> \" + verdict + \" <bookmark mark='c'/> \" + hits",
+      "zh": "降温值得吗？让三种方法的实际候选代价评估次数相同，初始化也计入。计算一次2-opt代价差计一次，给一个遗传算法子代打分也计一次；这不代表相同CPU时间。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了{100 * (min(d['nn_lengths']) / opt - 1):.0f}%；2-opt爬山法把它打磨到{min(d['nn2opt_lengths']):,}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{hits}"
+    },
+    {
+      "scene": "Local",
+      "sub": "verdict",
+      "old_key": "f'On the same budget of {d['budget']:,} tours looked at",
+      "key": "f\"On the same budget of {d['budget']:,} candidate-cost evaluations, {order[0][0]} does best, averaging {order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]}, {order[2][1]:,.0f}.\"",
+      "english_source": "f\"On the same budget of {d['budget']:,} candidate-cost evaluations, {order[0][0]} does best, averaging {order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]}, {order[2][1]:,.0f}.\"",
+      "zh": "在同样{d['budget']:,}次候选代价评估的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}；{order[2][0]}平均{order[2][1]:,.0f}。"
+    },
+    {
+      "scene": "Logic",
+      "sub": null,
+      "old_key": "In 1965 Alan Robinson gave machines a single rule of inference",
+      "key": "In 1965 Alan Robinson gave machines a resolution rule for automated deduction. <bookmark mark='a'/> Write every fact as a clause, an or of literals. If one clause contains x and another not x, resolve them: at least one of the rest must hold. <bookmark mark='b'/> To prove a goal, add its negation, here: the grass is not wet, <bookmark mark='c'/> and resolve until you derive the empty clause, a contradiction. <bookmark mark='d'/> Not wet and the rain rule give no rain; not wet and the sprinkler rule give no sprinkler; rain or sprinkler, with no sprinkler, gives rain; rain against no rain leaves nothing. <bookmark mark='e'/> Robinson proved the method sound and refutation-complete. First-order clauses also need factoring: unify same-sign literals within one clause. Without a resource cap, resolution and factoring can derive the empty clause whenever the clauses are inconsistent. Our bounded run can stop without an answer.",
+      "english_source": "In 1965 Alan Robinson gave machines a resolution rule for automated deduction. <bookmark mark='a'/> Write every fact as a clause, an or of literals. If one clause contains x and another not x, resolve them: at least one of the rest must hold. <bookmark mark='b'/> To prove a goal, add its negation, here: the grass is not wet, <bookmark mark='c'/> and resolve until you derive the empty clause, a contradiction. <bookmark mark='d'/> Not wet and the rain rule give no rain; not wet and the sprinkler rule give no sprinkler; rain or sprinkler, with no sprinkler, gives rain; rain against no rain leaves nothing. <bookmark mark='e'/> Robinson proved the method sound and refutation-complete. First-order clauses also need factoring: unify same-sign literals within one clause. Without a resource cap, resolution and factoring can derive the empty clause whenever the clauses are inconsistent. Our bounded run can stop without an answer.",
+      "zh": "1965年，艾伦·鲁滨逊给了机器一条用于自动演绎的归结规则。<bookmark mark='a'/>把每条事实写成一个子句，也就是若干文字的“或”。如果一个子句含有x，另一个含有非x，就把它们归结：剩下的部分至少有一个必须成立。<bookmark mark='b'/>要证明一个目标，就加入它的否定，这里是：草地不湿，<bookmark mark='c'/>然后不断归结，直到推出空子句，也就是一个矛盾。<bookmark mark='d'/>不湿和下雨那条规则，得到不下雨；不湿和洒水器那条规则，得到洒水器没开；下雨或洒水器，加上洒水器没开，得到下雨；下雨对上不下雨，什么都不剩。<bookmark mark='e'/>鲁滨逊证明这个方法是可靠的，而且是反驳完备的。一阶子句还需要因子化：合一同一子句内同号的文字。不加资源上限时，只要子句集不一致，归结与因子化就能推出空子句。我们有资源上限的运行，也可能没有得到答案就停止。"
+    },
+    {
+      "scene": "SAT",
+      "sub": "verdict",
+      "old_key": null,
+      "key": "Some runs reached the decision cap without an answer. The solid and dashed lines bound the SAT fraction; unknown is not unsatisfiable, and a censored crossing or width is unresolved.",
+      "english_source": "Some runs reached the decision cap without an answer. The solid and dashed lines bound the SAT fraction; unknown is not unsatisfiable, and a censored crossing or width is unresolved.",
+      "zh": "有些运行达到决策次数上限，仍未得出答案。实线与虚线给出可满足比例的下界和上界；未知不等于不可满足，受到截断影响的交点或宽度仍未确定。"
+    },
+    {
+      "scene": "SAT",
+      "sub": "verdict",
+      "old_key": null,
+      "key": "The sampled ratios do not bracket both window endpoints, so a width is unresolved.",
+      "english_source": "The sampled ratios do not bracket both window endpoints, so a width is unresolved.",
+      "zh": "采样的比值范围没有覆盖窗口的两个端点，所以宽度仍未确定。"
+    },
+    {
+      "scene": "SAT",
+      "sub": null,
+      "old_key": "f\"The transition is also where the problems are hard.",
+      "key": "\"The transition is also where the problems are hard. <bookmark mark='a'/> Count DPLL's decisions: far below the threshold a solution is found almost at once, far above, a contradiction. <bookmark mark='b'/> \" + result",
+      "english_source": "\"The transition is also where the problems are hard. <bookmark mark='a'/> Count DPLL's decisions: far below the threshold a solution is found almost at once, far above, a contradiction. <bookmark mark='b'/> \" + result",
+      "zh": "相变的地方，也正是问题难的地方。<bookmark mark='a'/>数一数DPLL的决策次数：远低于阈值时，几乎马上就找到一个解；远高于阈值时，几乎马上就找到矛盾。<bookmark mark='b'/>{result}"
+    },
+    {
+      "scene": "SAT",
+      "sub": "result",
+      "old_key": null,
+      "key": "Some runs are truncated at the decision cap. These medians describe observed work, including truncated runs; they do not locate the peak of completion work.",
+      "english_source": "Some runs are truncated at the decision cap. These medians describe observed work, including truncated runs; they do not locate the peak of completion work.",
+      "zh": "有些运行在决策次数上限处被截断。这些中位数描述的是已经观察到的工作量，包括被截断的运行；它们不能定位完成求解所需工作量的峰值。"
+    },
+    {
+      "scene": "SAT",
+      "sub": "result",
+      "old_key": null,
+      "key": "f'For {n1} variables, the median peaks at a ratio of {pk:.1f}, at {med.max():,.0f} decisions, against {lo_side:,.0f} at the left edge and {hi_side:,.0f} at the right. Easy, hard, easy.'",
+      "english_source": "f'For {n1} variables, the median peaks at a ratio of {pk:.1f}, at {med.max():,.0f} decisions, against {lo_side:,.0f} at the left edge and {hi_side:,.0f} at the right. Easy, hard, easy.'",
+      "zh": "对{n1}个变量，中位数在比值{pk:.1f}处达到峰值，为{med.max():,.0f}次决策，而左边缘是{lo_side:,.0f}次，右边缘是{hi_side:,.0f}次。易、难、易。"
+    }
+  ],
+  "caption_updates": {
+    "strings": {
+      "consistent $h_2 \\ge h_1$: \\ no more mandatory $f<C^*$ states; \\\\ boundary work depends on ties": "一致的$h_2 \\ge h_1$：\\ 必须扩展的$f<C^*$状态不会更多；\\\\ 边界工作量取决于平局处理",
+      "$2$-opt moves: \\ reverse a stretch of the tour; \\\\ $10{,}000$ evaluated moves per temperature": "$2$-opt移动：\\ 反转回路中的一段；\\\\ 每个温度评估$10{,}000$次移动",
+      "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations, \\ $5$ seeds; \\ bar = mean, \\ line = range": "计算结果：\\ 后三种方法的实际候选代价评估上限均为$2{,}000{,}000$次；\\ $5$个种子；\\ 条形=平均值，\\ 线段=范围",
+      "resolution plus factoring: \\\\ refutation-complete without a resource cap": "归结加因子化：\\\\ 不加资源上限时反驳完备",
+      "$n=25$: \\ crossing unresolved": "$n=25$：\\ 交点未确定",
+      "$n=25$: \\ half at $4.20$, \\ $90\\%\\to10\\%$ over $0.50$": "$n=25$：\\ 在$4.20$处降到一半，\\ $90\\%\\to10\\%$跨越$0.50$",
+      "computed: \\ $3$ unknown outcomes; \\\\ solid = SAT lower bound; \\ dashed = upper bound": "计算结果：\\ $3$个结果未知；\\\\ 实线=可满足比例下界；\\ 虚线=上界",
+      "observed DPLL decisions \\ (median, log scale)": "已观察到的DPLL决策次数\\（中位数，对数刻度）",
+      "decision cap reached: \\\\ observed work includes truncated runs; \\\\ completion-time peak unresolved": "达到决策上限：\\\\ 已观察到的工作量包括截断运行；\\\\ 完成求解的工作量峰值未确定",
+      "SAT fraction bounds": "可满足比例的上下界"
+    }
+  },
+  "shared_tables_edited": false,
+  "note": "Representative measured numeric captions support existing numeric templates; confirm all actual production values after recomputation. Existing transition main VO and uncensored verdict branches remain unchanged.",
+  "local_narration_updates_applied": true
+}

@@ -1,0 +1,97 @@
+{
+  "generated_utc": "2026-10-31T13:47:07.096342+00:00",
+  "scope": "Actual default TSP/resolution computations only; no full Part2 benchmark/render/playback pass",
+  "sources": {
+    "videos/ai/ai2/compute.py": "7f34897b94a1dcd0fdc7aab152bfd48a8e92e1e38ca36d2ef186aaf4312994bb",
+    "videos/ai/ai2/local.py": "56dcec8ad4404c39e0938033ed6800593e2fdd130ece5443e7550115652cfc2a",
+    "videos/ai/ai2/logic.py": "f04ef328b499e9453b0e0f63d49f90791e700f756fdebc585d7bc9b6f5c60eb1"
+  },
+  "tsp": {
+    "result": {
+      "schema_version": 2,
+      "budget": 2000000,
+      "budget_unit": "candidate_cost_evaluations_including_initialization",
+      "eq_evaluations": {
+        "restarts": [
+          2000000,
+          2000000,
+          2000000,
+          2000000,
+          2000000
+        ],
+        "anneal": [
+          2000000,
+          2000000,
+          2000000,
+          2000000,
+          2000000
+        ],
+        "ga": [
+          2000000,
+          2000000,
+          2000000,
+          2000000,
+          2000000
+        ]
+      },
+      "eq_restarts": [
+        7788,
+        7740,
+        7797,
+        7658,
+        7542
+      ],
+      "eq_anneal": [
+        7542,
+        7542,
+        7542,
+        7542,
+        7542
+      ],
+      "eq_ga": [
+        7984,
+        7746,
+        7894,
+        8060,
+        7973
+      ]
+    },
+    "json_sha256": "dc0cde7d3c2506d00236d94e52586b5cc11383382621cb3adaaf55397171b1fc",
+    "npz_sha256": "f7312a49883e623bf1d9a954075dbd7e7d97724073b87825860e903cc11e8c39"
+  },
+  "resolution": {
+    "result": {
+      "schema_version": 3,
+      "prop": {
+        "found": true,
+        "status": "refuted",
+        "clauses": 10,
+        "proof_len": 8
+      },
+      "fol": {
+        "found": true,
+        "status": "refuted",
+        "clauses": 9,
+        "proof_len": 7
+      },
+      "explode_saturate": {
+        "found": false,
+        "status": "limit",
+        "clause_cap": 4000,
+        "made": 4000,
+        "levels": 3,
+        "proof_len": 0
+      },
+      "explode_support": {
+        "found": true,
+        "status": "refuted",
+        "clause_cap": 4000,
+        "made": 2823,
+        "levels": 8,
+        "proof_len": 15
+      }
+    },
+    "json_sha256": "add3b5ec347fa408118c0a55616c7f77027c8f6bec856a78a101d1e575d9d6fa",
+    "npz_sha256": null
+  }
+}

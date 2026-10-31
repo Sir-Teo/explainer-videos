@@ -32,7 +32,7 @@ cited on screen.
   without sideways moves; random restarts); the Metropolis rule (1953) and detailed balance to Boltzmann's
   distribution, derived; simulated annealing (Kirkpatrick, Gelatt & Vecchi 1983) on berlin52 (TSPLIB, optimum
   7,542), the tour untangling as it cools; nearest neighbour, 2-opt restarts, annealing and a genetic algorithm
-  (Holland 1975) on an equal budget of tours looked at; FunSearch (2023) and AlphaEvolve (2025).
+  (Holland 1975) on an equal cap on actual candidate-cost evaluations, including initialization (not equal CPU time); FunSearch (2023) and AlphaEvolve (2025).
 * **6. Games and alpha–beta.** Von Neumann's minimax (1928); Shannon's chess paper (1950); tic-tac-toe's whole tree
   (549,946 positions, 255,168 games); alpha–beta on an illustrative tree with the window [α, β] and pruned branches
   greyed (McCarthy); the best case b^⌈d/2⌉ + b^⌊d/2⌋ − 1 derived (Knuth & Moore 1975) and checked exactly on uniform

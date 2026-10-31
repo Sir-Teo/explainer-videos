@@ -1,0 +1,61 @@
+{
+  "narration_updates": [
+    {
+      "key": "\"Completeness is not efficiency. <bookmark mark='a'/> Give the prover eight family facts and three rules, and ask whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> \" + sat_verdict + \" <bookmark mark='c'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs involving the negated goal or its descendants. \" + sos_verdict + \" <bookmark mark='d'/> Provers live or die by such strategies. Resolution's descendants, like Vampire and E, still compete every year, and proof assistants call on them to fill in routine steps.\"",
+      "old_key": "f\"Completeness is not efficiency.",
+      "english_source": "\"Completeness is not efficiency. <bookmark mark='a'/> Give the prover eight family facts and three rules, and ask whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> \" + sat_verdict + \" <bookmark mark='c'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs involving the negated goal or its descendants. \" + sos_verdict + \" <bookmark mark='d'/> Provers live or die by such strategies. Resolution's descendants, like Vampire and E, still compete every year, and proof assistants call on them to fill in routine steps.\"",
+      "zh": "完备不等于高效。<bookmark mark='a'/>给证明器八条家庭事实和三条规则，问安妮是不是弗洛拉的祖先，相隔四代。<bookmark mark='b'/>{sat_verdict}<bookmark mark='c'/>支持集策略，来自拉里·沃斯和同事1965年的工作，只归结涉及否定目标或其后代的子句对。{sos_verdict}<bookmark mark='d'/>定理证明器的成败，就取决于这样的策略。归结的后代，像Vampire和E，每年还在比赛，证明助手也会调用它们来补全常规步骤。"
+    },
+    {
+      "key": "f\"The level-by-level search found a refutation after {sat['made']:,} recorded clauses; the proof uses {sat['proof_len']} clauses.\"",
+      "english_source": "f\"The level-by-level search found a refutation after {sat['made']:,} recorded clauses; the proof uses {sat['proof_len']} clauses.\"",
+      "zh": "逐层归结搜索记录了{sat['made']:,}个子句后找到反驳证明；证明用到{sat['proof_len']}个子句。",
+      "sub": "sat_verdict"
+    },
+    {
+      "key": "f\"The level-by-level search reached its cap of {sat['clause_cap']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run.\"",
+      "english_source": "f\"The level-by-level search reached its cap of {sat['clause_cap']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run.\"",
+      "zh": "逐层归结搜索达到记录{sat['clause_cap']:,}个子句的上限，仍未找到反驳证明。这次运行没有确定目标。",
+      "sub": "sat_verdict"
+    },
+    {
+      "key": "f\"The level-by-level search stopped with no new clauses after {sat['made']:,} recorded clauses, without finding a refutation.\"",
+      "english_source": "f\"The level-by-level search stopped with no new clauses after {sat['made']:,} recorded clauses, without finding a refutation.\"",
+      "zh": "逐层归结搜索记录了{sat['made']:,}个子句后，因没有新子句而停止，未找到反驳证明。",
+      "sub": "sat_verdict"
+    },
+    {
+      "key": "f\"The set-of-support search found a refutation after {sos['made']:,} recorded clauses; the proof uses {sos['proof_len']} clauses.\"",
+      "english_source": "f\"The set-of-support search found a refutation after {sos['made']:,} recorded clauses; the proof uses {sos['proof_len']} clauses.\"",
+      "zh": "支持集搜索记录了{sos['made']:,}个子句后找到反驳证明；证明用到{sos['proof_len']}个子句。",
+      "sub": "sos_verdict"
+    },
+    {
+      "key": "f\"The set-of-support search reached its cap of {sos['clause_cap']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run.\"",
+      "english_source": "f\"The set-of-support search reached its cap of {sos['clause_cap']:,} recorded clauses without finding a refutation. That leaves the goal unresolved by this run.\"",
+      "zh": "支持集搜索达到记录{sos['clause_cap']:,}个子句的上限，仍未找到反驳证明。这次运行没有确定目标。",
+      "sub": "sos_verdict"
+    },
+    {
+      "key": "f\"The set-of-support search stopped with no new clauses after {sos['made']:,} recorded clauses, without finding a refutation.\"",
+      "english_source": "f\"The set-of-support search stopped with no new clauses after {sos['made']:,} recorded clauses, without finding a refutation.\"",
+      "zh": "支持集搜索记录了{sos['made']:,}个子句后，因没有新子句而停止，未找到反驳证明。",
+      "sub": "sos_verdict"
+    }
+  ],
+  "caption_updates": {
+    "strings": {
+      "clauses recorded at stopping \\\\ (including input clauses)": "停止时记录的子句数\\\\（包括输入子句）",
+      "all pairs: \\ proof found": "全部子句对：\\ 已找到证明",
+      "all pairs: \\ cap reached; no proof": "全部子句对：\\ 达到上限；未找到证明",
+      "all pairs: \\ no new clauses; no proof": "全部子句对：\\ 无新子句；未找到证明",
+      "set of support: \\ proof found": "支持集：\\ 已找到证明",
+      "set of support: \\ cap reached; no proof": "支持集：\\ 达到上限；未找到证明",
+      "set of support: \\ no new clauses; no proof": "支持集：\\ 无新子句；未找到证明"
+    }
+  },
+  "local_narration_updates_applied": true,
+  "global_table_edited": false,
+  "resolution_schema_version": 3,
+  "inline_branches": true
+}
