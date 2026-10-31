@@ -109,7 +109,11 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(dots[7]), FadeIn(labs[7]))
             self.play(FadeIn(winters[1]), FadeIn(dots[8]), FadeIn(labs[8]))
             vo.wait_until("f")
-            self.play(FadeIn(dots[9]), FadeIn(labs[9]), Indicate(labs[9], color=MAXC))
+            # Indicate must begin after FadeIn has made this label visible.
+            # Keep both actions inside the original one-second reveal window.
+            self.play(FadeIn(dots[9]), Succession(FadeIn(labs[9], run_time=0.5),
+                                                 Indicate(labs[9], color=MAXC, run_time=0.5)),
+                      run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -148,7 +152,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def plan(self):
         title = label(rf"Part {PART}: \ Thinking Machines", font_size=46).to_edge(UP, buff=0.5)
-        smap = series_map(current=PART, done=PART - 1).scale(0.8).move_to(DOWN * 0.6)
+        smap = series_map(current=PART, done=PART - 1).scale(0.9).move_to(DOWN * 0.6)
         obj = objectives_card([
             r"what a machine can compute; \ Turing's test; \ Dartmouth and the Logic Theorist",
             r"search: \ breadth-first, \ Dijkstra, \ A*, \ and where heuristics come from",
