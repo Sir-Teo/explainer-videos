@@ -1,0 +1,109 @@
+{
+  "scope": "Lossless storage compression only; original review bytes and verdicts unchanged",
+  "files": [
+    {
+      "original_name": "ai1-counting-repair-review.json",
+      "gzip_name": "ai1-counting-repair-review.json.gz",
+      "uncompressed_bytes": 1338564,
+      "gzip_bytes": 108210,
+      "uncompressed_sha256": "ffd6d27cb00f3ed5eee0baf8ffaa2d3b125e9bd1d6f643cee8b5bc241690cd17",
+      "gzip_sha256": "3ecd4cb63faaff555b9956cc3c42aeea419a3212b22b88be5d2404a3e153f3db"
+    },
+    {
+      "original_name": "ai1-counting-shannon-likelihood-motion-review.json",
+      "gzip_name": "ai1-counting-shannon-likelihood-motion-review.json.gz",
+      "uncompressed_bytes": 1200448,
+      "gzip_bytes": 186988,
+      "uncompressed_sha256": "68a17697c531f6fd9a9a330139cddfd59dc8c5b0018c87914e48dbb4048aba08",
+      "gzip_sha256": "8104894ff85b491fe857f5d39dfb5bba38d1158d3099f8ffc1170518b1dfc4ba"
+    },
+    {
+      "original_name": "ai1-entropy-repair-review.json",
+      "gzip_name": "ai1-entropy-repair-review.json.gz",
+      "uncompressed_bytes": 458152,
+      "gzip_bytes": 67143,
+      "uncompressed_sha256": "625a4d16ae032e91d3b6d6122a546bbcf4c3db45f75543e81941254635f5550a",
+      "gzip_sha256": "5438e0bd12f96719f09f136bc1d0ef80d440f94961d7edc211c08e5003ff2b9b"
+    },
+    {
+      "original_name": "ai1-foundations-motion-review.json",
+      "gzip_name": "ai1-foundations-motion-review.json.gz",
+      "uncompressed_bytes": 1610497,
+      "gzip_bytes": 289751,
+      "uncompressed_sha256": "d3fd8105cab2c8749fa85ecf8e1b9a3b483cc76626d2ab8fde417190e62a0bb1",
+      "gzip_sha256": "42b2d2b60ab77c916022596ed2eea06b815b122e69391e7787d629316ec16c7e"
+    },
+    {
+      "original_name": "ai1-hook-complete-motion-review.json",
+      "gzip_name": "ai1-hook-complete-motion-review.json.gz",
+      "uncompressed_bytes": 891427,
+      "gzip_bytes": 77684,
+      "uncompressed_sha256": "e90ab6e5dd95ccdae8ed1609a002d10e8e59fca5efa0651771f6ca9b078e5e09",
+      "gzip_sha256": "318470004bd336dbb2928d88219df2576438ff61ba580cae3325e88a3f709f5a"
+    },
+    {
+      "original_name": "ai1-information-knowledge-motion-review.json",
+      "gzip_name": "ai1-information-knowledge-motion-review.json.gz",
+      "uncompressed_bytes": 1047860,
+      "gzip_bytes": 180734,
+      "uncompressed_sha256": "43c94fbe9d21297352666cfe4bdc9cfa2d939859dc97b0b5115aa459d1ecd8a1",
+      "gzip_sha256": "52c788471d4c79269715110fc59cbf446215d5d24f03b7eb25daec761a6b3caf"
+    },
+    {
+      "original_name": "ai1-outro-motion-review.json",
+      "gzip_name": "ai1-outro-motion-review.json.gz",
+      "uncompressed_bytes": 424132,
+      "gzip_bytes": 76057,
+      "uncompressed_sha256": "711a01f0c63d5f2d423e44cd149c65eb69841871f04daf2bca8486e90d5c48d7",
+      "gzip_sha256": "ab2f07438e6d2af86ec0588d827bb942c0e1eeb8a62e7a2a71fa2233c05df755"
+    },
+    {
+      "original_name": "ai1-probability-surprise-motion-review.json",
+      "gzip_name": "ai1-probability-surprise-motion-review.json.gz",
+      "uncompressed_bytes": 883631,
+      "gzip_bytes": 135287,
+      "uncompressed_sha256": "777df9553a8672db858f2c40067e70ac494939d9894d88821bf7f061aa546c79",
+      "gzip_sha256": "ee7cbaea99db795b7abc8e5a436c1d1e6a578d42ea936f7633c2c68930afa3c3"
+    },
+    {
+      "original_name": "ai1-scoreboard-en-motion-review.json",
+      "gzip_name": "ai1-scoreboard-en-motion-review.json.gz",
+      "uncompressed_bytes": 383908,
+      "gzip_bytes": 39759,
+      "uncompressed_sha256": "8c8c9412147ec0e7335883ac7500aaea9832323abf1244f5e3d76091b50cc246",
+      "gzip_sha256": "146c88b85e5b4c0151c558be62fd5971ad2e639b100182d75f2ea31d89cf5c49"
+    },
+    {
+      "original_name": "ai1-scoreboard-zh-motion-review.json",
+      "gzip_name": "ai1-scoreboard-zh-motion-review.json.gz",
+      "uncompressed_bytes": 397951,
+      "gzip_bytes": 42814,
+      "uncompressed_sha256": "f223668bbac2e50577dc58c3d9d0522d30cf6ae8b3bce52e270631b5093b3ac6",
+      "gzip_sha256": "2e904c075a1c60e8d22e1ee5033205502c94b3cf322b10200006f33076a21d6c"
+    },
+    {
+      "original_name": "ai1-theory-motion-review.json",
+      "gzip_name": "ai1-theory-motion-review.json.gz",
+      "uncompressed_bytes": 954746,
+      "gzip_bytes": 169429,
+      "uncompressed_sha256": "60fe0d3e3c051984bda246fb856f70ab65e2461dfa8f99c90d53a1f820ff0476",
+      "gzip_sha256": "c269449218805aac5e6a6f3b20d015955459927cbffc32ae2eaab680e91713f1"
+    },
+    {
+      "original_name": "ai1-theory-repair-review.json",
+      "gzip_name": "ai1-theory-repair-review.json.gz",
+      "uncompressed_bytes": 2588598,
+      "gzip_bytes": 170058,
+      "uncompressed_sha256": "924febcef621d147587d83c1d9f99bfe9ec56a1145c9cc97ed25ebc6775ef0d4",
+      "gzip_sha256": "2a9913f57cf6dc17680305d124f196982f08e6fb4b3bafc992d533d2a832998a"
+    },
+    {
+      "original_name": "ai1-units-motion-review.json",
+      "gzip_name": "ai1-units-motion-review.json.gz",
+      "uncompressed_bytes": 255369,
+      "gzip_bytes": 38026,
+      "uncompressed_sha256": "df3594d2011b2cfe89377410f37a2b0d7f35c4bfe94ca8bb007d9dae8f254e4a",
+      "gzip_sha256": "235a160ae7bb9ed9b9aca796aeb031a3906bb9a29bff39f17c99021bd6f228dd"
+    }
+  ]
+}
