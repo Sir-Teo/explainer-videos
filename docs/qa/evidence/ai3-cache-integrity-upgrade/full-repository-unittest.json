@@ -1,0 +1,10 @@
+{
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 nice -n10 python -m unittest discover -s tests -v",
+  "exit_code": 0,
+  "tests": 235,
+  "seconds": 26.689,
+  "result": "OK",
+  "uncompressed_log_sha256": "2954dad5720bb9ab68a4ecac8fb489d26af80e844469e6fd8c737de991d5f691",
+  "compressed_log_sha256": "74887208fd1c31375762c88144adae6bd390b9decb130862ba3805be6004dd22",
+  "scope": "Current cache-integrity plus scene edits before final GaLore wording; later GaLore narration tests are separate. No rendered or listening approval follows."
+}

@@ -1,0 +1,58 @@
+{
+  "observed_utc": "2026-10-31T21:02:25.575654+00:00",
+  "historical_producer_sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+  "historical_literal_17_true_receipt": "../ai3-data-progress/completion-all-17.json (exact copy retained here)",
+  "historical_validation_scopes": {
+    "embedded_schema_recipe_array_hash_checks": [
+      "gpt2",
+      "norms",
+      "mp",
+      "galore",
+      "words",
+      "sgns",
+      "jl",
+      "mf",
+      "twotower"
+    ],
+    "JSON_existence_only": [
+      "einsum",
+      "project",
+      "letters",
+      "power",
+      "image",
+      "depth",
+      "galorectl",
+      "highdim"
+    ]
+  },
+  "correction": "The historical 17 true values accurately reported the old predicate, but did not establish uniform schema, artifact integrity, or consumed-input provenance. The original dated receipt is preserved, not rewritten.",
+  "after_upgrade_scope": "Nine embedded recipe fingerprints remain unchanged. Eight additional items now require separately staged integrity sidecars, strict payload contracts, scoped algorithm/constant AST recipes, artifact byte hashes and current dependency observations.",
+  "legacy_origin": "All eight staged records explicitly say postproduction-attestation. Frozen producer, expected published payload hashes, completion receipt and successful run-log lines/hashes support this later observation; none is misrepresented as producer-written historical input metadata.",
+  "historical_consumption_gap": "Original consumed dependency hashes were not recorded by this producer. Present dependency observations cannot retroactively establish those original bytes.",
+  "historical_QA_ledger_gap": "Existing qa_series result inputs track numerical JSON/NPZ signatures, not these new sidecars. Earlier render records keep original fingerprints/warnings. No retrospective current-source or sidecar-generation claim is made.",
+  "future_generation_scope": "Normal loader/CLI observes recipe/dependencies before generation and at publication, rejecting detected changes. Missing prerequisites are labeled incomplete-before. Direct save records publication observations only. Neither method instruments every dependency read.",
+  "tests": {
+    "focused": 40,
+    "new_integrity_tests": 19,
+    "existing_integration_tests": 8,
+    "existing_numerical_tests": 13,
+    "production_recompute": false,
+    "production_all17_current_and_actual_loads": true,
+    "production_registered_producers_mocked_fail_on_call": true,
+    "production_producer_calls": 0,
+    "warnings": 0,
+    "full_suite": "Parent-owned separate full-suite run; not attributed to this focused evidence."
+  },
+  "preservation": {
+    "numerical_JSON_NPZ_files": 26,
+    "all_bytes_sizes_mtimes_preserved": true,
+    "all_eight_sidecars_match_staged_bytes": true,
+    "original_nine_recipe_fingerprints_unchanged": true,
+    "top_level_numerical_producer_helper_AST_unchanged": 54
+  },
+  "scope_limits": [
+    "Hash integrity is not adversarial authentication or independent numerical correctness.",
+    "No numerical producers/models/training/renders ran for this migration or all17 load verification. Focused tests use temporary deterministic fixtures; existing tiny numerical tests are not production computation.",
+    "Runtime validation is not visual, narration/listening, continuous playback or production-export approval."
+  ]
+}

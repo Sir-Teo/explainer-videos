@@ -51,11 +51,13 @@ import json
 import math
 import pickle
 import time
+from pathlib import Path
 
 import numpy as np
 
 from explainer.ai.cache import Cache
 from explainer.cache_lock import cache_lock, locked_item
+from videos.ai.ai3 import cache_integrity
 
 CACHE_SCHEMAS = {name: 1 for name in ("gpt2", "norms", "mp", "galore", "words", "sgns", "jl", "mf", "twotower")}
 
@@ -75,12 +77,13 @@ def file_digest(path):
 class SchemaCache(Cache):
     """Semantic revisions and corpus lineage, checked without invoking a producer."""
 
+    @locked_item(lambda self, name: self.path(name))
     def current(self, name):
         p = self.path(name)
         if not p.is_file():
             return False
         if name not in CACHE_SCHEMAS:
-            return True
+            return cache_integrity.current(name, self.dir, Path(__file__).resolve().parents[3], Path(__file__))
         try:
             data = json.loads(p.read_text())
             if not isinstance(data, dict):
@@ -113,8 +116,23 @@ class SchemaCache(Cache):
     @locked_item(lambda self, name: self.path(name))
     def load(self, name):
         if not self.current(name):
-            self.save(name, self.items[name]())
+            self._produce(name, self.items[name])
         return super().load(name)
+
+    def _produce(self, name, producer):
+        # load/main hold the item lock throughout observation, generation and save.
+        if name not in cache_integrity.ITEMS:
+            self.save(name, producer())
+            return
+        observations = getattr(self, "_integrity_generations", None)
+        if observations is None:
+            observations = self._integrity_generations = {}
+        observations[name] = cache_integrity.observe_generation(
+            name, self.dir, Path(__file__).resolve().parents[3], Path(__file__))
+        try:
+            self.save(name, producer())
+        finally:
+            observations.pop(name, None)
 
     @locked_item(lambda self, name, out: self.path(name))
     def save(self, name, out):
@@ -124,6 +142,8 @@ class SchemaCache(Cache):
         self.dir.mkdir(parents=True, exist_ok=True)
         arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
         rest = {k: v for k, v in out.items() if k not in arrays}
+        if name in cache_integrity.ITEMS:
+            cache_integrity.sidecar_path(self.dir, name).unlink(missing_ok=True)
         self.path(name).unlink(missing_ok=True)
         self._loaded.pop(name, None)
         npz = self.path(name).with_suffix(".npz")
@@ -139,6 +159,10 @@ class SchemaCache(Cache):
         tmp = self.path(name).with_suffix(".tmp.json")
         tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
         tmp.replace(self.path(name))
+        if name in cache_integrity.ITEMS:
+            cache_integrity.publish(name, self.dir, Path(__file__).resolve().parents[3], Path(__file__),
+                                    origin="producer-save",
+                                    generation=getattr(self, "_integrity_generations", {}).get(name))
         (self.dir / f"{name}.partial.json").unlink(missing_ok=True)
         if name == "sgns":
             (self.dir / "sgns.ckpt").unlink(missing_ok=True)
@@ -156,7 +180,7 @@ class SchemaCache(Cache):
                     continue
                 started = time.time()
                 print(f"  compute {name} ...", flush=True)
-                self.save(name, items[name]())
+                self._produce(name, items[name])
                 print(f"  done    {name} in {time.time() - started:.0f}s", flush=True)
 
 

@@ -1,0 +1,237 @@
+{
+  "scope": "Manifest covers actual packaged bytes, excludes itself. Runtime metadata is later attestation with explicit historical consumption/QA-ledger limits; no numerical payloads/models included.",
+  "files": [
+    {
+      "file": "implementation-handoff.md.gz",
+      "bytes": 1427,
+      "sha256": "fd8c1532bd0733bd251543fb075012cae7e3210f755b9dd4a8811dacbad0b187",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2914,
+      "uncompressed_sha256": "0706eb7a9e43500cd199fc5544440a8075e0047d3c487ca0e4d77a7fdadb3f12",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/implementation-handoff.md"
+    },
+    {
+      "file": "source-freeze-and-preservation.json.gz",
+      "bytes": 3419,
+      "sha256": "3610f3647d6e75b75589d76b20344a8791bf3579fef1e3d10c6ee5504c62b59d",
+      "encoding": "gzip",
+      "uncompressed_bytes": 9249,
+      "uncompressed_sha256": "25366646bc90459c974182640bb8a3716e295f5705374c959d3576c50708789e",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/source-freeze-and-preservation.json"
+    },
+    {
+      "file": "attestation-staging-receipt.json.gz",
+      "bytes": 1604,
+      "sha256": "38d0cb8d07712a70349228d7142d0bac6947521d458f099dfef8b9fc7da58ea3",
+      "encoding": "gzip",
+      "uncompressed_bytes": 7447,
+      "uncompressed_sha256": "5ed9a8c512f6a295b692cbae7a9eb8cbb09beee4fa0d8c49d0c98b720125c028",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/attestation-staging-receipt.json"
+    },
+    {
+      "file": "preactivation-baseline.json.gz",
+      "bytes": 2103,
+      "sha256": "2554a33c8f836219a017113b38ece9ce7af0c807f7bd8782992dfe195b9dae23",
+      "encoding": "gzip",
+      "uncompressed_bytes": 5558,
+      "uncompressed_sha256": "05d3465cf8187610ded000c8cc8c15ae266bec3fae9e0ff2a85f401b90d2d7e8",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/preactivation-baseline.json"
+    },
+    {
+      "file": "postactivation-validation.json.gz",
+      "bytes": 1807,
+      "sha256": "a85fc7f582d445d560a566c012018b90ea50c063398d1e8836297047d6bf9f00",
+      "encoding": "gzip",
+      "uncompressed_bytes": 5232,
+      "uncompressed_sha256": "053b036aacdf994d60244a0c88345c1bd2c1f0ee38f625fe3568f17951952735",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/postactivation-validation.json"
+    },
+    {
+      "file": "evidence.json.gz",
+      "bytes": 1961,
+      "sha256": "c83c02353476b787483d139caa23768a8cdc5e60ec6d74961dd3eb4b12ef8341",
+      "encoding": "gzip",
+      "uncompressed_bytes": 9349,
+      "uncompressed_sha256": "cfd7c977458da8399759a934621880ec6376e04549025ddaccc2421499367a96",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/evidence.json"
+    },
+    {
+      "file": "focused-tests.log.gz",
+      "bytes": 1521,
+      "sha256": "ac3113d033f73bd94ef435d618bfdb878e30c22fcef1cbb1fd8b413af19c945c",
+      "encoding": "gzip",
+      "uncompressed_bytes": 7330,
+      "uncompressed_sha256": "a5cc2e3fa91036656fdc06a80be3f14a168b69e1b2aaf629f1d7ca07a597dc00",
+      "source_at_freeze": "/workspace/runtime/ai3-cache-integrity-proposal/focused-tests.log"
+    },
+    {
+      "file": "attestation-depth.json.gz",
+      "bytes": 882,
+      "sha256": "f3988d423782491bb2ad96a63dc00989dafb8a83c6634c9c1bffd81f50766f72",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1928,
+      "uncompressed_sha256": "2238b1c3e8ea5df74b9c1e3f1e0fb747dd3dae7547cd727622d7129fc45650fb",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/depth.json"
+    },
+    {
+      "file": "attestation-einsum.json.gz",
+      "bytes": 844,
+      "sha256": "19cf384088e0e4aea546d95a288b3b4a9b847ac8f119d95d858c4c453797da45",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1806,
+      "uncompressed_sha256": "68b05129b7bce371654adc171e34fa67e12a74cfcb49cae32765e9d9b1ca7c1c",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/einsum.json"
+    },
+    {
+      "file": "attestation-galorectl.json.gz",
+      "bytes": 1243,
+      "sha256": "a6e3ccf44763db4ba78c7749ef7fbdf8acc29774f74bd862d7ca2a658828b098",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2592,
+      "uncompressed_sha256": "ec688504f0065769d9ffa29bf5289ea2645a5a2ea1925684f2835bbc2efb6a38",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/galorectl.json"
+    },
+    {
+      "file": "attestation-highdim.json.gz",
+      "bytes": 903,
+      "sha256": "9a410bae496c6d2d7f8d9766cd8df39074c7c1c329aee9aa12b940f9c7c46d87",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1967,
+      "uncompressed_sha256": "0d5a17246218e4360c5b02335628e417d4ec32db6fb03300a75dfa9e8faa613f",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/highdim.json"
+    },
+    {
+      "file": "attestation-image.json.gz",
+      "bytes": 909,
+      "sha256": "471d7cfdad12c6a7561f981bd9a6fca0154c7041aa3b5ec35d29f96229095212",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1966,
+      "uncompressed_sha256": "bf38a32b7e01adfddae076caeae3f6c8d0da822ba17af7baedf29bb3dfa6f1a6",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/image.json"
+    },
+    {
+      "file": "attestation-letters.json.gz",
+      "bytes": 1046,
+      "sha256": "ddd6091ed67733bfb4e4a9656a46de72de4ff5f45aae83fc892f48bcfc9bdac6",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2217,
+      "uncompressed_sha256": "e1c0886805239e16a6099389114808f6dad1d1b027f99bd1e7e60a6eaf39475e",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/letters.json"
+    },
+    {
+      "file": "attestation-power.json.gz",
+      "bytes": 1148,
+      "sha256": "9774b37891782e346c11cbca373d30620c5e335c3f47b4d9a3a10257c167c425",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2415,
+      "uncompressed_sha256": "5ee27b8ca181111946221cc0ac53b36f1a8711de1c9b6849d51b41db4c6f0973",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/power.json"
+    },
+    {
+      "file": "attestation-project.json.gz",
+      "bytes": 856,
+      "sha256": "90f0044a0cc75f798cd4dc897237f86b391f8296c1c262e579906a01960501c6",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1832,
+      "uncompressed_sha256": "663f03a81489c99b1c9f1d8d8b46cb8abb3069dcab772b4fa206fd745d8544e9",
+      "source_at_freeze": "/workspace/explainer-videos/.cache/ai3/_integrity/project.json"
+    },
+    {
+      "file": "frozen-compute.py.gz",
+      "bytes": 29936,
+      "sha256": "34cad82e23de7389bfe35aebe10a602674a66db97a592113ad6a0a0df00f5b0f",
+      "encoding": "gzip",
+      "uncompressed_bytes": 91092,
+      "uncompressed_sha256": "decde1f7874d08148cf35ac8067cb6ea6cf051d058ce052a6282afdca4cdb41a",
+      "source_at_freeze": "/workspace/explainer-videos/videos/ai/ai3/compute.py"
+    },
+    {
+      "file": "frozen-cache_integrity.py.gz",
+      "bytes": 6378,
+      "sha256": "7555a592c75cc1b561acc86b756109c4714015e422465fede30e5c7d5f132c18",
+      "encoding": "gzip",
+      "uncompressed_bytes": 18033,
+      "uncompressed_sha256": "e1a73eccbc8b14bcb73d9444e1b4b2868786dc92ec9e02240b5b9f2da5252627",
+      "source_at_freeze": "/workspace/explainer-videos/videos/ai/ai3/cache_integrity.py"
+    },
+    {
+      "file": "frozen-attest_ai3_cache.py.gz",
+      "bytes": 2186,
+      "sha256": "48ef195f38e04861d0f1a5125ff01c53459e1d6481237a5710d0e39ebb9af701",
+      "encoding": "gzip",
+      "uncompressed_bytes": 6200,
+      "uncompressed_sha256": "a5b247a5be5ec1b03d0a7a0fe94fbff92093a18617348c25ee5b4195fea73afa",
+      "source_at_freeze": "/workspace/explainer-videos/tools/attest_ai3_cache.py"
+    },
+    {
+      "file": "frozen-test_ai3_cache_integrity.py.gz",
+      "bytes": 4327,
+      "sha256": "c0aa7c5f111e20b879389c6884531e11890b71f903f75bb869531eeb9b8e2a65",
+      "encoding": "gzip",
+      "uncompressed_bytes": 15410,
+      "uncompressed_sha256": "c58a74953bd198ec1bd8fdf683200d8e25c7195be5e61932bbe6f957e092d6af",
+      "source_at_freeze": "/workspace/explainer-videos/tests/test_ai3_cache_integrity.py"
+    },
+    {
+      "file": "original-producer-2b03-compute.py.gz",
+      "bytes": 29687,
+      "sha256": "8fa239594e39d5d69c6839614176fb445947ac9f9ba6fdbc02e28ec2a527140e",
+      "encoding": "gzip",
+      "uncompressed_bytes": 89799,
+      "uncompressed_sha256": "2b03a02de9ae201a9955f6a88ed56f6433b5d0602186c5a3978cd4d565a616e2",
+      "source_at_freeze": "/workspace/runtime/ai3-spectra-review/snapshot/videos/ai/ai3/compute.py"
+    },
+    {
+      "file": "original-completion-all-17.json.gz",
+      "bytes": 1285,
+      "sha256": "04bd3947a449efc96196df5f0826172c672d7c505abab4730b41fb62b0a8a585",
+      "encoding": "gzip",
+      "uncompressed_bytes": 2487,
+      "uncompressed_sha256": "780389cf97a4a7785bf0cdd82012343ebf0647d3c59be99470d7dc3a46e6efb1",
+      "source_at_freeze": "/workspace/explainer-videos/docs/qa/evidence/ai3-data-progress/completion-all-17.json"
+    },
+    {
+      "file": "original-main-generation.log.gz",
+      "bytes": 1471,
+      "sha256": "8e8ee93d4ffb06884062513fbb88159018fc87a2d8aaf9b7ad19d4742a4ce600",
+      "encoding": "gzip",
+      "uncompressed_bytes": 5658,
+      "uncompressed_sha256": "6521b67b69300c4b9aff7814ddea6ab4364cfbf4b07a08012ab1fb9bbe6ce27e",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/ai3-compute-remaining.log"
+    },
+    {
+      "file": "original-independent-generation.log.gz",
+      "bytes": 400,
+      "sha256": "c24b4dcdd054c1818529ab54a73d28c64964cfb4564dc84fbfc67dc7de9da3b2",
+      "encoding": "gzip",
+      "uncompressed_bytes": 1814,
+      "uncompressed_sha256": "7616d114e9c5a3b10946ca7286eeb1640740c80a8293355e81d29d0de61b90ac",
+      "source_at_freeze": "/workspace/explainer-videos/renders/qa/ai3-independent-data.log"
+    },
+    {
+      "file": "scope-correction.json",
+      "bytes": 3390,
+      "sha256": "06b82a3d0683441fd9fe7e9f951c3579df7ce355f0125f90fcd4d14e441fc654"
+    },
+    {
+      "file": "README.md",
+      "bytes": 5067,
+      "sha256": "940c8c0c751d2c70233d9c674df1dd6d624d43f9b2179ce7bbf60ececc5394a0"
+    },
+    {
+      "file": "full-repository-unittest.log.gz",
+      "bytes": 8103,
+      "sha256": "74887208fd1c31375762c88144adae6bd390b9decb130862ba3805be6004dd22",
+      "source_at_freeze": "Parent full-repository unittest run, actual235tests26.689sexit0, excluding subsequent GaLore wording.",
+      "encoding": "gzip",
+      "uncompressed_bytes": 40754,
+      "uncompressed_sha256": "2954dad5720bb9ab68a4ecac8fb489d26af80e844469e6fd8c737de991d5f691"
+    },
+    {
+      "file": "full-repository-unittest.json",
+      "bytes": 563,
+      "sha256": "f193ddb232d877126481d5a9a2527eb8d0f54cb2e0f5f5dc1d13d5a87a7a633c",
+      "source_at_freeze": "Parent full-repository unittest run, actual235tests26.689sexit0, excluding subsequent GaLore wording."
+    }
+  ]
+}
