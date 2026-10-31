@@ -240,3 +240,27 @@ repository tests pass. The default resolution result revealed an additional fals
 now reports a capped saturation run honestly, without raising the cap. Part2 full computation/source review is
 underway; no Part2 rendered or audio sign-off is claimed. Part1 Information audio has reached5/6 blocks; ASR
 pronunciation leads remain unresolved despite clean waveform/alignment checks.
+
+## Completed narration chapter and motion repair
+
+All six Information speech blocks completed with zero waveform/alignment issues and no further OOM. Six original
+ASR leads remain retained. Independent pinned Whisper recognition decoded all six clips and the exact stress
+probe, matching the key numbers, millionths and minus sign; [raw evidence](evidence/ai1-narrated/) distinguishes
+automated recognition from manual listening. The complete English Information chapter then rendered with real
+cached speech at1920×1080/nominal30fps,169.57seconds. Full audio/video decode passes, aligned words stay within
+the movie, narration blocks do not overlap, and all15bookmark waits meet their targets with zero measured lateness.
+The15bookmark-indexed frames were inspected. This is one chapter's automated AV evidence; continuous viewing,
+manual listening and full-series narrated production validation remain unverified.
+
+Dense Hook review found multi-digit ranks colliding during the1.5-second enlarged pulse. Highlighting now changes
+color without growth, and rank-one opacity increases from.35to.55. Complete focused EN/ZH Shannon-method clips
+were rendered and decoded; all345selected frames and52pulse-window frames were reviewed,371distinct postrepair
+source frames in total. [Before/after images, hashes and review](evidence/ai1-rank-pulse/) verify separated ranks
+throughout both windows. Complete repaired Hook motion renders also pass; their full dense review is ongoing.
+
+Temporal extraction now fills every selected-time gap to at most one second, even when slow fades evade adjacent
+frame thresholds. Nine real-frame/provenance tests cover late flashes, equal-luminance color changes, slow fades,
+parser depth, failed refreshes and nonstandard sibling records. Old audits retain their original tool hashes.
+All34 Part1 language/chapter cases are now undergoing complete selected-frame-content review, with exact-SHA
+reuse distinguished from direct views. New lasting findings (Entropy rare-label spacing, Counting annotation/curve
+intersection and rounded numeric equality) are queued for one coherent repair batch after that pass.

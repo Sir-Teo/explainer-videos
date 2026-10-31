@@ -6,10 +6,37 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from PIL import Image, ImageDraw
 
-from tools.qa_motion import audit, extract
+from tools.qa_motion import audit, extract, provenance
+
+
+class TemporalProvenanceTests(unittest.TestCase):
+    def test_unrelated_sibling_schema_is_not_mistaken_for_identified_video_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            video = root / "focused.mp4"
+            for content in ("[]", '{"movie":[]}', "not JSON"):
+                with self.subTest(content=content):
+                    (root / "result.json").write_text(content)
+                    self.assertIsNone(provenance(video))
+
+    def test_focused_nonstandard_record_retains_identity_without_currentness_check(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            video = root / "focused.mp4"
+            video.write_bytes(b"provenance fixture; no decoding needed")
+            record = root / "result.json"
+            record.write_text(json.dumps({"movie": str(video), "scope": "one method only", "fingerprint": "earlier"}))
+            with patch("tools.qa_series.fingerprint", side_effect=AssertionError("nonstandard schema must not be evaluated")):
+                result = provenance(video)
+            self.assertEqual(result["record"], str(record))
+            self.assertEqual(len(result["sha256"]), 64)
+            self.assertEqual(result["fingerprint"], "earlier")
+            self.assertIsNone(result["current_source_and_inputs"])
+            self.assertEqual(result["current_source_and_inputs_reason"], "nonstandard record; not evaluated")
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg is required")
@@ -90,8 +117,32 @@ class TemporalAuditTests(unittest.TestCase):
             result = audit(self.make_clip(root, False), root / "audit", width=96)
             self.assertEqual(result["analysis"]["decoded_frames"], 40)
             self.assertFalse(result["motion_intervals"])
-            self.assertEqual(len(result["selected_frames"]), 3)
+            self.assertTrue(any("static-midpoint" in f["reasons"] for f in result["selected_frames"]))
+            self.assertLessEqual(result["largest_selected_time_gap"], 1.0)
             self.assertEqual(result["selected_frames"][-1]["source_frame"], 39)
+
+    def test_slow_24_second_fade_is_covered_even_when_detector_misses_it(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            frames = root / "slow"
+            frames.mkdir()
+            for i in range(240):
+                Image.new("RGB", (32, 24), (i, i, i)).save(frames / f"{i:03d}.png")
+            clip = root / "slow.mkv"
+            subprocess.run(["ffmpeg", "-v", "error", "-threads", "1", "-framerate", "10", "-i", str(frames / "%03d.png"),
+                            "-c:v", "ffv1", "-threads", "1", "-pix_fmt", "bgr0", str(clip)], check=True)
+            result = audit(clip, root / "audit", width=32)
+            self.assertEqual(result["analysis"]["decoded_frames"], 240)
+            self.assertFalse(result["motion_intervals"])  # Each channel changes only 1/255 per frame.
+            self.assertEqual(result["settings"]["pixel_delta"], 8)
+            self.assertEqual(result["settings"]["changed_fraction"], 0.0005)
+            self.assertEqual(result["settings"]["mean_delta"], 0.0001)
+            self.assertLessEqual(result["largest_selected_time_gap"], 1.0)
+            self.assertFalse(result["timestamp_quantization"]["unavoidable_source_gaps"])
+            selected = result["selected_frames"]
+            self.assertEqual(selected[-1]["source_frame"], 239)
+            self.assertTrue(any("maximum-gap-fill" in f["reasons"] for f in selected))
+            self.assertGreaterEqual(len(selected), 25)
 
     def test_invalid_input_cannot_produce_completed_evidence(self):
         with tempfile.TemporaryDirectory() as temporary:
