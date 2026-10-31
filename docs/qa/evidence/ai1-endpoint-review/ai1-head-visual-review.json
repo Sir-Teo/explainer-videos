@@ -1,0 +1,3439 @@
+{
+  "scope": "Sampled animation-endpoint contact sheets and explicitly listed individual still frames; no continuous playback, animation-intermediate, audio or final-resolution approval.",
+  "reviews": {
+    "zh/Probability": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:27:20.286213+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 22,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Probability/result.json",
+          "sha256": "fdd2f19edc22a0b231557f33ffc4de07e629a7e3ad15c186e67d9f72a8a3620c"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Probability/sheet.png",
+          "sha256": "8e724afa17f2a45b32e48c608a11f6a30b3c8575d1dd048dc3ca7997bdd68409"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "008_00092.3s.png",
+          "path": "renders/qa/series/ai1/zh/Probability/008_00092.3s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "b502cfed28da9d63c570ace9abba5e4032ab52cf71bf0076cddabc79182bc26a",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "021_00198.1s.png",
+          "path": "renders/qa/series/ai1/zh/Probability/021_00198.1s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "eeed529c4c54c2659a001547d79fd7e5ed349e22d65358a62a1df3f05b31cf80",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Mosaic, conditional formula, chain-rule steps and green interval ladder are separated and legible in sampled endpoints.",
+        "Concrete scale-communication defect: P(A)=P(t)=0.072 width brace labels the fixed-width magnified column, with no explicit width-magnification cue in the inspected frames. Root has since added a cue; these images do not validate that fix."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": true,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": false,
+      "result_bytes_unchanged_since_snapshot": false,
+      "post_fix_refresh": {
+        "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+        "inputs_current": true,
+        "captured_utc": "2026-10-31T13:34:45.507686+00:00",
+        "assets": [
+          {
+            "original_path": "renders/qa/series/ai1/zh/Probability/result.json",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Probability/result.json",
+            "sha256": "49aeba34e126606c759b85cf5fb707cab8d33192f27f7d0f97bb4416ca3260ec"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/Probability/sheet.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Probability/sheet.png",
+            "sha256": "46954e5a2f6574f0c8e14d659e6256f8da99f19358c9ecec3321513cf77f1bb7"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/Probability/008_00092.3s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Probability/008_00092.3s.png",
+            "sha256": "b502cfed28da9d63c570ace9abba5e4032ab52cf71bf0076cddabc79182bc26a"
+          }
+        ],
+        "review_complete": true,
+        "all_sheet_tiles_inspected": true,
+        "native_fix_frame_inspected": true,
+        "result": "Both refreshed sheet and native fix frame inspected: magnification cue is legible with no new collision.",
+        "reviewed_utc": "2026-10-31T13:38:10.006685+00:00"
+      }
+    },
+    "en/Probability": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:27:20.308180+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 22,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Probability/result.json",
+          "sha256": "8279611d89a53d147a64c8623ce65898b091dfaf5ba4bdc9e56e224d05ccb8e1"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Probability/sheet.png",
+          "sha256": "33cf9d4102a9bd89f52b1422447dd346abf01032b73857c18a5df821774f6de7"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "008_00086.7s.png",
+          "path": "renders/qa/series/ai1/en/Probability/008_00086.7s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "f1ace905d4b6157f6018304eb15bc2a1ca8d6b881ae9f71d327ef842dd500391",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Mosaic, conditional formula, chain-rule steps and green interval ladder are separated and legible in sampled endpoints.",
+        "Concrete scale-communication defect: P(A)=P(t)=0.072 width brace labels the fixed-width magnified column, with no explicit width-magnification cue in the inspected frames. Root has since added a cue; these images do not validate that fix."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": true,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": false,
+      "result_bytes_unchanged_since_snapshot": false,
+      "post_fix_refresh": {
+        "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+        "inputs_current": true,
+        "captured_utc": "2026-10-31T13:34:45.495582+00:00",
+        "assets": [
+          {
+            "original_path": "renders/qa/series/ai1/en/Probability/result.json",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Probability/result.json",
+            "sha256": "9ad300951de88793a2ac27088ad54de2b63dce48567cb8b0c74a979dbd6804e8"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/en/Probability/sheet.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Probability/sheet.png",
+            "sha256": "389c75ab2a6fc25673d7ee019b57da7d2475169b6e8b857210bdf12e774c4caa"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/en/Probability/008_00086.7s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Probability/008_00086.7s.png",
+            "sha256": "f1ace905d4b6157f6018304eb15bc2a1ca8d6b881ae9f71d327ef842dd500391"
+          }
+        ],
+        "review_complete": true,
+        "all_sheet_tiles_inspected": true,
+        "native_fix_frame_inspected": true,
+        "result": "Both refreshed sheet and native fix frame inspected: magnification cue is legible with no new collision.",
+        "reviewed_utc": "2026-10-31T13:38:10.006706+00:00"
+      }
+    },
+    "en/Surprise": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:27:20.318462+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 22,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Surprise/result.json",
+          "sha256": "5a65a231cdc99b39bef0a862b7ce9870d0f68f94dc10a751da17f64a4c8b9663"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Surprise/sheet.png",
+          "sha256": "144fb935f4b91d3bf36f003e308b707f87d8d743cbb3554acb1fefdceed1e77a"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "017_00131.3s.png",
+          "path": "renders/qa/series/ai1/en/Surprise/017_00131.3s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "73e51993fb6fbdcd0b5f25e2e4b1d2f69bdc4af5164626ef68037ec290fc862d",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "021_00171.6s.png",
+          "path": "renders/qa/series/ai1/en/Surprise/021_00171.6s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "7f7c9f4e3094e14506793a89d558a187ec1bc66d717b32bb18cb305580e98a1e",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Pink surprise bars, log curve, equation box, and letter-by-letter skyline remain readable and inside the sampled frames.",
+        "Native curve labels distinguish e/z/coin/u-after-q. Native final skyline preserves spacing between letters, summary and legend. No additional static-frame defect identified."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "zh/Surprise": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:27:20.330739+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 21,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Surprise/result.json",
+          "sha256": "7aad142caf45badeceb32e3cac9447bfa5c1dcdcbcf0a26e19b16c652aacf3be"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Surprise/sheet.png",
+          "sha256": "d86544f29a8abdd15e3f87a15700cc1c4682db7c4b01704cfaf0c6efbb2e1ae7"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "020_00172.9s.png",
+          "path": "renders/qa/series/ai1/zh/Surprise/020_00172.9s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "7d7305b6341673169481bd37764b79c87bb5460db92fff89288faba764b21e9a",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Pink surprise bars, log curve, equation box, and letter-by-letter skyline remain readable and inside the sampled frames.",
+        "Native curve labels distinguish e/z/coin/u-after-q. Native final skyline preserves spacing between letters, summary and legend. No additional static-frame defect identified."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "en/Entropy": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:28:00.097469+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 33,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Entropy/result.json",
+          "sha256": "8e4c18e4e08cbda7f9fabfab196ff6c1ea39390eea925c8cb82b07e1acc5b223"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Entropy/sheet.png",
+          "sha256": "273e4ccdcc7e414fbdc03fc9f7fd65986e17cc27fa0dc0ff67ea596ebe450211"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "032_00256.2s.png",
+          "path": "renders/qa/series/ai1/en/Entropy/032_00256.2s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "88da83510b6936e03ea4a11cd91b017fa5d7201549ede76b2fafbeda879e766d",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Entropy-area skyline, binary curve, grouping trees, uniqueness ladder, Jensen proof and final conditional-entropy bars were checked in the sheet. Native conditional formula/captions and arrow do not overlap.",
+        "Corrected historical redundancy distinction is narration-only; its paragraph was checked in captured narration text, not inferred from pixels or listened to."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true,
+      "captured_redundancy_paragraph": [
+        {
+          "start": 179.82758333333334,
+          "duration": 40.566625,
+          "text": "In general, with K outcomes, the entropy is at most log two of K. The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. Entropy is an average of logs. Swap in the log of the average, and the average of one over p is just the number of outcomes. So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+          "raw": "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+          "words": [
+            [
+              "In",
+              180.12758333333335,
+              180.53330723905725
+            ],
+            [
+              "general,",
+              180.53330723905725,
+              180.93903114478115
+            ],
+            [
+              "with",
+              180.93903114478115,
+              181.34475505050506
+            ],
+            [
+              "K",
+              181.34475505050506,
+              181.75047895622896
+            ],
+            [
+              "outcomes,",
+              181.75047895622896,
+              182.15620286195286
+            ],
+            [
+              "the",
+              182.15620286195286,
+              182.56192676767677
+            ],
+            [
+              "entropy",
+              182.56192676767677,
+              182.96765067340067
+            ],
+            [
+              "is",
+              182.96765067340067,
+              183.37337457912457
+            ],
+            [
+              "at",
+              183.37337457912457,
+              183.77909848484848
+            ],
+            [
+              "most",
+              183.77909848484848,
+              184.1848223905724
+            ],
+            [
+              "log",
+              184.1848223905724,
+              184.5905462962963
+            ],
+            [
+              "two",
+              184.5905462962963,
+              184.9962702020202
+            ],
+            [
+              "of",
+              184.9962702020202,
+              185.40199410774412
+            ],
+            [
+              "K.",
+              185.40199410774412,
+              185.80771801346802
+            ],
+            [
+              "The",
+              185.80771801346802,
+              186.21344191919192
+            ],
+            [
+              "proof",
+              186.21344191919192,
+              186.61916582491583
+            ],
+            [
+              "is",
+              186.61916582491583,
+              187.02488973063973
+            ],
+            [
+              "one",
+              187.02488973063973,
+              187.43061363636363
+            ],
+            [
+              "inequality.",
+              187.43061363636363,
+              187.83633754208753
+            ],
+            [
+              "The",
+              187.83633754208753,
+              188.24206144781147
+            ],
+            [
+              "log",
+              188.24206144781147,
+              188.64778535353537
+            ],
+            [
+              "bends",
+              188.64778535353537,
+              189.05350925925927
+            ],
+            [
+              "downward,",
+              189.05350925925927,
+              189.45923316498317
+            ],
+            [
+              "so",
+              189.45923316498317,
+              189.86495707070708
+            ],
+            [
+              "the",
+              189.86495707070708,
+              190.27068097643098
+            ],
+            [
+              "average",
+              190.27068097643098,
+              190.67640488215488
+            ],
+            [
+              "of",
+              190.67640488215488,
+              191.0821287878788
+            ],
+            [
+              "logs",
+              191.0821287878788,
+              191.4878526936027
+            ],
+            [
+              "is",
+              191.4878526936027,
+              191.89357659932662
+            ],
+            [
+              "at",
+              191.89357659932662,
+              192.29930050505052
+            ],
+            [
+              "most",
+              192.29930050505052,
+              192.70502441077443
+            ],
+            [
+              "the",
+              192.70502441077443,
+              193.11074831649833
+            ],
+            [
+              "log",
+              193.11074831649833,
+              193.51647222222223
+            ],
+            [
+              "of",
+              193.51647222222223,
+              193.92219612794614
+            ],
+            [
+              "the",
+              193.92219612794614,
+              194.32792003367004
+            ],
+            [
+              "average:",
+              194.32792003367004,
+              194.73364393939397
+            ],
+            [
+              "Jensen's",
+              194.73364393939397,
+              195.13936784511787
+            ],
+            [
+              "inequality.",
+              195.13936784511787,
+              195.54509175084178
+            ],
+            [
+              "Entropy",
+              195.54509175084178,
+              195.95081565656568
+            ],
+            [
+              "is",
+              195.95081565656568,
+              196.35653956228958
+            ],
+            [
+              "an",
+              196.35653956228958,
+              196.7622634680135
+            ],
+            [
+              "average",
+              196.7622634680135,
+              197.1679873737374
+            ],
+            [
+              "of",
+              197.1679873737374,
+              197.5737112794613
+            ],
+            [
+              "logs.",
+              197.5737112794613,
+              197.9794351851852
+            ],
+            [
+              "Swap",
+              197.9794351851852,
+              198.38515909090913
+            ],
+            [
+              "in",
+              198.38515909090913,
+              198.79088299663303
+            ],
+            [
+              "the",
+              198.79088299663303,
+              199.19660690235693
+            ],
+            [
+              "log",
+              199.19660690235693,
+              199.60233080808084
+            ],
+            [
+              "of",
+              199.60233080808084,
+              200.00805471380474
+            ],
+            [
+              "the",
+              200.00805471380474,
+              200.41377861952864
+            ],
+            [
+              "average,",
+              200.41377861952864,
+              200.81950252525255
+            ],
+            [
+              "and",
+              200.81950252525255,
+              201.22522643097648
+            ],
+            [
+              "the",
+              201.22522643097648,
+              201.63095033670038
+            ],
+            [
+              "average",
+              201.63095033670038,
+              202.03667424242428
+            ],
+            [
+              "of",
+              202.03667424242428,
+              202.4423981481482
+            ],
+            [
+              "one",
+              202.4423981481482,
+              202.8481220538721
+            ],
+            [
+              "over",
+              202.8481220538721,
+              203.253845959596
+            ],
+            [
+              "p",
+              203.253845959596,
+              203.6595698653199
+            ],
+            [
+              "is",
+              203.6595698653199,
+              204.0652937710438
+            ],
+            [
+              "just",
+              204.0652937710438,
+              204.4710176767677
+            ],
+            [
+              "the",
+              204.4710176767677,
+              204.87674158249163
+            ],
+            [
+              "number",
+              204.87674158249163,
+              205.28246548821554
+            ],
+            [
+              "of",
+              205.28246548821554,
+              205.68818939393944
+            ],
+            [
+              "outcomes.",
+              205.68818939393944,
+              206.09391329966334
+            ],
+            [
+              "So",
+              206.09391329966334,
+              206.49963720538724
+            ],
+            [
+              "H",
+              206.49963720538724,
+              206.90536111111115
+            ],
+            [
+              "is",
+              206.90536111111115,
+              207.31108501683505
+            ],
+            [
+              "at",
+              207.31108501683505,
+              207.71680892255898
+            ],
+            [
+              "most",
+              207.71680892255898,
+              208.12253282828289
+            ],
+            [
+              "log",
+              208.12253282828289,
+              208.5282567340068
+            ],
+            [
+              "K,",
+              208.5282567340068,
+              208.9339806397307
+            ],
+            [
+              "with",
+              208.9339806397307,
+              209.3397045454546
+            ],
+            [
+              "equality",
+              209.3397045454546,
+              209.7454284511785
+            ],
+            [
+              "only",
+              209.7454284511785,
+              210.1511523569024
+            ],
+            [
+              "when",
+              210.1511523569024,
+              210.5568762626263
+            ],
+            [
+              "every",
+              210.5568762626263,
+              210.9626001683502
+            ],
+            [
+              "outcome",
+              210.9626001683502,
+              211.36832407407414
+            ],
+            [
+              "is",
+              211.36832407407414,
+              211.77404797979804
+            ],
+            [
+              "equally",
+              211.77404797979804,
+              212.17977188552194
+            ],
+            [
+              "likely.",
+              212.17977188552194,
+              212.58549579124585
+            ],
+            [
+              "The",
+              212.58549579124585,
+              212.99121969696975
+            ],
+            [
+              "gap",
+              212.99121969696975,
+              213.39694360269365
+            ],
+            [
+              "measures",
+              213.39694360269365,
+              213.80266750841756
+            ],
+            [
+              "structure",
+              213.80266750841756,
+              214.20839141414146
+            ],
+            [
+              "a",
+              214.20839141414146,
+              214.61411531986536
+            ],
+            [
+              "guesser",
+              214.61411531986536,
+              215.01983922558927
+            ],
+            [
+              "can",
+              215.01983922558927,
+              215.42556313131317
+            ],
+            [
+              "exploit.",
+              215.42556313131317,
+              215.83128703703707
+            ],
+            [
+              "Shannon's",
+              215.83128703703707,
+              216.23701094276097
+            ],
+            [
+              "redundancy",
+              216.23701094276097,
+              216.64273484848488
+            ],
+            [
+              "is",
+              216.64273484848488,
+              217.04845875420878
+            ],
+            [
+              "that",
+              217.04845875420878,
+              217.45418265993268
+            ],
+            [
+              "gap",
+              217.45418265993268,
+              217.8599065656566
+            ],
+            [
+              "divided",
+              217.8599065656566,
+              218.2656304713805
+            ],
+            [
+              "by",
+              218.2656304713805,
+              218.6713543771044
+            ],
+            [
+              "log",
+              218.6713543771044,
+              219.0770782828283
+            ],
+            [
+              "two",
+              219.0770782828283,
+              219.4828021885522
+            ],
+            [
+              "of",
+              219.4828021885522,
+              219.8885260942761
+            ],
+            [
+              "K.",
+              219.8885260942761,
+              220.29425
+            ]
+          ]
+        }
+      ],
+      "narration_text_scope": "Read captured raw/translated text only; no audio listened to."
+    },
+    "zh/Entropy": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:28:00.128557+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 33,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Entropy/result.json",
+          "sha256": "9f2f6ff14da7f6659f6d6014442b31d4deb46351cdc5c64b8e5a8bf2ff664194"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Entropy/sheet.png",
+          "sha256": "a90234180e2575034fe5d20740537e8bba5cfdc04fa029561b27b7cc38aabba3"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "032_00273.0s.png",
+          "path": "renders/qa/series/ai1/zh/Entropy/032_00273.0s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "a4b9867c1090605afcb965fc17fc072c590d45cd34b5bf693d5d4fe6a0a913c0",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Entropy-area skyline, binary curve, grouping trees, uniqueness ladder, Jensen proof and final conditional-entropy bars were checked in the sheet. Native conditional formula/captions and arrow do not overlap.",
+        "Corrected historical redundancy distinction is narration-only; its paragraph was checked in captured narration text, not inferred from pixels or listened to."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true,
+      "captured_redundancy_paragraph": [
+        {
+          "start": 192.04983333333337,
+          "duration": 43.056958333333334,
+          "text": "一般来说，有K种结果时，熵至多是以2为底K的对数。证明只需要一个不等式。对数函数向下弯，所以对数的平均值，至多等于平均值的对数：詹森不等式。熵是对数的平均值。换成平均值的对数，而p分之1的平均值，正好就是结果的个数。所以H至多是log K，当且仅当每种结果同样可能时取等号。这段差距，衡量了猜测者可以利用的结构。香农定义的冗余，是这个差距占最大熵的比例，也就是除以log K。",
+          "raw": "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely. The gap measures structure a guesser can exploit. Shannon's redundancy is that gap divided by log two of K.",
+          "words": [
+            [
+              "一",
+              192.34983333333338,
+              192.61153257716273
+            ],
+            [
+              "般",
+              192.61153257716273,
+              192.8732318209921
+            ],
+            [
+              "来",
+              192.8732318209921,
+              193.13493106482144
+            ],
+            [
+              "说，",
+              193.13493106482144,
+              193.39663030865083
+            ],
+            [
+              "有",
+              193.39663030865083,
+              193.65832955248018
+            ],
+            [
+              "K",
+              193.65832955248018,
+              193.92002879630954
+            ],
+            [
+              "种",
+              193.92002879630954,
+              194.1817280401389
+            ],
+            [
+              "结",
+              194.1817280401389,
+              194.44342728396828
+            ],
+            [
+              "果",
+              194.44342728396828,
+              194.70512652779763
+            ],
+            [
+              "时，",
+              194.70512652779763,
+              194.966825771627
+            ],
+            [
+              "熵",
+              194.966825771627,
+              195.22852501545634
+            ],
+            [
+              "至",
+              195.22852501545634,
+              195.49022425928572
+            ],
+            [
+              "多",
+              195.49022425928572,
+              195.75192350311508
+            ],
+            [
+              "是",
+              195.75192350311508,
+              196.01362274694443
+            ],
+            [
+              "以",
+              196.01362274694443,
+              196.2753219907738
+            ],
+            [
+              "2",
+              196.2753219907738,
+              196.53702123460317
+            ],
+            [
+              "为",
+              196.53702123460317,
+              196.79872047843253
+            ],
+            [
+              "底",
+              196.79872047843253,
+              197.06041972226188
+            ],
+            [
+              "K",
+              197.06041972226188,
+              197.32211896609124
+            ],
+            [
+              "的",
+              197.32211896609124,
+              197.58381820992062
+            ],
+            [
+              "对",
+              197.58381820992062,
+              197.84551745374998
+            ],
+            [
+              "数。",
+              197.84551745374998,
+              198.10721669757933
+            ],
+            [
+              "证",
+              198.10721669757933,
+              198.3689159414087
+            ],
+            [
+              "明",
+              198.3689159414087,
+              198.63061518523807
+            ],
+            [
+              "只",
+              198.63061518523807,
+              198.89231442906743
+            ],
+            [
+              "需",
+              198.89231442906743,
+              199.15401367289678
+            ],
+            [
+              "要",
+              199.15401367289678,
+              199.41571291672614
+            ],
+            [
+              "一",
+              199.41571291672614,
+              199.67741216055552
+            ],
+            [
+              "个",
+              199.67741216055552,
+              199.93911140438487
+            ],
+            [
+              "不",
+              199.93911140438487,
+              200.20081064821423
+            ],
+            [
+              "等",
+              200.20081064821423,
+              200.46250989204358
+            ],
+            [
+              "式。",
+              200.46250989204358,
+              200.72420913587297
+            ],
+            [
+              "对",
+              200.72420913587297,
+              200.98590837970232
+            ],
+            [
+              "数",
+              200.98590837970232,
+              201.24760762353168
+            ],
+            [
+              "函",
+              201.24760762353168,
+              201.50930686736103
+            ],
+            [
+              "数",
+              201.50930686736103,
+              201.77100611119042
+            ],
+            [
+              "向",
+              201.77100611119042,
+              202.03270535501977
+            ],
+            [
+              "下",
+              202.03270535501977,
+              202.29440459884913
+            ],
+            [
+              "弯，",
+              202.29440459884913,
+              202.55610384267848
+            ],
+            [
+              "所",
+              202.55610384267848,
+              202.81780308650787
+            ],
+            [
+              "以",
+              202.81780308650787,
+              203.07950233033722
+            ],
+            [
+              "对",
+              203.07950233033722,
+              203.34120157416658
+            ],
+            [
+              "数",
+              203.34120157416658,
+              203.60290081799593
+            ],
+            [
+              "的",
+              203.60290081799593,
+              203.8646000618253
+            ],
+            [
+              "平",
+              203.8646000618253,
+              204.12629930565467
+            ],
+            [
+              "均",
+              204.12629930565467,
+              204.38799854948402
+            ],
+            [
+              "值，",
+              204.38799854948402,
+              204.64969779331338
+            ],
+            [
+              "至",
+              204.64969779331338,
+              204.91139703714276
+            ],
+            [
+              "多",
+              204.91139703714276,
+              205.17309628097212
+            ],
+            [
+              "等",
+              205.17309628097212,
+              205.43479552480147
+            ],
+            [
+              "于",
+              205.43479552480147,
+              205.69649476863083
+            ],
+            [
+              "平",
+              205.69649476863083,
+              205.9581940124602
+            ],
+            [
+              "均",
+              205.9581940124602,
+              206.21989325628957
+            ],
+            [
+              "值",
+              206.21989325628957,
+              206.48159250011892
+            ],
+            [
+              "的",
+              206.48159250011892,
+              206.74329174394828
+            ],
+            [
+              "对",
+              206.74329174394828,
+              207.00499098777766
+            ],
+            [
+              "数：",
+              207.00499098777766,
+              207.26669023160701
+            ],
+            [
+              "詹",
+              207.26669023160701,
+              207.52838947543637
+            ],
+            [
+              "森",
+              207.52838947543637,
+              207.79008871926573
+            ],
+            [
+              "不",
+              207.79008871926573,
+              208.0517879630951
+            ],
+            [
+              "等",
+              208.0517879630951,
+              208.31348720692446
+            ],
+            [
+              "式。",
+              208.31348720692446,
+              208.57518645075382
+            ],
+            [
+              "熵",
+              208.57518645075382,
+              208.83688569458317
+            ],
+            [
+              "是",
+              208.83688569458317,
+              209.09858493841256
+            ],
+            [
+              "对",
+              209.09858493841256,
+              209.3602841822419
+            ],
+            [
+              "数",
+              209.3602841822419,
+              209.62198342607127
+            ],
+            [
+              "的",
+              209.62198342607127,
+              209.88368266990062
+            ],
+            [
+              "平",
+              209.88368266990062,
+              210.14538191373
+            ],
+            [
+              "均",
+              210.14538191373,
+              210.40708115755936
+            ],
+            [
+              "值。",
+              210.40708115755936,
+              210.66878040138872
+            ],
+            [
+              "换",
+              210.66878040138872,
+              210.93047964521807
+            ],
+            [
+              "成",
+              210.93047964521807,
+              211.19217888904745
+            ],
+            [
+              "平",
+              211.19217888904745,
+              211.4538781328768
+            ],
+            [
+              "均",
+              211.4538781328768,
+              211.71557737670616
+            ],
+            [
+              "值",
+              211.71557737670616,
+              211.97727662053552
+            ],
+            [
+              "的",
+              211.97727662053552,
+              212.2389758643649
+            ],
+            [
+              "对",
+              212.2389758643649,
+              212.50067510819426
+            ],
+            [
+              "数，",
+              212.50067510819426,
+              212.7623743520236
+            ],
+            [
+              "而",
+              212.7623743520236,
+              213.02407359585297
+            ],
+            [
+              "p",
+              213.02407359585297,
+              213.28577283968235
+            ],
+            [
+              "分",
+              213.28577283968235,
+              213.5474720835117
+            ],
+            [
+              "之",
+              213.5474720835117,
+              213.80917132734106
+            ],
+            [
+              "1",
+              213.80917132734106,
+              214.07087057117042
+            ],
+            [
+              "的",
+              214.07087057117042,
+              214.3325698149998
+            ],
+            [
+              "平",
+              214.3325698149998,
+              214.59426905882916
+            ],
+            [
+              "均",
+              214.59426905882916,
+              214.8559683026585
+            ],
+            [
+              "值，",
+              214.8559683026585,
+              215.11766754648787
+            ],
+            [
+              "正",
+              215.11766754648787,
+              215.37936679031725
+            ],
+            [
+              "好",
+              215.37936679031725,
+              215.6410660341466
+            ],
+            [
+              "就",
+              215.6410660341466,
+              215.90276527797596
+            ],
+            [
+              "是",
+              215.90276527797596,
+              216.16446452180531
+            ],
+            [
+              "结",
+              216.16446452180531,
+              216.4261637656347
+            ],
+            [
+              "果",
+              216.4261637656347,
+              216.68786300946405
+            ],
+            [
+              "的",
+              216.68786300946405,
+              216.9495622532934
+            ],
+            [
+              "个",
+              216.9495622532934,
+              217.21126149712276
+            ],
+            [
+              "数。",
+              217.21126149712276,
+              217.47296074095215
+            ],
+            [
+              "所",
+              217.47296074095215,
+              217.7346599847815
+            ],
+            [
+              "以",
+              217.7346599847815,
+              217.99635922861086
+            ],
+            [
+              "H",
+              217.99635922861086,
+              218.2580584724402
+            ],
+            [
+              "至",
+              218.2580584724402,
+              218.5197577162696
+            ],
+            [
+              "多",
+              218.5197577162696,
+              218.78145696009895
+            ],
+            [
+              "是",
+              218.78145696009895,
+              219.0431562039283
+            ],
+            [
+              "log",
+              219.0431562039283,
+              219.30485544775766
+            ],
+            [
+              " K，",
+              219.30485544775766,
+              219.56655469158704
+            ],
+            [
+              "当",
+              219.56655469158704,
+              219.8282539354164
+            ],
+            [
+              "且",
+              219.8282539354164,
+              220.08995317924575
+            ],
+            [
+              "仅",
+              220.08995317924575,
+              220.3516524230751
+            ],
+            [
+              "当",
+              220.3516524230751,
+              220.6133516669045
+            ],
+            [
+              "每",
+              220.6133516669045,
+              220.87505091073385
+            ],
+            [
+              "种",
+              220.87505091073385,
+              221.1367501545632
+            ],
+            [
+              "结",
+              221.1367501545632,
+              221.39844939839256
+            ],
+            [
+              "果",
+              221.39844939839256,
+              221.66014864222194
+            ],
+            [
+              "同",
+              221.66014864222194,
+              221.9218478860513
+            ],
+            [
+              "样",
+              221.9218478860513,
+              222.18354712988065
+            ],
+            [
+              "可",
+              222.18354712988065,
+              222.44524637371
+            ],
+            [
+              "能",
+              222.44524637371,
+              222.7069456175394
+            ],
+            [
+              "时",
+              222.7069456175394,
+              222.96864486136874
+            ],
+            [
+              "取",
+              222.96864486136874,
+              223.2303441051981
+            ],
+            [
+              "等",
+              223.2303441051981,
+              223.49204334902745
+            ],
+            [
+              "号。",
+              223.49204334902745,
+              223.75374259285684
+            ],
+            [
+              "这",
+              223.75374259285684,
+              224.0154418366862
+            ],
+            [
+              "段",
+              224.0154418366862,
+              224.27714108051555
+            ],
+            [
+              "差",
+              224.27714108051555,
+              224.5388403243449
+            ],
+            [
+              "距，",
+              224.5388403243449,
+              224.8005395681743
+            ],
+            [
+              "衡",
+              224.8005395681743,
+              225.06223881200364
+            ],
+            [
+              "量",
+              225.06223881200364,
+              225.323938055833
+            ],
+            [
+              "了",
+              225.323938055833,
+              225.58563729966238
+            ],
+            [
+              "猜",
+              225.58563729966238,
+              225.84733654349174
+            ],
+            [
+              "测",
+              225.84733654349174,
+              226.1090357873211
+            ],
+            [
+              "者",
+              226.1090357873211,
+              226.37073503115045
+            ],
+            [
+              "可",
+              226.37073503115045,
+              226.6324342749798
+            ],
+            [
+              "以",
+              226.6324342749798,
+              226.89413351880918
+            ],
+            [
+              "利",
+              226.89413351880918,
+              227.15583276263854
+            ],
+            [
+              "用",
+              227.15583276263854,
+              227.4175320064679
+            ],
+            [
+              "的",
+              227.4175320064679,
+              227.67923125029728
+            ],
+            [
+              "结",
+              227.67923125029728,
+              227.94093049412663
+            ],
+            [
+              "构。",
+              227.94093049412663,
+              228.202629737956
+            ],
+            [
+              "香",
+              228.202629737956,
+              228.46432898178534
+            ],
+            [
+              "农",
+              228.46432898178534,
+              228.7260282256147
+            ],
+            [
+              "定",
+              228.7260282256147,
+              228.98772746944408
+            ],
+            [
+              "义",
+              228.98772746944408,
+              229.24942671327344
+            ],
+            [
+              "的",
+              229.24942671327344,
+              229.5111259571028
+            ],
+            [
+              "冗",
+              229.5111259571028,
+              229.77282520093217
+            ],
+            [
+              "余，",
+              229.77282520093217,
+              230.03452444476153
+            ],
+            [
+              "是",
+              230.03452444476153,
+              230.29622368859089
+            ],
+            [
+              "这",
+              230.29622368859089,
+              230.55792293242024
+            ],
+            [
+              "个",
+              230.55792293242024,
+              230.8196221762496
+            ],
+            [
+              "差",
+              230.8196221762496,
+              231.08132142007898
+            ],
+            [
+              "距",
+              231.08132142007898,
+              231.34302066390833
+            ],
+            [
+              "占",
+              231.34302066390833,
+              231.6047199077377
+            ],
+            [
+              "最",
+              231.6047199077377,
+              231.86641915156707
+            ],
+            [
+              "大",
+              231.86641915156707,
+              232.12811839539643
+            ],
+            [
+              "熵",
+              232.12811839539643,
+              232.38981763922578
+            ],
+            [
+              "的",
+              232.38981763922578,
+              232.65151688305514
+            ],
+            [
+              "比",
+              232.65151688305514,
+              232.9132161268845
+            ],
+            [
+              "例，",
+              232.9132161268845,
+              233.17491537071388
+            ],
+            [
+              "也",
+              233.17491537071388,
+              233.43661461454323
+            ],
+            [
+              "就",
+              233.43661461454323,
+              233.6983138583726
+            ],
+            [
+              "是",
+              233.6983138583726,
+              233.96001310220197
+            ],
+            [
+              "除",
+              233.96001310220197,
+              234.22171234603132
+            ],
+            [
+              "以",
+              234.22171234603132,
+              234.48341158986068
+            ],
+            [
+              "log",
+              234.48341158986068,
+              234.74511083369003
+            ],
+            [
+              " K。",
+              234.74511083369003,
+              235.0068100775194
+            ]
+          ]
+        }
+      ],
+      "narration_text_scope": "Read captured raw/translated text only; no audio listened to."
+    },
+    "en/Prefix": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:28:00.172826+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 23,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Prefix/result.json",
+          "sha256": "913ea856d437a8c374e64b1616b223299e3d818ea0cb57b5b3c69354a60a0539"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Prefix/sheet.png",
+          "sha256": "c6853fe9d7dd22dac2541529ca35bd61b8a24c09f95da5c464100eb5fa5d1dcd"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "022_00223.0s.png",
+          "path": "renders/qa/series/ai1/en/Prefix/022_00223.0s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "8ad7ee7f5da41cb709456fd52d8eadb9cd4e70fe7d228f07123e0e91f553c6a7",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Binary prefix tree, Kraft area accounting, canonical-code table and McMillan comparison chart are visually separated in the English sheet and native final frame.",
+        "Chinese final why-note collides/crowds the chart upper-left y-tick and log-scale caption in the inspected native frame; root has since repositioned it, so a refreshed frame is still needed."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": true,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": false,
+      "result_bytes_unchanged_since_snapshot": false,
+      "post_fix_refresh": {
+        "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+        "inputs_current": true,
+        "captured_utc": "2026-10-31T13:34:45.519439+00:00",
+        "assets": [
+          {
+            "original_path": "renders/qa/series/ai1/en/Prefix/result.json",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Prefix/result.json",
+            "sha256": "74a0fa6945a12fa51ded7cf5c54e8d88bbb185d345ce976165fb41374cdee363"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/en/Prefix/sheet.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Prefix/sheet.png",
+            "sha256": "3a4edbcf323ecd3e32ff2a8b76cfe51fa28529f8b984f9bb898fcd2aaadc2899"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/en/Prefix/022_00223.0s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/en/Prefix/022_00223.0s.png",
+            "sha256": "8ad7ee7f5da41cb709456fd52d8eadb9cd4e70fe7d228f07123e0e91f553c6a7"
+          }
+        ],
+        "review_complete": true,
+        "all_sheet_tiles_inspected": true,
+        "native_fix_frame_inspected": true,
+        "result": "Both refreshed sheet and native fix frame inspected: final proof why-note is below-left and clear of chart/y ticks.",
+        "reviewed_utc": "2026-10-31T13:38:10.006711+00:00"
+      }
+    },
+    "zh/Prefix": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:28:00.198832+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 24,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Prefix/result.json",
+          "sha256": "57064cd3b213bcd15f558383e2082a1902b3a13960436a5027587b48da0afb66"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Prefix/sheet.png",
+          "sha256": "54cabd6f8296d3c0c5afc09e3abd29612a53c39841444f7b3e9799123bb69b69"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "023_00236.8s.png",
+          "path": "renders/qa/series/ai1/zh/Prefix/023_00236.8s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "f4556d4d555228041841502ab02ace7b2b59f5feba9a2dd640a6c14f061fb13c",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Binary prefix tree, Kraft area accounting, canonical-code table and McMillan comparison chart are visually separated in the English sheet and native final frame.",
+        "Chinese final why-note collides/crowds the chart upper-left y-tick and log-scale caption in the inspected native frame; root has since repositioned it, so a refreshed frame is still needed."
+      ],
+      "review_complete": true,
+      "source_current": true,
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": true,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": false,
+      "result_bytes_unchanged_since_snapshot": false,
+      "post_fix_refresh": {
+        "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+        "inputs_current": true,
+        "captured_utc": "2026-10-31T13:34:45.530722+00:00",
+        "assets": [
+          {
+            "original_path": "renders/qa/series/ai1/zh/Prefix/result.json",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Prefix/result.json",
+            "sha256": "58687b5c3ab57152bd51bbb5dc6d9fb3012cea701f2e6eec4932b5b38e362c68"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/Prefix/sheet.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Prefix/sheet.png",
+            "sha256": "c81d70df0412d6419e01eb80aab09bde88b9b7b44fd82cc5437570a07eb14946"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/Prefix/023_00236.8s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/refresh/zh/Prefix/023_00236.8s.png",
+            "sha256": "f4556d4d555228041841502ab02ace7b2b59f5feba9a2dd640a6c14f061fb13c"
+          }
+        ],
+        "review_complete": true,
+        "all_sheet_tiles_inspected": true,
+        "native_fix_frame_inspected": true,
+        "result": "Both refreshed sheet and native fix frame inspected: final proof why-note is below-left and clear of chart/y ticks.",
+        "reviewed_utc": "2026-10-31T13:38:10.006716+00:00"
+      }
+    },
+    "en/Hook": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.193197+00:00",
+      "fingerprint": "68334c0e28000589e0438800726edbde16a55e94c333f9499cb6fe480854ffa0",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": false,
+      "inputs_current": true,
+      "status": "needs-review",
+      "automated_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "sheet_frame_count": 24,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Hook/result.json",
+          "sha256": "edecbf58a16f06ffbc1891fdfcae36191060311b0ca449acb987a3387ed5d011"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Hook/sheet.png",
+          "sha256": "905ab66e4623b53089ecb7da4e7f195c9f3809dac946651285367d9335d2a77c"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "011_00088.5s.png",
+          "path": "renders/qa/series/ai1/en/Hook/011_00088.5s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "ec0fe3cfc6dda200744a1e4b94963abc3b9d1d1aa336b25e3a7e0234d9909d62",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "019_00170.4s.png",
+          "path": "renders/qa/series/ai1/en/Hook/019_00170.4s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "f72dee2bfdfa70b85ba3322ae447e9c42f2e31556c35ea0ed257a7deaaae62b6",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "023_00223.5s.png",
+          "path": "renders/qa/series/ai1/en/Hook/023_00223.5s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "b4fc5a7e90346fb26ecccffe9ddb3d46d39753f5f70b4945187e7643f7234747",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Inspected every contact-sheet tile. Native timeline labels, series-map columns, and scoreboard heading/citation/axis fit the frame without observed overlap.",
+        "Dimmed future scoreboard/model rows and series-map rows are intentional introductory emphasis; low-resolution text is small but visible. No additional static-frame defect identified.",
+        "Earlier source fingerprint with source-changed-during-render warning; this review is historical layout evidence, not a current preflight pass."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "zh/Hook": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.207120+00:00",
+      "fingerprint": "68334c0e28000589e0438800726edbde16a55e94c333f9499cb6fe480854ffa0",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": false,
+      "inputs_current": true,
+      "status": "needs-review",
+      "automated_warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "sheet_frame_count": 25,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Hook/result.json",
+          "sha256": "b30ace4ac23af7d4c5f07943beb845b852145fcbea9d421c5ac8351dbb09a53d"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Hook/sheet.png",
+          "sha256": "4f49bab72aa109d78b3f4add92916bd3239e25633122be1160d37996bac094b7"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "012_00091.9s.png",
+          "path": "renders/qa/series/ai1/zh/Hook/012_00091.9s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "8ab99c529e313dc91b9188ed2d7c96863592b6f9554e5d77a05a698ca418d688",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "020_00173.5s.png",
+          "path": "renders/qa/series/ai1/zh/Hook/020_00173.5s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "8022d12689f3494a5214a51d8a5e27f55e80a657e60df54eaa97570028c46201",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "024_00229.0s.png",
+          "path": "renders/qa/series/ai1/zh/Hook/024_00229.0s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "ea3349769ff88841a67900c1b8742b28094c7bc502265e884ee2f3e1ccf3a7ad",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Inspected every contact-sheet tile. Native timeline labels, series-map columns, and scoreboard heading/citation/axis fit the frame without observed overlap.",
+        "Dimmed future scoreboard/model rows and series-map rows are intentional introductory emphasis; low-resolution text is small but visible. No additional static-frame defect identified.",
+        "Earlier source fingerprint with source-changed-during-render warning; this review is historical layout evidence, not a current preflight pass."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "en/Huffman": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.218008+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 19,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Huffman/result.json",
+          "sha256": "236af57312028bd4a7cd0b0d977fc98e516fb72a02f32ea0b62507c42b843e8f"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Huffman/sheet.png",
+          "sha256": "f6463a97da68bbd4fe13a97aee0f8976ef4056e516b1ccb9416e22933fa1962d"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "014_00139.0s.png",
+          "path": "renders/qa/series/ai1/en/Huffman/014_00139.0s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "7c5f06f20f290cb0be58c9d085a9fe8b06a8ba04329bc58db2ca06d82459b3f8",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Checked every sheet tile for merge-tree and bound/proof layout; native exchange views show both e/z bit strings, rare-sibling labels, and probability/cost equations legibly.",
+        "No clipping, equation/tree collision or additional static-frame defect identified in the inspected endpoint images."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "zh/Huffman": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.229219+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 19,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Huffman/result.json",
+          "sha256": "11c269fb5c3ed5bb1c4152864a6a7a89a9eed4a5febce8c831097848d187f7ef"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Huffman/sheet.png",
+          "sha256": "d46d3273552d7d38417efc20f0a06b69384c08ae5c310c5fbaba2b27ebf54c7f"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "014_00147.3s.png",
+          "path": "renders/qa/series/ai1/zh/Huffman/014_00147.3s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "da3ab0f86585bae7736e4a265388a6044da4eedfb450276677006e1131649d71",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Checked every sheet tile for merge-tree and bound/proof layout; native exchange views show both e/z bit strings, rare-sibling labels, and probability/cost equations legibly.",
+        "No clipping, equation/tree collision or additional static-frame defect identified in the inspected endpoint images."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "en/Typical": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.258617+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 22,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/Typical/result.json",
+          "sha256": "0c7d8bb3baedd4e1b4114bc7c5e1f68a245a44c3a6705eb46a9d20047233b419"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/Typical/sheet.png",
+          "sha256": "e41a30461ca20fd5203084701e271b239f6b4d077600a981e689e12b58a3e7a8"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "017_00199.5s.png",
+          "path": "renders/qa/series/ai1/en/Typical/017_00199.5s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "4bb13a36279ede8791c14a4d3edbc4633cb1a4f59176aa98522a1db46a678bf6",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Checked concentration chart, typical-set definition and cardinality ladder, coin ribbons, theorem/code-length panel, and nested schematic squares.",
+        "Native Chinese definition/cardinality frames and both-language coding-rate panels are legible without observed clipping or overlap. Schematic/example disclosures remain visible."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "zh/Typical": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.270126+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 24,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/Typical/result.json",
+          "sha256": "3845ea5fab40cec1971ffa250f1034872d659a3a1d45cbf770cab0cadd99556a"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/Typical/sheet.png",
+          "sha256": "3aacf454a488f3bd51e0ebd9d04df775ac487f8709fb6a1135c5d8cd6fca4b66"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "008_00083.6s.png",
+          "path": "renders/qa/series/ai1/zh/Typical/008_00083.6s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "4430db509035695a6ac876f05e897752fe419fd9bbf506d6dfc427fcdfdceb10",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "010_00093.3s.png",
+          "path": "renders/qa/series/ai1/zh/Typical/010_00093.3s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "65222a7cc90ff41e4285ac9bfb871cf7712d8c7e160d68a164ab1c04c9eb8916",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "019_00213.8s.png",
+          "path": "renders/qa/series/ai1/zh/Typical/019_00213.8s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "c03db31fc2d681cd4531b802f917b1e9b51e1d5a75053ee2412072b2a6510819",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Checked concentration chart, typical-set definition and cardinality ladder, coin ribbons, theorem/code-length panel, and nested schematic squares.",
+        "Native Chinese definition/cardinality frames and both-language coding-rate panels are legible without observed clipping or overlap. Schematic/example disclosures remain visible."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true
+    },
+    "en/CrossEntropy": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.279719+00:00",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": true,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 24,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/en/CrossEntropy/result.json",
+          "sha256": "8ba66c5b120c85fe852876d064afcf2b65b9c8dbd1c710c26afa893e9fc7e14a"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/en/CrossEntropy/sheet.png",
+          "sha256": "ee9317973dcc6ecdd5db1d7e86c870e5b3cc3d11e542f9627eb33da500234b9f"
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "020_00178.9s.png",
+          "path": "renders/qa/series/ai1/en/CrossEntropy/020_00178.9s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "93383784f40807063360e543930a8388fa1a9219ec25f31f919171c79f26989e",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "023_00226.2s.png",
+          "path": "renders/qa/series/ai1/en/CrossEntropy/023_00226.2s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "3844cda96a1b95c25808b7d20a792c122f202c7957d132fb3125fc3f72bd3c7d",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Corrected autoregressive-pretraining headline is visible and fits in both languages. Native objective, decomposition and nats caption are separated.",
+        "Native KL endpoints retain matching density axes, readable mu/sigma/KL values, source/model colors, and separate objectives/captions; no overlap or new density/readout defect observed."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": true,
+      "result_bytes_unchanged_since_snapshot": true,
+      "captured_autoregressive_pretraining_paragraph": [
+        {
+          "start": 150.06650000000002,
+          "duration": 33.279625,
+          "text": "Here is why this matters for AI. Autoregressive language models are pretrained with this next-token loss: the average of log one over q, for each token of real text, given the tokens before it. Usually with the natural log, ln, so it's counted in nats: one nat is about 1.44 bits. It's the cross-entropy between the world's text and the model. Training can only shrink the divergence; the entropy of language itself is a floor no model can go below.",
+          "raw": "Here is why this matters for AI. <bookmark mark='a'/> Autoregressive language models are pretrained with this next-token loss: the average of log one over q, for each token of real text, given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below.",
+          "words": [
+            [
+              "Here",
+              150.36650000000003,
+              150.7774953703704
+            ],
+            [
+              "is",
+              150.7774953703704,
+              151.18849074074075
+            ],
+            [
+              "why",
+              151.18849074074075,
+              151.59948611111113
+            ],
+            [
+              "this",
+              151.59948611111113,
+              152.0104814814815
+            ],
+            [
+              "matters",
+              152.0104814814815,
+              152.42147685185188
+            ],
+            [
+              "for",
+              152.42147685185188,
+              152.83247222222224
+            ],
+            [
+              "AI.",
+              152.83247222222224,
+              153.24346759259262
+            ],
+            [
+              "Autoregressive",
+              153.24346759259262,
+              153.65446296296298
+            ],
+            [
+              "language",
+              153.65446296296298,
+              154.06545833333334
+            ],
+            [
+              "models",
+              154.06545833333334,
+              154.47645370370373
+            ],
+            [
+              "are",
+              154.47645370370373,
+              154.88744907407408
+            ],
+            [
+              "pretrained",
+              154.88744907407408,
+              155.29844444444447
+            ],
+            [
+              "with",
+              155.29844444444447,
+              155.70943981481483
+            ],
+            [
+              "this",
+              155.70943981481483,
+              156.12043518518522
+            ],
+            [
+              "next-token",
+              156.12043518518522,
+              156.53143055555557
+            ],
+            [
+              "loss:",
+              156.53143055555557,
+              156.94242592592593
+            ],
+            [
+              "the",
+              156.94242592592593,
+              157.35342129629632
+            ],
+            [
+              "average",
+              157.35342129629632,
+              157.76441666666668
+            ],
+            [
+              "of",
+              157.76441666666668,
+              158.17541203703706
+            ],
+            [
+              "log",
+              158.17541203703706,
+              158.58640740740742
+            ],
+            [
+              "one",
+              158.58640740740742,
+              158.9974027777778
+            ],
+            [
+              "over",
+              158.9974027777778,
+              159.40839814814817
+            ],
+            [
+              "q,",
+              159.40839814814817,
+              159.81939351851855
+            ],
+            [
+              "for",
+              159.81939351851855,
+              160.2303888888889
+            ],
+            [
+              "each",
+              160.2303888888889,
+              160.64138425925927
+            ],
+            [
+              "token",
+              160.64138425925927,
+              161.05237962962966
+            ],
+            [
+              "of",
+              161.05237962962966,
+              161.463375
+            ],
+            [
+              "real",
+              161.463375,
+              161.8743703703704
+            ],
+            [
+              "text,",
+              161.8743703703704,
+              162.28536574074076
+            ],
+            [
+              "given",
+              162.28536574074076,
+              162.69636111111114
+            ],
+            [
+              "the",
+              162.69636111111114,
+              163.1073564814815
+            ],
+            [
+              "tokens",
+              163.1073564814815,
+              163.51835185185186
+            ],
+            [
+              "before",
+              163.51835185185186,
+              163.92934722222225
+            ],
+            [
+              "it.",
+              163.92934722222225,
+              164.3403425925926
+            ],
+            [
+              "Usually",
+              164.3403425925926,
+              164.751337962963
+            ],
+            [
+              "with",
+              164.751337962963,
+              165.16233333333335
+            ],
+            [
+              "the",
+              165.16233333333335,
+              165.57332870370374
+            ],
+            [
+              "natural",
+              165.57332870370374,
+              165.9843240740741
+            ],
+            [
+              "log,",
+              165.9843240740741,
+              166.39531944444445
+            ],
+            [
+              "ln,",
+              166.39531944444445,
+              166.80631481481484
+            ],
+            [
+              "so",
+              166.80631481481484,
+              167.2173101851852
+            ],
+            [
+              "it's",
+              167.2173101851852,
+              167.62830555555558
+            ],
+            [
+              "counted",
+              167.62830555555558,
+              168.03930092592594
+            ],
+            [
+              "in",
+              168.03930092592594,
+              168.4502962962963
+            ],
+            [
+              "nats:",
+              168.4502962962963,
+              168.8612916666667
+            ],
+            [
+              "one",
+              168.8612916666667,
+              169.27228703703705
+            ],
+            [
+              "nat",
+              169.27228703703705,
+              169.68328240740743
+            ],
+            [
+              "is",
+              169.68328240740743,
+              170.0942777777778
+            ],
+            [
+              "about",
+              170.0942777777778,
+              170.50527314814815
+            ],
+            [
+              "1.44",
+              170.50527314814815,
+              170.91626851851854
+            ],
+            [
+              "bits.",
+              170.91626851851854,
+              171.3272638888889
+            ],
+            [
+              "It's",
+              171.3272638888889,
+              171.73825925925925
+            ],
+            [
+              "the",
+              171.73825925925925,
+              172.14925462962964
+            ],
+            [
+              "cross-entropy",
+              172.14925462962964,
+              172.56025
+            ],
+            [
+              "between",
+              172.56025,
+              172.97124537037035
+            ],
+            [
+              "the",
+              172.97124537037035,
+              173.38224074074074
+            ],
+            [
+              "world's",
+              173.38224074074074,
+              173.7932361111111
+            ],
+            [
+              "text",
+              173.7932361111111,
+              174.2042314814815
+            ],
+            [
+              "and",
+              174.2042314814815,
+              174.61522685185184
+            ],
+            [
+              "the",
+              174.61522685185184,
+              175.0262222222222
+            ],
+            [
+              "model.",
+              175.0262222222222,
+              175.4372175925926
+            ],
+            [
+              "Training",
+              175.4372175925926,
+              175.84821296296295
+            ],
+            [
+              "can",
+              175.84821296296295,
+              176.25920833333333
+            ],
+            [
+              "only",
+              176.25920833333333,
+              176.6702037037037
+            ],
+            [
+              "shrink",
+              176.6702037037037,
+              177.08119907407405
+            ],
+            [
+              "the",
+              177.08119907407405,
+              177.49219444444444
+            ],
+            [
+              "divergence;",
+              177.49219444444444,
+              177.9031898148148
+            ],
+            [
+              "the",
+              177.9031898148148,
+              178.31418518518515
+            ],
+            [
+              "entropy",
+              178.31418518518515,
+              178.72518055555554
+            ],
+            [
+              "of",
+              178.72518055555554,
+              179.1361759259259
+            ],
+            [
+              "language",
+              179.1361759259259,
+              179.54717129629626
+            ],
+            [
+              "itself",
+              179.54717129629626,
+              179.95816666666664
+            ],
+            [
+              "is",
+              179.95816666666664,
+              180.369162037037
+            ],
+            [
+              "a",
+              180.369162037037,
+              180.7801574074074
+            ],
+            [
+              "floor",
+              180.7801574074074,
+              181.19115277777775
+            ],
+            [
+              "no",
+              181.19115277777775,
+              181.6021481481481
+            ],
+            [
+              "model",
+              181.6021481481481,
+              182.0131435185185
+            ],
+            [
+              "can",
+              182.0131435185185,
+              182.42413888888885
+            ],
+            [
+              "go",
+              182.42413888888885,
+              182.83513425925923
+            ],
+            [
+              "below.",
+              182.83513425925923,
+              183.2461296296296
+            ]
+          ]
+        }
+      ],
+      "narration_text_scope": "Read captured raw/translated text only; no audio listened to."
+    },
+    "zh/CrossEntropy": {
+      "provenance_checked_before_review_utc": "2026-10-31T13:29:29.292073+00:00",
+      "fingerprint": "f368c5837198ce490159d8a0553f3b945564ceeb8e039737be40bcf71a6dc30b",
+      "current_fingerprint_at_review": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "source_current": false,
+      "inputs_current": true,
+      "status": "passed",
+      "automated_warnings": [],
+      "sheet_frame_count": 24,
+      "assets": {
+        "result.json": {
+          "path": "renders/qa/series/ai1/zh/CrossEntropy/result.json",
+          "sha256": "f5af070665c3ea7191dc3960ec1048015bc48bbc92bc3305d1d7f1bc17a72b18"
+        },
+        "sheet.png": {
+          "path": "renders/qa/series/ai1/zh/CrossEntropy/sheet.png",
+          "sha256": "2d67c86f5847c1027ea254a28291b6acdf78eb1a67ef1ffb8aa29315c53fd13a",
+          "initial_snapshot_hash_was_not_the_final_hash_observed_in_image_view": true,
+          "reconciliation_reason": "The worker writes result.json before regenerating sheet.png; initial metadata capture overlapped this interval. The stable_content_reconciliation snapshots were copied under a shared chapter lock and then actually inspected."
+        }
+      },
+      "individual_frames_inspected": [
+        {
+          "filename": "020_00180.3s.png",
+          "path": "renders/qa/series/ai1/zh/CrossEntropy/020_00180.3s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "550983d9af16b4f1999a420104a6aaffa86a27f628f6b4d8be6b5bc91566b534",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        },
+        {
+          "filename": "023_00226.8s.png",
+          "path": "renders/qa/series/ai1/zh/CrossEntropy/023_00226.8s.png",
+          "resolution": [
+            854,
+            480
+          ],
+          "sha256_at_metadata_capture": "85796fad230da8071e6e00c85590b77d93d90ddd5722a63aa70b3680b4390371",
+          "hash_scope": "Hash read after the primary native view; no pre-view per-frame hash was taken. Sheet hashes were captured before primary sheet inspection. Prefer immutable refresh/reconciliation snapshots for changed assets."
+        }
+      ],
+      "findings": [
+        "Corrected autoregressive-pretraining headline is visible and fits in both languages. Native objective, decomposition and nats caption are separated.",
+        "Native KL endpoints retain matching density axes, readable mu/sigma/KL values, source/model colors, and separate objectives/captions; no overlap or new density/readout defect observed."
+      ],
+      "review_complete": true,
+      "reviewed_at_utc": "2026-10-31T13:33:10.953988+00:00",
+      "all_recorded_sheet_tiles_inspected": true,
+      "source_current_at_completion": false,
+      "inputs_current_at_completion": true,
+      "sheet_bytes_unchanged_since_snapshot": false,
+      "result_bytes_unchanged_since_snapshot": false,
+      "captured_autoregressive_pretraining_paragraph": [
+        {
+          "start": 147.8010416666667,
+          "duration": 36.458125,
+          "text": "这就是它对AI的意义所在。自回归语言模型预训练时，用的就是这个下一个词元预测损失：对真实文本的每一个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。通常用自然对数ln，所以单位是奈特：1奈特大约是1.44比特。它就是世界上的文本和模型之间的交叉熵。训练只能缩小散度；语言本身的熵，是任何模型都无法低于的下限。",
+          "raw": "Here is why this matters for AI. <bookmark mark='a'/> Autoregressive language models are pretrained with this next-token loss: the average of log one over q, for each token of real text, given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below.",
+          "words": [
+            [
+              "这",
+              148.1010416666667,
+              148.35859980620157
+            ],
+            [
+              "就",
+              148.35859980620157,
+              148.61615794573646
+            ],
+            [
+              "是",
+              148.61615794573646,
+              148.87371608527135
+            ],
+            [
+              "它",
+              148.87371608527135,
+              149.13127422480622
+            ],
+            [
+              "对",
+              149.13127422480622,
+              149.3888323643411
+            ],
+            [
+              "AI",
+              149.3888323643411,
+              149.646390503876
+            ],
+            [
+              "的",
+              149.646390503876,
+              149.90394864341087
+            ],
+            [
+              "意",
+              149.90394864341087,
+              150.16150678294576
+            ],
+            [
+              "义",
+              150.16150678294576,
+              150.41906492248066
+            ],
+            [
+              "所",
+              150.41906492248066,
+              150.67662306201552
+            ],
+            [
+              "在。",
+              150.67662306201552,
+              150.93418120155042
+            ],
+            [
+              "自",
+              150.93418120155042,
+              151.19173934108528
+            ],
+            [
+              "回",
+              151.19173934108528,
+              151.44929748062017
+            ],
+            [
+              "归",
+              151.44929748062017,
+              151.70685562015507
+            ],
+            [
+              "语",
+              151.70685562015507,
+              151.96441375968993
+            ],
+            [
+              "言",
+              151.96441375968993,
+              152.22197189922483
+            ],
+            [
+              "模",
+              152.22197189922483,
+              152.47953003875972
+            ],
+            [
+              "型",
+              152.47953003875972,
+              152.73708817829458
+            ],
+            [
+              "预",
+              152.73708817829458,
+              152.99464631782948
+            ],
+            [
+              "训",
+              152.99464631782948,
+              153.25220445736437
+            ],
+            [
+              "练",
+              153.25220445736437,
+              153.50976259689924
+            ],
+            [
+              "时，",
+              153.50976259689924,
+              153.76732073643413
+            ],
+            [
+              "用",
+              153.76732073643413,
+              154.02487887596902
+            ],
+            [
+              "的",
+              154.02487887596902,
+              154.2824370155039
+            ],
+            [
+              "就",
+              154.2824370155039,
+              154.53999515503878
+            ],
+            [
+              "是",
+              154.53999515503878,
+              154.79755329457367
+            ],
+            [
+              "这",
+              154.79755329457367,
+              155.05511143410854
+            ],
+            [
+              "个",
+              155.05511143410854,
+              155.31266957364343
+            ],
+            [
+              "下",
+              155.31266957364343,
+              155.57022771317833
+            ],
+            [
+              "一",
+              155.57022771317833,
+              155.8277858527132
+            ],
+            [
+              "个",
+              155.8277858527132,
+              156.08534399224808
+            ],
+            [
+              "词",
+              156.08534399224808,
+              156.34290213178298
+            ],
+            [
+              "元",
+              156.34290213178298,
+              156.60046027131784
+            ],
+            [
+              "预",
+              156.60046027131784,
+              156.85801841085274
+            ],
+            [
+              "测",
+              156.85801841085274,
+              157.11557655038763
+            ],
+            [
+              "损",
+              157.11557655038763,
+              157.3731346899225
+            ],
+            [
+              "失：",
+              157.3731346899225,
+              157.6306928294574
+            ],
+            [
+              "对",
+              157.6306928294574,
+              157.88825096899228
+            ],
+            [
+              "真",
+              157.88825096899228,
+              158.14580910852715
+            ],
+            [
+              "实",
+              158.14580910852715,
+              158.40336724806204
+            ],
+            [
+              "文",
+              158.40336724806204,
+              158.66092538759693
+            ],
+            [
+              "本",
+              158.66092538759693,
+              158.91848352713183
+            ],
+            [
+              "的",
+              158.91848352713183,
+              159.1760416666667
+            ],
+            [
+              "每",
+              159.1760416666667,
+              159.43359980620158
+            ],
+            [
+              "一",
+              159.43359980620158,
+              159.69115794573648
+            ],
+            [
+              "个",
+              159.69115794573648,
+              159.94871608527134
+            ],
+            [
+              "词",
+              159.94871608527134,
+              160.20627422480624
+            ],
+            [
+              "元，",
+              160.20627422480624,
+              160.46383236434113
+            ],
+            [
+              "在",
+              160.46383236434113,
+              160.721390503876
+            ],
+            [
+              "已",
+              160.721390503876,
+              160.9789486434109
+            ],
+            [
+              "知",
+              160.9789486434109,
+              161.23650678294578
+            ],
+            [
+              "前",
+              161.23650678294578,
+              161.49406492248065
+            ],
+            [
+              "面",
+              161.49406492248065,
+              161.75162306201554
+            ],
+            [
+              "词",
+              161.75162306201554,
+              162.00918120155043
+            ],
+            [
+              "元",
+              162.00918120155043,
+              162.26673934108533
+            ],
+            [
+              "的",
+              162.26673934108533,
+              162.5242974806202
+            ],
+            [
+              "条",
+              162.5242974806202,
+              162.78185562015508
+            ],
+            [
+              "件",
+              162.78185562015508,
+              163.03941375968998
+            ],
+            [
+              "下，",
+              163.03941375968998,
+              163.29697189922484
+            ],
+            [
+              "取",
+              163.29697189922484,
+              163.55453003875974
+            ],
+            [
+              "q",
+              163.55453003875974,
+              163.81208817829463
+            ],
+            [
+              "分",
+              163.81208817829463,
+              164.0696463178295
+            ],
+            [
+              "之",
+              164.0696463178295,
+              164.3272044573644
+            ],
+            [
+              "1",
+              164.3272044573644,
+              164.58476259689928
+            ],
+            [
+              "的",
+              164.58476259689928,
+              164.84232073643415
+            ],
+            [
+              "对",
+              164.84232073643415,
+              165.09987887596904
+            ],
+            [
+              "数，",
+              165.09987887596904,
+              165.3574370155039
+            ],
+            [
+              "再",
+              165.3574370155039,
+              165.6149951550388
+            ],
+            [
+              "求",
+              165.6149951550388,
+              165.8725532945737
+            ],
+            [
+              "平",
+              165.8725532945737,
+              166.13011143410856
+            ],
+            [
+              "均。",
+              166.13011143410856,
+              166.38766957364345
+            ],
+            [
+              "通",
+              166.38766957364345,
+              166.64522771317831
+            ],
+            [
+              "常",
+              166.64522771317831,
+              166.9027858527132
+            ],
+            [
+              "用",
+              166.9027858527132,
+              167.1603439922481
+            ],
+            [
+              "自",
+              167.1603439922481,
+              167.41790213178297
+            ],
+            [
+              "然",
+              167.41790213178297,
+              167.67546027131786
+            ],
+            [
+              "对",
+              167.67546027131786,
+              167.93301841085275
+            ],
+            [
+              "数",
+              167.93301841085275,
+              168.19057655038762
+            ],
+            [
+              "ln，",
+              168.19057655038762,
+              168.4481346899225
+            ],
+            [
+              "所",
+              168.4481346899225,
+              168.7056928294574
+            ],
+            [
+              "以",
+              168.7056928294574,
+              168.96325096899227
+            ],
+            [
+              "单",
+              168.96325096899227,
+              169.22080910852716
+            ],
+            [
+              "位",
+              169.22080910852716,
+              169.47836724806203
+            ],
+            [
+              "是",
+              169.47836724806203,
+              169.73592538759692
+            ],
+            [
+              "奈",
+              169.73592538759692,
+              169.99348352713181
+            ],
+            [
+              "特：",
+              169.99348352713181,
+              170.25104166666668
+            ],
+            [
+              "1",
+              170.25104166666668,
+              170.50859980620157
+            ],
+            [
+              "奈",
+              170.50859980620157,
+              170.76615794573644
+            ],
+            [
+              "特",
+              170.76615794573644,
+              171.02371608527133
+            ],
+            [
+              "大",
+              171.02371608527133,
+              171.28127422480622
+            ],
+            [
+              "约",
+              171.28127422480622,
+              171.5388323643411
+            ],
+            [
+              "是",
+              171.5388323643411,
+              171.79639050387598
+            ],
+            [
+              "1.44",
+              171.79639050387598,
+              172.05394864341088
+            ],
+            [
+              "比",
+              172.05394864341088,
+              172.31150678294574
+            ],
+            [
+              "特。",
+              172.31150678294574,
+              172.56906492248064
+            ],
+            [
+              "它",
+              172.56906492248064,
+              172.82662306201553
+            ],
+            [
+              "就",
+              172.82662306201553,
+              173.0841812015504
+            ],
+            [
+              "是",
+              173.0841812015504,
+              173.3417393410853
+            ],
+            [
+              "世",
+              173.3417393410853,
+              173.59929748062015
+            ],
+            [
+              "界",
+              173.59929748062015,
+              173.85685562015505
+            ],
+            [
+              "上",
+              173.85685562015505,
+              174.11441375968994
+            ],
+            [
+              "的",
+              174.11441375968994,
+              174.3719718992248
+            ],
+            [
+              "文",
+              174.3719718992248,
+              174.6295300387597
+            ],
+            [
+              "本",
+              174.6295300387597,
+              174.88708817829456
+            ],
+            [
+              "和",
+              174.88708817829456,
+              175.14464631782946
+            ],
+            [
+              "模",
+              175.14464631782946,
+              175.40220445736435
+            ],
+            [
+              "型",
+              175.40220445736435,
+              175.6597625968992
+            ],
+            [
+              "之",
+              175.6597625968992,
+              175.9173207364341
+            ],
+            [
+              "间",
+              175.9173207364341,
+              176.174878875969
+            ],
+            [
+              "的",
+              176.174878875969,
+              176.43243701550387
+            ],
+            [
+              "交",
+              176.43243701550387,
+              176.68999515503876
+            ],
+            [
+              "叉",
+              176.68999515503876,
+              176.94755329457365
+            ],
+            [
+              "熵。",
+              176.94755329457365,
+              177.20511143410852
+            ],
+            [
+              "训",
+              177.20511143410852,
+              177.4626695736434
+            ],
+            [
+              "练",
+              177.4626695736434,
+              177.72022771317828
+            ],
+            [
+              "只",
+              177.72022771317828,
+              177.97778585271317
+            ],
+            [
+              "能",
+              177.97778585271317,
+              178.23534399224806
+            ],
+            [
+              "缩",
+              178.23534399224806,
+              178.49290213178293
+            ],
+            [
+              "小",
+              178.49290213178293,
+              178.75046027131782
+            ],
+            [
+              "散",
+              178.75046027131782,
+              179.00801841085269
+            ],
+            [
+              "度；",
+              179.00801841085269,
+              179.26557655038758
+            ],
+            [
+              "语",
+              179.26557655038758,
+              179.52313468992247
+            ],
+            [
+              "言",
+              179.52313468992247,
+              179.78069282945734
+            ],
+            [
+              "本",
+              179.78069282945734,
+              180.03825096899223
+            ],
+            [
+              "身",
+              180.03825096899223,
+              180.29580910852712
+            ],
+            [
+              "的",
+              180.29580910852712,
+              180.553367248062
+            ],
+            [
+              "熵，",
+              180.553367248062,
+              180.81092538759688
+            ],
+            [
+              "是",
+              180.81092538759688,
+              181.06848352713178
+            ],
+            [
+              "任",
+              181.06848352713178,
+              181.32604166666667
+            ],
+            [
+              "何",
+              181.32604166666667,
+              181.58359980620156
+            ],
+            [
+              "模",
+              181.58359980620156,
+              181.84115794573643
+            ],
+            [
+              "型",
+              181.84115794573643,
+              182.09871608527132
+            ],
+            [
+              "都",
+              182.09871608527132,
+              182.3562742248062
+            ],
+            [
+              "无",
+              182.3562742248062,
+              182.61383236434108
+            ],
+            [
+              "法",
+              182.61383236434108,
+              182.87139050387597
+            ],
+            [
+              "低",
+              182.87139050387597,
+              183.12894864341087
+            ],
+            [
+              "于",
+              183.12894864341087,
+              183.38650678294576
+            ],
+            [
+              "的",
+              183.38650678294576,
+              183.64406492248065
+            ],
+            [
+              "下",
+              183.64406492248065,
+              183.90162306201552
+            ],
+            [
+              "限。",
+              183.90162306201552,
+              184.1591812015504
+            ]
+          ]
+        }
+      ],
+      "narration_text_scope": "Read captured raw/translated text only; no audio listened to.",
+      "stable_content_reconciliation": {
+        "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+        "source_current": false,
+        "inputs_current": true,
+        "captured_utc": "2026-10-31T13:36:35.389153+00:00",
+        "assets": [
+          {
+            "original_path": "renders/qa/series/ai1/zh/CrossEntropy/result.json",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/reconciled/zh/CrossEntropy/result.json",
+            "sha256": "719e39458c63d7fa38d4fd147292e92285f5d99b2a7ab8ff235afac35feea8a8"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/CrossEntropy/sheet.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/reconciled/zh/CrossEntropy/sheet.png",
+            "sha256": "d2ea6fe43ee4bf43a3261c0402129613e9c66a6ba62d048efca83e5eef173a93"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/CrossEntropy/020_00180.3s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/reconciled/zh/CrossEntropy/020_00180.3s.png",
+            "sha256": "550983d9af16b4f1999a420104a6aaffa86a27f628f6b4d8be6b5bc91566b534"
+          },
+          {
+            "original_path": "renders/qa/series/ai1/zh/CrossEntropy/023_00226.8s.png",
+            "snapshot_path": "/workspace/runtime/ai1-head-visual-evidence/reconciled/zh/CrossEntropy/023_00226.8s.png",
+            "sha256": "85796fad230da8071e6e00c85590b77d93d90ddd5722a63aa70b3680b4390371"
+          }
+        ],
+        "review_complete": true,
+        "all_sheet_tiles_inspected": true,
+        "native_frames_inspected": true,
+        "result": "AR-pretraining headline, loss panel and KL readout endpoints remain legible and separated; earlier global source fingerprint is retained honestly.",
+        "reviewed_utc": "2026-10-31T13:38:10.006723+00:00"
+      }
+    }
+  },
+  "completed_utc": "2026-10-31T13:33:10.953988+00:00",
+  "current_fingerprint_at_completion": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+  "summary": {
+    "contact_sheets_inspected": 16,
+    "sampled_endpoint_frames_in_sheets": 381,
+    "individual_native_frames_inspected": 26,
+    "continuous_playback_reviewed": false,
+    "audio_listened_to": false,
+    "final_resolution_reviewed": false,
+    "new_fixes_already_applied_by_root_but_not_validated_in_this_review": [],
+    "provenance_note": "All primary sheets except Hook were current at their initial review checks. Root then made two visual fixes, changing the global fingerprint. Later native views were explicitly checked/reviewed as earlier-source evidence; every asset is content-hashed.",
+    "post_fix_fresh_cases_reviewed": 4,
+    "post_fix_fresh_sheet_endpoint_images": 91,
+    "post_fix_individual_native_frame_views": 4,
+    "additional_hash_reconciliation_sheet_views": 1,
+    "additional_hash_reconciliation_native_frame_views": 2,
+    "additional_hash_reconciliation_endpoint_images": 24,
+    "native_frame_views_total_including_rechecks": 32,
+    "open_visual_findings_in_inspected_endpoint_images": [],
+    "resolved_findings": [
+      {
+        "issue": "Fixed-width pull labeled by P(A) without a magnification cue",
+        "languages": [
+          "en",
+          "zh"
+        ],
+        "verification": "Fresh post_fix_refresh snapshots at fingerprint a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40"
+      },
+      {
+        "issue": "Chinese Prefix final why-note crowds plot tick/log-scale labels",
+        "languages": [
+          "en",
+          "zh"
+        ],
+        "verification": "Fresh post_fix_refresh snapshots show note below-left; Chinese collision cleared and English spacing also checked."
+      }
+    ],
+    "source_scope_note": "Primary head-sheet pass covers fingerprints 68334c0… (Hook) and 55f0083… (other scenes). Four modified Probability/Prefix cases were refreshed and reviewed at a3b80ce4…. Remaining earlier-source images are retained as earlier evidence, not relabeled current."
+  }
+}

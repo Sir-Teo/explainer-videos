@@ -1,0 +1,2523 @@
+{
+  "generated_utc": "2026-10-31T13:37:24.024140+00:00",
+  "scope": "Part1 chapters Arithmetic through Outro, EN/ZH; sampled rendered endpoint review only.",
+  "source_edits_performed": false,
+  "renders_or_compute_performed": false,
+  "summary": {
+    "chapters": 9,
+    "language_cases": 18,
+    "contact_sheets_inspected": 18,
+    "endpoint_thumbnails_in_sheets": 326,
+    "native_priority_frames_inspected": 20,
+    "concrete_visual_defects_observed": 0,
+    "metadata_source_change_warnings": 3
+  },
+  "limitations": [
+    "This does not establish continuous playback, animation timing/pacing, narration pronunciation, audio signal quality, or audiovisual synchronization.",
+    "Contact-sheet overview is less detailed than viewing every original frame; only listed20priority frames inspected at native854x480.",
+    "Source-current flags are recorded at immutable snapshot time. Some captures became stale after parent shared caption/head fixes; root authorized geometry review and reports exact provenance. A final refreshed pipeline remains parent responsibility.",
+    "No unrendered alternative branches (e.g. decoder failure) are visually validated."
+  ],
+  "cases": [
+    {
+      "lang": "en",
+      "scene": "Arithmetic",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "e34d9e00699ae79f422bf6d58a33603ac94b6820e1dfdd6950903bbd5a287bc9",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/026_00264.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/026_00264.3s.png",
+          "sha256": "b6a25732cc5ea084935d3d876a128e9530a11dba8a98d35074644fe1787db5c3",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Kraft normalization/code-weight qualifier fits between bidirectional arrows and compressed-size equation; no clipping or text collision in either language."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "e34d9e00699ae79f422bf6d58a33603ac94b6820e1dfdd6950903bbd5a287bc9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/result.json",
+          "sha256": "8f6384fca680f501e49783b361541c59dde992671cb7b36cf5fe1ac0750952ba"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/000_00001.0s.png",
+          "sha256": "529b556e6087e23a7087e9322d7bb61b4c93b79e4f80ac6a863259a336f72560"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/001_00006.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/001_00006.4s.png",
+          "sha256": "0f679777c2bd5737dc78c8f5e29d9ba8383a6f7e3d43c57fd10c792c13eff052"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/002_00012.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/002_00012.0s.png",
+          "sha256": "de84b402ace007e7afbfcc039dda4ebf6fc4e4c455da1f543c309cabe075164f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/003_00016.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/003_00016.9s.png",
+          "sha256": "ac6e6a4c08e679d2d7dc3b107fafb21bfa42791390f3b0e6ac384929131361f9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/004_00026.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/004_00026.4s.png",
+          "sha256": "a181028377c8058c6f5a00ca6e4e197364ade1cd3fc750f49cde5cf430ee25da"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/005_00034.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/005_00034.6s.png",
+          "sha256": "b02fef6ff48c3b878427fac1c5d9c9e2881d9c487aec366d0aeca74a2389a1a4"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/006_00041.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/006_00041.5s.png",
+          "sha256": "aae8eeb58c66ce71eaaff79aea9724ad3f1121e2e8ba5bb6a1f0e11bffd97ae3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/007_00053.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/007_00053.2s.png",
+          "sha256": "ce1b63edcd502a7587135c167a77732715517bc08af7020c8cde9408ef718fdf"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/008_00082.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/008_00082.5s.png",
+          "sha256": "11c44b4bae2349f22c7a12d001869a869e406b049a9b0035f9d341f3301e5e57"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/009_00101.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/009_00101.1s.png",
+          "sha256": "c326ca3875ee6c2adda46d1462a2c7eaf3524f9fda5c3f7be82932ed2137202f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/010_00109.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/010_00109.2s.png",
+          "sha256": "34fdf8406ca2a93a7da38c8aecdf1958cee41f2a035ee9187464ccaa0f922956"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/011_00118.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/011_00118.5s.png",
+          "sha256": "026063b22cd4157add3b4c31e10e13eaa3da256ce6995d4bea36b8b2260a4ca2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/012_00128.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/012_00128.9s.png",
+          "sha256": "d8eb30eb2dfebb7bb827c6a237e9abd8a1dddd91f352f24e47086f80e96b44bb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/013_00140.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/013_00140.6s.png",
+          "sha256": "22943d0980beea577dc78f710d7648af308df70b0387375960aa97c028f94d1b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/014_00150.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/014_00150.2s.png",
+          "sha256": "4bc127d1bc5fadd04ec4220049e28b0bde845f04de6f8aebc1422fee762b9425"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/015_00161.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/015_00161.9s.png",
+          "sha256": "357843d751b25d0b17a08a1e7bfeac5d5e1c66b5c848bbd7fdaad92ccc964c0a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/016_00165.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/016_00165.9s.png",
+          "sha256": "081ea378468406f19e9d99734848134fec10387db584ca648764274c8ee4b0d8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/017_00171.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/017_00171.2s.png",
+          "sha256": "991e386faf12b1b7fe7a92abaeb8e4a977740384dfd9f443481307f16d01aea3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/018_00181.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/018_00181.7s.png",
+          "sha256": "89c677ce1d710c8f974c593d939d6ae9ed1230eeb37950eda0ee7748e03426c7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/019_00188.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/019_00188.3s.png",
+          "sha256": "46a50ae4fd046249f592b3b08e3704f04f6699d8e5be93a9eea242538ce0b4be"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/020_00199.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/020_00199.7s.png",
+          "sha256": "634ac512055e79fd8e14081faa4b058d5ef2ab569ae75f87c95afec7a0a83cc3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/021_00209.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/021_00209.7s.png",
+          "sha256": "d9376c254c520f76e08d1a2bdc126acc6d2a9d085b9cb9062cc866b6dd0a2175"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/022_00233.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/022_00233.0s.png",
+          "sha256": "ade4500f603df9f7bc2a8f42980ad19f88d12eaf537fd7d6fbc0b7985227d257"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/023_00235.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/023_00235.2s.png",
+          "sha256": "a0da5ceba9cd42acbede6600fc27fd2a31547949e8bd3319107b8838a20ea8b2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/024_00249.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/024_00249.2s.png",
+          "sha256": "02ac08adbfe94a735ee7bb93353329600903ae41826adc46f032c6ac46d04ef2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/025_00254.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/025_00254.7s.png",
+          "sha256": "f60d1f08ee933a92b2b17e90d79151f72702407da7391947769b8dd64b7e8c30"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/026_00264.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/026_00264.3s.png",
+          "sha256": "b6a25732cc5ea084935d3d876a128e9530a11dba8a98d35074644fe1787db5c3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Arithmetic/027_00282.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/027_00282.8s.png",
+          "sha256": "19564f091d00ee2d8cd78b4ee7aff932f373119af82f20400dd9ad0ccd2f19c8"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Counting",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "needs-review",
+      "inputs_current_at_snapshot": true,
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "0f84658454084e9fcbe51cbba9bdfca1f83e91f5ae2ce3f344c964222f5cdb06",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/013_00095.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/013_00095.2s.png",
+          "sha256": "41a95c09fb3e539daa1250b864a3e7d6ff5fd4513993638dae92c3359129628f",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "The selected minimum is explicitly labeled best on this scored passage. Caption fits above the k=5 point and remains legible; linework crosses the plot area as intended."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "0f84658454084e9fcbe51cbba9bdfca1f83e91f5ae2ce3f344c964222f5cdb06"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/result.json",
+          "sha256": "a902a56eac7ccb7c5e817ace5cf2740beaeadbced60c8c888fec54aaf3fc11cb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/000_00001.0s.png",
+          "sha256": "be808c04f518028b5bd5beb8b7e769cfe6adf8cc71d31ec690c52be013a5a17c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/001_00008.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/001_00008.7s.png",
+          "sha256": "e3ed8dcdc657f736c1601f05c27ff350454fd457847ceb6e99c0a6816718759a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/002_00014.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/002_00014.4s.png",
+          "sha256": "c5b07b365bb1aa12de4316ff9377c901ec21efe93f944b05874ee4ce056042f9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/003_00018.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/003_00018.8s.png",
+          "sha256": "7db27264a118a37f4b413c1c0ec4933aebdd38677542b5729c3555caeb98a191"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/004_00025.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/004_00025.4s.png",
+          "sha256": "a4cc50260990f382fded7af1eff2cfacaf646bf35bbd41e21224ba8ebed975a8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/005_00029.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/005_00029.9s.png",
+          "sha256": "c27788d47bc074429b410d767932180afaecb772235d5500749d0d8423dea0b2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/006_00033.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/006_00033.0s.png",
+          "sha256": "9dce2f869a88475959e91b8a5dbf43810b4a50fc7716b3982c2475df1c3ddfb2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/007_00038.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/007_00038.0s.png",
+          "sha256": "8e88e3c441cd737b43a598732ef86a37624a2793bb3dbb3b0d036c7fd23f2242"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/008_00043.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/008_00043.6s.png",
+          "sha256": "389ced2a24d601f4e56892738e06f9cc8da7b98fa7e080796a4e9308fb6a1e41"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/009_00052.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/009_00052.3s.png",
+          "sha256": "22ae778619bb96c5933ff1dae8b3cbd160b33e9813d92c6cc37799bbba6072e3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/010_00060.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/010_00060.8s.png",
+          "sha256": "a060cb7b16f2f74994f7f91dda2da110d60c5480bf306e735b2f9fee757ebc3b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/011_00071.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/011_00071.4s.png",
+          "sha256": "4035a8567dfa40be29d730cc3bb97f3833741d3f636967687610a5a500df3f28"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/012_00082.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/012_00082.6s.png",
+          "sha256": "754f48c951aae4debdcd8bc3e6d938a12602bbb319b610bdf037fcbce21d003b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/013_00095.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/013_00095.2s.png",
+          "sha256": "41a95c09fb3e539daa1250b864a3e7d6ff5fd4513993638dae92c3359129628f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/014_00121.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/014_00121.1s.png",
+          "sha256": "d2cb96643da767c41df2de0c8f69c71aa0ee9e0c40ba712418970ef892232f5e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/015_00132.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/015_00132.4s.png",
+          "sha256": "1b415fce74b433db4709110f6e505eddcd7beca2e61982bd38b0ba8a4acf49b8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/016_00135.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/016_00135.1s.png",
+          "sha256": "a0ddd6f7d8b501ce37da4899873ff4bbf949fc35b9073ddfe24fcb0a86bc77fa"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/017_00148.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/017_00148.0s.png",
+          "sha256": "d3229cc08888a2370d2b0dfdd8eff7298702bb5fde2691c202e44fe598ead63a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/018_00158.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/018_00158.7s.png",
+          "sha256": "e3cbbb4c4f09b53ef5e5131a972da4a1d5c9dc98fbf855f2e0c2a527f504647d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/019_00171.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/019_00171.6s.png",
+          "sha256": "10e4e9c540646856d65470272e2d088d91d41ddc65cb843dfad7b93d7b3047f8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/020_00183.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/020_00183.1s.png",
+          "sha256": "c68acbe025bb926cd82712a8ba0556f2eabe1b0a42622e297940a462b113431e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/021_00188.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/021_00188.0s.png",
+          "sha256": "3838306511df12a9e2e194a7faf3c5e8cda9699b53fd386bd54e53840a2f11fe"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/022_00199.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/022_00199.8s.png",
+          "sha256": "525cff4f354d1aaa027dbad390e57aa033083b431cb28fe2bf7c731fd956772a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/023_00205.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/023_00205.3s.png",
+          "sha256": "da77a5d564b16f11ee3771be4d2587c9a9bd2abd483da69ec0dcc13c21c7f54c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/024_00213.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/024_00213.7s.png",
+          "sha256": "008cec68ea967cd33ec185b5fd938f60654528a674c5b22d893cb253fd425246"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/025_00241.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/025_00241.7s.png",
+          "sha256": "3f5587650f82b32874822fd4a9aa5fb092ee81892168e19037299546cfa114e7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/026_00246.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/026_00246.9s.png",
+          "sha256": "a51b30d214bc19f299d53b7745bb9e744c70b9e3da16130c3637c829813c4643"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/027_00257.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/027_00257.4s.png",
+          "sha256": "50a7771e188474345dc6b1691d37c630ee42bf77e40c510acebf9b25e38ae2c6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Counting/028_00269.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Counting/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/028_00269.5s.png",
+          "sha256": "a16201608f0a41de0ce8443f90310e98b75cf6f561ae664a12cafe8b8c091817"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Shannon1951",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "410d1f48a13c14ecc9a6b282f746a0176658cb13101082b3d9cdd31d43e453ae",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/008_00073.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00073.7s.png",
+          "sha256": "5c73366c33849ce29b0f61c8be4a61d8325663aee8ba41186207266edf366e00",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Independent smoothed order-5 comparison, 2.02 bits, is separated from ideal-guess rank bounds. Caption fits in right-hand note stack."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "410d1f48a13c14ecc9a6b282f746a0176658cb13101082b3d9cdd31d43e453ae"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "09e82f7b7589e04feb2af5548a72fffa0518523f158974fe14d5d120a9d4bee8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "e0a1137a960287a91689cac7154ceb682c118bdfca087c5de012449808551d12"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/001_00009.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00009.2s.png",
+          "sha256": "2d57ff8599ab92b2cd68773e5218b3df4e3c3d093be30cea0516f43f00d8c335"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/002_00016.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00016.6s.png",
+          "sha256": "4eb9c6b10765c4457d8a4d1920f19875072a0b49c7fe34d1f7233762e3000e86"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/003_00023.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00023.5s.png",
+          "sha256": "88f783727bd8f09fe3c1df029a540f67337b1ce9ac10a3ce87d52b35659bd799"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/004_00036.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00036.4s.png",
+          "sha256": "2c0f8cf2f05c1011b3dc9ae5bf037470cd0de74dd2d3e6c3651bab4a902bc620"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/005_00050.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00050.5s.png",
+          "sha256": "89eeda20699fb61658fcf09b5cf07ffed8a0fd518779925f3e312b7cdbebc12a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/006_00056.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00056.2s.png",
+          "sha256": "af1662320f0e6e99c48341ee3ba7836fa22384b852fe8cf95eae1904d477ac69"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/007_00065.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00065.2s.png",
+          "sha256": "1146f65ed1b36a22749ff1a6ff1fb5beb60fab2d318837dc21cfb7a381c87d82"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/008_00073.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00073.7s.png",
+          "sha256": "5c73366c33849ce29b0f61c8be4a61d8325663aee8ba41186207266edf366e00"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/009_00088.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00088.1s.png",
+          "sha256": "502b117fc7ad86874d06e0b13c27baeb8cd57201f1ace3291273423b95d9f99d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/010_00090.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00090.9s.png",
+          "sha256": "414659f2a30f1067ce00a7fa1beaa66d3b156d7a68440c1b7c7d98567627b21e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/011_00098.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00098.1s.png",
+          "sha256": "5c942d9123d31bd58fd6179451eec7bd003bd4b9429d005f6e662abdfea238c4"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/012_00110.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00110.3s.png",
+          "sha256": "97674248e5ba66f5384d5faf0ff066bf849fac38b568f764215ef75d4135e25c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Shannon1951/013_00117.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00117.3s.png",
+          "sha256": "4f959daf7689371c803d114359d63d8d87a1f3dc74ddd3a69ad6e0c19eeab602"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Likelihood",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "03fd4a1e61eea500fcf32f0300e96431fcb58975813ee7d9c9339c3e556a07ee",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/017_00154.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00154.6s.png",
+          "sha256": "d37dc45b9ac07e0b9aba1f2f08dd85b6388de59e235024ae28665816cc3e0c63",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Shared-logit toy-model qualifier is legible below the pointwise derivative; neither language collides with bottom edge or main formula."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "03fd4a1e61eea500fcf32f0300e96431fcb58975813ee7d9c9339c3e556a07ee"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "d1bfbded3434f85d3d8b2d12a0fde7f4044fce8cdd3ffd3733b9016bcf59d43e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "cdd1ed77280772e6d4725354bbfc9d1de242946c680760f4655650d147318cc8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/001_00012.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00012.9s.png",
+          "sha256": "d26acac28f003f90540ef36ae0058769269f82838657dd419e5f15a769830ad7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/002_00030.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00030.7s.png",
+          "sha256": "ce6d1420a3ac386c546cd66a1a2756e55359c104952791917b049acfea373390"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/003_00035.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00035.5s.png",
+          "sha256": "34514f329d88b798fa36dcf539acf829e44a1606779594bfb9b1c95382261ca5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/004_00038.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00038.8s.png",
+          "sha256": "fd4944d94108be3bec26fb289c615aba182f07b9d28ad3777cb0012bc949aa7e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/005_00051.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00051.3s.png",
+          "sha256": "3e7c78574d3df0cc0e6c1e4dabafccbcdb1abb83d461504b52d615b732f47d07"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/006_00061.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00061.2s.png",
+          "sha256": "26fb1c14a287370d311188bed0142f59bc5dc699f48c0e3492928db27dfa8b34"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/007_00072.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00072.9s.png",
+          "sha256": "808a9443495f37444149e89df7d9819cc37e89667d96c9e8d327beb56f897232"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/008_00075.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00075.8s.png",
+          "sha256": "e84a427f4acc1934e1d2abe1f2230387f58a7c89a58e9f67a410f79169cf4b37"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/009_00097.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00097.0s.png",
+          "sha256": "96ba4a2a187bae484618deba73d8404bd0b0043f6d457a95edc6fa157b9954ab"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/010_00106.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00106.5s.png",
+          "sha256": "a204be37486a5fe7ea99b504a033bea4cbd06f80e7926e8a65bbf9bb113b354e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/011_00114.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00114.0s.png",
+          "sha256": "fdd7af4073059b3a0f8b4c6047559ea0989d0d7d36d803bd2085fb973651e7d9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/012_00120.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00120.8s.png",
+          "sha256": "77ac6292bce29106dd7d802197ea04dec12bdacce7119f8feb73c6af24ee6cea"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/013_00128.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00128.5s.png",
+          "sha256": "4ba309851e779c949bd5695a2848db5bc2f52c542e83758a71abe0fecccdcad3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/014_00133.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00133.5s.png",
+          "sha256": "8619e5123c5a6c14bd2387b89ae6390495ae7573404500a4a47eeab85807f0d2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/015_00144.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00144.4s.png",
+          "sha256": "417f5f4a7b2261aa570cc0d57fcf1228a5536241255e894d4b520637d39f01d7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/016_00150.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00150.9s.png",
+          "sha256": "cbb933f299954a0c0b6d40fba9ed7699491bbcdccf9af947121eda215263938e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/017_00154.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00154.6s.png",
+          "sha256": "d37dc45b9ac07e0b9aba1f2f08dd85b6388de59e235024ae28665816cc3e0c63"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Likelihood/018_00168.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00168.7s.png",
+          "sha256": "913ea3769838717322ff7ad25b58e095666c12958cc97c3c4b450a1c122837d5"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Information",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "977f0959843d3832c11652afea23890c5b153953f4dfefa18f77cab8767cbb01",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/005_00037.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00037.4s.png",
+          "sha256": "7d1293e4ecb241208dfec24933a6e89889c6edb1b9cfc2e15e751c070543afd6",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Joint previous-two-letters qualifier and lag-two-alone value fit on one bottom line. Main entropy and Venn elements remain clear. Memory/control annotations visible in sheet; native detail of memory plot not re-reviewed in this pass."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "977f0959843d3832c11652afea23890c5b153953f4dfefa18f77cab8767cbb01"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "f90ad35605f2ce389f4cf665f230acb56e6d84d976a1468ee502b00b3fba7d73"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "c537c5f13405e66ff42e0d1c0584f702101f57bc081e2f66191f759ceb487c62"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/001_00006.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00006.8s.png",
+          "sha256": "27b03eee4e0887303baece10f01d624c562a5d54fde84c5737b475bc87c8531f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/002_00014.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00014.9s.png",
+          "sha256": "2043321dd79c511b38c13b33737fd5528f3c2bd47d5e8e2e78525e9a3e9a1f0e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/003_00028.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00028.3s.png",
+          "sha256": "33b466634e62a4154cfb93ea06b56a3e9e75c9f1ed9e220c1b881165a38b744a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/004_00034.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00034.8s.png",
+          "sha256": "0b05c7ae687ecb2724fed47b17efa4940f811ea76a290a2b2e7c08a2070cb7c6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/005_00037.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00037.4s.png",
+          "sha256": "7d1293e4ecb241208dfec24933a6e89889c6edb1b9cfc2e15e751c070543afd6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/006_00049.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00049.9s.png",
+          "sha256": "10b85b8a0b2651be4254e0827a7af92498d8ef599ef77a4c999537c2277473b2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/007_00057.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00057.4s.png",
+          "sha256": "44f19acf4b7cee9876048cfea94cb1dd8cb52caf61618e30a42abcf5acb96863"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/008_00073.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00073.1s.png",
+          "sha256": "55e6f47aaf8596e4206737e9c1ebee038f73f06257ff11089675195d8e2c6fb9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/009_00079.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00079.8s.png",
+          "sha256": "8404a09ab0335be4fc1568682ce6f8fb55e6fec60dbcbb7d79686f125a457113"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/010_00083.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00083.1s.png",
+          "sha256": "b73518095c8ebfa4df7bef20c72d8e1fd94f46de3e020b25b39d9f7ef98df7d1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/011_00091.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00091.7s.png",
+          "sha256": "cd6d22163e651e87a6110c5f9309ec9878dafe53065e084a3f6f539e9ad4a304"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/012_00101.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00101.0s.png",
+          "sha256": "9c1d9b729fe44beab2a1eb4e0116da37c6cd80d17ce5a9d32e47323536e70a85"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/013_00105.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00105.6s.png",
+          "sha256": "1d7e088e659727abee0538e1a290e2f04d141736709dc58772246a3dc3059cbc"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/014_00117.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00117.3s.png",
+          "sha256": "a115e6afe2f826d3056c4f6c80d21281c3360e4275452a1491cde0597c3e035a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/015_00131.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00131.5s.png",
+          "sha256": "3f341ed832011661457b812ffaa32888e0dd24fe83825bc8dd2cca6937241275"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Information/016_00158.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00158.3s.png",
+          "sha256": "48361e39b30b7ee0eabb6993fe1ccafb49bd0d71f7d65af851c7c744b3c94709"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Knowledge",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "a7f07fbb53c7895f541c384dbfac55346de006837fdcf3c7b5719bf58bc1cc54",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/006_00062.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00062.6s.png",
+          "sha256": "581b2b838abb59adc7169b21ef1c2316c4e5abff673f43755b46457ac9b3a127",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Two token heatmaps fit and context comparison (13.0 vs 3.5 bits) fits below them. Legends and attribution remain separated. No conclusion about audio or continuous highlight animation."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "a7f07fbb53c7895f541c384dbfac55346de006837fdcf3c7b5719bf58bc1cc54"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "8c1ecae19b6f601d4e40e3b7becfef85ff245b289e0460329c6d53fd218ade30"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "b45a79f9c2f4afcae7e15476f1c6eba96e55e5e0b357802eb2bc566c200c255f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/001_00010.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00010.2s.png",
+          "sha256": "5820c108d3206149b8d8649f5712df30aa66d550c299b84b14f932f6bb0ce0b7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/002_00017.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00017.7s.png",
+          "sha256": "1c8e7ffcf4fcff66038a26b2e69264afaec60d8e355104c954b23a689e11ccd7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/003_00026.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00026.4s.png",
+          "sha256": "d82a81b3ffe456a0793465fc79451fec2f90d3f1f17ccf7817662bd5f0f5038d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/004_00035.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00035.6s.png",
+          "sha256": "ec444b925b54c02c68da3eed244af0f2a6c0a269dd0b3605db63014ddbee480e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/005_00053.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00053.2s.png",
+          "sha256": "8e96660de1fcbf481b2a983e98fc5dd38708b825ae43f361bcb854c010d2f375"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/006_00062.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00062.6s.png",
+          "sha256": "581b2b838abb59adc7169b21ef1c2316c4e5abff673f43755b46457ac9b3a127"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/007_00078.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00078.7s.png",
+          "sha256": "e45e05f7d8221c086e3f01e7c472f3967b4dbea79d3e20893c582ac72c073549"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/008_00085.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00085.7s.png",
+          "sha256": "22fc829a5629b4beaaa2c149ba2cb7a2015b6604c04363f2105d2a0f5722db82"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/009_00094.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00094.3s.png",
+          "sha256": "152c0799afa22792362fdfafe49f0e234b97149f4d1798e28b24c8221ad58e51"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/010_00104.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00104.1s.png",
+          "sha256": "7247b015698e365ef6515b05ba6a41534912a196147daeba12ec296c8194389f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/011_00110.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00110.4s.png",
+          "sha256": "0cf06ba4b79adbec6f8eba680604553a29a5cd8fe7b3ff470349a17f7f970979"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/012_00123.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00123.2s.png",
+          "sha256": "427994591a30e11eec6604fd7b8a8d4574529cf5e8ca4945f7c4b2f3a91f694a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Knowledge/013_00128.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00128.2s.png",
+          "sha256": "0d892967249aa035cb18ccd81416a6f6042d46e4cd447347cee457a30dd6da6d"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Units",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "b6dcf1b90da6a250e91531c94b70e164ce05e693192de21960c228dd38717610",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/011_00109.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00109.7s.png",
+          "sha256": "1f8e3dcba33a1983c5168a34430d66acc9f1189d27bc376da6687b45a1ec769a",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "31 models across 12 benchmarks/domain-matched wording and Pearson -0.93 fit above schematic. Citation remains inside frame."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "b6dcf1b90da6a250e91531c94b70e164ce05e693192de21960c228dd38717610"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "2c2b0116edf663bdc451cb0c0fef91fd0dc0b2c329c978f05e7bfbcf10756dcc"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "b4ddf467c656882a61cc7b1c40b88ff01e1fcb7d71d4ba5fa752a31578ad9529"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/001_00008.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00008.0s.png",
+          "sha256": "d9b84046da301dc15b15e4007c29deebc15a231cdd9f21f01f6829be72f2c61f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/002_00020.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00020.8s.png",
+          "sha256": "078c3f92491121842ab1aa2d7fc97e47b57b36b14982cdb5e67ffa1ff8018aca"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/003_00032.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00032.0s.png",
+          "sha256": "abf088d7b4c1fd16171949fcd327679a376e401753fed0cbf27c9a0e0535455f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/004_00040.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00040.0s.png",
+          "sha256": "1dfadf48ea065f509c2c20dc195061ba40c280c4c07a13a1c9b382609ea0071a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/005_00047.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00047.4s.png",
+          "sha256": "3060b8050c30a1037a910fdb6297a8cd16ec7f1f837b60a884868023f44774d1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/006_00054.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00054.3s.png",
+          "sha256": "0852d0ef6e27efb991909cfbd51cab8055f0274b87a22999c4c528fc84e021b8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/007_00067.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00067.5s.png",
+          "sha256": "9081b48667c3964f2452fdfc46706df22ba205e9b2383df078343cf2b5839f82"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/008_00073.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00073.1s.png",
+          "sha256": "462f81f6736adf62dcd76664c60a7ca012305039e476ba7c74eee4a665194ec5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/009_00082.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00082.6s.png",
+          "sha256": "acba2fdd78ae47f952f27a86b02598de1ffef9bef919c03a3cf35bda678f05bf"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/010_00093.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00093.1s.png",
+          "sha256": "3c94c9ffb3f3a2533c692f165237945bf9a96c8746ca44d6f864580f1855ea39"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Units/011_00109.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00109.7s.png",
+          "sha256": "1f8e3dcba33a1983c5168a34430d66acc9f1189d27bc376da6687b45a1ec769a"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Scoreboard",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "96ff6c3f90cdc4fc3da82cea27b9b674cf91a5a8ee6c3af9ddf63b91c824c473",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/014_00126.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00126.3s.png",
+          "sha256": "5ab590e2ca32e938183e688e65736a73929258ecc88a90752590771b01cefbcd",
+          "inspection": "native_854x480_priority_frame"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/018_00183.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00183.0s.png",
+          "sha256": "e14feb8b684b6fb003ef52b1717a2a6662be08ba5b12aa4fb7e309d21139a381",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "688-byte packed known-length payload qualifier is legible in two bottom lines. Estimated whole-passage size is qualified. Hutter July24,2026 total100,424,672 bytes / 0.80bits per input byte footer and Oct31 check date fit without citation collision."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "96ff6c3f90cdc4fc3da82cea27b9b674cf91a5a8ee6c3af9ddf63b91c824c473"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "72a55c54943201cef11730c62035169cde8225eda1b42943c59634a578a6a7b5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "dd3028e87d4ac93ca42758c35c8ef5774560c6ce8c0854fa1653ca7ddcb145fa"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/001_00005.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00005.3s.png",
+          "sha256": "25e86316cb289ba3558b126a2109c3b88179462c4e932bcd2b98381a7dfc764b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/002_00015.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00015.5s.png",
+          "sha256": "18d44d2296aa5971da3b3f8a85c413f20ed304291c35f6072494459608411c33"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/003_00022.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00022.6s.png",
+          "sha256": "4ccd9129cb72d3d32f2a7f171ddf13628cd06afab5478e8a08ef711e3a089f42"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/004_00027.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00027.5s.png",
+          "sha256": "ff192a5938740f949e6a824005511f4cff31fd6eb28c3b74b33d93b4766b05f0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/005_00034.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00034.3s.png",
+          "sha256": "0319c8eaa60f105fc2237d987f97f213a6662250faea0734d11a925f2fdad803"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/006_00043.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00043.5s.png",
+          "sha256": "e51d51a3c6c02e3ee4b3c2d478bc3fcc2059ab0255d9fd71b7273de8c3445a61"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/007_00067.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00067.6s.png",
+          "sha256": "1a15e6d726e54c927f46d40b09deee793c74618355e8b887038d8fc95572d4fe"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/008_00072.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00072.8s.png",
+          "sha256": "cbc5eb23b454ab118d08fc017dd3b40a7a0fa0949154afad259db16e532dbc59"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/009_00079.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00079.3s.png",
+          "sha256": "9acd888d40497f3c9cfc7d54b5b46b3c21a224098e37a7665900139961f6dcbd"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/010_00084.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00084.5s.png",
+          "sha256": "ed09d0f2ae7156066e5c512ab45e330450949dd2d1d36559a507996440cc2f9e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/011_00090.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00090.8s.png",
+          "sha256": "8b23e49bd1304ad76a4f1e2041ac28df23b9259b8da248efc9897f08321f3e7a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/012_00103.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00103.6s.png",
+          "sha256": "ff6186902298756665c86421df07f161edfa5bcfe8e09f41d04ce1c447a31aa1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/013_00110.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00110.0s.png",
+          "sha256": "b77bfbed95bc22f558e4e7eb45ae72888d42e6df4a1327d8f269aa1bc07c3284"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/014_00126.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00126.3s.png",
+          "sha256": "5ab590e2ca32e938183e688e65736a73929258ecc88a90752590771b01cefbcd"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/015_00137.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00137.9s.png",
+          "sha256": "3eab2ce4120f038dde84edc459b02b52043ee47c8ffad717160ba8b5352e995a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/016_00144.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00144.7s.png",
+          "sha256": "dd093fb6740482b32bbd4dd98d36610fd5774cc2af244dfce14b5e70b39ad44e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/017_00161.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00161.4s.png",
+          "sha256": "9e7c3ac6916c338ceb4b9ec1a7d2352d7129b33b11f88645845614e8c07ceb89"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/018_00183.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00183.0s.png",
+          "sha256": "e14feb8b684b6fb003ef52b1717a2a6662be08ba5b12aa4fb7e309d21139a381"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/019_00213.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/019_00213.4s.png",
+          "sha256": "513687c9e31b573a17b87ac8be8904a5eb762b47735a028fdc6d01024d11b20c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Scoreboard/020_00216.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/020_00216.2s.png",
+          "sha256": "03133c4a31955b0fbfff08777678510bbe1cfc1b8a4c56419b430f2482102596"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "en",
+      "scene": "Outro",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "4bc29f1ff18d26258c8b5a98a1d0e4bef75aaef119d2330ce7788b40dc524fc6",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/000_00038.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00038.5s.png",
+          "sha256": "63fb9cdf7c61cf06ee4348daa1a910aca3de48aede7ecfb6d39ea8286c951c67",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "All eight recap tiles fit. Both narrow and broad Gaussian pairs have curved peaks without the earlier flat cap; curves stay within tile. Bilingual labels fit at native frame size."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "4bc29f1ff18d26258c8b5a98a1d0e4bef75aaef119d2330ce7788b40dc524fc6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "8fcaf1c9b4a1ec4a0afd310725ddb853a50453e31956f5067e0cbfe98ae31749"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/000_00038.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00038.5s.png",
+          "sha256": "63fb9cdf7c61cf06ee4348daa1a910aca3de48aede7ecfb6d39ea8286c951c67"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/001_00070.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00070.1s.png",
+          "sha256": "45c6ff3be03d9ac9b67e4e1a50824b55bba74354cd93e1e0f57171e0d1c54876"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/002_00075.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00075.0s.png",
+          "sha256": "864e5663f518df728e0b328eaf7165edea471a600561f444672d8b9533ae73bc"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/003_00096.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00096.0s.png",
+          "sha256": "b2c60eba247c4c4e00c6738e7d4d347e469ab7631841cdb391f422fa4ebc80bb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/004_00101.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00101.9s.png",
+          "sha256": "2662c4d816012a78507d56f0ff7a5bfa0fd52a18ed03ca4e4929f0eead3f96ca"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/en/Outro/005_00114.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/en/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00114.1s.png",
+          "sha256": "ed8a3ea7908113b69dcf59279c4251aa47f025b498d352484faf716c305bedf1"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Arithmetic",
+      "fingerprint": "55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "needs-review",
+      "inputs_current_at_snapshot": true,
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "bc90fa879ac1f0abef18e266d0de8c07278a1a603eaeca159f14b59c1ebeb6f1",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/026_00269.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/026_00269.5s.png",
+          "sha256": "ba9e931c16cb47e3c9fde8a1a76a6f00a4deccee979757de420a5d766ed5a694",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Kraft normalization/code-weight qualifier fits between bidirectional arrows and compressed-size equation; no clipping or text collision in either language."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/sheet.png",
+          "sha256": "bc90fa879ac1f0abef18e266d0de8c07278a1a603eaeca159f14b59c1ebeb6f1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/result.json",
+          "sha256": "142525678557ad7a73e42da0288e41d6946310e71c86be3136290f64ad459f0b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/000_00001.0s.png",
+          "sha256": "64910952517cc40e8d3bb0b2348ed9d36227e4c3064ee131a7c0e2300baef228"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/001_00006.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/001_00006.1s.png",
+          "sha256": "25f935be1d684b0599eb84e9a2abeb0ba1883fddc0e900e15b140e4cb70b4c52"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/002_00012.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/002_00012.3s.png",
+          "sha256": "40eed1ae21f8307251a8247a64bb7f5e2df4467a5a10052f58cd3cc808a0a56b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/003_00017.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/003_00017.7s.png",
+          "sha256": "4a3527697807bd98e8bece5748dd901e931ad348470b7e2904320048ef36a00e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/004_00028.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/004_00028.6s.png",
+          "sha256": "57759e7e58040c4032bdcd4adfea98b0ee36a075b38b6bd37c11f38732685c70"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/005_00036.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/005_00036.8s.png",
+          "sha256": "c6a738604bf797de9160c9b6eb00a2568904d75a00a8dabbb05ae3b39bd5d908"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/006_00043.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/006_00043.5s.png",
+          "sha256": "9398ed9981ed482f6d7af393199776a9505f52d670a026e6641b57a2c494c408"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/007_00057.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/007_00057.6s.png",
+          "sha256": "b63095e3dbabeb62d36fe04382b504561fb586abfe3a9b03d71f7f8d0d4b52f7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/008_00088.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/008_00088.5s.png",
+          "sha256": "8a9636749c9f50c8fb9a98ef6333968bfa1b5c1fc155d55cdfd5a1e2a3162db5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/009_00104.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/009_00104.1s.png",
+          "sha256": "e88fa37adcbbdb8d9426344eeffcbd972fc215fadec34ef19fcf20177b736b80"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/010_00111.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/010_00111.2s.png",
+          "sha256": "a05b4ecf192f139721fa5f7558527d23751d0d70778daed7a11e139f17d4297e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/011_00121.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/011_00121.3s.png",
+          "sha256": "c1b806b593429088c25923ad4b13ec2308c896f35f22e9e3eee3623e5c3a13fc"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/012_00131.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/012_00131.9s.png",
+          "sha256": "73b3960d4eb3509807c9dea7866bce73420d87f04cc7aa8a902f230daeb846c9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/013_00144.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/013_00144.0s.png",
+          "sha256": "86a4f267945ba2f648476d10d54e0a7c04e3b1d58e939060c1731fe44517b916"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/014_00152.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/014_00152.7s.png",
+          "sha256": "4d1739be20400f3f6c6c39b6cfcc09b5b1c2867a2d2f243b585fb08aab1c21f0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/015_00166.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/015_00166.8s.png",
+          "sha256": "0155ae63b51ee14f122e1d6b2c8a86d819b8c19f251ca5fd913c09a88acecc3c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/016_00169.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/016_00169.2s.png",
+          "sha256": "fe5a34cbc2d681fa545a576b885dbe37ec483e4de74eb000dbbaa4bad9e924a3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/017_00174.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/017_00174.7s.png",
+          "sha256": "fb3007e08bff8e040b742d0934b477dd6f93c518759665a536534d352e052efb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/018_00184.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/018_00184.9s.png",
+          "sha256": "763108ec5ef51e0043d32389261459fe1a7eb71a4f23eda9c6b98d8a15e1e9ea"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/019_00191.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/019_00191.0s.png",
+          "sha256": "3b59b259d254a98309c44a033ca89532dd1944a614f39935babda88bb62ada6c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/020_00202.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/020_00202.8s.png",
+          "sha256": "d7f6be8287f26ce355cd35878860546486e3e88812081d5098db8b56f0bbb6cd"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/021_00214.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/021_00214.4s.png",
+          "sha256": "0d07a5b1aabf811ad4622c7d5412725904ae27b83c9b14ca973518e00b18c026"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/022_00239.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/022_00239.1s.png",
+          "sha256": "38c250e3d4c9522c8dbb422a524343df09a72e8da4888906dcb7d8d4ce74b5b4"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/023_00241.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/023_00241.3s.png",
+          "sha256": "2d208fe7ea496f00929199d45f8f7fc69dd78d941ae18ba97af7ea16d3c84b00"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/024_00254.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/024_00254.8s.png",
+          "sha256": "98ec25476b5912319c26fc82264f213c1d372b138b3316fb6fdd1aa1163eb60c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/025_00259.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/025_00259.4s.png",
+          "sha256": "7626dac0da2cab8ee206d84cd30912c5f400fb07da87a0ad4e791ccdaea1de6a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/026_00269.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/026_00269.5s.png",
+          "sha256": "ba9e931c16cb47e3c9fde8a1a76a6f00a4deccee979757de420a5d766ed5a694"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Arithmetic/027_00291.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Arithmetic/55f0083d2b24237cdfe45313eac0318f72ad00827b57c760d3dd81d4fb072045/027_00291.3s.png",
+          "sha256": "3729d4c36e7b560b9f07bc3e568ec1d9b793751b43e5e977aec80c9e22a99fcb"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Counting",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": false,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "5c57a3836bca9f62e992c10ec93675eda9d56bbc9276e211471aaf6b5ec0f6a8",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/014_00104.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00104.2s.png",
+          "sha256": "8949083c25292be89c1017161ad6daedb0120c0c30a257c5e52b829fb2719869",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "The selected minimum is explicitly labeled best on this scored passage. Caption fits above the k=5 point and remains legible; linework crosses the plot area as intended."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "5c57a3836bca9f62e992c10ec93675eda9d56bbc9276e211471aaf6b5ec0f6a8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "b81cb9155ae0284e75926734fc6b7412ee4860d35f9b0f6e8c7eec3f7460a4e9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "a3b1527e8f61728a9907242d4ee78d6613c3b5380f90e2c781ec8a4c31635f32"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/001_00008.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00008.9s.png",
+          "sha256": "c5f47efc47ffa020191b6f2a15c95f552beb4046f8ee143ab0b2152da3d2878f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/002_00013.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00013.0s.png",
+          "sha256": "85e43e4575246fe3a6e8fabfd84f10b17fd39326d25c51814f18ac84d804b73f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/003_00015.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00015.7s.png",
+          "sha256": "8aea17f5404bdc427664ed81e3bf776cbe6198cbf4cbe30e26851860441b11e8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/004_00020.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00020.1s.png",
+          "sha256": "7bed790fa7fc9f8ee17fe640a48d4103983dea192097c30f5733536f6fb91269"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/005_00027.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00027.4s.png",
+          "sha256": "8eb7466de55e63bac1da39ce731912335ad6a3bd0e387db8f2b06374aabb8068"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/006_00032.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00032.3s.png",
+          "sha256": "6f5ce5f62a6662b67a08efb669360bcd3e7ca83658295c6e9db91717ec0d14a3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/007_00035.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00035.6s.png",
+          "sha256": "111ca04c84af7ac5c3cb296e0e3640a92228da6bf5ca580d665730b1f33787a6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/008_00041.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00041.8s.png",
+          "sha256": "43a1e3083e6c9c87e313b61f1ccb8999d83a6782cb9f7a4678e223c96f29a746"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/009_00046.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00046.7s.png",
+          "sha256": "9f6e7affd5f18be9d0c6017446f15667a8c9946b0cccbadc915f42f946dcfec7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/010_00056.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00056.3s.png",
+          "sha256": "357e3392f579c457f77ac3868d3c1fa182f38782ef02b52a0b4474cb81c82872"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/011_00065.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00065.6s.png",
+          "sha256": "f97b24a9a3d4a511511b68963b08302c744d386e37f7cc40246e879bcbb18996"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/012_00077.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00077.2s.png",
+          "sha256": "842910f3338a30fee1a491f8e0d9557f8a64daba5d7bc6cc603d41f11b6102c5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/013_00090.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00090.0s.png",
+          "sha256": "a39ba04b4986348d605c9b7f59d12f1c2f0e59c0800663bb54ebbf4e301c77a7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/014_00104.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00104.2s.png",
+          "sha256": "8949083c25292be89c1017161ad6daedb0120c0c30a257c5e52b829fb2719869"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/015_00129.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00129.8s.png",
+          "sha256": "4499c763de85d5e0b175e4129ebf5494d513dfc388805045aaf34bf8249ec145"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/016_00133.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00133.3s.png",
+          "sha256": "f0a541e56ef8dc257504885b4df485ffd22d8c5662fb7fb37a1675cd6550ee4b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/017_00147.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00147.7s.png",
+          "sha256": "fd43c44da71426da91d62fe5e8a05caa68afb17e0de8e181d986a5f8084d8e19"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/018_00151.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00151.0s.png",
+          "sha256": "d988b0381d64df080c76b3144551072ea64a5f730d0504c5e68dc607acd5d2e3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/019_00163.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/019_00163.9s.png",
+          "sha256": "b62af38fde63c5d51b09c1f022c5601c576fbcd4046e4a1cc4a80ea5ae794c41"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/020_00178.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/020_00178.2s.png",
+          "sha256": "a1fe437a75403135c5bf6e7a28eaa079d20374613676311438ff6adbed850d7d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/021_00190.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/021_00190.9s.png",
+          "sha256": "c96258406676fc0880599749a64c81240ebca6acbd4ba3c443a2d4a609353a38"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/022_00199.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/022_00199.9s.png",
+          "sha256": "fa9514a0a4598d4f4bb851de28397decb7d1c7ee421fd20bdf4e6a32d70c87a0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/023_00205.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/023_00205.6s.png",
+          "sha256": "1d6314e1bc752c19be38401078dc6c520b8533528d5fa39c11cb0715f86d46ad"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/024_00218.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/024_00218.0s.png",
+          "sha256": "e41d9d0b323bdd4d3ad3e6f79365380dbb600506a46baf943f4364d74c64df78"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/025_00225.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/025_00225.5s.png",
+          "sha256": "3072d069e725090ebf0e0b10a5c0b61cedc9b60d18b8f738a3e706d614857869"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/026_00236.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/026_00236.0s.png",
+          "sha256": "83c4cabd5ba554cbbf66c0fed9ed8e9310aa7a21cdb4a43bb6ee059137c8c7fb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/027_00267.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/027_00267.3s.png",
+          "sha256": "8da75b39ee4b7183753ca2cce96b5a8ea6976af3f419d82ea678ac547d8e5861"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/028_00271.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/028_00271.6s.png",
+          "sha256": "08feeff49761b87132e1252e7b6b59c73535782f477a7eb93f595f38e2b0a5ad"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/029_00283.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/029_00283.4s.png",
+          "sha256": "a3210d3983e389b04a0791db5d6dc6b5ef05a3dc1e5b5b1d0ffb475a4d721f64"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Counting/030_00295.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Counting/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/030_00295.9s.png",
+          "sha256": "e7bf3cbd8d5882288e0b3350907dd6f5cefd2897ea4b02345e14dcff43208e5e"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Shannon1951",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": false,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "5e5b557bcd03b77ff2bcf6cae7b7269550b88e6bbeebacdac6f70bc00f877e8b",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/008_00076.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00076.8s.png",
+          "sha256": "e1eb34d5382de9033dbbc5decc46198e5e65970cf171bea343333e296d9b917d",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Independent smoothed order-5 comparison, 2.02 bits, is separated from ideal-guess rank bounds. Caption fits in right-hand note stack."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "5e5b557bcd03b77ff2bcf6cae7b7269550b88e6bbeebacdac6f70bc00f877e8b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "d3e6d42c9e37046b01f1bfe7fd879a307c1b96e0957411a3b35bc8524e6049f1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "64df6050f85e0c3f41e6007140445aee1b07afd454f00cbba4aefdc648a16a54"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/001_00008.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00008.9s.png",
+          "sha256": "799839bf8fdce9c2251a8690d6bed70add790c887efb63f0f855aa19b490be6b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/002_00018.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00018.8s.png",
+          "sha256": "f440f6fffef5582e9b4bd0412956d73b0114444f0090e1ed38bdc2917cb7c01b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/003_00025.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00025.3s.png",
+          "sha256": "1e7fa20f54343984214be483089c63aa11ca381e92e4d15418aebcdb3451cc01"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/004_00037.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00037.9s.png",
+          "sha256": "2a2b3675a395e6d7828bf6b9518961cf384c97d5c6e502fd79ae035d9e29a3c6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/005_00052.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00052.1s.png",
+          "sha256": "59e0433f4ef988d0fca8d04f19b517b47fcead49ce48ae3ae90f3f28ae6b464d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/006_00059.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00059.0s.png",
+          "sha256": "7102649b3a4c431ef29b36786d9686c6abac8ff983a0c3ffeeda3dce0a28f5a6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/007_00067.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00067.8s.png",
+          "sha256": "6222a513213495608e0de41efb88974d29927b7cce7dfae4283e03a6caab8648"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/008_00076.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00076.8s.png",
+          "sha256": "e1eb34d5382de9033dbbc5decc46198e5e65970cf171bea343333e296d9b917d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/009_00093.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00093.7s.png",
+          "sha256": "f01874918dd9a5304e098d9e51e2da725a9aca003acf3b816781a3f3e8487fe1"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/010_00097.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00097.4s.png",
+          "sha256": "7de0ad4efe579d58db125f3fe8e2a3de956d44aa4abb7733cba1ecf17bd5ef21"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/011_00104.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00104.6s.png",
+          "sha256": "36540f60f75b6d16f3c64954b17a75a8c9903ee7b5a4f6b34c44fefd5cc1ac29"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/012_00119.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00119.6s.png",
+          "sha256": "3c10e61a2dc7bfe28f9501163222a124e76df75f0dc932a5bb85bcfede7cfefc"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Shannon1951/013_00127.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Shannon1951/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00127.0s.png",
+          "sha256": "c846a64ec3b26651b99c98e2b96f67c637a5260adc8e3f9f788e54d4bb4cf87f"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Likelihood",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "b0f80a02c07025078afd2c0da08d23f16dfd52deca29dbef70c17b9e9d401eed",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/018_00159.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00159.0s.png",
+          "sha256": "2973ad36ed12d63ec81e196ed9076dd7f9aa480d31ff29460aff229a8b00b5b5",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Shared-logit toy-model qualifier is legible below the pointwise derivative; neither language collides with bottom edge or main formula."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "b0f80a02c07025078afd2c0da08d23f16dfd52deca29dbef70c17b9e9d401eed"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "354f47bb7ee89e59842afb017ac44dc0b2c4115c212c4c316f304a6358e5525a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "77d3c4e91fa33dcfd78e1d06131db6d462b4d533002bbe874545c2149d250238"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/001_00013.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00013.8s.png",
+          "sha256": "f529abb6c738a3e9881cd2f5bce2739c96ee2fc51c72071d7b66a1a64ff19740"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/002_00027.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00027.3s.png",
+          "sha256": "07a819dcaff7fd61b3c1ca2ea9837551828089abad4112004be4e675e665f2d9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/003_00034.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00034.3s.png",
+          "sha256": "1c9fdf3d5a4442409e0cbe225772fa2d882f1637d0903480be9903b5ac8d93ce"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/004_00039.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00039.4s.png",
+          "sha256": "bcebb0960f806dcc7ab2e801e09dfbc4131f34d0f33c8e2348968532aab299e6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/005_00043.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00043.1s.png",
+          "sha256": "e415ca4a0d8641a520dd87ea3b2cf25eaa6a22a2793b232e940d7dce13516f01"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/006_00055.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00055.0s.png",
+          "sha256": "a6c827febcbab9f9f9804c2a9dde8beb80d86a60fc4867fad4df555df79ed265"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/007_00064.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00064.5s.png",
+          "sha256": "845abeb259d47ce14f5285f263c339a5471a0021a548ed0c14ed6e854955a6b2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/008_00080.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00080.0s.png",
+          "sha256": "d37d1793463d5f54e16553ea1571c7c469b644b6f569f4c71bfaae1c9aaba162"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/009_00083.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00083.3s.png",
+          "sha256": "a526a660857c4bf7df2257d7887eac712bdb93332786f5f0f3508e605a84d902"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/010_00106.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00106.1s.png",
+          "sha256": "bbd2e19e1586560901be67a56c011ea8a2b7606b3222cf691198c46885ca800c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/011_00114.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00114.2s.png",
+          "sha256": "a56169d6617b95172c91cfa3aa7924bbfc924573d5738e53d2a8dbeb762cc721"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/012_00122.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00122.0s.png",
+          "sha256": "cc07cad74811df7305ef0fe32824ac06c7207d1780121a86b450cb9e86e91d3c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/013_00128.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00128.3s.png",
+          "sha256": "19078a22996060516444b468d42d3b48b35d13f3ee7bf2929955f6c38824064a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/014_00137.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00137.0s.png",
+          "sha256": "3c19455dd38ceaca4cb7e7772f4442c551f174121284208d8b034878fa414a90"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/015_00140.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00140.9s.png",
+          "sha256": "83e0acf13c23070695bfd3813b8ab5219575f23d590222c588bb3b6736b94ffa"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/016_00149.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00149.2s.png",
+          "sha256": "52414e4510226678c2437498bd7fcd53fd96d81577bf706599bb3eab44876ef8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/017_00154.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00154.5s.png",
+          "sha256": "76952a55df54fa10272fddeac2c788f18a7b38bb66271ae89cd0a4bdb03af757"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/018_00159.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00159.0s.png",
+          "sha256": "2973ad36ed12d63ec81e196ed9076dd7f9aa480d31ff29460aff229a8b00b5b5"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Likelihood/019_00179.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Likelihood/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/019_00179.0s.png",
+          "sha256": "4c2e560e1fa2f664a230650606f258b09b037932b1d87c438ac25c9f95159d1c"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Information",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": false,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "36ace3f959c9eda801a86597de35eaf6702fad6402ea6f50d8219371cf720d21",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/005_00041.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00041.5s.png",
+          "sha256": "7a6267db9b56bca8d2260c5e4207005f7005b9a82bad0ae2be8351819f8fc844",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Joint previous-two-letters qualifier and lag-two-alone value fit on one bottom line. Main entropy and Venn elements remain clear. Memory/control annotations visible in sheet; native detail of memory plot not re-reviewed in this pass."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "36ace3f959c9eda801a86597de35eaf6702fad6402ea6f50d8219371cf720d21"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "44000d46254fb192e89fdfb0499cf018a8106752600de63787b019aca39d39e9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "7bd38e416f217cfec78f81c2faaad4a92ae9d47ce45934cc18c88410fe603074"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/001_00007.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00007.0s.png",
+          "sha256": "6d01b706bab9f998534c8a3bc3096fbfc8bf6dce228fefe6999ed3c04ec8d41b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/002_00014.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00014.1s.png",
+          "sha256": "9cf32419d990347f7fea8a86cc90f561ad7885b73a63d5af60d18e337433c993"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/003_00030.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00030.4s.png",
+          "sha256": "25287e9e46f9ed5e402350ef29a187023bdfe3dc8e7381ed1364f28b46b50934"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/004_00038.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00038.3s.png",
+          "sha256": "4a0584580a368dc15d95fd636d62dab85525f9ca6bca5b71c79ecabd934e9e85"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/005_00041.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00041.5s.png",
+          "sha256": "7a6267db9b56bca8d2260c5e4207005f7005b9a82bad0ae2be8351819f8fc844"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/006_00054.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00054.3s.png",
+          "sha256": "1972acf79cf5a4b7e62aa32faf48afc3b6dbab6566c31391ecbf2b878c8daeaa"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/007_00062.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00062.6s.png",
+          "sha256": "7d85f107fb2096744c5a8ac310e24b204761d1ef270ec4d07ff17b720a442e6d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/008_00081.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00081.0s.png",
+          "sha256": "955baa6f1caffcab126e066568eaaecc827b84489d8f78b7d374c9e6ab1608ca"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/009_00088.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00088.1s.png",
+          "sha256": "1cd0fc9baf50378aa56851e442c8c79527dfbd60bd6dce6dc68e447830072a02"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/010_00092.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00092.0s.png",
+          "sha256": "d09b45c46feeea7a15cad02dcb7c77c693873136fe40af3f1c2de7850ae7c43f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/011_00100.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00100.7s.png",
+          "sha256": "8402f001170f6b2fb718121f59bdb77825d086e29f8943a17eb4844da387c291"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/012_00110.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00110.1s.png",
+          "sha256": "2386e27225500b4b5ce057bfad4c8f676ff1fbf8e9b4aa4cd3fd846dd3d76df3"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/013_00114.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00114.9s.png",
+          "sha256": "14a73ed80dd2fb3d1a53e33c1564668fbd1e3aa65a37438334615e957e6df873"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/014_00129.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00129.1s.png",
+          "sha256": "e21ffdf94a753435dfe977971ee16198d27c5399157e0b56b5076a695dc631eb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/015_00143.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00143.9s.png",
+          "sha256": "e721e302f662962610c0e22db00098c6731504938c606ccaa8162152908473b8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Information/016_00173.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Information/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00173.8s.png",
+          "sha256": "e1cf65db9a1337ffc75f59f573aedacbb0faac633637a9d4aba8eeb1c7a72d06"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Knowledge",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "8efb9fe5c31a27640538ca97f6add2c12962a11af4ea424187437856d39251b4",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/006_00063.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00063.7s.png",
+          "sha256": "c0529d5072bdbe1a08a3e7b3d72963db3a45a55a3a3af97a5f4d25c08b5b6ccf",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "Two token heatmaps fit and context comparison (13.0 vs 3.5 bits) fits below them. Legends and attribution remain separated. No conclusion about audio or continuous highlight animation."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "8efb9fe5c31a27640538ca97f6add2c12962a11af4ea424187437856d39251b4"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "de0f58ad4787816e7b116da235e579e74b731cba4b60c7bb5f57a75c0c874135"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "7c6d2161fa52f553c1e0b57d6512664e0f440e13e45ab63136d6d19de44d016d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/001_00009.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00009.3s.png",
+          "sha256": "61b05c429a0c2a82d6369fab86ea8ef42a1e646f699c262c509740635acfd3ff"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/002_00018.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00018.1s.png",
+          "sha256": "3fd3916a1e262cad657350a1d78224f912a238593508679f407103a0436db8d0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/003_00027.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00027.7s.png",
+          "sha256": "53f73795930b4f2ca0a4e87d5ea1472332007db8215da5ea3264255322efbab0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/004_00037.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00037.2s.png",
+          "sha256": "587ff97da5c86a8135d9c6943b416d3699be6b3bb1742917dc699e26dff6d761"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/005_00054.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00054.0s.png",
+          "sha256": "918c46d5d1962c20db678dc1d1a6f7565792c124bcbb25a5106d83afd84c34b2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/006_00063.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00063.7s.png",
+          "sha256": "c0529d5072bdbe1a08a3e7b3d72963db3a45a55a3a3af97a5f4d25c08b5b6ccf"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/007_00082.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00082.0s.png",
+          "sha256": "3a2b2795294c84186b537877dac49b1fb099c1c572f0da82453336c782b30e9c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/008_00085.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00085.7s.png",
+          "sha256": "ddb10bd692f7c282bb003d5a26c8d0f4e785d0f7fc70721e6977ceb3d4588b67"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/009_00088.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00088.6s.png",
+          "sha256": "a142fada6ff4b40128d2af93baeb6de4c4690ec11b7c19d728b58d4d95a2046a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/010_00096.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00096.4s.png",
+          "sha256": "70f3bbbde58fc97a57f7ba5689d176911f25d84d93f5e5d540dc35ade85c4bd8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/011_00105.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00105.8s.png",
+          "sha256": "2b34d5067c0687cdf003c5181d0b1b92196cbbb6533bb39c9eb3b82323c0a004"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/012_00112.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00112.4s.png",
+          "sha256": "4f1dde3fc066ae7be4f9fd2a8a9fa82c9570777960672751328096f8a11b46f6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/013_00125.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00125.9s.png",
+          "sha256": "6c62c08a122118c0972b3962673510af4ae5ee40653547d5c3d751039cf6bc83"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Knowledge/014_00132.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Knowledge/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00132.4s.png",
+          "sha256": "32cdd41a6788ff1c4ab8f5c45d0e0c6eef086191f376306896720b7f7ba1b4a5"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Units",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": false,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "6801fda4efb5c3669e93dda370c56ade3c959e83237797dc9fd1a60fae6a9961",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/011_00122.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00122.9s.png",
+          "sha256": "fced376acdfa15e6cf479d05eb4d5e42ec4ea7b5c5c29514a895cec9b70d88b9",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "31 models across 12 benchmarks/domain-matched wording and Pearson -0.93 fit above schematic. Citation remains inside frame."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "6801fda4efb5c3669e93dda370c56ade3c959e83237797dc9fd1a60fae6a9961"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "b11d2d7459b02fb55a8a256c90ea4d2da369c846df41a3423b95e0fa06f2d9e0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "b71bdeec67483d3a25d1664a13aa64f6910d9eae6bb72aac225ff7c3b086b0d0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/001_00008.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00008.0s.png",
+          "sha256": "85ec5a8f5d915f819b965deacb6749c7deec269f0bb05e0a1c02158b0aa25caf"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/002_00022.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00022.1s.png",
+          "sha256": "2d9692b540e0fc722192993ee725e863ce5dc550e500f5cde1c9c2f20440eb5e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/003_00033.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00033.1s.png",
+          "sha256": "76ee77939f2ccf43b628a67c2a424ba3470e7204c11a4aeee705a23ca6fe205c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/004_00042.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00042.3s.png",
+          "sha256": "7448a7da90b4355c6c327ba58767b50f105f376aa2e7500d2075e0f89b7412db"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/005_00050.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00050.1s.png",
+          "sha256": "49d9be39fa7880980efed078fc68be0b4474467ccee658aea2650056bf6942e8"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/006_00059.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00059.2s.png",
+          "sha256": "0aea80e2e6417e286dba0d3cb39928b17cafa548c6e2e850923b4ffd8d3994fb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/007_00070.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00070.5s.png",
+          "sha256": "8ad32cb585ef0eedd2245500b1e3795d9602aa07efbeead3c0fcecbc09e78b78"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/008_00078.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00078.1s.png",
+          "sha256": "f2d56235f89f6a50bd44abe7b92a2b802e1a551807404762f925ddd2887d427a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/009_00090.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00090.3s.png",
+          "sha256": "e393c240f06154770724ba74f995d9fe0180dfbc6c4f0a423041efb172a0cb28"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/010_00100.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00100.5s.png",
+          "sha256": "1ad9e03dec43393cd32cab3f2e2936287c8dac23db90ea8dd5567c45e8a0cb0e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Units/011_00122.9s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Units/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00122.9s.png",
+          "sha256": "fced376acdfa15e6cf479d05eb4d5e42ec4ea7b5c5c29514a895cec9b70d88b9"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Scoreboard",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "passed",
+      "inputs_current_at_snapshot": true,
+      "warnings": [],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "44236f985a462436a9cec24d1e4b9779fcc16990e15a5f2972b96fc4b7308c98",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/014_00125.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00125.1s.png",
+          "sha256": "8e75f46b1ed9e8b8e1257b3f54bba9bf2581aa4890860d0563217b692656c812",
+          "inspection": "native_854x480_priority_frame"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/018_00182.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00182.8s.png",
+          "sha256": "19390a6f91b93df216beccf3bc4c184c1be5c3f132ecd8937d773aa4e00185b7",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "688-byte packed known-length payload qualifier is legible in two bottom lines. Estimated whole-passage size is qualified. Hutter July24,2026 total100,424,672 bytes / 0.80bits per input byte footer and Oct31 check date fit without citation collision."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "44236f985a462436a9cec24d1e4b9779fcc16990e15a5f2972b96fc4b7308c98"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "abfef11117cac504d02922eaedc9958f9a7feeed7cb0f46c1a27bf0cf03d82d2"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/000_00001.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00001.0s.png",
+          "sha256": "fa2b151bf12d007c35d477da5f708ac48f9e6876fe724dec523d4a2ecbfb3d7d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/001_00004.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00004.7s.png",
+          "sha256": "f84c80863018f0df26a521b6d535eeeae958e06ce4b15505f873bd8e2f7432f9"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/002_00016.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00016.6s.png",
+          "sha256": "89e691238d835e8eaa68c440be43eb857c1217daed05bd3802e80a3727f37122"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/003_00024.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00024.0s.png",
+          "sha256": "88faf58392c7df621ccdea15ef499e1c586a461dae67af61c698589b1308bb41"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/004_00029.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00029.1s.png",
+          "sha256": "fdb500dd1dd3e23d1b413d2425fc1f627fb4b3a431e46deff36450fbfa963b00"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/005_00036.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00036.0s.png",
+          "sha256": "d7a1e5aa07de3013ae0bf521ae82e8abf65fe374783a8ec8c3621dd3af701410"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/006_00043.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/006_00043.0s.png",
+          "sha256": "6949747b0dc348ca7654b749a41779e6416a8a01f5e5f98e260efb74e8d6a73a"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/007_00067.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/007_00067.3s.png",
+          "sha256": "741b3a1b65f474d6552fd253e96fbaf0dc0d029eca2c902f4f4baccc2cafb0e4"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/008_00072.0s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/008_00072.0s.png",
+          "sha256": "f49447a0612797e72b1da6cd07e4e3b671cd41aa2e350404faa0b6c0026a143b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/009_00077.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/009_00077.5s.png",
+          "sha256": "99c35b1346d1823b3b94822fa1934408b69369fb77bdd530637e957f158d78a0"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/010_00081.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/010_00081.6s.png",
+          "sha256": "88037db5502264d9e5db8dad809415ac30072d2a7bc8054a2110d5a1ccc3d2da"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/011_00087.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/011_00087.1s.png",
+          "sha256": "44b198d4cc8663d8502b6ec0db0d3fb76e7fb46def20e693c4a20fce0c0d530f"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/012_00100.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/012_00100.3s.png",
+          "sha256": "7ef3f4390005367f5576fcca15bec01a59ada369e3902cec18104036727ee89e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/013_00107.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/013_00107.8s.png",
+          "sha256": "c5a800d077a62fdf023239de6fdf4cdcd0ad5465a1ae30b818326b99e746f238"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/014_00125.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/014_00125.1s.png",
+          "sha256": "8e75f46b1ed9e8b8e1257b3f54bba9bf2581aa4890860d0563217b692656c812"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/015_00135.6s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/015_00135.6s.png",
+          "sha256": "bfc1e4cfba6baff8881355312f7c0c79074ca5f608e54d1d0faa7fbe6c7781bb"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/016_00141.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/016_00141.8s.png",
+          "sha256": "a333eee0dc5cfaac7b99d56c1d37323741090b3a474e327a8f2031a63ec16f6c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/017_00161.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/017_00161.1s.png",
+          "sha256": "4e0df873d1d4c60b98efe36699cc16261e9759265d75b69fa6f2b3e44dbe4b2b"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/018_00182.8s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/018_00182.8s.png",
+          "sha256": "19390a6f91b93df216beccf3bc4c184c1be5c3f132ecd8937d773aa4e00185b7"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/019_00211.7s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/019_00211.7s.png",
+          "sha256": "fd845faf6277d5f4191f85c620bea9b6e7e1441556050850fb10cf12dae7c880"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/020_00214.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/020_00214.3s.png",
+          "sha256": "e9a68b656893be9074c154dc0f9600b8f1e4446fc98d03bdfb631b9dc7a795a6"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/021_00217.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/021_00217.1s.png",
+          "sha256": "62e95b4607963435e2cc90d5bd4ae158af3b51340da4380474d925c084070b4d"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Scoreboard/022_00220.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Scoreboard/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/022_00220.5s.png",
+          "sha256": "2e5a095c2b9a6baba81ba2e9e72dc6d146258d3f27766860cbdf374325503d81"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    },
+    {
+      "lang": "zh",
+      "scene": "Outro",
+      "fingerprint": "a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40",
+      "current_fingerprint_at_snapshot": "7a66a4a4b49aae2c6ebe700df4dc41e84e7ed230fe8029cafa387d5537a72c56",
+      "source_current_at_snapshot": false,
+      "tail_content_marker_present": true,
+      "status": "needs-review",
+      "inputs_current_at_snapshot": true,
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "inspected_files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "295b43f7a205911b0365797f94177ada107ee1fef47e1783da8af86d95093081",
+          "inspection": "sheet_overview"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/000_00044.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00044.1s.png",
+          "sha256": "1c0818350fdc96f0852dcf76f7ff38c88fdac0ae6502e9d9e1334b9ca76e8e43",
+          "inspection": "native_854x480_priority_frame"
+        }
+      ],
+      "findings": [
+        {
+          "severity": "observation",
+          "result": "no_concrete_layout_defect_observed",
+          "detail": "All eight recap tiles fit. Both narrow and broad Gaussian pairs have curved peaks without the earlier flat cap; curves stay within tile. Bilingual labels fit at native frame size."
+        }
+      ],
+      "files": [
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/sheet.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/sheet.png",
+          "sha256": "295b43f7a205911b0365797f94177ada107ee1fef47e1783da8af86d95093081"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/result.json",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/result.json",
+          "sha256": "c5d30c693106987e4b8408fbfc6bc58d923521a8bd54107d7efbcc5c320ec381"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/000_00044.1s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/000_00044.1s.png",
+          "sha256": "1c0818350fdc96f0852dcf76f7ff38c88fdac0ae6502e9d9e1334b9ca76e8e43"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/001_00081.3s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/001_00081.3s.png",
+          "sha256": "da41a5e60e386a0a16bbe9f5358c0b8ac62b94b4677bae7b59d12355b4fd143c"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/002_00086.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/002_00086.2s.png",
+          "sha256": "d32dd12e49f1cdbce220d1b828791b101f336b18a63537db3335c96ac87da627"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/003_00107.5s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/003_00107.5s.png",
+          "sha256": "4e2bcf3a8affa57c1a2217a483f8d0e2e47263ad6054391beb5bee18a23f6544"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/004_00116.2s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/004_00116.2s.png",
+          "sha256": "63c338336831b0204b4b879a1f45f2d2dfa14b79d2ea4006f2eed71e6955ec8e"
+        },
+        {
+          "original": "/workspace/explainer-videos/renders/qa/series/ai1/zh/Outro/005_00129.4s.png",
+          "snapshot": "/workspace/runtime/ai1-tail-visual-snapshots/zh/Outro/a3b80ce4acb50a631be6be6f23cb1bf432e0ef923e839b119d296d0d22fc4a40/005_00129.4s.png",
+          "sha256": "026afa46e4cc45d8aa844c16840e479e6ba69f4ccc25939ef0407325645e71d8"
+        }
+      ],
+      "tail_batch_visually_confirmed": true,
+      "english_content_marker_limitation": "Marker can be false for Chinese translated text; visible revised caption and fingerprint used to establish tail-batch capture.",
+      "review_scope": "Sampled endpoint contact-sheet overview plus listed native priority frames only; no continuous playback/audio review."
+    }
+  ]
+}

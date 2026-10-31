@@ -218,3 +218,25 @@ McMillan equation and its explanation stack vertically on the left, clear of the
 endpoint rechecks passed without warnings; their native frames were visually inspected.
 [Before/after images and capture fingerprints](evidence/ai1-layout/) retain the actual evidence. This is endpoint
 layout coverage, not continuous animation/playback approval. Focused layout/QA tests also passed (21 tests).
+
+## Stronger temporal coverage and Part 2 measured verification
+
+All34 Part1 bilingual endpoint sheets were inspected:707 primary endpoint thumbnails,46 priority native views,
+plus focused repairs/reconciliation. Detailed [head/tail visual records](evidence/ai1-endpoint-review/) preserve
+actual hashes and earlier/current distinctions. New captures are only marked reviewed when their sheet hash
+collides exactly with an inspected asset; fresh content requires a new review.
+
+`tools/qa_motion.py` decodes every source frame and detects RGB changes at reduced resolution, extracting
+transition boundaries/midpoints, at most one-second spacing within detected motion, and static midpoints into
+readable chronological pages. Six real-FFmpeg regressions pass, including a late one-frame flash and an
+equal-luminance color change that grayscale misses. The current Chinese Hook audit decoded3569frames, found64
+motion intervals, and extracted368native frames onto46sheets. [Exact times/settings/provenance](evidence/ai1-temporal/zh-hook-audit.json)
+are retained; page-by-page visual review is ongoing. This does not certify undetected subthreshold changes or
+continuous perceptual playback. Subsequent unrelated Part2 caption additions make the conservative whole-part
+source fingerprint stale; the audit retains the original movie hash and capture provenance.
+
+Part2's reproduced repairs and real default TSP/resolution outcomes are [documented](ai2-repairs.md). All116
+repository tests pass. The default resolution result revealed an additional false success narrative; the scene
+now reports a capped saturation run honestly, without raising the cap. Part2 full computation/source review is
+underway; no Part2 rendered or audio sign-off is claimed. Part1 Information audio has reached5/6 blocks; ASR
+pronunciation leads remain unresolved despite clean waveform/alignment checks.
