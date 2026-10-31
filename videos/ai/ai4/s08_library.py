@@ -15,6 +15,17 @@ def source(fn) -> str:
     return textwrap.dedent(inspect.getsource(fn)).rstrip()
 
 
+def gap_report(gap: float) -> str:
+    """Describe the recorded absolute error without inferring matching decimals."""
+    gap = float(gap)
+    if not math.isfinite(gap) or gap < 0:
+        raise ValueError("a gradient-check gap must be finite and non-negative")
+    if gap == 0:
+        return "the largest absolute difference is exactly zero in this comparison"
+    mantissa, exponent = f"{gap:.2e}".split("e")
+    return f"the largest absolute difference is {mantissa} times ten to the {int(exponent)}"
+
+
 class Library(VoiceoverScene):
     def construct(self):
         self.card()
@@ -53,6 +64,8 @@ class Library(VoiceoverScene):
         for c in (mul, back):
             if c.width > 13.0:
                 c.width = 13.0
+            if c.height > 5.7:
+                c.height = 5.7
         path = label(r"\texttt{explainer/ai/autodiff.py}", font_size=26, color=GREY_B).to_edge(UP, buff=0.35)
         note1 = label(r"$\partial(ab)/\partial a = b$: \ the incoming gradient, times the other input", font_size=28,
                       color=GRAD).to_edge(DOWN, buff=0.45)
@@ -77,11 +90,13 @@ class Library(VoiceoverScene):
     # ------------------------------------------------------------------
     def check(self):
         c = load("check")
-        assert c["fd_diff"] < 1e-9 and c["torch_diff"] < 1e-15
+        fd_result = gap_report(c["fd_diff"])
+        pt_result = gap_report(c["torch_diff"])
         head = label(rf"A small network: \ ${c['n_params']}$ numbers, \ every gradient checked", font_size=32)
         head.to_edge(UP, buff=0.45)
         rows = VGroup()
-        hdr = VGroup(label(r"ours", font_size=26, color=GRAD), label(r"nudge by $10^{-6}$", font_size=26, color=VALUE))
+        hdr = VGroup(label(r"ours", font_size=26, color=GRAD),
+                     label(r"central difference, \ $h = 10^{-6}$", font_size=24, color=VALUE))
         for ours, fd in c["shown"]:
             rows.add(VGroup(MathTex(f"{ours:+.10f}", font_size=30, color=GRAD), MathTex(f"{fd:+.10f}", font_size=30,
                                                                                     color=VALUE)))
@@ -92,23 +107,17 @@ class Library(VoiceoverScene):
         for k in range(2):
             hdr[k].set_x(rows[0][k].get_x())
 
-        def sci(x):
-            e = int(f"{x:e}".split("e")[1])
-            return rf"{x / 10 ** e:.1f} \times 10^{{{e}}}"
-
         res = VGroup(
-            MathTex(r"\text{finite differences: \ worst gap } " + sci(c["fd_diff"]), font_size=34, color=VALUE),
-            MathTex(r"\text{PyTorch: \ worst gap } " + sci(c["torch_diff"]), font_size=34, color=GRAD),
+            MathTex(r"\text{finite differences: \ max absolute error } " + sci(c["fd_diff"]), font_size=30, color=VALUE),
+            MathTex(r"\text{PyTorch: \ max absolute error } " + sci(c["torch_diff"]), font_size=30, color=GRAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to([3.6, -0.1, 0])
-        if res.get_right()[0] > 6.9:
-            res.shift(LEFT * (res.get_right()[0] - 6.9))
-        fd_digits = int(math.floor(-math.log10(c["fd_diff"])))
-        pt_digits = int(math.floor(-math.log10(max(c["torch_diff"], 1e-18))))
+        if res.get_right()[0] > 6.65:
+            res.shift(LEFT * (res.get_right()[0] - 6.65))
         with self.voiceover(
-            "Does it work? <bookmark mark='a'/> Nudge each number by a millionth, measure how much the loss changes, "
-            f"and compare: the gradients agree to {fd_digits} decimal places, which, as chapter ten shows, is all a "
-            "nudge can tell. <bookmark mark='b'/> Against PyTorch, the library most of today's models are trained "
-            f"with, they agree to {pt_digits} decimal places, the limit of the computer's own arithmetic."
+            "Does it work? <bookmark mark='a'/> Nudge each checked number a millionth in both directions, "
+            f"take the central difference, and compare: {fd_result}. Chapter ten explains the limits of that "
+            "numerical check. <bookmark mark='b'/> Against PyTorch, an independent automatic differentiation "
+            f"implementation, {pt_result}. These are absolute errors, not a count of matching printed digits."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -170,8 +179,8 @@ class Library(VoiceoverScene):
                       run_time=2.0)
             self.play(FadeIn(hist, shift=UP * 0.2))
             vo.wait_until("b")
-            for k, an in enumerate(fwd):
-                self.play(an, lines[min(k + 1, len(lines) - 1)].animate.set_color(VALUE), run_time=0.35)
+            for (_, destination), an in zip(edges, fwd):
+                self.play(an, lines[int(destination)].animate.set_color(VALUE), run_time=0.35)
             vo.wait_until("c")
             for an in bwd:
                 self.play(an, run_time=0.35)

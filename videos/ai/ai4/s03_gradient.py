@@ -30,7 +30,9 @@ class Gradient(VoiceoverScene, ThreeDScene):
         axes = ThreeDAxes(x_range=[-4, 4, 1], y_range=[-3, 3, 1], z_range=[0, 4, 1], x_length=8, y_length=6, z_length=2.6,
                           axis_config={"stroke_color": GREY_C, "include_ticks": False, "include_tip": False}).shift(DOWN * 0.9)
         surf = loss_surface(axes, bowl, [-4, 4], [-3, 3], resolution=(36, 28), z_lo=0.2, z_hi=4.2)
-        p0 = np.array([-2.6, 1.6])
+        # Keep the illustrated plane at the point used by the measured errors
+        # and the directional-derivative sweep, so their captions describe it.
+        p0 = np.array(BOWL_P0)
         ball = surface_ball(axes, bowl, *p0, color=WHITE, radius=0.12)
         sx = ParametricFunction(lambda t: axes.c2p(t, p0[1], bowl(t, p0[1])) + np.array([0, 0, 0.03]), t_range=[-4, 4],
                                 color=C.TRUE_P, stroke_width=4)
@@ -107,12 +109,13 @@ class Gradient(VoiceoverScene, ThreeDScene):
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.6, buff=0.55, edge=6.9)
         head = label(r"why the gradient is the steepest direction", font_size=30, color=GREY_A).to_edge(UP, buff=0.3)
         thm = theorem_card(r"steepest ascent",
-                           r"If $\nabla f \ne 0$, \ of all unit directions, $\nabla f / \|\nabla f\|$ climbs fastest, "
+                           r"If $f$ is differentiable and $\nabla f \ne 0$, \ of all unit directions, "
+                           r"$\nabla f / \|\nabla f\|$ climbs fastest, "
                            r"at rate $\|\nabla f\|$; \ its opposite descends fastest. \ Perpendicular directions have "
                            r"zero first-order change.",
                            width=9.6, font_size=22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Why steepest? Pick any direction, a unit vector u, and ask for the slope that way. "
+            "Why steepest? At a differentiable point, pick any direction, a unit vector u, and ask for the slope that way. "
             "<bookmark mark='a'/> The tangent plane answers it: the slope along u is the gradient dotted with u. "
             "<bookmark mark='b'/> By the Cauchy–Schwarz inequality from Part 3, a dot product is at most the product "
             "of the lengths, and u has length one: no direction climbs faster than the length of the gradient. "
@@ -175,7 +178,7 @@ class Gradient(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "Seen from above, the surface becomes a map of contour lines, each at one height. <bookmark mark='a'/> "
             "Swing a direction around the point and read the slope. <bookmark mark='b'/> It's largest straight along "
-            "the gradient, <bookmark mark='c'/> zero along the contour line, <bookmark mark='d'/> and most negative "
+            "the gradient, <bookmark mark='c'/> zero along the tangent to the contour line, <bookmark mark='d'/> and most negative "
             "pointing against it. <bookmark mark='e'/> Measured by finite differences in seven hundred and twenty "
             f"directions, the steepest slope is {d['dmax']:.4f}, the gradient's length is {d['gnorm']:.4f}, and the "
             f"two directions are {off:.2f} degrees apart: {verdict}."

@@ -6,6 +6,17 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai4.common import GRAD, HIST, PART, VALUE, load
 
 
+def parameter_count_source(data, name):
+    """Describe each model independently; a historical value is not a new read."""
+    provenance = data.get("provenance", {}).get(name, {})
+    source = provenance.get("source")
+    if source == "pinned-safetensors-headers":
+        return r"counted from pinned weight-file headers"
+    if source == "historical-fallback":
+        return r"historical fallback; \ not a fresh header read"
+    return r"cached count; \ provenance unverified"
+
+
 class Hook(VoiceoverScene):
     def construct(self):
         self.recall()
@@ -15,12 +26,14 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def recall(self):
         p = load("params")
-        assert p["gpt2"] == 124_439_808 and 4.0e9 < p["qwen3_4b"] < 4.1e9
+        assert all(isinstance(p[name], int) and p[name] > 0 for name in ("gpt2", "qwen3_4b"))
         colors = {r"q_k": C.MODEL_Q, r"\hat p_k": C.TRUE_P}
         f = cmath(r"\frac{\partial \mathcal{L}}{\partial z_k}", "=", r"q_k", "-", r"\hat p_k", colors=colors,
                   font_size=60).move_to(UP * 0.6)
         cap = label(r"Part 1: \ one derivative, worked out by hand", font_size=30, color=GREY_A).next_to(f, DOWN, buff=0.4)
-        # a sea of numbers: each square stands for 54,000 of GPT-2's
+        units = label(r"natural-log cross-entropy; \ a loss in bits multiplies this by $1/\ln 2$", font_size=23,
+                      color=GREY_B).next_to(cap, DOWN, buff=0.2)
+        # A schematic sea, with the actual per-cell scale disclosed below.
         cols, rows = 64, 36
         side = 0.19
         g = np.random.default_rng(3)
@@ -28,24 +41,32 @@ class Hook(VoiceoverScene):
                               fill_opacity=float(0.25 + 0.6 * g.random()))
                        .move_to([(c - (cols - 1) / 2) * side, (rows - 1) / 2 * side - r * side - 0.25, 0])
                        for r in range(rows) for c in range(cols)])
-        n1 = label(rf"GPT-2: \ ${p['gpt2']:,}$ numbers".replace(",", "{,}"), font_size=34, color=WHITE)
-        n2 = label(rf"Qwen3-4B: \ ${p['qwen3_4b']:,}$".replace(",", "{,}"), font_size=34, color=WHITE)
+        n1 = VGroup(label(rf"GPT-2: \ ${p['gpt2']:,}$ parameters".replace(",", "{,}"), font_size=34, color=WHITE),
+                    label(parameter_count_source(p, "gpt2"), font_size=20, color=GREY_A)).arrange(DOWN, buff=0.12)
+        n2 = VGroup(label(rf"Qwen3-4B: \ ${p['qwen3_4b']:,}$ parameters".replace(",", "{,}"), font_size=34, color=WHITE),
+                    label(parameter_count_source(p, "qwen3_4b"), font_size=20, color=GREY_A)).arrange(DOWN, buff=0.12)
         for m in (n1, n2):
             m.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.12).set_z_index(5)
         VGroup(n1, n2).arrange(DOWN, buff=0.25).to_edge(UP, buff=0.35)
-        each = label(r"each needs $\partial \mathcal{L} / \partial \theta$, \ every step", font_size=30, color=GRAD)
+        each = label(r"full-parameter training: \ each needs $\partial \mathcal{L} / \partial \theta$", font_size=28, color=GRAD)
         each.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.12).set_z_index(5)
         each.to_edge(DOWN, buff=0.4)
+        scale = label(rf"schematic: \ one square represents about ${p['gpt2'] / (cols * rows):,.0f}$ GPT-2 parameters".replace(",", "{,}"),
+                      font_size=20, color=GREY_B).next_to(each, UP, buff=0.18)
+        scale.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.1).set_z_index(5)
         with self.voiceover(
             "In part one we worked out a single derivative by hand: the gradient of the surprise with respect to the "
-            "scores, the model's guess minus the truth. <bookmark mark='a'/> GPT-2 has a hundred and twenty-four "
-            "million numbers. Qwen3-4B has four billion. <bookmark mark='b'/> Every step of training needs the "
-            "derivative of the loss with respect to every single one of them, and nobody works those out by hand."
+            "scores, the model's guess minus the truth, for natural-log cross-entropy. In bits there is an extra "
+            f"factor of one over ln two. <bookmark mark='a'/> The recorded parameter counts are about {p['gpt2'] / 1e6:.0f} "
+            f"million for GPT-2 and {p['qwen3_4b'] / 1e9:.2f} billion for Qwen3-4B. Each source is labeled on screen. "
+            "<bookmark mark='b'/> In full-parameter training, every step needs the derivative of the loss with "
+            "respect to every trainable parameter, and nobody works those out by hand."
         ) as vo:
-            self.play(Write(f), FadeIn(cap))
+            self.play(Write(f), FadeIn(cap), FadeIn(units))
             vo.wait_until("a")
-            self.play(FadeOut(f), FadeOut(cap), LaggedStart(*[FadeIn(s) for s in sea], lag_ratio=0.0006), run_time=2.0)
-            self.play(FadeIn(n1))
+            self.play(FadeOut(f), FadeOut(cap), FadeOut(units),
+                      LaggedStart(*[FadeIn(s) for s in sea], lag_ratio=0.0006), run_time=2.0)
+            self.play(FadeIn(n1), FadeIn(scale))
             self.play(FadeIn(n2))
             vo.wait_until("b")
             self.play(LaggedStart(*[s.animate.set_fill(GRAD, opacity=float(0.3 + 0.6 * g.random())) for s in sea],
@@ -94,7 +115,8 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> Karush, and then Kuhn and Tucker, added inequalities. <bookmark mark='d'/> Then "
             "came programs: in 1964 Wengert had one carry derivatives along with its values, <bookmark mark='e'/> "
             "and in 1970 Linnainmaa ran the chain rule backwards. <bookmark mark='f'/> In 1985 a standard fixed how "
-            "computers round, <bookmark mark='g'/> and in 1986 backpropagation made neural networks trainable. "
+            "computers round, <bookmark mark='g'/> and in 1986 Rumelhart, Hinton and Williams demonstrated learning "
+            "hidden representations with backpropagation. "
             "<bookmark mark='h'/> From 2010, libraries did all of it automatically, <bookmark mark='i'/> and some of "
             "today's largest models train with numbers only eight bits long."
         ) as vo:

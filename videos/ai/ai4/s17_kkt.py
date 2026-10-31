@@ -11,6 +11,46 @@ POSC, NEGC = C.TRUE_P, GRAD
 PRIMAL, DUAL = WHITE, CONS
 
 
+def svm_checks_pass(d):
+    if not all(d["solvers"][k]["success"] for k in ("primal", "dual")):
+        return False
+    tolerances, residuals = d["tolerances"], d["residuals"]
+    groups = {"feasibility": ("primal_feasibility", "dual_nonnegative", "dual_equality", "duality_gap"),
+              "stationarity": ("stationarity_w", "stationarity_b"),
+              "complementarity": ("complementarity",)}
+    return all(math.isfinite(float(residuals[k])) and abs(float(residuals[k])) <= tolerances[t]
+               for t, names in groups.items() for k in names)
+
+
+def svm_solver_verdict(d):
+    if svm_checks_pass(d):
+        return "Both optimizers report success and all listed feasibility, stationarity, slackness and gap checks pass their tolerances."
+    return "The candidate solutions have not passed all solver and residual checks; the displayed values are not certified optima."
+
+
+def diagnostic_number(value):
+    return sci(value, 0) if math.isfinite(value) else r"\mathrm{unavailable}"
+
+
+def clipped_separator(w, b, level, bounds):
+    """Intersect a linear level set with a rectangle, including vertical lines."""
+    xmin, xmax, ymin, ymax = bounds
+    points = []
+    if abs(w[1]) > 1e-14:
+        for x in (xmin, xmax):
+            y = (level - b - w[0] * x) / w[1]
+            if ymin - 1e-12 <= y <= ymax + 1e-12:
+                points.append((x, min(ymax, max(ymin, y))))
+    if abs(w[0]) > 1e-14:
+        for y in (ymin, ymax):
+            x = (level - b - w[1] * y) / w[0]
+            if xmin - 1e-12 <= x <= xmax + 1e-12:
+                point = (min(xmax, max(xmin, x)), y)
+                if not any(abs(point[0] - p[0]) + abs(point[1] - p[1]) < 1e-10 for p in points):
+                    points.append(point)
+    return points[:2] if len(points) >= 2 else None
+
+
 class KKT(VoiceoverScene):
     def construct(self):
         self.card()
@@ -61,7 +101,8 @@ class KKT(VoiceoverScene):
             "the gradient of the Lagrangian zero, every constraint met, every multiplier non-negative, "
             "<bookmark mark='b'/> and each multiplier times its constraint equal to zero: complementary slackness. "
             "<bookmark mark='c'/> Either the minimum is inside and the wall is idle, its multiplier zero, "
-            "<bookmark mark='d'/> or the minimum is on the wall, and the multiplier measures how hard the wall pushes."
+            "<bookmark mark='d'/> or the minimum is on the wall. Its multiplier may be positive or zero; in this "
+            "right-hand example it is positive and measures how hard the wall pushes."
         ) as vo:
             self.play(FadeIn(thm, shift=UP * 0.2))
             vo.wait_until("a")
@@ -119,22 +160,30 @@ class KKT(VoiceoverScene):
         t1.next_to(g1, UP, buff=0.15)
         l1 = label(r"$p^* = 1 = d^*$", font_size=22, color=PRIMAL).next_to(g1.ax.c2p(2, 1), UP, buff=0.12)
         nl, nd = np.asarray(d["nc_l"]), np.asarray(d["nc_dual"])
-        g2 = axes([0, 6, 1], [-6, 0, 2], x_length=5.0, y_length=3.2, xlabel=r"$\mu$", ylabel=r"$q(\mu)$",
-                  xticks=[0, 2, 4, 6], yticks=[-6, -4, -2, 0], center=[3.5, -0.4, 0])
-        c2 = curve(g2.ax, nl, np.clip(nd, -6, 0), DUAL, 3.5)
+        finite_dual = nd[np.isfinite(nd)]
+        low = 2 * math.floor(min(float(finite_dual.min()), float(d["nc_p"]), -2.0) / 2)
+        high = max(0.0, math.ceil(max(float(finite_dual.max()), float(d["nc_p"]))))
+        g2 = axes([0, 6, 1], [low, high, 2], x_length=5.0, y_length=3.2, xlabel=r"$\mu$", ylabel=r"$\widetilde q_{\rm grid}(\mu)$",
+                  xticks=[0, 2, 4, 6], yticks=list(np.arange(low, high + 0.1, 2)), center=[3.5, -0.4, 0])
+        c2 = curve(g2.ax, nl, nd, DUAL, 3.5)
         p2 = DashedLine(g2.ax.c2p(0, d["nc_p"]), g2.ax.c2p(6, d["nc_p"]), color=PRIMAL, stroke_width=2)
         t2 = label(r"not convex: \ $\min x^4 - 3x^2 + x$ s.t. $x \ge \tfrac12$", font_size=21, color=GREY_A)
         t2.next_to(g2, UP, buff=0.15)
-        l2 = label(rf"$p^* = {d['nc_p']:.2f}$", font_size=22, color=PRIMAL).next_to(g2.ax.c2p(5, d["nc_p"]), UP, buff=0.1)
-        l3 = label(rf"$d^* = {d['nc_d']:.2f}$: \ a gap of ${d['nc_gap']:.2f}$", font_size=22, color=DUAL)
-        l3.move_to(g2.ax.c2p(2.0, -5.0))
+        l2 = label(rf"$\widetilde p_{{\rm grid}} = {d['nc_p']:.2f}$", font_size=22, color=PRIMAL).next_to(g2.ax.c2p(5, d["nc_p"]), UP, buff=0.1)
+        l3 = label(rf"grid estimates: \ $\widetilde d = {d['nc_d']:.2f}$, \ $\widetilde p-\widetilde d = {d['nc_gap']:.2f}$", font_size=21, color=DUAL)
+        l3.next_to(g2, DOWN, buff=0.2)
         pk = Dot(g2.ax.c2p(d["nc_lam"], d["nc_d"]), radius=0.07, color=DUAL)
-        tag = note(r"computed").to_corner(DR, buff=0.25)
+        grid = d["grid"]
+        tag = wrapped_label(rf"finite grid: \ $x\in[{grid['x_min']:g},{grid['x_max']:g}]$, \ spacing ${sci(grid['x_spacing'], 0)}$; "
+                            rf"$\mu$ spacing ${grid['lambda_spacing']:g}$. \ Not a certified continuous dual bound.",
+                            12.5, font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Two small examples. Minimize x squared, keeping x at least one. Its dual function is a hump that rises "
             "to touch the true minimum, one, exactly: no gap. <bookmark mark='a'/> Now a double well, the same kind of "
-            f"constraint, and no convexity. The dual's best is {d['nc_d']:.2f}, below the true minimum of "
-            f"{d['nc_p']:.2f}: a duality gap of {d['nc_gap']:.2f}. The lower bound still holds; it just isn't tight."
+            f"constraint, and no convexity. On finite grids, the estimated primal value is {d['nc_p']:.2f} and "
+            f"the best estimated dual value is {d['nc_d']:.2f}, a difference of {d['nc_gap']:.2f}. These are grid "
+            "estimates, not a certified continuous dual bound. The exact weak-duality theorem still holds; this "
+            "numerical picture illustrates how a gap can arise."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(t1), Create(p1), Create(c1), FadeIn(tag), run_time=1.6)
             self.play(FadeIn(l1))
@@ -150,60 +199,89 @@ class KKT(VoiceoverScene):
         X, y = np.asarray(d["X"]), np.asarray(d["y"])
         w, b = np.asarray(d["w"]), float(d["b"])
         alpha = np.asarray(d["alpha"])
-        sv = [int(i) for i in d["sv"]]
-        assert abs(d["gap"]) < 1e-6 and d["slack"] < 1e-6
+        alpha_tol = float(d["tolerances"]["alpha"])
+        margin_tol = float(d["tolerances"]["margin"])
+        sv = np.flatnonzero(alpha > alpha_tol).tolist()
+        tight = np.flatnonzero(np.abs(np.asarray(d["margins"]) - 1) <= margin_tol).tolist()
+        solver_verdict = svm_solver_verdict(d)
         ax = Axes(x_range=[-2.0, 2.5, 1], y_range=[-2.6, 2.8, 1], x_length=5.0, y_length=5.6, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.9, -0.4, 0])
 
         def line(c):
-            # w . x + b = c, clipped to the plot
-            xs = np.linspace(-2.0, 2.5, 2001)
-            ys = (c - b - w[0] * xs) / w[1]
-            ok = (ys >= -2.6) & (ys <= 2.8)
-            return Line(ax.c2p(xs[ok][0], ys[ok][0]), ax.c2p(xs[ok][-1], ys[ok][-1]))
+            segment = clipped_separator(w, b, c, (-2.0, 2.5, -2.6, 2.8))
+            return Line(ax.c2p(*segment[0]), ax.c2p(*segment[1])) if segment else VectorizedPoint(ax.c2p(0, 0))
 
         mid = line(0).set_stroke(WHITE, 3)
-        m1 = DashedLine(line(1).get_start(), line(1).get_end(), color=GREY_B, stroke_width=2)
-        m2 = DashedLine(line(-1).get_start(), line(-1).get_end(), color=GREY_B, stroke_width=2)
-        clip = Rectangle(width=5.0, height=5.6).move_to(ax)
+        def margin(c):
+            segment = clipped_separator(w, b, c, (-2.0, 2.5, -2.6, 2.8))
+            return (DashedLine(ax.c2p(*segment[0]), ax.c2p(*segment[1]), color=GREY_B, stroke_width=2)
+                    if segment else VectorizedPoint(ax.c2p(0, 0)))
+
+        m1, m2 = margin(1), margin(-1)
         pts = VGroup(*[Dot(ax.c2p(*p), radius=0.07, color=POSC if c > 0 else NEGC) for p, c in zip(X, y)])
         rings = VGroup(*[Circle(radius=0.17, color=CONS, stroke_width=3).move_to(ax.c2p(*X[i])) for i in sv])
         # the multipliers, one bar per point
-        g2 = axes([0, len(alpha), 5], [0, float(alpha.max()) * 1.15, 0.25], x_length=5.6, y_length=2.2,
-                  xlabel=r"the $20$ points", ylabel=r"multiplier $\alpha_i$", xticks=[], yticks=[0], font_size=18,
-                  center=[3.4, -2.0, 0])
+        amax = max(float(np.max(np.abs(alpha))), 1e-12)
+        amin = min(0.0, float(alpha.min()) * 1.15)
+        g2 = axes([0, len(alpha), 5], [amin, amax * 1.15, max(amax / 4, 1e-12)], x_length=5.6, y_length=1.6,
+                  xlabel=rf"the ${len(alpha)}$ points", ylabel=r"multiplier $\alpha_i$", xticks=[], yticks=[0], font_size=18,
+                  center=[3.4, -1.7, 0])
         bw = 5.6 / len(alpha) * 0.7
-        abars = VGroup(*[Rectangle(width=bw, height=max(2.2 * a / (alpha.max() * 1.15), 0.01), stroke_width=0,
-                                   fill_color=CONS if i in sv else GREY_D, fill_opacity=0.9)
-                         .move_to(g2.ax.c2p(i + 0.5, 0) + UP * max(2.2 * a / (alpha.max() * 1.15), 0.01) / 2)
-                         for i, a in enumerate(alpha)])
+        abars = VGroup()
+        for i, a in enumerate(alpha):
+            base, tip = g2.ax.c2p(i + 0.5, 0), g2.ax.c2p(i + 0.5, a)
+            if abs(tip[1] - base[1]) < 1e-12:
+                abars.add(Line(base + LEFT * bw / 2, base + RIGHT * bw / 2, color=GREY_D, stroke_width=1))
+            else:
+                abars.add(Rectangle(width=bw, height=abs(tip[1] - base[1]), stroke_width=0,
+                                    fill_color=CONS if i in sv else (C.PENALTY if a < 0 else GREY_D), fill_opacity=0.9)
+                          .move_to((base + tip) / 2))
         eqs = VGroup(
             label(r"primal: \ $\min \tfrac12\|w\|^2$ \ s.t. \ $y_i(w\cdot x_i + b) \ge 1$", font_size=22, color=PRIMAL),
             label(r"dual: \ $\max_{\alpha \ge 0} \textstyle\sum_i \alpha_i - \tfrac12 \sum_{ij} \alpha_i \alpha_j y_i y_j\, "
                   r"x_i \cdot x_j$", font_size=22, color=DUAL),
-            label(rf"computed: \ $p^* = {d['p_star']:.6f}$, \ $d^* = {d['d_star']:.6f}$", font_size=22, color=WHITE),
-            label(rf"${len(sv)}$ support vectors: \ $\alpha_i > 0$ exactly where $y_i f(x_i) = 1$", font_size=22, color=CONS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, 1.6, 0])
+            label(r"$\sum_i\alpha_i y_i=0$: \ stationarity in the free intercept $b$", font_size=22, color=DUAL),
+            label(rf"solver candidates: \ $p = {d['p_star']:.6f}$, \ $d = {d['d_star']:.6f}$", font_size=22, color=WHITE),
+            wrapped_label(r"$\alpha_i > 0 \Rightarrow y_i f(x_i)=1$ at an optimum; \ the reverse can fail in degenerate data", 5.1,
+                          font_size=22, color=CONS),
+            wrapped_label(rf"rings: \ ${len(sv)}$ multipliers above ${sci(alpha_tol, 0)}$; \ "
+                          rf"${len(tight)}$ margins within ${sci(margin_tol, 0)}$ of $1$", 6.2, font_size=20, color=GREY_A),
+            wrapped_label(solver_verdict, 6.2, font_size=20, color=GREY_B),
+            wrapped_label(rf"feasibility residual ${diagnostic_number(max(d['residuals'][k] for k in ('primal_feasibility', 'dual_nonnegative', 'dual_equality')))}$, "
+                          rf"tolerance ${sci(d['tolerances']['feasibility'], 0)}$; "
+                          rf"stationarity residual ${diagnostic_number(max(d['residuals']['stationarity_w'], d['residuals']['stationarity_b']))}$, "
+                          rf"tolerance ${sci(d['tolerances']['stationarity'], 0)}$; "
+                          rf"slackness ${diagnostic_number(d['residuals']['complementarity'])}$, tolerance ${sci(d['tolerances']['complementarity'], 0)}$; "
+                          rf"absolute gap ${diagnostic_number(abs(d['residuals']['duality_gap']))}$",
+                          6.2, font_size=20, color=GREY_A),
+        )
+        VGroup(eqs[0], eqs[1], eqs[2], eqs[3], eqs[6], eqs[7]).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.3, 2.8, 0], aligned_edge=UP)
+        eqs[4].next_to(ax, UP, buff=0.15)
+        eqs[5].move_to([3.3, -3.3, 0])
         hist = cite(r"B.~Boser, I.~Guyon \& V.~Vapnik (1992); \ C.~Cortes \& V.~Vapnik (1995)", corner=UR)
-        gap_word = "agree to every digit shown" if abs(d["gap"]) < 1e-9 else "agree to six digits"
         with self.voiceover(
             "Duality's most famous use: the support vector machine of Part 6. Find the widest street between two "
             "classes: the smallest w that puts every point at least one unit of margin from the line. "
             "<bookmark mark='a'/> Its dual has one multiplier per point, and depends on the points only through their "
-            "dot products, which is what lets kernels in. <bookmark mark='b'/> We solved both, separately, on twenty "
-            f"points: the two optimal values {gap_word}. <bookmark mark='c'/> And complementary slackness picks out "
-            f"the support vectors: only {len(sv)} multipliers are non-zero, exactly for the {len(sv)} points on the "
-            "edges of the street. Bernhard Boser, Isabelle Guyon and Vladimir Vapnik built the method on this dual in "
+            "dot products, which is what lets kernels in. Minimizing over the free intercept also requires the "
+            f"label-weighted multipliers to sum to zero. <bookmark mark='b'/> We attempted separate primal and dual "
+            f"solves on {len(X)} points. {solver_verdict} The candidate objective values are displayed with six "
+            f"decimal places. <bookmark mark='c'/> We ring the points whose {len(sv)} multipliers exceed the stated "
+            f"numerical zero threshold; {len(tight)} points have margins within the stated tolerance of one. At an optimum, "
+            "a positive multiplier forces a point onto a margin, "
+            "but a margin point can have a zero multiplier in degenerate data. Bernhard Boser, Isabelle Guyon and "
+            "Vladimir Vapnik built the method on this dual in "
             "1992."
         ) as vo:
             self.play(Create(ax), FadeIn(pts), FadeIn(eqs[0]), FadeIn(hist))
             self.play(Create(mid), Create(m1), Create(m2))
             vo.wait_until("a")
-            self.play(FadeIn(eqs[1]))
+            self.play(FadeIn(eqs[1]), FadeIn(eqs[2]))
             vo.wait_until("b")
-            self.play(FadeIn(eqs[2]))
+            self.play(FadeIn(eqs[3]), FadeIn(eqs[6]), FadeIn(eqs[7]))
             vo.wait_until("c")
+            self.play(FadeOut(eqs[6]), FadeOut(eqs[7]), run_time=0.5)
             self.play(FadeIn(g2), LaggedStart(*[GrowFromEdge(r_, DOWN) for r_ in abars], lag_ratio=0.05),
-                      Create(rings), FadeIn(eqs[3]), run_time=2.0)
+                      Create(rings), FadeIn(eqs[4]), FadeIn(eqs[5]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

@@ -28,6 +28,68 @@ def symlog(v, lin=1e-3):
     return np.sign(v) * np.log10(1 + np.abs(v) / lin) / math.log10(1 + 1 / lin)
 
 
+def displayed_logs(values, lo, hi):
+    values = np.asarray(values, float)
+    valid = np.isfinite(values) & (values >= 0)
+    out = np.full(values.shape, np.nan)
+    out[valid] = np.clip(np.log10(np.maximum(values[valid], 10.0 ** lo)), lo, hi)
+    counts = dict(floor=int(np.sum(valid & (values < 10.0 ** lo))),
+                  ceiling=int(np.sum(valid & (values > 10.0 ** hi))), omitted=int(np.sum(~valid)))
+    return out, counts
+
+
+def spectrum_state(eigenvalues, thresholds):
+    eigenvalues = np.asarray(eigenvalues, float)
+    finite = eigenvalues[np.isfinite(eigenvalues)]
+    omitted = int(eigenvalues.size - finite.size)
+    rho = float(np.max(np.abs(finite))) if finite.size else float("nan")
+    if not finite.size:
+        return dict(eigenvalues=finite, normalized=np.zeros(finite.shape), rho=rho, omitted=omitted,
+                    negative=None, high_positive=None, flat=None)
+    if rho == 0:
+        return dict(eigenvalues=finite, normalized=np.zeros(finite.shape), rho=rho, omitted=omitted,
+                    negative=0, high_positive=0, flat=1.0)
+    normalized = finite / rho
+    return dict(eigenvalues=finite, normalized=normalized, rho=rho, omitted=omitted,
+                negative=int(np.sum(normalized < -thresholds["negative_relative"])),
+                high_positive=int(np.sum(normalized > thresholds["outlier_relative"])),
+                flat=float(np.mean(np.abs(normalized) <= thresholds["flat_relative"])))
+
+
+def power_comparison(estimates, eigenvalues):
+    estimates, eigenvalues = np.asarray(estimates, float), np.asarray(eigenvalues, float)
+    finite = eigenvalues[np.isfinite(eigenvalues)]
+    rho = float(np.max(np.abs(finite))) if finite.size else float("nan")
+    dominant = np.unique(finite[np.abs(finite) == rho])
+    target = float(dominant[0]) if dominant.size == 1 else None
+    if target is None or not rho > 0 or not estimates.size or not np.isfinite(estimates[-1]):
+        # Equal positive/negative dominant magnitudes need not yield a convergent Rayleigh quotient.
+        return dict(target=target, rho=rho, relative=np.full(estimates.shape, np.nan), available=False)
+    return dict(target=target, rho=rho, relative=np.abs(estimates - target) / abs(target), available=True)
+
+
+def curvature_verdict(initial, final):
+    if initial["negative"] is None or final["negative"] is None:
+        return "Relative negative-curvature counts are unavailable for an empty spectrum."
+    a, b = initial["negative"], final["negative"]
+    if b < a:
+        return f"The count below the stated negative cutoff decreases from {a} to {b} between the first and final checkpoints."
+    if b > a:
+        return f"The count below the stated negative cutoff increases from {a} to {b} between the first and final checkpoints."
+    return f"The count below the stated negative cutoff is {a} at both endpoints; intermediate checkpoints may differ."
+
+
+def radius_verdict(initial, final):
+    a, b = initial["rho"], final["rho"]
+    if not (math.isfinite(a) and math.isfinite(b)):
+        return "A finite absolute spectral-radius comparison is unavailable."
+    if b < a:
+        return f"The absolute spectral radius decreases from {a:.3g} to {b:.3g}."
+    if b > a:
+        return f"The absolute spectral radius increases from {a:.3g} to {b:.3g}."
+    return f"The absolute spectral radius is {a:.3g} at both endpoints."
+
+
 class HVP(VoiceoverScene):
     def construct(self):
         self.card()
@@ -78,45 +140,65 @@ class HVP(VoiceoverScene):
     def checks(self):
         d = load("hessian")
         hs, fe = np.asarray(d["hs"]), np.asarray(d["fd_err"])
-        assert d["hv_full_diff"] < 1e-10
         g1 = log_axes((-10, -1), (-10, 0), x_length=5.4, y_length=3.6, xlabel=r"step $h$",
-                      ylabel=r"finite differences of gradients: \ error", center=[-3.6, -0.6, 0], ystep=2, xstep=3)
-        c1 = curve(g1.ax, np.log10(hs), np.clip(np.log10(fe), -10, 0), GRAD, 3)
-        best = Dot(g1.ax.c2p(math.log10(d["fd_best_h"]), math.log10(d["fd_best"])), radius=0.07, color=GRAD)
+                      ylabel=r"finite differences of gradients: error", center=[-3.6, -0.5, 0], ystep=2, xstep=3)
+        displayed_fd, fd_limits = displayed_logs(fe, -10, 0)
+        c1 = curve(g1.ax, np.log10(hs), displayed_fd, GRAD, 3)
+        eligible = np.isfinite(fe) & (fe >= 0) & np.isfinite(hs) & (hs >= 1e-10) & (hs <= 0.1)
+        best = VGroup()
+        if eligible.any():
+            ii = np.flatnonzero(eligible)
+            i = int(ii[np.argmin(fe[eligible])])
+            best.add(Dot(g1.ax.c2p(math.log10(hs[i]), displayed_fd[i]), radius=0.07, color=GRAD))
         lam = np.asarray(d["lam_est"])
-        top = float(d["lam_top"])
-        K_ = 40
-        relerr = np.maximum(np.abs(lam[:K_] - top) / top, 1e-16)
-        g2 = log_axes((0, K_), (-16, 0), x_length=4.6, y_length=3.2, xlabel=r"power iteration step",
-                      ylabel=r"error of the largest eigenvalue", xticks=[], ystep=4, font_size=18, center=[3.6, -0.9, 0])
-        for k_ in (0, 20, 40):
+        final_eigenvalues = np.asarray(d[f"eig{len(d['keep']) - 1}"])
+        power = power_comparison(lam, final_eigenvalues)
+        K_ = min(40, len(lam))
+        plotted_power, power_limits = displayed_logs(power["relative"][:K_], -16, 0)
+        g2 = log_axes((0, max(K_ - 1, 1)), (-16, 0), x_length=4.6, y_length=3.2,
+                      xlabel=r"power product index (starts at $0$)",
+                      ylabel=r"relative error vs. signed dominant-magnitude eigenvalue", xticks=[], ystep=4,
+                      font_size=17, center=[3.6, -0.7, 0])
+        for k_ in sorted({0, (K_ - 1) // 2, max(K_ - 1, 1)}):
             g2.add(MathTex(str(k_), font_size=18, color=GREY_B).next_to(g2.ax.c2p(k_, -16), DOWN, buff=0.1))
-        c2 = VGroup(curve(g2.ax, np.arange(K_), np.log10(relerr), HESS, 3),
-                    *[Dot(g2.ax.c2p(i, float(np.log10(v))), radius=0.035, color=HESS) for i, v in enumerate(relerr)])
-        line = VMobject()
-        rel = abs(d["lam_power"] - top) / top
-        info = VGroup(
-            label(rf"a ${d['sizes'][0]}$--${d['sizes'][1]}$--${d['sizes'][2]}$--${d['sizes'][3]}$ network, \ "
-                  rf"${d['P']}$ parameters, \ trained \ (computed)", font_size=22, color=GREY_A),
-            label(rf"Pearlmutter against the full ${d['P']} \times {d['P']}$ Hessian: \ ${sci(max(d['hv_full_diff'], 1e-18), 0)}$",
-                  font_size=22, color=HESS),
-            label(rf"time: \ ${d['t_hvp'] / d['t_grad']:.1f}$ gradients' worth", font_size=22, color=HESS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(UP, buff=0.35)
-        fdl = label(rf"best: \ ${sci(d['fd_best'], 0)}$ at $h = {sci(d['fd_best_h'], 0)}$", font_size=20, color=GRAD)
-        fdl.next_to(best, DOWN, buff=0.15)
-        pwl = label(rf"from products alone: \ off by ${sci(max(rel, 1e-16), 0)}$", font_size=20, color=HESS)
-        pwl.next_to(g2, DOWN, buff=0.1).align_to(g2, LEFT)
+        c2 = VGroup(curve(g2.ax, np.arange(K_), plotted_power, HESS, 3),
+                    *[Dot(g2.ax.c2p(i, float(v)), radius=0.035, color=HESS)
+                      for i, v in enumerate(plotted_power) if math.isfinite(v)])
         ratio = d["t_hvp"] / d["t_grad"]
-        e = d["fd_best"]
+        info = VGroup(
+            label(rf"a ${d['sizes'][0]}$--${d['sizes'][1]}$--${d['sizes'][2]}$--${d['sizes'][3]}$ network; "
+                  rf"${d['P']}$ parameters (computed)", font_size=22, color=GREY_A),
+            label(rf"max product discrepancy vs. full Hessian: ${sci(d['hv_full_diff'], 1)}$",
+                  font_size=22, color=HESS),
+            label(rf"this benchmark: ${ratio:.1f}$ gradient evaluations' time", font_size=22, color=HESS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(UP, buff=0.35)
+        fdl = label(rf"best recorded error: ${sci(d['fd_best'], 1)}$", font_size=20, color=GRAD)
+        fdl.next_to(g1, DOWN, buff=0.1).align_to(g1, LEFT)
+        if power["available"]:
+            last = float(power["relative"][-1])
+            pwl = label(rf"signed target ${power['target']:.3g}$; final relative error ${sci(last, 1)}$",
+                        font_size=19, color=HESS)
+            power_v = f"For this stored spectrum the signed dominant-magnitude target is {power['target']:.3g}; the final relative error is {last:.2e}."
+        else:
+            pwl = label(r"no finite final dominant-target comparison; curve omitted", font_size=19, color=GREY_A)
+            power_v = "A finite final comparison with a unique signed nonzero dominant-magnitude target is unavailable, so that convergence comparison is omitted."
+        pwl.next_to(g2, DOWN, buff=0.1).align_to(g2, LEFT)
+        if pwl.width > 5.2:
+            pwl.scale_to_fit_width(5.2)
+        limits = note(r"finite-difference display: $10^{-10}$ floor, $1$ ceiling; power: $10^{-16}$ floor, $1$ ceiling\\"
+                      rf"floor counts incl. zero: ${fd_limits['floor']}$ / ${power_limits['floor']}$; ceiling: "
+                      rf"${fd_limits['ceiling']}$ / ${power_limits['ceiling']}$; invalid omitted: "
+                      rf"${fd_limits['omitted']}$ / ${power_limits['omitted']}$", font_size=15).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Check it on a small network we'll meet in a moment. <bookmark mark='a'/> Against the full Hessian, "
-            f"built the slow way, Pearlmutter's product agrees to rounding error, and it costs {ratio:.1f} gradients. "
-            "<bookmark mark='b'/> Finite differences of gradients make another V, as in chapter ten, and at their best "
-            f"are off by {mant(e)} times ten to the minus {expo(e)}. <bookmark mark='c'/> And products are all you "
-            "need to learn about curvature: multiply a vector by H, again and again, renormalizing, and it turns "
-            "toward the steepest direction. The estimate of the largest eigenvalue converges to the true one."
+            "Check it on the stored final parameters of a small network. <bookmark mark='a'/> Against the full "
+            f"Hessian, the maximum product discrepancy is {d['hv_full_diff']:.2e}. In this benchmark a product takes "
+            f"{ratio:.1f} times a gradient's time. <bookmark mark='b'/> The best recorded finite-difference relative "
+            f"error is {d['fd_best']:.2e}. <bookmark mark='c'/> Repeated products and normalization are power iteration. "
+            "With a strictly dominant eigenvalue magnitude and a nonzero initial projection on its eigenspace, "
+            "they approach that eigenspace. The eigenvalue may be negative: largest magnitude is not largest "
+            f"algebraic value. {power_v} Display floors and ceilings are stated below the plots."
         ) as vo:
-            self.play(FadeIn(info[0]), FadeIn(g1), FadeIn(g2))
+            self.play(FadeIn(info[0]), FadeIn(g1), FadeIn(g2), FadeIn(limits))
             vo.wait_until("a")
             self.play(FadeIn(info[1]), FadeIn(info[2]))
             vo.wait_until("b")
@@ -145,77 +227,109 @@ class HVP(VoiceoverScene):
         pts = VGroup(*[Dot(to_xy(p), radius=0.03, color=CLASS_COL[int(c)]) for p, c in zip(X, y)]).set_z_index(3)
         # the loss curve
         cv = np.asarray(d["curve"])
-        g1 = log_axes((0, math.log10(d["steps"])), (-5, 1), x_length=3.4, y_length=1.25, xlabel=r"step",
+        g1 = log_axes((0, math.log10(d["steps"] + 1)), (-5, 1), x_length=3.4, y_length=1.25, xlabel=r"step $+1$",
                       ylabel=r"loss", center=[-4.5, -2.55, 0], ystep=3, font_size=16)
         a1 = g1.ax
-        okc = cv[:, 0] > 0
-        lc = curve(a1, np.log10(cv[okc, 0]), np.clip(np.log10(cv[okc, 1]), -5, 1), C.LOSS, 2.5)
-        # the spectrum: eigenvalues over the largest, sorted, on a signed log scale
+        okc = cv[:, 0] >= 0
+        loss_display, loss_limits = displayed_logs(cv[okc, 1], -5, 1)
+        lc = curve(a1, np.log10(cv[okc, 0] + 1), loss_display, C.LOSS, 2.5)
+        thresholds = d["spectrum_thresholds"]
+        assert thresholds["scale"] == "spectral_radius"
+        states = [spectrum_state(d[f"eig{k}"], thresholds) for k in range(K)]
+        # Per-checkpoint absolute spectral radius keeps every finite normalized eigenvalue in [-1, 1].
         P = int(d["P"])
-        g2 = axes([0, P, 100], [-1.05, 1.05, 0.5], x_length=6.2, y_length=4.0, xlabel=r"eigenvalues, \ smallest to largest",
-                  ylabel=r"$\lambda / \lambda_{\max}$ \ (signed log scale)", xticks=[], yticks=[-1, 0, 1],
-                  yfmt=lambda v: {-1: "-1", 0: "0", 1: "1"}[int(v)], font_size=18, center=[2.9, -0.75, 0])
+        g2 = axes([0, P, 100], [-1.05, 1.05, 0.5], x_length=6.2, y_length=3.6, xlabel=r"eigenvalues, \ smallest to largest",
+                  ylabel=r"$\lambda/\rho(H)$; $\rho(H)=\max|\lambda|$ (signed log)", xticks=[], yticks=[-1, 0, 1],
+                  yfmt=lambda v: {-1: "-1", 0: "0", 1: "1"}[int(v)], font_size=18, center=[2.9, -0.95, 0])
         a2 = g2.ax
         for v in (-0.1, -0.01, 0.01, 0.1):
             yv = float(symlog(v))
             g2.add(MathTex(f"{v:g}", font_size=14, color=GREY_C).next_to(a2.c2p(0, yv), LEFT, buff=0.08))
 
         def spectrum(k):
-            ev = np.sort(np.asarray(d[f"eig{k}"]))
-            ys = symlog(ev / ev.max())
-            return VGroup(*[Dot(a2.c2p(i, float(v)), radius=0.022,
-                                color=(HESS if v > symlog(0.1) else (C.SURPRISE if v < symlog(-0.01) else GREY_B)))
-                            for i, v in enumerate(ys)])
+            values = np.sort(states[k]["normalized"])
+            return VGroup(*[Dot(a2.c2p(i, float(symlog(v))), radius=0.022,
+                                color=(HESS if v > thresholds["outlier_relative"] else
+                                       (C.SURPRISE if v < -thresholds["negative_relative"] else GREY_B)))
+                            for i, v in enumerate(values)])
 
         def readout(k):
-            t = keep[k]
-            return VGroup(
-                label(rf"step ${t:,}$".replace(",", "{,}") + rf": \ loss ${d[f'loss{k}']:.4f}$, \ accuracy "
-                      rf"${100 * d[f'acc{k}']:.0f}\%$", font_size=23, color=WHITE),
-                label(rf"$\lambda_{{\max}} = {d[f'top{k}']:.3g}$; \ outliers ${d[f'nout{k}']}$, \ negative ${d[f'nneg{k}']}$, "
-                      rf"\ near zero ${100 * d[f'flat{k}']:.0f}\%$", font_size=21, color=GREY_A),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([2.9, 2.55, 0])
+            state = states[k]
+            if state["negative"] is None:
+                detail = r"no finite eigenvalues: relative cutoff counts unavailable"
+            elif state["rho"] == 0:
+                detail = r"$\rho(H)=0$: all finite eigenvalues are zero"
+            else:
+                detail = (rf"$\rho(H)={state['rho']:.3g}$; high-positive ${state['high_positive']}$; "
+                          rf"negative ${state['negative']}$; near-zero ${100 * state['flat']:.0f}\%$")
+            block = VGroup(
+                label(rf"step ${keep[k]:,}$".replace(",", "{,}") + rf": loss ${d[f'loss{k}']:.4f}$; training accuracy "
+                      rf"${100 * d[f'acc{k}']:.0f}\%$", font_size=22, color=WHITE),
+                label(detail, font_size=20, color=GREY_A),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.9, 2.6, 0])
+            if block.width > 6.5:
+                block.scale_to_fit_width(6.5)
+            return block
 
         dots = [spectrum(k) for k in range(K)]
         reads = [readout(k) for k in range(K)]
-        marker = Dot(a1.c2p(0, math.log10(d["loss0"])), radius=0.06, color=WHITE)
+        marker = Dot(radius=0.06, color=WHITE)
 
         def mpos(k):
-            t = max(keep[k], 1)
-            return a1.c2p(math.log10(t), float(np.clip(math.log10(d[f"loss{k}"]), -5, 1)))
+            t = keep[k] + 1
+            value, _ = displayed_logs([d[f"loss{k}"]], -5, 1)
+            return a1.c2p(math.log10(t), float(value[0]) if math.isfinite(value[0]) else -5)
 
-        marker.move_to(mpos(0))
+        def marker_opacity(k):
+            value = float(d[f"loss{k}"])
+            return float(math.isfinite(value) and value >= 0)
+
+        marker.move_to(mpos(0)).set_opacity(marker_opacity(0))
         title = label(rf"three spirals, \ a ${P}$-parameter network, \ trained with Adam: \ its full Hessian at "
                       rf"${K}$ checkpoints", font_size=22, color=GREY_A).to_edge(UP, buff=0.2)
-        tag = note(r"computed").to_corner(DR, buff=0.2)
-        nk = K - 1
-        neg0, negK = int(d["nneg0"]), int(d[f"nneg{nk}"])
-        out_end = int(d[f"nout{nk}"])
-        flat_end = 100 * float(d[f"flat{nk}"])
-        neg_v = (f"from {neg0} clearly negative eigenvalues at the start to {negK}" if negK < neg0 else
-                 f"{neg0} clearly negative eigenvalues at the start and {negK} at the end")
-        out_v = (f"{out_end} eigenvalues stand out above a tenth of the largest" if out_end > 0 else
-                 "no eigenvalue stands out")
+        cutoff_note = label(
+            rf"relative cutoffs: negative $\lambda<-{thresholds['negative_relative']:g}\rho$; "
+            rf"near-zero $|\lambda|\leq {thresholds['flat_relative']:g}\rho$\\"
+            rf"high-positive $\lambda>{thresholds['outlier_relative']:g}\rho$; zero radius: all finite eigenvalues zero",
+            font_size=17, color=GREY_A).move_to([2.9, 1.85, 0])
+        if cutoff_note.width > 6.5:
+            cutoff_note.scale_to_fit_width(6.5)
+        tag = note(rf"computed; training cohort ${len(y)}$; omitted eigenvalues: "
+                   rf"${sum(state['omitted'] for state in states)}$\\loss display: $10^{{-5}}$ floor incl. zero "
+                   rf"({loss_limits['floor']}); $10$ ceiling ({loss_limits['ceiling']}); invalid omitted ({loss_limits['omitted']})",
+                   font_size=14).to_corner(DR, buff=0.15)
+        initial, final = states[0], states[-1]
+        mixed = np.any(initial["eigenvalues"] < 0) and np.any(initial["eigenvalues"] > 0)
+        initial_v = ("The initial Hessian has both positive and negative curvature directions. That alone does not "
+                     "establish a stationary saddle point." if mixed else
+                     "The stored initial spectrum does not have both positive and negative eigenvalues.")
+        neg_v = curvature_verdict(initial, final)
+        radius_v = radius_verdict(initial, final)
+        final_v = (f"At the final checkpoint, {final['high_positive']} eigenvalues exceed the chosen positive cutoff, "
+                   f"and {100 * final['flat']:.0f} percent lie inside the stated relative near-zero cutoff."
+                   if final["negative"] is not None else
+                   "At the final checkpoint the relative cutoff counts are undefined.")
         with self.voiceover(
-            "Now watch a landscape change as a network learns. Three interleaved spirals, a network with "
-            f"{P} parameters, and its full Hessian, computed at {K} moments during training. "
-            "<bookmark mark='a'/> At the start, the eigenvalues spread both ways: the initial point is a saddle in "
-            f"many directions. <bookmark mark='b'/> As the network fits the spirals, the negative curvature drains "
-            f"away, {neg_v}. <bookmark mark='c'/> At the end, {out_v}, and "
-            f"{flat_end:.0f} percent lie within a hundredth of zero: a bulk of nearly flat directions, plus a few "
-            "steep ones, the shape Levent Sagun and colleagues reported for real networks in 2016. And as the loss "
-            "goes to zero, the whole spectrum shrinks with it."
+            "Now watch a landscape change as a network learns three interleaved spirals. This network has "
+            f"{P} parameters, with its full Hessian computed at {K} stored checkpoints. Accuracy is on the "
+            f"{len(y)} training examples. <bookmark mark='a'/> {initial_v} <bookmark mark='b'/> "
+            "The signed-log plot divides each spectrum by its own absolute spectral radius, so its shape and "
+            f"absolute size must be read separately. {neg_v} <bookmark mark='c'/> Final counts: {final_v} "
+            f"Absolute scale: {radius_v} "
+            "The cutoffs are stated relative to each checkpoint's spectral radius. High-positive is a selected "
+            "cutoff, not a fitted statistical outlier test. Sagun and colleagues studied concentration of neural "
+            "network Hessian spectra in 2016; this small training example reports its own measured outcome."
         ) as vo:
             self.play(FadeIn(title), FadeIn(imgs[0]), FadeIn(frame), FadeIn(pts), FadeIn(g1), Create(lc), FadeIn(marker),
-                      FadeIn(g2), FadeIn(dots[0]), FadeIn(reads[0]), FadeIn(tag), run_time=2.0)
+                      FadeIn(g2), FadeIn(dots[0]), FadeIn(reads[0]), FadeIn(cutoff_note), FadeIn(tag), run_time=2.0)
             vo.wait_until("a")
             self.play(Indicate(dots[0], color=C.SURPRISE, scale_factor=1.0))
             vo.wait_until("b")
             for k in range(1, K):
                 rt = 1.0
                 self.play(FadeOut(imgs[k - 1]), FadeIn(imgs[k]), Transform(dots[0], dots[k]),
-                          FadeOut(reads[k - 1]), FadeIn(reads[k]), marker.animate.move_to(mpos(k)), run_time=rt)
-                if k == 2:
-                    vo.wait_until("c")
+                          FadeOut(reads[k - 1]), FadeIn(reads[k]),
+                          marker.animate.move_to(mpos(k)).set_opacity(marker_opacity(k)), run_time=rt)
+            vo.wait_until("c")
         self.wait(0.3)
         self.clear_scene()

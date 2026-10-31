@@ -10,6 +10,46 @@ from videos.ai.ai4.common import GRAD, HESS, HIST, PART, VALUE, load, log_axes
 GDC, NEWC = WHITE, C.BITS
 
 
+def objective_window(errors, lo=-12.0, hi=0.0):
+    errors = np.asarray(errors, float)
+    valid = np.isfinite(errors) & (errors >= 0)
+    displayed = np.full(errors.shape, np.nan)
+    displayed[valid] = np.clip(np.log10(np.maximum(errors[valid], 10 ** lo)), lo, hi)
+    return displayed, int(np.sum(valid & (errors < 10 ** lo))), int(np.sum(valid & (errors > 10 ** hi))), int(np.sum(~valid))
+
+
+def trajectory_bounds(*paths):
+    points = np.concatenate([np.asarray(path, float).reshape(-1, 2) for path in paths])
+    points = points[np.isfinite(points).all(axis=1)]
+    if not len(points):
+        return (-1.0, 1.0), (-1.0, 1.0)
+    low, high = points.min(0), points.max(0)
+    padding = np.maximum((high - low) * 0.1, 0.1)
+    return tuple((float(a), float(b)) for a, b in zip(low - padding, high + padding))
+
+
+def convergence_summary(result, method):
+    status = result["status"]
+    criterion = "gradient norm" if method == "Newton" else "objective gap to the numerical reference"
+    if "unavailable" in result["criterion"]:
+        return f"{method}'s objective-gap comparison is unavailable because the numerical reference is not stationary."
+    if status == "converged" and result["first_hit_step"] is not None:
+        return f"{method} first meets its {criterion} threshold at step {result['first_hit_step']}."
+    if status == "capped":
+        return f"{method} has not met its {criterion} threshold by its cap of {result['cap']} steps; the observed run is censored."
+    return f"{method} did not produce a finite converged result; its status is {status}."
+
+
+def digit_summary(errors):
+    errors = np.asarray(errors, float)
+    if len(errors) < 3 or not np.all(np.isfinite(errors) & (errors > 0)):
+        return "Three finite positive recorded errors are unavailable for a correct-digit comparison."
+    digits = [-math.log10(float(e)) for e in errors[:3]]
+    trend = ("The recorded counts increase in these steps." if all(b > a for a, b in zip(digits, digits[1:])) else
+             "The recorded counts do not increase at every step.")
+    return f"Correct-digit estimates are {digits[0]:.1f}, {digits[1]:.1f}, and {digits[2]:.1f}. {trend}"
+
+
 class Newton(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
@@ -56,10 +96,11 @@ class Newton(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "The gradient says which way is downhill. It doesn't say how the slope itself is changing. "
             "<bookmark mark='a'/> That's the second derivative, curvature. With many inputs it's a matrix of second "
-            "derivatives, the Hessian. <bookmark mark='b'/> It's symmetric, so, from part three, it has perpendicular "
+            "derivatives, the Hessian. <bookmark mark='b'/> For a twice continuously differentiable function it is "
+            "symmetric, so, from part three, it has perpendicular "
             "eigenvectors, the directions of pure curvature, and its eigenvalues say how sharply the surface bends "
-            "along each. <bookmark mark='c'/> Both positive: a bowl. One negative: a saddle, downhill one way and "
-            "uphill the other, which chapter fourteen takes up."
+            "along each. <bookmark mark='c'/> This quadratic is a bowl when both are positive. With mixed signs it is a "
+            "saddle at its stationary origin. Mixed curvature at an arbitrary point does not establish stationarity."
         ) as vo:
             self.play(Create(axes), FadeIn(s1), run_time=1.5)
             self.begin_ambient_camera_rotation(rate=0.08)
@@ -83,7 +124,7 @@ class Newton(VoiceoverScene, ThreeDScene):
             cmath(r"0", r"=", r"\nabla f + H \Delta", font_size=40),
             cmath(r"\Delta", r"=", r"-H^{-1} \nabla f", font_size=44, colors={r"\Delta": NEWC}),
         ]
-        whys = [why(r"Taylor to second order: \ the best quadratic"), why(r"its minimum: \ the gradient in $\Delta$ is zero"),
+        whys = [why(r"Taylor to second order: \ the best quadratic"), why(r"stationary quadratic: gradient in $\Delta$ is zero"),
                 why(r"if $H$ is positive definite: \ a minimum")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-2.2, buff=0.6, edge=6.9)
         hist = history_card(1669, r"Isaac Newton; \ Joseph Raphson (1690); \ Thomas Simpson (1740)",
@@ -91,7 +132,8 @@ class Newton(VoiceoverScene, ThreeDScene):
                             r"for maxima and minima", width=8.0, font_size=19, color=HIST).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The Hessian gives a better step. The first derivative made the best straight line; with the second, "
-            "the best quadratic. <bookmark mark='a'/> Jump straight to that quadratic's minimum, where its gradient "
+            "the local quadratic. When the Hessian is positive definite, this quadratic has a minimum. "
+            "<bookmark mark='a'/> Solve for that minimum, where its gradient "
             "is zero: <bookmark mark='b'/> the step is minus H inverse times the gradient. That's Newton's method. "
             "<bookmark mark='c'/> Newton used the idea in 1669 for roots of equations, Raphson simplified it in 1690, "
             "and Thomas Simpson extended it in 1740 to several variables and to finding minima."
@@ -117,55 +159,63 @@ class Newton(VoiceoverScene, ThreeDScene):
         def f(w1, w2):
             return float(np.logaddexp(0, -y * (X @ np.array([w1, w2]))).mean() + lam / 2 * (w1 * w1 + w2 * w2))
 
-        ax = Axes(x_range=[-0.3, 1.8, 0.5], y_range=[-0.9, 0.7, 0.5], x_length=6.2, y_length=4.7, tips=False,
+        xr, yr = trajectory_bounds(gd, nw, d["w_star"])
+        ax = Axes(x_range=[*xr, 0.5], y_range=[*yr, 0.5], x_length=6.2, y_length=4.7, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-3.4, -0.5, 0])
         levels = [f_star + 2e-4 * 2.5 ** k for k in range(8)]
-        cont = contour_lines(ax, f, (-0.3, 1.8), (-0.9, 0.7), levels, n=(90, 70), colors=("#2E6FB0", "#9CC3EA"))
-        gpath = VMobject(color=GDC, stroke_width=2.5).set_points_as_corners([ax.c2p(*q) for q in gd[::3]])
-        npath = VMobject(color=NEWC, stroke_width=4).set_points_as_corners([ax.c2p(*q) for q in nw[:5]])
-        ndots = VGroup(*[Dot(ax.c2p(*q), radius=0.07, color=NEWC) for q in nw[:4]])
+        cont = contour_lines(ax, f, xr, yr, levels, n=(90, 70), colors=("#2E6FB0", "#9CC3EA"))
+        gd_samples = np.vstack([gd[::3], gd[-1]])
+        gpath = curve(ax, gd_samples[:, 0], gd_samples[:, 1], GDC, 2.5)
+        npath = curve(ax, nw[:, 0], nw[:, 1], NEWC, 4)
+        ndots = VGroup(*[Dot(ax.c2p(*q), radius=0.07, color=NEWC) for q in nw if np.isfinite(q).all()])
         star = Star(n=5, outer_radius=0.14, color=YELLOW, fill_opacity=1).move_to(ax.c2p(*d["w_star"]))
         axl = VGroup(MathTex(r"w_1", font_size=24, color=GREY_B).next_to(ax, DOWN, buff=0.1),
                      MathTex(r"w_2", font_size=24, color=GREY_B).next_to(ax, LEFT, buff=0.1))
         # the error against the step, on a log scale
         ge = np.asarray(d["gd_err"])
-        stride = int(d["gd_err_stride"])
         ne = np.asarray(d["newton_err"])
-        steps = int(d["gd_steps"])
-        top = int(math.ceil(math.log10(steps)))
-        g2 = log_axes((0, top), (-12, 0), x_length=5.0, y_length=3.6, xlabel=r"step $+1$",
-                      ylabel=r"$f - f^*$", center=[3.9, -0.1, 0], ystep=3)
+        gd_result, nw_result = d["convergence"]["gd"], d["convergence"]["newton"]
+        steps = int(gd_result["iterations"])
+        top = max(1, int(math.ceil(math.log10(max(steps, len(ne), 1) + 1))))
+        g2 = log_axes((0, top), (-12, 0), x_length=5.0, y_length=3.4, xlabel=r"iteration $+1$",
+                      ylabel=r"$f - f^*_{\rm reference}$", center=[3.9, 0.0, 0], ystep=3)
         a2 = g2.ax
-        t_gd = np.arange(len(ge)) * stride + 1
-        okg = ge > 1e-13
-        c_gd = curve(a2, np.log10(t_gd[okg]), np.clip(np.log10(ge[okg]), -12, 0), GDC, 3)
-        okn = ne > 1e-13
-        c_nw = VGroup(curve(a2, np.log10(np.arange(len(ne))[okn] + 1), np.clip(np.log10(ne[okn]), -12, 0), NEWC, 3.5),
-                      *[Dot(a2.c2p(math.log10(i + 1), max(math.log10(e), -12)), radius=0.06, color=NEWC)
-                        for i, e in enumerate(ne) if e > 1e-13])
-        digits = [int(math.floor(-math.log10(e))) for e in ne if e > 1e-13]
-        nsteps = int(d["newton_steps"])
+        t_gd = np.asarray(d["gd_err_steps"], int) + 1
+        yg, gf, gc, gi = objective_window(ge)
+        yn, nf, nc, ni = objective_window(ne)
+        c_gd = curve(a2, np.log10(t_gd), yg, GDC, 3)
+        c_nw = VGroup(curve(a2, np.log10(np.arange(len(ne)) + 1), yn, NEWC, 3.5),
+                      *[Dot(a2.c2p(math.log10(i + 1), v), radius=0.06, color=NEWC)
+                        for i, v in enumerate(yn) if math.isfinite(v)])
+        gd_summary = convergence_summary(gd_result, "Gradient descent")
+        nw_summary = convergence_summary(nw_result, "Newton")
+        gd_label = (r"reference comparison unavailable" if "unavailable" in gd_result["criterion"] else
+                    rf"first hit: ${gd_result['first_hit_step']}$" if gd_result["status"] == "converged" else
+                    rf"{gd_result['status']}: ${gd_result['iterations']}$ iterations")
+        nw_label = (rf"first hit: ${nw_result['first_hit_step']}$" if nw_result["status"] == "converged" else
+                    rf"{nw_result['status']}: ${nw_result['iterations']}$ iterations")
         info = VGroup(
-            label(rf"logistic regression, \ two correlated features: \ curvatures ${d['kappa']:.0f}$ times apart",
+            label(rf"logistic regression, two correlated features: curvature ratio ${d['kappa']:.0f}$",
                   font_size=22, color=GREY_A),
-            label(rf"gradient descent \ (step $1/L$): \ ${steps:,}$ steps to $10^{{-10}}$".replace(",", "{,}"), font_size=22,
-                  color=GDC),
-            label(rf"Newton: \ ${nsteps}$ steps; \ correct digits ${', '.join(str(k) for k in digits)}$", font_size=22,
-                  color=NEWC),
+            label(rf"GD: conservative $1/L$ step; {gd_label}; objective-gap threshold ${sci(gd_result['threshold'], 0)}$",
+                  font_size=21, color=GDC),
+            label(rf"Newton: {nw_label}; gradient-norm threshold ${sci(nw_result['threshold'], 0)}$",
+                  font_size=21, color=NEWC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(UP, buff=0.3)
-        tag = note(r"computed").next_to(g2, DOWN, buff=0.1).align_to(g2, RIGHT)
-        d1, d2, d3 = (int(math.floor(-math.log10(max(e, 1e-17)))) for e in ne[1:4])
-        doubling = d2 >= 1.6 * d1 and d3 >= 1.6 * d2
-        verdict = ("roughly doubling each step: quadratic convergence" if doubling else
-                   "growing faster every step")
+        tag = note(r"computed; paths join recorded iterates, invalid points omitted; star: numerical reference\\"
+                   rf"error display: $10^{{-12}}$ floor incl. zero ({gf + nf}); $1$ ceiling ({gc + nc}); invalid omitted ({gi + ni})",
+                   font_size=16).to_edge(DOWN, buff=0.16)
+        digit_v = digit_summary(ne[1:4])
         with self.voiceover(
-            "A test: logistic regression, a classifier Part 6 builds, with two features so correlated that the curvature "
-            f"differs {d['kappa']:.0f}-fold between directions. <bookmark mark='a'/> Gradient descent, with the largest "
-            f"step that is always safe, zigzags down the valley and needs {steps:,} steps to get within ten to the "
-            f"minus ten of the minimum. <bookmark mark='b'/> Newton needs {nsteps}. <bookmark mark='c'/> Count its "
-            f"correct digits after each step: {d1}, then {d2}, then {d3}, {verdict}. <bookmark mark='d'/> The catch is the Hessian itself: each step solves "
-            "a linear system with it, and for a billion parameters it would have a billion squared entries. The next "
-            "chapter uses curvature without ever building it."
+            "A test: logistic regression, a classifier Part 6 builds, with two correlated features. The curvature "
+            f"ratio at the reference solution is {d['kappa']:.0f}. <bookmark mark='a'/> Gradient descent uses the "
+            f"conservative step one over L, where L globally bounds curvature. {gd_summary} "
+            f"<bookmark mark='b'/> {nw_summary} These are iteration counts, not equal amounts of work per step. "
+            f"<bookmark mark='c'/> {digit_v} Local quadratic convergence requires a sufficiently close starting point "
+            "and a nonsingular Hessian with suitable smoothness; three digit counts alone do not certify it. "
+            "<bookmark mark='d'/> The catch is the Hessian itself: each step solves a linear system with it, and for "
+            "a billion parameters it would have a billion squared entries. The next chapter uses curvature without "
+            "ever building it."
         ) as vo:
             self.play(FadeIn(info[0]), Create(ax), LaggedStart(*[Create(c) for c in cont], lag_ratio=0.1), FadeIn(axl),
                       FadeIn(star), run_time=1.8)
@@ -175,6 +225,7 @@ class Newton(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(Create(npath), FadeIn(ndots), Create(c_nw), FadeIn(info[2]), run_time=1.5)
             vo.wait_until("c")
-            self.play(Indicate(info[2], color=NEWC, scale_factor=1.05))
+            self.play(Indicate(info[2], color=NEWC, scale_factor=1.0))
+            vo.wait_until("d")
         self.wait(0.3)
         self.clear_scene()
