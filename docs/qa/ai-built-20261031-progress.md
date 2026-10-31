@@ -145,14 +145,26 @@ full computations, visual renders and audio remain pending. No Part 2 source was
 ## Narration pronunciation repair
 
 A real local Qwen3-TTS/ASR stress probe of scientific e-notation produced an ASR lead in which the negative
-exponent was lost (best score0.902, below0.93). The [probe record](evidence/ai1-mi/pronunciation-probe.json)
+exponent was lost (best score 0.902, below 0.93). The [probe record](evidence/ai1-mi/pronunciation-probe.json)
 retains exact expected/heard text, timing and waveform hash. This is ASR evidence, not manual listening.
 The MI narration now says explicit signed millionths of a bit in English/Chinese; on-screen values are unchanged.
 A regression evaluates the actual source utterance and verifies the Chinese negative sign; 74 tests pass and
-all160 narration source templates remain covered. Updated scene/audio checks are running. The earlier Information
+all 160 narration source templates remain covered. Updated scene/audio checks are running. The earlier Information
 audio job was cancelled as stale after one of six blocks; it is not a chapter audio pass. The server may finish
 its already received request before accepting current-source work.
 
-Observed CPU cost: the stress probe retained10.28seconds of speech after633.1seconds including four takes and
-checking; the3.6-second chapter-card utterance took119.4seconds. Those measurements expose a real narration
-throughput limit in this4-core CPU environment; full bilingual narration/listening is still outstanding.
+Observed CPU cost: the stress probe retained 10.28 seconds of speech after 633.1 seconds including four takes and
+checking; the 3.6-second chapter-card utterance took 119.4 seconds. Those measurements expose a real narration
+throughput limit in this 4-core CPU environment; full bilingual narration/listening is still outstanding.
+
+## CPU narration memory failure
+
+The first long Information paragraph caused the local narration process to exit 137. The 16 GiB container recorded
+one OOM kill. The old Torch engine batched every pending sentence of a paragraph while retaining the speech, ASR
+and alignment models in memory. CPU synthesis now serializes those chunks; the GPU path retains its original
+batching. Two regression tests exercise the actual TorchEngine class with a model double, including order, voice,
+language, retry temperature and maximum CPU batch size. All 76 tests pass. This is not real GPU validation.
+
+The local server has been restarted with the bounded CPU path and two threads. A real repeat of current-source
+synthesis is still pending; the memory fix is not a claim that the full narrated chapter or series passed. Earlier
+throughput measurements used one speech thread alongside renders, so they are not a dedicated-machine benchmark.
