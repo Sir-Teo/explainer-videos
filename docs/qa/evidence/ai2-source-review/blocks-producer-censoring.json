@@ -1,0 +1,12 @@
+{
+  "observed_utc": "2026-10-31T16:18:28.511902+00:00",
+  "source_sha256": "a9eb15b35ca0c21392e4c20c1328dda27b50e431a2d32973ccae117d285f4925",
+  "test_sha256": "a33a3d838ccc4b2ab6a741adaf9a3e69a29bf4a64fbcf525c1dfa2cad1c6e11a",
+  "default_blocks_cache_sha256": "b4dad9d1da37f2fff2eb24896b396e96e0a62afe455f5078eae6c65ef4849e5b",
+  "default_cache_unchanged": true,
+  "actual_production_search_or_cache_write": false,
+  "producer_tests": 5,
+  "full_repository_tests": 150,
+  "verification_log": "renders/qa/unittest-part2-producer-final.log",
+  "scope": "Conditional producer repair; mixed stopped/solved fixtures are not default-run outcomes"
+}

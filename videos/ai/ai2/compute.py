@@ -936,7 +936,7 @@ def compute_blocks(per_n=12):
                 row.update(hmax=e, hmax_len=len(p) if p is not None else -1)
             p, e = B.best_first(s0, goal, kind="ff", greedy=True)
             row.update(ff=e, ff_len=len(p) if p is not None else -1)
-            if "bfs_len" in row:
+            if "bfs_len" in row and row["bfs_len"] >= 0 and row["hmax_len"] >= 0:
                 assert row["hmax_len"] == row["bfs_len"]
             rows.append(row)
     out["rows"] = rows
