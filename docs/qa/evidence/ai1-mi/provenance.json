@@ -1,0 +1,62 @@
+[
+  {
+    "subset": "Information.memory only",
+    "mode": "before",
+    "lang": "en",
+    "duration": 58.73333333333353,
+    "movie": "renders/qa/ai1-mi-comparison/en/before/media/videos/480p15/KLComparison.mp4",
+    "source_sha256": "73fed1a6bfce19c4cc4893d3496b9e4a4c740cf43d25be64ae7c81ded407a243",
+    "source_commit": "af170318c179bfb56fa28aafe73477c56f5b80d8",
+    "input_sha256": {
+      ".cache/ai1/mi.json": "77457acc5b9cf2e32ff99fcfd0201a70c96c066dd148209a8043d289ec6852f4",
+      ".cache/ai1/mi.npz": "91a670bb30ec44883a131234b3782fc95b3725a8fc19074d741a7f22ee3c501d",
+      ".cache/ai1/corpus.json": "c1cc5d8d66bb4ac1e5a93a2bb9b3adc588fa4e6bd0e5e7271103fde4c74d4f8a"
+    },
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 59 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 59 s\n",
+    "provenance_note": "Before uses baseline scene code against the same regenerated corrected data as after. Original compute aborted; this is a reconstructed comparison, not a preexisting approved export.",
+    "review_scope": "Information.memory() only. Real silent render/full decode, endpoint and24sampledframe inspections; no fullplayback/narratedlistening signoff.",
+    "committed_image": "en-before.png",
+    "image_sha256": "d356cd82e9fc0823de78710a229572b33b1c356057cac6a4559f5037d1bef2bd"
+  },
+  {
+    "subset": "Information.memory only",
+    "mode": "after",
+    "lang": "en",
+    "duration": 77.26666666666675,
+    "movie": "renders/qa/ai1-mi-comparison/en/after/media/videos/480p15/KLComparison.mp4",
+    "source_sha256": "b585aaaa58df01ad26d7a6775e80cf6bcd3ced73366ae0acd73bade014bc5048",
+    "source_commit": null,
+    "input_sha256": {
+      ".cache/ai1/mi.json": "77457acc5b9cf2e32ff99fcfd0201a70c96c066dd148209a8043d289ec6852f4",
+      ".cache/ai1/mi.npz": "91a670bb30ec44883a131234b3782fc95b3725a8fc19074d741a7f22ee3c501d",
+      ".cache/ai1/corpus.json": "c1cc5d8d66bb4ac1e5a93a2bb9b3adc588fa4e6bd0e5e7271103fde4c74d4f8a"
+    },
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 77 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 77 s\n",
+    "provenance_note": "Current scene and regenerated corrected MI data.",
+    "review_scope": "Information.memory() only. Real silent render/full decode, endpoint and24sampledframe inspections; no fullplayback/narratedlistening signoff.",
+    "committed_image": "en-after.png",
+    "image_sha256": "40778885f9dd5e0efea9173f3edaeb63b4111f2f10ce069d894a096a41c71e5f"
+  },
+  {
+    "subset": "Information.memory only",
+    "mode": "after",
+    "lang": "zh",
+    "duration": 88.19999999999997,
+    "movie": "renders/qa/ai1-mi-comparison/zh/after/media/videos/480p15/KLComparison.mp4",
+    "source_sha256": "b585aaaa58df01ad26d7a6775e80cf6bcd3ced73366ae0acd73bade014bc5048",
+    "source_commit": null,
+    "input_sha256": {
+      ".cache/ai1/mi.json": "77457acc5b9cf2e32ff99fcfd0201a70c96c066dd148209a8043d289ec6852f4",
+      ".cache/ai1/mi.npz": "91a670bb30ec44883a131234b3782fc95b3725a8fc19074d741a7f22ee3c501d",
+      ".cache/ai1/corpus.json": "c1cc5d8d66bb4ac1e5a93a2bb9b3adc588fa4e6bd0e5e7271103fde4c74d4f8a"
+    },
+    "full_video_decode": "passed",
+    "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 88 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 88 s\n",
+    "provenance_note": "Current scene and regenerated corrected MI data.",
+    "review_scope": "Information.memory() only. Real silent render/full decode, endpoint and24sampledframe inspections; no fullplayback/narratedlistening signoff.",
+    "committed_image": "zh-after.png",
+    "image_sha256": "3c362a9e3aae99e6f81ffbd29d0973c62bcb11ca4c7b9760d37d60cec6701755"
+  }
+]

@@ -8,7 +8,10 @@
     "source_commit": "af170318c179bfb56fa28aafe73477c56f5b80d8",
     "source_sha256": "691c1cd559f7f175199740264eb364b8dc8a04136a08f9469174c4cd55136845",
     "note": "Render succeeded; metadata serialization failed afterward, metadata reconstructed from ffprobe.",
-    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "input_sha256": {
+      ".cache/ai1/kl.json": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+      ".cache/ai1/kl.npz": "dfc4032a422a2cf0f388e582ebd29fa7fc4ff98d8e9bc077df66871e67d1e9ef"
+    },
     "images": "Extracted from the actual silent MP4 near each narration-block end",
     "image_times": [
       34.120333333333335,
@@ -28,7 +31,10 @@
     "movie": "renders/qa/ai1-kl-comparison/en/after/media/videos/480p15/KLComparison.mp4",
     "source_commit": null,
     "source_sha256": "cf2fd9a715e88339ae83c1a60472c7d25d6b977f3de33fc9b2086730755d65f5",
-    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "input_sha256": {
+      ".cache/ai1/kl.json": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+      ".cache/ai1/kl.npz": "dfc4032a422a2cf0f388e582ebd29fa7fc4ff98d8e9bc077df66871e67d1e9ef"
+    },
     "images": "Extracted from the actual silent MP4 near each narration-block end",
     "image_times": [
       34.120333333333335,
@@ -48,7 +54,10 @@
     "movie": "renders/qa/ai1-kl-comparison/zh/before/media/videos/480p15/KLComparison.mp4",
     "source_commit": "af170318c179bfb56fa28aafe73477c56f5b80d8",
     "source_sha256": "691c1cd559f7f175199740264eb364b8dc8a04136a08f9469174c4cd55136845",
-    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "input_sha256": {
+      ".cache/ai1/kl.json": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+      ".cache/ai1/kl.npz": "dfc4032a422a2cf0f388e582ebd29fa7fc4ff98d8e9bc077df66871e67d1e9ef"
+    },
     "images": "Extracted from the actual silent MP4 near each narration-block end",
     "image_times": [
       34.68020833333333,
@@ -68,7 +77,10 @@
     "movie": "renders/qa/ai1-kl-comparison/zh/after/media/videos/480p15/KLComparison.mp4",
     "source_commit": null,
     "source_sha256": "cf2fd9a715e88339ae83c1a60472c7d25d6b977f3de33fc9b2086730755d65f5",
-    "input_sha256": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+    "input_sha256": {
+      ".cache/ai1/kl.json": "8edbd45cd54e796c857ccca3c5b291314913e863deccccba34338510bf2d34a6",
+      ".cache/ai1/kl.npz": "dfc4032a422a2cf0f388e582ebd29fa7fc4ff98d8e9bc077df66871e67d1e9ef"
+    },
     "images": "Extracted from the actual silent MP4 near each narration-block end",
     "image_times": [
       34.68020833333333,
