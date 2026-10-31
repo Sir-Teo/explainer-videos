@@ -70,6 +70,7 @@ class CacheIntegrityTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.cache=Path(self.tmp.name)/'ai3'
+        self.real_dependencies = integrity.dependencies
         self.deps=patch.object(integrity,'dependencies',return_value={'fixture':'original'});self.deps.start();self.addCleanup(self.deps.stop)
 
     def publish(self,name='einsum'):
@@ -99,6 +100,35 @@ class CacheIntegrityTests(unittest.TestCase):
         for value in ('{','[]','null','{"value":NaN}'):
             with self.subTest(value=value):p.write_text(value);self.assertFalse(self.current())
 
+    def test_non_object_sidecars_are_stale_in_cached_only_qa(self):
+        self.publish()
+        side = integrity.sidecar_path(self.cache, 'einsum')
+        payload = self.cache / 'einsum.json'
+        before = payload.read_bytes(), payload.stat().st_mtime_ns
+        cache = compute.SchemaCache('ai3')
+        cache.dir = self.cache
+        producer = Mock(side_effect=AssertionError('unexpected producer'))
+        cache.items = {'einsum': producer}
+        with patch.object(compute, 'CACHE', cache):
+            for value in ([], None, ['nonempty'], 'invalid', 1, True):
+                with self.subTest(value=value):
+                    side.write_text(json.dumps(value))
+                    with self.assertRaises(qa_series.StaleDataError):
+                        qa_series.require_current_cache(compute, 'ai3', payload, 'einsum')
+                    self.assertEqual(json.loads(side.read_text()), value)
+        producer.assert_not_called()
+        self.assertEqual(before, (payload.read_bytes(), payload.stat().st_mtime_ns))
+
+    def test_non_object_legacy_evidence_is_stale(self):
+        record = self.publish()
+        side = integrity.sidecar_path(self.cache, 'einsum')
+        record['origin'] = 'postproduction-attestation'
+        for value in ([], None, ['nonempty'], 'invalid', 1, True):
+            with self.subTest(value=value):
+                record['evidence'] = value
+                side.write_text(json.dumps(record))
+                self.assertFalse(self.current())
+
     def test_npz_truncated_shape_changed_or_object_are_stale(self):
         for mode in ('truncated','shape','object','missing'):
             with self.subTest(mode=mode):
@@ -119,6 +149,27 @@ class CacheIntegrityTests(unittest.TestCase):
         self.publish()
         with patch.object(integrity,'recipe',return_value={'drift':1}):self.assertFalse(self.current())
         with patch.object(integrity,'dependencies',return_value={'fixture':'changed'}):self.assertFalse(self.current())
+
+    def test_power_rejects_transitively_stale_letters_without_payload_changes(self):
+        bigram = self.cache.parent / 'ai1' / 'bigram.json'
+        bigram.parent.mkdir(parents=True)
+        bigram.write_text('{"fixture":1}')
+        model = Path(self.tmp.name) / 'model.safetensors'
+        config = model.with_name('config.json')
+        model.write_bytes(b'local test weights')
+        config.write_text('{}')
+        with patch.object(integrity, 'dependencies', side_effect=self.real_dependencies), \
+                patch.object(integrity, '_gpt2_files', return_value={'config': config, 'weights': model}):
+            self.publish('letters')
+            self.publish('power')
+            self.assertTrue(self.current('power'))
+            before = {p: (p.read_bytes(), p.stat().st_mtime_ns)
+                      for p in self.cache.glob('*') if p.is_file() and p.suffix in ('.json', '.npz')}
+            # Only the upstream bigram changes; direct power dependencies are identical.
+            bigram.write_text('{"fixture":2}')
+            self.assertFalse(self.current('letters'))
+            self.assertFalse(self.current('power'))
+            self.assertEqual(before, {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in before})
 
     def test_recipe_tracks_algorithm_and_constants_not_validator_only_edits(self):
         p=Path(self.tmp.name)/'compute.py';p.write_bytes(SOURCE.read_bytes())

@@ -315,12 +315,16 @@ def current(name, cache_dir, root, producer_source):
     try:
         with cache_lock(Path(cache_dir)/f"{name}.json"):
             value=json.loads(sidecar_path(cache_dir,name).read_text())
+            if not isinstance(value, dict):return False
             if value.get("integrity_version")!=VERSION or value.get("item")!=name:return False
             if value.get("origin") not in ("postproduction-attestation","producer-save"):return False
             if value.get("origin")=="postproduction-attestation":
-                evidence=value.get("evidence") or {}
+                evidence=value.get("evidence")
+                if not isinstance(evidence, dict):return False
                 if evidence.get("original_producer_sha256")!=ORIGINAL_PRODUCER:return False
                 if evidence.get("expected_artifacts")!=value.get("artifacts"):return False
+            # Equal letters payload bytes can outlive their own bigram lineage.
+            if name == "power" and not current("letters", cache_dir, root, producer_source):return False
             return (value.get("artifacts")==inspect_payload(name,cache_dir)
                     and value.get("recipe")==recipe(name,producer_source)
                     and value.get("dependencies_observed_now")==dependencies(name,cache_dir,root))

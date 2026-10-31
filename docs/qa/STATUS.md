@@ -3,9 +3,9 @@
 Observed: 2026-10-31 21:03 UTC. Progress, **not full-series production approval**.
 
 Branch: `qa/ai-series-cloud-20261031`. Latest verified pushed commit before this checkpoint:
-`d0b785420b56141f5f4cb56984a47c9590fb88ca` (verified against the remote branch at21:03UTC).
-The current cache-integrity/scene batch passed all235repository tests in26.689seconds; subsequent GaLore
-wording has its own10passing narration tests and fresh renders pending. Actual41-phase Manim rotation
+`23c6e5147e26e8f72822be25c257d0007f371a3c` (verified against the remote branch at21:06UTC).
+The current cache-integrity/scene batch passed all238repository tests in27.567seconds, including the GaLore
+wording and new sidecar-type/transitive-lineage regressions. Fresh scene render reviews remain separate. Actual41-phase Manim rotation
 fixtures also pass. Test results and selected-image review have separate scopes.
 
 Part 1: all 17 scenes, both languages, have endpoint captures and complete silent renders. The baseline temporal
@@ -77,6 +77,10 @@ The Chinese Outro's two missing caption translations are corrected; fresh EN/ZH 
 have zero runtime warnings. Actual final selected-image inspection is pending. Earlier warning-bearing records
 remain historical evidence, not newly relabelled passes.
 
-Storage: about4.3GiB free after reclaiming only an inactive, reproducible public ASR model cache. All numerical
+Storage: about3.7GiB free after reclaiming only an inactive, reproducible public ASR model cache. All numerical
 payloads/checkpoints, original source, unique visual evidence and pending-upload files were preserved. The normal
 public redownload route and exact evicted revision are recorded in the capacity receipt; no access was bypassed.
+
+Independent review also closed malformed-sidecar and transitive Power/Letters lineage gaps. The new
+[robustness receipt](evidence/ai3-cache-integrity-robustness/README.md) records22focused tests, the238-test full suite
+and a repeated zero-producer actual-load/payload-preservation check. No valid numerical result was recomputed.
