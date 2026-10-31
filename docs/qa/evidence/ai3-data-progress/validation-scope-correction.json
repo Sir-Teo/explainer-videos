@@ -1,0 +1,28 @@
+{
+  "observed_utc": "2026-10-31T20:48:59.617852+00:00",
+  "applies_to_receipt": "completion-all-17.json",
+  "original_receipt_sha256": "780389cf97a4a7785bf0cdd82012343ebf0647d3c59be99470d7dc3a46e6efb1",
+  "strict_schema_recipe_array_items": [
+    "gpt2",
+    "norms",
+    "mp",
+    "galore",
+    "words",
+    "sgns",
+    "jl",
+    "mf",
+    "twotower"
+  ],
+  "existence_only_items_at_original_check": [
+    "einsum",
+    "project",
+    "letters",
+    "power",
+    "image",
+    "depth",
+    "galorectl",
+    "highdim"
+  ],
+  "correction": "The recorded17True returnvalues and successfulgenerationprocesses remain accurate. They must not be read as uniform provenance validation:8paths bypassed JSONparsing/NPZ/schema/recipechecks. Postproductionintegrity/recipecompatibility checks are being added without altering numericpayloads. Originalconsumed dependencyhashes cannotbe invented retrospectively.",
+  "implementation_status": "Inprogress; originalguardnotyetchanged. Currentdependencies/source/logattestation willbe explicit anddistinct fromfutureproducer-save origins."
+}
