@@ -1,0 +1,1122 @@
+{
+  "observed_utc": "2026-10-31T21:10:56.687178+00:00",
+  "part": 3,
+  "numerical_items_completed": 17,
+  "chapter_language_cases": 38,
+  "source_review": "All19 sources reviewed",
+  "production_approval": "pending",
+  "listening": "unverified",
+  "continuous_perceptual_review": "unverified",
+  "snapshot_limits": "Records are sequentially read while unrelated selected-image inspection proceeds. Source hashes are checkpoint bytes, not proof of historical worker import. Conservative warnings preserved. Exact artifact visual coverage belongs to linked per-case receipts. Runtime/source fields retain the initial dated snapshot; later selected-review status updates are separately timestamped.",
+  "chapters": [
+    {
+      "scene": "Hook",
+      "title": "Where words live",
+      "source_file": "videos/ai/ai3/s01_hook.py",
+      "source_sha256_at_checkpoint": "ef357b016949f41b3a5383891534634d83dfc84518bd53b228f82e87baef5a3a",
+      "selected_review": "Selected review complete: EN356/ZH374",
+      "repair_or_checks": "Label halos, transition continuity, footer clearance",
+      "evidence_directory": "docs/qa/evidence/ai3-hook-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Hook/result.json",
+            "record_sha256": "000b71bb9d0728d813a70f76cd71b75fa0024180c4e6e664c3498663b4834165",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "8e367d7cfa00f504333569bff3346007f0ccbb3e3ef74975aa4eaf81613b01b3",
+            "recorded_visual_review": "pending",
+            "duration": 146.6258425925926,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Hook_motion/result.json",
+            "record_sha256": "895c07e78c69c8b82143198c0fbf9239a080ba6ec3bbda41e6f565171944c2eb",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "257976476e86ed8a3e925a09c9e50c911f01fd7f0267630a329b826d8c7b5188",
+            "recorded_visual_review": "pending",
+            "duration": 146.19999999999956,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Hook/result.json",
+            "record_sha256": "22d4d315e54c96d0d31973bf56d0be5847d1e0206e66b63075c5eed71d04780c",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "a8ef30a67b1971408ced25b6889423cb987ce32756d9d30a9cdc519b9b0e026c",
+            "recorded_visual_review": "pending",
+            "duration": 166.29112900235933,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Hook_motion/result.json",
+            "record_sha256": "58ed85bef19893010f6e515a5749ff397813149387215faf18dc33ec659b1e3b",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "e6c0e095180122d5effa4692138983ec93e548f64f058ba1a459fcee46959e42",
+            "recorded_visual_review": "pending",
+            "duration": 165.86666666666602,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Vectors",
+      "title": "1. Vectors and the inner product",
+      "source_file": "videos/ai/ai3/s02_vectors.py",
+      "source_sha256_at_checkpoint": "110a369b78476c6d4a302e9ff61dfbb5fe5e569a74e0843d2c249cc1eb5cb62e",
+      "selected_review": "Selected review complete: EN511/ZH489",
+      "repair_or_checks": "Raw-logit baseline, protected transition, both equality signs",
+      "evidence_directory": "docs/qa/evidence/ai3-vectors-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Vectors/result.json",
+            "record_sha256": "ccb7dfdc9e19c4382b15bf55d18b76622c9d3f7bfc174f978369a58dee2c6074",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78",
+            "recorded_visual_review": "pending",
+            "duration": 199.17168055555558,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Vectors_motion/result.json",
+            "record_sha256": "b8837a04bf07d3e4edef05d086f89406342c63c40e86dd3e25c60d16b4b77f07",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 198.7999999999985,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Vectors/result.json",
+            "record_sha256": "ad379c92d469dabca2594939a1a7dfb8ce430bebac39854e102da9655bda20dc",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "e8a8cc7ab5bf2983f747fa05cfdaf62eab4d83b20dd821afd11ae69c70bca0d8",
+            "recorded_visual_review": "pending",
+            "duration": 199.3800238799107,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Vectors_motion/result.json",
+            "record_sha256": "11329c1f9034ce1869ce50075d28c5bad077be9b99579ea9dceaf20d0c7f8496",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 198.9999999999984,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Einsum",
+      "title": "2. Tensors and einsum",
+      "source_file": "videos/ai/ai3/s03_einsum.py",
+      "source_sha256_at_checkpoint": "4cf32fd13a907723f2478104b8be2de7dd38df693fa330558edb15d1716ed23e",
+      "selected_review": "Selected review complete: EN402/ZH407",
+      "repair_or_checks": "Index-role legend and rank-at-most-one qualification",
+      "evidence_directory": "docs/qa/evidence/ai3-einsum-rank-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Einsum/result.json",
+            "record_sha256": "3a0189cb9a6bd22b101bfc98bb059e246abaa9ef3908b15add320cf5f69829c3",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80",
+            "recorded_visual_review": "pending",
+            "duration": 160.55908333333335,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Einsum_motion/result.json",
+            "record_sha256": "aadabc0bedef6e34b8839fa280238c0866e73b156ea01264438c10c488a25578",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80",
+            "recorded_visual_review": "pending",
+            "duration": 160.06666666666598,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Einsum/result.json",
+            "record_sha256": "d08eda7c4f4e51094a86ec0dc271d05d7681b629dca5284557e0eb20cff11b4f",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "bca25458d4cd1163e65c538e053de04c14f32d8cfac81fa3a0b6f56bd5907c80",
+            "recorded_visual_review": "pending",
+            "duration": 159.90450000000004,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Einsum_motion/result.json",
+            "record_sha256": "326b6916bdf4134c00a1801a5e8d70db0082cd7f146a90cdbedff81cdcaeb3e1",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "4382502c95ce4f56dc9a93df98e8b223497818c55a1d752d81093828cbeb4041",
+            "recorded_visual_review": "pending",
+            "duration": 159.3999999999993,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Matrices",
+      "title": "3. Matrices move space",
+      "source_file": "videos/ai/ai3/s04_matrices.py",
+      "source_sha256_at_checkpoint": "ddc663f7dddd7d9377b269a4aff97268316f944b3d3a532867f968962ee25e47",
+      "selected_review": "Bilingual repaired selected review complete",
+      "repair_or_checks": "Rigid rotations and protected composition headings",
+      "evidence_directory": "docs/qa/evidence/ai3-matrices-eigen-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Matrices/result.json",
+            "record_sha256": "c6550e8cf1fa71a395f8f6301a6f292d9f8ad5e9f6e1cf3cea5aa50b72d444cc",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78",
+            "recorded_visual_review": "pending",
+            "duration": 132.11352083333335,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Matrices_motion/result.json",
+            "record_sha256": "c4b7f03f8a014898fb117c07ad51b18635c709bd9b6d515593937ccef60d4edd",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 131.73333333333255,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Matrices/result.json",
+            "record_sha256": "9cd4f4e5dc33ad8da550319d8a4d81785947d00a713d1e795c1d921a7af86a71",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "e8a8cc7ab5bf2983f747fa05cfdaf62eab4d83b20dd821afd11ae69c70bca0d8",
+            "recorded_visual_review": "pending",
+            "duration": 133.07837568399455,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Matrices_motion/result.json",
+            "record_sha256": "2d18a078cedbc9f853d123e5da2c42b4af34091e0b4f869a77079784848b0c29",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 132.59999999999926,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Projection",
+      "title": "4. Projection and least squares",
+      "source_file": "videos/ai/ai3/s05_projection.py",
+      "source_sha256_at_checkpoint": "51ec9acc613b590f70f0f0410087749d5f66799238baa85649ceefd4dacac5ae",
+      "selected_review": "Selected review complete: EN521/ZH550",
+      "repair_or_checks": "Plot/legend margins, native Chinese bottom inset",
+      "evidence_directory": "docs/qa/evidence/ai3-projection-selected-review",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Projection/result.json",
+            "record_sha256": "19126a23125bfd3862ef20706130dbb42fa09acae420827762f3bb44a8622f73",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+            "recorded_visual_review": "pending",
+            "duration": 202.03133333333338,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Projection_motion/result.json",
+            "record_sha256": "d8423657fc24dbdea1e4bc937bf3930967923ada6e921811d41408b68c4bd0ff",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+            "recorded_visual_review": "pending",
+            "duration": 201.5333333333318,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Projection/result.json",
+            "record_sha256": "4d7fbdf7f248cf71c9bb095a9a20e86ef367ad66a83971866ef6481149217bba",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+            "recorded_visual_review": "pending",
+            "duration": 212.4045,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Projection_motion/result.json",
+            "record_sha256": "b1a45f11fe34da80935290c3ac4c3201becd7370aad6a067699f400669bc0786",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "a19275e5208e72af9e98ebf4dc23d4facc21b96dc771ad8a757b3fa5fe8567de",
+            "recorded_visual_review": "pending",
+            "duration": 211.99999999999878,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Eigen",
+      "title": "5. Directions that stay put",
+      "source_file": "videos/ai/ai3/s06_eigen.py",
+      "source_sha256_at_checkpoint": "5f83069e33e325b05874f5b9c9a507bd5b06d5f2b10fa2ab7c2ee4bd86278fd0",
+      "selected_review": "Bilingual repaired selected review complete",
+      "repair_or_checks": "Rigid eigenbasis rotations and uniform PCA viewport",
+      "evidence_directory": "docs/qa/evidence/ai3-matrices-eigen-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Eigen/result.json",
+            "record_sha256": "aa58d516d3a1e46f646def8b06ca888094c47704dc7415cb7a83f9f3c8022365",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78",
+            "recorded_visual_review": "pending",
+            "duration": 161.75358333333335,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Eigen_motion/result.json",
+            "record_sha256": "f1483bfe90e825b6b90b621964203f67f92659e31a35af30205b9b493c30902c",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 161.3999999999992,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Eigen/result.json",
+            "record_sha256": "1f32d679f1840bbfc24a4392a9c0306a7e4c476a3ac992facd30768edcdc6ac5",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+            "recorded_visual_review": "pending",
+            "duration": 184.48591666666672,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Eigen_motion/result.json",
+            "record_sha256": "00179b94b508a4950001e36d7ed7733d8e4d63d96a30d7edb67a5dbfd521dac0",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 183.99999999999898,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Power",
+      "title": "6. Power iteration, run live",
+      "source_file": "videos/ai/ai3/s07_power.py",
+      "source_sha256_at_checkpoint": "3a0bf8e0af73cf30fd68f528881e46db9e29be38d6a0f756378f815ceb59809c",
+      "selected_review": "Selected review complete: EN318/ZH315",
+      "repair_or_checks": "Roundoff leader and non-growing prediction emphasis",
+      "evidence_directory": "docs/qa/evidence/ai3-power-svd-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Power/result.json",
+            "record_sha256": "31010edcd4d8ea805257f30fec58fd3daec60adb42d74e22bcdd95b56d7617b3",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a8ef30a67b1971408ced25b6889423cb987ce32756d9d30a9cdc519b9b0e026c",
+            "recorded_visual_review": "pending",
+            "duration": 141.43243320105825,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Power_motion/result.json",
+            "record_sha256": "ff22008739ce9acc20f68220f144a16eae7aae8550b62b6dac63a8da272d1066",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 141.0666666666665,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Power/result.json",
+            "record_sha256": "5a6a24a5a0148312eddca9838821e5b31722923967a1f06a09a36a02119cf818",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "8164936c8718eb39fa466b0a28885865474ced98207acd3f80f81c7cb9ed0c76",
+            "recorded_visual_review": "pending",
+            "duration": 147.88595833333335,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Power_motion/result.json",
+            "record_sha256": "5b48320f28221e7b6e2b7fd9d379570fe806ebc0390c6ef4122fdd59620e30da",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 147.53333333333296,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "SVD",
+      "title": "7. Every matrix: turn, stretch, turn",
+      "source_file": "videos/ai/ai3/s08_svd.py",
+      "source_sha256_at_checkpoint": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "selected_review": "Selected review complete: EN227/ZH250",
+      "repair_or_checks": "Proper rigid rotations preserve factorization throughout motion",
+      "evidence_directory": "docs/qa/evidence/ai3-power-svd-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/SVD/result.json",
+            "record_sha256": "f9cbb54178aab3c65e19266b0adf9ad052051e95ff7f3f2ea7cb1ad2b69cfbc8",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "4d660cd10b555641162f66a262561ca74b08b35685aa167d29516fb6f5f2c1f9",
+            "recorded_visual_review": "pending",
+            "duration": 99.69250000000001,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/SVD_motion/result.json",
+            "record_sha256": "2aa434f78b85f96d90e14ffe33af2a6cbc96c16323996bf7608ef76be6011e48",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 99.39999999999996,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/SVD/result.json",
+            "record_sha256": "4a3dda18c9681c197d599bcf184dbdf8690464bf37ec14760d51f7b0932b6ba0",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "cb2709e50dcb733f8c815f50653d0c51fbd24ef49f74dbc1abd0e8112bcb2f78",
+            "recorded_visual_review": "pending",
+            "duration": 105.52433333333333,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/SVD_motion/result.json",
+            "record_sha256": "134f9d79d60ef19b9559e329d6bc8f57529cfc108f546c62b1fb2fc7deaad929",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "138a87a47d0fd2dfb3be01795bc4678cd2afb28c878618761ab9a9eb70fd685e",
+            "recorded_visual_review": "pending",
+            "duration": 105.26666666666645,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "LowRank",
+      "title": "8. The best low-rank copy",
+      "source_file": "videos/ai/ai3/s09_lowrank.py",
+      "source_sha256_at_checkpoint": "8424ebda29b931c5507cd2b505e8911130c220c3df10ae801afd237e81da0fdd",
+      "selected_review": "Selected review complete: EN425/ZH439",
+      "repair_or_checks": "Omitted singular-value Euclidean norm, measured error equality",
+      "evidence_directory": "docs/qa/evidence/ai3-lowrank-tailnorm-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/LowRank/result.json",
+            "record_sha256": "5c6c904a65fcce392dcce2f2c023be70798cfc9747dc4aa2dc8558a264a70e5f",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad",
+            "recorded_visual_review": "pending",
+            "duration": 179.42762500000003,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/LowRank_motion/result.json",
+            "record_sha256": "62f52f2aca0a5e2fd2ab59f755cec87ebaf90cd05286e0fd9095ac1ade03c7b8",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad",
+            "recorded_visual_review": "pending",
+            "duration": 178.86666666666548,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/LowRank/result.json",
+            "record_sha256": "69c196b378a57b0beba5c730ccc11313facabf93b57a27893fd6400810b3b3db",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "b6996509e10f25b35447673ccc4bc2d853ce194583356afc425bf618f27a41ad",
+            "recorded_visual_review": "pending",
+            "duration": 183.64983333333336,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/LowRank_motion/result.json",
+            "record_sha256": "981fc8b3b82fbe570f35297a3848b372464feb3fa08eae43a53b4027fac6f030",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685",
+            "recorded_visual_review": "pending",
+            "duration": 183.1999999999988,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Norms",
+      "title": "9. How big is a matrix?",
+      "source_file": "videos/ai/ai3/s10_norms.py",
+      "source_sha256_at_checkpoint": "fa9e8275eab6a3808d349e0fe48f7930f1b1e474000cae05012fcb5d3846b8ec",
+      "selected_review": "Final bilingual selected review complete",
+      "repair_or_checks": "Outline emphasis preserves dark formula-card contrast",
+      "evidence_directory": "docs/qa/evidence/ai3-norms-galore-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Norms/result.json",
+            "record_sha256": "fe58530680f0ea3ee7f07cfe65fe3fda4007e0694bec7177432169229caae57b",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+            "recorded_visual_review": "pending",
+            "duration": 193.8554166666667,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Norms_motion/result.json",
+            "record_sha256": "ebed7c9558a5f16cac253b6549e53150f379b58bcb990e4f9ccefd37688a0f3a",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 193.33333333333186,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Norms/result.json",
+            "record_sha256": "610148cb37573e1bbb90d487d34db332c4dc50789527390aa83e9b19551d913b",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+            "recorded_visual_review": "pending",
+            "duration": 197.17200000000003,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Norms_motion/result.json",
+            "record_sha256": "9844615b62e520345c24e5a7fdfcc2219ea58f6fc4173cd1965d59130878a5c9",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 196.73333333333184,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Spectra",
+      "title": "10. Random matrices and trained weights",
+      "source_file": "videos/ai/ai3/s11_spectra.py",
+      "source_sha256_at_checkpoint": "571d273685a004e9440e5d669517b9edda2ccfd1c82b0b4d4e880d664719a053",
+      "selected_review": "Selected review complete: EN310/ZH317",
+      "repair_or_checks": "Measured-data checks; no new blocking visual defect",
+      "evidence_directory": "docs/qa/evidence/ai3-spectra-selected-review",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Spectra/result.json",
+            "record_sha256": "61b18c6fc3a9f16a6374711d57e77de8e2abbfe22892ea5b1a2629c04f03b539",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 155.181375,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Spectra_motion/result.json",
+            "record_sha256": "02d51ee90ba2ac4ebf939bc95da80ca1bcf1ee3c693704d7025ac989b56fbb34",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 154.79999999999964,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Spectra/result.json",
+            "record_sha256": "d093bcd19000248ab318c19e65dcbb031ea8e38aee779c4eb1c7027de5ef7f6c",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 176.44983333333337,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Spectra_motion/result.json",
+            "record_sha256": "f16e390bd392f21f6b5b749e1938a09f17d6b03e689437169c8e0f3e0322f8e8",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 175.99999999999937,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      },
+      "native_1080_endpoint_review": "All31 native-resolution captures inspected on8pages at960px width plus8native-pixel critical crops; separate from motion.",
+      "native_1080_evidence": "docs/qa/evidence/ai3-spectra-production-endpoints-1080/"
+    },
+    {
+      "scene": "GaLore",
+      "title": "11. Gradients are low rank",
+      "source_file": "videos/ai/ai3/s12_galore.py",
+      "source_sha256_at_checkpoint": "8a417905d2ecec9d181d56fb90c83312e61834c0531633bb147016c706993af8",
+      "selected_review": "Final bilingual selected review complete",
+      "repair_or_checks": "Rank bounds qualified; 84 Norms/GaLore endpoints and 1,758 motion times jointly reviewed",
+      "evidence_directory": "docs/qa/evidence/ai3-norms-galore-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/GaLore/result.json",
+            "record_sha256": "7cce1cc40e9eaeb25bb9893b45d3958f7bfa8fbe15ace92099f42064bd38d93b",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 205.26287500000004,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/GaLore_motion/result.json",
+            "record_sha256": "44d276ff44eff947397b4c0cb92ad4b960b84a054af0c7bffd5961820de7dd73",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 204.73333333333224,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/GaLore/result.json",
+            "record_sha256": "19d212be6346acb28c80a2bbfc23e32fa69fac3409397a17db7f8789873dc8f4",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 209.81154166666667,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/GaLore_motion/result.json",
+            "record_sha256": "a410576a722018579cc4b138226e18f674e43e04a04b5209862ca03636546393",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 209.26666666666566,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Words",
+      "title": "12. Word vectors from counting",
+      "source_file": "videos/ai/ai3/s13_words.py",
+      "source_sha256_at_checkpoint": "97e14f916b8fbd72d5ff1ec35e6ff58a7e4f760e34db3352ae9db7f547036eaf",
+      "selected_review": "Final bilingual selected review complete",
+      "repair_or_checks": "Protect analogy labels from translated arrow strokes",
+      "evidence_directory": "docs/qa/evidence/ai3-words-geometry-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Words/result.json",
+            "record_sha256": "5d42c147b7556fb2c8fedb6446faaa48cab178319e8b5e37a9819746ddd1db7b",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 185.90175000000005,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Words_motion/result.json",
+            "record_sha256": "a85800472c420122cc1298807bb52ef4830f2515d10116178714d2896244de1c",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 185.4666666666655,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Words/result.json",
+            "record_sha256": "d71764a155be5adabf68cf33dfd1be74572d7f17f2a92395ee3aeef0dd47fcb3",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 199.43354166666668,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Words_motion/result.json",
+            "record_sha256": "0516fb144bb6901f056aa73936dd3eb45320a50e670e4667a258b74697f79470",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 198.93333333333211,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "SGNS",
+      "title": "13. word2vec is counting in disguise",
+      "source_file": "videos/ai/ai3/s14_sgns.py",
+      "source_sha256_at_checkpoint": "bec79fc8bc271484317b002649960bd40eb3d827eb76cbd7a1cf2948541d1673",
+      "selected_review": "Final selected review complete: EN437/ZH443",
+      "repair_or_checks": "Hold described checkpoints until next bookmark; qualify early neighbours",
+      "evidence_directory": "docs/qa/evidence/ai3-sgns-replay-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/SGNS/result.json",
+            "record_sha256": "5e553de25fbeec72e4ce9620bf733b6cfe64c0de7c9c0e8c173488d6e420a90b",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+            "recorded_visual_review": "pending",
+            "duration": 214.90908333333337,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/SGNS_motion/result.json",
+            "record_sha256": "30889df97d7afcff505b3f970287cb15fe8ce745236286098846eb96d8a6e25b",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 214.3333333333318,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/SGNS/result.json",
+            "record_sha256": "3387da499d734a863a2e85bf47985ab129f71b47969d826b6f80319e67075630",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "eddb64ac8fe69472ecff511548cad5c049a973bafa4fc1397147575630743dff",
+            "recorded_visual_review": "pending",
+            "duration": 228.72541666666675,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/SGNS_motion/result.json",
+            "record_sha256": "c3ab11ba88308241cbd4c32d6b7fd490f15d3f40dd78e520f4208eb5865fbac6",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "3c573e7093f3652a74e8e34c4f627e8d7de2dcd961a8fa20096520205ad59f03",
+            "recorded_visual_review": "pending",
+            "duration": 228.19999999999843,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "HighDim",
+      "title": "14. Life in 768 dimensions",
+      "source_file": "videos/ai/ai3/s15_highdim.py",
+      "source_sha256_at_checkpoint": "7ea3b0e73d85f3e65876f095416b21a4ae8165179e0246811545d52641ed1b55",
+      "selected_review": "Selected review complete: EN371/ZH360",
+      "repair_or_checks": "All dimension changes, settled d=10, distributions and labels reviewed",
+      "evidence_directory": "docs/qa/evidence/ai3-highdim-jl-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/HighDim/result.json",
+            "record_sha256": "bb2b16f8d52572bf71e730bbae7db2c9af8cfcf78ce9e8aed4f51458dceec696",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "4382502c95ce4f56dc9a93df98e8b223497818c55a1d752d81093828cbeb4041",
+            "recorded_visual_review": "pending",
+            "duration": 143.97583333333333,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/HighDim_motion/result.json",
+            "record_sha256": "8d8b4a20d50f87cdfaf6eaa2c6d7ba4c5491a77eb9514234daa88e28d3a0f154",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 143.46666666666607,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/HighDim/result.json",
+            "record_sha256": "d3f3f3a7121cca58cf7c89de640c01ec2e2451e8dc525da40f76ede7cddd0c0e",
+            "runtime_status": "needs-review",
+            "warnings": [
+              {
+                "kind": "source-changed-during-render"
+              }
+            ],
+            "fingerprint": "f884f1c15bc0688d3f3821c7ec94aacdc96fecbe12778a5e6110775cf9fa8685",
+            "recorded_visual_review": "pending",
+            "duration": 138.28245833333338,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/HighDim_motion/result.json",
+            "record_sha256": "4cb0f0de7a1fd96101c4a3fc02f50377e3d93d4aaf0576b0cef339c44552c950",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "a1ea477a61f43792541a6894683ebe0ddb372f3c12e386d3d73f8b7b84c1b000",
+            "recorded_visual_review": "pending",
+            "duration": 137.79999999999947,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "JL",
+      "title": "15. Johnson-Lindenstrauss, proved",
+      "source_file": "videos/ai/ai3/s16_jl.py",
+      "source_sha256_at_checkpoint": "b0ce1007f88106ee78554e4438d2267f32678df53819c24a06d43c13bf842ac5",
+      "selected_review": "Final selected review complete: EN390/ZH402",
+      "repair_or_checks": "95% confidence scope, 99.6% readout, card clearance",
+      "evidence_directory": "docs/qa/evidence/ai3-highdim-jl-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/JL/result.json",
+            "record_sha256": "34cea4a033eb463ca5770f01e583d7dfb9abced6d0260f6f2300cbfede8e7561",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 183.64241666666672,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/JL_motion/result.json",
+            "record_sha256": "d8edbdf54c663cf94e23dd7683964b559fe3e4ba931f8dcb14a9a5ab7bc87533",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 183.19999999999894,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/JL/result.json",
+            "record_sha256": "ca8557bccd6cb879f5e76b85763b25a20424f04d62f03b839030887c405589e1",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 198.07895833333336,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/JL_motion/result.json",
+            "record_sha256": "83bb0f34f4392af584100ddbac0590868d2bbc4d171f06039a715aac5e857f8a",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 197.5999999999987,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Geometry",
+      "title": "16. GPT-2's lopsided space",
+      "source_file": "videos/ai/ai3/s17_geometry.py",
+      "source_sha256_at_checkpoint": "7d9923cf29cc01dbe96299d569daa7b86abc99fdca9b495c007c18687b481f5a",
+      "selected_review": "Final bilingual selected review complete",
+      "repair_or_checks": "Histogram semantic colors, unscaled measured bar, sequential caption fade",
+      "evidence_directory": "docs/qa/evidence/ai3-words-geometry-motion-regression",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Geometry/result.json",
+            "record_sha256": "ed848bb92de98feaf72de907cf6cf5f15a2964f5269c5cbe0e62eaacda365330",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 162.00541666666666,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Geometry_motion/result.json",
+            "record_sha256": "b9c379581b117ecc3d5530334b045525f23595f464e01e4d41c6fbeca4a402b2",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 161.66666666666634,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Geometry/result.json",
+            "record_sha256": "144b3ea8e7fffa8597792cf5c954afb383eaf89a1f914b11edd396ccd8602629",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 172.2812916666667,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Geometry_motion/result.json",
+            "record_sha256": "6cf17312c23d4b4d013f40dc94624efed3818c086d6016e4101e7a6dea8041c6",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "34b6bce39640ff3daeeb4b2d5222d9bcc0e2fb7770bc4e1ec886104addae12f0",
+            "recorded_visual_review": "pending",
+            "duration": 171.933333333333,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Netflix",
+      "title": "17. Low rank in the wild",
+      "source_file": "videos/ai/ai3/s18_netflix.py",
+      "source_sha256_at_checkpoint": "a6709b228262080e408cfc559edc473696b57cef516defa3316f514b5b1ad21c",
+      "selected_review": "Current bilingual selected review underway",
+      "repair_or_checks": "Standard macro recall, raw conditional scores, grouped objective, readable counts",
+      "evidence_directory": "docs/qa/evidence/ai3-late-source-repairs",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Netflix/result.json",
+            "record_sha256": "7e7b248a7246ce98b96d5f014e886590ca04e865372137c41b9c5bee3d4f6c2d",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 263.8720416666667,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Netflix_motion/result.json",
+            "record_sha256": "fef7e88b4b70fa11afce585c1bfc2c3df9e35bddec8c59449c48d1e68ed3f6c7",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 263.39999999999867,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Netflix/result.json",
+            "record_sha256": "3bc7000d51af198f986a73293b0d0143371492b1eadd42e2ac50b7b4d1cfafaa",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 287.551,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Netflix_motion/result.json",
+            "record_sha256": "31b234eb12c8bfd5537b23598f8fadb004b308c343ad0cc548e9c29ee7574ff6",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 286.9999999999986,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    },
+    {
+      "scene": "Outro",
+      "title": "Recap, problems, and what comes next",
+      "source_file": "videos/ai/ai3/s19_outro.py",
+      "source_sha256_at_checkpoint": "22163cd98ceb1928347079996807c11d97aab44622b65a520a00b028d3e3c116",
+      "selected_review": "Complete original643 selected times reviewed; final wrapped-caption regression underway",
+      "repair_or_checks": "Chinese captions corrected; long recap caption wrapping queued",
+      "evidence_directory": "docs/qa/evidence/ai3-late-source-repairs",
+      "cases": {
+        "en": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/en/Outro/result.json",
+            "record_sha256": "47763823f423e23edba8268935b712a3b59b513563c34305fea2dc365bef3990",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 144.33508333333336,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/en/Outro_motion/result.json",
+            "record_sha256": "cefd1f8e99166211cee079f7df7409314d339c2a4ba09bba39d773d4aa223196",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 143.93333333333294,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        },
+        "zh": {
+          "endpoints": {
+            "record": "renders/qa/series/ai3/zh/Outro/result.json",
+            "record_sha256": "292044e018a19734606b5b76a06729340252d7853c5ee32323a1a4558b52b3f7",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 157.3417916666667,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          },
+          "motion": {
+            "record": "renders/qa/series/ai3/zh/Outro_motion/result.json",
+            "record_sha256": "80e1b5a60a1891f8c0cd4b49cb20e7f03a77d99870bcb53cb934d5556c0a33e5",
+            "runtime_status": "passed",
+            "warnings": [],
+            "fingerprint": "9a08a4f1a4faa5cd99271c8b0ea1e5ca0d9be7b1211f2dd7a144289efed1f0dc",
+            "recorded_visual_review": "pending",
+            "duration": 156.99999999999912,
+            "scope": "Runtime record only; actual selected review is tracked separately above."
+          }
+        }
+      }
+    }
+  ],
+  "selected_review_updated_utc": "2026-10-31T21:20:31.050627+00:00",
+  "completed_bilingual_selected_chapters": 17,
+  "remaining_bilingual_selected_chapters": [
+    "Netflix",
+    "Outro"
+  ]
+}
