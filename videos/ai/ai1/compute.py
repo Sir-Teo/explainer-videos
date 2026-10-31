@@ -111,6 +111,29 @@ def path(name: str) -> Path:
     return DATA_DIR / f"{name}.json"
 
 
+CACHE_SCHEMAS = {"mi": 2}
+
+
+def cache_current(name: str) -> bool:
+    """Check schema markers without loading scenes or starting computation.
+
+    Readers/rebuilders hold the item's cache lock. Unchanged items keep the
+    existing file-presence contract until their own schema changes.
+    """
+    metadata = path(name)
+    if not metadata.exists():
+        return False
+    expected = CACHE_SCHEMAS.get(name)
+    if expected is None:
+        return True
+    try:
+        value = json.loads(metadata.read_text())
+        return (isinstance(value, dict) and value.get("schema_version") == expected
+                and metadata.with_suffix(".npz").is_file())
+    except (OSError, ValueError, TypeError):
+        return False
+
+
 _loaded: dict = {}
 _loaded_signatures: dict = {}
 
@@ -119,11 +142,11 @@ _loaded_signatures: dict = {}
 def load(name: str) -> dict:
     p = path(name)
     if name not in _loaded or _loaded_signatures.get(name) != cache_signature(p):
-        if not p.exists():  # compute on first use, like every other part's cache (another part may need just this)
+        if not cache_current(name):  # missing or stale schema, under the same item lock
             if name not in ITEMS:
                 raise FileNotFoundError(f"{p} missing, and no compute item {name!r} for ai1")
             DATA_DIR.mkdir(parents=True, exist_ok=True)
-            print(f"  computing ai1/{name} (first use) ...", flush=True)
+            print(f"  computing ai1/{name} (missing or stale cache) ...", flush=True)
             _save(name, ITEMS[name]())
         _loaded[name] = json.loads(p.read_text())
         npz = p.with_suffix(".npz")
@@ -730,7 +753,7 @@ def compute_mi():
     if sel.sum() >= 2:
         slope, intercept = map(float, np.polyfit(np.log10(ds[sel]), np.log10(mi[sel]), 1))
         assert np.isfinite(slope) and np.isfinite(intercept)
-    return dict(d=ds, mi=mi, mi_plugin=plugin, bias=bias,
+    return dict(schema_version=CACHE_SCHEMAS["mi"], d=ds, mi=mi, mi_plugin=plugin, bias=bias,
                 shuffled_mi=shuffled_mi, shuffled_plugin=shuffled_plugin, shuffled_bias=shuffled_bias,
                 pair_counts=len(a) - ds, n_letters=len(a), shuffle_seed=7, shuffle_replicates=1,
                 floor=float(shuffled_mi[0]), slope=slope, intercept=intercept, fit_d=ds[sel],
@@ -1626,7 +1649,7 @@ def main():
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "true")
     for name in args.names:
         with cache_lock(path(name)):
-            if path(name).exists() and not args.force:
+            if cache_current(name) and not args.force:
                 print(f"  cached  {name}")
                 continue
             t = time.time()

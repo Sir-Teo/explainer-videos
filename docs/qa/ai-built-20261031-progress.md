@@ -37,6 +37,10 @@ source estimate exceeds the stated 60-minute target and requires measured pacing
   marginals, active-alphabet bias corrections, signed estimates and matched shuffled controls are retained.
   The picture labels a descriptive fit, discloses nonpositive omissions and finite-sample limitations, and avoids
   extrapolation or an unqualified universal Markov-model claim.
+- Existing MI caches are schema-checked under their cache lock. Normal reads and the compute CLI rebuild legacy
+  data; cached-only QA reports `stale-data` without computing or changing it. Five legacy-cache regressions pass,
+  including a CLI that previously skipped the old completion marker. An isolated actual-worker integration check
+  also confirmed the persisted `stale-data` result and byte-identical legacy cache. All 72 current unit tests pass.
 
 ## Before/after visual evidence
 
