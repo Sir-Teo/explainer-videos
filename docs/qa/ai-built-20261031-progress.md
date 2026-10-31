@@ -2,7 +2,9 @@
 
 **Production approval remains pending for all 31 parts.** Work proceeds in part order. Part 1 now has complete
 bilingual endpoint and selected-time silent-motion coverage plus one narrated English chapter. Part 2 source/data
-review is complete and bilingual rendered review is active. Parts 3–31 are unreviewed. The [current status](STATUS.md)
+and bilingual selected-frame passes are complete at preview scope, with narration/production gaps open. Part 3
+source repairs and ready-scene rendered review are active; Part 4 has read-only preparation findings, and Parts 5–31
+remain queued. The [current status](STATUS.md)
 and [Part 2 chapter checklist](ai2-chapter-checklist.md) supersede older dated checkpoints below.
 
 Baseline: `af170318c179bfb56fa28aafe73477c56f5b80d8`. Branch: `qa/ai-series-cloud-20261031`.
