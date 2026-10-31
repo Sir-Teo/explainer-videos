@@ -1,4 +1,5 @@
 import unittest
+import ast
 import json
 import tempfile
 from pathlib import Path
@@ -9,6 +10,25 @@ from explainer.zh_templates import Translator, source_startswith, sources, table
 
 
 class TemplateTests(unittest.TestCase):
+    def test_mi_measurements_use_spoken_units_and_translate_the_negative_sign(self):
+        path = Path(__file__).resolve().parents[1] / "videos/ai/ai1/s13_information.py"
+        tree = ast.parse(path.read_text())
+        argument = next(node.args[0] for node in ast.walk(tree)
+                        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                        and node.func.attr == "voiceover" and node.args
+                        and isinstance(node.args[0], ast.JoinedStr)
+                        and isinstance(node.args[0].values[0], ast.Constant)
+                        and node.args[0].values[0].value.startswith("How far back does that reach?"))
+        values = {"mi": [.75], "far": 1000, "last_sign": "", "control_sign": "minus ",
+                  "last_millionths": 7.32, "control_millionths": .69}
+        spoken = eval(compile(ast.Expression(argument), str(path), "eval"), {"__builtins__": {}}, values)
+        self.assertIn("minus 0.69 millionths of a bit", spoken)
+        self.assertNotIn("e-0", spoken)
+        translated = Translator("ai1")(spoken)
+        self.assertIn("负0.69个百万分之一比特", translated)
+        self.assertNotIn("minus", translated)
+        self.assertNotIn("{", translated)
+
     def test_quote_choice_does_not_hide_translation(self):
         self.assertTrue(source_startswith('f"After Bull, Durham costs {bits:.1f} bits."',
                                          "f'After Bull, Durham costs"))

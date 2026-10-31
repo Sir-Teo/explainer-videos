@@ -1,0 +1,13 @@
+{
+  "lang": "en",
+  "voice": "qwen3-calm-a",
+  "text": "At one thousand letters, the corrected estimate is 7.3e-06 bits; one shuffled version gives -6.9e-07.",
+  "heard": "At one thousand letters, the corrected estimate is seven point three e zero six bits. One shuffled version gives minus six point nine zero seven.",
+  "score": 0.902,
+  "scope": "Scientific-notation stress probe; not scene playback or manual listening",
+  "audio_seconds": 10.28,
+  "wall_seconds": 633.1,
+  "tries": 4,
+  "audio_sha256": "8dcd4fc17af894ec3cb41837fde3e91bc7cfc23f2920ad29a5be72f59da41438",
+  "decision": "Replace e-notation in narration with explicit signed millionths; visual numbers remain scientific notation."
+}

@@ -141,3 +141,18 @@ boundary-tie wording, resolution factoring/empty-clause, and SAT censoring findi
 retains exact APIs, source hashes, observed outcomes and scope limits. JIT was disabled and a process audit enforced
 zero repository writes. These are focused bug reproductions; Part 2 implementation repairs, production JIT runs,
 full computations, visual renders and audio remain pending. No Part 2 source was changed.
+
+## Narration pronunciation repair
+
+A real local Qwen3-TTS/ASR stress probe of scientific e-notation produced an ASR lead in which the negative
+exponent was lost (best score0.902, below0.93). The [probe record](evidence/ai1-mi/pronunciation-probe.json)
+retains exact expected/heard text, timing and waveform hash. This is ASR evidence, not manual listening.
+The MI narration now says explicit signed millionths of a bit in English/Chinese; on-screen values are unchanged.
+A regression evaluates the actual source utterance and verifies the Chinese negative sign; 74 tests pass and
+all160 narration source templates remain covered. Updated scene/audio checks are running. The earlier Information
+audio job was cancelled as stale after one of six blocks; it is not a chapter audio pass. The server may finish
+its already received request before accepting current-source work.
+
+Observed CPU cost: the stress probe retained10.28seconds of speech after633.1seconds including four takes and
+checking; the3.6-second chapter-card utterance took119.4seconds. Those measurements expose a real narration
+throughput limit in this4-core CPU environment; full bilingual narration/listening is still outstanding.
