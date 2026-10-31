@@ -96,7 +96,7 @@ class PlanningCensoringTests(unittest.TestCase):
                          "load": lambda name: {"rows": rows, "towers": [1, 3, 13, 73, 501, 4051, 37633]},
                          "VGroup": Mob, "MathTex": Mob, "label": Mob, "axes": Plot, "curve": Mob,
                          "Dot": Mob, "legend": Mob, "history_card": Mob, "note": Mob}
-                scope.update({k: k for k in ("GREY_A", "GREY_B", "GCOST", "PATH", "HIST", "RIGHT", "DOWN", "UP", "DL")})
+                scope.update({k: k for k in ("GREY_A", "GREY_B", "GCOST", "PATH", "FAIL", "HIST", "RIGHT", "DOWN", "UP", "DL")})
                 exec(compile(ast.Module(body=METHOD.body[:METHOD.body.index(WITH)], type_ignores=[]),
                              "actual-planning-scene-setup", "exec"), scope)
                 english = eval(compile(ast.Expression(WITH.items[0].context_expr.args[0]),

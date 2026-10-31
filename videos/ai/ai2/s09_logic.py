@@ -46,6 +46,57 @@ def proof_layout(info, proof, x0=-5.6, width=11.2, y_top=2.0, dy=1.35, font_size
     return boxes, row
 
 
+def proof_edge(boxes, parent, child):
+    """Connect clauses without drawing through an unrelated clause's label.
+
+    Long derivations may skip a row. Route those edges through a clear vertical
+    lane when a straight segment would cross another box, keeping the arrowhead
+    at the actual conclusion rather than an intervening premise.
+    """
+    start, end = boxes[parent].get_bottom(), boxes[child].get_top()
+    obstacles = [box for i, box in boxes.items() if i not in (parent, child)]
+
+    def crosses(a, b, box):
+        low, high = 0.0, 1.0
+        for axis, bounds in enumerate(((box.get_left()[0] - 0.10, box.get_right()[0] + 0.10),
+                                       (box.get_bottom()[1] - 0.10, box.get_top()[1] + 0.10))):
+            delta = b[axis] - a[axis]
+            if abs(delta) < 1e-10:
+                if not bounds[0] <= a[axis] <= bounds[1]:
+                    return False
+            else:
+                enter, leave = sorted((bound - a[axis]) / delta for bound in bounds)
+                low, high = max(low, enter), min(high, leave)
+                if low > high:
+                    return False
+        return True
+
+    def clear(points):
+        return not any(crosses(a, b, box) for a, b in zip(points, points[1:]) for box in obstacles)
+
+    points = [start, end]
+    if not clear(points):
+        depart, approach = start + DOWN * 0.20, end + UP * 0.20
+        lanes = {start[0], end[0]}
+        for box in obstacles:
+            lanes.update((box.get_left()[0] - 0.24, box.get_right()[0] + 0.24))
+        candidates = []
+        for x in sorted(lanes):
+            if abs(x) > config.frame_width / 2 - 0.15:
+                continue
+            route = [start, depart, np.array([x, depart[1], 0]),
+                     np.array([x, approach[1], 0]), approach, end]
+            route = [p for k, p in enumerate(route) if k == 0 or np.linalg.norm(p - route[k - 1]) > 1e-8]
+            if clear(route):
+                length = sum(np.linalg.norm(b - a) for a, b in zip(route, route[1:]))
+                candidates.append((length, route))
+        if not candidates:
+            raise ValueError(f"No unobstructed proof edge from {parent} to {child}")
+        points = min(candidates, key=lambda item: item[0])[1]
+    edge = Line(start, end, color=GREY_C, stroke_width=2).set_points_as_corners(points)
+    return edge.add_tip(tip_length=0.10).set_z_index(-1)
+
+
 def resolution_outcome_label(record, name):
     state = ("proof found" if record["found"] else "cap reached; no proof" if record["status"] == "limit"
              else "no new clauses; no proof")
@@ -168,8 +219,7 @@ class Logic(VoiceoverScene):
         lines = {}
         for i in derived:
             parents = info[i]["parents"]
-            lines[i] = VGroup(*[Line(boxes[p].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2)
-                                for p in parents])
+            lines[i] = VGroup(*[proof_edge(boxes, p, i) for p in parents])
         start = [i for i in proof if info[i]["parents"] is None]
         neg = [i for i in start if info[i]["goal"]]
         note1 = label(r"add the negated goal; \\ derive the empty clause $\square$: \\ a contradiction", font_size=22,
@@ -218,8 +268,7 @@ class Logic(VoiceoverScene):
         lines, subs = {}, {}
         for i in derived:
             parents = info[i]["parents"]
-            lines[i] = VGroup(*[Line(boxes[p].get_bottom(), boxes[i].get_top(), color=GREY_C, stroke_width=2)
-                                for p in parents])
+            lines[i] = VGroup(*[proof_edge(boxes, p, i) for p in parents])
             sub = info[i]["sub"]
             if sub:
                 pairs = sorted({(k.split("_")[0], v) for k, v in sub.items() if v[:1].isupper()})

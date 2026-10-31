@@ -1,8 +1,9 @@
 # AI, Built cloud QA progress — 31 October 2026
 
-**Production approval remains pending for all 31 parts.** This is an incremental checkpoint on Part 1,
-not completion of the requested full-series QA. Work proceeds in part order. Parts 2–31 have inventory/static
-checks only; their rendered visuals, motion, narration and playback have not been reviewed in this cloud task.
+**Production approval remains pending for all 31 parts.** Work proceeds in part order. Part 1 now has complete
+bilingual endpoint and selected-time silent-motion coverage plus one narrated English chapter. Part 2 source/data
+review is complete and bilingual rendered review is active. Parts 3–31 are unreviewed. The [current status](STATUS.md)
+and [Part 2 chapter checklist](ai2-chapter-checklist.md) supersede older dated checkpoints below.
 
 Baseline: `af170318c179bfb56fa28aafe73477c56f5b80d8`. Branch: `qa/ai-series-cloud-20261031`.
 The checkout is `/workspace/explainer-videos`; the unrelated mounted repository was left untouched.
@@ -17,7 +18,8 @@ Their cache counts are an explicitly dated, non-atomic existence snapshot, not Q
 
 The source-based narration estimate is 27.23 hours English, roughly 54.45 hours for one bilingual playback pass.
 This excludes model computation, rendering, repeated repair passes and listening. The documented CPU narration
-fallback takes 10–30 times real time; no narration server has been started in this environment. Part 26's 63.5-minute
+fallback is expensive: the completed six-block Information narration used bounded CPU synthesis and is retained;
+the server is now stopped. Other narration remains pending. Part 26's 63.5-minute
 source estimate exceeds the stated 60-minute target and requires measured pacing review.
 
 ## Verified changes
