@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-10-31T18:43:44.576196+00:00",
+  "test_file": "tests/test_ai3_narration_review.py",
+  "test_file_sha256": "1938589dc85e020409f0eff83e5c9d400db5fe3b4fe6da61018ad41e3161d55f",
+  "command": "python -m unittest discover -s tests -p test_ai3_narration_review.py -v",
+  "tests": 10,
+  "result": "passed",
+  "pushed_test_commit": "a276671",
+  "coverage": "actual retrieval_cohort_summary AST and recursively translated whole narration; seven unavailable/outcome combinations for each named cohort; no data generation or rendered/narrated playback claim",
+  "log_sha256": "26564192a5ca6ec245010d5ed58ce08982ae31a7b406457615e4d8d6697780b5"
+}
