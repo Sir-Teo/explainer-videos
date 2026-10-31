@@ -58,13 +58,13 @@ def retrieval_cohort_summary(cohort, name):
                 f"{targets} eligible targets. No finite comparison is available.")
     if not cohort["model_available"]:
         return (f"For {name}, two-tower recall is unavailable on {users} users and {targets} eligible targets; "
-                f"popularity recall is {popularity:.2f}. No comparison is available.")
+                f"popularity recall is {popularity:.3f}. No comparison is available.")
     if not cohort["baseline_available"]:
-        return (f"For {name}, two-tower recall is {recall:.2f} on {users} users and {targets} eligible targets, "
+        return (f"For {name}, two-tower recall is {recall:.3f} on {users} users and {targets} eligible targets, "
                 "but popularity recall is unavailable. No comparison is available.")
     comparison = ("The two towers beat popularity for this cohort." if recall > popularity else
                   "The two towers do not beat popularity for this cohort.")
-    return (f"For {name}, macro recall reaches {recall:.2f}, against popularity's {popularity:.2f}, on "
+    return (f"For {name}, macro recall reaches {recall:.3f}, against popularity's {popularity:.3f}, on "
             f"{users} users and {targets} eligible targets. {comparison}")
 
 
@@ -133,8 +133,8 @@ class Netflix(VoiceoverScene):
         colors = {r"\mathbf{p}_u^{\top}\mathbf{q}_i": C.BITS}
         rows = [
             cmath(r"\hat r_{ui}", "=", r"\mu + b_u + b_i +", r"\mathbf{p}_u^{\top}\mathbf{q}_i", font_size=38, colors=colors),
-            cmath(r"\min", r"\textstyle\sum_{(u,i)\ \text{rated}}", r"(r_{ui} - \hat r_{ui})^2 + \lambda\big(|\mathbf{p}_u|^2 + "
-                  r"|\mathbf{q}_i|^2\big) + 0.01(b_u^2+b_i^2)", font_size=32),
+            cmath(r"\min", r"\textstyle\sum_{(u,i)\ \text{rated}}", r"\Big[(r_{ui} - \hat r_{ui})^2 + \lambda\big(|\mathbf{p}_u|^2 + "
+                  r"|\mathbf{q}_i|^2\big) + 0.01(b_u^2+b_i^2)\Big]", font_size=32),
         ]
         whys = [why(r"an average, \ how generous the user is, \ how good the film is, \\ and a rank-$k$ taste match"),
                 why(r"only the cells we have; \ $\lambda$ penalizes vectors; \ biases retain a $0.01$ penalty")]
@@ -392,7 +392,7 @@ class Netflix(VoiceoverScene):
                       rf"known: ${ew['evaluated_users']}$ users, ${fmt_int(ew['eligible_targets'])}$ targets; \ "
                       rf"new: ${ec['evaluated_users']}$ users, ${fmt_int(ec['eligible_targets'])}$ targets \\ "
                       r"empty-target users excluded; \ watched films filtered",
-                      font_size=15).next_to(g, DOWN, buff=0.08)
+                      font_size=22).next_to(g, DOWN, buff=0.08)
         warm_summary = retrieval_cohort_summary(warm, "known users")
         cold_summary = retrieval_cohort_summary(cold, "new users")
         with self.voiceover(

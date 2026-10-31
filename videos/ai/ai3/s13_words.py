@@ -241,6 +241,9 @@ class Words(VoiceoverScene):
         dots = VGroup(*[glow_dot(p, color=c, radius=0.09) for p, c in zip(pts, cols)])
         labs = VGroup(*[data_text(n, font=MONO, font_size=28, color=c).next_to(p, UP if k % 2 else DOWN, buff=0.18)
                         for k, (n, p, c) in enumerate(zip(names, pts, cols))])
+        # The copied step passes these fixed labels during its translation.
+        for lab in labs:
+            lab.set_stroke(BACKGROUND, width=5, opacity=1, background=True).set_z_index(20)
         step = Arrow(pts[0], pts[1], buff=0.12, color=C.BITS, stroke_width=5)
         again = Arrow(pts[2], pts[2] + (pts[1] - pts[0]), buff=0.12, color=C.BITS, stroke_width=5)
         land = DashedLine(pts[2] + (pts[1] - pts[0]), pts[3], color=GREY_B, stroke_width=2)

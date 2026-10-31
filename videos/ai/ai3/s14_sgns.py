@@ -100,7 +100,7 @@ class SGNS(VoiceoverScene):
             "We trained it on the novels, with the same vocabulary and nominal window as the counting. "
             "Subsampling frequent words changes the actual context sequences. Four words and their "
             "nearest neighbours, with the loss below. <bookmark mark='a'/> At the start, random. <bookmark mark='b'/> "
-            f"After {steps[1]} steps, the neighbours are the commonest words: they get pushed first. "
+            f"After {steps[1]} steps, the lists are still mixed; some favour common function words. "
             f"<bookmark mark='c'/> By step {steps[mid]:,}, meaning appears: three sits with "
             f"{', '.join(snaps[mid]['three'][:3])}. <bookmark mark='d'/> By the end, Monday sits with "
             f"{proper(snaps[-1]['monday'][0])}, and father with {snaps[-1]['father'][0]}. Nothing told it what a day or a "
@@ -110,9 +110,10 @@ class SGNS(VoiceoverScene):
             self.add(cnt, cursor, live_loss)
             vo.wait_until("a")
             marks = {1: "b", mid: "c", len(steps) - 1: "d"}
-            for k in range(1, len(steps)):
-                if k in marks:
-                    vo.wait_until(marks[k])
+            # Hold each described snapshot until the next narration bookmark.
+            # Keep unspoken intermediate checkpoints in the measured data.
+            for k in sorted(marks):
+                vo.wait_until(marks[k])
                 new = VGroup(*[column(k, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
                 self.play(FadeOut(cols, rate_func=squish_rate_func(smooth, 0.0, 0.45)),
                           FadeIn(new, rate_func=squish_rate_func(smooth, 0.5, 1.0)), t.animate.set_value(steps[k]),

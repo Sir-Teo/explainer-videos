@@ -52,7 +52,8 @@ class Norms(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(defs[0], shift=DOWN * 0.2), FadeIn(defs[1], shift=DOWN * 0.2))
             vo.wait_until("a")
-            self.play(Indicate(defs[0], scale_factor=1.03), Indicate(defs[1], scale_factor=1.03), run_time=1.5)
+            self.play(Circumscribe(defs[0], color=C.TRUE_P, buff=0.08, stroke_width=3),
+                      Circumscribe(defs[1], color=SIG, buff=0.08, stroke_width=3), run_time=1.5)
             for k, mk in enumerate("bcde"):
                 vo.wait_until(mk)
                 step(k)
