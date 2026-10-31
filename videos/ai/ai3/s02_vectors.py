@@ -179,8 +179,14 @@ class Vectors(VoiceoverScene):
                 why(r"a parabola that never dips below $0$: \\ at most one root, \ discriminant $\le 0$"),
                 why(r"equality iff $\mathbf{a},\mathbf{b}$ are linearly dependent")]
         step = ladder(self, rows, whys, keep=4, top=3.3, x=-1.2, buff=0.3, edge=6.9)
-        ax = Axes(x_range=[-0.5, 3.5, 1], y_range=[0, 9, 3], x_length=4.6, y_length=2.4, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.4, 0])
+        # Both signs of t matter: antiparallel vectors attain equality at negative t.
+        t_lo, t_hi = -2.5, 2.5
+        ax = Axes(x_range=[t_lo, t_hi, 1], y_range=[0, 9, 3], x_length=4.6, y_length=2.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.6, -2.25, 0])
+        t_ticks = VGroup(*[VGroup(Line(ax.c2p(v, 0) + UP * 0.04, ax.c2p(v, 0) + DOWN * 0.04,
+                                           color=GREY_B, stroke_width=1.5),
+                                      MathTex(str(v), font_size=20, color=GREY_B)
+                                      .next_to(ax.c2p(v, 0), DOWN, buff=0.08)) for v in (-2, 0, 2)])
         tl = MathTex(r"t", font_size=26, color=GREY_B).next_to(ax.x_axis, RIGHT, buff=0.1)
         fl = MathTex(r"|\mathbf{a}-t\mathbf{b}|^2", font_size=24, color=GREY_B).next_to(ax.y_axis, UP, buff=0.08)
         th = ValueTracker(1.1)
@@ -193,7 +199,7 @@ class Vectors(VoiceoverScene):
             b = b_()
             A2, AB, B2, Y = float(a_ @ a_), float(a_ @ b), float(b @ b), 8.8
             disc = max(AB * AB - B2 * (A2 - Y), 0.0)
-            lo, hi = max(-0.5, (AB - math.sqrt(disc)) / B2), min(3.5, (AB + math.sqrt(disc)) / B2)
+            lo, hi = max(t_lo, (AB - math.sqrt(disc)) / B2), min(t_hi, (AB + math.sqrt(disc)) / B2)
             return ax.plot(lambda t: A2 - 2 * t * AB + t * t * B2, x_range=[lo, hi, 0.02], color=C.BITS, stroke_width=4)
 
         par = always_redraw(parabola)
@@ -208,11 +214,11 @@ class Vectors(VoiceoverScene):
             "inequality. <bookmark mark='a'/> For any number t, the length of a minus t b, squared, can't be negative. "
             "<bookmark mark='b'/> If b is zero, the inequality is immediate. Otherwise, expand it: a parabola in t. "
             "<bookmark mark='c'/> A parabola that never dips below "
-            "zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the dot "
-            "product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches "
-            "zero only when b lines up with a. So an angle between two words makes sense."
+            "zero has at most one root, so its discriminant can't be positive. <bookmark mark='d'/> Rearranged: the "
+            "absolute dot product is at most the product of the lengths. <bookmark mark='e'/> Turn b and watch: the parabola touches "
+            "zero when b lies on a's line, in either direction. So an angle between two words makes sense."
         ) as vo:
-            self.play(Create(ax), FadeIn(tl), FadeIn(fl), FadeIn(va))
+            self.play(Create(ax), FadeIn(t_ticks), FadeIn(tl), FadeIn(fl), FadeIn(va))
             self.add(par, vb, cs)
             vo.wait_until("a")
             step(0)

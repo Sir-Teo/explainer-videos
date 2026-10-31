@@ -42,7 +42,7 @@ class Eigen(VoiceoverScene):
         char.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.1)
         with self.voiceover(
             "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> Some aren't: they stay on their "
-            "line, only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and the stretch is the "
+            "line, only stretched, shrunk or flipped. <bookmark mark='b'/> Those are the eigenvectors, and the scale is the "
             "eigenvalue. A minus lambda I must then squash a direction to zero, so its determinant vanishes: a "
             "polynomial equation for lambda."
         ) as vo:
@@ -84,7 +84,7 @@ class Eigen(VoiceoverScene):
         Qr = rot(-PI / 4)  # turns (1, 1) onto the x axis
         with self.voiceover(
             "Symmetric matrices, equal to their mirror image across the diagonal, behave best. <bookmark mark='a'/> "
-            "Their eigenvalues are real, and their eigenvectors perpendicular. <bookmark mark='b'/> So the map is: turn "
+            "Their eigenvalues are real, and we can choose an orthonormal eigenvector basis. <bookmark mark='b'/> So the map is: turn "
             "the eigenvectors onto the axes, stretch each axis by its eigenvalue, and turn back. <bookmark mark='c'/> A "
             "equals Q, Lambda, Q transpose; for a turn like Q, the transpose is the same turn, undone. That's the "
             "spectral theorem."
@@ -107,7 +107,7 @@ class Eigen(VoiceoverScene):
     # ------------------------------------------------------------------
     def proof(self):
         thm = theorem_card(r"the spectral theorem",
-                           r"A real symmetric matrix has real eigenvalues and perpendicular eigenvectors: \ "
+                           r"A real symmetric matrix has real eigenvalues and an orthonormal eigenvector basis: \ "
                            r"$A = Q\Lambda Q^{\top}$, \ with $Q$ orthogonal.",
                            who=r"Cauchy (1829), \ for quadratic forms; \ Hilbert (1904--10), \ in infinite dimensions",
                            width=6.6).to_corner(UL, buff=0.25)
@@ -209,6 +209,7 @@ class Eigen(VoiceoverScene):
         g = np.random.default_rng(4)
         C2 = np.array([[2.2, 1.3], [1.3, 1.1]])
         X = g.multivariate_normal([0, 0], C2, size=260)
+        X -= X.mean(0)  # PCA projects deviations from the empirical mean.
         cov = np.cov(X.T)
         lam, Q = np.linalg.eigh(cov)
         top = Q[:, 1] * np.sign(Q[0, 1])
@@ -219,7 +220,7 @@ class Eigen(VoiceoverScene):
         pc2 = arrow([*(2 * math.sqrt(lam[0]) * np.array([-top[1], top[0]])), 0], color=C.MODEL_Q)
         line = Line([*(-5.5 * top), 0], [*(5.5 * top), 0], color=C.BITS, stroke_width=2, stroke_opacity=0.6)
         proj = VGroup(*[Dot([*((p @ top) * top), 0], radius=0.045, color=C.TRUE_P) for p in X])
-        tag = label(r"illustrative data", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
+        tag = label(r"centred illustrative data", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
         head = label(r"covariance: \ symmetric; \ its eigenvectors: \ the \textit{principal components}", font_size=30)
         head.to_edge(UP, buff=0.4)
         cv = MathTex(r"\begin{bmatrix} " + rf"{cov[0, 0]:.2f} & {cov[0, 1]:.2f} \\ {cov[1, 0]:.2f} & {cov[1, 1]:.2f}"

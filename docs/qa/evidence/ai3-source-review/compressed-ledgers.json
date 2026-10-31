@@ -1,0 +1,72 @@
+[
+  {
+    "file": "ai3-tail-symbolic-fixtures.json.gz",
+    "compressed_sha256": "6b0e789ae06106cd17c1fa7625e88219139067344f6fa78b63a94d9b9e20d1f2",
+    "uncompressed_sha256": "2565bcbd0310bc3d6d4725d86790669e5c674e907fe9c0d34d3d771dc5469365"
+  },
+  {
+    "file": "ai3-first-half-source-review.json.gz",
+    "compressed_sha256": "ad115e379ebd4fa71b8580f663ba28f1d6fb3ea1440e472d5d0a81b2d3c63d3b",
+    "uncompressed_sha256": "a5d12b273c81e0587b9730b8a10372bacc5c623d5c4f29be5e6056a670ae93c4"
+  },
+  {
+    "file": "ai3-resolved-translation-fixtures.json.gz",
+    "compressed_sha256": "57393cf06660c1c5852c40d550a479bb4da15dcae57842c782e119bd4d9d0171",
+    "uncompressed_sha256": "b38f65844678a3ced5d5ba59bd37ce48fbf123b11e3a72ee3e01c5aab48d7219"
+  },
+  {
+    "file": "ai3-tail-caption-proposal-handoff.json.gz",
+    "compressed_sha256": "d6ff466fc87f290f27a06b28fe173355af398e7085403972375a0867b29e4adb",
+    "uncompressed_sha256": "79c3304315677dcbaaac2056497209e862ddc514061df232e0b8559074084dbd"
+  },
+  {
+    "file": "ai3-first-half-symbolic-fixtures.json.gz",
+    "compressed_sha256": "85dd04c281f26c08c3d9896d3c2ade0d0340572f0a3c5fa23ee2a3d12f8a9bf0",
+    "uncompressed_sha256": "e376564396f87f1b4f85c38a4efa4973e03d9e7d4fed29b60346a705f2003e7d"
+  },
+  {
+    "file": "ai3-tail-implementation-review.json.gz",
+    "compressed_sha256": "812587ffc2630f3a960cb46f0e8b5adb5766f59ef28d0fa966e428af3db1412d",
+    "uncompressed_sha256": "9ec7a58cee08b258696e6c4d222f0b2a0643874ca211e2a370d7fa4133434467"
+  },
+  {
+    "file": "ai3-translation-review.json.gz",
+    "compressed_sha256": "679424ad5528a2be339f28681ec4179ae4a281950a233e9702aaaf46f5f889a5",
+    "uncompressed_sha256": "c48245d9823c1355ef3d203ab8a9e9b8347c41d6d2f78641320d7d23cd54ea85"
+  },
+  {
+    "file": "ai3-independent-validation-review.json.gz",
+    "compressed_sha256": "78588c3c07ad7780414e3f34f9a17e83a7dfa0c6b2e8ff1a1cd655b1d669d1ea",
+    "uncompressed_sha256": "0c1e523c3333ba74317ce783559f909110c3c2fa1865fc0c1460c46ca9d6f888"
+  },
+  {
+    "file": "ai3-first-half-implementation.json.gz",
+    "compressed_sha256": "f572e740ee99678c38245180c5ceeb49231f2c01d8fd0422748e1e3390ac6556",
+    "uncompressed_sha256": "6941aed2d8a0af366a109744f53e4a6004add36b95eca2a4c666f16af6e7c8af"
+  },
+  {
+    "file": "ai3-tail-source-review.json.gz",
+    "compressed_sha256": "a90c05f523b0d68116793c7f07752e9723939f22aadd28b8ba58b4c5856f7ddb",
+    "uncompressed_sha256": "33d1a556713cd891e519553815dc772baf2ae059d3cad664df2d57fe3db59115"
+  },
+  {
+    "file": "ai3-integrity-review-review.json.gz",
+    "compressed_sha256": "c7620f3b681884012a7f9e9b65edde6035f397213439e7f7fa5949a0165636af",
+    "uncompressed_sha256": "aad977d9b9b9dadb241021c51f8b331a37c4f7f9c31f0a3df96d8f0e0222d213"
+  },
+  {
+    "file": "ai3-final-source-test-receipt.json.gz",
+    "compressed_sha256": "ebc5b3ce4b11d0f19497e245f02495a4c1371519fa03a4c97fa713b46e8ce8b1",
+    "uncompressed_sha256": "a2ba455a93e8e85eec5af2d1f54bd725d0269fa4f1b89551d873ee53ff0ecba2"
+  },
+  {
+    "file": "ai3-source-preparation-review.json.gz",
+    "compressed_sha256": "912da044db916d58891f7bcf4cacce1bba616e23c3e3aaa3ee4875fa568943dc",
+    "uncompressed_sha256": "e267efdfd9a12b704affc817e304b764dfeabbb3cffbfcf243c2f1e44c7f8b1f"
+  },
+  {
+    "file": "ai3-numerical-repairs-handoff.json.gz",
+    "compressed_sha256": "3295aed107ed2d6cd09888e21f685c277f2bc24ba8b162924ec6e3f0bd6c5567",
+    "uncompressed_sha256": "af98899168d26fbbe1d21e570b82f7cdf7571e012a3b9def55ab1b2f35dde149"
+  }
+]

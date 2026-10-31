@@ -50,25 +50,29 @@ class Outro(VoiceoverScene):
         im = load("image")
         out.append((Group(gray_image(np.asarray(im["recon"])[3], TW * 0.9)), r"rank $8$ of a picture", C.BITS))
         nm = load("norms")["rows"]
-        ax = mk([-0.5, 11.5, 1], [0, 140, 1])
+        ax = mk([-0.5, 11.5, 1], [0, max(r["stable"] for r in nm) * 1.05, 1])
         out.append((VGroup(ax, *[curve(ax, [r["layer"] for r in nm if r["kind"] == k_],
                                        [r["stable"] for r in nm if r["kind"] == k_], c_, 2.5)
                                  for k_, c_ in (("attn", C.QUERY), ("attn_out", C.VALUE), ("mlp_in", C.MLP),
                                                 ("mlp_out", C.TRUE_P))]), r"stable ranks", C.MLP))
         mp = load("mp")
-        ev = np.log10(np.maximum(np.asarray(mp["show"]["ev"]), 10 ** -2.5))
-        es = np.log10(np.asarray(mp["shuffled"]["ev"]))
+        def positive_logs(values):
+            values = np.asarray(values, float)
+            return np.log10(values[np.isfinite(values) & (values > 0)])
+
+        ev = positive_logs(mp["show"]["ev"])
+        es = positive_logs(mp["shuffled"]["ev"])
         ax = mk([-2.5, 1.4, 1], [0, 1, 1])
         hb = VGroup(ax)
         for vals, col in ((es, RANDOM), (ev, TRAINED)):
             c_, edges = np.histogram(vals, bins=30, range=(-2.5, 1.4))
-            c_ = c_ / c_.max()
+            c_ = c_ / max(1, c_.max())
             for a_, b_, h_ in zip(edges[:-1], edges[1:], c_):
                 if h_ > 0:
                     p0, p1 = ax.c2p(a_, 0), ax.c2p(b_, h_)
                     hb.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=col,
                                      fill_opacity=0.6).move_to((p0 + p1) / 2))
-        out.append((hb, r"trained vs.\ shuffled", TRAINED))
+        out.append((hb, r"spectra: \ separately peak-normalized", TRAINED))
         gl = load("galore")["track"]["tracked"]
         ax = mk([0, math.log10(600), 1], [0, 1, 1])
         out.append((VGroup(ax, curve(ax, [math.log10(t_["step"]) for t_ in gl], [t_["top8"] for t_ in gl], C.SCORE, 2.5)),
@@ -78,9 +82,9 @@ class Outro(VoiceoverScene):
         x_, y_ = np.asarray(r0["x"])[::6], np.asarray(r0["y"])[::6]
         lo_, hi_ = float(np.percentile(x_, 1)), float(np.percentile(x_, 99))
         ax = mk([lo_, hi_, 1], [lo_, hi_, 1])
-        out.append((VGroup(ax, *[Dot(ax.c2p(a_, float(np.clip(b_, lo_, hi_))), radius=0.012, color=C.REWARD)
-                                 for a_, b_ in zip(x_, y_) if lo_ <= a_ <= hi_]),
-                    r"$\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI} - \log k$", C.REWARD))
+        out.append((VGroup(ax, *[Dot(ax.c2p(a_, b_), radius=0.012, color=C.REWARD)
+                                 for a_, b_ in zip(x_, y_) if lo_ <= a_ <= hi_ and lo_ <= b_ <= hi_]),
+                    r"SGNS: generalized shifted PMI", C.REWARD))
         hd = load("highdim")
         ax = mk([0, 4, 1], [-4, 0, 1])
         lds = np.log10(np.asarray(hd["var_dims"], float))
@@ -124,9 +128,11 @@ class Outro(VoiceoverScene):
             "Cauchy-Schwarz, measures likeness. Einsum names the axes and counts the cost. Projections find the closest "
             "point, and arithmetic's order matters. Symmetric matrices stretch along perpendicular directions, which "
             "power iteration finds; every matrix is turn, stretch, turn, and its biggest pieces are its best low-rank "
-            "copy. Trained weights and gradients live in a few strong directions. Counting and guessing factorize the "
-            "same table. And in high dimensions, random directions are perpendicular, random projections keep "
-            "distances, and low rank fills in empty tables."
+            "copy, with reflections allowed and rectangular singular-value blocks. Some trained weights and gradients "
+            "concentrate in strong directions. Counting and guessing connect through related cooccurrence statistics; "
+            "smoothed negative sampling gives a generalized shifted PMI. And in high dimensions, independent random "
+            "directions are nearly perpendicular. Random projections can preserve squared distances with stated "
+            "probability, and low rank helps fill empty tables."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -163,7 +169,7 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"Use Cauchy--Schwarz to prove the triangle inequality $|\mathbf{a} + \mathbf{b}| \le |\mathbf{a}| + "
             r"|\mathbf{b}|$, \ and find when it is an equality.",
-            r"Show that $P = A(A^{\top}A)^{-1}A^{\top}$ satisfies $P^2 = P = P^{\top}$, \ and that $I - P$ projects onto "
+            r"For $A$ with full column rank, show that $P = A(A^{\top}A)^{-1}A^{\top}$ satisfies $P^2 = P = P^{\top}$, \ and that $I - P$ projects onto "
             r"the vectors perpendicular to every column of $A$.",
             r"For symmetric $A$ with $\lambda_1 > \lambda_2$, \ show that $R(\mathbf{v}_1 + \varepsilon\mathbf{v}_2) = "
             r"\lambda_1 - (\lambda_1 - \lambda_2)\varepsilon^2 + O(\varepsilon^4)$ for unit eigenvectors: \ why the "

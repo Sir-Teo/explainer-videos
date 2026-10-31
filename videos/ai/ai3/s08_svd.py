@@ -156,7 +156,7 @@ class SVD(VoiceoverScene):
         yl = label(r"$|A\mathbf{x}|$ for every direction $\mathbf{x}$", font_size=26, color=GREY_A).next_to(ax, UP, buff=0.2)
         xa = always_redraw(lambda: arrow(c + k * np.array([*x(), 0]), start=c, color=GREY_A, stroke_width=4))
         ya = always_redraw(lambda: arrow(c + k * np.array([*(A @ x()), 0]), start=c, color=C.BITS, stroke_width=5))
-        dot = always_redraw(lambda: glow_dot(ax.c2p(t.get_value() % (2 * PI), float(np.linalg.norm(A @ x()))), color=C.BITS,
+        dot = always_redraw(lambda: glow_dot(ax.c2p(t.get_value(), float(np.linalg.norm(A @ x()))), color=C.BITS,
                                              radius=0.07, layers=3))
         name = label(r"the spectral norm: \ $\|A\| = \sigma_1$, \ the most $A$ can stretch", font_size=30, color=WHITE)
         name.to_edge(DOWN, buff=0.45)

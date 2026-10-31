@@ -21,7 +21,7 @@ class Geometry(VoiceoverScene):
     def anisotropy(self):
         g = load("gpt2")
         raw, cen = np.asarray(g["hist_raw"], float), np.asarray(g["hist_centred"], float)
-        top = max(raw.max(), cen.max()) / raw.sum()
+        top = max(raw.max() / raw.sum(), cen.max() / cen.sum())
         bars = LiveBars(raw / raw.sum(), max_value=top, height=3.4, bar_width=0.17, gap=0.03, colors=RAWC)
         bars.place(-2.0)
         x0, w = bars.base.get_start()[0] + 0.15, 60 * 0.2
@@ -32,21 +32,26 @@ class Geometry(VoiceoverScene):
         ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([X(v), -2.2, 0])
                          for t, v in (("-0.3", -0.3), ("0", 0.0), ("0.3", 0.3), ("0.6", 0.6))])
         zero = DashedLine([X(0), -2.0, 0], [X(0), 1.8, 0], color=GREY_B, stroke_width=2)
-        head = label(r"GPT-2: \ the cosine between $2{,}000$ random tokens' vectors", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"GPT-2: \ $2{,}000$ sampled token vectors, \ vocabulary IDs $1{,}000$--$19{,}999$",
+                     font_size=28).to_edge(UP, buff=0.4)
+        crop = note(r"histograms normalized within $[-0.3,0.6]$; \ tails outside this window omitted",
+                    font_size=18).next_to(head, DOWN, buff=0.12)
         m1 = label(rf"average ${g['cos_random_mean']:.2f}$, \ not $0$: \ they share a direction", font_size=30, color=RAWC)
         m2 = label(rf"subtract the average vector: \ ${g['cos_centred_mean']:.3f}$", font_size=30, color=CENC)
         for m in (m1, m2):
             m.to_edge(DOWN, buff=0.45)
         pred = label(rf"random directions in $768$ dimensions: \ $0 \pm {1 / np.sqrt(768):.3f}$", font_size=24,
-                     color=GREY_A).next_to(head, DOWN, buff=0.2)
+                     color=GREY_A).next_to(crop, DOWN, buff=0.15)
         with self.voiceover(
             "Random directions in 768 dimensions are nearly perpendicular, cosines of zero give or take "
-            f"{1 / np.sqrt(768):.3f}. Trained vectors are not random. <bookmark mark='a'/> Between two of GPT-2's token "
+            f"{1 / np.sqrt(768):.3f}. Trained vectors are not random. We sample two thousand token IDs from "
+            "one thousand through nineteen thousand nine hundred ninety-nine, not the whole vocabulary. "
+            "<bookmark mark='a'/> Between two of those token "
             f"vectors the average cosine is {g['cos_random_mean']:.2f}: they all lean one way, the space is "
-            f"anisotropic. Each makes a cosine of {g['mean_vec_cos']:.2f}, on average, with their mean. "
-            f"<bookmark mark='b'/> Subtract the mean, and the average cosine falls to {g['cos_centred_mean']:.3f}."
+            f"anisotropic. Each makes a cosine of {g['mean_vec_cos']:.2f}, on average, with the full vocabulary mean. "
+            f"<bookmark mark='b'/> Subtract that mean, and the average cosine falls to {g['cos_centred_mean']:.3f}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(pred), Create(zero), FadeIn(ticks))
+            self.play(FadeIn(head), FadeIn(crop), FadeIn(pred), Create(zero), FadeIn(ticks))
             vo.wait_until("a")
             self.play(FadeIn(bars), FadeIn(m1))
             vo.wait_until("b")
@@ -78,7 +83,7 @@ class Geometry(VoiceoverScene):
         cols = [interpolate_color(ManimColor(C.BITS), ManimColor(C.TRUE_P), min(1.0, i / 50257) ** 0.5) for i in ids]
         dots = VGroup(*[Dot(bx.c2p(x, y), radius=0.022, color=c_, fill_opacity=0.7) for (x, y), c_ in
                         zip(pts[::2], cols[::2])])
-        key = legend([(C.BITS, r"early tokens (frequent)"), (C.TRUE_P, r"late tokens (rare)")], font_size=20)
+        key = legend([(C.BITS, r"early vocabulary IDs"), (C.TRUE_P, r"late vocabulary IDs")], font_size=20)
         key.next_to(gb, UP, buff=0.1).align_to(gb, RIGHT)
         abtt = {int(D): m for D, m, _ in g["abtt"]}
         head = label(r"After centring: \ which directions remain lopsided?", font_size=34).to_edge(UP, buff=0.35)
@@ -86,7 +91,8 @@ class Geometry(VoiceoverScene):
         with self.voiceover(
             "Even centred, the spread is uneven. <bookmark mark='a'/> The top principal direction carries "
             f"{100 * share[0]:.1f} percent of it, against {100 * iso:.2f} for an even share. <bookmark mark='b'/> Colour "
-            "each token by its number in GPT-2's vocabulary, which roughly runs from frequent to rare: the first "
+            "each token by its number in GPT-2's vocabulary, a rough merge-order proxy rather than a measured "
+            "frequency rank: the first "
             f"direction tracks it, a rank correlation of {rho:.2f}. <bookmark mark='c'/> Jun Gao and colleagues explained "
             "this in 2019: training mostly pushes a rare token's vector away from contexts, so rare tokens drift "
             "together. Removing the top direction too, Mu and Viswanath's all-but-the-top of 2018, brings the average "
@@ -120,21 +126,29 @@ class Geometry(VoiceoverScene):
         leg = legend([(RAWC, r"as is"), (CENC, r"centred, layer by layer")], font_size=22).move_to([4.6, 1.5, 0])
         mid = L[n // 2]
         rog = label(rf"layer ${mid['layer']}$: \ dimensions ${mid['top3_dims'][0]}, {mid['top3_dims'][1]}, "
-                    rf"{mid['top3_dims'][2]}$ \\ carry ${100 * mid['top3_share']:.0f}\%$ of the average cosine",
+                    rf"{mid['top3_dims'][2]}$ \\ contribute ${100 * mid['top3_share']:.0f}\%$ of the average cosine \\ "
+                    r"signed contributions, not variance shares",
                     font_size=22, color=GREY_A).move_to([4.6, -0.4, 0])
         tag = note(rf"computed: \ GPT-2 reading the scoreboard's passage, \ ${g['passage_tokens']}$ tokens").to_corner(DR, buff=0.2)
-        hi = max(L[1:], key=lambda d: d["cos"])
+        peak = max(L[1:], key=lambda d: d["cos"])
+        final = L[-1]
+        endpoints = label(rf"final layer ${final['layer']}$: ${final['cos']:.2f}$ \\ "
+                          rf"peak at layer ${peak['layer']}$: ${peak['cos']:.2f}$",
+                          font_size=22, color=RAWC).move_to([4.6, 0.5, 0])
         with self.voiceover(
             "Inside the network it is stronger. <bookmark mark='a'/> GPT-2 reading the scoreboard's passage, layer by "
             f"layer: the average cosine between positions is {L[0]['cos']:.2f} at the input, about {mid['cos']:.2f} in "
-            f"the middle, and {hi['cos']:.2f} at the top, the narrow cone Kawin Ethayarajh measured in 2019. "
+            f"the middle, and {final['cos']:.2f} after final normalization. The maximum among non-input layers "
+            f"is {peak['cos']:.2f} at layer {peak['layer']}. This illustrates the narrow-cone effect Kawin "
+            "Ethayarajh measured in 2019. "
             f"<bookmark mark='b'/> In layer {mid['layer']}, three of 768 dimensions carry {100 * mid['top3_share']:.0f} "
-            "percent of it: rogue dimensions, in Timkey and van Schijndel's phrase. <bookmark mark='c'/> Centre each "
+            "percent of the average cosine as a signed contribution, not a share of squared variance: rogue "
+            "dimensions, in Timkey and van Schijndel's phrase. <bookmark mark='c'/> Centre each "
             "layer and the cosines fall to about zero. Raw cosines measure this common lean as much as meaning."
         ) as vo:
             self.play(FadeIn(ga), FadeIn(tag), FadeIn(leg[0]))
             vo.wait_until("a")
-            self.play(Create(cr), run_time=2.0)
+            self.play(Create(cr), FadeIn(endpoints), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(rog))
             vo.wait_until("c")

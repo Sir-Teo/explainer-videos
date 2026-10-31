@@ -32,16 +32,19 @@ class HighDim(VoiceoverScene):
         dl = MathTex(r"d =", font_size=48)
         dv = Integer(2, font_size=48, color=C.BITS)
         dread = VGroup(dl, dv).arrange(RIGHT, buff=0.2).to_corner(UR, buff=0.7)
+        cap = note(r"bar height: fraction of $20{,}000$ pairs in each $5^\circ$ bin", font_size=20)
+        cap.to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Our intuition comes from three dimensions, and in 768 it misleads us. <bookmark mark='a'/> Two random "
             "directions: in two dimensions, any angle. <bookmark mark='b'/> In three, right angles are already the most "
-            f"common. <bookmark mark='c'/> In a hundred, the angle's standard deviation around ninety degrees is "
+            f"common. <bookmark mark='c10'/> In ten, the spread is {sd[10]:.1f} degrees. "
+            f"<bookmark mark='c'/> In a hundred, the angle's standard deviation around ninety degrees is "
             f"{sd[100]:.1f} degrees, <bookmark mark='d'/> and in 768, {sd[768]:.1f}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
             self.play(Indicate(dread))
-            for d, mark in zip(dims[1:], ["b", "c", "c", "d"]):
+            for d, mark in zip(dims[1:], ["b", "c10", "c", "d"]):
                 vo.wait_until(mark)
                 self.play(*bars.to(hist[d]), ChangeDecimalToValue(dv, d), run_time=1.2)
         bars.freeze()
@@ -152,7 +155,9 @@ class HighDim(VoiceoverScene):
         bars.place(-2.0, x=-3.6)
         x0, w = bars.base.get_start()[0] + 0.15, bars.width_total
         ticks = VGroup(*[MathTex(t, font_size=26, color=GREY_B).move_to([x0 + w * v / 2 - 0.02, -2.2, 0])
-                         for t, v in (("0", 0), (r"\sqrt d", 1), (r"2\sqrt d", 2))])
+                         for t, v in (("0", 0), ("1", 1), ("2", 2))])
+        normalized = label(r"normalized length $|\mathbf{x}|/\sqrt d$; \ bars: fraction of $20{,}000$ draws",
+                           font_size=18, color=GREY_A).move_to([-3.6, -2.7, 0])
         head = label(r"The length of a random vector, \ $\mathbf{x} \sim \mathcal{N}(0, I_d)$", font_size=34)
         head.to_edge(UP, buff=0.35)
         dv = Integer(2, font_size=44, color=C.BITS)
@@ -173,10 +178,11 @@ class HighDim(VoiceoverScene):
             "Now lengths. <bookmark mark='a'/> As d grows, a random vector's length piles up around root d. "
             "<bookmark mark='b'/> Its square is a sum of d squares, <bookmark mark='c'/> with mean d and variance 2 d. "
             "<bookmark mark='d'/> The square root changes by one over two root d per unit, so the length's spread is "
-            "about one over root two for large d: the length grows, the spread approaches a constant. Measured at 768, "
+            "about one over root two for large d: the absolute length grows, its absolute spread approaches a constant. "
+            "The histogram divides length by root d, so its relative spread narrows. Measured at 768, "
             f"{nsd[k768]:.3f}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
+            self.play(FadeIn(head), FadeIn(normalized), FadeIn(bars), FadeIn(ticks), FadeIn(dread))
             vo.wait_until("a")
             for d in dims[1:]:
                 self.play(*bars.to(hist[d]), ChangeDecimalToValue(dv, d), run_time=0.9)

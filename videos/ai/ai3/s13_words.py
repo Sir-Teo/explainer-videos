@@ -6,6 +6,22 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai3.common import HIST, MONO, chapter, load
 
 
+def projected_neighbours(E, vocab, query, k, n=5):
+    """Cosine neighbours in the first k columns; zero queries have no direction."""
+    vectors = np.asarray(E, float)[:, :k]
+    norms = np.linalg.norm(vectors, axis=1)
+    valid = np.isfinite(vectors).all(axis=1) & np.isfinite(norms) & (norms > 0)
+    q = vocab.index(query)
+    if not valid[q]:
+        return []
+    unit = np.divide(vectors, norms[:, None], out=np.zeros_like(vectors), where=valid[:, None])
+    scores = unit @ unit[q]
+    valid[q] = False
+    candidates = np.flatnonzero(valid & np.isfinite(scores))
+    order = candidates[np.argsort(-scores[candidates], kind="stable")[:n]]
+    return [vocab[i] for i in order]
+
+
 class Words(VoiceoverScene):
     def construct(self):
         chapter(self, 12, r"Word vectors from counting", r"Can a computer learn what words mean by counting?",
@@ -159,9 +175,7 @@ class Words(VoiceoverScene):
         assert E.shape[1] == ks[-1]
 
         def near(word, k, n=5):
-            e = E[:, :k] / np.linalg.norm(E[:, :k], axis=1, keepdims=True)
-            sim = e @ e[idx[word]]
-            return [vocab[i] for i in np.argsort(-sim)[1:n + 1]]
+            return projected_neighbours(E, vocab, word, k, n)
 
         words = ["three", "ship", "father", "monday"]
         final = {x: set(near(x, ks[-1], 10)) for x in words}  # each word's 10 nearest, with all 100 directions
@@ -181,8 +195,9 @@ class Words(VoiceoverScene):
         t = ValueTracker(ks[0])
         cnt = always_redraw(lambda: label(rf"keeping the first ${int(round(t.get_value()))}$ of the $100$ directions",
                                           font_size=30, color=C.CONTEXT).to_edge(UP, buff=0.45))
-        sub = label(r"each word's $5$ nearest neighbours; \ highlighted: \ among its $10$ nearest with all $100$",
-                    font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
+        sub = label(r"highlighted: among the final top $10$; \ threshold: $3$ of the current $5$ \\ "
+                    r"first crossing among the tested ranks, not permanent stability",
+                    font_size=21, color=GREY_A).to_edge(DOWN, buff=0.4)
         if sub.width > 13.0:
             sub.scale_to_fit_width(13.0)
         order = sorted(words, key=lambda x: settle[x])
@@ -190,7 +205,9 @@ class Words(VoiceoverScene):
             "How many directions does meaning need? Keep only the strongest few. <bookmark mark='a'/> With "
             f"{ks[0]}, only {hits0} of these twenty neighbours are final ones. <bookmark mark='b'/> With {ks[1]}, "
             f"<bookmark mark='c'/> {ks[2]}, <bookmark mark='d'/> {ks[3]}, <bookmark mark='e'/> and all {ks[-1]}. "
-            f"{order[0]} settles first, with {settle[order[0]]} directions; {order[3]} needs {settle[order[3]]}. The "
+            f"Our threshold is three of five neighbours among the final top ten. {order[0]} first crosses it at "
+            f"{settle[order[0]]} tested directions; {order[3]} at {settle[order[3]]}. This is a first crossing, not "
+            "a claim that every later neighbour stays fixed. The "
             "strongest directions carry the broad patterns; finer meanings live further down."
         ) as vo:
             self.add(cnt)
@@ -217,7 +234,7 @@ class Words(VoiceoverScene):
         at = w["analogy_test"]
         pu = w["purity"]
         xy = np.asarray(w["analogy_xy"])
-        xy = xy / np.abs(xy).max() * 2.6
+        xy = xy / np.abs(xy).max() * 2.2
         pts = [np.array([x, y, 0]) + DOWN * 0.3 for x, y in xy]
         names = ["france", "paris", "england", "london"]
         cols = [C.TRUE_P, C.BITS, C.TRUE_P, C.BITS]
@@ -237,13 +254,17 @@ class Words(VoiceoverScene):
         k2.move_to([-6.6, 0.4, 0], aligned_edge=LEFT)
         score = label(rf"on ${at['all']['n']}$ such questions from the books: \ ${100 * at['all']['acc']:.0f}\%$ right",
                       font_size=26, color=C.BITS).next_to(k2, DOWN, buff=0.2).align_to(k2, LEFT)
-        tag = label(r"drawn on the plane of the two steps", font_size=22, color=GREY_B).to_corner(UR, buff=0.45)
+        tag = label(r"2D projection of the steps; \ neighbours ranked in $100$D", font_size=18,
+                    color=GREY_B).to_edge(DOWN, buff=0.65)
+        pool = note(r"category purity searches only the categorized candidate pool", font_size=18)
+        pool.to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "Directions mean something too. <bookmark mark='a'/> Step from France to Paris, then take the same step "
             f"from England. <bookmark mark='b'/> {land_say} Man is to king as woman is to: {mk[0]}, then {mk[1]}. "
             f"<bookmark mark='c'/> On {at['all']['n']} such questions built from the books, man and woman, dog and dogs, "
             f"walk and walked, the nearest word is right {100 * at['all']['acc']:.0f} percent of the time, out of ten "
-            "thousand candidates. And of each category word's five nearest neighbours, animals, colours, numbers and so "
+            "thousand candidates. Separately, searching only among categorized words, of each category word's five "
+            "nearest neighbours, animals, colours, numbers and so "
             f"on, {100 * pu['purity']:.0f} percent share its category, against {100 * pu['chance']:.0f} percent by "
             "chance."
         ) as vo:
@@ -255,6 +276,6 @@ class Words(VoiceoverScene):
             self.play(Create(land), FadeIn(dots[3]), FadeIn(labs[3]), FadeIn(res))
             self.play(FadeIn(k2))
             vo.wait_until("c")
-            self.play(FadeIn(score))
+            self.play(FadeIn(score), FadeIn(pool))
         self.wait(0.3)
         self.clear_scene()

@@ -43,15 +43,133 @@ Items:
 
 from __future__ import annotations
 
+import argparse
 import collections
+import copy
+import hashlib
+import json
 import math
+import pickle
+import time
 
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import cache_lock, locked_item
 
-CACHE = Cache("ai3")
-load = CACHE.load
+CACHE_SCHEMAS = {name: 1 for name in ("gpt2", "norms", "mp", "galore", "words", "sgns", "jl", "mf", "twotower")}
+
+
+def digest_json(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+
+
+def file_digest(path):
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+class SchemaCache(Cache):
+    """Semantic revisions and corpus lineage, checked without invoking a producer."""
+
+    def current(self, name):
+        p = self.path(name)
+        if not p.is_file():
+            return False
+        if name not in CACHE_SCHEMAS:
+            return True
+        try:
+            data = json.loads(p.read_text())
+            if not isinstance(data, dict):
+                return False
+            if data.get("schema_version") != CACHE_SCHEMAS[name] or data.get("recipe") != item_recipe(name):
+                return False
+            npz = p.with_suffix(".npz")
+            if data.get("arrays_sha256") != (file_digest(npz) if npz.exists() else None):
+                return False
+            if name in ("words", "sgns"):
+                lineage = data["provenance"]
+                if lineage["corpus_sha256"] != file_digest(self.dir.parent / "ai1" / "train.txt"):
+                    return False
+                if lineage["vocab_sha256"] != digest_json(data["vocab"]):
+                    return False
+                if lineage["recipe"] != item_recipe(name):
+                    return False
+                if lineage["fingerprint"] != digest_json({k: v for k, v in lineage.items() if k != "fingerprint"}):
+                    return False
+                if name == "sgns" and not self.current("words"):
+                    return False
+                if name == "sgns":
+                    words = json.loads(self.path("words").read_text())
+                    if words["vocab"] != data["vocab"] or data["words_fingerprint"] != words["provenance"]["fingerprint"]:
+                        return False
+            return True
+        except (OSError, ValueError, KeyError, TypeError):
+            return False
+
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not self.current(name):
+            self.save(name, self.items[name]())
+        return super().load(name)
+
+    @locked_item(lambda self, name, out: self.path(name))
+    def save(self, name, out):
+        if name in ("words", "sgns") and out["provenance"]["corpus_sha256"] != file_digest(self.dir.parent / "ai1" / "train.txt"):
+            raise ValueError("corpus changed after it was consumed; refusing completed cache publication")
+        # Publish arrays before the completion marker, authenticating their bytes.
+        self.dir.mkdir(parents=True, exist_ok=True)
+        arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
+        rest = {k: v for k, v in out.items() if k not in arrays}
+        self.path(name).unlink(missing_ok=True)
+        self._loaded.pop(name, None)
+        npz = self.path(name).with_suffix(".npz")
+        if arrays:
+            tmp = self.path(name).with_suffix(".tmp.npz")
+            np.savez_compressed(tmp, **arrays)
+            tmp.replace(npz)
+        else:
+            npz.unlink(missing_ok=True)
+        if name in CACHE_SCHEMAS:
+            rest.update(schema_version=CACHE_SCHEMAS[name], recipe=item_recipe(name),
+                        arrays_sha256=file_digest(npz) if arrays else None)
+        tmp = self.path(name).with_suffix(".tmp.json")
+        tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
+        tmp.replace(self.path(name))
+        (self.dir / f"{name}.partial.json").unlink(missing_ok=True)
+        if name == "sgns":
+            (self.dir / "sgns.ckpt").unlink(missing_ok=True)
+
+    def main(self, items, doc=None):
+        self.items = items
+        ap = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
+        ap.add_argument("names", nargs="*", default=list(items))
+        ap.add_argument("--force", action="store_true")
+        args = ap.parse_args()
+        for name in args.names:
+            with cache_lock(self.path(name)):
+                if self.current(name) and not args.force:
+                    print(f"  cached  {name}")
+                    continue
+                started = time.time()
+                print(f"  compute {name} ...", flush=True)
+                self.save(name, items[name]())
+                print(f"  done    {name} in {time.time() - started:.0f}s", flush=True)
+
+
+CACHE = SchemaCache("ai3")
+
+
+def cache_current(name):
+    return CACHE.current(name)
+
+
+def load(name):
+    # Deliberate indirection: cached-only QA guards this instance before any upgrade.
+    return CACHE.load(name)
 
 VOWELS = "aeiou"
 CATEGORIES = {
@@ -149,7 +267,9 @@ def compute_gpt2():
         i = token_id(tok, w)
         sim = Wn @ Wn[i]
         res = []
-        for j in np.argsort(-sim)[1:80]:
+        order = np.argsort(-sim, kind="stable")
+        # Keep the original 79-other-token search budget, independent of ties.
+        for j in order[order != i][:79]:
             s = tok.decode([int(j)]).strip()
             if s.lower() == w.lower() or s.lower() in [r[0].lower() for r in res] or not s.isalpha():
                 continue
@@ -513,7 +633,7 @@ def compute_norms():
     g = rng(21)
     G = g.normal(size=(768, 3072))
     sg = np.linalg.svd(G, compute_uv=False)
-    rand = dict(stable=float((sg ** 2).sum() / sg[0] ** 2), kappa=float(sg[0] / sg[-1]),
+    rand = dict(shape=[768, 3072], seed=21, distribution="iid-standard-normal", stable=float((sg ** 2).sum() / sg[0] ** 2), kappa=float(sg[0] / sg[-1]),
                 stable_pred=768 * 3072 / (math.sqrt(768) + math.sqrt(3072)) ** 2)
     # solving A x = b as the condition number grows: the error is about kappa times the machine's rounding unit
     kappas = [10.0 ** e for e in range(0, 15)]
@@ -578,22 +698,32 @@ def esd(Wm):
 
 
 def powerlaw_fit(ev, min_tail=10):
-    """Continuous power-law MLE for the tail of the eigenvalues (Clauset, Shalizi & Newman 2009): for each candidate
-    xmin, alpha = 1 + n / sum(log(x / xmin)); keep the xmin with the smallest Kolmogorov-Smirnov distance."""
+    """Continuous-tail MLE, choosing xmin by the two-sided empirical KS distance.
+
+    This is a descriptive tail fit, not a power-law goodness-of-fit test.
+    """
     x = np.sort(np.asarray(ev, float))
-    x = x[x > 0]
+    x = x[np.isfinite(x) & (x > 0)]
+    if not isinstance(min_tail, (int, np.integer)) or min_tail < 2:
+        raise ValueError("min_tail must be an integer >= 2")
     best = None
-    for i in range(len(x) // 2, len(x) - min_tail):
-        xmin = x[i]
-        t = x[i:]
+    for i in range(len(x) // 2, len(x) - min_tail + 1):
+        xmin, t = x[i], x[i:]
         n = len(t)
-        a = 1 + n / np.log(t / xmin).sum()
-        emp = np.arange(n) / n
-        model_cdf = 1 - (t / xmin) ** (1 - a)
-        ks = float(np.abs(emp - model_cdf).max())
+        log_sum = np.log(t / xmin).sum()
+        if log_sum <= 0:
+            continue
+        alpha = 1 + n / log_sum
+        cdf = 1 - (t / xmin) ** (1 - alpha)
+        ks = float(max(np.max(np.arange(1, n + 1) / n - cdf),
+                       np.max(cdf - np.arange(n) / n)))
         if best is None or ks < best[2]:
-            best = (float(a), float(xmin), ks, n)
-    return dict(alpha=best[0], xmin=best[1], ks=best[2], n_tail=best[3])
+            best = (float(alpha), float(xmin), ks, n)
+    if best is None:
+        return dict(alpha=float("nan"), xmin=float("nan"), ks=float("nan"), n_tail=0,
+                    fit_status="unavailable", fit_method="continuous-two-sided-KS")
+    return dict(alpha=best[0], xmin=best[1], ks=best[2], n_tail=best[3],
+                fit_status="fitted", fit_method="continuous-two-sided-KS")
 
 
 def mp_density(x, q):
@@ -611,11 +741,11 @@ def compute_mp():
     from explainer.ai import novels
     from explainer.lm import pocket
 
-    out = {}
+    out = dict(edge_margin=0.0, edge_rule="strictly-greater-than-limiting-MP-edge")
     g = rng(1967)
     G = g.normal(size=(768, 3072))
     ev, q, lo, hi = esd(G)
-    out["random"] = dict(ev=ev, q=q, lo=lo, hi=hi, above=int((ev > hi * 1.02).sum()), max_over_edge=float(ev[-1] / hi))
+    out["random"] = dict(ev=ev, q=q, lo=lo, hi=hi, above=int((ev > hi).sum()), max_over_edge=float(ev[-1] / hi))
     # GPT-2: every block matrix; the MLP's first matrix of layer SHOW in full, with a shuffled control
     rows = []
     SHOW = 6
@@ -623,13 +753,13 @@ def compute_mp():
         e, q_, lo_, hi_ = esd(Wm)
         fit = powerlaw_fit(e)
         rows.append(dict(layer=L, kind=kind, q=q_, hi=hi_, max_over_edge=float(e[-1] / hi_),
-                         above=int((e > hi_ * 1.02).sum()), n=len(e), **fit))
+                         above=int((e > hi_).sum()), n=len(e), **fit))
         if L == SHOW and kind == "mlp_in":
             out["show"] = dict(layer=L, kind=kind, ev=e, q=q_, lo=lo_, hi=hi_, **fit)
             flat = Wm.ravel().copy()
             rng(7).shuffle(flat)
             es, *_ = esd(flat.reshape(Wm.shape))
-            out["shuffled"] = dict(ev=es, above=int((es > hi_ * 1.02).sum()), max_over_edge=float(es[-1] / hi_))
+            out["shuffled"] = dict(ev=es, above=int((es > hi_).sum()), max_over_edge=float(es[-1] / hi_))
     out["gpt2"] = rows
     # the novels model, trained, against the same architecture freshly initialized
     torch_threads(2)
@@ -644,8 +774,8 @@ def compute_mp():
         e0, *_ = esd(p0.detach().numpy())
         fit = powerlaw_fit(e)
         nrows.append(dict(name=name, shape=list(p.shape), q=q_, hi=hi_, max_over_edge=float(e[-1] / hi_),
-                          above=int((e > hi_ * 1.02).sum()), n=len(e), init_max_over_edge=float(e0[-1] / hi_),
-                          init_above=int((e0 > hi_ * 1.02).sum()), **fit))
+                          above=int((e > hi_).sum()), n=len(e), init_max_over_edge=float(e0[-1] / hi_),
+                          init_above=int((e0 > hi_).sum()), **fit))
     out["novels"] = nrows
     out["novels_d"] = int(model.cfg.d)
     return out
@@ -810,7 +940,8 @@ def compute_galore():
     out = dict(track=dict((k, v) for k, v in tr.items() if k != "G"), runs=runs, best_lr=best,
                ns_sv=[x.tolist() for x in ns], ns_err=float(np.linalg.norm(final - exact) / np.linalg.norm(exact)),
                g_sv=(s / s[0]).tolist(), steps=GL_STEPS, batch=GL_BATCH, seq=GL_CFG["seq"], refresh=GL_REFRESH,
-               cfg=GL_CFG)
+               cfg=GL_CFG, ns_initialization="G/(frobenius_norm(G)+1e-7)",
+               ns_coefficients=list(pocket.NS_COEFFS), ns_iterations=5, ns_dtype="float32")
     part.finish()
     return out
 
@@ -843,18 +974,36 @@ def compute_galorectl():
 VOCAB, WINDOW, DIM = 10000, 4, 100
 
 
-def book_words():
-    words = ai1().text("train27").split()
+def book_words(with_source=False):
+    source = CACHE.dir.parent / "ai1" / "train.txt"
+    if not source.is_file():
+        ai1().text("train27")  # normal compute may create the missing corpus
+    # Read the exact artifact authenticated by lineage; avoid ai1's memoized text.
+    raw = source.read_bytes()
+    source_sha256 = hashlib.sha256(raw).hexdigest()
+    words = ai1().to27(raw.decode("utf-8")).split()
     cnt = collections.Counter(words)
     vocab = [w for w, _ in cnt.most_common(VOCAB)]
     idx = {w: i for i, w in enumerate(vocab)}
     ids = np.array([idx.get(w, -1) for w in words])
-    return words, vocab, idx, ids, cnt
+    result = (words, vocab, idx, ids, cnt)
+    return (*result, source_sha256) if with_source else result
 
 
 def neighbours(E, vocab, idx, w, k=6):
-    sim = E @ E[idx[w]]
-    return [(vocab[i], float(sim[i])) for i in np.argsort(-sim)[1:k + 1]]
+    """Other rows ranked by dot product; ties keep vocabulary order.
+
+    E is row-normalized by callers. A zero query has no directional neighbours.
+    """
+    E = np.asarray(E, float)
+    query = idx[w]
+    if not np.linalg.norm(E[query]):
+        return []
+    sim = E @ E[query]
+    candidates = np.flatnonzero((np.arange(len(E)) != query) & np.isfinite(sim)
+                                & (np.linalg.norm(E, axis=1) > 0))
+    order = candidates[np.argsort(-sim[candidates], kind="stable")[:max(0, k)]]
+    return [(vocab[i], float(sim[i])) for i in order]
 
 
 def analogy(E, idx, vocab, a, b, c, k=5):
@@ -918,7 +1067,7 @@ def compute_words():
     import scipy.sparse as sp
     from scipy.sparse.linalg import svds
 
-    words, vocab, idx, ids, cnt = book_words()
+    words, vocab, idx, ids, cnt, source_sha256 = book_words(with_source=True)
     C, n_rows = cooccurrence(ids)
     tot = float(C.sum())
     rs = np.asarray(C.tocsr().sum(1)).ravel()
@@ -931,7 +1080,7 @@ def compute_words():
     o = np.argsort(-s)
     u, s = u[:, o], s[o]
     E = u * np.sqrt(s)
-    E /= np.linalg.norm(E, axis=1, keepdims=True)
+    E /= np.maximum(np.linalg.norm(E, axis=1, keepdims=True), 1e-12)
     nb = {w: neighbours(E, vocab, idx, w) for w in BOOK_WORDS}
     an = {f"{a}:{b}::{c}": analogy(E, idx, vocab, a, b, c) for a, b, c in ANALOGIES}
     # a 2D picture of the analogy: the four words on the plane of their two differences
@@ -948,7 +1097,7 @@ def compute_words():
             n_ab = float(Cc[idx[a], idx[b]])
             if n_ab > 0:
                 show_pairs.append((a, b, n_ab, float(np.log(n_ab * tot / rs[idx[a]] / rs[idx[b]]))))
-    return dict(vocab=vocab, n_words=len(words), n_pairs=int(n_rows * 2), density=float(keep.mean()), top300=T,
+    return dict(provenance=word_provenance("words", vocab, words, source_sha256=source_sha256), vocab=vocab, n_words=len(words), n_pairs=int(n_rows * 2), density=float(keep.mean()), top300=T,
                 nnz=int(P.nnz), s=s, E=E.astype(np.float32), neighbours=nb, analogies=an, analogy_xy=xy,
                 counts=[int(cnt[w]) for w in vocab[:20]], analogy_test=analogy_test(E, idx, vocab),
                 purity=category_purity(E, idx), show_pairs=show_pairs, cells=VOCAB * VOCAB)
@@ -957,8 +1106,22 @@ def compute_words():
 SG_EPOCHS, SG_B, SG_K = 3, 4096, 5
 
 
+def word_provenance(name, vocab, words=None, *, seq=None, neg=None, source_sha256=None):
+    """Content and ordered-row lineage; no loader is used to authenticate it."""
+    out = dict(corpus_sha256=source_sha256 or file_digest(CACHE.dir.parent / "ai1" / "train.txt"),
+               vocab_sha256=digest_json(vocab), recipe=item_recipe(name))
+    if words is not None:
+        out["normalized_tokens_sha256"] = hashlib.sha256(" ".join(words).encode()).hexdigest()
+    for key, values in (("subsampled_sequence", seq), ("negative_distribution", neg)):
+        if values is not None:
+            arr = np.ascontiguousarray(values)
+            out[key + "_sha256"] = hashlib.sha256(arr.dtype.str.encode() + str(arr.shape).encode() + arr.tobytes()).hexdigest()
+    out["fingerprint"] = digest_json(out)
+    return out
+
+
 def sgns_data(seed=7):
-    words, vocab, idx, ids, cnt = book_words()
+    words, vocab, idx, ids, cnt, source_sha256 = book_words(with_source=True)
     freq = np.array([cnt[w] for w in vocab], float)
     f = freq / freq.sum()
     keep_p = np.minimum(1.0, np.sqrt(1e-4 / f) + 1e-4 / f)  # subsample very frequent words
@@ -968,7 +1131,8 @@ def sgns_data(seed=7):
     neg = freq ** 0.75 / (freq ** 0.75).sum()
     centre = np.concatenate([seq[:-d] for d in range(1, WINDOW + 1)] + [seq[d:] for d in range(1, WINDOW + 1)])
     context = np.concatenate([seq[d:] for d in range(1, WINDOW + 1)] + [seq[:-d] for d in range(1, WINDOW + 1)])
-    return vocab, idx, seq, neg, centre, context, g
+    provenance = word_provenance("sgns", vocab, words, seq=seq, neg=neg, source_sha256=source_sha256)
+    return vocab, idx, seq, neg, centre, context, g, provenance
 
 
 def compute_sgns():
@@ -977,7 +1141,7 @@ def compute_sgns():
     torch = torch_threads(2)
     torch.set_grad_enabled(True)  # (the GPT-2 items switch it off)
     torch.manual_seed(0)
-    vocab, idx, seq, neg_np, centre, context, g = sgns_data()
+    vocab, idx, seq, neg_np, centre, context, g, provenance = sgns_data()
     neg_p = torch.tensor(neg_np, dtype=torch.float32)
     E_in = torch.nn.Embedding(VOCAB, DIM)
     E_out = torch.nn.Embedding(VOCAB, DIM)
@@ -987,7 +1151,7 @@ def compute_sgns():
     B, K, losses = SG_B, SG_K, []
     total = SG_EPOCHS * math.ceil(len(centre) / B)
     checks = sorted({0, max(1, total // 300), total // 100, total // 30, total // 10, total // 3, total})
-    snaps = []
+    snaps, snap_steps = [], []
 
     def snap():  # how it learns: the nearest neighbours of the chosen words, along the way
         E_ = E_in.weight.detach().numpy()
@@ -995,16 +1159,27 @@ def compute_sgns():
         return {w: [x for x, _ in neighbours(E_, vocab, idx, w)][:5] for w in BOOK_WORDS}
 
     snaps.append(snap())
+    snap_steps.append(0)
     # a checkpoint after every pass (vectors, optimizer, both random generators, curves), so a killed run resumes
     ckpt = CACHE.dir / "sgns.ckpt"
     start = 0
+    checkpoint_contract = dict(provenance=provenance, vocab=vocab, checks=checks,
+                               batches_per_epoch=math.ceil(len(centre) / B), epochs=SG_EPOCHS,
+                               torch_version=torch.__version__, numpy_version=np.__version__, snapshot_words=list(BOOK_WORDS))
     if ckpt.exists():
-        st = torch.load(ckpt, weights_only=False)
-        E_in.load_state_dict(st["E_in"]), E_out.load_state_dict(st["E_out"]), opt.load_state_dict(st["opt"])
-        g.bit_generator.state = st["g"]
-        torch.set_rng_state(st["torch"])
-        losses, snaps, start = st["losses"], st["snaps"], st["epoch"] + 1
-        print(f"  resuming sgns after pass {start}", flush=True)
+        try:
+            st = torch.load(ckpt, weights_only=False)
+        except (EOFError, RuntimeError, pickle.UnpicklingError) as exc:
+            raise ValueError(f"unreadable SGNS checkpoint {ckpt}; preserve and inspect before retry") from exc
+        try:
+            restore_sgns_checkpoint(st, checkpoint_contract, E_in, E_out, opt, g, torch)
+        except IncompatibleSGNSCheckpoint as exc:
+            rejected = ckpt.with_name("sgns.rejected-" + file_digest(ckpt)[:16] + ".ckpt")
+            ckpt.replace(rejected)
+            print(f"  ignoring incompatible SGNS checkpoint ({exc}); preserved as {rejected.name}", flush=True)
+        else:
+            losses, snaps, snap_steps, start = st["losses"], st["snaps"], st["snap_steps"], st["epoch"] + 1
+            print(f"  resuming sgns after pass {start}", flush=True)
     for epoch in range(start, SG_EPOCHS):
         perm = g.permutation(len(centre))
         for s0 in range(0, len(perm), B):
@@ -1019,19 +1194,23 @@ def compute_sgns():
             opt.zero_grad()
             loss.backward()
             opt.step()
-            losses.append(float(loss))
+            losses.append(float(loss.detach()))
             if len(losses) in checks:
                 snaps.append(snap())
+                snap_steps.append(len(losses))
         CACHE.dir.mkdir(parents=True, exist_ok=True)
         torch.save(dict(E_in=E_in.state_dict(), E_out=E_out.state_dict(), opt=opt.state_dict(), g=g.bit_generator.state,
-                        torch=torch.get_rng_state(), losses=losses, snaps=snaps, epoch=epoch), ckpt.with_suffix(".tmp"))
+                        torch=torch.get_rng_state(), losses=losses, snaps=snaps, snap_steps=snap_steps, epoch=epoch,
+                        contract=checkpoint_contract, checkpoint_schema=1), ckpt.with_suffix(".tmp"))
         ckpt.with_suffix(".tmp").replace(ckpt)
     Wi = E_in.weight.detach().numpy().astype(np.float64)
     Wo = E_out.weight.detach().numpy().astype(np.float64)
-    E = Wi / np.linalg.norm(Wi, axis=1, keepdims=True)
+    E = Wi / np.maximum(np.linalg.norm(Wi, axis=1, keepdims=True), 1e-12)
     nb = {w: neighbours(E, vocab, idx, w) for w in BOOK_WORDS}
     an = {f"{a}:{b}::{c}": analogy(E, idx, vocab, a, b, c) for a, b, c in ANALOGIES}
     svd = load("words")
+    if svd["vocab"] != vocab or svd["provenance"]["corpus_sha256"] != provenance["corpus_sha256"]:
+        raise ValueError("words/SGNS corpus or ordered vocabulary mismatch; comparison cannot proceed")
     Es = np.asarray(svd["E"], float)
     overlap = {w: len({x for x, _ in nb[w]} & {x for x, _ in neighbours(Es, vocab, idx, w)}) for w in BOOK_WORDS}
     # Levy & Goldberg on the trained model: the optimum of the SGNS loss puts w . c = log(#(w,c) / (#(w) P_n(c)))
@@ -1046,14 +1225,71 @@ def compute_sgns():
     r = float(np.corrcoef(shifted, dots)[0, 1])
     slope = float(np.polyfit(shifted, dots, 1)[0])
     pick = rng(8).choice(len(sel), min(3000, len(sel)), replace=False)
-    out = dict(neighbours=nb, analogies=an, loss=np.array(losses[::200]), pairs=int(len(centre)), overlap=overlap,
-               steps=len(losses), snap_steps=checks[:len(snaps)], snap_neighbours=snaps, k=K,
+    out = dict(provenance=provenance, vocab=vocab, words_fingerprint=svd["provenance"]["fingerprint"],
+               neighbours=nb, analogies=an, loss=np.array(losses[::200]), loss_steps=list(range(1, len(losses) + 1, 200)), pairs=int(len(centre)), overlap=overlap,
+               steps=len(losses), snap_steps=snap_steps, snap_neighbours=snaps, k=K,
                analogy_test=analogy_test(E, idx, vocab), purity=category_purity(E, idx),
                lg=dict(n=int(len(sel)), r=r, slope=slope, mae=float(np.abs(dots - shifted).mean()),
                        x=shifted[pick], y=dots[pick], min_count=50, top=top))
     out["lg_exact"] = sgns_exact(centre, context, neg_np, K)
-    ckpt.unlink(missing_ok=True)
+    # Completion publication removes the checkpoint only after Cache.save succeeds.
     return out
+
+
+class IncompatibleSGNSCheckpoint(ValueError):
+    """A rejected checkpoint whose state has not touched the live training run."""
+
+
+def restore_sgns_checkpoint(state, expected, E_in, E_out, opt, g, torch):
+    """Preflight on independent objects; incompatible state never touches live state.
+
+    Unexpected failure during the final commit propagates and aborts the run; the
+    caller may only start fresh after an IncompatibleSGNSCheckpoint rejection.
+    """
+    try:
+        if not isinstance(state, dict) or state.get("checkpoint_schema") != 1 or state.get("contract") != expected:
+            raise ValueError("legacy or mismatched corpus/vocabulary/training contract")
+        epoch = state["epoch"]
+        if type(epoch) is not int or not 0 <= epoch < expected["epochs"]:
+            raise ValueError("invalid epoch")
+        completed = (epoch + 1) * expected["batches_per_epoch"]
+        expected_snaps = [i for i in expected["checks"] if i <= completed]
+        if (len(state["losses"]) != completed or not np.isfinite(state["losses"]).all()
+                or state["snap_steps"] != expected_snaps or len(state["snaps"]) != len(expected_snaps)):
+            raise ValueError("inconsistent loss/snapshot counters")
+        for model, key in ((E_in, "E_in"), (E_out, "E_out")):
+            actual = model.state_dict()
+            if (set(state[key]) != set(actual)
+                    or any(state[key][k].shape != v.shape or not torch.isfinite(state[key][k]).all()
+                           for k, v in actual.items())):
+                raise ValueError("incompatible/nonfinite embedding state")
+            copy.deepcopy(model).load_state_dict(state[key])
+        def finite_tensors(value):
+            if torch.is_tensor(value):
+                return bool(torch.isfinite(value).all())
+            if isinstance(value, dict):
+                return all(finite_tensors(v) for v in value.values())
+            if isinstance(value, (list, tuple)):
+                return all(finite_tensors(v) for v in value)
+            return True
+        if not finite_tensors(state["opt"]):
+            raise ValueError("nonfinite optimizer state")
+        query_words = expected.get("snapshot_words", [])
+        if any(not isinstance(snap, dict) or any(w not in snap or not isinstance(snap[w], list)
+               or any(v not in expected["vocab"] for v in snap[w]) for w in query_words)
+               for snap in state["snaps"]):
+            raise ValueError("invalid neighbour snapshot vocabulary")
+        copy.deepcopy(opt).load_state_dict(state["opt"])
+        probe_rng = np.random.Generator(type(g.bit_generator)())
+        probe_rng.bit_generator.state = state["g"]
+        torch.Generator().set_state(state["torch"])
+    except (ValueError, KeyError, TypeError, RuntimeError, AttributeError) as exc:
+        raise IncompatibleSGNSCheckpoint(str(exc)) from exc
+    E_in.load_state_dict(state["E_in"])
+    E_out.load_state_dict(state["E_out"])
+    opt.load_state_dict(state["opt"])
+    g.bit_generator.state = state["g"]
+    torch.set_rng_state(state["torch"])
 
 
 def sgns_exact(centre, context, neg_np, K, V=300, dims=(300, 30, 5), iters=3000):
@@ -1153,15 +1389,22 @@ def compute_highdim():
 KS = [2, 5, 20, 100, 400]
 KS_FINE = [2, 5, 10, 20, 50, 100, 200, 400, 768]
 JL_EPS = 0.1
+JL_DELTA = 0.05
 
 
-def jl_bound_eps(k, n):
-    """The distortion the union bound guarantees for n points at dimension k: the eps with
-    n (n - 1) exp(-k (eps^2/2 - eps^3/3) / 2) = 1, or nan if none below 1."""
-    target = 2 * math.log(n * (n - 1)) / k
-    lo, hi = 1e-6, 0.999
-    if hi ** 2 / 2 - hi ** 3 / 3 < target:
+def jl_bound_eps(k, n, delta=JL_DELTA):
+    """Squared-distance distortion with union failure bound <= delta.
+
+    NaN means this sufficient bound certifies no epsilon strictly below one.
+    """
+    if (isinstance(k, bool) or isinstance(n, bool) or not isinstance(k, (int, np.integer))
+            or not isinstance(n, (int, np.integer)) or k <= 0 or n < 2
+            or not math.isfinite(delta) or not 0 < delta < 1):
+        raise ValueError("require integer k>0, n>=2 and 0<delta<1")
+    target = 2 * (math.log(n) + math.log(n - 1) - math.log(delta)) / k
+    if target >= 1 / 6:
         return float("nan")
+    lo, hi = 0.0, 1.0
     for _ in range(80):
         mid = (lo + hi) / 2
         if mid ** 2 / 2 - mid ** 3 / 3 < target:
@@ -1183,7 +1426,8 @@ def compute_jl():
     pick = g.choice(len(i), 2000, replace=False)
     pi_, pj_ = i[pick], j[pick]
     d0 = np.linalg.norm(pts[pi_] - pts[pj_], axis=1)
-    out = dict(ks=KS, d0=d0, n=n)
+    out = dict(ks=KS, d0=d0, n=n, delta=JL_DELTA, confidence=1 - JL_DELTA,
+               bound_units="squared-relative-error", bound_formula="two-tail-union-v2")
     for k in KS:
         R = g.normal(size=(768, k)) / math.sqrt(k)
         P = pts @ R
@@ -1315,11 +1559,16 @@ def compute_mf():
     r = Wd["r"]
     out = dict(n_ratings=int(len(r)), users=N_USERS, items=N_ITEMS, density=float(len(r) / N_USERS / N_ITEMS),
                genres=GENRES, star_counts=[int((r == s).sum()) for s in range(1, 6)])
-    mu = float(r[train].mean())
+    final_train = train | valid
+    out["fit_counts"] = dict(tuning_train=int(train.sum()), validation=int(valid.sum()),
+                             final_train=int(final_train.sum()), test=int(test.sum()))
+    out["split_fingerprint"] = hashlib.sha256(np.ascontiguousarray(split).tobytes()).hexdigest()
+    out.update(bias_penalty=0.01, evaluation_clip=[1, 5], final_fit="train|valid")
+    mu = float(r[final_train].mean())
     out["rmse_mean"] = float(np.sqrt(((r[test] - mu) ** 2).mean()))
-    part = CACHE.partial("mf", dict(ranks=MF_RANKS, lams=MF_LAMS, epochs=MF_EPOCHS, v=1))
+    part = CACHE.partial("mf", dict(ranks=MF_RANKS, lams=MF_LAMS, epochs=MF_EPOCHS, split=out["split_fingerprint"], final_fit="train|valid", v=2))
     if "bias" not in part:
-        res = mf_train(Wd, 0, 0.0, 0, train_mask=train, eval_mask=test)
+        res = mf_train(Wd, 0, 0.0, 0, train_mask=final_train, eval_mask=test)
         part["bias"] = dict(hist=res["hist"])
     out["rmse_bias"] = part["bias"]["hist"][-1][2]
     # choose lambda per rank on the validation ratings
@@ -1363,7 +1612,8 @@ def compute_mf():
     gen = Wd["genre"]
     nn10 = np.argsort(-S, axis=1)[:, :10]
     out["genre_nn"] = float((gen[nn10] == gen[:, None]).mean())
-    out["genre_chance"] = float(sum((np.bincount(gen) / len(gen)) ** 2))
+    counts = np.bincount(gen)
+    out["genre_chance"] = float(np.sum(counts * (counts - 1)) / (len(gen) * (len(gen) - 1)))
     # the singular values of the completed matrix's taste part (rank-8 P Q^T): how many directions matter
     sv = np.linalg.svd(res["P"] @ res["Q"].T, compute_uv=False)
     out["completed_sv"] = sv[:K] / sv[0]
@@ -1375,6 +1625,37 @@ def compute_mf():
 # Two towers
 # ---------------------------------------------------------------------------
 TT_DIM, TT_STEPS, TT_BATCH, TT_TAU = 32, 3000, 512, 0.1
+
+
+def retrieval_recall(score_fn, users, targets, seen, k=10):
+    """Macro recall over distinct eligible targets; empty-target users are excluded.
+
+    Seen targets are ineligible and removed. Nonfinite-score items cannot be recommended.
+    An empty evaluated cohort is unavailable (NaN), not a zero/success measurement.
+    """
+    if not isinstance(k, int) or k < 1:
+        raise ValueError("k must be a positive integer")
+    values, target_count, hits, excluded = [], 0, 0, 0
+    for u in users:
+        scores = np.asarray(score_fn(u), float).copy()
+        if scores.ndim != 1:
+            raise ValueError("scores must be a one-dimensional catalog vector")
+        blocked = set(seen.get(u, ()))
+        relevant = set(targets.get(u, ())) - blocked
+        if any(type(i) not in (int, np.int32, np.int64) or not 0 <= i < len(scores) for i in relevant | blocked):
+            raise ValueError("target/seen item outside catalog")
+        if not relevant:
+            excluded += 1
+            continue
+        eligible = np.array([i for i in range(len(scores)) if i not in blocked and np.isfinite(scores[i])], int)
+        top = set(eligible[np.argsort(-scores[eligible], kind="stable")[:k]].tolist())
+        count = len(top & relevant)
+        values.append(count / len(relevant))
+        hits += count
+        target_count += len(relevant)
+    return dict(recall=float(np.mean(values)) if values else float("nan"), evaluated_users=len(values),
+                eligible_targets=target_count, hits=hits, excluded_empty_users=excluded, k=k,
+                aggregation="macro", target_policy="distinct-unseen-targets")
 
 
 def compute_twotower():
@@ -1443,17 +1724,7 @@ def compute_twotower():
     pop = np.bincount(items[tr & pos], minlength=N_ITEMS).astype(float)
 
     def recall(score_fn, us, targets, seen):
-        hit = tot = 0
-        for u in us:
-            s = score_fn(u).copy()
-            s[list(seen[u])] = -1e9
-            top = set(np.argsort(-s)[:10].tolist())
-            t = targets[u]
-            if not t:
-                continue
-            hit += len(top & set(t)) / min(len(t), 10)
-            tot += 1
-        return hit / max(tot, 1)
+        return retrieval_recall(score_fn, us, targets, seen)["recall"]
 
     def tower_scores(us, hists):
         with torch.no_grad():
@@ -1468,9 +1739,11 @@ def compute_twotower():
     prior = np.log((pop + 1) / (pop + 1).sum())
 
     def eval_tt():
-        """recall@10 for warm and cold users: by the towers' score alone, and with the popularity prior added back
-        (the towers are trained with the in-batch correction, so their score estimates log p(film | user) minus
-        log p(film): a pointwise mutual information)."""
+        """Raw scores are the intended conditional ranking after corrected training.
+
+        Prior-added scores remain an explicitly separate popularity-weighted ablation.
+        Finite neural fits need not attain the ideal conditional optimum.
+        """
         Sw = tower_scores(warm_eval, [hist_train[u] for u in warm_eval]) / TT_TAU
         Sc = tower_scores(cold_users, [cold_hist[u] for u in cold_users]) / TT_TAU
         out = []
@@ -1506,7 +1779,43 @@ def compute_twotower():
     last = curve[-1]
     return dict(curve=curve, recall_warm=last[2], recall_cold=last[3], recall_warm_prior=last[4],
                 recall_cold_prior=last[5], pop_warm=r_pop_w, pop_cold=r_pop_c, n_warm=len(warm_eval),
-                n_cold=len(cold_users), dim=TT_DIM, items=N_ITEMS, tau=TT_TAU, steps=TT_STEPS)
+                n_cold=len(cold_users), dim=TT_DIM, items=N_ITEMS, tau=TT_TAU, steps=TT_STEPS,
+                default_inference="raw-conditional-score", metric="macro-recall@10",
+                evaluation=dict(warm=retrieval_recall(lambda u: pop, warm_eval, warm_target, seen_w),
+                                cold=retrieval_recall(lambda u: pop, cold_users, cold_target, seen_c)),
+                prior_ablation="raw-score-plus-log-smoothed-popularity")
+
+
+def item_recipe(name):
+    recipes = {
+        "gpt2": dict(neighbours="explicit-self-mask-stable-ties-v1", candidate_cap=79,
+                     returned_cap=6, queries=NEIGHBOUR_WORDS),
+        "norms": dict(random_shape=[768, 3072], random_seed=21, reference="single-MLP-shape"),
+        "mp": dict(ks="two-sided-empirical-v1", edge_margin=0.0, min_tail=10),
+        "galore": dict(ns_initialization="frobenius-plus-1e-7", ns_steps=5,
+                       ns_coefficients=[3.4445, -4.7750, 2.0315], cfg=GL_CFG, steps=GL_STEPS,
+                       batch=GL_BATCH, lrs=GL_LRS, methods=GL_METHODS, refresh=GL_REFRESH, scale=GL_SCALE),
+        "words": dict(vocab=VOCAB, window=WINDOW, dim=DIM, normalization="ai1-to27-v1",
+                      context="symmetric-original-token-positions", smoothing=0.75, svd_seed=0,
+                      neighbours="explicit-self-mask-stable-ties-nonzero-v1"),
+        "sgns": dict(vocab=VOCAB, window=WINDOW, dim=DIM, epochs=SG_EPOCHS, batch=SG_B,
+                     negatives=SG_K, seed=7, torch_seed=0, subsample=1e-4, negative_power=0.75,
+                     context="symmetric-subsampled-sequence-v1", optimizer="Adam", lr=0.003,
+                     betas=[0.9, 0.999], eps=1e-8, dtype="float32", checkpoint="epoch-v1",
+                     exact=dict(vocab=300, dims=[300, 30, 5], iterations=3000),
+                     neighbours="explicit-self-mask-stable-ties-nonzero-v1"),
+        "jl": dict(delta=JL_DELTA, squared_error=JL_EPS, bound="two-tail-union-v2"),
+        "mf": dict(ranks=MF_RANKS, lams=MF_LAMS, epochs=MF_EPOCHS, seed=2006,
+                   final_fit="train|valid", bias_penalty=0.01, evaluation_clip=[1, 5]),
+        "twotower": dict(dim=TT_DIM, steps=TT_STEPS, batch=TT_BATCH, tau=TT_TAU,
+                         metric="macro-recall-distinct-unseen-v1", inference="raw-conditional-score",
+                         training="in-batch-log-q-correction", q="positive-train-frequency-plus-1e-9",
+                         seed=2016, history_seed=5, torch_seed=0, world_seed=2006),
+    }
+    if name in ("words", "sgns"):
+        recipes[name].update(queries=BOOK_WORDS, analogies=[list(row) for row in ANALOGIES],
+                             relations=RELATIONS, categories=CATEGORIES)
+    return recipes[name]
 
 
 def tidy(x, top=True):

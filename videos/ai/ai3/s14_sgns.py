@@ -64,7 +64,7 @@ class SGNS(VoiceoverScene):
         words = ["monday", "three", "father", "eyes"]
         total = int(sg["steps"])
         loss = np.asarray(sg["loss"])
-        lx = np.arange(len(loss)) * 200
+        lx = np.asarray(sg["loss_steps"], float)
         g = axes([0, total, max(1, total // 4)], [float(loss.min()) - 0.2, float(loss.max()) + 0.2, 1],
                  x_length=4.2, y_length=2.2, xlabel=r"step", ylabel=r"loss", center=[-4.5, -2.3, 0], font_size=18)
         ax = g.ax
@@ -76,8 +76,8 @@ class SGNS(VoiceoverScene):
                                             ax.c2p(t.get_value(), float(loss.max()) + 0.2), color=WHITE, stroke_width=2))
 
         def column(k, word):
-            return VGroup(*[data_text(x, font=MONO, font_size=20, color=WHITE) for x in snaps[k][word][:5]]).arrange(
-                DOWN, buff=0.1)
+            return VGroup(*[data_text(x, font=MONO, font_size=20, color=WHITE).move_to(DOWN * 0.38 * i)
+                            for i, x in enumerate(snaps[k][word][:5])])
 
         heads = VGroup(*[data_text(w_, font=MONO, font_size=26, color=C.BITS) for w_ in words]).arrange(RIGHT, buff=1.6)
         heads.move_to([0.6, 2.4, 0])
@@ -97,7 +97,8 @@ class SGNS(VoiceoverScene):
         proper = lambda w_: w_.capitalize() if w_ in days.split() else w_  # noqa: E731
         mid = min(4, len(steps) - 1)
         with self.voiceover(
-            "We trained it on the novels, with the same words and window as the counting. Four words and their "
+            "We trained it on the novels, with the same vocabulary and nominal window as the counting. "
+            "Subsampling frequent words changes the actual context sequences. Four words and their "
             "nearest neighbours, with the loss below. <bookmark mark='a'/> At the start, random. <bookmark mark='b'/> "
             f"After {steps[1]} steps, the neighbours are the commonest words: they get pushed first. "
             f"<bookmark mark='c'/> By step {steps[mid]:,}, meaning appears: three sits with "
@@ -135,7 +136,7 @@ class SGNS(VoiceoverScene):
             cmath(r"\mathbf{w}\cdot\mathbf{c}", "=", r"\log\frac{\#(w,c)}{\#(w)\,P_n(c)} - \log k",
                   font_size=34, colors={r"\mathbf{w}\cdot\mathbf{c}": WC}),
         ]
-        whys = [why(r"the loss, cell by cell: \ the pair seen $\#(w,c)$ times, \\ drawn as a negative "
+        whys = [why(r"the log objective, cell by cell: \ the pair seen $\#(w,c)$ times, \\ drawn as a negative "
                     r"$k\,\#(w)\,P_n(c)$ times on average", font_size=22),
                 why(r"$\sigma' = \sigma(1 - \sigma)$, \ $1 - \sigma(x) = \sigma(-x)$", font_size=22),
                 why(r"$\sigma(x) / \sigma(-x) = e^x$", font_size=22),
@@ -147,7 +148,7 @@ class SGNS(VoiceoverScene):
                            r"$\mathrm{PMI}(w,c)-\log k$.", width=8.0).to_edge(UP, buff=0.2)
         with self.voiceover(
             "Why do guessing and counting agree? In 2014 Omer Levy and Yoav Goldberg showed why. "
-            "<bookmark mark='a'/> Collect the loss for one word and one context: the pair appears as a real neighbour "
+            "<bookmark mark='a'/> Collect the log objective for one word and one context: the pair appears as a real neighbour "
             "some number of times, and as a negative about k times the word's count times the context's sampling "
             "probability. <bookmark mark='b'/> Treat their dot product x as free; set the derivative to zero. "
             "<bookmark mark='c'/> The ratio of the two logistic terms is e to the x. <bookmark mark='d'/> Take logs: "
@@ -175,12 +176,16 @@ class SGNS(VoiceoverScene):
             r = ex["runs"][str(d)]
             ax = Axes(x_range=[lo, hi, 2], y_range=[lo, hi, 2], x_length=3.2, y_length=3.2, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": False})
-            x, y = np.asarray(r["x"]), np.clip(np.asarray(r["y"]), lo, hi)
+            x, y = np.asarray(r["x"]), np.asarray(r["y"])
             pick = np.arange(0, len(x), 3)
+            inside = (x[pick] >= lo) & (x[pick] <= hi) & (y[pick] >= lo) & (y[pick] <= hi)
+            omitted = int((~inside).sum())
+            pick = pick[inside]
             pts = VGroup(*[Dot(ax.c2p(float(x[i]), float(y[i])), radius=0.018, color=SGC, fill_opacity=0.6) for i in pick])
             diag = Line(ax.c2p(lo, lo), ax.c2p(hi, hi), color=WHITE, stroke_width=1.5)
             t = label(rf"$d = {d}$", font_size=28, color=WHITE).next_to(ax, UP, buff=0.1)
-            e = label(rf"median error ${r['median_err']:.3f}$", font_size=22, color=SGC).next_to(ax, DOWN, buff=0.1)
+            e = label(rf"median error ${r['median_err']:.3f}$ \\ ${omitted}$ sampled points outside the window omitted",
+                      font_size=18, color=SGC).next_to(ax, DOWN, buff=0.1)
             panels.add(VGroup(ax, diag, pts, t, e))
         panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.15)
         if panels.width > 12.8:
@@ -188,13 +193,15 @@ class SGNS(VoiceoverScene):
         xl = label(r"across: \ generalized shifted PMI; \quad up: \ $\mathbf{w}\cdot\mathbf{c}$, \ trained", font_size=22,
                    color=GREY_A).next_to(panels, DOWN, buff=0.2)
         yl = VectorizedPoint()
-        head = label(rf"Checked: \ the ${V}$ commonest words, \ the whole loss minimized, \ ${ex['cells']:,}$ pairs".replace(",", "{,}"),
-                     font_size=30).to_edge(UP, buff=0.35)
+        head = label(rf"${V}$ commonest words; \ $3{{,}}000$ Adam steps; \ ${fmt_int(ex['cells'])}$ pairs seen at least $5$ times",
+                     font_size=27).to_edge(UP, buff=0.35)
         r0, r1, r2 = (ex["runs"][str(d)] for d in dims)
         with self.voiceover(
-            f"Let's check it on the {V} commonest words, where the loss can be minimized completely. "
-            f"<bookmark mark='a'/> With {dims[0]} numbers per vector, every dot product is free: they land on the "
-            f"shifted PMI, a median error of {r0['median_err']:.3f}. <bookmark mark='b'/> With {dims[1]}, the points "
+            f"Let's check it on the {V} commonest words, after three thousand Adam steps. We measure "
+            f"{ex['cells']:,} observed pairs seen at least five times. <bookmark mark='a'/> With {dims[0]} numbers "
+            "per vector, all dot products can be free in principle, but finite training is not a convergence "
+            f"certificate: the measured median error from generalized shifted PMI is {r0['median_err']:.3f}. "
+            f"<bookmark mark='b'/> With {dims[1]}, the points "
             f"spread: {r1['median_err']:.2f}. <bookmark mark='c'/> With {dims[2]}, {r2['median_err']:.2f}. A short "
             "vector holds only a low-rank version of the table."
         ) as vo:
@@ -218,7 +225,10 @@ class SGNS(VoiceoverScene):
         ax = g.ax
         diag = Line(ax.c2p(lo, lo), ax.c2p(hi, hi), color=WHITE, stroke_width=1.5)
         pick = np.arange(0, len(x), 2)
-        pts = VGroup(*[Dot(ax.c2p(float(np.clip(x[i], lo, hi)), float(np.clip(y[i], lo, hi))), radius=0.02, color=SGC,
+        inside = (x[pick] >= lo) & (x[pick] <= hi) & (y[pick] >= lo) & (y[pick] <= hi)
+        omitted = int((~inside).sum())
+        pick = pick[inside]
+        pts = VGroup(*[Dot(ax.c2p(float(x[i]), float(y[i])), radius=0.02, color=SGC,
                            fill_opacity=0.55) for i in pick])
         stats = VGroup(label(rf"${fmt_int(lg['n'])}$ pairs seen at least ${lg['min_count']}$ times", font_size=26),
                        label(rf"correlation ${lg['r']:.2f}$", font_size=30, color=SGC),
@@ -228,6 +238,9 @@ class SGNS(VoiceoverScene):
         why_ = label(r"$100$ numbers per word for $10{,}000$ words, \\ three passes, \\ and a loss that weighs "
                      r"frequent pairs more", font_size=24, color=GREY_A).next_to(stats, DOWN, buff=0.4).align_to(stats, LEFT)
         head = label(r"The real run: \ $10{,}000$ words, \ $100$ numbers each", font_size=32).to_edge(UP, buff=0.35)
+        cap = note(rf"diagnostic cohort: top $2{{,}}000$ words; \ every second stored sample drawn \\ "
+                   rf"${omitted}$ points outside the percentile window omitted; \ statistics use the full cohort",
+                   font_size=17).to_edge(DOWN, buff=0.15)
         strong = lg["r"] > 0.7
         verdict = ("They agree closely, though the low rank pulls the extremes toward the middle."
                    if strong else "They agree only loosely: a hundred numbers can't hold the whole table, and the "
@@ -238,7 +251,7 @@ class SGNS(VoiceoverScene):
             f"PMI of its own training pairs. <bookmark mark='b'/> Correlation {lg['r']:.2f}, slope {lg['slope']:.2f}. "
             f"{verdict}"
         ) as vo:
-            self.play(FadeIn(head), FadeIn(g), Create(diag))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(g), Create(diag))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in pts], lag_ratio=0.001), run_time=2.0)
             vo.wait_until("b")
