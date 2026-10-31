@@ -100,6 +100,21 @@ def inputs_current(result):
     return "inputs" in result and all(data_signature(ROOT / p) == sig for p, sig in result["inputs"].items())
 
 
+def runtime_completed(result):
+    """Warnings require review but do not discard a completed narration capture."""
+    return result.get("status") in ("passed", "needs-review")
+
+
+def preflight_passed(result):
+    # Also handles older records whose status was passed despite warnings.
+    return result.get("status") == "passed" and not result.get("warnings")
+
+
+def check_status(result):
+    """Normalize older records that labelled warning-bearing runs as passed."""
+    return "needs-review" if result.get("status") == "passed" and result.get("warnings") else result.get("status")
+
+
 def sheet(paths, out, cols=4, width=427):
     from PIL import Image, ImageDraw
 
@@ -137,7 +152,7 @@ def worker(args):
                 except BlockingIOError:
                     pass
                 else:
-                    if json.loads(endpoint_result.read_text()).get("status") == "passed":
+                    if runtime_completed(json.loads(endpoint_result.read_text())):
                         (folder / "Tex").mkdir(exist_ok=True)
                         for svg in (endpoint / "Tex").glob("*.svg"):
                             target = folder / "Tex" / svg.name
@@ -154,7 +169,9 @@ def worker(args):
 
     result = {"video": args.video, "scene": args.worker, "lang": args.lang, "status": "running",
               "mode": "motion" if args.motion else "endpoints",
-              "fingerprint": fingerprint(args.video), "inputs": {}, "frames": [], "warnings": []}
+              "fingerprint": fingerprint(args.video), "inputs": {}, "frames": [], "warnings": [],
+              "visual_review": "pending", "full_playback_review": "pending",
+              "narrated_playback_review": "pending"}
     original_vo, original_wait = VoiceoverScene.voiceover, VoiceoverScene.wait
     active = []
     last_image = None
@@ -334,9 +351,15 @@ def worker(args):
                       error=f"{type(exc).__name__}: {exc}", traceback=traceback.format_exc())
         traceback.print_exc()
     result["elapsed"] = round(time.monotonic() - start, 2)
+    if runtime_completed(result) and result["fingerprint"] != fingerprint(args.video):
+        result["warnings"].append({"kind": "source-changed-during-render"})
+    if runtime_completed(result) and not inputs_current(result):
+        result["warnings"].append({"kind": "input-changed-during-render"})
+    if result["status"] == "passed" and result["warnings"]:
+        result["status"] = "needs-review"
     (folder / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=1))
     sheet([folder / f["file"] for f in result["frames"]], folder / "sheet.png")
-    return 0 if result["status"] == "passed" else 1
+    return 0 if preflight_passed(result) else 1
 
 
 def main():
@@ -360,6 +383,12 @@ def main():
     videos = [args.video] if args.video else all_videos(args.series or "ai")
     if args.start_at:
         videos = videos[videos.index(args.start_at):]
+    if args.only:
+        known = {cls for video in videos
+                 for _, cls, _ in importlib.import_module(f"{video_package(video)}.manifest").SCENES}
+        unknown = set(args.only) - known
+        if unknown:
+            ap.error(f"--only contains unknown chapters: {', '.join(sorted(unknown))}")
     summary = []
     for video in videos:
         key = fingerprint(video)
@@ -372,7 +401,7 @@ def main():
             folder.mkdir(parents=True, exist_ok=True)
             path = folder / "result.json"
             old = json.loads(path.read_text()) if path.exists() else {}
-            if not (args.resume and old.get("fingerprint") == key and old.get("status") == "passed"
+            if not (args.resume and old.get("fingerprint") == key and runtime_completed(old)
                     and inputs_current(old)):
                 cmd = [sys.executable, str(Path(__file__)), video, "--worker", cls, "--lang", args.lang]
                 if args.cached_only:
@@ -395,8 +424,11 @@ def main():
                 if rc and (not path.exists() or json.loads(path.read_text()) == old):
                     path.write_text(json.dumps({"video": video, "scene": cls, "lang": args.lang,
                                                 "status": "timeout" if rc == -1 else "crashed",
+                                                "mode": "motion" if args.motion else "endpoints",
+                                                "error": f"worker exit code {rc}",
                                                 "fingerprint": key, "frames": [], "warnings": []}))
             r = json.loads(path.read_text())
+            r["status"] = check_status(r)
             frames = r.get("frames", [])
             if frames:
                 best = max(frames, key=lambda f: f["coverage"])
@@ -420,12 +452,13 @@ def main():
     records = [r for p in sorted(OUT.glob(f"*/{args.lang}/*/result.json"))
                if (r := json.loads(p.read_text())).get("mode", "endpoints") == ("motion" if args.motion else "endpoints")]
     compact = [{k: r.get(k) for k in ("video", "scene", "lang", "status", "error", "elapsed")}
+               | {"status": check_status(r)}
                | {"warnings": len(r.get("warnings", [])), "frames": len(r.get("frames", []))} for r in records]
     suffix = f"{args.lang}" + ("_motion" if args.motion else "")
     tmp = OUT / f"summary_{suffix}.{os.getpid()}.tmp"
     tmp.write_text(json.dumps(compact, ensure_ascii=False, indent=1))
     tmp.replace(OUT / f"summary_{suffix}.json")
-    return int(any(r["status"] != "passed" for r in summary))
+    return int(any(not preflight_passed(r) for r in summary))
 
 
 if __name__ == "__main__":

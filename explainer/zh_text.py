@@ -89,15 +89,26 @@ _BY_NUMBERS: dict | None = None
 
 
 def _by_numbers() -> dict:
-    """{English with its numbers blanked: (Chinese with the same numbers blanked, how many)}, for the entries whose
-    translation keeps every number of the English in the same order."""
+    """Numeric caption templates, retaining the translation's number order.
+
+    Reordered numbers are safe to map only when their original values are unique;
+    otherwise the existing same-order rule avoids guessing which value moved.
+    """
     global _BY_NUMBERS
     if _BY_NUMBERS is None:
         _BY_NUMBERS = {}
         for en, zh in (_TABLE or {}).get("strings", {}).items():
             ne = _NUM.findall(en)
-            if ne and _NUM.findall(zh) == ne:
-                _BY_NUMBERS.setdefault(_NUM.sub("\0", en), (_NUM.sub("\0", zh), len(ne)))
+            nz = _NUM.findall(zh)
+            if not ne:
+                continue
+            if nz == ne:
+                order = tuple(range(len(ne)))
+            elif len(ne) == len(set(ne)) and len(nz) == len(ne) and set(nz) == set(ne):
+                order = tuple(ne.index(value) for value in nz)
+            else:
+                continue
+            _BY_NUMBERS.setdefault(_NUM.sub("\0", en), (_NUM.sub("\0", zh), len(ne), order))
     return _BY_NUMBERS
 
 
@@ -112,12 +123,13 @@ def translate(s: str) -> str:
     if s in _TABLE.get("strings", {}):
         return _SPACE.sub(r"\1\\ }", _TABLE["strings"][s])
     # the same string with other numbers (a result that came out differently on this machine): any entry whose
-    # translation keeps the English numbers, in order, serves as a template
+    # translation preserves the English numbers serves as a template, even when
+    # Chinese grammar changes their order.
     hit = _by_numbers().get(_NUM.sub("\0", s))
     if hit is not None:
         nums = _NUM.findall(s)
         if len(nums) == hit[1]:
-            it = iter(nums)
+            it = iter(nums[i] for i in hit[2])
             return _SPACE.sub(r"\1\\ }", re.sub("\0", lambda m: next(it), hit[0]))
     phrases = _TABLE.get("phrases", {})
 

@@ -168,76 +168,112 @@ class Information(VoiceoverScene):
     # ------------------------------------------------------------------
     def memory(self):
         d = load("mi")
-        ds, mi = np.asarray(d["d"], float), np.asarray(d["mi"])
-        slope = float(d["slope"])
+        ds, mi = np.asarray(d["d"], float), np.asarray(d["mi"], float)
+        shuffled = np.asarray(d["shuffled_mi"], float)
         corpus = load("corpus")
+        far, last, control = int(ds[-1]), float(mi[-1]), float(shuffled[-1])
+        fit_ds = np.asarray(d["fit_d"], float)
+        has_fit = d["slope"] is not None and len(fit_ds) >= 2
         head = label(r"How far back does the past tell you about the future?", font_size=32).to_edge(UP, buff=0.3)
-        defn = mtex(r"I(X_t; X_{t+d}) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)\,p(y)\big)", font_size=32,
+        defn = mtex(r"I(X_t; X_{t+d}) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)\,p(y)\big)", font_size=30,
                     color=GREY_A).next_to(head, DOWN, buff=0.2)
-        ax = Axes(x_range=[0, 3, 1], y_range=[0, 6, 1], x_length=8.6, y_length=4.3, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).shift(DOWN * 0.75 + LEFT * 0.8)
-        xl = VGroup(*[MathTex(t, font_size=24, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.15)
-                      for t, v in (("1", 0), ("10", 1), ("100", 2), ("1000", 3))])
-        yl = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v + 6), LEFT, buff=0.12)
-                      for v in (0, -2, -4, -6)])
+        positives = np.concatenate((mi[mi > 0], shuffled[shuffled > 0]))
+        lower = min(-6, math.floor(math.log10(float(positives.min()))) - 1) if len(positives) else -6
+        ax = CornerAxes(x_range=[0, math.log10(far), 1], y_range=[lower, 0, 1], x_length=8.0, y_length=4.2,
+                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False,
+                                                 "stroke_width": 2}).move_to([-1.7, -0.65, 0])
+        xl = VGroup(*[MathTex(rf"10^{{{v}}}" if v else "1", font_size=23, color=GREY_B)
+                      .next_to(ax.c2p(v, lower), DOWN, buff=0.15) for v in range(int(math.log10(far)) + 1)])
+        yl = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=22, color=GREY_B)
+                      .next_to(ax.c2p(0, v), LEFT, buff=0.12) for v in range(lower, 1, 2)])
         axl = VGroup(label(r"distance $d$, in letters", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.5),
-                     label(r"mutual information, bits", font_size=22, color=GREY_A).next_to(ax.c2p(0, 6), UP, buff=0.12))
-        ok = mi > 0
-        pts = [ax.c2p(math.log10(x), math.log10(y) + 6) for x, y in zip(ds[ok], mi[ok])]
-        curve_ = VMobject(stroke_color=C.CONTEXT, stroke_width=4).set_points_as_corners(pts)
-        dots = VGroup(*[Dot(p_, radius=0.045, color=C.CONTEXT) for p_ in pts])
-        fit_x = np.array([math.log10(20), 3])
-        fit = DashedLine(ax.c2p(fit_x[0], d["intercept"] + slope * fit_x[0] + 6),
-                         ax.c2p(fit_x[1], d["intercept"] + slope * fit_x[1] + 6), color=C.BITS, stroke_width=2.5)
-        fit_l = label(rf"a power law: \ $\propto d^{{{slope:.2f}}}$", font_size=24, color=C.BITS).next_to(fit, UP, buff=0.15)
-        fit_l.shift(RIGHT * 0.6)
-        a1 = label(rf"inside a word: \ ${mi[0]:.2f}$ bits at $d = 1$, \ falling fast", font_size=22, color=WHITE)
-        a1.next_to(ax.c2p(0.12, math.log10(mi[0]) + 6), RIGHT, buff=0.25)
+                     label(r"estimated mutual information, bits", font_size=22, color=GREY_A)
+                     .next_to(ax, UP, buff=0.15).align_to(ax, LEFT))
+
+        def log_points(values):
+            # Keep gaps: a nonpositive corrected estimate has no log coordinate.
+            # Its signed value is retained in the cache and disclosed on screen.
+            ys = np.full(len(values), np.nan)
+            positive = values > 0
+            ys[positive] = np.log10(values[positive])
+            return positive, ys
+
+        ok, ys = log_points(mi)
+        curve_ = curve(ax, np.log10(ds), ys, C.CONTEXT, 3.5)
+        dots = VGroup(*[Dot(ax.c2p(math.log10(x), y), radius=0.045, color=C.CONTEXT)
+                        for x, y in zip(ds[ok], ys[ok])])
+        shuffle_ok, shuffle_y = log_points(shuffled)
+        shuffle_dots = VGroup(*[Dot(ax.c2p(math.log10(x), y), radius=0.035, color=GREY_A)
+                                for x, y in zip(ds[shuffle_ok], shuffle_y[shuffle_ok])])
+        key = legend([(C.CONTEXT, r"book pairs"), (GREY_A, r"one shuffled control")], font_size=21)
+        key.move_to([-1.1, 2.1, 0])
+        omitted = int((~ok).sum() + (~shuffle_ok).sum())
+        disclosure = wrapped_label(rf"nonpositive estimates omitted from log axes: ${omitted}$", 8.4,
+                                   font_size=18, color=GREY_B).next_to(axl[0], DOWN, buff=0.15)
+
+        def scientific(value):
+            if value == 0:
+                return "0"
+            exponent = math.floor(math.log10(abs(value)))
+            return rf"{value / 10 ** exponent:.2f}\times 10^{{{exponent}}}"
+
         side = VGroup(
-            label(r"a counting model with $k$ letters of context:", font_size=22, color=GREY_A),
-            label(r"its dependence dies off \textit{exponentially}", font_size=22, color=GREY_A),
-            label(r"real text: \ a long, slow tail", font_size=22, color=C.BITS),
-            label(r"(Lin \& Tegmark, 2017)", font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.9, 0.9, 0])
+            label(r"at the furthest measured lag", font_size=22, color=GREY_A),
+            MathTex(rf"d = {far}", font_size=28),
+            label(r"book pairs", font_size=21, color=C.CONTEXT),
+            MathTex(rf"\widehat I = {scientific(last)}", font_size=26, color=C.CONTEXT),
+            label(r"one shuffled control", font_size=21, color=GREY_A),
+            MathTex(rf"\widehat I = {scientific(control)}", font_size=26, color=GREY_A),
+            wrapped_label(r"one permutation, not an uncertainty interval", 3.8, font_size=19, color=GREY_B),
+            wrapped_label(r"approximate bias correction; estimates may be negative", 3.8,
+                          font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.8, 0.6, 0])
+        fit = VGroup()
+        if has_fit:
+            slope = float(d["slope"])
+            fit_x = np.log10([fit_ds[0], fit_ds[-1]])
+            fit = DashedLine(ax.c2p(fit_x[0], d["intercept"] + slope * fit_x[0]),
+                             ax.c2p(fit_x[1], d["intercept"] + slope * fit_x[1]),
+                             color=C.BITS, stroke_width=2.5)
+            fit_l = VGroup(label(r"log-log fit, positive estimates", font_size=20, color=C.BITS),
+                           MathTex(rf"\widehat I \propto d^{{{slope:.2f}}}", font_size=25, color=C.BITS),
+                           wrapped_label(r"descriptive fit, not proof of a power law", 3.8,
+                                         font_size=19, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        else:
+            fit_l = wrapped_label(r"not enough positive estimates for a log-log fit", 3.8,
+                                  font_size=20, color=C.BITS)
+        fit_l.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         tag = computed_tag(rf"computed: ${corpus['train27_chars'] / 1e6:.1f}$ million letters of the ${corpus['n_books']}$ "
                            r"books")
-        x10 = VGroup(*[label(r"$\times 10$", font_size=18, color=GREY_C).move_to(
-            [ax.c2p(v + 0.5, 0)[0], xl[0].get_y(), 0]) for v in range(3)])
-        rate = math.log(mi[0] / mi[list(ds).index(10)]) / 9
-        de = np.linspace(1, 40, 240)
-        ye = mi[0] * np.exp(-rate * (de - 1))
-        ok_e = np.log10(ye) + 6 > 0
-        expo = DashedVMobject(VMobject(stroke_color=GREY_A, stroke_width=3).set_points_as_corners(
-            [ax.c2p(math.log10(x), math.log10(y) + 6) for x, y in zip(de[ok_e], ye[ok_e])]), num_dashes=30)
-        expo_l = label(r"exponential decay \ (shape only)", font_size=20, color=GREY_A).next_to(
-            ax.c2p(1.33, 0.7), RIGHT, buff=0.1)
-        far = int(ds[ok][-1])
-        tail = ("It decays slowly, like a power of the distance, out to a thousand letters and beyond."
-                if slope > -1.5 and far >= 1000 else "It keeps decaying, slowly, as far as we measured.")
+        fit_said = ("The gold line is a descriptive least-squares fit to the positive estimates from twenty to "
+                    "one thousand letters. It is not a test that proves a power law." if has_fit else
+                    "There are not enough positive estimates here for a log-log fit.")
         with self.voiceover(
-            "How far back does that reach? Measure the mutual information between a letter and the one d places "
-            "later, over all our books. <bookmark mark='a'/> Neighbours share "
-            f"{mi[0]:.2f} bits. Inside a word, it falls fast. <bookmark mark='b'/> But then it doesn't vanish. "
-            + tail + " On these axes, each tick is ten times the last, both across and up, so a power law shows up "
-            "as a straight line."
+            "How far back does that reach? Measure pairs of letters at distance d across our books. These are "
+            "finite-sample estimates, with an approximate bias correction. <bookmark mark='a'/> The neighbouring "
+            f"letter estimate is {mi[0]:.2f} bits. <bookmark mark='b'/> At our largest measured distance, "
+            f"{far} letters, the corrected estimate is {last:.2g} bits; one shuffled version of the same letters "
+            f"gives {control:.2g}. The shuffled control is a reference realization, not an uncertainty interval. "
+            "Both axes are logarithmic. Nonpositive estimates cannot appear on them; their signed values are "
+            "retained, including the control shown at the right."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(defn), Create(ax), FadeIn(xl), FadeIn(x10), FadeIn(yl), FadeIn(axl),
-                      FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(defn), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), FadeIn(tag))
             vo.wait_until("a")
-            self.play(Create(curve_), FadeIn(dots), run_time=2.5)
-            self.play(FadeIn(a1))
+            self.play(Create(curve_), FadeIn(dots), FadeIn(shuffle_dots), FadeIn(key), run_time=2.5)
+            self.play(FadeIn(disclosure))
             vo.wait_until("b")
-            self.play(Create(fit), FadeIn(fit_l))
+            self.play(FadeIn(side))
         with self.voiceover(
-            "A counting model can't produce that tail: beyond its few letters of context, its dependence dies away "
-            "exponentially, <bookmark mark='x'/> by the same factor every letter, straight off these axes. "
-            "<bookmark mark='a'/> Real text rewards memory at every distance. To guess well, a model needs a long "
-            "memory, and a way to find what matters in it: attention, in Part 13."
+            "A fit is a summary, not a law. " + fit_said + " <bookmark mark='a'/> Bias correction is approximate, especially for overlapping pairs "
+            "from text. Corrected estimates can fluctuate below zero, even though true mutual information is "
+            "nonnegative. <bookmark mark='b'/> Our measurement stops at this distance. It does not establish what "
+            "happens beyond it, or prove that memory helps at every distance. Long context remains a question "
+            "for models to test: attention, in Part 13."
         ) as vo:
-            self.play(FadeIn(side[:2]))
-            vo.wait_until("x")
-            self.play(Create(expo), FadeIn(expo_l), run_time=1.5)
+            self.play(Create(fit), FadeIn(fit_l))
             vo.wait_until("a")
-            self.play(FadeIn(side[2:]))
+            self.play(Indicate(side[-1], color=WHITE, scale_factor=1.02))
+            vo.wait_until("b")
+            self.play(Indicate(side[1], color=C.CONTEXT, scale_factor=1.06))
         self.wait(0.3)
         self.clear_scene()

@@ -19,6 +19,26 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 
+def select_capture(records, key, current):
+    """Prefer a current capture; a newer stale render must not hide one."""
+    from tools.qa_series import runtime_completed
+
+    usable = [(p, d) for p, d in records if runtime_completed(d) and d.get("narration")]
+    fresh = [(p, d) for p, d in usable if d.get("fingerprint") == key and current(d)]
+    return max(fresh, key=lambda pair: pair[0].stat().st_mtime_ns) if fresh else None
+
+
+def audio_status(report):
+    """This verdict covers automated audio checks, never listening or playback."""
+    if not report.get("source_current"):
+        return "stale-capture"
+    if report.get("issues") or len(report.get("lines", [])) != report.get("expected_lines"):
+        return "failed"
+    if any(line.get("asr_review_leads") for line in report.get("lines", [])):
+        return "needs-review"
+    return "completed"
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("video")
@@ -32,28 +52,28 @@ def main():
     import soundfile as sf
     from explainer import lang, tts
     from explainer.paths import video_package
-    from explainer.voiceover import _strip_bookmarks
     from tools.qa_series import OUT, fingerprint, inputs_current
 
+    if tts.BACKEND == "silent":
+        ap.error("audio QA requires synthesized speech; EXPLAINER_TTS=silent only estimates timing")
     manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
+    scenes = [scene for _, scene, _ in manifest.SCENES if not args.only or scene in args.only]
+    unknown = set(args.only or []) - set(scenes)
+    if unknown or not scenes:
+        ap.error(f"--only contains unknown chapters: {', '.join(sorted(unknown))}")
+    key = fingerprint(args.video)
+    summary = []
     for _, scene, _ in manifest.SCENES:
         if args.only and scene not in args.only:
             continue
         candidates = [OUT / args.video / "en" / name / "result.json" for name in (scene, scene + "_motion")]
         records = [(p, json.loads(p.read_text())) for p in candidates if p.exists()]
-        records = [(p, d) for p, d in records if d.get("status") == "passed" and d.get("narration")]
-        if not records:
-            print(f"{args.video} {scene}: no successful English narration capture", flush=True)
-            continue
-        p, evidence = max(records, key=lambda pair: pair[0].stat().st_mtime_ns)
         report = {"video": args.video, "scene": scene, "lang": args.lang,
                   "backend": tts.BACKEND, "voice": tts.VOICE,
-                  "input_record": str(p.relative_to(ROOT)),
-                  "input_sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
-                  "source_current": evidence.get("fingerprint") == fingerprint(args.video)
-                                    and inputs_current(evidence),
+                  "status": "running", "source_current": False,
                   "scope": "signal and alignment integrity; listening and narrated playback pending",
-                  "expected_lines": len(evidence["narration"]), "lines": [], "issues": []}
+                  "listening_review": "pending", "narrated_playback_review": "pending",
+                  "expected_lines": None, "lines": [], "issues": []}
         target = OUT / args.video / args.lang / scene / "audio_result.json"
         target.parent.mkdir(parents=True, exist_ok=True)
 
@@ -62,12 +82,26 @@ def main():
             temp.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n")
             temp.replace(target)
 
+        selected = select_capture(records, key, inputs_current)
+        if selected is None:
+            report["status"] = "stale-capture" if records else "missing-capture"
+            report["issues"].append({"issue": "no current successful English narration capture"})
+            save()
+            summary.append({"scene": scene, "status": report["status"]})
+            print(f"{args.video} {scene}: {report['status']}; rerun current English chapter QA", flush=True)
+            continue
+        p, evidence = selected
+        report.update(input_record=str(p.relative_to(ROOT)),
+                      input_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
+                      source_current=True, expected_lines=len(evidence["narration"]))
+        from explainer.voiceover import _strip_bookmarks
+
         save()
         for i, line in enumerate(evidence["narration"]):
             raw = line["raw"]
-            spoken, _ = _strip_bookmarks(lang.translate(raw, ROOT / "videos" / "ai" / args.video, scene))
             start = time.monotonic()
             try:
+                spoken, _ = _strip_bookmarks(lang.translate(raw, ROOT / "videos" / "ai" / args.video, scene))
                 utterance = tts.synthesize(spoken)
                 samples, sr = sf.read(utterance.audio_path)
                 duration = len(samples) / sr
@@ -112,10 +146,18 @@ def main():
                       f"{duration:.1f}s, {len(issues)} signal/timing issues", flush=True)
             except Exception as error:
                 report["issues"].append({"line": i, "issue": repr(error)})
-                save()
-                raise
+                print(f"{args.video} {scene} line {i + 1}: {error!r}", flush=True)
             save()
+        report["source_current"] = (fingerprint(args.video) == key and inputs_current(evidence)
+                                    and hashlib.sha256(p.read_bytes()).hexdigest() == report["input_sha256"])
+        report["status"] = audio_status(report)
+        save()
+        summary.append({"scene": scene, "status": report["status"]})
+    summary_path = OUT / args.video / args.lang / "audio_summary.json"
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n")
+    return int(any(record["status"] != "completed" for record in summary))
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

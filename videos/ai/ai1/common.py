@@ -17,6 +17,7 @@ from __future__ import annotations
 
 
 import math
+import textwrap
 
 import numpy as np
 
@@ -48,20 +49,14 @@ def letter(c: str, font_size=30, color=WHITE) -> Text:
 
 
 def wrap_words(s: str, width: int) -> list[str]:
-    """Break ``s`` into lines of at most ``width`` characters at spaces (each line keeps its trailing space, so the
-    lines concatenate back to ``s``)."""
-    lines, cur = [], ""
-    for w in s.split(" "):
-        piece = w + " "
-        if len(cur) + len(w) > width and cur:
-            lines.append(cur)
-            cur = ""
-        cur += piece
-    if cur:
-        lines.append(cur)
-    lines[-1] = lines[-1][:-1] if lines[-1].endswith(" ") and not s.endswith(" ") else lines[-1]
-    assert "".join(lines) == s
-    return lines
+    """Wrap prose without changing its characters, so guess counts stay aligned.
+
+    Whitespace is retained, including at either end. A word longer than ``width``
+    remains whole rather than splitting a word in Shannon's guessing picture.
+    """
+    return textwrap.wrap(s, width=width, expand_tabs=False, replace_whitespace=False,
+                         drop_whitespace=False, break_long_words=False,
+                         break_on_hyphens=False) or [""]
 
 
 # ---------------------------------------------------------------------------

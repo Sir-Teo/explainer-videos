@@ -20427,7 +20427,17 @@
     "random-sign scale: \\ $\\sqrt{400} = 20$": "随机符号的尺度：\\ $\\sqrt{400} = 20$",
     "colour scaled within each matrix": "颜色在每个矩阵内单独缩放",
     "no decay": "无衰减",
-    "each step, \\ each hidden unit switches off with probability $1/2$": "每一步，\\ 每个隐藏单元以 $1/2$ 的概率关闭"
+    "each step, \\ each hidden unit switches off with probability $1/2$": "每一步，\\ 每个隐藏单元以 $1/2$ 的概率关闭",
+    "estimated mutual information, bits": "互信息估计，比特",
+    "book pairs": "书中的字母对",
+    "one shuffled control": "一次随机打乱对照",
+    "at the furthest measured lag": "测到的最远间隔",
+    "one permutation, not an uncertainty interval": "一次置换，不是不确定性区间",
+    "approximate bias correction; estimates may be negative": "近似偏差校正；估计可能为负",
+    "log-log fit, positive estimates": "正估计的双对数拟合",
+    "descriptive fit, not proof of a power law": "描述性拟合，不是幂律的证明",
+    "not enough positive estimates for a log-log fit": "没有足够的正估计做双对数拟合",
+    "nonpositive estimates omitted from log axes: $18$": "对数轴上省略的非正估计：$18$"
   },
   "phrases": {
     "width": "宽度",

@@ -159,10 +159,16 @@ def _download(url: str, dst: Path) -> Path:
         return dst
     dst.parent.mkdir(parents=True, exist_ok=True)
     for attempt in range(5):  # Gutenberg resets the odd connection
-        r = subprocess.run(["curl", "-sS", "-L", "--retry", "5", "--retry-all-errors", "-m", "600", "-o",
+        r = subprocess.run(["curl", "-f", "-sS", "-L", "--retry", "5", "-m", "600", "-o",
                             str(dst) + ".part", url])
-        if r.returncode == 0:
+        partial = Path(str(dst) + ".part")
+        if r.returncode == 0 and partial.exists() and partial.stat().st_size > 0:
             break
+        partial.unlink(missing_ok=True)
+        # curl already retries transient HTTP failures. A missing/forbidden book
+        # must stay missing, rather than caching the server's HTML error page.
+        if r.returncode == 22:
+            raise RuntimeError(f"HTTP error downloading {url}")
         time.sleep(2 ** (attempt + 1))
     else:
         raise RuntimeError(f"could not download {url}")
@@ -681,27 +687,55 @@ def compute_game():
 # Mutual information
 # ---------------------------------------------------------------------------
 def compute_mi():
+    """Finite-sample pairwise MI estimates and a matched shuffled reference.
+
+    The leading independent-sample bias correction is only a heuristic for
+    overlapping text pairs, not a confidence bound. Corrected estimates may be
+    negative even though population MI cannot be. Estimator caveats: Paninski,
+    Neural Computation (2003), https://doi.org/10.1162/089976603321780272.
+    """
     a = codes27(text("train27"))
-    p1 = np.bincount(a, minlength=27) / len(a)
+    if len(a) < 2:
+        raise ValueError("mutual information needs at least two letters")
     ds = np.unique(np.round(np.logspace(0, 3, 40)).astype(int))
-    mi = []
-    for d in ds:
-        j = np.bincount(a[:-d] * 27 + a[d:], minlength=729).reshape(27, 27) / (len(a) - d)
-        nz = j > 0
-        I = float((j[nz] * np.log2(j[nz] / np.outer(p1, p1)[nz])).sum())
-        I -= 26 * 26 / (2 * (len(a) - d) * math.log(2))  # the plug-in estimate's bias (Miller-Madow)
-        mi.append(I)
-    mi = np.array(mi)
-    # the same letters, shuffled: no dependence at any distance (what the estimator reads as "nothing")
-    sh = a.copy()
-    rng(7).shuffle(sh)
-    j = np.bincount(sh[:-1] * 27 + sh[1:], minlength=729).reshape(27, 27) / (len(sh) - 1)
-    floor = float((j[j > 0] * np.log2(j[j > 0] / np.outer(p1, p1)[j > 0])).sum()) - 26 * 26 / (2 * len(sh) * math.log(2))
-    # three quarters of a bit between neighbours; a fast fall inside a word, then a long, slow tail
-    assert mi[0] > 0.7 and mi[ds.tolist().index(10)] < 0.002 and mi[-1] > 20 * abs(floor)
-    sel = (ds >= 20) & (ds <= 1000)
-    slope, icept = np.polyfit(np.log10(ds[sel]), np.log10(mi[sel]), 1)
-    return dict(d=ds, mi=mi, floor=floor, slope=float(slope), intercept=float(icept))
+    ds = ds[ds < len(a)]
+
+    def estimate(sequence, distance):
+        n = len(sequence) - distance
+        counts = np.bincount(sequence[:-distance] * 27 + sequence[distance:], minlength=729).reshape(27, 27)
+        joint = counts / n
+        # Each lag has different endpoint populations. Use its own exact joint
+        # marginals rather than the full corpus's letter frequencies.
+        px, py = joint.sum(axis=1), joint.sum(axis=0)
+        independent = np.outer(px, py)
+        nz = counts > 0
+        plugin = float(np.sum(joint[nz] * np.log2(joint[nz] / independent[nz])))
+        assert np.isfinite(plugin) and plugin >= -1e-12
+        dof = (np.count_nonzero(px) - 1) * (np.count_nonzero(py) - 1)
+        bias = float(dof / (2 * n * math.log(2)))
+        return max(0.0, plugin), bias
+
+    # Exactly one seeded permutation, evaluated at the same lags and pair counts.
+    # This is a reference realization, not a noise floor or uncertainty interval.
+    shuffled = a.copy()
+    rng(7).shuffle(shuffled)
+    plugin, bias = np.array([estimate(a, int(d)) for d in ds]).T
+    shuffled_plugin, shuffled_bias = np.array([estimate(shuffled, int(d)) for d in ds]).T
+    mi, shuffled_mi = plugin - bias, shuffled_plugin - shuffled_bias
+    assert np.isfinite(mi).all() and np.isfinite(shuffled_mi).all()
+    # A descriptive least-squares fit is possible only for positive estimates.
+    # Do not abort, clamp, or take log10 of a hoped-for positive tail.
+    sel = (ds >= 20) & (ds <= 1000) & (mi > 0)
+    slope = intercept = None
+    if sel.sum() >= 2:
+        slope, intercept = map(float, np.polyfit(np.log10(ds[sel]), np.log10(mi[sel]), 1))
+        assert np.isfinite(slope) and np.isfinite(intercept)
+    return dict(d=ds, mi=mi, mi_plugin=plugin, bias=bias,
+                shuffled_mi=shuffled_mi, shuffled_plugin=shuffled_plugin, shuffled_bias=shuffled_bias,
+                pair_counts=len(a) - ds, n_letters=len(a), shuffle_seed=7, shuffle_replicates=1,
+                floor=float(shuffled_mi[0]), slope=slope, intercept=intercept, fit_d=ds[sel],
+                estimator="plug-in MI with exact lag-specific marginals; leading finite-sample bias correction",
+                fit_note="least-squares log-log fit to positive corrected estimates at d=20..1000; not a power-law test")
 
 
 # ---------------------------------------------------------------------------
@@ -877,7 +911,9 @@ def compute_lms():
     from explainer.ai.cache import Partial
 
     # each model's result is kept as it finishes: five downloads and runs, so an interrupted item resumes
-    part = Partial(DATA_DIR / "lms.partial.json", dict(models=[m[0] for m in LMS], windows=[m[4] for m in LMS]),
+    part = Partial(DATA_DIR / "lms.partial.json", dict(models=LMS,
+                   passage_sha256=hashlib.sha256(passage.encode("utf-8")).hexdigest(),
+                   paragraph_index=SURPRISE_PARA),
                    "ai1/lms")
     for mid, lab, params, year, window in LMS:
         if mid not in part:
