@@ -1,0 +1,332 @@
+{
+  "status": "scoped-endpoint-repair-confirmed",
+  "observed_utc": "2026-10-31T16:10:42.615907+00:00",
+  "finding": "Long proof edges crossed unrelated intermediate clause text in shared proposition and first-order diagrams.",
+  "source": "/workspace/explainer-videos/videos/ai/ai2/s09_logic.py",
+  "before_source_sha256": "ac89effefcf5a19fe228d75496686ee41d03681c1626cdd29d12353519067303",
+  "after_source_sha256": "48513df86ab8e297ce78ce6d2d81e7d09fff50bab55e06ca6220c79de02ca7a6",
+  "repair": "Route intersecting edges through clear orthogonal lanes; retain direct clear edges; conclusion arrowheads and behind-node layering. Both language scenes share this geometry helper.",
+  "before_evidence": {
+    "file": "/workspace/runtime/ai2-logic-routing-repair/before.json",
+    "sha256": "06b7091f6ebdbe1bc8f20a109d909e693cf2cf88653533b77201f781d7f0ddf0",
+    "actual_native_views": {
+      "en": [
+        {
+          "endpoint_index": 14,
+          "original": "/workspace/explainer-videos/renders/qa/series/ai2/en/Logic/014_00123.1s.png",
+          "preserved": "/workspace/runtime/ai2-logic-routing-repair/en-014_00123.1s.png",
+          "time": 123.14752378097529,
+          "sha256": "fef7b842341340a439e30e4072a74081f8277da8a2e73e96c95a3c49fb2c0021"
+        }
+      ],
+      "zh": [
+        {
+          "endpoint_index": 12,
+          "original": "/workspace/explainer-videos/renders/qa/series/ai2/zh/Logic/012_00121.4s.png",
+          "preserved": "/workspace/runtime/ai2-logic-routing-repair/zh-012_00121.4s.png",
+          "time": 121.41994972557018,
+          "sha256": "aed1dd8701cf9b4d1fd66e340162b72a9db23b68a04ba8d3ddbf0fdf8eb022f2"
+        }
+      ]
+    }
+  },
+  "after_evidence": {
+    "en": {
+      "file": "/workspace/runtime/ai2-logic-routing-repair/after-en/plan.json",
+      "sha256": "873bf270aa9b9636a6f0eb389418690942f07d00104de073dff3fdbd72319054",
+      "runtime_status": "needs-review",
+      "warnings": [
+        {
+          "kind": "source-changed-during-render"
+        }
+      ],
+      "fingerprint": "78f9c6e3675de70a3073d45915a25fe2c65b011f1f2dfb790d027470f9bf3653",
+      "actual_native_views": [
+        {
+          "endpoint_index": 14,
+          "time": 123.14752378097529,
+          "file": "/workspace/runtime/ai2-logic-routing-repair/after-en/014_00123.1s.png",
+          "sha256": "0e96f9ade8bdb762620169cb3fe0f934b6022a68c9734ac1f1ed073b5dacc3cb",
+          "observation": "Proposition proof route avoids intermediate node labels; arrowheads terminate at actual conclusions."
+        },
+        {
+          "endpoint_index": 17,
+          "time": 162.35731944444444,
+          "file": "/workspace/runtime/ai2-logic-routing-repair/after-en/017_00162.4s.png",
+          "sha256": "a10d4805d01c4a4e8708ae32dbd5a20e7c492ef9f6eb26f1f1089bd0c6ccb61f",
+          "observation": "First-order long routes avoid intermediate clause boxes; substitution labels and card remain separate."
+        }
+      ]
+    },
+    "zh": {
+      "file": "/workspace/runtime/ai2-logic-routing-repair/after-zh/plan.json",
+      "sha256": "ba731dff86335dc7531e3cf855d25310333dfff80d126ce5479ee1ac2307f42f",
+      "runtime_status": "passed",
+      "warnings": [],
+      "fingerprint": "fb280fe069f46cf0ca305f7b1dfff5d30a108d1fe7a14ad76c44bef14c909674",
+      "actual_native_views": [
+        {
+          "file": "/workspace/runtime/ai2-logic-routing-repair/after-zh/012_00121.4s.png",
+          "time": 121.41994972557018,
+          "reason": "narrated-hold-9.8s",
+          "coverage": 0.03210870413739266,
+          "texts": [
+            {
+              "text": "\\frac{A \\lor x \\qquad B \\lor \\lnot x}{A \\lor B}",
+              "bounds": [
+                3.0669833895833345,
+                6.533016610416665,
+                2.120443541666667,
+                3.0795564583333332
+              ]
+            },
+            {
+              "text": "归结 \\ （鲁滨逊 1965）",
+              "bounds": [
+                3.773858411458333,
+                5.826141588541667,
+                1.7421330416666672,
+                1.9704435416666668
+              ]
+            },
+            {
+              "text": "计算所得：\\ 我们的归结证明器",
+              "bounds": [
+                3.954946727777778,
+                6.9111111111111105,
+                -3.8,
+                -3.5764840104166664
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Rain} \\lor \\mathrm{Wet}",
+              "bounds": [
+                -6.000991799999999,
+                -4.399008200000002,
+                1.7975716104166666,
+                2.0024283895833332
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Sprinkler} \\lor \\mathrm{Wet}",
+              "bounds": [
+                -3.799008200000002,
+                -1.6425052208333364,
+                1.76938564375,
+                2.03061435625
+              ]
+            },
+            {
+              "text": "\\mathrm{Rain} \\lor \\mathrm{Sprinkler}",
+              "bounds": [
+                -1.0425052208333363,
+                1.0193346874999962,
+                1.76938564375,
+                2.03061435625
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Wet}",
+              "bounds": [
+                1.6611057333333346,
+                2.3388942666666654,
+                1.7975716104166666,
+                2.0024283895833332
+              ]
+            },
+            {
+              "text": "加入目标的否定；\\\\ 推出空子句 $\\square$：\\\\ 一个矛盾",
+              "bounds": [
+                3.9699771593750004,
+                5.630022840624999,
+                0.017351605208333398,
+                0.7826483947916667
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Rain}",
+              "bounds": [
+                -1.986549070833333,
+                -1.213450929166667,
+                0.49757161041666653,
+                0.7024283895833332
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Sprinkler}",
+              "bounds": [
+                -0.613450929166667,
+                0.7121010083333332,
+                0.46938564374999986,
+                0.7306143562499998
+              ]
+            },
+            {
+              "text": "\\mathrm{Rain}",
+              "bounds": [
+                -0.6925955229166663,
+                -0.1074044770833345,
+                -0.8024283895833335,
+                -0.5975716104166668
+              ]
+            },
+            {
+              "text": "\\square",
+              "bounds": [
+                -1.0966168583333327,
+                -0.9033831416666676,
+                -2.0998132041666673,
+                -1.9001867958333338
+              ]
+            }
+          ],
+          "endpoint_index": 12,
+          "sha256": "46e09dd9b567813b1f655725207addf3dec8f845ce5321b32c12840098406182",
+          "observation": "Long proposition edge routes around intermediate¬Sprinkler label; arrowheads point to conclusions."
+        },
+        {
+          "file": "/workspace/runtime/ai2-logic-routing-repair/after-zh/016_00179.1s.png",
+          "time": 179.1317000133654,
+          "reason": "narration-end",
+          "coverage": 0.04765564012490242,
+          "texts": [
+            {
+              "text": "一阶：\\ 合一找到让两个文字相匹配的代换",
+              "bounds": [
+                -2.4190846739583622,
+                2.4193544781249714,
+                3.4431299395833337,
+                3.7
+              ]
+            },
+            {
+              "text": "\\mathrm{Grandparent}(x, y) \\lor \\lnot \\mathrm{Parent}(x, z) \\lor \\lnot \\mathrm{Parent}(z, y)",
+              "bounds": [
+                -6.541023056022811,
+                -1.6341544171598121,
+                1.7120056107131365,
+                1.9382670480195516
+              ]
+            },
+            {
+              "text": "\\mathrm{Parent}(\\mathrm{Anne}, \\mathrm{Byron})",
+              "bounds": [
+                -1.0890906092380197,
+                0.9431430522133297,
+                1.7120056107131365,
+                1.9382670480195516
+              ]
+            },
+            {
+              "text": "\\mathrm{Parent}(\\mathrm{Byron}, \\mathrm{Ada})",
+              "bounds": [
+                1.4882068601351222,
+                3.407309802933264,
+                1.7120056107131365,
+                1.9382670480195516
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Grandparent}(\\mathrm{Anne}, \\mathrm{Ada})",
+              "bounds": [
+                3.9523736108550565,
+                6.541023056022811,
+                1.7120056107131365,
+                1.9382670480195516
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Parent}(\\mathrm{Anne}, x) \\lor \\lnot \\mathrm{Parent}(x, \\mathrm{Ada})",
+              "bounds": [
+                -1.3781975629329373,
+                2.196572920459883,
+                0.39476807490213894,
+                0.6210295122085541
+              ]
+            },
+            {
+              "text": "\\{x/\\mathrm{Anne},\\ y/\\mathrm{Ada}\\}",
+              "bounds": [
+                2.605549864437073,
+                4.558623039437073,
+                0.3833657935553465,
+                0.6324317935553465
+              ]
+            },
+            {
+              "text": "\\lnot \\mathrm{Parent}(\\mathrm{Anne}, \\mathrm{Byron})",
+              "bounds": [
+                0.06937547165137542,
+                2.2479253576605,
+                -0.9224694609088586,
+                -0.6962080236024435
+              ]
+            },
+            {
+              "text": "\\{x/\\mathrm{Byron}\\}",
+              "bounds": [
+                2.6569023016376887,
+                3.805065251637691,
+                -0.9338717422556512,
+                -0.6848057422556512
+              ]
+            },
+            {
+              "text": "\\square",
+              "bounds": [
+                -0.0407756216293399,
+                0.10968824326382176,
+                -2.2042970854151607,
+                -2.048855470718136
+              ]
+            },
+            {
+              "text": "1972",
+              "bounds": [
+                1.8411111111111103,
+                2.5553100475694444,
+                -2.6266666645833334,
+                -2.3586508822916663
+              ]
+            },
+            {
+              "text": "阿兰·科尔默劳尔 \\& 菲利普·鲁塞尔：\\ Prolog",
+              "bounds": [
+                1.8411111111111103,
+                5.891329018402777,
+                -2.88187215,
+                -2.686666664583333
+              ]
+            },
+            {
+              "text": "\\begin{tabular}{@{}l@{}}霍恩子句上的归结，作为一种编程语言\\ （与罗伯特·科瓦\\\\尔斯基）\\end{tabular}",
+              "bounds": [
+                1.8411111111111103,
+                6.299994502777776,
+                -3.45,
+                -3.06187215
+              ]
+            }
+          ],
+          "endpoint_index": 16,
+          "sha256": "dcf3e18eaf5122dce308a926884f1971b014aff651e65ef77a360952ca6b611a",
+          "observation": "First-order long edges route around unrelated clauses; substitution labels and Prolog card remain clear."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "focused_regressions": "python -m unittest tests.test_ai2_proof_routes -v:2testsPASS",
+    "cached_geometry": {
+      "file": "/workspace/runtime/ai2-logic-routing-repair/geometry.json",
+      "sha256": "06a2956fbd2bc159f56aafa43b0e168a8d1b186c89f934591f530b14b6a490db",
+      "edges": 14,
+      "checks": "parent start/conclusion tip,frame bounds,401samples persegment avoiding unrelated clause rectangles. No data computation."
+    }
+  },
+  "limitations": [
+    "4 repaired endpoint stills actually inspected:EN14/17,ZH12/16.",
+    "No repaired motion/continuous perceptual playback/listening claim in this receipt. Parent assigned English motion to another reviewer.",
+    "Conservative aggregate source fingerprints and warnings preserved; direct source helper identity recorded separately."
+  ]
+}

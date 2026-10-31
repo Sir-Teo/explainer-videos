@@ -1,0 +1,20 @@
+{
+  "scope": "Source-only benchmark panel hierarchy/readability improvement; targeted render pending root",
+  "before_directory": "/workspace/runtime/ai2-plans-panel-before",
+  "before_source_sha256": "614e760d34b9fa553e4dd3125abb92cdf24cd15e21d83d1851861e90a0be4c5b",
+  "after_source_sha256": "7acde48a6a99aec78c344989df410c6a220fbdbe3181f22aeb140f78f7b6b6ec",
+  "changes": [
+    "Move completion coverage from small four-line under-axis footer to right column, with per-method24pt solved/attempted and18pt unresolved/unrun counts.",
+    "Increase legend21pt and separate conceptual explanation, three-line matched-length comparison and coverage by vertical hierarchy.",
+    "Replace tall low-density historical cards with18pt one-line dated author/algorithm footer; preserves both dates/names.",
+    "Reveal coverage with third method/comparison rather than before curves.",
+    "Plot/data and all measured counts unchanged; original cache has no unresolved attempts."
+  ],
+  "caption_handoff": "/workspace/runtime/ai2-plans-panel-caption-add.json",
+  "local_ZH_narration": "unchanged; existing branch tests cover same narration",
+  "tests": "5focused tests pass, including8actual setup/narration fixtures with4EN/ZHbookmarks; AST/diffcheck pass",
+  "limits": [
+    "No after-render image exists yet; no after visual signoff claimed.",
+    "Root owns shared captions and targeted rerender."
+  ]
+}

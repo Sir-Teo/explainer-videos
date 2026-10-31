@@ -1,0 +1,298 @@
+{
+  "observed_utc": "2026-10-31T16:01:15.676993+00:00",
+  "coverage": "Initial endpoint pipeline; warnings and partial failures retained, not a final signoff",
+  "scenes": [
+    {
+      "scene": "Hook",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 15,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "passed",
+        "frames": 15,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "Turing",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 21,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "passed",
+        "frames": 21,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "Search",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 17,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "passed",
+        "frames": 17,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "AStar",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 23,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "needs-review",
+        "frames": 22,
+        "warnings": [
+          {
+            "kind": "untranslated-on-screen",
+            "text": "$247$ cells{,} \\ the same optimal cost"
+          }
+        ]
+      }
+    },
+    {
+      "scene": "Heuristics",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 17,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "needs-review",
+        "frames": 19,
+        "warnings": [
+          {
+            "kind": "untranslated-on-screen",
+            "text": "each table: \\ exact cost in moves of its five tiles{,} \\\\ found by breadth-first search{,} $1{,}048{,}576$ entries"
+          }
+        ]
+      }
+    },
+    {
+      "scene": "Local",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "needs-review",
+        "frames": 24,
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ]
+      },
+      "zh": {
+        "endpoint_runtime": "needs-review",
+        "frames": 25,
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ]
+      }
+    },
+    {
+      "scene": "Games",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 18,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "passed",
+        "frames": 18,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "Samuel",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 25,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "failed",
+        "frames": 5,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "Logic",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 22,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "needs-review",
+        "frames": 21,
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ]
+      }
+    },
+    {
+      "scene": "SAT",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 26,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "failed",
+        "frames": 14,
+        "warnings": []
+      }
+    },
+    {
+      "scene": "Plans",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 22,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    },
+    {
+      "scene": "Knowledge",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 20,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    },
+    {
+      "scene": "Eliza",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 14,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    },
+    {
+      "scene": "Winters",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 21,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    },
+    {
+      "scene": "Survives",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "passed",
+        "frames": 26,
+        "warnings": []
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    },
+    {
+      "scene": "Outro",
+      "source_review": "complete",
+      "numerical_inputs": "all19 items computed",
+      "continuous_perceptual_playback": "unverified",
+      "audio_listening": "unverified",
+      "en": {
+        "endpoint_runtime": "needs-review",
+        "frames": 5,
+        "warnings": [
+          {
+            "kind": "source-changed-during-render"
+          }
+        ]
+      },
+      "zh": {
+        "endpoint_runtime": "pending",
+        "frames": 0
+      }
+    }
+  ]
+}

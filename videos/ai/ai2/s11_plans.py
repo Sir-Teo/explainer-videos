@@ -317,31 +317,30 @@ class Plans(VoiceoverScene):
             ys = [np.log10(max(mean(k, n), 1)) for n in xs]
             lines.add(VGroup(*([curve(g.ax, xs, ys, col, 4)] if len(xs) > 1 else []),
                              *[Dot(g.ax.c2p(x, y), radius=0.05, color=col) for x, y in zip(xs, ys)]))
-        lg = legend([(c, t) for _, c, t in series], font_size=19).move_to([5.0, 2.3, 0])
+        lg = legend([(c, t) for _, c, t in series], font_size=21).move_to([5.0, 2.5, 0])
         paired = summary["paired_solved"]
         L_opt, L_ff = summary["paired_bfs_length"], summary["paired_ff_length"]
         relax = label(r"relaxed heuristics: \ ignore delete lists, \\ estimate remaining cost cheaply",
-                      font_size=20, color=PATH).move_to([5.0, 0.8, 0])
-        cost = label((rf"${paired}$ matched solved problems, ${n_bfs}$ blocks: \\ optimal ${L_opt:.1f}$ steps; "
+                      font_size=21, color=PATH).move_to([5.0, 1.3, 0])
+        cost = label((rf"${paired}$ matched solved problems \\ at ${n_bfs}$ blocks \\ optimal ${L_opt:.1f}$ steps; "
                       rf"greedy ${L_ff:.1f}$" if paired else r"no matched solved problems: \\ plan lengths unavailable"),
-                     font_size=18, color=GREY_A).move_to([5.0, -0.4, 0])
+                     font_size=21, color=GREY_A).move_to([5.0, 0.2, 0])
         if cost.width > 3.8:
             cost.scale_to_fit_width(3.8)
         counts = summary["all"]
-        coverage = label(
-            r"solved / attempted; capped or unresolved; not run or unknown \\ "
-            rf"BFS ${counts['bfs']['solved']}/{counts['bfs']['attempted']}$; "
-            rf"${counts['bfs']['unresolved']}$; ${counts['bfs']['not_run_or_unknown']}$ \\ "
-            rf"A* ${counts['hmax']['solved']}/{counts['hmax']['attempted']}$; "
-            rf"${counts['hmax']['unresolved']}$; ${counts['hmax']['not_run_or_unknown']}$ \\ "
-            rf"greedy ${counts['ff']['solved']}/{counts['ff']['attempted']}$; "
-            rf"${counts['ff']['unresolved']}$; ${counts['ff']['not_run_or_unknown']}$",
-            font_size=15, color=GREY_A).move_to([0.6, -3.15, 0])
-        if coverage.width > 5.8:
-            coverage.scale_to_fit_width(5.8)
-        hcs = VGroup(history_card(1995, r"Blum \& Furst: \ Graphplan", r"", width=3.2, color=HIST, font_size=17),
-                     history_card(2001, r"Hoffmann \& Nebel: \ FF", r"", width=3.2, color=HIST, font_size=17))
-        hcs.arrange(DOWN, buff=0.12).move_to([5.0, -2.2, 0])
+        coverage_rows = VGroup()
+        for key, color, name in (("bfs", GREY_B, "BFS"), ("hmax", GCOST, "A*"), ("ff", PATH, "greedy")):
+            c = counts[key]
+            coverage_rows.add(VGroup(
+                label(rf"{name}: ${c['solved']}/{c['attempted']}$", font_size=24, color=color),
+                label(rf"${c['unresolved']}$ unresolved; ${c['not_run_or_unknown']}$ not run / unknown",
+                      font_size=18, color=FAIL if c["unresolved"] else GREY_A)
+            ).arrange(DOWN, buff=0.06))
+        coverage_rows.arrange(DOWN, buff=0.17)
+        coverage = VGroup(label(rf"all ${len(rows)}$ problems \\ solved / attempted", font_size=20, color=GREY_A),
+                          coverage_rows).arrange(DOWN, buff=0.15).move_to([5.0, -1.9, 0])
+        hcs = label(r"1995: \ Graphplan (Blum \& Furst) \qquad 2001: \ FF (Hoffmann \& Nebel)",
+                    font_size=18, color=HIST).move_to([1.5, -3.65, 0])
         tag = note(rf"computed: \ ${len(rows)}$ random problems")
         tag.to_corner(DL, buff=0.2)
         bfs_n, hm_n, ff_n = mean("bfs", n_bfs), mean("hmax", n_bfs), mean("ff", n_bfs)
@@ -374,7 +373,7 @@ class Plans(VoiceoverScene):
             " Such heuristics, Graphplan, and planning as satisfiability made general "
             "planners practical."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag), FadeIn(coverage))
+            self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(th), LaggedStart(*[FadeIn(t) for t in tab], lag_ratio=0.15))
             vo.wait_until("b")
@@ -382,6 +381,6 @@ class Plans(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(relax), Create(lines[1]), FadeIn(lg[1]))
             vo.wait_until("d")
-            self.play(Create(lines[2]), FadeIn(lg[2]), FadeIn(cost), FadeIn(hcs))
+            self.play(Create(lines[2]), FadeIn(lg[2]), FadeIn(cost), FadeIn(coverage), FadeIn(hcs))
         self.wait(0.3)
         self.clear_scene()

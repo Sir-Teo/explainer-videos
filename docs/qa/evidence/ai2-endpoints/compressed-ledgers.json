@@ -1,0 +1,37 @@
+[
+  {
+    "file": "ai2-en-head-endpoint-review.json.gz",
+    "compression": "gzip",
+    "compressed_sha256": "36e794d97dc6072de51d25a6181bc4a2f359dbfc70e80d8e83930e5216a508c9",
+    "uncompressed_sha256": "43c1ee728cbcf4e46734262fe88b14c514b48ece49d46da5158ee5185dfed1c2",
+    "uncompressed_bytes": 561242
+  },
+  {
+    "file": "ai2-en-tail-endpoint-review.json.gz",
+    "compression": "gzip",
+    "compressed_sha256": "389947b2a0ed066e3e9b71172acbd12a5dcec02c9d04c6a7e25515904837f625",
+    "uncompressed_sha256": "24fa6a6113f8471c56e6de621512ec98c48408200880ad88e635372a0db27617",
+    "uncompressed_bytes": 1359519
+  },
+  {
+    "file": "ai2-zh-hook-samuel-endpoint-review.json.gz",
+    "compression": "gzip",
+    "compressed_sha256": "9e223faaac4488ea9eddc45f4a0698f0d0263031b25c616614c516c088d6ce7e",
+    "uncompressed_sha256": "d77a29604708fa5dc0692555aafc79016283e455ae774c8c7f085370b045fa83",
+    "uncompressed_bytes": 553876
+  },
+  {
+    "file": "ai2-zh-tail-endpoints-review.json.gz",
+    "compression": "gzip",
+    "compressed_sha256": "63166b834367dfb8cdbe478a7e4b55c395d84f6c8fd4b4b01319acb733b27fd6",
+    "uncompressed_sha256": "c36607f065c22192bb1b42d87e6c1e30d3a18e31d2b1ec91248fe7ecffa13efe",
+    "uncompressed_bytes": 141111
+  },
+  {
+    "file": "caption-controls/scan.json.gz",
+    "compression": "gzip",
+    "compressed_sha256": "db21f6a0493025dcf4dbb314ac8f13047bc3efb9af35528d417e15005b5ecc81",
+    "uncompressed_sha256": "6369ef1f5d694894d16096827375d58d2e625bc92bffd540158e6f033172c172",
+    "uncompressed_bytes": 577130
+  }
+]

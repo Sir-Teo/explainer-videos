@@ -1,0 +1,306 @@
+{
+  "observed_utc": "2026-10-31T16:08:38.379056+00:00",
+  "scope": "Read-only comparison of actual translation function outputs for collected English captions; table equivalence only, not scene/data/module equivalence or full playback approval. Missing/uncollected dynamic strings are outside this proof.",
+  "current_table_sha256": "91a1df24ccc919b32eccf15cb8f7f4c0e719b790bb0ca97be789ab9258d8ae0a",
+  "parts": {
+    "ai1": {
+      "baseline_table_commit": "0895606482d10710c033090461877d123c87e7c1",
+      "cases": {
+        "Arithmetic": {
+          "collected_unique_strings": 125,
+          "collected_file_sha256": "ec2d85dfc320b86051b08dfd166572e5b681d534c9434b4fc4ed1c8b8720af18",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Counting": {
+          "collected_unique_strings": 100,
+          "collected_file_sha256": "ef48f2cc0a71f9026f52295b7fbf3848c5f092659f537d62c72d287bfa6d256b",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "CrossEntropy": {
+          "collected_unique_strings": 93,
+          "collected_file_sha256": "e7bd7032061f93349b92aa81d94c5491811923dea3b28219ac295941ef01d61b",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Entropy": {
+          "collected_unique_strings": 121,
+          "collected_file_sha256": "677f198f386ddc8589f9df41f336916cf5f7d44f5a5b8def909d47f3ab7ce87a",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Hook": {
+          "collected_unique_strings": 148,
+          "collected_file_sha256": "9d3321f46f0fde0f8a06ac2d3226e2a4c1e6ca0978e692b3b089b21a3dfbcef0",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Huffman": {
+          "collected_unique_strings": 75,
+          "collected_file_sha256": "5c010481e855631a0ad56e6fb1380f814157cdf677f827070689fa172e2896b8",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Information": {
+          "collected_unique_strings": 82,
+          "collected_file_sha256": "d6c18464a3958de31ae8b17d7b247aaa5c901c6ae2a2105d0d6e8ffcb9eb60b7",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Knowledge": {
+          "collected_unique_strings": 53,
+          "collected_file_sha256": "ec2fe407f96763777a00b959f96f73ce6432fdb4c79103b222683866903cdfc6",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Likelihood": {
+          "collected_unique_strings": 99,
+          "collected_file_sha256": "7175c778b4840c4e450af8d7b10cec2cd1552f08d027ccf9ef6b91c44f8d7e05",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Outro": {
+          "collected_unique_strings": 61,
+          "collected_file_sha256": "db888467be643eaae1c51564b6bdc765978bd4bade02bac50538d102ca4ca63e",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Prefix": {
+          "collected_unique_strings": 103,
+          "collected_file_sha256": "926931424232d6d87ad9151e4f6d2e6b9b37d9dc87328fa06c4e28e73ea74ec2",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Probability": {
+          "collected_unique_strings": 68,
+          "collected_file_sha256": "79a4a7f64cb239a7c41a4d511af59410f36a2e3849f13763a402802c8f8e0cf3",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Scoreboard": {
+          "collected_unique_strings": 91,
+          "collected_file_sha256": "db6e053ceb0b336a0c8820415cc8cf5900f77f57c67060d720711609688b9741",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Shannon1951": {
+          "collected_unique_strings": 56,
+          "collected_file_sha256": "95f72f7e7a94c341fb337db8980f49268d992f56e86bdd90c4b0197bf4d638f5",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Surprise": {
+          "collected_unique_strings": 76,
+          "collected_file_sha256": "58763c7f8a4be0de4c827942b1ca03a0eff3f80d36b62532611add98cb239e37",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Typical": {
+          "collected_unique_strings": 135,
+          "collected_file_sha256": "f38d053db7ddd81458442e2de8fa64b5c81b80e737a48f12b733c6888370d548",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Units": {
+          "collected_unique_strings": 57,
+          "collected_file_sha256": "1d3be69158cd9d461e5b7a9d02a862791c841ab2809e8b7bb94aaddd2282c2ed",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        }
+      }
+    },
+    "ai2": {
+      "baseline_table_commit": "78fad0cd27f72f4883155027bdf7625da2af7bb2",
+      "cases": {
+        "AStar": {
+          "collected_unique_strings": 81,
+          "collected_file_sha256": "af74567b808c6a2a3c2b6a50bd7b652a599345d6dc90d4ae910710d7ab5b9632",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "$247$ cells{,} \\ the same optimal cost",
+              "baseline": "$247$ cells{,} \\ the same optimal cost",
+              "current": "$247$个单元格，\\ 最优代价相同"
+            }
+          ]
+        },
+        "Eliza": {
+          "collected_unique_strings": 47,
+          "collected_file_sha256": "081e4e3a65e0b65dd83869517f05c8d12dffe5173abf45d25510600fabef511e",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Games": {
+          "collected_unique_strings": 91,
+          "collected_file_sha256": "6ed9fe5ec66371d2763f70bd17e6afd7fec48fd38a25569880d8a0b3bf6d01bc",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Heuristics": {
+          "collected_unique_strings": 87,
+          "collected_file_sha256": "9644d108b229b09fd28c65b2038b0942048497b4bdb56955d86e339824457214",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "computed: \\ $30$ positions; \\ $\\blacktriangledown$ = capped \\\\ $0$ unknown optimal lengths omitted",
+              "baseline": "computed: \\ $30$ positions; \\ $\\blacktriangledown$ = capped \\\\ $0$ unknown optimal lengths omitted",
+              "current": "计算结果：\\ $30$个局面；\\ $\\blacktriangledown$表示达到上限 \\\\ 省略$0$个最优解长未知的局面"
+            },
+            {
+              "english": "each table: \\ exact cost in moves of its five tiles{,} \\\\ found by breadth-first search{,} $1{,}048{,}576$ entries",
+              "baseline": "each table: \\ exact cost in moves of its five tiles{,} \\\\ found by breadth-first search{,} $1{,}048{,}576$ entries",
+              "current": "每张表：\\ 仅计算其五个方块移动的精确代价，\\\\ 通过广度优先搜索得到，共$1{,}048{,}576$项"
+            }
+          ]
+        },
+        "Hook": {
+          "collected_unique_strings": 89,
+          "collected_file_sha256": "80a096ce1c3469165a2dae8ddb6a619fdabaa70a4c30d4a0ae03587e067fcbfe",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Knowledge": {
+          "collected_unique_strings": 93,
+          "collected_file_sha256": "b0777b38bacd98f5c070622280a18e21d8403e6e197e21e10b14b6f5a01b21d4",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Local": {
+          "collected_unique_strings": 111,
+          "collected_file_sha256": "2c52e45f4ff753b9d18acbde751db4ca9e28e2e5d435673d3e9750fe50701611",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations{,} \\ $5$ seeds; \\ bar = mean{,} \\ line = range",
+              "baseline": "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations{,} \\ $5$ seeds; \\ bar = mean{,} \\ line = range",
+              "current": "计算结果：\\ 后三种方法的候选代价评估预算均为$2{,}000{,}000$次，\\ $5$个种子；\\ 条形=平均值，\\ 线段=范围"
+            }
+          ]
+        },
+        "Logic": {
+          "collected_unique_strings": 81,
+          "collected_file_sha256": "b3596487cadf5a233b334cc475dad78ae07616badef4851eac94e02fca299e22",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Outro": {
+          "collected_unique_strings": 55,
+          "collected_file_sha256": "5bd741aec99253aed06c0e4aad2e2c6d99afaba8fc78d6851abf4ff60f0d22be",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Plans": {
+          "collected_unique_strings": 109,
+          "collected_file_sha256": "648afdd92fe073bad6c71cb543fd69359322eb2958953ae9201080242776dd9a",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "$0$ unresolved; $0$ not run / unknown",
+              "baseline": "$0$ unresolved; $0$ not run / unknown",
+              "current": "$0$未解决；$0$未运行 / 未知"
+            },
+            {
+              "english": "$0$ unresolved; $36$ not run / unknown",
+              "baseline": "$0$ unresolved; $36$ not run / unknown",
+              "current": "$0$未解决；$36$未运行 / 未知"
+            },
+            {
+              "english": "$12$ matched solved problems \\\\ at $7$ blocks \\\\ optimal $11.3$ steps; greedy $15.3$",
+              "baseline": "$12$ matched solved problems \\\\ at $7$ blocks \\\\ optimal $11.3$ steps; greedy $15.3$",
+              "current": "$12$个双方都解出的相同问题 \\\\ 积木数为$7$ \\\\ 最优$11.3$步；贪心$15.3$步"
+            },
+            {
+              "english": "1995: \\ Graphplan (Blum \\& Furst) \\qquad 2001: \\ FF (Hoffmann \\& Nebel)",
+              "baseline": "1995: \\ Graphplan (Blum \\& Furst) \\qquad 2001: \\ FF (Hoffmann \\& Nebel)",
+              "current": "1995：\\ Graphplan（Blum \\& Furst）\\qquad 2001：\\ FF（Hoffmann \\& Nebel）"
+            },
+            {
+              "english": "A*, \\ $h_{\\max}$",
+              "baseline": "A*, \\ $h_{\\max}$",
+              "current": "A星，\\ $h_{\\max}$"
+            },
+            {
+              "english": "A*: $48/48$",
+              "baseline": "A*: $48/48$",
+              "current": "A星：$48/48$"
+            },
+            {
+              "english": "BFS: $48/48$",
+              "baseline": "BFS: $48/48$",
+              "current": "广度优先：$48/48$"
+            },
+            {
+              "english": "all $84$ problems \\\\ solved / attempted",
+              "baseline": "all $84$ problems \\\\ solved / attempted",
+              "current": "全部$84$个问题 \\\\ 已解决 / 已尝试"
+            },
+            {
+              "english": "computed: \\ $84$ random problems",
+              "baseline": "computed: \\ $84$ random problems",
+              "current": "计算所得：\\ $84$个随机问题"
+            },
+            {
+              "english": "greedy: $84/84$",
+              "baseline": "greedy: $84/84$",
+              "current": "贪心：$84/84$"
+            },
+            {
+              "english": "observed expansions \\ (mean, log scale)",
+              "baseline": "observed expansions \\ (mean, log scale)",
+              "current": "观察到的扩展数 \\ （均值，对数刻度）"
+            }
+          ]
+        },
+        "SAT": {
+          "collected_unique_strings": 106,
+          "collected_file_sha256": "7232c6d300692bba24e38bdeda0d2476917d82c6af05af12beb73cafc3a8699e",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "observed DPLL decisions \\ (median, log scale)",
+              "baseline": "已观察到的DPLL决策次数\\（中位数，对数刻度）",
+              "current": "已观察到的DPLL决策次数\\ （中位数，对数刻度）"
+            }
+          ]
+        },
+        "Samuel": {
+          "collected_unique_strings": 92,
+          "collected_file_sha256": "c39984a9b9444df2c4f9d90ce91b53e009f9f6353614747ad47c1cc8ad5c0121",
+          "translation_outputs_identical": false,
+          "changed_outputs": [
+            {
+              "english": "modern semi-gradient analogue: \\ temporal-difference learning \\ (Part 26)",
+              "baseline": "现代半梯度对应形式：\\ 时序差分学习\\（第26部分）",
+              "current": "现代半梯度对应形式：\\ 时序差分学习\\ （第26部分）"
+            }
+          ]
+        },
+        "Search": {
+          "collected_unique_strings": 49,
+          "collected_file_sha256": "ce475fe5e42e10aa29b83bf774f177b1c993e1c805641fe6a4d418921e4a76be",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Survives": {
+          "collected_unique_strings": 98,
+          "collected_file_sha256": "9962e1b66915541013ad40b202610eaefb89fc5255c80ee35c77c972baddebb4",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Turing": {
+          "collected_unique_strings": 86,
+          "collected_file_sha256": "bf86de1d5c7e8bd5a52861de7a734bff0e73331f228169ca95ed3232ceab8e6d",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        },
+        "Winters": {
+          "collected_unique_strings": 82,
+          "collected_file_sha256": "d7ccc4644c1b40fc2ebacd194ab2d36ed125d5027cdc48f95a1e1a9339bd8636",
+          "translation_outputs_identical": true,
+          "changed_outputs": []
+        }
+      }
+    }
+  }
+}

@@ -20464,7 +20464,7 @@
     "$n=25$: \\ crossing unresolved": "$n=25$：\\ 交点未确定",
     "$n=25$: \\ half at $4.20$, \\ $90\\%\\to10\\%$ over $0.50$": "$n=25$：\\ 在$4.20$处降到一半，\\ $90\\%\\to10\\%$跨越$0.50$",
     "computed: \\ $3$ unknown outcomes; \\\\ solid = SAT lower bound; \\ dashed = upper bound": "计算结果：\\ $3$个结果未知；\\\\ 实线=可满足比例下界；\\ 虚线=上界",
-    "observed DPLL decisions \\ (median, log scale)": "已观察到的DPLL决策次数\\（中位数，对数刻度）",
+    "observed DPLL decisions \\ (median, log scale)": "已观察到的DPLL决策次数\\ （中位数，对数刻度）",
     "decision cap reached: \\\\ observed work includes truncated runs; \\\\ completion-time peak unresolved": "达到决策上限：\\\\ 已观察到的工作量包括截断运行；\\\\ 完成求解的工作量峰值未确定",
     "SAT fraction bounds": "可满足比例的上下界",
     "clauses recorded at stopping \\\\ (including input clauses)": "停止时记录的子句数\\\\（包括输入子句）",
@@ -20502,7 +20502,15 @@
     "solved / attempted; capped or unresolved; not run or unknown \\\\ BFS $48/48$; $0$; $36$ \\\\ A* $48/48$; $0$; $36$ \\\\ greedy $84/84$; $0$; $0$": "已解决 / 已尝试；达到上限或未解决；未运行或未知 \\\\ 广度优先 $48/48$；$0$；$36$ \\\\ A星 $48/48$；$0$；$36$ \\\\ 贪心 $84/84$；$0$；$0$",
     "$247$ cells{,} \\ the same optimal cost": "$247$个单元格，\\ 最优代价相同",
     "each table: \\ exact cost in moves of its five tiles{,} \\\\ found by breadth-first search{,} $1{,}048{,}576$ entries": "每张表：\\ 仅计算其五个方块移动的精确代价，\\\\ 通过广度优先搜索得到，共$1{,}048{,}576$项",
-    "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations{,} \\ $5$ seeds; \\ bar = mean{,} \\ line = range": "计算结果：\\ 后三种方法的候选代价评估预算均为$2{,}000{,}000$次，\\ $5$个种子；\\ 条形=平均值，\\ 线段=范围"
+    "computed: \\ the last three on an equal budget of $2{,}000{,}000$ candidate-cost evaluations{,} \\ $5$ seeds; \\ bar = mean{,} \\ line = range": "计算结果：\\ 后三种方法的候选代价评估预算均为$2{,}000{,}000$次，\\ $5$个种子；\\ 条形=平均值，\\ 线段=范围",
+    "$12$ matched solved problems \\\\ at $7$ blocks \\\\ optimal $11.3$ steps; greedy $15.3$": "$12$个双方都解出的相同问题 \\\\ 积木数为$7$ \\\\ 最优$11.3$步；贪心$15.3$步",
+    "all $84$ problems \\\\ solved / attempted": "全部$84$个问题 \\\\ 已解决 / 已尝试",
+    "1995: \\ Graphplan (Blum \\& Furst) \\qquad 2001: \\ FF (Hoffmann \\& Nebel)": "1995：\\ Graphplan（Blum \\& Furst）\\qquad 2001：\\ FF（Hoffmann \\& Nebel）",
+    "BFS: $48/48$": "广度优先：$48/48$",
+    "$0$ unresolved; $36$ not run / unknown": "$0$未解决；$36$未运行 / 未知",
+    "A*: $48/48$": "A星：$48/48$",
+    "greedy: $84/84$": "贪心：$84/84$",
+    "$0$ unresolved; $0$ not run / unknown": "$0$未解决；$0$未运行 / 未知"
   },
   "phrases": {
     "width": "宽度",

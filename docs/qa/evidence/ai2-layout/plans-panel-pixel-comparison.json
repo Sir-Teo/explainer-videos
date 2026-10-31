@@ -1,0 +1,40 @@
+[
+  {
+    "case": "before",
+    "frame": "/workspace/runtime/ai2-plans-panel-before/021_00208.2s.png",
+    "sha256": "631957dacf2fbf82b59ab1ec38cc926d70b716c1833000cddf0cfc5843bd5fb6",
+    "roi": [
+      380,
+      418,
+      550,
+      429
+    ],
+    "threshold": 20,
+    "foreground_bbox_inclusive": [
+      428,
+      419,
+      497,
+      427
+    ],
+    "glyph_height_pixels": 9
+  },
+  {
+    "case": "after",
+    "frame": "/workspace/runtime/ai2-en-tail-endpoint-snapshot/Plans/021_00208.2s.png",
+    "sha256": "11a9d23975f515a65cba0dc0af973dd845597ee46ab0484c0024546439b66cbd",
+    "roi": [
+      675,
+      315,
+      800,
+      333
+    ],
+    "threshold": 20,
+    "foreground_bbox_inclusive": [
+      690,
+      317,
+      764,
+      331
+    ],
+    "glyph_height_pixels": 15
+  }
+]

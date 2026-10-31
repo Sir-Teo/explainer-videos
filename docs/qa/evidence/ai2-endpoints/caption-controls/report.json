@@ -1,0 +1,63 @@
+{
+  "scope": "Actual current zh_text.translate outputs for unique collected Part2 EN/ZH caption records only, with frozen translation table and complete transformed strings. No scenes executed, data computed, chapters rerendered or global edits.",
+  "completed_utc": "2026-10-31T16:03:17.268984+00:00",
+  "unique_records": 1458,
+  "tex_or_mathtex_records": 1306,
+  "changed_translations": 812,
+  "changed_tex_or_mathtex_records": 804,
+  "scene_counts": {
+    "AStar": 87,
+    "Eliza": 47,
+    "Games": 100,
+    "Heuristics": 97,
+    "Hook": 95,
+    "Knowledge": 93,
+    "Local": 119,
+    "Logic": 90,
+    "Outro": 55,
+    "Plans": 128,
+    "SAT": 112,
+    "Samuel": 99,
+    "Search": 61,
+    "Survives": 98,
+    "Turing": 95,
+    "Winters": 82
+  },
+  "malformed_unicode_control_candidates": [],
+  "scan_rule": "At an odd-length run of backslashes, a directly following non-ASCII non-whitespace codepoint is a suspicious TeX control symbol. Even backslash runs and explicit control-space sequences are excluded.",
+  "translation_table_sha256": "74a804b4789dbbe436439b35437a2cf05c43a0f8c40da8405c15e25b2eeb41e9",
+  "scan_file": "/workspace/runtime/ai2-used-caption-controls/scan.json",
+  "scan_sha256": "6369ef1f5d694894d16096827375d58d2e625bc92bffd540158e6f033172c172",
+  "scoped_xelatex_checks": [
+    {
+      "scene": "SAT",
+      "key": "observed DPLL decisions \\ (median, log scale)",
+      "translated": "已观察到的DPLL决策次数\\ （中位数，对数刻度）",
+      "source_collection": "/workspace/explainer-videos/renders/qa/series/ai2/en/SAT/text.jsonl",
+      "source_line": 89,
+      "tex_file": "/workspace/runtime/ai2-used-caption-controls/fixed-caption-0.tex",
+      "tex_sha256": "78095728d22816dbe4fc76f4d0756268b1903adb0062ecaae4467d39c9560b41",
+      "xelatex_returncode": 0,
+      "xdv_exists": true,
+      "stdout_log": "/workspace/runtime/ai2-used-caption-controls/fixed-caption-0.stdout.log"
+    },
+    {
+      "scene": "Samuel",
+      "key": "modern semi-gradient analogue: \\ temporal-difference learning \\ (Part 26)",
+      "translated": "现代半梯度对应形式：\\ 时序差分学习\\ （第26部分）",
+      "source_collection": "/workspace/explainer-videos/renders/qa/series/ai2/en/Samuel/text.jsonl",
+      "source_line": 38,
+      "tex_file": "/workspace/runtime/ai2-used-caption-controls/fixed-caption-1.tex",
+      "tex_sha256": "3f74342c02fc27fd1306a70bb9de615d9d1ad04f7e0eceac2aa5c07dba6b2eea",
+      "xelatex_returncode": 0,
+      "xdv_exists": true,
+      "stdout_log": "/workspace/runtime/ai2-used-caption-controls/fixed-caption-1.stdout.log"
+    }
+  ],
+  "finding": "No additional malformed single-backslash Unicode controls in the collected Part2 translated strings. Both corrected known captions compile to XDV with exit0.",
+  "limits": [
+    "Not a compile check of every collected caption",
+    "Uncollected runtime captions and future numeric variants remain outside coverage",
+    "A successful isolated typeset does not certify full chapter rendering or visual layout"
+  ]
+}
