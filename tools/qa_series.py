@@ -37,6 +37,18 @@ sys.path.insert(0, str(ROOT))
 OUT = ROOT / "renders" / "qa" / "series"
 
 
+class StaleDataError(RuntimeError):
+    """A cache exists but cannot satisfy the current scene's data schema."""
+
+
+def require_part1_cache(compute, name):
+    """Cached-only QA must never invoke a schema upgrade's computation."""
+    if not compute.path(name).exists():
+        raise FileNotFoundError(f"QA needs computed data: ai1/{name}")
+    if not compute.cache_current(name):
+        raise StaleDataError(f"QA found stale computed data: ai1/{name}; rebuild this item before rendering")
+
+
 def visible_text_bounds(m, camera=None):
     """Measure visible glyphs in screen space, including 3D camera projection."""
     visible = []
@@ -257,9 +269,9 @@ def worker(args):
         return value
 
     def load1(name):
-        if args.cached_only and not c1.path(name).exists():
-            raise FileNotFoundError(f"QA needs computed data: ai1/{name}")
         with cache_lock(c1.path(name)):
+            if args.cached_only:
+                require_part1_cache(c1, name)
             value = original_c1(name)
             record_data(c1.path(name))
         return value
@@ -347,7 +359,8 @@ def worker(args):
             finally:
                 lang.LANG = args.lang
     except Exception as exc:
-        result.update(status="missing-data" if "QA needs computed data:" in str(exc) else "failed",
+        result.update(status=("stale-data" if isinstance(exc, StaleDataError) else
+                              "missing-data" if "QA needs computed data:" in str(exc) else "failed"),
                       error=f"{type(exc).__name__}: {exc}", traceback=traceback.format_exc())
         traceback.print_exc()
     result["elapsed"] = round(time.monotonic() - start, 2)
