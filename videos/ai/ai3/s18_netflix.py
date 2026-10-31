@@ -150,8 +150,9 @@ class Netflix(VoiceoverScene):
         with self.voiceover(
             "The model is a sum. <bookmark mark='a'/> An average, plus the user's generosity, plus the film's quality, "
             "plus a dot product of k numbers of taste each. <bookmark mark='b'/> Fit it to the ratings we have, keeping "
-            "the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> A full table would have chapter eight's answer; with holes there is "
-            "no formula, and we descend the gradient. <bookmark mark='d'/> We built a small world to test on: "
+            "the vectors small, with a separate fixed penalty on user and film biases. <bookmark mark='c'/> Chapter "
+            "eight solves the unregularized least-squares rank-k approximation of a full matrix. Here, we optimize "
+            "the observed ratings with the vector and bias penalties. <bookmark mark='d'/> We built a small world to test on: "
             f"{m['users']:,} users, {m['items']:,} films, {m['n_ratings']:,} ratings, from six hidden genres the method "
             "never sees."
         ) as vo:

@@ -36,3 +36,9 @@ Seventeen of19 bilingual chapter selected-frame reviews are complete. Netflix an
 remain active. Spectra additionally has31 reviewed native1080 endpoint captures, eight pages at960px tile width
 and eight native-pixel critical crops: [production endpoint evidence](evidence/ai3-spectra-production-endpoints-1080/).
 Other production endpoint cases are being captured and reviewed separately.
+
+21:53 update: all19 chapters have completed baseline/repaired review at their exact artifact versions. Late factual
+qualifications now require fresh Hook/Words/Netflix VO timing regressions. Power label, Outro footer and GaLore
+feasibility replacements are verified; current statuses/source hashes are in the separately timestamped JSON.
+All38 original native1080 endpoint cases (695images) have been inspected at documented scales; later replacements
+have separate per-artifact receipts. No production/narration approval is implied.

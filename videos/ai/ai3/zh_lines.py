@@ -27,7 +27,7 @@ CHAPTERS = {
 ZH = {
     # ---------------------------------------------------------------- Hook
     'In part one, a model learned to guess the next letter by counting':
-        "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙：每个上下文都是一座孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也没让它学到关于the hound barked的任何东西。",
+        "在第1部分，一个模型靠计数学会了猜下一个字母，然后撞上了一堵墙。它能共享完全相同的字母模式，但每个上下文仍是一座计数的孤岛。<bookmark mark='a'/>把the dog barked读上100遍，也不会让它学到dog和hound在意义上相近。",
 
     'f"Every modern model fixes this the same way.':
         "每一个现代模型，都用同一种办法解决这个问题：给每个词一个位置，<bookmark mark='a'/>也就是空间里的一个点，这些点的选法，让用法相近的词最后靠在一起。<bookmark mark='b'/>这是{len(words)}个词，放在GPT-2给它们安排的位置上：动物在一个区域，颜色在另一个区域，然后是数字、地点、家庭、身体，还有动词。",
@@ -261,7 +261,7 @@ ZH = {
         "这是一个真实的梯度，来自一个在小说上训练的小Transformer：一个{shape[0]}乘{shape[1]}的矩阵。<bookmark mark='a'/>它的奇异值，从大到小，对数坐标。在第{tr[0]['step']}步，前八个方向承载了梯度平方能量的{100 * tr[0]['top8']:.1f}%。<bookmark mark='b'/>实测前八个方向的占比，在第{pk['step']}步达到最大，{100 * pk['top8']:.1f}%。<bookmark mark='c'/>最后第{last['step']}步，占比是{100 * last['top8']:.1f}%，而方向一共有{n}个。游标把每一张谱，和完整能量占比轨迹上的同一步对齐。",
 
     'f"That is GaLore\'s idea':
-        "这就是GaLore的想法，来自Jiawei Zhao、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{mems['adam']:,}个数，秩32时{mems['galore32']:,}个，秩8时{mems['galore8']:,}个。在大规模上，论文报告优化器内存最多减少65%，而且配合8位状态，在一张24GB的显卡上预训练了一个70亿参数的模型。",
+        "这就是GaLore的想法，来自Jiawei Zhao、阿尼玛·阿南德库马尔、田渊栋和同事，2024年。Adam为每个权重保存两个滑动平均：一个70亿参数的模型，就多出140亿个数。<bookmark mark='a'/>GaLore把每个梯度投影到它前r个奇异方向上，<bookmark mark='b'/>在那里运行Adam，每隔一段时间更新这些方向。<bookmark mark='c'/>对我们的模型：Adam要保存{mems['adam']:,}个数，秩32时{mems['galore32']:,}个，秩8时{mems['galore8']:,}个。在大规模上，论文报告优化器内存最多减少65%，并展示了配合8位状态、逐层更新和较小的词元批次，70亿参数模型的预训练可以容纳在24GB内存中。这是内存可行性的结果。",
 
     'f"Does a narrow window cost anything?':
         "窄窗口有代价吗？我们用Adam，以及秩32和秩8的GaLore训练这个模型。每种方法都用种子0的验证结果，从三个学习率中选出最好的，再用这个学习率跑种子0、1、2；报告的三个种子里，包含了调参用的种子。<bookmark mark='a'/>训练曲线先做八个样本的移动平均，再画均值和从最小值到最大值的带状范围，不做硬性的损失截断。<bookmark mark='b'/>留出数据上的损失：Adam {mean['adam']:.3f}，秩32 {mean['galore32']:.3f}，秩8 {mean['galore8']:.3f}。<bookmark mark='c'/>{verdict}",
@@ -292,8 +292,8 @@ ZH = {
     # ---------------------------------------------------------------- Words
     'Chapter twelve.': '第12章。从计数得到词向量。',
 
-    "Part 1's counting model treated every word as an island.":
-        "第1部分的计数模型，把每个词都当成一座孤岛。办法来自语言学里的一个老想法。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
+    'Part 1 began with counts of distinct letter symbols.':
+        "第1部分先从不同字母符号的计数开始。现在，我们通过统计词共享的上下文，把词联系起来。这个想法来自语言学。<bookmark mark='a'/>1954年，泽利格·哈里斯指出，出现在相同上下文里的词，意思往往相近。<bookmark mark='b'/>1957年，约翰·弗斯说：要了解一个词，就看它和什么词为伴。<bookmark mark='c'/>1990年，斯科特·迪尔韦斯特、苏珊·杜迈斯和同事把它变成了算法：数一数词在文档里出现的次数，做奇异值分解，按意义而不是按拼写来检索。",
 
     'f"We\'ll do it with the thirty novels.':
         "我们用那三十部小说来做。<bookmark mark='a'/>取最常见的一万个词，数每一对词在四个词以内同时出现多少次：一亿个格子，来自{w['n_words'] / 1000000.0:.2f}百万词的文本。<bookmark mark='b'/>再按第1部分的办法，把计数变成意外度：两个词相遇的次数，是偶然相遇的多少倍，取对数，就是点互信息。只留下它的正的部分。<bookmark mark='c'/>monday和morning：{w['show_pairs'][0][3]:.2f}。the和of一起出现了{int(w['show_pairs'][-1][2]):,}次，可它们和什么词都相遇：{w['show_pairs'][-1][3]:.2f}。<bookmark mark='d'/>做SVD用的表，还会先把上下文分布取四分之三次方并归一化，再只保留正值。",
@@ -410,7 +410,7 @@ ZH = {
         "低秩最有名的一次检验，来自一家DVD租赁公司。<bookmark mark='a'/>2006年10月，Netflix公开了一亿条评分，来自480189位用户、17770部电影，悬赏一百万美元，谁能把留出评分预测得比它自己的系统好10%。<bookmark mark='b'/>这张表大半是空的：每位用户平均只有大约两百条评分。<bookmark mark='c'/>12月，一位署名西蒙·芬克的程序员贴出一个短程序，用梯度下降分解这张表，在排行榜上一跃而上。2009年，BellKor's Pragmatic Chaos队获胜，用的是几百个模型的组合，其中很多都是那种分解的改进版。",
 
     'f"The model is a sum.':
-        "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小；用户和电影的偏置，还各有一个单独的固定惩罚。<bookmark mark='c'/>一张满的表，第8章就有答案；有空洞就没有公式，只能沿梯度下降。<bookmark mark='d'/>我们造了一个小世界来检验：{m['users']:,}位用户，{m['items']:,}部电影，{m['n_ratings']:,}条评分，来自六种隐藏的类型，方法本身看不到它们。",
+        "模型是一个和。<bookmark mark='a'/>一个平均分，加上用户的宽厚，加上电影的质量，再加上两个各有k个口味数的向量的点积。<bookmark mark='b'/>拟合已有的评分，同时让向量保持小；用户和电影的偏置，还各有一个单独的固定惩罚。<bookmark mark='c'/>第8章解决的是：对完整矩阵，不加正则化、按最小二乘做秩k近似。这里，我们只优化已观测的评分，同时保留向量和偏置惩罚。<bookmark mark='d'/>我们造了一个小世界来检验：{m['users']:,}位用户，{m['items']:,}部电影，{m['n_ratings']:,}条评分，来自六种隐藏的类型，方法本身看不到它们。",
 
     'f"Training replayed, at rank':
         "回放训练过程，秩为{int(rp['rank'])}。<bookmark mark='a'/>训练用的评分上误差在降，留出的评分上也在降：从{h[0, 2]:.2f}星降到{h[-1, 2]:.3f}。{tail}<bookmark mark='b'/>右边，是每部电影的向量，画在它最强的两个方向上，按隐藏的类型着色，也画出各类型的平均位置。<bookmark mark='c'/>每部电影最近的十部电影里，有{100 * m['genre_nn']:.0f}%和它同类型，碰运气只有{100 * m['genre_chance']:.0f}%。{genre_verdict}",

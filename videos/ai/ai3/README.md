@@ -48,9 +48,10 @@ A hook, seventeen chapters and an outro (about 50 minutes; `python tools/lecture
   checked); Part 1's letter table, and correspondence analysis putting the vowels at one end; LSA, LoRA and latent
   attention.
 * **9. How big is a matrix?** Frobenius and spectral norms; ‖A‖_F² = Σσᵢ² derived; stable rank. Computed: the stable
-  ranks of all 48 matrices in GPT-2's blocks against a random matrix of the same shape (≈ 345). A vector through 40
-  random layers (gains 0.8, 1.0, 1.2). The condition number derived as an error amplifier, and measured for 64- and
-  32-bit arithmetic. Muon as steepest descent in the spectral norm; Newton–Schulz on a real gradient.
+  ranks of all 48 matrices in GPT-2's blocks against a single random 768 × 3072 MLP-shaped reference (stable rank
+  ≈ 345). A vector through 40 random layers (gains 0.8, 1.0, 1.2). The condition number derived as an error amplifier,
+  and measured for 64- and 32-bit arithmetic. Muon as steepest descent in the spectral norm; Newton–Schulz on a real
+  gradient.
 * **10. Random matrices and trained weights.** Wigner (1955) and the Marchenko–Pastur law (1967), checked on a
   random 768 × 3072 matrix; GPT-2's layer-6 MLP matrix: a bulk plus eigenvalues escaping the edge, which vanish when
   the same numbers are shuffled; power-law tails fitted (Clauset–Shalizi–Newman) for all 48 matrices against Martin
@@ -70,7 +71,8 @@ A hook, seventeen chapters and an outro (about 50 minutes; `python tools/lecture
   and 5, and on the real 10,000-word run; full rank does not certify convergence to the target. GloVe
   (2014); counting against guessing on the same tests.
 * **14. Life in 768 dimensions.** Angles between random directions; Var(cos θ) = 1/d derived and measured from d = 2
-  to 4,096; 10,000 random directions all within a few degrees of perpendicular, and superposition; lengths
+  to 4,096; in the measured 768-dimensional draw, all pairs among 10,000 random directions lie between 78° and
+  102° (typical angular spread ≈ 2°), and superposition; lengths
   concentrating at √d with spread 1/√2, derived and measured; the volume in a thin shell.
 * **15. Johnson–Lindenstrauss, proved.** A thousand of GPT-2's vectors through one random matrix; the lemma
   (Dasgupta–Gupta form) and its proof: Gaussian projection, χ² variable, Chernoff bound, union bound. Checked: the
@@ -162,8 +164,9 @@ with GPUs* (2017); X. Yi et al., *Sampling-Bias-Corrected Neural Modeling for La
 
 1. **Triangle inequality.** |a + b|² = |a|² + 2a·b + |b|² ≤ |a|² + 2|a||b| + |b|² = (|a| + |b|)², by
    Cauchy–Schwarz. Equality needs a·b = |a||b|: one vector a non-negative multiple of the other.
-2. **Projections.** P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = A(AᵀA)⁻¹Aᵀ = P, and Pᵀ = A((AᵀA)⁻¹)ᵀAᵀ = P because AᵀA is
-   symmetric. For any y, Aᵀ(I − P)y = Aᵀy − AᵀA(AᵀA)⁻¹Aᵀy = 0, so (I − P)y is perpendicular to every column; and
+2. **Projections.** For A with full column rank, P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = A(AᵀA)⁻¹Aᵀ = P, and
+   Pᵀ = A((AᵀA)⁻¹)ᵀAᵀ = P because AᵀA is symmetric. For any y,
+   Aᵀ(I − P)y = Aᵀy − AᵀA(AᵀA)⁻¹Aᵀy = 0, so (I − P)y is perpendicular to every column; and
    (I − P)² = I − 2P + P² = I − P.
 3. **Rayleigh quotient near an eigenvector.** With unit v₁ ⊥ v₂ and x = v₁ + εv₂: xᵀAx = λ₁ + ε²λ₂ and xᵀx = 1 + ε²,
    so R = (λ₁ + ε²λ₂)/(1 + ε²) = λ₁ − (λ₁ − λ₂)ε²/(1 + ε²) = λ₁ − (λ₁ − λ₂)ε² + O(ε⁴). An error ε in direction moves
@@ -171,7 +174,8 @@ with GPUs* (2017); X. Yi et al., *Sampling-Bias-Corrected Neural Modeling for La
 4. **Norms.** ‖A‖_F² = Σᵢⱼ aᵢⱼ² = tr(AᵀA) = tr(VΣ²Vᵀ) = tr(Σ²) = Σσᵢ². Then σ₁² ≤ Σσᵢ² ≤ rσ₁². The first bound is
    attained by rank-one matrices (uvᵀ), the second by matrices with r equal singular values (any multiple of an
    orthogonal matrix, or of a partial isometry).
-5. **SGNS optimum.** ℓ(x) = a log σ(x) + b log σ(−x) has ℓ′(x) = a(1 − σ(x)) − bσ(x) = aσ(−x) − bσ(x), zero when
+5. **SGNS optimum.** For a, b > 0 and a free scalar x, ℓ(x) = a log σ(x) + b log σ(−x) has
+   ℓ′(x) = a(1 − σ(x)) − bσ(x) = aσ(−x) − bσ(x), zero when
    σ(x)/σ(−x) = eˣ = a/b, and ℓ″ < 0 there (it is the maximum of the log-likelihood; the loss −ℓ is minimized).
    With a = #(w,c) and b = k·#(w)·P_n(c): w·c = log(#(w,c)/(#(w)P_n(c))) − log k, the PMI with the negative
    distribution as P(c), shifted by log k.
@@ -188,14 +192,14 @@ with GPUs* (2017); X. Yi et al., *Sampling-Bias-Corrected Neural Modeling for La
 
 1. **三角不等式。** |a + b|² = |a|² + 2a·b + |b|² ≤ |a|² + 2|a||b| + |b|² = (|a| + |b|)²，用的是柯西–施瓦茨不等式。取等号要求
    a·b = |a||b|：一个向量是另一个的非负倍数。
-2. **投影。** P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = P；因为 AᵀA 对称，Pᵀ = P。对任意 y，Aᵀ(I − P)y = Aᵀy − Aᵀy = 0，所以
+2. **投影。** 若 A 列满秩，P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = P；因为 AᵀA 对称，Pᵀ = P。对任意 y，Aᵀ(I − P)y = Aᵀy − Aᵀy = 0，所以
    (I − P)y 与每一列都垂直；并且 (I − P)² = I − 2P + P² = I − P。
 3. **特征向量附近的瑞利商。** 取单位向量 v₁ ⊥ v₂，x = v₁ + εv₂：xᵀAx = λ₁ + ε²λ₂，xᵀx = 1 + ε²，所以
    R = λ₁ − (λ₁ − λ₂)ε²/(1 + ε²) = λ₁ − (λ₁ − λ₂)ε² + O(ε⁴)。方向误差 ε 只让 R 变化 ε²；幂迭代的方向误差按 (λ₂/λ₁)ᵏ
    缩小，特征值的误差就按 (λ₂/λ₁)²ᵏ 缩小。
 4. **范数。** ‖A‖_F² = Σᵢⱼ aᵢⱼ² = tr(AᵀA) = tr(Σ²) = Σσᵢ²，所以 σ₁² ≤ Σσᵢ² ≤ rσ₁²。秩为一的矩阵 uvᵀ 取到左边的等号；
    r 个奇异值都相等的矩阵（正交矩阵的倍数）取到右边的等号。
-5. **SGNS 的最优点。** ℓ(x) = a log σ(x) + b log σ(−x)，ℓ′(x) = aσ(−x) − bσ(x)，在 eˣ = a/b 时为零，且 ℓ″ < 0（这是对数似然的
+5. **SGNS 的最优点。** 对 a, b > 0 及自由标量 x，ℓ(x) = a log σ(x) + b log σ(−x)，ℓ′(x) = aσ(−x) − bσ(x)，在 eˣ = a/b 时为零，且 ℓ″ < 0（这是对数似然的
    最大值，损失 −ℓ 的最小值）。代入 a = #(w,c)，b = k·#(w)·P_n(c)：w·c = log(#(w,c)/(#(w)P_n(c))) − log k，即以负采样分布为
    P(c) 的点互信息，平移 log k。
 6. **随机方向。** 由对称性，E[x₁²] = … = E[x_d²]，它们的和是 E|x|² = 1，所以每个都是 1/d。x、y 独立且均匀时，E[x·y] = 0，

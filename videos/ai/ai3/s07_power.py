@@ -122,6 +122,9 @@ class Power(VoiceoverScene):
                  yticks=[-16, -12, -8, -4, 0], yfmt=lambda v: f"10^{{{int(v)}}}" if v else "1",
                  xlabel=r"step $k$", ylabel=r"$\sin\theta_k$, \ the angle to the top eigenvector",
                  center=[-1.3, -0.2, 0])
+        # The tangent prediction can begin above the plotted sine range.
+        # Keep the caption clear without changing either measured data or axes.
+        g.ylabel.shift(UP * 0.4)
         ax = g.ax
         series = []
         for key, col, name in (("gpt2", GPTC, r"GPT-2's token covariance ($768 \times 768$)"),

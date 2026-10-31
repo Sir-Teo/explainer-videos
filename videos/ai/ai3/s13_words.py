@@ -46,7 +46,8 @@ class Words(VoiceoverScene):
         ).arrange(RIGHT, buff=0.2, aligned_edge=UP).move_to(DOWN * 0.3)
         head = label(r"Meaning from company", font_size=40).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Part 1's counting model treated every word as an island. The fix is an old idea from linguistics. "
+            "Part 1 began with counts of distinct letter symbols. Now we connect words by counting the contexts "
+            "they share. The idea comes from linguistics. "
             "<bookmark mark='a'/> In 1954 Zellig Harris argued that words in the same contexts tend to mean similar "
             "things. <bookmark mark='b'/> In 1957 John Firth: you shall know a word by the company it keeps. "
             "<bookmark mark='c'/> In 1990 Scott Deerwester, Susan Dumais and colleagues made it an algorithm: count "

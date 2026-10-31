@@ -3,7 +3,9 @@
 Goal: a university-level course in video, **as comprehensive and as close to the frontier as possible**, telling
 **how AI became what it is today** alongside the mathematics. It is in English and Chinese to the standard of
 *Analysis, Built*, and renders on macOS and Linux. Each part runs **30–60 minutes**, depending on how much its
-content needs. Currently the twenty parts total about 4.9 hours. This plan totals about 26 hours across 31 parts.
+content needs. The earlier twenty-part export set totaled about 4.9 hours; those exports do not represent the
+current 31-part manifests. The expanded plan targets about 26 hours. Final running time requires the completed
+narrated builds.
 
 ## 1. The standard every part meets
 
