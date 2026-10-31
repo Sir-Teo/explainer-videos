@@ -1,0 +1,186 @@
+[
+  {
+    "scene": "Entropy",
+    "language": "en",
+    "source_frame": 523,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "entropy-en-before.png",
+        "image_sha256": "190930906c590bab5c147c8eb381ff6dfa97468212fa6e8ef782733fb2a2dd33",
+        "movie": "renders/qa/ai1-final-layout-batch/before/en/Entropy/movie.mp4",
+        "movie_sha256": "f4ae68f989943b277d39c98715bde475dc8362b4fff4c6e3e1c388dfc14f120b"
+      },
+      {
+        "state": "after",
+        "image": "entropy-en-after.png",
+        "image_sha256": "1957dc99e4be1631d20cbea22784296daf4fa31a50962e2db807665f40b4de47",
+        "movie": "renders/qa/series/ai1/en/Entropy_motion/media/videos/480p15/Entropy.mp4",
+        "movie_sha256": "b6a58a72dc670aa47c2da4574706687e0b2a7ab8fe561424282dcb4624d7e8df"
+      }
+    ]
+  },
+  {
+    "scene": "Entropy",
+    "language": "zh",
+    "source_frame": 559,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "entropy-zh-before.png",
+        "image_sha256": "a1b2a4c71842c2064461b32ae81ed44f5b742cac0c2b2e695d0b88e0b225fb9b",
+        "movie": "renders/qa/ai1-final-layout-batch/before/zh/Entropy/movie.mp4",
+        "movie_sha256": "5921323d694dc869280d939e518a60a552df94fb9a9ba3bf4337d0a8dbb1fae3"
+      },
+      {
+        "state": "after",
+        "image": "entropy-zh-after.png",
+        "image_sha256": "b6aa7ae9da865348db9bf2d761107765cc293b535ed695cc4c8f385f17f62443",
+        "movie": "renders/qa/series/ai1/zh/Entropy_motion/media/videos/480p15/Entropy.mp4",
+        "movie_sha256": "babb289d429bee0398b7dfb35b554f099413133b72d7b553761bb975611b6f1f"
+      }
+    ]
+  },
+  {
+    "scene": "Counting",
+    "language": "en",
+    "source_frame": 1419,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "counting-en-before.png",
+        "image_sha256": "0bb7a7900dff9028a345fe3810102c85df1aa888bd9bcd85269527d79b9bc7ee",
+        "movie": "renders/qa/ai1-final-layout-batch/before/en/Counting/movie.mp4",
+        "movie_sha256": "fd5fd9e6133b75c2efabdd16dc438637304c13197d38df39d57e4586eb82fdda"
+      },
+      {
+        "state": "after",
+        "image": "counting-en-after.png",
+        "image_sha256": "96c07a51e38222cb3ac5102cd0044452eb08047890152093600362aff30ef3bf",
+        "movie": "renders/qa/series/ai1/en/Counting_motion/media/videos/480p15/Counting.mp4",
+        "movie_sha256": "ddd1983980e2931e77c639421e90237f356b135391ba6d1007684eb7cea4ec02"
+      }
+    ]
+  },
+  {
+    "scene": "Counting",
+    "language": "zh",
+    "source_frame": 1554,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "counting-zh-before.png",
+        "image_sha256": "49b2db0dfbcd3fe5c54b1b622029c38edb5bfec772510e414047e1d478ff3665",
+        "movie": "renders/qa/ai1-final-layout-batch/before/zh/Counting/movie.mp4",
+        "movie_sha256": "b26d2ddf16fdbd9f426a9b329f28284d4690ff0b40e8cad6d64ee156a13d15ea"
+      },
+      {
+        "state": "after",
+        "image": "counting-zh-after.png",
+        "image_sha256": "444192729c08a15d7af74e83da6ce35aae95d8e2f4ac3c421a72cb80a3f15ae5",
+        "movie": "renders/qa/series/ai1/zh/Counting_motion/media/videos/480p15/Counting.mp4",
+        "movie_sha256": "1dbb7b6c949d2d9bb5a4bc9b6a489398f3491deef97ccbdd011b9dbacdf2fbc4"
+      }
+    ]
+  },
+  {
+    "scene": "CrossEntropy",
+    "language": "en",
+    "source_frame": 1088,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "cross-entropy-en-before.png",
+        "image_sha256": "6d562bf3afa6b1db48a773f97c559e788cb9d8fa936c22ef2307937e504fcbac",
+        "movie": "renders/qa/ai1-final-layout-batch/before/en/CrossEntropy/movie.mp4",
+        "movie_sha256": "4d6dd843477c063e01ac4cb38d01057a8a142c2443ef44aea7fabf611698a27d"
+      },
+      {
+        "state": "after",
+        "image": "cross-entropy-en-after.png",
+        "image_sha256": "ff1c2cffe81614d44b5254c163d1d4033cdb8ba242e0f40922348d10b70fc9e3",
+        "movie": "renders/qa/series/ai1/en/CrossEntropy_motion/media/videos/480p15/CrossEntropy.mp4",
+        "movie_sha256": "ace24806250317ddbfbad694160ec07bb01d38fc527391fdc230977498b57467"
+      }
+    ]
+  },
+  {
+    "scene": "CrossEntropy",
+    "language": "zh",
+    "source_frame": 1074,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "cross-entropy-zh-before.png",
+        "image_sha256": "0eeb3f6f56f051612ad81bc08c26d7dd7a801b4a6e7d87a290d3d6ef6031229f",
+        "movie": "renders/qa/ai1-final-layout-batch/before/zh/CrossEntropy/movie.mp4",
+        "movie_sha256": "92711b888cf50e1d37c0384e4b9e282b833d2c2afe22d7f875676aa042593e33"
+      },
+      {
+        "state": "after",
+        "image": "cross-entropy-zh-after.png",
+        "image_sha256": "4599b6e788ebc26d8cc9065f6f0cc638b2ce3d9f79221cce5f1425fd602660a0",
+        "movie": "renders/qa/series/ai1/zh/CrossEntropy_motion/media/videos/480p15/CrossEntropy.mp4",
+        "movie_sha256": "aa937c333d34c86d68ed18d41a083a3eda3fb1766c9762f1dd9a365574f7dca8"
+      }
+    ]
+  },
+  {
+    "scene": "Arithmetic",
+    "language": "en",
+    "source_frame": 3541,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "arithmetic-en-before.png",
+        "image_sha256": "e6a10929b3e9218e32cd692b9c84991f808d997b187b0e603d2f7804a1050c3f",
+        "movie": "renders/qa/ai1-final-layout-batch/before/en/Arithmetic/movie.mp4",
+        "movie_sha256": "f76f7156ce9b2aadbf6d3d4717f26d183bd88d422a876081bf8aa0c6fe20b258"
+      },
+      {
+        "state": "after",
+        "image": "arithmetic-en-after.png",
+        "image_sha256": "477fc4034615f4125832e99285d4787c7b30c96548f28471e559a05d871f0bbd",
+        "movie": "renders/qa/series/ai1/en/Arithmetic_motion/media/videos/480p15/Arithmetic.mp4",
+        "movie_sha256": "fbffb4b0b2b5a0743df9250307ce71af7c88675ab31c7d0fe9613b47eefd7382"
+      }
+    ]
+  },
+  {
+    "scene": "Arithmetic",
+    "language": "zh",
+    "source_frame": 3633,
+    "scope": "Exact decoded source-frame before/after images; not continuous viewing",
+    "capture_fingerprint_after": "c7679c4a581f8f795949b96b25c745441a6c16012ca24d0a9de18b096272d8b8",
+    "images": [
+      {
+        "state": "before",
+        "image": "arithmetic-zh-before.png",
+        "image_sha256": "9517c49c56063d490d5f25d618bbcfd3faee43825daac5f7a04c791ec82d2c55",
+        "movie": "renders/qa/ai1-final-layout-batch/before/zh/Arithmetic/movie.mp4",
+        "movie_sha256": "b58ae026e1b2fb699ad228143061fbc4b1bcedec65325e2909ad2d6d64ccb114"
+      },
+      {
+        "state": "after",
+        "image": "arithmetic-zh-after.png",
+        "image_sha256": "9f85ecc47636f2f48db5603d7f08e945f90245b5914b0d90c2822cf740277399",
+        "movie": "renders/qa/series/ai1/zh/Arithmetic_motion/media/videos/480p15/Arithmetic.mp4",
+        "movie_sha256": "9fc0869d7c61579560ebc42a97ad79b5335d16db75205e68d16d0feb2044495e"
+      }
+    ]
+  }
+]

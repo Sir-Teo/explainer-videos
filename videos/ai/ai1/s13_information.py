@@ -144,7 +144,7 @@ class Information(VoiceoverScene):
         head2 = label(r"Processing the previous letter", font_size=34).to_edge(UP, buff=0.35)
         tag = computed_tag()
         take = label(r"a model's features, computed \\ from the context, can't know more \\ about the next token than "
-                     r"the context did", font_size=24, color=GREY_A).move_to([4.7, -1.9, 0])
+                     r"the context did", font_size=24, color=GREY_A).move_to([4.25, -1.9, 0])
         with self.voiceover(
             "Let's watch it happen in our books. <bookmark mark='a'/> Keep only the kind of the previous letter: "
             f"space, vowel or consonant. Of the {I:.2f} bits, {Ig:.2f} survive. <bookmark mark='b'/> Or garble it: "

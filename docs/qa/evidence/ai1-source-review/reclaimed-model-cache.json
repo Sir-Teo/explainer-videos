@@ -1,0 +1,14 @@
+{
+  "observed_utc": "2026-10-31T15:46:44.136717+00:00",
+  "repo_id": "Qwen/Qwen3-4B-Base",
+  "repo_type": "model",
+  "size_on_disk": 8056505693,
+  "revisions": [
+    {
+      "commit_hash": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+      "files_count": 10
+    }
+  ],
+  "action": "Remove only task-downloaded model cache after completed measurements; keep all numerical results and evidence",
+  "metadata_source": "Official Hub cache metadata; no independent content checksum recomputed"
+}

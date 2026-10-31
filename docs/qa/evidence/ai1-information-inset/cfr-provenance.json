@@ -1,0 +1,30 @@
+{
+  "scope": "Optional editor-compatible CFR derivative; no original playback failure claimed",
+  "source_movie": "renders/qa/narrated/ai1/en/media/videos/1080p30/Information.mp4",
+  "source_sha256": "9f158d65c64b1399a2417f1e7f1da2ba1eb0220303b101b604718747ca476ca1",
+  "cfr_movie": "renders/qa/narrated/ai1/en/media/videos/1080p30/Information-CFR.mp4",
+  "cfr_sha256": "68ee8295d0b718621c19eb56ceecb90df7f221c3e80712193e8128bc5bd36c6b",
+  "source_module_sha256": "8f788f0a5ee0b6c8d3f39e2b814d6c8490933a068fc706715ef08911c8bfa18a",
+  "method": "Copy encoded packets; round video PTS/DTS to exact30fps grid; preserve audio packets",
+  "video_reencoded": false,
+  "max_video_timestamp_shift_seconds": 0.0022786458333333335,
+  "video_packets": 5087,
+  "decoded_video_frames": 5087,
+  "all_decoded_frame_hashes_equal": true,
+  "decoded_audio_pcm_hash_equal": true,
+  "audio_pcm_sha256": "SHA256=a9d63db889dfeb73084eb9225db89165932fa6b701bc65742dc1949e3231b47f",
+  "before_video": {
+    "r_frame_rate": "30/1",
+    "avg_frame_rate": "78136320/2604509",
+    "duration": "169.564388",
+    "nb_frames": "5087"
+  },
+  "after_video": {
+    "r_frame_rate": "30/1",
+    "avg_frame_rate": "30/1",
+    "duration": "169.566667",
+    "nb_frames": "5087"
+  },
+  "listening": "unverified",
+  "continuous_perceptual_playback": "unverified"
+}

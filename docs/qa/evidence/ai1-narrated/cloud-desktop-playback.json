@@ -1,0 +1,54 @@
+{
+  "received_utc": "2026-10-31T15:08:35.178472+00:00",
+  "reviewer": "Independent dot cloud desktop worker, reported by parent",
+  "scope": "Uninterrupted editor UI playback with timed screenshot inspection; not continuous perceptual viewing or audio listening",
+  "movie_sha256": "496695c0d74cf7d4f33c62d369187b622bacf8d999f5eef1fe7dfd44c335f113",
+  "bytes": 7152100,
+  "transport": "Supported Library materialization",
+  "application": "Kdenlive on cloud Linux",
+  "video": "Information EN1920x1080 nominal30fps169.564388s5087frames",
+  "verified": [
+    "Visible in Thunar",
+    "Seek to start",
+    "Fullscreen playback timecode progressed",
+    "Terminal stop02:49:15"
+  ],
+  "sample_times": [
+    "00:08",
+    "00:31",
+    "00:41",
+    "00:50",
+    "00:59",
+    "01:09",
+    "01:22",
+    "01:32",
+    "01:52",
+    "02:06",
+    "02:22",
+    "02:37",
+    "02:49"
+  ],
+  "findings": [
+    {
+      "kind": "safe-margin polish",
+      "time": "01:32:29",
+      "description": "Takeaway visible, not proven clipped, but about12px from right edge in1364px preview; root is insetting it."
+    },
+    {
+      "kind": "editor-compatibility warning",
+      "description": "Kdenlive flagged variable-frame-rate; transcode canceled to preserve original. No playback failure established."
+    },
+    {
+      "kind": "end-frame observation",
+      "description": "Held terminal frame brighter than direct near-dark FFmpeg tail; no export-ending defect established."
+    }
+  ],
+  "no_observed_issue_at_samples": [
+    "formula/diagram readability",
+    "chart/caveat readability",
+    "overlap",
+    "missing glyphs"
+  ],
+  "audio_perception": "unverified",
+  "continuous_perceptual_viewing": "unverified"
+}

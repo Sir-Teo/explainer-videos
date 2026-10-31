@@ -1,0 +1,224 @@
+[
+  {
+    "case": "en-before",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-en-Information-dense-final/frames/0002688_000089.599s.png",
+    "image_size": [
+      1920,
+      1080
+    ],
+    "roi": [
+      1200,
+      730,
+      1920,
+      860
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      1283,
+      744,
+      1905,
+      848
+    ],
+    "right_blank_pixels": 14,
+    "chart_rightmost_pixel": 1191,
+    "horizontal_blank_pixels_from_chart": 91,
+    "chart_foreground_roi": [
+      100,
+      310,
+      1210,
+      880
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "23307c05ad0f8c4ee51e46a6d69a55ea4e80b828eed7ad3a006a5adef7101d2e"
+  },
+  {
+    "case": "en-after",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-en-Information-inset-CFR/frames/0002685_000089.500s.png",
+    "image_size": [
+      1920,
+      1080
+    ],
+    "roi": [
+      1200,
+      730,
+      1920,
+      860
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      1223,
+      744,
+      1844,
+      848
+    ],
+    "right_blank_pixels": 75,
+    "chart_rightmost_pixel": 1191,
+    "horizontal_blank_pixels_from_chart": 31,
+    "chart_foreground_roi": [
+      100,
+      310,
+      1210,
+      880
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "704acda0013a099d6e190c3f194f9b1dcc9fdf7e2389d4f261c7199d380ad1cb"
+  },
+  {
+    "case": "en-entrance",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-en-Information-inset-CFR/frames/0002682_000089.400s.png",
+    "image_size": [
+      1920,
+      1080
+    ],
+    "roi": [
+      1200,
+      730,
+      1920,
+      860
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      1223,
+      744,
+      1844,
+      848
+    ],
+    "right_blank_pixels": 75,
+    "chart_rightmost_pixel": 1191,
+    "horizontal_blank_pixels_from_chart": 31,
+    "chart_foreground_roi": [
+      100,
+      310,
+      1210,
+      880
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "c365ea260c88ccb6a2936820307e9b947af4ac5ced84d0d1fb6678ac75b0f27b"
+  },
+  {
+    "case": "zh-before",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-zh-Information-dense-final/frames/0001721_000114.733s.png",
+    "image_size": [
+      854,
+      480
+    ],
+    "roi": [
+      570,
+      320,
+      854,
+      385
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      625,
+      329,
+      793,
+      378
+    ],
+    "right_blank_pixels": 60,
+    "chart_rightmost_pixel": 530,
+    "horizontal_blank_pixels_from_chart": 94,
+    "chart_foreground_roi": [
+      60,
+      135,
+      560,
+      390
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "f2a6d61c44af6f8416fa5484eb7c7bfa2469b0e89a8c4009f8344a5ea8871067"
+  },
+  {
+    "case": "zh-after",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-zh-Information-inset/frames/0001721_000114.733s.png",
+    "image_size": [
+      854,
+      480
+    ],
+    "roi": [
+      570,
+      320,
+      854,
+      385
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      598,
+      329,
+      766,
+      378
+    ],
+    "right_blank_pixels": 87,
+    "chart_rightmost_pixel": 530,
+    "horizontal_blank_pixels_from_chart": 67,
+    "chart_foreground_roi": [
+      60,
+      135,
+      560,
+      390
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "7bed807976fa082a464dc6b3f6ac0be5276c5257b838a7a4d63f902d24ed0920"
+  },
+  {
+    "case": "zh-entrance",
+    "frame": "/workspace/explainer-videos/renders/qa/temporal/ai1-zh-Information-inset/frames/0001715_000114.333s.png",
+    "image_size": [
+      854,
+      480
+    ],
+    "roi": [
+      570,
+      320,
+      854,
+      385
+    ],
+    "background_rgb": [
+      12,
+      15,
+      22
+    ],
+    "threshold": 20,
+    "glyph_bbox_inclusive": [
+      598,
+      329,
+      766,
+      378
+    ],
+    "right_blank_pixels": 87,
+    "chart_rightmost_pixel": 530,
+    "horizontal_blank_pixels_from_chart": 67,
+    "chart_foreground_roi": [
+      60,
+      135,
+      560,
+      390
+    ],
+    "chart_rightmost_pixel_measured": true,
+    "frame_sha256": "92d27a98a50cd16396f6db8a96cd84dcf294901b4fd0e66a90582bf692f09f2f"
+  }
+]
